@@ -82,6 +82,14 @@ public:
 	}
 
 	/**
+	 * The tool icon
+	 */
+	virtual QString icon()
+	{
+		return "help";
+	}
+	
+	/**
 	 * This function processes every important mouse or keyboard event.
 	 * It then calls suiting functions like mouseMoved() so deriving tools
 	 * don't need to directly deal with events themselves.

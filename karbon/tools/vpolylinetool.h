@@ -58,6 +58,7 @@ class VPolylineTool : public VTool
 
 		virtual QString name() { return i18n( "Polyline Tool" ); }
 		virtual QString contextHelp();
+		virtual QString icon() { return "14_polyline"; }
 
 	protected:
 		/**

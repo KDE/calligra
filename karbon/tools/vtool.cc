@@ -21,6 +21,7 @@
 #include <qevent.h>
 
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -39,7 +40,7 @@ VTool::VTool( KarbonView* view )
 void VTool::activateAll()
 {
 	view()->toolOptionsDocker()->manageTool( this );
-	view()->contextHelpAction()->updateHelp( name(), contextHelp() );
+	view()->contextHelpAction()->updateHelp( name(), contextHelp(), &BarIcon( icon() ) );
 
 	activate();
 }
