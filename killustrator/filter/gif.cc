@@ -1,326 +1,314 @@
-////////////////////////////////////////////////////
-//
-// Transparent support for GIF files in Qt Pixmaps,
-// using GIFLIB library.
-//
-// Much of this code is duplicated from gif2x11.c, which is distributed
-// with GIFLIB.
-//
-// Sirtaj Kang, Oct 1996.
-//
-// Current Problems:
-// * No GIF extension blocks supported.
-// * Lousy error reporting.
-// * Buffers entire image in mem before moving to QImage
-// * Skipped IODevice completely. How to get around this?
-//
-// GIF write support and transparency support added by Richard J. Moore
-// Note that Qt will support gif files internally in version 1.3 so this
-// code is not worth spending much time on.
-// moorer@cs.man.ac.uk
-//
-// $Id$
-
-
-#include <kdebug.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
-#include <fcntl.h>
-#include <stdlib.h>
-
 #include <qimage.h>
+#include <qdstream.h>
 
-#include "gif.h"
+#include <ctype.h>
 
-extern "C" {
-#include <gif_lib.h>
-};
+/*
+Block Name                  Required   Label       Ext.   Vers.
+Application Extension       Opt. (*)   0xFF (255)  yes    89a
+Comment Extension           Opt. (*)   0xFE (254)  yes    89a
+Global Color Table          Opt. (1)   none        no     87a
+Graphic Control Extension   Opt. (*)   0xF9 (249)  yes    89a
+Header                      Req. (1)   none        no     N/A
+Image Descriptor            Opt. (*)   0x2C (044)  no     87a (89a)
+Local Color Table           Opt. (*)   none        no     87a
+Logical Screen Descriptor   Req. (1)   none        no     87a (89a)
+Plain Text Extension        Opt. (*)   0x01 (001)  yes    89a
+Trailer                     Req. (1)   0x3B (059)  no     87a
 
-void read_gif_file(QImageIO * imageio)
-{
-  int i, j, Size, Row, Col, Width, Height, ExtCode, Count;
-  GifRecordType RecordType;
-  GifByteType *Extension;
-  GifRowType *ScreenBuffer;
-  GifFileType *GifFile;
+Unlabeled Blocks
+Header                      Req. (1)   none        no     N/A
+Logical Screen Descriptor   Req. (1)   none        no     87a (89a)
+Global Color Table          Opt. (1)   none        no     87a
+Local Color Table           Opt. (*)   none        no     87a
 
-  QImage image;
-  ColorMapObject *Colourmap;
-  int trans= -1; // Index of the transparant colour, -1 if no transparent colour
-/*  unsigned int *ui_row; */
-  unsigned char *uc_row;
-  int InterlacedOffset[] =
-  {0, 4, 2, 1},         /* The way Interlaced image should. */
-    InterlacedJumps[] =
-    {8, 8, 4, 2};               /* be read - offsets and jumps... */
+Graphic-Rendering Blocks
+Plain Text Extension        Opt. (*)   0x01 (001)  yes    89a
+Image Descriptor            Opt. (*)   0x2C (044)  no     87a (89a)
+
+Control Blocks
+Graphic Control Extension   Opt. (*)   0xF9 (249)  yes    89a
+
+Special Purpose Blocks
+Trailer                     Req. (1)   0x3B (059)  no     87a
+Comment Extension           Opt. (*)   0xFE (254)  yes    89a
+Application Extension       Opt. (*)   0xFF (255)  yes    89a
+*/
 
 
-    // Initialise GIF struct and read init block
-
-    if ((GifFile = DGifOpenFileName(imageio->fileName())) == NULL)
-      return;
-
-    // Create the new image using read dimensions.
-    // Currently hardcoded to 8 bit.
-
-    image.create(GifFile->SWidth, GifFile->SHeight, 8,
-                 GifFile->SColorMap->ColorCount,
-                 QImage::BigEndian);
-
-    /* Allocate the screen as vector of column of rows. We cannt allocate    */
-    /* the all screen at once, as this broken minded CPU can allocate up to  */
-    /* 64k at a time and our image can be bigger than that:                  */
-    /* Note this screen is device independent - its the screen as defined by */
-    /* the GIF file parameters itself.                                       */
-
-    if ((ScreenBuffer = (GifRowType *)
-         malloc(GifFile->SHeight * sizeof(GifRowType *))) == NULL)
-      return;
-
-    Size = GifFile->SWidth * sizeof(GifPixelType);      /* Bytes in one row */
-    if ((ScreenBuffer[0] = (GifRowType) malloc(Size)) == NULL)  /* First row */
-      return;
-
-    for (i = 0; i < GifFile->SWidth; i++)       /* Set color to BackGround */
-      ScreenBuffer[0][i] = GifFile->SBackGroundColor;
-
-    for (i = 1; i < GifFile->SHeight; i++) {
-      /* Allocate the other rows, and set their color to background too: */
-      if ((ScreenBuffer[i] = (GifRowType) malloc(Size)) == NULL)
-        return;
-
-      memcpy(ScreenBuffer[i], ScreenBuffer[0], Size);
+static inline int gif_next_y( int oldY, int h ) {
+    int y = oldY;
+    switch( y%8 ) {
+    case 0:
+	y += 8;
+	if ( y >= h )
+	    y = 4;
+	break;
+    case 4:
+	y += 8;
+	if ( y >= h )
+	    y = 2;
+	break;
+    case 2: // FALL THROUGH
+    case 6:
+	y += 4;
+	if ( y >= h )
+	    y = 1;
+	break;
+    default:
+	y += 2;
+	if ( y >= h )
+	    y = -1;
+	break;
     }
-
-    /* Scan the content of the GIF file and load the image(s) in: */
-
-    do {
-      if (DGifGetRecordType(GifFile, &RecordType) == GIF_ERROR) {
-        PrintGifError();
-        return;
-      }
-      switch (RecordType) {
-      case IMAGE_DESC_RECORD_TYPE:
-        if (DGifGetImageDesc(GifFile) == GIF_ERROR) {
-          PrintGifError();
-          return;
-        }
-        Row = GifFile->Image.Top;       /* Image Position relative to Screen. */
-        Col = GifFile->Image.Left;
-        Width = GifFile->Image.Width;
-        Height = GifFile->Image.Height;
-        if (GifFile->Image.Left + GifFile->Image.Width > GifFile->SWidth ||
-            GifFile->Image.Top + GifFile->Image.Height > GifFile->SHeight) {
-KDEBUG(KDEBUG_INFO, 3000, "Image is not confined to screen dimension, aborted.\n");
-          return;
-        }
-        if (GifFile->Image.Interlace) {
-          /* Need to perform 4 passes on the images: */
-          for (Count = i = 0; i < 4; i++)
-            for (j = Row + InterlacedOffset[i]; j < Row + Height;
-                 j += InterlacedJumps[i]) {
-              if (DGifGetLine(GifFile, &ScreenBuffer[j][Col],
-                              Width) == GIF_ERROR) {
-                PrintGifError();
-                return;
-              }
-            }
-        } else {
-          for (i = 0; i < Height; i++) {
-            if (DGifGetLine(GifFile, &ScreenBuffer[Row++][Col],
-                            Width) == GIF_ERROR) {
-              PrintGifError();
-              return;
-            }
-          }
-        }
-        break;
-      case EXTENSION_RECORD_TYPE:
-        /* Skip any extension blocks in file: */
-        if (DGifGetExtension(GifFile, &ExtCode, &Extension) == GIF_ERROR) {
-          PrintGifError();
-          return;
-        }
-        if ( ExtCode == 249 )   // Graphic Control Ext
-          {
-KDEBUG(KDEBUG_INFO, 3000, "Found graphic control extension\n");
-            // extract tranparent pixel stuff
-            if (Extension[1] & 1) {
-              trans= Extension[4];
-KDEBUG1(KDEBUG_INFO, 3000, "Set trans to %d\n", Extension[4]);
-            }
-          }
-        do {
-          if (DGifGetExtensionNext(GifFile, &Extension) == GIF_ERROR) {
-            PrintGifError();
-            return;
-          }
-          if (Extension != NULL) {
-            if ( ExtCode == 249 )       // Graphic Control Ext
-            {
-KDEBUG(KDEBUG_INFO, 3000, "Found graphic control extension in next\n");
-            // extract tranparent pixel stuff
-            if (Extension[1] & 1) {
-              trans= Extension[4];
-KDEBUG1(KDEBUG_INFO, 3000, "Set trans to %d\n", Extension[4]);
-            }
-            }
-          }
-        } while  (Extension != NULL);
-        break;
-      case TERMINATE_RECORD_TYPE:
-        break;
-      default:          /* Should be traps by DGifGetRecordType. */
-        break;
-      }
-    }
-    while (RecordType != TERMINATE_RECORD_TYPE);
-
-    /* Set QImage colour map */
-
-    Colourmap = (GifFile->Image.ColorMap
-                 ? GifFile->Image.ColorMap
-                 : GifFile->SColorMap);
-
-    for (j = 0; j < Colourmap->ColorCount; j++) {
-      /* Set colour to rgb and set as opaque */
-      image.setColor(j, qRgb(Colourmap->Colors[j].Red,
-                             Colourmap->Colors[j].Green,
-                             Colourmap->Colors[j].Blue) | 0xff000000);
-    }
-
-    /* Copy image from Row buffers */
-    for (j = 0; j < GifFile->SHeight; j++) {
-      uc_row = (unsigned char *) image.scanLine(j);
-      for (i = 0; i < GifFile->SWidth; i++) {
-        *uc_row++ = ScreenBuffer[j][i];
-      }
-    }
-    if (trans != -1) {
-      /* Make the transparent colour transparent */
-      image.setColor(trans, qRgb(Colourmap->Colors[trans].Red,
-                             Colourmap->Colors[trans].Green,
-                             Colourmap->Colors[trans].Blue) & 0x00ffffff);
-      image.setAlphaBuffer(TRUE);
-    }
-
-    /* Commit image */
-
-    imageio->setImage(image);
-    imageio->setStatus(0);
-
-    if (DGifCloseFile(GifFile) == GIF_ERROR)
-      PrintGifError();
-
-}                               /*read_gif_file */
-
-
-void write_gif_file(QImageIO *imageio)
-{
-  int i, /*j,*/ status;
-  GifFileType *GifFile;
-  ColorMapObject *screenColourmap;
-  ColorMapObject *imageColourmap;
-
-KDEBUG(KDEBUG_INFO, 3000, "write_gif_file()\n");
-
-  imageColourmap= MakeMapObject(256, NULL);
-  if (!imageColourmap) {
-KDEBUG(KDEBUG_INFO, 3000, "Could not create image colour map\n");
-    return;
-  }
-
-  screenColourmap= MakeMapObject(256, NULL);
-  if (!screenColourmap) {
-KDEBUG(KDEBUG_INFO, 3000, "Could not create screen colour map\n");
-    return;
-  }
-
-KDEBUG1(KDEBUG_INFO, 3000, "Made Colourmap size 256, image colours= %d\n", imageio->image().numColors());
-
-  for (i= 0; i < 256; i++) {
-    if (i <imageio->image().numColors()) {
-      imageColourmap->Colors[i].Red= qRed(imageio->image().color(i));
-      imageColourmap->Colors[i].Green= qGreen(imageio->image().color(i));
-      imageColourmap->Colors[i].Blue= qBlue(imageio->image().color(i));
-    }
-    else {
-      imageColourmap->Colors[i].Red= 0;
-      imageColourmap->Colors[i].Green= 0;
-      imageColourmap->Colors[i].Blue= 0;
-    }
-  }
-
-  for (i= 0; i < 256; i++) {
-    if (i <imageio->image().numColors()) {
-      screenColourmap->Colors[i].Red= qRed(imageio->image().color(i));
-      screenColourmap->Colors[i].Green= qGreen(imageio->image().color(i));
-      screenColourmap->Colors[i].Blue= qBlue(imageio->image().color(i));
-    }
-    else {
-      screenColourmap->Colors[i].Red= 0;
-      screenColourmap->Colors[i].Green= 0;
-      screenColourmap->Colors[i].Blue= 0;
-    }
-  }
-
-  GifFile= EGifOpenFileName((char *)imageio->fileName(), 0);
-  if (!GifFile) {
-    FreeMapObject(imageColourmap);
-    FreeMapObject(screenColourmap);
-KDEBUG(KDEBUG_INFO, 3000, "Could not open file\n");
-    return;
-  }
-
-KDEBUG(KDEBUG_INFO, 3000, "Creating screen desc\n");
-
-  status= EGifPutScreenDesc(GifFile,
-                            imageio->image().width(),
-                            imageio->image().height(),
-                            256,
-                            0,
-                            screenColourmap);
-
-  if (status != GIF_OK) {
-    EGifCloseFile(GifFile);
-KDEBUG(KDEBUG_INFO, 3000, "Could not create screen description\n");
-    return;
-  }
-
-KDEBUG(KDEBUG_INFO, 3000, "Creating image description\n");
-
-  status= EGifPutImageDesc(GifFile,
-                           0, 0,
-                           imageio->image().width(),
-                           imageio->image().height(),
-                           0,
-                           imageColourmap);
-
-  if (status != GIF_OK) {
-    EGifCloseFile(GifFile);
-    return;
-  }
-
-KDEBUG(KDEBUG_INFO, 3000, "Writing image data\n");
-
-  for (i = 0; status && (i < imageio->image().height()); i++) {
-    status= EGifPutLine(GifFile, 
-                        imageio->image().scanLine(i),
-                        imageio->image().bytesPerLine());
-  }
-
-  if (status != GIF_OK) {
-    PrintGifError();
-    EGifCloseFile(GifFile);
-    return;
-  }
-
-  if (EGifCloseFile(GifFile) != GIF_OK) {
-    PrintGifError();
-    return;
-  }
-
-  return;
+    return y;
 }
+
+
+static inline int gif_get_pixel( QImage& image, int& x, int& y ) {
+    static uchar * p;
+    int color;
+
+    if ( x == 0 )
+	p = image.scanLine( y );
+
+    color = (int)*(p++);
+    x++;
+    return color;
+}
+
+
+static void gif_write_content( Q_UINT8 packet[], int& packetPointer,
+			       Q_UINT32 & accumulator,
+			       unsigned int & shift,
+			       QDataStream * s )
+{
+    while ( shift > 7 ) {
+	packet[packetPointer++] = (accumulator & 255);
+	accumulator = accumulator >> 8;
+	shift -= 8;
+	if ( packetPointer == 256 ) {
+	    s->device()->writeBlock( (char *)packet, 256 );
+	    packetPointer = 1;
+	}
+    }
+}
+
+
+extern "C" void write_gif_image( QImageIO * iio )
+{
+    if ( iio )
+	iio->setStatus( 1 );
+    else
+	return;
+
+    QImage image;
+    if ( iio->image().depth() != 8 )
+	image = iio->image().convertDepth( 8 );
+    else
+	image = iio->image();
+
+    int w = image.width(), h = image.height();
+    int x, y;
+
+    unsigned int i;
+    int palette[256];
+    int ncols = 0;
+    for( i=0; i<256; i++ )
+	palette[i] = -1;
+
+    bool need89 = FALSE;
+    int transparentColor = 0;
+    for( y=0; y<h; y++ ) {
+	uchar * yp = image.scanLine( y );
+	for( x=0; x<w; x++ ) {
+	    int color = (int)*(yp + x);
+	    if ( need89 && (image.color( color ) & ~RGB_MASK) == 0 ) {
+		palette[color] = transparentColor;
+	    } else if ( palette[color] < 0 ) {
+		if ( need89 == FALSE && image.hasAlphaBuffer() &&
+		     (image.color( color ) & ~RGB_MASK) != 0 ) {
+		    need89 = TRUE;
+		    transparentColor = ncols;
+		}
+		palette[color] = ncols++;
+	    }
+	}
+    }
+
+    int colorTableSize = 2;
+    int colorTableCode = 1;
+    while ( colorTableSize < ncols ) {
+	colorTableSize *= 2;
+	colorTableCode++;
+    }
+
+    // write the file header
+    QDataStream * s = new QDataStream( iio->ioDevice() );
+    if ( s->device()->writeBlock( need89 ? "GIF89a" : "GIF87a", 6 ) < 6 )
+	return;
+
+    s->setByteOrder( QDataStream::LittleEndian );
+    *s << (Q_UINT16)w
+       << (Q_UINT16)h
+       << (Q_UINT8) (128 + 17*(colorTableCode-1))
+       << (Q_UINT8) 0 // some random color is "background"
+       << (Q_UINT8) 0; // no aspect ratio information
+
+    // build and write the global color table
+    char * globalColorTable = new char[3*colorTableSize];
+    memset( globalColorTable, 0, 3*colorTableSize );
+
+    for( i=0; i<256; i++ )
+	if ( palette[i] >= 0 ) {
+	    QRgb c = image.color( i );
+	    int p = 3*palette[i];
+	    globalColorTable[p++] = (unsigned char)(qRed(c));
+	    globalColorTable[p++] = (unsigned char)(qGreen(c));
+	    globalColorTable[p] = (unsigned char)(qBlue(c));
+	}
+
+    if ( s->device()->writeBlock( globalColorTable, 3*colorTableSize ) <
+	 3*colorTableSize )
+	return;
+
+    delete[]globalColorTable;
+    globalColorTable = 0;
+
+    // write transparent color index if there is one
+    if ( need89 )
+	*s << (Q_UINT8) 0x21 // extension block
+	   << (Q_UINT8) 0xf9 // graphic control extension
+	   << (Q_UINT8) 4 // size
+	   << (Q_UINT8) 5 // no not dispose, transparent color follows
+	   << (Q_UINT16) 0 // no delay time
+	   << (Q_UINT8) transparentColor
+	   << (Q_UINT8) 0; // terminate the extension block
+
+    *s << (Q_UINT8) 0x2C // image separator, constant
+       << (Q_UINT16) 0 // x
+       << (Q_UINT16) 0 // y
+       << (Q_UINT16) w
+       << (Q_UINT16) h
+       << (Q_UINT8) 64; // interlaced
+
+    // write pixels
+
+    unsigned int codeSize = colorTableCode;
+    if ( codeSize < 2 )
+	codeSize = 2;
+
+    *s << (Q_UINT8) codeSize;
+
+    // stuff for the compressor...
+
+    struct {
+	unsigned int child : 12;
+	unsigned int sibling : 12;
+	unsigned int pixel : 8;
+    } codeTable[4096];
+
+    Q_UINT8 packet[257]; // data sub-block and one byte for a hack below
+    int packetPointer = 1;
+    packet[0] = (Q_UINT8) 255;
+
+    unsigned int clear = 1 << codeSize++; // gif says
+    unsigned int endOfInformation = clear+1; // gif says
+    unsigned int ncodes = clear+1; // highest-numbered code in use - mine
+
+    unsigned int entry = clear; // clear, here, means Do Not Add
+    codeTable[clear].child = clear;
+
+    for( i=0; i<clear; i++ ) {
+	codeTable[i].child = clear; // meaning: invalid
+	codeTable[i].pixel = i;
+    }
+
+    UINT32 accumulator = 0;
+    unsigned int shift = 0;
+
+    x = 0;
+    y = 0;
+    unsigned int pixel, child;
+
+    while( y >= 0 ) {
+	// output to make space, if necessary
+	if ( shift + codeSize > 30 )
+	    gif_write_content( packet, packetPointer, accumulator, shift, s );
+
+	pixel = palette[gif_get_pixel( image, x, y )];
+	if ( x >= w ) {
+	    y = gif_next_y( y, h );
+	    x = 0;
+	}
+
+	// see whether entry+child exists in the dictionary
+	child = codeTable[entry].child;
+	while ( child != clear && codeTable[child].pixel != pixel )
+	    child = codeTable[child].sibling;
+	if ( child != clear ) {
+	    // yes, use that entry
+	    entry = child;
+	} else if ( ncodes < 4095 && entry != clear ) {
+	    // no, and entry is not 'clear', and there is space to add
+	    // entry+child to the dictionary
+	    child = ++ncodes;
+	    codeTable[child].child = clear;
+	    codeTable[child].pixel = pixel;
+	    codeTable[child].sibling = codeTable[entry].child;
+	    codeTable[entry].child = child;
+	    accumulator = accumulator | ( entry << shift );
+	    shift += codeSize;
+	    // may need to increase the code size
+	    if ( codeSize < 12 && ncodes >= (unsigned int)(1 << codeSize ) )
+		codeSize++;
+	    entry = pixel;
+	} else {
+	    // dictionary is full, so send the entry and then a clear
+	    // (unless the entry is the initial clear)
+	    accumulator = accumulator | ( entry << shift );
+	    shift += codeSize;
+	    // may need to make space in the accumulator
+	    if ( shift + codeSize > 30 )
+		gif_write_content( packet, packetPointer,
+				   accumulator, shift, s );
+	    if ( entry != clear ) {
+		for( i=0; i<clear; i++ ) {
+		    codeTable[i].child = clear; // meaning: invalid
+		    codeTable[i].pixel = i;
+		}
+		accumulator = accumulator | ( clear << shift );
+		shift += codeSize;
+	    }
+	    ncodes = clear+1;
+	    codeSize = colorTableCode+1;
+	    if ( codeSize < 2 )
+		codeSize = 2;
+	    entry = pixel;
+	}
+    }
+
+    // write the last entry
+    if ( shift + codeSize > 30 )
+	gif_write_content( packet, packetPointer, accumulator, shift, s );
+    accumulator = accumulator | ( entry << shift );
+    shift += codeSize;
+
+    // add the end of information marker
+    accumulator = accumulator | ( endOfInformation << shift );
+    shift = shift + codeSize + 7; // to make sure the final byte is sent off
+    gif_write_content( packet, packetPointer, accumulator, shift, s );
+
+    // add the zero-length sub-block and gif trailer
+    packet[0] = (Q_UINT8)(packetPointer-1);
+    if ( packetPointer > 1 )
+	packet[packetPointer++] = (Q_UINT8) 0; // zero length sub-block
+    packet[packetPointer++] = (Q_UINT8) 0x3B; // gif trailer
+    if ( s->device()->writeBlock( (char *)packet,
+				  packetPointer ) < packetPointer )
+	return; // assumption: if this succeeds, all earlier writes succeeded
+
+    iio->setStatus( 0 );
+}
+
 

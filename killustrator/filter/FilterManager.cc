@@ -43,7 +43,7 @@ FilterManager::FilterManager () {
 
 void FilterManager::installDefaultFilters () {
   ImageExport* filter = new ImageExport ();
-  // #ifdef HAVE_QIMGIO
+#ifdef HAVE_QIMGIO
   filters.insert ("JPEG", new FilterInfo (FilterInfo::FKind_Export,
 					  "JPEG Image Format", "jpg",
 					  "Kai-Uwe Sattler",
@@ -52,7 +52,7 @@ void FilterManager::installDefaultFilters () {
 					  "PNG Image Format", "png",
 					  "Kai-Uwe Sattler",
 					  "1.0", 0L, filter));
-  // #endif
+#endif
   filters.insert ("PPM", new FilterInfo (FilterInfo::FKind_Export,
 					  "PPM Image Format", "ppm",
 					  "Kai-Uwe Sattler",
