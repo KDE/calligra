@@ -399,6 +399,8 @@ public:
     QPtrList<ToolEntry> toolList;
 
     void initActions();
+    void adjustActions( bool mode );
+    void adjustActions( KSpreadSheet* sheet, KSpreadCell* cell );
 };
 
 KSpreadScripts* ViewPrivate::globalScriptsDlg = 0L;
@@ -1261,6 +1263,169 @@ void ViewPrivate::initActions()
 
 }
 
+void ViewPrivate::adjustActions( bool mode )
+{
+  actions->replace->setEnabled( mode );
+  actions->insertSeries->setEnabled( mode );
+  actions->insertLink->setEnabled( mode );
+  actions->insertSpecialChar->setEnabled( mode );
+  actions->insertFunction->setEnabled( mode );
+  actions->removeComment->setEnabled( mode );
+  actions->decreaseIndent->setEnabled( mode );
+  actions->bold->setEnabled( mode );
+  actions->italic->setEnabled( mode );
+  actions->underline->setEnabled( mode );
+  actions->strikeOut->setEnabled( mode );
+  actions->percent->setEnabled( mode );
+  actions->precplus->setEnabled( mode );
+  actions->precminus->setEnabled( mode );
+  actions->money->setEnabled( mode );
+  actions->alignLeft->setEnabled( mode );
+  actions->alignCenter->setEnabled( mode );
+  actions->alignRight->setEnabled( mode );
+  actions->alignTop->setEnabled( mode );
+  actions->alignMiddle->setEnabled( mode );
+  actions->alignBottom->setEnabled( mode );
+  actions->paste->setEnabled( mode );
+  actions->cut->setEnabled( mode );
+  actions->specialPaste->setEnabled( mode );
+  actions->deleteCell->setEnabled( mode );
+  actions->clearText->setEnabled( mode );
+  actions->clearComment->setEnabled( mode );
+  actions->clearValidity->setEnabled( mode );
+  actions->clearConditional->setEnabled( mode );
+  actions->recalcWorkbook->setEnabled( mode );
+  actions->recalcWorksheet->setEnabled( mode );
+  actions->adjust->setEnabled( mode );
+  actions->editCell->setEnabled( mode );
+  if( !mode )
+  {
+      actions->undo->setEnabled( false );
+      actions->redo->setEnabled( false );
+  }
+  else
+  {
+      actions->undo->setEnabled( doc->undoBuffer()->hasUndoActions() );
+      actions->redo->setEnabled( doc->undoBuffer()->hasRedoActions() );
+  }
+
+  actions->paperLayout->setEnabled( mode );
+  actions->styleDialog->setEnabled( mode );
+  actions->definePrintRange->setEnabled( mode );
+  actions->resetPrintRange->setEnabled( mode );
+  actions->insertFromDatabase->setEnabled( mode );
+  actions->insertFromTextfile->setEnabled( mode );
+  actions->insertFromClipboard->setEnabled( mode );
+  actions->conditional->setEnabled( mode );
+  actions->validity->setEnabled( mode );
+  actions->goalSeek->setEnabled( mode );
+  actions->subTotals->setEnabled( mode );
+  actions->multipleOperations->setEnabled( mode );
+  actions->textToColumns->setEnabled( mode );
+  actions->consolidate->setEnabled( mode );
+  actions->insertCellCopy->setEnabled( mode );
+  actions->wrapText->setEnabled( mode );
+  actions->selectFont->setEnabled( mode );
+  actions->selectFontSize->setEnabled( mode );
+  actions->deleteColumn->setEnabled( mode );
+  actions->hideColumn->setEnabled( mode );
+  actions->showColumn->setEnabled( mode );
+  actions->showSelColumns->setEnabled( mode );
+  actions->insertColumn->setEnabled( mode );
+  actions->deleteRow->setEnabled( mode );
+  actions->insertRow->setEnabled( mode );
+  actions->hideRow->setEnabled( mode );
+  actions->showRow->setEnabled( mode );
+  actions->showSelRows->setEnabled( mode );
+  actions->formulaSelection->setEnabled( mode );
+  actions->textColor->setEnabled( mode );
+  actions->bgColor->setEnabled( mode );
+  actions->cellLayout->setEnabled( mode );
+  actions->borderLeft->setEnabled( mode );
+  actions->borderRight->setEnabled( mode );
+  actions->borderTop->setEnabled( mode );
+  actions->borderBottom->setEnabled( mode );
+  actions->borderAll->setEnabled( mode );
+  actions->borderOutline->setEnabled( mode );
+  actions->borderRemove->setEnabled( mode );
+  actions->borderColor->setEnabled( mode );
+  actions->removeTable->setEnabled( mode );
+  actions->autoSum->setEnabled( mode );
+  //   actions->scripts->setEnabled( mode );
+  actions->defaultFormat->setEnabled( mode );
+  actions->areaName->setEnabled( mode );
+  actions->resizeRow->setEnabled( mode );
+  actions->resizeColumn->setEnabled( mode );
+  actions->fontSizeUp->setEnabled( mode );
+  actions->fontSizeDown->setEnabled( mode );
+  actions->upper->setEnabled( mode );
+  actions->lower->setEnabled( mode );
+  actions->equalizeRow->setEnabled( mode );
+  actions->equalizeColumn->setEnabled( mode );
+  actions->verticalText->setEnabled( mode );
+  actions->addModifyComment->setEnabled( mode );
+  actions->removeComment->setEnabled( mode );
+  actions->insertCell->setEnabled( mode );
+  actions->removeCell->setEnabled( mode );
+  actions->changeAngle->setEnabled( mode );
+  actions->dissociateCell->setEnabled( mode );
+  actions->increaseIndent->setEnabled( mode );
+  actions->decreaseIndent->setEnabled( mode );
+  actions->spellChecking->setEnabled( mode );
+  actions->calcMin->setEnabled( mode );
+  actions->calcMax->setEnabled( mode );
+  actions->calcAverage->setEnabled( mode );
+  actions->calcCount->setEnabled( mode );
+  actions->calcSum->setEnabled( mode );
+  actions->calcNone->setEnabled( mode );
+  actions->insertPart->setEnabled( mode );
+  actions->createStyle->setEnabled( mode );
+  actions->selectStyle->setEnabled( mode );
+
+  actions->tableFormat->setEnabled( false );
+  actions->sort->setEnabled( false );
+  actions->mergeCell->setEnabled( false );
+  actions->insertChartFrame->setEnabled( false );
+  actions->sortDec->setEnabled( false );
+  actions->sortInc->setEnabled( false );
+  actions->transform->setEnabled( false );
+
+  actions->fillRight->setEnabled( false );
+  actions->fillLeft->setEnabled( false );
+  actions->fillUp->setEnabled( false );
+  actions->fillDown->setEnabled( false );
+
+  if ( mode && doc && map && !map->isProtected() )
+    actions->renameTable->setEnabled( true );
+  else
+    actions->renameTable->setEnabled( false );
+
+  view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
+}
+
+void ViewPrivate::adjustActions( KSpreadSheet* sheet, KSpreadCell* cell )
+{
+  QRect selection = selectionInfo->selection();
+  if ( sheet->isProtected() && !cell->isDefault() && cell->notProtected( cell->column(), cell->row() ) )
+  {
+    if ( ( selection.width() > 1 ) || ( selection.height() > 1 ) )
+    {
+      if ( actions->bold->isEnabled() )
+        adjustActions( false );
+    }
+    else
+    {
+      if ( !actions->bold->isEnabled() )
+        adjustActions( true );
+    }
+  }
+  else if ( sheet->isProtected() )
+  {
+    if ( actions->bold->isEnabled() )
+      adjustActions( false );
+  }
+}
+
 
 /*****************************************************************************
  *
@@ -1473,7 +1638,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
 
-    adjustActions( !d->activeSheet->isProtected() );
+    d->adjustActions( !d->activeSheet->isProtected() );
     adjustMapActions( !d->map->isProtected() );
 }
 
@@ -2163,7 +2328,7 @@ void KSpreadView::initialPosition()
     if ( koDocument()->isReadWrite() )
       initConfig();
 
-    adjustActions( !d->activeSheet->isProtected() );
+    d->adjustActions( !d->activeSheet->isProtected() );
     adjustMapActions( !d->map->isProtected() );
 }
 
@@ -2215,31 +2380,7 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
 
     d->toolbarLock = FALSE;
     if ( d->activeSheet )
-      adjustActions( d->activeSheet, cell );
-}
-
-void KSpreadView::adjustActions( KSpreadSheet const * const table,
-                                 KSpreadCell const * const cell )
-{
-  QRect selection = d->selectionInfo->selection();
-  if ( table->isProtected() && !cell->isDefault() && cell->notProtected( cell->column(), cell->row() ) )
-  {
-    if ( ( selection.width() > 1 ) || ( selection.height() > 1 ) )
-    {
-      if ( d->actions->bold->isEnabled() )
-        adjustActions( false );
-    }
-    else
-    {
-      if ( !d->actions->bold->isEnabled() )
-        adjustActions( true );
-    }
-  }
-  else if ( table->isProtected() )
-  {
-    if ( d->actions->bold->isEnabled() )
-      adjustActions( false );
-  }
+      d->adjustActions( d->activeSheet, cell );
 }
 
 void KSpreadView::updateEditWidgetOnPress()
@@ -2263,7 +2404,7 @@ void KSpreadView::updateEditWidgetOnPress()
         editWidget()->setText( cell->text() );
 
     updateButton(cell, column, row);
-    adjustActions( d->activeSheet, cell );
+    d->adjustActions( d->activeSheet, cell );
 }
 
 void KSpreadView::updateEditWidget()
@@ -2312,7 +2453,7 @@ void KSpreadView::updateEditWidget()
       d->canvas->editor()->setFocus();
     }
     updateButton(cell, column, row);
-    adjustActions( d->activeSheet, cell );
+    d->adjustActions( d->activeSheet, cell );
 }
 
 void KSpreadView::activateFormulaEditor()
@@ -3384,7 +3525,7 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
   d->actions->showPageBorders->setChecked( d->activeSheet->isShowPageBorders() );
   d->actions->protectSheet->setChecked( d->activeSheet->isProtected() );
   d->actions->protectDoc->setChecked( d->map->isProtected() );
-  adjustActions( !d->activeSheet->isProtected() );
+  d->adjustActions( !d->activeSheet->isProtected() );
   adjustMapActions( !d->map->isProtected() );
 
   /* see if there was a previous selection on this other table */
@@ -4427,152 +4568,12 @@ void KSpreadView::toggleProtectSheet( bool mode )
      d->activeSheet->setProtected( QCString() );
    }
    d->doc->setModified( true );
-   adjustActions( !mode );
+   d->adjustActions( !mode );
    d->doc->emitBeginOperation();
    // d->activeSheet->setRegionPaintDirty( QRect(QPoint( 0, 0 ), QPoint( KS_colMax, KS_rowMax ) ) );
    refreshView();
    updateEditWidget();
    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
-}
-
-void KSpreadView::adjustActions( bool mode )
-{
-  d->actions->replace->setEnabled( mode );
-  d->actions->insertSeries->setEnabled( mode );
-  d->actions->insertLink->setEnabled( mode );
-  d->actions->insertSpecialChar->setEnabled( mode );
-  d->actions->insertFunction->setEnabled( mode );
-  d->actions->removeComment->setEnabled( mode );
-  d->actions->decreaseIndent->setEnabled( mode );
-  d->actions->bold->setEnabled( mode );
-  d->actions->italic->setEnabled( mode );
-  d->actions->underline->setEnabled( mode );
-  d->actions->strikeOut->setEnabled( mode );
-  d->actions->percent->setEnabled( mode );
-  d->actions->precplus->setEnabled( mode );
-  d->actions->precminus->setEnabled( mode );
-  d->actions->money->setEnabled( mode );
-  d->actions->alignLeft->setEnabled( mode );
-  d->actions->alignCenter->setEnabled( mode );
-  d->actions->alignRight->setEnabled( mode );
-  d->actions->alignTop->setEnabled( mode );
-  d->actions->alignMiddle->setEnabled( mode );
-  d->actions->alignBottom->setEnabled( mode );
-  d->actions->paste->setEnabled( mode );
-  d->actions->cut->setEnabled( mode );
-  d->actions->specialPaste->setEnabled( mode );
-  d->actions->deleteCell->setEnabled( mode );
-  d->actions->clearText->setEnabled( mode );
-  d->actions->clearComment->setEnabled( mode );
-  d->actions->clearValidity->setEnabled( mode );
-  d->actions->clearConditional->setEnabled( mode );
-  d->actions->recalcWorkbook->setEnabled( mode );
-  d->actions->recalcWorksheet->setEnabled( mode );
-  d->actions->adjust->setEnabled( mode );
-  d->actions->editCell->setEnabled( mode );
-  if( !mode )
-  {
-      d->actions->undo->setEnabled( false );
-      d->actions->redo->setEnabled( false );
-  }
-  else
-  {
-      d->actions->undo->setEnabled( d->doc->undoBuffer()->hasUndoActions() );
-      d->actions->redo->setEnabled( d->doc->undoBuffer()->hasRedoActions() );
-  }
-
-  d->actions->paperLayout->setEnabled( mode );
-  d->actions->styleDialog->setEnabled( mode );
-  d->actions->definePrintRange->setEnabled( mode );
-  d->actions->resetPrintRange->setEnabled( mode );
-  d->actions->insertFromDatabase->setEnabled( mode );
-  d->actions->insertFromTextfile->setEnabled( mode );
-  d->actions->insertFromClipboard->setEnabled( mode );
-  d->actions->conditional->setEnabled( mode );
-  d->actions->validity->setEnabled( mode );
-  d->actions->goalSeek->setEnabled( mode );
-  d->actions->subTotals->setEnabled( mode );
-  d->actions->multipleOperations->setEnabled( mode );
-  d->actions->textToColumns->setEnabled( mode );
-  d->actions->consolidate->setEnabled( mode );
-  d->actions->insertCellCopy->setEnabled( mode );
-  d->actions->wrapText->setEnabled( mode );
-  d->actions->selectFont->setEnabled( mode );
-  d->actions->selectFontSize->setEnabled( mode );
-  d->actions->deleteColumn->setEnabled( mode );
-  d->actions->hideColumn->setEnabled( mode );
-  d->actions->showColumn->setEnabled( mode );
-  d->actions->showSelColumns->setEnabled( mode );
-  d->actions->insertColumn->setEnabled( mode );
-  d->actions->deleteRow->setEnabled( mode );
-  d->actions->insertRow->setEnabled( mode );
-  d->actions->hideRow->setEnabled( mode );
-  d->actions->showRow->setEnabled( mode );
-  d->actions->showSelRows->setEnabled( mode );
-  d->actions->formulaSelection->setEnabled( mode );
-  d->actions->textColor->setEnabled( mode );
-  d->actions->bgColor->setEnabled( mode );
-  d->actions->cellLayout->setEnabled( mode );
-  d->actions->borderLeft->setEnabled( mode );
-  d->actions->borderRight->setEnabled( mode );
-  d->actions->borderTop->setEnabled( mode );
-  d->actions->borderBottom->setEnabled( mode );
-  d->actions->borderAll->setEnabled( mode );
-  d->actions->borderOutline->setEnabled( mode );
-  d->actions->borderRemove->setEnabled( mode );
-  d->actions->borderColor->setEnabled( mode );
-  d->actions->removeTable->setEnabled( mode );
-  d->actions->autoSum->setEnabled( mode );
-  //   d->actions->scripts->setEnabled( mode );
-  d->actions->defaultFormat->setEnabled( mode );
-  d->actions->areaName->setEnabled( mode );
-  d->actions->resizeRow->setEnabled( mode );
-  d->actions->resizeColumn->setEnabled( mode );
-  d->actions->fontSizeUp->setEnabled( mode );
-  d->actions->fontSizeDown->setEnabled( mode );
-  d->actions->upper->setEnabled( mode );
-  d->actions->lower->setEnabled( mode );
-  d->actions->equalizeRow->setEnabled( mode );
-  d->actions->equalizeColumn->setEnabled( mode );
-  d->actions->verticalText->setEnabled( mode );
-  d->actions->addModifyComment->setEnabled( mode );
-  d->actions->removeComment->setEnabled( mode );
-  d->actions->insertCell->setEnabled( mode );
-  d->actions->removeCell->setEnabled( mode );
-  d->actions->changeAngle->setEnabled( mode );
-  d->actions->dissociateCell->setEnabled( mode );
-  d->actions->increaseIndent->setEnabled( mode );
-  d->actions->decreaseIndent->setEnabled( mode );
-  d->actions->spellChecking->setEnabled( mode );
-  d->actions->calcMin->setEnabled( mode );
-  d->actions->calcMax->setEnabled( mode );
-  d->actions->calcAverage->setEnabled( mode );
-  d->actions->calcCount->setEnabled( mode );
-  d->actions->calcSum->setEnabled( mode );
-  d->actions->calcNone->setEnabled( mode );
-  d->actions->insertPart->setEnabled( mode );
-  d->actions->createStyle->setEnabled( mode );
-  d->actions->selectStyle->setEnabled( mode );
-
-  d->actions->tableFormat->setEnabled( false );
-  d->actions->sort->setEnabled( false );
-  d->actions->mergeCell->setEnabled( false );
-  d->actions->insertChartFrame->setEnabled( false );
-  d->actions->sortDec->setEnabled( false );
-  d->actions->sortInc->setEnabled( false );
-  d->actions->transform->setEnabled( false );
-
-  d->actions->fillRight->setEnabled( false );
-  d->actions->fillLeft->setEnabled( false );
-  d->actions->fillUp->setEnabled( false );
-  d->actions->fillDown->setEnabled( false );
-
-  if ( mode && d->doc && d->map && !d->map->isProtected() )
-    d->actions->renameTable->setEnabled( true );
-  else
-    d->actions->renameTable->setEnabled( false );
-
-  canvasWidget()->gotoLocation( d->selectionInfo->marker(), d->activeSheet );
 }
 
 void KSpreadView::toggleRecordChanges( bool mode )

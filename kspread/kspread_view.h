@@ -544,9 +544,6 @@ private:
 
   /* helper functions */
   void adjustMapActions( bool mode );
-  void adjustActions( bool mode );
-  void adjustActions( KSpreadSheet const * const table,
-                      KSpreadCell const * const cell );
   bool checkChangeRecordPassword();
   void endOperation( QRect const & rect );
 
