@@ -40,9 +40,11 @@ namespace KexiPart
 
 namespace KexiDB
 {
-	class QuerySchema;
 	class Connection;
+	class QuerySchema;
+	class TableSchema;
 };
+
 class KexiQueryDocument;
 
 class KexiQueryDesignerGuiEditor : public KexiViewBase
@@ -69,9 +71,14 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
 		virtual bool storeData();
 
+		/*! Updates data in columns depending on tables that are currently inserted.
+		 Tabular Data in combo box popups is updated as well. */
+		void updateColumsData();
+
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
 		void slotDroppedAtRow(KexiTableItem *item, int row, QDropEvent *ev);
+		void slotTableAdded(KexiDB::TableSchema &t);
 
 	private:
 		KexiTableViewData *m_data;
@@ -81,6 +88,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		KexiQueryDocument *m_doc;
 		KexiSectionHeader *m_head;
 		QSplitter *m_spl;
+
+		KexiTableViewData *m_fieldColumnData, *m_tablesColumnData;
 };
 
 #endif

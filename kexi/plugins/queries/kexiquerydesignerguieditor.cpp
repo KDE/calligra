@@ -45,6 +45,7 @@
 #include "kexisectionheader.h"
 
 #include "widget/relations/kexirelationwidget.h"
+#include "widget/relations/kexirelationviewtable.h"
 
 #define MAX_FIELDS 101 //nice prime number
 
@@ -59,6 +60,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 	m_spl->setChildrenCollapsible(false);
 //	KexiInternalPart::createWidgetInstance("relation", win, s, "relation");
 	m_relations = new KexiRelationWidget(mainWin, m_spl, "relations");
+	connect(m_relations, SIGNAL(tableAdded(KexiDB::TableSchema&)),
+		this, SLOT(slotTableAdded(KexiDB::TableSchema&)));
 
 //	addActionProxyChild( m_view->relationView() );
 /*	KexiRelationPart *p = win->relationPart();
@@ -112,9 +115,17 @@ void
 KexiQueryDesignerGuiEditor::initTable()
 {
 	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Field"), KexiDB::Field::Enum);
+
+	QValueList<QVariant> empty_list;
+	m_fieldColumnData = new KexiTableViewData( empty_list, empty_list,
+		KexiDB::Field::Text, KexiDB::Field::Text);
+	col1->setRelatedData( m_fieldColumnData );
 	m_data->addColumn(col1);
 
 	KexiTableViewColumn *col2 = new KexiTableViewColumn(i18n("Table"), KexiDB::Field::Enum);
+	m_tablesColumnData = new KexiTableViewData( empty_list, empty_list,
+		KexiDB::Field::Text, KexiDB::Field::Text);
+	col2->setRelatedData( m_tablesColumnData );
 	m_data->addColumn(col2);
 
 	KexiTableViewColumn *col3 = new KexiTableViewColumn(i18n("Visible"), KexiDB::Field::Boolean);
@@ -153,10 +164,38 @@ KexiQueryDesignerGuiEditor::initTable()
 //		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
 //		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
 //		m_fields.insert(i, buff);
-		KexiTableItem *item = new KexiTableItem(columns);//3 empty fields
+		KexiTableItem *item = new KexiTableItem(columns);
 		m_data->append(item);
 	}
+	updateColumsData();
+}
 
+void KexiQueryDesignerGuiEditor::updateColumsData()
+{
+//	m_fieldColumnData
+	//update 'table' and 'field' columns
+	m_tablesColumnData->clear();
+	m_fieldColumnData->clear();
+	for (TablesDictIterator it(*m_relations->tables());it.current();++it) {
+		//table
+		KexiDB::TableSchema *table = it.current()->table();
+		KexiTableItem *item = new KexiTableItem(2);
+		(*item)[0]=table->name();
+		(*item)[1]=(*item)[0];
+		m_tablesColumnData->append( item );
+		//field
+		item = new KexiTableItem(2);
+		(*item)[0]=table->name()+".*";
+		(*item)[1]=(*item)[0];
+		m_fieldColumnData->append( item );
+		for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
+			item = new KexiTableItem(2);
+			(*item)[0]=t_it.current()->name();
+			(*item)[1]=QString("  ") + t_it.current()->name();
+			m_fieldColumnData->append( item );
+		}
+	}
+//TODO
 }
 
 KexiRelationWidget *KexiQueryDesignerGuiEditor::relationView() const
@@ -181,19 +220,6 @@ KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
 //	m_table->updateContents();
 
 	setDirty(true);
-}
-
-void
-KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row, QDropEvent *ev)
-{
-	//TODO: better check later if the source is really a table
-	QString srcTable;
-	QString srcField;
-	QString dummy;
-
-	KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
-	//TODO
-//	addRow(srcTable, srcField);
 }
 
 KexiDB::QuerySchema *
@@ -312,6 +338,24 @@ void KexiQueryDesignerGuiEditor::slotDragOverTableRow(KexiTableItem *item, int r
 	if (e->provides("kexi/field")) {
 		e->acceptAction(true);
 	}
+}
+
+void
+KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row, QDropEvent *ev)
+{
+	//TODO: better check later if the source is really a table
+	QString srcTable;
+	QString srcField;
+	QString dummy;
+
+	KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
+	//TODO
+//	addRow(srcTable, srcField);
+}
+
+void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema &t)
+{
+	updateColumsData();
 }
 
 #include "kexiquerydesignerguieditor.moc"
