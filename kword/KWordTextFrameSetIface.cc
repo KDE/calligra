@@ -279,3 +279,14 @@ void KWordTextFrameSetIface::setRelativeTextSize( double _size )
     KCommand *cmd=m_frametext->textObject()->setRelativeTextSizeCommand(_size );
     delete cmd;
 }
+
+double KWordTextFrameSetIface::wordByWord() const
+{
+    return m_frametext->textObject()->wordByWord();
+}
+
+void KWordTextFrameSetIface::setWordByWord( bool _b )
+{
+    KCommand *cmd=m_frametext->textObject()->setWordByWordCommand(_b );
+    delete cmd;
+}

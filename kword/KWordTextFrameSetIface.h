@@ -85,6 +85,9 @@ k_dcop:
     double relativeTextSize() const;
     void setRelativeTextSize( double _size );
 
+    double wordByWord() const;
+    void setWordByWord( bool _b );
+
 private:
     KWTextFrameSet *m_frametext;
 
