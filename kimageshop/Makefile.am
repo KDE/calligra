@@ -30,8 +30,6 @@ linktest_SOURCES = $(libkimageshop_la_SOURCES) $(kimageshop_SOURCES)
 linktest_LDADD = $(lib_LTLIBRARIES)
 linktest_LDFLAGS = $(libkimageshop_LDFLAGS)
 
-messages:
-	$(EXTRACTRC) *.rc > parts.cc
-	$(XGETTEXT) *.cc */*.cc -o $(podir)/kimageshop.pot
-	rm parts.cc
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp *.cc */*.cc -o $(podir)/kimageshop.pot
 
