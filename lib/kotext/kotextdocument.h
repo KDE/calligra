@@ -145,8 +145,8 @@ class KMacroCommand;
 /**
  * Our base class for QRT custom items (i.e. special chars)
  * Custom items include:
- * - variables ( KWVariable, variable.h )
- * - inline images ( KWTextImage, kwtextimage.h ) (to be removed)
+ * - variables ( KoVariable, koVariable.h )
+ * - in kword: inline images ( KWTextImage, kwtextimage.h ) (to be removed)
  * - in kword: anchors, i.e. floating frames ( KWAnchor, kwanchor.h )
  */
 class KoTextCustomItem : public Qt3::QTextCustomItem
@@ -175,6 +175,8 @@ public:
 
     /** Save to XML */
     virtual void save( QDomElement & /*formatElem*/ ) = 0;
+    /** Return type of custom item. See DTD for VARIABLE.id docu. */
+    virtual int typeId() const = 0;
 
     /** Reimplement this to calculate the item width
      * It is important to start with "if ( m_deleted ) return;" */

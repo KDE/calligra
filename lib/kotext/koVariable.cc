@@ -93,7 +93,7 @@ void KoVariableDateFormat::load( const QCString &key )
     if ( !params.isEmpty() )
     {
         m_bShort = (params[0] == '1');
-        m_strFormat = QString::fromUtf8(params);
+        m_strFormat = QString::fromUtf8( key.mid( 5 ) ); // skip "DATE" and the 0/1
     }
     // TODO else: use the last setting ?  (useful for the interactive case)
 }
@@ -321,15 +321,17 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
     p->restore();
 }
 
-void KoVariable::save( QDomElement &formatElem )
+void KoVariable::save( QDomElement &parentElem )
 {
     kdDebug() << "KoVariable::save" << endl;
-    formatElem.setAttribute( "id", 4 ); // code for a variable
-    QDomElement typeElem = formatElem.ownerDocument().createElement( "TYPE" );
-    formatElem.appendChild( typeElem );
+    QDomElement variableElem = parentElem.ownerDocument().createElement( "VARIABLE" );
+    parentElem.appendChild( variableElem );
+    QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
+    variableElem.appendChild( typeElem );
     typeElem.setAttribute( "type", static_cast<int>( type() ) );
     typeElem.setAttribute( "key", m_varFormat->key() );
     typeElem.setAttribute( "text", text() );
+    saveVariable( variableElem );
 }
 
 void KoVariable::load( QDomElement & )
@@ -565,12 +567,10 @@ QString KoDateVariable::text()
     return QString::null;
 }
 
-void KoDateVariable::save( QDomElement& parentElem )
+void KoDateVariable::saveVariable( QDomElement& varElem )
 {
-    KoVariable::save( parentElem );
-
-    QDomElement elem = parentElem.ownerDocument().createElement( "DATE" );
-    parentElem.appendChild( elem );
+    QDomElement elem = varElem.ownerDocument().createElement( "DATE" );
+    varElem.appendChild( elem );
     elem.setAttribute( "year", m_date.year() );
     elem.setAttribute( "month", m_date.month() );
     elem.setAttribute( "day", m_date.day() );
@@ -634,10 +634,8 @@ QString KoTimeVariable::text()
     return QString::null;
 }
 
-void KoTimeVariable::save( QDomElement& parentElem )
+void KoTimeVariable::saveVariable( QDomElement& parentElem )
 {
-    KoVariable::save( parentElem );
-
     QDomElement elem = parentElem.ownerDocument().createElement( "TIME" );
     parentElem.appendChild( elem );
     elem.setAttribute( "hour", m_time.hour() );
@@ -683,9 +681,8 @@ KoCustomVariable::KoCustomVariable( KoTextDocument *textdoc, const QString &name
 {
 }
 
-void KoCustomVariable::save( QDomElement& parentElem )
+void KoCustomVariable::saveVariable( QDomElement& parentElem )
 {
-    KoVariable::save( parentElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "CUSTOM" );
     parentElem.appendChild( elem );
     elem.setAttribute( "name", correctQString( m_name ) );
@@ -731,9 +728,8 @@ KoSerialLetterVariable::KoSerialLetterVariable( KoTextDocument *textdoc, const Q
 {
 }
 
-void KoSerialLetterVariable::save( QDomElement& parentElem )
+void KoSerialLetterVariable::saveVariable( QDomElement& parentElem )
 {
-    KoVariable::save( parentElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "SERIALLETTER" );
     parentElem.appendChild( elem );
     elem.setAttribute( "name", correctQString( m_name ) );
@@ -774,9 +770,8 @@ KoPgNumVariable::KoPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariab
 {
 }
 
-void KoPgNumVariable::save( QDomElement& parentElem )
+void KoPgNumVariable::saveVariable( QDomElement& parentElem )
 {
-    KoVariable::save( parentElem );
     QDomElement pgNumElem = parentElem.ownerDocument().createElement( "PGNUM" );
     parentElem.appendChild( pgNumElem );
     pgNumElem.setAttribute( "subtype", m_subtype );
@@ -826,10 +821,9 @@ KoFieldVariable::KoFieldVariable( KoTextDocument *textdoc, int subtype, KoVariab
 {
 }
 
-void KoFieldVariable::save( QDomElement& parentElem )
+void KoFieldVariable::saveVariable( QDomElement& parentElem )
 {
-    //kdDebug() << "KoFieldVariable::save" << endl;
-    KoVariable::save( parentElem );
+    //kdDebug() << "KoFieldVariable::saveVariable" << endl;
     QDomElement elem = parentElem.ownerDocument().createElement( "FIELD" );
     parentElem.appendChild( elem );
     elem.setAttribute( "subtype", m_subtype );
@@ -944,9 +938,8 @@ KoLinkVariable::KoLinkVariable( KoTextDocument *textdoc, const QString & _linkNa
 {
 }
 
-void KoLinkVariable::save( QDomElement& parentElem )
+void KoLinkVariable::saveVariable( QDomElement& parentElem )
 {
-    KoVariable::save( parentElem );
     QDomElement linkElem = parentElem.ownerDocument().createElement( "LINK" );
     parentElem.appendChild( linkElem );
     linkElem.setAttribute( "linkName", m_linkName );

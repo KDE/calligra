@@ -27,11 +27,12 @@
 #include <qmap.h>
 #include <qobject.h>
 class QDomElement;
-// Always add new types at the _end_ of this list.
+// Always add new types at the _end_ of this list (but before VT_ALL of course).
 // (and update KWView::setupActions)
 enum VariableType { VT_NONE = -1,
                     VT_DATE = 0, VT_TIME = 2, VT_PGNUM = 4,
-                    VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8, VT_LINK=9, VT_ALL=256 };
+                    VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8, VT_LINK=9,
+                    VT_ALL=256 };
 
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
 
@@ -248,15 +249,24 @@ public:
      */
     virtual QString text() = 0;
    // { return varFormat->convert( variantValue() ); } too bad QVariant doesn't have QDate/QTime :(
+    // Hmm, it has now (Qt3). Maybe rethink this?
 
-    // Variables reimplement this method to recalculate their value
-    // They must call resize() after having done that.
+    /** Variables reimplement this method to recalculate their value
+     * They must call resize() after having done that.
+     */
     virtual void recalc() {}
 
-    virtual void save( QDomElement &parentElem );
+    /** Save the variable. Public API, does the common job and then calls saveVariable. */
+    void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    /** Part of the KoTextCustomItem interface. Returns the code for a variable, see DTD.
+      * Do NOT reimplement in koVariable-derived classes.
+      */
+    virtual int typeId() const { return 4; }
 
 protected:
+    /** Variable should reimplement this to implement saving. */
+    virtual void saveVariable( QDomElement &parentElem ) = 0;
     KoVariableFormat *m_varFormat;
     KoVariableCollection *m_varColl;
 };
@@ -281,7 +291,7 @@ public:
     //QDate date() const { return m_date; }
     void setDate( const QDate & _date ) { m_date = _date; }
 
-    virtual void save( QDomElement &parentElem );
+    virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
 protected:
@@ -309,7 +319,7 @@ public:
     virtual QString text();
     void setTime( const QTime & _time ) { m_time = _time; }
 
-    virtual void save( QDomElement &parentElem );
+    virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
 protected:
@@ -331,7 +341,7 @@ public:
     { return VT_CUSTOM; }
     static QStringList actionTexts();
 
-    virtual void save( QDomElement &parentElem );
+    virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
     QString name() const { return m_name; }
@@ -366,7 +376,7 @@ public:
     virtual VariableType type() const
     { return VT_FIELD; }
 
-    virtual void save( QDomElement &parentElem );
+    virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
     virtual void recalc();
@@ -390,7 +400,7 @@ public:
     { return VT_SERIALLETTER; }
     static QStringList actionTexts();
 
-    virtual void save( QDomElement &parentElem );
+    virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
     virtual QString text();
@@ -423,7 +433,7 @@ public:
     virtual void recalc();
     virtual QString text();
 
-    virtual void save( QDomElement &parentElem );
+    virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 protected:
     short int m_subtype;
@@ -441,7 +451,7 @@ public:
 
     static QStringList actionTexts();
 
-    virtual void save( QDomElement &parentElem );
+    virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
     virtual QString text() { return value(); }
