@@ -190,7 +190,7 @@ void OLEFilter::slotSaveDocumentInformation(
     author->setTitle(title);
     author->setCompany(company);
     author->setEmail(email);
-    author->setTelephone(telephone);
+    author->setTelephoneHome(telephone);
     author->setFax(fax);
     author->setCountry(postalCode);
     author->setPostalCode(country);
