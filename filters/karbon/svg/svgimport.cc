@@ -116,6 +116,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 void
 SvgImport::convert()
 {
+	GraphicsContext *gc = new GraphicsContext;
 	QDomElement docElem = inpdoc.documentElement();
 	double width	= !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ) ) : 550.0;
 	double height	= !docElem.attribute( "height" ).isEmpty() ? parseUnit( docElem.attribute( "height" ) ) : 841.0;
@@ -123,7 +124,6 @@ SvgImport::convert()
 	m_document.setHeight( height );
 
 	// undo y-mirroring
-	GraphicsContext *gc = new GraphicsContext;
 	gc->matrix.scale( 1, -1 );
 	gc->matrix.translate( 0, -m_document.height() );
 	if( !docElem.attribute( "viewBox" ).isEmpty() )
@@ -146,6 +146,7 @@ SvgImport::convert()
 double
 SvgImport::parseUnit( const QString &unit )
 {
+	// TODO : percentage?
 	bool ok = false;
 	double value = unit.toDouble( &ok );
 
@@ -163,6 +164,13 @@ SvgImport::parseUnit( const QString &unit )
 			value = value * DPI;
 		else if( unit.right( 2 ) == "pt" )
 			value = ( value / 72.0 ) * DPI;
+	}
+	else
+	{
+		kdDebug() << "before ; " << value << endl;
+		if( m_gc.current() )
+			value *= sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2 );
+		kdDebug() << "after ; " << value << endl;
 	}
 	return value;
 }
@@ -330,7 +338,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 		}
 	}
 	else if( command == "stroke-width" )
-		gc->stroke.setLineWidth( params.toDouble() );
+		gc->stroke.setLineWidth( parseUnit( params ) );
 	else if( command == "stroke-linejoin" )
 	{
 		if( params == "miter" )
@@ -395,6 +403,11 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	if( m_gc.current() )
 		*gc = *( m_gc.current() );
 
+	QWMatrix mat = parseTransform( e.attribute( "transform" ) );
+	gc->matrix = mat * gc->matrix;
+	VTransformCmd trafo( 0L, gc->matrix );
+	trafo.visit( *obj );
+
 	// try normal PA
 	if( !e.attribute( "fill" ).isEmpty() )
 		parsePA( gc, "fill", e.attribute( "fill" ) );
@@ -434,10 +447,6 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 
 	obj->setFill( gc->fill );
 	obj->setStroke( gc->stroke );
-	QWMatrix mat = parseTransform( e.attribute( "transform" ) );
-	gc->matrix = mat * gc->matrix;
-	VTransformCmd trafo( 0L, gc->matrix );
-	trafo.visit( *obj );
 	m_gc.push( gc );
 }
 
