@@ -232,6 +232,7 @@ void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context
             m_textVertAlign= KP_BOTTOM;
     }
     kdDebug()<<" vertical Alignment :"<< ( ( m_textVertAlign== KP_TOP ) ? "top" : ( m_textVertAlign==  KP_CENTER ) ? "center": "bottom" )<<endl;
+    resizeTextDocument(); // this will to formatMore()
 
     m_textobj->loadOasisContent( element, context, m_doc->styleCollection() );
 }
