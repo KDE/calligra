@@ -62,7 +62,7 @@
                 <cstring>checkboxSticky</cstring>
             </property>
             <property name="text">
-                <string>&amp;Sticky object</string>
+                <string>&amp;Show on all pages</string>
             </property>
         </widget>
     </grid>
