@@ -2864,7 +2864,10 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
     QPtrList<KoTextFormatInterface> lst;
     // If we're editing a text object, then that's the one we return
     if ( m_currentTextObjectView )
-        lst.append( m_currentTextObjectView );
+    {
+        if ( !m_currentTextObjectView->kpTextObject()->isProtectContent())
+            lst.append( m_currentTextObjectView );
+    }
     else
     {
         QPtrListIterator<KPObject> it(getObjectList());
