@@ -73,9 +73,10 @@ John
   calculation precision, new datatypes (matrix?), and cleaner code
   --will do after 1.2
 
-- Bugfixing for the 1.2 release -- I've got excel where I work now, so I might
-start playing around in the filter code.  I will at least try to fix some
-of the reported crashing.
+- Bugfixing for the 1.2 release
+  I'm on crack - I *don't* have Excel at work and have no
+  idea why I thought I did (don't boot the windows partition too much....).  So I suppose
+  the excel filter will remain as it is.
 
 
 Philipp
