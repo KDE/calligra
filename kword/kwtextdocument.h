@@ -59,6 +59,8 @@ protected:
     void init();
 private:
     void appendBookmark( KoTextParag* parag, int pos, KoTextParag* endParag, int endPos, const QString& name );
+    void loadOasisFootnote( const QDomElement& tag, KoOasisContext& context,
+                            KoTextCustomItem* & customItem );
 
     KWTextFrameSet * m_textfs;
 };

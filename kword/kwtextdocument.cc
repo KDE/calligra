@@ -22,13 +22,14 @@
 #include "kwtextdocument.h"
 #include "kwtextframeset.h"
 #include "kwtextparag.h"
+#include "kwloadinginfo.h"
+#include "kwvariable.h"
 
 #include <kooasiscontext.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include "kwloadinginfo.h"
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textfs->kWordDocument(), fc, formatter, false ), m_textfs( textfs )
@@ -71,6 +72,31 @@ void KWTextDocument::appendBookmark( KoTextParag* parag, int pos, KoTextParag* e
     m_textfs->kWordDocument()->insertBookMark( name, static_cast<KWTextParag *>( parag ),
                                                static_cast<KWTextParag *>( endParag ),
                                                m_textfs, pos, endPos );
+}
+
+void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& context,
+                                        KoTextCustomItem* & customItem )
+{
+    const QString frameName( tag.attribute("text:id") );
+    const QString tagName( tag.tagName() );
+    QDomElement citationElem = tag.namedItem( tagName + "-citation" ).toElement();
+
+    bool endnote = tagName == "text:endnote";
+
+    QString label = citationElem.attribute( "text:label" );
+    bool autoNumbered = label.isEmpty();
+
+    KWFootNoteFrameSet *fs = m_textfs->insertFootNote(
+        endnote ? EndNote : FootNote,
+        autoNumbered ? KWFootNoteVariable::Auto : KWFootNoteVariable::Manual,
+        label );
+    customItem = fs->footNoteVariable();
+
+    fs->createInitialFrame( 0 ); // we don't know the page number...
+
+    // Parse contents into the frameset
+    QDomElement bodyElem = tag.namedItem( tagName + "-body" ).toElement();
+    fs->loadOasisContent( bodyElem, context );
 }
 
 bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& context,
@@ -151,14 +177,12 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
             }
             return true;
         }
-#if 0 // TODO Implement loading of footnotes/endnotes
         else if ( tagName == "text:footnote" || tagName == "text:endnote" )
         {
             textData = '#'; // anchor placeholder
-            importFootnote( doc, tag, outputFormats, pos, tagName );
+            loadOasisFootnote( tag, context, customItem );
             return true;
         }
-#endif
     }
     else // non "text:" tags
     {

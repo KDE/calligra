@@ -3218,6 +3218,32 @@ bool KWTextFrameSet::sortText(sortType type)
     return true;
 }
 
+// This is used when loading (KWTextDocument::loadOasisFootnote)
+// and when inserting from the GUI (KWTextFrameSetEdit::insertFootNote),
+// so don't add any 'repaint' or 'recalc' code here
+KWFootNoteFrameSet * KWTextFrameSet::insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering numType, const QString &manualString )
+{
+     kdDebug() << "KWTextFrameSetEdit::insertFootNote " << endl;
+     KWDocument * doc = m_doc;
+     KWFootNoteVariable * var = new KWFootNoteVariable( textDocument(), doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection(), doc );
+     var->setNoteType( noteType );
+     var->setNumberingType( numType );
+     if ( numType == KWFootNoteVariable::Manual )
+         var->setManualString( manualString );
+
+     // Now create text frameset which will hold the variable's contents
+     KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( doc, i18n( "Footnotes" ) );
+     fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
+
+     doc->addFrameSet( fs );
+
+     // Bind the footnote variable and its text frameset
+     var->setFrameSet( fs );
+     fs->setFootNoteVariable( var );
+
+     return fs;
+}
+
 MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
 {
     return MEANING_MOUSE_INSIDE_TEXT;
@@ -3857,49 +3883,34 @@ void KWTextFrameSetEdit::insertCustomVariable( const QString &name)
      insertVariable( var );
 }
 
-void KWTextFrameSetEdit::insertFootNote( NoteType noteType,KWFootNoteVariable::Numbering _numType, const QString &_manualString)
+void KWTextFrameSetEdit::insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering numType, const QString &manualString )
 {
-     kdDebug() << "KWTextFrameSetEdit::insertFootNote " << endl;
-     KWDocument * doc = frameSet()->kWordDocument();
-     KWFootNoteVariable * var = new KWFootNoteVariable( textFrameSet()->textDocument() , doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection(), doc);
-     var->setNoteType( noteType );
-     var->setNumberingType(_numType );
-     if ( _numType ==KWFootNoteVariable::Manual)
-         var->setManualString( _manualString );
+    KWFootNoteFrameSet *fs = textFrameSet()->insertFootNote( noteType, numType, manualString );
+    KWFootNoteVariable * var = fs->footNoteVariable();
 
-     // Now create text frameset which will hold the variable's contents
-     KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( doc, i18n( "Footnotes" ) );
-     fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
+    // Place the frame on the correct page, but the exact coordinates
+    // will be determined by recalcFrames (KWFrameLayout)
+    int pageNum = m_currentFrame->pageNum();
+    fs->createInitialFrame( pageNum );
 
-     // Place the frame on the correct page, but the exact coordinates
-     // will be determined by recalcFrames (KWFrameLayout)
-     int pageNum = m_currentFrame->pageNum();
-     fs->createInitialFrame( pageNum );
+    insertVariable( var );
 
-     doc->addFrameSet( fs );
+    // Re-number footnote variables
+    textFrameSet()->renumberFootNotes();
 
-     // Bind the footnote variable and its text frameset
-     var->setFrameSet( fs );
-     fs->setFootNoteVariable( var );
+    // Layout the footnote frame
+    textFrameSet()->kWordDocument()->recalcFrames( pageNum, -1 ); // we know that for sure nothing changed before this page.
 
-     insertVariable( var );
+    KWCanvas* canvas = m_canvas;
+    // And now edit the footnote frameset - all WPs do that it seems.
+    m_canvas->editFrameSet( fs );
 
-     // Re-number footnote variables
-     textFrameSet()->renumberFootNotes();
-
-     // Layout the footnote frame
-     doc->recalcFrames( pageNum, -1 ); // we know that for sure nothing changed before this page.
-
-     KWCanvas* canvas = m_canvas;
-     // And now edit the footnote frameset - all WPs do that it seems.
-     m_canvas->editFrameSet( fs );
-
-     // --- from here, we are deleted! ---
-     // (This is why we must use canvas and not m_canvas)
-     // Ensure cursor is visible
-     KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(canvas->currentFrameSetEdit()->currentTextEdit());
-     if ( textedit )
-         textedit->ensureCursorVisible();
+    // --- from here, we are deleted! ---
+    // (This is why we must use canvas and not m_canvas)
+    // Ensure cursor is visible
+    KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(canvas->currentFrameSetEdit()->currentTextEdit());
+    if ( textedit )
+        textedit->ensureCursorVisible();
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )

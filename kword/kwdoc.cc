@@ -1598,6 +1598,12 @@ void KWDocument::endOfLoading()
             }
         }
     }
+
+    // Renumber footnotes
+    KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
+    if ( frameset  )
+        frameset->renumberFootNotes( false /*no repaint*/ );
+
     emit sigProgress(-1);
 
     //kdDebug(32001) << "KWDocument::loadXML done" << endl;
@@ -1605,7 +1611,6 @@ void KWDocument::endOfLoading()
     setModified( false );
 
     // Connect to notifications from main text-frameset
-    KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
     if ( frameset ) {
         connect( frameset->textObject(), SIGNAL( chapterParagraphFormatted( KoTextParag * ) ),
                  SLOT( slotChapterParagraphFormatted( KoTextParag * ) ) );

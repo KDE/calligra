@@ -281,6 +281,11 @@ public:
      */
     KoTextParag* paragAtLUPos( int yLU ) const;
 
+    /**
+     * Insert a footnote (var and frameset). Shared code for loading and inserting from GUI.
+     */
+    KWFootNoteFrameSet * insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering numType, const QString &manualString );
+
     KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
 
     QString copyTextParag( QDomElement & elem, int selectionId );
@@ -392,7 +397,7 @@ public:
     void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor() ); }
     void insertWPPage();
     void insertVariable( int type, int subtype = 0 );
-    void insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering _numType, const QString &_manualString );
+    void insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering numType, const QString& manualString );
     void insertCustomVariable( const QString &name);
     void insertVariable( KoVariable *var, KoTextFormat *format = 0 /*means currentFormat()*/,bool removeSelectedText = true, bool refreshCustomMenu = false/*don't refresh all the time custom menu*/ );
 
