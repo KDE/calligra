@@ -77,9 +77,11 @@ void KexiFormPart::initPartActions(KActionCollection *collection)
 
 void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 {
-	m_manager->createActions(col, 0);
-	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), col, "taborder");
-	new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), m_manager, SLOT(ajustWidgetSize()), col, "adjust");
+	if (mode==Kexi::DesignViewMode) {
+		m_manager->createActions(col, 0);
+		new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), col, "taborder");
+		new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), m_manager, SLOT(ajustWidgetSize()), col, "adjust");
+	}
 	//TODO
 }
 
