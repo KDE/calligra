@@ -1128,10 +1128,12 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
         return false;
     }
 
-    // Now the children are saved, leave the directory/directories again
+    bool result = completeLoading( _store );
+
+    // Restore the "old" path
     _store->popDirectory();
 
-    return completeLoading( _store );
+    return result;
 }
 
 bool KoDocument::isInOperation()
