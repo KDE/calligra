@@ -44,6 +44,7 @@ k_dcop:
 
     void setDepth(int depth );
     void setBright(int bright );
+    void setSwapRGB(bool swapRGB );
 
 private:
     KPPixmapObject *obj;

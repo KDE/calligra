@@ -96,3 +96,14 @@ void KPPixmapObjectIface::setBright(int bright )
 
     obj->setPictureSettings( _mirrorType,  _depth, _swapRGB,bright );
 }
+
+void KPPixmapObjectIface::setSwapRGB(bool swapRGB )
+{
+    PictureMirrorType _mirrorType;
+    int _depth=0;
+    bool _swapRGB=false;
+    int _bright=0;
+    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_bright );
+
+    obj->setPictureSettings( _mirrorType,  _depth, swapRGB,_bright );
+}
