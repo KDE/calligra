@@ -1405,12 +1405,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
     emit sigProgress(-1);
 
-    recalcFrames(); // This computes the number of pages (from the frames)
-                    // for the first time (and adds footers/headers etc.)
-
-    emit newContentsSize();
-    repaintAllViews( true );     // in case any view exists already
-
     //kdDebug(32001) << "KWDocument::loadXML done" << endl;
 
     setModified( false );
@@ -1422,9 +1416,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
                  SLOT( slotChapterParagraphFormatted( KoTextParag * ) ) );
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-
-
-    startBackgroundSpellCheck();
 
     return true;
 }
@@ -1679,8 +1670,16 @@ bool KWDocument::completeLoading( KoStore *_store )
     // Save memory
     m_urlIntern = QString::null;
 
-    //fix z orders on older documents
+    // Fix z orders on older documents
     fixZOrders();
+
+    recalcFrames(); // This computes the number of pages (from the frames)
+                    // for the first time (and adds footers/headers etc.)
+
+    emit newContentsSize();
+    repaintAllViews( true );     // in case any view exists already
+
+    startBackgroundSpellCheck();
 
     return TRUE;
 }
@@ -2386,7 +2385,12 @@ KWFrameSet * KWDocument::frameSetByName( const QString & name )
     return 0L;
 }
 
+//#define DEBUG_FRAMESELECT
+
 KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border) {
+#ifdef DEBUG_FRAMESELECT
+    kdDebug(32001) << "KWDocument::deepestInlineFrame parent=" << parent << " nPoint=" << nPoint << endl;
+#endif
     KWFrameSet *hostFrameSet=parent->frameSet();
     KoPoint docPoint( unzoomPoint( nPoint ) );
     int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
@@ -2414,6 +2418,10 @@ KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, 
 }
 
 KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool *border) {
+
+#ifdef DEBUG_FRAMESELECT
+    kdDebug(32001) << "KWDocument::frameBelowFrame frame=" << frame << " nPoint=" << nPoint << endl;
+#endif
 
     KWFrameSet *fs = frame->frameSet();
     KoPoint docPoint( unzoomPoint( nPoint ) );
@@ -2459,6 +2467,9 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
 }
 
 KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
+#ifdef DEBUG_FRAMESELECT
+    kdDebug(32001) << "KWDocument::topFrameUnderMouse nPoint=" << nPoint << endl;
+#endif
     KoPoint docPoint( unzoomPoint( nPoint ) );
     int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
     QPtrList<KWFrame> frames = framesInPage(page);
@@ -2470,10 +2481,16 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
             continue;
 
         if(f->frameAtPos(nPoint, true)) {
+#ifdef DEBUG_FRAMESELECT
+            kdDebug(32001) << "KWDocument::topFrameUnderMouse found frame " << f << " by border" << endl;
+#endif
             if ( border ) *border = true;
             return f;
         }
         if(f->frameAtPos(nPoint)) {
+#ifdef DEBUG_FRAMESELECT
+            kdDebug(32001) << "KWDocument::topFrameUnderMouse found frame " << f << ", will dig into it." << endl;
+#endif
             return deepestInlineFrame(f,nPoint,border);
         }
     }
@@ -2484,6 +2501,9 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
 
 KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool firstNonSelected )
 {
+#ifdef DEBUG_FRAMESELECT
+    kdDebug(32001) << "KWDocument::frameUnderMouse nPoint=" << nPoint << " firstNonSelected=" << firstNonSelected << endl;
+#endif
     KWFrame *candidate=topFrameUnderMouse(nPoint,border);
     if (!firstNonSelected)
         return candidate;
@@ -2552,6 +2572,7 @@ QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
 
 
 void KWDocument::fixZOrders() {
+    bool fixed_something = false;
 	for (int pgnum=0;pgnum<getPages();pgnum++) {
 		QPtrList<KWFrame> frames= framesInPage(pgnum,false);
 		// scan this page to see if we need to fixup.
@@ -2571,10 +2592,13 @@ void KWDocument::fixZOrders() {
 			            continue;
 				current_zorder++;
 				fr->setZOrder(current_zorder);
+                                fixed_something = true;
 			}
 		}
 
 	}
+        if ( fixed_something )
+            updateAllFrames();
 }
 
 

@@ -868,15 +868,9 @@ void KWFrameSet::updateFrames()
     // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
     // So we want it cached.
     QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
-    // Look for the one that's in the document's list. Table cells aren't.
-    KWFrameSet* thisFrameSet = grpMgr ? grpMgr : this;
-    bool foundThis = false;
     for (; framesetIt.current(); ++framesetIt )
     {
         KWFrameSet *frameSet = framesetIt.current();
-        if ( frameSet == thisFrameSet )
-            foundThis = true;
-
         if ( !frameSet->isVisible() )
             continue;
 
@@ -905,6 +899,7 @@ void KWFrameSet::updateFrames()
                       if(!parentFrame)
                           parentFrame = oldParentFrame;
                     }
+                    //kdDebug() << "KWFrameSet::updateFrames comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
 		    if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
                     {
                         KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
