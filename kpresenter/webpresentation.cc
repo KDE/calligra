@@ -458,7 +458,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         QString note ( escapeHtmlText( codec, _tmpList.at(i)->noteText() ) );
         if ( !note.isEmpty() ) {
             streamOut << "  <b>" << escapeHtmlText( codec, i18n( "Note" ) ) << "</b>\n";
-            streamOut << " blockquote>\n";
+            streamOut << " <blockquote>\n";
 
             streamOut << note.replace( "\n", brtag );
 
