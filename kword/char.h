@@ -34,8 +34,9 @@ public:
     virtual bool operator==( const KWCharAttribute &_attrib )
     { return classId == static_cast<KWCharAttribute>( _attrib ).classId; }
 
-    virtual QDomElement save( QDomDocument& ) {}
-
+    virtual QDomElement save( QDomDocument& ) { return QDomElement(); }
+    virtual bool load( const QDomElement&, KWordDocument* ) { return false; }
+    
 protected:
     int classId;
 
@@ -64,9 +65,8 @@ public:
         return ( format && *format != *_attrib.format );
     }
 
-    // #### todo
-    //virtual void save( ostream &out )
-    //{ format->save( out ); }
+    virtual QDomElement save( QDomDocument& );
+    virtual bool load( const QDomElement&, KWordDocument* );
 
 protected:
     KWFormat *format;
@@ -88,10 +88,10 @@ public:
     { return image; }
     virtual void setImage( KWImage *_image )
     { image = _image; }
-    // #### todo
-    //virtual void save( ostream &out )
-    //{ image->save( out ); }
 
+    virtual QDomElement save( QDomDocument& );
+    virtual bool load( const QDomElement&, KWordDocument* );
+    
 protected:
     KWImage *image;
 
@@ -106,6 +106,8 @@ class KWCharTab : public KWCharAttribute
 public:
     KWCharTab() { classId = ID_KWCharTab; }
 
+    virtual QDomElement save( QDomDocument& );
+    virtual bool load( const QDomElement&, KWordDocument* );
 };
 
 /******************************************************************/
@@ -122,14 +124,9 @@ public:
 
     KWVariable *getVar() { return var; }
 
-    // #### todo
-    // virtual void save( ostream &out ) {
-//         var->save( out );
-//         out << otag << "<FRMAT>" << endl;
-//         KWCharFormat::save( out );
-//         out << etag << "</FRMAT>" << endl;
-//     }
-
+    virtual QDomElement save( QDomDocument& );
+    virtual bool load( const QDomElement&, KWordDocument* );
+    
 protected:
     KWVariable *var;
 
@@ -149,14 +146,9 @@ public:
 
     KWFootNote *getFootNote() { return fn; }
 
-    // #### todo
-    // virtual void save( ostream &out ) {
-//         fn->save( out );
-//         out << otag << "<FRMAT>" << endl;
-//         KWCharFormat::save( out );
-//         out << etag << "</FRMAT>" << endl;
-    //}
-
+    virtual QDomElement save( QDomDocument& );
+    virtual bool load( const QDomElement&, KWordDocument* );
+    
 protected:
     KWFootNote *fn;
 
@@ -216,10 +208,8 @@ public:
     QString toString( unsigned int _pos, unsigned int _len );
 
     QDomElement save( QDomDocument& doc );
-    // #### todo
-    //void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
     bool load( const QDomElement& element );
-    
+
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
     int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false );
     int findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
@@ -227,8 +217,8 @@ public:
 
     KWordDocument *getDocument() { return doc; }
 
-    QString decoded();
-    QCString utf8( bool _decoded = true );
+    // QString decoded();
+    // QCString utf8( bool _decoded = true );
 
     void clear();
 
@@ -238,12 +228,11 @@ protected:
     KWChar* copy( KWChar *_data, unsigned int _len );
     KWChar& copy( KWChar _c );
     bool formatChanged( KWCharAttribute *a1, KWCharAttribute *a2 );
-    
+
     unsigned int _len_;
     unsigned int _max_;
     KWChar* _data_;
     KWordDocument *doc;
-
 };
 
 void freeChar( KWChar& _char, KWordDocument *_doc );

@@ -212,7 +212,7 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
 /*================================================================*/
 QDomElement KWFootNoteManager::save( QDomDocument& doc )
 {
-    QDomElement e = doc.createElement( "FOOTNODE-GLOBAL" );
+    QDomElement e = doc.createElement( "FOOTNOTE-GLOBAL" );
 
     QDomElement s = doc.createElement( "START" );
     e.appendChild( s );
@@ -445,6 +445,19 @@ QDomElement KWFootNote::save( QDomDocument& doc )
 }
 
 /*================================================================*/
+bool KWFootNote::load( const QDomElement& element )
+{
+    start = element.attribute( "start" ).toInt();
+    end = element.attribute( "end" ).toInt();
+    before = element.attribute( "before" );
+    after = element.attribute( "after" );
+    parag = element.attribute( "ref" );
+
+    // #### todo INTERNAL
+    
+    return TRUE;
+}
+
 // #### todo
 // void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst )
 // {

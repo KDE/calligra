@@ -111,24 +111,14 @@ QDomElement KWVariable::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-// #### todo
-// void KWVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
-// {
-//     if ( name == "POS" )
-//     {
-// 	KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 	for( ; it != lst.end(); it++ )
-// 	{
-// 	    if ( ( *it ).m_strName == "frameSet" )
-// 		frameSetNum = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "frame" )
-// 		frameNum = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "pgNum" )
-// 		pageNum = atoi( ( *it ).m_strValue.c_str() );
-// 	}
-//     }
-// }
+bool KWVariable::load( const QDomElement& element )
+{
+    frameSetNum = element.attribute( "frameSet" ).toInt();
+    frameNum = element.attribute( "frame" ).toInt();
+    pageNum = element.attribute( "page" ).toInt();
+	    
+    return TRUE;
+}
 
 /******************************************************************/
 /* Class: KWPgNumVariable					  */

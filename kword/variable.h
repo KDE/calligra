@@ -148,8 +148,7 @@ public:
     virtual void recalc() {}
 
     virtual QDomElement save( QDomDocument& doc );
-    // #### todo
-    //virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual bool load( const QDomElement& element );
 
 protected:
     KWordDocument *doc;
