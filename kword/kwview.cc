@@ -751,7 +751,8 @@ void KWView::fileStatistics()
         flesch_score = 206.835 - (1.015 * (words/sentences)) - (84.6 * syllables/words);
     QString flesch;
     QString flesch_score_string;
-    flesch_score_string.setNum(flesch_score, 'f', 1);
+    KLocale locale("kword");
+    flesch_score_string = locale.formatNumber(flesch_score, 1);
     if( words < 200 ) {
         // a kind of warning if too few words:
         flesch = i18n("approximately %1").arg(flesch_score_string);
@@ -765,16 +766,23 @@ void KWView::fileStatistics()
 
     QVBoxLayout * vlayout = new QVBoxLayout( dlg.plainPage() );
     vlayout->addWidget( new QLabel(
-        i18n( "<qt><center>Document Statistics</center><hr><p>"
-              "Characters (total count including spaces) : <b>%1</b><br/>"
-              "Characters without spaces: <b>%2</b><br/>"
-              "Words: <b>%3</b><br/>"
-              "Sentences: <b>%4</b><br/>"
-              "Syllables: <b>%5</b><br/>"
-              "Flesch reading ease: <b>%6</b></p>" ).
-        arg( charsWithSpace ).arg( charsWithoutSpace ).arg( words ).arg( sentences ).
-        arg( syllables ).arg( flesch ),
-                        dlg.plainPage() ) );
+              "<qt><center>" +i18n("Document Statistics") +"</center><hr/><br/>"
+              "<table>"
+              "<tr><td>" +i18n("Characters including spaces:")+ 
+              "</td> <td align=\"right\"><b>" +locale.formatNumber(charsWithSpace, 0)+ "</b></td></tr>"
+              "<tr><td>" +i18n("Characters without spaces:")+
+              "</td> <td align=\"right\"><b>" +locale.formatNumber(charsWithoutSpace, 0)+ "</b></td></tr>"
+              "<tr><td>" +i18n("Syllables:")+ 
+              "</td> <td align=\"right\"><b>" +locale.formatNumber(syllables, 0)+ "</b></td></tr>"
+              "<tr><td>" +i18n("Words:")+ 
+              "</td> <td align=\"right\"><b>" +locale.formatNumber(words, 0)+ "</b></td></tr>"
+              "<tr><td>" +i18n("Sentences:")+ 
+              "</td> <td align=\"right\"><b>" +locale.formatNumber(sentences, 0)+ "</b></td></tr>"
+              "<tr><td>&nbsp;</td></tr>"
+              "<tr><td>" +i18n("Flesch reading ease:")+
+              "</td> <td align=\"right\"><b>" +flesch+ "</b></td></tr>" 
+              "</table></qt>",
+	dlg.plainPage() ) );
     dlg.setInitialSize( QSize( 400, 200 ) ); // not too good for long translations... -> use a real layout and 5 labels
     dlg.show();
 }
