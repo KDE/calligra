@@ -296,18 +296,37 @@ public:
    */
   virtual void setEmpty() { m_bEmpty = true; }
 
-    // ############# Can be protected, or ?
   /**
-   *  Loads a document from @ref KReadOnlyPart::m_file (KParts takes care of downloading
-   *  remote documents).
-   *  Applies a filter if necessary, and calls loadNativeFormat in any case
-   *  You should not have to reimplement, except for very special cases.
-   *
-   * This method is called from the @ref KReadOnlyPart::openURL method.
+   *  Loads a document from a store.
+   *  You should never have to reimplement.
+   *  @param url An internal url, like tar:/1/2
    */
-  virtual bool openFile();
+  virtual bool loadFromStore( KoStore* store, const KURL& url );
 
-    // ############# Can be protected, or ?
+  /**
+   *  Saves a document to a store.
+   *  You should not have to reimplement this - but call it in @ref saveChildren.
+   */
+  virtual bool saveToStore( KoStore* store, const QString& path );
+
+  /**
+   *  Reimplement this method to load the contents of your KOffice document,
+   *  from the XML document.
+   */
+  virtual bool loadXML( const QDomDocument & ) = 0;
+
+  /**
+   *  Reimplement this to save the contents of the KOffice document into
+   *  a QDomDocument. The framework takes care of saving it to the store.
+   */
+  virtual QDomDocument saveXML();
+
+  /**
+   *  Reimplement this to save the contents of the KOffice document into
+   *  a QDomDocument. The framework takes care of saving it to the store.
+   */
+  virtual bool saveToStream( QIODevice * dev );
+
   /**
    *  Loads a document in the native format from a given URL.
    *  Reimplement if your native format isn't XML.
@@ -317,33 +336,11 @@ public:
   virtual bool loadNativeFormat( const QString & file );
 
   /**
-   *  Loads a document from a store.
-   *  You should never have to reimplement.
-
-   *  @param url An internal url, like tar:/1/2
-   */
-  virtual bool loadFromStore( KoStore* store, const KURL& url );
-
-        // ############# Can be protected or friend, or ?
-  /**
-   *  This method is needed for the new filter API. You have to
-   *  reimplement it to load XML if you want to support filters
-   *  which handle QDomDocuments. The default implementation returns
-   *  false - i.e. not successfully loaded
-   */
-  virtual bool loadXML( const QDomDocument&, KoStore* = 0L ) { return false; }
-
-    // ############# Can be protected, or ?
-  /**
    *  Saves the document in native format, to a given file
    *  You should never have to reimplement.
+   *  Made public for writing templates.
    */
   virtual bool saveNativeFormat( const QString & file );
-
-  /**
-   *  Saves a document to a store.
-   */
-  virtual bool saveToStore( KoStore* store, const QCString& format, const QString& path );
 
   /**
    *  Retrieves the mimetype of the document.
@@ -399,9 +396,6 @@ public:
   virtual const KoMainWindow *firstShell();
   virtual const KoMainWindow *nextShell();
 
-  // Hmm, name clash with the other @save. We want to give access to parent's save()
-  virtual bool save() { return KParts::ReadWritePart::save(); }
-
   /**
    * Returns the list of all the currently opened documents
    */
@@ -434,48 +428,22 @@ protected:
   virtual KoView *createViewInstance( QWidget *parent, const char *name ) = 0;
 
   /**
+   *  Loads a document from @ref KReadOnlyPart::m_file (KParts takes care of downloading
+   *  remote documents).
+   *  Applies a filter if necessary, and calls loadNativeFormat in any case
+   *  You should not have to reimplement, except for very special cases.
+   *
+   * This method is called from the @ref KReadOnlyPart::openURL method.
+   */
+  virtual bool openFile();
+
+  /**
    *  Saves a document to @ref KReadOnlyPart::m_file (KParts takes care of uploading
    *  remote documents)
    *  Applies a filter if necessary, and calls saveNativeFormat in any case
    *  You should not have to reimplement, except for very special cases.
    */
   virtual bool saveFile();
-
-  /**
-   *  This function is called from @ref #loadFromURL and @ref #loadFromStore.
-   *  It decides whether XML or binary data has to be read and calls
-   *  @ref #loadBinary or @ref #loadXML depending on this result.
-   *
-   *  Usually you dont want to overload this function.
-   *
-   *  @param _store may be 0L.
-   */
-  virtual bool load( istream& in, KoStore* _store );
-
-  /**
-   *  This method loads a binary document. It is called by @ref #load.
-   *
-   *  You have to overload it, if you want to load a binary file.
-   *
-   *  @param _stream       The stream, from which the binary should be read.
-   *  @param _randomaccess Tells whether input stream is a serial stream
-   *                       or a random access stream, usually a @ref ifstream
-   *                       or a @ref istringstream.
-   *  @param _store        Pointer to a Store object. May be 0L.
-   *  @return              Loading was successful or not.
-   */
-  virtual bool loadBinary( std::istream& , bool /*_randomaccess*/, KoStore* /*_store*/ );
-
-  /**
-   *  This method loads a XML document. It is called by @ref #load.
-   *
-   *  You have to overload it, if you want to load a XML file.
-   *
-   *  @param _parser Parser from which to load the document.
-   *  @param _store  Pointer to a Store object. May be 0L.
-   *  @return              Loading was successful or not.
-   */
-  virtual bool loadXML( KOMLParser& _parser, KoStore* _store );
 
   /**
    *  You need to overload this function if your document may contain
@@ -505,7 +473,7 @@ protected:
    *  QListIterator<KoDocumentChild> it( children() );
    *  for( ; it.current(); ++it ) {
    *    QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-   *    if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
+   *    if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
    *      return false;
    *  }
    *  return true;
@@ -515,26 +483,22 @@ protected:
 
   /**
    *  Overload this function if you have to load additional files
-   *  from a store. This function is called after @ref #loadXML or
-   *  @ref #loadBinary and after @ref #loadChildren have been called.
+   *  from a store. This function is called after @ref #loadXML
+   *  and after @ref #loadChildren have been called.
    */
   virtual bool completeLoading( KoStore* store );
 
   /**
    *  If you want to write additional files to a store,
-   *  the you must do it here.
+   *  then you must do it here.
    *  In the implementation, you should prepend the document
    *  url (using url().url()) before the filename, so that everything is kept relative
    *  to this document. For instance it will produce urls such as
    *  tar:/1/pictures/picture0.png, if the doc url is tar:/1
-   *  But do this ONLY if the document is stored extern (see @ref #isStoredExtern)
+   *  But do this ONLY if the document is not stored extern (see @ref #isStoredExtern).
+   *  If it is, then the pictures should be saved to tar:/pictures.
    */
-  virtual bool completeSaving( KoStore* );
-
-  /**
-   * @internal - used by saveNativeFormat
-   */
-  virtual bool save( ostream&, const char* format );
+  virtual bool completeSaving( KoStore* store );
 
   /**
    * Return true if url() is a real filename, false if url() is

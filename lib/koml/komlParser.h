@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,69 +17,45 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __parser_h__
-#define __parser_h__
+#ifndef __koml_parser_wrapper_h__
+#define __koml_parser_wrapper_h__
+
+#include <qdom.h>
+#include <qvaluestack.h>
 
 #include <string>
 #include <vector>
-
-#include "torben.h"
-#include "komlFeed.h"
 
 using std::string;
 
 struct KOMLAttrib
 {
-  string m_strName;
-  string m_strValue;
+    string m_strName;
+    string m_strValue;
 };
 
 class KOMLParser
 {
 public:
-  KOMLParser( KOMLFeed* _feed );
-  virtual ~KOMLParser();
+    KOMLParser( const QDomDocument& doc );
+    virtual ~KOMLParser();
 
-  /**
-   * @param _search is the opening tag we are searching for. If this is 0L
-   *                every opening tag is matched.
-   * @param _tag holds the matched tag.
-   */
-  bool open( const char *_search, string &_tag );
-  bool close( string&, bool _emit = false );
+    /**
+     * @param _search is the opening tag we are searching for. If this is 0L
+     *                every opening tag is matched.
+     * @param _tag holds the matched tag.
+     */
+    bool open( const char *_search, string& unused );
+    bool close( string& unused );
 
-  bool readText( string& );
+    bool readText( string& text );
 
-  static bool parseTag( const char *_tag, string& name, std::vector<KOMLAttrib>& _attribs );
+    bool parseTag( const char *_tag, string& tagname, std::vector<KOMLAttrib>& _attribs );
 
-  static void encode(string &_str);
-  
 protected:
-  void unreadTag( string& );
-  bool readTag( string& );
-  bool findTagStart();
-  bool findTagEnd();
-  bool pull();
-
-  void free( KOMLData* _data );
-
-  KOMLFeed *m_pFeed;
-  std::list<KOMLData*> m_lstData;
-
-  int m_iPos;
-  bool m_bEOF;
-  const char *m_pData;
-  int m_iLen;
-
-  std::vector<string> m_vecStack;
-
-  bool m_bEmit;
-  int m_iEmitStart;
-
-  bool m_bUnreadTag;
-  string m_strUnreadTag;
-
-  bool m_bCloseSingleTag;
+    QDomDocument m_doc;
+    QDomNode m_node;
+    QValueStack<QDomNode> m_stack;
 };
 
 #endif

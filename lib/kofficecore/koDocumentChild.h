@@ -19,6 +19,7 @@
 #ifndef __koDocumentChild_h__
 #define __koDocumentChild_h__
 
+#include <qtextstream.h>
 #include <qwmatrix.h>
 #include <komlParser.h>
 #include <koChild.h>
@@ -69,14 +70,6 @@ public:
    *  embedded documents. Saving the embedded documents themselves
    *  is done in @ref Document_impl. This function just stores information
    *  about the position and id of the embedded document.
-   */
-  virtual bool save( std::ostream& out );
-
-  /**
-   *  Writes the OBJECT tag, but does NOT write the content of the
-   *  embedded documents. Saving the embedded documents themselves
-   *  is done in @ref Document_impl. This function just stores information
-   *  about the position and id of the embedded document.
    *
    *  The OBJECT element is not added to the document. It is just created
    *  and returned.
@@ -86,13 +79,6 @@ public:
    *  @return the element containing the OBJECT tag.
    */
   virtual QDomElement save( QDomDocument& doc );
-
-  /**
-   *  Parses the OBJECT tag. This does NOT mean creating the child documents.
-   *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
-   *  to actually load the embedded documents.
-   */
-  virtual bool load( KOMLParser& parser, std::vector<KOMLAttrib>& _attribs );
 
   /**
    *  Parses the OBJECT tag. This does NOT mean creating the child documents.
@@ -120,7 +106,7 @@ protected:
    */
   virtual bool loadTag( KOMLParser& parser, const string& tag, std::vector<KOMLAttrib>& lst2 );
 
-private:
+protected: // TODO private: when KOML is dead
 
   /**
    *  Holds the source of this object, for example "file:/home/weis/image.gif"

@@ -25,10 +25,9 @@
 
 #include <komlParser.h>
 #include <komlWriter.h>
+#include <qtextstream.h>
 
 using std::vector;
-using std::ostream;
-using std::istream;
 
 class QImage;
 class QPicture;
@@ -38,24 +37,17 @@ class QColor;
 class QFont;
 class QString;
 
-ostream& operator<< ( ostream& outs, const QRect &_rect );
+QTextStream& operator<< ( QTextStream& outs, const QRect &_rect );
 QRect tagToRect( std::vector<KOMLAttrib>& _attribs );
 
-ostream& operator<< ( ostream& outs, const QColor &_rect );
-istream& operator>> ( istream& outs, QColor &_rect );
+QTextStream& operator<< ( QTextStream& outs, const QColor &_rect );
+QTextStream& operator>> ( QTextStream& outs, QColor &_rect );
 QColor strToColor( const char *_buffer );
 
-ostream& operator<< ( ostream& outs, const QPen &_pen );
+QTextStream& operator<< ( QTextStream& outs, const QPen &_pen );
 QPen tagToPen( std::vector<KOMLAttrib>& _attribs );
 
-ostream& operator<< ( ostream& outs, const QFont &_font );
+QTextStream& operator<< ( QTextStream& outs, const QFont &_font );
 QFont tagToFont( std::vector<KOMLAttrib>& _attribs );
-
-ostream& operator<< ( ostream& outs, const QImage &_img );
-void writeImageToStream( ostream &outs, const QImage &_img, const QString &_format );
-istream& operator>> ( istream& ins, QImage &_img );
-
-ostream& operator<< ( ostream& outs, const QPicture &_pic );
-istream& operator>> ( istream& ins, QPicture &_pic );
 
 #endif

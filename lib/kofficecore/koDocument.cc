@@ -26,6 +26,7 @@
 #include <koApplication.h>
 #include <koMainWindow.h>
 #include <koStream.h>
+#include <koStoreDevice.h>
 #include <koQueryTrader.h>
 #include <koFilterManager.h>
 #include <koDocumentInfo.h>
@@ -47,6 +48,7 @@
 #include <kmessagebox.h>
 
 #include <qtimer.h>
+#include <qfile.h>
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qpicture.h>
@@ -521,31 +523,32 @@ bool KoDocument::saveNativeFormat( const QString & file )
   kdDebug(30003) << "Saving root" << endl;
   if ( store->open( "root" ) )
   {
-    ostorestream out( store );
-    if ( !save( out, 0L /* to remove */ ) )
+    KoStoreDevice dev( store );
+    if ( !saveToStream( &dev ) )
     {
-      store->close();
+      delete store;
       return false;
     }
-    out.flush();
     store->close();
   }
   else
+  {
+    delete store;
     return false;
+  }
   if ( store->open( "documentinfo.xml" ) )
   {
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    QTextStream str( &buffer );
-    str << d->m_docInfo->save();
-    buffer.close();
+    QDomDocument doc = d->m_docInfo->save();
+    KoStoreDevice dev( store );
 
-    ostorestream out( store );
+    // ### Inefficient - TODO in QDom
+    QString buffer;
+    QTextStream str( &buffer, IO_WriteOnly );
+    str << doc;
 
-    out.write( buffer.buffer().data(), buffer.buffer().size() );
+    QCString s = buffer.utf8();
 
-    out.flush();
-
+    dev.writeBlock( s.data(), s.length() );
     store->close();
   }
 
@@ -555,7 +558,22 @@ bool KoDocument::saveNativeFormat( const QString & file )
   return ret;
 }
 
-bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const QString & _path )
+bool KoDocument::saveToStream( QIODevice * dev )
+{
+  QDomDocument doc = saveXML();
+
+  // Save to buffer
+  // ### Inefficient - TODO in QDom
+  QString buffer;
+  QTextStream str( &buffer, IO_WriteOnly );
+  str << doc;
+
+  QCString s = buffer.utf8();
+
+  return dev->writeBlock( s.data(), s.length() ) == (int)s.length();
+}
+
+bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 {
   kdDebug(30003) << "Saving document to store" << endl;
 
@@ -569,10 +587,13 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
   QString u = url().url();
   if ( _store->open( u ) )
   {
-    ostorestream out( _store );
-    if ( !save( out, _format ) )
+    KoStoreDevice dev( _store );
+    if ( !saveToStream( &dev ) )
+    {
+      _store->close();
       return false;
-    out.flush();
+    }
+
     _store->close();
   }
 
@@ -642,8 +663,8 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
   kdDebug(30003) << "KoDocument::loadNativeFormat( " << file << " )" << endl;
 
-  ifstream in( file );
-  if ( !in )
+  QFile in(file);
+  if ( !in.open( IO_ReadOnly ) )
   {
     QApplication::restoreOverrideCursor();
     return false;
@@ -651,20 +672,27 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
   // Try to find out whether it is a mime multi part file
   char buf[5];
-  in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
-  in.unget(); in.unget(); in.unget(); in.unget();
+  if ( in.readBlock( buf, 4 ) < 4 )
+  {
+    QApplication::restoreOverrideCursor();
+    in.close();
+    return false;
+  }
 
   //kdDebug(30003) << "PATTERN=" << buf << endl;
 
   // Is it plain XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
   {
-    bool res = load( in, 0L );
-    in.close();
+    in.at(0);
+    QDomDocument doc;
+    doc.setContent( &in );
+    bool res = loadXML( doc );
     if ( res )
       res = completeLoading( 0L );
 
     QApplication::restoreOverrideCursor();
+    in.close();
     return res;
   } else
   { // It's a koffice store (binary or tar.gz)
@@ -688,8 +716,10 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     if ( store->open( "root" ) )
     {
-      istorestream in( store );
-      if ( !load( in, store ) )
+      KoStoreDevice dev( store );
+      QDomDocument doc;
+      doc.setContent( &dev );
+      if ( !loadXML( doc ) )
       {
         delete store;
         QApplication::restoreOverrideCursor();
@@ -707,29 +737,10 @@ bool KoDocument::loadNativeFormat( const QString & file )
     }
     if ( store->open( "documentinfo.xml" ) )
     {
-      istorestream in( store );
-
-      QBuffer buffer;
-      buffer.open( IO_WriteOnly );
-
-      char buf[ 4096 ];
-      int cnt;
-      do
-      {
-	in.read( buf, 4096 );
-	cnt = in.gcount();
-	buffer.writeBlock( buf, cnt );
-      } while( cnt > 0 );
-
-      buffer.close();
-      buffer.open( IO_ReadOnly );
-
+      KoStoreDevice dev( store );
       QDomDocument doc;
-      doc.setContent( &buffer );
+      doc.setContent( &dev );
       d->m_docInfo->load( doc );
-
-      buffer.close();
-
       store->close();
     }
     else
@@ -750,8 +761,10 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 {
   if ( _store->open( url.url() ) )
   {
-    istorestream in( _store );
-    if ( !load( in, _store ) )
+    KoStoreDevice dev( _store );
+    QDomDocument doc;
+    doc.setContent( &dev );
+    if ( !loadXML( doc ) )
       return false;
     _store->close();
   }
@@ -759,41 +772,12 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
   m_url = url;
 
   if ( !loadChildren( _store ) )
-  {	
+  {
     kdError(30003) << "ERROR: Could not load children" << endl;
     return false;
   }
 
   return completeLoading( _store );
-}
-
-bool KoDocument::load( istream& in, KoStore* _store )
-{
-  kdDebug(30003) << "KoDocument::load( istream& in, KoStore* _store )" << endl;
-  // Try to find out whether it is a mime multi part file
-  char buf[5];
-  in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
-  in.unget(); in.unget(); in.unget(); in.unget();
-
-  kdDebug(30003) << "PATTERN2=" << buf << endl;
-
-  // Load XML ?
-  if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
-  {
-    KOMLStreamFeed feed( in );
-    KOMLParser parser( &feed );
-
-    if ( !loadXML( parser, _store ) )
-      return false;
-  }
-  // Load binary data
-  else
-  {
-    if ( !loadBinary( in, false, _store ) )
-      return false;
-  }
-
-  return true;
 }
 
 bool KoDocument::isStoredExtern()
@@ -831,18 +815,6 @@ void KoDocument::changedByFilter( bool changed ) const
     d->m_changed=changed;
 }
 
-bool KoDocument::loadBinary( istream& , bool, KoStore* )
-{
-    kdError(30003) << "KoDocument::loadBinary not implemented" << endl;
-    return false;
-}
-
-bool KoDocument::loadXML( KOMLParser&, KoStore*  )
-{
-    kdError(30003) << "KoDocument::loadXML not implemented" << endl;
-    return false;
-}
-
 bool KoDocument::loadChildren( KoStore* )
 {
     return true;
@@ -858,10 +830,10 @@ bool KoDocument::completeSaving( KoStore* )
     return true;
 }
 
-bool KoDocument::save( ostream&, const char* )
+QDomDocument KoDocument::saveXML()
 {
-    kdError(30003) << "KoDocument::save not implemented" << endl;
-    return false;
+    kdError(30003) << "KoDocument::saveXML not implemented" << endl;
+    return QDomDocument();
 }
 
 QCString KoDocument::nativeFormatMimeType()

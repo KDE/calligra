@@ -103,70 +103,6 @@ KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
   return document()->hitTest( p, m );
 }
 
-bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
-{
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end(); it++ )
-  {
-    if ( (*it).m_strName == "url" )
-    {
-      m_tmpURL = (*it).m_strValue.c_str();
-    }
-    else if ( (*it).m_strName == "mime" )
-    {
-      m_tmpMimeType = (*it).m_strValue.c_str();
-    }
-    else
-      kdDebug(30003) << "Unknown attrib 'OBJECT:" << (*it).m_strName.c_str() << "'" << endl;
-  }
-
-  if ( m_tmpURL.isEmpty() )
-  {	
-    kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
-    return false;
-  }
-  else if ( m_tmpMimeType.isEmpty() )
-  {
-    kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
-    return false;
-  }
-
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
-
-  bool brect = false;
-
-  // RECT
-  while( parser.open( 0L, tag ) )
-  {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-
-    if ( name == "RECT" )
-    {
-      brect = true;
-      m_tmpGeometry = tagToRect( lst );
-      setGeometry( m_tmpGeometry );
-    }
-    else
-      kdDebug(30003) << "Unknown tag '" << tag.c_str() << "' in OBJECT" << endl;
-
-    if ( !parser.close( tag ) )
-    {
-      kdDebug(30003) << "ERR: Closing Child in OBJECT" << endl;
-      return false;
-    }
-  }
-
-  if ( !brect )
-  {
-    kdDebug(30003) << "Missing RECT in OBJECT" << endl;
-    return false;
-  }
-
-  return true;
-}
-
 bool KoDocumentChild::load( const QDomElement& element )
 {
     if ( element.hasAttribute( "url" ) )
@@ -267,18 +203,6 @@ QDomElement KoDocumentChild::save( QDomDocument& doc )
     rect.setAttribute( "h", geometry().height() );
     e.appendChild(rect);
     return e;
-}
-
-bool KoDocumentChild::save( ostream& out )
-{
-  assert( document() );
-  QString u = document()->url().url();
-  QString mime = document()->mimeType();
-
-  out << indent << "<OBJECT url=\"" << u.ascii() << "\" mime=\"" << mime.ascii() << "\">"
-      << geometry() << "</OBJECT>" << endl;
-
-  return true;
 }
 
 bool KoDocumentChild::isStoredExtern()

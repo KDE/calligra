@@ -5,10 +5,10 @@ INCLUDES = $(all_includes)
 
 ####### Files
 
-libkoml_la_SOURCES = komlWrapper.cc komlParser.cc komlFeed.cc komlFileFeed.cc \
+libkoml_la_SOURCES = komlParser.cc komlFeed.cc komlFileFeed.cc \
 	komlWriter.cc komlStreamFeed.cc torben.cc komlMime.cc
 
-include_HEADERS = komlWrapper.h komlParser.h komlFeed.h komlFileFeed.h \
+include_HEADERS = komlParser.h komlFeed.h komlFileFeed.h \
 	komlWriter.h torben.h komlStreamFeed.h komlMime.h
 
 libkoml_la_LIBADD = $(LIB_KDECORE)
