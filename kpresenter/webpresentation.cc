@@ -233,7 +233,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         html = QString( "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" );
         html += QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
 
-        html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
+        html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
             .arg( chsetName );
 
         html += QString( "</HEAD>\n" );
@@ -528,7 +528,7 @@ void KPWebPresentationWizard::setupPage2()
                         "old web browsers.\n");
 
     if ( KImageIO::canWrite( "JPEG" ) )
-        help += i18n("JPEG is a picture format with a quite good\n"
+        help += i18n("JPEG is a picture format with quite a good\n"
                      "compression and which is supported by\n"
                      "all web browsers.\n");
 

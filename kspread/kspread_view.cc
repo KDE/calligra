@@ -391,7 +391,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_autoSum = new KAction( i18n("AutoSum"), "black_sum", 0, this, SLOT( autoSum() ),
                              actionCollection(), "autoSum" );
-    m_sortDec = new KAction( i18n("Sort descreasing"), "sort_decrease", 0, this, SLOT( sortDec() ),
+    m_sortDec = new KAction( i18n("Sort decreasing"), "sort_decrease", 0, this, SLOT( sortDec() ),
                              actionCollection(), "sortDec" );
     m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this, SLOT( sortInc() ),
                              actionCollection(), "sortInc" );
