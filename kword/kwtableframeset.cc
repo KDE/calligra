@@ -179,6 +179,7 @@ void KWTableFrameSet::addCell( Cell *cell )
     for ( i = 0; i < m_cells.count() && m_cells.at( i )->isAboveOrLeftOf( cell->m_row, cell->m_col ); i++ ) ;
     // cell->setName( m_name + ' ' + cell->m_col + ',' + cell->m_row ); // already done in constructor
     m_cells.insert( i, cell );
+
 }
 
 /*================================================================*/
@@ -1312,20 +1313,16 @@ bool KWTableFrameSet::contains( double mx, double my ) {
     for (unsigned int i=1 ; i < m_pageBoundaries.count(); i++) {
 
         first = m_cells.at((m_pageBoundaries[i-1]))->getFrame( 0 );
-
-        // laurent
-        //  m_pageBoundaries[i] -1 doesn't work when you join last cells
-        // so used for the moment getCell( )
-        // I don't know if it broken somethink :(
-
-        //last = m_cells.at(m_pageBoundaries[i] -1)->getFrame( 0 );
-
-        last = getCell( m_rows - 1, m_cols - 1 )->getFrame( 0 );
-
+        if(m_pageBoundaries[i] != 0) 
+            last = m_cells.at(m_pageBoundaries[i] -1)->getFrame( 0 );
+        else 
+            last = first;
 
         KoRect rect( KoPoint( first->x(), first->y() ), KoPoint( last->right(), last->bottom() ) );
-        if(rect.contains(mx,my))
+        if(rect.contains(mx,my)) {
+kdDebug() << "Inside table\n" ;
             return true;
+        }
     }
 
     return false;
