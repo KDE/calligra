@@ -6353,48 +6353,6 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             else if( rowElement.tagName() == "table:table-row" )
             {
                 loadRowFormat( rowElement, rowIndex, oasisStyles, rowNode.isNull() );
-
-                rowIndex++;
-                int columnIndex = 0;
-                QDomNode cellNode = rowNode.firstChild();
-                while( !cellNode.isNull() )
-                {
-                    QDomElement cellElement = cellNode.toElement();
-                    if( !cellElement.isNull() )
-                    {
-                        columnIndex++;
-                        if( cellElement.tagName() == "table:table-cell" )
-                        {
-                            KSpreadCell* cell = nonDefaultCell( columnIndex, rowIndex );
-                            cell->loadOasis( cellElement, oasisStyles );
-
-                            if( cellElement.hasAttribute( "table:number-columns-repeated" ) )
-                            {
-                                bool ok = false;
-                                int cols = cellElement.attribute( "table:number-columns-repeated" ).toInt( &ok );
-                                if( ok )
-                                    for( int i = 1; i < cols; i++ )
-                                    {
-                                        columnIndex++;
-                                        KSpreadCell* target = nonDefaultCell( columnIndex, rowIndex );
-                                        target->copyAll( cell );
-                                    }
-                             }
-                        }
-                    }
-
-                    cellNode = cellNode.nextSibling();
-                }
-
-                if( rowElement.hasAttribute( "table:number-rows-repeated" ) )
-                {
-                    bool ok = false;
-                    int rows = rowElement.attribute( "table:number-rows-repeated" ).toInt( &ok );
-                    if( ok )
-                        for( int i = 1; i < rows; i++ )
-                            // FIXME copy row layout
-                            rowIndex++;
-                }
             }
         }
 
@@ -6549,6 +6507,36 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                 rowL->setHide( true );
         }
         ++rowIndex;
+    }
+
+    int columnIndex = 0;
+    QDomNode cellNode = row.firstChild();
+    while( !cellNode.isNull() )
+    {
+        QDomElement cellElement = cellNode.toElement();
+        if( !cellElement.isNull() )
+        {
+            columnIndex++;
+            if( cellElement.tagName() == "table:table-cell" )
+            {
+                KSpreadCell* cell = nonDefaultCell( columnIndex, rowIndex );
+                cell->loadOasis( cellElement, oasisStyles );
+
+                if( cellElement.hasAttribute( "table:number-columns-repeated" ) )
+                {
+                    bool ok = false;
+                    int cols = cellElement.attribute( "table:number-columns-repeated" ).toInt( &ok );
+                    if( ok )
+                        for( int i = 1; i < cols; i++ )
+                        {
+                            columnIndex++;
+                            KSpreadCell* target = nonDefaultCell( columnIndex, rowIndex );
+                            target->copyAll( cell );
+                        }
+                }
+            }
+        }
+        cellNode = cellNode.nextSibling();
     }
 
     return true;
