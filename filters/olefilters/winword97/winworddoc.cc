@@ -32,9 +32,8 @@ WinWordDoc::WinWordDoc(
             dataStream.data),
         m_part(part)
 {
-    m_success = true;
-    m_ready = false;
-
+    m_phase = INIT;
+    m_success = TRUE;
     m_body = QString("");
     m_tableManager = 0;
 }
@@ -45,138 +44,28 @@ WinWordDoc::~WinWordDoc()
 
 const bool WinWordDoc::convert()
 {
-    if (!m_success || m_ready)
-        return false;
-    parse();
-    m_success = true;
+    // We do the conversion in two passes, to allow all the tables to be turned into framesets
+    // after the main frameset with the text.
 
-    return m_success;
-}
-
-void WinWordDoc::gotError(const QString &text)
-{
-    m_body.append("<PARAGRAPH>\n <TEXT>\n");
-    m_body.append(text);
-    m_body.append("\n </TEXT>\n</PARAGRAPH>\n");
-}
-
-void WinWordDoc::gotParagraph(const QString &text, PAP &style)
-{
-    m_body.append("<PARAGRAPH>\n <TEXT>\n");
-    m_body.append(text);
-    m_body.append("\n </TEXT>\n</PARAGRAPH>\n");
-}
-
-void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
-{
-    // 0 Arabic numbering 
-    // 1 Upper case Roman 
-    // 2 Lower case Roman 
-    // 3 Upper case Letter 
-    // 4 Lower case letter 
-    // 5 Ordinal
-
-    static unsigned numberingTypes[6] =
+    if (m_phase == INIT)
     {
-        1, 5, 4, 3, 2, 6
-    };
-
-    m_body.append("<PARAGRAPH>\n <TEXT>\n");
-    m_body.append(text);
-    m_body.append("\n </TEXT>\n"
-            "  <LAYOUT>\n"
-            "   <NAME value=\"Head ");
-    m_body.append(QString::number(style.istd));
-    m_body.append("\"/>\n   <COUNTER type=\"");
-    m_body.append(QString::number(numberingTypes[style.anld.nfc]));
-    m_body.append("\" depth=\"");
-    m_body.append(QString::number(style.istd - 1));
-    m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
-            "  </LAYOUT>\n"
-            "</PARAGRAPH>\n");
-}
-
-void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
-{
-    // 0 Arabic numbering 
-    // 1 Upper case Roman 
-    // 2 Lower case Roman 
-    // 3 Upper case Letter 
-    // 4 Lower case letter 
-    // 5 Ordinal
-
-    static unsigned numberingTypes[6] =
-    {
-        1, 5, 4, 3, 2, 6
-    };
-
-    m_body.append("<PARAGRAPH>\n <TEXT>\n");
-    m_body.append(text);
-    m_body.append("\n </TEXT>\n"
-            "  <LAYOUT>\n"
-            "   <COUNTER type=\"");
-    m_body.append(QString::number(numberingTypes[style.anld.nfc]));
-    m_body.append("\" depth=\"");
-    m_body.append(QString::number(style.ilvl));
-    m_body.append("\" bullet=\"176\" start=\"");
-    m_body.append(QString::number(style.anld.iStartAt));
-    m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
-            "  </LAYOUT>\n"
-            "</PARAGRAPH>\n");
-}
-
-void WinWordDoc::gotTableEnd()
-{
-//QString m_body = QString("");
-//    m_body.append("<FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
-//        " <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
-//kdDebug(30000) << m_body << endl;
-}
-
-void WinWordDoc::gotTableParagraph(const QString &text, PAP &style)
-{
-//QString m_body = QString("");
-//    m_body.append("<FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
-//    m_body.append(QString::number(m_tableManager));
-//    m_body.append("\" row=\"");
-//    m_body.append(QString::number(m_tableRow));
-//    m_body.append("\" col=\"");
-//    m_body.append(QString::number(m_tableColumn));
-//    m_body.append("\" removeable=\"0\" visible=\"1\">\n"
-//        "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
-//    m_body.append("<PARAGRAPH>\n <TEXT>\n");
-//    m_body.append(text);
-//    m_body.append("\n </TEXT>\n</PARAGRAPH>\n</FRAMESET>\n");
-//kdDebug(30000) << m_body << endl;
-    gotParagraph(text, style);
-    if (style.fTtp)
-    {
-        m_tableRow++;
-        m_tableColumn = 0;
+        m_body.append(
+            "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
+            "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
+        m_phase = TEXT_PASS;
+        m_tableManager = 0;
+        parse();
+        m_body.append(
+            "  </FRAMESET>\n");
+        if (m_success)
+        {
+            m_phase = TABLE_PASS;
+            m_tableManager = 0;
+            parse();
+        }
     }
-    else
-    {
-        m_tableColumn++;
-    }
-}
 
-void WinWordDoc::gotTableStart()
-{
-    // Create a unique group manager for each new table.
-
-    m_tableManager++;
-    m_tableRow = 0;
-    m_tableColumn = 0;
-//QString m_body = QString("");
-//    m_body.append("</FRAMESET>\n");
-//kdDebug(30000) << m_body << endl;
-}
-
-const QDomDocument * const WinWordDoc::part()
-{
-    if (m_ready && m_success)
-        return &m_part;
-    else
+    if (m_phase != DONE)
     {
         QString newstr;
 
@@ -191,52 +80,170 @@ const QDomDocument * const WinWordDoc::part()
             "  <FORMAT superscript=\"1\" type=\"1\"/>\n"
             "  <FIRSTPARAG ref=\"(null)\"/>\n"
             " </FOOTNOTEMGR>\n"
-            " <FRAMESETS>\n"
-            "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
-            "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
-        if (m_success)
-            newstr.append(m_body);
-        else
+            " <FRAMESETS>\n");
+        if (!m_success)
             newstr.append(
+            "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
+            "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n"
             "   <PARAGRAPH>\n"
-            "    <TEXT>This filter is still crappy and it obviously was not able to convert your document...</TEXT>\n"
-            "    <INFO info=\"0\"/>\n"
-            "    <HARDBRK frame=\"0\"/>\n"
-            "    <FORMATS>\n"
-            "    </FORMATS>\n"
-            "    <LAYOUT>\n"
-            "     <NAME value=\"Standard\"/>\n"
-            "     <FOLLOWING name=\"Standard\"/>\n"
-            "     <FLOW value=\"0\"/>\n"
-            "     <OHEAD pt=\"0\" mm=\"0\" inch=\"0\"/>\n"
-            "     <OFOOT pt=\"0\" mm=\"0\" inch=\"0\"/>\n"
-            "     <IFIRST pt=\"0\" mm=\"0\" inch=\"0\"/>\n"
-            "     <ILEFT pt=\"0\" mm=\"0\" inch=\"0\"/>\n"
-            "     <LINESPACE pt=\"0\" mm=\"0\" inch=\"0\"/>\n"
-            "     <COUNTER type=\"0\" depth=\"0\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
-            "     <LEFTBORDER red=\"255\" green=\"255\" blue=\"255\" style=\"0\" width=\"0\"/>\n"
-            "     <RIGHTBORDER red=\"255\" green=\"255\" blue=\"255\" style=\"0\" width=\"0\"/>\n"
-            "     <TOPBORDER red=\"255\" green=\"255\" blue=\"255\" style=\"0\" width=\"0\"/>\n"
-            "     <BOTTOMBORDER red=\"255\" green=\"255\" blue=\"255\" style=\"0\" width=\"0\"/>\n"
-            "     <FORMAT>\n"
-            "      <COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n"
-            "      <FONT name=\"times\"/>\n"
-            "      <SIZE value=\"12\"/>\n"
-            "      <WEIGHT value=\"50\"/>\n"
-            "      <ITALIC value=\"0\"/>\n"
-            "      <UNDERLINE value=\"0\"/>\n"
-            "      <VERTALIGN value=\"0\"/>\n"
-            "     </FORMAT> \n"
-            "    </LAYOUT>\n"
-            "   </PARAGRAPH>\n");
+            "    <TEXT>This filter is still crappy and it obviously was not able to convert your document.</TEXT>\n"
+            "   </PARAGRAPH>\n"
+            "  </FRAMESET>\n");
+        newstr.append(m_body);
         newstr.append(
-            "  </FRAMESET>\n"
             "  </FRAMESETS>\n"
             "</DOC>\n");
         m_part.setContent(newstr);
-        m_ready=true;
-        return &m_part;
+        m_phase = DONE;
     }
+    return m_success;
+}
+
+void WinWordDoc::gotError(const QString &text)
+{
+    if (m_phase == TEXT_PASS)
+    {
+        m_body.append("<PARAGRAPH>\n<TEXT>");
+        m_body.append(text);
+        m_body.append("</TEXT>\n</PARAGRAPH>\n");
+    }
+    m_success = false;
+}
+
+void WinWordDoc::gotParagraph(const QString &text, PAP &style)
+{
+    if (m_phase == TEXT_PASS)
+    {
+        m_body.append("<PARAGRAPH>\n<TEXT>");
+        m_body.append(text);
+        m_body.append("</TEXT>\n</PARAGRAPH>\n");
+    }
+}
+
+void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
+{
+    if (m_phase == TEXT_PASS)
+    {
+        m_body.append("<PARAGRAPH>\n<TEXT>");
+        m_body.append(text);
+        m_body.append("</TEXT>\n"
+            " <LAYOUT>\n"
+            "  <NAME value=\"Head ");
+        m_body.append(QString::number(style.istd));
+        m_body.append("\"/>\n  <COUNTER type=\"");
+        m_body.append(numberingType(style.anld.nfc));
+        m_body.append("\" depth=\"");
+        m_body.append(QString::number(style.istd - 1));
+        m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
+            " </LAYOUT>\n"
+            "</PARAGRAPH>\n");
+    }
+}
+
+void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
+{
+    if (m_phase == TEXT_PASS)
+    {
+        m_body.append("<PARAGRAPH>\n<TEXT>");
+        m_body.append(text);
+        m_body.append("</TEXT>\n"
+            " <LAYOUT>\n"
+            "  <COUNTER type=\"");
+        m_body.append(numberingType(style.anld.nfc));
+        m_body.append("\" depth=\"");
+        m_body.append(QString::number(style.ilvl));
+        m_body.append("\" bullet=\"176\" start=\"");
+        m_body.append(QString::number(style.anld.iStartAt));
+        m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
+            " </LAYOUT>\n"
+            "</PARAGRAPH>\n");
+    }
+}
+
+void WinWordDoc::gotTableBegin()
+{
+    // Create a unique group manager for each new table.
+
+    m_tableManager++;
+    m_tableRow = 0;
+
+    if (m_phase == TEXT_PASS)
+    {
+        m_body.append("<PARAGRAPH>\n<TEXT>");
+        if (m_tableManager == 1)
+            m_body.append("This filter is currently unable to position tables correctly."
+                " All the tables are at the end of this document. Other tables can be found by looking for strings like"
+                "\"Table 1 goes here\"");
+        m_body.append("Table ");
+        m_body.append(QString::number(m_tableManager));
+        m_body.append(" goes here.</TEXT>\n</PARAGRAPH>\n");
+    }
+}
+
+void WinWordDoc::gotTableEnd()
+{
+}
+
+void WinWordDoc::gotTableRow(const QString texts[], const PAP styles[], TAP &row)
+{
+    if (m_phase == TABLE_PASS)
+    {
+        int offset = -row.rgdxaCenter[0];
+
+        for (unsigned i = 0; i < row.itcMac; i++)
+        {
+            m_body.append("<FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
+            m_body.append(QString::number(m_tableManager));
+            m_body.append("\" row=\"");
+            m_body.append(QString::number(m_tableRow));
+            m_body.append("\" col=\"");
+            m_body.append(QString::number(i));
+            m_body.append("\" rows=\"1\" cols=\"1\" removeable=\"0\" visible=\"1\">\n"
+                " <FRAME left=\"");
+            m_body.append(QString::number((row.rgdxaCenter[i] + offset)/20));
+            m_body.append("\" right=\"");
+            m_body.append(QString::number((row.rgdxaCenter[i+1] + offset)/20));
+            m_body.append("\" top=\"");
+            m_body.append(QString::number(400 + m_tableRow * 30));
+            m_body.append("\" bottom=\"");
+            m_body.append(QString::number(500 + m_tableRow * 30));
+            m_body.append("\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
+            m_body.append("<PARAGRAPH>\n<TEXT>");
+            m_body.append(texts[i]);
+            m_body.append("</TEXT>\n </PARAGRAPH>\n");
+            m_body.append("</FRAMESET>\n");
+
+            offset++;
+        }
+    }
+    m_tableRow++;
+}
+
+char WinWordDoc::numberingType(unsigned nfc)
+{
+    // Word number formats are:
+    //
+    // 0 Arabic numbering
+    // 1 Upper case Roman
+    // 2 Lower case Roman
+    // 3 Upper case Letter
+    // 4 Lower case letter
+    // 5 Ordinal
+
+    static unsigned numberingTypes[6] =
+    {
+        '1', '5', '4', '3', '2', '6'
+    };
+
+    return numberingTypes[nfc];
+}
+
+const QDomDocument * const WinWordDoc::part()
+{
+    if (m_phase == DONE)
+        return &m_part;
+    else
+        return NULL;
 }
 
 /*
@@ -457,6 +464,7 @@ void WinWordDoc::readCommentStuff() {
 //    sttbf(m_grpXst, m_fib.fcGrpXstAtnOwners, m_fib.lcbGrpXstAtnOwners, m_table.data);
 //    sttbf(m_atnbkmk, m_fib.fcSttbfAtnbkmk, m_fib.lcbSttbfAtnbkmk, m_table.data);
 }
+
 
 
 

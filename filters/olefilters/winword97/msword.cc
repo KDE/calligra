@@ -48,33 +48,171 @@ void MsWord::constructionError(unsigned line, const char *reason)
     kdError(s_area) << m_constructionError << endl;
 }
 
-void MsWord::decodeParagraph(const QString &text, PAP &style)
+void MsWord::decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style)
 {
-    if (style.fInTable)
+    PAP pap;
+
+    // Work out the paragraph details.
+
+    paragraphStyleCreate(&pap);
+    paragraphStyleModify(&pap, style);
+    paragraphStyleModify(&pap, layout);
+
+    // We treat table paragraphs somewhat differently...so edal with
+    // them first.
+
+    if (pap.fInTable)
     {
         if (!m_wasInTable)
-            gotTableStart();
+        {
+            gotTableBegin();
+            m_tableColumn = 0;
+        }
         m_wasInTable = true;
-        gotTableParagraph(text, style);
+
+        // When we get to the end of the row, output the whole lot.
+
+        if (pap.fTtp)
+        {
+            TAP tap;
+
+            // A TAP describes the row.
+
+            memset(&tap, 0, sizeof(tap));
+            paragraphStyleModify(&pap, &tap, style.grpprl, style.grpprlBytes);
+            gotTableRow(m_tableText, m_tableStyle, tap);
+            m_tableColumn = 0;
+        }
+        else
+        {
+            m_tableText[m_tableColumn] = text;
+            m_tableStyle[m_tableColumn] = pap;
+            m_tableColumn++;
+        }
+        return;
+    }
+    if (m_wasInTable)
+        gotTableEnd();
+    m_wasInTable = false;
+
+    // What kind of paragraph was this?
+
+    if ((pap.istd >= 1) && (pap.istd <= 9))
+    {
+        gotHeadingParagraph(text, pap);
+    }
+    else
+    if (pap.ilfo)
+    {
+        const U8 *ptr = m_tableStream + m_fib.fcPlfLfo; //lcbPlfLfo.
+        const U8 *ptr2;
+        const U8 *ptr3;
+        U32 lfoCount;
+        int i;
+
+        // Find the number of LFOs.
+
+        ptr += MsWordGenerated::read(ptr, &lfoCount);
+        ptr2 = ptr + lfoCount * sizeof(LFO);
+        if (lfoCount < pap.ilfo)
+            kdError(s_area) << "MsWord::error finding LFO[" << pap.ilfo << "]" << endl;
+
+        // Skip all the LFOs before our one, so that we can traverse the variable
+        // length LFOLVL arrays.
+
+        for (i = 1; i < pap.ilfo; i++)
+        {
+            LFO data;
+            LFOLVL levelOverride;
+            LVLF level;
+            U16 numberTextLength;
+            QString numberText;
+
+            // Read the LFO, and then skip any LFOLVLs.
+
+            ptr += MsWordGenerated::read(ptr, &data);
+            for (unsigned j = 0; j < data.clfolvl; j++)
+            {
+                ptr2 += MsWordGenerated::read(ptr2, &levelOverride);
+                if (levelOverride.fFormatting)
+                {
+                    ptr2 += MsWordGenerated::read(ptr2, &level);
+                    ptr3 = ptr2;
+                    ptr2 += level.cbGrpprlPapx;
+                    ptr2 += level.cbGrpprlChpx;
+                    ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
+                    ptr2 += read(ptr2, &numberText, numberTextLength, true);
+                }
+            }
+        }
+
+        // We have found the LFO from its 1-based array. Check to see if there are any overrides for this particular level.
+
+        LFO data;
+        LFOLVL levelOverride;
+        LVLF level;
+        U16 numberTextLength;
+        QString numberText;
+
+        // Read our LFO, and then search any LFOLVLs for a matching level.
+
+        ptr += MsWordGenerated::read(ptr, &data);
+        for (i = 0; i < data.clfolvl; i++)
+        {
+            ptr2 += MsWordGenerated::read(ptr2, &levelOverride);
+            if (levelOverride.fFormatting)
+            {
+                ptr2 += MsWordGenerated::read(ptr2, &level);
+                ptr3 = ptr2;
+                ptr2 += level.cbGrpprlPapx;
+                ptr2 += level.cbGrpprlChpx;
+                ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
+                ptr2 += read(ptr2, &numberText, numberTextLength, true);
+            }
+
+            // If this LFOLVL is ours, we are done!
+
+            if (pap.ilvl == levelOverride.ilvl)
+            {
+                break;
+            };
+        }
+        if (i == data.clfolvl)
+        {
+            // No overriding LFOLVL was found.
+
+            levelOverride.fFormatting = false;
+            levelOverride.fStartAt = false;
+        }
+
+        // If the LFOLVL was not a complete override, resort to the LSTs for whatever
+        // is missing.
+
+        paragraphStyleModify(&pap, data, !levelOverride.fFormatting, !levelOverride.fStartAt);
+        if (levelOverride.fStartAt)
+        {
+            // Apply the startAt.
+
+            pap.anld.iStartAt = levelOverride.iStartAt;
+            kdDebug(s_area) << "got startAt " << pap.anld.iStartAt << " from LFOLVL" << endl;
+        }
+        if (levelOverride.fFormatting)
+        {
+            // Apply the grpprl.
+
+            kdDebug(s_area) << "getting formatting from LFO" << endl;
+            paragraphStyleModify(&pap, NULL, ptr3, level.cbGrpprlPapx);
+
+            // Apply the startAt.
+
+            pap.anld.iStartAt = level.iStartAt;
+            kdDebug(s_area) << "got startAt " << pap.anld.iStartAt << " from LVLF" << endl;
+        }
+        gotListParagraph(text, pap);
     }
     else
     {
-        if (m_wasInTable)
-            gotTableEnd();
-        m_wasInTable = false;
-        if ((style.istd >= 1) && (style.istd <= 9))
-        {
-            gotHeadingParagraph(text, style);
-        }
-        else
-        if (style.ilfo)
-        {
-            gotListParagraph(text, style);
-        }
-        else
-        {
-            gotParagraph(text, style);
-        }
+        gotParagraph(text, pap);
     }
 }
 
@@ -181,7 +319,6 @@ void MsWord::getPAPX(
     U32 startFc;
     U32 endFc;
     U8 rgb;
-    PAP pap;
     PHE layout;
     PAPXFKP style;
 
@@ -191,125 +328,7 @@ void MsWord::getPAPX(
         QString text;
 
         read(m_mainStream + startFc, &text, endFc - startFc, unicode);
-        paragraphStyleCreate(&pap);
-        paragraphStyleModify(&pap, style);
-        paragraphStyleModify(&pap, layout);
-
-        // What kind of paragraph was this?
-
-        if (pap.ilfo)
-        {
-            const U8 *ptr = m_tableStream + m_fib.fcPlfLfo; //lcbPlfLfo.
-            const U8 *ptr2;
-            const U8 *ptr3;
-            U32 lfoCount;
-            int i;
-
-            // Find the number of LFOs.
-
-            ptr += MsWordGenerated::read(ptr, &lfoCount);
-            ptr2 = ptr + lfoCount * sizeof(LFO);
-            if (lfoCount < pap.ilfo)
-                kdError(s_area) << "MsWord::error finding LFO[" << pap.ilfo << "]" << endl;
-
-            // Skip all the LFOs before our one, so that we can traverse the variable
-            // length LFOLVL arrays.
-
-            for (i = 1; i < pap.ilfo; i++)
-            {
-                LFO data;
-                LFOLVL levelOverride;
-                LVLF level;
-                U16 numberTextLength;
-                QString numberText;
-
-                // Read the LFO, and then skip any LFOLVLs.
-
-                ptr += MsWordGenerated::read(ptr, &data);
-                for (unsigned j = 0; j < data.clfolvl; j++)
-                {
-                    ptr2 += MsWordGenerated::read(ptr2, &levelOverride);
-                    if (levelOverride.fFormatting)
-                    {
-                        ptr2 += MsWordGenerated::read(ptr2, &level);
-                        ptr3 = ptr2;
-                        ptr2 += level.cbGrpprlPapx;
-                        ptr2 += level.cbGrpprlChpx;
-                        ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-                        ptr2 += read(ptr2, &numberText, numberTextLength, true);
-                    }
-                }
-            }
-
-            // We have found the LFO from its 1-based array. Check to see if there are any overrides for this particular level.
-
-            LFO data;
-            LFOLVL levelOverride;
-            LVLF level;
-            U16 numberTextLength;
-            QString numberText;
-
-            // Read our LFO, and then search any LFOLVLs for a matching level.
-
-            ptr += MsWordGenerated::read(ptr, &data);
-            for (i = 0; i < data.clfolvl; i++)
-            {
-                ptr2 += MsWordGenerated::read(ptr2, &levelOverride);
-                if (levelOverride.fFormatting)
-                {
-                    ptr2 += MsWordGenerated::read(ptr2, &level);
-                    ptr3 = ptr2;
-                    ptr2 += level.cbGrpprlPapx;
-                    ptr2 += level.cbGrpprlChpx;
-                    ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-                    ptr2 += read(ptr2, &numberText, numberTextLength, true);
-                }
-
-                // If this LFOLVL is ours, we are done!
-
-                if (pap.ilvl == levelOverride.ilvl)
-                {
-                    break;
-                };
-            }
-            if (i == data.clfolvl)
-            {
-                // No overriding LFOLVL was found.
-
-                levelOverride.fFormatting = false;
-                levelOverride.fStartAt = false;
-            }
-
-            // If the LFOLVL was not a complete override, resort to the LSTs for whatever
-            // is missing.
-
-            paragraphStyleModify(&pap, data, !levelOverride.fFormatting, !levelOverride.fStartAt);
-            if (levelOverride.fStartAt)
-            {
-                // Apply the startAt.
-
-                pap.anld.iStartAt = levelOverride.iStartAt;
-        	kdDebug(s_area) << "got startAt " << pap.anld.iStartAt << " from LFOLVL" << endl;
-            }
-            if (levelOverride.fFormatting)
-            {
-                // Apply the grpprl.
-
-        	kdDebug(s_area) << "getting formatting from LFO" << endl;
-                paragraphStyleModify(&pap, ptr3, level.cbGrpprlPapx);
-
-                // Apply the startAt.
-
-                pap.anld.iStartAt = level.iStartAt;
-                kdDebug(s_area) << "got startAt " << pap.anld.iStartAt << " from LVLF" << endl;
-            }
-            kdDebug(s_area) << "list: startAt: " << pap.anld.iStartAt <<
-                "nfc: " << pap.anld.nfc << "jc: " << pap.anld.jc << endl;
-if (pap.anld.nfc > 5)
-pap.anld.nfc=0;
-        }
-        kdDebug(s_area) << "MsWord::gotParagraph: style: " << pap.istd << endl;
-        decodeParagraph(text, pap);
+        decodeParagraph(text, layout, style);
     }
 }
 
@@ -444,17 +463,19 @@ void MsWord::gotListParagraph(const QString &text, PAP &style)
     kdDebug(s_area) << "MsWord::gotParagraph: list level: " << style.ilvl << endl;
 }
 
+void MsWord::gotTableBegin()
+{
+    kdDebug(s_area) << "MsWord::gotParagraph: table begin" << endl;
+}
+
 void MsWord::gotTableEnd()
 {
+    kdDebug(s_area) << "MsWord::gotParagraph: table end" << endl;
 }
 
-void MsWord::gotTableParagraph(const QString &text, PAP &style)
+void MsWord::gotTableRow(const QString texts[], const PAP styles[], TAP &row)
 {
-    kdDebug(s_area) << "MsWord::gotParagraph: table: " << style.ilvl << endl;
-}
-
-void MsWord::gotTableStart()
-{
+    kdDebug(s_area) << "MsWord::gotParagraph: table row: cells: " << row.itcMac << endl;
 }
 
 MsWord::MsWord(
@@ -587,7 +608,8 @@ void MsWord::paragraphStyleModify(PAP *pap, unsigned style)
 
 // Apply a grpprl.
 
-void MsWord::paragraphStyleModify(PAP *pap, const U8 *grpprl, unsigned count)
+#include <stdio.h>
+void MsWord::paragraphStyleModify(PAP *pap, TAP *tap, const U8 *grpprl, unsigned count)
 {
     union
     {
@@ -702,6 +724,30 @@ void MsWord::paragraphStyleModify(PAP *pap, const U8 *grpprl, unsigned count)
         case 0xa414:
             MsWordGenerated::read(in + bytes, &pap->dyaAfter);
             break;
+
+        // TAP-specific stuff...
+
+        case 0xd605:
+            if (tap)
+            {
+                MsWordGenerated::read(in + bytes, &tap->rgbrcTable[0], 6);
+            }
+            break;
+        case 0xd608:
+            if (tap)
+            {
+                // Get cell count.
+
+                MsWordGenerated::read(in + bytes, &tmp);
+                tap->itcMac = tmp;
+                tmp = 1;
+
+                // Get cell boundaries and descriptions.
+
+                tmp += MsWordGenerated::read(in + bytes + tmp, (U16 *)&tap->rgdxaCenter[0], tap->itcMac + 1);
+                tmp += MsWordGenerated::read(in + bytes + tmp, &tap->rgtc[0], tap->itcMac);
+            }
+            break;
         default:
             kdWarning(s_area) << "MsWord::paragraphStyleModify: unsupported opcode:" << opcode.value << endl;
             break;
@@ -762,7 +808,7 @@ void MsWord::paragraphStyleModify(PAP *pap, LFO &style, bool useFormatting, bool
             {
                 // Apply the grpprl.
 
-                paragraphStyleModify(pap, ptr2, level.cbGrpprlPapx);
+                paragraphStyleModify(pap, NULL, ptr2, level.cbGrpprlPapx);
             }
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
@@ -786,7 +832,7 @@ void MsWord::paragraphStyleModify(PAP *pap, PAPXFKP &style)
     // Build the base PAP then walk the grpprl.
 
     paragraphStyleModify(pap, style.istd);
-    paragraphStyleModify(pap, style.grpprl, style.grpprlBytes);
+    paragraphStyleModify(pap, NULL, style.grpprl, style.grpprlBytes);
 }
 
 // Apply a layout.
@@ -823,7 +869,7 @@ void MsWord::paragraphStyleModify(PAP *pap, STD &style)
     // Build the base PAP then walk the grpprl.
 
     paragraphStyleModify(pap, pap->istd);
-    paragraphStyleModify(pap, grpprl, cbUpx - 2);
+    paragraphStyleModify(pap, NULL, grpprl, cbUpx - 2);
 }
 
 void MsWord::parse()
@@ -1091,8 +1137,3 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
     }
     return bytes;
 } // FIB
-
-
-
-
-

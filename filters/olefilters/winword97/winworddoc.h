@@ -70,13 +70,28 @@ private:
     WinWordDoc(const WinWordDoc &);
     const WinWordDoc &operator=(const WinWordDoc &);
 
+    // The conversion is done in multiple passes. Which pass is this?
+
+    enum
+    {
+        INIT,
+        TEXT_PASS,
+        TABLE_PASS,
+        DONE
+    } m_phase;
+    bool m_success;
+
+    // Convert from Word number format codes to our own number format.
+
+    char numberingType(unsigned nfc);
+
     void gotError(const QString &text);
     void gotParagraph(const QString &text, PAP &style);
     void gotHeadingParagraph(const QString &text, PAP &style);
     void gotListParagraph(const QString &text, PAP &style);
+    void gotTableBegin();
     void gotTableEnd();
-    void gotTableParagraph(const QString &text, PAP &style);
-    void gotTableStart();
+    void gotTableRow(const QString texts[], const PAP styles[], TAP &row);
 
     void FIBInfo();
 
@@ -87,11 +102,9 @@ private:
     const bool checkBinTables();
     void readCommentStuff();
 
-    bool m_success, m_ready;
     QDomDocument m_part;
     unsigned m_tableManager;
     unsigned m_tableRow;
-    unsigned m_tableColumn;
 
     // Stylesheet
     StyleSheet *m_styleSheet;

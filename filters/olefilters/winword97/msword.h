@@ -54,9 +54,9 @@ public:
     virtual void gotParagraph(const QString &text, PAP &style);
     virtual void gotHeadingParagraph(const QString &text, PAP &style);
     virtual void gotListParagraph(const QString &text, PAP &style);
+    virtual void gotTableBegin();
     virtual void gotTableEnd();
-    virtual void gotTableParagraph(const QString &text, PAP &style);
-    virtual void gotTableStart();
+    virtual void gotTableRow(const QString texts[], const PAP styles[], TAP &row);
 
 // TBD: this will be not remain public once I figure out how the nested classes
 // can be made to work (as friends?).
@@ -257,14 +257,21 @@ private:
 
     // Decode a paragraph into the various types for which we have callbacks.
 
-    void decodeParagraph(const QString &text, PAP &style);
+    void decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style);
+
+    // Table variables. We store up the paragraphs in a row,
+    // and then return the whole lot in one go.
+
     bool m_wasInTable;
+    unsigned m_tableColumn;
+    QString m_tableText[64];
+    PAP m_tableStyle[64];
 
     // Initialise and construct the PAP for a paragrpah.
 
     void paragraphStyleCreate(PAP *pap);
     void paragraphStyleModify(PAP *pap, unsigned style);
-    void paragraphStyleModify(PAP *pap, const U8 *grpprl, unsigned count);
+    void paragraphStyleModify(PAP *pap, TAP *tap, const U8 *grpprl, unsigned count);
     void paragraphStyleModify(PAP *pap, LFO &style, bool useFormatting, bool useStartAt);
     void paragraphStyleModify(PAP *pap, PAPXFKP &style);
     void paragraphStyleModify(PAP *pap, PHE &layout);

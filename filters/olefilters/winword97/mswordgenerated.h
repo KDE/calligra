@@ -4168,7 +4168,7 @@ public:
         // rgdxaCenter[0] is the left boundary of cell 0 measured relative to 
         // margin.. rgdxaCenter[tap.itcMac - 1] is left boundary of last 
         // cell. rgdxaCenter[tap.itcMac] is right boundary of last cell.
-        U16 rgdxaCenter[65];
+        S16 rgdxaCenter[65];
 
         // used internally by Word
         U16 rgdxaCenterPrint[65];
