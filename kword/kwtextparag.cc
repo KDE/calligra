@@ -601,6 +601,17 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 case 2: // Picture
                 {
                     len = 1; // it was missing from old 1.0 files
+
+                    // The character matching this format is probably a QChar(1)
+                    // However, as it is an invalid XML character, we must replace it
+                    // or it will be written out while save the file.
+                    KoTextStringChar& ch = string()->at(index);
+                    if (ch.c.unicode()==1)
+                    {
+                        kdDebug() << "Replacing QChar(1) (in KWTextParag::loadFormatting)" << endl;
+                        ch.c='#';
+                    }
+                    
                     KWTextImage * custom = new KWTextImage( kwTextDocument(), QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
                     paragFormat()->addRef();
