@@ -5908,51 +5908,6 @@ void KWView::insertFile(const QString & path)
     QString maindoc = "maindoc.xml";
     if ( store )
     {
-        // We load the embedded objects
-        bool b = store->open(maindoc);
-        if ( !b )
-        {
-            KMessageBox::sorry( this,
-                                i18n("File name is not a KWord file!."),
-                                i18n("Insert File"));
-            delete store;
-            return;
-        }
-        QDomDocument doc;
-        doc.setContent( store->device() );
-        QDomElement word = doc.documentElement();
-        QDomDocument domDoc( "SELECTION" ); // see KWCanvas::copySelectedFrames
-        QDomElement topElem = domDoc.createElement( "SELECTION" );
-        domDoc.appendChild( topElem );
-
-        QValueList<QDomElement> embeddedList;
-        QDomElement embeddedElem = word.namedItem( "EMBEDDED" ).toElement();
-        for ( ; !embeddedElem.isNull() ; embeddedElem = embeddedElem.nextSibling().toElement() )
-        {
-            if ( embeddedElem.tagName() == "EMBEDDED" )
-            {
-                embeddedList.append( embeddedElem );
-            }
-        }
-        QValueList<QDomElement>::Iterator it = embeddedList.begin();
-        QValueList<QDomElement>::Iterator end = embeddedList.end();
-        bool hasEmbedded = false;
-        for ( ; it!= end ; ++it )
-        {
-            topElem.appendChild( *it );
-            hasEmbedded = true;
-        }
-        store->close();
-        if ( hasEmbedded )
-        {
-            //kdDebug()<<k_funcinfo<<" Embedded: \n"<<domDoc.toCString()<<endl;
-            if ( !macroCmd )
-                macroCmd = new KMacroCommand( i18n("Insert File") );
-            m_doc->insertEmbedded( store, topElem, macroCmd );
-        }
-    }
-    if ( store )
-    {
         // We need to load the pictures before we treat framesets
         // because KWDocument::pasteFrames() calls processPictureRequests().
         bool b = store->open(maindoc);
@@ -6092,7 +6047,7 @@ void KWView::insertFile(const QString & path)
                     //kdDebug()<<k_funcinfo<<" paragList tag: "<<(*it).tagName()<<" name: "<<(*it).attribute( "name" )<<" grpMgr: "<<(*it).attribute( "grpMgr" )<<endl;
                     paragsElem.appendChild( *it );
                 }
-                //kdDebug() << k_funcinfo << "\n" << domDoc.toCString() << endl;
+                //kdDebug() << k_funcinfo << "Paragraphs:\n" << domDoc.toCString() << endl;
 
                 // The fixed framesets
                 framesetElem = framesetElem.nextSibling().toElement();
@@ -6153,7 +6108,32 @@ void KWView::insertFile(const QString & path)
                         topElem.appendChild( framesetElem );
                     }
                 }
+                // Embedded documents
+                QDomDocument embeddedDoc( "SELECTION" );
+                QDomElement selElem = embeddedDoc.createElement( "SELECTION" );
+                embeddedDoc.appendChild( selElem );
 
+                QValueList<QDomElement> embeddedList;
+                QDomElement embeddedElem = word.namedItem( "EMBEDDED" ).toElement();
+                for ( ; !embeddedElem.isNull() ; embeddedElem = embeddedElem.nextSibling().toElement() )
+                {
+                    if ( embeddedElem.tagName() == "EMBEDDED" )
+                    {
+                        embeddedList.append( embeddedElem );
+                    }
+                }
+                it = embeddedList.begin();
+                end = embeddedList.end();
+                bool hasEmbedded = false;
+                for ( ; it!= end ; ++it )
+                {
+                    selElem.appendChild( *it );
+                    hasEmbedded = true;
+                }
+                store->close();
+
+
+                // Now we do the insertion
                 if ( !macroCmd )
                     macroCmd = new KMacroCommand( i18n("Insert File") );
 
@@ -6163,6 +6143,14 @@ void KWView::insertFile(const QString & path)
                     //kdDebug() << k_funcinfo << domDocFrames.toCString() << endl;
                     m_doc->pasteFrames( topElem, macroCmd );
                 }
+                if ( hasEmbedded )
+                {
+                    //kdDebug()<<k_funcinfo<<" Embedded: \n"<<embeddedDoc.toCString()<<endl;
+                    if ( !macroCmd )
+                        macroCmd = new KMacroCommand( i18n("Insert File") );
+                    m_doc->insertEmbedded( store, selElem, macroCmd );
+                }
+
                 // insert paragraphs and inline framesets (we always have at least one paragraph)
                 KCommand *cmd = textFrameSet->pasteKWord( &insertionCursor, domDoc.toCString(), true );
 
@@ -6173,7 +6161,6 @@ void KWView::insertFile(const QString & path)
 
             }
         }
-        store->close();
 
         m_doc->loadImagesFromStore( store );
         m_doc->completePasting();

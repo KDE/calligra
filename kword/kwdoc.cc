@@ -2123,8 +2123,9 @@ void KWDocument::completePasting()
 
 void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd )
 {
-    m_pasteFramesetsMap = new QMap<QString, QString>();
-    QPtrList<KWFrameSet> frameSetsToFinalize;
+    if ( !m_pasteFramesetsMap ) // may have been created by pasteFrames
+        m_pasteFramesetsMap = new QMap<QString, QString>();
+
     QDomElement elem = topElem.firstChild().toElement();
     for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
     {
@@ -2147,6 +2148,7 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
                     insertChild( ch );
                     QString oldName = settings.attribute( "name" );
                     QString newName = uniqueFramesetName( oldName );
+                    m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
                     KWPartFrameSet *part = new KWPartFrameSet( this, ch, newName );
                     m_lstFrameSet.append( part );
                     kdDebug() << "KWDocument::insertEmbedded loading embedded object" << endl;
@@ -2160,20 +2162,11 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
                             macroCmd->addCommand( new KWCreateFrameCommand( QString::null, frameIt.current() ) );
                         }
                     }
-                    if ( frameSetsToFinalize.findRef( part ) == -1 )
-                        frameSetsToFinalize.append( part );
                 }
             }
         }
     }
-    // Do it on all of them (we'd need to store frameSetsToFinalize as member var if this is really slow)
-    for ( QPtrListIterator<KWFrameSet> fit( frameSetsToFinalize ); fit.current(); ++fit )
-        fit.current()->finalize();
-
-    repaintAllViews();
     refreshDocStructure( (int)Embedded );
-    delete m_pasteFramesetsMap;
-    m_pasteFramesetsMap = 0L;
 }
 
 QDomDocument KWDocument::saveXML()
