@@ -352,7 +352,7 @@ don't put a </?xml...> at the end of the file!).
 
             cols:           Ditto for columns.
 
-            protectcontent: Protect content of text object
+            protectContent: Protect content of text object
 
             protectSize:    Prevent user from changing size and position
                             of the frames in this frameset.
@@ -375,7 +375,7 @@ don't put a </?xml...> at the end of the file!).
     col CDATA #IMPLIED
     rows CDATA #IMPLIED
     cols CDATA #IMPLIED
-    protectcontent CDATA #IMPLIED>
+    protectContent CDATA #IMPLIED>
     protectSize CDATA #IMPLIED>
 
 <!ELEMENT FRAME
