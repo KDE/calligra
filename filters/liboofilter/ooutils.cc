@@ -20,7 +20,8 @@
 */
 
 #include "ooutils.h"
-#include "stylestack.h"
+#include <koDocument.h>
+#include <koStyleStack.h>
 #include <qdom.h>
 #include <qcolor.h>
 #include <qimage.h>
@@ -28,14 +29,30 @@
 #include <qregexp.h>
 #include <kdebug.h>
 #include <kzip.h>
+#include <kodom.h>
+#include <qxml.h>
+
+const char* const ooNS::office="http://openoffice.org/2000/office";
+const char* const ooNS::style="http://openoffice.org/2000/style";
+const char* const ooNS::text="http://openoffice.org/2000/text";
+const char* const ooNS::table="http://openoffice.org/2000/table";
+const char* const ooNS::draw="http://openoffice.org/2000/drawing";
+const char* const ooNS::presentation="http://openoffice.org/2000/presentation";
+const char* const ooNS::fo="http://www.w3.org/1999/XSL/Format";
+const char* const ooNS::xlink="http://www.w3.org/1999/xlink";
+const char* const ooNS::number="http://openoffice.org/2000/datastyle";
+const char* const ooNS::svg="http://www.w3.org/2000/svg";
+const char* const ooNS::dc="http://purl.org/dc/elements/1.1/";
+const char* const ooNS::meta="http://openoffice.org/2000/meta";
+const char* const ooNS::config="http://openoffice.org/2001/config";
 
 QString OoUtils::expandWhitespace(const QDomElement& tag)
 {
     //tags like <text:s text:c="4">
 
     int howmany=1;
-    if (tag.hasAttribute("text:c"))
-        howmany = tag.attribute("text:c").toInt();
+    if (tag.hasAttributeNS( ooNS::text, "c"))
+        howmany = tag.attributeNS( ooNS::text, "c", QString::null).toInt();
 
     QString result;
     return result.fill(32, howmany);
@@ -75,22 +92,22 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
     return true;
 }
 
-void OoUtils::importIndents( QDomElement& parentElement, const StyleStack& styleStack )
+void OoUtils::importIndents( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if ( styleStack.hasAttribute( "fo:margin-left" ) || // 3.11.19
-         styleStack.hasAttribute( "fo:margin-right" ) )
+    if ( styleStack.hasAttributeNS( ooNS::fo, "margin-left" ) || // 3.11.19
+         styleStack.hasAttributeNS( ooNS::fo, "margin-right" ) )
          // *text-indent must always be bound to either margin-left or margin-right
     {
-        double marginLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) );
-        double marginRight = KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) );
+        double marginLeft = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-left" ) );
+        double marginRight = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-right" ) );
         double first = 0;
-        if (styleStack.attribute("style:auto-text-indent") == "true") // style:auto-text-indent takes precedence
+        if (styleStack.attributeNS( ooNS::style, "auto-text-indent") == "true") // style:auto-text-indent takes precedence
             // ### "indented by a value that is based on the current font size"
             // ### and "requires margin-left and margin-right
             // ### but how much is the indent?
             first = 10;
-        else if (styleStack.hasAttribute("fo:text-indent"))
-            first = KoUnit::parseValue( styleStack.attribute("fo:text-indent"));
+        else if (styleStack.hasAttributeNS( ooNS::fo, "text-indent"))
+            first = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "text-indent"));
 
         if ( marginLeft != 0 || marginRight != 0 || first != 0 )
         {
@@ -106,12 +123,12 @@ void OoUtils::importIndents( QDomElement& parentElement, const StyleStack& style
     }
 }
 
-void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& styleStack )
+void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if( styleStack.hasAttribute("fo:line-height") )
+    if( styleStack.hasAttributeNS( ooNS::fo, "line-height") )
     {
         // Fixed line height
-        QString value = styleStack.attribute( "fo:line-height" ); // 3.11.1
+        QString value = styleStack.attributeNS( ooNS::fo, "line-height" ); // 3.11.1
         if ( value != "normal" )
         {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
@@ -135,9 +152,9 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
         }
     }
     // Line-height-at-least is mutually exclusive with line-height
-    else if ( styleStack.hasAttribute("style:line-height-at-least") ) // 3.11.2
+    else if ( styleStack.hasAttributeNS( ooNS::style, "line-height-at-least") ) // 3.11.2
     {
-        QString value = styleStack.attribute( "style:line-height-at-least" );
+        QString value = styleStack.attributeNS( ooNS::style, "line-height-at-least" );
         // kotext has "at least" but that's for the linespacing, not for the entire line height!
         // Strange. kotext also has "at least" for the whole line height....
         // Did we make the wrong choice in kotext?
@@ -149,9 +166,9 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
         parentElement.appendChild(lineSpacing);
     }
     // Line-spacing is mutually exclusive with line-height and line-height-at-least
-    else if ( styleStack.hasAttribute("style:line-spacing") ) // 3.11.3
+    else if ( styleStack.hasAttributeNS( ooNS::style, "line-spacing") ) // 3.11.3
     {
-        double value = KoUnit::parseValue( styleStack.attribute( "style:line-spacing" ) );
+        double value = KoUnit::parseValue( styleStack.attributeNS( ooNS::style, "line-spacing" ) );
         if ( value != 0.0 )
         {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
@@ -163,13 +180,13 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const StyleStack& s
 
 }
 
-void OoUtils::importTopBottomMargin( QDomElement& parentElement, const StyleStack& styleStack )
+void OoUtils::importTopBottomMargin( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if( styleStack.hasAttribute("fo:margin-top") || // 3.11.22
-        styleStack.hasAttribute("fo:margin-bottom"))
+    if( styleStack.hasAttributeNS( ooNS::fo, "margin-top") || // 3.11.22
+        styleStack.hasAttributeNS( ooNS::fo, "margin-bottom"))
     {
-        double mtop = KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) );
-        double mbottom = KoUnit::parseValue( styleStack.attribute("fo:margin-bottom" ) );
+        double mtop = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-top" ) );
+        double mbottom = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-bottom" ) );
         if( mtop != 0 || mbottom != 0 )
         {
             QDomElement offset = parentElement.ownerDocument().createElement( "OFFSETS" );
@@ -182,17 +199,17 @@ void OoUtils::importTopBottomMargin( QDomElement& parentElement, const StyleStac
     }
 }
 
-void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& styleStack )
+void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if ( !styleStack.hasChildNode( "style:tab-stops" ) ) // 3.11.10
+    if ( !styleStack.hasChildNodeNS( ooNS::style, "tab-stops" ) ) // 3.11.10
         return;
-    QDomElement tabStops = styleStack.childNode( "style:tab-stops" ).toElement();
+    QDomElement tabStops = styleStack.childNodeNS( ooNS::style, "tab-stops" );
     //kdDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
     for ( QDomNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
     {
         QDomElement tabStop = it.toElement();
         Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
-        QString type = tabStop.attribute( "style:type" ); // left, right, center or char
+        QString type = tabStop.attributeNS( ooNS::style, "type", QString::null ); // left, right, center or char
 
         QDomElement elem = parentElement.ownerDocument().createElement( "TABULATOR" );
         int kOfficeType = 0;
@@ -203,19 +220,19 @@ void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& st
         else if ( type == "right" )
             kOfficeType = 2;
         else if ( type == "char" ) {
-            QString delimiterChar = tabStop.attribute( "style:char" ); // single character
+            QString delimiterChar = tabStop.attributeNS( ooNS::style, "char", QString::null ); // single character
             elem.setAttribute( "alignchar", delimiterChar );
             kOfficeType = 3; // "alignment on decimal point"
         }
 
         elem.setAttribute( "type", kOfficeType );
 
-        double pos = KoUnit::parseValue( tabStop.attribute( "style:position" ) );
+        double pos = KoUnit::parseValue( tabStop.attributeNS( ooNS::style, "position", QString::null ) );
         elem.setAttribute( "ptpos", pos );
 
         // TODO Convert leaderChar's unicode value to the KOffice enum
         // (blank/dots/line/dash/dash-dot/dash-dot-dot, 0 to 5)
-        QString leaderChar = tabStop.attribute( "style:leader-char" ); // single character
+        QString leaderChar = tabStop.attributeNS( ooNS::style, "leader-char", QString::null ); // single character
         if ( !leaderChar.isEmpty() )
         {
             int filling = 0;
@@ -238,14 +255,14 @@ void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& st
 
 }
 
-void OoUtils::importBorders( QDomElement& parentElement, const StyleStack& styleStack )
+void OoUtils::importBorders( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if (styleStack.hasAttribute("fo:border","left"))
+    if (styleStack.hasAttributeNS( ooNS::fo, "border","left"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attribute("fo:border", "left"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.attributeNS( ooNS::fo, "border", "left"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("LEFTBORDER");
             lbElem.setAttribute("width", width);
@@ -259,12 +276,12 @@ void OoUtils::importBorders( QDomElement& parentElement, const StyleStack& style
         }
     }
 
-    if (styleStack.hasAttribute("fo:border", "right"))
+    if (styleStack.hasAttributeNS( ooNS::fo, "border", "right"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attribute("fo:border", "right"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.attributeNS( ooNS::fo, "border", "right"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("RIGHTBORDER");
             lbElem.setAttribute("width", width);
@@ -278,12 +295,12 @@ void OoUtils::importBorders( QDomElement& parentElement, const StyleStack& style
         }
     }
 
-    if (styleStack.hasAttribute("fo:border", "top"))
+    if (styleStack.hasAttributeNS( ooNS::fo, "border", "top"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attribute("fo:border", "top"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.attributeNS( ooNS::fo, "border", "top"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("TOPBORDER");
             lbElem.setAttribute("width", width);
@@ -297,12 +314,12 @@ void OoUtils::importBorders( QDomElement& parentElement, const StyleStack& style
         }
     }
 
-    if (styleStack.hasAttribute("fo:border", "bottom"))
+    if (styleStack.hasAttributeNS( ooNS::fo, "border", "bottom"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attribute("fo:border", "bottom"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.attributeNS( ooNS::fo, "border", "bottom"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("BOTTOMBORDER");
             lbElem.setAttribute("width", width);
@@ -409,14 +426,14 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
 
 void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
 {
-    QDomNode meta   = _meta.namedItem( "office:document-meta" );
-    QDomNode office = meta.namedItem( "office:meta" );
+    QDomNode meta   = KoDom::namedItemNS( _meta, ooNS::office, "document-meta" );
+    QDomNode office = KoDom::namedItemNS( meta, ooNS::office, "meta" );
 
     if ( office.isNull() )
         return;
     QDomElement elementDocInfo  = docinfo.documentElement();
 
-    QDomElement e = office.namedItem( "dc:creator" ).toElement();
+    QDomElement e = KoDom::namedItemNS( office, ooNS::dc, "creator" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         QDomElement author = docinfo.createElement( "author" );
@@ -426,7 +443,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         elementDocInfo.appendChild( author);
     }
 
-    e = office.namedItem( "dc:title" ).toElement();
+    e = KoDom::namedItemNS( office, ooNS::dc, "title" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         QDomElement about = docinfo.createElement( "about" );
@@ -436,7 +453,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         elementDocInfo.appendChild( about );
     }
 
-    e = office.namedItem( "dc:description" ).toElement();
+    e = KoDom::namedItemNS( office, ooNS::dc, "description" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
@@ -448,7 +465,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         about.appendChild( title );
         title.appendChild( docinfo.createTextNode( e.text() ) );
     }
-    e = office.namedItem( "dc:subject" ).toElement();
+    e = KoDom::namedItemNS( office, ooNS::dc, "subject" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
@@ -460,7 +477,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         about.appendChild( subject );
         subject.appendChild( docinfo.createTextNode( e.text() ) );
     }
-    e = office.namedItem( "meta:keywords" ).toElement();
+    e = KoDom::namedItemNS( office, ooNS::meta, "keywords" );
     if ( !e.isNull() )
     {
         QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
@@ -468,7 +485,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
             about = docinfo.createElement( "about" );
             elementDocInfo.appendChild( about );
         }
-        QDomElement tmp = e.namedItem( "meta:keyword" ).toElement();
+        QDomElement tmp = KoDom::namedItemNS( e, ooNS::meta, "keyword" );
         if ( !tmp.isNull() && !tmp.text().isEmpty() )
         {
             QDomElement keyword = docinfo.createElement( "keyword" );
@@ -500,13 +517,18 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, QDomDo
         return KoFilter::WrongFormat;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-    QIODevice* io=f->device();
     kdDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
+    QIODevice* io = f->device();
+
+    QXmlInputSource source( io );
+    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
+    QXmlSimpleReader reader;
+    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
 
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
-    if ( !doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) )
+    if ( !doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn ) )
     {
         kdError(30519) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl

@@ -26,9 +26,26 @@
 #include <koFilterChain.h>
 class QColor;
 class QDomElement;
-class StyleStack;
+class KoStyleStack;
 class QDomDocument;
 class KZip;
+
+class ooNS {
+public:
+    static const char* const office;
+    static const char* const style;
+    static const char* const text;
+    static const char* const table;
+    static const char* const draw;
+    static const char* const presentation;
+    static const char* const fo;
+    static const char* const xlink;
+    static const char* const number;
+    static const char* const svg;
+    static const char* const dc;
+    static const char* const meta;
+    static const char* const config;
+};
 
 namespace OoUtils
 {
@@ -39,19 +56,19 @@ namespace OoUtils
     ///////// Paragraph properties /////////
 
     // Convert fo:margin-left, fo:margin-right and fo:text-indent to <INDENTS>
-    void importIndents( QDomElement& parentElement, const StyleStack& styleStack );
+    void importIndents( QDomElement& parentElement, const KoStyleStack& styleStack );
 
     // Convert fo:line-height, style:line-height-at-least and style:line-spacing to <LINESPACING>
-    void importLineSpacing( QDomElement& parentElement, const StyleStack& styleStack );
+    void importLineSpacing( QDomElement& parentElement, const KoStyleStack& styleStack );
 
     // Convert fo:margin-top and fo:margin-bottom to <OFFSETS>
-    void importTopBottomMargin( QDomElement& parentElement, const StyleStack& styleStack );
+    void importTopBottomMargin( QDomElement& parentElement, const KoStyleStack& styleStack );
 
     // Convert style:tab-stops to <TABULATORS>
-    void importTabulators( QDomElement& parentElement, const StyleStack& styleStack );
+    void importTabulators( QDomElement& parentElement, const KoStyleStack& styleStack );
 
     // Convert fo:border* to <*BORDER>
-    void importBorders( QDomElement& parentElement, const StyleStack& styleStack );
+    void importBorders( QDomElement& parentElement, const KoStyleStack& styleStack );
 
     /////////// Text properties ///////////
 

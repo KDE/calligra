@@ -25,7 +25,7 @@
 
 #include <qdict.h>
 #include <qdom.h>
-#include <stylestack.h>
+#include <koStyleStack.h>
 #include <liststylestack.h>
 
 class KZip;
@@ -65,7 +65,7 @@ private:
     bool createStyleMap( const QDomDocument & styles, QDomDocument& doc );
     void insertStyles( const QDomElement& element, QDomDocument& doc );
     void importDateTimeStyle( const QDomElement& parent );
-    void fillStyleStack( const QDomElement& object, const QString& attrName );
+    void fillStyleStack( const QDomElement& object, const char* nsURI, const QString& attrName );
     void addStyles( const QDomElement* style );
     void importFootnotesConfiguration( QDomDocument& doc, const QDomElement& elem, bool endnote );
     void importFootnote( QDomDocument& doc, const QDomElement& object, QDomElement& formats, uint pos, const QString& tagName );
@@ -95,7 +95,7 @@ private:
     QDict<QDomElement>   m_masterPages;
     QDict<QDomElement>   m_listStyles;
 
-    StyleStack m_styleStack;
+    KoStyleStack m_styleStack;
     QDomElement m_defaultStyle;
     ListStyleStack m_listStyleStack;
     QDomElement m_outlineStyle;

@@ -27,7 +27,8 @@
 #include <qdom.h>
 #include <qdict.h>
 #include <qcolor.h>
-#include <stylestack.h>
+#include <koStyleStack.h>
+#include <liststylestack.h>
 
 class KZip;
 
@@ -52,7 +53,7 @@ private:
     void createStyleMap( QDomDocument &docstyles );
     void insertDraws( const QDomElement& styles );
     void insertStyles( const QDomElement& styles );
-	void insertStylesPresentation( const QDomElement& styles );
+    void insertStylesPresentation( const QDomElement& styles );
 
     void fillStyleStack( const QDomElement& object,bool sticky = false );
     void addStyles( const QDomElement* style );
@@ -71,27 +72,28 @@ private:
     void appendLineEnds( QDomDocument& doc, QDomElement& e, bool _orderEndStartLine = true );
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
     void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
-	void createPresentationAnimation(const QDomElement& element);
-	QDomNode findAnimationByObjectID(const QString & id,  int & order);
+    void createPresentationAnimation(const QDomElement& element);
+    QDomElement findAnimationByObjectID(const QString & id,  int & order);
 
     void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
-	void appendBackgroundPage( QDomDocument &doc, QDomElement &e,QDomElement & pictureElement,  QDomElement &soundElement );
+    void appendBackgroundPage( QDomDocument &doc, QDomElement &e,QDomElement & pictureElement,  QDomElement &soundElement );
 
     QDomElement saveHelper(const QString &tmpText, QDomDocument &doc);
-	void appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement,double offset, bool sticky = false);
+    void appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement,double offset, bool sticky = false);
 
     QString storeImage( const QDomElement& object );
     QString storeSound(const QDomElement & object, QDomElement & p, QDomDocument & doc);
     QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );
-    QDomElement parseList( QDomDocument& doc, const QDomElement& paragraph );
-    QDomElement parseParagraph( QDomDocument& doc, const QDomElement& list );
+    bool pushListLevelStyle( const QString& listStyleName, int level );
+    bool pushListLevelStyle( const QString& listStyleName, QDomElement& fullListStyle, int level );
+    void applyListStyle( QDomElement& paragraph );
+    void parseList( QDomDocument& doc, QDomElement& textObjectElement, const QDomElement& list );
+    void parseParagraphs( QDomDocument& doc, QDomElement& textObjectElement, const QDomElement& textBox );
+    QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
     void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
                              QDomElement& outputParagraph, uint& pos);
-    bool parseSettings( QDomDocument &doc, const QDomElement &settingElement, QDomElement &helpLineElement, QDomElement &attributeElement );
+    bool parseSettings( QDomDocument &doc, QDomElement &helpLineElement, QDomElement &attributeElement );
     void parseHelpLine( QDomDocument &doc,QDomElement &helpLineElement, const QString &text );
-    QString parseConfigItem( const QDomElement& item, const QString & configName );
-
-    QDomElement mapItem( const QDomElement &settingElement, const QString &mapItemName );
 
     KoFilter::ConversionStatus openFile();
     KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
@@ -101,10 +103,18 @@ private:
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
-    QDict<QDomElement> m_styles, m_draws,m_stylesPresentation;
+    QDict<QDomElement> m_styles, m_draws, m_stylesPresentation;
+    QDict<QDomElement>   m_listStyles;
     QDict<animationList> m_animations;
+
+    bool m_insideOrderedList;
+    bool m_nextItemIsListItem; // only the first elem inside list-item is numbered
+    int m_restartNumbering;
+    QString m_currentListStyleName;
+
     KZip * m_zip;
-    StyleStack m_styleStack;
+    KoStyleStack m_styleStack;
+    ListStyleStack m_listStyleStack;
 };
 
 #endif

@@ -100,32 +100,32 @@ int Conversion::importCounterType( const QString& numFormat )
     return 0;
 }
 
-QString Conversion::headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd )
+QString Conversion::headerTypeToFramesetName( const QString& localName, bool hasEvenOdd )
 {
-    if ( tagName == "style:header" )
+    if ( localName == "header" )
         return hasEvenOdd ? i18n("Odd Pages Header") : i18n( "Header" );
-    if ( tagName == "style:header-left" )
+    if ( localName == "header-left" )
         return i18n("Even Pages Header");
-    if ( tagName == "style:footer" )
+    if ( localName == "footer" )
         return hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
-    if ( tagName == "style:footer-left" )
+    if ( localName == "footer-left" )
         return i18n("Even Pages Footer");
-    kdWarning(30518) << "Unknown tag in headerTypeToFramesetName: " << tagName << endl;
+    kdWarning(30518) << "Unknown tag in headerTypeToFramesetName: " << localName << endl;
     // ######
     //return i18n("First Page Header");
     //return i18n("First Page Footer");
     return QString::null;
 }
 
-int Conversion::headerTypeToFrameInfo( const QString& tagName, bool /*hasEvenOdd*/ )
+int Conversion::headerTypeToFrameInfo( const QString& localName, bool /*hasEvenOdd*/ )
 {
-    if ( tagName == "style:header" )
+    if ( localName == "header" )
         return 3; // odd headers
-    if ( tagName == "style:header-left" )
+    if ( localName == "header-left" )
         return 2; // even headers
-    if ( tagName == "style:footer" )
+    if ( localName == "footer" )
         return 6; // odd footers
-    if ( tagName == "style:footer-left" )
+    if ( localName == "footer-left" )
         return 5; // even footers
 
     // ### return 1; // first header

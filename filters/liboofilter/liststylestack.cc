@@ -1,4 +1,6 @@
 #include "liststylestack.h"
+#include "ooutils.h" // for ooNS
+#include <kodom.h>
 
 ListStyleStack::ListStyleStack()
     : m_initialLevel( 0 )
@@ -34,5 +36,5 @@ QDomElement ListStyleStack::currentListStyle() const
 QDomElement ListStyleStack::currentListStyleProperties() const
 {
     QDomElement style = currentListStyle();
-    return style.namedItem( "style:properties" ).toElement();
+    return KoDom::namedItemNS( style, ooNS::style, "properties" );
 }
