@@ -786,7 +786,12 @@ QDomElement KPresenterDoc::saveAttribute( QDomDocument &doc )
 {
     QDomElement attributes=doc.createElement("ATTRIBUTES");
     //store first view parameter.
-    int activePage=m_pageList.findRef(m_kpresenterView->getCanvas()->activePage());
+    int activePage=0;
+    if ( m_kpresenterView && m_kpresenterView->getCanvas() && m_kpresenterView->getCanvas()->activePage() )
+        activePage=m_pageList.findRef(m_kpresenterView->getCanvas()->activePage());
+    else if ( m_initialActivePage )
+        activePage=m_pageList.findRef(m_initialActivePage);
+    activePage = QMAX( activePage, 0);
     attributes.setAttribute("activePage",activePage );
     attributes.setAttribute("gridx", m_gridX );
     attributes.setAttribute("gridy", m_gridY );
