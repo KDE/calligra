@@ -944,8 +944,8 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "TINV",             332,  2 },
 	{ "CONCATENATE",      336,  0 },  /* EXCEL: CONCAT */
 	{ "POW",              337,  2 },  /* EXCEL: POWER */
-	{ "RADIAN",           342,  1 },  /* EXCEL: RAD */
-	{ "DEGREE",           343,  1 },  /* EXCEL: DEG */
+	{ "RADIANS",          342,  1 },  
+	{ "DEGREES",          343,  1 },  
 	{ "SUBTOTAL",         344,  0 },
 	{ "SUMIF",            345,  0 },
 	{ "COUNTIF",          346,  2 },
