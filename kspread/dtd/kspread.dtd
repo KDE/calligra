@@ -128,6 +128,36 @@
                   dateFormatShort                CDATA #REQUIRED>
 
  
+<!--	Contains the areaname for the various tables.
+        Attributes:
+        any
+-->
+<!ELEMENT areaname (reference)*>
+
+<!--	Contains the definition of an area.
+        Attributes:
+        any
+-->
+<ELEMENT reference (tabname,refname,rect)>
+
+<!ELEMENT tabname #PCDATA>
+
+
+<!ELEMENT refname #PCDATA>
+
+<!--	Describe the area selected.
+        Attributes:
+
+         left-rect   value of the left border
+         right-rect  value of the right border
+         bottom-rect value of the bottom border
+         top-rect    value of the top border
+-->
+<!ELEMENT rect  EMPTY>
+<!ATTLIST rect  left-rect      CDATA #IMPLIED
+                right-rect     CDATA #IMPLIED
+                bottom-rect    CDATA #IMPLIED
+                top-rect       CDATA #IMPLIED>
 
 
 <!--	Contains the table data for the various tables.
@@ -224,7 +254,7 @@
 
 		Attributes:
                         valmin  Minimal value of the validate condition         
-                        cond    type of condition (Equal=0, Superior=1 etc...)         
+                        cond    type of condition (None, Equal, Superior etc...)         
                         valmax  Maximal value of the validate condition         
                         allow   type of value allows (ALL, NUmber etc...)         
                         action  Action executes when it's not validate (Error, warning etc...)
@@ -244,6 +274,38 @@
 
 <!ELEMENT timemax #PCDATA>
 
+<!--   Describes conditional cell attribut format.
+-->
+<!ELEMENT condition  (first | second | third)>
+
+
+<!--	Describes first conditon format.
+
+		Attributes:
+
+                       cond:  Define the condition apply on the cell (NONE, EQUAL etc...)
+                       val1:  Inferior value of condition
+                       val2:  Superior value of condition
+                       color: Color apply when condition is right
+-->
+
+<!ELEMENT first (font) >
+<!ATTLIST first         cond              CDATA #REQUIRED
+                        val1              CDATA #REQUIRED
+                        val2              CDATA #REQUIRED
+                        color             CDATA #REQUIRED>
+ 
+<!ELEMENT second (font) >
+<!ATTLIST second        cond              CDATA #REQUIRED
+                        val1              CDATA #REQUIRED
+                        val2              CDATA #REQUIRED
+                        color             CDATA #REQUIRED>
+
+<!ELEMENT third (font) >
+<!ATTLIST third         cond              CDATA #REQUIRED
+                        val1              CDATA #REQUIRED
+                        val2              CDATA #REQUIRED
+                        color             CDATA #REQUIRED>
 
 
 <!--	Describes one column
@@ -253,7 +315,7 @@
 		column	the column number
 		width	the width of the column
 -->
-<!ELEMENT column FORMAT?>
+<!ELEMENT column format>
 <!ATTLIST column  column  CDATA #REQUIRED
                   width   CDATA #REQUIRED>
 
@@ -265,7 +327,7 @@
 		row	the row number
 		height	the height of the row
 -->
-<!ELEMENT row FORMAT?>
+<!ELEMENT row format>
 <!ATTLIST row  row  CDATA #REQUIRED
                height   CDATA #REQUIRED>
 
@@ -279,15 +341,15 @@
 		mime	the MIME type of the application that has generated
 				the chart
 -->
-<!ELEMENT CHART (RECT|BINDING)*>
-<!ATTLIST CHART         url     CDATA #REQUIRED
+<!ELEMENT chart (rect|binding)*>
+<!ATTLIST chart         url     CDATA #REQUIRED
                         mime    CDATA #REQUIRED>
 
-<!ELEMENT RECT EMPTY>
-<!ATTLIST RECT  x        CDATA #REQUIRED
+<!ELEMENT rect EMPTY>
+<!ATTLIST rect  x        CDATA #REQUIRED
                 y        CDATA #REQUIRED
                 w        CDATA #REQUIRED
                 h        CDATA #REQUIRED>
 
-<!ELEMENT BINDING (RECT)>
+<!ELEMENT binding (rect)>
 
