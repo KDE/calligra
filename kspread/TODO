@@ -20,7 +20,7 @@ Others bugs not in BT system (Report by - taken by):
 
 Other things: (please add the things you are working on!)
 
-- Zoom
+- WYSIWYG
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not commited (Norbert))
 - AutoFormat (already exists in a very limited way: Format -> table style)
@@ -41,6 +41,9 @@ Other things: (please add the things you are working on!)
 - background spell check
 - links to cells in other kspread files
 - much more formulas (financial, database...)
+        String2Int, CurrentMonth, CurrentYear, CurrentDay,
+- Insert pictures
+- Insert basic drawings, autoforms        
 - Scrollbar that supports jumping one row/column forward or back
 - Named areas with something like "=x+5" ("='x'+5" works already)
 - formula result: fit the precision to the width of the cell
@@ -89,7 +92,7 @@ Philipp
 Norbert
 =======
 
-- still undecided...
+- currently in bug fixing and testing mode...
 
 Ariya
 =====

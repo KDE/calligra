@@ -4279,14 +4279,18 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
       {
         bool ok = false;
         m_dValue = t.toDouble(&ok); // We save in non-localized format
-        m_strText = pasteOperation( t, m_strText, op );
         if ( !ok )
           kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
         if ( formatType() == Percentage )
         {
           setFactor(100.0); // should have been already done by loadLayout
+          if (ok)
+            t = QString::number(m_dValue * m_dFactor, 'g', DBL_DIG);
+          m_strText = pasteOperation( t, m_strText, op );
           m_strText += '%';
         }
+        else
+          m_strText = pasteOperation( t, m_strText, op );
 
         break;
       }
