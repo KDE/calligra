@@ -1,12 +1,12 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="3">
+<kpartgui name="kexiformpartinst" version="4">
 
 <MenuBar>
   <Menu name="edit">
    <Separator />
-   <Action name="taborder"/>
-   <Action name="adjust"/>
-   <Action name="change_style"/>
+   <Action name="formpart_taborder"/>
+   <Action name="formpart_adjust_size"/>
+   <!-- Action name="change_style"/ -->
   </Menu>
 </MenuBar>
 
