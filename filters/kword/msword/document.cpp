@@ -192,7 +192,14 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
         format.appendChild( vertAlign );
     }
 
-    // TODO: TEXTBACKGROUNDCOLOR - what's the msword name for it? Can't find it in the CHP.
+    if ( chp->fHighlight ) { // background color is known as "highlight" in msword
+        QColor color = Conversion::color( chp->icoHighlight, -1 );
+        QDomElement bgcolElem( m_mainDocument.createElement( "TEXTBACKGROUNDCOLOR" ) );
+        bgcolElem.setAttribute( "red", color.red() );
+        bgcolElem.setAttribute( "blue", color.blue() );
+        bgcolElem.setAttribute( "green", color.green() );
+        format.appendChild( bgcolElem );
+    }
 
     // ## Problem with fShadow. Char property in MSWord, parag property in KWord at the moment....
 
@@ -298,7 +305,7 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
         flowElement.setAttribute("align",alignment);
         layoutElement.appendChild(flowElement);
 
-        kdDebug() << k_funcinfo << " dxaLeft1=" << m_pap->dxaLeft1 << " dxaLeft=" << m_pap->dxaLeft << " dxaRight=" << m_pap->dxaRight << " dyaBefore=" << m_pap->dyaBefore << " dyaAfter=" << m_pap->dyaAfter << " lspd=" << m_pap->lspd.dyaLine << "/" << m_pap->lspd.fMultLinespace << endl;
+        //kdDebug() << k_funcinfo << " dxaLeft1=" << m_pap->dxaLeft1 << " dxaLeft=" << m_pap->dxaLeft << " dxaRight=" << m_pap->dxaRight << " dyaBefore=" << m_pap->dyaBefore << " dyaAfter=" << m_pap->dyaAfter << " lspd=" << m_pap->lspd.dyaLine << "/" << m_pap->lspd.fMultLinespace << endl;
 
         if ( m_pap->dxaLeft1 || m_pap->dxaLeft || m_pap->dxaRight )
         {
