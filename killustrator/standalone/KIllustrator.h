@@ -141,6 +141,9 @@ protected slots:
   void selectColor (int flag, const QBrush& b);
   void setUndoStatus(bool undoPossible, bool redoPossible);
 
+  void popupForSelection (int x, int y);
+  void popupForObject (int x, int y, GObject* obj);
+
 private:
   static bool closeWindow (KIllustrator* win);
   static void quit ();
@@ -172,7 +175,7 @@ private:
   QGridLayout *gridLayout;
 
   QPopupMenu *file, *edit, *view, *layout, *effects, 
-    *arrangement, *extras, *help;
+    *arrangement, *extras, *help, *popupMenu;
   QPopupMenu *openRecent;
   ToolGroup *tgroup;
   ToolController *tcontroller;

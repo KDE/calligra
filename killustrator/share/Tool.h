@@ -47,6 +47,8 @@ public:
 
   virtual void configure () {}
 
+  virtual bool consumesRMBEvents () { return true; }
+
 signals:
   void modeSelected (const char* msg);
 

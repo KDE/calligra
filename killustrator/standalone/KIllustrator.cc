@@ -205,6 +205,13 @@ void KIllustrator::setupMainView () {
   connect (canvas, SIGNAL(mousePositionChanged (int, int)),
 	   vRuler, SLOT(updatePointer(int, int)));
 
+  connect (canvas, SIGNAL(rightButtonAtObjectClicked (int, int, GObject*)),
+	   this, SLOT(popupForObject (int, int, GObject *)));
+  connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
+	   this, SLOT(popupForSelection (int, int)));
+
+  void rightButtonAtSelectionClicked ();
+
   gridLayout->addWidget (viewport, 1, 1);
   gridLayout->setRowStretch (1, 20);
   gridLayout->setColStretch (1, 20);
@@ -556,6 +563,20 @@ void KIllustrator::initMenu () {
   menubar->insertItem (i18n ("&Help"), help);
   
   setMenu (menubar);
+
+  popupMenu = new QPopupMenu ();
+  popupMenu->insertItem (i18n ("Copy"), ID_EDIT_COPY);
+  popupMenu->insertItem (i18n ("Cut"), ID_EDIT_CUT);
+  popupMenu->insertSeparator ();
+  popupMenu->insertItem (i18n ("Properties"), ID_EDIT_PROPERTIES);
+  popupMenu->insertSeparator ();
+  popupMenu->insertItem (i18n ("Align"), ID_ARRANGE_ALIGN);
+  popupMenu->insertSeparator ();
+  popupMenu->insertItem (i18n ("To Front"), ID_ARRANGE_FRONT);
+  popupMenu->insertItem (i18n ("To Back"), ID_ARRANGE_BACK);
+  popupMenu->insertItem (i18n ("Forward One"), ID_ARRANGE_1_FORWARD);
+  popupMenu->insertItem (i18n ("Back One"), ID_ARRANGE_1_BACK); 
+  connect (popupMenu, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 }
 
 void KIllustrator::initStatusBar () {
@@ -1110,3 +1131,11 @@ void KIllustrator::updateRecentFiles () {
     id++;
   }
 }
+
+void KIllustrator::popupForSelection (int x, int y) {
+  popupMenu->popup (QCursor::pos ());
+}
+
+void KIllustrator::popupForObject (int x, int y, GObject* obj) {
+}
+

@@ -49,6 +49,8 @@ public:
 	      bool permanent = false);
   void translate (GDocument* doc, int dx, int dy, bool permanent = false);
   
+  virtual bool consumesRMBEvents () { return false; }
+
 private:
   void processKeyPressEvent (QKeyEvent* e, GDocument* doc, Canvas* canvas);
   void processButtonPressEvent (QMouseEvent* e, GDocument* doc, 

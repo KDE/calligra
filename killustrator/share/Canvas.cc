@@ -178,10 +178,9 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
       viewport->ensureVisible (e->x (), e->y (), 10, 10);
   }
 
-#if 0  
-  if (e->button () == RightButton) {
-    if (e->type () != Event_MouseButtonPress)
-      return;
+  if (e->button () == RightButton &&
+      e->type () == Event_MouseButtonPress &&
+      ! toolController->getActiveTool ()->consumesRMBEvents ()) {
     if (document->selectionIsEmpty ()) {
       GObject* obj = document->findContainingObject (new_pos.x (), 
 						     new_pos.y ());
@@ -195,12 +194,11 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
     }
     else {
       // pop up menu for the current selection
-	emit rightButtonAtSelectionClicked (e->x (), e->y ());
+      emit rightButtonAtSelectionClicked (e->x (), e->y ());
     }
     return;
   }
   else
-#endif
     if (toolController) {
       // the tool controller processes the event
       toolController->delegateEvent (&new_ev, document, this);
