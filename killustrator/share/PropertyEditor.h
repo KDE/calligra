@@ -63,6 +63,7 @@ private slots:
   void applyPressed ();
   void helpPressed ();
   void fillStyleChanged ();
+  void fillColor1Changed (const QColor&);
   void gradientColorChanged (const QColor&);
   void gradientStyleChanged (int);
 
@@ -95,8 +96,7 @@ private:
   // Fill Tab
   QRadioButton *fillStyleBttn[5];
   QComboBox *gradStyleCombo;
-  KColorButton *solidColorBttn, *patternColorBttn,
-    *gradColor1Bttn, *gradColor2Bttn;
+  KColorButton *fillColorBtn1, *fillColorBtn2;
   QLabel *gradPreview;
   QWidgetStack *wstack;
   Gradient *gradient;
