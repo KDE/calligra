@@ -507,7 +507,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                 p, static_cast<KoTextParag *>(cursor->parag()),
                 iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
                 pix, cg, m_doc, // TODO view's zoom handler
-                cursorVisible, cursor, m_doc->viewFormattingChars());
+                cursorVisible, cursor, FALSE, m_doc->viewFormattingChars());
             cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
 
             p->restore();
