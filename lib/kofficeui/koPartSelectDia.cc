@@ -35,10 +35,10 @@
  ****************************************************/
 
 KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
-    KDialogBase( parent, name, TRUE, i18n("Insert Part"), KDialogBase::Ok | KDialogBase::Cancel )
+    KDialogBase( parent, name, TRUE, i18n("Insert Object"), KDialogBase::Ok | KDialogBase::Cancel )
 {
     listview = new QListView( this );
-    listview->addColumn( i18n( "Part" ) );
+    listview->addColumn( i18n( "Object" ) );
     listview->addColumn( i18n( "Comment" ) );
     listview->setAllColumnsShowFocus( TRUE );
     listview->setShowSortIndicator( TRUE );
