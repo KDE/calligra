@@ -185,17 +185,17 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         QDomElement styleElem = doc.createElement("STYLE");
         stylesElem.appendChild( styleElem );
 
-        QString styleName = e.attribute( "style:name" );
+        QString styleName = kWordStyleName( e.attribute( "style:name" ) );
         QDomElement element = doc.createElement("NAME");
         element.setAttribute( "value", styleName );
         styleElem.appendChild( element );
-        //kdDebug(30518) << k_funcinfo << "generating style " << e.attribute( "style:name" ) << endl;
+        //kdDebug(30518) << k_funcinfo << "generating style " << styleName << endl;
 
         QString followingStyle = m_styleStack.attribute( "style:next-style-name" );
         if ( !followingStyle.isEmpty() )
         {
             QDomElement element = doc.createElement( "FOLLOWING" );
-            element.setAttribute( "name", followingStyle );
+            element.setAttribute( "name", kWordStyleName( followingStyle ) );
             styleElem.appendChild( element );
         }
 
@@ -1150,7 +1150,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     if ( !styleName.isEmpty() )
     {
         QDomElement nameElement = doc.createElement("NAME");
-        nameElement.setAttribute("value", styleName);
+        nameElement.setAttribute( "value", kWordStyleName(styleName) );
         layoutElement.appendChild(nameElement);
     }
 
@@ -2336,6 +2336,16 @@ void OoWriterImport::finishDocumentContent( QDomDocument& mainDocument )
     attributes.setAttribute( "hasTOC", m_hasTOC ? 1 : 0 );
     // TODO hasHeader, hasFooter, unit?, tabStopValue
     // TODO activeFrameset, cursorParagraph, cursorIndex
+}
+
+QString OoWriterImport::kWordStyleName( const QString& ooStyleName )
+{
+    if ( ooStyleName.startsWith( "Contents " ) ) {
+        QString s( ooStyleName );
+        return s.replace( 0, 9, QString("Contents Head ") ); // Awful hack for KWord's broken "update TOC" feature
+    } else {
+        return ooStyleName;
+    }
 }
 
 #include "oowriterimport.moc"
