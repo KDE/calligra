@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2002 Laurent Montel <montel@kde.org>
    Copyright 2002 Philipp Mueller <philipp.mueller@gmx.de>
    Copyright 2000 David Faure <faure@kde.org>
@@ -40,8 +40,6 @@ public:
 
 k_dcop:
     virtual DCOPRef map();
-    virtual bool save();
-    virtual bool saveAs( const QString& url );
 
     bool showTabBar()const;
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2003 Norbert Andres <nandres@web.de>
    Copyright 2002 Laurent Montel <montel@kde.org>
@@ -47,19 +47,6 @@ DCOPRef KSpreadDocIface::map()
     return DCOPRef( kapp->dcopClient()->appId(),
                     doc->map()->dcopObject()->objId() );
 }
-
-bool KSpreadDocIface::save()
-{
-    // TODO
-  return false;
-}
-
-bool KSpreadDocIface::saveAs( const QString& )
-{
-    // TODO
-  return false;
-}
-
 
 void KSpreadDocIface::changeDefaultGridPenColor( const QColor &_col)
 {
