@@ -174,6 +174,8 @@ public:
 
 	// set up node selection depending on p
 	bool selectNode( const KoPoint &p );
+	bool checkNode( const KoPoint &p );
+	bool selectNode( const KoRect &r );
 	void selectNode();
 
 	void save( QDomElement& element ) const;

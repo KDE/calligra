@@ -46,7 +46,7 @@ VEditNodeTool::activate()
 void
 VEditNodeTool::setCursor( const KoPoint &p ) const
 {
-	if( view()->part()->document().selection()->selectNode( p ) )
+	if( view()->part()->document().selection()->checkNode( p ) )
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
 	else
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );

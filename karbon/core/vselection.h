@@ -97,6 +97,7 @@ public:
 	VHandleNode node( const QPoint& point ) const;
 
 	bool selectNode( const KoPoint &p );
+	bool checkNode( const KoPoint &p );
 	void selectNodes();
 
 private:

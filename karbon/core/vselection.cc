@@ -88,6 +88,8 @@ VSelection::append( const KoRect& rect )
 	VLayerListIterator itr(
 		static_cast<VDocument*>( parent() )->layers() );
 
+	m_segments.clear();
+
 	for ( ; itr.current(); ++itr )
 	{
 		VObjectListIterator itr2( itr.current()->objects() );
@@ -99,7 +101,12 @@ VSelection::append( const KoRect& rect )
 // TODO: use a zoom dependant vflatten visitor to achieve finer resolution:
 				itr2.current()->boundingBox().intersects( rect ) )
 			{
+				VNodeSelector op( rect );
+				op.visit( *itr.current() );
 				append( itr2.current() );
+				QPtrListIterator<VSegment> it2( op.result() );
+				for( it2.toFirst(); it2.current(); ++it2 )
+					m_segments.append( it2.current() );
 			}
 		}
 	}
@@ -237,7 +244,21 @@ VSelection::selectNodes()
 	for( ; itr.current(); ++itr )
 	{
 		op.visit( *itr.current() );
+		QPtrListIterator<VSegment> it2( op.result() );
+		for( it2.toFirst(); it2.current(); ++it2 )
+			m_segments.append( it2.current() );
 	}
+}
+
+bool
+VSelection::checkNode( const KoPoint &p )
+{
+	QPtrListIterator<VSegment> itr( m_segments );
+	for( itr.toFirst(); itr.current(); ++itr )
+		if( itr.current()->checkNode( p ) )
+			return true;
+
+	return false;
 }
 
 bool
@@ -252,9 +273,7 @@ VSelection::selectNode( const KoPoint &p )
 		op.visit( *itr.current() );
 		QPtrListIterator<VSegment> it2( op.result() );
 		for( it2.toFirst(); it2.current(); ++it2 )
-		{
 			m_segments.append( it2.current() );
-		}
 	}
 
 	return m_segments.count() > 0;
