@@ -104,9 +104,7 @@ VSegment::point( double t ) const
 	}
 
 	// beziers:
-	// copy points to not modify the segment itself:
 	KoPoint q[4];
-
 	q[0] = m_prev->m_point[2];
 	q[1] = m_point[0];
 	q[2] = m_point[1];
@@ -139,7 +137,6 @@ VSegment::derive( double t ) const
 
 	// beziers:
 	KoPoint q[3];
-
 	q[0] = m_point[0] - m_prev->m_point[2];
 	q[1] = m_point[1] - m_point[0];
 	q[2] = m_point[2] - m_point[1];
@@ -154,6 +151,45 @@ VSegment::derive( double t ) const
 	}
 
 	return 3 * q[0];
+}
+
+void
+VSegment::pointAndDerive( double t, KoPoint& p, KoPoint& der ) const
+{
+	if( !m_prev || m_type == segment_begin )
+		return;
+
+	// lines:
+	if( m_type == segment_line )
+	{
+		der = m_point[2] - m_prev->m_point[2];
+		p = m_prev->m_point[2] + der * t;
+
+		return;
+	}
+
+	// beziers:
+	KoPoint q[4];
+	q[0] = m_prev->m_point[2];
+	q[1] = m_point[0];
+	q[2] = m_point[1];
+	q[3] = m_point[2];
+
+	// de casteljau algorithm:
+	for( uint j = 1; j <= 3; ++j )
+	{
+		for( uint i = 0; i <= 3 - j; ++i )
+		{
+			q[i] = ( 1.0 - t ) * q[i] + t * q[i+1];
+		}
+
+		if( j == 2 )
+			der = 3 * ( q[1] - q[0] );
+	}
+
+	p = q[0];
+
+	return;
 }
 
 double

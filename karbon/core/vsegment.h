@@ -56,7 +56,6 @@ public:
 
 	const KoPoint& ctrlPoint1() const { return m_point[0]; }
 	const KoPoint& ctrlPoint2() const { return m_point[1]; }
-
 	const KoPoint& knot() const { return m_point[2]; }
 
 	void setCtrlPoint1( const KoPoint& p ) { m_point[0] = p; }
@@ -72,8 +71,15 @@ public:
 	/// Returns the point on this segment for 0 <= t <= 1.
 	KoPoint point( double t ) const;
 
-	/// Returns the derivative for 0 <= t <= 1.
+	/// Returns the derivative of this segment for 0 <= t <= 1.
 	KoPoint derive( double t ) const;
+
+	/**
+	 * In case you need the point and the derivative at once for 0 <= t <= 1,
+	 * use this function since it is more efficient.  First KoPoint
+	 * is the point, the second KoPoint is the derivative.
+	 */
+	void pointAndDerive( double t, KoPoint& p, KoPoint& der ) const;
 
 // TODO: currently return 0.0 for segments != lines:
 	/// Returns the arc length.

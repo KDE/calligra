@@ -380,31 +380,38 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 	VSegmentList s( 0L );
 
 	s.moveTo(
-		KoPoint(200,100) );
+		KoPoint(400,300) );
 	s.curveTo(
-		KoPoint(500,400),
-		KoPoint(100,400),
-		KoPoint(400,50) );
+		KoPoint(700,600),
+		KoPoint(300,600),
+		KoPoint(600,250) );
 
 	VPath* p;
 
 	if( i == 0 )
 	{
 		p = new VPath( 0L );
-		p->moveTo(
-			KoPoint(200,100) );
-		p->curveTo(
-			KoPoint(500,400),
-			KoPoint(100,400),
-			KoPoint(400,50) );
+		p->combineSegmentList( s );
+
+		++i;
+	}
+	else if( i == 1)
+	{
+		KoPoint P, D;
+		s.getLast()->pointAndDerive(0.85, P, D );
+kdDebug() << P.x() << "\t" << P.y() << endl;
+kdDebug() << D.x() << "\t" << D.y() << endl;
+		p = new VPath( 0L );
+		p->moveTo( P );
+		p->lineTo( P + D );
 
 		++i;
 	}
 	else
 	{
 		p = new VPath( 0L );
-		p->moveTo( s.getLast()->point(0.85) );
-		p->lineTo( s.getLast()->point(0.85) + s.getLast()->derive(0.85));
+		p->moveTo( s.getLast()->point(0.95) );
+		p->lineTo( s.getLast()->point(0.95) + s.getLast()->derive(0.95) );
 	}
 
 	m_part->document().append( p );
