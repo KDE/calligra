@@ -1,0 +1,5 @@
+	- convert all the figure in the good x, y with QWMatrix
+	- option : display the grid
+	- suppotr all the pattern with \newpsstyle (p. 31, pst-user2).
+	- support all the gradient with gradangle=angle and
+		gradmidpoint=num between 0 and 1
