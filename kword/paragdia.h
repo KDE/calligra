@@ -28,9 +28,12 @@
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qradiobutton.h>
+#include <qpushbutton.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
+#include <kbuttonbox.h>
+#include <kcolorbtn.h>
 
 #include <stdlib.h>
 
@@ -102,9 +105,21 @@ class KWBorderPreview : public QGroupBox
 public:
   KWBorderPreview(QWidget*,const char*);
   ~KWBorderPreview() {}
+
+  KWParagLayout::Border getLeftBorder() { return leftBorder; }
+  void setLeftBorder(KWParagLayout::Border _leftBorder) { leftBorder = _leftBorder; repaint(true); }
+  KWParagLayout::Border getRightBorder() { return rightBorder; }
+  void setRightBorder(KWParagLayout::Border _rightBorder) { rightBorder = _rightBorder; repaint(true); }
+  KWParagLayout::Border getTopBorder() { return topBorder; }
+  void setTopBorder(KWParagLayout::Border _topBorder) { topBorder = _topBorder; repaint(true); }
+  KWParagLayout::Border getBottomBorder() { return bottomBorder; }
+  void setBottomBorder(KWParagLayout::Border _bottomBorder) { bottomBorder = _bottomBorder; repaint(true); }
   
 protected:
   void drawContents(QPainter*);
+  QPen setBorderPen(KWParagLayout::Border _brd);
+
+  KWParagLayout::Border leftBorder,rightBorder,topBorder,bottomBorder;
 
 };
 
@@ -147,25 +162,40 @@ public:
     { return atoi(eSpacing->text()); } 
 
   KWParagLayout::Flow getFlow();
-  int flags;
-  
+
+  KWParagLayout::Border getLeftBorder() { return leftBorder; }
+  void setLeftBorder(KWParagLayout::Border _leftBorder) { leftBorder = _leftBorder; updateBorders(); }
+  KWParagLayout::Border getRightBorder() { return rightBorder; }
+  void setRightBorder(KWParagLayout::Border _rightBorder) { rightBorder = _rightBorder; updateBorders(); }
+  KWParagLayout::Border getTopBorder() { return topBorder; }
+  void setTopBorder(KWParagLayout::Border _topBorder) { topBorder = _topBorder; updateBorders(); }
+  KWParagLayout::Border getBottomBorder() { return bottomBorder; }
+  void setBottomBorder(KWParagLayout::Border _bottomBorder) { bottomBorder = _bottomBorder; updateBorders(); }
 
 protected:
   void setupTab1();
   void setupTab2();
   void setupTab3();
   void clearFlows();
+  void updateBorders();
 
   QWidget *tab1,*tab2,*tab3;
   QGridLayout *grid1,*grid2,*grid3,*indentGrid,*spacingGrid,*pSpaceGrid;
   KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter;
-  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow;
+  QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow,*lStyle,*lWidth,*lColor;
   QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame;
-  QComboBox *cSpacing;
+  QComboBox *cSpacing,*cStyle,*cWidth;
   QRadioButton *rLeft,*rCenter,*rRight,*rBlock;
   KWPagePreview *prev1;
   KWPagePreview2 *prev2;
+  KButtonBox *bb;
+  QPushButton *bLeft,*bRight,*bTop,*bBottom;
+  KWBorderPreview *prev3;
+  KColorButton *bColor;
 
+  KWParagLayout::Border leftBorder,rightBorder,topBorder,bottomBorder;
+  int flags;
+  
 protected slots:
   void leftChanged(const char*);
   void rightChanged(const char*);
@@ -178,7 +208,14 @@ protected slots:
   void flowCenter();
   void flowRight();
   void flowBlock();
-  
+  void brdLeftToggled(bool);
+  void brdRightToggled(bool);
+  void brdTopToggled(bool);
+  void brdBottomToggled(bool);
+  void brdStyleChanged(const char*);
+  void brdWidthChanged(const char*);
+  void brdColorChanged(const QColor&);
+
 };
 
 #endif

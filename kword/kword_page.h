@@ -126,6 +126,14 @@ public:
     { return static_cast<float>(fc->getParag()->getParagLayout()->getMMParagFootOffset()); }
   unsigned int getLineSpacing()
     { return fc->getParag()->getParagLayout()->getPTLineSpacing(); }
+  KWParagLayout::Border getLeftBorder()
+    { return fc->getParag()->getParagLayout()->getLeftBorder(); }
+  KWParagLayout::Border getRightBorder()
+    { return fc->getParag()->getParagLayout()->getRightBorder(); }
+  KWParagLayout::Border getTopBorder()
+    { return fc->getParag()->getParagLayout()->getTopBorder(); }
+  KWParagLayout::Border getBottomBorder()
+    { return fc->getParag()->getParagLayout()->getBottomBorder(); }
 
 
   void recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_fc = 0L);

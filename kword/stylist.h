@@ -27,6 +27,8 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qpainter.h>
+#include <qpen.h>
+#include <qbrush.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>

@@ -289,6 +289,21 @@ void KWStyleEditor::changeAlign()
 /*================================================================*/
 void KWStyleEditor::changeBorders()
 {
+  if (paragDia)
+    {
+      disconnect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
+      paragDia->close();
+      delete paragDia;
+      paragDia = 0;
+    }
+  paragDia = new KWParagDia(0,"",KWParagDia::PD_BORDERS);
+  paragDia->setCaption(i18n("KWord - Paragraph Borders"));
+  connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
+  paragDia->setLeftBorder(style->getLeftBorder());
+  paragDia->setRightBorder(style->getRightBorder());
+  paragDia->setTopBorder(style->getTopBorder());
+  paragDia->setBottomBorder(style->getBottomBorder());
+  paragDia->show();
 }
 
 /*================================================================*/
@@ -312,6 +327,13 @@ void KWStyleEditor::paragDiaOk()
     case KWParagDia::PD_FLOW:
       style->setFlow(paragDia->getFlow());
       break;
+    case KWParagDia::PD_BORDERS:
+      {
+	style->setLeftBorder(paragDia->getLeftBorder());
+	style->setRightBorder(paragDia->getRightBorder());
+	style->setTopBorder(paragDia->getTopBorder());
+	style->setBottomBorder(paragDia->getBottomBorder());
+      } break;
     default: break;
     }
 

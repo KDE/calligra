@@ -167,10 +167,68 @@ KWBorderPreview::KWBorderPreview(QWidget* parent,const char* name)
 }
 
 /*================================================================*/
-void KWBorderPreview::drawContents(QPainter* p)
+void KWBorderPreview::drawContents(QPainter* painter)
 {
+  QRect r = contentsRect();
+  QFontMetrics fm(font());
+
+  painter->fillRect(r.x() + fm.width('W'),r.y() + fm.height(),r.width() - 2 * fm.width('W'),r.height() - 2 * fm.height(),white);
+  painter->setClipRect(r.x() + fm.width('W'),r.y() + fm.height(),r.width() - 2 * fm.width('W'),r.height() - 2 * fm.height());
+
+  if (topBorder.ptWidth > 0)
+    {
+      painter->setPen(setBorderPen(topBorder));
+      painter->drawLine(r.x() + 20,r.y() + 20,r.right() - 20,r.y() + 20);
+    }
+
+  if (bottomBorder.ptWidth > 0)
+    {
+      painter->setPen(setBorderPen(bottomBorder));
+      painter->drawLine(r.x() + 20,r.bottom() - 20,r.right() - 20,r.bottom() - 20);
+    }
+
+  if (leftBorder.ptWidth > 0)
+    {
+      painter->setPen(setBorderPen(leftBorder));
+      painter->drawLine(r.x() + 20,r.y() + 20,r.x() + 20,r.bottom() - 20);
+    }
+
+  if (rightBorder.ptWidth > 0)
+    {
+      painter->setPen(setBorderPen(rightBorder));
+      painter->drawLine(r.right() - 20,r.y() + 20,r.right() - 20,r.bottom() - 20);
+    }
 }
 
+/*================================================================*/
+QPen KWBorderPreview::setBorderPen(KWParagLayout::Border _brd)
+{
+  QPen pen(black,1,SolidLine);
+
+  pen.setWidth(_brd.ptWidth);
+  pen.setColor(_brd.color);
+  
+  switch (_brd.style)
+    {
+    case KWParagLayout::SOLID:
+      pen.setStyle(SolidLine);
+      break;
+    case KWParagLayout::DASH:
+      pen.setStyle(DashLine);
+      break;
+    case KWParagLayout::DOT:
+      pen.setStyle(DotLine);
+      break;
+    case KWParagLayout::DASH_DOT:
+      pen.setStyle(DashDotLine);
+      break;
+    case KWParagLayout::DASH_DOT_DOT:
+      pen.setStyle(DashDotDotLine);
+      break;
+    }
+
+  return QPen(pen);
+}
 
 /******************************************************************/
 /* Class: KWParagDia                                              */
@@ -522,7 +580,97 @@ void KWParagDia::setupTab3()
 {
   tab3 = new QWidget(this);
 
-  grid3 = new QGridLayout(tab3,4,2,15,7);
+  grid3 = new QGridLayout(tab3,8,2,15,7);
+
+  lStyle = new QLabel(i18n("Style:"),tab3);
+  lStyle->resize(lStyle->sizeHint());
+  grid3->addWidget(lStyle,0,0);
+
+  cStyle = new QComboBox(false,tab3);
+  cStyle->insertItem(i18n("solid line"));
+  cStyle->insertItem(i18n("dash line (----)"));
+  cStyle->insertItem(i18n("dot line (****)"));
+  cStyle->insertItem(i18n("dash dot line (-*-*)"));
+  cStyle->insertItem(i18n("dash dot dot line (-**-)"));
+  cStyle->resize(cStyle->sizeHint());
+  grid3->addWidget(cStyle,1,0);
+  connect(cStyle,SIGNAL(activated(const char*)),this,SLOT(brdStyleChanged(const char*)));
+
+  lWidth = new QLabel(i18n("Width:"),tab3);
+  lWidth->resize(lWidth->sizeHint());
+  grid3->addWidget(lWidth,2,0);
+
+  cWidth = new QComboBox(false,tab3);
+  for(unsigned int i = 1;i <= 10;i++)
+    {
+      char buffer[10];
+      sprintf(buffer,"%i",i);
+      cWidth->insertItem(buffer);
+    }
+  grid3->addWidget(cWidth,3,0);
+  cWidth->resize(cStyle->size());
+  connect(cWidth,SIGNAL(activated(const char*)),this,SLOT(brdWidthChanged(const char*)));
+
+  lColor = new QLabel(i18n("Color:"),tab3);
+  lColor->resize(lColor->sizeHint());
+  grid3->addWidget(lColor,4,0);
+  
+  bColor = new KColorButton(tab3,"");
+  bColor->resize(bColor->sizeHint());
+  grid3->addWidget(bColor,5,0);
+  connect(bColor,SIGNAL(changed(const QColor&)),this,SLOT(brdColorChanged(const QColor&)));
+  
+  bb = new KButtonBox(tab3);
+  bb->addStretch();
+  bLeft = bb->addButton("",true);
+  bLeft->setPixmap(QPixmap(kapp->kde_datadir() + "/kword/toolbar/borderleft.xpm"));
+  bLeft->setToggleButton(true);
+  bRight = bb->addButton("",true);
+  bRight->setPixmap(QPixmap(kapp->kde_datadir() + "/kword/toolbar/borderright.xpm"));
+  bRight->setToggleButton(true);
+  bTop = bb->addButton("",true);
+  bTop->setPixmap(QPixmap(kapp->kde_datadir() + "/kword/toolbar/bordertop.xpm"));
+  bTop->setToggleButton(true);
+  bBottom = bb->addButton("",true);
+  bBottom->setPixmap(QPixmap(kapp->kde_datadir() + "/kword/toolbar/borderbottom.xpm"));
+  bBottom->setToggleButton(true);
+  bb->addStretch();
+  bb->layout();
+  grid3->addWidget(bb,6,0);
+
+  connect(bLeft,SIGNAL(toggled(bool)),this,SLOT(brdLeftToggled(bool)));
+  connect(bRight,SIGNAL(toggled(bool)),this,SLOT(brdRightToggled(bool)));
+  connect(bTop,SIGNAL(toggled(bool)),this,SLOT(brdTopToggled(bool)));
+  connect(bBottom,SIGNAL(toggled(bool)),this,SLOT(brdBottomToggled(bool)));
+
+  prev3 = new KWBorderPreview(tab3,"");
+  grid3->addMultiCellWidget(prev3,0,7,1,1);
+
+  grid3->addRowSpacing(0,lStyle->height());
+  grid3->addRowSpacing(1,cStyle->height());
+  grid3->addRowSpacing(2,lWidth->height());
+  grid3->addRowSpacing(3,cWidth->height());
+  grid3->addRowSpacing(4,lColor->height());
+  grid3->addRowSpacing(5,bColor->height());
+  grid3->addRowSpacing(6,bb->height());
+  grid3->setRowStretch(0,0);
+  grid3->setRowStretch(1,0);
+  grid3->setRowStretch(2,0);
+  grid3->setRowStretch(3,0);
+  grid3->setRowStretch(4,0);
+  grid3->setRowStretch(5,0);
+  grid3->setRowStretch(6,0);
+  grid3->setRowStretch(7,1);
+
+  grid3->addColSpacing(0,lStyle->width());
+  grid3->addColSpacing(0,cStyle->width());
+  grid3->addColSpacing(0,lWidth->width());
+  grid3->addColSpacing(0,cWidth->width());
+  grid3->addColSpacing(0,lColor->width());
+  grid3->addColSpacing(0,bColor->width());
+  grid3->addColSpacing(0,bb->width());
+  grid3->setColStretch(0,0);
+  grid3->setColStretch(1,1);
 
   grid3->activate();
 
@@ -536,6 +684,35 @@ void KWParagDia::clearFlows()
   rCenter->setChecked(false);
   rRight->setChecked(false);
   rBlock->setChecked(false);
+}
+
+/*================================================================*/
+void KWParagDia::updateBorders()
+{
+  if (leftBorder.ptWidth == 0)
+    bLeft->setOn(false);
+  else
+    bLeft->setOn(true);
+
+  if (rightBorder.ptWidth == 0)
+    bRight->setOn(false);
+  else
+    bRight->setOn(true);
+
+  if (topBorder.ptWidth == 0)
+    bTop->setOn(false);
+  else
+    bTop->setOn(true);
+
+  if (bottomBorder.ptWidth == 0)
+    bBottom->setOn(false);
+  else
+    bBottom->setOn(true);
+
+  prev3->setLeftBorder(leftBorder);
+  prev3->setRightBorder(rightBorder);
+  prev3->setTopBorder(topBorder);
+  prev3->setBottomBorder(bottomBorder);
 }
 
 /*================================================================*/
@@ -632,3 +809,119 @@ void KWParagDia::flowBlock()
   clearFlows();
   rBlock->setChecked(true);
 }
+
+/*================================================================*/
+void KWParagDia::brdLeftToggled(bool _on)
+{
+  if (!_on)
+    leftBorder.ptWidth = 0;
+  else
+    {
+      leftBorder.ptWidth = atoi(cWidth->currentText());
+      leftBorder.color = QColor(bColor->color());
+      QString stl(cStyle->currentText());
+
+      if (stl == i18n("solid line"))
+	leftBorder.style = KWParagLayout::SOLID;
+      else if (stl == i18n("dash line (----)"))
+	leftBorder.style = KWParagLayout::DASH;
+      else if (stl == i18n("dot line (****)"))
+	leftBorder.style = KWParagLayout::DOT;
+      else if (stl == i18n("dash dot line (-*-*)"))
+	leftBorder.style = KWParagLayout::DASH_DOT;
+      else if (stl == i18n("dash dot dot line (-**-)"))
+	leftBorder.style = KWParagLayout::DASH_DOT_DOT;
+    }
+  prev3->setLeftBorder(leftBorder);
+}
+
+/*================================================================*/
+void KWParagDia::brdRightToggled(bool _on)
+{
+  if (!_on)
+    rightBorder.ptWidth = 0;
+  else
+    {
+      rightBorder.ptWidth = atoi(cWidth->currentText());
+      rightBorder.color = QColor(bColor->color());
+      QString stl(cStyle->currentText());
+
+      if (stl == i18n("solid line"))
+	rightBorder.style = KWParagLayout::SOLID;
+      else if (stl == i18n("dash line (----)"))
+	rightBorder.style = KWParagLayout::DASH;
+      else if (stl == i18n("dot line (****)"))
+	rightBorder.style = KWParagLayout::DOT;
+      else if (stl == i18n("dash dot line (-*-*)"))
+	rightBorder.style = KWParagLayout::DASH_DOT;
+      else if (stl == i18n("dash dot dot line (-**-)"))
+	rightBorder.style = KWParagLayout::DASH_DOT_DOT;
+    }
+  prev3->setRightBorder(rightBorder);
+}
+
+/*================================================================*/
+void KWParagDia::brdTopToggled(bool _on)
+{
+  if (!_on)
+    topBorder.ptWidth = 0;
+  else
+    {
+      topBorder.ptWidth = atoi(cWidth->currentText());
+      topBorder.color = QColor(bColor->color());
+      QString stl(cStyle->currentText());
+
+      if (stl == i18n("solid line"))
+	topBorder.style = KWParagLayout::SOLID;
+      else if (stl == i18n("dash line (----)"))
+	topBorder.style = KWParagLayout::DASH;
+      else if (stl == i18n("dot line (****)"))
+	topBorder.style = KWParagLayout::DOT;
+      else if (stl == i18n("dash dot line (-*-*)"))
+	topBorder.style = KWParagLayout::DASH_DOT;
+      else if (stl == i18n("dash dot dot line (-**-)"))
+	topBorder.style = KWParagLayout::DASH_DOT_DOT;
+    }
+  prev3->setTopBorder(topBorder);
+}
+
+/*================================================================*/
+void KWParagDia::brdBottomToggled(bool _on)
+{
+  if (!_on)
+    bottomBorder.ptWidth = 0;
+  else
+    {
+      bottomBorder.ptWidth = atoi(cWidth->currentText());
+      bottomBorder.color = QColor(bColor->color());
+      QString stl(cStyle->currentText());
+
+      if (stl == i18n("solid line"))
+	bottomBorder.style = KWParagLayout::SOLID;
+      else if (stl == i18n("dash line (----)"))
+	bottomBorder.style = KWParagLayout::DASH;
+      else if (stl == i18n("dot line (****)"))
+	bottomBorder.style = KWParagLayout::DOT;
+      else if (stl == i18n("dash dot line (-*-*)"))
+	bottomBorder.style = KWParagLayout::DASH_DOT;
+      else if (stl == i18n("dash dot dot line (-**-)"))
+	bottomBorder.style = KWParagLayout::DASH_DOT_DOT;
+    }
+  prev3->setBottomBorder(bottomBorder);
+}
+
+/*================================================================*/
+void KWParagDia::brdStyleChanged(const char *_style)
+{
+}
+
+/*================================================================*/
+void KWParagDia::brdWidthChanged(const char *_width)
+{
+}
+
+/*================================================================*/
+void KWParagDia::brdColorChanged(const QColor &_color)
+{
+}
+

@@ -354,3 +354,8 @@ Reggie, 15.11.1998:
 Reggie, 16.11.1998:
 -------------------
 - More work on the stylist (style editor, style manager, ...)
+
+Reggie, 18.11.1998:
+-------------------
+- Added tab to the paragraph layout dialog for configuration of paragraph borders
+- Use this border config tab in the stylist too

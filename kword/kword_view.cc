@@ -580,6 +580,10 @@ void KWordView::formatParagraph()
   paragDia->setSpaceAfterParag(gui->getPaperWidget()->getSpaceAfterParag());
   paragDia->setLineSpacing(gui->getPaperWidget()->getLineSpacing());
   paragDia->setFlow(gui->getPaperWidget()->getFlow());
+  paragDia->setLeftBorder(gui->getPaperWidget()->getLeftBorder());
+  paragDia->setRightBorder(gui->getPaperWidget()->getRightBorder());
+  paragDia->setTopBorder(gui->getPaperWidget()->getTopBorder());
+  paragDia->setBottomBorder(gui->getPaperWidget()->getBottomBorder());
   paragDia->show();
 }
 
@@ -1661,6 +1665,10 @@ void KWordView::paragDiaOk()
   gui->getHorzRuler()->setLeftIndent(static_cast<int>(paragDia->getLeftIndent()));
   gui->getHorzRuler()->setFirstIndent(static_cast<int>(paragDia->getFirstLineIndent()));
   gui->getPaperWidget()->setFlow(paragDia->getFlow());
+  gui->getPaperWidget()->setParagLeftBorder(paragDia->getLeftBorder());
+  gui->getPaperWidget()->setParagRightBorder(paragDia->getRightBorder());
+  gui->getPaperWidget()->setParagTopBorder(paragDia->getTopBorder());
+  gui->getPaperWidget()->setParagBottomBorder(paragDia->getBottomBorder());
   setFlow(paragDia->getFlow());
 }
 
