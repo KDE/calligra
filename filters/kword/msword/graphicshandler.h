@@ -25,6 +25,7 @@
 
 #include <qobject.h>
 #include "document.h"
+#include "versionmagic.h"
 
 #ifndef IMAGE_IMPORT
 namespace wvWare

@@ -21,6 +21,7 @@
 #define TEXTHANDLER_H
 
 #include "tablehandler.h"
+#include "versionmagic.h"
 
 #include <wv2/handlers.h>
 #include <qstring.h>

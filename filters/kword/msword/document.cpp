@@ -21,6 +21,7 @@
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
+#include "versionmagic.h"
 
 #include <koRect.h>
 #include <koGlobal.h>

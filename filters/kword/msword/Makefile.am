@@ -1,7 +1,6 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(LIBWV2_CFLAGS) $(all_includes)
-#AM_CXXFLAGS = -DIMAGE_IMPORT # enable this flag if you use wv2 CVS
 
 ####### Files
 
