@@ -21,7 +21,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-
+/*
 #include <fstream.h>
 #include <qpicture.h>
 #include "Preview.h"
@@ -34,10 +34,10 @@
 #define PREVIEW_BORDER 5
 
 #ifndef USE_QFD
-/**
+*//**
  * A preview handler for the KFilePreviewDialag that shows
  * a KIllustrator document.
- */
+ */ /*
 bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 			QString&, QPixmap& pixmap) {
   bool res = false;
@@ -91,10 +91,10 @@ bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
   return res;
 }
 
-/**
+*/ /**
  * A preview handler for the KFilePreviewDialag that shows
  * a WMF object.
- */
+ */ /*
 bool wmfPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 			QString&, QPixmap& pixmap) {
   bool res = false;
@@ -125,11 +125,11 @@ bool wmfPreviewHandler (const KFileInfo* fInfo, const QString fileName,
   }
   return res;
 }
-
+*/
 /**
  * A preview handler for the KFilePreviewDialag that shows
  * a Pixmap object.
- */
+ */ /*
 bool pixmapPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 			QString&, QPixmap& pixmap) {
   bool res = false;
@@ -163,3 +163,4 @@ bool pixmapPreviewHandler (const KFileInfo* fInfo, const QString fileName,
   return res;
 }
 #endif
+*/

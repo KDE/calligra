@@ -179,7 +179,7 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
 
   if (! previewHandlerRegistered) {
     kimgioRegister ();
-
+/*
 #ifndef USE_QFD
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
 					       PreviewPixmap);
@@ -196,6 +196,7 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
     KFilePreviewDialog::registerPreviewModule ("png", pixmapPreviewHandler,
 					       PreviewPixmap);
 #endif
+*/
     previewHandlerRegistered = true;
   }
 
@@ -809,7 +810,7 @@ void KIllustrator::menuCallback (int item) {
 					     i18n("*.kil | KIllustrator File"),
 					     this);
 #else
-	  KFilePreviewDialog::getOpenFileURL((const char *) lastOpenDir,
+	  KFileDialog::getOpenFileName((const char *) lastOpenDir,
 					     i18n("*.kil | KIllustrator File"),
 					     this);
 #endif
@@ -900,7 +901,7 @@ void KIllustrator::menuCallback (int item) {
 	         "*.xpm | X11 Pixmaps"),
 	     this);
 #else
-     QString fname = KFilePreviewDialog::getOpenFileName
+     QString fname = KFileDialog::getOpenFileName
 	     ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
 	         "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
 	         "*.png | PNG Images\n"
@@ -924,7 +925,7 @@ void KIllustrator::menuCallback (int item) {
 	      ((const char *) lastClipartDir,
 	       i18n("*.wmf *.WMF | Windows Metafiles"), this);
 #else
-      QString fname = KFilePreviewDialog::getOpenFileName
+      QString fname = KFileDialog::getOpenFileName
 	      ((const char *) lastClipartDir,
 	       i18n("*.wmf *.WMF | Windows Metafiles"), this);
 #endif
@@ -1460,7 +1461,7 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
 #else
     KFileDialog *dlg = new KFileDialog ((const char *) lastExportDir,
 					(const char *) filter, this,
-					0L, true, false);
+					"file dialog", true);
     dlg->setCaption (i18n ("Save As"));
     if (! lastExport.isEmpty ()) {
 	dlg->setSelection ((const char *) lastExport);
@@ -1516,7 +1517,7 @@ void KIllustrator::importFromFile () {
     QFileDialog::getOpenFileName ((const char *) lastImportDir,
 					 (const char *) filter, this);
 #else
-    KFilePreviewDialog::getOpenFileName ((const char *) lastImportDir,
+    KFileDialog::getOpenFileName ((const char *) lastImportDir,
 					 (const char *) filter, this);
 #endif
   if (! fname.isEmpty ()) {

@@ -654,7 +654,7 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
 #else
     KFileDialog *dlg = new KFileDialog (lastExportDir,
 					filter, this,
-					0L, true, false);
+					"file dia", true);
     dlg->setCaption (i18n ("Save As"));
     if (! lastExport.isEmpty ()) {
 	dlg->setSelection ((const char *) lastExport);
@@ -683,7 +683,7 @@ void KIllustratorView::slotImport()
 #ifdef USE_QFD
     QString fname = QFileDialog::getOpenFileName (lastImportDir, filter, this);
 #else 
-    QString fname = KFilePreviewDialog::getOpenFileName (lastImportDir, filter, this);
+    QString fname = KFileDialog::getOpenFileName (lastImportDir, filter, this);
 #endif
     if (! fname.isEmpty ())
     {
@@ -757,7 +757,7 @@ void KIllustratorView::slotInsertBitmap()
                  "*.xpm | X11 Pixmaps"),
              this);
 #else
-    QString fname = KFilePreviewDialog::getOpenFileName
+    QString fname = KFileDialog::getOpenFileName
 		    ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
 							"*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
 							"*.png | PNG Images\n"
@@ -781,7 +781,7 @@ void KIllustratorView::slotInsertClipart()
               (lastClipartDir,
                i18n("*.wmf *.WMF | Windows Metafiles"), this);
 #else
-    QString fname = KFilePreviewDialog::getOpenFileName
+    QString fname = KFileDialog::getOpenFileName
 		    (lastClipartDir,
 		     i18n("*.wmf *.WMF | Windows Metafiles"), this);
 #endif
