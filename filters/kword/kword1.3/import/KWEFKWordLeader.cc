@@ -119,7 +119,7 @@ void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
         {
             kdDebug(30520) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
         }
-        else if ( (*(it)).m_endparag == paraCount )
+        if ( (*(it)).m_endparag == paraCount )
         {
             kdDebug(30520) << "Paragraph: " << paraCount << " end: " << (*(it)).m_name << endl;
         }
@@ -824,7 +824,7 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
-static void ProcessBookmarkTag ( QDomNode myNode, void* tag, KWEFKWordLeader *leader )
+static void ProcessBookmarkItemTag ( QDomNode myNode, void* tag, KWEFKWordLeader *leader )
 {
     QValueList<Bookmark> * bookmarkList = static_cast< QValueList<Bookmark> * > ( tag );
 
@@ -856,7 +856,7 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "BOOKMARK", ProcessBookmarkTag, tag );
+    tagProcessingList << TagProcessing ( "BOOKMARKITEM", ProcessBookmarkItemTag, tag );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
