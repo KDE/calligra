@@ -92,7 +92,7 @@ void KSpreadResizeRow::slotOk()
 
 void KSpreadResizeRow::slotDefault()
 {
-    double height = heightOfRow;
+    double height = KoUnit::ptToUnit( heightOfRow,m_pView->doc()->getUnit() );
     m_pHeight->setValue( height );
 }
 
