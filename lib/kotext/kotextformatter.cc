@@ -50,7 +50,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     curLeft = x;
     int rm = parag->rightMargin();
     int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4 ) : 0;
-    int w = dw - initialRMargin;
+    int availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
     qDebug( "KoTextFormatterBaseBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d", left, initialHeight, initialLMargin, initialRMargin, w );
 #endif
@@ -137,7 +137,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	} else { // tab
 	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
-		ww = w - x;
+		ww = availableWidth - x;
 	    else
 		ww = nx - x + 1;
             pixelww = zh->layoutUnitToPixelX( ww );
@@ -151,7 +151,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
             QTextCustomItem* ci = c->customItem();
 	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4 ) : left;
 	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4 ) : 0 );
-	    KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
+	    KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
 		fullWidth = FALSE;
@@ -198,8 +198,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	     && ( !isBreakable( string, i ) || ( i > 1 && lastBreak == i-1 && isBreakable( string, i-2 ) )
 					    || lastBreak == -2 )
 	     && ( lastBreak != -1 || allowBreakInWords() ) &&
-	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
-	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
+	     ( wrapAtColumn() == -1 && x + ww > availableWidth && lastBreak != -1 ||
+	       wrapAtColumn() == -1 && x + ww > availableWidth - 4 && lastBreak == -1 && allowBreakInWords() ||
 	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
 	       parag->isNewLinesAllowed() && lastChr == '\n' && lastBreak > -1 ) {
 #ifdef DEBUG_FORMATTER
@@ -217,7 +217,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		    h = lineStart->baseLine + belowBaseLine;
 		    lineStart->h = h;
 		//}
-		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
+		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 #ifdef DEBUG_FORMATTER
@@ -232,15 +232,15 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		initialHeight = tmph;
 		initialLMargin = x;
 		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), tmph, rm, 4 ) : 0 );
-		w = dw - initialRMargin;
+		availableWidth = dw - initialRMargin;
 		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
 		    int nx = parag->nextTab( i, x );
 		    if ( nx < x )
-			ww = w - x;
+			ww = availableWidth - x;
 		    else
 			ww = nx - x + 1;
 		}
-		if ( x != left || w != dw )
+		if ( x != left || availableWidth != dw )
 		    fullWidth = FALSE;
 		curLeft = x;
 		lineStart->y = y;
@@ -257,7 +257,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		// Breakable char was found
 		i = lastBreak;
 		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align,
-		                                                w - string->at( i ).x - ( string->isRightToLeft() && lastChr == '\n'? (c - 1)->width: 0 ) );
+		                                                availableWidth - string->at( i ).x - ( string->isRightToLeft() && lastChr == '\n'? (c - 1)->width: 0 ) );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 		lineStart = lineStart2;
@@ -272,8 +272,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		initialHeight = h;
 		initialLMargin = x;
 		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4 ) : 0 );
-		w = dw - initialRMargin;
-		if ( x != left || w != dw )
+		availableWidth = dw - initialRMargin;
+		if ( x != left || availableWidth != dw )
 		    fullWidth = FALSE;
 		curLeft = x;
 		lineStart->y = y;
@@ -329,7 +329,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		    i = (firstChar - &string->at(0));
 		    x = newLMargin;
                     pixelx = zh->layoutUnitToPixelX( x );
-		    w = dw - newRMargin;
+		    availableWidth = dw - newRMargin;
 		    initialLMargin = newLMargin;
 		    initialRMargin = newRMargin;
 		    c = &string->at( i );
@@ -344,7 +344,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #ifdef DEBUG_FORMATTER
 		    qDebug("Restarting with i=%d x=%d y=%d h=%d initialHeight=%d initialLMargin=%d initialRMargin=%d y=%d",i,x,y,h,initialHeight,initialLMargin,initialRMargin,y);
 #endif
-                    // ww and pixelww already calculated and store, no need to duplicate
+                    // ww and pixelww already calculated and stored, no need to duplicate
                     // code like QRT does.
                     ww = c->width;
                     pixelww = c->pixelwidth;
@@ -421,8 +421,9 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	// last line in a paragraph is not justified
 	if ( align == Qt::AlignJustify )
 	    align = Qt::AlignAuto;
-	KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align,
-	                                                w - x + ( string->isRightToLeft()? c->width: 0 ) ); // don't calc the line break when having right to left text
+        int space = availableWidth - x + c->width; // don't count the trailing space (it breaks e.g. centering)
+        KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, space );
+
 	h += doc ? parag->lineSpacing( linenr++ ) : 0;
 	lineStart->h = h;
 	delete lineStart2;
