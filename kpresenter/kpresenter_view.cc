@@ -1570,14 +1570,7 @@ void KPresenterView::textEnumList()
     {
         c.setNumbering( KoParagCounter::NUM_NONE );
     }
-    KPTextView * edit = page->currentTextObjectView();
-    Q_ASSERT(edit);
-    if ( edit )
-    {
-        KCommand *cmd=edit->setCounterCommand( c );
-        if(cmd)
-            m_pKPresenterDoc->addCommand(cmd);
-    }
+    page->setTextCounter(c);
 }
 
 /*===============================================================*/
@@ -1594,18 +1587,8 @@ void KPresenterView::textUnsortList()
         c.setStyle( KoParagCounter::STYLE_DISCBULLET );
     }
     else
-    {
         c.setNumbering( KoParagCounter::NUM_NONE );
-    }
-    // TODO port to applicableTextInterfaces() ... setParagLayoutFormat()
-    KPTextView * edit = page->currentTextObjectView();
-    Q_ASSERT(edit);
-    if ( edit )
-    {
-        KCommand *cmd=edit->setCounterCommand( c );
-        if(cmd)
-            m_pKPresenterDoc->addCommand(cmd);
-    }
+    page->setTextCounter(c);
 }
 
 /*===============================================================*/

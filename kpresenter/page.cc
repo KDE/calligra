@@ -46,7 +46,7 @@
 #include <kpresenter_sound_player.h>
 #include <notebar.h>
 #include <kpresenter_utils.h>
-
+#include <koparagcounter.h>
 #include <kapplication.h>
 #include <kmimemagic.h>
 #include <kurl.h>
@@ -61,6 +61,7 @@
 #include <kozoomhandler.h>
 #include <stdlib.h>
 #include <qclipboard.h>
+
 
 #include <math.h>
 
@@ -1877,6 +1878,14 @@ void Page::setNewRightIndent(double _rightIndent)
     QPtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it )
         it.current()->setMargin(QStyleSheetItem::MarginRight, _rightIndent);
+}
+
+void Page::setTextCounter(KoParagCounter counter)
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setCounter(counter );
 }
 
 /*================================================================*/

@@ -60,6 +60,7 @@ class QSize;
 class QPoint;
 class KPresenterSoundPlayer;
 class KoTextObject;
+class KoParagCounter;
 
 class KPTextView;
 
@@ -93,6 +94,7 @@ public:
     void setNewRightIndent(double _rightIndent);
     void setNewLeftIndent(double _leftIndent);
     void setNewFirstIndent(double _firstIndent);
+    void setTextCounter(KoParagCounter counter);
     void setTabList( const KoTabulatorList & tabList );
     void setTextBold( bool b );
     void setTextItalic( bool b );
