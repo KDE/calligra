@@ -168,8 +168,6 @@ void KWFrameDia::init() {
         }
         if( fs && fs->isMainFrameset() )
         {
-            setupTab2();
-            setupTab4();
             setupTab5();
         }
         else if ( fs && fs->isHeaderOrFooter() )
