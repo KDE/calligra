@@ -2819,9 +2819,8 @@ void KPresenterDoc::updateHelpLineButton()
 
 void KPresenterDoc::loadHelpLines( const QDomElement &element )
 {
-    QDomElement helplines=element.firstChild().toElement();
-    helplines=helplines.namedItem("HELPLINES").toElement();
-
+    QDomElement helplines=element.namedItem("HELPLINES").toElement();
+    helplines=helplines.firstChild().toElement();
     while ( !helplines.isNull() ) {
         if ( helplines.tagName()=="Vertical" )
         {
