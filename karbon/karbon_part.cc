@@ -37,6 +37,7 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
+#include "vtooldocker.h"
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
  static const char * CURRENT_DTD_VERSION = "1.2";
@@ -50,7 +51,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_commandHistory = new VCommandHistory( this );
 	m_bShowStatusBar = true;
 	m_maxRecentFiles = VGlobal::maxRecentFiles;
-	dcop = 0;
+	dcop = 0L;
+	m_toolContainer = 0L;
 
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
 	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
@@ -117,6 +119,18 @@ KoView*
 KarbonPart::createViewInstance( QWidget* parent, const char* name )
 {
 	return new KarbonView( this, parent, name );
+}
+
+void
+KarbonPart::removeView( KoView *view )
+{
+	kdDebug() << "KarbonPart::removeView" << endl;
+	KoDocument::removeView( view );
+	if( views().count() == 0 )
+	{
+		delete m_toolContainer;
+		m_toolContainer = 0L;
+	}
 }
 
 bool
@@ -231,12 +245,14 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	delete painterFactory;
 }
 
-void KarbonPart::setShowStatusBar (bool b)
+void
+KarbonPart::setShowStatusBar (bool b)
 {
 	m_bShowStatusBar = b;
 }
 
-void KarbonPart::reorganizeGUI ()
+void
+KarbonPart::reorganizeGUI ()
 {
 	QPtrListIterator<KoView> itr( views() );
 	for( ; itr.current(); ++itr )
@@ -245,13 +261,15 @@ void KarbonPart::reorganizeGUI ()
 	}
 }
 
-void KarbonPart::setUndoRedoLimit( int undos )
+void
+KarbonPart::setUndoRedoLimit( int undos )
 {
 	m_commandHistory->setUndoLimit( undos );
 	m_commandHistory->setRedoLimit( undos );
 }
 
-void KarbonPart::initConfig()
+void
+KarbonPart::initConfig()
 {
 	KConfig* config = KarbonPart::instance()->config();
 
@@ -272,7 +290,8 @@ void KarbonPart::initConfig()
 	}
 }
 
-void KarbonPart::initUnit()
+void
+KarbonPart::initUnit()
 {
     //load unit config after we load file.
     //load it for new file or empty file
@@ -284,7 +303,8 @@ void KarbonPart::initUnit()
     }
 }
 
-void KarbonPart::setUnit(KoUnit::Unit _unit)
+void
+KarbonPart::setUnit(KoUnit::Unit _unit)
 {
     m_unit=_unit;
     QPtrListIterator<KoView> itr( views() );
@@ -292,6 +312,18 @@ void KarbonPart::setUnit(KoUnit::Unit _unit)
     {
         static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
     }
+}
+
+void
+KarbonPart::setToolContainer( VToolDocker *toolContainer )
+{
+	m_toolContainer = toolContainer;
+}
+
+VToolDocker*
+KarbonPart::toolContainer()
+{
+	return m_toolContainer;
 }
 
 #include "karbon_part.moc"

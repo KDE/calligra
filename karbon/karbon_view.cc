@@ -76,6 +76,7 @@
 
 //dockers
 #include "vcolordocker.h"
+#include "vtooldocker.h"
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -154,12 +155,34 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_ColorManager = new VColorDocker( m_part, this );
 	connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 	connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
-	
+
+	VToolDocker *_toolContainer = m_part->toolContainer();
+	if( !_toolContainer )
+	{
+		_toolContainer = new VToolDocker( m_part, this );
+		mainWindow()->addDockWindow( _toolContainer, DockLeft );
+	m_part->setToolContainer( _toolContainer );
+	}
+	connect( _toolContainer, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
+	connect( _toolContainer, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
+	connect( _toolContainer, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
+	connect( _toolContainer, SIGNAL( shearToolActivated() ),		this, SLOT( shearTool() ) );
+	connect( _toolContainer, SIGNAL( rectangleToolActivated() ),	this, SLOT( rectangleTool() ) );
+	connect( _toolContainer, SIGNAL( roundRectToolActivated() ),	this, SLOT( roundRectTool() ) );
+	connect( _toolContainer, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
+   	connect( _toolContainer, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
+	connect( _toolContainer, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
+	connect( _toolContainer, SIGNAL( sinusToolActivated() ),		this, SLOT( sinusTool() ) );
+	connect( _toolContainer, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
+	connect( _toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
+	connect( _toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
+	m_part->toolContainer()->show();
+
 	m_objectDlg = new VObjectDlg( m_part, this );
 	m_objectDlg->disable(); //disabled @ startup because none of the objects are selected
 	m_TransformDlg = new VTransformDlg( m_part, this );
 
-        setNumberOfRecentFiles( m_part->maxRecentFiles() );
+	setNumberOfRecentFiles( m_part->maxRecentFiles() );
 
 	// initial tool is select-tool:
 	m_currentTool = m_selectTool;
@@ -534,7 +557,6 @@ KarbonView::selectTool()
 	m_currentTool->deactivate();
 	m_currentTool = m_selectTool;
 	m_currentTool->activate();
-	m_selectToolAction->setChecked( true );
 	m_canvas->repaintAll();
 }
 
@@ -544,7 +566,6 @@ KarbonView::selectNodesTool()
 	m_currentTool->deactivate();
 	m_currentTool = m_selectNodesTool;
 	m_currentTool->activate();
-	m_selectNodesToolAction->setChecked( true );
 	m_canvas->repaintAll();
 }
 
@@ -554,7 +575,6 @@ KarbonView::rotateTool()
 	m_currentTool->deactivate();
 	m_currentTool = m_rotateTool;
 	m_currentTool->activate();
-	m_rotateToolAction->setChecked( true );
 	m_canvas->repaintAll();
 }
 
@@ -579,7 +599,6 @@ KarbonView::shearTool()
 	m_currentTool->deactivate();
 	m_currentTool = m_shearTool;
 	m_currentTool->activate();
-	m_shearToolAction->setChecked( true );
 	m_canvas->repaintAll();
 }
 
@@ -915,7 +934,7 @@ KarbonView::initActions()
 	// object <-----
 
 	// tools ----->
-	m_ellipseToolAction = new KToggleAction(
+	/*m_ellipseToolAction = new KToggleAction(
 		i18n( "&Ellipse" ), "14_ellipse", 0, this,
 		SLOT( ellipseTool() ), actionCollection(), "tool_ellipse" );
 	m_polygonToolAction = new KToggleAction(
@@ -953,12 +972,12 @@ KarbonView::initActions()
 		SLOT( gradTool() ), actionCollection(), "tool_grad" );
 	m_polylineToolAction = new KToggleAction(
 		i18n( "Poly&line" ), "14_polyline", 0, this,
-		SLOT( polylineTool() ), actionCollection(), "tool_polyline" );
+		SLOT( polylineTool() ), actionCollection(), "tool_polyline" );*/
 	/*m_textToolAction = new KToggleAction(
 		i18n( "Text" ), "14_text", 0, this,
 		SLOT( textTool() ), actionCollection(), "tool_text" );*/
 
-	m_ellipseToolAction->setExclusiveGroup( "Tools" );
+	/*m_ellipseToolAction->setExclusiveGroup( "Tools" );
 	m_polygonToolAction->setExclusiveGroup( "Tools" );
 	m_rectangleToolAction->setExclusiveGroup( "Tools" );
 	m_roundRectToolAction->setExclusiveGroup( "Tools" );
@@ -970,7 +989,7 @@ KarbonView::initActions()
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
 	m_gradToolAction->setExclusiveGroup( "Tools" );
-	m_polylineToolAction->setExclusiveGroup( "Tools" );
+	m_polylineToolAction->setExclusiveGroup( "Tools" );*/
 	//m_textToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
 
