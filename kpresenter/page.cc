@@ -3111,10 +3111,10 @@ void Page::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int 
     kpobject->setOwnClipping( true );
 
     KPObject *obj = 0;
-    for ( unsigned int i = tmpObjs.findRef( kpobject ) + 1; i < tmpObjs.count(); i++ )
-    {
+    for ( unsigned int i = tmpObjs.findRef( kpobject ) + 1; i < tmpObjs.count(); i++ ) {
 	obj = tmpObjs.at( i );
-	if ( kpobject->getBoundingRect( 0, 0 ).intersects( obj->getBoundingRect( 0, 0 ) ) && obj->getPresNum() < static_cast<int>( currPresStep ) )
+	if ( kpobject->getBoundingRect( 0, 0 ).intersects( obj->getBoundingRect( 0, 0 ) ) && 
+	     obj->getPresNum() < static_cast<int>( currPresStep ) )
 	    obj->draw( &p, diffx(), diffy() );
     }
 
@@ -3124,6 +3124,7 @@ void Page::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int 
 /*======================== print =================================*/
 void Page::print( QPainter *painter, QPrinter *printer, float left_margin, float top_margin )
 {
+    printer->setFullPage( TRUE );
     int i = 0;
 
     repaint( false );
@@ -3150,12 +3151,14 @@ void Page::print( QPainter *painter, QPrinter *printer, float left_margin, float
 
     QProgressBar progBar;
 
-    QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ), printer->toPage() - printer->fromPage() + 2, this );
+    QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ), 
+			      printer->toPage() - printer->fromPage() + 2, this );
     int j = 0;
     progress.setProgress( 0 );
 
     if ( printer->fromPage() > 1 )
-	view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageSize( 1, 1.0, false ).height() ) - MM_TO_POINT( top_margin ) );
+	view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageSize( 1, 1.0, false ).height() ) - 
+			MM_TO_POINT( top_margin ) );
 
     for ( i = printer->fromPage(); i <= printer->toPage(); i++ )
     {
