@@ -37,8 +37,7 @@ class AspellConfig;
  *  access to the spellchecker.
  *
  * @author David Sweet <dsweet@kde.org>
- * @version $Id$
- * @see KSpellConfig
+ * @see KOSpellConfig
  */
 
 class KOSpell : public QObject
@@ -436,8 +435,6 @@ protected:
 
     void setUpDialog ();
 
-    bool cleanFputs (const QString & s, bool appendCR=TRUE);
-    bool cleanFputsWord (const QString & s, bool appendCR=TRUE);
     bool writePersonalDictionary ();
 
     bool spellWord( const QString &_word );

@@ -311,18 +311,18 @@ bool KOSpell::spellWord( const QString &_word )
 void KOSpell::nextWord()
 {
     QString word;
+    offset=0;
     do
     {
         int i =0;
-        for ( i = lastpos; i<(int)origbuffer.length();i++)
+        for ( i = lastpos + offset; i<(int)origbuffer.length();i++)
         {
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
                 break;
             word.append(ch);
         }
-        lastpos = i+1;
-
+        offset+= i+1;
 
         if(d->m_bIgnoreTitleCase && word==word.upper())
             word ="";
@@ -340,7 +340,7 @@ void KOSpell::nextWord()
         if (ignorelist.findIndex(word.lower())!=-1)
             word ="";
     }
-    while ( word.isEmpty() && (lastpos < (int)origbuffer.length()-1));
+    while ( word.isEmpty() && (lastpos+offset < (int)origbuffer.length()-1));
 
     if ( !spellWord( word ))
     {
@@ -411,7 +411,9 @@ void KOSpell::dialog(const QString & word, QStringList & sugg )
 
     connect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
     ksdlg->init (word, &sugg);
-    emit misspelling (word, sugg, lastpos-word.length()-1 /* -1 for next space*/);
+    kdDebug()<<" lastpos :"<<lastpos<<endl;
+    kdDebug()<<" word.length() :"<<word.length()<<endl;
+    emit misspelling (word, sugg, lastpos);
 
     ksdlg->show();
 }
@@ -449,18 +451,18 @@ void KOSpell::dialog2 (int result)
         kdDebug()<<" newbuffer :"<<newbuffer<<endl;
 
         offset+=replacement().length()-replacement().length();
-        newbuffer.replace (lastpos, replacement().length(), replacement()+" " );
+        newbuffer.replace (lastpos + offset, replacement().length(), replacement()+" " );
         kdDebug()<<" apres :"<<newbuffer<<endl;
         emit replaceall( dlgorigword ,  replacement() );
-        emit corrected (dlgorigword ,  replacement(), lastpos);
+        emit corrected (dlgorigword ,  replacement(), lastpos+offset);
         break;
     case KS_REPLACE:
         kdDebug()<<" newbuffer :"<<newbuffer<<endl;
 
         offset+=replacement().length()-replacement().length();
-        newbuffer.replace (lastpos, replacement().length(), replacement()+" " );
+        newbuffer.replace (lastpos+offset, replacement().length(), replacement()+" " );
         kdDebug()<<" apres :"<<newbuffer<<endl;
-        emit corrected (dlgorigword ,  replacement(), lastpos);
+        emit corrected (dlgorigword ,  replacement(), lastpos+offset);
         break;
     case KS_CHECKAGAINWITHNEWLANGUAGE:
         changeSpellLanguage( ksdlg->languageIndex());
@@ -490,6 +492,7 @@ void KOSpell::dialog2 (int result)
         emit death();
         break;
     }
+    lastpos += offset;
     if ( testNextWord)
         checkNextWord();
 }
