@@ -250,13 +250,26 @@ lucijan	#3 0x414dbf54 in strdup () from /lib/tls/libc.so.6
 lucijan	js^: yes simply add a new kexi__object but o_caption as NULL
 ::FIXIT
 
+TODO: Put Conenction::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
+
 2004-01-19
 RESIZING HELL RESOLVED
 - KexiDialogBase resizing fixed for maximize state: only resize a dialog if it is in normal state
 - KexiMainWindow: for dialogs in normal state: decrease dialog's height if it exceeds area contents
 - KexiViewBase: 
    -preferred size hint introduced;
-   -parentDialgo() convenience method added for getting view's dialog parent.
+   -parentDialog() convenience method added for getting view's dialog parent.
+
+- KexiDB::Connection:
+  -tableNames() return only tables that have valid names
+  -the same for any other objects
+- actions in 'Create' menu work
+- PropertyEditor has cell borders' color like this used in table view
+- closing() signal added to KexiViewBase - it works like in KexiDialogBase.
+  Effect: table view's data is saved on closing if editing is in progress
+
+- table view, kexidb: after row inserting, autoincremented fields have displayed values
+- query removing works
 
 2004-01-17
 - KexiDialogBase: minimum height fixed: added height of its caption
