@@ -222,50 +222,10 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 
     grid->addWidget( new QLabel(  i18n(  "Units:" ), tmpQGroupBox ), 1, 0 );
 
-    QStringList listUnit;
-    listUnit << KoUnit::unitDescription( KoUnit::U_MM );
-    listUnit << KoUnit::unitDescription( KoUnit::U_CM );
-    listUnit << KoUnit::unitDescription( KoUnit::U_DM );
-    listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
-    listUnit << KoUnit::unitDescription( KoUnit::U_PT );
-    listUnit << KoUnit::unitDescription( KoUnit::U_PI );
-    listUnit << KoUnit::unitDescription( KoUnit::U_DD );
-    listUnit << KoUnit::unitDescription( KoUnit::U_CC );
-
     m_unit = new QComboBox( tmpQGroupBox );
     m_unit->insertStringList( KoUnit::listOfUnitName() );
     grid->addWidget( m_unit, 1, 1 );
-    m_oldUnit = 0;
-
-    switch( KoUnit::unit( unitType ) )
-    {
-
-    case KoUnit::U_MM:
-        m_oldUnit = 0;
-        break;
-    case KoUnit::U_CM:
-        m_oldUnit = 1;
-        break;
-    case KoUnit::U_DM:
-        m_oldUnit = 2;
-        break;
-    case KoUnit::U_INCH:
-        m_oldUnit = 3;
-        break;
-    case KoUnit::U_PT:
-        m_oldUnit = 4;
-        break;
-    case KoUnit::U_PI:
-        m_oldUnit = 5;
-        break;
-    case KoUnit::U_DD:
-        m_oldUnit = 6;
-        break;
-    case KoUnit::U_CC:
-    default:
-        m_oldUnit = 7;
-    }
-
+    m_oldUnit = KoUnit::unit( unitType );
     m_unit->setCurrentItem( m_oldUnit );
 	connect( m_unit, SIGNAL( activated( int ) ), SIGNAL( unitChanged( int ) ) );
 }
