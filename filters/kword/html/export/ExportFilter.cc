@@ -196,8 +196,18 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         }
         else
         {
-            kdWarning(30503) << "Picture format not supported by HTML export filter!" << endl;
-            return false;
+            // ### TODO: avoid loading the picture 2 times
+            image.resize( 0 );
+            if ( ! loadAndConvertToImage( anchor.picture.koStoreName, extension, "PNG", image ) )
+            {
+                kdWarning(30503) << "Could not convert picture to PNG!" << endl;
+                return false;
+            }
+            *m_streamOut << "<img "; // This is an empty element!
+            *m_streamOut << "src=\"" << escapeHtmlText(strImageName) << "\" ";
+            *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key.filename()) << "\"";
+            *m_streamOut << (isXML()?"/>":">");
+            writePicture = true;
         }
         
         // Do we still need to write the original picture?
