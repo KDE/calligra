@@ -3407,6 +3407,8 @@ void KPresenterView::objectSelectedChanged()
     }
     actionScreenAssignEffect->setEnabled(state&&!headerfooterselected);
     actionEditDelete->setEnabled(state&&!headerfooterselected);
+    actionEditCut->setEnabled(state&&!headerfooterselected);
+
     actionExtraPenBrush->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
     actionExtraShadow->setEnabled(state
@@ -6866,7 +6868,22 @@ void KPresenterView::slotObjectEditChanged()
     if(!edit)
     {
         actionEditCopy->setEnabled(state);
-        actionEditCut->setEnabled(state);
+        bool headerfooterselected = false;
+        if(m_canvas->numberOfObjectSelected()==1)
+        {
+            KPObject *obj=m_canvas->getSelectedObj();
+            //disable this action when we select a header/footer
+            if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
+            {
+                headerfooterselected=true;
+            }
+            else
+            {
+                headerfooterselected=false;
+            }
+        }
+
+        actionEditCut->setEnabled(state&&!headerfooterselected);
     }
     actionFormatStyleMenu->setEnabled( isText );
     actionFormatStyle->setEnabled(isText);
