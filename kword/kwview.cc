@@ -1672,13 +1672,21 @@ void KWView::slotViewFrameBorders()
 
 void KWView::viewHeader()
 {
+    bool state=actionViewFooter->isChecked();
     m_doc->setHeaderVisible( actionViewHeader->isChecked() );
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if(!state && edit && edit->frameSet()->isAHeader())
+        m_doc->terminateEditing( edit->frameSet() );
     m_doc->updateResizeHandles( );
 }
 
 void KWView::viewFooter()
 {
-    m_doc->setFooterVisible( actionViewFooter->isChecked() );
+    bool state=actionViewFooter->isChecked();
+    m_doc->setFooterVisible( state );
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if(!state && edit && edit->frameSet()->isAFooter())
+        m_doc->terminateEditing( edit->frameSet() );
     m_doc->updateResizeHandles( );
 }
 
