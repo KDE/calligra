@@ -2986,41 +2986,24 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
         const double widthLimit = m_doc->unzoomItX( m_doc->paperWidth() - m_doc->leftBorder() - m_doc->rightBorder() - m_doc->zoomItX( 10 ) );
         const double heightLimit = m_doc->unzoomItY( m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
         fsInline = 0L;
-        double width = 0.0;
-        double height = 0.0;
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
 
         frameset->loadPicture( filename );
-        if ( isClipart )
-        {
-            frameset->setKeepAspectRatio( false ); // KWord 1.2 does not support "keep aspect ratio" for cliparts
+        QSize size (frameset->picture().getOriginalSize());
+        // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
+        // ### TODO/FIXME: is the qRound really necessary?
+        double width = m_doc->unzoomItX( qRound( (double)size.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) ) );
+        double height = m_doc->unzoomItY( qRound( (double)size.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) ) );
 
-            // Set an initial size
-            QSize size=frameset->picture().getOriginalSize(); // Get the bounding rectangle
-            width = size.width();
-            height = size.height();
-        }
-        else
-        {
-            // For an inline frame we _need_ to find out the size!
-            if ( pixmapSize.isEmpty() )
-                pixmapSize = QPixmap( filename ).size();
+        frameset->setKeepAspectRatio( _keepRatio);
 
-            // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-            // ### TODO/FIXME: is the qRound really necessary?
-            width = m_doc->unzoomItX( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) ) );
-            height = m_doc->unzoomItY( qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) ) );
-
-            frameset->setKeepAspectRatio( _keepRatio);
-
-        }
 
         if ( _keepRatio && ((width > widthLimit) || (height > heightLimit)) )
         {
             // size too big => adjust the size and keep ratio
-            float ratioX = (float)width / widthLimit;
-            float ratioY = (float)height / heightLimit;
-            float ratioPicture = (float)width / height;
+            const double ratioX = width / widthLimit;
+            const double ratioY = height / heightLimit;
+            const double ratioPicture = width / height;
 
             if ( ratioPicture == 0 )  // unlikely
             {
