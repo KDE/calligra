@@ -373,7 +373,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 // But we don't want to do this forever, so we check against maxY (if known)
                 if ( maxY > -1 )
                 {
-                    if ( y < maxY )
+                    if ( parag->rect().y() + y < maxY )
                     {
                         --i; // so that the ++i in for() is a noop
                         continue;
@@ -443,7 +443,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 //tminw = marg;
                 tmpWused = 0;
                 // If we're after maxY, time to stop. Hopefully KWord will create more pages.
-                if ( maxY > -1 && y >= maxY )
+                if ( maxY > -1 && parag->rect().y() + y >= maxY )
                     break;
                 continue;
             }
