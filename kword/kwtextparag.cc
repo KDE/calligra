@@ -34,7 +34,7 @@
 // Called by KoTextParag::drawParagString - all params are in pixel coordinates
 void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/, int start, int len,
                                        int /*startX*/, int /*lastY*/, int /*baseLine*/, int /*h*/, // in LU
-                                       int startX_pix, int lastY_pix, int baseLine_pix, int bw, int h_pix, // in pixels
+                                       int /*startX_pix*/, int lastY_pix, int baseLine_pix, int /*bw*/, int h_pix, // in pixels
                                        bool drawSelections,
                                        KoTextFormat *lastFormat, int /*i*/, const QMemArray<int> &selectionStarts,
                                        const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
@@ -124,7 +124,8 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                 {
                     // Don't use ch.pixelwidth here. We want a square with
                     // the same size for all spaces, even the justified ones
-                    int w = zh->layoutUnitToPixelX( string()->width(i) );
+                    //int w = zh->layoutUnitToPixelX( string()->width(i) );
+                    int w = zh->layoutUnitToPixelX( ch.format()->width( ' ' ) );
                     int height = zh->layoutUnitToPixelY( ch.ascent() );
                     int size = QMAX( 2, QMIN( w/2, height/3 ) ); // Enfore that it's a square, and that it's visible
                     int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
@@ -141,7 +142,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
 
                     int availWidth = ch.pixelwidth;
 
-                    KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );
+                    KoTextFormat* format = ch.format();
                     int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + availWidth / 2;
                     int size = QMIN( availWidth,format->screenFontMetrics(zh).width('W')) / 2 ; // actually the half size
                     int y = lastY_pix + baseLine_pix - zh->layoutUnitToPixelY( ch.ascent()/2 );
