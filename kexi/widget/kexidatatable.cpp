@@ -97,7 +97,10 @@ void KexiDataTable::setDataSet(KexiDBRecord *rec)
 	m_record=rec;
 
 	if(!m_record)
+	{
 		kdDebug() << "KexiDataTable::setDataSet(): record doesn't exist" << endl;
+		return;
+	}
 
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{

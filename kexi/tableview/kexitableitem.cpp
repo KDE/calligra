@@ -75,7 +75,7 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView)
 	int numCols=tableView->cols();
 	m_columns.resize(numCols);
 
-	setInsertItem(false);
+	m_insertItem = false;
 //	m_columns.setAutoDelete(true);
 
 //	m_columnsI.resize(numCols);
@@ -131,13 +131,24 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView, bool sorted, ...)
 void
 KexiTableItem::setInsertItem(bool insertItem)
 {
+	qDebug("KexiTableItem::setInsertItem()\n");
 	m_insertItem = insertItem;
 //	int m_position = m_pTable->m_contents.find(this);
 	if(insertItem)
 	{
 		m_pTable->recordMarker()->setInsertRow(getHint().toInt() + 1);
+		m_pTable->setInsertItem(this);
 		qDebug("inserting into %i", getHint().toInt());
 	}
+	else
+	{
+		if(m_pTable->insertItem() && m_pTable->insertItem() == this)
+		{
+			m_pTable->takeInsertItem();
+		}
+	}
+
+	qDebug("KexiTableItem::setInsertItem(): done\n");
 }
 
 

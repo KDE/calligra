@@ -120,12 +120,13 @@ KexiTablePartProxy::slotAlter(const QString& identifier)
 void
 KexiTablePartProxy::slotDrop(const QString& identifier)
 {
+	QString rI = part()->items()->find(identifier)->name();
 	int ans = KMessageBox::questionYesNo(kexiView(),
-		i18n("Do you realy want to delete %1?").arg(identifier), i18n("Delete Table?"));
+		i18n("Do you realy want to delete %1?").arg(rI), i18n("Delete Table?"));
 
 	if(ans == KMessageBox::Yes)
 	{
-		if(kexiView()->project()->db()->query("DROP TABLE " + identifier))
+		if(kexiView()->project()->db()->query("DROP TABLE " + rI))
 		{
 			// FIXME: Please implement a less costly solution.
 			m_tablePart->getTables();

@@ -129,6 +129,11 @@ public:
 
 	KexiTableList	*contents() { return m_contents; }
 
+
+	void		takeInsertItem();
+	void		setInsertItem(KexiTableItem *i) { m_pInsertItem = i; }
+	KexiTableItem	*insertItem() { return m_pInsertItem; }
+
 	enum AdditionPolicy
 	{
 		NoAdd,
@@ -244,6 +249,7 @@ protected:
 
 	bool			m_needAutoScroll;
 	QTimer			*m_scrollTimer;
+	KexiTableItem		*m_pInsertItem;
 
 	QStringList		m_dropFilters;
 

@@ -70,6 +70,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	m_curRow = -1;
 	m_curCol = -1;
 	m_pCurrentItem = 0;
+	m_pInsertItem = 0;
 
 	m_rowHeight = fontMetrics().lineSpacing();
 	if(m_rowHeight < 17)
@@ -202,6 +203,11 @@ void KexiTableView::addRecord()
 
 void KexiTableView::clear()
 {
+	for(int i=0; i < rows(); i++)
+	{
+		m_pVerticalHeader->removeLabel(i);
+	}
+
 	editorCancel();
 	m_contents->clear();
 
@@ -215,15 +221,15 @@ void KexiTableView::clear()
 	m_pVerticalHeader->setCurrentRow(-1);
 //	m_pUpdateTimer->start(1,true);
 	viewport()->repaint();
-
-	for(int i=0; i < m_pVerticalHeader->count(); i++)
-	{
-		m_pVerticalHeader->removeLabel(i);
-	}
 }
 
 void KexiTableView::clearAll()
 {
+	for(int i=0; i < rows(); i++)
+	{
+		m_pVerticalHeader->removeLabel(i);
+	}
+
 	editorCancel();
 	m_contents->clear();
 
@@ -247,11 +253,6 @@ void KexiTableView::clearAll()
 	m_pColumnTypes->resize(0);
 	m_pColumnModes->resize(0);
 	m_pColumnDefaults->clear();
-
-	for(int i=0; i < m_pVerticalHeader->count(); i++)
-	{
-		m_pVerticalHeader->removeLabel(i);
-	}
 }
 
 int KexiTableView::findString(const QString &string)
@@ -1092,6 +1093,18 @@ void KexiTableView::updateCell(int row, int col)
 
 void KexiTableView::columnSort(int col)
 {
+	bool i = false;
+	QVariant hint;
+	if(m_pInsertItem)
+	{
+		i = true;
+		hint = m_pInsertItem->getHint();
+//		delete m_pInsertItem;
+		remove(m_pInsertItem);
+		m_pInsertItem = 0;
+		m_pVerticalHeader->removeLabel(rows());
+	}
+
 	if(m_sortedColumn == col)
 		m_sortOrder = !m_sortOrder;
 	else
@@ -1100,6 +1113,15 @@ void KexiTableView::columnSort(int col)
 	m_pTopHeader->setSortIndicator(col, m_sortOrder);
 	m_contents->setSorting(col, m_sortOrder, columnType(col));
 	sort();
+
+	if(i)
+	{
+		KexiTableItem *insert = new KexiTableItem(this);
+		insert->setHint(hint);
+		insert->setInsertItem(true);
+		m_pInsertItem = insert;
+
+	}
 //	updateContents( 0, 0, viewport()->width(), viewport()->height());
 }
 
@@ -1385,6 +1407,14 @@ KexiTableView::print(KPrinter &printer)
 //	p.drawLine(60,60,120,150);
 	p.end();
 }
+
+void
+KexiTableView::takeInsertItem()
+{
+//	delete m_pInsertItem;
+	m_pInsertItem = 0;
+}
+
 
 KexiTableHeader* KexiTableView::recordMarker()
 {
