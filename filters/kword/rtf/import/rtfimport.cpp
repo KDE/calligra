@@ -75,6 +75,9 @@ static RTFProperty propertyTable[] =
 	PROP(	"Text",		"@shppict",	parseGroup,		0L, false ),
 	PROP(	"@rtf",		"@stylesheet",	parseStyleSheet,	0L, true ),
 	MEMBER(	"@info",	"@title",	parsePlainText,		title, false ),
+
+    // Alphabetical order
+
 	PROP(	0L,		"\\",		insertSymbol,		0L, '\\' ),
 	PROP(	0L,		"_",		insertSymbol,		0L, 0x2011 ),
 	PROP(	0L,		"{",		insertSymbol,		0L, '{' ),
@@ -82,6 +85,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"}",		insertSymbol,		0L, '}' ),
 	PROP(	0L,		"~",		insertSymbol,		0L, 0x00a0 ),
 	PROP(	0L,		"-",		insertSymbol,		0L, 0x00ad ),
+	PROP(	0L,		"adjustright",	ignoreKeyword,		0L, 0 ), // Not supported, KWord has no gird
 	PROP(	0L,		"ansi",	setAnsiCodepage,		0L, 0 ),
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
@@ -121,6 +125,8 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"clbrdrr",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[1]) ),
 	MEMBER(	0L,		"clbrdrt",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[2]) ),
 	MEMBER(	0L,		"clcbpat",	setNumericProperty,	state.tableCell.bgcolor, 0 ),
+	PROP(	0L,		"cs",	ignoreKeyword,		0L, 0 ), // Not supported by KWord 1.3
+	PROP(	0L,		"datafield",	skipGroup,		0L, 0 ), // Binary data in variables are not supported
 	MEMBER(	"@rtf",		"deff",		setNumericProperty,	defaultFont, 0 ),
 	MEMBER(	"@rtf",		"deftab",	setNumericProperty,	defaultTab, 0 ),
 	MEMBER(	"@pict",	"dibitmap",	setEnumProperty,	picture.type, RTFPicture::BMP ),
@@ -130,13 +136,17 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"emspace",	insertSymbol,		0L, 0x2003 ),
 	PROP(	0L,		"endash",	insertSymbol,		0L, 0x2013 ),
 	PROP(	0L,		"enspace",	insertSymbol,		0L, 0x2002 ),
+	PROP(	0L,		"expnd",	ignoreKeyword,		0L, 0 ), // Expansion/compression of character inter-space not supported
+	PROP(	0L,		"expndtw",	ignoreKeyword,		0L, 0 ), // Expansion/compression of character inter-space not supported
 	MEMBER(	0L,		"f",		setNumericProperty,	state.format.font, 0 ),
 	MEMBER(	"@rtf",		"facingp",	setFlagProperty,	facingPages, true ),
+	PROP(	0L,		"fcharset",	ignoreKeyword,		0L, 0 ), // Not needed with Qt
 	MEMBER(	"@fonttbl",	"fdecor",	setEnumProperty,	font.styleHint, QFont::Decorative ),
 	MEMBER(	0L,		"fi",		setNumericProperty,	state.layout.firstIndent, 0 ),
 	MEMBER(	"@fonttbl",	"fmodern",	setEnumProperty,	font.styleHint, QFont::TypeWriter ),
 	MEMBER(	"@fonttbl",	"fnil",		setEnumProperty,	font.styleHint, QFont::AnyStyle ),
 	MEMBER(	0L,		"footery",	setNumericProperty,	state.section.footerMargin, 0 ),
+	PROP(	0L,		"formshade",	ignoreKeyword,		0L, 0 ), // Not supported, KWord has no form support
 	MEMBER(	"@fonttbl",	"fprq",		setNumericProperty,	font.fixedPitch, 0 ),
 	MEMBER(	"@fonttbl",	"froman",	setEnumProperty,	font.styleHint, QFont::Serif ),
 	MEMBER(	0L,		"fs",		setNumericProperty,	state.format.fontSize, 0 ),
@@ -163,15 +173,16 @@ static RTFProperty propertyTable[] =
 	MEMBER(	"@rtf",		"margr",	setNumericProperty,	rightMargin, 0 ),
 	MEMBER(	"@rtf",		"margt",	setNumericProperty,	topMargin, 0 ),
 	MEMBER(	0L,		"nosupersub",	setEnumProperty,	state.format.vertAlign, RTFFormat::Normal ),
+	PROP(	0L,		"panose",		ignoreKeyword,	0L, 0 ), // Not supported
 	PROP(	"Text",		"page",		insertPageBreak,	0L, 0 ),
 	MEMBER(	0L,		"pagebb",	setFlagProperty,	state.layout.pageBB, true ),
-	PROP(	0L,		"pc",	setPcCodepage,		0L, 0 ),
-	PROP(	0L,		"pca",	setPcaCodepage,		0L, 0 ),
-	MEMBER(	0L,		"pgbrk",	setToggleProperty,	state.layout.pageBA, true ),
 	MEMBER(	"@rtf",		"paperh",	setNumericProperty,	paperHeight, 0 ),
 	MEMBER(	"@rtf",		"paperw",	setNumericProperty,	paperWidth, 0 ),
 	PROP(	"Text",		"par",		insertParagraph,	0L, 0 ),
 	PROP(	0L,		"pard",		setParagraphDefaults,	0L, 0 ),
+	PROP(	0L,		"pc",	setPcCodepage,		0L, 0 ),
+	PROP(	0L,		"pca",	setPcaCodepage,		0L, 0 ),
+	MEMBER(	0L,		"pgbrk",	setToggleProperty,	state.layout.pageBA, true ),
 	MEMBER(	"@pict",	"piccropb",	setNumericProperty,	picture.cropBottom, 0 ),
 	MEMBER(	"@pict",	"piccropl",	setNumericProperty,	picture.cropLeft, 0 ),
 	MEMBER(	"@pict",	"piccropr",	setNumericProperty,	picture.cropRight, 0 ),
@@ -293,7 +304,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     // This filter only supports RTF to KWord conversion
     if ((from != "text/rtf") || (to != "application/x-kword"))
         return KoFilter::NotImplemented;
-    
+
     QTime debugTime;
     debugTime.start();
     
@@ -657,6 +668,14 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
         kdDebug(30515) << "Unknown keyword: " << it.key() << " * " << it.data() << endl;
 
     return KoFilter::OK;
+}
+
+/**
+ * Skip the keyword, as we do not need to do anything with it
+ * (either because it is supported anyway or because we cannot support it.)
+ */
+void RTFImport::ignoreKeyword( RTFProperty * )
+{
 }
 
 /**

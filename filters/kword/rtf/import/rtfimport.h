@@ -217,6 +217,7 @@ public:
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
+    void ignoreKeyword( RTFProperty * );
     void setCodepage( RTFProperty * );
     void setMacCodepage( RTFProperty * );
     void setAnsiCodepage( RTFProperty * );
