@@ -474,6 +474,7 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
+    if ( !frame ) return;
 
     KoPoint pos( position );
     // position includes the border, we need to adjust accordingly

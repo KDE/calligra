@@ -241,6 +241,7 @@ signals:
 
 private slots:
     void doChangeInterval();
+    void slotAfterUndoRedo();
 
 protected:
     void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );

@@ -1246,6 +1246,9 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
         break;
     }
 
+    if ( !undoRedoInfo.customItemsMap.isEmpty() )
+        clearUndoRedoInfo();
+
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
@@ -2295,11 +2298,7 @@ void KWTextFrameSet::undo()
     // a cursor inside a deleted paragraph -> crash.
     emit setCursor( c );
     setLastFormattedParag( textdoc->firstParag() );
-    formatMore();
-    emit repaintChanged( this );
-    emit updateUI( true );
-    emit showCursor();
-    emit ensureCursorVisible();
+    QTimer::singleShot( 0, this, SLOT( slotAfterUndoRedo() ) );
 }
 
 void KWTextFrameSet::redo()
@@ -2314,6 +2313,15 @@ void KWTextFrameSet::redo()
     }
     emit setCursor( c ); // see undo
     setLastFormattedParag( textdoc->firstParag() );
+    QTimer::singleShot( 0, this, SLOT( slotAfterUndoRedo() ) );
+}
+
+// This is done in a singleShot timer because of macro-commands.
+// We need to do this _after_ terminating the macro command (for instance
+// in the case of undoing a floating-frame insertion, we need to delete
+// the frame first)
+void KWTextFrameSet::slotAfterUndoRedo()
+{
     formatMore();
     emit repaintChanged( this );
     emit updateUI( true );
