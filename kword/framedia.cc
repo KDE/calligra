@@ -188,10 +188,16 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     // Picture frame
     if(frameType==FT_PICTURE)
     {
-        aspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
-        grid1->addWidget(aspectRatio, row, 0);
+        cbAspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
+        if ( frame->getFrameSet() )
+            cbAspectRatio->setChecked( static_cast<KWPictureFrameSet *>( frame->getFrameSet() )->keepAspectRatio() );
+        else
+            cbAspectRatio->setChecked( true );
+        grid1->addWidget(cbAspectRatio, row, 0);
         ++row;
     }
+    else
+        cbAspectRatio = 0L;
 
     // Text frame
     if(frameType==FT_TEXT)
@@ -838,6 +844,9 @@ bool KWFrameDia::applyChanges()
             frame->setNewFrameBehaviour(KWFrame::NoFollowup);
         else
             frame->setNewFrameBehaviour(KWFrame::Copy);
+
+        if ( cbAspectRatio && frame->getFrameSet() )
+            static_cast<KWPictureFrameSet *>( frame->getFrameSet() )->setKeepAspectRatio( cbAspectRatio->isChecked() );
     }
 
     if ( tab3 )

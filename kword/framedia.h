@@ -63,7 +63,7 @@ protected:
     QWidget *tab1;
     QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
     QGroupBox *endOfFrame, *onNewPage, *sideHeads;
-    QCheckBox *cbCopy, *aspectRatio;
+    QCheckBox *cbCopy, *cbAspectRatio;
     QRadioButton *rResizeFrame, *rAppendFrame, *rNoShow, *reconnect, *noFollowup, *copyRadio;
     QLabel *sideTitle1, *sideTitle2;
     QLineEdit *sideWidth, *sideGap;
