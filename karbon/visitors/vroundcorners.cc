@@ -27,7 +27,7 @@ VRoundCorners::visitVPath( VPath& path )
 void
 VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 {
-	// We'll change segments from segmentList. that doesnt hurt, since we
+	// Note: we change segments from segmentList. that doesnt hurt, since we
 	// replace segmentList with newList afterwards.
 
 	// Temporary list:
@@ -36,6 +36,84 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	segmentList.first();
 	// skip "begin":
 	segmentList.next();
+
+	// Description of the algorithm:
+	//
+	// Let's assume segmentList is closed and contains segments which build
+	// a rectangle:
+	//
+	//           3
+	//    X------------X
+	//    |            |
+	//   4|            |2      (numbers mean the segments' order
+	//    |            |        in segmentList. we neglect the "begin"
+	//    X------------X        segment)
+	//           1
+	//
+	// We want to round the corners with "radius" m_radius (the algorithm
+	// doesn't really produce circular arcs with fixed radii).
+	// We need to process three different steps:
+	//
+	// 1) Begin
+	//    -----
+	//    Split the first segment of segmentList (called "segmentList[1]" here)
+	//    at parameter t and move newList to this new knot. While
+	//
+	//        t = segmentList[1]->param( m_radius )
+	//
+	//    as long as segmentList[1] isnt too small (smaller than 2 * m_radius).
+	//    In this case we set t = 0.5.
+	//
+	//    segmentList:          newList:
+	//
+	//           3
+	//    X------------X
+	//    |            |
+	//   4|            |2
+	//    |            |
+	//    X--X---------X        ...X
+	//           1                     1
+	//
+	// 2) Loop
+	//    ----
+	//    This step is repeated for each following segment.
+	//    Split the current segment segmentList[n] at parameter t
+	//    and add the first subsegment to newList. While
+	//
+	//        t = segmentList[n]->param( segmentList[n]->length() - m_radius )
+	//
+	//    as long as segmentList[n] isnt too small (smaller than 2 * m_radius).
+	//    In this case we set t = 0.5.
+	//
+// TODO: round corner.
+	//
+	//    segmentList:          newList:
+	//
+	//           3
+	//    X------------X
+	//    |            |
+	//   4|            X2                    X
+	//    |            |                    /.2
+	//    X--X------X--X           X------X...
+	//           1                     1
+	//
+	// 3) End
+	//    ---
+// TODO: end.
+	//
+	//    segmentList:          newList:
+	//
+	//           3                     5
+	//    X--X------X--X        6 .X------X. 4
+	//    |            |         /          \
+	//   4X            X2     7 X            X 3
+	//    |            |      8 .\          /
+	//    X--X------X--X        ...X------X. 2
+	//           1                     1
+	//
+	// Further details:
+	//
+	// - We dont touch bezier/bezier joins, that's senseless.
 
 
 	double length;
@@ -84,7 +162,7 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 
 			param = length > 2 * m_radius
 				? segmentList.current()->param( length - m_radius )
-				: param = 0.5;
+				: 0.5;
 
 			segmentList.insert(
 				segmentList.current()->splitAt( param ) );
@@ -100,17 +178,16 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 
 			param = length > 2 * m_radius
 				? segmentList.current()->param( m_radius )
-				: param = 0.5;
+				: 0.5;
 
 			segmentList.insert(
 				segmentList.current()->splitAt( param ) );
 
 
+			// Round corner:
 			newList.curveTo(
-				segmentList.current()->prev()->prev()->knot() +
-					0.5 * m_radius * segmentList.current()->prev()->tangent( 0.0 ),
-				segmentList.current()->knot() -
-					0.5 * m_radius * segmentList.current()->tangent( 1.0 ),
+				segmentList.current()->prev()->point( 0.5 ),
+				segmentList.current()->point( 0.5 ),
 				segmentList.current()->knot() );
 		}
 		else
@@ -132,7 +209,7 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 
 			param = length > 2 * m_radius
 				? segmentList.current()->param( length - m_radius )
-				: param = 0.5;
+				: 0.5;
 
 			segmentList.insert(
 				segmentList.current()->splitAt( param ) );
@@ -144,11 +221,10 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 			segmentList.first();
 			segmentList.next();
 
+			// Round corner:
 			newList.curveTo(
-				segmentList.getLast()->prev()->knot() +
-					0.5 * m_radius * segmentList.getLast()->tangent( 0.0 ),
-				segmentList.current()->knot() -
-					0.5 * m_radius * segmentList.current()->tangent( 1.0 ),
+				segmentList.getLast()->point( 0.5 ),
+				segmentList.current()->point( 0.5 ),
 				segmentList.current()->knot() );
 		}
 		else
