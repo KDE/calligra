@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="21">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="22">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="koffice_undo"/>
@@ -49,8 +49,6 @@
    <Action name="stencilFormat"/>
    <Action name="arrowHeadFormat"/>
    <Separator/>
-   <Action name="paperLayout"/>
-   <Separator/>
    <Action name="alignStencils"/>
    <Separator/>
    <Action name="groupStencils"/>
@@ -59,6 +57,7 @@
    <Action name="sendStencilToBack"/>
    <Action name="bringStencilToFront"/>
    <Separator/>
+   <Action name="paperLayout"/>
  </Menu>
  <Menu name="Tools"><text>&amp;Tools</text>
    <Action name="addStencilSet"/>
