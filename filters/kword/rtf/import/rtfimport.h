@@ -217,6 +217,7 @@ public:
     void setMacCodepage( RTFProperty * );
     void setAnsiCodepage( RTFProperty * );
     void setPcaCodepage( RTFProperty * );
+    void setPcCodepage( RTFProperty * );
     void setToggleProperty( RTFProperty * );
     void setFlagProperty( RTFProperty *property );
     void setNumericProperty( RTFProperty *property );
@@ -293,13 +294,12 @@ public:
     int defaultTab, defaultFont;
     bool landscape, facingPages;
 
-    //codepage for the document
-    QCString codepage;
-
     // Field support
     QCString fldinst, fldrslt;
     RTFFormat fldfmt;
     int flddst; // support for recursive fields
+protected:
+    QTextCodec* textCodec;
 };
 
 #endif

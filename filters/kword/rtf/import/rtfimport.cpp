@@ -16,14 +16,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "rtfimport.h"
-#include "rtfimport.moc"
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 #include <qwmf.h>
 #include <qcstring.h>
 #include <qstringlist.h>
 #include <qregexp.h>
+
+#include "rtfimport.h"
+#include "rtfimport.moc"
 
 typedef KGenericFactory<RTFImport, KoFilter> RTFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) );
@@ -151,7 +152,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"nosupersub",	setEnumProperty,	state.format.vertAlign, RTFFormat::Normal ),
 	PROP(	"Text",		"page",		insertPageBreak,	0L, 0 ),
 	MEMBER(	0L,		"pagebb",	setFlagProperty,	state.layout.pageBB, true ),
-	PROP(	0L,		"pc",	setPcaCodepage,		0L, 0 ), // ### This is an approximation CP437 != IBM 850
+	PROP(	0L,		"pc",	setPcCodepage,		0L, 0 ),
 	PROP(	0L,		"pca",	setPcaCodepage,		0L, 0 ),
 	MEMBER(	0L,		"pgbrk",	setToggleProperty,	state.layout.pageBA, true ),
 	MEMBER(	"@rtf",		"paperh",	setNumericProperty,	paperHeight, 0 ),
@@ -255,7 +256,7 @@ static const char *borderN[4]	= { "LEFTBORDER", "RIGHTBORDER", "TOPBORDER", "BOT
 
 
 RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
-    : KoFilter()
+    : KoFilter(), textCodec(NULL)
 {
     for (uint i=0; i < sizeof(propertyTable) /sizeof(propertyTable[0]); i++)
     {
@@ -328,7 +329,6 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     defaultFont	= 0;
     landscape	= false;
     facingPages	= false;
-    codepage	= "";
 
     // Create main document
     frameSets.clear( 2 );
@@ -633,8 +633,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
  */
 void RTFImport::setCodepage( RTFProperty * )
 {
-    codepage.setNum( token.value );
-    codepage.prepend( "CP" );
+    QString cp("CP");
+    cp+=QString::number( token.value );
+    textCodec=QTextCodec::codecForName(cp.utf8());
+    kdDebug(30515) << "\\ansicpg: asked: " << cp << " given: " << textCodec->name() << endl;
 }
 
 /**
@@ -642,7 +644,8 @@ void RTFImport::setCodepage( RTFProperty * )
  */
 void RTFImport::setMacCodepage( RTFProperty * )
 {
-    codepage="Apple Roman";
+    textCodec=QTextCodec::codecForName("Apple Roman");
+    kdDebug(30515) << "\\mac " << textCodec->name() << endl; 
 }
 
 /**
@@ -651,7 +654,8 @@ void RTFImport::setMacCodepage( RTFProperty * )
  */
 void RTFImport::setAnsiCodepage( RTFProperty * )
 {
-    codepage="CP1252";
+    textCodec=QTextCodec::codecForName("CP1252");
+    kdDebug(30515) << "\\ansi " << textCodec->name() << endl; 
 }
 
 /**
@@ -659,7 +663,17 @@ void RTFImport::setAnsiCodepage( RTFProperty * )
  */
 void RTFImport::setPcaCodepage( RTFProperty * )
 {
-    codepage="IBM 850";
+    textCodec=QTextCodec::codecForName("IBM 850"); // Qt writes the name with a space
+    kdDebug(30515) << "\\pca " << textCodec->name() << endl; 
+}
+
+/**
+ * Set document codepage.
+ */
+void RTFImport::setPcCodepage( RTFProperty * )
+{
+    textCodec=QTextCodec::codecForName("IBM 850"); // This is an approximation
+    kdDebug(30515) << "\\pc (approximation) " << textCodec->name() << endl;
 }
 
 /**
@@ -1048,13 +1062,16 @@ void RTFImport::insertSymbol( RTFProperty *property )
  */
 void RTFImport::insertHexSymbol( RTFProperty * )
 {
-	    QTextCodec* tc=QTextCodec::codecForName(codepage);
-	    if(!tc)
-		tc=QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
-	char tmpch[2]={token.value, '\0'};
+    if(!textCodec)
+    {
+        kdWarning(30515) << "No code page selected, assuming CP 1252! (in RTFImport::insertHexSymbol)" << endl;
+        textCodec = QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
+    }    
+    
+    const char tmpch[2] = {token.value, '\0'};
 
-	    // TODO: Is it always a single character?
-	    insertUTF8( tc->toUnicode( tmpch ).at( 0 ).unicode() );
+    // TODO: Is it always a single character?
+    insertUTF8( textCodec->toUnicode( tmpch ).at( 0 ).unicode() );
 }
 
 /**
