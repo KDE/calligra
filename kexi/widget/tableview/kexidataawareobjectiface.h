@@ -38,7 +38,7 @@ namespace KexiDB {
 	class RowEditBuffer;
 }
 class KexiTableEdit;
-class KexiTableRM;
+class KexiRecordMarker;
 class KexiRecordNavigator;
 
 //! default column width in pixels
@@ -341,7 +341,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		//! \return true is column \a col is editable
 		bool columnEditable(int col) const;
 
-		inline KexiTableRM* verticalHeader() const { return m_verticalHeader; }
+		inline KexiRecordMarker* verticalHeader() const { return m_verticalHeader; }
 
 		//! signals
 		virtual void itemChanged(KexiTableItem *, int row, int col) = 0;
@@ -603,8 +603,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		DeletionPolicy m_deletionPolicy;
 
-//! @todo make generic interface out of KexiTableRM
-		KexiTableRM *m_verticalHeader;
+//! @todo make generic interface out of KexiRecordMarker
+		KexiRecordMarker *m_verticalHeader;
 
 //! @todo make generic interface out of KexiTableEdit
 		KexiTableEdit *m_editor;

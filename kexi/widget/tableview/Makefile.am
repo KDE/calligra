@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libkexidatatable.la
 libkexidatatable_la_SOURCES = kexidataawareobjectiface.cpp \
 	kexitableview.cpp kexitableview_p.cpp \
 	kexicelleditorfactory.cpp kexitableedit.cpp kexitableheader.cpp \
-	kexitableitem.cpp kexitableviewdata.cpp kexitablerm.cpp  \
+	kexitableitem.cpp kexitableviewdata.cpp \
 	kexidatetableedit.cpp kexitimetableedit.cpp kexidatetimetableedit.cpp \
 	kexiinputtableedit.cpp kexiblobtableedit.cpp kexibooltableedit.cpp \
 	kexicomboboxtableedit.cpp kexicomboboxpopup.cpp kexitableviewpropertybuffer.cpp

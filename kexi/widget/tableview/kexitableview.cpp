@@ -54,7 +54,6 @@
 #endif
 
 #include "kexitableview.h"
-#include "kexitablerm.h"
 #include "kexi_utils.h"
 #include "kexivalidator.h"
 
@@ -67,8 +66,8 @@
 #include "kexicomboboxtableedit.h"
 #include "kexiblobtableedit.h"
 #include "kexibooltableedit.h"
-
 #include "kexitableview_p.h"
+#include <widget/utils/kexirecordmarker.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
  : alternateBackgroundColor( KGlobalSettings::alternateBackgroundColor() )
@@ -302,7 +301,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	d->pTopHeader->setMovingEnabled(false);
 	connect(d->pTopHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotTopHeaderSizeChange(int,int,int)));
 
-	m_verticalHeader = new KexiTableRM(this);
+	m_verticalHeader = new KexiRecordMarker(this, "rm");
 	m_verticalHeader->setCellHeight(d->rowHeight);
 //	m_verticalHeader->setFixedWidth(d->rowHeight);
 	m_verticalHeader->setCurrentRow(-1);
@@ -3742,12 +3741,6 @@ KexiTableView::print(KPrinter &/*printer*/)
 }
 #endif
 
-/*moved
-KexiTableRM* KexiTableView::verticalHeader() const
-{
-	return m_verticalHeader; 
-}
-*/
 QString KexiTableView::columnCaption(int colNum) const
 {
 	return d->pTopHeader->label(colNum);

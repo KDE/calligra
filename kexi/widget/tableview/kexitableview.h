@@ -38,7 +38,6 @@
 
 #include <kdebug.h>
 
-#include "kexitablerm.h"
 #include "kexitableviewdata.h"
 #include "kexitableedit.h"
 #include "tristate.h"
@@ -51,7 +50,6 @@ class KPrinter;
 class KAction;
 
 class KexiTableHeader;
-class KexiTableRM;
 class KexiTableItem;
 class KexiTableEdit;
 class KexiTableViewPrivate;

@@ -92,6 +92,14 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 		/*! @internal used for keyboard handling. */
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
+		/*! \return true if "editing" indicator is visible for this navigator. 
+		 @see showEditingIndicator() */
+		bool editingIndicatorVisible() const;
+
+		/*! \return true if "editing" indicator is enabled for this navigator. 
+		 Only meaningful if setEditingIndicatorEnabled(true) is called. */
+		bool editingIndicatorEnabled() const;
+
 	public slots:
 		/*! Sets insertingEnabled flag. If true, "+" button will be enabled. */
 		void setInsertingEnabled(bool set);
@@ -99,7 +107,17 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 		/*! Sets visibility of "inserting" button. */
 		void setInsertingButtonVisible(bool set);
 
-		virtual void setEnabled( bool set );
+		/*! Sets visibility of the place where "editing" indicator will be displayed. 
+		 "editing" indicator will display KexiRecordMarker::penImage() image when
+		  setEditingIndicatorVisible() is called.
+		 This method is currently used e.g. within standard kexi forms 
+		 (see KexiFormScrollView class). */
+		void setEditingIndicatorEnabled(bool set);
+
+		/*! Shows or hides "editing" indicator. */
+		void showEditingIndicator(bool show);
+
+		virtual void setEnabled(bool set);
 
 		/*! Sets current record number for this navigator, 
 		 i.e. a value that will be displayed in the 'record number' text box. 

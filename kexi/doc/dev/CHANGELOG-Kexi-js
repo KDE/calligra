@@ -440,6 +440,11 @@ Startup TODO:
 - add "Save Special->Shortcut file for this project" action
 - split .kexis format to .kexis and .kexic
 
+2005-02-27
+KexiDB
+- mysql/sqlite drivers: fixed problem with xxxxConnection::value(int)
+  when we're using raw sql statements (so expanded field list is empty)
+
 2005-02-26
 Widgets
 - KexiTableRM moved to KexiRecordMarker in libguiutils

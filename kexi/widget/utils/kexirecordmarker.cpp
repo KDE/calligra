@@ -22,14 +22,19 @@
    Original Project: buX (www.bux.at)
 */
 
-#include "kexitablerm.h"
+#include "kexirecordmarker.h"
 
 #include <qcolor.h>
 #include <qstyle.h>
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <qimage.h>
 
 #include <kdebug.h>
+#include <kstaticdeleter.h>
+
+static KStaticDeleter<QImage> KexiRecordMarker_pen_deleter, KexiRecordMarker_plus_deleter;
+QImage* KexiRecordMarker_pen = 0, *KexiRecordMarker_plus = 0;
 
 static const unsigned char img_pen_data[] = {
     0x00,0x00,0x03,0x30,0x78,0x9c,0xfb,0xff,0xff,0x3f,0xc3,0x7f,0x32,0x30,
@@ -58,22 +63,31 @@ static struct EmbedImage {
     { 10, 10, 32, (const unsigned char*)img_pen_data, 50, 0, 0, TRUE, "tableview_plus.png" }
 };
 
-void getImg(QImage &image, const unsigned char* data, int id)
+QImage* getImg(const unsigned char* data, int id)
 {
 	QByteArray baunzip;
 	baunzip = qUncompress( data, embed_image[id].compressed );
-	QImage img((uchar*)baunzip.data(),
+	QImage *img = new QImage( QImage((uchar*)baunzip.data(),
 			embed_image[id].width, embed_image[id].height,
 			embed_image[id].depth, (QRgb*)embed_image[id].colorTable,
 			embed_image[id].numColors, QImage::BigEndian
-	);
-	image = img.copy();
+	).copy() );
 	if ( embed_image[id].alpha )
-		image.setAlphaBuffer(TRUE);
+		img->setAlphaBuffer(TRUE);
+	return img;
 }
 
-KexiTableRM::KexiTableRM(QWidget *parent)
-:QWidget(parent)
+static void initImages()
+{
+	if (!KexiRecordMarker_pen) {
+/*! @warning not reentrant! */
+		KexiRecordMarker_pen_deleter.setObject( KexiRecordMarker_pen, getImg(img_pen_data, 0) );
+		KexiRecordMarker_plus_deleter.setObject( KexiRecordMarker_plus, getImg(img_plus_data, 1) );
+	}
+}
+
+KexiRecordMarker::KexiRecordMarker(QWidget *parent, const char* name)
+:QWidget(parent, name)
 {
 	m_rowHeight = 1;
 	m_offset=0;
@@ -83,22 +97,35 @@ KexiTableRM::KexiTableRM(QWidget *parent)
 	m_rows = 0;
 	m_showInsertRow = true;//false;
 	
-	getImg(m_penImg, img_pen_data, 0);
-	getImg(m_plusImg, img_plus_data, 1);
+//	getImg(m_penImg, img_pen_data, 0);
+//	getImg(m_plusImg, img_plus_data, 1);
+	initImages();
 }
 
-KexiTableRM::~KexiTableRM()
+QImage* KexiRecordMarker::penImage()
+{
+	initImages();
+	return KexiRecordMarker_pen;
+}
+
+QImage* KexiRecordMarker::plusImage()
+{
+	initImages();
+	return KexiRecordMarker_plus;
+}
+
+KexiRecordMarker::~KexiRecordMarker()
 {
 }
 
-void KexiTableRM::addLabel(bool upd)
+void KexiRecordMarker::addLabel(bool upd)
 {
 	m_rows++;
 	if (upd)
 		update();
 }
 
-void KexiTableRM::removeLabel(bool upd)
+void KexiRecordMarker::removeLabel(bool upd)
 {
 	if (m_rows > 0) {
 		m_rows--;
@@ -107,21 +134,21 @@ void KexiTableRM::removeLabel(bool upd)
 	}
 }
 
-void KexiTableRM::addLabels(int num, bool upd)
+void KexiRecordMarker::addLabels(int num, bool upd)
 {
 	m_rows += num;
 	if (upd)
 		update();
 }
 
-void KexiTableRM::clear(bool upd)
+void KexiRecordMarker::clear(bool upd)
 {
 	m_rows=0;
 	if (upd)
 		update();
 }
 
-int KexiTableRM::rows() const
+int KexiRecordMarker::rows() const
 {
 	if (m_showInsertRow)
 		return m_rows +1;
@@ -129,7 +156,7 @@ int KexiTableRM::rows() const
 		return m_rows;
 }
 
-void KexiTableRM::paintEvent(QPaintEvent *e)
+void KexiRecordMarker::paintEvent(QPaintEvent *e)
 {
 	QPainter p(this);
 	QRect r(e->rect());
@@ -152,7 +179,8 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		//show pen when editing
 		int ofs = m_rowHeight / 4;
 		int pos = ((m_rowHeight*(m_currentRow>=0?m_currentRow:0))-m_offset)-ofs/2+1;
-		p.drawImage((m_rowHeight-m_penImg.width())/2,(m_rowHeight-m_penImg.height())/2+pos,m_penImg);
+		p.drawImage((m_rowHeight-KexiRecordMarker_pen->width())/2,
+			(m_rowHeight-KexiRecordMarker_pen->height())/2+pos,*KexiRecordMarker_pen);
 	}
 	else if (m_currentRow >= first && m_currentRow <= last 
 		&& (!m_showInsertRow || (m_showInsertRow && m_currentRow < last)))/*don't display marker for 'insert' row*/ 
@@ -166,20 +194,20 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		points.putPoints(0, 3, ofs2, pos+ofs, ofs2 + ofs, pos+ofs*2, 
 			ofs2,pos+ofs*3);
 		p.drawPolygon(points);
-//		kdDebug() <<"KexiTableRM::paintEvent(): POLYGON" << endl;
+//		kdDebug() <<"KexiRecordMarker::paintEvent(): POLYGON" << endl;
 /*		int half = m_rowHeight / 2;
 		points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);*/
 	}
 	if (m_showInsertRow && m_editRow < last
 		&& last == (m_rows-1+(m_showInsertRow?1:0)) ) {
 		//show plus sign
-		int pos = ((m_rowHeight*last)-m_offset)+(m_rowHeight-m_plusImg.height())/2;
+		int pos = ((m_rowHeight*last)-m_offset)+(m_rowHeight-KexiRecordMarker_plus->height())/2;
 //		p.drawImage((width()-m_plusImg.width())/2-1, pos, m_plusImg);
-		p.drawImage((width()-m_plusImg.width())/2, pos, m_plusImg);
+		p.drawImage((width()-KexiRecordMarker_plus->width())/2, pos, *KexiRecordMarker_plus);
 	}
 }
 
-void KexiTableRM::setCurrentRow(int row)
+void KexiRecordMarker::setCurrentRow(int row)
 {
 	int oldRow = m_currentRow;
 	m_currentRow=row;
@@ -188,35 +216,35 @@ void KexiTableRM::setCurrentRow(int row)
 	update(0,(m_rowHeight*row)-m_offset-1, width()+2, m_rowHeight+2);
 }
 
-void KexiTableRM::setOffset(int offset)
+void KexiRecordMarker::setOffset(int offset)
 {
 	int oldOff = m_offset;
 	m_offset = offset;
 	scroll(0,oldOff-offset);
 }
 
-void KexiTableRM::setCellHeight(int cellHeight)
+void KexiRecordMarker::setCellHeight(int cellHeight)
 {
 	m_rowHeight = cellHeight;
 }
 
-void KexiTableRM::setEditRow(int row)
+void KexiRecordMarker::setEditRow(int row)
 {
 	m_editRow = row;
 //TODO: update only needed area!
 	update();
 }
 
-void KexiTableRM::showInsertRow(bool show)
+void KexiRecordMarker::showInsertRow(bool show)
 {
 	m_showInsertRow = show;
 //TODO: update only needed area!
 	update();
 }
 
-void KexiTableRM::setColor(const QColor &newcolor)
+void KexiRecordMarker::setColor(const QColor &newcolor)
 {
 	m_pointerColor = newcolor;
 }
 
-#include "kexitablerm.moc"
+#include "kexirecordmarker.moc"
