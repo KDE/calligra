@@ -32,6 +32,10 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  , KexiActionProxy(this, parent)
  , m_isRegistered(false)
 {
+	m_supportsDataViewMode = true;
+	m_supportsDesignViewMode = true;
+	m_supportsSQLViewMode = false;
+
 	m_contextHelpInfo=new KexiContextHelpInfo();
 	m_parentWindow=parent;
 	m_instance=parent->instance();
@@ -52,7 +56,7 @@ void KexiDialogBase::registerDialog() {
 	m_isRegistered=true;
 	m_parentWindow->addWindow((KMdiChildView *)this);
 	show();
-	m_parentWindow->activeWindowChanged(this);
+//	m_parentWindow->activeWindowChanged(this);
 }
 
 bool KexiDialogBase::isRegistered(){

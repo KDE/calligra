@@ -74,6 +74,22 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		virtual QString itemIcon();
 
+		/*! \return true if this dialog supports switching to the "data view mode" 
+		 (true e.g. for table dialog). The flag is used e.g. for 
+		 testing by KexiMainWindow, if actions of switching to given view mode is available. 
+		 This flag is true by default.
+		 Set m_supportsDataViewMode in your subclass to override this flag. */
+		bool supportsDataViewMode() const { return m_supportsDataViewMode; }
+
+		/*! Like above, for "design view mode". This flag is true by default.
+		 Set m_supportsDesignViewMode in your subclass to override this flag. */
+		bool supportsDesignViewMode() const { return m_supportsDesignViewMode; }
+
+		/*! Like above, for "sql view mode" (e.g. true for queries). 
+		 This flag is false by default. 
+		 Set m_supportsSQLViewMode in your subclass to override this flag. */
+		bool supportsSQLViewMode() const { return m_supportsSQLViewMode; }
+
 	public slots:
 //		virtual void detach();
 
@@ -96,6 +112,10 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 Default implementation always return false. Reimplement this if you e.g. want reuse "dirty" 
 		 flag from internal structures that may be changed. */
 		virtual bool dirty();
+
+		bool m_supportsDataViewMode : 1; //!< see supportsDataViewMode()
+		bool m_supportsDesignViewMode : 1; //!< see supportsDesignViewMode()
+		bool m_supportsSQLViewMode : 1; //!< see supportsSQLViewMode()
 
 	private:
 		KexiMainWindow *m_parentWindow;
