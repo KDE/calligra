@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -43,7 +43,7 @@ KWSearchDia::KWSearchDia(QWidget* parent,const char* name,KWordDocument *_doc,KW
       searchEntry = new KWSearchEntry();
       view->setSearchEntry(searchEntry);
     }
-  
+
   if (!replaceEntry)
     {
       replaceEntry = new KWSearchEntry();
@@ -54,9 +54,9 @@ KWSearchDia::KWSearchDia(QWidget* parent,const char* name,KWordDocument *_doc,KW
   setupTab2();
 
   resize(minimumSize());
-    
+
   setCancelButton(i18n("Close"));
-  setOkButton(0L);
+  setOkButton(QString::null);
 }
 
 /*================================================================*/
@@ -77,7 +77,7 @@ void KWSearchDia::setupTab1()
   lSearch->resize(lSearch->sizeHint());
   lSearch->setAlignment(AlignBottom);
   sGrid->addWidget(lSearch,1,0);
-  
+
   eSearch = new QLineEdit(gSearch);
   eSearch->resize(eSearch->sizeHint());
   sGrid->addWidget(eSearch,2,0);
@@ -160,7 +160,7 @@ void KWSearchDia::setupTab1()
       if (QString(cmFamily->text(j)) == searchEntry->family)
 	cmFamily->setCurrentItem(j);
     }
-  connect(cmFamily,SIGNAL(activated(const char*)),this,SLOT(slotFamily(const char*)));
+  connect(cmFamily,SIGNAL(activated(const QString &)),this,SLOT(slotFamily(const QString &)));
 
   cmSize = new QComboBox(true,gSearch);
   QStrList sizes;
@@ -176,7 +176,7 @@ void KWSearchDia::setupTab1()
   cmSize->resize(cmSize->sizeHint());
   sGrid->addWidget(cmSize,2,2);
   cmSize->setCurrentItem(curr);
-  connect(cmSize,SIGNAL(activated(const char*)),this,SLOT(slotSize(const char*)));
+  connect(cmSize,SIGNAL(activated(const QString &)),this,SLOT(slotSize(const QString &)));
 
   bColor = new KColorButton(gSearch);
   bColor->resize(bColor->sizeHint());
@@ -201,7 +201,7 @@ void KWSearchDia::setupTab1()
   sGrid->addWidget(cmUnderline,6,2);
   cmUnderline->setChecked(searchEntry->underline);
   connect(cmUnderline,SIGNAL(clicked()),this,SLOT(slotUnderline()));
-  
+
   cmVertAlign = new QComboBox(false,gSearch);
   cmVertAlign->insertItem(i18n("Normal"),-1);
   cmVertAlign->insertItem(i18n("Subscript"),-1);
@@ -295,7 +295,7 @@ void KWSearchDia::setupTab1()
   bbSearch->resize(bbSearch->sizeHint());
 
   grid1->addWidget(bbSearch,1,0);
- 
+
   /**
    * ----------------- general -----------------
    */
@@ -345,7 +345,7 @@ void KWSearchDia::setupTab2()
   lReplace->resize(lReplace->sizeHint());
   lReplace->setAlignment(AlignBottom);
   rGrid->addWidget(lReplace,1,0);
-  
+
   eReplace = new QLineEdit(gReplace);
   eReplace->resize(eReplace->sizeHint());
   rGrid->addWidget(eReplace,2,0);
@@ -402,7 +402,7 @@ void KWSearchDia::setupTab2()
       if (QString(rcmFamily->text(j)) == replaceEntry->family)
 	rcmFamily->setCurrentItem(j);
     }
-  connect(rcmFamily,SIGNAL(activated(const char*)),this,SLOT(rslotFamily(const char*)));
+  connect(rcmFamily,SIGNAL(activated(const QString &)),this,SLOT(rslotFamily(const QString &)));
 
   rcmSize = new QComboBox(true,gReplace);
   QStrList sizes;
@@ -418,7 +418,7 @@ void KWSearchDia::setupTab2()
   rcmSize->resize(cmSize->sizeHint());
   rGrid->addWidget(rcmSize,2,2);
   rcmSize->setCurrentItem(curr);
-  connect(rcmSize,SIGNAL(activated(const char*)),this,SLOT(rslotSize(const char*)));
+  connect(rcmSize,SIGNAL(activated(const QString &)),this,SLOT(rslotSize(const QString &)));
 
   rbColor = new KColorButton(gReplace);
   rbColor->resize(rbColor->sizeHint());
@@ -443,7 +443,7 @@ void KWSearchDia::setupTab2()
   rGrid->addWidget(rcmUnderline,6,2);
   rcmUnderline->setChecked(replaceEntry->underline);
   connect(rcmUnderline,SIGNAL(clicked()),this,SLOT(rslotUnderline()));
-  
+
   rcmVertAlign = new QComboBox(false,gReplace);
   rcmVertAlign->insertItem(i18n("Normal"),-1);
   rcmVertAlign->insertItem(i18n("Subscript"),-1);
@@ -531,7 +531,7 @@ void KWSearchDia::setupTab2()
   bbReplace->layout();
   bbReplace->resize(bbReplace->sizeHint());
   subgrid->addWidget(bbReplace,0,0);
- 
+
   cAsk = new QCheckBox(i18n("Ask before replacing"),wid);
   cAsk->resize(cAsk->sizeHint());
   cAsk->setChecked(replaceEntry->ask);
@@ -540,7 +540,7 @@ void KWSearchDia::setupTab2()
   subgrid->addRowSpacing(0,bbReplace->height());
   subgrid->addRowSpacing(0,cAsk->height());
   subgrid->setRowStretch(0,0);
-  
+
   subgrid->addColSpacing(0,bbReplace->width());
   subgrid->addColSpacing(1,cAsk->width());
   subgrid->setColStretch(0,0);
@@ -615,7 +615,7 @@ void KWSearchDia::slotCheckFamily()
       cmFamily->setEnabled(true);
       slotFamily(cmFamily->currentText());
     }
-  else 
+  else
     {
       cmFamily->setEnabled(false);
       eSearch->setFont(kapp->generalFont);
@@ -701,18 +701,18 @@ void KWSearchDia::slotCheckVertAlign()
 }
 
 /*================================================================*/
-void KWSearchDia::slotFamily(const char* family)
+void KWSearchDia::slotFamily(const QString & family)
 {
   searchEntry->family = qstrdup(family);
   view->setSearchEntry(searchEntry);
-  
+
   QFont f = QFont(kapp->generalFont);
   f.setFamily(qstrdup(family));
   eSearch->setFont(f);
 }
 
 /*================================================================*/
-void KWSearchDia::slotSize(const char* size)
+void KWSearchDia::slotSize(const QString & size)
 {
   searchEntry->size = atoi(size);
   view->setSearchEntry(searchEntry);
@@ -810,7 +810,7 @@ void KWSearchDia::replaceNext()
 
   bool addlen = false;
   bool replace = false;
-  
+
   if (!cRev->isChecked())
     replace = page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),
 			 cWildcard->isChecked(),addlen,false);
@@ -850,7 +850,7 @@ void KWSearchDia::replaceAll()
 	    {
 	    case 1: break;
 	    case 2: _exit = true; break;
-	    case 3: 
+	    case 3:
 	      {
 		if (addlen) page->addLen();
 		page->repaint(false);
@@ -879,7 +879,7 @@ void KWSearchDia::rslotCheckFamily()
       rcmFamily->setEnabled(true);
       rslotFamily(rcmFamily->currentText());
     }
-  else 
+  else
     {
       rcmFamily->setEnabled(false);
       eReplace->setFont(kapp->generalFont);
@@ -965,7 +965,7 @@ void KWSearchDia::rslotCheckVertAlign()
 }
 
 /*================================================================*/
-void KWSearchDia::rslotFamily(const char* family)
+void KWSearchDia::rslotFamily(const QString & family)
 {
   replaceEntry->family = qstrdup(family);
   view->setReplaceEntry(replaceEntry);
@@ -976,7 +976,7 @@ void KWSearchDia::rslotFamily(const char* family)
 }
 
 /*================================================================*/
-void KWSearchDia::rslotSize(const char* size)
+void KWSearchDia::rslotSize(const QString & size)
 {
   replaceEntry->size = atoi(size);
   view->setReplaceEntry(replaceEntry);

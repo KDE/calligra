@@ -51,8 +51,8 @@ QPainter* KChartPainter::setupPaintDev( QPaintDevice* paintdev )
 
   // (Other colors to be set when used.)
   _chart->_transparency = true;
-  painter->setBackgroundMode( _chart->_transparency ? TransparentMode :
-							  OpaqueMode );
+  painter->setBackgroundMode( _chart->_transparency ? Qt::TransparentMode :
+							  Qt::OpaqueMode );
 
   return painter;
 }
@@ -74,7 +74,7 @@ uint KChartPainter::numDatasets( table_t* table )
 uint KChartPainter::maxPos( table_t* table )
 {
 	uint ret = 0;
-	for( data_t::iterator lit = table->data.begin(); 
+	for( data_t::iterator lit = table->data.begin();
 		 lit != table->data.end(); ++lit ) {
 		ret = QMAX( ret, lit->size() );
 	}
@@ -112,9 +112,9 @@ void KChartPainter::minMaxOverallYValue( table_t* table,
 	min = MAXDOUBLE;
 	max = MINDOUBLE;
 
-	for( data_t::iterator lit = table->data.begin(); 
+	for( data_t::iterator lit = table->data.begin();
 		 lit != table->data.end(); ++lit ) {
-		for( line_t::iterator iter = lit->begin(); 
+		for( line_t::iterator iter = lit->begin();
 			 iter != lit->end(); ++iter ) {
 			max = QMAX( max, (*iter) );	
 			min = QMIN( min, (*iter) );

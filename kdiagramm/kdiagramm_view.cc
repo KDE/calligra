@@ -253,7 +253,7 @@ void KDiagrammView::editData()
 
 void KDiagrammView::helpUsing()
 {
-  kapp->invokeHTMLHelp( "kdiagramm/kdiagramm.html", 0 );
+  kapp->invokeHTMLHelp( "kdiagramm/kdiagramm.html", QString::null );
 }
 
 CORBA::Boolean KDiagrammView::printDlg()

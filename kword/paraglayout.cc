@@ -22,21 +22,21 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name
     counter.numberingType = NT_LIST;
     counter.bulletFont = "symbol";
 
-    left.color = white;
+    left.color = Qt::white;
     left.style = SOLID;
     left.ptWidth = 0;
-    right.color = white;
+    right.color = Qt::white;
     right.style = SOLID;
     right.ptWidth = 0;
-    top.color = white;
+    top.color = Qt::white;
     top.style = SOLID;
     top.ptWidth = 0;
-    bottom.color = white;
+    bottom.color = Qt::white;
     bottom.style = SOLID;
     bottom.ptWidth = 0;
 
     format.setDefaults(_doc);
-    
+
     document = _doc;
     if (_add)
       document->paragLayoutList.append(this);
@@ -96,32 +96,32 @@ void KWParagLayout::setFormat(KWFormat &_f)
 
 void KWParagLayout::save(ostream &out)
 {
-  out << indent << "<NAME value=\"" << name << "\"/>" << endl;
-  out << indent << "<FOLLOWING name=\"" << followingParagLayout << "\"/>" << endl;
+  out << indent << "<NAME value=\"" << name.ascii() << "\"/>" << endl;
+  out << indent << "<FOLLOWING name=\"" << followingParagLayout.ascii() << "\"/>" << endl;
   out << indent << "<FLOW value=\"" << static_cast<int>(flow) << "\"/>" << endl;
   out << indent << "<OHEAD " << paragHeadOffset << "/>" << endl;
   out << indent << "<OFOOT " << paragFootOffset << "/>" << endl;
   out << indent << "<IFIRST " << firstLineLeftIndent << "/>" << endl;
   out << indent << "<ILEFT " << leftIndent << "/>" << endl;
   out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
-  out << indent << "<COUNTER type=\"" << static_cast<int>(counter.counterType) << "\" depth=\"" << counter.counterDepth 
-      << "\" bullet=\"" << counter.counterBullet << "\" start=\"" << counter.startCounter << "\" numberingtype=\"" 
-      << static_cast<int>(counter.numberingType) << "\" lefttext=\"" << counter.counterLeftText << "\" righttext=\"" 
-      << counter.counterRightText << "\" bulletfont=\"" << counter.bulletFont << "\"/>" << endl;
+  out << indent << "<COUNTER type=\"" << static_cast<int>(counter.counterType) << "\" depth=\"" << counter.counterDepth
+      << "\" bullet=\"" << counter.counterBullet << "\" start=\"" << counter.startCounter.ascii() << "\" numberingtype=\""
+      << static_cast<int>(counter.numberingType) << "\" lefttext=\"" << counter.counterLeftText.ascii() << "\" righttext=\""
+      << counter.counterRightText.ascii() << "\" bulletfont=\"" << counter.bulletFont.ascii() << "\"/>" << endl;
   out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
-      << left.color.blue() << "\" style=\"" << static_cast<int>(left.style) << "\" width=\"" << left.ptWidth << "\"/>" << endl; 
+      << left.color.blue() << "\" style=\"" << static_cast<int>(left.style) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
   out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
-      << right.color.blue() << "\" style=\"" << static_cast<int>(right.style) << "\" width=\"" << right.ptWidth << "\"/>" << endl; 
+      << right.color.blue() << "\" style=\"" << static_cast<int>(right.style) << "\" width=\"" << right.ptWidth << "\"/>" << endl;
   out << indent << "<TOPBORDER red=\"" << top.color.red() << "\" green=\"" << top.color.green() << "\" blue=\""
-      << top.color.blue() << "\" style=\"" << static_cast<int>(top.style) << "\" width=\"" << top.ptWidth << "\"/>" << endl; 
+      << top.color.blue() << "\" style=\"" << static_cast<int>(top.style) << "\" width=\"" << top.ptWidth << "\"/>" << endl;
   out << indent << "<BOTTOMBORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
-      << bottom.color.blue() << "\" style=\"" << static_cast<int>(bottom.style) << "\" width=\"" << bottom.ptWidth << "\"/>" << endl; 
+      << bottom.color.blue() << "\" style=\"" << static_cast<int>(bottom.style) << "\" width=\"" << bottom.ptWidth << "\"/>" << endl;
   out << otag << "<FORMAT>" << endl;
   format.save(out);
   out << etag << "</FORMAT> " << endl;
-  
+
   for (unsigned int i = 0;i < tabList.count();i++)
-    out << indent << "<TABULATOR mmpos=\"" << tabList.at(i)->mmPos << "\" ptpos=\"" << tabList.at(i)->ptPos 
+    out << indent << "<TABULATOR mmpos=\"" << tabList.at(i)->mmPos << "\" ptpos=\"" << tabList.at(i)->ptPos
 	<< "\" inchpos=\"" << tabList.at(i)->inchPos << "\" type=\"" << static_cast<int>(tabList.at(i)->type) << "\"/>" << endl;
 }
 
@@ -135,7 +135,7 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),_name,lst);
-	      
+	
       // name
       if (_name == "NAME")
 	{
@@ -489,8 +489,8 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       else
-	cerr << "Unknown tag '" << tag << "' in PARAGRAPHLAYOUT" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in PARAGRAPHLAYOUT" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -499,10 +499,10 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     }
 }
 
-void KWParagLayout::setTabList(QList<KoTabulator> *_tabList) 
+void KWParagLayout::setTabList(QList<KoTabulator> *_tabList)
 {
   tabList.setAutoDelete(true);
-  tabList.clear(); 
+  tabList.clear();
   tabList.setAutoDelete(false);
   specialTabs = false;
   for (unsigned int i = 0;i < _tabList->count();i++)

@@ -747,7 +747,7 @@ void KWordView::viewDocStruct()
 /*===============================================================*/
 void KWordView::insertPicture()
 {
-  QString file = KFilePreviewDialog::getOpenFileName(0,
+  QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
 							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
 							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
@@ -777,7 +777,7 @@ void KWordView::insertFrameBreak()
 {
   if (gui->getPaperWidget()->getTable()) return;
 
-  QKeyEvent e(Event_KeyPress,Key_Return,0,ControlButton);
+  QKeyEvent e(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,0,ControlButton);
   gui->getPaperWidget()->keyPressEvent(&e);
 }
 
@@ -954,7 +954,7 @@ void KWordView::toolsCreateText()
 void KWordView::toolsCreatePix()
 {
   gui->getPaperWidget()->mmEdit();
-  QString file = KFilePreviewDialog::getOpenFileName(0,
+  QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
 							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
 							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
@@ -1008,7 +1008,7 @@ void KWordView::toolsKSpreadTable()
       return;
     }
 
-  cerr << "USING component " << vec[0].name << endl;
+  cerr << "USING component " << vec[0].name.ascii() << endl;
   gui->getPaperWidget()->setPartEntry(vec[0]);
 }
 
@@ -1578,7 +1578,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuInsert_FrameBreak = m_vMenuInsert->insertItem4(i18n("&Hard frame break"),this,"insertFrameBreak", 0, -1, -1 );
 
   m_vMenuInsert->insertSeparator(-1);
-  
+
   m_vMenuInsert->insertItem8( i18n("&Variable"), m_vMenuInsert_Variable, -1, -1 );
 
   m_idMenuInsert_VariableDateFix = m_vMenuInsert_Variable->insertItem4(i18n("Date (fix)"), this,"insertVariableDateFix", 0, -1, -1 );
@@ -1588,7 +1588,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuInsert_VariablePageNum = m_vMenuInsert_Variable->insertItem4(i18n("Page Number"), this,"insertVariablePageNum", 0, -1, -1 );
   m_vMenuInsert_Variable->insertSeparator(-1);
   m_idMenuInsert_VariableOther = m_vMenuInsert_Variable->insertItem4(i18n("Other..."), this,"insertVariableOther", 0, -1, -1 );
-  
+
   // tools menu
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
 
@@ -1858,7 +1858,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
       styleList.append(QString(m_pKWordDoc->paragLayoutList.at(i)->getName()));
       stylelist[i] = CORBA::string_dup(m_pKWordDoc->paragLayoutList.at(i)->getName());
     }
-  m_idComboText_Style = m_vToolBarText->insertCombo( stylelist, ID_STYLE_LIST, false, SIGNAL( activated( const char* ) ),
+  m_idComboText_Style = m_vToolBarText->insertCombo( stylelist, ID_STYLE_LIST, false, SIGNAL( activated( const QString & ) ),
 						     this, "textStyleSelected", true, i18n("Style"),
 						     200, -1, OpenPartsUI::AtBottom );
 
@@ -1871,7 +1871,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     sprintf( buffer, "%i", i );
     sizelist[i-4] = CORBA::string_dup( buffer );
   }
-  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const char* ) ),
+  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const QString & ) ),
 							this, "textSizeSelected", true,
 							i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
   m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,8);
@@ -1883,7 +1883,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   fonts.length( fontList.count() );
   for(unsigned int i = 0;i < fontList.count(); i++ )
     fonts[i] = CORBA::string_dup( fontList.at(i) );
-  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const char* ) ), this,
+  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
 							"textFontSelected", true, i18n("Font List"),
 							200, -1, OpenPartsUI::AtBottom );
   tbFont.setFamily(fontList.at(0));
@@ -1959,7 +1959,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
       sprintf(buffer,"%i",i);
       spclist[i] = CORBA::string_dup(buffer);
     }
-  m_idComboText_LineSpacing = m_vToolBarText->insertCombo(spclist,ID_LINE_SPC,true,SIGNAL(activated(const char*)),
+  m_idComboText_LineSpacing = m_vToolBarText->insertCombo(spclist,ID_LINE_SPC,true,SIGNAL(activated(const QString &)),
 							  this,"textLineSpacing",true,i18n("Line Spacing (in pt)"),
 							  60,-1,OpenPartsUI::AtBottom);
   spc = 0;
@@ -2041,7 +2041,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     widthlist[i-1] = CORBA::string_dup( buffer );
   }
   tmpBrd.ptWidth = 1;
-  m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, true, SIGNAL( activated( const char* ) ),
+  m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, true, SIGNAL( activated( const QString & ) ),
 							   this, "textBorderWidth", true, i18n("Paragraph Border Width"),
 							   60, -1, OpenPartsUI::AtBottom );
 
@@ -2052,7 +2052,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   stylelist[2] = CORBA::string_dup( i18n("dot line (****)") );
   stylelist[3] = CORBA::string_dup( i18n("dash dot line (-*-*)") );
   stylelist[4] = CORBA::string_dup( i18n("dash dot dot line (-**-)") );
-  m_idComboText_BorderStyle = m_vToolBarText->insertCombo( stylelist,ID_BRD_STYLE, false, SIGNAL( activated( const char* ) ),
+  m_idComboText_BorderStyle = m_vToolBarText->insertCombo( stylelist,ID_BRD_STYLE, false, SIGNAL( activated( const QString & ) ),
 							   this, "textBorderStyle", true, i18n("Paragraph Border Style"),
 							   150, -1, OpenPartsUI::AtBottom );
   tmpBrd.style = KWParagLayout::SOLID;
@@ -2097,11 +2097,11 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2( colpix, ID_FBORDER_COLOR, SIGNAL( clicked() ), this, "frameBorderColor",
 							      true, i18n("Frame Border Color"), -1);
 
-  m_idComboFrame_BorderWidth = m_vToolBarFrame->insertCombo( widthlist, ID_FBRD_WIDTH, true, SIGNAL( activated( const char* ) ),
+  m_idComboFrame_BorderWidth = m_vToolBarFrame->insertCombo( widthlist, ID_FBRD_WIDTH, true, SIGNAL( activated( const QString & ) ),
 							   this, "frameBorderWidth", true, i18n("Frame Border Width"),
 							   60, -1, OpenPartsUI::AtBottom );
 
-  m_idComboFrame_BorderStyle = m_vToolBarFrame->insertCombo( stylelist,ID_FBRD_STYLE, false, SIGNAL( activated( const char* ) ),
+  m_idComboFrame_BorderStyle = m_vToolBarFrame->insertCombo( stylelist,ID_FBRD_STYLE, false, SIGNAL( activated( const QString & ) ),
 							   this, "frameBorderStyle", true, i18n("Frame Border Style"),
 							   150, -1, OpenPartsUI::AtBottom );
 
@@ -2708,7 +2708,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   // HACK
   if (doc->viewCount() == 1 && !doc->loaded())
     {
-      QKeyEvent e(Event_KeyPress,Key_Delete,0,0);
+      QKeyEvent e(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Delete,0,0);
       paperWidget->keyPressEvent(&e);
       scrollH(0);
       scrollV(0);

@@ -24,7 +24,7 @@ void KChartLinesPainter::drawData( QPainter* painter, table_t* table )
 	QColor datacolor = chooseDataColor( dataset );
 	QPoint begin = valToPixel( 1, table->data[dataset][0],
 							   dataset );
-	PenStyle type = chooseLineType( dataset );
+	Qt::PenStyle type = chooseLineType( dataset );
 
 	for( uint i = 0; i <= maxPos( table ); i++ ) {
 		// PENDING(kalle) How do I know this?
@@ -41,11 +41,11 @@ void KChartLinesPainter::drawData( QPainter* painter, table_t* table )
 }
 
 
-void KChartLinesPainter::drawLegendMarker( QPainter* painter, int number, 
+void KChartLinesPainter::drawLegendMarker( QPainter* painter, int number,
 										   int x, int y, table_t* table )
 {
   QColor datacolor = chooseDataColor( number );
-  PenStyle type = chooseLineType( number );
+  Qt::PenStyle type = chooseLineType( number );
 
   y += (int)rint( _chart->_legendelementheight / 2 );
   painter->setPen( QPen( datacolor, _chart->_linewidth, type ) );
@@ -53,18 +53,18 @@ void KChartLinesPainter::drawLegendMarker( QPainter* painter, int number,
 }
 
 
-PenStyle KChartLinesPainter::chooseLineType( int dataset )
+Qt::PenStyle KChartLinesPainter::chooseLineType( int dataset )
 {
   if( _chart->_linetypes.count() > 0 )
 	return *_chart->_linetypes.at( dataset % _chart->_linetypes.count() );
 
   // 5 is the number of defined pen styles in qpen.h, excluding NoPen
-  return (PenStyle)( dataset % 5 + 1 );
+  return (Qt::PenStyle)( dataset % 5 + 1 );
 }
 
 
 void KChartLinesPainter::drawLine( QPainter* painter, const QPoint& begin,
-								   const QPoint& end, PenStyle type,
+								   const QPoint& end, Qt::PenStyle type,
 								   const QColor& datacolor, table_t* table )
 {
   QPen pen( datacolor, _chart->_linewidth, type );

@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <qprinter.h>
 #include "kimage_view.h"
@@ -52,10 +52,10 @@ KImageView::KImageView( QWidget *_parent, const char *_name, KImageDoc* _doc ) :
 {
   setWidget( this );
 
-  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus ); 
+  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
   m_pDoc = _doc;
-  
+
   QObject::connect( m_pDoc, SIGNAL( sig_updateView() ), this, SLOT( slotUpdateView() ) );
 
   slotUpdateView();
@@ -68,7 +68,7 @@ void KImageView::init()
    ******************************************************/
 
   cerr << "Registering menu as " << id() << endl;
-  
+
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->registerClient( id(), this );
@@ -83,7 +83,7 @@ void KImageView::init()
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->registerClient( id(), this );
   else
-    cerr << "Did not get a tool bar manager" << endl;  
+    cerr << "Did not get a tool bar manager" << endl;
 }
 
 KImageView::~KImageView()
@@ -96,12 +96,12 @@ KImageView::~KImageView()
 void KImageView::cleanUp()
 {
   cerr << "void KImageView::cleanUp() " << endl;
-  
+
   if ( m_bIsClean )
     return;
 
   cerr << "1b) Unregistering menu and toolbar" << endl;
-  
+
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->unregisterClient( id() );
@@ -109,7 +109,7 @@ void KImageView::cleanUp()
   OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->unregisterClient( id() );
-  
+
   m_pDoc->removeView( this );
 
   KoViewIf::cleanUp();
@@ -123,14 +123,14 @@ bool KImageView::event( const char* _event, const CORBA::Any& _value )
   MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
 
   END_EVENT_MAPPER;
-  
+
   return false;
 }
 
 bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
   cerr << "bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
-  
+
   if ( CORBA::is_nil( _factory ) )
   {
     cerr << "Setting to nil" << endl;
@@ -163,14 +163,14 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
 						       i18n( "Keep original image size" ), -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
-  
+
   tmp = kapp->kde_icondir().copy();
   tmp += "/mini/unknown.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ),
-							this, "editImage", true, 
+							this, "editImage", true,
 							i18n( "Edit image" ), -1 );
-  
+
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
   return true;
@@ -184,7 +184,7 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  // Edit  
+  // Edit
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
   QString path = kapp->kde_icondir().copy();
@@ -205,9 +205,9 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::loadPixmap( path );
   m_idMenuEdit_Original = m_vMenuEdit->insertItem6( pix, i18n("&Original size"), this,
 						    "originalSize", CTRL + Key_O, -1, -1 );
-  
+
   m_vMenuEdit->insertSeparator( -1 );
-  
+
   path = kapp->kde_icondir().copy();
   path += "/mini/unknown.xpm";
   pix = OPUIUtils::loadPixmap( path );
@@ -216,25 +216,25 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuEdit_Export = m_vMenuEdit->insertItem( i18n("E&xport image"), this, "exportImage", CTRL + Key_X );
 
   m_vMenuEdit->insertSeparator( -1 );
-  
+
   m_idMenuEdit_Page = m_vMenuEdit->insertItem( i18n("&Page Layout"), this, "pageLayout", CTRL + Key_L );
 
   return true;
-}      
+}
 
 void KImageView::helpUsing()
 {
-  kapp->invokeHTMLHelp( "kimage/kimage.html", 0 );
+  kapp->invokeHTMLHelp( "kimage/kimage.html", QString::null );
 }
 
 CORBA::Boolean KImageView::printDlg()
 {
   QPrinter prt;
   if ( QPrintDialog::getPrinterSetup( &prt ) )
-  {    
+  {
     m_pDoc->print( &prt );
   }
-  
+
   return true;
 }
 
@@ -242,7 +242,7 @@ void KImageView::pageLayout()
 {
   m_pDoc->paperLayoutDlg();
 }
-  
+
 void KImageView::newView()
 {
   assert( (m_pDoc != 0L) );
@@ -256,9 +256,9 @@ void KImageView::slotUpdateView()
 {
   if ( m_pDoc->image().isNull() )
     return;
-  
+
   m_pixmap.convertFromImage( m_pDoc->image() );
-  
+
   QWidget::update();
 }
 
@@ -281,12 +281,12 @@ void KImageView::editImage()
 void KImageView::importImage()
 {
   cerr << "import this=" << (int)this << endl;
-  
+
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
     return;
-  
+
   if ( !m_pDoc->openDocument( file, 0L ) )
   {
     QString tmp;
@@ -304,12 +304,12 @@ void KImageView::exportImage()
     QMessageBox::critical( this, i18n( "IO Error" ), i18n("The document is empty\nNothing to export."), i18n( "OK" ) );
     return;
   }
-   
+
   QString file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
     return;
-   
+
   if ( !m_pDoc->saveDocument( file, 0L ) )
   {
     QString tmp;
@@ -328,12 +328,12 @@ void KImageView::paintEvent( QPaintEvent *_ev )
 {
   if ( m_pixmap.isNull() )
     return;
-  
+
   QPainter painter;
   painter.begin( this );
-  
+
   painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
-  
+
   painter.end();
 }
 

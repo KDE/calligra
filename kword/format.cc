@@ -91,7 +91,7 @@ void KWFormat::setDefaults( KWordDocument *_doc )
     weight = QFont::Normal;
     italic = 0;
     underline = 0;
-    color = black;
+    color = Qt::black;
     vertAlign = VA_NORMAL;
     math = -1;
     direct = -1;
@@ -107,40 +107,40 @@ void KWFormat::apply( KWFormat &_format )
 {
     if ( _format.getUserFont() )
 	userFont = _format.getUserFont();
-    
+
     if ( _format.getPTFontSize() != -1 )
 	ptFontSize = _format.getPTFontSize();
-    
+
     if ( _format.getWeight() != -1 )
 	weight = _format.getWeight();
-    
+
     if ( _format.getItalic() != -1 )
 	italic = _format.getItalic();
 
     if ( _format.getUnderline() != -1 )
 	underline = _format.getUnderline();
-    
+
     if ( _format.getColor().isValid() )
 	color = _format.getColor();
-    
+
     vertAlign = _format.getVertAlign();
 }
 
 void KWFormat::decRef()
-{ 
+{
   --ref;
   QString key = doc->getFormatCollection()->generateKey(this);
   //debug("dec ref (%d): %s",ref,key.data());
 
-  if (ref <= 0 && doc) 
-    doc->getFormatCollection()->removeFormat(this); 
+  if (ref <= 0 && doc)
+    doc->getFormatCollection()->removeFormat(this);
 
   if (!doc && ref == 0) warning("RefCount of the format == 0, but I couldn't delete it,"
 				" because I have not a pointer to the document!");
 }
 
 void KWFormat::incRef()
-{ 
+{
   ++ref;
   QString key = doc->getFormatCollection()->generateKey(this);
   //debug("inc ref (%d): %s",ref,key.data());
@@ -149,7 +149,7 @@ void KWFormat::incRef()
 void KWFormat::save(ostream &out)
 {
   out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
-  out << indent << "<FONT name=\"" << userFont->getFontName() << "\"/>" << endl;
+  out << indent << "<FONT name=\"" << userFont->getFontName().ascii() << "\"/>" << endl;
   out << indent << "<SIZE value=\"" << ptFontSize << "\"/>" << endl;
   out << indent << "<WEIGHT value=\"" << weight << "\"/>" << endl;
   out << indent << "<ITALIC value=\"" << static_cast<int>(italic) << "\"/>" << endl;
@@ -168,7 +168,7 @@ void KWFormat::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_d
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
+	
       // color
       if (name == "COLOR")
 	{
@@ -268,8 +268,8 @@ void KWFormat::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_d
 	}
 
      else
-	cerr << "Unknown tag '" << tag << "' in FORMAT" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in FORMAT" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;

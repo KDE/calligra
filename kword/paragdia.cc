@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -53,7 +53,7 @@ void KWPagePreview::drawContents(QPainter* p)
   p->setBrush(QBrush(black));
 
   p->drawRect(_x + 1,_y + 1,wid,hei);
-  
+
   p->setBrush(QBrush(white));
   p->drawRect(_x,_y,wid,hei);
 
@@ -63,7 +63,7 @@ void KWPagePreview::drawContents(QPainter* p)
 
   for (int i = 1;i <= 4;i++)
     p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2,wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
-  
+
   p->setBrush(QBrush(darkGray));
 
   for (int i = 5;i <= 8;i++)
@@ -102,7 +102,7 @@ void KWPagePreview2::drawContents(QPainter* p)
   p->setBrush(QBrush(black));
 
   p->drawRect(_x + 1,_y + 1,wid,hei);
-  
+
   p->setBrush(QBrush(white));
   p->drawRect(_x,_y,wid,hei);
 
@@ -112,7 +112,7 @@ void KWPagePreview2::drawContents(QPainter* p)
 
   for (int i = 1;i <= 4;i++)
     p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2,wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
-  
+
   p->setBrush(QBrush(darkGray));
 
   int __x = 0,__w = 0;
@@ -209,7 +209,7 @@ QPen KWBorderPreview::setBorderPen(KWParagLayout::Border _brd)
 
   pen.setWidth(_brd.ptWidth);
   pen.setColor(_brd.color);
-  
+
   switch (_brd.style)
     {
     case KWParagLayout::SOLID:
@@ -390,7 +390,7 @@ KWParagLayout::Flow KWParagDia::getFlow()
   else if (rCenter->isChecked()) return KWParagLayout::CENTER;
   else if (rRight->isChecked()) return KWParagLayout::RIGHT;
   else if (rBlock->isChecked()) return KWParagLayout::BLOCK;
-  
+
   return KWParagLayout::LEFT;
 }
 
@@ -417,7 +417,7 @@ void KWParagDia::setupTab1()
   eLeft->setFrame(true);
   eLeft->resize(eLeft->sizeHint().width() / 2,eLeft->sizeHint().height());
   indentGrid->addWidget(eLeft,1,1);
-  connect(eLeft,SIGNAL(textChanged(const char*)),this,SLOT(leftChanged(const char*)));
+  connect(eLeft,SIGNAL(textChanged(const QString &)),this,SLOT(leftChanged(const QString &)));
 
   lRight = new QLabel(i18n(QString("Right (" + doc->getUnit() + "):")),indentFrame);
   lRight->resize(lRight->sizeHint());
@@ -431,7 +431,7 @@ void KWParagDia::setupTab1()
   eRight->setFrame(true);
   eRight->resize(eLeft->size());
   indentGrid->addWidget(eRight,2,1);
-  connect(eRight,SIGNAL(textChanged(const char*)),this,SLOT(rightChanged(const char*)));
+  connect(eRight,SIGNAL(textChanged(const QString &)),this,SLOT(rightChanged(const QString &)));
   eRight->setEnabled(false);
 
   lFirstLine = new QLabel(i18n(QString("First Line (" + doc->getUnit() + "):")),indentFrame);
@@ -445,7 +445,7 @@ void KWParagDia::setupTab1()
   eFirstLine->setEchoMode(QLineEdit::Normal);
   eFirstLine->setFrame(true);
   eFirstLine->resize(eLeft->size());
-  connect(eFirstLine,SIGNAL(textChanged(const char*)),this,SLOT(firstChanged(const char*)));
+  connect(eFirstLine,SIGNAL(textChanged(const QString &)),this,SLOT(firstChanged(const QString &)));
   indentGrid->addWidget(eFirstLine,3,1);
 
   // grid col spacing
@@ -468,7 +468,7 @@ void KWParagDia::setupTab1()
   // --------------- spacing ---------------
   spacingFrame = new QGroupBox(i18n("Line Spacing"),tab1);
   spacingGrid = new QGridLayout(spacingFrame,3,1,15,7);
-  
+
   cSpacing = new QComboBox(false,spacingFrame,"");
   cSpacing->insertItem(i18n("0.5 lines"));
   cSpacing->insertItem(i18n("1.0 line"));
@@ -486,7 +486,7 @@ void KWParagDia::setupTab1()
   eSpacing->setFrame(true);
   eSpacing->resize(cSpacing->size());
   eSpacing->setEnabled(false);
-  connect(eSpacing,SIGNAL(textChanged(const char*)),this,SLOT(spacingChanged(const char*)));
+  connect(eSpacing,SIGNAL(textChanged(const QString &)),this,SLOT(spacingChanged(const QString &)));
   spacingGrid->addWidget(eSpacing,2,0);
 
   // grid col spacing
@@ -509,7 +509,7 @@ void KWParagDia::setupTab1()
   // --------------- paragraph spacing ---------------
   pSpaceFrame = new QGroupBox(i18n("Paragraph Space"),tab1);
   pSpaceGrid = new QGridLayout(pSpaceFrame,3,2,15,7);
-  
+
   lBefore = new QLabel(i18n(QString("Before (" + doc->getUnit() + "):")),pSpaceFrame);
   lBefore->resize(lBefore->sizeHint());
   lBefore->setAlignment(AlignRight);
@@ -521,9 +521,9 @@ void KWParagDia::setupTab1()
   eBefore->setEchoMode(QLineEdit::Normal);
   eBefore->setFrame(true);
   eBefore->resize(eBefore->sizeHint().width() / 2,eBefore->sizeHint().height());
-  connect(eBefore,SIGNAL(textChanged(const char*)),this,SLOT(beforeChanged(const char*)));
+  connect(eBefore,SIGNAL(textChanged(const QString &)),this,SLOT(beforeChanged(const QString &)));
   pSpaceGrid->addWidget(eBefore,1,1);
- 
+
   lAfter = new QLabel(i18n(QString("After (" + doc->getUnit() + "):")),pSpaceFrame);
   lAfter->resize(lAfter->sizeHint());
   lAfter->setAlignment(AlignRight);
@@ -535,7 +535,7 @@ void KWParagDia::setupTab1()
   eAfter->setEchoMode(QLineEdit::Normal);
   eAfter->setFrame(true);
   eAfter->resize(eAfter->sizeHint().width() / 2,eAfter->sizeHint().height());
-  connect(eAfter,SIGNAL(textChanged(const char*)),this,SLOT(afterChanged(const char*)));
+  connect(eAfter,SIGNAL(textChanged(const QString &)),this,SLOT(afterChanged(const QString &)));
   pSpaceGrid->addWidget(eAfter,2,1);
 
   // grid col spacing
@@ -654,7 +654,7 @@ void KWParagDia::setupTab3()
   cStyle->insertItem(i18n("dash dot dot line (-**-)"));
   cStyle->resize(cStyle->sizeHint());
   grid3->addWidget(cStyle,1,0);
-  connect(cStyle,SIGNAL(activated(const char*)),this,SLOT(brdStyleChanged(const char*)));
+  connect(cStyle,SIGNAL(activated(const QString &)),this,SLOT(brdStyleChanged(const QString &)));
 
   lWidth = new QLabel(i18n("Width:"),tab3);
   lWidth->resize(lWidth->sizeHint());
@@ -669,17 +669,17 @@ void KWParagDia::setupTab3()
     }
   grid3->addWidget(cWidth,3,0);
   cWidth->resize(cStyle->size());
-  connect(cWidth,SIGNAL(activated(const char*)),this,SLOT(brdWidthChanged(const char*)));
+  connect(cWidth,SIGNAL(activated(const QString &)),this,SLOT(brdWidthChanged(const QString &)));
 
   lColor = new QLabel(i18n("Color:"),tab3);
   lColor->resize(lColor->sizeHint());
   grid3->addWidget(lColor,4,0);
-  
+
   bColor = new KColorButton(tab3,"");
   bColor->resize(bColor->sizeHint());
   grid3->addWidget(bColor,5,0);
   connect(bColor,SIGNAL(changed(const QColor&)),this,SLOT(brdColorChanged(const QColor&)));
-  
+
   bb = new KButtonBox(tab3);
   bb->addStretch();
   bLeft = bb->addButton("",true);
@@ -843,12 +843,12 @@ void KWParagDia::setupTab4()
   ecLeft = new QLineEdit(gText);
   ecLeft->resize(ecLeft->sizeHint());
   txtgrid->addWidget(ecLeft,2,0);
-  connect(ecLeft,SIGNAL(textChanged(const char*)),this,SLOT(leftTextChanged(const char*)));
+  connect(ecLeft,SIGNAL(textChanged(const QString &)),this,SLOT(leftTextChanged(const QString &)));
 
   ecRight = new QLineEdit(gText);
   ecRight->resize(ecRight->sizeHint());
   txtgrid->addWidget(ecRight,2,1);
-  connect(ecRight,SIGNAL(textChanged(const char*)),this,SLOT(rightTextChanged(const char*)));
+  connect(ecRight,SIGNAL(textChanged(const QString &)),this,SLOT(rightTextChanged(const QString &)));
 
   txtgrid->addRowSpacing(0,10);
   txtgrid->addRowSpacing(1,lcLeft->height());
@@ -875,7 +875,7 @@ void KWParagDia::setupTab4()
   g2 = new QButtonGroup(gOther);
   g2->hide();
   g2->setExclusive(true);
-  
+
   lDepth = new QLabel(i18n("Depth:"),gOther);
   lDepth->setAlignment(AlignRight | AlignVCenter);
   lDepth->resize(lDepth->sizeHint());
@@ -894,7 +894,7 @@ void KWParagDia::setupTab4()
   eStart = new QLineEdit(gOther);
   eStart->resize(eStart->sizeHint());
   ogrid->addWidget(eStart,2,1);
-  connect(eStart,SIGNAL(textChanged(const char*)),this,SLOT(startChanged(const char*)));
+  connect(eStart,SIGNAL(textChanged(const QString &)),this,SLOT(startChanged(const QString &)));
 
   rList = new QRadioButton(i18n("&List Numbering"),gOther);
   rList->resize(rList->sizeHint());
@@ -977,7 +977,7 @@ void KWParagDia::setupTab5()
   bbTabs->layout();
   bbTabs->resize(bbTabs->sizeHint());
   grid5->addWidget(bbTabs,2,0);
-  
+
   lTabs = new QListBox(tab5);
   lTabs->resize(lTabs->sizeHint());
   grid5->addWidget(lTabs,3,0);
@@ -1015,7 +1015,7 @@ void KWParagDia::setupTab5()
   tabGrid->setRowStretch(2,0);
   tabGrid->setRowStretch(3,0);
   tabGrid->setRowStretch(4,1);
- 
+
   tabGrid->addColSpacing(0,rtLeft->width());
   tabGrid->addColSpacing(0,rtRight->width());
   tabGrid->addColSpacing(0,rtCenter->width());
@@ -1088,19 +1088,19 @@ void KWParagDia::updateBorders()
 }
 
 /*================================================================*/
-void KWParagDia::leftChanged(const char* _text)
+void KWParagDia::leftChanged(const QString & _text)
 {
   prev1->setLeft(atof(_text));
 }
 
 /*================================================================*/
-void KWParagDia::rightChanged(const char* _text)
+void KWParagDia::rightChanged(const QString & _text)
 {
   prev1->setRight(atof(_text));
 }
 
 /*================================================================*/
-void KWParagDia::firstChanged(const char* _text)
+void KWParagDia::firstChanged(const QString & _text)
 {
   prev1->setFirst(atof(_text));
 }
@@ -1133,19 +1133,19 @@ void KWParagDia::spacingActivated(int _index)
 }
 
 /*================================================================*/
-void KWParagDia::spacingChanged(const char* _text)
+void KWParagDia::spacingChanged(const QString & _text)
 {
   prev1->setSpacing(atof(_text));
 }
 
 /*================================================================*/
-void KWParagDia::beforeChanged(const char* _text)
+void KWParagDia::beforeChanged(const QString & _text)
 {
   prev1->setBefore(atof(_text));
 }
 
 /*================================================================*/
-void KWParagDia::afterChanged(const char* _text)
+void KWParagDia::afterChanged(const QString & _text)
 {
   prev1->setAfter(atof(_text));
 }
@@ -1283,12 +1283,12 @@ void KWParagDia::brdBottomToggled(bool _on)
 }
 
 /*================================================================*/
-void KWParagDia::brdStyleChanged(const char *_style)
+void KWParagDia::brdStyleChanged(const QString &_style)
 {
 }
 
 /*================================================================*/
-void KWParagDia::brdWidthChanged(const char *_width)
+void KWParagDia::brdWidthChanged(const QString &_width)
 {
 }
 
@@ -1328,19 +1328,19 @@ void KWParagDia::numTypeChanged(int _ntype)
 }
 
 /*================================================================*/
-void KWParagDia::leftTextChanged(const char* _c)
+void KWParagDia::leftTextChanged(const QString & _c)
 {
   counter.counterLeftText = qstrdup(_c);
 }
 
 /*================================================================*/
-void KWParagDia::rightTextChanged(const char* _c)
+void KWParagDia::rightTextChanged(const QString & _c)
 {
   counter.counterRightText = qstrdup(_c);
 }
 
 /*================================================================*/
-void KWParagDia::startChanged(const char* _c)
+void KWParagDia::startChanged(const QString & _c)
 {
   counter.startCounter = qstrdup(_c);
 }
@@ -1410,7 +1410,7 @@ void KWParagDia::setTabList(QList<KoTabulator> *tabList)
 
 /*================================================================*/
 KWUnit KWParagDia::getLeftIndent()
-{ 
+{
   KWUnit u;
   switch (KWUnit::unitType(doc->getUnit()))
     {
@@ -1423,11 +1423,11 @@ KWUnit KWParagDia::getLeftIndent()
     }
 
   return u;
-} 
+}
 
 /*================================================================*/
 KWUnit KWParagDia::getFirstLineIndent()
-{ 
+{
   KWUnit u;
   switch (KWUnit::unitType(doc->getUnit()))
     {
@@ -1440,11 +1440,11 @@ KWUnit KWParagDia::getFirstLineIndent()
     }
 
   return u;
-} 
+}
 
 /*================================================================*/
 KWUnit KWParagDia::getSpaceBeforeParag()
-{ 
+{
   KWUnit u;
   switch (KWUnit::unitType(doc->getUnit()))
     {
@@ -1457,11 +1457,11 @@ KWUnit KWParagDia::getSpaceBeforeParag()
     }
 
   return u;
-} 
+}
 
 /*================================================================*/
 KWUnit KWParagDia::getSpaceAfterParag()
-{ 
+{
   KWUnit u;
   switch (KWUnit::unitType(doc->getUnit()))
     {
@@ -1474,13 +1474,13 @@ KWUnit KWParagDia::getSpaceAfterParag()
     }
 
   return u;
-} 
+}
 
 /*================================================================*/
 KWUnit KWParagDia::getLineSpacing()
-{ 
+{
   KWUnit u;
   u.setPT(atoi(eSpacing->text()));
   return u;
-} 
+}
 

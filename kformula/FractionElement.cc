@@ -1,17 +1,17 @@
 /*
-  FractionElement.cc 
+  FractionElement.cc
   Project KOffice/KFormula
-  
+
   Author: Andrea Rizzi <rizzi@kde.org>
   License:GPL
 */
 
 //#define RECT
-#include <qrect.h> 
+#include <qrect.h>
 #include <stdlib.h>
 #include "kformula_doc.h"
-#include "BasicElement.h" 
-#include "FractionElement.h" 
+#include "BasicElement.h"
+#include "FractionElement.h"
 #include "formuladef.h"
 
 
@@ -19,7 +19,7 @@ FractionElement::FractionElement(KFormulaDoc *Formula,
 				 BasicElement *Prev,
 				 int Relation,
 				 BasicElement *Next,
-				 QString Content) : 
+				 QString Content) :
     BasicElement(Formula,Prev,Relation,Next,Content)
 {
     /*
@@ -36,26 +36,26 @@ FractionElement::~FractionElement()
 
 void FractionElement::draw(QPoint drawPoint,int resolution)
 {
-  
+
     QPainter *pen;
     pen=formula->painter();
     //QRect globalArea;
-    int x,y; 
+    int x,y;
     x=drawPoint.x();
     y=drawPoint.y();
     int space=atoi(content.right(content.length()-3));
     warning("Sapce %i",space);
     space+=numericFont/24;
-  
+
     if( beActive )
-	pen->setPen(red);
- 
- 
-    int ofs=(numericFont/24); 
+	pen->setPen(Qt::red);
+
+
+    int ofs=(numericFont/24);
     warning("Array");
-  
+
     if (content[0]=='F') {
-	QPointArray points(5);  
+	QPointArray points(5);
 	points.setPoint(1,x+familySize.x()+1,y+offsetY-ofs/2);
 	points.setPoint(2,x+familySize.right()-2,y+offsetY-ofs/2);
 	points.setPoint(3,x+familySize.right()-2,y+offsetY+ofs/2);
@@ -63,16 +63,16 @@ void FractionElement::draw(QPoint drawPoint,int resolution)
 	pen->setBrush(pen->pen().color());
 	pen->drawPolygon(points,FALSE,1,9);
     }
-  
+
     if( beActive )
-	pen->setPen(blue);
+	pen->setPen(Qt::blue);
     int y0=-child[0]->getSize().bottom()-space/2;
     int y1=-child[1]->getSize().top()+space/2;
     int x0=0,x1=0;
     y0+=offsetY;
     y1+=offsetY;
     if(offsetX>0) x0=offsetX;
-    if(offsetX<0) x1=-offsetX; 
+    if(offsetX<0) x1=-offsetX;
 
     child[0]->draw(QPoint(x+x0+3,y+y0),resolution);
     child[1]->draw(QPoint(x+x1+3,y+y1),resolution);
@@ -80,22 +80,22 @@ void FractionElement::draw(QPoint drawPoint,int resolution)
     myArea.moveBy(x,y);
 
 #ifdef RECT
-    pen->drawRect(myArea);   
-    // pen->drawRect(globalArea); 
+    pen->drawRect(myArea);
+    // pen->drawRect(globalArea);
 #endif
- 
+
     drawIndexes(pen,resolution);
     if( beActive )
-	pen->setPen(black);
+	pen->setPen(Qt::black);
     if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
-  
-  
+
+
 }
 
 void FractionElement::checkSize()
 {
     //warning("R %p",this);
-    QRect nextDimension; 
+    QRect nextDimension;
 
     if (next!=0L)
 	{
@@ -122,13 +122,13 @@ void FractionElement::checkSize()
 	offsetX/=2;
     if(content[2]=='R')
 	warning("R");
- 
-    child0Size.moveBy(0,-space/2-child0Size.bottom());  
-    child1Size.moveBy(0,space/2-child1Size.top());  
+
+    child0Size.moveBy(0,-space/2-child0Size.bottom());
+    child1Size.moveBy(0,space/2-child1Size.top());
     familySize=child0Size.unite(child1Size);
- 
+
     familySize.moveBy(0,offsetY);
-    familySize.setLeft(familySize.left()-3);  
+    familySize.setLeft(familySize.left()-3);
     familySize.setRight(familySize.right()+3);
     localSize=familySize;
     checkIndexesSize();  //This will change localSize adding Indexes Size

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -126,8 +126,8 @@ protected slots:
   void slotCheckItalic();
   void slotCheckUnderline();
   void slotCheckVertAlign();
-  void slotFamily(const char*);
-  void slotSize(const char*);
+  void slotFamily(const QString &);
+  void slotSize(const QString &);
   void slotColor(const QColor&);
   void slotBold();
   void slotItalic();
@@ -143,8 +143,8 @@ protected slots:
   void rslotCheckItalic();
   void rslotCheckUnderline();
   void rslotCheckVertAlign();
-  void rslotFamily(const char*);
-  void rslotSize(const char*);
+  void rslotFamily(const QString &);
+  void rslotSize(const QString &);
   void rslotColor(const QColor&);
   void rslotBold();
   void rslotItalic();

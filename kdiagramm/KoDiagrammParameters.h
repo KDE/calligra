@@ -74,7 +74,7 @@ struct KoDiagrammParameters
   QColor _fgcolor;
   QColor _labelcolor;
   QColor _textcolor;
-  QList<PenStyle> _linetypes;
+  QList<Qt::PenStyle> _linetypes;
   QList<QPaintDevice> _autoupdatedevices;
   QStrList _legends;
   QString _title;
@@ -173,17 +173,17 @@ inline KoDiagrammParameters::KoDiagrammParameters()
   _bottommargin = 0;
   _leftmargin = 0;
   _rightmargin = 0;
-  
+
   _width = 20;
   _height = 20;
 
   // the colours
-  _bgcolor = white;
-  _fgcolor = darkBlue;
-  _textcolor = darkBlue;
-  _labelcolor = darkBlue;
-  _axislabelcolor = darkBlue;
-  _accentcolor = gray;
+  _bgcolor = Qt::white;
+  _fgcolor = Qt::darkBlue;
+  _textcolor = Qt::darkBlue;
+  _labelcolor = Qt::darkBlue;
+  _axislabelcolor = Qt::darkBlue;
+  _accentcolor = Qt::gray;
 
   // draw in transparent mode?
   _transparency = false;
@@ -210,7 +210,7 @@ inline KoDiagrammParameters::KoDiagrammParameters()
   _zeroaxis = true; // draw zero axis if there are negative values?
   _zeroaxisonly = true; // draw zero axis, but not bottom axis?
   _legendmarkerheight = 8; // legend parameters
-  _legendmarkerwidth = 12; 
+  _legendmarkerwidth = 12;
   _legendspacing = 4;
   _legendplacement = BottomCenter;
   _legendcols = -1; // not user-defined by default
@@ -236,7 +236,7 @@ inline KoDiagrammParameters::KoDiagrammParameters()
   // Distance between two bars (in percent of bar width), initialized
   // with 0 here, may be overwritten for bars.
   _xbardist = 0;
-  
+
 
   _startangle = 0;
 
@@ -244,8 +244,8 @@ inline KoDiagrammParameters::KoDiagrammParameters()
   setLabelFont( QFont( "courier", 12 ) );
 
   _linewidth = 1;
-  PenStyle* myint = new PenStyle;
-  *myint = SolidLine;
+  Qt::PenStyle* myint = new Qt::PenStyle;
+  *myint = Qt::SolidLine;
   _linetypes.setAutoDelete( true );
   _linetypes.append( myint );
 }
@@ -319,7 +319,7 @@ inline void KoDiagrammParameters::setYAxisFont( QFont font )
   QFontMetrics fm( font );
   _yaxisfontwidth = fm.width( 'm' );
   _yaxisfontheight = fm.height();
-  
+
 }
 
 inline QFont KoDiagrammParameters::yAxisFont() const
@@ -335,7 +335,7 @@ inline void KoDiagrammParameters::setLegendFont( QFont font )
   QFontMetrics fm( font );
   _legendfontwidth = fm.width( 'm' );
   _legendfontheight = fm.height();
-  
+
 }
 
 inline QFont KoDiagrammParameters::legendFont() const
@@ -368,7 +368,7 @@ inline void KoDiagrammParameters::setTitleFont( QFont font )
   QFontMetrics fm( font );
   _titlefontwidth = fm.width( 'm' );
   _titlefontheight = fm.height();
-  
+
 }
 
 inline QFont KoDiagrammParameters::titleFont() const

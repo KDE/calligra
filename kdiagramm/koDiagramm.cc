@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-                 1998 Erwin tratar <tratar@stud.uni-frankfurt.de> 
+                 1998 Erwin tratar <tratar@stud.uni-frankfurt.de>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include "koDiagramm.h"
 #include <math.h>
@@ -82,13 +82,13 @@ void KoDiagrammView::resizeEvent( QResizeEvent *_ve )
   update();
 }
 
-void KoDiagrammView::paintEvent( QPaintEvent *_ev ) 
+void KoDiagrammView::paintEvent( QPaintEvent *_ev )
 {
   QPainter painter;
   painter.begin( this );
 
   m_diagramm.paint( painter, width(), height() );
-  
+
   painter.end();
 }
 
@@ -111,7 +111,7 @@ const double pi = 3.1415926535;
 static QPoint getPercentPoint( QRect& rcBound, double fPercent)
 {
   QPoint pt( rcBound.x() + rcBound.width() / 2, rcBound.y() + rcBound.height() / 2 );
-  
+
   double arc = (2*pi*fPercent)/100;
   pt.setX( pt.x() + static_cast<int>(sin(arc)*rcBound.width() / 2 ) );
   pt.setY( pt.y() - static_cast<int>(cos(arc)*rcBound.height() / 2 ) );
@@ -125,7 +125,7 @@ static double calcArc( QRect& rcBound, QPoint pt1, QPoint pt2 )
   pt1 -= ptCenter;
   pt2 -= ptCenter;
 
-  return acos( (pt1.x() * pt2.x() + pt1.y() * pt2.y() ) / 
+  return acos( (pt1.x() * pt2.x() + pt1.y() * pt2.y() ) /
 	       ( sqrt( pt1.x() * pt1.x() + pt1.y() * pt1.y() ) * sqrt( pt2.x() * pt2.x() + pt2.y() * pt2.y() ) ) );
 }
 
@@ -204,7 +204,7 @@ void KoDiagramm::paint( QPainter& painter, int width, int height )
       if( m_table.data.size() > 8 )
 	drawDiagrammSaeulen( painter, width, height );
       else
-	drawDiagrammKreis( painter, width, height );  
+	drawDiagrammKreis( painter, width, height );
     }
   break;
   case DT_SAEULEN:
@@ -239,8 +239,8 @@ void KoDiagramm::setupPainter( QPainter& painter )
 
 	// should be configurable later...
 	_params._transparency = true;
-	painter.setBackgroundMode( _params._transparency ? TransparentMode :
-							   OpaqueMode );
+	painter.setBackgroundMode( _params._transparency ? Qt::TransparentMode :
+							   Qt::OpaqueMode );
 }
 #endif
 
@@ -276,7 +276,7 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
 
   // Font Groesse
   QRect sizeText = painter.boundingRect( 0, 0, _width, _height, AlignLeft, "0" );
-  
+
   // Find maximal value
   double maxValue = 0.0;
   line_t::iterator iter;
@@ -354,18 +354,18 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
   int sizeKat = 0;
   QString strFoo;
   for( int i = 0; i * nStep <= rcDraw.height() - nOffY; i++ )
-  {    
+  {
     strFoo.sprintf( "%f", dStep * i );
     while( strFoo.right(1) == "0" )
       strFoo.truncate( strFoo.length() - 1 );
     if ( strFoo.right(1) == "." )
       strFoo.truncate( strFoo.length() - 1 );
-    
+
     QRect tmp = painter.boundingRect( 0, 0, _width, _height, AlignLeft, strFoo );
     if ( tmp.width() > sizeKat )
       sizeKat = tmp.width();
   }
-  
+
   // Hintergrund zeichnen
   rcDraw.setLeft( rcDraw.left() + sizeKat + sizeText.width() + 10 );
   rcDraw.setRight( rcDraw.right() - max(0, max_xdesc_len - sizeText.height()) - sizeText.height() );
@@ -382,7 +382,7 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
   QPointArray poly( 4 );
   for( int k = 0; k < 4; k++ )
     poly.setPoint( k, leftPane[k] );
-  
+
   painter.setPen( lightGray );
   painter.drawPolygon( poly );
   painter.drawRect(rcBack);
@@ -397,17 +397,17 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
 
   painter.setPen( darkGray );
   painter.drawPolygon( poly );
-  
+
   QString strStep;
   for( int i = 0; i * nStep <= rcDraw.height() - nOffY; i++ )
   {
-    painter.drawLine( rcDraw.left() - 10, rcDraw.bottom() - i * nStep, 
+    painter.drawLine( rcDraw.left() - 10, rcDraw.bottom() - i * nStep,
 		      rcDraw.left(), rcDraw.bottom() - i * nStep );
     painter.drawLine( rcDraw.left(), rcDraw.bottom() - i * nStep,
 		      rcDraw.left() + nOffX, rcDraw.bottom() - i * nStep - nOffY );
     painter.drawLine( rcDraw.left() + nOffX, rcDraw.bottom() - i * nStep - nOffY,
 		      rcDraw.right(), rcDraw.bottom() - i  * nStep - nOffY );
-       
+
     // Beschriftung
     strStep.sprintf("%f", dStep * i );
     while( strStep.right(1) == "0" )
@@ -429,20 +429,20 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
   unsigned int line = 0;
   // Fuer jede Zeile berechnen
   for( data_t::iterator lit = m_table.data.begin(); lit != m_table.data.end(); ++lit )
-  {      
+  {
     unsigned int nCount = 0;
     for( iter = lit->begin(); iter != lit->end() && nCount < MAX_SAUELEN; ++iter, ++nCount )
     {
       double fHeight = (*iter);
 
       fHeight *= (static_cast<double>(nStep)/dStep);
-      QRect rcSaeule(rcDraw.left() + nCount * nSection + nSection / 2 - ( nSection * 3 ) / 10, 
+      QRect rcSaeule(rcDraw.left() + nCount * nSection + nSection / 2 - ( nSection * 3 ) / 10,
 		     rcDraw.bottom(),
 		     2 * ( nSection * 3 ) / 10 + 1, -(int)fHeight - 1 );
       rcSaeule.moveBy( ptFrontOffset.x(), ptFrontOffset.y() );
 
       int w = rcSaeule.width() / m_table.data.size();
-      
+
       // Right
       leftPane[0]	= QPoint( rcSaeule.left() + (line+1)*w, rcSaeule.top() );
       leftPane[1]	= QPoint( rcSaeule.left() + (line+1)*w, rcSaeule.bottom() );
@@ -470,7 +470,7 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
       painter.setPen( col );
       painter.setBrush( col );
       painter.drawPolygon( poly );
-    
+
       // Front
       painter.setPen( brushPie[ line % MAX_FARBEN ] );
       rcSaeule.setBottom( rcSaeule.bottom() - 1 );
@@ -481,7 +481,7 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
 
     line++;
   }
-  
+
   // Label
   unsigned int nCount = 0;
   s = m_table.xDesc.first();
@@ -518,7 +518,7 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
   brushPie[7].setRgb( 0,204,255 );
 
   // Font-Groessen
-  QRect sizeText = painter.boundingRect( 0, 0, _width, _height, AlignLeft, "0" );
+  QRect sizeText = painter.boundingRect( 0, 0, _width, _height, Qt::AlignLeft, "0" );
   int iOff = max(sizeText.height(), sizeText.width() );
   cerr << "iOff = " << iOff << endl;
 
@@ -559,18 +559,18 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 
     painter.save();
     painter.translate( x_offset, y_offset );
-    
+
     // Legende
-    QRect sizeTextMaxTmp = painter.boundingRect( 0, 0, _width, _height, AlignLeft, "Rest" );
+    QRect sizeTextMaxTmp = painter.boundingRect( 0, 0, _width, _height, Qt::AlignLeft, "Rest" );
     int sizeTextMax = sizeTextMaxTmp.width();
     int sizeValue = 0;
     unsigned int nCount = 0;
 
-    const char* s = m_table.xDesc.first();  
+    const char* s = m_table.xDesc.first();
     for( line_t::iterator iter = lit->begin(); nCount < MAX_KREIS_SECTIONS && iter != lit->end() && s != 0L;
 	 ++iter, ++nCount, s = m_table.xDesc.next() )
     {
-      QRect tmp = painter.boundingRect( 0, 0, _width, _height, AlignLeft, s );
+      QRect tmp = painter.boundingRect( 0, 0, _width, _height, Qt::AlignLeft, s );
       sizeTextMax = max( sizeTextMax , tmp.width() );
 
       QString strValue;
@@ -579,11 +579,11 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 	strValue.truncate( strValue.length() - 1 );
       if ( strValue.right(1) == "." )
 	strValue.truncate( strValue.length() - 1 );
-	  
-      tmp = painter.boundingRect( 0, 0, _width, _height, AlignLeft, strValue );
+	
+      tmp = painter.boundingRect( 0, 0, _width, _height, Qt::AlignLeft, strValue );
       sizeValue = max( sizeValue, tmp.width() );
     }
-    sizeValue	+= iOff; 
+    sizeValue	+= iOff;
     sizeTextMax += sizeValue;
 
     // Legendensymbol
@@ -610,9 +610,9 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 
     // Diagramm Unterschift anzeigen
     if ( m_table.yDesc.count() > 1 )
-      painter.drawText( rcDraw.x(), rcDraw.bottom() + y_desc_height / 4, rcDraw.width(), y_desc_height * 3 / 4, AlignCenter, ydesc );
+      painter.drawText( rcDraw.x(), rcDraw.bottom() + y_desc_height / 4, rcDraw.width(), y_desc_height * 3 / 4, Qt::AlignCenter, ydesc );
 
-    
+
     QRect rcLegend( rcDraw.right() + iOff, rcDraw.top(), rcDraw.right() + sizeTextMax, rcDraw.bottom() );
 
     QRect rcBound( rcDraw );
@@ -627,7 +627,7 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
     rcDraw.setTop( rcBound.top() + 2*iOff );
 
     // Leerer Kreis
-    painter.setBrush( white );
+    painter.setBrush( Qt::white );
     painter.drawEllipse( rcDraw );
 
     double fLast = 0;
@@ -643,9 +643,9 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
       double fRealValue = (*iter);
       double fValue = ( (*iter) * 100 ) / sum;
       QString strLegend = s;
-      
+
       cerr << "Entry: " << strLegend << endl;
-    
+
       QPoint ptLegend( rcLegend.left(), rcLegend.top() + (3 * nCount * iOff) / 2 );
 
       // 3% Cutoff
@@ -655,12 +655,12 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 	if( getPercentPoint( rcDraw, fLast ).x() < center.x() )
 	{
 	  // Rest auffüllen
-	  painter.setBrush( white );
+	  painter.setBrush( Qt::white );
 	  // TODO pDC->Pie(rcDraw, getPercentPoint(rcDraw,0), getPercentPoint(rcDraw,fLast));
 	}
 
 	// : Bezeichnung
-	painter.setPen( black );
+	painter.setPen( Qt::black );
 	QString strValue;
 
 	// Rest berechnen
@@ -669,12 +669,12 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 	  fRealValue += (*iter);
 	  ++iter;
 	}
-      
+
 	if( fRealValue > 0.0 )
         {
 	  // Format.raise(fRealValue, strValue);
 	  strValue.sprintf( "%d", fRealValue );
-	  
+	
 	  painter.drawText( ptLegend.x() + 2*iOff, ptLegend.y() + painter.fontMetrics().ascent(), strValue );
 	  painter.drawText( ptLegend.x() + 2*iOff + sizeValue, ptLegend.y() + painter.fontMetrics().ascent(), i18n( "Rest") );
 	}
@@ -693,26 +693,26 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 	     calcArc( rcDraw, getPercentPoint( rcDraw, fLast + fValue ), getPercentPoint( rcDraw, fLast ) ) > 0.0 )
         {
 	  drawPie( painter, rcDraw, (int)( fRealLast / sum * 360 * 16 ), (int)( fRealValue / sum * 360 * 16 ) );
-	  
+	
 	  // Datenlinie
 	  painter.drawLine( getPercentPoint( rcDraw, fLast + fValue / 2 ), getPercentPoint( rcBound, fLast + fValue / 2 ) );
 
-	  QPoint ptText( getPercentPoint( rcBound, fLast + fValue / 2 ) ); 
-	  
-	  painter.setBrush( black );
-	  painter.setPen( black );
-	  
+	  QPoint ptText( getPercentPoint( rcBound, fLast + fValue / 2 ) );
+	
+	  painter.setBrush( Qt::black );
+	  painter.setPen( Qt::black );
+	
 	  QRect tmp( ptText.x() - iOff/2, ptText.y() - iOff/2, iOff, iOff );
 	  painter.drawEllipse( tmp );
-	  
+	
 	  QRect tmp2( ptLegend.x(), ptLegend.y(), iOff, iOff );
 	  painter.drawEllipse( tmp2 );
 	
-	  painter.setBrush( white );
-	  painter.setPen( white );
-	  
-	  QRect tmp3 = painter.boundingRect( 0, 0, _width, _height, AlignLeft, strText );
-	  
+	  painter.setBrush( Qt::white );
+	  painter.setPen( Qt::white );
+	
+	  QRect tmp3 = painter.boundingRect( 0, 0, _width, _height, Qt::AlignLeft, strText );
+	
 	  painter.drawText( ptText.x() + ( iOff - tmp3.width() )/2 - iOff/2,
 			    ptText.y() + painter.fontMetrics().ascent() +
 			    ( iOff - painter.fontMetrics().height() ) / 2 - iOff/2, strText );
@@ -722,8 +722,8 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 	}
 
 	// Legende
-	painter.setBrush( black );
-	painter.setPen( black );
+	painter.setBrush( Qt::black );
+	painter.setPen( Qt::black );
 	
 	QString strValue;
 	// TODO Format.raise(fRealValue, strValue);
@@ -779,7 +779,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
     return;
   if ( m_table.yDesc.count() < 1 )
     return;
-  
+
   // Farben
   QColor brushPie[MAX_KREIS_SECTIONS];
   brushPie[0].setRgb( 153,153,255 );
@@ -792,7 +792,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
   brushPie[7].setRgb( 0,204,255 );
 
   table_t table = m_table;
-  
+
   // Konsolidierung
   if( table.xDesc.count() > MAX_LINIEN_SECTIONS )
   {
@@ -816,7 +816,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
         {
 	  (*riter) += (*iter);
 	}
-      
+
 	if(--nKonsolStep == 0)
 	  nKonsolStep = nKonsolidierung;
       }
@@ -840,7 +840,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
     }
     table.xDesc = dest;
   }
-  
+
   QRect sizeText = painter.boundingRect( 0, 0, _width, _height, AlignLeft, "0" );
   int iOff = max(sizeText.height(), sizeText.width() );
 
@@ -857,7 +857,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
   QRect legende( _width - 2*iOff - max_ydesc_len - iOff, iOff, 2*iOff + max_ydesc_len + iOff, _height - 2*iOff );
   if ( table.yDesc.count() == 1 )
     legende.setCoords( 0, 0, 0, 0 );
-  
+
   // Find longest description in xDesc
   int max_xdesc_len = 0;
   for( s = table.xDesc.first(); s != 0L; s = table.xDesc.next() )
@@ -865,7 +865,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
     QRect tmp = painter.boundingRect( 0, 0, _width, _height, AlignLeft, s );
     max_xdesc_len = (int)max((double)max_xdesc_len, sqrt(0.5) * tmp.width() );
   }
-  
+
   // Find maximal value
   double maxValue = 0.0;
   line_t::iterator iter;
@@ -877,7 +877,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
       maxValue = max(maxValue, (*iter) );	
     }
   }
-  
+
   // Exception
   if( maxValue == 0.0 )
     return;
@@ -919,10 +919,10 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
   }
 
   // Hoehe des zu zeichnenden Diagramms
-  QRect rcDraw( 0, 0, _width, _height ); 
+  QRect rcDraw( 0, 0, _width, _height );
   rcDraw.setTop( rcDraw.top() + sizeText.height() );
   rcDraw.setBottom( rcDraw.bottom() - max_xdesc_len - sizeText.height() - sizeText.height() );
-  
+
   // Groesse eines Schrittes
   int nStep = rcDraw.height() / nSteps;
 
@@ -930,13 +930,13 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
   int sizeKat = 0;
   QString strFoo;
   for(int i = 0; i * nStep <= rcDraw.height(); i++ )
-  {    
+  {
     strFoo.sprintf( "%f", dStep * i );
     while( strFoo.right(1) == "0" )
       strFoo.truncate( strFoo.length() - 1 );
     if ( strFoo.right(1) == "." )
       strFoo.truncate( strFoo.length() - 1 );
-    
+
     QRect tmp = painter.boundingRect( 0, 0, _width, _height, AlignLeft, strFoo );
     if ( tmp.width() > sizeKat )
       sizeKat = tmp.width();
@@ -949,12 +949,12 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
   // Exceptions
   if ( rcDraw.width() <= 0 || rcDraw.height() <= 0 )
     return;
-  
+
   // Hintergrund zeichnen
   painter.setPen( lightGray );
   painter.setBrush( white );
   painter.drawRect( rcDraw );
-  
+
   // Skalierung einzeichnen
   QString strStep;
   for(int i = 0; i * nStep <= rcDraw.height(); i++ )
@@ -1009,14 +1009,14 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
     {
       double fHeight = *iter;
       fHeight *= (static_cast<double>(nStep)/dStep);
-    
+
       poly.push_back( QPoint( rcDraw.left() + nCount * nSection, rcDraw.bottom() - (int)fHeight) );
     }
-    
+
     // Endpunkt
     if ( m_diaType == DT_AREA )
       poly.push_back( QPoint( rcDraw.left() + ( nCount - 1 ) * nSection, rcDraw.bottom() ) );
-    
+
     // Zeichnen
     QPointArray arr( poly.size() );
     list<QPoint>::iterator it = poly.begin();
@@ -1035,12 +1035,12 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
 
   if ( table.yDesc.count() == 1 )
     return;
-  
+
   line = 0;
   int y = 0;
   // Legende zeichnen
   for( s = table.yDesc.first(); s != 0L; s = table.yDesc.next() )
-  {    
+  {
     painter.setPen( brushPie[ line % MAX_KREIS_SECTIONS ] );
     painter.setBrush( brushPie[ line % MAX_KREIS_SECTIONS ] );
     QRect tmp( legende.x(), y + legende.y(), iOff, iOff );
@@ -1069,10 +1069,10 @@ void KoDiagramm::setData( table_t& data, const char* szTitle,
 			data_type datType /*DAT_NUMMER*/, dia_type diaType /*=DT_KREIS_ODER_SAEULEN*/)
 {
   m_table = data;
-  
+
   m_curTitle = szTitle;
   m_diaType = diaType;
-  m_dataType = datType;  
+  m_dataType = datType;
 }
 
 /*
@@ -1090,7 +1090,7 @@ void KoDiagramm::FormatGebuehr( double val, CString& out )
 void KoDiagramm::FormatDauer( double val, CString& out)
 {
 	COleDateTimeSpan date(0,0,0,(int)val );
-	out.Format("%0d:%02d:%02d", 
+	out.Format("%0d:%02d:%02d",
 		date.GetDays()*24 +	date.GetHours(),
 		date.GetMinutes(),
 		date.GetSeconds()

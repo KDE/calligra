@@ -23,16 +23,16 @@ KChartPie3DPainter::~KChartPie3DPainter()
 bool KChartPie3DPainter::setupCoords( QPaintDevice* paintdev )
 {
   QPaintDeviceMetrics pdm( paintdev );
-  
+
   _chart->_pieheight = (int)rint( 0.1 * _chart->_height );
 
   // Make sure we are not reserving space we don't need
   if( _chart->_title.isEmpty() ) _chart->_titlefontheight = 0;
   if( _chart->_xlabel.isEmpty() ) _chart->_xlabelfontheight = 0;
 
-  // Calculate the bounding box for the pie and some width, height and 
+  // Calculate the bounding box for the pie and some width, height and
   // centre parameters.
-  _chart->_bottom = _chart->_height - _chart->_pieheight - _chart->_bottommargin - 
+  _chart->_bottom = _chart->_height - _chart->_pieheight - _chart->_bottommargin -
 	( _chart->_xlabelfontheight ? _chart->_xlabelfontheight + _chart->_textspacing : 0 );
   _chart->_top = _chart->_topmargin + ( _chart->_titlefontheight ? ( _chart->_titlefontheight +
 								_chart->_textspacing ) : 0 );
@@ -50,13 +50,13 @@ bool KChartPie3DPainter::setupCoords( QPaintDevice* paintdev )
 
   // setup the data colour list if it does no exist yet
   if( _chart->_datacolors.count() == 0 ) {
-	_chart->_datacolors.setColor( 0, red );
-	_chart->_datacolors.setColor( 1, green );
-	_chart->_datacolors.setColor( 2, blue );
-	_chart->_datacolors.setColor( 3, yellow );
-	_chart->_datacolors.setColor( 4, magenta );
-	_chart->_datacolors.setColor( 5, cyan );
-	_chart->_datacolors.setColor( 6, darkYellow );
+	_chart->_datacolors.setColor( 0, Qt::red );
+	_chart->_datacolors.setColor( 1, Qt::green );
+	_chart->_datacolors.setColor( 2, Qt::blue );
+	_chart->_datacolors.setColor( 3, Qt::yellow );
+	_chart->_datacolors.setColor( 4, Qt::magenta );
+	_chart->_datacolors.setColor( 5, Qt::cyan );
+	_chart->_datacolors.setColor( 6, Qt::darkYellow );
   }
 
   return true;
@@ -68,10 +68,10 @@ void KChartPie3DPainter::drawPie( QPainter* painter, table_t* table )
   int left = _xcenter - _chart->_width/2;
 
   painter->setPen( _chart->_accentcolor );
-  painter->drawArc( _chart->_left, _chart->_top, 
+  painter->drawArc( _chart->_left, _chart->_top,
 					_chart->_width, _chart->_height,
 					0, 5760 );
-  painter->drawArc( _chart->_left, 
+  painter->drawArc( _chart->_left,
 					_ycenter+_chart->_pieheight-_chart->_width/2,
 					_chart->_width, _chart->_height,
 					0, 2880 );
@@ -87,7 +87,7 @@ void KChartPie3DPainter::drawData( QPainter* painter, table_t* table )
 {
   double total = 0;
 
-  for( uint i = 0; i <= maxPos( table ); i++ ) 
+  for( uint i = 0; i <= maxPos( table ); i++ )
 	total += table->data[0][i]; // only first dataset
 
   int pb = _angleoffset;
@@ -97,8 +97,8 @@ void KChartPie3DPainter::drawData( QPainter* painter, table_t* table )
 	QColor datacolor = chooseDataColor( i );
 	painter->setPen( datacolor );
 	// Create two brushes for filled and non-filled rectangles
-	QBrush filledbrush( datacolor, SolidPattern );
-	QBrush emptybrush( datacolor, NoBrush );
+	QBrush filledbrush( datacolor, Qt::SolidPattern );
+	QBrush emptybrush( datacolor, Qt::NoBrush );
 
 	// Set the angle of the pie slice
 	int pa = pb;

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -27,20 +27,20 @@
 /******************************************************************/
 
 /*================================================================*/
-void KWImage::decRef() 
-{ 
+void KWImage::decRef()
+{
   --ref;
   QString key = doc->getImageCollection()->generateKey(this);
-  
-  if (ref <= 0 && doc) 
-    doc->getImageCollection()->removeImage(this); 
+
+  if (ref <= 0 && doc)
+    doc->getImageCollection()->removeImage(this);
   if (!doc && ref == 0) warning("RefCount of the image == 0, but I couldn't delete it,"
 				" because I have not a pointer to the document!");
 }
 
 /*================================================================*/
-void KWImage::incRef() 
-{ 
+void KWImage::incRef()
+{
   ++ref;
   QString key = doc->getImageCollection()->generateKey(this);
 }
@@ -48,7 +48,7 @@ void KWImage::incRef()
 /*================================================================*/
 void KWImage::save(ostream &out)
 {
-  out << indent << "<FILENAME value=\"" << filename << "\"/>" << endl;
+  out << indent << "<FILENAME value=\"" << filename.ascii() << "\"/>" << endl;
 }
 
 /*================================================================*/
@@ -63,7 +63,7 @@ void KWImage::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_do
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
+	
       // filename
       if (name == "FILENAME")
 	{
@@ -80,8 +80,8 @@ void KWImage::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_do
 	}
 
      else
-	cerr << "Unknown tag '" << tag << "' in IMAGE" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in IMAGE" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;

@@ -36,6 +36,8 @@
 
 #include "kword_doc.moc"
 
+#include <qevent.h>
+
 /******************************************************************/
 /* Class: KWordChild                                              */
 /******************************************************************/
@@ -1286,7 +1288,7 @@ bool KWordDocument::save( ostream &out, const char* /* _format */ )
   out << etag << "</PAPER>" << endl;
   out << indent << "<ATTRIBUTES processing=\"" << static_cast<int>(processingType) << "\" standardpage=\"" << 1
       << "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter()
-      << "\" unit=\"" << getUnit() << "\"/>" << endl;
+      << "\" unit=\"" << getUnit().ascii() << "\"/>" << endl;
 
   out << otag << "<FRAMESETS>" << endl;
 
@@ -2473,7 +2475,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	    _fc->cursorGotoRight(painter);
 	  painter.end();
 
-	  QKeyEvent ev(Event_KeyPress,Key_Return,13,0);
+	  QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
 	  _page->keyPressEvent(&ev);
 
 	  str = QString(strList.at(1));
@@ -2507,7 +2509,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	    _fc->cursorGotoRight(painter);
 	  painter.end();
 
-	  QKeyEvent ev(Event_KeyPress,Key_Return,13,0);
+	  QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,13,0);
 	  _page->keyPressEvent(&ev);
 	
 	  painter.begin(_page);

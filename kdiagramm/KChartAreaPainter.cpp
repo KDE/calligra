@@ -21,7 +21,7 @@ KChartAreaPainter::~KChartAreaPainter()
 
 void KChartAreaPainter::drawData( QPainter* painter, table_t* table )
 {
-  for( uint ds = 0; 
+  for( uint ds = 0;
 	   ds < numDatasets( table ); ds++ ) {
 	int pointno = 0;
 
@@ -40,8 +40,8 @@ void KChartAreaPainter::drawData( QPainter* painter, table_t* table )
 		// PENDING(kalle) How do I know this?
 // 	  if( !_chart->chartData()->hasYValue( ds, i ) )
 // 		continue;
-	  
-	  xy = valToPixel( i+1, table->data[ds][i], 
+	
+	  xy = valToPixel( i+1, table->data[ds][i],
 					   ds );
 	  points.setPoint( pointno, xy ); pointno++;
 	}
@@ -51,8 +51,8 @@ void KChartAreaPainter::drawData( QPainter* painter, table_t* table )
 	points.setPoint( pointno, xy );
 
 	// Draw a filled line and a line polygon
-	QBrush filledbrush( datacolor, SolidPattern );
-	QBrush emptybrush( _chart->_accentcolor, NoBrush );
+	QBrush filledbrush( datacolor, Qt::SolidPattern );
+	QBrush emptybrush( _chart->_accentcolor, Qt::NoBrush );
 	painter->setPen( datacolor );
 	painter->setBrush( filledbrush );
 	painter->drawPolygon( points );
@@ -61,7 +61,7 @@ void KChartAreaPainter::drawData( QPainter* painter, table_t* table )
 	painter->drawPolygon( points );
 
 	// Draw the accent lines
-	QPen dashedpen( _chart->_accentcolor, 0, DashLine );
+	QPen dashedpen( _chart->_accentcolor, 0, Qt::DashLine );
 	painter->setPen( dashedpen );
 	for( uint i = 1; i < maxPos( table ); i++ ) {
 		// PENDING(kalle) How do I know this?

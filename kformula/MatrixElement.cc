@@ -1,16 +1,16 @@
 /*
-  MatrixElement.cc 
+  MatrixElement.cc
   Project KOffice/KFormula
-  
+
   Author: Andrea Rizzi <rizzi@kde.org>
   License:GPL
 */
 
 //#define RECT
-#include <qrect.h> 
+#include <qrect.h>
 #include <stdlib.h>
-#include "BasicElement.h" 
-#include "MatrixElement.h" 
+#include "BasicElement.h"
+#include "MatrixElement.h"
 #include "formuladef.h"
 #include "kformula_doc.h"
 
@@ -44,35 +44,35 @@ void MatrixElement::setChildrenNumber(int n)
 
 void MatrixElement::draw(QPoint drawPoint,int resolution)
 {
-  
+
     QPainter *pen;
     pen=formula->painter();
     //QRect globalArea;
-    int x,y; 
+    int x,y;
     x=drawPoint.x()+familySize.x();
     y=drawPoint.y();
     int rows=atoi(content.mid(3,3));
     int cols=atoi(content.mid(6,3));
     if( beActive )
-	pen->setPen(red);
+	pen->setPen(Qt::red);
     /*
       Here draw borders
-    */  
+    */
     int ofs=numericFont/24;
     int r,c;
     int minX;
-    
-    for(c=0;c<cols;c++)     
-      { 
+
+    for(c=0;c<cols;c++)
+      {
 	minX=32000;
 
 	for(r=0;r<rows;r++)
 	    {
 		child[c+r*cols]->draw(QPoint(x+3,y)+childPoint[c+r*cols],resolution);
 		if(childPoint[c+r*cols].x()<minX) minX=childPoint[c+r*cols].x();
-	     if(c==0) 
+	     if(c==0)
               if(r<rows-1) {
-      	       if(content[15]=='L')   
+      	       if(content[15]=='L')
                 {
 	         int vspace=atoi(content.mid(12,3))+ofs;
 		QPointArray points(4);
@@ -84,9 +84,9 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2-ofs+ofs/2);
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
-		 
+		
 		}
-	       if(content[15]=='D')   
+	       if(content[15]=='D')
                 {
 	         int vspace=atoi(content.mid(12,3));
 		QPointArray points(4);
@@ -98,7 +98,7 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs-1);
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
-		 
+		
 	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+1+2*ofs);
 		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+3*ofs+1);
 		points.setPoint(2,x+familySize.width(),
@@ -108,7 +108,7 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 		pen->setBrush(pen->pen().color());
 		pen->drawPolygon(points,FALSE,0,4);
 		}
-	       
+	
 	       }
 	    }
 
@@ -145,30 +145,30 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
 	  }
       }
     if( beActive )
-	pen->setPen(blue);
-      
+	pen->setPen(Qt::blue);
+
     x=drawPoint.x();
 
     myArea=globalSize;
     myArea.moveBy(x,y);
 
 #ifdef RECT
-    pen->drawRect(myArea);   
-    // pen->drawRect(globalArea); 
+    pen->drawRect(myArea);
+    // pen->drawRect(globalArea);
 #endif
- 
+
     drawIndexes(pen,resolution);
     if( beActive )
-	pen->setPen(black);
+	pen->setPen(Qt::black);
     if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
-  
-  
+
+
 }
 
 void MatrixElement::checkSize()
 {
     //warning("M %p",this);
-    QRect nextDimension; 
+    QRect nextDimension;
     int rows=atoi(content.mid(3,3)); //Number of rows
     int cols=atoi(content.mid(6,3)); //Number of columns
     int midr=atoi(content.mid(9,3)); //Mid row
@@ -183,24 +183,24 @@ void MatrixElement::checkSize()
 
     for(int chi=0;chi<rows*cols;chi++)
 	child[chi]->checkSize();           //check size of every child
- 
+
     int vspace = space, hspace=space;               //real spaces (change if there are borders)
     int ofs=numericFont/24;
     if (ofs<1) ofs=1;
     if(content[1]=='C') midr=0;
     if(content[16]=='L') hspace+=ofs;
-    if(content[15]=='L') vspace+=ofs; 
+    if(content[15]=='L') vspace+=ofs;
     if(content[16]=='D') hspace+=3*ofs;
-    if(content[15]=='D') vspace+=3*ofs; 
+    if(content[15]=='D') vspace+=3*ofs;
 
     int correction=0;
     QRect sizeC;
     QRect sizeR;
     QRect sizeE;
     int r,c,e;
-    int downy=0;  
+    int downy=0;
     sizeC.setRect(0,0,1,1);
- 
+
     for(r=0;r<rows;r++)
 	{
 	    sizeR.setRect(0,0,1,1);
@@ -210,12 +210,12 @@ void MatrixElement::checkSize()
 		    sizeE=child[e]->getSize();
 		    sizeR=sizeR.unite(sizeE);
 		}
-            hby[r]=sizeR.bottom();   
-	    if(r<=midr) 
+            hby[r]=sizeR.bottom();
+	    if(r<=midr)
 		{
 		    downy=-sizeC.bottom()+sizeR.top()-vspace;
 		    if (r==0) downy=sizeR.top();
-		    sizeC.moveBy(0,downy);              
+		    sizeC.moveBy(0,downy);
 		    for(c=0;c<cols;c++)
 			{
 			    e=r*cols+c;
@@ -225,9 +225,9 @@ void MatrixElement::checkSize()
 			{
 			    warning("N:%i MoveUp by:%i",c,downy);
 			    childPoint[c]+=QPoint(0,downy);
-			}                  
-		} 
-  
+			}
+		}
+
 	    if(r==midr)
 		{
 
@@ -240,44 +240,44 @@ void MatrixElement::checkSize()
 			correction=-sizeR.bottom();
 
 		}
-  
-	    if(r>midr) 
+
+	    if(r>midr)
 		{
 		    downy=sizeC.bottom()-sizeR.top()+vspace;
-		    sizeR.moveBy(0,downy);              
+		    sizeR.moveBy(0,downy);
 		    for(c=0;c<cols;c++)
 			{
 			    e=r*cols+c;
 			    childPoint[e]=QPoint(0,downy);
-			}               
-		} 
+			}
+		}
 	    sizeC=sizeC.unite(sizeR);
 	}
 
     familySize=sizeC;
     // familySize.setBottom(familySize.bottom()+vspace);
-    familySize.moveBy(0,correction); 
+    familySize.moveBy(0,correction);
     int topBorderCorr=0;
     if(content[17]=='L')
        topBorderCorr=ofs+1+space;
     if(content[17]=='D')
-       topBorderCorr=3*ofs+2+space;           
+       topBorderCorr=3*ofs+2+space;
     //correction+=topBorderCorr;
     familySize.setTop(familySize.top()-topBorderCorr);
-    
+
     for(c=0;c<cols*rows;c++)
 	childPoint[c]+=QPoint(0,correction);
 
     if(content[1]=='C')
-	correction=-familySize.height()/2; 
+	correction=-familySize.height()/2;
     familySize.moveBy(0,correction);
- 
+
     for(c=0;c<cols*rows;c++)
 	childPoint[c]+=QPoint(0,correction);
 
 /*
 And now columns!!
-*/ 
+*/
     int right,x;
     sizeR.setRect(0,0,1,1);
     if(content[19]=='L')
@@ -294,7 +294,7 @@ And now columns!!
 	    sizeC=sizeC.unite(sizeE);
 	}
 	right=sizeR.width();
-	warning("C-X:%i,Y:%i,W:%i,E:%i",sizeC.x(),sizeC.y(),sizeC.height(),sizeC.width());    
+	warning("C-X:%i,Y:%i,W:%i,E:%i",sizeC.x(),sizeC.y(),sizeC.height(),sizeC.width());
 	sizeC.moveBy(hspace+right,0);
 	warning("C+X:%i,Y:%i,W:%i,E:%i",sizeC.x(),sizeC.y(),sizeC.height(),sizeC.width());
 	for(r=0;r<rows;r++) {
@@ -307,15 +307,15 @@ And now columns!!
 	    childPoint[e]=QPoint(x+right,childPoint[e].y());
 	}
 	warning("R-X:%i,Y:%i,W:%i,E:%i",sizeR.x(),sizeR.y(),sizeR.height(),sizeR.width());
-	sizeR=sizeR.unite(sizeC);        
+	sizeR=sizeR.unite(sizeC);
 	warning("R+X:%i,Y:%i,W:%i,E:%i",sizeR.x(),sizeR.y(),sizeR.height(),sizeR.width());
-    } 
-    sizeR.setRight(sizeR.right()-hspace);  
+    }
+    sizeR.setRight(sizeR.right()-hspace);
     familySize=familySize.unite(sizeR);
-    
+
     //Add Margins!!!
-    
-    familySize.setLeft(familySize.left()-3);  
+
+    familySize.setLeft(familySize.left()-3);
     familySize.setRight(familySize.right()+3);
     localSize=familySize;
     checkIndexesSize();  //This will change localSize adding Indexes Size

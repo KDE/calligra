@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -62,10 +62,10 @@ void KWStyleManager::setupTab1()
   bButtonBox->addStretch();
   bEdit = bButtonBox->addButton(i18n("&Edit..."),false);
   connect(bEdit,SIGNAL(clicked()),this,SLOT(editStyle()));
-  bCopy = bButtonBox->addButton(i18n("&Copy..."),false); 
+  bCopy = bButtonBox->addButton(i18n("&Copy..."),false);
   bButtonBox->addStretch();
-  bUp = bButtonBox->addButton(i18n("Up"),false); 
-  bDown = bButtonBox->addButton(i18n("D&own"),false); 
+  bUp = bButtonBox->addButton(i18n("Up"),false);
+  bDown = bButtonBox->addButton(i18n("D&own"),false);
   bButtonBox->layout();
   grid1->addWidget(bButtonBox,0,1);
 
@@ -81,7 +81,7 @@ void KWStyleManager::setupTab1()
 
   addTab(tab1,i18n("Style Manager"));
 
-  connect(lStyleList,SIGNAL(highlighted(const char*)),this,SLOT(updateButtons(const char*)));
+  connect(lStyleList,SIGNAL(highlighted(const QString &)),this,SLOT(updateButtons(const QString &)));
   lStyleList->setCurrentItem(0);
 }
 
@@ -208,7 +208,7 @@ void KWStyleManager::editStyle()
 void KWStyleManager::addStyle()
 {
   QString str;
-  str.sprintf("%s (%d)",i18n("New Style Template"),doc->paragLayoutList.count());
+  str.sprintf("%s (%d)",i18n("New Style Template").ascii(),doc->paragLayoutList.count());
   (void)new KWParagLayout(doc,true,str);
   lStyleList->insertItem(str);
   lStyleList->setCurrentItem(lStyleList->count() - 1);
@@ -227,7 +227,7 @@ void KWStyleManager::deleteStyle()
 void KWStyleManager::apply()
 {
   int f = 0;
-  
+
   if (cFont->currentItem() == 1)
     f = f | KWordDocument::U_FONT_FAMILY_SAME_SIZE;
   else if (cFont->currentItem() == 2)
@@ -264,7 +264,7 @@ void KWStyleManager::updateStyleList()
 }
 
 /*================================================================*/
-void KWStyleManager::updateButtons(const char *s)
+void KWStyleManager::updateButtons(const QString &s)
 {
   if (s == QString("Standard") ||
       s == QString("Head 1") ||
@@ -373,7 +373,7 @@ void KWStyleEditor::setupTab1()
     }
   cFollowing->resize(cFollowing->sizeHint());
   grid2->addWidget(cFollowing,1,1);
-  connect(cFollowing,SIGNAL(activated(const char*)),this,SLOT(fplChanged(const char*)));
+  connect(cFollowing,SIGNAL(activated(const QString &)),this,SLOT(fplChanged(const QString &)));
 
   grid2->addRowSpacing(0,lName->height());
   grid2->addRowSpacing(0,eName->height());
@@ -389,7 +389,7 @@ void KWStyleEditor::setupTab1()
   grid2->addColSpacing(1,cFollowing->width());
   grid2->setColStretch(0,0);
   grid2->setColStretch(1,1);
-  
+
   grid2->activate();
 
   grid1->addWidget(nwid,0,0);
@@ -592,8 +592,8 @@ void KWStyleEditor::paragDiaOk()
 }
 /*================================================================*/
 void KWStyleEditor::apply()
-{ 
-  *ostyle = *style; 
+{
+  *ostyle = *style;
 
   if (eName->text() != style->getName())
     {
@@ -603,7 +603,7 @@ void KWStyleEditor::apply()
 	  if (doc->paragLayoutList.at(i)->getName() == eName->text())
 	    same = true;
 	}
-      
+
       if (!same)
 	{
 	  ostyle->setName(eName->text());

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -76,7 +76,7 @@ protected slots:
   void addStyle();
   void deleteStyle();
   void updateStyleList();
-  void updateButtons(const char*);
+  void updateButtons(const QString &);
 
 };
 
@@ -141,7 +141,7 @@ protected slots:
   void changeTabulators();
   void paragDiaOk();
   void apply();
-  void fplChanged(const char* n) { style->setFollowingParagLayout(QString(n)); }
+  void fplChanged(const QString & n) { style->setFollowingParagLayout(QString(n)); }
 
 };
 

@@ -1,15 +1,15 @@
 /*
-  BracketElement.cc 
+  BracketElement.cc
   Project KOffice/KFormula
-  
+
   Author: Andrea Rizzi <rizzi@kde.org>
   License:GPL
 */
 
 //#define RECT
-#include <qrect.h> 
-#include "BasicElement.h" 
-#include "BracketElement.h" 
+#include <qrect.h>
+#include "BasicElement.h"
+#include "BracketElement.h"
 #include "formuladef.h"
 #include "kformula_doc.h"
 
@@ -33,17 +33,17 @@ BracketElement::~BracketElement()
 
 void BracketElement::draw(QPoint drawPoint,int resolution)
 {
-  
+
   QPainter *pen=formula->painter();
   int x=drawPoint.x();
   int y=drawPoint.y();
   if( beActive )
-    pen->setPen(red);
+    pen->setPen(Qt::red);
   int unit=familySize.height()/4;
-  /*  
+  /*
       Draw Bracket!!
   */
-  int ofs=(numericFont/24); 
+  int ofs=(numericFont/24);
   if (ofs>0) ofs-=1;
   char ch=0;
   x+=1;
@@ -51,7 +51,7 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
     ch=content[i];
     if(i) x+=familySize.width()-unit-ofs-3;
     switch (ch)
-     { 
+     {
       case '|':
     /*
      I could also use DrawRect
@@ -134,9 +134,9 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
                       unit,familySize.height(),
 		      90*16,180*16);
       */
-      
+
       pen->setPen(elementColor);
-    
+
       }
       break;
       case ')':
@@ -154,55 +154,55 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
                       unit,familySize.height(),
 		      270*16,180*16);
 */      pen->setPen(elementColor);
-    
+
       }
       break;
 
 
     }
-  
+
   }
   /*
     Draw child[0], it must exist
-  */    
-  
+  */
+
   x=drawPoint.x();  //modified in delimiters draw
-  
+
   if( beActive )
-    pen->setPen(blue);
+    pen->setPen(Qt::blue);
   child[0]->draw(QPoint(x+familySize.x()+unit+ofs+3,y),resolution);
   myArea=globalSize;;
   myArea.moveBy(x,y);
   // globalArea=
   // globalArea.moveBy(x,y);
 #ifdef RECT
-  pen->setBrush(green);
-  pen->setBrush(NoBrush);
-  pen->drawRect(myArea);   
+  pen->setBrush(Qt::green);
+  pen->setBrush(Qt::NoBrush);
+  pen->drawRect(myArea);
   QRect area(localSize);
   area.moveBy(x,y);
-  pen->drawRect(area); 
-  pen->setBrush(SolidPattern);
+  pen->drawRect(area);
+  pen->setBrush(Qt::SolidPattern);
 #endif
   drawIndexes(pen,resolution);
   if( beActive )
-    pen->setPen(black);
+    pen->setPen(Qt::black);
   if(next!=0L) next->draw(drawPoint+QPoint(localSize.width()+1,0),resolution);
-  
-  
+
+
 }
 
 void BracketElement::checkSize()
 {
  //warning("R %p",this);
-  QRect nextDimension; 
-  
+  QRect nextDimension;
+
   if (next!=0L)
     {
       next->checkSize();
       nextDimension=next->getSize();
     }
-  
+
   child[0]->checkSize();
   familySize=child[0]->getSize();
 
@@ -212,10 +212,10 @@ void BracketElement::checkSize()
      familySize.setTop(familySize.top()-(16-fmY)/2-1);
      familySize.setBottom(familySize.bottom()+(16-fmY)/2+1);
     }
-  familySize.setLeft(familySize.left()-(numericFont/24)-(familySize.height()/4)-2);  
-  familySize.setRight(familySize.right()+(numericFont/24)+(familySize.height()/4)+2);  
+  familySize.setLeft(familySize.left()-(numericFont/24)-(familySize.height()/4)-2);
+  familySize.setRight(familySize.right()+(numericFont/24)+(familySize.height()/4)+2);
 
-  
+
   localSize=familySize;
   checkIndexesSize();  //This will change localSize adding Indexes Size
   familySize.moveBy(-localSize.left(),0);

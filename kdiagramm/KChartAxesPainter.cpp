@@ -27,7 +27,7 @@ KChartAxesPainter::~KChartAxesPainter()
 
 QPoint KChartAxesPainter::valToPixel( uint pos, double value, uint dataset )
 {
-  double ymin = ( _chart->_twoaxes && ( dataset == 2 ) ) ? _chart->_ymins[1] : 
+  double ymin = ( _chart->_twoaxes && ( dataset == 2 ) ) ? _chart->_ymins[1] :
 	_chart->_ymins[0];
   double ymax = ( _chart->_twoaxes && ( dataset == 2 ) ) ? _chart->_ymaxs[1] : _chart->_ymaxs[0];
   double ystep = ( _chart->_bottom - _chart->_top ) / ( ymax - ymin );
@@ -43,13 +43,13 @@ void KChartAxesPainter::paintChart( QPainter* painter, table_t* table )
 	return;
 
   setupLegend( painter->device(), table );
-  if( !setupCoords( painter->device(), table ) ) // this can go wrong if the paintable size 
+  if( !setupCoords( painter->device(), table ) ) // this can go wrong if the paintable size
 	                             // is too small
 	return;
   drawText( painter, table );
   drawAxes( painter, table );
   drawTicks( painter, table );
-  drawData( painter, table ); 
+  drawData( painter, table );
   drawLegend( painter, table );
 }
 
@@ -59,11 +59,11 @@ void KChartAxesPainter::setupLegend( QPaintDevice* paintdev, table_t* table )
   // No need to setup anything if there are no legends
   if( _chart->_legends.count() == 0 )
 	return;
-  
+
   int maxlen = 0;
   uint num = 0;
   QPaintDeviceMetrics pdm( paintdev );
-  
+
   const char* curlegend  = _chart->_legends.first();
   while( curlegend ) {
 	// Check whether there is a legend defined at this position
@@ -165,7 +165,7 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
 	_chart->_textfontheight = 0;
   if( _chart->_xlabel.isEmpty() )
 	_chart->_xlabelfontwidth = 0;
-  
+
   if( _chart->_y1label.isEmpty() && !_chart->_ylabel.isEmpty() )
 	_chart->_y1label = _chart->_ylabel;
 
@@ -179,9 +179,9 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
 	_chart->_yaxisfontwidth = 0;
   }
 
-  bool labelheight = ( _chart->_xlabelfontheight ? 1 : 0 ) + 
+  bool labelheight = ( _chart->_xlabelfontheight ? 1 : 0 ) +
 	( _chart->_xaxisfontheight ? 1 : 0 );
-  
+
   // calculate top and bottom of bounding box
   QPaintDeviceMetrics pdm( paintdev );
   _chart->_bottom = _chart->_height - _chart->_bottommargin - 1 -
@@ -189,7 +189,7 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
 	( _chart->_xaxisfontheight ? _chart->_xaxisfontheight : 0 ) -
 	( labelheight ? labelheight * _chart->_textspacing : 0 );
 
-  _chart->_top = _chart->_topmargin + 
+  _chart->_top = _chart->_topmargin +
 	( _chart->_titlefontheight ? ( _chart->_titlefontheight + _chart->_textspacing ) : 0 );
   if( _chart->_top == 0 )
 	_chart->_top = _chart->_yaxisfontheight/2;
@@ -205,7 +205,7 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
   _chart->_left = _chart->_leftmargin +
 	( ls ? ( ls + _chart->_axisspace ) : 0 ) +
 	( _chart->_ylabelfontheight1 ? ( _chart->_ylabelfontheight + _chart->_textspacing ) : 0 );
-  
+
   if( _chart->_twoaxes )
 	ls = _chart->_yaxisfontwidth * _chart->_ylabellength[1];
   _chart->_right = _chart->_width - _chart->_rightmargin - 1 -
@@ -229,13 +229,13 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
 	
   // set up the data colour list if it does not exist yet
   if( _chart->_datacolors.count() == 0 ) {
-	_chart->_datacolors.setColor( 0, red );
-	_chart->_datacolors.setColor( 1, green );
-	_chart->_datacolors.setColor( 2, blue );
-	_chart->_datacolors.setColor( 3, yellow );
-	_chart->_datacolors.setColor( 4, magenta );
-	_chart->_datacolors.setColor( 5, cyan );
-	_chart->_datacolors.setColor( 6, darkYellow );
+	_chart->_datacolors.setColor( 0, Qt::red );
+	_chart->_datacolors.setColor( 1, Qt::green );
+	_chart->_datacolors.setColor( 2, Qt::blue );
+	_chart->_datacolors.setColor( 3, Qt::yellow );
+	_chart->_datacolors.setColor( 4, Qt::magenta );
+	_chart->_datacolors.setColor( 5, Qt::cyan );
+	_chart->_datacolors.setColor( 6, Qt::darkYellow );
   }
 
   // more sanity checks
@@ -276,7 +276,7 @@ bool KChartAxesPainter::setMaxMin( table_t* table )
   if( _chart->_ymin ) {
 	_chart->_ymins[0] = _chart->_ymin;
 	_chart->_ymins[1] = _chart->_ymin;
-  } 
+  }
 
   if( _chart->_ymax ) {
 	_chart->_ymaxs[0] = _chart->_ymax;
@@ -318,9 +318,9 @@ void KChartAxesPainter::createYLabels()
   _chart->_ylabellength[0] = 0;
   _chart->_ylabellength[1] = 0;
 
-  for( int t = 0; t <= _chart->_yticksnum; t++ ) 
+  for( int t = 0; t <= _chart->_yticksnum; t++ )
 	for( int a = 0; a <= ( _chart->_twoaxes ? 1 : 0 ); a++ ) {
-	  double labelno = _chart->_ymins[a] + t * 
+	  double labelno = _chart->_ymins[a] + t *
 		( _chart->_ymaxs[a] - _chart->_ymins[a] ) / _chart->_yticksnum;
 
 	  // PENDING(kalle): Support number formats
@@ -329,7 +329,7 @@ void KChartAxesPainter::createYLabels()
 	  int len = labelstr.length();
 
 	  _chart->_ylabels[a][t] = labelno;
-	  
+	
 	  if( len > _chart->_ylabellength[a] )
 		_chart->_ylabellength[a] = len;
 	}
@@ -344,13 +344,13 @@ double KChartAxesPainter::upperBound( double val )
   int sign;
   if( val >= 0 )
 	sign = 1;
-  else 
+  else
 	sign = -1;
   val = fabs( val );
 
   double exp = pow( 10, rint( log( val ) / log( 10 ) ) );
   double ret = (rint( val / exp ) + sign ) * exp;
-  
+
   return sign * ret;
 }
 
@@ -363,13 +363,13 @@ double KChartAxesPainter::lowerBound( double val )
   int sign;
   if( val >= 0 )
 	sign = 1;
-  else 
+  else
 	sign = -1;
   val = fabs( val );
 
   double exp = pow( 10, rint( log( val ) / log( 10 ) ) );
   double ret = (rint( val / exp ) - sign ) * exp;
-  
+
   return sign * ret;
 }
 
@@ -386,8 +386,8 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
 	painter->setFont( _chart->titleFont() );
 	painter->setPen( _chart->_textcolor );
 	QFontMetrics fm( _chart->titleFont() );
-	painter->drawText( titlex, titley, fm.width( _chart->_title ), fm.height(), 
-					   AlignLeft, _chart->_title );
+	painter->drawText( titlex, titley, fm.width( _chart->_title ), fm.height(),
+					   Qt::AlignLeft, _chart->_title );
   }
 
   // x label
@@ -400,8 +400,8 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
 	painter->setFont( _chart->xLabelFont() );
 	painter->setPen( _chart->_labelcolor );
 	QFontMetrics fm( _chart->xLabelFont() );
-	painter->drawText( xlabelx, xlabely, fm.width( _chart->_xlabel ), fm.height(), 
-					   AlignLeft, _chart->_xlabel );
+	painter->drawText( xlabelx, xlabely, fm.width( _chart->_xlabel ), fm.height(),
+					   Qt::AlignLeft, _chart->_xlabel );
   }
 
   // y label
@@ -417,7 +417,7 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
 	QPoint pos( ylabelx, ylabely );
 	pos = painter->xFormDev( pos ); // convert position back to user coords
 	painter->drawText( pos.x(), pos.y(), fm.width( _chart->_y1label ), fm.height(),
-					   AlignLeft, _chart->_y1label );
+					   Qt::AlignLeft, _chart->_y1label );
 	painter->resetXForm();
   }
 
@@ -435,7 +435,7 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
 	QPoint pos( ylabel2x, ylabel2y );
 	pos = painter->xFormDev( pos ); // convert position back to user coords
 	painter->drawText( pos.x(), pos.y(), fm.width( _chart->_y2label ), fm.height(),
-					   AlignLeft, _chart->_y2label );
+					   Qt::AlignLeft, _chart->_y2label );
 	painter->resetXForm();
   }
 }
@@ -445,14 +445,14 @@ void KChartAxesPainter::drawAxes( QPainter* painter, table_t* table )
 {
   if( _chart->_boxaxis ) {
 	painter->setPen( _chart->_fgcolor );
-	painter->setBrush( NoBrush );
-	painter->drawRect( QRect( QPoint( _chart->_left, _chart->_top ), 
+	painter->setBrush( Qt::NoBrush );
+	painter->drawRect( QRect( QPoint( _chart->_left, _chart->_top ),
 							  QPoint( _chart->_right, _chart->_bottom) ) );
   } else {
 	painter->setPen( _chart->_fgcolor );
-	painter->setBrush( NoBrush );
+	painter->setBrush( Qt::NoBrush );
 	painter->drawLine( _chart->_left, _chart->_top, _chart->_left, _chart->_bottom );
-	if( !_chart->_zeroaxisonly ) 
+	if( !_chart->_zeroaxisonly )
 	  painter->drawLine( _chart->_left, _chart->_bottom, _chart->_right, _chart->_bottom );
 	if( _chart->_twoaxes )
 	  painter->drawLine( _chart->_right, _chart->_bottom, _chart->_right, _chart->_top );
@@ -483,7 +483,7 @@ void KChartAxesPainter::drawTicks( QPainter* painter, table_t* table )
 		painter->drawLine( xy.x(), xy.y(),
 						   xy.x() + (3-2*(a-1))*_chart->_ticklength, xy.y() );
 	  }
-	  
+	
 	  // Skip unwanted labels
 	  if( ( t % _chart->_ylabelskip ) || ! _chart->_yplotvalues )
 		continue;
@@ -498,12 +498,12 @@ void KChartAxesPainter::drawTicks( QPainter* painter, table_t* table )
 	  y -= _chart->_yaxisfontheight/2;
 	  xy.setX( x );
 	  xy.setY( y );
-	  
+	
 	  painter->setFont( _chart->yAxisFont() );
 	  painter->setPen( _chart->_axislabelcolor );
 	  QFontMetrics fm( _chart->yAxisFont() );
-	  painter->drawText( xy.x(), xy.y(), 
-						 fm.width( labelstr ), fm.height(), AlignLeft, labelstr );
+	  painter->drawText( xy.x(), xy.y(),
+						 fm.width( labelstr ), fm.height(), Qt::AlignLeft, labelstr );
 	}
   }
 
@@ -540,8 +540,8 @@ void KChartAxesPainter::drawTicks( QPainter* painter, table_t* table )
 	painter->setPen( _chart->_axislabelcolor );
 	painter->setFont( _chart->xAxisFont() );
 	QFontMetrics fm( _chart->xAxisFont() );
-	painter->drawText( xy.x(), yt, fm.width( text ), fm.height(), 
-					   AlignLeft, text );
+	painter->drawText( xy.x(), yt, fm.width( text ), fm.height(),
+					   Qt::AlignLeft, text );
   }
 }
 
@@ -575,7 +575,7 @@ void KChartAxesPainter::drawLegend( QPainter* painter, table_t* table )
 	painter->setFont( _chart->legendFont() );
 	painter->setPen( _chart->_fgcolor );
 	painter->drawText( xe, ys, fm.width( _chart->_legends.at( legend ) ),
-					   fm.height(), AlignLeft, _chart->_legends.at( legend ) );
+					   fm.height(), Qt::AlignLeft, _chart->_legends.at( legend ) );
 
 	x += _chart->_legendelementwidth;
 
@@ -588,15 +588,15 @@ void KChartAxesPainter::drawLegend( QPainter* painter, table_t* table )
 }
 
 
-void KChartAxesPainter::drawLegendMarker( QPainter* painter, int number, 
+void KChartAxesPainter::drawLegendMarker( QPainter* painter, int number,
 										  int x, int y, table_t* table )
 {
   QColor datacolor = chooseDataColor( number );
 
   y += (int)rint( _chart->_legendelementheight/2 - _chart->_legendmarkerheight/2 );
 
-  QBrush filledbrush( datacolor, SolidPattern );
-  QBrush emptybrush( datacolor, NoBrush );
+  QBrush filledbrush( datacolor, Qt::SolidPattern );
+  QBrush emptybrush( datacolor, Qt::NoBrush );
   QRect rect( QPoint( x, y ),
 			  QPoint( x + _chart->_legendmarkerwidth, y + _chart->_legendmarkerheight ) );
   painter->setBrush( filledbrush );

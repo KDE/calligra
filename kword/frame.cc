@@ -45,7 +45,7 @@ KWFrame::KWFrame()
   runAroundGap = 1;
   mostRight = false;
 
-  backgroundColor = QBrush(white);
+  backgroundColor = QBrush(Qt::white);
   brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
@@ -69,7 +69,7 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   selected = false;
   mostRight = false;
 
-  backgroundColor = QBrush(white);
+  backgroundColor = QBrush(Qt::white);
   brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
@@ -93,7 +93,7 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   selected = false;
   mostRight = false;
 
-  backgroundColor = QBrush(white);
+  backgroundColor = QBrush(Qt::white);
   brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
@@ -117,7 +117,7 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   selected = false;
   mostRight = false;
 
-  backgroundColor = QBrush(white);
+  backgroundColor = QBrush(Qt::white);
   brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
@@ -141,7 +141,7 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap
   selected = false;
   mostRight = false;
 
-  backgroundColor = QBrush(white);
+  backgroundColor = QBrush(Qt::white);
   brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
@@ -165,7 +165,7 @@ KWFrame::KWFrame(const QRect &_rect)
   selected = false;
   mostRight = false;
 
-  backgroundColor = QBrush(white);
+  backgroundColor = QBrush(Qt::white);
   brd_left.color = getBackgroundColor().color();
   brd_left.style = KWParagLayout::SOLID;
   brd_left.ptWidth = 1;
@@ -268,35 +268,35 @@ QCursor KWFrame::getMouseCursor(int mx,int my,bool table)
   if (!table)
     {
       if (mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6)
-	return sizeFDiagCursor;
+	return Qt::sizeFDiagCursor;
       if (mx >= x() && my >= y() + height() / 2 - 3 && mx <= x() + 6 && my <= y() + height() / 2 + 3)
-	return sizeHorCursor;
+	return Qt::sizeHorCursor;
       if (mx >= x() && my >= y() + height() - 6 && mx <= x() + 6 && my <= y() + height())
-	return sizeBDiagCursor;
+	return Qt::sizeBDiagCursor;
       if (mx >= x() + width() / 2 - 3 && my >= y() && mx <= x() + width() / 2 + 3 && my <= y() + 6)
-	return sizeVerCursor;
+	return Qt::sizeVerCursor;
       if (mx >= x() + width() / 2 - 3 && my >= y() + height() - 6 && mx <= x() + width() / 2 + 3 && my <= y() + height())
-	return sizeVerCursor;
+	return Qt::sizeVerCursor;
       if (mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + 6)
-	return sizeBDiagCursor;
+	return Qt::sizeBDiagCursor;
       if (mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() && my <= y() + height() / 2 + 3)
-	return sizeHorCursor;
+	return Qt::sizeHorCursor;
       if (mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height())
-	return sizeFDiagCursor;
+	return Qt::sizeFDiagCursor;
 
       if (selected)
-	return sizeAllCursor;
+	return Qt::sizeAllCursor;
     }
   else
     {
       if (mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + height())
-	return sizeHorCursor;
+	return Qt::sizeHorCursor;
       if (mx >= x() && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height())
-	return sizeVerCursor;
-      return sizeAllCursor;
+	return Qt::sizeVerCursor;
+      return Qt::sizeAllCursor;
     }
 
-  return arrowCursor;
+  return Qt::arrowCursor;
 }
 
 /*================================================================*/
@@ -378,7 +378,7 @@ void KWFrameSet::addFrame(KWFrame _frame)
 void KWFrameSet::addFrame(KWFrame *_frame)
 {
   if (frames.findRef(_frame) != -1) return;
-  
+
   frames.append(_frame);
   if (frames.count() == 1) init();
   update();
@@ -466,9 +466,9 @@ QCursor KWFrameSet::getMouseCursor(unsigned int mx,unsigned int my)
   int frame = getFrame(mx,my);
 
   if (frame == -1)
-    return arrowCursor;
+    return Qt::arrowCursor;
 
-  if (!getFrame(frame)->isSelected() && !grpMgr) return arrowCursor;
+  if (!getFrame(frame)->isSelected() && !grpMgr) return Qt::arrowCursor;
 
   return getFrame(frame)->getMouseCursor(mx,my,grpMgr ? true : false);
 }
@@ -487,8 +487,8 @@ void KWFrameSet::save(ostream &out)
 	  << "\" runaGapPT=\"" << frame->getRunAroundGap().pt()
 	  << "\" runaGapMM=\"" << frame->getRunAroundGap().mm()
 	  << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
-	  << frame->leftBrd2String() << frame->rightBrd2String() << frame->topBrd2String()
-	  << frame->bottomBrd2String() << "bkRed=\"" << frame->getBackgroundColor().color().red()
+	  << frame->leftBrd2String().ascii() << frame->rightBrd2String().ascii() << frame->topBrd2String().ascii()
+	  << frame->bottomBrd2String().ascii() << "bkRed=\"" << frame->getBackgroundColor().color().red()
 	  << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
 
 	  << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm()
@@ -838,7 +838,7 @@ void KWTextFrameSet::save(ostream &out)
 
   out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType())
       << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
-      << static_cast<int>(frameInfo) << grp << "\" removeable=\"" << static_cast<int>(removeableHeader)
+      << static_cast<int>(frameInfo) << grp.ascii() << "\" removeable=\"" << static_cast<int>(removeableHeader)
       << "\">" << endl;
 
   KWFrameSet::save(out);
@@ -906,19 +906,19 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  float lmm = 0,linch = 0,rmm = 0,rinch = 0,tmm = 0,tinch = 0,bmm = 0,binch = 0,ramm = 0,rainch = -1;
 	  unsigned int lpt = 0,rpt = 0,tpt = 0,bpt = 0,rapt = 0;
 	
-	  l.color = white;
+	  l.color = Qt::white;
 	  l.style = KWParagLayout::SOLID;
 	  l.ptWidth = 1;
-	  r.color = white;
+	  r.color = Qt::white;
 	  r.style = KWParagLayout::SOLID;
 	  r.ptWidth = 1;
-	  t.color = white;
+	  t.color = Qt::white;
 	  t.style = KWParagLayout::SOLID;
 	  t.ptWidth = 1;
-	  b.color = white;
+	  b.color = Qt::white;
 	  b.style = KWParagLayout::SOLID;
 	  b.ptWidth = 1;
-	  QColor c(white);
+	  QColor c(Qt::white);
 	
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1261,19 +1261,19 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  float lmm = 0,linch = 0,rmm = 0,rinch = 0,tmm = 0,tinch = 0,bmm = 0,binch = 0,ramm = 0,rainch = -1;
 	  unsigned int lpt = 0,rpt = 0,tpt = 0,bpt = 0,rapt = 0;
 	
-	  l.color = white;
+	  l.color = Qt::white;
 	  l.style = KWParagLayout::SOLID;
 	  l.ptWidth = 1;
-	  r.color = white;
+	  r.color = Qt::white;
 	  r.style = KWParagLayout::SOLID;
 	  r.ptWidth = 1;
-	  t.color = white;
+	  t.color = Qt::white;
 	  t.style = KWParagLayout::SOLID;
 	  t.ptWidth = 1;
-	  b.color = white;
+	  b.color = Qt::white;
 	  b.style = KWParagLayout::SOLID;
 	  b.ptWidth = 1;
-	  QColor c(white);
+	  QColor c(Qt::white);
 	
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();

@@ -19,17 +19,17 @@ public:
   ~KChartLinesPainter();
 
   virtual void drawData( QPainter* painter, table_t* table );
-  virtual void drawLegendMarker( QPainter* painter, int number, 
+  virtual void drawLegendMarker( QPainter* painter, int number,
 								 int x, int y, table_t* table );
 
 private:
-  PenStyle chooseLineType( int dataset );
+  Qt::PenStyle chooseLineType( int dataset );
   void drawLine( QPainter* painter, const QPoint& begin,
-				 const QPoint& end, PenStyle type,
+				 const QPoint& end, Qt::PenStyle type,
 				 const QColor& datacolor, table_t* table );
 
   int _linewidth;
-  QList<PenStyle> _linetypes;
+  QList<Qt::PenStyle> _linetypes;
 };
 
 #endif

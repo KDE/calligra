@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <qprinter.h>
 #include "kimage_doc.h"
@@ -65,7 +65,7 @@ KImageDoc::KImageDoc()
 
   m_iXOffset = 0;
   m_iYOffset = 0;
-  
+
   kimgioRegister();
 
   m_lstViews.setAutoDelete( false );
@@ -79,7 +79,7 @@ CORBA::Boolean KImageDoc::init()
 void KImageDoc::cleanUp()
 {
   cerr << "CLeanUp KImageDoc" << endl;
-  
+
   if ( m_bIsClean )
     return;
 
@@ -109,7 +109,7 @@ KImageView* KImageDoc::createImageView()
   KImageView *p = new KImageView( 0L, 0L, this );
   p->QWidget::show();
   m_lstViews.append( p );
-  
+
   return p;
 }
 
@@ -140,18 +140,18 @@ bool KImageDoc::save( ostream& out, const char* /* format */ )
   out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "kimage"
       << "\" mime=\"" << "application/x-kimage" << "\" >" << endl;
-    
-  out << otag << "<PAPER format=\"" << paperFormatString() << "\" orientation=\"" << orientationString() << "\">" << endl;
+
+  out << otag << "<PAPER format=\"" << paperFormatString().ascii() << "\" orientation=\"" << orientationString().ascii() << "\">" << endl;
   out << indent << "<PAPERBORDERS left=\"" << leftBorder() << "\" top=\"" << topBorder() << "\" right=\"" << rightBorder()
       << " bottom=\"" << bottomBorder() << "\"/>" << endl;
-  out << indent << "<HEAD left=\"" << headLeft() << "\" center=\"" << headMid() << "\" right=\"" << headRight() << "\"/>" << endl;
-  out << indent << "<FOOT left=\"" << footLeft() << "\" center=\"" << footMid() << "\" right=\"" << footRight() << "\"/>" << endl;
+  out << indent << "<HEAD left=\"" << headLeft().ascii() << "\" center=\"" << headMid().ascii() << "\" right=\"" << headRight().ascii() << "\"/>" << endl;
+  out << indent << "<FOOT left=\"" << footLeft().ascii() << "\" center=\"" << footMid().ascii() << "\" right=\"" << footRight().ascii() << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
 
   out << etag << "</DOC>" << endl;
-    
+
   setModified( FALSE );
-    
+
   return true;
 }
 
@@ -160,7 +160,7 @@ bool KImageDoc::completeSaving( KOStore::Store_ptr _store )
   CORBA::String_var u = url();
   QString u2 = u.in();
   u2 += "/image";
-  
+
   _store->open( u2, "image/bmp" );
   {
     ostorestream out( _store );
@@ -175,18 +175,18 @@ bool KImageDoc::completeSaving( KOStore::Store_ptr _store )
 bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
   cerr << "------------------------ LOADING --------------------" << endl;
-  
+
   string tag;
   vector<KOMLAttrib> lst;
   string name;
- 
+
   // DOC
   if ( !parser.open( "DOC", tag ) )
   {
     cerr << "Missing DOC" << endl;
     return false;
   }
-  
+
   KOMLParser::parseTag( tag.c_str(), name, lst );
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for( ; it != lst.end(); it++ )
@@ -210,7 +210,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   while( parser.open( 0L, tag ) )
   {
     KOMLParser::parseTag( tag.c_str(), name, lst );
- 
+
     if ( name == "PAPER" )
     {
       KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -235,7 +235,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
 	if ( name == "PAPERBORDERS" )
-	{    
+	{
 	  KOMLParser::parseTag( tag.c_str(), name, lst );
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for( ; it != lst.end(); it++ )
@@ -258,7 +258,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    }
 	    else
 	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
-	  } 
+	  }
 	}
       	else if ( name == "HEAD" )
 	{
@@ -280,7 +280,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    }
 	    else
 	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'" << endl;
-	  } 
+	  }
 	}
       	else if ( name == "FOOT" )
 	{
@@ -302,10 +302,10 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    }
 	    else
 	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'" << endl;
-	  } 
+	  }
 	}
 	else
-	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;    
+	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
 	
 	if ( !parser.close( tag ) )
         {
@@ -324,13 +324,13 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     }
   }
 
-  parser.close( tag ); 
+  parser.close( tag );
 
   setPaperLayout( left, top, right, bottom, format, orientation );
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
-  
+
   cerr << "------------------------ LOADING DONE --------------------" << endl;
-  
+
   return true;
 }
 
@@ -346,13 +346,13 @@ bool KImageDoc::completeLoading( KOStore::Store_ptr _store )
     istorestream in( _store );
     in >> m_image;
   }
-  _store->close();  
+  _store->close();
 
   m_bModified = false;
   m_bEmpty = false;
-  
+
   emit sig_updateView();
-  
+
   return true;
 }
 
@@ -383,7 +383,7 @@ void KImageDoc::print( QPaintDevice* _dev )
     painter.drawText( (int)( MM_TO_POINT * leftBorder() +
 			     MM_TO_POINT * printableWidth() - (float)w ),
 		      (int)( MM_TO_POINT * 10.0 ), headRight( pagenr, m_strName ) );
-  
+
   // print foot line
   w = fm.width( footLeft( pagenr, m_strName ) );
   if ( w > 0 )
@@ -402,14 +402,14 @@ void KImageDoc::print( QPaintDevice* _dev )
 			     MM_TO_POINT * printableWidth() - (float)w ),
 		      (int)( MM_TO_POINT * ( paperHeight() - 10.0 ) ),
 		      footRight( pagenr, m_strName ) );
-  
+
   painter.translate( MM_TO_POINT * m_leftBorder, MM_TO_POINT * m_topBorder );
 
   // Print centered
   painter.drawImage( ( MM_TO_POINT * printableWidth() - m_image.width() ) / 2,
 		     ( MM_TO_POINT * printableHeight() - m_image.height() ) / 2,
 		     m_image );
-  
+
   painter.end();
 }
 
@@ -417,18 +417,18 @@ void KImageDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _heigh
 		      CORBA::Float _scale )
 {
   cerr << "DRAWING w=" << _width << " h=" << _height << endl;
-  
+
   QPainter painter;
   painter.begin( _dev );
 
   if ( _scale != 1.0 )
     painter.scale( _scale, _scale );
-  
+
   // Print centered
   int x = ( _width - m_image.width() ) / 2;
   int y = ( _height - m_image.height() ) / 2;
   QPoint p( x, y );
-  
+
   QRect rect;
   if ( x >= 0 )
   {
@@ -468,7 +468,7 @@ void KImageDoc::paperLayoutDlg()
   pl.right = rightBorder();
   pl.top = topBorder();
   pl.bottom = bottomBorder();
-  
+
   KoHeadFoot hf;
   hf.headLeft = headLeft();
   hf.headRight = headRight();
@@ -476,19 +476,19 @@ void KImageDoc::paperLayoutDlg()
   hf.footLeft = footLeft();
   hf.footRight = footRight();
   hf.footMid = footMid();
-  
+
   if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
     return;
 
   if ( pl.format == PG_CUSTOM )
   {
     m_paperWidth = pl.width;
-    m_paperHeight = pl.height;  
+    m_paperHeight = pl.height;
   }
-  
+
   setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
 
-  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );  
+  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 
   emit sig_updateView();
 }
@@ -502,7 +502,7 @@ void KImageDoc::setHeadFootLine( const char *_headl, const char *_headm, const c
   m_footLeft = _footl;
   m_footRight = _footr;
   m_footMid = _footm;
-  
+
   m_bModified = TRUE;
 }
 
@@ -511,7 +511,7 @@ void KImageDoc::setPaperLayout( float _leftBorder, float _topBorder, float _righ
 {
     KoFormat f = paperFormat();
     KoOrientation o = orientation();
-    
+
     if ( strcmp( "A3", _paper ) == 0L )
 	f = PG_DIN_A3;
     else if ( strcmp( "A4", _paper ) == 0L )
@@ -548,7 +548,7 @@ void KImageDoc::setPaperLayout( float _leftBorder, float _topBorder, float _righ
 	o = PG_PORTRAIT;
     else if ( strcmp( "Landscape", _orientation ) == 0L )
 	o = PG_LANDSCAPE;
-    
+
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
 }
 
@@ -561,9 +561,9 @@ void KImageDoc::setPaperLayout( float _leftBorder, float _topBorder, float _righ
   m_bottomBorder = _bottomBorder;
   m_orientation = _orientation;
   m_paperFormat = _paper;
-  
+
   calcPaperSize();
-    
+
   m_bModified = TRUE;
 }
 
@@ -582,7 +582,7 @@ QString KImageDoc::completeHeading( const char *_data, int _page, const char *_t
 	} */
     QString t = QTime::currentTime().toString().copy();
     QString d = QDate::currentDate().toString().copy();
-    
+
     QString tmp = _data;
     int pos = 0;
     /* while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
@@ -640,7 +640,7 @@ void KImageDoc::calcPaperSize()
 	break;
     case PG_SCREEN:
         m_paperWidth = PG_SCREEN_WIDTH;
-        m_paperHeight = PG_SCREEN_HEIGHT;    
+        m_paperHeight = PG_SCREEN_HEIGHT;
     case PG_CUSTOM:
         return;
     }
@@ -684,7 +684,7 @@ QString KImageDoc::orientationString()
     case QPrinter::Landscape:
       return QString( "Landscape" );
     }
-  
+
   assert( 0 );
 }
 
@@ -692,24 +692,24 @@ bool KImageDoc::openDocument( const char *_filename, const char *_format )
 {
   if ( !m_image.load( _filename, _format ) )
     return false;
-  
+
   if ( _format )
     m_strImageFormat = _format;
   else
     m_strImageFormat = QImage::imageFormat( _filename );
-  
+
   emit sig_updateView();
 
   m_bModified = true;
   m_bEmpty = false;
-  
+
   return true;
 }
 
 bool KImageDoc::saveDocument( const char *_filename, const char *_format )
 {
   assert( !isEmpty() );
-  
+
   return m_image.save( _filename, m_strImageFormat );
 }
 

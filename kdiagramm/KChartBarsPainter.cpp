@@ -28,7 +28,7 @@ void KChartBarsPainter::drawData( QPainter* painter, table_t* table )
 	  int bottom = _chart->_zeropoint;
 
 	  // loop over datasets
-	  for( uint dataset = 0; dataset < numDatasets( table ); 
+	  for( uint dataset = 0; dataset < numDatasets( table );
 		   dataset++ ) {
 		// Don't draw anything if there is no point defined
 		  // PENDING(kalle) How do I know this?
@@ -39,12 +39,12 @@ void KChartBarsPainter::drawData( QPainter* painter, table_t* table )
 		QColor datacolor = chooseDataColor( dataset );
 		painter->setPen( datacolor );
 		// Create two brushes for filled and non-filled rectangles
-		QBrush filledbrush( datacolor, SolidPattern );
-		QBrush emptybrush( datacolor, NoBrush );
+		QBrush filledbrush( datacolor, Qt::SolidPattern );
+		QBrush emptybrush( datacolor, Qt::NoBrush );
 		
 		// get coordinates of top and center of bar
-		QPoint xpt = valToPixel( i+1, 
-								 table->data[dataset][i], 
+		QPoint xpt = valToPixel( i+1,
+								 table->data[dataset][i],
 								 dataset );
 
 		// calculate left and right of bar
@@ -89,18 +89,18 @@ void KChartBarsPainter::drawData( QPainter* painter, table_t* table )
 
 	// redraw the zero axis
 	painter->setPen( _chart->_fgcolor );
-	painter->drawLine( _chart->_left, _chart->_zeropoint, 
+	painter->drawLine( _chart->_left, _chart->_zeropoint,
 					   _chart->_right, _chart->_zeropoint );
   } else {
 	// loop over the dataset
-	for( uint dataset = 0; dataset < numDatasets( table ); 
+	for( uint dataset = 0; dataset < numDatasets( table );
 		 dataset++ ) {
 	  // Choose a colour for the dataset being drawn
 	  QColor datacolor = chooseDataColor( dataset );
 	  painter->setPen( datacolor );
 	  // Create two brushes for filled and non-filled rectangles
-	  QBrush filledbrush( datacolor, SolidPattern );
-	  QBrush emptybrush( datacolor, NoBrush );
+	  QBrush filledbrush( datacolor, Qt::SolidPattern );
+	  QBrush emptybrush( datacolor, Qt::NoBrush );
 
 	  // loop over the positions in the current dataset
 	  for( uint i = 0; i <= maxPos( table ); i++ ) {
@@ -110,11 +110,11 @@ void KChartBarsPainter::drawData( QPainter* painter, table_t* table )
 // 		  continue;
 		
 		// get coordinates of top and center of bar
-		QPoint coords = valToPixel( i+1, 
+		QPoint coords = valToPixel( i+1,
 									table->data[dataset][i],
 									dataset );
 		// calculate left and right
-		left = coords.x() - _chart->_xstep/2 + 
+		left = coords.x() - _chart->_xstep/2 +
 		  (int)rint( dataset * _chart->_xstep / numDatasets( table ) );
 		right = coords.x() - _chart->_xstep/2 +
 		  (int)rint( (dataset+1) * _chart->_xstep / numDatasets( table ) );
@@ -131,7 +131,7 @@ void KChartBarsPainter::drawData( QPainter* painter, table_t* table )
 		painter->setPen( _chart->_accentcolor );
 		if( table->data[dataset][i] >= 0 ) {
 		  // positive value
-		  QRect rect( QPoint( left, coords.y() ), 
+		  QRect rect( QPoint( left, coords.y() ),
 					  QPoint( right, _chart->_zeropoint ) );
 		  painter->drawRect( rect );
 		} else {

@@ -1,15 +1,15 @@
 /*
-  PrefixedElement.cc 
+  PrefixedElement.cc
   Project KOffice/KFormula
-  
+
   Author: Andrea Rizzi <rizzi@kde.org>
   License:GPL
 */
 
 //#define RECT
 #include <qrect.h>
-#include "BasicElement.h" 
-#include "PrefixedElement.h" 
+#include "BasicElement.h"
+#include "PrefixedElement.h"
 #include "formuladef.h"
 #include "kformula_doc.h"
 
@@ -17,7 +17,7 @@ PrefixedElement::PrefixedElement(KFormulaDoc *Formula,
 			 BasicElement *Prev,
 			 int Relation,
 			 BasicElement *Next,
-			 QString Content) : 
+			 QString Content) :
     BasicElement(Formula,Prev,Relation,Next,Content)
 {
     /*
@@ -36,32 +36,32 @@ PrefixedElement::~PrefixedElement()
 
 void PrefixedElement::draw(QPoint drawPoint,int resolution)
 {
-  
+
     QPainter *pen=formula->painter();
     //QRect globalArea;
     int x,y,unit=0; //unit is familySize.height/6,used to draw proportional Prefixeds
     x=drawPoint.x();
     y=drawPoint.y();
     if( beActive )
-	pen->setPen(red);
+	pen->setPen(Qt::red);
 
-  
-    /*  
+
+    /*
 	Draw Prefixed!!
     */
-    int ofs=(numericFont/24)+1; 
+    int ofs=(numericFont/24)+1;
     unit = 0;
     int symT=0;   //Top & Bottmo of
     int symB=0;   // symbol (integral,sum...)
-    if( content[1]=='S') 
+    if( content[1]=='S')
      {
       symT=familySize.top();
-      symB=familySize.bottom(); 
+      symB=familySize.bottom();
       unit = (familySize.height()-2*ofs)/8;
-     } 
+     }
     if( content[1]=='F')
      {
-     
+
       unit = atoi(content.mid(2,3));
      symB= unit*4;
       symT=- unit*4;
@@ -83,7 +83,7 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
                       unit,unit*2+ofs,
 		      0,180*16);
       pen->setPen(elementColor);
-    
+
       pen->setBrush(elementColor);
       pen->drawChord(x+familySize.x()+1,y+symB-(unit+ofs)*2,
                       unit+ofs*2,(unit+ofs)*2,
@@ -94,24 +94,24 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
                       unit,unit*2+ofs,
 		      180*16,180*16);
       pen->setPen(elementColor);
-    
+
       QPointArray points(5);
       points.setPoint(1,x+familySize.x()+unit+ofs+1 ,y+symB-unit-ofs    );
-      points.setPoint(2,x+familySize.x()+unit+ofs*2  ,y+symB-unit-ofs  ); 
+      points.setPoint(2,x+familySize.x()+unit+ofs*2  ,y+symB-unit-ofs  );
       points.setPoint(3,x+familySize.x()+unit,y+symT+unit+ofs-1);
       points.setPoint(4,x+familySize.x()-ofs+unit+1,y+symT+unit+ofs-1);
       pen->setBrush(pen->pen().color());
-      pen->drawPolygon(points,FALSE,1,4); 
+      pen->drawPolygon(points,FALSE,1,4);
      }
     /*
       Draw child[0], it must exist
-    */    
+    */
     if( beActive )
-	pen->setPen(blue);
+	pen->setPen(Qt::blue);
    //I must add MaxLimitWidth
 //    child[0]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y),resolution);
     child[0]->draw(QPoint(x+familySize.right()-child[0]->getSize().width(),y),resolution);
-    
+
     int y1=0,y2=0;
     if( content[1]=='S')
      {
@@ -125,42 +125,42 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
       if(child[1]!=0)
        y1=y-child[1]->getSize().bottom()-unit*2;
       if(child[2]!=0)
-       y2=y-child[2]->getSize().top()+unit*2;      
+       y2=y-child[2]->getSize().top()+unit*2;
      }
-         
+
     if(child[1]!=0)
       child[1]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y1),resolution);
 
     if(child[2]!=0)
       child[2]->draw(QPoint(x+familySize.x()+unit*2+ofs+1,y2),resolution);
-    
+
     myArea=globalSize;;
     myArea.moveBy(x,y);
     // globalArea=
     // globalArea.moveBy(x,y);
 #ifdef RECT
-    pen->drawRect(myArea);   
-    // pen->drawRect(globalArea); 
+    pen->drawRect(myArea);
+    // pen->drawRect(globalArea);
 #endif
     drawIndexes(pen,resolution);
     if( beActive )
-	pen->setPen(black);
+	pen->setPen(Qt::black);
     if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
-  
-  
+
+
 }
 
 void PrefixedElement::checkSize()
 {
     //warning("R %p",this);
-    QRect nextDimension; 
-    QRect child1Size,child2Size;  
+    QRect nextDimension;
+    QRect child1Size,child2Size;
     if (next!=0L)
 	{
 	    next->checkSize();
 	    nextDimension=next->getSize();
 	}
-  
+
     child[0]->checkSize();
     familySize=child[0]->getSize();
 
@@ -175,7 +175,7 @@ void PrefixedElement::checkSize()
 	{	warning("There is a CHild2:lowerLimit");
 	    child[2]->checkSize();
 	    child2Size=child[2]->getSize();
-	} else child2Size.setRect(0,0,1,1);   
+	} else child2Size.setRect(0,0,1,1);
 	
     int MaxX=0;
     if (child1Size.width()>child2Size.width())
@@ -198,17 +198,17 @@ void PrefixedElement::checkSize()
     int ofs=(numericFont/24);
     if (unit <6)ofs=1;
     familySize.setTop(familySize.top()-1-ofs);
-    familySize.setLeft(familySize.left()-1-ofs-unit*2);  
-  
-    if (familySize.height()< unit*8 )        
+    familySize.setLeft(familySize.left()-1-ofs-unit*2);
+
+    if (familySize.height()< unit*8 )
       {
        if (familySize.top() >-unit*4)
-	familySize.setTop(-unit*4 );        
+	familySize.setTop(-unit*4 );
        if (familySize.bottom() < unit*4)
-	familySize.setBottom( unit*4  );        
-      
+	familySize.setBottom( unit*4  );
+
       }
-      
+
     localSize=familySize;
     checkIndexesSize();  //This will change localSize adding Indexes Size
     familySize.moveBy(-localSize.left(),0);

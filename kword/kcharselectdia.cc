@@ -40,7 +40,7 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,int __c,QFont __
   fontList.find(_font.family());
   fontCombo->setCurrentItem(fontList.at());
   grid->addWidget(fontCombo,1,0);
-  connect(fontCombo,SIGNAL(activated(const char*)),this,SLOT(fontSelected(const char*)));
+  connect(fontCombo,SIGNAL(activated(const QString &)),this,SLOT(fontSelected(const QString &)));
 
   charSelect = new KCharSelect(this,"",__font,_c);
   charSelect->resize(charSelect->sizeHint());
@@ -103,8 +103,8 @@ void KCharSelectDia::charChanged(int __c)
 }
 
 /*=========================== Font selected =====================*/
-void KCharSelectDia::fontSelected(const char *_family)
+void KCharSelectDia::fontSelected(const QString &_family)
 {
   _font.setFamily(_family);
-  charSelect->setFont(_family);
+  charSelect->setFont(QFont(_family));
 }

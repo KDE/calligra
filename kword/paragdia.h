@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -61,7 +61,7 @@ class KWPagePreview : public QGroupBox
 public:
   KWPagePreview(QWidget*,const char*);
   ~KWPagePreview() {}
-  
+
   void setLeft(float _left)
     { left = _left; repaint(false); }
   void setRight(float _right)
@@ -93,7 +93,7 @@ class KWPagePreview2 : public QGroupBox
 public:
   KWPagePreview2(QWidget*,const char*);
   ~KWPagePreview2() {}
-  
+
   void setFlow(KWParagLayout::Flow _flow)
     { flow = _flow; repaint(false); }
 
@@ -124,7 +124,7 @@ public:
   void setTopBorder(KWParagLayout::Border _topBorder) { topBorder = _topBorder; repaint(true); }
   KWParagLayout::Border getBottomBorder() { return bottomBorder; }
   void setBottomBorder(KWParagLayout::Border _bottomBorder) { bottomBorder = _bottomBorder; repaint(true); }
-  
+
 protected:
   void drawContents(QPainter*);
   QPen setBorderPen(KWParagLayout::Border _brd);
@@ -146,7 +146,7 @@ public:
   ~KWNumPreview() {}
 
   void setCounter(KWParagLayout::Counter _counter) { counter = _counter; repaint(true); }
-  
+
 protected:
   void drawContents(QPainter*);
 
@@ -170,7 +170,7 @@ public:
   static const int PD_TABS = 16;
 
   KWParagDia(QWidget*,const char*,QStrList _fontList,int _flags,KWordDocument *_doc);
-  ~KWParagDia();              
+  ~KWParagDia();
 
   int getFlags() { return flags; }
 
@@ -233,7 +233,7 @@ protected:
   QListBox *lTabs;
   QLabel *lTab;
   QRadioButton *rtLeft,*rtCenter,*rtRight,*rtDecimal;
-  
+
 
   KWParagLayout::Border leftBorder,rightBorder,topBorder,bottomBorder;
   int flags;
@@ -242,13 +242,13 @@ protected:
   KWordDocument *doc;
 
 protected slots:
-  void leftChanged(const char*);
-  void rightChanged(const char*);
-  void firstChanged(const char*);
+  void leftChanged(const QString &);
+  void rightChanged(const QString &);
+  void firstChanged(const QString &);
   void spacingActivated(int);
-  void spacingChanged(const char*);
-  void beforeChanged(const char*);
-  void afterChanged(const char*);
+  void spacingChanged(const QString &);
+  void beforeChanged(const QString &);
+  void afterChanged(const QString &);
   void flowLeft();
   void flowCenter();
   void flowRight();
@@ -257,15 +257,15 @@ protected slots:
   void brdRightToggled(bool);
   void brdTopToggled(bool);
   void brdBottomToggled(bool);
-  void brdStyleChanged(const char*);
-  void brdWidthChanged(const char*);
+  void brdStyleChanged(const QString &);
+  void brdWidthChanged(const QString &);
   void brdColorChanged(const QColor&);
   void changeBullet();
   void typeChanged(int);
   void numTypeChanged(int);
-  void leftTextChanged(const char*);
-  void rightTextChanged(const char*);
-  void startChanged(const char*);
+  void leftTextChanged(const QString &);
+  void rightTextChanged(const QString &);
+  void startChanged(const QString &);
   void depthChanged(int);
 
 };

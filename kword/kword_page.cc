@@ -89,6 +89,8 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   recalcCursor(false,0,fc);
 
   editMode = EM_NONE;
+  setKeyCompression(true);
+
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -2204,17 +2206,17 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       } break;
     default:
       {
-	if (e->ascii() && e->ascii() > 31)
+	if (!e->text().isEmpty()) //e->ascii() && e->ascii() > 31)
 	  {
 	    if (has_to_copy) copyBuffer();
 	
 	    draw_buffer = false;
-	    char tmpString[2] = {0,0};
+	    //char tmpString[2] = {0,0};
 	    bool isPrev = false;
-	    tmpString[0] = (char)e->ascii();
+	    //tmpString[0] = (char)e->ascii();
 	    unsigned int tmpTextPos = fc->getTextPos();
-	    fc->getParag()->insertText(fc->getTextPos(),tmpString);
-	    fc->getParag()->setFormat(fc->getTextPos(),1,format);
+	    fc->getParag()->insertText(fc->getTextPos(),e->text());
+	    fc->getParag()->setFormat(fc->getTextPos(),e->text().length(),format);
 	    fc->makeLineLayout(painter);
 	    KWFormatContext paintfc(doc,fc->getFrameSet());
 
@@ -2274,12 +2276,12 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	    fc->makeLineLayout(painter);
 
-	    if (tmpTextPos + 1 <= fc->getLineEndPos())
-	      fc->cursorGotoPos(tmpTextPos + 1,painter);
+	    if (tmpTextPos + e->text().length() <= fc->getLineEndPos())
+	      fc->cursorGotoPos(tmpTextPos + e->text().length(),painter);
 	    else
 	      {
 		fc->cursorGotoNextLine(painter);
-		fc->cursorGotoPos(tmpTextPos + 1,painter);
+		fc->cursorGotoPos(tmpTextPos + e->text().length(),painter);
 	      }
 	
 	    QPaintDevice *dev = painter.device();
@@ -3917,7 +3919,6 @@ void KWPage::insertVariable(VariableType type)
 
   recalcPage(0L);
   recalcCursor(true);
-  
   
   debug("void KWPage::insertVariable(VariableType type) ... successful");
 }
