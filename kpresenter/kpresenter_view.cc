@@ -123,7 +123,11 @@ CORBA::Boolean KPresenterView_impl::printDlg()
 
   switch (m_pKPresenterDoc->pageLayout().format)
     {
+    case PG_DIN_A3: prt.setPageSize(QPrinter::A3);
+      break;
     case PG_DIN_A4: prt.setPageSize(QPrinter::A4);
+      break;
+    case PG_DIN_A5: prt.setPageSize(QPrinter::A5);
       break;
     case PG_US_LETTER: prt.setPageSize(QPrinter::Letter);
       break;
@@ -3281,6 +3285,21 @@ void KPresenterView_impl::makeRectVisible(QRect _rect)
 {
   horz->setValue(_rect.x()); 
   vert->setValue(_rect.y()); 
+}
+
+/*==============================================================*/
+void KPresenterView_impl::restartPresStructView()
+{
+  QObject::disconnect(presStructView,SIGNAL(presStructViewClosed()),this,SLOT(psvClosed()));
+  presStructView->close();
+  delete presStructView;
+  presStructView = 0;
+  page->deSelectAllObj();
+      
+  presStructView = new PresStructViewer(0,"",KPresenterDoc(),this);
+  presStructView->setCaption(i18n("KPresenter - Presentation structure viewer"));
+  QObject::connect(presStructView,SIGNAL(presStructViewClosed()),this,SLOT(psvClosed()));
+  presStructView->show();
 }
 
 /*============== create a pixmapstring from a color ============*/

@@ -1,6 +1,13 @@
 #include "paraglayout.h"
 #include "kword_doc.h"
 
+#include <koIMR.h>
+#include <komlMime.h>
+#include <koStream.h>
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
+
 KWParagLayout::KWParagLayout( KWordDocument_impl *_doc )
   : format(_doc), counterFormat(_doc)
 {
@@ -86,4 +93,23 @@ void KWParagLayout::setNumberLikeParagLayout( const char *_name )
 	numberLikeParagLayout = this;
     else
 	numberLikeParagLayout = p;
+}
+
+void KWParagLayout::save(ostream &out)
+{
+  out << indent << "<FLOW value=\"" << static_cast<int>(flow) << "\"/>" << endl;
+  out << indent << "<OFFSETS head=\"" << mmParagHeadOffset << "\" foot=\"" << mmParagFootOffset << "\"/>" << endl;
+  out << indent << "<INDENTS first=\"" << mmFirstLineLeftIndent << "\" left=\"" << mmLeftIndent << "\"/>" << endl;
+  out << indent << "<COUNTER flow=\"" << static_cast<int>(counterFlow) << "\" depth=\"" << counterDepth 
+      << "\" nr=\"" << counterNr << "\" left_text=\"" << counterLeftText << "\" right_text=\"" << counterRightText
+      << "\"/>" << endl;
+  out << indent << "<LINESPACING value=\"" << ptLineSpacing << "\"/>" << endl;
+  out << indent << "<LEFT_BORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
+      << left.color.blue() << "\" style=\"" << static_cast<int>(left.style) << "\" width=\"" << left.ptWidth << "\"/>" << endl; 
+  out << indent << "<RIGHT_BORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
+      << right.color.blue() << "\" style=\"" << static_cast<int>(right.style) << "\" width=\"" << right.ptWidth << "\"/>" << endl; 
+  out << indent << "<TOP_BORDER red=\"" << top.color.red() << "\" green=\"" << top.color.green() << "\" blue=\""
+      << top.color.blue() << "\" style=\"" << static_cast<int>(top.style) << "\" width=\"" << top.ptWidth << "\"/>" << endl; 
+  out << indent << "<BOTTOM_BORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
+      << bottom.color.blue() << "\" style=\"" << static_cast<int>(bottom.style) << "\" width=\"" << bottom.ptWidth << "\"/>" << endl; 
 }

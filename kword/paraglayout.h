@@ -9,6 +9,8 @@ class KWParagLayout;
 #include <qstring.h>
 #include <qcolor.h>
 
+#include <iostream>
+
 /**
  * A KWParagLayout-Instance provides all information neccessary to format a given
  * parag. This means: Font, TextFlow, Counter ....
@@ -148,6 +150,8 @@ public:
      * @return the name of the following parag layout.
      */
     KWParagLayout* getFollowingParagLayout() { return followingParagLayout; }  
+
+    void save(ostream &out);
 
 protected:
     Flow flow;

@@ -16,6 +16,13 @@
 #include "image.h"
 #include "kword_doc.h"
 
+#include <koIMR.h>
+#include <komlMime.h>
+#include <koStream.h>
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
+
 /******************************************************************/
 /* Class: KWImage                                                 */
 /******************************************************************/
@@ -37,4 +44,10 @@ void KWImage::incRef()
 { 
   ++ref;
   QString key = doc->getImageCollection()->generateKey(this);
+}
+
+/*================================================================*/
+void KWImage::save(ostream &out)
+{
+  out << indent << "<FILENAME value=\"" << filename << "\"/>" << endl;
 }

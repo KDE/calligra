@@ -221,3 +221,7 @@ Reggie, 10.10.1998:
 - Fixed a redraw bug in backspace/delete
 - When placing the cursor with the mouse the format/text toolbar
   is updated correctly too now
+
+Reggie, 11.10.1998:
+-------------------
+- Implemented saving documents (XML)

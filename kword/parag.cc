@@ -5,6 +5,13 @@
 #include "parag.h"
 #include "kword_doc.h"
 
+#include <koIMR.h>
+#include <komlMime.h>
+#include <koStream.h>
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
+
 KWParag::KWParag( KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout )
 {
     prev = _prev;
@@ -102,8 +109,6 @@ void KWParag::insertPictureAsChar(unsigned int _pos,QString _filename)
   KWCharImage *i = new KWCharImage(image);
 
   text.insert(_pos,i);
-  //freeChar( text.data()[ _pos ] );
-  //text.data()[_pos].attrib = i;
 }
 
 void KWParag::appendText(KWChar *_text,unsigned int _len)
@@ -120,16 +125,8 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 {
   assert( _pos < text.size() );
   
-  //KWFormat *format = document->getFormatCollection()->getFormat(_format);
-  //KWCharFormat *f = new KWCharFormat(format);
-
   for (unsigned int i = 0;i < _len;i++)
     {
-//       if (text.data()[_pos + i].attrib && text.data()[_pos + i].attrib->getClassId() == ID_KWCharFormat)
-// 	{
-// 	  ((KWCharFormat*)text.data()[_pos + i].attrib)->getFormat()->decRef();
-// 	  ((KWCharFormat*)text.data()[_pos + i].attrib)->setFormat(0L);
-// 	}
       freeChar( text.data()[ _pos + i] );
       KWFormat *format = document->getFormatCollection()->getFormat(_format);
       KWCharFormat *f = new KWCharFormat(format);
@@ -137,6 +134,11 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
     }
 }
 
-
-
-
+void KWParag::save(ostream &out)
+{
+  out << indent << "<TEXT value=\"" << text << "\"/>" << endl;
+  text.saveFormat(out);
+  out << otag << "<LAYOUT>" << endl;
+  paragLayout->save(out);
+  out << etag << "</LAYOUT>" << endl;
+}

@@ -33,6 +33,7 @@
 #include <ktreelist.h>
 #include <kapp.h>
 #include <ktablistbox.h>
+#include <ktoolbar.h>
 
 #include "kpobject.h"
 #include "kpbackground.h"
@@ -80,6 +81,19 @@ signals:
 protected slots:
   void itemSelected(int);
 
+  void slotStyle();
+  void slotRotate();
+  void slotShadow();
+  void slotAlign();
+  void slotEffect();
+  void slotLower();
+  void slotRaise();
+  void slotDelete();
+  void slotEdit();
+  void slotBackground();
+  void slotConfigPages();
+  void slotChangeFilename();
+
 protected:
   struct ItemInfo
   {
@@ -87,12 +101,27 @@ protected:
     KTreeListItem *item;
   };
 
+  static const int B_STYLE  = 1;
+  static const int B_ROTATE = 2;
+  static const int B_SHADOW = 3;
+  static const int B_ALIGN  = 4;
+  static const int B_EFFECT = 5;
+  static const int B_LOWER  = 6;
+  static const int B_RAISE  = 7;
+  static const int B_DELETE = 8;
+  static const int B_EDIT   = 9;
+  static const int B_BACK   = 10;
+  static const int B_CPAGES = 11;
+  static const int B_CFILEN = 12;
+  
   void resizeEvent(QResizeEvent *e);
   void closeEvent(QCloseEvent *e);
   void setupTreeView();
+  void setupToolBar();
   void fillWithPageInfo(KPBackGround *_page,int _num);
   void fillWithObjInfo(KPObject *_obj,int _num);
   QString getColor(QColor _color);
+  void disableAllFunctions();
 
   KNewPanner *panner;
   KTreeList *treelist;
@@ -101,6 +130,7 @@ protected:
   KPresenterView_impl *view;
   QList<ItemInfo> pageList,objList;
   KPObject *lastSelected;
+  KToolBar *toolbar;
 
 };
 

@@ -216,6 +216,35 @@ bool KWordDocument_impl::load(istream &in,bool _randomaccess)
 /*================================================================*/
 bool KWordDocument_impl::save(ostream &out)
 {
+  out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org" 
+      << "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;
+  
+  out << otag << "<PAPER format=\"" << static_cast<int>(pageLayout.format) << "\" width=\"" << pageLayout.width
+      << "\" height=\"" << pageLayout.height << "\" orientation=\"" << static_cast<int>(pageLayout.orientation) 
+      << "\" columns=\"" << pageColumns.columns << "\" column_spacing=\"" << pageColumns.columnSpacing << "\">" << endl;
+  out << indent << "<PAPERBORDERS left=\"" << pageLayout.left << "\" top=\"" << pageLayout.top << "\" right=\"" << pageLayout.right
+      << "\" bottom=\"" << pageLayout.bottom << "\"/>" << endl;
+  out << etag << "</PAPER>" << endl;
+
+  out << otag << "<PARAGRAPHS>" << endl;
+
+  KWParag *parag = getFirstParag();
+  while (parag)
+    {
+      out << otag << "<PARAGRAPH>" << endl;
+      parag->save(out);
+      parag = parag->getNext();
+      out << etag << "</PARAGRAPH>" << endl;
+    }
+  out << etag << "</PARAGRAPHS>" << endl;
+
+  // Write "OBJECT" tag for every child
+  QListIterator<KWordChild> chl(m_lstChildren);
+  for(;chl.current();++chl)
+    chl.current()->save( out );
+
+  out << etag << "</DOC>" << endl;
+    
   return true;
 }
 

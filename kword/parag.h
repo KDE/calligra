@@ -11,6 +11,7 @@ class KWordDocument_impl;
 #include "formatcollection.h"
 
 #include <assert.h>
+#include <iostream>
 
 /**
  * This class hold a real paragraph. It tells abou the text in this
@@ -123,6 +124,8 @@ public:
     bool deleteText( unsigned int _pos, unsigned int _len = 1);
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
   
+    void save(ostream &out);
+
 protected:
     /**
      * Pointer to the previous paragraph or 0L if this is the first one.

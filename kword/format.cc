@@ -1,6 +1,13 @@
 #include "format.h"
 #include "kword_doc.h"
 
+#include <koIMR.h>
+#include <komlMime.h>
+#include <koStream.h>
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
+
 KWFormat::KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
 		    char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 )
 {
@@ -147,4 +154,15 @@ void KWFormat::incRef()
   ++ref;
   QString key = doc->getFormatCollection()->generateKey(this);
   //debug("inc ref (%d): %s",ref,key.data());
+}
+
+void KWFormat::save(ostream &out)
+{
+  out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
+  out << indent << "<FONT name=\"" << userFont->getFontName() << "\"/>" << endl;
+  out << indent << "<SIZE value=\"" << ptFontSize << "\"/>" << endl;
+  out << indent << "<WEIGHT value=\"" << weight << "\"/>" << endl;
+  out << indent << "<ITALIC value=\"" << static_cast<int>(italic) << "\"/>" << endl;
+  out << indent << "<UNDERLINE value=\"" << static_cast<int>(underline) << "\"/>" << endl;
+  out << indent << "<VERT_ALIGN value=\"" << static_cast<int>(vertAlign) << "\"/>" << endl;
 }

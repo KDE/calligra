@@ -9,6 +9,8 @@ class KWordDocument_impl;
 
 #include <qstring.h>
 
+#include <iostream>
+
 /**
  * This class is used to change the texts format within a paragraph.
  *
@@ -161,6 +163,8 @@ public:
     { return ref; }
 
     KWordDocument_impl *getDocument() { return doc; }
+
+    void save(ostream &out);
     
 protected:
     /**

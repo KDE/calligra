@@ -19,6 +19,8 @@
 #include <qimage.h>
 #include <qstring.h>
 
+#include <iostream>
+
 class KWordDocument_impl;
 
 /******************************************************************/
@@ -43,6 +45,8 @@ public:
   
   QString getFilename()
     { return filename; }
+
+  void save(ostream &out);
 
 protected:
   int ref;

@@ -35,6 +35,7 @@ PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDo
 
   panner = new KNewPanner(this,"panner",KNewPanner::Vertical,KNewPanner::Percent,30);
 
+  treelist = new KTreeList(panner,"");
   setupTreeView();
 
   list = new KTabListBox(panner,"",2);
@@ -42,11 +43,17 @@ PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDo
   list->setColumn(0,i18n("Description"),250);
   list->setColumn(1,i18n("Value"),190);
 
+  setupToolBar();
+
   panner->activate(treelist,list);
 
   resize(600,400);
-  panner->move(0,0);
-  panner->resize(600,400);
+  
+  toolbar->move(0,0);
+  toolbar->resize(600,toolbar->height());
+
+  panner->move(0,toolbar->height());
+  panner->resize(600,400 - toolbar->height());
 }
 
 /*================================================================*/
@@ -82,7 +89,8 @@ void PresStructViewer::itemSelected(int _index)
 void PresStructViewer::resizeEvent(QResizeEvent *e)
 {
   QDialog::resizeEvent(e);
-  panner->resize(width(),height());
+  toolbar->resize(width(),toolbar->height());
+  panner->resize(width(),height() - toolbar->height());
 }
 
 /*================================================================*/
@@ -95,8 +103,6 @@ void PresStructViewer::closeEvent(QCloseEvent *e)
 /*================================================================*/
 void PresStructViewer::setupTreeView()
 {
-  treelist = new KTreeList(this,"");
-
   KTreeListItem *item = 0;
   ItemInfo *info = 0;
 
@@ -160,6 +166,44 @@ void PresStructViewer::setupTreeView()
 }
 
 /*================================================================*/
+void PresStructViewer::setupToolBar()
+{
+  toolbar = new KToolBar(this);
+
+  QString pixdir = KApplication::kde_datadir() + "/kpresenter/toolbar/";
+  
+  toolbar->insertButton(QPixmap(pixdir + "style.xpm"),B_STYLE,SIGNAL(clicked()),this,SLOT(slotStyle()),false,i18n("Pen & Brush"));
+  toolbar->insertButton(QPixmap(pixdir + "rotate.xpm"),B_ROTATE,SIGNAL(clicked()),this,SLOT(slotRotate()),false,i18n("Rotate"));
+  toolbar->insertButton(QPixmap(pixdir + "shadow.xpm"),B_SHADOW,SIGNAL(clicked()),this,SLOT(slotShadow()),false,i18n("Shadow"));
+  toolbar->insertButton(QPixmap(pixdir + "alignobjs.xpm"),B_ALIGN,SIGNAL(clicked()),this,SLOT(slotAlign()),false,i18n("Align"));
+  toolbar->insertButton(QPixmap(pixdir + "effect.xpm"),B_EFFECT,SIGNAL(clicked()),this,SLOT(slotEffect()),false,i18n("Assign effect"));
+
+  toolbar->insertSeparator();
+  
+  toolbar->insertButton(QPixmap(pixdir + "raise.xpm"),B_LOWER,SIGNAL(clicked()),this,SLOT(slotRaise()),false,i18n("Raise"));
+  toolbar->insertButton(QPixmap(pixdir + "lower.xpm"),B_RAISE,SIGNAL(clicked()),this,SLOT(slotLower()),false,i18n("Lower"));
+
+  toolbar->insertSeparator();
+
+  toolbar->insertButton(QPixmap(pixdir + "delete.xpm"),B_DELETE,SIGNAL(clicked()),this,SLOT(slotDelete()),false,i18n("Delete"));
+  toolbar->insertButton(QPixmap(pixdir + "text.xpm"),B_EDIT,SIGNAL(clicked()),this,SLOT(slotEdit()),false,i18n("Edit"));
+  toolbar->insertButton(QPixmap(KApplication::kde_toolbardir() + "/fileopen.xpm"),B_CFILEN,
+			SIGNAL(clicked()),this,SLOT(slotChangeFilename()),false,i18n("Change Filename"));
+
+  toolbar->insertSeparator();
+
+  toolbar->insertButton(QPixmap(pixdir + "picture.xpm"),B_BACK,SIGNAL(clicked()),this,SLOT(slotBackground()),false,i18n("Background"));
+  toolbar->insertButton(QPixmap(KApplication::kde_toolbardir() + "/filenew.xpm"),B_CPAGES,
+			SIGNAL(clicked()),this,SLOT(slotConfigPages()),false,i18n("Configure Pages"));
+
+  toolbar->setFullWidth(true);
+  toolbar->enableFloating(false);
+  toolbar->setBarPos(KToolBar::Top);
+  toolbar->enableMoving(false);
+  toolbar->updateRects();
+}
+
+/*================================================================*/
 void PresStructViewer::fillWithPageInfo(KPBackGround *_page,int _num)
 {
   QString str;
@@ -202,6 +246,10 @@ void PresStructViewer::fillWithPageInfo(KPBackGround *_page,int _num)
 		       list->count() - 1,1);
 
   view->skipToPage(_num);
+
+  disableAllFunctions();
+  toolbar->setItemEnabled(B_BACK,true);
+  toolbar->setItemEnabled(B_CPAGES,true);
 }
 
 /*================================================================*/
@@ -462,6 +510,23 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
   _obj->setSelected(true);
   doc->repaint(_obj);
   lastSelected = _obj;
+
+  disableAllFunctions();
+
+  if (_obj->getType() == OT_TEXT)
+    toolbar->setItemEnabled(B_EDIT,true);
+  else if (_obj->getType() == OT_CLIPART || _obj->getType() == OT_PICTURE)
+    toolbar->setItemEnabled(B_CFILEN,true);
+  else
+    toolbar->setItemEnabled(B_STYLE,true);
+  
+  toolbar->setItemEnabled(B_ROTATE,true);
+  toolbar->setItemEnabled(B_SHADOW,true);
+  toolbar->setItemEnabled(B_ALIGN,true);
+  toolbar->setItemEnabled(B_EFFECT,true);
+  toolbar->setItemEnabled(B_LOWER,true);
+  toolbar->setItemEnabled(B_RAISE,true);
+  toolbar->setItemEnabled(B_DELETE,true);
 }
 
 /*================================================================*/
@@ -500,4 +565,92 @@ QString PresStructViewer::getColor(QColor _color)
     str.sprintf("(%d,%d,%d)",_color.red(),_color.green(),_color.blue());
     
   return str;
+}
+
+/*================================================================*/
+void PresStructViewer::slotStyle()
+{
+  view->extraPenBrush();
+}
+
+/*================================================================*/
+void PresStructViewer::slotRotate()
+{
+  view->extraRotate();
+}
+
+/*================================================================*/
+void PresStructViewer::slotShadow()
+{
+  view->extraShadow();
+}
+
+/*================================================================*/
+void PresStructViewer::slotAlign()
+{
+  view->extraAlignObj();
+}
+
+/*================================================================*/
+void PresStructViewer::slotEffect()
+{
+  view->screenAssignEffect();
+}
+
+/*================================================================*/
+void PresStructViewer::slotLower()
+{
+  view->extraLower();
+}
+
+/*================================================================*/
+void PresStructViewer::slotRaise()
+{
+  view->extraRaise();
+}
+
+/*================================================================*/
+void PresStructViewer::slotDelete()
+{
+  view->editDelete();
+  view->restartPresStructView();
+}
+
+/*================================================================*/
+void PresStructViewer::slotEdit()
+{
+}
+
+/*================================================================*/
+void PresStructViewer::slotBackground()
+{
+  view->extraBackground();
+}
+
+/*================================================================*/
+void PresStructViewer::slotConfigPages()
+{
+  view->screenConfigPages();
+}
+
+/*================================================================*/
+void PresStructViewer::slotChangeFilename()
+{
+}
+
+/*================================================================*/
+void PresStructViewer::disableAllFunctions()
+{
+  toolbar->setItemEnabled(B_STYLE,false);
+  toolbar->setItemEnabled(B_ROTATE,false);
+  toolbar->setItemEnabled(B_SHADOW,false);
+  toolbar->setItemEnabled(B_ALIGN,false);
+  toolbar->setItemEnabled(B_EFFECT,false);
+  toolbar->setItemEnabled(B_LOWER,false);
+  toolbar->setItemEnabled(B_RAISE,false);
+  toolbar->setItemEnabled(B_DELETE,false);
+  toolbar->setItemEnabled(B_EDIT,false);
+  toolbar->setItemEnabled(B_BACK,false);
+  toolbar->setItemEnabled(B_CPAGES,false);
+  toolbar->setItemEnabled(B_CFILEN,false);
 }

@@ -3,6 +3,13 @@
 #include <string.h>
 #include <assert.h>
 
+#include <koIMR.h>
+#include <komlMime.h>
+#include <koStream.h>
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
+
 KWString::KWString(const char *_str)
 {
   if (_str == 0L)
@@ -157,6 +164,56 @@ QString KWString::toString(unsigned int _pos,unsigned int _len)
   return QString(str);
 }
 
+void KWString::saveFormat(ostream &out)
+{
+  unsigned int start = 0;
+  
+  for (unsigned int i = 0;i < _len_;i++)
+    {
+      if (_data_[i].attrib->getClassId() != ID_KWCharFormat)
+	{
+	  if (start < i)
+	    {
+	      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start 
+		  << "\" len=\"" << i - start << "\">" << endl;
+	      _data_[start].attrib->save(out);
+	      out << etag << "</FORMAT>" << endl;
+	    }
+	  switch (_data_[i].attrib->getClassId())
+	    {
+	    case ID_KWCharImage:
+	      {
+		out << otag << "<FORMAT id=\"" << _data_[i].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+		_data_[i].attrib->save(out);
+		out << etag << "</FORMAT>" << endl;
+	      } break;
+	    default: break;
+	    }
+	  start = i + 1;
+	}
+      else if (i > 0 && _data_[i].attrib->getClassId() == ID_KWCharFormat &&
+	       !(*((KWCharFormat*)_data_[i].attrib) == *((KWCharFormat*)_data_[i - 1].attrib)))
+	{
+	  if (start < i)
+	    {
+	      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start 
+		  << "\" len=\"" << i - start << "\">" << endl;
+	      _data_[i].attrib->save(out);
+	      out << etag << "</FORMAT>" << endl;
+	    }
+	  start = i;
+	}
+    }
+
+  if (start < _len_)
+    {
+      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start 
+	  << "\" len=\"" << _len_ - start << "\">" << endl;
+      _data_[start].attrib->save(out);
+      out << etag << "</FORMAT>" << endl;
+    }
+}
+
 void KWString::resize(unsigned int _size,bool del = true)
 {
   if ( _size == _len_ )
@@ -240,4 +297,12 @@ void freeChar( KWChar& _char )
       }
     _char.attrib = 0L;
   }
+}
+
+ostream& operator<<(ostream &out,KWString &_string)
+{
+  for (unsigned int i = 0;i < _string.size();i++)
+    out << _string.data()[i].c;
+
+  return out;
 }

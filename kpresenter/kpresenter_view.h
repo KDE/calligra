@@ -291,6 +291,8 @@ public:
   void skipToPage(int _num);
   void makeRectVisible(QRect _rect);
 
+  void restartPresStructView();
+
 public slots:
 
   // Document signals

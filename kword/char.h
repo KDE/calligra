@@ -7,6 +7,8 @@
 #include <qimage.h>
 #include <qstring.h>
 
+#include <iostream>
+
 enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2};
  
 class KWCharAttribute
@@ -19,6 +21,9 @@ public:
     { return classId; }
   virtual bool operator==(const KWCharAttribute &_attrib)
     { return classId == const_cast<KWCharAttribute>(_attrib).getClassId(); }
+
+  virtual void save(ostream &out) 
+    {;}
 
 protected:
   int classId;
@@ -41,6 +46,9 @@ public:
       (format) && *format == *_attrib.getFormat(); 
   }
 
+  virtual void save(ostream &out)
+    { format->save(out); }
+
 protected:
   KWFormat *format;
 
@@ -57,6 +65,8 @@ public:
     { return image; }
   virtual void setImage(KWImage *_image)
     { image = _image; }
+  virtual void save(ostream &out)
+    { image->save(out); }
 
 protected:
   // We need the image because it has full resolution and
@@ -101,12 +111,13 @@ public:
     { return _data_; }
 
   QString toString(unsigned int _pos,unsigned int _len);
+  void saveFormat(ostream &out);
 
 protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);
   KWChar* copy(KWChar *_data,unsigned int _len);
-  
+
   unsigned int _len_;
   unsigned int _max_;
   KWChar* _data_;
@@ -114,5 +125,6 @@ protected:
 };
 
 void freeChar(KWChar& _char);
+ostream& operator<<(ostream &out,KWString &_string);
 
 #endif
