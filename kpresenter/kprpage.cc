@@ -168,7 +168,7 @@ void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter)
     }
 }
 
-void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, double increaseX, double increaseY )
+void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, double increaseX, double increaseY, double moveX, double moveY )
 {
     m_doc->deSelectAllObj();
     int num = m_objectList.count();
@@ -189,7 +189,14 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
     //move and select all new pasted in objects
     KPObject *_tempObj;
     for (_tempObj = m_objectList.at(num); _tempObj; _tempObj = m_objectList.next()) {
-      _tempObj->moveBy( 20,20 );
+        if ( moveX != 0 || moveY != 0)
+        {
+            _tempObj->moveBy( moveX,moveY);
+        }
+        else
+        {
+            _tempObj->moveBy( 20.0,20.0 );
+        }
       _tempObj->setSelected( true );
       if ( angle == 0.0 || increaseY != 0.0 || increaseX != 0.0)
           m_doc->repaint(_tempObj);

@@ -36,6 +36,9 @@ public:
     double angle() const;
     double increaseX() const;
     double increaseY() const;
+    double moveX() const;
+    double moveY() const;
+
 
 protected slots:
     void slotReset();
@@ -43,6 +46,7 @@ protected:
     KIntNumInput *m_nbCopy;
     KDoubleNumInput *m_rotation;
     KDoubleNumInput *m_increaseX, *m_increaseY;
+    KDoubleNumInput *m_moveX, *m_moveY;
     KPresenterDoc *m_doc;
 
 };

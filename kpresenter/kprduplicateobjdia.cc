@@ -58,6 +58,14 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const
     lab=new QLabel(i18n("Increase Y(%1):").arg(m_doc->getUnitName()), page);
     m_increaseY= new KDoubleNumInput( page );
 
+    tmp=new KSeparator(page);
+    lab=new QLabel(i18n("Move X(%1):").arg(m_doc->getUnitName()), page);
+    m_moveX= new KDoubleNumInput( page );
+
+    lab=new QLabel(i18n("Move Y(%1):").arg(m_doc->getUnitName()), page);
+    m_moveY= new KDoubleNumInput( page );
+
+
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotReset() ));
     resize( 200,100 );
 }
@@ -88,6 +96,16 @@ double KPrDuplicatObjDia::increaseX() const
 double KPrDuplicatObjDia::increaseY() const
 {
     return QMAX(0, KoUnit::ptFromUnit( m_increaseY->value(), m_doc->getUnit() ));
+}
+
+double KPrDuplicatObjDia::moveX() const
+{
+    return QMAX(0, KoUnit::ptFromUnit( m_moveX->value(), m_doc->getUnit() ));
+}
+
+double KPrDuplicatObjDia::moveY() const
+{
+    return QMAX(0, KoUnit::ptFromUnit( m_moveY->value(), m_doc->getUnit() ));
 }
 
 
