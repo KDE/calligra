@@ -442,7 +442,8 @@ VPath::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "PATH" );
 		element.appendChild( me );
 
-		me.setAttribute( "closed", m_closed );
+		if( m_closed )
+			me.setAttribute( "closed", m_closed );
 
 		m_stroke.save( me );
 		m_fill.save( me );

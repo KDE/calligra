@@ -6,6 +6,7 @@
 #define __VGRADIENT_H__
 
 #include <qvaluelist.h>
+#include <koPoint.h>
 #include "vcolor.h"
 
 
@@ -46,6 +47,11 @@ private:
 	VGradientType m_type;
 
 	QValueList<VColorStop> m_colorStops;
+
+	// (polar) coordinates:
+	KoPoint m_origin;
+	double  m_angle;
+	double m_length;
 };
 
 #endif

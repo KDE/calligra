@@ -37,8 +37,6 @@ VFill::save( QDomElement& element ) const
 void
 VFill::load( const QDomElement& element )
 {
-	m_type = fill_none;
-
 	m_fillRule = element.attribute( "fillRule" ) == 0 ?
 		fillrule_evenOdd : fillrule_winding;
 
