@@ -20,6 +20,7 @@
 #ifndef kounit_h
 #define kounit_h
 #include <qstring.h>
+#include <qstringlist.h>
 
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
@@ -152,6 +153,8 @@ public:
     }
     // Get the full (translated) description of a unit
     static QString unitDescription( Unit _unit );
+    static QStringList listOfUnitName();
+
 };
 
 

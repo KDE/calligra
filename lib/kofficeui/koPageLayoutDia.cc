@@ -304,9 +304,7 @@ void KoPageLayoutDia::setupTab1()
 
         // combo unit
         cpgUnit = new QComboBox( false, unitFrame, "cpgUnit" );
-        cpgUnit->insertItem( i18n( "Millimeters (mm)" ) );
-        cpgUnit->insertItem( i18n( "Points (pt)" ) );
-        cpgUnit->insertItem( i18n( "Inches (in)" ) );
+        cpgUnit->insertStringList( KoUnit::listOfUnitName() );
         unitLayout->addWidget( cpgUnit, 0, Qt::AlignLeft | Qt::AlignVCenter );
         connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( unitChanged( int ) ) );
     } else {
@@ -739,11 +737,11 @@ void KoPageLayoutDia::orientationChanged()
 {
     KoOrientation oldOrientation = layout.orientation;
     layout.orientation = ( rbPortrait->isChecked() ) ?  PG_PORTRAIT : PG_LANDSCAPE;
-    
+
     // without this check, width & height would be swapped around (below)
     // even though the orientation has not changed
     if (layout.orientation == oldOrientation) return;
-    
+
     layout.ptWidth = KoUnit::ptFromUnit( epgWidth->value(), m_unit );
     layout.ptHeight = KoUnit::ptFromUnit( epgHeight->value(), m_unit );
     layout.ptLeft = KoUnit::ptFromUnit( ebrLeft->value(), m_unit );

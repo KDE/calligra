@@ -22,6 +22,17 @@
 #include <klocale.h>
 #include <kglobal.h>
 
+QStringList KoUnit::listOfUnitName()
+{
+    QStringList lst;
+    for ( uint i = 0 ; i <= KoUnit::U_LASTUNIT ; ++i )
+    {
+        KoUnit::Unit unit = static_cast<KoUnit::Unit>( i );
+        lst.append( KoUnit::unitDescription( unit ) );
+    }
+    return lst;
+}
+
 QString KoUnit::unitDescription( Unit _unit )
 {
     switch ( _unit )
