@@ -63,6 +63,13 @@ public:
 		m_columns[col] = value;
 	}
 
+	void setInsertItem(bool insertItem);
+
+	bool isInsertItem()
+	{
+		return m_insertItem;
+	}
+
 	int position()
 	{
 		return m_position;
@@ -122,6 +129,8 @@ protected:
 	QValueVector<QVariant>	 m_columns;
 	QVariant		m_hint;
 	KexiTableView		*m_pTable;
+
+	bool			m_insertItem;
 
 	int			m_position;
 };

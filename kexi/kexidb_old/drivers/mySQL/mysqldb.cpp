@@ -227,7 +227,7 @@ MySqlDB::driverName()
 QString
 MySqlDB::escape(const QString &str)
 {
-	const char *escaped;
+	char *escaped = 0;
 	mysql_real_escape_string(m_mysql, escaped, str.latin1(), strlen(str.latin1()));
 	return QString::fromLatin1(escaped);
 }

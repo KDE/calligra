@@ -473,7 +473,15 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 	int x = 2;
 
+//	int iOffset = 0;
 	QPen fg(colorGroup().text());
+	if(item->isInsertItem())
+	{
+		QFont f = p->font();
+		f.setItalic(true);
+		p->setFont(f);
+//		iOffset = 3;
+	}
 	p->setPen(fg);
 	switch(columnType(col))
 	{
@@ -482,7 +490,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			int num = item->getValue(col).toInt();
 //			if(num < 0)
 //				p->setPen(red);
-			p->drawText(x, 2, w - (x+x), h, AlignRight, QString::number(num));
+//			p->drawText(x - (x+x) - 2, 2, w, h, AlignRight, QString::number(num));
+			p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, QString::number(num));
+//			p->drawRect(x - 1, 1, w - (x+x) - 1, h + 1);
 			break;
 		}
 		case QVariant::Bool:
@@ -518,6 +528,14 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		{
 			p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->getText(col));
 		}
+	}
+	p->setPen(fg);
+	if(item->isInsertItem())
+	{
+		QFont f = p->font();
+		f.setItalic(false);
+		p->setFont(f);
+//		iOffset = 3;
 	}
 }
 
@@ -628,6 +646,7 @@ void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
+	qDebug("KexiTableView::KeyPressEvent()");
 	// if a cell is just editing, do some special stuff
 	if(m_pEditor)
 	{
@@ -688,9 +707,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			break;
 		}
     default:
+   	 qDebug("KexiTableView::KeyPressEvent(): default");
 		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
 		{
-			if (e->text()[0].isPrint())
+			qDebug("KexiTableView::KeyPressEvent(): ev pressed");
+//			if (e->text()[0].isPrint())
 				createEditor(m_curRow, m_curCol, e->text(), false);
 		}
 	}
@@ -1074,6 +1095,11 @@ void KexiTableView::slotAutoScroll()
 				break;
 		}
 	}
+}
+
+KexiTableRM* KexiTableView::recordMarker()
+{
+	return m_pRecordMarker;
 }
 
 #include "kexitableview.moc"

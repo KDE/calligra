@@ -27,6 +27,7 @@
 
 class KexiTableItem;
 class QStatusBar;
+class QLineEdit;
 
 class KexiDBRecord;
  
@@ -43,15 +44,16 @@ class KexiDataTable : public KexiDialogBase
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
 	protected:
-		QStringList getInvolvedTables(QString query);
-
 		KexiTableView	*m_tableView;
 		QStatusBar	*m_statusBar;
+		QLineEdit	*m_search;
 
 		KexiDBRecord	*m_record;
 
 	protected slots:
 		void slotItemChanged(KexiTableItem *i, int col);
+
+		void slotSearchChanged(const QString &);
 };
  
 #endif

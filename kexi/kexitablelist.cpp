@@ -59,14 +59,14 @@ int KexiTableList::compareItems(Item item1, Item item2)
 
 int KexiTableList::cmpInt(Item item1, Item item2)
 {
-	return m_order* (((KexiTableItem *)item1)->getInt(m_key) - ((KexiTableItem *)item2)->getInt(m_key));
+	return m_order* (((KexiTableItem *)item1)->getValue(m_key).toInt() - ((KexiTableItem *)item2)->getValue(m_key).toInt());
 }
 
 
 int KexiTableList::cmpStr(Item item1, Item item2)
 {
-	const QString &as =((KexiTableItem *)item1)->getText(m_key);
-	const QString &bs =((KexiTableItem *)item2)->getText(m_key);
+	const QString &as =((KexiTableItem *)item1)->getValue(m_key).toString();
+	const QString &bs =((KexiTableItem *)item2)->getValue(m_key).toString();
 
 	const QChar *a = as.unicode();
 	const QChar *b = bs.unicode();

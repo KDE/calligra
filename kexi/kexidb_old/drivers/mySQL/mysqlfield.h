@@ -33,6 +33,8 @@ class MySqlField : public KexiDBField
 		QString				name() const;
 		QString				table() const;
 
+		bool				auto_increment();
+
 		//key section
 		bool				primary_key();
 		bool				unique_key();

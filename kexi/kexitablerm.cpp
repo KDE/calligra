@@ -21,6 +21,8 @@
    Original Project: buX (www.bux.at)
 */
 
+#include <qcolor.h>
+
 #include <qpixmap.h>
 #include <qpainter.h>
 
@@ -46,12 +48,28 @@ const char *KexiTableRM::arrow[]=
 "#......"
 };
 
+const char *KexiTableRM::star[]=
+{
+"7 7 2 1",
+"  c None",
+". c #AF0000",
+"   .   ",
+" . . . ",
+"  ...  ",
+".......",
+"  ...  ",
+" . . . ",
+"   .   "
+};
+
 KexiTableRM::KexiTableRM(QWidget *parent)
 :QWidget(parent)
 {
 	m_rowHeight = 1;
 	m_offset=0;
 	m_currentRow=-1;
+	m_insertRow=-1;
+	m_pointerColor = QColor(99,0,0);
 	m_pArrowPixmap = new QPixmap(arrow);
 }
 
@@ -68,11 +86,41 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 	int first = (r.top()    + m_offset) / m_rowHeight + 1;
 	int last  = (r.bottom() + m_offset) / m_rowHeight + 1;
 
-	if(m_currentRow >= first && m_currentRow <= last)
+	p.setPen(m_pointerColor);
+	if(m_currentRow >= first && m_currentRow <= last && m_currentRow != m_insertRow)
 	{
 		int pos = ((m_rowHeight*m_currentRow)-m_offset)-1;
-		p.drawPixmap(2,pos-15,*m_pArrowPixmap);
-    }
+		for(int i=0; i < (m_rowHeight - 2)/ 2; i++)
+		{
+			p.drawLine(i + 2, pos - m_rowHeight + 2 + i, i + 2, pos - 2 - i);
+		}
+		
+	}
+	
+	p.setPen(QColor(0,0,99));
+/*	if(m_insertRow >= first && m_insertRow <= last)
+	{
+		int pos = ((m_rowHeight*m_insertRow)-m_offset)-1;
+		for(int i=0; i < (m_rowHeight - 2)/ 2; i++)
+		{
+			p.drawLine(i + 2, pos - m_rowHeight + 2 + i, i + 2, pos - 2 - i);
+		}
+		
+	}
+*/
+
+	if(m_insertRow >= first && m_insertRow <= last)
+	{
+		int poss = ((m_insertRow*m_rowHeight)-m_offset)-1;
+		p.drawLine(2, poss - (m_rowHeight/2) - 1, width() - 4, poss - (m_rowHeight/2) - 1);
+		p.drawLine(2, poss - (m_rowHeight/2), width() - 4, poss - (m_rowHeight/2));
+		p.drawLine(2, poss - (m_rowHeight/2) + 1, width() - 4, poss - (m_rowHeight/2) + 1);
+
+		p.drawLine((m_rowHeight - 4)/2 - 1, poss - m_rowHeight + 3, (m_rowHeight- 4)/2 - 1, poss - 3);
+		p.drawLine((m_rowHeight - 4)/2, poss - m_rowHeight + 3, (m_rowHeight- 4)/2, poss - 3);
+		p.drawLine((m_rowHeight - 4)/2 + 1, poss - m_rowHeight + 3, (m_rowHeight- 4)/2 + 1, poss - 3);
+	}
+
 }
 
 void KexiTableRM::setCurrentRow(int row)
@@ -88,11 +136,22 @@ void KexiTableRM::setOffset(int offset)
 	int oldOff = m_offset;
 	m_offset = offset;
 	scroll(0,oldOff-offset);
+	qDebug("KexiTableRM::setOffset(): offset is: %i", offset);
 }
 
 void KexiTableRM::setCellHeight(int cellHeight)
 {
 	m_rowHeight = cellHeight;
+}
+
+void KexiTableRM::setInsertRow(int row)
+{
+	m_insertRow = row;
+}
+
+void KexiTableRM::setColor(QColor newcolor)
+{
+	m_pointerColor = newcolor;
 }
 
 #include "kexitablerm.moc"

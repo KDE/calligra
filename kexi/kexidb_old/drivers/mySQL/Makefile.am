@@ -8,9 +8,9 @@ keximysqlinterface_la_METASOURCES = AUTO
 
 keximysqlinterface_la_SOURCES = mysqldb.cpp mysqlfield.cpp mysqlresult.cpp mysqlrecord.cpp 
 
-keximysqlinterface_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) $(LIB_MYSQL) ../../kexiDB/libkexidb.la
+keximysqlinterface_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lmysqlclient ../../kexiDB/libkexidb.la
 
-keximysqlinterface_la_LDFLAGS     = -module $(KDE_PLUGIN) $(MYSQL_LDFLAGS)
+keximysqlinterface_la_LDFLAGS     = -module $(KDE_PLUGIN) $(MYSQL_LIBDIR)
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 

@@ -1,16 +1,7 @@
-#lib_LTLIBRARIES = libmysqlinterface.la
+if compile_mysql_plugin
+MYSQL_DIR=mySQL
+endif
+
+SUBDIRS = $(MYSQL_DIR)
 
 
-#INCLUDES = $(all_includes)
-
-SUBDIRS = mySQL
-
-#LDFLAGS =
-
-#libmysqlinterface_la_METASOURCES = AUTO
-
-#libmysqlinterface_la_SOURCES = kexiinterfacetemplate.cpp mysqlinterface.cpp
-
-#KDE_OPTIONS = qtonly
-
-#EXTRA_DIST = libmyinterface.cpp

@@ -41,6 +41,15 @@ MySqlField::table() const
 }
 
 bool
+MySqlField::auto_increment()
+{
+	if(m_field->flags & AUTO_INCREMENT_FLAG)
+		return true;
+	else
+		return false;
+}
+
+bool
 MySqlField::primary_key()
 {
 	if(m_field->flags & PRI_KEY_FLAG)

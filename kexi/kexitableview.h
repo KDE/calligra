@@ -90,7 +90,7 @@ public:
 	int		columnAt(int pos) const;
 	int		rowAt(int pos) const;
 
-	int			sorting();
+	int		sorting();
 	void		clear();
 	void		clearAll();
 	void		remove(int row);
@@ -105,6 +105,8 @@ public:
 	void		emitSelected();
 
 	bool		m_editOnDubleClick;
+
+	KexiTableRM	*recordMarker();
 
 	KexiTableList	*contents() { return &m_contents; }
 

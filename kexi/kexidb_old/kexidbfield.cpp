@@ -72,6 +72,12 @@ KexiDBField::table() const
 }
 
 bool
+KexiDBField::auto_increment()
+{
+	return false;
+}
+
+bool
 KexiDBField::primary_key()
 {
 	return false;

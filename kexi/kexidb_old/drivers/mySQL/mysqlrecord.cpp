@@ -71,7 +71,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 {
 	for(UpdateBuffer::Iterator it = m_updateBuffer.begin(); it != m_updateBuffer.end(); it++)
 	{
-		if((*it).record == record)
+		if((*it).record == record && (*it).done == false)
 		{
 			QString value = m_db->escape((*it).value.toString());
 			kdDebug() << "MySqlRecord::commit(): escaping" << endl;
@@ -85,6 +85,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 			kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
 			m_db->query(statement);
 //			m_updateBuffer.erase(it);
+			(*it).done = true;
 		}
 	}
 }
@@ -154,16 +155,21 @@ MySqlRecord::update(unsigned int record, QString field, QVariant value)
 	i.record = record;
 	i.field = field;
 	i.value = value;
+	i.done = false;
 
 	m_updateBuffer.append(i);
 	kdDebug() << "MySqlRecord::update(): we have now " << m_updateBuffer.count() << " items" << endl;
 	return true;
 }
 
-KexiDBRecord*
+int
 MySqlRecord::insert()
 {
-	return 0;
+//	return 0;
+	if(readOnly())
+		return -1;
+
+	
 }
 
 bool

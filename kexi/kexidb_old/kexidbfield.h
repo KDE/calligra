@@ -58,6 +58,10 @@ class KexiDBField
 		virtual QString		name() const;
 		virtual QString		table() const;
 
+		/*!
+		 *	@returns true if the field is autoincrement (e.g. integer/numeric)
+		 */
+		virtual bool		auto_increment();
 		//key section
 		virtual	bool		primary_key();
 		virtual bool		unique_key();

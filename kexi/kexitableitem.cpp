@@ -24,11 +24,15 @@
 #include <qtimer.h>
 //#include <stdarg.h>
 #include "kexitableview.h"
+#include "kexitablerm.h"
 #include "kexitableitem.h"
 
 KexiTableItem::KexiTableItem(int numCols)
 {
 	m_columns.resize(numCols);
+
+	m_insertItem = false;
+	setInsertItem(false);
 //	m_columns.setAutoDelete(true);
 //	for(int i=0; i < numCols; i++)
 //		m_columns.insert(i, new QVariant);
@@ -36,8 +40,11 @@ KexiTableItem::KexiTableItem(int numCols)
 
 void KexiTableItem::attach(KexiTableView *tableView, bool sorted=false)
 {
-    if(!sorted)
+	if(!sorted)
+	{
+		qDebug("inserting somewhere");
 		tableView->m_contents.append(this);
+	}
 	else
 	{
 		qDebug("inserting sorted");
@@ -45,20 +52,29 @@ void KexiTableItem::attach(KexiTableView *tableView, bool sorted=false)
 	}
 	tableView->m_numRows++;
 	tableView->triggerUpdate();
+	
+//	if(isInsertItem())
+//		tableView->recordMarker()->setInsertRow(position);
 }
 
 void KexiTableItem::attach(KexiTableView *tableView, int position)
 {
+	qDebug("inserting at position %i", position);
 	m_position = position;
 	tableView->m_contents.insert(position, this);
 	tableView->m_numRows++;
 	tableView->triggerUpdate();
+
+//	if(isInsertItem())
+//		tableView->recordMarker()->setInsertRow(position);
 }
 
 KexiTableItem::KexiTableItem(KexiTableView *tableView)
 {
 	int numCols=tableView->cols();
 	m_columns.resize(numCols);
+
+	setInsertItem(false);
 //	m_columns.setAutoDelete(true);
 
 //	m_columnsI.resize(numCols);
@@ -73,6 +89,7 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView)
 
 	tableView->m_numRows++;
 	tableView->triggerUpdate();
+	m_pTable = tableView;
 //	tableView->m_pUpdateTimer->start(1,true);
 //	tableView->columnWidthChanged(0,0,0);
 }
@@ -109,6 +126,19 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView, bool sorted, ...)
 	va_end(ap);
 }
 */
+void
+KexiTableItem::setInsertItem(bool insertItem)
+{
+	m_insertItem = insertItem;
+//	int m_position = m_pTable->m_contents.find(this);
+	if(insertItem)
+	{
+		m_pTable->recordMarker()->setInsertRow(getHint().toInt() + 1);
+		qDebug("inserting into %i", getHint().toInt());
+	}
+}
+
+
 KexiTableItem::~KexiTableItem()
 {
 //	qDebug("KexiTableItem::~KexiTableItem()");

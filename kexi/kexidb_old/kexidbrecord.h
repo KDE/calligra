@@ -127,9 +127,9 @@ class KexiDBRecord
 		 *  @code insertBuffer->update("Name", QString("Your name"));
 		 *  @code record->commit(true); //commits changes on current record and inserts insertBuffer
 		 *
-		 *  returns 0, if insert isn't possible
+		 *  @returns a record-identification integer
 		 */
-		virtual KexiDBRecord *insert() = 0;
+		virtual int insert() = 0;
 
 		/*!
 		 *  directly changes to the nth record

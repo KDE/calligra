@@ -43,6 +43,7 @@ typedef struct UpdateItem
 	unsigned int record;
 	QString field;
 	QVariant value;
+	bool done;
 };
 
 typedef QPtrList<MySqlRecord> InsertList;
@@ -79,7 +80,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 
 		bool deleteRecord();
 
-		KexiDBRecord *insert();
+		int insert();
 
 		MySqlRecord *operator++();
 		MySqlRecord *operator--();

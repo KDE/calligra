@@ -1,8 +1,8 @@
-DONE		kservicetype/kservice
-		(see koffice/servicetypes,
-		kpart::componentfactory finds it out for us)
+a int/float table-editor
+	look at:
+	KGlobal->locale() ...
 
-NOT NEEDED	mouseMoveEvent->setCursor()
-		see kword/kwcanvas.cc 429
-		(for kexiform)
-		don't forget setMouseTracking(true)
+if there will ever be a scripting interface read:
+	perldoc perlembedd
+
+

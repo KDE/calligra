@@ -45,12 +45,19 @@ public slots:
 	void setCellHeight(int cellHeight);
 	void setCurrentRow(int row);
 
+	void setInsertRow(int row);
+	void setColor(QColor color);
+	
 protected:
-	int m_rowHeight;
-	int m_offset;
-	int m_currentRow;
+	int	m_rowHeight;
+	int	m_offset;
+	int	m_currentRow;
+	int	m_insertRow;
+	
+	QColor	m_pointerColor;
 
 	static const char *arrow[];
+	static const char *star[];
 	QPixmap *m_pArrowPixmap;
 };
 
