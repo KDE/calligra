@@ -250,31 +250,10 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     m_horizontalAndVerticalMirrorPicture = new QRadioButton( i18n( "Horizontal And Vertical Mirror" ), mirrorGroup );
     connect( m_horizontalAndVerticalMirrorPicture, SIGNAL( clicked() ), this, SLOT( slotHorizontalAndVerticalMirrorPicture() ) );
 
-
-    if ( mirrorType == PM_NORMAL ) {
-        m_normalPicture->setChecked( true );
-        m_horizontalMirrorPicture->setChecked( false );
-        m_verticalMirrorPicture->setChecked( false );
-        m_horizontalAndVerticalMirrorPicture->setChecked( false );
-    }
-    else if ( mirrorType == PM_HORIZONTAL ) {
-        m_normalPicture->setChecked( false );
-        m_horizontalMirrorPicture->setChecked( true );
-        m_verticalMirrorPicture->setChecked( false );
-        m_horizontalAndVerticalMirrorPicture->setChecked( false );
-    }
-    else if ( mirrorType == PM_VERTICAL ) {
-        m_normalPicture->setChecked( false );
-        m_horizontalMirrorPicture->setChecked( false );
-        m_verticalMirrorPicture->setChecked( true );
-        m_horizontalAndVerticalMirrorPicture->setChecked( false );
-    }
-    else if ( mirrorType == PM_HORIZONTALANDVERTICAL ) {
-        m_normalPicture->setChecked( false );
-        m_horizontalMirrorPicture->setChecked( false );
-        m_verticalMirrorPicture->setChecked( false );
-        m_horizontalAndVerticalMirrorPicture->setChecked( true );
-    }
+    m_normalPicture->setChecked( mirrorType == PM_NORMAL );
+    m_horizontalMirrorPicture->setChecked( mirrorType == PM_HORIZONTAL );
+    m_verticalMirrorPicture->setChecked( mirrorType == PM_VERTICAL );
+    m_horizontalAndVerticalMirrorPicture->setChecked( mirrorType == PM_HORIZONTALANDVERTICAL );
 
 
     QButtonGroup *depthGroup = new QVButtonGroup( i18n( "Depth" ), gSettings );
@@ -295,41 +274,11 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     connect( m_depth32, SIGNAL( clicked() ), this, SLOT( slotPictureDepth32() ) );
 
 
-    if ( depth == 0 ) {
-        m_depth0->setChecked( true );
-        m_depth1->setChecked( false );
-        m_depth8->setChecked( false );
-        m_depth16->setChecked( false );
-        m_depth32->setChecked( false );
-    }
-    else if ( depth == 1 ) {
-        m_depth0->setChecked( false );
-        m_depth1->setChecked( true );
-        m_depth8->setChecked( false );
-        m_depth16->setChecked( false );
-        m_depth32->setChecked( false );
-    }
-    else if ( depth == 8 ) {
-        m_depth0->setChecked( false );
-        m_depth1->setChecked( false );
-        m_depth8->setChecked( true );
-        m_depth16->setChecked( false );
-        m_depth32->setChecked( false );
-    }
-    else if ( depth == 16 ) {
-        m_depth0->setChecked( false );
-        m_depth1->setChecked( false );
-        m_depth8->setChecked( false );
-        m_depth16->setChecked( true );
-        m_depth32->setChecked( false );
-    }
-    else if ( depth == 32 ) {
-        m_depth0->setChecked( false );
-        m_depth1->setChecked( false );
-        m_depth8->setChecked( false );
-        m_depth16->setChecked( false );
-        m_depth32->setChecked( true );
-    }
+    m_depth0->setChecked( depth == 0 );
+    m_depth1->setChecked( depth == 1 );
+    m_depth8->setChecked( depth == 8 );
+    m_depth16->setChecked( depth == 16 );
+    m_depth32->setChecked( depth == 32 );
 
 
     m_swapRGBCheck = new QCheckBox( i18n( "Convert from RGB image to BGR image" ), gSettings );
