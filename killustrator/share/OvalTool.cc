@@ -22,47 +22,38 @@
 
 */
 
-#include <iostream.h>
-#include <math.h>
-#include "OvalTool.h"
-#include "OvalTool.moc"
-#include "GDocument.h"
-#include "Canvas.h"
-#include "Coord.h"
-#include "CreateOvalCmd.h"
-#include "CommandHistory.h"
-#include "EllipseConfigDialog.h"
-#include "units.h"
-#include "PStateManager.h"
+#include <OvalTool.h>
+
 #include <qkeycode.h>
-#include <kapp.h>
+
 #include <klocale.h>
-#include "version.h"
 #include <kconfig.h>
+#include <kapp.h>
+
+#include <GDocument.h>
+#include <Canvas.h>
+#include <CreateOvalCmd.h>
+#include <CommandHistory.h>
+#include <EllipseConfigDialog.h>
+#include <units.h>
+#include <PStateManager.h>
+#include <GOval.h>
+
+#include <math.h>
 #include <stdio.h>
 
 OvalTool::OvalTool (CommandHistory *history) : Tool (history) {
-  oval = NULL;
-#if NEWKDE
+  oval = 0L;
   KConfig* config = kapp->config ();
-#else
-  KConfig* config = kapp->getConfig ();
-#endif
   QString oldgroup = config->group ();
 
-  config->setGroup ("EllipseTool");
-  useFixedCenter = config->readBoolEntry ("FixedCenter", false);
+  config->setGroup("EllipseTool");
+  useFixedCenter = config->readBoolEntry("FixedCenter", false);
   config->setGroup (oldgroup);
 }
 
 void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () ==
-#if QT_VERSION >= 199
-      QEvent::MouseButtonPress
-#else
-      Event_MouseButtonPress
-#endif
-      ) {
+  if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
@@ -74,16 +65,10 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     oval->setEndPoint (pos);
     doc->insertObject (oval);
     emit modeSelected (flag ? i18n ("Create Circle") :
-		       i18n ("Create Ellipse"));
+                       i18n ("Create Ellipse"));
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::MouseMove
-#else
-	   Event_MouseMove
-#endif
-	   ) {
-    if (oval == NULL)
+  else if (e->type () == QEvent::MouseMove) {
+    if (oval == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
@@ -92,18 +77,18 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     if (useFixedCenter) {
       float dx = fabs (xpos - pos.x ()),
-	dy = fabs (ypos - pos.y ());
+        dy = fabs (ypos - pos.y ());
       Coord ps, pe;
       if (oval->isCircle ()) {
-	float off = qRound ((dx > dy ? dx : dy) / 2.0);
-	ps = Coord (pos.x () - off, pos.y () - off);
-	pe = Coord (pos.x () + off, pos.y () + off);
+        float off = qRound ((dx > dy ? dx : dy) / 2.0);
+        ps = Coord (pos.x () - off, pos.y () - off);
+        pe = Coord (pos.x () + off, pos.y () + off);
       }
       else {
-	ps = Coord (pos.x () - qRound (dx / 2.0),
-		    pos.y () - qRound (dy / 2.0));
-	pe = Coord (pos.x () + qRound (dx / 2.0),
-		    pos.y () + qRound (dy / 2.0));
+        ps = Coord (pos.x () - qRound (dx / 2.0),
+                    pos.y () - qRound (dy / 2.0));
+        pe = Coord (pos.x () + qRound (dx / 2.0),
+                    pos.y () + qRound (dy / 2.0));
       }
       oval->setStartPoint (ps);
       oval->setEndPoint (pe);
@@ -121,19 +106,14 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     wval = cvtPtToUnit (unit, r.width ());
     hval = cvtPtToUnit (unit, r.height ());
 
+    // FIXME (Werner)
     sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-	     oval->isCircle () ? I18N ("Create Circle") :
-	     I18N ("Create Ellipse"), xval, u, yval, u, wval, u, hval, u);
+             oval->isCircle () ? I18N ("Create Circle") :
+             I18N ("Create Ellipse"), xval, u, yval, u, wval, u, hval, u);
     emit modeSelected (msgbuf);
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::MouseButtonRelease
-#else
-	   Event_MouseButtonRelease
-#endif
-	   ) {
-    if (oval == NULL)
+  else if (e->type () == QEvent::MouseButtonRelease) {
+    if (oval == 0L)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
@@ -153,21 +133,13 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       CreateOvalCmd *cmd = new CreateOvalCmd (doc, oval);
       history->addCommand (cmd);
     }
-    oval = NULL;
+    oval = 0L;
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::KeyPress
-#else
-	   Event_KeyPress
-#endif
-	   ) {
+  else if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == QT_ESCAPE)
       emit operationDone ();
   }
-
-  return;
 }
 
 void OvalTool::activate (GDocument* , Canvas* /*canvas*/) {
@@ -178,11 +150,7 @@ void OvalTool::aroundFixedCenter (bool flag) {
   if (useFixedCenter != flag) {
     useFixedCenter = flag;
 
-#if NEWKDE
     KConfig* config = kapp->config ();
-#else
-    KConfig* config = kapp->getConfig ();
-#endif
     QString oldgroup = config->group ();
 
     config->setGroup ("EllipseTool");
@@ -195,4 +163,4 @@ void OvalTool::configure () {
   EllipseConfigDialog::setupTool (this);
 }
 
-
+#include <OvalTool.moc>

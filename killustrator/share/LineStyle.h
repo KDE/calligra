@@ -26,11 +26,8 @@
 #define LineStyle_h_
 
 #include <qintdict.h>
-#include <qpointarray.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include "Coord.h"
-#include "Painter.h"
+
+class QPixmap;
 
 class LineStyle {
 public:

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,189 +15,142 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include <kapp.h>
-#include <klocale.h>
-#include <kseparator.h>
-#include <kbuttonbox.h>
-#include <qpushbutton.h>
+#include <OptionDialog.h>
+
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <qvgroupbox.h>
+#include <qhbox.h>
 #include <qcombobox.h>
-#include "OptionDialog.h"
-#include "OptionDialog.moc"
-#include "PStateManager.h"
 
-OptionDialog::OptionDialog (QWidget* parent, const char* name) : 
-    QTabDialog (parent, name, true) {
-  QWidget* widget;
+#include <klocale.h>
 
-  setCaption (i18n ("Option"));
+#include <UnitBox.h>
+#include <PStateManager.h>
 
-  widget = createGeneralWidget (this);
-  addTab (widget, i18n ("General"));
-
-  widget = createEditWidget (this);
-  addTab (widget, i18n ("Edit"));
-
-  setOkButton (i18n ("OK"));
-  setCancelButton (i18n ("Cancel"));
-
-  adjustSize ();
- 
-  setMinimumSize (300, 310);
-  setMaximumSize (300, 310);
+OptionDialog::OptionDialog (QWidget* parent, const char* name) :
+    KDialogBase(KDialogBase::Tabbed, i18n("Option"),
+                KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,
+                parent, name, true) {
+    createGeneralWidget(addPage(i18n("General")));
+    createEditWidget(addPage(i18n("Edit")));
 }
 
-QWidget* OptionDialog::createGeneralWidget (QWidget* parent) {
-  QWidget* w;
-  QLabel* label;
+void OptionDialog::createGeneralWidget (QWidget* parent) {
 
-  w = new QWidget (parent);
+    QGridLayout *layout=new QGridLayout(parent, 2, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QLabel *label = new QLabel(i18n("Unit:"), parent);
+    layout->addWidget(label, 0, 0);
 
-  label = new QLabel (w);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Unit:"));
-  label->setFixedHeight (label->sizeHint ().height ());
-  label->move (10, 20);
+    unit = new QComboBox (parent);
+    unit->insertItem (unitToString (UnitPoint));
+    unit->insertItem (unitToString (UnitMillimeter));
+    unit->insertItem (unitToString (UnitInch));
+    unit->insertItem (unitToString (UnitPica));
+    unit->insertItem (unitToString (UnitCentimeter));
+    unit->insertItem (unitToString (UnitDidot));
+    unit->insertItem (unitToString (UnitCicero));
+    layout->addWidget(unit, 0, 1);
+    layout->setRowStretch(1, 1);
 
-  unit = new QComboBox (w);
-  unit->insertItem (unitToString (UnitPoint));
-  unit->insertItem (unitToString (UnitMillimeter));
-  unit->insertItem (unitToString (UnitInch));
-  unit->insertItem (unitToString (UnitPica));
-  unit->insertItem (unitToString (UnitCentimeter));
-  unit->insertItem (unitToString (UnitDidot));
-  unit->insertItem (unitToString (UnitCicero));
-  unit->move (80, 20);
-
-  unit->setCurrentItem ((int) 
-			PStateManager::instance ()->defaultMeasurementUnit ());
-
-  return w;
+    unit->setCurrentItem ((int)
+                          PStateManager::instance ()->defaultMeasurementUnit ());
 }
 
-QWidget* OptionDialog::createEditWidget (QWidget* parent) {
-  QWidget* w;
-  QLabel* label;
-  QGroupBox* box;
-  w = new QWidget (parent);
+void OptionDialog::createEditWidget (QWidget* parent) {
 
-  box = new QGroupBox (w);
-  box->setTitle (i18n ("Duplicate Offset"));
-  box->move (20, 15);
+    QBoxLayout *layout=new QVBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QGroupBox *box = new QVGroupBox(i18n("Duplicate Offset"), parent);
+    layout->addWidget(box);
 
-  label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Horizontal:"));
-  label->move (20, 20);
+    QHBox *hbox=new QHBox(box);
+    QLabel *label = new QLabel(i18n("Horizontal:"), hbox);
 
-  horiz = new UnitBox (box);
-  horiz->setRange (-1000.0, 1000.0);
-  horiz->setStep (0.1);
-  horiz->setEditable (true);
-  horiz->move (90, 20);
+    horiz = new UnitBox(hbox);
+    horiz->setRange (-1000.0, 1000.0);
+    horiz->setStep (0.1);
+    horiz->setEditable (true);
 
-  label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Vertical:"));
-  label->move (20, 50);
+    hbox=new QHBox(box);
+    label = new QLabel(i18n("Vertical:"), hbox);
 
-  vert = new UnitBox (box);
-  vert->setRange (-1000.0, 1000.0);
-  vert->setStep (0.1);
-  vert->setEditable (true);
-  vert->move (90, 50);
-  box->adjustSize ();
+    vert = new UnitBox(hbox);
+    vert->setRange (-1000.0, 1000.0);
+    vert->setStep (0.1);
+    vert->setEditable (true);
 
-  box = new QGroupBox (w);
-  box->setTitle (i18n ("Step Distance"));
-  box->move (20, 120);
+    box = new QVGroupBox(i18n("Step Distance"), parent);
+    layout->addWidget(box);
 
-  label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Small step:"));
-  label->move (20, 20);
+    hbox=new QHBox(box);
+    label = new QLabel(i18n("Small step:"), hbox);
 
-  smallStep = new UnitBox (box);
-  smallStep->setRange (-1000.0, 1000.0);
-  smallStep->setStep (0.1);
-  smallStep->setEditable (true);
-  smallStep->move (90, 20);
+    smallStep = new UnitBox(hbox);
+    smallStep->setRange (-1000.0, 1000.0);
+    smallStep->setStep (0.1);
+    smallStep->setEditable (true);
 
-  label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Big step:"));
-  label->move (20, 50);
+    hbox=new QHBox(box);
+    label = new QLabel(i18n("Big step:"), hbox);
 
-  bigStep = new UnitBox (box);
-  bigStep->setRange (-1000.0, 1000.0);
-  bigStep->setStep (0.1);
-  bigStep->setEditable (true);
-  bigStep->move (90, 50);
+    bigStep = new UnitBox(hbox);
+    bigStep->setRange (-1000.0, 1000.0);
+    bigStep->setStep (0.1);
+    bigStep->setEditable (true);
 
-  PStateManager *psm = PStateManager::instance ();
-  horiz->setValue (psm->duplicateXOffset ());
-  vert->setValue (psm->duplicateYOffset ());
-  smallStep->setValue (psm->smallStepSize ());
-  bigStep->setValue (psm->bigStepSize ());
-  box->adjustSize ();
-
-  return w;
-}
-
-void OptionDialog::applyPressed () {
-  accept ();
-}
-
-void OptionDialog::helpPressed () {
+    PStateManager *psm = PStateManager::instance ();
+    horiz->setValue (psm->duplicateXOffset ());
+    vert->setValue (psm->duplicateYOffset ());
+    smallStep->setValue (psm->smallStepSize ());
+    bigStep->setValue (psm->bigStepSize ());
 }
 
 int OptionDialog::setup () {
-  int res;
-  OptionDialog dialog (0L, "Options");
-  
-  res = dialog.exec ();
-  if (res == QDialog::Accepted) {
-    int selection = dialog.unit->currentItem ();
-    PStateManager* psm = PStateManager::instance ();
-    switch (selection) {
-    case 0:
-      psm->setDefaultMeasurementUnit (UnitPoint);
-      break;
-    case 1:
-      psm->setDefaultMeasurementUnit (UnitMillimeter);
-      break;
-    case 2:
-      psm->setDefaultMeasurementUnit (UnitInch);
-      break;
-    case 3:
-      psm->setDefaultMeasurementUnit (UnitPica);
-      break;
-    case 4:
-      psm->setDefaultMeasurementUnit (UnitCentimeter);
-      break;
-    case 5:
-      psm->setDefaultMeasurementUnit (UnitDidot);
-      break;
-    case 6:
-      psm->setDefaultMeasurementUnit (UnitCicero);
-      break;
-    default:
-      break;
+
+    OptionDialog dialog (0L, "Options");
+
+    int res=dialog.exec();
+    if(res == QDialog::Accepted) {
+        int selection = dialog.unit->currentItem ();
+        PStateManager* psm = PStateManager::instance ();
+        switch (selection) {
+            case 0:
+                psm->setDefaultMeasurementUnit (UnitPoint);
+                break;
+            case 1:
+                psm->setDefaultMeasurementUnit (UnitMillimeter);
+                break;
+            case 2:
+                psm->setDefaultMeasurementUnit (UnitInch);
+                break;
+            case 3:
+                psm->setDefaultMeasurementUnit (UnitPica);
+                break;
+            case 4:
+                psm->setDefaultMeasurementUnit (UnitCentimeter);
+                break;
+            case 5:
+                psm->setDefaultMeasurementUnit (UnitDidot);
+                break;
+            case 6:
+                psm->setDefaultMeasurementUnit (UnitCicero);
+                break;
+            default:
+                break;
+        }
+        psm->setStepSizes (dialog.smallStep->getValue (),
+                           dialog.bigStep->getValue ());
+        psm->setDuplicateOffsets (dialog.horiz->getValue (),
+                                  dialog.vert->getValue ());
     }
-    psm->setStepSizes (dialog.smallStep->getValue (), 
-		       dialog.bigStep->getValue ());
-    psm->setDuplicateOffsets (dialog.horiz->getValue (), 
-			      dialog.vert->getValue ());
-  }
-  return res;
+    return res;
 }
-  
+
+#include <OptionDialog.moc>

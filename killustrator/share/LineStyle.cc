@@ -22,10 +22,11 @@
 
 */
 
-#include <qcolor.h>
-#include <qpen.h>
-#include "LineStyle.h"
-#include "version.h"
+#include <LineStyle.h>
+
+#include <qpixmap.h>
+#include <qpainter.h>
+
 #include <kstaticdeleter.h>
 
 QIntDict<LineStyle> *LineStyle::styles=0L;
@@ -52,7 +53,7 @@ QPixmap& LineStyle::pixmap () {
     preview = new QPixmap (100, 20);
     preview->fill ();
     QPainter p;
-    QPen pen (QT_PRFX::black, 2, (QT_PRFX::PenStyle) id);
+    QPen pen (Qt::black, 2, (Qt::PenStyle) id);
     p.begin (preview);
     p.setPen (pen);
     p.drawLine (0, 10, 100, 10);
@@ -86,10 +87,10 @@ QIntDictIterator<LineStyle> LineStyle::getLineStyles () {
 }
 
 void LineStyle::initialize () {
-  LineStyle::install (new LineStyle ((long) QT_PRFX::NoPen));
-  LineStyle::install (new LineStyle ((long) QT_PRFX::SolidLine));
-  LineStyle::install (new LineStyle ((long) QT_PRFX::DashLine));
-  LineStyle::install (new LineStyle ((long) QT_PRFX::DotLine));
-  LineStyle::install (new LineStyle ((long) QT_PRFX::DashDotLine));
-  LineStyle::install (new LineStyle ((long) QT_PRFX::DashDotDotLine));
+  LineStyle::install (new LineStyle ((long) Qt::NoPen));
+  LineStyle::install (new LineStyle ((long) Qt::SolidLine));
+  LineStyle::install (new LineStyle ((long) Qt::DashLine));
+  LineStyle::install (new LineStyle ((long) Qt::DotLine));
+  LineStyle::install (new LineStyle ((long) Qt::DashDotLine));
+  LineStyle::install (new LineStyle ((long) Qt::DashDotDotLine));
 }

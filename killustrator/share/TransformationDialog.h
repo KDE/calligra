@@ -25,7 +25,7 @@
 #ifndef TransformationDialog_h
 #define TransformationDialog_h
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class QRadioButton;
 class QCheckBox;
@@ -34,13 +34,12 @@ class GDocument;
 class CommandHistory;
 class FloatSpinBox;
 class UnitBox;
-class MyTabCtl;
 
-class TransformationDialog : public QDialog {
+class TransformationDialog : public KDialogBase {
   Q_OBJECT
 public:
   TransformationDialog (CommandHistory* cmdHist,
-			QWidget* parent = 0L, const char* name = 0L);
+                        QWidget* parent = 0L, const char* name = 0L);
 
   void setDocument (GDocument* doc);
   void showTab (int id);
@@ -49,10 +48,10 @@ public slots:
   void update ();
 
 protected:
-  QWidget* createPositionWidget (QWidget* parent);
-  QWidget* createDimensionWidget (QWidget* parent);
-  QWidget* createRotationWidget (QWidget* parent);
-  QWidget* createMirrorWidget (QWidget* parent);
+  void createPositionWidget (QWidget* parent);
+  void createDimensionWidget (QWidget* parent);
+  void createRotationWidget (QWidget* parent);
+  void createMirrorWidget (QWidget* parent);
 
 private slots:
   void applyPressed ();
@@ -69,8 +68,6 @@ private:
   void scale (bool onDuplicate);
   void mirror (bool onDuplicate);
 
-  MyTabCtl *tabCtl;
-  QWidget *widgets[4];
   GDocument* document;
   CommandHistory *history;
 

@@ -22,318 +22,212 @@
 
 */
 
-#include "TransformationDialog.h"
-#include "TransformationDialog.moc"
-
-#include <stdio.h>
+#include <TransformationDialog.h>
 
 #include <klocale.h>
-#include <kapp.h>
-#include <kbuttonbox.h>
-#include <kseparator.h>
 #include <kiconloader.h>
 
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
+#include <qhbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qhbox.h>
 
-#include "TranslateCmd.h"
-#include "RotateCmd.h"
-#include "ScaleCmd.h"
-#include "InsertObjCmd.h"
-#include "Handle.h" // for scaling directions
-#include "GDocument.h"
-#include "GObject.h"
-#include "CommandHistory.h"
-#include "FloatSpinBox.h"
-#include "UnitBox.h"
-#include "MyTabCtl.h"
+#include <TranslateCmd.h>
+#include <RotateCmd.h>
+#include <ScaleCmd.h>
+#include <InsertObjCmd.h>
+#include <Handle.h> // for scaling directions
+#include <GDocument.h>
+#include <GObject.h>
+#include <CommandHistory.h>
+#include <FloatSpinBox.h>
+#include <UnitBox.h>
 
 TransformationDialog::TransformationDialog (CommandHistory* cmdHist,
-					    QWidget* parent,
-					    const char* name) :
-  QDialog (parent, name, false) {
-  document = 0L;
-  history = cmdHist;
-  setCaption (i18n ("Transform"));
+                                            QWidget* parent, const char* name) :
+  KDialogBase(KDialogBase::Tabbed, i18n("Transform"), KDialogBase::Close,
+              KDialogBase::Close, parent, name, false) {
 
-  QVBoxLayout *vl = new QVBoxLayout (this, 2);
-
-  // the tab control
-  tabCtl = new MyTabCtl (this);
-
-  widgets[0] = createPositionWidget (tabCtl);
-  tabCtl->addTab (widgets[0], i18n ("Position"));
-
-  widgets[1] = createDimensionWidget (tabCtl);
-  tabCtl->addTab (widgets[1], i18n ("Dimension"));
-
-  widgets[2] = createRotationWidget (tabCtl);
-  tabCtl->addTab (widgets[2], i18n ("Rotation"));
-
-  widgets[3] = createMirrorWidget (tabCtl);
-  tabCtl->addTab (widgets[3], i18n ("Mirror"));
-
-  vl->addWidget (tabCtl, 1);
-
-  // a separator
-  KSeparator* sep = new KSeparator (this);
-  vl->addWidget (sep);
-
-  // the standard buttons
-  KButtonBox *bbox = new KButtonBox (this);
-  QPushButton *button = bbox->addButton (i18n ("Close"));
-  connect (button, SIGNAL(clicked ()), this, SLOT(accept ()));
-
-  bbox->layout ();
-  bbox->setMinimumSize (bbox->sizeHint () + QSize (20, 20));
-
-  vl->addWidget (bbox);
-
-  vl->activate ();
-
-  setMinimumSize (330, 350);
-  setMaximumSize (400, 350);
-  resize (330, 350);
+    document = 0L;
+    history = cmdHist;
+    createPositionWidget(addPage(i18n("Position")));
+    createDimensionWidget(addPage(i18n("Dimension")));
+    createRotationWidget (addPage(i18n("Rotation")));
+    createMirrorWidget(addPage(i18n("Mirror")));
 }
 
-QWidget* TransformationDialog::createPositionWidget (QWidget* parent) {
-  QWidget* w;
-  QLabel* label;
+void TransformationDialog::createPositionWidget (QWidget* parent) {
 
-  w = new QWidget (parent);
-  label = new QLabel (w);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Horizontal:"));
-  label->move (20, 20);
+    QGridLayout *layout=new QGridLayout(parent, 5, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QLabel* label = new QLabel(i18n("Horizontal:"), parent);
+    layout->addWidget(label, 0, 0);
 
-  horizPosition = new UnitBox (w);
-  horizPosition->setRange (-1000.0, 1000.0);
-  horizPosition->setStep (0.1);
-  horizPosition->setEditable (true);
-  horizPosition->move (90, 20);
+    horizPosition = new UnitBox (parent);
+    horizPosition->setRange (-1000.0, 1000.0);
+    horizPosition->setStep (0.1);
+    horizPosition->setEditable (true);
+    layout->addWidget(horizPosition, 0, 1);
 
-  label = new QLabel (w);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Vertical:"));
-  label->move (20, 50);
+    label = new QLabel(i18n("Vertical:"), parent);
+    layout->addWidget(label, 1, 0);
 
-  vertPosition = new UnitBox (w);
-  vertPosition->setRange (-1000.0, 1000.0);
-  vertPosition->setStep (0.1);
-  vertPosition->setEditable (true);
-  vertPosition->move (90, 50);
+    vertPosition = new UnitBox(parent);
+    vertPosition->setRange (-1000.0, 1000.0);
+    vertPosition->setStep (0.1);
+    vertPosition->setEditable (true);
+    layout->addWidget(vertPosition, 1, 1);
 
-  relativePosition = new QCheckBox (w);
-  relativePosition->setText (i18n ("Relative Position"));
-  relativePosition->setGeometry (20, 80, 150, 30);
-  connect( relativePosition, SIGNAL(clicked()),
-           this, SLOT(relativePositionSlot()) );
+    relativePosition = new QCheckBox(i18n("Relative Position"), parent);
+    connect( relativePosition, SIGNAL(clicked()),
+             this, SLOT(relativePositionSlot()) );
+    layout->addMultiCellWidget(relativePosition, 2, 2, 0, 1);
+    layout->setRowStretch(3, 1);
 
-  applyBttn[0] = new QPushButton (w);
-  applyBttn[0]->setText (i18n ("Apply"));
-  connect (applyBttn[0], SIGNAL(clicked()), this, SLOT(applyPressed()));
+    applyBttn[0] = new QPushButton(i18n("Apply"), parent);
+    connect (applyBttn[0], SIGNAL(clicked()), this, SLOT(applyPressed()));
+    layout->addWidget(applyBttn[0], 4, 0);
 
-  applyToDupBttn[0] = new QPushButton (w);
-  applyToDupBttn[0]->setText (i18n ("Apply To Duplicate"));
-  connect (applyToDupBttn[0], SIGNAL(clicked()),
-	   this, SLOT(applyToDuplicatePressed()));
-
-  int width = applyToDupBttn[0]->sizeHint ().width ();
-  int height = applyToDupBttn[0]->sizeHint ().height ();
-
-  applyBttn[0]->setGeometry (20, 120, width, height);
-  applyToDupBttn[0]->setGeometry (20, 122 + height, width, height);
-
-  w->adjustSize ();
-  return w;
+    applyToDupBttn[0] = new QPushButton(i18n("Apply To Duplicate"), parent);
+    connect (applyToDupBttn[0], SIGNAL(clicked()),
+             this, SLOT(applyToDuplicatePressed()));
+    layout->addWidget(applyToDupBttn[0], 4, 1);
 }
 
-QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
-  QWidget* w;
-  QButtonGroup* group;
-  QLabel* label;
+void TransformationDialog::createDimensionWidget (QWidget* parent) {
 
-  w = new QWidget (parent);
+    QGridLayout *layout=new QGridLayout(parent, 6, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-  group = new QButtonGroup (w);
-  group->setFrameStyle (QFrame::NoFrame);
-  group->setExclusive (true);
-  group->move (20, 10);
+    QButtonGroup *group=new QHButtonGroup(parent);
+    group->setFrameStyle (QFrame::NoFrame);
+    group->setExclusive (true);
+    layout->addMultiCellWidget(group, 0, 0, 0, 1);
 
-  absolute = new QRadioButton (group);
-  absolute->setText (i18n ("Absolute"));
-  absolute->setChecked (true);
-  absolute->move (0, 0);
-  connect (absolute, SIGNAL(clicked ()), this, SLOT(slotAbsScale ()));
+    absolute = new QRadioButton(i18n("Absolute"), group);
+    absolute->setChecked (true);
+    connect (absolute, SIGNAL(clicked ()), this, SLOT(slotAbsScale ()));
 
-  percent = new QRadioButton (group);
-  percent->setText (i18n ("Percentage"));
-  percent->move (0, 25);
-  connect (percent, SIGNAL(clicked ()), this, SLOT(slotPercentScale ()));
-  group->adjustSize ();
+    percent = new QRadioButton(i18n("Percentage"), group);
+    connect (percent, SIGNAL(clicked ()), this, SLOT(slotPercentScale ()));
 
-  label = new QLabel (w);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Horizontal:"));
-  label->move (20, 65);
+    QLabel *label = new QLabel(i18n("Horizontal:"), parent);
+    layout->addWidget(label, 1, 0);
 
-  horizDim = new UnitBox (w);
-  horizDim->setRange (-1000.0, 1000.0);
-  horizDim->setStep (0.1);
-  horizDim->setEditable (true);
-  horizDim->move (90, 65);
-  connect (horizDim, SIGNAL(valueChanged (float)),
-	   this, SLOT(updateProportionalDimension (float)));
-  label = new QLabel (w);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Vertical:"));
-  label->move (20, 95);
+    horizDim = new UnitBox(parent);
+    horizDim->setRange (-1000.0, 1000.0);
+    horizDim->setStep (0.1);
+    horizDim->setEditable (true);
+    connect (horizDim, SIGNAL(valueChanged (float)),
+             this, SLOT(updateProportionalDimension (float)));
+    layout->addWidget(horizDim, 1, 1);
 
-  vertDim = new UnitBox (w);
-  vertDim->setRange (-1000.0, 1000.0);
-  vertDim->setStep (0.1);
-  vertDim->setEditable (true);
-  vertDim->move (90, 95);
-  connect (vertDim, SIGNAL(valueChanged (float)),
-	   this, SLOT(updateProportionalDimension (float)));
+    label = new QLabel(i18n("Vertical:"), parent);
+    layout->addWidget(label, 2, 0);
 
-  proportional = new QCheckBox (w);
-  proportional->setText (i18n ("Proportional"));
-  proportional->setGeometry (20, 125, 150, 30);
+    vertDim = new UnitBox(parent);
+    vertDim->setRange (-1000.0, 1000.0);
+    vertDim->setStep (0.1);
+    vertDim->setEditable (true);
+    connect (vertDim, SIGNAL(valueChanged (float)),
+             this, SLOT(updateProportionalDimension (float)));
+    layout->addWidget(vertDim, 2, 1);
 
-  applyBttn[1] = new QPushButton (w);
-  applyBttn[1]->setText (i18n ("Apply"));
-  connect (applyBttn[1], SIGNAL(clicked()), this, SLOT(applyPressed()));
+    proportional = new QCheckBox(i18n("Proportional"), parent);
+    layout->addMultiCellWidget(proportional, 3, 3, 0, 1);
+    layout->setRowStretch(4, 1);
 
-  applyToDupBttn[1] = new QPushButton (w);
-  applyToDupBttn[1]->setText (i18n ("Apply To Duplicate"));
-  connect (applyToDupBttn[1], SIGNAL(clicked()),
-	   this, SLOT(applyToDuplicatePressed()));
+    applyBttn[1] = new QPushButton(i18n("Apply"), parent);
+    connect (applyBttn[1], SIGNAL(clicked()), this, SLOT(applyPressed()));
+    layout->addWidget(applyBttn[1], 5, 0);
 
-  int width = applyToDupBttn[1]->sizeHint ().width ();
-  int height = applyToDupBttn[1]->sizeHint ().height ();
-
-  applyBttn[1]->setGeometry (20, 165, width, height);
-  applyToDupBttn[1]->setGeometry (20, 167 + height, width, height);
-
-  w->adjustSize ();
-  return w;
+    applyToDupBttn[1] = new QPushButton(i18n("Apply To Duplicate"), parent);
+    connect (applyToDupBttn[1], SIGNAL(clicked()),
+             this, SLOT(applyToDuplicatePressed()));
+    layout->addWidget(applyToDupBttn[1], 5, 1);
 }
 
-QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
-  QWidget* w;
-  QLabel* label;
-  QGroupBox* box;
+void TransformationDialog::createRotationWidget (QWidget* parent) {
 
-  w = new QWidget (parent);
+    QGridLayout *layout=new QGridLayout(parent, 4, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-  label = new QLabel (w);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Angle:"));
-  label->setFixedHeight (label->sizeHint ().height ());
-  label->move (20, 20);
+    QGroupBox *box = new QGroupBox(i18n("Center"), parent);
+    layout->addMultiCellWidget(box, 0, 0, 0, 1);
+    QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    vboxlayout->addSpacing(fontMetrics().height()/2);
 
-  rotAngle = new FloatSpinBox (w);
-  rotAngle->setRange (-360.0, +360.0);
-  horizPosition->setStep (0.1);
-  //  rotAngle->setEditable (true);
-  rotAngle->move (90, 20);
+    QBoxLayout *hboxlayout=new QHBoxLayout(vboxlayout);
+    QLabel *label = new QLabel(i18n("Horizontal:"), box);
+    hboxlayout->addWidget(label);
 
-  box = new QGroupBox (w);
-  box->setTitle (i18n ("Center"));
-  box->move (20, 50);
+    horizRotCenter = new UnitBox(box);
+    horizRotCenter->setRange (-1000.0, 1000.0);
+    horizRotCenter->setStep (0.1);
+    horizRotCenter->setEditable (true);
+    hboxlayout->addWidget(horizRotCenter);
 
-  label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Horizontal:"));
-  label->move (20, 20);
+    hboxlayout=new QHBoxLayout(vboxlayout);
+    label = new QLabel(i18n("Vertical:"), box);
+    hboxlayout->addWidget(label);
 
-  horizRotCenter = new UnitBox (box);
-  horizRotCenter->setRange (-1000.0, 1000.0);
-  horizRotCenter->setStep (0.1);
-  horizRotCenter->setEditable (true);
-  horizRotCenter->move (90, 20);
+    vertRotCenter = new UnitBox(box);
+    vertRotCenter->setRange (-1000.0, 1000.0);
+    vertRotCenter->setStep (0.1);
+    vertRotCenter->setEditable (true);
+    hboxlayout->addWidget(vertRotCenter);
 
-  label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Vertical:"));
-  label->move (20, 50);
+    relativeRotCenter = new QCheckBox(i18n("Relative Position"), box);
+    connect( relativeRotCenter, SIGNAL(clicked()),
+             this, SLOT(relativeRotCenterSlot()) );
+    vboxlayout->addWidget(relativeRotCenter);
 
-  vertRotCenter = new UnitBox (box);
-  vertRotCenter->setRange (-1000.0, 1000.0);
-  vertRotCenter->setStep (0.1);
-  vertRotCenter->setEditable (true);
-  vertRotCenter->move (90, 50);
+    QHBox *hbox=new QHBox(parent);
+    label = new QLabel(i18n("Angle:"), hbox);
 
-  relativeRotCenter = new QCheckBox (box);
-  relativeRotCenter->setText (i18n ("Relative Position"));
-  relativeRotCenter->setGeometry (20, 80, 150, 20);
-  box->adjustSize ();
-  connect( relativeRotCenter, SIGNAL(clicked()),
-           this, SLOT(relativeRotCenterSlot()) );
-  
-  applyBttn[2] = new QPushButton (w);
-  applyBttn[2]->setText (i18n ("Apply"));
-  connect (applyBttn[2], SIGNAL(clicked()), this, SLOT(applyPressed()));
+    rotAngle = new FloatSpinBox(hbox);
+    rotAngle->setRange (-360.0, +360.0);
+    horizPosition->setStep (0.1);
+    layout->addMultiCellWidget(hbox, 1, 1, 0, 1);
+    layout->setRowStretch(2, 1);
 
-  applyToDupBttn[2] = new QPushButton (w);
-  applyToDupBttn[2]->setText (i18n ("Apply To Duplicate"));
-  connect (applyToDupBttn[2], SIGNAL(clicked()),
-	   this, SLOT(applyToDuplicatePressed()));
+    applyBttn[2] = new QPushButton(i18n("Apply"), parent);
+    connect (applyBttn[2], SIGNAL(clicked()), this, SLOT(applyPressed()));
+    layout->addWidget(applyBttn[2], 3, 0);
 
-  int width = applyToDupBttn[2]->sizeHint ().width ();
-  int height = applyToDupBttn[2]->sizeHint ().height ();
-
-  applyBttn[2]->setGeometry (20, 180, width, height);
-  applyToDupBttn[2]->setGeometry (20, 182 + height, width, height);
-
-  w->adjustSize ();
-  return w;
+    applyToDupBttn[2] = new QPushButton(i18n("Apply To Duplicate"), parent);
+    connect (applyToDupBttn[2], SIGNAL(clicked()),
+             this, SLOT(applyToDuplicatePressed()));
+    layout->addWidget(applyToDupBttn[2], 3, 1);
 }
 
-QWidget* TransformationDialog::createMirrorWidget (QWidget* parent) {
-  QWidget* w;
-  QButtonGroup* group;
-  w = new QWidget (parent);
+void TransformationDialog::createMirrorWidget (QWidget* parent) {
 
-  group = new QButtonGroup (w);
-  group->setFrameStyle (QFrame::NoFrame);
-  group->setExclusive (true);
+    QBoxLayout *layout=new QVBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QButtonGroup *group = new QHButtonGroup(parent);
+    group->setFrameStyle (QFrame::NoFrame);
+    group->setExclusive (true);
+    layout->addWidget(group);
 
-  horizMirror = new QPushButton (group);
-  horizMirror->setToggleButton (true);
-  horizMirror->setPixmap (UserIcon ("hmirror"));
-  horizMirror->setGeometry (20, 20, 40, 40);
+    horizMirror = new QPushButton(group);
+    horizMirror->setToggleButton(true);
+    horizMirror->setPixmap(UserIcon("hmirror"));
 
-  vertMirror = new QPushButton (group);
-  vertMirror->setToggleButton (true);
-  vertMirror->setPixmap (UserIcon ("vmirror"));
-  vertMirror->setGeometry (65, 20, 40, 40);
+    vertMirror = new QPushButton(group);
+    vertMirror->setToggleButton(true);
+    vertMirror->setPixmap(UserIcon("vmirror"));
 
-  group->adjustSize ();
+    group=new QHButtonGroup(parent);
+    group->setFrameStyle (QFrame::NoFrame);
+    layout->addWidget(group);
+    applyBttn[3] = new QPushButton(i18n("Apply"), group);
+    connect (applyBttn[3], SIGNAL(clicked()), this, SLOT(applyPressed()));
 
-  applyBttn[3] = new QPushButton (w);
-  applyBttn[3]->setText (i18n ("Apply"));
-  connect (applyBttn[3], SIGNAL(clicked()), this, SLOT(applyPressed()));
-
-  applyToDupBttn[3] = new QPushButton (w);
-  applyToDupBttn[3]->setText (i18n ("Apply To Duplicate"));
-  connect (applyToDupBttn[3], SIGNAL(clicked()),
-	   this, SLOT(applyToDuplicatePressed()));
-
-  int width = applyToDupBttn[3]->sizeHint ().width ();
-  int height = applyToDupBttn[3]->sizeHint ().height ();
-
-  applyBttn[3]->setGeometry (20, 110, width, height);
-  applyToDupBttn[3]->setGeometry (20, 112 + height, width, height);
-
-  w->adjustSize ();
-  return w;
+    applyToDupBttn[3] = new QPushButton(i18n("Apply To Duplicate"), group);
+    connect (applyToDupBttn[3], SIGNAL(clicked()),
+             this, SLOT(applyToDuplicatePressed()));
+    layout->addStretch(1);
 }
 
 void TransformationDialog::relativePositionSlot(){
@@ -437,7 +331,7 @@ void TransformationDialog::translate (bool onDuplicate) {
     duplicates.setAutoDelete (false);
 
     for (list<GObject*>::iterator it = document->getSelection ().begin ();
-	 it != document->getSelection ().end (); it++) {
+         it != document->getSelection ().end (); it++) {
       GObject* obj = (*it)->copy ();
       QWMatrix m;
       m.translate (xval, yval);
@@ -478,7 +372,7 @@ void TransformationDialog::scale (bool onDuplicate) {
     duplicates.setAutoDelete (false);
 
     for (list<GObject*>::iterator it = document->getSelection ().begin ();
-	 it != document->getSelection ().end (); it++) {
+         it != document->getSelection ().end (); it++) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
 
@@ -496,7 +390,7 @@ void TransformationDialog::scale (bool onDuplicate) {
   }
   else {
     ScaleCmd* cmd = new ScaleCmd (document, Handle_Right | Handle_Bottom,
-				 xval, yval);
+                                 xval, yval);
     history->addCommand (cmd, true);
   }
 }
@@ -519,7 +413,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
     duplicates.setAutoDelete (false);
 
     for (list<GObject*>::iterator it = document->getSelection ().begin ();
-	 it != document->getSelection ().end (); it++) {
+         it != document->getSelection ().end (); it++) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
       m1.translate (-xcenter, -ycenter);
@@ -535,7 +429,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
   }
   else {
     RotateCmd* cmd = new RotateCmd (document, Coord (xcenter, ycenter),
-				    angle);
+                                    angle);
     history->addCommand (cmd, true);
   }
 }
@@ -555,7 +449,7 @@ void TransformationDialog::mirror (bool onDuplicate) {
     duplicates.setAutoDelete (false);
 
     for (list<GObject*>::iterator it = document->getSelection ().begin ();
-	 it != document->getSelection ().end (); it++) {
+         it != document->getSelection ().end (); it++) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
 
@@ -573,7 +467,7 @@ void TransformationDialog::mirror (bool onDuplicate) {
   }
   else {
     ScaleCmd* cmd = new ScaleCmd (document, Handle_Right | Handle_Bottom,
-				  sx, sy);
+                                  sx, sy);
     history->addCommand (cmd, true);
   }
 }
@@ -584,9 +478,9 @@ void TransformationDialog::setDocument (GDocument* doc) {
 }
 
 void TransformationDialog::showTab (int id) {
-  show ();
-  tabCtl->showPage (id);
-  raise ();
+  show();
+  showPage(id);
+  raise();
 }
 
 void TransformationDialog::update () {
@@ -623,22 +517,22 @@ void TransformationDialog::updateProportionalDimension (float /*value*/) {
     debug("updateProportionalDimension--Horizontal");
       if (percent->isChecked ()){
         debug("updateProportionalDimension--Percental");
-	vertDim->setValue (horizDim->getValue ());}
+        vertDim->setValue (horizDim->getValue ());}
       else {
         debug("updateProportionalDimension--Non-Percental");
-	float h = horizDim->getValue ();
-	vertDim->setValue (h / dimRatio);
+        float h = horizDim->getValue ();
+        vertDim->setValue (h / dimRatio);
       }
     }
     else if (sender () == vertDim) {
       debug("updateProportionalDimension--vertical");
       if (percent->isChecked ()){
       debug("updateProportionalDimension--percental");
-	horizDim->setValue (vertDim->getValue ());}
+        horizDim->setValue (vertDim->getValue ());}
       else {
         debug("updateProportionalDimension--non-percental");
-	float v = vertDim->getValue ();
-	horizDim->setValue (v * dimRatio);
+        float v = vertDim->getValue ();
+        horizDim->setValue (v * dimRatio);
       }
     }
   }
@@ -657,3 +551,5 @@ void TransformationDialog::slotPercentScale () {
   vertDim->enableUnits (false);
   vertDim->setValue (100.0);
 }
+
+#include <TransformationDialog.moc>

@@ -37,7 +37,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 GLayer.h LayerDialog.h LayerView.h \
 		 Gradient.h GradientShape.h \
 		 BrushCells.h PathTextTool.h \
-		 EllipseConfigDialog.h MyTabCtl.h HelplineDialog.h \
+		 EllipseConfigDialog.h HelplineDialog.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
 		 StartupScreen.h filter_utils.h
 
@@ -77,7 +77,7 @@ libkillu_la_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon
 			  GLayer.cc LayerDialog.cc LayerView.cc \
 			  Gradient.cc GradientShape.cc \
 			  BrushCells.cc  \
-			  EllipseConfigDialog.cc MyTabCtl.cc \
+			  EllipseConfigDialog.cc \
 			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
 			  BlendDialog.cc BlendCmd.cc \
 			  StartupScreen.cc filter_utils.cc
