@@ -59,8 +59,6 @@ const char* KivioDragObject::format(int i) const
 
 QByteArray KivioDragObject::encodedData(const char* mimetype) const
 {
-  kdDebug() << "KivioDragObject: mimetype = " << mimetype << endl;
-
   if((m_encodeMimeList[0] == mimetype) ||
     (m_encodeMimeList[1] == mimetype) ||
     (m_encodeMimeList[2] == mimetype))
@@ -146,13 +144,13 @@ QByteArray KivioDragObject::kivioEncoded() const
 
 QByteArray KivioDragObject::imageEncoded(const char* mimetype) const
 {
-  kdDebug() << "Encoding..." << endl;
   KoZoomHandler zoomHandler;
   zoomHandler.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
   QPixmap buffer(zoomHandler.zoomItX(m_stencilRect.w()), zoomHandler.zoomItY(m_stencilRect.h()));
   buffer.fill(Qt::white);
   KivioScreenPainter p;
   p.start( &buffer );
+  p.setTranslation(-zoomHandler.zoomItX(m_stencilRect.x()), -zoomHandler.zoomItY(m_stencilRect.y()));
   KivioIntraStencilData data;
   data.painter = &p;
   data.zoomHandler = &zoomHandler;
@@ -169,7 +167,6 @@ QByteArray KivioDragObject::imageEncoded(const char* mimetype) const
 
   QImageDrag id;
   id.setImage(buffer.convertToImage());
-  kdDebug() << "Encoding ready!" << endl;
   return id.encodedData(mimetype);
 }
 
