@@ -4078,14 +4078,15 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     // Save to buffer
     QDomDocument doc = saveCellRect( rct );
 
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    QTextStream str( &buffer );
+    QString buffer;
+    QTextStream str( &buffer, IO_WriteOnly );
     str << doc;
-    buffer.close();
+
+    QCString s = buffer.utf8();
+    buffer = QString::null;
 
     QStoredDrag* data = new QStoredDrag( "application/x-kspread-snippet" );
-    data->setEncodedData( buffer.buffer() );
+    data->setEncodedData( s );
 
     QApplication::clipboard()->setData( data );
 }

@@ -231,14 +231,19 @@ bool KSpreadDoc::save( ostream& out, const char* )
   spread.appendChild( e );
 
   // Save to buffer
-  QBuffer buffer;
-  buffer.open( IO_WriteOnly );
-  QTextStream str( &buffer );
+  QString buffer;
+  // buffer.open( IO_WriteOnly );
+  QTextStream str( &buffer, IO_WriteOnly );
   str << doc;
-  buffer.close();
+  // buffer.close();
 
-  out.write( buffer.buffer().data(), buffer.buffer().size() );
+  // out.write( buffer.buffer().data(), buffer.buffer().size() );
 
+  QCString s = buffer.utf8();
+  buffer = QString::null;
+  
+  out.write( s.data(), s.size() );
+  
   setModified( false );
 
   return true;
