@@ -132,174 +132,6 @@
 // KSpread DCOP
 #include "KSpreadViewIface.h"
 
-// non flickering version of KSpell.
-// DF: those fixes have been applied to kde-3.2-pre, so KSpreadSpell
-// can go away when koffice requires kde-3.2.
-class KSpreadSpell : public KSpell
-{
- public:
-  KSpreadSpell(QWidget *parent, const QString &caption,
-               QObject *receiver, const char *slot, KSpellConfig *kcs=0,
-               bool progressbar = FALSE, bool modal = true )
-    : KSpell(parent, caption, receiver, slot, kcs, progressbar, modal)
-  {
-  }
-
-  // override check(...)
-  // mostly copied from kdelibs/kspell/kspell.cpp
-  // the dialog gets created but it gets only shown if something
-  // is misspelled. Otherwise for every cell the dialog would pop up
-  // and disappear
-  bool check( const QString &_buffer, bool _usedialog = true )
-  {
-    QString qs;
-
-    usedialog=_usedialog;
-    setUpDialog ();
-    //set the dialog signal handler
-    dialog3slot = SLOT (check3 ());
-
-    kdDebug(750) << "KS: check" << endl;
-    origbuffer = _buffer;
-    if ( ( totalpos = origbuffer.length() ) == 0 )
-    {
-      emit done(origbuffer);
-      return FALSE;
-    }
-
-    // Torben: I corrected the \n\n problem directly in the
-    //         origbuffer since I got errors otherwise
-    if ( origbuffer.right(2) != "\n\n" )
-    {
-      if (origbuffer.at(origbuffer.length() - 1) != '\n')
-      {
-        origbuffer += '\n';
-        origbuffer += '\n'; //shouldn't these be removed at some point?
-      }
-      else
-	origbuffer += '\n';
-    }
-
-    newbuffer = origbuffer;
-
-    // KProcIO calls check2 when read from ispell
-    connect(proc, SIGNAL (readReady(KProcIO *)), this, SLOT (check2(KProcIO *)));
-
-    proc->fputs ("!");
-
-    //lastpos is a position in newbuffer (it has offset in it)
-    offset = lastlastline = lastpos = lastline = 0;
-
-    emitProgress ();
-
-    // send first buffer line
-    int i = origbuffer.find('\n', 0) + 1;
-    qs = origbuffer.mid (0, i);
-    cleanFputs(qs, FALSE);
-
-    lastline = i; //the character position, not a line number
-
-    ksdlg->hide();
-
-    return TRUE;
-  }
-
-  // mostly copied from kdelibs/kspell/kspell.cpp
-  void check2 (KProcIO *)
-  {
-    int e, tempe;
-    QString word;
-    QString line;
-
-    do
-    {
-      tempe = proc->fgets (line); //get ispell's response
-
-      if (tempe > 0)
-      {
-        e = parseOneResponse(line, word, sugg);
-        if ( (e == 3) // mistake
-            || (e == 2) ) // replace
-        {
-          dlgresult =- 1;
-
-          // for multibyte encoding posinline needs correction
-          if (ksconfig->encoding() == KS_E_UTF8)
-          {
-            // convert line to UTF-8, cut at pos, convert back to UCS-2
-            // and get string length
-            posinline = (QString::fromUtf8(origbuffer.mid(lastlastline,
-                                                          lastline - lastlastline).utf8(),
-                                           posinline)).length();
-          }
-
-          lastpos = posinline + lastlastline + offset;
-
-          //orig is set by parseOneResponse()
-
-          if (e == 2) // replace
-          {
-            dlgreplacement = word;
-            emit corrected (orig, replacement(), lastpos);
-            offset += replacement().length() - orig.length();
-            newbuffer.replace (lastpos, orig.length(), word);
-          }
-          else  //MISTAKE
-          {
-            cwword = word;
-            if ( usedialog )
-            {
-              // show the word in the dialog
-              ksdlg->show();
-              dialog (word, sugg, SLOT (check3()));
-            }
-            else
-            {
-              // No dialog, just emit misspelling and continue
-              emit misspelling (word, sugg, lastpos);
-              dlgresult = KS_IGNORE;
-              check3();
-            }
-            return;
-          }
-        }
-
-      }
-
-      emitProgress (); //maybe
-
-    } while (tempe > 0);
-
-    proc->ackRead();
-
-
-    if (tempe == -1) //we were called, but no data seems to be ready...
-      return;
-
-    //If there is more to check, then send another line to ISpell.
-    if ((unsigned int)lastline < origbuffer.length())
-    {
-      int i;
-      QString qs;
-
-      lastpos = (lastlastline = lastline) + offset; //do we really want this?
-      i = origbuffer.find('\n', lastline)+1;
-      qs = origbuffer.mid (lastline, i-lastline);
-      cleanFputs (qs, FALSE);
-      lastline = i;
-      return;
-    }
-    else
-      //This is the end of it all
-    {
-      ksdlg->hide();
-      newbuffer.truncate (newbuffer.length()-2);
-      emitProgress();
-      emit done (newbuffer);
-    }
-  }
-};
-
 using namespace KSpread;
 
 class ViewActions;
@@ -394,7 +226,7 @@ public:
     // spell-check context
     struct
     {
-      KSpreadSpell *   kspell;
+      KSpell *   kspell;
       KSpreadSheet *  firstSpellTable;
       KSpreadSheet *  currentSpellTable;
       KSpreadCell  *  currentCell;
@@ -2061,7 +1893,7 @@ void KSpreadView::startKSpell()
         d->doc->getKSpellConfig()->setReplaceAllList( d->spell.replaceAll );
 
     }
-    d->spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this,
+    d->spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this,
                                        SLOT( spellCheckerReady() ),
                                        d->doc->getKSpellConfig() );
 

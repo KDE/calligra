@@ -48,7 +48,6 @@ class KSpreadHBorder;
 class KSpreadLocationEditWidget;
 class KSpreadSelection;
 class KSpreadSheet;
-class KSpreadSpell;
 class KSpreadVBorder;
 class KSpreadView;
 class KSpreadComboboxLocationEditWidget;

@@ -1874,6 +1874,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
   }
 }
 
+// not used anywhere
 void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
                                  KSpreadView* view, const KSpreadSheet* table,
 				 const QRect &chooseRect)
@@ -1930,6 +1931,7 @@ void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
   return;
 }
 
+// not used anywhere
 void KSpreadDoc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
                                    KSpreadView* view, const KSpreadSheet* table,
                                    const QRect &marker)
