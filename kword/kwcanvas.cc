@@ -427,25 +427,17 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             {
                 frame = doc->frameAtPos( docPoint.x(), docPoint.y() );
                 KWFrameSet * fs = frame ? frame->getFrameSet() : 0L;
-                bool emitChanged = false; // to emit after mousePressEvent [for tables]
-                if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
-                    terminateCurrentEdit();
-
-                // Edit the frameset under the mouse, if any
-                if ( fs && !m_currentFrameSetEdit )
+                bool emitChanged = false;
+                if ( fs )
                 {
                     KWTableFrameSet *table = fs->getGroupManager();
-                    if(table)
-                        m_currentFrameSetEdit=table->createFrameSetEdit(this);
-                    else
-                        m_currentFrameSetEdit = fs->createFrameSetEdit( this );
-                    emitChanged = true;
+                    emitChanged = checkCurrentEdit( table ? table : fs );
                 }
 
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
 
-                if ( emitChanged )
+                if ( emitChanged ) // emitted after mousePressEvent [for tables]
                     emit currentFrameSetEditChanged();
             }
         }
@@ -1577,6 +1569,27 @@ KWTableFrameSet *KWCanvas::getTable()
     return 0L;
 }
 
+bool KWCanvas::checkCurrentEdit( KWFrameSet * fs )
+{
+    bool emitChanged = false;
+    if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
+    {
+        // Don't use terminateCurrentEdit here, we want to emit changed only once
+        m_currentFrameSetEdit->terminate();
+        delete m_currentFrameSetEdit;
+        m_currentFrameSetEdit = 0L;
+        emitChanged = true;
+    }
+
+    // Edit the frameset under the mouse, if any
+    if ( fs && !m_currentFrameSetEdit )
+    {
+        m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+        emitChanged = true;
+    }
+    return emitChanged;
+}
+
 void KWCanvas::terminateCurrentEdit()
 {
     m_currentFrameSetEdit->terminate();
@@ -1616,19 +1629,8 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
             // If a frame was selected, we edit that one instead - ## well, its frameset at least.
             KWFrameSet * fs = frame ? frame->getFrameSet() : doc->getFrameSet( 0 );
             ASSERT( fs );
-            if ( fs )
-            {
-                //kdDebug() << "KWCanvas::setMouseMode editing " << fs << endl;
-                KWTableFrameSet *table = fs->getGroupManager();
-                if(table)
-                {
-                    m_currentFrameSetEdit=table->createFrameSetEdit(this);
-                (static_cast<KWTableFrameSetEdit *>(m_currentFrameSetEdit))->setCurrentCell( fs );
-                }
-                else
-                    m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+            if ( fs && checkCurrentEdit( fs ) )
                 emit currentFrameSetEditChanged();
-            }
         }
     }
 
@@ -1835,7 +1837,7 @@ void KWCanvas::updateCurrentFormat()
 {
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
     if ( edit )
-        edit->updateUI();
+        edit->updateUI( true, true );
 }
 
 #ifndef NDEBUG

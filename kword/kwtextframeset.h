@@ -222,7 +222,7 @@ signals:
     void setCursor( QTextCursor * cursor );
     // Emitted when the formatting under the cursor may have changed.
     // The Edit object should re-read settings and update the UI.
-    void updateUI( bool updateFormat = true );
+    void updateUI( bool updateFormat, bool force = false );
     // Same thing, when the current format (of the edit object) was changed
     void showCurrentFormat();
     // The views should make sure the cursor is visible
@@ -380,7 +380,7 @@ public:
     QList<KAction> dataToolActionList();
 
 public slots:
-    void updateUI( bool updateFormat = true );
+    void updateUI( bool updateFormat, bool force = false );
     void ensureCursorVisible();
     // This allows KWTextFrameSet to hide/show all the cursors before modifying anything
     void hideCursor() { drawCursor( false ); }

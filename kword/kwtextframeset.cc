@@ -1069,7 +1069,7 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
     //setLastFormattedParag( textdoc->firstParag() ); // done by zoom
     formatMore();
     emit repaintChanged( this );
-    emit updateUI();
+    emit updateUI( true );
 }
 
 KWTextFrameSet *KWTextFrameSet::getCopy() {
@@ -1779,7 +1779,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         setLastFormattedParag( firstParag );
         formatMore();
         emit repaintChanged( this );
-        emit updateUI();
+        emit updateUI( true );
         if ( createUndoRedo )
             m_doc->addCommand( macroCmd );
         emit showCursor();
@@ -1851,7 +1851,7 @@ void KWTextFrameSet::setCounter( QTextCursor * cursor, const Counter & counter )
     *undoRedoInfo.newParagLayout.counter = counter;
     undoRedoInfo.clear();
     emit showCursor();
-    emit updateUI();
+    emit updateUI( true );
 }
 
 void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
@@ -1882,7 +1882,7 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
     undoRedoInfo.newParagLayout.alignment = align;
     undoRedoInfo.clear();
     emit showCursor();
-    emit updateUI();
+    emit updateUI( true );
 }
 
 void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin ) {
@@ -1920,7 +1920,7 @@ void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m,
     undoRedoInfo.newParagLayout.margins[m] = margin;
     undoRedoInfo.clear();
     emit showCursor();
-    emit updateUI();
+    emit updateUI( true );
 }
 
 void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, double spacing )
@@ -2005,7 +2005,7 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
     undoRedoInfo.newParagLayout.bottomBorder=bottomBorder;
     undoRedoInfo.clear();
     emit showCursor();
-    emit updateUI();
+    emit updateUI( true );
 }
 
 
@@ -2039,7 +2039,7 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &ta
     undoRedoInfo.newParagLayout.setTabList( tabList );
     undoRedoInfo.clear();
     emit showCursor();
-    emit updateUI();
+    emit updateUI( true );
 }
 
 void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, int pageBreaking )
@@ -2073,7 +2073,7 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, int pageBreaking )
     undoRedoInfo.newParagLayout.pageBreaking = pageBreaking;
     undoRedoInfo.clear();
     emit showCursor();
-    emit updateUI();
+    emit updateUI( true );
     emit ensureCursorVisible();
 }
 
@@ -2100,7 +2100,7 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, 
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
-    emit updateUI();
+    emit updateUI( true );
     emit showCursor();
     undoRedoInfo.clear();
 }
@@ -2163,7 +2163,7 @@ void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & rep
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
-    emit updateUI();
+    emit updateUI( true );
     emit showCursor();
 }
 
@@ -2245,7 +2245,7 @@ void KWTextFrameSet::undo()
     setLastFormattedParag( textdoc->firstParag() );
     formatMore();
     emit repaintChanged( this );
-    emit updateUI();
+    emit updateUI( true );
     emit showCursor();
     emit ensureCursorVisible();
 }
@@ -2264,7 +2264,7 @@ void KWTextFrameSet::redo()
     setLastFormattedParag( textdoc->firstParag() );
     formatMore();
     emit repaintChanged( this );
-    emit updateUI();
+    emit updateUI( true );
     emit showCursor();
     emit ensureCursorVisible();
 }
@@ -2314,7 +2314,7 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
-    emit updateUI();
+    emit updateUI( true );
     emit showCursor();
 }
 
@@ -2338,7 +2338,7 @@ void KWTextFrameSet::insertTOC( QTextCursor * cursor )
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
-    emit updateUI();
+    emit updateUI( true );
     emit showCursor();
 
     m_doc->addCommand( macroCmd );
@@ -2548,7 +2548,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     connect( fs, SIGNAL( hideCursor() ), this, SLOT( hideCursor() ) );
     connect( fs, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
     connect( fs, SIGNAL( setCursor( QTextCursor * ) ), this, SLOT( setCursor( QTextCursor * ) ) );
-    connect( fs, SIGNAL( updateUI(bool) ), this, SLOT( updateUI(bool) ) );
+    connect( fs, SIGNAL( updateUI(bool, bool) ), this, SLOT( updateUI(bool, bool) ) );
     connect( fs, SIGNAL( showCurrentFormat() ), this, SLOT( showCurrentFormat() ) );
     connect( fs, SIGNAL( ensureCursorVisible() ), this, SLOT( ensureCursorVisible() ) );
     connect( fs, SIGNAL( selectionChanged(bool) ), canvas, SIGNAL( selectionChanged(bool) ) );
@@ -2573,7 +2573,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     mightStartDrag = FALSE;
 
     m_currentFormat = 0;
-    updateUI();
+    updateUI( true, true );
 }
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
@@ -2792,7 +2792,7 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action, bool select )
     }
 
     showCursor();
-    updateUI();
+    updateUI( true );
 }
 
 void KWTextFrameSetEdit::moveCursor( CursorAction action )
@@ -2852,7 +2852,7 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
         } break;
     }
 
-    updateUI();
+    updateUI( true );
 }
 
 void KWTextFrameSetEdit::paste()
@@ -3271,7 +3271,7 @@ void KWTextFrameSetEdit::placeCursor( const QPoint &pos )
     cursor->restoreState();
     QTextParag *s = textDocument()->firstParag();
     cursor->place( pos,  s );
-    updateUI();
+    updateUI( true );
 }
 
 void KWTextFrameSetEdit::blinkCursor()
@@ -3495,7 +3495,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
 }
 
 // Update the GUI toolbar button etc. to reflect the current cursor position.
-void KWTextFrameSetEdit::updateUI( bool updateFormat )
+void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
 {
     // Update UI - only for those items which have changed
 
@@ -3532,7 +3532,7 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
     // Paragraph settings
     KWTextParag * parag = static_cast<KWTextParag *>(cursor->parag());
 
-    if ( m_paragLayout.alignment != parag->alignment() ) {
+    if ( m_paragLayout.alignment != parag->alignment() || force ) {
         m_paragLayout.alignment = parag->alignment();
         m_canvas->gui()->getView()->showAlign( m_paragLayout.alignment );
     }
@@ -3548,13 +3548,13 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
         m_paragLayout.counter->setNumbering( Counter::NUM_NONE );
         m_paragLayout.counter->setStyle( Counter::STYLE_NONE );
     }
-    if ( m_paragLayout.counter->style() != cstyle )
+    if ( m_paragLayout.counter->style() != cstyle || force )
         m_canvas->gui()->getView()->showCounter( * m_paragLayout.counter );
 
     if(m_paragLayout.leftBorder!=parag->leftBorder() ||
        m_paragLayout.rightBorder!=parag->rightBorder() ||
        m_paragLayout.topBorder!=parag->topBorder() ||
-       m_paragLayout.bottomBorder!=parag->bottomBorder())
+       m_paragLayout.bottomBorder!=parag->bottomBorder() || force )
     {
         m_paragLayout.leftBorder = parag->leftBorder();
         m_paragLayout.rightBorder = parag->rightBorder();
@@ -3565,14 +3565,14 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat )
 
     if ( !parag->style() )
         kdWarning() << "Paragraph " << parag->paragId() << " has no style" << endl;
-    else if ( m_paragLayout.style != parag->style() )
+    else if ( m_paragLayout.style != parag->style() || force )
     {
         m_paragLayout.style = parag->style();
         m_canvas->gui()->getView()->showStyle( m_paragLayout.style->name() );
     }
 
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
-        || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine) )
+        || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine) || force )
     {
         m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
         m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
