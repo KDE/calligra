@@ -37,7 +37,7 @@ public:
 	~VStrokeFillPreview();
 
 	virtual QSize sizeHint() const
-		{ return QSize( 50, 50 ); }
+		{ return QSize( 50, 60 ); }
 	virtual QSize minimumSizeHint() const
 		{ return QSize( 20, 20 ); }
 	virtual QSizePolicy sizePolicy() const
