@@ -169,6 +169,7 @@ bool KoApplication::start()
 		     if ( shell->openDocument(doc, templateURL )) {
 		       doc->resetURL();
 		       doc->setEmpty();
+                       doc->setTitleModified();
 		       kdDebug(3003) << "Template loaded..." << endl;
 		       n++;
 		     } else {
