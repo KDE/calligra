@@ -680,7 +680,7 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL DCS *out, unsigned count)
         shifterU8 >>= 3;
         out->unused0_3 = shifterU8;
         shifterU8 >>= 5;
-        bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
+        bytes += read(in + bytes, (U8 *)(ptr + bytes), 1);
         out++;
     }
     return bytes;
@@ -780,6 +780,8 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL DOP *out, unsigned count)
         shifterU8 >>= 1;
         out->fMirrorMargins = shifterU8;
         shifterU8 >>= 1;
+        out->unused6_6 = shifterU8;
+        shifterU8 >>= 1;
         out->fDfltTrueType = shifterU8;
         shifterU8 >>= 1;
         bytes += read(in + bytes, &shifterU8);
@@ -792,6 +794,8 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL DOP *out, unsigned count)
         out->fRMView = shifterU8;
         shifterU8 >>= 1;
         out->fRMPrint = shifterU8;
+        shifterU8 >>= 1;
+        out->unused7_5 = shifterU8;
         shifterU8 >>= 1;
         out->fLockRev = shifterU8;
         shifterU8 >>= 1;
@@ -1627,6 +1631,8 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL PICF *out, unsigned count)
         shifterU16 >>= 1;
         out->fError = shifterU16;
         shifterU16 >>= 1;
+        out->bpp = shifterU16;
+        shifterU16 >>= 8;
         bytes += read(in + bytes, (BRC *)(ptr + bytes), 4);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 3);
         out++;
@@ -1784,7 +1790,7 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL SEP *out, unsigned count)
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
-        bytes += read(in + bytes, (U16 *)(ptr + bytes), 5);
+        bytes += read(in + bytes, (U16 *)(ptr + bytes), 4);
         bytes += read(in + bytes, &shifterU16);
         out->pgbApplyTo = shifterU16;
         shifterU16 >>= 3;
@@ -1792,6 +1798,8 @@ unsigned MsWordGenerated::read(const U8 *in, __UNAL SEP *out, unsigned count)
         shifterU16 >>= 2;
         out->pgbOffsetFrom = shifterU16;
         shifterU16 >>= 3;
+        out->unused74_8 = shifterU16;
+        shifterU16 >>= 8;
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 11);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);

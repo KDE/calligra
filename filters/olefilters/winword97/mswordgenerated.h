@@ -1108,7 +1108,7 @@ public:
         U8 unused0_3:5;
 
         //
-        U16 unused1;
+        U8 unused1;
     } __attribute__ ((packed)) DCS;
     static unsigned read(const U8 *in, __UNAL DCS *out, unsigned count=1);
 
@@ -1246,7 +1246,7 @@ public:
         U8 fMirrorMargins:1;
 
         // reserved
-        U8 unused6_6;
+        U8 unused6_6:1;
 
         // when 1, use TrueType fonts by default (flag obeyed only when doc
         // was created by WinWord 2.x)
@@ -1269,7 +1269,7 @@ public:
         U8 fRMPrint:1;
 
         // reserved
-        U8 unused7_5;
+        U8 unused7_5:1;
 
         // when 1, the current revision marking state is locked
         U8 fLockRev:1;
@@ -3590,7 +3590,7 @@ public:
         //     0 unknown
         //     1 monochrome
         //     4 VGA
-        U16 bpp;
+        U16 bpp:8;
 
         // specification for border above picture
         BRC brcTop;
@@ -3887,10 +3887,7 @@ public:
         // reserved
         U16 unused72;
 
-        // page border properties
-        U16 pgbProp;
-
-        // page border applies to:
+        // pgbProp page border properties. page border applies to:
         //     0 all pages in this section
         //     1 first page in this section
         //     2 all pages in this section but first
@@ -3906,6 +3903,8 @@ public:
         //     0 offset from text
         //     1 offset from edge of page
         U16 pgbOffsetFrom:3;
+
+        U16 unused74_8:8;
 
         // default value is 12240 twipswidth of page
         U32 xaPage;
