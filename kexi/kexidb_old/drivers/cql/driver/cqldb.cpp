@@ -18,8 +18,13 @@ Boston, MA 02111-1307, USA.
 */
 
 //#include <qstringlist.h>
+#include <iostream.h>
+
 #include <kgenericfactory.h>
 #include <kdebug.h>
+#include <klocale.h>
+
+#include <kexidberror.h>
 
 #include "cqldb.h"
 
@@ -62,6 +67,7 @@ CqlDB::load(QString file)
 	catch(CqlException& ex)
 	{
 		cerr << ex << endl;
+		throw new KexiDBError(0, i18n("connection faild"));
 	}
 }
 
@@ -73,6 +79,13 @@ CqlDB::tables()
 
 bool
 CqlDB::query(QString)
+{
+}
+
+bool
+CqlDB::alterField(const QString& table, const QString& field, const QString& newFieldName,
+	KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
+	bool binary, bool unsignedType, const QString& defaultVal)
 {
 }
 

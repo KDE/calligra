@@ -44,6 +44,11 @@ class CqlDB : public KexiDB
 
 		bool		query(QString statement);
 
+		
+		bool alterField(const QString& table, const QString& field, const QString& newFieldName,
+			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
+			bool binary, bool unsignedType, const QString& defaultVal);
+
 	private:
 		SqlHandle	*m_db;
 };
