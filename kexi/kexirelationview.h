@@ -28,6 +28,7 @@
 
 #include <klistview.h>
 #include <kexirelation.h>
+#include "kexirelationviewtable.h"
 
 //#include <qlistview.h>
 
@@ -82,46 +83,6 @@ class KexiRelationView : public QScrollView
 		TableList	m_tables;
 		RelationList	m_connections;
 		bool		m_readOnly;
-};
-
-class KexiRelationViewTable : public KListView
-{
-	Q_OBJECT
-
-	public:
-		KexiRelationViewTable(KexiRelationView *parent, QString table, QStringList fields, const char *name=0);
-		~KexiRelationViewTable();
-
-		QString			table() const { return m_table; };
-		int			globalY(const QString &item);
-		void setReadOnly(bool);
-
-	signals:
-		void			tableScrolling(QString);
-
-	protected:
-		QDragObject		*dragObject();
-		virtual bool		acceptDrag(QDropEvent *e) const;
-
-	protected slots:
-		void			slotDropped(QDropEvent *e);
-		void			slotContentsMoving(int, int);
-
-	private:
-		QStringList		m_fieldList;
-		QString			m_table;
-
-		KexiRelationView	*m_parent;
-};
-
-class KexiFieldMetaDrag : public QStoredDrag
-{
-	public:
-		KexiFieldMetaDrag(QCString meta, QWidget *parent=0, const char *name=0);
-		~KexiFieldMetaDrag() { };
-
-		static bool canDecode( QDragMoveEvent* e);
-		static bool decode( QDropEvent* e, QString& s);
 };
 
 #endif
