@@ -21,6 +21,8 @@
 #include "sqliteconnection_p.h"
 #include "sqlitecursor.h"
 
+#include "sqlite.h"
+
 #include <kexidb/driver.h>
 #include <kexidb/cursor.h>
 #include <kexidb/error.h>
@@ -39,6 +41,7 @@ using namespace KexiDB;
 
 SQLiteConnectionInternal::SQLiteConnectionInternal()
 	: data(0),errmsg_p(0),res(SQLITE_OK)
+	, temp_st(0x10000) //
 {
 }
 
@@ -206,13 +209,17 @@ bool SQLiteConnection::drv_executeQuery( const QString& statement )
 bool SQLiteConnection::drv_executeSQL( const QString& statement )
 {
 	KexiDBDrvDbg << "SQLiteConnection::drv_executeSQL(" << statement << ")" <<endl;
-	QCString st(statement.length()*2);
+//	QCString st(statement.length()*2);
 //	st = escapeString( statement.local8Bit() ); //?
-	st = statement.local8Bit();
+#ifdef SQLITE_UTF8
+	d->temp_st = statement.utf8();
+#else
+	d->temp_st = statement.local8Bit(); //latin1 only
+#endif
 
 	d->res = sqlite_exec( 
 		d->data, 
-		st.data(), 
+		(const char*)d->temp_st, 
 		0/*callback*/, 
 		0,
 		&d->errmsg_p );

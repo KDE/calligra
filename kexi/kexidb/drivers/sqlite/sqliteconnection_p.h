@@ -39,6 +39,8 @@ class SQLiteConnectionInternal
 		QString errmsg; //<! server-specific message of last operation
 		char *errmsg_p; //<! temporary: server-specific message of last operation
 		int res; //<! result code of last operation on server
+
+		QCString temp_st;
 };
 };
 

@@ -306,7 +306,20 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 - remove single-char token names with chars (more readable + more effective)
 
 === 2004 LT TODO ===
+- move to SQLITE3 (later it will be harder to do)
 -....
+
+2004-08-19
+KexiDB
+- DriverPrivate added to avoid binary incompatibilities
+- driver (QCString keys, QVariant values) properties added
+  (some prdefined properties added as well)
+Table View
+- optimizations in KexiTableViewData::saveRow()
+New API Tests
+- "dr_prop" test added
+SQLITE Driver
+- Kexi file driver now supports UTF8 storage for text fields
 
 2004-08-17..18
 Core

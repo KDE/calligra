@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 #include <kexidb/driver_p.h>
 #include <kexidb/connection.h>
 
+#include "sqlite.h"
 #include "sqlitedriver.h"
 #include "sqliteconnection.h"
 
@@ -49,11 +50,11 @@ class KexiDB::SQLiteDriverPrivate
 //PgSqlDB::PgSqlDB(QObject *parent, const char *name, const QStringList &) 
 SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList &args )
 	: Driver( parent, name, args )
-	,d( new SQLiteDriverPrivate() )
+	,dp( new SQLiteDriverPrivate() )
 {
-	m_isFileDriver = true;
-	m_isDBOpenedAfterCreate = true;
-	m_features = SingleTransactions | CursorForward;
+	d->isFileDriver = true;
+	d->isDBOpenedAfterCreate = true;
+	d->features = SingleTransactions | CursorForward;
 	
 	//special method for autoincrement definition
 	beh->SPECIAL_AUTO_INCREMENT_DEF = true;
@@ -61,24 +62,28 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	beh->ROW_ID_FIELD_NAME = "OID";
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=true;
 
-	m_typeNames[Field::Byte]="Byte";
-	m_typeNames[Field::ShortInteger]="ShortInteger";
-	m_typeNames[Field::Integer]="Integer";
-	m_typeNames[Field::BigInteger]="BigInteger";
-	m_typeNames[Field::Boolean]="Boolean";
-	m_typeNames[Field::Date]="Date";
-	m_typeNames[Field::DateTime]="DateTime";
-	m_typeNames[Field::Time]="Time";
-	m_typeNames[Field::Float]="Float";
-	m_typeNames[Field::Double]="Double";
-	m_typeNames[Field::Text]="Text";
-	m_typeNames[Field::LongText]="CLOB";
-	m_typeNames[Field::BLOB]="BLOB";
+	//predefined properties
+	d->properties["client_library_version"] = sqlite_libversion();
+	d->properties["default_server_encoding"] = sqlite_libencoding();
+
+	d->typeNames[Field::Byte]="Byte";
+	d->typeNames[Field::ShortInteger]="ShortInteger";
+	d->typeNames[Field::Integer]="Integer";
+	d->typeNames[Field::BigInteger]="BigInteger";
+	d->typeNames[Field::Boolean]="Boolean";
+	d->typeNames[Field::Date]="Date";
+	d->typeNames[Field::DateTime]="DateTime";
+	d->typeNames[Field::Time]="Time";
+	d->typeNames[Field::Float]="Float";
+	d->typeNames[Field::Double]="Double";
+	d->typeNames[Field::Text]="Text";
+	d->typeNames[Field::LongText]="CLOB";
+	d->typeNames[Field::BLOB]="BLOB";
 }
 
 SQLiteDriver::~SQLiteDriver()
 {
-	delete d;
+	delete dp;
 }
 
 

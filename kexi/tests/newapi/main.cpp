@@ -46,9 +46,11 @@ QCString db_name;
 QCString drv_name;
 QCString test_name;
 int cursor_options = 0;
+bool db_name_required = true;
 
 KexiDB::ConnectionData conn_data;
 QGuardedPtr<KexiDB::Connection> conn;
+QGuardedPtr<KexiDB::Driver> driver;
 KApplication *app = 0;
 KInstance *instance = 0;
 
@@ -73,7 +75,7 @@ static KCmdLineOptions options[] =
 		" <new_db_name> is removed if already exists.\n"
 		" <db_name> must be a valid kexi database e.g. created with 'tables' test.", 0},
   { "+driver_name", "Driver name", 0},
-  { "+db_name", "Database name", 0},
+  { "+[db_name]", "Database name", 0},
   { "+[statement]", "Optional SQL statement (for parser test)", 0},
 	KCmdLineLastOption
 };
@@ -84,6 +86,7 @@ static KCmdLineOptions options[] =
 #include "tables_test.h"
 #include "tableview_test.h"
 #include "parser_test.h"
+#include "dr_prop_test.h"
 
 #define RETURN(code) \
 	kdDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR") << endl; \
@@ -116,18 +119,26 @@ int main(int argc, char** argv)
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	QCStringList tests;
 	tests << "cursors" << "schema" << "dbcreation" << "tables" 
-		<< "tableview" << "parser";
-	if (!args->isSet("test") || !tests.contains(args->getOption("test"))) {
+		<< "tableview" << "parser" << "dr_prop";
+	if (!args->isSet("test")) {
 		kdDebug() << "No test specified. Use --help." << endl;
-		RETURN(0);
+		RETURN(1);
 	}
 	test_name = args->getOption("test");
+	if (!tests.contains(test_name)) {
+		kdDebug() << QString("No such test \"%1\". Use --help.").arg(test_name) << endl;
+		RETURN(1);
+	}
 	
 	if (test_name=="tableview") {
 		gui = true;
 	}
 	else if (test_name=="parser") {
 		minargs = 3;
+	}
+	else if (test_name=="dr_prop") {
+		minargs = 1;
+		db_name_required = false;
 	}
 	if ((int)args->count()<minargs) {
 		kdDebug() << QString("Not enough args (%1 required). Use --help.").arg(minargs) << endl;
@@ -156,7 +167,7 @@ int main(int argc, char** argv)
 	}
 
 	//get driver
-	KexiDB::Driver *driver = manager.driver(drv_name);
+	driver = manager.driver(drv_name);
 	if (!driver || manager.error()) {
 		manager.debugError();
 		RETURN(1);
@@ -168,34 +179,36 @@ int main(int argc, char** argv)
 //	conn_data.password = "mypwd";
 
 //open connection
-	db_name = args->arg(1);
-	if (db_name.isEmpty()) {
+	if (args->count() >= 2)
+		db_name = args->arg(1);
+	if (db_name_required && db_name.isEmpty()) {
 		kdDebug() << prgname << ": database name?" << endl;
 		RETURN(1);
 	}
-//	db_name = QCString(argv[3]);
-	//additional switches:
-	if (args->isSet("buffered-cursors")) {
-		cursor_options |= KexiDB::Cursor::Buffered;
-	}
-/*		else {
-			kdWarning() << "Unknown switch: '" << QCString(argv[i]) << "'" << endl;
-			usage();
+	if (!db_name.isEmpty()) {
+		//additional switches:
+		if (args->isSet("buffered-cursors")) {
+			cursor_options |= KexiDB::Cursor::Buffered;
+		}
+	/*		else {
+				kdWarning() << "Unknown switch: '" << QCString(argv[i]) << "'" << endl;
+				usage();
+				RETURN(1);
+			}
+		}*/
+		
+		conn_data.setFileName( db_name );
+
+		conn = driver->createConnection(conn_data);
+
+		if (!conn || driver->error()) {
+			driver->debugError();
 			RETURN(1);
 		}
-	}*/
-	
-	conn_data.setFileName( db_name );
-
-	conn = driver->createConnection(conn_data);
-
-	if (!conn || driver->error()) {
-		driver->debugError();
-		RETURN(1);
-	}
-	if (!conn->connect()) {
-		conn->debugError();
-		RETURN(1);
+		if (!conn->connect()) {
+			conn->debugError();
+			RETURN(1);
+		}
 	}
 
 //start test:
@@ -212,6 +225,8 @@ int main(int argc, char** argv)
 		r=tableViewTest();
 	else if (test_name == "parser")
 		r=parserTest(args->arg(2));
+	else if (test_name == "dr_prop")
+		r=drPropTest();
 	else {
 		kdWarning() << "No such test: " << test_name << endl;
 //		usage();

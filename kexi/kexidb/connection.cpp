@@ -137,7 +137,7 @@ void Connection::destroy()
 {
 	disconnect();
 	//do not allow the driver to touch me: I will kill myself.
-	m_driver->m_connections.take( this );
+	m_driver->d->connections.take( this );
 }
 
 Connection::~Connection()
@@ -369,7 +369,7 @@ bool Connection::createDatabase( const QString &dbName )
 			return false;
 	}
 
-	if (!tmpdbName.isEmpty() || !m_driver->m_isDBOpenedAfterCreate) {
+	if (!tmpdbName.isEmpty() || !m_driver->d->isDBOpenedAfterCreate) {
 		//db need to be opened
 		if (!useDatabase( dbName, false/*not yet kexi compatible!*/ )) {
 			setError(i18n("Database \"%1\" created but could not be opened.").arg(dbName) );
@@ -781,7 +781,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			v += m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
 		}
 		else {
-			v += m_driver->m_typeNames[field->m_type];
+			v += m_driver->d->typeNames[field->m_type];
 			if (field->isUnsigned())
 				v += (" " + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
 			if (field->m_length>0)
@@ -1345,18 +1345,18 @@ bool Connection::drv_createTable( const QString& tableSchemaName )
 
 bool Connection::beginAutoCommitTransaction(Transaction &trans)
 {
-	if (m_driver->m_features & Driver::IgnoreTransactions)
+	if (m_driver->d->features & Driver::IgnoreTransactions)
 		return true;
 	if (!m_autoCommit)
 		return true;
 		
 	// commit current transaction (if present) for drivers 
 	// that allow single transaction per connection
-	if (m_driver->m_features & Driver::SingleTransactions) {
+	if (m_driver->d->features & Driver::SingleTransactions) {
 		if (!commitTransaction(d->m_default_trans, true)) 
 			return false; //we have real error
 	}
-	else if (!(m_driver->m_features & Driver::MultipleTransactions)) {
+	else if (!(m_driver->d->features & Driver::MultipleTransactions)) {
 		return true; //no trans. supported at all - just return
 	}
 	trans=beginTransaction();
@@ -1365,7 +1365,7 @@ bool Connection::beginAutoCommitTransaction(Transaction &trans)
 
 bool Connection::commitAutoCommitTransaction(const Transaction& trans)
 {
-	if (m_driver->m_features & Driver::IgnoreTransactions)
+	if (m_driver->d->features & Driver::IgnoreTransactions)
 		return true;
 	if (trans.isNull() || !m_driver->transactionsSupported())
 		return true;
@@ -1392,14 +1392,14 @@ Transaction Connection::beginTransaction()
 	if (!isDatabaseUsed())
 		return Transaction::null;
 	Transaction trans;
-	if (m_driver->m_features & Driver::IgnoreTransactions) {
+	if (m_driver->d->features & Driver::IgnoreTransactions) {
 		//we're creating dummy transaction data here,
 		//so it will look like active
 		trans.m_data = new TransactionData(this);
 		d->m_transactions.append(trans);
 		return trans;
 	}
-	if (m_driver->m_features & Driver::SingleTransactions) {
+	if (m_driver->d->features & Driver::SingleTransactions) {
 		if (d->m_default_trans.active()) {
 			setError(ERR_TRANSACTION_ACTIVE, i18n("Transaction already started.") );
 			return Transaction::null;
@@ -1412,7 +1412,7 @@ Transaction Connection::beginTransaction()
 		d->m_transactions.append(trans);
 		return d->m_default_trans;
 	}
-	if (m_driver->m_features & Driver::MultipleTransactions) {
+	if (m_driver->d->features & Driver::MultipleTransactions) {
 		if (!(trans.m_data = drv_beginTransaction())) {
 			SET_BEGIN_TR_ERROR;
 			return Transaction::null;
@@ -1430,7 +1430,7 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 	if (!isDatabaseUsed())
 		return false;
 	if ( !m_driver->transactionsSupported()
-		&& !(m_driver->m_features & Driver::IgnoreTransactions))
+		&& !(m_driver->d->features & Driver::IgnoreTransactions))
 	{
 		SET_ERR_TRANS_NOT_SUPP;
 		return false;
@@ -1447,7 +1447,7 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
 	bool ret;
-	if (! (m_driver->m_features & Driver::IgnoreTransactions) )
+	if (! (m_driver->d->features & Driver::IgnoreTransactions) )
 		ret = drv_commitTransaction(t.m_data);
 	if (t.m_data)
 		t.m_data->m_active = false; //now this transaction if inactive
@@ -1463,7 +1463,7 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 	if (!isDatabaseUsed())
 		return false;
 	if ( !m_driver->transactionsSupported() 
-		&& !(m_driver->m_features & Driver::IgnoreTransactions)) 
+		&& !(m_driver->d->features & Driver::IgnoreTransactions)) 
 	{
 		SET_ERR_TRANS_NOT_SUPP;
 		return false;
@@ -1480,7 +1480,7 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
 	bool ret = true;
-	if (! (m_driver->m_features & Driver::IgnoreTransactions) )
+	if (! (m_driver->d->features & Driver::IgnoreTransactions) )
 	 	ret = drv_rollbackTransaction(t.m_data);
 	if (t.m_data)
 		t.m_data->m_active = false; //now this transaction if inactive
@@ -1508,7 +1508,7 @@ void Connection::setDefaultTransaction(const Transaction& trans)
 {
 	if (!checkIsDatabaseUsed())
 		return;
-	if ( !(m_driver->m_features & Driver::IgnoreTransactions)
+	if ( !(m_driver->d->features & Driver::IgnoreTransactions)
 		&& (!trans.active() || !m_driver->transactionsSupported()) )
 	{
 		return;
@@ -1528,7 +1528,7 @@ bool Connection::autoCommit() const
 
 bool Connection::setAutoCommit(bool on)
 {
-	if (m_autoCommit == on || m_driver->m_features & Driver::IgnoreTransactions)
+	if (m_autoCommit == on || m_driver->d->features & Driver::IgnoreTransactions)
 		return true;
 	if (!drv_setAutoCommit(on))
 		return false;

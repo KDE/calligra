@@ -420,7 +420,11 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 		if (!*col)
 			data[i] = QVariant();
 		else if (f->isTextType())
-			data[i] = QVariant( *col );
+#ifdef SQLITE_UTF8
+			data[i] = QString::fromUtf8( *col );
+#else
+			data[i] = QVariant( *col ); //only latin1
+#endif
 		else if (f->isIntegerType())
 			data[i] = QVariant( QCString(*col).toInt() );
 		else if (f->isFPNumericType())

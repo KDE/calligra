@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,10 +21,6 @@
 #define KEXIDB_DRIVER_H
 
 #include <qobject.h>
-#include <qptrlist.h>
-#include <qptrdict.h>
-#include <qstringlist.h>
-#include <qvaluevector.h>
 
 #include <kexidb/object.h>
 #include <kexidb/field.h>
@@ -105,13 +101,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 (equal X-Kexi-FileDBDriverMime service property)
 		 otherwise returns null string. \sa isFileDriver()
 		*/
-		QString fileDBDriverMime() const { return m_fileDBDriverMime; }
+		QString fileDBDriverMime() const;
 
 		/*! Info about the driver as a service. */
-		const KService* service() const { return m_service; }
+		const KService* service() const;
 
 		/*! \return true if this driver is file-based */
-		bool isFileDriver() const { return m_isFileDriver; }
+		bool isFileDriver() const;
 
 		/*! \return true if \a n is a system object's name, 
 		 eg. name of build-in system table that cannot be used or created by a user,
@@ -147,14 +143,14 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 
 		/*! \return Driver's features that are combination of Driver::Features
 		enum. */
-		int features() const { return m_features; }
+		int features() const;
 
 		/*! \return true if transaction are supported (single or 
 		 multiple). */
-		bool transactionsSupported() const { return m_features & (SingleTransactions | MultipleTransactions); }
+		bool transactionsSupported() const;
 		
 		/*! SQL-implementation-dependent name of given type */
-		QString sqlTypeName(int id_t) const { return m_typeNames[id_t]; }
+		QString sqlTypeName(int id_t) const;
 
 		/*! used when we do not have Driver instance yet */
 		static QString defaultSQLTypeName(int id_t);
@@ -184,6 +180,12 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		virtual QString escapeString(const QString& str) const = 0;
 		virtual QCString escapeString(const QCString& str) const = 0;
 
+		QVariant propertyValue( const QCString& propName ) const;
+
+		QString propertyCaption( const QCString& propName ) const;
+
+		QValueList<QCString> propertyNames() const;
+
 	protected:
 		/*! For reimplemenation: creates and returns connection object 
 		 with additional structures specific for a given driver.
@@ -195,9 +197,9 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! Used by DriverManager. 
 		 Note for driver developers: Reimplement this.
 		 In your reimplementation you should initialize:
-		 - m_typeNames - to types accepted by your engine
-		 - m_isFileDriver - to true or false depending if your driver is file-based
-		 - m_features - to combination of selected values from Features enum
+		 - d->typeNames - to types accepted by your engine
+		 - d->isFileDriver - to true or false depending if your driver is file-based
+		 - d->features - to combination of selected values from Features enum
 		 
 		 You may also want to change options in DriverBehaviour *beh member.
 		 See drivers/mySQL/mysqldriver.cpp for usage example.
@@ -210,56 +212,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 eventually delete it. Better use Connection destructor. */
 		Connection* removeConnection( Connection *conn );
 
-		QPtrDict<KexiDB::Connection> m_connections;
-
-//(js)now QObject::name() is reused:
-//		/*! The name equal to the service name (X-Kexi-DriverName) 
-//		 stored in given service .desktop file. Set this in subclasses. */
-//		QString m_driverName;
-		
-		/*! Name of MIME type of files handled by this driver 
-		 if it is a file-based database's driver 
-		 (equal X-Kexi-FileDBDriverMime service property) */
-		QString m_fileDBDriverMime;
-
-		/*! Info about the driver as a service. */
-		KService *m_service;
-
-		/*! Internal constant flag: Set this in subclass if driver is a file driver */
-		bool m_isFileDriver : 1;
-
-		/*! Internal constant flag: Set this in subclass if after successfull
-		 drv_createDatabased() database is in opened state (as after useDatabase()). 
-		 For most engines this is not true. */
-		bool m_isDBOpenedAfterCreate : 1;
-
-		/*! List of system objects names, eg. build-in system tables that 
-		 cannot be used by user, and in most cases user even shouldn't see these.
-		 The list contents is driver dependent (by default is empty) 
-		 - fill this in subclass ctor. */
-//		QStringList m_systemObjectNames;
-
-		/*! List of system fields names, build-in system fields that cannot be used by user,
-		 and in most cases user even shouldn't see these.
-		 The list contents is driver dependent (by default is empty) - fill this in subclass ctor. */
-//		QStringList m_systemFieldNames;
-
-		/*! Features (like transactions, etc.) supported by this driver
-		 (sum of selected  Features enum items). 
-		 This member should be filled in driver implementation's constructor 
-		 (by default m_features==NoFeatures). */
-		int m_features;
-
-		//! real type names for this engine
-		QValueVector<QString> m_typeNames;
-
 	friend class Connection;
 	friend class Cursor;
 	friend class DriverManagerInternal;
 
 		DriverBehaviour *beh;
 		
-		DriverPrivate *d; //unused
+		DriverPrivate *d;
 };
 
 } //namespace KexiDB

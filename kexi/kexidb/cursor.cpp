@@ -435,7 +435,6 @@ bool Cursor::updateRow(RowData& data, RowEditBuffer& buf)
 	clearError();
 	if (!m_query)
 		return false;
-	clearError();
 	return m_conn->updateRow(*m_query, data, buf);
 }
 

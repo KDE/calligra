@@ -90,7 +90,7 @@ namespace KexiDB
 	/*! \return true if \a v represents an empty (but not null) value.
 	 Values of some types (as for strings) can be both empty and not null. */
 	inline bool isEmptyValue(KexiDB::Field *f, const QVariant &v) {
-		if (f->isTextType() && v.toString().isEmpty() && !v.toString().isNull())
+		if (f->hasEmptyProperty() && v.toString().isEmpty() && !v.toString().isNull())
 			return true;
 		return v.isNull();
 	}

@@ -39,6 +39,7 @@ test to more complicated):
 -cursors
 -tableview
 -parser
+-dr_prop
 
 If the given driver does not pass one of these tests, and you have found:
 - that the problem is at the KexiDB library side (e.g. crash, or improper

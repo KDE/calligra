@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -80,7 +80,7 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 		virtual bool closeDatabase( KexiDB::Connection& conn );
 		virtual bool dropDatabase( KexiDB::Connection& conn, const QString &dbName );
 */
-	SQLiteDriverPrivate *d;
+	SQLiteDriverPrivate *dp;
 /*
 	MySqlDB(QObject *parent=0, const char *name="mysq", const QStringList &args=QStringList());
 		~MySqlDB();

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +39,47 @@ using namespace KexiDB;
  or when we cannot get one */
 QValueVector<QString> dflt_typeNames;
 
+//---------------------------------------------
+
+DriverPrivate::DriverPrivate()
+ : isFileDriver(false)
+ , isDBOpenedAfterCreate(false)
+ , features(Driver::NoFeatures)
+{
+	properties["client_library_version"] = "";
+	propertyCaptions["client_library_version"] = i18n("Client library version");
+
+	properties["default_server_encoding"] = "";
+	propertyCaptions["default_server_encoding"] = i18n("Default character encoding on server");
+}
+
+void DriverPrivate::initInternalProperties()
+{
+	properties["is_file_database"] = QVariant(isFileDriver, 1);
+	propertyCaptions["is_file_database"] = i18n("File-based database driver");
+	if (isFileDriver) {
+		properties["file_database_mimetype"] = fileDBDriverMime;
+		propertyCaptions["file_database_mimetype"] = i18n("File-based database's MIME type");
+	}
+	QString str;
+	if (features & Driver::SingleTransactions)
+		str = i18n("Single transactions");
+	else if (features & Driver::MultipleTransactions)
+		str = i18n("Multiple transactions");
+	else if (features & Driver::NestedTransactions)
+		str = i18n("Nested transactions");
+	else if (features & Driver::IgnoreTransactions)
+		str = i18n("Ignored");
+	else
+		str = i18n("None");
+	properties["transaction_support"] = str;
+	propertyCaptions["transaction_support"] = i18n("Transaction support");
+
+	properties["kexidb_driver_version"] = QString("%1.%2").arg(versionMajor()).arg(versionMinor());
+	propertyCaptions["kexidb_driver_version"] = i18n("KexiDB driver version");
+}
+
+//---------------------------------------------
 
 DriverBehaviour::DriverBehaviour()
 	: UNSIGNED_TYPE_KEYWORD("UNSIGNED")
@@ -50,32 +91,31 @@ DriverBehaviour::DriverBehaviour()
 {
 }
 
+//---------------------------------------------
 
 Driver::Driver( QObject *parent, const char *name, const QStringList & )
 	: QObject( parent, name )
 	, Object()
-	, m_isFileDriver(false)
-	, m_isDBOpenedAfterCreate(false)
-	, m_features(NoFeatures)
 	, beh( new DriverBehaviour() )
-	, d(0) //because unsused
+	, d( new DriverPrivate() )
 {
-	m_connections.setAutoDelete(false);
+	d->connections.setAutoDelete(false);
 	//TODO: reasonable size
-	m_connections.resize(101);
-	m_typeNames.resize(Field::LastType + 1);
+	d->connections.resize(101);
+	d->typeNames.resize(Field::LastType + 1);
 }
 
 Driver::~Driver()
 {
 	DriverManagerInternal::self()->aboutDelete( this );
 //	KexiDBDbg << "Driver::~Driver()" << endl;
-	QPtrDictIterator<Connection> it( m_connections );
+	QPtrDictIterator<Connection> it( d->connections );
 	Connection *conn;
 	while ( (conn = it.toFirst()) ) {
 		delete conn;
 	}
 	delete beh;
+	delete d;
 //	KexiDBDbg << "Driver::~Driver() ok" << endl;
 }
 
@@ -102,11 +142,29 @@ bool Driver::isValid()
 const QPtrList<Connection> Driver::connectionsList() const
 {
 	QPtrList<Connection> clist;
-	QPtrDictIterator<Connection> it( m_connections );
+	QPtrDictIterator<Connection> it( d->connections );
 	for( ; it.current(); ++it )
 		clist.append( &(*it) );
 	return clist; 
 }
+
+QString Driver::fileDBDriverMime() const 
+{ return d->fileDBDriverMime; }
+
+const KService* Driver::service() const 
+{ return d->service; }
+
+bool Driver::isFileDriver() const
+{ return d->isFileDriver; }
+
+int Driver::features() const
+{ return d->features; }
+
+bool Driver::transactionsSupported() const 
+{ return d->features & (SingleTransactions | MultipleTransactions); }
+
+QString Driver::sqlTypeName(int id_t) const
+{ return d->typeNames[id_t]; }
 
 Connection *Driver::createConnection( ConnectionData &conn_data )
 {
@@ -114,7 +172,7 @@ Connection *Driver::createConnection( ConnectionData &conn_data )
 	if (!isValid())
 		return 0;
 	
-	if (m_isFileDriver) {
+	if (d->isFileDriver) {
 		if (conn_data.fileName().isEmpty()) {
 			setError(ERR_MISSING_DB_LOCATION, i18n("File name expected for file-based database driver.") );
 			return 0;
@@ -123,14 +181,14 @@ Connection *Driver::createConnection( ConnectionData &conn_data )
 //	Connection *conn = new Connection( this, conn_data );
 	Connection *conn = drv_createConnection( conn_data );
 	conn_data.driverName = name();
-	m_connections.insert( conn, conn );
+	d->connections.insert( conn, conn );
 	return conn;
 }
 
 Connection* Driver::removeConnection( Connection *conn )
 {
 	clearError();
-	return m_connections.take( conn );
+	return d->connections.take( conn );
 }
 
 QString Driver::defaultSQLTypeName(int id_t)
@@ -201,6 +259,23 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 			return QString::null;
 	}
 	return QString::null;
+}
+
+QVariant Driver::propertyValue( const QCString& propName ) const
+{
+	return d->properties[propName.lower()];
+}
+
+QString Driver::propertyCaption( const QCString& propName ) const
+{
+	return d->propertyCaptions[propName.lower()];
+}
+
+QValueList<QCString> Driver::propertyNames() const
+{
+	QValueList<QCString> names = d->properties.keys();
+	qHeapSort(names);
+	return names;
 }
 
 

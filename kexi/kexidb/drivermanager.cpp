@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Daniel Molkentin <molkentin@kde.org>
    Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #include <kexidb/drivermanager_p.h>
 
 #include <kexidb/driver.h>
+#include <kexidb/driver_p.h>
 #include <kexidb/error.h>
 
 #include <klibloader.h>
@@ -171,8 +172,9 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	KexiDBDbg << "drv="<<(long)drv <<endl;
 
 //	drv->setName(srv_name.latin1());
-	drv->m_service = ptr; //store info
-	drv->m_fileDBDriverMime = ptr->property("X-Kexi-FileDBDriverMime").toString();
+	drv->d->service = ptr; //store info
+	drv->d->fileDBDriverMime = ptr->property("X-Kexi-FileDBDriverMime").toString();
+	drv->d->initInternalProperties();
 	m_drivers.insert(name.latin1(), drv); //cache it
 	return drv;
 }

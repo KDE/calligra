@@ -450,6 +450,14 @@ bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item,
 	return true;
 }
 
+//get a new value (of present in the buffer), or the old one, otherwise
+//(taken here for optimization)
+#define GET_VALUE if (!val) { \
+	val = dbaware ? rowEditBuffer()->at( *it_f.current()->fieldinfo ) : rowEditBuffer()->at( *f ); \
+	if (!val) \
+		val = &(*it_r); /* get old value */ \
+	}
+
 //js TODO: if there can be multiple views for this data, we need multiple buffers!
 bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 {
@@ -463,26 +471,30 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 	KexiTableViewColumn::ListIterator it_f(columns);
 	KexiDB::RowData::iterator it_r = item.begin();
 	int col = 0;
+	QVariant *val;
 	for (;it_f.current() && it_r!=item.end();++it_f,++it_r,col++) {
 		KexiDB::Field *f = it_f.current()->field();
-		//get new value (of present in the buffer), or the old one, otherwise
-		QVariant *val = dbaware ? rowEditBuffer()->at( *it_f.current()->fieldinfo ) : rowEditBuffer()->at( *f );
-		if (!val)
-			val = &(*it_r); //get old value
-		//check it
-		if (val->isNull() && f->isNotNull()) {
-			//NOT NULL violated
-			m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
-			m_result.desc = i18n("The column's constraint is declared as NOT NULL.");
-			m_result.column = col;
-			return false;
+		val = 0;
+		if (f->isNotNull()) {
+			GET_VALUE;
+			//check it
+			if (val->isNull()) {
+				//NOT NULL violated
+				m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
+				m_result.desc = i18n("The column's constraint is declared as NOT NULL.");
+				m_result.column = col;
+				return false;
+			}
 		}
-		else if (f->isNotEmpty() && (val->isNull() || KexiDB::isEmptyValue( f, *val )) ) {
-			//NOT EMPTY violated
-			m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
-			m_result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
-			m_result.column = col;
-			return false;
+		if (f->isNotEmpty()) {
+			GET_VALUE;
+			if (val->isNull() || KexiDB::isEmptyValue( f, *val )) {
+				//NOT EMPTY violated
+				m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
+				m_result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
+				m_result.column = col;
+				return false;
+			}
 		}
 	}
 

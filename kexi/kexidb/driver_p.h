@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,9 @@
 #endif
 
 #include <qstring.h>
+#include <qmap.h>
+#include <qptrdict.h>
+#include <qvariant.h>
 
 namespace KexiDB {
 
@@ -94,6 +97,72 @@ class KEXI_DB_EXPORT DriverBehaviour
 	 is empty or not, we need to fetch first record. Particularly, it's true for SQLite.
 	 The flag is used in Cursor::open(). By default this flag is false. */
 	bool _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY : 1;
+};
+
+/*! Private driver's data members. Available for implementation. */
+class DriverPrivate
+{
+	public:
+		DriverPrivate();
+
+		QPtrDict<Connection> connections;
+
+//(js)now QObject::name() is reused:
+//		/*! The name equal to the service name (X-Kexi-DriverName) 
+//		 stored in given service .desktop file. Set this in subclasses. */
+//		QString m_driverName;
+		
+		/*! Name of MIME type of files handled by this driver 
+		 if it is a file-based database's driver 
+		 (equal X-Kexi-FileDBDriverMime service property) */
+		QString fileDBDriverMime;
+
+		/*! Info about the driver as a service. */
+		KService *service;
+
+		/*! Internal constant flag: Set this in subclass if driver is a file driver */
+		bool isFileDriver : 1;
+
+		/*! Internal constant flag: Set this in subclass if after successfull
+		 drv_createDatabased() database is in opened state (as after useDatabase()). 
+		 For most engines this is not true. */
+		bool isDBOpenedAfterCreate : 1;
+
+		/*! List of system objects names, eg. build-in system tables that 
+		 cannot be used by user, and in most cases user even shouldn't see these.
+		 The list contents is driver dependent (by default is empty) 
+		 - fill this in subclass ctor. */
+//		QStringList m_systemObjectNames;
+
+		/*! List of system fields names, build-in system fields that cannot be used by user,
+		 and in most cases user even shouldn't see these.
+		 The list contents is driver dependent (by default is empty) - fill this in subclass ctor. */
+//		QStringList m_systemFieldNames;
+
+		/*! Features (like transactions, etc.) supported by this driver
+		 (sum of selected  Features enum items). 
+		 This member should be filled in driver implementation's constructor 
+		 (by default m_features==NoFeatures). */
+		int features;
+
+		//! real type names for this engine
+		QValueVector<QString> typeNames;
+
+		/*! Driver properties dictionary (indexed by name), 
+		 useful for presenting properties to the user. 
+		 Set available properties here in driver implementation. */
+		QMap<QCString,QVariant> properties;
+
+		/*! i18n'd captions for properties. You do not need 
+		 to set predefined properties' caption in driver implementation 
+		 -it's done automatically. */
+		QMap<QCString,QString> propertyCaptions;
+
+	protected:
+		/*! Used by driver manager to initialize properties taken using internal driver flags. */
+		void initInternalProperties();
+	
+	friend class DriverManagerInternal;
 };
 
 }

@@ -23,6 +23,7 @@ Boston, MA 02111-1307, USA.
 # include <config-win.h>
 #endif
 #include <mysql.h>
+#include <mysql_version.h>
 #define BOOL bool
 
 #include <qvariant.h>
@@ -60,28 +61,36 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 {
 	KexiDBDrvDbg << "MySqlDriver::MySqlDriver()" << endl;
 
-	m_isFileDriver=false;
-	m_features=IgnoreTransactions | CursorForward;
+	d->isFileDriver=false;
+	d->features=IgnoreTransactions | CursorForward;
 
 	beh->ROW_ID_FIELD_NAME="LAST_INSERT_ID()";
 	beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE=true;
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
-	
-	m_typeNames[Field::Byte]="TINYINT";
-	m_typeNames[Field::ShortInteger]="SMALLINT";
-	m_typeNames[Field::Integer]="INT";
-	m_typeNames[Field::BigInteger]="BIGINT";
+
+	//predefined properties
+#if MYSQL_VERSION_ID < 40000
+	d->properties["client_library_version"] = MYSQL_SERVER_VERSION; //nothing better
+	d->properties["default_server_encoding"] = MYSQL_CHARSET; //nothing better
+#elif MYSQL_VERSION_ID < 50000
+//OK?	d->properties["client_library_version"] = mysql_get_client_version();
+#endif
+
+	d->typeNames[Field::Byte]="TINYINT";
+	d->typeNames[Field::ShortInteger]="SMALLINT";
+	d->typeNames[Field::Integer]="INT";
+	d->typeNames[Field::BigInteger]="BIGINT";
 	// Can use BOOLEAN here, but BOOL has been in MySQL longer
-	m_typeNames[Field::Boolean]="BOOL";
-	m_typeNames[Field::Date]="DATE";
-	m_typeNames[Field::DateTime]="DATETIME";
-	m_typeNames[Field::Time]="TIME";
-	m_typeNames[Field::Float]="FLOAT";
-	m_typeNames[Field::Double]="DOUBLE";
-	m_typeNames[Field::Text]="VARCHAR";
-	m_typeNames[Field::LongText]="LONGTEXT";
-	m_typeNames[Field::BLOB]="BLOB"; 
+	d->typeNames[Field::Boolean]="BOOL";
+	d->typeNames[Field::Date]="DATE";
+	d->typeNames[Field::DateTime]="DATETIME";
+	d->typeNames[Field::Time]="TIME";
+	d->typeNames[Field::Float]="FLOAT";
+	d->typeNames[Field::Double]="DOUBLE";
+	d->typeNames[Field::Text]="VARCHAR";
+	d->typeNames[Field::LongText]="LONGTEXT";
+	d->typeNames[Field::BLOB]="BLOB"; 
 }
 
 MySqlDriver::~MySqlDriver()

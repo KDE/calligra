@@ -46,23 +46,27 @@ KEXIDB_DRIVER_INFO( ODBCDriver, odbc, "odbc" );
 ODBCDriver::ODBCDriver( QObject *parent, const char *name, const QStringList &args )
 	: Driver( parent, name, args )
 {
-	m_isFileDriver = false;
-	m_isDBOpenedAfterCreate = true;
-	m_features = SingleTransactions | CursorForward;
+	d->isFileDriver = false;
+	d->isDBOpenedAfterCreate = true;
+	d->features = SingleTransactions | CursorForward;
 
-	m_typeNames[ Field::Byte ] = "Byte";
-	m_typeNames[ Field::ShortInteger ] = "ShortInteger";
-	m_typeNames[ Field::Integer ] = "Integer";
-	m_typeNames[ Field::BigInteger ] = "BigInteger";
-	m_typeNames[ Field::Boolean ] = "Boolean";
-	m_typeNames[ Field::Date ] = "Date";
-	m_typeNames[ Field::DateTime ] = "DateTime";
-	m_typeNames[ Field::Time ] = "Time";
-	m_typeNames[ Field::Float ] = "Float";
-	m_typeNames[ Field::Double ] = "Double";
-	m_typeNames[ Field::Text ] = "Text";
-	m_typeNames[ Field::LongText ] = "CLOB";
-	m_typeNames[ Field::BLOB ] = "BLOB";
+	//predefined properties
+	d->properties["client_library_version"] = "";//TODO
+	d->properties["default_server_encoding"] = ""; //TODO
+
+	d->typeNames[ Field::Byte ] = "Byte";
+	d->typeNames[ Field::ShortInteger ] = "ShortInteger";
+	d->typeNames[ Field::Integer ] = "Integer";
+	d->typeNames[ Field::BigInteger ] = "BigInteger";
+	d->typeNames[ Field::Boolean ] = "Boolean";
+	d->typeNames[ Field::Date ] = "Date";
+	d->typeNames[ Field::DateTime ] = "DateTime";
+	d->typeNames[ Field::Time ] = "Time";
+	d->typeNames[ Field::Float ] = "Float";
+	d->typeNames[ Field::Double ] = "Double";
+	d->typeNames[ Field::Text ] = "Text";
+	d->typeNames[ Field::LongText ] = "CLOB";
+	d->typeNames[ Field::BLOB ] = "BLOB";
 }
 
 ODBCDriver::~ODBCDriver()

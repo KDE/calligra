@@ -42,8 +42,8 @@ KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql, "pqxxsql" );
 pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringList &args )
 	: Driver( parent, name, args )
 {
-	m_isFileDriver = false;
-	m_features = SingleTransactions | CursorForward | CursorBackward;
+	d->isFileDriver = false;
+	d->features = SingleTransactions | CursorForward | CursorBackward;
 
 	beh->UNSIGNED_TYPE_KEYWORD = "";
 	beh->ROW_ID_FIELD_NAME = "oid";
@@ -51,19 +51,23 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 	beh->AUTO_INCREMENT_FIELD_OPTION = "serial";
 	beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
 
-	m_typeNames[Field::Byte]="SMALLINT";
-	m_typeNames[Field::ShortInteger]="SMALLINT";
-	m_typeNames[Field::Integer]="INTEGER";
-	m_typeNames[Field::BigInteger]="BIGINT";
-	m_typeNames[Field::Boolean]="BOOLEAN";
-	m_typeNames[Field::Date]="DATE";
-	m_typeNames[Field::DateTime]="DATETIME";
-	m_typeNames[Field::Time]="TIME";
-	m_typeNames[Field::Float]="FLOAT";
-	m_typeNames[Field::Double]="DOUBLE";
-	m_typeNames[Field::Text]="VARCHAR";
-	m_typeNames[Field::LongText]="TEXT";
-	m_typeNames[Field::BLOB]="BYTEA";
+	//predefined properties
+	d->properties["client_library_version"] = "";//TODO
+	d->properties["default_server_encoding"] = ""; //TODO
+
+	d->typeNames[Field::Byte]="SMALLINT";
+	d->typeNames[Field::ShortInteger]="SMALLINT";
+	d->typeNames[Field::Integer]="INTEGER";
+	d->typeNames[Field::BigInteger]="BIGINT";
+	d->typeNames[Field::Boolean]="BOOLEAN";
+	d->typeNames[Field::Date]="DATE";
+	d->typeNames[Field::DateTime]="DATETIME";
+	d->typeNames[Field::Time]="TIME";
+	d->typeNames[Field::Float]="FLOAT";
+	d->typeNames[Field::Double]="DOUBLE";
+	d->typeNames[Field::Text]="VARCHAR";
+	d->typeNames[Field::LongText]="TEXT";
+	d->typeNames[Field::BLOB]="BYTEA";
 }
 
 //==================================================================================
