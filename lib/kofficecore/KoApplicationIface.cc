@@ -20,6 +20,7 @@
 #include "KoApplicationIface.h"
 #include "koApplication.h"
 #include "koDocument.h"
+#include "koView.h"
 #include "koQueryTrader.h"
 #include "KoDocumentIface.h"
 #include <dcopclient.h>
@@ -56,6 +57,23 @@ QValueList<DCOPRef> KoApplicationIface::getDocuments()
       QListIterator<KoDocument> it( *documents );
       for (; it.current(); ++it )
         lst.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
+    }
+    return lst;
+}
+
+QValueList<DCOPRef> KoApplicationIface::getViews()
+{
+    QValueList<DCOPRef> lst;
+    QList<KoDocument> *documents = KoDocument::documentList();
+    if ( documents )
+    {
+      QListIterator<KoDocument> it( *documents );
+      for (; it.current(); ++it )
+      {
+          QListIterator<KoView> itview( it.current()->views() );
+          for ( ; itview.current(); ++itview )
+              lst.append( DCOPRef( kapp->dcopClient()->appId(), itview.current()->dcopObject()->objId() ) );
+      }
     }
     return lst;
 }

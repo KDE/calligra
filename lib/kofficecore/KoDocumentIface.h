@@ -25,6 +25,7 @@
 #include <dcopref.h>
 
 class KoDocument;
+class KDCOPActionProxy;
 
 /**
  * DCOP interface for any KOffice document
@@ -37,25 +38,29 @@ class KoDocument;
  */
 class KoDocumentIface : public DCOPObject
 {
-  K_DCOP
+    K_DCOP
 public:
 
-  KoDocumentIface( KoDocument * doc );
-  ~KoDocumentIface();
+    KoDocumentIface( KoDocument * doc, const char * name = 0 );
+    ~KoDocumentIface();
 
 k_dcop:
-  /**
-   * Returns the URL for this document (empty, real URL, or internal one)
-   */
-  QString url();
+    /**
+     * Returns the URL for this document (empty, real URL, or internal one)
+     */
+    QString url();
 
-  bool isModified();
+    bool isModified();
 
-  int viewCount();
-  DCOPRef view( int idx );
+    int viewCount();
+    DCOPRef view( int idx );
 
+    DCOPRef action( const QCString &name );
+    QCStringList actions();
+    QMap<QCString,DCOPRef> actionMap();
 protected:
-  KoDocument * m_pDoc;
+    KoDocument * m_pDoc;
+    KDCOPActionProxy *m_actionProxy;
 };
 
 #endif

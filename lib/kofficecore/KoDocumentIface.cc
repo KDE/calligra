@@ -22,15 +22,20 @@
 #include "koView.h"
 #include <kapp.h>
 #include <dcopclient.h>
+#include <kdcopactionproxy.h>
+#include <kaction.h>
 #include <kdebug.h>
 
-KoDocumentIface::KoDocumentIface( KoDocument * doc )
+KoDocumentIface::KoDocumentIface( KoDocument * doc, const char * name )
+    : DCOPObject( name )
 {
   m_pDoc = doc;
+  m_actionProxy = new KDCOPActionProxy( doc->actionCollection(), this );
 }
 
 KoDocumentIface::~KoDocumentIface()
 {
+    delete m_actionProxy;
 }
 
 QString KoDocumentIface::url()
@@ -61,4 +66,26 @@ DCOPRef KoDocumentIface::view( int idx )
     return DCOPRef();
 
   return DCOPRef( kapp->dcopClient()->appId(), obj->objId() );
+}
+
+DCOPRef KoDocumentIface::action( const QCString &name )
+{
+    return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
+}
+
+QCStringList KoDocumentIface::actions()
+{
+    QCStringList res;
+    QValueList<KAction *> lst = m_actionProxy->actions();
+    QValueList<KAction *>::ConstIterator it = lst.begin();
+    QValueList<KAction *>::ConstIterator end = lst.end();
+    for (; it != end; ++it )
+        res.append( (*it)->name() );
+
+    return res;
+}
+
+QMap<QCString,DCOPRef> KoDocumentIface::actionMap()
+{
+    return m_actionProxy->actionMap();
 }

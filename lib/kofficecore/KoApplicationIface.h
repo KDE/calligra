@@ -48,6 +48,13 @@ k_dcop:
    */
   QValueList<DCOPRef> getDocuments();
 
+  /**
+   * @return a list of references to all the views
+   * (see KoViewIface)
+   * Convenience method to avoid iterating over all documents to get all the views.
+   */
+  QValueList<DCOPRef> getViews();
+
 };
 
 #endif

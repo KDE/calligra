@@ -552,7 +552,11 @@ KStatusBar * KoView::statusBar() const
 DCOPObject *KoView::dcopObject()
 {
     if ( !d->m_dcopObject )
-        d->m_dcopObject = new KoViewIface( this );
+    {
+        static int s_viewIFNumber = 0;
+        QCString name; name.setNum( s_viewIFNumber ); name.prepend("View-");
+        d->m_dcopObject = new KoViewIface( name, this );
+    }
 
     return d->m_dcopObject;
 }

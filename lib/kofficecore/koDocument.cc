@@ -1099,7 +1099,11 @@ int KoDocument::shellCount() const
 DCOPObject * KoDocument::dcopObject()
 {
   if ( !d->m_dcopObject )
-    d->m_dcopObject = new KoDocumentIface( this );
+  {
+      static int s_docIFNumber = 0;
+      QCString name; name.setNum( s_docIFNumber ); name.prepend("Document-");
+      d->m_dcopObject = new KoDocumentIface( this, name );
+  }
   return d->m_dcopObject;
 }
 
