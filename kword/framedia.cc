@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
+#include <qwhatsthis.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -883,49 +884,52 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnitName()), tab4 );
     mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
+    synchronize=new QCheckBox( i18n("Synchronize changes"), grp2 );
+    QWhatsThis::add(synchronize, i18n("When this is checked any change in margins will be used for all directions"));
+    mGrid->addMultiCellWidget( synchronize, 1, 1, 0, 1);
+
     lml = new QLabel( i18n( "Left:" ), grp2 );
     lml->resize( lml->sizeHint() );
-    mGrid->addWidget( lml, 1, 0 );
+    mGrid->addWidget( lml, 2, 0 );
 
     sml = new KDoubleNumInput( grp2 );
 
     sml->setValue( 0.0 );
     sml->resize( sml->sizeHint() );
-    mGrid->addWidget( sml, 2, 0 );
+    mGrid->addWidget( sml, 3, 0 );
 
     lmr = new QLabel( i18n( "Right:" ), grp2 );
     lmr->resize( lmr->sizeHint() );
-    mGrid->addWidget( lmr, 1, 1 );
+    mGrid->addWidget( lmr, 2, 1 );
 
     smr = new KDoubleNumInput( grp2 );
 
     smr->setValue( 0.0 );
     smr->resize( smr->sizeHint() );
-    mGrid->addWidget( smr, 2, 1 );
+    mGrid->addWidget( smr, 3, 1 );
 
     lmt = new QLabel( i18n( "Top:" ), grp2 );
     lmt->resize( lmt->sizeHint() );
-    mGrid->addWidget( lmt, 3, 0 );
+    mGrid->addWidget( lmt, 4, 0 );
 
     smt = new KDoubleNumInput( grp2 );
 
     smt->setValue( 0.0 );
     smt->resize( smt->sizeHint() );
-    mGrid->addWidget( smt, 4, 0 );
+    mGrid->addWidget( smt, 5, 0 );
 
     lmb = new QLabel( i18n( "Bottom:" ), grp2 );
     lmb->resize( lmb->sizeHint() );
-    mGrid->addWidget( lmb, 3, 1 );
+    mGrid->addWidget( lmb, 4, 1 );
 
     smb = new KDoubleNumInput( grp2 );
 
     smb->setValue( 0.0 );
     smb->resize( smb->sizeHint() );
-    mGrid->addWidget( smb, 4, 1 );
+    mGrid->addWidget( smb, 5, 1 );
 
     mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
-    synchronize=new QCheckBox( i18n("Synchronize"), grp2 );
-    mGrid->addMultiCellWidget( synchronize, 5, 5, 0, 0);
+
     grid4->addMultiCellWidget( grp2, row, (++row), 0,1 );
     if ( frame )
     {
@@ -1009,12 +1013,12 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     }
     if (tab1 && cbProtectContent )
     {
-        bool state = cbProtectContent->isChecked();
-        smb->setEnabled( !state );
-        smr->setEnabled( !state );
-        smt->setEnabled( !state );
-        sml->setEnabled( !state );
-        synchronize->setEnabled( !state );
+        bool state = !cbProtectContent->isChecked();
+        smb->setEnabled( state );
+        smr->setEnabled( state );
+        smt->setEnabled( state );
+        sml->setEnabled( state );
+        synchronize->setEnabled( state );
     }
 
     noSignal=false;
