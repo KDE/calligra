@@ -574,7 +574,7 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
 
 	//VIEW MENU
-	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", Key_F6,
+	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "state_data", Key_F6,
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
