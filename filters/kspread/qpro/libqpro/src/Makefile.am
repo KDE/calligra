@@ -1,4 +1,4 @@
-INCLUDES= -I$(srcdir) -I$(top_srcdir)
+INCLUDES= -I$(srcdir) -I$(srcdir)/.. -I$(top_srcdir)
 
 lib_LTLIBRARIES = libqpro.la
 libqpro_la_SOURCES = formula.cc  record.cc  record_factory.cc  stream.cc  tablenames.cc 
