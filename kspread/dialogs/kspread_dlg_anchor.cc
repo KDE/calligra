@@ -168,7 +168,7 @@ QString internetAnchor::apply()
   return createLink();
 }
 
-QString internetAnchor::createLink()
+QString internetAnchor::createLink() const
 {
    QString end_link;
   QString link;
@@ -248,7 +248,7 @@ QString mailAnchor::apply()
   return createLink();
 }
 
-QString mailAnchor::createLink()
+QString mailAnchor::createLink() const
 {
   QString end_link;
   QString link;
@@ -366,7 +366,7 @@ void fileAnchor::slotSelectRecentFile( const QString &_file )
 }
 
 
-QString fileAnchor::createLink()
+QString fileAnchor::createLink() const
 {
   QString end_link;
   QString link;
@@ -452,7 +452,7 @@ QString cellAnchor::apply()
 
 }
 
-QString cellAnchor::createLink()
+QString cellAnchor::createLink() const
 {
     QString end_link;
     QString link;

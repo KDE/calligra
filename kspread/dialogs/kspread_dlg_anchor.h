@@ -42,7 +42,7 @@ public:
   internetAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   QString apply();
 private:
-    QString createLink();
+    QString createLink() const;
     KSpreadView* m_pView;
 
     QLineEdit* text;
@@ -58,7 +58,7 @@ public:
   mailAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   QString apply();
 private:
-    QString createLink();
+    QString createLink() const;
     KSpreadView* m_pView;
 
     QLineEdit* text;
@@ -77,7 +77,7 @@ public:
 private slots:
     void slotSelectRecentFile( const QString &_file );
 private:
-    QString createLink();
+    QString createLink() const;
     KSpreadView* m_pView;
 
     QLineEdit* text;
@@ -94,7 +94,7 @@ public:
   cellAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   QString apply();
 private:
-    QString createLink();
+    QString createLink() const;
     KSpreadView* m_pView;
 
     QLineEdit* text;
