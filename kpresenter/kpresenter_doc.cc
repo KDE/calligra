@@ -2655,39 +2655,39 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
             else
                 actif=true;
         }
-    }
 
-    QPtrList<KPTextObject> objlist;
-    QPtrListIterator<KPObject> oIt(m_kpresenterView->getCanvas()->activePage()->objectList() )  ;
-    for ( ; oIt.current() ; ++oIt )
-    {
-        if(oIt.current()->getType()==OT_TEXT)
-            objlist.append(static_cast<KPTextObject*>( oIt.current() ));
-    }
-
-    oIt=m_stickyPage->objectList();
-    for ( ; oIt.current() ; ++oIt )
-    {
-        if(oIt.current()->getType()==OT_TEXT)
-            objlist.append(static_cast<KPTextObject*>( oIt.current() ));
-    }
-
-    int pos=objlist.findNextRef(obj);
-    if(pos !=-1)
-    {
-        KPTextObject *frm=0L;
-        for ( frm=objlist.at(pos); frm != 0; frm=objlist.next() ){
-            if(frm->textObject()->beedSpellCheck())
-                return frm;
+        QPtrList<KPTextObject> objlist;
+        QPtrListIterator<KPObject> oIt(m_kpresenterView->getCanvas()->activePage()->objectList() )  ;
+        for ( ; oIt.current() ; ++oIt )
+        {
+            if(oIt.current()->getType()==OT_TEXT)
+                objlist.append(static_cast<KPTextObject*>( oIt.current() ));
         }
-    }
-    else
-    {
-        //return to 0
-        KPTextObject *frm=0L;
-        for ( frm=objlist.first(); frm != 0; frm=objlist.next() ){
-            if(frm->textObject()->beedSpellCheck())
-                return frm;
+
+        oIt=m_stickyPage->objectList();
+        for ( ; oIt.current() ; ++oIt )
+        {
+            if(oIt.current()->getType()==OT_TEXT)
+                objlist.append(static_cast<KPTextObject*>( oIt.current() ));
+        }
+
+        int pos=objlist.findNextRef(obj);
+        if(pos !=-1)
+        {
+            KPTextObject *frm=0L;
+            for ( frm=objlist.at(pos); frm != 0; frm=objlist.next() ){
+                if(frm->textObject()->beedSpellCheck())
+                    return frm;
+            }
+        }
+        else
+        {
+            //return to 0
+            KPTextObject *frm=0L;
+            for ( frm=objlist.first(); frm != 0; frm=objlist.next() ){
+                if(frm->textObject()->beedSpellCheck())
+                    return frm;
+            }
         }
     }
     if(actif)
