@@ -24,7 +24,7 @@
 
 /*====================== constructor =============================*/
 AEditWin::AEditWin(const char *name)
-    : KTopLevelWidget(name)
+    : KTMainWindow(name)
 {
     groupName = "";
     fileName = "";

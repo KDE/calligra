@@ -44,7 +44,7 @@
 /******************************************************************/
 /* Class: AEditWin                                                */
 /******************************************************************/
-class AEditWin : public KTopLevelWidget
+class AEditWin : public KTMainWindow
 {
   Q_OBJECT
 
