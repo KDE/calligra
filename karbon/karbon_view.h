@@ -85,8 +85,7 @@ private:
 	KarbonPart* m_part;
 	VCanvas* m_canvas;
 
-	// i currently think that all views should be in the same state (static):
-	static VTool* s_currentTool;
+	VTool* s_currentTool;
 
 	// zoom action:
 	KSelectAction* m_zoomAction;

@@ -31,8 +31,6 @@
 
 #include <kdebug.h>
 
-VTool* KarbonView::s_currentTool = 0L;
-
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
 {

@@ -71,9 +71,8 @@ AiImport::convert( const QCString& from, const QCString& to )
 	QString outStr;
 	QTextStream s( &outStr, IO_WriteOnly );
 
-
 	m_aiDocument.parse( s, byteArrayIn.data() );
-
+kdDebug() << outStr << endl;
 
 	QCString cStr = outStr.latin1();
 	storeOut->writeBlock( cStr, cStr.length() );

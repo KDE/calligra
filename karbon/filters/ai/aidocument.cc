@@ -12,110 +12,15 @@
 
 
 // TODO: look in "perl cookbook" for better regexp:
-static const QString regFloat =
-"(?:"
-	"\\d*\\.\\d+"
-")";
-
-// path attributes ----->
-static const QString regWindingOrder =
-"(?:"
-	"(?:0|1)" "\\s+" "D"
-")";
-static const QString regLineJoin =
-"(?:"
-	"(?:0|1|2)" "\\s+" "j"
-")";
-static const QString regLineCap =
-"(?:" 
-	"(?:0|1|2)" "\\s+" "J"
-")";
-static const QString regMiterLimit =
-"(?:" +
-	regFloat + "\\s+" "M"
-")";
-static const QString regLineWidth =
-"(?:" +
-	regFloat + "\\s+" "w"
-")";
-
-static const QString regPathAttributes =
-"(?:" +
-	regWindingOrder	+ "|" +
-	regLineJoin		+ "|" +
-	regLineCap		+ "|" +
-	regMiterLimit	+ "|" +
-	regLineWidth	+ 
-")";
-// <----- path attributes
-
-
-// path construction ----->
-static const QString regMoveTo =
-"(?:" +
-	regFloat + "\\s+" + regFloat + "\\s+"
-	"m"
-")";
-static const QString regLineTo =
-"(?:" +
-	regFloat + "\\s+" + regFloat + "\\s+"
-	"[lL]"
-")";
-static const QString regCurveTo =
-"(?:" +
-	regFloat + "\\s+" + regFloat + "\\s+" +
-	regFloat + "\\s+" + regFloat + "\\s+" +
-	regFloat + "\\s+" + regFloat + "\\s+"
-	"[cC]"
-")";
-static const QString regCurve1To =
-"(?:" +
-	regFloat + "\\s+" + regFloat + "\\s+" +
-	regFloat + "\\s+" + regFloat + "\\s+"
-	"[vV]"
-")";
-static const QString regCurve2To =
-"(?:" +
-	regFloat + "\\s+" + regFloat + "\\s+" +
-	regFloat + "\\s+" + regFloat + "\\s+"
-	"[yY]"
-")";
-
-static const QString regPathConstructors =
-"(?:" +
-	regMoveTo	+ "|" +
-	regLineTo	+ "|" +
-	regCurveTo	+ "|" +
-	regCurve1To	+ "|" +
-	regCurve2To	+ 
-")";
-// <----- path construction
-
-// path renderer ----->
-static const QString regRendeCloseNone			= "N";
-static const QString regRenderNone				= "n";
-static const QString regRenderFill				= "F";
-static const QString regRenderCloseFill			= "f";
-static const QString regRenderStroke			= "S";
-static const QString regRenderCloseStroke		= "s";
-static const QString regRenderFillStroke		= "B";
-static const QString regRenderCloseFillStroke	= "b";
-
-static const QString regPathRenderer =
-"(?:" +
-	regRendeCloseNone			+ "|" +
-	regRenderNone				+ "|" +
-	regRenderFill				+ "|" +
-	regRenderCloseFill			+ "|" +
-	regRenderStroke				+ "|" +
-	regRenderCloseStroke		+ "|" +
-	regRenderFillStroke			+ "|" +
-	regRenderCloseFillStroke	+ 
-")";
-// <----- path renderer
+static inline bool isNumber( const QString& in )
+{
+	QRegExp reg( "^(?:\\d*\\.)?\\d+$" );	// TODO: fail safe?
+	return in.find( reg, 0 ) != -1;
+}
 
 AiDocument::AiDocument()
 {
+	m_envStack.push( document );
 }
 
 void
@@ -126,79 +31,235 @@ AiDocument::parse( QTextStream& s, const QString& in )
 		"<!DOCTYPE DOC>\n"
 		"<DOC mime=\"application/x-karbon\" version=\"0.1\" "
 			"editor=\"Karbon AI Import Filter\" >\n"
-		"  <LAYER visible=\"1\" >\n"
+		"<LAYER visible=\"1\" >\n"
 	<< endl;
 
-	QString head;
-	QString body;
+	QStringList tokens = QStringList::split( QRegExp( "\\s+" ), in );
 
-	QRegExp reg( "^.*(%!PS-Adobe-.*%%EndProlog)(.*%%EOF)" );
-	if( reg.search( in ) != -1 )
+	QStringList::const_iterator itr = tokens.begin();
+	for( ; itr != tokens.end(); ++itr )
 	{
-		head = reg.cap( 1 );
-		body = reg.cap( 2 );
-	}
+		// choose environment:
 
-	parseHead( s, head );
-	parseBody( s, body );
+		// document ----->
+		if( m_envStack.top() == document )
+		{
+			if( (*itr).startsWith( "%!PS-Adobe-" ) )
+			{
+				m_envStack.push( head );
+				--itr;
+				continue;
+			}
+		}
+		// <----- document
+
+		// head ----->
+		else if( m_envStack.top() == head )
+		{
+			if( *itr == "%%EndProlog" )
+			{
+				m_envStack.pop();
+				m_envStack.push( body );
+				continue;
+			}
+		}
+		// <----- head
+
+		// body ---->
+		else if( m_envStack.top() == body )
+		{
+			if( m_stringStack.count() == 1  )
+			{
+				if( m_numberStack.count() == 2 )
+				{
+					// a moveto starts a path:
+					if(
+						*( m_stringStack.top() ) == "m" ||
+						*( m_stringStack.top() ) == "M" )
+					{
+						m_envStack.push( path );
+						--itr;
+						continue;
+					}
+				}
+
+				m_stringStack.clear();
+				m_numberStack.clear();
+			}
+
+			if( (*itr).startsWith( "%AI" ) )
+			{
+				m_envStack.push( definition );
+				--itr;
+				continue;
+			}
+			else if( *itr == "%%EOF" )
+			{
+				m_envStack.pop();
+				continue;
+			}
+			else if( isNumber( *itr ) )
+			{
+				m_stringStack.clear();
+				m_envStack.push( number );
+				--itr;
+				continue;
+			}
+			else
+			{
+				m_envStack.push( string );
+				--itr;
+				continue;
+			}
+		}
+		// <----- body
+
+		// path ----->
+		else if( m_envStack.top() == path )
+		{
+			if(
+				m_numberStack.count() == 0 &&
+				m_stringStack.count() == 1 )
+			{
+				m_stringStack.clear();
+				m_numberStack.clear();
+			}
+			else if(
+				m_numberStack.count() == 1 &&
+				m_stringStack.count() == 1 )
+			{
+				m_stringStack.clear();
+				m_numberStack.clear();
+			}
+			else if(
+				m_numberStack.count() == 2 &&
+				m_stringStack.count() == 1  )
+			{
+				if(
+					*( m_stringStack.top() ) == "m" ||
+					*( m_stringStack.top() ) == "M" )
+				{
+					QString val[2];
+					val[1] = *( m_numberStack.pop() );
+					val[0] = *( m_numberStack.pop() );
+					moveTo( s, val[0], val[1] );
+				}
+				else if(
+					*( m_stringStack.top() ) == "l" ||
+					*( m_stringStack.top() ) == "L" )
+				{
+					QString val[2];
+					val[1] = *( m_numberStack.pop() );
+					val[0] = *( m_numberStack.pop() );
+					lineTo( s, val[0], val[1] );
+				}
+
+				m_stringStack.clear();
+				m_numberStack.clear();
+			}
+			else if(
+				m_numberStack.count() == 4 &&
+				m_stringStack.count() == 1  )
+			{
+				m_stringStack.clear();
+				m_numberStack.clear();
+			}
+			else if(
+				m_numberStack.count() == 6 &&
+				m_stringStack.count() == 1  )
+			{
+				m_stringStack.clear();
+				m_numberStack.clear();
+			}
+
+			if( isNumber( *itr ) )
+			{
+				m_stringStack.clear();
+				m_envStack.push( number );
+				--itr;
+				continue;
+			}
+			else
+			{
+				m_envStack.push( string );
+				--itr;
+				continue;
+			}
+		}
+		else if( m_envStack.top() == definition )
+		{
+			if( (*itr).startsWith( "%AI" ) )
+			{
+				m_envStack.pop();
+				continue;
+			}
+		}
+		else if( m_envStack.top() == number )
+		{
+			m_numberStack.push( &(*itr) );
+			m_envStack.pop();
+			continue;
+		}
+		else if( m_envStack.top() == string )
+		{
+			m_stringStack.push( &(*itr) );
+			m_envStack.pop();
+			continue;
+		}
+	}
+	// <----- path
 
 	s <<
-		" </LAYER>\n"
+		"</LAYER>\n"
 		"</DOC>\n"
 	<< endl;
 }
 
-void
-AiDocument::parseHead( QTextStream& s, const QString& in )
-{
-	QRegExp reg( "%%Creator:([^\n]+)" );
-	if( reg.search( in ) != -1 )
-		headCreator( reg.cap( 1 ).stripWhiteSpace() );
 
-	reg.setPattern( "%%For:([^\n]+)" );
-	if( reg.search( in ) != -1 )
-		headAuthor( reg.cap( 1 ).stripWhiteSpace() );
+void
+AiDocument::moveTo( QTextStream& s, const QString& x, const QString& y )
+{
+	s << "<MOVE x=\"" + x + "\" y=\"" + y + "\" />" << endl;
 }
 
 void
-AiDocument::parseBody( QTextStream& s, const QString& in )
+AiDocument::curveTo( QTextStream& s,
+	const QString& x1, const QString& y1,
+	const QString& x2, const QString& y2,
+	const QString& x3, const QString& y3 )
 {
-	QRegExp reg("");
-	reg.setMinimal( true );
-
-	int pos = 0;
-	while ( pos >= 0 )
-	{
-		pos = reg.search( in, pos );
-		if ( pos > -1 )
-		{
-			pos += reg.matchedLength();
-			parsePath( s, reg.cap( 1 ) );
-		}
-	}
+	s << "<CURVE "
+		"x1=\"" + x1 + "\" y1=\"" + y1 + "\" "
+		"x2=\"" + x2 + "\" y2=\"" + y2 + "\" "
+		"x3=\"" + x3 + "\" y3=\"" + y3 + "\" "
+	"/>" << endl;
 }
 
 void
-AiDocument::parsePath( QTextStream& s, const QString& in )
+AiDocument::curve1To( QTextStream& s,
+	const QString& x2, const QString& y2,
+	const QString& x3, const QString& y3 )
 {
-	kdDebug() << "path ***" << in << "***" << endl;
+	s << "<CURVE1 "
+		"x2=\"" + x2 + "\" y2=\"" + y2 + "\" "
+		"x3=\"" + x3 + "\" y3=\"" + y3 + "\" "
+	"/>" << endl;
 }
 
 void
-AiDocument::lineTo( QTextStream& s, double x, double y )
+AiDocument::curve2To( QTextStream& s,
+	const QString& x1, const QString& y1,
+	const QString& x3, const QString& y3 )
 {
-	kdDebug() << "***lineto " << x << " " << y << endl;
+	s << "<CURVE2 "
+		"x1=\"" + x1 + "\" y1=\"" + y1 + "\" "
+		"x3=\"" + x3 + "\" y3=\"" + y3 + "\" "
+	"/>" << endl;
 }
 
 void
-AiDocument::headCreator( const QString& in )
+AiDocument::lineTo( QTextStream& s, const QString& x, const QString& y )
 {
-	kdDebug() << "***\"" << in << "\"" << endl;
-}
-
-void
-AiDocument::headAuthor( const QString& in )
-{
-	kdDebug() << "***\"" << in << "\"" << endl;
+	s << "<LINE x=\"" + x + "\" y=\"" + y + "\" />" << endl;
 }
 
