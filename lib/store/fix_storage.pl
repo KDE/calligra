@@ -85,6 +85,26 @@ sub findMainDocuments {
   }
 }
 
+# Factorizes the common regexp code between maindoc.xml and parts
+sub fixLine {
+  my($line, $prefix) = @_;
+
+  if($line =~ m/(\s*\<object\s+mime=\"[^\"]*\"\s+url=\")([^\"]*)(\".*)/) {
+    return $1 . $prefix . $2 . $3 . "\n";
+  }
+  elsif($line =~ m/(\s*\<OBJECT\s+mime=\"[^\"]*\"\s+url=\")([^\"]*)(\".*)/) {
+    return $1 . $prefix . $2 . $3 . "\n";
+  }
+  elsif($line =~ m/(\s*\<KEY\s+.*\s+)filename(=\"[^\"]*\".*)/) {
+    my($tmp) = $1 . "key" . $2 . "\n";
+    if($tmp =~ m/(\s*\<KEY\s+.*\s+name=\")([^\"]*)(\".*)/) {
+      return $1 . $prefix . $2 . $3 . "\n";
+    }
+    return $tmp;
+  }
+  return $line;
+}
+
 # Walks through all the documents and fixes links. "Fixes" all the
 # candidates we found
 sub fixLinks {
@@ -95,15 +115,7 @@ sub fixLinks {
     open(SOURCE, "<$item->[0]") || die "Couldn't open the source file: $!\n";
     open(DEST, ">$item->[1]") || die "Couldn't open the destination file: $!\n";
     while(<SOURCE>) {
-      if(m/(\s*\<object\s+mime=\"[^\"]*\"\s+url=\")([^\"]*)(\".*)/) {
-	print DEST $1, $prefix, $2, $3, "\n";
-	next;
-      }
-      elsif(m/(\s*\<OBJECT\s+mime=\"[^\"]*\"\s+url=\")([^\"]*)(\".*)/) {
-	print DEST $1, $prefix, $2, $3, "\n";
-	next;
-      }
-      print DEST $_;
+      print DEST fixLine($_, $prefix);
     }
     close(SOURCE);
     close(DEST);
@@ -123,30 +135,11 @@ sub fixMainDocument {
   open(SOURCE, "<$tmpdir/maindoc.xml");
   open(DEST, ">$tmpdir/tmp.xml");
   while(<SOURCE>) {
-    if(m/(\s*\<object\s+mime=\"[^\"]*\"\s+url=\")([^\"]*)(\".*)/) {
-      print DEST $1, "tar:/", $2, $3, "\n";
-      next;
-    }
-    elsif(m/(\s*\<OBJECT\s+mime=\"[^\"]*\"\s+url=\")([^\"]*)(\".*)/) {
-      print DEST $1, "tar:/", $2, $3, "\n";
-      next;
-    }
-    print DEST $_;
+    print DEST fixLine($_, "tar:/");
   }
   close(SOURCE);
   close(DEST);
   system("mv $tmpdir/tmp.xml $tmpdir/maindoc.xml");
-}
-
-# Tries to find "lost" files and correct the links in the part files.
-sub fixRemainingLink {
-}
-
-# Call fixRemainingLink for all the files we moved around
-sub fixRemainingLinks {
-  foreach(@needFixing) {
-    fixRemainingLink($_);
-  }
 }
 
 ##################################################
@@ -182,9 +175,6 @@ print "Moving and fixing relative links...\n";
 fixLinks();
 removeOldFiles();
 fixMainDocument();
-
-# Now fix the remaining picture/clipart links by qualified guesses ;)
-fixRemainingLinks();
 
 print "Creating the archive...\n";
 chdir($tmpdir);
