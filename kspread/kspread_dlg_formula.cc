@@ -20,6 +20,7 @@
 #include <qtextbrowser.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
+#include <qsizepolicy.h>
 
 #include "kspread_dlg_formula.h"
 #include "kspread_view.h"
@@ -68,6 +69,9 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     QGridLayout *grid1 = new QGridLayout(this,11,2,15,7);
 
     searchFunct = new KLineEdit(this);
+    QSizePolicy sp3( QSizePolicy::Preferred, QSizePolicy::Fixed );
+    searchFunct->setSizePolicy( sp3 );
+
     grid1->addWidget( searchFunct, 0, 0 );
 
     typeFunction = new QComboBox(this);
@@ -77,6 +81,8 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     grid1->addWidget( typeFunction, 1, 0 );
 
     functions = new QListBox(this);
+    QSizePolicy sp1( QSizePolicy::Preferred, QSizePolicy::Expanding );
+    functions->setSizePolicy( sp1 );
     grid1->addWidget( functions, 2, 0 );
 
     selectFunction = new QPushButton( this );
@@ -87,6 +93,8 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     grid1->addMultiCellWidget( result, 4, 4, 0, 1 );
 
     m_tabwidget = new QTabWidget( this );
+    QSizePolicy sp2( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    m_tabwidget->setSizePolicy( sp2 );
     grid1->addMultiCellWidget( m_tabwidget, 0, 2, 1, 1 );
 
     m_browser = new QTextBrowser( m_tabwidget );
