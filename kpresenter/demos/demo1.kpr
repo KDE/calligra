@@ -38,7 +38,7 @@
  </BACKGROUND>
  <OBJECTS>
   <OBJECT type="2">
-   <ORIG x="370" y="1233"/>
+   <ORIG x="400" y="1233"/>
    <SIZE width="200" height="200"/>
    <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
    <EFFECTS effect="1" effect2="0"/>
@@ -51,8 +51,8 @@
    <GRADIENT red1="0" green1="128" blue1="0" red2="128" green2="0" blue2="0" type="5"/>
   </OBJECT>
   <OBJECT type="2">
-   <ORIG x="60" y="1233"/>
-   <SIZE width="190" height="200"/>
+   <ORIG x="80" y="1233"/>
+   <SIZE width="200" height="200"/>
    <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
    <EFFECTS effect="10" effect2="0"/>
    <PEN red="0" green="0" blue="0" width="1" style="1"/>
@@ -447,7 +447,7 @@
    </TEXTOBJ>
   </OBJECT>
   <OBJECT type="4">
-   <ORIG x="10" y="1070"/>
+   <ORIG x="9" y="1070"/>
    <SIZE width="660" height="60"/>
    <SHADOW distance="2" direction="7" red="255" green="255" blue="255"/>
    <EFFECTS effect="10" effect2="0"/>
@@ -533,8 +533,8 @@
    </TEXTOBJ>
   </OBJECT>
   <OBJECT type="4">
-   <ORIG x="80" y="1240"/>
-   <SIZE width="170" height="190"/>
+   <ORIG x="110" y="1240"/>
+   <SIZE width="150" height="190"/>
    <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
    <EFFECTS effect="9" effect2="1"/>
    <PRESNUM value="2"/>
@@ -567,7 +567,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -599,7 +599,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -631,7 +631,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -663,7 +663,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -709,7 +709,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -719,7 +719,7 @@
    </TEXTOBJ>
   </OBJECT>
   <OBJECT type="4">
-   <ORIG x="390" y="1237"/>
+   <ORIG x="420" y="1237"/>
    <SIZE width="170" height="190"/>
    <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
    <EFFECTS effect="4" effect2="1"/>

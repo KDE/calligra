@@ -14,6 +14,7 @@
 /******************************************************************/
 
 #include "kpresenter_doc.h"
+#include "kpresenter_view.h"
 #include "presstructview.h"
 #include "presstructview.moc"
 
@@ -22,10 +23,13 @@
 /******************************************************************/
 
 /*================================================================*/
-PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDocument_impl *_doc)
+PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDocument_impl *_doc,KPresenterView_impl *_view)
   : QDialog(parent,name,false)
 {
   doc = _doc;
+  view = _view;
+  lastSelected = 0;
+
   pageList.setAutoDelete(true);
   objList.setAutoDelete(true);
 
@@ -196,6 +200,8 @@ void PresStructViewer::fillWithPageInfo(KPBackGround *_page,int _num)
   list->appendItem(i18n("Effect for changing to next page")); 
   list->changeItemPart(i18n(PageEffectName[static_cast<int>(_page->getPageEffect())]),
 		       list->count() - 1,1);
+
+  view->skipToPage(_num);
 }
 
 /*================================================================*/
@@ -445,6 +451,17 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
       } break;
     default: break;
     }
+  
+  if (lastSelected)
+    {
+      lastSelected->setSelected(false);
+      doc->repaint(lastSelected);
+    }
+  
+  view->makeRectVisible(_obj->getBoundingRect(0,0));
+  _obj->setSelected(true);
+  doc->repaint(_obj);
+  lastSelected = _obj;
 }
 
 /*================================================================*/

@@ -587,7 +587,9 @@ void KPresenterView_impl::screenPresStructView()
 {
   if (!presStructView)
     {
-      presStructView = new PresStructViewer(0,"",KPresenterDoc());
+      page->deSelectAllObj();
+      
+      presStructView = new PresStructViewer(0,"",KPresenterDoc(),this);
       presStructView->setCaption(i18n("KPresenter - Presentation structure viewer"));
       QObject::connect(presStructView,SIGNAL(presStructViewClosed()),this,SLOT(psvClosed()));
       presStructView->show();
@@ -3266,6 +3268,19 @@ void KPresenterView_impl::setRanges()
 	m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).width() + 16 - page->width();
       horz->setRange(0,range);
     }
+}
+
+/*==============================================================*/
+void KPresenterView_impl::skipToPage(int _num)
+{
+  vert->setValue(KPresenterDoc()->getPageSize(_num,0,0,1.0,false).y()); 
+}
+
+/*==============================================================*/
+void KPresenterView_impl::makeRectVisible(QRect _rect)
+{
+  horz->setValue(_rect.x()); 
+  vert->setValue(_rect.y()); 
 }
 
 /*============== create a pixmapstring from a color ============*/

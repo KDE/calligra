@@ -38,6 +38,7 @@
 #include "kpbackground.h"
 
 class KPresenterDocument_impl;
+class KPresenterView_impl;
 
 const QString ObjName[] = {"Picture","Line","Rectangle","Ellipse","Text","Autoform",
 			   "Clipart","Undefined"};
@@ -71,7 +72,7 @@ class PresStructViewer : public QDialog
   Q_OBJECT
 
 public:
-  PresStructViewer(QWidget *parent,const char *name,KPresenterDocument_impl *_doc);
+  PresStructViewer(QWidget *parent,const char *name,KPresenterDocument_impl *_doc,KPresenterView_impl *_view);
 
 signals:
   void presStructViewClosed();
@@ -97,7 +98,9 @@ protected:
   KTreeList *treelist;
   KTabListBox *list;
   KPresenterDocument_impl *doc;
+  KPresenterView_impl *view;
   QList<ItemInfo> pageList,objList;
+  KPObject *lastSelected;
 
 };
 

@@ -288,6 +288,9 @@ public:
   KoRuler *getHRuler() { return h_ruler; }
   KoRuler *getVRuler() { return v_ruler; }
 
+  void skipToPage(int _num);
+  void makeRectVisible(QRect _rect);
+
 public slots:
 
   // Document signals
