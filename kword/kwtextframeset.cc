@@ -1663,6 +1663,11 @@ void KWTextFrameSet::formatMore()
                             table->recalcRows(cell->m_col,cell->m_row);
                             table->updateTempHeaders();
                         }
+                        if(newPosition < wantedPosition && (theFrame->getNewFrameBehaviour() == KWFrame::NoFollowup)) {
+                            lastFormatted = 0;
+                            m_lastFormatted = 0;
+                            break;
+                        }
                         if(newPosition < wantedPosition && theFrame->getNewFrameBehaviour() == KWFrame::Reconnect) {
                             wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
                             // fall through to AutoCreateNewFrame
