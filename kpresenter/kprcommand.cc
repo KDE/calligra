@@ -1931,12 +1931,12 @@ void KPrChangeVariableSettingsCommand::unexecute()
     changeValue(m_bOldValue);
 }
 
-KPrDeletePageCmd::KPrDeletePageCmd( const QString &_name, int pos,KPrPage *_page, KPresenterDoc *_doc):
-    KNamedCommand(_name),
-    doc(_doc),
-    m_page(_page),
-    position(pos)
+KPrDeletePageCmd::KPrDeletePageCmd( const QString &name, int pageNum, KPresenterDoc *doc )
+: KNamedCommand( name )
+, m_doc( doc )
+, m_pageNum( pageNum )
 {
+    m_page = m_doc->pageList().at( m_pageNum );
 }
 
 KPrDeletePageCmd::~KPrDeletePageCmd()
@@ -1945,27 +1945,35 @@ KPrDeletePageCmd::~KPrDeletePageCmd()
 
 void KPrDeletePageCmd::execute()
 {
-    doc->deSelectAllObj();
-    doc->takePage(m_page);
-    doc->addRemovePage( position, false );
-    doc->updatePresentationButton();
+    m_doc->deSelectAllObj();
+    m_doc->takePage( m_page, QMAX( m_pageNum - 1, 0 ) );
+    m_doc->updatePresentationButton();
 }
 
 void KPrDeletePageCmd::unexecute()
 {
-    doc->deSelectAllObj();
-    doc->insertPage( m_page, position);
-    doc->addRemovePage( position, true );
-    doc->updatePresentationButton();
+    m_doc->deSelectAllObj();
+    m_doc->insertPage( m_page, QMAX( m_pageNum - 1, 0 ), m_pageNum );
+    m_doc->updatePresentationButton();
 }
 
-KPrInsertPageCmd::KPrInsertPageCmd( const QString &_name,int _pos, KPrPage *_page,
-                                    KPresenterDoc *_doc ) :
-    KNamedCommand(_name),
-    doc(_doc),
-    m_page(_page),
-    position(_pos)
+KPrInsertPageCmd::KPrInsertPageCmd( const QString &name, int pageNum, InsertPos pos, 
+                                    KPrPage *page, KPresenterDoc *doc ) 
+: KNamedCommand(name)
+, m_doc( doc )
+, m_page( page )
+, m_currentPageNum( pageNum )
+, m_insertPageNum( 0 )  
 {
+    switch( pos )
+    {
+        case IP_BEFORE:
+            m_insertPageNum = m_currentPageNum;
+            break;
+        case IP_AFTER:  
+            m_insertPageNum = m_currentPageNum + 1;
+            break;
+    }
 }
 
 KPrInsertPageCmd::~KPrInsertPageCmd()
@@ -1974,28 +1982,24 @@ KPrInsertPageCmd::~KPrInsertPageCmd()
 
 void KPrInsertPageCmd::execute()
 {
-    doc->deSelectAllObj();
-    doc->insertPage( m_page, position);
-    doc->addRemovePage( position, true );
+    m_doc->deSelectAllObj();
+    m_doc->insertPage( m_page, m_currentPageNum, m_insertPageNum );
     m_page->completeLoading( false, -1 );
-    doc->updatePresentationButton();
+    m_doc->updatePresentationButton();
 }
 
 void KPrInsertPageCmd::unexecute()
 {
-    doc->deSelectAllObj();
-    doc->takePage(m_page);
-    doc->addRemovePage( position, false );
-    doc->updatePresentationButton();
+    m_doc->deSelectAllObj();
+    m_doc->takePage( m_page, m_currentPageNum );
+    m_doc->updatePresentationButton();
 }
 
-KPrMovePageCmd::KPrMovePageCmd( const QString &_name,int _oldpos,int _newpos, KPrPage *_page,
-                                KPresenterDoc *_doc ) :
-    KNamedCommand(_name),
-    doc(_doc),
-    m_page(_page),
-    oldPosition(_oldpos),
-    newPosition(_newpos)
+KPrMovePageCmd::KPrMovePageCmd( const QString &_name,int from, int to, KPresenterDoc *_doc ) :
+    KNamedCommand( _name ),
+    m_doc( _doc ),
+    m_oldPosition( from ),
+    m_newPosition( to )
 {
 }
 
@@ -2005,18 +2009,14 @@ KPrMovePageCmd::~KPrMovePageCmd()
 
 void KPrMovePageCmd::execute()
 {
-    doc->deSelectAllObj();
-    doc->takePage(m_page);
-    doc->insertPage( m_page, newPosition);
-    doc->movePageTo( oldPosition, newPosition );
+    m_doc->deSelectAllObj();
+    m_doc->movePageTo( m_oldPosition, m_newPosition );
 }
 
 void KPrMovePageCmd::unexecute()
 {
-    doc->deSelectAllObj();
-    doc->takePage(m_page);
-    doc->insertPage(m_page,oldPosition);
-    doc->movePageTo( newPosition, oldPosition );
+    m_doc->deSelectAllObj();
+    m_doc->movePageTo( m_newPosition, m_oldPosition );
 }
 
 

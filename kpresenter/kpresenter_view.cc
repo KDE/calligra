@@ -584,10 +584,8 @@ void KPresenterView::editCopyPage()
 
 void KPresenterView::editDuplicatePage()
 {
-    m_pKPresenterDoc->copyPage( currPg, currPg+1 );
+    m_pKPresenterDoc->copyPage( currPg );
     setRanges();
-    skipToPage( currPg ); // go to the new page
-    updateSideBarMenu();
 }
 
 void KPresenterView::updateSideBarMenu()
@@ -604,9 +602,6 @@ void KPresenterView::editDelPage()
     m_canvas->exitEditMode();
     m_pKPresenterDoc->deletePage( currPg );
     setRanges();
-    currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
-    skipToPage( currPg );
-    updateSideBarMenu();
 }
 
 void KPresenterView::insertPage()
@@ -630,9 +625,6 @@ void KPresenterView::insertPage()
     int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new slide"), currPg, pos,
                                               dia.radioDifferent->isChecked(), QString::null );
     setRanges();
-    if ( pg != -1 )
-        skipToPage( pg );
-    updateSideBarMenu();
 }
 
 void KPresenterView::insertPicture()
@@ -3641,6 +3633,30 @@ unsigned int KPresenterView::getCurrPgNum() const
 {
     return currPg + 1;
 }
+
+
+void KPresenterView::recalcCurrentPageNum()
+{
+    KPrPage *activePage = m_canvas->activePage();
+
+    QPtrList<KPrPage> pageList( m_pKPresenterDoc->pageList() );
+
+    int pos = pageList.findRef( activePage );
+
+    if ( pos != -1 )
+    {
+        currPg = pos;
+    }
+    else
+    {
+        kdDebug(33001) << "KPresenterView::recalcCurrentPageNum: activePage not found" << endl;
+        currPg = 0;
+    }
+
+    if( sidebar )
+        sidebar->setCurrentPage( currPg );
+}
+
 
 void KPresenterView::scrollH( int value )
 {

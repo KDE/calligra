@@ -466,6 +466,11 @@ public:
 
     // get current pagenum, 1-based
     unsigned int getCurrPgNum() const;
+    /**
+     * Recalculate the currPgNum from the activePage of the canvas
+     * This is necessary after a page has inserted.
+     */
+    void recalcCurrentPageNum();
 
     // return pointer to document
     KPresenterDoc *kPresenterDoc() const {return m_pKPresenterDoc; }

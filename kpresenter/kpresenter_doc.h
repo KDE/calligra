@@ -215,8 +215,16 @@ class KPresenterDoc : public KoDocument
 
     int insertNewPage( const QString &cmdName,int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
 
-    void insertPage( KPrPage *_page, int position);
-    void takePage(KPrPage *_page);
+    /**
+     * insert page page and go to page insertPageNum on all views
+     * which have currentPageNum as active page
+     */
+    void insertPage( KPrPage *page, int currentPageNum, int insertPageNum );
+    /**
+     * remove page page and go to page pageNum on all view which 
+     * had page as active page
+     */
+    void takePage( KPrPage *page, int pageNum );
     void deletePage( int _page );
     void copyPageToClipboard( int pgnum );
 
@@ -487,7 +495,7 @@ class KPresenterDoc : public KoDocument
 #endif
 public slots:
     void movePage( int from, int to );
-    void copyPage( int from, int to );
+    void copyPage( int from );
     void selectPage( int pgNum, bool select );
     void clipboardDataChanged();
 

@@ -692,45 +692,46 @@ protected:
 class KPrDeletePageCmd : public KNamedCommand
 {
 public:
-    KPrDeletePageCmd( const QString &_name,int _pos, KPrPage *page, KPresenterDoc *_doc );
+    KPrDeletePageCmd( const QString &name, int pageNum, KPresenterDoc *doc );
     ~KPrDeletePageCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    KPresenterDoc *doc;
+    KPresenterDoc *m_doc;
     KPrPage *m_page;
-    int position;
+    int m_pageNum;
 };
 
 class KPrInsertPageCmd : public KNamedCommand
 {
 public:
-    KPrInsertPageCmd( const QString &_name,int _pos, KPrPage *page, KPresenterDoc *_doc );
+    KPrInsertPageCmd( const QString &name, int currentPageNum, InsertPos pos, 
+                      KPrPage *page, KPresenterDoc *doc );
     ~KPrInsertPageCmd();
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    KPresenterDoc *doc;
+    KPresenterDoc *m_doc;
     KPrPage *m_page;
-    int position;
+    int m_currentPageNum;
+    int m_insertPageNum;
 };
 
 class KPrMovePageCmd : public KNamedCommand
 {
 public:
-    KPrMovePageCmd( const QString &_name,int _oldpos,int newPos, KPrPage *page, KPresenterDoc *_doc );
+    KPrMovePageCmd( const QString &_name, int from,int to, KPresenterDoc *_doc );
     ~KPrMovePageCmd();
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    KPresenterDoc *doc;
-    KPrPage *m_page;
-    int oldPosition;
-    int newPosition;
+    KPresenterDoc *m_doc;
+    int m_oldPosition;
+    int m_newPosition;
 };
 
 class KPrPasteTextCommand : public KoTextDocCommand

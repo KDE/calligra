@@ -3097,35 +3097,61 @@ void KPresenterDoc::deletePage( int _page )
     //m_pageList.at(_page)->deletePage();
     if ( m_pageList.count()==1 )
         return;
-    KPrDeletePageCmd *cmd=new KPrDeletePageCmd(i18n("Delete Slide"),_page,m_pageList.at(_page),this);
+    KPrDeletePageCmd *cmd = new KPrDeletePageCmd( i18n("Delete Slide"), _page, this );
     cmd->execute();
     addCommand(cmd);
 }
 
-void KPresenterDoc::insertPage( KPrPage *_page, int position)
+void KPresenterDoc::insertPage( KPrPage *page, int currentPageNum, int insertPageNum )
 {
-    int pos=m_deletedPageList.findRef(_page);
+    // check if page was allready deleted
+    int pos = m_deletedPageList.findRef( page );
     if ( pos != -1 )
-        m_deletedPageList.take( pos);
+        m_deletedPageList.take( pos );
 
-    if ( m_deletedPageList.findRef( _page ) )
-        m_deletedPageList.remove( _page );
-    m_pageList.insert( position,_page);
-    //activate this page in all views
+    m_pageList.insert( insertPageNum, page );
+
+    addRemovePage( insertPageNum, true );
+    //activate this page in all views which on slide currentPageNum
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->skipToPage(position);
+    {
+        KPresenterView *view = static_cast<KPresenterView*>( it.current() );
+
+        // change to the new page if the view was on the current page.
+        if ( view->getCurrPgNum() - 1 == currentPageNum )
+        {
+            view->skipToPage( insertPageNum );
+        }
+        else // recalc the page number as it might have been changed
+        {
+            view->recalcCurrentPageNum();
+        }
+    }
 }
 
-void KPresenterDoc::takePage(KPrPage *_page)
+void KPresenterDoc::takePage( KPrPage *page, int pageNum )
 {
-    int pos=m_pageList.findRef(_page);
-    m_pageList.take( pos);
-    m_deletedPageList.append( _page );
+    int pos = m_pageList.findRef( page );
+    m_pageList.take( pos );
+    m_deletedPageList.append( page );
+
+    addRemovePage( pos, false );
 
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->skipToPage(pos-1);
+    {
+        KPresenterView *view = static_cast<KPresenterView*>( it.current() );
+        // change to the new page if the view was on the current page.
+        if ( view->getCurrPgNum() - 1 == pos )
+        {
+            view->skipToPage( pageNum );
+        }
+        else // recalc the page number as it might have been changed
+        {
+            view->recalcCurrentPageNum();
+        }
+    }
 
     repaint( false );
 
@@ -3156,14 +3182,29 @@ void KPresenterDoc::addRemovePage( int pos, bool addPage )
 void KPresenterDoc::movePageTo( int oldPos, int newPos )
 {
     kdDebug(33001) << "movePage oldPos = " << oldPos << ", neuPos = " << newPos << endl;
-    recalcPageNum();
 
+    KPrPage * page = m_pageList.take( oldPos );
+    m_pageList.insert( newPos, page );
+    
+    recalcPageNum();
     recalcVariables( VT_PGNUM );
 
     // Update the sidebars
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->moveSideBarItem( oldPos, newPos );
+    {
+        KPresenterView *view = static_cast<KPresenterView*>( it.current() );
+        view->moveSideBarItem( oldPos, newPos );
+        // change to the new page if the view was on the old pos.
+        if ( view->getCurrPgNum() - 1 == oldPos )
+        {
+            view->skipToPage( newPos );
+        }
+        else // recalc the page number as it might have been changed
+        {
+            view->recalcCurrentPageNum();
+        }
+    }
 
     //update statusbar
     emit pageNumChanged();
@@ -3213,9 +3254,6 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
 
     _clean = false;
 
-    if ( _insPos == IP_AFTER )
-        _page++;
-
     objStartY=-1;
 
     //insert page.
@@ -3227,7 +3265,7 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
 
     objStartY = 0;
 
-    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(cmdName, _page, newpage, this);
+    KPrInsertPageCmd *cmd = new KPrInsertPageCmd( cmdName, _page, _insPos, newpage, this );
     cmd->execute();
     addCommand(cmd);
 
@@ -3447,30 +3485,30 @@ QPixmap KPresenterDoc::generatePreview( const QSize& size )
 void KPresenterDoc::movePage( int from, int to )
 {
     kdDebug(33001) << "KPresenterDoc::movePage from=" << from << " to=" << to << endl;
-    KPrMovePageCmd *cmd=new KPrMovePageCmd( i18n("Move Slide"),from,to, m_pageList.at(from) ,this );
+    KPrMovePageCmd *cmd = new KPrMovePageCmd( i18n("Move Slide"), from, to, this );
     cmd->execute();
     addCommand(cmd);
 }
 
-void KPresenterDoc::copyPage( int from, int to )
+void KPresenterDoc::copyPage( int from )
 {
     _clean = false;
     _duplicatePage=true;
 
-    kdDebug(33001) << "KPresenterDoc::copyPage from=" << from << " to=" << to << endl;
+    kdDebug(33001) << "KPresenterDoc::copyPage from=" << from << " to=" << from + 1 << endl;
     bool wasSelected = isSlideSelected( from );
     KTempFile tempFile( QString::null, ".kpr" );
     tempFile.setAutoDelete( true );
     savePage( tempFile.name(), from );
 
     //insert page.
-    KPrPage *newpage=new KPrPage(this);
+    KPrPage *newpage = new KPrPage(this);
 
-    m_pageWhereLoadObject=newpage;
+    m_pageWhereLoadObject = newpage;
 
     loadNativeFormat( tempFile.name() );
 
-    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Duplicate Slide"), to, newpage, this );
+    KPrInsertPageCmd *cmd = new KPrInsertPageCmd( i18n("Duplicate Slide"), from, IP_AFTER, newpage, this );
     cmd->execute();
     addCommand(cmd);
 
@@ -3479,7 +3517,7 @@ void KPresenterDoc::copyPage( int from, int to )
     _clean = true;
     m_pageWhereLoadObject=0L;
 
-    selectPage( to, wasSelected );
+    selectPage( from + 1, wasSelected );
 }
 
 void KPresenterDoc::copyPageToClipboard( int pgnum )
@@ -4205,7 +4243,7 @@ void KPresenterDoc::insertFile(const QString & file )
     {
         if ( !macro )
             macro = new KMacroCommand( i18n("Insert File"));
-        KPrInsertPageCmd * cmd = new KPrInsertPageCmd( i18n("Insert File"),i, m_pageList.at(i), this ) ;
+        KPrInsertPageCmd * cmd = new KPrInsertPageCmd( i18n("Insert File"), i - 1, IP_AFTER, m_pageList.at(i), this ) ;
         macro->addCommand(cmd );
     }
     if ( macro )
