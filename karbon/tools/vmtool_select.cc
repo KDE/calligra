@@ -141,12 +141,12 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 				QRect(
 					qRound( view->zoomFactor() * fp.x() ),
 					qRound( view->zoomFactor() * fp.y() ),
-					qRound( view->zoomFactor() * lp.x() ),
-					qRound( view->zoomFactor() * lp.y() ) ).normalize(),
+					qRound( view->zoomFactor() * ( lp.x() - fp.x() ) ),
+					qRound( view->zoomFactor() * ( lp.y() - fp.y() ) ) ).normalize(),
 				view->zoomFactor(),
 				true );
 				
-			if( part()->selection().count() > 0  )
+			//if( part()->selection().count() > 0  )
 				part()->repaintAllViews();
 		}
 
