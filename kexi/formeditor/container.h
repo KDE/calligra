@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,68 +27,47 @@ class QEvent;
 class QWidget;
 
 namespace KFormDesigner {
-/**
- *
- * Lucijan Busch
- **/
+
 class Container;
 class WidgetLibrary;
 class ObjectTreeItem;
 class Form;
 
 /**
- * this class makes a container out
- * of any QWidget
+ * This class makes a container out of any QWidget. You can then create child widgets, and the background is dotted.
  */
-
+//! A class to make a container from any widget
 class KFORMEDITOR_EXPORT Container : public QObject
 {
 	Q_OBJECT
 
 	public:
 		/**
-		 * simply add a widget which you want to have as container
-		 * this factory will care about the rest...
-		 * (e.g. inserting widgets, painting the grid, ...)
+		 * Creates a Container from the widget \a container, which have \a toplevel as parent Container.
 		 */
 
 		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0);
 		~Container();
 
-		/**
-		 * clears the dots around selected widgets and emits the new selection.
-		 * you won't need to call that in most cases.<br>
-		 * note: use this for a toplevel container only!
-		 */
-		void		setSelectionChanged(QWidget *selected);
-
-		/**
-		 * @returns a pointer to the toplevel
-		 */
+		//! \return a pointer to the toplevel Container.
 		Container	*toplevel();
 
 		/**
-		 * sets the object tree
-		 * NOTE: this is needed if we are toplevel
+		 * Sets the ObjectTree of this Container.\n
+		 * NOTE: this is needed only if we are toplevel.
 		 */
 		void		setObjectTree(ObjectTreeItem *t) { m_tree = t; }
 
 		/**
-		 * @returns the treenode assosiated with current container
+		 * \return The ObjectTreeItem assosiated with this Container's widget.
 		 */
 		ObjectTreeItem	*tree();
-
-
-		/**
-		 * registers a sub-container and adds it to the widget tree
-		 */
-		void		registerChild(Container *t);
 
 	signals:
 		/**
 		 * this siganl gets emmited when the mode changes<br>
 		 * if e = true one can edit the form<br>
-		 * if e = false one can use the form
+		 * if e = false one can use the form (Not implemented yet)
 		 */
 		void		modeChanged(bool e);
 
@@ -95,37 +75,34 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/**
 		 * use this function to toggle between editing and viewing mode.<br>
 		 * if e = true one can edit the form<br>
-		 * if e = false one can use the form
+		 * if e = false one can use the form (not implemented yet)
 		 */
 		void		setEditingMode(bool e);
 
-		/**
-		 * @returns the watched widget
-		 */
+		//! \return The watched widget.
 		QWidget		*widget() { return m_container; }
 
+		//! Sets the Form which this Container belongs to.
 		void		setForm(Form *form);
 
-		/**
-		 * @returns the form this container belongs to
-		 */
+		//! \return The form this Container belongs to.
 		Form		*form();
 
+		/*! Deletes the selected child item of this Container, and remove it from ObjectTree. */
 		void		deleteItem();
 
 	protected slots:
-		/**
-		 * this slot uselets widgets
-		 */
+		//! Sets \a selected to be the selected widget of this container (and so of the Form).
 		void		setSelectedWidget(QWidget *selected);
 
+		/*! This slot is called when the watched widget is deleted. Deletes the Container too. */
 		void		widgetDeleted();
-		//void		updateBackground();
-
-	signals:
-		void		insertStop();
 
 	protected:
+		/*! This is the main function of Container, which filters the event sent to the watched widget.\n
+		   It takes care of drawing the background and the insert rect, of creating the new child widgets, of moving the widgets and
+		   pop up a menu when right-clicking.
+		  */
 		virtual bool	eventFilter(QObject *o, QEvent *e);
 
 	private:

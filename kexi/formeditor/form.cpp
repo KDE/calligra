@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -61,7 +62,7 @@ Form::createToplevel(QWidget *container)
 
 	kdDebug() << "Form::createToplevel(): m_toplevel=" << m_toplevel << endl;
 }
-
+/*
 QWidget*
 Form::createInstance(QWidget *parent, bool e)
 {
@@ -83,7 +84,7 @@ Form::createEmptyInstance(const QString &c, QWidget *parent)
 	m_topTree = new ObjectTree(c, m->name(), m);
 	m_toplevel->setObjectTree(m_topTree);
 	return m;
-}
+}*/
 
 void
 Form::setCurrentWidget(QWidget *w)

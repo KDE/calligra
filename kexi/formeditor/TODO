@@ -19,11 +19,16 @@
 
 ****** Bugfixes/Changes : *****
 * Only QTabWidget should be selected, not pages
+* Add a minimum size for created widgets ( using size hint)
+* Finish sync between Form and ObjectTreeView
+* Pasted widget appears when you click on the form to indicate its position
+* Move the pasted widget a little to avoid to have two widgets at the same pos
 * Add a grouping ability to Widget
 * Merge stdwidgetfactory and containerfactory
-* Finish sync between Form and ObjectTreeView
 * Make FormManager independant of the parent container (ie no longer depends on QWorkspace)
+* Add a classname and filename member into Form
 * Fix pixmaps in Property Editor
+
 
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Change tab position by drag'n drop

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,11 +38,10 @@ typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 typedef QDict<ObjectTreeItem> TreeDict;
 typedef QMap<QString, int> Names;
 
-/**
- *
- * @author Lucijan Busch <lucijan@kde.org>
- * This class holds the classanme, properties and children
- **/
+/*! This class holds the properties of a widget (classname, name, parent, children ..).
+    \author Lucijan Busch <lucijan@kde.org>
+ */
+ //! An item representing a widget
 class KFORMEDITOR_EXPORT ObjectTreeItem
 {
 	
@@ -82,6 +82,9 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QWidget*	m_widget;
 };
 
+//! A class representing all the objects in a Form
+/*! This class holds ObjectTreeItem for each widget in a Form.
+ */
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	public:
@@ -101,6 +104,7 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 
 		void		removeChild(const QString &);
 
+		/*! Generates a new name with \a base as beginning (eg if base is "QLineEdit", it returns "QLineEdit1"). */
 		QString		genName(const QString &base);
 
 		void		debug();
