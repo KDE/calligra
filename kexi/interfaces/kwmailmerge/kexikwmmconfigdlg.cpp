@@ -35,34 +35,30 @@
 #include "kexikwmmconfigdlg.h"
 
 KexiKWMMConfigDlg::KexiKWMMConfigDlg(QWidget *parent, KexiKWMMConnection *c)
- : QDialog(parent, "kexikwmmconfig")
+ :
+KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "kexikwmmconfig", true )
 {
 //	c->project()->initDBConnection(c->project()->dbConnection());
+	QFrame *frame=plainPage();
+
 	resize(400, 300);
 	m_connection = c;
-	QLabel *lDs = new QLabel(i18n("Datasource:"), this);
-	m_dataSource = new KexiDataSourceComboBox(this, "", c->project());
+	QLabel *lDs = new QLabel(i18n("Datasource:"), frame);
+	m_dataSource = new KexiDataSourceComboBox(frame, "", c->project());
 	connect(m_dataSource, SIGNAL(activated(int)), this, SLOT(slotSourceChanged(int)));
 	KexiDataSourceComboBox::ItemList i;
 	m_dataSource->fillList(c->project(), i);
-	m_view = new KexiView(KexiView::EmbeddedMode, c->project(), this);
+	m_view = new KexiView(KexiView::EmbeddedMode, c->project(), frame);
 	m_view->resize(400, 300);
 
-	QPushButton *btnOk = new QPushButton(i18n("&Ok"), this);
-	QPushButton *btnCancel = new QPushButton(i18n("&Cacnel"), this);
-	connect(btnOk, SIGNAL(clicked()), this, SLOT(accept()));
-	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 
-//	QHBoxLayout *lBtn = new QHBoxLayout(this);
-//	lBtn->addWidget(btnOk);
-//	lBtn->addWidget(btnCancel);
-
-	QGridLayout *g = new QGridLayout(this);
+	QGridLayout *g = new QGridLayout(frame);
 	g->addWidget(lDs,			0, 0);
 	g->addMultiCellWidget(m_dataSource,	0, 0, 1, 2);
 	g->addMultiCellWidget(m_view,		1, 1, 0, 2);
-	g->addWidget(btnOk,			2, 1);
-	g->addWidget(btnCancel,			2, 2);
+	lDs->show();
+	m_dataSource->show();
+	m_view->show();
 }
 
 void
@@ -91,7 +87,7 @@ KexiKWMMConfigDlg::fields()
 	DbRecord rec;
 
 	KexiProjectHandler *h = m_connection->project()->handlerForMime(mime());
-	KexiDataProvider *prov = h->provider();
+	KexiDataProvider *prov=KEXIDATAPROVIDER(h);
 
 	if(!prov)
 		return rec;

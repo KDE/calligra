@@ -20,14 +20,14 @@
 #ifndef KEXIKWMMCONFIGDLG_H
 #define KEXIKWMMCONFIGDLG_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include "kword/mailmerge_interface.h"
 
 class KexiDataSourceComboBox;
 class KexiKWMMConnection;
 class KexiView;
 
-class KexiKWMMConfigDlg : public QDialog
+class KexiKWMMConfigDlg : public KDialogBase
 {
 	Q_OBJECT
 

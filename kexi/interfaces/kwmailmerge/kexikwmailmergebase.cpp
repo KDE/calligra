@@ -90,7 +90,7 @@ bool
 KexiKWMailMergeBase::initDB(bool count)
 {
 	KexiProjectHandler *h = m_connection->project()->handlerForMime(m_mime);
-	KexiDataProvider *prov = h->provider();
+	KexiDataProvider *prov = KEXIDATAPROVIDER(h);
 	if(!prov)
 		return false;
 
