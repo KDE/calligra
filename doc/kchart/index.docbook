@@ -15,6 +15,10 @@
 <author>
 &Jonathan.Drews; &Jonathan.Drews.mail;
 </author>
+<author>
+<firstname>Raphael</firstname>
+<surname>Langerhorst</surname>
+</author>
 <!-- 
 <othercredit role="developer">
 &Matthias.Kalle.Dalheimer; &Matthias.Kalle.Dalheimer.mail;
@@ -26,14 +30,19 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-20</date>
-<releaseinfo>1.01.00</releaseinfo>
+<date>2005-03-13</date>
+<releaseinfo>1.4</releaseinfo>
 
 <abstract>
 <para>
-&kchart; is an application for drawing bar graphs, pie charts and line
-plots. It is intended to be used with &kspread;. &kchart; is still
-under development so some features do not work.
+&kchart; is an application for visualizing numerical data. It has many
+different chart types available like bar graphs, line plots, pie charts,
+ring charts and more.
+</para>
+<para>
+&kchart; is a &koffice; component and is very well integrated with &kspread;
+to allow visualization of spreadsheet data. But it is also possible to use
+&kchart; as a standalone application.
 </para>
 </abstract>
 
@@ -51,6 +60,39 @@ under development so some features do not work.
 <chapter id="introduction">
 
 <title>Introduction</title>
+
+<para>
+&kchart; is a tool for visualizing numerical data. It can be used
+as a standalone application with a simple data editor. But as a
+&koffice; component it offers very flexible integration. &kspread;
+uses the &kchart; component for charts and diagrams. &kspread;
+can be seen as a very powerful data provider for &kchart; input.
+</para>
+<para>
+To start with we will look at how &kchart; can be used as a
+stand alone component. When we are familiar with &kchart; we
+will investigate the charting capabilities it offers together
+with &kspread;.
+</para>
+<para>
+A command reference is added at the end to make the handbook
+complete.
+</para>
+
+</chapter>
+
+<chapter id="kchartstandalone">
+
+<title>The &kchart; application</title>
+
+<para>
+</para>
+
+</chapter>
+
+<chapter id="kchartinkspread">
+
+<title>Using KChart in KSpread</title>
 
 <para>
 &kchart; is intended primarily for use with &kspread;. It is currently
