@@ -831,14 +831,20 @@ bool KSEval_t_equal( KSParseNode* node, KSContext& context )
 {
   EVAL_OPS( context, l, r, false );
 
+  KScript::Boolean result;
   if ( !r.value()->cast( l.value()->type() ) )
   {
-    QString tmp( i18n("From %1 to %2") );
-    context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ).arg( l.value()->typeName() ), node->getLineNo() ) );
-    return false;
+    /* If we can't cast the values to match, then they definitely aren't
+       equal.  Don't return a parse error here -- our users aren't expected
+       to have detailed understanding of the syntax.
+    */
+    result = false;
+  }
+  else
+  {
+    result = ( r.value()->cmp( *l.value() ) );
   }
 
-  KScript::Boolean result = ( r.value()->cmp( *l.value() ) );
   FILL_VALUE( context, l, r );
   context.value()->setValue( result );
   return true;
