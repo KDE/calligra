@@ -118,17 +118,7 @@ void KoCounterStyleWidget::setCounter (KoParagCounter counter )
     KoParagCounter::Style st = counter.style();
     m_counter.setStyle( st );
     changeKWSpinboxType( st);
-    unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != st; i++);
-    lstStyle->setCurrentItem(i);
-    bCustom->setText( m_counter.customBulletCharacter() );
-    if ( !m_counter.customBulletFont().isEmpty() )
-        bCustom->setFont( QFont( m_counter.customBulletFont() ) );
-    sPrefix->setText( m_counter.prefix() );
-    sSuffix->setText( m_counter.suffix() );
-
-    spnDepth->setValue( m_counter.depth() );
-    spnStart->setValue( m_counter.startNumber() );
+    displayStyle( st );
     noSignals = false;
 }
 
@@ -188,6 +178,22 @@ void KoCounterStyleWidget::fillStyleCombo(KoParagCounter::Numbering type) {
     noSignals=false;
 }
 
+void KoCounterStyleWidget::displayStyle( KoParagCounter::Style style )
+{
+    unsigned int i;
+    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style; i++);
+    lstStyle->setCurrentItem(i);
+    bCustom->setText( m_counter.customBulletCharacter() );
+    if ( !m_counter.customBulletFont().isEmpty() )
+        bCustom->setFont( QFont( m_counter.customBulletFont() ) );
+
+    sPrefix->setText( m_counter.prefix() );
+    sSuffix->setText( m_counter.suffix() );
+
+    spnDepth->setValue( m_counter.depth() );
+    spnStart->setValue( m_counter.startNumber() );
+}
+
 void KoCounterStyleWidget::display( const KoParagLayout & lay ) {
     KoParagCounter::Style style = KoParagCounter::STYLE_NONE;
     if ( lay.counter )
@@ -204,19 +210,7 @@ void KoCounterStyleWidget::display( const KoParagLayout & lay ) {
     numTypeChanged( m_counter.numbering() );
     emit sig_numTypeChanged( m_counter.numbering() );
 
-    unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style; i++);
-    lstStyle->setCurrentItem(i);
-    bCustom->setText( m_counter.customBulletCharacter() );
-    if ( !m_counter.customBulletFont().isEmpty() )
-        bCustom->setFont( QFont( m_counter.customBulletFont() ) );
-
-    sPrefix->setText( m_counter.prefix() );
-    sSuffix->setText( m_counter.suffix() );
-
-    spnDepth->setValue( m_counter.depth() );
-    spnStart->setValue( m_counter.startNumber() );
-
+    displayStyle( style );
 }
 
 

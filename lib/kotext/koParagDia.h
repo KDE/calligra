@@ -248,6 +248,9 @@ protected slots:
     void numStyleChanged();
     void selectCustomBullet();
 
+protected:
+    void displayStyle( KoParagCounter::Style style );
+
 private:
     QGroupBox *gStyle;
     QPtrList <StyleRepresenter> stylesList;
