@@ -37,8 +37,6 @@ public:
   virtual ~KoTarStore();
 
   // IDL
-  virtual void cd( const char* subdir );
-  virtual void cdUp( );
   virtual CORBA::Boolean open( const char* name, const char *_mime_type );
   virtual void close();
   virtual KOStore::Data* read( CORBA::ULong max );
