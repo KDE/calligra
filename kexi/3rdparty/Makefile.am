@@ -1,6 +1,4 @@
-if have_readline
-KEXISQLDIRS=kexisql3 kexisql
-endif
-SUBDIRS = $(KEXISQLDIRS)
+
+SUBDIRS = kexisql3 kexisql
 
 #unused: uuid
