@@ -36,32 +36,32 @@ public:
 protected:
     void init(const QString& filename );
     void loadFile();
-    void initCombobox();
+    void initGroupList();
     void saveFile();
 
 
 protected slots:
-    void slotExpressionActivated(const QString &_text );
+    void slotGroupSelected();
+    void slotExpressionSelected();
+    void slotUpdateGroupName(const QString &newGroupName);
+    void slotUpdateExpression(const QString &newExpression);
+    void slotRemoveExpression();
     void slotAddExpression();
-    void slotDelExpression();
+    void slotRemoveGroup();
     void slotAddGroup();
-    void slotDelGroup();
-    void slotRenameGroup();
-    void slotRenameExpression();
-    void slotSelectionChanged();
     virtual void slotOk();
 
  private:
     typedef QMap<QString,QStringList> list;
     list listExpression;
-    QComboBox *m_typeExpression;
-    QListBox *m_listOfExpression;
-    QPushButton *m_addExpression;
+    QListBox *m_groupList;
+    QListBox *m_ExpressionsList;
     QPushButton *m_addGroup;
     QPushButton *m_delGroup;
-    QPushButton *m_renameGroup;
+    QPushButton *m_addExpression;
     QPushButton *m_delExpression;
-    QPushButton *m_renameExpression;
+    QLineEdit *m_groupLineEdit;
+    QLineEdit *m_expressionLineEdit;
     bool m_bChanged;
 };
 
