@@ -1,3 +1,5 @@
+// $Header$
+
 /*
    This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
