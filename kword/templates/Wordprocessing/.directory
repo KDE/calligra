@@ -1,3 +1,27 @@
 [Desktop Entry]
 Name=Normal
+Name[cs]=Normální
+Name[el]=Κανονικό
+Name[eo]=Normala
+Name[et]=Tavaline
+Name[eu]=Normala
+Name[fi]=Normaali
+Name[he]=ליגר
+Name[hr]=Normalno
+Name[hu]=Normál
+Name[is]=Venjulegt
+Name[it]=Normale
+Name[ja]=標準
+Name[ko]=보통
+Name[lt]=Normalus
+Name[lv]=Normāls
+Name[mk]=Обично
+Name[nl]=Normaal
+Name[ru]=Нормальный
+Name[sk]=Normálny
+Name[sl]=Navadno
+Name[ta]=º¡¾¡ÃÉ
+Name[uk]=Звичайний
+Name[zh_CN.GB2312]=普通
+Name[zh_TW.Big5]=一般
 X-KDE-DefaultTab=true

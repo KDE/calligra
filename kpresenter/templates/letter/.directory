@@ -1,3 +1,6 @@
 [Desktop Entry]
 Name=Letter
+Name[es]=Carta
+Name[ko]=편지
+Name[lv]=Vēstule
 X-KDE-DefaultTab=true
