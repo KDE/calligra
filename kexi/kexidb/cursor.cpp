@@ -193,7 +193,11 @@ bool Cursor::moveFirst()
 				return !m_afterLast;
 			}
 		}
-		if (!reopen())
+		if (m_afterLast && m_at==0) //failure if already no records
+			return false;
+		if (!reopen()) //try reopen
+			return false;
+		if (m_afterLast) //eof
 			return false;
 	}
 	else {

@@ -24,6 +24,7 @@
 #define ERR_NONE 0
 #define ERR_NO_NAME_SPECIFIED 9 //! used when name (e.g. for database) was not specified
 #define ERR_DRIVERMANAGER 10
+#define ERR_INVALID_IDENTIFIER 11 //! used when name (e.g. for database) was not specified
 #define ERR_MISSING_DB_LOCATION 20
 #define ERR_ALREADY_CONNECTED 30
 #define ERR_NO_CONNECTION 40 //!< when opened connection was expected using KexiDB::Connection

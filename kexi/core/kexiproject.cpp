@@ -39,6 +39,7 @@
 #include "kexipart.h"
 #include "kexi.h"
 #include "keximainwindow.h"
+#include "kexi_utils.h"
 
 #include <assert.h>
 
@@ -229,13 +230,18 @@ KexiProject::items(KexiPart::Info *i)
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
 		KexiPart::Item *it = new KexiPart::Item();
-		it->setIdentifier(cursor->value(0).toInt());
-		it->setMime(i->mime());
-		it->setName(cursor->value(1).toString());
-		it->setCaption(cursor->value(2).toString());
-
+		bool ok;
+		int ident;
+		QString objName;
+		if ( (ident=cursor->value(0).toInt(&ok)) && ok && ident>0 
+			&& (objName=cursor->value(1).toString()) && Kexi::isIdentifier(objName) ) {
+			it->setIdentifier(ident);
+			it->setMime(i->mime()); //js: may be not null???
+			it->setName(objName);
+			it->setCaption(cursor->value(2).toString());
+		}
 		dict->insert(it->identifier(), it);
-		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<cursor->value(1).toString()<<endl;
+		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident<<endl;
 	}
 
 	m_connection->deleteCursor(cursor);

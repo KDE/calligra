@@ -39,6 +39,7 @@
 
 #include <assert.h>
 
+#include "kexi_utils.h"
 
 namespace KexiDB {
 
@@ -1340,6 +1341,10 @@ bool Connection::setupObjectSchemaData( const KexiDB::RowData &data, SchemaData 
 		return false;
 	}
 	sdata.m_name = data[2].toString();
+	if (!Kexi::isIdentifier( sdata.m_name )) {
+		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"").arg(sdata.m_name));
+		return false;
+	}
 	sdata.m_caption = data[3].toString();
 	sdata.m_helpText = data[4].toString();
 	
