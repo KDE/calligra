@@ -1,6 +1,7 @@
 SUBDIRS = kiviopart plugins templates
 
-# Note: kivio-sml-i18n.cpp is only needed for I18N, not for building
+# Note: kivio-sml-i18n.cpp and kivio-desc-i18n.cpp are only needed for I18N,
+#  not for building
 
 package-messages:
 	$(MAKE) -f admin/Makefile.common package-messages
