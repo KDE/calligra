@@ -2618,7 +2618,7 @@ void KPresenterView::setupActions()
 					   actionCollection(), "tools_table" );
     actionToolsTable->setExclusiveGroup( "tools" );
 
-    actionToolsObject = new KoPartSelectAction( i18n( "&Object..." ), "frame_query",
+    actionToolsObject = new KoPartSelectAction( i18n( "&Object" ), "frame_query",
                                                     this, SLOT( toolsObject() ),
                                                     actionCollection(), "tools_object" );
 
@@ -2910,12 +2910,12 @@ void KPresenterView::setupActions()
 				     this, SLOT( screenFirst() ),
 				     actionCollection(), "screen_first" );
 
-    actionScreenPrev = new KAction( i18n( "&Previous Step" ),
+    actionScreenPrev = new KAction( i18n( "&Previous Slide" ),
 				     "back", Key_Prior,
 				     this, SLOT( screenPrev() ),
 				     actionCollection(), "screen_prev" );
 
-    actionScreenNext = new KAction( i18n( "&Next Step" ),
+    actionScreenNext = new KAction( i18n( "&Next Slide" ),
 				     "forward", Key_Next,
 				     this, SLOT( screenNext() ),
 				     actionCollection(), "screen_next" );
