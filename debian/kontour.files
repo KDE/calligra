@@ -1,0 +1,13 @@
+usr/bin/kontour
+usr/lib/kontour.*
+usr/lib/kde3/libkontourpart.*
+usr/lib/kde3/libsvgexport.*
+usr/lib/kde3/libsvgimport.*
+usr/lib/kde3/libxfigimport.*
+usr/share/applnk/Office/kontour.desktop
+usr/share/apps/kontour
+usr/share/icons/hicolor/16x16/apps/kontour.png
+usr/share/icons/hicolor/32x32/apps/kontour.png
+usr/share/icons/hicolor/48x48/apps/kontour.png
+usr/share/pixmaps/kontour.xpm
+usr/share/lintian/overrides/kontour
