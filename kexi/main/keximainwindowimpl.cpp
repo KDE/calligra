@@ -3008,8 +3008,8 @@ void KexiMainWindowImpl::slotImportProject()
 void KexiMainWindowImpl::addWindow( KMdiChildView* pView, int flags )
 {
 	//maximize this window, if it's 
-//@todo Certain windows' sizes, e.g. forms could have own size configation specified!
-//      Query for this, and if so: give up.
+//!@todo Certain windows' sizes, e.g. forms could have own size configation specified!
+//!      Query for this, and if so: give up.
 	if (d->maximizeFirstOpenedChildFrm) {
 		flags |= KMdi::Maximize;
 		d->maximizeFirstOpenedChildFrm = false;
