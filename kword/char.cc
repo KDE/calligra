@@ -304,24 +304,24 @@ void KWString::saveFormat( ostream &out )
 	    }
 	    switch ( _data_[ i ].attrib->getClassId() ) {
 	    case ID_KWCharImage: {
-		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" 
+		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">"
 		    << endl;
 		_data_[ i ].attrib->save( out );
 		out << etag << "</FORMAT>" << endl;
 	    } break;
 	    case ID_KWCharTab: {
-		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" 
+		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">"
 		    << endl;
 		out << etag << "</FORMAT>" << endl;
 	    } break;
 	    case ID_KWCharVariable: {
-		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" 
+		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">"
 		    << endl;
 		_data_[ i ].attrib->save( out );
 		out << etag << "</FORMAT>" << endl;
 	    } break;
 	    case ID_KWCharFootNote: {
-		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" 
+		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">"
 		    << endl;
 		_data_[ i ].attrib->save( out );
 		out << etag << "</FORMAT>" << endl;
@@ -380,7 +380,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		else if ( ( *it ).m_strName == "len" )
 		    __len = atoi( ( *it ).m_strValue.c_str() );
 	    }
-	    
+	
 	    if ( _load ) {
 		switch ( _id ) {
 		case ID_KWCharFormat: {
@@ -664,7 +664,7 @@ int KWString::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _ind
 
 	if ( !_format && _whole ) {
 	    if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
-		 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || 
+		 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) ||
 		   res + static_cast<int>( _expr.length() ) <
 		   static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
 		return res;
@@ -698,7 +698,7 @@ int KWString::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _ind
 	    return res;
 	else {
 	    if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
-		 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || 
+		 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) ||
 		   res + static_cast<int>( _expr.length() ) <
 		   static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
 		return res;
@@ -709,7 +709,7 @@ int KWString::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _ind
 }
 
 /*================================================================*/
-int KWString::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, 
+int KWString::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len,
 		    bool _cs, bool _wildcard )
 {
     QString str = toString( 0, size() );
@@ -759,7 +759,7 @@ int KWString::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _
 
 	if ( !_format && _whole ) {
 	    if ( ( res == 0 || res > 0 && str[ res - 1 ] == ' ' ) &&
-		 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) || 
+		 ( res + static_cast<int>( _expr.length() ) == static_cast<int>( _len_ ) ||
 		   res + static_cast<int>( _expr.length() ) <
 		   static_cast<int>( _len_ ) && str[ res + _expr.length() ] == ' ' ) )
 		return res;
@@ -804,7 +804,7 @@ int KWString::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _
 }
 
 /*================================================================*/
-int KWString::findRev( QRegExp /*_regexp*/, KWSearchDia::KWSearchEntry */*_format*/, 
+int KWString::findRev( QRegExp /*_regexp*/, KWSearchDia::KWSearchEntry */*_format*/,
 		       int /*_index*/, int &/*_len*/, bool /*_cs*/, bool /*_wildcard*/ )
 {
     return -1;
@@ -817,8 +817,8 @@ QString KWString::decoded()
 
     str.append( "_" );
 
-    str.replace( QRegExp( "<" ), "&lt; " );
-    str.replace( QRegExp( ">" ), "&gt; " );
+    str.replace( QRegExp( "<" ), "&lt;" );
+    str.replace( QRegExp( ">" ), "&gt;" );
 
     str.remove( str.length() - 1, 1 );
 
