@@ -156,7 +156,7 @@ int KoTextParag::counterWidth() const
 
 // Draw the complete label (i.e. heading/list numbers/bullets) for this paragraph.
 // This is called by KoTextParag::paintDefault.
-void KoTextParag::drawLabel( QPainter* p, int x, int _y, int /*w*/, int h, int base, const QColorGroup& /*cg*/ )
+void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int hLU, int baseLU, const QColorGroup& /*cg*/ )
 {
     if ( !m_layout.counter ) // shouldn't happen
         return;
@@ -168,7 +168,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int _y, int /*w*/, int h, int b
         return;
     }
 
-    int size = m_layout.counter->width( this );
+    int counterWidthLU = m_layout.counter->width( this );
 
     // We use the formatting of the first char as the formatting of the counter
     KoTextFormat *format = KoParagCounter::counterFormat( this );
@@ -184,13 +184,12 @@ void KoTextParag::drawLabel( QPainter* p, int x, int _y, int /*w*/, int h, int b
     assert( zh );
     //bool forPrint = ( p->device()->devType() == QInternal::Printer );
 
-    x = zh->layoutUnitToPixelX( x );
-    int y = zh->layoutUnitToPixelY( _y );
-    h = zh->layoutUnitToPixelY( _y, h );
-    base = zh->layoutUnitToPixelY( _y, base );
-    size = zh->layoutUnitToPixelX( size );
-
-    int height = zh->layoutUnitToPixelY( _y, format->height() );
+    int xLeft = zh->layoutUnitToPixelX( xLU - counterWidthLU );
+    int y = zh->layoutUnitToPixelY( yLU );
+    int h = zh->layoutUnitToPixelY( yLU, hLU );
+    int base = zh->layoutUnitToPixelY( yLU, baseLU );
+    int counterWidth = zh->layoutUnitToPixelX( counterWidthLU );
+    int height = zh->layoutUnitToPixelY( yLU, format->height() );
 
     QFont font( format->screenFont( zh ) );
     // Footnote numbers are in superscript (in WP and Word, not in OO)
@@ -205,28 +204,21 @@ void KoTextParag::drawLabel( QPainter* p, int x, int _y, int /*w*/, int h, int b
     // Now draw any bullet that is required over the space left for it.
     if ( m_layout.counter->isBullet() )
     {
-        // Modify x offset.
-        QString suffix = m_layout.counter->suffix() + ' ' /*the trailing space*/;
-        for ( unsigned int i = 0; i < suffix.length(); i++ )
-            x -= zh->layoutUnitToPixelX(format->width( suffix, i ));
+	int xBullet = zh->layoutUnitToPixelX( m_layout.counter->bulletX() );
 
-        int width = format->width( ' ' );
+	// The width and height of the bullet is the width of one space
+        int width = zh->layoutUnitToPixelX( format->width( ' ' ) );
 
-        width = zh->layoutUnitToPixelX( width );
         QString prefix = m_layout.counter->prefix();
-	if ( !prefix.isEmpty() )
-	{
-	    prefix += ' '/*the trailing space, part of the prefix*/;
-            int posPrefix=0;
-            for ( unsigned int i = 0; i < prefix.length(); i++ )
-                posPrefix += zh->layoutUnitToPixelX(format->width( prefix,i));
+        if ( !prefix.isEmpty() )
+        {
+            ///prefix += ' '/*the trailing space, part of the prefix*/;
+            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y - h, height );
 
-            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ) , textColor, x , base, width, y - h, height );
-
-            p->drawText( x-posPrefix, y - h + base, prefix );
+            p->drawText( xLeft, y - h + base, prefix );
         }
 
-        QRect er( x - width, y - h + height / 2 - width / 2, width, width );
+        QRect er( xBullet, y - h + height / 2 - width / 2, width, width );
         // Draw the bullet.
         switch ( m_layout.counter->style() )
         {
@@ -253,30 +245,32 @@ void KoTextParag::drawLabel( QPainter* p, int x, int _y, int /*w*/, int h, int b
                     bulletFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( bulletFont );
                 }
-                KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ) , textColor, x - width , base, width, y - h ,height );
+                KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet - width, base, width, y - h, height );
 
-                p->drawText( x - width, y - h + base, m_layout.counter->customBulletCharacter() );
+                p->drawText( xBullet - width, y - h + base, m_layout.counter->customBulletCharacter() );
                 break;
             default:
                 break;
         }
-	if ( !suffix.isEmpty() )
-        {
-            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ) , textColor, x , base, size, y - h,height );
 
-            p->drawText( x , y - h + base, suffix );
+        QString suffix = m_layout.counter->suffix() + ' ' /*the trailing space*/;
+        if ( !suffix.isEmpty() )
+        {
+            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, counterWidth, y - h,height );
+
+            p->drawText( xBullet + width, y - h + base, suffix );
         }
     }
     else
     {
         // There are no bullets...any parent bullets have already been suppressed.
         // Just draw the text! Note: one space is always appended.
-        KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ) , textColor, x - size , base, size, y - h, height);
+        KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, counterWidth, y - h, height);
 
 
         QString counterText = m_layout.counter->text( this );
         if ( !counterText.isEmpty() )
-            p->drawText( x - size, y - h + base, counterText + ' ' );
+            p->drawText( xLeft, y - h + base, counterText + ' ' );
     }
     p->restore();
 }
@@ -521,7 +515,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     // 3) Go (almost verbatim from the original KoTextFormat::drawParagString)
     QString str( s );
     if ( str[ (int)str.length() - 1 ].unicode() == 0xad )
-	str.remove( str.length() - 1, 1 );
+        str.remove( str.length() - 1, 1 );
     painter.setPen( QPen( textColor ) );
     painter.setFont( font );
 
@@ -1054,14 +1048,14 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     if ( format->doubleUnderline())
     {
         // For double-underlining, both lines are of width 0.5 (*zoom), in the hopes
-	// to have room for both.
-	// Another solution would be to increase the descent, but this would have to be
-	// done in the formatter
-	// ### TODO scale the painter to do this, especially when printing, to gain more resolution
+        // to have room for both.
+        // Another solution would be to increase the descent, but this would have to be
+        // done in the formatter
+        // ### TODO scale the painter to do this, especially when printing, to gain more resolution
         //kdDebug() << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
 
-	int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
+        int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
         p->save();
         switch( format->underlineLineStyle())
         {
@@ -1087,9 +1081,9 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 
         p->drawLine( startX, y, startX + bw, y );
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
-	y = lastY + baseLine + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
+        y = lastY + baseLine + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
-	p->drawLine( startX, y, startX + bw, y );
+        p->drawLine( startX, y, startX + bw, y );
         p->restore();
         if ( font.underline() ) { // can this happen?
             font.setUnderline( FALSE );
@@ -1157,7 +1151,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         }
 
         int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        p->drawLine( startX, y - h/2 + 2 , startX + bw, y- h/2 +2 );
+        p->drawLine( startX, y - h/2 + 2, startX + bw, y- h/2 +2 );
         p->restore();
         font.setStrikeOut( FALSE );
         p->setFont( font );
@@ -1187,8 +1181,8 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
         }
         int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        p->drawLine( startX, y - h/2 + 2 -KoBorder::zoomWidthY( 1, zh, 0 ) , startX + bw, y- h/2 +2 -KoBorder::zoomWidthY( 1, zh, 0 ));
-        p->drawLine( startX, y - h/2 + 2 + KoBorder::zoomWidthY( 1, zh, 0 ) , startX + bw, y- h/2 +2 +KoBorder::zoomWidthY( 1, zh, 0 ));
+        p->drawLine( startX, y - h/2 + 2 -KoBorder::zoomWidthY( 1, zh, 0 ), startX + bw, y- h/2 +2 -KoBorder::zoomWidthY( 1, zh, 0 ));
+        p->drawLine( startX, y - h/2 + 2 + KoBorder::zoomWidthY( 1, zh, 0 ), startX + bw, y- h/2 +2 +KoBorder::zoomWidthY( 1, zh, 0 ));
         p->restore();
         font.setStrikeOut( FALSE );
         p->setFont( font );

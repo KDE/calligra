@@ -497,6 +497,20 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     return m_cache.width;
 }
 
+int KoParagCounter::bulletX()
+{
+    // width() must have been called first
+    Q_ASSERT( m_cache.width != -1 );
+    Q_ASSERT( m_cache.counterFormat );
+    int x = 0;
+    QFontMetrics fm = m_cache.counterFormat->screenFontMetrics( 0L, false );
+    QString text = prefix();
+    for (  unsigned int i = 0; i < text.length(); i++ )
+        x += fm.width( text[i] );
+    // Now go from 100%-zoom to LU
+    return KoTextZoomHandler::ptToLayoutUnitPt( x );
+}
+
 // Only exists to centralize code. Does no caching.
 KoTextFormat* KoParagCounter::counterFormat( const KoTextParag *paragraph )
 {

@@ -49,6 +49,12 @@ public:
      */
     int width( const KoTextParag *paragraph );
 
+    /**
+     * X position of the bullet ( i.e. width of prefix )
+     * Unit : LU pixels
+     */
+    int bulletX();
+
     /** XML support. */
     void load( QDomElement & element );
     void save( QDomElement & element );
