@@ -61,8 +61,8 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	new QLabel( i18n("New:"), groupbox );
 	mOldColor = new KColorPatch( groupbox );
 	mColorPreview = new KColorPatch( groupbox );
-	QColor color( "black" );
-	color = c.toQColor();
+
+	QColor color( c );
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );

@@ -458,7 +458,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 	if( m_fill && m_fill->type() != VFill::none )
 	{
-		color = m_fill->color().toQColor();
+		color = m_fill->color();
 		af = qRound( 255 * m_fill->color().opacity() );
 		fillColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
 
@@ -485,7 +485,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		ArtPathStrokeJoinType joinStyle = ART_PATH_STROKE_JOIN_MITER;
 		// TODO : non rgb support ?
 
-		color = m_stroke->color().toQColor();
+		color = m_stroke->color();
 		as = qRound( 255 * m_stroke->color().opacity() );
 		strokeColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
 
@@ -756,7 +756,7 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 		(*stopArray)[ offset * 2 ].offset = ramp;
 		//kdDebug() << " (*stopArray)[ offset * 2 ].offset : " <<  (*stopArray)[ offset * 2 ].offset << endl;
 
-		QColor qStopColor = colorStops[ offset ]->color.toQColor();
+		QColor qStopColor = colorStops[ offset ]->color;
 		int r = qRed( qStopColor.rgb() );
 		int g = qGreen( qStopColor.rgb() );
 		int b = qBlue( qStopColor.rgb() );
@@ -781,7 +781,7 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 			//kdDebug() << "(*stopArray)[ offset * 2  ].offset : " << (*stopArray)[ offset * 2  ].offset << endl;
 			//kdDebug() << "(*stopArray)[ offset * 2 + 1 ].offset : " << (*stopArray)[ offset * 2 + 1 ].offset << endl;
 
-			QColor qStopColor2 = colorStops[ offset + 1 ]->color.toQColor();
+			QColor qStopColor2 = colorStops[ offset + 1 ]->color;
 			stopColor = int(r + ((qRed(qStopColor2.rgb()) - r)) * 0.5) << 24 |
 						int(g + ((qGreen(qStopColor2.rgb()) - g)) * 0.5) << 16 |
 						int(b + ((qBlue(qStopColor2.rgb()) - b)) * 0.5) << 8 |

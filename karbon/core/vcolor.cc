@@ -57,8 +57,7 @@ VColor::VColor( const QColor& color )
 	m_value[2] = color.blue() / 255.0;
 }
 
-QColor
-VColor::toQColor() const
+VColor::operator QColor() const
 {
 	VColor copy( *this );
 	copy.convertToColorSpace( rgb );

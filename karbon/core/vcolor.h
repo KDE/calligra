@@ -52,7 +52,10 @@ public:
 	VColor( const VColor& color );
 	VColor( const QColor& color );
 
-	QColor toQColor() const;
+	/**
+	 * Cast operator to QColor.
+	 */
+	operator QColor() const;
 
 	float operator[]( unsigned i ) const
 		{ return m_value[i]; }

@@ -65,7 +65,7 @@ void VGradientWidget::paintColorStop( QPainter& p, int x, VColor& color )
 
 	bitmap = QBitmap( 5, 8, colorStop_bits, true );
 	bitmap.setMask( bitmap );
-	p.setPen( color.toQColor() );
+	p.setPen( color );
 	p.drawPixmap( x - 2, 1, bitmap );
 
 	bitmap = QBitmap( 7, 8, colorStopBorder_bits, true );
