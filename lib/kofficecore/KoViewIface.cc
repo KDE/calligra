@@ -27,10 +27,17 @@
 #include <kdcopactionproxy.h>
 #include <kaction.h>
 
-KoViewIface::KoViewIface( KoView *view )
-    : DCOPObject( view )
+//static
+QCString KoViewIface::newIfaceName()
 {
-    m_pView = view;
+    static int s_viewIFNumber = 0;
+    QCString name; name.setNum( s_viewIFNumber ); name.prepend("View-");
+    return name;
+}
+
+KoViewIface::KoViewIface( KoView *view )
+    : DCOPObject( newIfaceName() )
+{
     m_actionProxy = new KDCOPActionProxy( view->actionCollection(), this );
 }
 

@@ -27,13 +27,19 @@
 class KDCOPActionProxy;
 class KoView;
 
-class KoViewIface : virtual public DCOPObject
+class KoViewIface : public DCOPObject
 {
     K_DCOP
 public:
     KoViewIface( KoView *view );
     KoViewIface( const char *name, KoView *view );
+    // TODO same args order as KoDocumentIface
+
     virtual ~KoViewIface();
+
+    // Generate a name for this interface. Automatically used if
+    // the first constructor is used.
+    static QCString newIfaceName();
 
 k_dcop:
     DCOPRef action( const QCString &name );

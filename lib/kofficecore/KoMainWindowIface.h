@@ -27,7 +27,7 @@
 class KDCOPActionProxy;
 class KoMainWindow;
 
-class KoMainWindowIface : virtual public DCOPObject
+class KoMainWindowIface : public DCOPObject
 {
     K_DCOP
 public:

@@ -26,8 +26,16 @@
 #include <kaction.h>
 #include <kdebug.h>
 
+//static
+QCString KoDocumentIface::newIfaceName()
+{
+    static int s_docIFNumber = 0;
+    QCString name; name.setNum( s_docIFNumber ); name.prepend("Document-");
+    return name;
+}
+
 KoDocumentIface::KoDocumentIface( KoDocument * doc, const char * name )
-    : DCOPObject( name )
+    : DCOPObject( name ? QCString(name) : newIfaceName() )
 {
   m_pDoc = doc;
   m_actionProxy = new KDCOPActionProxy( doc->actionCollection(), this );
