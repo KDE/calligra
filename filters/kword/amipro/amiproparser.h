@@ -54,6 +54,8 @@ class AmiProStyle
 {
   public:
     QString name;
+    QString fontFamily;
+    float fontSize;
     AmiProStyle();
     AmiProStyle( const AmiProStyle& );
     AmiProStyle& operator=( const AmiProStyle& );

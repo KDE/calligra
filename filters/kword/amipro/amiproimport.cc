@@ -154,8 +154,8 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
   result.append( "  <FOLLOWING name=\"Standard\" />\n" );
   result.append( "  <FORMAT id=\"1\" >\n" );
   result.append( "  <WEIGHT value=\"50\" />\n" );
-  result.append( "  <FONT name=\"Sans serif\" />\n" );
-  result.append( "  <SIZE value=\"12\" />\n" );
+  result.append( "  <FONT name=\"" + style.fontFamily + "\" />\n" );
+  result.append( "  <SIZE value=\"" + QString::number(style.fontSize) + "\" />\n" );
   result.append( "   </FORMAT>\n" );
   result.append( "</STYLE>\n" );
 

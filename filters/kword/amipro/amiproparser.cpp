@@ -247,7 +247,14 @@ bool AmiProParser::parseParagraph( const QString& partext )
 bool AmiProParser::parseStyle( const QStringList& lines )
 {
   AmiProStyle style;
+
   style.name = lines[0].stripWhiteSpace();
+  if( style.name.isEmpty() ) return true;
+
+  if( lines[2].stripWhiteSpace() != "[fnt]" ) return true;
+  style.fontFamily = lines[3].stripWhiteSpace();
+  style.fontSize = lines[4].stripWhiteSpace().toFloat();
+
   m_styleList.append( style );
   if( m_listener )
     return m_listener->doDefineStyle( style );
@@ -476,6 +483,8 @@ AmiProStyle::AmiProStyle()
 void AmiProStyle::assign( const AmiProStyle& s )
 {
   name = s.name;
+  fontFamily = s.fontFamily;
+  fontSize = s.fontSize;
 }
 
 AmiProStyle::AmiProStyle( const AmiProStyle& s )
