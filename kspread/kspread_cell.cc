@@ -2543,16 +2543,16 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     //
     // Draw diagonal borders.
     //
-    if ( m_fallDiagonalPen.style() != Qt::NoPen )
+    if ( fallDiagonalPen(_col, _row).style() != Qt::NoPen )
     {
         // Diagonal line go across other cells if this cell is
         // a multicol/row cell. So use "w2" instead of "w" ...
-        _painter.setPen( m_fallDiagonalPen );
+        _painter.setPen( fallDiagonalPen(_col, _row) );
         _painter.drawLine( _tx, _ty, _tx + w2, _ty + h2 );
     }
-    if ( m_goUpDiagonalPen.style() != Qt::NoPen )
+    if (goUpDiagonalPen(_col, _row).style() != Qt::NoPen )
     {
-        _painter.setPen( m_goUpDiagonalPen );
+        _painter.setPen( goUpDiagonalPen(_col, _row) );
         _painter.drawLine( _tx, _ty + h2 , _tx + w2, _ty );
     }
 

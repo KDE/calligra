@@ -464,6 +464,12 @@ public:
 
     void init();
     void initParameters(KSpreadLayout *_obj,int column,int row);
+    void checkBorderRight(KSpreadLayout *obj,int x,int y);
+    void checkBorderLeft(KSpreadLayout *obj,int x,int y);
+    void checkBorderTop(KSpreadLayout *obj,int x,int y);
+    void checkBorderBottom(KSpreadLayout *obj,int x,int y);
+    void checkBorderVertical(KSpreadLayout *obj,int x,int y);
+    void checkBorderHorizontal(KSpreadLayout *obj,int x,int y);
     /**
      * Run the dialogs event loop and return when closed.
      */
