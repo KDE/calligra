@@ -28,4 +28,3 @@ KFormulaContainer::KFormulaContainer()
     eList.setAutoDelete(true); 
 }
 
-//#include "formula_container.moc"

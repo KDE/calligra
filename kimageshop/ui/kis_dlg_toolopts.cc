@@ -135,7 +135,7 @@ ToolOptionsDialog::ToolOptionsDialog( tooltype tt, ToolOptsStruct ts,
 /*
     KisToolTab - base class for all tool tab widgets
 */
-KisToolTab::KisToolTab(ToolOptsStruct ts, QWidget *_parent, const char *_name)
+KisToolTab::KisToolTab(ToolOptsStruct /*ts*/, QWidget *_parent, const char *_name)
     : QWidget( _parent, _name )
 {
 

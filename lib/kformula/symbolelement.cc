@@ -102,7 +102,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     int distX = style.getDistanceX(tstyle);
     int distY = style.getDistanceY(tstyle);
 
-    symbol.calcSizes(style, mySize*1.5);
+    symbol.calcSizes(style, qRound(mySize*1.5));
     content->calcSizes(style, tstyle, istyle);
 
     //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
@@ -199,7 +199,7 @@ void SymbolElement::draw(QPainter& painter, const QRect& r,
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    symbol.draw(painter, r, style, mySize, myPos);
+    symbol.draw(painter, r, style, qRound(mySize), myPos);
     content->draw(painter, r, style, tstyle, istyle, myPos);
     if (hasUpper()) {
         upper->draw(painter, r, style, style.convertTextStyleIndex( tstyle ),

@@ -62,7 +62,7 @@ void InsertPartTool::setPartEntry (KoDocumentEntry& entry)
   validEntry = true;
  }
 
-void InsertPartTool::processEvent (QEvent* e, GDocument *_doc, Canvas* /*_canvas*/)
+void InsertPartTool::processEvent (QEvent* e, GDocument */*_doc*/, Canvas* /*_canvas*/)
 {
   if(!doc->document()->isReadWrite())
     return;

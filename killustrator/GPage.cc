@@ -152,7 +152,7 @@ void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline)
   }
 }
 
-void GPage::drawContentsInRegion (QPainter& p, const Rect& r, const Rect& rr,
+void GPage::drawContentsInRegion (QPainter& p, const Rect&/*r*/, const Rect& rr,
                                       bool withBasePoints, bool outline)
 {
   for (QListIterator<GLayer> i(layers); i.current(); ++i)
