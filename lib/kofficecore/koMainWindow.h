@@ -21,6 +21,7 @@
 #define __ko_main_window_h__
 
 #include <kparts/mainwindow.h>
+#include <kfiledialog.h>
 
 class QLabel;
 class KoDocument;
@@ -357,6 +358,23 @@ private slots:
 private:
     KoMainWindowPrivate *d;
 
+};
+
+// Extension to KFileDialog in order to add "save as koffice-1.1" and "save as dir"
+// Used only when saving!
+class KoFileDialog : public KFileDialog
+{
+    Q_OBJECT
+public:
+    KoFileDialog(const QString& startDir, const QString& filter,
+                 QWidget *parent, const char *name,
+                 bool modal);
+    void setSpecialMimeFilter( QStringList& mimeFilter,
+                               const QString& currentFormat, const int specialOutputFlag,
+                               const QString& nativeFormat );
+    int specialEntrySelected();
+private slots:
+void slotChangedfilter( int index );
 };
 
 #endif
