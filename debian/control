@@ -12,10 +12,10 @@ Suggests: kdebase-cvs
 Description: KDE Office Suite
  KDE Office Suite
 
-Package: koffice-cvs-dev
+Package: koffice-dev-cvs
 Architecture: any
 Section: devel
-Depends: koffice-cvs (= ${Source-Version}), kdelibs3-cvs-dev
+Depends: koffice-cvs (= ${Source-Version}), kdelibs3-dev-cvs
 Description: Core libraries for KOffice (Development files)
  Core libraries for Koffice (Development files)
 
