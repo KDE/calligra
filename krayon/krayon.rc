@@ -142,11 +142,13 @@
   <Action name="configure"/>
 </Menu>
 
+<!--
 <Menu name="history"><text>History</text>
   <Action name="undo"/>
   <Action name="redo"/>
   <Action name="history_dialog"/>
 </Menu>
+-->
 
 </MenuBar>
 
