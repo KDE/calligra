@@ -315,6 +315,10 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright );
   }
 
+  // In case of reload (e.g. from konqueror)
+  m_pMap->tableList().clear(); // it's set to autoDelete
+  m_refs.clear();
+
   // <map>
   QDomElement mymap = spread.namedItem( "map" ).toElement();
   if ( !mymap.isNull() )
@@ -324,10 +328,6 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       return false;
     }
 
-  // All this is done in completeLoading...
-  //m_bLoading = false;
-  //m_pMap->update();
-  //setModified( FALSE );
   return true;
 }
 
