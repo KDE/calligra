@@ -4823,6 +4823,20 @@ KoRect KPrCanvas::getDrawRect( const KoPointArray &_points )
     return rect;
 }
 
+void KPrCanvas::createEditing( KPTextObject *textObj )
+{
+    if( m_currentTextObjectView)
+    {
+        m_currentTextObjectView->terminate();
+        delete m_currentTextObjectView;
+        m_currentTextObjectView = 0L;
+        editNum = -1;
+    }
+    m_currentTextObjectView=textObj->createKPTextView( this );
+    editNum=objectList().findRef(textObj);
+
+}
+
 void KPrCanvas::terminateEditing( KPTextObject *textObj )
 {
     if ( m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == textObj )

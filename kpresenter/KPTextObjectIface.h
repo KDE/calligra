@@ -34,6 +34,7 @@ public:
     KPTextObjectIface( KPTextObject *_textobject );
 
 k_dcop:
+    DCOPRef startEditing();
     bool hasSelection() const;
     int numberOfParagraphs();
     QString selectedText() const;

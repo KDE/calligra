@@ -186,6 +186,7 @@ public:
     void dragStarted() { mousePressed = false; }
 
     void setXimPosition( int x, int y, int w, int h, QFont *f );
+    void createEditing( KPTextObject *textObj );
 
 public slots:
     void exitEditMode();

@@ -62,6 +62,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
 {
     //kdDebug()<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )\n";
     m_doc=_doc;
+    dcop=0;
     kpbackground= new KPBackGround( this );
     //create object list for each page.
     m_objectList.setAutoDelete( false );

@@ -41,7 +41,7 @@ int KPresenterDocIface::getNumPages()
 DCOPRef KPresenterDocIface::getPage( int num )
 {
     if( num>= doc->getPageNums())
-        return DCOPRef();
+      return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->pageList().at( num )->dcopObject()->objId() );
 }

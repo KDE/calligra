@@ -20,27 +20,27 @@
 #include "KPTextObjectIface.h"
 #include "kptextobject.h"
 #include <KoTextViewIface.h>
-
+#include "kpresenter_doc.h"
+#include "kpresenter_view.h"
 #include <kotextobject.h>
 #include <kapplication.h>
 #include <dcopclient.h>
-
+#include "kprcanvas.h"
 
 KPTextObjectIface::KPTextObjectIface( KPTextObject *_textobject )
     : DCOPObject()
 {
    m_textobject = _textobject;
 }
-#if 0
+
 DCOPRef KPTextObjectIface::startEditing()
 {
-    KWDocument *doc=m_frametext->kWordDocument();
-    QPtrList <KWView> lst=doc->getAllViews();
-    lst.at(0)->getGUI()->canvasWidget()->checkCurrentTextEdit(m_frametext);
+    KPresenterDoc *doc=m_textobject->kPresenterDocument();
+    KPresenterView *view=doc->getKPresenterView();
+    view->getCanvas()->createEditing( m_textobject);
     return DCOPRef( kapp->dcopClient()->appId(),
-		    (static_cast<KWTextFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() );
+		    view->getCanvas()->currentTextObjectView()->dcopObject()->objId() );
 }
-#endif
 
 bool KPTextObjectIface::hasSelection() const
 {
