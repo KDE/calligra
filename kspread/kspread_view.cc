@@ -505,7 +505,9 @@ void KSpreadView::initConfig()
         m_pDoc->setShowStatusBar(config->readBoolEntry("Status bar",true));
 
         changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
-        m_pDoc->setAutoSave(config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60));
+        //autosave value is stored as a minute.
+        //but default value is stored as seconde.
+        m_pDoc->setAutoSave(config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60)*60);
 	}
 
  if(  config->hasGroup("KSpread Color" ) )
