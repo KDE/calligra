@@ -55,8 +55,10 @@ namespace Kivio {
 
   void PluginManager::activateDefaultTool()
   {
-    kdDebug(43000) << "Default tool activated! " << defaultTool()->name() << endl;
-    defaultTool()->setActivated(true);
+    if(defaultTool()) {
+      kdDebug(43000) << "Default tool activated! " << defaultTool()->name() << endl;
+      defaultTool()->setActivated(true);
+    }
   }
   
   void PluginManager::activate(Kivio::MouseTool* tool)
