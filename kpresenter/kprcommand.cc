@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1436,69 +1437,122 @@ void PictureSettingCmd::unexecute()
 
 RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
                             QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags )
-    : KNamedCommand( _name ), oldValues( _oldValues ), objects( _objects ), flags(_flags)
+    : KNamedCommand( _name ), m_oldValues( _oldValues ), m_objects( _objects ), m_flags(_flags)
 {
-    objects.setAutoDelete( false );
-    oldValues.setAutoDelete( false );
-    doc = _doc;
+    m_objects.setAutoDelete( false );
+    m_oldValues.setAutoDelete( false );
+    m_doc = _doc;
     m_page = _page;
-    newValues = _newValues;
+    m_newValues = _newValues;
 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
+
+RectValueCmd::RectValueCmd( const QString &name, QPtrList<KPObject> &objects, RectValues newValues,
+                            KPresenterDoc *doc, KPrPage *page, int flags )
+: KNamedCommand( name )
+, m_doc( doc )
+, m_page( page )
+, m_newValues( newValues )
+, m_flags( flags )
+{
+    m_objects.setAutoDelete( false );
+    m_oldValues.setAutoDelete( false );
+
+    addObjects( objects );
+}
+
+
 RectValueCmd::~RectValueCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 
-    oldValues.setAutoDelete( true );
-    oldValues.clear();
+    m_oldValues.setAutoDelete( true );
+    m_oldValues.clear();
 }
 
-void RectValueCmd::execute()
+
+void RectValueCmd::addObjects( const QPtrList<KPObject> &objects )
 {
     QPtrListIterator<KPObject> it( objects );
-    for ( ; it.current() ; ++it )
+    for ( ; it.current(); ++it )
     {
-        KPRectObject *obj=dynamic_cast<KPRectObject*>(it.current() );
-        if(obj)
+        if ( it.current()->getType() == OT_GROUP )
         {
-            if (flags & XRnd)
+            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            if ( obj )
             {
-                int xtmp, ytmp;
-                obj->getRnds(xtmp, ytmp);
-                obj->setRnds(newValues.xRnd, ytmp);
+                addObjects( obj->objectList() );
             }
-
-            if (flags & YRnd)
+        }
+        else
+        {
+            KPRectObject *obj = dynamic_cast<KPRectObject*>( it.current() );
+            if( obj )
             {
+                m_objects.append( obj );
+                obj->incCmdRef();
+
+                RectValues * rectValue = new RectValues;
+
                 int xtmp, ytmp;
-                obj->getRnds(xtmp, ytmp);
-                obj->setRnds(xtmp, newValues.yRnd);
+                obj->getRnds( xtmp, ytmp );
+                rectValue->xRnd = xtmp;
+                rectValue->yRnd = ytmp;
+
+                m_oldValues.append( rectValue );
             }
         }
     }
-    doc->repaint( false );
+}
 
-    doc->updateSideBarItem( m_page );
+
+void RectValueCmd::execute()
+{
+    QPtrListIterator<KPObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+    {
+        KPRectObject *obj = dynamic_cast<KPRectObject*>( it.current() );
+        if( obj )
+        {
+            int xtmp, ytmp;
+            obj->getRnds( xtmp, ytmp );
+
+            if ( m_flags & XRnd )
+            {
+                xtmp = m_newValues.xRnd;
+            }
+
+            if ( m_flags & YRnd )
+            {
+                ytmp = m_newValues.yRnd;
+            }
+
+            obj->setRnds( xtmp, ytmp );
+        }
+    }
+    m_doc->repaint( false );
+
+    m_doc->updateSideBarItem( m_page );
 }
 
 void RectValueCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
+    for ( unsigned int i = 0; i < m_objects.count(); i++ )
     {
-        KPRectObject *obj=dynamic_cast<KPRectObject*>( objects.at(i));
+        KPRectObject *obj = dynamic_cast<KPRectObject*>( m_objects.at( i ) );
 
-        if(obj)
-            obj->setRnds( oldValues.at( i )->xRnd, oldValues.at( i )->yRnd );
+        if( obj )
+            obj->setRnds( m_oldValues.at( i )->xRnd, m_oldValues.at( i )->yRnd );
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 

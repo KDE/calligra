@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -685,19 +686,22 @@ public:
 
     RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
                   QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
+    RectValueCmd( const QString &_name, QPtrList<KPObject> &_objects, RectValues _newValues,
+                  KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
     ~RectValueCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
+    void addObjects( const QPtrList<KPObject> &_objects );
 
-    KPresenterDoc *doc;
+    KPresenterDoc *m_doc;
     KPrPage *m_page;
-    QPtrList<RectValues> oldValues;
-    QPtrList<KPObject> objects;
-    RectValues newValues;
-    int flags;
+    QPtrList<RectValues> m_oldValues;
+    QPtrList<KPObject> m_objects;
+    RectValues m_newValues;
+    int m_flags;
 };
 
 class KPrDeletePageCmd : public KNamedCommand
