@@ -105,6 +105,13 @@ public:
    */
   int getIndex( const QString& _longparam, const QString& _shortparam );
 
+/*
+  QString getParam( QStringList::Iterator _it );
+  void deleteParam( QStringList::Iterator _it );
+  QStringList::Iterator getIndex( const QString& _param );
+  QStringList::Iterator getIndex( const QString& _longparam, const QString& _shortparam );
+*/
+
 protected:
   bool compareParam( const QString& _arg, const QString& _param ) const;
 
