@@ -62,10 +62,10 @@ class KexiComboBoxPopup : public QFrame
 
 	public slots:
 		virtual void resize( int w, int h );
+		void updateSize();
 
 	protected slots:
 		void slotTVItemAccepted(KexiTableItem *item, int row, int col);
-		void updateSize();
 		void slotDataRefreshRequested();
 
 	protected:

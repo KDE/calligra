@@ -205,6 +205,9 @@ class KexiTableViewPrivate
 	 Equal -1 if no indication is needed.
 	*/
 	int dragIndicatorLine;
+
+	//! Used by delayed mode of maximizeColumnsWidth() 
+	QValueList<int> maximizeColumnsWidthOnShow;
 };
 
 #endif

@@ -59,6 +59,9 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 //js		void backspace();
 		virtual void clear();
 
+		/*! \return total size of this editor, including any buttons, etc. (if present). */
+		virtual QSize totalSize();
+
 	protected slots:
 		void setRestrictedCompletion();
 		void completed(const QString &);

@@ -21,6 +21,7 @@
 
 #include "kexitableview.h"
 #include "kexitableitem.h"
+#include "kexitableedit.h"
 
 #include <kdebug.h>
 
@@ -137,7 +138,8 @@ void KexiComboBoxPopup::setDataInternal( KexiTableViewData *data, bool owner )
 	if (d->tv->data())
 		d->tv->data()->disconnect( this );
 	d->tv->setData( data, owner );
-	connect( data, SIGNAL(refreshRequested()), this, SLOT(slotDataRefreshRequested()));
+	connect( d->tv, SIGNAL(dataRefreshed()), this, SLOT(slotDataRefreshRequested()));
+//	connect( data, SIGNAL(refreshRequested()), this, SLOT(slotDataRefreshRequested()));
 
 	updateSize();
 }
@@ -149,7 +151,10 @@ void KexiComboBoxPopup::updateSize()
 //	d->tv->adjustColumnWidthToContents( 0 ); //TODO: not only for column 0, if there are more columns!
 //	                                         //TODO: check if the width is not too big
 	const int rows = QMIN( d->max_rows, d->tv->rows() );
-	resize( d->tv->tableSize().width(), d->tv->rowHeight() * rows +2 );
+	KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
+	const int width = QMAX( d->tv->tableSize().width(), 
+		(te ? te->totalSize().width() : parentWidget()->width()/*sanity*/) );
+	resize( width, d->tv->rowHeight() * rows +2 );
 
 //	resize( d->tv->columnWidth( 0 ), d->tv->rowHeight() * QMIN( d->max_rows, d->tv->rows() ) +2 );
 }

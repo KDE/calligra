@@ -145,6 +145,11 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		 and width of this string is returned. */
 		virtual int widthForValue( QVariant &val, QFontMetrics &fm );
 
+		/*! \return total size of this editor, including any buttons, etc. (if present). 
+		 Reimpelment this if you want to return more appropriate size. THis impelmentation just
+		 returns QWidget::size(). */
+		virtual QSize totalSize() { return QWidget::size(); }
+
 	signals:
 		void editRequested();
 		void cancelRequested();

@@ -461,6 +461,8 @@ void KexiTableView::initDataContents()
 	setCursor(curRow, curCol);
 	ensureVisible(0,0);
 	updateContents();
+
+	emit dataRefreshed();
 }
 
 void KexiTableView::slotDataDestroying()
@@ -2175,6 +2177,11 @@ void KexiTableView::viewportResizeEvent( QResizeEvent *e )
 void KexiTableView::showEvent(QShowEvent *e)
 {
 	QScrollView::showEvent(e);
+	if (!d->maximizeColumnsWidthOnShow.isEmpty()) {
+		maximizeColumnsWidth(d->maximizeColumnsWidthOnShow);
+		d->maximizeColumnsWidthOnShow.clear();
+	}
+
 	if (d->initDataContentsOnShow) {
 		//full init
 		d->initDataContentsOnShow = false;
@@ -3092,6 +3099,44 @@ void KexiTableView::setColumnWidth(int colNum, int width)
 	const int oldWidth = d->pTopHeader->sectionSize( colNum );
 	d->pTopHeader->resizeSection( colNum, width );
 	slotTopHeaderSizeChange( colNum, oldWidth, d->pTopHeader->sectionSize( colNum ) );
+}
+
+void KexiTableView::maximizeColumnsWidth( const QValueList<int> &columnList )
+{
+	if (!isVisible()) {
+		d->maximizeColumnsWidthOnShow += columnList;
+		return;
+	}
+	if (width() <= d->pTopHeader->headerWidth())
+		return;
+	//sort the list and make it unique
+	QValueList<int>::const_iterator it;
+	QValueList<int> cl, sortedList = columnList;
+	qHeapSort(sortedList);
+	int i=-999;
+	for (it=sortedList.constBegin(); it!=sortedList.end(); ++it) {
+		if (i!=(*it)) {
+			cl += (*it);
+			i = (*it);
+		}
+	}
+	//resize
+	int sizeToAdd = (width() - d->pTopHeader->headerWidth()) / cl.count() - verticalHeader()->width();
+	if (sizeToAdd<=0)
+		return;
+	for (it=cl.constBegin(); it!=cl.end(); ++it) {
+		int w = d->pTopHeader->sectionSize(*it);
+		if (w>0) {
+			d->pTopHeader->resizeSection(*it, w+sizeToAdd);
+		}
+	}
+	updateContents();
+	editorShowFocus( d->curRow, d->curCol );
+}
+
+void KexiTableView::adjustHorizontalHeaderSize()
+{
+	d->pTopHeader->adjustHeaderSize();
 }
 
 void KexiTableView::setColumnStretchEnabled( bool set, int colNum )

@@ -131,6 +131,7 @@ void KexiComboBoxTableEdit::showFocus( const QRect& r )
 
 void KexiComboBoxTableEdit::resize(int w, int h)
 {
+	m_totalSize = QSize(w,h);
 	QWidget::resize(w - m_button->width(), h);
 	m_button->resize( h, h );
 	m_rightMargin = m_parentRightMargin + m_button->width();
@@ -138,7 +139,8 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 	if (m_popup) {
 //		KexiTableView *tv = static_cast<KexiTableView*>(m_scrollView);
 //		m_popup->move( tv->viewport()->mapToGlobal(pos()) + QPoint(0,height()) );//+ rect().bottomLeft() ) );
-		m_popup->resize(w, m_popup->height());
+//		m_popup->resize(w, m_popup->height());
+		m_popup->updateSize();
 	}
 //	m_lineedit->resize(w - m_button->width()-1, h);
 }
@@ -278,7 +280,8 @@ void KexiComboBoxTableEdit::showPopup()
 		int h = m_popup->height(), w = m_popup->width();
 		m_popup->resize(w, 0);
 		m_popup->show();
-		m_popup->resize(w, h);
+		m_popup->updateSize();
+//		m_popup->resize(w, h);
 	}
 
 	m_lineedit->setFocus();

@@ -408,6 +408,13 @@ bool KexiInputTableEdit::cursorAtEnd()
 	return m_lineedit->cursorPosition()==(int)m_lineedit->text().length();
 }
 
+QSize KexiInputTableEdit::totalSize()
+{
+	if (!m_lineedit)
+		return size();
+	return m_lineedit->size();
+}
+
 #if 0 //js: we've QValidator for validating!
 bool
 KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)

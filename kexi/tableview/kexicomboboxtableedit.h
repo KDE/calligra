@@ -79,6 +79,9 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		virtual void hide();
 		virtual void show();
 
+		/*! \return total size of this editor, including popup button. */
+		virtual QSize totalSize() { return m_totalSize; }
+
 	protected slots:
 		void slotButtonClicked();
 		void showPopup();
@@ -100,6 +103,8 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 		KexiComboBoxPopup *m_popup;
 		int m_parentRightMargin;
+
+		QSize m_totalSize;
 };
 
 class KexiComboBoxEditorFactoryItem : public KexiCellEditorFactoryItem

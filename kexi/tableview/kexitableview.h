@@ -365,6 +365,17 @@ public slots:
 	 This method behaves like QHeader::setStretchEnabled ( bool b, int section ). */
 	void setColumnStretchEnabled( bool set, int colNum );
 
+	/*! Maximizes widths of columns selected by \a columnList, so the horizontal 
+	 header has maximum overall width. Each selected column's width will be increased 
+	 by the same value. Does nothing if \a columnList is empty or there is no free space 
+	 to resize columns. If this table view is not visible, resizing will be performed on showing. */
+	void maximizeColumnsWidth( const QValueList<int> &columnList );
+
+	/*! Adjusts the size of the sections to fit the size of the horizontal header 
+	 as completely as possible. Only sections for which column stretch is enabled will be resized.
+	 \sa setColumnStretchEnabled() QHeader::adjustHeaderSize() */
+	void adjustHorizontalHeaderSize();
+
 	/*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
 	 If forceSet is true, cursor position is updated even if \a row and \a col doesn't 
 	 differ from actual position. */
@@ -457,6 +468,9 @@ signals:
 
 	void dragOverRow(KexiTableItem *item, int row, QDragMoveEvent* e);
 	void droppedAtRow(KexiTableItem *item, int row, QDropEvent *e);
+
+	/*! Data has been refreshed on-screen - emitted from initDataContents(). */
+	void dataRefreshed();
 
 #if 0 
 //MOC_SKIP_BEGIN 
