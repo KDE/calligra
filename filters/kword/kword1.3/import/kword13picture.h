@@ -34,6 +34,7 @@ public:
     ~KWord13Picture( void );
 public:
     bool loadPicture( KoStore* store );
+    QString getOasisPictureName( void ) const;
 public:
     QString m_storeName; ///< Name of the file in store
     KTempFile* m_tempFile; ///< Temporary file

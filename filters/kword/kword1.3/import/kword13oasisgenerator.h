@@ -49,6 +49,7 @@ protected: // Generating phase
     void writeContentXml( void );
     void writeMetaXml( void );
     void writePreviewFile(void);
+    void writePictures( void );
 protected: // Preparing phase
     /// Preparing page layout
     void preparePageLayout( void );

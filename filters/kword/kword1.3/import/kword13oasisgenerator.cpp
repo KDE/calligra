@@ -20,13 +20,14 @@
 */
 
 #include <qstring.h>
-#include <qtextstream.h>
+#include <qdict.h>
+#include <qfile.h>
 #include <qbuffer.h>
 #include <qimage.h>
 
 #include <kdebug.h>
-#include <kzip.h>
 #include <ktempfile.h>
+#include <kmimetype.h>
 
 #include <kofficeversion.h>
 #include <koStore.h>
@@ -35,6 +36,7 @@
 #include <koGenStyles.h>
 
 #include "kword13formatother.h"
+#include "kword13picture.h"
 #include "kword13document.h"
 
 #include "kword13oasisgenerator.h"
@@ -813,6 +815,54 @@ void KWord13OasisGenerator::writePreviewFile(void)
     // No manifest entry, as it is supposed not to be part of the document.
 }
 
+void KWord13OasisGenerator::writePictures( void )
+{
+    if ( !m_store || !m_kwordDocument )
+    {
+        kdError(30520) << "Not possible to generate preview file" << endl;
+        return;
+    }
+
+    for ( QDictIterator<KWord13Picture> it( m_kwordDocument->m_pictureDict ) ; it.current(); ++it )
+    {
+        if ( !it.current()->m_valid || !it.current()->m_tempFile )
+        {
+            kdDebug(30520) << "No data for picture: " << it.currentKey() << endl;
+            continue;
+        }
+        const QString fileName( it.current()->m_tempFile->name() );
+        const QString oasisName( it.current()->getOasisPictureName() );
+        kdDebug(30520) << "Copying... " << it.currentKey() << " => " << oasisName << endl;
+        QFile file( fileName );
+        if ( !file.open( IO_ReadOnly ) )
+        {
+            kdWarning(30520) << "Cannot open: " << fileName << endl;
+            continue;
+        }
+        QByteArray array( file.readAll() );
+        if ( array.isNull() )
+        {
+            kdWarning(30520) << "Null picture for " << fileName << endl;
+            file.close();
+            continue;
+        }
+        file.close();
+        
+        m_store->open( oasisName );
+        m_store->write( array );
+        m_store->close();
+        
+        if ( m_manifestWriter )
+        {
+            // ### TODO: better mime type detection (probably need a correct extension for th etemporary file)
+            const QString mimeType ( KMimeType::findByPath( fileName, 0, false )->name() );
+            m_manifestWriter->addManifestEntry( oasisName, mimeType );
+        }
+        
+    }
+
+}
+
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
 {
     if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
@@ -834,7 +884,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     QByteArray manifestData;
     QBuffer manifestBuffer( manifestData );
     manifestBuffer.open( IO_WriteOnly );
-    KoXmlWriter* m_manifestWriter = new KoXmlWriter( &manifestBuffer );
+    m_manifestWriter = new KoXmlWriter( &manifestBuffer );
     m_manifestWriter->startDocument( "manifest:manifest" );
     m_manifestWriter->startElement( "manifest:manifest" );
     m_manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
@@ -844,6 +894,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     writeStylesXml();
     writeContentXml();
     writeMetaXml();
+    writePictures();
     
         // Write out manifest file
     m_manifestWriter->endElement();

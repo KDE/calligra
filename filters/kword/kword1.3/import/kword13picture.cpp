@@ -60,3 +60,28 @@ bool KWord13Picture::loadPicture( KoStore* store )
     return m_valid;
 }
 
+QString KWord13Picture::getOasisPictureName( void ) const
+{
+    if ( ! m_valid || ! m_tempFile )
+        return QString::null;
+        
+    // We need a 32 digit hex value of the picture number
+    // Please note: it is an exact 32 digit value, truncated if the value is more than 512 bits wide. :-)
+    QString number;
+    number.fill('0',32);
+    // ### TODO: have a real counter instead of using the pointers
+    number += QString::number( (long long)( (void*) m_tempFile ) , 16 ); // in hex
+
+    QString strExtension( m_storeName.lower() );
+    const int result = m_storeName.findRev( '.' );
+    if ( result >= 0 )
+    {
+        strExtension = m_storeName.mid( result );
+    }
+    
+    QString ooName( "Pictures/" );
+    ooName += number.right( 32 );
+    ooName += strExtension;
+
+    return ooName;
+}
