@@ -1,7 +1,7 @@
 #include "vpath.h"
 
 VPath::VPath()
-    : VObject()
+    : VObject(), m_currentPoint = 0L
 {
 }
 
@@ -9,13 +9,13 @@ VPath::~VPath()
 {
     // remove primitives:
     VPrimitive* prim;
-    for ( prim=m_primitives.first(); prim!=0; prim=m_primitives.next() )
+    for ( prim=m_primitives.first(); prim!=0L; prim=m_primitives.next() )
     {
 	delete prim;
     }
 }
 
 void
-VPath::draw( VPainter& /*p*/ )
+VPath::draw( QPainter& /*p*/ )
 {
 }

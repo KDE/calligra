@@ -6,15 +6,15 @@
 #include "vobject.h"
 #include "vprimitive.h"
 
-class VPainter;
+class QPainter;
 class VPoint;
 
 class VPath : public VObject {
 public:
     VPath();
-    virtual ~VPath();
+    ~VPath();
     
-    virtual void draw( VPainter& p );
+    void draw( QPainter& p );
     
     // postscript-like commands:
     void moveTo();
@@ -23,7 +23,7 @@ public:
     void close();
 
 private:
-    VPoint m_curPoint;
+    VPoint* m_currentPoint;
     QList<VPrimitive> m_primitives;
 };
 

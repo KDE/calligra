@@ -3,32 +3,38 @@
 
 #include "vpoint.h"
 
+
 class VPrimitive {
 public:
-    VPrimitive();
 
-protected:    
+protected:
+    // protected ctor to forbid instantiation:
+    VPrimitive( VPoint* fp, VPoint* lp )
+	: m_firstPoint(fp), m_lastPoint(lp) {}
     
 private:
+    VPoint* m_firstPoint;
+    VPoint* m_lastPoint;
 
 };
+
 
 class VLine : public VPrimitive {
 public:
-    VLine( VPoint& p0, VPoint& p1 )
-	: m_p0(p0), m_p1(p1) {}
+    VLine( VPoint* fp, VPoint* lp )
+	: VPrimitive(fp,lp) {}
 	    
-private:
-    VPoint& m_p0, m_p1;
 };
+
 
 class VBezier : public VPrimitive {
 public:
-    VBezier( VPoint& p0, VPoint& p1, VPoint& p2, VPoint& p3 )
-	: m_p0(p0), m_p1(p1), m_p2(p2), m_p3(p3) {}
+    VBezier( VPoint* fp, VPoint* fcp, VPoint* lcp, VPoint* lp )
+	: VPrimitive(fp,lp), m_firstCtrlPoint(fcp), m_lastCtrlPoint(lcp) {}
 	    
 private:
-    VPoint& m_p0, m_p1, m_p2, m_p3;
+    VPoint* m_firstCtrlPoint;
+    VPoint* m_lastCtrlPoint;
 };
 
 
