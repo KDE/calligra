@@ -423,68 +423,56 @@ bool KivioPage::addStencil( KivioStencil *pStencil )
 
 void KivioPage::selectStencils( float x, float y, float w, float h )
 {
-    // Iterate through all stencils of this layer
-    KivioStencil *pStencil = m_pCurLayer->stencilList()->first();
-    while( pStencil )
+  // Iterate through all stencils of this layer
+  KivioStencil *pStencil = m_pCurLayer->stencilList()->first();
+
+  while( pStencil )
+  {
+    // Is it in the rectangle?
+    if( stencilInRect( x, y, w, h, pStencil )==true )
     {
-        // Is it in the rectangle?
-        if( stencilInRect( x, y, w, h, pStencil )==true )
-        {
-            selectStencil( pStencil );
-
-	    // Don't allow reselection
-	    if( m_lstSelection.findRef( pStencil ) != -1 )
-	    {
-	    }
-	    else
-	    {
-	       pStencil->select();
-	       m_lstSelection.append( pStencil );
-	    }
-        }
-
-        pStencil = m_pCurLayer->stencilList()->next();
+      selectStencil( pStencil );
     }
 
-    m_pDoc->slotSelectionChanged();
+    pStencil = m_pCurLayer->stencilList()->next();
+  }
+
+  m_pDoc->slotSelectionChanged();
 }
 
 bool KivioPage::stencilInRect( float x, float y, float w, float h, KivioStencil *pStencil )
 {
-    float sx, sy, sw, sh;
+  float sx, sy, sw, sh;
 
-    sx = pStencil->x();
-    sy = pStencil->y();
-    sw = pStencil->w();
-    sh = pStencil->h();
+  sx = pStencil->x();
+  sy = pStencil->y();
+  sw = pStencil->w();
+  sh = pStencil->h();
 
-    if( sx >= x &&
-        sy >= y &&
-        sx+sw <= x+w &&
-        sy+sh <= y+h )
-        return true;
+  if( sx >= x && sy >= y && sx+sw <= x+w && sy+sh <= y+h )
+    return true;
 
-    return false;
+  return false;
 }
 
 
 void KivioPage::selectStencil( KivioStencil *pStencil )
 {
-    if( !pStencil )
-    {
-       kdDebug() << "KivioPage::selectStencil - AHHHH! NULL STENCIL!" << endl;
-        return;
-    }
+  if( !pStencil )
+  {
+    kdDebug() << "KivioPage::selectStencil - AHHHH! NULL STENCIL!" << endl;
+    return;
+  }
 
-    // Don't allow reselection
-    if( m_lstSelection.findRef( pStencil ) != -1 )
-        return;
+  // Don't allow reselection
+  if( m_lstSelection.findRef( pStencil ) != -1 )
+    return;
 
-    kdDebug() <<"KivioPage::selectStencil - Selecting stencil" << endl;
-    pStencil->select();
-    m_lstSelection.append( pStencil );
+  kdDebug() <<"KivioPage::selectStencil - Selecting stencil" << endl;
+  pStencil->select();
+  m_lstSelection.append( pStencil );
 
-    m_pDoc->slotSelectionChanged();
+  m_pDoc->slotSelectionChanged();
 }
 
 bool KivioPage::unselectStencil( KivioStencil *pStencil )

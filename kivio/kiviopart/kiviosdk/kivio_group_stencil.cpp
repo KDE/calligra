@@ -105,7 +105,7 @@ void KivioGroupStencil::setBGColor( QColor c )
     }
 }
 
-void KivioGroupStencil::setLineWidth( float f )
+void KivioGroupStencil::setLineWidth( double f )
 {
     // Draw the group in outline mode
     KivioStencil *pStencil = m_pGroupList->first();
@@ -138,7 +138,7 @@ KivioCollisionType KivioGroupStencil::checkForCollision( KivioPoint *p, double t
 
 void KivioGroupStencil::addToGroup( KivioStencil *pStencil )
 {
-    float left, right, top, bottom;
+    double left, right, top, bottom;
 
 
     m_pGroupList->append(pStencil);
@@ -259,9 +259,9 @@ QDomElement KivioGroupStencil::saveXML( QDomDocument &doc )
     return e;
 }
 
-void KivioGroupStencil::setX( float newX )
+void KivioGroupStencil::setX( double newX )
 {
-   float dx = newX - m_x;
+   double dx = newX - m_x;
 
    m_x = newX;
    KivioStencil *pStencil = m_pGroupList->first();
@@ -277,9 +277,9 @@ void KivioGroupStencil::setX( float newX )
 
 }
 
-void KivioGroupStencil::setY( float newY )
+void KivioGroupStencil::setY( double newY )
 {
-   float dy = newY - m_y;
+   double dy = newY - m_y;
 
    m_y = newY;
    KivioStencil *pStencil = m_pGroupList->first();
@@ -295,12 +295,12 @@ void KivioGroupStencil::setY( float newY )
 
 }
 
-void KivioGroupStencil::setPosition( float newX, float newY )
+void KivioGroupStencil::setPosition( double newX, double newY )
 {
-   float dx = newX - m_x;
-   float dy = newY - m_y;
+   double dx = newX - m_x;
+   double dy = newY - m_y;
 
-   float newX2, newY2;
+   double newX2, newY2;
 
    m_x = newX;
    m_y = newY;
@@ -327,7 +327,7 @@ void KivioGroupStencil::setPosition( float newX, float newY )
 
 }
 
-void KivioGroupStencil::setW( float newW )
+void KivioGroupStencil::setW( double newW )
 {
     double percInc = newW / m_w;
 
@@ -350,7 +350,7 @@ void KivioGroupStencil::setW( float newW )
     }
 }
 
-void KivioGroupStencil::setH( float newH )
+void KivioGroupStencil::setH( double newH )
 {
     double percInc = newH / m_h;
 
@@ -373,7 +373,7 @@ void KivioGroupStencil::setH( float newH )
     }
 }
 
-void KivioGroupStencil::setDimensions( float newW, float newH )
+void KivioGroupStencil::setDimensions( double newW, double newH )
 {
     double percIncX = newW / m_w;
     double percIncY = newH / m_h;
@@ -426,7 +426,7 @@ int KivioGroupStencil::generateIds( int next )
 }
 
 
-KivioConnectorTarget *KivioGroupStencil::connectToTarget( KivioConnectorPoint *p, float thresh)
+KivioConnectorTarget *KivioGroupStencil::connectToTarget( KivioConnectorPoint *p, double thresh)
 {
     KivioConnectorTarget *pTarget;
 

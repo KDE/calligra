@@ -125,6 +125,7 @@ protected:
 
     // The stemcil type
     KivioStencilType m_type;
+    bool m_connected;
 
 public:
     KivioStencil();
@@ -134,7 +135,8 @@ public:
 
     virtual KivioStencilType type() { return m_type; }
     virtual void setType(KivioStencilType t) { m_type = t; }
-
+    virtual bool connected() { return m_connected; }
+    virtual void setConnected(bool c) { m_connected = c; }
 
     virtual double x() { return m_x; }
     virtual void setX( double f ) { m_x=f; updateGeometry(); }

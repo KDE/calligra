@@ -580,14 +580,14 @@ bool Kivio1DStencil::boolContainsFalse( bool *boolArray, int count )
     return false;
 }
 
-
 void Kivio1DStencil::searchForConnections( KivioPage *pPage )
 {
   bool *done = new bool[ m_pConnectorPoints->count()];
   int i;
 
-  for( i=0; i<(int)m_pConnectorPoints->count(); i++ )
+  for( i=0; i<(int)m_pConnectorPoints->count(); i++ ) {
     done[i] = false;
+  }
 
   KivioConnectorPoint *p;
   i=0;
@@ -595,8 +595,9 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage )
 
   while( p )
   {
-    if( p->targetId() == -1 )
+    if( p->targetId() == -1 ) {
       done[i] = true;
+    }
 
     i++;
     p = m_pConnectorPoints->next();
@@ -877,3 +878,19 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
   painter->drawText( _x, _y, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
 }
 
+bool Kivio1DStencil::connected()
+{
+  KivioConnectorPoint *p;
+  p = m_pConnectorPoints->first();
+
+  while( p )
+  {
+    if(p->target() != 0) {
+      return true;
+    }
+
+    p = m_pConnectorPoints->next();
+  }
+
+  return false;
+}

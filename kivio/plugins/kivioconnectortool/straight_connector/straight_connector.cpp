@@ -89,6 +89,9 @@ KivioStraightConnector::KivioStraightConnector()
    m_pCanProtect->clearBit( kpHeight );
    m_pCanProtect->clearBit( kpX );
    m_pCanProtect->clearBit( kpY );
+
+   // This is a stencil of type connector
+   setType(kstConnector);
 }
 
 KivioStraightConnector::~KivioStraightConnector()
@@ -106,8 +109,8 @@ void KivioStraightConnector::setStartPoint( double x, double y )
     if( m_needsText )
     {
        m_pTextConn->setPosition( (m_pEnd->x()+m_pStart->x())/2.0f,
-				 (m_pEnd->y()+m_pStart->y())/2.0f,
-				 false );
+        (m_pEnd->y()+m_pStart->y())/2.0f,
+        false );
     }
 }
 

@@ -47,6 +47,7 @@ KivioStencil::KivioStencil()
   }
 
   m_type = kstNormal;
+  m_connected = false;
 }
 
 KivioStencil::~KivioStencil()

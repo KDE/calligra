@@ -80,7 +80,7 @@ public:
 
 
     // Line width
-    virtual void setLineWidth( float );
+    virtual void setLineWidth( double );
 
 
     // Collision detection
@@ -93,12 +93,12 @@ public:
 
 
     // Position / Dimension operations
-    virtual void setX( float );
-    virtual void setY( float );
-    virtual void setW( float );
-    virtual void setH( float );
-    virtual void setPosition( float f1, float f2 );
-    virtual void setDimensions( float f1, float f2 );
+    virtual void setX( double );
+    virtual void setY( double );
+    virtual void setW( double );
+    virtual void setH( double );
+    virtual void setPosition( double f1, double f2 );
+    virtual void setDimensions( double f1, double f2 );
 
 
     // ID generation
@@ -106,7 +106,7 @@ public:
 
 
     // Connection operations
-    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, float );
+    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, double );
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );
 
     virtual void searchForConnections( KivioPage * );

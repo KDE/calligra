@@ -59,6 +59,8 @@ public:
     Kivio1DStencil();
     virtual ~Kivio1DStencil();
 
+    virtual bool connected();
+
     // fg color functions
     virtual void setFGColor( QColor c );
     virtual QColor fgColor();
