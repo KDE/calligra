@@ -1103,7 +1103,6 @@ throw( KDChartNotEnoughSpaceException )
 #endif
 {
     QPaintDeviceMetrics painterMetrics( painter->device() );
-
     QRect drawRect;
     if( rect )
         drawRect = *rect;
@@ -1117,7 +1116,6 @@ throw( KDChartNotEnoughSpaceException )
 
     uint trueWidth  = drawRect.width();
     uint trueHeight = drawRect.height();
-
 
     // Temporary values used to calculate start values xposLeft, yposTop, xposRight, yposBottom.
     // They will be replaced immediately after these calculations.

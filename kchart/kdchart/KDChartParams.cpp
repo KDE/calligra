@@ -816,7 +816,7 @@ void KDChartParams::setDefaultAxesTypes()
         case KDChartAxisParams::AxisPosRight:
         case KDChartAxisParams::AxisPosLeft2:
         case KDChartAxisParams::AxisPosRight2:
-            setAxisLabelsTouchEdges( i, Polar != chartType() );
+            setAxisLabelsTouchEdges( i, true ); //Polar != chartType() );
             break;
             // additional axes for charts representing 3-dimensional data:
         case KDChartAxisParams::AxisPosLowerRightEdge:

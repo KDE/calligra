@@ -223,7 +223,6 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
             uint nLabels = ( 0 != labelTexts && labelTexts->count() )
                            ? labelTexts->count()
                            : 0;
-
             // start point of 1st delimiter on the axis-line == grid-start
             QPoint p1( orig );
             // end point of 1st delimiter near the label text
