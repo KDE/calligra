@@ -75,7 +75,8 @@ public:
                      PPrecision = 0x80000,
                      PFormatNumber = 0x100000,
                      PAngle = 0x200000,
-                     PComment = 0x400000};
+                     PComment = 0x400000,
+                     PIndent = 0x800000};
 
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
@@ -173,6 +174,8 @@ public:
     virtual void setAngle(int _angle);
 
     virtual void setComment( const QString& c );
+
+    virtual void setIndent( int _indent );
 
     ////////////////////////////////
     //
@@ -272,11 +275,13 @@ public:
 
     virtual QString comment(int col, int row) const;
 
+    virtual int getIndent(int col, int row) const;
+
     KSpreadTable* table() { return m_pTable; }
     const KSpreadTable* table() const { return m_pTable; }
 
     KLocale* locale();
-    
+
     virtual bool hasProperty( Properties p ) const;
 
 protected:
@@ -415,6 +420,11 @@ protected:
      * Stores a comment string.
      */
     QString m_strComment;
+
+    /**
+    * Give indent
+    */
+    int m_indent;
 
 private:
     void setProperty( Properties p );

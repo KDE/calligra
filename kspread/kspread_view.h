@@ -268,8 +268,8 @@ public slots:
     void mergeCell();
     void dissociateCell();
     void gotoCell();
-
-    //void showComment();
+    void  increaseIndent();
+    void  decreaseIndent();
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -488,7 +488,6 @@ private:
     KAction* m_firstLetterUpper;
     KToggleAction* m_verticalText;
     KAction* m_addModifyComment;
-    //KAction* m_showComment;
     KAction* m_removeComment;
     KAction* m_insertCell;
     KAction* m_removeCell;
@@ -496,6 +495,8 @@ private:
     KAction* m_mergeCell;
     KAction* m_dissociateCell;
     KAction* m_gotoCell;
+    KAction* m_increaseIndent;
+    KAction* m_decreaseIndent;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

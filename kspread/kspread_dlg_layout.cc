@@ -238,6 +238,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     textRotation = obj->getAngle(_left, _top);
     formatNumber = obj->getFormatNumber(_left, _top);
 
+    indent = obj->getIndent(_left, _top);
+
     cellText=obj->text();
 
     if( obj->isValue())
@@ -581,9 +583,9 @@ int CellLayoutDlg::exec()
 void CellLayoutDlg::slotApply()
 {
 
-    if( isMerged!= positionPage->mergeCell->isChecked())
+    if( isMerged!= positionPage->getMergedCellState())
     {
-        if(positionPage->mergeCell->isChecked())
+        if(positionPage->getMergedCellState())
                 {
                 //merge cell
                 table->mergeCell(QPoint(left,top));
@@ -2053,7 +2055,16 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     mergeCell->setChecked(dlg->isMerged);
     mergeCell->setEnabled(!dlg->oneCell);
     grid2->addWidget(mergeCell,0,0);
-    grid3->addMultiCellWidget(grp,2,2,0,1);
+    //grid3->addMultiCellWidget(grp,2,2,0,1);
+    grid3->addWidget(grp,2,0);
+
+    grp = new QButtonGroup( i18n("Indent"),this);
+    grid2 = new QGridLayout(grp,1,1,15,7);
+    indent=new KIntNumInput(dlg->indent, grp, 10);
+    indent->setLabel(i18n("Indent :"));
+    indent->setRange(0, 400, 1);
+    grid2->addWidget(indent,0,0);
+    grid3->addWidget(grp,2,1);
 
     grp = new QButtonGroup( i18n("Size of cell"),this);
     grid2 = new QGridLayout(grp,2,2,15,7);
@@ -2079,6 +2090,11 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     this->resize( 400, 400 );
 
 }
+bool CellLayoutPagePosition::getMergedCellState()
+{
+    return  mergeCell->isChecked();
+}
+
 void CellLayoutPagePosition::slotChangeWidthState()
 {
     if( defaultWidth->isChecked())
@@ -2137,6 +2153,8 @@ void CellLayoutPagePosition::apply( KSpreadCell *_obj )
         _obj->setVerticalText(false);
 
   _obj->setAngle(angleRotation->value());
+  if(dlg->indent!=indent->value())
+        _obj->setIndent(indent->value());
 }
 
 int CellLayoutPagePosition::getSizeHeight()

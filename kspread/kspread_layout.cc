@@ -79,6 +79,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_eFormatNumber=KSpreadLayout::Number;
     m_rotateAngle=0;
     m_strComment="";
+    m_indent=0;
     QFont font = KGlobalSettings::generalFont();
     KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
     m_textFont = font;
@@ -115,6 +116,7 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
     m_eFormatNumber = _l.m_eFormatNumber;
     m_rotateAngle = _l.m_rotateAngle;
     m_strComment = _l.m_strComment;
+    m_indent=_l.m_indent;
 }
 
 void KSpreadLayout::clearProperties()
@@ -255,6 +257,8 @@ QDomElement KSpreadLayout::save( QDomDocument& doc ) const
 	format.setAttribute( "format",(int) m_eFormatNumber);
     if ( hasProperty( PAngle ) )
 	format.setAttribute( "angle", m_rotateAngle );
+    if ( hasProperty( PIndent ) )
+	format.setAttribute( "indent", m_indent );
     if ( hasProperty( PFont ) )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
     if ( hasProperty( PTextPen ) && m_textPen.color().isValid())
@@ -400,7 +404,12 @@ bool KSpreadLayout::load( const QDomElement& f,PasteMode pm )
 	    if ( !ok )
 		return false;
     }
-
+    if ( f.hasAttribute( "indent" ) )
+    {
+            setIndent(f.attribute( "indent").toInt( &ok ));
+	    if ( !ok )
+		return false;
+    }
     if ( f.hasAttribute( "brushcolor" ) )
 	setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
 
@@ -890,6 +899,17 @@ void KSpreadLayout::setAngle(int _angle)
     layoutChanged();
 }
 
+void KSpreadLayout::setIndent( int _indent )
+{
+    if ( _indent==0 )
+        clearProperty( PIndent );
+    else
+        setProperty( PIndent );
+
+    m_indent=_indent;
+    layoutChanged();
+}
+
 void KSpreadLayout::setComment( const QString& _comment )
 {
     if ( _comment.isEmpty() )
@@ -1312,6 +1332,18 @@ QString KSpreadLayout::comment( int col, int row ) const
     }
 
     return m_strComment;
+}
+
+int KSpreadLayout::getIndent( int col, int row ) const
+{
+    if ( !hasProperty( PIndent ) )
+    {
+	const KSpreadLayout* l = fallbackLayout( col, row );
+	if ( l )
+	    return l->getIndent( col, row );
+    }
+
+    return m_indent;
 }
 
 

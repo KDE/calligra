@@ -7,7 +7,7 @@
 
 		Please report all bugs to Kalle and Torben at the above addresses.
 -->
-		
+
 
 
 <!--	A KSpread document consists of a paper description and a map that
@@ -47,7 +47,7 @@
 <!--	Describes the margins of the page.
 
 		Attributes:
-		
+
 		left:			left margin in pixels
 		right:			right margin in pixels
 		top:			top margin in pixels
@@ -148,7 +148,8 @@
                         faktor           CDATA #REQUIRED
                         format           CDATA #REQUIRED
                         angle            CDATA #REQUIRED
-                        brushcolor       CDATA #REQUIRED>
+                        brushcolor       CDATA #REQUIRED
+                        indent       CDATA #REQUIRED>
 
 
 <!--	Describes one column
@@ -166,7 +167,7 @@
 <!--	Describes an embedded chart.
 
 		Attributes:
-		
+
 		url		the URL of the embedded chart
 				(example: "store:/Table 1/0")
 		mime	the MIME type of the application that has generated

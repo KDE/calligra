@@ -1022,3 +1022,7 @@ some fixes
 ----------------------------------------------------
 -Add new time format ( 10:05:5 AM, 10:05 AM, 10 h 05 min 5 s )
 -Some fix.
+
+2000-10-24-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Add indent functions used when text is aligned to left

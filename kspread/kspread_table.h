@@ -511,6 +511,9 @@ public:
     void dissociateCell( const QPoint &_marker, bool makeUndo=true );
     void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
 
+    void increaseIndent( const QPoint &_marker );
+    void decreaseIndent( const QPoint &_marker );
+
     bool areaIsEmpty() ;
 
     void refreshPreference() ;

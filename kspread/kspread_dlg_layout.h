@@ -229,7 +229,7 @@ public:
     void apply( KSpreadCell *_cell );
     int getSizeHeight();
     int getSizeWidth();
-    QCheckBox *mergeCell;
+    bool getMergedCellState();
 public slots:
     void slotChangeHeightState();
     void slotChangeWidthState();
@@ -249,8 +249,9 @@ protected:
     CellLayoutDlg *dlg;
     QCheckBox *defaultWidth;
     QCheckBox *defaultHeight;
-    //QCheckBox *mergeCell;
+    QCheckBox *mergeCell;
     KIntNumInput *angleRotation;
+    KIntNumInput *indent;
 };
 
 
@@ -530,6 +531,8 @@ public:
 
     int heigthSize;
     int widthSize;
+
+    int indent;
 
     QPixmap* formatOnlyNegSignedPixmap;
     QPixmap* formatRedOnlyNegSignedPixmap;

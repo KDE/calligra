@@ -2684,7 +2684,21 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
 
         if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
-            _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
+                {
+                int indent=0;
+                int a = m_eAlign;
+                if ( a == KSpreadCell::Undefined )
+                        {
+                        if ( m_bValue || m_bDate || m_bTime)
+                                a = KSpreadCell::Right;
+                        else
+                                a = KSpreadCell::Left;
+                        }
+                //apply indent if text is align to left not when text is at right or middle
+                if(  a==KSpreadCell::Left)
+                        indent=m_indent;
+                _painter.drawText( indent+_tx + m_iTextX, _ty + m_iTextY, m_strOutText );
+                }
         else if( m_rotateAngle!=0)
         {
             int angle=m_rotateAngle;
