@@ -164,7 +164,12 @@ protected:
     QString pre, post;
 };*/
 
-
+class KoVariable;
+class KoVariableFormat;
+class KoDocument;
+class KoVariableFormatCollection;
+class KoTextDocument;
+class KoVariableCollection;
 class KoVariableCollection : public QObject
 {
     Q_OBJECT
@@ -182,6 +187,8 @@ public:
     const QPtrList<KoVariable>& getVariables() const {
         return variables;
     }
+
+    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
 
     KoVariableSettings *variableSetting(){return m_variableSettings;}
 
@@ -242,12 +249,6 @@ public:
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
-
-    /**
-     * Create a variable, from its @p type and @p subtype.
-     * When @p varFormat is 0, the variable is created with its default format.
-     */
-    static KoVariable * createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat * varFormat,KoTextDocument *textdoc, KoDocument * doc, KoVariableCollection *varColl );
 
 protected:
     KoVariableFormat *m_varFormat;

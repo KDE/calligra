@@ -322,8 +322,7 @@ void KoVariable::load( QDomElement & )
 {
 }
 
-//static
-KoVariable * KoVariable::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,KoVariableCollection *varColl )
+KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
 {
     QCString string;
     KDialogBase* dialog;
@@ -521,22 +520,22 @@ KoVariable * KoVariable::createVariable( int type, int subtype, KoVariableFormat
     KoVariable * var = 0L;
     switch ( type ) {
         case VT_DATE:
-            var = new KoDateVariable( textdoc, subtype, varFormat,varColl );
+            var = new KoDateVariable( textdoc, subtype, varFormat,this );
             break;
         case VT_TIME:
-            var = new KoTimeVariable( textdoc, subtype, varFormat, varColl );
+            var = new KoTimeVariable( textdoc, subtype, varFormat, this );
             break;
         case VT_PGNUM:
-            var = new KoPgNumVariable( textdoc, subtype, varFormat, varColl );
+            var = new KoPgNumVariable( textdoc, subtype, varFormat, this );
             break;
         case VT_FIELD:
-            var = new KoFieldVariable( textdoc, subtype, varFormat,varColl,doc );
+            var = new KoFieldVariable( textdoc, subtype, varFormat,this,doc );
             break;
         case VT_CUSTOM:
-            var = new KoCustomVariable( textdoc, QString::null, varFormat, varColl);
+            var = new KoCustomVariable( textdoc, QString::null, varFormat, this);
             break;
         case VT_SERIALLETTER:
-            var = new KoSerialLetterVariable( textdoc, QString::null, varFormat ,varColl);
+            var = new KoSerialLetterVariable( textdoc, QString::null, varFormat ,this);
             break;
     }
     Q_ASSERT( var );
