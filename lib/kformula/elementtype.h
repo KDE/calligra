@@ -94,7 +94,7 @@ public:
     virtual QFont getFont( const ContextStyle& context );
 
     /**
-     * sets the painters pen to a appropiate value
+     * sets the painters pen to a appropriate value
      */
     virtual void setUpPainter( const ContextStyle& context, QPainter& painter );
 
@@ -217,7 +217,7 @@ public:
     virtual QFont getFont(const ContextStyle& context);
 
     /**
-     * sets the painters pen to a appropiate value
+     * sets the painters pen to a appropriate value
      */
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 
@@ -275,7 +275,7 @@ public:
     virtual QFont getFont(const ContextStyle& context);
 
     /**
-     * sets the painters pen to a appropiate value
+     * sets the painters pen to a appropriate value
      */
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 };
@@ -297,7 +297,7 @@ public:
     virtual QFont getFont( const ContextStyle& context );
 
     /**
-     * sets the painters pen to a appropiate value
+     * sets the painters pen to a appropriate value
      */
     virtual void setUpPainter( const ContextStyle& context, QPainter& painter );
 };
@@ -321,7 +321,7 @@ public:
     virtual QFont getFont( const ContextStyle& context );
 
     /**
-     * sets the painters pen to a appropiate value
+     * sets the painters pen to a appropriate value
      */
     virtual void setUpPainter( const ContextStyle& context, QPainter& painter );
 };
