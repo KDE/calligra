@@ -39,9 +39,11 @@ class KEXI_DB_EXPORT SchemaData
 		const int type() const;
 		const int id() const;
 		const QString& name() const;
-//		void setName(const QString& name);
+		void setName(const QString& n) { m_name=n; }
 		const QString& caption() const;
+		void setCaption(const QString& c) { m_caption=c; }
 		const QString& helpText() const;
+		void setHelpText(const QString& ht) { m_helpText=ht; }
 
 		//! \return debug string useful for debugging
 		virtual QString schemaDataDebugString() const;

@@ -2,22 +2,22 @@
 
 	KexiDB::Connection *conn = driver->createConnection(conn_data);
 	if (driver->error()) {
-		kdDebug() << driver->errorMsg() << endl;
+		driver->debugError();
 		return 1;
 	}
 	if (!conn->connect()) {
-		kdDebug() << conn->errorMsg() << endl;
+		conn->debugError();
 		return 1;
 	}
 	if (!conn->databaseExists( "mydb" )) {
 		if (!conn->createDatabase( "mydb" )) {
-			kdDebug() << conn->errorMsg() << endl;
+			conn->debugError();
 			return 1;
 		}
 		kdDebug() << "DB created"<< endl;
 	}
 	if (!conn->useDatabase( "mydb" )) {
-		kdDebug() << conn->errorMsg() << endl;
+		conn->debugError();
 		return 1;
 	}
 	KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby", KexiDB::Cursor::Buffered );

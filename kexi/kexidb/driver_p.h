@@ -38,7 +38,16 @@ class DriverBehaviour
 	public:
 		DriverBehaviour();
 			
-	QString UNSIGNED_TYPE_KEYWORD; //!< "UNSIGNED" by default
+	//! "UNSIGNED" by default
+	QString UNSIGNED_TYPE_KEYWORD;
+	//! "AUTO_INCREMENT" by default, used as add-in word to field definition
+	//! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
+	QString AUTO_INCREMENT_FIELD_OPTION; 
+	/*! True if autoincrement field need has special definition 
+	 e.g. like "INTEGER PRIMARY KEY" for SQLite.
+	 Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.
+	 False by default. */
+	bool SPECIAL_AUTO_INCREMENT_DEF : 1;
 };
 
 }

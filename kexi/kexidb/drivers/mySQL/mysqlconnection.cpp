@@ -192,6 +192,14 @@ bool MySqlConnection::drv_executeSQL( const QString& statement ) {
         return false;
 }
 
+Q_ULLONG MySqlConnection::drv_lastInsertRowID()
+{
+#ifndef Q_WS_WIN
+#warning TODO
+#endif
+	return (Q_ULLONG)mysql_insert_id(m_mysql);
+}
+
 
 
 

@@ -88,6 +88,7 @@ KexiDB::FieldList& TableSchema::addField(KexiDB::Field* field)
 {
 	assert(field);
 	FieldList::addField(field);
+	field->setTable(this);
 	field->m_order = m_fields.count();
 	//Check for auto-generated indices:
 

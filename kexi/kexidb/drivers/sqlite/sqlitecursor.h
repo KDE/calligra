@@ -60,6 +60,14 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 
 		virtual void storeCurrentRecord(RecordData &data) const;
 
+		virtual int serverResult();
+		
+		virtual QString serverResultName();
+
+		virtual QString serverErrorMsg();
+
+		virtual void drv_clearServerResult();
+
 	protected:
 		/*! Cursor will operate on \a conn */
 		SQLiteCursor(Connection* conn, const QString& statement = QString::null, uint options = NoOptions );

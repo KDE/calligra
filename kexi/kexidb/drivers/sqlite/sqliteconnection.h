@@ -73,6 +73,16 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 		virtual bool drv_executeSQL( const QString& statement );
 //		virtual bool drv_executeQuery( const QString& statement );
 
+		virtual Q_ULLONG drv_lastInsertRowID();
+
+		virtual int serverResult();
+		
+		virtual QString serverResultName();
+
+		virtual QString serverErrorMsg();
+
+		virtual void drv_clearServerResult();
+
 		/*! Creates cursor data and initializes cursor 
 			using \a statement for later data retrieval. */
 //		virtual CursorData* drv_createCursor( const QString& statement );

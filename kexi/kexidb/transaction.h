@@ -35,9 +35,13 @@ class KEXI_DB_EXPORT TransactionData
 	public:
 		TransactionData(Connection *conn);
 		~TransactionData();
+
+		//helper for debugging
+		static int globalcount;
 		
 		Connection *m_conn;
 		bool m_active : 1;
+		bool m_rollbackOnDestuction : 1;
 		uint refcount;
 };
 
@@ -76,7 +80,9 @@ class KEXI_DB_EXPORT Transaction : public QObject
 		
 		/*! shortcut that offers uinitialised (null) transaction */
 		static const Transaction null;
-	
+
+		//helper for debugging
+		static int globalcount;
 	protected:
 		
 		TransactionData *m_data;

@@ -19,6 +19,7 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/drivermanager.h>
+#include <kexidb/driver_p.h>
 #include <kexidb/connection.h>
 
 #include "sqlitedriver.h"
@@ -52,6 +53,10 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	m_isFileDriver = true;
 	m_isDBOpenedAfterCreate = true;
 	m_features = SingleTransactions | CursorForward;
+	
+	//special method for autoincrement definition
+	beh->SPECIAL_AUTO_INCREMENT_DEF = true;
+	beh->AUTO_INCREMENT_FIELD_OPTION = "INTEGER PRIMARY KEY";
 
 	m_typeNames[Field::Byte]="Byte";
 	m_typeNames[Field::ShortInteger]="ShortInteger";

@@ -86,6 +86,21 @@ TODO: add server version info retrieval
 TODO: add schema to kexi__* tables on createTable()
 TODO: add support for creation temporary databases
 
+2003-10-10
+- FIX: creating kexidb system tables schema objects on useDatabase()
+- KexiDB::Object::debugError() added for convenience
+- Object: serverErrorMsg(), serverResult(), serverResultName(),
+	drv_clearServerResult() added
+- virtual Q_ULLONG Connection::drv_lastInsertRowID() added - returns unique
+   identifier of last inserted row. 
+- DriverBehaviour::AUTO_INCREMENT_FIELD_OPTION added; autoinc field's option is now 
+	used in "CREATE TABLE" statement building; bool SPECIAL_AUTO_INCREMENT_DEF added
+- fixed crash on mass transactions closing during closeDatabase()
+- added tables creation subtest to kexidb/tests/newapi
+- SQLite* classes: last operation's result is now stored for later checking
+
+TODO: fix commiting after second table (CARS) - rollback is called - BAD
+
 2003-10-09
 KexiDB::Connection: 
 - "select * from ..." substituted by "select <field name(s)> from ..."
@@ -99,6 +114,8 @@ KexiDB::Connection:
   from xxxxConnection subclasses.
 - ~TableSchema calls Connection::removeMe() so it is removed from tables list if needed
 - ordering in Field object added
+- quite hacky and thus effective insertRecord() overloads added
+- some schema is added to kexi__* tables on createTable()
   
 2003-10-07
 - KexiDB::QueryAsterisk class introduced to define select queries with asterisks, like

@@ -20,6 +20,8 @@
 #include <kexidb/object.h>
 #include <kexidb/error.h>
 
+#include <kdebug.h>
+
 using namespace KexiDB;
 
 
@@ -51,6 +53,37 @@ void Object::setError( KexiDB::Object *obj )
 	}
 }
 
+void Object::clearError()
+{ 
+	m_errno = 0;
+	m_hasError = false;
+	m_errMsg = QString::null;
+	drv_clearServerResult();
+}
+
+QString Object::serverErrorMsg()
+{
+	return QString::null;
+}
+
+int Object::serverResult()
+{
+	return 0;
+}
+
+QString Object::serverResultName()
+{
+	return QString::null;
+}
+
 Object::~Object()
 {
+}
+
+void Object::debugError()
+{
+	if (error())
+		KexiDBDbg << "KEXIDB ERROR: " << errorMsg() << endl;
+	else
+		KexiDBDbg << "KEXIDB OK." << endl;
 }

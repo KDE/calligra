@@ -67,6 +67,7 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlConnection : public Connection
                 virtual bool drv_closeDatabase();
                 virtual bool drv_dropDatabase( const QString &dbName = QString::null );
                 virtual bool drv_executeSQL( const QString& statement );
+                virtual Q_ULLONG drv_lastInsertRowID();
 
 	private:
 		friend class MySqlCursor;

@@ -34,7 +34,7 @@
 using namespace KexiDB;
 
 SQLiteConnectionInternal::SQLiteConnectionInternal()
-	: data(0),errmsg(0)
+	: data(0),errmsg(0),m_res(SQLITE_OK)
 {
 }
 
@@ -205,14 +205,39 @@ bool SQLiteConnection::drv_executeSQL( const QString& statement )
 	QCString st(statement.length()*2);
 	st = escapeString( statement.local8Bit() ); //?
 
-	int res = sqlite_exec( 
+	d->m_res = sqlite_exec( 
 		d->data, 
 		st.data(), 
 		0/*callback*/, 
 		0,
 		&d->errmsg );
 
-	return res==SQLITE_OK;
+	return d->m_res==SQLITE_OK;
+}
+
+Q_ULLONG SQLiteConnection::drv_lastInsertRowID()
+{
+	return (Q_ULLONG)sqlite_last_insert_rowid(d->data);
+}
+
+int SQLiteConnection::serverResult()
+{
+	return d->m_res;
+}
+
+QString SQLiteConnection::serverResultName()
+{
+	return QString::fromLatin1( sqlite_error_string(d->m_res) );
+}
+
+void SQLiteConnection::drv_clearServerResult()
+{
+	d->m_res = SQLITE_OK;
+}
+
+QString SQLiteConnection::serverErrorMsg()
+{
+	return QString::fromLatin1( d->errmsg );
 }
 
 

@@ -6,24 +6,29 @@
 	QCString db_name = QCString(argv[3]);
 	conn_data.setFileName( db_name );
 
-	KexiDB::Connection *conn = driver->createConnection(conn_data);
+	conn = driver->createConnection(conn_data);
 	if (driver->error()) {
-		kdDebug() << driver->errorMsg() << endl;
+		driver->debugError();
 		return 1;
 	}
 	if (!conn->connect()) {
-		kdDebug() << conn->errorMsg() << endl;
+		conn->debugError();
 		return 1;
 	}
-	if (!conn->databaseExists( db_name )) {
-		if (!conn->createDatabase( db_name )) {
-			kdDebug() << conn->errorMsg() << endl;
+	if (conn->databaseExists( db_name )) {
+		if (!conn->dropDatabase(  )) {
+			conn->debugError();
 			return 1;
 		}
-		kdDebug() << "DB '" << db_name << "' created"<< endl;
+		kdDebug() << "DB '" << db_name << "' dropped"<< endl;
 	}
+	if (!conn->createDatabase( db_name )) {
+		conn->debugError();
+		return 1;
+	}
+	kdDebug() << "DB '" << db_name << "' created"<< endl;
 	if (!conn->useDatabase( /*default*/ )) {
-		kdDebug() << conn->errorMsg() << endl;
+		conn->debugError();
 		return 1;
 	}
 /*	KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby", KexiDB::Cursor::Buffered );

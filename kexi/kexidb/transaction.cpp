@@ -26,16 +26,31 @@
 
 using namespace KexiDB;
 
+//helper for debugging
+int Transaction::globalcount = 0;
+int TransactionData::globalcount = 0;
+
 TransactionData::TransactionData(Connection *conn)
  : m_conn(conn)
  , m_active(true)
+ , m_rollbackOnDestuction(false)
  , refcount(1)
 {
 	assert(conn);
+	Transaction::globalcount++; //because refcount(1) init.
+	TransactionData::globalcount++;
+	KexiDBDbg << "-- TransactionData::globalcount == " << TransactionData::globalcount << endl;
 }
 
 TransactionData::~TransactionData()
 {
+//	if (m_rollbackOnDestuction && conn) {
+//		KexiDBDbg << "-- ~TransactionData(): ROLLBACK ON DESTRUCTION!" << endl;
+//		conn->drv_rollbackTransaction( this );
+//	}
+	
+	TransactionData::globalcount--;
+	KexiDBDbg << "-- TransactionData::globalcount == " << TransactionData::globalcount << endl;
 }
 
 //---------------------------------------------------
@@ -70,14 +85,17 @@ Transaction::Transaction( const Transaction& trans )
 	: QObject(0,"kexidb_transaction")
 	, m_data(trans.m_data)
 {
-	if (m_data)
+	if (m_data) {
 		m_data->refcount++;
+		Transaction::globalcount++;
+	}
 }
 
 Transaction::~Transaction()
 {
 	if (m_data) {
 		m_data->refcount--;
+		Transaction::globalcount--;
 		KexiDBDbg << "~Transaction(): m_data->refcount==" << m_data->refcount << endl;
 		if (m_data->refcount==0)
 			delete m_data;
@@ -85,15 +103,23 @@ Transaction::~Transaction()
 	else {
 		KexiDBDbg << "~Transaction(): null" << endl;
 	}
+	KexiDBDbg << "-- Transaction::globalcount == " << Transaction::globalcount << endl;
 }
 
 Transaction& Transaction::operator=(const Transaction& trans)
 {
-	if (m_data)
+	if (m_data) {
 		m_data->refcount--;
+		Transaction::globalcount--;
+		KexiDBDbg << "Transaction::operator=: m_data->refcount==" << m_data->refcount << endl;
+		if (m_data->refcount==0)
+			delete m_data;
+	}
 	m_data = trans.m_data;
-	if (m_data)
+	if (m_data) {
 		m_data->refcount++;
+		Transaction::globalcount++;
+	}
 	return *this;
 }
 

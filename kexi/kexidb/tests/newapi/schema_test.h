@@ -1,6 +1,6 @@
 	conn_data.setFileName( "db" );
 
-	KexiDB::Connection *conn = driver->createConnection(conn_data);
+	conn = driver->createConnection(conn_data);
 	if (driver->error()) {
 		kdDebug() << driver->errorMsg() << endl;
 		return 1;

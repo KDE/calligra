@@ -89,7 +89,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 If \a ignoreErrors if true, error flag of connection 
 		  won't be modified for any errors (it will quietly return),
 		  else (ignoreErrors == false) we can check why db does 
-		  not exist using error() and/or errorMsg(). */
+		  not exist using error(), errorNum() and/or errorMsg(). */
 		bool databaseExists( const QString &dbName, bool ignoreErrors = true );
 
 		/*! Creates new database with name \a dbName, using this connection.
@@ -419,9 +419,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //			(used mostly for SELECT query). */
 //		virtual bool drv_executeQuery( const QString& statement ) = 0;
 		
-		/* Executes query \a statement, but without returning resulting 
-			rows (used mostly for functional queries). */
+		/*! Executes query \a statement, but without returning resulting 
+		 rows (used mostly for functional queries). */
 		virtual bool drv_executeSQL( const QString& statement ) = 0;
+
+		/*! Returns unique identifier of last inserted row. 
+		 Typically this is just primary key value. 
+		 This identifier could be reused when we want to reference
+		 just inserted row.
+		 Note for driver developers: contact js (at) iidea.pl 
+		 if your engine do not offers this information. */
+		virtual Q_ULLONG drv_lastInsertRowID() = 0;
 
 		/*! Note for driver developers: begins new transaction
 		 and returns handle to it. Default implementation just

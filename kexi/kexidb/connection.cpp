@@ -44,6 +44,7 @@ class ConnectionPrivate
 {
 	public:
 		ConnectionPrivate() 
+		 : m_dont_remove_transactions(false)
 		{
 		}
 		~ConnectionPrivate() { }
@@ -53,6 +54,9 @@ class ConnectionPrivate
 		in the context of this transaction. */
 		Transaction m_default_trans;
 		QValueList<Transaction> m_transactions;
+		//! true if rollbackTransaction() and commitTransaction() shouldn't remove 
+		//! the transaction object from m_transactions list; used by closeDatabase()
+		bool m_dont_remove_transactions; 
 };
 
 }
@@ -276,8 +280,11 @@ bool Connection::createDatabase( const QString &dbName )
 //	if (error())
 //		return false;
 	
-	//-create system tables
-	setupKexiDBSystemSchema();
+	//-create system tables schema objects
+	if (!setupKexiDBSystemSchema())
+		return false;
+	
+	//-physically create system tables
 	TableSchema *ts=m_kexiDBSystemtables.first();
 	while (ts) {
 		if (!drv_createTable( ts->name() ))
@@ -324,12 +331,18 @@ bool Connection::useDatabase( const QString &dbName )
 	if (!m_usedDatabase.isEmpty() && !closeDatabase()) //close db if already used
 		return false;
 
-	bool ok = drv_useDatabase( my_dbName );
-	if (ok)
-		m_usedDatabase = my_dbName;
-	else
-		m_usedDatabase = "";
-	return ok;
+	m_usedDatabase = "";
+	
+	if (!drv_useDatabase( my_dbName )) {
+		return false;
+	}
+	
+	//-create system tables schema objects
+	if (!setupKexiDBSystemSchema())
+		return false;
+
+	m_usedDatabase = my_dbName;
+	return true;
 }
 
 bool Connection::closeDatabase()
@@ -346,14 +359,18 @@ bool Connection::closeDatabase()
 	if (m_driver->transactionsSupported()) {
 		//rollback all transactions
 		QValueList<Transaction>::iterator it;
+		d->m_dont_remove_transactions=true; //lock!
 		for (it=d->m_transactions.begin(); it!= d->m_transactions.end(); ++it) {
 			if (!rollbackTransaction(*it)) {//rollback as much as you can, don't stop on prev. errors
 				ret = false;
 			}
 			else {
 				KexiDBDbg << "Connection::closeDatabase(): transaction rolled back!" << endl;
+				KexiDBDbg << "Connection::closeDatabase(): trans.refcount==" << 
+				 ((*it).m_data ? QString::number((*it).m_data->refcount) : "(null)") << endl;
 			}
 		}
+		d->m_dont_remove_transactions=false; //unlock!
 		d->m_transactions.clear(); //free trans. data
 	}
 
@@ -377,7 +394,7 @@ bool Connection::dropDatabase( const QString &dbName )
 	QString dbToDrop;
 	if (dbName.isEmpty() && m_usedDatabase.isEmpty()) {
 		if (!m_driver->isFileDriver())
-		return false;
+			return false;
 		//this is a file driver so reuse previously passed filename
 		dbToDrop = m_data.m_fileName;
 	}
@@ -472,6 +489,8 @@ QValueList<int> Connection::objectIds(int objType)
 
 QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) const
 {
+	if (v.isNull())
+		return "NULL";
 	switch (ftype) {
 		case Field::Byte:
 		case Field::ShortInteger:
@@ -514,18 +533,30 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 		else
 			sql += ", ";
 		QString v = field->m_name + " ";
-		if (field->isUnsigned())
-			v += (m_driver->beh->UNSIGNED_TYPE_KEYWORD + " ");
-		v += m_driver->m_typeNames[field->m_type];
-		if (field->m_length>0)
-			v += QString("(%1)").arg(field->m_length);
-		if (field->isUniqueKey())
-			v += " UNIQUE";
-//TODO: here is automatically a single-field key created
-		if (field->isNotNull())
-			v += " NOT NULL";
-		if (field->defaultValue().isValid())
-			v += QString(" DEFAULT ") + valueToSQL( field->m_type, field->m_defaultValue );
+		if (field->isAutoIncrement() && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
+			v += m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
+		}
+		else {
+			if (field->isUnsigned())
+				v += (m_driver->beh->UNSIGNED_TYPE_KEYWORD + " ");
+			v += m_driver->m_typeNames[field->m_type];
+			if (field->m_length>0)
+				v += QString("(%1)").arg(field->m_length);
+			if (field->isAutoIncrement())
+				v += (" " + m_driver->beh->AUTO_INCREMENT_FIELD_OPTION);
+	//TODO: here is automatically a single-field key created
+			if (field->isPrimaryKey())
+				v += " PRIMARY KEY";
+			if (!field->isPrimaryKey() && field->isUniqueKey())
+				v += " UNIQUE";
+#ifndef Q_WS_WIN
+#warning IS this ok for all engines?: if (!field->isAutoIncrement() && !field->isPrimaryKey() && field->isNotNull()) 
+#endif
+			if (!field->isAutoIncrement() && !field->isPrimaryKey() && field->isNotNull()) 
+				v += " NOT NULL"; //only add not null option if no autocommit is set
+			if (field->defaultValue().isValid())
+				v += QString(" DEFAULT ") + valueToSQL( field->m_type, field->m_defaultValue );
+		}
 		sql += v;
 	}
 	sql += ")";
@@ -536,10 +567,12 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 #define C_A(a) , const QVariant& c ## a
 
 #define V_A0 valueToSQL( tableSchema.field(0)->type(), c0 )
-#define V_A(a) +","+valueToSQL( tableSchema.field(a)->type(), c ## a )
+#define V_A(a) +","+valueToSQL( \
+	tableSchema.field(a) ? tableSchema.field(a)->type() : Field::Text, c ## a )
 
 #define C_INS_REC(args, vals) \
 	bool Connection::insertRecord(KexiDB::TableSchema &tableSchema args) {\
+		KexiDBDbg<<"******** "<< QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + vals + ")" <<endl; \
 		return drv_executeSQL( \
 		 QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + vals + ")" \
 		); \
@@ -554,19 +587,30 @@ C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5), V_A0 V_A(1) V_A(2) V_A(3) 
 C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) )
 C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6) C_A(7), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) V_A(7) )
 
+#undef C_A
+#undef V_A0
+#undef V_A
+#undef C_INS_REC
+
 bool Connection::insertRecord(KexiDB::TableSchema &tableSchema, QValueList<QVariant>& values)
 {
 	Field::List *fields = tableSchema.fields();
 	Field *f = fields->first();
 	QString s_val; 
-	s_val.setLength(1024);//TODO: move to members
+//	s_val.reserve(2048);//TODO: move to members
 	QValueList<QVariant>::iterator it = values.begin();
-	while (f && it!=values.end()) {
+	int i=0;
+	while (f && (it!=values.end())) {
+		if (!s_val.isEmpty())
+			s_val += ",";
 		s_val += valueToSQL( f->type(), *it );
+		KexiDBDbg << "val" << i++ << ": " << valueToSQL( f->type(), *it ) << endl;
 		++it;
 		f=fields->next();
 	}
-
+	KexiDBDbg<<"******** "<< 
+	(QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + s_val + ")") <<endl;
+	
 	return drv_executeSQL(
 		QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + s_val + ")"
 	);
@@ -578,6 +622,10 @@ QString Connection::queryStatement( const KexiDB::QuerySchema& querySchema )
 	return QString::null;
 }
 
+#define createTable_ERR \
+	{ rollbackAutoCommitTransaction(trans); \
+	  return false; }
+
 bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 {
 	if (!checkConnected())
@@ -587,26 +635,28 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	if (!beginAutoCommitTransaction(trans))
 		return false;
 	
-	if (!drv_createTable(*tableSchema)) {
-		rollbackAutoCommitTransaction(trans);
-		return false;
-	}
+	if (!drv_createTable(*tableSchema))
+		createTable_ERR;
 	
 	//add schema info to kexi__* tables
 	TableSchema *ts;
 	ts = m_tables_byname["kexi__objects"];
-	if (!insertRecord(*ts, QVariant(), QVariant(tableSchema->type()), QVariant(tableSchema->name()),
+	if (!insertRecord(*ts, QVariant()/*autoinc*/, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
 		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText())))
-		return false;
-
+		createTable_ERR;
+	int obj_id = drv_lastInsertRowID();
+	if (obj_id<=0) //sanity check
+		createTable_ERR;
+	KexiDBDbg << "######## obj_id == " << obj_id << endl;
+	
 	ts = m_tables_byname["kexi__fields"];
 	Field::List *fields = tableSchema->fields();
 	Field *f = fields->first();
 	int order = 0;
 	while (f) {
-		if (!insertRecord(*ts, 
-		QValueList<QVariant>()
-		<< QVariant() //id: TODO!!!
+		QValueList<QVariant> vals;
+		vals
+		<< QVariant(obj_id)
 		<< QVariant(f->type())
 		<< QVariant(f->name())
 		<< QVariant(f->length())
@@ -616,8 +666,10 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 		<< QVariant(f->defaultValue())
 		<< QVariant(f->order())
 		<< QVariant(f->caption())
-		<< QVariant(f->helpText()) ))
-			return false;
+		<< QVariant(f->helpText());
+		
+		if (!insertRecord(*ts, vals ))
+			createTable_ERR;
 			
 		f = fields->next();
 		order++;
@@ -652,10 +704,9 @@ bool Connection::beginAutoCommitTransaction(Transaction &trans)
 		
 	// commit current transaction (if present) for drivers 
 	// that allow single transaction per connection
-	if ((m_driver->m_features & Driver::SingleTransactions)
-		 && !commitTransaction(d->m_default_trans, true)) 
-	{
-		return false;
+	if (m_driver->m_features & Driver::SingleTransactions) {
+		if (!commitTransaction(d->m_default_trans, true)) 
+			return false; //we have real error
 	}
 	else if (!(m_driver->m_features & Driver::MultipleTransactions)) {
 		return true; //no trans. supported at all - just return
@@ -737,7 +788,10 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
 	bool ret = drv_commitTransaction(t.m_data);
-	d->m_transactions.remove(t);
+	if (t.m_data)
+		t.m_data->m_active = false; //now this transaction if inactive
+	if (!d->m_dont_remove_transactions) //true=transaction obj will be later removed from list
+		d->m_transactions.remove(t);
 	if (!ret && !error())
 		setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on commit transaction"));
 	return ret;
@@ -763,7 +817,10 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
 	bool ret = drv_rollbackTransaction(t.m_data);
-	d->m_transactions.remove(t);
+	if (t.m_data)
+		t.m_data->m_active = false; //now this transaction if inactive
+	if (!d->m_dont_remove_transactions) //true=transaction obj will be later removed from list
+		d->m_transactions.remove(t);
 	if (!ret && !error())
 		setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on rollback transaction"));
 	return ret;
@@ -853,7 +910,7 @@ bool Connection::deleteCursor(Cursor *cursor)
 	if (!cursor)
 		return false;
 	if (cursor->connection()!=this) //illegal call
-		qWarning("Connection::deleteCursor(): Cannot delete the cursor not owned by the same connection!");
+		KexiDBDbg << "Connection::deleteCursor(): WARNING! Cannot delete the cursor not owned by the same connection!" << endl;
 	bool ret = cursor->close();
 	delete cursor;
 	return ret;

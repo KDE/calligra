@@ -42,7 +42,8 @@ class KexiDB::SQLiteCursorData
 		SQLiteCursorData()
 			:
 //			: curr_cols(0)
-			curr_coldata(0)
+			res(SQLITE_OK)
+			, curr_coldata(0)
 			, curr_colname(0)
 //			, rec_stored(false)
 /* MOVED TO Cursor:
@@ -59,6 +60,8 @@ class KexiDB::SQLiteCursorData
 		sqlite_vm *vm;
 		char *utail;
 		char *errmsg;
+		
+		int res;
 
 //		int curr_cols;
 		const char **curr_coldata;
@@ -99,13 +102,13 @@ bool SQLiteCursor::drv_open()
 	m_data->st.resize(m_statement.length()*2);
 	m_data->st = m_conn->escapeString( m_statement.local8Bit() );
 
-	int res = sqlite_compile(
+	m_data->res = sqlite_compile(
 		m_data->data,
 		m_data->st.data(),
 		(const char**)&m_data->utail,
 		&m_data->vm,
 		&m_data->errmsg );
-	if (res!=SQLITE_OK) {
+	if (m_data->res!=SQLITE_OK) {
 		return false;
 	}
 //cursor is automatically @ first record
@@ -132,8 +135,8 @@ bool SQLiteCursor::drv_open()
 
 bool SQLiteCursor::drv_close()
 {
-	int res = sqlite_finalize( m_data->vm, &m_data->errmsg );
-	if (res!=SQLITE_OK) {
+	m_data->res = sqlite_finalize( m_data->vm, &m_data->errmsg );
+	if (m_data->res!=SQLITE_OK) {
 		return false;
 	}
 	return true;
@@ -147,7 +150,7 @@ bool SQLiteCursor::drv_close()
 
 bool SQLiteCursor::drv_getNextRecord()
 {
-	int res = -1;
+	m_data->res = -1;
 
 	if ((m_options & Buffered) && (m_at < (m_records_in_buf-1)) ) {
 		//this cursor is buffered:
@@ -166,14 +169,14 @@ bool SQLiteCursor::drv_getNextRecord()
 				//for buffered cursor: only retrieve record 
 				//if we are not at after last buffer's item when buffer is fully filled
 				KexiDBDrvDbg<<"==== sqlite_step ===="<<endl;
-				res = sqlite_step(
+				m_data->res = sqlite_step(
 					m_data->vm,
 //					&m_data->curr_cols,
 					&m_fieldCount,
 					&m_data->curr_coldata,
 					&m_data->curr_colname);
 			}
-			if (res!=SQLITE_ROW) {//there is no record
+			if (m_data->res!=SQLITE_ROW) {//there is no record
 				if (m_options & Buffered) {
 					m_buffering_completed = true; //no more records to buffer
 				}
@@ -181,8 +184,9 @@ bool SQLiteCursor::drv_getNextRecord()
 				m_validRecord = false;
 				m_afterLast = true;
 				m_at = -1;
-				if (res==SQLITE_DONE)
+				if (m_data->res==SQLITE_DONE) {
 					return false;
+				}
 				//SQLITE_ERROR:
 				setError(ERR_CURSOR_RECORD_FETCHING, I18N_NOOP("Cannot fetch a record with a cursor"));
 				return false;
@@ -361,3 +365,24 @@ int SQLiteCursor::at()
 }
 
 */
+
+
+int SQLiteCursor::serverResult()
+{
+	return m_data->res;
+}
+
+QString SQLiteCursor::serverResultName()
+{
+	return QString::fromLatin1( sqlite_error_string(m_data->res) );
+}
+
+void SQLiteCursor::drv_clearServerResult()
+{
+	m_data->res = SQLITE_OK;
+}
+
+QString SQLiteCursor::serverErrorMsg()
+{
+	return QString::fromLatin1( m_data->errmsg );
+}

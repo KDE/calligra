@@ -32,7 +32,8 @@ class SQLiteConnectionInternal
 		~SQLiteConnectionInternal();
 
 		sqlite *data;
-		char *errmsg;
+		char *errmsg; //<! server-specific message of last operation
+		int m_res; //<! result code of last operation on server
 };
 };
 

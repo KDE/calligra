@@ -40,6 +40,8 @@ QValueVector<QString> dflt_typeNames;
 
 DriverBehaviour::DriverBehaviour()
 	: UNSIGNED_TYPE_KEYWORD("UNSIGNED")
+	, AUTO_INCREMENT_FIELD_OPTION("AUTO_INCREMENT")
+	, SPECIAL_AUTO_INCREMENT_DEF(false)
 {
 }
 
