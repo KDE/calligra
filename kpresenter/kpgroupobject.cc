@@ -130,6 +130,24 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+
+bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter)
+{
+    xmlWriter.startElement( "draw:g" );
+
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+#if 0
+        if ( it.current()->getType() == OT_PART )
+            continue;
+#endif
+        it.current()->saveOasis( xmlWriter );
+    }
+    xmlWriter.endElement();
+}
+
+
 void KPGroupObject::loadOasisGroupObject( KPresenterDoc *_doc, int pos, KPrPage * newpage, QDomNode &element, KoOasisContext & context, QDomElement *animation)
 {
     //in oasis format we don't save pos.
@@ -144,8 +162,6 @@ void KPGroupObject::loadOasisGroupObject( KPresenterDoc *_doc, int pos, KPrPage 
     }
     setOrig( r.x(), r.y() );
     setSize( r.width(), r.height() );
-
-//remove duplicate code
     updateObjs = true;
 }
 

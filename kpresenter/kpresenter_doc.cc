@@ -1110,10 +1110,9 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 
 void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject)
 {
-    kdDebug()<<"void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context)\n";
     for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
     {
-        kdDebug()<<"load Object \n";
+        //kdDebug()<<"load Object \n";
         QDomElement o = object.toElement();
         QString name = o.tagName();
         QDomElement * animationShow = 0L;
@@ -1213,12 +1212,11 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                 groupObject->addObjects( kpgroupobject );
             else
                 newpage->appendObject(kpgroupobject);
-            kdDebug()<<" grouping object*****************\n";
         }
         else if ( name == "presentation:notes" ) // notes
         {
             //we must extend note attribute
-            kdDebug()<<"presentation:notes----------------------------------\n";
+            //kdDebug()<<"presentation:notes----------------------------------\n";
             QDomNode textBox = o.namedItem( "draw:text-box" );
             if ( !textBox.isNull() )
             {
@@ -1241,7 +1239,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         }
         context.styleStack().restore();
     }
-    kdDebug()<<" finish void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context)\n";
+
 }
 
 void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
