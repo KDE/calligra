@@ -846,11 +846,9 @@ void KWCanvas::mrCreateText()
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
-        KWFrameDia * frameDia = new KWFrameDia( this, frame, doc, FT_TEXT);
-
-        frameDia->setCaption(i18n("Connect frame"));
-        frameDia->show();
-        delete frameDia;
+        KWFrameDia frameDia( this, frame, doc, FT_TEXT );
+        frameDia.setCaption(i18n("Connect frame"));
+        frameDia.show();
     }
     setMouseMode( MM_EDIT );
     doc->repaintAllViews();

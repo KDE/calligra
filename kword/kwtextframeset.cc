@@ -1818,7 +1818,7 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
 }
 
 
-void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
+void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId )
 {
     QTextDocument * textdoc = textDocument();
     //for ( int i = 1; i < (int)QTextDocument::Temp; ++i )
@@ -1826,17 +1826,17 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     emit hideCursor();
     checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
     if ( !undoRedoInfo.valid() ) {
-	textdoc->selectionStart( QTextDocument::Standard, undoRedoInfo.id, undoRedoInfo.index );
+	textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
 	undoRedoInfo.text = QString::null;
         undoRedoInfo.name = i18n("Remove Selected Text");
     }
     int oldLen = undoRedoInfo.text.length();
-    undoRedoInfo.text = textdoc->selectedText( QTextDocument::Standard );
-    QTextCursor c1 = textdoc->selectionStartCursor( QTextDocument::Standard );
-    QTextCursor c2 = textdoc->selectionEndCursor( QTextDocument::Standard );
+    undoRedoInfo.text = textdoc->selectedText( selectionId );
+    QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
+    QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
     readFormats( c1, c2, oldLen, true, true );
 
-    textdoc->removeSelectedText( QTextDocument::Standard, cursor );
+    textdoc->removeSelectedText( selectionId, cursor );
 
     emit ensureCursorVisible();
     setLastFormattedParag( cursor->parag() );
@@ -1894,8 +1894,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     if ( !removeSelected ) {
         // ## not sure why we do this. I'd prefer leaving the selection unchanged...
         // but then it'd need adjustements in the offsets etc.
-        textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
-        textdoc->setSelectionEnd( QTextDocument::Standard, cursor );
+        textdoc->removeSelection( QTextDocument::Standard );
         emit repaintChanged( this );
     }
 }

@@ -39,6 +39,7 @@
 #include "kwdoc.h"
 #include "kwframe.h"
 #include "kwstyle.h"
+#include "kwformat.h"
 #include "defs.h"
 #include "paragdia.h"
 #include "searchdia.h"
@@ -608,7 +609,7 @@ void KWView::setupActions()
                         actionCollection(), "extra_autocorrection" );
 
     //------------------------ Settings menu
-    KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "configure" );
+    KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
 }
 
 void KWView::fileStatistics()
@@ -1672,7 +1673,6 @@ void KWView::formatFrameSet()
 void KWView::extraSpelling()
 {
     if (kspell) return; // Already in progress
-    m_spellCurrParag = 0L;
     m_spellCurrFrameSetNum = -1;
     kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), doc->getKSpellConfig() );
 
@@ -2702,84 +2702,106 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 /*================================================================*/
 void KWView::spellCheckerReady()
 {
-    // #### currently only the first available textframeset is checked!!
-    m_spellCurrParag = 0;
-    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
+    for ( unsigned int i = m_spellCurrFrameSetNum + 1; i < doc->getNumFrameSets(); i++ ) {
         KWFrameSet *frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() != FT_TEXT )
+        if ( !frameset->isVisible() || frameset->getFrameType() != FT_TEXT )
             continue;
         m_spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
+        kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;
         KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet*>( frameset );
-        m_spellCurrParag = textfs->textDocument()->firstParag();
-        break;
-    }
-
-    if ( !m_spellCurrParag ) {
-        kspell->cleanUp();
+        QTextParag * p = textfs->textDocument()->firstParag();
+        QString text;
+        while ( p ) {
+            QString str = p->string()->toString();
+            str.truncate( str.length() - 1 ); // damn trailing space
+            text += str + '\n';
+            p = p->next();
+        }
+        text += '\n';
+        kspell->check( text );
         return;
     }
+    kdDebug() << "KWView::spellCheckerReady done" << endl;
 
-    QString text;
-    QTextParag *p = m_spellCurrParag;
-    while ( p ) {
-        text += p->string()->toString() + '\n';
+    // Done
+    kspell->cleanUp();
+    delete kspell;
+    kspell = 0;
+}
+
+/*================================================================*/
+void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
+{
+    kdDebug() << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    ASSERT( fs );
+    if ( !fs ) return;
+    QTextParag * p = fs->textDocument()->firstParag();
+    while ( p && pos >= p->length() )
+    {
+        pos -= p->length();
         p = p->next();
     }
-    text += '\n';
-    m_spellLastTextPos = -1;
-    kspell->check( text );
+    ASSERT( p );
+    if ( !p ) return;
+    kdDebug() << "KWView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+    fs->highlightPortion( p, pos, old.length(), gui->canvasWidget() );
 }
 
 /*================================================================*/
-void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned /*can't use that one, it refers to the unmodified buffer*/ )
+void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
 {
-    kdDebug() << "KWView::spellCheckerMisspelling old=" << old << endl;
-    while ( m_spellCurrParag ) {
-        QString text = m_spellCurrParag->string()->toString();
-        int pos = text.find( old, m_spellLastTextPos+1 );
-        if ( pos != -1 ) {
-            m_spellLastTextPos = pos;
-            KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
-            ASSERT( fs );
-            if ( fs )
-                fs->highlightPortion( m_spellCurrParag, pos, old.length(), gui->canvasWidget() );
-            break;
-        }
-        m_spellCurrParag = m_spellCurrParag->next();
-        m_spellLastTextPos = -1;
-    }
-    ASSERT( m_spellCurrParag );
-}
-
-/*================================================================*/
-void KWView::spellCheckerCorrected( QString old, QString corr, unsigned )
-{
-    // ## this assumes spellCheckerMisspelling was called before for this word
-    // so it breaks "Replace All" :(
-    // Maybe we should use the "unsigned pos" and keep track of an offset when
-    // replacing a word :} ouch.
-    int pos = m_spellLastTextPos;
-    QTextFormat *f = m_spellCurrParag->at( pos )->format();
-    m_spellCurrParag->remove( pos, old.length() );
-    m_spellCurrParag->insert( pos, corr );
-    m_spellCurrParag->setFormat( pos, corr.length(), f, true );
-    m_spellLastTextPos = pos + corr.length();
+    kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 
     KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
     ASSERT( fs );
-    if ( fs )
-        fs->removeHighlight();
+    if ( !fs ) return;
+    QTextParag * p = fs->textDocument()->firstParag();
+    while ( p && pos >= p->length() )
+    {
+        pos -= p->length();
+        p = p->next();
+    }
+    ASSERT( p );
+    if ( !p ) return;
+    fs->highlightPortion( p, pos, old.length(), gui->canvasWidget() );
+
+    QTextCursor cursor( fs->textDocument() );
+    cursor.setParag( p );
+    cursor.setIndex( pos );
+    // Remove the match
+    fs->removeSelectedText( &cursor, KWTextFrameSet::HighlightSelection );
+    // Insert the replacement
+    QTextFormat * format = p->at( pos )->format();
+    // TODO a macro command somehow
+    fs->insert( &cursor, static_cast<KWTextFormat *>(format),
+                corr, true, false,
+                i18n("Insert Replacement") );
 }
 
 /*================================================================*/
 void KWView::spellCheckerDone( const QString & )
 {
-    kspell->cleanUp();
-    spellCheckerFinished();
+    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    ASSERT( fs );
+    if ( fs )
+        fs->removeHighlight();
+
+    if ( kspell->dlgResult() != KS_CANCEL && kspell->dlgResult() != KS_STOP )
+    {
+        // Try to check another frameset
+        spellCheckerReady();
+    }
+    else
+    {
+        kspell->cleanUp();
+        delete kspell;
+        kspell = 0;
+    }
 }
 
 /*================================================================*/
-void KWView::spellCheckerFinished( )
+void KWView::spellCheckerFinished()
 {
     KSpell::spellStatus status = kspell->status();
     delete kspell;

@@ -519,7 +519,8 @@ void KWFrameSet::updateAnchors()
         }
     }
     m_anchorParag->setChanged( true );
-    emit m_anchorTextFs->repaintChanged( this );
+    kdDebug() << "KWFrameSet::updateAnchors emit repaintChanged" << endl;
+    emit repaintChanged( m_anchorTextFs );
 }
 
 void KWFrameSet::deleteAnchors()

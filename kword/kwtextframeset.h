@@ -110,7 +110,7 @@ public:
 
     void insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName );
-    void removeSelectedText( QTextCursor * cursor );
+    void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
     void undo();
     void redo();
     void clearUndoRedoInfo();
