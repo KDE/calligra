@@ -4221,6 +4221,12 @@ QStringList KWDocument::listOfBookmarkName(KWViewMode * viewMode)const
     return list;
 }
 
+void KWDocument::paragraphModified(KoTextParag* /*_parag*/, KoTextParag::ParagModifyType /*_type*/, int /*start*/, int /*lenght*/)
+{
+    //kdDebug()<<" _parag :"<<_parag<<" start :"<<start<<" lenght :"<<lenght<<endl;
+}
+
+
 void KWDocument::spellCheckParagraphDeleted( KoTextParag *_parag,  KWTextFrameSet *frm)
 {
     m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());

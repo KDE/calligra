@@ -72,7 +72,7 @@ class KoTextParag;
 #include <koPictureCollection.h>
 #include <kozoomhandler.h>
 #include <koUnit.h>
-
+#include <qrichtext_p.h>
 #include "kwanchorpos.h"
 #include "defs.h"
 
@@ -699,6 +699,7 @@ public:
 
     void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
     void spellCheckParagraphDeleted( KoTextParag *_parag,  KWTextFrameSet *frm);
+    void paragraphModified(KoTextParag* _parag, KoTextParag::ParagModifyType _type, int start, int lenght);
 
     void initBookmarkList();
     void loadImagesFromStore( KoStore *_store );

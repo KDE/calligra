@@ -126,13 +126,13 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     connect( m_textobj, SIGNAL( paragraphCreated( KoTextParag*) ),
              SLOT( slotParagraphCreated(KoTextParag*) ));
     connect( m_textobj, SIGNAL( paragraphModified( KoTextParag*, KoTextParag::ParagModifyType, int, int) ),
-             SLOT( slotParagraphModified(KoTextParag*) ));
+             SLOT( slotParagraphModified(KoTextParag*, KoTextParag::ParagModifyType, int, int) ));
 
 }
 
-void KWTextFrameSet::slotParagraphModified(KoTextParag* /*_parag*/)
+void KWTextFrameSet::slotParagraphModified(KoTextParag* _parag, KoTextParag::ParagModifyType _type, int start, int lenght)
 {
-    //todo
+    kWordDocument()->paragraphModified(_parag, _type, start, lenght);
 }
 
 void KWTextFrameSet::slotParagraphCreated(KoTextParag* /*_parag*/)
