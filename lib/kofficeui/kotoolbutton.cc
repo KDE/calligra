@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 namespace {
-    const int COLUMNS = 15;
+    const int COLS = 15;
     const int TILESIZE = 16;
 }
 
@@ -47,7 +47,7 @@ QSize KoColorPanel::sizeHint() const
 
 QSize KoColorPanel::minimumSizeHint() const
 {
-    return QSize( COLUMNS << 4, lines() << 4 );
+    return QSize( COLS << 4, lines() << 4 );
 }
 
 void KoColorPanel::clear()
@@ -235,7 +235,7 @@ void KoColorPanel::insertDefaultColors()
     updateGeometry();
     // we have to repaint the "old" current row explicitly due
     // to WStaticContents
-    repaint( 0, currentRow << 4, COLUMNS << 4, 16 );
+    repaint( 0, currentRow << 4, COLS << 4, 16 );
 }
 
 void KoColorPanel::mousePressEvent( QMouseEvent* )
@@ -265,7 +265,7 @@ void KoColorPanel::paintEvent( QPaintEvent* e )
         int tmp = TILESIZE * lns;
         if ( startCol == 0 )
             erase( 0, 0, 2, tmp );
-        if ( endCol == COLUMNS )
+        if ( endCol == COLS )
             erase( width() - 2, 0, 2, tmp );
         else
             erase( ( endCol << 4 ) - 2, 0, 2, tmp );
@@ -274,7 +274,7 @@ void KoColorPanel::paintEvent( QPaintEvent* e )
             erase( ( i << 4 ) - 2, 0, 4, tmp );
 
         // horizontal rects
-        tmp = TILESIZE * COLUMNS;
+        tmp = TILESIZE * COLS;
         if ( startRow == 0 )
             erase( 0, 0, tmp, 2 );
         if ( endRow == lns )
@@ -313,8 +313,8 @@ void KoColorPanel::paintEvent( QPaintEvent* e )
 
     // clean up the last line (it's most likely that it's not totally filled)
     if ( !e->erased() && endRow > lns ) {
-        int fields = m_colorMap.count() % COLUMNS;
-        erase( fields << 4, lns * TILESIZE, ( COLUMNS - fields ) << 4, 16 );
+        int fields = m_colorMap.count() % COLS;
+        erase( fields << 4, lns * TILESIZE, ( COLS - fields ) << 4, 16 );
     }
 }
 
@@ -328,7 +328,7 @@ void KoColorPanel::keyPressEvent( QKeyEvent* e )
             --newPos.y;
     }
     if ( e->key() == Qt::Key_Down ) {
-        if ( newPos < Position( m_colorMap.count() % COLUMNS, lines() - 2 ) )
+        if ( newPos < Position( m_colorMap.count() % COLS, lines() - 2 ) )
             ++newPos.y;
         else
             e->ignore();
@@ -340,7 +340,7 @@ void KoColorPanel::keyPressEvent( QKeyEvent* e )
             --newPos.x;
     }
     if ( e->key() == Qt::Key_Right ) {
-        if ( newPos.x < COLUMNS - 1 && newPos < Position( m_colorMap.count() % COLUMNS - 1, lines() - 1 ) )
+        if ( newPos.x < COLS - 1 && newPos < Position( m_colorMap.count() % COLS - 1, lines() - 1 ) )
             ++newPos.x;
         else
             e->ignore();
@@ -365,7 +365,7 @@ bool KoColorPanel::insertColor( const QColor& color, bool checking )
     m_colorMap.insert( m_nextPosition, color );
 
     ++m_nextPosition.x;
-    if ( m_nextPosition.x == COLUMNS ) {
+    if ( m_nextPosition.x == COLS ) {
         m_nextPosition.x = 0;
         ++m_nextPosition.y;
     }
@@ -420,7 +420,7 @@ int KoColorPanel::lines() const
 {
     if ( m_colorMap.isEmpty() )
         return 1;
-    return ( m_colorMap.count() - 1 ) / COLUMNS + 1;
+    return ( m_colorMap.count() - 1 ) / COLS + 1;
 }
 
 void KoColorPanel::paintArea( const QRect& rect, int& startRow, int& endRow, int& startCol, int& endCol ) const
@@ -430,7 +430,7 @@ void KoColorPanel::paintArea( const QRect& rect, int& startRow, int& endRow, int
     endRow = endRow > lines() ? lines() : endRow;
     startCol = rect.left() >> 4;
     endCol = ( rect.right() >> 4 ) + 1;
-    endCol = endCol > COLUMNS ? COLUMNS : endCol;
+    endCol = endCol > COLS ? COLS : endCol;
 }
 
 void KoColorPanel::updateFocusPosition( const Position& newPosition )
@@ -480,7 +480,7 @@ void KoColorPanel::init()
 
 bool operator<( const KoColorPanel::Position& lhs, const KoColorPanel::Position& rhs )
 {
-    return ( lhs.y * COLUMNS + lhs.x ) < ( rhs.y * COLUMNS + rhs.x );
+    return ( lhs.y * COLS + lhs.x ) < ( rhs.y * COLS + rhs.x );
 }
 
 
