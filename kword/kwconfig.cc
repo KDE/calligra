@@ -45,12 +45,12 @@ KWConfig::KWConfig( KWView* parent )
 
 {
   QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
-                          BarIcon("spellcheck", KIcon::SizeMedium) );
-  _spellPage=new configureSpellPage(parent,page);
+                        BarIcon("spellcheck", KIcon::SizeMedium) );
+  _spellPage=new configureSpellPage(parent, page);
 
-  page = addVBoxPage( i18n("Interface"), i18n("Interface"),
-                          BarIcon("misc", KIcon::SizeMedium) );
-  _interfacePage=new configureInterfacePage(parent,page);
+  QVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface"),
+                              BarIcon("misc", KIcon::SizeMedium) );
+  _interfacePage=new configureInterfacePage(parent, page2);
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
@@ -76,26 +76,25 @@ void KWConfig::slotDefault()
     }
 }
 
-configureSpellPage::configureSpellPage( KWView *_view, QWidget *parent , char *name )
- :QWidget ( parent,name)
+configureSpellPage::configureSpellPage( KWView *_view, QVBox *box, char *name )
+    : QObject( box->parent(), name )
 {
   m_pView=_view;
   config = KWFactory::global()->config();
-  QVBoxLayout *box = new QVBoxLayout( this );
-  box->setMargin( 5 );
-  box->setSpacing( 10 );
-  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Spelling"));
 
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
-  _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
-  grid1->addWidget(_spellConfig,0,0);
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox, 5, 1, KDialog::marginHint(), KDialog::spacingHint());
+  grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
+  grid1->setRowStretch( 4, 10 );
+  _spellConfig = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
+  grid1->addWidget(_spellConfig,1,0);
 #ifdef KSPELL_HAS_IGNORE_UPPER_WORD
   _dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
-  grid1->addWidget(_dontCheckUpperWord,1,0);
+  grid1->addWidget(_dontCheckUpperWord,2,0);
 
   _dontCheckTilteCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
-  grid1->addWidget(_dontCheckTilteCase,2,0);
+  grid1->addWidget(_dontCheckTilteCase,3,0);
 
   if( config->hasGroup("KSpell kword") )
     {
@@ -104,7 +103,7 @@ configureSpellPage::configureSpellPage( KWView *_view, QWidget *parent , char *n
         _dontCheckTilteCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
 #endif
-  box->addWidget( tmpQGroupBox);
+  //box->addWidget( tmpQGroupBox );
 }
 
 void configureSpellPage::apply()
@@ -144,21 +143,22 @@ void configureSpellPage::slotDefault()
 #endif
 }
 
-configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent , char *name )
- :QWidget ( parent,name)
+configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char *name )
+ : QObject( box->parent(), name )
 {
     m_pView=_view;
     config = KWFactory::global()->config();
     KWUnit::Unit unit = m_pView->kWordDocument()->getUnit();
-    QVBoxLayout *box = new QVBoxLayout( this );
+    /*QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
-    box->setSpacing( 10 );
-    QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+    box->setSpacing( 10 );*/
+    QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Interface"));
 
     QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-    lay1->setMargin( 20 );
-    lay1->setSpacing( 10 );
+    lay1->addSpacing( 10 );
+    lay1->setMargin( KDialog::marginHint() );
+    lay1->setSpacing( KDialog::spacingHint() );
 
     // ### m_ is for member variables !
     int m_iGridX=10;
@@ -234,7 +234,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pages per row:"));
     lay1->addWidget(m_nbPagePerRow);
 
-    box->addWidget( tmpQGroupBox);
+    //box->addWidget( tmpQGroupBox);
 }
 
 void configureInterfacePage::apply()

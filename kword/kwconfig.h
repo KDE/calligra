@@ -29,11 +29,11 @@ class KDoubleNumInput;
 class KSpellConfig;
 class KConfig;
 
-class configureSpellPage : public QWidget
+class configureSpellPage : public QObject
 {
     Q_OBJECT
 public:
-    configureSpellPage( KWView *_view,QWidget *parent = 0, char *name = 0 );
+    configureSpellPage( KWView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
 private:
@@ -44,11 +44,11 @@ private:
     KConfig* config;
 };
 
-class configureInterfacePage : public QWidget
+class configureInterfacePage : public QObject
 {
     Q_OBJECT
 public:
-    configureInterfacePage( KWView *_view,QWidget *parent = 0, char *name = 0 );
+    configureInterfacePage( KWView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
 private:
