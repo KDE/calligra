@@ -1170,10 +1170,19 @@ void OOWriterWorker::processFootnote( const VariableData& variable )
 void OOWriterWorker::processNote( const VariableData& variable )
 {
     // KWord 1.3's annotations are anonymous and undated, however the OO specification tells that author and date are mandatory.
-    // ### TODO: how to have a better author and date for annotations?
-    *m_streamOut << "<office:annotation office:create-date=\"1970-01-01\" office:author=\""
-        << escapeOOText( i18n("Pseudo-author for annotations", "KWord 1.3" ) )
-        << "\">\n";
+    // ### TODO: how to have a better author for annotations?
+    *m_streamOut << "<office:annotation office:create-date=\"";
+
+    // We use the document creation date as creation date for the annotation
+    // (OOWriter uses only the date part, there is no time part)
+    if ( m_varSet.creationTime.isValid() )
+        *m_streamOut << escapeOOText( m_varSet.creationTime.date().toString( Qt::ISODate ) );
+    else
+        *m_streamOut << "1970-01-01";
+
+    *m_streamOut << "\" office:author=\"";
+    *m_streamOut << escapeOOText( i18n( "Pseudo-author for annotations", "KWord 1.3" ) );
+    *m_streamOut << "\">\n";
     *m_streamOut << "<text:p>"
         << escapeOOSpan( variable.getGenericData( "note" ) )
         << "</text:p>\n"
