@@ -78,7 +78,7 @@ public:
 
     virtual QBrush getBrush() const;
 
-    void setShadowParameter(int _distance,ShadowDirection _direction,QColor _color);
+    virtual void setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color);
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);

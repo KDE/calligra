@@ -229,7 +229,9 @@ double KPTextObject::load(const QDomElement &element)
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 			  bool drawingShadow, bool drawContour )
 {
-    paint( _painter, _zoomHandler, false, 0L, true, drawingShadow,drawContour );
+    //never draw Shadow.
+    //shadow in text obj is a properties from paragraph
+    paint( _painter, _zoomHandler, false, 0L, true, /*drawingShadow*/false,drawContour );
 }
 
 // Special method for drawing a text object that is being edited
@@ -253,7 +255,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     double ow = ext.width();
     double oh = ext.height();
     double pw = pen.width() / 2;
-
+    drawingShadow=false;
     if ( drawContour ) {
 	QPen pen3( Qt::black, 1, Qt::DotLine );
 	_painter->setPen( pen3 );
@@ -997,7 +999,7 @@ KCommand * KPTextObject::pasteKPresenter( QTextCursor * cursor, const QCString &
 }
 
 
-void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,QColor _color)
+void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color)
 {
     //todo apply to all parag
     shadowDistance = _distance;
