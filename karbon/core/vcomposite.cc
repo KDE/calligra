@@ -369,7 +369,7 @@ VPath::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
 {
 	setState( normal );
 
-	QString data = element.attribute( "d" );
+	QString data = element.attribute( "svg:d" );
 	if( data.length() > 0 )
 	{
 		loadSvgPath( data );
