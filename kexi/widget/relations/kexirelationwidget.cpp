@@ -22,6 +22,7 @@
 #include "kexirelationwidget.h"
 
 #include <qlayout.h>
+#include <qlistbox.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 
@@ -51,6 +52,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	g->addLayout( hlyr, 0, 0 );
 
 	m_tableCombo = new KComboBox(this, "tables_combo");
+	m_tableCombo->setMinimumWidth(QFontMetrics(font()).width("w")*20);
 	QLabel *lbl = new QLabel(m_tableCombo, i18n("Table")+": ", this);
 	lbl->setIndent(3);
 	m_tableCombo->setInsertionPolicy(QComboBox::NoInsertion);
@@ -170,18 +172,26 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 		this, SLOT(slotTableFieldDoubleClicked(QListViewItem*,const QPoint&,int)));
 	kdDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
 
-	int oi=m_tableCombo->currentItem();
-	kdDebug()<<"KexiRelationWidget::slotAddTable(): removing a table from the combo box"<<endl;
-	m_tableCombo->removeItem(m_tableCombo->currentItem());
-	if (m_tableCombo->count()>0)
-	{
-		if (oi>=m_tableCombo->count())
-			oi=m_tableCombo->count()-1;
-		m_tableCombo->setCurrentItem(oi);
+	const QString tname = t->name().lower();
+	const int count = m_tableCombo->count();
+	for (int i = 0; i < count; i++ ) {
+		if (m_tableCombo->text(i).lower() == tname )
+			break;
 	}
-	else {
-		m_tableCombo->setEnabled(false);
-		m_btnAdd->setEnabled(false);
+	if (i<count) {
+		int oi = m_tableCombo->currentItem();
+		kdDebug()<<"KexiRelationWidget::slotAddTable(): removing a table from the combo box"<<endl;
+		m_tableCombo->removeItem(i);
+		if (m_tableCombo->count()>0) {
+			if (oi>=m_tableCombo->count()) {
+				oi=m_tableCombo->count()-1;
+				m_tableCombo->setCurrentItem(oi);
+			}
+		}
+		else {
+			m_tableCombo->setEnabled(false);
+			m_btnAdd->setEnabled(false);
+		}
 	}
 	emit tableAdded(*t);
 }
@@ -341,6 +351,13 @@ KexiRelationWidget::fillTablesCombo()
 	QStringList tmp = m_conn->tableNames();
 	tmp.sort();
 	m_tableCombo->insertStringList(tmp);
+}
+
+void
+KexiRelationWidget::tableCreated(const QString& tableName)
+{
+	m_tableCombo->insertItem(tableName);
+	m_tableCombo->listBox()->sort();
 }
 
 #include "kexirelationwidget.moc"
