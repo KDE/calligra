@@ -69,9 +69,14 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
   else
   {
     // FIXME litte vs big endian ?
+    // TODO ensure double takes 8 bytes
     isInteger = false;
-    *((unsigned*) &f) = 0;  // lower 32 bits = 0
-    *((unsigned*) &f + 1) = rkvalue & 0xFFFFFFFC; // bit 0, 1 = 0
+    unsigned char* s = (unsigned char*) &rkvalue;
+    unsigned char* r = (unsigned char*) &f;
+    r[0] = r[1] = r[2] = r[3] = 0;
+    r[4] = s[0] & 0xfc;
+    r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
+    memcpy( &f, r, 8 );
     f *= factor;
   }
 }
