@@ -1070,10 +1070,6 @@ void KPresenterDoc::saveOasisIgnoreList( KoXmlWriter &settingsWriter )
 
 void KPresenterDoc::loadOasisIgnoreList( const QDomDocument&settingsDoc )
 {
-    //todo
-    if ( settingsDoc.isNull() )
-        return; //not a error some file doesn't have settings.xml
-
     KoOasisSettings settings( settingsDoc );
     bool tmp = settings.selectItemSet( "configuration-settings" );
     kdDebug()<<" settings : configuration-settings :"<<tmp<<endl;
@@ -1198,9 +1194,6 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 
 void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
 {
-    if ( settingsDoc.isNull() )
-        return; //not a error some file doesn't have settings.xml
-
     KoOasisSettings settings( settingsDoc );
     bool tmp = settings.selectItemSet( "view-settings" );
     //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
@@ -1559,8 +1552,11 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     m_loadingInfo=0L;
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
-    loadOasisSettings( settingsDoc );
-    loadOasisIgnoreList( settingsDoc );
+    if ( !settings.isNull() )
+    {
+        loadOasisSettings( settingsDoc );
+        loadOasisIgnoreList( settingsDoc );
+    }
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );
     emit sigProgress( -1 );
