@@ -28,7 +28,9 @@
 #include <klocale.h>
 #include <kprocio.h>
 #include "kospell.h"
-
+#include <qfileinfo.h>
+#include <qdir.h>
+#include <kglobal.h>
 #define MAXLINELENGTH 10000
 
 class KoSpell::KoSpellPrivate
@@ -555,6 +557,208 @@ void KoSpell::setIgnoreTitleCase(bool _ignore)
 {
     d->m_bIgnoreTitleCase=_ignore;
 }
+
+//duplicate code from ksconfig
+//remove it when we use kde3.1
+QStringList KoSpell::getAvailDictsIspell ()
+{
+    QStringList listIspell;
+    // dictionary path
+    QFileInfo dir ("/usr/lib/ispell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/local/lib/ispell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/local/share/ispell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/share/ispell");
+    /* TODO get them all instead of just one of them.
+     * If /usr/local/lib exists, it skips the rest
+     if (!dir.exists() || !dir.isDir())
+     dir.setFile ("/usr/local/lib");
+    */
+    if (!dir.exists() || !dir.isDir()) return QStringList();
+
+    kdDebug() << "KoSpell::getAvailDictsIspell "
+              << dir.filePath() << " " << dir.dirPath() << endl;
+
+    QDir thedir (dir.filePath(),"*.hash");
+
+    kdDebug() << "KoSpell" << thedir.path() << "\n" << endl;
+    kdDebug() << "entryList().count()="
+              << thedir.entryList().count() << endl;
+
+    for (unsigned int i=0;i<thedir.entryList().count();i++)
+    {
+        QString fname, lname, hname;
+        fname = thedir [i];
+
+        // remove .hash
+        if (fname.right(5) == ".hash") fname.remove (fname.length()-5,5);
+
+        if (interpret (fname, lname, hname))
+	{
+            hname=i18n("default spelling dictionary"
+                       ,"Default - %1 [%2]").arg(hname).arg(fname);
+            listIspell.append(hname);
+	}
+        else
+	{
+            hname=hname+" ["+fname+"]";
+            listIspell.append(hname);
+	}
+    }
+    return listIspell;
+}
+
+QStringList KoSpell::getAvailDictsAspell () {
+
+    QStringList listAspell;
+
+    // dictionary path
+    // FIXME: use "aspell dump config" to find out the dict-dir
+    QFileInfo dir ("/usr/lib/aspell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/local/lib/aspell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/share/aspell");
+    if (!dir.exists() || !dir.isDir())
+        dir.setFile ("/usr/local/share/aspell");
+    if (!dir.exists() || !dir.isDir()) return QStringList();
+
+    kdDebug() << "KoSpell::getAvailDictsAspell "
+                 << dir.filePath() << " " << dir.dirPath() << endl;
+
+    QDir thedir (dir.filePath(),"*");
+
+    kdDebug() << "KSpellConfig" << thedir.path() << "\n" << endl;
+    kdDebug() << "entryList().count()="
+                 << thedir.entryList().count() << endl;
+
+    for (unsigned int i=0; i<thedir.entryList().count(); i++)
+    {
+        QString fname, lname, hname;
+        fname = thedir [i];
+
+        // consider only simple dicts without '-' in the name
+        // FIXME: may be this is wrong an the list should contain
+        // all *.multi files too, to allow using special dictionaries
+        if (fname[0] != '.' &&  fname.find('-') < 0)
+	{
+
+            // remove .multi
+            if (fname.right(6) == ".multi") fname.remove (fname.length()-6,6);
+
+            if (interpret (fname, lname, hname))
+	    {
+                hname=i18n("default spelling dictionary"
+                           ,"Default - %1 [%2]").arg(hname).arg(fname);
+                listAspell.append(hname);
+    	    }
+            else
+	    {
+                hname=hname+" ["+fname+"]";
+                listAspell.append(hname);
+	    }
+	}
+    }
+    return listAspell;
+}
+
+
+bool
+KoSpell::interpret (QString &fname, QString &lname,
+			      QString &hname)
+
+{
+
+  kdDebug(750) << "KSpellConfig::interpret [" << fname << "]" << endl;
+
+  QString dname(fname);
+
+  if(dname.right(1)=="+")
+    dname.remove(dname.length()-1, 1);
+
+  if(dname.right(3)=="sml" || dname.right(3)=="med" || dname.right(3)=="lrg" || dname.right(3)=="xlg")
+     dname.remove(dname.length()-3,3);
+
+  //These are mostly the ispell-langpack defaults
+  if (dname=="english" || dname=="american" ||
+      dname=="british" || dname=="canadian") {
+    lname="en"; hname=i18n("English");
+  }
+  else if (dname=="espa~nol" || dname=="espanol") {
+    lname="es"; hname=i18n("Spanish");
+  }
+  else if (dname=="dansk") {
+    lname="da"; hname=i18n("Danish");
+  }
+  else if (dname=="deutsch") {
+    lname="de"; hname=i18n("German");
+  }
+  else if (dname=="german") {
+    lname="de"; hname=i18n("German (new orth.)");
+  }
+  else if (dname=="portuguesb" || dname=="br") {
+    lname="br"; hname=i18n("Brazilian Portuguese");
+  }
+  else if (dname=="portugues") {
+    lname="pt"; hname=i18n("Portuguese");
+  }
+  else if (dname=="esperanto") {
+    lname="eo"; hname=i18n("Esperanto");
+  }
+  else if (dname=="norsk") {
+    lname="no"; hname=i18n("Norwegian");
+  }
+  else if (dname=="polish") {
+    lname="pl"; hname=i18n("Polish");
+  }
+  else if (dname=="russian") {
+    lname="ru"; hname=i18n("Russian");
+  }
+  else if (dname=="slovensko") {
+    lname="si"; hname=i18n("Slovenian");
+  }
+  else if (dname=="slovak"){
+    lname="sk"; hname=i18n("Slovak");
+  }
+  else if (dname=="czech") {
+    lname="cs"; hname=i18n("Czech");
+  }
+  else if (dname=="svenska") {
+    lname="sv"; hname=i18n("Swedish");
+  }
+  else if (dname=="swiss") {
+    lname="de"; hname=i18n("Swiss German");
+  }
+  else if (dname=="ukrainian") {
+    lname="uk"; hname=i18n("Ukrainian");
+  }
+  else if (dname=="lietuviu" || dname=="lithuanian") {
+     lname="lt"; hname=i18n("Lithuanian");
+  }
+  else if (dname=="francais" || dname=="french") {
+    lname="fr"; hname=i18n("French");
+  }
+  else if (dname=="belarusian") {  // waiting for post 2.2 to not dissapoint translators
+    lname="be"; hname=i18n("Belarusian");
+  }
+  else if( dname == "magyar" ) {
+    lname="hu"; hname=i18n("Hungarian");
+  }
+  else {
+    lname=""; hname=i18n("Unknown ispell dictionary", "Unknown");
+  }
+
+  //We have explicitly chosen English as the default here.
+  if ( (KGlobal::locale()->language()==QString::fromLatin1("C") &&
+	lname==QString::fromLatin1("en")) ||
+       KGlobal::locale()->language()==lname)
+    return TRUE;
+
+  return FALSE;
+}
+
 
 #include "kospell.moc"
 

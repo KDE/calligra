@@ -56,7 +56,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , SpellCheckingLanguage = 4096};
 
     enum UnderlineLineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3};
     enum StrikeOutLineType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2};
@@ -91,6 +91,9 @@ public:
 
     void setUnderlineLineStyle (UnderlineLineStyle _type);
     UnderlineLineStyle underlineLineStyle()const {return m_underlineLineStyle;}
+
+    void setSpellCheckingLanguage( const QString & _lang);
+    QString spellCheckingLanguage() const { return m_spellCheckLanguage;}
 
     bool doubleUnderline() const { return (m_underlineLine==U_DOUBLE ); }
     bool underline() const { return (m_underlineLine==U_SIMPLE ); }
@@ -152,5 +155,6 @@ protected:
     StrikeOutLineType m_strikeOutLine;
     UnderlineLineStyle m_underlineLineStyle;
     StrikeOutLineStyle m_strikeOutLineStyle;
+    QString m_spellCheckLanguage;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;

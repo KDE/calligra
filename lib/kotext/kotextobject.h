@@ -105,10 +105,13 @@ public:
     //void setCounter(const KoParagCounter & counter );
     KCommand *setCounterCommand(const KoParagCounter & counter );
 
+    KCommand *setSpellCheckingLanguage(const QString &);
+
+
     QColor textColor() const;
     QFont textFont() const;
     QString textFontFamily()const;
-
+    QString spellCheckingLanguage() const;
     QColor textBackgroundColor()const;
     QColor textUnderlineColor()const;
 

@@ -101,6 +101,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::StrikeOut;
     if ( textBackgroundColor() != format.textBackgroundColor() )
         flags |= KoTextFormat::TextBackgroundColor;
+    if ( spellCheckingLanguage() != format.spellCheckingLanguage() )
+        flags |= KoTextFormat::SpellCheckingLanguage;
     return flags;
 }
 
@@ -362,3 +364,12 @@ KoTextFormat::StrikeOutLineStyle KoTextFormat::stringToStrikeOutStyle( const QSt
     else
         return KoTextFormat::S_SOLID;
 }
+
+void KoTextFormat::setSpellCheckingLanguage( const QString & _lang)
+{
+    if ( m_spellCheckLanguage == _lang )
+        return;
+    m_spellCheckLanguage = _lang;
+    update();
+}
+

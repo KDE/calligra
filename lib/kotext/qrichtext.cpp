@@ -6120,6 +6120,8 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         setUnderlineLineType (nf.underlineLineType());
         setUnderlineLineStyle (nf.underlineLineStyle());
     }
+    if( flags & KoTextFormat::SpellCheckingLanguage)
+        setSpellCheckingLanguage(nf.spellCheckingLanguage());
 
     //////
     update();

@@ -382,6 +382,8 @@ void KoTextFormat::generateKey()
     k += QString::number( (int)m_underlineLineStyle );
     k += '/';
     k += QString::number( (int)m_strikeOutLineStyle);
+    k += '/';
+    k += m_spellCheckLanguage;
     ////
 }
 
@@ -408,6 +410,8 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
     k += QString::number( (int)U_SOLID );
     k += '/';
     k += QString::number( (int)S_SOLID ); // no double-underline in a "simple format"
+    k += '/';
+    k += QString::null;
     ////
     return k;
 }

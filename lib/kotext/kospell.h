@@ -213,6 +213,9 @@ public:
 	*/
 	void death( );
 
+    static QStringList getAvailDictsAspell ();
+    static QStringList getAvailDictsIspell ();
+
 	protected slots:
 	/* All of those signals from KProcIO get sent here. */
 	void KoSpell2(KProcIO *);
@@ -237,6 +240,7 @@ protected:
 
 	void startIspell();
 	bool writePersonalDictionary ();
+        static bool interpret (QString &fname, QString &lname, QString &hname);
 
 	private:
 	class KoSpellPrivate;

@@ -2139,6 +2139,11 @@ QString KoTextFormatInterface::textFontFamily()const
     return currentFormat()->font().family();
 }
 
+QString KoTextFormatInterface::spellCheckingLanguage() const
+{
+    return currentFormat()->spellCheckingLanguage();
+}
+
 KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, int flags)
 {
     KoTextFormat format( *currentFormat() );
@@ -2263,6 +2268,13 @@ KCommand *KoTextFormatInterface::setCounterCommand(const KoParagCounter & counte
         format.counter = new KoParagCounter;
     *format.counter = counter;
     return setParagLayoutFormatCommand(&format,KoParagLayout::BulletNumber);
+}
+
+KCommand *KoTextFormatInterface::setSpellCheckingLanguage(const QString &_lang)
+{
+    KoTextFormat format( *currentFormat() );
+    format.setSpellCheckingLanguage(_lang);
+    return setFormatCommand( &format, KoTextFormat::SpellCheckingLanguage );
 }
 
 #include "kotextobject.moc"
