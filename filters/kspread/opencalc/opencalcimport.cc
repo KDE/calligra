@@ -1879,6 +1879,8 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
     else
       layout->setAlignY( KSpreadFormat::Top );
   }
+  else
+      layout->setAlignY( KSpreadFormat::Bottom );
 
   if ( property.hasAttribute( "fo:wrap-option" ) )
   {
