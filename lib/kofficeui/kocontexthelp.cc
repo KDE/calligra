@@ -123,7 +123,7 @@ KoTinyButton::KoTinyButton( Action a, QWidget* parent )
 		case Sticky:
 				m_bitmap = QBitmap( 5, 5, notstickybits, true );
 			break;
-			
+
 		default:
 			m_bitmap = QBitmap( 5, 5, closebits, true );
 	}
@@ -186,16 +186,16 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 	layout->addColSpacing( 0, 5 );
 	layout->addColSpacing( 2, 5 );
 	layout->setColStretch( 1, 1 );
-	
+
 	m_helpLabel = new QLabel( m_helpViewport );
 	m_helpLabel->setAlignment( AlignLeft | AlignVCenter | ExpandTabs | WordBreak );
 	m_helpLabel->setBackgroundMode( PaletteLight );
 	m_helpViewport->installEventFilter( this );
 	m_helpViewport->setBackgroundMode( PaletteLight );
 	setText( help );
-	
+
 	setBackgroundMode( PaletteLight );
-	
+
 	connect( m_upButton, SIGNAL( pressed() ), this, SLOT( startScrollingUp() ) );
 	connect( m_downButton, SIGNAL( pressed() ), this, SLOT( startScrollingDown() ) );
 	connect( m_upButton, SIGNAL( released() ), this, SLOT( stopScrolling() ) );
@@ -245,7 +245,7 @@ void KoHelpWidget::startScrollingDown()
 
 void KoHelpWidget::scrollUp()
 {
-	if ( m_ypos > 0 ) 
+	if ( m_ypos > 0 )
 		stopScrolling();
 	else
 	{
@@ -289,9 +289,10 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	QHBoxLayout* buttonLayout;
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
-	layout->addLayout( buttonLayout = new QHBoxLayout( this ), 2, 0 );
+        buttonLayout = new QHBoxLayout( layout );
+        //layout->addLayout( buttonLayout, 2, 0 );
 	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 2, 1, 1 );
-	buttonLayout->add( m_close = new KoTinyButton( KoTinyButton::Close, this ) ); 
+	buttonLayout->add( m_close = new KoTinyButton( KoTinyButton::Close, this ) );
 	buttonLayout->add( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
 	layout->addColSpacing( 2, 2 );
 	layout->addRowSpacing( 3, 2 );
@@ -300,10 +301,10 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	layout->setRowStretch( 1, 1 );
 	buttonLayout->setSpacing( 1 );
 	setMinimumSize( 180, 180 );
-	
+
 	m_isSticky = false;
 	setFocusPolicy( StrongFocus );
-	
+
 	connect( m_close, SIGNAL( clicked() ), this, SIGNAL( wantsToBeClosed() ) );
 	connect( m_sticky, SIGNAL( toggled( bool ) ), this, SLOT( setSticky( bool ) ) );
 } // KoContextHelpPopup::KoContextHelpPopup
@@ -391,14 +392,14 @@ void KoContextHelpPopup::keyPressEvent( QKeyEvent* e )
 /*		case Key_Up:
 				m_helpViewer->startScrollingUp();
 			break;
-		
+
 		case Key_Down:
 				m_helpViewer->startScrollingDown();
 			break;*/
 		case Key_Up:
 				m_helpViewer->scrollUp();
 			break;
-		
+
 		case Key_Down:
 				m_helpViewer->scrollDown();
 			break;
@@ -413,7 +414,7 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 		case Key_Down:
 				m_helpViewer->stopScrolling();
 			break;*/
-			
+
 		case Key_Escape:
 				emit wantsToBeClosed();
 			break;
