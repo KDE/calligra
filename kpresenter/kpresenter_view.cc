@@ -726,7 +726,8 @@ void KPresenterView::savePicture()
 void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
 {
     QString oldFile(oldName);
-    KURL url(oldFile);
+    KURL url;
+    url.setPath( oldFile );
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 

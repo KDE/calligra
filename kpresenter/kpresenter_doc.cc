@@ -2291,8 +2291,9 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
         QFileInfo fileInfo( _template );
         fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
         
-        KURL src( fileName );
-        KURL dest( locateLocal( "appdata", "default.kpr" ) );
+        KURL src, dest;
+        src.setPath( fileName );
+        dest.setPath( locateLocal( "appdata", "default.kpr" ) );
         kdDebug() << "Copying template  (in KPresenterDoc::templateFileName)" << endl
             << "  from: " << src.prettyURL() << endl
             << "  to: " << dest.prettyURL() << endl;

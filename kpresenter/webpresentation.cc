@@ -183,11 +183,13 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 
     const char *pics[] = { "home", "first", "next", "prev", "last", 0 };
 
+    KURL srcurl, desturl;
+    
     for ( uint index = 0; pics[ index ]; index ++ )    
     {
         QString filename( pics[ index ] + format );
-        KURL srcurl ( locate( "slideshow", filename, KPresenterFactory::global() ) );
-        KURL desturl ( path + "/pics/" + filename );
+        srcurl.setPath( locate( "slideshow", filename, KPresenterFactory::global() ) );
+        desturl.setPath ( path + "/pics/" + filename );
         KIO::NetAccess::del( desturl ); // Copy does not remove existing destination file
         KIO::NetAccess::copy( srcurl, desturl );
         p = progressBar->progress();
