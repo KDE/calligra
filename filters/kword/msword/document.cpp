@@ -587,6 +587,9 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
             int depth = pap.ilvl; /*both are 0 based*/
             counterElement.setAttribute( "depth", depth );
             wvWare::UString text = listInfo->text().text;
+#ifndef NDEBUG
+            listInfo->dump();
+#endif
             QString prefix, suffix;
             bool depthFound = false;
             // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
@@ -594,7 +597,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
             for ( int i = 0 ; i < text.length() ; ++i )
             {
                 short ch = text[i].unicode();
-                kdDebug() << i << ":" << ch << endl;
+                //kdDebug() << i << ":" << ch << endl;
                 if ( ch < 10 ) { // List level place holder
                     if ( ch == depth ) {
                         if ( depthFound )
@@ -614,7 +617,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
             }
             if ( depthFound )
             {
-                kdDebug() << " prefix=" << prefix << " suffix=" << suffix << " nfc=" << listInfo->numberFormat()<< endl;
+                kdDebug() << " prefix=" << prefix << " suffix=" << suffix << endl;
                 counterElement.setAttribute( "type", Conversion::numberFormatCode( listInfo->numberFormat() ) );
                 counterElement.setAttribute( "lefttext", prefix );
                 counterElement.setAttribute( "righttext", suffix );
