@@ -5027,26 +5027,28 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
 /*================================================================*/
 void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
 {
-    KoRect rect = _pointArray.boundingRect();
+    if( _pointArray.count()> 1)
+    {
+        KoRect rect = _pointArray.boundingRect();
 
-    double ox = rect.x();
-    double oy = rect.y();
-    unsigned int index = 0;
+        double ox = rect.x();
+        double oy = rect.y();
+        unsigned int index = 0;
 
-    KoPointArray points( _pointArray );
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = point.x() - ox ;
-        double tmpY = point.y() - oy ;
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
+        KoPointArray points( _pointArray );
+        KoPointArray tmpPoints;
+        KoPointArray::ConstIterator it;
+        for ( it = points.begin(); it != points.end(); ++it ) {
+            KoPoint point = (*it);
+            double tmpX = point.x() - ox ;
+            double tmpY = point.y() - oy ;
+            tmpPoints.putPoints( index, 1, tmpX,tmpY );
+            ++index;
+        }
+        rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
+        m_activePage->insertPolyline( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
+                                      m_view->getLineEnd() );
     }
-    rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
-    m_activePage->insertPolyline( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
-                                           m_view->getLineEnd() );
-
     m_pointArray = KoPointArray();
     m_indexPointArray = 0;
 }
@@ -5054,98 +5056,101 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
 /*================================================================*/
 void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
 {
-    KoPointArray _points( _pointArray );
-    KoPointArray _allPoints;
-    unsigned int pointCount = _points.count();
-    KoRect _rect;
+    if( _pointArray.count()> 1)
+    {
 
-    if ( pointCount == 2 ) { // line
-        _rect = _points.boundingRect();
-        _allPoints = _points;
-    }
-    else { // cubic bezier curve
-        KoPointArray tmpPointArray;
-        unsigned int _tmpIndex = 0;
-        unsigned int count = 0;
-        while ( count < pointCount ) {
-            if ( pointCount >= ( count + 4 ) ) { // for cubic bezier curve
-                double _firstX = _points.at( count ).x();
-                double _firstY = _points.at( count ).y();
+        KoPointArray _points( _pointArray );
+        KoPointArray _allPoints;
+        unsigned int pointCount = _points.count();
+        KoRect _rect;
 
-                double _fourthX = _points.at( count + 1 ).x();
-                double _fourthY = _points.at( count + 1 ).y();
+        if ( pointCount == 2 ) { // line
+            _rect = _points.boundingRect();
+            _allPoints = _points;
+        }
+        else { // cubic bezier curve
+            KoPointArray tmpPointArray;
+            unsigned int _tmpIndex = 0;
+            unsigned int count = 0;
+            while ( count < pointCount ) {
+                if ( pointCount >= ( count + 4 ) ) { // for cubic bezier curve
+                    double _firstX = _points.at( count ).x();
+                    double _firstY = _points.at( count ).y();
 
-                double _secondX = _points.at( count + 2 ).x();
-                double _secondY = _points.at( count + 2 ).y();
+                    double _fourthX = _points.at( count + 1 ).x();
+                    double _fourthY = _points.at( count + 1 ).y();
 
-                double _thirdX = _points.at( count + 3 ).x();
-                double _thirdY = _points.at( count + 3 ).y();
+                    double _secondX = _points.at( count + 2 ).x();
+                    double _secondY = _points.at( count + 2 ).y();
 
-                KoPointArray _cubicBezierPoint;
-                _cubicBezierPoint.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
+                    double _thirdX = _points.at( count + 3 ).x();
+                    double _thirdY = _points.at( count + 3 ).y();
 
-                _cubicBezierPoint = _cubicBezierPoint.cubicBezier();
+                    KoPointArray _cubicBezierPoint;
+                    _cubicBezierPoint.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
 
-                KoPointArray::ConstIterator it;
-                for ( it = _cubicBezierPoint.begin(); it != _cubicBezierPoint.end(); ++it ) {
-                    KoPoint _point = (*it);
-                    tmpPointArray.putPoints( _tmpIndex, 1, _point.x(), _point.y() );
-                    ++_tmpIndex;
+                    _cubicBezierPoint = _cubicBezierPoint.cubicBezier();
+
+                    KoPointArray::ConstIterator it;
+                    for ( it = _cubicBezierPoint.begin(); it != _cubicBezierPoint.end(); ++it ) {
+                        KoPoint _point = (*it);
+                        tmpPointArray.putPoints( _tmpIndex, 1, _point.x(), _point.y() );
+                        ++_tmpIndex;
+                    }
+
+                    count += 4;
                 }
+                else { // for line
+                    double _x1 = _points.at( count ).x();
+                    double _y1 = _points.at( count ).y();
 
-                count += 4;
+                    double _x2 = _points.at( count + 1 ).x();
+                    double _y2 = _points.at( count + 1 ).y();
+
+                    tmpPointArray.putPoints( _tmpIndex, 2, _x1,_y1, _x2,_y2 );
+                    _tmpIndex += 2;
+                    count += 2;
+                }
             }
-            else { // for line
-                double _x1 = _points.at( count ).x();
-                double _y1 = _points.at( count ).y();
 
-                double _x2 = _points.at( count + 1 ).x();
-                double _y2 = _points.at( count + 1 ).y();
-
-                tmpPointArray.putPoints( _tmpIndex, 2, _x1,_y1, _x2,_y2 );
-                _tmpIndex += 2;
-                count += 2;
-            }
+            _rect = tmpPointArray.boundingRect();
+            _allPoints = tmpPointArray;
         }
 
-        _rect = tmpPointArray.boundingRect();
-        _allPoints = tmpPointArray;
-    }
+        double ox = _rect.x();
+        double oy = _rect.y();
+        unsigned int index = 0;
 
-    double ox = _rect.x();
-    double oy = _rect.y();
-    unsigned int index = 0;
+        KoPointArray points( _pointArray );
+        KoPointArray tmpPoints;
+        KoPointArray::ConstIterator it;
+        for ( it = points.begin(); it != points.end(); ++it ) {
+            KoPoint point = (*it);
+            double tmpX = point.x() - ox;
+            double tmpY = point.y() - oy;
+            tmpPoints.putPoints( index, 1, tmpX,tmpY );
+            ++index;
+        }
 
-    KoPointArray points( _pointArray );
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = point.x() - ox;
-        double tmpY = point.y() - oy;
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
+        index = 0;
+        KoPointArray tmpAllPoints;
+        for ( it = _allPoints.begin(); it != _allPoints.end(); ++it ) {
+            KoPoint point = (*it);
+            double tmpX = point.x() - ox ;
+            double tmpY = point.y() - oy;
+            tmpAllPoints.putPoints( index, 1, tmpX,tmpY );
+            ++index;
+        }
+        _rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
+        if ( toolEditMode == INS_CUBICBEZIERCURVE ) {
+            m_activePage->insertCubicBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
+                                                  m_view->getLineBegin(), m_view->getLineEnd() );
+        }
+        else if ( toolEditMode == INS_QUADRICBEZIERCURVE ) {
+            m_activePage->insertQuadricBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
+                                                    m_view->getLineBegin(), m_view->getLineEnd() );
+        }
     }
-
-    index = 0;
-    KoPointArray tmpAllPoints;
-    for ( it = _allPoints.begin(); it != _allPoints.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = point.x() - ox ;
-        double tmpY = point.y() - oy;
-        tmpAllPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
-    _rect.moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
-    if ( toolEditMode == INS_CUBICBEZIERCURVE ) {
-        m_activePage->insertCubicBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
-                                                       m_view->getLineBegin(), m_view->getLineEnd() );
-    }
-    else if ( toolEditMode == INS_QUADRICBEZIERCURVE ) {
-        m_activePage->insertQuadricBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
-                                                         m_view->getLineBegin(), m_view->getLineEnd() );
-    }
-
     m_pointArray = KoPointArray();
     m_indexPointArray = 0;
 }
