@@ -32,7 +32,7 @@ static const KCmdLineOptions options[]=
 	KCmdLineLastOption
 };
 
-extern "C" int kdemain( int argc, char **argv )
+extern "C" KUGARDESIGNER_EXPORT int kdemain( int argc, char **argv )
 {
     KLocale::setMainCatalogue("kugar");
     KCmdLineArgs::init( argc, argv, newKudesignerAboutData() );

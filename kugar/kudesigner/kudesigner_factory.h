@@ -21,11 +21,11 @@
 #define KUDESIGNER_FACTORY_H
 
 #include <koFactory.h>
-
+#include <koffice_export.h>
 class KInstance;
 class KAboutData;
 
-class KudesignerFactory : public KoFactory
+class KUGARDESIGNER_EXPORT KudesignerFactory : public KoFactory
 {
     Q_OBJECT
 public:
