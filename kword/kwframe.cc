@@ -569,7 +569,7 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
 void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet )
 {
     KoStyleStack& styleStack = context.styleStack();
-    styleStack.setTypeProperties( "" ); //I think that it's not necessary, but for be safe
+    styleStack.setTypeProperties( "graphic" );
     // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
     m_paddingLeft = KoUnit::parseValue( styleStack.attribute( "fo:padding", "left" ) );
     m_paddingRight = KoUnit::parseValue( styleStack.attribute( "fo:padding", "right" ) );
@@ -632,7 +632,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
     KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
     KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
-    const QCString oowrap = context.styleStack().attribute( "style:wrap" ).latin1();
+    const QCString oowrap = styleStack.attribute( "style:wrap" ).latin1();
     if ( oowrap == "none" )        // 'no wrap' means 'avoid horizontal space'
         runAround = KWFrame::RA_SKIP;
     else if ( oowrap == "left" )
@@ -744,12 +744,17 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     //todo add other element !!!!
     if ( runAround() == KWFrame::RA_SKIP )
         frameStyle.addProperty( "style:wrap", "none" );
-    else if (  runAround() == KWFrame::RA_NO )
+    else if ( runAround() == KWFrame::RA_NO )
         frameStyle.addProperty( "style:wrap", "run-through" );
-    if ( runAroundSide() ==  KWFrame::RA_LEFT )
-        frameStyle.addProperty( "style:wrap", "left" );
-    else if ( runAroundSide() == KWFrame::RA_RIGHT )
-        frameStyle.addProperty( "style:wrap", "right" );
+    else // RA_BOUNDINGRECT
+    {
+        if ( runAroundSide() ==  KWFrame::RA_LEFT )
+            frameStyle.addProperty( "style:wrap", "left" );
+        else if ( runAroundSide() == KWFrame::RA_RIGHT )
+            frameStyle.addProperty( "style:wrap", "right" );
+        else if ( runAroundSide() == KWFrame::RA_BIGGEST )
+            frameStyle.addProperty( "style:wrap", "biggest" );
+    }
 
     return mainStyles.lookup( frameStyle, "fr" );
 }
