@@ -64,6 +64,19 @@ DCOPObject* KPLineObject::dcopObject()
     return dcop;
 }
 
+bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    xmlWriter.startElement( "draw:line" );
+    //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
+    //save object name and other generic attribute
+    //KPObject::saveOasis( xmlWriter );
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+    xmlWriter.endElement();
+    return true;
+}
+
+
 QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);

@@ -95,13 +95,21 @@ DCOPObject* KPrPage::dcopObject()
 }
 
 
-bool KPrPage::saveOasisPage( KoXmlWriter &xmlWriter /*add style*/ )
+bool KPrPage::saveOasisPage( KoXmlWriter &xmlWriter, int posPage /*add style*/ )
 {
     xmlWriter.startElement( "draw:page" );
     xmlWriter.addAttribute( "draw:name", m_manualTitle );
     //xmlWriter.addAttribute( "draw:style-name", style );
-    //xmlWriter.addAttribute( "draw:id", id ); ???? FIXME
+    xmlWriter.addAttribute( "draw:id", posPage );
     //xmlWriter.addAttribute( "draw:master-page-name", master-page-name); ??? FIXME
+
+
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->saveOasis( xmlWriter );
+    }
+
     xmlWriter.endElement();
     return true;
 }

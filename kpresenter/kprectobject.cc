@@ -72,6 +72,19 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    xmlWriter.startElement( "draw:rect" );
+    //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
+    //save object name and other generic attribute
+    //KPObject::saveOasis( xmlWriter );
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+    xmlWriter.endElement();
+    return true;
+}
+
+
 void KPRectObject::loadOasis(const QDomElement &element, KoOasisContext&context, QDomElement *animation)
 {
     kdDebug()<<"void KPRectObject::loadOasis(const QDomElement &element)******************\n";

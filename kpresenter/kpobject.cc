@@ -29,8 +29,8 @@
 #include <qdom.h>
 
 #include <kapplication.h>
-#include <koStyleStack.h>
 #include <kooasiscontext.h>
+
 
 #include <stdlib.h>
 #include <fstream>
@@ -187,6 +187,13 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
 
     return fragment;
 }
+
+bool KPObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    //we don't have a simple object
+    return true;
+}
+
 
 void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {

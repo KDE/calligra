@@ -26,6 +26,7 @@
 
 class QPainter;
 class DCOPObject;
+class KoXmlWriter;
 
 class KPLineObject : public KPShadowObject
 {
@@ -61,6 +62,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
+
+    virtual bool saveOasis( KoXmlWriter &xmlWriter );
 
     virtual void flip(bool horizontal );
 

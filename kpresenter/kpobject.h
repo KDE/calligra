@@ -36,6 +36,8 @@
 #include "kpobject.h"
 #include <koStyleStack.h>
 #include <koOasisStyles.h>
+#include <koxmlwriter.h>
+
 class QPainter;
 class DCOPObject;
 class QDomDocumentFragment;
@@ -125,6 +127,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  QDomElement *animation);
+
+    virtual bool saveOasis( KoXmlWriter &xmlWriter );
 
     virtual void flip(bool horizontal );
 
