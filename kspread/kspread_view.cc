@@ -753,6 +753,70 @@ void ViewPrivate::initActions()
       0, view, SLOT( clearCommentSelection() ), ac, "clearcomment" );
   actions->clearComment->setToolTip(i18n("Remove this cell's comment."));
 
+  // -- column & row actions --
+
+  actions->resizeColumn = new KAction( i18n("Resize Column..."), "resizecol",
+      0, view, SLOT( resizeColumn() ), ac, "resizeCol" );
+  actions->resizeColumn->setToolTip(i18n("Change the width of a column."));
+
+  actions->insertColumn = new KAction( i18n("Insert Columns"), "insert_table_col",
+      0, view, SLOT( insertColumn() ), ac, "insertColumn" );
+  actions->insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet."));
+
+  actions->deleteColumn = new KAction( i18n("Delete Columns"), "delete_table_col",
+      0, view, SLOT( deleteColumn() ), ac, "deleteColumn" );
+  actions->deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet."));
+
+  actions->hideColumn = new KAction( i18n("Hide Columns"), "hide_table_column",
+      0, view, SLOT( hideColumn() ), ac, "hideColumn" );
+  actions->hideColumn->setToolTip(i18n("Hide the column from view."));
+
+  actions->showColumn = new KAction( i18n("Show Columns..."), "show_table_column",
+      0, view, SLOT( showColumn() ), ac, "showColumn" );
+  actions->showColumn->setToolTip(i18n("Show hidden columns."));
+
+  actions->equalizeColumn = new KAction( i18n("Equalize Column"), "adjustcol",
+      0, view, SLOT( equalizeColumn() ), ac, "equalizeCol" );
+  actions->equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size."));
+
+  actions->showSelColumns = new KAction( i18n("Show Columns"), "show_table_column",
+      0, view, SLOT( showSelColumns() ), ac, "showSelColumns" );
+  actions->showSelColumns->setToolTip(i18n("Show hidden columns in the selection."));
+  actions->showSelColumns->setEnabled(false);
+
+  actions->resizeRow = new KAction( i18n("Resize Row..."), "resizerow",
+      0, view, SLOT( resizeRow() ), ac, "resizeRow" );
+  actions->resizeRow->setToolTip(i18n("Change the height of a row."));
+
+  actions->insertRow = new KAction( i18n("Insert Rows"), "insert_table_row",
+      0, view, SLOT( insertRow() ), ac, "insertRow" );
+  actions->insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet."));
+
+  actions->deleteRow = new KAction( i18n("Delete Rows"), "delete_table_row",
+      0, view, SLOT( deleteRow() ), ac, "deleteRow" );
+  actions->deleteRow->setToolTip(i18n("Removes a row from the spreadsheet."));
+
+  actions->hideRow = new KAction( i18n("Hide Rows"), "hide_table_row",
+      0, view, SLOT( hideRow() ), ac, "hideRow" );
+  actions->hideRow->setToolTip(i18n("Hide a row from view."));
+
+  actions->showRow = new KAction( i18n("Show Rows..."), "show_table_row",
+      0, view, SLOT( showRow() ), ac, "showRow" );
+  actions->showRow->setToolTip(i18n("Show hidden rows."));
+
+  actions->equalizeRow = new KAction( i18n("Equalize Row"), "adjustrow",
+      0, view, SLOT( equalizeRow() ), ac, "equalizeRow" );
+  actions->equalizeRow->setToolTip(i18n("Resizes selected rows to be the same size."));
+
+  actions->showSelRows = new KAction( i18n("Show Rows"), "show_table_row",
+      0, view, SLOT( showSelRows() ), ac, "showSelRows" );
+  actions->showSelRows->setEnabled(false);
+  actions->showSelRows->setToolTip(i18n("Show hidden rows in the selection."));
+
+  actions->adjust = new KAction( i18n("Adjust Row && Column"),
+      0, view, SLOT( adjust() ), ac, "adjust" );
+  actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
+
 }
 
 
@@ -902,7 +966,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeCellOperationActions();
     initializeTableActions();
     initializeSpellChecking();
-    initializeRowColumnActions();
 
     QPtrListIterator<KSpreadSheet> it( d->doc->map()->tableList() );
     for( ; it.current(); ++it )
@@ -1397,85 +1460,6 @@ void KSpreadView::initializeSpellChecking()
   d->actions->spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ),
                                           actionCollection(), "spelling" );
   d->actions->spellChecking->setToolTip(i18n("Check the spelling."));
-}
-
-
-void KSpreadView::initializeRowColumnActions()
-{
-  d->actions->adjust = new KAction( i18n("Adjust Row && Column"), 0, this,
-                          SLOT( adjust() ), actionCollection(), "adjust" );
-  d->actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
-
-  d->actions->resizeRow = new KAction( i18n("Resize Row..."), "resizerow", 0, this,
-                             SLOT( resizeRow() ), actionCollection(),
-                             "resizeRow" );
-  d->actions->resizeRow->setToolTip(i18n("Change the height of a row."));
-
-  d->actions->resizeColumn = new KAction( i18n("Resize Column..."), "resizecol", 0, this,
-                                SLOT( resizeColumn() ), actionCollection(),
-                                "resizeCol" );
-  d->actions->resizeColumn->setToolTip(i18n("Change the width of a column."));
-
-  d->actions->equalizeRow = new KAction( i18n("Equalize Row"), "adjustrow", 0, this,
-                               SLOT( equalizeRow() ), actionCollection(),
-                               "equalizeRow" );
-  d->actions->equalizeRow->setToolTip(i18n("Resizes selected rows to be the same size."));
-
-  d->actions->equalizeColumn = new KAction( i18n("Equalize Column"), "adjustcol", 0, this,
-                                  SLOT( equalizeColumn() ), actionCollection(),
-                                  "equalizeCol" );
-  d->actions->equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size."));
-
-  d->actions->deleteColumn = new KAction( i18n("Delete Columns"), "delete_table_col", 0,
-                                this, SLOT( deleteColumn() ),
-                                actionCollection(), "deleteColumn" );
-  d->actions->deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet."));
-
-  d->actions->deleteRow = new KAction( i18n("Delete Rows"), "delete_table_row", 0, this,
-                             SLOT( deleteRow() ), actionCollection(),
-                             "deleteRow" );
-  d->actions->deleteRow->setToolTip(i18n("Removes a row from the spreadsheet."));
-
-  d->actions->insertColumn = new KAction( i18n("Insert Columns"), "insert_table_col" ,
-                                0, this, SLOT( insertColumn() ),
-                                actionCollection(), "insertColumn" );
-  d->actions->insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet."));
-
-  d->actions->insertRow = new KAction( i18n("Insert Rows"), "insert_table_row", 0, this,
-                             SLOT( insertRow() ), actionCollection(),
-                             "insertRow" );
-  d->actions->insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet."));
-
-  d->actions->hideRow = new KAction( i18n("Hide Rows"), "hide_table_row", 0, this,
-                           SLOT( hideRow() ), actionCollection(), "hideRow" );
-  d->actions->hideRow->setToolTip(i18n("Hide a row from view."));
-
-  d->actions->showRow = new KAction( i18n("Show Rows..."), "show_table_row", 0, this,
-                           SLOT( showRow() ), actionCollection(), "showRow" );
-  d->actions->showRow->setToolTip(i18n("Show hidden rows."));
-
-  d->actions->showSelRows = new KAction( i18n("Show Rows"), "show_table_row", 0, this,
-                               SLOT( showSelRows() ), actionCollection(),
-                               "showSelRows" );
-  d->actions->showSelRows->setEnabled(false);
-  d->actions->showSelRows->setToolTip(i18n("Show hidden rows in the selection."));
-
-  d->actions->hideColumn = new KAction( i18n("Hide Columns"), "hide_table_column", 0,
-                              this, SLOT( hideColumn() ), actionCollection(),
-                              "hideColumn" );
-  d->actions->hideColumn->setToolTip(i18n("Hide the column from view."));
-
-  d->actions->showColumn = new KAction( i18n("Show Columns..."), "show_table_column", 0,
-                              this, SLOT( showColumn() ), actionCollection(),
-                              "showColumn" );
-  d->actions->showColumn->setToolTip(i18n("Show hidden columns."));
-
-  d->actions->showSelColumns = new KAction( i18n("Show Columns"), "show_table_column",
-                                  0, this, SLOT( showSelColumns() ),
-                                  actionCollection(), "showSelColumns" );
-  d->actions->showSelColumns->setToolTip(i18n("Show hidden columns in the selection."));
-  d->actions->showSelColumns->setEnabled(false);
-
 }
 
 
