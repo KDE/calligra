@@ -99,6 +99,9 @@ util_fractionFormat(double value, KSpreadCell::FormatType fmtType)
 	}
 	if( index1 == 0 ) return QString("%1").arg( floor(value) );
 	if( index1 == index ) return QString("%1").arg( floor(value)+1 );
+        if( floor(value) == 0)
+            return QString("%1/%2").arg( index1 ).arg( index );
+
 	return QString("%1 %2/%3")
 		.arg( floor(value) )
 	      	.arg( index1 )
@@ -141,10 +144,15 @@ util_fractionFormat(double value, KSpreadCell::FormatType fmtType)
     if (denominator == numerator)
 	return QString().setNum(floor(value + 1));
     else
-	return QString("%1 %2/%3")
+    {
+        if ( floor(value) == 0 )
+            return QString("%1/%2").arg(numerator).arg(denominator);
+        else
+            return QString("%1 %2/%3")
 		.arg(floor(value))
 		.arg(numerator)
 		.arg(denominator);
+    }
 }
 
 
