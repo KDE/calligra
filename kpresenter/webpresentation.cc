@@ -230,7 +230,8 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     QString html;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         pgNum = i + 1;
-        html = QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
+        html = QString( "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" );
+        html += QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
 
         html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
             .arg( chsetName );
@@ -285,7 +286,16 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         html += "  </FONT><HR noshade><BR>\n";
 
         html += "  <CENTER>\n";
-        html += QString( "    <IMG src=\"../pics/slide_%1.%2\">" ).arg( pgNum ).arg( format );
+
+        html += "    ";
+        if ( i < slideInfos.count() - 1 )
+            html += QString( "<A HREF=\"slide_%1.html\">" ).arg( pgNum + 1 );
+        html += QString( "<IMG src=\"../pics/slide_%1.%2\" BORDER=0>" ).arg( pgNum ).arg( format );
+        if ( i < slideInfos.count() - 1 )
+            html += "</A>\n";
+        else
+            html += "\n";
+
         html += "  </CENTER><BR><HR noshade>\n";
         html += "  <CENTER>\n";
         html += "    <B>"+ i18n("Author:") + " </B>";
