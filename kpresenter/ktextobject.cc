@@ -2010,6 +2010,19 @@ void KTextObject::addText(QString text,QFont font,QColor color,
   if (htmlMode)
     text = text.replace(QRegExp("\x26nbsp\x3b")," ");
 
+  QTextStream t(text,IO_ReadOnly);
+  QString s = "",tmp;  
+
+  while (!t.eof())
+    {
+      tmp = t.readLine();
+      if (!isValid(tmp)) tmp = " ";
+      tmp += "\n";
+      s.append(tmp);
+    }
+
+  text = s;
+
   if (newParagraph || paragraphs() < 1)
     {
       txtParagraph = addParagraph();
@@ -2046,10 +2059,7 @@ void KTextObject::addText(QString text,QFont font,QColor color,
 		    }
 		  txtObj->append(text.left(sp));
 		  txtParagraph->append(txtObj);
-		}
-	      else
-		delete txtObj;
-
+		} 
 	      if (text.mid(sp,1) == " ")
 		txtObj = new TxtObj(" ",font,color,TxtObj::NORMAL,TxtObj::SEPARATOR);
 	      else
@@ -2081,19 +2091,7 @@ void KTextObject::addText(QString text,QFont font,QColor color,
 		      txtParagraph->setHorzAlign(align);
 		    }
 		  txtParagraph->append(txtObj);
-		}
-	      else if (text.left(br) == "")
-		{
-		  delete txtObj;
-		  txtObj = new TxtObj(" ",font,color,TxtObj::NORMAL,TxtObj::SEPARATOR);
-		  if (!txtParagraph)
-		    {
-		      txtParagraph = addParagraph();
-		      txtParagraph->setHorzAlign(align);
-		    }
-		  txtParagraph->append(txtObj);
-		}
-	      else delete txtObj;
+		} 
 	      
 	      txtObj = new TxtObj();
 	      txtObj->setFont(font);
@@ -2116,9 +2114,7 @@ void KTextObject::addText(QString text,QFont font,QColor color,
 	}
       txtObj->append(text.left(sp));
       txtParagraph->append(txtObj);
-    }
-  else
-    delete txtObj;
+    } 
   
   if (!txtParagraph)
     {
@@ -2348,7 +2344,6 @@ void KTextObject::openASCII(QString filename)
     {
       while (!t.eof())
 	{
-	  
 	  tmp = t.readLine();
 	  if (!isValid(tmp)) tmp = " ";
 	  tmp += "\n";
