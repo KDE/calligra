@@ -180,6 +180,7 @@ QpIStream::operator >> (QP_INT64 &pI64)
       double lDble;
    };
 
+   lDble = 0.0; // HACK: prevent gcc internal compiler error
    lChar[0] = get();
    lChar[1] = get();
    lChar[2] = get();
