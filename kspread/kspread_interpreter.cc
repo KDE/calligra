@@ -136,20 +136,21 @@ bool kspreadfunc_xor( KSContext& context );
 bool kspreadfunc_if( KSContext& context );
 
 // defined in kspread_functions_information.cc
+bool kspreadfunc_countblank( KSContext & context );
+bool kspreadfunc_filename( KSContext & context );
 bool kspreadfunc_info( KSContext& context );
 bool kspreadfunc_isblank( KSContext& context );
+bool kspreadfunc_isdate( KSContext& context );
+bool kspreadfunc_iseven( KSContext& context );
 bool kspreadfunc_islogical( KSContext& context );
-bool kspreadfunc_istext( KSContext& context );
 bool kspreadfunc_isnottext( KSContext& context );
 bool kspreadfunc_isnum( KSContext& context );
-bool kspreadfunc_istime( KSContext& context );
-bool kspreadfunc_isdate( KSContext& context );
 bool kspreadfunc_isodd( KSContext& context );
-bool kspreadfunc_iseven( KSContext& context );
-bool kspreadfunc_version( KSContext & context );
-bool kspreadfunc_filename( KSContext & context );
+bool kspreadfunc_istext( KSContext& context );
+bool kspreadfunc_istime( KSContext& context );
+bool kspreadfunc_n( KSContext & context );
 bool kspreadfunc_type( KSContext & context );
-bool kspreadfunc_countblank( KSContext & context );
+bool kspreadfunc_version( KSContext & context );
 
 // defined in kspread_functions_text.cc
 bool kspreadfunc_char( KSContext& context );
@@ -581,19 +582,20 @@ static const functionEntry funcTab[] = {
   { "NOT", kspreadfunc_not },
 
   // information
+  { "COUNTBLANK", kspreadfunc_countblank },
+  { "FILENAME", kspreadfunc_filename },
   { "INFO", kspreadfunc_info },
   { "ISBLANK", kspreadfunc_isblank },
-  { "ISLOGICAL", kspreadfunc_islogical },
-  { "ISTEXT", kspreadfunc_istext },
-  { "ISNUM", kspreadfunc_isnum },
-  { "ISNOTTEXT", kspreadfunc_isnottext },
-  { "ISODD", kspreadfunc_isodd },
-  { "ISEVEN", kspreadfunc_iseven },
   { "ISDATE", kspreadfunc_isdate },
+  { "ISEVEN", kspreadfunc_iseven },
+  { "ISLOGICAL", kspreadfunc_islogical },
+  { "ISNOTTEXT", kspreadfunc_isnottext },
+  { "ISNUM", kspreadfunc_isnum },
+  { "ISODD", kspreadfunc_isodd },
+  { "ISTEXT", kspreadfunc_istext },
   { "ISTIME", kspreadfunc_istime },
-  { "FILENAME", kspreadfunc_filename },
+  { "N", kspreadfunc_n },
   { "TYPE", kspreadfunc_type },
-  { "COUNTBLANK", kspreadfunc_countblank },
 
   // statistical
   { "AVERAGE", kspreadfunc_average },

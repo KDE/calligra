@@ -5,6 +5,21 @@
     <GroupName>Information</GroupName>
 
     <Function>
+      <Name>N</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The N() function converts a value to a number. If value is or refers to a number, this function returns the number. If value is True, this function returns 1. If a value is a date, this function returns the serial number of that date. Anything else will cause the function to return 0.</Text>
+	<Syntax>N(value)</Syntax>
+	<Example>N(3.14) returns 3.14</Example>
+	<Example>N("7") returns 0 (because "7" is text)</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>INFO</Name>
       <Type>String</Type>
       <Parameter>

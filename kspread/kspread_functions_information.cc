@@ -394,3 +394,43 @@ bool kspreadfunc_version( KSContext & context )
 
   return true;
 }
+
+// Function: N
+bool kspreadfunc_n( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "N", true ) )
+    return false;
+
+  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+  {
+    context.setValue( new KSValue( args[0]->doubleValue() ) );
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+  {
+    context.setValue( new KSValue( args[0]->intValue() ) );
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
+  {
+    context.setValue( new KSValue( args[0]->boolValue() ) );
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
+  {
+    QDate date = args[0]->dateValue();
+    QDate ref = QDate( 1900, 1, 1 );
+    long serialno = -date.daysTo( ref ) + 2;
+    context.setValue( new KSValue( serialno ) );
+    return true;
+  }
+
+  context.setValue( new KSValue( (int)0 ) );
+  return true;
+ 
+}
