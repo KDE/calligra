@@ -214,7 +214,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             for ( unsigned int i = 0; i < prefix.length(); i++ )
                 posPrefix += zh->layoutUnitToPixelX(format->width( prefix,i));
 
-            KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x , base, width, y - h, height );
+            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ) , textColor, x , base, width, y - h, height );
 
             p->drawText( x-posPrefix, y - h + base, prefix );
         }
@@ -246,7 +246,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
                     bulletFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( bulletFont );
                 }
-                KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x - width , base, width, y - h ,height );
+                KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ) , textColor, x - width , base, width, y - h ,height );
 
                 p->drawText( x - width, y - h + base, m_layout.counter->customBulletCharacter() );
                 break;
@@ -255,7 +255,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         }
 	if ( !suffix.isEmpty() )
         {
-            KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x , base, size, y - h,height );
+            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ) , textColor, x , base, size, y - h,height );
 
             p->drawText( x , y - h + base, suffix );
         }
@@ -264,7 +264,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     {
         // There are no bullets...any parent bullets have already been suppressed.
         // Just draw the text! Note: one space is always appended.
-        KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x - size , base, size, y - h, height);
+        KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ) , textColor, x - size , base, size, y - h, height);
 
 
         QString counterText = m_layout.counter->text( this );
@@ -548,7 +548,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	}
     }
 
-    KoTextParag::drawUnderlineDoubleUnderline( &painter, lastFormat, zh, font, textColor, startX, baseLine, bw, lastY, h);
+    KoTextParag::drawFontEffects( &painter, lastFormat, zh, font, textColor, startX, baseLine, bw, lastY, h);
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
@@ -1054,7 +1054,7 @@ void KoTextParag::printRTDebug( int info )
 #endif
 
 
-void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h )
+void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h )
 {
     if ( format->doubleUnderline() )
     {

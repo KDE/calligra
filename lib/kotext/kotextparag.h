@@ -137,7 +137,7 @@ public:
     /** draw underline and double underline. Static because it's used
      *  for draw double/simple in variable.
      */
-     static void drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y,  int h);
+     static void drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y,  int h);
 
 #ifndef NDEBUG
     void printRTDebug( int );
