@@ -279,9 +279,10 @@ KarbonView::print( KPrinter &printer )
 	// TODO : better use eps export?
 	// TODO : use real page layout stuff
 	QPtrListIterator<VLayer> i = m_part->document().layers();
+	KoRect rect( 0, 0, width(), height() );
 	for ( ; i.current(); ++i )
 		//if ( i.current()->visible() )
-			i.current()->draw( &p, &KoRect::fromQRect( QRect( 0, 0, width(), height() ) ) );
+			i.current()->draw( &p, &rect );
 
 	p.end();
 }
@@ -325,6 +326,7 @@ KarbonView::editSelectAll()
 
 	if( m_part->document().selection()->objects().count() > 0 )
 		m_part->repaintAllViews();
+	selectionChanged();
 }
 
 void
@@ -335,6 +337,7 @@ KarbonView::editDeselectAll()
 		m_part->document().selection()->clear();
 		m_part->repaintAllViews();
 	}
+	selectionChanged();
 }
 
 void
