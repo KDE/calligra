@@ -153,13 +153,13 @@ void KWFrameDia::setupTab2TextFrame()
     lRunBounding->resize( pixmap.size() );
     runGrid->addWidget( lRunBounding, 2, 0 );
 
-    pixmap = BarIcon( "run_contur" );
+    pixmap = BarIcon( "run_skip" );
     lRunContur = new QLabel( runGroup );
     lRunContur->setBackgroundPixmap( pixmap );
     lRunContur->resize( pixmap.size() );
     runGrid->addWidget( lRunContur, 3, 0 );
 
-    rRunNo = new QRadioButton( i18n( "&Don't run around other frames" ), runGroup );
+    rRunNo = new QRadioButton( i18n( "&Run through other frames" ), runGroup );
     rRunNo->resize( rRunNo->sizeHint() );
     runGrid->addWidget( rRunNo, 1, 1 );
     connect( rRunNo, SIGNAL( clicked() ), this, SLOT( runNoClicked() ) );
@@ -169,7 +169,7 @@ void KWFrameDia::setupTab2TextFrame()
     runGrid->addWidget( rRunBounding, 2, 1 );
     connect( rRunBounding, SIGNAL( clicked() ), this, SLOT( runBoundingClicked() ) );
 
-    rRunContur = new QRadioButton( i18n( "Run around the &Contur of other frames" ), runGroup );
+    rRunContur = new QRadioButton( i18n( "&Don´t run around other frames" ), runGroup );
     rRunContur->resize( rRunContur->sizeHint() );
     runGrid->addWidget( rRunContur, 3, 1 );
     connect( rRunContur, SIGNAL( clicked() ), this, SLOT( runConturClicked() ) );
@@ -225,7 +225,7 @@ void KWFrameDia::setupTab2TextFrame()
 	break;
     case RA_BOUNDINGRECT: rRunBounding->setChecked( true );
 	break;
-    case RA_CONTUR: rRunContur->setChecked( true );
+    case RA_SKIP: rRunContur->setChecked( true );
 	break;
     }
 
@@ -601,7 +601,7 @@ void KWFrameDia::applyChanges()
 	    else if ( rRunBounding->isChecked() )
 		frame->setRunAround( RA_BOUNDINGRECT );
 	    else if ( rRunContur->isChecked() )
-		frame->setRunAround( RA_CONTUR );
+		frame->setRunAround( RA_SKIP );
 
 	    KWUnit u;
 	    switch ( KWUnit::unitType( doc->getUnit() ) ) {
@@ -619,7 +619,7 @@ void KWFrameDia::applyChanges()
 	    else if ( rRunBounding->isChecked() )
 		doc->setRunAround( RA_BOUNDINGRECT );
 	    else if ( rRunContur->isChecked() )
-		doc->setRunAround( RA_CONTUR );
+		doc->setRunAround( RA_SKIP );
 
 	    KWUnit u;
 	    switch ( KWUnit::unitType( doc->getUnit() ) ) {

@@ -22,6 +22,7 @@
 
 /*================================================================*/
 KWString::KWString( QString _str, KWordDocument *_doc )
+    : cache()
 {
     if ( _str == 0L ) {
 	_data_ = 0L;
@@ -49,6 +50,7 @@ KWString::KWString( const KWString &_string )
     _len_ = _string._len_;
     _max_ = _string._max_;
     doc = _string.doc;
+    cache = _string.cache;
 }
 
 /*================================================================*/
@@ -58,7 +60,8 @@ KWString &KWString::operator=( const KWString &_string )
     _len_ = _string._len_;
     _max_ = _string._max_;
     doc = _string.doc;
-
+    cache = _string.cache;
+    
     return *this;
 }
 
@@ -94,6 +97,7 @@ void KWString::append( KWChar *_text, unsigned int _len )
     for ( unsigned int i = 0; i < _len; i++ ) {
 	_data_[ oldlen + i ].c = _data[ i ].c;
 	_data_[ oldlen + i ].attrib = _data[ i ].attrib;
+	cache += _data[ i ].c;
     }
 }
 
@@ -106,6 +110,7 @@ void KWString::append( KWChar _c )
 
     _data_[ oldlen ].c = c.c;
     _data_[ oldlen ].attrib = c.attrib;
+    cache += _c.c;
 }
 
 /*================================================================*/
@@ -126,6 +131,7 @@ void KWString::insert( unsigned int _pos, QString _text )
 	_data_[ _pos + i ].c = _text[ i ];
 	_data_[ _pos + i ].attrib = 0L;
     }
+    cache.insert( _pos, _text );
 }
 
 /*================================================================*/
@@ -145,6 +151,7 @@ void KWString::insert( unsigned int _pos, KWString *_text )
     for ( unsigned int i = 0; i < nl; ++i ) {
 	_data_[ _pos + i ].c = _text->data()[ i ].c;
 	_data_[ _pos + i ].attrib = _text->data()[ i ].attrib;
+	cache.insert( _pos + i, _text->data()[ i ].c );
     }
 }
 
@@ -162,6 +169,7 @@ void KWString::insert( unsigned int _pos, const char _c )
 
     _data_[ _pos ].c = _c;
     _data_[ _pos ].attrib = 0L;
+    cache.insert( _pos, _c );
 }
 
 /*================================================================*/
@@ -178,6 +186,7 @@ void KWString::insert( unsigned int _pos, KWCharImage *_image )
 
     _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _image;
+    cache.insert( _pos, KWSpecialChar );
 }
 
 /*================================================================*/
@@ -194,6 +203,7 @@ void KWString::insert( unsigned int _pos, KWCharTab *_tab )
 
     _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _tab;
+    cache.insert( _pos, KWSpecialChar );
 }
 
 /*================================================================*/
@@ -210,6 +220,7 @@ void KWString::insert( unsigned int _pos, KWCharVariable *_var )
 
     _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _var;
+    cache.insert( _pos, KWSpecialChar );
 }
 
 /*================================================================*/
@@ -226,12 +237,14 @@ void KWString::insert( unsigned int _pos, KWCharFootNote *_fn )
 
     _data_[ _pos ].c = KWSpecialChar;
     _data_[ _pos ].attrib = _fn;
+    cache.insert( _pos, KWSpecialChar );
 }
 
 /*================================================================*/
 void KWString::clear()
 {
     remove( 0, size() );
+    cache = QString::null;
 }
 
 /*================================================================*/
@@ -244,6 +257,8 @@ bool KWString::remove( unsigned int _pos, unsigned int _len )
 	memmove( _data_ + _pos, _data_ + _pos + _len, sizeof( KWChar ) * ( _len_ - _pos - _len ) );
 	resize( _len_ - _len, false );
 
+	cache.remove( _pos, _len );
+	
 	return true;
     }
     return false;
@@ -261,18 +276,24 @@ KWChar* KWString::split( unsigned int _pos )
 
     __data = copy( _data, _len_ - _pos );
     resize( _pos );
+    cache.truncate( _pos );
     return __data;
 }
 
 /*================================================================*/
-QString KWString::toString()
-{
+QString KWString::toString( bool cached )
+{	
+    if ( cached )
+	return cache;
     return toString( 0, size() );
 }
 
 /*================================================================*/
-QString KWString::toString( unsigned int _pos, unsigned int _len )
+QString KWString::toString( unsigned int _pos, unsigned int _len, bool cached )
 {
+    if ( cached )
+	return cache.mid( _pos, _len );
+
     QString str = "";
     char c = 1;
 
@@ -285,8 +306,9 @@ QString KWString::toString( unsigned int _pos, unsigned int _len )
 		str += c;
 	}
     }
-
-    return QString( str );
+    cached = str;
+    
+    return str;
 }
 
 /*================================================================*/
@@ -523,6 +545,9 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 	    return;
 	}
     }
+    
+    // build cache
+    toString( FALSE );
 }
 
 /*================================================================*/
@@ -659,7 +684,7 @@ KWChar& KWString::copy( KWChar _c )
 /*================================================================*/
 int KWString::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole )
 {
-    QString str = toString( 0, size() );
+    QString str = toString();
     int res = str.find( _expr, _index, _cs );
 
     if ( res != -1 ) {
@@ -715,7 +740,7 @@ int KWString::find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _ind
 int KWString::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len,
 		    bool _cs, bool _wildcard )
 {
-    QString str = toString( 0, size() );
+    QString str = toString();
     _regexp.setWildcard( _wildcard );
     _regexp.setCaseSensitive( _cs );
     int res = _regexp.match( str, _index, &_len );
@@ -754,7 +779,7 @@ int KWString::find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _i
 /*================================================================*/
 int KWString::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole )
 {
-    QString str = toString( 0, size() );
+    QString str = toString();
     int res = str.findRev( _expr, _index, _cs );
 
     if ( res != -1 ) {
@@ -816,7 +841,7 @@ int KWString::findRev( QRegExp /*_regexp*/, KWSearchDia::KWSearchEntry */*_forma
 /*================================================================*/
 QString KWString::decoded()
 {
-    QString str = toString( 0, size() );
+    QString str = toString();
 
     str.append( "_" );
 
@@ -835,7 +860,7 @@ QCString KWString::utf8( bool _decoded )
     if ( _decoded )
 	str = decoded();
     else
-	str = toString( 0, size() );
+	str = toString();
 
     return QCString( str.utf8() );
 }

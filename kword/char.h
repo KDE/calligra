@@ -206,8 +206,8 @@ public:
     KWChar* data()
     { return _data_; }
 
-    QString toString();
-    QString toString( unsigned int _pos, unsigned int _len );
+    QString toString( bool cached = FALSE );
+    QString toString( unsigned int _pos, unsigned int _len, bool cached = FALSE );
     void saveFormat( ostream &out );
     void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
 
@@ -233,6 +233,7 @@ protected:
     unsigned int _max_;
     KWChar* _data_;
     KWordDocument *doc;
+    QString cache;
 
 };
 

@@ -1108,6 +1108,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bo
 
     doc->getAutoFormat().startAutoFormat( parag, this );
 
+    compare_formats = TRUE;
     // Loop until we reach the end of line
     while ( !_break && ( ptPos < xShift + ( pFrame->width() -
 					    pFrame->getBLeft().pt() -
@@ -1118,7 +1119,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bo
 
 	if ( c != KWSpecialChar && text[ textPos ].attrib ) {
 	    // Handle font formats here.
-	    assert( text[ textPos ].attrib->getClassId() == ID_KWCharFormat );
+	    //assert( text[ textPos ].attrib->getClassId() == ID_KWCharFormat );
 	    KWCharFormat *f = ( KWCharFormat* )text[ textPos ].attrib;
 	    apply( *f->getFormat() );
 	    if ( textPos == lineStartPos )
@@ -1295,7 +1296,8 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bo
 
     // Does this line still fit in this frame or do we have to make a hard break?
     if ( !doc->isPTYInFrame( frameSet - 1, frame - 1, ptY + getLineHeight() ) ||
-	 ( parag->hasHardBreak() && isCursorInFirstLine() ) && parag->getPrev() && parag->getPrev()->getEndPage() == page ) {
+	 ( parag->hasHardBreak() && isCursorInFirstLine() ) && 
+	 parag->getPrev() && parag->getPrev()->getEndPage() == page ) {
 	// Are we a header or footer?
 	if ( isAHeader( pFrameSet->getFrameInfo() ) ||
 	     isAFooter( pFrameSet->getFrameInfo() ) ) {
@@ -1406,7 +1408,8 @@ void KWFormatContext::makeCounterLayout()
 /*================================================================*/
 void KWFormatContext::apply( const KWFormat &_format )
 {
-    if ( compare_formats && _format == *( ( KWFormat* )this ) ) return;
+    if ( compare_formats && _format == *( ( KWFormat* )this ) ) 
+	return;
 
     KWFormat::apply( _format );
     if ( _format.getVertAlign() != VA_NORMAL )
@@ -1511,4 +1514,10 @@ void KWFormatContext::setFrame( unsigned int _frame )
 
     if ( !pFrame )
 	qWarning( "KWFormatContext::setFrame: pFrame is NULL, KWord will crash soon or at least behave strange!" );
+}
+
+/*================================================================*/
+QRegion KWFormatContext::getEmptyRegion() const 
+{
+    return emptyRegion;
 }

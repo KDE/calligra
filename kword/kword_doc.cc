@@ -3377,9 +3377,13 @@ void KWordDocument::updateAllFrames()
 		del.append( frm );
 		mgrs.append( frameset->getGroupManager() );
 	    }
+	    for ( j = 0; j < frameset->getNumFrames(); ++j )
+		frameset->getFrame( j )->clearIntersects();
 	} else {
-	    for ( j = 0; j < frameset->getNumFrames(); j++ )
+	    for ( j = 0; j < frameset->getNumFrames(); j++ ) {
 		_frames.append( frameset->getFrame( j ) );
+		frameset->getFrame( j )->clearIntersects();
+	    }
 	}
     }
 

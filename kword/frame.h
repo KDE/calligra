@@ -47,7 +47,7 @@ enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMU
 enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
 		 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
 		 FI_FOOTNOTE = 7 };
-enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_CONTUR = 2 };
+enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -76,7 +76,7 @@ public:
 
     void addIntersect( QRect &_r );
     void clearIntersects()
-    { intersections.clear(); }
+    { intersections.clear(); emptyRegionDirty = TRUE; }
 
     int getLeftIndent( int _y, int _h );
     int getRightIndent( int _y, int _h );
@@ -110,7 +110,7 @@ public:
     void setTopBorder( KWParagLayout::Border _brd ) { brd_top = _brd; }
     void setBottomBorder( KWParagLayout::Border _brd ) { brd_bottom = _brd; }
 
-    QRegion getEmptyRegion();
+    QRegion getEmptyRegion( bool useCached = TRUE );
 
     QBrush getBackgroundColor() { return backgroundColor; }
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
@@ -140,7 +140,9 @@ protected:
     int pageNum;
 
     QList<QRect> intersections;
-
+    QRegion emptyRegion;
+    bool emptyRegionDirty;
+    
     KWParagLayout::Border brd_left, brd_right, brd_top, brd_bottom;
     QBrush backgroundColor;
 

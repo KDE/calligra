@@ -412,7 +412,7 @@ protected:
     bool keyboardRepeat, continueSelection, redrawAllWhileScrolling;
 
     KWParag *cachedParag;
-    QStringList cachedLines;
+    QMap<QString,int> cachedLines;
     KWFormatContext *oldFc;
     QPoint cachedContentsPos;
     bool _erase, _setErase, redrawOnlyCurrFrameset, _scrolled;

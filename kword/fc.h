@@ -36,11 +36,11 @@ public:
     KWFormatContext( KWordDocument *_doc, unsigned int _frameSet );
     KWFormatContext &operator=( const KWFormatContext &fc );
     virtual ~KWFormatContext() {}
-    
+
     virtual bool operator>( const KWFormatContext &fc ) const;
     virtual bool operator<( const KWFormatContext &fc ) const;
     virtual bool operator==( const KWFormatContext &fc ) const;
-    
+
     void init( KWParag *_parag, bool _fromStart = TRUE,
                int _frame = -1, int _page = -1 );
     void enterNextParag();
@@ -183,10 +183,8 @@ public:
     void setFrameSet( unsigned int _frameSet );
     void setFrame( unsigned int _frame );
 
-    QRegion getEmptyRegion() const {
-	return emptyRegion;
-    }
-    
+    QRegion getEmptyRegion() const;
+
 protected:
     unsigned int ptTextLen;
     unsigned int ptAscender;
@@ -274,7 +272,7 @@ protected:
 
     KWFrameSet *pFrameSet;
     KWFrame *pFrame;
-    
+
 };
 
 #endif

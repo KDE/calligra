@@ -1,6 +1,6 @@
 toolbar_DATA =  unsortedList.png enumList.png table.png sub.png super.png \
 	borderbottom.png borderleft.png borderright.png bordertop.png \
-	run_bounding.png run_contur.png run_not.png \
+	run_bounding.png run_skip.png run_not.png \
 	editframetool.png edittool.png picframetool.png textframetool.png \
 	formula.png char.png return.png kwsearch.png \
 	colin.png colout.png rowin.png rowout.png tree_arrange.png \

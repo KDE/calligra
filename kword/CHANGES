@@ -1574,3 +1574,14 @@ Reggie, 3.10.1999:
 Reggie, 4.10.1999:
 --------------
 - More work on spellchecking, works now somehow
+
+Reggie, 5.10.1999:
+--------------
+- As text runaround contur didn´t work anyway, I removed
+  that option and added option to skip height of intersecting frames 
+- Improved speed of text running around frames a bit
+- quite some speed improvements in formatting
+- fixes in formatting
+- fixes and improvements in line caching for drawing
+- KWString does now some more caching => faster
+

@@ -38,6 +38,7 @@
 #include <qpixmap.h>
 #include <qfile.h>
 #include <qscrollview.h>
+#include <qarray.h>
 
 /******************************************************************/
 /* Class: KWFrame						  */
@@ -52,7 +53,8 @@ KWFrame::KWFrame()
     selected = false;
     runAroundGap = 1;
     mostRight = false;
-
+    emptyRegionDirty = TRUE;
+    
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
     brd_left.style = KWParagLayout::SOLID;
@@ -76,6 +78,7 @@ KWFrame::KWFrame( const QPoint &topleft, const QPoint &bottomright )
     intersections.setAutoDelete( true );
     selected = false;
     mostRight = false;
+    emptyRegionDirty = TRUE;
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
@@ -100,6 +103,7 @@ KWFrame::KWFrame( const QPoint &topleft, const QSize &size )
     intersections.setAutoDelete( true );
     selected = false;
     mostRight = false;
+    emptyRegionDirty = TRUE;
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
@@ -124,6 +128,7 @@ KWFrame::KWFrame( int left, int top, int width, int height )
     intersections.setAutoDelete( true );
     selected = false;
     mostRight = false;
+    emptyRegionDirty = TRUE;
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
@@ -148,6 +153,7 @@ KWFrame::KWFrame( int left, int top, int width, int height, RunAround _ra, KWUni
     intersections.setAutoDelete( true );
     selected = false;
     mostRight = false;
+    emptyRegionDirty = TRUE;
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
@@ -172,6 +178,7 @@ KWFrame::KWFrame( const QRect &_rect )
     intersections.setAutoDelete( true );
     selected = false;
     mostRight = false;
+    emptyRegionDirty = TRUE;
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
@@ -202,45 +209,55 @@ KWFrame::~KWFrame()
 /*================================================================*/
 void KWFrame::addIntersect( QRect &_r )
 {
+    emptyRegionDirty = TRUE;
+    
     intersections.append( new QRect( _r.x(), _r.y(), _r.width(), _r.height() ) );
 }
 
 /*================================================================*/
 int KWFrame::getLeftIndent( int _y, int _h )
 {
-    if ( runAround == RA_NO || intersections.isEmpty() ) return 0;
+    if ( runAround == RA_NO || intersections.isEmpty() ) 
+	return 0;
 
+    if ( emptyRegionDirty )
+	getEmptyRegion();
+    
     int _left = 0;
-    QRect rect;
-
-    for ( unsigned int i = 0; i < intersections.count(); i++ ) {
-	rect = *intersections.at( i );
-
-	if ( rect.intersects( QRect( left(), _y, width(), _h ) ) ) {
-	    if ( rect.left() == left() )
-		_left = QMAX( _left, static_cast<int>( rect.width() + runAroundGap.pt( ) ) );
-	}
-    }
-
+    QRect line( x(), _y, width(), _h );
+    QRegion reg = emptyRegion.intersect( line );
+    _left = reg.boundingRect().left() - x();
+    for ( unsigned int i = 0; i < reg.rects().size(); ++i )
+	_left = QMAX( _left, reg.rects()[ i ].left() - x() );
+    if ( _left > 0 )
+	_left += runAroundGap.pt();
+    if ( _left > 0 && runAround == RA_SKIP )
+	_left = width();
+    
     return _left;
 }
 
 /*================================================================*/
 int KWFrame::getRightIndent( int _y, int _h )
 {
-    if ( runAround == RA_NO || intersections.isEmpty() ) return 0;
+    if ( runAround == RA_NO || intersections.isEmpty() ) 
+	return 0;
+
+    if ( emptyRegionDirty )
+	getEmptyRegion();
 
     int _right = 0;
-    QRect rect;
-
-    for ( unsigned int i = 0; i < intersections.count(); i++ ) {
-	rect = *intersections.at( i );
-
-	if ( rect.intersects( QRect( left(), _y, width(), _h ) ) ) {
-	    if ( rect.right() == right() )
-		_right = QMAX( _right, static_cast<int>( rect.width() + runAroundGap.pt() ) );
-	}
+    QRegion line( x(), _y, width(), _h );
+    QRegion reg = line.subtract( emptyRegion );
+    _right = 0;
+    for ( unsigned int i = 0; i < reg.rects().size(); ++i ) {
+	if ( reg.rects()[ i ].right() == right() )
+	    _right = QMAX( _right, reg.rects()[ i ].width() );
     }
+    if ( _right > 0 )
+	_right += runAroundGap.pt();
+    if ( _right > 0 && runAround == RA_SKIP )
+	_right = width();
 
     return _right;
 }
@@ -262,17 +279,23 @@ unsigned int KWFrame::getNextFreeYPos( unsigned int _y, unsigned int _h )
 }
 
 /*================================================================*/
-QRegion KWFrame::getEmptyRegion()
+QRegion KWFrame::getEmptyRegion( bool useCached )
 {
-    QRegion region( x(), y(), width(), height() );
+    if ( !emptyRegionDirty && useCached )
+	return emptyRegion;
+    
+    emptyRegion = QRegion( x(), y(), width(), height() );
     QRect rect;
 
     for ( unsigned int i = 0; i < intersections.count(); i++ ) {
 	rect = *intersections.at( i );
-	region = region.subtract( QRect( rect.x() - 1, rect.y() - 1, rect.width() + 2, rect.height() + 2 ) );
+	emptyRegion = emptyRegion.subtract( QRect( rect.x() - 1, rect.y() - 1, 
+						   rect.width() + 2, rect.height() + 2 ) );
     }
 
-    return QRegion( region );
+    emptyRegionDirty = FALSE;
+    
+    return emptyRegion;
 }
 
 /*================================================================*/
