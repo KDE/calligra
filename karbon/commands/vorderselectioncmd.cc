@@ -60,6 +60,47 @@ VOrderSelectionCmd::execute()
 			}
 		}
 	}
+	else if( m_state == up || m_state == down )
+	{
+		VSelection selection = *m_doc->selection();
+
+		VObjectList objects;
+
+		VLayerListIterator litr( m_doc->layers() );
+		while( !selection.objects().isEmpty() )
+		{
+			for ( ; litr.current(); ++litr )
+			{
+				VObjectList todo;
+				VObjectListIterator itr( selection.objects() );
+				for ( ; itr.current() ; ++itr )
+				{
+					objects = litr.current()->objects();
+					VObjectListIterator itr2( objects );
+					// find all selected VObjects that are in the current layer
+					for ( ; itr2.current(); ++itr2 )
+					{
+						if( itr2.current() == itr.current() )
+						{
+							todo.append( itr.current() );
+							// remove from selection
+							selection.take( *itr.current() );
+						}
+					}
+				}
+
+				// we have found the affected vobjects in this vlayer
+				VObjectListIterator itr3( todo );
+				for ( ; itr3.current(); ++itr3 )
+				{
+					if( m_state == up )
+						litr.current()->upwards( itr3.current() );
+					else
+						litr.current()->downwards( itr3.current() );
+				}
+			}
+		}
+	}
 }
 
 void

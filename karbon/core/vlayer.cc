@@ -64,7 +64,7 @@ VLayer::upwards( const VObject& object )
 {
 	if( m_objects.getLast() == &object ) return;
 
-	m_objects.remove();
+	m_objects.remove( &object );
 
 	if( m_objects.current() != m_objects.getLast() )
 	{
@@ -82,7 +82,7 @@ VLayer::downwards( const VObject& object )
 
 //	int index = m_objects.find( object );
 	bool bLast = m_objects.getLast() == &object;
-	m_objects.remove();
+	m_objects.remove( &object );
 
 	if( !bLast ) m_objects.prev();
 

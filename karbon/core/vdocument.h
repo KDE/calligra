@@ -85,11 +85,6 @@ public:
 	VSelection* selection() const
 		{ return m_selection; }
 
-	// move up/down within layer
-// TODO: move these functions into a command:
-	void moveSelectionDown();
-	void moveSelectionUp();
-
 	/**
 	 * Returns the default stroke.
 	 */
