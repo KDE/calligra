@@ -90,10 +90,24 @@ XcfExport::convert( const QCString& from, const QCString& to )
 void
 XcfExport::visitVDocument( VDocument& document )
 {
-	// Write header.
-
-	// Tag.
+	// Header tag.
 	m_stream->writeRawBytes( "gimp xcf file", 14 );
+
+	// Image width.
+	*m_stream << static_cast<Q_UINT32>( document.width() );
+
+	// Image height.
+	*m_stream << static_cast<Q_UINT32>( document.height() );
+
+	// Image type 0 = RGB.
+	*m_stream << static_cast<Q_UINT32>( 0 );
+
+	// Do not save any properties.
+	*m_stream
+		// "END".
+		<< static_cast<Q_UINT32>( 0 )
+		// size 0.
+		<< static_cast<Q_UINT32>( 0 );
 
 
 	// Export layers.
