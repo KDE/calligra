@@ -38,8 +38,10 @@ class KexiQueryPart : public KexiProjectHandler
 
                 virtual void hookIntoView(KexiView *view);
 
-                virtual void store (KoStore *){;}
-                virtual void load  (KoStore *){;}
+//                virtual void saveXML(QDomDocument&);
+//		virtual void loadXML(const QDomDocument&);
+		virtual void store (KoStore *);
+                virtual void load  (KoStore *);
 
 
 		virtual QPixmap				groupPixmap();
@@ -47,10 +49,7 @@ class KexiQueryPart : public KexiProjectHandler
 	
 	protected:
 		friend class KexiQueryPartProxy;
-		void				 getQueries();
 
-	signals:
-		void				itemListChanged(KexiProjectHandler*);
 };
 
 #endif

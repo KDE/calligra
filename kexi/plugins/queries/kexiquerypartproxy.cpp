@@ -32,6 +32,7 @@
 #include "kexiquerydesigner.h"
 #include "kexiquerypart.h"
 #include "kexiquerypartproxy.h"
+#include "kexiquerypartitem.h"
 #include "kexiview.h"
 
 KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
@@ -82,14 +83,13 @@ KexiQueryPartProxy::slotCreateQuery()
         bool ok = false;
         QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query name:"), "", &ok, kexiView());
 
-	KexiProjectHandler::ItemList *list=part()->items();
-
         if(ok && name.length() > 0)
         {
-                KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, name, "query");
-                list->append(new KexiProjectHandlerItem(part(), name, "kexi/query", name));
+		KexiQueryPartItem *it;
+                part()->items()->insert(name,it=new KexiQueryPartItem(part(), name, "kexi/query", name));
+                KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it);
                 emit m_queryPart->itemListChanged(part());
-//              project()->addFileReference("/query/" + name + ".query");
+//                kexiView()->project()->addFileReference("/query/" + name + ".query");
 
                 kqd->show();
                 kexiView()->project()->setModified(true);
@@ -99,7 +99,12 @@ KexiQueryPartProxy::slotCreateQuery()
 void
 KexiQueryPartProxy::slotOpen(const QString& identifier)
 {
-        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, identifier, "oq");
+	KexiProjectHandlerItem *it=(*(part()->items()))[identifier];
+	if (!it) return;
+	KexiQueryPartItem *it1=static_cast<KexiQueryPartItem*>(it->qt_cast("KexiQueryPartItem"));
+	if (!it1) return;
+
+        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "oq",it1);
         kqd->show();
 }
 

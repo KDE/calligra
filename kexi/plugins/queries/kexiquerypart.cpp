@@ -30,6 +30,7 @@
 #include "kexiquerydesigner.h"
 #include "kexiquerypart.h"
 #include "kexiquerypartproxy.h"
+#include "kexiquerypartitem.h"
 
 KexiQueryPart::KexiQueryPart(QObject *project,const char *,const QStringList &)
  : KexiProjectHandler(KEXIPROJECT(project))
@@ -67,8 +68,12 @@ KexiQueryPart::itemPixmap()
 	return kapp->iconLoader()->loadIcon("query", KIcon::Small);
 }
 
-void
-KexiQueryPart::getQueries()
+
+void KexiQueryPart::store (KoStore *)
+{
+}
+
+void KexiQueryPart::load (KoStore *)
 {
 	References fileRefs = kexiProject()->fileReferences("Queries");
 	ItemList *list=items();
@@ -77,12 +82,12 @@ KexiQueryPart::getQueries()
 	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
 	{
 		kdDebug() << "KexiQueryPart::getQueries() added " << (*it).name << endl;
-		list->append(new KexiProjectHandlerItem(this, (*it).name, "kexi/query", (*it).name));
+		list->insert((*it).name,new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
 	}
 	
 	emit itemListChanged(this);
-}
 
+}
 
 void KexiQueryPart::hookIntoView(KexiView *view)
 {

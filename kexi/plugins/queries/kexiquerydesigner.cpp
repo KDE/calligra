@@ -43,6 +43,7 @@
 #include "kexitablelist.h"
 #include "kmultitabbar.h"
 #include "kexiquerydesigner.h"
+#include "kexiquerypartitem.h"
 
 class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 {
@@ -77,14 +78,14 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 
 KexiQueryDesigner::EditGUIClient *KexiQueryDesigner::m_editGUIClient=0;
 
-KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, QString identifier, const char *name)
+KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item)
  : KexiDialogBase(view,parent, name)
 {
-	m_identifier = identifier;
+	m_item = item;
 	m_partCount = 0;
 	m_activeTab = -1;
 
-	setCaption(i18n("Query"));
+	setCaption(i18n("Query %1").arg(item->name()));
 
 	QVBoxLayout *l=new QVBoxLayout(this);
 
@@ -123,6 +124,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, QString ide
 	sb->setFixedHeight(sb->sizeHint().height());
 	l->addWidget(sb);
 	l->activate();
+	loadQuery();
 //	activateActions();
 //	connect(kexi->project(), SIGNAL(saving()), this, SLOT(slotSave()));
 #if 0
@@ -132,6 +134,16 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, QString ide
 //	showMaximized();
 
 }
+
+void KexiQueryDesigner::loadQuery()
+{
+	KexiQueryPartItem::QueryEntryList list=m_item->getQueryData();
+	m_editor->clear();
+	for(KexiQueryPartItem::QueryEntryList::iterator it=list.begin();it!=list.end();++it)
+		m_editor->appendLine((*it).source,(*it).field,(*it).show,(*it).andC,(*it).orC);
+	
+}
+
 
 KXMLGUIClient *KexiQueryDesigner::guiClient()
 {
@@ -209,6 +221,37 @@ KexiQueryDesigner::slotViewState()
 	}
 }
 
+
+void KexiQueryDesigner::finishUpForClosing()
+{
+	kdDebug()<<"KexiQueryDesigner::finishUpForClosing()"<<endl;
+	saveBack();
+}
+
+void KexiQueryDesigner::saveBack()
+{
+	kdDebug()<<"KexiQueryDesigner::saveBack()"<<endl;
+        KexiTableList *designContent = m_editor->table()->contents();
+        if(!designContent)
+        	return;
+	KexiQueryPartItem::QueryEntryList list;
+        for(KexiTableItem *it=designContent->first(); it; it = designContent->next())
+        {
+        	if(!it->isInsertItem())
+                {
+			kdDebug()<<"Adding one query entry to list"<<endl;
+			KexiQueryPartItem::QueryEntry item;
+			item.source=*(m_editor->sourceList().at(it->getValue(0).toInt()));
+			item.field=it->getValue(1).toString();
+			item.show=it->getValue(2).toBool();
+			item.andC=it->getValue(3).toString();
+			item.orC=it->getValue(4).toString();
+			list.append(item);
+                }
+	}
+	m_item->setQueryData(list);	
+}
+
 void
 KexiQueryDesigner::slotSave(KoStore *store)
 {
@@ -222,7 +265,7 @@ KexiQueryDesigner::slotSave(KoStore *store)
 		domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
 		QDomElement nameElement = domDoc.createElement("Query");
-		QDomText attrName = domDoc.createTextNode(m_identifier);
+		QDomText attrName = domDoc.createTextNode("m_identifier");
 		nameElement.appendChild(attrName);
 		domDoc.appendChild(nameElement);
 
@@ -285,12 +328,12 @@ KexiQueryDesigner::slotSave(KoStore *store)
 		{
 			FileReference ref;
 			ref.group = "queries";
-			ref.name = m_identifier;
-			ref.location = "/query/" + m_identifier + ".query";
+			ref.name = "m_identifier";
+			ref.location = "/query/" + QString("m_identifier") + ".query";
 #if 0
 			kexi->project()->addFileReference(ref);
 #endif
-			store->open("/query/" + m_identifier + ".query");
+			store->open("/query/" + QString("m_identifier") + ".query");
 			store->write(data);
 			store->close();
 		}

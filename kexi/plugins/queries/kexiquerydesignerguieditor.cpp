@@ -59,15 +59,54 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_designTable->addColumn(i18n("AND condition"), QVariant::String, true);
 	m_designTable->addColumn(i18n("OR condition"), QVariant::String, true);
 
-
+	clear();
+/*
 	m_insertItem = new KexiTableItem(m_designTable);
 	m_insertItem->setValue(0, 0);
 	m_insertItem->setValue(2, true);
 	m_insertItem->setInsertItem(true);
-
+*/
 	QGridLayout *g = new QGridLayout(this);
 //	g->addWidget(m_tables,		0,	0);
 	g->addWidget(m_designTable,	1,	0);
+}
+
+void KexiQueryDesignerGuiEditor::clear()
+{
+	m_designTable->clear();
+
+        m_insertItem = new KexiTableItem(m_designTable);
+        m_insertItem->setValue(0, 0);
+        m_insertItem->setValue(2, true);
+        m_insertItem->setInsertItem(true);
+}
+
+void KexiQueryDesignerGuiEditor::appendLine(const QString &source, const QString &field, bool show,
+	const QString &andC, const QString &orC)
+{
+	uint i=0;
+	uint tid=0;
+        for(QStringList::Iterator it = m_sourceList.begin(); it != m_sourceList.end(); it++)
+        {
+                if(source == (*it))
+                {
+			tid=i;
+                        break;
+                }
+                i++;
+        }
+
+	m_insertItem->setValue(0,tid);
+	m_insertItem->setValue(1,field);
+	m_insertItem->setValue(2,show);
+	m_insertItem->setValue(3,andC);
+	m_insertItem->setValue(4,orC);
+
+        KexiTableItem *newInsert = new KexiTableItem(m_designTable);
+        newInsert->setValue(0, 0);
+        newInsert->setValue(2, true);
+        newInsert->setInsertItem(true);
+        m_insertItem = newInsert;
 }
 
 void
@@ -291,6 +330,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 {
+	m_parent->saveBack();
 }
 
 

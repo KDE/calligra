@@ -91,7 +91,7 @@ KexiTablePart::getTables()
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
 	{
 		kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
-		list->append(new KexiProjectHandlerItem(this, (*it), "kexi/table", (*it)));
+		list->insert(*it,new KexiProjectHandlerItem(this, (*it), "kexi/table", (*it)));
 	}
 
 	emit itemListChanged(this);

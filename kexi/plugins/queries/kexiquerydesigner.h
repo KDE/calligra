@@ -34,6 +34,7 @@ class KexiDataTable;
 class QWidgetStack;
 class KMultiTabBar;
 class KexiProject;
+class KexiQueryPartItem;
 
 typedef QIntDict<QWidget> WidgetIndex;
 
@@ -44,7 +45,7 @@ class KexiQueryDesigner : public KexiDialogBase
 	public:
 
 
-		KexiQueryDesigner(KexiView *view,QWidget *parent, QString indentifier, const char *name=0);
+		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item);
 		~KexiQueryDesigner();
 
 		virtual KXMLGUIClient	*guiClient();
@@ -52,10 +53,10 @@ class KexiQueryDesigner : public KexiDialogBase
 		virtual void		activateActions();
 
 		void			setCurrentQuery(const QString &query);
-
+		void			saveBack();
 	protected:
 		void			addTab(QPixmap pixmap, const QString &caption, QWidget *assosiated,int ID);
-
+		virtual void		finishUpForClosing();
 	private:
 		class			EditGUIClient;
 		friend class		EditGUIClient;
@@ -69,11 +70,14 @@ class KexiQueryDesigner : public KexiDialogBase
 
 		QString			m_query;
 
-		QString			m_identifier;
+	
+		KexiQueryPartItem	*m_item;
 
 		KMultiTabBar		*m_tb;
 		int			m_partCount;
 		int			m_activeTab;
+
+		void			loadQuery();
 
 	signals:
 		void			queryChanged();

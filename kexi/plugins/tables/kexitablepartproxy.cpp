@@ -86,7 +86,7 @@ KexiTablePartProxy::slotCreate()
 		{
 			KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, "alterTable");
 			kat->show();
-			list->append(new KexiProjectHandlerItem(part(), name, "kexi/table", name));
+			list->insert(name,new KexiProjectHandlerItem(part(), name, "kexi/table", name));
 			emit m_tablePart->itemListChanged(part());
 		}
 	}
