@@ -58,11 +58,11 @@ private:
   KoDocumentInfoDlgPrivate *d;
 };
 
-class KoDocumentInfoPropsPage : public PropsPage
+class KoDocumentInfoPropsPage : public KPropsPage
 {
   Q_OBJECT
 public:
-  KoDocumentInfoPropsPage( PropertiesDialog *props );
+  KoDocumentInfoPropsPage( KPropertiesDialog *props );
   virtual ~KoDocumentInfoPropsPage();
 
   virtual void applyChanges();

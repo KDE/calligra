@@ -269,8 +269,8 @@ public:
   const KTarFile *m_docInfoFile;
 };
 
-KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( PropertiesDialog *props )
-: PropsPage( props )
+KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props )
+: KPropsPage( props )
 {
   d = new KoDocumentInfoPropsPagePrivate;
   d->m_info = new KoDocumentInfo( this, "docinfo" );
@@ -353,7 +353,7 @@ void KoDocumentInfoPropsPage::applyChanges()
     return;
 
   bool docInfoSaved = false;
-  
+
   QStringList entries = root->entries();
   QStringList::ConstIterator it = entries.begin();
   QStringList::ConstIterator end = entries.end();
@@ -375,7 +375,7 @@ void KoDocumentInfoPropsPage::applyChanges()
       kdDebug( 30003 ) << "writing documentinfo.xml" << endl;
       d->m_dst->writeFile( "documentinfo.xml", entry->user(), entry->group(), buffer.buffer().size(),
 			   buffer.buffer().data() );
-      
+
       docInfoSaved = true;
     }
     else
