@@ -27,6 +27,7 @@
 #include <dcopclient.h>
 #include "kprcanvas.h"
 #include <kdebug.h>
+#include <kcommand.h>
 
 KPTextObjectIface::KPTextObjectIface( KPTextObject *_textobject )
     : KPresenterObjectIface(_textobject),KPresenterObject2DIface(_textobject)
@@ -67,57 +68,68 @@ void KPTextObjectIface::recalcPageNum( )
 
 void KPTextObjectIface::setBoldText( bool b )
 {
-   m_textobject->textObject()->setBoldCommand( b );
+   KCommand *cmd=m_textobject->textObject()->setBoldCommand( b );
+   delete cmd;
 }
 
 void KPTextObjectIface::setItalicText( bool b )
 {
-    m_textobject->textObject()->setItalicCommand(b);
+    KCommand *cmd=m_textobject->textObject()->setItalicCommand(b);
+    delete cmd;
 }
 
 void KPTextObjectIface::setUnderlineText( bool b )
 {
-    m_textobject->textObject()->setUnderlineCommand(b);
+    KCommand *cmd=m_textobject->textObject()->setUnderlineCommand(b);
+    delete cmd;
 }
 
 void KPTextObjectIface::setDoubleUnderlineText( bool b )
 {
-    m_textobject->textObject()->setDoubleUnderlineCommand(b);
+    KCommand *cmd=m_textobject->textObject()->setDoubleUnderlineCommand(b);
+    delete cmd;
 }
 
 void KPTextObjectIface::setStrikeOutText( bool b )
 {
-    m_textobject->textObject()->setStrikeOutCommand(b);
+    KCommand *cmd=m_textobject->textObject()->setStrikeOutCommand(b);
+    delete cmd;
 }
 
 void KPTextObjectIface::setTextColor( const QColor &col )
 {
-    m_textobject->textObject()->setTextColorCommand(col);
+    KCommand *cmd=m_textobject->textObject()->setTextColorCommand(col);
+    delete cmd;
 }
 
 void KPTextObjectIface::setTextPointSize( int s )
 {
-    m_textobject->textObject()->setPointSizeCommand( s );
+    KCommand *cmd=m_textobject->textObject()->setPointSizeCommand( s );
+    delete cmd;
 }
 
 void KPTextObjectIface::setTextSubScript( bool b )
 {
-    m_textobject->textObject()->setTextSubScriptCommand( b );
+    KCommand *cmd=m_textobject->textObject()->setTextSubScriptCommand( b );
+    delete cmd;
 }
 
 void KPTextObjectIface::setTextSuperScript( bool b )
 {
-    m_textobject->textObject()->setTextSuperScriptCommand( b );
+    KCommand *cmd=m_textobject->textObject()->setTextSuperScriptCommand( b );
+    delete cmd;
 }
 
 void KPTextObjectIface::setTextDefaultFormat()
 {
-    m_textobject->textObject()->setDefaultFormatCommand();
+    KCommand *cmd=m_textobject->textObject()->setDefaultFormatCommand();
+    delete cmd;
 }
 
 void KPTextObjectIface::setTextBackgroundColor(const QColor & col)
 {
-    m_textobject->textObject()->setTextBackgroundColorCommand(col);
+    KCommand *cmd=m_textobject->textObject()->setTextBackgroundColorCommand(col);
+    delete cmd;
 }
 
 QColor KPTextObjectIface::textColor() const
@@ -142,27 +154,30 @@ QColor KPTextObjectIface::textBackgroundColor() const
 
 void KPTextObjectIface::setTextFamilyFont(const QString &font)
 {
-    m_textobject->textObject()->setFamilyCommand(font);
+    KCommand *cmd=m_textobject->textObject()->setFamilyCommand(font);
+    delete cmd;
 }
 
 void KPTextObjectIface::changeCaseOfText( const QString & caseType)
 {
+    KCommand *cmd = 0L;
     if( caseType.lower() == "uppercase" )
     {
-        m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
+        cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
     }
     else if( caseType.lower() =="lowercase" )
     {
-        m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
+        cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
     }
     else if( caseType.lower() =="titlecase" )
     {
-        m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
+        cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
     }
     else if( caseType.lower() =="togglecase" )
     {
-        m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
+        cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
     }
     else
         kdDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
+    delete cmd;
 }
