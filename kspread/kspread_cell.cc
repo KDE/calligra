@@ -41,6 +41,8 @@
 #include <klocale.h>
 #include <kscript_parsenode.h>
 
+#include <koApplication.h>
+
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
 #define DO_UPDATE m_pTable->emit_updateCell( this, m_iColumn, m_iRow )
@@ -2200,7 +2202,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   format.setAttribute( "align", (int)m_eAlign );
 
   if ( m_bgColor != Qt::white )
-    format.setAttribute( "bgcolor", m_bgColor.name() );
+    format.setAttribute( "bgcolor", colorToName( m_bgColor ) );
   if ( multiRow() )
     format.setAttribute( "multirow", "yes" );
 

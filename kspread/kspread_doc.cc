@@ -36,6 +36,7 @@
 #include <sys/stat.h>
 
 #include <kscript_context.h>
+#include <kstddirs.h>
 
 /*****************************************************************************
  *
@@ -244,7 +245,7 @@ bool KSpreadDoc::loadXML( const QDomDocument& doc, KOStore::Store_ptr  )
 {
   // <spreadsheet>
   if ( doc.doctype().name() != "spreadsheet" )
-  {    
+  {
     m_bLoading = false;
     return false;
   }
@@ -259,7 +260,7 @@ bool KSpreadDoc::loadXML( const QDomDocument& doc, KOStore::Store_ptr  )
   {
     QString format = paper.attribute( "format" );
     QString orientation = paper.attribute( "orientation" );
-    
+
     // <borders>
     QDomElement borders = paper.namedItem( "borders" ).toElement();
     if ( borders.isNull() )
@@ -587,12 +588,14 @@ void KSpreadDoc::initInterpreter()
 {
   m_pInterpreter = new KSpreadInterpreter( this );
 
-  QString koffice_global_path = kapp->kde_datadir();
-  koffice_global_path += "/koffice/scripts";
+  // #### do not know the locate stuff is correct
+  
+  QString koffice_global_path = locate("data", "/koffice/scripts");
+  //koffice_global_path += "/koffice/scripts";
   m_pInterpreter->addSearchPath( koffice_global_path );
 
-  QString global_path = kapp->kde_datadir();
-  global_path += "/kspread/scripts";
+  QString global_path = locate("data", "/koffice/scripts");
+  //global_path += "/kspread/scripts";
   m_pInterpreter->addSearchPath( global_path );
 
   QString koffice_local_path = kapp->localkdedir();
@@ -621,7 +624,7 @@ void KSpreadDoc::initInterpreter()
       m[ name ] = *it;
     }
   }
-  
+
   // Load the extension scripts
   QMap<QString,QString>::Iterator mip = m.begin();
   for( ; mip != m.end(); ++mip )

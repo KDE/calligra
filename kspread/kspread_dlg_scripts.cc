@@ -7,6 +7,7 @@
 #include <qmsgbox.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kstddirs.h>
 
 #include <stdlib.h>
 
@@ -31,8 +32,8 @@ void KSpreadScripts::updateList()
     list->clear();
     nameList.clear();
 
-    QString path( kapp->kde_datadir().copy() );
-    path += "/kspread/scripts/";
+    QString path( locate("data", "/koffice/scripts") );
+    //path += "/kspread/scripts/";
 
     QDir d( path );
     d.setFilter( QDir::Files );
@@ -81,8 +82,8 @@ void KSpreadScripts::slotAdd()
 	return;
     }
 
-    QString d( kapp->kde_datadir().copy() );
-    d += "/kspread/scripts/";
+    QString d( locate("data", "/koffice/scripts") );
+    //d += "/kspread/scripts/";
     d += t2.data();
     FILE *f = fopen( d.data(), "w" );
     if ( f == 0L )
@@ -116,8 +117,8 @@ void KSpreadScripts::slotDelete()
     /* nameList.remove( t2.data() );
     list->removeItem( list->currentItem() ); */
 
-    QString dir( kapp->kde_datadir().copy() );
-    dir += "/kspread/scripts/";
+    QString dir( locate("data", "/koffice/scripts") );
+    //dir += "/kspread/scripts/";
     dir += t2.data();
     // HACK
     unlink( t2.data() );
@@ -157,8 +158,8 @@ void KSpreadScripts::slotRename()
     nameList.append( t2 );
     list->inSort( t.data() ); */
 
-    QString dir( kapp->kde_datadir().copy() );
-    dir += "/kspread/scripts/";
+    QString dir( locate("data", "/koffice/scripts") );
+    //dir += "/kspread/scripts/";
 
     QString t4( dir.data() );
     t4 += t3.data();
