@@ -40,6 +40,7 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <kzip.h>
 
 #include <koGlobal.h>
@@ -191,8 +192,17 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
         return false;
     }
 
-    m_streamOut=new QTextStream(m_contentBody, IO_WriteOnly);
+    m_zip->setCompression( KZip::NoCompression );
+#if KDE_IS_VERSION( 3, 1, 93 )
+    m_zip->setExtraField( KZip::NoExtraField );
+#endif
 
+    const QCString appId( "application/vnd.sun.xml.writer" );
+    m_zip->writeFile( "mimetype", QString::null, QString::null, appId.length(), appId.data() );
+
+    m_zip->setCompression( KZip::DeflateCompression );
+
+    m_streamOut=new QTextStream(m_contentBody, IO_WriteOnly);
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
 
     return true;

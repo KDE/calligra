@@ -3,7 +3,6 @@ KFormula (frameType==4)
 <PAPER>, <PAPERBORDERS>
 <ATTRIBUTES>
 Generate Manifest file
-Generate mimetype file
 <style:wrap> with "none" for pictures?
 converting from raw XML KWord document (in KoStore?)
 Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?)
