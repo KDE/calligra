@@ -33,7 +33,8 @@
 
 KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
 {
-    m_cachedPixmap.setOptimization(QPixmap::NormalOptim);
+    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
+    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 }
 
 KoPictureImage::~KoPictureImage(void)
@@ -135,6 +136,7 @@ bool KoPictureImage::load(const QByteArray& array, const QString& /* extension*/
     if (!imageIO.read())
     {
         buffer.close();
+        kdError(30003) << "Image could not be loaded!" << endl;
         return false;
     }
     buffer.close();
