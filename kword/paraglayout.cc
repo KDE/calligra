@@ -18,7 +18,20 @@ KWParagLayout::KWParagLayout( KWordDocument_impl *_doc )
     followingParagLayout = this;
     numberLikeParagLayout = 0L;
     ptLineSpacing = 0;
-    
+
+    left.color = white;
+    left.style = SOLID;
+    left.ptWidth = 0;
+    right.color = white;
+    right.style = SOLID;
+    right.ptWidth = 0;
+    top.color = white;
+    top.style = SOLID;
+    top.ptWidth = 0;
+    bottom.color = white;
+    bottom.style = SOLID;
+    bottom.ptWidth = 0;
+
     format.setDefaults( _doc );
     
     document = _doc;
@@ -34,8 +47,8 @@ KWParagLayout::~KWParagLayout()
 KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
 {
   flow = _layout.getFlow();
-  mmParagFootOffset = _layout.getPTParagFootOffset();
-  mmParagHeadOffset = _layout.getPTParagHeadOffset();
+  mmParagFootOffset = _layout.getMMParagFootOffset();
+  mmParagHeadOffset = _layout.getMMParagHeadOffset();
   mmFirstLineLeftIndent = _layout.getPTFirstLineLeftIndent();
   mmLeftIndent = _layout.getPTLeftIndent();
   counterFlow = static_cast<CounterFlow>(_layout.getCounterFlow());
@@ -46,6 +59,11 @@ KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
   followingParagLayout = this;
   numberLikeParagLayout = 0L;
   ptLineSpacing = _layout.getPTLineSpacing();
+
+  left = _layout.getLeftBorder();
+  right = _layout.getRightBorder();
+  top = _layout.getTopBorder();
+  bottom = _layout.getBottomBorder();
 
   format.setDefaults( document );
 

@@ -95,6 +95,15 @@ public:
   void setLineSpacing(unsigned int _spacing)
     { fc->getParag()->getParagLayout()->setPTLineSpacing(_spacing); recalcCursor(); }
 
+  void setParagLeftBorder(KWParagLayout::Border _brd)
+    { fc->getParag()->getParagLayout()->setLeftBorder(_brd); recalcCursor(); }
+  void setParagRightBorder(KWParagLayout::Border _brd)
+    { fc->getParag()->getParagLayout()->setRightBorder(_brd); recalcCursor(); }
+  void setParagTopBorder(KWParagLayout::Border _brd)
+    { fc->getParag()->getParagLayout()->setTopBorder(_brd); recalcCursor(); }
+  void setParagBottomBorder(KWParagLayout::Border _brd)
+    { fc->getParag()->getParagLayout()->setBottomBorder(_brd); recalcCursor(); }
+
   KWParagLayout::Flow getFlow()
     { return fc->getParag()->getParagLayout()->getFlow(); }
   float getLeftIndent()

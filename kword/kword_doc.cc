@@ -333,6 +333,36 @@ void KWordDocument_impl::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long 
 }
 
 /*================================================================*/
+QPen KWordDocument_impl::setBorderPen(KWParagLayout::Border _brd)
+{
+  QPen pen(black,1,SolidLine);
+
+  pen.setWidth(_brd.ptWidth);
+  pen.setColor(_brd.color);
+  
+  switch (_brd.style)
+    {
+    case KWParagLayout::SOLID:
+      pen.setStyle(SolidLine);
+      break;
+    case KWParagLayout::DASH:
+      pen.setStyle(DashLine);
+      break;
+    case KWParagLayout::DOT:
+      pen.setStyle(DotLine);
+      break;
+    case KWParagLayout::DASH_DOT:
+      pen.setStyle(DashDotLine);
+      break;
+    case KWParagLayout::DASH_DOT_DOT:
+      pen.setStyle(DashDotDotLine);
+      break;
+    }
+
+  return QPen(pen);
+}
+
+/*================================================================*/
 KWUserFont* KWordDocument_impl::findUserFont(char* _userfontname)
 {
   KWUserFont* font;
@@ -409,7 +439,16 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
   _painter.save();
 
   unsigned int xShift = getPTLeftBorder() + ( _fc.getColumn() - 1 ) * ( getPTColumnWidth() + getPTColumnSpacing() );
-  QRegion cr = QRegion(xShift - xOffset,_fc.getPTY() - yOffset,getPTColumnWidth(),_fc.getLineHeight());
+  QRegion cr = QRegion(xShift - xOffset - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - 
+		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2,
+		       _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth - 
+		       _fc.getParag()->getParagLayout()->getTopBorder().ptWidth / 2,
+		       getPTColumnWidth() + _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + 
+		       _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
+		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth,
+		       _fc.getLineHeight() + _fc.getParag()->getParagLayout()->getTopBorder().ptWidth +
+		       _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth + 
+		       _fc.getParag()->getParagLayout()->getTopBorder().ptWidth);
   QRegion visible(0,0,_w,_h);
 
   if (_painter.hasClipping())
@@ -423,6 +462,55 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 
   _painter.setClipRegion(cr);
 
+  if (_fc.isCursorInFirstLine() && _fc.getParag()->getParagLayout()->getTopBorder().ptWidth > 0)
+    {
+      unsigned int _x1 = getPTLeftBorder() + (_fc.getColumn() - 1) * (getPTColumnWidth() + getPTColumnSpacing()) - xOffset -
+	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
+      unsigned int _y = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
+      unsigned int _x2 = _x1 + getPTColumnWidth() +
+	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
+	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2 -
+	((_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2) * 2 == 
+	 _fc.getParag()->getParagLayout()->getRightBorder().ptWidth ? 1 : 0) ;
+      
+      _painter.setPen(setBorderPen(_fc.getParag()->getParagLayout()->getTopBorder()));
+      _painter.drawLine(_x1,_y,_x2,_y);
+    }
+  if (_fc.isCursorInLastLine() && _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth > 0)
+    {
+      unsigned int _x1 = getPTLeftBorder() + (_fc.getColumn() - 1) * (getPTColumnWidth() + getPTColumnSpacing()) - xOffset -
+	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
+      unsigned int _y = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth - 1;
+      unsigned int _x2 = _x1 + getPTColumnWidth() +
+	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
+	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2 -
+	((_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2) * 2 == 
+	 _fc.getParag()->getParagLayout()->getRightBorder().ptWidth ? 1 : 0) ;
+      
+      _painter.setPen(setBorderPen(_fc.getParag()->getParagLayout()->getBottomBorder()));
+      _painter.drawLine(_x1,_y,_x2,_y);
+    }
+  if (_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth > 0)
+    {
+      unsigned int _x = getPTLeftBorder() + (_fc.getColumn() - 1) * (getPTColumnWidth() + getPTColumnSpacing()) - xOffset - 
+	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth;
+      unsigned int _y1 = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
+      unsigned int _y2 = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth;
+      
+      _painter.setPen(setBorderPen(_fc.getParag()->getParagLayout()->getLeftBorder()));
+      _painter.drawLine(_x,_y1,_x,_y2);
+    }
+  if (_fc.getParag()->getParagLayout()->getRightBorder().ptWidth > 0)
+    {
+      unsigned int _x = getPTLeftBorder() + (_fc.getColumn() - 1) * (getPTColumnWidth() + getPTColumnSpacing()) - xOffset + 
+	_fc.getParag()->getParagLayout()->getRightBorder().ptWidth + getPTColumnWidth() - 1;
+      unsigned int _y1 = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
+      unsigned int _y2 = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth;
+      
+      _painter.setPen(setBorderPen(_fc.getParag()->getParagLayout()->getRightBorder()));
+      _painter.drawLine(_x,_y1,_x,_y2);
+    }
+  
   // Shortcut to the text memory segment
   unsigned int textLen = _fc.getParag()->getTextLen() - 1;
   KWChar* text = _fc.getParag()->getText();

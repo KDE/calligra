@@ -54,6 +54,13 @@ module KWord
       slot void textUnsortList();
       slot void textSuperScript();
       slot void textSubScript();
+      slot void textBorderLeft();
+      slot void textBorderRight();
+      slot void textBorderTop();
+      slot void textBorderBottom();
+      slot void textBorderColor();
+      slot void textBorderWidth(in string width);
+      slot void textBorderStyle(in string style);
     };
 
   interface KWordDocument : OPParts::Document, OPParts::Print

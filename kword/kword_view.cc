@@ -69,6 +69,21 @@ KWordView_impl::KWordView_impl(QWidget *_parent = 0L,const char *_name = 0L)
   flow = KWParagLayout::LEFT;
   paragDia = 0;
   vertAlign = KWFormat::VA_NORMAL;
+  left.color = white;
+  left.style = KWParagLayout::SOLID;
+  left.ptWidth = 0;
+  right.color = white;
+  right.style = KWParagLayout::SOLID;
+  right.ptWidth = 0;
+  top.color = white;
+  top.style = KWParagLayout::SOLID;
+  top.ptWidth = 0;
+  bottom.color = white;
+  bottom.style = KWParagLayout::SOLID;
+  bottom.ptWidth = 0;
+  tmpBrd.color = white;
+  tmpBrd.style = KWParagLayout::SOLID;
+  tmpBrd.ptWidth = 0;
 }
 
 /*================================================================*/
@@ -140,7 +155,7 @@ void KWordView_impl::construct()
 }
 
 /*================================================================*/
-void KWordView_impl::setFormat(KWFormat &_format,bool _check = true)
+void KWordView_impl::setFormat(KWFormat &_format,bool _check = true,bool _update_page = true)
 {
   if (_check && format == _format) return;
 
@@ -195,7 +210,8 @@ void KWordView_impl::setFormat(KWFormat &_format,bool _check = true)
 
   format = _format;
   
-  gui->getPaperWidget()->formatChanged(format);
+  if (_update_page)
+    gui->getPaperWidget()->formatChanged(format);
 }
 
 /*================================================================*/
@@ -223,6 +239,49 @@ void KWordView_impl::setFlow(KWParagLayout::Flow _flow)
 	case KWParagLayout::BLOCK:
 	  m_rToolBarText->setButton(m_idButtonText_ABlock,true);  
 	  break;
+	}
+    }
+}
+
+/*================================================================*/
+void KWordView_impl::setParagBorders(KWParagLayout::Border _left,KWParagLayout::Border _right,
+				     KWParagLayout::Border _top,KWParagLayout::Border _bottom)
+{
+  if (left != _left || right != _right || top != _top || bottom != _bottom)
+    {
+      m_rToolBarText->setButton(m_idButtonText_BorderLeft,false);  
+      m_rToolBarText->setButton(m_idButtonText_BorderRight,false);  
+      m_rToolBarText->setButton(m_idButtonText_BorderTop,false);  
+      m_rToolBarText->setButton(m_idButtonText_BorderBottom,false);  
+      
+      left = _left;
+      right = _right;
+      top = _top;
+      bottom = _bottom;
+
+      if (left.ptWidth > 0)
+	{
+	  m_rToolBarText->setButton(m_idButtonText_BorderLeft,true);  
+	  tmpBrd = left;
+	  setParagBorderValues();
+	}
+      if (right.ptWidth > 0)
+	{
+	  m_rToolBarText->setButton(m_idButtonText_BorderRight,true);  
+	  tmpBrd = right;
+	  setParagBorderValues();
+	}
+      if (top.ptWidth > 0)
+	{
+	  m_rToolBarText->setButton(m_idButtonText_BorderTop,true);  
+	  tmpBrd = top;
+	  setParagBorderValues();
+	}
+      if (bottom.ptWidth > 0)
+	{
+	  m_rToolBarText->setButton(m_idButtonText_BorderBottom,true);  
+	  tmpBrd = bottom;
+	  setParagBorderValues();
 	}
     }
 }
@@ -582,6 +641,143 @@ void KWordView_impl::textSubScript()
   gui->getPaperWidget()->formatChanged(format);
 }
 
+/*===============================================================*/
+void KWordView_impl::textBorderLeft()
+{
+  if (!m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
+    left = tmpBrd;
+  else
+    left.ptWidth = 0;
+
+  gui->getPaperWidget()->setParagLeftBorder(left);
+}
+
+/*===============================================================*/
+void KWordView_impl::textBorderRight()
+{
+  if (!m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
+    right = tmpBrd;
+  else
+    right.ptWidth = 0;
+
+  gui->getPaperWidget()->setParagRightBorder(right);
+}
+
+/*===============================================================*/
+void KWordView_impl::textBorderTop()
+{
+  if (!m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
+    top = tmpBrd;
+  else
+    top.ptWidth = 0;
+
+  gui->getPaperWidget()->setParagTopBorder(top);
+}
+
+/*===============================================================*/
+void KWordView_impl::textBorderBottom()
+{
+  if (!m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
+    bottom = tmpBrd;
+  else
+    bottom.ptWidth = 0;
+
+  gui->getPaperWidget()->setParagBottomBorder(bottom);
+}
+
+/*================================================================*/
+void KWordView_impl::textBorderColor()
+{
+  if (KColorDialog::getColor(tmpBrd.color))
+    m_rToolBarText->setButtonPixmap(m_idButtonText_BorderColor,CORBA::string_dup(colorToPixString(tmpBrd.color)));
+
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
+    {
+      left = tmpBrd;
+      gui->getPaperWidget()->setParagLeftBorder(left);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
+    {
+      right = tmpBrd;
+      gui->getPaperWidget()->setParagRightBorder(right);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
+    {
+      top = tmpBrd;
+      gui->getPaperWidget()->setParagTopBorder(top);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
+    {
+      bottom = tmpBrd;
+      gui->getPaperWidget()->setParagBottomBorder(bottom);
+    }
+}
+
+/*================================================================*/
+void KWordView_impl::textBorderWidth(const char *width)
+{
+  tmpBrd.ptWidth = atoi(width);
+
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
+    {
+      left = tmpBrd;
+      gui->getPaperWidget()->setParagLeftBorder(left);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
+    {
+      right = tmpBrd;
+      gui->getPaperWidget()->setParagRightBorder(right);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
+    {
+      top = tmpBrd;
+      gui->getPaperWidget()->setParagTopBorder(top);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
+    {
+      bottom = tmpBrd;
+      gui->getPaperWidget()->setParagBottomBorder(bottom);
+    }
+}
+
+/*================================================================*/
+void KWordView_impl::textBorderStyle(const char *style)
+{
+  QString stl(style);
+
+  if (stl == i18n("solid line"))
+    tmpBrd.style = KWParagLayout::SOLID;
+  else if (stl == i18n("dash line (----)"))
+    tmpBrd.style = KWParagLayout::DASH;
+  else if (stl == i18n("dot line (****)"))
+    tmpBrd.style = KWParagLayout::DOT;
+  else if (stl == i18n("dash dot line (-*-*)"))
+    tmpBrd.style = KWParagLayout::DASH_DOT;
+  else if (stl == i18n("dash dot dot line (-**-)"))
+    tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
+
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
+    {
+      left = tmpBrd;
+      gui->getPaperWidget()->setParagLeftBorder(left);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
+    {
+      right = tmpBrd;
+      gui->getPaperWidget()->setParagRightBorder(right);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
+    {
+      top = tmpBrd;
+      gui->getPaperWidget()->setParagTopBorder(top);
+    }
+  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
+    {
+      bottom = tmpBrd;
+      gui->getPaperWidget()->setParagBottomBorder(bottom);
+    }
+}
+
 /*================================================================*/
 void KWordView_impl::resizeEvent(QResizeEvent *e)
 {
@@ -888,7 +1084,7 @@ void KWordView_impl::setupTextToolbar()
       tbFont.setUnderline(false);
 
       // color
-      m_idButtonText_Color = m_rToolBarText->insertButton(CORBA::string_dup(""),CORBA::string_dup(i18n("Color")),
+      m_idButtonText_Color = m_rToolBarText->insertButton(CORBA::string_dup(""),CORBA::string_dup(i18n("Text Color")),
 							  this,CORBA::string_dup("textColor"));
       m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(black)));
       tbColor = black;
@@ -967,6 +1163,71 @@ void KWordView_impl::setupTextToolbar()
 							      this,CORBA::string_dup("textSubScript"));
       m_rToolBarText->setToggle(m_idButtonText_SubScript,true);
       m_rToolBarText->setButton(m_idButtonText_SubScript,false);
+
+      m_rToolBarText->insertSeparator();
+
+      // border left
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kword/toolbar/borderleft.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_BorderLeft = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Border Left")),
+							       this,CORBA::string_dup("textBorderLeft"));
+      m_rToolBarText->setToggle(m_idButtonText_BorderLeft,true);
+      m_rToolBarText->setButton(m_idButtonText_BorderLeft,false);
+
+      // border right
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kword/toolbar/borderright.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_BorderRight = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Border Right")),
+								this,CORBA::string_dup("textBorderRight"));
+      m_rToolBarText->setToggle(m_idButtonText_BorderRight,true);
+      m_rToolBarText->setButton(m_idButtonText_BorderRight,false);
+
+      // border top
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kword/toolbar/bordertop.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_BorderTop = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Border Top")),
+							      this,CORBA::string_dup("textBorderTop"));
+      m_rToolBarText->setToggle(m_idButtonText_BorderTop,true);
+      m_rToolBarText->setButton(m_idButtonText_BorderTop,false);
+
+      // border bottom
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kword/toolbar/borderbottom.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_BorderBottom = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Border Bottom")),
+								 this,CORBA::string_dup("textBorderBottom"));
+      m_rToolBarText->setToggle(m_idButtonText_BorderBottom,true);
+      m_rToolBarText->setButton(m_idButtonText_BorderBottom,false);
+
+      // border color
+      m_idButtonText_BorderColor = m_rToolBarText->insertButton(CORBA::string_dup(""),CORBA::string_dup(i18n("Border Color")),
+								this,CORBA::string_dup("textBorderColor"));
+      tmpBrd.color = black;
+      m_rToolBarText->setButtonPixmap(m_idButtonText_BorderColor,CORBA::string_dup(colorToPixString(black)));
+
+      // border width combobox
+      m_idComboText_BorderWidth = m_rToolBarText->insertCombo(true,CORBA::string_dup(i18n("Border Width")),60,
+							      this,CORBA::string_dup("textBorderWidth"));
+      for(unsigned int i = 1;i <= 10;i++)
+	{
+	  char buffer[10];
+	  sprintf(buffer,"%i",i);
+	  m_rToolBarText->insertComboItem(m_idComboText_BorderWidth,CORBA::string_dup(buffer),-1);
+	}
+      tmpBrd.ptWidth = 1;
+
+      // border style combobox
+      m_idComboText_BorderStyle = m_rToolBarText->insertCombo(false,CORBA::string_dup(i18n("Border Style")),150,
+							      this,CORBA::string_dup("textBorderStyle"));
+      m_rToolBarText->insertComboItem(m_idComboText_BorderStyle,CORBA::string_dup(i18n("solid line")),-1);
+      m_rToolBarText->insertComboItem(m_idComboText_BorderStyle,CORBA::string_dup(i18n("dash line (----)")),-1);
+      m_rToolBarText->insertComboItem(m_idComboText_BorderStyle,CORBA::string_dup(i18n("dot line (****)")),-1);
+      m_rToolBarText->insertComboItem(m_idComboText_BorderStyle,CORBA::string_dup(i18n("dash dot line (-*-*)")),-1);
+      m_rToolBarText->insertComboItem(m_idComboText_BorderStyle,CORBA::string_dup(i18n("dash dot dot line (-**-)")),-1);
+      tmpBrd.style = KWParagLayout::SOLID;
     }
 }      
 
@@ -1061,6 +1322,14 @@ void KWordView_impl::getFonts()
   }
   
   XFreeFontNames(fontNames_copy);
+}
+
+/*================================================================*/
+void KWordView_impl::setParagBorderValues()
+{
+  m_rToolBarText->setCurrentComboItem(m_idComboText_BorderWidth,tmpBrd.ptWidth - 1);
+  m_rToolBarText->setCurrentComboItem(m_idComboText_BorderStyle,static_cast<int>(tmpBrd.style));
+  m_rToolBarText->setButtonPixmap(m_idButtonText_BorderColor,CORBA::string_dup(colorToPixString(tmpBrd.color)));
 }
 
 /*================================================================*/

@@ -213,3 +213,11 @@ Reggie, 9.10.1998:
 - Implemented subscript
 - Implemented superscript
 - Implemented space before/after paragraphs
+
+Reggie, 10.10.1998:
+-------------------
+- Implemented drawing (configurable) borders around paragraphs
+- Bugfix with space before/after paragraphs
+- Fixed a redraw bug in backspace/delete
+- When placing the cursor with the mouse the format/text toolbar
+  is updated correctly too now

@@ -52,7 +52,7 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   mousePressed = false;
   setMouseTracking(true);
 
-//   recalcText();
+  //recalcText();
 //   debug("recalc text");
 }
 
@@ -164,6 +164,13 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
   mousePressed = false;
   if (doc->has_selection())
     doc->copySelectedText();
+	
+  gui->getView()->setFormat(*((KWFormat*)fc),true,false);
+  gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+  gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+				  fc->getParag()->getParagLayout()->getRightBorder(),
+				  fc->getParag()->getParagLayout()->getTopBorder(),
+				  fc->getParag()->getParagLayout()->getBottomBorder());
 }
 
 /*================================================================*/
@@ -440,12 +447,20 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoLineStart(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+					fc->getParag()->getParagLayout()->getRightBorder(),
+					fc->getParag()->getParagLayout()->getTopBorder(),
+					fc->getParag()->getParagLayout()->getBottomBorder());
       } break;
     case Key_End:
       {
 	fc->cursorGotoLineEnd(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+					fc->getParag()->getParagLayout()->getRightBorder(),
+					fc->getParag()->getParagLayout()->getTopBorder(),
+					fc->getParag()->getParagLayout()->getBottomBorder());
       } break;
     case Key_Right:
       {
@@ -459,6 +474,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoRight(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+					fc->getParag()->getParagLayout()->getRightBorder(),
+					fc->getParag()->getParagLayout()->getTopBorder(),
+					fc->getParag()->getParagLayout()->getBottomBorder());
 
 	if (continueSelection || e->state() & ShiftButton)
 	  {
@@ -495,6 +514,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoLeft(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+					fc->getParag()->getParagLayout()->getRightBorder(),
+					fc->getParag()->getParagLayout()->getTopBorder(),
+					fc->getParag()->getParagLayout()->getBottomBorder());
 
 	if (continueSelection || e->state() & ShiftButton)
 	  {
@@ -531,6 +554,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoUp(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+					fc->getParag()->getParagLayout()->getRightBorder(),
+					fc->getParag()->getParagLayout()->getTopBorder(),
+					fc->getParag()->getParagLayout()->getBottomBorder());
 
 	if (continueSelection || e->state() & ShiftButton)
 	  {
@@ -567,6 +594,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoDown(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+					fc->getParag()->getParagLayout()->getRightBorder(),
+					fc->getParag()->getParagLayout()->getTopBorder(),
+					fc->getParag()->getParagLayout()->getBottomBorder());
 
 	if (continueSelection || e->state() & ShiftButton)
 	  {
@@ -688,10 +719,15 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    int _y = (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset;
 	    painter.fillRect(paintfc.getPTLeft() - xOffset,
-			     _y,paintfc.getPTWidth(),
+			     _y + 1,paintfc.getPTWidth(),
 			     height() - _y,
 			     QBrush(white));
+	    painter.save();
+	    painter.setClipRect(QRect(paintfc.getPTLeft() - xOffset,
+			     _y + 1,paintfc.getPTWidth(),
+			     height() - _y));
 	    drawBorders(painter);
+	    painter.restore();
 	  }
 
 	if (goNext)
@@ -795,10 +831,15 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    int _y = (int)paintfc.getPTY() + (int)paintfc.getLineHeight() - (int)yOffset;
 	    painter.fillRect(paintfc.getPTLeft() - xOffset,
-			     _y,paintfc.getPTWidth(),
+			     _y + 1,paintfc.getPTWidth(),
 			     height() - _y,
 			     QBrush(white));
+	    painter.save();
+	    painter.setClipRect(QRect(paintfc.getPTLeft() - xOffset,
+			     _y + 1,paintfc.getPTWidth(),
+			     height() - _y));
 	    drawBorders(painter);
+	    painter.restore();
 	  }
 
 	if (goNext)

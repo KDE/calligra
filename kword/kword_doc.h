@@ -273,6 +273,7 @@ protected:
   virtual void makeChildListIntern(OPParts::Document_ptr _doc,const char *_path);
   
   virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height);
+  QPen setBorderPen(KWParagLayout::Border _brd);
 
   QList<KWordView_impl> m_lstViews;
   QList<KWordChild> m_lstChildren;

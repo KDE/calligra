@@ -135,7 +135,14 @@ public:
   virtual void textUnsortList();
   virtual void textSuperScript();
   virtual void textSubScript();
-
+  virtual void textBorderLeft();
+  virtual void textBorderRight();
+  virtual void textBorderTop();
+  virtual void textBorderBottom();
+  virtual void textBorderColor();
+  virtual void textBorderWidth(const char *width);
+  virtual void textBorderStyle(const char *style);
+  
   virtual void setMode(OPParts::Part::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);
 
@@ -144,8 +151,10 @@ public:
 
   virtual void createGUI();
   virtual void construct();
-  virtual void setFormat(KWFormat &_format,bool _check = true);
+  virtual void setFormat(KWFormat &_format,bool _check = true,bool _update_page = true);
   virtual void setFlow(KWParagLayout::Flow _flow);
+  virtual void setParagBorders(KWParagLayout::Border _left,KWParagLayout::Border _right,
+			       KWParagLayout::Border _top,KWParagLayout::Border _bottom);
 
   KWordGUI *getGUI() { return gui; }
 
@@ -175,6 +184,7 @@ protected:
 
   char* colorToPixString(QColor);
   void getFonts();
+  void setParagBorderValues();
 
 
   KWordDocument_impl *m_pKWordDoc;
@@ -264,6 +274,13 @@ protected:
   CORBA::Long m_idButtonText_UnsortList;
   CORBA::Long m_idButtonText_SuperScript;
   CORBA::Long m_idButtonText_SubScript;
+  CORBA::Long m_idButtonText_BorderLeft;
+  CORBA::Long m_idButtonText_BorderRight;
+  CORBA::Long m_idButtonText_BorderTop;
+  CORBA::Long m_idButtonText_BorderBottom;
+  CORBA::Long m_idButtonText_BorderColor;
+  CORBA::Long m_idComboText_BorderWidth;
+  CORBA::Long m_idComboText_BorderStyle;
 
   // text toolbar values
   QFont tbFont;
@@ -276,6 +293,7 @@ protected:
   KWFormat format;
   KWParagLayout::Flow flow;
   KWFormat::VertAlign vertAlign;
+  KWParagLayout::Border left,right,top,bottom,tmpBrd;
 
   KWParagDia *paragDia;
 

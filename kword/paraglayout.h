@@ -7,6 +7,7 @@ class KWParagLayout;
 #include "format.h"
 
 #include <qstring.h>
+#include <qcolor.h>
 
 /**
  * A KWParagLayout-Instance provides all information neccessary to format a given
@@ -18,6 +19,20 @@ class KWParagLayout
 public:
     enum Flow { LEFT, RIGHT, CENTER, BLOCK };
     enum CounterFlow { C_LEFT, C_RIGHT };
+
+    enum BorderStyle {SOLID = 0,DASH = 1,DOT = 2,DASH_DOT = 3,DASH_DOT_DOT = 4};
+    struct Border
+    {
+      QColor color;
+      BorderStyle style;
+      unsigned int ptWidth;
+      bool operator==(const Border _brd) {
+	return (style == _brd.style && color == _brd.color && ptWidth == _brd.ptWidth);
+      }
+      bool operator!=(const Border _brd) {
+	return (style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth);
+      }
+    };
 
     KWParagLayout( KWordDocument_impl *_doc );
     ~KWParagLayout();
@@ -75,6 +90,11 @@ public:
      */
     void setNumberLikeParagLayout( const char *_paragname );
 
+    void setLeftBorder(Border _brd) { left = _brd; }
+    void setRightBorder(Border _brd) { right = _brd; }
+    void setTopBorder(Border _brd) { top = _brd; }
+    void setBottomBorder(Border _brd) { bottom = _brd; }
+
     KWParagLayout* getNumberLikeParagLayout() {	return numberLikeParagLayout; }
     
     /**
@@ -94,6 +114,10 @@ public:
     unsigned int getMMParagHeadOffset() { return mmParagHeadOffset; }
     unsigned int getPTLineSpacing() { return ptLineSpacing; }
     Flow getFlow() { return flow; }
+    Border getLeftBorder() { return left; }
+    Border getRightBorder() { return right; }
+    Border getTopBorder() { return top; }
+    Border getBottomBorder() { return bottom; }
     /**
      * @return the flow of the Counter.
      */
@@ -132,6 +156,8 @@ protected:
     unsigned int mmFirstLineLeftIndent;
     unsigned int mmLeftIndent;
     unsigned int ptLineSpacing;
+    Border left,right,top,bottom;
+
     /**
      * This instance holds information about the font and color etc. for
      * the parags text.
