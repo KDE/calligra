@@ -1,11 +1,15 @@
 Changes after KOffice-1.3
 =========================
+Allow to build with automake-1.8
+
 KOfficeCore:
 - Changed .desktop file setup so that changes to the K menu structure,
   to file-program associations, or other distribution customizations cannot
   prevent KOffice applications from starting.
 - Fixed parsing of number+unit, due to change in Qt 3.3. Fixes problems
   when opening OOWriter documents in particular.
+- Don't show the filter dialog when generating thumbnails
+- Improved error handling to catch "partition full" problems.
 
 KOfficeUI:
 - Fix overwriting of templates (#73537)
@@ -15,6 +19,11 @@ KOfficeUI:
 KoText:
 - Date variables for printing-date, last-modified, and creation-date were
   not loaded correctly.
+- Background spellchecking works again
+- Fixed crash during background spellchecking (refcounting of formats)
+
+KoSpell:
+- Improved configure check for libaspell
 
 KoWMF:
 - Fixed infinite loop on invalid WMF file
