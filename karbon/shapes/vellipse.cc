@@ -21,6 +21,7 @@
 #include "vellipse.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
+#include <koUnit.h>
 #include <vglobal.h>
 #include <qdom.h>
 
@@ -58,18 +59,23 @@ VEllipse::init()
 	// Create (half-)unity circle with topLeft at (0|0):
 	double currentAngle = -startAngle - VGlobal::pi_2;
 	KoPoint start( 0.5 * sin( -startAngle ), 0.5 * cos( -startAngle ) );
+	kdDebug() << "start : " << start << endl;
 	moveTo( KoPoint( start.x(), start.y() ) );
 	KoPoint current;
-	double midAngle = startAngle - VGlobal::pi_2 / 2.0;
+	double midAngle = currentAngle + VGlobal::pi_2 / 2.0;
 	for( int i = 0;i < nsegs;i++ )
 	{
 		current = KoPoint( 0.5 * sin( currentAngle ), 0.5 * cos( currentAngle ) );
 		currentAngle -= VGlobal::pi_2;
+		if( currentAngle < 0 )
+			currentAngle += VGlobal::pi * 2.0;
 		midAngle -= VGlobal::pi_2;
-		arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( -VGlobal::pi_2 / 2.0 ) ),
-						-sin( midAngle ) * ( 0.5 / cos( -VGlobal::pi_2 / 2.0 ) ) ) , current, 0.5 );
-	kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / cos( -VGlobal::pi_2 / 2.0 ) ) << endl;
-	kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / cos( -VGlobal::pi_2 / 2.0 ) ) << endl;
+		if( midAngle < 0 )
+			midAngle += VGlobal::pi * 2.0;
+		arcTo( KoPoint( cos( midAngle ) * ( 0.5 / sin( VGlobal::pi_2 / 2.0 ) ) ,
+						-sin( midAngle ) * ( 0.5 / sin( VGlobal::pi_2 / 2.0 ) ) ) , current, 0.5 );
+	kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / sin( VGlobal::pi_2 / 2.0 ) ) << endl;
+	kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / sin( VGlobal::pi_2 / 2.0 ) ) << endl;
 	kdDebug() << "current : " << current << endl;
 	kdDebug() << "currentAngle : " << currentAngle << endl;
 	kdDebug() << "midAngle : " << midAngle << endl;
@@ -156,11 +162,11 @@ VEllipse::load( const QDomElement& element )
 		if( list.item( i ).isElement() )
 			VObject::load( list.item( i ).toElement() );
 
-	m_rx = element.attribute( "rx" ).toDouble(),
-	m_ry = element.attribute( "ry" ).toDouble(),
+	m_rx = KoUnit::parseValue( element.attribute( "rx" ) );
+	m_ry = KoUnit::parseValue( element.attribute( "ry" ) );
 
-	m_center.setX( element.attribute( "cx" ).toDouble() );
-	m_center.setY( element.attribute( "cy" ).toDouble() );
+	m_center.setX( KoUnit::parseValue( element.attribute( "cx" ) ) );
+	m_center.setY( KoUnit::parseValue( element.attribute( "cy" ) ) );
 
 	m_startAngle = element.attribute( "start-angle" ).toDouble();
 	m_endAngle = element.attribute( "end-angle" ).toDouble();

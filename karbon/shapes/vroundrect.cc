@@ -18,6 +18,7 @@
 */
 
 #include <klocale.h>
+#include <koUnit.h>
 
 #include "vroundrect.h"
 #include "vglobal.h"
@@ -107,13 +108,13 @@ VRoundRect::load( const QDomElement& element )
 		if( list.item( i ).isElement() )
 			VObject::load( list.item( i ).toElement() );
 
-	m_width  = element.attribute( "width" ).toDouble(),
-	m_height = element.attribute( "height" ).toDouble(),
+	m_width  = KoUnit::parseValue( element.attribute( "width" ), 10.0 );
+	m_height = KoUnit::parseValue( element.attribute( "height" ), 10.0 );
 
-	m_topLeft.setX( element.attribute( "x" ).toDouble() );
-	m_topLeft.setY( element.attribute( "y" ).toDouble() );
+	m_topLeft.setX( KoUnit::parseValue( element.attribute( "x" ) ) );
+	m_topLeft.setY( KoUnit::parseValue( element.attribute( "y" ) ) );
 
-	m_edgeRadius  = element.attribute( "corner-radius" ).toDouble(),
+	m_edgeRadius  = KoUnit::parseValue( element.attribute( "corner-radius" ) );
 
 	init();
 

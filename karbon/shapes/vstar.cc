@@ -27,6 +27,7 @@
 #include "vstar.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
+#include <koUnit.h>
 
 VStar::VStar( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -300,11 +301,11 @@ VStar::load( const QDomElement& element )
 		if( list.item( i ).isElement() )
 			VObject::load( list.item( i ).toElement() );
 
-	m_center.setX( element.attribute( "cx" ).toDouble() );
-	m_center.setY( element.attribute( "cy" ).toDouble() );
+	m_center.setX( KoUnit::parseValue( element.attribute( "cx" ) ) );
+	m_center.setY( KoUnit::parseValue( element.attribute( "cy" ) ) );
 
-	m_outerRadius  = element.attribute( "outerradius" ).toDouble();
-	m_innerRadius  = element.attribute( "innerradius" ).toDouble();
+	m_outerRadius  = KoUnit::parseValue( element.attribute( "outerradius" ) );
+	m_innerRadius  = KoUnit::parseValue( element.attribute( "innerradius" ) );
 	m_edges  = element.attribute( "edges" ).toUInt();
 
 	m_innerAngle  = element.attribute( "innerangle" ).toUInt();

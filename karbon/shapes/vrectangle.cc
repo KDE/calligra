@@ -20,7 +20,9 @@
 
 #include "vrectangle.h"
 #include <klocale.h>
+#include <koUnit.h>
 #include <qdom.h>
+#include <kdebug.h>
 
 VRectangle::VRectangle( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -66,8 +68,8 @@ VRectangle::save( QDomElement& element ) const
 		me.setAttribute( "x", m_topLeft.x() );
 		me.setAttribute( "y", m_topLeft.y() );
 
-		me.setAttribute( "width", m_width );
-		me.setAttribute( "height", m_height );
+		me.setAttribute( "width", QString("%1pt").arg( m_width ) );
+		me.setAttribute( "height", QString("%1pt").arg( m_height ) );
 
 		writeTransform( me );
 	}
@@ -83,11 +85,11 @@ VRectangle::load( const QDomElement& element )
 		if( list.item( i ).isElement() )
 			VObject::load( list.item( i ).toElement() );
 
-	m_width  = element.attribute( "width" ).toDouble(),
-	m_height = element.attribute( "height" ).toDouble(),
+	m_width  = KoUnit::parseValue( element.attribute( "width" ), 10.0 );
+	m_height = KoUnit::parseValue( element.attribute( "height" ), 10.0 );
 
-	m_topLeft.setX( element.attribute( "x" ).toDouble() );
-	m_topLeft.setY( element.attribute( "y" ).toDouble() );
+	m_topLeft.setX( KoUnit::parseValue( element.attribute( "x" ) ) );
+	m_topLeft.setY( KoUnit::parseValue( element.attribute( "y" ) ) );
 
 	init();
 

@@ -27,6 +27,7 @@
 #include "vspiral.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
+#include <koUnit.h>
 
 VSpiral::VSpiral( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -142,12 +143,12 @@ VSpiral::load( const QDomElement& element )
 		if( list.item( i ).isElement() )
 			VObject::load( list.item( i ).toElement() );
 
-	m_radius  = element.attribute( "radius" ).toDouble(),
-	m_angle = element.attribute( "angle" ).toDouble(),
-	m_fade = element.attribute( "fade" ).toDouble(),
+	m_radius  = KoUnit::parseValue( element.attribute( "radius" ) );
+	m_angle = element.attribute( "angle" ).toDouble();
+	m_fade = element.attribute( "fade" ).toDouble();
 
-	m_center.setX( element.attribute( "cx" ).toDouble() );
-	m_center.setY( element.attribute( "cy" ).toDouble() );
+	m_center.setX( KoUnit::parseValue( element.attribute( "cx" ) ) );
+	m_center.setY( KoUnit::parseValue( element.attribute( "cy" ) ) );
 
 	m_segments  = element.attribute( "segments" ).toUInt(),
 
