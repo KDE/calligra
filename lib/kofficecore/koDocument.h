@@ -374,7 +374,7 @@ public:
   /**
    * Checks whether the document is currently in the process of autosaving
    */
-  bool IsAutosaving();
+  bool isAutosaving();
 
   /**
    * Retrieve the default value for autosave. Called by the applications

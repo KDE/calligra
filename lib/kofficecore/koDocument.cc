@@ -1267,7 +1267,7 @@ void KoDocument::setErrorMessage( const QString& errMsg )
     d->lastErrorMessage = errMsg;
 }
 
-bool KoDocument::IsAutosaving()
+bool KoDocument::isAutosaving()
 {
   return d->m_autosaving;
 }
