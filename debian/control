@@ -173,7 +173,7 @@ Suggests: khelpcenter, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Replaces: koffice-libs (<< 1:1.1-20010404-0)
 Description: a business report maker for the KDE Office Suite
- Kugar is a tool for generating business quality reports which can
+ Kugar is a tool for generating business quality reports that can
  be viewed and printed.  It includes a standalone report viewer and a
  KPart report viewer.  The latter means that any KDE application can
  embed the report viewing functionality and that reports can be viewed

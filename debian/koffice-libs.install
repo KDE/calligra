@@ -19,6 +19,8 @@ usr/lib/kde3/clipartthumbnail.la
 usr/lib/kde3/clipartthumbnail.so
 usr/lib/kde3/kfile_koffice.la
 usr/lib/kde3/kfile_koffice.so
+usr/lib/kde3/kfile_ooo.la
+usr/lib/kde3/kfile_ooo.so
 usr/lib/kde3/kodocinfopropspage.la
 usr/lib/kde3/kodocinfopropspage.so
 usr/lib/kde3/kofficescan.la

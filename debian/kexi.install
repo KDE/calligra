@@ -1,7 +1,10 @@
 usr/bin/kexi
+usr/bin/kformdesigner
+usr/lib/kde3/containers.la
+usr/lib/kde3/containers.so
 usr/lib/kde3/kexi*
-usr/lib/kde3/kudesigner_kexiplugin.so
 usr/lib/kde3/kudesigner_kexiplugin.la
+usr/lib/kde3/kudesigner_kexiplugin.so
 usr/lib/kde3/kwmailmerge_kexi.la
 usr/lib/kde3/kwmailmerge_kexi.so
 usr/lib/kde3/libkexipart.la
@@ -18,7 +21,9 @@ usr/lib/libkexiextendedwidgets.*
 usr/lib/libkexipart.*
 usr/lib/libkformeditor.*
 usr/share/applnk/Office/kexi.desktop
+usr/share/applnk/Utilities/kformdesigner.desktop
 usr/share/apps/kexi
+usr/share/apps/kformdesigner
 usr/share/icons/crystalsvg/128x128/apps/kexi.png
 usr/share/icons/crystalsvg/16x16/actions/db.png
 usr/share/icons/crystalsvg/16x16/actions/form.png
@@ -70,4 +75,5 @@ usr/share/icons/hicolor/48x48/apps/kexi.png
 usr/share/icons/hicolor/48x48/mimetypes/kexi.png
 usr/share/services/kexi
 usr/share/services/keximysqlinterface.desktop
+usr/share/services/kformeditor
 ../kexi.xpm usr/share/pixmaps

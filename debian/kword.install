@@ -30,6 +30,8 @@ usr/lib/kde3/libhtmlimport.la
 usr/lib/kde3/libhtmlimport.so
 usr/lib/kde3/libkwordlatexexport.la
 usr/lib/kde3/libkwordlatexexport.so
+usr/lib/kde3/libmswordimport.la
+usr/lib/kde3/libmswordimport.so
 usr/lib/kde3/libmswriteexport.la
 usr/lib/kde3/libmswriteexport.so
 usr/lib/kde3/libmswriteimport.la
@@ -77,6 +79,7 @@ usr/share/services/kword_docbook_export.desktop
 usr/share/services/kword_html_export.desktop
 usr/share/services/kword_html_import.desktop
 usr/share/services/kword_latex_export.desktop
+usr/share/services/kword_msword_import.desktop
 usr/share/services/kword_mswrite_import.desktop
 usr/share/services/kword_mswrite_export.desktop
 usr/share/services/kword_oowriter_export.desktop

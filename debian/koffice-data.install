@@ -67,6 +67,7 @@ usr/share/icons/crystalsvg/32x32/actions/under.png
 usr/share/mimelnk
 usr/share/services/clipartthumbnail.desktop
 usr/share/services/kfile_koffice.desktop
+usr/share/services/kfile_ooo.desktop
 usr/share/services/kformula_latex_export.desktop
 usr/share/services/kformula_png_export.desktop
 usr/share/services/kformula_mathml_export.desktop
