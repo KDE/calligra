@@ -16,5 +16,8 @@ libsvgexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kontour/libkontourpart.la
 
 METASOURCES = AUTO
 
+data_DATA = x-svg.desktop
+datadir = $(kde_mimedir)/image
+
 service_DATA = killustrator_svg_import.desktop killustrator_svg_export.desktop
 servicedir = $(kde_servicesdir)
