@@ -116,7 +116,7 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 #endif
 
 	// dummy
-	button = addButton( "", i18n( "" ) );
+	button = addButton( "", "" );
 
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );
 }
