@@ -49,6 +49,7 @@ class QwViewport;
 class Canvas;
 class GDocument;
 class TransformationDialog;
+class PStateManager;
 
 #define ID_FILE_NEW              1
 #define ID_FILE_OPEN             2
@@ -187,6 +188,7 @@ private:
 
   QString localFile;
   QArray<float> zFactors;
+  PStateManager* psm;
 
   static QList<GObject> clipboard;
   static QList<KIllustrator> windows;

@@ -62,6 +62,7 @@
 #include "filter/FilterManager.h"
 #include "ToolButton.h"
 #include "Preview.h"
+#include "units.h"
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
@@ -94,6 +95,8 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   // current IO job.
   kfmConn = 0;
 
+  psm = PStateManager::instance ();
+
   zFactors.resize (5);
   zFactors[0] = 0.5;
   zFactors[1] = 1.0;
@@ -125,9 +128,6 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   Canvas::initZoomFactors (zFactors);
 
   setCaption ("KIllustrator");
-
-  //  connect ((KIllustratorApp *) kapp, SIGNAL (recentFilesChanged ()),
-  //	   this, SLOT (updateRecentFiles ()));
 
   connect (PStateManager::instance (), SIGNAL (recentFilesChanged ()),
   	   this, SLOT (updateRecentFiles ()));
@@ -168,7 +168,7 @@ void KIllustrator::setupMainView () {
   QWidget *w = new QWidget (this);
   gridLayout = new QGridLayout (w, 2, 2);
   
-  MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
+  MeasurementUnit mu = psm->defaultMeasurementUnit ();
   hRuler = new Ruler (Ruler::Horizontal, mu, w);
   vRuler = new Ruler (Ruler::Vertical, mu, w);
   gridLayout->addWidget (hRuler, 0, 1);
@@ -311,52 +311,62 @@ void KIllustrator::initToolBars () {
   ToolButton* toolButton;
 
   toolButton = new ToolButton (loader->loadIcon ("selecttool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Selection Mode"));
   toolPalette->insertWidget (0, toolButton->width (), toolButton);
   tgroup->insertButton (0, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("pointtool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Edit Point"));
   toolPalette->insertWidget (1, toolButton->width (), toolButton);
   tgroup->insertButton (1, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("freehandtool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Create FreeHand Line"));
   toolPalette->insertWidget (2, toolButton->width (), toolButton);
   tgroup->insertButton (2, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("linetool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Create Polyline"));
   toolPalette->insertWidget (3, toolButton->width (), toolButton);
   tgroup->insertButton (3, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("beziertool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Create Bezier Curve"));
   toolPalette->insertWidget (4, toolButton->width (), toolButton);
   tgroup->insertButton (4, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("recttool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Create Rectangle"));
   toolPalette->insertWidget (5, toolButton->width (), toolButton);
   tgroup->insertButton (5, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("polygontool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Create Polygon"));
   toolPalette->insertWidget (6, toolButton->width (), toolButton);
   tgroup->insertButton (6, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("ellipsetool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Create Ellipse"));
   toolPalette->insertWidget (7, toolButton->width (), toolButton);
   tgroup->insertButton (7, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("texttool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Create Text"));
   toolPalette->insertWidget (8, toolButton->width (), toolButton);
   tgroup->insertButton (8, toolButton);
 
   toolButton = new ToolButton (loader->loadIcon ("zoomtool.xpm"), 
-			       toolPalette);
+			       toolPalette,
+                               i18n ("Zoom In"));
   toolPalette->insertWidget (9, toolButton->width (), toolButton);
   tgroup->insertButton (9, toolButton);
 
@@ -493,11 +503,15 @@ void KIllustrator::initMenu () {
   arrangement->insertItem (i18n ("Align"), ID_ARRANGE_ALIGN);
   arrangement->setAccel (CTRL + Key_A, ID_ARRANGE_ALIGN);
   arrangement->insertItem (i18n ("To Front"), ID_ARRANGE_FRONT);
+  arrangement->setAccel (SHIFT + Key_PageUp, ID_ARRANGE_FRONT);
   arrangement->insertItem (i18n ("To Back"), ID_ARRANGE_BACK);
+  arrangement->setAccel (SHIFT + Key_PageDown, ID_ARRANGE_BACK);
   arrangement->insertItem (i18n ("Forward One"),
 			   ID_ARRANGE_1_FORWARD);
+  arrangement->setAccel (CTRL + Key_PageUp, ID_ARRANGE_1_FORWARD);
   arrangement->insertItem (i18n ("Back One"), 
 			   ID_ARRANGE_1_BACK); 
+  arrangement->setAccel (CTRL + Key_PageDown, ID_ARRANGE_1_BACK);
   arrangement->insertSeparator ();
   arrangement->insertItem (i18n ("Group"), ID_ARRANGE_GROUP);
   arrangement->setAccel (CTRL + Key_G, ID_ARRANGE_GROUP);
@@ -536,14 +550,24 @@ void KIllustrator::initStatusBar () {
   setStatusBar (statusbar);
 
   statusbar->setInsertOrder (KStatusBar::RightToLeft);
-  statusbar->insertItem ("XXXX.XX:XXXX.XX pt", 1);
+  statusbar->insertItem ("XXXX.XX:XXXX.XX pt     ", 1);
   statusbar->insertItem ("                                        ", 2);
   statusbar->enable (KStatusBar::Show);
 }
 
 void KIllustrator::showCursorPosition (int x, int y) {
   char buf[100];
-  sprintf (buf, "%4.2f:%4.2f pt", (float) x, (float) y);
+  switch (psm->defaultMeasurementUnit ()) {
+  case UnitPoint:
+    sprintf (buf, "%4.2f:%4.2f pt     ", (float) x, (float) y);
+    break;
+  case UnitMillimeter:
+    sprintf (buf, "%4.2f:%4.2f mm     ", cvtPtToMm (x), cvtPtToMm (y));
+    break;
+  case UnitInch:
+    sprintf (buf, "%4.2f:%4.2f inch   ", cvtPtToInch (x), cvtPtToInch (y));
+    break;
+  }
   statusbar->changeItem (buf, 1);
 }
 
@@ -603,11 +627,13 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_EDIT_UNDO:
     cmdHistory.undo ();
-    tcontroller->toolSelected (0);
+//    tcontroller->toolSelected (0);
+    tgroup->selectTool (0);
     break;
   case ID_EDIT_REDO:
     cmdHistory.redo ();
-    tcontroller->toolSelected (0);
+//    tcontroller->toolSelected (0);
+    tgroup->selectTool (0);
     break;
   case ID_EDIT_CUT:
     cmdHistory.addCommand (new CutCmd (document, clipboard), true);
@@ -811,7 +837,6 @@ void KIllustrator::saveFile () {
   }
   else {
     document->saveToXml ((const char *) document->fileName ());
-    //    KIllustratorApp *myapp = (KIllustratorApp *) kapp;
     PStateManager::instance ()->addRecentFile ((const char *) 
 					       document->fileName ());
   }
@@ -820,8 +845,18 @@ void KIllustrator::saveFile () {
 void KIllustrator::saveAsFile () {
   QString fname = KFileDialog::getSaveFileName (0, "*.kil", this);
   if (! fname.isEmpty ()) {
+    if (access ((const char *) fname, W_OK) == 0) {
+      // there is already a file with the same name
+      int result = 
+	KMsgBox::yesNoCancel (this, "Message", 
+			      i18n ("This Document already exists.\nWould you like to override it ?"),
+			      KMsgBox::QUESTION, i18n ("Yes"), 
+			      i18n ("No"), 
+			      i18n ("Cancel"));
+      if (result != 1)
+	return;
+    }
     document->saveToXml (fname);
-    //    KIllustratorApp *myapp = (KIllustratorApp *) kapp;
     PStateManager::instance ()->addRecentFile ((const char *) fname);
     setFileCaption (fname);
   }
