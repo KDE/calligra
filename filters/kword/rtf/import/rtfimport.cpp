@@ -1275,10 +1275,6 @@ void RTFImport::insertUnicodeSymbol( RTFProperty * )
 	    }
 	}
     }
-    if (token.type == RTFTokenizer::PlainText) // DEBUG
-    {
-        kdDebug(30515) << "insertUnicodeSymbol: unskipable plain text!" << endl;
-    }
     if (token.type != RTFTokenizer::PlainText)
     {
 	token.type = RTFTokenizer::PlainText;
