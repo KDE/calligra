@@ -22,6 +22,8 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 
+#include <klocale.h>
+
 #include "kdualcolorbtn.h"
 #include "colordialog.h"
 
