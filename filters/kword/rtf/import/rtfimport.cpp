@@ -137,7 +137,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	"@rtf",		"landscape",	setFlagProperty,	landscape, true ),
 	PROP(	0L,		"ldblquote",	insertSymbol,		0L, 0x201c ),
 	MEMBER(	0L,		"li",		setNumericProperty,	state.layout.leftIndent, 0 ),
-	PROP(	"Text",		"line",		insertParagraph,	0L, 0 ),
+	PROP(	0L,		"line",		insertSymbol,		0L, 0x000a ),
 	PROP(	0L,		"lquote",	insertSymbol,		0L, 0x2018 ),
 	PROP(	0L,		"ltrmark",	insertSymbol,		0L, 0x200e ),
 	MEMBER(	"@pict",	"macpict",	setEnumProperty,	picture.type, RTFPicture::MacPict ),
