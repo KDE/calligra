@@ -179,6 +179,8 @@ void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& st
         QDomElement tabStop = it.toElement();
         Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
         QString type = tabStop.attribute( "style:type" ); // left, right, center or char
+
+        QDomElement elem = parentElement.ownerDocument().createElement( "TABULATOR" );
         int kOfficeType = 0;
         if ( type == "left" )
             kOfficeType = 0;
@@ -187,12 +189,11 @@ void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& st
         else if ( type == "right" )
             kOfficeType = 2;
         else if ( type == "char" ) {
-            //QString delimiterChar = tabStop.attribute( "style:char" ); // single character
-            // TODO save delimiterChar
+            QString delimiterChar = tabStop.attribute( "style:char" ); // single character
+            elem.setAttribute( "alignchar", delimiterChar );
             kOfficeType = 3; // "alignment on decimal point"
         }
 
-        QDomElement elem = parentElement.ownerDocument().createElement( "TABULATOR" );
         elem.setAttribute( "type", kOfficeType );
 
         double pos = KoUnit::parseValue( tabStop.attribute( "style:position" ) );
