@@ -1432,10 +1432,39 @@ void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles,  KoGenStyl
 QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles )
 {
     KoGenStyle stroke( KPresenterDoc::STYLE_STROKE /*, "graphic"*/ /*no name*/ );
-    //FIXME !!!!
-    stroke.addAttribute( "draw:style", "...." );
-    stroke.addAttribute( "draw:dots1", "...." );
-    stroke.addAttribute( "draw:distance", "...." );
+    switch( pen.style() )
+    {
+    case Qt::NoPen:
+        //nothing
+        break;
+    case Qt::SolidLine:
+        //nothing
+        break;
+    case Qt::DashLine: //value from ooimpress filter
+        stroke.addAttribute( "draw:style", "rect" );
+        stroke.addAttribute( "draw:dots1", "1" );
+        stroke.addAttribute( "draw:dots2", "1" );
+        stroke.addAttribute( "draw:dots1-length", "0.508cm" );
+        stroke.addAttribute( "draw:dots2-length", "0.508cm" );
+        stroke.addAttribute( "draw:distance", "0.508cm" );
+    case Qt::DotLine:
+        stroke.addAttribute( "draw:style", "rect" );
+        stroke.addAttribute( "draw:dots1", "1" );
+        stroke.addAttribute( "draw:distance", "0.257cm" );
+    case Qt::DashDotLine:
+        stroke.addAttribute( "draw:style", "rect" );
+        stroke.addAttribute( "draw:dots1", "1" );
+        stroke.addAttribute( "draw:dots2", "1" );
+        stroke.addAttribute( "draw:dots1-length", "0.051cm" );
+        stroke.addAttribute( "draw:dots2-length", "0.254cm" );
+        stroke.addAttribute( "draw:distance", "0.127cm" );
+    case Qt::DashDotDotLine:
+        stroke.addAttribute( "draw:style", "rect" );
+        stroke.addAttribute( "draw:dots1", "2" );
+        stroke.addAttribute( "draw:dots2", "1" );
+        stroke.addAttribute( "draw:dots2-length", "0.203cm" );
+        stroke.addAttribute( "draw:distance", "0.203cm" );
+    }
     return mainStyles.lookup( stroke, "stroke" );
     //    <draw:stroke-dash draw:name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
 }
@@ -1453,10 +1482,18 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
             pen.setStyle(static_cast<Qt::PenStyle>( 1 ) );
         else if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "dash" )
         {
-            //FIXME !!!!!!!!!!!!!!!! we use name from oo which is not good
-            //we muse use style defined into office style
-
             QString style = styleStack.attribute( "draw:stroke-dash", QString::null,"graphic" );
+
+            kdDebug()<<" stroke style is  : "<<style<<endl;
+            //type not defined by default
+            //try to use style.
+            QDomElement* draw = context.oasisStyles().drawStyles()[style];
+            kdDebug()<<" stroke have oasis style defined :"<<draw<<endl;
+            if ( draw )
+            {
+                //FIXME
+            }
+
             if ( style == "Ultrafine Dashed" || style == "Fine Dashed" ||
                  style == "Fine Dashed (var)" || style == "Dashed (var)" )
                 pen.setStyle(static_cast<Qt::PenStyle>( 2 ) );
@@ -1469,6 +1506,7 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
                 pen.setStyle(static_cast<Qt::PenStyle>( 5 ) );
         }
 
+        //FIXME witdh pen style is not good :(
         if ( styleStack.hasAttribute( "svg:stroke-width", QString::null,"graphic" ) )
             pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width" ) ) );
         if ( styleStack.hasAttribute( "svg:stroke-color", QString::null,"graphic" ) )
