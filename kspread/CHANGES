@@ -1,5 +1,9 @@
 Changes from 1.1 to 1.2
 =======================
+
+Until beta1:
+------------
+
 - bug fixes :-)
 - perfomance enhancements
 - support up to 2^15 columns and rows, formerly it was 676 columns and 10000 rows
@@ -8,9 +12,6 @@ Changes from 1.1 to 1.2
 - function name is now case-insensitive
 - "Related Function" in formula editor
 - move functions in kspread_interpreter into several kspread_functions_*.cc
-- auto continuation support for every direction and all types supported in KSpread
-  and for more complex series like 1,3,4,6,...
-- just one "copy" instead of "copy" and "copy as text"
 
 New functions added:
  conversion:
@@ -32,3 +33,14 @@ New functions added:
    WEIBULL, EXPONDIST, NORMDIST, NORMSDIST, FISHER, 
    FISHERINV, LOGNORMDIST
   
+
+After Beta1:
+------------
+- Bug fixes
+- auto continuation support for every direction and all types supported in KSpread
+  and for more complex series like 1,3,4,6,...
+- just one "copy" instead of "copy" and "copy as text"
+- insertion of series supports now doubles and decreasing series
+
+After Beta2:
+------------
