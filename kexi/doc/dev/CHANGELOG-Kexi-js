@@ -316,6 +316,11 @@ KexiDB
   it's already provided
 - DriverManagerInternal::aboutDelete() added: called from Driver dtor
   (because sometimes KLibrary is destroyed before DriverManagerInternal)
+- DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE added
+	 True if the value (fetched from field (or function) 
+	 defined by ROW_ID_FIELD_NAME member) is EXACTLY the value if autoincremented field,
+	 not just an implicit (internal) row number. Default value is false.
+	 --used in Connection::lastInsertedAutoIncValue()
 Table Designer
 - saving changes to tables works now (data is just dropped, though);
   user is warned about this, when needed

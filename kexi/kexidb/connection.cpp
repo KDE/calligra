@@ -1031,6 +1031,8 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName)
 {
 	int row_id = drv_lastInsertRowID();
+	if (m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE)
+		return row_id;
 	RowData rdata;
 	if (row_id<=0 || !querySingleRecord(
 	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME

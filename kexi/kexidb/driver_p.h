@@ -51,11 +51,27 @@ class KEXI_DB_EXPORT DriverBehaviour
 	 False by default. */
 	bool SPECIAL_AUTO_INCREMENT_DEF : 1;
 	
-	/*! Name of a field with autoincremented unique value,
+	/*! Name of a field (or built-in function) with autoincremented unique value,
 	 typically returned by Connection::drv_lastInsertRowID().
+
+	 Examples:
+	 - PostgreSQL and SQLite engines use 'OID' field 
+	 - MySQL uses LAST_INSERT_ID() built-in function
 	*/
 	QString ROW_ID_FIELD_NAME;
 	
+	/*! True if the value (fetched from field (or function) 
+	 defined by ROW_ID_FIELD_NAME member) is EXACTLY the value if autoincremented field,
+	 not just an implicit (internal) row number. Default value is false.
+	 
+	 Examples:
+	 - PostgreSQL and SQLite engines have this flag set to false ('OID' field has 
+	    it's own implicit value)
+	 - MySQL has this flag set to true (LAST_INSERT_ID() returns real value 
+	 of last autoincremented field)
+	*/
+	bool ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE : 1;
+
 	/*! Name of any (e.g. first found) database for this connection that 
 	 typically always exists. This can be not set if we want to do some magic checking
 	 what database name is availabe by reimplementing
