@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "driver.h"
+#include <kexidb/driver.h>
 #include "error.h"
 #include "drivermanager.h"
 #include "connection.h"
@@ -26,12 +26,14 @@
 #include <qfileinfo.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <assert.h>
 
 using namespace KexiDB;
 
-//! used when we do not have Driver instance yet
+/*! used when we do not have Driver instance yet,
+ or when we cannot get one */
 QValueVector<QString> dflt_typeNames;
 
 
@@ -50,7 +52,7 @@ Driver::Driver( QObject *parent, const char *name, const QStringList & )
 
 Driver::~Driver()
 {
-	qDebug("Driver::~Driver()");
+	KexiDBDbg << "Driver::~Driver()" << endl;
 //	Connection *conn;
 	m_connections.clear();
 /*	for ( conn = m_connections.first(); conn ; conn = m_connections.next() ) {
@@ -59,7 +61,7 @@ Driver::~Driver()
 		m_connections.remove();
 		delete conn;
 	}*/
-	qDebug("Driver::~Driver() ok");
+	KexiDBDbg << "Driver::~Driver() ok" << endl;
 }
 
 const QPtrList<Connection> Driver::connectionsList() 
