@@ -1021,8 +1021,9 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             QString name = o.tagName();
             int offset = dp.attribute( "draw:id" ).toInt();
             kdDebug()<<" object offset :"<<offset<<endl;
-	    QDomElement * animation = m_animations[o.attribute("draw:id")];
-; //todo fixme
+	    QDomElement * animation = 0L;
+	    if( o.hasAttribute("draw:id"))
+	      animation = m_animations[o.attribute("draw:id")];
             m_styleStack.save();
             if ( name == "draw:text-box" ) // textbox
             {
