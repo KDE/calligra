@@ -1743,6 +1743,7 @@ void OoImpressImport::createStyleMap( QDomDocument &docstyles )
     {
         insertDraws( fixedStyles.toElement() );
         insertStyles( fixedStyles.toElement() );
+        insertStylesPresentation( fixedStyles.toElement() );
     }
 
     QDomNode automaticStyles = styles.namedItem( "office:automatic-styles" );
@@ -1805,7 +1806,7 @@ void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ) )
     {
-        //kdDebug()<<" presentation:style-name **************************** :"<<object.attribute( "presentation:style-name" )<<endl;
+        kdDebug()<<" presentation:style-name **************************** :"<<object.attribute( "presentation:style-name" )<<endl;
         if ( sticky )
             addStyles( m_stylesPresentation[object.attribute( "presentation:style-name" )] );
         else
@@ -1823,6 +1824,7 @@ void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
 
 void OoImpressImport::addStyles( const QDomElement* style )
 {
+    kdDebug()<<" addStyle :"<<style<<endl;
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttribute( "style:parent-style-name" ) )
     {
