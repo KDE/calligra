@@ -25,6 +25,6 @@ int main( int /*argc*/, char **/*argv*/ )
 {
     KInstance instance( "filterchain_test" );  // we need an instance when using the trader
     KOffice::Graph g( "application/x-kword" );
-    g.dumpAll();
+    g.dump();
     return 0;
 }

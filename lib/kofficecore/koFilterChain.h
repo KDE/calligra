@@ -23,16 +23,16 @@
 #include <qasciidict.h>
 #include <qptrlist.h>
 
-#include <priorityqueue.h>
-
 class KoFilterManager;
 
 // As we use quite generic classnames...
-namespace KOffice {
-
+namespace KOffice
+{
     class Vertex;
+    template<class T> class PriorityQueue;
 
-    class Edge {
+    class Edge
+    {
 
     public:
         // creates a new edge to "vertex" with the given service (=filter).
@@ -44,11 +44,11 @@ namespace KOffice {
         const Vertex* vertex() const { return m_vertex; }
 
         // Relaxes the "connected" vertex (i.e. the weight of the
-        // connected vertex = "vertexWeight" (parameter) + weight of this edge
+        // connected vertex = "predec.->key()" (parameter) + weight of this edge
         // As this will only be called once we calculate the weight
         // of the edge "on the fly"
         // Note: We have to pass the queue as we have to call keyDecreased :}
-        void relax( unsigned int vertexWeight, PriorityQueue<Vertex>& queue );
+        void relax( const Vertex* predecessor, PriorityQueue<Vertex>& queue );
 
         // debugging
         void dump( const QCString& indent ) const;
@@ -63,7 +63,8 @@ namespace KOffice {
     };
 
 
-    class Vertex {
+    class Vertex
+    {
 
     public:
         Vertex( const QCString& mimeType );
@@ -72,8 +73,9 @@ namespace KOffice {
         QCString mimeType() const { return m_mimeType; }
 
         // current "weight" of the vertex - will be "relaxed" when
-        // running the shortest path algorithm
-        void setKey( unsigned int key ) { if ( m_weight > key ) m_weight=key; }
+        // running the shortest path algorithm. Returns true if it
+        // really was "relaxed"
+        bool setKey( unsigned int key );
         unsigned int key() const { return m_weight; }
 
         // Position in the heap, needed for a fast keyDecreased operation
@@ -109,7 +111,8 @@ namespace KOffice {
     };
 
 
-    class Graph {
+    class Graph
+    {
 
     public:
         Graph( const QCString& from );
@@ -118,18 +121,16 @@ namespace KOffice {
         bool isValid() const { return m_graphValid; }
 
         // debugging
-        void dumpAll() const;
-        void dumpQueue() const;
-        void dumpDict() const;
+        void dump() const;
 
     private:
         Graph( const Graph& rhs );
         Graph& operator=( const Graph& rhs );
 
         void buildGraph();
+        void shortestPath();
 
         QAsciiDict<Vertex> m_vertices;
-        PriorityQueue<Vertex> m_queue;
         QCString m_from;
         bool m_graphValid;
     };
@@ -138,7 +139,8 @@ namespace KOffice {
 
 // Just a toy class right now to test the basic functionality of
 // the graph algorithm.
-class KoFilterChain {
+class KoFilterChain
+{
 
 public:
     // find a better name for the enum

@@ -44,7 +44,7 @@ int main(int /*argc*/, char **/*argv*/) {
 
     srand(time(0));
     for(int i=0; i<12; ++i) {
-        Node *n=new Node(static_cast<int>(static_cast<double>(rand())/static_cast<double>(RAND_MAX)*20.0));
+        Node *n=new Node(rand()%20);
         list.append(n);
         queue.insert(n);
     }

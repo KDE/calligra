@@ -20,6 +20,8 @@
 #include <koQueryTrader.h>
 #include <kdebug.h>
 
+#include <priorityqueue.h>
+
 #include <limits.h> // UINT_MAX
 
 namespace KOffice {
@@ -29,12 +31,14 @@ namespace KOffice {
     {
     }
 
-    void Edge::relax( unsigned int vertexWeight, PriorityQueue<Vertex>& queue )
+    void Edge::relax( const Vertex* predecessor, PriorityQueue<Vertex>& queue )
     {
-        if ( !m_vertex )
+        if ( !m_vertex || !predecessor )
             return;
-        m_vertex->setKey( vertexWeight + m_weight );
-        queue.keyDecreased( m_vertex ); // maintain the heap property
+        if ( m_vertex->setKey( predecessor->key() + m_weight ) ) {
+            queue.keyDecreased( m_vertex ); // maintain the heap property
+            m_vertex->setPredecessor( predecessor );
+        }
     }
 
     void Edge::dump( const QCString& indent ) const
@@ -50,6 +54,15 @@ namespace KOffice {
         m_weight( UINT_MAX ), m_index( -1 )
     {
         m_edges.setAutoDelete( true );  // we take ownership of added edges
+    }
+
+    bool Vertex::setKey( unsigned int key )
+    {
+        if ( m_weight > key ) {
+            m_weight=key;
+            return true;
+        }
+        return false;
     }
 
     void Vertex::addEdge( const Edge* edge )
@@ -89,7 +102,7 @@ namespace KOffice {
     void Vertex::relaxVertices( PriorityQueue<Vertex>& queue )
     {
         for ( Edge *e = m_edges.first(); e; e = m_edges.next() )
-            e->relax( m_weight, queue );
+            e->relax( this, queue );
     }
 
     void Vertex::dump( const QCString& indent ) const
@@ -106,8 +119,11 @@ namespace KOffice {
     {
         m_vertices.setAutoDelete( true );
         buildGraph();
+        shortestPath();
     }
 
+    // Query the trader and create the vertices and edges representing
+    // mime types and filters.
     void Graph::buildGraph()
     {
         QValueList<KoFilterEntry> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
@@ -143,32 +159,53 @@ namespace KOffice {
                 if ( service )
                     library = service->library();
                 int weight = ( *it ).weight;
-                for ( ; importIt!=importEnd; ++importIt ) {
-                    Vertex* imp = m_vertices[ ( *importIt ).latin1() ]; // has to exist
-                    imp->addEdge( new Edge( exp, library, weight ) );
-                }
+                for ( ; importIt!=importEnd; ++importIt )
+                    m_vertices[ ( *importIt ).latin1() ]->addEdge( new Edge( exp, library, weight ) );
             }
         }
     }
 
-    void Graph::dumpAll() const
+    // As all edges (=filters) are required to have a positive weight
+    // we can use Dijkstra's shortest path algorithm from Cormen's
+    // "Introduction to Algorithms" (p. 527)
+    // Note: I did some adaptions as our data structures are slightly
+    // different from the ones used in the book. Further we simply stop
+    // the algorithm is we don't find any node with a weight != Infinity
+    // (==UINT_MAX), as this means that the remaining nodes in the queue
+    // aren't connected anyway.
+    void Graph::shortestPath()
     {
-        dumpQueue();
-        dumpDict();
+        // Is the requested start mime type valid?
+        Vertex* from = m_vertices[ m_from ];
+        if ( !from )
+            return;
+
+        // Inititalize start vertex
+        from->setKey( 0 );
+
+        // Fill the priority queue with all the vertices
+        PriorityQueue<Vertex> queue;
+        QAsciiDictIterator<Vertex> it( m_vertices );
+        for ( ; it.current(); ++it )
+            queue.insert( it.current() );
+
+        while ( !queue.isEmpty() ) {
+            Vertex *min = queue.extractMinimum();
+            // Did we already relax all connected vertices?
+            if ( min->key() == UINT_MAX )
+                break;
+            min->relaxVertices( queue );
+        }
+        m_graphValid = true;
     }
 
-    void Graph::dumpQueue() const
+    void Graph::dump() const
     {
-        m_queue.dump();
-    }
-
-    void Graph::dumpDict() const
-    {
-        kdDebug() << "+++++++++ Graph::dumpDict +++++++++" << endl;
+        kdDebug() << "+++++++++ Graph::dump +++++++++" << endl;
         QAsciiDictIterator<Vertex> it( m_vertices );
         for ( ; it.current(); ++it )
             it.current()->dump( "   " );
-        kdDebug() << "+++++++++ Graph::dumpDict (done) +++++++++" << endl;
+        kdDebug() << "+++++++++ Graph::dump (done) +++++++++" << endl;
     }
 
 } // namespace KOffice
