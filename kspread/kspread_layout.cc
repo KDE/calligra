@@ -174,7 +174,7 @@ bool RowLayout::save( ostream &out )
   return true;
 }
 
-bool RowLayout::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+bool RowLayout::load( KOMLParser& , vector<KOMLAttrib>& _attribs )
 {
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end(); it++ )
@@ -297,7 +297,7 @@ bool ColumnLayout::save( ostream &out )
   return true;
 }
 
-bool ColumnLayout::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+bool ColumnLayout::load( KOMLParser& , vector<KOMLAttrib>& _attribs )
 {
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end(); it++ )
