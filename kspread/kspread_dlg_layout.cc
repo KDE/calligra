@@ -1999,6 +1999,8 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     else if( dlg->alignX==KSpreadCell::Undefined)
         standard->setChecked(true);
 
+    connect(grp, SIGNAL(clicked(int)),this,SLOT(slotStateChanged(int)));
+
     grp = new QButtonGroup( i18n("Vertical"),this);
     grp->setRadioButtonExclusive( TRUE );
 
@@ -2089,7 +2091,16 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     connect(defaultWidth , SIGNAL(clicked() ),this, SLOT(slotChangeWidthState()));
     connect(defaultHeight , SIGNAL(clicked() ),this, SLOT(slotChangeHeightState()));
     connect(angleRotation, SIGNAL(valueChanged(int)),this,SLOT(slotChangeAngle(int)));
+    slotStateChanged(0);
     this->resize( 400, 400 );
+
+}
+void CellLayoutPagePosition::slotStateChanged(int)
+{
+if(right->isChecked() || center->isChecked())
+        indent->setEnabled(false);
+else
+        indent->setEnabled(true);
 
 }
 bool CellLayoutPagePosition::getMergedCellState()
@@ -2155,7 +2166,7 @@ void CellLayoutPagePosition::apply( KSpreadCell *_obj )
         _obj->setVerticalText(false);
 
   _obj->setAngle(angleRotation->value());
-  if(dlg->indent!=indent->value())
+  if(dlg->indent!=indent->value() && indent->isEnabled())
         _obj->setIndent(indent->value());
 }
 

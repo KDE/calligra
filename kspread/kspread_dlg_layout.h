@@ -234,6 +234,7 @@ public slots:
     void slotChangeHeightState();
     void slotChangeWidthState();
     void slotChangeAngle(int);
+    void slotStateChanged(int);
 protected:
     QRadioButton *bottom;
     QRadioButton *top;
