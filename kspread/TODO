@@ -84,7 +84,7 @@ Norbert
 - insert data from databases                                    (Norbert - almost done)
 - Styles                                                        ( after 1.2 cause it requires bigger changes
                                                                   than expected )
-- implement more Excel shortcuts like CTRL+Shift+!, *, ^, ...   (Norbert - almost done)
+- implement more Excel shortcuts like CTRL+Shift+!, *, ^, ...   (done)
   (see Todo-list below)
 - GoalSeek                                                      ( done )
 
@@ -153,9 +153,6 @@ Shift F9 versus F9
 
 Let's try to get them working well in Kspread as well. I tried my
 hand at it but wasn't able to get them to be efficient.
-
-Furthermore try stuff like CTRL + SHIFT + # or @ or ! in Excel
-This is neat stuff and makes one's life so much more enjoyable.
 
 3. Familiarize yourself with the concept of array formulas and why they
 are necessary (area protection, partial argument evaluation) Who would

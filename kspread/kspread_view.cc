@@ -4656,6 +4656,10 @@ void KSpreadView::insertTable( KSpreadTable* table )
   }
 }
 
+QColor KSpreadView::borderColor() const
+{ 
+  return m_borderColor->color(); 
+}
 
 #include "kspread_view.moc"
 

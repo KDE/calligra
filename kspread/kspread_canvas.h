@@ -471,6 +471,13 @@ private:
    */
   void ExtendRectBorder(QRect& area);
   void PaintRegion(QRect paintRegion, QRect viewRegion, QPainter &painter);
+  bool formatKeyPress( QKeyEvent * _ev );
+  double getDouble( KSpreadCell * cell );
+  void convertToDouble( KSpreadCell * cell );
+  void convertToPercent( KSpreadCell * cell );
+  void convertToMoney( KSpreadCell * cell );
+  void convertToTime( KSpreadCell * cell );
+  void convertToDate( KSpreadCell * cell );
 };
 
 /**

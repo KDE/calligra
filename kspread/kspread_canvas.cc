@@ -1617,10 +1617,13 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
 }
 
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
-{
-  KSpreadTable *table = activeTable();
+{  
+  KSpreadTable * table = activeTable();
   QString tmp;
   if ( !table )
+    return;
+
+  if ( formatKeyPress( _ev ) )
     return;
 
   // Dont handle the remaining special keys.
@@ -1673,6 +1676,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     RowLayout *rl;
     int moveHide=0;
 
+
     if( !((( _ev->state() & ShiftButton ) == ShiftButton)&&( _ev->state() & ControlButton ) == ControlButton) && (_ev->state() != Qt::ControlButton) )
 	{
 	    KSpread::MoveTo tmpMoveTo=m_pView->doc()->getMoveToValue();
@@ -1693,7 +1697,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			case KSpread::Right:
 			    tmpMoveTo=KSpread::Left;
 			}
-		}
+		} 
+
 //if( _ev->state() != Qt::ControlButton ){
       switch( _ev->key() )
       {
@@ -2315,6 +2320,413 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   // _ev->accept();
 
   // m_pView->eventKeyPressed( _ev, m_bChoose );
+}
+
+double KSpreadCanvas::getDouble( KSpreadCell * cell )
+{
+  cell->setFactor( 1.0 );
+  if ( cell->isDate() )
+  {
+    QDate date = cell->valueDate();
+    QDate dummy(1900, 1, 1);
+    return (dummy.daysTo( date ) + 1);
+  }
+  if ( cell->isTime() )
+  {
+    QTime time  = cell->valueTime();
+    QTime dummy;
+    return dummy.secsTo( time );
+  }
+  if ( cell->isNumeric() )
+    return cell->valueDouble();
+
+  return 0.0;
+}
+
+void KSpreadCanvas::convertToDouble( KSpreadCell * cell )
+{
+  if ( cell->isTime() || cell->isDate() )
+    cell->setValue( getDouble( cell ) );
+  cell->setFactor( 1.0 );
+}
+
+void KSpreadCanvas::convertToPercent( KSpreadCell * cell )
+{
+  if ( cell->isTime() || cell->isDate() )
+    cell->setValue( getDouble( cell ) );
+
+  cell->setFactor( 100.0 );
+  cell->setFormatType( KSpreadCell::Percentage );
+}
+
+void KSpreadCanvas::convertToMoney( KSpreadCell * cell )
+{
+  if ( cell->isTime() || cell->isDate() )
+    cell->setValue( getDouble( cell ) );
+
+  cell->setFormatType( KSpreadCell::Money );
+  cell->setFactor( 1.0 );
+  cell->setPrecision( m_pDoc->locale()->fracDigits() );
+}
+
+void KSpreadCanvas::convertToTime( KSpreadCell * cell )
+{
+  if ( cell->isDate() )
+    cell->setValue( getDouble( cell ) );
+
+  cell->setFormatType( KSpreadLayout::SecondeTime );
+            
+  QTime time(0, 0, 0);
+  time = time.addSecs( (int) cell->valueDouble() );
+  int msec = (int) ( (cell->valueDouble() - (int) cell->valueDouble())* 1000 );
+  time = time.addMSecs( msec );
+  cell->setCellText( time.toString() );
+}
+
+void KSpreadCanvas::convertToDate( KSpreadCell * cell )
+{
+  if ( cell->isTime() )
+    cell->setValue( getDouble( cell ) );
+
+  cell->setFormatType( KSpreadLayout::ShortDate );
+  cell->setFactor( 1.0 );
+
+  QDate date(1900, 1, 1);
+          
+  date = date.addDays( (int) cell->valueDouble() - 1 );
+  cell->setCellText( util_dateFormat(m_pDoc->locale(), date, KSpreadCell::ShortDate) );
+}
+
+bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
+{
+  KSpreadCell  * cell = 0L;
+  KSpreadTable * table = activeTable();
+  QRect rect = table->selectionRect();
+  bool selected = ( rect.left() != 0 );
+
+  if ( !selected )
+    rect.setCoords( markerColumn(), markerRow(), markerColumn(), markerRow() );
+
+  int right  = rect.right();
+  int bottom = rect.bottom();
+
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    QString dummy;
+    KSpreadUndoCellLayout * undo = new KSpreadUndoCellLayout( m_pDoc, table, rect, dummy );
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+
+  if ( selected && table->isRowSelected() )
+  {
+    for ( int r = rect.top(); r <= bottom; ++r )
+    {
+      cell = table->getFirstCellRow( r );
+      while ( cell )
+      {
+        if ( cell->isObscuringForced() )
+        {
+          cell = table->getNextCellRight( cell->column(), r );
+          continue;
+        }
+
+        QPen pen;
+
+        switch ( _ev->key() )
+        {
+         case Key_Exclam:
+          convertToDouble( cell );
+          cell->setFormatType( KSpreadCell::Number );
+          cell->setPrecision( 2 );
+          break;
+
+         case Key_Dollar:
+          convertToMoney( cell );
+          break;
+
+         case Key_Percent:
+          convertToPercent( cell );
+          break;
+
+         case Key_At:
+          convertToTime( cell );
+          break;
+
+         case Key_NumberSign:
+          convertToDate( cell );
+          break;
+
+         case Key_AsciiCircum:
+          cell->setFormatType( KSpreadCell::Scientific );
+          convertToDouble( cell );
+          cell->setFactor( 1.0 );
+          break;
+
+         case Key_Ampersand:
+          if ( r == rect.top() )
+          {
+            pen = QPen( m_pView->borderColor(), 1, SolidLine);
+            cell->setTopBorderPen( pen );
+          }
+          else if ( r == rect.bottom() )
+          {
+            pen = QPen( m_pView->borderColor(), 1, SolidLine);
+            cell->setBottomBorderPen( pen );
+          }
+          break;
+
+         default:
+          return false;
+        } // switch
+
+        cell = table->getNextCellRight( cell->column(), r );
+      } // while (cell)
+      RowLayout * rw = table->nonDefaultRowLayout( r );
+      QPen pen;
+      switch ( _ev->key() )
+      {
+       case Key_Exclam:
+        rw->setFormatType( KSpreadCell::Number );
+        rw->setPrecision( 2 );
+        break;
+
+       case Key_Dollar:
+        rw->setFormatType( KSpreadCell::Money );
+        rw->setFactor( 1.0 );
+        rw->setPrecision( m_pDoc->locale()->fracDigits() );
+        break;
+
+       case Key_Percent:
+        rw->setFactor( 100.0 );
+        rw->setFormatType( KSpreadCell::Percentage );
+        break;
+
+       case Key_At:
+        rw->setFormatType( KSpreadLayout::SecondeTime );
+        rw->setFactor( 1.0 );
+        break;
+
+       case Key_NumberSign:
+        rw->setFormatType( KSpreadLayout::ShortDate );
+        rw->setFactor( 1.0 );
+        break;
+
+       case Key_AsciiCircum:
+        rw->setFormatType( KSpreadCell::Scientific );
+        rw->setFactor( 1.0 );
+        break;
+
+       case Key_Ampersand:
+        if ( r == rect.top() )
+        {
+          pen = QPen( m_pView->borderColor(), 1, SolidLine);
+          rw->setTopBorderPen( pen );
+        }
+        if ( r == rect.bottom() )
+        {
+          pen = QPen( m_pView->borderColor(), 1, SolidLine);
+          rw->setBottomBorderPen( pen );
+        }
+        break;
+
+       default:
+        return false;
+      }
+      table->emit_updateRow( rw, r );
+    }
+
+    return true;
+  }
+
+  if ( selected && table->isColumnSelected() )
+  {
+    for ( int c = rect.left(); c <= right; ++c )
+    {
+      cell = table->getFirstCellColumn( c );
+      while ( cell )
+      {
+        if ( cell->isObscuringForced() )
+        {
+          cell = table->getNextCellDown( c, cell->row() );
+          continue;
+        }
+
+        QPen pen;
+        switch ( _ev->key() )
+        {
+         case Key_Exclam:
+          convertToDouble( cell );
+          cell->setFormatType( KSpreadCell::Number );
+          cell->setPrecision( 2 );
+          break;
+          
+         case Key_Dollar:
+          convertToMoney( cell );
+          break;
+
+         case Key_Percent:
+          convertToPercent( cell );
+          break;
+
+         case Key_At:
+          convertToTime( cell );
+          break;
+
+         case Key_NumberSign:
+          convertToDate( cell );
+          break;
+
+         case Key_AsciiCircum:
+          cell->setFormatType( KSpreadCell::Scientific );
+          convertToDouble( cell );
+          cell->setFactor( 1.0 );
+          break;
+
+         case Key_Ampersand:
+          if ( c == rect.left() )
+          {
+            pen = QPen( m_pView->borderColor(), 1, SolidLine);
+            cell->setLeftBorderPen( pen );
+          }
+          else if ( c == rect.right() )
+          {
+            pen = QPen( m_pView->borderColor(), 1, SolidLine);
+            cell->setRightBorderPen( pen );
+          }
+          break;
+
+         default:
+          return false;
+        }
+        cell = table->getNextCellDown( c, cell->row() );
+      }
+
+      ColumnLayout * cw = table->nonDefaultColumnLayout( c );
+      QPen pen;
+      switch ( _ev->key() )
+      {
+       case Key_Exclam:
+        cw->setFormatType( KSpreadCell::Number );
+        cw->setPrecision( 2 );
+        break;
+
+       case Key_Dollar:
+        cw->setFormatType( KSpreadCell::Money );
+        cw->setFactor( 1.0 );
+        cw->setPrecision( m_pDoc->locale()->fracDigits() );
+        break;
+
+       case Key_Percent:
+        cw->setFactor( 100.0 );
+        cw->setFormatType( KSpreadCell::Percentage );
+        break;
+
+       case Key_At:
+        cw->setFormatType( KSpreadLayout::SecondeTime );
+        cw->setFactor( 1.0 );
+        break;
+
+       case Key_NumberSign:
+        cw->setFormatType( KSpreadLayout::ShortDate );
+        cw->setFactor( 1.0 );
+        break;
+
+       case Key_AsciiCircum:
+        cw->setFactor( 1.0 );
+        cw->setFormatType( KSpreadCell::Scientific );
+        break;
+
+       case Key_Ampersand:
+        if ( c == rect.left() )
+        {
+          pen = QPen( m_pView->borderColor(), 1, SolidLine);
+          cw->setLeftBorderPen( pen );
+        }
+        if ( c == rect.right() )
+        {
+          pen = QPen( m_pView->borderColor(), 1, SolidLine);
+          cw->setRightBorderPen( pen );
+        }
+        break;
+        
+       default:
+        return false;
+      }
+      table->emit_updateColumn( cw, c );
+    }
+    return true;
+  }
+
+  for ( int row = rect.top(); row <= bottom; ++row )
+  {
+    for ( int col = rect.left(); col <= right; ++ col )
+    {
+      cell = table->nonDefaultCell( col, row );
+
+      if ( cell->isObscuringForced() )
+        continue;
+
+      QPen  pen;
+      switch ( _ev->key() )
+      {
+       case Key_Exclam:
+        convertToDouble( cell );
+        cell->setFormatType( KSpreadCell::Number );
+        cell->setPrecision( 2 );
+        break;
+
+       case Key_Dollar:
+        convertToMoney( cell );
+        break;
+
+       case Key_Percent:
+        convertToPercent( cell );
+        break;
+
+       case Key_At:
+        convertToTime( cell );
+        break;
+
+       case Key_NumberSign:
+        convertToDate( cell );
+        break;
+
+       case Key_AsciiCircum:
+        cell->setFormatType( KSpreadCell::Scientific );
+        convertToDouble( cell );
+        cell->setFactor( 1.0 );
+        break;
+
+       case Key_Ampersand:
+        if ( row == rect.top() )
+        {
+          pen = QPen( m_pView->borderColor(), 1, SolidLine);
+          cell->setTopBorderPen( pen );
+        }
+        if ( row == rect.bottom() )
+        {
+          pen = QPen( m_pView->borderColor(), 1, SolidLine);
+          cell->setBottomBorderPen( pen );
+        }       
+        if ( col == rect.left() )
+        {
+          pen = QPen( m_pView->borderColor(), 1, SolidLine);
+          cell->setLeftBorderPen( pen );
+        }
+        if ( col == rect.right() )
+        {
+          pen = QPen( m_pView->borderColor(), 1, SolidLine);
+          cell->setRightBorderPen( pen );
+        }
+        break;
+
+       default:
+        return false;
+      } // switch
+    } // for left .. right
+  } // for top .. bottom
+  table->updateView(rect);
+  return true;
 }
 
 void KSpreadCanvas::doAutoScroll()

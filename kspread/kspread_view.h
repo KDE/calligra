@@ -185,6 +185,7 @@ public:
     void updateBorderButton();
     void removeTable( KSpreadTable *_t );
     void insertTable( KSpreadTable* table );
+    QColor borderColor() const;
 
 public slots:
     void initialPosition();

@@ -21,6 +21,9 @@ Until beta2:
 - insertion of series supports now doubles and decreasing series
 - support for inserting data from SQL databases
 - implemented "Goal Seek"
+- implemented new shortcuts for cell formating 
+    (Excel like): Ctrl+!, $, %, #, ^, @, &, F4 (I will put a description of
+    them in the KSpread handbook later)
 
 Until beta1:
 ------------
