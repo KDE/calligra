@@ -1,4 +1,4 @@
-INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
+INCLUDES = $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
 	-I$(srcdir)/../visitors \

@@ -21,13 +21,13 @@
 #define __KARBON_PART_BASE_H__
 
 #include <koDocument.h>
-
+#include <koffice_export.h>
 class VCommand;
 class VDocument;
 class VToolController;
 
 
-class KarbonPartBase : public KoDocument
+class KARBONBASE_EXPORT KarbonPartBase : public KoDocument
 {
 public:
 	KarbonPartBase( QWidget* parentWidget = 0L, const char* widgetName = 0L,
