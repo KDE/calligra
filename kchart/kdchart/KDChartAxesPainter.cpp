@@ -1821,22 +1821,19 @@ void KDChartAxesPainter::calculateOrdinateFactors(
     */
     if ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() ) {
         double orgLow( nLow );
-        modf( nLow / nDivisor, &nLow );
-        //double nMod = modf( nLow / nRound, &nLow );
-        nLow *= nRound * nDivisor;
+        modf( nLow / nDelta, &nLow );
+        nLow *= nDelta;
         if ( nLow > orgLow )
-            nLow -= nRound * nDivisor;
+            nLow -= nDelta;
         if ( 0.0 < nLow && 0.0 >= orgLow )
             nLow = 0.0;
     }
     if ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() ) {
         double orgHigh( nHigh );
-        //nHigh += 1.1 * nDelta;
-        modf( nHigh / nDivisor, &nHigh );
-        //double nMod = modf( nHigh / nRound, &nHigh );
-        nHigh *= nRound * nDivisor;
+        modf( nHigh / nDelta, &nHigh );
+        nHigh *= nDelta;
         if ( nHigh < orgHigh )
-            nHigh += nRound * nDivisor;
+            nHigh += nDelta;
         if ( 0.0 > nHigh && 0.0 <= orgHigh )
             nHigh = 0.0;
     }
