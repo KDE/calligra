@@ -610,7 +610,7 @@ public:
     bool isNested() const { return TRUE; }
     void resize( QPainter*, int nwidth );
     virtual void invalidate() { cachewidth = -1; };
-    QString anchorAt( QPainter* p, int x, int y );
+    /// ## QString anchorAt( QPainter* p, int x, int y );
 
     virtual void enter( QTextCursor *c, QTextDocument *&doc, QTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd = FALSE );
     virtual void enterAt( QTextCursor *c, QTextDocument *&doc, QTextParag *&parag, int &idx, int &ox, int &oy, const QPoint &pos );
