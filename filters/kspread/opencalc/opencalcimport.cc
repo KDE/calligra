@@ -1896,7 +1896,8 @@ void OpenCalcImport::readInStyle( KSpreadFormat * layout, QDomElement const & st
 
       if ( format )
       {
-        layout->setFormatString( *format, formatType );
+        layout->setFormatString( *format );
+        layout->setFormatType( formatType );
       }
 
       // <number:currency-symbol number:language="de" number:country="DE">€</number:currency-symbol>
