@@ -74,7 +74,7 @@ public:
 
         uint getRow() const {return m_row;}
         uint getColumn() const {return m_col;}
-
+        KWTableFrameSet *table() const { return m_table;}
         bool isAboveOrLeftOf( unsigned row, unsigned col );
 
         double leftBorder();

@@ -326,12 +326,13 @@ void KWFrameBorderCommand::execute()
         }
 
 	if (!cell) {
-		frame->frameBordersChanged();
-		if (frame->isSelected())
-			frame->updateResizeHandles();
-		    //fixme frameBorderChanged for table cells here too ?
+            frame->frameBordersChanged();
+            if (frame->isSelected())
+                frame->updateResizeHandles();
+            //fixme frameBorderChanged for table cells here too ?
 	}
-
+        else
+            cell->table()->refreshSelectedCell();
     }
 
 
@@ -388,6 +389,9 @@ void KWFrameBorderCommand::unexecute()
 			frame->updateResizeHandles();
 		    //fixme frameBorderChanged for table cells here too ?
 	}
+        else
+            cell->table()->refreshSelectedCell();
+
     }
 
 
