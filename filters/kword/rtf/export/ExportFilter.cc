@@ -875,7 +875,8 @@ bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     m_streamOut=new QTextStream(m_ioDevice);
 
-    m_streamOut->setEncoding(QTextStream::UnicodeUTF8); // We want ASCII, so use UTF-8
+    // ### TODO: should "CP 1252" be used directly? (But RTFWorker::escapeRtfText is beased on ISO-8859-1 only.)
+    m_streamOut->setEncoding(QTextStream::Latin1); // We are declaring the RTF document as CP 1252, so use ISO-8859-1
 
     m_fileName=filenameOut;
 
@@ -897,7 +898,7 @@ bool RTFWorker::doOpenDocument(void)
     // Make the file header
 
     // Note: we use \\ansicpg1252 because 1200 is not supposed to be supported
-    // Note2: we assume using \\ansicpg1252 in RTFWorker::escapeRtfText
+    // Note2: we assume using \\ansicpg1252 in RTFWorker::escapeRtfText and in RTFWorker::doOpenFile
     *m_streamOut << "{\\rtf1\\ansi\\ansicpg1252\\uc1\\deff0" << m_eol;
 
     // Default color table
