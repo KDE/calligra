@@ -174,6 +174,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         QDomElement element = doc.createElement("NAME");
         element.setAttribute( "value", e.attribute( "style:name" ) );
         styleElem.appendChild( element );
+        //kdDebug(30518) << k_funcinfo << "generating style " << e.attribute( "style:name" ) << endl;
 
         QString followingStyle = m_styleStack.attribute( "style:next-style-name" );
         if ( !followingStyle.isEmpty() )
@@ -624,6 +625,7 @@ void OoWriterImport::addStyles( const QDomElement* style )
     if ( style->hasAttribute( "style:parent-style-name" ) )
         addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
 
+    //kdDebug(30518) << "pushing style " << style->attribute( "style:name" ) << endl;
     m_styleStack.push( *style );
 }
 
@@ -826,6 +828,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     }
 
     writeLayout( doc, layoutElement );
+    writeFormat( doc, layoutElement, 1, 0, 0 ); // paragraph format, useful for empty parags
 
     QDomElement* paragraphStyle = m_styles[paragraph.attribute( "text:style-name" )];
     QString masterPageName = paragraphStyle ? paragraphStyle->attribute( "style:master-page-name" ) : QString::null;
@@ -1058,7 +1061,7 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
       style:punctuation-wrap, 3.10.36 - not implemented in kotext
     */
 
-    if ( format.hasChildNodes() )
+    if ( format.hasChildNodes() || !length /*hack for styles, they should always have a format*/)
         formats.appendChild( format );
 }
 
