@@ -226,6 +226,10 @@ QStringList KoVariableDateFormat::staticFormatPropsList()
     listDateFormat<<"yyyy-MM-dd";
     listDateFormat<<"dd/yy";
     listDateFormat<<"MMMM";
+    listDateFormat<<"yyyy-MM-dd hh:mm";
+    listDateFormat<<"dd.MMM.yyyy hh:mm";
+    listDateFormat<<"MMM dd,yyyy h:mm AP";
+    listDateFormat<<"yyyy-MM-ddThh:mm:ss"; // ISO 8601
     return listDateFormat;
 }
 
@@ -250,6 +254,10 @@ QStringList KoVariableDateFormat::staticTranslatedFormatPropsList()
     listDateFormat<<"yyyy-MM-dd";
     listDateFormat<<"dd/yy";
     listDateFormat<<"MMMM";
+    listDateFormat<<"yyyy-MM-dd hh:mm";
+    listDateFormat<<"dd.MMM.yyyy hh:mm";
+    listDateFormat<<"MMM dd,yyyy h:mm AP";
+    listDateFormat<<"yyyy-MM-ddThh:mm:ss"; // ISO 8601
     return listDateFormat;
 }
 
