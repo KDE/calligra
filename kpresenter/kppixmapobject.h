@@ -16,11 +16,13 @@
 #ifndef kppixmapobject_h
 #define kppixmapobject_h
 
-#include <qpixmap.h>
+#include <qdatetime.h>
 
 #include "kpobject.h"
 #include "kppixmapcollection.h"
 #include "kpgradient.h"
+
+class QPixmap;
 
 /******************************************************************/
 /* Class: KPPixmapObject                                          */
@@ -30,7 +32,7 @@ class KPPixmapObject : public KPObject
 {
 public:
     KPPixmapObject( KPPixmapCollection *_pixmapCollection );
-    KPPixmapObject( KPPixmapCollection *_pixmapCollection, QString _filename );
+    KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, QDateTime _lastModified );
     virtual ~KPPixmapObject()
     {}
     
@@ -45,19 +47,22 @@ public:
     { brush = _brush; }
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( QColor _gColor1 )
-    { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; redrawPix = true; }
+    { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
     virtual void setGColor2( QColor _gColor2 )
-    { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; redrawPix = true; }
+    { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
     virtual void setGType( BCType _gType )
-    { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; redrawPix = true; }
-
-    virtual void setFileName( QString _filename );
-    virtual void setPixmap( QString _filename, QString _data );
-
+    { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
+    virtual QString getFileName()
+    { return key.dataKey.filename; }
+    
+    void setPixmap( const QString &_filename, QDateTime _lastModified )
+    { setPixmap( _filename, _lastModified, orig_size ); }
+    void setPixmap( const QString &_filename, QDateTime _lastModified, const KSize &_size );
+    void reload()
+    { setPixmap( key.dataKey.filename, key.dataKey.lastModified, key.size ); }
+    
     virtual ObjType getType()
     { return OT_PICTURE; }
-    virtual QString getFileName()
-    { return filename; }
     virtual QPen getPen()
     { return pen; }
     virtual QBrush getBrush()
@@ -80,21 +85,16 @@ protected:
     KPPixmapObject()
     {; }
 
-    QString filename;
     KPPixmapCollection *pixmapCollection;
     QPixmap *pixmap;
-    KSize pixSize;
-    QString data;
-
+    KPPixmapCollection::Key key;
+    KPGradient *gradient;
+    
     QPen pen;
     QBrush brush;
     QColor gColor1, gColor2;
     BCType gType;
     FillType fillType;
-
-    KPGradient *gradient;
-    QPixmap pix;
-    bool redrawPix;
 
 };
 

@@ -17,6 +17,9 @@
 
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <qfileinfo.h>
+#include <qpixmap.h>
+#include <qcstring.h>
 
 /******************************************************************/
 /* Class: KPPixmapObject                                          */
@@ -24,36 +27,42 @@
 
 /*================ default constructor ===========================*/
 KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection )
-    : KPObject(), filename(), data()
+    : KPObject()
 {
     pixmapCollection = _pixmapCollection;
-    pixmap = 0;
+    pixmap = 0L;
     brush = Qt::NoBrush;
-    gradient = 0;
+    gradient = 0L;
     fillType = FT_BRUSH;
     gType = BCT_GHORZ;
-    redrawPix = false;
     pen = QPen( Qt::black, 1, Qt::NoPen );
     gColor1 = Qt::red;
     gColor2 = Qt::green;
 }
 
 /*================== overloaded constructor ======================*/
-KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection, QString _filename )
-    : KPObject(), data()
+KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, QDateTime _lastModified )
+    : KPObject()
 {
     pixmapCollection = _pixmapCollection;
-    pixmap = 0;
+
+    if ( !_lastModified.isValid() )
+    {
+        QFileInfo inf( _filename );
+        _lastModified = inf.lastModified();
+    }
+
     ext = orig_size;
     brush = Qt::NoBrush;
-    gradient = 0;
+    gradient = 0L;
+    pixmap = 0L;
     fillType = FT_BRUSH;
     gType = BCT_GHORZ;
-    redrawPix = false;
     pen = QPen( Qt::black, 1, Qt::NoPen );
     gColor1 = Qt::red;
-    gColor2 = Qt::Qt::green;
-    setFileName( _filename );
+    gColor2 = Qt::green;
+
+    setPixmap( _filename, _lastModified );
 }
 
 /*======================= set size ===============================*/
@@ -62,30 +71,17 @@ void KPPixmapObject::setSize( int _width, int _height )
     KPObject::setSize( _width, _height );
     if ( move ) return;
 
-    if ( !filename.isEmpty() && !data.isEmpty() )
-    {
-        if ( pixmap )
-        {
-            pixmap = pixmapCollection->getPixmap( filename, data, pixSize, true, false );
-            QString _data = data;
-            KSize _pixSize = pixSize;
-            pixSize = ext;
-            pixmap = pixmapCollection->getPixmap( filename, data, pixmap, pixSize );
-            pixmapCollection->removeRef( filename, _data, _pixSize );
-        }
-        else
-        {
-            pixSize = ext;
-            pixmap = pixmapCollection->getPixmap( filename, data, pixSize );
-        }
-    }
+    if ( pixmap )
+        pixmapCollection->removeRef( key );
+
+    key = KPPixmapCollection::Key( KPPixmapDataCollection::Key( key.dataKey.filename, key.dataKey.lastModified ), ext );
+    pixmap = pixmapCollection->findPixmap( key );
+
+    if ( ext == orig_size && pixmap )
+        ext = pixmap->size();
 
     if ( fillType == FT_GRADIENT && gradient )
-    {
         gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
 }
 
 /*======================= set size ===============================*/
@@ -94,30 +90,36 @@ void KPPixmapObject::resizeBy( int _dx, int _dy )
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
 
-    if ( !filename.isEmpty() && !data.isEmpty() )
-    {
-        if ( pixmap )
-        {
-            pixmap = pixmapCollection->getPixmap( filename, data, pixSize, true, false );
-            QString _data = data;
-            KSize _pixSize = pixSize;
-            pixSize = ext;
-            pixmap = pixmapCollection->getPixmap( filename, data, pixmap, pixSize );
-            pixmapCollection->removeRef( filename, _data, _pixSize );
-        }
-        else
-        {
-            pixSize = ext;
-            pixmap = pixmapCollection->getPixmap( filename, data, pixSize );
-        }
-    }
+    if ( pixmap )
+        pixmapCollection->removeRef( key );
+
+    key = KPPixmapCollection::Key( KPPixmapDataCollection::Key( key.dataKey.filename, key.dataKey.lastModified ), ext );
+    pixmap = pixmapCollection->findPixmap( key );
+
+    if ( ext == orig_size && pixmap )
+        ext = pixmap->size();
 
     if ( fillType == FT_GRADIENT && gradient )
-    {
         gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
+}
+
+/*================================================================*/
+void KPPixmapObject::setPixmap( const QString &_filename, QDateTime _lastModified, const KSize &_size )
+{
+    if ( !_lastModified.isValid() )
+    {
+        QFileInfo inf( _filename );
+        _lastModified = inf.lastModified();
     }
+
+    if ( pixmap )
+        pixmapCollection->removeRef( key );
+
+    key = KPPixmapCollection::Key( KPPixmapDataCollection::Key( _filename, _lastModified ), _size );
+    pixmap = pixmapCollection->findPixmap( key );
+
+    if ( ext == orig_size && pixmap )
+        ext = pixmap->size();
 }
 
 /*================================================================*/
@@ -131,56 +133,7 @@ void KPPixmapObject::setFillType( FillType _fillType )
         gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-    {
         gradient = new KPGradient( gColor1, gColor2, gType, getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
-}
-
-/*======================== set backpix filename ==================*/
-void KPPixmapObject::setFileName( QString _filename )
-{
-    if ( _filename.isEmpty() || _filename == filename ) return;
-
-    if ( !filename.isEmpty() )
-        pixmapCollection->removeRef( filename, pixSize );
-
-    filename = _filename;
-
-    pixSize = ext;
-
-    pixmap = pixmapCollection->getPixmap( filename, pixSize, data );
-    ext = pixmap->size();
-    pixSize = ext;
-
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
-}
-
-/*========================== set backpix  ========================*/
-void KPPixmapObject::setPixmap( QString _filename, QString _data )
-{
-    if ( !filename.isEmpty() || _filename == filename )
-        pixmapCollection->removeRef( filename, pixSize );
-
-    filename = _filename;
-    data = _data;
-
-    pixSize = ext;
-
-    pixmap = pixmapCollection->getPixmap( filename, data, pixSize );
-
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-        pix.resize( getSize() );
-    }
 }
 
 /*========================= save =================================*/
@@ -195,14 +148,7 @@ void KPPixmapObject::save( ostream& out )
         << static_cast<int>( effect2 ) << "\"/>" << endl;
     out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
     out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
-
-    QString _data;
-    pixmapCollection->getPixmap( filename, pixSize, _data );
-    pixmapCollection->removeRef( filename, pixSize );
-
-    out << indent << "<PIXMAP filename=\"" << filename.ascii() << "\" data=\""
-        << _data.ascii() << "\"/>" << endl;
-
+    out << indent << "<KEY " << key << "/>" << endl;
     out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
         << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
@@ -224,7 +170,7 @@ void KPPixmapObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // orig
         if ( name == "ORIG" )
         {
@@ -315,15 +261,50 @@ void KPPixmapObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
         }
 
 
+        // key
+        else if ( name == "KEY" )
+        {
+            int year, month, day, hour, minute, second, msec;
+
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "filename" )
+                    key.dataKey.filename = ( *it ).m_strValue.c_str();
+                else if ( ( *it ).m_strName == "year" )
+                    year = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "month" )
+                    month = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "day" )
+                    day = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "hour" )
+                    hour = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "minute" )
+                    minute = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "second" )
+                    second = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "msec" )
+                    msec = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "width" )
+                    key.size.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "height" )
+                    key.size.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+            key.dataKey.lastModified.setDate( QDate( year, month, day ) );
+            key.dataKey.lastModified.setTime( QTime( hour, minute, second, msec ) );
+        }
+
         // pixmap
         else if ( name == "PIXMAP" )
         {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-    
+
             bool openPic = true;
-            QString _data, _fileName;
-    
+            QCString _data;
+            QString _fileName;
+
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "data" )
@@ -348,11 +329,15 @@ void KPPixmapObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     }
                 }
             }
-    
+
+            key.dataKey.filename = _fileName;
+            key.dataKey.lastModified.setDate( pixmapCollection->tmpDate() );
+            key.dataKey.lastModified.setTime( pixmapCollection->tmpTime() );
+            key.size = ext;
             if ( !openPic )
-                setPixmap( _fileName, _data );
+                pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey, _data );
             else
-                setFileName( _fileName );
+                pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey );
         }
 
         // pen
@@ -471,32 +456,6 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     int penw = pen.width();
 
-    _painter->save();
-    _painter->setViewport( ox, oy, r.width(), r.height() );
-//  if ( fillType == FT_BRUSH || !gradient )
-//      _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
-//  else
-//     {
-//      if ( angle == 0 )
-//          _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
-//      else
-//      {
-//          QPixmap pix( ow - 2 * penw, oh - 2 * penw );
-//          QPainter p;
-//          p.begin( &pix );
-//          p.drawPixmap( 0, 0, *gradient->getGradient() );
-//          p.end();
-    
-//          _painter->drawPixmap( penw, penw, pix );
-//      }
-
-//      _painter->setPen( pen );
-//      _painter->setBrush( Qt::NoBrush );
-//      //_painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
-//     }
-    _painter->setViewport( r );
-    _painter->restore();
-
     if ( shadowDistance > 0 )
     {
         if ( angle == 0 )
@@ -509,14 +468,14 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->setBrush( shadowColor );
 
             KSize bs = pixmap->size();
-    
+
             _painter->drawRect( sx, sy, bs.width(), bs.height() );
         }
         else
         {
             r = _painter->viewport();
             _painter->setViewport( ox, oy, r.width(), r.height() );
-            
+
             KRect br = pixmap->rect();
             int pw = br.width();
             int ph = br.height();
@@ -525,14 +484,14 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int pixXPos = -rr.x();
             br.moveTopLeft( KPoint( -br.width() / 2, -br.height() / 2 ) );
             rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
-            
+
             QWMatrix m, mtx;
             mtx.rotate( angle );
             m.translate( pw / 2, ph / 2 );
             m = mtx * m;
-            
+
             _painter->setWorldMatrix( m );
-            
+
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
 
@@ -541,7 +500,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             getShadowCoords( dx, dy, shadowDirection, shadowDistance );
             _painter->drawRect( rr.left() + pixXPos + dx, rr.top() + pixYPos + dy,
                                 bs.width(), bs.height() );
-            
+
             _painter->setViewport( r );
         }
     }
@@ -558,7 +517,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
         _painter->drawPixmap( ox, oy, *pixmap );
-        
+
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( ox + penw, oy + penw, ow - 2 * penw, oh - 2 * penw );
@@ -583,7 +542,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         m = mtx * m;
 
         _painter->setWorldMatrix( m );
-        
+
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );
 
@@ -591,9 +550,9 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
         else
             _painter->drawPixmap( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
-        
+
         _painter->drawPixmap( rr.left() + pixXPos, rr.top() + pixYPos, *pixmap );
-        
+
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ow - 2 * penw, oh - 2 * penw );

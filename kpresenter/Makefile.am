@@ -18,7 +18,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
 	kppixmapobject.cc kppieobject.cc kppartobject.cc \
-	kpbackground.cc kppixmap.cc kpclipart.cc kpgradient.cc\
+	kpbackground.cc kpclipart.cc kpgradient.cc\
 	kppixmapcollection.cc kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
@@ -38,7 +38,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h kppartobject.h \
-		kpbackground.h kppixmap.h kpclipart.h kpgradient.h \
+		kpbackground.h kpclipart.h kpgradient.h \
 		kppixmapcollection.h kpgradientcollection.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \

@@ -25,6 +25,8 @@
 #include <qpen.h>
 #include <qbrush.h>
 #include <qpixmap.h>
+#include <qfileinfo.h>
+#include <qcstring.h>
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -42,7 +44,7 @@
 /*================================================================*/
 KPBackGround::KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCollection *_gradientCollection,
                             KPresenterDoc *_doc )
-    : backPixFilename(), backClipFilename(), backClip(), pixSize( orig_size ), data(), footerHeight( 0 )
+    : backClipFilename(), backClip(), footerHeight( 0 )
 {
     backType = BT_COLOR;
     backView = BV_CENTER;
@@ -53,22 +55,28 @@ KPBackGround::KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCol
 
     pixmapCollection = _pixmapCollection;
     gradientCollection = _gradientCollection;
-    backPix = 0;
-    gradient = 0;
+    backPix = 0L;
+    gradient = 0L;
 
     doc = _doc;
 }
 
 /*================================================================*/
-void KPBackGround::setBackPixFilename( QString _filename )
+void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModified )
 {
-    if ( _filename.isEmpty() || _filename == backPixFilename ) return;
+    if ( backType != BT_PICTURE )
+        return;
+    
+    if ( !_lastModified.isValid() )
+    {
+        QFileInfo inf( _filename );
+        _lastModified = inf.lastModified();
+    }
 
-    if ( !backPixFilename.isEmpty() )
-        pixmapCollection->removeRef( backPixFilename, pixSize );
+    if ( backPix )
+        pixmapCollection->removeRef( key );
 
-    backPixFilename = _filename;
-
+    KSize pixSize;
     switch ( backView )
     {
     case BV_ZOOM: pixSize = KSize( ext.width(), ext.height() );
@@ -77,31 +85,8 @@ void KPBackGround::setBackPixFilename( QString _filename )
         break;
     }
 
-    backPix = pixmapCollection->getPixmap( backPixFilename, pixSize, data );
-    pixSize = backPix->size();
-}
-
-/*================================================================*/
-void KPBackGround::setBackPix( QString _filename, QString _data )
-{
-    if ( _filename.isEmpty() || _data.isEmpty() || _filename == backPixFilename ) return;
-
-    if ( !backPixFilename.isEmpty() )
-        pixmapCollection->removeRef( backPixFilename, pixSize );
-
-    backPixFilename = _filename;
-
-    switch ( backView )
-    {
-    case BV_ZOOM: pixSize = KSize( ext.width(), ext.height() );
-        break;
-    case BV_TILED: case BV_CENTER: pixSize = orig_size;
-        break;
-    }
-
-    data = _data;
-    backPix = pixmapCollection->getPixmap( backPixFilename, _data, pixSize );
-    pixSize = backPix->size();
+    key = KPPixmapCollection::Key( KPPixmapDataCollection::Key( _filename, _lastModified ), pixSize );
+    backPix = pixmapCollection->findPixmap( key );
 }
 
 /*================================================================*/
@@ -160,54 +145,12 @@ void KPBackGround::draw( QPainter *_painter, KPoint _offset, bool _drawBorders )
 void KPBackGround::restore()
 {
     if ( backType == BT_PICTURE )
-    {
-        if ( backView == BV_ZOOM )
-        {
-            if ( !backPixFilename.isEmpty() && !data.isEmpty() )
-            {
-                if ( backPix )
-                {
-                    backPix = pixmapCollection->getPixmap( backPixFilename, data, pixSize, true, false );
-                    QString _data = data;
-                    KSize _pixSize = pixSize;
-                    pixSize = ext;
-                    backPix = pixmapCollection->getPixmap( backPixFilename, data, backPix, pixSize );
-                    pixmapCollection->removeRef( backPixFilename, _data, _pixSize );
-                }
-                else
-                {
-                    pixSize = ext;
-                    backPix = pixmapCollection->getPixmap( backPixFilename, data, pixSize );
-                }
-            }
-        }
-        else
-        {
-            if ( !backPixFilename.isEmpty() && !data.isEmpty() )
-            {
-                if ( backPix )
-                {
-                    QString _data = data;
-                    KSize _pixSize = pixSize;
-                    pixSize = orig_size;
-                    backPix = pixmapCollection->getPixmap( backPixFilename, data, pixSize, true );
-                    pixSize = backPix->size();
-                    pixmapCollection->removeRef( backPixFilename, _data, _pixSize );
-                }
-                else
-                {
-                    pixSize = orig_size;
-                    backPix = pixmapCollection->getPixmap( backPixFilename, data, pixSize );
-                    pixSize = backPix->size();
-                }
-            }
-        }
-    }
+        setBackPixmap( key.dataKey.filename, key.dataKey.lastModified );
 
     if ( backType != BT_PICTURE && backPix )
     {
-        pixmapCollection->removeRef( backPixFilename, data, pixSize );
-        backPix = 0;
+        pixmapCollection->removeRef( key );
+        backPix = 0L;
     }
 
     if ( backType == BT_COLOR || backType == BT_CLIPART || backType == BT_PICTURE && backView == BV_CENTER )
@@ -238,15 +181,8 @@ void KPBackGround::save( ostream& out )
         << backColor2.green() << "\" blue=\"" << backColor2.blue() << "\"/>" << endl;
     out << indent << "<BCTYPE value=\"" << static_cast<int>( bcType ) << "\"/>" << endl;
 
-    if ( !backPixFilename.isEmpty() && backType == BT_PICTURE )
-    {
-        QString _data;
-        pixmapCollection->getPixmap( backPixFilename, pixSize, _data );
-        pixmapCollection->removeRef( backPixFilename, pixSize );
-
-        out << indent << "<BACKPIX filename=\"" << backPixFilename.ascii() << "\" data=\""
-            << _data.ascii() << "\"/>" << endl;
-    }
+    if ( backPix && backType == BT_PICTURE )
+        out << indent << "<BACKPIXKEY " << key << endl;
 
     if ( !backClipFilename.isEmpty() && backType == BT_CLIPART )
         out << indent << "<BACKCLIP filename=\"" << backClipFilename.ascii() << "\"/>" << endl;
@@ -351,15 +287,50 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             }
         }
 
+        // back pixmap
+        else if ( name == "BACKPIXKEY" )
+        {
+            int year, month, day, hour, minute, second, msec;
+
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "filename" )
+                    key.dataKey.filename = ( *it ).m_strValue.c_str();
+                else if ( ( *it ).m_strName == "year" )
+                    year = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "month" )
+                    month = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "day" )
+                    day = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "hour" )
+                    hour = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "minute" )
+                    minute = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "second" )
+                    second = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "msec" )
+                    msec = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "width" )
+                    key.size.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "height" )
+                    key.size.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+            key.dataKey.lastModified.setDate( QDate( year, month, day ) );
+            key.dataKey.lastModified.setTime( QTime( hour, minute, second, msec ) );
+        }
+
         // backpic
         else if ( name == "BACKPIX" )
         {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-    
+
             bool openPic = true;
-            QString _data, _fileName;
-    
+            QCString _data;
+            QString _fileName;
+
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "data" )
@@ -384,11 +355,15 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     }
                 }
             }
-    
+
+            key.dataKey.filename = _fileName;
+            key.dataKey.lastModified.setDate( pixmapCollection->tmpDate() );
+            key.dataKey.lastModified.setTime( pixmapCollection->tmpTime() );
+            key.size = ext;
             if ( !openPic )
-                setBackPix( _fileName, _data );
+                pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey, _data );
             else
-                setBackPixFilename( _fileName );
+                pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey );
         }
 
         // backclip
@@ -462,7 +437,7 @@ void KPBackGround::drawBackPix( QPainter *_painter )
                 _y = ( pix->height() - backPix->height() ) / 2;
             }
             else if ( backPix->height() > pix->height() )
-            {   
+            {
                 bitBlt( pix, 0, 0, backPix, 0, backPix->height() - pix->height(),
                         backPix->width(), pix->height() );
                 _x = ( pix->width() - backPix->width() ) / 2;
@@ -499,7 +474,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const KPoint &_offset )
 
         int h = 0;
         if ( doc->header()->getKTextObject()->isModified() )
-        {   
+        {
             for ( unsigned int i = 0; i < doc->header()->getKTextObject()->paragraphs(); i++ )
                 h += doc->header()->getKTextObject()->paragraphAt( i )->height();
             h += 2;

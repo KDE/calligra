@@ -27,6 +27,7 @@ class KPresenterView;
 #include <qlist.h>
 #include <qobject.h>
 #include <qstring.h>
+#include <qvaluelist.h>
 
 #include <koPageLayoutDia.h>
 
@@ -100,7 +101,7 @@ public:
 
     // save
     virtual bool save( ostream&, const char *_format );
-    virtual bool exportHTML( QString _filename );
+    virtual bool completeSaving( KOStore::Store_ptr _store );
 
     // load
     virtual bool load_template( const QString &_url );
@@ -359,7 +360,8 @@ protected:
     void saveObjects( ostream& );
     void loadBackground( KOMLParser&, vector<KOMLAttrib>& );
     void loadObjects( KOMLParser&, vector<KOMLAttrib>&, bool _paste = false );
-
+    virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
+    
     // ************ variables ************
 
     struct PixCache
@@ -413,7 +415,10 @@ protected:
     KPTextObject *_header, *_footer;
     bool _hasHeader, _hasFooter;
     KPFooterHeaderEditor *headerFooterEdit;
-    
+
+    QValueList<KPPixmapDataCollection::Key> pixmapCollectionKeys;
+    KoPageLayout __pgLayout;
+
 };
 
 #endif

@@ -55,6 +55,9 @@
 #include <qclipbrd.h>
 #include <qregexp.h>
 #include <qfileinf.h>
+#include <qmap.h>
+#include <qdatetime.h>
+#include <qimage.h>
 
 #include <kurl.h>
 
@@ -103,7 +106,7 @@ KPresenterChild::~KPresenterChild()
 
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc()
-    : _pixmapCollection(), _gradientCollection(), _commands(), _hasHeader( false ), 
+    : _pixmapCollection(), _gradientCollection(), _commands(), _hasHeader( false ),
       _hasFooter( false )
 {
     ADD_INTERFACE( "IDL:KOffice/Print:1.0" )
@@ -221,13 +224,14 @@ void KPresenterDoc::cleanUp()
 /*========================== save ===============================*/
 bool KPresenterDoc::hasToWriteMultipart()
 {
-    QListIterator<KPresenterChild> it( m_lstChildren );
-    for( ; it.current(); ++it )
-    {
-        if ( !it.current()->isStoredExtern() )
-            return true;
-    }
-    return false;
+//     QListIterator<KPresenterChild> it( m_lstChildren );
+//     for( ; it.current(); ++it )
+//     {
+//         if ( !it.current()->isStoredExtern() )
+//             return true;
+//     }
+//     return false;
+    return true;
 }
 
 /*======================= make child list intern ================*/
@@ -311,6 +315,19 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 
         out << etag << "</EMBEDDED>" << endl;
     }
+
+    out << otag << "<PIXMAPS>" << endl;
+
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+
+    for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
+    {
+        KPPixmapDataCollection::Key key = it.key();
+        out << indent << "<KEY " << key << " />" << endl;
+    }
+
+    out << etag << "</PIXMAPS>" << endl;
+
     out << etag << "</DOC>" << endl;
 
     setModified( false );
@@ -330,13 +347,6 @@ void KPresenterDoc::enableEmbeddedParts( bool f )
         if ( kpobject->getType() == OT_PART )
             dynamic_cast<KPPartObject*>( kpobject )->enableDrawing( f );
     }
-}
-
-/*====================== export HTML ============================*/
-bool KPresenterDoc::exportHTML( QString _filename )
-{
-    QMessageBox::critical( ( QWidget* )0L, i18n( "KPresenter Error" ), i18n( "HTML export is not implemented!" ), i18n( "OK" ) );
-    return true;
 }
 
 /*========================== save background ====================*/
@@ -368,6 +378,37 @@ void KPresenterDoc::saveObjects( ostream& out )
     }
 }
 
+/*==============================================================*/
+bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
+{
+    if ( !_store )
+        return true;
+    
+    CORBA::String_var u = url();
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+
+    for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
+    {
+        if ( _pixmapCollection.getPixmapDataCollection().references( it.key() ) > 0 &&
+             !it.key().filename.isEmpty() )
+        {
+            QString u2 = u.in();
+            u2 += "/";
+            u2 += it.key().toString();
+
+            QString mime = "image/";
+            mime += QString( QImage::imageFormat( it.key().filename ) );
+            _store->open( u2, mime.lower() );
+            ostorestream out( _store );
+            out << it.data();
+            out.flush();
+            _store->close();
+        }
+    }
+
+    return true;
+}
+
 /*========================== load ===============================*/
 bool KPresenterDoc::loadChildren( KOStore::Store_ptr _store )
 {
@@ -384,32 +425,33 @@ bool KPresenterDoc::loadChildren( KOStore::Store_ptr _store )
 /*========================= load a template =====================*/
 bool KPresenterDoc::load_template( const QString &_url )
 {
-    KURL u( _url );
-    if ( u.isMalformed() )
-        return false;
+//     KURL u( _url );
+//     if ( u.isMalformed() )
+//         return false;
 
-    if ( !u.isLocalFile() )
-    {
-        cerr << "Can not open remote URL" << endl;
-        return false;
-    }
+//     if ( !u.isLocalFile() )
+//     {
+//         cerr << "Can not open remote URL" << endl;
+//         return false;
+//     }
 
-    ifstream in( u.path() );
-    if ( !in )
-    {
-        cerr << "Could not open" << u.path().latin1() << endl;
-        return false;
-    }
+//     ifstream in( u.path() );
+//     if ( !in )
+//     {
+//         cerr << "Could not open" << u.path().latin1() << endl;
+//         return false;
+//     }
 
-    KOMLStreamFeed feed( in );
-    KOMLParser parser( &feed );
+//     KOMLStreamFeed feed( in );
+//     KOMLParser parser( &feed );
 
-    if ( !loadXML( parser, 0L ) )
-        return false;
+//     if ( !loadXML( parser, 0L ) )
+//         return false;
 
-    m_bModified = true;
-    in.close();
-    return true;
+//     m_bModified = true;
+//     in.close();
+//     return true;
+    return loadFromURL( _url, "application/x-kpresenter" );
 }
 
 /*========================== load ===============================*/
@@ -420,7 +462,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     vector<KOMLAttrib> lst;
     string name;
 
-    KoPageLayout __pgLayout;
+    //KoPageLayout __pgLayout;
     __pgLayout.unit = PG_MM;
 
     // clean
@@ -457,7 +499,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
             if ( ( *it ).m_strValue != "application/x-kpresenter" )
             {
                 cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
-                        QApplication::restoreOverrideCursor();
+                QApplication::restoreOverrideCursor();
                 return false;
             }
         }
@@ -503,11 +545,11 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
                 }
                 else
                     cerr << "Unknown tag '" << tag << "' in EMBEDDED" << endl;
-    
+
                 if ( !parser.close( tag ) )
                 {
                     cerr << "ERR: Closing Child" << endl;
-                        QApplication::restoreOverrideCursor();
+                    QApplication::restoreOverrideCursor();
                     return false;
                 }
             }
@@ -527,13 +569,13 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
                     __pgLayout.width = __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
                     __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
                     __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-                }   
+                }
                 else if ( ( *it ).m_strName == "height" )
                 {
                     __pgLayout.height = __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
                     __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
                     __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-                }   
+                }
                 else if ( ( *it ).m_strName == "ptWidth" )
                     __pgLayout.ptWidth = atoi( ( *it ).m_strValue.c_str() );
                 else if ( ( *it ).m_strName == "inchWidth" )
@@ -573,19 +615,19 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
                             __pgLayout.top = __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
                             __pgLayout.ptTop = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
                             __pgLayout.inchTop = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                        }       
+                        }
                         else if ( ( *it ).m_strName == "right" )
                         {
                             __pgLayout.right = __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
                             __pgLayout.ptRight = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
                             __pgLayout.inchRight = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                        }       
+                        }
                         else if ( ( *it ).m_strName == "bottom" )
                         {
                             __pgLayout.bottom = __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
                             __pgLayout.ptBottom = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
                             __pgLayout.inchBottom = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                        }       
+                        }
                         else if ( ( *it ).m_strName == "ptLeft" )
                             __pgLayout.ptLeft = atoi( ( *it ).m_strValue.c_str() );
                         else if ( ( *it ).m_strName == "inchLeft" )
@@ -616,11 +658,11 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
                 }
                 else
                     cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
-    
+
                 if ( !parser.close( tag ) )
                 {
                     cerr << "ERR: Closing Child" << endl;
-                        QApplication::restoreOverrideCursor();
+                    QApplication::restoreOverrideCursor();
                     return false;
                 }
             }
@@ -723,9 +765,65 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
             }
         }
 
+        else if ( name == "PIXMAPS" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+            }
+
+            while ( parser.open( 0L, tag ) )
+            {
+                KPPixmapDataCollection::Key key;
+                int year, month, day, hour, minute, second, msec;
+
+                KOMLParser::parseTag( tag.c_str(), name, lst );
+                if ( name == "KEY" )
+                {
+                    KOMLParser::parseTag( tag.c_str(), name, lst );
+                    vector<KOMLAttrib>::const_iterator it = lst.begin();
+                    for( ; it != lst.end(); it++ )
+                    {
+                        if ( ( *it ).m_strName == "filename" )
+                            key.filename = ( *it ).m_strValue.c_str();
+                        else if ( ( *it ).m_strName == "year" )
+                            year = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "month" )
+                            month = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "day" )
+                            day = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "hour" )
+                            hour = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "minute" )
+                            minute = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "second" )
+                            second = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "msec" )
+                            msec = atoi( ( *it ).m_strValue.c_str() );
+                        else
+                            cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
+                    }
+                    key.lastModified.setDate( QDate( year, month, day ) );
+                    key.lastModified.setTime( QTime( hour, minute, second, msec ) );
+
+                    pixmapCollectionKeys.append( key );
+                }
+                else
+                    cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
+
+                if ( !parser.close( tag ) )
+                {
+                    cerr << "ERR: Closing Child" << endl;
+                    QApplication::restoreOverrideCursor();
+                    return false;
+                }
+            }
+        }
+
         else
             cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;
-    
+
         if ( !parser.close( tag ) )
         {
             cerr << "ERR: Closing Child" << endl;
@@ -737,8 +835,22 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     if ( _rastX == 0 ) _rastX = 10;
     if ( _rastY == 0 ) _rastY = 10;
 
-    setPageLayout( __pgLayout, 0, 0 );
-        QApplication::restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
+
+    if ( !_store )
+    {
+        setPageLayout( __pgLayout, 0, 0 );
+
+        KPObject *kpobject = 0L;
+        for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
+        {
+            if ( kpobject->getType() == OT_PICTURE )
+                dynamic_cast<KPPixmapObject*>( kpobject )->reload();
+        }
+        
+        _pixmapCollection.setAllowChangeRef( true );
+        _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
+    }
 
     return true;
 }
@@ -799,14 +911,14 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
             {
                 KPLineObject *kplineobject = new KPLineObject();
                 kplineobject->load( parser, lst );
-        
+
                 if ( _paste )
                 {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 }
-                else        
+                else
                     _objectList->append( kplineobject );
             } break;
             case OT_RECT:
@@ -814,103 +926,103 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
                 KPRectObject *kprectobject = new KPRectObject();
                 kprectobject->setRnds( _xRnd, _yRnd );
                 kprectobject->load( parser, lst );
-        
+
                 if ( _paste )
                 {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 }
-                else        
+                else
                     _objectList->append( kprectobject );
             } break;
             case OT_ELLIPSE:
             {
                 KPEllipseObject *kpellipseobject = new KPEllipseObject();
                 kpellipseobject->load( parser, lst );
-        
+
                 if ( _paste )
                 {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 }
-                else        
+                else
                     _objectList->append( kpellipseobject );
             } break;
             case OT_PIE:
             {
                 KPPieObject *kppieobject = new KPPieObject();
                 kppieobject->load( parser, lst );
-        
+
                 if ( _paste )
                 {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chors" ), kppieobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 }
-                else        
+                else
                     _objectList->append( kppieobject );
             } break;
             case OT_AUTOFORM:
             {
                 KPAutoformObject *kpautoformobject = new KPAutoformObject();
                 kpautoformobject->load( parser, lst );
-        
+
                 if ( _paste )
                 {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 }
-                else        
+                else
                     _objectList->append( kpautoformobject );
             } break;
             case OT_CLIPART:
             {
                 KPClipartObject *kpclipartobject = new KPClipartObject();
                 kpclipartobject->load( parser, lst );
-        
+
                 if ( _paste )
                 {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 }
-                else        
+                else
                     _objectList->append( kpclipartobject );
             } break;
             case OT_TEXT:
             {
                 KPTextObject *kptextobject = new KPTextObject();
                 kptextobject->load( parser, lst );
-        
+
                 if ( _paste )
                 {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Text" ), kptextobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 }
-                else        
+                else
                     _objectList->append( kptextobject );
             } break;
             case OT_PICTURE:
             {
                 KPPixmapObject *kppixmapobject = new KPPixmapObject( &_pixmapCollection );
                 kppixmapobject->load( parser, lst );
-        
+
                 if ( _paste )
                 {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 }
-                else        
+                else
                     _objectList->append( kppixmapobject );
             } break;
             default: break;
             }
-    
+
             if ( objStartY > 0 ) _objectList->last()->moveBy( 0, objStartY );
             if ( pasting )
             {
@@ -927,6 +1039,54 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
             return;
         }
     }
+}
+
+/*===================================================================*/
+bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
+{
+    if ( _store )
+    {
+        CORBA::String_var str = url();
+
+        QValueListIterator<KPPixmapDataCollection::Key> it = pixmapCollectionKeys.begin();
+
+        for ( ; it != pixmapCollectionKeys.end(); ++it )
+        {
+            QString u = str.in();
+            u += "/";
+            u += it.node->data.toString();
+
+            QImage img;
+
+            _store->open( u, 0L );
+            {
+                istorestream in( _store );
+                in >> img;
+            }
+            _store->close();
+
+            _pixmapCollection.getPixmapDataCollection().insertPixmapData( it.node->data, img );
+        }
+
+
+        KPObject *kpobject = 0L;
+        for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
+        {
+            if ( kpobject->getType() == OT_PICTURE )
+                dynamic_cast<KPPixmapObject*>( kpobject )->reload();
+        }
+
+//     KPBackGround *kpbackground = 0L;
+//     for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next() )
+//         kpbackground->restore();
+
+    }
+    setPageLayout( __pgLayout, 0, 0 );
+
+    _pixmapCollection.setAllowChangeRef( true );
+    _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
+
+    return true;
 }
 
 /*========================= create a new shell ========================*/
@@ -1117,6 +1277,7 @@ bool KPresenterDoc::insertNewTemplate( int diffx, int diffy, bool clean=false )
         objStartY = 0;
         _clean = true;
         m_bModified = true;
+        setURL( QString::null );
         return true;
     }
     else if ( ret == KoTemplateChooseDia::File )
@@ -1135,6 +1296,7 @@ bool KPresenterDoc::insertNewTemplate( int diffx, int diffy, bool clean=false )
         _clean = true;
         m_bModified = true;
         load_template( fileName );
+        setURL( QString::null );
         return true;
     }
     else
@@ -1159,8 +1321,23 @@ void KPresenterDoc::setBackColor( unsigned int pageNum, QColor backColor1, QColo
 /*==================== set background picture ====================*/
 void KPresenterDoc::setBackPixFilename( unsigned int pageNum, QString backPix )
 {
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    QDateTime dt;
+    
+    if ( !QFileInfo( backPix ).exists() )
+    {
+        for ( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
+        {
+            if ( it.key().filename == backPix )
+            {
+                dt = it.key().lastModified;
+                break;
+            }
+        }
+    }
+    
     if ( pageNum < _backgroundList.count() )
-        backgroundList()->at( pageNum )->setBackPixFilename( backPix );
+        backgroundList()->at( pageNum )->setBackPixmap( backPix, dt );
     m_bModified = true;
 }
 
@@ -2425,7 +2602,22 @@ void KPresenterDoc::raiseObjs( int diffx, int diffy )
 /*=================== insert a picture ==========================*/
 void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _x = 10, int _y = 10 )
 {
-    KPPixmapObject *kppixmapobject = new KPPixmapObject( &_pixmapCollection, filename );
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    QDateTime dt;
+    
+    if ( !QFileInfo( filename ).exists() )
+    {
+        for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
+        {
+            if ( it.key().filename == filename )
+            {
+                dt = it.key().lastModified;
+                break;
+            }
+        }
+    }
+    
+    KPPixmapObject *kppixmapobject = new KPPixmapObject( &_pixmapCollection, filename, dt );
     kppixmapobject->setOrig( ( ( diffx + _x ) / _rastX ) * _rastX, ( ( diffy + _y ) / _rastY ) * _rastY );
     kppixmapobject->setSelected( true );
 
@@ -2456,12 +2648,27 @@ void KPresenterDoc::changePicture( QString filename, int diffx, int diffy )
 {
     KPObject *kpobject = 0;
 
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    QDateTime dt;
+    
+    if ( !QFileInfo( filename ).exists() )
+    {
+        for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
+        {
+            if ( it.key().filename == filename )
+            {
+                dt = it.key().lastModified;
+                break;
+            }
+        }
+    }
+    
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
     {
         kpobject = objectList()->at( i );
         if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE )
         {
-            KPPixmapObject *pix = new KPPixmapObject( &_pixmapCollection, filename );
+            KPPixmapObject *pix = new KPPixmapObject( &_pixmapCollection, filename, QDateTime() );
 
             ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change pixmap" ), dynamic_cast<KPPixmapObject*>( kpobject ),
                                                   pix, this );
@@ -2622,7 +2829,7 @@ void KPresenterDoc::setUnit( KoUnit _unit, QString __unit )
     if ( !m_lstViews.isEmpty() )
     {
         for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        {   
+        {
             viewPtr->getHRuler()->setUnit( __unit );
             viewPtr->getVRuler()->setUnit( __unit );
         }
@@ -2650,7 +2857,7 @@ void KPresenterDoc::repaint( KRect rect )
         {
             r = rect;
             r.moveTopLeft( KPoint( r.x() - viewPtr->getDiffX(), r.y() - viewPtr->getDiffY() ) );
-                    
+
             viewPtr->repaint( r, false );
         }
     }
@@ -2667,7 +2874,7 @@ void KPresenterDoc::repaint( KPObject *kpobject )
         {
             r = kpobject->getBoundingRect( 0, 0 );
             r.moveTopLeft( KPoint( r.x() - viewPtr->getDiffX(), r.y() - viewPtr->getDiffY() ) );
-                    
+
             viewPtr->repaint( r, false );
         }
     }
@@ -2863,6 +3070,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
         KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
         _backgroundList.take( _backgroundList.count() - 1 );
         _backgroundList.insert( _page, kpbackground );
+        setURL( QString::null );
     }
 
     repaint( false );

@@ -206,10 +206,27 @@ Reggie, 16.5.1999:
 - Removed code in effectdia which was commented out
 - Fixed setting pen and brush for pixmaps
   (of course a brush is only visible if the pixmap is transparent)
-- Fixed selecting rotated objects 
+- Fixed selecting rotated objects
 - Fixed some problems with toolbar icons
 - Fixed bug reported by David:
    Insert a picture (F2), then change it on the hard disk, remove the picture from
    kpresenter, and try to insert it again : it gets cached, and the old one gets inserted.
 - Removed some uselsess stuff
 - Updated TODO file
+
+Reggie, 17 - 19.5.1999:
+-----------------------
+- I completely rewrote the pixmap handling in KPresenter (finally got rid of some really ugly hacks):
+  - Splitted KPPixmapCollection into two parts (KPPixmapCollection and KPPixmapDataCollection). Inserting
+    pixmaps and lookups are faster now as I'm using QMaps. Also the code is much shorter
+    and ref-counting finally works :-)
+  - Loading/Changing pixmaps/background pixmaps is much faster, because there is no need anymore to convert 
+    a pixmap to an internal KPresenter pixmap format
+  - Saving/Loading pixmaps in(to) documents is cleaner and faster now: I'm using the features of KoStore
+  - Old presentations can be still opened (I added some convert-functions for compatibility)
+
+I didn't test the new pixmap stuff a lot yet, so there may be some bugs in it. I'll do more
+testing tomorrow...
+
+- Fixed loading templates and loading docs using the template dialog (Also stores and embedded parts
+  are loaded in these cases correctly)
