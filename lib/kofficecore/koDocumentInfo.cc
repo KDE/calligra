@@ -38,6 +38,10 @@ KoDocumentInfo::KoDocumentInfo( QObject* parent, const char* name )
     (void)new KoDocumentInfoAbout( this );
 }
 
+KoDocumentInfo::~KoDocumentInfo()
+{
+}
+
 bool KoDocumentInfo::load( const QDomDocument& doc )
 {
     QStringList lst = pages();

@@ -34,6 +34,7 @@ class KoDocumentInfo : public QObject
     Q_OBJECT
 public:
     KoDocumentInfo( QObject* parent = 0, const char* name = 0 );
+    virtual ~KoDocumentInfo();
 
     bool load( const QDomDocument& doc );
     QDomDocument save();
