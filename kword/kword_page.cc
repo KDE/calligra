@@ -667,6 +667,22 @@ bool KWPage::vmpEdit( int mx, int my )
 
     int frameset = doc->getFrameSet( mx, my );
 
+    if ( frameset != -1 && doc->getFrameSet( frameset )->getFrameType() == FT_FORMULA ) {
+	gui->getView()->showFormulaToolbar( TRUE );
+	KWFormulaFrameSet *fs = dynamic_cast<KWFormulaFrameSet*>( doc->getFrameSet( frameset ) );
+	fs->activate( viewport(), contentsX(), contentsY(), gui->getVertRuler()->width()
+		      + gui->getDocStruct()->width() );
+	editNum = frameset;
+	return TRUE;
+    }
+    if ( frameset != -1 && doc->getFrameSet( frameset )->getFrameType() == FT_PART ) {
+	KWPartFrameSet *fs = dynamic_cast<KWPartFrameSet*>( doc->getFrameSet( frameset ) );
+	fs->activate( gui->getView(), contentsX(), contentsY(), gui->getVertRuler()->width()
+		      + gui->getDocStruct()->width() );
+	editNum = frameset;
+	return TRUE;
+    }
+    
     selectedFrameSet = selectedFrame = -1;
     if ( frameset != -1 && doc->getFrameSet( frameset )->getFrameType() == FT_TEXT ) {
 	fc->setFrameSet( frameset + 1 );
@@ -891,6 +907,7 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
 	    editNum = -1;
 	    return;
 	} else if ( doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA ) {
+	    gui->getView()->showFormulaToolbar( FALSE );
 	    dynamic_cast<KWFormulaFrameSet*>( doc->getFrameSet( editNum ) )->deactivate();
 	    setFocusProxy( 0 );
 	    viewport()->setFocusProxy( this );
@@ -1237,6 +1254,7 @@ void KWPage::vmdEditFrame( int mx, int my )
 		      + gui->getDocStruct()->width() );
 	editNum = frameset;
     } else if ( doc->getFrameSet( frameset )->getFrameType() == FT_FORMULA ) {
+	gui->getView()->showFormulaToolbar( TRUE );
 	KWFormulaFrameSet *fs = dynamic_cast<KWFormulaFrameSet*>( doc->getFrameSet( frameset ) );
 	fs->activate( viewport(), contentsX(), contentsY(), gui->getVertRuler()->width()
 		      + gui->getDocStruct()->width() );
@@ -2901,10 +2919,20 @@ void KWPage::scrollToOffset( int _x, int _y, KWFormatContext &_fc )
 /*================================================================*/
 void KWPage::formatChanged( KWFormat &_format, bool _redraw )
 {
+    if ( editNum != -1 ) {
+	if ( formulaIsActive() ) {
+	    QFont f( _format.getUserFont()->getFontName(), _format.getPTFontSize() );
+	    f.setBold( _format.getWeight() == QFont::Bold );
+	    f.setItalic( _format.getItalic() );
+	    f.setUnderline( _format.getUnderline() );
+	    QColor c( _format.getColor() );
+	    ( ( KWFormulaFrameSet* )doc->getFrameSet( editNum ) )->setFormat( f, c );	    
+	}
+	return;
+    }
     format = _format;
 
-    if ( doc->has_selection() && !inKeyEvent && _redraw )
-    {
+    if ( doc->has_selection() && !inKeyEvent && _redraw ) {
 	QPainter p;
 
 	p.begin( viewport() );
@@ -3216,6 +3244,7 @@ void KWPage::setMouseMode( MouseMode _mm )
 	    recalcCursor( FALSE );
 	    editNum = -1;
 	} if ( doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA ) {
+	    gui->getView()->showFormulaToolbar( FALSE );
 	    dynamic_cast<KWFormulaFrameSet*>( doc->getFrameSet( editNum ) )->deactivate();
 	    setFocusProxy( 0 );
 	    viewport()->setFocusProxy( this );
@@ -4981,4 +5010,18 @@ void KWPage::formatMore()
 void KWPage::noInput()
 {
     formatTimer.start( 0, TRUE );
+}
+
+/*================================================================*/
+void KWPage::insertFormulaChar( int c )
+{
+    if ( editNum != -1 && doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA )
+	( ( KWFormulaFrameSet* )doc->getFrameSet( editNum ) )->insertChar( c );
+}
+
+/*================================================================*/
+bool KWPage::formulaIsActive() const
+{
+    return ( editNum != -1 && 
+	     doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA );
 }

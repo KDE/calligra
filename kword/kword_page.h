@@ -180,7 +180,9 @@ public:
     void repaintScreen( int currFS, bool erase );
 
     void selectAll();
-
+    void insertFormulaChar( int c );
+    bool formulaIsActive() const;
+    
 public slots:
     void newLeftIndent( int _left );
     void newFirstIndent( int _first );

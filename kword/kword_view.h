@@ -202,6 +202,18 @@ public:
     virtual void frameBorderStyle( const CORBA::WChar *style );
     virtual void frameBackColor();
 
+    virtual void formulaPower();
+    virtual void formulaSubscript();
+    virtual void formulaParentheses();
+    virtual void formulaAbsValue();
+    virtual void formulaBrackets();
+    virtual void formulaFraction();
+    virtual void formulaRoot();
+    virtual void formulaIntegral();
+    virtual void formulaMatrix();
+    virtual void formulaLeftSuper();
+    virtual void formulaLeftSub();
+    
     virtual void setMode( KOffice::View::Mode _mode );
     virtual void setFocus( CORBA::Boolean mode );
 
@@ -234,6 +246,8 @@ public:
     KOffice::MainWindow_var getMainWindow() { return m_vKoMainWindow; }
     OpenParts::Id getID() { return OPPartIf::m_id; }
 
+    void showFormulaToolbar( bool show );
+    
 public slots:
     void slotInsertObject( KWordChild *_child, KWPartFrameSet *_kwpf );
     void slotUpdateChildGeometry( KWordChild *_child );
@@ -294,7 +308,7 @@ protected:
     CORBA::Long m_idMenuEdit_ReconnectFrame;
     CORBA::Long m_idMenuEdit_CustomVars;
     CORBA::Long m_idMenuEdit_SerialLetterDataBase;
-    
+
     // view menu
     OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
@@ -438,6 +452,20 @@ protected:
     CORBA::Long m_idButtonTable_DeleteRow;
     CORBA::Long m_idButtonTable_InsertCol;
     CORBA::Long m_idButtonTable_DeleteCol;
+
+    // formula toolbar
+    OpenPartsUI::ToolBar_var m_vToolBarFormula;
+    CORBA::Long m_idButtonFormula_Power;
+    CORBA::Long m_idButtonFormula_Subscript;
+    CORBA::Long m_idButtonFormula_Parentheses;
+    CORBA::Long m_idButtonFormula_AbsValue;
+    CORBA::Long m_idButtonFormula_Brackets;
+    CORBA::Long m_idButtonFormula_Fraction;
+    CORBA::Long m_idButtonFormula_Root;
+    CORBA::Long m_idButtonFormula_Integral;
+    CORBA::Long m_idButtonFormula_Matrix;
+    CORBA::Long m_idButtonFormula_LeftSuper;
+    CORBA::Long m_idButtonFormula_LeftSub;
 
     // text toolbar values
     QFont tbFont;

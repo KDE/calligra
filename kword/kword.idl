@@ -20,7 +20,7 @@ module KWord
       slot void editReconnectFrame();
       slot void editCustomVars();
       slot void editSerialLetterDataBase();
-      
+
       slot void newView();
       slot void viewFormattingChars();
       slot void viewFrameBorders();
@@ -111,6 +111,18 @@ module KWord
       slot void frameBorderWidth(in wstring width);
       slot void frameBorderStyle(in wstring style);
       slot void frameBackColor();
+
+      slot void formulaPower();
+      slot void formulaSubscript();
+      slot void formulaParentheses();
+      slot void formulaAbsValue();
+      slot void formulaBrackets();
+      slot void formulaFraction();
+      slot void formulaRoot();
+      slot void formulaIntegral();
+      slot void formulaMatrix();
+      slot void formulaLeftSuper();
+      slot void formulaLeftSub();
     };
 
   interface KWordDocument : KOffice::Document, KOffice::Print

@@ -34,6 +34,7 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 #include <qfile.h>
+#include <qpalette.h>
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -1515,7 +1516,6 @@ void KWPartFrameSet::update()
 }
 
 #include <kformulaedit.h>
-#include <kformulatoolbar.h>
 
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
@@ -1523,21 +1523,22 @@ void KWPartFrameSet::update()
 
 /*================================================================*/
 KWFormulaFrameSet::KWFormulaFrameSet( KWordDocument *_doc, QWidget *parent )
-    : KWFrameSet( _doc ), pic( 0 )
+    : KWFrameSet( _doc ), pic( 0 ), font( "utopia", 12 ), color( Qt::black )
+
 {
     formulaEdit = new KFormulaEdit( parent );
+    formulaEdit->setFont( font );
     if ( pic )
 	delete pic;
     pic = new QPicture;
     QPainter p;
     p.begin( pic );
+    formulaEdit->getFormula()->setFont( font );
+    formulaEdit->getFormula()->setBackColor( Qt::white );
+    formulaEdit->getFormula()->setForeColor( color );
     formulaEdit->getFormula()->redraw( p );
     p.end();
     formulaEdit->hide();
-    
-    toolbar = new KFormulaToolBar;
-    toolbar->connectToFormula( formulaEdit );
-    toolbar->hide();
 }
 
 /*================================================================*/
@@ -1549,8 +1550,8 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWordDocument *_doc )
 /*================================================================*/
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
-    //delete formulaEdit;
-    delete toolbar;
+    if ( pic )
+	delete pic;
 }
 
 /*================================================================*/
@@ -1560,13 +1561,37 @@ QPicture *KWFormulaFrameSet::getPicture()
 }
 
 /*================================================================*/
+void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )
+{
+    font = f;
+    color = c;
+    if ( formulaEdit && formulaEdit->isVisible() ) {
+	formulaEdit->getFormula()->setFont( font );
+	formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
+	formulaEdit->getFormula()->setForeColor( color );
+	formulaEdit->redraw( TRUE );
+    }
+    update();
+}
+
+/*================================================================*/
+void KWFormulaFrameSet::getFormat( QFont &f, QColor &c )
+{
+    f = font;
+    c = color;
+}
+
+/*================================================================*/
 void KWFormulaFrameSet::activate( QWidget *_widget, int diffx, int diffy, int /*diffxx*/ )
 {
     if ( formulaEdit->parent() != _widget )
 	formulaEdit->reparent( _widget, 0, QPoint( 0, 0 ), FALSE );
+
+    formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
+    formulaEdit->redraw( TRUE );
+    formulaEdit->setBackgroundColor( frames.at( 0 )->getBackgroundColor().color() );
     formulaEdit->setGeometry( QRect( frames.at( 0 )->x() - diffx, frames.at( 0 )->y() - diffy,
 				     frames.at( 0 )->width(), frames.at( 0 )->height() ) );
-    toolbar->show();
     formulaEdit->show();
     _widget->setFocusProxy( formulaEdit );
     ( ( QWidget* )_widget->parent() )->setFocusProxy( formulaEdit );
@@ -1577,7 +1602,6 @@ void KWFormulaFrameSet::activate( QWidget *_widget, int diffx, int diffy, int /*
 void KWFormulaFrameSet::deactivate()
 {
     formulaEdit->hide();
-    toolbar->hide();
     
     if ( pic )
 	delete pic;
@@ -1589,6 +1613,13 @@ void KWFormulaFrameSet::deactivate()
 }
 
 /*================================================================*/
+void KWFormulaFrameSet::insertChar( int c )
+{
+    if ( formulaEdit )
+	formulaEdit->insertChar( c );
+}
+
+/*================================================================*/
 void KWFormulaFrameSet::create( QWidget *parent )
 {
     if ( formulaEdit ) {
@@ -1597,13 +1628,12 @@ void KWFormulaFrameSet::create( QWidget *parent )
     }
     
     formulaEdit = new KFormulaEdit( parent );
+    formulaEdit->getFormula()->setFont( font );
+    formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
+    formulaEdit->getFormula()->setForeColor( color );
     formulaEdit->hide();
     formulaEdit->setText( text );
     update();
-
-    toolbar = new KFormulaToolBar;
-    toolbar->connectToFormula( formulaEdit );
-    toolbar->hide();
 }
 
 /*================================================================*/
@@ -1611,6 +1641,7 @@ void KWFormulaFrameSet::update()
 {
     if ( !formulaEdit )
 	return;
+    formulaEdit->setFont( font );
     formulaEdit->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
 				     frames.at( 0 )->width(), frames.at( 0 )->height() ) );
     formulaEdit->getFormula()->setPos( formulaEdit->width() / 2, formulaEdit->height() / 2 );

@@ -55,8 +55,12 @@ int main( int argc, char **argv )
     KWordApp app( argc, argv );
     kimgioRegister();
 
-    KGlobal::dirs()->addResourceType("kword_template",
-		     KStandardDirs::kde_default("data") + "kword/templates/");
+    KGlobal::dirs()->addResourceType( "kword_template",
+				      KStandardDirs::kde_default("data") + 
+				      "kword/templates/" );
+    KGlobal::dirs()->addResourceType( "toolbar", 
+				      KStandardDirs::kde_default( "data" ) + 
+				      "kformula/pics/" );
     app.exec();
 
     return 0;
