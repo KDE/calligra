@@ -17,10 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-// Description: Tabulator chooser (header)
-
-/******************************************************************/
-
 #ifndef koTabChooser_h
 #define koTabChooser_h
 
@@ -35,9 +31,9 @@
 
 #include <kapp.h>
 
-/******************************************************************/
-/* Class: KoTabChooser						  */
-/******************************************************************/
+/**
+ *  class KoTabChooser
+ */
 
 class KoTabChooser : public QFrame
 {
@@ -62,7 +58,10 @@ protected:
     int flags;
     int currType;
     QPopupMenu *rb_menu;
-    int mLeft, mRight, mCenter, mDecPoint;
+    int mLeft;
+    int mRight;
+    int mCenter;
+    int mDecPoint;
 
 protected slots:
     void rbLeft() { currType = TAB_LEFT; repaint( true ); }
