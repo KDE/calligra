@@ -26,7 +26,7 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     pageMenu->insertItem( i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
     pageMenu->insertItem( i18n( "&Use current slide as default template" ), this, SLOT( pageDefaultTemplate() ) );
     pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Duplicate Page" ), this, SLOT( duplicateCopy() ) );
-    pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "&Delete Page..." ), this, SLOT( pageDelete() ) );
+    delPageId = pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "D&elete Page..." ), this, SLOT( pageDelete() ) );
     pageMenu->setMouseTracking( true );
 }
 
@@ -127,7 +127,11 @@ void SideBar::pageDefaultTemplate()
     view->extraDefaultTemplate();
 }
 
-void SideBar::rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c )
+void SideBar::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 {
+    if ( !selectedItem() )
+        return;
+
+    pageMenu->setItemEnabled( delPageId, doc->getPageNums() > 1 );
     pageMenu->popup( pnt );
 }

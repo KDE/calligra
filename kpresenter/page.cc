@@ -441,6 +441,7 @@ void Page::mousePressEvent( QMouseEvent *e )
                 }
             } else {
                 QPoint pnt = QCursor::pos();
+                pageMenu->setItemEnabled( delPageId, view->kPresenterDoc()->getPageNums() > 1 );
                 pageMenu->popup( pnt );
                 mousePressed = false;
                 modType = MT_NONE;
@@ -1534,7 +1535,7 @@ void Page::setupMenus()
     pageMenu->insertItem( i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
     pageMenu->insertItem( i18n( "&Use current slide as default template" ), this, SLOT( pageDefaultTemplate() ) );
     pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Duplicate Page" ), this, SLOT( duplicateCopy() ) );
-    pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "&Delete Page..." ), this, SLOT( pageDelete() ) );
+    delPageId = pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "D&elete Page..." ), this, SLOT( pageDelete() ) );
     pageMenu->insertSeparator();
     pageMenu->insertItem( i18n( "Edit &Header/Footer..." ), this, SLOT( slotEditHF() ) );
     pageMenu->insertSeparator();

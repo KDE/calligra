@@ -40,6 +40,7 @@ private slots:
     void pageInsert();
 
 private:
+    int delPageId;
     KPresenterDoc *doc;
     KPresenterView *view;
     QListViewItem *movedItem, *movedAfter;

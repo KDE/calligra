@@ -216,7 +216,7 @@ protected:
 				const QSize &presSize, KPPixmapObject *obj );
     QSize getPixmapOrigSize( KPPixmapObject *&obj );
     void setTextBackground( KPTextObject *obj );
-    
+
     // variables
     QPopupMenu *graphMenu, *picMenu, *txtMenu, *clipMenu, *presMenu;
     QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu4, *alignMenu5;
@@ -236,6 +236,7 @@ protected:
     QValueList<int>::Iterator slideListIterator;
     int PM_DM, PM_SM;
     int firstX, firstY;
+    int delPageId;
     bool drawRubber;
     QRect rubber, oldBoundingRect, oldRect;
     ToolEditMode toolEditMode;

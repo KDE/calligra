@@ -388,31 +388,26 @@ void KPresenterView::editDuplicatePage()
     sidebar->setCurrentPage( pg );
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
-
+    actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
 }
 
 /*===============================================================*/
 void KPresenterView::editDelPage()
 {
-    // David - shouldn't the action be disabled, to prevent this ?
-    if ( m_pKPresenterDoc->getPageNums() < 2 ) {
-	KMessageBox::sorry( this,
-			    i18n( "Every document has to have at least one page. Because this document \n"
-				  "has not more that one page you can't delete this one." ) );
-    } else {
-	if ( KMessageBox::questionYesNo( this,
-					 i18n( "Do you want to remove the current page?\n"
-					       "This operation is not undoable.") ) != KMessageBox::Yes )
-	    return;
-	m_pKPresenterDoc->deletePage( currPg );
-	setRanges();
-	sidebar->rebuildItems();
-	currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
-	skipToPage( currPg );
-	sidebar->setCurrentPage( currPg );
-	pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-	pgPrev->setEnabled( currPg > 0 );
-    }
+    if ( KMessageBox::questionYesNo( this,
+                                     i18n( "Do you want to remove the current page?\n"
+                                           "This operation is not undoable.") )
+         != KMessageBox::Yes )
+        return;
+    m_pKPresenterDoc->deletePage( currPg );
+    setRanges();
+    sidebar->rebuildItems();
+    currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
+    skipToPage( currPg );
+    sidebar->setCurrentPage( currPg );
+    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
+    pgPrev->setEnabled( currPg > 0 );
+    actionEditDelPage->setEnabled(  m_pKPresenterDoc->getPageNums() > 1 );
 }
 
 /*===============================================================*/
@@ -456,6 +451,7 @@ void KPresenterView::insertPage()
     sidebar->setCurrentPage( pg );
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
+    actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
 }
 
 /*====================== insert a picture =======================*/
@@ -1715,6 +1711,7 @@ void KPresenterView::initGui()
     ( (KSelectAction*)actionScreenPenWidth )->setCurrentItem( 2 );
     actionEditUndo->setEnabled( false );
     actionEditRedo->setEnabled( false );
+    actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
     QMap<int, bool> slides = m_pKPresenterDoc->getSelectedSlides();
     for ( QMap<int, bool>::ConstIterator it = slides.begin(); it != slides.end(); ++it )
 	sidebar->setOn( it.key(), *it );
