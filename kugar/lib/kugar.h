@@ -11,6 +11,6 @@
 
 #include "mpagecollection.h"
 #include "mreportengine.h"
-#include "mreportviewer.h"
+#include "kreportviewer.h"
 
 #endif

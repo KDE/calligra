@@ -4,6 +4,8 @@
     begin     : Mon Aug 23 1999
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
+    copyright : (C) 2002 Alexander Dymo
+    email     : cloudtemple@mksat.net	
  ***************************************************************************/
 
 #include "mreportsection.h"
@@ -97,6 +99,18 @@ int MReportSection::getHeight(){
 /** Sets the height of the section */
 void MReportSection::setHeight(int h){
   height = h;
+}
+
+/** Sets the level of the section */
+void MReportSection::setLevel(int l)
+{
+	level = l;
+}
+
+/** Gets the level of the section */
+int MReportSection::getLevel()
+{
+	return level;
 }
 
 /** Set the current page number - used by special fields */

@@ -78,7 +78,7 @@
 			HAlignment="1" VAlignment="2" WordWrap="0" />	
 	</PageHeader>
 
-	<Detail Height="14">
+	<Detail Level="0" Height="14">
 		<Field Field="prddesc" Text="" X="0" Y="0" Width="268" Height="14" 
 			BackgroundColor="255,255,255" ForegroundColor="0,0,0" 
 			BorderColor="0,0,0" BorderWidth="1" BorderStyle="0"

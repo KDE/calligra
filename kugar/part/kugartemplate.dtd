@@ -3,7 +3,7 @@
 <!-- The DTD for a Kugar template. -->
 
 
-<!ELEMENT KugarTemplate (ReportHeader, PageHeader, Detail, PageFooter, ReportFooter)>
+<!ELEMENT KugarTemplate (ReportHeader, PageHeader, DetailHeader*, Detail*, DetailFooter*, PageFooter, ReportFooter)>
 <!ATTLIST KugarTemplate
 	PageSize	CDATA #REQUIRED
 	PageOrientation	CDATA #REQUIRED
@@ -22,9 +22,20 @@
 	Height		CDATA   #REQUIRED
 	PrintFrequency	CDATA	#REQUIRED>
 
+<!ELEMENT DetailHeader (Line*, Label*, Special*)>
+<!ATTLIST DetailHeader
+	Height		CDATA   #REQUIRED
+	Level		CDATA	#REQUIRED>
+
 <!ELEMENT Detail (Line*, Label*, Special*, Field*)>
 <!ATTLIST Detail 
-	Height		CDATA   #REQUIRED>
+	Height		CDATA   #REQUIRED
+	Level		CDATA	#REQUIRED>
+
+<!ELEMENT DetailFooter (Line*, Label*, Special*)>
+<!ATTLIST Detail 
+	Height		CDATA   #REQUIRED
+	Level		CDATA	#REQUIRED>
 
 <!ELEMENT PageFooter (Line*, Label*, Special*)>
 <!ATTLIST PageFooter 

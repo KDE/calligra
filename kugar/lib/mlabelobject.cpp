@@ -4,9 +4,12 @@
     begin     : Wed Aug 11 1999
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
+    copyright : (C) 2002 Alexander Dymo
+    email     : cloudtemple@mksat.net	
  ***************************************************************************/
 
-#include <kglobalsettings.h>
+//#include <kglobalsettings.h>
+#include <qfont.h>
 
 #include "mlabelobject.h"
 
@@ -16,7 +19,8 @@ MLabelObject::MLabelObject() : MReportObject(), xMargin(0), yMargin(0){
   text = "";
 
   // Set the default font
-  fontFamily = KGlobalSettings::generalFont().family();
+  QFont defaultFont;
+  fontFamily = defaultFont.family();
   fontSize = 10;
   fontWeight = MLabelObject::Normal;
   fontItalic = false;

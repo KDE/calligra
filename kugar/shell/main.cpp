@@ -18,16 +18,20 @@
 
 int main(int argc,char **argv)
 {
-	KAboutData about(PACKAGE,I18N_NOOP("Kugar"),VERSION,
-			 I18N_NOOP("A template driven report viewer for XML data."),
-			 KAboutData::License_GPL_V2,
-			 "Copyright (c) 1999-2000 Mutiny Bay Software\n"
-			 "Copyright (c) 2000 Phil Thompson",
-			 I18N_NOOP(
-		"Kugar merges XML data files with XML templates\n"
+	KAboutData about(PACKAGE, I18N_NOOP("Kugar"), VERSION,
+		I18N_NOOP("A template driven report viewer for XML data."),
+		KAboutData::License_GPL_V2,
+		"Copyright (c) 1999-2000 Mutiny Bay Software\n"
+		"Copyright (c) 2000 Phil Thompson",
+		I18N_NOOP("Kugar merges XML data files with XML templates\n"
 		"to display and print high quality reports."),
-                         "http://www.thekompany.com/projects/kugar",
-			 "phil@river-bank.demon.co.uk");
+		"http://www.thekompany.com/projects/kugar",
+		"phil@river-bank.demon.co.uk");
+	about.addAuthor("Phil Thompson", I18N_NOOP("Current maintainer, Shell, Konqueror Part"),
+		"phil@river-bank.demon.co.uk");
+	about.addAuthor("Alexander Dymo", I18N_NOOP("General Enhancements, Bugfixes"), "cloudtemple@mksat.net",
+		"http://www.cloudtemple.mksat.net");
+	about.addAuthor("Mutiny Bay Software", "Original author", "info@mutinybaysoftware.com");
 
 	// Handle the command line.
 

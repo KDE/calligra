@@ -1,15 +1,17 @@
 /***************************************************************************
-              mreportviewer.cpp  -  Kugar report viewer widget
+              mreportviewer.cpp  -  Kugar QT report viewer widget
               -------------------
     begin     : Fri Aug 13 1999
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
+    copyright : (C) 2002 Alexander Dymo
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #include <qapplication.h>
-#include <kmessagebox.h>
-#include <kprinter.h>
-#include <klocale.h>
+#include <qmessagebox.h>
+#include <qprinter.h>
+//#include <klocale.h>
 
 #include "mreportviewer.h"
 
@@ -144,14 +146,15 @@ void MReportViewer::printReport(){
 
 	// Check if there is a report or any pages to print
 	if(cnt == 0) {
-    KMessageBox::error(this, i18n("There are no pages in the\nreport to print."));
+    QMessageBox::critical(this, "Kugar", "There are no pages in the\nreport to print.",
+	QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
     return;
   }
 
   // Set the printer dialog
-	printer = new KPrinter();
-  printer->setPageSize((KPrinter::PageSize)report->pageSize());
-  printer->setOrientation((KPrinter::Orientation)report->pageOrientation());
+	printer = new QPrinter();
+  printer->setPageSize((QPrinter::PageSize)report->pageSize());
+  printer->setOrientation((QPrinter::Orientation)report->pageOrientation());
 	printer->setMinMax(1, cnt);
 	printer->setFromTo(1, cnt);
   printer->setFullPage(true);
@@ -165,7 +168,7 @@ void MReportViewer::printReport(){
 		int viewIdx = report->getCurrentIndex();
 
 		// Check the order we are printing the pages
-		if (printer->pageOrder() == KPrinter::FirstPageFirst)
+		if (printer->pageOrder() == QPrinter::FirstPageFirst)
 			printRev = false;
 		else
     	printRev = true;
@@ -178,12 +181,12 @@ void MReportViewer::printReport(){
 		int totalSteps = printCnt * printCopies;
 		int currentStep = 1;
 
-		// Set copies to 1, KPrinter copies does not appear to work ...
+		// Set copies to 1, QPrinter copies does not appear to work ...
 		printer->setNumCopies(1);
 
 		// Setup the progress dialog
-		QProgressDialog progress( i18n("Printing report..."),
-					i18n("Cancel"),
+		QProgressDialog progress( "Printing report...",
+					"Cancel",
 		          		totalSteps, this, "progress", true );
 		progress.setMinimumDuration(M_PROGRESS_DELAY);
 		QObject::connect(&progress, SIGNAL(cancelled()), this, SLOT(slotCancelPrinting()));
@@ -297,7 +300,7 @@ void MReportViewer::slotRenderProgress(int p){
 	// Check if the dialog was created
 	if (progress == 0){
 		totalSteps = rptEngine->getRenderSteps();
-		progress = new QProgressDialog( i18n("Creating report..."), i18n("Cancel"),
+		progress = new QProgressDialog( "Creating report...", "Cancel",
                                     totalSteps, this, "progress", true );
 		progress->setMinimumDuration(M_PROGRESS_DELAY);
 	}

@@ -1,5 +1,6 @@
 // Copyright (c) 1999 Mutiny Bay Software
 // Copyright (c) 2000 Phil Thompson <phil@river-bank.demon.co.uk>
+// Copyright (c) 2002 Alexander Dymo <cloudtemple@mksat.net>
 //
 // This file contains the implementation of the KDE GUI wrapper around the
 // report viewer widget.
@@ -26,7 +27,7 @@ Report::Report() : KMainWindow(0L)
 {
 	// Create the viewer widget.
 
-	rptviewer = new MReportViewer(this);
+	rptviewer = new KReportViewer(this);
 
 	connect(rptviewer,SIGNAL(preferedTemplate(const QString &)),
 			  SLOT(slotPreferedTemplate(const QString &)));

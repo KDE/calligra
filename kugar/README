@@ -1,6 +1,6 @@
 Kugar - A report creation tool for KDE.
 
-Current version: 1.0
+Current version: 1.3
 
 The current maintainer can be reached via Email: phil@river-bank.demon.co.uk
 or visit http://www.thekompany.com/projects/kugar
@@ -16,6 +16,7 @@ Current features:
 
 * Qt report viewer widget for previewing reports from within a Qt application
   (WYSIWYG).
+* KDE report viewer widget that utilizes KDE print dialog
 * KDE report viewer utility.
 * KPart report viewer component - view reports from within Konqueror.
 * Report printing in Postscript.
@@ -24,6 +25,8 @@ Current features:
 * Report Header/Footer.
 * Page Header/Footer.
 * Detail Section.
+* Detail Header/Footer.
+* Multiple Detail levels (unlimited).
 * Grand totals: count, sum, average, variance and standard deviation.
 * Report print progress and cancellation.
 * Report rendering progress and cancellation.

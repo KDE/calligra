@@ -4,6 +4,8 @@
     begin     : Sun Aug 15 1999
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
+    copyright : (C) 2002 Alexander Dymo
+    email     : cloudtemple@mksat.net	
  ***************************************************************************/
 
 #ifndef MREPORTENGINE_H
@@ -92,8 +94,12 @@ private:
   MReportSection rHeader;
   /** Page header */
   MReportSection pHeader;
-  /** Detail section */
-  MReportDetail detail;
+  /** Detail headers */
+  QPtrList<MReportSection> dHeaders;
+  /** Detail sections */
+  QPtrList<MReportDetail> details;
+  /** Detail footers */
+  QPtrList<MReportSection> dFooters;
   /** Page footer */
   MReportSection pFooter;
   /** Report footer */
@@ -144,6 +150,8 @@ private:
   void setReportAttributes(QDomNode* report);
   /** Sets the layout attributes for the given report section */
   void setSectionAttributes(MReportSection* section, QDomNode* report);
+  /** Sets the layout attributes for the detail headers and footers */
+  void setDetMiscAttributes(MReportSection* section, QDomNode* report);
   /** Sets the layout attributes for the detail section */
   void setDetailAttributes(QDomNode* report);
 	/** Sets a line's layout attributes */
@@ -161,6 +169,13 @@ private:
     * Used by the copy constructor and assignment operator
     */
   void copy(const MReportEngine* mReportEngine);
+
+/** Finds the detail header object, which is apropriate for the given level */
+	MReportSection *findDetailHeader(int level);
+/** Finds the detail object, which is apropriate for the given level */
+	MReportDetail *findDetail(int level);
+/** Finds the detail footer object, which is apropriate for the given level */
+	MReportSection *findDetailFooter(int level);
 };
 
 #endif

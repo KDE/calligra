@@ -4,6 +4,8 @@
     begin     : Tue Aug 17 1999
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
+    copyright : (C) 2002 Alexander Dymo
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #include <math.h>
@@ -59,6 +61,12 @@ QString MUtil::formatDate(const QDate& value, int format){
 			break;
 		case MUtil::YYYYMD_DASH:
 	    string = QString("%1-%2-%3").arg(value.year()).arg(value.month()).arg(value.day());
+			break;
+		case MUtil::DDMMYY_PERIOD:
+	    string = QString("%1.%2.%3").arg(day).arg(month).arg(year);
+			break;
+		case MUtil::DDMMYYYY_PERIOD:
+	    string = QString("%1.%2.%3").arg(day).arg(month).arg(value.year());
 			break;
 		default:
 			string = value.toString();

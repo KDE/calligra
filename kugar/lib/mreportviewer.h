@@ -1,9 +1,11 @@
 /***************************************************************************
-              mreportviewer.h  -  Kugar report viewer widget
+              mreportviewer.h  -  Kugar QT report viewer widget
               -------------------
     begin     : Fri Aug 13 1999
     copyright : (C) 1999 by Mutiny Bay Software
     email     : info@mutinybaysoftware.com
+    copyright : (C) 2002 Alexander Dymo
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #ifndef MREPORTVIEWER_H
@@ -23,12 +25,12 @@
 
 #define M_PROGRESS_DELAY 500			// Number of ms to delay progress dialog display
 
-class KPrinter;
+//class KPrinter;
 
 /** Application reference, required for event processing */
 extern QApplication *mAppRef;
 
-/**Kugar report viewer widget
+/**Kugar QT report viewer widget
   *@author Mutiny Bay Software
   */
 
@@ -63,7 +65,7 @@ private slots:
 	void slotCancelPrinting();
 	void slotRenderProgress(int);
 
-private:
+protected:
 	void paintEvent(QPaintEvent *event);
 	void resizeEvent(QResizeEvent *event);
 
@@ -71,7 +73,7 @@ private:
 	MPageDisplay *display;
 	MReportEngine *rptEngine;
 	MPageCollection *report;
-	KPrinter *printer;
+	QPrinter *printer;
 };
 
 #endif

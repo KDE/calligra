@@ -4,6 +4,8 @@
     begin     : Mon Aug 23 1999                                           
     copyright : (C) 1999 by Mutiny Bay Software                         
     email     : info@mutinybaysoftware.com                                     
+    copyright : (C) 2002 Alexander Dymo
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #ifndef MREPORTSECTION_H
@@ -39,6 +41,8 @@ public:
 protected:
   /** Sections's height */
   int height;
+  /** Sections's level in hierarchy */
+  int level;
   /** Section print frequency */
   int frequency;
   /** Page number - used by special fields */
@@ -68,6 +72,10 @@ public:
   void setHeight(int h);
   /** Gets the height of the section */
   int getHeight();
+  /** Sets the level of the section */
+  void setLevel(int l);
+  /** Gets the level of the section */
+  int getLevel();
   /** Set the current page number - used by special fields */
   void setPageNumber(int page);
   /** Set the current date - used by special fields */

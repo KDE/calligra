@@ -4,6 +4,8 @@
     begin     : Tue Aug 17 1999                                           
     copyright : (C) 1999 by Mutiny Bay Software                         
     email     : info@mutinybaysoftware.com                                     
+    copyright : (C) 2002 Alexander Dymo
+    email     : cloudtemple@mksat.net
  ***************************************************************************/
 
 #ifndef MUTIL_H
@@ -28,7 +30,8 @@ public:
 		MMDDY_SLASH, MMDDY_DASH,
 		MDYYYY_SLASH, MDYYYY_DASH,
 		MMDDYYYY_SLASH, MMDDYYYY_DASH,
-		YYYYMD_SLASH, YYYYMD_DASH
+		YYYYMD_SLASH, YYYYMD_DASH,
+		DDMMYY_PERIOD, DDMMYYYY_PERIOD
 	};
 
 	/** Formats a date using one of the pre-defined formats */

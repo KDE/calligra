@@ -16,11 +16,13 @@ libkugar_la_SOURCES = \
 	mreportobject.cpp \
 	mreportsection.cpp \
 	mreportviewer.cpp \
+	kreportviewer.cpp \
 	mspecialobject.cpp \
 	mutil.cpp
 
 EXTRA_DIST = \
 	kugar.h \
+	kugarqt.h \
 	mcalcobject.h \
 	mfieldobject.h \
 	mlabelobject.h \
@@ -32,6 +34,7 @@ EXTRA_DIST = \
 	mreportobject.h \
 	mreportsection.h \
 	mreportviewer.h \
+	kreportviewer.h \
 	mspecialobject.h \
 	mutil.h
 
