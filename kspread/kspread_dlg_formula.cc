@@ -140,6 +140,8 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
              this, SLOT( slotActivated(const QString &) ) );
     connect( functions, SIGNAL( highlighted(const QString &) ),
              this, SLOT( slotselected(const QString &) ) );
+    connect( functions, SIGNAL( selected(const QString &) ),
+             this, SLOT( slotselected(const QString &) ) );
     connect( functions, SIGNAL( doubleClicked(QListBoxItem *)),
              this ,SLOT( slotDoubleClicked(QListBoxItem *) ) );
     slotActivated(i18n("All"));
@@ -191,6 +193,8 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
         {
         searchFunct->setFocus();
         }
+    searchFunct->setCompletionMode(KGlobalSettings::CompletionAuto  );
+    searchFunct->setCompletionObject( &listFunct,true );
     if(functions->currentItem()==-1)
         selectFunction->setEnabled(false);
     connect(searchFunct, SIGNAL( textChanged( const QString & )),
@@ -791,43 +795,43 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
         functions->insertStringList(list_stat);
         listFunct.setItems(list_stat);
     }
-    if (string ==i18n("Trigonometric"))
+    else if (string ==i18n("Trigonometric"))
     {
         functions->clear();
         functions->insertStringList(list_trig);
         listFunct.setItems(list_trig);
     }
-    if (string ==i18n("Analytic"))
+    else if (string ==i18n("Analytic"))
     {
         functions->clear();
         functions->insertStringList(list_anal);
         listFunct.setItems(list_anal);
     }
-    if(string== i18n("Logic") )
+    else if(string== i18n("Logic") )
     {
         functions->clear();
         functions->insertStringList(list_logic);
         listFunct.setItems(list_logic);
     }
-    if(string== i18n("Text") )
+    else if(string== i18n("Text") )
     {
         functions->clear();
         functions->insertStringList(list_text);
         listFunct.setItems(list_text);
     }
-    if(string== i18n("Time and Date") )
+    else if(string== i18n("Time and Date") )
     {
         functions->clear();
         functions->insertStringList(list_date_time);
         listFunct.setItems(list_date_time);
     }
-    if(string== i18n("Financial") )
+    else if(string== i18n("Financial") )
     {
         functions->clear();
         functions->insertStringList(list_financial);
         listFunct.setItems(list_financial);
     }
-    if(string == i18n("All"))
+    else if(string == i18n("All"))
     {
         QStringList tmp;
         tmp+=list_stat;
@@ -840,15 +844,10 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
         tmp.sort();
         functions->clear();
         functions->insertStringList(tmp);
-        listFunct.setItems(list_stat);
-        listFunct.insertItems(list_trig);
-        listFunct.insertItems(list_anal);
-        listFunct.insertItems(list_text);
-        listFunct.insertItems(list_logic);
-        listFunct.insertItems(list_date_time);
-        listFunct.insertItems(list_financial);
+        listFunct.setItems(tmp);
     }
-
+    functions->setCurrentItem(0);
+    slotselected(functions->text(0));
 }
 
 void KSpreadDlgFormula::changeFunction()
