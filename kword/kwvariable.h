@@ -33,7 +33,7 @@ class KWDocument;
 class KWTextFrameSet;
 class KWFootNoteFrameSet;
 class KoVariable;
-class KoPgNumVariable;
+class KoPageVariable;
 class KoMailMergeVariable;
 class QDomElement;
 class KoTextFormat;
@@ -69,7 +69,7 @@ class KWVariableCollection : public KoVariableCollection
 /**
  * "current page number" and "number of pages" variables
  */
-class KWPgNumVariable : public KoPgNumVariable
+class KWPgNumVariable : public KoPageVariable
 {
 public:
     KWPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KWDocument *doc );

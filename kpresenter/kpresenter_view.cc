@@ -1770,7 +1770,7 @@ void KPresenterView::textInsertPageNum()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
-        edit->insertVariable( VT_PGNUM, KoPgNumVariable::VST_PGNUM_CURRENT );
+        edit->insertVariable( VT_PGNUM, KoPageVariable::VST_PGNUM_CURRENT );
 }
 
 void KPresenterView::mtextFont()
@@ -2970,7 +2970,7 @@ void KPresenterView::setupActions()
     actionInsertVariable->insert(actionInsertCustom);
     refreshCustomMenu();
 
-    addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
+    addVariableActions( VT_PGNUM, KoPageVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
 
     actionInsertVariable->popupMenu()->insertSeparator();
     actionRefreshAllVariable = new KAction( i18n( "&Refresh All Variables" ), 0,

@@ -646,6 +646,9 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
         case VT_FOOTNOTE: // this is a KWord-specific variable
             kdError() << "Footnote type not handled in KoVariableCollection: VT_FOOTNOTE" << endl;
             return 0L;
+        case VT_STATISTIC:
+            kdError() << " Statistic type not handled in KoVariableCollection: VT_STATISTIC" << endl;
+            return 0L;
         }
     }
     Q_ASSERT( varFormat );
@@ -665,7 +668,7 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
             break;
         case VT_PGNUM:
             kdError() << "VT_PGNUM must be handled by the application's reimplementation of KoVariableCollection::createVariable" << endl;
-            //var = new KoPgNumVariable( textdoc, subtype, varFormat, this );
+            //var = new KoPageVariable( textdoc, subtype, varFormat, this );
             break;
         case VT_FIELD:
             var = new KoFieldVariable( textdoc, subtype, varFormat,this,doc );
@@ -1557,14 +1560,14 @@ QStringList KoMailMergeVariable::actionTexts()
 }
 
 /******************************************************************/
-/* Class: KoPgNumVariable                                         */
+/* Class: KoPageVariable                                         */
 /******************************************************************/
-KoPgNumVariable::KoPgNumVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
+KoPageVariable::KoPageVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
         : KoVariable( textdoc, varFormat, _varColl ), m_subtype( subtype )
 {
 }
 
-QString KoPgNumVariable::fieldCode()
+QString KoPageVariable::fieldCode()
 {
     if ( m_subtype == VST_PGNUM_CURRENT )
         return i18n("Page Current Num");
@@ -1582,7 +1585,7 @@ QString KoPgNumVariable::fieldCode()
 }
 
 
-void KoPgNumVariable::saveVariable( QDomElement& parentElem )
+void KoPageVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement pgNumElem = parentElem.ownerDocument().createElement( "PGNUM" );
     parentElem.appendChild( pgNumElem );
@@ -1593,7 +1596,7 @@ void KoPgNumVariable::saveVariable( QDomElement& parentElem )
         pgNumElem.setAttribute( "value", m_varValue.toString() );
 }
 
-void KoPgNumVariable::load( QDomElement& elem )
+void KoPageVariable::load( QDomElement& elem )
 {
     KoVariable::load( elem );
     QDomElement pgNumElem = elem.namedItem( "PGNUM" ).toElement();
@@ -1608,7 +1611,7 @@ void KoPgNumVariable::load( QDomElement& elem )
     }
 }
 
-void KoPgNumVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoPageVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     switch( m_subtype )
     {
@@ -1651,7 +1654,7 @@ void KoPgNumVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context
     kdDebug()<<" variable pgnum \n";
 }
 
-void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoPageVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     const QString localName( elem.localName() );
     if ( localName == "page-number" )
@@ -1684,7 +1687,7 @@ void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
     }
 }
 
-QStringList KoPgNumVariable::actionTexts()
+QStringList KoPageVariable::actionTexts()
 {
     QStringList lst;
     lst << i18n( "Page Number" );
@@ -1695,12 +1698,12 @@ QStringList KoPgNumVariable::actionTexts()
     return lst;
 }
 
-QStringList KoPgNumVariable::subTypeText()
+QStringList KoPageVariable::subTypeText()
 {
-    return KoPgNumVariable::actionTexts();
+    return KoPageVariable::actionTexts();
 }
 
-void KoPgNumVariable::setVariableSubType( short int type )
+void KoPageVariable::setVariableSubType( short int type )
 {
     m_subtype = type;
     Q_ASSERT( m_varColl );
@@ -2324,7 +2327,7 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
     p->restore();
 }
 
-void KoPgNumVariable::setSectionTitle( const QString& _title )
+void KoPageVariable::setSectionTitle( const QString& _title )
 {
     QString title( _title );
     if ( title.isEmpty() )

@@ -38,7 +38,7 @@ enum VariableType { VT_NONE = -1,
                     VT_TIME = 2, VT_TIME_VAR_KWORD10 = 3,
                     VT_PGNUM = 4,
                     VT_CUSTOM = 6, VT_MAILMERGE = 7, VT_FIELD = 8, VT_LINK = 9,
-                    VT_NOTE = 10, VT_FOOTNOTE = 11,
+                    VT_NOTE = 10, VT_FOOTNOTE = 11, VT_STATISTIC = 12,
                     VT_ALL=256 };
 
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
@@ -627,12 +627,11 @@ protected:
  * "current page number" and "number of pages" variables
  * This is a base class, it must be inherited by applications,
  * to provide recalc().
- * TODO: rename KoPageVariable.
  */
-class KoPgNumVariable : public KoVariable
+class KoPageVariable : public KoVariable
 {
 public:
-    KoPgNumVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl);
+    KoPageVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl);
 
     virtual VariableType type() const
     { return VT_PGNUM; }

@@ -28,7 +28,7 @@
 #include "kprtextdocument.h"
 class KPresenterDoc;
 class KoVariable;
-class KoPgNumVariable;
+class KoPageVariable;
 class KoTextFormat;
 class KoVariableSettings;
 
@@ -44,7 +44,7 @@ public:
 /**
  * "current page number" and "number of pages" variables
  */
-class KPrPgNumVariable : public KoPgNumVariable
+class KPrPgNumVariable : public KoPageVariable
 {
 public:
     KPrPgNumVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,

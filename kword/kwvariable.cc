@@ -111,7 +111,7 @@ KoVariable *KWVariableCollection::createVariable( int type, short int subtype, K
     switch(type) {
     case VT_PGNUM:
         if ( !varFormat )
-            varFormat = (subtype == KoPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
+            varFormat = (subtype == KoPageVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
         var = new KWPgNumVariable( textdoc, subtype, varFormat, this, m_doc );
         break;
     case VT_MAILMERGE:
@@ -139,7 +139,7 @@ KoVariable *KWVariableCollection::createVariable( int type, short int subtype, K
 /* Class: KWPgNumVariable                                         */
 /******************************************************************/
 KWPgNumVariable::KWPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KWDocument *doc  )
-    : KoPgNumVariable( textdoc, subtype, varFormat ,_varColl ), m_doc(doc)
+    : KoPageVariable( textdoc, subtype, varFormat ,_varColl ), m_doc(doc)
 {
 }
 
@@ -658,28 +658,25 @@ void KWStatisticVariable::recalc()
         return;
     }
     int nb = 0;
-    if ( m_subtype == VST_STATISTIC_NB_FRAME )
-        nb = m_doc->framesetsIterator().count();
-    else
+    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt )
     {
-        QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
-        for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt )
+        KWFrameSet *frameSet = framesetIt.current();
+        if ( frameSet->isVisible() )
         {
-            KWFrameSet *frameSet = framesetIt.current();
-            if ( frameSet->isVisible() )
+            if ( m_subtype == VST_STATISTIC_NB_FRAME )
+                ++nb;
+            else if( m_subtype == VST_STATISTIC_NB_PICTURE && frameSet->type() == FT_PICTURE)
             {
-                if( m_subtype == VST_STATISTIC_NB_PICTURE && frameSet->type() == FT_PICTURE)
-                {
-                    ++nb;
-                }
-                else if( m_subtype == VST_STATISTIC_NB_TABLE && frameSet->type() == FT_TABLE)
-                {
-                    ++nb;
-                }
-                else if( m_subtype == VST_STATISTIC_NB_EMBEDDED && frameSet->type() == FT_PART )
-                {
-                    ++nb;
-                }
+                ++nb;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_TABLE && frameSet->type() == FT_TABLE)
+            {
+                ++nb;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_EMBEDDED && frameSet->type() == FT_PART )
+            {
+                ++nb;
             }
         }
 #if 0
