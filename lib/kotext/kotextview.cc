@@ -899,7 +899,7 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QSt
         }
     }
 
-    if ( text.isEmpty() ) // Nothing to apply a tool to
+    if ( text.isEmpty() || textObject()->protectContent()) // Nothing to apply a tool to
         return QPtrList<KAction>();
 
     // Any tool that works on plain text is relevant
