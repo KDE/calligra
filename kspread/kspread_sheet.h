@@ -233,6 +233,12 @@ class KSpreadSheet : public QObject
     friend class KSpreadCell;
 
     Q_OBJECT
+
+
+    Q_PROPERTY( QString sheetName READ sheetName )
+    Q_PROPERTY( bool autoCalc READ getAutoCalc WRITE setAutoCalc );
+    Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid );
+
 public:
     enum Direction { Right, Left, Up, Down };
     enum SortingOrder{ Increase, Decrease };
