@@ -163,7 +163,7 @@ price_to_str( float price,
 		if( whole<0 && numr<0.0 )
 			numr = -numr;
 		*numorator = (int)numr;
-		*demoninator = (int)pow(2.0, (float)cnt);
+		*demoninator = (int)pow((float)2.0, (float)cnt);
 		*decimal = whole;
 		sprintf( rtn, "%d %d/%d", whole,(int)numr,*demoninator );
 		}
