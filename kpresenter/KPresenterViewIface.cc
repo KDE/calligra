@@ -664,3 +664,18 @@ void KPresenterViewIface::customSlideShow()
 {
     view->customSlideShow();
 }
+
+void KPresenterViewIface::insertLineBreak()
+{
+    view->slotLineBreak();
+}
+
+void KPresenterViewIface::increaseOutlineLevel()
+{
+    view->slotIncreaseOutlineLevel();
+}
+
+void KPresenterViewIface::decreaseOutlineLevel()
+{
+    view->slotDecreaseOutlineLevel();
+}

@@ -216,6 +216,11 @@ k_dcop:
 
     void customSlideShow();
 
+    void insertLineBreak();
+    void increaseOutlineLevel();
+    void decreaseOutlineLevel();
+
+
 private:
     KPresenterView *view;
 

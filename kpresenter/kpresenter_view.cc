@@ -2960,6 +2960,12 @@ void KPresenterView::setupActions()
     new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
                  this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
+    new KAction( i18n( "Increase Outline Level" ), ALT+Key_Right,
+                 this, SLOT( slotIncreaseOutlineLevel() ), actionCollection(), "increase_outline_level" );
+    new KAction( i18n( "Decrease Outline Level" ), ALT+Key_Left,
+                 this, SLOT( slotDecreaseOutlineLevel() ), actionCollection(), "decrease_outline_level" );
+
+
     actionInsertComment = new KAction( i18n( "Comment..." ), 0,
                                        this, SLOT( insertComment() ),
                                        actionCollection(), "insert_comment" );
@@ -4722,6 +4728,22 @@ void KPresenterView::slotLineBreak()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
         edit->insertLineBreak();
+}
+
+void KPresenterView::slotIncreaseOutlineLevel()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        edit->increaseOutlineLevel( m_pKPresenterDoc->styleCollection() );
+    }
+}
+
+void KPresenterView::slotDecreaseOutlineLevel()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+        edit->decreaseOutlineLevel( m_pKPresenterDoc->styleCollection() );
 }
 
 void KPresenterView::extraAutoFormat()
