@@ -122,6 +122,7 @@ public:
         italic=false;
         bold=false;
         underline=false;
+        strikeout=false;
         red=0;
         green=0;
         blue=0;
@@ -141,6 +142,7 @@ public:
     bool        italic;
     bool        bold;
     bool        underline;
+    bool        strikeout;
     int         red;
     int         green;
     int         blue;
@@ -184,13 +186,27 @@ static bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCu
     // Initialize the QStrings with the previous values of the properties they represent!
     QString strFontStyle(stackItem->italic?"italic":"");
     QString strWeight(stackItem->bold?"bold":"");
-    QString strDecoration(stackItem->underline?"underline":"");
+
+    QString strDecoration;
+    if (stackItem->underline)
+    {
+        strDecoration="underline";
+    }
+    else if (stackItem->strikeout)
+    {
+        strDecoration="line-through";
+    }
+    else
+    {
+        strDecoration="";
+    }
+
     QString strTextPosition("old");
     QString strColour("old");
     QString strFontSize("old");
     QString strFontFamily(stackItem->fontName);
 
-	QValueList<CSS2Styles> css2StylesList;
+    QValueList<CSS2Styles> css2StylesList;
 
     css2StylesList.append( CSS2Styles("font-style",&strFontStyle));
     css2StylesList.append( CSS2Styles("font-weight",&strWeight));
@@ -204,9 +220,11 @@ static bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCu
 
     stackItem->italic=(strFontStyle=="italic");
     stackItem->bold=(strWeight=="bold");
-    // underline is the only font-decoration available in KWord
-    stackItem->underline=(strDecoration=="underline"); // Underline is the only text decoration that KWord can do!
-    if (strTextPosition=="subscript")
+
+    stackItem->underline=(strDecoration=="underline");
+    stackItem->strikeout=(strDecoration=="line-through");
+
+	if (strTextPosition=="subscript")
     {
         stackItem->textPosition=1;
     }
@@ -261,8 +279,11 @@ static bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCu
 
 // Element <span>
 
-bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QString& strStyle)
+bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QString& strStyleLocal, const QString& strStyleAttribute)
 {
+    QString strStyle=strStyleLocal;
+    strStyle+=strStyleAttribute;
+
     // <span> elements can be nested in <p> elements or in other <span> elements
     if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeSpan))
     {
@@ -331,6 +352,13 @@ bool charactersElementSpan (StackItem* stackItem, const QString & ch)
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 
+    if (stackItem->strikeout)
+    {
+        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("STRIKEOUT");
+        fontElementOut.setAttribute("value",1);
+        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    }
+
     if (stackItem->textPosition)
     {
         QDomElement fontElementOut=nodeOut.ownerDocument().createElement("VERTALIGN");
@@ -363,8 +391,18 @@ bool EndElementSpan (StackItem* stackItem, StackItem* stackCurrent)
 
 // Element <p>
 
-bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& mainFramesetElement, const QString& strStyle)
+bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& mainFramesetElement,
+        const QString& strStyleLocal, const QString& strStyleAttribute, const QString& strAlign)
 {
+    QString strStyle=strStyleLocal;
+    if (!strAlign.isEmpty())
+    {
+        strStyle+="text-align:";
+        strStyle+=strAlign; //FIXME: improve security (check of strAlign needed!)
+        strStyle+=";";
+    }
+    strStyle+=strStyleAttribute;
+
     QDomNode nodeOut=stackCurrent->stackNode;
     //We use mainFramesetElement here not to be dependant that <section> has happened before
     QDomElement paragraphElementOut=mainFramesetElement.ownerDocument().createElement("PARAGRAPH");
@@ -403,8 +441,10 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     stackItem->pos=0; // No text characters yet
     stackItem->italic=(strFontStyle=="italic");
     stackItem->bold=(strWeight=="bold");
-    // underline is the only font-decoration available in KWord
-    stackItem->underline=(strDecoration=="underline"); // Underline is the only text decoration that KWord can do!
+
+    stackItem->underline=(strDecoration=="underline");
+    stackItem->strikeout=(strDecoration=="line-through");
+
     if (strTextPosition=="subscript")
     {
         stackItem->textPosition=1;
@@ -495,54 +535,39 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     QDomElement formatElementOut=layoutElement.ownerDocument().createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
 
-    //Note: the <FONT> tag is mandatory for KWord (FIXME: not anymore in KWord 0.9)
-    QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("FONT");
-    fontElementOut.setAttribute("name",stackItem->fontName); // Font name
-    formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    element=formatElementOut.ownerDocument().createElement("FONT");
+    element.setAttribute("name",stackItem->fontName); // Font name
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->fontSize)
-    {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("SIZE");
-        fontElementOut.setAttribute("value",stackItem->fontSize);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-    }
+    element=formatElementOut.ownerDocument().createElement("SIZE");
+    element.setAttribute("value",(stackItem->fontSize>0)?(stackItem->fontSize):12);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->italic)
-    {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("ITALIC");
-        fontElementOut.setAttribute("value",1);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-    }
+    element=formatElementOut.ownerDocument().createElement("ITALIC");
+    element.setAttribute("value",(stackItem->italic)?1:0);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->bold)
-    {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("WEIGHT");
-        fontElementOut.setAttribute("value",75);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-    }
+    element=formatElementOut.ownerDocument().createElement("WEIGHT");
+    element.setAttribute("value",(stackItem->bold)?75:50);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->underline)
-    {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("UNDERLINE");
-        fontElementOut.setAttribute("value",1);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-    }
+    element=formatElementOut.ownerDocument().createElement("UNDERLINE");
+    element.setAttribute("value",(stackItem->underline)?1:0);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->textPosition)
-    {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("VERTALIGN");
-        fontElementOut.setAttribute("value",stackItem->textPosition);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-    }
+    element=nodeOut.ownerDocument().createElement("STRIKEOUT");
+    element.setAttribute("value",(stackItem->strikeout)?1:0);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->red || stackItem->green || stackItem->blue)
-    {
-        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("COLOR");
-        fontElementOut.setAttribute("red",stackItem->red);
-        fontElementOut.setAttribute("green",stackItem->green);
-        fontElementOut.setAttribute("blue",stackItem->blue);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-    }
+    element=formatElementOut.ownerDocument().createElement("VERTALIGN");
+    element.setAttribute("value",stackItem->textPosition);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
+
+    element=formatElementOut.ownerDocument().createElement("COLOR");
+    element.setAttribute("red",stackItem->red);
+    element.setAttribute("green",stackItem->green);
+    element.setAttribute("blue",stackItem->blue);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
     return true;
 }
@@ -590,6 +615,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     //TODO: memory failure recovery
 
     stackItem->elementName=name; // Register the element name
+	
+	QString strStyleAttribute=attributes.value("style");
 
     bool success=false;
     bool nomatch=false;
@@ -600,19 +627,24 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         {
             if (name=="p")
             {
-                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,attributes.value("style"));
+                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,
+                        QString::null,strStyleAttribute,attributes.value("align"));
             }
             else if (name=="b")
             {
-                success=StartElementSpan(stackItem,structureStack.current(),"font-weight:bold");
+                success=StartElementSpan(stackItem,structureStack.current(),"font-weight:bold;",strStyleAttribute);
             }
             else if (name=="i")
             {
-                success=StartElementSpan(stackItem,structureStack.current(),"font-style:italic");
+                success=StartElementSpan(stackItem,structureStack.current(),"font-style:italic;",strStyleAttribute);
             }
             else if (name=="u")
             {
-                success=StartElementSpan(stackItem,structureStack.current(),"font-decoration:underline");
+                success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:underline;",strStyleAttribute);
+            }
+            else if (name=="s")
+            {
+                success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:line-through;",strStyleAttribute);
             }
             else
             {
@@ -628,10 +660,17 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
             }
             else if(name[0]=='h')
             { // <h1> ... <h6> (many other tags are catched too but do not exist.)
-                QString strStyle;
-                strStyle="font-weight:bold";
-                strStyle+=attributes.value("style");
-                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,strStyle);
+                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,
+                        "font-weight:bold;",strStyleAttribute,attributes.value("align"));
+            }
+            else if (name=="em")
+            {
+                success=StartElementSpan(stackItem,structureStack.current(),"font-style:italic;",strStyleAttribute);
+
+            }
+            else if (name=="br")
+            {
+                nomatch=true; // TODO: how can we implent this one? <br> can be on <p> but also on <span> (and compatibles)
             }
             else
             {
@@ -643,11 +682,19 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         {
             if (name=="sub")
             {
-               success=StartElementSpan(stackItem,structureStack.current(),"text-position:subscript");
+               success=StartElementSpan(stackItem,structureStack.current(),"text-position:subscript;",strStyleAttribute);
             }
             else if (name=="sup")
             {
-               success=StartElementSpan(stackItem,structureStack.current(),"text-position:superscript");
+               success=StartElementSpan(stackItem,structureStack.current(),"text-position:superscript;",strStyleAttribute);
+            }
+            else if (name=="del")
+            {  // May need to be changed when a new KWord does know what "deleted" text is!
+               success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:line-through;",strStyleAttribute);
+            }
+            else if (name=="ins")
+            {  // May need to be changed when a new KWord does know what "inserted" text is!
+               success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:underline;",strStyleAttribute);
             }
             else
             {
@@ -658,7 +705,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         {
             if (name=="span")
             {
-                success=StartElementSpan(stackItem,structureStack.current(),attributes.value("style"));
+                success=StartElementSpan(stackItem,structureStack.current(),QString::null,strStyleAttribute);
             }
             else if (name=="body")
             {
@@ -666,6 +713,26 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
                 stackItem->elementType=ElementTypeBody;
                 stackItem->stackNode=structureStack.current()->stackNode;
                 success=true;
+            }
+            else if (name=="cite")
+            {
+                success=StartElementSpan(stackItem,structureStack.current(),"font-style:italic;",strStyleAttribute);
+            }
+            else
+            {
+                nomatch=true;
+            }
+            break;
+        }
+    case 6:
+        {
+            if (name=="strike")
+            {
+                success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:line-through;",strStyleAttribute);
+            }
+            else if (name=="strong")
+            {
+                success=StartElementSpan(stackItem,structureStack.current(),"font-weight:bold;",strStyleAttribute);
             }
             else
             {
@@ -687,7 +754,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         {
             // We are in a <p> or <span> element (or compatible)
             // We do not know the element but treat it as <span> (with empty style not to have secondary effects.)
-            success=StartElementSpan(stackItem,structureStack.current(),QString::null);
+            success=StartElementSpan(stackItem,structureStack.current(),QString::null,strStyleAttribute);
         }
         else
         {
