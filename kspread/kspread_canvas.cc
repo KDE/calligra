@@ -496,18 +496,13 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadSheet* table,
   }
   else
   {
-    QRect newSelection;
     QPoint topLeft(location);
-    QPoint bottomRight;
     KSpreadCell* cell = table->cellAt(location);
     if ( cell->isObscured() && cell->isObscuringForced() )
     {
       cell = cell->obscuringCells().first();
       topLeft = QPoint(cell->column(), cell->row());
     }
-    bottomRight.setX(topLeft.x() + cell->extraXCells());
-    bottomRight.setY(topLeft.y() + cell->extraYCells());
-    newSelection = QRect(topLeft, bottomRight);
 
     if (m_bChoose)
     {
@@ -838,10 +833,7 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
 {
   KSpreadSheet* table = activeTable();
   QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
-  QRect newCellArea;
 //  KSpreadCell* destinationCell = table->cellAt(cell);
-
-  newCellArea = QRect(cell, cell);
 
   if (m_bChoose)
   {
