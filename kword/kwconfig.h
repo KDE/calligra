@@ -41,7 +41,7 @@ private:
     KWView* m_pView;
     KSpellConfig *_spellConfig;
     QCheckBox *_dontCheckUpperWord;
-    QCheckBox *_dontCheckTilteCase;
+    QCheckBox *_dontCheckTitleCase;
     KConfig* config;
 };
 
@@ -76,10 +76,28 @@ private:
     KWView* m_pView;
     KConfig* config;
     QComboBox *m_unit;
-    KDoubleNumInput* columnSpacing;
     int m_oldUnit;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
+};
+
+class ConfigureDefaultDocPage : public QObject
+{
+    Q_OBJECT
+public:
+    ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name = 0 );
+    void apply();
+    void slotDefault();
+public slots:
+    void selectNewDefaultFont();
+private:
+    KWView* m_pView;
+    KConfig* config;
+    QComboBox *m_unit;
+    QFont *font;
+    QLabel *fontName;
+
+    KDoubleNumInput* columnSpacing;
 };
 
 class KWConfig : public KDialogBase
@@ -91,9 +109,10 @@ public slots:
     void slotApply();
     void slotDefault();
 private:
-    ConfigureSpellPage *_spellPage;
-    ConfigureInterfacePage *_interfacePage;
-    ConfigureMiscPage *_miscPage;
+    ConfigureSpellPage *m_spellPage;
+    ConfigureInterfacePage *m_interfacePage;
+    ConfigureMiscPage *m_miscPage;
+    ConfigureDefaultDocPage *m_defaultDocPage;
 };
 
 

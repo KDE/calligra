@@ -196,8 +196,16 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     initConfig();
     getFormulaDocument()->setZoom( m_zoomedResolutionX, m_zoomedResolutionY, false, false );
 
-    // Get default font from KDE
-    m_defaultFont = KoGlobal::defaultFont();
+    // Get default font from the KWord config file
+    KConfig *config = KWFactory::global()->config();
+    QString defaultFontname="Sans serif,12,-1,5,50,0,0,0,0,0";
+    if( config->hasGroup("Document defaults") ) {
+        config->setGroup("Document defaults" );
+        defaultFontname=config->readEntry("DefaultFont", defaultFontname);
+    }
+    m_defaultFont= QFont();
+    m_defaultFont.fromString(defaultFontname);
+    
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
     m_defaultFont.setPointSize( ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
 
