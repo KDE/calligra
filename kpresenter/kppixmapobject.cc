@@ -96,7 +96,7 @@ DCOPObject* KPPixmapObject::dcopObject()
     return dcop;
 }
 
-QString KPPixmapObject::convertValueToPercent( int val )
+QString KPPixmapObject::convertValueToPercent( int val ) const
 {
    return QString::number( val )+"%";
 }

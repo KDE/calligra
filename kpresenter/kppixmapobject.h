@@ -126,7 +126,7 @@ protected:
     void drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler);
 
     QPixmap generatePixmap(KoZoomHandler*_zoomHandler);
-    QString convertValueToPercent( int val );
+    QString convertValueToPercent( int val ) const;
 
     KoPictureCollection *imageCollection;
     KoPicture image;
