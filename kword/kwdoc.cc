@@ -2133,11 +2133,7 @@ void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChange
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
-        // ###### TODO virtual method in KWFrameSet, so that KWTableFrameSet works too
-        // Or better, an iterator that gets all text framesets even if nested
-        KWTextFrameSet * frameSet = dynamic_cast<KWTextFrameSet*>( fit.current() );
-        if ( frameSet )
-            frameSet->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+            fit.current()->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
     }
 }
 

@@ -27,7 +27,7 @@
 #include <koRect.h>
 #include <qbrush.h>
 #include <qlist.h>
-
+#include "kwstyle.h"
 #include "border.h"
 
 namespace KFormula {
@@ -299,6 +299,8 @@ public:
     virtual ~KWFrameSet();
 
     virtual FrameSetType type() { return FT_BASE; }
+
+    virtual void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged ) {};
 
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>

@@ -1769,6 +1769,13 @@ bool KWTableFrameSet::canRemovePage( int num ) {
     return true;
 }
 
+void KWTableFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+{
+    for (unsigned int i =0; i < m_cells.count(); i++) {
+        m_cells.at(i)->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+    }
+}
+
 #ifndef NDEBUG
 void KWTableFrameSet::printDebug( KWFrame * frame )
 {
