@@ -54,7 +54,7 @@ QGridLayout *grid = new QGridLayout(this, 3, 6, KDialog::marginHint(),
    _ok = new QPushButton(i18n("&Ok"), this);
    _cancel = new QPushButton(i18n("&Cancel"), this);
 
-   // FIXME: limit size of input field
+   _pwd->setMaxLength(56);
    grid->addMultiCellWidget(_prompt, 0, 0, 0, 5);
    grid->addMultiCellWidget(_pwd, 1, 1, 0, 4);
    grid->addMultiCellWidget(_ok, 2, 2, 3, 3);
