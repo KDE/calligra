@@ -46,6 +46,7 @@
 #include "brush.h"
 #include "layerdlg.h"
 #include "colordialog.h"
+#include "gradient.h"
 #include "gradientdlg.h"
 #include "gradienteditordlg.h"
 #include "brushdialog.h"
@@ -54,6 +55,7 @@
 #include "movetool.h"
 #include "brushtool.h"
 #include "zoomtool.h"
+#include "gradienttool.h"
 #include "preferencesdlg.h"
 
 KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopDoc* _doc )
@@ -142,6 +144,7 @@ void KImageShopView::cleanUp()
   delete m_pMoveTool;
   delete m_pBrushTool;
   delete m_pZoomTool;
+  delete m_pGradientTool;
 
   KoViewIf::cleanUp();
 }
@@ -292,6 +295,13 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->setToggle( TBTOOLS_BRUSHTOOL, true );
   m_toolButtons.push_back( TBTOOLS_BRUSHTOOL );
 
+  // gradient tool
+  text = Q2C( i18n( "Draw a gradient." ) );
+  pix = OPICON( "gradient" );
+  m_vToolBarTools->insertButton2( pix, TBTOOLS_GRADIENTTOOL, SIGNAL(clicked()), this, "slotActivateGradientTool", true, text, -1 );
+  m_vToolBarTools->setToggle( TBTOOLS_GRADIENTTOOL, true );
+  m_toolButtons.push_back( TBTOOLS_GRADIENTTOOL );
+
   kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateToolbar : done" );
   return true;
 }
@@ -428,6 +438,9 @@ void KImageShopView::createGUI()
 
   // create zoom tool
   m_pZoomTool = new ZoomTool(this);
+
+  // create gradient tool
+  m_pGradientTool = new GradientTool( m_pDoc, m_actGradient );
 
   // create layer dialog
   m_pLayerDialog = new LayerDialog( m_pDoc, this );
@@ -716,6 +729,16 @@ void KImageShopView::slotActivateZoomTool()
   m_pTool = m_pZoomTool;
 
   activateTool( TBTOOLS_ZOOMTOOL );
+}
+
+void KImageShopView::slotActivateGradientTool()
+{
+  if( !m_pGradientTool )
+    m_pGradientTool = new GradientTool( m_pDoc, m_actGradient );
+
+  m_pTool = m_pGradientTool;
+
+  activateTool( TBTOOLS_GRADIENTTOOL );
 }
 
 void KImageShopView::slotUpdateView(const QRect &_area) // _area in canvas coordiantes

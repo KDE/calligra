@@ -59,6 +59,7 @@ module KImageShop
 		slot void slotActivateMoveTool();
 		slot void slotActivateZoomTool();
 		slot void slotActivateBrushTool();
+		slot void slotActivateGradientTool();
 	
 		slot void activatedUndoMenu( in long _id );
 		slot void activatedRedoMenu( in long _id );
@@ -90,4 +91,5 @@ module KImageShop
 };
 
 #endif
+
 

@@ -45,6 +45,8 @@ class MoveTool;
 class BrushTool;
 class ZoomTool;
 class Brush;
+class Gradient;
+class GradientTool;
 class GradientDialog;
 class GradientEditorDialog;
 class ColorDialog;
@@ -119,6 +121,7 @@ public slots:
   virtual void slotActivateMoveTool();
   virtual void slotActivateBrushTool();
   virtual void slotActivateZoomTool();
+  virtual void slotActivateGradientTool();
 
   void changeUndo( QString, bool);
   void changeRedo( QString, bool);
@@ -177,9 +180,9 @@ protected:
 
 private:
 
-  enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL, TBEDIT_UNDO, TBEDIT_REDO,
-		 TBEDIT_COPY, TBEDIT_CUT, TBEDIT_PASTE, TBDIALOGS_LAYER, TBDIALOGS_COLOR, TBDIALOGS_BRUSH,
-		 TBDIALOGS_GRADIENT, TBDIALOGS_GRADIENTEDITOR };
+  enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL, TBTOOLS_GRADIENTTOOL, TBEDIT_UNDO,
+	 TBEDIT_REDO, TBEDIT_COPY, TBEDIT_CUT, TBEDIT_PASTE, TBDIALOGS_LAYER, TBDIALOGS_COLOR,
+	 TBDIALOGS_BRUSH, TBDIALOGS_GRADIENT, TBDIALOGS_GRADIENTEDITOR };
 
   KImageShopDoc        *m_pDoc;
   LayerDialog          *m_pLayerDialog;
@@ -194,6 +197,8 @@ private:
   const Brush          *m_pBrush; // current brush
   BrushDialog          *m_pBrushDialog;
   const BrushesWidget  *m_pBrushChooser;
+  Gradient             *m_actGradient;
+  GradientTool         *m_pGradientTool;
   GradientDialog       *m_pGradientDialog;
   GradientEditorDialog *m_pGradientEditorDialog;
   ColorDialog          *m_pColorDialog;

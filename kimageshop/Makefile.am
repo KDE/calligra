@@ -16,18 +16,20 @@ kimageshop_SOURCES =  kimageshop_view.cc tool.cc channeldata.cc layer.cc canvas.
 	brush.cc misc.cc kvector.cc kcolor.cc canvasview.cc \
 	kfloatingdialog.cc kfloatingtabdialog.cc kfloatingdialogowner.cc \
 	kimageshop_undo.cc kimageshop_config.cc \
-	kimageshop_doc.cc kimageshop_shell.cc kimageshop_main.cc
+	kimageshop_doc.cc kimageshop_shell.cc kimageshop_main.cc \
+	gradient.cc
 
 noinst_HEADERS = channeldata.h layer.h canvas.h \
 	brush.h misc.h kvector.h kcolor.h tool.h canvasview.h \
 	kfloatingdialog.h kfloatingtabdialog.h kfloatingdialogowner.h \
 	kimageshop_undo.h kimageshop_config.h kimageshop_view.h \
-	kimageshop_doc.h kimageshop_shell.h kimageshop_main.h
+	kimageshop_doc.h kimageshop_shell.h kimageshop_main.h \
+	gradient.h
 
 METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 	kimageshop_doc.moc kimageshop_view.moc kimageshop_config.moc \
 	canvasview.moc canvas.moc layer.moc kfloatingdialog.moc \
-	kfloatingtabdialog.moc
+	kfloatingtabdialog.moc gradient.moc
 
 idl_DATA = kimageshop.idl
 
