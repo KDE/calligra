@@ -245,6 +245,7 @@ protected:
      * We store all paragraph counters in this array.
      */
     unsigned short counters[8][8];
+
 };
 
 #endif

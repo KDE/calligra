@@ -513,8 +513,8 @@ void KWordDocument_impl::drawMarker(KWFormatContext &_fc,QPainter *_painter,int 
   _painter->drawLine(_fc.getPTPos() - xOffset + 1,
 		     _fc.getPTY() - yOffset,
 		     _fc.getPTPos() - xOffset + 1,
-		     _fc.getPTY() + _fc.getLineHeight() - _fc.getPTSpacing() - yOffset);
-  
+		     _fc.getPTY() + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset);
+
   _painter->setRasterOp(rop);
 }
 

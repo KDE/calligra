@@ -137,3 +137,7 @@ Reggie, 28.9.1998:
 ------------------
 - Added JPEG filter
 - some fixes
+
+Reggie, 29.9.1998:
+------------------
+- Bugfix with drawing the cursor
