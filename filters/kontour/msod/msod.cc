@@ -288,7 +288,7 @@ void Msod::drawShape(
 
     operands >> data.spid >> data.grfPersistent.info;
     bytes -= sizeof(data);
-    kdDebug(s_area) << "shape-id: " << data.spid << " type: " << funcTab[shapeType] <<
+	kdDebug(s_area) << "shape-id: " << data.spid << " type: " << funcTab[shapeType] << " (" << shapeType << ")" <<
         (data.grfPersistent.fields.fGroup ? " group" : "") <<
         (data.grfPersistent.fields.fChild ? " child" : "") <<
         (data.grfPersistent.fields.fPatriarch ? " patriarch" : "") <<
