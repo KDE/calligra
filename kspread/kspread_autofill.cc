@@ -67,7 +67,6 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
 
 AutoFillDeltaSequence::~AutoFillDeltaSequence()
 {
-  if ( m_sequence )
     delete m_sequence;
 }
 
@@ -966,10 +965,13 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
       {
 	double val;
+        double factor=1;
+        if ( _srcList.at( s )->formatType() == KSpreadLayout::Percentage )
+            factor = 0.01;
         if (!down)
-          val = (_srcList.at( s )->valueDouble() - incr);
+          val = (_srcList.at( s )->valueDouble() - (incr*factor));
         else
-          val = (_srcList.at( s )->valueDouble() + incr);
+          val = (_srcList.at( s )->valueDouble() + (incr*factor));
 	QString tmp;
 	tmp = tmp.setNum(val);
 	cell->setCellText( tmp, true );
