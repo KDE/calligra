@@ -4206,8 +4206,7 @@ void KWPage::dragMoveEvent(QDragMoveEvent *e)
   //debug("void KWPage::dragMoveEvent(QDragMoveEvent *e)");
 
   if (KWordDrag::canDecode(e) ||
-      QImageDrag::canDecode(e) ||
-      QUrlDrag::canDecode(e))
+      QImageDrag::canDecode(e))
     {
       if (mouseMode != MM_EDIT)
 	setMouseMode(MM_EDIT);
@@ -4287,6 +4286,8 @@ void KWPage::dragMoveEvent(QDragMoveEvent *e)
 	  _painter.end();
 	}
     }
+  else
+    e->ignore();
 }
 
 /*================================================================*/
@@ -4315,6 +4316,7 @@ void KWPage::dropEvent(QDropEvent *e)
 	  if (drop->encodedData("text/plain").size())
 	    editPaste(drop->encodedData("text/plain"));
 	}
+      e->accept();
     }
   else if (QImageDrag::canDecode(e))
     {
@@ -4342,60 +4344,63 @@ void KWPage::dropEvent(QDropEvent *e)
       QString cmd = "rm -f ";
       cmd += filename;
       system(cmd.ascii());
+      e->accept();
     }
-  else if (QUrlDrag::canDecode(e))
-    {
-      QStrList lst;
-      QUrlDrag::decode(e,lst);
+  else
+    e->ignore();
+//   else if (QUrlDrag::canDecode(e))
+//     {
+//       QStrList lst;
+//       QUrlDrag::decode(e,lst);
 
-      QString str;
-      for (str = lst.first();!str.isEmpty();str = lst.next())
-	{
-	  KURL url(str);
-	  if (!url.isLocalFile()) return;
+//       QString str;
+//       for (str = lst.first();!str.isEmpty();str = lst.next())
+// 	{
+// 	  KURL url(str);
+// 	  if (!url.isLocalFile()) return;
 
-	  QString filename = url.path();
- 	  KMimeMagicResult *res = KMimeMagic::self()->findFileType(filename);
+// 	  QString filename = url.path();
+//  	  KMimeMagicResult *res = KMimeMagic::self()->findFileType(filename);
 	
-	  if (res && res->isValid())
-	    {
-	      QString mimetype = res->mimeType();
-	      if (mimetype.contains("image"))
-		{
-		  QPixmap pix(filename);
-		  KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
-		  frameset->setFileName(filename,KSize(pix.width(),pix.height()));
-		  KWFrame *frame = new KWFrame(e->pos().x() + xOffset,e->pos().y() + yOffset,pix.width(),pix.height());
-		  frameset->addFrame(frame);
-		  doc->addFrameSet(frameset);
-		  repaint(false);
-      		  continue;
-		}	
+// 	  if (res && res->isValid())
+// 	    {
+// 	      QString mimetype = res->mimeType();
+// 	      if (mimetype.contains("image"))
+// 		{
+// 		  QPixmap pix(filename);
+// 		  KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
+// 		  frameset->setFileName(filename,KSize(pix.width(),pix.height()));
+// 		  KWFrame *frame = new KWFrame(e->pos().x() + xOffset,e->pos().y() + yOffset,pix.width(),pix.height());
+// 		  frameset->addFrame(frame);
+// 		  doc->addFrameSet(frameset);
+// 		  repaint(false);
+//       		  continue;
+// 		}	
 	
-	    }
+// 	    }
 	
-	  // open any non-picture as text
-	  // in the future we should open specific mime types with "their" programms and embed them
-	  QFile f(filename);
-	  QTextStream t(&f);
-	  QString text = "",tmp;
+// 	  // open any non-picture as text
+// 	  // in the future we should open specific mime types with "their" programms and embed them
+// 	  QFile f(filename);
+// 	  QTextStream t(&f);
+// 	  QString text = "",tmp;
 
-	  if (f.open(IO_ReadOnly))
-	    {
-	      while (!t.eof())
-		{
-		  tmp = t.readLine();
-		  tmp += "\n";
-		  text.append(tmp);
-		}
-	      f.close();
-	    }
-	  doc->getAutoFormat().setEnabled(true);
-	  doc->paste(fc,text,this);
-	  repaint(false);
-	  doc->getAutoFormat().setEnabled(false);
-	}
-    }
+// 	  if (f.open(IO_ReadOnly))
+// 	    {
+// 	      while (!t.eof())
+// 		{
+// 		  tmp = t.readLine();
+// 		  tmp += "\n";
+// 		  text.append(tmp);
+// 		}
+// 	      f.close();
+// 	    }
+// 	  doc->getAutoFormat().setEnabled(true);
+// 	  doc->paste(fc,text,this);
+// 	  repaint(false);
+// 	  doc->getAutoFormat().setEnabled(false);
+// 	}
+//     }
   startBlinkCursor();
 }
 
