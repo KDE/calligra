@@ -24,13 +24,12 @@
 #include "kptrelation.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
-#include "kptresource.h"
 
 #include <qrect.h>
 #include <qptrlist.h>
 #include <qstring.h>
 #include <qcanvas.h>
-#include <qdict.h>
+
 #include <vector>
 
 class QDomElement;
@@ -43,6 +42,7 @@ class KPTAppointment;
 class KPTResourceGroup;
 class KPTResource;
 class KPTResourceGroupRequest;
+class KPTEffort;
 
 
 /**
@@ -75,7 +75,6 @@ public:
 
     bool setId(QString id);
     QString id() const { return m_id; } // unique identity
-    static KPTNode *find(const QString id) { return nodeIdDict.find(id); }
     
     enum NodeTypes {
 	  Type_Node = 0,
@@ -366,12 +365,23 @@ public:
     /// removes appointment without deleting it (independent of setAutoDelete)
     void takeAppointment(KPTAppointment *appointment);
     
+    virtual KPTNode *findNode() const { return findNode(m_id); }
+    virtual KPTNode *findNode(const QString &id) const
+        { return (m_parent ? m_parent->findNode(id) : 0); }
+    virtual bool removeId()  { return removeId(m_id); }
+    virtual bool removeId(const QString &id)
+        { return (m_parent ? m_parent->removeId(id) : false); }
+    virtual void insertId(const QString &id) { insertId(id, this); }
+    virtual void insertId(const QString &id, const KPTNode *node)
+        { if (m_parent) m_parent->insertId(id, node); }
+    
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
     QPtrList<KPTRelation> m_dependParentNodes;
     KPTNode *m_parent;
 
+    QString m_id; // unique id
     QString m_name;        // Name of this node
     QString m_leader;      // Person or group responsible for this node
     QString m_description; // Description of this node
@@ -433,8 +443,6 @@ protected:
     /// The node has not been scheduled
     bool m_notScheduled;
     
-    QString m_id; // unique id
-    
     bool m_visitedForward;
     bool m_visitedBackward;
     
@@ -444,11 +452,9 @@ protected:
  
     QPtrList<KPTAppointment> m_appointments;
  
- private:
+private:
     void init();
-
-    static QDict<KPTNode> nodeIdDict;
-    
+        
 #ifndef NDEBUG
 public:
     virtual void printDebug(bool children, QCString indent);

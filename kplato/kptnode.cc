@@ -19,6 +19,8 @@
 */
 #include "kptnode.h"
 
+#include "kptresource.h"
+
 #include <qptrlist.h>
 #include <qdom.h>
 
@@ -26,8 +28,6 @@
 
 namespace KPlato
 {
-
-QDict<KPTNode> KPTNode::nodeIdDict;
 
 KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     m_parent = parent;
@@ -65,7 +65,7 @@ KPTNode::~KPTNode() {
         delete rel;
     }
     KPTAppointment *a;
-    while (a = m_appointments.getFirst()) {
+    while ((a = m_appointments.getFirst())) {
         delete a;
     }
 }
@@ -110,7 +110,7 @@ bool KPTNode::useDateOnly() {
 void KPTNode::delChildNode( KPTNode *node, bool remove) {
     //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
     if ( m_nodes.findRef(node) != -1 ) {
-        nodeIdDict.remove(node->id());
+        removeId(node->id());
         if(remove)
             m_nodes.remove();
         else
@@ -121,7 +121,7 @@ void KPTNode::delChildNode( KPTNode *node, bool remove) {
 void KPTNode::delChildNode( int number, bool remove) {
     KPTNode *n = m_nodes.at(number);
     if (n)
-        nodeIdDict.remove(n->id());
+        removeId(n->id());
     if(remove)
         m_nodes.remove(number);
     else
@@ -573,21 +573,21 @@ bool KPTNode::setId(QString id) {
         m_id = id;
         return false;
     }
-    KPTNode *n = nodeIdDict.find(m_id);
+    KPTNode *n = findNode();
     if (n == this) {
         //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
-        nodeIdDict.remove(m_id);
+        removeId();
     } else if (n) {
         //Hmmm, shouldn't happen
         kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
     }
-    if (nodeIdDict.find(id)) {
-        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<nodeIdDict.find(id)->name()<<endl;
+    if (findNode(id)) {
+        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name()<<endl;
         m_id = QString(); // hmmm
         return false;
     }
     m_id = id;
-    nodeIdDict.insert(id, this);
+    insertId(id);
     //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
     return true;
 }

@@ -41,15 +41,28 @@
 namespace KPlato
 {
 
+/// Use for main projects
+KPTProject::KPTProject(bool useDateOnly, KPTNode *parent)
+    : KPTNode(parent)
+{
+    m_useDateOnly = useDateOnly;
+    m_constraint = KPTNode::MustStartOn;
+    m_standardWorktime = new KPTStandardWorktime();
+    m_defaultCalendar = new KPTCalendar(*m_standardWorktime);
+    m_defaultCalendar->setProject(this);
+    init();
+}
+
+/// Use for subprojects
 KPTProject::KPTProject(KPTNode *parent)
     : KPTNode(parent)
 
 {
-    m_constraint = KPTNode::MustStartOn;
-    m_useDateOnly = KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date;
-    m_standardWorktime = new KPTStandardWorktime();
-    m_defaultCalendar = new KPTCalendar(*m_standardWorktime);
-    if (parent == 0) {
+    init();
+}
+
+void KPTProject::init() {
+    if (m_parent == 0) {
         // set sensible defaults for a project wo parent
         if (m_useDateOnly) {
             m_startTime = KPTDateTime(QDate::currentDate(),QTime());
@@ -63,8 +76,7 @@ KPTProject::KPTProject(KPTNode *parent)
             if (m_duration == KPTDuration::zeroDuration)
                 m_duration.addDays(1);
         }    
-    }
-    
+    }    
     m_calendars.setAutoDelete(true);
 }
 
@@ -297,6 +309,7 @@ bool KPTProject::load(QDomElement &element) {
             } else if (e.tagName() == "calendar") {
                 // Load the calendar.
                 KPTCalendar *child = new KPTCalendar();
+                child->setProject(this);
                 if (child->load(e)) {
                     addCalendar(child);
                 } else {
@@ -582,11 +595,11 @@ bool KPTProject::moveTaskDown( KPTNode* node )
 }
 
 KPTResourceGroup *KPTProject::group(QString id) {
-    return KPTResourceGroup::find(id);
+    return findResourceGroup(id);
 }
 
 KPTResource *KPTProject::resource(QString id) {
-    return KPTResource::find(id);
+    return findResource(id);
 }
 
 double KPTProject::plannedCost() {
@@ -625,7 +638,7 @@ void KPTProject::addCalendar(KPTCalendar *calendar) {
 }
 
 KPTCalendar *KPTProject::calendar(const QString id) const {
-    return KPTCalendar::find(id);
+    return findCalendar(id);
 }
 
 void KPTProject::addStandardWorktime(KPTStandardWorktime * worktime) {
@@ -638,6 +651,7 @@ void KPTProject::addStandardWorktime(KPTStandardWorktime * worktime) {
 void KPTProject::addDefaultCalendar(KPTStandardWorktime * worktime) {
     delete m_defaultCalendar;
     m_defaultCalendar = new KPTCalendar(*worktime);
+    m_defaultCalendar->setProject(this);
 }
 
 bool KPTProject::legalToLink(KPTNode *par, KPTNode *child) {

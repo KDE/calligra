@@ -21,8 +21,8 @@
 #ifndef kpttask_h
 #define kpttask_h
 
-#include "kptduration.h"
 #include "kptnode.h"
+#include "kptduration.h"
 #include "kptresource.h"
 
 #include <qptrlist.h>

@@ -42,8 +42,6 @@
 namespace KPlato
 {
 
-KPTConfig KPTPart::configuration;
-
 KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
 		 QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
@@ -53,10 +51,10 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
     m_commandHistory = new KoCommandHistory(actionCollection());
 
     setInstance(KPTFactory::global());
-    configuration.setReadWrite(isReadWrite()|| !isEmbedded());
-    configuration.load();
+    m_config.setReadWrite(isReadWrite()|| !isEmbedded());
+    m_config.load();
     
-    m_project = new KPTProject(); // after config is loaded
+    m_project = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date); // after config is loaded
     
     connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
     connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));
@@ -65,7 +63,7 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
 
 
 KPTPart::~KPTPart() {
-    configuration.save();
+    m_config.save();
     delete m_project;
     delete m_projectDialog;
 }
@@ -76,7 +74,7 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
     
     if (flags==KoDocument::InitDocEmpty)
     {
-        m_project = new KPTProject();
+        m_project = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
         setAutoSave(0); // disable
         setModified(false);
         return true;
@@ -106,7 +104,7 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
 	// Make a fresh project and let the user enter some info
-	m_project = new KPTProject();
+	m_project = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
 	// an emty project should be empty
 	// m_projectDialog = new KPTProjectDialog(*m_project, m_view);
 	// m_projectDialog->exec();
@@ -193,7 +191,7 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
             QDomElement e = list.item(i).toElement();
     
             if (e.tagName() == "project") {
-                KPTProject *newProject = new KPTProject();
+                KPTProject *newProject = new KPTProject(m_config.behavior().dateTimeUsage == KPTBehavior::Date);
                 if (newProject->load(e)) {
                     // The load went fine. Throw out the old project
                     delete m_project;

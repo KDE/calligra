@@ -32,14 +32,14 @@
 namespace KPlato
 {
 
-KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidget *p, const char *n)
+KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, bool useDateOnly, QWidget *p, const char *n)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, n, true, true)
 {
     QVBox *page;
     
     // Create all the tabs.
     page = addVBoxPage(i18n("&General"));
-    m_generalTab = new KPTTaskGeneralPanel(task, workTime, page);
+    m_generalTab = new KPTTaskGeneralPanel(task, workTime, useDateOnly, page);
 
     page = addVBoxPage(i18n("&Resources"));
     m_resourcesTab = new KPTRequestResourcesPanel(page, task);

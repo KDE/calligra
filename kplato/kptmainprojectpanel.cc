@@ -74,7 +74,7 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
 
 
 bool KPTMainProjectPanel::ok() {
-    if (idfield->text() != project.id() && KPTNode::find(idfield->text())) {
+    if (idfield->text() != project.id() && project.findNode(idfield->text())) {
         KMessageBox::sorry(this, i18n("Project id must be unique"));
         idfield->setFocus();
         return false;

@@ -36,13 +36,13 @@ class KPTStandardWorktime;
 class KPTTaskGeneralPanel : public KPTTaskGeneralPanelBase {
     Q_OBJECT
 public:
-    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, bool useDateOnly=false, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand(KPTPart *part);
 
     bool ok();
 
-    void setStartValues(KPTTask &task, KPTStandardWorktime *workTime=0);
+    void setStartValues(KPTTask &task, bool useDateOnly=false, KPTStandardWorktime *workTime=0);
 
 public slots:
     virtual void estimationTypeChanged(int type);
@@ -54,6 +54,7 @@ private:
     
     KPTDuration m_effort;
     KPTDuration m_duration;
+    bool m_useDateOnly;
 };
 
 } //KPlato namespace

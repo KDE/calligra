@@ -20,6 +20,7 @@
 #include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
+#include "kptproject.h"
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -464,10 +465,9 @@ int KPTCalendarWeeks::state(const QDate &date) {
 
 /////   KPTCalendar   ////
 
-QDict<KPTCalendar> KPTCalendar::calendarIdDict;
-
 KPTCalendar::KPTCalendar()
     : m_parent(0),
+      m_project(0),
       m_deleted(false) {
 
     init();
@@ -476,6 +476,7 @@ KPTCalendar::KPTCalendar()
 KPTCalendar::KPTCalendar(QString name, KPTCalendar *parent)
     : m_name(name),
       m_parent(parent),
+      m_project(0),
       m_deleted(false) {
     
     init();
@@ -484,6 +485,7 @@ KPTCalendar::KPTCalendar(QString name, KPTCalendar *parent)
 KPTCalendar::KPTCalendar(KPTStandardWorktime &wt)
     : m_name(i18n("Standard calendar")),
       m_parent(0),
+      m_project(0),
       m_deleted(false) {
     
     for (int i=-1; i > -1000; i--) {
@@ -498,6 +500,7 @@ KPTCalendar::KPTCalendar(KPTStandardWorktime &wt)
 
 KPTCalendar::~KPTCalendar() {
     //kdDebug()<<k_funcinfo<<"deleting "<<m_name<<endl;
+    removeId();
     delete m_weeks; 
     delete m_weekdays; 
 }
@@ -520,16 +523,19 @@ const KPTCalendar &KPTCalendar::copy(KPTCalendar &calendar) {
 }
 
 void KPTCalendar::init() {
-    generateId();
     m_days.setAutoDelete(true);
     m_weeks = new KPTCalendarWeeks();
     m_weekdays = new KPTCalendarWeekdays();
 }
 
+void KPTCalendar::setProject(KPTProject *project) { 
+    m_project = project;
+    generateId();
+}
 
 void KPTCalendar::setDeleted(bool yes) {
     if (yes) {
-        calendarIdDict.remove(m_id);
+        removeId();
     } else {
         setId(m_id);
     }
@@ -542,44 +548,37 @@ bool KPTCalendar::setId(QString id) {
         m_id = id;
         return false;
     }
-    KPTCalendar *c = calendarIdDict.find(m_id);
+    KPTCalendar *c = findCalendar();
     if (c == this) {
         //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
-        calendarIdDict.remove(m_id);
+        removeId();
     } else if (c) {
         //can happen when making a copy
         kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<c->name()<<endl;
     }
-    if (calendarIdDict.find(id)) {
-        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<calendarIdDict.find(id)->name()<<endl;
+    if (findCalendar(id)) {
+        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<findCalendar(id)->name()<<endl;
         m_id = QString(); // hmmm
         return false;
     }
     m_id = id;
-    calendarIdDict.insert(id, this);
+    insertId(id);
     //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
     return true;
 }
 
 void KPTCalendar::generateId() {
     if (!m_id.isEmpty()) {
-        calendarIdDict.remove(m_id);
+        removeId();
     }
     for (int i=0; i<32000 ; ++i) {
         m_id = m_id.setNum(i);
-        if (!calendarIdDict.find(m_id)) {
-            calendarIdDict.insert(m_id, this);
+        if (!findCalendar()) {
+            insertId(m_id);
             return;
         }
     }
     m_id = QString();
-}
-
-KPTCalendar *KPTCalendar::find(const QString id) {
-    if (id.isEmpty()) {
-        return 0;
-    }
-    return calendarIdDict.find(id);
 }
 
 bool KPTCalendar::load(QDomElement &element) {
@@ -818,6 +817,19 @@ KPTDateTime KPTCalendar::availableBefore(const KPTDateTime &time) {
         t = interval(start, end).second;
     //kdDebug()<<k_funcinfo<<t.toString()<<endl;
     return t;
+}
+
+KPTCalendar *KPTCalendar::findCalendar(const QString &id) const { 
+    return (m_project ? m_project->findCalendar(id) : 0); 
+}
+
+bool KPTCalendar::removeId(const QString &id) { 
+    return (m_project ? m_project->removeCalendarId(id) : false); 
+}
+
+void KPTCalendar::insertId(const QString &id){ 
+    if (m_project)
+        m_project->insertCalendarId(id, this); 
 }
 
 /////////////

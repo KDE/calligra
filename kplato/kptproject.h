@@ -22,13 +22,13 @@
 #define kptproject_h
 
 #include "kptnode.h"
-#include "kpttask.h"
 
 #include "kptduration.h"
 #include "kptresource.h"
 
 #include <qmap.h>
 #include <qptrlist.h>
+#include <qdict.h>
 
 #include <list>
 #include <algorithm>
@@ -36,6 +36,7 @@
 namespace KPlato
 {
 
+class KPTPart;
 class KPTCalendar;
 class KPTStandardWorktime;
 
@@ -47,6 +48,7 @@ class KPTStandardWorktime;
  */
 class KPTProject : public KPTNode {
 public:
+    KPTProject(bool useDateOnly, KPTNode *parent = 0);
     KPTProject(KPTNode *parent = 0);
     ~KPTProject();
 
@@ -140,6 +142,34 @@ public:
     void setUseDateOnly(bool on) { m_useDateOnly = on; }
     bool useDateOnly() { return m_useDateOnly; }
 
+    virtual KPTNode *findNode(const QString &id) const 
+        { return (m_parent ? m_parent->findNode(id) : nodeIdDict.find(id)); }
+    virtual bool removeId(const QString &id) 
+        { return (m_parent ? m_parent->removeId(id) : nodeIdDict.remove(id)); }
+    virtual void insertId(const QString &id, const KPTNode *node)
+        { m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node); }
+    
+    KPTResourceGroup *findResourceGroup(const QString &id) const 
+        { return resourceGroupIdDict.find(id); }
+    bool removeResourceGroupId(const QString &id) 
+        { return resourceGroupIdDict.remove(id); }
+    void insertResourceGroupId(const QString &id, const KPTResourceGroup* group) 
+        { resourceGroupIdDict.insert(id, group); }
+    
+    KPTResource *findResource(const QString &id) const 
+        { return resourceIdDict.find(id); }
+    bool removeResourceId(const QString &id) 
+        { return resourceIdDict.remove(id); }
+    void insertResourceId(const QString &id, const KPTResource *resource) 
+        { resourceIdDict.insert(id, resource); }
+
+    virtual KPTCalendar *findCalendar(const QString &id) const 
+        { return calendarIdDict.find(id); }
+    virtual bool removeCalendarId(const QString &id) 
+        { return calendarIdDict.remove(id); }
+    virtual void insertCalendarId(const QString &id, const KPTCalendar *calendar)
+        { calendarIdDict.insert(id, calendar); }
+    
 protected:
     QPtrList<KPTResourceGroup> m_resourceGroups;
 
@@ -161,11 +191,19 @@ protected:
     bool legalChildren(KPTNode *par, KPTNode *child);
 
 private:
+    void init();
+    
     QPtrList<KPTNode> m_startNodes;
     QPtrList<KPTNode> m_endNodes;
     QPtrList<KPTNode> m_summarytasks;
     
     bool m_useDateOnly;
+    
+    QDict<KPTResourceGroup> resourceGroupIdDict;
+    QDict<KPTResource> resourceIdDict;
+    QDict<KPTNode> nodeIdDict;        
+    QDict<KPTCalendar> calendarIdDict;
+    
 #ifndef NDEBUG
 #include <qcstring.h>
 public:

@@ -40,7 +40,7 @@ class KPTPart;
 class KPTCalendarListDialogImpl : public KPTCalendarListDialogBase {
     Q_OBJECT
 public:
-    KPTCalendarListDialogImpl (QWidget *parent);
+    KPTCalendarListDialogImpl(KPTProject &project, QWidget *parent);
 
     void setBaseCalendars();
     
@@ -68,6 +68,7 @@ protected:
     CalendarListViewItem *findItem(KPTCalendar *cal);
     
 private:
+    KPTProject &project;
     QPtrList<CalendarListViewItem> m_deletedItems;
     QPtrList<CalendarListViewItem> baseCalendarList;
 };

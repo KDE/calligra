@@ -44,19 +44,19 @@
 namespace KPlato
 {
 
-KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime, QWidget *p, const char *n)
+KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime, bool useDateOnly, QWidget *p, const char *n)
     : KPTTaskGeneralPanelBase(p, n),
       m_task(task),
       m_dayLength(24)
 {
     useTime = !task.useDateOnly();
-    setStartValues(task, workTime);
+    setStartValues(task, useDateOnly, workTime);
     namefield->setFocus();
 }
 
-void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *workTime) {
+void KPTTaskGeneralPanel::setStartValues(KPTTask &task, bool useDateOnly, KPTStandardWorktime *workTime) {
     m_effort = m_duration = task.effort()->expected();
-    
+    m_useDateOnly = useDateOnly;
     namefield->setText(task.name());
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
@@ -88,7 +88,7 @@ void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *wor
         QTime time = workTime ? workTime->endOfDay(date.dayOfWeek()-1) : QTime::currentTime();
         setEndDateTime(QDateTime(date, time)); 
     }
-    if (KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date) {
+    if (useDateOnly) {
         setStartTime(QTime());
         scheduleStartTime->setEnabled(false);
         setEndTime(QTime());
@@ -168,7 +168,7 @@ KMacroCommand *KPTTaskGeneralPanel::buildCommand(KPTPart *part) {
 }
 
 bool KPTTaskGeneralPanel::ok() {
-    if (idfield->text() != m_task.id() && KPTNode::find(idfield->text())) {
+    if (idfield->text() != m_task.id() && m_task.findNode(idfield->text())) {
         KMessageBox::sorry(this, i18n("Task id must be unique"));
         idfield->setFocus();
         return false;
@@ -188,7 +188,7 @@ void KPTTaskGeneralPanel::estimationTypeChanged(int type) {
             KPTDateTime st = startDateTime();
             KPTDateTime end = endDateTime();
             m_duration = end - st;
-            if (KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date) {
+            if (m_useDateOnly) {
                 m_duration.addDays(1);
             }
             estimate->setValue(m_duration);

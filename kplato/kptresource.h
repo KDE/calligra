@@ -27,7 +27,6 @@
 #include <qdom.h>
 #include <qstring.h>
 #include <qptrlist.h>
-#include <qdict.h>
 
 class QTime;
 
@@ -39,10 +38,10 @@ class KPTEffort;
 class KPTAppointment;
 class KPTTask;
 class KPTNode;
+class KPTProject;
 class KPTResource;
 class KPTResourceRequest;
 class KPTResourceGroupRequest;
-class KPTProject;
 class KPTCalendar;
 class KPTResourceRequestCollection;
 
@@ -67,7 +66,6 @@ class KPTResourceGroup {
           QString id() const { return m_id; }
           bool setId(QString id);
           void generateId();
-          static KPTResourceGroup *find(const QString id);
           
           KPTProject *project() { return m_project; }
           
@@ -139,6 +137,12 @@ class KPTResourceGroup {
           const QPtrList<KPTResourceGroupRequest> &requests() const
             { return m_requests; }
 
+          KPTResourceGroup *findId() const { return findId(m_id); }
+          KPTResourceGroup *findId(const QString &id) const;
+          bool removeId() { return removeId(m_id); }
+          bool removeId(const QString &id);
+          void insertId(const QString &id);
+
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
@@ -158,8 +162,6 @@ class KPTResourceGroup {
         
         QPtrList<KPTResourceGroupRequest> m_requests;
         
-        static QDict<KPTResourceGroup> resourceGroupIdDict;
-
 };
 
 /**
@@ -182,7 +184,6 @@ public:
     QString id() const { return m_id; }
     bool setId(QString id);
     void generateId();
-    static KPTResource *find(const QString id);
 
     enum Type { Type_Work, Type_Material };
     void setType(Type type) { m_type = type; }
@@ -277,6 +278,14 @@ public:
     KPTDateTime availableAfter(const KPTDateTime &time);
     KPTDateTime availableBefore(const KPTDateTime &time);
 
+    KPTResource *findId() const { return findId(m_id); }
+    KPTResource *findId(const QString &id) const;
+    bool removeId() { return removeId(m_id); }
+    bool removeId(const QString &id);
+    void insertId(const QString &id);
+
+    KPTCalendar *findCalendar(const QString &id) const;
+
 private:
     KPTProject *m_project;
     QPtrList<KPTAppointment> m_appointments;
@@ -302,8 +311,6 @@ private:
     KPTCalendar *m_calendar;
     QPtrList<KPTResourceRequest> m_requests;
     
-    static QDict<KPTResource> resourceIdDict;
-        
 public:
 #ifndef NDEBUG
         void printDebug(QString ident);

@@ -25,17 +25,18 @@
 
 #include <qptrlist.h>
 #include <qpair.h>
-#include <qdict.h>
 
 class QDomElement;
 class QDateTime;
 class QTime;
 class QDate;
+class QString;
 
 namespace KPlato
 {
 
 class KPTDateTime;
+class KPTProject;
 
 class KPTCalendarDay {
 
@@ -220,6 +221,9 @@ public:
 
     KPTCalendar *parent() const { return m_parent; }
     void setParent(KPTCalendar *parent) { m_parent = parent; }
+    
+    KPTProject *project() const { return m_project; }
+    void setProject(KPTProject *project);
 
     bool isDeleted() const { return m_deleted; }
     void setDeleted(bool yes);
@@ -227,7 +231,6 @@ public:
     QString id() const { return m_id; }
     bool setId(QString id);
     void generateId();
-    static KPTCalendar *find(const QString id);
     
     bool load(QDomElement &element);
     void save(QDomElement &element);
@@ -279,6 +282,12 @@ public:
     KPTDateTime availableAfter(const KPTDateTime &time);
     KPTDateTime availableBefore(const KPTDateTime &time);
 
+    KPTCalendar *findCalendar() const { return findCalendar(m_id); }
+    KPTCalendar *findCalendar(const QString &id) const;
+    bool removeId() { return removeId(m_id); }
+    bool removeId(const QString &id);
+    void insertId(const QString &id);
+    
 protected:
     const KPTCalendar &copy(KPTCalendar &calendar);
     void init();
@@ -286,6 +295,7 @@ protected:
 private:
     QString m_name;
     KPTCalendar *m_parent;
+    KPTProject *m_project;
     bool m_deleted;
     QString m_id;
     QString m_parentId;
@@ -293,8 +303,6 @@ private:
     QPtrList<KPTCalendarDay> m_days;
     KPTCalendarWeeks *m_weeks;
     KPTCalendarWeekdays *m_weekdays;
-    static QDict<KPTCalendar> calendarIdDict;
-
 
 #ifndef NDEBUG
 public:

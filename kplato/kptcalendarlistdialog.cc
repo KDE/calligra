@@ -148,12 +148,15 @@ KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, con
       project(p)
 {
     //kdDebug()<<k_funcinfo<<&p<<endl;
-    dia = new KPTCalendarListDialogImpl(this);
+    dia = new KPTCalendarListDialogImpl(p, this);
     QPtrListIterator<KPTCalendar> it = p.calendars();
     for (; it.current(); ++it) {
         //kdDebug()<<k_funcinfo<<"Add calendar: "<<it.current()->name()<<" deleted="<<it.current()->isDeleted()<<endl;
-        if (!it.current()->isDeleted())
-            new CalendarListViewItem(dia->calendarList, new KPTCalendar(it.current()), it.current());
+        if (!it.current()->isDeleted()) {
+            KPTCalendar *c = new KPTCalendar(it.current());
+            c->setProject(&p);
+            new CalendarListViewItem(dia->calendarList, c, it.current());
+        }
     }    
     dia->setBaseCalendars();
     
@@ -199,7 +202,9 @@ void KPTCalendarListDialog::slotOk() {
 }
 
 
-KPTCalendarListDialogImpl::KPTCalendarListDialogImpl (QWidget *parent) : KPTCalendarListDialogBase(parent) {
+KPTCalendarListDialogImpl::KPTCalendarListDialogImpl (KPTProject &p, QWidget *parent) 
+    : KPTCalendarListDialogBase(parent),
+      project(p) {
 
     m_deletedItems.setAutoDelete(true);
     calendar->setEnabled(false);
@@ -307,6 +312,7 @@ void KPTCalendarListDialogImpl::slotAddClicked() {
     if (editName->text().isEmpty())
         return;
     KPTCalendar *cal = new KPTCalendar(editName->text());
+    cal->setProject(&project);
     CalendarListViewItem *item = new CalendarListViewItem(calendarList, cal);
     item->state = CalendarListViewItem::New;
     calendarList->setSelected(item, true);

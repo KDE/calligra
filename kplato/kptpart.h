@@ -73,7 +73,7 @@ public:
     
     void setCommandType(int type);
     
-    static KPTConfig &config() { return configuration; }
+    KPTConfig &config() { return m_config; }
     
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
@@ -89,7 +89,7 @@ private:
     KoCommandHistory *m_commandHistory;
     bool m_update, m_calculate;
     
-    static KPTConfig configuration;
+    KPTConfig m_config;
 };
 
 }  //KPlato namespace
