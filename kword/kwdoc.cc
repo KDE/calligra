@@ -231,8 +231,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 DCOPObject* KWDocument::dcopObject()
 {
     if ( !dcop )
-    dcop = new KWordDocIface( this );
-
+        dcop = new KWordDocIface( this );
     return dcop;
 }
 

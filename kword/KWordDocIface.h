@@ -24,7 +24,7 @@
 #include <dcopref.h>
 
 #include <qstring.h>
-
+#include <qstringlist.h>
 class KWDocument;
 
 class KWordDocIface : virtual public KoDocumentIface
@@ -172,7 +172,7 @@ k_dcop:
 
     void addIgnoreWordAll( const QString &);
     void clearIgnoreWordAll( );
-
+    QStringList spellListIgnoreAll() const;
 
     //init/save config
     virtual void initConfig();

@@ -2914,9 +2914,7 @@ void KWView::extraSpelling()
     m_doc->setReadWrite(false); // prevent editing text
     m_spell.spellCurrFrameSetNum = -1;
     m_spell.macroCmdSpellCheck=0L;
-#if KDE_VERSION >= 305
     m_spell.replaceAll.clear();
-#endif
     m_spell.textFramesets.clear();
     // Ask each frameset to complete the list of text framesets.
     // This way table cells are checked too.
@@ -4233,9 +4231,7 @@ void KWView::spellCheckerDone( const QString & )
     {
         m_doc->setReadWrite(true);
         m_spell.textFramesets.clear();
-#if KDE_VERSION >= 305
         m_spell.replaceAll.clear();
-#endif
         if(m_spell.macroCmdSpellCheck)
             m_doc->addCommand(m_spell.macroCmdSpellCheck);
         m_spell.macroCmdSpellCheck=0L;
@@ -4268,9 +4264,7 @@ void KWView::spellCheckerFinished()
     }
     m_doc->setReadWrite(true);
     m_spell.textFramesets.clear();
-#if KDE_VERSION >= 305
     m_spell.replaceAll.clear();
-#endif
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
     m_spell.macroCmdSpellCheck=0L;
@@ -4291,13 +4285,11 @@ void KWView::spellCheckerIgnoreAll( const QString & word)
     m_doc->addIgnoreWordAll( word );
 }
 
-#if KDE_VERSION >= 305
 void KWView::spellCheckerReplaceAll( const QString & origword ,  const QString & replacement)
 {
     m_spell.replaceAll.append( origword );
     m_spell.replaceAll.append( replacement );
 }
-#endif
 
 void KWView::configure()
 {

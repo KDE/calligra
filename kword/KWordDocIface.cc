@@ -598,3 +598,9 @@ void KWordDocIface::clearIgnoreWordAll( )
 {
     doc->clearIgnoreWordAll();
 }
+
+QStringList KWordDocIface::spellListIgnoreAll() const
+{
+    return doc->spellListIgnoreAll();
+}
+
