@@ -561,7 +561,7 @@ public:
      * Sets the document URL to @p url
      * KParts doesn't really allow this, but it is needed for undo of setStoreInternal()
      */
-    void setUrl( KURL url ) { m_url = url; }
+    void setURL( const KURL& url ) { m_url = url; }
     
 signals:
     /**
