@@ -27,6 +27,7 @@ namespace KexiDB
 
 class Connection;
 class QuerySchema;
+class TableSchema;
 
 /**
  * parser for sql statements
