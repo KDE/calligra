@@ -3440,6 +3440,10 @@ KCommand *KPrPage::stickyObj(bool _sticky, KPrPage * currentPage)
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't unsticke stike a header/footer
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if ( it.current()->isSelected() && it.current()->isSticky()!=_sticky) {
 	    _objects.append( it.current() );
 	}
