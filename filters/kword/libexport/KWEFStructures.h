@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -243,6 +243,17 @@ public:
     bool getFootnoteAuto(void) const;
     QString getFootnoteValue(void) const;
     QValueList<ParaData>* getFootnotePara(void) const;
+
+    /**
+     * Set generic variable data
+     * @since 1.3.1, 1.4
+     */
+    void setGenericData( const QString& key, const QString& data );
+    /**
+     * Get generic variable data
+     * @since 1.3.1, 1.4
+     */
+    QString getGenericData( const QString& key ) const;
 
     QString m_key;
     QString m_text;
