@@ -259,21 +259,15 @@ KoColumns KoPageLayoutDia::getColumns()
     cl.columns = nColumns->value();
 
     switch ( layout.unit ) {
-    case PG_MM: {
-        cl.mmColumnSpacing = nCSpacing->text().toDouble();
-        cl.ptColumnSpacing = MM_TO_POINT( cl.mmColumnSpacing );
-        cl.inchColumnSpacing = MM_TO_INCH( cl.mmColumnSpacing );
-    } break;
-    case PG_PT: {
+    case PG_MM:
+        cl.ptColumnSpacing = MM_TO_POINT( nCSpacing->text().toDouble() );
+        break;
+    case PG_PT:
         cl.ptColumnSpacing = nCSpacing->text().toDouble();
-        cl.mmColumnSpacing = POINT_TO_MM( cl.ptColumnSpacing );
-        cl.inchColumnSpacing = POINT_TO_INCH( cl.ptColumnSpacing );
-    } break;
-    case PG_INCH: {
-        cl.inchColumnSpacing = nCSpacing->text().toDouble();
-        cl.ptColumnSpacing = INCH_TO_POINT( cl.inchColumnSpacing );
-        cl.mmColumnSpacing = INCH_TO_MM( cl.inchColumnSpacing );
-    } break;
+        break;
+    case PG_INCH:
+        cl.ptColumnSpacing = INCH_TO_POINT( nCSpacing->text().toDouble() );
+        break;
     }
 
     return cl;
@@ -729,15 +723,21 @@ void KoPageLayoutDia::setupTab3()
     nCSpacing->setFrame( true );
     grid3->addWidget( nCSpacing, 3, 0 );
 
+    double columnSpacing = 0;
     switch ( layout.unit ) {
-    case PG_MM: nCSpacing->setText( QString::number( cl.mmColumnSpacing ) );
+    case PG_MM:
+        columnSpacing = POINT_TO_MM( cl.ptColumnSpacing ); // TODO rounding
         break;
-    case PG_PT: nCSpacing->setText( QString::number( cl.ptColumnSpacing ) );
+    case PG_PT:
+        columnSpacing = cl.ptColumnSpacing;
         break;
-    case PG_INCH: nCSpacing->setText( QString::number( cl.inchColumnSpacing ) );
+    case PG_INCH:
+        columnSpacing = POINT_TO_INCH( cl.ptColumnSpacing );
         break;
     }
-    connect( nCSpacing, SIGNAL( textChanged( const QString & ) ), this, SLOT( nSpaceChanged( const QString & ) ) );
+    nCSpacing->setText( QString::number( columnSpacing ) );
+    connect( nCSpacing, SIGNAL( textChanged( const QString & ) ),
+             this, SLOT( nSpaceChanged( const QString & ) ) );
 
     // ------------- preview -----------
     pgPreview2 = new KoPagePreview( tab3, "Preview", layout );
@@ -1232,21 +1232,15 @@ void KoPageLayoutDia::nColChanged( int _val )
 void KoPageLayoutDia::nSpaceChanged( const QString &_val )
 {
     switch ( layout.unit ) {
-        case PG_MM: {
-            cl.mmColumnSpacing = _val.toDouble();
-            cl.ptColumnSpacing = MM_TO_POINT( cl.mmColumnSpacing );
-            cl.inchColumnSpacing = MM_TO_INCH( cl.mmColumnSpacing );
-        } break;
-        case PG_PT: {
-            cl.ptColumnSpacing = _val.toDouble();
-            cl.mmColumnSpacing = POINT_TO_MM( cl.ptColumnSpacing );
-            cl.inchColumnSpacing = POINT_TO_INCH( cl.ptColumnSpacing );
-        } break;
-        case PG_INCH: {
-            cl.inchColumnSpacing = _val.toDouble();
-            cl.ptColumnSpacing = INCH_TO_POINT( cl.inchColumnSpacing );
-            cl.mmColumnSpacing = INCH_TO_MM( cl.inchColumnSpacing );
-        } break;
+    case PG_MM:
+        cl.ptColumnSpacing = MM_TO_POINT( _val.toDouble() );
+        break;
+    case PG_PT:
+        cl.ptColumnSpacing = _val.toDouble();
+        break;
+    case PG_INCH:
+        cl.ptColumnSpacing = INCH_TO_POINT( _val.toDouble() );
+        break;
     }
 
     updatePreview( layout );

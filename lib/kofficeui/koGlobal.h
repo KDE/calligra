@@ -115,6 +115,8 @@ struct KoPageLayout
     double ptRight;
     double ptTop;
     double ptBottom;
+
+    // Deprecated, don't use. pt* should be enough.
     double mmWidth;
     double mmHeight;
     double mmLeft;
@@ -177,8 +179,6 @@ struct KoColumns
 {
     int columns;
     double ptColumnSpacing;
-    double mmColumnSpacing;
-    double inchColumnSpacing;
 };
 
 // structure for KWord header-Footer
@@ -188,6 +188,8 @@ struct KoKWHeaderFooter
     KoHFType footer;
     double ptHeaderBodySpacing;
     double ptFooterBodySpacing;
+
+    // Deprecated, don't use. pt* should be enough.
     double mmHeaderBodySpacing;
     double mmFooterBodySpacing;
     double inchHeaderBodySpacing;
