@@ -643,8 +643,19 @@ bool KoMainWindow::queryClose()
   if ( d->m_rootDoc->isModified() &&
        !d->m_rootDoc->isEmbedded())
   {
+      QString name;
+      if ( rootDocument()->documentInfo() )
+      {
+         name = rootDocument()->documentInfo()->title();
+      }
+      if ( name.isEmpty() )
+          name = rootDocument()->url().fileName();
+	   
+      if ( name.isEmpty() )
+          name = i18n( "Untitled" );
+        
       int res = KMessageBox::warningYesNoCancel( 0L,
-                    i18n( "The document has been modified.\nDo you want to save it ?" ));
+                    i18n( "The document <b>'%1'</b> has been modified.\nDo you want to save it ?" ).arg(name));
 
       switch(res) {
           case KMessageBox::Yes : {
