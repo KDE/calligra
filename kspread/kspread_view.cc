@@ -57,6 +57,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kfind.h>
+#include <kfontdialog.h>
 #include <kreplace.h>
 #include <kfinddialog.h>
 #include <kreplacedialog.h>
@@ -1438,8 +1439,20 @@ void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
 {
     toolbarLock = TRUE;
 
+    // workaround for bug #59291 (crash upon starting from template)
+    // certain Qt and Fontconfig combination fail miserably if can not 
+    // find the font name (e.g. not installed in the system)
+    QStringList fontList;
+    KFontChooser::getFontList( fontList, 0 );
+    QString fontFamily = cell->textFontFamily( column,row );
+    for ( QStringList::Iterator it = fontList.begin(); it != fontList.end(); ++it )
+      if ((*it).lower() == fontFamily.lower())
+      {
+        actions->selectFont->setFont( fontFamily );
+        break;
+      }
+    
     actions->selectFontSize->setFontSize( cell->textFontSize( column, row ) );
-    actions->selectFont->setFont( cell->textFontFamily( column,row ) );
     actions->bold->setChecked( cell->textFontBold( column, row ) );
     actions->italic->setChecked( cell->textFontItalic(  column, row) );
     actions->underline->setChecked( cell->textFontUnderline( column, row ) );
