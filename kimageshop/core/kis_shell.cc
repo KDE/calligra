@@ -76,6 +76,7 @@ void KImageShopShell::slotFileOpen()
 {
   QString filter = "*.kis|KImageShop picture\n" + KImageIO::pattern( KImageIO::Reading );
 
+  QString tempfile;
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
   
   if ( file.isNull() )
@@ -83,7 +84,7 @@ void KImageShopShell::slotFileOpen()
   
   if( KImageIO::isSupported( KImageIO::mimeType( file ) ) )
     {
-      QString tempfile = KoFilterManager::self()->import( file, nativeFormatMimeType() );
+      tempfile = KoFilterManager::self()->import( file, nativeFormatMimeType() );
       if( tempfile.isNull() )
 	return;
     }
