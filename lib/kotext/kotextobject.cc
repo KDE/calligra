@@ -885,7 +885,7 @@ KCommand *KoTextObject::setCounterCommand( QTextCursor * cursor, const KoParagCo
         return 0L;
     emit hideCursor();
     if(cursor)
-        storeParagUndoRedoInfo( cursor );
+        storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) && cursor) {
         static_cast<KoTextParag*>(cursor->parag())->setCounter( counter );
         setLastFormattedParag( cursor->parag() );
@@ -928,7 +928,7 @@ KCommand * KoTextObject::setAlignCommand( QTextCursor * cursor, int align , int 
 
     emit hideCursor();
     if(cursor)
-        storeParagUndoRedoInfo( cursor );
+        storeParagUndoRedoInfo( cursor ,selectionId );
     if ( !textdoc->hasSelection( selectionId ) &&cursor ) {
         static_cast<KoTextParag *>(cursor->parag())->setAlign(align);
         setLastFormattedParag( cursor->parag() );
@@ -965,7 +965,7 @@ KCommand * KoTextObject::setMarginCommand( QTextCursor * cursor, QStyleSheetItem
 
     emit hideCursor();
     if( cursor)
-        storeParagUndoRedoInfo( cursor );
+        storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId )&&cursor ) {
         static_cast<KoTextParag *>(cursor->parag())->setMargin(m, margin);
         setLastFormattedParag( cursor->parag() );
@@ -1012,7 +1012,7 @@ KCommand * KoTextObject::setLineSpacingCommand( QTextCursor * cursor, double spa
 
     emit hideCursor();
     if(cursor)
-        storeParagUndoRedoInfo( cursor );
+        storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
         static_cast<KoTextParag *>(cursor->parag())->setLineSpacing(spacing);
         setLastFormattedParag( cursor->parag() );
@@ -1052,7 +1052,7 @@ KCommand * KoTextObject::setBordersCommand( QTextCursor * cursor, const KoBorder
 
     emit hideCursor();
     if(cursor)
-        storeParagUndoRedoInfo( cursor );
+        storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) ) {
       static_cast<KoTextParag *>(cursor->parag())->setLeftBorder(leftBorder);
       static_cast<KoTextParag *>(cursor->parag())->setRightBorder(rightBorder);
@@ -1107,7 +1107,7 @@ KCommand * KoTextObject::setTabListCommand( QTextCursor * cursor, const KoTabula
 
     emit hideCursor();
     if(cursor)
-        storeParagUndoRedoInfo( cursor );
+        storeParagUndoRedoInfo( cursor, selectionId );
 
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
         static_cast<KoTextParag *>(cursor->parag())->setTabList( tabList );
@@ -1147,7 +1147,7 @@ KCommand * KoTextObject::setShadowCommand( QTextCursor * cursor,double dist, sho
 
     emit hideCursor();
     if(cursor)
-        storeParagUndoRedoInfo( cursor );
+        storeParagUndoRedoInfo( cursor, selectionId );
 
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
         static_cast<KoTextParag *>(cursor->parag())->setShadow( dist, direction, col );
