@@ -128,6 +128,9 @@ protected:
   QRect getPageSize(unsigned int p) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy());}
 
   void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);
+  void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(erase);}
+  void _repaint(int _x,int _y,int _w,int _h,bool erase=true)
+    {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,erase);}
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu;

@@ -228,6 +228,10 @@ public:
   void rotateObjs();
   void reArrangeObjs();
 
+  // repaint all views
+  void repaint(bool);
+  void repaint(unsigned int,unsigned int,unsigned int,unsigned int,bool);
+
 signals:
 
   // document modified
@@ -244,14 +248,6 @@ signals:
   void restoreBackColor(unsigned int);
 
 protected:
-
-  // *********** functions ***********
-
-  // repaint all views
-  void repaint(bool);
-  void repaint(unsigned int,unsigned int,unsigned int,unsigned int,bool);
-
-  // *********** variables ***********
 
   // list of views and children
   QList<KPresenterView_impl> m_lstViews;

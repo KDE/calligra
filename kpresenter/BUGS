@@ -2,17 +2,13 @@ These are known bugs:
 ---------------------
 
 Here I just note the known bugs, and if I know a solution, I also note it here. So I know
-what there is todeo when I'll do the bugfix.
+what there is todo when I'll do the bugfix.
 
-1. Insert two pictures, move the first one => segfault if second pic has to be redrawn
-   (workaround needed, perhaps problem with painter->drawPixmap)
-   The best would be to let KImage draw the pictures!
+1. FIXED. (was picture bug). But I want to do it with KImage one time.
 
-2. When moving/resizing a clipart => clipart looses lines (make clipping rect one pixel larger, or objsize larger)
+2. When moving/resizing a clipart => clipart looses lines (make clipping rect one pixel larger, or objsize smaller)
 
-3. When having multiple views, and a repaint with a clipping rect (in kpresenter_doc) is done, the diffx/diffy from
-   the active view is used for all views => incorrect repaint in other views. Solution: don't calc the diffx/diffy into
-   the clipping rect, calc the final clipping rect in the repaint-methode using the diffx/diffy of every current view.
+3. FIXED. (was bug with repaint of multiple views)
 
 4. FIXED. (was textobj focus problem)
 

@@ -397,7 +397,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
   resizeObjNum = 0;
   mouseMoveEvent(e);
   drawBack = false;
-  repaint(false);
+  _repaint(false);
   drawBack = true;
 }
 
@@ -491,15 +491,15 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		      oox = oox - diffx();
 		      ooy = ooy - diffy();
 		      drawBack = true;
-		      repaint(ox,oy,ow,oh,false);
- 		      if (ox > oox) repaint(oox,oy,ox-oox,oh,false);
- 		      if (oy > ooy) repaint(ox,ooy,ow,oy-ooy,false);
- 		      if (oox > ox) repaint(ox+ow,oy,oox-ox,oh,false);
- 		      if (ooy > oy) repaint(ox,oy+oh,ow,ooy-oy,false);
- 		      if ((ox > oox) && (oy > ooy)) repaint(oox,ooy,ox-oox,oy-ooy,false);
- 		      if ((ox > oox) && (oy < ooy)) repaint(oox,oy+oh,ox-oox,ooy-oy,false);
- 		      if ((ox < oox) && (oy > ooy)) repaint(ox+ow,ooy,oox-ox,oy-ooy,false);
- 		      if ((ox < oox) && (oy < ooy)) repaint(ox+ow,oy+oh,oox-ox,ooy-oy,false);
+		      _repaint(ox,oy,ow,oh,false);
+ 		      if (ox > oox) _repaint(oox,oy,ox-oox,oh,false);
+ 		      if (oy > ooy) _repaint(ox,ooy,ow,oy-ooy,false);
+ 		      if (oox > ox) _repaint(ox+ow,oy,oox-ox,oh,false);
+ 		      if (ooy > oy) _repaint(ox,oy+oh,ow,ooy-oy,false);
+ 		      if ((ox > oox) && (oy > ooy)) _repaint(oox,ooy,ox-oox,oy-ooy,false);
+ 		      if ((ox > oox) && (oy < ooy)) _repaint(oox,oy+oh,ox-oox,ooy-oy,false);
+ 		      if ((ox < oox) && (oy > ooy)) _repaint(ox+ow,ooy,oox-ox,oy-ooy,false);
+ 		      if ((ox < oox) && (oy < ooy)) _repaint(ox+ow,oy+oh,oox-ox,ooy-oy,false);
 		    }
 		}
 	    }
@@ -604,7 +604,7 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
       objPtr->graphObj->show();
       objPtr->graphObj->setFocus();
       graphPtr = objPtr->graphObj;
-      repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
+      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
 	      objPtr->ow,objPtr->oh,true);
     }
 }
@@ -648,7 +648,7 @@ void Page::selectObj(int num)
 	  if (i == (unsigned int)num)
 	    {
 	      objPtr->isSelected = true;
-	      repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
+	      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
 		      objPtr->ow,objPtr->oh,true);
 	      return;
 	    }
@@ -680,7 +680,7 @@ void Page::deSelectObj(int num)
 	  if (i == (unsigned int)num)
 	    {
 	      objPtr->isSelected = false;
-	      repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
+	      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
 		      objPtr->ow,objPtr->oh,true);
 	      return;
 	    }
@@ -723,8 +723,8 @@ void Page::resizeObjTop(int diff,PageObjects* obj)
       oy = oy - diffy();
       ooy = ooy - diffy();
       drawBack = true;
-      repaint(ox,oy,ow,oh,false);
-      if (oh < ooh) repaint(ox,ooy,ow,ooh-oh,false); 
+      _repaint(ox,oy,ow,oh,false);
+      if (oh < ooh) _repaint(ox,ooy,ow,ooh-oh,false); 
     }
 }
 
@@ -751,8 +751,8 @@ void Page::resizeObjLeft(int diff,PageObjects* obj)
       oy = oy - diffy();
       oox = oox - diffx();
       drawBack = true;
-      repaint(ox,oy,ow,oh,false);
-      if (ow < oow) repaint(oox,oy,oow-ow,oh,false); 
+      _repaint(ox,oy,ow,oh,false);
+      if (ow < oow) _repaint(oox,oy,oow-ow,oh,false); 
     }
 }
 
@@ -777,8 +777,8 @@ void Page::resizeObjBot(int diff,PageObjects* obj)
       ox = ox - diffx();
       oy = oy - diffy();
       drawBack = true;
-      repaint(ox,oy,ow,oh,false);
-      if (oh < ooh) repaint(ox,oy+oh,ow,ooh-oh,false); 
+      _repaint(ox,oy,ow,oh,false);
+      if (oh < ooh) _repaint(ox,oy+oh,ow,ooh-oh,false); 
     }
 }
 
@@ -803,8 +803,8 @@ void Page::resizeObjRight(int diff,PageObjects* obj)
       ox = ox - diffx();
       oy = oy - diffy();
       drawBack = true;
-      repaint(ox,oy,ow,oh,false);
-      if (ow < oow) repaint(ox+ow,oy,oow-ow,oh,false); 
+      _repaint(ox,oy,ow,oh,false);
+      if (ow < oow) _repaint(ox+ow,oy,oow-ow,oh,false); 
     }
 }
 
@@ -1118,3 +1118,5 @@ void Page::restoreBackColor(unsigned int pgNum)
  		&p,QSize(pageList()->at(pgNum)->cPix->width(),pageList()->at(pgNum)->cPix->height()));
   p.end();
 }
+
+

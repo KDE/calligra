@@ -410,7 +410,7 @@ bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,int diffx,int di
 		{
 		  objPtr->graphObj->setObjPen(pen);
 		  objPtr->graphObj->setObjBrush(brush);
-		  repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+		  repaint(objPtr->ox,objPtr->oy,
 			  objPtr->ow,objPtr->oh,TRUE);
 		  ret = true;
 		}
@@ -527,7 +527,7 @@ void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
 	    {
 	      _objList.take(i);
 	      _objList.append(objPtr);
-	      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+	      repaint(objPtr->ox,objPtr->oy,
 		      objPtr->ow,objPtr->oh,TRUE);
 	    
 	    }
@@ -548,7 +548,7 @@ void KPresenterDocument_impl::lowerObjs(int diffx,int diffy)
 	    {
 	      _objList.take(i);
 	      _objList.insert(0,objPtr);
-	      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+	      repaint(objPtr->ox,objPtr->oy,
 		      objPtr->ow,objPtr->oh,false);
 	    }
 	}      
@@ -579,7 +579,7 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
 	  objPtr->graphObj->loadPixmap();
 	  _objList.append(objPtr);
-	  repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+	  repaint(objPtr->ox,objPtr->oy,
 		  objPtr->ow,objPtr->oh,false);
 	}
     }
@@ -606,7 +606,7 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
       objPtr->graphObj->loadClipart();
       _objList.append(objPtr);
-      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+      repaint(objPtr->ox,objPtr->oy,
 	      objPtr->ow,objPtr->oh,false);
     }
   QApplication::restoreOverrideCursor();
@@ -633,13 +633,13 @@ void KPresenterDocument_impl::changePicture(const char *filename,int diffx,int d
 		      objPtr->graphObj->loadPixmap();
 		      objPtr->isSelected = false;
 		      objPtr->graphObj->resize(pix.size());
-		      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+		      repaint(objPtr->ox,objPtr->oy,
 			      objPtr->ow,objPtr->oh,false);
 		      objPtr = _objList.at(i);
 		      objPtr->ow = pix.width();
 		      objPtr->oh = pix.height();
 		      objPtr->isSelected = true;
-		      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+		      repaint(objPtr->ox,objPtr->oy,
 			      objPtr->ow,objPtr->oh,false);
 		      break;
 		    }
@@ -670,11 +670,11 @@ void KPresenterDocument_impl::changeClipart(const char *filename,int diffx,int d
 		      objPtr->graphObj->setFileName(QString(filename));
 		      objPtr->graphObj->loadClipart();
 		      objPtr->isSelected = false;
-		      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+		      repaint(objPtr->ox,objPtr->oy,
 			      objPtr->ow,objPtr->oh,false);
 		      objPtr = _objList.at(i);
 		      objPtr->isSelected = true;
-		      repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+		      repaint(objPtr->ox,objPtr->oy,
 			      objPtr->ow,objPtr->oh,false);
 		      break;
 		    }
@@ -703,7 +703,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineType lt,int diffx,int diff
   objPtr->graphObj->setLineType(lt);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   _objList.append(objPtr);
-  repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+  repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
 }
 
@@ -726,7 +726,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   objPtr->graphObj->setRnds(_xRnd,_yRnd);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   _objList.append(objPtr);
-  repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+  repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
 }
 
@@ -747,7 +747,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   objPtr->graphObj->setObjBrush(brush);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   _objList.append(objPtr);
-  repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+  repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
 }
 
@@ -769,7 +769,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   objPtr->textObj->resize(objPtr->ow,objPtr->oh);
   objPtr->textObj->setShowCursor(false);
   _objList.append(objPtr);
-  repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+  repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
 }
 
@@ -790,7 +790,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,const char *f
   objPtr->graphObj->setObjBrush(brush);
   _objList.append(objPtr);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-  repaint(objPtr->ox-diffx,objPtr->oy-diffy,
+  repaint(objPtr->ox,objPtr->oy,
  	  objPtr->ow,objPtr->oh,false);
 }
 
@@ -811,7 +811,11 @@ void KPresenterDocument_impl::repaint(unsigned int x,unsigned int y,unsigned int
   if (!m_lstViews.isEmpty())
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
-	viewPtr->repaint(x,y,w,h,erase);
+	{
+	  x -= viewPtr->getDiffX();
+	  y -= viewPtr->getDiffY();
+	  viewPtr->repaint(x,y,w,h,erase);
+	}
     }
 }
 

@@ -645,6 +645,8 @@ void KPresenterView_impl::createGUI()
       page->restoreBackColor(0);
     }
 
+  resizeEvent(0L);
+
   edeb("...void KPresenterView_impl::createGUI() %i | %i\n",refCount(),_refcnt());
 }
 
@@ -666,6 +668,7 @@ void KPresenterView_impl::construct()
   // We are now in sync with the document
   m_bKPresenterModified = false;
 
+  resizeEvent(0L);
 }
 
 /*======================== document modified ===================*/
