@@ -316,6 +316,9 @@ public:
 
     KTextEditFormatCollection *formatCollection() const { return fCollection; }
 
+public slots:
+    void movePage( int from, int to );
+    
 signals:
 
     // document modified
@@ -421,7 +424,7 @@ protected:
     KTextEditFormatCollection *fCollection;
     QMap<int, bool> selectedSlides;
     bool ignoreSticky;
-    
+
 };
 
 #endif

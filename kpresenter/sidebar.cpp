@@ -12,6 +12,11 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d )
     addColumn( i18n( "Number" ) );
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+    connect( this, SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ),
+	     this, SLOT( movedItems( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
+    setAcceptDrops( TRUE );
+    setDropVisualizer( TRUE );
+    setDragEnabled( TRUE );
 }
 
 void SideBar::rebuildItems()
@@ -20,7 +25,7 @@ void SideBar::rebuildItems()
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
 	checkedMap.insert( it.current()->text( 0 ), ( (QCheckListItem*)it.current() )->isOn() );
-    
+
     clear();
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
 	QCheckListItem *item = new QCheckListItem( this, "", QCheckListItem::CheckBox );
@@ -62,4 +67,25 @@ void SideBar::setOn( int pg, bool on )
 	    return;
 	}
     }
+}
+
+void SideBar::contentsDropEvent( QDropEvent *e )
+{
+    disconnect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+    KListView::contentsDropEvent( e );
+    connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+}
+
+void SideBar::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
+{
+    int num = i->text( 1 ).toInt() - 1;
+    int numNow;
+    if ( !newAfter ) {
+	numNow = 0;
+    } else { 
+	numNow = newAfter->text( 1 ).toInt();
+	if ( numNow > num )
+	    numNow--;
+    }
+    emit movePage( num, numNow );
 }

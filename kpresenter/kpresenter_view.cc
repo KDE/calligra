@@ -95,6 +95,46 @@
 
 #define DEBUG
 
+static const char *pageup_xpm[] = {
+"    14    14        2            1",
+". c #000000",
+"# c none",
+"##############",
+"##############",
+"######..######",
+"#####....#####",
+"####......####",
+"###........###",
+"##############",
+"######..######",
+"#####....#####",
+"####......####",
+"###........###",
+"##############",
+"##############",
+"##############"
+};
+
+static const char *pagedown_xpm[] = {
+"    16    16        2            1",
+". c #000000",
+"# c none",
+"##############",
+"##############",
+"##############",
+"###........###",
+"####......####",
+"#####....#####",
+"######..######",
+"##############",
+"###........###",
+"####......####",
+"#####....#####",
+"######..######",
+"##############",
+"##############"
+};
+
 /*****************************************************************/
 /* class KPresenterFrame					 */
 /*****************************************************************/
@@ -1629,7 +1669,11 @@ void KPresenterView::createGUI()
     splitter = new QSplitter( this );
 
     sidebar = new SideBar( splitter, m_pKPresenterDoc );
-
+    connect( sidebar, SIGNAL( movePage( int, int ) ),
+	     m_pKPresenterDoc, SLOT( movePage( int, int ) ) );
+    connect( sidebar, SIGNAL( movePage( int, int ) ),
+	     this, SLOT( updateSideBar( int, int ) ) );
+    
     // setup page
     pageBase = new PageBase( splitter, this );
     pageBase->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -2510,8 +2554,8 @@ void PageBase::resizeEvent( QResizeEvent *e )
 	view->page->resize( s.width() - 36, s.height() - 36 );
 	view->page->move( 20, 20 );
 	view->vert->setGeometry( s.width() - 16, 0, 16, s.height() - 32 );
-	view->pgPrev->setGeometry( s.width() - 16, s.height() - 32, 16, 16 );
-	view->pgNext->setGeometry( s.width() - 16, s.height() - 16, 16, 16 );
+	view->pgPrev->setGeometry( s.width() - 15, s.height() - 32, 15, 16 );
+	view->pgNext->setGeometry( s.width() - 15, s.height() - 16, 15, 16 );
 	view->horz->setGeometry( 0, s.height() - 16, s.width() - 16, 16 );
 	if ( view->h_ruler )
 	    view->h_ruler->setGeometry( 20, 0, view->page->width(), 20 );
@@ -2688,12 +2732,12 @@ void KPresenterView::setupScrollbars()
     vert->setValue(vert->minValue());
     horz->setValue(horz->minValue());
     pgNext = new QToolButton( pageBase );
-    pgNext->setText( ">" );
+    pgNext->setPixmap( QPixmap( pagedown_xpm ) );
     pgNext->setAutoRepeat( TRUE );
     QToolTip::add( pgNext, i18n( "Next Page" ) );
     connect( pgNext, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
     pgPrev = new QToolButton( pageBase );
-    pgPrev->setText( "<" );
+    pgPrev->setPixmap( QPixmap( pageup_xpm ) );
     pgPrev->setAutoRepeat( TRUE );
     QToolTip::add( pgPrev, i18n( "Previous Page" ) );
     connect( pgPrev, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
@@ -2999,4 +3043,19 @@ QMap<int, bool > KPresenterView::selectedSlideMap() const
     for ( ; it.current(); ++it )
 	map.insert( it.current()->text( 1 ).toInt() - 1, ( (QCheckListItem*)it.current() )->isOn() );
     return map;
+}
+
+void KPresenterView::updateSideBar( int, int pg )
+{
+    sidebar->blockSignals( TRUE );
+    sidebar->rebuildItems();
+    sidebar->blockSignals( FALSE );
+    currPg = pg;
+    vert->setValue( 0 );
+    yOffset = kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height()  * currPg;
+    page->repaint( FALSE );
+    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
+    pgPrev->setEnabled( currPg > 0 );
+    emit currentPageChanged( currPg );
+    sidebar->setCurrentPage( currPg );
 }

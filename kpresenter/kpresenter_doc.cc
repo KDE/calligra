@@ -3992,3 +3992,14 @@ void KPresenterDoc::ungroupObjects()
 	unGroupObjCmd->execute();
     }
 }
+
+void KPresenterDoc::movePage( int from, int to )
+{
+    QString file = getenv( "HOME" );
+    file += "/.tmp.kpr";
+    savePage( file, from );
+    deletePage( from );
+    InsertPos ipos;
+    ipos = IP_BEFORE;
+    insertPage( to, ipos, FALSE, file );
+}

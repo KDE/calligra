@@ -110,7 +110,7 @@ public:
 
     QValueList<int> selectedSlides() const;
     QMap<int, bool > selectedSlideMap() const;
-    
+
 signals:
     void currentPageChanged( int );
 
@@ -347,7 +347,8 @@ protected slots:
     void unitChanged( QString );
 
     void search();
-
+    void updateSideBar( int, int );
+    
 protected:
 
 // ********* functions ***********
@@ -423,7 +424,7 @@ protected:
     int pieLength, pieAngle;
     int rndX, rndY;
     bool sticky;
-    
+
     // the page
     Page *page;
     KoRuler *h_ruler, *v_ruler;
