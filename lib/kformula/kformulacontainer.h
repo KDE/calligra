@@ -24,9 +24,9 @@
 #include <qclipboard.h>
 #include <qdom.h>
 #include <qimage.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qobject.h>
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qstring.h>
 
 #include <kcommand.h>

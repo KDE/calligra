@@ -21,7 +21,7 @@
 #include <iostream>
 #include <klocale.h>  //This is for undo descriptions
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "kformulacommand.h"
 #include "formulacursor.h"

@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qapp.h>
+#include <qapplication.h>
 #include <qdom.h>
 #include <qevent.h>
 #include <qfile.h>

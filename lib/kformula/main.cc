@@ -5,7 +5,7 @@
 #include <qaccel.h>
 #include <qfile.h>
 #include <qlayout.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qmainwindow.h>
 #include <qpainter.h>
 #include <qstring.h>
