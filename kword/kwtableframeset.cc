@@ -550,13 +550,25 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 
     double diff=0.0;
     double pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
-//kdDebug(32004) << "pageBottom; " << pageBottom << endl;
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+    kdDebug(32004) << "pageBottom; " << pageBottom << " (start)" << endl;
+    int nLoop = 0; // DEBUG
+#else
+    // kdDebug(32004) << "pageBottom; " << pageBottom << endl;
+#endif
     while(++j!=m_rowPositions.end()) { // stuff for multipage tables.
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+    kdDebug(32004) << "Loop: new row: " << ++nLoop << " lineNumber: " << lineNumber << endl;
+#endif
         if(pageBound!=m_pageBoundaries.end() && *pageBound == lineNumber ) {
             if(*j > pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder() ) { // next page marker exists, and is accurate...
                 pageNumber++;
                 pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
-//kdDebug(32004) << "pageBottom; " << pageBottom << endl;
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+                kdDebug(32004) << "pageBottom; " << pageBottom << " (loop)" << endl;
+#else
+                // kdDebug(32004) << "pageBottom; " << pageBottom << endl;
+#endif
                 untilRow=QMAX(untilRow, *pageBound);
                 pageBound++;
             }
