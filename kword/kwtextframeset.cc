@@ -96,6 +96,9 @@ KWFrame * KWTextFrameSet::contentsToInternal( QPoint cPoint, QPoint &iPoint, boo
             // (which doesn't have frames, borders, etc.)
             iPoint.setX( cPoint.x() - frameRect.left() );
             iPoint.setY( cPoint.y() - frameRect.top() + totalHeight );
+            /*kdDebug() << "contentsToInternal: returning " << iPoint.x() << "," << iPoint.y()
+                      << " totalHeight=" << totalHeight << " because r: " << DEBUGRECT(r)
+                      << " contains cPoint:" << cPoint.x() << "," << cPoint.y() << endl;*/
             return frameIt.current();
         }
 #if 0 // this was a hack, we shouldn't need it anymore
@@ -777,7 +780,7 @@ void KWTextFrameSet::zoom()
     }
     m_lastFormatted = textdoc->firstParag();
     m_availableHeight = -1; // to be recalculated
-    ensureCursorVisible();
+    emit ensureCursorVisible();
 }
 
 void KWTextFrameSet::unzoom()
@@ -1697,11 +1700,11 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
 
     textdoc->removeSelectedText( QTextDocument::Standard, cursor );
 
-    ensureCursorVisible();
+    emit ensureCursorVisible();
     setLastFormattedParag( cursor->parag() );
     formatMore();
     emit repaintChanged( this );
-    ensureCursorVisible();
+    emit ensureCursorVisible();
     emit showCursor();
     undoRedoInfo.clear();
 }
@@ -1737,7 +1740,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
 
     formatMore();
     emit repaintChanged( this );
-    ensureCursorVisible();
+    emit ensureCursorVisible();
     emit showCursor();
     undoRedoInfo.text += txt;
 
@@ -1838,7 +1841,7 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
 
     formatMore();
     emit repaintChanged( this );
-    ensureCursorVisible();
+    emit ensureCursorVisible();
     emit showCursor();
 }
 
@@ -2318,6 +2321,7 @@ KWDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 
 void KWTextFrameSetEdit::ensureCursorVisible()
 {
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor->parag()->paragId() << endl;
     QTextParag * parag = cursor->parag();
     if ( !parag->isValid() )
         parag->format();

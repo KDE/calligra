@@ -173,7 +173,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged )
 {
     QRect crect( cx, cy, cw, ch );
-    kdDebug(32002) << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << " crect: " << DEBUGRECT( crect ) << endl;
+    //kdDebug(32002) << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << " crect: " << DEBUGRECT( crect ) << endl;
     bool focus = hasFocus() || viewport()->hasFocus();
     if ( painter->device()->devType() == QInternal::Printer )
         focus = false;
@@ -459,7 +459,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 int x = static_cast<int>( mx / doc->zoomedResolutionX() );
                 int y = static_cast<int>( my / doc->zoomedResolutionY() );
                 KWFrameSet *fs = doc->getFrameSet( x, y );
-                if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
+                if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
                 {
                     // Terminate edition of that frameset
                     delete m_currentFrameSetEdit;
@@ -467,7 +467,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     repaintAll();
                 }
                 // Edit the frameset under the mouse, if any
-                if ( !m_currentFrameSetEdit && fs )
+                if ( fs && !m_currentFrameSetEdit )
                     m_currentFrameSetEdit = fs->createFrameSetEdit( this );
 
                 if ( m_currentFrameSetEdit )
@@ -1611,6 +1611,7 @@ void KWCanvas::resizeEvent( QResizeEvent *e )
 /*================================================================*/
 void KWCanvas::scrollToOffset( int _x, int _y )
 {
+    kdDebug() << "KWCanvas::scrollToOffset " << _x << "," << _y << endl;
 #if 0
     bool blinking = blinkTimer.isActive();
     if ( blinking )
