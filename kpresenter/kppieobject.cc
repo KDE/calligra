@@ -197,17 +197,19 @@ void KPPieObject::flip(bool horizontal )
     {
         if ( p_angle <= 90*16 )
         {
+            p_angle = 180*16- p_angle - p_len;
         }
         else if ( p_angle >90*16 && p_angle <180*16 )
         {
+            p_angle = 180*16 - p_angle - p_len  ;
         }
         else if ( p_angle >180*16 && p_angle <270*16 )
         {
-
+            p_angle = 360*16 - (p_angle - 180*16) - p_len;
         }
         else if ( p_angle >270*16 && p_angle <360*16 )
         {
-
+            p_angle = 180*16+ (360*16 - (p_angle+p_len));
         }
     }
 }
