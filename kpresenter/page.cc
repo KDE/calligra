@@ -695,6 +695,7 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 	      connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		      this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));      
 	      editNum = i;
+	      break;
 	    }
 	}
     }
