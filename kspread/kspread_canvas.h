@@ -306,6 +306,9 @@ protected:
     virtual void focusInEvent( QFocusEvent* );
     virtual void focusOutEvent( QFocusEvent* );
     virtual void resizeEvent( QResizeEvent * _ev );
+    virtual void dragMoveEvent(QDragMoveEvent * _ev);
+    virtual void dropEvent(QDropEvent * _ev);
+    virtual void dragLeaveEvent(QDragLeaveEvent * _ev);
 
 private slots:
     void doAutoScroll();
@@ -413,6 +416,12 @@ private:
      */
     double m_dYOffset;
 
+    /**
+     * Start coordinates for drag and drop
+     */
+    QPoint m_dragStart;
+    bool   m_dragging;
+
     KSpreadLocationEditWidget *m_pPosWidget;
     KSpreadEditWidget *m_pEditWidget;
     KSpreadCellEditor *m_pEditor;
@@ -457,6 +466,7 @@ private:
 
 private:
 
+  void startTheDrag();
   void paintSelectionChange(QRect area1, QRect area2);
 
   /**

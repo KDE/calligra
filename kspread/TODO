@@ -6,16 +6,7 @@ For bugs: look into the KBugBuster if somebody else is working on it.d
 
 Others bugs not in BT system (Report by - taken by):
 
-- Clicking into canvas causes to much flickering if many items
-        (especially multirow cells) are in visible rect
-	--(John) I've done updates on this, does anyone think this is still
-	         a big problem?
-        No, I think you fixed it. So Bug #41068 can be closed
-        But something else: put something like setZoom( 0.75 ) in 
-        the KSpreadView contructor and then mark a big area - this takes forever
-        on slow machines.
-		 
-- MultiRow cells will only be drawn if obscuring is forced!
+
 
 
 Other things: (please add the things you are working on!)
@@ -58,6 +49,7 @@ Other things: (please add the things you are working on!)
 - formula result: fit the precision to the width of the cell
 - other bug fixes                               (everybody, every time)
 - Handling of empty cells: empty cells are != 0.0 
+- interface for mail merge
 
 *********
 * Taken:
@@ -98,7 +90,7 @@ Norbert
 - Style support
 + StarCalc/OpenCalc import filter
 - StarCalc/OpenCalc filter for embedding/embedded objects
-- StarCalc/OpenCalc export filter
++ StarCalc/OpenCalc export filter
 
 - Multiple Operations
 + Lookup & Reference functions (LOOKUP needs to fixed)

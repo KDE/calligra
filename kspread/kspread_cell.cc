@@ -3306,22 +3306,27 @@ const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 
 void KSpreadCell::setLeftBorderPen( const QPen& p )
 {
-    KSpreadCell* cell = m_pTable->cellAt( column() - 1, row() ); //what happens on column=1
+  if ( column() == 1 )
+  {
+    KSpreadCell* cell = m_pTable->cellAt( column() - 1, row() );
     if ( cell && cell->hasProperty( PRightBorder )
          && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PRightBorder );
+  }
 
-    KSpreadFormat::setLeftBorderPen( p );
+  KSpreadFormat::setLeftBorderPen( p );
 }
 
 void KSpreadCell::setTopBorderPen( const QPen& p )
 {
-    KSpreadCell* cell = m_pTable->cellAt( column(), row() - 1 ); //what happens on row=1
+  if ( row() == 1 )
+  {
+    KSpreadCell* cell = m_pTable->cellAt( column(), row() - 1 );
     if ( cell && cell->hasProperty( PBottomBorder )
          && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PBottomBorder );
-
-    KSpreadFormat::setTopBorderPen( p );
+  }
+  KSpreadFormat::setTopBorderPen( p );
 }
 
 void KSpreadCell::setRightBorderPen( const QPen& p )

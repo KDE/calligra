@@ -13,6 +13,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <qbuffer.h>
 #include <qlabel.h>
 #include <qdrawutil.h>
 #include <qbutton.h>
@@ -275,7 +276,9 @@ void KSpreadEditWidget::setText( const QString& t )
  ****************************************************************/
 
 KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc )
-    : QWidget( _parent, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase )
+  : QWidget( _parent, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ),
+    m_dragStart( -1, -1 ),
+    m_dragging( false )
 {
   length_namecell = 0;
   m_chooseStartTable = NULL;
@@ -313,6 +316,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   setFocus();
   installEventFilter( this );
   (void)new KSpreadToolTip( this );
+  setAcceptDrops( true );
 }
 
 KSpreadCanvas::~KSpreadCanvas()
@@ -753,6 +757,24 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
+  if ( m_dragging )
+    return;
+
+  if ( m_dragStart.x() != -1 )
+  {
+    QPoint p ( (int) _ev->pos().x() + xOffset(),
+               (int) _ev->pos().y() + yOffset() );
+
+    if ( ( m_dragStart - p ).manhattanLength() > 4 )
+    {
+      m_dragging = true;
+      startTheDrag();
+      m_dragStart.setX( -1 );
+    }
+    m_dragging = false;
+    return;
+  }
+
   // Special handling for choose mode.
   if( m_bChoose )
   {
@@ -994,6 +1016,40 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     return;
   }
 
+  {
+    // start drag ?
+    double xpos = m_pView->activeTable()->dblColumnPos( selectionInfo()->selection().left() );
+    double ypos = m_pView->activeTable()->dblRowPos( selectionInfo()->selection().top() );
+    double width  = 0.0;
+    double height = 0.0;
+    int i;
+    QRect rct( selectionInfo()->selection() );
+    int bot   = rct.bottom();
+    int right = rct.right();
+    for ( i = rct.left(); i <= right; ++i )
+    {
+      width += table->columnFormat( i )->dblWidth( this );
+    }
+    for ( i = rct.top(); i <= bot; ++i )
+    {
+      height += table->rowFormat( i )->dblHeight( this );
+    }
+
+    QRect r1( xpos - 1, ypos - 1, width + 3, height + 3 );
+    QRect r2( xpos + 3, ypos + 3, width - 6, height - 6 );
+
+    m_dragStart.setX( -1 );
+
+    if ( r1.contains( QPoint( ev_PosX, ev_PosY ) )
+         && !r2.contains( QPoint( ev_PosX, ev_PosY ) ) )
+    {
+      m_dragStart.setX( (int) ev_PosX );
+      m_dragStart.setY( (int) ev_PosY );
+
+      return;
+    }
+  }
+
   // In which cell did the user click ?
   double tmp;
   int col = table->leftColumn( ev_PosX, tmp );
@@ -1066,18 +1122,44 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 }
 
+void KSpreadCanvas::startTheDrag()
+{
+  KSpreadSheet * table = activeTable();
+  if ( !table )
+    return;
+
+  // right area for start dragging
+  KSpreadTextDrag * d = new KSpreadTextDrag( this );
+  
+  QRect rct( selectionInfo()->selection() );
+  QDomDocument doc = table->saveCellRect( rct );
+  
+  // Save to buffer
+  QBuffer buffer;
+  buffer.open( IO_WriteOnly );
+  QTextStream str( &buffer );
+  str.setEncoding( QTextStream::UnicodeUTF8 );
+  str << doc;
+  buffer.close();
+  
+  d->setPlain( table->copyAsText( selectionInfo() ) );
+  d->setKSpread( buffer.buffer() );
+  
+  d->dragCopy();
+}
+
 void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
 {
   if ( !m_bMousePressed )
     return;
 
-  KSpreadSheet *table = activeTable();
+  KSpreadSheet * table = activeTable();
   if ( !table )
     return;
 
+  double tmp;
   double ev_PosX = doc()->unzoomItX( _ev->pos().x() );
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() );
-  double tmp;
   int col = table->leftColumn( (ev_PosX + xOffset()), tmp );
   int row = table->topRow( (ev_PosY + yOffset()), tmp );
 
@@ -1202,6 +1284,104 @@ void KSpreadCanvas::focusOutEvent( QFocusEvent* )
     if ( m_scrollTimer->isActive() )
         m_scrollTimer->stop();
     m_bMousePressed = false;
+}
+
+void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
+{
+  KSpreadSheet * table = activeTable();
+  if ( !table )
+  {
+    _ev->ignore();
+    return;
+  }
+
+  _ev->accept( KSpreadTextDrag::canDecode( _ev ) );
+
+  double xpos = table->dblColumnPos( selectionInfo()->selection().left() );
+  double ypos = table->dblRowPos( selectionInfo()->selection().top() );
+  double width  = table->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
+  double height = table->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
+  
+  QRect r1( xpos - 1, ypos - 1, width + 3, height + 3 );
+  double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
+
+  if ( r1.contains( QPoint( ev_PosX, ev_PosY ) ) )
+    _ev->ignore( r1 );
+}
+
+void KSpreadCanvas::dragLeaveEvent(QDragLeaveEvent * _ev)
+{
+  if ( m_scrollTimer->isActive() )
+    m_scrollTimer->stop();  
+}
+
+void KSpreadCanvas::dropEvent( QDropEvent * _ev )
+{
+  m_dragging = false;
+  KSpreadSheet * table = activeTable();
+  if ( !table )
+  {
+    _ev->ignore();
+    return;
+  }
+
+  double xpos = table->dblColumnPos( selectionInfo()->selection().left() );
+  double ypos = table->dblRowPos( selectionInfo()->selection().top() );
+  double width  = table->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
+  double height = table->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
+  
+  QRect r1( xpos - 1, ypos - 1, width + 3, height + 3 );
+  double ev_PosX = doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
+
+  if ( r1.contains( QPoint( ev_PosX, ev_PosY ) ) )
+    _ev->ignore( );
+  else
+    _ev->accept( );
+
+  double tmp;
+  int col = table->leftColumn( ev_PosX, tmp );
+  int row = table->topRow( ev_PosY, tmp );
+
+  if ( !KSpreadTextDrag::canDecode( _ev ) ) 
+  {
+    _ev->ignore();
+    return;
+  }
+
+  QByteArray b;
+
+  if ( _ev->provides( KSpreadTextDrag::selectionMimeType() ) )
+  {
+    if ( KSpreadTextDrag::target() == _ev->source() )
+      table->deleteSelection( selectionInfo() );
+
+    b = _ev->encodedData( KSpreadTextDrag::selectionMimeType() );
+    table->paste( b, QRect( col, row, 1, 1 ), true );
+
+    if ( _ev->source() == this )
+      _ev->acceptAction();
+    _ev->accept();
+  }
+  else
+  {
+    QString text;
+    if ( !QTextDrag::decode( _ev, text ) )
+    {
+      _ev->ignore();
+      return;
+    }
+    if ( KSpreadTextDrag::target() == _ev->source() )
+      table->deleteSelection( selectionInfo() );
+
+    table->pasteTextPlain( text, QRect( col, row, 1, 1 ) );
+    _ev->accept();
+    if ( _ev->source() == this )
+      _ev->acceptAction();
+
+    return;
+  }
 }
 
 void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
