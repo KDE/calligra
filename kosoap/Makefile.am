@@ -1,5 +1,5 @@
 SUBDIRS = easysoap++ 
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I./easysoap++/
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(srcdir)/easysoap++/
 KDE_CXXFLAGS = -fexceptions -g3
 ## The part
 kde_module_LTLIBRARIES = libkosoappart.la
