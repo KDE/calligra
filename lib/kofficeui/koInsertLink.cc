@@ -40,7 +40,7 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget */*parent*/, const char */*name*/ )
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
 
-  page=addVBoxPage(i18n("Mail"), QString::null,BarIcon("mail_generic",KIcon::SizeMedium));
+  page=addVBoxPage(i18n("Mail & News"), QString::null,BarIcon("mail_generic",KIcon::SizeMedium));
   mailLink = new  mailLinkPage(page );
   connect(mailLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
@@ -90,7 +90,7 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
         fileLink->setLinkName(_link);
         showPage(2);
     }
-    else if(_href.find("mailto:")!=-1)
+    else if(_href.find("mailto:")!=-1 || _href.find("news:")!=-1)
     {
         mailLink->setHrefName(_href);
         mailLink->setLinkName(_link);
@@ -237,7 +237,7 @@ mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
 
-  tmpQLabel->setText(i18n("Mail Address:"));
+  tmpQLabel->setText(i18n("Target:"));
   m_hrefName = new QLineEdit( this );
 
   lay2->addWidget(m_hrefName);
@@ -255,7 +255,7 @@ QString mailLinkPage::createMailLink()
     if(result.isEmpty())
         return result;
 
-    if(result.find("mailto:")==-1)
+    if(result.find("mailto:")==-1 && result.find("news:")==-1)
         result = "mailto:"+result;
     return result;
 }

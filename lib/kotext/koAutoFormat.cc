@@ -558,14 +558,16 @@ void KoAutoFormat::doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag
 void KoAutoFormat::detectStartOfLink(const QString &word)
 {
     if (word.find("http")!=-1 || word.find("mailto")!=-1
-        || word.find("ftp")!=-1 || word.find("file")!=-1)
+        || word.find("ftp")!=-1 || word.find("file")!=-1
+        || word.find("news")!=-1 )
         m_ignoreUpperCase=true;
 }
 
 void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
 {
     if (word.find("http://")!=-1 || word.find("mailto:")!=-1
-        || word.find("ftp://")!=-1 || word.find("file:")!=-1)
+        || word.find("ftp://")!=-1 || word.find("file:")!=-1
+        || word.find("news:")!=-1)
     {
         unsigned int length = word.length();
         int start = index - length;
