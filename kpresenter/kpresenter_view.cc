@@ -244,6 +244,7 @@ KPresenterView::~KPresenterView()
 void KPresenterView::setupPrinter( QPrinter &prt )
 {
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
+    prt.setFromTo( 1, m_pKPresenterDoc->getPageNums() );
     bool makeLandscape = false;
 
     switch ( m_pKPresenterDoc->pageLayout().format ) {
