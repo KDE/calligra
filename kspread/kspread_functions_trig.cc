@@ -31,9 +31,7 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 

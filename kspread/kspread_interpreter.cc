@@ -29,10 +29,10 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
+#include <kspread_sheet.h>
+#include <kspread_doc.h>
 
 
 /***************************************************************
@@ -47,8 +47,8 @@
 class KSParseNodeExtraPoint : public KSParseNodeExtra
 {
 public:
-  KSParseNodeExtraPoint( const QString& s, KSpreadMap* m, KSpreadSheet* t ) : m_point( s, m, t ) 
-  { 
+  KSParseNodeExtraPoint( const QString& s, KSpreadMap* m, KSpreadSheet* t ) : m_point( s, m, t )
+  {
   }
 
   KSpreadPoint* point() { return &m_point; }
@@ -64,8 +64,8 @@ class KSParseNodeExtraRange : public KSParseNodeExtra
 {
 public:
   KSParseNodeExtraRange( const QString& s, KSpreadMap* m, KSpreadSheet* t )
-    : m_range( s, m, t ) 
-  { 
+    : m_range( s, m, t )
+  {
   }
 
   KSpreadRange* range() { return &m_range; }
@@ -256,7 +256,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
  *
  *********************************************************************/
 
-KSpreadInterpreter::KSpreadInterpreter( KSpreadDoc * doc ) 
+KSpreadInterpreter::KSpreadInterpreter( KSpreadDoc * doc )
   : KSInterpreter(),
     m_cell( 0 ),
     m_doc( doc ),

@@ -21,7 +21,7 @@
 
 #include "kspread_dlg_anchor.h"
 #include "kspread_canvas.h"
-#include "kspread_table.h"
+#include "kspread_sheet.h"
 
 #include <qlayout.h>
 #include <qlabel.h>

@@ -31,10 +31,8 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
 #include <kspread_util.h>
-#include <kspread_table.h>
 #include <kspread_value.h>
 
 // prototypes (sorted alphabetically)
@@ -104,7 +102,7 @@ bool kspreadfunc_address( KSContext & context )
 
       if ( !KSUtil::checkType( context, args[3], KSValue::BoolType, true ) )
         return false;
-      
+
       absNum = args[2]->intValue();
       r1c1   = !args[3]->boolValue();
     }
@@ -113,10 +111,10 @@ bool kspreadfunc_address( KSContext & context )
   {
     if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
       return false;
-    
+
     if ( !KSUtil::checkType( context, args[3], KSValue::BoolType, true ) )
       return false;
-    
+
     if ( !KSUtil::checkType( context, args[4], KSValue::StringType, true ) )
       return false;
 
@@ -182,7 +180,7 @@ bool kspreadfunc_address( KSContext & context )
     abs = false;
     if ( absNum == 1 || absNum == 2 )
       abs = true;
-    
+
     if ( abs )
       result += '$';
 
@@ -226,7 +224,7 @@ bool kspreadfunc_areas( KSContext & context )
     return false;
 
   int l = s.length();
-  
+
   int num = 0;
   QString ref;
   for ( int i = 1; i < l; ++i )
@@ -241,7 +239,7 @@ bool kspreadfunc_areas( KSContext & context )
         ref = "";
       }
     }
-    else 
+    else
       ref += s[i];
   }
 
@@ -256,7 +254,7 @@ bool kspreadfunc_choose( KSContext & context )
   QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
 
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();  
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
 
   int index = -1;
   int count = 0;
@@ -267,7 +265,7 @@ bool kspreadfunc_choose( KSContext & context )
     {
       if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
         return false;
-      
+
       index = args[0]->intValue();
 
       if ( index < 1 )
@@ -356,7 +354,7 @@ bool kspreadfunc_column( KSContext & context )
       */
     }
   }
-  
+
   return false;
 }
 
@@ -379,11 +377,11 @@ bool kspreadfunc_columns( KSContext & context )
       KSpreadPoint p( s );
       if ( p.pos.x() <= 0 || p.pos.y() <= 0 )
         return false;
-      
+
       context.setValue( new KSValue( (int) 1 ) );
       return true;
     }
-    
+
     context.setValue( new KSValue( r.range.width() ) );
     return true;
   }
@@ -413,7 +411,7 @@ bool kspreadfunc_columns( KSContext & context )
         break;
       }
     }
-    
+
     context.setValue( new KSValue( count ) );
     return true;
   }
@@ -451,11 +449,11 @@ bool kspreadfunc_indirect( KSContext & context )
     return false;
 
   if ( r1c1 )
-  {    
+  {
     // TODO: translate the r1c1 style to a1 style
     ref = ref;
   }
-  
+
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
   KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->table();
 
@@ -478,14 +476,14 @@ bool kspreadfunc_indirect( KSContext & context )
       context.setValue( new KSValue( cell->valueTime() ) );
     else
       context.setValue( new KSValue( cell->strOutText() ) );
-      
-    return true;    
+
+    return true;
   }
 
   return false;
 }
 
-static bool isEqualLess( KSContext & context, KSpreadValue::Type type, KSValue::Ptr const & value, 
+static bool isEqualLess( KSContext & context, KSpreadValue::Type type, KSValue::Ptr const & value,
                          double dValue, QString const & sValue, bool bValue )
 {
   if ( ( type == KSpreadValue::Type::Float )
@@ -563,7 +561,7 @@ bool kspreadfunc_lookup( KSContext & context )
   else
     return false;
   kdDebug() << "H2 " << endl;
-  
+
   int index = -1;
 
   double dValue = 0.0;
@@ -575,7 +573,7 @@ bool kspreadfunc_lookup( KSContext & context )
   if ( type == KSpreadCell::StringData )
     sValue = args[0]->stringValue();
   if ( type == KSpreadCell::BoolData )
-    bValue = args[0]->boolValue();   
+    bValue = args[0]->boolValue();
 
   // single value / no list
   if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
@@ -614,7 +612,7 @@ bool kspreadfunc_lookup( KSContext & context )
     {
       context.setValue( new KSValue( args[2] ) );
       return true;
-    }    
+    }
     else if ( ( type == KSpreadCell::BoolData )
               && ( KSUtil::checkType( context, args[1], KSValue::BoolType, true ) ) )
     {
@@ -636,13 +634,13 @@ bool kspreadfunc_lookup( KSContext & context )
     return false;
 
   QValueList<KSValue::Ptr>::Iterator it  = lookup.begin();
-  QValueList<KSValue::Ptr>::Iterator end = lookup.end();  
+  QValueList<KSValue::Ptr>::Iterator end = lookup.end();
 
   index = -1;
   kdDebug() << "Start" << endl;
   int l = lookup.count();
   for ( int i = 0; i < l; ++i ) // ( ; it != end; ++it )
-  {    
+  {
     if ( KSUtil::checkType( context, lookup[i], KSValue::DoubleType, true ) )
       kdDebug() << "Double" << endl;
     if ( KSUtil::checkType( context, lookup[i], KSValue::ListType, true ) )
@@ -719,7 +717,7 @@ bool kspreadfunc_row( KSContext & context )
 
     }
   }
-  
+
   return false;
 }
 
@@ -741,11 +739,11 @@ bool kspreadfunc_rows( KSContext & context )
       KSpreadPoint p( s );
       if ( p.pos.y() <= 0 || p.pos.x() <= 0 )
         return false;
-      
+
       context.setValue( new KSValue( (int) 1 ) );
       return true;
     }
-    
+
     context.setValue( new KSValue( r.range.height() ) );
     return true;
   }
@@ -768,7 +766,7 @@ bool kspreadfunc_rows( KSContext & context )
       if ( s[i] == '[' )
         ++count;
     }
-    
+
     context.setValue( new KSValue( count ) );
     return true;
   }

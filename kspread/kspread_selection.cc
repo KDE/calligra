@@ -20,7 +20,7 @@
 #include "kspread_selection.h"
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
-#include "kspread_table.h"
+#include "kspread_sheet.h"
 #include "kspread_view.h"
 
 KSpreadSelection::KSpreadSelection(KSpreadView* view)

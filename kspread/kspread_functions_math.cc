@@ -25,6 +25,7 @@
 #include <float.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
@@ -32,11 +33,11 @@
 #include <koscript_synext.h>
 
 #include <kspread_cell.h>
+#include <kspread_sheet.h>
+#include <kspread_interpreter.h>
 #include <kspread_doc.h>
 #include <kspread_functions.h>
 #include <kspread_functions_helper.h>
-#include <kspread_map.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 namespace math_local

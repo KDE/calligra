@@ -23,11 +23,10 @@
 #include <float.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
 #include "kspread_functions_helper.h"
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 
@@ -45,31 +44,31 @@ uint EDate::greg2jul( QDate const & date )
 {
   // reference is 31 Dec, 1899 midnight
   QDate refDate = QDate( 1899, 12, 31 );
-  
+
   return refDate.daysTo( date ) + 1;
 }
 
 void EDate::jul2greg( double num, int & y, int & m, int & d )
 {
   QDate date = QDate( 1899, 12, 31 );
-  
+
   date = date.addDays( (int) num );
-  
+
   y = date.year();
   m = date.month();
   d = date.day();
-  
+
   return;
-  
+
   if ( g_dateOrigin == 0 )
     g_dateOrigin = EDate::greg2jul( 1900, 1, 1 ) - 1;
-  
+
   int i = (int) floor( num + HALFSEC );
   if (i > g_dateSerial_19000228)
     --i;
   else if (i == g_dateSerial_19000228 + 1)
     kdWarning() << "Request for date 02/29/1900." << endl;
-  
+
   QDate::julianToGregorian( i + g_dateOrigin, y, m, d );
 }
 
@@ -86,8 +85,8 @@ bool getDate( KSContext & context, KSValue::Ptr & arg, QDate & date )
 
       double d = arg->doubleValue();
 
-      int y = 0; 
-      int m = 0; 
+      int y = 0;
+      int m = 0;
       int day = 0;
       EDate::jul2greg( d, y, m, day );
 
@@ -107,7 +106,7 @@ bool getDate( KSContext & context, KSValue::Ptr & arg, QDate & date )
       return true;
     }
   }
-  else 
+  else
   {
     date = arg->dateValue();
     return true;
@@ -182,7 +181,7 @@ int daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
   int day1, day2, month1, month2, year1, year2;
   bool isLeapYear = false;
   int days, months, years;
-  
+
   day1   = date1.day();
   month1 = date1.month();
   year1  = date1.year();
@@ -196,10 +195,10 @@ int daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
 
   isLeapYear = QDate::leapYear( year1 );
 
-  switch (basis) 
+  switch (basis)
   {
    case 0:
-    if ( month1 == 2 && month2 != 2 && year1 == year2 ) 
+    if ( month1 == 2 && month2 != 2 && year1 == year2 )
     {
       if ( isLeapYear )
         return months * 30 + days - 1;
@@ -232,19 +231,19 @@ double fact(int n)
 
 double combin(int n, int k)
 {
-  if (n >= 15) 
+  if (n >= 15)
   {
     double result = exp(lgamma (n + 1) - lgamma (k + 1) - lgamma (n - k + 1));
     return floor(result + 0.5);
-  } 
-  else 
+  }
+  else
   {
     double result = fact( n ) / fact( k ) / fact( n - k );
     return result;
   }
 }
 
-double gaussinv_helper (double x) 
+double gaussinv_helper (double x)
 {
   double c0, c1, c2, d1, d2, d3, q, t, z;
   c0 = 2.515517;
@@ -272,7 +271,7 @@ bool approx_equal(double a, double b)
   return (x < 0.0 ? -x : x)  <  ((a < 0.0 ? -a : a) * DBL_EPSILON);
 }
 
-bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
                                  double & result, int & number, bool aMode )
 {
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
@@ -307,7 +306,7 @@ bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> &
   return true;
 }
 
-bool kspreadfunc_stddev_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+bool kspreadfunc_stddev_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
                                 double & result, double & avera, bool aMode )
 {
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
@@ -342,7 +341,7 @@ bool kspreadfunc_stddev_helper( KSContext & context, QValueList<KSValue::Ptr> & 
   return true;
 }
 
-bool kspreadfunc_variance_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+bool kspreadfunc_variance_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
                                   double & result, double avera, bool aMode )
 {
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();

@@ -27,16 +27,15 @@
 #include <qvaluelist.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
 #include <kspread_functions_helper.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 // prototypes (sorted!)
@@ -163,7 +162,7 @@ void KSpreadRegisterStatisticalFunctions()
   repo->registerFunction( "WEIBULL", kspreadfunc_weibull );
 }
 
-bool kspreadfunc_skew_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, 
+bool kspreadfunc_skew_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result,
                               double avg, double stdev )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -261,7 +260,7 @@ bool kspreadfunc_skew_pop( KSContext & context )
 
 class ContentTable : public QMap<double, int> {};
 
-bool kspreadfunc_mode_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+bool kspreadfunc_mode_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
                               ContentTable & table, double & number, int & value )
 {
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
@@ -277,7 +276,7 @@ bool kspreadfunc_mode_helper( KSContext & context, QValueList<KSValue::Ptr> & ar
         return false;
     }
     else
-    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) ) 
+    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       double d = (*it)->doubleValue();
 
@@ -297,7 +296,7 @@ bool kspreadfunc_mode_helper( KSContext & context, QValueList<KSValue::Ptr> & ar
       }
     }
   }
-  
+
   return true;
 }
 
@@ -316,8 +315,8 @@ bool kspreadfunc_mode( KSContext & context )
   return true;
 }
 
-bool kspreadfunc_covar_helper( KSContext & context, QValueList<KSValue::Ptr> & args1, 
-                               QValueList<KSValue::Ptr> & args2, 
+bool kspreadfunc_covar_helper( KSContext & context, QValueList<KSValue::Ptr> & args1,
+                               QValueList<KSValue::Ptr> & args2,
                                double & result, double avg1, double avg2 )
 {
   QValueList<KSValue::Ptr>::Iterator it1 = args1.begin();
@@ -338,7 +337,7 @@ bool kspreadfunc_covar_helper( KSContext & context, QValueList<KSValue::Ptr> & a
         return false;
       if ( !KSUtil::checkType( context, *it2, KSValue::DoubleType, true ) )
         return false;
-      
+
       result += ( (*it1)->doubleValue() - avg1 ) * ( (*it2)->doubleValue() - avg2 );
     }
     ++it2;
@@ -439,7 +438,7 @@ bool kspreadfunc_covar( KSContext & context )
     return false;
 
   double avg2 = res2 / (double) number;
-  
+
   double covar = 0.0;
 
   if ( !kspreadfunc_covar_helper( context, args[0]->listValue(), args[1]->listValue(),
@@ -465,13 +464,13 @@ bool kspreadfunc_array_helper( KSContext & context, QValueList<KSValue::Ptr> & a
         return false;
     }
     else
-    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) ) 
+    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       array << (*it)->doubleValue();
       ++number;
     }
   }
-  
+
   return true;
 }
 
@@ -514,7 +513,7 @@ bool kspreadfunc_large( KSContext & context )
         return false;
     }
     else
-    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) ) 
+    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       array << (*it)->doubleValue();
       ++number;
@@ -523,7 +522,7 @@ bool kspreadfunc_large( KSContext & context )
 
   if ( k > number )
     return false;
-  
+
   qHeapSort( array );
 
   double d = *array.at( number - k - 1 );
@@ -574,7 +573,7 @@ bool kspreadfunc_small( KSContext & context )
         return false;
     }
     else
-    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) ) 
+    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       array << (*it)->doubleValue();
       ++number;
@@ -583,14 +582,14 @@ bool kspreadfunc_small( KSContext & context )
 
   if ( k > number )
     return false;
-  
+
   qHeapSort( array );
 
   context.setValue( new KSValue( (double) (*array.at( k - 1 )) ) );
   return true;
 }
 
-bool kspreadfunc_geomean_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+bool kspreadfunc_geomean_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
                                  double & result, int & number)
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -606,10 +605,10 @@ bool kspreadfunc_geomean_helper( KSContext & context, QValueList<KSValue::Ptr> &
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       double d = (*it)->doubleValue();
-      
+
       if ( d <= 0 )
         return false;
-      
+
       result *= d;
       ++number;
     }
@@ -632,7 +631,7 @@ bool kspreadfunc_geomean( KSContext & context )
     return false;
 
   result = pow( result, 1.0 / number);
-  
+
   context.setValue( new KSValue( result ) );
   return true;
 }
@@ -652,10 +651,10 @@ bool kspreadfunc_harmean_helper( KSContext & context, QValueList<KSValue::Ptr> &
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       double d = (*it)->doubleValue();
-      
+
       if ( d <= 0 )
         return false;
-      
+
       result += 1 / d;
       ++number;
     }
@@ -690,7 +689,7 @@ bool kspreadfunc_loginv( KSContext & context )
 
   if ( !KSUtil::checkArgumentsCount( context, 3, "LOGINV",true ) )
     return false;
-  
+
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
 
@@ -708,13 +707,13 @@ bool kspreadfunc_loginv( KSContext & context )
     return false;
   if ( s <= 0 )
     return false;
-  
+
   double result;
 
-  if ( p == 1 ) 
+  if ( p == 1 )
     result = HUGE_VAL;
   else
-  if ( p > 0 ) 
+  if ( p > 0 )
     result = exp( gaussinv_helper( p ) * s + m );
   else
     result = 0.0;
@@ -772,7 +771,7 @@ bool kspreadfunc_devsq( KSContext & context )
   return true;
 }
 
-bool kspreadfunc_kurt_est_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, 
+bool kspreadfunc_kurt_est_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result,
                                   double avg, double stdev )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -820,7 +819,7 @@ bool kspreadfunc_kurtosis_est( KSContext & context )
 
   if ( !kspreadfunc_kurt_est_helper( context, args, x4, avg, res ) )
     return false;
-  
+
   double den = ( double )( number - 2 ) * ( number - 3 );
   double nth = ( double ) number * ( number + 1 ) / ( ( number - 1 ) * den );
   double t = 3.0 * ( number - 1 ) * ( number - 1 ) / den;
@@ -865,7 +864,7 @@ bool kspreadfunc_standardize( KSContext & context )
 
   if ( !KSUtil::checkArgumentsCount( context,3, "STANDARDIZE",true ) )
     return false;
-  
+
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
 
@@ -894,7 +893,7 @@ bool kspreadfunc_hypgeomdist( KSContext & context )
 
   if ( !KSUtil::checkArgumentsCount( context,4, "HYPGEOMDIST",true ) )
     return false;
-  
+
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
     return false;
 
@@ -932,7 +931,7 @@ bool kspreadfunc_negbinomdist( KSContext & context )
 
   if ( !KSUtil::checkArgumentsCount( context,3, "NEGBINOMDIST",true ) )
     return false;
-  
+
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
     return false;
 
@@ -945,8 +944,8 @@ bool kspreadfunc_negbinomdist( KSContext & context )
   int    x = args[0]->intValue();
   int    r = args[1]->intValue();
   double p = args[2]->doubleValue();
-  
-  if ( ( x + r - 1 ) <= 0 ) 
+
+  if ( ( x + r - 1 ) <= 0 )
     return false;
   if ( p < 0 || p > 1 )
     return false;
@@ -1446,7 +1445,7 @@ static double taylor_helper (double* pPolynom, uint nMax, double x)
   return nVal;
 }
 
-static double gauss_helper( double x ) 
+static double gauss_helper( double x )
 {
   double t0[] =
     { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
@@ -1859,7 +1858,7 @@ bool kspreadfunc_lognormdist(KSContext& context ) {
 }
 
 // Function: normsdist
-bool kspreadfunc_stdnormdist(KSContext& context ) 
+bool kspreadfunc_stdnormdist(KSContext& context )
 {
   //returns the cumulative lognormal distribution
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -2044,23 +2043,23 @@ bool kspreadfunc_poisson( KSContext& context ) {
 
   if (lambda < 0.0 || x < 0.0)
     return false;
-  else if (kum == 0)  
+  else if (kum == 0)
   { // density
     if (lambda == 0.0)
       result = 0;
     else
       result = exp(-lambda) * pow(lambda,x) / util_fact(x,0);
   }
-  else 
+  else
   { // distribution
     if (lambda == 0.0)
       result = 1;
-    else 
+    else
     {
       double sum = 1.0;
       double fFak = 1.0;
       unsigned long nEnd = static_cast<unsigned long > (x);
-      for (unsigned long i = 1; i <= nEnd; i++) 
+      for (unsigned long i = 1; i <= nEnd; i++)
       {
         fFak *= static_cast<double>(i);
         sum += pow( lambda, static_cast<double>(i) ) / fFak;
@@ -2439,12 +2438,12 @@ bool kspreadfunc_avedev(KSContext &context)
 
 	// Devide by the number of values
 	temp /= number;
-	
+
 	bool finish = kspreadfunc_avedev_helper(context, context.value()->listValue(), result, temp);
-	
+
 	if(!finish)
 		return false;
-	
+
 	// Devide by the number of values
 	result /= number;
 

@@ -31,11 +31,10 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
 #include <kspread_functions_helper.h>
 #include <kspread_util.h>
-#include <kspread_table.h>
+
 
 // prototypes (sorted)
 bool kspreadfunc_accrint( KSContext& context );
@@ -124,11 +123,11 @@ static double getPay( double rate, double nper, double pv, double fv, int type )
 static double getPrinc( double start, double pay,
                         double rate, double period )
 {
-  return ( start * pow( 1.0 + rate, period) + pay 
+  return ( start * pow( 1.0 + rate, period) + pay
            * ( ( pow( 1 + rate, period ) - 1 ) / rate ) );
 }
 
-static bool getCoupParameter( KSContext & context, QString const & fName, QDate & settlement, 
+static bool getCoupParameter( KSContext & context, QString const & fName, QDate & settlement,
                               QDate & maturity, int & frequency, int & basis, bool & eom )
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
@@ -144,7 +143,7 @@ static bool getCoupParameter( KSContext & context, QString const & fName, QDate 
     {
       if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
         return false;
-      basis = args[3]->intValue(); 
+      basis = args[3]->intValue();
     }
   }
   else
@@ -153,8 +152,8 @@ static bool getCoupParameter( KSContext & context, QString const & fName, QDate 
       return false;
     if ( !KSUtil::checkType( context, args[4], KSValue::BoolType, true ) )
       return false;
-    
-    basis = args[3]->intValue(); 
+
+    basis = args[3]->intValue();
     eom   = args[4]->boolValue();
   }
 
@@ -170,7 +169,7 @@ static bool getCoupParameter( KSContext & context, QString const & fName, QDate 
   frequency = args[2]->intValue();
 
   if (basis < 0 || basis > 5 || ( frequency == 0 ) || ( 12 % frequency != 0 )
-      || settlement.daysTo( maturity ) <= 0) 
+      || settlement.daysTo( maturity ) <= 0)
     return false;
 
   return true;
@@ -185,14 +184,14 @@ bool kspreadfunc_coupnum( KSContext & context )
   int   basis = 0;
   bool  eom   = true;
 
-  if ( !getCoupParameter( context, "COUPNUM", settlement, maturity, 
+  if ( !getCoupParameter( context, "COUPNUM", settlement, maturity,
                           frequency, basis, eom ) )
     return false;
 
   double result;
   QDate cDate( maturity );
 
-  int months = maturity.month() - settlement.month() 
+  int months = maturity.month() - settlement.month()
     + 12 * ( maturity.year() - settlement.year() );
 
   subMonths( cDate, months );
@@ -299,7 +298,7 @@ bool kspreadfunc_accrintm( KSContext& context )
     {
       if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
         return false;
-      
+
       par   = args[3]->doubleValue();
     }
   }
@@ -345,13 +344,13 @@ bool kspreadfunc_disc( KSContext& context )
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
 
   int basis = 0;
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 5, "DISC", true ) )
   {
     if ( !KSUtil::checkArgumentsCount( context, 4, "DISC", true ) )
       return false;
   }
-  else 
+  else
   {
     if ( !KSUtil::checkType( context, args[4], KSValue::IntType, true ) )
       return false;
@@ -370,7 +369,7 @@ bool kspreadfunc_disc( KSContext& context )
 
   if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
     return false;
-  
+
   if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
     return false;
 
@@ -408,7 +407,7 @@ bool kspreadfunc_tbillprice( KSContext& context )
 
   if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
     return false;
-  
+
   discount = args[2]->doubleValue();
 
   double days = settlement.daysTo( maturity );
@@ -440,7 +439,7 @@ bool kspreadfunc_tbillyield( KSContext& context )
 
   if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
     return false;
-  
+
   rate = args[2]->doubleValue();
 
   double days = settlement.daysTo( maturity );
@@ -472,7 +471,7 @@ bool kspreadfunc_tbilleq( KSContext& context )
 
   if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
     return false;
-  
+
   discount = args[2]->doubleValue();
 
   double days = settlement.daysTo( maturity );
@@ -495,7 +494,7 @@ bool kspreadfunc_received( KSContext& context )
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
 
   int basis = 0;
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 5, "RECEIVED", true ) )
   {
     if ( !KSUtil::checkArgumentsCount( context, 4, "RECEIVED", true ) )
@@ -505,8 +504,8 @@ bool kspreadfunc_received( KSContext& context )
   {
     if ( !KSUtil::checkType( context, args[4], KSValue::IntType, true ) )
       return false;
-    
-    basis = args[4]->intValue(); 
+
+    basis = args[4]->intValue();
   }
 
   QDate settlement;
@@ -534,7 +533,7 @@ bool kspreadfunc_received( KSContext& context )
     return false;
 
   double x = 1.0 - ( discount * d / y );
-  
+
   if ( x == 0 )
     return false;
 
@@ -628,7 +627,7 @@ bool kspreadfunc_intrate( KSContext& context )
   {
     if ( !KSUtil::checkType( context, args[4], KSValue::IntType, true ) )
       return false;
-    
+
     basis = args[4]->intValue();
   }
 
@@ -853,7 +852,7 @@ bool kspreadfunc_ipmt( KSContext& context )
     if ( !KSUtil::checkType( context, args[4], KSValue::DoubleType, true ) )
       return false;
     type = args[5]->intValue();
-    fv   = args[4]->doubleValue();    
+    fv   = args[4]->doubleValue();
   }
   else
   if ( KSUtil::checkArgumentsCount( context, 5, "IPMT", true ) )
@@ -866,7 +865,7 @@ bool kspreadfunc_ipmt( KSContext& context )
   else
   if ( !KSUtil::checkArgumentsCount( context, 4, "IPMT", false ) )
     return false;
-  
+
 
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
@@ -1258,7 +1257,7 @@ bool kspreadfunc_db( KSContext& context )
   if( salvage / cost < 0 ) return false;
 
   double rate = 1000 * (1 - pow( (salvage/cost), (1/life) ));
-  rate = floor( rate + 0.5 )  / 1000; 
+  rate = floor( rate + 0.5 )  / 1000;
 
   double total = cost * rate * month / 12;
 
@@ -1328,12 +1327,12 @@ bool kspreadfunc_ddb( KSContext& context )
       context.setValue( new KSValue( periodDep ) );
       return true;
     }
-    else 
+    else
     {
       total += periodDep;
     }
   }
-  
+
   context.setValue( new KSValue( cost - total - salvage ) );
 
   return true;

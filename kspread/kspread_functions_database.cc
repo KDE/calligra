@@ -32,10 +32,10 @@
 #include <koscript_synext.h>
 
 #include <kspread_cell.h>
+#include <kspread_sheet.h>
+#include <kspread_interpreter.h>
 #include <kspread_doc.h>
 #include <kspread_functions.h>
-#include <kspread_map.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 #include <qmemarray.h>
@@ -220,7 +220,7 @@ void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const &
   for ( int r = top + 1; r <= bottom; ++r ) // first row are headers
   {
     KSpreadDB::ConditionList * criteria = new KSpreadDB::ConditionList();
-    
+
     for ( int c = 0; c < cCols; ++c )
     {
       if ( list[c] == -1 )
@@ -229,7 +229,7 @@ void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const &
       KSpreadDB::Condition cond;
       cond.index = list[c];
 
-      kdDebug() << "Cell: " << c+left << ", " << r << ", Str: " 
+      kdDebug() << "Cell: " << c+left << ", " << r << ", Str: "
                 << table->cellAt( c + left, r )->strOutText() << ", index: " << list[c] << endl;
 
       getCond( cond, table->cellAt( c + left, r )->strOutText() );
@@ -254,44 +254,44 @@ bool conditionMatches( KSpreadDB::Condition cond, KSpreadCell * cell )
   {
     if ( !cell->value().isNumber() )
       return false;
-    
+
     double d = cell->value().asFloat();
 
     kdDebug() << "Comparing: " << d << " - " << cond.value << "; Comp: " << cond.comp << endl;
 
     switch ( cond.comp )
     {
-     case KSpreadDB::isEqual: 
+     case KSpreadDB::isEqual:
       if ( approx_equal( d, cond.value ) )
         return true;
 
       return false;
 
-     case KSpreadDB::isLess: 
+     case KSpreadDB::isLess:
       if ( d < cond.value )
         return true;
 
       return false;
 
-     case KSpreadDB::isGreater: 
+     case KSpreadDB::isGreater:
       if ( d > cond.value )
         return true;
 
       return false;
 
-     case KSpreadDB::lessEqual: 
+     case KSpreadDB::lessEqual:
       if ( d <= cond.value )
         return true;
 
       return false;
 
-     case KSpreadDB::greaterEqual: 
+     case KSpreadDB::greaterEqual:
       if ( d >= cond.value )
         return true;
 
       return false;
 
-     case KSpreadDB::notEqual: 
+     case KSpreadDB::notEqual:
       if ( d != cond.value )
         return true;
 
@@ -301,44 +301,44 @@ bool conditionMatches( KSpreadDB::Condition cond, KSpreadCell * cell )
       return false;
     }
   }
-  else 
+  else
   {
     QString d = cell->strOutText();
     kdDebug() << "String: " << d << endl;
 
     switch ( cond.comp )
     {
-     case KSpreadDB::isEqual: 
+     case KSpreadDB::isEqual:
       if ( d == cond.stringValue )
         return true;
 
       return false;
 
-     case KSpreadDB::isLess: 
+     case KSpreadDB::isLess:
       if ( d < cond.stringValue )
         return true;
 
       return false;
 
-     case KSpreadDB::isGreater: 
+     case KSpreadDB::isGreater:
       if ( d > cond.stringValue )
         return true;
 
       return false;
 
-     case KSpreadDB::lessEqual: 
+     case KSpreadDB::lessEqual:
       if ( d <= cond.stringValue )
         return true;
 
       return false;
 
-     case KSpreadDB::greaterEqual: 
+     case KSpreadDB::greaterEqual:
       if ( d >= cond.stringValue )
         return true;
 
       return false;
 
-     case KSpreadDB::notEqual: 
+     case KSpreadDB::notEqual:
       if ( d != cond.stringValue )
         return true;
 
@@ -379,7 +379,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * table, int
     //   if first condition matches => add cell, next row
     KSpreadDB::ConditionList * criterias = conditions->first();
 
-    bool add = true; 
+    bool add = true;
     while ( criterias )
     {
       add = true;
@@ -388,7 +388,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * table, int
       end = criterias->end();
 
       for ( ; it != end; ++it )
-      {        
+      {
         KSpreadDB::Condition cond = *it;
         conCell = table->cellAt( cond.index, row );
         kdDebug() << "Checking cell: " << cond.index << ", " << row << " - " << conCell->strOutText() << endl;
@@ -397,7 +397,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * table, int
           add = false;
           break; // all conditions per criteria must match, but just one criteria
         }
-      }  
+      }
       if ( add )
         break; // just one criteria need to match
 
@@ -431,7 +431,7 @@ bool kspreadfunc_dsum( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -481,7 +481,7 @@ bool kspreadfunc_daverage( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -535,7 +535,7 @@ bool kspreadfunc_dcount( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -587,7 +587,7 @@ bool kspreadfunc_dcounta( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -637,7 +637,7 @@ bool kspreadfunc_dget( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -696,7 +696,7 @@ bool kspreadfunc_dmax( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -752,7 +752,7 @@ bool kspreadfunc_dmin( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -808,7 +808,7 @@ bool kspreadfunc_dproduct( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -824,7 +824,7 @@ bool kspreadfunc_dproduct( KSContext & context )
 
   double product = 1.0;
   int count = 0;
-  
+
   KSpreadCell * cell = cells->first();
 
   while ( cell )
@@ -866,7 +866,7 @@ bool kspreadfunc_dstdev( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -882,7 +882,7 @@ bool kspreadfunc_dstdev( KSContext & context )
 
   double sum = 0.0;
   int count = 0;
-  
+
   KSpreadCell * cell = cells->first();
 
   while ( cell )
@@ -899,9 +899,9 @@ bool kspreadfunc_dstdev( KSContext & context )
   if ( count == 0 )
     return false;
 
-  double average = sum / count; 
+  double average = sum / count;
   double result = 0.0;
-  
+
   cell = cells->first();
 
   while ( cell )
@@ -940,7 +940,7 @@ bool kspreadfunc_dstdevp( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -956,7 +956,7 @@ bool kspreadfunc_dstdevp( KSContext & context )
 
   double sum = 0.0;
   int count = 0;
-  
+
   KSpreadCell * cell = cells->first();
 
   while ( cell )
@@ -973,9 +973,9 @@ bool kspreadfunc_dstdevp( KSContext & context )
   if ( count == 0 )
     return false;
 
-  double average = sum / count; 
+  double average = sum / count;
   double result = 0.0;
-  
+
   cell = cells->first();
 
   while ( cell )
@@ -1013,7 +1013,7 @@ bool kspreadfunc_dvar( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -1029,7 +1029,7 @@ bool kspreadfunc_dvar( KSContext & context )
 
   double sum = 0.0;
   int count = 0;
-  
+
   KSpreadCell * cell = cells->first();
 
   while ( cell )
@@ -1046,9 +1046,9 @@ bool kspreadfunc_dvar( KSContext & context )
   if ( count == 0 )
     return false;
 
-  double average = sum / count; 
+  double average = sum / count;
   double result = 0.0;
-  
+
   cell = cells->first();
 
   while ( cell )
@@ -1086,7 +1086,7 @@ bool kspreadfunc_dvarp( KSContext & context )
 
   if ( !db.isValid() || !conditions.isValid() )
     return false;
-  
+
   int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
   if ( fieldIndex == -1 )
     return false;
@@ -1102,7 +1102,7 @@ bool kspreadfunc_dvarp( KSContext & context )
 
   double sum = 0.0;
   int count = 0;
-  
+
   KSpreadCell * cell = cells->first();
 
   while ( cell )
@@ -1119,9 +1119,9 @@ bool kspreadfunc_dvarp( KSContext & context )
   if ( count == 0 )
     return false;
 
-  double average = sum / count; 
+  double average = sum / count;
   double result = 0.0;
-  
+
   cell = cells->first();
 
   while ( cell )

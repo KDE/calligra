@@ -29,10 +29,8 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
 #include <kspread_util.h>
-#include <kspread_table.h>
 
 // prototypes (sorted alphabetically)
 bool kspreadfunc_and( KSContext& context );
@@ -50,14 +48,14 @@ void KSpreadRegisterLogicFunctions()
 {
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
-  repo->registerFunction( "AND",   kspreadfunc_and );   
-  repo->registerFunction( "FALSE", kspreadfunc_false );   
-  repo->registerFunction( "IF",    kspreadfunc_if );    
+  repo->registerFunction( "AND",   kspreadfunc_and );
+  repo->registerFunction( "FALSE", kspreadfunc_false );
+  repo->registerFunction( "IF",    kspreadfunc_if );
   repo->registerFunction( "NAND",  kspreadfunc_nand );  // KSpread-specific
   repo->registerFunction( "NOR",   kspreadfunc_nor );   // KSpread-specific
-  repo->registerFunction( "NOT",   kspreadfunc_not );   
-  repo->registerFunction( "OR",    kspreadfunc_or );   
-  repo->registerFunction( "TRUE",  kspreadfunc_true );   
+  repo->registerFunction( "NOT",   kspreadfunc_not );
+  repo->registerFunction( "OR",    kspreadfunc_or );
+  repo->registerFunction( "TRUE",  kspreadfunc_true );
   repo->registerFunction( "XOR",   kspreadfunc_xor );   // KSpread-specific
 }
 
@@ -65,14 +63,14 @@ void KSpreadRegisterLogicFunctions()
 bool kspreadfunc_false( KSContext & context )
 {
   context.setValue( new KSValue( FALSE ) );
-  return true;  
+  return true;
 }
 
 // Function: TRUE
 bool kspreadfunc_true( KSContext & context )
 {
   context.setValue( new KSValue( TRUE ) );
-  return true;  
+  return true;
 }
 
 // Function: NOT

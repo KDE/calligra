@@ -25,16 +25,15 @@
 #include <float.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
 #include <kspread_functions_helper.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 // prototypes
@@ -141,7 +140,7 @@ bool kspreadfunc_edate( KSContext & context )
   }
 
   months = args[1]->intValue();
-  
+
   if ( months > 0 )
     addMonths( date, months );
   else
@@ -164,7 +163,7 @@ bool kspreadfunc_eomonth( KSContext & context )
 
   if ( !KSUtil::checkArgumentsCount( context, 2, "EOMONTH", true ) )
   {
-    if ( !KSUtil::checkArgumentsCount( context, 1, "EOMONTH", true ) )    
+    if ( !KSUtil::checkArgumentsCount( context, 1, "EOMONTH", true ) )
       return false;
 
     months = 0;
@@ -176,12 +175,12 @@ bool kspreadfunc_eomonth( KSContext & context )
 
     months = (int) args[1]->doubleValue();
   }
-  
+
   kdDebug() << "EOMONTH" << endl;
 
   if ( !getDate( context, args[0], date ) )
     return false;
-  
+
   if ( months > 0 )
     addMonths( date, months );
   else
@@ -257,7 +256,7 @@ bool kspreadfunc_days360( KSContext & context )
   else
   {
     // thanks to the Gnumeric developers for this...
-    if ( month1 == 2 && month2 == 2 
+    if ( month1 == 2 && month2 == 2
          && date1.daysInMonth() == day1
          && date2.daysInMonth() == day2 )
       day2 = 30;
@@ -272,7 +271,7 @@ bool kspreadfunc_days360( KSContext & context )
       day1 = 30;
   }
 
-  int result = ( ( year2 - year1 ) * 12 + ( month2 - month1 ) ) * 30 
+  int result = ( ( year2 - year1 ) * 12 + ( month2 - month1 ) ) * 30
     + ( day2 - day1 );
 
   context.setValue( new KSValue( ( negative ? -result : result ) ) );
@@ -289,13 +288,13 @@ bool kspreadfunc_year( KSContext & context )
     context.setValue( new KSValue( QDate::currentDate().year() ) );
     return true;
   }
-  
+
   kdDebug() << "YEAR" << endl;
 
   QDate date;
   if ( !getDate( context, args[0], date ) )
     return false;
-  
+
   context.setValue( new KSValue( date.year() ) );
   return true;
 }
@@ -316,7 +315,7 @@ bool kspreadfunc_month( KSContext & context )
   QDate date;
   if ( !getDate( context, args[0], date ) )
     return false;
-  
+
   context.setValue( new KSValue( date.month() ) );
   return true;
 }
@@ -331,7 +330,7 @@ bool kspreadfunc_day( KSContext & context )
     context.setValue( new KSValue( QDate::currentDate().day() ) );
     return true;
   }
-  
+
   kdDebug() << "Day"<< endl;
   QDate date;
   if ( !getDate( context, args[0], date ) )
@@ -353,7 +352,7 @@ bool kspreadfunc_hour( KSContext & context )
     context.setValue( new KSValue( QTime::currentTime().hour() ) );
     return true;
   }
-  
+
   if ( KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
   {
     hour = args[0]->timeValue().hour();
@@ -364,7 +363,7 @@ bool kspreadfunc_hour( KSContext & context )
 
     uint secs = (uint) ( ( d - floor( d ) ) * SECSPERDAY );
 
-    hour = secs / 3600;    
+    hour = secs / 3600;
   }
   else if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
   {
@@ -395,7 +394,7 @@ bool kspreadfunc_minute( KSContext & context )
     context.setValue( new KSValue( QTime::currentTime().minute() ) );
     return true;
   }
-  
+
   if ( KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
   {
     minute = args[0]->timeValue().minute();
@@ -436,7 +435,7 @@ bool kspreadfunc_second( KSContext & context )
     context.setValue( new KSValue( QTime::currentTime().second() ) );
     return true;
   }
-  
+
   if ( KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
   {
     second = args[0]->timeValue().second();
@@ -1063,7 +1062,7 @@ bool kspreadfunc_dayOfYear( KSContext& context )
 
 bool isLeapYear_helper(int _year)
 {
-    return (((_year % 4) == 0) && ((_year % 100) != 0) || ((_year % 400) == 0)); 
+    return (((_year % 4) == 0) && ((_year % 100) != 0) || ((_year % 400) == 0));
 }
 
 // Function: daysInMonth
@@ -1087,7 +1086,7 @@ bool kspreadfunc_daysInMonth( KSContext& context )
   static uint aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
   int nYear = args[0]->intValue();
   int nMonth = args[1]->intValue();
-  int result; 
+  int result;
 
   if ( nMonth != 2)
     result = aDaysInMonth[nMonth-1];
@@ -1095,7 +1094,7 @@ bool kspreadfunc_daysInMonth( KSContext& context )
   {
     if (isLeapYear_helper(nYear))
         result = aDaysInMonth[nMonth-1] + 1;
-    else    
+    else
         result = aDaysInMonth[nMonth-1];
   }
 
@@ -1136,7 +1135,7 @@ bool kspreadfunc_daysInYear ( KSContext& context )
 
   int nYear = args[0]->intValue();
   bool leap = isLeapYear_helper(nYear);
-  int result; 
+  int result;
 
   if (leap)
     result = 366;
@@ -1158,7 +1157,7 @@ bool kspreadfunc_weeksInYear( KSContext& context )
     return false;
 
   int nYear = args[0]->intValue();
-  int result; 
+  int result;
   QDate _date(nYear, 1, 1);
   int nJan1DayOfWeek = _date.dayOfWeek();   //first day of the year
 

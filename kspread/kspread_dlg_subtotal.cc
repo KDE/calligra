@@ -19,7 +19,7 @@
 
 #include "kspread_dlg_subtotal.h"
 #include "kspreadsubtotal.h"
-#include "kspread_table.h"
+#include "kspread_sheet.h"
 #include "kspread_view.h"
 #include "kspread_util.h"
 

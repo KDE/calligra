@@ -20,7 +20,7 @@
 
 #include "kspread_dlg_insert.h"
 #include "kspread_view.h"
-#include "kspread_table.h"
+#include "kspread_sheet.h"
 
 #include <qlayout.h>
 #include <kbuttonbox.h>

@@ -35,7 +35,7 @@ class QDomDocument;
 #include <qintdict.h>
 #include <qobject.h>
 
-#include "kspread_table.h"
+#include "kspread_sheet.h"
 
 /**
   A map is a simple container for all tables. Usually a complete map

@@ -20,7 +20,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_functions_trig.cc kspread_functions_datetime.cc \
 	kspread_functions_statistical.cc kspread_functions_text.cc kspread_functions_reference.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
-	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
+	kspread_dlg_scripts.cc kspread_cell.cc kspread_sheet.cc \
 	kspread_dlg_cons.cc kspread_util.cc kspread_functions_database.cc \
         kspread_dlg_database.cc kspread_dlg_goalseek.cc \
 	kspread_editors.cc kspreadsubtotal.ui \
@@ -70,7 +70,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h kspread_functions_helper.h \
 	kspread_undo.h kspread_view.h kspread_tabbar.h \
 	kspread_autofill.h kspread_interpreter.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
-	kspread_dlg_scripts.h kspread_table.h kspread_cell.h \
+	kspread_dlg_scripts.h kspread_sheet.h kspread_cell.h \
 	kspread_dlg_cons.h kspread_cluster.h kspread_value.h \
 	kspread_util.h kspread_canvas.h kspread_dlg_subtotal.h \
 	kspread_dlg_reference.h kspread_locale.h \

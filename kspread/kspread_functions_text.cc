@@ -28,15 +28,14 @@
 
 #include <qregexp.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 // prototypes
@@ -260,9 +259,9 @@ bool kspreadfunc_dollar( KSContext& context )
 
   if( KSUtil::checkArgumentsCount( context, 2, "DOLLAR", false ) )
     if ( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
-      decimals = args[1]->intValue(); 
+      decimals = args[1]->intValue();
 
-  // if decimals < 0, number is rounded 
+  // if decimals < 0, number is rounded
   if( decimals < 0 )
   {
     decimals = -decimals;
@@ -361,7 +360,7 @@ bool kspreadfunc_fixed( KSContext& context )
   QString result;
 
   // unfortunately, we can't just use KLocale::formatNumber because
-  // * if decimals < 0, number is rounded 
+  // * if decimals < 0, number is rounded
   // * if no_commas is TRUE, thousand separators shouldn't show up
 
   if( decimals < 0 )
@@ -369,8 +368,8 @@ bool kspreadfunc_fixed( KSContext& context )
     decimals = -decimals;
     number = floor( number/pow(10.0,decimals)+0.5 ) * pow(10.0,decimals);
     decimals = 0;
-  } 
- 
+  }
+
   bool neg = number < 0;
   result = QString::number( neg ? -number:number, 'f', decimals );
 
@@ -379,8 +378,8 @@ bool kspreadfunc_fixed( KSContext& context )
     else result.replace(pos, 1, KGlobal::locale()->decimalSymbol());
   if( !no_commas )
     while (0 < (pos -= 3))
-      result.insert(pos, KGlobal::locale()->thousandsSeparator()); 
- 
+      result.insert(pos, KGlobal::locale()->thousandsSeparator());
+
   result.prepend( neg ? KGlobal::locale()->negativeSign():
     KGlobal::locale()->positiveSign() );
 
@@ -613,7 +612,7 @@ bool kspreadfunc_right( KSContext& context )
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
 	bool hasNoSecondParam = KSUtil::checkArgumentsCount( context, 1, "right", false );
-	
+
     if ( !KSUtil::checkArgumentsCount( context, 2, "right", false ) &&
 		 !hasNoSecondParam)
       return false;
@@ -656,10 +655,10 @@ bool kspreadfunc_rot( KSContext& context )
   for( unsigned i=0; i<text.length(); i++ )
   {
     unsigned c = text[i].upper().unicode();
-    if( ( c >= 'A' ) && ( c <= 'M' ) ) 
-      text[i] = QChar( text[i].unicode() + 13);  
+    if( ( c >= 'A' ) && ( c <= 'M' ) )
+      text[i] = QChar( text[i].unicode() + 13);
     if( ( c >= 'N' ) && ( c <= 'Z' ) )
-      text[i] = QChar( text[i].unicode() - 13);  
+      text[i] = QChar( text[i].unicode() - 13);
   }
 
   context.setValue( new KSValue( text ) );
@@ -746,7 +745,7 @@ bool kspreadfunc_substitute( KSContext& context )
   {
     if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
       return false;
-    num = args[3]->intValue(); 
+    num = args[3]->intValue();
     all = false;
   }
   else

@@ -20,7 +20,7 @@
 
 #include "kspread_dlg_pasteinsert.h"
 #include "kspread_canvas.h"
-#include "kspread_table.h"
+#include "kspread_sheet.h"
 
 #include <qlayout.h>
 #include <klocale.h>

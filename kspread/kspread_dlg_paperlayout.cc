@@ -20,7 +20,7 @@
 #include "kspread_dlg_paperlayout.h"
 #include <kspread_doc.h>
 #include "kspread_map.h"
-#include "kspread_table.h"
+#include "kspread_sheet.h"
 #include <kspread_undo.h>
 #include <kspread_util.h>
 #include <kspread_view.h>
@@ -188,7 +188,7 @@ void KSpreadPaperLayout::slotOk()
 
         if ( error ) KMessageBox::information( 0, i18n( "Print range wrong, changes are ignored." ) );
       }
-      
+
       if ( tmpRepeatCols.isEmpty() )
       {
         sheet->setPrintRepeatColumns( qMakePair( 0, 0 ) );
@@ -214,7 +214,7 @@ void KSpreadPaperLayout::slotOk()
         if ( error )
           KMessageBox::information( 0, i18n( "Repeated columns range wrong, changes are ignored.\nMust be in format column:column (eg. B:C)" ) );
       }
-      
+
       if ( tmpRepeatRows.isEmpty() )
       {
         sheet->setPrintRepeatRows ( qMakePair( 0, 0 ) );
@@ -236,27 +236,27 @@ void KSpreadPaperLayout::slotOk()
                 }
             }
         }
-        
+
         if ( error )
           KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (eg. 2:3)" ) );
       }
       sheet->doc()->setModified( true );
-      
+
       if ( pl.format == PG_CUSTOM )
       {
         sheet->setPaperWidth( qRound( POINT_TO_MM( pl.ptWidth ) *1000 ) / 1000 );
         sheet->setPaperHeight( qRound( POINT_TO_MM( pl.ptHeight ) *1000 ) / 1000 );
       }
-      
+
       sheet->setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );
-      
+
       sheet->setHeadFootLine( sheet->delocalizeHeadFootLine( hf.headLeft  ),
                               sheet->delocalizeHeadFootLine( hf.headMid   ),
                               sheet->delocalizeHeadFootLine( hf.headRight ),
                               sheet->delocalizeHeadFootLine( hf.footLeft  ),
                               sheet->delocalizeHeadFootLine( hf.footMid   ),
                               sheet->delocalizeHeadFootLine( hf.footRight ) );
-      
+
       sheet->doc()->setUnit( unit );
 
       if ( map )

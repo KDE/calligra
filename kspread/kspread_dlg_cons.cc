@@ -36,7 +36,7 @@
 #include <kspread_doc.h>
 #include <kspread_global.h>
 #include <kspread_interpreter.h>
-#include <kspread_table.h>
+#include <kspread_sheet.h>
 #include <kspread_util.h>
 
 
@@ -53,8 +53,8 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( page, "Label_1" );
   grid1->addWidget(tmpQLabel,0,0);
-  tmpQLabel->setText( i18n("&Function:") );  
-  
+  tmpQLabel->setText( i18n("&Function:") );
+
   m_pFunction = new QComboBox( page );
   grid1->addWidget(m_pFunction,1,0);
   tmpQLabel->setBuddy(m_pFunction);
@@ -75,7 +75,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pRef = new QLineEdit( page );
   grid1->addWidget(m_pRef,3,0);
   tmpQLabel->setBuddy(m_pRef);
-  
+
   tmpQLabel = new QLabel( page, "Label_1" );
   grid1->addWidget(tmpQLabel,4,0);
   tmpQLabel->setText( i18n("&Entered references:") );
@@ -83,7 +83,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pRefs = new QListBox( page );
   grid1->addMultiCellWidget( m_pRefs,5,8,0,0);
   tmpQLabel->setBuddy(m_pRefs);
-  
+
   m_pRow = new QCheckBox( i18n("&Description in row"), page );
   grid1->addWidget( m_pRow,9,0);
   m_pCol = new QCheckBox( i18n("De&scription in column"), page );
@@ -254,7 +254,7 @@ void KSpreadConsolidate::slotOk()
 	formula += ")";
 
         if(!novalue)
-	  table->setText( dy + y, dx + x, 
+	  table->setText( dy + y, dx + x,
             m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
       }
     }
@@ -335,7 +335,7 @@ void KSpreadConsolidate::slotOk()
 	}
 	formula += ")";
 
-	table->setText( dy + y, dx + x, 
+	table->setText( dy + y, dx + x,
           m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
       }
     }
@@ -416,7 +416,7 @@ void KSpreadConsolidate::slotOk()
 
 	formula += ")";
 
-	table->setText( dy + y, dx + x, 
+	table->setText( dy + y, dx + x,
           m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
       }
     }
@@ -554,7 +554,7 @@ void KSpreadConsolidate::slotOk()
 	}
 	formula += ")";
 
-	table->setText( dy + y, dx + x, 
+	table->setText( dy + y, dx + x,
           m_pCopy->isChecked() ? evaluate( formula, table ) : formula );
       }
     }
@@ -640,12 +640,12 @@ QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* tabl
   QString result = "###";
 
   kdDebug(36001)<<"KSpreadConsolidate::evaluate " << formula << endl;
- 
+
   KSContext context;
   QPtrList<KSpreadDependency> lst;
 
   // parse and evaluate formula
-  KSParseNode* code = table->doc()->interpreter()->parse( context, 
+  KSParseNode* code = table->doc()->interpreter()->parse( context,
     table, formula, lst );
   if( !code ) return result;
 

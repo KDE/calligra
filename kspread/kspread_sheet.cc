@@ -41,6 +41,7 @@
 #include <kprinter.h>
 #include <koDocumentInfo.h>
 
+#include "kspread_sheet.h"
 #include "kspread_global.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"
@@ -54,7 +55,7 @@
 #include <assert.h>
 
 #include <koChart.h>
-#include "kspread_table.moc"
+#include "kspread_sheet.moc"
 /*****************************************************************************
  *
  * CellBinding

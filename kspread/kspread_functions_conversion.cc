@@ -25,15 +25,14 @@
 #include <float.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 
@@ -160,19 +159,19 @@ bool kspreadfunc_decsex( KSContext& context )
   else
     inter=-1;
   hours=inter*(int)(fabs(val));
-  
+
   double workingVal = (val - (double)hours) * inter;
-  
+
   /* try to do this without rounding errors */
   workingVal *= 60.0;
   minutes = (int)(floor(workingVal));
-  
+
   workingVal -= minutes;
   workingVal *= 60;
-  
+
   seconds = (int)(floor(workingVal));
   workingVal -= seconds;
-  
+
   /* now we need to try to round up the seconds if that makes sense */
   if (workingVal >= 0.5)
   {
@@ -182,14 +181,14 @@ bool kspreadfunc_decsex( KSContext& context )
       minutes++;
       seconds -= 60;
     }
-    
+
     while (minutes >= 60)
     {
       hours++;
       minutes -= 60;
     }
   }
-  
+
   QTime _time(hours,minutes,seconds);
   context.setValue( new KSValue(_time));
 

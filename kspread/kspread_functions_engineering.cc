@@ -25,15 +25,14 @@
 #include <float.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
 
 
@@ -1425,7 +1424,7 @@ bool kspreadfunc_gestep( KSContext & context )
 
   if ( !KSUtil::checkArgumentsCount( context, 2, "GESTEP", false ) )
   {
-    if ( !KSUtil::checkArgumentsCount( context, 1, "GESTEP", true ) )    
+    if ( !KSUtil::checkArgumentsCount( context, 1, "GESTEP", true ) )
       return false;
   }
   else

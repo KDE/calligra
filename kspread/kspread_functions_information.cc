@@ -29,16 +29,17 @@
 
 #include <qdir.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_doc.h>
 #include <kspread_functions.h>
-#include <kspread_table.h>
 #include <kspread_util.h>
+#include <kspread_doc.h>
+#include <kspread_sheet.h>
 
 // prototypes (sort alphabetically)
 //bool kspreadfunc_countblank( KSContext & context );
@@ -102,7 +103,7 @@ bool kspreadfunc_info( KSContext& context )
   }
 
   else if ( type == "release" )
-  { 
+  {
     context.setValue( new KSValue( QString( VERSION ) ) );
     return true;
   }
@@ -122,7 +123,7 @@ bool kspreadfunc_info( KSContext& context )
       result = i18n( "Automatic" );
     context.setValue( new KSValue( result ) );
     return true;
-  } 
+  }
 
   else if (type == "memavail")
   {
@@ -143,7 +144,7 @@ bool kspreadfunc_info( KSContext& context )
     {
        context.setValue( new KSValue( QString( name.sysname ) ) );
        return true;
-    }   
+    }
   }
 
   else if (type == "totmem")
@@ -175,16 +176,16 @@ bool kspreadfunc_isblank( KSContext& context )
 
   bool result = false;
 
-  if ( KSUtil::checkType( context, args[0], KSValue::Empty, false ) ) 
+  if ( KSUtil::checkType( context, args[0], KSValue::Empty, false ) )
     result = true;
 
   // the following part is needed becase empty cell returns 0.0 instead
   // of KSValue::Empty. this is due to bug in many function implementation
   // until someone can fix this, leave it as it is (ariya, 16.05.2002)
-  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) ) 
+  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
     result = args[0]->doubleValue() == 0.0;
 
-  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) ) 
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
     result = args[0]->stringValue().isEmpty();
 
   context.setValue( new KSValue( result ) );
@@ -231,7 +232,7 @@ bool kspreadfunc_isref( KSContext& context )
     ref = false;
   else
     ref = true;
-      
+
   context.setValue( new KSValue( ref ) );
   return true;
 }
@@ -354,8 +355,8 @@ bool kspreadfunc_iseven( KSContext& context )
 }
 
 /*
-static bool kspreadfunc_countblank_helper( KSContext & context, 
-                                           QValueList<KSValue::Ptr> & args, 
+static bool kspreadfunc_countblank_helper( KSContext & context,
+                                           QValueList<KSValue::Ptr> & args,
                                            int & result)
 {
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
@@ -370,19 +371,19 @@ static bool kspreadfunc_countblank_helper( KSContext & context,
         return false;
     }
     else
-    if ( KSUtil::checkType( context, args[0], KSValue::Empty, true ) ) 
+    if ( KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
     {
       ++result;
     }
     else
-    if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) ) 
+    if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     {
       KScript::Double d = args[0]->doubleValue();
       if (d == 0.0)
         ++result;
     }
     else
-    if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) ) 
+    if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
     {
       QString s = args[0]->stringValue();
       if ( s.isEmpty() || s.stripWhiteSpace().isEmpty() )
@@ -424,7 +425,7 @@ bool kspreadfunc_type( KSContext & context )
     return true;
   }
 
-  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) 
+  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, false )
        || KSUtil::checkType( context, args[0], KSValue::IntType, false )
        || KSUtil::checkType( context, args[0], KSValue::DateType, false )
        || KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
@@ -518,5 +519,5 @@ bool kspreadfunc_n( KSContext & context )
 
   context.setValue( new KSValue( (int)0 ) );
   return true;
- 
+
 }

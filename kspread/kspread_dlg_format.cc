@@ -18,7 +18,7 @@
 
 #include "kspread_dlg_format.h"
 #include "kspread_view.h"
-#include "kspread_table.h"
+#include "kspread_sheet.h"
 #include "kspread_undo.h"
 #include "kspread_doc.h"
 
