@@ -399,7 +399,7 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
     int tmpVerticalAlign=-1;
 
     tmpFamily=lastFormat->font().family();
-    tmpPointSize=static_cast<int>(KoZoomHandler::layoutUnitToPt( lastFormat->font().pointSize()));
+    tmpPointSize=static_cast<int>(KoZoomHandler::layoutUnitPtToPt( lastFormat->font().pointSize()));
     tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
     tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
     tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
@@ -570,7 +570,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n )
 
     QString color = n.attribute( attrColor );
     QFont fn( family );
-    fn.setPointSize( KoTextZoomHandler::ptToLayoutUnit( size ) );
+    fn.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
     fn.setBold( bold );
     fn.setItalic( italic );
     fn.setUnderline( underline );

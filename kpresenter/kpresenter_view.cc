@@ -2717,7 +2717,7 @@ void KPresenterView::objectSelectedChanged()
     {
         KoTextFormat format =*(page->applicableTextInterfaces().first()->currentFormat());
         //unzoom font
-        format.setPointSize( (int)KoTextZoomHandler::layoutUnitToPt( format.font().pointSize() ) );
+        format.setPointSize( (int)KoTextZoomHandler::layoutUnitPtToPt( format.font().pointSize() ) );
         showFormat( format );
         const KoParagLayout * paragLayout=page->applicableTextInterfaces().first()->currentParagLayoutFormat();
         if(paragLayout->counter)

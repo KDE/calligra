@@ -131,7 +131,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_defaultFont = KoGlobal::defaultFont();
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
-    m_defaultFont.setPointSize( KoTextZoomHandler::ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
+    m_defaultFont.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( QFontInfo(m_defaultFont).pointSize() ) );
     m_standardStyle->format().setFont( m_defaultFont );
     m_zoomHandler = new KoZoomHandler;
 
