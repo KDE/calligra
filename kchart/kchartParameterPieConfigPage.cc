@@ -26,9 +26,6 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KDChartParams* param
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    qDebug( "Sorry, not implemented: KChartParameterPieConfigPage::KChartParameterPieConfigPage()" );
-#warning Put back in
-#ifdef K
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
 
     QButtonGroup* gb = new QButtonGroup( i18n( "Label's position" ), this );
@@ -149,13 +146,13 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KDChartParams* param
     grid1->addColSpacing(1,gb2->width());
     grid1->activate();
 
-    if(_params->label_line)
-    	dist->setEnabled(true);
-    else
+    // PENDING(kalle) Put back in
+    //     if(_params->label_line)
+//     	dist->setEnabled(true);
+//     else
     	dist->setEnabled(false);
     connect( lineLabel, SIGNAL( toggled( bool ) ),
   		   this, SLOT( changeState( bool ) ) );
-#endif
 }
 
 void KChartParameterPieConfigPage::changeState(bool state)
@@ -164,63 +161,55 @@ if(state)
    dist->setEnabled(true);
 else
    dist->setEnabled(false);
-
 }
 
 
 void KChartParameterPieConfigPage::init()
 {
-    qDebug( "Sorry, not implemented: KChartParameterPieConfigPage::init()" );
-#warning Put back in
-#ifdef K
-    title->setText(_params->title);
-    lineLabel->setChecked(_params->label_line);
-    dist->setValue(_params->label_dist);
-    switch(_params->percent_labels)
-    	{
-    	case KCHARTPCTTYPE_ABOVE:
-    		_typeAbove->setChecked(true);
-    		break;
-	case KCHARTPCTTYPE_NONE:
-    		_typeNone->setChecked(true);
-    		break;
-	case KCHARTPCTTYPE_RIGHT:
-    		_typeRight->setChecked(true);
-    		break;
-	case KCHARTPCTTYPE_LEFT:
-    		_typeLeft->setChecked(true);
-    		break;
-	case KCHARTPCTTYPE_BELOW:
-    		_typeBelow->setChecked(true);
-    		break;
-    	default:
-                                   kdDebug(35001)<<" Error in _params->percent_labels\n";
-    		break;
-    	}
-#endif
+    // PENDING(kalle) Put back in
+    //     title->setText(_params->title);
+//     lineLabel->setChecked(_params->label_line);
+//     dist->setValue(_params->label_dist);
+//     switch( _params->percent_labels ) {
+//     	case KCHARTPCTTYPE_ABOVE:
+//     		_typeAbove->setChecked(true);
+//     		break;
+// 	case KCHARTPCTTYPE_NONE:
+//     		_typeNone->setChecked(true);
+//     		break;
+// 	case KCHARTPCTTYPE_RIGHT:
+//     		_typeRight->setChecked(true);
+//     		break;
+// 	case KCHARTPCTTYPE_LEFT:
+//     		_typeLeft->setChecked(true);
+//     		break;
+// 	case KCHARTPCTTYPE_BELOW:
+//     		_typeBelow->setChecked(true);
+//     		break;
+//     	default:
+//                                    kdDebug(35001)<<" Error in _params->percent_labels\n";
+//     		break;
+//     	}
 }
 
 
 void KChartParameterPieConfigPage::apply()
 {
-    qDebug( "Sorry, not implemented: KChartParameterPieConfigPage::apply()" );
-#warning Put back in
-#ifdef K
-    _params->title=title->text();
-    _params->label_line=lineLabel->isChecked();
-    if(lineLabel->isChecked())
-    	_params->label_dist=dist->value();
-    if(_typeAbove->isChecked())
-    	_params->percent_labels=KCHARTPCTTYPE_ABOVE;
-    else if(_typeNone->isChecked())
-    	_params->percent_labels=KCHARTPCTTYPE_NONE;
-    else if(_typeRight->isChecked())
-    	_params->percent_labels=KCHARTPCTTYPE_RIGHT;
-    else if(_typeLeft->isChecked())
-    	_params->percent_labels=KCHARTPCTTYPE_LEFT;
-    else if(_typeBelow->isChecked())
-    	_params->percent_labels=KCHARTPCTTYPE_BELOW;
-    else
-    	kdDebug(35001)<<"Error in QRadioButton\n";
-#endif
+    // PENDING(kalle) Put back in
+    //     _params->title=title->text();
+//     _params->label_line=lineLabel->isChecked();
+//     if(lineLabel->isChecked())
+//     	_params->label_dist=dist->value();
+//     if(_typeAbove->isChecked())
+//     	_params->percent_labels=KCHARTPCTTYPE_ABOVE;
+//     else if(_typeNone->isChecked())
+//     	_params->percent_labels=KCHARTPCTTYPE_NONE;
+//     else if(_typeRight->isChecked())
+//     	_params->percent_labels=KCHARTPCTTYPE_RIGHT;
+//     else if(_typeLeft->isChecked())
+//     	_params->percent_labels=KCHARTPCTTYPE_LEFT;
+//     else if(_typeBelow->isChecked())
+//     	_params->percent_labels=KCHARTPCTTYPE_BELOW;
+//     else
+//     	kdDebug(35001)<<"Error in QRadioButton\n";
 }

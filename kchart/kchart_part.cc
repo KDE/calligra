@@ -63,7 +63,8 @@ bool KChartPart::initDoc()
     // Initialize the parameter set for this chart document
     kdDebug(35001) << "InitDOC" << endl;
     _params = new KDChartParams();
-
+    _params->setThreeDBars( true );
+    
     return TRUE;
 }
 
@@ -993,6 +994,13 @@ QFont KChartPart::toFont( QDomElement &element ) const
 
 /**
  * $Log$
+ * Revision 1.55  2001/06/10 16:02:52  kalle
+ * Replacement of the old charting engine with the new KDChart charting
+ * engine.
+ *
+ * The wizard and the configuration dialog are still disabled and will
+ * be turned on again one after the other now.
+ *
  * Revision 1.54  2001/04/18 11:32:02  faure
  * paintContent API fix
  *

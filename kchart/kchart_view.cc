@@ -70,14 +70,14 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      "barschart");
     m_chartbars->setExclusiveGroup( "charttypes" );
     m_chartbars->setChecked( true );
-    m_charthilo = new KToggleAction( i18n("&HiLo"), "hilo3d", 0, this,
+    m_charthilo = new KToggleAction( i18n("&HiLo"), "hilo", 0, this,
                                      SLOT( hiLoChart() ), actionCollection(),
                                      "hilochart");
     m_charthilo->setExclusiveGroup( "charttypes" );
-    m_chartring = new KToggleAction( i18n("&RingLo"), "ring3d", 0, this,
+    m_chartring = new KToggleAction( i18n("&Ring"), "ring", 0, this,
                                      SLOT( ringChart() ), actionCollection(),
                                      "ringchart");
-    m_charthilo->setExclusiveGroup( "charttypes" );
+    m_chartring->setExclusiveGroup( "charttypes" );
 
     // initialize the configuration
     //    loadConfig();
@@ -141,26 +141,18 @@ void KChartView::createTempData()
 
 void KChartView::edit()
 {
-    qDebug( "Sorry, not implemented: KChartView::edit()" );
-#warning Put back in
-#ifdef K
     kchartDataEditor ed;
     KDChartParams* params=((KChartPart*)koDocument())->params();
 
     KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
     qDebug( "***Before calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
     ed.setData(dat);
-    ed.setLegend(params->legend);
-    ed.setXLabel(params->xlbl);
-    if (ed.exec() != QDialog::Accepted) {
+    if( ed.exec() != QDialog::Accepted ) {
         return;
     }
     ed.getData(dat);
     qDebug( "***Before calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
-    ed.getLegend(params);
-    ed.getXLabel(params);
     repaint();
-#endif
 }
 
 void KChartView::wizard()
@@ -177,9 +169,6 @@ void KChartView::wizard()
 
 void KChartView::config()
 {
-    qDebug( "Sorry, not implemented: KChartView::configChart()" );
-#warning Put back in
-#ifdef K
     // open a config dialog depending on the chart type
     KDChartParams* params = ((KChartPart*)koDocument())->params();
 
@@ -188,7 +177,6 @@ void KChartView::config()
              this, SLOT( slotRepaint() ) );
     d->exec();
     delete d;
-#endif
 }
 
 
@@ -225,7 +213,7 @@ void KChartView::pieChart()
     repaint();
 }
 
-void KChartView::lineChart() 
+void KChartView::lineChart()
 {
     KDChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::Line );
@@ -233,7 +221,7 @@ void KChartView::lineChart()
     repaint();
 }
 
-void KChartView::barsChart() 
+void KChartView::barsChart()
 {
     KDChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::Bar );
@@ -242,7 +230,7 @@ void KChartView::barsChart()
     repaint();
 }
 
-void KChartView::areasChart() 
+void KChartView::areasChart()
 {
     KDChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::Area );
@@ -251,7 +239,7 @@ void KChartView::areasChart()
 }
 
 
-void KChartView::hiLoChart() 
+void KChartView::hiLoChart()
 {
     KDChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::HiLo );
@@ -260,7 +248,7 @@ void KChartView::hiLoChart()
 }
 
 
-void KChartView::ringChart() 
+void KChartView::ringChart()
 {
     KDChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::Ring );

@@ -22,91 +22,79 @@
 
 KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KDChartParams* params,
                                                         QWidget* parent ) :
-  KChartSubTypeChartPage(  params, parent )
+    KChartSubTypeChartPage(  params, parent )
 {
-    qDebug( "Sorry, not implemented: KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage()" );
-#warning Put back in
-#ifdef K
-
     QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
-  QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Subtype" ), this );
-  toplevel->addWidget( subtypeBG, AlignCenter| AlignVCenter );
-  depth = new QRadioButton( i18n( "Depth" ), subtypeBG );
-  subtypeBG->insert( depth, KCHARTSTACKTYPE_DEPTH );
-  beside = new QRadioButton( i18n( "Beside" ), subtypeBG );
-  subtypeBG->insert( beside, KCHARTSTACKTYPE_BESIDE );
-  subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
-  connect( subtypeBG, SIGNAL( clicked( int ) ),
-                   this, SLOT( slotChangeSubType( int ) ) );
+    QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Subtype" ), this );
+    toplevel->addWidget( subtypeBG, AlignCenter| AlignVCenter );
+    normal = new QRadioButton( i18n( "Normal" ), subtypeBG );
+    subtypeBG->insert( normal, KDChartParams::AreaNormal );
+    stacked = new QRadioButton( i18n( "Stacked" ), subtypeBG );
+    subtypeBG->insert( stacked, KDChartParams::AreaStacked );
+    percent = new QRadioButton( i18n( "Percent" ), subtypeBG );
+    subtypeBG->insert( percent, KDChartParams::AreaPercent );
+    subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
+    connect( subtypeBG, SIGNAL( clicked( int ) ),
+             this, SLOT( slotChangeSubType( int ) ) );
 
-  QHGroupBox* exampleGB = new QHGroupBox( i18n( "Example" ), this );
-  toplevel->addWidget( exampleGB, 2 );
-  exampleLA = new QLabel( exampleGB );
-  exampleLA->setAlignment( AlignCenter | AlignVCenter );
-  // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
-#endif
+    QHGroupBox* exampleGB = new QHGroupBox( i18n( "Example" ), this );
+    toplevel->addWidget( exampleGB, 2 );
+    exampleLA = new QLabel( exampleGB );
+    exampleLA->setAlignment( AlignCenter | AlignVCenter );
+    // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
 }
 
 
 void KChartAreaSubTypeChartPage::init()
 {
-    qDebug( "Sorry, not implemented: KChartAreaSubTypeChartPage::init()" );
-#warning Put back in
-#ifdef K
-  // LAYER and PERCENT are for bars only and therefore not configurable here.
-  switch((int)_params->stack_type) {
-        case (int)KCHARTSTACKTYPE_DEPTH:
-          {
-                depth->setChecked(true);
-                break;
-          }
-        case (int)KCHARTSTACKTYPE_BESIDE:
-          {
-                beside->setChecked(true);
-                break;
-          }
-        default:
-          {
-                kdDebug( 35001 ) << "Error in stack_type" << endl;
-                abort();
-                break;
-          }
+    switch( _params->areaChartSubType() ) {
+    case KDChartParams::AreaNormal:
+        normal->setChecked( true );
+        break;
+    case KDChartParams::AreaStacked:
+        stacked->setChecked( true );
+        break;
+    case KDChartParams::AreaPercent:
+        percent->setChecked( true );
+        break;
+    default:
+        {
+            kdDebug( 35001 ) << "Error in stack_type" << endl;
+            abort();
+            break;
         }
+    }
 
-  slotChangeSubType( _params->stack_type );
-#endif
+    slotChangeSubType( _params->areaChartSubType() );
 }
 
 void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 {
-    qDebug( "Sorry, not implemented: KChartAreaSubTypeChartPage::slotChangeSubType()" );
-#warning Put back in
-#ifdef K
-  switch( type ) {
-  case KCHARTSTACKTYPE_DEPTH:
-        exampleLA->setPixmap( UserIcon( "areasubtypedepth" ) );
+    switch( type ) {
+    case KDChartParams::AreaNormal:
+        exampleLA->setPixmap( UserIcon( "areasubtypenormal" ) );
         break;
-  case KCHARTSTACKTYPE_BESIDE:
-        exampleLA->setPixmap( UserIcon( "areasubtypebeside" ) );
+    case KDChartParams::AreaStacked:
+        exampleLA->setPixmap( UserIcon( "areasubtypestacked" ) );
         break;
-  };
-#endif
+    case KDChartParams::AreaPercent:
+        exampleLA->setPixmap( UserIcon( "areasubtypepercent" ) );
+        break;
+    };
 }
 
 
 
 void KChartAreaSubTypeChartPage::apply()
 {
-    qDebug( "Sorry, not implemented: KChartAreaSubTypeChartPage::apply()" );
-#warning Put back in
-#ifdef K
-  if( depth->isChecked() ) {
-        _params->stack_type = KCHARTSTACKTYPE_DEPTH;
-  } else if( beside->isChecked() ) {
-        _params->stack_type = KCHARTSTACKTYPE_BESIDE;
-  } else {
+    if( normal->isChecked() ) 
+        _params->setAreaChartSubType( KDChartParams::AreaNormal );
+    else if( stacked->isChecked() )
+        _params->setAreaChartSubType( KDChartParams::AreaStacked );
+    else if( percent->isChecked() )
+        _params->setAreaChartSubType( KDChartParams::AreaPercent );
+    else {
         kdDebug( 35001 ) << "Error in groupbutton" << endl;
-  }
-#endif
+    }
 }
 

@@ -19,9 +19,6 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KDChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    qDebug( "Sorry, not implemented: KChartParameter3dConfigPage::KChartParameter3dConfigPage()" );
-#warning Put back in
-#ifdef K
   QGridLayout* layout = new QGridLayout(this, 2, 2,15,7 );
 
   QButtonGroup* gb = new QButtonGroup( i18n("3D Parameters"), this );
@@ -60,7 +57,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KDChartParams* params,
   grid1->addWidget(bar_width,2,1);
   bar_width->setRange( 0,100,1 );
 
-  if(_params->do_bar())
+  if( _params->chartType() == KDChartParams::Bar )
         bar_width->setEnabled(true);
   else
         bar_width->setEnabled(false);
@@ -74,31 +71,25 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KDChartParams* params,
   //it's not good but I don't know how
   //to reduce space
   layout->addColSpacing(1,300);
-#endif
 }
 
 void KChartParameter3dConfigPage::init()
 {
-    qDebug( "Sorry, not implemented: KChartParameter3dConfigPage::init()" );
-#warning Put back in
-#ifdef K
-    angle3d->setValue(_params->_3d_angle);
-    depth->setValue( _params->_3d_depth);
-    if(_params->do_bar())
-        bar_width->setValue( _params->bar_width);
-#endif
+    angle3d->setValue( _params->threeDBarAngle() );
+    depth->setValue( _params->threeDBarDepth() );
+    if( _params->chartType() == KDChartParams::Bar )
+        // PENDING(kalle) Adapt
+        //         bar_width->setValue( _params->bar_width);
+        ;
 }
 
 void KChartParameter3dConfigPage::apply()
 {
-    qDebug( "Sorry, not implemented: KChartParameter3dConfigPage::apply()" );
-#warning Put back in
-#ifdef K
-_params->_3d_angle=angle3d->value();
+    _params->setThreeDBarAngle( angle3d->value() );
+    _params->setThreeDBarDepth( depth->value() );
 
-_params->_3d_depth=depth->value();
-
-if(_params->do_bar())
-        _params->bar_width=bar_width->value();
-#endif
+    if( _params->chartType() == KDChartParams::Bar )
+        // PENDING(kalle) Adapt
+        //        _params->bar_width=bar_width->value();
+        ;
 }

@@ -58,11 +58,9 @@ KChartFontConfigPage::KChartFontConfigPage( KDChartParams* params,
 
 void KChartFontConfigPage::initList()
 {
-    qDebug( "Sorry, not implemented: KChartFontConfigPage::initList()" );
-#warning Put back in
-#ifdef K
   list->insertItem(i18n("Title"));
-  if(!_params->isPie())	{
+  if( _params->chartType() != KDChartParams::Pie &&
+      _params->chartType() != KDChartParams::Ring ) {
     list->insertItem(i18n("X-Title"));
     list->insertItem(i18n("Y-Title"));
     list->insertItem(i18n("X-Axis"));
@@ -73,25 +71,28 @@ void KChartFontConfigPage::initList()
   int num=0;
   bool noEnough=false;
   //num <12 because there are 12 colors
-  for( QStringList::Iterator it = _params->legend.begin();
-       it != _params->legend.end(); ++it, num++ ) {
-    if( num<12 )
-      listColor->insertItem(*it);
-    else {
-      if( !noEnough ) {
-	listColor->insertItem(i18n("Not enough color"));
-	noEnough = true;
-      }
-    }
-  }
-  listColor->setCurrentItem(0);
-  for( unsigned int i = 0; i < _params->ExtColor.count(); i++ ) {
-    if( i<12 )
-      extColor.setColor(i,_params->ExtColor.color(i));
-  }
-  index = 0;
-  colorButton->setColor( extColor.color(index));
-#endif
+
+  // PENDING(kalle) Assign legend colors
+  //   for( QStringList::Iterator it = _params->legend.begin();
+//        it != _params->legend.end(); ++it, num++ ) {
+//     if( num<12 )
+//       listColor->insertItem(*it);
+//     else {
+//       if( !noEnough ) {
+// 	listColor->insertItem(i18n("Not enough color"));
+// 	noEnough = true;
+//       }
+//     }
+//   }
+
+  // PENDING(kalle) Assign ExtColor
+//   listColor->setCurrentItem(0);
+//   for( unsigned int i = 0; i < _params->ExtColor.count(); i++ ) {
+//     if( i<12 )
+//       extColor.setColor(i,_params->ExtColor.color(i));
+//   }
+//   index = 0;
+//   colorButton->setColor( extColor.color(index));
 }
 
 
@@ -136,41 +137,41 @@ void KChartFontConfigPage::changeLabelFont()
 
 void KChartFontConfigPage::init()
 {
-    qDebug( "Sorry, not implemented: KChartFontConfigPage::init()" );
-#warning Put back in
-#ifdef K
-  title = _params->titleFont();
-  xtitle = _params->xTitleFont();
-  ytitle = _params->yTitleFont();
-  xaxis = _params->xAxisFont();
-  yaxis = _params->yAxisFont();
-  label = _params->labelFont();
+    // PENDING(kalle) Adapt
+    //   title = _params->titleFont();
+//   xtitle = _params->xTitleFont();
+//   ytitle = _params->yTitleFont();
+//   xaxis = _params->xAxisFont();
+//   yaxis = _params->yAxisFont();
+//   label = _params->labelFont();
 
-  for(int i=0;i<12;i++)
-    extColor.setColor(i,_params->ExtColor.color(i));
-
-  index = 0;
-  colorButton->setColor(extColor.color(index));
-#endif
+    // PENDING(kalle) Adapt
+//   for(int i=0;i<12;i++)
+//     extColor.setColor(i,_params->ExtColor.color(i));
+//   index = 0;
+//   colorButton->setColor(extColor.color(index));
 }
 
 
 void KChartFontConfigPage::apply()
 {
-    qDebug( "Sorry, not implemented: KChartFontConfigPage::apply()" );
-#warning Put back in
-#ifdef K
-  _params->setLabelFont(label);
-  if(!_params->isPie()) {
-    _params->setXAxisFont(xaxis);
-    _params->setYAxisFont(yaxis);
-    _params->setXTitleFont(xtitle);
-    _params->setYTitleFont(ytitle);
+    // PENDING(kalle) Adapt
+    //   _params->setLabelFont(label);
+
+  if( _params->chartType() != KDChartParams::Pie &&
+      _params->chartType() != KDChartParams::Ring ) {
+      // PENDING(kalle) Adapt
+      //     _params->setXAxisFont(xaxis);
+//     _params->setYAxisFont(yaxis);
+//     _params->setXTitleFont(xtitle);
+//     _params->setYTitleFont(ytitle);
   }
-  _params->setTitleFont(title);
+
+  // PENDING(kalle) Adapt
+  //   _params->setTitleFont(title);
 
   extColor.setColor(index,colorButton->color());
-  for(unsigned int i=0;i<extColor.count();i++)
-    _params->ExtColor.setColor(i,extColor.color(i));
-#endif
+  // PENDING(kalle) Adapt
+  //   for(unsigned int i=0;i<extColor.count();i++)
+//     _params->ExtColor.setColor(i,extColor.color(i));
 }

@@ -27,12 +27,13 @@ public:
     virtual void apply();
 
 private slots:
-	  void slotChangeSubType( int type );
+    void slotChangeSubType( int type );
 
 private:
-    QRadioButton *depth;
-    QRadioButton *beside;
-	QLabel* exampleLA;
+    QRadioButton* normal;
+    QRadioButton* stacked;
+    QRadioButton* percent;
+    QLabel* exampleLA;
 };
 
 #endif

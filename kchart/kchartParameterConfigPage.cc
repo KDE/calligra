@@ -23,9 +23,6 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
                                                       QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    qDebug( "Sorry, not implemented: KChartParameterConfigPage::KChartParameterConfigPage()" );
-#warning Put back in
-#ifdef K
     QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
 
     QGridLayout* layout = new QGridLayout( 1, 3 );
@@ -128,7 +125,9 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
     grid3->addWidget(tmpLabel,2,0);
 
     //element = new KIntNumInput(1,gb3,10);
-    element=new QSpinBox(1,_params->xlbl.count() , 1, gb3);
+    // PENDING(kalle) Reenable?
+    element=new QSpinBox(1,/*_params->xlbl.count()*/0 , 1, gb3);
+    element->setEnabled( false );
     //element->setRange(1,3,1);//_params->xlbl.count());
     //element->setLabel(i18n( "Element" ));
     grid3->addWidget(element,3,0);
@@ -153,153 +152,149 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
 
     connect(font,SIGNAL(clicked()),this,SLOT(changeFont()));
     connect( grid, SIGNAL( toggled( bool ) ),
-  		   this, SLOT( changeState( bool ) ) );
+             this, SLOT( changeState( bool ) ) );
     connect( xaxis, SIGNAL( toggled( bool ) ),
-  		   this, SLOT( changeXaxisState( bool ) ) );
-#endif
+             this, SLOT( changeXaxisState( bool ) ) );
 }
 
 void KChartParameterConfigPage::changeXaxisState(bool state)
 {
-if(state)
-   xlabel->setEnabled(true);
-else
-   xlabel->setEnabled(false);
+    if(state)
+        xlabel->setEnabled(true);
+    else
+        xlabel->setEnabled(false);
 
 }
 
 void KChartParameterConfigPage::changeState(bool state)
 {
-if(state)
-   shelf->setEnabled(true);
-else
-   shelf->setEnabled(false);
+    if(state)
+        shelf->setEnabled(true);
+    else
+        shelf->setEnabled(false);
 
 }
 
 void KChartParameterConfigPage::changeFont()
 {
-if (KFontDialog::getFont( annotationFont,false,this ) == QDialog::Rejected )
+    if (KFontDialog::getFont( annotationFont,false,this ) == QDialog::Rejected )
         return;
 }
 
 void KChartParameterConfigPage::init()
 {
-    qDebug( "Sorry, not implemented: KChartParameterConfigPage::init()" );
-#warning Put back in
-#ifdef K
-    grid->setChecked(_params->grid);
-    border->setChecked(_params->border);
-    xaxis->setChecked(_params->xaxis);
-    yaxis->setChecked(_params->yaxis);
-    xlabel->setChecked(_params->hasxlabel);
-    shelf->setChecked(_params->shelf);
-    llabel->setChecked(_params->llabel);
-    if(_params->type==KCHARTTYPE_LINE)
-        {
-         cross->setEnabled(true);
-         cross->setChecked(_params->cross);
-        }
-    else
-        {
-         cross->setEnabled(false);
-         cross->setChecked(false);
-        }
-    if(_params->has_yaxis2())
-    	{
-    	yaxis2->setChecked(_params->yaxis2);
-    	int len=_params->ylabel2_fmt.length();
-        ylabel2_fmt->setText(_params->ylabel2_fmt.right(len-3));
+    // PENDING(kalle) adapt these to KDChart
+    //     grid->setChecked(_params->grid);
+    //     border->setChecked(_params->border);
+    //     xaxis->setChecked(_params->xaxis);
+    //     yaxis->setChecked(_params->yaxis);
+    //     xlabel->setChecked(_params->hasxlabel);
+    //     shelf->setChecked(_params->shelf);
+    //     llabel->setChecked(_params->llabel);
+//     if( _params->chartType() == KDChartParams::Line ) {
+//         cross->setEnabled(true);
+//         cross->setChecked(_params->cross);
+//     }
+//     else {
+        cross->setEnabled(false);
+        cross->setChecked(false);
+//     }
+    // PENDING(kalle) Adapt this
+    //     if(_params->has_yaxis2())
+    //     	{
+    //     	yaxis2->setChecked(_params->yaxis2);
+    //     	int len=_params->ylabel2_fmt.length();
+    //         ylabel2_fmt->setText(_params->ylabel2_fmt.right(len-3));
 
-    	ytitle2->setText(_params->ytitle2);
-    	}
-    else
-    	{
+    //     	ytitle2->setText(_params->ytitle2);
+    //     	}
+    //     else
+    {
     	yaxis2->setEnabled(false);
     	ylabel2_fmt->setEnabled(false);
     	ytitle2->setEnabled(false);
-    	}
-    if(_params->grid)
-    	shelf->setEnabled(true);
-    else
-    	shelf->setEnabled(false);
-    title->setText(_params->title);
-    xtitle->setText(_params->xtitle);
-    ytitle->setText(_params->ytitle);
-    int len=_params->ylabel_fmt.length();
-    ylabel_fmt->setText(_params->ylabel_fmt.right(len-3));
+    }
+    // PENDING(kalle) Adapt this
+    //     if(_params->grid)
+    //     	shelf->setEnabled(true);
+    //     else
+    shelf->setEnabled(false);
 
-    if(_params->xaxis)
-    	xlabel->setEnabled(true);
-    else
-    	xlabel->setEnabled(false);
+    // PENDING(kalle) Adapt this
+    //     title->setText(_params->title);
+    //     xtitle->setText(_params->xtitle);
+    //     ytitle->setText(_params->ytitle);
+    //     int len=_params->ylabel_fmt.length();
+    //     ylabel_fmt->setText(_params->ylabel_fmt.right(len-3));
 
-    annotationFont=_params->annotationFont();
-    if(_params->annotation)
-        {
-        annotation->setText(_params->annotation->note);
-        color->setColor(_params->annotation->color);
-        element->setValue((int)_params->annotation->point+1);
-        }
-    else
-        {
-        color->setColor(Qt::black);
-        annotation->setText("");
-        element->setValue(1);
-        }
-#endif
+    //     if(_params->xaxis)
+    //     	xlabel->setEnabled(true);
+    //     else
+    xlabel->setEnabled(false);
+
+    // PENDING(kalle) Adapt this
+    //     annotationFont=_params->annotationFont();
+    //     if(_params->annotation)
+    //         {
+    //         annotation->setText(_params->annotation->note);
+    //         color->setColor(_params->annotation->color);
+    //         element->setValue((int)_params->annotation->point+1);
+    //         }
+    //     else
+    //         {
+    color->setColor(Qt::black);
+    annotation->setText("");
+    element->setValue(1);
 }
 
 
 void KChartParameterConfigPage::apply()
 {
-    qDebug( "Sorry, not implemented: KChartParameterConfigPage::apply()" );
-#warning Put back in
-#ifdef K
-    _params->grid=grid->isChecked();
-    _params->border=border->isChecked();
-    _params->xaxis=xaxis->isChecked();
-    _params->yaxis=yaxis->isChecked();
-    _params->llabel=llabel->isChecked();
-    if(xaxis->isChecked())
-    	_params->hasxlabel=xlabel->isChecked();
-    if(_params->has_yaxis2())
-    	{
-    	_params->yaxis2=yaxis2->isChecked();
-    	if(!ylabel2_fmt->text().isEmpty())
-    		_params->ylabel2_fmt="%g "+ylabel2_fmt->text();
-    	_params->ytitle2=ytitle2->text();
-    	}
+    // PENDING(kalle) Adapt this
+    //     _params->grid=grid->isChecked();
+    //     _params->border=border->isChecked();
+    //     _params->xaxis=xaxis->isChecked();
+    //     _params->yaxis=yaxis->isChecked();
+    //     _params->llabel=llabel->isChecked();
+    //     if(xaxis->isChecked())
+    //     	_params->hasxlabel=xlabel->isChecked();
+    //     if(_params->has_yaxis2())
+    //     	{
+    //     	_params->yaxis2=yaxis2->isChecked();
+    //     	if(!ylabel2_fmt->text().isEmpty())
+    //     		_params->ylabel2_fmt="%g "+ylabel2_fmt->text();
+    //     	_params->ytitle2=ytitle2->text();
+    //     	}
 
 
-    if(grid->isChecked())
-    	_params->shelf=shelf->isChecked();
-    _params->title=title->text();
-    _params->xtitle=xtitle->text();
-    _params->ytitle=ytitle->text();
-    if(!ylabel_fmt->text().isEmpty())
-    	_params->ylabel_fmt="%g "+ylabel_fmt->text();
+    // PENDING(kalle) Adapt this
+    //     if(grid->isChecked())
+    //     	_params->shelf=shelf->isChecked();
+    //     _params->title=title->text();
+    //     _params->xtitle=xtitle->text();
+    //     _params->ytitle=ytitle->text();
+    //     if(!ylabel_fmt->text().isEmpty())
+    //     	_params->ylabel_fmt="%g "+ylabel_fmt->text();
 
-    if(annotation->text().isEmpty())
-        {
-        if(_params->annotation)
-                {
-                delete _params->annotation;
-                _params->annotation=0;
-                }
-        }
-    else
-        {
-        if(!_params->annotation)
-                _params->annotation=new KChartAnnotationType;
-        _params->annotation->note=annotation->text();
-        _params->annotation->color=color->color();
-        _params->annotation->point=element->value()-1;
-        _params->setAnnotationFont( annotationFont );
-        }
-   if(_params->type==KCHARTTYPE_LINE)
-        {
-         _params->cross=cross->isChecked();
-        }
-#endif
+    // PENDING(kalle) Adapt this
+    //     if(annotation->text().isEmpty()) {
+    //         if(_params->annotation) {
+    //                 delete _params->annotation;
+    //                 _params->annotation=0;
+    //                 }
+    //         }
+    //     else
+    //         {
+    //         if(!_params->annotation)
+    //                 _params->annotation=new KChartAnnotationType;
+    //         _params->annotation->note=annotation->text();
+    //         _params->annotation->color=color->color();
+    //         _params->annotation->point=element->value()-1;
+    //         _params->setAnnotationFont( annotationFont );
+    //         }
+
+    if( _params->chartType() == KDChartParams::Line ) {
+        // PENDING(kalle) Readapt
+        //         _params->cross=cross->isChecked();
+    }
 }
