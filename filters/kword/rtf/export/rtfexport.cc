@@ -300,13 +300,13 @@ return;
                                    << " is stored as " << picture.koStoreName << endl;
 #endif
 
-    KoStore store (storeFileName, KoStore::Read);
+    KoStore* store = KoStore::createStore(storeFileName, KoStore::Read);
 
 
-    if ( store.open (picture.koStoreName) )
+    if ( store->open (picture.koStoreName) )
     {
-        QByteArray byteArray = store.read ( store.size () );
-        store.close ();
+        QByteArray byteArray = store->read ( store->size () );
+        store->close ();
                                                                                      ParaLayout layout;  // structure for paragrapl layout data
 
         QFileInfo fileInfo (exportFileName);
@@ -368,10 +368,9 @@ return;
     }
     else
     {
-        store.close ();
-
         kdError (KDEBUG_RTFFILTER) << "Unable to open KoStore file " << picture.koStoreName << "!" << endl;
     }
+    delete store;
 */
 } // end ProcessPicturnDats
 
@@ -470,19 +469,19 @@ bool ProcessStoreFile ( QString   storeFileName,
                         QString   exportFileName,
                         QString  &outputBuffer )
 {
-    KoStore store (storeFileName, KoStore::Read);
+    KoStore* store = KoStore::createStore (storeFileName, KoStore::Read);
 
-    if ( !store.open (storeCompFileName) )
+    if ( !store->open (storeCompFileName) )
     {
-        store.close ();
-
+        delete store;
         kdError (KDEBUG_RTFFILTER) << "Unable to open KoStore " << storeFileName
                                        << " component " << storeCompFileName << "!" << endl;
         return false;
     }
 
-    QByteArray byteArrayIn = store.read ( store.size () );
-    store.close ();
+    QByteArray byteArrayIn = store->read ( store->size () );
+    store->close ();
+    delete store;
 
     QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
 

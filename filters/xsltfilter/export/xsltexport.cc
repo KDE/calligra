@@ -46,20 +46,21 @@ KoFilter::ConversionStatus XSLTExport::convert( const QCString& from, const QCSt
 		from != "application/x-kpresenter")
         return KoFilter::NotImplemented;
     kdDebug() << "filter accepted" << endl;
-    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
-    if(!in.open("root")) {
+    KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
+    if(!in || in->open("root")) {
         kdError(30503) << "Unable to open input file!" << endl;
-        in.close();
+        delete in;
         return KoFilter::FileNotFound;
     }
     /* input file Reading */
     //QByteArray array=in.read(in.size());
-    in.close();
+    in->close();
 
 
-    XSLTExportDia* dialog = new XSLTExportDia(&in, from, 0, "Exportation", true);
+    XSLTExportDia* dialog = new XSLTExportDia(in, from, 0, "Exportation", true);
     dialog->setOutputFile(m_chain->outputFile());
     dialog->exec();
     delete dialog;
+    delete in;
     return KoFilter::OK;
 }

@@ -25,10 +25,10 @@
 
 #include "qstring.h"
 #include "qdom.h"
-#include "koStore.h"
 
 class FileHeader;
 class Document;
+class KoStore;
 
 class XmlParser
 {
@@ -51,7 +51,7 @@ class XmlParser
 	public:
 		XmlParser(QString);
                 XmlParser(QByteArray);	/* deprecated */
-		XmlParser(const KoStore&);
+		XmlParser(const KoStore*);
 		XmlParser();
 		virtual ~XmlParser();
 

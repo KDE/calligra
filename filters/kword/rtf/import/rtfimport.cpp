@@ -273,15 +273,16 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     }
 
     // Open output file
-    KoStore out( m_chain->outputFile(), KoStore::Write, "KOffice application/x-kword\004\006" );
+    KoStore* out = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "KOffice application/x-kword\004\006" );
 
-    if (out.bad())
+    if (out->bad())
     {
 	kdError() << "Unable to open output file!" << endl;
 	in.close();
+	delete out;
 	return KoFilter::StorageCreationError;
     }
-    kostore	= &out;
+    kostore	= out;
     table	= 0;
     clipart	= 0;
     pixmap	= 0;
@@ -576,6 +577,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     writeOutPart( "root", mainDoc.data() );
     writeOutPart( "documentinfo.xml", docInfo.data() );
     in.close();
+    delete out;
 
     return KoFilter::OK;
 }

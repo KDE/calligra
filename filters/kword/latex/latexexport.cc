@@ -43,20 +43,21 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     if(to != "text/x-tex" || from != "application/x-kword")
         return KoFilter::NotImplemented;
 
-    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
-    if(!in.open("root")) {
+    KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
+    if(!in || !in->open("root")) {
         kdError(30503) << "Unable to open input file!" << endl;
-        in.close();
+        delete in;
         return KoFilter::FileNotFound;
     }
     /* input file Reading */
-    in.close();
+    in->close();
 
     LATEXExportDia* dialog = new LATEXExportDia(in);
     dialog->setOutputFile(m_chain->outputFile());
 
     dialog->exec();
     delete dialog;
+    delete in;
 
     return KoFilter::OK;
 }

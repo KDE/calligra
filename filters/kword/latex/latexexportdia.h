@@ -42,7 +42,6 @@
 #include <qvbuttongroup.h>
 
 #include <klocale.h>
-#include <koStore.h>
 
 #include <kdialogbase.h>
 #include "xml2latexparser.h"
@@ -54,10 +53,10 @@ class LATEXExportDia : public KDialogBase
 	QString _fileIn;
 	QString _fileOut;
 	QByteArray _arrayIn;
-	const KoStore& _in;	/* the zipped file containing all pictures, part, ... */
+	const KoStore* _in;	/* the zipped file containing all pictures, part, ... */
 
 	public:
-		LATEXExportDia(const KoStore&, QWidget *parent=0L, const char *name=0L);
+		LATEXExportDia(const KoStore*, QWidget *parent=0L, const char *name=0L);
 
 		virtual ~LATEXExportDia() {}
 		void createDialog();

@@ -53,25 +53,28 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     if ( to != "text/x-tex" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;
 
-    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
-    if(!in.open("root")) {
-        kapp->restoreOverrideCursor();
+    KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
+    if(!in || !in->open("root")) {
+        QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "LaTeX export error" ) );
+        delete in;
         return KoFilter::FileNotFound;
     }
 
-    KoStoreDevice device( &in );
+    KoStoreDevice device( in );
     QDomDocument dom( "KFORMULA" );
     if ( !dom.setContent( &device, false ) ) {
-        kapp->restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "LaTeX export error" ) );
+        delete in;
         return KoFilter::WrongFormat;
     }
 
     QFile f( m_chain->outputFile() );
     if( !f.open( IO_Truncate | IO_ReadWrite ) ) {
-        kapp->restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "LaTeX export error" ) );
+        delete in;
         return KoFilter::FileNotFound;
     }
 
@@ -90,6 +93,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
 
     delete formula;
     delete doc;
+    delete in;
 
     return KoFilter::OK;
 }

@@ -28,14 +28,13 @@
 #include <qstring.h>		/* for QString classe */
 #include "fileheader.h"
 #include "document.h"
-#include "koStore.h"
 
 class Xml2LatexParser : public XmlParser
 {
 	QFile       _file;
 	QTextStream _out;
 	QString     _filename;
-	const KoStore&    _in;
+	const KoStore*    _in;
 
 	FileHeader  _header;
 	Document    _document;
@@ -49,7 +48,7 @@ class Xml2LatexParser : public XmlParser
 		 * @param fileOut Output latex filename.
 		 * @param config Option choosen.
 		 */
-		Xml2LatexParser(const KoStore&, QString, QString);
+		Xml2LatexParser(const KoStore*, QString, QString);
 
 		virtual ~Xml2LatexParser() {}
 

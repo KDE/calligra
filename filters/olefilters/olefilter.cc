@@ -113,7 +113,7 @@ KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCStr
     appIdentification += to;
     appIdentification += '\004';
     appIdentification += '\006';
-    store=new KoStore(fileOut, KoStore::Write, appIdentification);
+    store=KoStore::createStore(fileOut, KoStore::Write, appIdentification);
     if(store->bad()) {
         kdError(s_area) << "OLEFilter::filter(): Unable to open output file! " << fileOut << endl;
         delete [] olefile.data;
@@ -192,9 +192,10 @@ void OLEFilter::slotSavePart(
 
         // Now fetch out the elements from the resulting KoStore and embed them in our KoStore.
 
-        KoStore storedPart(tempFileOUT.name(), KoStore::Read);
+        KoStore* storedPart = KoStore::createStore(tempFileOUT.name(), KoStore::Read);
         if (!store->embed(id, storedPart))
             kdError(s_area) << "Could not embed in KoStore!" << endl;
+	delete storedPart;
         delete mgr;
     }
     storageId = id;

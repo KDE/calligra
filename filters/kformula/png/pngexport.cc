@@ -53,18 +53,20 @@ KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCStr
     if ( to != "image/png" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;
 
-    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
-    if(!in.open("root")) {
+    KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
+    if(!in || !in->open("root")) {
         kapp->restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "PNG export error" ) );
+        delete in;
         return KoFilter::FileNotFound;
     }
 
-    KoStoreDevice device( &in );
+    KoStoreDevice device( in );
     QDomDocument dom( "KFORMULA" );
     if ( !dom.setContent( &device, false ) ) {
         kapp->restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "PNG export error" ) );
+        delete in;
         return KoFilter::WrongFormat;
     }
     /* input file Reading */
@@ -73,7 +75,7 @@ KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCStr
     PNGExportDia* dialog = new PNGExportDia( dom, m_chain->outputFile() );
     dialog->exec();
     delete dialog;
-
+    delete in;
     return KoFilter::OK;
 }
 

@@ -46,7 +46,7 @@ enum
 {
 	BOLD_STYLE 		= 1,
 	ITALIC_STYLE 		= 2,
-	UNDERLINE_STYLE 	= 3,
+	UNDERLINE_STYLE 	= 3
 };
 //--
 

@@ -104,15 +104,16 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
     emit sigProgress(100);
 
     QCString appIdentification( "KOffice application/x-kontour\004\006" );
-    KoStore out(m_chain->outputFile(), KoStore::Write, appIdentification);
-    if (!out.open("root"))
+    KoStore* out = KoStore::createStore(m_chain->outputFile(), KoStore::Write, appIdentification);
+    if (!out || !out->open("root"))
     {
         kdError(s_area) << "Cannot open output file" << endl;
+	delete out;
         return KoFilter::StorageCreationError;
     }
     QCString cstring = m_text.utf8();
-    out.write((const char*)cstring, cstring.length());
-    out.close();
+    out->write((const char*)cstring, cstring.length());
+    out->close();
 
     // Now add in the data for all embedded parts.
 
@@ -122,11 +123,13 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
     {
         // Now fetch out the elements from the resulting KoStore and embed them in our KoStore.
 
-        KoStore storedPart(it.data().file, KoStore::Read);
-        if (!out.embed(it.data().storageName, storedPart))
+        KoStore* storedPart = KoStore::createStore(it.data().file, KoStore::Read);
+        if (!out->embed(it.data().storageName, storedPart))
             kdError(s_area) << "Could not embed in KoStore!" << endl;
+	delete storedPart;
         unlink(it.data().file.local8Bit());
     }
+    delete out;
     return KoFilter::OK;
 }
 
