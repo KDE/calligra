@@ -47,7 +47,6 @@ KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWAutoForma
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
       oBegin( autoFormat->getConfigTypographicQuotes().begin ),
       oEnd( autoFormat->getConfigTypographicQuotes().end ),
-      quotesChanged( false ),
       m_autoFormat( *autoFormat ),
       m_docAutoFormat( autoFormat )
 {
@@ -214,6 +213,9 @@ bool KWAutoFormatDia::applyConfig()
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
 
+    // Save to config file
+    m_docAutoFormat->saveConfig();
+
     return true;
 }
 
@@ -232,7 +234,6 @@ void KWAutoFormatDia::chooseQuote1()
     if ( KCharSelectDia::selectChar( f, c, false ) )
     {
         pbQuote1->setText( c );
-        quotesChanged = true;
     }
 }
 
@@ -243,7 +244,6 @@ void KWAutoFormatDia::chooseQuote2()
     if ( KCharSelectDia::selectChar( f, c, false ) )
     {
         pbQuote2->setText( c );
-        quotesChanged = true;
     }
 }
 

@@ -24,23 +24,92 @@
 #include "kwtextframeset.h"
 #include <kdebug.h>
 #include <klocale.h>
+#include <kinstance.h>
+#include <kconfig.h>
 #include <qrichtext_p.h>
 
 /******************************************************************/
 /* Class: KWAutoFormat						  */
 /******************************************************************/
 KWAutoFormat::KWAutoFormat( KWDocument *_doc )
-    : m_typographicQuotes(), m_enabled( true ),
+    : m_doc( _doc ), m_configRead( false ), m_typographicQuotes(), /*m_enabled( true ),*/
       m_convertUpperCase( false ), m_convertUpperUpper( false ),
       m_maxlen( 0 )
 {
-    m_doc = _doc;
+}
+
+void KWAutoFormat::readConfig()
+{
+    // Read the autoformat configuration
+    // This is done on demand (when typing the first char, or when opening the config dialog)
+    // so that loading is faster and to avoid doing it for readonly documents.
+    if ( m_configRead )
+        return;
+    KConfig * config = m_doc->instance()->config();
+    KConfigGroupSaver cgs( config, "AutoFormat" );
+    m_convertUpperCase = config->readBoolEntry( "ConvertUpperCase", false );
+    m_convertUpperUpper = config->readBoolEntry( "ConvertUpperUpper", false );
+    QString begin = config->readEntry( "TypographicQuotesBegin", "«" );
+    m_typographicQuotes.begin = begin[0];
+    QString end = config->readEntry( "TypographicQuotesEnd", "»" );
+    m_typographicQuotes.end = end[0];
+    m_typographicQuotes.replace = config->readBoolEntry( "TypographicQuotesEnabled", false )
+                                  && !begin.isEmpty()
+                                  && !end.isEmpty();
+
+    ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
+    config->setGroup( "AutoFormatEntries" );
+
+    QStringList find, replace;
+    if ( config->hasKey( "Find" ) ) // Note that this allows saving an empty list and not getting the defaults
+        find = config->readListEntry( "Find" );
+    else
+        find << "(C)" << "(c)" << "(R)" << "(r)";
+    if ( config->hasKey( "Replace" ) )
+        replace = config->readListEntry( "Replace" );
+    else
+        replace << "©" << "©" << "®" << "®";
+
+    QStringList::Iterator fit = find.begin();
+    QStringList::Iterator rit = replace.begin();
+    for ( ; fit != find.end() && rit != replace.end() ; ++fit, ++rit )
+    {
+        m_entries.insert( ( *fit ), KWAutoFormatEntry( ( *rit ) ) );
+    }
+    buildMaxLen();
+
+    m_configRead = true;
+}
+
+void KWAutoFormat::saveConfig()
+{
+    KConfig * config = m_doc->instance()->config();
+    KConfigGroupSaver cgs( config, "AutoFormat" );
+    config->writeEntry( "ConvertUpperCase", m_convertUpperCase );
+    config->writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
+    config->writeEntry( "TypographicQuotesBegin", QString( m_typographicQuotes.begin ) );
+    config->writeEntry( "TypographicQuotesEnd", QString( m_typographicQuotes.end ) );
+    config->writeEntry( "TypographicQuotesEnabled", m_typographicQuotes.replace );
+    config->setGroup( "AutoFormatEntries" );
+    QStringList find, replace;
+    KWAutoFormatEntryMap::Iterator it = m_entries.begin();
+    for ( ; it != m_entries.end() ; ++it )
+    {
+        find.append( it.key() );
+        replace.append( it.data().replace() );
+    }
+    config->writeEntry( "Find", find );
+    config->writeEntry( "Replace", replace );
+    config->sync();
 }
 
 void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag, int index, QChar ch )
 {
-    if ( !m_enabled )
-	return;
+    if ( !m_configRead )
+        readConfig();
+
+    //if ( !m_enabled )
+    //    return;
 
     // Auto-correction happens when pressing space, tab, CR etc.
     if ( ch.isSpace() )
@@ -71,7 +140,7 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
 
 bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word )
 {
-    QMap< QString, KWAutoFormatEntry >::Iterator it = m_entries.find( word );
+    KWAutoFormatEntryMap::Iterator it = m_entries.find( word );
     if ( it != m_entries.end()  )
     {
         KWTextDocument * textdoc = parag->textDocument();

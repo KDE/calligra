@@ -1753,6 +1753,7 @@ void KWView::extraSpelling()
 
 void KWView::extraAutoFormat()
 {
+    doc->getAutoFormat()->readConfig();
     KWAutoFormatDia dia( this, 0, doc->getAutoFormat() );
     dia.show();
 }

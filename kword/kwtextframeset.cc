@@ -392,7 +392,7 @@ void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpa
 void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd )
 {
 #ifdef DEBUG_FLOW
-    kdDebugBody(32002) << "KWTextFrameSet " << this << " getMargins yp=" << yp
+    kdDebugBody(32002) << "  KWTextFrameSet " << this << " getMargins yp=" << yp
                        << " h=" << h << " called by "
                        << (marginLeft?"adjustLMargin":marginRight?"adjustRMargin":"adjustFlow")
                        << endl;
@@ -401,10 +401,10 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     KWFrame * frame = internalToNormal( QPoint(0, yp), p );
 #ifdef DEBUG_FLOW
     if (!frame)
-        kdDebug() << "getMargins: internalToNormal returned frame=0L for yp=" << yp << endl;
+        kdDebug() << "  getMargins: internalToNormal returned frame=0L for yp=" << yp << endl;
         // frame == 0 happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
     else
-        kdDebugBody(32002) << "getMargins: internalToNormal returned frame=" << DEBUGRECT( *frame )
+        kdDebugBody(32002) << "  getMargins: internalToNormal returned frame=" << DEBUGRECT( *frame )
                            << " and p=" << p.x() << "," << p.y() << endl;
 #endif
     // Everything from there is in 'normal' coordinates.
@@ -416,7 +416,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     int bottomSkip = 0;
 
 #ifdef DEBUG_FLOW
-    kdDebug() << "KWTextFrameSet::getMargins looking for frames between " << p.y() << " and " << p.y()+h << endl;
+    kdDebugBody(32002) << "  getMargins: looking for frames between " << p.y() << " and " << p.y()+h << endl;
 #endif
     // For every frame on top at this height, we'll move from and to towards each other
     // The text flows between 'from' and 'to'
@@ -427,7 +427,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
         {
             QRect frameRect = (*fIt).frame->outerRect();
 #ifdef DEBUG_FLOW
-            kdDebug() << "getMargins found frame at " << DEBUGRECT(frameRect) << endl;
+            kdDebugBody(32002) << "   getMargins found frame at " << DEBUGRECT(frameRect) << endl;
 #endif
             // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
             if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
@@ -435,7 +435,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                 int availLeft = QMAX( 0, frameRect.left() - from );
                 int availRight = QMAX( 0, to - frameRect.right() );
 #ifdef DEBUG_FLOW
-                kdDebugBody(32002) << "getMargins availLeft=" << availLeft
+                kdDebugBody(32002) << "   getMargins availLeft=" << availLeft
                                    << " availRight=" << availRight << endl;
 #endif
                 if ( availLeft > availRight ) // choose the max
@@ -445,7 +445,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                     // flow text at the right of the frame
                     from = QMAX( from, to - availRight ); // can only go right -> QMAX
 #ifdef DEBUG_FLOW
-                kdDebugBody(32002) << "getMargins from=" << from << " to=" << to << endl;
+                kdDebugBody(32002) << "   getMargins from=" << from << " to=" << to << endl;
 #endif
                 if ( breakEnd )
                 {
@@ -454,7 +454,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                     if ( normalToInternal( nPoint, iPoint ) )
                         bottomSkip = QMAX( bottomSkip, iPoint.y() );
 #ifdef DEBUG_FLOW
-                    kdDebugBody(32002) << "getMargins iPoint.y=" << iPoint.y() << " frame's bottom=" << frameRect.bottom()
+                    kdDebugBody(32002) << "   getMargins iPoint.y=" << iPoint.y() << " frame's bottom=" << frameRect.bottom()
                                        << " bottomSkip=" << bottomSkip << endl;
 #endif
                 }
@@ -484,7 +484,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
     int marginLeft;
     getMargins( yp, h, &marginLeft, 0L, 0L );
 #ifdef DEBUG_FLOW
-    kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin " << marginLeft << endl;
+    kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin marginLeft=" << marginLeft << endl;
 #endif
     return QTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
 }
@@ -494,7 +494,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
     int marginRight;
     getMargins( yp, h, 0L, &marginRight, 0L );
 #ifdef DEBUG_FLOW
-    kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin " << marginRight << endl;
+    kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin marginRight=" << marginRight << endl;
 #endif
     return QTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
 }
@@ -723,7 +723,7 @@ void KWTextFrameSet::updateFrames()
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
     }
 
-    kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;
     frameList.setAutoDelete( true );

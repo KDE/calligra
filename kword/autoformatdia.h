@@ -57,7 +57,6 @@ protected:
     KListView * m_pListView;
 
     QChar oBegin, oEnd;
-    bool quotesChanged;
 
     KWAutoFormat m_autoFormat; // The copy we're working on
     KWAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)

@@ -59,8 +59,11 @@ Improved readonly mode, when embedding into konqueror (can now select and copy).
 Insert Frame/Page Break feature added (also as part of styles).
 Apply button added to the stylist.
 Zoom value can be set arbitrarily by the user (editable combobox).
+Auto-correction, typographical quotes.
+Insertion of predefined expressions.
 
 Fixed recalculation of "page number" variable in header or footer.
 Painting and run-around-frame fixes (e.g. in multi-columns mode).
 Fixes for the creation and removal of pages.
 Fixed crash when embedding into Konqueror.
+Many other fixes.

@@ -76,22 +76,8 @@ public:
     // Config for the typographic quotes. Used by the dialog.
     struct TypographicQuotes
     {
-	TypographicQuotes() : begin( '«' ), end( '»' ), replace( FALSE )
-	{}
-	TypographicQuotes( const TypographicQuotes &t ) {
-	    begin = t.begin;
-	    end = t.end;
-	    replace = t.replace;
-	}
-	TypographicQuotes &operator=( const TypographicQuotes &t ) {
-	    begin = t.begin;
-	    end = t.end;
-	    replace = t.replace;
-	    return *this;
-	}
-
 	QChar begin, end;
-	bool replace;
+	bool replace; // aka enabled
     };
 
     // Configuration (on/off/settings). Called by the dialog.
@@ -128,6 +114,10 @@ public:
     void copyAutoFormatEntries( const KWAutoFormat & other )
     { m_entries = other.m_entries; }
 
+    // Read/save config ( into kwordrc )
+    void readConfig();
+    void saveConfig();
+
 protected:
     bool doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
     void doUpperCase( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
@@ -142,11 +132,13 @@ protected:
 private:
     KWDocument *m_doc;
 
-    bool m_enabled;
+    //bool m_enabled;
+    bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper;
     TypographicQuotes m_typographicQuotes;
 
-    QMap< QString, KWAutoFormatEntry > m_entries;
+    typedef QMap< QString, KWAutoFormatEntry > KWAutoFormatEntryMap;
+    KWAutoFormatEntryMap m_entries;
     int m_maxlen;
 };
 
