@@ -178,6 +178,12 @@ VGroup::load( const QDomElement& element )
 				composite->load( e );
 				append( composite );
 			}
+			else if( e.tagName() == "GROUP" )
+			{
+				VGroup* group = new VGroup( this );
+				group->load( e );
+				append( group );
+			}
 			else if( e.tagName() == "TEXT" )
 			{
 				/*VText* text = new VText( this );
