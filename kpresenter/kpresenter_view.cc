@@ -6962,8 +6962,7 @@ bool KPresenterView::switchInOtherPage( const QString & text )
 
 KCommand * KPresenterView::applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst)
 {
-    KMacroCommand *macro = new KMacroCommand( i18n("Apply Autoformat"));
-    bool createcmd=false;
+    KMacroCommand *macro = 0L;
     QPtrList<KoTextObject> list(lst);
     QPtrListIterator<KoTextObject> fit(list);
     for ( ; fit.current() ; ++fit )
@@ -6971,17 +6970,12 @@ KCommand * KPresenterView::applyAutoFormatToCurrentPage( const QPtrList<KoTextOb
         KCommand *cmd = m_pKPresenterDoc->getAutoFormat()->applyAutoFormat( fit.current() );
         if ( cmd )
         {
-            createcmd= true;
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Apply Autoformat"));
             macro->addCommand( cmd );
         }
     }
-    if ( createcmd )
-    {
-        return macro ;
-    }
-    else
-        delete macro;
-    return 0L;
+    return macro;
 }
 
 

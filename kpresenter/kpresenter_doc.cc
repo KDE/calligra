@@ -1323,7 +1323,6 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     macro->addCommand( insertCmd );
                     createMacro=true;
                     //insertCmd->execute();
-                    //addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -1441,11 +1440,6 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     macro->addCommand( insertCmd );
                     kpclipartobject->reload();
                     createMacro=true;
-#if 0
-                    insertCmd->execute();
-                    addCommand( insertCmd );
-                    kpclipartobject->reload();
-#endif
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -1494,11 +1488,6 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     kppixmapobject->reload();
                     createMacro=true;
 
-#if 0
-                    insertCmd->execute();
-                    addCommand( insertCmd );
-                    kppixmapobject->reload();
-#endif
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {

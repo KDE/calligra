@@ -2304,26 +2304,26 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
             {
                 if ( !e->isAutoRepeat() )
                 {
-                    KMacroCommand *macro=new KMacroCommand(i18n("Move Objects"));
-                    bool cmdCreate=false;
+                    KMacroCommand *macro=0L;
                     int x=(m_view->zoomHandler()->zoomItX(m_boundingRect.x()) - firstX);
                     int y=(m_view->zoomHandler()->zoomItY(m_boundingRect.y()) - firstY);
                     KCommand *cmd=m_activePage->moveObject(m_view,x,y);
                     if(cmd)
                     {
+                        if ( ! macro )
+                            macro=new KMacroCommand(i18n("Move Objects"));
                         macro->addCommand(cmd);
-                        cmdCreate=true;
                     }
                     cmd=stickyPage()->moveObject(m_view,x,y);
                     if(cmd)
                     {
+                        if ( ! macro )
+                            macro=new KMacroCommand(i18n("Move Objects"));
+
                         macro->addCommand(cmd);
-                        cmdCreate=true;
                     }
-                    if(cmdCreate)
+                    if(macro)
                         m_view->kPresenterDoc()->addCommand(macro );
-                    else
-                        delete macro;
                     m_keyPressEvent = false;
                 }
                 emit objectSelectedChanged();
@@ -3361,7 +3361,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom )
     QRect rect = m_view->kPresenterDoc()->pageList().at(pgnum)->getZoomPageRect( );
     _pix.resize( rect.size() );
     _pix.fill( Qt::white );
-    
+
     QPainter p;
     p.begin( &_pix );
 
@@ -4927,25 +4927,24 @@ void KPrCanvas::copyObjs()
 /*================================================================*/
 void KPrCanvas::deleteObjs()
 {
-    KMacroCommand *macro=new KMacroCommand(i18n( "Delete Objects" ));
-    bool macroCreate=false;
+    KMacroCommand *macro=0L;
     KCommand *cmd=m_activePage->deleteObjs();
     if( cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n( "Delete Objects" ));
         macro->addCommand(cmd);
-        macroCreate=true;
     }
     cmd=stickyPage()->deleteObjs();
     if( cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n( "Delete Objects" ));
         macro->addCommand(cmd);
-        macroCreate=true;
     }
     m_view->kPresenterDoc()->deSelectAllObj();
-    if(macroCreate)
+    if(macro)
         m_view->kPresenterDoc()->addCommand(macro);
-    else
-        delete macro;
     emit objectSelectedChanged();
     setToolEditMode( toolEditMode );
 }

@@ -112,29 +112,29 @@ void KPConfig::openPage(int flags)
 
 void KPConfig::slotApply()
 {
-    KMacroCommand *macro = new KMacroCommand(i18n("Change Config") );
-    bool createMacro = false;
+    KMacroCommand *macro = 0L;
     _interfacePage->apply();
     _colorBackground->apply();
     _spellPage->apply();
     KCommand *cmd = _miscPage->apply();
     if ( cmd )
     {
+        if ( !macro )
+            macro = new KMacroCommand(i18n("Change Config") );
         macro->addCommand( cmd );
-        createMacro = true;
     }
     cmd = _defaultDocPage->apply();
     if ( cmd )
     {
+        if ( !macro )
+            macro = new KMacroCommand(i18n("Change Config") );
+
         macro->addCommand( cmd );
-        createMacro = true;
     }
 
     _toolsPage->apply();
-    if ( createMacro )
+    if ( macro )
         m_doc->addCommand( macro);
-    else
-        delete macro;
 }
 
 void KPConfig::slotDefault()
