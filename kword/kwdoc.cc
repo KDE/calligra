@@ -993,14 +993,16 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
-        KWFrameSet * frameset = fit.current();
-        if ( frameset->getFrameInfo() == FI_FIRST_HEADER ) _first_header = TRUE;
-        if ( frameset->getFrameInfo() == FI_EVEN_HEADER ) _odd_header = TRUE;
-        if ( frameset->getFrameInfo() == FI_ODD_HEADER ) _even_header = TRUE;
-        if ( frameset->getFrameInfo() == FI_FIRST_FOOTER ) _first_footer = TRUE;
-        if ( frameset->getFrameInfo() == FI_EVEN_FOOTER ) _odd_footer = TRUE;
-        if ( frameset->getFrameInfo() == FI_ODD_FOOTER ) _even_footer = TRUE;
-        if ( frameset->getFrameInfo() == FI_FOOTNOTE ) _footnotes = TRUE;
+        switch( fit.current()->getFrameInfo() ) {
+        case FI_FIRST_HEADER: _first_header = TRUE; break;
+        case FI_EVEN_HEADER: _odd_header = TRUE; break;
+        case FI_ODD_HEADER: _even_header = TRUE; break;
+        case FI_FIRST_FOOTER: _first_footer = TRUE; break;
+        case FI_EVEN_FOOTER: _odd_footer = TRUE; break;
+        case FI_ODD_FOOTER: _even_footer = TRUE; break;
+        case FI_FOOTNOTE: _footnotes = TRUE; break;
+        default: break;
+        }
     }
 
     // create defaults if they were not in the input file.
