@@ -1,3 +1,4 @@
+KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
 	$(KOSCRIPT_INCLUDES) -I$(top_srcdir)/interfaces \
 	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
@@ -20,8 +21,8 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	kspread_dlg_cons.cc kspread_util.cc \
         kspread_dlg_database.cc kspread_dlg_goalseek.cc \
-	kspread_editors.cc \
-	kspread_dlg_reference.cc\
+	kspread_editors.cc kspreadsubtotal.ui \
+	kspread_dlg_reference.cc kspread_dlg_subtotal.cc \
 	kspread_dlg_comment.cc kspread_dlg_angle.cc kspread_dlg_goto.cc\
 	kspread_dlg_area.cc kspread_dlg_resize2.cc kspread_dlg_preference.cc\
 	kspread_dlg_special.cc \
@@ -46,6 +47,8 @@ libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
 	$(LIB_KOSCRIPT) $(LIB_KOFFICEUI) -lkspell
 libkspreadpart_la_METASOURCES = AUTO
 
+METASOURCES = AUTO
+
 ## The kdeinit loadable module
 lib_LTLIBRARIES =  kspread.la
 kspread_la_SOURCES = main.cc
@@ -67,7 +70,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
 	kspread_dlg_scripts.h kspread_table.h kspread_cell.h \
 	kspread_dlg_cons.h kspread_cluster.h \
-	kspread_util.h kspread_canvas.h \
+	kspread_util.h kspread_canvas.h kspread_dlg_subtotal.h \
 	kspread_dlg_reference.h kspread_locale.h \
 	kspread_editors.h  kspread_dlg_formula.h \
 	kspread_dlg_reference.h kspread_dlg_area.h kspread_dlg_resize2.h\
@@ -78,7 +81,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_dlg_validity.h  kspread_dlg_showColRow.h \
 	kspread_dlg_list.h kspread_dlg_csv.h \
 	kspread_dlg_database.h kspread_dlg_goalseek.h \
-	kspread_events.h kspread_global.h  \
+	kspread_events.h kspread_global.h \
 	kspread_dlg_show.h kspread_dlg_insert.h kspread_dlg_pasteinsert.h KSpreadViewIface.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
 	KSpreadAppIface.h kspread_dlg_format.h kspread_aboutdata.h \
@@ -101,5 +104,6 @@ parser:
 
 messages: rc.cpp
 	perl extracti18n extensions/*.xml > xml_doc.cc
+	$(EXTRACTRC) *.ui >> rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h -o $(podir)/kspread.pot
 	-rm xml_doc.cc
