@@ -1515,11 +1515,16 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QString masterPageName = "Standard"; // use default layout as fallback
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
 
+    //tz this is a big hack FIXME
+    if ( ! master )
+    {
+        master = oasisStyles.masterPages()["Default"];
+    }
     kdDebug()<<" load sticky oasis object \n";
     kdDebug()<<" master.isNull() :"<<master->isNull()<<endl;
     QDomNode node = *master;
     kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
-    loadOasisObject( -1 , m_masterPage, node , context);
+    loadOasisObject( m_masterPage, node , context);
     loadOasisHeaderFooter( node,context );
 
     kdDebug()<<" end load sticky oasis object \n";
@@ -1599,7 +1604,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             //All animation object for current page is store into this element
             createPresentationAnimation(KoDom::namedItemNS( drawPage, KoXmlNS::presentation, "animations"));
             // parse all objects
-            loadOasisObject(pos, newpage, drawPage, context);
+            loadOasisObject( newpage, drawPage, context );
 
             context.styleStack().restore();
             m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
@@ -1637,7 +1642,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 }
 
 
-void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject)
+void KPresenterDoc::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject )
 {
     for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
     {
@@ -1804,7 +1809,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             KPGroupObject *kpgroupobject = new KPGroupObject();
             QDomNode nodegroup = object.firstChild();
 
-            kpgroupobject->loadOasisGroupObject( this, pos, newpage, object, context, m_loadingInfo);
+            kpgroupobject->loadOasisGroupObject( this, newpage, object, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kpgroupobject );
             else
@@ -1845,10 +1850,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                     note += t.text() + "\n";
                     kdDebug()<<" note :"<<note<<endl;
                 }
-                if ( pos != -1 )
-                    m_pageList.at(pos)->setNoteText(note );
-                else
-                    m_masterPage->setNoteText( note );
+                newpage->setNoteText( note );
             }
         }
         else if ( ( name == "header" || name == "footer" ) && o.namespaceURI() == KoXmlNS::style )

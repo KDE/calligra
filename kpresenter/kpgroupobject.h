@@ -69,7 +69,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
-    virtual void loadOasisGroupObject( KPresenterDoc *doc, int pos, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual void loadOasisGroupObject( KPresenterDoc *doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info);
     virtual bool saveOasis(KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj) const;
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,

@@ -152,7 +152,7 @@ class KPresenterDoc : public KoDocument
      * Load oasis object
      * @param pos: we use -1 for sticky page.
      */
-    void loadOasisObject( int pos, KPrPage * page, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject = 0L);
+    void loadOasisObject( KPrPage * page, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject = 0L);
 
     virtual bool loadXML( const QDomDocument& doc );
     virtual bool loadXML( QIODevice *, const QDomDocument & doc );
