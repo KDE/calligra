@@ -559,19 +559,19 @@ KoRect KWFrame::innerRect() const
 {
     KoRect inner( this->normalize());
     inner.moveBy( bLeft(), bTop());
-    inner.setWidth( inner.width() - bLeft() - bRight() );
-    inner.setHeight( inner.height() - bTop() - bBottom() );
+    inner.setWidth( innerWidth() );
+    inner.setHeight( innerHeight() );
     return inner;
 }
 
 double KWFrame::innerWidth() const
 {
-    return width() - bLeft() - bRight();
+    return QMAX( 0.0, width() - bLeft() - bRight() );
 }
 
 double KWFrame::innerHeight() const
 {
-    return height() - bTop() - bBottom();
+    return QMAX( 0.0, height() - bTop() - bBottom() );
 }
 
 void KWFrame::setFrameMargins( double _left, double _top, double _right, double _bottom)
