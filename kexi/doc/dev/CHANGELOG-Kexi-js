@@ -335,6 +335,10 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
+2004-10-11
+Parser:
+- ER004 supported
+
 2004-10-09
 Kexi Startup
 - ksqlite2to3 script added for unices. It's used instead of two QProcesses.
