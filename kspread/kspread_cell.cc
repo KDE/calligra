@@ -60,6 +60,15 @@ namespace KSpreadCell_LNS
 
 using namespace KSpreadCell_LNS;
 
+
+// Some variables are placed in CellExtra because normally they're not required 
+// in simple case of cell(s). For example, most plain text cells don't need 
+// to store information about spanned columns and rows, as this is only
+// the case with merged cells.
+// When the cell is getting complex (e.g. merged with other cells, contains 
+// rich text, has validation criteria, etc), this CellExtra is allocated by 
+// CellPrivate and starts to be available. Otherwise, it won't exist at all.
+
 class CellExtra
 {
 public:
@@ -148,6 +157,7 @@ public:
     KSpreadCell* nextCell;
     KSpreadCell* previousCell;
 
+    // "extra stuff", see explanation for CellExtra
     CellExtra* cellExtra;
 
     CellPrivate();
