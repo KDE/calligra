@@ -34,7 +34,7 @@
 
 // hehe >:->
 #include <kspread_doc.h>
-#include <kspread_table.h>
+#include <kspread_sheet.h>
 #include <kspread_cell.h>
 #include <kspread_util.h>
 #include <koDocumentInfo.h>
@@ -52,7 +52,7 @@ static int g_dateOrigin = 0;
 
 // copied from gnumeric: src/formats.c:
 static char const * cell_format_date [] = {
-	"m/d/yy",		/* 0 KSpreadCell::date_format5*/ 
+	"m/d/yy",		/* 0 KSpreadCell::date_format5*/
 	"m/d/yyyy",		/* 1 KSpreadCell::date_format6*/
 	"d-mmm-yy",		/* 2 KSpreadCell::date_format1 18-Feb-99 */
 	"d-mmm-yyyy",		/* 3 KSpreadCell::date_format2 18-Feb-1999 */
@@ -86,7 +86,7 @@ static char const * cell_format_date [] = {
 	"yyyy",			/* 31 KSpreadCell::date_format23*/
 	NULL
 };
-	
+
 // copied from gnumeric: src/formats.c:
 static char const * cell_format_time [] = {
   "h:mm AM/PM",    // KSpreadCell::Time_format1 9 : 01 AM
@@ -149,7 +149,7 @@ QTime GNUMERICFilter::GnumericDate::getTime( double num )
   secs -= h * 3600;
   int m = secs / 60;
   secs -= h * 60;
-  
+
   kdDebug() << "****** h: " << h << ", m: " << m << ", secs: " << secs << endl;
   QTime time( h, m, ( secs < 0 || secs > 59 ? 0 : secs ) );
 
@@ -159,8 +159,8 @@ QTime GNUMERICFilter::GnumericDate::getTime( double num )
 typedef KGenericFactory<GNUMERICFilter, KoFilter> GNUMERICFilterFactory;
 K_EXPORT_COMPONENT_FACTORY( libgnumericimport, GNUMERICFilterFactory( "gnumericimport" ) );
 
-GNUMERICFilter::GNUMERICFilter( KoFilter *, const char *, const QStringList & ) 
-  : KoFilter() 
+GNUMERICFilter::GNUMERICFilter( KoFilter *, const char *, const QStringList & )
+  : KoFilter()
 {
 }
 
@@ -180,9 +180,9 @@ void  convert_string_to_qcolor(QString color_string, QColor * color)
   /* We only care about the top byte. */
 
   red   = color_string.mid( 0, first_col_pos).toInt( &number_ok, 16 ) >> 8;
-  green = color_string.mid(first_col_pos + 1, 
+  green = color_string.mid(first_col_pos + 1,
                            (second_col_pos-first_col_pos) - 1).toInt( &number_ok, 16) >> 8;
-  blue  = color_string.mid(second_col_pos + 1, 
+  blue  = color_string.mid(second_col_pos + 1,
                            (color_string.length() - first_col_pos) - 1).toInt( &number_ok, 16) >> 8;
   color->setRgb(red, green, blue);
 }
@@ -195,12 +195,12 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
   /* Summary Handling START */
   QDomNode summary  = docElem->namedItem("gmr:Summary");
   QDomNode gmr_item = summary.namedItem("gmr:Item");
-  
-  while( !gmr_item.isNull() ) 
+
+  while( !gmr_item.isNull() )
   {
     QDomNode gmr_name  = gmr_item.namedItem("gmr:name");
     QDomNode gmr_value = gmr_item.namedItem("gmr:val-string");
-    
+
     KoDocumentInfo * DocumentInfo     = document->documentInfo();
     KoDocumentInfoAbout  * aboutPage  = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>(DocumentInfo->page( "author" ));
@@ -212,7 +212,7 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
     }
     else if (gmr_name.toElement().text() == "keywords")
     {
-      1; /* Not supported by KSpread */
+      /* Not supported by KSpread */
     }
     else if (gmr_name.toElement().text() == "comments")
     {
@@ -220,15 +220,15 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
     }
     else if (gmr_name.toElement().text() == "category")
     {
-      1;  /* Not supported by KSpread */
+      /* Not supported by KSpread */
     }
     else if (gmr_name.toElement().text() == "manager")
     {
-      1;  /* Not supported by KSpread */
+      /* Not supported by KSpread */
     }
     else if (gmr_name.toElement().text() == "application")
     {
-      1;  /* Not supported by KSpread */
+      /* Not supported by KSpread */
     }
     else if (gmr_name.toElement().text() == "author")
     {
@@ -241,7 +241,7 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
 
     gmr_item = gmr_item.nextSibling();
   }
-  
+
   /* Summany Handling STOP */
 }
 
@@ -258,18 +258,18 @@ void setColInfo(QDomNode * sheet, KSpreadSheet * table)
     double d = def.attribute( "DefaultSizePts" ).toDouble( &ok );
     if ( ok )
     {
-      KSpreadLayout::setGlobalColWidth( d );
+      KSpreadFormat::setGlobalColWidth( d );
       table->setDefaultWidth( d );
     }
-  }    
+  }
 
-  while( !columninfo.isNull() ) 
+  while( !columninfo.isNull() )
   {
     QDomElement e = columninfo.toElement(); // try to convert the node to an element.
     int column_number;
-    
+
     column_number = e.attribute("No").toInt()+1;
-    ColumnLayout *cl = new ColumnLayout(table, column_number);
+    ColumnFormat *cl = new ColumnFormat(table, column_number);
     if (e.hasAttribute("Hidden"))
     {
       if (e.attribute("Hidden")=="1")
@@ -278,12 +278,12 @@ void setColInfo(QDomNode * sheet, KSpreadSheet * table)
       }
     }
     if (e.hasAttribute("Unit"))
-    {      
+    {
       //  xmm = (x_points) * (1 inch / 72 points) * (25.4 mm/ 1 inch)
       cl->setWidth((e.attribute("Unit").toDouble()*4)/3);
       //cl->setWidth(e.attribute("Unit").toInt());
     }
-    table->insertColumnLayout(cl);
+    table->insertColumnFormat(cl);
     columninfo = columninfo.nextSibling();
   }
 }
@@ -302,18 +302,18 @@ void setRowInfo(QDomNode *sheet, KSpreadSheet *table)
     d = def.attribute( "DefaultSizePts" ).toDouble( &ok );
     if ( ok )
     {
-      KSpreadLayout::setGlobalRowHeight( d );
+      KSpreadFormat::setGlobalRowHeight( d );
       table->setDefaultHeight( d );
     }
-  }    
+  }
 
-  while( !rowinfo.isNull() ) 
+  while( !rowinfo.isNull() )
   {
     QDomElement e = rowinfo.toElement(); // try to convert the node to an element.
     int row_number;
     row_number = e.attribute("No").toInt() + 1;
-    RowLayout *rl = new RowLayout(table, row_number);
-    
+    RowFormat *rl = new RowFormat(table, row_number);
+
     if (e.hasAttribute("Hidden"))
     {
       if (e.attribute("Hidden") == "1")
@@ -327,7 +327,7 @@ void setRowInfo(QDomNode *sheet, KSpreadSheet *table)
       if ( ok )
         rl->setHeight( dbl );
     }
-    table->insertRowLayout(rl);
+    table->insertRowFormat(rl);
     rowinfo = rowinfo.nextSibling();
   }
 }
@@ -340,19 +340,19 @@ void setSelectionInfo( QDomNode * sheet, KSpreadSheet * /* table */ )
   /* Kspread does not support mutiple selections.. */
   /* This code will set the selection to the last one GNUmeric's multiple
      selections. */
-  while( !selection.isNull() ) 
+  while( !selection.isNull() )
   {
     QDomElement e = selection.toElement(); // try to convert the node to an element.
     QRect kspread_selection;
-    
+
     kspread_selection.setLeft((e.attribute("startCol").toInt() + 1));
     kspread_selection.setTop((e.attribute("startRow").toInt() + 1));
     kspread_selection.setRight((e.attribute("endCol").toInt() + 1));
     kspread_selection.setBottom((e.attribute("endRow").toInt() + 1));
-    
+
     /* can't set it in the table -- must set it to a view */
     //	  table->setSelection(kspread_selection);
-    
+
     selection = selection.nextSibling();
   }
 }
@@ -362,7 +362,7 @@ void setObjectInfo(QDomNode * sheet, KSpreadSheet * table)
 {
   QDomNode gmr_objects =  sheet->namedItem("gmr:Objects");
   QDomNode gmr_cellcomment = gmr_objects.namedItem("gmr:CellComment");
-  while( !gmr_cellcomment.isNull() ) 
+  while( !gmr_cellcomment.isNull() )
   {
     QDomElement e = gmr_cellcomment.toElement(); // try to convert the node to an element.
     if (e.hasAttribute("Text"))
@@ -374,7 +374,7 @@ void setObjectInfo(QDomNode * sheet, KSpreadSheet * table)
         cell->setComment(e.attribute("Text"));
       }
     }
-    
+
     gmr_cellcomment  = gmr_cellcomment.nextSibling();
   }
 }
@@ -422,7 +422,7 @@ void convertToPen( QPen & pen, int style )
     break;
    case 9:
     pen.setStyle( Qt::DashDotLine );
-    pen.setWidth( 1 );    
+    pen.setWidth( 1 );
     break;
    case 10:
     pen.setStyle( Qt::DashDotLine );
@@ -455,7 +455,7 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
   QDomNode gmr_bottom = gmr_styleborder.namedItem("gmr:Bottom");
   QDomNode gmr_left = gmr_styleborder.namedItem("gmr:Left");
   QDomNode gmr_right = gmr_styleborder.namedItem("gmr:Right");
-                          
+
   // NoPen - no line at all. For example,
   // QPainter::drawRect() fills but does not
   // draw any explicit boundary
@@ -463,13 +463,13 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
   // - dashes, separated by a few
   // pixels. DotLine - dots, separated by a
   // few pixels. DashDotLine - alternately
-  // dots and dashes. DashDotDotLine - one dash, two dots, one dash, two dots... 
+  // dots and dashes. DashDotDotLine - one dash, two dots, one dash, two dots...
 
   if ( !gmr_left.isNull() )
   {
     QDomElement e = gmr_left.toElement(); // try to convert the node to an element.
     if ( e.hasAttribute( "Style" ) )
-    {                              
+    {
       int style = e.attribute( "Style" ).toInt();
 
       QPen pen;
@@ -492,7 +492,7 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
   {
     QDomElement e = gmr_right.toElement(); // try to convert the node to an element.
     if ( e.hasAttribute( "Style" ) )
-    {                              
+    {
       int style = e.attribute( "Style" ).toInt();
 
       QPen pen;
@@ -515,7 +515,7 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
   {
     QDomElement e = gmr_top.toElement(); // try to convert the node to an element.
     if ( e.hasAttribute( "Style" ) )
-    {                              
+    {
       int style = e.attribute( "Style" ).toInt();
 
       QPen pen;
@@ -538,7 +538,7 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
   {
     QDomElement e = gmr_bottom.toElement(); // try to convert the node to an element.
     if ( e.hasAttribute( "Style" ) )
-    {                              
+    {
       int style = e.attribute( "Style" ).toInt();
       QPen pen;
       convertToPen( pen, style );
@@ -560,7 +560,7 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
   {
     QDomElement e = gmr_diagonal.toElement(); // try to convert the node to an element.
     if ( e.hasAttribute( "Style" ) )
-    {                              
+    {
       int style = e.attribute( "Style" ).toInt();
       QPen pen;
       convertToPen( pen, style );
@@ -582,7 +582,7 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
   {
     QDomElement e = gmr_rev_diagonal.toElement(); // try to convert the node to an element.
     if ( e.hasAttribute( "Style" ) )
-    {                              
+    {
       int style = e.attribute( "Style" ).toInt();
 
       QPen pen;
@@ -604,8 +604,8 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
 }
 
 
-bool GNUMERICFilter::setType( KSpreadCell * kspread_cell, 
-                              QString const & formatString, 
+bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
+                              QString const & formatString,
                               QString & cell_content )
 {
   int i = 0;
@@ -622,26 +622,26 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
         int y, m, d;
         bool ok = true;
         int val  = cell_content.toInt( &ok );
-        
-        kdDebug() << "!!!   FormatString: Date: " << formatString << ", CellContent: " << cell_content 
+
+        kdDebug() << "!!!   FormatString: Date: " << formatString << ", CellContent: " << cell_content
                   << ", Double: " << val << endl;
         if ( !ok )
           return false;
-        
+
         GnumericDate::jul2greg( val, y, m, d );
         kdDebug() << "     num: " << val << ", y: " << y << ", m: " << m << ", d: " << d << endl;
-        
+
         date.setYMD( y, m, d );
       }
       else
         date = kspread_cell->valueDate();
 
-      KSpreadLayout::FormatType type;
+      KSpreadFormat::FormatType type;
       switch( i )
       {
        case 0:  type = KSpreadCell::date_format5;  break;
        case 1:  type = KSpreadCell::date_format6;  break;
-       case 2:  type = KSpreadCell::date_format1;  break;        
+       case 2:  type = KSpreadCell::date_format1;  break;
        case 3:  type = KSpreadCell::date_format2;  break;
        case 4:  type = KSpreadCell::date_format3;  break;
        case 5:  type = KSpreadCell::date_format4;  break;
@@ -668,7 +668,7 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
        default:
         type = KSpreadCell::ShortDate;
         break;
-        /* 12, 13, 14, 15, 20, 21 */                          
+        /* 12, 13, 14, 15, 20, 21 */
       }
 
       kdDebug() << "i: " << i << ", Type: " << type << ", Date: " << date.toString() << endl;
@@ -679,7 +679,7 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
       return true;
     }
   }
-                  
+
   for ( i = 0; cell_format_time[i] ; ++i )
   {
     if (formatString == cell_format_time[i])
@@ -690,19 +690,19 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
       {
         bool ok = true;
         double content = cell_content.toDouble( &ok );
-        
-        kdDebug() << "   FormatString: Time: " << formatString << ", CellContent: " << cell_content 
+
+        kdDebug() << "   FormatString: Time: " << formatString << ", CellContent: " << cell_content
                   << ", Double: " << content << endl;
-        
+
         if ( !ok )
           return false;
-        
+
         time = GnumericDate::getTime( content );
       }
       else
         time = kspread_cell->valueTime();
 
-      KSpreadLayout::FormatType type;
+      KSpreadFormat::FormatType type;
       switch( i )
       {
        case 0: type = KSpreadCell::Time_format1; break;
@@ -714,14 +714,14 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
        default:
         type = KSpreadCell::Time_format1; break;
       }
-                      
+
       kdDebug() << "i: " << i << ", Type: " << type << endl;
       kspread_cell->setValue( time );
       kspread_cell->setFormatType( type );
 
       return true;
     }
-  }              
+  }
 
   return false; // no date or time
 }
@@ -752,7 +752,7 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
         result = result.replace( n, list1[i].length(), list2[i] );
     }
   }
-  
+
   return result;
 }
 
@@ -797,7 +797,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
       fright = POINT_TO_MM( right.attribute( "Points" ).toFloat( &ok ) );
     if ( !ok )
       fright = 2.0;
-  }  
+  }
 
   QDomElement foot( printInfo.namedItem("gmr:Footer").toElement() );
   if ( !foot.isNull() )
@@ -832,9 +832,10 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   QDomElement size( printInfo.namedItem("gmr:paper").toElement() );
   if ( !size.isNull() )
     paperSize = size.text();
-
-  table->setPaperLayout( fleft, ftop, fright, fbottom,
+/* Laurent FIXME !!!!!!!!!!!!!!!!!!
+  table->setPaperFormat( fleft, ftop, fright, fbottom,
                          paperSize, orientation );
+*/
   table->setHeadFootLine( headLeft, headMiddle, headRight,
                           footLeft, footMiddle, footRight );
 }
@@ -843,33 +844,33 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
 {
   int l = formatString.length();
   int lastPos = 0;
-  
+
   if (formatString[l - 1] == '%')
   {
-    kspread_cell->setFormatType(KSpreadLayout::Percentage);
+    kspread_cell->setFormatType(KSpreadFormat::Percentage);
     kspread_cell->setFactor(100);
   }
   else if (formatString[0] == '$')
   {
-    kspread_cell->setFormatType(KSpreadLayout::Money); 
+    kspread_cell->setFormatType(KSpreadFormat::Money);
     kspread_cell->setCurrency( 1, "$" );
     lastPos = 1;
   }
   else if (formatString[0] == '£')
   {
-    kspread_cell->setFormatType(KSpreadLayout::Money);
+    kspread_cell->setFormatType(KSpreadFormat::Money);
     kspread_cell->setCurrency( 1, "£" );
     lastPos = 1;
   }
   else if (formatString[0] == '¥')
   {
-    kspread_cell->setFormatType(KSpreadLayout::Money);
+    kspread_cell->setFormatType(KSpreadFormat::Money);
     kspread_cell->setCurrency( 1, "¥" );
     lastPos = 1;
   }
   else if (formatString[0] == '¤')
   {
-    kspread_cell->setFormatType(KSpreadLayout::Money);
+    kspread_cell->setFormatType(KSpreadFormat::Money);
     kspread_cell->setCurrency( 1, "¤" );
     lastPos = 1;
   }
@@ -877,18 +878,18 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
   {
     if ((formatString[0] == '[') && (formatString[1] == '$'))
     {
-      int n = formatString.find(']');                            
+      int n = formatString.find(']');
       if (n != -1)
       {
-        QString currency = formatString.mid(2, n - 2);                              
-        kspread_cell->setFormatType(KSpreadLayout::Money);
+        QString currency = formatString.mid(2, n - 2);
+        kspread_cell->setFormatType(KSpreadFormat::Money);
         kspread_cell->setCurrency( 1, currency );
       }
       lastPos = ++n;
     }
     else if (formatString.find("E+0") != -1)
     {
-      kspread_cell->setFormatType(KSpreadLayout::Scientific);
+      kspread_cell->setFormatType(KSpreadFormat::Scientific);
     }
     else
     {
@@ -901,7 +902,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
       if (formatString.find("?/?") != -1)
       {
         // TODO: fixme!
-        kspread_cell->setFormatType( KSpreadLayout::fraction_three_digits );
+        kspread_cell->setFormatType( KSpreadFormat::fraction_three_digits );
         return;
       }
       // so it's nothing we want to understand:-)
@@ -910,12 +911,12 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
   }
 
   while (formatString[lastPos] == ' ')
-    ++lastPos;  
+    ++lastPos;
 
   // GetPrecision and decimal point, format of negative items...
-  
+
   // thousands separator
-  if (formatString[lastPos] == '#') 
+  if (formatString[lastPos] == '#')
   {
     bool sep = true;
     if (formatString[lastPos + 1] == ',')
@@ -923,39 +924,39 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
     else
       sep = false;
     // since KSpread 1.3
-    // kspread_cell->setThousandsSeparator( sep );                            
+    // kspread_cell->setThousandsSeparator( sep );
   }
 
   while (formatString[lastPos] == ' ')
-    ++lastPos;  
+    ++lastPos;
 
   int n = formatString.find( '.', lastPos );
-  if ( n != -1) 
+  if ( n != -1)
   {
     lastPos = n + 1;
     int precision = lastPos;
     while (formatString[precision] == '0')
       ++precision;
-    
+
     int tmp = lastPos;
     lastPos = precision;
     precision -= tmp;
-    
+
     kspread_cell->setPrecision( precision );
   }
 
   bool red = false;
   if (formatString.find("[RED]", lastPos) != -1)
-  { 
+  {
     red = true;
-    kspread_cell->setFloatColor( KSpreadLayout::NegRed );
+    kspread_cell->setFloatColor( KSpreadFormat::NegRed );
   }
   if ( formatString.find('(', lastPos) != -1 )
   {
     if ( red )
-      kspread_cell->setFloatColor( KSpreadLayout::NegRedBrackets );
+      kspread_cell->setFloatColor( KSpreadFormat::NegRedBrackets );
     else
-      kspread_cell->setFloatColor( KSpreadLayout::NegBrackets );
+      kspread_cell->setFloatColor( KSpreadFormat::NegBrackets );
   }
 }
 
@@ -964,7 +965,7 @@ void GNUMERICFilter::convertFormula( QString & formula ) const
   int n = formula.find( '=', 1 );
 
   // TODO: check if we do not screw something up here...
-  if ( n != -1 )  
+  if ( n != -1 )
     formula = formula.replace( n, 1, "==" );
 
   bool inQuote1 = false;
@@ -984,18 +985,18 @@ void GNUMERICFilter::convertFormula( QString & formula ) const
 void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
 {
   kdDebug() << "SetStyleInfo entered " << endl;
-  
+
   int row, column;
   QDomNode styles =  sheet->namedItem( "gmr:Styles" );
   if ( !styles.isNull() )
   {
     // Get a style region within that sheet.
     QDomNode style_region =  styles.namedItem( "gmr:StyleRegion" );
-    
+
     while ( !style_region.isNull() )
     {
       QDomElement e = style_region.toElement(); // try to convert the node to an element.
-      
+
       QDomNode style = style_region.namedItem( "gmr:Style" );
       QDomNode font = style.namedItem( "gmr:Font" );
       QDomNode gmr_styleborder = style.namedItem( "gmr:StyleBorder" );
@@ -1004,9 +1005,9 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
       int startRow = e.attribute( "startRow" ).toInt() + 1;
       int endRow   = e.attribute( "endRow" ).toInt() + 1;
 
-      kdDebug() << "------Style: " << startCol << ", " 
+      kdDebug() << "------Style: " << startCol << ", "
                 << startRow << " - " << endCol << ", " << endRow << endl;
-      
+
       if ( endCol - startCol > 200 || endRow - startRow > 200 )
       {
         style_region = style_region.nextSibling();
@@ -1016,7 +1017,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
       for ( column = startCol; column <= endCol; ++column )
       {
         for ( row = startRow; row <= endRow; ++row )
-        {          
+        {
           kdDebug() << "Cell: " << column << ", " << row << endl;
           KSpreadCell * kspread_cell = table->cellAt( column, row, false );
 
@@ -1028,11 +1029,11 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             continue;
           }
 
-          QDomElement style_element = style.toElement(); // try to convert the node to an element.          
+          QDomElement style_element = style.toElement(); // try to convert the node to an element.
 
           kdDebug() << "Style valid for kspread" << endl;
           kspread_cell = table->nonDefaultCell( column, row, false );
-          
+
           if (style_element.hasAttribute("Fore"))
           {
             QString color_string = style_element.attribute("Fore");
@@ -1040,7 +1041,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             convert_string_to_qcolor(color_string, &color);
             kspread_cell->setTextColor(color);
           }
-          
+
           if (style_element.hasAttribute("Back"))
           {
             QString color_string = style_element.attribute("Back");
@@ -1048,20 +1049,20 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             convert_string_to_qcolor(color_string, &color);
             kspread_cell->setBgColor(color);
           }
-          
+
           if (style_element.hasAttribute("PatternColor"))
           {
             QString color_string = style_element.attribute("PatternColor");
             QColor color;
             convert_string_to_qcolor(color_string, &color);
             kspread_cell->setBackGroundBrushColor( color );
-          }          
-          
+          }
+
           if (style_element.hasAttribute("Shade"))
           {
             /* Pattern's taken from: gnumeric's pattern.c */
             /* if "TODO" added: doesn't match exactly the gnumeric one */
-            
+
             QString shade = style_element.attribute("Shade");
             if (shade == "0")
             {
@@ -1072,7 +1073,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
               /* 1 Solid */
               kspread_cell->setBackGroundBrushStyle(Qt::SolidPattern);
               /* What should this be? */
-              
+
             }
             else if (shade == "2")
             {
@@ -1088,7 +1089,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             {
               kspread_cell->setBackGroundBrushStyle(Qt::Dense5Pattern);
               /* This should be 25%... All qt has is 37% */
-              
+
               /* 4 25% */
             }
             else if (shade == "5")
@@ -1100,7 +1101,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             {
               kspread_cell->setBackGroundBrushStyle(Qt::Dense7Pattern);
               /* 6 6.25% */
-              1;
+
             }
             else if (shade == "7")
             {
@@ -1122,7 +1123,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             {
               /* 10 Diagonal Stripe */
               kspread_cell->setBackGroundBrushStyle(Qt::FDiagPattern);
-            }            
+            }
             else if (shade == "11")
             {
               /* 11 Diagonal Crosshatch */
@@ -1207,7 +1208,6 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             if (halign_string == "1")
             {
               /* General: No equivalent in Kspread. */
-              1;
             }
             else if (halign_string == "2")
             {
@@ -1229,12 +1229,10 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             else if (halign_string == "32")
             {
               /* Justify: No equivalent in Kspread */
-              1;
             }
             else if (halign_string == "64")
             {
               /* Centered across selection*/
-              1;
             }
 
           }
@@ -1259,7 +1257,6 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             else if (valign_string == "8")
             {
               /* Justify: No equivalent in Kspread */
-              1;
             }
           }
 
@@ -1467,13 +1464,13 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
           kdWarning() << "No cells" << endl;
         }
 
-	while ( !cell.isNull() ) 
+	while ( !cell.isNull() )
         {
 	  value += 2;
 	  emit sigProgress(value);
 
 	  QDomElement e = cell.toElement(); // try to convert the node to an element.
-	  if ( !e.isNull() ) 
+	  if ( !e.isNull() )
           { // the node was really an element.
             kdDebug() << "New Cell " << endl;
 	    QDomNode content_node = cell.namedItem("gmr:Content");
@@ -1482,7 +1479,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
             {
 	      QDomElement content = content_node.toElement();
 
-	      if( !content.isNull() ) 
+	      if( !content.isNull() )
               { // the node was really an element.
 		column = e.attribute( "Col" ).toInt() + 1;
 		row    = e.attribute( "Row" ).toInt() + 1;
@@ -1538,12 +1535,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 		    // expr = exprID_dict[QString("1")];
 
 		    qDebug("FOO:%d %d", column, row);
-		    qDebug("%s", 
+		    qDebug("%s",
                            table->cellAt( column, row, false )->decodeFormula( expr, column, row ).latin1());
 		    qDebug("%s", expr);
 
-		    table->setText(row, column, 
-                                   table->cellAt( column, row, false )->decodeFormula( expr, column, row ), 
+		    table->setText(row, column,
+                                   table->cellAt( column, row, false )->decodeFormula( expr, column, row ),
                                    false);
 		  }
 	      }
@@ -1573,7 +1570,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
 	/* STYLE handling STOP */
         table->enableScrollBarUpdates( true );
-        
+
 	sheet = sheet.nextSibling();
         ++num;
       }

@@ -30,7 +30,7 @@
 #include <qfile.h>
 
 #include <kspread_map.h>
-#include <kspread_table.h>
+#include <kspread_sheet.h>
 #include <kspread_doc.h>
 
 #include <koDocumentInfo.h>
@@ -101,28 +101,28 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 			 cell_style.setAttribute("Fore",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
 		       }
 
-		     if (cell->align(currentcolumn,currentrow) ==  KSpreadLayout::Left)
+		     if (cell->align(currentcolumn,currentrow) ==  KSpreadFormat::Left)
 		       {
 			 cell_style.setAttribute("HAlign","2");
 		       }
-		     else if (cell->align(currentcolumn,currentrow) ==  KSpreadLayout::Right)
+		     else if (cell->align(currentcolumn,currentrow) ==  KSpreadFormat::Right)
 		       {
 			 cell_style.setAttribute("HAlign","4");
 		       }
-		     else if (cell->align(currentcolumn,currentrow) ==  KSpreadLayout::Center)
+		     else if (cell->align(currentcolumn,currentrow) ==  KSpreadFormat::Center)
 		       {
 			 cell_style.setAttribute("HAlign","8");
 		       }
 
-		     if (cell->alignY(currentcolumn,currentrow) ==  KSpreadLayout::Top)
+		     if (cell->alignY(currentcolumn,currentrow) ==  KSpreadFormat::Top)
 		       {
 			 cell_style.setAttribute("VAlign","1");
 		       }
-		     else if (cell->alignY(currentcolumn,currentrow) ==  KSpreadLayout::Bottom)
+		     else if (cell->alignY(currentcolumn,currentrow) ==  KSpreadFormat::Bottom)
 		       {
 			 cell_style.setAttribute("VAlign","2");
 		       }
-		     else if (cell->alignY(currentcolumn,currentrow) ==  KSpreadLayout::Middle)
+		     else if (cell->alignY(currentcolumn,currentrow) ==  KSpreadFormat::Middle)
 		       {
 			 cell_style.setAttribute("VAlign","4");
 		       }
@@ -460,7 +460,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
 
 	 /* Start COLS */
-	 ColumnLayout *cl=table->firstCol();
+	 ColumnFormat *cl=table->firstCol();
 	 while (cl)
 	   {
 	     QDomElement colinfo = gnumeric_doc.createElement("gmr:ColInfo");
@@ -474,13 +474,13 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
 	 /* End COLS */
 
-	 //	 RowLayout *rl=table->m_cells.firstCell;
+	 //	 RowFormat *rl=table->m_cells.firstCell;
 	 //   <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
 
 
 	 /* Start ROWS */
 
-	 RowLayout *rl=table->firstRow();
+	 RowFormat *rl=table->firstRow();
 	 while (rl)
 	   {
 	     QDomElement rowinfo = gnumeric_doc.createElement("gmr:RowInfo");
