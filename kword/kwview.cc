@@ -1794,6 +1794,9 @@ void KWView::updateReadWrite( bool readwrite )
         actionExtraCreateTemplate->setEnabled( true );
         actionViewPageMode->setEnabled( true );
         actionViewPreviewMode->setEnabled( true );
+        actionViewTextMode->setEnabled( true );
+        actionShowRuler->setEnabled( true );
+        actionEditFind->setEnabled( true );
         actionViewFormattingChars->setEnabled( true );
         actionViewFrameBorders->setEnabled( true );
         // that's not readonly, in fact, it modifies the doc
