@@ -49,6 +49,7 @@ class KEXIMAIN_EXPORT KexiNameDialog : public KDialogBase
 	protected slots:
 		void slotTextChanged();
 		virtual void accept();
+		void updateSize();
 	
 	protected:
 		void init();

@@ -61,12 +61,6 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 
 		void setNameText(const QString& name);
 
-		/*! By default empty values are not accepted. */
-		void setAcceptsEmptyValue( bool set );
-
-		/*! \return accepting empty values flag. */
-		bool acceptsEmptyValue() const;
-
 		/*! Sets i18n'ed warning message displayed when user leaves 'name' field
 		 without filling it (if acceptsEmptyValue() is false). 
 		 By default the message is equal "Please enter the name.". */
@@ -87,6 +81,16 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 		 \sa KexiMultiValidator::addSubvalidator(). */
 		void addNameSubvalidator( KexiValidator* validator, bool owned = true );
 
+		/*! \return true if name text cannot be empty (true by default). */
+		bool isNameRequired() const;
+
+		void setNameRequired( bool set );
+
+		/*! \return true if caption text cannot be empty (false by default). */
+		bool isCaptionRequired() const { return m_caption_required; }
+
+		void setCaptionRequired(bool set) { m_caption_required = set; }
+
 	public slots:
 		/*! Clears both name and caption. */
 		virtual void clear();
@@ -100,8 +104,11 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 		/*! Emitted whenever return key is pressed on name or caption label. */
 		void returnPressed();
 
-		/*! Emitted whenever caption or name text changes */
+		/*! Emitted whenever the caption or the name text changes */
 		void textChanged();
+
+		/*! Emitted whenever the message changes */
+		void messageChanged();
 
 	protected slots:
 		void slotNameTxtChanged(const QString&);
@@ -125,6 +132,7 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 
 		bool m_le_name_txtchanged_disable : 1;
 		bool m_le_name_autofill : 1;
+		bool m_caption_required : 1;
 
 		friend class KexiNameDialog;
 };

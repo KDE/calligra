@@ -50,6 +50,7 @@ void KexiNameWidget::init(
 {
 	m_le_name_txtchanged_disable = false;
 	m_le_name_autofill = true;
+	m_caption_required = false;
 
 	lyr = new QGridLayout( this, 1, 1, 0, 6, "lyr");
 
@@ -128,11 +129,11 @@ bool KexiNameWidget::empty() const
 	return le_name->text().isEmpty() || le_caption->text().stripWhiteSpace().isEmpty();
 }
 
-void KexiNameWidget::setAcceptsEmptyValue( bool set ) 
-{ m_validator->setAcceptsEmptyValue(set); }
+void KexiNameWidget::setNameRequired( bool set ) 
+{ m_validator->setAcceptsEmptyValue(!set); }
 
-bool KexiNameWidget::acceptsEmptyValue() const 
-{ return m_validator->acceptsEmptyValue(); }
+bool KexiNameWidget::isNameRequired() const 
+{ return !m_validator->acceptsEmptyValue(); }
 
 void KexiNameWidget::setCaptionText(const QString& capt)
 {
@@ -155,6 +156,7 @@ void KexiNameWidget::setMessageText(const QString& msg)
 		lbl_message->setText(msg.stripWhiteSpace()+"<br>");
 		lbl_message->show();
 	}
+	messageChanged();
 }
 
 QString KexiNameWidget::captionText() const
@@ -169,17 +171,15 @@ QString KexiNameWidget::nameText() const
 
 bool KexiNameWidget::checkValidity()
 {
-	if (!acceptsEmptyValue()) {
-		if (le_name->text().isEmpty()) {
-			KMessageBox::sorry(0, m_nameWarning);
-			le_name->setFocus();
-			return false;
-		}
-		if (le_caption->text().stripWhiteSpace().isEmpty()) {
-			KMessageBox::sorry(0, m_captionWarning);
-			le_caption->setFocus();
-			return false;
-		}
+	if (isNameRequired() && le_name->text().stripWhiteSpace().isEmpty()) {
+		KMessageBox::sorry(0, m_nameWarning);
+		le_name->setFocus();
+		return false;
+	}
+	if (isCaptionRequired() && le_caption->text().stripWhiteSpace().isEmpty()) {
+		KMessageBox::sorry(0, m_captionWarning);
+		le_caption->setFocus();
+		return false;
 	}
 	QString dummy, message, details;
 	if (m_validator->check(dummy, le_name->text(), message, details)

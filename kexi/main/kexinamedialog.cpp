@@ -64,19 +64,28 @@ void KexiNameDialog::init()
 	lyr->addItem(new QSpacerItem( 5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ), 1, 1);
 //	m_widget->captionLineEdit()->selectAll();
 //	m_widget->captionLineEdit()->setFocus();
-	resize( QSize(400, 140 + (m_widget->lbl_message->isVisible()?m_widget->lbl_message->height():0) )
-		.expandedTo(minimumSizeHint()) );
+	connect(m_widget,SIGNAL(messageChanged()),this, SLOT(updateSize()));
+	updateSize();
 	enableButtonOK( true );
 	slotTextChanged();
 	connect(m_widget, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
 
+void KexiNameDialog::updateSize()
+{
+//	resize( QSize(400, 140 + (m_widget->lbl_message->isVisible()?m_widget->lbl_message->height():0) )
+	resize( QSize(400, 140 + (!m_widget->lbl_message->text().isEmpty()?m_widget->lbl_message->height():0) )
+		.expandedTo(minimumSizeHint()) );
+//	updateGeometry();
+}
+
 void KexiNameDialog::slotTextChanged()
 {
-	if (!m_widget->acceptsEmptyValue()) {
-		enableButtonOK( !m_widget->captionText().isEmpty() 
-			&& !m_widget->nameText().isEmpty() );
-	}
+	bool enable = true;
+	if (m_widget->isNameRequired() && m_widget->nameText().isEmpty()
+		|| m_widget->isCaptionRequired() && m_widget->captionText().isEmpty())
+		enable = false;
+	enableButtonOK( enable );
 }
 
 void KexiNameDialog::accept()

@@ -1692,6 +1692,9 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 			d->nameDialog->widget()->addNameSubvalidator(
 				new Kexi::KexiDBObjectNameValidator(project()->dbConnection()->driver(), 0, "sub"));
 		}
+		else {
+			d->nameDialog->widget()->setMessageText( messageWhenAskingForName );
+		}
 		d->nameDialog->widget()->setCaptionText(dlg->partItem()->caption());
 		d->nameDialog->widget()->setNameText(dlg->partItem()->name());
 		d->nameDialog->setCaption(i18n("Save Object As"));
