@@ -136,7 +136,7 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, bool visible)
 
 bool QuerySchema::isFieldVisible(uint number) const
 {
-	return m_visibility.testBit(number);
+	return (number < fieldCount()) ? m_visibility.testBit(number) : false;
 }
 
 void QuerySchema::setFieldVisible(uint number, bool v)

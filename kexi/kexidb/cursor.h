@@ -298,6 +298,8 @@ class KEXI_DB_EXPORT Cursor: public Object
 		//! Usefull e.g. for value(int) method when we need access to schema def.
 		Field::Vector* m_fieldsExpanded;
 
+		QValueList<bool> m_detailedVisibility;
+
 	private:
 		bool m_readAhead : 1;
 		
