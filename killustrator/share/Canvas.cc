@@ -724,7 +724,7 @@ void Canvas::readGridProperties ()
 
   config->setGroup ("Helplines");
   helplinesAreOn = config->readBoolEntry ("showHelplines");
-  helplinesSnapIsOn = config->readBoolEntry ("snapTopHelplines");
+  helplinesSnapIsOn = config->readBoolEntry ("snapToHelplines");
   document->layerForHelplines ()->setVisible (helplinesAreOn);
 }
 
@@ -738,14 +738,14 @@ void Canvas::saveGridProperties ()
   config->writeEntry ("vGridDistance", (double) vGridDistance);
   config->writeEntry ("hGridDistance", (double) hGridDistance);
   config->writeEntry ("showGrid", gridIsOn);
-  config->writeEntry ("snapTopGrid", gridSnapIsOn);
+  config->writeEntry ("snapToGrid", gridSnapIsOn);
   config->writeEntry ("GridColor", mGridColor);
   //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
   //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
   
   config->setGroup ("Helplines");
   config->writeEntry ("showHelplines", helplinesAreOn);
-  config->writeEntry ("snapTopHelplines", helplinesSnapIsOn);
+  config->writeEntry ("snapToHelplines", helplinesSnapIsOn);
 
   config->sync ();
 }
