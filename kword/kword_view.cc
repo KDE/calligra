@@ -1,4 +1,4 @@
-;/* This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -2675,8 +2675,8 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
 			  KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
     r_vert = new KoRuler( left, paperWidget->viewport(), Qt::Vertical, layout, 0 );
     connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
-    connect( r_horz, SIGNAL( newLeftIndent( int ) ), paperWidget, SLOT( newLeftIndent( int ) ) );
-    connect( r_horz, SIGNAL( newFirstIndent( int ) ), paperWidget, SLOT( newFirstIndent( int ) ) );
+    connect( r_horz, SIGNAL( newLeftIndent( double ) ), paperWidget, SLOT( newLeftIndent( double ) ) );
+    connect( r_horz, SIGNAL( newFirstIndent( double ) ), paperWidget, SLOT( newFirstIndent( double ) ) );
     connect( r_horz, SIGNAL( openPageLayoutDia() ), view, SLOT( openPageLayoutDia() ) );
     connect( r_horz, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
     connect( r_vert, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
@@ -2849,7 +2849,7 @@ void KWordView::printDebug() {
     kdDebug() << "  newFrameBh  0=Reconnect, 1=NoFollowup, 2=Copy" <<endl;
     kdDebug() << "Framesets: " << doc->getNumFrameSets() <<endl;
     for (unsigned int iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
-        kdDebug() << "Frameset " << iFrameset << ": " << 
+        kdDebug() << "Frameset " << iFrameset << ": " <<
             doc->getFrameSet(iFrameset)->getName() << " (" << doc->getFrameSet(iFrameset) << ")" <<endl;
         kdDebug() << "Frameset has type:" << doc->getFrameSet(iFrameset)->getFrameType() << endl;
         kdDebug() << "Frameset has Info:" << doc->getFrameSet(iFrameset)->getFrameInfo() << endl;
@@ -2860,7 +2860,7 @@ void KWordView::printDebug() {
                 kdDebug() << " Frame " << j << " has NewFrameBehaviour: "<< doc->getFrameSet(iFrameset)->getFrame(j)->getNewFrameBehaviour() << endl;
             if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected())
                 kdDebug() << " Frame " << j << " on page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << " *" << endl;
-            else 
+            else
                 kdDebug() << " Frame " << j << " on page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << endl;
         }
     }

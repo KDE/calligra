@@ -524,9 +524,9 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 	repaint( false );
 	double _tmp = i_first;
 	// FIXME
-	emit newLeftIndent( double2Int(i_left) );
+	emit newLeftIndent( i_left );
 	i_first = _tmp;
-	emit newFirstIndent( double2Int(i_first) );
+	emit newFirstIndent( i_first );
     } else if ( d->action == A_TAB ) {
 	if ( d->canvas ) {
 	    QPainter p;
@@ -633,13 +633,13 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 				ip_first=right-left-15;
 				ip_first=ip_first<0 ? 0 : ip_first;
 				i_first=unZoomIt(static_cast<double>(ip_first));
-				emit newFirstIndent( double2Int(i_first) );
+				emit newFirstIndent( i_first );
 			    }
 			    if( ip_left > right-left-15 ) {
 				ip_left=right-left-15;
 				ip_left=ip_left<0 ? 0 : ip_left;
 				i_left=unZoomIt(static_cast<double>(ip_left));
-				emit newLeftIndent( double2Int(i_left) );
+				emit newLeftIndent( i_left );
 			    }
 			    d->oldMx = mx;
 			    d->oldMy = my;
@@ -663,13 +663,13 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 				ip_first=right-left-15;
 				ip_first=ip_first<0 ? 0 : ip_first;
 				i_first=unZoomIt(static_cast<double>(ip_first));
-				emit newFirstIndent( double2Int(i_first) );
+				emit newFirstIndent( i_first );
 			    }
 			    if( ip_left > right-left-15 ) {
 				ip_left=right-left-15;
 				ip_left=ip_left<0 ? 0 : ip_left;
 				i_left=unZoomIt(static_cast<double>(ip_left));
-				emit newLeftIndent( double2Int(i_left) );
+				emit newLeftIndent( i_left );
 			    }
 			    d->oldMx = mx;
 			    d->oldMy = my;

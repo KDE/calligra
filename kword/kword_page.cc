@@ -3553,7 +3553,7 @@ void KWPage::femProps()
 }
 
 /*================================================================*/
-void KWPage::newLeftIndent( int _left )
+void KWPage::newLeftIndent( double _left )
 {
     KWUnit u;
     u.setPT( _left );
@@ -3573,7 +3573,7 @@ void KWPage::newLeftIndent( int _left )
 }
 
 /*================================================================*/
-void KWPage::newFirstIndent( int _first )
+void KWPage::newFirstIndent( double _first )
 {
     KWUnit u;
     u.setPT( _first );

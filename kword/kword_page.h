@@ -235,8 +235,8 @@ public:
     void updateSelections();
 
 public slots:
-    void newLeftIndent( int _left );
-    void newFirstIndent( int _first );
+    void newLeftIndent( double _left );
+    void newFirstIndent( double _first );
     void frameSizeChanged( KoPageLayout );
     void mmEdit()
     { setMouseMode( MM_EDIT ); mmUncheckAll(); mm_menu->setItemChecked( mm_edit, true ); }

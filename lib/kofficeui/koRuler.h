@@ -117,8 +117,8 @@ public:
 
 signals:
     void newPageLayout( KoPageLayout );
-    void newLeftIndent( int );
-    void newFirstIndent( int );
+    void newLeftIndent( double );
+    void newFirstIndent( double );
     void openPageLayoutDia();
     void tabListChanged( QList<KoTabulator>* );
     void unitChanged( QString );
