@@ -2218,33 +2218,82 @@ void KPrGeometryPropertiesCommand::unexecute()
     }
 }
 
-
-KPrProtectContentCommand::KPrProtectContentCommand( const QString &_name, bool _protectContent,
-                                                    KPTextObject *_obj, KPresenterDoc *_doc )
-    : KNamedCommand( _name ),
-      protectContent( _protectContent ),
-      objects( _obj ),
-      doc(_doc)
+KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, QPtrList<KPObject> &objects,
+                                                    bool protectContent, KPresenterDoc *doc )
+: KNamedCommand( name )
+, m_protectContent( protectContent )
+, m_doc( doc )
 {
+    m_objects.setAutoDelete( false );
+
+    addObjects( objects );
+}
+
+KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, bool protectContent,
+                                                    KPTextObject *obj, KPresenterDoc *doc )
+: KNamedCommand( name )
+, m_protectContent( protectContent )
+, m_doc( doc )
+{
+    obj->incCmdRef();
+    m_objects.append( obj );
+    m_oldValues.append( obj->isProtectContent() );
 }
 
 KPrProtectContentCommand::~KPrProtectContentCommand()
 {
+    QPtrListIterator<KPTextObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+}
+
+void KPrProtectContentCommand::addObjects( const QPtrList<KPObject> &objects )
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current(); ++it )
+    {
+        if ( it.current()->getType() == OT_GROUP )
+        {
+            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            if ( obj )
+            {
+                addObjects( obj->objectList() );
+            }
+        }
+        else
+        {
+            KPTextObject *obj = dynamic_cast<KPTextObject*>( it.current() );
+            if( obj )
+            {
+                m_objects.append( obj );
+                obj->incCmdRef();
+
+                m_oldValues.append( obj->isProtectContent() );
+            }
+        }
+    }
 }
 
 void KPrProtectContentCommand::execute()
 {
-    objects->setProtectContent( protectContent );
-    doc->updateObjectSelected();
-    doc->updateRulerInProtectContentMode();
+    QPtrListIterator<KPTextObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->setProtectContent( m_protectContent );
+    }
+    m_doc->updateObjectSelected();
+    m_doc->updateRulerInProtectContentMode();
 
 }
 
 void KPrProtectContentCommand::unexecute()
 {
-    objects->setProtectContent( !protectContent );
-    doc->updateObjectSelected();
-    doc->updateRulerInProtectContentMode();
+    for ( unsigned int i = 0; i < m_objects.count(); i++ )
+    {
+        m_objects.at( i )->setProtectContent( m_oldValues[i] );
+    }
+    m_doc->updateObjectSelected();
+    m_doc->updateRulerInProtectContentMode();
 }
 
 KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPresenterDoc *_doc )
@@ -2330,33 +2379,99 @@ MarginsStruct::MarginsStruct( double _left, double _top, double _right, double _
 }
 
 
+KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, QPtrList<KPObject> &objects,
+                                                MarginsStruct newMargins, KPresenterDoc *doc,
+                                                KPrPage *page )
+: KNamedCommand( name )
+, m_newMargins( newMargins )
+, m_page( page )
+, m_doc( doc )
+{
+    m_objects.setAutoDelete( false );
+    m_oldMargins.setAutoDelete( false );
+
+    addObjects( objects );
+}
+
+
 KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin,
                                                 MarginsStruct _MarginsEnd, KPresenterDoc *_doc ) :
     KNamedCommand(name),
-    m_obj( _obj ),
-    m_marginsBegin(_MarginsBegin),
-    m_marginsEnd(_MarginsEnd),
+    m_newMargins(_MarginsEnd),
     m_doc( _doc )
 {
+    _obj->incCmdRef();
+    m_objects.append( _obj );
+    m_oldMargins.append( new MarginsStruct( _obj ) );
     m_page = m_doc->findPage( _obj );
 }
 
+
+KPrChangeMarginCommand::~KPrChangeMarginCommand()
+{
+    QPtrListIterator<KPTextObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+    m_oldMargins.setAutoDelete( true );
+    m_oldMargins.clear();
+}
+
+
+void KPrChangeMarginCommand::addObjects( const QPtrList<KPObject> &objects )
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current(); ++it )
+    {
+        if ( it.current()->getType() == OT_GROUP )
+        {
+            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            if ( obj )
+            {
+                addObjects( obj->objectList() );
+            }
+        }
+        else
+        {
+            KPTextObject *obj = dynamic_cast<KPTextObject*>( it.current() );
+            if( obj )
+            {
+                m_objects.append( obj );
+                obj->incCmdRef();
+
+                m_oldMargins.append( new MarginsStruct( obj ) );
+            }
+        }
+    }
+}
+
+
 void KPrChangeMarginCommand::execute()
 {
-    m_obj->setTextMargins( m_marginsEnd.leftMargin, m_marginsEnd.topMargin, m_marginsEnd.rightMargin, m_marginsEnd.bottomMargin);
-    m_obj->resizeTextDocument();
-    m_obj->kPresenterDocument()->layout(m_obj);
-    m_obj->kPresenterDocument()->repaint(m_obj);
+    QPtrListIterator<KPTextObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->setTextMargins( m_newMargins.leftMargin, m_newMargins.topMargin,
+                                      m_newMargins.rightMargin, m_newMargins.bottomMargin);
+        it.current()->resizeTextDocument();
+        it.current()->layout();
+    }
+    m_doc->repaint( false );
 
     m_doc->updateSideBarItem( m_page );
 }
 
 void KPrChangeMarginCommand::unexecute()
 {
-    m_obj->setTextMargins( m_marginsBegin.leftMargin, m_marginsBegin.topMargin, m_marginsBegin.rightMargin, m_marginsBegin.bottomMargin);
-    m_obj->resizeTextDocument();
-    m_obj->kPresenterDocument()->layout(m_obj);
-    m_obj->kPresenterDocument()->repaint(m_obj);
+    for ( unsigned int i = 0; i < m_objects.count(); i++ )
+    {
+        KPTextObject *object = m_objects.at( i );
+        MarginsStruct *marginsStruct = m_oldMargins.at( i );
+        object->setTextMargins( marginsStruct->leftMargin, marginsStruct->topMargin,
+                                marginsStruct->rightMargin, marginsStruct->bottomMargin);
+        object->resizeTextDocument();
+        object->layout();
+    }
+    m_doc->repaint( false );
 
     m_doc->updateSideBarItem( m_page );
 }

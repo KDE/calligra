@@ -953,16 +953,22 @@ protected:
 class KPrProtectContentCommand : public KNamedCommand
 {
 public:
-    KPrProtectContentCommand( const QString &_name, bool _protectContent, KPTextObject *_obj, KPresenterDoc *_doc );
+    KPrProtectContentCommand( const QString &name, QPtrList<KPObject> &objects,
+                              bool protectContent, KPresenterDoc *doc );
+    KPrProtectContentCommand( const QString &name, bool protectContent,
+                              KPTextObject *obj, KPresenterDoc *doc );
 
     ~KPrProtectContentCommand();
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    bool protectContent;
-    KPTextObject *objects;
-    KPresenterDoc * doc;
+    void addObjects( const QPtrList<KPObject> &objects );
+
+    QPtrList<KPTextObject> m_objects;
+    bool m_protectContent;
+    QValueList<bool> m_oldValues;
+    KPresenterDoc *m_doc;
 };
 
 class KPrCloseObjectCommand : public KNamedCommand
@@ -995,16 +1001,19 @@ struct MarginsStruct {
 class KPrChangeMarginCommand : public KNamedCommand
 {
 public:
+    KPrChangeMarginCommand( const QString &name, QPtrList<KPObject> &objects, MarginsStruct newMargins,
+                            KPresenterDoc *doc, KPrPage *page );
     KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin,
                             MarginsStruct _MarginsEnd, KPresenterDoc *_doc );
-    ~KPrChangeMarginCommand() {}
+    ~KPrChangeMarginCommand();
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    KPTextObject *m_obj;
-    MarginsStruct m_marginsBegin;
-    MarginsStruct m_marginsEnd;
+    void addObjects( const QPtrList<KPObject> &objects );
+    QPtrList<MarginsStruct> m_oldMargins;
+    QPtrList<KPTextObject> m_objects;
+    MarginsStruct m_newMargins;
     KPrPage *m_page;
     KPresenterDoc *m_doc;
 };
