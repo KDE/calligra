@@ -40,7 +40,8 @@ KWTableStyleCollection::KWTableStyleCollection()
 KWTableStyleCollection::~KWTableStyleCollection()
 {
    kdDebug() << "KWTableStyleCollection::destructor" << endl;
-
+    m_styleList.setAutoDelete( true );
+    m_styleList.clear();
     m_deletedStyles.clear();
 }
 
@@ -109,9 +110,9 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
     QDomElement element = parentElem.namedItem( "NAME" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) )
         m_name = element.attribute( "value" );
-    
+
     element = parentElem.namedItem( "PFRAMESTYLE" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) 
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
          && ( _doc->frameStyleCollection()->findFrameStyle( element.attribute( "name" ) ) ) )
         m_frameStyle = _doc->frameStyleCollection()->findFrameStyle( element.attribute( "name" ) );
     else {
@@ -128,9 +129,9 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
             m_frameStyle = _doc->frameStyleCollection()->frameStyleAt( 0 );
         }
     }
-    
+
     element = parentElem.namedItem( "PSTYLE" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) 
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
          && ( _doc->styleCollection()->findStyle( element.attribute( "name" ) ) ) )
         m_style = _doc->styleCollection()->findStyle( element.attribute( "name" ) );
     else {

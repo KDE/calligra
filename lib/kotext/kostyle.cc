@@ -33,7 +33,9 @@ KoStyleCollection::KoStyleCollection()
 
 KoStyleCollection::~KoStyleCollection()
 {
-    //todo
+    m_styleList.setAutoDelete( true );
+    m_styleList.clear();
+    m_deletedStyles.clear();
 }
 
 KoStyle* KoStyleCollection::findStyle( const QString & _name )

@@ -40,7 +40,8 @@ KWFrameStyleCollection::KWFrameStyleCollection()
 KWFrameStyleCollection::~KWFrameStyleCollection()
 {
     kdDebug() << "KWFrameStyleCollection::destructor" << endl;
-
+    m_styleList.setAutoDelete( true );
+    m_styleList.clear();
     m_deletedStyles.clear();
 }
 
@@ -102,7 +103,7 @@ KWFrameStyle::KWFrameStyle( const QString & name )
     m_name = name;
     m_backgroundColor.setColor( Qt::white );
 }
-    
+
 KWFrameStyle::KWFrameStyle( const QString & name, KWFrame * frame )
 {
     m_name = name;

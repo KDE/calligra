@@ -433,6 +433,7 @@ void KWTableStyleManager::addStyle(const QPtrList<KWTableStyle> &listStyle )
         noSignals=false;
 
     }
+
     updateGUI();
 }
 

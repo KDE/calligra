@@ -50,6 +50,8 @@ KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const 
 
 KWImportFrameTableStyleDia::~KWImportFrameTableStyleDia()
 {
+    m_frameStyleList.setAutoDelete(true);
+    m_tableStyleList.setAutoDelete(true);
     m_frameStyleList.clear();
     m_tableStyleList.clear();
 }
