@@ -68,7 +68,8 @@ protected slots:
     void chooseQuote1();
     void chooseQuote2();
     void slotAddEntry();
-};
+    void slotChangeItem( QListViewItem * );
+};	
 
 /******************************************************************/
 /* Class: KWAutoFormatEditDia                                     */

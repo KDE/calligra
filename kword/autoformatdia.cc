@@ -125,6 +125,9 @@ void KWAutoFormatDia::setupTab2()
     connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
              SLOT(slotEditEntry()) );
 
+    connect(m_pListView, SIGNAL(clicked ( QListViewItem * ) ),
+            SLOT(slotChangeItem( QListViewItem * ) ));
+
     QMap< QString, KWAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
         ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
@@ -142,6 +145,16 @@ void KWAutoFormatDia::setupTab2()
     pbEdit = new QPushButton( i18n( "Edit..." ), buttons );
     connect(pbEdit,SIGNAL(clicked()),this,SLOT(slotEditEntry()));
     ( void )new QWidget( buttons );
+    bool state=(m_pListView->currentItem()!=0);
+    pbRemove->setEnabled(state);
+    pbEdit->setEnabled(state);
+}
+
+void KWAutoFormatDia::slotChangeItem( QListViewItem * )
+{
+    bool state=(m_pListView->currentItem()!=0);
+    pbRemove->setEnabled(state);
+    pbEdit->setEnabled(state);
 }
 
 void KWAutoFormatDia::slotRemoveEntry()
@@ -159,6 +172,10 @@ void KWAutoFormatDia::refreshEntryList()
     m_pListView->clear();
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
         ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
+    m_pListView->setCurrentItem(m_pListView->firstChild ());
+    bool state=(m_pListView->currentItem()!=0);
+    pbRemove->setEnabled(state);
+    pbEdit->setEnabled(state);
 }
 
 void KWAutoFormatDia::addEntryList(const QString &key, KWAutoFormatEntry &_autoEntry)
@@ -319,16 +336,23 @@ void KWAutoFormatEditDia::chooseSpecialChar2()
 
 void KWAutoFormatEditDia::slotOk()
 {
-    if(lineEditReplace->text().isEmpty() || lineEditFind->text().isEmpty())
+    QString repl=lineEditReplace->text();
+    QString find=lineEditFind->text();
+    if(repl.isEmpty() || find.isEmpty())
     {
        KMessageBox::sorry( 0L, i18n( "An area is empty" ) );
        return;
     }
-    KWAutoFormatEntry tmp = KWAutoFormatEntry( lineEditReplace->text() );
+    if(repl==find)
+    {
+        KMessageBox::sorry( 0L, i18n( "Find string is the same as replace string!" ) );
+        return;
+    }
+    KWAutoFormatEntry tmp = KWAutoFormatEntry( repl );
     if(!replaceEntry)
-        parentWidget->addEntryList(lineEditFind->text(), tmp);
+        parentWidget->addEntryList(find, tmp);
     else
-        parentWidget->editEntryList(replaceEntryString,lineEditFind->text() ,tmp);
+        parentWidget->editEntryList(replaceEntryString,find ,tmp);
     accept();
 }
 
