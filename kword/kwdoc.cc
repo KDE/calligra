@@ -1873,10 +1873,14 @@ void KWDocument::loadFrameStyleTemplates( const QDomElement &stylesElem )
 
 void KWDocument::loadDefaultFrameStyleTemplates()
 {
-    KURL fsfile;
+    // ### FIXME: why is this not working for $KDE_LANG != "en_US" (#61007)
+    const QString fsfileName( locate("appdata", "framestyles.xml") );
 
-    if ( ! QFile::exists(locate("appdata", "framestyles.xml")) )
+    kdDebug(30003) << "File framestyles.xml searched at: " << fsfileName << endl;
+
+    if ( ! QFile::exists( fsfileName ) )
     {
+        kdWarning(30003) << "Cannot find any framestyles.xml" << endl;
         if (!m_frameStyleColl->findFrameStyle("Plain")) {
             KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
             standardFrameStyle->setBackgroundColor(QColor("white"));
@@ -1889,23 +1893,21 @@ void KWDocument::loadDefaultFrameStyleTemplates()
         return;
     }
 
-    fsfile.setPath( locate("appdata", "framestyles.xml") );
-
+    kdDebug(30003) << "File framestyles.xml found!" << endl;
+    
     // Open file and parse it
-    QFile in( fsfile.path() );
+    QFile in( fsfileName );
     if ( !in.open( IO_ReadOnly ) )
     {
         //i18n( "Couldn't open the file for reading (check read permissions)" );
+        kdWarning(30003) << "Couldn't open the file for reading (check read permissions)" << endl;
         return;
     }
-    in.at(0);
     QString errorMsg;
     int errorLine;
     int errorColumn;
     QDomDocument doc;
-    if ( doc.setContent( &in , &errorMsg, &errorLine, &errorColumn ) ) {
-    }
-    else
+    if ( ! doc.setContent( &in , &errorMsg, &errorLine, &errorColumn ) )
     {
         kdError (30003) << "Parsing Error! Aborting! (in KWDocument::loadDefaultFrameStyleTemplates())" << endl
                         << "  Line: " << errorLine << " Column: " << errorColumn << endl
