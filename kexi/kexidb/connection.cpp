@@ -953,7 +953,6 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	if (!fl)
 		return false;
 		
-	QValueList<QVariant> values;
 	if (!insertRecord(*fl, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
 		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText()) ))
 		createTable_ERR;
