@@ -102,6 +102,7 @@ KexiCreateProject::next()
 		QString user = m_pageAuth->data("user").toString();
 		QString pass = m_pageAuth->data("password").toString();
 		
+		kdDebug() << "Socket = " << socket << " Port = " << port << endl;
 		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket, port);
 	}
 

@@ -62,16 +62,15 @@ MySqlDB::queryRecord(QString querystatement, bool buffer)
 bool
 MySqlDB::connect(QString host, QString user, QString password, QString socket, QString port)
 {
-	const char* sock = 0;
 	kdDebug() << "MySqlDB::connect(" << host << "," << user << "," << password << ")" << endl;
 	
-	if(socket != "")
+	if(socket == "")
 	{
-		sock = socket.local8Bit();
+		socket = "/var/lib/mysql/mysql.sock"; // Default socket FIXME: This should be less hardcoded! ;)
 	}
 	
 	mysql_real_connect(m_mysql, host.local8Bit(), user.local8Bit(), password.local8Bit(), 0,
-		port.toUInt(), sock, 0);
+		port.toUInt(), socket, 0);
 	if(mysql_errno(m_mysql) == 0)
 	{
 		m_connected = true;
