@@ -434,7 +434,7 @@ void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QR
 {
     if ( bcType == BCT_PLAIN || backColor1 == backColor2 )
     {
-        //kdDebug() << "KPBackGround::drawBackColor (filling " << DEBUGRECT(crect) << ")" << endl;
+        //kdDebug(33001) << "KPBackGround::drawBackColor (filling " << DEBUGRECT(crect) << ")" << endl;
         _painter->fillRect( crect, QBrush( getBackColor1() ) );
     }
     else if ( backType == BT_COLOR || backType == BT_CLIPART ||
@@ -449,8 +449,8 @@ void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QR
 /*================================================================*/
 void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
 {
-    /*kdDebug() << "KPBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
-    kdDebug() << "mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
+    /*kdDebug(33001) << "KPBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
+    kdDebug(33001) << "mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
               << " crect=" << DEBUGRECT(crect) << endl;*/
     if ( !backImage.isNull() )
     {

@@ -42,7 +42,7 @@ KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoReplaceDia * dialog, KPTex
 
 KPrFindReplace::~KPrFindReplace()
 {
-    //kdDebug() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
+    //kdDebug(33001)() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
 }
 
 void KPrFindReplace::emitNewCommand(KCommand *cmd)

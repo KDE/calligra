@@ -230,7 +230,7 @@ void KPTextObjectIface::changeCaseOfText( const QString & caseType)
     }
 
     else
-        kdDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
+        kdDebug(33001)<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
     delete cmd;
 }
 

@@ -1819,7 +1819,7 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
     }
-    //kdDebug() << "KWPasteTextCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //kdDebug(33001) << "KWPasteTextCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
     //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
@@ -1851,7 +1851,7 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
                 first = false;
         }
     }
-    kdDebug() << "KPrPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
+    kdDebug(33001) << "KPrPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
     KPrTextDocument * textdoc = static_cast<KPrTextDocument *>(c->parag()->document());
 
     cursor.insert( text, true );
@@ -1865,7 +1865,7 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
     // shifted it down (side effect of splitAndInsertEmptyParag)
     firstParag = doc->paragAt( m_parag );
     KoTextParag * parag = static_cast<KoTextParag *>(firstParag);
-    //kdDebug() << "KPrPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
+    //kdDebug(33001) << "KPrPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
 
     //uint count = listParagraphs.count();
     QValueList<QDomElement>::ConstIterator it = listParagraphs.begin();
@@ -1912,7 +1912,7 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
         parag->setChanged( TRUE );
         textdoc->textObject()->loadVariable( listVariable,parag, m_idx );
         parag = static_cast<KoTextParag *>(parag->next());
-        //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
+        //kdDebug(33001) << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();
@@ -2417,7 +2417,7 @@ void KPrHideShowHeaderFooter::execute()
     else if( m_textObject==m_doc->header())
         m_doc->setHeader( newValue );
     else
-        kdDebug()<<"Error in void KPrHideShowHeaderFooter::execute()\n";
+        kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::execute()\n";
 }
 
 void KPrHideShowHeaderFooter::unexecute()
@@ -2427,7 +2427,7 @@ void KPrHideShowHeaderFooter::unexecute()
     else if( m_textObject==m_doc->header())
         m_doc->setHeader( !newValue );
     else
-        kdDebug()<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
+        kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
 
 }
 

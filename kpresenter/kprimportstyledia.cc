@@ -98,7 +98,7 @@ void KPrImportStyleDia::loadFile()
                     if ( !nameElem.isNull() )
                     {
                         sty->setName( nameElem.attribute("value") );
-                        //kdDebug(32001) << "KWStyle created  name=" << sty->name() << endl;
+                        //kdDebug(33001) << "KWStyle created  name=" << sty->name() << endl;
                     } else
                         kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 

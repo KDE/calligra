@@ -377,7 +377,7 @@ void KPGroupObject::setShadowDirection( ShadowDirection _direction )
 void KPGroupObject::setShadowColor( const QColor &_color )
 {
     KPObject::setShadowColor( _color );
-    kdDebug() << "KPGroupObject::setShadowColor"<<updateObjs << endl;
+    kdDebug(33001) << "KPGroupObject::setShadowColor"<<updateObjs << endl;
     if ( !updateObjs )
         return;
     QPtrListIterator<KPObject> it( objects );

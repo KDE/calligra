@@ -61,7 +61,7 @@
 
 KPrPage::KPrPage(KPresenterDoc *_doc )
 {
-    kdDebug()<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;;
+    kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;;
     m_doc=_doc;
     dcop=0;
     kpbackground= new KPBackGround( this );
@@ -76,7 +76,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
 
 KPrPage::~KPrPage()
 {
-    kdDebug()<<"Delete page :KPrPage::~KPrPage() :"<<this<<endl;
+    kdDebug(33001)<<"Delete page :KPrPage::~KPrPage() :"<<this<<endl;
     //delete object list.
     m_objectList.setAutoDelete( true );
     m_objectList.clear();

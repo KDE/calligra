@@ -211,7 +211,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
         if ( atrLs.at( i )->pwDiv > 0 )
         {
             pw = pwOrig / atrLs.at( i )->pwDiv;
-            px = (int)((double)(ex - pw) / (double)ex * px + pw / 2); 
+            px = (int)((double)(ex - pw) / (double)ex * px + pw / 2);
             py = (int)((double)(ey - pw) / (double)ey * py + pw / 2);
         }
         pntArray2.setPoint( i, px, py );

@@ -423,7 +423,7 @@ void KPWebPresentation::init()
     }
 
     title = i18n("Slideshow");
-    kdDebug() << "KPWebPresentation::init : " << doc->getPageNums() << " pages." << endl;
+    kdDebug(33001) << "KPWebPresentation::init : " << doc->getPageNums() << " pages." << endl;
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
     {
         if ( doc->isSlideSelected( i ) )

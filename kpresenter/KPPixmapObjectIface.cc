@@ -96,5 +96,5 @@ void KPPixmapObjectIface::setPictureMirrorType(const QString & _mirror)
     else if ( _mirror.lower()=="horizontalandvertical")
         obj->setPictureMirrorType( PM_HORIZONTALANDVERTICAL );
     else
-        kdDebug()<<" Error in setPictureMirrorType :"<<_mirror<<endl;
+        kdDebug(33001)<<" Error in setPictureMirrorType :"<<_mirror<<endl;
 }

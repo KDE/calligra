@@ -345,7 +345,7 @@ void KPresenterPageIface::setPageEffect(const QString &effect )
     else if(effect=="RANDOM")
         m_page->setPageEffect(PEF_RANDOM);
     else
-        kdDebug()<<"Error in setPageEffect\n";
+        kdDebug(33001)<<"Error in setPageEffect\n";
 }
 
 QString KPresenterPageIface::pageEffectString( )const
@@ -458,7 +458,7 @@ QString KPresenterPageIface::pageEffectString( )const
         return QString("RANDOM");
         break;
     default:
-        kdDebug()<<"Page effect not define!!!!!!\n";
+        kdDebug(33001)<<"Page effect not define!!!!!!\n";
         break;
     }
     return QString("");
@@ -626,7 +626,7 @@ void KPresenterPageIface::setBackGroundColorType(const QString &type)
         bctype=BCT_GPYRAMID;
     else
     {
-        kdDebug()<<"Error KPresenterPageIface::setBackGroundColorType\n";
+        kdDebug(33001)<<"Error KPresenterPageIface::setBackGroundColorType\n";
         return;
     }
 

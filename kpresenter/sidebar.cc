@@ -245,7 +245,7 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
 // add a thumb item without recreating all thumbs
 void ThumbBar::addItem( int pos )
 {
-    kdDebug()<< "ThumbBar::addItem" << endl;
+    kdDebug(33001)<< "ThumbBar::addItem" << endl;
     int page = 0;
     for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         // find page which should move
@@ -317,7 +317,7 @@ void ThumbBar::moveItem( int oldPos, int newPos )
 
 void ThumbBar::removeItem( int pos )
 {
-    kdDebug()<< "ThumbBar::removeItem" << endl;
+    kdDebug(33001)<< "ThumbBar::removeItem" << endl;
     int page = 0;
     bool change = false;
     QIconViewItem *itemToDelete = 0;
@@ -455,7 +455,7 @@ void Outline::updateItem( int pagenr /* 0-based */)
 
 void Outline::addItem( int pos )
 {
-    kdDebug()<< "Outline::addItem" << endl;
+    kdDebug(33001)<< "Outline::addItem" << endl;
     // still use rebuildItems as I had no good idea to do it :-) tz
     rebuildItems();
 }
@@ -489,14 +489,14 @@ void Outline::moveItem( int oldPos, int newPos )
 
 void Outline::removeItem( int pos )
 {
-    kdDebug()<< "Outline::removeItem" << endl;
+    kdDebug(33001)<< "Outline::removeItem" << endl;
     int page = 0;
     bool updatePageNum = false;
 
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it ) {
         if ( page == pos ) {
-            kdDebug() << "Page " << it.current()->text(0) << " removed" << endl;
+            kdDebug(33001) << "Page " << it.current()->text(0) << " removed" << endl;
             if ( it.current()->nextSibling())
                 updatePageNum = true;
             delete it.current();

@@ -326,8 +326,8 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect ) const
     {
         //kdDebug(33001) << "KPrCanvas::drawBackground drawing bg for page " << i+1 << " editMode=" << editMode << endl;
         QRect pageRect = m_activePage->getZoomPageRect();
-        //kdDebug() << "KPrCanvas::drawBackground pageRect=" << DEBUGRECT(pageRect) << endl;
-        //kdDebug() << "KPrCanvas::drawBackground rect=" << DEBUGRECT(rect) << endl;
+        //kdDebug(33001) << "KPrCanvas::drawBackground pageRect=" << DEBUGRECT(pageRect) << endl;
+        //kdDebug(33001) << "KPrCanvas::drawBackground rect=" << DEBUGRECT(rect) << endl;
         if ( rect.intersects( pageRect ) )
         {
             m_activePage->background()->draw( painter, m_view->zoomHandler(), rect, true );
@@ -4911,7 +4911,7 @@ void KPrCanvas::copyObjs()
 
     QStoredDrag * drag = new QStoredDrag( "application/x-kpresenter-selection" );
     drag->setEncodedData( doc.toCString() );
-    kdDebug()<<"doc.toCString() :"<<doc.toCString()<<endl;
+    kdDebug(33001)<<"doc.toCString() :"<<doc.toCString()<<endl;
     QApplication::clipboard()->setData( drag );
 }
 

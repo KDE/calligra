@@ -468,7 +468,7 @@ void KPresenterView::print( KPrinter &prt )
     m_canvas->deSelectAllObj();
     QPainter painter;
     painter.begin( &prt );
-    kdDebug() << "KPresenterView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
+    kdDebug(33001) << "KPresenterView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
                    << "," << (double)metrics.logicalDpiY() / (double)dpiY << endl;
     painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
                    (double)metrics.logicalDpiY() / (double)dpiY );
@@ -485,7 +485,7 @@ void KPresenterView::print( KPrinter &prt )
 
 
     m_canvas->repaint();
-    kdDebug() << "KPresenterView::print zoom&res reset" << endl;
+    kdDebug(33001) << "KPresenterView::print zoom&res reset" << endl;
 }
 
 /*===============================================================*/
@@ -1956,7 +1956,7 @@ void KPresenterView::slotCounterStyleSelected()
     if ( actionName.startsWith( "counterstyle_" ) )
     {
         QString styleStr = actionName.mid(13);
-        //kdDebug() << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
+        //kdDebug(33001) << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
         KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
         KoParagCounter c;
         if ( style == KoParagCounter::STYLE_NONE )
@@ -4742,7 +4742,7 @@ void KPresenterView::nextPage()
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
  	return;
 
-    //kdDebug()<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
+    //kdDebug(33001)<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
     skipToPage( currPg+1 );
 }
 
@@ -5307,7 +5307,7 @@ void KPresenterView::spellCheckerReady()
     for ( unsigned int i = m_spell.spellCurrTextObjNum + 1; i < m_spell.textObject.count(); i++ ) {
         KPTextObject *textobj = m_spell.textObject.at( i );
         m_spell.spellCurrTextObjNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
-        //kdDebug() << "KPresenterView::spellCheckerReady spell-checking frameset " << spellCurrTextObjNum << endl;
+        //kdDebug(33001) << "KPresenterView::spellCheckerReady spell-checking frameset " << spellCurrTextObjNum << endl;
 
         KoTextParag * p = textobj->textDocument()->firstParag();
         QString text;
@@ -5326,7 +5326,7 @@ void KPresenterView::spellCheckerReady()
         m_spell.kspell->check( text );
         return;
     }
-    //kdDebug() << "KPresenterView::spellCheckerReady done" << endl;
+    //kdDebug(33001) << "KPresenterView::spellCheckerReady done" << endl;
     if(!switchInOtherPage(i18n( "Do you want to spellcheck new page?")))
     {
         // Done
@@ -5350,7 +5350,7 @@ void KPresenterView::spellCheckerReady()
 
 void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {
-    //kdDebug() << "KPresenterView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    //kdDebug(33001) << "KPresenterView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
     KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
     Q_ASSERT( textobj );
     if ( !textobj ) return;
@@ -5362,13 +5362,13 @@ void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringL
     }
     Q_ASSERT( p );
     if ( !p ) return;
-    //kdDebug() << "KPresenterView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+    //kdDebug(33001) << "KPresenterView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
     textobj->highlightPortion( p, pos, old.length(), m_canvas );
 }
 
 void KPresenterView::spellCheckerCorrected( const QString &old, const QString &corr, unsigned int pos )
 {
-    //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    //kdDebug(33001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 
     KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
     Q_ASSERT( textobj );
@@ -5478,7 +5478,7 @@ void KPresenterView::showCounter( KoParagCounter &c )
 {
     QString styleStr("counterstyle_");
     styleStr += QString::number( c.style() );
-    //kdDebug() << "KWView::showCounter styleStr=" << styleStr << endl;
+    //kdDebug(33001) << "KWView::showCounter styleStr=" << styleStr << endl;
     KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr.latin1() ) );
     Q_ASSERT( act );
     if ( act )
@@ -6015,7 +6015,7 @@ void KPresenterView::editReplace()
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     if ( dialog.exec() == QDialog::Accepted )
     {
-        kdDebug() << "KPresenterView::editReplace" << endl;
+        kdDebug(33001) << "KPresenterView::editReplace" << endl;
         m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,list);
         doFindReplace();
     }
@@ -6180,7 +6180,7 @@ void KPresenterView::setZoom( int zoom, bool updateViews )
     m_pKPresenterDoc->updateZoomRuler();
 
     // Also set the zoom in KoView (for embedded views)
-    //kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
+    //kdDebug(33001) << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
     KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
     setRanges();
 }
@@ -6202,7 +6202,7 @@ int KPresenterView::getPresentationDuration() const
 
 void KPresenterView::setPresentationDuration( int _pgNum )
 {
-    // kdDebug() << "KPresenterView::setPresentationDuration( " << _pgNum << " )" << endl;
+    // kdDebug(33001) << "KPresenterView::setPresentationDuration( " << _pgNum << " )" << endl;
     *m_presentationDurationList.at( _pgNum ) = getPresentationDuration();
     restartPresentationDuration();
 }

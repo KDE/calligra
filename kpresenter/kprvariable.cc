@@ -37,8 +37,8 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
     switch(type) {
     case VT_PGNUM:
     {
-        kdDebug()<<" subtype == KoPgNumVariable::VST_CURRENT_SECTION :"<<(subtype == KoPgNumVariable::VST_CURRENT_SECTION)<<endl;
-        kdDebug()<<" varFormat :"<<varFormat<<endl;
+        kdDebug(33001)<<" subtype == KoPgNumVariable::VST_CURRENT_SECTION :"<<(subtype == KoPgNumVariable::VST_CURRENT_SECTION)<<endl;
+        kdDebug(33001)<<" varFormat :"<<varFormat<<endl;
         if ( !varFormat )
             varFormat = (subtype == KoPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
         return new KPrPgNumVariable( textdoc,subtype, varFormat,this,m_doc  );

@@ -217,7 +217,7 @@ LineEnd lineEndBeginFromString( const QString & type )
     else if (type=="DOUBLE_LINE_ARROW")
         return L_DOUBLE_LINE_ARROW;
     else
-        kdDebug()<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
+        kdDebug(33001)<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
     return L_NORMAL;
 }
 

@@ -228,7 +228,7 @@ void KPresenterObjectIface::setEffect(const QString & effect)
     else if(effect=="WIPE_BOTTOM")
         obj->setEffect(EF_WIPE_BOTTOM);
     else
-        kdDebug()<<"Error : setEffect()\n";
+        kdDebug(33001)<<"Error : setEffect()\n";
 }
 
 void KPresenterObjectIface::setEffect3(const QString & effect)
