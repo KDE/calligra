@@ -22,28 +22,31 @@
 
 #include "kexi_global.h"
 
-KEXICORE_EXPORT unsigned int Kexi::version()
+namespace Kexi {
+
+KEXICORE_EXPORT unsigned int version()
 {
     return KEXI_VERSION;
 }
 
-KEXICORE_EXPORT unsigned int Kexi::versionMajor()
+KEXICORE_EXPORT unsigned int versionMajor()
 {
     return KEXI_VERSION_MAJOR;
 }
 
-KEXICORE_EXPORT unsigned int Kexi::versionMinor()
+KEXICORE_EXPORT unsigned int versionMinor()
 {
     return KEXI_VERSION_MINOR;
 }
 
-KEXICORE_EXPORT unsigned int Kexi::versionRelease()
+KEXICORE_EXPORT unsigned int versionRelease()
 {
     return KEXI_VERSION_RELEASE;
 }
 
-KEXICORE_EXPORT const char *Kexi::versionString()
+KEXICORE_EXPORT const char *versionString()
 {
     return KEXI_VERSION_STRING;
 }
 
+}
