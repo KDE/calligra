@@ -90,6 +90,8 @@ FT_Outline_Funcs OutlineMethods =
 VText::VText( VObject* parent, VState state )
 	: VObject( parent, state )
 {
+	m_stroke = new VStroke( this );
+	m_fill = new VFill();
 }
 
 
@@ -107,6 +109,10 @@ VText::VText( KarbonView *view, const QFont &font, const QString &text )
 VText::VText( const VText& text )
 	: VObject( text ), m_text( text.m_text )
 {
+	m_stroke = new VStroke( *text.m_stroke );
+	m_stroke->setParent( this );
+	m_fill = new VFill( *text.m_fill );
+
 	// copy glyphs
 	VObjectListIterator itr = text.m_glyphs;
 	for ( ; itr.current() ; ++itr )

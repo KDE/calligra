@@ -22,17 +22,9 @@ VObject::VObject( VObject* parent, VState state )
 
 VObject::VObject( const VObject& obj )
 {
-	// copy a stroke if obj has one:
-	if( obj.m_stroke )
-	{
-		m_stroke = new VStroke( *obj.m_stroke );
-		m_stroke->setParent( this );
-	}
-
-	// copy a fill if obj has one:
-	if( obj.m_fill )
-		m_fill = new VFill( *obj.m_fill );
-
+	m_stroke = 0L;
+	m_fill = 0L;
+	
 	m_parent = obj.m_parent;
 	m_state = obj.m_state;
 

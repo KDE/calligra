@@ -7,9 +7,11 @@
 
 #include <koRect.h>
 
+#include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
 #include "vpath.h"
+#include "vstroke.h"
 #include "vvisitor.h"
 
 #include <kdebug.h>
@@ -18,11 +20,17 @@
 VGroup::VGroup( VObject* parent, VState state )
 	: VObject( parent, state )
 {
+	m_stroke = new VStroke( this );
+	m_fill = new VFill();
 }
 
 VGroup::VGroup( const VGroup& group )
 	: VObject( group )
 {
+	m_stroke = new VStroke( *group.m_stroke );
+	m_stroke->setParent( this );
+	m_fill = new VFill( *group.m_fill );
+
 	VObjectListIterator itr = group.m_objects;
 	for ( ; itr.current() ; ++itr )
 		append( itr.current()->clone() );

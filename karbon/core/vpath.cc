@@ -10,6 +10,7 @@
 #include <koPoint.h>
 #include <koRect.h>
 
+#include "vfill.h"
 #include "vpainter.h"
 #include "vpath.h"
 #include "vsegment.h"
@@ -22,6 +23,9 @@
 VPath::VPath( VObject* parent, VState state )
 	: VObject( parent, state )
 {
+	m_stroke = new VStroke( this );
+	m_fill = new VFill();
+
 	m_segmentLists.setAutoDelete( true );
 
 	// add an initial segmentlist:
@@ -34,6 +38,10 @@ VPath::VPath( VObject* parent, VState state )
 VPath::VPath( const VPath& path )
 	: VObject( path )
 {
+	m_stroke = new VStroke( *path.m_stroke );
+	m_stroke->setParent( this );
+	m_fill = new VFill( *path.m_fill );
+
 	m_segmentLists.setAutoDelete( true );
 
 	QPtrListIterator<VSegmentList> itr( path.m_segmentLists );
