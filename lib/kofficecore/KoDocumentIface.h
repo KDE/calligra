@@ -49,7 +49,7 @@ k_dcop:
    */
   QString url();
 
-private:
+protected:
   KoDocument * m_pDoc;
 };
 
