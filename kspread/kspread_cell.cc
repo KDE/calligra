@@ -76,8 +76,8 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, int _column, int _row )
   m_dExtraWidth = 0.0;
   m_dExtraHeight = 0.0;
   m_iPrecision = -1;
-  m_iOutTextWidth = 0;
-  m_iOutTextHeight = 0;
+  m_dOutTextWidth = 0.0;
+  m_dOutTextHeight = 0.0;
 
   m_nbLines=0;
   m_Validity=0;
@@ -682,20 +682,21 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // in which case m_iRow and m_iColumn are 0 and 0, but col and row
     // are the real coordinates of the cell.
 
-    if (!testFlag(Flag_LayoutDirty))
+    if ( !testFlag( Flag_LayoutDirty ) )
       return;
 
     m_nbLines = 0;
-    clearFlag(Flag_CellTooShort);
+    clearFlag( Flag_CellTooShort );
 
     freeAllObscuredCells();
     /* but reobscure the ones that are forced obscuring */
-    forceExtraCells(m_iColumn, m_iRow, m_iMergedXCells, m_iMergedYCells);
+    forceExtraCells( m_iColumn, m_iRow, m_iMergedXCells, m_iMergedYCells );
 
     ColumnLayout *cl1 = m_pTable->columnLayout( column() );
     RowLayout *rl1 = m_pTable->rowLayout( row() );
-    if( cl1->isHide() || (rl1->height()<=2))
+    if( cl1->isHide() || ( rl1->dblHeight() <= m_pTable->doc()->unzoomItY( 2.0 ) ) )
         return;
+
     /**
      * RichText
      */
@@ -755,16 +756,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         /* we may have used extra cells, but only cells that we were already
            merged to.
         */
-        if (m_iExtraXCells < m_iMergedXCells)
+        if( m_iExtraXCells < m_iMergedXCells )
         {
-          m_iExtraXCells = m_iMergedXCells;
+            m_iExtraXCells = m_iMergedXCells;
         }
         else
         {
-          m_dExtraWidth = max_width;
+            m_dExtraWidth = max_width;
         }
         // Occupy the needed extra cells in vertical direction
-        double max_height = height( 0 );
+        double max_height = dblHeight( 0 );
         int r = _row;
         ende = ( max_height >= h );
         for( r = _row + 1; !ende && r < _row + 500; ++r )
@@ -796,15 +797,15 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         /* we may have used extra cells, but only cells that we were already
            merged to.
         */
-        if (m_iExtraYCells < m_iMergedYCells)
+        if( m_iExtraYCells < m_iMergedYCells )
         {
-          m_iExtraYCells = m_iMergedYCells;
+            m_iExtraYCells = m_iMergedYCells;
         }
         else
         {
-          m_dExtraHeight = max_height;
+            m_dExtraHeight = max_height;
         }
-        clearFlag(Flag_LayoutDirty);
+        clearFlag( Flag_LayoutDirty );
         return;
     }
 
@@ -821,25 +822,21 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     // Determine the correct font
     //
-    KSpreadConditional condition;
-    if( conditions.currentCondition(condition) &&
-	!m_pTable->getShowFormula() )
-    {
-        _painter.setFont( condition.fontcond );
-    }
-    else
-    {
-        _painter.setFont( textFont(_col,_row ) );
-    }
+    conditionAlign( _painter, _col, _row );
+
+    //Adjust fontsize to zoomlevel
+    QFont tmpFont = _painter.font();
+    tmpFont.setPointSizeFloat( m_pTable->doc()->zoomedResolutionY() * tmpFont.pointSizeFloat() );
+    _painter.setFont( tmpFont );
+
     // Calculate text dimensions
-    textSize(_painter);
+    textSize( _painter );
 
     QFontMetrics fm = _painter.fontMetrics();
 
     //
     // Calculate the size of the cell
     //
-
     RowLayout *rl = m_pTable->rowLayout( m_iRow );
     ColumnLayout *cl = m_pTable->columnLayout( m_iColumn );
 
@@ -848,7 +845,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     // Calculate the extraWidth and extraHeight if we are forced to.
     /* TODO - use m_dExtraWidth/height here? Isn't it already calculated?*/
-    if ( testFlag(Flag_ForceExtra) )
+    if ( testFlag( Flag_ForceExtra ) )
     {
         for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
         {
@@ -861,19 +858,18 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             h += rl->dblHeight() ;
         }
     }
-
     m_dExtraWidth = w;
     m_dExtraHeight = h;
 
     // Some space for the little button of the combo box
     if ( m_style == ST_Select )
-        w -= 16;
+        w -= 16.0;
 
     // Do we need to break the line into multiple lines and are we allowed to
     // do so?
     int lines = 1;
-    if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
-         rightBorderWidth( _col, _row ) && multiRow(_col, _row ) )
+    if ( m_dOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) -
+         rightBorderWidth( _col, _row ) && multiRow( _col, _row ) )
     {
         // copy of m_strOutText
         QString o = m_strOutText;
@@ -888,25 +884,26 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             m_strOutText = "";
             do
             {
-                pos = o.find(' ',pos );
-                int width = fm.width( m_strOutText.mid( start, (pos1-start) ) + o.mid( pos1, (pos-pos1) ) );
+                pos = o.find( ' ', pos );
+                double width = m_pTable->doc()->unzoomItX( fm.width( m_strOutText.mid( start, (pos1-start) ) + 
+                                                                     o.mid( pos1, (pos-pos1) ) ) );
 
-                if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) - rightBorderWidth( _col, _row ) )
+                if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
                 {
-                    m_strOutText += o.mid(pos1,(pos-pos1));
+                    m_strOutText += o.mid( pos1, pos - pos1 );
                     pos1 = pos;
                 }
                 else
                 {
-                    if(o.at(pos1)==' ')
+                    if( o.at( pos1 ) == ' ' )
                         pos1 = pos1 + 1;
-                    if(pos1!=0 && pos!=-1)
+                    if( pos1 != 0 && pos != -1 )
                     {
-                        m_strOutText += "\n" + o.mid( pos1, ( pos - pos1 ) );
+                        m_strOutText += "\n" + o.mid( pos1, pos - pos1 );
                         lines++;
                     }
                     else
-                        m_strOutText += o.mid( pos1, ( pos - pos1 ) );
+                        m_strOutText += o.mid( pos1, pos - pos1 );
                     start = pos1;
                     pos1 = pos;
                 }
@@ -915,16 +912,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             while( o.find( ' ', pos ) != -1 );
         }
 
-        m_iOutTextHeight *= lines;
+        m_dOutTextHeight *= lines;
 
         m_nbLines = lines;
-        m_iTextX = 0;
+        m_dTextX = 0.0;
 
         // Calculate the maximum width
         QString t;
         int i;
         int pos = 0;
-        m_iOutTextWidth = 0;
+        m_dOutTextWidth = 0.0;
         do
         {
             i = m_strOutText.find( "\n", pos );
@@ -935,36 +932,36 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 t = m_strOutText.mid( pos, i - pos );
                 pos = i + 1;
             }
-            int tw = fm.width( t );
-            if ( tw > m_iOutTextWidth )
-                m_iOutTextWidth = tw;
+            double tw = m_pTable->doc()->unzoomItX( fm.width( t ) );
+            if ( tw > m_dOutTextWidth )
+                m_dOutTextWidth = tw;
         }
         while ( i != -1 );
     }
-
-    // Calculate m_iTextX and m_iTextY
-    offsetAlign(_col,_row);
-
     m_fmAscent = fm.ascent();
-    int indent=0;
+
+    // Calculate m_dTextX and m_dTextY
+    offsetAlign( _col, _row );
+
+    double indent = 0.0;
     int a = defineAlignX();
     //apply indent if text is align to left not when text is at right or middle
-    if(  a==KSpreadCell::Left && !isEmpty())
-        indent=getIndent(column(),row());
+    if( a == KSpreadCell::Left && !isEmpty() )
+        indent = m_pTable->doc()->unzoomItX( getIndent( column(), row() ) );
 
-    if( verticalText( column(), row() ) ||getAngle(column(), row())!=0)
+    if( verticalText( column(), row() ) || getAngle( column(), row() ) != 0 )
     {
        RowLayout *rl = m_pTable->rowLayout( row() );
 
-       if(m_iOutTextHeight>=rl->height())
+       if( m_dOutTextHeight >= rl->dblHeight() )
        {
-         setFlag(Flag_CellTooShort);
+         setFlag( Flag_CellTooShort );
        }
     }
 
     // Do we have to occupy additional cells right hand ?
-    if ( m_iOutTextWidth+indent > w - 2 * BORDER_SPACE -
-         leftBorderWidth( _col, _row) - rightBorderWidth( _col, _row ) )
+    if ( m_dOutTextWidth + indent > w - 2 * BORDER_SPACE -
+         leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
     {
       int c = m_iColumn;
       int end = 0;
@@ -975,12 +972,12 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         KSpreadCell *cell = m_pTable->visibleCellAt( c + 1, m_iRow );
         if ( cell->isEmpty() )
         {
-          w += cl2->width() - 1;
+          w += cl2->dblWidth() - 1;
           c++;
 
           // Enough space ?
-          if ( m_iOutTextWidth+indent <= w - 2 * BORDER_SPACE -
-               leftBorderWidth( _col, _row) - rightBorderWidth( _col, _row ) )
+          if ( m_dOutTextWidth + indent <= w - 2 * BORDER_SPACE -
+               leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
             end = 1;
         }
         // Not enough space, but the next cell is not empty
@@ -996,10 +993,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
          has something to do with calculating how much room the text needs in
          those cases?
       */
-      if ( align(_col,_row) == KSpreadCell::Left ||
-           align(_col,_row) == KSpreadCell::Undefined)
+      if( align( _col, _row ) == KSpreadCell::Left ||
+          align( _col, _row ) == KSpreadCell::Undefined )
       {
-        if (c - m_iColumn > m_iMergedXCells)
+        if( c - m_iColumn > m_iMergedXCells )
         {
           m_iExtraXCells = c - m_iColumn;
           m_dExtraWidth = w;
@@ -1009,22 +1006,22 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             cell->obscure( this );
           }
           //Not enough space
-          if(end==-1)
+          if( end == -1 )
           {
-            setFlag(Flag_CellTooShort);
+            setFlag( Flag_CellTooShort );
           }
         }
         else
         {
-          setFlag(Flag_CellTooShort);
+          setFlag( Flag_CellTooShort );
         }
       }
       else
       {
-        setFlag(Flag_CellTooShort);
+        setFlag( Flag_CellTooShort );
       }
     }
-    clearFlag(Flag_LayoutDirty);
+    clearFlag( Flag_LayoutDirty );
 
     return;
 }
@@ -1279,165 +1276,209 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
 }
 
 
-void KSpreadCell::offsetAlign( int _col,int _row )
+void KSpreadCell::offsetAlign( int _col, int _row )
 {
-    int a = align(_col,_row);
+    int a = align( _col, _row );
     RowLayout *rl = m_pTable->rowLayout( _row );
     ColumnLayout *cl = m_pTable->columnLayout( _col );
 
-    int w = cl->width();
-    int h = rl->height();
+    double w = cl->dblWidth();
+    double h = rl->dblHeight();
 
     if ( m_iExtraXCells )
-        w = int( m_dExtraWidth );
+        w = m_dExtraWidth;
     if ( m_iExtraYCells )
-        h = int( m_dExtraHeight );
+        h = m_dExtraHeight;
+
     int tmpAngle = getAngle( _col, _row );
-    switch( alignY(_col,_row) )
-        {
+    switch( alignY( _col, _row ) )
+    {
         case KSpreadCell::Top:
             if( tmpAngle == 0 )
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE + 
+                           (double)m_fmAscent / 
+                           m_pTable->doc()->zoomedResolutionY();
             else
-                {
-                    if(tmpAngle<0)
-                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-                    else
-                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
-                }
+            {
+                if( tmpAngle < 0 )
+                    m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE ;
+                else
+                    m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
+                                 (double)m_fmAscent * cos( tmpAngle * M_PI / 180 ) /
+                                 m_pTable->doc()->zoomedResolutionY();
+            }
             break;
+
         case KSpreadCell::Bottom:
-            if(!verticalText(_col,_row) && !multiRow(_col,_row) && !tmpAngle)
-                m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-            else if(tmpAngle!=0)
-                {
-                    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-                        {
-                            if( tmpAngle < 0 )
-                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
-                            else
-                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
-                        }
-                    else
-                        {
-                            if( tmpAngle < 0 )
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-                            else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
-                        }
-                }
-            else if( multiRow(_col,_row) )
-                {
-                    int tmpline=m_nbLines;
-                    if(m_nbLines>1)
-                        tmpline=m_nbLines-1;
-                    if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
-                        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*tmpline- bottomBorderWidth( _col, _row );
-                    else
-                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                }
-            else
-                if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-                    m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+m_fmAscent;
-                else
-                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-            break;
-        case KSpreadCell::Middle:
-            if(!verticalText(_col,_row) && !multiRow(_col,_row) && !tmpAngle)
-                m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+            if( !verticalText( _col, _row ) &&
+                !multiRow( _col, _row ) && !tmpAngle )
+                m_dTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
             else if( tmpAngle != 0 )
+            {
+                if( h - BORDER_SPACE - m_dOutTextHeight - bottomBorderWidth( _col, _row ) > 0 )
                 {
-                    if( ( h - m_iOutTextHeight ) > 0 )
-                        {
-                            if( tmpAngle < 0 )
-                                m_iTextY = ( h - m_iOutTextHeight ) / 2 ;
-                            else
-                                m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
-                        }
+                    if( tmpAngle < 0 )
+                        m_dTextY = h - BORDER_SPACE - m_dOutTextHeight - bottomBorderWidth( _col, _row );
                     else
-                        {
-                            if( tmpAngle < 0 )
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
-                            else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(tmpAngle*M_PI/180));
-                        }
+                        m_dTextY = h - BORDER_SPACE - m_dOutTextHeight - bottomBorderWidth( _col, _row ) +
+                                   (double)m_fmAscent * cos( tmpAngle * M_PI / 180 ) /
+                                   m_pTable->doc()->zoomedResolutionY();
                 }
-            else if( multiRow(_col,_row) )
-                {
-                    int tmpline=m_nbLines;
-                    if(m_nbLines==0)
-                        tmpline=1;
-                    if(( h - m_iOutTextHeight*tmpline )>0)
-                        m_iTextY = ( h - m_iOutTextHeight*tmpline ) / 2 +m_fmAscent;
-                    else
-                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                }
-            else
-                if(( h - m_iOutTextHeight )>0)
-                    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
                 else
-                    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                {
+                    if( tmpAngle < 0 )
+                        m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE ;
+                    else
+                        m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
+                                   (double)m_fmAscent * cos( tmpAngle * M_PI / 180 ) /
+                                   m_pTable->doc()->zoomedResolutionY();
+                }
+            }
+            else if( multiRow( _col, _row ) )
+            {
+                int tmpline = m_nbLines;
+                if( m_nbLines > 1 )
+                    tmpline = m_nbLines - 1;
+                if( h - BORDER_SPACE - m_dOutTextHeight * m_nbLines -
+                          bottomBorderWidth( _col, _row ) > 0 )
+                    m_dTextY = h - BORDER_SPACE - m_dOutTextHeight * tmpline -
+                               bottomBorderWidth( _col, _row );
+                else
+                    m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
+                               (double)m_fmAscent / 
+                               m_pTable->doc()->zoomedResolutionY();
+            }
+            else
+                if( h - BORDER_SPACE - m_dOutTextHeight - bottomBorderWidth( _col, _row ) > 0 )
+                    m_dTextY = h - BORDER_SPACE - m_dOutTextHeight -
+                               bottomBorderWidth( _col, _row ) + 
+                               (double)m_fmAscent /
+                               m_pTable->doc()->zoomedResolutionY();
+                else
+                    m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
+                               (double)m_fmAscent /
+                               m_pTable->doc()->zoomedResolutionY();
             break;
-        }
-    a=defineAlignX();
-    if(m_pTable->getShowFormula())
+
+        case KSpreadCell::Middle:
+            if( !verticalText( _col, _row ) && !multiRow( _col, _row ) && !tmpAngle )
+            {
+                m_dTextY = ( h - m_dOutTextHeight ) / 2 +
+                           (double)m_fmAscent /
+                            m_pTable->doc()->zoomedResolutionY();
+            }
+            else if( tmpAngle != 0 )
+            {
+                if( h - m_dOutTextHeight > 0 )
+                {
+                    if( tmpAngle < 0 )
+                        m_dTextY = ( h - m_dOutTextHeight ) / 2 ;
+                    else
+                        m_dTextY = ( h - m_dOutTextHeight ) / 2 +
+                                   (double)m_fmAscent * cos( tmpAngle * M_PI / 180 ) /
+                                   m_pTable->doc()->zoomedResolutionY();
+                }
+                else
+                {
+                    if( tmpAngle < 0 )
+                        m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE ;
+                    else
+                        m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
+                                   (double)m_fmAscent * cos( tmpAngle * M_PI / 180 ) /
+                                   m_pTable->doc()->zoomedResolutionY();
+                }
+            }
+            else if( multiRow( _col, _row ) )
+            {
+                int tmpline = m_nbLines;
+                if( m_nbLines == 0 )
+                    tmpline = 1;
+                if( h - m_dOutTextHeight * tmpline > 0 )
+                    m_dTextY = ( h - m_dOutTextHeight * tmpline ) / 2 +
+                               (double)m_fmAscent /
+                               m_pTable->doc()->zoomedResolutionY();
+                else
+                    m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
+                               (double)m_fmAscent /
+                               m_pTable->doc()->zoomedResolutionY();
+            }
+            else
+                if( h - m_dOutTextHeight > 0 )
+                    m_dTextY = ( h - m_dOutTextHeight ) / 2 +
+                               (double)m_fmAscent /
+                               m_pTable->doc()->zoomedResolutionY();
+                else
+                    m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
+                               (double)m_fmAscent /
+                               m_pTable->doc()->zoomedResolutionY();
+            break;
+    }
+
+    a = defineAlignX();
+    if( m_pTable->getShowFormula() )
         a = KSpreadCell::Left;
 
     switch( a )
-        {
+    {
         case KSpreadCell::Left:
-            m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+            m_dTextX = leftBorderWidth( _col, _row ) + BORDER_SPACE;
             break;
         case KSpreadCell::Right:
-            m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
+            m_dTextX = w - BORDER_SPACE - m_dOutTextWidth - rightBorderWidth( _col, _row );
             break;
         case KSpreadCell::Center:
-            m_iTextX = ( w - m_iOutTextWidth ) / 2;
+            m_dTextX = ( w - m_dOutTextWidth ) / 2;
             break;
-        }
+    }
 }
 
 void KSpreadCell::textSize( QPainter &_paint )
 {
     QFontMetrics fm = _paint.fontMetrics();
     // Horizontal text ?
-    int tmpAngle=getAngle( column(), row() );
+    int tmpAngle = getAngle( column(), row() );
     if( !verticalText( column(), row() ) && !tmpAngle )
     {
-        m_iOutTextWidth = fm.width( m_strOutText );
-	int offsetFont=0;
-	if((alignY(column(),row())==KSpreadCell::Bottom)&& textFontUnderline(column(), row() ))
-	   {
-	     offsetFont=fm.underlinePos()+1;
-	   }
-        m_iOutTextHeight = fm.ascent() + fm.descent()+offsetFont ;
+        m_dOutTextWidth = m_pTable->doc()->unzoomItX( fm.width( m_strOutText ) );
+        int offsetFont = 0;
+        if( ( alignY( column(), row() ) == KSpreadCell::Bottom ) &&
+            textFontUnderline( column(), row() ) )
+        {
+            offsetFont = fm.underlinePos() + 1;
+        }
+        m_dOutTextHeight = m_pTable->doc()->unzoomItY( fm.ascent() + fm.descent() + offsetFont );
     }
     // Rotated text ?
-    else if(  tmpAngle!= 0 )
+    else if( tmpAngle!= 0 )
     {
-        m_iOutTextHeight = static_cast<int>(cos(tmpAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(tmpAngle*M_PI/180))));
-        m_iOutTextWidth = static_cast<int>(abs((int)(sin(tmpAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(tmpAngle*M_PI/180));
-        //kdDebug(36001)<<"m_iOutTextWidth"<<m_iOutTextWidth<<"m_iOutTextHeight"<<m_iOutTextHeight<<endl;
+        m_dOutTextHeight = m_pTable->doc()->unzoomItY( cos( tmpAngle * M_PI / 180 ) *
+                                                          ( fm.ascent() + fm.descent() ) +
+                                                       abs( (int)( fm.width( m_strOutText ) *
+                                                          sin( tmpAngle * M_PI / 180 ) ) ) );
+        m_dOutTextWidth = m_pTable->doc()->unzoomItX( abs( (int)( sin( tmpAngle * M_PI / 180 ) *
+                                                         ( fm.ascent() + fm.descent() ) ) ) +
+                                                      fm.width( m_strOutText ) *
+                                                      cos ( tmpAngle * M_PI / 180 ) );
+        //kdDebug(36001)<<"m_dOutTextWidth"<<m_dOutTextWidth<<"m_dOutTextHeight"<<m_dOutTextHeight<<endl;
     }
     // Vertical text ?
     else
     {
-        int width=0;
-        for(unsigned int i=0;i<m_strOutText.length();i++)
-                width=QMAX(width,fm.width(m_strOutText.at(i)));
-        m_iOutTextWidth = width;
-        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
+        int width = 0;
+        for( unsigned int i = 0; i < m_strOutText.length(); i++ )
+            width = QMAX( width, fm.width( m_strOutText.at( i ) ) );
+        m_dOutTextWidth = m_pTable->doc()->unzoomItX( width );
+        m_dOutTextHeight = m_pTable->doc()->unzoomItY( ( fm.ascent() + fm.descent() ) *
+                                                       m_strOutText.length() );
     }
-
-    m_fmAscent=fm.ascent();
 }
 
-void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
+void KSpreadCell::conditionAlign( QPainter &_paint, int _col, int _row )
 {
     KSpreadConditional condition;
 
-    if( conditions.currentCondition(condition) &&
-	!m_pTable->getShowFormula() )
+    if( conditions.currentCondition( condition ) &&
+           !m_pTable->getShowFormula() )
     {
         _paint.setFont( condition.fontcond );
     }
@@ -1445,10 +1486,6 @@ void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
     {
         _paint.setFont( textFont(_col,_row ) );
     }
-
-    textSize(_paint);
-
-    offsetAlign(_col,_row);
 }
 
 bool KSpreadCell::makeFormula()
@@ -2389,22 +2426,25 @@ void KSpreadCell::paintText( QPainter& painter,
 
   KSpreadConditional condition;
 
-  if( conditions.currentCondition( condition ) &&
-      !m_pTable->getShowFormula() )
+  //Set the font according to condition
+  conditionAlign( painter, cellRef.x(), cellRef.y() );
+
+  //Check for red font color for negativ values
+  if( !conditions.currentCondition( condition ) )
   {
-    painter.setFont( condition.fontcond );
-    tmpPen.setColor( condition.colorcond );
-  }
-  else
-  {
-    painter.setFont( textFont( cellRef.x(), cellRef.y() ) );
     if( isNumeric() && !m_pTable->getShowFormula() )
     {
       double v = valueDouble() * factor( column(), row() );
-      if ( floatColor( cellRef.x(), cellRef.y()) == KSpreadCell::NegRed && v < 0.0 )
+      if( floatColor( cellRef.x(), cellRef.y() ) == KSpreadCell::NegRed && v < 0.0 )
         tmpPen.setColor( Qt::red );
     }
   }
+
+  //Adjust font to zoom level
+  QFont tmpFont = painter.font();
+  tmpFont.setPointSizeFloat( m_pTable->doc()->zoomedResolutionY() * tmpFont.pointSizeFloat() );
+  painter.setFont( tmpFont );
+
 /****
 
  For now I am commenting this out -- with the default color display you
@@ -2434,8 +2474,8 @@ void KSpreadCell::paintText( QPainter& painter,
   painter.setPen( tmpPen );
 
   QString tmpText = m_strOutText;
-  int tmpHeight = m_iOutTextHeight;
-  int tmpWidth = m_iOutTextWidth;
+  double tmpHeight = m_dOutTextHeight;
+  double tmpWidth = m_dOutTextWidth;
   if( testFlag( Flag_CellTooShort ) )
   {
     m_strOutText = textDisplaying( painter );
@@ -2456,56 +2496,54 @@ void KSpreadCell::paintText( QPainter& painter,
     m_strOutText = "";
   }
 
-  conditionAlign( painter, cellRef.x(), cellRef.y() );
-
-  int indent = 0;
-  int offsetCellTooShort = 0;
+  double indent = 0;
+  double offsetCellTooShort = 0.0;
   int a = defineAlignX();
   //apply indent if text is align to left not when text is at right or middle
   if(  a == KSpreadCell::Left && !isEmpty() )
   {
-    indent = getIndent( column(), row() );
+    indent = m_pTable->doc()->unzoomItX( getIndent( column(), row() ) );
   }
 
   //made an offset, otherwise ### is under red triangle
   if( a == KSpreadCell::Right && !isEmpty() && testFlag( Flag_CellTooShort ) )
   {
-    offsetCellTooShort = 4;
+    offsetCellTooShort = m_pTable->doc()->unzoomItX( 4 );
   }
 
   QFontMetrics fm2 = painter.fontMetrics();
-  int offsetFont = 0;
+  double offsetFont = 0.0;
 
   if( ( alignY( column(), row() ) == KSpreadCell::Bottom ) &&
       textFontUnderline( column(), row() ) )
   {
-    offsetFont = fm2.underlinePos() + 1;
+    offsetFont = m_pTable->doc()->unzoomItX( fm2.underlinePos() + 1 );
   }
 
   int tmpAngle = getAngle( cellRef.x(), cellRef.y() );
   if ( !multiRow( cellRef.x(), cellRef.y() ) &&
        !verticalText( cellRef.x(), cellRef.y()) && !tmpAngle )
   {
-    painter.drawText( doc->zoomItX( indent + cellRect.x() + m_iTextX - offsetCellTooShort ),
-                      doc->zoomItY( cellRect.y() + m_iTextY - offsetFont ), m_strOutText );
+    painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX - offsetCellTooShort ),
+                      doc->zoomItY( cellRect.y() + m_dTextY - offsetFont ), m_strOutText );
   }
   else if( tmpAngle != 0 )
   {
     int angle = tmpAngle;
     QFontMetrics fm = painter.fontMetrics();
-    painter.rotate(angle);
-    int x;
+
+    painter.rotate( angle );
+    double x;
     if( angle > 0 )
-      x = indent + cellRect.x() + m_iTextX;
+      x = indent + cellRect.x() + m_dTextX;
     else
-      x = indent + static_cast<int>( cellRect.x() + m_iTextX -
-                                     ( fm.descent() + fm.ascent() ) *
-                                     sin( angle * M_PI / 180 ) );
-    int y;
+      x = indent + cellRect.x() + m_dTextX -
+                     ( fm.descent() + fm.ascent() ) * sin( angle * M_PI / 180 );
+    double y;
     if( angle > 0 )
-      y = cellRect.y() + m_iTextY;
+      y = cellRect.y() + m_dTextY;
     else
-      y = cellRect.y() + m_iTextY + m_iOutTextHeight;
+      y = cellRect.y() + m_dTextY + m_dOutTextHeight;
     painter.drawText( doc->zoomItX( x * cos( angle * M_PI / 180 ) +
                                     y * sin( angle * M_PI / 180 ) ),
                       doc->zoomItY( -x * sin( angle * M_PI / 180 ) +
@@ -2540,17 +2578,17 @@ void KSpreadCell::paintText( QPainter& painter,
       switch( a )
       {
       case KSpreadCell::Left:
-        m_iTextX = leftBorderWidth( cellRef.x(), cellRef.y() ) + BORDER_SPACE;
+        m_dTextX = leftBorderWidth( cellRef.x(), cellRef.y() ) + BORDER_SPACE;
         break;
       case KSpreadCell::Right:
-        m_iTextX = cellRect.width() - BORDER_SPACE - fm.width( t )
+        m_dTextX = cellRect.width() - BORDER_SPACE - fm.width( t )
                    - rightBorderWidth( cellRef.x(), cellRef.y() );
         break;
       case KSpreadCell::Center:
-        m_iTextX = ( cellRect.width() - fm.width( t ) ) / 2;
+        m_dTextX = ( cellRect.width() - fm.width( t ) ) / 2;
       }
-      painter.drawText( doc->zoomItX( indent + cellRect.x() + m_iTextX + dx ),
-                        doc->zoomItY( cellRect.y() + m_iTextY + dy ), t );
+      painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX + dx ),
+                        doc->zoomItY( cellRect.y() + m_dTextY + dy ), t );
       dy += fm.descent() + fm.ascent();
     }
     while ( i != -1 );
@@ -2567,8 +2605,8 @@ void KSpreadCell::paintText( QPainter& painter,
     {
       i = m_strOutText.length();
       t = m_strOutText.at( j );
-      painter.drawText( doc->zoomItX( indent + cellRect.x() + m_iTextX + dx ),
-                        doc->zoomItY( cellRect.y() + m_iTextY + dy ), t );
+      painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX + dx ),
+                        doc->zoomItY( cellRect.y() + m_dTextY + dy ), t );
       dy += fm.descent() + fm.ascent();
       j++;
     }
@@ -2578,8 +2616,8 @@ void KSpreadCell::paintText( QPainter& painter,
   if( testFlag(Flag_CellTooShort) )
   {
     m_strOutText = tmpText;
-    m_iOutTextHeight = tmpHeight;
-    m_iOutTextWidth = tmpWidth;
+    m_dOutTextHeight = tmpHeight;
+    m_dOutTextWidth = tmpWidth;
   }
 
   if( m_pTable->getHideZero() && isNumeric() &&
@@ -2963,15 +3001,15 @@ int KSpreadCell::defineAlignX()
     return a;
 }
 
-QString KSpreadCell::textDisplaying( QPainter &_painter)
+QString KSpreadCell::textDisplaying( QPainter &_painter )
 {
   QFontMetrics fm = _painter.fontMetrics();
-  int a=align(column(),row());
-  if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isNumeric()
-    && !verticalText( column(), row() ))
+  int a = align( column(), row() );
+  if( ( a == KSpreadCell::Left || a == KSpreadCell::Undefined ) && !isNumeric()
+             && !verticalText( column(), row() ) )
   {
     //not enough space but align to left
-    double len = 0;
+    double len = 0.0;
     for ( int i = column(); i <= column() + m_iExtraXCells; i++ )
     {
       ColumnLayout *cl2 = m_pTable->columnLayout( i );
@@ -2979,144 +3017,143 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
     }
 
     QString tmp;
-    int tmpIndent=0;
+    int tmpIndent = 0;
     if( !isEmpty() )
       tmpIndent = getIndent( column(), row() );
     for( int i = m_strOutText.length(); i != 0; i-- )
     {
       tmp = m_strOutText.left(i);
 
-	if((fm.width(tmp)+tmpIndent)<(len-4-1)) //4 equal lenght of red triangle +1 pixel
-	  {
-	    if( getAngle(column(), row())!=0)
-	      {
-		QString tmp2;
-		RowLayout *rl = m_pTable->rowLayout( row() );
-		if(m_iOutTextHeight>rl->height())
-		  {
-		    for (int j=m_strOutText.length();j!=0;j--)
-		      {
-			tmp2=m_strOutText.left(j);
-			if(fm.width(tmp2)<(rl->height()-1))
-			  {
-			    return m_strOutText.left(QMIN(tmp.length(),tmp2.length()));
-			  }
-		      }
-		  }
-		else
-		  return tmp;
+        if( fm.width( tmp ) + tmpIndent < len - 4 - 1 ) //4 equal lenght of red triangle +1 pixel
+        {
+            if( getAngle( column(), row() ) != 0 )
+            {
+                QString tmp2;
+                RowLayout *rl = m_pTable->rowLayout( row() );
+                if( m_dOutTextHeight > rl->dblHeight() )
+                {
+                    for ( int j = m_strOutText.length(); j != 0; j-- )
+                    {
+                        tmp2 = m_strOutText.left( j );
+                        if( fm.width(tmp2) < rl->dblHeight() - 1 )
+                        {
+                            return m_strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
+                        }
+                    }
+                }
+                else
+                    return tmp;
 
-	      }
-	    else
-	      return tmp;
-	  }
-      }
-    return QString("");
+            }
+            else
+                return tmp;
+        }
+    }
+    return QString( "" );
   }
- else if(verticalText( column(),row() ))
+  else if( verticalText( column(), row() ) )
   {
-     RowLayout *rl = m_pTable->rowLayout( row() );
-     int tmpIndent=0;
-     //not enough space but align to left
-     int len=0;
-     for (int i=column();i<=column()+m_iExtraXCells;i++)
-       {
-	 ColumnLayout *cl2 = m_pTable->columnLayout( i );
-	 len+=cl2->width() - 1;
-       }
-     if(!isEmpty())
-       tmpIndent=getIndent(column(),row());
-     if( ((m_iOutTextWidth+tmpIndent)>len)||m_iOutTextWidth==0)
-       return QString("");
+    RowLayout *rl = m_pTable->rowLayout( row() );
+    int tmpIndent = 0;
+    //not enough space but align to left
+    double len = 0.0;
+    for( int i = column(); i <= column() + m_iExtraXCells; i++ )
+    {
+        ColumnLayout *cl2 = m_pTable->columnLayout( i );
+        len += cl2->dblWidth() - 1;
+    }
+    if( !isEmpty() )
+        tmpIndent = getIndent( column(), row() );
+    if( ( m_dOutTextWidth + tmpIndent > len )|| m_dOutTextWidth == 0.0 )
+        return QString( "" );
 
-     for (int i=m_strOutText.length();i!=0;i--)
-       {
-	if(((fm.ascent() + fm.descent())*i)<(rl->height()-1))
-	  {
-	    return m_strOutText.left(i);
-	  }
-      }
-    return QString("");
-   }
+    for ( int i = m_strOutText.length(); i != 0; i-- )
+    {
+        if( ( fm.ascent() + fm.descent() ) * i < rl->dblHeight() - 1 )
+        {
+            return m_strOutText.left( i );
+        }
+    }
+    return QString( "" );
+ }
 
  ColumnLayout *cl = m_pTable->columnLayout( column() );
- double w = (  m_dExtraWidth == 0 ) ? cl->dblWidth() : m_dExtraWidth;
+ double w = ( m_dExtraWidth == 0.0 ) ? cl->dblWidth() : m_dExtraWidth;
 
- if( isNumeric())
+ if( isNumeric() )
  {
-   if( formatType()!=Scientific)
+   if( formatType() != Scientific )
    {
-     int p = (precision(column(),row())  == -1) ? 8 :
-       precision(column(),row());
-     double value =valueDouble() * factor(column(),row());
-     int pos=0;
-     QString localizedNumber= QString::number( (value), 'E', p);
-     if((pos=localizedNumber.find('.'))!=-1)
+     int p = ( precision( column(), row() ) == -1 ) ? 8 :
+          precision( column(), row() );
+     double value = valueDouble() * factor( column(), row() );
+     int pos = 0;
+     QString localizedNumber = QString::number( (value), 'E', p );
+     if( ( pos = localizedNumber.find('.') ) != -1 )
      {
-       localizedNumber=localizedNumber.replace(pos,1,decimal_point);
+       localizedNumber = localizedNumber.replace( pos, 1, decimal_point );
      }
      if( floatFormat( column(), row() ) ==
-	 KSpreadCell::AlwaysSigned && value >= 0 )
-
+            KSpreadCell::AlwaysSigned && value >= 0 )
      {
-       if(locale()->positiveSign().isEmpty())
+       if( locale()->positiveSign().isEmpty() )
        {
-	 localizedNumber='+'+localizedNumber;
+         localizedNumber = '+' + localizedNumber;
        }
      }
-     if ( precision(column(),row()) == -1 &&
-	  localizedNumber.find(decimal_point) >= 0 )
+     if ( precision( column(), row() ) == -1 &&
+          localizedNumber.find( decimal_point ) >= 0 )
      {
        //duplicate code it's not good I know I will fix it
-       int start=0;
-       if((start=localizedNumber.find('E'))!=-1)
+       int start = 0;
+       if( ( start = localizedNumber.find('E') ) != -1 )
        {
-	 start=localizedNumber.length()-start;
+         start = localizedNumber.length() - start;
        }
-       int i = localizedNumber.length()-start;
+       int i = localizedNumber.length() - start;
        bool bFinished = FALSE;
 
        while ( !bFinished && i > 0 )
        {
-	 QChar ch = localizedNumber[ i - 1 ];
-	 if ( ch == '0' )
-	 {
-	   localizedNumber.remove(--i,1);
-	 }
-	 else
-	 {
-	   bFinished = TRUE;
-	   if ( ch == decimal_point )
-	   {
-	     localizedNumber.remove(--i,1);
-	   }
-	 }
+         QChar ch = localizedNumber[ i - 1 ];
+         if ( ch == '0' )
+         {
+           localizedNumber.remove( --i, 1 );
+         }
+         else
+         {
+           bFinished = TRUE;
+           if ( ch == decimal_point )
+           {
+             localizedNumber.remove( --i, 1 );
+           }
+         }
        }
      }
-     if(fm.width(localizedNumber)<w && !m_pTable->getShowFormula())
+     if( fm.width( localizedNumber ) < w && !m_pTable->getShowFormula() )
      {
        return localizedNumber;
      }
    }
    /* What is this doing and is it broken with the new error handling? */
-   QString str("####");
+   QString str( "####" );
    int i;
-   for(i=4;i!=0;i--)
+   for( i=4; i != 0; i-- )
    {
-     if(fm.width(str.right(i))<(w-4-1))
+     if( fm.width( str.right( i ) ) < w - 4 - 1 )
      {
        break;
      }
    }
-   return str.right(i);//QString("###");
+   return str.right( i );//QString("###");
  }
  else
  {
    QString tmp;
-   for (int i=m_strOutText.length();i!=0;i--)
+   for ( int i = m_strOutText.length(); i != 0; i-- )
    {
-     tmp=m_strOutText.left(i);
-     if(fm.width(tmp)<(w-4-1)) //4 equals lenght of red triangle +1 pixel
+     tmp = m_strOutText.left( i );
+     if( fm.width( tmp ) < w - 4 - 1 ) //4 equals lenght of red triangle +1 pixel
      {
        return tmp;
      }
@@ -3125,109 +3162,6 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
  return  QString::null;
 }
 
-/*
-void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _row,
-                         ColumnLayout *cl, RowLayout *rl, bool _only_left,
-                         bool _only_top, const QPen& _grid_pen )
-{
-    // ###### Torben: This looks unbelievable bad!
-
-  if ( m_bCalcDirtyFlag )
-    calc();
-
-  if ( m_bLayoutDirtyFlag)
-    makeLayout( _painter, _col, _row );
-
-  if ( !_only_left && !_only_top && m_bgColor.isValid() )
-  {
-    _painter.setBackgroundColor( m_bgColor );
-    _painter.eraseRect( _tx, _ty, cl->width(), rl->height() );
-  }
-
-  // Draw the border
-  if ( !_only_top )
-  {
-    //_painter.setPen( leftBorderPen );
-    // Fix a 'bug' in the pens width setting. We still need the upper left corner
-    // of the line but a width > 1 won't work for us.
-    QPen pen;
-    pen.setColor( leftBorderColor( _col, _row) );
-    if ( m_leftBorderPen.style() == Qt::NoPen )
-      pen = _grid_pen;
-    else
-      pen = QPen( m_leftBorderPen );
-    _painter.setPen( pen );
-    int dx = 0;//int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 );
-    _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + rl->height() );
-  }
-  if ( !_only_left )
-  {
-    //_painter.setPen( topBorderPen );
-    QPen pen;
-    pen.setColor( topBorderColor( _col, _row ) );
-    if ( m_topBorderPen.style() == Qt::NoPen )
-      pen = _grid_pen;
-    else
-      pen = QPen( m_topBorderPen );
-    _painter.setPen( pen );
-    int dy = 0;//(int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 );
-    _painter.drawLine( _tx, _ty + dy, _tx + cl->width() , _ty + dy );
-  }
-  if ( !_only_top && !_only_left )
-    {
-      int dy=0;
-      int dx=0;
-      if ( m_fallDiagonalPen.style() != Qt::NoPen )
-        {
-          _painter.setPen( m_fallDiagonalPen );
-          _painter.drawLine( _tx + dx, _ty + dy, _tx + cl->width() , _ty + rl->height() );
-        }
-      if ( m_goUpDiagonalPen.style() != Qt::NoPen )
-        {
-          _painter.setPen( m_goUpDiagonalPen );
-          _painter.drawLine( _tx , _ty +rl->height() , _tx + cl->width(), _ty  );
-        }
-      if( m_backGroundBrush.style()!= Qt::NoBrush)
-        {
-        int left=leftBorderWidth( _col, _row) + BORDER_SPACE;
-        int top=topBorderWidth(_col,_row) + BORDER_SPACE;
-        _painter.setPen(Qt::NoPen);
-        _painter.setBrush(m_backGroundBrush);
-        _painter.drawRect( _tx + left, _ty + top,
-                cl->width()-left-BORDER_SPACE, rl->height() - top - BORDER_SPACE);
-        }
-
-    }
-  if ( !_only_top && !_only_left )
-    if ( !m_strOutText.isEmpty() )
-    {
-      _painter.setPen( m_textPen );
-      verifyCondition();
-      if(m_conditionIsTrue && !m_pTable->getShowFormula())
-        {
-        KSpreadConditional *tmpCondition=0;
-        switch(m_numberOfCond)
-                {
-                case 0:
-                        tmpCondition=m_firstCondition;
-                        break;
-                case 1:
-                        tmpCondition=m_secondCondition;
-                        break;
-                case 2:
-                        tmpCondition=m_thirdCondition;
-                        break;
-                }
-
-        _painter.setFont( tmpCondition->fontcond );
-        }
-      else
-        _painter.setFont( textFont(_col,_row ) );
-      conditionAlign(_painter,_col,_row);
-      _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
-    }
-}
-*/
 
 double KSpreadCell::dblWidth( int _col, const KSpreadCanvas *_canvas ) const
 {

@@ -2530,6 +2530,7 @@ void KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
 
     m_pEditor->setPalette( QPalette( g, p.disabled(), g ) );
     m_pEditor->setFont( cell->textFont( markerColumn(), markerRow() ) );
+
     KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
     m_pEditor->setGeometry( doc()->zoomRect( rect ) );
     m_pEditor->setMinimumSize( QSize( doc()->zoomItX( min_w ), doc()->zoomItY( min_h ) ) );

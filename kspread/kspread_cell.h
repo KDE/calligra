@@ -455,8 +455,8 @@ public:
     /**
      * return size of the text
      */
-    int textWidth()const {return m_iOutTextWidth; }
-    int textHeight()const {return m_iOutTextHeight; }
+    double textWidth() const { return m_dOutTextWidth; }
+    double textHeight() const { return m_dOutTextHeight; }
 
     /**
      * Like @ref updateDepending, but the cells content will be refreshed
@@ -894,9 +894,9 @@ private:
      * Not necessarily the same as m_strText, e.g. m_strText="1" and m_strOutText="1.00".
      */
     QString m_strOutText;
-    int m_iOutTextWidth;
-    int m_iOutTextHeight;
-    int m_iTextX, m_iTextY;
+    double m_dOutTextWidth;
+    double m_dOutTextHeight;
+    double m_dTextX, m_dTextY;
     /**
      * Result of "fm.ascent()" in makeLayout.
      * used in offsetAlign.
