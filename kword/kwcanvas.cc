@@ -519,7 +519,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 	  KWTextFrameSet *frameset= dynamic_cast<KWTextFrameSet *>(frameundermouse->frameSet());
 	  if (frameset)
 	  {
-	    KWFrameSetEdit *framesetedit = frameset->createFrameSetEdit(this);
+	    KWFrameSetEdit *framesetedit = frameset->createFrameSetEdit(this, true);
 	    if ( framesetedit )
 	    {
 	      KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(framesetedit);
@@ -1217,7 +1217,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
 	KWTextFrameSet *frameset= dynamic_cast<KWTextFrameSet *>(frameundermouse->frameSet());
 	if (frameset)
 	{
-	  KWFrameSetEdit *framesetedit = frameset->createFrameSetEdit(this);
+	  KWFrameSetEdit *framesetedit = frameset->createFrameSetEdit(this, true);
 	  if ( framesetedit )
 	  {
 	    KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(framesetedit);

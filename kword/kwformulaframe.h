@@ -64,7 +64,7 @@ public:
 
     virtual void moveFrame( KWFrame* frame );
 
-    virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
+    virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*,bool);
 
     virtual MouseMeaning getMouseMeaningInsideFrame( const KoPoint& );
 

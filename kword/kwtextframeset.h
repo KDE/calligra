@@ -72,7 +72,7 @@ public:
      */
     virtual FrameSetType type() { return FT_TEXT; }
 
-    virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas );
+    virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas, bool temp=false );
 
     /** Return the contained text object */
     KoTextObject * textObject() const { return m_textobj; }
@@ -356,7 +356,7 @@ class KWTextFrameSetEdit : public KoTextView, public KWFrameSetEdit
 {
     Q_OBJECT
 public:
-    KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas );
+    KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas, bool temp=false);
     virtual ~KWTextFrameSetEdit();
 
     virtual KoTextViewIface* dcopObject();

@@ -39,7 +39,7 @@ public:
      */
     virtual FrameSetType type() { return FT_PART; }
 
-    virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
+    virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas *, bool );
 
     KWChild *getChild()const { return m_child; }
 
