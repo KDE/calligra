@@ -312,13 +312,36 @@ void KPGroupObject::updateCoords( double dx, double dy )
 /*================================================================*/
 void KPGroupObject::rotate( float _angle )
 {
+    float oldAngle = angle;
+    float diffAngle = _angle - angle;
+    float angInRad = diffAngle * M_PI / 180;
+
     KPObject::rotate( _angle );
+
+    // find center of the group
+    double centerx = orig.x() + ext.width() / 2.0;
+    double centery = orig.y() + ext.height() / 2.0;
 
     if ( !updateObjs )
         return;
     QPtrListIterator<KPObject> it( objects );
-    for ( ; it.current() ; ++it )
-        it.current()->rotate( _angle );
+    for ( ; it.current() ; ++it ) {
+        // find distance of object center to group center
+        double px = it.current()->getOrig().x() + it.current()->getSize().width() / 2.0 - centerx;
+        double py = it.current()->getOrig().y() + it.current()->getSize().height() / 2.0 - centery; 
+        // find distance for move
+        double mx = px * cos( angInRad ) - py * sin( angInRad ) - px;
+        double my = px * sin( angInRad ) + py * cos( angInRad ) - py;
+        double objAngle = it.current()->getAngle();
+        // If part of group was already rotated the difference has to be added 
+        // to the angle
+        if ( objAngle != oldAngle ) {
+            it.current()->rotate( objAngle + diffAngle );
+        } else {
+            it.current()->rotate( _angle );
+        }
+        it.current()->moveBy( mx, my );
+    }
 }
 
 void KPGroupObject::setShadowParameter( int _distance, ShadowDirection _direction, const QColor &_color )
