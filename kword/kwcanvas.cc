@@ -982,7 +982,7 @@ void KWCanvas::mrCreateTable()
             }
 
             QString _name;
-            int numTables = doc->getNumFrameSets();
+            int numTables = 1;
             bool same;
             do { // need a new name for the new table.
                 same = false;

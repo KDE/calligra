@@ -672,22 +672,23 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
 
     bool needFinetune=false;
     unsigned int copyFromRow=_idx-1;
-    if(_recalc) copyFromRow=0;
+    if(isAHeader) copyFromRow=0;
 
     // build a list of colStart positions.
     for ( i = 0; i < m_cells.count(); i++ ) {
         Cell *cell = m_cells.at(i);
         if ( cell->m_row == copyFromRow ) {
-            if(cell->m_cols>1) {
-                needFinetune=true;
+            if(cell->m_cols==1)
                 colStart.append(cell->getFrame( 0 )->left());
-            } else {
+            else {
+                needFinetune=true;
                 for( int rowspan=cell->m_cols; rowspan>0; rowspan--)
 {
                 colStart.append(cell->getFrame( 0 )->left() + (cell->getFrame( 0 )->width() / cell->m_cols)*(rowspan - 1) );
 }
             }
         }
+        // also move all cells beneath the new row.
         if ( cell->m_row >= _idx ) cell->m_row++;
     }
 
@@ -706,16 +707,22 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
 
     QList<KWTableFrameSet::Cell> nCells;
     nCells.setAutoDelete( false );
+    int height = getCell(copyFromRow,0)->getFrame(0)->height();
 
     for ( i = 0; i < getCols(); i++ ) {
-        int tmpWidth= colStart[i+1] - colStart[i]-tableCellSpacing;
-        if((i+1)==getCols())
-            tmpWidth= colStart[i+1] - colStart[i]+tableCellSpacing-2;
-        KWFrame *frame = new KWFrame(0L, colStart[i], r.y(), tmpWidth, 20); // TODO  m_doc->getDefaultParagLayout()->getFormat().ptFontSize() + 10 );
+        int colSpan = getCell(copyFromRow,i)->m_cols;
+        int tmpWidth= colStart[i+colSpan] - colStart[i];
+        if(i+colSpan != getCols())
+            tmpWidth-=tableCellSpacing;
+        else 
+            tmpWidth+=1;
+
+        KWFrame *frame = new KWFrame(0L, colStart[i], r.y(), tmpWidth, height);
         frame->setFrameBehaviour(AutoExtendFrame);
         frame->setNewFrameBehaviour(NoFollowup);
 
         Cell *newCell = new Cell( this, _idx, i );
+        newCell->m_cols=colSpan;
         newCell->setIsRemoveableHeader( isAHeader );
         newCell->addFrame( frame );
 
@@ -750,6 +757,8 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
 
     if ( _recalc )
         recalcRows();
+
+    finalize();
 }
 
 /*================================================================*/

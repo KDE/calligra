@@ -1310,6 +1310,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     for ( unsigned int i = 0; i < frames.count(); i++ ) {
                         KWFrameSet *f = frames.at(i);
                         if(! f->isVisible()) continue;
+                        if(! f->getFrameType() == FT_TABLE) continue;
                         if(f->getName() == tableName) {
                             table = static_cast<KWTableFrameSet *> (f);
                             break;
