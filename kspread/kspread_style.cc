@@ -781,7 +781,8 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
         format = "h:mm:ss AP";
         break;
     case Time_format3: // 9 h 01 min 28 s
-        //format = ;
+        kdDebug()<<" Time_format3:Time_format3:Time_format3:Time_format3:\n";
+        format = "hh \\h mm \\m\\i\\n ss \\s";
         break;
     case Time_format4:
         format = "hh:mm";

@@ -232,7 +232,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             format += e.text();
         } else if ( localName == "currency-symbol" ) {
             format += e.text();
-            //todo
+            //TODO
             // number:language="de" number:country="DE">€</number:currency-symbol>
         } else if ( localName == "number" ) {
             // TODO: number:grouping="true"
@@ -453,11 +453,18 @@ bool KoOasisStyles::saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QStr
 }
 
 
-bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text )
+bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash )
 {
     bool changed = false;
     //we can also add time to date.
-    if ( format.startsWith( "hh" ) )
+    if ( antislash )
+    {
+        text+=format[0];
+        format = format.remove( 0, 1 );
+        antislash = false;
+        changed = true;
+    }
+    else if ( format.startsWith( "hh" ) )
     {
         addTextNumber( text, elementWriter );
 
@@ -544,12 +551,22 @@ QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QStrin
     }
     else
     {
+        bool antislash = false;
         do
         {
-            if ( !saveOasisTimeFormat( elementWriter, format, text ) )
+            if ( !saveOasisTimeFormat( elementWriter, format, text, antislash ) )
             {
-                text += format[0];
+                QString elem( format[0] );
                 format = format.remove( 0, 1 );
+                if ( elem == "\\" )
+                {
+                     antislash = true;
+                }
+                else
+                {
+                    text += elem;
+                    antislash = false;
+                }
             }
         }
         while ( format.length() > 0 );
@@ -686,9 +703,15 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
     }
     else
     {
+        bool antislash = false;
         do
         {
-            if ( format.startsWith( "MMMM" ) )
+            if ( antislash )
+            {
+                text+=format[0];
+                format = format.remove( 0, 1 );
+            }
+            else if ( format.startsWith( "MMMM" ) )
             {
                 addTextNumber( text, elementWriter );
                 elementWriter.startElement( "number:month" );
@@ -780,10 +803,19 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
             }
             else
             {
-                if ( !saveOasisTimeFormat( elementWriter, format, text ) )
+                if ( !saveOasisTimeFormat( elementWriter, format, text,antislash ) )
                 {
-                    text += format[0];
+                    QString elem( format[0] );
                     format = format.remove( 0, 1 );
+                    if ( elem == "\\" )
+                    {
+                        antislash = true;
+                    }
+                    else
+                    {
+                        text += elem;
+                        antislash = false;
+                    }
                 }
             }
         }

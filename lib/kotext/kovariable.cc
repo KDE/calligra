@@ -1477,7 +1477,6 @@ void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
 
 void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    //TODO save time format
     writer.startElement( "text:time" );
     if ( m_correctTime != 0 )
         writer.addAttribute( "text:time-adjust", m_correctTime );
