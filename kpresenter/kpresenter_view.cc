@@ -2263,8 +2263,10 @@ void KPresenterView::setupActions()
                                                actionCollection(), "format_strike" );
 
     actionTextColor = new TKSelectColorAction( i18n( "&Color" ), TKSelectColorAction::TextColor,
-                                               actionCollection(), "text_color" );
+                                               actionCollection(), "text_color" ,true);
     connect( actionTextColor, SIGNAL( activated() ), SLOT( textColor() ) );
+    actionTextColor->setDefaultColor(QColor());
+
 
     actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
 				       this, SLOT( textAlignLeft() ),
