@@ -80,3 +80,8 @@ Reggie, 17.9.1998:
 ------------------
 - Started working on CENTER flow
 - Started writing a dialog for paragraph settings
+
+Reggie, 18.9.1998:
+------------------
+- Worked on paragraph settings dialog (started a cool preview widget)
+- Fixed a redraw problem (with setting some clippings)

@@ -17,6 +17,62 @@
 #include "paragdia.moc"
 
 /******************************************************************/
+/* class KWPagePreview                                            */
+/******************************************************************/
+
+/*================================================================*/
+KWPagePreview::KWPagePreview(QWidget* parent,const char* name)
+  : QGroupBox(i18n("Preview"),parent,name)
+{
+  left = 0;
+  right = 0;
+  first = 0;
+  spacing = 0;
+}
+
+/*================================================================*/
+void KWPagePreview::drawContents(QPainter* p)
+{
+  int wid = 148;
+  int hei = 210;
+  int _x = (width() - wid) / 2;
+  int _y = (height() - hei) / 2;
+
+  int dl = static_cast<int>(left / 2);
+  int dr = static_cast<int>(right / 2);
+  int df = static_cast<int>(first / 2 + left / 2);
+
+  // draw page
+  p->setPen(QPen(black));
+  p->setBrush(QBrush(black));
+
+  p->drawRect(_x + 1,_y + 1,wid,hei);
+  
+  p->setBrush(QBrush(white));
+  p->drawRect(_x,_y,wid,hei);
+
+  // draw parags
+  p->setPen(NoPen);
+  p->setBrush(QBrush(lightGray));
+
+  for (int i = 1;i <= 8;i++)
+    p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2,wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
+  
+  p->setBrush(QBrush(darkGray));
+
+  for (int i = 9;i <= 12;i++)
+    p->drawRect((i == 9 ? df : dl) + _x + 6,_y + 6 + (i - 1) * 12 + 2,
+		wid - 12 - ((i / 4) * 4 == i ? 50 : 0) - ((i == 12 ? 0 : dr) + (i == 9 ? df : dl)),6);
+
+  p->setBrush(QBrush(lightGray));
+
+  for (int i = 13;i <= 16;i++)
+    p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2,wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
+
+}
+
+
+/******************************************************************/
 /* Class: KWParagDia                                              */
 /******************************************************************/
 
@@ -59,6 +115,7 @@ void KWParagDia::setupTab1()
   eLeft->setFrame(true);
   eLeft->resize(eLeft->sizeHint().width() / 2,eLeft->sizeHint().height());
   indentGrid->addWidget(eLeft,1,1);
+  connect(eLeft,SIGNAL(textChanged(const char*)),this,SLOT(leftChanged(const char*)));
 
   lRight = new QLabel(i18n("Right (mm):"),indentFrame);
   lRight->resize(lRight->sizeHint());
@@ -72,6 +129,7 @@ void KWParagDia::setupTab1()
   eRight->setFrame(true);
   eRight->resize(eLeft->size());
   indentGrid->addWidget(eRight,2,1);
+  connect(eRight,SIGNAL(textChanged(const char*)),this,SLOT(rightChanged(const char*)));
 
   lFirstLine = new QLabel(i18n("First Line (mm):"),indentFrame);
   lFirstLine->resize(lFirstLine->sizeHint());
@@ -84,6 +142,7 @@ void KWParagDia::setupTab1()
   eFirstLine->setEchoMode(QLineEdit::Normal);
   eFirstLine->setFrame(true);
   eFirstLine->resize(eLeft->size());
+  connect(eFirstLine,SIGNAL(textChanged(const char*)),this,SLOT(firstChanged(const char*)));
   indentGrid->addWidget(eFirstLine,3,1);
 
   // grid col spacing
@@ -114,6 +173,7 @@ void KWParagDia::setupTab1()
   cSpacing->insertItem(i18n("2.0 lines"));
   cSpacing->insertItem(i18n("Custom (mm)"));
   cSpacing->resize(cSpacing->sizeHint());
+  connect(cSpacing,SIGNAL(activated(int)),this,SLOT(spacingActivated(int)));
   spacingGrid->addWidget(cSpacing,1,0);
 
   eSpacing = new KRestrictedLine(spacingFrame,"","1234567890.");
@@ -137,11 +197,19 @@ void KWParagDia::setupTab1()
   spacingGrid->activate();
   grid1->addWidget(spacingFrame,1,0);
 
+  // --------------- preview --------------------
+  prev1 = new KWPagePreview(tab1,"");
+  grid1->addMultiCellWidget(prev1,0,2,1,1);
+
   // --------------- main grid ------------------
   grid1->addColSpacing(0,indentFrame->width());
+  grid1->addColSpacing(0,spacingFrame->width());
+  grid1->addColSpacing(1,250);
   grid1->setColStretch(1,1);
 
   grid1->addRowSpacing(0,indentFrame->height());
+  grid1->addRowSpacing(1,spacingFrame->height());
+  grid1->addRowSpacing(2,20);
   grid1->setRowStretch(2,1);
 
   grid1->activate();
@@ -152,4 +220,31 @@ void KWParagDia::setupTab1()
 /*================================================================*/
 void KWParagDia::setupTab2()
 {
+}
+
+/*================================================================*/
+void KWParagDia::leftChanged(const char* _text)
+{
+  prev1->setLeft(atof(_text));
+}
+
+/*================================================================*/
+void KWParagDia::rightChanged(const char* _text)
+{
+  prev1->setRight(atof(_text));
+}
+
+/*================================================================*/
+void KWParagDia::firstChanged(const char* _text)
+{
+  prev1->setFirst(atof(_text));
+}
+
+/*================================================================*/
+void KWParagDia::spacingActivated(int _index)
+{
+  if (_index == 4)
+    eSpacing->setEnabled(true);
+  else
+    eSpacing->setEnabled(false);
 }

@@ -38,6 +38,7 @@ class KWordDocument_impl;
 #include <qrect.h>
 #include <qevent.h>
 #include <qpainter.h>
+#include <qregion.h>
 
 #include <koPageLayoutDia.h>
 

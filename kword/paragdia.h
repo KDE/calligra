@@ -23,9 +23,41 @@
 #include <qframe.h>
 #include <qgroupbox.h>
 #include <qcombobox.h>
+#include <qpen.h>
+#include <qbrush.h>
+#include <qpainter.h>
+#include <qcolor.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
+
+#include <stdlib.h>
+
+/******************************************************************/
+/* class KWPagePreview                                            */
+/******************************************************************/
+
+class KWPagePreview : public QGroupBox
+{
+  Q_OBJECT
+
+public:
+  KWPagePreview(QWidget*,const char*);
+  ~KWPagePreview() {}
+  
+  void setLeft(float _left)
+    { left = _left; repaint(false); }
+  void setRight(float _right)
+    { right = _right; repaint(false); }
+  void setFirst(float _first)
+    { first = _first; repaint(false); }
+
+protected:
+  void drawContents(QPainter*);
+
+  float left,right,first,spacing;
+
+};
 
 /******************************************************************/
 /* Class: KWParagDia                                              */
@@ -49,7 +81,16 @@ protected:
   QLabel *lLeft,*lRight,*lFirstLine;
   QGroupBox *indentFrame,*spacingFrame;
   QComboBox *cSpacing;
+  KWPagePreview *prev1;
+
+protected slots:
+  void leftChanged(const char*);
+  void rightChanged(const char*);
+  void firstChanged(const char*);
+  void spacingActivated(int);
 
 };
 
 #endif
+
+

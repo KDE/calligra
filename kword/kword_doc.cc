@@ -385,6 +385,16 @@ KWParag* KWordDocument_impl::findFirstParagOfPage(unsigned int _page)
 /*================================================================*/
 void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset )
 {
+  _painter.save();
+
+  unsigned int xShift = getPTLeftBorder() + ( _fc.getColumn() - 1 ) * ( getPTColumnWidth() + getPTColumnSpacing() );
+  QRegion cr = QRegion(xShift - xOffset,_fc.getPTY() - yOffset,getPTColumnWidth(),_fc.getLineHeight());
+
+  if (_painter.hasClipping())
+    cr = _painter.clipRegion().intersect(cr);
+
+  _painter.setClipRegion(cr);
+
   // Shortcut to the text memory segment
   KWChar* text = _fc.getParag()->getText();
   // Shortcut to the current paragraph layout
@@ -394,15 +404,15 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 
   // First line ? Draw the counter ?
   if ( pos == 0 && lay->getCounterNr() != -1 )
-  {
-    KWFormat counterfm(this, _fc );
-    counterfm.apply( lay->getCounterFormat() );
-    _painter.setFont( *( counterfm.loadFont( this ) ) );
-    _painter.setPen( counterfm.getColor() );
-
-    _painter.drawText( _fc.getPTCounterPos() - xOffset, 
-		       _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText() );
-  }
+    {
+      KWFormat counterfm(this, _fc );
+      counterfm.apply( lay->getCounterFormat() );
+      _painter.setFont( *( counterfm.loadFont( this ) ) );
+      _painter.setPen( counterfm.getColor() );
+      
+      _painter.drawText( _fc.getPTCounterPos() - xOffset, 
+			 _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, _fc.getCounterText() );
+    }
     
   // paint it character for character. Provisionally! !!HACK!!
   _fc.cursorGotoLineStart( _painter );
@@ -417,54 +427,55 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
   int i = 0;
   unsigned int tmpPTPos = 0;
   while ( !_fc.isCursorAtLineEnd() )
-  {
-    // Init position
-    if ( i == 0 )
-      {
-	// Change the painter
-	tmpPTPos = _fc.getPTPos();
-	_painter.setFont( *_fc.loadFont( this ) );
-	_painter.setPen( _fc.getColor() );
-	
-	//cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
-      }
-    
-    buffer[i] = text[ _fc.getTextPos() ].c;
-    
-    if ( buffer[i] == 0 )
-      {
-	// Torben: TODO: Handle special objects like images here
-      }
-    else
-      {
-	if ( text[ _fc.getTextPos() ].attrib != 0L )
-	  {
-	    // Change text format here
-	    assert( text[ _fc.getTextPos() ].attrib->getClassId() == ID_KWCharFormat );
-	    KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
-	    _fc.apply( *f->getFormat() );
-	    // Change the painter
-	    _painter.setFont( *_fc.loadFont( this ) );
-	    _painter.setPen( _fc.getColor() );
+    {
+      // Init position
+      if ( i == 0 )
+	{
+	  // Change the painter
+	  tmpPTPos = _fc.getPTPos();
+	  _painter.setFont( *_fc.loadFont( this ) );
+	  _painter.setPen( _fc.getColor() );
+	  
+	  //cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+	}
+      
+      buffer[i] = text[ _fc.getTextPos() ].c;
+      
+      if ( buffer[i] == 0 )
+	{
+	  // Torben: TODO: Handle special objects like images here
+	}
+      else
+	{
+	  if ( text[ _fc.getTextPos() ].attrib != 0L )
+	    {
+	      // Change text format here
+	      assert( text[ _fc.getTextPos() ].attrib->getClassId() == ID_KWCharFormat );
+	      KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
+	      _fc.apply( *f->getFormat() );
+	      // Change the painter
+	      _painter.setFont( *_fc.loadFont( this ) );
+	      _painter.setPen( _fc.getColor() );
 	    //cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
-	  }
-	
-	// Test next character.
-	i++;
-	if ( _fc.cursorGotoNextChar( _painter ) != 1 || text[_fc.getTextPos()].c == ' ' || i >= 199 )
-	  {
-	    // there was a blank _or_ there will be a font switch _or_ a special object next, so print 
-	    // what we have so far
-	    buffer[i] = '\0';
-	    _painter.drawText( tmpPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, buffer );
-	    //cerr << "#'" << buffer << "'" << endl;
-	    i = 0;
-	    // Blanks are not printed at all
-	    if ( text[_fc.getTextPos()].c == ' ' )
-	      _fc.cursorGotoNextChar(_painter);
-	  }
-      }
-  }
+	    }
+	  
+	  // Test next character.
+	  i++;
+	  if ( _fc.cursorGotoNextChar( _painter ) != 1 || text[_fc.getTextPos()].c == ' ' || i >= 199 )
+	    {
+	      // there was a blank _or_ there will be a font switch _or_ a special object next, so print 
+	      // what we have so far
+	      buffer[i] = '\0';
+	      _painter.drawText( tmpPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset, buffer );
+	      //cerr << "#'" << buffer << "'" << endl;
+	      i = 0;
+	      // Blanks are not printed at all
+	      if ( text[_fc.getTextPos()].c == ' ' )
+		_fc.cursorGotoNextChar(_painter);
+	    }
+	}
+    }
+  _painter.restore();
 }
 
 /*================================================================*/
