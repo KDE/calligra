@@ -532,14 +532,17 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                         deSelectAllObj();
 
-                    if ( kpobject && overObject )
+                    if ( overObject )
                     {
-                        if(!kpobject->isSelected())
+		      if(kpobject)
+			{
+			  if(!kpobject->isSelected())
                             selectObj( kpobject );
-                        else if(kpobject->isSelected() &&  (e->state() & ShiftButton))
+			  else if(kpobject->isSelected() &&  (e->state() & ShiftButton))
                             deSelectObj(kpobject);
-                        modType = MT_NONE;
-                        raiseObject();
+			  modType = MT_NONE;
+			  raiseObject();
+			}
                     }
                     else
                     {
@@ -992,6 +995,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
             // User-friendlyness: automatically start editing this textobject
             activePage()->deSelectAllObj();
+	    m_view->kPresenterDoc()->stickyPage()->deSelectAllObj();
             createEditing( kptextobject );
             //setTextBackground( kptextobject );
             //setCursor( arrowCursor );
@@ -1656,6 +1660,7 @@ void KPrCanvas::deSelectObj( int num )
 void KPrCanvas::selectObj( KPObject *kpobject )
 {
     kpobject->setSelected( true );
+    //FIXME 
     m_view->penColorChanged( m_activePage->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
     m_view->brushColorChanged( m_activePage->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
     _repaint( kpobject );
@@ -1698,7 +1703,7 @@ void KPrCanvas::selectAllObj()
 /*==================== deselect all objects ======================*/
 void KPrCanvas::deSelectAllObj()
 {
-    if(m_activePage->numSelected()==0)
+  if(m_activePage->numSelected()==0 && m_view->kPresenterDoc()->stickyPage()->numSelected()==0)
         return;
 
     if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 ) {
