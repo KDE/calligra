@@ -1239,6 +1239,28 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             }
 
         }
+        if( m_styleStack.hasAttribute("style:text-position"))
+        {
+            QString textPos =m_styleStack.attribute("style:text-position");
+            //relativetextsize="0.58"
+            //"super 58%"
+            if( textPos.contains("super"))
+            {
+                textPos=textPos.remove("super");
+                textPos=textPos.remove("%");
+                double value = textPos.stripWhiteSpace().toDouble();
+                text.setAttribute("VERTALIGN",2);
+                text.setAttribute("relativetextsize", value/100 );
+            }
+            else if(textPos.contains("sub"))
+            {
+                textPos=textPos.remove("sub");
+                textPos=textPos.remove("%");
+                double value = textPos.stripWhiteSpace().toDouble();
+                text.setAttribute("VERTALIGN",1);
+                text.setAttribute("relativetextsize", value/100 );
+            }
+        }
         if ( m_styleStack.hasAttribute( "style:text-underline" ) )
         {
             QString underType = m_styleStack.attribute( "style:text-underline" );
