@@ -643,6 +643,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
     _loaded = TRUE;
     pixmapKeys.clear();
+    pixmapNames.clear();
     imageRequests.clear();
     imageRequests2.clear();
 
@@ -967,7 +968,8 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
 	    while ( parser.open( 0L, tag ) ) {
 		QString key;
-
+		QString n = QString::null;
+		
 		KOMLParser::parseTag( tag.c_str(), name, lst );
 		if ( name == "KEY" ) {
 		    KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -975,9 +977,12 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "key" )
 			    key = ( *it ).m_strValue.c_str();
+			else if ( ( *it ).m_strName == "name" )
+			    n = ( *it ).m_strValue.c_str();
 			else
 			    cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
 		    }
+		    pixmapNames.append( n );
 		    pixmapKeys.append( key );
 		} else
 		    cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
@@ -1294,11 +1299,17 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 	CORBA::String_var str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
 
 	QStringList::Iterator it = pixmapKeys.begin();
+	QStringList::Iterator nit = pixmapNames.begin();
 
-	for ( ; it != pixmapKeys.end(); ++it ) {
-	    QString u = str.in();
-	    u += "/";
-	    u += *it;
+	for ( ; it != pixmapKeys.end(); ++it, ++nit ) {
+	    QString u;
+	    if ( !( *nit ).isEmpty() )
+		u = *nit;
+	    else {
+		u = str.in();
+		u += "/";
+		u += *it;
+	    }
 
 	    QImage img;
 
@@ -1342,9 +1353,9 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 {
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
-    out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org"
-	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\" url=\""
-	<< KURL( url() ).path().latin1() << "\">" << endl;
+    out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" 
+	<< "reggie@kde.org and weis@kde.org"
+	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;
     out << otag << "<PAPER format=\"" << static_cast<int>( pageLayout.format ) << "\" ptWidth=\"" << pageLayout.ptWidth
 	<< "\" ptHeight=\"" << pageLayout.ptHeight
 	<< "\" mmWidth =\"" << pageLayout.mmWidth << "\" mmHeight=\"" << pageLayout.mmHeight
@@ -1352,12 +1363,17 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 	<< "\" orientation=\"" << static_cast<int>( pageLayout.orientation )
 	<< "\" columns=\"" << pageColumns.columns << "\" ptColumnspc=\"" << pageColumns.ptColumnSpacing
 	<< "\" mmColumnspc=\"" << pageColumns.mmColumnSpacing << "\" inchColumnspc=\"" << pageColumns.inchColumnSpacing
-	<< "\" hType=\"" << static_cast<int>( pageHeaderFooter.header ) << "\" fType=\"" << static_cast<int>( pageHeaderFooter.footer )
-	<< "\" ptHeadBody=\"" << pageHeaderFooter.ptHeaderBodySpacing << "\" ptFootBody=\"" << pageHeaderFooter.ptFooterBodySpacing
-	<< "\" mmHeadBody=\"" << pageHeaderFooter.mmHeaderBodySpacing << "\" mmFootBody=\"" << pageHeaderFooter.mmFooterBodySpacing
-	<< "\" inchHeadBody=\"" << pageHeaderFooter.inchHeaderBodySpacing << "\" inchFootBody=\"" << pageHeaderFooter.inchFooterBodySpacing
+	<< "\" hType=\"" << static_cast<int>( pageHeaderFooter.header ) << "\" fType=\"" 
+	<< static_cast<int>( pageHeaderFooter.footer )
+	<< "\" ptHeadBody=\"" << pageHeaderFooter.ptHeaderBodySpacing << "\" ptFootBody=\"" 
+	<< pageHeaderFooter.ptFooterBodySpacing
+	<< "\" mmHeadBody=\"" << pageHeaderFooter.mmHeaderBodySpacing << "\" mmFootBody=\"" 
+	<< pageHeaderFooter.mmFooterBodySpacing
+	<< "\" inchHeadBody=\"" << pageHeaderFooter.inchHeaderBodySpacing << "\" inchFootBody=\"" 
+	<< pageHeaderFooter.inchFooterBodySpacing
 	<< "\">" << endl;
-    out << indent << "<PAPERBORDERS mmLeft=\"" << pageLayout.mmLeft << "\" mmTop=\"" << pageLayout.mmTop << "\" mmRight=\""
+    out << indent << "<PAPERBORDERS mmLeft=\"" << pageLayout.mmLeft << "\" mmTop=\"" << pageLayout.mmTop 
+	<< "\" mmRight=\""
 	<< pageLayout.mmRight << "\" mmBottom=\"" << pageLayout.mmBottom
 	<< "\" ptLeft=\"" << pageLayout.ptLeft << "\" ptTop=\"" << pageLayout.ptTop << "\" ptRight=\""
 	<< pageLayout.ptRight << "\" ptBottom=\"" << pageLayout.ptBottom
@@ -1375,8 +1391,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     out << otag << "<FRAMESETS>" << endl;
 
     KWFrameSet *frameSet = 0L;
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ )
-    {
+    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	frameSet = getFrameSet( i );
 	if ( frameSet->getFrameType() != FT_PART )
 	    frameSet->save( out );
@@ -1385,8 +1400,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     out << etag << "</FRAMESETS>" << endl;
 
     out << otag << "<STYLES>" << endl;
-    for ( unsigned int j = 0; j < paragLayoutList.count(); j++ )
-    {
+    for ( unsigned int j = 0; j < paragLayoutList.count(); j++ ) {
 	out << otag << "<STYLE>" << endl;
 	paragLayoutList.at( j )->save( out );
 	out << etag << "</STYLE>" << endl;
@@ -1397,11 +1411,19 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 
     QDictIterator<KWImage> it = imageCollection.iterator();
     QStringList keys, images;
-    for ( ; it.current(); ++it )
-    {
+    int i = 0;
+    for ( ; it.current(); ++it ) {
 	if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
 	    continue;
-	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1() << "\"/>" << endl;
+	QString format = QFileInfo( it.current()->getFilename() ).extension().upper();
+	if ( format == "JPG" )
+	    format = "JPEG";
+	if ( QImage::outputFormats().find( format ) == -1 )
+	    format = "BMP";
+	
+	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1() 
+	    << "\" name=\"" << QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() ).latin1()
+	    << "\"/>" << endl;
 	keys.append( it.currentKey() );
 	images.append( it.current()->getFilename() );
     }
@@ -1427,15 +1449,11 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
     QDictIterator<KWImage> it = imageCollection.iterator();
 
     QStringList keys, images;
-
-    for( ; it.current(); ++it )
-    {
+    int i = 0;
+    
+    for( ; it.current(); ++it ) {
 	if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
 	    continue;
-
-	QString u2 = u.in();
-	u2 += "/";
-	u2 += it.current()->getFilename();
 
 	QString format = QFileInfo( it.current()->getFilename() ).extension().upper();
 	if ( format == "JPG" )
@@ -1443,9 +1461,10 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	if ( QImage::outputFormats().find( format ) == -1 )
 	    format = "BMP";
 
+	QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
 	QString mime = "image/" + format.lower();
-	if ( _store->open( u2, mime.lower() ) )
-	{
+	
+	if ( _store->open( u2, mime.lower() ) ) {
 	    ostorestream out( _store );
 	    writeImageToStream( out, *it.current(), format );
 	    out.flush();

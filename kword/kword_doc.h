@@ -254,7 +254,7 @@ public:
     void copySelectedText();
     void setFormat( KWFormat &_format );
 
-    void paste( KWFormatContext *_fc, QString _string, KWPage *_page, 
+    void paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 		KWFormat *_format = 0L, const QString &_mime = "text/plain" );
 
     void appendPage( unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE );
@@ -370,7 +370,7 @@ public:
 
     KWSerialLetterDataBase *getSerialLetterDataBase() const;
     int getSerialLetterRecord() const;
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -449,7 +449,7 @@ protected:
     QString urlIntern;
     bool pglChanged;
 
-    QStringList pixmapKeys;
+    QStringList pixmapKeys, pixmapNames;
     QDict<KWCharImage> imageRequests;
     QDict<KWPictureFrameSet> imageRequests2;
     QList<KWVariable> variables;

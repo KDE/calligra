@@ -1486,3 +1486,6 @@ Reggie, 12.9.1999:
 - More work on serial letters
 - Some fixes for pixmaps in new and old fileformat
 
+Reggie, 13.9.1999:
+------------------
+- Saving/Loading pixmaps follows now the new fileformat SPECS
