@@ -6968,7 +6968,7 @@ void KSpreadSheet::maxRowCols( int & maxCols, int & maxRows )
 }
 
 
-bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles )
+bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle )
 {
     int maxCols= 1;
     int maxRows= 1;
@@ -6982,7 +6982,7 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles )
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
     }
     maxRowCols( maxCols, maxRows );
-    saveOasisColRowCell( xmlWriter, mainStyles, maxCols, maxRows );
+    saveOasisColRowCell( xmlWriter, mainStyles, maxCols, maxRows, valStyle );
     xmlWriter.endElement();
     return true;
 }
@@ -6995,7 +6995,7 @@ QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
     return mainStyles.lookup( pageStyle, "ta" );
 }
 
-void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows )
+void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, KSpreadGenValidationStyles &valStyle )
 {
     int i = 1;
     while ( i <= maxCols )
@@ -7049,20 +7049,20 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
         if ( row->isHide() )
             xmlWriter.addAttribute( "table:visibility", "collapse" );
 
-        saveOasisCells(  xmlWriter, mainStyles, i, maxCols );
+        saveOasisCells(  xmlWriter, mainStyles, i, maxCols, valStyle );
 
         xmlWriter.endElement();
     }
 }
 
-void KSpreadSheet::saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols )
+void KSpreadSheet::saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, KSpreadGenValidationStyles &valStyle )
 {
     int i = 1;
     while ( i <= maxCols )
     {
         int repeated = 1;
         KSpreadCell* cell = cellAt( i, row );
-        cell->saveOasis( xmlWriter, mainStyles, row, i,  maxCols, repeated );
+        cell->saveOasis( xmlWriter, mainStyles, row, i,  maxCols, repeated, valStyle );
         i += repeated;
     }
 }

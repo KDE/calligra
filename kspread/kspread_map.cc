@@ -21,7 +21,7 @@
 #include "kspread_map.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
-
+#include "kspread_genvalidationstyle.h"
 #include "KSpreadMapIface.h"
 
 #include <kmdcodec.h>
@@ -87,10 +87,11 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
 
 bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
 {
+    KSpreadGenValidationStyles valStyle;
     QPtrListIterator<KSpreadSheet> it( m_lstTables );
     for( ; it.current(); ++it )
     {
-        it.current()->saveOasis( xmlWriter, mainStyles );
+        it.current()->saveOasis( xmlWriter, mainStyles, valStyle );
     }
     return true;
 }

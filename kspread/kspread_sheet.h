@@ -38,7 +38,7 @@ class KSpreadUndoInsertRemoveAction;
 class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;
-
+class KSpreadGenValidationStyles;
 class QStingList;
 class QWidget;
 class QPainter;
@@ -283,7 +283,7 @@ public:
 
     virtual bool loadOasis( const QDomElement& table, const KoOasisStyles& oasisStyles );
 
-    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles );
+    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle );
 
     /**
      * Saves a children
@@ -1177,8 +1177,8 @@ protected:
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 
     QString saveOasisTableStyleName( KoGenStyles &mainStyles );
-    void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows );
-    void saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols );
+    void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, KSpreadGenValidationStyles &valStyle );
+    void saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, KSpreadGenValidationStyles &valStyle );
 
     void maxRowCols( int & maxCols, int & maxRows );
 

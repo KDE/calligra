@@ -57,6 +57,7 @@
 #include "kspread_style_manager.h"
 #include "kspread_util.h"
 #include "ksploadinginfo.h"
+#include "kspread_genvalidationstyle.h"
 
 #include "kspread_value.h"
 #include <koxmlwriter.h>
@@ -5144,77 +5145,7 @@ void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
     }
 }
 
-QString KSpreadCell::saveOasisValidationCondition()
-{
-    //todo
-    return "";
-}
 
-QString KSpreadCell::saveOasisValidation( KoXmlWriter &xmlValidation, int & validNumber )
-{
-    //todo
-#if 0
-          <table:content-validation table:name="val1" table:condition="cell-content-is-decimal-number() and cell-content()=12" table:allow-empty-cell="false" table:base-cell-address="Sheet1.C9">
-        <table:help-message table:title="b" table:display="true">
-          <text:p>cvbxcvb</text:p>
-        </table:help-message>
-        <table:error-message table:message-type="warning" table:title="cvbxc" table:display="false">
-          <text:p>bxcbvxcvbxcvb</text:p>
-          <text:p>xc</text:p>
-          <text:p>bx</text:p>
-          <text:p>cb</text:p>
-          <text:p>x</text:p>
-          <text:p>cbv</text:p>
-        </table:error-message>
-      </table:content-validation>
-#endif
-        QString strValNumber=QString( "val%1" ).arg( validNumber );
-    xmlValidation.startElement( "table:content-validation" );
-    xmlValidation.addAttribute( "table:name", QString( "val%1" ).arg( validNumber ) );
-    xmlValidation.addAttribute( "table:allow-empty-cell", d->extra()->validity->allowEmptyCell ? "true" : "false" );
-
-
-    xmlValidation.addAttribute( "table:condition", saveOasisValidationCondition() );
-
-    xmlValidation.startElement( "table:help-message" );
-    xmlValidation.addAttribute( "table:title", d->extra()->validity->titleInfo );
-    xmlValidation.addAttribute( "table:display", d->extra()->validity->displayValidationInformation ? "true" : "false" );
-
-    QStringList text = QStringList::split( "\n", d->extra()->validity->messageInfo );
-    for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
-        xmlValidation.startElement( "text:p" );
-        xmlValidation.addTextNode( *it );
-        xmlValidation.endElement();
-    }
-    xmlValidation.endElement();
-
-    xmlValidation.startElement( "table:error-message" );
-    switch( d->extra()->validity->m_action )
-    {
-    case Warning:
-        xmlValidation.addAttribute( "table:message-type", "warning" );
-        break;
-    case Information:
-        xmlValidation.addAttribute( "table:message-type", "information" );
-        break;
-    case Stop:
-        xmlValidation.addAttribute( "table:message-type", "stop" );
-        break;
-    }
-    xmlValidation.addAttribute("table:title", d->extra()->validity->titleInfo);
-    xmlValidation.addAttribute("table:display", ( d->extra()->validity->displayMessage ? "true": "false" ));
-    text = QStringList::split( "\n", d->extra()->validity->message );
-    for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
-        xmlValidation.startElement( "text:p" );
-        xmlValidation.addTextNode( *it );
-        xmlValidation.endElement();
-    }
-    xmlValidation.endElement();
-
-    xmlValidation.endElement();
-    ++validNumber;
-    return strValNumber;
-}
 
 void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 {
@@ -5222,7 +5153,7 @@ void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 }
 
 
-bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, int column, int maxCols, int &repeated )
+bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, int column, int maxCols, int &repeated, KSpreadGenValidationStyles &valStyle )
 {
     if ( !isObscuringForced() )
         xmlwriter.startElement( "table:table-cell" );
@@ -5286,7 +5217,11 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     {
       kdDebug() << "Type: " << d->value.type() << endl;
     }
-
+    if (d->extra()->validity)
+    {
+        KSpreadGenValidationStyle styleVal(d->extra()->validity);
+        xmlwriter.addAttribute( "table:validation-name", valStyle.lookup( styleVal ) );
+    }
     if ( isFormula() )
     {
       kdDebug() << "Formula found" << endl;

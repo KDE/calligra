@@ -45,6 +45,7 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
 class KSParseNode;
+class KSpreadGenValidationStyles;
 
 
 #include <qpainter.h>
@@ -246,10 +247,8 @@ public:
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
-    virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles, int row, int column, int maxCol, int &repeated );
+    virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles, int row, int column, int maxCol, int &repeated, KSpreadGenValidationStyles &valStyle );
     void saveOasisCellStyle( KoGenStyle &currentCellStyle );
-    QString saveOasisValidation( KoXmlWriter &xmlValidation, int & validNumber );
-    QString KSpreadCell::saveOasisValidationCondition();
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite, bool paste = false );
