@@ -38,7 +38,7 @@ Todo:
 - Hide/show header/footer by page (allow by oasis format)
 
 In Progress:
--> implement custom slide show (save/change works), load doesn't work and we don't use it for the moment
+-> implement custom slide show (save/load/change works)
 -> copy/paste element as oasis format
 	-> duplicate page (DONE)
 	-> copy page (DONE)

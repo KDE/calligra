@@ -1286,7 +1286,7 @@ void KPresenterDoc::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc 
 	QCString tagName = e.tagName().latin1();
         if ( tagName == "presentation:show" )
         {
-            kdDebug()<<" e.attribute(presentation:name) :"<<e.attribute("presentation:name")<< " e.attribute(presentation:pages) :"<<e.attribute("presentation:pages")<<endl;
+            //kdDebug()<<" e.attribute(presentation:name) :"<<e.attribute("presentation:name")<< " e.attribute(presentation:pages) :"<<e.attribute("presentation:pages")<<endl;
             QStringList tmp = QStringList::split( ",", e.attribute("presentation:pages") );
             m_loadingInfo->m_tmpCustomListMap.insert( e.attribute("presentation:name"), tmp );
         }
@@ -1461,7 +1461,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     if ( drawPage.isNull() ) // no slides? give up.
         return false;
     QDomElement dp = drawPage.toElement();
-    m_loadingInfo = new KPRLoadingInfo;
 
     //code from kword
     // TODO variable settings
@@ -1587,7 +1586,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         startBackgroundSpellCheck();
 #endif
     }
-    kdDebug()<<"m_loadingInfo->m_tmpCustomListMap.isEmpty() :"<<m_loadingInfo->m_tmpCustomListMap.isEmpty()<<endl;
     updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap );
     delete m_loadingInfo;
     m_loadingInfo=0L;
@@ -4453,23 +4451,20 @@ CustomListMap KPresenterDoc::customListSlideShow()
 
 void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map )
 {
-    kdDebug()<<"void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map )\n";
     m_customListSlideShow.clear();
     CustomListMap::Iterator it;
     for ( it = map.begin(); it != map.end(); ++it ) {
-        kdDebug()<<"sssssssssssssssssssssssssssssssssssssssssssssssssssssss\n";
         QStringList tmp( it.data() );
         QDict<KPrPage> tmpDict;
         for ( QStringList::Iterator itList = tmp.begin(); itList != tmp.end(); ++itList )
         {
-            kdDebug()<<" list \n";
             for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
             {
-                kdDebug()<<" insert page name :"<<*itList<<endl;
+                //kdDebug()<<" insert page name :"<<*itList<<endl;
                 if ( m_pageList.at( i )->pageTitle()== ( *itList ) )
                 {
                     tmpDict.insert( ( *itList ), m_pageList.at( i ) );
-                    kdDebug()<<" really insert\n";
+                    //kdDebug()<<" really insert\n";
                     break;
                 }
             }
