@@ -131,10 +131,8 @@ KarbonPart::initDoc()
 	}
 	else if( result == KoTemplateChooseDia::File )
 	{
-		KURL url;
-		url.setPath( file );
-		bool ok = openURL( url );
-		return ok;
+		KURL url( file );
+		return openURL( url );
 	}
 
 	return false;
