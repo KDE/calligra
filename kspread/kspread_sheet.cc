@@ -1348,7 +1348,6 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker
 
 void KSpreadSheet::setSelectionfirstLetterUpper( KSpreadSelection* selectionInfo)
 {
-  KSpreadChanges * c = 0;
   SetSelectionFirstLetterUpperWorker w(  this );
   workOnCells( selectionInfo, w );
 }
@@ -5908,7 +5907,7 @@ void KSpreadSheet::mergeCells( const QRect &area )
   if( m_pMap->isProtected() )
     return;
 
-  // no span ?    
+  // no span ?
   if( area.width() == 1 && area.height() == 1)
     return;
 
@@ -6296,10 +6295,10 @@ void KSpreadSheet::checkContentDirection( QString const & name )
   bool rtl = m_bRightToLeft;
 
   kdDebug() << "name.isRightToLeft(): " << name.isRightToLeft() << ", RTL: " << rtl << endl;
-  
+
   /*
    * note:
-   * the rtl code in kspread is till buggy. for this release the trigger will be 
+   * the rtl code in kspread is till buggy. for this release the trigger will be
    * an RTL sheet name. in between releases the trigger will be that the name
    * of the sheet will start with "rtl". just to make developers life easier.
    */
@@ -6923,7 +6922,7 @@ void KSpreadSheet::removeTable()
     emit sig_TableRemoved(this);
 }
 
-bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
+bool KSpreadSheet::setTableName( const QString& name, bool init, bool /*makeUndo*/ )
 {
     if ( map()->findTable( name ) )
         return FALSE;
