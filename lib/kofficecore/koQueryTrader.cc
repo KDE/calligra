@@ -17,26 +17,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kactivator.h> // needs to be first in order to include POA (HACK)
+#include <klibloader.h>
 
 #include "koQueryTypes.h"
-#include "koffice.h"
+#include "koDocument.h"
+#include "koTrader.h"
 
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmessagebox.h>
 
 #include <klocale.h>
-#include <opApplication.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-#include <kded_instance.h>
-#include <ktrader.h>
-
+#include <kservices.h>
 #include <kdebug.h>
 
 /**
- * Port from KOffice Trader to KTrader/KActivator (kded) by Simon Hausmann
+ * Port from KOffice Trader to KoTrader/KActivator (kded) by Simon Hausmann
  * (c) 1999 Simon Hausmann <hausmann@kde.org>
  */
 
@@ -49,42 +47,21 @@
 KoComponentEntry::KoComponentEntry( const KoComponentEntry& e )
 {
   operator=( e );
-  /* comment = e.comment;
-  name = e.name;
-  exec = e.exec;
-  activationMode = e.activationMode;
-  repoID = e.repoID;
-  miniIcon = e.miniIcon;
-  icon = e.icon;
-
-  if ( e.reference )
-    reference = CORBA::Object::_duplicate( e.reference );
-  else
-  reference = 0; */
 }
 
 const KoComponentEntry& KoComponentEntry::operator=( const KoComponentEntry& e )
 {
   comment = e.comment;
   name = e.name;
-  exec = e.exec;
-  activationMode = e.activationMode;
-  repoID = e.repoID;
+  libname = e.libname;
   miniIcon = e.miniIcon;
   icon = e.icon;
-
-  if ( e.reference )
-    reference = CORBA::Object::_duplicate( e.reference );
-  else
-    reference = 0;
 
   return *this;
 }
 
 KoComponentEntry::~KoComponentEntry()
 {
-  if ( reference )
-    CORBA::release( reference );
 }
 
 /*******************************************************************
@@ -99,8 +76,7 @@ static KoComponentEntry koParseComponentProperties( KService::Ptr service )
 
   e.name = service->name();
   e.comment = service->comment();
-  e.exec = service->CORBAExec();
-  e.activationMode = service->activationMode();
+  e.libname = service->library();
 
   QStringList lst = KGlobal::dirs()->resourceDirs("icon");
   QStringList::ConstIterator it = lst.begin();
@@ -111,8 +87,6 @@ static KoComponentEntry koParseComponentProperties( KService::Ptr service )
   it = lst.begin();
   while (!e.miniIcon.load( *it + "/" + service->icon() ) && it != lst.end() )
     it++;
-
-  e.repoID = service->repoIds();
 
   return e;
 }
@@ -134,62 +108,53 @@ KoDocumentEntry::KoDocumentEntry( const KoComponentEntry& _e ) : KoComponentEntr
 
 const KoDocumentEntry& KoDocumentEntry::operator=( const KoDocumentEntry& e )
 {
-  KoComponentEntry::operator=( e );
-  mimeTypes = e.mimeTypes;
-  return *this;
+    KoComponentEntry::operator=( e );
+    mimeTypes = e.mimeTypes;
+    return *this;
 }
 
-KOffice::Document_ptr KoDocumentEntry::createDoc()
+KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
 {
-  ASSERT( !CORBA::is_nil( reference ) );
-  kdebug(0, 30003, "Narrow factory\n");
-  KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( reference );
-  if( CORBA::is_nil( factory ) )
-  {
-    QString tmp( i18n("Server %1 does not implement a KOffice factory" ) );
-    tmp = tmp.arg( name );
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "Ok" ) );
-    return 0;
-  }
-  kdebug(0, 30003, "Create\n");
-  KOffice::Document_ptr doc = factory->create();
-  if( CORBA::is_nil( doc ) )
-  {
-    QString tmp( i18n("Server %1 did not create a document" ) );
-    tmp = tmp.arg( name );
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "Ok" ) );
-    return 0;
-  }
-  kdebug(0, 30003, "Create done\n");
-  return doc;
+    KLibFactory* factory = KLibLoader::self()->factory( libname );
+
+    if( !factory )
+	return 0;
+
+    QObject* obj = factory->create( KLibFactory::KofficeDocument, parent, name );
+    if ( !obj || !obj->inherits( "KoDocument" ) )
+    {
+	delete obj;
+	return 0;
+    }
+
+    return (KoDocument*)obj;
 }
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType( const char *mimetype )
 {
-  QString constr( "'%1' in ServiceTypes" );
-  constr = constr.arg( mimetype );
+    QString constr( "'%1' in ServiceTypes" );
+    constr = constr.arg( mimetype );
 
-  QValueList<KoDocumentEntry> vec = query( constr );
-  if ( vec.isEmpty() )
-    return KoDocumentEntry();
-  
-  return vec[0];
+    QValueList<KoDocumentEntry> vec = query( constr );
+    if ( vec.isEmpty() )
+	return KoDocumentEntry();
+
+    return vec[0];
 }
 
 QValueList<KoDocumentEntry> KoDocumentEntry::query( const char *_constr, int /*_count*/ )
 {
   QValueList<KoDocumentEntry> lst;
 
-  KTrader *trader = KdedInstance::self()->ktrader();
-  KActivator *activator = KdedInstance::self()->kactivator();
+  KoTrader *trader = KoTrader::self();
 
   if ( !_constr )
     _constr = "";
 
   // Query the trader
-  KTrader::OfferList offers = trader->query( "KOfficeDocument", _constr );
+  KoTrader::OfferList offers = trader->query( "KOfficePart", _constr );
 
-  KTrader::OfferList::ConstIterator it = offers.begin();
+  KoTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   for( unsigned int i = 0; i < max; i++ )
   {
@@ -198,19 +163,6 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const char *_constr, int /*_
 
     //HACK
     d.mimeTypes = (*it)->serviceTypes();
-
-    //strip off tag
-    QString repoId = *( (*it)->repoIds().begin() );
-    QString tag = (*it)->name();
-    int tagPos = repoId.findRev( '#' );
-    if ( tagPos != -1 )
-    {
-      tag = repoId.mid( tagPos+1 );
-      repoId.truncate( tagPos );
-    }
-
-    // We need a virtual object reference
-    d.reference = activator->activateService( (*it)->name().ascii(), repoId.ascii(), tag.ascii() );
 
     // Append converted offer
     lst.append( d );
@@ -262,31 +214,16 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
   kdebug(0, 30003, "KoFilterEntry::query( %s, <ignored> )", _constr );
   QValueList<KoFilterEntry> lst;
 
-  KTrader *trader = KdedInstance::self()->ktrader();
-  KActivator *activator = KdedInstance::self()->kactivator();
+  KoTrader *trader = KoTrader::self();
 
-  KTrader::OfferList offers = trader->query( "KOfficeFilter", _constr );
+  KoTrader::OfferList offers = trader->query( "KOfficeFilter", _constr );
 
-  KTrader::OfferList::ConstIterator it = offers.begin();
+  KoTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   kdebug(0, 30003, "Query returned %d offers\n", max);
   for( unsigned int i = 0; i < max; i++ )
   {
     KoFilterEntry f( koParseFilterProperties( *it ) );
-
-    //strip off tag
-    QString repoId = *( (*it)->repoIds().begin() );
-    QString tag = (*it)->name();
-    int tagPos = repoId.findRev( '#' );
-    if ( tagPos != -1 )
-    {
-      tag = repoId.mid( tagPos+1 );
-      repoId.truncate( tagPos );
-    }
-
-    // We need a virtual object reference
-    f.reference = activator->activateService( (*it)->name().ascii(), repoId.ascii(), tag.ascii() );
-    kdebug(0, 30003, "Created %p\n",f.reference);
 
     // Append converted offer
     lst.append( f );
@@ -297,3 +234,73 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
   return lst;
 }
 
+KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
+{
+    KLibFactory* factory = KLibLoader::self()->factory( libname );
+
+    if( !factory )
+	return 0;
+
+    QObject* obj = factory->create( parent, name, "KoFilter" );
+    if ( !obj || !obj->inherits( "KoFilter" ) )
+    {
+	delete obj;
+	return 0;
+    }
+
+    return (KoFilter*)obj;
+}
+
+/*******************************************************************
+ *
+ * koParseToolProperties
+ *
+ *******************************************************************/
+
+static KoToolEntry koParseToolProperties( KService::Ptr service )
+{
+    KoToolEntry e( koParseComponentProperties( service ) );
+
+    QStringList mimeTypes = service->property( "MimeTypes" )->stringValue();
+    QStringList commands = service->property( "Commands" )->stringValue();
+    QStringList commandsI18N = service->property( "CommandsI18N" )->stringValue();
+
+    return e;
+}
+
+/*******************************************************************
+ *
+ * KoToolEntry
+ *
+ *******************************************************************/
+
+KoToolEntry::KoToolEntry( const KoToolEntry& e ) : KoComponentEntry( e )
+{
+    mimeTypes = e.mimeTypes;
+    commandsI18N = e.commandsI18N;
+    commands = e.commands;
+}
+
+KoToolEntry::KoToolEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )
+{
+}
+
+QValueList<KoToolEntry> KoToolEntry::query( const QString &_mime_type )
+{
+  QValueList<KoToolEntry> lst;
+
+  KoTrader *trader = KoTrader::self();
+
+  KoTrader::OfferList offers = trader->query( "KOfficeTool" );
+
+  KoTrader::OfferList::ConstIterator it = offers.begin();
+  for (; it != offers.end(); ++it )
+  {
+    KoToolEntry t( koParseToolProperties( *it ) );
+
+    if ( t.mimeTypes.find( _mime_type ) != t.mimeTypes.end() )
+	lst.append( t );
+  }
+
+  return lst;
+}

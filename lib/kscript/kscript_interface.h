@@ -1,3 +1,5 @@
+#if 0
+
 #ifndef __KSCRIPT_INTERFACE_H__
 #define __KSCRIPT_INTERFACE_H__
 
@@ -18,7 +20,7 @@ public:
   enum Access { ReadOnly, Normal };
 
   KSAttribute( KSModule* m, const QString& name, Access a, const KSTypeCode::Ptr& );
-  
+
   void set( KSContext&, KSProxy*, KSValue* );
   KSValue::Ptr get( KSContext&, KSProxy* );
 
@@ -67,18 +69,20 @@ public:
    * before inserting new items.
    */
   bool allSuperInterfaces( QValueList<KSValue::Ptr>& );
-  
+
   /**
    * @return the name of the interface. This name is NOT qualified, that means
    *         it does not contain the name of the module etc.
    */
   QString name() const { return m_name; }
-  
+
 protected:
   QValueList<KSValue::Ptr> m_superInterfaces;
   KSNamespace m_space;
   QString m_name;
   KSModule* m_module;
 };
+
+#endif
 
 #endif

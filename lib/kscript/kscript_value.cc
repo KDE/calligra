@@ -86,7 +86,7 @@ KSValue::~KSValue()
 KSValue& KSValue::operator= ( const KSValue& p )
 {
   clear();
-  
+
   switch( p.type() )
     {
     case Empty:
@@ -147,7 +147,7 @@ KSValue& KSValue::operator= ( const KSValue& p )
 
   typ = p.type();
   m_mode = p.mode();
- 
+
   return *this;
 }
 
@@ -343,24 +343,32 @@ void KSValue::clear()
     case ProxyBuiltinMethodType:
       break;
     case TypeCodeType:
-      if ( val.ptr )
+#if 0
+	if ( val.ptr )
 	if ( typeCodeValue()->deref() )
 	  delete ((KSTypeCode*)val.ptr);
+#endif
       break;
     case ProxyType:
-      if ( val.ptr )
+#if 0
+	if ( val.ptr )
 	if ( proxyValue()->deref() )
 	  delete ((KSProxy*)val.ptr);
+#endif
       break;
     case InterfaceType:
+#if 0
       if ( val.ptr )
 	if ( interfaceValue()->deref() )
 	  delete ((KSInterface*)val.ptr);
+#endif
       break;
     case AttributeType:
+#if 0
       if ( val.ptr )
 	if ( attributeValue()->deref() )
 	  delete ((KSAttribute*)val.ptr);
+#endif
       break;
     case FunctionType:
       if ( val.ptr )
@@ -417,7 +425,7 @@ void KSValue::clear()
     case NTypes:
       ASSERT(0);
       break;
-    }  
+    }
 
   typ = Empty;
 }
@@ -501,7 +509,7 @@ bool KSValue::cast( Type _typ )
 	typ = _typ;
 	return true;
       }
-      break;      
+      break;
     case DoubleType:
       if ( _typ == IntType )
       {
@@ -550,10 +558,10 @@ bool KSValue::cast( Type _typ )
     case NTypes:
       ASSERT(0);
       break;
-    }  
+    }
 
   typ = _typ;
-  
+
   return true;
 }
 
@@ -703,7 +711,7 @@ QString KSValue::toString() const
     case NTypes:
       ASSERT(0);
       break;
-    }  
+    }
 
   // Never reached
   return QString::null;
@@ -729,7 +737,7 @@ bool KSValue::operator==( const KSValue& v ) const
 }
 
 bool KSValue::cmp( const KSValue& v ) const
-{    
+{
   if ( typ != v.typ )
     return false;
 

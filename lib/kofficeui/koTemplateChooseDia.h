@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Template Choose Dialog (header)                        */
+/* Module: Template Choose Dialog (header)			  */
 /******************************************************************/
 
 #ifndef koTemplateChooseDia_h
@@ -36,94 +36,97 @@
 
 class MyIconCanvas : public KIconLoaderCanvas
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	MyIconCanvas(QWidget *parent = 0,const QString &name = QString::null)
-		: KIconLoaderCanvas(parent,name) {}
+    MyIconCanvas(QWidget *parent = 0,const QString &name = QString::null)
+	: KIconLoaderCanvas(parent,name) {}
 
-	bool isCurrentValid() { return sel_id >= 0 && sel_id < (int)name_list.count() && !getCurrent().isEmpty(); }
+    bool isCurrentValid() { return currentItem(); }
 
 protected:
-	void mousePressEvent(QMouseEvent *e) {
-		KIconLoaderCanvas::mousePressEvent(e);
-		if (sel_id >= 0 && sel_id < (int)name_list.count()) {
-			QString s = getCurrent();
-			emit currentChanged(s);
-		} else {
-			QString s = "";
-			emit currentChanged(s);
-		}
+    void viewportMousePressEvent(QMouseEvent *e) {
+	KIconLoaderCanvas::viewportMousePressEvent(e);
+	if ( isCurrentValid() ) {
+	    QString s = getCurrent();
+	    emit currentChanged(s);
+	} else {
+	    QString s = "";
+	    emit currentChanged(s);
 	}
+    }
 
 signals:
-	void currentChanged(const QString &);
+    void currentChanged(const QString &);
 
 };
 
 class QGridLayout;
 
+class KLibGlobal;
+
 /******************************************************************/
-/* Class: KoTemplateChooseDia                                     */
+/* Class: KoTemplateChooseDia					  */
 /******************************************************************/
 
 class KoTemplateChooseDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	enum ReturnType {Cancel,Template,File,Empty};
+    enum ReturnType {Cancel,Template,File,Empty};
 
-	KoTemplateChooseDia(QWidget *parent,const char *name,const QString& template_type,bool _hasCancel,bool _onlyTemplates, const QString &importFilter, const QString &mimeType );
-	~KoTemplateChooseDia() {;}
+    KoTemplateChooseDia(QWidget *parent,const char *name,const QString& template_type, KLibGlobal* global, bool _hasCancel,bool _onlyTemplates, const QString &importFilter, const QString &mimeType );
+    ~KoTemplateChooseDia() {;}
 
-	static ReturnType chooseTemplate(const QString& template_type, QString &_template, bool _hasCancel, bool _onlyTemplates = true, const QString &importFilter = QString::null, const QString &mimeType = QString::null );
+    static ReturnType chooseTemplate(const QString& template_type, KLibGlobal* global, QString &_template, bool _hasCancel, bool _onlyTemplates = true, const QString &importFilter = QString::null, const QString &mimeType = QString::null );
 
-	QString getTemplate() { return templateName; }
-	QString getFullTemplate() { return fullTemplateName; }
-	ReturnType getReturnType() { return returnType; }
+    QString getTemplate() { return templateName; }
+    QString getFullTemplate() { return fullTemplateName; }
+    ReturnType getReturnType() { return returnType; }
 
-protected:
-	struct Group
-	{
-		QFileInfo dir;
-		QString name;
-		QWidget *tab;
-		MyIconCanvas *loadWid;
-		QLabel *label;
-	};
+private:
+    struct Group
+    {
+	QFileInfo dir;
+	QString name;
+	QWidget *tab;
+	MyIconCanvas *loadWid;
+	QLabel *label;
+    };
 
-	void getGroups();
-	void setupTabs();
+    void getGroups();
+    void setupTabs();
 
-	QList<Group> groupList;
-	Group *grpPtr;
-	QString template_type;
-	QString templateName, fullTemplateName;
-	bool onlyTemplates;
-	QRadioButton *rbTemplates,*rbFile,*rbEmpty;
-	QLabel *lFile;
-	QPushButton *bFile,*ok;
-	QTabWidget *tabs;
-	ReturnType returnType;
-	QGridLayout *grid;
-	QString m_strImportFilter;
-	QString m_strMimeType;
-	
+    QList<Group> groupList;
+    Group *grpPtr;
+    QString template_type;
+    QString templateName, fullTemplateName;
+    bool onlyTemplates;
+    QRadioButton *rbTemplates,*rbFile,*rbEmpty;
+    QLabel *lFile;
+    QPushButton *bFile,*ok;
+    QTabWidget *tabs;
+    ReturnType returnType;
+    QGridLayout *grid;
+    QString m_strImportFilter;
+    QString m_strMimeType;
+    KLibGlobal* global;
+
 private slots:
-	void nameChanged(const QString &);
-	void chosen();
-	void currentChanged(const QString &);
+    void nameChanged(const QString &);
+    void chosen();
+    void currentChanged(const QString &);
 
-	void openTemplate();
-	void openFile();
-	void openEmpty();
-	void chooseFile();
-	void tabsChanged(const QString &)
-	{ openTemplate(); }
+    void openTemplate();
+    void openFile();
+    void openEmpty();
+    void chooseFile();
+    void tabsChanged(const QString &)
+    { openTemplate(); }
 
 signals:
-	void templateChosen(const QString &);
+    void templateChosen(const QString &);
 
 };
 

@@ -456,7 +456,7 @@ bool KSMethod::call( KSContext& context )
   {
     KSProxyBuiltinMethod m = m_func->proxyBuiltinMethodValue();
     KSProxy* o = m_object->proxyValue();
-    if ( ! (o->*m)( context ) )
+    if ( ! (o->*m)( context, name() ) )
       return false;
   }
 

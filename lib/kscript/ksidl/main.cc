@@ -24,8 +24,13 @@
 #include <iostream>
 #include <fstream>
 
+#ifdef HAVE_MINI_STL
+#include <ministl/string>
+#include <ministl/list>
+#else
 #include <string>
 #include <list>
+#endif
 #include <string.h>
 #include <unistd.h>
 
@@ -88,7 +93,11 @@ void importModule( const char *_id )
 string repoid2Ident( const char *_id, bool _strip_module = true, bool _strip_pragma = true )
 {
   string repoid = _id + 4;
+#if HAVE_MINI_STL
+  repoid = repoid.substr(0, repoid.rfind(":"));
+#else  
   repoid.erase( repoid.rfind( ":" ) );
+#endif  
   int pos;
   while ( ( pos = repoid.find( "/" ) ) != -1 )
     repoid[pos] = '.';

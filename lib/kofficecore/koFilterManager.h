@@ -20,7 +20,6 @@
 #ifndef __koffice_filter_manager_h__
 #define __koffice_filter_manager_h__
 
-#include <qobject.h>
 #include <qstring.h>
 
 /**
@@ -31,11 +30,10 @@
  * @author Torben Weis <weis@kde.org>
  * @version $Id$
  */
-class KoFilterManager // : public QObject
+class KoFilterManager
 {
 public:
     enum Direction { Import, Export };
-
     /**
      * Returns a string list that is suitable for passing to
      * KFileDialog::setFilters().
@@ -55,21 +53,29 @@ public:
      *                        is added.
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
      */
-    QString fileSelectorList( Direction direction, const char *_format,
+    const QString fileSelectorList( const Direction &direction, const char *_format,
                               const char *_native_pattern,
                               const char *_native_name,
-                              bool allfiles ) const;
+                              const bool allfiles ) const;
 
     /**
-     * Load a file, applying a filter if necessary
-     * @return the file name, either _url or a /tmp file
+     * Import a file by applying a filter
+     * @return the file name, either _url (error) or a /tmp file (success)
      */
-    QString import( const QString & _url, const char *_native_format );
+    const QString import( const QString &_url, const char *_native_format );
     /**
      * Export a file using a filter - don't call this one it's automatically
      * called by KoMainWindow::saveDocument()
+     * @return the filename (some /tmp/ name) to which the original file should
+     * be saved. The export_() function fetches this file and saves it to the _url
+     * @param _url the location where the converted file will be stored
      */
-    void export_( const QString &_tmpFile, const QString &_url, const char *_native_format );
+    const QString prepareExport( const QString &_url, const char *_native_format );
+    /**
+     * Performs the "real" exporting - don't call this function directly! It will
+     * be called from KoMainWindow::saveDocument()
+     */
+    const bool export_();
 
     /**
      * Returns a pointer to the only instance of the KoFilterManager.
@@ -78,11 +84,11 @@ public:
     static KoFilterManager* self();
 
 protected:
-    KoFilterManager();
+    KoFilterManager() {}
 
 private:
     static KoFilterManager* s_pSelf;
+    QString tmpFile, exportFile, native_format;
+    bool prepare;
 };
-	
-
 #endif

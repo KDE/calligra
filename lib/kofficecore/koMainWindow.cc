@@ -18,250 +18,145 @@
 */
 
 #include <config.h>
-#ifdef HAVE_PATHS_H
-#include <paths.h>
-#endif
-#ifndef _PATH_TMP
-#define _PATH_TMP "/tmp/"
-#endif
 
 #include "koMainWindow.h"
-#include "koFrame.h"
 #include "koDocument.h"
-#include "koView.h"
 #include "koFilterManager.h"
-
-#include <opMainWindowIf.h>
-#include <opApplication.h>
-#include <opMenuBarManager.h>
-#include <opToolBarManager.h>
-#include <opStatusBarManager.h>
-#include <opMenu.h>
+#include "koIcons.h"
 
 #include <qkeycode.h>
 #include <qfile.h>
+#include <qaction.h>
+#include <qwhatsthis.h>
+#include <qmime.h>
+#include <qmessagebox.h>
 
 #include <kapp.h>
 #include <kstdaccel.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmimetypes.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <stdlib.h>
 
-KoMainWindow::KoMainWindow( const char * )
+QList<KoMainWindow>* KoMainWindow::s_lstMainWindows = 0;
+
+KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
+    : Shell( parent, name )
 {
-  m_pFileMenu = 0L;
-  m_pHelpMenu = 0L;
-  m_pFrame = 0L;
-  m_pKoInterface = 0L;
+    if ( !s_lstMainWindows )
+	s_lstMainWindows = new QList<KoMainWindow>;
+    s_lstMainWindows->append( this );
 
-  connect( this, SIGNAL( activePartChanged( unsigned long, unsigned long ) ),
-	   this, SLOT( slotActivePartChanged( unsigned long, unsigned long ) ) );
+    KAction* fnew = new KAction( i18n("New"), KofficeBarIcon( "filenew" ), CTRL + Key_N, this, SLOT( slotFileNew() ),
+			  actionCollection(), "filenew" );
+    KAction* open = new KAction( i18n("Open ..."), KofficeBarIcon( "fileopen" ), CTRL + Key_O, this, SLOT( slotFileOpen() ),
+			  actionCollection(), "fileopen" );
+    KAction* save = new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), CTRL + Key_S, this, SLOT( slotFileSave() ),
+			  actionCollection(), "filesave" );
+    KAction* saveAs = new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ),
+			    actionCollection(), "filesaveas" );
+    KAction* print = new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), CTRL + Key_P, this, SLOT( slotFilePrint() ),
+			  actionCollection(), "fileprint" );
+    KAction* close = new KAction( i18n("Close"), 0, this, SLOT( slotFileClose() ),
+			  actionCollection(), "fileclose" );
+    KAction* quit = new KAction( i18n("Quit"), 0, this, SLOT( slotFileQuit() ),
+			  actionCollection(), "quit" );
+    KAction* helpAbout = new KAction( i18n("About"), 0, this, SLOT( slotFileQuit() ),
+			  actionCollection(), "about" );
 
-  // create the menu bar
-  (void)menuBarManager();
-
-  // create the toolbar manager to handle the toolbars of the embedded parts
-  (void)toolBarManager();
-
-  // create the statusbar manager to handle the statusbar of the embedded parts
-  (void)statusBarManager();
-
-  // build a toolbar and insert some buttons
-  opToolBar()->insertButton(BarIcon("filenew"),TOOLBAR_NEW, SIGNAL( clicked() ), this, SLOT( slotFileNew() ), true,i18n("New"));
-  opToolBar()->insertButton(BarIcon("fileopen"),TOOLBAR_OPEN, SIGNAL( clicked() ), this, SLOT( slotFileOpen() ),
-			    true,i18n("Open File"));
-  opToolBar()->insertButton(BarIcon("filefloppy"), TOOLBAR_SAVE, SIGNAL( clicked() ), this, SLOT( slotFileSave() ),
-			    true,i18n("Save File"));
-  opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
-  opToolBar()->insertButton(BarIcon("fileprint"), TOOLBAR_PRINT, SIGNAL( clicked() ), this, SLOT( slotFilePrint() ),
-			    true,i18n("Print"));
-  opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
-
-  m_pFrame = new KoFrame( this );
-  setView( m_pFrame );
-
-  // Build a default menubar with at least file and help menu
-  menuBarManager()->create( 0 );
+    KToolBar* fileTools = new KToolBar( this, "file operations" );
+    fnew->plug( fileTools );
+    open->plug( fileTools );
+    save->plug( fileTools );
+    print->plug( fileTools );
+    (void)QWhatsThis::whatsThisButton( fileTools );
+    fileTools->show();
 }
 
 KoMainWindow::~KoMainWindow()
 {
-  menuBarManager()->clear();
+    if ( s_lstMainWindows )
+	s_lstMainWindows->removeRef( this );
 }
 
-void KoMainWindow::cleanUp()
+KoMainWindow* KoMainWindow::firstMainWindow()
 {
-  setRootPart( (long unsigned int)(OpenParts::Id)0 );
+    if ( !s_lstMainWindows )
+	return 0;
 
-  interface()->cleanUp();
+    return s_lstMainWindows->first();
 }
 
-OPMainWindowIf* KoMainWindow::interface()
+KoMainWindow* KoMainWindow::nextMainWindow()
 {
-  if ( m_pInterface == 0L )
-    m_pInterface = m_pKoInterface = new KoMainWindowIf( this );
-  return m_pInterface;
+    if ( !s_lstMainWindows )
+	return 0;
+
+    return s_lstMainWindows->next();
 }
 
-KoMainWindowIf* KoMainWindow::koInterface()
+bool KoMainWindow::openDocument( const char* _url )
 {
-  if ( m_pInterface == 0L )
-    m_pInterface = m_pKoInterface = new KoMainWindowIf( this );
-  return m_pKoInterface;
+    KoDocument* doc = document();
+	
+    KoDocument* newdoc = createDoc();
+    if ( !newdoc->loadFromURL( _url ) )
+    {
+	delete newdoc;
+	return FALSE;
+    }
+
+    if ( doc && doc->isEmpty() )
+    {
+	setRootPart( newdoc );
+	delete doc;
+	return TRUE;
+    }
+    else if ( doc && !doc->isEmpty() )
+    {
+        Shell *s = newdoc->createShell();
+        s->show();
+	return TRUE;
+    }
+
+    setRootPart( newdoc );
+    return TRUE;
 }
 
-void KoMainWindow::setRootPart( unsigned long _part_id )
+bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern, const char* _native_name, bool saveas )
 {
-  if ( !m_pFrame )
-    return;
-
-  OpenParts::Part_var part;
-  if ( _part_id != 0 )
-  {
-    part = interface()->findPart( _part_id );
-    assert( !CORBA::is_nil( part ) );
-  }
-
-  m_pFrame->detach();
-
-  if ( _part_id != 0 )
-  {
-    KOffice::View_var view = KOffice::View::_narrow( part );
-    assert( !CORBA::is_nil( view ) );
-    m_pFrame->attachView( view );
-  }
-}
-
-void KoMainWindow::setRootPart( KoViewIf* _view )
-{
-  if ( !m_pFrame )
-    return;
-
-  m_pFrame->detach();
-
-  m_pFrame->attachLocalView( _view );
-}
-
-void KoMainWindow::slotActivePartChanged( unsigned long _new_part_id, unsigned long /* _old_part_id */ )
-{
-  menuBarManager()->clear();
-  toolBarManager()->clear();
-  statusBarManager()->clear();
-  menuBarManager()->create( _new_part_id );
-  toolBarManager()->create( _new_part_id );
-  statusBarManager()->create( _new_part_id );
-}
-
-void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
-{
-  // Do we loose control over the menubar ?
-  if ( _menubar == 0L )
-  {
-    m_pFileMenu = 0L;
-    return;
-  }
-
-  bool bInsertFileMenu = false;
-  m_pFileMenu = _menubar->fileMenu();
-  if ( m_pFileMenu == 0L )
-  {
-    bInsertFileMenu = true;
-    debug("Creating File Menu in koMainWindow.cc");
-    m_pFileMenu = new OPMenu;
-  }
-  else
-    m_pFileMenu->insertSeparator();
-
-// Do we really want to add new, open, save, ... to a menu already containing those ??? (David)
-
-  KStdAccel stdAccel;
-  m_idMenuFile_New = m_pFileMenu->insertItem( BarIcon( "filenew" ) , i18n( "&New" ), this, SLOT( slotFileNew() ), stdAccel.openNew() );
-  m_idMenuFile_Open = m_pFileMenu->insertItem( BarIcon( "fileopen" ), i18n( "&Open..." ), this, SLOT( slotFileOpen() ), stdAccel.open() );
-  m_pFileMenu->insertSeparator(-1);
-  m_idMenuFile_Save = m_pFileMenu->insertItem( BarIcon( "filefloppy" ), i18n( "&Save" ), this, SLOT( slotFileSave() ), stdAccel.save() );
-  m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
-
-  m_idMenuFile_SaveAs = m_pFileMenu->insertItem( i18n( "&Save as..." ), this, SLOT( slotFileSaveAs() ) );
-  m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
-
-  m_pFileMenu->insertSeparator(-1);
-  m_idMenuFile_Print = m_pFileMenu->insertItem( BarIcon( "fileprint" ), i18n( "&Print..." ), this, SLOT( slotFilePrint() ),  stdAccel.print() );
-  m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
-
-  m_pFileMenu->insertSeparator(-1);
-  m_idMenuFile_Close = m_pFileMenu->insertItem( i18n( "&Close" ), this, SLOT( slotFileClose() ), stdAccel.close() );
-  m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
-
-  m_idMenuFile_Quit = m_pFileMenu->insertItem( BarIcon( "exit" ), i18n( "&Quit" ), this, SLOT( slotFileQuit() ), stdAccel.quit() );
-
-  if (bInsertFileMenu)
-    _menubar->insertItem( i18n( "&File" ), m_pFileMenu, -1, 0 );
-}
-
-void KoMainWindow::createHelpMenu( OPMenuBar* _menubar )
-{
-  // Do we loose control over the menubar ?
-  if ( _menubar == 0L )
-  {
-    m_pHelpMenu = 0L;
-    return;
-  }
-
-  bool bInsertHelpMenu = false;
-  m_pHelpMenu = _menubar->helpMenu();
-  // No help menu yet ?
-  if ( m_pHelpMenu == 0L )
-  {
-    m_pHelpMenu = new OPMenu;
-    bInsertHelpMenu = true;
-  }
-  else
-    m_pHelpMenu->insertSeparator();
-
-  // Insert our item
-  m_idMenuHelp_About = m_pHelpMenu->insertItem( i18n( "&About KOffice" ), this, SLOT( slotHelpAbout() ) );
-  if (bInsertHelpMenu)
-  {
-    _menubar->insertSeparator();
-    _menubar->insertItem( i18n( "&Help" ), m_pHelpMenu );
-  }
-}
-
-bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern, const char* _native_name )
-{
-    KOffice::Document_ptr pDoc = document();
-    assert( pDoc );
+    KoDocument* pDoc = document();
 
     QString url = pDoc->url();
     QString outputMimeType ( _native_format );
 
-    if ( url.isEmpty() ) {
-	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-	   _native_format, _native_pattern, _native_name, TRUE );
+    if ( url.isEmpty() || saveas )
+    {
+	    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
+	    _native_format, _native_pattern, _native_name, TRUE );
         QString file;
 
         bool bOk = true;
-        do { 
+        do {
             file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
             if ( file.isNull() )
                 return false;
 
             if ( QFile::exists( file ) ) { // this file exists => ask for confirmation
-                bOk = KMessageBox::questionYesNo( this, 
+                bOk = KMessageBox::questionYesNo( this,
                                                   i18n("A document with this name already exists\n"\
-                                                  "Do you want to overwrite it ?"), 
+                                                  "Do you want to overwrite it ?"),
                                                   i18n("Warning") ) == KMessageBox::Yes;
             }
         } while ( !bOk );
-	KMimeType *t = KMimeType::findByURL( KURL( file ), 0, TRUE );
+	    KMimeType *t = KMimeType::findByURL( KURL( file ), 0, TRUE );
         outputMimeType = t->mimeType();
 
         url = file;
@@ -277,21 +172,13 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 	cmd = cmd.arg( u.path() ).arg( u.path() );
 	system( cmd.latin1() );
     }
-    
+
     // Not native format : save using export filter
     if ( outputMimeType != _native_format ) {
-        char tempfname[256];
-        int fildes; 
-        sprintf(tempfname, _PATH_TMP"/kofficefilterXXXXXX");
-        if ((fildes = mkstemp(tempfname)) == -1 )
-            return false;
-        ::close( fildes );
-        if ( pDoc->saveToURL( tempfname, _native_format ) ) {
-            KoFilterManager::self()->export_( tempfname, url, _native_format );
-            unlink( tempfname );
+        QString nativeFile=KoFilterManager::self()->prepareExport(url, _native_format);
+        if ( pDoc->saveToURL( nativeFile, _native_format ) && KoFilterManager::self()->export_() )
             return true;
-        } else
-            unlink( tempfname );
+        else
             return false;
     }
 
@@ -305,24 +192,103 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     return true;
 }
 
+bool KoMainWindow::closeDocument()
+{
+    if ( document() == 0 )
+	return TRUE;
+
+    if ( document()->isModified() )
+    {
+	int res = QMessageBox::warning( 0L, i18n( "Warning" ), i18n( "The document has been modified\nDo you want to save it ?" ),
+					i18n( "Yes" ), i18n( "No" ), i18n( "Cancel" ) );
+
+	if ( res == 0 )
+	    return saveDocument( nativeFormatMimeType(), nativeFormatPattern(), nativeFormatName() );
+
+	KoDocument* doc = document();
+	setRootPart( 0 );
+	delete doc;
+    }
+
+    return TRUE;
+}
+
+bool KoMainWindow::closeAllDocuments()
+{
+    KoMainWindow* win = firstMainWindow();
+    for( ; win; win = nextMainWindow() )
+    {
+	if ( !win->closeDocument() )
+	    return FALSE;
+    }
+
+    return TRUE;
+}
+
 void KoMainWindow::slotFileNew()
 {
+    KoDocument* doc = document();
+	
+    KoDocument* newdoc = createDoc();
+    if ( !newdoc->initDoc() )
+    {
+	delete newdoc;
+	return;
+    }
+
+    if ( doc && doc->isEmpty() )
+    {
+	setRootPart( newdoc );
+	delete doc;
+	return;
+    }
+    else if ( doc && !doc->isEmpty() )
+    {
+        Shell *s = newdoc->createShell();
+        s->show();
+	return;
+    }
+
+    setRootPart( newdoc );
+    return;
 }
 
 void KoMainWindow::slotFileOpen()
 {
+    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+								nativeFormatMimeType(), nativeFormatPattern(),
+								nativeFormatName(), TRUE );
+
+    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+    if ( file.isNull() )
+	return;
+
+    file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
+    if ( file.isNull() )
+	return;
+
+    if ( !openDocument( file ) )
+    {
+        QString tmp;
+        tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
+        QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    }
 }
 
 void KoMainWindow::slotFileSave()
 {
+    saveDocument( nativeFormatMimeType(), nativeFormatPattern(), nativeFormatName() );
 }
 
 void KoMainWindow::slotFileSaveAs()
 {
+    saveDocument( nativeFormatMimeType(), nativeFormatPattern(), nativeFormatName(), TRUE );
 }
 
 void KoMainWindow::slotFileClose()
 {
+    if ( closeDocument() )
+	delete this;
 }
 
 void KoMainWindow::slotFilePrint()
@@ -331,112 +297,13 @@ void KoMainWindow::slotFilePrint()
 
 void KoMainWindow::slotFileQuit()
 {
+    if ( closeAllDocuments() )
+	kapp->exit();
 }
 
 void KoMainWindow::slotHelpAbout()
 {
 }
 
-/**************************************************
- *
- * KoMainWindowIf
- *
- **************************************************/
-
-KoMainWindowIf::KoMainWindowIf( KoMainWindow* _main ) : OPMainWindowIf( _main )
-{
-  ADD_INTERFACE( "IDL:KOffice/MainWindow:1.0" );
-
-  m_pKoMainWindow = _main;
-  m_iMarkedPart = 0;
-}
-
-KoMainWindowIf::~KoMainWindowIf()
-{
-}
-
-void KoMainWindowIf::setMarkedPart( OpenParts::Id id )
-{
-  m_iMarkedPart = id;
-}
-
-KOffice::Document_ptr KoMainWindowIf::document()
-{
-  return m_pKoMainWindow->document();
-}
-
-KOffice::View_ptr KoMainWindowIf::view()
-{
-  return m_pKoMainWindow->view();
-}
-
-bool KoMainWindowIf::partClicked( OpenParts::Id _part_id, long int /* _button */ )
-{
-  assert( _part_id != 0 );
-
-  OpenParts::Part_var part;
-
-  // Find it
-  part = findPart( _part_id );
-  if( CORBA::is_nil( part ) )
-  {
-    kdebug( KDEBUG_ERROR, 30003, "ERROR: void OPMainWindowIf::setActivePart( OpenParts::Id _id )" );
-    kdebug( KDEBUG_ERROR, 30003, "       id %i is unknown", _part_id );
-    return false;
-  }
-
-  KOffice::View_var view = KOffice::View::_narrow( part );
-  if ( CORBA::is_nil( view ) )
-  {
-    setActivePart( _part_id );
-    return false;
-  }
-
-  // Special handling for the root view, since the root view is
-  // never marked
-  if ( view->mode() == KOffice::View::RootMode )
-  {
-    if ( _part_id != m_iMarkedPart )
-      unmarkPart();
-    setActivePart( _part_id );
-    return false;
-  }
-
-  if ( view->isMarked() )
-  {
-    if ( _part_id != m_iMarkedPart )
-      unmarkPart();
-    setActivePart( _part_id );
-    return false;
-  }
-  else if ( !view->hasFocus() )
-  {
-    if ( _part_id != m_iMarkedPart )
-      unmarkPart();
-    view->setMarked( true );
-    m_iMarkedPart = _part_id;
-    return true;
-  }
-
-  // Ever reached? I dont think so ...
-  return true;
-}
-
-void KoMainWindowIf::unmarkPart()
-{
-  if ( m_iMarkedPart == 0 )
-    return;
-
-  // Find it
-  OpenParts::Part_var part = findPart( m_iMarkedPart );
-  assert( !CORBA::is_nil( part ) );
-
-  KOffice::View_var view = KOffice::View::_narrow( part );
-  assert( !CORBA::is_nil( view ) );
-
-  view->setMarked( false );
-
-  m_iMarkedPart = 0;
-}
 
 #include "koMainWindow.moc"

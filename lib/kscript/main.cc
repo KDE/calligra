@@ -1,19 +1,9 @@
 #include "kscript.h"
 
-#include <qapplication.h>
+#include <kapp.h>
+#include <dcopclient.h>
 #include <qstring.h>
-
-#include <CORBA.h>
-// The fuck does not compile without this ....
-// dont ask me why!
-#include <mico/template_impl.h>
-
-CORBA::ORB* pOrb;
-
-CORBA::ORB* orb()
-{
-  return pOrb;
-}
+#include <stdio.h> /* for printf */
 
 int main( int argc, char** argv )
 {
@@ -23,13 +13,11 @@ int main( int argc, char** argv )
     return 0;
   }
 
-  QApplication app( argc, argv );
+  KApplication app( argc, argv, argv[1] );
 
-  CORBA::ORB* orb = CORBA::ORB_init( argc, argv, "mico-local-orb");
-  pOrb = orb;
-  CORBA::BOA* boa = orb->BOA_init( argc, argv, "mico-local-boa");
-  (void)boa;
-
+  kapp->dcopClient()->attach();
+  kapp->dcopClient()->registerAs( argv[1] );
+  
   KSInterpreter script;
   QString ex = script.runScript( argv[1] );
   if ( !ex.isEmpty() )

@@ -30,23 +30,23 @@ KoAboutDia::KoAboutDia(QWidget* parent,
 {
   switch (koapp)
     {
-    case KPresenter: 
+    case KPresenter:
       {
-	setCaption(i18n("KPresenter - About")); 
+	setCaption(i18n("KPresenter - About"));
 	pLogo = BarIcon("koKPresenter");
 	author = "Reginald Stadlbauer";
 	email = "<reggie@kde.org>";
 	add = i18n("WMF Clipart Support (c) by Stefan Taferner <taferner@kde.org>");
       } break;
-    case KSpread: 
+    case KSpread:
       {
-	setCaption(i18n("KSpread - About")); 
+	setCaption(i18n("KSpread - About"));
 	pLogo = BarIcon("koKSpread");
 	author = "Torben Weis";
 	email = "<weis@kde.org>";
 	add = "";
       } break;
-    case KCharts: 
+    case KCharts:
       {
 	setCaption(i18n("KCharts - About"));
 	pLogo = BarIcon("koKCharts");
@@ -62,7 +62,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
 	email = "<weis@kde.org>";
 	add = "";
       } break;
-    case KAutoformEdit: 
+    case KAutoformEdit:
       {
 	setCaption(i18n("KAutoformEdit - About"));
 	pLogo = BarIcon("koKAutoformEdit");
@@ -70,7 +70,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
 	email = "<reggie@kde.org>";
 	add = "";
       } break;
-    case KOffice: 
+    case KOffice:
       {
 	setCaption(i18n("KOffice - About"));
 	pLogo = BarIcon("koKOffice");
@@ -81,14 +81,14 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     default:
 	warning("KoAboutDia can not handle case %d", koapp);
     }
-  
+
   grid = new QGridLayout(this,2,2);
 
   lLogo = new QLabel(this);
   lLogo->setPixmap(pLogo);
   lLogo->resize(lLogo->sizeHint());
   grid->addWidget(lLogo,0,0);
-  
+
   lInfo = new QLabel(this);
   QString infoText;
 

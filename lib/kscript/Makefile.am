@@ -1,6 +1,6 @@
 
-INCLUDES = $(MICO_INCLUDES) $(all_includes)
-LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS)
+INCLUDES = $(all_includes)
+LDFLAGS   = $(all_libraries)
 
 ####### Files
 
@@ -17,7 +17,7 @@ libkscript_la_METASOURCES = kscript_ext_qt.moc
 
 libkscript_la_LDFLAGS = -version-info 1:0:0
 
-libkscript_la_LIBADD = $(LIB_QT) $(LIBMICO)
+libkscript_la_LIBADD = $(LIB_KDECORE)
 
 bin_PROGRAMS = kscript
 
@@ -35,7 +35,7 @@ kscript_LDFLAGS = $(KDE_RPATH)
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
-SUBDIRS = ksidl
+# SUBDIRS = ksidl
 
 ####### Implicit rules
 

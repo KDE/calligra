@@ -177,19 +177,6 @@ void KS_Qt_Callback::activated( const QString& param1 )
     emitSignal( params, "activated");
 }
 
-void KS_Qt_Callback::highlighted( int param1 )
-{
-    QValueList<KSValue::Ptr> params;
-    params.append( new KSValue( param1 ) );
-    emitSignal( params, "highlighted");
-}
-
-void KS_Qt_Callback::highlighted( const QString& param1 )
-{
-    QValueList<KSValue::Ptr> params;
-    params.append( new KSValue( param1 ) );
-    emitSignal( params, "highlighted");
-}
 
 /**********************************************
  *

@@ -23,8 +23,6 @@ public:
 
   bool ksQComboBox( KSContext& );
   bool ksQComboBox_activated( KSContext& );
-  bool ksQComboBox_highlighted( KSContext& );
-  bool ksQComboBox_textChanged( KSContext& );
   bool ksQComboBox_insertItem( KSContext& );
     
   KSValue::Ptr member( KSContext& context, const QString& name );

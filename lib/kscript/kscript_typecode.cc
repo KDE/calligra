@@ -1,3 +1,5 @@
+#if 0
+
 #define WITH_CORBA
 #include <CORBA.h>
 
@@ -96,3 +98,5 @@ KSTypeCode::Ptr KSTypeCode::typeCode( KSContext& context, KSValue* v )
   context.setException( new KSException( "InvalidTypeCode", v->toString(), -1 ) );
   return 0;
 }
+
+#endif

@@ -16,7 +16,7 @@ class KSStructClass : public QShared
 public:
   typedef KSSharedPtr<KSStructClass> Ptr;
 
-  KSStructClass( KSModule* module, const QString& name, const KSParseNode* n );
+  KSStructClass( KSModule* module, const QString& name /*, const KSParseNode* n*/ );
   virtual ~KSStructClass() { }
 
   bool constructor( KSContext& c );
@@ -46,7 +46,7 @@ public:
 private:
   QString m_name;
   KSNamespace m_space;
-  const KSParseNode* m_node;
+    // const KSParseNode* m_node;
   QStringList m_vars;
   KSModule* m_module;
 };

@@ -31,7 +31,7 @@ main
 	c = QCheckBox( w );
 	c.text = "Check";
 	c.checked = TRUE;
-	combo = QComboBox( TRUE, w );
+	combo = QComboBox( w );
 	combo.insertItem("Schubidu");
 	combo.insertItem("Schabada");
 	combo.insertItem("Schabadai");

@@ -20,9 +20,7 @@ include_HEADERS = koAboutDia.h koPageLayoutDia.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koUIUtils.h
 
-METASOURCES = koAboutDia.moc koPartSelectDia.moc koRuler.moc \
-	  koKoolBar.moc koPartSelectDia_data.moc koTabChooser.moc \
-	  koPageLayoutDia.moc koTemplateChooseDia.moc
+METASOURCES = AUTO
 
 ####### Implicit rules
 

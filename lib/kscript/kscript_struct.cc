@@ -8,8 +8,8 @@
  *
  ***************************************************/
 
-KSStructClass::KSStructClass( KSModule* m, const QString& name, const KSParseNode* n )
-  : m_name( name ), m_node( n ), m_module( m )
+KSStructClass::KSStructClass( KSModule* m, const QString& name )
+  : m_name( name ), m_module( m )
 {
   m_space.insert( "isA", new KSValue( &KSStruct::isA ) );
 }
@@ -88,6 +88,6 @@ bool KSStruct::setMember( KSContext& context, const QString& name, const KSValue
   }
 
   m_space.insert( name, v );
-  
+
   return true;
 }

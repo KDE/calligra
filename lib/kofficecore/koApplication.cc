@@ -17,83 +17,34 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koApplication.h>
-#include <kiconloader.h>
+#include "koApplication.h"
+
 #include <klocale.h>
 #include <kglobal.h>
-#include <koMainWindow.h>
 #include <kstddirs.h>
 #include <qstringlist.h>
 
-KoApplication::KoApplication(int &argc, char **argv, const QString& rAppName)
-    : OPApplication(argc, argv, rAppName)
-    , kded( argc, argv, opapp_orb )
+KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName)
+    : KApplication(argc, argv, rAppName)
     , m_params( argc, argv )
-    , m_bWithGUI( true )
 {
-  KGlobal::locale()->insertCatalogue("koffice");
-  KGlobal::dirs()->addResourceType("toolbar", 
-	   KStandardDirs::kde_default("data") + "/koffice/toolbar/");
-  KGlobal::dirs()->addResourceType("toolbar", 
-	   KStandardDirs::kde_default("data") + "/koffice/pics/");
-
-  // checking whether the app is started as a server
-  QStringList::Iterator it;
-  if( m_params.find( "--server", "-s", true, it ) )
-  {
-    m_bWithGUI = false;
-    m_params.del( it );
-  }
+    KGlobal::locale()->insertCatalogue("koffice");
+    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
+    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/pics/");
+	
+    // checking whether the app is started as a server
+    // ###### Torben: Is that needed ?
+    /*
+    QStringList::Iterator it;
+    if( m_params.find( "--server", "-s", true, it ) )
+    {
+	m_bWithGUI = false;
+	m_params.del( it );
+    } */
 }
 
 KoApplication::~KoApplication()
 {
-}
-
-void KoApplication::start()
-{
-  KoMainWindow* pShell;
-  QStringList openFiles;
-  QString tmpFilename;
-
-  if( m_bWithGUI )
-  {
-    for( uint i = 0; i < m_params.count(); i++ )
-    {
-      tmpFilename = m_params.get( i );
-      if( tmpFilename.left( 1 ) != "-" )
-      {
-        openFiles.append( tmpFilename );
-      }
-    }
-    if( openFiles.isEmpty() )
-    {
-      pShell = createNewShell();
-      if( pShell )
-      {
-        pShell->show();
-        pShell->newDocument();
-      }
-      else
-        kdebug( KDEBUG_FATAL, 30003, "Cannot create new shell. KoApplication::createNewShell() has to be overloaded" );
-    }
-    else
-    {
-      QStringList::Iterator it;
-
-      for( it = openFiles.begin() ; it != openFiles.end() ; ++it )
-      {
-        pShell = createNewShell();
-        if( pShell )
-        {
-          pShell->show();
-          pShell->openDocument( *it );
-        }
-        else
-          kdebug( KDEBUG_FATAL, 30003, "Cannot create new shell. KoApplication::createNewShell() has to be overloaded" );
-      }
-    }
-  }
 }
 
 #include "koApplication.moc"

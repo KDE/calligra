@@ -1,3 +1,5 @@
+#if 0
+
 #define WITH_CORBA
 #include <CORBA.h>
 
@@ -32,3 +34,4 @@ KSModule::Ptr ksCreateModule_Corba( KSInterpreter* interp )
   return module;
 }
 
+#endif

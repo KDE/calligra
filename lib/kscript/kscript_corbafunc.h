@@ -1,3 +1,5 @@
+#if 0
+
 #ifndef __KSCRIPT_CORBA_FUNC_H__
 #define __KSCRIPT_CORBA_FUNC_H__
 
@@ -42,5 +44,7 @@ private:
   QString m_name;
   KSParseNode* m_node;
 };
+
+#endif
 
 #endif

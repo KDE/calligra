@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <stdio.h>
 #include <assert.h>
@@ -24,20 +24,20 @@
 
 #include "koBinaryStore.h"
 
-KoBinaryStore::KoBinaryStore( const QString & _filename, KOStore::Mode _mode )
+KoBinaryStore::KoBinaryStore( const QString & _filename, KoStore::Mode _mode )
 {
   m_bIsOpen = false;
   m_mode = _mode;
   m_id = 0;
-  
+
   kdebug( KDEBUG_INFO, 30002, "KoBinaryStore Constructor filename = %s mode = %d", _filename.data(), _mode);
 
-  if ( _mode == KOStore::Write )
+  if ( _mode == Write )
   {
     m_out.open( _filename, ios::out | ios::trunc );
     m_out.write( "KS01", 4 );
   }
-  else if ( _mode == KOStore::Read )
+  else if ( _mode == Read )
   {
     m_in.open( _filename, ios::in );
     // Skip header
@@ -47,7 +47,7 @@ KoBinaryStore::KoBinaryStore( const QString & _filename, KOStore::Mode _mode )
     {
       Entry e;
       if ( readHeader( e ) )
-      {  
+      {
 	m_in.seekg( e.size, ios::cur );
 	m_map.insert ( e.name, e );
       }
@@ -60,7 +60,7 @@ KoBinaryStore::KoBinaryStore( const QString & _filename, KOStore::Mode _mode )
 KoBinaryStore::~KoBinaryStore()
 {
   kdebug( KDEBUG_INFO, 30002, "###################### DESTRUCTOR ####################" );
-  if ( m_mode == KOStore::Write )
+  if ( m_mode == Write )
   {
     m_out.close();
   }
@@ -86,7 +86,7 @@ unsigned long KoBinaryStore::readHeader( KoBinaryStore::Entry& _entry )
   unsigned long len = getULong();
   if ( m_in.eof() )
     return 0L;
-  
+
   _entry.size = getULong();
   /*unsigned long flags = */ getULong();
 
@@ -105,7 +105,7 @@ unsigned long KoBinaryStore::readHeader( KoBinaryStore::Entry& _entry )
 
   return len;
 }
-  
+
 void KoBinaryStore::putULong( unsigned long x )
 {
   int n;
@@ -122,7 +122,7 @@ unsigned long KoBinaryStore::getULong()
   x += ( (unsigned long)m_in.get() ) << 8;
   x += ( (unsigned long)m_in.get() ) << 16;
   x += ( (unsigned long)m_in.get() ) << 24;
-  
+
   return x;
 }
 
@@ -133,7 +133,7 @@ void KoBinaryStore::list()
   cout << "--------------------------------------------------------------------" << endl;
 
   unsigned int size = 0;
-  
+
   map<string,Entry>::iterator it = m_map.begin();
   for( ; it != m_map.end(); ++it )
   {
@@ -154,20 +154,20 @@ bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: File is already opened" );
     return false;
   }
-    
-  if ( _mime_type.isNull() && m_mode != KOStore::Read )
+
+  if ( _mime_type.isNull() && m_mode != Read )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Mimetype omitted while opening entry %s for writing", _name.data() );
     return false;
   }
-  
+
   if ( _name.length() > 512 )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Filename %s is too long", _name.data() );
     return false;
   }
-  
-  if ( m_mode == KOStore::Write )
+
+  if ( m_mode == Write )
   {
     QMapIterator<QString, Entry> it =  m_map.find( _name );
     if ( it == m_map.end() )
@@ -175,7 +175,7 @@ bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
       kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Duplicate filename %s", _name.data() );
       return false;
     }
-    
+
     m_current.pos = m_out.tellp();
     m_current.name = _name;
     m_current.mimetype = _mime_type;
@@ -184,10 +184,10 @@ bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
     writeHeader( m_current );
     m_current.data = m_out.tellp();
   }
-  else if ( m_mode == KOStore::Read )
-  { 
+  else if ( m_mode == Read )
+  {
     kdebug( KDEBUG_INFO, 30002, "Opening for reading %s", _name.data() );
-    
+
     QMapIterator<QString, Entry> it =  m_map.find( _name );
     if ( it == m_map.end() )
     {
@@ -207,7 +207,7 @@ bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
   }
   else
     assert( 0 );
-  
+
   m_bIsOpen = true;
 
   return true;
@@ -216,14 +216,14 @@ bool KoBinaryStore::open( const QString & _name, const QCString & _mime_type )
 void KoBinaryStore::close()
 {
   kdebug( KDEBUG_INFO, 30002, "koBinaryStore: Closing" );
-  
+
   if ( !m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: You must open before closing" );
     return;
   }
 
-  if ( m_mode == KOStore::Write )
+  if ( m_mode == Write )
   {
     // rewrite header with correct size
     m_current.size = m_out.tellp() - m_current.data;
@@ -236,9 +236,9 @@ void KoBinaryStore::close()
   m_bIsOpen = false;
 }
 
-KOStore::Data KoBinaryStore::read( unsigned long int max )
+QByteArray KoBinaryStore::read( unsigned long int max )
 {
-  KOStore::Data data;
+  QByteArray data;
 
   if ( !m_bIsOpen )
   {
@@ -246,20 +246,20 @@ KOStore::Data KoBinaryStore::read( unsigned long int max )
     data.resize( 0 );
     return data;
   }
-  if ( m_mode != KOStore::Read )
+  if ( m_mode != Read )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Can not read from store that is opened for writing" );
     data.resize( 0 );
     return data;
   }
-  
+
   if ( m_in.eof() )
   {
     kdebug( KDEBUG_INFO, 30002, "EOF" );
     data.resize( 0 );
     return data;
   }
-  
+
   if ( max > m_current.size - m_readBytes )
     max = m_current.size - m_readBytes;
   if ( max == 0 )
@@ -268,7 +268,7 @@ KOStore::Data KoBinaryStore::read( unsigned long int max )
     data.resize( 0 );
     return data;
   }
-  
+
   char *p = new char[ max ];
   m_in.read( p, max );
   unsigned int len = m_in.gcount();
@@ -278,7 +278,7 @@ KOStore::Data KoBinaryStore::read( unsigned long int max )
     data.resize( 0 );
     return data;
   }
-  
+
   m_readBytes += max;
   data.setRawData( p, max );
 
@@ -292,20 +292,20 @@ long KoBinaryStore::read( char *_buffer, unsigned long _len )
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: You must open before reading" );
     return -1;
   }
-  if ( m_mode != KOStore::Read )
+  if ( m_mode != Read )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Can not read from store that is opened for writing" );
     return -1;
   }
-  
+
   if ( m_in.eof() )
     return 0;
-  
+
   if ( _len > m_current.size - m_readBytes )
     _len = m_current.size - m_readBytes;
   if ( _len == 0 )
     return 0;
-  
+
   m_in.read( _buffer, _len );
   unsigned int len = m_in.gcount();
   if ( len != _len )
@@ -313,13 +313,13 @@ long KoBinaryStore::read( char *_buffer, unsigned long _len )
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Error while reading" );
     return -1;
   }
-  
+
   m_readBytes += len;
-  
+
   return len;
 }
 
-bool KoBinaryStore::write( const KOStore::Data& data )
+bool KoBinaryStore::write( const QByteArray& data )
 {
   unsigned int len = data.size();
   if (len == 0)
@@ -330,7 +330,7 @@ bool KoBinaryStore::write( const KOStore::Data& data )
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: You must open before writing" );
     return 0L;
   }
-  if ( m_mode != KOStore::Write )
+  if ( m_mode != Write )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Can not write to store that is opened for reading" );
     return 0L;
@@ -356,7 +356,7 @@ bool KoBinaryStore::write( const char* _data, unsigned long _len )
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: You must open before writing" );
     return 0L;
   }
-  if ( m_mode != KOStore::Write )
+  if ( m_mode != Write )
   {
     kdebug( KDEBUG_INFO, 30002, "KoBinaryStore: Can not write to store that is opened for reading" );
     return 0L;

@@ -4,6 +4,7 @@
 #include "kscript_object.h"
 #include "kscript_parsenode.h"
 #include "kscript_util.h"
+#include "kscript_proxy.h"
 
 #include <iostream.h>
 
@@ -148,6 +149,23 @@ bool ksfunc_print( KSContext& context )
   return true;
 }
 
+static bool ksfunc_application( KSContext& context )
+{
+    if ( !KSUtil::checkArgumentsCount( context, 2, "Application" ) )
+	return false;
+
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType ) )
+	return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::StringType ) )
+	return false;
+
+    context.setValue( new KSValue( new KSProxy( args[0]->stringValue().latin1(), args[1]->stringValue().latin1() ) ) );
+    
+    return TRUE;
+}
+
 KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kscript" );
@@ -157,6 +175,7 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
   module->addObject( "length", new KSValue( new KSBuiltinFunction( module, "length", ksfunc_length ) ) );
   module->addObject( "toInt", new KSValue( new KSBuiltinFunction( module, "toInt", ksfunc_toInt ) ) );
   module->addObject( "toFloat", new KSValue( new KSBuiltinFunction( module, "toFloat", ksfunc_toFloat ) ) );
+  module->addObject( "findApplication", new KSValue( new KSBuiltinFunction( module, "findApplication", ksfunc_application ) ) );
 
   return module;
 }

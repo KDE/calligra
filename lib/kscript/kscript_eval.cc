@@ -142,6 +142,7 @@ bool KSEval_exports( KSParseNode* node, KSContext& context )
 	return false;
     }
   }
+#if 0
   else if ( context.value()->type() == KSValue::InterfaceType )
   {
     if ( node->branch1() )
@@ -159,6 +160,7 @@ bool KSEval_exports( KSParseNode* node, KSContext& context )
 	return false;
     }
   }
+#endif
   else
     ASSERT( 0 );
 
@@ -167,6 +169,7 @@ bool KSEval_exports( KSParseNode* node, KSContext& context )
 
 bool KSEval_interface_dcl( KSParseNode* node, KSContext& context )
 {
+#if 0
   KSParseNode *left = node->branch1();
   ASSERT( left );
 
@@ -191,12 +194,14 @@ bool KSEval_interface_dcl( KSParseNode* node, KSContext& context )
 
   context.setValue( 0 );
 
+#endif
   return true;
 }
 
 bool KSEval_interface_header( KSParseNode* node, KSContext& context )
 {
-  ASSERT( context.value() && context.value()->type() == KSValue::InterfaceType );
+#if 0
+    ASSERT( context.value() && context.value()->type() == KSValue::InterfaceType );
 
   // TODO: Avoid circles in super classes
 
@@ -228,12 +233,13 @@ bool KSEval_interface_header( KSParseNode* node, KSContext& context )
   }
 
   context.value()->interfaceValue()->setSuperInterfaces( l.value()->listValue() );
-
+#endif
   return true;
 }
 
 bool KSEval_corba_func_dcl( KSParseNode* node, KSContext& context )
 {
+#if 0
   ASSERT( context.value() && context.value()->type() == KSValue::InterfaceType );
 
   KSCorbaFunc* func = new KSCorbaFunc( context.scope()->module(), node );
@@ -242,12 +248,14 @@ bool KSEval_corba_func_dcl( KSParseNode* node, KSContext& context )
   // Dont evaluate the other branches here. They may refere to ScopedNames
   // which are yet not known. Instead we process the branches if the function is called
   // first. In addition this allows for a better startup time.
+#endif
   return true;
 }
 
 bool KSEval_t_in_param_dcl( KSParseNode* node, KSContext& context )
 {
-  ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
+#if 0
+    ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
 
   KSContext d( context );
   if ( node->branch1() )
@@ -262,12 +270,13 @@ bool KSEval_t_in_param_dcl( KSParseNode* node, KSContext& context )
     return false;
 
   ((KSCorbaFunc*)context.value()->functionValue())->addParameter( KSCorbaFunc::T_IN, node->getIdent(), tc );
-
+#endif
   return true;
 }
 
 bool KSEval_t_out_param_dcl( KSParseNode* node, KSContext& context )
 {
+#if 0
   ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
 
   KSContext d( context );
@@ -283,12 +292,13 @@ bool KSEval_t_out_param_dcl( KSParseNode* node, KSContext& context )
     return false;
 
   ((KSCorbaFunc*)context.value()->functionValue())->addParameter( KSCorbaFunc::T_OUT, node->getIdent(), tc );
-
+#endif
   return true;
 }
 
 bool KSEval_t_inout_param_dcl( KSParseNode* node, KSContext& context )
 {
+#if 0
   ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
 
   KSContext d( context );
@@ -304,7 +314,7 @@ bool KSEval_t_inout_param_dcl( KSParseNode* node, KSContext& context )
     return false;
 
   ((KSCorbaFunc*)context.value()->functionValue())->addParameter( KSCorbaFunc::T_INOUT, node->getIdent(), tc );
-
+#endif
   return true;
 }
 
@@ -680,6 +690,7 @@ bool KSEval_scoped_name( KSParseNode* node, KSContext& context )
 
 bool KSEval_t_attribute( KSParseNode* node, KSContext& context )
 {
+#if 0
   ASSERT( context.value() && context.value()->type() == KSValue::InterfaceType );
 
   ASSERT( node->branch1() );
@@ -700,7 +711,7 @@ bool KSEval_t_attribute( KSParseNode* node, KSContext& context )
 
   KSValue::Ptr v = new KSValue( new KSAttribute( context.scope()->module(), node->getIdent(), attr, tc ) );
   context.value()->interfaceValue()->nameSpace()->insert( node->getIdent(), v );
-
+#endif
   return true;
 }
 
@@ -711,6 +722,7 @@ bool KSEval_t_readonly_attribute( KSParseNode* node, KSContext& context )
 
 bool KSEval_raises_expr( KSParseNode* node, KSContext& context )
 {
+#if 0
   ASSERT( context.value() && context.value()->type() == KSValue::FunctionType );
 
   // Get the list of exceptions
@@ -737,7 +749,7 @@ bool KSEval_raises_expr( KSParseNode* node, KSContext& context )
     }
     ((KSCorbaFunc*)context.value()->functionValue())->addException( *it );
   }
-
+#endif
   return true;
 }
 
@@ -758,8 +770,10 @@ bool KSEval_const_dcl( KSParseNode* node, KSContext& context )
     context.value()->classValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
   else if ( context.value()->type() == KSValue::StructClassType )
     context.value()->structClassValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
+#if 0
   else if ( context.value()->type() == KSValue::InterfaceType )
     context.value()->interfaceValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
+#endif
   else
     ASSERT( 0 );
 
@@ -1379,6 +1393,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
     b = l.value()->structClassValue()->constructor( context );
     context.scope()->popModule();
   }
+#if 0
   else if ( l.value()->cast( KSValue::InterfaceType ) )
   {
     context.scope()->pushModule( l.value()->interfaceValue()->module() );
@@ -1386,6 +1401,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
     b = l.value()->interfaceValue()->constructor( context );
     context.scope()->popModule();
   }
+#endif
   else if ( l.value()->cast( KSValue::MethodType ) )
   {
     context.scope()->pushModule( l.value()->methodValue()->module() );
@@ -1466,6 +1482,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
 
     return true;
   }
+#if 0
   // Special handling for interfaces
   else if ( l.value()->cast( KSValue::InterfaceType ) )
   {
@@ -1480,7 +1497,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
 
     return true;
   }
-
+#endif
   KSValue::Ptr v;
   KSModule* module;
   if ( l.value()->cast( KSValue::ObjectType ) )
@@ -1496,7 +1513,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
   else if ( l.value()->cast( KSValue::ProxyType ) )
   {
     v = l.value()->proxyValue()->member( context, node->getIdent() );
-    module = l.value()->proxyValue()->module();
+    module = context.scope()->module();
   }
   // Special handling for all kind of built in data types
   else
@@ -1532,10 +1549,11 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
 
   if ( v->type() == KSValue::FunctionType  )
       context.setValue( new KSValue( new KSMethod( module, l.shareValue(), v ) ) );
-  else if ( v->type() == KSValue::BuiltinMethodType || v->type() == KSValue::StructBuiltinMethodType )
+  else if ( v->type() == KSValue::BuiltinMethodType || v->type() == KSValue::StructBuiltinMethodType ||
+	    v->type() == KSValue::ProxyBuiltinMethodType )
     context.setValue( new KSValue( new KSMethod( module, l.shareValue(), v, node->getIdent() ) ) );
   else
-    context.setValue( v );
+      context.setValue( v );
 
   return true;
 }
@@ -2220,13 +2238,15 @@ bool KSEval_t_struct( KSParseNode* node, KSContext& context )
   if ( context.value() && ( context.value()->type() == KSValue::InterfaceType ||
 			    context.value()->type() == KSValue::ClassType ) )
   {
-    p = new KSStructClass( context.scope()->module(), node->getIdent(), node );
+    p = new KSStructClass( context.scope()->module(), node->getIdent() );
     KSValue::Ptr v = new KSValue( p );
 
     if ( context.value()->type() == KSValue::ClassType )
       context.value()->classValue()->nameSpace()->insert( node->getIdent(), v );
+#if 0
     else
       context.value()->interfaceValue()->nameSpace()->insert( node->getIdent(), v );
+#endif
 
     KSParseNode *left = node->branch1();
     if ( !left )
@@ -2244,7 +2264,7 @@ bool KSEval_t_struct( KSParseNode* node, KSContext& context )
   else
   {
     // All children should know about the new KSStructClass
-    context.setValue( new KSValue( ( p = new KSStructClass( context.scope()->module(), node->getIdent(), node ) ) ) );
+    context.setValue( new KSValue( ( p = new KSStructClass( context.scope()->module(), node->getIdent() ) ) ) );
     context.scope()->addObject( node->getIdent(), context.shareValue() );
 
     KSParseNode *left = node->branch1();
@@ -2253,14 +2273,6 @@ bool KSEval_t_struct( KSParseNode* node, KSContext& context )
 	return false;
 
     context.setValue( 0 );
-  }
-
-  // Tell the interpreter that we are responsible for a certain repoid
-  QMap<QString,KSValue::Ptr>::Iterator it = p->nameSpace()->find( "repoid" );
-  if ( it != p->nameSpace()->end() )
-  {
-    p->ref();
-    context.interpreter()->addRepoidImplementation( it.data()->stringValue(), new KSValue( p ) );
   }
 
   return true;

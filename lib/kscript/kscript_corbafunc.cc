@@ -1,3 +1,5 @@
+#if 0
+
 #define WITH_CORBA
 #include <CORBA.h>
 
@@ -118,9 +120,9 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
 	_arg->clear();
 	return true;
       }
-      
+
       if ( !x->_is_a( _tc->id() ) )
-      {  
+      {
 	QString tmp( "While unpacking a CORBA datatype, an object of type %1 was expected but %2 found" );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ).arg( x->_repoid() ) ) );
 	return false;
@@ -134,7 +136,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
 	c = context.interpreter()->repoidImplementation( _tc->id() );
 
       if ( !c || !c->type() == KSValue::InterfaceType )
-      {  
+      {
 	QString tmp( "Did not find an interface for the repoid %1. Seems to be an error of the idl compiler." );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ) ) );
 	return false;
@@ -205,7 +207,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
       KSValue *c = context.interpreter()->repoidImplementation( _tc->id() );
 
       if ( !c || !c->type() == KSValue::StructClassType )
-      {  
+      {
 	QString tmp( "Did not find a struct for the repoid %1. Seems to be an error of the idl compiler." );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ) ) );
 	return false;
@@ -235,7 +237,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
       KSValue *c = context.interpreter()->repoidImplementation( _tc->id() );
 
       if ( !c || !c->type() == KSValue::StructClassType )
-      {  
+      {
 	QString tmp( "Did not find a struct for the repoid %1. Seems to be an error of the idl compiler." );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ) ) );
 	return false;
@@ -268,7 +270,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
       cerr << "Extracting Union " << _tc->id() << endl;
       CORBA::TypeCode_var dt = _tc->discriminator_type();
       CORBA::Long defidx = _tc->default_index();
-      
+
       assert( _any.union_get_begin() );
 
       PyObject* disc = parseResult( _any, dt );
@@ -299,7 +301,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
 	}
 	Py_DECREF( label );
       }
-      
+
       PyObject* uni = 0L;
 
       if ( found )
@@ -366,7 +368,7 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
   switch( _tc->kind() )
   {
   case CORBA::tk_void:
-    return true; 
+    return true;
   case CORBA::tk_any:
     {
       // TODO: Need any support
@@ -516,7 +518,7 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
       // _any <<= CORBA::Any::from_object( obj, _tc->name() );
       // return true;
       //}
-    
+
       if ( !obj->_is_a( _tc->id() ) )
       {
 	KSUtil::castingError( context, obj->_repoid(), _tc->id() );
@@ -529,7 +531,7 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
     {
       if ( !KSUtil::checkType( context, _arg, KSValue::ListType ) )
 	return false;
-      
+
       const CORBA::TypeCode_var ctc = _tc->content_type();
 
       CORBA::ULong len = _arg->listValue().count();
@@ -589,7 +591,7 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
     {
       if ( defidx != -1 && (CORBA::ULong) defidx == idx )
 	continue;
-      
+
       CORBA::Any_var lany = _tc->member_label( idx );
       PyObject* label = parseResult( *lany, dt );
       if ( label == 0L )
@@ -611,7 +613,7 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
       cerr << "ERROR: Could not pack discriminator for union " << _tc->id() << endl;
       return 0L;
     }
-  
+
     PyObject* value = PyObject_GetAttrString( _arg, "v" );
 
     if ( found )
@@ -638,9 +640,9 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
 	return 0L;
       }
     }
-    
+
     assert( _any.union_put_end() );
-    
+
     return true; */
   }
   case CORBA::tk_alias:
@@ -692,7 +694,7 @@ bool KSCorbaFunc::init( KSContext& context )
   KSTypeCode::Ptr tc = KSTypeCode::typeCode( context, d.value() );
   if ( !tc )
     return false;
-  
+
   setReturnTypeCode( tc );
 
   ref();
@@ -801,7 +803,7 @@ bool KSCorbaFunc::call( KSContext& context )
     // Raise a default excpetion
     QString tmp( "An unexpected CORBA exception occured\n%1" );
     context.setException( new KSException( "CORBAException", tmp.arg( _ex->_repoid() ), -1 ) );
-    return false;    
+    return false;
   }
 
   // Unpack out/inout parameters
@@ -848,3 +850,5 @@ void KSCorbaFunc::setReturnTypeCode( const KSTypeCode::Ptr& tc )
 {
   m_returnTypeCode = tc;
 }
+
+#endif

@@ -32,22 +32,19 @@ class KTar;
 class KoTarStore : public KoStore
 {
 public:
-  // C++
-  KoTarStore( const QString & _filename, KOStore::Mode _mode );
+  KoTarStore( const QString & _filename, Mode _mode );
   virtual ~KoTarStore();
 
-  // IDL
   virtual bool open( const QString & name, const QCString &_mime_type );
   virtual void close();
-  virtual KOStore::Data read( long unsigned int max );
-  virtual bool write( const KOStore::Data& _data );
+  virtual QByteArray read( long unsigned int max );
+  virtual bool write( const QByteArray& _data );
 
-  // C++
   virtual bool write( const char* _data, unsigned long _len );
   virtual long read( char *_buffer, unsigned long _len );
 
   virtual bool bad() { return !m_bGood; } // :)
-    
+
 protected:
   /**
    * Conversion routine
@@ -55,8 +52,8 @@ protected:
    * @return the name used in the file, more user-friendly ("maindoc.xml", "part0.xml", ...)
    */
   static QString toExternalNaming( const QString & _internalNaming );
-  
-  KOStore::Mode m_mode;
+
+  Mode m_mode;
 
   // Store the filenames (with full path inside the archive)  when writing, to avoid duplicates
   QStringList m_strFiles;

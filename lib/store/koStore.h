@@ -20,23 +20,33 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include "koStoreIf.h"
+#include <qstring.h>
+#include <qcstring.h>
 
-// Base class for KoTarStore and KoBinaryStore
-// Needed for the write( const char*, long ) and read(char*, long) methods
-class KoStore : public KOStore::Store_skel
+/**
+ * Base class for @ref KoTarStore and @ref KoBinaryStore
+ */
+class KoStore
 {
-protected: // interface, not real class
-  KoStore() {}
+protected:
+    /**
+     * This is an abstract class.
+     */
+    KoStore() {}
+    
 public:
-  virtual ~KoStore() {}
+    enum Mode { Read, Write };
+    
+    virtual ~KoStore() {}
 
-  // Note that all those are C++, not IDL. They define additionnal
-  // interface methods for the store, only available locally
-  // (i.e. only the main koDocument instance uses them)
-  virtual bool write( const char* _data, unsigned long _len ) = 0L;
-  virtual long read( char *_buffer, unsigned long _len ) = 0L;
-  virtual bool bad() = 0L;
+    virtual bool write( const char* _data, unsigned long _len ) = 0;
+    virtual long read( char *_buffer, unsigned long _len ) = 0;
+    virtual bool bad() = 0;
+
+    virtual bool open( const QString & name, const QCString & mimetype ) = 0;
+    virtual void close() = 0;
+    virtual QByteArray read( unsigned long max ) = 0;
+    virtual bool write( const QByteArray& data ) = 0;
 };
 
 #endif

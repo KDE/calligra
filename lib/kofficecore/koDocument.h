@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __ko_document_h__
 #define __ko_document_h__
@@ -23,48 +23,50 @@
 class KoDocumentChild;
 class KoDocumentChildPicture;
 
-#include "koffice.h"
+#include <container.h>
+#include <part.h>
 
-#include <opDocument.h>
 #include <komlParser.h>
-#include <koStoreIf.h>
+#include <koStore.h>
+
+#include <kdebug.h>
 
 #include <qrect.h>
 #include <qpicture.h>
 #include <qstring.h>
 
+#include <iostream.h>
 
-class KoDocument : virtual public OPDocumentIf,
-		           virtual public KOffice::Document_skel
+class KoDocument : public ContainerPart
 {
+    Q_OBJECT
 public:
-  // C++
-  KoDocument();
+  KoDocument( QObject* parent = 0, const char* name = 0 );
   virtual ~KoDocument() { };
 
-  virtual void cleanUp();
+  virtual bool initDoc() = 0;
 
-  // IDL
-  virtual bool isModified() { return m_bModified; }
-  
-  // IDL
-  virtual void setURL( const QString & _url ) { m_strURL = _url; }
+  virtual bool isModified() const;
+  virtual void setModified( bool _mod = true );
+  virtual bool isEmpty() const;
 
-  virtual QString url() { return m_strURL; }
-  
-  // IDL
-  virtual bool loadFromURL( const QString & _url );
-  virtual bool loadFromStore( KOStore::Store_ptr _store, const QString & _url );
+  virtual void setURL( const QString& url );
+  virtual QString url() const;
 
-  // IDL
-  virtual bool saveToURL( const QString & _url, const QCString & _format );
-  virtual bool saveToStore( KOStore::Store_ptr _store, const QCString & _format, const QString & _path );
+  virtual bool loadFromURL( const QString& url );
+  virtual bool loadFromStore( KoStore* store, const QString& url );
 
-  // C++
-  virtual void setModified( bool _mod = true ) { m_bModified = _mod; }
-  
+  virtual bool saveToURL( const QString& url, const QCString& format );
+  virtual bool saveToStore( KoStore* store, const QCString& format, const QString& path );
+
+  virtual QCString mimeType() const = 0;
+
+  /**
+   * Overloaded from ContainerPart to set the modified flag.
+   */
+  virtual void insertChild( PartChild* child );
+
 protected:
-  // C++
   /**
    *  This function is called from @ref #loadFromURL and @ref #loadFromStore.
    *  It decides wether XML or binary data has to be read and calls
@@ -74,7 +76,7 @@ protected:
    *
    *  @param _store may be 0L.
    */
-  virtual bool load( istream& in, KOStore::Store_ptr _store );
+  virtual bool load( istream& in, KoStore* _store );
   /**
    *  @param _stream       The stream, from which the binary should be read.
    *  @param _randomaccess Tells whether input stream is a serial stream
@@ -82,13 +84,11 @@ protected:
    *                       or a @ref istringstream.
    *  @param _store        Pointer to a Store object. May be 0L.
    */
-  virtual bool loadBinary( istream& , bool /*_randomaccess*/, KOStore::Store_ptr /*_store*/ )
-  { kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadBinary not implemented" ); return false; };
+  virtual bool loadBinary( istream& , bool /*_randomaccess*/, KoStore* /*_store*/ );
   /**
    *  This function loads a XML document. It is called by @ref KoDocument#load.
    */
-  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr  )
-  { kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadXML not implemented" ); return false; };
+  virtual bool loadXML( KOMLParser&, KoStore* );
   /**
    *  You need to overload this function if your document may contain
    *  embedded documents. This function is called to load embedded documents.
@@ -106,7 +106,7 @@ protected:
    *  return true;
    *  </PRE>
    */
-  virtual bool loadChildren( KOStore::Store_ptr ) { return true; }
+  virtual bool loadChildren( KoStore* );
   /**
    *  Saves all children. If your document supports embedding, then you have
    *  to overload this function. An implementation may look like this:
@@ -120,18 +120,17 @@ protected:
    *      KOffice::Document_var doc = it.current()->document();
    *      if ( !doc->saveToStore( _store, 0L, internURL ) )
    *         return false;
-   *  } 
+   *  }
    *  return true;
    *  </PRE>
    */
-  virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
+  virtual bool saveChildren( KoStore* store, const char *path );
   /**
    *  Overload this function if you have to load additional files
    *  from a store. This function is called after @ref #loadXML or
    *  @ref #loadBinary and after @ref #loadChildren have been called.
    */
-  virtual bool completeLoading( KOStore::Store_ptr /* _store */ )
-  { return true; }
+  virtual bool completeLoading( KoStore* store );
   /**
    *  If you want to write additional files to a store,
    *  the you must do it here.
@@ -141,21 +140,18 @@ protected:
    *  tar:/1/pictures/picture0.png, if the doc url is tar:/1
    *  But do this ONLY if the document is stored extern (see @ref #isStoredExtern)
    */
-  virtual bool completeSaving( KOStore::Store_ptr /* _store */ )
-  { return true; }
-  
-  // C++
+  virtual bool completeSaving( KoStore* );
+
   /**
    *  Saves only an OBJECT tag for this document.
    */
-  virtual bool save( ostream&, const char* /* _format */ )
-  { kdebug( KDEBUG_ERROR, 30003, "KoDocument::save not implemented" ); return false; };
+  virtual bool save( ostream&, const char* format );
 
   /**
    *  Overload this function with your personal text.
    */
-  virtual const char* copyright() { return ""; }
-  virtual const char* comment() { return ""; }
+  virtual QString copyright() const;
+  virtual QString comment() const;
   /**
    *  An example implementation may look like this one:
    *  <PRE>
@@ -164,13 +160,16 @@ protected:
    *  {
    *    if ( !it.current()->isStoredExtern() )
    *    {
-   *      return true;    
+   *      return true;
    *    }
    *  }
    *  return false;
    *  </PRE>
+   *
+   * By default the function returns FALSE. That is ok if your document
+   * wont embed other documents, otherwise you have to overload the function.
    */
-  virtual bool hasToWriteMultipart() = 0;
+  virtual bool hasToWriteMultipart();
 
   /**
    * Return true if url() is a real filename, false if url() is
@@ -178,31 +177,25 @@ protected:
    */
   virtual bool isStoredExtern();
 
-  QString m_strURL;
-  bool m_bModified;
+private:
+    QString m_strURL;
+    bool m_bModified;
+    bool m_bEmpty;
 };
-
-typedef KOMVar<KOffice::Document> KoDocument_ref;
 
 /**
  *  Holds an embedded object.
  */
-class KoDocumentChild
+class KoDocumentChild : public PartChild
 {
 public:
-  KoDocumentChild( const QRect& _rect, KOffice::Document_ptr _doc );
-  KoDocumentChild();
+  KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry );
+  KoDocumentChild( KoDocument* parent );
   virtual ~KoDocumentChild();
-  
-  virtual KOffice::Document_ptr document()
-  { return KOffice::Document::_duplicate( m_rDoc ); }
-  virtual const char* url()
-  { return m_strURL; }
-  virtual const char* mimeType()
-  { return m_strMimeType; }
-  virtual const QRect& geometry()
-  { return m_geometry; }
-  virtual void setGeometry( const QRect& _rect );
+
+  virtual KoDocument* document() { return (KoDocument*)part(); }
+
+  virtual QString url();
 
   /**
    *  Writes the OBJECT tag, but does NOT write the content of the
@@ -214,61 +207,46 @@ public:
   /**
    *  Parses the OBJECT tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
-   *  or @ref #loadDocumentMimePart to actually load the embedded documents.
+   *  to actually load the embedded documents.
    */
   virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
   /**
    *  Actually loads the document from the disk/net or from the store,
-   *  depending on @ref #m_strURL
+   *  depending on @ref #url
    */
-  virtual bool loadDocument( KOStore::Store_ptr );
+  virtual bool loadDocument( KoStore* );
 
   virtual bool isStoredExtern();
-  
-  /**
-   *  @param _force_update may be set to true. In this case this function
-   *  always requests a new picture from the child
-   *  instead of returning the cached one.
-   */
-  virtual QPicture* draw( float _scale = 1.0, bool _force_update = false );
 
-  virtual KOffice::View_ptr createView( KOffice::MainWindow_ptr _main );
-  
 protected:
-  KoDocument_ref m_rDoc;
   /**
-   *  The geometry is assumed to be always unzoomed.
+   * Called if @ref #load finds a tag that it does not understand.
+   *
+   * @return TRUE if the tag could be handled. The default implementation
+   *         returns FALSE.
    */
-  QRect m_geometry;
+  virtual bool loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& lst2 );
+
+private:
   /**
    *  Holds the source of this object, for example "file:/home/weis/image.gif"
-   *  or "tar:/table1/2" if it is stored in a koffice store. If this string
-   *  is empty then the document was created from scratch and not saved yet.
-   *  Those documents are usually stored in a compound document later.
+   *  or "tar:/table1/2" if it is stored in a koffice store. This variable is
+   *  set after parsing the OBJECT tag in @ref #load and is reset after
+   *  calling @ref #loadDocument.
    */
-  QString m_strURL;
-  QString m_strMimeType;
-
-  QPicture* m_pPicture;
-  float m_pictureScale;
-  
-  bool m_bHasPrintingExtension;
-};
-
-class KoDocumentChildPicture
-{
-public:
-  KoDocumentChildPicture( KoDocumentChild *_child );
-  virtual ~KoDocumentChildPicture();
-  virtual KoDocumentChild* child()
-  { return m_pChild; }
-  virtual QPicture* picture()
-  { return m_pChild->draw(); }
-  virtual const QRect& geometry()
-  { return m_pChild->geometry(); }
-  
-protected:
-  KoDocumentChild* m_pChild;
+  QString m_tmpURL;
+  /**
+   * This variable is
+   *  set after parsing the OBJECT tag in @ref #load and is reset after
+   *  calling @ref #loadDocument.
+   */
+  QRect m_tmpGeometry;
+  /**
+   * This variable is
+   *  set after parsing the OBJECT tag in @ref #load and is reset after
+   *  calling @ref #loadDocument.
+   */
+  QString m_tmpMimeType;
 };
 
 #endif

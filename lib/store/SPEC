@@ -18,7 +18,7 @@ and finished by David.
 
 The obvious gain of that type of storage is that it's 100% non-proprietary as it
 uses only the already available formats (XML, pictures, tar.gz, ...) and tools (tar, gzip).
-If enables anybody to hack directly into the document, for instance to update
+It enables anybody to hack directly into the document, for instance to update
 an image (faster than launching the application), or to write scripts
 that generate koffice documents ! :)
 Later, someone will be able to easily write an import filter for any other office-suite
@@ -28,13 +28,13 @@ It also generates much smaller files than the old binary store, since everything
 
 1) Name of the KOffice Files:
 As some people suggested using a "tgz"-ending is stupid, I'll drop it :)
-Just use the "normal" endings like "MyLetter.kwd", "Sales.ksp", or 
+Just use the "normal" endings like "MyLetter.kwd", "Sales.ksp", or
 "Meeting.kpr".
 
 2) Internal Structure:
 I don't like theoretic explanations so I'd give a simple example: Assume you
 have to write a lab-report. Coincidence? I think not >:) You surely will have
-some text, the readings, some formulas and a few pictures (e.g. circiut
+some text, the readings, some formulas and a few pictures (e.g. circuit
 diagram,...).
 The main document will be a KWord-file. In this file you embed some KSpread-
 tables, some KDiagram-charts, the KFormulas, and some picture-frames. You save
@@ -55,7 +55,7 @@ pictures/picture0.jpg
 pictures/picture1.bmp
 cliparts/      -- Cliparts embedded in the main KWord document
 cliparts/clipart0.wmf
-...          
+...
 
 Still TODO for the specification :
 Currently if a document has no child document, no picture, and no embedded parts,

@@ -32,19 +32,7 @@ int istorestreambuffer::underflow ()
     /* read new chars
      */
     long anz = 8192;
-    if ( !CORBA::is_nil( m_vStore ) )
-    {
-        KOStore::Data p; // QArray<unsigned char> 
-        //kdebug( KDEBUG_INFO, 30002, "--->read" );
-        p = m_vStore->read( pufferSize - 4 );
-        //kdebug( KDEBUG_INFO, 30002, "<---" );
-        if ( !p )
-	        return EOF;
-        anz = p.size();
-        memcpy( puffer + 4 , p.data(), anz );
-    }
-    else
-        anz = m_pStore->read( puffer + 4, pufferSize - 4 );
+    anz = m_pStore->read( puffer + 4, pufferSize - 4 );
     if ( anz <= 0 )
     {
         // either there was an error or we are at the EOF
@@ -52,13 +40,13 @@ int istorestreambuffer::underflow ()
     }
     //else
     //  kdebug( KDEBUG_INFO, 30002, "Read %i bytes", anz );
-     
+
     /* set the pointer to our buffer
      */
     setg (puffer+(4-anzPutback),   // start of the Putback-zone
 	  puffer+4,                    // read position
 	  puffer+4+anz);               // end of the buffer
-    
+
     // return the next char
     unsigned char c = *((unsigned char*)gptr());
     return c;
@@ -68,15 +56,7 @@ int istorestreambuffer::underflow ()
 int ostorestreambuffer::emptybuffer()
 {
     int anz = pptr()-pbase();
-    if ( !CORBA::is_nil( m_vStore ) )
-    {
-      KOStore::Data data;
-      data.setRawData( m_buffer, anz ); // point to m_buffer
-      m_vStore->write( data );
-      data.resetRawData( m_buffer, anz ); // forget about m_buffer
-    }
-    else
-      m_pStore->write( m_buffer, anz );
+    m_pStore->write( m_buffer, anz );
 
     pbump (-anz);    // restore "write-pointer" position
     return anz;

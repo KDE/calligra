@@ -31,9 +31,11 @@ KSInterpreter::KSInterpreter()
   for(; it != end; ++it )
     m_global->insert( it.key(), it.data() );
 
+#if 0
   // Load the CORBA module
   m = ksCreateModule_Corba( this );
   m_modules.insert( m->name(), m );
+#endif
 
   m_globalContext.setScope( new KSScope( m_global, 0 ) );
 }
@@ -213,28 +215,14 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
     return true;
 
   m_modules.insert( name, module );
-  
+
   return true;
-}
-
-void KSInterpreter::addRepoidImplementation( const QString& repoid, const KSValue::Ptr& v )
-{
-  m_repoidImpls.insert( repoid, v );
-}
-
-KSValue* KSInterpreter::repoidImplementation( const QString& repoid )
-{
-  QMap<QString,KSValue::Ptr>::Iterator it = m_repoidImpls.find( repoid );
-  if ( it == m_repoidImpls.end() )
-    return 0;
-
-  return it.data();
 }
 
 bool KSInterpreter::processExtension( KSContext& context, KSParseNode* node )
 {
   QString tmp( "The interpreter does not support an extended syntax you are using.");
   context.setException( new KSException( "UnsupportedSyntaxExtension", tmp, node->getLineNo() ) );
-  
+
   return false;
 }

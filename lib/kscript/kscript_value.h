@@ -25,7 +25,7 @@ class KSTypeCode;
 
 typedef bool (KSObject::*KSBuiltinMethod)( KSContext& );
 typedef bool (KSStruct::*KSStructBuiltinMethod)( KSContext& );
-typedef bool (KSProxy::*KSProxyBuiltinMethod)( KSContext& );
+typedef bool (KSProxy::*KSProxyBuiltinMethod)( KSContext&, const QString& );
 
 /**
  * This class acts like a union. It can hold one value at the
@@ -42,7 +42,7 @@ public:
       StringType,
       IntType,
       BoolType,
-      DoubleType, 
+      DoubleType,
       ListType,
       MapType,
       CharType,
@@ -75,7 +75,7 @@ public:
     KSValue( Type );
     KSValue( const KSValue& );
     virtual ~KSValue();
-  
+
     KSValue( const QString& _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( const QValueList<Ptr>& _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( const QMap<QString,Ptr>& _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
@@ -94,15 +94,15 @@ public:
     KSValue( KSModule* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSStruct* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSStructClass* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSStructBuiltinMethod* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSStructBuiltinMethod _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSProxy* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSInterface* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSProxyBuiltinMethod* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSProxyBuiltinMethod _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSTypeCode* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
     KSValue( KSAttribute* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
 
     KSValue& operator= ( const KSValue& );
-    
+
     void setValue( const QString& );
     void setValue( const QValueList<Ptr>& );
     void setValue( const QMap<QString,Ptr>& );
@@ -135,9 +135,9 @@ public:
 
     Type type() const { return typ; }
     virtual QString typeName() const;
-  
+
     bool isEmpty() const { return ( typ == Empty ); }
-  
+
     const QString& stringValue() const { ASSERT( typ == StringType ); return *((QString*)val.ptr); }
     QString& stringValue() { ASSERT( typ == StringType ); return *((QString*)val.ptr); }
     const QValueList<Ptr>& listValue() const { ASSERT( typ == ListType );  return *((QValueList<Ptr>*)val.ptr); }
@@ -197,7 +197,7 @@ public:
      * @return KSValue::Empty if the given name is empty or unknown.
      */
     static Type nameToType( const QString& _name );
-  
+
     /**
      * @return an empty value. Its reference count is increased so that you can assign
      *         it directly to some @ref KSContext.
@@ -205,7 +205,7 @@ public:
     static KSValue* null() { if ( !s_null ) s_null = new KSValue; s_null->ref(); return s_null; }
 
 protected:
-    
+
     Mode m_mode;
     Type typ;
     union

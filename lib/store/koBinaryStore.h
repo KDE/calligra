@@ -29,13 +29,13 @@
 class KoBinaryStore : public KoStore
 {
 public:
-  KoBinaryStore( const QString & _filename, KOStore::Mode _mode );
+  KoBinaryStore( const QString & _filename, Mode _mode );
   virtual ~KoBinaryStore();
 
   virtual bool open( const QString & name, const QCString &_mime_type );
   virtual void close();
-  virtual KOStore::Data read( unsigned long int max );
-  virtual bool write( const KOStore::Data& _data );
+  virtual QByteArray read( unsigned long int max );
+  virtual bool write( const QByteArray& _data );
 
   bool write( const char* _data, unsigned long _len );
   long read( char *_buffer, unsigned long _len );
@@ -43,9 +43,9 @@ public:
   // void list();
 
   bool bad() { return m_out.bad(); }
-    
+
 protected:
-  KOStore::Mode m_mode;
+  Mode m_mode;
 
   struct Entry
   {

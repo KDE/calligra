@@ -89,10 +89,7 @@ bool KSObject_QDialog::ksQDialog_show( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 0, "QLineEdit::setText" ) )
     return false;
   QDialog* w = (QDialog*)object();
-  if ( w )
-    w->show();
-  else
-    qDebug("QDialog::show - no object");
+  w->show();
 }
 
 bool KSObject_QDialog::ksQDialog_hide( KSContext& context )

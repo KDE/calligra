@@ -1,5 +1,6 @@
 #include "kscript_util.h"
 #include "kscript_context.h"
+#include "kscript_struct.h"
 
 bool KSUtil::checkArgumentsCount( KSContext& context, uint count, const QString& name, bool fatal )
 {
@@ -63,4 +64,22 @@ void KSUtil::tooManyArgumentsError( KSContext& context, const QString& methodnam
 {
   QString tmp( "Too many arguments  for method %1" );
   context.setException( new KSException( "TooManyArguments", tmp.arg( methodname ), -1 ) );
+}
+
+QRect KSUtil::toQRect( KSContext& context, KSStruct* s )
+{
+    KSValue::Ptr x = s->member( context, "x" );
+    if ( !x || x->type() != KSValue::IntType )
+	return QRect();
+    KSValue::Ptr y = s->member( context, "y" );
+    if ( !y || y->type() != KSValue::IntType )
+	return QRect();
+    KSValue::Ptr width = s->member( context, "width" );
+    if ( !width || width->type() != KSValue::IntType )
+	return QRect();
+    KSValue::Ptr height = s->member( context, "height" );
+    if ( !height || height->type() != KSValue::IntType )
+	return QRect();
+
+    return QRect( x, y, width, height );
 }

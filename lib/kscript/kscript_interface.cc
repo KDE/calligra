@@ -1,3 +1,5 @@
+#if 0
+
 #define WITH_CORBA
 #include <CORBA.h>
 
@@ -20,7 +22,7 @@ KSAttribute::KSAttribute( KSModule* m, const QString& name, KSAttribute::Access 
   m_typecode = tc;
   m_access = a;
 }
-  
+
 void KSAttribute::set( KSContext&, KSProxy*, KSValue* )
 {
   // TODO
@@ -54,7 +56,7 @@ bool KSInterface::constructor( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, m_name + "::" + m_name ) )
     return false;
-  
+
   if ( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
   {
     // TODO: We must avoid this with certain security policies.
@@ -113,3 +115,5 @@ KSValue::Ptr KSInterface::member( KSContext& context, const QString& name )
 
   return it.data();
 }
+
+#endif

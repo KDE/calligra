@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __ko_query_types_h__
 #define __ko_query_types_h__
@@ -25,18 +25,8 @@
 #include <qpixmap.h>
 #include <qvaluelist.h>
 
-// Some forward declarations
-namespace KOffice
-{
-  class Document;
-  typedef Document *Document_ptr;
-};
-
-namespace CORBA
-{
-  class Object;
-  typedef Object* Object_ptr;
-};
+class KoDocument;
+class KoFilter;
 
 /**
  *  Represents an available component.
@@ -45,31 +35,21 @@ class KoComponentEntry
 {
 
 public:
-
-  KoComponentEntry() { reference = 0; }
+  KoComponentEntry() { }
   KoComponentEntry( const KoComponentEntry& _entry );
 
+  const KoComponentEntry& operator=( const KoComponentEntry& e );
+	
   /**
    * Releases the @ref #reference.
    */
   virtual ~KoComponentEntry();
 
-  const KoComponentEntry& operator=( const KoComponentEntry& _entry );
-
   QString comment;
   QString name;
-  QString exec;
-  QString activationMode;
-  QStringList repoID;
+  QString libname;
   QPixmap miniIcon;
   QPixmap icon;
-
-  /**
-   * Reference to the components factory. It is a virtual reference.
-   * That means that the component is started when the
-   * first function call is invoked on this reference.
-   */
-  CORBA::Object_ptr reference;
 
   bool isEmpty() const { return name.isEmpty(); }
 };
@@ -102,11 +82,10 @@ public:
   { return ( mimeTypes.find( _mimetype ) != mimeTypes.end() ); }
 
   /**
-   *  Uses the factory of the component (@ref #reference) to create
-   *  a document. If that is not possible, the user gets an error dialog
-   *  and 0 is returned.
+   *  Uses the factory of the component  to create
+   *  a document. If that is not possible 0 is returned.
    */
-  KOffice::Document_ptr createDoc();
+  KoDocument* createDoc( KoDocument* parent = 0, const char* name = 0 );
 
   /**
    *  This function will query KDED to find all available components.
@@ -140,6 +119,8 @@ public:
   KoFilterEntry( const KoFilterEntry& _entry );
   ~KoFilterEntry() { }
 
+  KoFilter* createFilter( QObject* parent = 0, const char* name = 0);
+
   /**
    *  The imported mimetype.
    */
@@ -165,7 +146,7 @@ public:
    */
   bool imports( const char* _mimetype ) const
   { return ( import.find( _mimetype ) != -1 ); }
-  
+
   /**
    *  @return TRUE if the filter can exports the requested mimetype.
    */
@@ -180,6 +161,25 @@ public:
    *                 components.
    */
   static QValueList<KoFilterEntry> query( const char* _constr = "", int _count = 100 );
+};
+
+/**
+ * Torben says: DONT USE. Use KoDataToolInfo instead!
+ */
+class KoToolEntry : public KoComponentEntry
+{
+public:
+  KoToolEntry() { };
+  KoToolEntry( const KoComponentEntry& _entry );
+  KoToolEntry( const KoToolEntry& entry );
+
+  QStringList mimeTypes;
+  QStringList commands;
+  QStringList commandsI18N;
+
+  bool supports( const QString &_mime_type ) const { return ( mimeTypes.find( _mime_type ) != mimeTypes.end() ); }
+
+  static QValueList<KoToolEntry> query( const QString &_mime_type );
 };
 
 #endif

@@ -1,36 +1,38 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 David Faure <faure@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include "koUIUtils.h"
 
-OpenPartsUI::Pixmap* KOUIUtils::colorPixmap( QColor c, PType _type )
+#include <qcstring.h>
+
+QPixmap KOUIUtils::colorPixmap( const QColor& c, PType _type )
 {
     int r, g, b;
-    QString pix;
-    QString line;
- 
+    QCString pix;
+    QCString line;
+
     c.rgb( &r, &g, &b );
- 
+
     pix = "/* XPM */\n";
- 
+
     pix += "static char * text_xpm[] = {\n";
- 
+
     switch ( _type )
     {
       case TXT_COLOR:
@@ -67,7 +69,7 @@ OpenPartsUI::Pixmap* KOUIUtils::colorPixmap( QColor c, PType _type )
         pix += "\"............aee##ffa\",\n";
         pix += "\"............agghhiia\",\n";
         pix += "\"............agghhiia\",\n";
-        pix += "\"............aaaaaaaa\"};\n"; 
+        pix += "\"............aaaaaaaa\"};\n";
       } break;
       case FRAME_COLOR:
       {
@@ -102,12 +104,12 @@ OpenPartsUI::Pixmap* KOUIUtils::colorPixmap( QColor c, PType _type )
       case BACK_COLOR:
       {
         pix += "\" 20 20 3 1 \",\n";
- 
+
         pix += "\"  c none \",\n";
         pix += "\". c red \",\n";
         line.sprintf( "\"+ c #%02X%02X%02X \",\n", r, g, b );
         pix += line.copy();
- 
+
         pix += "\"                     \",\n";
         pix += "\"                     \",\n";
         pix += "\"  ................  \",\n";
@@ -130,9 +132,13 @@ OpenPartsUI::Pixmap* KOUIUtils::colorPixmap( QColor c, PType _type )
         pix += "\"                     \";\n";
       } break;
     }
- 
-  OpenPartsUI::Pixmap* p = new OpenPartsUI::Pixmap;
-  p->data = pix;
-  p->onlyFilename = false;
-  return p;
+
+    QByteArray data;
+    data.setRawData( pix.data(), pix.length() );
+    
+    QPixmap pixmap( data );
+    
+    data.resetRawData( pix.data(), pix.length() );
+    
+    return pixmap;
 }

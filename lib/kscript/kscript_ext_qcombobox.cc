@@ -25,13 +25,9 @@ KSClass_QComboBox::KSClass_QComboBox( KSModule* m, const char* name ) : KSClass_
 {
   nameSpace()->insert( "QComboBox", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox ) );
   nameSpace()->insert( "activated", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox_activated ) );
-  nameSpace()->insert( "highlighted", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox_highlighted ) );
-  nameSpace()->insert( "textChanged", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox_textChanged ) );
   nameSpace()->insert( "insertItem", new KSValue( (KSBuiltinMethod)&KSObject_QComboBox::ksQComboBox_insertItem ) );
 
   addQtSignal( "activated" );
-  addQtSignal( "highlighted" );
-  addQtSignal( "textChanged" );
 }
 
 KSScriptObject* KSClass_QComboBox::createObject( KSClass* c )
@@ -51,47 +47,33 @@ bool KSObject_QComboBox::ksQComboBox( KSContext& context )
 
   if ( !checkDoubleConstructor( context, "QComboBox" ) )
     return false;
-  qDebug("QComboBox 2\n");
+
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
     
   QWidget* parent = 0;
   QString name;
-  bool rw = false;
-  int arg = 0;
-  qDebug("QComboBox 3\n");
+
   if ( args.count() >= 1 )
   {
-qDebug("QComboBox 3e\n");
-      if ( checkArguments(context, context.value(), "QComboBox::QComboBox", KS_Qt_Object::BoolType ) )
-        { qDebug("QComboBox 3e\n");rw = args[arg]->boolValue(); arg++; qDebug("QComboBox 3a\n"); }
-      else if ( checkArguments( context, context.value(), "QComboBox::QComboBox", KS_Qt_Object::WidgetType ) )
-        { parent = KSObject_QWidget::convert( args[arg] ); arg++; qDebug("QComboBox 3b\n");}
-      else if ( checkArguments( context, context.value(), "QComboBox::QComboBox", KS_Qt_Object::StringType ) )
-        { name = args[arg]->stringValue(); arg++; qDebug("QComboBox 3c\n");}
+      if ( !checkArguments( context, context.value(), "QComboBox::QComboBox", KS_Qt_Object::WidgetType ) )
+	  return FALSE;
+      parent = KSObject_QWidget::convert( args[0] );
   }
   if ( args.count() >= 2 )
   {
-qDebug("QComboBox 3d\n");
-      if ( checkArguments( context, context.value(), "QComboBox::QComboBox", KS_Qt_Object::WidgetType ) )
-        { parent = KSObject_QWidget::convert( args[arg] ); arg++; qDebug("QComboBox 3e\n");}
-      else if ( checkArguments( context, context.value(), "QComboBox::QComboBox", KS_Qt_Object::StringType ) )
-        { name = args[arg]->stringValue(); arg++; qDebug("QComboBox 3f\n");}
+      if ( !checkArguments( context, context.value(), "QComboBox::QComboBox", KS_Qt_Object::StringType ) )
+	  return FALSE;
+      name = args[1]->stringValue();
   }
-  if ( args.count() == 3 )
-  {
-qDebug("QComboBox 3g\n");
-      if ( checkArguments( context, context.value(), "QComboBox::QComboBox", KS_Qt_Object::StringType ) )
-        { name = args[arg]->stringValue(); }
-  }
-  if ( args.count() > 3 )
+  if ( args.count() > 2 )
   {
       KSUtil::tooFewArgumentsError( context, "QComboBox::QComboBox" );
       return FALSE;
   }
-  qDebug("QComboBox 5\n");
-  setObject( new QComboBox( rw, parent, name ) );
 
-  qDebug("QComboBox 6\n");
+  setObject( new QComboBox( parent, name ) );
+
+  qDebug("QComboBox 2\n");
 
   return true;
 }
@@ -104,12 +86,6 @@ void KSObject_QComboBox::setObject( QObject* obj )
 					 SLOT( activated( int ) ), this, "activated" );
         KS_Qt_Callback::self()->connect( obj, SIGNAL( activated( const QString& ) ),
                                          SLOT( activated( const QString& ) ), this, "activated" );
-        KS_Qt_Callback::self()->connect( obj, SIGNAL( highlighted( int ) ),
-                                         SLOT( highlighted( int ) ), this, "highlighted" );
-        KS_Qt_Callback::self()->connect( obj, SIGNAL( highlighted( const QString& ) ),
-                                         SLOT( highlighted( const QString& ) ), this, "highlighted" );
-        KS_Qt_Callback::self()->connect( obj, SIGNAL( textChanged( const QString& ) ),
-                                         SLOT( textChanged( const QString& ) ), this, "textChanged" );
     }
 
     KSObject_QWidget::setObject( obj );
@@ -128,35 +104,6 @@ bool KSObject_QComboBox::ksQComboBox_activated( KSContext& context )
 
   return true;
 }
-
-bool KSObject_QComboBox::ksQComboBox_highlighted( KSContext& context )
-{
-  if ( !checkLive( context, "QComboBox::highlighted" ) )
-    return false;
-
-  if ( !KSUtil::checkArgumentsCount( context, 0, "QComboBox::highlighted" ) )
-    return false;
-
-// TODO get argument and pass it to Qt-Signal
-//  WIDGET->highlighted();
-
-  return true;
-}
-
-bool KSObject_QComboBox::ksQComboBox_textChanged( KSContext& context )
-{
-  if ( !checkLive( context, "QComboBox::textChanged" ) )
-    return false;
-
-  if ( !KSUtil::checkArgumentsCount( context, 0, "QComboBox::textChanged" ) )
-    return false;
-
-// TODO get argument and pass it to Qt-Signal
-//  WIDGET->textChanged();
-
-  return true;
-}
-
 
 bool KSObject_QComboBox::ksQComboBox_insertItem( KSContext& context )
 {

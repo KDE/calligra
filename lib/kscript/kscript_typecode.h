@@ -1,3 +1,5 @@
+#if 0
+
 #ifndef __KSCRIPT_TYPECODE
 #define __KSCRIPT_TYPECODE
 
@@ -28,7 +30,7 @@ public:
    * @return FALSE is the argument was no valid typecode.
    */
   bool fromString( const QString& stringified );
- 
+
   /**
    * If the value is a string, then it is translated to a typecode.
    * If no typecode could be generated an exception is raised and
@@ -49,5 +51,7 @@ protected:
   void* m_typcode;
 #endif
 };
+
+#endif
 
 #endif

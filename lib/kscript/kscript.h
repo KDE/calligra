@@ -49,17 +49,6 @@ public:
   KSContext& context() { return m_globalContext; }
 
   /**
-   * The CORBA wrapper uses this function to see which interface/struct
-   * implements a certain repoid.
-   */
-  KSValue* repoidImplementation( const QString& repoid );
-  /**
-   * @ref KSStructClass and @ref KSInterface use this function to register themself
-   * for some repoid.
-   */
-  void addRepoidImplementation( const QString& repoid, const KSValue::Ptr& v );
-
-  /**
    * Add a search path. KScript will search for modules in this path.
    */
   void addSearchPath( const QString& p ) { m_searchPaths.prepend( p ); }
@@ -89,10 +78,6 @@ protected:
    * the filename.
    */
   QMap<QString,KSModule::Ptr> m_modules;
-  /**
-   * Maps Repoids to their @ref KSStructClass or @ref KSInterface
-   */
-  QMap<QString,KSValue::Ptr> m_repoidImpls;
   /**
    * List of all classes where we can search for modules.
    */
