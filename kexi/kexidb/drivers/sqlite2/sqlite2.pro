@@ -6,5 +6,5 @@ win32:INCLUDEPATH += $(KEXI)/3rdparty/kexisql/src ../sqlite/moc
 
 system( bash kmoc ../sqlite )
 
-TARGET = kexidb_sqlite2driver$$KDEBUG
+TARGET = kexidb_sqlite2driver$$KDELIBDEBUG
 

@@ -6,7 +6,7 @@ win32:QMAKE_CXXFLAGS += /I$(MYSQL_INC)
 
 win32:LIBS += $(MYSQL_LIB)/mysqlclient.lib
 
-TARGET		= kexidb_mysqldriver$$KDEBUG
+TARGET		= kexidb_mysqldriver$$KDELIBDEBUG
 
 system( bash kmoc )
 
