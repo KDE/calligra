@@ -2958,7 +2958,8 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
 		}
 	    } else {
 		qDebug( "Unknown second-level element found: %s", tagName.latin1() );
-		return false;
+		// NOTE: We do *not* 'return false' here but continue normal operation
+		//       since additional elements might have been added in future versions
 	    }
 	}
 	node = node.nextSibling();
