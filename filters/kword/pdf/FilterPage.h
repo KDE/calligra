@@ -68,6 +68,10 @@ class FilterString : public TextString
     FilterLink *_link;
     uint        _frameIndex;
 
+    void addChar(GfxState *state, double x, double y,
+                 double dx, double dy, Unicode u);
+    bool checkCombination(TextString *s);
+
     friend class FilterPage;
 };
 
@@ -80,6 +84,8 @@ class FilterPage : public TextPage
     FilterPage(FilterData &data);
 
     void beginString(GfxState *, double x0, double y0);
+    void addString(TextString *);
+    void endString();
     void dump();
     void addLink(FilterLink *link) { _links.push_back(link); }
     void clear();
@@ -89,6 +95,7 @@ class FilterPage : public TextPage
     bool        _empty;
     QValueVector<FilterParagraph> _pars;
     QValueVector<FilterLink *>    _links;
+    FilterString *_lastStr;
 
     void prepare();
 };

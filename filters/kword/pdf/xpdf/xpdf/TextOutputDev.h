@@ -49,11 +49,10 @@ public:
   virtual ~TextString();
 
   // Add a character to the string.
-  void addChar(GfxState *state, double x, double y,
-	       double dx, double dy, Unicode u);
+  virtual void addChar(GfxState *state, double x, double y,
+                       double dx, double dy, Unicode u);
 
-private:
-
+protected:
   double xMin, xMax;		// bounding box x coordinates
   double yMin, yMax;		// bounding box y coordinates
   union {
@@ -68,6 +67,7 @@ private:
 
   friend class TextPage;
   friend class TextBlock;
+  friend class FilterString;
   friend class FilterPage;
 };
 
@@ -139,7 +139,7 @@ public:
   virtual void endString();
 
   // Add a string, sorting it into the list of strings.
-  void addString(TextString *str);
+  virtual void addString(TextString *str);
 
 
   // Coalesce strings that look like parts of the same line.

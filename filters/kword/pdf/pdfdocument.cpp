@@ -29,6 +29,7 @@
 #include "FilterDevice.h"
 #include "misc.h"
 
+using namespace PDFImport;
 
 PdfDocument::PdfDocument(const QString &name, const QString &ownerPassword,
                const QString &userPassword, KoFilter::ConversionStatus &result)

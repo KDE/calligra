@@ -34,6 +34,8 @@
 #include "dialog.h"
 
 
+using namespace PDFImport;
+
 //-----------------------------------------------------------------------------
 class PdfImportFactory : KGenericFactory<PdfImport, KoFilter>
 {
@@ -142,7 +144,8 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
             delete doc;
             return KoFilter::UserCancelled;
         }
-        kdDebug(30516) << "treat page: " << it.current() << endl;
+        kdDebug(30516) << "-- treat page: " << it.current()
+                       << "----------------" << endl;
         doc->treatPage( it.current() );
         QDomElement element = data.createElement("BOOKMARKITEM");
         element.setAttribute("name", QString("page%1").arg(it.current()));
@@ -164,7 +167,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
         kdError(30516) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-//    kdDebug(30516) << data.document().toCString() << endl;
+    kdDebug(30516) << data.document().toCString() << endl;
     QCString cstr = data.document().toCString();
     out->writeBlock(cstr, cstr.length());
     out->close();

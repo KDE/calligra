@@ -26,8 +26,11 @@
 
 #include "GfxState.h"
 #include "misc.h"
+#include "transform.h"
 
+using namespace PDFImport;
 
+// FIX for Qt 3.0
 // qvaluevector bug - qheapsort uses 'count' but qvaluevector has only 'size'
 template <class Container>
 Q_INLINE_TEMPLATES void qHeapSort2( Container &c )
@@ -76,32 +79,155 @@ FilterString::~FilterString()
     delete _font;
 }
 
+void FilterString::addChar(GfxState *state, double x, double y,
+                           double dx, double dy, Unicode u)
+{
+    Unicode res1, res2;
+    switch ( checkSpecial(u, res1, res2) ) {
+    case Ligature:
+        kdDebug(30516) << "found ligature " << QString(QChar(res1))
+                       << "+" << QString(QChar(res2)) << endl;
+        TextString::addChar(state, x, y, dx/2, dy, res1);
+        TextString::addChar(state, x+dx/2, y, dx/2, dy, res2);
+        break;
+    case Bullet: {
+        kdDebug(30516) << "found bullet" << endl;
+        // #### FIXME : if list, use a COUNTER
+        // temporarly replace by symbol
+        _font->setFamily(FilterFont::Symbol);
+        TextString::addChar(state, x, y, dx, dy, res1);
+        break;
+    }
+    case SuperScript:
+        kdDebug(30516) << "found superscript" << endl;
+        // #### FIXME
+        TextString::addChar(state, x, y, dx, dy, u);
+        break;
+    case LatexSymbol: {
+        if ( _font->isLatex() && _font->isSymbol() ) {
+            kdDebug(30516) << "found latex symbol" << endl;
+            // #### FIXME : we should separate the character from the rest
+            // of the string ....
+            _font->setFamily(FilterFont::Times);
+        }
+        TextString::addChar(state, x, y, dx, dy, u);
+        break;
+    }
+    case Normal:
+        TextString::addChar(state, x, y, dx, dy, u);
+        checkCombination(this);
+        break;
+    }
+}
+
+bool FilterString::checkCombination(TextString *str)
+{
+    if ( len<1 || str->len<1 ) return false;
+    if ( str==this && len<2 ) return false;
+
+    struct CharData {
+        int i;
+        double min, max;
+        Unicode u;
+    };
+    CharData letter, accent;
+    letter.i = (str==this ? len-1 : 0);
+    letter.u = str->text[letter.i];
+    accent.i = (str==this ? len-2 : len-1);
+    accent.u = text[accent.i];
+    Unicode res;
+    if ( !checkAccent(letter.u, accent.u, res) ) return false;
+
+    letter.min = (letter.i==0 ? str->xMin : str->xRight[letter.i-1]);
+    letter.max = str->xRight[letter.i];
+    accent.min = (accent.i==0 ? xMin : xRight[accent.i-1]);
+    accent.max = xRight[accent.i];
+//    kdDebug(30516) << "found combi " << QString(QChar(res))
+//                   << " accent=[" << accent.min << " , " << accent.max << "] "
+//                   << "letter=[" << letter.min << " , " << letter.max << "]"
+//                   << " ..." << endl;
+    // #### FIXME we should check for above or below accent !!!
+    if ( more(letter.min, accent.min) || more(accent.max, letter.max) )
+        return false;
+//    kdDebug(30516) << "  ...combi ok ! " << endl;
+
+    // replace accent by accented letter
+    text[accent.i] = res;
+    xMax = letter.max;
+    if ( accent.i==0 ) xMin = letter.min;
+    else xRight[accent.i-1] = letter.min;
+    yMin = kMin(yMin, str->yMin);
+    yMax = kMax(yMax, str->yMax);
+
+    // append remaining string
+    if ( str==this ) {
+        len--;
+        for (int k=letter.i+1; k<str->len; k++) {
+            xRight[k-1] = xRight[k];
+            text[k-1] = text[k];
+        }
+    } else {
+        for (int k=letter.i+1; k<str->len; k++)
+        TextString::addChar(0, str->xRight[k-1], 0,
+                            str->xRight[k] - str->xRight[k-1], 0,
+                            str->text[k]);
+        str->len = 0;
+    }
+
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 FilterPage::FilterPage(FilterData &data)
-    : TextPage(false), _data(data), _empty(true)
+    : TextPage(false), _data(data), _empty(true), _lastStr(0)
 {}
 
 void FilterPage::clear()
 {
     TextPage::clear();
     _empty = true;
+    _lastStr = 0;
     for (uint i=0; i<_links.size(); i++)
         delete _links[i];
     _links.resize(0);
     _pars.resize(0);
 }
 
-void FilterPage::beginString(GfxState *state, double x0, double y0) {
-  // This check is needed because Type 3 characters can contain
-  // text-drawing operations.
-  if (curStr) {
-    ++nest;
-    return;
-  }
+void FilterPage::beginString(GfxState *state, double x0, double y0)
+{
+    // This check is needed because Type 3 characters can contain
+    // text-drawing operations.
+    if (curStr) {
+        ++nest;
+        return;
+    }
 
-  _data.checkTextFrameset();
-  curStr = new FilterString(state, x0, y0, fontSize, _data.textIndex());
-  _empty = false;
+    _data.checkTextFrameset();
+    curStr = new FilterString(state, x0, y0, fontSize, _data.textIndex());
+    _empty = false;
+//    kdDebug(30516) << "---" << endl;
+}
+
+void FilterPage::endString()
+{
+//    kdDebug(30516) << "endString..." << " len=" << curStr->len
+//                   << " " << _lastStr
+//                   << " len=" << (_lastStr ? _lastStr->len : -1) << endl;
+    TextPage::endString();
+//    kdDebug(30516) << "  ...endString done" << endl;
+}
+
+void FilterPage::addString(TextString *str)
+{
+//    kdDebug(30516) << "addString..." << endl;
+    if (_lastStr) _lastStr->checkCombination(str);
+//    kdDebug(30516) << "addmid" << endl;
+    _lastStr = (str->len==0 ? 0 : static_cast<FilterString *>(str));
+//    QString s;
+//    for (int i=0; i<str->len; i++) s += QChar(str->text[i]);
+//    kdDebug(30516) << "string: " << s <<endl;
+    TextPage::addString(str);
+//    kdDebug(30516) << " ...addString done" << endl;
 }
 
 void FilterPage::prepare()
@@ -224,20 +350,22 @@ void FilterPage::prepare()
     }
 
     // coalesce formats
-    int dec = 0;
     for (uint i=0; i<_pars.size(); i++) {
+        uint dec = 0;
         QValueVector<FilterBlock> blocks;
         blocks.push_back(_pars[i].blocks[0]);
         for (uint k=1; k<_pars[i].blocks.size(); k++) {
             FilterBlock &b = _pars[i].blocks[k];
-            b.pos += dec;
+            b.pos -= dec;
             if ( (b.link==blocks.back().link) &&
                  (*b.font)==(*blocks.back().font) ) {
                 if (b.link) {
                     blocks.back().linkText += b.linkText;
-                    dec--;
+                    dec++;
                 } else blocks.back().text += b.text;
-            } else blocks.push_back(b);
+            } else {
+                blocks.push_back(b);
+            }
         }
         _pars[i].blocks = blocks;
     }

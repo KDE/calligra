@@ -31,7 +31,10 @@ class BaseStream;
 class PDFDoc;
 class FilterDevice;
 class FilterData;
-class DRect;
+namespace PDFImport
+{
+    class DRect;
+};
 
 class PdfDocument
 {
@@ -43,7 +46,7 @@ class PdfDocument
     QString info(const QCString &key) const;
     uint nbPages() const;
     KoOrientation paperOrientation() const;
-    DRect paperSize(KoFormat &format) const;
+    PDFImport::DRect paperSize(KoFormat &format) const;
     bool isEncrypted() const;
 
     void initDevice(FilterData &data);

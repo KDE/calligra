@@ -92,9 +92,9 @@ class FilterDevice : public OutputDev
 
     class Image {
      public:
-        QImage image;
-        DRect  rect;
-        bool   mask;
+        QImage           image;
+        PDFImport::DRect rect;
+        bool             mask;
     };
     Image     _currentImage;
     typedef QValueList<Image> ImageList;
@@ -104,8 +104,8 @@ class FilterDevice : public OutputDev
     uint initImage(GfxState *, int width, int height, bool mask);
     void addImage();
     void clear();
-    static DPathVector convertPath(GfxState *);
-    void doFill(GfxState *);
+    static PDFImport::DPathVector convertPath(GfxState *);
+    void doFill(const PDFImport::DPathVector &);
 };
 
 #endif

@@ -27,38 +27,43 @@
 
 #include <koGlobal.h>
 
-
-double toPoint(double mm);
-bool equal(double d1, double d2, double delta = 0.1);
 class GfxRGB;
-QColor toColor(GfxRGB &);
 
-//-----------------------------------------------------------------------------
-class DRect {
- public:
-    double width() const { return right - left; }
-    double height() const { return bottom - top; }
-
-    bool operator ==(const DRect &) const;
-
-    double top, bottom, right, left;
-};
-
-struct DPoint {
-    double x, y;
-};
-
-class DPath : public QValueVector<DPoint>
+namespace PDFImport
 {
-public:
-    DPath() {}
+    double toPoint(double mm);
+    bool equal(double d1, double d2, double delta = 0.1);
+    bool more(double d1, double d2, double delta = 0.1);
+    bool less(double d1, double d2, double delta = 0.1);
+    QColor toColor(GfxRGB &);
 
-    bool isSegment() const { return size()==2; }
-    bool isRectangle() const;
-    DRect boundingRect() const;
+    //-------------------------------------------------------------------------
+    class DRect {
+    public:
+        double width() const { return right - left; }
+        double height() const { return bottom - top; }
+
+        bool operator ==(const DRect &) const;
+
+        double top, bottom, right, left;
+    };
+
+    struct DPoint {
+        double x, y;
+    };
+
+    class DPath : public QValueVector<DPoint>
+    {
+    public:
+        DPath() {}
+
+        bool isSegment() const { return size()==2; }
+        bool isRectangle() const;
+        DRect boundingRect() const;
+    };
+
+    typedef QValueVector<DPath> DPathVector;
 };
-
-typedef QValueVector<DPath> DPathVector;
 
 //-----------------------------------------------------------------------------
 class KoFilterChain;
@@ -66,7 +71,7 @@ class KoFilterChain;
 class FilterData
 {
  public:
-    FilterData(KoFilterChain *, const DRect &pageRect, KoPageLayout,
+    FilterData(KoFilterChain *, const PDFImport::DRect &pageRect, KoPageLayout,
                uint nbPages);
 
     QDomElement createElement(const QString &name)
@@ -83,43 +88,53 @@ class FilterData
     QDomElement pictures() const { return _pictures; }
 
     void checkTextFrameset();
-    QDomElement pictureFrameset(const DRect &);
+    QDomElement pictureFrameset(const PDFImport::DRect &);
 
     void startPage();
     void endPage();
 
  private:
-    KoFilterChain *_chain;
-    QDomDocument   _document;
-    uint           _pageIndex, _imageIndex, _textIndex;
-    bool           _needNewTextFrameset;
-    QDomElement    _mainElement, _framesets, _pictures, _bookmarks;
-    QDomElement    _textFrameset, _mainTextFrameset, _lastMainLayout;
-    DRect          _pageRect;
+    KoFilterChain   *_chain;
+    QDomDocument     _document;
+    uint             _pageIndex, _imageIndex, _textIndex;
+    bool             _needNewTextFrameset;
+    QDomElement      _mainElement, _framesets, _pictures, _bookmarks;
+    QDomElement      _textFrameset, _mainTextFrameset, _lastMainLayout;
+    PDFImport::DRect _pageRect;
     typedef QValueList<QDomElement> FramesetList;
-    FramesetList _framesetList;
+    FramesetList     _framesetList;
 
     enum FramesetType { Text, Picture };
-    QDomElement createFrameset(FramesetType, const DRect &);
+    QDomElement createFrameset(FramesetType, const PDFImport::DRect &);
 };
 
 //-----------------------------------------------------------------------------
 class FilterFont
 {
  public:
-    FilterFont(const QString &name = "Times", uint size = 12,
+    FilterFont(const QString &name = "Times-Roman", uint size = 12,
                const QColor &color = Qt::black);
 
     bool operator ==(const FilterFont &) const;
     bool format(QDomDocument &, QDomElement &format, uint pos, uint len,
                 bool all = false) const;
     const QFont &font() const { return _font; }
+    const QColor &color() const { return _color; }
+    bool isLatex() const { return _latex; }
+    bool isSymbol() const { return _font.family()==FAMILY_DATA[Symbol]; }
+
+    enum Family { Times = 0, Helvetica, Courier, Symbol, Nb_Family };
+    void setFamily(Family f) { _font.setFamily(FAMILY_DATA[f]); }
 
     static FilterFont *defaultFont;
 
  private:
-    QFont  _font;
-    QColor _color;
+    QString _name;
+    QFont   _font;
+    QColor  _color;
+    bool    _latex;
+
+    static const char *FAMILY_DATA[Nb_Family];
 };
 
 //-----------------------------------------------------------------------------

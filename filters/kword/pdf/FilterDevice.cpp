@@ -27,6 +27,8 @@
 #include "FilterPage.h"
 
 
+using namespace PDFImport;
+
 FilterDevice::FilterDevice(FilterData &data)
     : _data(data), _fillColor(Qt::white), _strokeColor(Qt::black)
 {
@@ -47,7 +49,6 @@ void FilterDevice::clear()
 
 void FilterDevice::startPage(int, GfxState *)
 {
-    kdDebug(30516) << "start page" << endl;
     _data.startPage();
 }
 
@@ -57,7 +58,7 @@ void FilterDevice::endPage()
     _page->dump();
     clear();
     _data.endPage();
-    kdDebug(30516) << "end page" << endl;
+    kdDebug(30516) << "-- end page --------------------------" << endl;
 }
 
 void FilterDevice::updateFont(GfxState *state)
@@ -98,6 +99,12 @@ void FilterDevice::drawLink(Link* link, Catalog *cat)
 
 void FilterDevice::addImage()
 {
+    if ( _currentImage.image.width()==0 || _currentImage.image.height()==0 ) {
+        kdDebug(30516) << "image has null width or height !" << endl;
+        _currentImage = Image();
+        return;
+    }
+
     // check if same image already put at same place (don't know why it
     // appends sometimes : related to KWord printing to pdf ?)
     ImageList::iterator it;
@@ -284,33 +291,34 @@ void FilterDevice::updateStrokeColor(GfxState *state)
     _strokeColor = toColor(rgb);
 }
 
-void FilterDevice::stroke(GfxState */*state*/)
+void FilterDevice::stroke(GfxState *state)
 {
     kdDebug(30516) << "stroke" << endl;
-//    convertPath(state);
+    convertPath(state);
 }
 
-void FilterDevice::fill(GfxState */*state*/)
+void FilterDevice::fill(GfxState *state)
 {
     kdDebug(30516) << "fill" << endl;
+    convertPath(state);
 //    doFill(state);
 }
 
-void FilterDevice::eoFill(GfxState */*state*/)
+void FilterDevice::eoFill(GfxState *state)
 {
     kdDebug(30516) << "eoFill" << endl;
+    convertPath(state);
 //    doFill(state);
 }
 
-void FilterDevice::doFill(GfxState *state)
+void FilterDevice::doFill(const DPathVector &path)
 {
-    DPathVector v = convertPath(state);
-    for (uint i=0; i<v.size(); i++) {
-        if ( v[i].isSegment() ) continue;
-        if ( v[i].isRectangle() ) {
+    for (uint i=0; i<path.size(); i++) {
+        if ( path[i].isSegment() ) continue;
+        if ( path[i].isRectangle() ) {
             kdDebug(30516) << "fill rectangle" << endl;
             if ( !_currentImage.image.isNull() ) addImage();
-            _currentImage.rect = v[i].boundingRect();
+            _currentImage.rect = path[i].boundingRect();
             _currentImage.image =
                 QImage(qRound(_currentImage.rect.width()),
                        qRound(_currentImage.rect.height()), 32);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
+ * Copyright (c) 2002-2003 Nicolas HADACEK (hadacek@kde.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 #include "misc.h"
 
 #include <math.h>
+#include <qfontinfo.h>
+#include <qregexp.h>
 #include <kglobal.h>
 #include <kdebug.h>
 
@@ -26,6 +28,9 @@
 #include "Catalog.h"
 #include "GfxState.h"
 
+
+namespace PDFImport
+{
 
 double toPoint(double mm)
 {
@@ -35,6 +40,16 @@ double toPoint(double mm)
 bool equal(double d1, double d2, double delta)
 {
     return ( fabs(d1 - d2)<delta );
+}
+
+bool more(double d1, double d2, double delta)
+{
+    return ( d1>(d2+delta) );
+}
+
+bool less(double d1, double d2, double delta)
+{
+    return ( d1<(d2+delta) );
 }
 
 QColor toColor(GfxRGB &rgb)
@@ -74,6 +89,10 @@ DRect DPath::boundingRect() const
     }
     return r;
 }
+
+}; // namespace
+
+using namespace PDFImport;
 
 //-----------------------------------------------------------------------------
 FilterData::FilterData(KoFilterChain *chain, const DRect &pageRect,
@@ -183,7 +202,7 @@ QDomElement FilterData::createFrameset(FramesetType type, const DRect &r)
     _framesetList.append(frameset);
 
     QDomElement frame = _document.createElement("FRAME");
-    if (text) frame.setAttribute("autoCreateNewFrame", 0); // ?
+    if (text) frame.setAttribute("autoCreateNewFrame", (index==1 ? 1 : 0));
     frame.setAttribute("newFrameBehavior", (text && index==1 ? 0 : 1));
     frame.setAttribute("runaround", 0);
     frame.setAttribute("left", r.left);
@@ -204,7 +223,6 @@ QDomElement FilterData::createFrameset(FramesetType type, const DRect &r)
 
 void FilterData::startPage()
 {
-    kdDebug(30516) << "new page" << endl;
     _pageIndex++;
     _textFrameset = _mainTextFrameset;
     _needNewTextFrameset = false;
@@ -255,24 +273,81 @@ QDomElement FilterData::createParagraph(const QString &text,
 
 //-----------------------------------------------------------------------------
 FilterFont *FilterFont::defaultFont = 0;
+const char *FilterFont::FAMILY_DATA[FilterFont::Nb_Family] = {
+    "Times", "Helvetica", "Courier", "Symbol"
+};
 
 FilterFont::FilterFont(const QString &name, uint size, const QColor &color)
-    : _color(color)
+    : _name(name), _color(color), _latex(false)
 {
-    QString family = name;
-    if ( name.contains("times", false) ) family = "Times";
-    else if ( name.contains("helvetica", false) ) family = "Helvetica";
-    else if ( name.contains("courier", false) ) family = "Courier";
-    else if ( name.contains("symbol", false) ) family = "Symbol";
+    struct Data {
+        const char *regexp;
+        Family family;
+        bool italic, bold, latex;
+    };
+    static const Data DATA[] = {
+        // standard XPDF fonts
+        { "^Times-Roman$",           Times,       false, false, false },
+        { "^Times-Bold$",            Times,       false, true,  false },
+        { "^Times-Oblique$",         Times,       true,  false, false },
+        { "^Times-BoldOblique$",     Times,       true,  true,  false },
+        { "^Helvetica$",             Helvetica,   false, false, false },
+        { "^Helvetica-Bold$",        Helvetica,   false, true,  false },
+        { "^Helvetica-Oblique$",     Helvetica,   true,  false, false },
+        { "^Helvetica-BoldOblique$", Helvetica,   true,  true,  false },
+        { "^Courier$",               Courier,     false, false, false },
+        { "^Courier-Bold$",          Courier,     false, true,  false },
+        { "^Courier-Oblique$",       Courier,     true,  false, false },
+        { "^Courier-BoldOblique$",   Courier,     true,  true,  false },
+        { "^Symbol$",                Symbol,      false, false, false },
 
-    bool italic = ( name.contains("oblique", false) ||
-                    name.contains("italic", false) );
-    bool bold = name.contains("bold", false);
+        // some latex fonts
+        { "\\w*\\+CMR\\d+$",         Times,       false, false, true  },
+        { "\\w*\\+CMBX\\d+$",        Times,       false, true,  true  }, // X ?
+        { "\\w*\\+CMCSC\\d+$",       Times,       false, false, true  }, // sc
+        { "\\w*\\+CMTT\\d+$",        Courier,     false, false, true  },
+        { "\\w*\\+CMSY\\d+$",        Symbol,      false, false, true  },
+
+        { 0,                         Nb_Family,   false, false, false }
+    };
+
+    QString family;
+    bool italic, bold;
+    QRegExp re;
+    uint i = 0;
+    while ( DATA[i].regexp!=0 ) {
+        re.setPattern(DATA[i].regexp);
+        if ( re.exactMatch(name) ) {
+            family = FAMILY_DATA[DATA[i].family];
+            _latex = DATA[i].latex;
+            italic = DATA[i].italic;
+            bold = DATA[i].bold;
+            break;
+        }
+        i++;
+    }
+    if ( family.isEmpty() ) { // let's try harder
+        kdDebug(30516) << "unknown font name=" << name << endl;
+        if ( name.contains("times", false) ) family = "Times";
+        else if ( name.contains("helvetica", false) ) family = "Helvetica";
+        else if ( name.contains("courier", false) ) family = "Courier";
+        else if ( name.contains("symbol", false) ) family = "Symbol";
+        else family = name;
+
+        italic = ( name.contains("oblique", false) ||
+                   name.contains("italic", false) );
+        bold = name.contains("bold", false);
+    }
+
+//    if (_latex)
+//        kdDebug(30516) << "latex font name=" << name << endl;
+
     _font = QFont(family, size, (bold ? QFont::Bold : QFont::Normal), italic);
 }
 
 bool FilterFont::operator ==(const FilterFont &font) const
 {
+    if ( _name!=font._name ) return false;
     if ( _font.family()!=font._font.family() ) return false;
     if ( _font.pointSize()!=font._font.pointSize() ) return false;
     if ( _font.italic()!=font._font.italic() ) return false;
@@ -373,7 +448,7 @@ FilterLink::FilterLink(double x1, double x2, double y1, double y2,
         }
 
         _href = QString("bkm://page%1").arg(page);
-        qDebug("link to page %i", page);
+        kdDebug(30516) << "link to page " << page << endl;
         break;
     }
 
@@ -389,7 +464,8 @@ FilterLink::FilterLink(double x1, double x2, double y1, double y2,
             delete dest;
         }
 
-        qDebug("link to filename \"%s\" (page %i)", _href.latin1(), page);
+        kdDebug(30516) << "link to filename \"" << _href << "\" (page "
+                       << page << ")" <<endl;
         break;
     }
 
@@ -399,7 +475,7 @@ FilterLink::FilterLink(double x1, double x2, double y1, double y2,
         if ( llaunch.getFileName() )
             _href += llaunch.getFileName()->getCString();
 
-        qDebug("link to launch/open \"%s\"", _href.latin1());
+        kdDebug(30516) << "link to launch/open \"" << _href << "\"" << endl;
         break;
     }
 
@@ -408,7 +484,7 @@ FilterLink::FilterLink(double x1, double x2, double y1, double y2,
         if ( luri.getURI() )
             _href = luri.getURI()->getCString();
 
-        qDebug("link to URI \"%s\"", _href.latin1());
+        kdDebug(30516) << "link to URI \"" << _href << "\"" << endl;
         break;
     }
 
