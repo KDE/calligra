@@ -160,7 +160,7 @@ void AddSheetCommand::unexecute()
 
 QString AddSheetCommand::name() const
 {
-    return i18n("Add Table");
+    return i18n("Add Sheet");
 }
 
 
@@ -186,5 +186,5 @@ void RemoveSheetCommand::unexecute()
 
 QString RemoveSheetCommand::name() const
 {
-    return i18n("Remove Table");
+    return i18n("Remove Sheet");
 }
