@@ -2855,8 +2855,14 @@ void KWordView::printDebug() {
             doc->getFrameSet(iFrameset)->getName() << "' (" << doc->getFrameSet(iFrameset) << ")" <<endl;
         kdDebug() << " |  Type:" << doc->getFrameSet(iFrameset)->getFrameType() << endl;
         kdDebug() << " |  Info:" << doc->getFrameSet(iFrameset)->getFrameInfo() << endl;
-        if(doc->getFrameSet(iFrameset)->getGroupManager())
+        if(doc->getFrameSet(iFrameset)->getGroupManager()) {
             kdDebug() << " |  Groupmanager:" << doc->getFrameSet(iFrameset)->getGroupManager() << endl;
+            KWGroupManager::Cell *cell = doc->getFrameSet(iFrameset)->getGroupManager()->getCell(doc->getFrameSet(iFrameset));
+            kdDebug() << " |  |- row :" << cell->row << endl;
+            kdDebug() << " |  |- col :" << cell->col << endl;
+            kdDebug() << " |  |- rows:" << cell->rows << endl;
+            kdDebug() << " |  +- cols:" << cell->cols << endl;
+        }
         for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
             kdDebug() << " +-- Frame " << j << " of "<< doc->getFrameSet(iFrameset)->getNumFrames() <<  endl;
                 kdDebug() << "     FrameBehaviour: "<< doc->getFrameSet(iFrameset)->getFrame(j)->getFrameBehaviour() << endl;

@@ -30,7 +30,9 @@ More bugs:
 - Page Preview image forgets about orientation when changing page size. (always shows  portrait)
 - deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
   (we have a problem with reference counts in the creation of a new image)
-
+- Setting a paragraph to a new style should override ALL settings, including size of the characters.
+- RMB click on a table and asking for the properties should start the table dialog, not the
+  frame dialog.
 
 Add functionality:
 - Even/odd pages

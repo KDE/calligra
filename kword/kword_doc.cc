@@ -2473,7 +2473,8 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
             bool isRight = TRUE, isBottom = TRUE;
             if ( frameset->getGroupManager() ) {
                 unsigned int r, c;
-                frameset->getGroupManager()->getFrameSet( frameset, r, c );
+                r=frameset->getGroupManager()->getCell( frameset )->row;
+                c=frameset->getGroupManager()->getCell( frameset )->col;
                 if ( r < frameset->getGroupManager()->getRows() - 1 ) isBottom = FALSE;
                 if ( c < frameset->getGroupManager()->getCols() - 1 ) isRight = FALSE;
             }
@@ -3411,7 +3412,6 @@ QCursor KWordDocument::getMouseCursor( unsigned int mx, unsigned int my )
 
 /*================================================================*/
 QList<KWFrame> KWordDocument::getSelectedFrames() {
-kdDebug() << "KWordDocument::getSelectedFrames"<< endl;
     QList<KWFrame> frames;
     frames.setAutoDelete( FALSE );
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
@@ -3428,7 +3428,6 @@ kdDebug() << "KWordDocument::getSelectedFrames"<< endl;
         for ( unsigned int j = 0; j < getFrameSet(i)->getNumFrames(); j++ ) {
             if ( frameSet->getFrame( j )->isSelected() ) {
                 frames.append( frameSet->getFrame( j ));
-kdDebug() << "found a selected frame: "<< i << ", "<<j<< endl;
             }
         }
     }

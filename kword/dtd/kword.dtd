@@ -130,6 +130,8 @@
         newFrameBehaviour:   0 = on new page creation; Reconnect frame to current frameset
          1 = don't create a followup frame on the new page. 2 = This frame will be shown
          on the new page as well (with the same content)
+        sheetSide: 0: AnySide 1: this frame will only be shown on odd pages 
+         2: this frame will only be shown on even pages 
 
 -->
 <!ATTLIST FRAME left CDATA #REQUIRED

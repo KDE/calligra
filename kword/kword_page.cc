@@ -1627,7 +1627,6 @@ void KWPage::editReconnectFrame()
     }
 
     frameDia = new KWFrameDia( this,  frame,doc,frame->getFrameType());
-    //frameDia->setPage(this);
 
     connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
     frameDia->setCaption( i18n( "Reconnect Frame" ) );
@@ -2316,7 +2315,8 @@ bool KWPage::kInsertTableRow()
 
     KWGroupManager *grpMgr = doc->getFrameSet( fc->getFrameSet() - 1 )->getGroupManager();
     unsigned int row, col;
-    grpMgr->getFrameSet( doc->getFrameSet( fc->getFrameSet() - 1 ), row, col );
+    row=grpMgr->getCell( doc->getFrameSet( fc->getFrameSet() - 1 ))->row;
+    col=grpMgr->getCell( doc->getFrameSet( fc->getFrameSet() - 1 ))->col;
 
     grpMgr->insertRow( row + 1 );
 
@@ -3203,7 +3203,8 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
                     _painter.drawLine( tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1,
                                        tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
                     unsigned int row = 0, col = 0;
-                    frameset->getGroupManager()->getFrameSet( frameset, row, col );
+                    row=frameset->getGroupManager()->getCell( frameset)->row;
+                    col=frameset->getGroupManager()->getCell( frameset)->col;
                     if ( row == 0 )
                         _painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1,
                                            tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1 );

@@ -44,6 +44,7 @@ class QRegion;
 class KWFrameDia;
 class KWPage;
 class KWFrame;
+class KWTableDia;
 
 /******************************************************************/
 /* Class: KWResizeHandle                                          */
@@ -448,6 +449,7 @@ protected:
     int selectedFrameSet, selectedFrame;
 
     // Table creation support.
+    KWTableDia *tableDia;
     unsigned int tcols, trows;
     KWTblCellSize twid, thei;
 
