@@ -113,8 +113,8 @@ QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
   QString fontFamily = string( font.fontFamily()).string();
   double fontSize = font.fontSize();
   fontElement.setAttribute( "family", fontFamily );
-  fontElement.setAttribute( "size", QString::number( fontSize ) );
-  fontElement.setAttribute( "weight", font.bold() ? "75" : "50" );
+  fontElement.setAttribute( "size", fontSize );
+  fontElement.setAttribute( "weight", font.bold() ? 75 : 50 );
   fontElement.setAttribute( "bold", font.bold() ? "yes" : "no" );
   fontElement.setAttribute( "italic", font.italic() ? "yes" : "no" );
   fontElement.setAttribute( "underline", font.underline() ? "yes" : "no" );
@@ -216,8 +216,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
       {
         QDomElement e;
         e = mainDocument.createElement( "column" );
-        e.setAttribute( "column", QString::number( i+1 ) );
-        e.setAttribute( "width", QString::number( column->width() ) );
+        e.setAttribute( "column", i+1 );
+        e.setAttribute( "width", column->width() );
         table.appendChild( e );
 
         QDomElement fe = convertFormat( mainDocument, column->format() );
@@ -232,8 +232,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
       {
         QDomElement e;
         e = mainDocument.createElement( "row" );
-        e.setAttribute( "row", QString::number( i+1 ) );
-        e.setAttribute( "height", QString::number( POINT_TO_MM ( row->height() ) ) );
+        e.setAttribute( "row", i+1 );
+        e.setAttribute( "height", POINT_TO_MM ( row->height() ) );
         table.appendChild( e );
 
         QDomElement fe = convertFormat( mainDocument, row->format() );
@@ -249,8 +249,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
         {
           QDomElement ce;
           ce = mainDocument.createElement( "cell" );
-          ce.setAttribute( "row", QString::number( row+1 ) );
-          ce.setAttribute( "column", QString::number( col+1 ) );
+          ce.setAttribute( "row", row+1 );
+          ce.setAttribute( "column", col+1 );
           table.appendChild( ce );
 
           QDomElement fe;
