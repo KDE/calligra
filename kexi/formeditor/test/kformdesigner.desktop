@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KFormDesigner
-Name[bg]=Дизайнер на формуляри
 Name[cs]=Návrhář formulářů
 Name[cy]=DylunyddKForm
 Name[sv]=Kformdesigner
@@ -15,6 +14,7 @@ Icon=kformdesigner
 Type=Application
 DocPath=kformdesigner/kformdesigner.html
 GenericName=Qt Designer UI File Editor
+GenericName[bg]=Редактор на интерфейсен файл на Qt Designer
 GenericName[da]=Qt Designer UI file-editor
 GenericName[es]=Editor de archivos UI de Qt Designer
 GenericName[et]=Qt Disaineri UI-faili redaktor
@@ -25,5 +25,6 @@ GenericName[pt_BR]=Editor de Arquivos UI do Qt Designer
 GenericName[ru]=Редактор UI-файлов Qt Designer
 GenericName[sv]=Qt Designer editor för UI-filer
 GenericName[ta]=Qt வடிவமைப்பாளர் UI கோப்பு திருத்தி
+GenericName[tr]=Qt Designer UI Dosyası Düzenleyicisi
 MimeType=application/x-designer;
 Terminal=false

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Form Designer KDevelop Plugin
+Name[bg]=Приставка на KDevelop за проектиране на форми
 Name[da]=Form Designer KDEvelop-plugin
 Name[es]=Extensión de diseñador de formularios de KDeevelop
 Name[et]=Vormikujundaja KDevelop plugin
@@ -11,6 +12,7 @@ Name[pt_BR]=Plugin do Desenhista de Formulário do KDevelop
 Name[ru]=Модуль форм KDevelop
 Name[sv]=KDevelop insticksprogram för formulärkonstruktion
 Name[ta]=படிவ வடிவமைப்பாளர் கேடெவெலப் சொருகுப்பொருள்
+Name[tr]=FormTasarımcısı KDevelop Eklentisi
 Name[xx]=xxForm Designer KDevelop Pluginxx
 MimeType=application/x-designer;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
