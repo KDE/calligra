@@ -234,6 +234,12 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
 	     this, SLOT( slotPressReturn() ) );
 }
 
+KSpreadDlgFormula::~KSpreadDlgFormula()
+{
+    kdDebug()<<"KSpreadDlgFormula::~KSpreadDlgFormula() \n";
+}
+
+
 void KSpreadDlgFormula::slotPressReturn()
 {
     //laurent 2001-07-07 desactivate this code
@@ -302,6 +308,7 @@ void KSpreadDlgFormula::slotOk()
     }
 
     accept();
+    delete this;
 }
 
 void KSpreadDlgFormula::slotClose()
@@ -330,6 +337,7 @@ void KSpreadDlgFormula::slotClose()
     }
 
     reject();
+    delete this;
 }
 
 void KSpreadDlgFormula::slotSelectButton()
@@ -685,6 +693,11 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
     // Go to the first function in the list.
     functions->setCurrentItem(0);
     slotSelected( functions->text(0) );
+}
+
+void KSpreadDlgFormula::closeEvent ( QCloseEvent * )
+{
+    delete this;
 }
 
 #include "kspread_dlg_formula.moc"

@@ -47,7 +47,7 @@ class KSpreadDlgFormula : public QDialog
     Q_OBJECT
 public:
     KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName=0);
-
+    ~KSpreadDlgFormula();
 private:
     /**
      * Turns the @p text into a parameter that koscript can understand. The type
@@ -112,7 +112,8 @@ public:
      * Find out which widget got focus.
      */
     bool eventFilter( QObject* obj, QEvent* ev );
-
+ protected:
+    virtual void closeEvent ( QCloseEvent * ); 
 private:
     KSpreadView* m_pView;
     QPushButton* m_pOk;
