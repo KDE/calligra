@@ -184,6 +184,6 @@ QSize Report::sizeHint() const
 
 void Report::slotPreferedTemplate(const QString &tplname)
 {
-	setReportTemplate(tplname);
+//	setReportTemplate(tplname);
 }
 #include "report.moc"
