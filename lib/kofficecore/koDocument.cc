@@ -87,7 +87,8 @@ public:
         modifiedAfterAutosave( false ),
         m_autosaving( false ),
         m_shouldCheckAutoSaveFile( true ),
-        m_backupFile( true )
+        m_backupFile( true ),
+        m_backupPath( QString::null )
         {}
 
     QPtrList<KoView> m_views;
@@ -112,6 +113,7 @@ public:
     bool m_autosaving;
     bool m_shouldCheckAutoSaveFile; // usually true
     bool m_backupFile;
+    QString m_backupPath;
 };
 
 // Used in singleViewMode
@@ -280,7 +282,11 @@ bool KoDocument::saveFile()
     QApplication::setOverrideCursor( waitCursor );
 
     if ( KIO::NetAccess::exists( url() ) ) { // this file exists => backup
-        KURL backup( url() );
+        KURL backup;
+        if ( d->m_backupPath.isEmpty())
+            backup= url();
+        else
+            backup = d->m_backupPath +"/"+url().fileName();
         backup.setPath( backup.path() + QString::fromLatin1("~") );
         (void) KIO::NetAccess::del( backup );
         if ( backupFile() )
@@ -1466,6 +1472,17 @@ void KoDocument::setBackupFile( bool _b )
 bool KoDocument::backupFile()const
 {
     return d->m_backupFile;
+}
+
+
+void KoDocument::setBackupPath( const QString & _path)
+{
+    d->m_backupPath = _path;
+}
+
+QString KoDocument::backupPath()const
+{
+    return d->m_backupPath;
 }
 
 

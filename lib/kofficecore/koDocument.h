@@ -493,6 +493,11 @@ public:
 
     bool backupFile()const;
 
+    void setBackupPath( const QString & );
+
+    QString backupPath()const;
+
+
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes
