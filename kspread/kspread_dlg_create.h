@@ -49,7 +49,7 @@ public:
 
   void set_nbbutton(int nb){ button_select=nb;}
   int nb_param;
-
+  int first_element;
 
   int dx;
   int dy;
@@ -65,9 +65,9 @@ public slots:
 
 protected:
   enum type_create {type_double,type_string,type_logic};
-  enum type_editor { editWidget,editCell};
-  QString old_text;
+  enum type_editor { editcell,editwidget};
   type_editor editor;
+  QString old_text;
   KSpreadView* m_pView;
   QString name;
   QString tab_name;
@@ -86,12 +86,6 @@ protected:
   QPushButton* fi_select;
 
   type_create edit[5];
-  QLabel *f_text;
-  QLabel *s_text;
-  QLabel *t_text;
-  QLabel *fo_text;
-  QLabel *fi_text;
-  QLabel *exp_text;
   int button_select;
 };
 

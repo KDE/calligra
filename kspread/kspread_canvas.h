@@ -186,7 +186,7 @@ public:
     KSpreadTable* findTable( const QString& _name );
 
     void gotoLocation( const KSpreadPoint& _cell );
-  
+    void create_editor();
 public slots:  
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );

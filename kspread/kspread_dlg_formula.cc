@@ -21,7 +21,6 @@
 
 
 #include "kspread_dlg_formula.h"
-#include "kspread_dlg_assistant.h"
 #include "kspread_dlg_create.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
@@ -55,10 +54,6 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   exp=new QLabel(this);
   exp->layout();
   lay1->addWidget(exp);
-  assistant=new QCheckBox("Assistant",this);
-  assistant->layout();
-  lay1->addWidget(assistant);
-  assistant->setEnabled(false);
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
@@ -93,67 +88,8 @@ void KSpreaddlgformula::slotOk()
 
   if ( m_pView->activeTable() != 0L )
     {
-    	if(assistant->isChecked() && (math=="variante" || math =="mult" || math =="average" || math =="sum" || math =="max" || math =="min" || math =="ecartype"))
-    		{
-    	
-    		if(m_pView->editWidget()->isActivate() )
-    			{
-    			math=m_pView->editWidget()->text()+math;
-    			KSpreadassistant* dlg=new KSpreadassistant(m_pView,"Kassistant",math);
-    			dlg->show();
-    			}
-    		if(m_pView->canvasWidget()->pointeur() != 0)
-			{
-	    		if(m_pView->canvasWidget()->EditorisActivate())
-	    			{
-	    			math=m_pView->canvasWidget()->editEditor()+math;
-	    			KSpreadassistant* dlg=new KSpreadassistant(m_pView,"Kassistant",math);
-    				dlg->show();
-	    			}
-	    		}
-	    		
-    		
-    		}
-    	else
-    	{
-     	//don't work for the moment
-
-    	KSpreadcreate* dlg = new KSpreadcreate( m_pView, math,math );
-    	dlg->show();
-     	/*QString name_function;
-     	QString string;
-     	int pos;
-     	string="";
-     		
-     	if(math=="variante" || math =="mult" || math =="average" || math =="sum" || math =="max" || math =="min" || math =="ecartype")
-	{
-	    string=":";
-	}
-     	if(m_pView->editWidget()->isActivate() )
-	{
-	
-	
-	
-	    //last position of cursor + length of function +1 "("
-	    name_function= math  + "(" + string + ")";
-	    pos=m_pView->editWidget()->cursorPosition()+ math.length()+1;
-	    m_pView->editWidget()->setText( m_pView->editWidget()->text().insert(m_pView->editWidget()->cursorPosition(),name_function) );
-	    m_pView->editWidget()->setFocus();
-	    m_pView->editWidget()->setCursorPosition(pos);
-	}
-     	if(m_pView->canvasWidget()->pointeur() != 0)
-	{
-	    if(m_pView->canvasWidget()->EditorisActivate())
-	    {
-		
-		name_function= math  + "(" + string + ")";
-		pos=m_pView->canvasWidget()->posEditor()+ math.length()+1;
-		m_pView->canvasWidget()->setEditor(m_pView->canvasWidget()->editEditor().insert(m_pView->canvasWidget()->posEditor(),name_function) );
-	    	m_pView->canvasWidget()->focusEditor();
-	    	m_pView->canvasWidget()->setPosEditor(pos);
-	    }
-	}*/
-     	}
+    KSpreadcreate* dlg = new KSpreadcreate( m_pView, math,math );
+    dlg->show();
     }
 
   accept();
@@ -177,17 +113,7 @@ if ( m_pView->activeTable() != 0L )
 
 void KSpreaddlgformula::slotselected_formula(const QString & string)
 {
-if(string=="variante" || string =="mult" || string =="average" || string =="sum" || string =="max" || string =="min" || string =="ecartype")
-	{
-	
-	assistant->setEnabled(true);
-	}
-else
-	{
-	
-	assistant->setEnabled(false);
-	}
-if(string=="IF")
+/*if(string=="IF")
 	{
 	exp->clear();
 	exp->setText("IF(exp logic,if true so,if false so..)");
@@ -208,7 +134,8 @@ else if(string=="NO")
 	exp->setText("NO(exp logic) :\nif exp==TRUE return FALSE,\nif exp==FALSE return TRUE");
 	}
 else
-	exp->clear();		
+	exp->clear();	
+*/	
 }
 void KSpreaddlgformula::slotselected(const QString & string)
 {

@@ -1196,6 +1196,38 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   EMIT_EVENT( m_pView, KSpread::eventKeyPressed, event );
 }
 
+void KSpreadCanvas::create_editor()
+{
+KSpreadTable *table = activeTable();
+if ( !m_pEditor )
+      {
+        KSpreadCell* cell = activeTable()->cellAt( marker() );
+
+ m_pEditor = new KSpreadTextEditor( cell, this );
+	  /*if ( _ev->ascii() == '=' )
+	  	{
+	  	setEditorActivate(true);
+	  	name_tab=m_pView->activeTable()->name();
+	  	}
+	  } */
+	
+	int w = cell->width( m_iMarkerColumn, this );
+	int h = cell->height( m_iMarkerRow, this );
+	int xpos = table->columnPos( markerColumn(), this );
+	int ypos = table->rowPos( markerRow(), this );
+	QPalette p = m_pEditor->palette();
+	QColorGroup g( p.normal() );
+	g.setColor( QColorGroup::Text, cell->textPen().color() );
+	g.setColor( QColorGroup::Background, cell->KSpreadLayout::bgColor() );
+	m_pEditor->setPalette( QPalette( g, p.disabled(), g ) );
+	m_pEditor->setFont( cell->textFont() );
+	m_pEditor->setGeometry( xpos, ypos, w, h );
+	m_pEditor->setMinimumSize( QSize( w, h ) );
+	m_pEditor->show();
+	m_pEditor->setFocus();
+}
+}
+
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
 {
   KSpreadTable *table = activeTable();

@@ -372,7 +372,9 @@ public:
     void BackgroundColor();
     void sortincr();
     void sortdecrease();
-     void layoutDlg();
+
+    void layoutDlg();
+    void funct();
     virtual void cleanUp();
 
 protected slots:
@@ -530,6 +532,7 @@ protected:
     CORBA::Long m_idButtonLayout_bg_Color;
     CORBA::Long m_idButtonLayout_sort_incr;
     CORBA::Long m_idButtonLayout_sort_decrease;
+    CORBA::Long m_idButtonLayout_funct;
 
     OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;

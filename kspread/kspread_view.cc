@@ -690,6 +690,9 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   pix = OPUIUtils::convertPixmap( BarIcon("sort_decrease") );
   m_idButtonLayout_sort_decrease = m_vToolBarLayout->insertButton2( pix, 17, SIGNAL( clicked() ), this, "sortdecrease", true, ( wstr = Q2C( i18n( "Sort Decrease" ) ) ), -1 );
 
+  pix = OPUIUtils::convertPixmap( BarIcon("funct") );
+  m_idButtonLayout_funct = m_vToolBarLayout->insertButton2( pix, 18, SIGNAL( clicked() ), this, "funct", true, ( wstr = Q2C( i18n( "Function" ) ) ), -1 );
+
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
 
@@ -1120,6 +1123,37 @@ else
 	activeTable()->Column( r.left(),KSpreadTable::Decrease);
 	}	
 
+}
+
+void KSpreadView::funct()
+{
+if ( m_pTable != 0L )
+	{
+	if(m_pCanvas->pointeur() != 0&& !editWidget()->isActivate())
+		{
+		canvasWidget()->setEditorActivate(true);
+		KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula" );
+		dlg->show();
+		}
+	else if(editWidget()->isActivate())
+		{
+		KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula" );
+		dlg->show();
+		}
+	else if(m_pCanvas->pointeur() == 0&& !editWidget()->isActivate())
+		{
+		editWidget()->setActivate(true);
+		KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula" );
+		dlg->show();
+		}
+	else if(m_pCanvas->EditorisActivate())
+		{
+		canvasWidget()->setEditorActivate(true);
+		KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula" );
+		dlg->show();
+		}	
+	
+	}
 }
 
 void KSpreadView::reloadScripts()
@@ -2051,7 +2085,7 @@ void KSpreadView::insertTable()
 
 void KSpreadView::insertImage()
 {
-  // m_pCanvas->setAction( KSpreadCanvas::InsertChild, "KImage" );
+   //m_pCanvas->setAction( KSpreadCanvas::InsertChild, "KImage" );
 }
 
 void KSpreadView::insertObject()
