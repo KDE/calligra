@@ -4,5 +4,7 @@ Food for thought:
   http://www.adobe.com/products/illustrator/features.html
 - Adobe Illustrator Fileformat Specification:
   http://partners.adobe.com/asn/developer/PDFS/TN/5007.AI7FileFormat.pdf
+- Postscript Specs (since .AI is basically .PS):
+  http://partners.adobe.com/asn/developer/technotes.html#postscript
 - Sketch Development Guide:
   http://sketch.sourceforge.net/Doc/devguide.html
