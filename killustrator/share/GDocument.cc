@@ -695,8 +695,14 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	  poly->_addPoint (poly->numOfPoints (), point);
 	}
       }
-      else
-	cout << "invalid object type: " << elem.tag () << endl;
+      else {
+	GObject *proto = GObject::lookupPrototype (elem.tag ().c_str ());
+	if (proto != 0L) {
+	  obj = proto->clone (elem.attributes ());
+	}
+	else
+	  cout << "invalid object type: " << elem.tag () << endl;
+      }
     }
     if (finished) {
       if (obj) {

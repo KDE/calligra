@@ -40,6 +40,8 @@
 GObject::OutlineInfo GObject::defaultOutlineInfo;
 GObject::FillInfo GObject::defaultFillInfo;
 
+map<string, GObject*> GObject::prototypes;
+
 void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
   if (oi.mask & OutlineInfo::Color)
     defaultOutlineInfo.color = oi.color;
@@ -441,4 +443,16 @@ const char* GObject::getId () {
   if (! hasId ())
     id.sprintf ("%ld", (long) time ((time_t) 0L));
   return (const char *) id;
+}
+
+void GObject::registerPrototype (const char *className, GObject* proto) {
+  prototypes.insert (pair<string, GObject *> (className, proto));
+}
+
+GObject* GObject::lookupPrototype (const char *className) {
+  GObject* result = 0L;
+  map<string, GObject*>::iterator it = prototypes.find (className);
+  if (it != prototypes.end ())
+    result = it->second;
+  return result;
 }

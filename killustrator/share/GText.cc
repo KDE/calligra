@@ -447,6 +447,10 @@ GObject* GText::copy () {
   return new GText (*this);
 }
 
+GObject* GText::clone (const list<XmlAttribute>& attribs) {
+  return new GText (attribs);
+}
+
 void GText::writeToXml (XmlWriter& xml) {
   xml.startTag ("text", false);
   writePropertiesToXml (xml);

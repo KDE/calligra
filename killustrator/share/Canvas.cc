@@ -33,6 +33,7 @@
 #include <qprintdialog.h>
 #include <qcolor.h>    
 #include <qdatetime.h>    
+#include <qtimer.h>
 #include <kmsgbox.h>
 #include "Canvas.h"
 #include "Canvas.moc"
@@ -306,6 +307,10 @@ void Canvas::updateView () {
   repaint ();
 }
 
+void Canvas::retryUpdateRegion () {
+  updateRegion (region);
+}
+
 void Canvas::updateRegion (const Rect& reg) {
   if (pendingRedraws == 0 && document->selectionCount () > 1) {
     // we have to update a multiple selection, so we collect
@@ -336,6 +341,14 @@ void Canvas::updateRegion (const Rect& reg) {
 
   QRect clip = m.map (QRect (int (r.left ()), int (r.top ()), 
 			     int (r.width ()), int (r.height ())));
+
+  if (pixmap->paintingActive ()) {
+    // this occurs only in KOffice, when a embedded part tries
+    // to draw in our canvas
+    region = reg;
+    QTimer::singleShot (50, this, SLOT(retryUpdateRegion ()));
+    return;
+  }
 
   // setup the painter  
   p.begin (pixmap);

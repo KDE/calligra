@@ -53,6 +53,9 @@ public:
   
   virtual bool consumesRMBEvents () { return false; }
 
+signals:
+  void partSelected (GObject *);
+
 private:
   void processKeyPressEvent (QKeyEvent* e, GDocument* doc, Canvas* canvas);
   void processButtonPressEvent (QMouseEvent* e, GDocument* doc, 

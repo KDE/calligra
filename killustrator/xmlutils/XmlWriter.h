@@ -171,6 +171,11 @@ public:
    */
   void flush ();
 
+  /**
+   * Get the raw output stream.
+   */
+  ostream& stream () { return strm; }
+
 private:
   stack<string, vector<string> > lastTags;
   ostream strm;

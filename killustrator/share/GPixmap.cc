@@ -123,6 +123,10 @@ GObject* GPixmap::copy () {
   return new GPixmap (*this);
 }
 
+GObject* GPixmap::clone (const list<XmlAttribute>& attribs) {
+  return new GPixmap (attribs);
+}
+
 void GPixmap::writeToXml (XmlWriter& xml) {
   xml.startTag ("pixmap", false);
   writePropertiesToXml (xml);

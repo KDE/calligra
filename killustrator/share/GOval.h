@@ -59,6 +59,7 @@ public:
   bool isCircle () const { return circleFlag; }
 
   virtual GObject* copy ();
+  virtual GObject* clone (const list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
 

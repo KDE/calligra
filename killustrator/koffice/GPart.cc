@@ -31,25 +31,46 @@
 #include "KIllustrator_view.h"
 #include "KIllustrator_doc.h"
 
+GPart::GPart () {
+  child = 0L;
+  view = 0L;
+}
+
 GPart::GPart (KIllustratorChild *c) {
   child = c;
   view = 0L;
-  QRect r = child->geometry ();
-  cout << "part size = " << r.width () << ", " << r.height () << endl;
-  tMatrix.translate (r.x () - tMatrix.dx (), 
-		     r.y () - tMatrix.dy ());
-  iMatrix = tMatrix.invert ();
-  initTmpMatrix ();
+  initialGeom = child->geometry ();
   calcBoundingBox ();
 }
 
 GPart::GPart (const list<XmlAttribute>& attribs) : GObject (attribs) {
+  int x = 0, y = 0, w = 0, h = 0;
+  string url, mime;
+
   list<XmlAttribute>::const_iterator first = attribs.begin ();
-	
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
+    if (attr == "x") 
+      x = (*first).intValue ();
+    else if (attr == "y")
+      y = (*first).intValue ();
+    else if (attr == "width")
+      w = (*first).intValue ();
+    else if (attr == "height")
+      h = (*first).intValue ();
+    else if (attr == "url")
+      url = (*first).stringValue ();
+    else if (attr == "mime")
+      mime = (*first).stringValue ();
+    
     first++;
   }
+  initialGeom = QRect (x, y, w, h);
+  view = 0L;
+  child = new KIllustratorChild ();
+  child->setURL (url.c_str ());
+  child->setMimeType (mime.c_str ());
+  child->setGeometry (initialGeom);
   calcBoundingBox ();
 }
 
@@ -67,19 +88,18 @@ const char* GPart::typeName () {
 void GPart::draw (Painter& p, bool withBasePoints, bool outline) {
   p.save ();
   QRect r = child->geometry ();
-  p.setWorldMatrix (tmpMatrix, true);
   if (outline) {
+    p.setWorldMatrix (tmpMatrix, true);
     p.setPen (black);
-    p.drawRect (0, 0, r.width (), r.height ());
+    p.drawRect (r.x (), r.y (), r.width (), r.height ());
   }
   else {
     QRect win = p.window ();
     QRect vPort = p.viewport ();
-    QPicture *pic = child->draw ();
-    QWMatrix mx = p.worldMatrix ();
-    QRect mr = mx.map (QRect (0, 0, r.width (), r.height ()));
-    p.setViewport (0, 0, vPort.width (), vPort.height ());
-    //    p.setWorldMatrix (QWMatrix ());
+    QPicture *pic = child->draw (true);
+    p.setViewport (0, 0, 
+		   vPort.width (), vPort.height ());
+    p.translate (r.x (), r.y ());
     p.drawPicture (*pic);
     p.setViewport (vPort);
     p.setWindow (win);
@@ -88,18 +108,59 @@ void GPart::draw (Painter& p, bool withBasePoints, bool outline) {
 }
 
 void GPart::calcBoundingBox () {
-  QRect r = child->geometry ();
-  cout << "part : " << 0 << ", " << 0 << " -- " 
-       << r.width () << ", " << r.height () << endl;
-  calcUntransformedBoundingBox (Coord (0, 0), 
-				Coord (r.width (), 0),
-				Coord (r.width (), r.height ()), 
-				Coord (0, r.height ()));
+  QRect r = tmpMatrix.map (initialGeom);
+  if (r != oldGeom) {
+    cout << "UPDATE CHILD GEOMETRY !!!!!!!!!!!!" << endl;
+    oldGeom = r;
+    child->setGeometry (r);
+    cout << "new part geometry: " << r.x () << ", " << r.y () 
+	 << " - " << r.width () << ", " << r.height () << endl;
+  }
+  updateBoundingBox (Coord (r.x (), r.y ()), 
+		     Coord (r.right (), r.bottom ()));
 }
 
 GObject* GPart::copy () {
   return new GPart (*this);
 }
 
+GObject* GPart::clone (const list<XmlAttribute>& attribs) {
+  return new GPart (attribs);
+}
+
 void GPart::writeToXml (XmlWriter& xml) {
+  xml.startTag ("object", false);
+  writePropertiesToXml (xml);
+  xml.addAttribute ("x", oldGeom.x ());
+  xml.addAttribute ("y", oldGeom.y ());
+  xml.addAttribute ("width", oldGeom.width ());
+  xml.addAttribute ("height", oldGeom.height ());
+  xml.addAttribute ("url", child->urlForSave ());
+  xml.addAttribute ("mime", child->mimeType ());
+  xml.closeTag (true);
+
+  //  child->save (xml.stream ());
+}
+
+void GPart::setMainWindow (OpenParts::MainWindow_ptr _mainWindow) {
+  mainWindow = KOffice::MainWindow::_narrow (_mainWindow); 
+}
+
+void GPart::activate (int xoff, int yoff) {
+  assert (view);
+  QRect r = child->geometry ();
+  view->setGeometry (r.x () + xoff, r.y () + yoff, r.width (), r.height ());
+  view->show ();
+  view->view ()->mainWindow ()->setActivePart (view->view ()->id ());
+}
+
+void GPart::deactivate () {
+  view->hide ();
+  view->view ()->mainWindow ()->setActivePart (parentID);
+}
+
+void GPart::select (bool flag) {
+  GObject::select (flag);
+  if (!flag)
+    deactivate ();
 }

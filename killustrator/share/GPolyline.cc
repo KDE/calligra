@@ -248,6 +248,10 @@ GObject* GPolyline::copy () {
   return new GPolyline (*this);
 }
 
+GObject* GPolyline::clone (const list<XmlAttribute>& attribs) {
+  return new GPolyline (attribs);
+}
+
 void GPolyline::calcBoundingBox () {
   Rect r;
   unsigned int num = points.count ();

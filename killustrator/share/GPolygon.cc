@@ -335,6 +335,10 @@ GObject* GPolygon::copy () {
   return new GPolygon (*this);
 }
 
+GObject* GPolygon::clone (const list<XmlAttribute>& attribs) {
+  return new GPolygon (attribs);
+}
+
 void GPolygon::calcBoundingBox () {
   GPolyline::calcBoundingBox ();
   update_rpoints ();

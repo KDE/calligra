@@ -25,6 +25,9 @@
 #ifndef GObject_h_
 #define GObject_h_
 
+#include <string>
+#include <map>
+
 #include <qobject.h>
 #include <qcolor.h>
 #include <qfont.h>
@@ -264,7 +267,7 @@ public:
    * @param flag if true, the object is selected, otherwise the object will 
    *             be unselected.
    */
-  void select (bool flag = true);
+  virtual void select (bool flag = true);
 
   /**
    * Retrieve the selection status of the object.
@@ -328,6 +331,7 @@ public:
    * @return A copy of this object.
    */
   virtual GObject* copy () = 0;
+  virtual GObject* clone (const list<XmlAttribute>& attribs) = 0;
 
   virtual void writeToXml (XmlWriter&) = 0;
 
@@ -353,6 +357,9 @@ public:
 
   const char* getRefId () { return (const char *) refid; }
   bool hasRefId () const { return ! refid.isEmpty (); }
+
+  static void registerPrototype (const char* className, GObject *proto);
+  static GObject* lookupPrototype (const char *className);
 
 signals:
   void deleted ();
@@ -387,6 +394,8 @@ protected:
   // default value
   static OutlineInfo defaultOutlineInfo;
   static FillInfo defaultFillInfo;
+
+  static map<string, GObject*> prototypes;
 };
 
 class GOState {

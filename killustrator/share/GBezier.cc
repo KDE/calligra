@@ -373,6 +373,10 @@ GObject* GBezier::copy () {
   return new GBezier (*this);
 }
 
+GObject* GBezier::clone (const list<XmlAttribute>& attribs) {
+  return new GBezier (attribs);
+}
+
 void GBezier::initBasePoint (int idx) {
   Coord epoint = *(points.at (idx + 1));
   float dx = epoint.x ();

@@ -55,6 +55,7 @@ public:
   virtual const char* typeName ();
 
   virtual GObject* copy ();
+  virtual GObject* clone (const list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
 

@@ -32,20 +32,36 @@
 
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu, 
 				      const QRect& rect, 
-				      KOffice::Document_ptr doc) {
+				      KOffice::Document_ptr doc) 
+  : KoDocumentChild (rect, doc) {
   m_pKilluDoc = killu;
-  m_rDoc = KOffice::Document::_duplicate (doc);
-  m_geometry = rect;
+  cout << "mime type = " << (const char *) m_strMimeType << endl;
+  cout << "url = " << (const char *) m_strURL << " (" <<
+    m_rDoc->url () << ")" << endl;
 }
 
 KIllustratorChild::~KIllustratorChild () {
   m_rDoc = 0L;
 }
 
+void KIllustratorChild::setURL (const char* url) {
+  m_strURL = url;
+}
+
+void KIllustratorChild::setMimeType (const char *mime) {
+  m_strMimeType = mime;
+}
+
+const char* KIllustratorChild::urlForSave () {
+  return m_rDoc->url ();
+}
 
 KIllustratorDocument::KIllustratorDocument () {
   ADD_INTERFACE("IDL:OPParts/Print:1.0")
   cout << "create new KIllustratorDocument ..." << endl;
+
+  GObject::registerPrototype ("object", new GPart ());
+
   m_lstViews.setAutoDelete (true);
   m_lstChildren.setAutoDelete (true);
   m_bEmpty = true;
@@ -72,15 +88,54 @@ void KIllustratorDocument::cleanUp () {
 
 bool KIllustratorDocument::load (istream& in, KOStore::Store_ptr store) {
   cout << "load KIllu from stream !!!!!!!!!" << endl;
-  return GDocument::readFromXml (in);
+  if (GDocument::readFromXml (in)) {
+
+    // now look for part objects in order to create the child list
+    vector<GLayer*>::iterator i = layers.begin ();
+    for (; i != layers.end (); i++) {
+      GLayer* layer = *i;
+      list<GObject*>& contents = layer->objects ();
+      for (list<GObject*>::iterator oi = contents.begin ();
+	   oi != contents.end (); oi++) {
+	if ((*oi)->isA ("GPart")) {
+	  GPart *part = (GPart *) *oi;
+	  insertChild (part->getChild ());
+	}
+      }
+    }
+    return true;
+  }
+  return false;
 }
 
 bool KIllustratorDocument::loadChildren (KOStore::Store_ptr store) {
+  QListIterator<KIllustratorChild> it (m_lstChildren);
+  for (; it.current (); ++it) {
+    if (! it.current ()->loadDocument (store, it.current ()->mimeType ()))
+      return false;
+  }
+  
   return true;
 }
 
+void KIllustratorDocument::makeChildListIntern (KOffice::Document_ptr _root, 
+						const char *_path) {
+  cout << "KIllustrator::makeChildListIntern ()" << endl;
+  int i = 0;
+  QListIterator<KIllustratorChild> it (m_lstChildren);
+  for (; it.current (); ++it) {
+    QString tmp;
+    tmp.sprintf ("/%i", i++);
+    QString path (_path);
+    path += tmp.data ();
+    
+    KOffice::Document_var doc = it.current ()->document ();    
+    doc->makeChildList (_root, path);
+  }
+}
+
 bool KIllustratorDocument::hasToWriteMultipart () {
-  return false;
+  return (m_lstChildren.count () > 0);
 }
 
 void KIllustratorDocument::insertPart (const QRect& rect, 
@@ -101,6 +156,7 @@ void KIllustratorDocument::insertPart (const QRect& rect,
 
   GPart* part = new GPart (child);
   GDocument::insertObject (part);
+  emit partInserted (child, part);
 }
 
 

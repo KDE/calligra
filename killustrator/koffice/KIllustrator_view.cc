@@ -115,6 +115,7 @@ QWidget (parent), KoViewIf (doc), OPViewIf (doc), KIllustrator::View_skel () {
   zFactors[4] = 4.0;
   Canvas::initZoomFactors (zFactors);
 
+  cout << "connect doc" << endl;
   QObject::connect (m_pDoc, 
 		    SIGNAL (partInserted (KIllustratorChild *, GPart *)),
 		    this, 
@@ -145,6 +146,23 @@ void KIllustratorView::init () {
     tool_bar_manager->registerClient (id (), this);
   else
     cerr << "Did not get a tool bar manager" << endl;  
+
+  // create frames for all embedded parts
+  assert (m_pDoc != 0L);
+  m_lstFrames.clear ();
+
+  vector<GLayer*>::const_iterator i = m_pDoc->getLayers ().begin ();
+  for (; i != m_pDoc->getLayers ().end (); i++) {
+    GLayer* layer = *i;
+    list<GObject*>& contents = layer->objects ();
+    for (list<GObject*>::iterator oi = contents.begin ();
+	 oi != contents.end (); oi++) {
+      if ((*oi)->isA ("GPart")) {
+	GPart *part = (GPart *) *oi;
+	insertPartSlot (part->getChild (), part);
+      }
+    }
+  }
 }
 
 KIllustratorView::~KIllustratorView () {
@@ -232,13 +250,13 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
 
   // Menu: Edit->Insert
   m_idMenuInsert_Object =
-    m_vMenuInsert->insertItem (i18n ("Insert &Object..."), this,
+    m_vMenuInsert->insertItem (i18n ("&Object..."), this,
 			       "editInsertObject", 0);
   m_idMenuInsert_Clipart =
-    m_vMenuInsert->insertItem (i18n ("Insert &Clipart..."), this,
+    m_vMenuInsert->insertItem (i18n ("&Clipart..."), this,
 			       "editInsertClipart", 0);
   m_idMenuInsert_Bitmap =
-    m_vMenuInsert->insertItem (i18n ("Insert &Bitmap..."), this,
+    m_vMenuInsert->insertItem (i18n ("&Bitmap..."), this,
 			       "editInsertBitmap", 0);
 
   // Menu: View
@@ -622,22 +640,26 @@ void KIllustratorView::setupCanvas () {
 	   this, SLOT(popupForSelection (int, int)));
 
   widget ()->setFocusPolicy (QWidget::StrongFocus);
-  widget ()->setFocusProxy (canvas);
+  /*widget ()->*/setFocusProxy (canvas);
 
   grid->addWidget (viewport, 1, 1);
   grid->setRowStretch (1, 20);
   grid->setColStretch (1, 20);
 
   tcontroller = new ToolController (this);
-  Tool* tool;
+
+  SelectionTool* selTool;
   tcontroller->registerTool (ID_TOOL_SELECT, 
-			     tool = new SelectionTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+			     selTool = new SelectionTool (&cmdHistory));
+  QObject::connect (selTool, SIGNAL(modeSelected(const char*)),
 		    this, SLOT(showCurrentMode(const char*)));
+  QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
+		    this, SLOT(activatePart(GObject*)));
   tcontroller->registerTool (ID_TOOL_EDITPOINT, 
 			     editPointTool = new EditPointTool (&cmdHistory));
   QObject::connect (editPointTool, SIGNAL(modeSelected(const char*)),
 		    this, SLOT(showCurrentMode(const char*)));
+  Tool* tool;
   tcontroller->registerTool (ID_TOOL_FREEHAND, 
 			     tool = new FreeHandTool (&cmdHistory));
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
@@ -718,10 +740,6 @@ void KIllustratorView::cleanUp () {
   KoViewIf::cleanUp();
 }
 
-void KIllustratorView::construct () {
-  resizeEvent (0L);
-}
-
 void KIllustratorView::newView () {
   KIllustratorShell* shell = new KIllustratorShell ();
   shell->show ();
@@ -753,7 +771,8 @@ void KIllustratorView::resizeEvent (QResizeEvent* ) {
   cout << "resizeEvent" << endl;
   if (mainWidget) {
     mainWidget->resize (width (), height ()); 
-    if (m_bShowGUI) {
+    if ((KoViewIf::hasFocus () || mode () == KOffice::View::RootMode) &&
+	m_bShowGUI) {
       if (m_bShowRulers) {
 	// draw rulers
 	hRuler->show ();
@@ -1119,7 +1138,7 @@ void KIllustratorView::viewOutline () {
 }
 
 void KIllustratorView::viewNormal () {
-  canvas->setOutlineMode (true);
+  canvas->setOutlineMode (false);
   m_vMenuView->setItemChecked (m_idMenuView_Outline, false);
   m_vMenuView->setItemChecked (m_idMenuView_Normal, true);
 }
@@ -1170,10 +1189,12 @@ void KIllustratorView::resetTools () {
 }
 
 void KIllustratorView::insertPartSlot (KIllustratorChild *child, GPart *part) {
+  cout << "INSERT PART SLOT =============================" << endl;
   OpenParts::View_var v = child->createView (m_vKoMainWindow);
   assert (! CORBA::is_nil (v));
   KIllustratorFrame *frame = new KIllustratorFrame (this, child);
   frame->setGeometry (child->geometry ());
+  frame->setPartObject (part);
   m_lstFrames.append (frame);
 
   KOffice::View_var kv = KOffice::View::_narrow (v);
@@ -1182,8 +1203,10 @@ void KIllustratorView::insertPartSlot (KIllustratorChild *child, GPart *part) {
 
   frame->attachView (kv);
   frame->hide ();
+  cout << "set view for part: " << frame << endl; 
   part->setView (frame);
-
+  part->setMainWindow (mainWindow ());
+  part->setParentID (id ());
   /*
   QObject::connect (frame, SIGNAL(sig_geometryEnd (KoFrame *)),
 		    this, SLOT(childGeometryEndSlot (KoFrame *)));
@@ -1203,6 +1226,7 @@ void KIllustratorView::childMoveEndSlot (KoFrame *f) {
 }
 
 void KIllustratorView::changeChildGeometrySlot (KIllustratorChild *child) {
+  cout << "+++++++changeChildGeometry" << endl;
   // Find frame for child
   KIllustratorFrame *f = 0L;
   QListIterator<KIllustratorFrame> it (m_lstFrames);
@@ -1218,4 +1242,37 @@ void KIllustratorView::changeChildGeometrySlot (KIllustratorChild *child) {
   
   // TODO scaling
   f->setPartGeometry (child->geometry ());
+}
+
+void KIllustratorView::setFramesToParts () {
+  KIllustratorFrame *frame = 0L;
+  for (unsigned int i = 0; i < m_lstFrames.count (); i++) {
+    frame = m_lstFrames.at (i);
+    frame->hide ();
+    frame->view ()->setMainWindow (mainWindow ());
+    frame->getPartObject ()->setView (frame);
+    frame->getPartObject ()->setMainWindow (mainWindow ());
+    frame->getPartObject ()->setParentID (id ());
+  }
+}
+
+void KIllustratorView::activatePart (GObject *obj) {
+  if (obj->isA ("GPart")) {
+    GPart *part = (GPart *) obj;
+    cout << "setFramesToParts ..." << endl;
+    setFramesToParts ();
+    cout << "part->activate ..." << endl;
+    int xoff = 1, yoff = 1;
+    if (m_bShowRulers) {
+      xoff += 30;
+      yoff += 30;
+    }
+      
+    part->activate (xoff, yoff);
+    setFocusProxy (part->getView ());
+    QWidget::setFocusPolicy (QWidget::StrongFocus);
+    cout << "setFocus ..." << endl;
+    part->getView ()->setFocusPolicy (QWidget::StrongFocus);
+    part->getView ()->setFocus ();
+  }
 }

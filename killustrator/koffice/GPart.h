@@ -32,6 +32,10 @@
 #include <qdstream.h>
 #include <qpicture.h>
 
+#include <koMainWindow.h>
+#include <koView.h>
+#include <openparts.h>
+
 #include "Coord.h"
 #include "GObject.h"
 
@@ -41,6 +45,7 @@ class KIllustratorChild;
 class GPart : public GObject {
   Q_OBJECT
 public:
+  GPart ();
   GPart (KIllustratorChild *c);
   GPart (const list<XmlAttribute>& attribs);
   GPart (const GPart& p);
@@ -53,6 +58,7 @@ public:
   virtual const char* typeName ();
 
   virtual GObject* copy ();
+  virtual GObject* clone (const list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
 
@@ -60,6 +66,14 @@ public:
   KIllustratorFrame *getView () { return view; }
 
   KIllustratorChild *getChild () { return child; }
+  void setMainWindow(OpenParts::MainWindow_ptr _mainWindow);
+
+  void setParentID (OpenParts::Id _id) { parentID = _id; }
+
+  virtual void select (bool flag = false);
+  
+  virtual void activate (int xoff, int yoff);
+  virtual void deactivate ();
 
 protected:
   void calcBoundingBox ();
@@ -67,6 +81,9 @@ protected:
 private:
   KIllustratorChild *child;
   KIllustratorFrame *view;
+  KOffice::MainWindow_var mainWindow;
+  OpenParts::Id parentID;
+  QRect initialGeom, oldGeom;
 };
 
 #endif

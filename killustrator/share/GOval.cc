@@ -220,6 +220,10 @@ GObject* GOval::copy () {
   return new GOval (*this);
 }
 
+GObject* GOval::clone (const list<XmlAttribute>& attribs) {
+  return new GOval (attribs);
+}
+
 int GOval::getNeighbourPoint (const Coord& p) {
   for (int i = 1; i >= 0; i--) {
     Coord c = segPoint[i].transform (tMatrix);

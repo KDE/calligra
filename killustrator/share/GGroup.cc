@@ -96,6 +96,10 @@ GObject* GGroup::copy () {
   return new GGroup (*this);
 }
 
+GObject* GGroup::clone (const list<XmlAttribute>& attribs) {
+  return new GGroup (attribs);
+}
+
 void GGroup::calcBoundingBox () {
   if (members.empty ())
     return;

@@ -88,9 +88,13 @@ public:
   KIllustratorChild* child () { return m_pChild; }
   KIllustratorView* killustratorView () { return m_pView; }
 
+  void setPartObject (GPart *obj) { m_pObj = obj; }
+  GPart* getPartObject () { return m_pObj; }
+
 protected:
   KIllustratorChild *m_pChild;
   KIllustratorView *m_pView;
+  GPart *m_pObj;
 };
 
 class KIllustratorView : public QWidget, public MainView,
@@ -103,7 +107,6 @@ public:
   ~KIllustratorView ();
 
   void createGUI ();
-  void construct ();
   void cleanUp ();
 
   GDocument* activeDocument () { return m_pDoc; }
@@ -189,6 +192,8 @@ protected:
   void setupPopups ();
   void resizeEvent (QResizeEvent*);
 
+  void setFramesToParts ();
+
 protected slots:
   void editCutSlot ();
   void editCopySlot ();
@@ -208,6 +213,7 @@ protected slots:
   void changeChildGeometrySlot (KIllustratorChild *child);
   void childGeometryEndSlot (KoFrame *f);
   void childMoveEndSlot (KoFrame *f);
+  void activatePart (GObject *obj);
 
 protected:
   /* Menu: Edit */

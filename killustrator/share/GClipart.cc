@@ -121,6 +121,10 @@ GObject* GClipart::copy () {
   return new GClipart (*this);
 }
 
+GObject* GClipart::clone (const list<XmlAttribute>& attribs) {
+  return new GClipart (attribs);
+}
+
 void GClipart::writeToXml (XmlWriter& xml) {
   xml.startTag ("clipart", false);
   writePropertiesToXml (xml);

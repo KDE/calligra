@@ -107,6 +107,9 @@ public slots:
   void ensureVisibility (bool flag);
   void calculateSize ();
 
+private slots:
+  void retryUpdateRegion ();
+
 private:
   void propagateMouseEvent (QMouseEvent *e);
   void propagateKeyEvent (QKeyEvent *e);
@@ -126,7 +129,7 @@ private:
   bool drawBasePoints;
   bool outlineMode;
   int pendingRedraws;
-  Rect regionForUpdate;
+  Rect regionForUpdate, region;
 
   static QArray<float> zoomFactors;
 };

@@ -98,6 +98,7 @@ public:
   virtual void restoreState (GOState* state);
 
   virtual GObject* copy ();
+  virtual GObject* clone (const list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
 

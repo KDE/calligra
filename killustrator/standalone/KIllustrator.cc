@@ -450,6 +450,7 @@ void KIllustrator::initToolBars () {
 			     ID_TOOL_EP_DEL, true, i18n ("Remove Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_DEL);
   toolGroup2->addButton (ID_TOOL_EP_DEL);
+/*
   editPointToolbar->insertButton (loader->loadIcon ("split.xpm"), 
 			     ID_TOOL_EP_SPLIT, true, i18n ("Split Line"));
   editPointToolbar->setToggle (ID_TOOL_EP_SPLIT);
@@ -458,6 +459,7 @@ void KIllustrator::initToolBars () {
 			     ID_TOOL_EP_JOIN, true, i18n ("Join Lines"));
   editPointToolbar->setToggle (ID_TOOL_EP_JOIN);
   toolGroup2->addButton (ID_TOOL_EP_JOIN);
+*/
 
   connect (editPointToolbar, SIGNAL (clicked(int)), 
 	   this, SLOT (menuCallback (int)));
@@ -588,8 +590,8 @@ void KIllustrator::initMenu () {
   arrangement->insertItem (i18n ("Text along Path"), ID_ARRANGE_PATHTEXT);
   connect (arrangement, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
-  extras->insertItem (i18n ("Load &Palette..."), ID_EXTRAS_LOAD_PALETTE);
-  extras->insertSeparator ();
+  //  extras->insertItem (i18n ("Load &Palette..."), ID_EXTRAS_LOAD_PALETTE);
+  //  extras->insertSeparator ();
   extras->insertItem (i18n ("&Options..."), ID_EXTRAS_OPTIONS);
   //  extras->insertItem (i18n ("&Scripts..."), ID_EXTRAS_SCRIPTS);
   connect (extras, SIGNAL (activated (int)), SLOT (menuCallback (int)));

@@ -44,11 +44,18 @@ class KIllustratorView;
 
 class KIllustratorChild : public KoDocumentChild {
 public:
+  KIllustratorChild () {}
   KIllustratorChild (KIllustratorDocument* killu, const QRect& rect, 
 		     KOffice::Document_ptr doc);
   ~KIllustratorChild ();
 
   KIllustratorDocument* parent () { return m_pKilluDoc; }
+
+  void setURL (const char* url);
+  void setMimeType (const char *mime);
+
+  const char* urlForSave ();
+
 protected:
   KIllustratorDocument *m_pKilluDoc; 
 };
@@ -65,7 +72,8 @@ public:
   // --- C++ ---
   // Overloaded methods from KoDocument
 
-  
+  virtual void makeChildListIntern (KOffice::Document_ptr _root, 
+				    const char *_path);
   bool save (ostream& os, const char *fmt);
   bool load (istream& is, KOStore::Store_ptr store);
   bool loadChildren (KOStore::Store_ptr store);
