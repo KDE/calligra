@@ -177,6 +177,7 @@ void KWFrame::copySettings(KWFrame *frm)
     // Keep order identical as member var order (and init in ctor)
     setSheetSide(frm->sheetSide());
     setRunAround(frm->runAround());
+    setRunAroundSide(frm->runAroundSide());
     setFrameBehavior(frm->frameBehavior());
     setNewFrameBehavior(frm->newFrameBehavior());
     setRunAroundGap(frm->runAroundGap());
