@@ -1,1 +1,2 @@
 application/x-kpresenter; kpresenter;test=test "$DISPLAY" != ""; priority=7
+application/mspowerpoint; kpresenter;test=test "$DISPLAY" != ""; priority=2

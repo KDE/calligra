@@ -1,1 +1,2 @@
 application/x-kspread; kspread;test=test "$DISPLAY" != ""; priority=7
+application/msexcel; kspread;test=test "$DISPLAY" != ""; priority=2

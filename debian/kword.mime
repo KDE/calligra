@@ -1,2 +1,4 @@
 application/x-kword; kword;test=test "$DISPLAY" != ""; priority=7
 application/x-abiword; kword;test=test "$DISPLAY" != ""; priority=2
+application/msword; kword;test=test "$DISPLAY" != ""; priority=2
+text/rtf; kword;test=test "$DISPLAY" != ""; priority=2

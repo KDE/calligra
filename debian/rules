@@ -143,6 +143,9 @@ binary-arch: build install
 	dh_installmenu -a
 	dh_installmime -a
 	dh_installman -a
+	# Move some incorrectly installed man pages.
+	mv debian/kpresenter/usr/share/man/pl/man1/kprconverter.1 \
+	  debian/kpresenter/usr/share/man/man1/kprconverter.pl.1
 	dh_undocumented -a
 	dh_installchangelogs -pkoffice-libs
 	dh_installchangelogs -pkoffice-dev
