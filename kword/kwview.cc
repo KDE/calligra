@@ -1289,17 +1289,18 @@ void KWView::insertSpecialChar()
     QString f = font().family();
     QChar c=' ';
     KCharSelectDia *dlg=new KCharSelectDia( this, "insert special char", f,c );
-    connect(dlg,SIGNAL(insertChar(QChar)),this,SLOT(slotSpecialChar(QChar)));
+    connect(dlg,SIGNAL(insertChar(QChar,const QString &)),this,SLOT(slotSpecialChar(QChar,const QString &)));
     dlg->show();
     delete dlg;
 }
 
 /*===============================================================*/
-void KWView::slotSpecialChar(QChar c)
+void KWView::slotSpecialChar(QChar c, const QString &_font)
 {
    KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( !edit )
         return;
+    edit->setFamily( _font );
     edit->insertSpecialChar(c);
 }
 

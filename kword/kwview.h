@@ -275,7 +275,7 @@ public slots:
 
     void updatePageInfo();
 
-    void slotSpecialChar(QChar c);
+    void slotSpecialChar(QChar , const QString &);
 
 protected:
     void setupActions();

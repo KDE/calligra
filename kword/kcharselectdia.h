@@ -66,7 +66,7 @@ protected:
     KCharSelect *charSelect;
 
  signals:
-    void insertChar(QChar);
+    void insertChar(QChar,const QString &);
 };
 
 #endif

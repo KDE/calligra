@@ -107,5 +107,5 @@ QString KCharSelectDia::font()
 /*================================================================*/
 void KCharSelectDia::slotUser1()
 {
-    emit insertChar(chr());
+    emit insertChar(chr(),font());
 }
