@@ -2980,7 +2980,6 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
 		{
 		    if( !c->isEmpty() && !c->isObscured())
 		    {
-
 	                if( c->textWidth() > long_max )
                                 {
                                 long_max = c->textWidth() +
@@ -3008,7 +3007,6 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
 	    if( cell != m_pDefaultCell && !cell->isEmpty()
             && !cell->isObscured())
 	    {
-
                    if(cell->textWidth() > long_max )
                                 {
                                 long_max = cell->textWidth() +
@@ -3044,7 +3042,6 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
 		{
 		    if(!c->isEmpty() && !c->isObscured())
 		    {
-
 	  		if(c->textHeight()>long_max)
 			    long_max = c->textHeight() +
 				       c->topBorderWidth(c->column(),c->row() ) +
@@ -3069,7 +3066,6 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
 	    if(cell != m_pDefaultCell && !cell->isEmpty()
             && !cell->isObscured())
 	    {
-
 	 	if(cell->textHeight()>long_max )
 		    long_max = cell->textHeight() +
 			       cell->topBorderWidth(cell->column(),cell->row() ) +

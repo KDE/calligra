@@ -916,7 +916,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	m_strOutText = s->text();
     }
     else if ( isBool() )
-    {   
+    {
 	if ( m_dValue == 0 )
 	    m_strOutText = "False";
 	else
@@ -1823,7 +1823,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
         for ( int x = left; x <= right; x++ )
 	  for ( int y = top; y <= bottom; y++ )
-	  { 
+	  {
 	    KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
 	    if ( cell == 0L )
 	      return false;
@@ -2436,7 +2436,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     else if ( !m_strOutText.isEmpty() )
     {
-	if ( selected && ( _col != m.left() || _row != m.top() )  )
+        if ( selected && ( _col != m.left() || _row != m.top() )  )
         {
 	    QPen p( m_textPen );
 	    p.setColor( defaultColorGroup.highlightedText() );
@@ -3506,7 +3506,6 @@ void KSpreadCell::checkFormat(bool _formular)
    QString tmpText=m_strText;
    double val=0;
    bool ok=false;
-   int pos=0;
    QString tmp;
    if(_formular)
         tmpText=tmpText.right(tmpText.length()-1);

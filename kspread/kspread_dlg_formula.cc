@@ -1005,11 +1005,11 @@ void KSpreadDlgFormula::changeFunction()
     else if( m_funcName=="currentDate")
     {
         tmp.nb_param = 0;
-        tmp1=i18n("The currentDay() function returns the current\n"
+        tmp1=i18n("The currentDate() function returns the current\n"
                 "date formated with local parameters.\n");
         tmp1+=i18n("Syntax : %1()\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
-        tmp1+=i18n("currentDay() returns saturday 15 July 2000");
+        tmp1+=i18n("currentDate() returns saturday 15 July 2000");
         tmp.help=tmp1;
 
     }
@@ -1051,7 +1051,7 @@ void KSpreadDlgFormula::changeFunction()
                 "of the string. The whole string is returned\n"
                 "if len exceeds the length of the string.\n");
                 tmp1+=tmp2;
-                tmp1+=i18n("right(\"hello\",2) returns lo\nlen(\"kspread\",10) returns kspread");
+                tmp1+=i18n("right(\"hello\",2) returns lo\nright(\"kspread\",10) returns kspread");
         }
         else if(m_funcName=="left")
         {
@@ -1060,7 +1060,7 @@ void KSpreadDlgFormula::changeFunction()
                 "of the string. The whole string is returned\n"
                 "if len exceeds the length of the string.\n");
                 tmp1+=tmp2;
-                tmp1+=i18n("left(\"hello\",2) returns he\nlen(\"kspread\",10) returns kspread");
+                tmp1+=i18n("left(\"hello\",2) returns he\nleft(\"kspread\",10) returns kspread");
 
         }
         else if (m_funcName=="REPT" )
@@ -1069,7 +1069,7 @@ void KSpreadDlgFormula::changeFunction()
                         "as often as told by the second parameter.\n");
                 tmp1+=i18n("Syntax : %1(String,Int)\n").arg(m_funcName);
                 tmp1+=i18n("Example : \n");
-                tmp1+=i18n("REPET(\"kspread\",3) returns kspreadkspreadkspread.");
+                tmp1+=i18n("REPT(\"kspread\",3) returns kspreadkspreadkspread.");
         }
         else
         {
@@ -1145,9 +1145,9 @@ void KSpreadDlgFormula::changeFunction()
                           "the value of e (the  base\n"
                           "of natural logarithms)\n"
                           "raised to the power of x.\n");
-                tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+                tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
                 tmp1+=i18n("Example : \n");
-                tmp1+=i18n("sqrt(9) equals 3.\nsqrt(-9) equals nan.");
+                tmp1+=i18n("exp(9) equals 3.\nexp(-9) equals nan.");
                 tmp.help=tmp1;
                 }
         else if(m_funcName=="ceil")
@@ -1167,7 +1167,7 @@ void KSpreadDlgFormula::changeFunction()
                           "floating-point number x.\n");
                 tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
                 tmp1+=i18n("\nExample : \n");
-                tmp1+=i18n("fabs(12.5) equals 12.5.\nceil(-12.5) equals 12.5.");
+                tmp1+=i18n("fabs(12.5) equals 12.5.\nfabs(-12.5) equals 12.5.");
                 tmp.help=tmp1;
                 }
         else if(m_funcName=="floor")
@@ -1177,7 +1177,7 @@ void KSpreadDlgFormula::changeFunction()
                           "returning that value as a double.\n");
                 tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
                 tmp1+=i18n("\nExample : \n");
-                tmp1+=i18n("floor(12.5) equals 12.\nceil(-12.5) equals -13.");
+                tmp1+=i18n("floor(12.5) equals 12.\nfloor(-12.5) equals -13.");
                 tmp.help=tmp1;
                 }
         else if(m_funcName=="ENT")
@@ -1289,11 +1289,10 @@ void KSpreadDlgFormula::changeFunction()
         }
         else if(m_funcName=="variance")
         {
-                tmp1=i18n("The MOD() function returns the remainder\n"
-                        "after division if the second parameter\n"
-                        "is null the function returns #DIV/0\n");
+                tmp1=i18n("The variance() function calculates the variance\n"
+                        "of each parameter which are member of a population.\n");
                 tmp1+=tmp2;
-                tmp1+=i18n("MOD(12,5) returns 2\nMOD(5,5) returns 0");
+                tmp1+=i18n("variance(12,5,7) equals 8.666..\nvariance(15,80,3) equals 1144.22...");
         }
         else
         {
@@ -1583,7 +1582,7 @@ void KSpreadDlgFormula::changeFunction()
                 "if all the values given as parameters are of type bool\n"
                 "and have the value false. Otherwise it returns False\n");
                 tmp1+=tmp2;
-                tmp1+=i18n("NOR(True,False,False) returns False\nOR(False,False) returns True");
+                tmp1+=i18n("NOR(True,False,False) returns False\nNOR(False,False) returns True");
 
         }
         else if(m_funcName=="NAND")
@@ -1634,7 +1633,7 @@ void KSpreadDlgFormula::changeFunction()
                 tmp.thirdElementLabel=i18n("Probabity of failure");
                 tmp1=i18n("The INVBINO function returns the negative binomial \n"
                         "distribution. The first parameter is the number of failure,\n"
-                        "the second parameter is the number of success, and\n"
+                        "the second parameter is the number of failure, and\n"
                         "the third is the probability of failure. The number of\n"
                         "trials should be bigger than the number of failure.\n");
 
@@ -1831,7 +1830,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");
         if(m_funcName=="DECBIN")
-               tmp1+=i18n("DECBIN(12) returns 1100 \nDECHEX(55) returns 110111.");
+               tmp1+=i18n("DECBIN(12) returns 1100 \nDECBIN(55) returns 110111.");
         else if( m_funcName=="DECHEX")
                 tmp1+=i18n("DECHEX(12) returns c \nDECHEX(55) returns 37.");
         else if( m_funcName=="DECOCT")
