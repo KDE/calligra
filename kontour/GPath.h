@@ -147,6 +147,8 @@ public:
 
   void calcBoundingBox();
   GPath *convertToPath() const;
+  bool isConvertible() const;
+
 private:
   QPtrList<GSegment> segments;
   bool mClosed;

@@ -348,33 +348,28 @@ void KontourView::setupPanels()
   connect(activeDocument(), SIGNAL(updateLayerView()), mLayerPanel, SLOT(updatePanel()));
   mRightDock->moveDockWindow(mLayerWin);
 
-  /* Paint properties panel */
-  mPaintDock = new QDockWindow();
-  mPaintDock->setResizeEnabled(true);
-  mPaintPanel = new PaintPanel(mPaintDock);
-  connect(mPaintPanel, SIGNAL(changeFilled(bool)), this, SLOT(changeFilled(bool)));
-  connect(mPaintPanel, SIGNAL(changePaintColor(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
-  connect(mPaintPanel, SIGNAL(changeBrushStyle(Qt::BrushStyle)), this, SLOT(changeBrushStyle(Qt::BrushStyle)));
-  connect(this, SIGNAL(changedStyle(const GStyle &)), mPaintPanel, SLOT(slotStyleChanged(const GStyle &)));
-  mPaintDock->setWidget(mPaintPanel);
-  mPaintDock->setResizeEnabled(false);
-  mPaintDock->setCaption(i18n("Paint"));
-  mRightDock->moveDockWindow(mPaintDock);
-
   /* Outline properties panel */
   mOutlineDock = new QDockWindow();
   mOutlineDock->setResizeEnabled(true);
-  mOutlinePanel = new OutlinePanel(mOutlineDock);
-  connect(mOutlinePanel, SIGNAL(changeStroked(bool)), this, SLOT(changeStroked(bool)));
-  connect(mOutlinePanel, SIGNAL(changeOutlineColor(const KoColor &)), this, SLOT(changeOutlineColor(const KoColor &)));
-  connect(mOutlinePanel, SIGNAL(changeLinewidth(unsigned int)), this, SLOT(changeLinewidth(unsigned int)));
-  connect(mOutlinePanel, SIGNAL(changeJoinStyle(Qt::PenJoinStyle)), this, SLOT(changeJoinStyle(Qt::PenJoinStyle)));
-  connect(mOutlinePanel, SIGNAL(changeCapStyle(Qt::PenCapStyle)), this, SLOT(changeCapStyle(Qt::PenCapStyle)));
-  connect(this, SIGNAL(changedStyle(const GStyle &)), mOutlinePanel, SLOT(slotStyleChanged(const GStyle &)));
+  mOutlinePanel = new OutlinePanel(this, mOutlineDock);
+  mOutlinePanel->slotUpdate();
   mOutlineDock->setWidget(mOutlinePanel);
   mOutlineDock->setResizeEnabled(false);
   mOutlineDock->setCaption(i18n("Outline"));
   mRightDock->moveDockWindow(mOutlineDock);
+
+  /* Paint properties panel */
+  mPaintDock = new QDockWindow();
+  mPaintDock->setResizeEnabled(true);
+  mPaintPanel = new PaintPanel(this, mPaintDock);
+/*  connect(mPaintPanel, SIGNAL(changeFilled(bool)), this, SLOT(changeFilled(bool)));
+  connect(mPaintPanel, SIGNAL(changePaintColor(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
+  connect(mPaintPanel, SIGNAL(changeBrushStyle(Qt::BrushStyle)), this, SLOT(changeBrushStyle(Qt::BrushStyle)));
+  connect(this, SIGNAL(changedStyle(const GStyle &)), mPaintPanel, SLOT(slotStyleChanged(const GStyle &)));*/
+  mPaintDock->setWidget(mPaintPanel);
+  mPaintDock->setResizeEnabled(false);
+  mPaintDock->setCaption(i18n("Painting"));
+  mRightDock->moveDockWindow(mPaintDock);
 
   /* Transform properties panel */
   mTransformPanel = new TransformPanel();
@@ -595,7 +590,7 @@ void KontourView::popupForRulers()
   rulerMenu->popup(QCursor::pos());
 }
 
-void KontourView::changeOutlineColor(const KoColor &c)
+/*void KontourView::changeOutlineColor(const KoColor &c)
 {
   // if there is a selection, change its outline color
   if(activeDocument() && activeDocument()->activePage() &&
@@ -660,7 +655,7 @@ void KontourView::changeJoinStyle(Qt::PenJoinStyle style)
   {
     activeDocument()->activePage()->changeOutlineStyles(style);
   }
-}
+}*/
 
 void KontourView::changeTransform(KCommand *command)
 {
@@ -671,19 +666,13 @@ void KontourView::changeTransform(KCommand *command)
   }
 }
 
-void KontourView::changeCapStyle(Qt::PenCapStyle style)
-{
-  if(activeDocument() && activeDocument()->activePage() &&
-      !activeDocument()->activePage()->selectionIsEmpty())
-  {
-    activeDocument()->activePage()->changeOutlineStyles(style);
-  }
-}
-
 void KontourView::changeSelection()
 {
   GPage *page = activeDocument()->activePage();
-  if(!page) return;
+  if(!page)
+    return;
+  if(mOutlinePanel)
+    mOutlinePanel->slotUpdate();
   if(page->selectionIsEmpty())
   {
     m_copy->setEnabled(false);
@@ -707,14 +696,16 @@ void KontourView::changeSelection()
     m_forwardOne->setEnabled(true);
     m_backOne->setEnabled(true);
     m_duplicate->setEnabled(true);
-
-	emit changedStyle(page->getSelection().first()->style());
-	mTransformPanel->setContext(page->getSelection().first()->matrix(), page);
+    mTransformPanel->setContext(page->getSelection().first()->matrix(), page);
   }
   if(page->objectCount() == page->selectionCount())
     m_selectAll->setEnabled(false);
   else
     m_selectAll->setEnabled(true);
+  if(page->convertibleCount() == 0)
+    m_convertToPath->setEnabled(false);
+  else
+    m_convertToPath->setEnabled(true);
 }
 
 void KontourView::slotZoomFactorChanged()
@@ -924,7 +915,7 @@ void KontourView::slotUngroup()
 
 void KontourView::slotStyles(const QString &s)
 {
-  activeDocument()->styles()->current(m_styles->currentText());
+  activeDocument()->styles()->style(m_styles->currentText());
 }
 
 void KontourView::slotAddStyle()

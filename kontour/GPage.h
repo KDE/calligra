@@ -104,6 +104,7 @@ public:
   void insertObjectAtIndex(GObject *obj, unsigned int idx);
   void moveObjectToIndex(GObject *obj, unsigned int idx);
 
+
   void selectObject(GObject *obj);
   void unselectObject(GObject *obj);
 
@@ -121,6 +122,7 @@ public:
   QPtrList<GObject> &getSelection() {return selection; }
   bool selectionIsEmpty() const {return selection.isEmpty(); }
   unsigned int selectionCount() const {return selection.count(); }
+  unsigned int convertibleCount() const {return mConvertibleCount; }
 
   void drawContents(QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
   void drawContentsInRegion(QPainter &p, const KoRect &r, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
@@ -134,18 +136,6 @@ public:
   void updateHandle();
 
   void updateSelection();
-
-  /*
-   * Style management
-   */
-  void changePaintStyles(const KoColor &c);
-  void changeFilled(bool filled);
-  void changeOutlineStyles(const KoColor &c);
-  void changeOutlineStyles(Qt::BrushStyle);
-  void changeOutlineStyles(unsigned int lwidth);
-  void changeOutlineStyles(Qt::PenJoinStyle style);
-  void changeOutlineStyles(Qt::PenCapStyle style);
-  void changeStroked(bool stroked);
 
 public slots:
 //  void objectChanged ();
@@ -165,6 +155,7 @@ private:
   QPtrList<GObject> selection;    // the array of selected objects
 
   int mCurLayerNum;
+  unsigned int mConvertibleCount;
 
   KoPageLayout mPageLayout;
 

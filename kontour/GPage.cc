@@ -54,6 +54,7 @@ mHandle(this)
 
   mBGColor = white;
 
+  mConvertibleCount = 0;
   mCurLayerNum = 1;
 
   // in pt !!
@@ -272,7 +273,11 @@ void GPage::deleteObject(GObject *obj)
   {
     bool selected = obj->isSelected();
     if(selected)
+    {
       selection.removeRef(obj);
+      if(obj->isConvertible())
+        mConvertibleCount--;
+    }
     layer->deleteObject(obj);
     obj->unref();
     if(selected)
@@ -323,6 +328,8 @@ void GPage::selectObject(GObject *obj)
   {
     /* object isn't yet in selection list */
     obj->select(true);
+    if(obj->isConvertible())
+      mConvertibleCount++;
     selection.append(obj);
     updateSelection();
     document()->emitSelectionChanged();
@@ -336,6 +343,8 @@ void GPage::unselectObject(GObject *obj)
   {
     /* remove object from the selection list */
     obj->select(false);
+    if(obj->isConvertible())
+      mConvertibleCount--;
     selection.remove(i);
     updateSelection();
     document()->emitSelectionChanged();
@@ -435,7 +444,7 @@ KoRect GPage::boundingBoxForSelection()
     mSelBox = (*i)->boundingBox();
     ++i;
     for(; i.current(); ++i)
-      mSelBox = mSelBox.unite((*i)->boundingBox ());
+      mSelBox = mSelBox.unite((*i)->boundingBox());
   }
   else
   {
@@ -634,79 +643,6 @@ void GPage::updateSelection()
   updateHandle();
   r = r.unite(mSelBox);
   document()->emitChanged(r, true);
-}
-
-void GPage::changePaintStyles(const KoColor &c)
-{
-  for(GObject *o = selection.first(); o != 0L; o = selection.next())
-    o->changePaintStyle(c);
-
-  updateSelection();
-}
-
-void GPage::changeOutlineStyles(const KoColor &c)
-{
-  for(GObject *o = selection.first(); o != 0L; o = selection.next())
-    o->changeOutlineStyle(c);
-
-  updateSelection();
-}
-
-void GPage::changeOutlineStyles(Qt::BrushStyle bstyle)
-{
-  for(GObject *o = selection.first(); o != 0L; o = selection.next())
-  {
-    o->changeBrushStyle(bstyle);
-  }
-
-  updateSelection();
-}
-
-void GPage::changeOutlineStyles(unsigned int lwidth)
-{
-  for(GObject *o = selection.first(); o != 0L; o = selection.next())
-  {
-    o->changeOutlineWidth(lwidth);
-	o->calcBoundingBox();
-  }
-
-  updateSelection();
-}
-
-void GPage::changeOutlineStyles(Qt::PenJoinStyle style)
-{
-  for(GObject *o = selection.first(); o != 0L; o = selection.next())
-  {
-    o->changeJoinStyle(style);
-  }
-
-  updateSelection();
-}
-
-void GPage::changeOutlineStyles(Qt::PenCapStyle style)
-{
-  for(GObject *o = selection.first(); o != 0L; o = selection.next())
-  {
-    o->changeCapStyle(style);
-  }
-
-  updateSelection();
-}
-
-void GPage::changeStroked(bool stroked)
-{
-  for(GObject *o = selection.first(); o != 0L; o = selection.next())
-    o->changeStroked(stroked);
-
-  updateSelection();
-}
-
-void GPage::changeFilled(bool filled)
-{
-  for(GObject *o = selection.first(); o != 0L; o = selection.next())
-    o->changeFilled(filled);
-
-  updateSelection();
 }
 
 /*******************[OLD]*********************

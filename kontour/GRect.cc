@@ -331,6 +331,11 @@ GPath *GRect::convertToPath() const
   return path;
 }
 
+bool GRect::isConvertible() const
+{
+ return true;
+}
+
 /*bool GRect::isValid()
 {
   return (fabs(sPoint.x() - ePoint.x()) > 1 || fabs(sPoint.y() - ePoint.y()) > 1);

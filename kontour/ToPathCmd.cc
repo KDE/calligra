@@ -36,10 +36,11 @@ Command(aGDoc, i18n("Convert to path"))
 {
   QPtrListIterator<GObject> it(document()->activePage()->getSelection());
   for(; it.current(); ++it)
-  {
-    (*it)->ref();
-    objects.append(*it);
-  }
+    if((*it)->isConvertible())
+    {
+      (*it)->ref();
+      objects.append(*it);
+    }
 }
 
 ToPathCmd::~ToPathCmd()

@@ -34,7 +34,7 @@
 SetPropertyCmd::SetPropertyCmd(GDocument *aGDoc, const GStyle &s):
 Command(aGDoc, i18n("Set property"))
 {
-  st = s;
+/*  st = s;
   objects.resize(document()->activePage()->selectionCount());
   states.resize(document()->activePage()->selectionCount());
   QPtrListIterator<GObject> it(document()->activePage()->getSelection());
@@ -43,7 +43,7 @@ Command(aGDoc, i18n("Set property"))
     (*it)->ref();
     objects.insert(i, (*it));
     states[i] = (*it)->style();
-  }
+  }*/
 }
 
 SetPropertyCmd::~SetPropertyCmd()
@@ -54,17 +54,17 @@ SetPropertyCmd::~SetPropertyCmd()
 
 void SetPropertyCmd::execute()
 {
-  for(unsigned int i = 0; i < objects.count(); i++)
-    objects[i]->style(st);
+/*  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->style(st);*/
 }
 
 void SetPropertyCmd::unexecute()
 {
-  document()->activePage()->unselectAllObjects();
+/*  document()->activePage()->unselectAllObjects();
   for(unsigned int i = 0; i < objects.count(); i++)
   {
     objects[i]->style(states[i]);
     document()->activePage()->selectObject(objects[i]);
   }
-  document()->activePage()->updateSelection();
+  document()->activePage()->updateSelection();*/
 }

@@ -842,7 +842,12 @@ void GPath::calcBoundingBox()
 
 GPath *GPath::convertToPath() const
 {
-  return new GPath(*this);
+  return 0L;
+}
+
+bool GPath::isConvertible() const
+{
+  return false;
 }
 
 #include "GPath.moc"

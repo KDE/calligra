@@ -65,6 +65,7 @@ public:
 
   void calcBoundingBox();
   GPath *convertToPath() const;
+  bool isConvertible() const;
 
 private:
   Type mType;            // Oval type

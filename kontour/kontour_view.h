@@ -111,15 +111,6 @@ private:
 private slots:
   void popupForSelection();
   void popupForRulers();
-
-  void changeOutlineColor(const KoColor &c);
-  void changePaintColor(const KoColor &c);
-  void changeFilled(bool filled);
-  void changeStroked(bool stroked);
-  void changeLinewidth(unsigned int lwidth);
-  void changeBrushStyle(Qt::BrushStyle);
-  void changeJoinStyle(Qt::PenJoinStyle);
-  void changeCapStyle(Qt::PenCapStyle);
   void changeTransform(KCommand *);
   void changeSelection();
 

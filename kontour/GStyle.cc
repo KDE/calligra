@@ -41,8 +41,9 @@ public:
   Qt::BrushStyle   pattern;
 };
 
-GStyle::GStyle() : d(new GStylePrivate)
+GStyle::GStyle()
 {
+  d = new GStylePrivate;
   d->stroked = true;
   d->ocolor = KoColor::black();
   d->lwidth = 1;
@@ -57,10 +58,12 @@ GStyle::GStyle() : d(new GStylePrivate)
 
 GStyle::GStyle(const QDomElement &style)
 {
+  d = new GStylePrivate;
 }
 
 GStyle::GStyle(GStyle &obj)
 {
+  d = new GStylePrivate;
   d->stroked = obj.d->stroked;
   d->ocolor = obj.d->ocolor;
   d->lwidth = obj.d->lwidth;

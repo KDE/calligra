@@ -150,17 +150,8 @@ public:
   /*
    * Style management
    */
-  const GStyle &style() const {return st; }
-  void style(const GStyle &s);
-
-  void changePaintStyle(const KoColor &c);
-  void changeOutlineStyle(const KoColor &c);
-  void changeStroked(bool stroked);
-  void changeFilled(int filled);
-  void changeOutlineWidth(unsigned int lwidth);
-  void changeBrushStyle(Qt::BrushStyle bstyle);
-  void changeJoinStyle(Qt::PenJoinStyle style);
-  void changeCapStyle(Qt::PenCapStyle style);
+  GStyle *style() const {return mStyle; }
+  void style(const GStyle *s);
 
   /**
    * Control points.
@@ -236,6 +227,7 @@ public:
    * @return pointer to new path
    */
   virtual GPath *convertToPath() const = 0;
+  virtual bool isConvertible() const = 0;
 
   static GObject *objectFactory(const QDomElement &element);
 
@@ -266,7 +258,7 @@ protected:
   bool sflag:1;                   // object is selected
   bool inWork:1;                  // the object is currently manipulated,
   
-  GStyle st;
+  GStyle *mStyle;
   
   KoRect box;                     // the bounding box
 

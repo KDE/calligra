@@ -40,8 +40,8 @@ public:
 
   QDomElement writeToXml(QDomDocument &document);
 
-  GStyle *current() const {return mCurStyle; }
-  void current(QString aName);
+  GStyle *style() const {return mStyle; }
+  void style(QString aName);
 
   int currentNum() const {return mCur; }
 
@@ -53,9 +53,9 @@ public:
 private:
   QDict<GStyle> list;
 
-  int mNum;
-  int mCur;
-  GStyle *mCurStyle;          //current style
+  int       mNum;
+  int       mCur;
+  GStyle   *mStyle;          //current style
 };
 
 #endif

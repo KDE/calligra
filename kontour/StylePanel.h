@@ -27,6 +27,7 @@
 #include <qtabwidget.h>
 #include <qpen.h>
 
+class KontourView;
 class GStyle;
 class QComboBox;
 class KoColor;
@@ -35,53 +36,27 @@ class QCheckBox;
 class QSpinBox;
 class QButtonGroup;
 
-class PaintPanel : public QTabWidget
-{
-  Q_OBJECT
-public:
-  PaintPanel(QWidget *parent = 0L, const char *name = 0L);
-
-public slots:
-  void slotStyleChanged(const GStyle &);
-
-signals:
-  void colorChanged(const KoColor &);
-  void changePaintColor(const KoColor &);
-  void changeFilled(int f);
-  void changeBrushStyle(Qt::BrushStyle);
-
-private slots:
-  void activate(int f);
-
-private:
-  QComboBox       *mPaintingBox;
-  QSpinBox        *mOpacityBox;
-  KoColorChooser  *mPaintPanel;
-};
-
 class OutlinePanel : public QTabWidget
 {
   Q_OBJECT
 public:
-  OutlinePanel(QWidget *parent = 0L, const char *name = 0L);
+  OutlinePanel(KontourView *aView, QWidget *parent = 0L, const char *name = 0L);
 
 public slots:
-  void slotStyleChanged(const GStyle &);
-  void slotJoinPressed(int);
-  void slotCapPressed(int);
-
-signals:
-  void colorChanged(const KoColor &);
-  void changeOutlineColor(const KoColor &);
-  void changeStroked(bool);
-  void changeLinewidth(unsigned int);
-  void changeJoinStyle(Qt::PenJoinStyle);
-  void changeCapStyle(Qt::PenCapStyle);
+  void slotUpdate();
 
 private slots:
-  void slotChangeLineWidth(int lwidth);
+  void slotChangeStroked(bool b);
+  void slotChangeStartArrow(int w);
+  void slotChangeEndArrow(int w);
+  void slotChangeOpacity(int o);
+  void slotChangeLineWidth(int l);
+  void slotChangeLineStyle(int w);
+  void slotJoinPressed(int w);
+  void slotCapPressed(int w);
 
 private:
+  KontourView     *mView;
   QCheckBox       *mStroked;
   QComboBox       *mStartArrowBox;
   QComboBox       *mEndArrowBox;
@@ -91,6 +66,25 @@ private:
   QButtonGroup    *mJoinBox;
   QButtonGroup    *mCapBox;
   KoColorChooser  *mOutlinePanel;
+};
+
+class PaintPanel : public QTabWidget
+{
+  Q_OBJECT
+public:
+  PaintPanel(KontourView *aView, QWidget *parent = 0L, const char *name = 0L);
+
+public slots:
+  void slotUpdate();
+
+private slots:
+  void slotChangeFilled(int f);
+
+private:
+  KontourView     *mView;
+  QComboBox       *mPaintingBox;
+  QSpinBox        *mOpacityBox;
+  KoColorChooser  *mPaintPanel;
 };
 
 #endif

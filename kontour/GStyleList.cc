@@ -36,7 +36,7 @@ GStyleList::GStyleList()
   list.clear();
   GStyle *st = new GStyle();
   list.insert(i18n("default"), st);
-  mCurStyle = st;
+  mStyle = st;
   mCur = 0;
   mNum = 1;
 }
@@ -44,7 +44,7 @@ GStyleList::GStyleList()
 GStyleList::GStyleList(const QDomElement &sl)
 {
   list.clear();
-  mCurStyle = 0L;
+  mStyle = 0L;
 }
 
 QDomElement GStyleList::writeToXml(QDomDocument &document)
@@ -61,9 +61,9 @@ QDomElement GStyleList::writeToXml(QDomDocument &document)
   return sl;
 }
 
-void GStyleList::current(QString aName)
+void GStyleList::style(QString aName)
 {
-  mCurStyle = list.find(aName);
+  mStyle = list.find(aName);
 }
 
 QStringList *GStyleList::stringList()
@@ -79,7 +79,7 @@ void GStyleList::addStyle()
 {
   GStyle *st = new GStyle();
   list.insert(i18n("style #%1").arg(mNum), st);
-  mCurStyle = st;
+  mStyle = st;
   mNum++;
 }
 

@@ -43,6 +43,7 @@ GObject::GObject()
   mLayer = 0L;
   sflag = false;
   inWork = false;
+  mStyle = new GStyle;
 }
 
 GObject::GObject(const QDomElement &element)
@@ -51,6 +52,7 @@ GObject::GObject(const QDomElement &element)
   mLayer = 0L;
   sflag = false;
   inWork = false;
+  mStyle = new GStyle;
   //transform(toMatrix(element.namedItem("matrix").toElement()), false);
 }
 
@@ -62,7 +64,8 @@ GObject::GObject(const GObject &obj)
   mLayer = obj.mLayer;
   sflag = false;
   inWork = false;
-  st = obj.st;
+  mStyle = new GStyle;
+  *mStyle = *obj.mStyle;
   tMatrix = obj.tMatrix;
   tmpMatrix = tMatrix;
   iMatrix = obj.iMatrix;
@@ -108,7 +111,7 @@ QDomElement GObject::writeToXml(QDomDocument &document)
   QDomElement go = document.createElement("go");
   go.setAttribute("id", mId);
   go.appendChild(createMatrixElement(tMatrix, document));
-  go.appendChild(st.writeToXml(document));
+  go.appendChild(mStyle->writeToXml(document));
   return go;
 }
 
@@ -130,9 +133,9 @@ void GObject::setZoomFactor(double f, double pf)
 
 }
 
-void GObject::style(const GStyle &s)
+void GObject::style(const GStyle *s)
 {
-  st = s;
+  *mStyle = *s;
 }
 
 void GObject::matrix(QWMatrix m)
@@ -286,12 +289,12 @@ void GObject::setPen(QPainter *p)
 {
   // TODO : set dashes, arrows, linewidth etc.
   QPen pen;
-  if(st.stroked())
+  if(mStyle->stroked())
   {
-    pen.setColor(st.outlineColor().color());
-    pen.setWidth(st.outlineWidth());
-    pen.setCapStyle(st.capStyle());
-    pen.setJoinStyle(st.joinStyle());
+    pen.setColor(mStyle->outlineColor().color());
+    pen.setWidth(mStyle->outlineWidth());
+    pen.setCapStyle(mStyle->capStyle());
+    pen.setJoinStyle(mStyle->joinStyle());
   }
   else
     pen.setStyle(Qt::NoPen);
@@ -302,64 +305,24 @@ void GObject::setBrush(QPainter *p)
 {
   // TODO : patterns, gradients, noFill
   QBrush brush;
-  if(st.filled())
+  if(mStyle->filled())
   {
-    brush.setColor(st.fillColor().color());
-    brush.setStyle(st.brushStyle());
+    brush.setColor(mStyle->fillColor().color());
+    brush.setStyle(mStyle->brushStyle());
   }
   p->setBrush(brush);
 }
 
-void GObject::changePaintStyle(const KoColor &c)
-{
-  st.fillColor(c);
-}
-
-void GObject::changeOutlineStyle(const KoColor &c)
-{
-  st.outlineColor(c);
-}
-
-void GObject::changeStroked(bool stroked)
-{
-  st.stroked(stroked);
-}
-
-void GObject::changeFilled(int filled)
-{
-  st.filled(filled);
-}
-
-void GObject::changeOutlineWidth(unsigned int lwidth)
-{
-  st.outlineWidth(lwidth);
-}
-
-void GObject::changeBrushStyle(Qt::BrushStyle bstyle)
-{
-  st.brushStyle(bstyle);
-}
-
-void GObject::changeJoinStyle(Qt::PenJoinStyle style)
-{
-  st.joinStyle(style);
-}
-
-void GObject::changeCapStyle(Qt::PenCapStyle style)
-{
-  st.capStyle(style);
-}
-
 void GObject::adjustBBox(KoPoint &tleft, KoPoint &tright, KoPoint &bright, KoPoint &bleft)
 {
-  tleft.setX(tleft.x()   - st.outlineWidth() / 2);
-  tleft.setY(tleft.y()   - st.outlineWidth() / 2);
-  tright.setX(tright.x() + st.outlineWidth() / 2);
-  tright.setY(tright.y() - st.outlineWidth() / 2);
-  bright.setX(bright.x() + st.outlineWidth() / 2);
-  bright.setY(bright.y() + st.outlineWidth() / 2);
-  bleft.setX(bleft.x()   - st.outlineWidth() / 2);
-  bleft.setY(bleft.y()   + st.outlineWidth() / 2);
+  tleft.setX(tleft.x() - mStyle->outlineWidth() / 2);
+  tleft.setY(tleft.y() - mStyle->outlineWidth() / 2);
+  tright.setX(tright.x() + mStyle->outlineWidth() / 2);
+  tright.setY(tright.y() - mStyle->outlineWidth() / 2);
+  bright.setX(bright.x() + mStyle->outlineWidth() / 2);
+  bright.setY(bright.y() + mStyle->outlineWidth() / 2);
+  bleft.setX(bleft.x() - mStyle->outlineWidth() / 2);
+  bleft.setY(bleft.y() + mStyle->outlineWidth() / 2);
 }
 
 #include "GObject.moc"

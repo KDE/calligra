@@ -237,6 +237,8 @@ QDomDocument GDocument::saveToXml()
   }
   head.appendChild(helplines);
 
+  head.appendChild(mStyles.writeToXml(document));
+
   for(QPtrListIterator<GPage> pi(pages); pi.current(); ++pi)
   {
     GPage *p = (*pi);
