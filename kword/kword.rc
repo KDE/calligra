@@ -23,7 +23,6 @@
   <ActionList name="view_closeallviews"/>
   <Separator/>
   <ActionList name="view_split" />
-  <Separator/>
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
   <Action name="view_tablegrid"/>

@@ -58,7 +58,6 @@
   <ActionList name="view_closeallviews"/>
   <Separator/>
   <ActionList name="view_split" />
-  <Separator />
   <Action name="gotoCell"/>
   <Action name="showPageBorders"/>
  </Menu>

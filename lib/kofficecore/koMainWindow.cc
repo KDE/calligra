@@ -161,6 +161,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_orientation->setItems(items);
     d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
     d->m_splitViewActionList.append(d->m_orientation);
+    d->m_splitViewActionList.append(new KActionSeparator(this));
 
     if ( instance )
       setInstance( instance );

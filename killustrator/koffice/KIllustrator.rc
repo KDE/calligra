@@ -29,7 +29,6 @@
   <ActionList name="view_closeallviews"/>
   <Separator/>
   <ActionList name="view_split"/>
-  <Separator/>
   <Action name="outline"/>
   <Action name="normal"/>
   <Separator/>
