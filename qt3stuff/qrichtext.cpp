@@ -3465,6 +3465,7 @@ void QTextParag::format( int start, bool doMove )
 #ifdef DEBUG_FORMATTER
     qDebug("QTextParag::format id=%d invalid, formatting", paragId());
 #endif
+    bool formattedAgain = FALSE;
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
     if ( p )
@@ -3530,7 +3531,10 @@ void QTextParag::format( int start, bool doMove )
 	    int oh = r.height();
 	    r.setY( y );
 	    r.setHeight( oh );
-	    goto formatAgain;
+            if ( !formattedAgain ) {
+                formattedAgain = TRUE;
+                goto formatAgain;
+            }
 	}
 
     }
@@ -4912,7 +4916,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4 ) : 0;
     int w = dw - initialRMargin;
 #ifdef DEBUG_FORMATTER
-    qDebug( "QTextFormatterBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d", left, initialHeight, initialLMargin, initialRMargin, w );
+    qDebug( "QTextFormatterBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d dw=%d", left, initialHeight, initialLMargin, initialRMargin, w, dw );
 #endif
     bool fullWidth = TRUE;
     int marg = left + initialRMargin;
