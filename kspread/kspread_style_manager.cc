@@ -39,13 +39,18 @@ KSpreadStyleManager::~KSpreadStyleManager()
 
   Styles::iterator iter = m_styles.begin();
   Styles::iterator end  = m_styles.end();
-  
+
   while ( iter != end )
   {
     delete iter.data();
 
     ++iter;
   }
+}
+
+void KSpreadStyleManager::saveOasis( KoGenStyles &mainStyles )
+{
+    //todo
 }
 
 QDomElement KSpreadStyleManager::save( QDomDocument & doc )
@@ -58,7 +63,7 @@ QDomElement KSpreadStyleManager::save( QDomDocument & doc )
 
   Styles::iterator iter = m_styles.begin();
   Styles::iterator end  = m_styles.end();
-  
+
   while ( iter != end )
   {
     kdDebug() << "Saving style" << endl;
@@ -113,7 +118,7 @@ bool KSpreadStyleManager::loadXML( QDomElement const & styles )
 
   Styles::iterator iter = m_styles.begin();
   Styles::iterator end  = m_styles.end();
-  
+
   while ( iter != end )
   {
     KSpreadCustomStyle * styleData = iter.data();
@@ -157,7 +162,7 @@ KSpreadCustomStyle * KSpreadStyleManager::style( QString const & name ) const
 
   if ( iter != m_styles.end() )
     return iter.data();
- 
+
   if ( name == i18n( "Default" ) || name == "Default" )
     return m_defaultStyle;
 
@@ -170,7 +175,7 @@ void KSpreadStyleManager::takeStyle( KSpreadCustomStyle * style )
 
   Styles::iterator iter = m_styles.begin();
   Styles::iterator end  = m_styles.end();
-  
+
   while ( iter != end )
   {
     if ( iter.data()->parent() == style )
@@ -206,7 +211,7 @@ bool KSpreadStyleManager::validateStyleName( QString const & name, KSpreadCustom
 
   Styles::const_iterator iter = m_styles.begin();
   Styles::const_iterator end  = m_styles.end();
-  
+
   while ( iter != end )
   {
     if ( iter.key() == name && iter.data() != style )
@@ -222,7 +227,7 @@ void KSpreadStyleManager::changeName( QString const & oldName, QString const & n
 {
   Styles::iterator iter = m_styles.begin();
   Styles::iterator end  = m_styles.end();
-  
+
   while ( iter != end )
   {
     if ( iter.data()->parentName() == oldName )
@@ -248,7 +253,7 @@ QStringList KSpreadStyleManager::styleNames() const
 
   Styles::const_iterator iter = m_styles.begin();
   Styles::const_iterator end  = m_styles.end();
-  
+
   while ( iter != end )
   {
     list.push_back( iter.key() );

@@ -365,7 +365,6 @@ Oasis File Format:
 
 Todo:
 -----
--> save/load conditional cell attribute
 -> save/load font format
 -> save/load formula
 -> save/load repeate header print
@@ -381,3 +380,4 @@ Done:
 -> save/load page master layout
 -> save/load header/footer
 -> save/load print range
+-> save/load conditional cell attribute

@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <koGlobal.h>
 #include <klocale.h>
-
+#include <koGenStyles.h>
 #include <qdom.h>
 
 static uint calculateValue( QPen const & pen )
@@ -114,6 +114,12 @@ KSpreadStyle::KSpreadStyle( KSpreadStyle * style )
 KSpreadStyle::~KSpreadStyle()
 {
 }
+
+void KSpreadStyle::saveOasis( KoGenStyles &mainStyles )
+{
+    //todo
+}
+
 
 void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
 {

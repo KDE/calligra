@@ -32,6 +32,7 @@ class QDomElement;
 #include "kspread_format.h"
 
 class KSpreadCustomStyle;
+class KoGenStyles;
 
 class KSpreadStyle
 {
@@ -58,7 +59,7 @@ class KSpreadStyle
     };
 
   enum FlagsSet
-    { 
+    {
       SAlignX          = 0x01,
       SAlignY          = 0x02,
       SFactor          = 0x04,
@@ -91,7 +92,7 @@ class KSpreadStyle
       SFontFlag        = 0x20000000,
       SFontFamily      = 0x40000000
     };
-  
+
   KSpreadStyle();
   KSpreadStyle( KSpreadStyle * style );
 
@@ -101,6 +102,9 @@ class KSpreadStyle
 
   void saveXML( QDomDocument & doc, QDomElement & format ) const;
   bool loadXML( QDomElement & format );
+
+    void saveOasis( KoGenStyles &mainStyles );
+
 
   bool release();
   void addRef();
@@ -153,17 +157,17 @@ class KSpreadStyle
   KSpreadStyle * setFontSize( int size );
   KSpreadStyle * setPen( QPen const & pen );
   KSpreadStyle * setBgColor( QColor const & color );
-  KSpreadStyle * setRightBorderPen( QPen const & pen ); 
+  KSpreadStyle * setRightBorderPen( QPen const & pen );
   KSpreadStyle * setBottomBorderPen( QPen const & pen );
-  KSpreadStyle * setLeftBorderPen( QPen const & pen );  
-  KSpreadStyle * setTopBorderPen( QPen const & pen );   
-  KSpreadStyle * setFallDiagonalPen( QPen const & pen );  
-  KSpreadStyle * setGoUpDiagonalPen( QPen const & pen );  
+  KSpreadStyle * setLeftBorderPen( QPen const & pen );
+  KSpreadStyle * setTopBorderPen( QPen const & pen );
+  KSpreadStyle * setFallDiagonalPen( QPen const & pen );
+  KSpreadStyle * setGoUpDiagonalPen( QPen const & pen );
   KSpreadStyle * setRotateAngle( int angle );
   KSpreadStyle * setIndent( double indent );
   KSpreadStyle * setBackGroundBrush( QBrush const & brush );
   KSpreadStyle * setFloatFormat( KSpreadFormat::FloatFormat format );
-  KSpreadStyle * setFloatColor( KSpreadFormat::FloatColor color ); 
+  KSpreadStyle * setFloatColor( KSpreadFormat::FloatColor color );
   KSpreadStyle * setFormatType( KSpreadFormat::FormatType format );
   KSpreadStyle * setStrFormat( QString const & strFormat );
   KSpreadStyle * setPrecision( int precision );
@@ -179,7 +183,7 @@ class KSpreadStyle
   void setParent( KSpreadCustomStyle * parent );
 
  protected:
-  
+
   KSpreadCustomStyle * m_parent;
   QString        m_parentName;
   StyleType      m_type;
@@ -327,17 +331,17 @@ class KSpreadCustomStyle : public KSpreadStyle
   void changePen( QPen const & pen );
   void changeTextColor( QColor const & color );
   void changeBgColor( QColor const & color );
-  void changeRightBorderPen( QPen const & pen ); 
+  void changeRightBorderPen( QPen const & pen );
   void changeBottomBorderPen( QPen const & pen );
-  void changeLeftBorderPen( QPen const & pen );  
-  void changeTopBorderPen( QPen const & pen );   
-  void changeFallBorderPen( QPen const & pen );  
-  void changeGoUpBorderPen( QPen const & pen );  
+  void changeLeftBorderPen( QPen const & pen );
+  void changeTopBorderPen( QPen const & pen );
+  void changeFallBorderPen( QPen const & pen );
+  void changeGoUpBorderPen( QPen const & pen );
   void changeRotateAngle( int angle );
   void changeIndent( double indent );
   void changeBackGroundBrush( QBrush const & brush );
   void changeFloatFormat( KSpreadFormat::FloatFormat format );
-  void changeFloatColor( KSpreadFormat::FloatColor color ); 
+  void changeFloatColor( KSpreadFormat::FloatColor color );
   void changeFormatType( KSpreadFormat::FormatType format );
   void changeStrFormat( QString const & strFormat );
   void changePrecision( int precision );
