@@ -139,6 +139,7 @@ public:
     KCommand *dropEvent( KoTextObject *tmp,KoTextCursor dropCursor, bool dropInSameObj);
 
     void removeComment();
+    KoStyle * createStyleFromSelection(const QString & name);
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.

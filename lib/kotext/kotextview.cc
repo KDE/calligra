@@ -32,7 +32,7 @@
 #include <koVariable.h>
 #include <kcommand.h>
 #include "KoTextViewIface.h"
-
+#include <kostyle.h>
 class KoTextView::KoTextViewPrivate
 {
 public:
@@ -1143,5 +1143,18 @@ void KoTextView::removeComment()
     }
 }
 
+KoStyle * KoTextView::createStyleFromSelection(const QString & name)
+{
+    KoTextCursor startSel = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+    KoStyle * style = new KoStyle (name);
+    KoParagLayout layout(m_cursor->parag()->paragLayout());
+    layout.style = style;
+    style->setFollowingStyle( style );
+    style->format() = *(m_cursor->parag()->at(startSel.index())->format());
+
+    style->paragLayout() = layout;
+    layout.style = style;
+    return style;
+}
 
 #include "kotextview.moc"
