@@ -29,6 +29,9 @@ static const char* version="0.1";
 KAboutData * newExampleAboutData()
 {
     // Change this, of course
+    // The first argument of the KAboutData constructor is the instance name.
+    // It is very important, it's what's used for many things, like the subdir in share/apps, etc.
+    // It must also match the name of the application's .desktop file.
     KAboutData * aboutData=new KAboutData( "example", I18N_NOOP("Example"),
                                            version, description, KAboutData::License_GPL,
                                            "(c) 1998-2000, Torben Weis");
