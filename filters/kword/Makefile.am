@@ -1,1 +1,1 @@
-SUBDIRS = ascii applixword html docbook latex abiword
+SUBDIRS = ascii applixword html docbook latex abiword rtf
