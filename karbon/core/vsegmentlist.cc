@@ -297,7 +297,7 @@ VSegmentList::arcTo(
 		KoPoint b0 = p1 + t10 * ( dP1B0 / sqrt( dsqT10 ) );
 
 		// if B0 deviates from current point P0, add a line to it:
-		if( b0 !=  currentPoint() )
+		if( !b0.isNear( currentPoint(), VGlobal::isNearRange ) )
 			lineTo( b0 );
 
 		// B3 = P1 + |P1B3| * T12/|T12|:
@@ -312,7 +312,7 @@ VSegmentList::arcTo(
 		double rsq = r * r;
 		double fract;
 
-		if( distsq >= rsq * VGlobal::veryLargeNumber ) // r is very small
+		if( distsq >= rsq * VGlobal::veryBigNumber ) // r is very small
 			fract = 0.0; // dist==r==0
 		else
 			fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );

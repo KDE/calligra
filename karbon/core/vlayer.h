@@ -49,7 +49,7 @@ public:
 	/// When the object is at the bottom this method has no effect.
 	void downwards( const VObject& object );
 
-	void sentToBack( const VObject& object );
+	void sendToBack( const VObject& object );
 
 
 	/// selects all objects that intersect with rect.

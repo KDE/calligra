@@ -24,7 +24,7 @@ namespace VGlobal
 	 * Constants used to decide if a number is equal zero or nearly the same
 	 * as another number.
 	 */
-	const double veryLargeNumber = 1.0e8;
+	const double veryBigNumber = 1.0e8;
 	const double verySmallNumber = 1.0e-8;
 
 	/**

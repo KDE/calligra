@@ -85,7 +85,7 @@ VLayer::downwards( const VObject& object )
 }
 
 void
-VLayer::sentToBack( const VObject& /*object*/ )
+VLayer::sendToBack( const VObject& /*object*/ )
 {
 }
 
