@@ -20,7 +20,6 @@
 #include "kptmilestone.h"
 
 KPTMilestone::KPTMilestone() : KPTNode() {
-        m_nodeType=POINT_IN_TIME;
 }
 
 KPTMilestone::~KPTMilestone() {
