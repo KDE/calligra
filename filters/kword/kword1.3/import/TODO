@@ -1,14 +1,14 @@
 KFormula (frameType==4)
-<COUNTER>
 <PAPER>, <PAPERBORDERS>
 <ATTRIBUTES>
 Generate Manifest file
 <style:wrap> with "none" for pictures?
 Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?...)
 Tables
-<FOOTNOTESETTINGS>. <ENDNOTESETTINGS>
+<COUNTER>, <FOOTNOTESETTINGS>. <ENDNOTESETTINGS>
 Variables/fields
 Footnote line (section 2.3 esp. 2.3.6)
+dir attribute of <FLOW>
 ...
 
 === Abiword's rtftest.rtf test file ===
@@ -20,13 +20,13 @@ wave (RTF import problem?)
 Paragraph direction
 Paragraph bullets/counters
 Text boxes (framesets)
-Anchors
+Anchors [Has KWord still something that needs to be transformed to an anchor?]
 Mail merge
 "Sections" (e.g. table of contents)
-Table styles, frame styles
+Table styles, frame styles [How?]
 Embedded objects
 Spellcheck settings?
-Cursor position
+Cursor position [How?]
 
 === KWord 0.8 ===
 Document settings

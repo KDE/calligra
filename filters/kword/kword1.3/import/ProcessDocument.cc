@@ -441,6 +441,7 @@ static void ProcessNoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader *lea
     variable->setGenericData( "note", note );
 }
 
+// ### TODO: some files have not a <VARIABLE> tag but its supposed children are directly children of <FORMAT id="4">
 static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader* leader)
 {
     VariableData *variable = (VariableData *) tagData;
@@ -948,6 +949,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     }
     else
     {
+        // ### TODO: <FLOW> can have a dir attribute
         tagProcessingList << TagProcessing ( "FLOW", ProcessStringAlignTag, &layout->alignment );
     }
 
