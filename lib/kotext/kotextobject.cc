@@ -495,7 +495,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
         {
                 QString last_line = cursor->parag()->toString();
                 last_line = last_line.remove(0,last_line.find(' ')+1);
-       
+
                 if( last_line.isEmpty() && cursor->parag()->counter() ) //if the previous line the in paragraph is empty
                 {
                         KoParagCounter c;
@@ -504,7 +504,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                                 emit newCommand(cmd);
                         setLastFormattedParag( cursor->parag() );
                         cursor->parag()->setNoCounter();
-	       
+
                         formatMore( 2 );
                         emit repaintChanged( this );
                         emit ensureCursorVisible();
@@ -515,7 +515,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 else
                         cursor->splitAndInsertEmptyParag();
         }
-        
+
         Q_ASSERT( cursor->parag()->prev() );
         setLastFormattedParag( cursor->parag() );
 
@@ -728,14 +728,25 @@ KCommand* KoTextObject::setParagLayoutCommand( KoTextCursor * cursor, const KoPa
     undoRedoInfo.type = UndoRedoInfo::Invalid; // tricky, we don't want clear() to create a command
     if ( paragLayoutFlags != 0 )
     {
+        emit hideCursor();
         if ( !textdoc->hasSelection( selectionId, true ) ) {
             cursor->parag()->setParagLayout( paragLayout, paragLayoutFlags, marginIndex );
+            setLastFormattedParag( cursor->parag() );
         } else {
             KoTextParag *start = textdoc->selectionStart( selectionId );
             KoTextParag *end = textdoc->selectionEnd( selectionId );
-            for ( ; start && start != end->next() ; start = start->next() )
+            for ( ; start && start != end->next() ; start = start->next() ) {
+                if ( paragLayoutFlags == KoParagLayout::BulletNumber && start->length() <= 1 )
+                    continue; // don't apply to empty paragraphs (#25742, #34062)
                 start->setParagLayout( paragLayout, paragLayoutFlags, marginIndex );
+            }
+            setLastFormattedParag( start );
         }
+
+        formatMore( 2 );
+        emit repaintChanged( this );
+        emit showCursor();
+        emit updateUI( true );
 
         if ( createUndoRedo )
         {
