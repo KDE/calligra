@@ -58,6 +58,7 @@
 #include <koPoint.h>
 #include <kozoomhandler.h>
 #include <stdlib.h>
+#include <qclipboard.h>
 
 /******************************************************************/
 /* class Page - Page                                              */
@@ -336,6 +337,12 @@ void Page::mousePressEvent( QMouseEvent *e )
             {
                 m_currentTextObjectView->showPopup( view, QCursor::pos() );
                 mousePressed=false;
+            }
+            else if( e->button() == MidButton )
+            {
+                QApplication::clipboard()->setSelectionMode( true );
+                m_currentTextObjectView->paste();
+                QApplication::clipboard()->setSelectionMode( false );
             }
             else
                 m_currentTextObjectView->mousePressEvent(e, pos);

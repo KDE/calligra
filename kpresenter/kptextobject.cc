@@ -1109,19 +1109,16 @@ void KPTextView::showFormat( KoTextFormat *format )
 
 void KPTextView::pgUpKeyPressed()
 {
-    kdDebug()<<"KPTextView::pgUpKeyPressed()\n";
     QTextCursor *cursor = textView()->cursor();
     Qt3::QTextParag *s = cursor->parag();
     s = textDocument()->firstParag();
 
     textView()->cursor()->setParag( s );
     textView()->cursor()->setIndex( 0 );
-    //todo
 }
 
 void KPTextView::pgDownKeyPressed()
 {
-    kdDebug()<<"KPTextView::pgDownKeyPressed()\n";
     QTextCursor *cursor = textView()->cursor();
     Qt3::QTextParag *s = cursor->parag();
     s = textDocument()->lastParag();
