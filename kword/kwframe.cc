@@ -1104,7 +1104,7 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
     // Save all the common attributes for framesets.
     parentElem.setAttribute( "frameType", static_cast<int>( type() ) );
     parentElem.setAttribute( "frameInfo", static_cast<int>( m_info ) );
-    parentElem.setAttribute( "name", correctQString( m_name ) );
+    parentElem.setAttribute( "name", m_name );
     parentElem.setAttribute( "visible", static_cast<int>( m_visible ) );
 
     if ( saveFrames )

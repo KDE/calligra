@@ -38,7 +38,6 @@
 #include "kwdoc.h"
 #include "kwcanvas.h"
 #include "defs.h"
-#include <koUtils.h>
 #include <koAutoFormat.h>
 #include <koVariable.h>
 #include "mailmerge.h"
@@ -59,6 +58,8 @@
 #include "kwbgspellcheck.h"
 
 //#define DEBUG_PAGES
+
+static const char * CURRENT_DTD_VERSION = "1.1";
 
 /******************************************************************/
 /* Class: KWChild                                              */
@@ -1157,7 +1158,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         m_headerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
-        unitName = correctQString( KWDocument::getAttribute( attributes, "unit", "pt" ) );
+        unitName = KWDocument::getAttribute( attributes, "unit", "pt" );
         m_hasTOC =  static_cast<bool>(KWDocument::getAttribute( attributes,"hasTOC", 0 ) );
     } else {
         m_processingType = WP;
@@ -1563,8 +1564,8 @@ void KWDocument::loadFrameSets( QDomElement framesetsElem )
 KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames )
 {
     FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
-    QString tableName = correctQString( KWDocument::getAttribute( framesetElem, "grpMgr", "" ) );
-    QString fsname = correctQString( KWDocument::getAttribute( framesetElem, "name", "" ) );
+    QString tableName = KWDocument::getAttribute( framesetElem, "grpMgr", "" );
+    QString fsname = KWDocument::getAttribute( framesetElem, "name", "" );
 
     switch ( frameSetType ) {
     case FT_TEXT: {
@@ -1844,9 +1845,8 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
 
 QDomDocument KWDocument::saveXML()
 {
-    QDomDocument doc( "DOC" );
-    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement kwdoc = doc.createElement( "DOC" );
+    QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
+    QDomElement kwdoc = doc.documentElement();
     kwdoc.setAttribute( "editor", "KWord" );
     kwdoc.setAttribute( "mime", "application/x-kword" );
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;

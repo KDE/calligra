@@ -138,3 +138,6 @@ Add support for note
 Can associate key shortcuts to styles
 "Section Title" variable
 
+New "PageUp/PageDown moves the caret" option, which defaults to false.
+ The new behaviour for PageUp/PageDown is to move the scrollbars, not the caret.
+
