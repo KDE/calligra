@@ -1,6 +1,7 @@
 #include "sidebar.h"
 #include "kpresenter_doc.h"
 #include <qheader.h>
+#include <qtimer.h>
 
 SideBar::SideBar( QWidget *parent, KPresenterDoc *d )
     : KListView( parent ), doc( d )
@@ -78,12 +79,20 @@ void SideBar::contentsDropEvent( QDropEvent *e )
 
 void SideBar::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
 {
-    int num = i->text( 1 ).toInt() - 1;
+    movedItem = i;
+    movedAfter = newAfter;
+    QTimer::singleShot( 300, this, SLOT( doMoveItems() ) );
+		 
+}
+
+void SideBar::doMoveItems()
+{
+    int num = movedItem->text( 1 ).toInt() - 1;
     int numNow;
-    if ( !newAfter ) {
+    if ( !movedAfter ) {
 	numNow = 0;
     } else { 
-	numNow = newAfter->text( 1 ).toInt();
+	numNow = movedAfter->text( 1 ).toInt();
 	if ( numNow > num )
 	    numNow--;
     }

@@ -30,9 +30,11 @@ public slots:
 private slots:
     void itemClicked( QListViewItem *i );
     void movedItems( QListViewItem *i, QListViewItem *firstAfter, QListViewItem *newAfter );
+    void doMoveItems();
     
 private:
     KPresenterDoc *doc;
+    QListViewItem *movedItem, *movedAfter;
     
 };
 
