@@ -125,9 +125,15 @@
                         14.. cubic bezier curve
                         15.. polygon
                         16.. closed line
+
+		sticky	0... not sticky (default)
+                        1... sticky object
+
 -->
 <!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR|TIMER|APPEARSOUNDEFFECT|DISAPPEARSOUNDEFFECT|POINTS|SETTINGS|PICTURESETTINGS|PROTECT|RATIO|OBJECTSNAME)*>
-<!ATTLIST OBJECT  type	NMTOKEN #REQUIRED>
+<!ATTLIST OBJECT
+          type	NMTOKEN #REQUIRED
+          sticky NMTOKEN #IMPLIED>
 
 <!--	The position of an object in the document.
         Note that this is an absolute position, from the topleft corner
