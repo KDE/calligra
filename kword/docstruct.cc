@@ -312,6 +312,8 @@ void KWDocStructRootItem::setupArrangement()
                             parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
                     }
                     QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), parags[ _depth ], SLOT( slotDoubleClicked( QListViewItem* ) ) );
+                    QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), parags[ _depth ], SLOT( slotDoubleClicked( QListViewItem* ) ) );
+
                 }
                 parag = static_cast<KWTextParag *>(parag->next());
             }
@@ -362,6 +364,8 @@ void KWDocStructRootItem::setupTextFrames()
                     _name=i18n( "Text Frame %1" ).arg(QString::number(j + 1));
                 child = new KWDocStructFrameItem( item, _name, frameset, frameset->frame( j ), gui );
                 QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+                QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+
             }
         }
     }
@@ -397,6 +401,8 @@ void KWDocStructRootItem::setupFormulaFrames()
             _name=i18n("Formula frame %1").arg(QString::number(i+1));
             child = new KWDocStructFormulaItem( this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+            QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+
         }
     }
 
@@ -433,6 +439,8 @@ void KWDocStructRootItem::setupTables()
         _name=i18n( "Table %1" ).arg(QString::number( i + 1 ));
         child = new KWDocStructTableItem( this, _name, tfs, gui );
         QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+        QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+
     }
 
     if ( childCount() == 0 )
@@ -466,6 +474,8 @@ void KWDocStructRootItem::setupPictures()
             _name=i18n("Picture (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->key().filename()).arg(++j);
             child = new KWDocStructPictureItem( this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+            QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+
         }
     }
 
@@ -500,6 +510,8 @@ void KWDocStructRootItem::setupCliparts()
             _name=i18n("Clipart (%1) %2").arg(dynamic_cast<KWClipartFrameSet*>( frameset )->key().filename()).arg(++j);
             child = new KWDocStructClipartItem( this, _name, dynamic_cast<KWClipartFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+            QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+
         }
     }
 
@@ -534,6 +546,8 @@ void KWDocStructRootItem::setupEmbedded()
             _name=frameset->getName();
             child = new KWDocStructPartItem( this, _name, dynamic_cast<KWPartFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+            QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+
         }
     }
 
