@@ -1313,6 +1313,7 @@ void KSpreadView::hideTable()
 {
     if ( !m_pTable )
        return;
+    m_pDoc->setModified( true );
     m_pTabBar->hideTable();
 }
 
@@ -1880,7 +1881,8 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_lstTools.setAutoDelete( true );
 
     if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()
-         && !cell->isTime() &&!cell->isDate() && koDocument()->isReadWrite() )
+         && !cell->isTime() &&!cell->isDate() && koDocument()->isReadWrite()
+         && cell->content() != KSpreadCell::VisualFormula)
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;
@@ -1946,6 +1948,7 @@ void KSpreadView::slotActivateTool( int _id )
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
       cell->setCellText( text, true );
+      editWidget()->setText( text );
       }
 }
 
@@ -2284,6 +2287,7 @@ void KSpreadView::removeTable()
         {
                 m_pCanvas->deleteEditor( false );
         }
+        m_pDoc->setModified( true );
         KSpreadTable *tbl = activeTable();
         tbl->removeTable();
 

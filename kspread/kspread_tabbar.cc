@@ -34,6 +34,7 @@
 #include "kspread_dlg_tabname.h"
 #include "kspread_tabbar.h"
 #include "kspread_map.h"
+#include "kspread_undo.h"
 #include <kdebug.h>
 
 KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
@@ -227,6 +228,7 @@ void KSpreadTabBar::slotRemove( )
     int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Remove table"));
     if ( ret == 3 )
     {
+        m_pView->doc()->setModified( true );
         if ( m_pView->canvasWidget()->editor() )
         {
                 m_pView->canvasWidget()->deleteEditor( false );
@@ -400,6 +402,7 @@ void KSpreadTabBar::slotRename()
                 return;
             }
             m_pView->updateEditWidget();
+            m_pView->doc()->setModified( true );
         }
     }
 }
@@ -609,6 +612,11 @@ void KSpreadTabBar::hideTable()
     }
     else
     {
+        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        {
+                KSpreadUndoHideTable* undo = new KSpreadUndoHideTable( m_pView->doc(), m_pView->activeTable() );
+                m_pView->doc()->undoBuffer()->appendUndo( undo );
+        }
         m_pView->activeTable()->hideTable(true);
     }
 }
@@ -625,6 +633,11 @@ void KSpreadTabBar::showTable(const QString& text)
 {
     KSpreadTable *table;
     table=m_pView->doc()->map()->findTable( text);
+    if ( !m_pView->doc()->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( m_pView->doc(), table );
+        m_pView->doc()->undoBuffer()->appendUndo( undo );
+    }
     table->hideTable(false);
 }
 

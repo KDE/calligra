@@ -1932,7 +1932,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
                         }
                         else
                                 cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-
+                  
                 }
                 else
                         cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );

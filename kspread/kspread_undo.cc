@@ -616,6 +616,13 @@ void KSpreadUndoDelete::redo()
     doc()->undoBuffer()->unlock();
 }
 
+/****************************************************************************
+ *
+ * KSpreadUndoResizeColRow
+ *
+ ***************************************************************************/
+
+
 KSpreadUndoResizeColRow::KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
     KSpreadUndoAction( _doc )
 {
@@ -769,6 +776,13 @@ void KSpreadUndoResizeColRow::redo()
     doc()->undoBuffer()->unlock();
 }
 
+/****************************************************************************
+ *
+ * KSpreadUndoChangeAreaTextCell
+ *
+ ***************************************************************************/
+
+
 KSpreadUndoChangeAreaTextCell::KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
     KSpreadUndoAction( _doc )
 {
@@ -890,6 +904,12 @@ void KSpreadUndoChangeAreaTextCell::redo()
     doc()->undoBuffer()->unlock();
 }
 
+/****************************************************************************
+ *
+ * KSpreadUndoMergedCell
+ *
+ ***************************************************************************/
+
 
 KSpreadUndoMergedCell::KSpreadUndoMergedCell( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row , int _extraX,int _extraY) :
     KSpreadUndoAction( _doc )
@@ -936,6 +956,11 @@ void KSpreadUndoMergedCell::redo()
     doc()->undoBuffer()->unlock();
 }
 
+/****************************************************************************
+ *
+ * KSpreadUndoAutofill
+ *
+ ***************************************************************************/
 
 KSpreadUndoAutofill::KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
     : KSpreadUndoAction( _doc )
@@ -1001,6 +1026,11 @@ void KSpreadUndoAutofill::redo()
     doc()->undoBuffer()->unlock();
 }
 
+/****************************************************************************
+ *
+ * KSpreadUndoInsertCellRow
+ *
+ ***************************************************************************/
 
 KSpreadUndoInsertCellRow::KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
     KSpreadUndoAction( _doc )
@@ -1035,6 +1065,12 @@ void KSpreadUndoInsertCellRow::redo()
     table->shiftRow( QPoint(m_iColumn,m_iRow) );
     doc()->undoBuffer()->unlock();
 }
+
+/****************************************************************************
+ *
+ * KSpreadUndoInsertCellCol
+ *
+ ***************************************************************************/
 
 
 KSpreadUndoInsertCellCol::KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
@@ -1071,6 +1107,11 @@ void KSpreadUndoInsertCellCol::redo()
     doc()->undoBuffer()->unlock();
 }
 
+/****************************************************************************
+ *
+ * KSpreadUndoRemoveCellRow
+ *
+ ***************************************************************************/
 
 KSpreadUndoRemoveCellRow::KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
     KSpreadUndoAction( _doc )
@@ -1124,6 +1165,11 @@ void KSpreadUndoRemoveCellRow::redo()
     doc()->undoBuffer()->unlock();
 }
 
+/****************************************************************************
+ *
+ * KSpreadUndoRemoveCellCol
+ *
+ ***************************************************************************/
 
 KSpreadUndoRemoveCellCol::KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
     KSpreadUndoAction( _doc )
@@ -1176,6 +1222,12 @@ void KSpreadUndoRemoveCellCol::redo()
     table->unshiftColumn( QPoint(m_iColumn,m_iRow) );
     doc()->undoBuffer()->unlock();
 }
+
+/****************************************************************************
+ *
+ * KSpreadUndoConditional
+ *
+ ***************************************************************************/
 
 KSpreadUndoConditional::KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
     : KSpreadUndoAction( _doc )
@@ -1238,3 +1290,81 @@ void KSpreadUndoConditional::redo()
 
     doc()->undoBuffer()->unlock();
 }
+
+/****************************************************************************
+ *
+ * KSpreadUndoHideTable
+ *
+ ***************************************************************************/
+
+KSpreadUndoHideTable::KSpreadUndoHideTable( KSpreadDoc *_doc, KSpreadTable *_table) :
+    KSpreadUndoAction( _doc )
+{
+    m_tableName = _table->tableName();
+}
+
+KSpreadUndoHideTable::~KSpreadUndoHideTable()
+{
+}
+
+void KSpreadUndoHideTable::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->hideTable(false);
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoHideTable::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->hideTable(true);
+    doc()->undoBuffer()->unlock();
+}
+
+/****************************************************************************
+ *
+ * KSpreadUndoShowTable
+ *
+ ***************************************************************************/
+
+
+KSpreadUndoShowTable::KSpreadUndoShowTable( KSpreadDoc *_doc, KSpreadTable *_table) :
+    KSpreadUndoAction( _doc )
+{
+    m_tableName = _table->tableName();
+}
+
+KSpreadUndoShowTable::~KSpreadUndoShowTable()
+{
+}
+
+void KSpreadUndoShowTable::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->hideTable(true);
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoShowTable::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    table->hideTable(false);
+    doc()->undoBuffer()->unlock();
+}
+

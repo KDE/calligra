@@ -970,3 +970,14 @@ Montel laurent <montell@club-internet.fr>
 2000-09-05-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 * Implemented Undo for autofill
+
+Summary 2000-09-05 -> 2000-09-16
+Montel laurent <montell@club-internet.fr>
+-----------------------------------------
+* Implemented Undo for "Conditional cell Attribut"
+* Implemented Undo for "Show Table" "Hide Table"
+* Implemented Undo For "insert/remove cell"
+* Undo layout works when you selected an entire row/column
+* bugs fixes :
+-close editor when you switch/insert/remove table
+-others bugs (I don't remember )

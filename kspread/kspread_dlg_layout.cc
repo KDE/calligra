@@ -504,14 +504,13 @@ int CellLayoutDlg::exec()
 void CellLayoutDlg::slotApply()
 {
     // Prepare the undo buffer
-    KSpreadUndoCellLayout *undo;
     if ( !table->doc()->undoBuffer()->isLocked() )
     {
         QRect rect;
         // Since the right/bottom border is stored in objects right + 1 ( or: bottom + 1 )
         // So we have to save these layouts, too
         rect.setCoords( left, top, right + 1, bottom + 1 );
-        undo = new KSpreadUndoCellLayout( table->doc(), table, rect );
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect );
         table->doc()->undoBuffer()->appendUndo( undo );
     }
 
@@ -529,12 +528,11 @@ void CellLayoutDlg::slotApply()
     if(positionPage->getSizeHeight()!=heigthSize
     || positionPage->getSizeWidth()!=widthSize)
     {
-        KSpreadUndoResizeColRow *undo2;
         if ( !table->doc()->undoBuffer()->isLocked())
         {
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
-                undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
+                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
                 table->doc()->undoBuffer()->appendUndo( undo2 );
         }
     }

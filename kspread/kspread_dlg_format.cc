@@ -127,11 +127,9 @@ void KSpreadFormatDlg::slotOk()
 
     QRect r = m_view->activeTable()->selectionRect();
 
-
-    KSpreadUndoCellLayout *undo;
     if ( !m_view->doc()->undoBuffer()->isLocked() )
     {
-        undo = new KSpreadUndoCellLayout( m_view->doc(), m_view->activeTable(), r );
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_view->doc(), m_view->activeTable(), r );
         m_view->doc()->undoBuffer()->appendUndo( undo );
     }
     //

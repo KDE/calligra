@@ -351,6 +351,32 @@ protected:
     QString m_tableName;
 };
 
+class KSpreadUndoHideTable : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoHideTable( KSpreadDoc *_doc, KSpreadTable *_table );
+    virtual ~KSpreadUndoHideTable();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+};
+
+class KSpreadUndoShowTable : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoShowTable( KSpreadDoc *_doc, KSpreadTable *_table );
+    virtual ~KSpreadUndoShowTable();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QString m_tableName;
+};
+
 class KSpreadUndo
 {
 public:
