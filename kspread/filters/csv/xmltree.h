@@ -18,7 +18,9 @@ class XMLTree : public QObject
   Q_OBJECT
 
 public:
-  XMLTree();
+  // Create a tree.
+  // inputFileName is only used in order to name the table
+  XMLTree(const QString & inputFileName);
   ~XMLTree();
 
   // Return the whole XML
@@ -33,7 +35,7 @@ private:
 
   int row, column;
   QDomDocument *root;
-  QDomElement doc, paper, map;
+  QDomElement doc, map, table;
 };
 
 #endif // XMLTREE_H

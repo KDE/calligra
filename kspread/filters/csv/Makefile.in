@@ -185,7 +185,7 @@ qt_libraries = @qt_libraries@
 x_includes = @x_includes@
 x_libraries = @x_libraries@
 
-INCLUDES = -I$(srcdir) -I$(top_srcdir)/filters/lib $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) 		$(all_includes) $(MICO_INCLUDES)
+INCLUDES = -I$(srcdir) -I$(top_srcdir)/filters/lib $(KOFFICE_INCLUDES) 		$(all_includes) $(MICO_INCLUDES)
 
 LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = $(top_builddir)/filters/lib/libqtext.la $(LIB_KOFFICECORE) 

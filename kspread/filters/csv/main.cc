@@ -6,6 +6,10 @@
 #include <main.h>
 #include <main.moc>
 
+#include <klocale.h>
+
+#include <stdio.h> // for fopen
+
 typedef KOMAutoLoader<Factory> MyAutoLoader;
 
 /******************************************************************/
@@ -48,6 +52,7 @@ Filter::Filter() : KOMComponent(), KOffice::Filter_skel() {
 void Filter::filter(KOffice::Filter::Data& data, const char *_from,
                     const char *_to) {
 
+  debug("Filter::filter !");
     QString to(_to);
     QString from(_from);
 
@@ -75,7 +80,9 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
     QTextStream inputStream (a, IO_ReadOnly);
 
     // Create Filter
-    myCSVFilter = new CSVFilter(inputStream);
+    // "CSV File" will be the table name. I would have preferred to set
+    // it to the input filename, but how to get hold of it here ? (David)
+    myCSVFilter = new CSVFilter(inputStream, i18n( "CSV File") );
 
     QString str;
 
@@ -121,7 +128,23 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
 
 /*================================================================*/
 int main(int argc,char **argv) {
+
+#define TEST_ONLY // define this to enable using the filter on standard input/output
+
+#ifdef TEST_ONLY
+    QTextIStream inputStream( stdin );
+    CSVFilter * myCSVFilter = new CSVFilter(inputStream, "standard input");
+
+    if ( myCSVFilter->filter() )
+      (void) myCSVFilter->part(); // will be shown on debug output
+    else
+      debug( "error ! filter() returned false" );
+
+    delete myCSVFilter;
+    return 0;
+#else
     MyApplication app(argc,argv);
     MyAutoLoader loader("IDL:KOffice/FilterFactory:1.0","KSpreadCSVFilter");
-    app.exec();
+    return app.exec();
+#endif
 }

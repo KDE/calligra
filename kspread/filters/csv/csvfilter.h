@@ -17,7 +17,7 @@ class CSVFilter : public QObject
 
 public:
     /** Create the filter */
-    CSVFilter(const QTextStream &_inputStream);
+    CSVFilter(QTextStream &_inputStream, const QString & _tableName);
     ~CSVFilter();
 
     /** Do the filtering */
@@ -27,7 +27,7 @@ public:
 
 private:
     XMLTree tree;
-    const QTextStream & inputStream;
+    QTextStream & inputStream;
     bool bReady;
     bool bSuccess;
 };

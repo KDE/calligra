@@ -9,11 +9,9 @@
 #include <xmltree.h>
 #include <xmltree.moc>
 
-XMLTree::XMLTree()
+XMLTree::XMLTree(const QString & inputFileName)
   : QObject()
 {
-  QDomElement e;
-
   root = new QDomDocument("XML");
 
   QDomProcessingInstruction pro;
@@ -21,37 +19,30 @@ XMLTree::XMLTree()
   root->appendChild(pro);
 
   doc = root->createElement("DOC"); 
-  //doc.setAttribute("author", "OLEFilter");
-  doc.setAttribute("email", "unknown");
-  doc.setAttribute("editor", "KSpread");
+  doc.setAttribute("editor", "KSpread CSV Filter");
   doc.setAttribute("mime", "application/x-kspread");
   root->appendChild(doc);
 
-  paper = root->createElement("PAPER");
+  QDomElement paper = root->createElement("PAPER");
   paper.setAttribute("format", "A4");
   paper.setAttribute("orientation", "Portrait");
   doc.appendChild(paper);
 
-  e = root->createElement("PAPERBORDERS");
-  //e.setAttribute("left", 20);
-  //e.setAttribute("top", 20);
-  //e.setAttribute("right", 20);
-  //e.setAttribute("bottom", 20);
-  paper.appendChild(e);
-
   map = root->createElement("MAP");
   doc.appendChild(map);
 
-  row = 0;
-  column = 0;
+  table = root->createElement("TABLE");
+  table.setAttribute("name", inputFileName);
+  map.appendChild(table);
+
+  row = 1;
+  column = 1;
 }
 
 XMLTree::~XMLTree() 
 {
-  if(root) {
+  if(root)
     delete root;
-    root=0L;
-  }
 }
 
 const QString XMLTree::part()
@@ -72,19 +63,18 @@ bool XMLTree::cell( const QString & contents )
   //e.appendChild(getFormat(xf));
   //e.appendChild(getFont(xf));
 
-  e.setAttribute("row", ++row);
-  e.setAttribute("column", ++column);
+  e.setAttribute("row", row);
+  e.setAttribute("column", column++);
   e.appendChild(root->createTextNode(contents));
 
-  doc.appendChild(e);
+  table.appendChild(e);
 
   return true;
 }
 
-
 void XMLTree::newline()
 {
   row ++;
-  column = 0;
+  column = 1;
 }
 

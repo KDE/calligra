@@ -185,7 +185,7 @@ qt_libraries = /mnt/devel/kde/qt/qt2/qt/lib
 x_includes = /usr/X11R6/include
 x_libraries = /usr/X11R6/lib
 
-INCLUDES = -I$(srcdir) -I$(top_srcdir)/filters/lib $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) 		$(all_includes) $(MICO_INCLUDES)
+INCLUDES = -I$(srcdir) -I$(top_srcdir)/filters/lib $(KOFFICE_INCLUDES) 		$(all_includes) $(MICO_INCLUDES)
 
 LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = $(top_builddir)/filters/lib/libqtext.la $(LIB_KOFFICECORE) 
