@@ -28,7 +28,6 @@
 
 #include <qkeycode.h>
 #include <qfile.h>
-#include <qaction.h>
 #include <qwhatsthis.h>
 #include <qmime.h>
 #include <qmessagebox.h>
@@ -39,6 +38,8 @@
 
 #include <kaboutdialog.h>
 #include <kaction.h>
+#include <kstdaction.h>
+#include <khelpmenu.h>
 #include <kapp.h>
 #ifndef USE_QFD
 #include <kfiledialog.h>
@@ -114,14 +115,19 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 			  actionCollection(), "filesave" );
     /*KAction* saveAs =*/ new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ),
 			    actionCollection(), "filesaveas" );
-    KAction* print = new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), KStdAccel::key(KStdAccel::Print), this, SLOT( slotFilePrint() ),
+    /*KAction* print = */new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), KStdAccel::key(KStdAccel::Print), this, SLOT( slotFilePrint() ),
 			  actionCollection(), "fileprint" );
     /*KAction* close =*/ new KAction( i18n("Close"), KofficeBarIcon( "close" ), KStdAccel::key(KStdAccel::Close), this, SLOT( slotFileClose() ),
 			  actionCollection(), "fileclose" );
     /*KAction* quit =*/ new KAction( i18n("Quit"), KofficeBarIcon( "exit" ), KStdAccel::key(KStdAccel::Quit), this, SLOT( slotFileQuit() ),
 			  actionCollection(), "quit" );
-    /*KAction* helpAbout =*/ new KAction( i18n("About KOffice..."), 0, this, SLOT( slotHelpAbout() ),
-			  actionCollection(), "about" );
+
+    KHelpMenu * m_helpMenu = new KHelpMenu( this );
+    KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), actionCollection(), "contents" );
+    KStdAction::whatsThis( m_helpMenu, SLOT( contextHelpActivated() ), actionCollection(), "whats_this" );
+    KStdAction::aboutApp( this, SLOT( slotHelpAbout() ), actionCollection(), "about_app" );
+    KStdAction::aboutKDE( m_helpMenu, SLOT( aboutKDE() ), actionCollection(), "about_kde" );
+    KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
 
     if ( instance )
       setInstance( instance );

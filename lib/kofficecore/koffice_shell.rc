@@ -15,7 +15,13 @@
  <Merge />
  <Menu name="help"><text>&amp;Help</text>
   <Merge />
-  <Action name="about" />
+  <Action name="contents"/>
+  <Action name="whats_this"/>
+  <Separator/>
+  <Action name="report_bug"/>
+  <Separator/>
+  <Action name="about_app"/>
+  <Action name="about_kde"/>
  </Menu>
 </MenuBar>
 <ToolBar name="kofficeshelltoolbar" fullWidth="false">
