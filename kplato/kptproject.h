@@ -25,53 +25,60 @@
 #include "kptterminalnode.h"
 #include "defs.h"
 
-#include<list>
-#include<algorithm>
+#include <list>
+#include <algorithm>
 
 class KPTResource;
 
 
 #define DEBUGPERT
 /** 
-  *  KPTProject is the main node in a project, it contains child nodes and possibly sub-projects. 
-  *  a sub-project is just another instantion of this node however.
-  */
+ * KPTProject is the main node in a project, it contains child nodes and
+ * possibly sub-projects. A sub-project is just another instantion of this
+ * node however.
+ */
 class KPTProject : public KPTNode {
-    public:
+public:
+    KPTProject();
+    ~KPTProject();
 
-        KPTProject();
-        ~KPTProject();
+    /**
+     * The expected Duration is the expected time to complete a Task, Project,
+     * etc. For an individual Task, this will calculate the expected duration
+     * by querying the Distribution of the Task. If the Distribution is a
+     * simple RiskNone, the value will equal the mode Duration, but for other
+     * Distributions like RiskHigh, the value will have to be calculated. For
+     * a Project or Subproject, the expected Duration is calculated by
+     * PERT/CPM. 
+     */
+    KPTDuration *getExpectedDuration();
 
+    /**
+     * Instead of using the expected duration, generate a random value using
+     * the Distribution of each Task. This can be used for Monte-Carlo
+     * estimation of Project duration.
+     */
+    KPTDuration *getRandomDuration();
 
-        /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
-         *  individual Task, this will calculate the expected duration by querying 
-         *  the Distribution of the Task. If the Distribution is a simple RiskNone, the value 
-         *  will equal the mode Duration, but for other Distributions like RiskHigh, the value 
-         *  will have to be calculated. For a Project or Subproject, the expected Duration is 
-         *  calculated by PERT/CPM. 
-         */
-        KPTDuration *getExpectedDuration();
+    /**
+     * Retrive the time this node starts. This is either implied from the set
+     * time, or calculated by asking the parents.
+     */
+    KPTDuration *getStartTime();
 
-        /** Instead of using the expected duration, generate a random value using the Distribution of 
-         *  each Task. This can be used for Monte-Carlo estimation of Project duration.
-         */
-        KPTDuration *getRandomDuration();
+    /**
+     * Retrieve the calculated float of this node
+     */
+    KPTDuration *getFloat();
 
-        /** Retrive the time this node starts. This is either implied from the set time, or calculated
-         *  by asking the parents.
-         */
-        KPTDuration *getStartTime();
-
-        /** Retrieve the calculated float of this node
-         */
-        KPTDuration *getFloat();
     /**
      * Carry out PERT/CPM calculations on current project.
      * Eventually, this will need to can specify which type of duration
      * calculation will be used.
      */
     void pert_cpm();
- protected:
+
+protected:
     /**
      * @return The start node.
      */
@@ -80,7 +87,7 @@ class KPTProject : public KPTNode {
      * @return The end node.
      */
     virtual KPTNode* end_node(){ return &endNode; }
- private:
+protected:
     /**
      * Class to handle find_if function. This really is necessary
      * if we want to use find_if.
@@ -112,10 +119,9 @@ class KPTProject : public KPTNode {
     KPTTerminalNode endNode;
 
 #ifdef DEBUGPERT
- public:
+public:
     static void pert_test();
     static void printTree(KPTNode *n, QString s);
 #endif
-
 };
 #endif

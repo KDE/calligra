@@ -23,7 +23,6 @@
 
 KPTTask::KPTTask() : KPTNode(), m_resource() {
     m_resource.setAutoDelete(true);
-    m_nodeType=TASK;
 }
 
 KPTTask::~KPTTask() {

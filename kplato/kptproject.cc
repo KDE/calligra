@@ -20,10 +20,8 @@
 #include <kdebug.h>
 
 KPTProject::KPTProject() : KPTNode(), startNode( this ), endNode( this ) {
-        m_nodeType=PROJECT;
     // Set start and end nodes to have zero duration
-    startNode.setEffort( const_cast<KPTEffort*>
-                 ( &KPTEffort::zeroEffort ) );
+    startNode.setEffort( const_cast<KPTEffort*>( &KPTEffort::zeroEffort ) );
     endNode.setEffort( const_cast<KPTEffort*>( &KPTEffort::zeroEffort ) );
 }
 
@@ -58,9 +56,11 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
     /* Propagate (start) value of first node in list to all nodes in project */
     /* First find the first node with no predecessors values */
     list<KPTNode*>::iterator curNode;
-    curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::predecessors ) );
+    curNode = find_if( nodelist.begin(), nodelist.end(),
+		       no_unvisited( &KPTNode::predecessors ) );
+
     while(curNode != nodelist.end()) {
-        /* at this point curNode will contain the first node from
+        /* At this point curNode will contain the first node from
          * which we can search: refer to node as currentNode and earliest
          * finish (or latest start) time for currentNode as duration */
         KPTNode &currentNode = **curNode;
