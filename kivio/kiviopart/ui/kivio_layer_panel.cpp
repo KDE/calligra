@@ -46,7 +46,7 @@ KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* n
 : KivioLayerPanelBase(parent, name), m_pView(view)
 {
   list->header()->hide();
-  list->addColumn(i18n("Vview"),15);
+  list->addColumn(i18n("View"),15);
   list->addColumn(i18n("Print"),15);
   list->addColumn(i18n("Editable"),15);
   list->addColumn(i18n("Connect"),15);
