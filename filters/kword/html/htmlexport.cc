@@ -657,7 +657,7 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, ClassExp
 class ClassExportFilterBase
 {
     public:
-        ClassExportFilterBase(void) {}
+        ClassExportFilterBase(void) : inList(false) {}
         virtual ~ClassExportFilterBase(void) {}
     public: //Non-virtual
         bool filter(const QString  &filenameIn, const QString  &filenameOut);
@@ -670,6 +670,10 @@ class ClassExportFilterBase
         virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const = 0;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText) = 0;
         virtual QString getStyleElement(void) {return QString::null;} //Default is no style
+    public: // Public variables
+        bool inList; // Are we currently in a list?
+        bool orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
+        CounterData::Style typeList; // What is the style of the current list (undefined, if we are not in a list)
     protected:
         QDomDocument qDomDocumentIn;
 };
@@ -738,19 +742,88 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 
     QString align=exportFilter->getParagraphOpeningTagExtraAttributes(paraLayout.alignment);
 
-    if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
+    // As KWord has only one depth of lists, we can process lists very simply.
+    if ( paraLayout.counter.numbering == CounterData::NUM_LIST )
     {
-        const int depth = paraLayout.counter.depth + 1;
+        if (exportFilter->inList)
+        {
+            // We are in a list but does it have the right type?
+            if ( paraLayout.counter.style!=exportFilter->typeList)
+            {
+                // No, then close the previous list
+                if (exportFilter->orderedList)
+                {
+                    outputText+="</ol>\n";
+                }
+                else
+                {
+                    outputText+="</ul>\n";
+                }
+                exportFilter->inList=false; // We are not in a list anymore
+            }
+        }
+
+        // Are we still in a list?
+        if (!exportFilter->inList)
+        {
+            // We are not yet part of a list
+            exportFilter->inList=true;
+            switch (paraLayout.counter.style)
+            {
+            case CounterData::STYLE_NONE:
+            default:
+                {
+                    exportFilter->orderedList=false;
+                    outputText+="<ul>\n";
+                    break;
+                }
+            case CounterData::STYLE_NUM:
+            case CounterData::STYLE_ALPHAB_L:
+            case CounterData::STYLE_ALPHAB_U:
+            case CounterData::STYLE_ROM_NUM_L:
+            case CounterData::STYLE_ROM_NUM_U:
+            case CounterData::STYLE_CUSTOM:
+                 {
+                    exportFilter->orderedList=true;
+                    outputText+="<ol>\n";
+                    break;
+                }
+            }
+            exportFilter->typeList=paraLayout.counter.style;
+        }
+        // TODO: with Cascaded Style Sheet, we could add the exact counter type we want
         // Note: .arg(strParaText) must remain last,
         //  as strParaText may contain an unwanted % + number sequence
-        outputText += QString("<h%1%2>%4</h%3>\n").arg(depth).arg(align).arg(depth).arg(strParaText);
+        outputText += QString("<li%1>%2</li>\n").arg(align).arg(strParaText);
     }
-    // TODO NUM_LIST
     else
     {
-        // Note: .arg(strParaText) must remain last,
-        //  as strParaText may contain an unwanted % + number sequence
-        outputText += QString("<p%1>%2</p>\n").arg(align).arg(strParaText);
+        if (exportFilter->inList)
+        {
+            // The previous paragraphs were in a list, so we have to close it
+            if (exportFilter->orderedList)
+            {
+                outputText+="</ol>\n";
+            }
+            else
+            {
+                outputText+="</ul>\n";
+            }
+            exportFilter->inList=false;
+        }
+        if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
+        {
+            const int depth = paraLayout.counter.depth + 1;
+            // Note: .arg(strParaText) must remain last,
+            //  as strParaText may contain an unwanted % + number sequence
+            outputText += QString("<h%1%2>%4</h%3>\n").arg(depth).arg(align).arg(depth).arg(strParaText);
+        }
+        else
+        {
+            // Note: .arg(strParaText) must remain last,
+            //  as strParaText may contain an unwanted % + number sequence
+            outputText += QString("<p%1>%2</p>\n").arg(align).arg(strParaText);
+        }
     }
 }
 
