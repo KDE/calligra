@@ -16,7 +16,9 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/#ifndef KSPREAD_APP_IFACE_H
+*/
+
+#ifndef KSPREAD_APP_IFACE_H
 #define KSPREAD_APP_IFACE_H
 
 #include <dcopobject.h>
