@@ -46,7 +46,6 @@ class KPTransEffectDia;
 class RotationDialogImpl;
 class ShadowDialogImpl;
 class ImageEffectDia;
-class KPPresStructView;
 class ConfPieDia;
 class ConfRectDia;
 class ConfPolygonDia;
@@ -253,7 +252,6 @@ public slots:
 
     // screen menu
     void screenConfigPages();
-    void screenPresStructView();
     void screenAssignEffect();
     void screenTransEffect();
     void screenStart();
@@ -457,8 +455,6 @@ public:
 
     void makeRectVisible( QRect _rect );
 
-    void restartPresStructView();
-
     PieType getPieType() const { return pieType; }
     int getPieAngle() const { return pieAngle; }
     int getPieLength() const { return pieLength; }
@@ -607,7 +603,6 @@ protected slots:
     void effectOk();
     void rotateOk();
     void shadowOk();
-    void psvClosed();
     void pddClosed();
 
     // scrolling
@@ -759,7 +754,6 @@ private:
     RotationDialogImpl *rotateDia;
     ShadowDialogImpl *shadowDia;
     ImageEffectDia *imageEffectDia;
-    KPPresStructView *presStructView;
     KPPresDurationDia *presDurationDia;
 
     // default pen and brush
@@ -921,7 +915,6 @@ private:
     KAction *actionExtraPenWidth;
 
     KAction *actionScreenConfigPages;
-    KAction *actionScreenPresStructView;
     KAction *actionScreenAssignEffect;
     KAction *actionScreenTransEffect;
     KAction *actionScreenStart;

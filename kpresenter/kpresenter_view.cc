@@ -44,7 +44,6 @@
 #include <rotationdialogimpl.h>
 #include "shadowdialogimpl.h"
 #include "imageEffectDia.h"
-#include <presstructview.h>
 
 #include <koAutoFormat.h>
 
@@ -215,7 +214,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     rotateDia = 0;
     shadowDia = 0;
     imageEffectDia = 0;
-    presStructView = 0;
     presDurationDia = 0;
     v_ruler = 0;
     h_ruler = 0;
@@ -403,7 +401,6 @@ KPresenterView::~KPresenterView()
         delete m_spell.kspell;
     }
 #endif
-    delete presStructView;
     delete rb_oalign;
     delete rb_lbegin;
     delete rb_lend;
@@ -1397,22 +1394,6 @@ void KPresenterView::screenTransEffect()
     QObject::disconnect( transEffectDia, SIGNAL( transEffectDiaOk() ), this, SLOT( transEffectOk() ) );
     delete transEffectDia;
     transEffectDia = 0;
-}
-
-void KPresenterView::screenPresStructView()
-{
-    delete presStructView;
-    presStructView = 0;
-
-    m_canvas->setToolEditMode( TEM_MOUSE );
-    deSelectAllObjects();
-
-    presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
-    presStructView->setCaption( i18n( "Presentation Structure Viewer" ) );
-    QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
-    presStructView->exec();
-    delete presStructView;
-    presStructView = 0;
 }
 
 void KPresenterView::screenAssignEffect()
@@ -2923,10 +2904,6 @@ void KPresenterView::setupActions()
                                            this, SLOT( screenConfigPages() ),
                                            actionCollection(), "screen_configpages" );
 
-    actionScreenPresStructView = new KAction( i18n( "Present&ation Structure Editor" ), 0,
-                                              this, SLOT( screenPresStructView() ),
-                                              actionCollection(), "screen_presstruct" );
-
     actionScreenAssignEffect = new KAction( i18n( "Edit &Object Effect..." ),
                                             "effect", 0,
                                             this, SLOT( screenAssignEffect() ),
@@ -3822,12 +3799,6 @@ void KPresenterView::shadowOk()
         kPresenterDoc()->addCommand(macro);
 }
 
-void KPresenterView::psvClosed()
-{
-    QObject::disconnect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
-    presStructView = 0;
-}
-
 unsigned int KPresenterView::getCurrPgNum() const
 {
     return currPg + 1;
@@ -4403,22 +4374,6 @@ void KPresenterView::makeRectVisible( QRect _rect )
 {
     horz->setValue( _rect.x() );
     vert->setValue( _rect.y() );
-}
-
-void KPresenterView::restartPresStructView()
-{
-    delete presStructView;
-    presStructView = 0;
-
-    deSelectAllObjects();
-
-    presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
-    presStructView->setCaption( i18n( "KPresenter - Presentation Structure Viewer" ) );
-    QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
-    presStructView->exec();
-
-    delete presStructView;
-    presStructView = 0;
 }
 
 void KPresenterView::setTool( ToolEditMode toolEditMode )
@@ -6167,7 +6122,7 @@ void KPresenterView::viewFooter()
     KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Header") : i18n("Hide Header"),
                                                                 m_pKPresenterDoc, state, m_pKPresenterDoc->footer());
     m_pKPresenterDoc->addCommand(cmd);
-    
+
     int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
     m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
 }

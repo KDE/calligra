@@ -293,11 +293,6 @@ void KPresenterViewIface::screenConfigPages()
     view->screenConfigPages();
 }
 
-void KPresenterViewIface::screenPresStructView()
-{
-    view->screenPresStructView();
-}
-
 void KPresenterViewIface::screenAssignEffect()
 {
     view->screenAssignEffect();
@@ -442,7 +437,6 @@ int KPresenterViewIface::getPresStepsOfPage() const
 {
     return view->getPresStepsOfPage();
 }
-
 
 int KPresenterViewIface::getNumPresPages() const
 {

@@ -112,7 +112,6 @@ k_dcop:
 
     // screen menu
     virtual void screenConfigPages();
-    virtual void screenPresStructView();
     virtual void screenAssignEffect();
     virtual void screenStart();
     virtual void screenStartFromFirst();
