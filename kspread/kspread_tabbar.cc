@@ -612,6 +612,10 @@ void TabBar::mousePressEvent( QMouseEvent* ev )
         update();
 
         emit tabChanged( d->tabs[ d->activeTab-1] );
+
+        // scroll if partially visible
+        if( d->tabRects[ tab-1 ].right() > width() - d->offset )
+            scrollRight();
     }
 
     if( ev->button() == RightButton )
