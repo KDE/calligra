@@ -50,6 +50,7 @@ int ftype = -1;
 QFile inf(filenameIn);
 QFile outf(filenameOut);
 int blocksize = 64;  // bytes
+int rc;
 
     // FIXME: we should use a cryptographically strong random function here.
     srand(time(NULL));
@@ -76,8 +77,11 @@ int blocksize = 64;  // bytes
     outf.open(IO_WriteOnly);
     inf.open(IO_ReadOnly);
 
+    // This is bad.  We don't have a buffer big enough for this anyways.
+    if (blocksize > 2048) return false;
+
     // write the header out to the output file.
-    char p[5120];
+    char p[8192];
     p[0] = FID_FIRST;
     p[1] = FID_SECOND;
     p[2] = FID_THIRD;
@@ -98,22 +102,46 @@ int blocksize = 64;  // bytes
     // write the data
     int randlen = rand() % 0x10000;
 
-    for (char *t = p+2; t-p < randlen+2; t += sizeof(int)) {
+    for (char *t = p+2; t-p < (randlen % 5120)+2; t += sizeof(int)) {
        ((int *)t) = rand();
     }
 
+    // NOTE: we _don't_ want to write randlen%5120 but randlen itself.  This
+    // just makes the crypto that much stronger.
     p[0] = randlen & 0x00ff;
     p[1] = randlen & 0xff00;
 
     unsigned int filelen = inf.size();
 
-    p[randlen+2] = filelen & 0x000000ff;
-    p[randlen+3] = filelen & 0x0000ff00;
-    p[randlen+4] = filelen & 0x00ff0000;
-    p[randlen+5] = filelen & 0xff000000;
+    p[(randlen % 5120)+2] = filelen & 0x000000ff;
+    p[(randlen % 5120)+3] = filelen & 0x0000ff00;
+    p[(randlen % 5120)+4] = filelen & 0x00ff0000;
+    p[(randlen % 5120)+5] = filelen & 0xff000000;
+
+    // pad up to the nearest blocksize.
+    int cursize = (randlen % 5120) + 6;
+    int shortness = cursize % blocksize;
+    if (shortness != 0) {
+       char *tp = &(p[cursize]);
+       rc = inf.readBlock(tp, blocksize - shortness);
+
+       if (rc < 0) return false;
+
+       // if we ran out of data already (!?!?) append random data.
+       cursize += rc;
+       while (shortness) {
+          p[cursize++] = (char) (rand()%0x100);
+          shortness--;
+       }
+    }
+
+    // assert: cursize % blocksize == 0;
+
+    for (int i = 0; i < cursize/blocksize; i++) {
+    }
 
     // FIXME: write out the encrypted data
-    
+
     return true;
 }
 

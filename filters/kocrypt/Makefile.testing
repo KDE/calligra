@@ -1,0 +1,22 @@
+#
+#  This is just used for building and running simple blowfish/cbc testcases.
+#
+#
+
+CXXFLAGS = -g -Wall
+
+all: testbf
+
+testbf: testbf.o blockcipher.o blowfish.o cbc.o
+
+testbf.o: testbf.cc blowfish.h
+
+blockcipher.o: blockcipher.cc blockcipher.h
+
+blowfish.o: blowfish.cc blowfish.h blowfishtables.h blockcipher.h
+
+cbc.o: cbc.cc cbc.h blockcipher.h
+
+# DO NOT DELETE
+
+
