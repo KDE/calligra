@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2004 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -318,6 +319,16 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         {
             PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
             drawPresPage( &bufPainter, crect, step );
+            if ( m_drawMode && m_drawModeLines.count() )
+            {
+                bufPainter.save();
+                bufPainter.setPen( m_view->kPresenterDoc()->presPen() );
+                for ( int i = 0; i < m_drawModeLines.count(); ++i )
+                {
+                  bufPainter.drawPolyline( m_drawModeLines[i] );
+                }
+                bufPainter.restore();
+            }
         }
 
         bufPainter.end();
@@ -609,8 +620,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPObject *kpobject = 0;
 
-    oldMx = contentsPoint.x();
-    oldMy = contentsPoint.y();
+    m_savedMousePos = contentsPoint;
 
     QPoint rasterPoint=applyGrid( e->pos(), true );
 
@@ -1107,12 +1117,13 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             setToolEditMode( TEM_MOUSE );
         }
     } else {
-        oldMx = e->x();
-        oldMy = e->y();
         if ( e->button() == LeftButton ) {
             if ( m_drawMode ) {
                 setCursor( KPresenterUtils::penCursor() );
                 m_drawLineInDrawMode = true;
+                m_drawModeLineIndex = 0;
+                m_drawModeLines.append( QPointArray() );
+                m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, e->x(), e->y() );
             }
             else
                 m_view->screenNext();
@@ -1192,6 +1203,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     if ( m_drawMode ) {
         m_drawLineInDrawMode = false;
+        m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, contentsPoint.x(), contentsPoint.y() );
         return;
     }
     bool state = m_view->kPresenterDoc()->snapToGrid();
@@ -1472,6 +1484,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    int oldMx = m_savedMousePos.x();
+    int oldMy = m_savedMousePos.y();
+    m_savedMousePos = contentsPoint;
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
@@ -1579,9 +1594,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
 
                     resizeObject( modType, mx - oldMx, my - oldMy );
-
-                    oldMx = e->x()+diffx();
-                    oldMy = e->y()+diffy();
                 }
             } break;
             case TEM_ZOOM : {
@@ -1928,9 +1940,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         p.begin( this );
         p.setPen( m_view->kPresenterDoc()->presPen() );
         p.drawLine( oldMx, oldMy, e->x(), e->y() );
-        oldMx = e->x();
-        oldMy = e->y();
         p.end();
+        m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, e->x(), e->y() );
     }
 
     if ( !editMode && !m_drawMode && !m_presMenu->isVisible() && fillBlack )
@@ -3141,6 +3152,9 @@ bool KPrCanvas::pNext( bool )
 
     goingBack = false;
 
+    // clear drawed lines
+    m_drawModeLines.clear();
+
     //kdDebug(33001) << "\n-------\nKPrCanvas::pNext m_step =" << m_step.m_step << " m_subStep =" << m_step.m_subStep << endl;
 
     // First try to go one sub-step further, if any object requires it
@@ -3308,6 +3322,9 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
 {
     goingBack = true;
     m_step.m_subStep = 0;
+
+    // clear drawed lines
+    m_drawModeLines.clear();
 
     if ( m_step.m_step > *m_pageEffectSteps.begin() ) {
         QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
@@ -4953,6 +4970,9 @@ void KPrCanvas::gotoPage( int pg )
 {
     int page = pg - 1;
     if ( page != m_step.m_pageNumber || m_step.m_step != *m_pageEffectSteps.begin() || m_step.m_subStep != 0 ) {
+        // clear drawed lines
+        m_drawModeLines.clear();
+
         m_step.m_pageNumber = page;
         kdDebug(33001) << "Page::gotoPage m_step.m_pageNumber =" << m_step.m_pageNumber << endl;
         m_presentationSlidesIterator = m_presentationSlides.find( m_step.m_pageNumber + 1 );

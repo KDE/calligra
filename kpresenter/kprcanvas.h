@@ -2,6 +2,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2004 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +29,8 @@
 #include <qpicture.h>
 #include <qvaluelist.h>
 #include <qpixmap.h>
+#include <qpointarray.h>
+#include <qvaluevector.h>
 
 #include <koRuler.h>
 #include <koQueryTrader.h>
@@ -689,7 +692,10 @@ private:
     bool mousePressed;
     bool drawContour;
     ModifyType modType;
-    unsigned int oldMx, oldMy;
+    /**
+     * Saves the last mouse position during mouse move events.
+     */
+    QPoint m_savedMousePos;
 
     KPObject *editNum;
 
@@ -706,6 +712,20 @@ private:
      * Used in drawing mode.
      */
     bool m_drawLineInDrawMode;
+    
+    /**
+     * Save the lines drawed in drawMode. 
+     * This is used for paint events.
+     * Used in drawing mode.
+     */
+    QValueVector<QPointArray> m_drawModeLines;
+
+    /**
+     * Index into the QPointArray for the next point of the line in draw mode.
+     * Used in drawing mode.
+     */
+    int m_drawModeLineIndex;
+    
     bool mouseSelectedObject;
     /// information about current step of the presentation
     PresStep m_step;
