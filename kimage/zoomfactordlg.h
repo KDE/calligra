@@ -34,7 +34,7 @@ public:
   ~KZoomFactorDialog();
 
   void setValue( const QPoint& theValue ); 
-  int getValue( QPoint& theValue);
+  int getValue( QPoint& theValue );
 
 private:
   KIntNumInput* m_pLineEditXFactor;

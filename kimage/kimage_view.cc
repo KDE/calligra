@@ -95,6 +95,10 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
   m_copy->setEnabled( false );
   m_paste->setEnabled( false );
 
+  m_scrollbars->setEnabled( false );
+  m_info->setEnabled( false );
+
+  // FIXME: set the user preferred color
   //setBackgroundColor( darkBlue );
 
   m_drawMode = OriginalSize;
@@ -105,32 +109,16 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
 
 void KImageView::paintEvent( QPaintEvent* /* _event */ )
 {
-  cout << "KImageView::paintEvent()" << endl;
-
   //if( doc().isEmpty() )
   //  return;
 
   QPainter painter;
-
   painter.begin( this );
 
-  QPixmap m_pixmap;
-  m_pixmap.convertFromImage( doc()->image() );
-
-  //painter.drawPixmap( 0, 0, m_pixmap );
-  
-  // TODO : Scaling
-
-  //doc()->paintContent( painter, _event->rect(), false );
-  
   if( m_centerMode )
-  {
     painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
-  }
   else
-  {
     painter.drawPixmap( 0, 0, m_pixmap );
-  }
   
   painter.end();
 }
@@ -143,6 +131,9 @@ KImageDocument* KImageView::doc()
 /*
 bool KImageView::printDlg()
 {
+  if( doc()->isEmpty() )
+    return;
+
   QPrinter prt;
 
   if( QPrintDialog::getPrinterSetup( &prt ) )
@@ -150,15 +141,6 @@ bool KImageView::printDlg()
     doc()->print( &prt );
   }
   return true;
-}
-
-void KImageView::newView()
-{
-  ASSERT( doc() != 0L );
-
-  KImageShell* shell = new KImageShell;
-  shell->show();
-  shell->setDocument( doc() );
 }
 */
 
@@ -207,7 +189,6 @@ void KImageView::editExportImage()
 {
   if( doc()->isEmpty() )
   {
-    QString tmp;
     QMessageBox::critical( this, i18n( "IO Error" ), i18n("The document is empty\nNothing to export."), i18n( "OK" ) );
     return;
   }
@@ -238,6 +219,11 @@ void KImageView::editPreferences()
 
 void KImageView::editPageLayout()
 {
+/*
+  if( doc()->isEmpty() )
+    return;
+*/
+
   //doc()->paperLayoutDlg();
 }
 
@@ -287,20 +273,22 @@ void KImageView::viewInformations()
 
 void KImageView::viewZoomFactor()
 {
+/*
   if( doc()->isEmpty() )
   {
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
     return;
   }
-/*
+*/
+
   KZoomFactorDialog dlg( NULL, "KImage" );
-  if( dlg.getValue( m_zoomFactor ) != QDialog::Accepted )
+  if( dlg.getValue( m_zoomFactorValue ) != QDialog::Accepted )
   {
     return;
   }
-  kdebug( KDEBUG_INFO, 0, "zoom factor: X: %i, Y: %i", m_zoomFactor.x(), m_zoomFactor.y() );
+  kdebug( KDEBUG_INFO, 0, "zoom factor: X: %i, Y: %i", m_zoomFactorValue.x(), m_zoomFactorValue.y() );
   m_drawMode = ZoomFactor;
-*/
+
   slotUpdateView();
 }
 
@@ -459,19 +447,6 @@ void KImageView::transformZoomMax()
   double dw = (double) width() / (double) doc()->image().width();
   double dh = (double) height() / (double) doc()->image().height();
   matrix.scale( dw, dh );
-
-/*
-	  m_pixmap.convertFromImage( doc()->image().smoothScale( width(), height() ) );
-  	  break;
-  	case FitWithProps:
-      dh = (double) height() / (double) doc()->image().height();
-      dw = (double) width() / (double) doc()->image().width();
-      d = ( dh < dw ? dh : dw );
-	  m_pixmap.convertFromImage( doc()->image().smoothScale( int( d * doc()->image().width() ), int ( d * doc()->image().height() ) ) );
-  	  break;
-*/
-
-  //QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   doc()->transformImage( matrix );
   slotUpdateView();
 }
@@ -486,7 +461,6 @@ void KImageView::transformZoomMaxAspect()
   double dh = (double) height() / (double) doc()->image().height();
   double d = ( dh < dw ? dh : dw );
   matrix.scale( d, d );
-  //QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   doc()->transformImage( matrix );
   slotUpdateView();
 }
@@ -503,6 +477,7 @@ void KImageView::helpAboutKImage()
 /*
 void KImageView::resizeEvent( QResizeEvent* )
 {
+  // TODO: only update new regions (ist this possible ?)
   slotUpdateView();
 }
 */
@@ -510,36 +485,39 @@ void KImageView::resizeEvent( QResizeEvent* )
 void KImageView::slotUpdateView()
 {
 /*
-  if( doc()->image().isNull() )
+  // FIXME: this test allways fails. WHY ?
+  if( doc()->isEmpty() )
   {
     return;
   }
+*/
 
   double dh, dw, d;
 	
   switch ( m_drawMode )
   {
-  	case OriginalSize:
-	  m_pixmap.convertFromImage( doc()->image() );
-  	  break;
-  	case FitToView:
-	  m_pixmap.convertFromImage( doc()->image().smoothScale( width(), height() ) );
-  	  break;
-  	case FitWithProps:
+    case OriginalSize:
+      m_pixmap.convertFromImage( doc()->image() );
+      break;
+    case FitToView:
+      m_pixmap.convertFromImage( doc()->image().smoothScale( width(), height() ) );
+      break;
+    case FitWithProps:
       dh = (double) height() / (double) doc()->image().height();
       dw = (double) width() / (double) doc()->image().width();
       d = ( dh < dw ? dh : dw );
-	  m_pixmap.convertFromImage( doc()->image().smoothScale( int( d * doc()->image().width() ), int ( d * doc()->image().height() ) ) );
-  	  break;
+      m_pixmap.convertFromImage( doc()->image().smoothScale( int( d * doc()->image().width() ), int ( d * doc()->image().height() ) ) );
+      break;
     case ZoomFactor:
-      dw = doc()->image().width() * m_zoomFactor.x() / 100;
-      dh = doc()->image().height() * m_zoomFactor.y() / 100;
-	  m_pixmap.convertFromImage( doc()->image().smoothScale( int( dw * doc()->image().width() ), int ( dh * doc()->image().height() ) ) );
-  	  break;
+      dw = (double) m_zoomFactorValue.x() / (double) 100.0;
+      dh = (double) m_zoomFactorValue.y() / (double) 100.0;
+      m_pixmap.convertFromImage( doc()->image().smoothScale( int( dw * doc()->image().width() ), int ( dh * doc()->image().height() ) ) );
+      break;
   }
-*/
+
   QWidget::update();
 }
 
 #include "kimage_view.moc"
+
 

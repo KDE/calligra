@@ -58,8 +58,7 @@ KImageDocument::~KImageDocument()
 
 bool KImageDocument::initDoc()
 {
-  // FIXME hase to be true on startup
-  m_bEmpty = false;
+  m_bEmpty = true;
 
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
@@ -70,10 +69,6 @@ bool KImageDocument::initDoc()
   m_paperHeight = PG_A4_HEIGHT;
   calcPaperSize();
   m_orientation = PG_PORTRAIT;
-
-  m_image.load( "/home/devel/daten/pshae46.jpg" );
-
-  cout << "MICHAEL : initDoc()" << endl;
 
   return true;
 }
