@@ -634,9 +634,9 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     QDomElement element = doc.createElement( "NAME" );
     parentElem.appendChild( element );
     if ( layout.style )
-        element.setAttribute( "value", layout.style->name() );
+        element.setAttribute( "value", layout.style->displayName() );
     //else
-    //    kdWarning() << "KoParagLayout::saveParagLayout: style==0L!" << endl;
+    //    kdWarning() << "KoParagLayout::saveParagLayout: style==0!" << endl;
 
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );
