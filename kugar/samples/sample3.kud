@@ -9,9 +9,9 @@
     <!ATTLIST Row 
     	level CDATA #REQUIRED
         title CDATA #REQUIRED
-        version CDATA #REQUIRED
-        platform CDATA #REQUIRED
-        copies CDATA #REQUIRED>
+        version CDATA #IMPLIED
+        platform CDATA #IMPLIED
+        copies CDATA #IMPLIED>
 ]>
 
 <KugarData Template="sample3.kut">
