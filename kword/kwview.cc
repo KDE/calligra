@@ -662,7 +662,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                     QDomElement e = n.toElement();
                     if ( e.tagName() == "Type" )
                         {
-                            group = i18n( e.namedItem( "TypeName" ).toElement().text().latin1() );
+                            group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
                             KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
                             parentMenu->insert( subMenu );
 
@@ -675,7 +675,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                                             QDomElement e2 = n2.toElement();
                                             if ( e2.tagName() == "Expression" )
                                                 {
-                                                    QString text = i18n( e2.namedItem( "Text" ).toElement().text().latin1() );
+                                                    QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
                                                     KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
                                                                                  actionCollection(), "expression-action" );
                                                     subMenu->insert( act );
