@@ -444,6 +444,7 @@ bool kspreadfunc_euro( KSContext& context )
   if( currency == "ESP" ) result = 166.386;  // Spain
   if( currency == "FIM" ) result = 5.94573;  // Finland
   if( currency == "FRF" ) result = 6.55957;  // France
+  if( currency == "GRD" ) result = 340.75;   // Greek
   if( currency == "IEP" ) result = 0.787564; // Ireland
   if( currency == "ITL" ) result = 1936.27;  // Italy
   if( currency == "LUX" ) result = 40.3399;  // Luxemburg
