@@ -990,7 +990,7 @@ for ( int incr=start;incr<=end; )
 
 
 
-void KSpreadTable::setSelectionPercent( const QPoint &_marker )
+void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
 {
     m_pDoc->setModified( true );
 
@@ -1007,7 +1007,21 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  if(it.current()->faktor()==100.0 && it.current()->postfix()=="%")
+	  /*if(it.current()->faktor()==100.0 && it.current()->postfix()=="%")
+	  	{
+	  	it.current()->setFaktor( 1.0 );
+	  	it.current()->setPrecision( 0 );
+	  	it.current()->setPostfix( "" );
+	  	it.current()->setPrefix( "" );
+	  	}
+	  else
+		{
+		it.current()->setFaktor( 100.0 );
+	  	it.current()->setPrecision( 0 );
+	  	it.current()->setPostfix( "%" );
+	  	it.current()->setPrefix( "" );
+	  	}*/
+	  if(!b)
 	  	{
 	  	it.current()->setFaktor( 1.0 );
 	  	it.current()->setPrecision( 0 );
@@ -1039,7 +1053,21 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  if(it.current()->faktor()==100.0 && it.current()->postfix()=="%")
+	  /*if(it.current()->faktor()==100.0 && it.current()->postfix()=="%")
+	  	{
+	  	it.current()->setFaktor( 1.0 );
+	  	it.current()->setPrecision( 0 );
+	  	it.current()->setPostfix( "" );
+	  	it.current()->setPrefix( "" );
+	  	}
+	  else
+		{
+		it.current()->setFaktor( 100.0 );
+	  	it.current()->setPrecision( 0 );
+	  	it.current()->setPostfix( "%" );
+	  	it.current()->setPrefix( "" );
+	  	}*/
+	  if(!b)
 	  	{
 	  	it.current()->setFaktor( 1.0 );
 	  	it.current()->setPrecision( 0 );
@@ -1086,7 +1114,21 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 		}
 
 		cell->setDisplayDirtyFlag();
-		if(cell->faktor()==100.0 && cell->postfix()=="%" )
+		/*if(cell->faktor()==100.0 && cell->postfix()=="%" )
+			{
+			cell->setFaktor( 1.0 );
+			cell->setPrecision( 0 );
+			cell->setPostfix( "" );
+			cell->setPrefix( "" );
+			}
+		else
+			{
+			cell->setFaktor( 100.0 );
+			cell->setPrecision( 0 );
+			cell->setPostfix( "%" );
+			cell->setPrefix( "" );
+			}*/
+		if(!b )
 			{
 			cell->setFaktor( 1.0 );
 			cell->setPrecision( 0 );
@@ -2478,7 +2520,7 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
     }
 }
 
-void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
+void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
 {
     m_pDoc->setModified( true );
     if(!currency)
@@ -2500,7 +2542,21 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 	{
 	  it.current()->setDisplayDirtyFlag();
 
-	  if(it.current()->postfix()==tmp)
+	  /*if(it.current()->postfix()==tmp)
+	  	{
+	  	it.current()->setPostfix( "");
+	  	it.current()->setPrefix( "" );
+	  	it.current()->setPrecision( 0 );
+	  	}
+	  else
+	  	{
+	  	it.current()->setPostfix( " "+currency);
+	  	//it.current()->setPostfix( " DM" );
+	  	it.current()->setFaktor( 1.0 );
+	  	it.current()->setPrefix( "" );
+	  	it.current()->setPrecision( 2 );
+	  	}*/
+	  if(!b)
 	  	{
 	  	it.current()->setPostfix( "");
 	  	it.current()->setPrefix( "" );
@@ -2532,7 +2588,21 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  if(it.current()->postfix()==tmp)
+	  /*if(it.current()->postfix()==tmp)
+	  	{
+	  	it.current()->setPostfix( "");
+	  	it.current()->setPrefix( "" );
+	  	it.current()->setPrecision( 0 );
+	  	}
+	  else
+	  	{
+	  	it.current()->setPostfix(" "+currency);
+	  	it.current()->setFaktor( 1.0 );
+	  	//it.current()->setPostfix( " DM" );
+	  	it.current()->setPrefix( "" );
+	  	it.current()->setPrecision( 2 );
+	  	}*/
+	  if(!b)
 	  	{
 	  	it.current()->setPostfix( "");
 	  	it.current()->setPrefix( "" );
@@ -2580,7 +2650,20 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 
 		cell->setDisplayDirtyFlag();
 		//cell->setPostfix( " DM" );
-		if(cell->postfix()==tmp)
+		/*if(cell->postfix()==tmp)
+	  		{
+	  		cell->setPostfix( "");
+	  		cell->setPrefix( "" );
+	  		cell->setPrecision( 0 );
+	  		}
+	 	else
+	 		{
+			cell->setPostfix( " "+currency);
+			cell->setFaktor( 1.0 );
+			cell->setPrefix( "" );
+			cell->setPrecision( 2 );
+			}*/
+		if(!b)
 	  		{
 	  		cell->setPostfix( "");
 	  		cell->setPrefix( "" );

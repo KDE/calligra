@@ -1818,6 +1818,22 @@ static bool kspreadfunc_atan2( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_inv( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "INV",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+
+  context.setValue( new KSValue( args[0]->doubleValue()*(-1) ) );
+
+  return true;
+}
+
 
 static bool kspreadfunc_cell( KSContext& context )
 {
@@ -2040,6 +2056,8 @@ module,"FV_annuity",kspreadfunc_fv_annuity) ) );
 module,"sign",kspreadfunc_sign) ) );
   module->addObject( "atan2", new KSValue( new KSBuiltinFunction(
 module,"atan2",kspreadfunc_atan2) ) );
+  module->addObject( "INV", new KSValue( new KSBuiltinFunction(
+module,"INV",kspreadfunc_inv) ) );  
   return module;
 }
 

@@ -2221,14 +2221,12 @@ void KSpreadView::alignCenter( bool b )
 	m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Center );
 }
 
-// The bool parameter is skipped since setSelectionMoneyFormat toggles the money
-// format anyway.
-void KSpreadView::moneyFormat(bool)
+void KSpreadView::moneyFormat(bool b)
 {
     if ( m_toolbarLock )
 	return;
     if ( m_pTable != 0L )
-	m_pTable->setSelectionMoneyFormat( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+	m_pTable->setSelectionMoneyFormat( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),b );
     updateEditWidget();
 }
 
@@ -2244,13 +2242,13 @@ void KSpreadView::precisionMinus()
     m_pTable->setSelectionPrecision( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), -1 );
 }
 
-// Parameter is skipped since KSpreadTable::setSelectionPercent toggles
-void KSpreadView::percent( bool )
+
+void KSpreadView::percent( bool b)
 {
    if ( m_toolbarLock )
 	return;
   if ( m_pTable != 0L )
-    m_pTable->setSelectionPercent( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->setSelectionPercent( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,b );
   updateEditWidget();
 }
 

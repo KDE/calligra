@@ -43,6 +43,7 @@
 #include <qstring.h>
 #include <kcolordlg.h>
 #include <kcolorbtn.h>
+#include <knuminput.h>
 
 class CellLayoutDlg;
 class KSpreadTable;
@@ -214,7 +215,8 @@ public:
     CellLayoutPagePosition( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
-
+    int getSizeHeight();
+    int getSizeWidth();
 protected:
     QRadioButton *bottom;
     QRadioButton *top;
@@ -223,6 +225,8 @@ protected:
     QRadioButton *right;
     QRadioButton *center;
     QCheckBox *multi;
+    KIntNumInput *width;
+    KIntNumInput *height;
     CellLayoutDlg *dlg;
 };
 
@@ -476,6 +480,9 @@ public:
     KSpreadCell::AlignY alignY;
 
     bool bMultiRow;
+
+    int heigthSize;
+    int widthSize;
 
     static QPixmap* formatOnlyNegSignedPixmap;
     static QPixmap* formatRedOnlyNegSignedPixmap;

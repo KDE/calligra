@@ -437,3 +437,9 @@ changed (idea of jp.martin" <jpmartin@iroise.com>)
 =>thanks to jp.martin
 -Now undoLayout works 
 -Bug Fix
+
+2000-05-03 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can give height and width of cells in kspread_dlg_layout
+-Add new function INV => multiply by -1 each value
+-bug fix

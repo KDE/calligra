@@ -26,6 +26,7 @@
 #include "kspread_table.h"
 #include "kspread_cell.h"
 #include "kspread_view.h"
+#include "kspread_canvas.h"
 
 #include <qlabel.h>
 #include <qpainter.h>
@@ -183,6 +184,23 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     brushStyle = obj->backGroundBrushStyle(_left,_top);
 
     bMultiRow = obj->multiRow();
+    
+    RowLayout *rl;
+    ColumnLayout *cl;
+    widthSize=0;
+    heigthSize=0;
+    for ( int x = _left; x <= _right; x++ )
+        {
+	cl = m_pView->activeTable()->columnLayout(x);
+    	widthSize=QMAX(cl->width(m_pView->canvasWidget()),widthSize);
+    	}
+
+    for ( int y = _top; y <= _bottom; y++ )
+	{
+    	rl = m_pView->activeTable()->rowLayout(y);
+    	heigthSize=QMAX(rl->height(m_pView->canvasWidget()),heigthSize);
+    	}
+
 
     // We assume, that all other objects have the same values
     bLeftBorderStyle = TRUE;
@@ -450,7 +468,22 @@ void CellLayoutDlg::slotApply()
             positionPage->apply( obj );
             patternPage->apply(obj);
 	}
-
+	
+    if(positionPage->getSizeHeight()!=heigthSize)
+    	{
+    	for ( int x = top; x <= bottom; x++ )
+    		{
+    		m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x );
+    		}
+    	}
+    if(positionPage->getSizeWidth()!=widthSize)
+    	{
+    	for ( int x = left; x <= right; x++ )
+    		{
+    		m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x );
+    		}	
+    	}
+    	
     // Outline
       borderPage->applyOutline( left, top, right, bottom );
 
@@ -1061,17 +1094,19 @@ void CellLayoutPageFont::setCombos()
 CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
 {
     dlg = _dlg;
-    QVBoxLayout *lay1 = new QVBoxLayout( this );
-    lay1->setMargin( 5 );
-    lay1->setSpacing( 10 );
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Horizontal"),this);
+    
+    QGridLayout *grid3 = new QGridLayout(this,3,2,15,7);
+    QButtonGroup *grp = new QButtonGroup( i18n("Horizontal"),this);
     grp->setRadioButtonExclusive( TRUE );
-    grp->layout();
-    lay1->addWidget(grp);
+    
+    QGridLayout *grid2 = new QGridLayout(grp,3,1,15,7);
     left = new QRadioButton( i18n("Left"), grp );
+    grid2->addWidget(left,0,0);
     center = new QRadioButton( i18n("Center"), grp );
+    grid2->addWidget(center,1,0);
     right = new QRadioButton( i18n("Right"), grp );
-
+    grid2->addWidget(right,2,0);
+    grid3->addWidget(grp,0,0);
 
     if(dlg->alignX==KSpreadCell::Left)
         left->setChecked(true);
@@ -1081,14 +1116,17 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
         right->setChecked(true);
 
 
-    grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Vertical"),this);
+    grp = new QButtonGroup( i18n("Vertical"),this);
     grp->setRadioButtonExclusive( TRUE );
-    grp->layout();
-    lay1->addWidget(grp);
+    
+    grid2 = new QGridLayout(grp,3,1,15,7);
     top = new QRadioButton( i18n("Top"), grp );
+    grid2->addWidget(top,0,0);
     middle = new QRadioButton( i18n("Middle"), grp );
+    grid2->addWidget(middle,1,0);
     bottom = new QRadioButton( i18n("Bottom"), grp );
-
+    grid2->addWidget(bottom,2,0);
+    grid3->addWidget(grp,0,1);
 
     if(dlg->alignY==KSpreadCell::Top)
         top->setChecked(true);
@@ -1097,12 +1135,30 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     else if(dlg->alignY==KSpreadCell::Bottom)
         bottom->setChecked(true);
 
-    grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Multi Row"),this);
-    grp->layout();
-    lay1->addWidget(grp);
+    grp = new QButtonGroup( i18n("Multi Row"),this);
+    
+    grid2 = new QGridLayout(grp,1,1,15,7);
     multi = new QCheckBox( i18n("Goto line automatically"), grp );
+
+    grid2->addWidget(multi,0,0);
     multi->setChecked(dlg->bMultiRow);
+    grid3->addMultiCellWidget(grp,1,1,0,1);
+    
+    grp = new QButtonGroup( i18n("Size of cell"),this);
+    grid2 = new QGridLayout(grp,1,2,15,7);
+    width=new KIntNumInput(dlg->widthSize, grp, 10);    
+    width->setLabel(i18n("Width :"));
+    width->setRange(20, 400, 1);
+    grid2->addWidget(width,0,0);
+
+    height=new KIntNumInput(dlg->heigthSize, grp, 10);    
+    height->setLabel(i18n("Height :"));
+    height->setRange(20, 400, 1);
+    grid2->addWidget(height,0,1);
+    grid3->addMultiCellWidget(grp,2,2,0,1);
+
     this->resize( 400, 400 );
+
 }
 
 void CellLayoutPagePosition::apply( KSpreadCell *_obj )
@@ -1123,7 +1179,15 @@ else if(center->isChecked())
 _obj->setMultiRow(multi->isChecked());
 }
 
+int CellLayoutPagePosition::getSizeHeight() 
+{
+return height->value();
+}
 
+int CellLayoutPagePosition::getSizeWidth() 
+{
+return width->value();
+}
 
 KSpreadBorderButton::KSpreadBorderButton( QWidget *parent, const char *_name ) : QPushButton(parent,_name)
 {

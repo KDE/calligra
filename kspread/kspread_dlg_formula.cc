@@ -669,6 +669,7 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
     list_anal+="pow";
     list_anal+="MOD";
     list_anal+="sign";
+    list_anal+="INV";
     list_anal.sort();
 
     QStringList list_trig;
@@ -1166,7 +1167,20 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+="sign(5) equals 5.\nsign(-5) equals -1.\nsign(0) equals 0.\n";
         tmp.help=tmp1;
         tmp.firstElementType=type_double;
+    }    
+    else if (m_funcName=="INV")
+    {
+        tmp.nb_param=1;
+        tmp.firstElementLabel=i18n("Double");
+        QString tmp1=i18n("This function multiply by -1 each value\n");
+        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+        tmp1+=i18n("Example : \n");
+        tmp1+="INV(-5) equals 5.\nINV(-5) equals 5.\nINV(0) equals 0.\n";
+        tmp.help=tmp1;
+        tmp.firstElementType=type_double;
     }
+
+
     else if (m_funcName=="atan2" )
     {
         tmp.nb_param=2;
