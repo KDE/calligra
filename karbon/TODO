@@ -12,6 +12,10 @@ BIG TOPICS:
 	- unify object and or node selection?
 	- achieve tight selection (exact selection-object collision test)
 3) reintroduce nodetool
+4) make VObject leaner (no fill/stroke bbox etc, move that to "3rd party classes".)
+   we could create e.g. a VObject->VDrawable-VPath hierarchy where
+   VDrawable derives from VHasStroke and VHasFill objects.
+   aim: make VSegment (VNode maybe) etc VObjects to simplify things
 
 GUI:
 -	split the dialog under "Object->Transform" into different non-tabbed dialogs
