@@ -46,11 +46,6 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, QString filename )
 
 	m_pixmap.resize( 64, 64 );
 	VKoPainter p( &m_pixmap, 64, 64 );
-	// Y mirroring
-	QWMatrix wmat;
-	wmat.scale( 1, -1 );
-	wmat.translate( 0,  -64 );
-	p.setWorldMatrix( wmat );
 	QWMatrix mat( 64., 0, 0, 64., 0, 0 );
 	m_clipart->transform( mat );
 	m_clipart->draw( &p, &m_clipart->boundingBox() );
@@ -59,11 +54,6 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, QString filename )
 
 	m_thumbPixmap.resize( 32, 32 );
 	VKoPainter p2( &m_thumbPixmap, 32, 32 );
-	// Y mirroring
-	wmat.reset();
-	wmat.scale( 1, -1 );
-	wmat.translate( 0,  -32 );
-	p2.setWorldMatrix( wmat );
 	mat.setMatrix( 32., 0, 0, 32., 0, 0 );
 	m_clipart->transform( mat );
 	m_clipart->draw( &p2, &m_clipart->boundingBox() );
@@ -76,10 +66,28 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, QString filename )
 	m_delete = QFileInfo( filename ).isWritable();
 } // VClipartIconItem::VClipartIconItem
 
+
+VClipartIconItem::VClipartIconItem( const VClipartIconItem& item )
+		: KoIconItem( item )
+{
+	m_clipart     = item.m_clipart->clone();
+	m_filename    = item.m_filename;
+	m_delete      = item.m_delete;
+	m_pixmap      = item.m_pixmap;
+	m_thumbPixmap = item.m_thumbPixmap;
+	validPixmap   = item.validPixmap;
+	validThumb    = item.validThumb;
+} // VClipartIconItem::VClipartIconItem
+
 VClipartIconItem::~VClipartIconItem()
 {
 	delete m_clipart;
 } // VClipartIconItem::~VClipartIconItem
+
+VClipartIconItem* VClipartIconItem::clone()
+{
+	return new VClipartIconItem( *this );
+} // VClipartIconItem::clone
 
 VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent )
 		: QFrame( parent ), m_view( view )
@@ -103,13 +111,14 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 	layout->setMargin( 3 );
 	
 	connect( m_addClipartButton, SIGNAL( clicked() ), this, SLOT( addClipart() ) );
+	connect( m_deleteClipartButton, SIGNAL( clicked() ), this, SLOT( deleteClipart() ) );
 	connect( m_clipartChooser, SIGNAL( selected( KoIconItem* ) ), this, SLOT( clipartSelected( KoIconItem* ) ) );
 	
 	m_clipartChooser->setAutoDelete( false );
 	VClipartIconItem* item = 0L;
 	for( item = clipartItems->first(); item; item = clipartItems->next() )
 		m_clipartChooser->addItem( item );
-	m_clipartItem = clipartItems->first();
+	m_clipartItem = clipartItems->first()->clone();
 } // VClipartWidget::VClipartWidget
 
 VClipartWidget::~VClipartWidget()
@@ -125,9 +134,10 @@ void VClipartWidget::clipartSelected( KoIconItem* item )
 {
 	if ( item )
 	{
+		delete m_clipartItem;
 		VClipartIconItem* clipartItem = (VClipartIconItem*)item;
 		m_deleteClipartButton->setEnabled( clipartItem->canDelete() );
-		m_clipartItem = clipartItem;
+		m_clipartItem = clipartItem->clone();
 	}
 } // VClipartWidget::clipartSelected
 
@@ -152,10 +162,22 @@ void VClipartWidget::addClipart()
 		double scaleFactor = 1. / QMAX( clipartBox.width(), clipartBox.height() );
 		QWMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
 		clipart->transform( trMatrix );
+		 // remove Y-mirroring
+		trMatrix.reset();
+		trMatrix.scale( 1, -1 );
+		trMatrix.translate( 0, -1 );
+		clipart->transform( trMatrix );
 		m_clipartChooser->addItem( KarbonFactory::rServer()->addClipart( clipart ) );
 	}
 	m_clipartChooser->updateContents();
 } // VClipartWidget::addClipart
+
+void VClipartWidget::deleteClipart()
+{
+	VClipartIconItem* clipartItem = m_clipartItem;
+	KarbonFactory::rServer()->removeClipart( clipartItem );
+	m_clipartChooser->removeItem( clipartItem );
+} // VClipartWidget::deleteClipart
 
 VClipartTool::VClipartTool( KarbonView* view )
 		: VTool( view )
@@ -185,16 +207,14 @@ void VClipartTool::activate()
 
 void VClipartTool::draw()
 {
-	if ( m_clipart )
+	if ( ( m_clipart ) && ( m_last.x() - first().x() != 0 ) && ( m_last.y() - first().y() != 0 ) )
 	{
 		VPainter* painter = view()->painterFactory()->editpainter();
 		view()->canvasWidget()->setYMirroring( true );
 		painter->setZoomFactor( view()->zoom() );
 		painter->setRasterOp( Qt::NotROP );
 
-		QWMatrix mat;
-		mat.scale( m_last.x() - first().x(), m_last.y() - first().y() );
-		mat.translate( first().x(), first().y() );
+		QWMatrix mat( m_last.x() - first().x(), 0, 0, m_last.y() - first().y(), first().x(), first().y() );
 		m_clipart->transform( mat );
 		m_clipart->draw( painter, &m_clipart->boundingBox() );
 		m_clipart->transform( mat.invert() );
@@ -203,10 +223,10 @@ void VClipartTool::draw()
 
 void VClipartTool::mouseButtonPress()
 {
-	m_clipart = m_optionsWidget->selectedClipart()->clipart()->clone();
+	VClipartIconItem* clipartItem = m_optionsWidget->selectedClipart();
+	m_clipart = clipartItem->clipart()->clone();
 	m_clipart->setState( VObject::edit );
-	kdDebug() << "Using clipart: " << m_optionsWidget->selectedClipart()->filename() << endl;
-	
+
 	m_last = last();
 	
 	draw();
@@ -235,11 +255,9 @@ void VClipartTool::mouseDragRelease()
 	{
 		draw();
 
-		QWMatrix mat;
-		mat.scale( last().x() - first().x(), last().y() - first().y() );
-		mat.translate( first().x(), first().y() );
+		m_last = last();
+		QWMatrix mat( m_last.x() - first().x(), 0, 0, m_last.y() - first().y(), first().x(), first().y() );
 		m_clipart->transform( mat );
-		m_clipart->setState( VObject::normal );
 		VClipartCmd* cmd = new VClipartCmd(
 			&view()->part()->document(),
 			name(),
@@ -248,7 +266,7 @@ void VClipartTool::mouseDragRelease()
 		view()->part()->addCommand( cmd, true );
 		view()->selectionChanged();
 
-		m_clipart = 0L;
+		delete m_clipart;
 	}
 } // VClipartTool::mouseDragRelease
 
@@ -260,7 +278,7 @@ void VClipartTool::cancel()
 } // VClipartTool::cancel
 
 VClipartTool::VClipartCmd::VClipartCmd( VDocument* doc, const QString& name, VObject* clipart )
-		: VCommand( doc, name ), m_clipart( clipart )
+		: VCommand( doc, name ), m_clipart( clipart->clone() )
 {
 } // VClipartTool::VClipartCmd::VClipartCmd
 

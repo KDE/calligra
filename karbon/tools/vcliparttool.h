@@ -38,6 +38,7 @@ class VClipartIconItem : public KoIconItem
 {
 	public:
 		VClipartIconItem( const VObject* clipart, QString filename );
+		VClipartIconItem( const VClipartIconItem& item );
 		~VClipartIconItem();
 		
 		virtual QPixmap& thumbPixmap() const { return (QPixmap&)m_thumbPixmap; }
@@ -45,6 +46,7 @@ class VClipartIconItem : public KoIconItem
 		const VObject* clipart() const { return m_clipart; }
 		QString filename() const { return m_filename; }
 		bool canDelete() const { return m_delete; }
+		VClipartIconItem* clone();
 
 	private:
 		QPixmap  m_pixmap;
@@ -66,6 +68,7 @@ class VClipartWidget : public QFrame
 
 	public slots:
 		void addClipart();
+		void deleteClipart();
 		void clipartSelected( KoIconItem* item );
 
 	private:
