@@ -35,9 +35,10 @@
 #include <klocale.h>
 
 InsertPartTool::InsertPartTool (CommandHistory* history) : Tool (history)
- {
+{
   validEntry = false;
- }
+  m_id=ToolInsertPart;
+}
 
 void InsertPartTool::activate (GDocument *_doc, Canvas *_canvas)
  {

@@ -164,10 +164,10 @@ void KIllustratorView::createMyGUI()
     new KAction( i18n("Insert &Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
 
     // Tools
-    m_selectTool = new KToggleAction( i18n("Mouse"), "selecttool", CTRL+Key_1, actionCollection(), "mouse" );
+    m_selectTool = new KToggleAction( i18n("Select objects"), "selecttool", CTRL+Key_1, actionCollection(), "mouse" );
     m_selectTool->setExclusiveGroup( "Tools" );
     connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
-    KToggleAction *m_pointTool = new KToggleAction( i18n("Point"), "pointtool", CTRL+Key_2, actionCollection(), "point" );
+    KToggleAction *m_pointTool = new KToggleAction( i18n("Edit points"), "pointtool", CTRL+Key_2, actionCollection(), "point" );
     m_pointTool->setExclusiveGroup( "Tools" );
     connect( m_pointTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPointTool( bool ) ) );
     KToggleAction *m_freehandTool = new KToggleAction( i18n("Freehand"), "freehandtool", CTRL+Key_3, actionCollection(), "freehand" );
@@ -291,7 +291,7 @@ void KIllustratorView::createMyGUI()
 
     // Disable node actions
     slotPointTool( false );
-    tcontroller->toolSelected( ID_TOOL_SELECT );
+    tcontroller->toolSelected( Tool::ToolSelect);
 
     setupPopups ();
     setUndoStatus (false, false);
@@ -407,64 +407,55 @@ void KIllustratorView::setupCanvas()
 
     tcontroller = new ToolController (this);
 
-    SelectionTool* selTool;
-    tcontroller->registerTool (ID_TOOL_SELECT,
-                               selTool = new SelectionTool (&cmdHistory));
+    SelectionTool* selTool=new SelectionTool (&cmdHistory);
+    tcontroller->registerTool ( selTool );
+
     QObject::connect (selTool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
     QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
                     this, SLOT(activatePart(GObject*)));
-    tcontroller->registerTool (ID_TOOL_EDITPOINT,
-                               editPointTool = new EditPointTool (&cmdHistory));
+
+    tcontroller->registerTool (editPointTool = new EditPointTool (&cmdHistory));
     QObject::connect (editPointTool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
     connect(editPointTool, SIGNAL(activated(bool)), this, SLOT(showNodesToolbar(bool)));
     Tool* tool;
-    tcontroller->registerTool (ID_TOOL_FREEHAND,
-                               tool = new FreeHandTool (&cmdHistory));
+    tcontroller->registerTool (tool = new FreeHandTool (&cmdHistory));
     QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (ID_TOOL_LINE,
-                               tool = new PolylineTool (&cmdHistory));
+    tcontroller->registerTool (tool = new PolylineTool (&cmdHistory));
     QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (ID_TOOL_BEZIER,
-                               tool = new BezierTool (&cmdHistory));
+    tcontroller->registerTool (tool = new BezierTool (&cmdHistory));
     QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (ID_TOOL_RECTANGLE,
-                               tool = new RectangleTool (&cmdHistory));
+    tcontroller->registerTool (tool = new RectangleTool (&cmdHistory));
     QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (ID_TOOL_POLYGON,
-                               tool = new PolygonTool (&cmdHistory));
+    tcontroller->registerTool (tool = new PolygonTool (&cmdHistory));
     QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (ID_TOOL_ELLIPSE,
-                               tool = new OvalTool (&cmdHistory));
+    tcontroller->registerTool (tool = new OvalTool (&cmdHistory));
     QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (ID_TOOL_TEXT,
-                               tool = new TextTool (&cmdHistory));
+    tcontroller->registerTool (tool = new TextTool (&cmdHistory));
     QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (ID_TOOL_ZOOM,
-                               mZoomTool = new ZoomTool (&cmdHistory));
+    tcontroller->registerTool (mZoomTool = new ZoomTool (&cmdHistory));
     QObject::connect (mZoomTool, SIGNAL(modeSelected(const QString&)),
                       this, SLOT(showCurrentMode(const QString&)));
 
-    tcontroller->registerTool (ID_TOOL_PATHTEXT,
-                               tool = new PathTextTool (&cmdHistory));
+    tcontroller->registerTool (tool = new PathTextTool (&cmdHistory));
     QObject::connect (tool, SIGNAL(operationDone ()),
                       this, SLOT (resetTools ()));
 
-    tcontroller->registerTool (ID_TOOL_INSERTPART,
-                               insertPartTool =
-                               new InsertPartTool (&cmdHistory));
+    tcontroller->registerTool (insertPartTool = new InsertPartTool (&cmdHistory));
     QObject::connect (insertPartTool, SIGNAL(operationDone()),
                       this, SLOT (resetTools()));
 
     canvas->setToolController(tcontroller);
+
+    canvas->installEventFilter(this);
 }
 
 void KIllustratorView::readConfig()
@@ -563,7 +554,7 @@ void KIllustratorView::editInsertObject ()
 
     insertPartTool->setPartEntry (docEntry);
     // ####### Torben
-    // tcontroller->toolSelected (m_idActiveTool = ID_TOOL_INSERTPART);
+    // tcontroller->toolSelected (m_idActiveTool = TD_TOOL_INSERTPART);
 }
 
 
@@ -631,12 +622,14 @@ void KIllustratorView::setFillColor (long int id) {
 }
 */
 
-void KIllustratorView::slotConfigurePolygon() {
-    tcontroller->configureTool (ID_TOOL_POLYGON);
+void KIllustratorView::slotConfigurePolygon()
+{
+   tcontroller->configureTool (Tool::ToolPolygon);
 }
 
-void KIllustratorView::slotConfigureEllipse() {
-    tcontroller->configureTool (ID_TOOL_ELLIPSE);
+void KIllustratorView::slotConfigureEllipse()
+{
+   tcontroller->configureTool (Tool::ToolEllipse);
 }
 
 /*
@@ -1027,7 +1020,7 @@ void KIllustratorView::slotUngroup()
 
 void KIllustratorView::slotTextAlongPath()
 {
-    tcontroller->toolSelected (ID_TOOL_PATHTEXT);
+   tcontroller->toolSelected (Tool::ToolPathText);
 }
 
 void KIllustratorView::slotConvertToCurve()
@@ -1119,8 +1112,25 @@ void KIllustratorView::slotPenChosen( const QColor & c  )
 void KIllustratorView::slotSelectTool( bool b )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_SELECT );
+       tcontroller->toolSelected( Tool::ToolSelect );
 }
+
+bool KIllustratorView::eventFilter(QObject *o, QEvent *e)
+{
+   if ((e==0) || (tcontroller->getActiveTool()->id()==Tool::ToolSelect))
+      return false;
+
+   if ((o==canvas) && (e->type()==QEvent::MouseButtonPress))
+   {
+      QMouseEvent *me=(QMouseEvent*)e;
+      if (me->button()==RightButton)
+      {
+         m_selectTool->setChecked(true);
+         slotSelectTool(true);
+      };
+   };
+   return false;
+};
 
 void KIllustratorView::slotPointTool( bool b )
 {
@@ -1132,62 +1142,62 @@ void KIllustratorView::slotPointTool( bool b )
     if ( b )
         slotMoveNode( true );
 
-    tcontroller->toolSelected( ID_TOOL_EDITPOINT );
+    tcontroller->toolSelected( Tool::ToolEditPoint );
 }
 
 void KIllustratorView::slotFreehandTool( bool b )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_FREEHAND );
+       tcontroller->toolSelected( Tool::ToolFreeHand );
 }
 
 void KIllustratorView::slotLineTool( bool b )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_LINE);
+       tcontroller->toolSelected( Tool::ToolLine);
 }
 
 void KIllustratorView::slotBezierTool( bool b )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_BEZIER);
+       tcontroller->toolSelected( Tool::ToolBezier);
 }
 
 void KIllustratorView::slotRectTool( bool b )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_RECTANGLE );
+       tcontroller->toolSelected( Tool::ToolRectangle );
 }
 
 void KIllustratorView::slotPolygonTool( bool b )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_POLYGON );
+       tcontroller->toolSelected( Tool::ToolPolygon );
 }
 
 void KIllustratorView::slotEllipseTool( bool b )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_ELLIPSE );
+       tcontroller->toolSelected( Tool::ToolEllipse );
 }
 
 void KIllustratorView::slotTextTool( bool b )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_TEXT );
+       tcontroller->toolSelected( Tool::ToolText );
 }
 
 void KIllustratorView::slotZoomTool( bool b  )
 {
     if ( b )
-        tcontroller->toolSelected( ID_TOOL_ZOOM );
+       tcontroller->toolSelected( Tool::ToolZoom );
 }
 
 void KIllustratorView::slotInsertPartTool( bool b  )
 {
  editInsertObject ();
  if ( b )
-  tcontroller->toolSelected( ID_TOOL_INSERTPART );
+    tcontroller->toolSelected( Tool::ToolInsertPart );
 }
 
 void KIllustratorView::slotMoveNode( bool b )

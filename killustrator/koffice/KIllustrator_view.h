@@ -29,6 +29,7 @@
 #include <MainView.h>
 #include <koView.h>
 
+/*const int ID_TOOL_DUMMY=1000;
 const int ID_TOOL_SELECT=1001;
 const int ID_TOOL_EDITPOINT=1002;
 const int ID_TOOL_FREEHAND=1003;
@@ -40,7 +41,7 @@ const int ID_TOOL_ELLIPSE=1008;
 const int ID_TOOL_TEXT=1009;
 const int ID_TOOL_ZOOM=1010;
 const int ID_TOOL_PATHTEXT=1011;
-const int ID_TOOL_INSERTPART=1012;
+const int ID_TOOL_INSERTPART=1012;*/
 
 class KIllustratorView;
 class KIllustratorChild;
@@ -75,6 +76,7 @@ public:
     ~KIllustratorView ();
 
     void createMyGUI ();
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
     /**
      * Overloaded @ref MainView::activeDocument
