@@ -2006,22 +2006,20 @@ void KWView::doFindReplace()
 {
     KWFindReplace* findReplace = m_findReplace; // keep a copy. "this" might be deleted before we exit this method
 
-    findReplace->proceed();
-
-    bool aborted = findReplace->aborted();
-    while(!aborted )
+    bool ret = findReplace->proceed();
+    while( ret )
     {
         // this can ask the user whether to restart
         if ( !findReplace->shouldRestart() )
             break;
-        findReplace->changeListObject( m_gui->canvasWidget()->kWordDocument()->frameTextObject() );
-        findReplace->proceed();
-        aborted = findReplace->aborted();
+        // not very useful since we can't create frames during a search/replace...
+        //findReplace->changeListObject( m_gui->canvasWidget()->kWordDocument()->frameTextObject() );
+        ret = findReplace->proceed();
     }
 
-    delete findReplace;
-    if ( !aborted ) // Only if we still exist....
+    if ( !findReplace->aborted() ) // Only if we still exist....
         m_findReplace = 0L;
+    delete findReplace;
 }
 
 void KWView::raiseFrame()

@@ -5955,20 +5955,18 @@ void KPresenterView::doFindReplace()
     KPrFindReplace* findReplace = m_findReplace; // keep a copy. "this" might be deleted before we exit this method
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_initSwitchPage=m_switchPage;
-    findReplace->proceed();
+    bool ret = findReplace->proceed();
 
-    bool aborted = findReplace->aborted();
-    while(!aborted && switchInOtherPage(i18n( "Do you want to search in new page?")) )
+    while( ret && switchInOtherPage(i18n( "Do you want to search in new page?")) )
     {
         m_findReplace->changeListObject(m_canvas->activePage()->objectText());
-        findReplace->proceed();
-        aborted = findReplace->aborted();
+        ret = findReplace->proceed();
     }
     m_switchPage=-1;
     m_initSwitchPage=-1;
-    delete findReplace;
-    if ( !aborted ) // Only if we still exist....
+    if ( !findReplace->aborted() ) // Only if we still exist....
         m_findReplace = 0L;
+    delete findReplace;
 }
 
 void KPresenterView::refreshAllVariable()
