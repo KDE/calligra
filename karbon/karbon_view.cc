@@ -64,6 +64,8 @@
 #include "vselection.h"
 #include "vtoolcontainer.h"
 #include "vstrokefillpreview.h"
+#include "vstatebutton.h"
+#include <kaction.h>
 
 #include <tkfloatspinboxaction.h>
 
@@ -716,6 +718,22 @@ KarbonView::slotFillChanged( const VFill &f )
 }
 
 void
+KarbonView::slotJoinStyleClicked()
+{
+	VObjectListIterator itr( m_part->document().selection()->objects() );
+	for ( ; itr.current() ; ++itr )
+	{
+		VStroke stroke( *( itr.current()->stroke() ) );
+		stroke.setParent( itr.current() );
+		kdDebug() << "setting to : " << (VStroke::VLineJoin)m_joinStyle->getState() << endl;
+		stroke.setLineJoin( (VStroke::VLineJoin)m_joinStyle->getState() );
+		itr.current()->setStroke( stroke );
+	}
+
+	m_part->repaintAllViews();
+}
+
+void
 KarbonView::setLineWidth()
 {
     setLineWidth( m_setLineWidth->value() );
@@ -952,6 +970,15 @@ KarbonView::initActions()
 	m_setLineWidth->setLineStep(0.5);
 	connect( m_setLineWidth, SIGNAL(activated()), this, SLOT(setLineWidth()) );
 	//connect( m_pDoc, SIGNAL(unitsChanged(int)), m_setLineWidth, SLOT(setUnit(int)) );
+
+	// set up join style widget
+	m_joinStyle = new VStateButton( this );
+	m_joinStyle->addState( new QPixmap( "pics/hi22-action-14_shear.png" ) );
+    m_joinStyle->addState( new QPixmap( "pics/hi22-action-14_star.png" ) );
+    m_joinStyle->addState( new QPixmap( "pics/hi22-action-14_rotate.png" ) );
+    m_joinStyle->setState( 0 );
+	KWidgetAction *join = new KWidgetAction( m_joinStyle, i18n("Set Join Style"), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
+	connect( m_joinStyle, SIGNAL(clicked()), this, SLOT(slotJoinStyleClicked()) );
 
 	// toolbox ---->
 	m_toolbox = VToolContainer::instance( m_part, this );

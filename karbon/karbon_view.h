@@ -48,6 +48,7 @@ class VTool;
 class VToolContainer;
 class VTransformDlg;
 class VWhirlPinchDlg;
+class VStateButton;
 
 class KarbonView : public KoView
 {
@@ -148,6 +149,7 @@ protected slots:
 	void strokeClicked();
 	void slotStrokeChanged( const VStroke & );
 	void slotFillChanged( const VFill & );
+	void slotJoinStyleClicked();
 
 protected:
 	virtual void updateReadWrite( bool rw );
@@ -207,6 +209,9 @@ private:
 
 	// line width
 	TKUFloatSpinBoxAction *m_setLineWidth;
+
+	// line join style
+	VStateButton *m_joinStyle;
 
 	// settings:
 	KAction* m_configureAction;

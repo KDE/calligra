@@ -84,5 +84,6 @@
 	</ToolBar>
 	<ToolBar name="PenProp" fullWidth="false"><text>Stroke Properties</text>
 	<Action name="setLineWidth"/>
+	<Action name="setJoinStyle"/>
 	</ToolBar>
 </kpartgui>
