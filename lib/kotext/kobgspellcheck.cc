@@ -142,6 +142,7 @@ void KoBgSpellCheck::markWord( const QString &old, int pos, bool misspelled )
 {
     KoTextParag* parag = d->backSpeller->currentParag();
     if ( !parag ) return;
+    if ( pos >= parag->length() ) return;
 
     KoTextStringChar *ch = parag->at( pos );
     KoTextFormat format( *ch->format() );
