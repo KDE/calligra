@@ -24,19 +24,19 @@
 #endif
 
 #include <qmessagebox.h>
-#include <qlist.h> 
+#include <qlist.h>
 #include <applixwordimport.h>
 #include <applixwordimport.moc>
 #include <kdebug.h>
 
 APPLIXWORDImport::APPLIXWORDImport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) 
+                     KoFilter(parent, name)
 {
 }
 
-const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
-                               const QString& from, const QString& to,
-                               const QString &) 
+bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
+                              const QString& from, const QString& to,
+                              const QString &)
 {
 
     if(to!="application/x-kword" || from!="application/x-applixword")
@@ -48,7 +48,7 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
         in.close();
         return false;
     }
-       
+
 
     QString str;
 
@@ -62,7 +62,7 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
     str += "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\">\n";
     str += "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n";
 
-   
+
     //int merker=0;
     QTextStream stream(&in);
     int rueck;
@@ -79,14 +79,14 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
     // Read Headline
     mystr = readTagLine (stream, in);
 
-    // mystr = stream.readLine ();     
-    rueck = sscanf ((const char *) mystr.latin1() , 
-                    "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT", 
-	             &vers[0], &vers[1], &vers[2]); 
-    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]); 
+    // mystr = stream.readLine ();
+    rueck = sscanf ((const char *) mystr.latin1() ,
+                    "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT",
+	             &vers[0], &vers[1], &vers[2]);
+    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
 
     // Check the headline
-    if (rueck <= 0)  
+    if (rueck <= 0)
     {
       printf ("Header not correkt - May be it is not an applixword file\n");
       printf ("Headerline: <%s>\n", (const char *) mystr.latin1());
@@ -119,10 +119,10 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
           t_mycolor *col = new t_mycolor;
           QString    coltxt ;
           int zaehler = 0;
-          do 
+          do
 	  {
             mystr = readTagLine (stream, in);
-            if (mystr == "<end_styles>") 
+            if (mystr == "<end_styles>")
 	    {
              ok = false;
              printf ("End styles\n\n");
@@ -130,16 +130,16 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
 	    else
 	    {
               if (mystr.startsWith ("<color "))
-	      { 
+	      {
 		mystr.remove (0, 8);
                 pos = mystr.find ("\"");
 		coltxt = mystr.left (pos);
                 mystr.remove (0,pos+1);
-                rueck = sscanf ((const char *) mystr.latin1() , 
-                                ":%d:%d:%d:%d>", 
-	                         &col->c, &col->m, &col->y, &col->k); 
-		printf ("  Color %3d: %3d %3d %3d %3d %s\n", 
-	                zaehler, col->c, col->m, col->y, col->k, 
+                rueck = sscanf ((const char *) mystr.latin1() ,
+                                ":%d:%d:%d:%d>",
+	                         &col->c, &col->m, &col->y, &col->k);
+		printf ("  Color %3d: %3d %3d %3d %3d %s\n",
+	                zaehler, col->c, col->m, col->y, col->k,
 	                (const char *)  coltxt.latin1());
                 zaehler ++;
 
@@ -166,7 +166,7 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
         else if (mystr == "<start_data Applix>")
 	{
           printf ("\nEmbedded Applix object starts:\n");
-          do 
+          do
 	  {
             mystr = readTagLine (stream, in);
             if (mystr == "<end_data>") ok = false;
@@ -185,7 +185,7 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
         else if (mystr.startsWith ("<start_hdrftr "))
 	{
           printf ("\nHeader/Footer starts:\n");
-          do 
+          do
 	  {
             mystr = readTagLine (stream, in);
             if (mystr == "<end_hdrftr>") ok = false;
@@ -216,118 +216,118 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
 
           // Remove starting tab info
           mystr.remove (0, 4);
-          
-          // Remove ending > 
+
+          // Remove ending >
           mystr.remove (mystr.length()-1, 1);
 
-          // Seperate textstring " 
+          // Seperate textstring "
           ok = true;
           int y=0;
-          do 
-	  { 
+          do
+	  {
              pos = mystr.find ("\"", y);
-             printf ("POS:%d  length:%d y:%d\n", pos, mystr.length(), y); 
+             printf ("POS:%d  length:%d y:%d\n", pos, mystr.length(), y);
              printf ("<%s>", (const char *) mystr.latin1() );
-             if(  (pos-1 > -1) && (mystr[pos-1] == '\\')) 
-             { 
+             if(  (pos-1 > -1) && (mystr[pos-1] == '\\'))
+             {
                printf (" No string end - but Gänsefüsschen\n");
                y=pos+1;
              }
-             else 
+             else
              {
                printf (" String end //\n");
                ok = false;
              }
-	  } 
-          while (ok == true); 
+	  }
+          while (ok == true);
 
           textstr = mystr.left (pos);
-          mystr.remove (0, pos+1); 
+          mystr.remove (0, pos+1);
           mystr.stripWhiteSpace();
-          printf ("Text:<%s> %d  Rest:<%s> \n", 
+          printf ("Text:<%s> %d  Rest:<%s> \n",
                   (const char *) textstr.latin1(), pos,
                   (const char *) mystr.latin1() );
 
-          // split format 
+          // split format
           QStringList typeList;
           typeList = QStringList::split (' ', mystr);
-          
+
           int fontsize=12, bold=0, italic=0, underline=0, colpos=-1;
           QString fontname;
           int nn=0;
-          for (QStringList::Iterator it = typeList.begin(); it != typeList.end(); ++it ) 
+          for (QStringList::Iterator it = typeList.begin(); it != typeList.end(); ++it )
           {
-            printf ("   No: %2d   >%s< = ", 
+            printf ("   No: %2d   >%s< = ",
                     nn, (*it).latin1() );
             nn++;
 
             // Looking for bold
-            if      ((*it) == "bold")    
-            {  
+            if      ((*it) == "bold")
+            {
               bold = 1;
               printf ("bold\n");
 	    }
-            else if ((*it) == "no-bold")    
-            {  
+            else if ((*it) == "no-bold")
+            {
               bold = 0;
               printf ("no bold\n");
 	    }
-            else if ((*it) == "italic")    
-            {  
+            else if ((*it) == "italic")
+            {
               italic = 1;
               printf ("italic\n");
 	    }
-            else if ((*it) == "no-italic")    
-            {  
+            else if ((*it) == "no-italic")
+            {
               italic = 0;
               printf ("no italic\n");
 	    }
-            else if ((*it) == "underline")    
-            {  
+            else if ((*it) == "underline")
+            {
               underline = 1;
               printf ("underline\n");
 	    }
-            else if ((*it) == "no-underline")    
-            {  
+            else if ((*it) == "no-underline")
+            {
               underline = 0;
               printf ("no underline\n");
 	    }
             else if ((*it).startsWith ("size"))
-            {  
+            {
               (*it).remove (0, 5);
 	      sscanf ( (const char *) (*it).latin1(), "%d", &fontsize);
               printf ("fontsize: %d\n", fontsize);
 	    }
             else if ((*it).startsWith ("face"))
-            {  
+            {
               (*it).remove (0, 6);
 	      (*it).remove ((*it).length()-1, 1);
   	      fontname = *it;
               printf ("fontname: %s\n", (const char *) fontname.latin1());
 	    }
             else if ((*it).startsWith ("color:"))
-            {  
+            {
               (*it).remove (0, 7);
 	      (*it).remove ((*it).length()-1, 1);
               colname = *it;
               colpos = mcoltxt.findIndex (colname);
-              printf ("  Color: %s %d \n", (const char *) colname.latin1(), 
+              printf ("  Color: %s %d \n", (const char *) colname.latin1(),
                                            colpos );
 	    }
-            else 
-            {  
+            else
+            {
 	      printf  ("%s\n", (const char *) (*it).latin1());
             }
 
 
-	  }  
+	  }
           printf ("\n");
 
           // Replaces Part for & <>, applixwear special characters and qouts
           replaceSpecial (textstr);
-     
 
-          // add text inside      
+
+          // add text inside
           str += "    <PARAGRAPH>\n";
           str += "     <TEXT>";
           str += textstr;
@@ -380,7 +380,7 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
 	}
 
 
-        if (i>step) 
+        if (i>step)
         {
             i=0;
             value+=2;
@@ -388,7 +388,7 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
         }
     }
     emit sigProgress(100);
-                
+
     str += "</TEXT>\n";
     str += "   </PARAGRAPH>\n";
     str += "  </FRAMESET>\n";
@@ -396,7 +396,7 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
     str += "</DOC>\n";
     printf ("Text %s\n", (const char *) str.utf8());
     KoStore out = KoStore (QString(fileOut), KoStore::Write);
-    if (!out.open ("root")) 
+    if (!out.open ("root"))
     {
         kdError(30502) << "Unable to open output file!" << endl;
         in.close  ();
@@ -417,180 +417,180 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
 /******************************************************************************
  *  function: specCharfind                                                    *
  ******************************************************************************/
-QChar 
+QChar
 APPLIXWORDImport::specCharfind (QChar a, QChar b)
 {
   QChar chr;
 
-   if      ( (a == 'n') && (b == 'p') ) chr = 'ß'; 
+   if      ( (a == 'n') && (b == 'p') ) chr = 'ß';
 
 
-   else if ( (a == 'n') && (b == 'c') ) chr = 'Ò'; 
-   else if ( (a == 'p') && (b == 'c') ) chr = 'ò'; 
+   else if ( (a == 'n') && (b == 'c') ) chr = 'Ò';
+   else if ( (a == 'p') && (b == 'c') ) chr = 'ò';
 
-   else if ( (a == 'n') && (b == 'd') ) chr = 'Ó'; 
-   else if ( (a == 'p') && (b == 'd') ) chr = 'ó'; 
+   else if ( (a == 'n') && (b == 'd') ) chr = 'Ó';
+   else if ( (a == 'p') && (b == 'd') ) chr = 'ó';
 
-   else if ( (a == 'n') && (b == 'e') ) chr = 'Ô'; 
-   else if ( (a == 'p') && (b == 'e') ) chr = 'ô'; 
+   else if ( (a == 'n') && (b == 'e') ) chr = 'Ô';
+   else if ( (a == 'p') && (b == 'e') ) chr = 'ô';
 
-   else if ( (a == 'n') && (b == 'f') ) chr = 'Õ'; 
-   else if ( (a == 'p') && (b == 'f') ) chr = 'õ'; 
+   else if ( (a == 'n') && (b == 'f') ) chr = 'Õ';
+   else if ( (a == 'p') && (b == 'f') ) chr = 'õ';
 
-   else if ( (a == 'p') && (b == 'g') ) chr = 'ö'; 
-   else if ( (a == 'n') && (b == 'g') ) chr = 'Ö'; 
+   else if ( (a == 'p') && (b == 'g') ) chr = 'ö';
+   else if ( (a == 'n') && (b == 'g') ) chr = 'Ö';
 
 
 
-   else if ( (a == 'n') && (b == 'j') ) chr = 'Ù'; 
-   else if ( (a == 'p') && (b == 'j') ) chr = 'ù'; 
+   else if ( (a == 'n') && (b == 'j') ) chr = 'Ù';
+   else if ( (a == 'p') && (b == 'j') ) chr = 'ù';
 
-   else if ( (a == 'n') && (b == 'k') ) chr = 'Ú'; 
-   else if ( (a == 'p') && (b == 'k') ) chr = 'ú'; 
+   else if ( (a == 'n') && (b == 'k') ) chr = 'Ú';
+   else if ( (a == 'p') && (b == 'k') ) chr = 'ú';
 
-   else if ( (a == 'n') && (b == 'l') ) chr = 'Û'; 
-   else if ( (a == 'p') && (b == 'l') ) chr = 'û'; 
+   else if ( (a == 'n') && (b == 'l') ) chr = 'Û';
+   else if ( (a == 'p') && (b == 'l') ) chr = 'û';
 
-   else if ( (a == 'p') && (b == 'm') ) chr = 'ü'; 
+   else if ( (a == 'p') && (b == 'm') ) chr = 'ü';
    else if ( (a == 'n') && (b == 'm') ) chr = 'Ü';
 
 
 
-   else if ( (a == 'm') && (b == 'a') ) chr = 'À'; 
-   else if ( (a == 'o') && (b == 'a') ) chr = 'à'; 
+   else if ( (a == 'm') && (b == 'a') ) chr = 'À';
+   else if ( (a == 'o') && (b == 'a') ) chr = 'à';
 
-   else if ( (a == 'm') && (b == 'b') ) chr = 'Á'; 
-   else if ( (a == 'o') && (b == 'b') ) chr = 'á'; 
+   else if ( (a == 'm') && (b == 'b') ) chr = 'Á';
+   else if ( (a == 'o') && (b == 'b') ) chr = 'á';
 
-   else if ( (a == 'm') && (b == 'c') ) chr = 'Â'; 
-   else if ( (a == 'o') && (b == 'c') ) chr = 'â'; 
+   else if ( (a == 'm') && (b == 'c') ) chr = 'Â';
+   else if ( (a == 'o') && (b == 'c') ) chr = 'â';
 
-   else if ( (a == 'm') && (b == 'd') ) chr = 'Ã'; 
-   else if ( (a == 'o') && (b == 'd') ) chr = 'ã'; 
+   else if ( (a == 'm') && (b == 'd') ) chr = 'Ã';
+   else if ( (a == 'o') && (b == 'd') ) chr = 'ã';
 
-   else if ( (a == 'm') && (b == 'e') ) chr = 'Ä'; 
-   else if ( (a == 'o') && (b == 'e') ) chr = 'ä'; 
+   else if ( (a == 'm') && (b == 'e') ) chr = 'Ä';
+   else if ( (a == 'o') && (b == 'e') ) chr = 'ä';
 
-   else if ( (a == 'm') && (b == 'f') ) chr = 'Å'; 
-   else if ( (a == 'o') && (b == 'f') ) chr = 'å'; 
+   else if ( (a == 'm') && (b == 'f') ) chr = 'Å';
+   else if ( (a == 'o') && (b == 'f') ) chr = 'å';
 
-   else if ( (a == 'm') && (b == 'g') ) chr = 'Æ'; 
-   else if ( (a == 'o') && (b == 'g') ) chr = 'æ'; 
+   else if ( (a == 'm') && (b == 'g') ) chr = 'Æ';
+   else if ( (a == 'o') && (b == 'g') ) chr = 'æ';
 
 
 
-   else if ( (a == 'm') && (b == 'i') ) chr = 'È'; 
-   else if ( (a == 'o') && (b == 'i') ) chr = 'è'; 
+   else if ( (a == 'm') && (b == 'i') ) chr = 'È';
+   else if ( (a == 'o') && (b == 'i') ) chr = 'è';
 
-   else if ( (a == 'm') && (b == 'j') ) chr = 'É'; 
-   else if ( (a == 'o') && (b == 'j') ) chr = 'é'; 
+   else if ( (a == 'm') && (b == 'j') ) chr = 'É';
+   else if ( (a == 'o') && (b == 'j') ) chr = 'é';
 
-   else if ( (a == 'm') && (b == 'k') ) chr = 'Ê'; 
+   else if ( (a == 'm') && (b == 'k') ) chr = 'Ê';
    else if ( (a == 'o') && (b == 'k') ) chr = 'ê';
- 
-   else if ( (a == 'm') && (b == 'l') ) chr = 'Ë'; 
-   else if ( (a == 'o') && (b == 'l') ) chr = 'ë'; 
+
+   else if ( (a == 'm') && (b == 'l') ) chr = 'Ë';
+   else if ( (a == 'o') && (b == 'l') ) chr = 'ë';
 
 
 
 
 
 
-   else if ( (a == 'm') && (b == 'm') ) chr = 'Ì'; 
-   else if ( (a == 'o') && (b == 'm') ) chr = 'ì'; 
+   else if ( (a == 'm') && (b == 'm') ) chr = 'Ì';
+   else if ( (a == 'o') && (b == 'm') ) chr = 'ì';
 
-   else if ( (a == 'm') && (b == 'n') ) chr = 'Í'; 
-   else if ( (a == 'o') && (b == 'n') ) chr = 'í'; 
+   else if ( (a == 'm') && (b == 'n') ) chr = 'Í';
+   else if ( (a == 'o') && (b == 'n') ) chr = 'í';
 
-   else if ( (a == 'm') && (b == 'o') ) chr = 'Î'; 
-   else if ( (a == 'o') && (b == 'o') ) chr = 'î'; 
+   else if ( (a == 'm') && (b == 'o') ) chr = 'Î';
+   else if ( (a == 'o') && (b == 'o') ) chr = 'î';
 
-   else if ( (a == 'm') && (b == 'p') ) chr = 'Ï'; 
-   else if ( (a == 'o') && (b == 'p') ) chr = 'ï'; 
-
-
-   else if ( (a == 'n') && (b == 'b') ) chr = 'Ñ'; 
-   else if ( (a == 'p') && (b == 'b') ) chr = 'ñ'; 
+   else if ( (a == 'm') && (b == 'p') ) chr = 'Ï';
+   else if ( (a == 'o') && (b == 'p') ) chr = 'ï';
 
 
-   else if ( (a == 'k') && (b == 'c') ) chr = '¢'; 
-   else if ( (a == 'k') && (b == 'j') ) chr = '©'; 
-   else if ( (a == 'l') && (b == 'f') ) chr = 'µ'; 
-   else if ( (a == 'n') && (b == 'i') ) chr = 'Ø'; 
-   else if ( (a == 'p') && (b == 'i') ) chr = 'ø'; 
+   else if ( (a == 'n') && (b == 'b') ) chr = 'Ñ';
+   else if ( (a == 'p') && (b == 'b') ) chr = 'ñ';
 
-   else if ( (a == 'l') && (b == 'j') ) chr = '¹'; 
-   else if ( (a == 'l') && (b == 'c') ) chr = '²'; 
-   else if ( (a == 'l') && (b == 'd') ) chr = '³'; 
 
-   else if ( (a == 'l') && (b == 'm') ) chr = '¼'; 
-   else if ( (a == 'l') && (b == 'n') ) chr = '½'; 
-   else if ( (a == 'l') && (b == 'o') ) chr = '¾'; 
+   else if ( (a == 'k') && (b == 'c') ) chr = '¢';
+   else if ( (a == 'k') && (b == 'j') ) chr = '©';
+   else if ( (a == 'l') && (b == 'f') ) chr = 'µ';
+   else if ( (a == 'n') && (b == 'i') ) chr = 'Ø';
+   else if ( (a == 'p') && (b == 'i') ) chr = 'ø';
 
-   else if ( (a == 'l') && (b == 'a') ) chr = '°'; 
+   else if ( (a == 'l') && (b == 'j') ) chr = '¹';
+   else if ( (a == 'l') && (b == 'c') ) chr = '²';
+   else if ( (a == 'l') && (b == 'd') ) chr = '³';
 
-   else if ( (a == 'k') && (b == 'o') ) chr = '®'; 
-   else if ( (a == 'k') && (b == 'h') ) chr = '§'; 
-   else if ( (a == 'k') && (b == 'd') ) chr = '£'; 
+   else if ( (a == 'l') && (b == 'm') ) chr = '¼';
+   else if ( (a == 'l') && (b == 'n') ) chr = '½';
+   else if ( (a == 'l') && (b == 'o') ) chr = '¾';
 
-   else if ( (a == 'p') && (b == 'a') ) chr = 'ð'; 
-   else if ( (a == 'n') && (b == 'a') ) chr = 'Ð'; 
+   else if ( (a == 'l') && (b == 'a') ) chr = '°';
 
-   else if ( (a == 'l') && (b == 'l') ) chr = '»'; 
-   else if ( (a == 'k') && (b == 'l') ) chr = '«'; 
+   else if ( (a == 'k') && (b == 'o') ) chr = '®';
+   else if ( (a == 'k') && (b == 'h') ) chr = '§';
+   else if ( (a == 'k') && (b == 'd') ) chr = '£';
 
-   else if ( (a == 'l') && (b == 'k') ) chr = 'º'; 
+   else if ( (a == 'p') && (b == 'a') ) chr = 'ð';
+   else if ( (a == 'n') && (b == 'a') ) chr = 'Ð';
 
-   else if ( (a == 'l') && (b == 'h') ) chr = '·'; 
+   else if ( (a == 'l') && (b == 'l') ) chr = '»';
+   else if ( (a == 'k') && (b == 'l') ) chr = '«';
 
-   else if ( (a == 'k') && (b == 'b') ) chr = '¡'; 
+   else if ( (a == 'l') && (b == 'k') ) chr = 'º';
 
-   else if ( (a == 'k') && (b == 'e') ) chr = '¤'; 
+   else if ( (a == 'l') && (b == 'h') ) chr = '·';
 
-   else if ( (a == 'l') && (b == 'b') ) chr = '±'; 
+   else if ( (a == 'k') && (b == 'b') ) chr = '¡';
 
-   else if ( (a == 'l') && (b == 'p') ) chr = '¿'; 
+   else if ( (a == 'k') && (b == 'e') ) chr = '¤';
 
-   else if ( (a == 'k') && (b == 'f') ) chr = '¥'; 
+   else if ( (a == 'l') && (b == 'b') ) chr = '±';
+
+   else if ( (a == 'l') && (b == 'p') ) chr = '¿';
+
+   else if ( (a == 'k') && (b == 'f') ) chr = '¥';
 
    else if ( (a == 'p') && (b == 'o') ) chr = 'þ';
    else if ( (a == 'n') && (b == 'o') ) chr = 'Þ';
 
-   else if ( (a == 'n') && (b == 'n') ) chr = 'Ý'; 
-   else if ( (a == 'p') && (b == 'n') ) chr = 'ý'; 
-   else if ( (a == 'p') && (b == 'p') ) chr = 'ÿ'; 
+   else if ( (a == 'n') && (b == 'n') ) chr = 'Ý';
+   else if ( (a == 'p') && (b == 'n') ) chr = 'ý';
+   else if ( (a == 'p') && (b == 'p') ) chr = 'ÿ';
 
-   else if ( (a == 'k') && (b == 'k') ) chr = 'ª'; 
+   else if ( (a == 'k') && (b == 'k') ) chr = 'ª';
 
-   else if ( (a == 'k') && (b == 'm') ) chr = '¬'; 
+   else if ( (a == 'k') && (b == 'm') ) chr = '¬';
    else if ( (a == 'p') && (b == 'h') ) chr = '÷';
- 
-   else if ( (a == 'k') && (b == 'g') ) chr = '|'; 
 
-   else if ( (a == 'l') && (b == 'e') ) chr = '\''; 
+   else if ( (a == 'k') && (b == 'g') ) chr = '|';
 
-   else if ( (a == 'k') && (b == 'i') ) chr = '¨';  
+   else if ( (a == 'l') && (b == 'e') ) chr = '\'';
 
-   else if ( (a == 'k') && (b == 'n') ) chr = '­';  
+   else if ( (a == 'k') && (b == 'i') ) chr = '¨';
 
-   else if ( (a == 'k') && (b == 'p') ) chr = '¯';  
+   else if ( (a == 'k') && (b == 'n') ) chr = '­';
 
-   else if ( (a == 'l') && (b == 'g') ) chr = '¶';  
+   else if ( (a == 'k') && (b == 'p') ) chr = '¯';
 
-   else if ( (a == 'l') && (b == 'i') ) chr = '¸';  
- 
-   else if ( (a == 'm') && (b == 'h') ) chr = 'Ç';  
-   else if ( (a == 'o') && (b == 'h') ) chr = 'ç';  
+   else if ( (a == 'l') && (b == 'g') ) chr = '¶';
 
-   else if ( (a == 'n') && (b == 'h') ) chr = '×';  
+   else if ( (a == 'l') && (b == 'i') ) chr = '¸';
 
-   else if ( (a == 'k') && (b == 'a') ) chr = ' ';  
+   else if ( (a == 'm') && (b == 'h') ) chr = 'Ç';
+   else if ( (a == 'o') && (b == 'h') ) chr = 'ç';
 
-   else if ( (a == 'a') && (b == 'j') ) chr = '!';  
+   else if ( (a == 'n') && (b == 'h') ) chr = '×';
 
-   else  chr = '#'; 
+   else if ( (a == 'k') && (b == 'a') ) chr = ' ';
 
-   return chr;            
+   else if ( (a == 'a') && (b == 'j') ) chr = '!';
+
+   else  chr = '#';
+
+   return chr;
 }
 
 
@@ -602,13 +602,13 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
   int     ok, pos;
 
    // Read one line
-   mystr = stream.readLine (); 
- 
+   mystr = stream.readLine ();
+
    // Delete whitespaces
    mystr.stripWhiteSpace();
 
    // Look if the tag continues on the next line
-   if ((mystr.length() == 80) && (mystr[mystr.length()-1] == '\\') ) 
+   if ((mystr.length() == 80) && (mystr[mystr.length()-1] == '\\') )
    {
      ok = true;
      do
@@ -617,18 +617,18 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
        pos = in.at ();
 
        // Read next line
-       mystrn = stream.readLine (); 
+       mystrn = stream.readLine ();
 
-       // Is the new line a new tag line  
+       // Is the new line a new tag line
        if (mystrn[0] == ' ')
        {
 	 // remove the whitespace at the start of the new line
-         mystrn.remove (0, 1);  
+         mystrn.remove (0, 1);
 
 	 // remove the '/' at the end of the old line
-         mystr.remove (mystr.length()-1, 1); 
+         mystr.remove (mystr.length()-1, 1);
 
-         // append the new line  
+         // append the new line
          mystr += mystrn;
        }
        else
@@ -638,7 +638,7 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
          ok = false;
        }
      }
-     while (ok == true);     
+     while (ok == true);
    }
 
    return mystr;
@@ -647,7 +647,7 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
 
 
 
-void 
+void
 APPLIXWORDImport::replaceSpecial (QString &textstr)
 {
   int ok, pos;
@@ -678,13 +678,13 @@ APPLIXWORDImport::replaceSpecial (QString &textstr)
    }
    while (ok == true);
 
-     
-     
+
+
    // 3. Replace part for Applix Characters
    int   foundSpecialCharakter;
    QChar newchar;
 
-   do 
+   do
    {
       // initialize
       foundSpecialCharakter = false;
@@ -692,8 +692,8 @@ APPLIXWORDImport::replaceSpecial (QString &textstr)
       pos = textstr.find ("^");
 
       // is there a special character ?
-      if (pos > -1 ) 
-      { 
+      if (pos > -1 )
+      {
          // i have found a special character !
          foundSpecialCharakter = true;
 
@@ -702,7 +702,7 @@ APPLIXWORDImport::replaceSpecial (QString &textstr)
 
          // replace the character
          textstr.replace (pos, 3, newchar);
-      }      
+      }
     }
     while (foundSpecialCharakter == true);
 }

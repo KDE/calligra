@@ -51,7 +51,7 @@ public:
     virtual ~FilterBase() {}
 
     // Manages the filtering process
-    virtual const bool filter();
+    virtual bool filter();
 
     // override this to return true if you want to return a plain QCString
     virtual bool plainString() const { return false; }

@@ -55,7 +55,7 @@ static void TreatAbiProps(QString strProps,QValueList<AbiProps> &abiPropsList)
 {
     if (strProps.isEmpty())
         return;
-    
+
     QString name,value;
     bool notFinished=true;
     int position=0;
@@ -500,7 +500,7 @@ static QDomElement createMainFramesetElement(QDomDocument& qDomDocumentOut)
     framesetElementOut.setAttribute("removable",0);
     //Todo?  attribute "name"
     framesetsPluralElementOut.appendChild(framesetElementOut);
-    
+
     QDomElement frameElementOut=qDomDocumentOut.createElement("FRAME");
     frameElementOut.setAttribute("left",28);
     frameElementOut.setAttribute("top",42);
@@ -516,9 +516,9 @@ ABIWORDImport::ABIWORDImport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
-const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
-                               const QString& from, const QString& to,
-                               const QString &)
+bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
+                           const QString& from, const QString& to,
+                           const QString &)
 {
     if ((to != "application/x-kword") || (from != "application/x-abiword"))
         return false;

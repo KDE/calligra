@@ -36,16 +36,16 @@ public:
     APPLIXGRAPHICImport (KoFilter *parent, const char *name);
     virtual ~APPLIXGRAPHICImport() {}
     /** filtering :) */
-    virtual const bool filter(const QString &fileIn, const QString &fileOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    virtual bool filter(const QString &fileIn, const QString &fileOut,
+                        const QString &from, const QString &to,
+                        const QString &config=QString::null);
 };
 
 
 
 
 // Kleinstes Objekt
-class applixGraphicsLine 
+class applixGraphicsLine
 {
   public:
    int offX;

@@ -25,9 +25,9 @@ HTMLImport::HTMLImport(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
 }
 
-const bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
-                              const QString& from, const QString& to,
-                              const QString &) {
+bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
+                        const QString& from, const QString& to,
+                        const QString &) {
 
     if(to!="application/x-kword" || from!="text/html")
         return false;

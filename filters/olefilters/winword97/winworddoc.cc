@@ -121,7 +121,7 @@ unsigned WinWordDoc::computeCellEdge(
     return cellEdge + s_hMargin;
 }
 
-const bool WinWordDoc::convert()
+bool WinWordDoc::convert()
 {
     // We do the conversion in two passes, to allow all the tables to be turned into framesets
     // after the main frameset with the text.

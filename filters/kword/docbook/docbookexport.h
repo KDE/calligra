@@ -37,8 +37,8 @@ public:
     DocBookExport (KoFilter *parent, const char *name );
     virtual ~DocBookExport() {}
     /** filtering :) */
-    virtual const bool filter(const QString &fileIn, const QString &fileOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    virtual bool filter(const QString &fileIn, const QString &fileOut,
+                        const QString &from, const QString &to,
+                        const QString &config=QString::null);
 };
 #endif // DOCBOOKEXPORT_H

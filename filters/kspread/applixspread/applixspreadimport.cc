@@ -25,9 +25,9 @@
 #endif
 
 #include <qmessagebox.h>
-#include <qstringlist.h> 
+#include <qstringlist.h>
 #include <qregexp.h>
-#include <qlist.h> 
+#include <qlist.h>
 #include <applixspreadimport.h>
 #include <applixspreadimport.moc>
 #include <kdebug.h>
@@ -37,7 +37,7 @@
 
 
 APPLIXSPREADImport::APPLIXSPREADImport (KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) 
+                     KoFilter(parent, name)
 {
 }
 
@@ -54,20 +54,20 @@ QString APPLIXSPREADImport::nextLine( QTextStream & stream )
     return s;
 }
 
-const bool 
+bool
 APPLIXSPREADImport::filter (
-   const QString &fileIn, 
+   const QString &fileIn,
    const QString &fileOut,
-   const QString &from, 
+   const QString &from,
    const QString &to,
-   const QString &) 
+   const QString &)
 {
 
     if (to != "application/x-kspread" || from != "application/x-applixspread")
         return false;
 
     QFile in (fileIn);
-    if (!in.open(IO_ReadOnly)) 
+    if (!in.open(IO_ReadOnly))
     {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
@@ -106,12 +106,12 @@ APPLIXSPREADImport::filter (
     t_rc my_rc;
 
 
-									       
+
     /**************************************************************************
      * Read header                                                            *
      **************************************************************************/
-    if (! readHeader (stream)) return false; 
- 
+    if (! readHeader (stream)) return false;
+
 
     while (!stream.atEnd ())
     {
@@ -119,37 +119,37 @@ APPLIXSPREADImport::filter (
         mystr = nextLine( stream );
 
         printf ("INPUT <%s>\n", mystr.latin1() );
- 
+
 
         /**********************************************************************
          *  Looking for the colormap                                          *
          **********************************************************************/
-        if (mystr.startsWith ("COLORMAP") ) 
+        if (mystr.startsWith ("COLORMAP") )
 	{
           readColormap (stream, mcol);
 	}
- 
+
         /**********************************************************************
          *  Looking for the typeface table                                    *
          **********************************************************************/
-        else if (mystr.startsWith ("TYPEFACE TABLE") ) 
+        else if (mystr.startsWith ("TYPEFACE TABLE") )
 	{
           readTypefaceTable (stream, typefacetab);
 	}
-          
+
         /**********************************************************************
          *  Looking for some View-Informations                                *
          **********************************************************************/
-        else if (mystr.startsWith ("View Start, Name:") ) 
+        else if (mystr.startsWith ("View Start, Name:") )
 	{
-          readView (stream, mystr, my_rc); 
+          readView (stream, mystr, my_rc);
 	}
 
 
         /**********************************************************************
          *   Detect ( at the first place of the Linie                         *
          **********************************************************************/
-        else if (mystr[0] == '(') 
+        else if (mystr[0] == '(')
 	{
 	  int fg=-1; // fg = foregound
 
@@ -161,8 +161,8 @@ APPLIXSPREADImport::filter (
 
           // Remember lenght of the string
           alllenght = mystr.length ();
-          if (alllenght >= 80-1) 
-          { 
+          if (alllenght >= 80-1)
+          {
             printf (" Line >= 80 chars \n");
             int ok = true;
             do
@@ -171,7 +171,7 @@ APPLIXSPREADImport::filter (
               mystrn = nextLine( stream );
               if (mystrn[0] == ' ')
 	      {
-                mystrn.remove (0, 1);  
+                mystrn.remove (0, 1);
                 mystr += mystrn;
 	      }
               else
@@ -180,13 +180,13 @@ APPLIXSPREADImport::filter (
                 ok = false;
 	      }
 	    }
-            while (ok == true); 
-             
+            while (ok == true);
+
           }
 
 
           // Search for ')'
-          pos = mystr.find (')'); 
+          pos = mystr.find (')');
           typestr = mystr.left (pos);
 
 
@@ -195,7 +195,7 @@ APPLIXSPREADImport::filter (
           // alllenght = alllenght - pos - 1;
 
           // Search for ':'
-          pos = mystr.find (':'); 
+          pos = mystr.find (':');
 
           // Copy cellnumber informations
           cellnostr = mystr.left (pos);
@@ -206,7 +206,7 @@ APPLIXSPREADImport::filter (
 
 
           // Split Table and Cell Number
-          pos = cellnostr.find ('!'); 
+          pos = cellnostr.find ('!');
 
           // Copy tabnumber informations
           tabnostr = cellnostr.left (pos);
@@ -239,8 +239,8 @@ APPLIXSPREADImport::filter (
           cellcolstr = cellnostr;
           cellcolstr.remove (cellcolstr.length()-leni, leni);
 
-	  printf ("  INFO: length:%d  cellnostr:<%s> tmp:<%s> irow:%d  cellcolstr:<%s>\n", 
-                  len,  cellnostr.latin1(), 
+	  printf ("  INFO: length:%d  cellnostr:<%s> tmp:<%s> irow:%d  cellcolstr:<%s>\n",
+                  len,  cellnostr.latin1(),
                   tmp, irow, cellcolstr.latin1());
 
           // Transformat ascii column to int column
@@ -248,11 +248,11 @@ APPLIXSPREADImport::filter (
 
 
 	  //  sscanf (cellnostr.latin1(), "%c%d",&ccol, &irow);
-  
+
           // Transformat ascii column to int column
 	  //  icol = ccol - 64;
 
-          // Remove first whitespace 
+          // Remove first whitespace
           mystr.remove    (0, 1);
           tabnostr.remove (0, 1);
 
@@ -267,7 +267,7 @@ APPLIXSPREADImport::filter (
           int   foundSpecialCharakter;
           QChar newchar;
 
-          do 
+          do
 	  {
             // initialize
             foundSpecialCharakter = false;
@@ -275,8 +275,8 @@ APPLIXSPREADImport::filter (
             pos = mystr.find ("^");
 
             // is there a special character ?
-            if (pos > -1 ) 
-            { 
+            if (pos > -1 )
+            {
               // i have found a special character !
               foundSpecialCharakter = true;
 
@@ -286,13 +286,13 @@ APPLIXSPREADImport::filter (
               // replace the character
               mystr.replace (pos, 3, newchar);
 	    }
-            
+
 	  }
           while (foundSpecialCharakter == true);
-        
 
-	  // examine the typestring 
-          // splitt typestring in 3 parts by an |       
+
+	  // examine the typestring
+          // splitt typestring in 3 parts by an |
           QString typeFormStr;
           QString typeCharStr;
           QString typeCellStr;
@@ -306,7 +306,7 @@ APPLIXSPREADImport::filter (
           typeCharStr = typestr.mid   (pos1+1,  pos2 - pos1 - 1);
 
           typeCellStr = typestr.right (typestr.length() - pos2 - 1);
-        
+
           // Is it a new table
           if (tabctr != tabnostr)
           {
@@ -324,65 +324,65 @@ APPLIXSPREADImport::filter (
              if (pos > -1) str += my_rc.rc[pos];
           }
 
-          printf (" -DATA: Text:<%s>  Tab:<%s> <%s> %c  %d    <%s> <%s> <%s>\n", 
-                  mystr.latin1(),  
-                  tabnostr.latin1(), 
+          printf (" -DATA: Text:<%s>  Tab:<%s> <%s> %c  %d    <%s> <%s> <%s>\n",
+                  mystr.latin1(),
+                  tabnostr.latin1(),
                   cellnostr.latin1(), ccol, irow,
-                  typeFormStr.latin1(), 
-                  typeCharStr.latin1(), 
+                  typeFormStr.latin1(),
+                  typeCharStr.latin1(),
                   typeCellStr.latin1());
 
 
           /********************************************************************
            * examine charakter format String, splitt it up in basic parts     *
            ********************************************************************/
-          QStringList typeCharList; 
+          QStringList typeCharList;
           int bold=0, italic=0, underline=0, nn=0, fontsize=12, fontnr=-1;
 
           typeCharList = QStringList::split (',', typeCharStr);
 
-          for (QStringList::Iterator it = typeCharList.begin(); 
-               it != typeCharList.end(); ++it ) 
+          for (QStringList::Iterator it = typeCharList.begin();
+               it != typeCharList.end(); ++it )
 	  {
 	    // Output
-            printf ("   Char (%2d)   >%s< ", 
+            printf ("   Char (%2d)   >%s< ",
                     nn, (*it).latin1() );
             nn++;
 
-            if      ((*it) == "B")  
+            if      ((*it) == "B")
             {
               printf ("   = bold\n");
-              bold  = 1;  
+              bold  = 1;
 	    }
-            else if ((*it) == "I")  
+            else if ((*it) == "I")
             {
               printf ("   = italic\n");
-              italic = 1;  
+              italic = 1;
 	    }
-            else if ((*it) == "U")  
+            else if ((*it) == "U")
             {
               printf ("   = underline\n");
-              underline = 1;  
+              underline = 1;
 	    }
             else if ((*it).startsWith("FG") )
 	    {
               sscanf ((*it).latin1(), "FG%d", &fg);
-              printf ("  = Colornr %d\n", fg); 
+              printf ("  = Colornr %d\n", fg);
 	    }
             else if ((*it).startsWith("TF") )
 	    {
               sscanf ((*it).latin1(), "TF%d", &fontnr);
-              printf ("  = Font (%d) %s\n", 
-                      fontnr, (const char *) typefacetab[fontnr].latin1()); 
+              printf ("  = Font (%d) %s\n",
+                      fontnr, (const char *) typefacetab[fontnr].latin1());
 	    }
             else if ((*it).startsWith("P") )
 	    {
               sscanf ((*it).latin1(), "P%d", &fontsize);
-              printf ("   = Fontsize %d\n", fontsize); 
+              printf ("   = Fontsize %d\n", fontsize);
 	    }
             else
 	    {
-              printf ("   = ???\n"); 
+              printf ("   = ???\n");
 	    }
 	  }
           printf ("\n");
@@ -397,48 +397,48 @@ APPLIXSPREADImport::filter (
 
           typeFormList = QStringList::split (',', typeFormStr);
           nn=0;
-          for (QStringList::Iterator it = typeFormList.begin(); it != typeFormList.end(); ++it ) 
+          for (QStringList::Iterator it = typeFormList.begin(); it != typeFormList.end(); ++it )
           {
 	    // Output
-            printf ("   Type (%2d)   >%s< ", 
+            printf ("   Type (%2d)   >%s< ",
                     nn, (*it).latin1() );
             nn++;
             // Grep horizontal alignment
-            if      ( (*it) == "1")  
-            { 
+            if      ( (*it) == "1")
+            {
               printf (" = left align\n");
-              align = 1; // left 
+              align = 1; // left
 	    }
-            else if ( (*it) == "2")    
-            { 
+            else if ( (*it) == "2")
+            {
               printf (" = right align\n");
               align = 3; // right
 	    }
-            else if ( (*it) == "3")    
-            { 
+            else if ( (*it) == "3")
+            {
               printf (" = center align\n");
               align = 2; // center
 	    }
 
             // Grep verticale alignment
-            else if ( (*it) == "VT")   
-            { 
+            else if ( (*it) == "VT")
+            {
               printf (" = top valign\n");
               valign =  1; // top
 	    }
-            else if ( (*it) == "VC")   
-            { 
+            else if ( (*it) == "VC")
+            {
               printf (" = center valign\n");
               valign =  0; // center - default (2)
 	    }
-            else if ( (*it) == "VB")   
-            { 
+            else if ( (*it) == "VB")
+            {
               printf (" = bottom valign\n");
               valign =  3; // bottom
 	    }
             else
 	    {
-              printf ("   = ???\n"); 
+              printf ("   = ???\n");
 	    }
 	  }
 
@@ -454,22 +454,22 @@ APPLIXSPREADImport::filter (
           int leftbrushstyle=0, leftbrushcolor=1, leftfg_bg=1;
           int rightbrushstyle=0, rightbrushcolor=1, rightfg_bg=1;
           int bottombrushstyle=0, bottombrushcolor=1, bottomfg_bg=1;
-  
+
           typeCellList = QStringList::split (',', typeCellStr);
           nn=0;
-          for ( QStringList::Iterator it = typeCellList.begin(); it != typeCellList.end(); ++it ) 
+          for ( QStringList::Iterator it = typeCellList.begin(); it != typeCellList.end(); ++it )
           {
 	    // Output
-            printf ("   Cell (%2d)   >%s< ", 
+            printf ("   Cell (%2d)   >%s< ",
                     nn, (*it).latin1() );
             nn++;
 
 	    if ((*it)[0] == 'T')
 	    {
-	      printf (" = top    "); 
+	      printf (" = top    ");
               transPenFormat ((*it), &topPenWidth, &topPenStyle);
 
-              if ((*it).length() > 2) 
+              if ((*it).length() > 2)
 	      {
 		(*it).remove (0, 2);
                 filterSHFGBG ((*it), &topbrushstyle, &topbrushcolor, &topfg_bg);
@@ -479,22 +479,22 @@ APPLIXSPREADImport::filter (
 
 	    else if ( (*it)[0] == 'B')
 	    {
-	      printf (" = bottom "); 
+	      printf (" = bottom ");
               transPenFormat ((*it), &bottomPenWidth, &bottomPenStyle);
 
-              if ((*it).length() > 2) 
+              if ((*it).length() > 2)
 	      {
 		(*it).remove (0, 2);
                 filterSHFGBG ((*it), &bottombrushstyle, &bottombrushcolor, &bottomfg_bg);
     	      }
-	    } 
+	    }
 
 	    else if ( (*it)[0] == 'L')
 	    {
-              printf (" = left   "); 
+              printf (" = left   ");
               transPenFormat ((*it), &leftPenWidth, &leftPenStyle);
- 
-              if ((*it).length() > 2) 
+
+              if ((*it).length() > 2)
 	      {
 		(*it).remove (0, 2);
                 filterSHFGBG ((*it), &leftbrushstyle, &leftbrushcolor, &leftfg_bg);
@@ -503,10 +503,10 @@ APPLIXSPREADImport::filter (
 
 	    else if ( (*it)[0] == 'R')
 	    {
-              printf (" = right  "); 
+              printf (" = right  ");
               transPenFormat ((*it), &rightPenWidth, &rightPenStyle);
-   
-              if ((*it).length() > 2) 
+
+              if ((*it).length() > 2)
 	      {
 		(*it).remove (0, 2);
                 filterSHFGBG ((*it), &rightbrushstyle, &rightbrushcolor, &rightfg_bg);
@@ -521,9 +521,9 @@ APPLIXSPREADImport::filter (
               filterSHFGBG ((*it), &brushstyle, &fg_bg, &brushcolor);
 	    }
 
-            else 
+            else
 	    {
-              printf ("   = ???\n"); 
+              printf ("   = ???\n");
 	    }
 
           }
@@ -533,19 +533,19 @@ APPLIXSPREADImport::filter (
 
 
           QString col;
- 
+
           // create kspread fileformat output
           str += "   <cell row=\"" + QString::number (irow) + "\"";
-          str += " column=\""      + QString::number (icol) + "\">\n"; 
-	  if (bold == 1  || italic == 1 || underline == 1 || 
+          str += " column=\""      + QString::number (icol) + "\">\n";
+	  if (bold == 1  || italic == 1 || underline == 1 ||
               align != 0 || valign != 0 ||
-              topPenStyle  != 0  || bottomPenStyle != 0 || 
+              topPenStyle  != 0  || bottomPenStyle != 0 ||
               leftPenStyle != 0  || rightPenStyle  != 0 || fg !=-1 || fg_bg != -1 ||
               fontsize != 12 || brushstyle != 0 || fontnr != -1)
 	  {
             str += "    <format";
             if (brushstyle != 0)
-            { 
+            {
                str += " brushstyle=\""  + QString::number(brushstyle) + "\" ";
                str += " brushcolor=\"";
                str += writeColor (mcol.at(brushcolor));
@@ -554,21 +554,21 @@ APPLIXSPREADImport::filter (
 
             if (align   != 0)  str += " align=\""  + QString::number(align) + "\" ";
             if (valign  != 0)  str += " alignY=\"" + QString::number(valign) + "\" ";
-            if (fg_bg != -1) 
+            if (fg_bg != -1)
             {
               str += " bgcolor=\"";
               str += writeColor (mcol.at(fg_bg));
               str += "\" ";
 	    }
-            str += ">\n"; 
+            str += ">\n";
 
             // Font color
-            if (fg != -1) 
+            if (fg != -1)
             {
-              str += "    <pen width=\"0\" style=\"1\" color=\"";  
-              str += writeColor (mcol.at(fg));  
-	      str += "\" />\n"; 
-	    } 
+              str += "    <pen width=\"0\" style=\"1\" color=\"";
+              str += writeColor (mcol.at(fg));
+	      str += "\" />\n";
+	    }
 
             // Left border
             if (leftPenWidth > 0)
@@ -614,7 +614,7 @@ APPLIXSPREADImport::filter (
               if (fontsize != 12)
 	      {
                 str += "size=\"";
-                str += QString::number (fontsize); 
+                str += QString::number (fontsize);
                 str += "\" ";
 	      }
               // Fontfamily
@@ -624,18 +624,18 @@ APPLIXSPREADImport::filter (
                 str += typefacetab[fontnr].latin1();
                 str += "\" ";
 	      }
-              str += "weight=\"0\""; 
+              str += "weight=\"0\"";
 
               if (italic    == 1) str += " italic=\"yes\"";
               if (bold      == 1) str += " bold=\"yes\"";
               if (underline == 1) str += " underline=\"yes\"";
 
-              str +=" />\n";    
+              str +=" />\n";
 	    }
 	    str += "    </format>\n";
 	  }
-          str += "    <text>" + mystr + "</text>\n";  
-          str += "   </cell>\n"; 
+          str += "    <text>" + mystr + "</text>\n";
+          str += "   </cell>\n";
 	}
 
     }
@@ -650,7 +650,7 @@ APPLIXSPREADImport::filter (
 
     KoStore out=KoStore(QString(fileOut), KoStore::Write);
 
-    if (!out.open("root")) 
+    if (!out.open("root"))
     {
       kdError(38000/*30502*/) << "Unable to open output file!" << endl;
         in.close  ();
@@ -672,180 +672,180 @@ APPLIXSPREADImport::filter (
 /******************************************************************************
  *  function: specCharfind                                                    *
  ******************************************************************************/
-QChar 
+QChar
 APPLIXSPREADImport::specCharfind (QChar a, QChar b)
 {
   QChar chr;
 
-   if      ( (a == 'n') && (b == 'p') ) chr = 'ß'; 
+   if      ( (a == 'n') && (b == 'p') ) chr = 'ß';
 
 
-   else if ( (a == 'n') && (b == 'c') ) chr = 'Ò'; 
-   else if ( (a == 'p') && (b == 'c') ) chr = 'ò'; 
+   else if ( (a == 'n') && (b == 'c') ) chr = 'Ò';
+   else if ( (a == 'p') && (b == 'c') ) chr = 'ò';
 
-   else if ( (a == 'n') && (b == 'd') ) chr = 'Ó'; 
-   else if ( (a == 'p') && (b == 'd') ) chr = 'ó'; 
+   else if ( (a == 'n') && (b == 'd') ) chr = 'Ó';
+   else if ( (a == 'p') && (b == 'd') ) chr = 'ó';
 
-   else if ( (a == 'n') && (b == 'e') ) chr = 'Ô'; 
-   else if ( (a == 'p') && (b == 'e') ) chr = 'ô'; 
+   else if ( (a == 'n') && (b == 'e') ) chr = 'Ô';
+   else if ( (a == 'p') && (b == 'e') ) chr = 'ô';
 
-   else if ( (a == 'n') && (b == 'f') ) chr = 'Õ'; 
-   else if ( (a == 'p') && (b == 'f') ) chr = 'õ'; 
+   else if ( (a == 'n') && (b == 'f') ) chr = 'Õ';
+   else if ( (a == 'p') && (b == 'f') ) chr = 'õ';
 
-   else if ( (a == 'p') && (b == 'g') ) chr = 'ö'; 
-   else if ( (a == 'n') && (b == 'g') ) chr = 'Ö'; 
+   else if ( (a == 'p') && (b == 'g') ) chr = 'ö';
+   else if ( (a == 'n') && (b == 'g') ) chr = 'Ö';
 
 
 
-   else if ( (a == 'n') && (b == 'j') ) chr = 'Ù'; 
-   else if ( (a == 'p') && (b == 'j') ) chr = 'ù'; 
+   else if ( (a == 'n') && (b == 'j') ) chr = 'Ù';
+   else if ( (a == 'p') && (b == 'j') ) chr = 'ù';
 
-   else if ( (a == 'n') && (b == 'k') ) chr = 'Ú'; 
-   else if ( (a == 'p') && (b == 'k') ) chr = 'ú'; 
+   else if ( (a == 'n') && (b == 'k') ) chr = 'Ú';
+   else if ( (a == 'p') && (b == 'k') ) chr = 'ú';
 
-   else if ( (a == 'n') && (b == 'l') ) chr = 'Û'; 
-   else if ( (a == 'p') && (b == 'l') ) chr = 'û'; 
+   else if ( (a == 'n') && (b == 'l') ) chr = 'Û';
+   else if ( (a == 'p') && (b == 'l') ) chr = 'û';
 
-   else if ( (a == 'p') && (b == 'm') ) chr = 'ü'; 
+   else if ( (a == 'p') && (b == 'm') ) chr = 'ü';
    else if ( (a == 'n') && (b == 'm') ) chr = 'Ü';
 
 
 
-   else if ( (a == 'm') && (b == 'a') ) chr = 'À'; 
-   else if ( (a == 'o') && (b == 'a') ) chr = 'à'; 
+   else if ( (a == 'm') && (b == 'a') ) chr = 'À';
+   else if ( (a == 'o') && (b == 'a') ) chr = 'à';
 
-   else if ( (a == 'm') && (b == 'b') ) chr = 'Á'; 
-   else if ( (a == 'o') && (b == 'b') ) chr = 'á'; 
+   else if ( (a == 'm') && (b == 'b') ) chr = 'Á';
+   else if ( (a == 'o') && (b == 'b') ) chr = 'á';
 
-   else if ( (a == 'm') && (b == 'c') ) chr = 'Â'; 
-   else if ( (a == 'o') && (b == 'c') ) chr = 'â'; 
+   else if ( (a == 'm') && (b == 'c') ) chr = 'Â';
+   else if ( (a == 'o') && (b == 'c') ) chr = 'â';
 
-   else if ( (a == 'm') && (b == 'd') ) chr = 'Ã'; 
-   else if ( (a == 'o') && (b == 'd') ) chr = 'ã'; 
+   else if ( (a == 'm') && (b == 'd') ) chr = 'Ã';
+   else if ( (a == 'o') && (b == 'd') ) chr = 'ã';
 
-   else if ( (a == 'm') && (b == 'e') ) chr = 'Ä'; 
-   else if ( (a == 'o') && (b == 'e') ) chr = 'ä'; 
+   else if ( (a == 'm') && (b == 'e') ) chr = 'Ä';
+   else if ( (a == 'o') && (b == 'e') ) chr = 'ä';
 
-   else if ( (a == 'm') && (b == 'f') ) chr = 'Å'; 
-   else if ( (a == 'o') && (b == 'f') ) chr = 'å'; 
+   else if ( (a == 'm') && (b == 'f') ) chr = 'Å';
+   else if ( (a == 'o') && (b == 'f') ) chr = 'å';
 
-   else if ( (a == 'm') && (b == 'g') ) chr = 'Æ'; 
-   else if ( (a == 'o') && (b == 'g') ) chr = 'æ'; 
+   else if ( (a == 'm') && (b == 'g') ) chr = 'Æ';
+   else if ( (a == 'o') && (b == 'g') ) chr = 'æ';
 
 
 
-   else if ( (a == 'm') && (b == 'i') ) chr = 'È'; 
-   else if ( (a == 'o') && (b == 'i') ) chr = 'è'; 
+   else if ( (a == 'm') && (b == 'i') ) chr = 'È';
+   else if ( (a == 'o') && (b == 'i') ) chr = 'è';
 
-   else if ( (a == 'm') && (b == 'j') ) chr = 'É'; 
-   else if ( (a == 'o') && (b == 'j') ) chr = 'é'; 
+   else if ( (a == 'm') && (b == 'j') ) chr = 'É';
+   else if ( (a == 'o') && (b == 'j') ) chr = 'é';
 
-   else if ( (a == 'm') && (b == 'k') ) chr = 'Ê'; 
+   else if ( (a == 'm') && (b == 'k') ) chr = 'Ê';
    else if ( (a == 'o') && (b == 'k') ) chr = 'ê';
- 
-   else if ( (a == 'm') && (b == 'l') ) chr = 'Ë'; 
-   else if ( (a == 'o') && (b == 'l') ) chr = 'ë'; 
+
+   else if ( (a == 'm') && (b == 'l') ) chr = 'Ë';
+   else if ( (a == 'o') && (b == 'l') ) chr = 'ë';
 
 
 
 
 
 
-   else if ( (a == 'm') && (b == 'm') ) chr = 'Ì'; 
-   else if ( (a == 'o') && (b == 'm') ) chr = 'ì'; 
+   else if ( (a == 'm') && (b == 'm') ) chr = 'Ì';
+   else if ( (a == 'o') && (b == 'm') ) chr = 'ì';
 
-   else if ( (a == 'm') && (b == 'n') ) chr = 'Í'; 
-   else if ( (a == 'o') && (b == 'n') ) chr = 'í'; 
+   else if ( (a == 'm') && (b == 'n') ) chr = 'Í';
+   else if ( (a == 'o') && (b == 'n') ) chr = 'í';
 
-   else if ( (a == 'm') && (b == 'o') ) chr = 'Î'; 
-   else if ( (a == 'o') && (b == 'o') ) chr = 'î'; 
+   else if ( (a == 'm') && (b == 'o') ) chr = 'Î';
+   else if ( (a == 'o') && (b == 'o') ) chr = 'î';
 
-   else if ( (a == 'm') && (b == 'p') ) chr = 'Ï'; 
-   else if ( (a == 'o') && (b == 'p') ) chr = 'ï'; 
-
-
-   else if ( (a == 'n') && (b == 'b') ) chr = 'Ñ'; 
-   else if ( (a == 'p') && (b == 'b') ) chr = 'ñ'; 
+   else if ( (a == 'm') && (b == 'p') ) chr = 'Ï';
+   else if ( (a == 'o') && (b == 'p') ) chr = 'ï';
 
 
-   else if ( (a == 'k') && (b == 'c') ) chr = '¢'; 
-   else if ( (a == 'k') && (b == 'j') ) chr = '©'; 
-   else if ( (a == 'l') && (b == 'f') ) chr = 'µ'; 
-   else if ( (a == 'n') && (b == 'i') ) chr = 'Ø'; 
-   else if ( (a == 'p') && (b == 'i') ) chr = 'ø'; 
+   else if ( (a == 'n') && (b == 'b') ) chr = 'Ñ';
+   else if ( (a == 'p') && (b == 'b') ) chr = 'ñ';
 
-   else if ( (a == 'l') && (b == 'j') ) chr = '¹'; 
-   else if ( (a == 'l') && (b == 'c') ) chr = '²'; 
-   else if ( (a == 'l') && (b == 'd') ) chr = '³'; 
 
-   else if ( (a == 'l') && (b == 'm') ) chr = '¼'; 
-   else if ( (a == 'l') && (b == 'n') ) chr = '½'; 
-   else if ( (a == 'l') && (b == 'o') ) chr = '¾'; 
+   else if ( (a == 'k') && (b == 'c') ) chr = '¢';
+   else if ( (a == 'k') && (b == 'j') ) chr = '©';
+   else if ( (a == 'l') && (b == 'f') ) chr = 'µ';
+   else if ( (a == 'n') && (b == 'i') ) chr = 'Ø';
+   else if ( (a == 'p') && (b == 'i') ) chr = 'ø';
 
-   else if ( (a == 'l') && (b == 'a') ) chr = '°'; 
+   else if ( (a == 'l') && (b == 'j') ) chr = '¹';
+   else if ( (a == 'l') && (b == 'c') ) chr = '²';
+   else if ( (a == 'l') && (b == 'd') ) chr = '³';
 
-   else if ( (a == 'k') && (b == 'o') ) chr = '®'; 
-   else if ( (a == 'k') && (b == 'h') ) chr = '§'; 
-   else if ( (a == 'k') && (b == 'd') ) chr = '£'; 
+   else if ( (a == 'l') && (b == 'm') ) chr = '¼';
+   else if ( (a == 'l') && (b == 'n') ) chr = '½';
+   else if ( (a == 'l') && (b == 'o') ) chr = '¾';
 
-   else if ( (a == 'p') && (b == 'a') ) chr = 'ð'; 
-   else if ( (a == 'n') && (b == 'a') ) chr = 'Ð'; 
+   else if ( (a == 'l') && (b == 'a') ) chr = '°';
 
-   else if ( (a == 'l') && (b == 'l') ) chr = '»'; 
-   else if ( (a == 'k') && (b == 'l') ) chr = '«'; 
+   else if ( (a == 'k') && (b == 'o') ) chr = '®';
+   else if ( (a == 'k') && (b == 'h') ) chr = '§';
+   else if ( (a == 'k') && (b == 'd') ) chr = '£';
 
-   else if ( (a == 'l') && (b == 'k') ) chr = 'º'; 
+   else if ( (a == 'p') && (b == 'a') ) chr = 'ð';
+   else if ( (a == 'n') && (b == 'a') ) chr = 'Ð';
 
-   else if ( (a == 'l') && (b == 'h') ) chr = '·'; 
+   else if ( (a == 'l') && (b == 'l') ) chr = '»';
+   else if ( (a == 'k') && (b == 'l') ) chr = '«';
 
-   else if ( (a == 'k') && (b == 'b') ) chr = '¡'; 
+   else if ( (a == 'l') && (b == 'k') ) chr = 'º';
 
-   else if ( (a == 'k') && (b == 'e') ) chr = '¤'; 
+   else if ( (a == 'l') && (b == 'h') ) chr = '·';
 
-   else if ( (a == 'l') && (b == 'b') ) chr = '±'; 
+   else if ( (a == 'k') && (b == 'b') ) chr = '¡';
 
-   else if ( (a == 'l') && (b == 'p') ) chr = '¿'; 
+   else if ( (a == 'k') && (b == 'e') ) chr = '¤';
 
-   else if ( (a == 'k') && (b == 'f') ) chr = '¥'; 
+   else if ( (a == 'l') && (b == 'b') ) chr = '±';
+
+   else if ( (a == 'l') && (b == 'p') ) chr = '¿';
+
+   else if ( (a == 'k') && (b == 'f') ) chr = '¥';
 
    else if ( (a == 'p') && (b == 'o') ) chr = 'þ';
    else if ( (a == 'n') && (b == 'o') ) chr = 'Þ';
 
-   else if ( (a == 'n') && (b == 'n') ) chr = 'Ý'; 
-   else if ( (a == 'p') && (b == 'n') ) chr = 'ý'; 
-   else if ( (a == 'p') && (b == 'p') ) chr = 'ÿ'; 
+   else if ( (a == 'n') && (b == 'n') ) chr = 'Ý';
+   else if ( (a == 'p') && (b == 'n') ) chr = 'ý';
+   else if ( (a == 'p') && (b == 'p') ) chr = 'ÿ';
 
-   else if ( (a == 'k') && (b == 'k') ) chr = 'ª'; 
+   else if ( (a == 'k') && (b == 'k') ) chr = 'ª';
 
-   else if ( (a == 'k') && (b == 'm') ) chr = '¬'; 
+   else if ( (a == 'k') && (b == 'm') ) chr = '¬';
    else if ( (a == 'p') && (b == 'h') ) chr = '÷';
- 
-   else if ( (a == 'k') && (b == 'g') ) chr = '|'; 
 
-   else if ( (a == 'l') && (b == 'e') ) chr = '\''; 
+   else if ( (a == 'k') && (b == 'g') ) chr = '|';
 
-   else if ( (a == 'k') && (b == 'i') ) chr = '¨';  
+   else if ( (a == 'l') && (b == 'e') ) chr = '\'';
 
-   else if ( (a == 'k') && (b == 'n') ) chr = '­';  
+   else if ( (a == 'k') && (b == 'i') ) chr = '¨';
 
-   else if ( (a == 'k') && (b == 'p') ) chr = '¯';  
+   else if ( (a == 'k') && (b == 'n') ) chr = '­';
 
-   else if ( (a == 'l') && (b == 'g') ) chr = '¶';  
+   else if ( (a == 'k') && (b == 'p') ) chr = '¯';
 
-   else if ( (a == 'l') && (b == 'i') ) chr = '¸';  
- 
-   else if ( (a == 'm') && (b == 'h') ) chr = 'Ç';  
-   else if ( (a == 'o') && (b == 'h') ) chr = 'ç';  
+   else if ( (a == 'l') && (b == 'g') ) chr = '¶';
 
-   else if ( (a == 'n') && (b == 'h') ) chr = '×';  
+   else if ( (a == 'l') && (b == 'i') ) chr = '¸';
 
-   else if ( (a == 'k') && (b == 'a') ) chr = ' ';  
+   else if ( (a == 'm') && (b == 'h') ) chr = 'Ç';
+   else if ( (a == 'o') && (b == 'h') ) chr = 'ç';
 
-   else if ( (a == 'a') && (b == 'j') ) chr = '!';  
+   else if ( (a == 'n') && (b == 'h') ) chr = '×';
 
-   else  chr = '#'; 
+   else if ( (a == 'k') && (b == 'a') ) chr = ' ';
 
-   return chr;            
+   else if ( (a == 'a') && (b == 'j') ) chr = '!';
+
+   else  chr = '#';
+
+   return chr;
 }
 
 
@@ -853,7 +853,7 @@ APPLIXSPREADImport::specCharfind (QChar a, QChar b)
 /******************************************************************************
  *  function:   writePen                                                      *
  ******************************************************************************/
-void 
+void
 APPLIXSPREADImport::writePen (QString &str, int penwidth, int penstyle, QString framecolor)
 {
   str += "     <pen width=\"";
@@ -882,7 +882,7 @@ APPLIXSPREADImport::writeColor (t_mycolor *mc)
 {
   char rgb[20];
 
-//    printf ("                 WriteColor: <%d>-<%d>-<%d>   <%d>-<%d>-<%d>-<%d>\n", 
+//    printf ("                 WriteColor: <%d>-<%d>-<%d>   <%d>-<%d>-<%d>-<%d>\n",
 //            mc->r, mc->g, mc->b,
 //            mc->c, mc->m, mc->y, mc->k);
 
@@ -901,25 +901,25 @@ APPLIXSPREADImport::writeColor (t_mycolor *mc)
  ******************************************************************************/
 void
 APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefacetab)
-{         
+{
    int tftabCounter=0, ok;
    QString mystr;
- 
+
    // Read the colormap
    printf ("Reading typeface table: \n");
-          
+
    ok = true;
    do
    {
      mystr = nextLine( stream );
      if (mystr == "END TYPEFACE TABLE" ) ok = false;
-     else 
+     else
      {
-       printf ("  %2d: <%s>\n", tftabCounter, mystr.latin1());  
-       typefacetab.append(mystr); 
+       printf ("  %2d: <%s>\n", tftabCounter, mystr.latin1());
+       typefacetab.append(mystr);
        tftabCounter++;
      }
-    } 
+    }
     while (ok == true );
 
     printf ("... done \n\n");
@@ -930,7 +930,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
 /******************************************************************************
  *  function:   readColormap                                                  *
  ******************************************************************************/
-void 
+void
 APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
 {
   int contcount, ok, pos;
@@ -954,7 +954,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
        // Count the number of  whitespaces
        contcount = mystr.contains (' ');
        printf ("contcount:%d ", contcount);
-       contcount -= 5; 
+       contcount -= 5;
 
        // Begin off interest
        pos = mystr.find (" 0 ");
@@ -963,14 +963,14 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
        colstr = mystr.left (pos);
        mystr.remove (0, pos+1);
        mystr.stripWhiteSpace ();
-       
+
        t_mycolor *tmc = new t_mycolor;
 
        // get sub colors
-       pos = sscanf (mystr.latin1(), "0 %d %d %d %d 0", 
-                     &tmc->c, &tmc->m, &tmc->y, &tmc->k); 
+       pos = sscanf (mystr.latin1(), "0 %d %d %d %d 0",
+                     &tmc->c, &tmc->m, &tmc->y, &tmc->k);
 
-       printf ("  - <%-20s> <%-15s> <%3d> <%3d> <%3d> <%3d>  pos: %d\n", 
+       printf ("  - <%-20s> <%-15s> <%3d> <%3d> <%3d> <%3d>  pos: %d\n",
                 mystr.latin1(),
                 colstr.latin1(),
                 tmc->c, tmc->m, tmc->y, tmc->k, pos);
@@ -987,7 +987,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
 
        mcol.append (tmc);
      }
- 
+
    }
    while (ok == true );
 
@@ -1008,14 +1008,14 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
 /******************************************************************************
  *  function:   readColormap                                                  *
  ******************************************************************************/
-void 
+void
 APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
 {
   QString rowcolstr;
   QString mystr, tabname;
   int ok;
 
-   printf ("Reading View\n"); 
+   printf ("Reading View\n");
 
    tabname = instr;
 
@@ -1027,7 +1027,7 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
    do
    {
      mystr = nextLine( stream );
-    
+
      printf ("  %s\n", mystr.latin1());
      if (mystr.startsWith ("View End, Name:")) ok = false;
      else
@@ -1038,7 +1038,7 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
           printf ("   - Column Widths\n");
 	  mystr.remove (0, 20);
           printf ("      <%s>\n", mystr.latin1());
-              
+
           int  colwidth, icolumn;
           char ccolumn;
 
@@ -1046,9 +1046,9 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
           QStringList ColumnList;
           ColumnList = QStringList::split (' ', mystr);
 
-          for ( QStringList::Iterator it = ColumnList.begin(); it != ColumnList.end(); ++it ) 
+          for ( QStringList::Iterator it = ColumnList.begin(); it != ColumnList.end(); ++it )
           {
-            
+
             sscanf ((*it).latin1(), "%c:%d", &ccolumn, &colwidth);
             int len = (*it).length ();
             int pos = (*it).find (":");
@@ -1074,7 +1074,7 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
           }
        }
 
-       // ROW Heights 
+       // ROW Heights
        else if  (mystr.startsWith ("View Row Heights"))
        {
          printf ("   - Row Heights\n");
@@ -1087,9 +1087,9 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
          QStringList RowList;
          RowList = QStringList::split (' ', mystr);
 
-         for ( QStringList::Iterator it = RowList.begin(); it != RowList.end(); ++it ) 
+         for ( QStringList::Iterator it = RowList.begin(); it != RowList.end(); ++it )
          {
-            sscanf ((*it).latin1(), " %d:%d", 
+            sscanf ((*it).latin1(), " %d:%d",
                     &irow, &rowheight);
             printf ("   row: %2d   height: %2d\n", irow, rowheight);
             if (rowheight > 32768) rowheight -= 32768;
@@ -1127,59 +1127,59 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
 /******************************************************************************
  *  function:   filterSHFGBG                                                  *
  ******************************************************************************/
-void 
-APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor, 
+void
+APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
                                   int *fgcolor)
-{              
+{
   QString tmpstr;
   int     pos;
   int     m2=0, m3=0;
 
-  // filter SH = Brushstyle Background 
+  // filter SH = Brushstyle Background
   pos = it.find ("SH");
   if (pos > -1)
   {
      tmpstr = it;
      if (pos > 0)   tmpstr.remove(0, pos);
-     pos = sscanf (tmpstr.latin1(), "SH%d", 
+     pos = sscanf (tmpstr.latin1(), "SH%d",
                    style);
 
-     printf ("style: %d(%d)  ", 
+     printf ("style: %d(%d)  ",
              *style, pos);
   }
 
 
-  // filter FG = FGCOLOR 
+  // filter FG = FGCOLOR
   pos = it.find ("FG");
   if (pos > -1)
   {
     tmpstr = it;
     if (pos > 0)   tmpstr.remove(0, pos);
-    pos = sscanf (tmpstr.latin1(), "FG%d", 
+    pos = sscanf (tmpstr.latin1(), "FG%d",
                   fgcolor);
-    printf ("fg: %d(%d)  ", 
+    printf ("fg: %d(%d)  ",
             *fgcolor, pos);
      m2=1;
   }
 
 
-  // filter BG = BGCOLOR 
+  // filter BG = BGCOLOR
   pos = it.find ("BG");
   if (pos > -1)
   {
     tmpstr = it;
     if (pos > 0)   tmpstr.remove(0, pos);
-    pos = sscanf (tmpstr.latin1(), "BG%d", 
+    pos = sscanf (tmpstr.latin1(), "BG%d",
                   bgcolor);
-    printf ("bgcolor: %d(%d)  ", 
+    printf ("bgcolor: %d(%d)  ",
             *bgcolor, pos);
     m3=1;
   }
 
 
   printf ("\n");
-  
-  
+
+
   // corrent the bgcolor to the fgcolor if the background is plain
   if ((*style == 8) && (m2 == 1) && (m3 == 0))
   {
@@ -1187,23 +1187,23 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
   }
 
 
-  // Translate brushstyle to kspread brushstyle  
+  // Translate brushstyle to kspread brushstyle
   if (*style != 0)
   {
     if       (*style ==  1) *style =  0;
     else if  (*style ==  2) *style =  7;
     else if  (*style ==  3) *style =  0;
-    else if  (*style ==  4) *style =  4;  
-    else if  (*style ==  5) *style =  3;  
-    else if  (*style ==  6) *style =  2;  
+    else if  (*style ==  4) *style =  4;
+    else if  (*style ==  5) *style =  3;
+    else if  (*style ==  6) *style =  2;
     else if  (*style ==  7) *style =  0;
     else if  (*style ==  8) *style =  0;
-    else if  (*style ==  9) *style = 10;  
-    else if  (*style == 10) *style =  9;  
-    else if  (*style == 11) *style = 11;  
-    else if  (*style == 12) *style = 12;  
-    else if  (*style == 13) *style = 13;  
-    else if  (*style == 14) *style = 14;  
+    else if  (*style ==  9) *style = 10;
+    else if  (*style == 10) *style =  9;
+    else if  (*style == 11) *style = 11;
+    else if  (*style == 12) *style = 12;
+    else if  (*style == 13) *style = 13;
+    else if  (*style == 14) *style = 14;
     else if  (*style == 15) *style =  0;
     else if  (*style == 16) *style =  0;
     else if  (*style == 17) *style =  0;
@@ -1217,41 +1217,41 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
 /******************************************************************************
  *  function:   filterSHFGBG                                                  *
  ******************************************************************************/
-void 
+void
 APPLIXSPREADImport::transPenFormat (QString it, int *PenWidth, int *PenStyle)
 {
-   
-   if       ( it[1] == '1' ) 
+
+   if       ( it[1] == '1' )
    {
-     *PenWidth = 1; 
+     *PenWidth = 1;
      *PenStyle = 1;
    }
 
-   else if  ( it[1] == '2' )  
+   else if  ( it[1] == '2' )
    {
-     *PenWidth = 2; 
+     *PenWidth = 2;
      *PenStyle = 1;
    }
 
-   else if  ( it[1] == '3' )  
+   else if  ( it[1] == '3' )
    {
-     *PenWidth = 3; 
+     *PenWidth = 3;
      *PenStyle = 1;
    }
 
-   else if  ( it[1] == '4' )  
+   else if  ( it[1] == '4' )
    {
-     *PenWidth = 1; 
+     *PenWidth = 1;
      *PenStyle = 3;
    }
 
-   else if  ( it[1] == '5' )  
+   else if  ( it[1] == '5' )
    {
-     *PenWidth = 5; 
+     *PenWidth = 5;
      *PenStyle = 1;
    }
 
-   printf ("frame (w:%d - s:%d) \n", *PenWidth, *PenStyle); 
+   printf ("frame (w:%d - s:%d) \n", *PenWidth, *PenStyle);
 }
 
 
@@ -1260,25 +1260,25 @@ APPLIXSPREADImport::transPenFormat (QString it, int *PenWidth, int *PenStyle)
 /******************************************************************************
  *  function: readHeader                                                       *
  ******************************************************************************/
-int 
+int
 APPLIXSPREADImport::readHeader (QTextStream &stream)
 {
   QString mystr;
   int     vers[3] = { 0, 0, 0 };
   int     rueck;
-   
 
-    // Read Headline  
+
+    // Read Headline
     mystr = nextLine (stream);
-    rueck = sscanf (mystr.latin1(), 
-                    "*BEGIN SPREADSHEETS VERSION=%d/%d ENCODING=%dBIT", 
-	             &vers[0], &vers[1], &vers[2]); 
-    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]); 
+    rueck = sscanf (mystr.latin1(),
+                    "*BEGIN SPREADSHEETS VERSION=%d/%d ENCODING=%dBIT",
+	             &vers[0], &vers[1], &vers[2]);
+    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
 
     // Check the headline
-    if (rueck <= 0)  
+    if (rueck <= 0)
     {
-      printf ("Header not correkt - May be it is not an applixspreadsheet file\n");  
+      printf ("Header not correkt - May be it is not an applixspreadsheet file\n");
       printf ("Headerline: <%s>\n", mystr.latin1());
 
       QMessageBox::critical (0L, "Applix spreadsheet header problem",
@@ -1301,13 +1301,13 @@ APPLIXSPREADImport::readHeader (QTextStream &stream)
 /******************************************************************************
  *  function: translateRowNumber                                              *
  ******************************************************************************/
-int 
+int
 APPLIXSPREADImport::translateColumnNumber (QString colstr)
 {
-  int icol=0; 
+  int icol=0;
   int p, x, len;
-  
-  
+
+
   len = colstr.length ();
   p = len-1;
   x = 1;
@@ -1332,7 +1332,7 @@ APPLIXSPREADImport::translateColumnNumber (QString colstr)
      }
      p--;
      printf ("HI 2\n");
-     
+
    }
 
    printf ("translateColumnNumber : <%s> -> %d\n", colstr.latin1(), icol);

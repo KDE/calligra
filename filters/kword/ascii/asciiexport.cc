@@ -536,11 +536,11 @@ void ProcessDocTag ( QDomNode   myNode,
 }
 
 
-const bool ASCIIExport::filter(const QString  &filenameIn,
-                               const QString  &filenameOut,
-                               const QString  &from,
-                               const QString  &to,
-                               const QString  &         )
+bool ASCIIExport::filter(const QString  &filenameIn,
+                         const QString  &filenameOut,
+                         const QString  &from,
+                         const QString  &to,
+                         const QString  &         )
 {
     if ( to != "text/plain" || from != "application/x-kword" )
     {

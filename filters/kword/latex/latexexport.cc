@@ -28,9 +28,9 @@ LATEXExport::LATEXExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
-const bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
-                              const QString& from, const QString& to,
-                              const QString &) {
+bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
+                         const QString& from, const QString& to,
+                         const QString &) {
 
     if(to != "text/x-tex" || from != "application/x-kword")
         return false;
@@ -45,7 +45,7 @@ const bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
     QByteArray array=in.read(0xffffffff);
     QString buf = QString::fromUtf8((const char*)array, array.size());
     in.close();
- 
+
     int begin = buf.find( "<DOC" ); // skip <?...?>
     buf.remove(0, begin);
     kdDebug() << "LATEX FILTER --> BEGIN" << endl;

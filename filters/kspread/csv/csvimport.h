@@ -40,8 +40,8 @@ class CSVFilter : public KoFilter {
 public:
     CSVFilter(KoFilter *parent, const char *name);
     virtual ~CSVFilter() {}
-    virtual const bool I_filter(const QString &file, KoDocument *document,
-                                const QString &from, const QString &to,
-                                const QString &config=QString::null);
+    virtual bool I_filter(const QString &file, KoDocument *document,
+                          const QString &from, const QString &to,
+                          const QString &config=QString::null);
 };
 #endif // CSVFILTER_H

@@ -40,13 +40,13 @@ public:
         const char *name);
     virtual ~MSODImport();
 
-    virtual const bool filter1(
+    virtual bool filter(
         const QString &fileIn,
         const QString &fileOut,
         const QString &prefixOut,
         const QString &from,
         const QString &to,
-        const QString &config = QString::null);
+        const QString &config);
     virtual bool supportsEmbedding() { return true; }
 
 protected:

@@ -35,9 +35,9 @@ CSVFilter::CSVFilter(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
 }
 
-const bool CSVFilter::I_filter(const QString &file, KoDocument *document,
-                               const QString &from, const QString &to,
-                               const QString &config) {
+bool CSVFilter::I_filter(const QString &file, KoDocument *document,
+                         const QString &from, const QString &to,
+                         const QString &config) {
     bool bSuccess=true;
 
     kdDebug(30501) << "here we go... " << document->className() << endl;

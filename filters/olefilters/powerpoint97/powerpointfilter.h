@@ -33,7 +33,7 @@ public:
         const myFile &mainStream,
         const myFile &currentUser);
     virtual ~PowerPointFilter();
-    virtual const bool filter();
+    virtual bool filter();
     virtual const QDomDocument * const part();
 
 private:

@@ -34,9 +34,9 @@ public:
     CSVExport(KoFilter *parent, const char*name);
     virtual ~CSVExport() {}
     /** do the filtering :) */
-    virtual const bool E_filter(const QString &file, const KoDocument * const document,
-                                const QString &from, const QString &to,
-                                const QString &config=QString::null);
+    virtual bool E_filter(const QString &file, const KoDocument * const document,
+                          const QString &from, const QString &to,
+                          const QString &config=QString::null);
 };
 #endif
 

@@ -37,7 +37,7 @@ WMFImport::~WMFImport()
 {
 }
 
-const bool WMFImport::filter(
+bool WMFImport::filter(
     const QString &fileIn,
     const QString &fileOut,
     const QString &from,

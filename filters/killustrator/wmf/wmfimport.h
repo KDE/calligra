@@ -39,7 +39,7 @@ public:
         const char *name);
     virtual ~WMFImport();
 
-    virtual const bool filter(
+    virtual bool filter(
         const QString &fileIn,
         const QString &fileOut,
         const QString &from,

@@ -54,7 +54,7 @@ OLEFilter::~OLEFilter() {
     store=0L;
 }
 
-const bool OLEFilter::filter1(
+bool OLEFilter::filter(
     const QString &fileIn,
     const QString &fileOut, const QString &prefixOut,
     const QString &from, const QString &to,

@@ -23,11 +23,11 @@
    This file is based on the old file:
     /home/kde/koffice/filters/kword/ascii/asciiexport.cc
 
-   The old file was copyrighted by 
+   The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
     Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
                        Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
- 
+
    The old file was licensed under the terms of the GNU Library General Public
    License version 2.
 */
@@ -787,11 +787,11 @@ static bool writeOutputFileGZipped(const QString& filename, const QCString& strO
     return true;
 }
 
-const bool ABIWORDExport::filter(const QString  &filenameIn,
-                               const QString  &filenameOut,
-                               const QString  &from,
-                               const QString  &to,
-                               const QString  &         )
+bool ABIWORDExport::filter(const QString  &filenameIn,
+                           const QString  &filenameOut,
+                           const QString  &from,
+                           const QString  &to,
+                           const QString  &         )
 {
     if ((from != "application/x-kword") || (to != "application/x-abiword"))
     {

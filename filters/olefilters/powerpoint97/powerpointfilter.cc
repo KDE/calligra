@@ -57,7 +57,7 @@ PowerPointFilter::~PowerPointFilter()
     delete m_tree;
 }
 
-const bool PowerPointFilter::filter()
+bool PowerPointFilter::filter()
 {
     return m_tree->convert();
 }

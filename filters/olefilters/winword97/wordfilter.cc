@@ -62,7 +62,7 @@ QCString WordFilter::CString() const
     return m_result;
 }
 
-const bool WordFilter::filter()
+bool WordFilter::filter()
 {
     m_success = myDoc->convert();
     m_ready = true;

@@ -74,7 +74,7 @@ public:
     NodeList parseRootDir();
     NodeList parseCurrentDir();
     const NodeList currentPath() const;
-    const NodeList find(const QString &name, const bool onlyCurrentDir=false);
+    const NodeList find(const QString &name, bool onlyCurrentDir=false);
     bool enterDir(const OLENode *node);
     bool leaveDir();
 

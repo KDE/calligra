@@ -127,7 +127,7 @@ bool KLaola::enterDir(const OLENode *dirHandle) {
     return false;
 }
 
-const KLaola::NodeList KLaola::find(const QString &name, const bool onlyCurrentDir) {
+const KLaola::NodeList KLaola::find(const QString &name, bool onlyCurrentDir) {
 
     OLENode *node;
     NodeList ret;

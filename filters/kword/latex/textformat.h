@@ -72,8 +72,8 @@ class TextFormat: public Format
 		void setTaille     (const int t)   { _taille    = t; }
 		void setSize       (const int t)   { _size      = t; }
 		void setWeight     (const int w)   { _weight    = w; }
-		void setItalic     (const bool i)  { _italic    = i; }
-		void setUnderlined (const bool u)  { _underline = u; }
+		void setItalic     (bool i)  { _italic    = i; }
+		void setUnderlined (bool u)  { _underline = u; }
 		void setPolice     (const char *p) { _police    = p; }
 		void setAlign      (const int a)   { _vertalign = (EAlign) a; }
 		void setColor (const int, const int, const int);

@@ -45,9 +45,9 @@ public:
         const myFile &dataStream);
     ~WinWordDoc();
 
-    const bool isOk() const { return m_success; }
+    bool isOk() const { return m_success; }
 
-    const bool convert();
+    bool convert();
 
 signals:
     // See olefilter.h for information

@@ -41,7 +41,7 @@ MSODImport::~MSODImport()
 {
 }
 
-const bool MSODImport::filter1(
+bool MSODImport::filter(
     const QString &fileIn,
     const QString &fileOut,
     const QString &prefixOut,

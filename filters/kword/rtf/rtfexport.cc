@@ -498,11 +498,11 @@ bool ProcessStoreFile ( QString   storeFileName,
 // The virtual function called by the file dialog to export the RTF file
 // It is the starting point in the file converson process.
 
-const bool RTFExport::filter ( const QString  &filenameIn,
-                                   const QString  &filenameOut,
-                                   const QString  &from,
-                                   const QString  &to,
-                                   const QString  &             )
+bool RTFExport::filter ( const QString  &filenameIn,
+                         const QString  &filenameOut,
+                         const QString  &from,
+                         const QString  &to,
+                         const QString  &             )
 {
 
     if ( to != "text/rtf" || from != "application/x-kword" )

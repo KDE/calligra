@@ -37,8 +37,8 @@ public:
     ASCIIExport(KoFilter *parent, const char *name);
     virtual ~ASCIIExport() {}
     /** filtering :) */
-    virtual const bool filter(const QString &fileIn, const QString &fileOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    virtual bool filter(const QString &fileIn, const QString &fileOut,
+                        const QString &from, const QString &to,
+                        const QString &config=QString::null);
 };
 #endif // ASCIIEXPORT_H

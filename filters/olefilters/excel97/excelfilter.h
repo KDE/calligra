@@ -32,7 +32,7 @@ public:
     ExcelFilter(const QByteArray &mainStream);
     ~ExcelFilter();
 
-    virtual const bool filter();
+    virtual bool filter();
     virtual const QDomDocument* const part();
 
 private:

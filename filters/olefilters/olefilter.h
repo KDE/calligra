@@ -43,14 +43,14 @@ public:
     virtual ~OLEFilter();
 
 /*
-    virtual const bool filter(const QString &fileIn, const QString &fileOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    virtual bool filter(const QString &fileIn, const QString &fileOut,
+                        const QString &from, const QString &to,
+                        const QString &config=QString::null);
 */
-    virtual const bool filter1(const QString &fileIn,
-                              const QString &fileOut, const QString &prefixOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    virtual bool filter(const QString &fileIn,
+                        const QString &fileOut, const QString &prefixOut,
+                        const QString &from, const QString &to,
+                        const QString &config);
     virtual bool supportsEmbedding() { return true; }
 
 protected slots:

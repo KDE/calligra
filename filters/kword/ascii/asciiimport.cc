@@ -34,9 +34,9 @@ ASCIIImport::ASCIIImport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
-const bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
-                               const QString& from, const QString& to,
-                               const QString &) {
+bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
+                         const QString& from, const QString& to,
+                         const QString &) {
 
 
   QString text1;  // text processing string

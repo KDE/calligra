@@ -49,7 +49,7 @@ applixGraphicsLine::applixGraphicsLine()
   offY      = 0;
   reColor   = 0;
   thickNess = 1; // ??
- 
+
   for (int i=0; i<5; i++)
   {
     ptX[0] = 0;
@@ -117,7 +117,7 @@ applixGraphicsRect::applixGraphicsRect() : applixGraphicsLine()
  *                                                                            *
  ******************************************************************************/
 APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *parent, const char *name) :
-                     KoFilter (parent, name) 
+                     KoFilter (parent, name)
 {
 
 }
@@ -134,12 +134,12 @@ APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *parent, const char *name) :
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-const bool 
-APPLIXGRAPHICImport::filter (const QString &fileIn, 
+bool
+APPLIXGRAPHICImport::filter (const QString &fileIn,
                              const QString &fileOut,
-                             const QString &from, 
+                             const QString &from,
                              const QString &to,
-                             const QString &) 
+                             const QString &)
 {
 
     // Check MIME Types
@@ -148,7 +148,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
     // Open Inputfile
     QFile in (fileIn);
-    if (!in.open (IO_ReadOnly) ) 
+    if (!in.open (IO_ReadOnly) )
     {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close ();
@@ -168,7 +168,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
     str += "   </grid>\n";
     str += "  </head>\n";
     str += "  <layer>\n";
-   
+
     QTextStream stream(&in);
     int step  = in.size()/50;
     int value = 0;
@@ -178,16 +178,16 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
     int vers[3] = { 0, 0, 0 };
     int rueck;  // Check scanf inputs
     QString mystr;
-      
-    // Read Headline  
+
+    // Read Headline
     mystr = stream.readLine ();
-    rueck = sscanf ((const char *) mystr.latin1() , 
-                    "*BEGIN GRAPHICS VERSION=%d/%d ENCODING=%dBIT", 
-	             &vers[0], &vers[1], &vers[2]); 
-    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]); 
+    rueck = sscanf ((const char *) mystr.latin1() ,
+                    "*BEGIN GRAPHICS VERSION=%d/%d ENCODING=%dBIT",
+	             &vers[0], &vers[1], &vers[2]);
+    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
 
     // Check the headline
-    if (rueck <= 0)  
+    if (rueck <= 0)
     {
       printf ("Header not correkt - May be it is not an applixgraphics file\n");
       printf ("Headerline: <%s>\n", (const char *) mystr.latin1());
@@ -205,7 +205,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
     while (!stream.atEnd ())
     {
         ++i;
-        
+
         // Read one line
         mystr = stream.readLine ();
         printf ("<<%s>>\n", (const char *) mystr.latin1());
@@ -220,11 +220,11 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
           // Delete  Point at the first place of the Linie
           mystr.remove (0, 1);
           printf ("StartPoint recognized <%s>\n", (const char *) mystr.latin1() );
-         
+
           /********************************************************************
            * Element LINE                                                     *
            ********************************************************************/
-          if (mystr.startsWith ("LINE AT") ) 
+          if (mystr.startsWith ("LINE AT") )
 	  {
             // Define
             applixGraphicsLine agLine;
@@ -234,7 +234,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
             printf (" Linie recognized: \n");
             mystr.remove (0, 8);
 
-            rueck = sscanf ((const char *) mystr.latin1(), "(%d,%d)", 
+            rueck = sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                             &agLine.offX, &agLine.offY);
 	    printf ("  Offset ->   x:%2d  y:%2d\n", agLine.offX, agLine.offY);
             if (rueck <= 0)
@@ -246,43 +246,43 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
             do
 	    {
-              // Akutelle Position bestimmen 
+              // Akutelle Position bestimmen
               pos = in.at ();
               // Zeile einlesen
               mystr = stream.readLine ();
 	      if      (mystr.startsWith (" RECOLOR ") )
-	      { 
+	      {
                 printf ("  Recolor  ");
-                mystr.remove (0, 9); 
-                if      (mystr == "ON")  
-                {  
-                  printf ("On\n");   
-                  agLine.reColor = true; 
-                } 
-                else if (mystr == "OFF") 
-                {  
-                  printf ("Off\n");   
-                  agLine.reColor = false; 
+                mystr.remove (0, 9);
+                if      (mystr == "ON")
+                {
+                  printf ("On\n");
+                  agLine.reColor = true;
                 }
-                else 
-                { 
+                else if (mystr == "OFF")
+                {
+                  printf ("Off\n");
+                  agLine.reColor = false;
+                }
+                else
+                {
                    printf ("!!!!!    Whats that <%s>\n", (const char *) mystr.latin1() );
                 }
 	      }
 	      else if (mystr.startsWith (" THICKNESS ") )
-	      { 
+	      {
                 printf ("  Thickness: ");
-                mystr.remove (0, 11);   
+                mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agLine.thickNess);
                 printf ("%d\n", agLine.thickNess);
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
-	      { 
+	      {
                 printf ("  Pnts    : ");
-                mystr.remove (0, 6);   
-                sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)", 
+                mystr.remove (0, 6);
+                sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)",
                         &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1]);
-                printf ("%d %d %d %d\n", 
+                printf ("%d %d %d %d\n",
                          agLine.ptX[0],  agLine.ptY[0],  agLine.ptX[1],  agLine.ptY[1]);
 	      }
 
@@ -314,13 +314,13 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
 
             str += "   </polyline>\n";
- 
+
 
 	  }
           /********************************************************************
            * Element RPOL Vieleck                                             *
            ********************************************************************/
-          if (mystr.startsWith ("RPOL AT") ) 
+          if (mystr.startsWith ("RPOL AT") )
 	  {
             // Define
             applixGraphicsLine agLine;
@@ -331,7 +331,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
             printf (" RPOL recognized: \n");
             mystr.remove (0, 8);
 
-            rueck = sscanf ((const char *) mystr.latin1(), "(%d,%d)", 
+            rueck = sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                             &agLine.offX, &agLine.offY);
 	    printf ("  Offset ->   x:%2d  y:%2d\n", agLine.offX, agLine.offY);
             if (rueck <= 0)
@@ -343,47 +343,47 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
             do
 	    {
-              // Akutelle Position bestimmen 
+              // Akutelle Position bestimmen
               pos = in.at ();
               // Zeile einlesen
               mystr = stream.readLine ();
 	      if      (mystr.startsWith (" RECOLOR ") )
-	      { 
+	      {
                 printf ("  Recolor  ");
-                mystr.remove (0, 9); 
-                if      (mystr == "ON")  
-                {  
-                  printf ("On\n");   
-                  agLine.reColor = true; 
-                } 
-                else if (mystr == "OFF") 
-                {  
-                  printf ("Off\n");   
-                  agLine.reColor = false; 
+                mystr.remove (0, 9);
+                if      (mystr == "ON")
+                {
+                  printf ("On\n");
+                  agLine.reColor = true;
                 }
-                else 
-                { 
+                else if (mystr == "OFF")
+                {
+                  printf ("Off\n");
+                  agLine.reColor = false;
+                }
+                else
+                {
                    printf ("!!!!!    Whats that <%s>\n", (const char *) mystr.latin1() );
                 }
 	      }
 	      else if (mystr.startsWith (" NSIDES") )
-	      { 
+	      {
                 printf ("  NSIDES: ");
-                mystr.remove (0, 8);   
+                mystr.remove (0, 8);
                 pos = sscanf ((const char *) mystr.latin1(), "%d", &nsides);
                 printf ("%d(%d)\n", &nsides, pos);
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
-	      { 
+	      {
                 printf ("  Pnts    : ");
-                mystr.remove (0, 6);   
-                sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)", 
-                        &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1], 
-                        &agLine.ptX[2], &agLine.ptY[2], &agLine.ptX[3], &agLine.ptY[3], 
+                mystr.remove (0, 6);
+                sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
+                        &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1],
+                        &agLine.ptX[2], &agLine.ptY[2], &agLine.ptX[3], &agLine.ptY[3],
                         &agLine.ptX[4], &agLine.ptY[4]);
-                printf ("%d %d   %d %d   %d %d   %d %d   %d %d\n", 
-                         agLine.ptX[0],  agLine.ptY[0],  agLine.ptX[1],  agLine.ptY[1], 
-                         agLine.ptX[2],  agLine.ptY[2],  agLine.ptX[3],  agLine.ptY[3], 
+                printf ("%d %d   %d %d   %d %d   %d %d   %d %d\n",
+                         agLine.ptX[0],  agLine.ptY[0],  agLine.ptX[1],  agLine.ptY[1],
+                         agLine.ptX[2],  agLine.ptY[2],  agLine.ptX[3],  agLine.ptY[3],
                          agLine.ptX[4],  agLine.ptY[4]);
 	      }
 
@@ -401,9 +401,9 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
             b = agLine.ptY[2] / 2;
             for (int i=0; i<nsides; i++)
 	    {
-              x[i] = a * cos (wink*PI/180); 
+              x[i] = a * cos (wink*PI/180);
               y[i] = b * sin (wink*PI/180);
-	      wink += (360/nsides);  
+	      wink += (360/nsides);
 	    }
 
             // Werte in die Struktur einlagern
@@ -424,7 +424,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
 
             str += "   </polyline>\n";
- 
+
 
 	  }
           /********************************************************************
@@ -440,58 +440,58 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
             mystr.remove (0, 7);
             sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                     &agText.offX, &agText.offY);
-	    printf ("  Offset ->   x:%2d  y:%2d\n", 
+	    printf ("  Offset ->   x:%2d  y:%2d\n",
                     agText.offX,   agText.offY);
 
 
             do
 	    {
-              // Akutelle Position bestimmen 
+              // Akutelle Position bestimmen
               pos = in.at ();
               // Zeile einlesen
               mystr = stream.readLine ();
 	      if      (mystr.startsWith (" RECOLOR ") )
-	      { 
+	      {
                 printf ("  Recolor  : ");
-                mystr.remove (0, 9); 
-                if      (mystr == "ON")  
-                {  
-                  printf ("On\n");   
-                  agText.reColor = true; 
-                } 
-                else if (mystr == "OFF") 
-                {  
-                  printf ("Off\n");   
-                  agText.reColor = false; 
+                mystr.remove (0, 9);
+                if      (mystr == "ON")
+                {
+                  printf ("On\n");
+                  agText.reColor = true;
                 }
-                else 
-                { 
+                else if (mystr == "OFF")
+                {
+                  printf ("Off\n");
+                  agText.reColor = false;
+                }
+                else
+                {
                    printf ("!!!!!     Whats that <%s>\n", (const char *) mystr.latin1() );
                 }
 	      }
 	      else if (mystr.startsWith (" .STR") )
-	      { 
+	      {
                 printf (" Textstring: ");
 
                 // Zeile einlesen
                 agText.str = stream.readLine ();
-                agText.str.remove (0, 3);  // delete ront part  
+                agText.str.remove (0, 3);  // delete ront part
                 printf ("%s\n", (const char *) agText.str.latin1());
 	      }
 	      else if (mystr.startsWith (" THICKNESS ") )
-	      { 
+	      {
                 printf ("  Thickness: ");
-                mystr.remove (0, 11);   
+                mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agText.thickNess);
                 printf ("%d\n", agText.thickNess);
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
-	      { 
+	      {
                 printf ("  Pnts    : ");
-                mystr.remove (0, 6);   
-                sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)", 
+                mystr.remove (0, 6);
+                sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)",
                         &agText.ptX[0], &agText.ptY[0], &agText.ptX[1], &agText.ptY[1]);
-                printf ("%d %d %d %d", 
+                printf ("%d %d %d %d",
                          agText.ptX[0],  agText.ptY[0],  agText.ptX[1],  agText.ptY[1]);
 	      }
 
@@ -533,128 +533,128 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
             do
 	    {
-              // Akutelle Position bestimmen 
+              // Akutelle Position bestimmen
               pos = in.at ();
               // read one line
               mystr = stream.readLine ();
 
               // option RECOLOR
 	      if      (mystr.startsWith (" RECOLOR ") )
-	      { 
+	      {
                 printf ("  Recolor : ");
-                mystr.remove (0, 9); 
-                if      (mystr == "ON")  
-                {  printf ("On\n");  agRect.reColor = true;} 
-                else if (mystr == "OFF") 
+                mystr.remove (0, 9);
+                if      (mystr == "ON")
+                {  printf ("On\n");  agRect.reColor = true;}
+                else if (mystr == "OFF")
                 { printf ("Off\n");  agRect.reColor = false;}
-                else 
-                { 
+                else
+                {
                    printf ("!!!!!     Whats that <%s>\n", (const char *) mystr.latin1() );
                 }
 	      }
               // option BACKFILL
 	      else if (mystr.startsWith (" BACKFILL ") )
-	      { 
+	      {
                 printf ("  Backfill: ");
-                mystr.remove (0, 12);   
-                sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>", 
-                        &agRect.bf[0], &agRect.bf[1], &agRect.bf[2], 
+                mystr.remove (0, 12);
+                sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>",
+                        &agRect.bf[0], &agRect.bf[1], &agRect.bf[2],
                         &agRect.bf[3], &agRect.bf[4], &agRect.bf[5],
                         &agRect.bf[6]);
-                printf ("%d %d %d %d %d %d %d\n", 
-                        agRect.bf[0], agRect.bf[1], agRect.bf[2], 
+                printf ("%d %d %d %d %d %d %d\n",
+                        agRect.bf[0], agRect.bf[1], agRect.bf[2],
                         agRect.bf[3], agRect.bf[4], agRect.bf[5],
                         agRect.bf[6]);
 	      }
               // option LINEFILL
 	      else if (mystr.startsWith (" LINEFILL ") )
-	      { 
+	      {
                 printf ("  Linefill: ");
-                mystr.remove (0, 12);   
-                sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>", 
-                        &agRect.lf[0], &agRect.lf[1], &agRect.lf[2], 
+                mystr.remove (0, 12);
+                sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>",
+                        &agRect.lf[0], &agRect.lf[1], &agRect.lf[2],
                         &agRect.lf[3], &agRect.lf[4], &agRect.lf[5],
                         &agRect.lf[6]);
-                printf ("%d %d %d %d %d %d %d\n", 
-                        agRect.lf[0], agRect.lf[1], agRect.lf[2], 
+                printf ("%d %d %d %d %d %d %d\n",
+                        agRect.lf[0], agRect.lf[1], agRect.lf[2],
                         agRect.lf[3], agRect.lf[4], agRect.lf[5],
                         agRect.lf[6]);
 	      }
               // option SHADOW
 	      else if (mystr.startsWith (" SHADOW ")  )
-	      { 
+	      {
                 printf ("  Shadow  : ");
-                mystr.remove (0, 12);   
-                sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d>", 
-                        &agRect.sh[0], &agRect.sh[1], &agRect.sh[2], 
+                mystr.remove (0, 12);
+                sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d>",
+                        &agRect.sh[0], &agRect.sh[1], &agRect.sh[2],
                         &agRect.sh[3], &agRect.sh[4]);
-                printf ("%d %d %d %d %d\n", 
-                        agRect.sh[0], agRect.sh[1], agRect.sh[2], 
+                printf ("%d %d %d %d %d\n",
+                        agRect.sh[0], agRect.sh[1], agRect.sh[2],
                         agRect.sh[3], agRect.sh[4]);
 	      }
               // option PARA
 	      else if (mystr.startsWith (" PARA ")  )
-	      { 
+	      {
                 printf ("  Para    : ");
-                mystr.remove (0, 12);   
-                sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d %d>", 
-                        &agRect.pa[0], &agRect.pa[1], &agRect.pa[2], 
+                mystr.remove (0, 12);
+                sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d %d>",
+                        &agRect.pa[0], &agRect.pa[1], &agRect.pa[2],
                         &agRect.pa[3], &agRect.pa[4], &agRect.pa[5],
                         &agRect.pa[6], &agRect.pa[7]);
-                printf ("%d %d %d %d %d %d %d %d\n", 
-                        agRect.pa[0], agRect.pa[1], agRect.pa[2], 
+                printf ("%d %d %d %d %d %d %d %d\n",
+                        agRect.pa[0], agRect.pa[1], agRect.pa[2],
                         agRect.pa[3], agRect.pa[4], agRect.pa[5],
                         agRect.pa[6], agRect.pa[7]);
 	      }
               // option THICKNESS
 	      else if (mystr.startsWith (" THICKNESS ") )
-	      { 
+	      {
                 printf ("  Thickness: ");
-                mystr.remove (0, 11);   
+                mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agRect.thickNess);
                 printf ("%d\n", agRect.thickNess);
 	      }
               // option V_SPACE
 	      else if (mystr.startsWith (" V_SPACE ") )
-	      { 
+	      {
                 printf ("  V_Space : ");
-                mystr.remove (0, 9);   
-                sscanf ((const char *)mystr.latin1(), "(%d %d %d)", 
+                mystr.remove (0, 9);
+                sscanf ((const char *)mystr.latin1(), "(%d %d %d)",
                          &agRect.vs[0], &agRect.vs[1], &agRect.vs[2]);
-                printf ("%d %d %d\n", 
+                printf ("%d %d %d\n",
                           agRect.vs[0],  agRect.vs[1],  agRect.vs[2]);
 	      }
               // option XYRAD
 	      else if (mystr.startsWith (" XYRAD ") )
-	      { 
+	      {
                 printf ("  XYRad   : ");
-                mystr.remove (0, 7);   
-                sscanf ((const char *)mystr.latin1(), "<%d %d>", 
+                mystr.remove (0, 7);
+                sscanf ((const char *)mystr.latin1(), "<%d %d>",
                          &agRect.xr[0], &agRect.xr[1]);
-                printf ("%d %d\n", 
+                printf ("%d %d\n",
                           agRect.xr[0],  agRect.xr[1]);
 	      }
               // option PNTS
 	      else if (mystr.startsWith (" PNTS ") )
-	      { 
+	      {
                 printf ("  Pnts    : ");
-                mystr.remove (0, 6);   
-                sscanf ((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)", 
+                mystr.remove (0, 6);
+                sscanf ((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                         &agRect.ptX[0], &agRect.ptY[0], &agRect.ptX[1], &agRect.ptY[1],
                         &agRect.ptX[2], &agRect.ptY[2], &agRect.ptX[3], &agRect.ptY[3],
                         &agRect.ptX[4], &agRect.ptY[4]);
-                printf ("%d %d  %d %d   %d %d  %d %d  %d %d\n", 
+                printf ("%d %d  %d %d   %d %d  %d %d  %d %d\n",
                         agRect.ptX[0], agRect.ptY[0], agRect.ptX[1], agRect.ptY[1],
                         agRect.ptX[2], agRect.ptY[2], agRect.ptX[3], agRect.ptY[3],
                         agRect.ptX[4], agRect.ptY[4]);
 	      }
 
-	    }      
+	    }
 	    while ((mystr[0] != '.') && (mystr[0] != 'E'));
 
             // An die Position zurueckspringen
             in.at (pos);
-  
+
             // Werte in die Struktur einlagern
             str += "   <rectangle ";
             str += "x=\"" ;
@@ -714,47 +714,47 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
             printf (" Habe ELL erkannt (keine Werte uebernommen)\n");
             mystr.remove (0, 7);
-            sscanf ((const char *)mystr.latin1(), "(%d,%d)",            
+            sscanf ((const char *)mystr.latin1(), "(%d,%d)",
                     &agEll.offX, &agEll.offY);
 	    printf ("  Offset ->   x:%2d  y:%2d\n", agEll.offX, agEll.offY);
 
             do
 	    {
-              // Akutelle Position bestimmen 
+              // Akutelle Position bestimmen
               pos = in.at ();
               // read one line
               mystr = stream.readLine ();
 
               // option RECOLOR
 	      if      (mystr.startsWith (" RECOLOR ") )
-	      { 
+	      {
                 printf ("  Recolor: ");
-                mystr.remove (0, 9); 
-                if      (mystr == "ON")  
-                {   
-                  printf ("On\n");   
+                mystr.remove (0, 9);
+                if      (mystr == "ON")
+                {
+                  printf ("On\n");
                   agEll.reColor = true;
-                } 
-                else if (mystr == "OFF") 
-                {  
-                  printf ("Off\n");  
+                }
+                else if (mystr == "OFF")
+                {
+                  printf ("Off\n");
                   agEll.reColor = false;
                 }
-                else 
-                { 
+                else
+                {
                    printf ("!!!!!    Whats that <%s>\n", (const char *) mystr.latin1() );
                 }
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
-	      { 
+	      {
                 printf ("  Pnts   : ");
-                mystr.remove (0, 6);   
+                mystr.remove (0, 6);
 		//
-                sscanf ((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)", 
+                sscanf ((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                         &agEll.ptX[0], &agEll.ptY[0], &agEll.ptX[1], &agEll.ptY[1],
                         &agEll.ptX[2], &agEll.ptY[2], &agEll.ptX[3], &agEll.ptY[3],
                         &agEll.ptX[4], &agEll.ptY[4]);
-                printf ("%d %d  %d %d   %d %d  %d %d  %d %d\n", 
+                printf ("%d %d  %d %d   %d %d  %d %d  %d %d\n",
                         agEll.ptX[0], agEll.ptY[0], agEll.ptX[1], agEll.ptY[1],
                         agEll.ptX[2], agEll.ptY[2], agEll.ptX[3], agEll.ptY[3],
                         agEll.ptX[4], agEll.ptY[4]);
@@ -777,7 +777,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 	}
 
 
-        if (i>step) 
+        if (i>step)
         {
             i=0;
             value+=2;
@@ -794,7 +794,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
 
     KoStore out=KoStore(QString(fileOut), KoStore::Write);
 
-    if (!out.open("root")) 
+    if (!out.open("root"))
     {
       kdError(38000/*30502*/) << "Unable to open output file!" << endl;
         in.close  ();

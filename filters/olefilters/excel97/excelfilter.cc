@@ -41,7 +41,7 @@ ExcelFilter::~ExcelFilter()
     tree=0L;
 }
 
-const bool ExcelFilter::filter()
+bool ExcelFilter::filter()
 {
     unsigned int i, cont = 0;
     double count = 0;

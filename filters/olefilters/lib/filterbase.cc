@@ -31,7 +31,7 @@ FilterBase::FilterBase(QStringList &oleStreams) : QObject() {
     m_oleStreams = oleStreams;
 }
 
-const bool FilterBase::filter() {
+bool FilterBase::filter() {
     QString newstr;
 
     // Page sizes, margins etc. all in points.

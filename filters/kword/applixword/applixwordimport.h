@@ -28,7 +28,7 @@
 #include <koFilter.h>
 #include <koStore.h>
 
-typedef struct 
+typedef struct
 {
   int c;
   int m;
@@ -48,13 +48,12 @@ public:
     APPLIXWORDImport(KoFilter *parent, const char *name);
     virtual ~APPLIXWORDImport() {}
     /** filtering :) */
-    virtual const bool filter(const QString &fileIn, const QString &fileOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    virtual bool filter(const QString &fileIn, const QString &fileOut,
+                        const QString &from, const QString &to,
+                        const QString &config=QString::null);
     QChar   specCharfind     (QChar , QChar );
     QString readTagLine      (QTextStream &, QFile &);
     void    replaceSpecial   (QString &);
 
 };
 #endif // APPLIXWORDIMPORT_H
-

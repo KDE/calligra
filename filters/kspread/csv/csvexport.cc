@@ -54,9 +54,9 @@ CSVExport::CSVExport(KoFilter *parent, const char *name) :
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-const bool CSVExport::E_filter(const QString &file, const KoDocument * const document,
-                               const QString &from, const QString &to,
-                               const QString &config) {
+bool CSVExport::E_filter(const QString &file, const KoDocument * const document,
+                         const QString &from, const QString &to,
+                         const QString &config) {
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
@@ -176,9 +176,9 @@ const bool CSVExport::E_filter(const QString &file, const KoDocument * const doc
 }
 
 /*
-const bool CSVExport::filter(const QString &fileIn, const QString &fileOut,
-                               const QString& from, const QString& to,
-                               const QString &config) {
+bool CSVExport::filter(const QString &fileIn, const QString &fileOut,
+                       const QString& from, const QString& to,
+                       const QString &config) {
 
     if(to!="text/x-csv" || from!="application/x-kspread")
     {

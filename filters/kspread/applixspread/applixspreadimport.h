@@ -24,12 +24,12 @@
 #include <qfile.h>
 #include <qobject.h>
 #include <qtextstream.h>
-#include <qlist.h> 
+#include <qlist.h>
 
 #include <koFilter.h>
 #include <koStore.h>
 
-typedef struct 
+typedef struct
 {
   int r;
   int g;
@@ -56,9 +56,9 @@ public:
     APPLIXSPREADImport (KoFilter *parent, const char *name);
     virtual ~APPLIXSPREADImport() {}
     /** filtering :) */
-    virtual const bool filter(const QString &fileIn, const QString &fileOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    virtual bool filter(const QString &fileIn, const QString &fileOut,
+                        const QString &from, const QString &to,
+                        const QString &config=QString::null);
 
 protected:
     QString nextLine           (QTextStream &);
