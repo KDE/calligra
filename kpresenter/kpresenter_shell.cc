@@ -22,6 +22,7 @@
 #include "kpresenter_view.h"
 #include "kpresenter_factory.h"
 #include <kstddirs.h>
+#include <klocale.h>
 #include <kaboutdialog.h>
 
 KPresenterShell::KPresenterShell( const char* name )
@@ -33,6 +34,11 @@ KPresenterShell::KPresenterShell( const char* name )
 
 KPresenterShell::~KPresenterShell()
 {
+}
+
+QString KPresenterShell::nativeFormatName() const
+{
+  return i18n("KPresenter");
 }
 
 KoDocument* KPresenterShell::createDoc()

@@ -32,7 +32,7 @@ public:
     ~KPresenterShell();
 
     QString nativeFormatPattern() const { return "*.kpr"; }
-    QString nativeFormatName() const { return "KPresenter"; }
+    QString nativeFormatName() const;
 
     virtual void setRootDocument( KoDocument* );
 
