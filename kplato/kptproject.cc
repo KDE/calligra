@@ -507,13 +507,14 @@ void KPTProject::addTask( KPTNode* task, KPTNode* position )
 	// we want to add a task at the given position. => the new node will
 	// become next sibling right after position.
 	if ( 0 == position ) {
+      kdError()<<k_funcinfo<<"position=0, could not add task: "<<task->name()<<endl;
 	  return;
 	}
+    //kdDebug()<<k_funcinfo<<"Add "<<task->name()<<" after "<<position->name()<<endl;
 	// in case we want to add to the main project, we make it child element
 	// of the root element.
 	if ( KPTNode::Type_Project == position->type() ) {
-		this->addChildNode(task);
-		task->setParent( this ); // tell the node about it
+        addSubTask(task, position);
 		return;
 	}
 	// find the position
@@ -526,7 +527,7 @@ void KPTProject::addTask( KPTNode* task, KPTNode* position )
 	int index = parentNode->findChildNode( position );
 	if ( -1 == index ) {
 		// ok, it does not exist
-		kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+		kdDebug()<<k_funcinfo<<"Task not found???"<<endl;
 		return;
 	}
 	parentNode->insertChildNode( index+1, task );
@@ -538,6 +539,7 @@ void KPTProject::addSubTask( KPTNode* task, KPTNode* position )
 	// we want to add a subtask to the node "position". It will become
 	// position's last child.
 	if ( 0 == position ) {
+      kdError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
 	  return;
 	}
 	position->addChildNode(task);
