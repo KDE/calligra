@@ -6,20 +6,22 @@
 #ifndef __VPATH_H__
 #define __VPATH_H__
 
-#include <qpointarray.h>
 #include <qptrlist.h>
 
 #include <koPoint.h>
 
-#include "vshape.h"
+#include "vobject.h"
 #include "vsegmentlist.h"
 #include "vvisitor.h"
+
 
 class QDomElement;
 class QWMatrix;
 class VPainter;
+class VSegment;
 
-class VPath : public VShape
+
+class VPath : public VObject
 {
 public:
 	VPath( VObject* parent = 0L );
@@ -100,7 +102,7 @@ public:
 	virtual const KoRect& boundingBox() const;
 	virtual bool isInside( const KoRect& rect ) const;
 
-	virtual VShape* clone();
+	virtual VObject* clone() const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );

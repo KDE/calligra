@@ -3,35 +3,29 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vgroup.h"
-#include "vpath.h"
-#include "vlayer.h"
-
 #include <qdom.h>
 
 #include <koRect.h>
 
+#include "vgroup.h"
+#include "vlayer.h"
+#include "vpath.h"
+
 #include <kdebug.h>
 
-VGroup::VGroup( VObject* parent )
-	: VShape( parent )
+
+VGroup::VGroup( VObject* parent, VState state )
+	: VObject( parent, state )
 {
 }
 
-VGroup::VGroup( const VObjectList& objects, VObject* parent )
-	: VShape( parent ), m_objects( objects )
+VGroup::VGroup( const VGroup& group)
+	: VObject( group )
 {
-	m_fill.setType( fill_unknown );
-	//stroke().setType( stroke_unknown );
-}
+	VObjectListIterator itr = group.m_objects;
 
-VGroup::VGroup( const VGroup& other )
-	: VShape( other )
-{
-	// copy objects
-	VObjectListIterator itr = other.m_objects;
 	for ( ; itr.current() ; ++itr )
-		m_objects.append( itr.current()->clone() );
+		append( itr.current()->clone() );
 }
 
 VGroup::~VGroup()
@@ -44,9 +38,10 @@ VGroup::~VGroup()
 }
 
 void
-VGroup::draw( VPainter *painter, const KoRect& rect )
+VGroup::draw( VPainter* painter, const KoRect& rect )
 {
 	VObjectListIterator itr = m_objects;
+
 	for ( ; itr.current(); ++itr )
 		itr.current()->draw( painter, rect );
 }
@@ -55,33 +50,18 @@ void
 VGroup::transform( const QWMatrix& m )
 {
 	VObjectListIterator itr = m_objects;
+
 	for ( ; itr.current() ; ++itr )
 		itr.current()->transform( m );
 }
 
 void
-VGroup::ungroup()
-{
-	VLayer *layer = static_cast<VLayer *>( parent() );
-	if( !layer )
-		return;
-
-	// unregister from parent layer
-	layer->removeRef( this );
-	// inform all objects in this group their new parent
-	VObjectListIterator itr = m_objects;
-	for ( ; itr.current() ; ++itr )
-		layer->appendObject( itr.current() );
-	// done
-	m_objects.clear();
-}
-
-void
 VGroup::setState( const VState state )
 {
-    VObjectListIterator itr = m_objects;
-    for ( ; itr.current() ; ++itr )
-        itr.current()->setState( state );
+	VObjectListIterator itr = m_objects;
+
+	for ( ; itr.current() ; ++itr )
+		itr.current()->setState( state );
 }
 
 const KoRect&
@@ -108,6 +88,7 @@ bool
 VGroup::isInside( const KoRect& rect ) const
 {
 	VObjectListIterator itr = m_objects;
+
 	for ( ; itr.current() ; ++itr )
 		if( itr.current()->isInside( rect ) )
 			return true;
@@ -115,30 +96,32 @@ VGroup::isInside( const KoRect& rect ) const
 	return false;
 }
 
-VShape*
-VGroup::clone()
+VObject*
+VGroup::clone() const
 {
 	return new VGroup( *this );
 }
 
 void
-VGroup::setFill( const VFill &f )
+VGroup::setFill( const VFill& fill )
 {
 	VObjectListIterator itr = m_objects;
-	for ( ; itr.current() ; ++itr )
-		itr.current()->setFill( f );
 
-	VShape::setFill( f );
+	for ( ; itr.current() ; ++itr )
+		itr.current()->setFill( fill );
+
+	VObject::setFill( fill );
 }
 
 void
-VGroup::setStroke( const VStroke &s )
+VGroup::setStroke( const VStroke& stroke )
 {
 	VObjectListIterator itr = m_objects;
-	for ( ; itr.current() ; ++itr )
-		itr.current()->setStroke( s );
 
-	VShape::setStroke( s );
+	for ( ; itr.current() ; ++itr )
+		itr.current()->setStroke( stroke );
+
+	VObject::setStroke( stroke );
 }
 
 void
@@ -149,6 +132,7 @@ VGroup::save( QDomElement& element ) const
 
 	// save objects:
 	VObjectListIterator itr = m_objects;
+
 	for ( ; itr.current(); ++itr )
 		itr.current()->save( me );
 }
@@ -169,25 +153,63 @@ VGroup::load( const QDomElement& element )
 
 			if( e.tagName() == "PATH" )
 			{
-				VPath* path = new VPath();
+				VPath* path = new VPath( this );
 				path->load( e );
-				m_objects.append( path );
+				append( path );
 			}
 			else if( e.tagName() == "TEXT" )
 			{
-				/*VText* text = new VText();
+				/*VText* text = new VText( this );
 				text->load( e );
-				insertObject( text );*/
+				append( text );*/
 			}
 		}
 	}
 }
 
+
 void
-VGroup::insertObject( VShape* object )
+VGroup::take( const VObject& object )
 {
-	// put new objects "on top" by appending them:
-	m_objects.append( object );
+	m_objects.removeRef( &object );
+}
+
+void
+VGroup::prepend( VObject* object )
+{
 	object->setParent( this );
+
+	m_objects.prepend( object );
+
+	invalidateBoundingBox();
+}
+
+void
+VGroup::append( VObject* object )
+{
+	object->setParent( this );
+
+	m_objects.append( object );
+
+	invalidateBoundingBox();
+}
+
+void
+VGroup::ungroup()
+{
+	VLayer *layer = static_cast<VLayer *>( parent() );
+	if( !layer )
+		return;
+
+	// unregister from parent layer
+	layer->take( this );
+	// inform all objects in this group their new parent
+	VObjectListIterator itr = m_objects;
+
+	for ( ; itr.current() ; ++itr )
+		layer->append( itr.current() );
+
+	// done
+	m_objects.clear();
 }
 

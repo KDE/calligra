@@ -5,8 +5,11 @@
 #ifndef __VINSERTKNOTS_H__
 #define __VINSERTKNOTS_H__
 
-#include "vpath.h"
 #include "vvisitor.h"
+
+
+class VPath;
+
 
 class VInsertKnots : public VVisitor
 {

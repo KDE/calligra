@@ -6,12 +6,14 @@
 #include <qdom.h>
 
 #include "vdocument.h"
-#include "vshape.h"
+#include "vfill.h"
+#include "vstroke.h"
 
 #include <kdebug.h>
 
 
-VDocument::VDocument() : VObject( 0L ),
+VDocument::VDocument()
+	: VObject( 0L ),
 		m_mime( "application/x-karbon" ), m_version( "0.1" ),
 		m_editor( "karbon14 0.0.1" ), m_syntaxVersion( "0.1" )
 {
@@ -33,8 +35,9 @@ void
 VDocument::draw( VPainter *painter, const KoRect& rect )
 {
 	QPtrListIterator<VLayer> i = m_layers;
+
 	for ( ; i.current(); ++i )
-		if ( i.current()->visible() )
+		if ( i.current()->state() == state_normal )
 			i.current()->draw( painter, rect );
 }
 
@@ -47,9 +50,9 @@ VDocument::insertLayer( VLayer* layer )
 }
 
 void
-VDocument::appendObject( VShape* object )
+VDocument::append( VObject* object )
 {
-	m_activeLayer->appendObject( object );
+	m_activeLayer->append( object );
 }
 
 void
@@ -86,7 +89,8 @@ VDocument::saveXML( QDomDocument& doc ) const
 	doc.appendChild( me );
 
 	// save objects:
-	VLayerListIterator itr = m_layers;
+	VLayerListIterator itr( m_layers );
+
 	for ( ; itr.current(); ++itr )
 		itr.current()->save( me );
 }
@@ -126,24 +130,24 @@ VDocument::loadXML( const QDomElement& doc )
 }
 
 void
-VDocument::selectObject( VShape& object, bool exclusive )
+VDocument::select( VObject& object, bool exclusive )
 {
 	if( exclusive )
-		deselectAllObjects();
+		deselect();
 
 	object.setState( state_selected );
 	m_selection.append( &object );
 }
 
 void
-VDocument::deselectObject( VShape& object )
+VDocument::deselect( VObject& object )
 {
 	object.setState( state_normal );
-	m_selection.removeRef( &object );
+	m_selection.take( &object );
 }
 
 void
-VDocument::selectAllObjects()
+VDocument::select()
 {
 	m_selection.clear();
 
@@ -153,24 +157,25 @@ VDocument::selectAllObjects()
 	for ( ; itr.current(); ++itr )
 	{
 		objects = itr.current()->objects();
+
 		VObjectListIterator itr2( objects );
+
 		for ( ; itr2.current(); ++itr2 )
 		{
-			if( static_cast<VShape *>( itr2.current() )->state() != state_deleted )
+			if( static_cast<VObject *>( itr2.current() )->state() != state_deleted )
 			{
-				static_cast<VShape *>( itr2.current() )->setState( state_selected );
+				static_cast<VObject *>( itr2.current() )->setState( state_selected );
 				m_selection.append( itr2.current() );
 			}
 		}
 	}
-	m_selection.invalidateBoundingBox();
 }
 
 void
-VDocument::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
+VDocument::select( const KoRect& rect, bool exclusive )
 {
 	if( exclusive )
-		deselectAllObjects();
+		deselect();
 
 	VObjectList objects;
 	VLayerListIterator itr( m_layers );
@@ -181,21 +186,21 @@ VDocument::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
 		VObjectListIterator itr2( objects );
 		for ( ; itr2.current(); ++itr2 )
 		{
-			static_cast<VShape *>(itr2.current())->setState( state_selected );
+			static_cast<VObject *>(itr2.current())->setState( state_selected );
 			m_selection.append( itr2.current() );
 		}
 	}
-	m_selection.invalidateBoundingBox();
 }
 
 void
-VDocument::deselectAllObjects()
+VDocument::deselect()
 {
 	// deselect objects:
-	VObjectListIterator itr( m_selection );
+	VObjectListIterator itr( m_selection.objects() );
+
 	for ( ; itr.current() ; ++itr )
 	{
-		static_cast<VShape *>(itr.current())->setState( state_normal );
+		static_cast<VObject *>(itr.current())->setState( state_normal );
 	}
 
 	m_selection.clear();
@@ -204,19 +209,20 @@ VDocument::deselectAllObjects()
 void
 VDocument::moveSelectionUp()
 {
+/*
 	//kdDebug() << "KarbonPart::moveSelectionUp" << endl;
-	VObjectList selection = m_selection;
+	VSelection selection = m_selection;
 
 	VObjectList objects;
 
 	VLayerListIterator litr( m_layers );
-	while( !selection.isEmpty() )
+	while( !selection.objects().isEmpty() )
 	{
 		kdDebug() << "!selection.isEmpty()" << endl;
 		for ( ; litr.current(); ++litr )
 		{
 			VObjectList todo;
-			VObjectListIterator itr( selection );
+			VObjectListIterator itr( selection.objects() );
 			for ( ; itr.current() ; ++itr )
 			{
 				objects = litr.current()->objects();
@@ -236,11 +242,13 @@ VDocument::moveSelectionUp()
 				litr.current()->moveObjectUp( itr3.current() );
 		}
 	}
+*/
 }
 
 void
 VDocument::moveSelectionDown()
 {
+/*
 	//kdDebug() << "KarbonPart::moveSelectionDown" << endl;
 	VObjectList selection = m_selection;
 
@@ -273,11 +281,13 @@ VDocument::moveSelectionDown()
 				litr.current()->moveObjectDown( itr3.current() );
 		}
 	}
+*/
 }
 
 void
 VDocument::moveSelectionToTop()
 {
+/*
 	VLayer *topLayer = m_layers.getLast();
 	//
 	VObjectListIterator itr( m_selection );
@@ -303,11 +313,13 @@ VDocument::moveSelectionToTop()
 	}
 
 	m_activeLayer = topLayer;
+*/
 }
 
 void
 VDocument::moveSelectionToBottom()
 {
+/*
 	VLayer *bottomLayer = m_layers.getFirst();
 	//
 	VObjectListIterator itr( m_selection );
@@ -333,13 +345,14 @@ VDocument::moveSelectionToBottom()
 	}
 
 	m_activeLayer = bottomLayer;
+*/
 }
 
 void
-VDocument::applyDefaultColors( VShape& obj ) const
+VDocument::applyDefaultColors( VObject& obj ) const
 {
-	VStroke stroke( obj.stroke() );
-	VFill fill( obj.fill() );
+	VStroke stroke( *obj.stroke() );
+	VFill fill( *obj.fill() );
 
 	stroke.setColor( m_defaultStrokeColor );
 	fill.setColor( m_defaultFillColor );

@@ -12,12 +12,13 @@
 
 #include "vpainter.h"
 #include "vpath.h"
+#include "vsegment.h"
 
 #include <kdebug.h>
 
 
 VPath::VPath( VObject* parent )
-	: VShape( parent )
+	: VObject( parent )
 {
 	m_segmentLists.setAutoDelete( true );
 
@@ -26,7 +27,7 @@ VPath::VPath( VObject* parent )
 }
 
 VPath::VPath( const VPath& path )
-	: VShape( path )
+	: VObject( path )
 {
 	m_segmentLists.setAutoDelete( true );
 
@@ -94,12 +95,12 @@ VPath::draw( VPainter *painter, const KoRect& rect )
 
 		painter->setRasterOp( Qt::CopyROP );
 		painter->setPen( Qt::NoPen );
-		painter->setBrush( fill() );
+		painter->setBrush( *fill() );
 		painter->fillPath();
 
 		// draw stroke:
 		painter->setRasterOp( Qt::CopyROP );
-		painter->setPen( stroke() );
+		painter->setPen( *stroke() );
 		painter->setBrush( Qt::NoBrush );
 		painter->strokePath();
 	}
@@ -324,8 +325,8 @@ return rect.intersects( boundingBox() );
 */
 }
 
-VShape*
-VPath::clone()
+VObject*
+VPath::clone() const
 {
 	return new VPath( *this );
 }
@@ -338,7 +339,7 @@ VPath::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "PATH" );
 		element.appendChild( me );
 
-		VShape::save( me );
+		VObject::save( me );
 
 		// save segmentlists:
 		QPtrListIterator<VSegmentList> itr( m_segmentLists );
@@ -370,7 +371,7 @@ VPath::load( const QDomElement& element )
 			}
 			else
 			{
-				VShape::load( child );
+				VObject::load( child );
 			}
 		}
 	}

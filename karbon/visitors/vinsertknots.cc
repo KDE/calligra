@@ -4,6 +4,7 @@
 
 #include "vinsertknots.h"
 #include "vpath.h"
+#include "vsegment.h"
 
 void
 VInsertKnots::setKnots( uint knots )

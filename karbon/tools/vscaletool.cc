@@ -84,7 +84,9 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 	KoRect rect = part()->document().selection().boundingBox();
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->document().selection().isEmpty() && VHandleTool::instance( m_part )->activeNode() != node_mm )
+	if(
+		part()->document().selection().objects().count() > 0 &&
+		VHandleTool::instance( m_part )->activeNode() != node_mm )
 	{
 		setCursor( view );
 		// scale operation
@@ -144,7 +146,7 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection();
+		VObjectListIterator itr = part()->document().selection().objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )

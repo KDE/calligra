@@ -22,6 +22,8 @@ public:
 		m_radius = radius;
 	}
 
+	virtual ~VWhirlPinch() {}
+
 	const KoPoint& center() const { return m_center; }
 	void setCenter( const KoPoint& center ) { m_center = center; }
 

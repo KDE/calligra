@@ -6,19 +6,29 @@
 #ifndef VDOCUMENT_H
 #define VDOCUMENT_H
 
-#include "vobject.h"
-#include "vlayer.h"
+#include <qstring.h>
+#include <qptrlist.h>
+
 #include "vcolor.h"
+#include "vlayer.h"
+#include "vobject.h"
+#include "vselection.h"
 
 class QDomDocument;
 class QDomElement;
 
-class VShape;
 
-// All non-visual, static doc info is in here.
-// The karbon part uses this class.
-// Filters can use this class as well instead of
-// the visually oriented karbon part.
+typedef QPtrList<VLayer> VLayerList;
+typedef QPtrListIterator<VLayer> VLayerListIterator;
+
+
+/**
+ * All non-visual, static doc info is in here.
+ * The karbon part uses this class.
+ * Filters can use this class as well instead of
+ * the visually oriented karbon part.
+ */
+
 class VDocument : public VObject
 {
 public: 
@@ -29,6 +39,8 @@ public:
 
 	// TODO
 	virtual void transform( const QWMatrix& ) {}
+
+	virtual VObject* clone() const { return 0L; }
 
 	const QString& mime() { return m_mime; }
 	void setMime( const QString& mime ) { m_mime = mime; }
@@ -51,13 +63,19 @@ public:
 	virtual void save( QDomElement& ) const {}
 	virtual void load( const QDomElement& element ) { loadXML( element ); }
 
+
 	// manipulate selection:
-	const VObjectList& selection() const { return m_selection; }
-	void selectAllObjects();    // select all vobjects period.
-	void deselectAllObjects();  // unselect all vobjects from all vlayers.
-	void selectObject( VShape& object, bool exclusive = false );
-	void deselectObject( VShape& object );
-	void selectObjectsWithinRect( const KoRect& rect, bool exclusive = false );
+	const VSelection& selection() const { return m_selection; }
+
+	void select();    // select all vobjects period.
+	void deselect();  // unselect all vobjects from all vlayers.
+
+	void select( VObject& object, bool exclusive = false );
+	void deselect( VObject& object );
+
+	/// Select all objects within rect.
+	void select( const KoRect& rect, bool exclusive = false );
+
 
 	// move up/down within layer
 	void moveSelectionToTop();
@@ -68,15 +86,15 @@ public:
 	void setDefaultStrokeColor( const VColor &color ) { m_defaultStrokeColor = color; }
 	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
 	/// all newly created shapes in this document get the default color by using this method
-	void applyDefaultColors( VShape & ) const;
+	void applyDefaultColors( VObject & ) const;
 
-	void appendObject( VShape* object ); // insert a new vobject
+	void append( VObject* object ); // insert a new vobject
 
 	VLayer* activeLayer() const { return m_activeLayer; }   // active layer.
 
 private:
 	VLayerList m_layers;			// all layers in this document
-	VObjectList m_selection;        // a list of selected objects.
+	VSelection m_selection;        // a list of selected objects.
 	VLayer* m_activeLayer;			// the active/current layer.
 
 	VColor m_defaultStrokeColor;        /// keep track of a default stroke color for created shapes

@@ -8,7 +8,7 @@
 
 #include "vcommand.h"
 
-class VShape;
+class VObject;
 
 // Provides a common base class for creation commands since they all have
 // a similar execute / unexecute behaviour and all build a VPath.
@@ -23,11 +23,11 @@ public:
 	virtual void unexecute();
 
 	/// Create a temporary object for displaying while shape creation.
-	virtual VShape* createPath() { return 0L; }
+	virtual VObject* createPath() { return 0L; }
 
 protected:
 	/// Pointer to the created object. Used for undo/redo.
-	VShape* m_object;
+	VObject* m_object;
 };
 
 #endif

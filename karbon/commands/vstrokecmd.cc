@@ -15,22 +15,24 @@ VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor& color, float opacity )
 	m_objects = m_doc->selection();
 	//m_part->deselectAllObjects();
 
-	if( m_objects.count() == 1 )
+	if( m_objects.objects().count() == 1 )
 		setName( i18n( "Stroke Object" ) );
 }
 
 void
 VStrokeCmd::execute()
 {
-	VObjectListIterator itr( m_objects );
+	VObjectListIterator itr( m_objects.objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		if( m_opacity == -1 )
-			m_color.setOpacity( itr.current()->stroke().color().opacity() );
+			m_color.setOpacity( itr.current()->stroke()->color().opacity() );
 
-		m_oldcolors.push_back( itr.current()->stroke() );
-		VStroke stroke = itr.current()->stroke();
+		m_oldcolors.push_back( *itr.current()->stroke() );
+
+		VStroke stroke = *itr.current()->stroke();
 		stroke.setColor( m_color );
+
 		itr.current()->setStroke( stroke );
 	}
 }
@@ -38,7 +40,7 @@ VStrokeCmd::execute()
 void
 VStrokeCmd::unexecute()
 {
-	VObjectListIterator itr( m_objects );
+	VObjectListIterator itr( m_objects.objects() );
 	int i = 0;
 	for ( ; itr.current() ; ++itr )
 	{

@@ -17,7 +17,7 @@ public:
 		 const double brX, const double brY, const double edgeR );
 	virtual ~VRoundRectCmd() {}
 
-	virtual VShape* createPath();
+	virtual VObject* createPath();
 
 private:
 	double m_tlX;

@@ -17,8 +17,13 @@
 
 #include <kdebug.h>
 
-VLayer::VLayer()
-	: m_name( i18n( "Layer" ) ), m_visible( true ), m_readOnly( false )
+VLayer::VLayer( VObject* parent, VState state )
+	: VGroup( parent, state ), m_name( i18n( "Layer" ) )
+{
+}
+
+VLayer::VLayer( const VLayer& layer )
+	: VGroup( layer )
 {
 }
 
@@ -32,52 +37,21 @@ VLayer::~VLayer()
 }
 
 void
-VLayer::draw( VPainter *painter, const KoRect& rect )
+VLayer::draw( VPainter* painter, const KoRect& rect )
 {
 	VObjectListIterator itr = m_objects;
+
 	for ( ; itr.current(); ++itr )
 		itr.current()->draw( painter, rect );
 }
 
 void
-VLayer::appendObject( VShape* object )
+VLayer::bringToFront( const VObject* /*object*/ )
 {
-	object->setParent( this );
-	// put new objects "on top" by appending them:
-	m_objects.append( object );
-	invalidateBoundingBox();
 }
 
 void
-VLayer::prependObject( VShape* object )
-{
-	object->setParent( this );
-	// prepend object
-	m_objects.prepend( object );
-	invalidateBoundingBox();
-}
-
-void
-VLayer::removeRef( const VShape* object )
-{
-	//
-	m_objects.removeRef( object );
-}
-
-void
-VLayer::moveObjectDown( const VShape* object )
-{
-	if( m_objects.getFirst() == object ) return;
-
-//	int index = m_objects.find( object );
-	bool bLast = m_objects.getLast() == object;
-	m_objects.remove();
-	if( !bLast ) m_objects.prev();
-	m_objects.insert( m_objects.at(), object );
-}
-
-void
-VLayer::moveObjectUp( const VShape* object )
+VLayer::upwards( const VObject* object )
 {
 	if( m_objects.getLast() == object ) return;
 
@@ -90,6 +64,23 @@ VLayer::moveObjectUp( const VShape* object )
 		m_objects.insert( m_objects.at(), object );
 	}
 	else m_objects.append( object );
+}
+
+void
+VLayer::downwards( const VObject* object )
+{
+	if( m_objects.getFirst() == object ) return;
+
+//	int index = m_objects.find( object );
+	bool bLast = m_objects.getLast() == object;
+	m_objects.remove();
+	if( !bLast ) m_objects.prev();
+	m_objects.insert( m_objects.at(), object );
+}
+
+void
+VLayer::sentToBack( const VObject* /*object*/ )
+{
 }
 
 VObjectList
@@ -130,7 +121,9 @@ VLayer::save( QDomElement& element ) const
 	element.appendChild( me );
 
 	me.setAttribute( "name", m_name );
-	me.setAttribute( "visible", m_visible );
+
+	if( state() == state_normal || state() == state_normal_locked )
+		me.setAttribute( "visible", 1 );
 
 	// save objects:
 	VObjectListIterator itr = m_objects;
@@ -146,7 +139,7 @@ VLayer::load( const QDomElement& element )
 	m_objects.setAutoDelete( false );
 
 	m_name = element.attribute( "name" );
-	m_visible = element.attribute( "visible" ) == 0 ? false : true;
+	setState( element.attribute( "visible" ) == 0 ? state_hidden : state_normal );
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
@@ -159,19 +152,19 @@ VLayer::load( const QDomElement& element )
 			{
 				VPath* path = new VPath();
 				path->load( e );
-				appendObject( path );
+				append( path );
 			}
 			else if( e.tagName() == "GROUP" )
 			{
 				VGroup* grp = new VGroup();
 				grp->load( e );
-				appendObject( grp );
+				append( grp );
 			}
 			else if( e.tagName() == "TEXT" )
 			{
 				/*VText* text = new VText();
 				text->load( e );
-				appendObject( text );*/
+				append( text );*/
 			}
 		}
 	}

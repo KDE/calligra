@@ -41,7 +41,7 @@ VHandleTool::instance( KarbonPart* part )
 }
 
 static KoRect
-computeRect( double cx, double cy, const double zoomFactor )
+computeRect( double cx, double cy, const double /*zoomFactor*/ )
 {
 	return KoRect( KoPoint( cx - HANDLE_SIZE /* zoomFactor */, cy - HANDLE_SIZE /* zoomFactor */ ),
 				  KoPoint( cx + HANDLE_SIZE /* zoomFactor */, cy + HANDLE_SIZE /* zoomFactor */ ) );
@@ -55,7 +55,7 @@ VHandleTool::draw( QPainter& painter, const double zoomFactor )
 	//QWMatrix mat = painter.worldMatrix();
 	//painter.setWorldMatrix( mat.scale( 1 / zoomFactor, 1 / zoomFactor ) );
 
-	if( part()->document().selection().count() > 0 )
+	if( part()->document().selection().objects().count() > 0 )
 	{
 		const KoRect& bb = part()->document().selection().boundingBox();
 

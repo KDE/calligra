@@ -63,8 +63,8 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	QColor color( "black" );
 
 	 // there is a selection, so take the color of first selected object
-	if( part->document().selection().count() > 0 )
-		color = part->document().selection().getFirst()->stroke().color().toQColor();
+	if( part->document().selection().objects().count() > 0 )
+		color = part->document().selection().objects().getFirst()->stroke()->color().toQColor();
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
@@ -126,11 +126,11 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	mOpacity->setRange( 0, 100, 1, true );
 
 	// there is a selection, so take the opacity of first selected object
-	if( part->document().selection().count() > 0 )
+	if( part->document().selection().objects().count() > 0 )
 	{
 		mOpacity->setValue( static_cast<int>(
-			part->document().selection().getFirst()->
-				stroke().color().opacity() * 100.0 ) );
+			part->document().selection().objects().getFirst()->
+				stroke()->color().opacity() * 100.0 ) );
 	}
 
 	mainLayout->addWidget( ogroupBox, 2, 2 );

@@ -24,7 +24,7 @@ VWhirlPinchCmd::execute()
 {
 	VWhirlPinch op( m_center, m_angle, m_pinch, m_radius );
 
-	VObjectListIterator itr( m_objects );
+	VObjectListIterator itr( m_objects.objects() );
 	for ( ; itr.current() ; ++itr )
 		op.visit( *itr.current() );
 }

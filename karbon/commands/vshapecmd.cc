@@ -3,9 +3,9 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vshapecmd.h"
-#include "vshape.h"
 #include "vdocument.h"
+#include "vobject.h"
+#include "vshapecmd.h"
 
 void
 VShapeCmd::execute()
@@ -18,8 +18,8 @@ VShapeCmd::execute()
 
 		m_doc->applyDefaultColors( *m_object );
 		// add path:
-		m_doc->appendObject( m_object );
-		m_doc->selectObject( *m_object, true );
+		m_doc->append( m_object );
+		m_doc->select( *m_object, true );
 	}
 }
 
@@ -28,7 +28,7 @@ VShapeCmd::unexecute()
 {
 	if ( m_object )
 	{
-		m_doc->deselectObject( *m_object );
+		m_doc->deselect( *m_object );
 		m_object->setState( state_deleted );
 	}
 }

@@ -22,7 +22,7 @@ VSinusCmd::VSinusCmd( VDocument *doc,
 	m_periods = periods < 1 ? 1 : periods;
 }
 
-VShape*
+VObject*
 VSinusCmd::createPath()
 {
 	VPath* path = new VPath();

@@ -5,14 +5,18 @@
 #ifndef __VVISITOR_H__
 #define __VVISITOR_H__
 
-class VShape;
+#include <qptrlist.h>
+
+
+class VObject;
 class VPath;
 class VSegmentList;
+
 
 class VVisitor
 {
 public:
-	virtual void visit( VShape& object );
+	virtual void visit( VObject& object );
 	virtual void visitVPath(
 		VPath& /*path*/, QPtrList<VSegmentList>& /*lists*/ ) = 0;
 };

@@ -23,7 +23,7 @@ public:
 	virtual void unexecute();
 
 private:
-	VObjectList m_objects;
+	VSelection m_objects;
 
 	VGroup* m_group;
 };

@@ -53,8 +53,9 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 	KoRect rect = part()->document().selection().boundingBox();
 
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
-	if( !part()->document().selection().isEmpty()
-		&& ( m_state != normal || rect.contains( fp /* view->zoom() */ ) ) )
+	if(
+		part()->document().selection().objects().count() > 0 &&
+		( m_state != normal || rect.contains( fp /* view->zoom() */ ) ) )
 	{
 		if( m_state != moving )
 			m_state = moving;
@@ -65,7 +66,7 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 						( m_lp.y() - fp.y() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection();
+		VObjectListIterator itr = part()->document().selection().objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 		for( ; itr.current() ; ++itr )
@@ -153,9 +154,9 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 			// erase old object:
 			drawTemporaryObject( view );
 
-			part()->document().deselectAllObjects();
+			part()->document().deselect();
 
-			part()->document().selectObjectsWithinRect(
+			part()->document().select(
 				KoRect(
 					fp.x() * view->zoom(), fp.y() * view->zoom(),
 					( lp.x() - fp.x() ) * view->zoom(),

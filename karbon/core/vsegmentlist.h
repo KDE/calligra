@@ -5,14 +5,14 @@
 #ifndef __VSEGMENTLIST_H__
 #define __VSEGMENTLIST_H__
 
-#include <qptrlist.h>
 #include <koPoint.h>
 
 #include "vobject.h"
-#include "vsegment.h"
+
 
 class QDomElement;
 class QWMatrix;
+class VSegment;
 
 
 // The general list stuff is stolen from Qt.
@@ -49,6 +49,8 @@ public:
 	virtual void transform( const QWMatrix& m );
 
 	virtual const KoRect& boundingBox() const;
+
+	virtual VObject* clone() const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );

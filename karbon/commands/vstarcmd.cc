@@ -28,7 +28,7 @@ VStarCmd::VStarCmd( VDocument *doc,
 	m_innerR = innerR < 0.0 ? -innerR : innerR;
 }
 
-VShape*
+VObject*
 VStarCmd::createPath()
 {
 	VPath* path = new VPath();

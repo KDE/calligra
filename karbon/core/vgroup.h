@@ -5,46 +5,65 @@
 #ifndef __VGROUP_H__
 #define __VGROUP_H__
 
-#include "vshape.h"
-#include "vobjectlist.h"
+#include "qptrlist.h"
 
+#include "vobject.h"
+
+class KoRect;
 class QDomElement;
+class VPainter;
 
-// grouping of VObjects
 
-class VGroup : public VShape
+typedef QPtrList<VObject> VObjectList;
+typedef QPtrListIterator<VObject> VObjectListIterator;
+
+
+/**
+ * Base class for all sort of VObject conglomerats.
+ */
+
+class VGroup : public VObject
 {
 public:
-	VGroup( VObject* parent = 0L );
-	VGroup( const VObjectList &, VObject* parent = 0L );
-	VGroup( const VGroup & );
-	~VGroup();
+	VGroup( VObject* parent = 0L, VState state = state_normal );
+	VGroup( const VGroup& group );
 
-	void draw( VPainter *painter, const KoRect& rect );
+	virtual ~VGroup();
 
-	void setState( const VState state );
-	// clear the group without deleting the objects
-	void ungroup();
-	void insertObject( VShape* object );
+	virtual void draw( VPainter* painter, const KoRect& rect );
 
 	virtual void transform( const QWMatrix& m );
 
-    virtual const KoRect& boundingBox() const;
+	virtual const KoRect& boundingBox() const;
 
-    virtual bool isInside( const KoRect& rect ) const;
+	virtual bool isInside( const KoRect& rect ) const;
 
-    virtual VShape* clone();
+	virtual void setState( const VState state );
+
+	virtual void setStroke( const VStroke& stroke );
+	virtual void setFill( const VFill& fill );
+
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
+
+	virtual VObject* clone() const;
+
+
+	/// removes the reference to the object, not the object itself
+	void take( const VObject& object );
+
+	void prepend( VObject* object );
+	void append( VObject* object );
+
+	void clear() { kdDebug() << "notimplemnted!!!" << endl; }
+
+	// clear the group without deleting the objects
+	void ungroup();	// TODO !!! use clear()?
 
 	// read-only access to objects:
 	const VObjectList& objects() const { return m_objects; }
 
-	virtual void setFill( const VFill &fill );
-    virtual void setStroke( const VStroke &stroke );
-
-	void save( QDomElement& element ) const;
-	void load( const QDomElement& element );
-
-private:
+protected:
 	VObjectList m_objects;
 };
 

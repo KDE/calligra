@@ -15,22 +15,24 @@ VFillCmd::VFillCmd( VDocument *doc, const VColor& color, float opacity )
 	m_objects = m_doc->selection();
 	//m_part->deselectAllObjects();
 
-	if( m_objects.count() == 1 )
+	if( m_objects.objects().count() == 1 )
 		setName( i18n( "Fill Object" ) );
 }
 
 void
 VFillCmd::execute()
 {
-	VObjectListIterator itr( m_objects );
+	VObjectListIterator itr( m_objects.objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		//if( m_opacity == -1 )
 		//	m_color.setOpacity( itr.current()->fill().color().opacity() );
 
-		m_oldcolors.push_back( VFill( itr.current()->fill() ) );
-		VFill fill = itr.current()->fill();
+		m_oldcolors.push_back( VFill( *itr.current()->fill() ) );
+
+		VFill fill = *itr.current()->fill();
 		fill.setColor( m_color );
+
 		itr.current()->setFill( fill );
 	}
 }
@@ -38,7 +40,7 @@ VFillCmd::execute()
 void
 VFillCmd::unexecute()
 {
-	VObjectListIterator itr( m_objects );
+	VObjectListIterator itr( m_objects.objects() );
 	int i = 0;
 	for ( ; itr.current() ; ++itr )
 	{

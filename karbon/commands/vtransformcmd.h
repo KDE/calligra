@@ -25,7 +25,8 @@ public:
 protected:
 	VTransformCmd( VDocument *doc, const QString& name );
 
-	VObjectList m_objects;
+	VSelection m_objects;
+
 	QWMatrix m_mat;
 };
 

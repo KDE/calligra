@@ -2,11 +2,11 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vshape.h"
+#include "vobject.h"
 #include "vvisitor.h"
 
 void
-VVisitor::visit( VShape& object )
+VVisitor::visit( VObject& object )
 {
 	object.accept( *this );
 }

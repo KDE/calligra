@@ -2,13 +2,15 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qmap.h>
+#include <qvaluelist.h>
 
 #include "vboolean.h"
 #include "vpath.h"
+#include "vsegment.h"
+
 
 void
-VBoolean::visit( VShape& object1, VShape& object2 )
+VBoolean::visit( VObject& object1, VObject& object2 )
 {
 	m_lists1 = 0L;
 	m_lists2 = 0L;

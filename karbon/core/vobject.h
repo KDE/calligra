@@ -6,12 +6,28 @@
 #ifndef __VOBJECT_H__
 #define __VOBJECT_H__
 
-#include <qptrlist.h>
 #include <koRect.h>
 
 class QDomElement;
 class QWMatrix;
+class VFill;
 class VPainter;
+class VStroke;
+class VVisitor;
+
+
+enum VState
+{
+	state_normal        = 0,	/// visible, not active
+	state_normal_locked = 1,	/// visible, but locked (r/o)
+	state_hidden        = 2,	/// hidden
+	state_hidden_locked = 3,	/// hidden and locked (r/o)
+	state_deleted       = 4,	/// deleted, nearly dead
+
+	// shape specific states:
+	state_selected      = 5,	/// visible, active and can be manipulated by tools
+	state_edit          = 6		/// visible, active and is currently manipulated by a tool
+};
 
 /**
  * The base class for all karbon objects. Every object should
@@ -23,18 +39,10 @@ class VPainter;
 class VObject
 {
 public:
-	VObject( VObject* parent = 0L ) : m_parent( parent )
-	{
-		invalidateBoundingBox();
-	}
+	VObject( VObject* parent = 0L, VState state = state_normal );
+	VObject( const VObject& obj );
 
-	VObject( const VObject& obj )
-	{
-		m_parent = obj.m_parent;
-		invalidateBoundingBox();
-	}
-
-	virtual ~VObject() {}
+	virtual ~VObject();
 
 	/**
 	 * Draw the object to a painting device.
@@ -52,7 +60,7 @@ public:
 	 *
 	 * @param m matrix to use for the transformation.
 	 */
-	virtual void transform( const QWMatrix& m ) = 0;
+	virtual void transform( const QWMatrix& /*m*/ ) {}
 
 	/**
 	 * Calculates the tightest bounding box around the object.
@@ -81,20 +89,51 @@ public:
 	 * false otherwise.
 	 */
 	virtual bool isInside( const KoRect& /*rect*/ ) const
-		{ return false; };
+		{ return false; }
+
+	void setParent( VObject* parent ) { m_parent = parent; }
+	VObject* parent() { return m_parent; }
+
+	/**
+	 * Get the state the shape is in.
+	 *
+	 * @return the shape state at time of calling.
+	 */
+	VState state() const { return m_state; }
+
+	/**
+	 * Sets the state to a specified new state.
+	 * Note that this will not have any effect until draw() is
+	 * called on this object.
+	 *
+	 * @param state the new state.
+	 */
+	virtual void setState( const VState state ) { m_state = state; }
+
+	const VStroke* stroke() const { return m_stroke; }
+	const VFill* fill() const { return m_fill; }
+
+	virtual void setStroke( const VStroke& stroke );
+	virtual void setFill( const VFill& fill );
 
 	/**
 	 * Save this object's state to xml.
 	 */
-	virtual void save( QDomElement& element ) const = 0;
+	virtual void save( QDomElement& element ) const;
+
 	/**
 	 * Load this object's state from xml and initialize
 	 * this object accordingly.
 	 */
-	virtual void load( const QDomElement& element ) = 0;
+	virtual void load( const QDomElement& element );
 
-	void setParent( VObject* parent ) { m_parent = parent; }
-	VObject* parent() { return m_parent; }
+	/**
+	 * Create an exact copy of this shape.
+	 */
+	virtual VObject* clone() const = 0;
+
+	/// Accept a VVisitor.
+	virtual void accept( VVisitor& /*visitor*/ ) {}
 
 protected:
 	/**
@@ -112,8 +151,13 @@ protected:
 	mutable KoRect m_boundingBox;
 	mutable bool m_boundingBoxIsInvalid;
 
+	VStroke* m_stroke;
+	VFill* m_fill;
+
 private:
 	VObject* m_parent;
+
+	VState m_state;
 };
 
 #endif

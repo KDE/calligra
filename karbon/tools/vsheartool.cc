@@ -79,7 +79,9 @@ VShearTool::drawTemporaryObject( KarbonView* view )
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->document().selection().isEmpty() && VHandleTool::instance( m_part )->activeNode() != node_mm )
+	if(
+		part()->document().selection().objects().count() > 0 &&
+		VHandleTool::instance( m_part )->activeNode() != node_mm )
 	{
 		KoRect rect = part()->document().selection().boundingBox();
 
@@ -123,7 +125,7 @@ VShearTool::drawTemporaryObject( KarbonView* view )
 						- ( m_fp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection();
+		VObjectListIterator itr = part()->document().selection().objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )

@@ -26,7 +26,7 @@ public:
 	virtual void unexecute();
 
 private:
-	VObjectList m_objects;
+	VSelection m_objects;
 
 	VColor m_color;
 	float m_opacity;

@@ -8,6 +8,7 @@
 #include <qvaluelist.h>
 #include <qwmatrix.h>
 
+#include "vsegment.h"
 #include "vsegmentlist.h"
 
 #include <kdebug.h>
@@ -323,7 +324,7 @@ VSegmentList::boundingBox() const
 		VSegment* segment = m_first;
 
 		// ommit "begin" segment:
-		while( segment = segment->m_next )
+		while( ( segment = segment->m_next ) )
 		{
 			m_boundingBox |= segment->boundingBox();
 		}
@@ -332,6 +333,12 @@ VSegmentList::boundingBox() const
 	}
 
 	return m_boundingBox;
+}
+
+VObject*
+VSegmentList::clone() const
+{
+	return new VSegmentList( *this );
 }
 
 void

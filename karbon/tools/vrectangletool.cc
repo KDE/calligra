@@ -49,7 +49,7 @@ VRectangleTool::drawTemporaryObject(
 	VRectangleCmd* cmd =
 		new VRectangleCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
-	VShape* path = cmd->createPath();
+	VObject* path = cmd->createPath();
 	path->setState( state_edit );
 	path->draw( painter, path->boundingBox() );
 

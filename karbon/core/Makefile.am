@@ -11,18 +11,17 @@ noinst_HEADERS = \
 	vcanvas.h \
 	vcolor.h \
 	vdashpattern.h \
+	vdocument.h \
 	vfill.h \
 	vglobal.h \
 	vgradient.h \
-	vdocument.h \
+	vgroup.h \
 	vlayer.h \
 	vobject.h \
-	vobjectlist.h \
-	vshape.h \
-	vgroup.h \
 	vpath.h \
 	vsegment.h \
 	vsegmentlist.h \
+	vselection.h \
 	vstroke.h
 #	vtext.h
 
@@ -30,16 +29,16 @@ libkarboncore_la_SOURCES = \
 	vcanvas.cc \
 	vcolor.cc \
 	vdashpattern.cc \
+	vdocument.cc \
 	vfill.cc \
 	vgradient.cc \
-	vdocument.cc \
-	vlayer.cc \
-	vobjectlist.cc \
-	vshape.cc \
 	vgroup.cc \
+	vlayer.cc \
+	vobject.cc \
 	vpath.cc \
 	vsegment.cc \
 	vsegmentlist.cc \
+	vselection.cc \
 	vstroke.cc
 #	vtext.cc
 

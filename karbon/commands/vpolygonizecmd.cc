@@ -20,7 +20,7 @@ VPolygonizeCmd::execute()
 {
 	VPolygonize op( m_flatness );
 
-	VObjectListIterator itr( m_objects );
+	VObjectListIterator itr( m_objects.objects() );
 	for ( ; itr.current() ; ++itr )
 		op.visit( *itr.current() );
 }

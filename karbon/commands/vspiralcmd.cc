@@ -9,6 +9,7 @@
 
 #include <klocale.h>
 
+#include "vfill.h"
 #include "vglobal.h"
 #include "vpath.h"
 #include "vspiralcmd.h"
@@ -30,7 +31,7 @@ VSpiralCmd::VSpiralCmd( VDocument *doc,
 	m_fade = ( fade <= 0.0 || fade >= 1.0 ) ? 0.5 : fade;
 }
 
-VShape*
+VObject*
 VSpiralCmd::createPath()
 {
 	VPath* path = new VPath();

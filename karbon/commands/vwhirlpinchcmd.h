@@ -19,7 +19,8 @@ public:
 	virtual void unexecute();
 
 private:
-	VObjectList m_objects;
+	VSelection m_objects;
+
 	KoPoint m_center;
 	double m_angle;
 	double m_pinch;

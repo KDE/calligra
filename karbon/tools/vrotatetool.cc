@@ -84,7 +84,7 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	if(
-		!part()->document().selection().isEmpty() &&
+		part()->document().selection().objects().count() > 0 &&
 		VHandleTool::instance( m_part )->activeNode() != node_mm )
 	{
 		setCursor( view );
@@ -123,7 +123,7 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection();
+		VObjectListIterator itr = part()->document().selection().objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )

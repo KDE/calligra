@@ -21,26 +21,27 @@ VGroupCmd::execute()
 {
 	m_group = new VGroup();
 
-	VObjectListIterator itr( m_objects );
+	VObjectListIterator itr( m_objects.objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->activeLayer()->removeRef( itr.current() );
-		m_group->insertObject( itr.current() );
+		m_doc->activeLayer()->take( itr.current() );
+		m_group->append( itr.current() );
 	}
-	m_doc->appendObject( m_group );
-	m_doc->selectObject( *m_group, true );
+
+	m_doc->append( m_group );
+	m_doc->select( *m_group, true );
 }
 
 void
 VGroupCmd::unexecute()
 {
-	m_doc->deselectAllObjects();
+	m_doc->deselect();
 	VObjectListIterator itr( m_group->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->selectObject( *( itr.current() ) );
+		m_doc->select( *( itr.current() ) );
 	}
 	// TODO : remove from corresponding VLayer
 	m_group->ungroup();

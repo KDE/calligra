@@ -8,6 +8,7 @@
 
 #include "vglobal.h"
 #include "vpath.h"
+#include "vsegment.h"
 #include "vwhirlpinch.h"
 
 

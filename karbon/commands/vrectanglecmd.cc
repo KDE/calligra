@@ -16,7 +16,7 @@ VRectangleCmd::VRectangleCmd( VDocument *doc,
 {
 }
 
-VShape*
+VObject*
 VRectangleCmd::createPath()
 {
 	VPath* path = new VPath();

@@ -57,7 +57,7 @@ VSpiralTool::drawTemporaryObject(
 			m_dialog->clockwise(),
 			d2 );
 
-	VShape* path = cmd->createPath();
+	VObject* path = cmd->createPath();
 	path->setState( state_edit );
 	path->draw( painter, path->boundingBox() );
 

@@ -27,7 +27,7 @@ VPolygonCmd::VPolygonCmd( VDocument *doc,
 	m_radius = radius < 0.0 ? -radius : radius;
 }
 
-VShape*
+VObject*
 VPolygonCmd::createPath()
 {
 	VPath* path = new VPath();

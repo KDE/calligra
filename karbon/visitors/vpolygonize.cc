@@ -2,8 +2,9 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vpolygonize.h"
 #include "vpath.h"
+#include "vpolygonize.h"
+#include "vsegment.h"
 
 void
 VPolygonize::setFlatness( double flatness )
