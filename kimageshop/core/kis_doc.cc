@@ -219,16 +219,28 @@ bool kisDoc::saveCurrentImage( const QString& file )
 
 bool kisDoc::loadImage( const QString& file )
 {
-  QString name;
-  name.sprintf("image %d", m_Images.count()+1);
-  kisImage *img = newImage(name, 512, 512, RGB, WHITE);
-  if (!img)
+  QImage img(file);
+
+  if (img.isNull())
     return false;
+ 
+  QString alphaName = file;
+  alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
+  qDebug("alphaname=%s\n",alphaName.latin1());
+  QImage alpha(alphaName);
   
-  // add background layer
-  img->addRGBLayer(file);
-  img->setLayerOpacity(255);
-  img->compositeImage(QRect(0, 0, 512, 512));
+  QString name = QFileInfo(file).fileName();
+  int w = img.width();
+  int h = img.height();
+
+  kisImage *kis_img = newImage(name, w, h, RGB, WHITE);
+  if (!kis_img)
+    return false;
+
+  
+  kis_img->addRGBLayer(img, alpha, name);
+  kis_img->setLayerOpacity(255);
+  kis_img->compositeImage(QRect(0, 0, w, h));
   return true;
 }
 
