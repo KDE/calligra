@@ -70,6 +70,7 @@ public:
 
     static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
     static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
+    static QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format );
 
 protected:
     /// Add styles to styles map

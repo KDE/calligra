@@ -138,7 +138,8 @@ public:
            STYLE_MASTER = 3,
            STYLE_LIST = 4,
            STYLE_NUMERIC_DATE = 5,
-	   STYLE_NUMERIC_TIME = 6 };
+	   STYLE_NUMERIC_TIME = 6,
+           STYLE_NUMERIC_FRACTION = 7};
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
      * but first you must define its properties and attributes.

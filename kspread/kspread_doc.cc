@@ -672,6 +672,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
     }
 
+    //TODO FIXME !!!!
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
@@ -682,6 +683,12 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_FRACTION );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:fraction", (*it).name, 0 /*TODO ????*/  );
     }
 
 

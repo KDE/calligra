@@ -827,3 +827,46 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
     currentStyle.addChildElement( "number", elementContents );
     return mainStyles.lookup( currentStyle, "N" );
 }
+
+
+QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format )
+{
+    kdDebug()<<"QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    QString format( _format );
+
+    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_FRACTION );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    QString text;
+    int integer = 0;
+    int numerator = 0;
+    int denominator = 0;
+    bool beforeSlash = true;
+    do
+    {
+        if ( format[0]=='#' )
+            integer++;
+        else if ( format[0]=='/' )
+            beforeSlash = false;
+        else if ( format[0]=='?' )
+        {
+            if ( beforeSlash )
+                numerator++;
+            else
+                denominator++;
+        }
+        format.remove( 0,1 );
+    }
+    while ( format.length() > 0 );
+    elementWriter.startElement( "number:fraction" );
+    elementWriter.addAttribute( "min-integer-digits", integer );
+    elementWriter.addAttribute( "min-numerator-digits",numerator );
+    elementWriter.addAttribute( "min-denominator-digits",denominator );
+    elementWriter.endElement();
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentStyle.addChildElement( "number", elementContents );
+    return mainStyles.lookup( currentStyle, "N" );
+}
+
