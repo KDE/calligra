@@ -69,7 +69,10 @@ class KEXICORE_EXPORT KexiDialogTempData : public QObject
 /*! This class can contain a number of configurable views, switchable using toggle action.
  It also automatically works as a proxy for shared (application-wide) actions.
 */
-class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy, public Kexi::ObjectStatus
+class KEXICORE_EXPORT KexiDialogBase : 
+	public KMdiChildView,
+	public KexiActionProxy,
+	public Kexi::ObjectStatus
 {
 	Q_OBJECT
 
@@ -224,6 +227,16 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 and m_schemaData is set. \sa schemaData().
 		 \return true on success, false on failure and cancelled when storing has been cancelled. */
 		tristate storeNewData();
+
+		/*! Reimplemented - we're informing the current view about performed detaching by calling
+		 KexiViewBase::parentDialogDetached(), so the view can react on this event
+		 (by default KexiViewBase::parentDialogDetached() does nothing, you can reimplement it). */
+		void sendDetachedStateToCurrentView();
+
+		/*! W're informing the current view about performed atttaching by calling
+		 KexiViewBase::parentDialogAttached(), so the view can react on this event
+		 (by default KexiViewBase::parentDialogAttached() does nothing, you can reimplement it). */
+		void sendAttachedStateToCurrentView(); 
 
 	signals:
 		void updateContextHelp();

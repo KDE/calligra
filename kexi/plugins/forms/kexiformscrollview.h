@@ -31,6 +31,8 @@ namespace KFormDesigner {
 	class Form;
 }
 
+class KexiDBForm;
+
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
 /*! @see KexiTableView */
 class KexiFormScrollView : 
@@ -53,6 +55,8 @@ class KexiFormScrollView :
 	public slots:
 		/*! Reimplemented to update resize policy. */
 		virtual void show();
+
+		//virtual void setFocus();
 
 		//! Implementation for KexiDataAwareObjectInterface
 		//! \return arbitraty value of 10.
@@ -161,6 +165,10 @@ class KexiFormScrollView :
 		 Updates scrollbars of the widget. 
 		 QScrollView::updateScrollbars() will be usually called here. */
 		virtual void updateWidgetScrollBars();
+
+		KexiDBForm* dbFormWidget() const;
+
+		//virtual bool focusNextPrevChild( bool next );
 
 		KFormDesigner::Form *m_form;
 

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +26,17 @@
 #include <kexigradientwidget.h>
 #include <kexidataiteminterface.h>
 #include <form.h>
+
+#define SET_FOCUS_USING_REASON(widget, reason) \
+	{ QEvent fe( QEvent::FocusIn ); \
+	QFocusEvent::setReason(reason); \
+	QApplication::sendEvent( widget, &fe ); \
+	QFocusEvent::resetReason(); }
+
+//QEvent foe( QEvent::FocusOut ); \
+//	QFocusEvent::setReason(reason); \
+//	QApplication::sendEvent( widget, &foe ); \
+//	QFocusEvent::resetReason(); \
 
 //! A DB-aware form widget
 class KexiDBForm : 
@@ -56,6 +68,12 @@ class KexiDBForm :
 		virtual QSize sizeHint() const;
 
 		bool autoTabStops() const;
+
+		QPtrList<QWidget>* orderedFocusWidgets() const;
+
+		void updateTabStopsOrder(KFormDesigner::Form* form);
+
+		virtual bool eventFilter ( QObject * watched, QEvent * e );
 
 	public slots:
 		void setAutoTabStops(bool set);

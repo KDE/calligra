@@ -20,9 +20,11 @@
 
 #include "kexiformscrollview.h"
 #include "kexiformview.h"
+#include "kexidbform.h"
 
 #include <formeditor/form.h>
 #include <formeditor/formmanager.h>
+#include <formeditor/objecttree.h>
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  : KexiScrollView(parent, preview)
@@ -39,6 +41,8 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 	//context menu
 	m_popup = new KPopupMenu(this, "contextMenu");
 	m_provider = new KexiDataProvider();
+
+	setFocusPolicy(NoFocus);
 }
 
 KexiFormScrollView::~KexiFormScrollView()
@@ -80,6 +84,9 @@ void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
 	//! @todo
 	if (m_currentItem)
 		m_provider->fillDataItems(*m_currentItem);
+
+//	if (m_form->tabStops()->first() && m_form->tabStops()->first()->widget())
+//		m_form->tabStops()->first()->widget()->setFocus();
 }
 
 void KexiFormScrollView::moveToRecordRequested(uint r)
@@ -228,5 +235,17 @@ void KexiFormScrollView::slotRowsDeleted( const QValueList<int> & )
 {
 	//! @todo
 }
+
+KexiDBForm* KexiFormScrollView::dbFormWidget() const
+{
+	return dynamic_cast<KexiDBForm*>(m_widget);
+}
+
+/*bool KexiFormScrollView::focusNextPrevChild( bool next )
+{
+	if (focusProxy())
+		focusProxy()->setFocus();
+	return true;
+}*/
 
 #include "kexiformscrollview.moc"

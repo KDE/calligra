@@ -263,8 +263,12 @@ void KexiViewBase::setFocus()
 		kdDebug() << "FOCUS: " << m_lastFocusedChildBeforeFocusOut->className() << " " << m_lastFocusedChildBeforeFocusOut->name()<< endl;
 		m_lastFocusedChildBeforeFocusOut->setFocus();
 	}
-	else
-		QWidget::setFocus();
+	else {
+		if (hasFocus())
+			setFocusInternal();
+		else
+			setFocusInternal();
+	}
 	m_mainWin->invalidateSharedActions(this);
 }
 

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,11 +22,13 @@
 #include <qobjectlist.h>
 #include <qpainter.h>
 #include <qcursor.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 
 #include "kexidbform.h"
 
+#include <formeditor/objecttree.h>
 
 class KexiDBForm::Private
 {
@@ -34,6 +37,7 @@ class KexiDBForm::Private
 		 : autoTabStops(false)
 		{
 		}
+		QPtrList<QWidget> orderedFocusWidgets;
 		bool autoTabStops : 1;
 };
 
@@ -45,6 +49,8 @@ KexiDBForm::KexiDBForm(QWidget *parent, const char *name/*, KexiDB::Connection *
  , d(new Private())
 {
 //test	setDisplayMode( KexiGradientWidget::SimpleGradient );
+
+	setFocusPolicy(NoFocus);
 
 	//m_conn = conn;
 	kexipluginsdbg << "KexiDBForm::KexiDBForm(): " << endl;
@@ -214,6 +220,66 @@ bool KexiDBForm::autoTabStops() const
 void KexiDBForm::setAutoTabStops(bool set)
 {
 	d->autoTabStops = set;
+}
+
+QPtrList<QWidget>* KexiDBForm::orderedFocusWidgets() const
+{
+	return &d->orderedFocusWidgets;
+}
+
+void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
+{
+	QWidget *fromWidget = 0;
+	QWidget *topLevelWidget = form->widget()->topLevelWidget();
+	if (d->orderedFocusWidgets.isEmpty()) {
+		//generate a new list
+		for (KFormDesigner::ObjectTreeListIterator it(form->tabStopsIterator()); it.current(); ++it) {
+			it.current()->widget()->installEventFilter(this);
+			if (fromWidget) {
+				kdDebug() << "KexiFormView::initForm() tab order: " << fromWidget->name() 
+					<< " -> " << it.current()->widget()->name() << endl;
+				setTabOrder( fromWidget, it.current()->widget() );
+			}
+			fromWidget = it.current()->widget();
+			d->orderedFocusWidgets.append( it.current()->widget() );
+		}
+	}
+	else {
+		//restore ordering
+		for (QPtrListIterator<QWidget> it(d->orderedFocusWidgets); it.current(); ++it) {
+			if (fromWidget) {
+				kdDebug() << "KexiFormView::initForm() tab order: " << fromWidget->name() 
+					<< " -> " << it.current()->name() << endl;
+				setTabOrder( fromWidget, it.current() );
+			}
+			fromWidget = it.current();
+		}
+//		SET_FOCUS_USING_REASON(focusWidget(), QFocusEvent::Tab);
+	}
+ }
+
+bool KexiDBForm::eventFilter ( QObject * watched, QEvent * e )
+{
+	if (e->type()==QEvent::KeyPress && dynamic_cast<KexiDataItemInterface*>(watched)) {
+		kdDebug() << watched->name() << endl;
+		if (d->orderedFocusWidgets.first() && static_cast<QKeyEvent*>(e)->key() == Key_Tab 
+			&& watched == d->orderedFocusWidgets.last())
+		{
+			//set focus, but don't use just setFocus() because certain widgets
+			//behaves differently (e.g. QLineEdit calls selectAll()) when 
+			//focus event's reason is QFocusEvent::Tab
+			SET_FOCUS_USING_REASON(d->orderedFocusWidgets.first(), QFocusEvent::Tab);
+			return true;
+		}
+		else if (d->orderedFocusWidgets.last() && static_cast<QKeyEvent*>(e)->key() == Key_BackTab 
+			&& watched == d->orderedFocusWidgets.first())
+		{
+			//set focus, see above note
+			SET_FOCUS_USING_REASON(d->orderedFocusWidgets.last(), QFocusEvent::Backtab);
+			return true;
+		}
+	}
+	return KexiGradientWidget::eventFilter(watched, e);
 }
 
 #include "kexidbform.moc"

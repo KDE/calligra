@@ -221,6 +221,20 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 or deactivation. */
 		virtual void updateActions(bool activated);
 
+		virtual void setFocusInternal() { QWidget::setFocus(); }
+
+		/*! Allows to react on parent dialog's detaching (only for KMDI's ChildFrame mode)
+		 - it is called by KexiDialogBase::youAreDetached().
+		 Default implementation does nothing.
+		 Implement it if you want to perform some appropriate actions. */
+		virtual void parentDialogDetached() {};
+
+		/*! Allows to react on parent dialog's attaching (only for KMDI's ChildFrame mode)
+		 - it is called by KexiDialogBase::youAreAttached().
+		 Default implementation does nothing.
+		 Implement it if you want to perform some appropriate actions. */
+		virtual void parentDialogAttached() {};
+
 		QString m_defaultIconName;
 
 		KexiMainWindow *m_mainWin;

@@ -439,13 +439,16 @@ TODO: look at recent Martin's stuff: http://homepages.cs.ncl.ac.uk/m.a.ellis/kex
 Startup TODO:
 - add "Save Special->Shortcut file for this project" action
 
-2005-02-23
+2005-02-23..25
 Forms
 - fixed Tab/BackTab ordering within form's fields, including cycles 
   and problems after detaching/attaching windows for Child Frame Mode.
   QApplication::sendEvent() used instead setFocus() for more realistic 
   (especially for QLineEdits) focusing effects when tabulator is pressed.
 - QLabel and KexiPixmapLabel available again in KFD
+Main
+- useful Statusbar debug info about focused widget added 
+  (enable this using KEXI_STATUSBAR_DEBUG compile-time macro)
 
 2005-02-21
 Kexi Startup

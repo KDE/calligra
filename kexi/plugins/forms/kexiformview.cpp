@@ -47,6 +47,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char 
  , m_buffer(0)
  , m_resizeMode(KexiFormView::ResizeDefault)
  , m_query(0)
+// , m_firstFocusWidget(0)
 {
 	m_delayedFormContentsResizeOnShow = false;
 
@@ -187,6 +188,14 @@ KexiFormView::initForm()
 	else
 		loadForm();
 
+	if(form()->autoTabStops())
+		form()->autoAssignTabStops();
+
+	m_dbform->updateTabStopsOrder(form());
+
+//	if (m_dbform->orderedFocusWidgets()->first())
+	//	m_scrollView->setFocusProxy( m_dbform->orderedFocusWidgets()->first() );
+
 	formPart()->manager()->importForm(form(), viewMode()==Kexi::DataViewMode);
 	m_scrollView->setForm(form());
 //	QSize s = m_dbform->size();
@@ -241,21 +250,7 @@ KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 		tempData()->scrollViewContentsPos 
 			= QPoint(m_scrollView->contentsX(), m_scrollView->contentsY());
 		}
-
-		//update tab stops if needed
-		if (mode==Kexi::DataViewMode) {
-			//propagate current "autoTabStops" property value to the form tree
-			form()->setAutoTabStops( m_dbform->autoTabStops() );
-
-			if(form()->autoTabStops())
-				form()->autoAssignTabStops();
-		}
-		else {
-			//set "autoTabStops" property
-			m_dbform->setAutoTabStops( form()->autoTabStops() );
-		}
 	}
-
 
 	// we don't store on db, but in our TempData
 	dontStore = true;
@@ -294,13 +289,29 @@ KexiFormView::afterSwitchFrom(int mode)
 		m_dbform->move(0,0);
 	}
 
+	//update tab stops if needed
+	if (viewMode()==Kexi::DataViewMode) {
+//		//propagate current "autoTabStops" property value to the form tree
+//		form()->setAutoTabStops( m_dbform->autoTabStops() );
+
+//		if(form()->autoTabStops())
+//			form()->autoAssignTabStops();
+	}
+	else {
+		//set "autoTabStops" property
+		m_dbform->setAutoTabStops( form()->autoTabStops() );
+	}
+
 	if (viewMode() == Kexi::DataViewMode) {
 //TMP!!
 		initDataSource();
 
 		//set focus on 1st focusable widget
-		if (form()->tabStops()->first() && form()->tabStops()->first()->widget())
-			form()->tabStops()->first()->widget()->setFocus();
+//		if (form()->tabStops()->first() && form()->tabStops()->first()->widget())
+//			form()->tabStops()->first()->widget()->setFocus();
+		if (m_dbform->orderedFocusWidgets()->first())
+			SET_FOCUS_USING_REASON(m_dbform->orderedFocusWidgets()->first(), QFocusEvent::Tab);
+//			m_dbform->orderedFocusWidgets()->first()->setFocus();
 	}
 	return true;
 }
@@ -598,42 +609,29 @@ KexiFormView::resizeEvent( QResizeEvent *e )
 	}
 }
 
-/* moved
-void KexiFormView::moveToRecordRequested(uint r)
+void 
+KexiFormView::setFocusInternal()
 {
-	if (r < 0 || r >= m_data->count())
-		return;
-	m_currentRowNumber = r;
-	m_currentRow = m_data->at(r);
-	m_provider->fillDataItems(*m_currentRow);
-	m_scrollView->recordNavigator()->setCurrentRecordNumber(m_currentRowNumber+1);
+	if (viewMode() == Kexi::DataViewMode) {
+		if (m_dbform->focusWidget()) {
+			//better-looking focus
+			SET_FOCUS_USING_REASON(m_dbform->focusWidget(), QFocusEvent::Tab);
+			return;
+		}
+	}
+	setFocus();
 }
 
-void KexiFormView::moveToLastRecordRequested()
+
+void KexiFormView::parentDialogDetached()
 {
-	moveToRecordRequested( m_data->count()-1 );
+	m_dbform->updateTabStopsOrder(form());
 }
 
-void KexiFormView::moveToPreviousRecordRequested()
+void KexiFormView::parentDialogAttached(KMdiChildFrm *)
 {
-	moveToRecordRequested( QMAX(0, m_currentRowNumber-1) );
+	m_dbform->updateTabStopsOrder(form());
 }
-
-void KexiFormView::moveToNextRecordRequested()
-{
-	moveToRecordRequested( QMIN(int(m_data->count())-1, m_currentRowNumber+1) );
-}
-
-void KexiFormView::moveToFirstRecordRequested()
-{
-	moveToRecordRequested( 0 );
-}
-
-void KexiFormView::addNewRecordRequested()
-{
-	//! @todo
-}
-*/
 
 #include "kexiformview.moc"
 

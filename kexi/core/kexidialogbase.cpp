@@ -496,5 +496,19 @@ void KexiDialogBase::deactivate()
 		v->updateActions(false);
 }
 
+void KexiDialogBase::sendDetachedStateToCurrentView()
+{
+	KexiViewBase *v = selectedView();
+	if (v)
+		v->parentDialogDetached();
+}
+
+void KexiDialogBase::sendAttachedStateToCurrentView()
+{
+	KexiViewBase *v = selectedView();
+	if (v)
+		v->parentDialogAttached();
+}
+
 #include "kexidialogbase.moc"
 

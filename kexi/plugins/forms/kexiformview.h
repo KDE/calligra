@@ -105,6 +105,8 @@ class KexiFormView : public KexiDataAwareView
 
 		void initDataSource();
 
+		virtual void setFocusInternal();
+
 /*		// for navigator
 		virtual void moveToRecordRequested(uint r);
 		virtual void moveToLastRecordRequested();
@@ -112,6 +114,17 @@ class KexiFormView : public KexiDataAwareView
 		virtual void moveToNextRecordRequested();
 		virtual void moveToFirstRecordRequested();
 		virtual void addNewRecordRequested();*/
+
+//		virtual bool eventFilter ( QObject * watched, QEvent * e );
+
+		/*! Called after loading the form contents (before showing it).
+		 Also called when the form window (KexiDialogBase) is detached
+		 (in KMDI's Child Frame mode), because otherwise tabstop ordering can get broken. */
+		void updateTabStopsOrder();
+
+		virtual void parentDialogDetached();
+
+		virtual void parentDialogAttached(KMdiChildFrm *);
 
 		KexiDBForm *m_dbform;
 		KexiFormScrollView *m_scrollView;
@@ -132,6 +145,10 @@ class KexiFormView : public KexiDataAwareView
 //moved		KexiTableViewData *m_data;
 //moved		KexiTableItem *m_currentRow;
 //moved		int m_currentRowNumber;
+
+		//QWidget* m_firstFocusWidget, *m_lastFocusWidget;
+
+//		QPtrList<QWidget> m_orderedFocusWidgets;
 		/*! For new (empty) forms only: 
 		 Our form's area will be resized more than once. 
 		 We will resize form widget itself later (in resizeEvent()). */
