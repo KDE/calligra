@@ -166,6 +166,15 @@ WidgetLibrary::displayName(const QString &classname)
 		return QString();
 }
 
+bool
+WidgetLibrary::showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple)
+{
+	if(m_widgets.find(classname))
+		return m_widgets[classname]->factory()->showProperty(classname, w, property, multiple);
+	else
+		true;
+}
+
 WidgetLibrary::~WidgetLibrary()
 {
 }

@@ -31,6 +31,7 @@
 #include "container.h"
 #include "formmanager.h"
 #include "spacer.h"
+#include "widgetlibrary.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"
 #include "commands.h"
@@ -140,6 +141,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	m_multiple = false;
 	m_lastcom = 0;
 	m_lastgeocom = 0;
+	m_properties.clear();
 	checkModifiedProp();
 	kdDebug() << "loading object = " << widg->name() << endl;
 
@@ -161,7 +163,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 		const QMetaProperty *meta = obj->metaObject()->property(count, true);
 		if(meta->designable(obj))
 		{
-			if(!showProperty(obj, meta->name()))
+			if(!showProperty(meta->name()))
 				continue;
 
 			QString desc = descFromName(meta->name());
@@ -225,6 +227,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 
 	m_lastcom = 0;
 	m_lastgeocom = 0;
+	m_properties.clear();
 	QString classn;
 	if(m_object->className() == widg->className())
 		classn = m_object->className();
@@ -234,7 +237,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 	QAsciiDictIterator<KexiProperty> it(*this);
 	for(; it.current(); ++it)
 	{
-		if(!showMultipleProperty(it.currentKey(), classn))
+		if(!showProperty(it.currentKey(), classn))
 			(*this)[it.currentKey()]->setVisible(false);
 	}
 
@@ -242,22 +245,41 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 }
 
 bool
-ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
+ObjectPropertyBuffer::showProperty(const QString &property, const QString &classname)
 {
-	QWidget *w = (QWidget*)obj;
-	if(!m_manager->isTopLevel(w))
+	if(!m_multiple)
 	{
-		QStringList list;
-		list << "caption" << "icon" << "sizeIncrement" << "iconText";
-		if(!(list.grep(property)).isEmpty())
+		if(m_properties.isEmpty())
+		{
+			if(!m_manager->isTopLevel((QWidget*)m_object))
+				m_properties << "caption" << "icon" << "sizeIncrement" << "iconText";
+		}
+
+		if(!(m_properties.grep(property)).isEmpty())
+			return false;
+	}
+	else
+	{
+		if(m_properties.isEmpty())
+		{
+			m_properties << "font" << "paletteBackgroundColor" << "enabled" << "paletteForegroundColor"
+			   << "cursor" << "paletteBackgroundPixmap";
+		}
+		if(!(m_properties.grep(property)).isEmpty())
+			return true;
+
+		if(classname.isEmpty())
 			return false;
 	}
 
+	return m_manager->lib()->showProperty(m_object->className(), (QWidget*)m_object, property, m_multiple);
+/*
 	if(obj->isA("KFormDesigner::Spacer"))
 		return Spacer::showProperty(property);
 	return true;
+*/
 }
-
+/*
 bool
 ObjectPropertyBuffer::showMultipleProperty(const QString &property, const QString &className)
 {
@@ -270,7 +292,7 @@ ObjectPropertyBuffer::showMultipleProperty(const QString &property, const QStrin
 //	}
 	return false;
 	// TODO : Filter properties following class name (ie : "alignment" for labels or line edits ...) (maybe using WidgetFactory ?)
-}
+}*/
 
 bool
 ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)

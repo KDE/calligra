@@ -88,11 +88,11 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		/*! This function is used to filter the properties to be shown (ie not show "caption" if the widget isn't toplevel).
 		   \return true if the property should be shown. False otherwise.
 		 */
-		bool    showProperty(QObject *obj, const QString &property);
+		bool    showProperty(const QString &property, const QString &classname=QString::null);
 		/*! This function is used to filter the properties to be shown when multiple widgets are selected at the same time.
 		   \return true if the property should be shown. False otherwise.
 		 */
-		bool    showMultipleProperty(const QString &property, const QString &className);
+		//bool    showMultipleProperty(const QString &property, const QString &className);
 		/*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for the QWidget \a obj. \a meta
 		  is the QMetaProperty for "alignment" property". ( called by setObject() )
 		 */
@@ -114,6 +114,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 
 	private:
 		QObject		*m_object;
+		QStringList	m_properties;
 		QPtrList<QWidget> m_widgets;
 		bool		m_multiple;
 		FormManager     *m_manager;

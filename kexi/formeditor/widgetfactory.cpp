@@ -20,6 +20,10 @@
 #include <klineedit.h>
 
 #include "resizehandle.h"
+#include "objpropbuffer.h"
+#include "formmanager.h"
+#include "form.h"
+#include "container.h"
 #include "widgetfactory.h"
 
 
@@ -45,6 +49,8 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 	editor->show();
 	editor->setFocus();
 	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeText(const QString&)));
+	connect(w, SIGNAL(destroyed()), this, SLOT(resetEditor()));
+	connect(m_editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
 
 	m_handles = new ResizeHandleSet(editor, true);
 
@@ -75,11 +81,29 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 void
 WidgetFactory::resetEditor()
 {
+	if(!m_editor)
+		return;
 	changeText(m_editor->text());
 	m_editor->deleteLater();
 	delete m_handles;
 	m_editor = 0;
 	m_widget = 0;
+	m_handles = 0;
+}
+
+void
+WidgetFactory::editorDeleted()
+{
+	delete m_handles;
+	m_editor = 0;
+	m_handles = 0;
+}
+
+void
+WidgetFactory::changeProperty(const char *name, const QString &text, Container *container)
+{
+	KFormDesigner::ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
+	(*buff)[name]->setValue(text);
 }
 
 WidgetFactory::~WidgetFactory()

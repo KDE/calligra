@@ -593,7 +593,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	}
 
 	QDomElement tclass = domDoc.createElement("widget");
-	tclass.setAttribute("class", item->className());
+	tclass.setAttribute("class", item->widget()->className());
 	tclass.appendChild(prop(domDoc, "name", item->widget()->property("name"), item->widget()));
 	tclass.appendChild(prop(domDoc, "geometry", item->widget()->property("geometry"), item->widget()));
 
@@ -699,7 +699,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	ObjectTreeItem *tree;
 	if (!container->form()->objectTree()->lookup(wname))
 	{
-		tree =  new ObjectTreeItem(el.attribute("class"), wname, w);
+		tree =  new ObjectTreeItem(lib->displayName(el.attribute("class")), wname, w);
 		container->form()->objectTree()->addChild(container->tree(), tree);
 	}
 	else

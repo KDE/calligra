@@ -23,9 +23,7 @@
 #include "containerfactory.h"
 #include "container.h"
 #include "form.h"
-#include "formmanager.h"
 #include "objecttree.h"
-#include "objpropbuffer.h"
 
 ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
@@ -139,8 +137,7 @@ ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 void
 ContainerFactory::changeText(const QString &text)
 {
-	KFormDesigner::ObjectPropertyBuffer *buff = m_container->form()->manager()->buffer();
-	(*buff)["title"]->setValue(text);
+	changeProperty("title", text, m_container);
 }
 
 void ContainerFactory::AddTabPage()

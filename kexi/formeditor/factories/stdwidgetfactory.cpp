@@ -18,10 +18,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "formmanager.h"
-#include "form.h"
 #include "spacer.h"
-#include "objpropbuffer.h"
 #include "stdwidgetfactory.h"
 
 StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStringList &)
@@ -131,8 +128,17 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 void
 StdWidgetFactory::changeText(const QString &text)
 {
-	KFormDesigner::ObjectPropertyBuffer *buff = m_container->form()->manager()->buffer();
-	(*buff)["text"]->setValue(text);
+	changeProperty("text", text, m_container);
+}
+
+bool
+StdWidgetFactory::showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple)
+{
+	if(classname == "Spacer")
+	{
+		return KFormDesigner::Spacer::showProperty(property);
+	}
+	return !multiple;
 }
 
 StdWidgetFactory::~StdWidgetFactory()

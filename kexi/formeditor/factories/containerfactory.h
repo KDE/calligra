@@ -24,6 +24,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 					 		 KFormDesigner::Container *);
 		virtual void				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
+		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple) { return !multiple;}
 
 	protected:
 		virtual void  changeText(const QString &newText);
