@@ -891,7 +891,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             //FIXME**********************
 #if 0
             lastObj = _objectList->count() - 1;
-            loadObjects(elem);
 #endif
             loadObjects(elem);
         } else if(elem.tagName()=="INFINITLOOP") {

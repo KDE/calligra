@@ -1048,11 +1048,13 @@ void KPresenterView::extraConfigure()
 /*===============================================================*/
 void KPresenterView::extraCreateTemplate()
 {
-    QPixmap pix( QSize( m_pKPresenterDoc->getPageRect( 0, 0, 0 ).width(),
-			m_pKPresenterDoc->getPageRect( 0, 0, 0 ).height() ) );
+    QRect r=m_pKPresenterDoc->pageList().at(0)->getZoomPageRect();
+    QPixmap pix( QSize( r.width(),
+			r.height() ) );
     pix.fill( Qt::white );
     int i = getCurrPgNum() - 1;
-    m_canvas->drawPageInPix2( pix, i * m_pKPresenterDoc->getPageRect( 0, 0, 0 ).height(), i );
+    //todo fix me
+    m_canvas->drawPageInPix2( pix, i * r.height(), i );
 
     QWMatrix m;
     m.scale( 60.0 / (float)pix.width(), 45.0 / (float)pix.height() );
@@ -1245,7 +1247,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         presStarted = true;
         int deskw = QApplication::desktop()->width();
         int deskh = QApplication::desktop()->height();
-        QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false );
+        QRect pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
         float _presFaktW = static_cast<float>( deskw ) /
                            static_cast<float>( pgRect.width() ) >
                            1.0 ?
@@ -1266,7 +1268,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         //yOffset = 0;
 
         // Center the slide in the screen, if it's smaller...
-        pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, _presFakt, false );
+        pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
         kdDebug(33001) << "                                pgRect: " << pgRect.x() << "," << pgRect.y()
                   << " " << pgRect.width() << "x" << pgRect.height() << endl;
         /*if ( deskw > pgRect.width() )

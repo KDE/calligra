@@ -77,7 +77,7 @@ KPrPage::~KPrPage()
     delete kpbackground;
 }
 
-void KPrPage::setPageLayout(KoPageLayout pgLayout)
+void KPrPage::setPageLayout(KoPageLayout /*pgLayout*/)
 {
     //refresh background
     //FIXME
@@ -2508,7 +2508,6 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsig
 
     SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new options" ), _diffs, _objects, m_doc->rastX(), m_doc->rastY(),
 						      _orastX, _orastY, _txtBackCol, _otxtBackCol, m_doc );
-    //setOptionsCmd->execute();
     if ( createUndoRedo )
         return setOptionsCmd;
     else

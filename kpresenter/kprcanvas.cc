@@ -2289,7 +2289,7 @@ bool KPrCanvas::pNext( bool )
         currPresStep = *presStepList.begin();
 
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
-        int pageHeight = m_view->kPresenterDoc()->getPageRect( 0, 0, 0, presFakt(), false ).height();
+        int pageHeight = m_view->kPresenterDoc()->pageList().at(currPresPage-1)->getZoomPageRect().height();
         int yOffset = ( presPage() - 1 ) * pageHeight;
         if ( height() > pageHeight )
             yOffset -= ( height() - pageHeight ) / 2;
@@ -4234,7 +4234,7 @@ void KPrCanvas::gotoPage( int pg )
         slideListIterator = slideList.find( currPresPage );
         editMode = false;
         drawMode = false;
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage);
         currPresStep = *presStepList.begin();
         subPresStep = 0;
         //change active page
@@ -4258,7 +4258,7 @@ void KPrCanvas::gotoPage( int pg )
         slideListIterator = slideList.find( currPresPage );
         editMode = false;
         drawMode = false;
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage);
         currPresStep = *presStepList.begin();
         subPresStep = 0;
 
