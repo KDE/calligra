@@ -54,7 +54,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
     setName( "KSpreadSortDlg" );
 
   resize( 528, 316 );
-  setCaption( i18n( "Sort - Attention: This is still Work in Progress!" ) );
+  setCaption( "KSpread" );
   //setSizeGripEnabled( true );
 
   QVBox *page = makeVBoxMainWidget();
@@ -442,8 +442,6 @@ void KSpreadSortDlg::slotOk()
   order3 = ( m_sortOrder3->currentItem() == 0 ? KSpreadTable::Increase
              : KSpreadTable::Decrease );
 
-  kdDebug() << "O1: " << order1 << ", O2: " << order2 << ", O3: " << order3 << endl;
-
   if ( m_sortRow->isChecked() )
   {
     key1 = m_sortKey1->currentItem() + r.top();
@@ -470,8 +468,6 @@ void KSpreadSortDlg::slotOk()
     if (m_sortKey3->currentItem() > 0)
       key3 = m_sortKey3->currentItem() + r.left() - 1; // cause there is "None"
   }
-
-  kdDebug() << key1 << ", " << key2 << ", " << key3 << endl;
 
   if ( m_useCustomLists->isChecked() )
   {
