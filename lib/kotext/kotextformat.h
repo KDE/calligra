@@ -28,21 +28,14 @@ public:
                             m_refFont( 0L ), m_refFontMetrics( 0L ),
                             m_refAscent( -1 ), m_refDescent( -1 ), m_refHeight( -1 )
 
-    {}
+    {
+        memset( m_screenWidths, 0, 256 * sizeof( ushort ) );
+    }
     ~KoTextFormatPrivate()
     {
         clearCache();
     }
-    void clearCache()
-    {
-        delete m_screenFontMetrics; m_screenFontMetrics = 0L;
-        delete m_screenFont; m_screenFont = 0L;
-        delete m_refFontMetrics; m_refFontMetrics = 0L;
-        delete m_refFont; m_refFont = 0L;
-        m_refAscent = -1;
-        m_refDescent = -1;
-        m_refHeight = -1;
-    }
+    void clearCache();
     // caching for speedup when formatting
     QFont* m_screenFont; // font to be used when painting (zoom-dependent)
     QFontMetrics* m_screenFontMetrics; // font metrics on screen (zoom-dependent)
@@ -51,6 +44,8 @@ public:
     int m_refAscent;
     int m_refDescent;
     int m_refHeight;
+    ushort m_screenWidths[ 256 ];
+    // m_refWidths[ 256 ] would speed things up too, but ushort might not be enough for it
 };
 
 

@@ -22,6 +22,18 @@
 #include "kozoomhandler.h"
 #include <kdebug.h>
 
+void KoTextFormat::KoTextFormatPrivate::clearCache()
+{
+    delete m_screenFontMetrics; m_screenFontMetrics = 0L;
+    delete m_screenFont; m_screenFont = 0L;
+    delete m_refFontMetrics; m_refFontMetrics = 0L;
+    delete m_refFont; m_refFont = 0L;
+    m_refAscent = -1;
+    m_refDescent = -1;
+    m_refHeight = -1;
+    memset( m_screenWidths, 0, 256 * sizeof( ushort ) );
+}
+
 void KoTextFormat::setPointSizeFloat( float size )
 {
     if ( fn.pointSizeFloat() == size )
@@ -204,7 +216,8 @@ const QFontMetrics& KoTextFormat::refFontMetrics() const
 int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
                              const KoTextParag* parag, int i ) const
 {
-    if ( c->c.unicode() == 0xad ) // soft hyphen
+    ushort unicode = c->c.unicode();
+    if ( unicode == 0xad ) // soft hyphen
 	return 0;
     Q_ASSERT( !c->isCustom() ); // actually it's a bit stupid to call this for custom items
     if( c->isCustom() ) {
@@ -220,9 +233,23 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
     int r = c->c.row();
     if( r < 0x06 || r > 0x1f )
     {
-        // The fast way: use the cached font metrics from KoTextFormat
+        // Use the cached font metrics from KoTextFormat
         if ( applyZoom )
-            pixelww = this->screenFontMetrics( zh ).width( c->c );
+        {
+	    if ( r ) {
+                pixelww = this->screenFontMetrics( zh ).width( c->c );
+	    } else {
+                // Use the m_screenWidths[] array when possible, even faster
+                Q_ASSERT( unicode < 256 );
+		pixelww = d->m_screenWidths[ unicode ];
+                // Not in cache yet -> calculate
+                if ( pixelww == 0 ) {
+                    pixelww = this->screenFontMetrics( zh ).width( c->c );
+                    Q_ASSERT( pixelww < 65535 );
+                    d->m_screenWidths[ unicode ] = pixelww;
+                }
+	    }
+        }
         else
             pixelww = this->refFontMetrics().width( c->c );
     }
