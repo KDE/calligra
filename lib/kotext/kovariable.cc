@@ -1811,7 +1811,68 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
 
 void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    //todo
+    switch( m_subtype )
+    {
+    case VST_NONE:
+        break;
+    case VST_FILENAME:
+        writer.startElement( "text:filename" );
+        writer.addAttribute( "text:display", "name-and-extension" );
+        break;
+    case VST_DIRECTORYNAME:
+        writer.startElement( "text:filename" );
+        writer.addAttribute( "text:display", "path" );
+        break;
+    case VST_AUTHORNAME:
+        writer.startElement( "text:author-name" );
+        break;
+    case VST_EMAIL:
+        writer.startElement("text:sender-email" );
+        break;
+    case VST_COMPANYNAME:
+        writer.startElement("text:sender-company" );
+        break;
+    case VST_PATHFILENAME:
+        writer.startElement("text:display" );
+        writer.addAttribute( "text:display", "pathfilename" ); // ???????? not define !
+        break;
+    case VST_FILENAMEWITHOUTEXTENSION:
+        writer.startElement("text:display" );
+        writer.addAttribute( "text:display", "name-and-extension" ); // ???????? not define !
+        break;
+    case VST_TELEPHONE:
+        writer.startElement("text:sender-phone-work" );
+        break;
+    case VST_FAX:
+        writer.startElement("text:sender-fax" );
+        break;
+    case VST_COUNTRY:
+        writer.startElement("text:sender-country" );
+        break;
+    case VST_TITLE:
+        writer.startElement("text:title" );
+        break;
+    case VST_ABSTRACT:
+        writer.startElement("text:description" );
+        break;
+    case VST_POSTAL_CODE:
+        writer.startElement("text:sender-postal-code" );
+        break;
+    case VST_CITY:
+        writer.startElement("text:sender-city" );
+        break;
+    case VST_STREET:
+        writer.startElement("text:sender-street" );
+        break;
+    case VST_AUTHORTITLE:
+        writer.startElement("text:sender-title" );
+        break;
+    case VST_INITIAL:
+        writer.startElement("text:author-initials" );
+        break;
+    }
+    writer.addTextNode( m_varValue.toString() );
+    writer.endElement();
 }
 
 void KoFieldVariable::recalc()
