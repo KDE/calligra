@@ -96,6 +96,50 @@ VSegment::isFlat( double flatness ) const
 	return false;
 }
 
+KoPoint
+VSegment::point( double t ) const
+{
+	if( !m_prev || m_type == segment_begin )
+		return KoPoint();
+
+	// lines:
+	if(
+		m_type == segment_line ||
+		m_type == segment_end )
+	{
+		return
+			m_prev->m_point[2] +
+			( m_point[2] - m_prev->m_point[2] ) * t;
+	}
+
+	// beziers:
+	// copy points to not modify the segment itself:
+	KoPoint q[3];
+
+	q[0] = m_prev->m_point[2];
+	q[3] = m_point[2];
+	q[1] = m_type == segment_curve1 ? q[0] : m_point[0];
+	q[2] = m_type == segment_curve2 ? q[3] : m_point[1];
+
+	// de casteljau algorithm:
+	for( uint j = 1; j <= 3; ++j )
+	{
+		for( uint i = 0; i <= 3 - j; ++i )
+		{
+			q[i] = ( 1.0 - t ) * q[i] + t * q[i+1];
+		}
+	}
+
+	return q[0];
+}
+
+KoPoint
+VSegment::derive( double t ) const
+{
+// TODO
+	return KoPoint();
+}
+
 double
 VSegment::length() const
 {

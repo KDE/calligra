@@ -61,6 +61,12 @@ public:
 	/// Returns true if segment is flat.
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
+	/// Returns the point on this segment for 0 <= t <= 1.
+	KoPoint point( double t ) const;
+
+	/// Returns the derivative for 0 <= t <= 1.
+	KoPoint derive( double t ) const;
+
 // TODO: currently return 0.0 for segments != lines:
 	/// Returns the arc length.
 	double length() const;
