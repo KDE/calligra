@@ -2455,7 +2455,7 @@ Qt::PenStyle KSpreadCell::fallDiagonalStyle( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->fallDiagonalStyle();
 	else
@@ -3158,7 +3158,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   if ( !comment.isEmpty() )
         {
         QDomElement comment = doc.createElement( "comment" );
-        comment.appendChild( doc.createTextNode( getComment() ) );
+        comment.appendChild( doc.createCDATASection( getComment() ) );
         cell.appendChild( comment );
         }
   if ( !m_strText.isEmpty() )
@@ -3484,7 +3484,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
         QString t = comment.text();
 	//t = t.stripWhiteSpace();
-        setComment(t+"\n");
+        setComment(t);
         }
 
     QDomElement text = cell.namedItem( "text" ).toElement();

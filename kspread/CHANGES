@@ -563,3 +563,8 @@ Be careful there are against a bug : when I try to reload comment
 "\n" were replacing by space => anybody has an idea ?
 icons (lo22-action-comment ,lo22-action-removecomment, lo22-insertcell,
 lo22-action-remove cell) created by jp.martin <jpmartin@iroise.com> thanks
+
+2000-05-24 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Correct bug when I reload comment, correction gived by simon Hausmann
+thanks a lot
