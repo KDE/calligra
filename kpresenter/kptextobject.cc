@@ -1235,17 +1235,13 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
         }
         if(difference > 0)
         {
-            double wantedPosition = 0;
-
-            wantedPosition = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( difference ) ) + getRect().bottom();
+            double wantedPosition = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( difference ) ) + getRect().bottom();
             double pageBottom = (double) m_doc->stickyPage()->getPageRect().bottom();
-            double newPosition = QMIN( wantedPosition, pageBottom );
-            newPosition = QMAX( newPosition, getRect().top() ); // avoid negative heights
-            bool resized = getRect().bottom() != newPosition;
-            if ( resized )
+            double newBottom = QMIN( wantedPosition, pageBottom ); // don't grow bigger than the page
+            newBottom = QMAX( newBottom, getRect().top() ); // avoid negative heights
+            if ( getRect().bottom() != newBottom )
             {
-                double tmpBottom = getRect().bottom() - newPosition ;
-                setSize( getRect().width(), getRect().height()-tmpBottom );
+                setSize( getRect().width(), newBottom - getRect().top() );
                 //m_textobj->setLastFormattedParag( lastFormatted->prev() );
                 m_doc->updateRuler();
                 *abort = true;
