@@ -1528,7 +1528,13 @@ bool KSpreadCell::calc(bool delay)
 {
   if ( testFlag(Flag_Progress) )
   {
+    /* This may not be a circular error - if we're calculating a dependancy,
+       then when that dependancy finishes, it recalculates the cells that
+       are depending on it -- this cell!  So it'll fail here but when the
+       stack unwinds the original call to this cell's calc() will finish
+       normally.
     kdError(36001) << "ERROR: Circle" << endl;
+    */
     setFlag(Flag_CircularCalculation);
     m_strFormulaOut = "####";
     m_dataType = StringData; // correct?
