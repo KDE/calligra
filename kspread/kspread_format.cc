@@ -362,7 +362,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
         if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
             currentCellStyle.addProperty( "style:diagonal-bl-tr", convertOasisPenToString( pen ) );
     }
-    if ( /*hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )*/1 /*|| force*/ )
+    if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )/*|| force*/ )
     {
         styleFormatName =  KSpreadStyle::saveOasisStyleNumeric( mainStyle, m_pStyle->formatType(), m_pStyle->prefix( ),  m_pStyle->postfix( ) );
     }
@@ -544,8 +544,13 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
         if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
             currentCellStyle.addProperty( "style:diagonal-bl-tr", convertOasisPenToString( pen ) );
     }
-    //TODO FIXME!!!!
-    return "";
+    QString styleFormatName;
+
+    if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )/*|| force*/ )
+    {
+        styleFormatName =  KSpreadStyle::saveOasisStyleNumeric( mainStyle, getFormatType( _col, _row ), prefix(_col,_row ),  postfix(_col, _row  ) );
+    }
+    return styleFormatName;
 }
 
 QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, bool force, bool copy ) const

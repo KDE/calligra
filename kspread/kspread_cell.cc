@@ -4536,9 +4536,11 @@ void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 
 QString KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles)
 {
+    kdDebug()<<" QString KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles)***********\n";
     QString formatCellStyle = KSpreadFormat::saveOasisCellStyle( currentCellStyle, mainStyles, column(), row() );
     if ( d->hasExtra() && d->extra()->conditions )
         d->extra()->conditions->saveOasisConditions( currentCellStyle );
+    kdDebug()<<" formatCellStyle :"<<formatCellStyle<<endl;
     return formatCellStyle;
 }
 
