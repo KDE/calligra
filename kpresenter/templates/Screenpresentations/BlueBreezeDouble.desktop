@@ -1,6 +1,27 @@
 [Desktop Entry]
 Icon=.icon/BlueBreezeDouble.png
 Name=Blue Breeze Double
+Name[af]=BLOU BRISIE DUBBEL
+Name[de]=Blau in Blau: Doppelseitig
+Name[eo]=Blua venteto -duobla
+Name[es]=Brisa azul doble
+Name[fr]=Brise bleue, double
+Name[he]=לופכ לוחכ
+Name[hu]=Kék árnyalatok, dupla
+Name[is]=Tvöfaldar bláar slæður
+Name[it]=Brezza blu doppio
+Name[ja]=ブルーブリーズ ダブル
+Name[lt]=Blue Breeze dvigubas
+Name[lv]=Zilā Dubult Brīze
+Name[no_NY]=Blå bris dobbel
+Name[pl]=Podwójna niebieska bryza
+Name[pt_BR]=Blue Breeze Duplo
+Name[pt]=Blue Breeze Duplo
+Name[sl]=Blue Breeze dvojnik
+Name[sv]=Dubbel Blå bris
+Name[tr]=Mavi Meltem Çift
+Name[uk]=Подвійний океанський бриз
+Name[vi]=Nhân đôi Blue Breeze 
 Type=Link
 URL=.source/BlueBreezeDouble.kpt
 X-KDE-Hidden=false
