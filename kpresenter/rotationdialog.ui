@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Kpresenter - Rotation</string>
+        <string>KPresenter - Rotation</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>

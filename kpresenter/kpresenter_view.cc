@@ -5181,7 +5181,7 @@ void KPresenterView::editReplace()
 
     if( list.count()==0)
     {
-        KMessageBox::sorry( this, i18n( "Sorry, there is not text object!" ) );
+        KMessageBox::sorry( this, i18n( "There is no text object!" ) );
         return;
     }
     m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
