@@ -583,6 +583,10 @@ public:
     void closeTextObject();
     void deSelectAllObject();
 
+    void insertDirectCursor(bool b);
+    void updateDirectCursorButton();
+
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -672,6 +676,8 @@ protected slots:
     void slotApplyParag();
     void slotObjectEditChanged();
     void slotChangeCutState(bool );
+
+    void insertDirectCursor();
 // end of protected slots
 protected:
 
@@ -1034,6 +1040,7 @@ private:
     KToggleAction *actionAllowBgSpellCheck;
     KAction *actionEditCustomVarsEdit;
     KActionMenu *actionFormatStyleMenu;
+    KToggleAction *actionInsertDirectCursor;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;

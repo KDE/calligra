@@ -424,8 +424,8 @@ public:
     void setPicturePath( const QString & _path ) { m_picturePath = _path ; }
 
     bool insertDirectCursor() const { return m_bInsertDirectCursor; }
-    void setInsertDirectCursor(bool _b){ m_bInsertDirectCursor=_b; }
-
+    void setInsertDirectCursor(bool _b);
+    void updateDirectCursorButton();
 
 public slots:
     void movePage( int from, int to );

@@ -3361,4 +3361,18 @@ void KPresenterDoc::updateStyleListOrder( const QStringList &list )
 }
 
 
+void KPresenterDoc::updateDirectCursorButton()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->updateDirectCursorButton();
+}
+
+void KPresenterDoc::setInsertDirectCursor(bool _b)
+{
+    m_bInsertDirectCursor=_b;
+    updateDirectCursorButton();
+}
+
+
 #include <kpresenter_doc.moc>

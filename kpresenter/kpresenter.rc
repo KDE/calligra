@@ -148,6 +148,8 @@
   </Menu>  
   <Separator/>
   <Action name="apply_autoformat"/>
+  <Separator/>
+  <Action name="direct_cursor"/>
  </Menu>
  <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
   <Action name="screen_configpages"/>

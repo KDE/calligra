@@ -3390,6 +3390,10 @@ void KPresenterView::setupActions()
                                     this, SLOT(backgroundPicture() ),
                                     actionCollection(), "save_bgpicture" );
 
+    actionInsertDirectCursor = new KToggleAction( i18n( "Insert Direct Cursor" ), 0,
+                                                  this, SLOT( insertDirectCursor() ),
+                                                  actionCollection(), "direct_cursor" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -7370,5 +7374,21 @@ void KPresenterView::removeLink()
     if ( edit )
         edit->removeLink();
 }
+
+void KPresenterView::insertDirectCursor()
+{
+    insertDirectCursor( actionInsertDirectCursor->isChecked());
+}
+
+void KPresenterView::insertDirectCursor(bool b)
+{
+    m_pKPresenterDoc->setInsertDirectCursor(b);
+}
+
+void KPresenterView::updateDirectCursorButton()
+{
+    actionInsertDirectCursor->setChecked(m_pKPresenterDoc->insertDirectCursor());
+}
+
 
 #include <kpresenter_view.moc>
