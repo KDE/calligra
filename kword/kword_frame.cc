@@ -2063,9 +2063,12 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
     cols = original.cols;
     name = original.name;
 
-    for (unsigned int i=0; i<= cells.count();i++) {
+    for (unsigned int i=0; i< cells.count();i++) {
         if(getCell(i))  {
+//kdDebug() << getCell(i)->frameSet << endl;
+//kdDebug() << dynamic_cast<KWTextFrameSet*>(getCell(i)->frameSet) << endl;
             getCell(i)->frameSet= dynamic_cast<KWTextFrameSet*>(getCell(i)->frameSet)->getCopy();
+            
             if ( anchored ) {
                 getCell(i)->frameSet->getFrame( 0 )->moveBy( origin.x(), origin.y() );
             }
