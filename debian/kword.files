@@ -9,5 +9,6 @@ usr/share/icons/locolor/16x16/apps/kword.png
 usr/share/icons/locolor/32x32/apps/kword.png
 usr/share/icons/hicolor/32x32/apps/kword.png
 usr/share/icons/hicolor/48x48/apps/kword.png
+usr/share/pixmaps/kword.xpm
 usr/share/doc/kde/HTML/en/kword/*
 usr/share/lintian/overrides/kword

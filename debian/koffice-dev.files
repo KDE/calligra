@@ -1,5 +1,6 @@
 usr/include/kde/*.h
 usr/lib/libkformula.so
+usr/lib/libkformula2.so
 usr/lib/libkochart.so
 usr/lib/libkodocinfopropspage.so
 usr/lib/libkofficecore.so

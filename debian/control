@@ -98,7 +98,7 @@ Package: kpresenter
 Architecture: any
 Section: x11
 Replaces: koffice-common
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${perl:Depends}
 Suggests: kdebase
 Description: a presentation program for the KDE Office Suite
  KPresenter is a fully-featured presentation program.  It is sufficiently

@@ -4,5 +4,6 @@ usr/lib/libkillustratorpart.*
 usr/share/applnk/Office/killustrator.desktop
 usr/share/apps/killustrator/*
 usr/share/mimelnk/application/x-killustrator.desktop
+usr/share/pixmaps/killustrator.xpm
 usr/share/doc/kde/HTML/en/killustrator/*
 usr/share/lintian/overrides/killustrator

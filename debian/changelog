@@ -21,7 +21,7 @@ koffice (1:1.1-20010404-1) unstable; urgency=low
   * Added icons to the debian menu items.
   * Changed the hint for the KWord debian menu item from "Word processors"
     to "WordProcessors" to match the hint for AbiWord.
-  * Added a few extra miscellaneous documentation files.
+  * Slightly altered which miscellaneous documentation files are installed.
   * Removed debconf-related files that are no longer used for koffice-libs.
   * Overhauled package descriptions.
   * Miscellaneous cleanups in debian.
