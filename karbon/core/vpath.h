@@ -9,7 +9,7 @@
 #include <qpointarray.h>
 #include <koPoint.h>
 
-#include "vpath_contour.h"
+#include "vpath_stroke.h"
 #include "vpath_fill.h"
 #include "vobject.h"
 #include "vsegment.h"
@@ -134,7 +134,7 @@ private:
 	VSegmentList m_segments;			// "outline" segments.
 	QPtrList<VSegmentList> m_holes;		// "holes" inside the outline
 
-	VPathContour m_contour;		// contour.
+	VPathStroke m_stroke;		// stroke.
 	VPathFill m_fill;			// fill.
 
 	bool m_isClosed;

@@ -2,18 +2,18 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VPATHCONTOUR_H__
-#define __VPATHCONTOUR_H__
+#ifndef __VPATHSTROKE_H__
+#define __VPATHSTROKE_H__
 
-#include "vcontour.h"
+#include "vstroke.h"
 #include "vsegment.h"
 
 class QPainter;
 
-class VPathContour : public VContour, VSegmentListTraverser
+class VPathStroke : public VStroke, VSegmentListTraverser
 {
 public:
-	VPathContour( const double width = 1.0, const VLineCap cap = cap_butt,
+	VPathStroke( const double width = 1.0, const VLineCap cap = cap_butt,
 		const VLineJoin join = join_miter );
 
 	void draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,

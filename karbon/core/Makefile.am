@@ -11,28 +11,28 @@ noinst_HEADERS = \
 	vcanvas.h \
 	vcolor.h \
 	vcommand.h \
-	vcontour.h \
 	vfill.h \
 	vglobal.h \
 	vlayer.h \
 	vobject.h \
 	vpath.h \
-	vpath_contour.h \
 	vpath_fill.h \
-	vsegment.h
+	vpath_stroke.h \
+	vsegment.h \
+	vstroke.h
 
 libkarboncore_la_SOURCES = \
 	vboundingbox.cc \
 	vcanvas.cc \
 	vcolor.cc \
 	vcommand.cc \
-	vcontour.cc \
 	vfill.cc \
 	vlayer.cc \
 	vpath.cc \
-	vpath_contour.cc \
 	vpath_fill.cc \
-	vsegment.cc
+	vpath_stroke.cc \
+	vsegment.cc \
+	vstroke.cc
 
 libkarboncore_la_METASOURCES = \
 	AUTO

@@ -5,17 +5,17 @@
 #include <qpainter.h>
 #include <qpointarray.h>
 
-#include "vpath_contour.h"
+#include "vpath_stroke.h"
 
 #include <kdebug.h>
 
-VPathContour::VPathContour( const double width, const VLineCap cap, const VLineJoin join )
-	: VContour( width, cap, join ), VSegmentListTraverser()
+VPathStroke::VPathStroke( const double width, const VLineCap cap, const VLineJoin join )
+	: VStroke( width, cap, join ), VSegmentListTraverser()
 {
 }
 
 void
-VPathContour::draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
+VPathStroke::draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
 	bool plain )
 {
 	m_zoomFactor = zoomFactor;
@@ -56,7 +56,7 @@ VPathContour::draw( QPainter& painter, const double zoomFactor, const VSegmentLi
 }
 
 bool
-VPathContour::begin( const KoPoint& p )
+VPathStroke::begin( const KoPoint& p )
 {
 	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint( m_pa.size() - 1,
@@ -69,7 +69,7 @@ VPathContour::begin( const KoPoint& p )
 }
 
 bool
-VPathContour::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+VPathStroke::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 {
 	QPointArray pa( 4 );
 	pa.setPoint( 0,
@@ -96,7 +96,7 @@ VPathContour::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 }
 
 bool
-VPathContour::lineTo( const KoPoint& p )
+VPathStroke::lineTo( const KoPoint& p )
 {
 	m_pa.resize( m_pa.size() + 1 );
 	m_pa.setPoint( m_pa.size() - 1,

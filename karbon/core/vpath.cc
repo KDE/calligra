@@ -27,7 +27,7 @@ VPath::VPath()
 	// add a initial segment at (0,0):
 	m_segments.append( new VSegment() );
 
-	m_contour.setLineWidth( 3.0 );
+	m_stroke.setLineWidth( 3.0 );
 }
 
 VPath::VPath( const VPath& path )
@@ -96,13 +96,13 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		}
 		m_fill.end_draw();
 
-		// draw contour:
-		// "outer shape":
-		m_contour.draw( painter, zoomFactor, m_segments );
+		// draw stroke:
+		// contour:
+		m_stroke.draw( painter, zoomFactor, m_segments );
 		// holes:
 		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
 		{
-			m_contour.draw( painter, zoomFactor, *( holeItr.current() ) );
+			m_stroke.draw( painter, zoomFactor, *( holeItr.current() ) );
 		}
 	}
 
@@ -110,12 +110,12 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	if( state() == edit || state() == selected )
 	{
 		// contour:
-		m_contour.draw( painter, zoomFactor, m_segments, true );
+		m_stroke.draw( painter, zoomFactor, m_segments, true );
 
 		// holes:
 		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
 		{
-			m_contour.draw( painter, zoomFactor, *( holeItr.current() ), true );
+			m_stroke.draw( painter, zoomFactor, *( holeItr.current() ), true );
 		}
 	}
 

@@ -2,13 +2,13 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VCONTOUR_H__
-#define __VCONTOUR_H__
+#ifndef __VSTROKE_H__
+#define __VSTROKE_H__
 
 #include "vcolor.h"
 #include "vsegment.h"
 
-class VContour
+class VStroke
 {
 public:
 	enum VLineCap{
@@ -21,7 +21,7 @@ public:
 		join_round,
 		join_bevel };
 
-	VContour( const double width = 1.0, const VLineCap cap = cap_butt,
+	VStroke( const double width = 1.0, const VLineCap cap = cap_butt,
 		const VLineJoin join = join_miter );
 
 	const VColor& color() const { return m_color; }
