@@ -14,15 +14,17 @@ LDADD =  ../lib/kofficeui/libkofficeui.la \
 
 bin_PROGRAMS = kformula.bin
 
-kformula_bin_SOURCES = kformula_main.cc kformula_doc.cc kformula_view.cc \
+kformula_bin_SOURCES =  kformula_view.cc matrixwidget.cc kformula_main.cc \
+	kformula_doc.cc \
 	kformula.cc kformula_shell.cc BasicElement.cc RootElement.cc \
 	TextElement.cc BracketElement.cc FractionElement.cc\
-	MatrixElement.cc PrefixedElement.cc
+	MatrixElement.cc PrefixedElement.cc 
 noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h formuladef.h \
 	kformula.h kformula_shell.h BasicElement.h RootElement.h TextElement.h\
 	BracketElement.h FractionElement.h MatrixElement.h PrefixedElement.h
+	matrixwidget.h
 SRCMETA = kformula_main.moc kformula_view.moc kformula_doc.moc \
-	kformula_shell.moc
+	kformula_shell.moc matrixwidget.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
@@ -66,4 +68,4 @@ kformula_main.cc: kformula_main.moc kformula.h
 kformula_shell.cc: kformula_shell.moc
 kformula_view.cc: kformula_view.moc
 kformula_main.cc: kformula_view.h kformula.h
-
+matrixwidget.cc: matrixwidget.moc

@@ -39,7 +39,7 @@ void MatrixElement::setChildrenNumber(int n)
     childrenNumber=n;
     child.resize(childrenNumber);
     childPoint.resize(childrenNumber);
-
+    hby.resize(childrenNumber);  //It's too much, but they are 2 only bytes..
 }
 
 void MatrixElement::draw(QPoint drawPoint,int resolution)
@@ -49,39 +49,64 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
     pen=formula->painter();
     //QRect globalArea;
     int x,y; 
-    x=drawPoint.x();
+    x=drawPoint.x()+familySize.x();
     y=drawPoint.y();
     int rows=atoi(content.mid(3,3));
     int cols=atoi(content.mid(6,3));
     if( beActive )
 	pen->setPen(red);
     /*
-      Here drow borders
-    */
- 
- 
-  
-    /*
-      int ofs=(numericFont/32); 
-	 
-      if (content[0]=='F') {
-      QPointArray points(5);  
-      points.setPoint(1,x+familySize.x()+1,y+offsetY-ofs/2);
-      points.setPoint(2,x+familySize.right()-2,y+offsetY-ofs/2);
-      points.setPoint(3,x+familySize.right()-2,y+offsetY+ofs/2);
-      points.setPoint(4,x+familySize.x()+1,y+offsetY+ofs/2);
-      pen->setBrush(pen->pen().color());
-      pen->drawPolygon(points,FALSE,1,9);
-      }*/
-  
+      Here draw borders
+    */  
+    int ofs=numericFont/32;
     if( beActive )
 	pen->setPen(blue);
     int r,c;
-    for(r=0;r<rows;r++)
-	for(c=0;c<cols;c++) 
+    int minX;
+    for(c=0;c<cols;c++)     
+      { 
+	minX=32000;
+
+	for(r=0;r<rows;r++)
 	    {
 		child[c+r*cols]->draw(QPoint(x+3,y)+childPoint[c+r*cols],resolution);
+		if(childPoint[c+r*cols].x()<minX) minX=childPoint[c+r*cols].x();
+	     if(c==0) 
+              if(r<rows-1)
+      	       if(content[15]=='L')   
+                {
+	         int vspace=atoi(content.mid(12,3))+ofs;
+		QPointArray points(4);
+	        points.setPoint(0,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2-ofs+ofs/2);
+		points.setPoint(1,x,y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs/2);
+		points.setPoint(2,x+familySize.width(),
+				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2+ofs/2);
+	        points.setPoint(3,x+familySize.width(),
+				  y+hby[r]+childPoint[c+r*cols].y()+vspace/2-ofs+ofs/2);
+		pen->setBrush(pen->pen().color());
+		pen->drawPolygon(points,FALSE,0,4);
+		 
+		}
+	      
 	    }
+
+	 if(c>0)
+          if(content[16]=='L')
+ 	   {
+	    int hspace=atoi(content.mid(12,3))+ofs;
+
+	    QPointArray points(4);
+	    points.setPoint(0,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.y());
+	    points.setPoint(1,minX+x+3-hspace/2-ofs+ofs/2,y+familySize.bottom());	
+	    points.setPoint(2,minX+x+3-hspace/2+ofs/2,y+familySize.bottom());
+	    points.setPoint(3,minX+x+3-hspace/2+ofs/2,y+familySize.y());
+	    pen->setBrush(pen->pen().color());
+	    pen->drawPolygon(points,FALSE,0,4);
+	  }
+      }
+      
+    x=drawPoint.x();
+
     myArea=globalSize;
     myArea.moveBy(x,y);
 
@@ -120,8 +145,11 @@ void MatrixElement::checkSize()
     int vspace = space, hspace=space;               //real spaces (change if there are borders)
     int ofs=numericFont/32;
     if(content[1]=='C') midr=0;
-    if(content[15]=='L') hspace+=ofs;
-    if(content[16]=='L') vspace+=ofs; 
+    if(content[16]=='L') hspace+=ofs;
+    if(content[15]=='L') vspace+=ofs; 
+    if(content[16]=='D') hspace+=3*ofs;
+    if(content[15]=='D') vspace+=3*ofs; 
+
     int correction=0;
     QRect sizeC;
     QRect sizeR;
@@ -139,7 +167,7 @@ void MatrixElement::checkSize()
 		    sizeE=child[e]->getSize();
 		    sizeR=sizeR.unite(sizeE);
 		}
-   
+            hby[r]=sizeR.bottom();   
 	    if(r<=midr) 
 		{
 		    downy=-sizeC.bottom()+sizeR.top()-vspace;

@@ -83,6 +83,7 @@ void BasicElement::draw(QPoint drawPoint,int resolution)
     int y = drawPoint.y();
     if( beActive )
 	pen->setPen(red);
+    pen->setBrush(NoBrush);
     pen->drawRect(x+familySize.x(),y-5,10,10);
   
     myArea=globalSize;

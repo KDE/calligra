@@ -84,7 +84,7 @@ class MatrixElement : public BasicElement
      * 15,16,17,18,19,20=Horiz,Vert,top,bottom,left,right border: L=Single Line
      */
     QArray<QPoint> childPoint;
-  
+    QArray<int> hby;   // Y of internal H border
   
 };
 #endif

@@ -395,6 +395,7 @@ void KFormulaDocument::keyPressEvent( QKeyEvent *k )
       if(type==0) Blocks[c]->getcont().remove(pos,1); else deleteIt(Blocks[c]);  
       }    else 
     */
+    warning("Key pressed %i, ascii:%i",k->key(),k->ascii());
     int elReturn=0;
     if((k->ascii()>32)&&(k->ascii()<127))
 	{ 

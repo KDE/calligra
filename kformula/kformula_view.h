@@ -38,8 +38,10 @@ class KFormulaView : public QWidget,
 
 public slots:
     // Document signals
+    void modifyMatrix(QString str);
+    void createMatrix(QString str);
     void slotModified();
-    void slotTypeChanged(  BasicElement *elm);
+    void slotTypeChanged( BasicElement *elm);
 
 protected:
     virtual void cleanUp();

@@ -2,6 +2,7 @@
 #include "kformula_doc.h"
 #include "kformula_main.h"
 #include "TextElement.h"
+#include "matrixwidget.h"
 #include <op_app.h>
 #include <utils.h>
 #include <part_frame_impl.h>
@@ -76,8 +77,8 @@ void KFormulaView::setDocument( KFormulaDocument *_doc )
 		      this, SLOT( slotModified() ) );
 
     QObject::connect( m_pDoc, 
-		      SIGNAL(sig_changeType(const BasicElement *)    ),
-		      this, SLOT( slotTypeChanged(const BasicElement *)    ) );
+		      SIGNAL(sig_changeType(BasicElement *)    ),
+		      this, SLOT( slotTypeChanged(BasicElement *)    ) );
 
 }
 
@@ -578,12 +579,11 @@ void KFormulaView::createGUI()
 }
 
 
-void KFormulaView::slotTypeChanged(      BasicElement *elm)
+void KFormulaView::slotTypeChanged( BasicElement *elm)
 {  
     bool isText, isBracket, isFraction, isPrefixed, isMatrix, isRoot;
     if (elm) {
 	const type_info& type = typeid(*elm);
-	
 	isText = type == typeid(TextElement);
 	isBracket = type == typeid(BracketElement);
 	isFraction = type == typeid(FractionElement);
@@ -596,6 +596,10 @@ void KFormulaView::slotTypeChanged(      BasicElement *elm)
     }
 
     m_rToolBarType->setItemEnabled(m_idButtonType_Spl,isText);
+
+// It remains deactivated !!!    
+//    m_rMenuBar->setItemEnabled(m_idMenuElement_Fraction,isFraction);
+    
     m_rToolBarType->setItemEnabled(m_idComboType_DelLeft,isBracket);
     m_rToolBarType->setItemEnabled(m_idComboType_DelRight,isBracket);
     m_rToolBarType->setItemEnabled(m_idButtonType_RIn,isRoot);
@@ -697,8 +701,45 @@ void KFormulaView::addBracket()
 void KFormulaView::addMatrix()
 {
     debug("adding Matrix");
-    m_pDoc->addMatrixElement("MCC004003001006NNNNNN");
+    MatrixSetupWidget *ms=new MatrixSetupWidget();
+    ms->setString("MCC002002001006NNNNNN");
+    QObject::connect(ms,SIGNAL(returnString(QString)),this,SLOT(createMatrix(QString)));
+    ms->show();    
+
 }
+
+void KFormulaView::createMatrix(QString str)
+{
+ if(str!="")
+    m_pDoc->addMatrixElement(str);
+ update();
+} 
+void KFormulaView::modifyMatrix(QString str)
+{
+ int x,y,old;
+ BasicElement *el=m_pDoc->activeElement();
+  if (el==0) 
+   return;
+ MatrixElement *elm = dynamic_cast<MatrixElement*>(el);
+    if (elm==0)
+	return; 
+ 
+ QString oldc=elm->getContent();
+ x=atoi(oldc.mid(3,3));
+ y=atoi(oldc.mid(6,3));
+ old=x*y;
+ x=atoi(str.mid(3,3));
+ y=atoi(str.mid(6,3));
+ elm->setChildrenNumber(x*y);
+ for(int i=old;i<x*y;i++)
+  elm->setChild(new BasicElement(m_pDoc,elm,i+4),i);	  
+ for(int i=x*y;i<old;i++)	
+  delete    elm->getChild(i); //code to remove unused children...
+
+  
+ elm->setContent(str);
+ update();
+} 
 
 void KFormulaView::addIntegral()
 {
@@ -938,7 +979,11 @@ void KFormulaView::bracketType()
 }
 void KFormulaView::matrixSet()
 { 
-    warning("Slot matrixSet");
+    MatrixSetupWidget *ms=new MatrixSetupWidget();
+    ms->setString(m_pDoc->activeElement()->getContent()); 
+        QObject::connect(ms,SIGNAL(returnString(QString)),this,SLOT(modifyMatrix(QString)));
+    ms->show();    
+
 }
 void KFormulaView::matrixRemRow()
 { 

@@ -117,7 +117,7 @@ class KFormulaDocument : public QObject,
     void sig_modified();
 
     void sig_changeText( const char * );
-    void sig_changeType( const BasicElement* );
+    void sig_changeType(BasicElement* );
   
  protected:
     QList<KFormulaView> m_lstViews;

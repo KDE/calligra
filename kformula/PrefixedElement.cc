@@ -144,9 +144,10 @@ void PrefixedElement::checkSize()
      unit = atoi(content.mid(2,3));
      if (unit< 4) unit =4;
     warning("Unit=%i ",unit);
-    
-    familySize.setTop(familySize.top()-1-(numericFont/32));
-    familySize.setLeft(familySize.left()-1-(numericFont/32)-unit*2);  
+    int ofs=(numericFont/32);
+    if (unit <6)ofs=1;
+    familySize.setTop(familySize.top()-1-ofs);
+    familySize.setLeft(familySize.left()-1-ofs-unit*2);  
   
     if (familySize.height()< unit*8 )        
       {
