@@ -1490,6 +1490,8 @@ void KWordView::formatParagraph()
 /*===============================================================*/
 void KWordView::formatPage()
 {
+    if(!doc->isReadWrite())
+        return;
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter kwhf;
@@ -2510,6 +2512,8 @@ void KWordView::styleManagerOk()
 /*================================================================*/
 void KWordView::newPageLayout( KoPageLayout _layout )
 {
+    if(!doc->isReadWrite())
+        return;
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
