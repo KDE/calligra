@@ -208,7 +208,7 @@ public:
 
     QMemArray<KoTextStringChar> subString( int start = 0, int len = 0xFFFFFF ) const;
     QString mid( int start = 0, int len = 0xFFFFFF ) const; // kotext addition
-    QMemArray<KoTextStringChar> rawData() const { return data; }
+    QMemArray<KoTextStringChar> rawData() const { return data.copy(); }
 
     void operator=( const QString &s ) { clear(); insert( 0, s, 0 ); }
     void operator+=( const QString &s );
