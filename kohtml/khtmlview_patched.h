@@ -5,6 +5,8 @@
 
 #include <khtmlview.h>
 
+#include <khtmlsavedpage.h>
+
 class KHTMLView_Patched : public KHTMLView
 {
   Q_OBJECT
@@ -13,7 +15,7 @@ public:
                     KHTMLView_Patched *parent_view = 0L);
   ~KHTMLView_Patched();
 
-  virtual void draw(QPaintDevice *dev, int width, int height);
+  void draw(SavedPage *p, QPaintDevice *dev, int width, int height);
 
   virtual KHTMLView *newView(QWidget *parent, const char *name = 0L, int flags = 0L);
 

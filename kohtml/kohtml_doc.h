@@ -36,7 +36,8 @@ class KoHTMLDoc;
 
 #include <kurl.h>
 #include <k2url.h>
-#include <kfm.h>
+
+#include <kio_job.h>
 
 #include <string>
 
@@ -67,7 +68,7 @@ protected:
   KRect m__geometry;  
 };
 
-class KoHTMLJob : public KFM
+class KoHTMLJob: public KIOJob
 {
   Q_OBJECT
 public:
@@ -179,6 +180,8 @@ protected slots:
   void slotUpdateInternalView();
   void slotDocumentDoneInternal(KHTMLView *view);
 
+  void slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *file);
+
 private:
   KoHTMLJob *findJob(KHTMLView *view, const char *url, KoHTMLJob::JobType jType);
   
@@ -191,6 +194,8 @@ private:
   QString m_vCurrentURL;
 
   KHTMLView_Patched *m_vInternalView;
+
+  KoHTMLJob *m_pMainJob;
   
   QList<KoHTMLView> m_lstViews;
   QList<KoHTMLChild> m_lstChildren;

@@ -6,7 +6,6 @@
 
 #include <iostream.h>
 
-#include <kfm.h>
 
 KHTMLView_Patched::KHTMLView_Patched(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
                     KHTMLView_Patched *parent_view = 0L)
@@ -60,9 +59,41 @@ KHTMLView_Patched::~KHTMLView_Patched()
 {
 }
 
-void KHTMLView_Patched::draw(QPaintDevice *dev, int width, int height)
+void KHTMLView_Patched::draw(SavedPage *p, QPaintDevice *dev, int width, int height)
 {
-  ((KHTMLWidget_Patched *)view)->draw(dev, width, height);
+//  cerr << "drawing right??????????????" << endl;
+  
+//  QPainter::redirect(this, dev);
+//  QPaintEvent pe(QRect(0, 0, width, height));
+//  QApplication::sendEvent(this, &pe);
+//  QPainter::redirect(this, 0);
+
+//  cerr << "anyway, we're done..." << endl;
+  
+//  ((KHTMLWidget_Patched *)view)->draw(dev, width, height);
+
+  QPixmap pix(width - p->xOffset, height - p->yOffset);
+
+  cerr << "drawing to pixmap" << endl;
+     
+  ((KHTMLWidget_Patched*)view)->draw(&pix, width - p->xOffset, height - p->yOffset);
+
+  cerr << "painting to " << p->xOffset << " " << p->yOffset << " from pixmap with size " << pix.width() << " " << pix.height() << endl;
+  cerr << "required width is " << width << " and the height is " << height << endl;  
+  
+  QPainter tmpPainter;
+  tmpPainter.begin(dev);
+  tmpPainter.drawPixmap(p->xOffset, p->yOffset, pix);
+  tmpPainter.end();  
+//  bitBlt(dev, p->xOffset, p->yOffset, &pix, 0, 0, pix.width(), pix.height(), CopyROP, true);
+
+  if (p->frames)
+     {
+       cerr << "iterating" << endl;
+       QListIterator<SavedPage> it(*p->frames);
+       for (; it.current(); ++it)
+           draw(it.current(), dev, width, height);
+     }     
 }
 
 KHTMLView *KHTMLView_Patched::newView(QWidget *parent = 0L, const char *name = 0L, int flags = 0L)

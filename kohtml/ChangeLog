@@ -4,3 +4,12 @@ Tue Dec 29 13:51:21 1998 Simon Hausmann <tronical@gmx.net>
 
         * (aaaarghl, there are serious problems with 64 bit machines
            ... and I have _NO_ clue how to solve this :-((((((((
+
+Sun Jan 3 16:08:47 1999 Simon Hausmann <tronical@gmx.net>
+
+        * improved QPicture stuff (though frame still don't work -> khtml crashes :(
+
+        * KoHTML now uses KIO to receive it's data :-D
+
+        * started settings dialog (but it's not used yet)
+

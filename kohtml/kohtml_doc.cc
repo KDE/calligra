@@ -21,16 +21,24 @@
 #include "kohtml_doc.h"
 #include "kohtml_doc.moc"
 
+#include <unistd.h>
+
 #include <koIMR.h>
 #include <qmsgbox.h>
 #include <qpaintdevice.h>
-
-#include <kfm.h>
 
 #include <khtmlsavedpage.h>
 
 #include "khtmlwidget_patched.h"
 #include "kfileio.h"
+
+// HACK until KFM III arrives in CVS
+#include <kfm.h>
+void openFileManagerWindow(const char *url)
+{
+  KFM kfm;
+  kfm.openURL(url);
+}
 
 KoHTMLChild::KoHTMLChild(KoHTMLDoc *doc, const KRect &rect, KOffice::Document_ptr koDoc)
 :KoDocumentChild(rect, koDoc)
@@ -53,6 +61,7 @@ KoHTMLChild::~KoHTMLChild()
 }
 
 KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url, JobType _jType)
+:KIOJob()
 {
   topParent = _topParent;
   parent = _parent;
@@ -60,7 +69,9 @@ KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url
   tmpFile = tmpnam(0);
   jType = _jType;
   
-  connect(this, SIGNAL(finished()),
+  enableGUI(false);
+  
+  connect(this, SIGNAL(sigFinished(int)),
           this, SLOT(slotJobFinished()));
 }
 
@@ -94,15 +105,19 @@ KoHTMLDoc::KoHTMLDoc()
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0");
 
+  KIOJob::initStatic();
+
   m_lstViews.setAutoDelete(false);
   m_lstChildren.setAutoDelete(true);
   m_lstHTMLViews.setAutoDelete(false);
-  m_lstJobs.setAutoDelete(true);
+  m_lstJobs.setAutoDelete(false);
 
   m_bModified = false;
 
   htmlData = "";  
   m_vCurrentURL = "";
+  
+  m_pMainJob = 0L;
 
   m_vInternalView = new KHTMLView_Patched;
   
@@ -196,24 +211,41 @@ void KoHTMLDoc::openURL(const char *_url)
   
   if (!u.isMalformed())
      {
-       QString s;
-       
-       if (KFM::download(u.url(), s))
-          {
-	    htmlData = kFileToString(s, false);
-	    KFM::removeTempFile(s);
-	    setModified(true);
-	    cout << "emitting contentChanged()" << endl;
-	    emit contentChanged();
-	  }
+       cerr << "killing old stuff" << endl;
+       if (m_pMainJob) m_pMainJob->kill();
+	  
+       m_pMainJob = new KoHTMLJob(0L, 0L, u.url(), KoHTMLJob::HTML);
+     
+       QObject::connect(m_pMainJob, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)),
+                        this, SLOT(slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)));
+     
+       m_pMainJob->start();
      }
+}
+
+void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *file)
+{
+  m_pMainJob = 0L; // the job will delete itself so we don't have to take care of this
+  
+  htmlData = kFileToString(file);
+  
+  cerr << "finished!!!!!!!!!!" << endl;
+  emit contentChanged();    
 }
 
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)
 { 
   if (!m_bDocumentDone) return;
 
-  m_vInternalView->draw(dev, width, height);
+  cerr << "void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)" << endl;
+
+  cerr << "saving ourselves ;)" << endl;
+  SavedPage *p = m_vInternalView->saveYourself();
+
+  cerr << "drawing" << endl;
+  m_vInternalView->draw(p, dev, width, height);
+  
+  delete p;
 }
 
 bool KoHTMLDoc::hasToWriteMultipart()
@@ -426,6 +458,7 @@ void KoHTMLDoc::removeHTMLView(KHTMLView *view)
 	if ((j->getTopParent() == view))
 	   {
 	     m_lstJobs.removeRef(j);
+	     delete j;
 	     cerr << "removed job" << endl;
 	   }     
       }
@@ -492,6 +525,7 @@ void KoHTMLDoc::slotCancelDocumentRequest(KHTMLView *view, const char *url)
      }
 
   m_lstJobs.removeRef(job);
+  job->kill();
 }
 
 void KoHTMLDoc::slotImageRequest(KHTMLView *view, const char *url)
@@ -525,6 +559,7 @@ void KoHTMLDoc::slotCancelImageRequest(KHTMLView *view, const char *url)
      }
 
   m_lstJobs.removeRef(job);
+  job->kill();
 }
 
 void KoHTMLDoc::slotDocumentStarted(KHTMLView *view)

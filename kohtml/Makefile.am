@@ -5,21 +5,27 @@ LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	../lib/store/libkstore.la -lkspell -lkparts -lkpartsui -lkom \
-	$(LIB_KHTML) $(LIB_KFILE) $(LIB_KIMGIO) -lkdeutil $(LIBMICO) 
+	-lkio -lkfm $(LIB_KHTML) $(LIB_KFILE) -lkdeutil $(LIBMICO) 
 
 ####### Files
 
 bin_PROGRAMS = kohtml.bin
 
 kohtml_bin_SOURCES = kohtml_main.cc kohtml_doc.cc kohtml_view.cc \
-	kohtml_shell.cc kohtml.cc khtmlwidget_patched.cc khtmlview_patched.cc\
-	kfileio.cc
+	kohtml_shell.cc kohtml.cc khtmlwidget_patched.cc khtmlview_patched.cc \
+	kfileio.cc kpropcheck.cc kpropcolor.cc kpropcombo.cc kpropdlg.cc \
+	kpropfont.cc kpropgroup.cc kpropradio.cc kpropspin.cc kproptext.cc \
+	settingsdlg.cc
 
 noinst_HEADERS = kohtml_main.h kohtml_doc.h kohtml_view.h kohtml_shell.h \
-	kohtml.h khtmlwidget_patched.h khtmlview_patched.h kfileio.h
+	kohtml.h khtmlwidget_patched.h khtmlview_patched.h kfileio.h \
+	kpropcheck.h kpropcolor.h kpropcombo.h kpropdlg.h kpropfont.h \
+	kpropgroup.h kpropradio.h kpropspin.h kproptext.h settingsdlg.h
 
 SRCMETA = kohtml_main.moc kohtml_view.moc kohtml_shell.moc kohtml_doc.moc \
-	khtmlwidget_patched.moc khtmlview_patched.moc	
+	khtmlwidget_patched.moc khtmlview_patched.moc kpropcheck.moc \
+	kpropcolor.moc kpropcombo.moc kpropdlg.moc kpropfont.moc kpropgroup.moc \
+	kpropradio.moc kpropspin.moc kproptext.moc settingsdlg.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
@@ -49,10 +55,20 @@ kohtml.h: kohtml.idl
 	$(IDL) --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I$(idldir) kohtml.idl
 
 kkohtml.cc: kohtml.h
-kohtml_view.cc: kohtml.h kohtml_view.moc
+kohtml_view.cc: kohtml.h kohtml_view.moc settingsdlg.h
 kohtml_shell.cc: kohtml.h kohtml_shell.moc
 kohtml_doc.cc: kohtml_doc.moc kohtml.h kfileio.h kohtml_doc.moc
 kohtml_main.cc: kohtml_main.moc kohtml.h kohtml_main.moc
 kfileio.cc: kfileio.h
 khtmlview_patched.cc: khtmlview_patched.h khtmlwidget_patched.h khtmlview_patched.moc
 khtmlwidget_patched.cc: khtmlwidget_patched.h khtmlwidget_patched.moc
+kpropcheck.cc: kpropcheck.h kpropcheck.moc
+kpropcolor.cc: kpropcolor.h kpropcolor.moc
+kpropcombo.cc: kpropcombo.h kpropcombo.moc
+kpropdlg.cc: kpropdlg.h kpropdlg.moc
+kpropfont.cc: kpropfont.h kpropfont.moc
+kpropgroup.cc: kpropgroup.h kpropgroup.moc
+kpropradio.cc: kpropradio.h kpropradio.moc
+kpropspin.cc: kpropspin.h kpropspin.moc
+kproptext.cc: kproptext.h kproptext.moc
+settingsdlg.cc: settingsdlg.h settingsdlg.moc

@@ -44,6 +44,7 @@
 
 #include "kohtml_shell.h"
 #include "khtmlwidget_patched.h"
+#include "settingsdlg.h"
 
 KoHTMLFrame::KoHTMLFrame(KoHTMLView *_view, KoHTMLChild *_child)
 :KoFrame(_view)
@@ -284,6 +285,11 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_idButton_Copy = m_vMainToolBar->insertButton2(pix, ID_EDIT_COPY, SIGNAL(clicked()), this, "editCopy", true, i18n("Copy"), -1);
 
   m_vMainToolBar->insertSeparator(-1);
+
+  pix = OPUIUtils::convertPixmap(ICON("configure.xpm"));
+  m_idConfigure = m_vMainToolBar->insertButton2(pix, ID_EDIT_PREFERENCES, SIGNAL(clicked()), this, "editPreferences", true, i18n("Preferences"), -1);
+
+  m_vMainToolBar->insertSeparator(-1);
   
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
   m_idButton_Insert_Object = m_vMainToolBar->insertButton2(pix, ID_EDIT_INSERT_OBJECT, SIGNAL(clicked()), this, "insertObject", true, i18n("Insert Object"), -1);
@@ -488,6 +494,9 @@ void KoHTMLView::editCopy()
 
 void KoHTMLView::editPreferences()
 {
+  SettingsDlg settingsDlg;
+
+  settingsDlg.exec();
 }
 
 void KoHTMLView::viewToolBar()
@@ -541,6 +550,7 @@ void KoHTMLView::statusCallback(CORBA::Long ID)
     {
       case ID_EDIT_COPY          : slotStatusMsg(i18n("Copies the selected section to the clipboard")); break;
       case ID_EDIT_INSERT_OBJECT : slotStatusMsg(i18n("Inserts an embedded object into the document")); break;
+      case ID_EDIT_PREFERENCES   : slotStatusMsg(i18n("Change user preferences")); break;
       case ID_VIEW_TOOLBAR       : slotStatusMsg(i18n("Enables / disables the toolbar")); break;
       case ID_VIEW_STATUSBAR     : slotStatusMsg(i18n("Enables / disables the statusbar")); break;
       case ID_BOOKMARKS_ADD      : slotStatusMsg(i18n("Add the current url to the bookmark list")); break;

@@ -4,7 +4,6 @@
 
 #include <iostream.h>
 
-#include <kfm.h>
 
 KHTMLWidget_Patched::KHTMLWidget_Patched(QWidget *parent = 0L, const char *name = 0L,
                       const char *pixDir = 0L)
@@ -21,14 +20,16 @@ KHTMLWidget_Patched::~KHTMLWidget_Patched()
 
 void KHTMLWidget_Patched::draw(QPaintDevice *dev, int width, int height)
 {
-  if (painter) delete painter;
-  painter = new QPainter(dev);
+  cerr << "drawinggggggg" << endl;
 
-//  repaint(0, 0, width, height, false);
-  QPaintEvent pe(QRect(0, 0, width, height));
-  paintEvent(&pe);
-  painter->end();
-  delete painter;
+//  if (painter) delete painter
+  
+  QPainter::redirect(this, dev);
+  QPaintEvent pe(QRect(x_offset, y_offset, x_offset+width, y_offset+height));
+  QApplication::sendEvent(this, &pe);
+  QPainter::redirect(this, 0);
+  
+  cerr << "done :-))))))" << endl;
 }
 
 void KHTMLWidget_Patched::mousePressEvent(QMouseEvent *ev)

@@ -151,6 +151,7 @@ protected:
   CORBA::Long m_idReload;
   CORBA::Long m_idStop;
   CORBA::Long m_idButton_Copy;
+  CORBA::Long m_idConfigure;
   CORBA::Long m_idButton_Insert_Object;
   
   OpenPartsUI::ToolBar_var m_vLocationToolBar;
