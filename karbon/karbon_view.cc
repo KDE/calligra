@@ -1137,7 +1137,7 @@ KarbonView::selectionChanged()
 		{
 			m_strokeFillPreview->update( *part()->document().selection()->objects().getFirst()->stroke(),
 													*part()->document().selection()->objects().getFirst()->fill() );
-			m_strokeDocker->setStroke( part()->document().selection()->objects().getFirst()->stroke() );
+			m_strokeDocker->setStroke( *( part()->document().selection()->objects().getFirst()->stroke() ) );
 		}
 		else
 		{
