@@ -115,9 +115,9 @@ void KImageView::paintEvent( QPaintEvent* /* _event */ )
 void KImageView::updateReadWrite( bool readwrite )
 {
 #ifdef __GNUC__
-#warning TODO 
+#warning TODO
 #endif
-} 
+}
 
 KImageDocument* KImageView::doc()
 {
@@ -160,13 +160,14 @@ void KImageView::editImportImage()
   if( url.isEmpty() )
     return;
 
+  /*
   QString tempFile;
 
   KIO::NetAccess::download( url, tempFile );
 
   if( !KImageIO::isSupported( KImageIO::mimeType( tempFile ) ) )
   {
-    if( !doc()->loadFromURL( tempFile ) )
+    if( !doc()->openURL( tempFile ) )
     {
       QString tmp;
       tmp.sprintf( i18n( "Could not open\n%s" ), url.path().data() );
@@ -176,7 +177,15 @@ void KImageView::editImportImage()
     KIO::NetAccess::removeTempFile( tempFile );
 
     slotUpdateView();
-  }
+  }*/
+
+  //David: KParts takes care of the network transparency
+
+    if( !doc()->openURL( url ) )
+    {
+      KMessageBox::sorry( 0L, i18n( "Could not open\n%1" ).arg(url.url()) );
+    }
+    slotUpdateView();
 }
 
 void KImageView::editExportImage()

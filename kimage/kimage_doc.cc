@@ -136,16 +136,15 @@ QCString KImageDocument::mimeType() const
   return "application/x-kimage";
 }
 
-bool KImageDocument::loadFromURL( const KURL& _url )
+bool KImageDocument::openFile()
 {
-  cout << "KImageDocument::loadFromURL" << endl;
+  kdDebug() << "KImageDocument::openFile" << endl;
 
-  // FIXME: crashes because of relative filenames
-  if( KImageIO::isSupported( KImageIO::mimeType( _url.url() ) ) )
+  if( KImageIO::isSupported( KImageIO::mimeType( m_file ) ) )
   {
     initDoc();
 
-    if( !m_image.load( _url.url() ) )
+    if( !m_image.load( m_file ) )
       return false;
 
     setModified( true );
@@ -153,7 +152,7 @@ bool KImageDocument::loadFromURL( const KURL& _url )
     return true;
   }
 
-  return KoDocument::loadFromURL( _url );
+  return KoDocument::openFile();
 }
 
 bool KImageDocument::save( ostream& out, const char* )
