@@ -1119,13 +1119,15 @@ that are inappropriate.  You can use the third tab of this dialog to define
 </screenshot>
 <para>To prevent &kword; from deciding an abbreviation or other text is 
 the end of a sentance, simply enter the text fragment in the text box below
-<guilabel>Don't treat as end of sentance</guilabel>.  Then click
+<guilabel>Do not treat as the end of a sentence</guilabel>.  Then click
 <guibutton>Add</guibutton>.</para>
 <para>As an example:  Adding <quote>Jr.</quote> to this dialog prevents</para>
 <para><quote>Robert Jones Jr. is a friend of the family.</quote></para>
 <para>from being changed to:</para>
 <para><quote>Robert Jones Jr. Is a friend of the family.</quote></para>
-<para>The set of boxes performs a similar function to the first.  Only in
+<para>To remove an erroneous entry, simply click once on the wrong entry with the &RMB;
+and click on the <guibutton>Remove</guibutton> button.</para>
+<para>The second set of boxes performs a similar function to the first.  Only in
 this instance, text entered in these boxes will stay double capital letters.</para>
 <para>simply enter the text fragment in the text box below
 <guilabel>Accept two uppercase letters in</guilabel>.  Then click
@@ -1134,6 +1136,8 @@ this instance, text entered in these boxes will stay double capital letters.</pa
 <para><quote>Sarasota, FL </quote></para>
 <para>from being changed to:</para>
 <para><quote>Sarasota, Fl </quote></para>
+<para>To remove an erroneous entry, simply click once on the wrong entry with the &RMB;
+and click on the <guibutton>Remove</guibutton> button.</para>
 </sect2>
 </sect1>
 </chapter> 
