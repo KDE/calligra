@@ -18,7 +18,6 @@
 */
 
 #include <koFactory.h>
-//#include <koFilterManager.h>
 
 
 class KoFactory::KoFactoryPrivate
@@ -36,13 +35,11 @@ KoFactory::KoFactory( QObject *parent, const char *name )
   : KParts::Factory( parent, name )
 {
   //d = new KoFactoryPrivate;
-  //KoFilterManager::incRef();
 }
 
 KoFactory::~KoFactory()
 {
   //delete d;
-  //KoFilterManager::decRef();
 }
 
 #include <koFactory.moc>
