@@ -619,6 +619,13 @@ void PropertyEditor::readProperties () {
             GText::TextInfo tInfo = GText::getDefaultTextInfo ();
             fontChooser->setFont (tInfo.font);
         }
+        if(!haveObjects) {
+            if(fillStyleBttn[GRADIENT_BOX]->isChecked()) {
+                fillStyleBttn[NOFILL_BOX]->setChecked(true);
+                wstack->raiseWidget(NOFILL_BOX);
+            }
+            fillStyleBttn[GRADIENT_BOX]->setEnabled(false);
+        }
     }
 }
 
