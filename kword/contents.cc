@@ -43,7 +43,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * fs = textdoc->textFrameSet();
 
-    fs->kWordDocument()->renameButtonTOC(i18n("Update Table of &Contents"));
+    fs->kWordDocument()->renameButtonTOC(true);
 
     QTextParag *insertionParag = textdoc->paragAt( m_paragId );
     if ( !insertionParag ) {
@@ -125,7 +125,7 @@ QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
     KWTextFrameSet * fs = textdoc->textFrameSet();
 
     removeTOC( fs, c, 0L );
-    fs->kWordDocument()->renameButtonTOC(i18n("Table of &Contents"));
+    fs->kWordDocument()->renameButtonTOC(false);
     return c;
 }
 

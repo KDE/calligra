@@ -262,7 +262,7 @@ public slots:
 
     void insertExpression();
 
-    void renameButtonTOC(const QString & _name);
+    void renameButtonTOC(bool b);
 
     void changeCaseOfText();
 

@@ -208,6 +208,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
     m_pKSpellConfig=0;
+    m_hasTOC=false;
 
     initConfig();
 
@@ -1077,6 +1078,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         m_headerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
         unitName = correctQString( KWDocument::getAttribute( attributes, "unit", "pt" ) );
+        m_hasTOC =  static_cast<bool>(KWDocument::getAttribute( attributes,"hasTOC", 0 ) );
     } else {
         m_processingType = WP;
         m_headerVisible = false;
@@ -1803,6 +1805,7 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "hasHeader", static_cast<int>(isHeaderVisible()) );
     docattrs.setAttribute( "hasFooter", static_cast<int>(isFooterVisible()) );
     docattrs.setAttribute( "unit", KWUnit::unitName(getUnit()) );
+    docattrs.setAttribute( "hasTOC", static_cast<int>(m_hasTOC));
 
 //    out << otag << "<FOOTNOTEMGR>" << endl;
 //    footNoteManager.save( out );
@@ -2992,12 +2995,13 @@ QColor KWDocument::defaultBgColor( QPainter * painter )
 }
 
 
-void KWDocument::renameButtonTOC(const QString & _name)
+void KWDocument::renameButtonTOC(bool b)
 {
+    m_hasTOC=b;
     QListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
     {
-        it.current()->renameButtonTOC(_name);
+        it.current()->renameButtonTOC(b);
     }
 }
 
@@ -3020,20 +3024,6 @@ void KWDocument::updateZoomRuler()
     {
         it.current()->getGUI()->getHorzRuler()->setZoom( zoomedResolutionX() );
         it.current()->getGUI()->getVertRuler()->setZoom( zoomedResolutionY() );
-    }
-}
-
-void KWDocument::findTOCStyle()
-{
-    KWStyle* tmpStyle;
-    for ( tmpStyle=m_styleList.first(); tmpStyle != 0; tmpStyle=m_styleList.next() )
-    {
-        if ( tmpStyle->name().startsWith( "Contents Head" ) || tmpStyle->name() == "Contents Title" )
-        {
-            renameButtonTOC(i18n("Update Table of &Contents"));
-            return;
-        }
-
     }
 }
 

@@ -471,7 +471,7 @@ public:
 
     int typeItemDocStructure(FrameSetType _type);
 
-    void renameButtonTOC(const QString & _name);
+    void renameButtonTOC(bool b);
 
     void refreshMenuExpression();
 
@@ -481,7 +481,10 @@ public:
 
     void updateZoomRuler();
 
-    void findTOCStyle();
+
+    void hasTOC(bool _b){ m_hasTOC=_b;}
+
+    bool isTOC(){return m_hasTOC;}
 
     // Convert a color into a color to be displayed for it
     // (when using color schemes, we still want to print black on white)
@@ -603,6 +606,8 @@ private:
 
     // Maybe the default value should be configurable and saved somehow?
     static const unsigned int s_defaultColumnSpacing = 3;
+
+    bool m_hasTOC;
 };
 
 

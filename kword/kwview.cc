@@ -251,7 +251,7 @@ void KWView::initGui()
     updatePageInfo();
     slotFrameSetEditChanged();
     frameSelectedChanged();
-    m_doc->findTOCStyle();
+    renameButtonTOC(m_doc->isTOC());
 }
 
 void KWView::setupActions()
@@ -1893,10 +1893,11 @@ void KWView::insertFootNoteEndNote()
 #endif
 }
 
-void KWView::renameButtonTOC(const QString & _name)
+void KWView::renameButtonTOC(bool b)
 {
    KActionCollection * coll = actionCollection();
-   coll->action("insert_contents")->setText(_name);
+   QString name= b ? i18n("Update Table of &Contents"):i18n("Table of &Contents");
+   coll->action("insert_contents")->setText(name);
 }
 
 void KWView::insertContents()
