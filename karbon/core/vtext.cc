@@ -29,6 +29,7 @@
 #include "vfill.h"
 #include "vvisitor.h"
 #include "vsegment.h"
+#include "vgroup.h"
 
 #ifdef HAVE_KARBONTEXT
 
@@ -270,6 +271,24 @@ VText::clone() const
 {
 	return new VText( *this );
 }
+
+VGroup* VText::toVGroup() const
+{
+	VGroup* group = new VGroup( parent() );
+	
+	VCompositeListIterator itr( m_glyphs );
+	for( ++itr; itr.current(); ++itr )
+	{
+		VComposite* c = itr.current()->clone();
+		c->setParent( group );
+		group->append( c );
+	}
+	
+	group->setFill( *m_fill );
+	group->setStroke( *m_stroke );
+	
+	return group;
+} // VText::toVGroup
 
 void
 VText::save( QDomElement& element ) const

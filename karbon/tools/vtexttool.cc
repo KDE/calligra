@@ -319,7 +319,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	m_fontSize->setValue( 12 );
 	m_fontSize->setSuffix( " pt" );
 	m_textEditor->setMinimumHeight( 100 );
-	m_convertToShapes->setEnabled( false );
+	m_convertToShapes->setEnabled( true );
 	 // TODO: Find a way to display correctly the following icons...
 	m_textAlignment->insertItem( "Left" );
 	m_textAlignment->insertItem( "Center" );
@@ -339,6 +339,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	connect( m_textEditor, SIGNAL( textChanged( const QString& ) ), this, SLOT( textChanged( const QString& ) ) );
 	
 	connect( m_editBasePath, SIGNAL( clicked() ), this, SLOT( editBasePath() ) );
+	connect( m_convertToShapes, SIGNAL( clicked() ), this, SLOT( convertToShapes() ) );
 } // VTextOptionsWidget::VTextOptionsWidget
 
 VTextOptionsWidget::~VTextOptionsWidget()
@@ -367,6 +368,11 @@ void VTextOptionsWidget::editBasePath()
 {
 	m_tool->editBasePath();
 } // VTextOptionsWidget::editBasePath
+
+void VTextOptionsWidget::convertToShapes()
+{
+	m_tool->convertToShapes();
+} // VTextOptionsWidget::convertToShapes
 
 void VTextOptionsWidget::setFont( const QFont& font )
 {
@@ -564,10 +570,17 @@ void VTextTool::mouseDragRelease()
 
 void VTextTool::textChanged()
 {
+	
 	if( !m_editedText )
 		return;
 
-	drawEditedText();
+	if( !m_creating && m_text && m_text->state() != VObject::hidden )
+	{
+		m_text->setState( VObject::hidden );
+		view()->canvasWidget()->repaintAll( true );
+	}
+	else
+		drawEditedText();
 	
 	m_editedText->setText( m_optionsWidget->text() );
 	m_editedText->setFont( m_optionsWidget->font() );
@@ -586,7 +599,6 @@ void VTextTool::accept()
 	{
 		cmd = new VTextCmd(
 			&view()->part()->document(),
-			view(),
 			( m_creating ? i18n( "Insert text" ) : i18n( "Change text" ) ),
 			m_text,
 			m_editedText->font(),
@@ -606,7 +618,6 @@ void VTextTool::accept()
 		m_text->setShadow( m_optionsWidget->shadowAngle(), m_optionsWidget->shadowDistance(), m_optionsWidget->translucentShadow() );
 		cmd = new VTextCmd(
 			&view()->part()->document(),
-			view(),
 			( m_creating ? i18n( "Insert text" ) : i18n( "Change text" ) ),
 			m_text );
 	} 
@@ -614,10 +625,7 @@ void VTextTool::accept()
 	view()->part()->addCommand( cmd, true );
 	view()->selectionChanged();
 
-	delete m_editedText;
 	m_creating = false;
-	m_editedText = 0L;
-	m_text = 0L;
 } // VTextTool::accept
 
 void VTextTool::cancel()
@@ -632,6 +640,24 @@ void VTextTool::editBasePath()
 	view()->part()->document().selection()->clear();
 	view()->part()->document().selection()->append( &m_editedText->basePath() );
 } // VTextTool::editBasePath
+
+void VTextTool::convertToShapes()
+{
+	if( !m_text )
+		return;
+
+	VTextToCompositeCmd* cmd = new VTextToCompositeCmd(
+		&view()->part()->document(),
+		i18n( "Text conversion" ),
+		m_text );
+	view()->part()->addCommand( cmd, true );
+	view()->selectionChanged();
+
+	m_creating = false;
+	delete m_editedText;
+	m_text = 0L;
+	m_editedText = 0L;
+} // VTextTool::convertToShapes
 
 void VTextTool::visitVComposite( VComposite& composite )
 {
@@ -667,27 +693,22 @@ void VTextTool::visitVText( VText& text )
 	m_optionsWidget->setPosition( text.position() );
 	m_optionsWidget->setAlignment( text.alignment() );
 	m_creating = false;
-	
-	text.setState( VObject::hidden );
-	view()->canvasWidget()->repaintAll( true );
-	
-	drawEditedText();
 } // VTextTool::visitVText
 
-VTextTool::VTextCmd::VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text )
-		: VCommand( doc, name, "14_text" ), m_view( view ), m_text( text )
+VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text )
+		: VCommand( doc, name, "14_text" ), m_text( text )
 {
 	m_textModifications = 0L;
 	
 	m_executed = false;
 } // VTextTool::VTextCmd::VTextCmd
 
-VTextTool::VTextCmd::VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text,
+VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text,
 		const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
 		bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow )
-		: VCommand( doc, name, "14_text" ), m_view( view ), m_text( text )
+		: VCommand( doc, name, "14_text" ), m_text( text )
 {
-	m_textModifications = (VTextModifPrivate*)malloc( sizeof( VTextModifPrivate ) );
+	m_textModifications = new VTextModifPrivate();
 	m_textModifications->newFont              = newFont;
 	m_textModifications->oldFont              = text->font();
 	m_textModifications->newBasePath          = newBasePath;
@@ -742,6 +763,7 @@ void VTextTool::VTextCmd::execute()
 		m_text->setUseShadow( m_textModifications->newUseShadow );
 		m_text->setShadow( m_textModifications->newShadowAngle, m_textModifications->newShadowDistance, m_textModifications->newTranslucentShadow );
 		m_text->traceText();
+		m_text->setState( VObject::normal );
 	}
 
 	m_executed = true;
@@ -767,19 +789,50 @@ void VTextTool::VTextCmd::unexecute()
 		m_text->setUseShadow( m_textModifications->oldUseShadow );
 		m_text->setShadow( m_textModifications->oldShadowAngle, m_textModifications->oldShadowDistance, m_textModifications->oldTranslucentShadow );
 		m_text->traceText();
+		m_text->setState( VObject::normal );
 	}
 
 	m_executed = false;
 } // VTextTool::VTextCmd::unexecute
 
 VTextTool::VTextToCompositeCmd::VTextToCompositeCmd( VDocument* doc, const QString& name, VText* text )
-		: VCommand( doc, name, "14_text" ), m_text( text )
+		: VCommand( doc, name, "14_text" ), m_text( text ), m_group( 0L ), m_executed( false )
 {
-	
 } // VTextTool::VTextToCompositeCmd::VTextToCompositeCmd
 
 VTextTool::VTextToCompositeCmd::~VTextToCompositeCmd()
 {
 } // VTextTool::VTextToCompositeCmd::~VTextToCompositeCmd
+
+void VTextTool::VTextToCompositeCmd::execute()
+{
+	if ( !m_text )
+		return;
+
+	if ( !m_group )
+	{
+		m_group = m_text->toVGroup();
+		document()->append( m_group );
+	}
+		
+	m_text->setState( VObject::deleted );
+	m_group->setState( VObject::normal );
+	document()->selection()->clear();
+	document()->selection()->append( m_group );
+
+	m_executed = true;
+} // VTextTool::VTextToCompositeCmd::execute
+
+void VTextTool::VTextToCompositeCmd::unexecute()
+{
+	if ( !m_text )
+		return;
+
+	m_text->setState( VObject::normal );
+	document()->selection()->take( *m_group );
+	m_group->setState( VObject::deleted );
+
+	m_executed = false;
+} // VTextTool::VTextToCompositeCmd::unexecute
 
 #include "vtexttool.moc"

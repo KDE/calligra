@@ -121,6 +121,7 @@ class VTextOptionsWidget : public QFrame
 		void accept();
 		void textChanged( const QString& );
 		void editBasePath();
+		void convertToShapes();
 
 	protected:
 		QTabWidget*   m_tabWidget;
@@ -159,6 +160,7 @@ class VTextTool : public VTool, public VVisitor
 		virtual void accept();
 		virtual void cancel();
 		virtual void editBasePath();
+		virtual void convertToShapes();
 
 		virtual void visitVComposite( VComposite& composite );
 		virtual void visitVDocument( VDocument& ) {}
@@ -171,8 +173,8 @@ class VTextTool : public VTool, public VVisitor
 		class VTextCmd : public VCommand
 		{
 			public:
-				VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text );
-				VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text,
+				VTextCmd( VDocument* doc, const QString& name, VText* text );
+				VTextCmd( VDocument* doc, const QString& name, VText* text,
 						const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
 						bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow );
 				virtual ~VTextCmd();
@@ -182,27 +184,30 @@ class VTextTool : public VTool, public VVisitor
 				virtual bool isExecuted() { return m_executed; }
 
 			private:
-				typedef struct 
+				class VTextModifPrivate 
 				{
-					QFont            oldFont;
-					QFont            newFont;
-					VPath            oldBasePath;
-					VPath            newBasePath;
-					VText::Position  oldPosition;
-					VText::Position  newPosition;
-					VText::Alignment oldAlignment;
-					VText::Alignment newAlignment;
-					QString          oldText;
-					QString          newText;
-					bool             oldUseShadow;
-					bool             newUseShadow;
-					int              oldShadowAngle;
-					int              newShadowAngle;
-					int              oldShadowDistance;
-					int              newShadowDistance;
-					bool             oldTranslucentShadow;
-					bool             newTranslucentShadow;
-				} VTextModifPrivate;
+					public:
+						VTextModifPrivate() : oldBasePath( 0L ), newBasePath( 0L ) {}
+					
+						QFont            oldFont;
+						QFont            newFont;
+						VPath            oldBasePath;
+						VPath            newBasePath;
+						VText::Position  oldPosition;
+						VText::Position  newPosition;
+						VText::Alignment oldAlignment;
+						VText::Alignment newAlignment;
+						QString          oldText;
+						QString          newText;
+						bool             oldUseShadow;
+						bool             newUseShadow;
+						int              oldShadowAngle;
+						int              newShadowAngle;
+						int              oldShadowDistance;
+						int              newShadowDistance;
+						bool             oldTranslucentShadow;
+						bool             newTranslucentShadow;
+				}; // VTextModifPrivate
 				
 				KarbonView*         m_view;
 				VText*              m_text;
@@ -216,12 +221,13 @@ class VTextTool : public VTool, public VVisitor
 				VTextToCompositeCmd( VDocument* doc, const QString& name, VText* text );
 				virtual ~VTextToCompositeCmd();
 
-				virtual void execute() {}
-				virtual void unexecute() {}
+				virtual void execute();
+				virtual void unexecute();
 				virtual bool isExecuted() { return m_executed; }
 
 			private:
 				VText*   m_text;
+				VGroup*  m_group;
 				bool     m_executed;
 		}; // VTextToCompositeCmd
 

@@ -32,6 +32,8 @@
 #include "vcomposite.h"
 #include "vpainter.h"
 
+class VGroup;
+
 typedef QPtrList<VComposite> VCompositeList;
 typedef QPtrListIterator<VComposite> VCompositeListIterator;
 
@@ -83,6 +85,7 @@ public:
 	virtual void load( const QDomElement& element );
 
 	virtual VText* clone() const;
+	virtual VGroup* toVGroup() const;
 
 	virtual void setState( const VState state );
 	
