@@ -64,7 +64,6 @@ KivioRuler::KivioRuler(Orientation o, QWidget *parent, const char *name)
 
 KivioRuler::~KivioRuler()
 {
-  if (buffer)
     delete buffer;
 
   delete marker;
