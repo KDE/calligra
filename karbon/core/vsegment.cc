@@ -542,11 +542,25 @@ VSegment::checkNode( const KoPoint &p )
 bool
 VSegment::selectNode( const KoPoint &p )
 {
-	m_isSelected[ 0 ] =	m_point[ 0 ].isNear( p, 2);//VGlobal::isNearRange );
-	m_isSelected[ 1 ] =	m_point[ 1 ].isNear( p, 2);//VGlobal::isNearRange );
-	m_isSelected[ 2 ] =	m_point[ 2 ].isNear( p, 2);//VGlobal::isNearRange );
+	if( m_point[ 0 ].isNear( p, 2) )
+	{
+		m_isSelected[ 0 ] = true;
+		m_isSelected[ 1 ] = m_isSelected[ 2 ] = false;
+		return true;
+	}
+	if( m_point[ 1 ].isNear( p, 2) )
+	{
+		m_isSelected[ 1 ] = true;
+		m_isSelected[ 0 ] = m_isSelected[ 2 ] = false;
+		return true;
+	}
+	if( m_point[ 1 ].isNear( p, 2) )
+	{
+		m_isSelected[ 0 ] = m_isSelected[ 1 ] = m_isSelected[ 2 ] = true;
+		return true;
+	}
 
-	return m_isSelected[ 0 ] || m_isSelected[ 1 ] || m_isSelected[ 2 ];
+	return false;
 }
 
 bool

@@ -281,7 +281,7 @@ bool
 VSelection::selectNode( const KoPoint &p )
 {
 	VNodeSelector op( p );
-	m_segments.clear();
+	//m_segments.clear();
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
@@ -289,7 +289,10 @@ VSelection::selectNode( const KoPoint &p )
 		op.visit( *itr.current() );
 		QPtrListIterator<VSegment> it2( op.result() );
 		for( it2.toFirst(); it2.current(); ++it2 )
+		{
+			it2.current()->selectNode( p );
 			m_segments.append( it2.current() );
+		}
 	}
 
 	return m_segments.count() > 0;

@@ -65,7 +65,10 @@ VEditNodeTool::drawTemporaryObject()
 		m_state != dragging && ( m_state == moving || view()->part()->document().selection()->checkNode( lp ) ) )
 	{
 		if( m_state == normal )
+		{
+			view()->part()->document().selection()->selectNode( lp );
 			m_state = moving;
+		}
 
 		// move operation
 		QWMatrix mat;
