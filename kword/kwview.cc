@@ -2276,14 +2276,16 @@ void KWView::editPaste()
         if ( edit )
             edit->paste();
     }
-    else if ( providesImage ) // must be after kwordtext
+    else // pasting frames
     {
-        KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
-	deselectAllFrames();
-        m_gui->canvasWidget()->pasteImage( data, docPoint );
-    } else { // providesKWord (e.g. frames)
-    	deselectAllFrames();
-        m_gui->canvasWidget()->pasteFrames();
+        deselectAllFrames();
+        if ( providesKWord ) {
+            m_gui->canvasWidget()->pasteFrames();
+        }
+        else { // providesImage, must be after providesKWord
+            KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
+            m_gui->canvasWidget()->pasteImage( data, docPoint );
+        }
     }
 }
 
