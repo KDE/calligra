@@ -116,6 +116,12 @@ k_dcop:
     virtual bool configAutoDetectUrl() const;
     virtual bool configIgnoreDoubleSpace() const;
 
+    virtual void setConfigRemoveSpaceBeginEndLine( bool _space);
+    virtual void setConfigUseBulletStyle( bool _ubs);
+
+    virtual bool configRemoveSpaceBeginEndLine() const;
+    virtual bool configUseBulletSyle() const;
+
 
 private:
     KPresenterDoc *doc;

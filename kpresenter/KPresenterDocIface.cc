@@ -365,6 +365,16 @@ void KPresenterDocIface::setConfigIgnoreDoubleSpace( bool _ids)
     doc->getAutoFormat()->configIgnoreDoubleSpace(_ids);
 }
 
+void KPresenterDocIface::setConfigRemoveSpaceBeginEndLine( bool _space)
+{
+    doc->getAutoFormat()->configRemoveSpaceBeginEndLine(_space);
+}
+
+void KPresenterDocIface::setConfigUseBulletStyle( bool _ubs)
+{
+    doc->getAutoFormat()->configUseBulletStyle(_ubs);
+}
+
 bool KPresenterDocIface::configUpperCase() const
 {
     return doc->getAutoFormat()->getConfigUpperCase();
@@ -389,4 +399,14 @@ bool KPresenterDocIface::configAutoDetectUrl() const
 bool KPresenterDocIface::configIgnoreDoubleSpace() const
 {
     return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
+}
+
+bool KPresenterDocIface::configRemoveSpaceBeginEndLine() const
+{
+    return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
+}
+
+bool KPresenterDocIface::configUseBulletSyle() const
+{
+    return doc->getAutoFormat()->getConfigUseBulletSyle();
 }
