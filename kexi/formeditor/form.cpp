@@ -91,10 +91,13 @@ Form::createEmptyInstance(const QString &c, QWidget *parent)
 void
 Form::setCurrentWidget(QWidget *w)
 {
+	if(w != m_selWidget)
+		w->raise();
 	m_selWidget = w;
 	if(w)
+	{
 		emit selectionChanged(w);
-
+	}
 	/*if(w->parentWidget()->inherits("QWidgetStack"))
 	{
 		w = w->parentWidget()->parentWidget();

@@ -28,6 +28,7 @@
 #include <qimage.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
+#include <qobjectlist.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -38,10 +39,48 @@
 #include "objecttree.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
+#include "spacer.h"
 
 #include "formIO.h"
 
 namespace KFormDesigner {
+
+// Helper classes for sorting widgets before saving (because Designer is too stupid to put them in the right order)
+class HorWidgetList : public QObjectList
+{
+	public:
+	HorWidgetList() {;}
+	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+	{
+		QWidget *w1 = static_cast<QWidget*>(item1);
+		QWidget *w2 = static_cast<QWidget*>(item2);
+
+		if(w1->x() < w2->x())
+			return -1;
+		if(w1->x() > w2->x())
+			return 1;
+		return 0; // item1 == item2
+	}
+};
+
+class VerWidgetList : public QObjectList
+{
+	public:
+	VerWidgetList() {;}
+	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+	{
+		QWidget *w1 = static_cast<QWidget*>(item1);
+		QWidget *w2 = static_cast<QWidget*>(item2);
+
+		if(w1->y() < w2->y())
+			return -10;
+		if(w1->y() > w2->y())
+			return 1;
+		return 0; // item1 == item2
+	}
+};
+
+// FormIO itself
 
 FormIO::FormIO(QObject *parent, const char *name=0)
    : QObject(parent, name)
@@ -164,17 +203,17 @@ FormIO::prop(QDomDocument &parent, const char *name, const QVariant &value, QWid
 	{
 		if(meta->isSetType())
 		{
-		QStringList list = QStringList::fromStrList(meta->valueToKeys(value.toInt()));
-		type = parent.createElement("set");
-		valueE = parent.createTextNode(list.join("|"));
-		type.appendChild(valueE);
+			QStringList list = QStringList::fromStrList(meta->valueToKeys(value.toInt()));
+			type = parent.createElement("set");
+			valueE = parent.createTextNode(list.join("|"));
+			type.appendChild(valueE);
 		}
 		else
 		{
-		QString s = meta->valueToKey(value.toInt());
-		type = parent.createElement("enum");
-		valueE = parent.createTextNode(s);
-		type.appendChild(valueE);
+			QString s = meta->valueToKey(value.toInt());
+			type = parent.createElement("enum");
+			valueE = parent.createTextNode(s);
+			type.appendChild(valueE);
 		}
 		propertyE.appendChild(type);
 		return propertyE;
@@ -473,12 +512,12 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 		
 		if(meta->isSetType())
 		{
-		QStrList keys;
-		QStringList list = QStringList::split("|", tag.text());
-		for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
-			keys.append((*it).latin1());
+			QStrList keys;
+			QStringList list = QStringList::split("|", tag.text());
+			for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
+				keys.append((*it).latin1());
 		
-		return QVariant(meta->keysToValue(keys));
+			return QVariant(meta->keysToValue(keys));
 		}
 	}
 		return QVariant();
@@ -499,6 +538,12 @@ FormIO::readAttribute(QDomNode node, QObject *obj, const QString &name)
 void
 FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc)
 {
+	if(item->className() == "Spacer")
+	{
+		Spacer::saveSpacer(item, parent, domDoc);
+		return;
+	}
+
 	QDomElement tclass = domDoc.createElement("widget");
 	tclass.setAttribute("class", item->className());
 	tclass.appendChild(prop(domDoc, "name", item->widget()->property("name"), item->widget()));
@@ -542,15 +587,32 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		}
 	}
 
-	if(!item->children()->isEmpty())
+	if(!item->children()->isEmpty() && layout.isNull())
 	{
 		for(ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
+			saveWidget(objIt, tclass, domDoc);
+	}
+	else if(!item->children()->isEmpty())
+	{
+		QObjectList *list;
+		if(layout.tagName() == "hbox")
+			list = new HorWidgetList();
+		else
+			list = new VerWidgetList();
+
+		for(ObjectTreeItem *objTree = item->children()->first(); objTree; objTree = item->children()->next())
+			list->append((QObject*)(objTree->widget()));
+		list->sort();
+
+		QObject *obj;
+		QObjectListIt it(*list);
+		while ((obj = it.current()) != 0)
 		{
-			if(layout.isNull())
-				saveWidget(objIt, tclass, domDoc);
-			else
-				saveWidget(objIt, layout, domDoc);
+			ObjectTreeItem *tree = item->container()->form()->objectTree()->lookup(obj->name());
+			saveWidget(tree, layout, domDoc);
+			++it;
 		}
+		delete list;
 	}
 }
 
@@ -567,9 +629,11 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		}
 		
 	}
-	
+
 	QWidget *w;
-	if(!parent)
+	if(el.tagName() == "spacer")
+		w = lib->createWidget("Spacer", parent, wname.latin1(), container);
+	else if(!parent)
 		w = lib->createWidget(el.attribute("class"), container->widget(), wname.latin1(), container);
 	else
 		w = lib->createWidget(el.attribute("class"), parent, wname.latin1(), container);
@@ -578,7 +642,10 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	ObjectTreeItem *tree;
 	if (!container->form()->objectTree()->lookup(wname))
 	{
-		tree =  new ObjectTreeItem(el.attribute("class"), wname, w);
+		if(el.tagName() == "spacer")
+			tree =  new ObjectTreeItem("Spacer", wname, w);
+		else
+			tree =  new ObjectTreeItem(el.attribute("class"), wname, w);
 		container->form()->objectTree()->addChild(container->tree(), tree);
 	}
 	else
@@ -606,11 +673,17 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			else
 				loadWidget(container, lib, n.toElement(), w);
 		}
+		if(n.toElement().tagName() == "spacer")
+		{
+			kdDebug() << "loding a spacer32" << endl;
+			loadWidget(container, lib, n.toElement(), w);
+		}
 		if((n.toElement().tagName() == "vbox") || (n.toElement().tagName() == "hbox") || (n.toElement().tagName() == "grid"))
 		{
 			loadLayout(n.toElement().tagName(), tree);
 			for(QDomNode m = n.toElement().firstChild(); !m.isNull(); m = m.nextSibling())
 			{
+				kdDebug() << "tagname is " << m.toElement().tagName() << endl;
 				if(m.toElement().tagName() == "property")
 				{
 					QString name = m.toElement().attribute("name");
@@ -633,12 +706,15 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 					else
 						loadWidget(container, lib, m.toElement(), w);
 				}
+				if(m.toElement().tagName() == "spacer")
+				{
+					kdDebug() << "loding a spacer" << endl;
+					loadWidget(tree->container(), lib, m.toElement(), w);
+				}
 			}
+
 			if(tree->container())
-			{
-				tree->container()->layout()->setAutoAdd(false);
-				tree->container()->layout()->activate();
-			}
+				tree->container()->setLayout(tree->container()->layoutType());
 		}
 	}
 
@@ -699,7 +775,6 @@ FormIO::loadLayout(const QString &name, ObjectTreeItem *tree)
 	{
 		tree->container()->setLayout(Container::Grid);
 	}
-	tree->container()->layout()->setAutoAdd(true);
 }
 
 QString

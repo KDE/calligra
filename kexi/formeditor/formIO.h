@@ -117,6 +117,8 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		/*! Loads the layout (ie calls Container::setLayout() ) which type is \a name, 
 		   and belonging to the widget represented by the ObjectTreeItem \a tree. */
 		static void         loadLayout(const QString &name, ObjectTreeItem *tree);
+
+	friend class Spacer;
 };
 
 }

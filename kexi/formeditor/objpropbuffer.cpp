@@ -29,6 +29,7 @@
 #include "form.h"
 #include "container.h"
 #include "formmanager.h"
+#include "spacer.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"
 
@@ -151,6 +152,9 @@ ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 		if(!(list.grep(property)).isEmpty())
 			return false;
 	}
+	kdDebug() << "object is a " << obj->className() << endl;
+	if(obj->isA("KFormDesigner::Spacer"))
+		return Spacer::showProperty(property);
 	return true;
 }
 
@@ -165,11 +169,6 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 				return false;
 
 			(*this)["geometry"]->setValue(((QWidget*)o)->geometry());
-
-			QListViewItem *it = m_manager->editor()->findItem("geometry", 0, Qt::ExactMatch);
-			KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
-			item->updateValue();
-			//item->updateChildValue();
 		}
 	}
 	return false;

@@ -298,7 +298,6 @@ Container::setSelectedWidget(QWidget *w)
 	kdDebug() << "slotSelectionChanged " << w->name()<< endl;
 
 	m_selected = w;
-	w->raise();
 
 	if(w)
 		m_form->setCurrentWidget(w);
@@ -401,8 +400,6 @@ Container::createBoxLayout(QObjectList *list)
 	}
 	delete olist;
 
-	if(list->isEmpty())
-		layout->setAutoAdd(true);
 	list->sort();
 
 	QObjectListIt it(*list);
@@ -414,8 +411,8 @@ Container::createBoxLayout(QObjectList *list)
 	}
 	delete list;
 
-	if(!m_container->parentWidget()->inherits("QWidgetStack"))
-		m_container->resize(layout->sizeHint());
+//	if(!m_container->parentWidget()->inherits("QWidgetStack"))
+//		m_container->resize(layout->sizeHint());
 	layout->activate();
 }
 

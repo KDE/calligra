@@ -16,6 +16,7 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
+#include "spacer.h"
 #include "stdwidgetfactory.h"
 
 StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStringList &)
@@ -34,6 +35,13 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	wLineEdit->setName("Line Edit");
 //	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
+
+	KFormDesigner::Widget *wSpacer = new KFormDesigner::Widget(this);
+	wSpacer->setPixmap("kexi");
+	wSpacer->setClassName("Spacer");
+	wSpacer->setName("Spacer");
+//	wSpacer->setDescription(i18n("A widget to input text"));
+	m_classes.append(wSpacer);
 }
 
 QString
@@ -63,6 +71,12 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	{
 		QWidget *w = new QLineEdit(p, n);
 		((QLineEdit *)w)->setReadOnly(true);
+		w->installEventFilter(container);
+		return w;
+	}
+	else if(c == "Spacer")
+	{
+		QWidget *w = new KFormDesigner::Spacer(p, n);
 		w->installEventFilter(container);
 		return w;
 	}

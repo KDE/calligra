@@ -11,6 +11,7 @@
    <Separator/>
    <Action name="library_widget_Line Edit"/>
    <Action name="library_widget_Text Label"/>
+   <Action name="library_widget_Spacer"/>
   </Menu>
   <Menu name="Debug">
    <text>&amp;Debug</text>
@@ -25,6 +26,7 @@
    <Action name="library_widget_Tab Widget"/>
    <Action name="library_widget_Line Edit"/>
    <Action name="library_widget_Text Label"/>
+   <Action name="library_widget_Spacer"/>
  <ActionList name="library_widgets" />
 </ToolBar>
 
