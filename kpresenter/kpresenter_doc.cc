@@ -126,6 +126,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
       _hasFooter( false ), m_unit( KoUnit::U_MM )
 {
     setInstance( KPresenterFactory::global() );
+    //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
+    m_pageWhereLoadObject=0L;
 
     m_standardStyle = new KoStyle( "Standard" );
 
@@ -1010,7 +1012,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
 }
 
 /*========================= load objects =========================*/
-void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPage *_page )
+void KPresenterDoc::loadObjects( const QDomElement &element )
 {
     ObjType t = OT_LINE;
     QDomElement obj=element.firstChild().toElement();
@@ -1030,8 +1032,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_LINE: {
                 KPLineObject *kplineobject = new KPLineObject();
                 offset=kplineobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this,_page );
+                if (m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this,m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1040,8 +1042,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_RECT: {
                 KPRectObject *kprectobject = new KPRectObject();
                 offset=kprectobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this, _page );
+                if (m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1050,8 +1052,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_ELLIPSE: {
                 KPEllipseObject *kpellipseobject = new KPEllipseObject();
                 offset=kpellipseobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1060,8 +1062,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_PIE: {
                 KPPieObject *kppieobject = new KPPieObject();
                 offset=kppieobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1070,8 +1072,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_AUTOFORM: {
                 KPAutoformObject *kpautoformobject = new KPAutoformObject();
                 offset=kpautoformobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1080,8 +1082,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_CLIPART: {
                 KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection );
                 offset=kpclipartobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this , _page);
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this , m_pageWhereLoadObject);
                     insertCmd->execute();
                     addCommand( insertCmd );
                     kpclipartobject->reload();
@@ -1091,8 +1093,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_TEXT: {
                 KPTextObject *kptextobject = new KPTextObject( this );
                 offset=kptextobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1101,8 +1103,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_PICTURE: {
                 KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection );
                 offset=kppixmapobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                     kppixmapobject->reload();
@@ -1112,8 +1114,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_FREEHAND: {
                 KPFreehandObject *kpfreehandobject = new KPFreehandObject();
                 offset=kpfreehandobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1122,8 +1124,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_POLYLINE: {
                 KPPolylineObject *kppolylineobject = new KPPolylineObject();
                 offset=kppolylineobject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this, _page );
+                if (m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1132,8 +1134,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_QUADRICBEZIERCURVE: {
                 KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject();
                 offset=kpQuadricBezierCurveObject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1142,8 +1144,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_CUBICBEZIERCURVE: {
                 KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
                 offset=kpCubicBezierCurveObject->load(obj);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1152,8 +1154,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_POLYGON: {
                 KPPolygonObject *kpPolygonObject = new KPPolygonObject();
                 offset=kpPolygonObject->load( obj );
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this , _page);
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this , m_pageWhereLoadObject);
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1162,8 +1164,8 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste, KPrPag
             case OT_GROUP: {
                 KPGroupObject *kpgroupobject = new KPGroupObject();
                 offset=kpgroupobject->load(obj, this);
-                if ( _paste && _page) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this, _page );
+                if ( m_pageWhereLoadObject) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
                     addCommand( insertCmd );
                 } else
@@ -1578,15 +1580,18 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     else
         objStartY = 0;
 
+    //insert page.
+    KPrPage *newpage=new KPrPage(this);
+    m_pageList.insert( _page,newpage);
+    m_pageWhereLoadObject=newpage;
+
     loadNativeFormat( fileName );
     objStartY = 0;
+    m_pageWhereLoadObject=0L;
 
     _clean = true;
     setModified(true);
 
-    //insert page.
-    KPrPage *newpage=new KPrPage(this);
-    m_pageList.insert( _page,newpage);
     emit sig_changeActivePage(newpage );
 
     if ( _page < (int)m_selectedSlides.count() )
@@ -1662,8 +1667,9 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int,KPrPage* _page )
 
     if ( !ok )
         return;
-
-    loadObjects(document, true,_page);
+    m_pageWhereLoadObject=_page;
+    loadObjects(document);
+    m_pageWhereLoadObject=0L;
 
     repaint( false );
     setModified( true );
@@ -1753,7 +1759,6 @@ void KPresenterDoc::movePage( int from, int to )
     savePage( tempFile.name(), from );
     deletePage( from );
     insertPage( to, IP_BEFORE, FALSE, tempFile.name() );
-    selectPage( to, wasSelected );
     selectPage( to, wasSelected );
 }
 

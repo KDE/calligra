@@ -338,7 +338,7 @@ protected:
     QDomElement saveNote( QDomDocument &doc );
     QDomElement saveAttribute( QDomDocument &doc );
     void loadBackground( const QDomElement &element );
-    void loadObjects( const QDomElement &element, bool _paste = false, KPrPage *_page=0L );
+    void loadObjects( const QDomElement &element );
     void loadTitle( const QDomElement &element );
     void loadNote( const QDomElement &element );
     virtual bool completeLoading( KoStore* /* _store */ );
@@ -423,6 +423,7 @@ private:
     KPresenterView *m_kpresenterView;;
     QPtrList<KPrPage> m_pageList;
     KPrPage *m_initialActivePage;
+    KPrPage *m_pageWhereLoadObject;
 };
 
 #endif
