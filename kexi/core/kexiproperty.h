@@ -87,10 +87,10 @@ class KEXICORE_EXPORT KexiProperty
 		~KexiProperty();
 
 		/*! \return true if this property is null. Null properties have empty names. */
-		bool isNull() const { return m_name.isEmpty(); }
+		inline bool isNull() const { return m_name.isEmpty(); }
 
 		/*! Equivalent to !isNull() */
-		operator bool () const { return !isNull(); }
+		inline operator bool () const { return !isNull(); }
 
 		const KexiProperty& operator=(const KexiProperty &property);
 
@@ -113,7 +113,7 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty *child(const QCString& name);
 
 		//! \return property name.
-		QCString name() const { return m_name; }
+		inline QCString name() const { return m_name; }
 
 		//! \return property value.
 		QVariant value() const;
@@ -132,7 +132,7 @@ class KEXICORE_EXPORT KexiProperty
 		void setValue(const QVariant &v, bool saveOldValue = true);
 
 		/*! Equivalent to setValue(const QVariant &) */
-		KexiProperty& operator= ( const QVariant& val ) { setValue(val); return *this; }
+		inline KexiProperty& operator= ( const QVariant& val ) { setValue(val); return *this; }
 
 		/*! For property of type "list of values":
 		 sets \a key_list as a new list of keys and \a name_list as a new list
@@ -150,13 +150,13 @@ class KEXICORE_EXPORT KexiProperty
 		/*! \return old property value. This makes only sense when changed() is true.
 		 The old value is saved on first change.
 		*/
-		QVariant	oldValue() const { return m_oldValue; }
+		inline QVariant oldValue() const { return m_oldValue; }
 
 		//! \return property i18n'ed description.
-		QString		desc() const { return m_desc; }
+		inline QString desc() const { return m_desc; }
 
 		/*! \return the QVariant::Type of property value and QVariant::StringList if this is a list property. */
-		QVariant::Type  type() const;
+		QVariant::Type type() const;
 
 		/*! \return a pointer to the string list containing all possible keys for this property
 		 or NULL if this is not a property of type stringlist. The values in this list are ordered,
@@ -174,13 +174,13 @@ class KEXICORE_EXPORT KexiProperty
 		  will be updated when the user presses Enter or when another editor gets the focus.
 		  Property follow Property Editor global rule if autoSync() != 0 and 1 (default)
 		*/
-		int		autoSync() const { return m_autosync; }
+		inline int autoSync() const { return m_autosync; }
 
 		/*! if \a sync == true, then the property will be synced automatically in Property Editor
 		  as soon as editor contents change (e.g. when the user types text). If \a sync == false, property value
 		  will be updated when the user presses Enter or when another editor gets the focus.
 		*/
-		void setAutoSync(int sync) { m_autosync = sync; }
+		inline void setAutoSync(int sync) { m_autosync = sync; }
 
 		//! \return true if this preperty value is changed.
 		bool changed() const;
@@ -201,18 +201,18 @@ class KEXICORE_EXPORT KexiProperty
 		*/
 		static QString format(const QVariant &v);
 
-		KexiPropertyBuffer*  buffer() { return m_buf; }
+		inline KexiPropertyBuffer* buffer() { return m_buf; }
 
 		// For pixmaps property only
-		void  setPixmapName(const QString &name) { m_pixmapName = name; }
-		QString  pixmapName() { return m_pixmapName; }
+		inline void setPixmapName(const QString &name) { m_pixmapName = name; }
+		inline QString pixmapName() { return m_pixmapName; }
 
 		/*! Sets icon by \a name for this property. Icons are optional and are used e.g. 
 		 in KexiPropertyEditor - displayed at the left hand. */
-		void setIcon(const QString &name) { m_icon = name; }
+		inline void setIcon(const QString &name) { m_icon = name; }
 
 		/*! \return property icon. Can be empty. */
-		QString icon() const { return m_icon; }
+		inline QString icon() const { return m_icon; }
 
 		void execute(const QString &value); // TMP
 

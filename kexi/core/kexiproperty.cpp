@@ -20,6 +20,7 @@
 */
 
 #include "kexiproperty.h"
+#include "kexi_global.h"
 #include "kexipropertybuffer.h"
 
 #include <qstringlist.h>
@@ -301,11 +302,14 @@ QVariant::Type KexiProperty::type() const
 
 void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOldValue)
 {
+	if (m_name.isEmpty()) {
+		kexiwarn << "KexiProperty::setValue(): COULD NOT SET value to a null property" << endl;
+	}
 //	kdDebug() << m_name << ": setValue('" << v.toString() << "' type=" << v.typeName() << ")" << endl;
 	if (m_value.type() != v.type() && !m_value.isNull() && !v.isNull()
 		 && !((m_value.type()==QVariant::Int && v.type()==QVariant::UInt) || (m_value.type()==QVariant::UInt && v.type()==QVariant::Int))) 
 	{
-		kdWarning() << "KexiProperty::setValue(): INCOMPATIBLE TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
+		kexiwarn << "KexiProperty::setValue(): INCOMPATIBLE TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
 	}
 
 	//1. Check if the value should be changed

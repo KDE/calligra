@@ -24,6 +24,7 @@
 #include <qdatetime.h>
 
 #include "kexipropertybuffer.h"
+#include "kexi_global.h"
 
 KexiProperty KexiPropertyBuffer::m_nonConstNull;
 

@@ -25,7 +25,10 @@
 #include <qdict.h>
 #include <qptrvector.h>
 
+#include <kdebug.h>
+
 #include "kexiproperty.h"
+#include "kexi_global.h"
 
 class PixmapCollection;
 
@@ -51,20 +54,21 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 
 		/*! \return property named with \a name. If no such property is found,
 		 null property (KexiProperty::null) is returned. */
-		KexiProperty& property( const QCString& name ) {
+		inline KexiProperty& property( const QCString& name ) {
 			KexiProperty *p = find(name);
 			if (p) return *p;
 			m_nonConstNull.m_name = "";
+			kexiwarn << "KexiPropertyBuffer::property(): \"" << name << "\" NOT FOUND" << endl;
 			return m_nonConstNull;
 		}
 
-		bool hasProperty( const QCString& name ) const { return find(name)!=0; }
+		inline bool hasProperty( const QCString& name ) const { return find(name)!=0; }
 
 		/*! Equivalent to property(const QCString& name) */
-		KexiProperty& operator[] ( const QCString& name ) { return property(name); }
+		inline KexiProperty& operator[] ( const QCString& name ) { return property(name); }
 
 		/*! \return an ordered list of properties */
-		KexiProperty::List* list() { return &m_list; }
+		inline KexiProperty::List* list() { return &m_list; }
 
 		/*! Add \a property to buffer with property->name() as key in QMap.
 		 Same as insert(\a property->name(), \a property).
@@ -89,10 +93,10 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 		 by their property sets.
 		 For comparing purposes, type names are case insensitive.
 		*/
-		QString typeName() const { return m_typeName; }
+		inline QString typeName() const { return m_typeName; }
 
-		void  setCollection(PixmapCollection *collection) { m_collection = collection; }
-		PixmapCollection*  collection()  { return m_collection; }
+		inline void setCollection(PixmapCollection *collection) { m_collection = collection; }
+		inline PixmapCollection*  collection()  { return m_collection; }
 		/*! The property \a prop value is now the pixmap in the PixmapCollection whose name is \a pixmapName.*/
 		void addCollectionPixmap(KexiProperty *prop, const QString pixmapName);
 		//! \return the name of the pixmap for the property whose name is \a name.
