@@ -27,17 +27,19 @@
 
 class KInstance;
 
-
+/** @internal */
 class KoTemplate {
 
 public:
     KoTemplate(const QString &name,
+               const QString &description=QString::null,
 	       const QString &file=QString::null,
 	       const QString &picture=QString::null,
 	       bool hidden=false, bool touched=false);
     ~KoTemplate() {}
 
     QString name() const { return m_name; }
+    QString description() const { return m_descr; };
     QString file() const { return m_file; }
     QString picture() const { return m_picture; }
     const QPixmap &loadPicture();
@@ -48,7 +50,7 @@ public:
     bool touched() const { return m_touched; }
 
 private:
-    QString m_name, m_file, m_picture;
+    QString m_name, m_descr, m_file, m_picture;
     bool m_hidden;
     mutable bool m_touched;
     bool m_cached;

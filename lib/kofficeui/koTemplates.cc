@@ -32,10 +32,10 @@
 #include <stdlib.h>
 
 
-KoTemplate::KoTemplate(const QString &name, const QString &file,
+KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,
                        const QString &picture, bool hidden,
                        bool touched) :
-    m_name(name), m_file(file), m_picture(picture), m_hidden(hidden),
+    m_name(name), m_descr(description), m_file(file), m_picture(picture), m_hidden(hidden),
     m_touched(touched), m_cached(false) {
 }
 
@@ -243,6 +243,7 @@ void KoTemplateTree::readTemplates() {
                 //kdDebug() << "filePath: " << filePath << endl;
                 QString icon;
                 QString text;
+		QString description;
                 QString hidden_str;
                 bool hidden=false;
                 QString templatePath;
@@ -253,7 +254,8 @@ void KoTemplateTree::readTemplates() {
                     config.setDesktopGroup();
                     if (config.readEntry("Type")=="Link") {
                         text=config.readEntry("Name");
-                        //kdDebug() << "name: " << text << endl;
+                        description=config.readEntry("Comment");
+			//kdDebug() << "name: " << text << endl;
                         icon=config.readEntry("Icon");
                         //kdDebug() << "icon1: " << icon << endl;
                         if(icon[0]!='/') // allow absolute paths for icons
@@ -288,7 +290,7 @@ void KoTemplateTree::readTemplates() {
                     templatePath = filePath; // Note that we store the .png file as the template !
                     // That's the way it's always been done. Then the app replaces the extension...
                 }
-                KoTemplate *t=new KoTemplate(text, templatePath, icon, hidden);
+                KoTemplate *t=new KoTemplate(text, description, templatePath, icon, hidden);
                 groupIt.current()->add(t, false, false); // false -> we aren't a "user", false -> don't
                                                          // "touch" the group to avoid useless
                                                          // creation of dirs in .kde/blah/...

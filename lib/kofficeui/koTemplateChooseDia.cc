@@ -94,6 +94,7 @@ class KoTemplateChooseDiaPrivate {
 	    m_returnType = KoTemplateChooseDia::Empty;
 	    m_nostartupdlg = false;
 	    tree = 0;
+	    m_nodiag = 0;
 	}
 
 	~KoTemplateChooseDiaPrivate() {}
@@ -352,6 +353,13 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     // Set the initially selected template, possibly from the last usage of the dialog
     currentChanged(itemtoselect);
 
+    // setup the checkbox
+    QString translatedstring = i18n("Always start %1 with the selected template").arg(d->m_nativeName);
+
+    d->m_nodiag = new QCheckBox ( translatedstring , widgetbase);
+    layout->addWidget(d->m_nodiag, 2, 0);
+    QString  startwithoutdialog = grp.readEntry( "NoStartDlg" );
+    d->m_nodiag->setChecked( startwithoutdialog == QString("yes") );
 }
 
 /*================================================================*/
@@ -359,8 +367,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 void KoTemplateChooseDia::setupDialog()
 {
 
-    QGridLayout *maingrid=new QGridLayout( d->m_mainwidget, 1, 1, 0, 6);
-    int checkboxposition = 1;
+    QGridLayout *maingrid=new QGridLayout( d->m_mainwidget, 1, 1, 2, 6);
     KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
 
     if (d->m_dialogType == Everything)
@@ -392,8 +399,6 @@ void KoTemplateChooseDia::setupDialog()
 	}
 
 
-	// it would be better to disable this useless cancel button
-	// the users can click on the cross of the dialog window
 	setButtonCancelText(i18n("&Quit"));
 
 	d->tabWidget = new QTabWidget( d->m_mainwidget, "tabWidget" );
@@ -403,7 +408,7 @@ void KoTemplateChooseDia::setupDialog()
 	d->newTab = new QWidget( d->tabWidget, "newTab" );
 	d->tabWidget->insertTab( d->newTab, "" );
 	d->tabWidget->changeTab( d->newTab, i18n( "Create a Document" ) );
-	QGridLayout * newTabLayout = new QGridLayout( d->newTab, 1, 1, 0, 6);
+	QGridLayout * newTabLayout = new QGridLayout( d->newTab, 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
 	// existing document
 	d->existingTab = new QWidget( d->tabWidget, "existingTab" );
@@ -432,23 +437,7 @@ void KoTemplateChooseDia::setupDialog()
 	{
 	    setCaption(i18n( "Create a Document" ));
 	    setupTemplateDialog(d->m_mainwidget, maingrid);
-	    checkboxposition = 2;
 	}
-    }
-
-    // setup the checkbox
-    if (d->m_dialogType != NoTemplates)
-    {
-	QString translatedstring = i18n("Always start %1 with the selected template").arg(d->m_nativeName);
-
-	d->m_nodiag = new QCheckBox ( translatedstring , d->m_mainwidget);
-	maingrid->addWidget(d->m_nodiag, checkboxposition, 0);
-	QString  startwithoutdialog = grp.readEntry( "NoStartDlg" );
-
-	if (startwithoutdialog == QString("yes"))
-	    d->m_nodiag->setChecked(1);
-	else
-	    d->m_nodiag->setChecked(0);
     }
 }
 
@@ -583,7 +572,7 @@ QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group , QString name)
 		this, 
 		t->name(), 
 		t->loadPicture(), 
-		t->name(), // TODO : should be the template description 
+		t->description(), 
 		t->file());
 
 	if (name == t->name())
