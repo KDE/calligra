@@ -680,7 +680,26 @@ void CellLayoutDlg::slotApply()
         else if( right==0x7FFF)
                 rect.setCoords( left, top, right , bottom+1  );
         else if( bottom==0x7FFF)
+                {
+                //create cell before to apply
+                RowLayout* rw =table->firstRow();
+                for( ; rw; rw = rw->next() )
+                        {
+                        if ( !rw->isDefault() )
+                                {
+                                for(int i=left;i<=right;i++)
+                                        {
+                                        KSpreadCell *cell = table->cellAt( i,  rw->row());
+                                        if ( cell->isDefault() )
+                                                {
+                                                cell = new KSpreadCell( table, i,  rw->row() );
+                                                table->insertCell( cell);
+                                                }
+                                        }
+                                }
+                        }
                 rect.setCoords( left, top, right+1 , bottom  );
+                }
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect );
         table->doc()->undoBuffer()->appendUndo( undo );
     }
