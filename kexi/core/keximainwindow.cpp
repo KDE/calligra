@@ -1520,8 +1520,25 @@ bool KexiMainWindow::newObject( KexiPart::Info *info )
 	if(!dlg->exec())
 		return false;
 
-	if(!project()->dbConnection()->executeQuery(QString("INSERT INTO kexi__objects VALUES(NULL, %1, '%2', '%3', NULL)").arg(info->projectPartID()).arg(dlg->name()).arg(dlg->caption())))
+//Ahh, Lucijan, what about using kexiDB API, not hardcoding? (js)
+//
+//	if(!project()->dbConnection()->executeQuery(QString("INSERT INTO kexi__objects VALUES(NULL, %1, '%2', '%3', NULL)")
+//		.arg(info->projectPartID()).arg(dlg->name()).arg(dlg->caption())))
+//		return false;
+
+	KexiDB::TableSchema *ts = project()->dbConnection()->tableSchema("kexi__objects");
+	if (!ts)
 		return false;
+		
+	KexiDB::FieldList *fl = ts->subList("o_type", "o_name", "o_caption");//TODO: "o_help");
+	if (!fl)
+		return false;
+		
+	if (!project()->dbConnection()->insertRecord(*fl, QVariant(info->projectPartID()), QVariant(dlg->name()),
+		QVariant(dlg->caption()) ))
+		return false;
+
+	delete fl;
 
 	KexiPart::Item *it = new KexiPart::Item();
 	it->setIdentifier(project()->dbConnection()->lastInsertedAutoIncValue("o_id", "kexi__objects"));
