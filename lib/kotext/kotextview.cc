@@ -275,7 +275,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
 
                 if ( !text.isEmpty() )
                 {
-                    if( !doIgnoreDoubleSpace(static_cast<KoTextParag*>(m_cursor->parag()),m_cursor->index() - 1,text[ text.length() - 1 ]))
+                    if( !doIgnoreDoubleSpace(static_cast<KoTextParag*>(m_cursor->parag()),m_cursor->index()-1 ,text[ text.length() - 1 ]))
                     {
                         insertText( text );
 

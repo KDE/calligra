@@ -562,7 +562,7 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
 
 bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
 {
-    if( m_ignoreDoubleSpace && ch.isSpace() && index > 1 )
+    if( m_ignoreDoubleSpace && ch.isSpace() && index >=  0 )
     {
         KoTextString *s = parag->string();
         QChar ch = s->at( index ).c;
