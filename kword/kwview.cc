@@ -1286,7 +1286,7 @@ void KWView::insertSpecialChar()
     KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( !edit )
         return;
-    QString f = font().family();
+    QString f = edit->textFontFamily();
     QChar c=' ';
     KCharSelectDia *dlg=new KCharSelectDia( this, "insert special char", f,c );
     connect(dlg,SIGNAL(insertChar(QChar,const QString &)),this,SLOT(slotSpecialChar(QChar,const QString &)));
