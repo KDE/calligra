@@ -998,19 +998,19 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling(), pos++ )
     {
         dp = drawPage.toElement();
-        m_loadingInfo->clearStyleStack(); // remove all styles
-        fillStyleStack( dp, oasisStyles );
-        m_loadingInfo->saveStyleStack();
+        context.styleStack().clear(); // remove all styles
+        fillStyleStack( dp, context );
+        context.styleStack().save();
         kdDebug ()<<"insert new page "<<endl;
         KPrPage *newpage=new KPrPage(this);
         m_pageList.insert( pos,newpage);
         m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
 
-        if ( m_loadingInfo->styleStack().hasAttribute( "draw:fill" )
-             || m_loadingInfo->styleStack().hasAttribute( "presentation:transition-style" ) )
+        if ( context.styleStack().hasAttribute( "draw:fill" )
+             || context.styleStack().hasAttribute( "presentation:transition-style" ) )
         {
             kdDebug()<<" fill or presentation-style found \n";
-            m_pageList.at(pos)->background()->loadOasis( m_loadingInfo->styleStack() );
+            m_pageList.at(pos)->background()->loadOasis( context.styleStack() );
         }
 
 
@@ -1028,55 +1028,55 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 	    if( o.hasAttribute("draw:id"))
 	      animationShow = m_loadingInfo->animationShowById(o.attribute("draw:id"));
 
-            m_loadingInfo->saveStyleStack();
+            context.styleStack().save();
 
             if ( name == "draw:text-box" ) // textbox
             {
-                fillStyleStack( o, oasisStyles );
+                fillStyleStack( o, context );
                 KPTextObject *kptextobject = new KPTextObject( this );
-                kptextobject->loadOasis(o, context, m_loadingInfo->styleStack(),oasisStyles, animationShow);
+                kptextobject->loadOasis(o, context, animationShow);
                 newpage->appendObject(kptextobject);
             }
             else if ( name == "draw:rect" ) // rectangle
             {
-                fillStyleStack( o, oasisStyles );
+                fillStyleStack( o, context );
                 KPRectObject *kprectobject = new KPRectObject();
-                kprectobject->loadOasis(o, m_loadingInfo->styleStack(),oasisStyles, animationShow);
+                kprectobject->loadOasis(o, context , animationShow);
                 newpage->appendObject(kprectobject);
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" )
             {
-                fillStyleStack( o, oasisStyles );
+                fillStyleStack( o, context );
                 if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
                 {
                    KPPieObject *kppieobject = new KPPieObject();
-                    kppieobject->loadOasis(o, m_loadingInfo->styleStack(),oasisStyles, animationShow);
+                    kppieobject->loadOasis(o, context, animationShow);
                     newpage->appendObject(kppieobject);
                 }
                 else  // circle or ellipse
                 {
                     KPEllipseObject *kpellipseobject = new KPEllipseObject();
-                    kpellipseobject->loadOasis(o,m_loadingInfo->styleStack(),oasisStyles, animationShow);
+                    kpellipseobject->loadOasis(o,context, animationShow);
                     newpage->appendObject(kpellipseobject);
                 }
             }
             else if ( name == "draw:line" ) // line
             {
-                fillStyleStack( o, oasisStyles );
+                fillStyleStack( o, context );
                 KPLineObject *kplineobject = new KPLineObject();
-                kplineobject->loadOasis(o,m_loadingInfo->styleStack(),oasisStyles, animationShow);
+                kplineobject->loadOasis(o, context, animationShow);
                 newpage->appendObject(kplineobject);
             }
             else if (name=="draw:polyline") { // polyline
-                fillStyleStack( o, oasisStyles );
+                fillStyleStack( o, context );
                 KPPolylineObject *kppolylineobject = new KPPolylineObject();
-                kppolylineobject->loadOasis(o, m_loadingInfo->styleStack(),oasisStyles, animationShow);
+                kppolylineobject->loadOasis(o, context, animationShow);
                 newpage->appendObject(kppolylineobject);
             }
             else if (name=="draw:polygon") { // polygon
-                fillStyleStack( o, oasisStyles );
+                fillStyleStack( o, context );
                 KPPolygonObject *kpPolygonObject = new KPPolygonObject();
-                kpPolygonObject->loadOasis( o, m_loadingInfo->styleStack() ,oasisStyles, animationShow);
+                kpPolygonObject->loadOasis( o, context, animationShow);
                 newpage->appendObject(kpPolygonObject);
             }
             else if ( name == "draw:image" ) // image
@@ -1103,12 +1103,12 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             else
             {
                 kdDebug() << "Unsupported object '" << name << "'" << endl;
-                m_loadingInfo->restoreStyleStack();
+                context.styleStack().restore();
                 continue;
             }
-	    m_loadingInfo->restoreStyleStack();
+	    context.styleStack().restore();
         }
-        m_loadingInfo->restoreStyleStack();
+        context.styleStack().restore();
 	m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
 	m_loadingInfo->clearAnimationHideDict(); // clear all hide animations style
     }
@@ -1157,39 +1157,37 @@ void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
     }
 }
 
-
-
-void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisStyles&oasisStyles )
+void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisContext & context )
 {
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ))
     {
         kdDebug()<<"Add 'presentation:style-name' \n";
-        addStyles( oasisStyles.styles()[object.attribute( "presentation:style-name" )], oasisStyles );
+        addStyles( context.oasisStyles().styles()[object.attribute( "presentation:style-name" )], context );
     }
     if ( object.hasAttribute( "draw:style-name" ) )
     {
-      kdDebug()<<"draw:style-name :"<<object.attribute( "draw:style-name" )<<endl;
-        addStyles( oasisStyles.styles()[object.attribute( "draw:style-name" )], oasisStyles );
+        kdDebug()<<"draw:style-name :"<<object.attribute( "draw:style-name" )<<endl;
+        addStyles( context.oasisStyles().styles()[object.attribute( "draw:style-name" )], context);
     }
     if ( object.hasAttribute( "draw:text-style-name" ) )
     {
         kdDebug()<<"Add 'draw:text-style-name' \n";
-        addStyles( oasisStyles.styles()[object.attribute( "draw:text-style-name" )],oasisStyles );
+        addStyles( context.oasisStyles().styles()[object.attribute( "draw:text-style-name" )], context );
     }
     if ( object.hasAttribute( "text:style-name" ) )
     {
         kdDebug()<<"Add 'text:style-name' \n";
-        addStyles( oasisStyles.styles()[object.attribute( "text:style-name" )], oasisStyles );
+        addStyles( context.oasisStyles().styles()[object.attribute( "text:style-name" )], context );
     }
 }
 
-void KPresenterDoc::addStyles( const QDomElement* style, KoOasisStyles&oasisStyles )
+void KPresenterDoc::addStyles( const QDomElement* style, KoOasisContext & context )
 {
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttribute( "style:parent-style-name" ) )
-        addStyles( oasisStyles.styles()[style->attribute( "style:parent-style-name" )], oasisStyles );
-    m_loadingInfo->styleStackPush( *style );
+        addStyles( context.oasisStyles().styles()[style->attribute( "style:parent-style-name" )], context );
+    context.addStyles( style );
 }
 
 

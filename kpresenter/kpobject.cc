@@ -29,6 +29,8 @@
 #include <qdom.h>
 
 #include <kapplication.h>
+#include <koStyleStack.h>
+#include <kooasiscontext.h>
 
 #include <stdlib.h>
 #include <fstream>
@@ -186,7 +188,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&/*oasisStyles*/, QDomElement *animation)
+void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     if(element.hasAttribute( "draw:name" ))
        objectName = element.attribute("draw:name");
@@ -195,6 +197,7 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
     ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
     ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
     kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+    const KoStyleStack styleStack = context.styleStack();
     if( element.hasAttribute( "draw:transform" ))
         {
             kdDebug()<<" object transform \n";
@@ -1066,11 +1069,11 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack,  KoOasisStyles&oasisStyles, QDomElement *animation)
+void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
-    KPObject::loadOasis(element, styleStack,oasisStyles, animation);
-
+    KPObject::loadOasis(element, context, animation);
+    KoStyleStack styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:stroke" ))
     {
         if ( styleStack.attribute( "draw:stroke" ) == "none" )
@@ -1224,17 +1227,18 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack,  KoOasisStyles&oasisStyles, QDomElement *animation)
+void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
 
-    KPShadowObject::loadOasis(element, styleStack, oasisStyles, animation);
+    KPShadowObject::loadOasis(element, context, animation);
+    KoStyleStack styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:fill" ) )
     {
         const QString fill = styleStack.attribute( "draw:fill" );
         kdDebug()<<" fill :"<<fill<<endl;
         QBrush tmpBrush;
-        
+
         if ( fill == "solid" )
         {
             tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
@@ -1249,8 +1253,8 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
 
             //type not defined by default
             //try to use style.
-            QDomElement* draw = oasisStyles.drawStyles()[style];
-            if ( draw) 
+            QDomElement* draw = context.oasisStyles().drawStyles()[style];
+            if ( draw)
                 {
                     kdDebug()<<"We have a style";
                     int angle = 0;
@@ -1300,7 +1304,7 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
                                             //todo fixme when we will have a kopaint
                                             kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
                                             break;
-                                        }                                  
+                                        }
                                 }
                             else if( styleHash == "double")
                                 {
@@ -1322,7 +1326,7 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
                                             //todo fixme when we will have a kopaint
                                             kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
                                             break;
-                                        }                                  
+                                        }
 
                                 }
                             else if( styleHash == "triple")
@@ -1341,7 +1345,7 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
 
             QString style = styleStack.attribute( "draw:fill-gradient-name" );
             kdDebug()<<" style gradient name :"<<style<<endl;
-            QDomElement* draw = oasisStyles.drawStyles()[style];
+            QDomElement* draw = context.oasisStyles().drawStyles()[style];
             kdDebug()<<" draw : "<<draw<<endl;
 
             if ( draw )

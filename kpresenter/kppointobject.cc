@@ -24,6 +24,8 @@
 #include <koUnit.h>
 #include <qdom.h>
 #include <qpainter.h>
+#include <koStyleStack.h>
+#include <kooasiscontext.h>
 
 KPPointObject::KPPointObject()
     : KPShadowObject(), lineBegin(L_NORMAL), lineEnd( L_NORMAL )
@@ -92,10 +94,10 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
 }
 
 
-void KPPointObject::loadOasis( const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&oasisStyles, QDomElement *animation )
+void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation )
 {
     kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
-    KPShadowObject::loadOasis( element, styleStack,oasisStyles, animation );
+    KPShadowObject::loadOasis( element, context, animation );
     //load point.
     QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
     QString pt_x, pt_y;
@@ -115,6 +117,7 @@ void KPPointObject::loadOasis( const QDomElement &element, const KoStyleStack & 
         points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
         ++index;
     }
+    KoStyleStack styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:marker-start" ) )
     {
         QString type = styleStack.attribute( "draw:marker-start" );

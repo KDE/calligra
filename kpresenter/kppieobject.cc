@@ -27,6 +27,8 @@
 #include <qpainter.h>
 #include <kdebug.h>
 #include <kozoomhandler.h>
+#include <kooasiscontext.h>
+#include <koStyleStack.h>
 using namespace std;
 
 KPPieObject::KPPieObject()
@@ -81,10 +83,10 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPPieObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack,KoOasisStyles&oasisStyles, QDomElement *animation)
+void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     kdDebug()<<"void KPPieObject::loadOasis(const QDomElement &element) ***************\n";
-    KP2DObject::loadOasis(element, styleStack,oasisStyles, animation);
+    KP2DObject::loadOasis(element, context, animation);
     QString kind = element.attribute( "draw:kind" );
     if ( kind == "section" )
         pieType = PT_PIE;
@@ -109,7 +111,7 @@ void KPPieObject::loadOasis(const QDomElement &element, const KoStyleStack & sty
         p_len = (  ( end - start ) * 16 );
 
     kdDebug()<<"KPPieObject::loadOasis(const QDomElement &element) : p_angle :"<<p_angle<<" p_len :"<<p_len<<endl;
-
+    KoStyleStack styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:marker-start" ) )
     {
         QString type = styleStack.attribute( "draw:marker-start" );

@@ -45,6 +45,7 @@ class KoZoomHandler;
 class KPresenterDoc;
 class KPTextObject;
 class KoTextObject;
+class KoOasisContext;
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -123,7 +124,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&oasisStyles,  QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  QDomElement *animation);
 
     virtual void flip(bool horizontal );
 
@@ -349,7 +350,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&oasisStyles, QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );
 protected:
@@ -417,7 +418,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack, KoOasisStyles&oasisStyles, QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
 
     virtual void flip(bool horizontal );
 

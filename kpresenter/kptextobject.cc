@@ -45,6 +45,7 @@
 #include "KPTextViewIface.h"
 #include "KPTextObjectIface.h"
 #include <kooasiscontext.h>
+#include <koStyleStack.h>
 
 #include <qfont.h>
 
@@ -205,12 +206,11 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
 }
 
 void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context,
-                             const KoStyleStack &styleStack, // ### remove, part of context
-                             KoOasisStyles&oasisStyles, // ### remove, part of context
                              QDomElement *animation )
 {
-    KP2DObject::loadOasis(element, styleStack, oasisStyles, animation);
+    KP2DObject::loadOasis(element, context, animation);
     //todo other attribute
+    KoStyleStack styleStack = context.styleStack();
     if( styleStack.hasAttribute( "fo:padding-top" ) )
         btop = KoUnit::parseValue( styleStack.attribute( "fo:padding-top" ) );
     if( styleStack.hasAttribute( "fo:padding-bottom" ) )

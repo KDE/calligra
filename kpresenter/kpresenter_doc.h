@@ -534,8 +534,8 @@ protected:
 
     void saveUsedSoundFileToStore( KoStore *_store, QStringList _list );
     void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list );
-    void addStyles( const QDomElement* style, KoOasisStyles& oasisStyles );
-    void fillStyleStack( const QDomElement& object, KoOasisStyles& oasisStyles );
+    void addStyles( const QDomElement* style, KoOasisContext & context );
+    void fillStyleStack( const QDomElement& object, KoOasisContext & context );
     void createPresentationAnimation(const QDomElement& element);
 
     // ************ variables ************

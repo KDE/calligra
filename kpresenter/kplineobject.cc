@@ -22,6 +22,8 @@
 #include "kpresenter_utils.h"
 #include "KPLineObjectIface.h"
 #include "koPointArray.h"
+#include <koStyleStack.h>
+#include <kooasiscontext.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -74,9 +76,9 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack,KoOasisStyles&oasisStyles, QDomElement *animation)
+void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
-    KPShadowObject::loadOasis(element, styleStack,oasisStyles, animation);
+    KPShadowObject::loadOasis(element, context, animation);
     double x1 = KoUnit::parseValue( element.attribute( "svg:x1" ) );
     double y1 = KoUnit::parseValue( element.attribute( "svg:y1" ) );
     double x2 = KoUnit::parseValue( element.attribute( "svg:x2" ) );
@@ -99,6 +101,7 @@ void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & st
     else
         lineType=LT_LD_RU;
     QString attr = (x1 < x2) ?  "draw:marker-start" : "draw:marker-end";
+    KoStyleStack styleStack = context.styleStack();
     if ( styleStack.hasAttribute( attr ) )
     {
         QString type = styleStack.attribute( attr );
