@@ -647,21 +647,21 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
  : QObject( box->parent(), name )
 {
     m_pView=_view;
+    KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::global()->config();
     QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
     gbDocumentDefaults->setMargin( 10 );
     gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
 
     double ptColumnSpacing=3;
-    KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
+    KoUnit::Unit unit = doc->getUnit();
     QString unitType=KoUnit::unitName(unit);
-    QString defaultFont="Sans serif,12,-1,5,50,0,0,0,0,0";
     if( config->hasGroup("Document defaults") )
     {
         config->setGroup( "Document defaults" );
         unitType=config->readEntry("Units",unitType);
         ptColumnSpacing=config->readDoubleNumEntry("ColumnSpacing",ptColumnSpacing);
-        defaultFont=config->readEntry("DefaultFont",defaultFont);
+        // loaded by kwdoc already defaultFont=config->readEntry("DefaultFont",defaultFont);
     }
 
     QString suffix = unitType.prepend(' ');
@@ -683,8 +683,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     QLabel *fontTitle = new QLabel(i18n("Default font:"), fontContainer);
 
-    font= new QFont();
-    font->fromString(defaultFont);
+    font= new QFont( doc->defaultFont() );
+    font->setPointSize( KoTextZoomHandler::layoutUnitPtToPt( font->pointSize() ) );
 
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);
@@ -720,7 +720,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
 
-    KWDocument * doc = m_pView->kWordDocument();
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
     m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
