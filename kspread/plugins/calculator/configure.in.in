@@ -2,7 +2,7 @@ AC_CHECK_HEADERS(ieeefp.h)
 
 AC_CHECK_FUNCS(fabsl)
 
-AC_DEFUN(KDE_C_LONG_DOUBLE,
+AC_DEFUN([KDE_C_LONG_DOUBLE],
 [
   AC_CACHE_CHECK(for long double, ac_cv_c_long_double,
   [

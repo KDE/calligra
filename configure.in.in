@@ -58,7 +58,7 @@ AC_SUBST(LIBMAGICK_RPATH)
 # also defines GSTUFF_PKG_ERRORS on error
 # Note: This is specially tweaked for karbon's fontconfig check. Please fix
 # it before using it for other tests :-)
-AC_DEFUN(KOFFICE_PKG_CHECK_MODULES, [
+AC_DEFUN([KOFFICE_PKG_CHECK_MODULES], [
   succeeded=no
 
   if test -z "$PKG_CONFIG"; then
