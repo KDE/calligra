@@ -53,7 +53,7 @@ KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCStr
     if ( to != "image/png" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;
 
-    KoStore in = KoStore(QString(m_chain->inputFile()), KoStore::Read);
+    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
     if(!in.open("root")) {
         kapp->restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "PNG export error" ) );
