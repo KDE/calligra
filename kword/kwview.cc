@@ -169,6 +169,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
 
+    connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+             actionChangeCase, SLOT(setEnabled(bool)));
+
     connect( m_gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
              this, SLOT(frameSelectedChanged()));
 
@@ -2913,6 +2916,7 @@ void KWView::slotFrameSetEditChanged()
     actionEditCut->setEnabled( hasSelection && rw );
     actionEditCopy->setEnabled( hasSelection );
     actionFormatDefault->setEnabled( hasSelection && rw);
+    actionChangeCase->setEnabled( hasSelection && rw);
     clipboardDataChanged(); // for paste
 
     bool state = (edit != 0L) && rw;
