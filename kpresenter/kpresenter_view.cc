@@ -365,7 +365,7 @@ void KPresenterView_impl::screenConfigPages()
       pgConfDia = 0;
     }
   pgConfDia = new PgConfDia(0,"PageConfig",KPresenterDoc()->spInfinitLoop(),
-			    KPresenterDoc()->spManualSwitch());
+			    KPresenterDoc()->spManualSwitch(),getCurrPgNum());
   pgConfDia->setMaximumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setMinimumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setCaption("KPresenter - Page Configuration for Screenpresentations");

@@ -16,6 +16,8 @@
 #ifndef PGCONFDIA_H
 #define PGCONFDIA_H
 
+#include <stdio.h>
+
 #include <qdialog.h>
 #include <qlabel.h>
 #include <qpushbt.h>
@@ -38,7 +40,7 @@ public:
 
   // constructor - destructor
   PgConfDia(QWidget* parent=0,const char* name=0,
-	    bool infLoop=false,bool swMan=true);
+	    bool infLoop=false,bool swMan=true,int pgNum=1);
   ~PgConfDia();                                             
   bool getInfinitLoop() {return infinitLoop->isChecked();}
   bool getManualSwitch() {return manualSwitch->isChecked();}

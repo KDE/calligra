@@ -158,7 +158,7 @@ protected:
   bool drawBack;                  
   GraphObj *graphPtr;
   KPresenterView_impl *view;
-  bool editMode;
+  bool editMode,goingBack;
   unsigned int currPresPage,currPresStep,subPresStep;
   float _presFakt;
   QList<int> presStepList;

@@ -43,6 +43,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       currPresStep = 0;
       subPresStep = 0;
       _presFakt = 1.0;
+      goingBack = false;
     }
   else 
     {
@@ -236,7 +237,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	      } break;
 	    case OT_TEXT: /* text */
 	      {
-		if (!editMode)
+		if (!editMode && currPresStep == objPtr->presNum && !goingBack)
 		  {
 		    switch (objPtr->effect2)
 		      {
@@ -1203,6 +1204,7 @@ void Page::stopScreenPresentation()
       restoreBackColor(i);
     }
 
+  goingBack = false;
   currPresPage = 1;
   editMode = true;
   drawBack = true;
@@ -1212,6 +1214,11 @@ void Page::stopScreenPresentation()
 /*========================== next ================================*/
 bool Page::pNext(bool manual)
 {
+  bool addSubPres = false;
+  bool clearSubPres = false;
+
+  goingBack = false;
+
   if ((int*)currPresStep < presStepList.last())
     {
 
@@ -1222,18 +1229,23 @@ bool Page::pNext(bool manual)
 	      && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
 	    {
 	      if (subPresStep < objPtr->textObj->paragraphs()-1)
-		{
-		  subPresStep++;
-		  drawBack = false;
-		  repaint(drawBack);
-		  drawBack = true;
-		  return false;
-		}
+		addSubPres = true;
 	      else
-		subPresStep = 0;
+		clearSubPres = true;
 	    }
 	}
       
+      if (addSubPres)
+	{
+	  subPresStep++;
+	  drawBack = false;
+	  repaint(drawBack);
+	  drawBack = true;
+	  return false;
+	}
+      else if (clearSubPres)
+	subPresStep = 0;
+
       presStepList.find((int*)currPresStep);
       currPresStep = (int)presStepList.next();
       drawBack = false;
@@ -1254,13 +1266,19 @@ bool Page::pNext(bool manual)
 		{
 		  if (subPresStep < objPtr->textObj->paragraphs()-1)
 		    {
-		      subPresStep++;
-		      drawBack = false;
-		      repaint(drawBack);
-		      drawBack = true;
-		      return false;
+		      if (subPresStep < objPtr->textObj->paragraphs()-1)
+			addSubPres = true;
 		    }
 		}
+	    }
+
+	  if (addSubPres)
+	    {
+	      subPresStep++;
+	      drawBack = false;
+	      repaint(drawBack);
+	      drawBack = true;
+	      return false;
 	    }
 
 	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
@@ -1278,17 +1296,22 @@ bool Page::pNext(bool manual)
 	      && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
 	    {
 	      if (subPresStep < objPtr->textObj->paragraphs()-1)
-		{
-		  subPresStep++;
-		  drawBack = false;
-		  repaint(drawBack);
-		  drawBack = true;
-		  return false;
-		}
+		addSubPres = true;
 	      else
-		subPresStep = 0;
+		clearSubPres = true;
 	    }
 	}
+
+      if (addSubPres)
+	{
+	  subPresStep++;
+	  drawBack = false;
+	  repaint(drawBack);
+	  drawBack = true;
+	  return false;
+	}
+      else if (clearSubPres)
+	subPresStep = 0;
 
       currPresPage++;
       presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
@@ -1301,6 +1324,9 @@ bool Page::pNext(bool manual)
 /*====================== previous ================================*/
 bool Page::pPrev(bool manual)
 {
+  goingBack = true;
+  subPresStep = 0;
+
   if ((int*)currPresStep > presStepList.first())
     {
       presStepList.find((int*)currPresStep);
