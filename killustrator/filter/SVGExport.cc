@@ -67,7 +67,7 @@ bool SVGExport::setup (GDocument *, const char*) {
 bool SVGExport::exportToFile (GDocument* doc) {
 
     QDomDocument document("svg");
-    document.doctype().setPublicId("svg PUBLIC \"-//W3C//DTD SVG December 1999//EN\"\n\"http:://www.w3.org/Graphics/SVG/SVG-19991203.dtd\"");
+    //document.doctype().setPublicId("svg PUBLIC \"-//W3C//DTD SVG December 1999//EN\"\n\"http:://www.w3.org/Graphics/SVG/SVG-19991203.dtd\"");
 
     QDomElement svg=document.createElement("svg");
     svg.setAttribute("width", doc->getPaperWidth());
