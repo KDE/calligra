@@ -28,6 +28,8 @@
 #include <qfile.h>
 #include <qstring.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
     : m_pSpawners(NULL),
@@ -162,63 +164,49 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
 
 QString KivioStencilSpawnerSet::readTitle( const QString &dir )
 {
-   QDomDocument d("StencilSPawnerSet");
-   QDomElement root;
-   QDomNode node;
-   QString nodeName;
-   QString title;
-   QFile f(dir+"/desc");
+  QDomDocument d("StencilSPawnerSet");
+  QDomElement root, nodeElement;
+  QDomNode node;
+  QString nodeName;
+  QString title, origTitle;
+  QFile f(dir+"/desc");
 
-   if( f.open( IO_ReadOnly )==false )
-   {
-      kdDebug(43000) << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set description: " <<
-	 dir << "/desc" << endl;
-      return dir.right(dir.length() - dir.findRev('/')-1);
-   }
+  if( f.open( IO_ReadOnly )==false )
+  {
+    kdDebug(43000) << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set description: " <<
+        dir << "/desc" << endl;
+    return dir.right(dir.length() - dir.findRev('/')-1);
+  }
 
-   d.setContent(&f);
+  d.setContent(&f);
 
-   root = d.documentElement();
-   node = root.firstChild();
+  root = d.documentElement();
+  node = root.firstChild();
 
-   while( !node.isNull() )
-   {
-      nodeName = node.nodeName();
+  while( !node.isNull() )
+  {
+    nodeName = node.nodeName();
+    nodeElement = node.toElement();
 
-      if( nodeName.compare("Title")==0 )
-      {
-	 title = XmlReadString( node.toElement(), "data", dir );
-	 return title;
+    if( nodeName.compare("Title")==0 && nodeElement.hasAttribute("lang"))
+    {
+      if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
+        title = XmlReadString( nodeElement, "data", dir );
       }
-   }
+    }
+    else if( nodeName.compare("Title")==0 && !nodeElement.hasAttribute("lang"))
+    {
+      origTitle = XmlReadString( nodeElement, "data", dir );
+    }
+  
+    node = node.nextSibling();
+  }
 
-   kdDebug(43000) << "KivioStencilSpawnerSet::readTitle() - No title found in "
-	     << dir << "/desc" << endl;
-
-   return "";
-
-/*
-    int pos;
-
-    QFile file( dir + "/desc" );
-
-    if( file.exists()==false )
-        return "Unknown";
-
-    if( file.open( IO_ReadOnly )==false )
-        return "Unknown";
-
-    QString ret;
-
-    file.readLine( ret, 128 );
-    file.close();
-
-    pos = ret.find( '\n' );
-    if( pos!=-1 )
-        ret.truncate( pos );
-
-    return ret;
-*/
+  if(title.isEmpty()) {
+    title = origTitle;
+  }
+  
+  return title;
 }
 
 QString KivioStencilSpawnerSet::readId( const QString &dir )

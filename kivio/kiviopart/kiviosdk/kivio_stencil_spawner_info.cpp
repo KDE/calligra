@@ -56,8 +56,8 @@ bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
   QDomNode node;
   QDomElement nodeElement;
   QString nodeName, origTitle, origDesc;
-  bool foundTitleTranslation = false;
-  bool foundDescTranslation = false;
+  m_title = "";
+  m_desc = "";
 
   node = e.firstChild();
   while(!node.isNull())
@@ -74,7 +74,6 @@ bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
     {
       if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
         m_title = nodeElement.attribute("data");
-        foundTitleTranslation = true;
       }
     }
     else if((nodeName.compare("Title")==0) && !nodeElement.hasAttribute("lang"))
@@ -89,7 +88,6 @@ bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
     {
       if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
         m_desc = nodeElement.attribute("data");
-        foundDescTranslation = true;
       }
     }
     else if((nodeName.compare("Description")==0) && !nodeElement.hasAttribute("lang"))
@@ -113,11 +111,11 @@ bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
       m_autoUpdate = nodeElement.attribute("data");
     }
     
-    if(!foundTitleTranslation) {
+    if(m_title.isEmpty()) {
       m_title = origTitle;
     }
     
-    if(!foundDescTranslation) {
+    if(m_desc.isEmpty()) {
       m_desc = origDesc;
     }
 
