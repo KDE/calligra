@@ -23,6 +23,7 @@
 class QString;
 class QStringList;
 #include <qvaluelist.h>
+#include <qcolor.h>
 
 class AmiProFormat
 {
@@ -31,6 +32,9 @@ class AmiProFormat
     bool bold, italic, underline;
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
+    QString fontFamily;
+    float fontSize;
+    QColor fontColor;
     enum { Left, Right, Center, Justified } align;
     AmiProFormat();
     AmiProFormat( const AmiProFormat& );
@@ -43,6 +47,13 @@ typedef QValueList<AmiProFormat> AmiProFormatList;
 class AmiProLayout
 {
   public:
+    QString name;
+    QString fontFamily;
+    float fontSize;
+    QColor fontColor;
+    bool bold, italic, underline;
+    bool word_underline, double_underline;
+    bool subscript, superscript, strikethrough;
     enum { Left, Center, Right, Justify } align;
     AmiProLayout();
     AmiProLayout( const AmiProLayout& );
@@ -56,6 +67,10 @@ class AmiProStyle
     QString name;
     QString fontFamily;
     float fontSize;
+    QColor fontColor;
+    bool bold, italic, underline;
+    bool word_underline, double_underline;
+    bool subscript, superscript, strikethrough;
     AmiProStyle();
     AmiProStyle( const AmiProStyle& );
     AmiProStyle& operator=( const AmiProStyle& );

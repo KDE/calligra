@@ -63,20 +63,24 @@ static QString AmiProFormatAsXML( AmiProFormat format )
 {
   QString result;
 
-  if( format.bold ) result.append("<WEIGHT value=\"75\" />\n" );
-  if( format.italic ) result.append( "<ITALIC value=\"1\" />\n" );
-  if( format.underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
-  if( format.strikethrough ) result.append( "<STRIKEOUT value=\"1\" />\n" );
-  if( format.subscript ) result.append( "<VERTALIGN value=\"1\" />\n" );
-  if( format.superscript ) result.append( "<VERTALIGN value=\"2\" />\n" );
+  QString fontname = format.fontFamily;
+  if( fontname.isEmpty() ) fontname = KoGlobal::defaultFont().family();
+  QString fontsize = QString::number( format.fontSize );
+  QString boldness = format.bold ? "75" : "50";
+  QString italic = format.italic ? "1" : "0";
+  QString strikeout = format.strikethrough ? "1" : "0";
+  QString vertalign = format.superscript ? "2" : format.subscript ? "1" : "0";
+  QString underline = format.underline|format.word_underline|format.double_underline ? "1" : "0";
 
-  // both word underline and double underline still treat as underline
-  // just wait until KWord has these features
-  if( format.word_underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
-  if( format.double_underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
-
-  result.prepend("<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
-    "\" len=\"" + QString::number(format.len) + "\">\n");
+  result = "<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
+     "\" len=\"" + QString::number(format.len) + "\">\n";
+  result.append( "  <FONT name=\"" + fontname + "\" />\n" );
+  result.append( "  <SIZE value=\"" + fontsize + "\" />\n" );
+  result.append( "  <WEIGHT value=\"" + boldness + "\" />\n" );
+  result.append( "  <ITALIC value=\"" + italic  + "\" />\n" );
+  result.append( "  <STRIKEOUT value=\"" + strikeout + "\" />\n" );
+  result.append( "  <VERTALIGN value=\"" + vertalign + "\" />\n" );
+  result.append( "  <UNDERLINE value=\"" + underline + "\" />\n" );
   result.append( "</FORMAT>\n" );
 
   return result;
@@ -94,8 +98,11 @@ static QString AmiProFormatListAsXML( AmiProFormatList& formatList )
     result.append( AmiProFormatAsXML(format) );
   }
 
-  result.prepend( "<FORMATS>\n" );
-  result.append( "</FORMATS>\n" );
+  if( !result.isEmpty() )
+  {
+    result.prepend( "<FORMATS>\n" );
+    result.append( "</FORMATS>\n" );
+  }
 
   return result;
 }
@@ -104,6 +111,18 @@ static QString AmiProFormatListAsXML( AmiProFormatList& formatList )
 static QString AmiProLayoutAsXML( const AmiProLayout& layout )
 {
   QString result;
+
+  QString referredStyle = layout.name;
+  if( referredStyle.isEmpty() ) referredStyle = "Standard";
+
+  QString fontname = layout.fontFamily;
+  if( fontname.isEmpty() ) fontname = KoGlobal::defaultFont().family();
+  QString fontsize = QString::number( layout.fontSize );
+  QString boldness = layout.bold ? "75" : "50";
+  QString italic = layout.italic ? "1" : "0";
+  QString strikeout = layout.strikethrough ? "1" : "0";
+  QString vertalign = layout.superscript ? "2" : layout.subscript ? "1" : "0";
+  QString underline = layout.underline|layout.word_underline|layout.double_underline ? "1" : "0";
 
   QString align;
   align = layout.align==AmiProLayout::Left ? "left" :
@@ -117,7 +136,7 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
   int fontSize = font.pointSize();
 
   result.append( "<LAYOUT>\n" );
-  result.append( "  <NAME value=\"Standard\" />\n" );
+  result.append( "  <NAME value=\"" + referredStyle + "\" />\n" );
   result.append( "  <FLOW align=\"" + align + "\" />\n" );
   result.append( "  <LINESPACING value=\"0\" />\n" );
   result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
@@ -129,14 +148,11 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
   result.append( "  <PAGEBREAKING />\n" );
   result.append( "  <COUNTER />\n" );
   result.append( "  <FORMAT id=\"1\">\n" );
-  result.append( "    <SIZE value=\"" + QString::number(fontSize) + "\" />\n" );
-  result.append( "    <WEIGHT value=\"50\" />\n" );
-  result.append( "    <ITALIC value=\"0\" />\n" );
-  result.append( "    <UNDERLINE value=\"0\" />\n" );
-  result.append( "    <STRIKEOUT value=\"0\" />\n" );
-  result.append( "    <CHARSET value=\"0\" />\n" );
-  result.append( "    <VERTALIGN value=\"0\" />\n" );
-  result.append( "    <FONT name=\"" + fontFamily + "\" />\n" );
+  result.append( "    <WEIGHT value=\"" + boldness + "\" />\n" );
+  result.append( "    <ITALIC value=\"" + italic  + "\" />\n" );
+  result.append( "    <STRIKEOUT value=\"" + strikeout + "\" />\n" );
+  result.append( "    <VERTALIGN value=\"" + vertalign + "\" />\n" );
+  result.append( "    <UNDERLINE value=\"" + underline + "\" />\n" );
   result.append( "  </FORMAT>\n" );
   result.append( "</LAYOUT>\n" );
 
@@ -148,15 +164,32 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
 {
   QString result;
 
+  QString fontname = style.fontFamily;
+  if( fontname.isEmpty() ) fontname = KoGlobal::defaultFont().family();
+  QString fontsize = QString::number( style.fontSize );
+  QString boldness = style.bold ? "75" : "50";
+  QString italic = style.italic ? "1" : "0";
+  QString strikeout = style.strikethrough ? "1" : "0";
+  QString vertalign = style.superscript ? "2" : style.subscript ? "1" : "0";
+  QString underline = style.underline|style.word_underline|style.double_underline ? "1" : "0";
+
   result.append( "<STYLE>\n" );
-  result.append( "<NAME value=\"" + style.name + "\" />\n" );
-  result.append( "<FLOW align=\"left\" />\n" );
+  result.append( "  <NAME value=\"" + style.name + "\" />\n" );
   result.append( "  <FOLLOWING name=\"Standard\" />\n" );
-  result.append( "  <FORMAT id=\"1\" >\n" );
-  result.append( "  <WEIGHT value=\"50\" />\n" );
-  result.append( "  <FONT name=\"" + style.fontFamily + "\" />\n" );
-  result.append( "  <SIZE value=\"" + QString::number(style.fontSize) + "\" />\n" );
-  result.append( "   </FORMAT>\n" );
+  result.append( "  <LINESPACING value=\"0\" />\n" );
+  result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <FORMAT id=\"1\">\n" );
+  result.append( "    <FONT name=\"" + fontname + "\" />\n" );
+  result.append( "    <SIZE value=\"" + fontsize + "\" />\n" );
+  result.append( "    <WEIGHT value=\"" + boldness + "\" />\n" );
+  result.append( "    <ITALIC value=\"" + italic  + "\" />\n" );
+  result.append( "    <STRIKEOUT value=\"" + strikeout + "\" />\n" );
+  result.append( "    <VERTALIGN value=\"" + vertalign + "\" />\n" );
+  result.append( "    <UNDERLINE value=\"" + underline + "\" />\n" );
+  result.append( "  </FORMAT>\n" );
   result.append( "</STYLE>\n" );
 
   return result;
@@ -174,8 +207,11 @@ static QString AmiProStyleListAsXML( AmiProStyleList& styleList )
     result.append( AmiProStyleAsXML( style ) );
   }
 
-  result.prepend ( "<STYLES>\n" );
-  result.append( "</STYLES>\n" );
+  if( !result.isEmpty() )
+  {
+    result.prepend ( "<STYLES>\n" );
+    result.append( "</STYLES>\n" );
+  }
 
   return result; 
 }

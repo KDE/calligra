@@ -1,7 +1,7 @@
 Lotus AmiPro File Format (NOT FINISHED YET)
 
 Ariya Hidayat <ariyahidayat@yahoo.de>
-Last rev: February 27, 2002
+Last rev: March 16, 2002
 
 1  Foreword
 -----------
@@ -42,11 +42,17 @@ The following list summarizes known formmating tags:
 Note: Word underline is just like underline, except that
 spaces between words are not underlined.
 
-Paragrah align is also encoded using tag, here it the list:
+Paragraph align is also encoded using tag, here it the list:
   <+@> left alignment
   <+A> right alignment
   <+B> center alignment
   <+C> justified
+
+Linespacing is encoded using tag:
+  <:S+-1> single
+  <:S+-2> one-and-half
+  <:S+-3> double
+  <:S+480> custom, 480/20 = 24 pt
 
 Special characters are escaped or encoded because 
 they have special meaning. Known so far: 
@@ -57,11 +63,89 @@ they have special meaning. Known so far:
 
 4  Styles
 ---------
-Styles are defined in the header. More about this will be
-examined later.
+Styles are defined in the header, precisely in section
+[tag]. The format for this section is shown with an
+example below:
+
+ [tag]
+     Title          ---> style name
+     8              ---> shortcut key ("F8")
+     [fnt]
+         Arial      ---> font family ("Arial")
+         360        ---> font size, 360/20 = 18 pt
+         0          ---> font color (see below)
+         16385      ---> formatting flag (see below)
+     [algn]
+         4
+         1
+         0
+         0
+         0
+     [spc]
+         33
+         432
+         1
+         144        ---> space before, 144/20 = 7.2 pt
+         72         ---> space after, 72/20 = 3.6 pt
+         1
+         100
+     [brk]
+                16
+        [line]
+                8
+                0
+                1
+                0
+                1
+                1
+                1
+                10
+                10
+                1
+
+        [spec]
+                0
+                1
+
+                0
+                1
+                1
+                0
+                0
+                0
+                0
+        [nfmt]
+                272
+                1
+                2
+                .
+                ,
+                </c>
+        Title
+        0
+        0
+
+
+Color Representation:
+  bit 0-7   : red 
+  bit 8-15  : green
+  bit 16-23 : blue
+
+Formatting flag (16 bit)
+  bit 0  : bold
+  bit 1  : italic
+  bit 2  : underline
+  bit 3  : word underline
+  bit 4  : all caps
+  bit 6  : double underline
+  bit 11 : initial caps
+  bit 12 : first line bold
+  bit 14 & 15 always set (??)
+
 
 Styles are applied using the following sequences:
 @StyleName@, which put inline (within the text/content).
+Normally this appears in beginning of paragraph.
 
 5  Frame, Image, Table
 ----------------------

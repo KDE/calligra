@@ -215,8 +215,13 @@ bool AmiProParser::parseParagraph( const QString& partext )
         } 
 
       else
-      for( i++; (i < partext.length()) && 
-         (partext[i] != '@'); i++);
+      {
+        // apply style
+        QString styleName;
+        for( i++; (i < partext.length()) && (partext[i] != '@'); i++)
+          styleName += partext[i];
+        m_layout.name = styleName;
+      }
     }
 
      else 
@@ -241,6 +246,9 @@ bool AmiProParser::parseParagraph( const QString& partext )
   if( m_listener ) 
     return m_listener->doParagraph( m_text, m_formatList, m_layout );
 
+  // reinit layout for subsequent paragraph
+  m_layout = AmiProLayout();
+
   return true;
 }
 
@@ -254,6 +262,16 @@ bool AmiProParser::parseStyle( const QStringList& lines )
   if( lines[2].stripWhiteSpace() != "[fnt]" ) return true;
   style.fontFamily = lines[3].stripWhiteSpace();
   style.fontSize = lines[4].stripWhiteSpace().toFloat();
+
+  unsigned color = lines[5].stripWhiteSpace().toUInt();
+  style.fontColor.setRgb( color&255, (color>>8)&255, (color>>16)&255);
+
+  unsigned flag = lines[6].stripWhiteSpace().toUInt();
+  style.bold = flag & 1;
+  style.italic = flag & 2;
+  style.underline = flag & 4;
+  style.word_underline = flag & 8;
+  style.double_underline = flag & 64;
 
   m_styleList.append( style );
   if( m_listener )
@@ -425,6 +443,9 @@ AmiProFormat::AmiProFormat()
   bold = italic = underline = 
   word_underline = double_underline = 
   subscript = superscript = strikethrough = FALSE;
+  fontFamily = "";
+  fontSize = 12;
+  fontColor = Qt::black;
 }
 
 void AmiProFormat::assign( const AmiProFormat& f )
@@ -439,6 +460,9 @@ void AmiProFormat::assign( const AmiProFormat& f )
   subscript = f.subscript;
   superscript = f.superscript;
   strikethrough = f.strikethrough;
+  fontFamily = f.fontFamily;
+  fontSize = f.fontSize;
+  fontColor = f.fontColor;
 }
 
 AmiProFormat::AmiProFormat( const AmiProFormat& f )
@@ -455,11 +479,30 @@ AmiProFormat& AmiProFormat::operator=(  const AmiProFormat& f )
 // paragraph layout
 AmiProLayout::AmiProLayout()
 {
+  name = "Standard";
+  fontFamily = "";
+  fontSize = 12;
+  fontColor = Qt::black;
+  bold = italic = underline = 
+  word_underline = double_underline = 
+  subscript = superscript = strikethrough = FALSE;
   align = Left;
 }
 
 void AmiProLayout::assign( const AmiProLayout &l )
 {
+  name = l.name;
+  fontFamily = l.fontFamily;
+  fontSize = l.fontSize;
+  fontColor = l.fontColor;
+  bold = l.bold;
+  italic = l.italic;
+  underline = l.underline;
+  word_underline = l.word_underline;
+  double_underline = l.double_underline;
+  subscript = l.subscript;
+  superscript = l.superscript;
+  strikethrough = l.strikethrough;
   align = l.align;
 }
 
@@ -478,6 +521,12 @@ AmiProLayout& AmiProLayout::operator=( const AmiProLayout& l )
 AmiProStyle::AmiProStyle()
 {
   name = "Unnamed";
+  fontFamily = "";
+  fontSize = 12;
+  fontColor = Qt::black;
+  bold = italic = underline = 
+  word_underline = double_underline = 
+  subscript = superscript = strikethrough = FALSE;
 }
 
 void AmiProStyle::assign( const AmiProStyle& s )
@@ -485,6 +534,15 @@ void AmiProStyle::assign( const AmiProStyle& s )
   name = s.name;
   fontFamily = s.fontFamily;
   fontSize = s.fontSize;
+  fontColor = s.fontColor;
+  bold = s.bold;
+  italic = s.italic;
+  underline = s.underline;
+  word_underline = s.word_underline;
+  double_underline = s.double_underline;
+  subscript = s.subscript;
+  superscript = s.superscript;
+  strikethrough = s.strikethrough;
 }
 
 AmiProStyle::AmiProStyle( const AmiProStyle& s )
