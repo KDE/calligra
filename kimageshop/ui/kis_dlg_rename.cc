@@ -18,11 +18,12 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qpushbutton.h>
+#include <qhbox.h>
 #include <qlabel.h>
+#include <qstring.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qstring.h>
+#include <qpushbutton.h>
 
 #include <kstddirs.h>
 #include <klocale.h>
@@ -32,7 +33,7 @@
 KisDlgRename::KisDlgRename(QString oldname, QWidget *parent, const char *name, bool modal, WFlags f)
   : KDialog ( parent, name, modal, f)
 {
-  QGridLayout *layout = new QGridLayout( this, 2, 2, 15, 7 );
+  QGridLayout *layout = new QGridLayout( this, 3, 2, 15, 7 );
 
   m_pEdit = new QLineEdit( oldname, this );
   layout->addWidget( m_pEdit, 0, 1 );
@@ -40,13 +41,18 @@ KisDlgRename::KisDlgRename(QString oldname, QWidget *parent, const char *name, b
   QLabel *label1 = new QLabel( m_pEdit, i18n( "Name" ), this );
   layout->addWidget( label1, 0, 0 );
 
-  QPushButton *pbOk = new QPushButton( i18n( "Ok" ), this );
+  layout->setRowStretch( 1, 1 );
+
+  QHBox *buttons = new QHBox( this );
+  layout->addMultiCellWidget( buttons, 2, 2, 0, 1 );
+
+  (void) new QWidget( buttons );
+
+  QPushButton *pbOk = new QPushButton( i18n( "Ok" ), buttons );
   pbOk->setDefault( true );
-  layout->addWidget( pbOk, 1, 0 );
   QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-  QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), this );
-  layout->addWidget( pbCancel, 1, 1 );
+  QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons );
   QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
