@@ -250,8 +250,8 @@ void KSpreadTabBar::slotAdd()
 
 void KSpreadTabBar::paintEvent( QPaintEvent* )
 {
-  if(!m_pView->doc()->getShowTabBar())
-    return;
+  /* if(!m_pView->doc()->getShowTabBar())
+     return;*/
  
    if ( tabsList.count() == 0 )
     {
@@ -413,9 +413,9 @@ void KSpreadTabBar::slotRename()
 
 void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 {
-  if(!m_pView->doc()->getShowTabBar())
+  /*  if(!m_pView->doc()->getShowTabBar())
     return;
-
+  */
     int old_active = activeTab;
 
     if ( tabsList.count() == 0 )
@@ -475,7 +475,7 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
 {
 
-    if ( !m_pView->koDocument()->isReadWrite()|| !m_pView->doc()->getShowTabBar())
+    if ( !m_pView->koDocument()->isReadWrite()/*|| !m_pView->doc()->getShowTabBar()*/)
         return;
 
     if ( _ev->button() == LeftButton && m_moveTab != 0 )
@@ -522,7 +522,7 @@ void KSpreadTabBar::slotAutoScroll( )
 void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 {
 
-    if ( !m_pView->koDocument()->isReadWrite()||!m_pView->doc()->getShowTabBar() )
+  if ( !m_pView->koDocument()->isReadWrite()/*||!m_pView->doc()->getShowTabBar()*/ )
          return;
     if ( m_moveTabFlag == 0)
         return;

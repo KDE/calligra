@@ -1876,21 +1876,39 @@ void KSpreadView::refreshView()
     // be changed, too.
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
     int top = 30;
+    //repaint to show/hide tabbar
     m_pTabBar->repaint();
 
     m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
-    m_pTabBarFirst->show();
     m_pTabBarLeft->setGeometry( 16, height() - 16, 16, 16 );
-    m_pTabBarLeft->show();
     m_pTabBarRight->setGeometry( 32, height() - 16, 16, 16 );
-    m_pTabBarRight->show();
     m_pTabBarLast->setGeometry( 48, height() - 16, 16, 16 );
-    m_pTabBarLast->show();
+
+    if(m_pDoc->getShowTabBar())
+      {
+	m_pTabBarFirst->show();
+	m_pTabBarLeft->show();
+	m_pTabBarRight->show();
+	m_pTabBarLast->show();
+      }
+    else
+      {
+	m_pTabBarFirst->hide();
+	m_pTabBarLeft->hide();
+	m_pTabBarRight->hide();
+	m_pTabBarLast->hide();
+      }
+
+
+
     if(!m_pDoc->getShowHorizontalScrollBar())
         m_pTabBar->setGeometry( 64, height() - 16, width() -64, 16 );
     else
         m_pTabBar->setGeometry( 64, height() - 16, width() / 2 - 64, 16 );
-    m_pTabBar->show();
+     if(m_pDoc->getShowTabBar())
+       m_pTabBar->show();
+     else
+       m_pTabBar->hide();
 
     // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
     int widthScrollbarVertical=16;
@@ -1931,7 +1949,10 @@ void KSpreadView::refreshView()
     m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical, 16 );
     m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
 
-    m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical, height() - 16 - top );
+    if(!m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
+      m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical, height()  - top );
+    else
+      m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical, height() -16 - top );
     m_pFrame->show();
 
     m_pCanvas->setGeometry( widthRowHeader, heightColHeader,

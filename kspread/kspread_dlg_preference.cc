@@ -299,9 +299,15 @@ if( m_pView->vBorderWidget()->isVisible()!=showRowHeader->isChecked())
         m_pView->doc()->setShowRowHeader(showRowHeader->isChecked());
         }
 
-
- config->writeEntry( "Tabbar", showTabBar->isChecked());
- m_pView->doc()->setShowTabBar(showTabBar->isChecked());
+ if(m_pView->tabBar()->isVisible()!=showTabBar->isChecked())
+   {
+     config->writeEntry( "Tabbar", showTabBar->isChecked());
+     if(showTabBar->isChecked())
+       m_pView->tabBar()->show();
+     else
+       m_pView->tabBar()->hide();
+     m_pView->doc()->setShowTabBar(showTabBar->isChecked());
+   }
 }
 
 
