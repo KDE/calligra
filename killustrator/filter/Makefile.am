@@ -4,6 +4,6 @@ CXXFLAGS = -Wall -O2
 
 noinst_LIBRARIES = libfilter.a
 
-noinst_HEADERS = ImageExport.h gif.h EPSExport.h
+noinst_HEADERS = FilterManager.h ImageExport.h gif.h EPSExport.h KilluImport.h
 
-libfilter_a_SOURCES = ImageExport.cc gif.cc EPSExport.cc
+libfilter_a_SOURCES = FilterManager.cc ImageExport.cc gif.cc EPSExport.cc KilluImport.cc
