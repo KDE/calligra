@@ -340,7 +340,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   gotoLocation( _cell.pos.x(), _cell.pos.y(), table );
 }
 
-void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select )
+void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select,bool move_into_area )
 {
   //kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
   //  " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
@@ -381,7 +381,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
 
   if ( !make_select )
   {
-    if ( selection.left() != 0 )
+    if ( selection.left() != 0 && !move_into_area)
       activeTable()->unselect();
     setMarker( QPoint( x, y ) );
   }
@@ -1245,6 +1245,31 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   {
     case Key_Return:
     case Key_Enter:
+      if ( !m_bChoose && markerRow() == 0xFFFF )
+        return;
+      if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
+        return;
+
+      if ( m_bChoose )
+        chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
+      else
+        {
+        QRect selection = activeTable()->selectionRect();
+        if(selection.left()==0)
+                gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select );
+        else
+                {
+                if(markerColumn()<selection.right()&&markerRow()<selection.bottom() )
+                        gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true );
+                else if( markerRow()==selection.bottom() && markerColumn()<selection.right())
+                        gotoLocation( markerColumn()+1, QMIN( 0x7FFF, selection.top() ), 0, make_select,true );
+                else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
+                        gotoLocation( selection.left(), QMIN( 0x7FFF, selection.top() ), 0, make_select,true );
+                else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
+                        gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true );
+                }
+        }
+      return;
     case Key_Down:
 
       if ( !m_bChoose && markerRow() == 0xFFFF )

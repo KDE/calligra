@@ -236,7 +236,7 @@ public:
      *                    moves the cursor keys. In this case the selection is
      *                    updated accordingly.
      */
-    void gotoLocation( int x, int y, KSpreadTable* table = 0, bool make_select = FALSE );
+    void gotoLocation( int x, int y, KSpreadTable* table = 0, bool make_select = FALSE,bool move_into_area=false);
 
     /**
      * Chooses the correct @ref #EditorType by looking at
