@@ -61,7 +61,7 @@ public:
     /**
      * @returns whether we want to see this element.
      */
-    virtual bool isVisible(const TextElement&) const { return false; }
+    virtual bool isInvisible(const TextElement&) const { return false; }
 
     /**
      * @returns the position of the first character
@@ -201,7 +201,7 @@ public:
     /**
      * @returns whether we want to see this element.
      */
-    virtual bool isVisible( const TextElement& element ) const;
+    virtual bool isInvisible( const TextElement& element ) const;
 
     /**
      * @returns the font to be used for this kind of element

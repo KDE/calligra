@@ -77,7 +77,7 @@ TokenType TextElement::getTokenType() const
 bool TextElement::isInvisible() const
 {
     if (getElementType() != 0) {
-        return getElementType()->isVisible(*this);
+        return getElementType()->isInvisible(*this);
     }
     return false;
 }
