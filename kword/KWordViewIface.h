@@ -74,6 +74,9 @@ k_dcop:
     virtual void sendToBack();
     virtual void applyAutoFormat();
     virtual void createStyleFromSelection();
+
+    virtual void insertFootNote();
+
 private:
     KWView *view;
 

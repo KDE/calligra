@@ -22,7 +22,7 @@
 #include "kwtextframeset.h"
 #include <kapplication.h>
 #include <dcopclient.h>
-
+#include "defs.h"
 KWordTextFrameSetEditIface::KWordTextFrameSetEditIface( KWTextFrameSetEdit *_framesetedit )
     :KoTextViewIface(_framesetedit)
 {
@@ -128,4 +128,16 @@ void KWordTextFrameSetEditIface::insertVariable( const QString & var)
 void KWordTextFrameSetEditIface::insertComment(const QString &_comment)
 {
     m_framesetedit->insertComment(_comment);
+}
+
+void KWordTextFrameSetEditIface::insertFootNote( const QString & type )
+{
+    if ( type.lower() =="footnote")
+    {
+        m_framesetedit->insertFootNote( FootNote);
+    }
+    else if ( type.lower()=="endnote")
+    {
+        m_framesetedit->insertFootNote( EndNote);
+    }
 }

@@ -2632,17 +2632,20 @@ void KWView::insertVariable()
 void KWView::insertFootNote()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
-    Q_ASSERT( edit ); // the action should be disabled if we're not editing a textframeset...
-    if ( edit->frameSet() != m_doc->frameSet(0) )
+    //Q_ASSERT( edit ); // the action should be disabled if we're not editing a textframeset...
+    if (edit ) // test for dcop call !
     {
-        KMessageBox::sorry( this,
-                            i18n( "You can only insert footnotes or "
-                                  "endnotes into the first frameset."),
-                            i18n("Insert Footnote"));
-    } else {
-        KWFootNoteDia dia( this, 0 );
-        if ( dia.exec() ) {
-            edit->insertFootNote( dia.noteType() );
+        if ( edit->frameSet() != m_doc->frameSet(0) )
+        {
+            KMessageBox::sorry( this,
+                                i18n( "You can only insert footnotes or "
+                                      "endnotes into the first frameset."),
+                                i18n("Insert Footnote"));
+        } else {
+            KWFootNoteDia dia( this, 0 );
+            if ( dia.exec() ) {
+                edit->insertFootNote( dia.noteType() );
+            }
         }
     }
 }

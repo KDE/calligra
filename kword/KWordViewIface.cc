@@ -219,3 +219,8 @@ void KWordViewIface::tableUngroupTable()
 {
     view->tableUngroupTable();
 }
+
+void KWordViewIface::insertFootNote()
+{
+    view->insertFootNote();
+}
