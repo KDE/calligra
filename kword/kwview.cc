@@ -5936,7 +5936,7 @@ void KWView::insertFile(const QString & path)
         store->close();
         if ( hasEmbedded )
         {
-            kdDebug()<<k_funcinfo<<" Embedded: \n"<<domDoc.toCString()<<endl;
+            //kdDebug()<<k_funcinfo<<" Embedded: \n"<<domDoc.toCString()<<endl;
             if ( !macroCmd )
                 macroCmd = new KMacroCommand( i18n("Insert File") );
             m_doc->insertEmbedded( store, topElem, macroCmd );

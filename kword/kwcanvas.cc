@@ -1767,6 +1767,8 @@ void KWCanvas::copySelectedFrames()
         KWFrameSet * fs = fit.current();
         if ( fs->isVisible() )
         {
+            if ( fs->type() == FT_PART )
+                continue; // pasteing embedded objects not yet implemented
             bool isTable = ( fs->type() == FT_TABLE );
             QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
             KWFrame * firstFrame = frameIt.current();
