@@ -601,17 +601,17 @@ KarbonView::slotFillColorChanged( const QColor &c )
 void
 KarbonView::setLineWidth()
 {
+	// TODO : maybe this can become a command
 	kdDebug() << "KarbonView::setLineWidth" << endl;
-	VSelection *selection = m_part->document().selection();
-	VStroke stroke;
-	//if( selection->stroke() )
-	//{
-	kdDebug() << "KarbonView::setLineWidth2" << endl;
+	VObjectListIterator itr( m_part->document().selection()->objects() );
+	for ( ; itr.current() ; ++itr )
+	{
+		VStroke stroke( *( itr.current()->stroke() ) );
 		stroke.setLineWidth( m_setLineWidth->value() );
-		selection->setStroke( stroke );
+		itr.current()->setStroke( stroke );
+	}
 
-		m_part->repaintAllViews();
-	//}
+	m_part->repaintAllViews();
 }
 
 void
