@@ -177,9 +177,9 @@ void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
         m_body.append(numberingType(style.anld.nfc));
         m_body.append("\" depth=\"");
         m_body.append(QString::number(style.ilvl));
-        m_body.append("\" bullet=\"176\" start=\"");
+        m_body.append("\" bullet=\"183\" start=\"");
         m_body.append(QString::number(style.anld.iStartAt));
-        m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
+        m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n"
             " </LAYOUT>\n"
             "</PARAGRAPH>\n");
     }
@@ -195,6 +195,8 @@ void WinWordDoc::gotTableBegin()
     if (m_phase == TEXT_PASS)
     {
         m_body.append("<PARAGRAPH>\n<TEXT>");
+if (1)
+{
         if (m_tableManager == 1)
             m_body.append("This filter is currently unable to position tables correctly."
                 " All the tables are at the end of this document. Other tables can be found by looking for strings like"
@@ -202,6 +204,16 @@ void WinWordDoc::gotTableBegin()
         m_body.append("Table ");
         m_body.append(QString::number(m_tableManager));
         m_body.append(" goes here.</TEXT>\n</PARAGRAPH>\n");
+}
+else
+{
+        // This '0' will be replaced with the anchor character.
+        m_body.append('0');
+        m_body.append("</TEXT>\n<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
+        m_body.append("<ANCHOR type=\"grpMgr\" instance=\"grpmgr_");
+        m_body.append(QString::number(m_tableManager));
+        m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n</PARAGRAPH>\n");
+}
     }
 }
 

@@ -920,6 +920,9 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         case sprmPDxaWidth: // 0x841A
             MsWordGenerated::read(in + bytes, &m_pap.dxaWidth);
             break;
+        case sprmTDxaGapHalf: // 0x9602
+            // TBD: NYI
+            break;
         case sprmPDyaBefore: // 0xA413
             MsWordGenerated::read(in + bytes, &m_pap.dyaBefore);
             break;
@@ -927,6 +930,9 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
             MsWordGenerated::read(in + bytes, &m_pap.dyaAfter);
             break;
         case sprmPChgTabsPapx: // 0xC60D
+            // TBD: NYI
+            break;
+        case sprmPChgTabs: // 0xC615
             // TBD: NYI
             break;
         case sprmPAnld: // 0xC63E
@@ -993,7 +999,7 @@ void Paragraph::apply(MsWord::U16 style)
 }
 
 // List format.
-void Paragraph::apply(MsWord::LFO &style, bool useFormatting, bool useStartAt)
+void Paragraph::apply(MsWord::LFO &style)
 {
     const MsWord::U8 *ptr = m_document.m_tableStream + m_document.m_fib.fcPlcfLst; //lcbPlcfLst.
     MsWord::U16 lstfCount;
@@ -1030,21 +1036,13 @@ void Paragraph::apply(MsWord::LFO &style, bool useFormatting, bool useStartAt)
             ptr2 += MsWordGenerated::read(ptr2, &level);
             m_pap.anld.nfc = level.nfc;
             m_pap.anld.jc = level.jc;
-            if (useStartAt)
-            {
-                // Apply the startAt.
-
-                m_pap.anld.iStartAt = level.iStartAt;
-            }
+            m_pap.anld.iStartAt = level.iStartAt;
+            kdDebug(MsWord::s_area) << "got startAt " << m_pap.anld.iStartAt <<
+                " from LVLF" << endl;
 
             // Apply the variable length parts.
 
-            if (useFormatting)
-            {
-                // Apply the grpprl.
-
-                apply(ptr2, level.cbGrpprlPapx);
-            }
+            apply(ptr2, level.cbGrpprlPapx);
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);

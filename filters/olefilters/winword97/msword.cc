@@ -255,7 +255,8 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
         ptr += MsWordGenerated::read(ptr, &lfoCount);
         ptr2 = ptr + lfoCount * sizeof(LFO);
         if (lfoCount < paragraph.m_pap.ilfo)
-            kdError(s_area) << "MsWord::error finding LFO[" << paragraph.m_pap.ilfo << "]" << endl;
+            kdError(s_area) << "MsWord::decodeParagraph: error finding LFO[" <<
+                paragraph.m_pap.ilfo << "]" << endl;
 
         // Skip all the LFOs before our one, so that we can traverse the variable
         // length LFOLVL arrays.
@@ -286,19 +287,22 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
             }
         }
 
-        // We have found the LFO from its 1-based array. Check to see if there are any overrides for this particular level.
+        // We have found the LFO from its 1-based array. Check to see if there are any
+        // overrides for this particular level.
 
         LFO data;
-        LFOLVL levelOverride;
-        LVLF level;
-        U16 numberTextLength;
-        QString numberText;
 
-        // Read our LFO, and then search any LFOLVLs for a matching level.
+        // Read our LFO, apply the LSTF and then search any LFOLVLs for a matching level.
 
         ptr += MsWordGenerated::read(ptr, &data);
+        paragraph.apply(data);
         for (i = 0; i < data.clfolvl; i++)
         {
+            LFOLVL levelOverride;
+            LVLF level;
+            U16 numberTextLength;
+            QString numberText;
+
             ptr2 += MsWordGenerated::read(ptr2, &levelOverride);
             if (levelOverride.fFormatting)
             {
@@ -314,40 +318,38 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
 
             if (paragraph.m_pap.ilvl == levelOverride.ilvl)
             {
+                // If the LFOLVL was not a complete override, resort to the LVLF
+                // for whatever is missing.
+
+                if (levelOverride.fFormatting)
+                {
+                    // Apply the grpprl.
+
+                    kdDebug(s_area) << "getting formatting from LVLF" << endl;
+                    paragraph.apply(ptr3, level.cbGrpprlPapx);
+
+                    // Apply the startAt.
+
+                    paragraph.m_pap.anld.iStartAt = level.iStartAt;
+                    kdDebug(s_area) << "got startAt " << paragraph.m_pap.anld.iStartAt <<
+                        " from LVLF" << endl;
+                }
+                else
+                if (levelOverride.fStartAt)
+                {
+                    // Apply the startAt.
+
+                    paragraph.m_pap.anld.iStartAt = levelOverride.iStartAt;
+                    kdDebug(s_area) << "got startAt " << paragraph.m_pap.anld.iStartAt <<
+                        " from LFOLVL" << endl;
+                }
                 break;
             };
         }
-        if (i == data.clfolvl)
-        {
-            // No overriding LFOLVL was found.
 
-            levelOverride.fFormatting = false;
-            levelOverride.fStartAt = false;
-        }
-
-        // If the LFOLVL was not a complete override, resort to the LSTs for whatever
-        // is missing.
-
-        paragraph.apply(data, !levelOverride.fFormatting, !levelOverride.fStartAt);
-        if (levelOverride.fStartAt)
-        {
-            // Apply the startAt.
-
-            paragraph.m_pap.anld.iStartAt = levelOverride.iStartAt;
-            kdDebug(s_area) << "got startAt " << paragraph.m_pap.anld.iStartAt << " from LFOLVL" << endl;
-        }
-        if (levelOverride.fFormatting)
-        {
-            // Apply the grpprl.
-
-            kdDebug(s_area) << "getting formatting from LFO" << endl;
-            paragraph.apply(ptr3, level.cbGrpprlPapx);
-
-            // Apply the startAt.
-
-            paragraph.m_pap.anld.iStartAt = level.iStartAt;
-            kdDebug(s_area) << "got startAt " << paragraph.m_pap.anld.iStartAt << " from LVLF" << endl;
-        }
+        // TBD: We often seem to get invalid nfc's. Map them to a safe value.
+        if (paragraph.m_pap.anld.nfc > 5)
+            paragraph.m_pap.anld.nfc = 5;
         gotListParagraph(text, paragraph.m_pap);
     }
     else

@@ -48,7 +48,7 @@ public:
 
     void apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap = NULL);
     void apply(MsWord::U16 style);
-    void apply(MsWord::LFO &style, bool useFormatting, bool useStartAt);
+    void apply(MsWord::LFO &style);
     void apply(MsWord::PAPXFKP &style);
     void apply(MsWord::PHE &layout);
     void apply(MsWord::STD &style);
