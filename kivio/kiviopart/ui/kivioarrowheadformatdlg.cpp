@@ -55,19 +55,19 @@ void KivioArrowHeadFormatDlg::init()
   QLabel* startAHWidthLbl = new QLabel(i18n("&Width:"), startGBox);
   m_startAHWidthUSBox = new KoUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   startAHWidthLbl->setBuddy(m_startAHWidthUSBox);
-  QLabel* startAHHeightLbl = new QLabel(i18n("&Height:"), startGBox);
+  QLabel* startAHHeightLbl = new QLabel(i18n("&Length:"), startGBox);
   m_startAHHeightUSBox = new KoUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   startAHHeightLbl->setBuddy(m_startAHHeightUSBox);
 
   QGroupBox* endGBox = new QGroupBox(2, Qt::Horizontal, i18n("End Arrowhead"), mainWidget);
-  QLabel* endAHTypeLbl = new QLabel(i18n("&Type:"), endGBox);
+  QLabel* endAHTypeLbl = new QLabel(i18n("T&ype:"), endGBox);
   m_endAHTypeCBox = new KComboBox(endGBox);
   loadArrowHeads(m_endAHTypeCBox);
   endAHTypeLbl->setBuddy(m_endAHTypeCBox);
-  QLabel* endAHWidthLbl = new QLabel(i18n("&Width:"), endGBox);
+  QLabel* endAHWidthLbl = new QLabel(i18n("W&idth:"), endGBox);
   m_endAHWidthUSBox = new KoUnitDoubleSpinBox(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   endAHWidthLbl->setBuddy(m_endAHWidthUSBox);
-  QLabel* endAHHeightLbl = new QLabel(i18n("&Height:"), endGBox);
+  QLabel* endAHHeightLbl = new QLabel(i18n("L&ength:"), endGBox);
   m_endAHHeightUSBox = new KoUnitDoubleSpinBox(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   endAHHeightLbl->setBuddy(m_endAHHeightUSBox);
 
