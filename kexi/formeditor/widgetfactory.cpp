@@ -39,10 +39,6 @@ namespace KFormDesigner {
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
  : QObject(parent, name)
 {
-	m_editor = 0;
-	m_widget = 0;
-	m_handles = 0;
-	m_container = 0;
 }
 
 KLineEdit*
@@ -151,7 +147,7 @@ WidgetFactory::resetEditor()
 		m_widget->removeEventFilter(this);
 		m_widget->installEventFilter(m_container);
 	}
-	else
+	else if(m_editor)
 	{
 		changeText(m_editor->text());
 		disconnect(m_editor, 0, this, 0);

@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 #include <qptrlist.h>
+#include <qguardedptr.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 
@@ -162,10 +163,10 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual void  editorDeleted();
 
 	protected:
-		QWidget *m_widget;
-		KLineEdit  *m_editor;
-		ResizeHandleSet  *m_handles;
-		Container      *m_container;
+		QGuardedPtr<QWidget> m_widget;
+		QGuardedPtr<KLineEdit>  m_editor;
+		QGuardedPtr<ResizeHandleSet>  m_handles;
+		QGuardedPtr<Container>      m_container;
 };
 
 }

@@ -58,6 +58,8 @@ class KFORMEDITOR_EXPORT MyTextEdit : public KTextEdit
 		}
 		virtual bool eventFilter(QObject *o, QEvent *ev)
 		{
+			if(!m_container)
+				return KTextEdit::eventFilter(o, ev);
 			bool ok = m_container->eventFilter(this, ev);
 			if(!ok)
 				return KTextEdit::eventFilter(o, ev);
@@ -65,7 +67,7 @@ class KFORMEDITOR_EXPORT MyTextEdit : public KTextEdit
 		}
 
 	private:
-		QObject   *m_container;
+		QGuardedPtr<QObject>  m_container;
 };
 
 class KFORMEDITOR_EXPORT MySpinBox : public KIntSpinBox
@@ -92,6 +94,8 @@ class KFORMEDITOR_EXPORT MySpinBox : public KIntSpinBox
 		}
 		virtual bool eventFilter(QObject *o, QEvent *ev)
 		{
+			if(!m_container)
+				return KIntSpinBox::eventFilter(o, ev);
 			bool ok = m_container->eventFilter(this, ev);
 			if(!ok)
 				return KIntSpinBox::eventFilter(o, ev);
@@ -99,7 +103,7 @@ class KFORMEDITOR_EXPORT MySpinBox : public KIntSpinBox
 		}
 
 	private:
-		QObject   *m_container;
+		QGuardedPtr<QObject>  m_container;
 };
 
 class KFORMEDITOR_EXPORT MyTimeWidget : public KTimeWidget
@@ -125,6 +129,8 @@ class KFORMEDITOR_EXPORT MyTimeWidget : public KTimeWidget
 		}
 		virtual bool eventFilter(QObject *o, QEvent *ev)
 		{
+			if(!m_container)
+				return KTimeWidget::eventFilter(o, ev);
 			bool ok = m_container->eventFilter(this, ev);
 			if(!ok)
 				return KTimeWidget::eventFilter(o, ev);
@@ -132,7 +138,7 @@ class KFORMEDITOR_EXPORT MyTimeWidget : public KTimeWidget
 		}
 
 	private:
-		QObject   *m_container;
+		QGuardedPtr<QObject>   m_container;
 };
 
 class KFORMEDITOR_EXPORT MyDateWidget : public KDateWidget
@@ -158,6 +164,8 @@ class KFORMEDITOR_EXPORT MyDateWidget : public KDateWidget
 		}
 		virtual bool eventFilter(QObject *o, QEvent *ev)
 		{
+			if(!m_container)
+				return KDateWidget::eventFilter(o, ev);
 			bool ok = m_container->eventFilter(this, ev);
 			if(!ok)
 				return KDateWidget::eventFilter(o, ev);
@@ -165,7 +173,7 @@ class KFORMEDITOR_EXPORT MyDateWidget : public KDateWidget
 		}
 
 	private:
-		QObject   *m_container;
+		QGuardedPtr<QObject>   m_container;
 };
 
 class KFORMEDITOR_EXPORT MyDateTimeWidget : public KDateTimeWidget
@@ -191,6 +199,8 @@ class KFORMEDITOR_EXPORT MyDateTimeWidget : public KDateTimeWidget
 		}
 		virtual bool eventFilter(QObject *o, QEvent *ev)
 		{
+			if(!m_container)
+				return KDateTimeWidget::eventFilter(o, ev);
 			bool ok = m_container->eventFilter(this, ev);
 			if(!ok)
 				return KDateTimeWidget::eventFilter(o, ev);
@@ -198,7 +208,7 @@ class KFORMEDITOR_EXPORT MyDateTimeWidget : public KDateTimeWidget
 		}
 
 	private:
-		QObject   *m_container;
+		QGuardedPtr<QObject>   m_container;
 };
 
 MyPicLabel::MyPicLabel(const QPixmap *pix, QWidget *parent, const char *name)
@@ -595,16 +605,17 @@ StdWidgetFactory::resetEditor()
 	if(m_widget && !m_editor)
 	{
 		QString classname = m_widget->className();
+		QWidget *w = m_widget;
 		if(classname == "KTextEdit")
-			((MyTextEdit*)m_widget)->setContainer(m_container);
+			((MyTextEdit*)w)->setContainer(m_container);
 		else if(classname == "KIntSpinBox")
-			((MySpinBox*)m_widget)->setContainer(m_container);
+			((MySpinBox*)w)->setContainer(m_container);
 		else if(classname == "KTimeWidget")
-			((MyTimeWidget*)m_widget)->setContainer(m_container);
+			((MyTimeWidget*)w)->setContainer(m_container);
 		else if(classname == "KDateWidget")
-			((MyDateWidget*)m_widget)->setContainer(m_container);
+			((MyDateWidget*)w)->setContainer(m_container);
 		else if(classname == "KDateTimeWidget")
-			((MyDateTimeWidget*)m_widget)->setContainer(m_container);
+			((MyDateTimeWidget*)w)->setContainer(m_container);
 	}
 
 	WidgetFactory::resetEditor();
@@ -614,8 +625,9 @@ void
 StdWidgetFactory::changeText(const QString &text)
 {
 	QString n = m_widget->className();
+	QWidget *w = m_widget;
 	if(n == "KIntSpinBox")
-		((KIntSpinBox*)m_widget)->setValue(text.toInt());
+		((KIntSpinBox*)w)->setValue(text.toInt());
 	else
 		changeProperty("text", text, m_container);
 }
@@ -713,6 +725,12 @@ StdWidgetFactory::autoSaveProperties(const QString &classname)
 		return QStringList("list_items");
 	else if(classname == "Line")
 		return QStringList("orientation");
+	else if(classname == "KTimeWidget")
+		return QStringList("time");
+	else if(classname == "KDateWidget")
+		return QStringList("date");
+	else if(classname == "KDateTimeWidget")
+		return QStringList("dateTime");
 
 	return QStringList();
 }

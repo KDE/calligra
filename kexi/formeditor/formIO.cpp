@@ -607,6 +607,36 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	{
 		return QCursor(tag.text().toInt());
 	}
+	else if(type == "time")
+	{
+		QDomElement h = node.namedItem("hour").toElement();
+		QDomElement m = node.namedItem("minute").toElement();
+		QDomElement s = node.namedItem("second").toElement();
+
+		return QTime(h.text().toInt(), m.text().toInt(), s.text().toInt());
+	}
+	else if(type == "date")
+	{
+		QDomElement y = node.namedItem("year").toElement();
+		QDomElement m = node.namedItem("month").toElement();
+		QDomElement d = node.namedItem("day").toElement();
+
+		return QDate(y.text().toInt(), m.text().toInt(), d.text().toInt());
+	}
+	else if(type == "datetime")
+	{
+		QDomElement h = node.namedItem("hour").toElement();
+		QDomElement m = node.namedItem("minute").toElement();
+		QDomElement s = node.namedItem("second").toElement();
+		QDomElement y = node.namedItem("year").toElement();
+		QDomElement mo = node.namedItem("month").toElement();
+		QDomElement d = node.namedItem("day").toElement();
+
+		QTime t(h.text().toInt(), m.text().toInt(), s.text().toInt());
+		QDate da(y.text().toInt(), mo.text().toInt(), d.text().toInt());
+
+		return QDateTime(da, t);
+	}
 	else if(type == "sizepolicy")
 	{
 		QDomElement h = node.namedItem("hsizetype").toElement();
