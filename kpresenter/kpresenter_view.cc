@@ -5539,6 +5539,12 @@ void KPresenterView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
     QString zoomStr = QString::number( zoom ) + '%';
+    int pos = list.findIndex(zoomStr);
+    if( pos == -1)
+    {
+        changeZoomMenu( zoom );
+        list = actionViewZoom->items();
+    }
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 }
 
