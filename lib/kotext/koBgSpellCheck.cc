@@ -40,7 +40,9 @@ public:
 
 KoBgSpellCheck::KoBgSpellCheck()
 {
-    //kdDebug(32500) << "KoBgSpellCheck::KoBgSpellCheck " << this << endl;
+#ifdef DEBUG_BGSPELLCHECKING
+    kdDebug(32500) << "KoBgSpellCheck::KoBgSpellCheck " << this << endl;
+#endif
     d = new KoBgSpellCheck::KoBgSpellCheckPrivate;
     d->m_pKSpellConfig=0L;
     d->startTimer = new QTimer( this );
@@ -131,6 +133,7 @@ void KoBgSpellCheck::clearIgnoreWordAll( )
 
 void KoBgSpellCheck::startBackgroundSpellCheck()
 {
+    d->startTimer->stop(); // In case we were called directly, while the timer was running.
     if ( !m_bSpellCheckEnabled )
         return;
     //re-test text obj
@@ -140,6 +143,9 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     }
     if ( !m_bgSpell.currentTextObj )
     {
+#ifdef DEBUG_BGSPELLCHECKING
+        //kdDebug(32500) << "KoBgSpellCheck::startBackgroundSpellCheck no currentTextObj to check this time." << endl;
+#endif
         d->startTimer->start( 1000, true );
         return;
     }
