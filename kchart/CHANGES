@@ -32,3 +32,8 @@
 -Add new type of bar chart : Percent bar chart
 But Pb for writing % in label for the moment it's not good
 -Bug fix
+
+2000-01-14 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Add new page for config chart : Parameter page
+-Bug fix

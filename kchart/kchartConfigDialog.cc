@@ -5,9 +5,7 @@
  */
 
 #include "kchartConfigDialog.h"
-#include "kchartColorConfigPage.h"
-#include "kchartGeometryConfigPage.h"
-#include "kchartparams.h"
+
 
 #include "kchartConfigDialog.moc"
 
@@ -27,6 +25,9 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 	// Color page
     _colorpage = new KChartColorConfigPage( this );
     addTab( _colorpage, i18n( "&Colors" ) );
+    
+    _parameterpage = new KChartParameterConfigPage(_params,this );
+    addTab( _parameterpage, i18n( "&Parameter" ) );
 
     //init
     defaults();
@@ -57,6 +58,8 @@ void KChartConfigDialog::apply()
     _params->YLabelColor = _colorpage->yLabelColor();
     _params->YLabel2Color = _colorpage->yLabel2Color();
     _params->EdgeColor = _colorpage->edgeColor();
+    
+    _parameterpage->apply();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
 }
@@ -80,6 +83,8 @@ void KChartConfigDialog::defaults()
     _colorpage->setYLabelColor( _params->YLabelColor );
     _colorpage->setYLabel2Color( _params->YLabel2Color );
     _colorpage->setEdgeColor( _params->EdgeColor );
+    
+    _parameterpage->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
 }

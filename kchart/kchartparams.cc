@@ -97,7 +97,8 @@ bool KChartParameters::threeD() {
 	       type == KCHARTTYPE_3DCOMBO_HLC_BAR ||
 	       type == KCHARTTYPE_3DCOMBO_HLC_AREA||
 	       type == KCHARTTYPE_3DCOMBO_LINE_BAR||
-	       type == KCHARTTYPE_3DCOMBO_LINE_AREA );
+	       type == KCHARTTYPE_3DCOMBO_LINE_AREA ||
+	       type == KCHARTTYPE_3DPIE );
   return val;
 }
 
@@ -111,6 +112,19 @@ bool KChartParameters::has_hlc_sets() {
 		  type == KCHARTTYPE_HILOCLOSE );
  return val;
 }
+
+bool KChartParameters::has_yaxis2() 
+{
+  bool val =
+		( type == KCHARTTYPE_COMBO_HLC_BAR   ||
+		  type == KCHARTTYPE_COMBO_HLC_AREA  ||
+		  type == KCHARTTYPE_3DCOMBO_HLC_BAR ||
+		  type == KCHARTTYPE_3DCOMBO_HLC_AREA||
+		  type == KCHARTTYPE_3DHILOCLOSE     ||
+		  type == KCHARTTYPE_HILOCLOSE );
+ return val;
+}
+
 
 bool KChartParameters::do_bar() {
   bool val = ( type == KCHARTTYPE_3DBAR || // offset X objects to leave
@@ -177,11 +191,11 @@ void KChartParameters::saveConfig(KConfig *conf) {
   conf->writeEntry("yaxis", yaxis);
   conf->writeEntry("yaxis2", yaxis2);
   conf->writeEntry("yval_style", yval_style );
-  conf->writeEntry("stack_type", stack_type);
+  conf->writeEntry("stack_type", (int)stack_type);
   conf->writeEntry("_3d_depth", _3d_depth);
   conf->writeEntry("_3d_angle", _3d_angle);
   conf->writeEntry("bar_width", bar_width);
-  conf->writeEntry("hlc_style", hlc_style);
+  conf->writeEntry("hlc_style", (int)hlc_style);
   conf->writeEntry("hlc_cap_width", hlc_cap_width );
   // TODO: Annotation type!!!
   conf->writeEntry("annotationfont", annotationfont);
@@ -212,10 +226,10 @@ void KChartParameters::saveConfig(KConfig *conf) {
   conf->writeEntry("transparent_bg", transparent_bg);
   conf->writeEntry("BGImage", BGImage);
   // TODO: explode, missing
-  conf->writeEntry("percent_labels", percent_labels );
+  conf->writeEntry("percent_labels",(int) percent_labels );
   conf->writeEntry("label_dist", label_dist);
   conf->writeEntry("label_line", label_line);
-  conf->writeEntry("type", type );
+  conf->writeEntry("type", (int)type );
   conf->writeEntry("other_threshold", other_threshold);
 }
 

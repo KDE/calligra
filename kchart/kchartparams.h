@@ -125,7 +125,8 @@ struct KChartParameters
     bool do_bar();
     bool threeD();
     bool has_hlc_sets();
-
+    bool has_yaxis2();
+    
     void saveConfig(KConfig *conf);
     void loadConfig(KConfig *conf);
 

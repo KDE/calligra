@@ -8,10 +8,11 @@
 #define __KCHARTCONFIGDIALOG_H__
 
 #include <qtabdialog.h>
+#include "kchartColorConfigPage.h"
+#include "kchartParameterConfigPage.h"
+#include "kchartGeometryConfigPage.h"
+#include "kchartparams.h"
 
-class KChartParameters;
-class KChartColorConfigPage;
-class KChartGeometryConfigPage;
 
 class KChartConfigDialog : public QTabDialog
 {
@@ -25,9 +26,10 @@ protected:
     KChartParameters* _params;
     KChartGeometryConfigPage* _geompage;
     KChartColorConfigPage* _colorpage;
+    KChartParameterConfigPage*_parameterpage; 
 
-    protected slots:
-	virtual void apply();
+protected slots:
+    virtual void apply();
     virtual void defaults();
 };
 

@@ -558,6 +558,7 @@ void kchartEngine::draw3DCombo() {
 
 
 /* try */
+/* this chart doesn't work for the moment */
 void kchartEngine::drawPie() 
 {
   float val[num_points];

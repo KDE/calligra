@@ -73,68 +73,69 @@ pie_gif( short			imagewidth,
          char			*lbl2[],/* *lbl[] */				/* data labels */
          float			val[] )				/* data */
 {
-    int			i;
+    int	i;
 
     QColor BGColor, LineColor, PlotColor, EdgeColor, EdgeColorShd,
         SliceColor[num_points], SliceColorShd[num_points];
 
-    float		rad = 0.0;					// radius
-    float		tot_val = 0.0;
-    float		pscl;
-    int			cx,							// affects func_px()
-        cy;							// affects func_py()
+    float rad = 0.0;					// radius
+    float tot_val = 0.0;
+    float pscl;
+    int	 cx;							// affects func_px()
+    int  cy;							// affects func_py()
     /* ~ 1% for a size of 100 pixs */
     /* label sizes will more dictate this */
     float		min_grphable = ( params->other_threshold < 0?
 								 100.0/(float)MIN(imagewidth,imageheight):
 								 (float)params->other_threshold )/100.0;
-    short		num_slices1 = 0,
-        num_slices2 = 0;
-    char		any_too_small = FALSE;
-    char		others[num_points];
-    float		slice_angle[3][num_points];	// must be used with others[]
-    char		threeD = ( params->type == KCHARTTYPE_3DPIE );
+    short num_slices1 = 0;
+    short num_slices2 = 0;
+    char any_too_small = FALSE;
+    char others[num_points];
+    float slice_angle[3][num_points];	// must be used with others[]
+    //char threeD = ( params->type == KCHARTTYPE_3DPIE );
 
-    int			xdepth_3D      = 0,			// affects func_px()
-        ydepth_3D      = 0;			// affects func_py()
-    int			do3Dx = 0,					// reserved for macro use
-        do3Dy = 0;
+    int	xdepth_3D = 0;			// affects func_px()
+    int ydepth_3D = 0;			// affects func_py()
+    int	do3Dx = 0;					// reserved for macro use
+    int do3Dy = 0;
 
 /* try */
 /*remove it when pie chart works */
  char lbl[num_points][10];
- for(int j=0;j<num_points;j++)
-  	{
-  	sprintf( lbl[j],"toto" );
-  	}
-
+ sprintf( lbl[0],"toto" );
+ sprintf( lbl[1],"voiture" );
+ sprintf( lbl[2],"titi" );
+ sprintf( lbl[3],"Gool" );
 
     //	GDCPIE_3d_angle = MOD_360(90-params->_3d_angle+360);
     
     pie_3D_rad = TO_RAD( params->_3d_angle );
 
-    xdepth_3D      = threeD? (int)( cos((double)MOD_2PI(M_PI_2-pie_3D_rad+2.0*M_PI)) * params->_3d_depth ): 0;
-    ydepth_3D      = threeD? (int)( sin((double)MOD_2PI(M_PI_2-pie_3D_rad+2.0*M_PI)) * params->_3d_depth ): 0;
+    xdepth_3D      = params->threeD() ? (int)( cos((double)MOD_2PI(M_PI_2-pie_3D_rad+2.0*M_PI)) * params->_3d_depth ): 0;
+    ydepth_3D      = params->threeD() ? (int)( sin((double)MOD_2PI(M_PI_2-pie_3D_rad+2.0*M_PI)) * params->_3d_depth ): 0;
     //	xdepth_3D      = threeD? (int)( cos(pie_3D_rad) * params->_3d_depth ): 0;
     //	ydepth_3D      = threeD? (int)( sin(pie_3D_rad) * params->_3d_depth ): 0;
 
 	/* ----- get total value ----- */
     for( i=0; i<num_points; ++i )
         tot_val += val[i];
+	
 
+   
 	/* ----- pie sizing ----- */
 	/* ----- make width room for labels, depth, etc.: ----- */
 	/* ----- determine pie's radius ----- */
     {
-        int		title_hgt  = !params->title.isEmpty() ? 1			/*  title? horizontal text line */
+        int title_hgt  = !params->title.isEmpty() ? 1			/*  title? horizontal text line */
             + params->titleFontHeight()
             * (int)cnt_nl( params->title.latin1(), (int*)NULL )
             + 2:
             0;
         float	last = 0.0;
         float	label_explode_limit = 0.0;
-        int		cheight,
-            cwidth;
+        int cheight;
+        int cwidth;
 
         // maximum: no labels, explosions
         // gotta start somewhere
@@ -151,15 +152,17 @@ pie_gif( short			imagewidth,
         for( i=0; i<num_points; ++i ) {
             float	this_pct = val[i]/tot_val;	/* should never be > 100% */
             float	that = this_pct*(2.0*M_PI);	/* pie-portion */
-            if( (this_pct > min_grphable) ||	/* too small */
+            
+	    if( (this_pct > min_grphable) ||	/* too small */
                 (!GDCPIE_missing || !GDCPIE_missing[i]) ) {	/* still want angles */
                 int this_explode = GDCPIE_explode? GDCPIE_explode[i]: 0;
                 double	this_sin;
                 double	this_cos;
                 slice_angle[0][i] = that/2.0+last; /* mid-point on full pie */
-                slice_angle[1][i] = last;		   /* 1st on full pie */
+                slice_angle[1][i] = last;	   /* 1st on full pie */
                 slice_angle[2][i] = that+last;	   /* 2nd on full pie */
-                this_sin        = sin( (double)slice_angle[0][i] );
+            
+		this_sin        = sin( (double)slice_angle[0][i] );
                 this_cos        = cos( (double)slice_angle[0][i] );
 
                 if( !GDCPIE_missing || !(GDCPIE_missing[i]) ) {
@@ -172,8 +175,8 @@ pie_gif( short			imagewidth,
                     /*  accounting for PCT placement, font */
                     if( lbl && lbl[i] )	{
                         char	foo[1+4+1+1];					/* XPG2 compatibility */
-                        int		pct_len;
-                        int		lbl_len = 0;
+                        int pct_len;
+                        int lbl_len = 0;
                         lbl_hgt = ( cnt_nl(lbl[i], &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
 																params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
                             * (params->labelFontHeight()+1);
@@ -225,7 +228,8 @@ pie_gif( short			imagewidth,
                     /*  this section uses a different algorithm then above, but does the same thing */
                     /*  could be combined, but each is ugly enough! */
                     // PROTECT /0
-                    if( threeD ) {
+                    if( params->threeD() ) 
+                    	{
                         short	j;
                         int		this_y_explode_pos;
                         int		this_x_explode_pos;
@@ -269,33 +273,55 @@ pie_gif( short			imagewidth,
     BGColor   = params->BGColor;
     LineColor = params->LineColor;
     PlotColor = params->PlotColor;
-    if( params->EdgeColor != QColor() ) {
+    if( params->EdgeColor != QColor() ) 
+    	{
         EdgeColor = params->EdgeColor;
-        if( threeD )
+        if( params->threeD() )
             // PENDING(kalle) This can probably be done more easily
             // with the hsv color model
             EdgeColorShd = QColor( params->EdgeColor.red() / 2,
                                    params->EdgeColor.green() / 2,
                                    params->EdgeColor.blue() / 2 );
-    }
+    	}
 
     /* --- set color for each slice --- */
     for( i=0; i<num_points; ++i )
-        if( params->SetColor.count() ) {
+        if( params->SetColor.count() ) 
+        {
             QColor slc_clr = params->SetColor.color( i );
             SliceColor[i]     = slc_clr;
-            if( threeD )
+	    if( params->threeD() )
                 SliceColorShd[i] = QColor( slc_clr.red() / 2,
                                            slc_clr.green() / 2,
                                            slc_clr.blue() / 2 );
-        } else {
-            SliceColor[i]     = PlotColor;
-            if( threeD )
+        } 
+        else 
+        {
+	    SliceColor[i]     = PlotColor;
+            if( params->threeD() )
                 SliceColorShd[i] = QColor( params->PlotColor.red() / 2,
                                            params->PlotColor.green() / 2,
                                            params->PlotColor.blue() / 2 );
         }
-
+    //remove it when pie chart works
+    SliceColor[0]=QColor("#ff0000");
+    SliceColor[1]=QColor("#c0ffc0");
+    SliceColor[2]=QColor("#00ff00");
+    SliceColor[3]=QColor("#0000ff");
+    SliceColorShd[0] = QColor(  SliceColor[0].red() / 2,
+                                SliceColor[0] .green() / 2,
+                                SliceColor[0].blue() / 2 );
+    SliceColorShd[1] = QColor(  SliceColor[1].red() / 2,
+                                SliceColor[1].green() / 2,
+                                SliceColor[1] .blue() / 2 );
+    SliceColorShd[2] = QColor(  SliceColor[2].red() / 2,
+                                SliceColor[2].green() / 2,
+                                SliceColor[2] .blue() / 2 );
+    SliceColorShd[3] = QColor(  SliceColor[3].red() / 2,
+                                SliceColor[3].green() / 2,
+                                SliceColor[3] .blue() / 2 );
+    
+    
     pscl = (2.0*M_PI)/tot_val;
 	
     /* ----- calc: smallest a slice can be ----- */
@@ -307,20 +333,19 @@ pie_gif( short			imagewidth,
     //				   ( 2.0 * (float)imageheight / (float)(SFONTHGT+1+TFONTHGT+2) );
 
 
-    if( threeD ) {
+    if( params->threeD() ) 
+    {
         /* draw background shaded pie */
         {
             float	rad1 = rad;
             for( i=0; i<num_points; ++i )
                 if( !(others[i]) &&
                     (!GDCPIE_missing || !GDCPIE_missing[i]) ) {
-                    float	rad = rad1;
+                    float rad = rad1;
                     p->setPen( SliceColorShd[i] );
-                    p->drawLine( CX(i,1),
-								 CY(i,1),
+                    p->drawLine( CX(i,1),CY(i,1),
                                  IX(i,1,1), IY(i,1,1) );
-                    p->drawLine( CX(i,1),
-								 CY(i,1),
+                    p->drawLine( CX(i,1),CY(i,1),
                                  IX(i,2,1), IY(i,2,1) );
 					
                     // original parameters:
@@ -343,14 +368,20 @@ pie_gif( short			imagewidth,
                     // 								SliceColorShd[i] );
 
                     // New - Qt:
-                    p->setPen( SliceColorShd[i] );
-                    p->drawArc( CX(i,1)-(rad*2/2), // x
+		 
+                    p->setPen( SliceColor[i] );
+                    p->setBrush(SliceColor[i]);
+		    
+		    //you must draw clockwise direction
+		    // => angle (-)
+		    cout <<"DrawPie -1\n";
+		    p->drawPie( CX(i,1)-(rad*2/2), // x
                                 CY(i,1)-(rad*2/2), // y
                                 rad*2, rad*2,           // w, h
-                                (TO_INT_DEG_FLOOR(slice_angle[1][i])+270)*16,
-                                ((TO_INT_DEG_CEIL(slice_angle[2][i])+270)-
+                                -(TO_INT_DEG_FLOOR(slice_angle[1][i])+270)*16,
+                                -((TO_INT_DEG_CEIL(slice_angle[2][i])+270)-
                                  (TO_INT_DEG_FLOOR(slice_angle[1][i])+270))*16 );
-								
+		    
                     rad1 = rad;
                     rad *= 3.0/4.0;
                     // PENDING(kalle) Can it really be that Qt has no
@@ -358,24 +389,25 @@ pie_gif( short			imagewidth,
                     // algorithm here.
                     //					gdImageFillToBorder( im, IX(i,0,1), IY(i,0,1), SliceColorShd[i], SliceColorShd[i] );
                     rad = rad1;
-                    if( params->EdgeColor != QColor() ) {
+                    if( params->EdgeColor != QColor() ) 
+                    {
                         p->setPen( EdgeColorShd );
-                        p->drawLine( CX(i,1),
-									 CY(i,1),
-									 IX(i,1,1), IY(i,1,1) );
-                        p->drawLine( CX(i,1),
-									 CY(i,1),
-									 IX(i,2,1), IY(i,2,1) );
+                        p->drawLine( CX(i,1),CY(i,1),
+				    IX(i,1,1), IY(i,1,1) );
+                        p->drawLine( CX(i,1),CY(i,1),
+				    IX(i,2,1), IY(i,2,1) );
                         // For differences between gd arc handling and
                         // Qt arc handling, please see first
                         // QPainter::drawArc() call in this file.
 
                         // New: Qt
-                        p->drawArc( CX(i,1)-rad, // x
+			p->setBrush(EdgeColorShd);
+                        cout <<"DrawPie 0\n";
+			p->drawPie( CX(i,1)-rad, // x
                                     CY(i,1)-rad, // y
                                     rad*2, rad*2,     // w, h
-                                    (TO_INT_DEG(slice_angle[1][i])+270)*16,
-                                    ((TO_INT_DEG(slice_angle[2][i])+270)-
+                                    -(TO_INT_DEG(slice_angle[1][i])+270)*16,
+                                    -((TO_INT_DEG(slice_angle[2][i])+270)-
                                      (TO_INT_DEG(slice_angle[1][i])+270))*16 );
                         // Original: gd
                         // 						gdImageArc( im, CX(i,1), CY(i,1),
@@ -434,7 +466,7 @@ pie_gif( short			imagewidth,
                 gdp.setPoint( 2, OX(i,tmp_slice[t].angle,1),
                               OY(i,tmp_slice[t].angle,1) );
 				gdp.setPoint( 3, OX(i,tmp_slice[t].angle,0),
-							  OY(i,tmp_slice[t].angle,0) );
+					   OY(i,tmp_slice[t].angle,0) );
 							
 				if( !(tmp_slice[t].hidden) ) {
 					p->setBrush( SliceColorShd[i] );
@@ -443,7 +475,7 @@ pie_gif( short			imagewidth,
 				} else {
 					rad -= 2.0;										/* no peeking */
 					gdp.setPoint( 0, OX(i,slice_angle[0][i],0),
-								  OY(i,slice_angle[0][i],0) );
+					     OY(i,slice_angle[0][i],0) );
 					gdp.setPoint( 1, OX(i,slice_angle[0][i],1),
 								  OY(i,slice_angle[0][i],1) );
 					rad += 2.0;
@@ -466,10 +498,8 @@ pie_gif( short			imagewidth,
 				
 				if( params->EdgeColor != QColor() ) {
 					p->setPen( EdgeColorShd );
-					p->drawLine( CX(i,0),
-								 CY(i,0),
-								 CX(i,1),
-								 CY(i,1) );
+					p->drawLine( CX(i,0),CY(i,0),
+						     CX(i,1),CY(i,1) );
 					p->drawLine( OX(i,tmp_slice[t].angle,0),
 								 OY(i,tmp_slice[t].angle,0),
 								 OX(i,tmp_slice[t].angle,1),
@@ -486,31 +516,36 @@ pie_gif( short			imagewidth,
 		float	rad1 = rad;
 		for( i=0; i<num_points; ++i )
 			if( !others[i] &&
-				(!GDCPIE_missing || !GDCPIE_missing[i]) ) {
+				(!GDCPIE_missing || !GDCPIE_missing[i]) ) 
+			  {
 				float	rad = rad1;
 
 				// last += val[i];
 				// EXPLODE_CX_CY( slice_angle[0][i], i );
 				p->setPen( SliceColor[i] );
-				p->drawLine( CX(i,0),
-							 CY(i,0),
-							 IX(i,1,0), IY(i,1,0) );
-				p->drawLine( CX(i,0),
-							 CY(i,0),
-							 IX(i,2,0), IY(i,2,0) );
+				
+				p->drawLine( CX(i,0),CY(i,0),
+					     IX(i,1,0), IY(i,1,0) );
+				p->drawLine( CX(i,0),CY(i,0),
+				             IX(i,2,0), IY(i,2,0) );
 				
 				// For the differences between Qt arc handling and gd
 				// arc handling, please see first call to
 				// QPainter::drawArc() in this file.
 
 				// New - Qt:
-				p->drawArc( CX(i,0)-rad, // x
-							CY(i,0)-rad, // y
-							rad*2, rad*2,     // w, h
-							(TO_INT_DEG_FLOOR(slice_angle[1][i])+270)*16,
-							((TO_INT_DEG_CEIL(slice_angle[2][i])+270)-
-							 (TO_INT_DEG_FLOOR(slice_angle[1][i])+270))*16 );
-
+				//put slice color
+				p->setBrush(SliceColor[i]);
+				
+				cout <<"drawPie1\n";
+				p->drawPie( CX(i,0)-rad, // x
+					    CY(i,0)-rad, // y
+					    rad*2, rad*2,// w, h
+				-(TO_INT_DEG_FLOOR(slice_angle[1][i])+270)*16,
+				-((TO_INT_DEG_CEIL(slice_angle[2][i])+270)-
+			       (TO_INT_DEG_FLOOR(slice_angle[1][i])+270))*16 );
+				
+				
 				// Original - gd:
 				// 				gdImageArc( im, CX(i,0), CY(i,0),
 				// 							(int)rad*2, (int)rad*2,
@@ -524,31 +559,32 @@ pie_gif( short			imagewidth,
 				//				gdImageFillToBorder( im, IX(i,0,0), IY(i,0,0), SliceColor[i], SliceColor[i] );
 				/* catch missed pixels on narrow slices */
 				p->setPen( SliceColor[i] );
-				p->drawLine( CX(i,0),
-							 CY(i,0),
-							 IX(i,0,0), IY(i,0,0) );
+				p->drawLine( CX(i,0),CY(i,0),
+					     IX(i,0,0), IY(i,0,0) );
+				
 				rad = rad1;
-				if( params->EdgeColor != QColor() ) {
-					p->setPen( EdgeColor );
-					p->drawLine( CX(i,0),
-								 CY(i,0),
-								 IX(i,1,0), IY(i,1,0) );
-					p->drawLine( CX(i,0),
-								 CY(i,0),
-								 IX(i,2,0), IY(i,2,0) );
-
+				if( params->EdgeColor != QColor() ) 
+				  {
+				        p->setPen( EdgeColor );
+					p->drawLine( CX(i,0),CY(i,0),
+						IX(i,1,0), IY(i,1,0) );
+					p->drawLine( CX(i,0),CY(i,0),
+						IX(i,2,0), IY(i,2,0) );
+				   
 					// For the differences between Qt arc handling and
 					// gd arc handling, please see the first call to
 					// QPainter::drawArc() in this file.
 
 					// New - Qt:
-					p->drawArc( CX(i,0)-rad,   // x
-								CY(i,0)-rad,   // y
-								rad*2, rad*2,       // w, h
-								(TO_INT_DEG(slice_angle[1][i])+270)*16,
-								((TO_INT_DEG(slice_angle[2][i])+270)-
-								 (TO_INT_DEG(slice_angle[1][i])+270))*16 );
-
+					
+					p->setBrush(SliceColor[i]);	
+					p->drawPie( CX(i,0)-rad,//  x
+						    CY(i,0)-rad ,//   y
+					           rad*2, rad*2,// w, h
+				      -(TO_INT_DEG(slice_angle[1][i])+270)*16,
+				      -((TO_INT_DEG(slice_angle[2][i])+270)-
+		                     (TO_INT_DEG(slice_angle[1][i])+270))*16 );
+					
 					// Original - gd:
 					// 					gdImageArc( im, CX(i,0), CY(i,0),
 					// 								rad*2, rad*2,
@@ -563,10 +599,7 @@ pie_gif( short			imagewidth,
 		
 		cnt_nl( params->title.latin1(), &title_len );
 		// PENDING(kalle) Check whether this really does line breaks
-		QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0, MAXINT,
-																				 MAXINT,
-																				 Qt::AlignCenter,
-																				 params->title );
+		QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0, MAXINT,MAXINT,Qt::AlignCenter,params->title );
 		p->drawText( (imagewidth-title_len*params->titleFontWidth())/2,
 					 1, // y
 					 br.width(), br.height(),
@@ -583,7 +616,8 @@ pie_gif( short			imagewidth,
 	}
 	
 	/* labels */
-	if( lbl ) {
+	if( lbl ) 
+		{
 		float	liner = rad;
 
 		rad += GDCPIE_label_dist;
@@ -599,12 +633,11 @@ pie_gif( short			imagewidth,
 					linex, liney;
 				
 				lbl_wdth *= params->labelFontWidth();
-				sprintf( pct_str,
-						 (params->percent_labels==KCHARTPCTTYPE_LEFT ||
-						  params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
+				sprintf( pct_str,(params->percent_labels==KCHARTPCTTYPE_LEFT ||params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
 						 lbl[i]? "(%.0f%%)":
 						 "%.0f%%",
 						 (val[i]/tot_val) * 100.0 );
+
 				pct_wdth = params->percent_labels == KCHARTPCTTYPE_NONE?
 					0:
 					strlen(pct_str) * params->labelFontWidth();
@@ -619,7 +652,8 @@ pie_gif( short			imagewidth,
 				} else
 					--linex;
 
-				switch( params->percent_labels )	{
+				switch( params->percent_labels )	
+				{
 				case KCHARTPCTTYPE_LEFT:	
 					if( slice_angle[0][i] > M_PI )
 						pctx -= lbl_wdth-1;
