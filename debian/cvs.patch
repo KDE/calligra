@@ -182,6 +182,28 @@
  libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS)
  
  libkugarpart_la_METASOURCES = AUTO
+--- kugar/part/kugar_part.cpp	2001/03/26 16:59:33	1.3
++++ kugar/part/kugar_part.cpp	2001/04/10 22:17:49
+@@ -78,7 +78,7 @@ KInstance *KugarFactory::instance()
+ 
+ 	if (!s_instance)
+ 	{
+-		KAboutData *about = new KAboutData(PACKAGE,
++		KAboutData *about = new KAboutData("kugar",
+ 						   I18N_NOOP("Kugar"),
+ 						   VERSION);
+ 
+--- kugar/shell/main.cpp	2000/09/21 08:57:22	1.1.1.1
++++ kugar/shell/main.cpp	2001/04/10 22:17:49
+@@ -18,7 +18,7 @@
+ 
+ int main(int argc,char **argv)
+ {
+-	KAboutData about(PACKAGE,I18N_NOOP("Kugar"),VERSION,
++	KAboutData about("kugar",I18N_NOOP("Kugar"),VERSION,
+ 			 I18N_NOOP("A template driven report viewer for XML data."),
+ 			 KAboutData::License_GPL_V2,
+ 			 "Copyright (c) 1999-2000 Mutiny Bay Software\n"
 --- kword/Makefile.am	2001/04/04 19:23:27	1.112
 +++ kword/Makefile.am	2001/04/08 21:39:15
 @@ -19,13 +19,13 @@ libkwordpart_la_SOURCES = kwfactory.cc k
