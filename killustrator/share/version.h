@@ -25,7 +25,7 @@
 #ifndef version_h_
 #define version_h_
 
-#include <qapp.h>
+#include <qglobal.h>
 
 #if QT_VERSION >= 199
 #define QT_PRFX Qt

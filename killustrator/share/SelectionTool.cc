@@ -568,13 +568,13 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
 
 void SelectionTool::rotate (GDocument* doc, float dx, float dy,
 			    float xp, float yp, bool permanent) {
-  float adx = fabs (dx);
-  float ady = fabs (dy);
+  //  float adx = fabs (dx);
+  //  float ady = fabs (dy);
   float angle = 0;
 
-  //  Rect r = doc->boundingBoxForSelection ();
-  Rect& r = origbox;
+  //  Rect& r = origbox;
 
+  /*
   if (adx > ady) {
     angle = adx / r.width () * 180.0;
     if ((yp > rotCenter.y () && dx > 0) ||
@@ -587,17 +587,14 @@ void SelectionTool::rotate (GDocument* doc, float dx, float dy,
 	(xp < rotCenter.x () && dy > 0))
       angle = -angle;
   }
-/*
-  if (adx > ady)
-    angle=atan2((float)rotCenter.y()-yp,(float)rotCenter.x()-xp);
-  else
-    angle-=atan2((float)(rotCenter.y()-firstpos.y()),
-		 (float)(rotCenter.x()-firstpos.x()));
-
-  angle*=180.0/M_PI;
+  */
+  // proposed by Stefan Eickeler <eickeler@fb9-ti.uni-duisburg.de>
+  angle=atan2 ((float)rotCenter.y()-yp,(float)rotCenter.x()-xp);
+  angle-=atan2 ((float)(rotCenter.y()-firstpos.y()),
+		(float)(rotCenter.x()-firstpos.x()));
+  angle*=180.0/3.141;
   if (angle<180.0) angle+=360.0;
   if (angle>180.0) angle-=360.0;
-*/
 
   if (permanent) {
     for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
@@ -761,6 +758,7 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
     }
     else {
       GObject *sobj = doc->getSelection ().front ();
+      cout << "---> " << sobj->typeName () << endl;
       sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
 	       I18N (sobj->typeName ()), x, u, y, u, w, u, h, u);
     }
