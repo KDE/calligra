@@ -301,7 +301,7 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
     }
 
     // Draw page borders (red), unless when printing
-    if ( !(painter->device()->devType() == QInternal::Printer) )
+    if ( painter->device()->devType() != QInternal::Printer )
     {
         painter->setPen( red );
         painter->setBrush( Qt::NoBrush );

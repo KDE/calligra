@@ -70,16 +70,8 @@ KWFrameSetEdit * KWTextFrameSet::createFrameSetEdit( KWCanvas * canvas )
 
 int KWTextFrameSet::availableHeight() const
 {
-    // Actually we shouldn't need this - updateFrames() calculates it
-#if 0
-    if ( m_availableHeight != -1 )
-        return m_availableHeight;
-    // Calculate available height by summing the height of all frames
-    m_availableHeight = 0;
-    QListIterator<KWFrame> frameIt( frameIterator() );
-    for ( ; frameIt.current(); ++frameIt )
-        m_availableHeight += frameIt.current()->height();
-#endif
+    if ( m_availableHeight == -1 )
+        const_cast<KWTextFrameSet *>(this)->updateFrames();
     return m_availableHeight;
 }
 
@@ -515,7 +507,7 @@ void KWTextFrameSet::updateFrames()
             //kdDebug(32002) << "KWTextFrameSet::updateFrames adding frame " << frame << endl;
             ASSERT( !frames.contains(frame) );
             frames.append( frame );
-            m_availableHeight += frame->height();
+            m_availableHeight += kWordDocument()->zoomItY( frame->height() );
             frames.at( frames.count() - 1 )->setMostRight( false );
             if ( frames.count() > 1 ) {
                 if ( frames.at( frames.count() - 2 )->right() > frames.at( frames.count() - 1 )->right() ) {
@@ -634,7 +626,7 @@ void KWTextFrameSet::zoom()
         s->invalidate( 0 );
     }
     m_lastFormatted = text->firstParag();
-    // emit repaintChanged(); // we shall see about that - we do updateAllViews anyway
+    m_availableHeight = -1; // to be recalculated
 }
 
 void KWTextFrameSet::unzoom()
@@ -888,9 +880,9 @@ void KWTextFrameSet::formatMore()
     }
     m_lastFormatted = lastFormatted;
 
-    if ( lastFormatted && bottom != -1 && bottom + lastFormatted->rect().height() > (m_availableHeight*kWordDocument()->zoomedResolutionY()) )
+    if ( lastFormatted && bottom != -1 && bottom + lastFormatted->rect().height() > m_availableHeight )
     {
-        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << (m_availableHeight*kWordDocument()->zoomedResolutionY()) << endl;
+        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
         // especially for tables. TODO.
 
