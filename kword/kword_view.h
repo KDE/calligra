@@ -251,7 +251,9 @@ public slots:
     virtual void formulaMatrix();
     virtual void formulaLeftSuper();
     virtual void formulaLeftSub();
-
+    virtual void formulaProduct();
+    virtual void formulaSum();
+    
     // C++
     virtual bool printDlg();
 
@@ -393,6 +395,8 @@ protected:
     QAction *actionFormulaMatrix;
     QAction *actionFormulaLeftSuper;
     QAction *actionFormulaLeftSub;
+    QAction *actionFormulaProduct;
+    QAction *actionFormulaSum;
 
     QAction *actionTableDelRow;
     QAction *actionTableDelCol;

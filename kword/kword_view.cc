@@ -556,6 +556,12 @@ void KWordView::setupActions()
     actionFormulaLeftSub = new KAction( i18n( "Left Subscript" ), KWBarIcon( "index1" ), 0,
 					 this, SLOT( formulaLeftSub() ),
 				      actionCollection(), "formula_leftsub" );
+    actionFormulaProduct = new KAction( i18n( "Formula Product" ), KWBarIcon( "product" ), 0,
+					 this, SLOT( formulaProduct() ),
+				      actionCollection(), "formula_product" );
+    actionFormulaSum = new KAction( i18n( "Formula Sum" ), KWBarIcon( "sum" ), 0,
+					 this, SLOT( formulaSum() ),
+				      actionCollection(), "formula_sum" );
 
     // ---------------------- Table actions
 
@@ -2234,6 +2240,18 @@ void KWordView::formulaLeftSuper()
 void KWordView::formulaLeftSub()
 {
     gui->getPaperWidget()->insertFormulaChar( Box::LSUB );
+}
+
+/*================================================================*/
+void KWordView::formulaProduct()
+{
+    gui->getPaperWidget()->insertFormulaChar( Box::PRODUCT );
+}
+
+/*================================================================*/
+void KWordView::formulaSum()
+{
+    gui->getPaperWidget()->insertFormulaChar( Box::SUM );
 }
 
 /*================================================================*/

@@ -183,5 +183,7 @@
   <Action name="formula_matrix"/>
   <Action name="formula_leftsup"/>
   <Action name="formula_leftsub"/>
+  <Action name="formula_product"/>
+  <Action name="formula_sum"/>
 </ToolBar>
 </QConfig>
