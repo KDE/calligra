@@ -27,8 +27,8 @@ EditWidget::EditWidget(QWidget *parent=0,const char *name=0)
 {
   QString pixdir;
   QPixmap pixmap;
-  
-  pixdir = KApplication::kde_toolbardir();  
+
+  pixdir = KApplication::kde_toolbardir();
 
   ok = new KButton(this);
   pixmap.load(pixdir+"/tick.xpm");
@@ -76,7 +76,7 @@ void EditWidget::deletePoint()
 	  changed = true;
 	  emit delPnt(pnt);
 	}
-    }  
+    }
 }
 
 /*====================== resize event ============================*/
@@ -95,9 +95,9 @@ void EditWidget::resizeEvent(QResizeEvent *e)
   cancel->move(5,5);
   ok->move(cancel->x()+cancel->width()+5,cancel->y());
   lineEdit->move(ok->x()+ok->width()+10,ok->y());
-  
+
   lineEdit->resize(width()-5-lineEdit->x(),lineEdit->height());
-  
+
   treeList->move(0,ok->y()+ok->height()+5);
   treeList->resize(width(),height()-treeList->y());
 }
@@ -105,10 +105,10 @@ void EditWidget::resizeEvent(QResizeEvent *e)
 /*================== parse the source ============================*/
 void EditWidget::parseSource()
 {
-  KTreeListItem *point; 
-  KTreeListItem *crd,*attrib; 
-  KTreeListItem *a,*b,*c,*d,*e,*f,*result; 
-  KTreeListItem *isVariable,*pwDiv; 
+  KTreeListItem *point;
+  KTreeListItem *crd,*attrib;
+  KTreeListItem *a,*b,*c,*d,*e,*f,*result;
+  KTreeListItem *isVariable,*pwDiv;
   QString tmp = "",tmp1 = "";
   unsigned int i = 1, j = 0;
   ATFInterpreter::CoordStruct coord;
@@ -117,14 +117,14 @@ void EditWidget::parseSource()
   if (!pointList.isEmpty())
     {
       for (pntPtr = pointList.first();pntPtr != 0;pntPtr = pointList.next(),i++)
-	{      
+	{
 	  tmp = "Point ";
 	  tmp1.setNum(i);
 	  tmp += tmp1;
 	  point = new KTreeListItem(tmp,0);
 	  for (j = 1;j <= 2;j++)
 	    {
-	      if (j == 1) 
+	      if (j == 1)
 		{
 		  coord = pntPtr->x;
 		  crd = new KTreeListItem("X",0);
@@ -202,7 +202,7 @@ QString EditWidget::stretch(QString s)
       for (i=0;i < s.length()-1;i++)
 	{
 	  res += s.at(i);
-	  if ((isNum(s.at(i)) && !isNum(s.at(i+1))) || (!isNum(s.at(i))))
+	  if ((isNum((char)QChar(s.at(i))) && !isNum((char)QChar(s.at(i+1)))) || (!isNum((char)QChar(s.at(i)))))
 	    res += " ";
 	}
       res += s.at(s.length()-1);
@@ -251,11 +251,11 @@ bool EditWidget::isInputOk(QString str,int structur,int var)
     {
       unsigned int i;
       int current;
-      
+
       const int varNum = 0;
       const int op     = 1;
       const int numOp  = 2;
-      
+
       if (structur < 2)
 	{
 	  switch (var)
@@ -266,7 +266,7 @@ bool EditWidget::isInputOk(QString str,int structur,int var)
 	    case 3: if (str.at(0) != 'd') return false; break;
 	    case 4: if (str.at(0) != 'e') return false; break;
 	    case 5: if (str.at(0) != 'f') return false; break;
-	    case 6: 
+	    case 6:
 	      {
 		if (structur == 0)
 		  if (str.at(0) != 'x') return false;
@@ -280,21 +280,21 @@ bool EditWidget::isInputOk(QString str,int structur,int var)
 	    {
 	      switch (current)
 		{
-		case op: 
+		case op:
 		  {
-		    if (!isOperator(str.at(i))) return false; 
+		    if (!isOperator((char)QChar(str.at(i)))) return false;
 		    current = varNum;
 		  } break;
-		case varNum: 
+		case varNum:
 		  {
-		    if (!(isVar(str.at(i)) || isNum(str.at(i)))) return false;
+		    if (!(isVar((char)QChar(str.at(i))) || isNum((char)QChar(str.at(i))))) return false;
 		    current = numOp;
 		  } break;
-		case numOp: 
+		case numOp:
 		  {
-		    if (!(isNum(str.at(i)) || isOperator(str.at(i)))) return false;
-		    if (isNum(str.at(i))) current = op;
-		    if (isOperator(str.at(i))) current = varNum;		    
+		    if (!(isNum((char)QChar(str.at(i))) || isOperator((char)QChar(str.at(i))))) return false;
+		    if (isNum((char)QChar(str.at(i)))) current = op;
+		    if (isOperator((char)QChar(str.at(i)))) current = varNum;		
 		  } break;
 		}
 	    }
@@ -304,17 +304,17 @@ bool EditWidget::isInputOk(QString str,int structur,int var)
 	{
 	  switch (var)
 	    {
-	    case 0: 
+	    case 0:
 	      {
-		if (str.at(0) != 'v') return false; 
+		if (str.at(0) != 'v') return false;
 		if (str.at(1) != '=') return false;
 		if (!(str.at(2) == '0' || str.at(2) == '1')) return false;
 	      } break;
-	    case 1: 
+	    case 1:
 	      {
-		if (str.at(0) != 'p') return false; 
+		if (str.at(0) != 'p') return false;
 		if (str.at(1) != '=') return false;
-		if (!isNum(str.at(2))) return false;
+		if (!isNum((char)QChar(str.at(2)))) return false;
 	      } break;
 	    }
 	}
@@ -335,7 +335,7 @@ void EditWidget::itemSelected(int index)
 void EditWidget::itemChanged()
 {
   QString str = stretch(simplify(lineEdit->text()));
-  
+
   if (treeList->getCurrentItem() && !str.isEmpty())
     {
       KTreeListItem *item = treeList->getCurrentItem();
@@ -346,7 +346,7 @@ void EditWidget::itemChanged()
 	  QString istr = item->getText();
 	  QString p1str = parent1->getText();
 	  QString p2str = parent2->getText();
-	  int pnt = p2str.right(2).toInt() - 1;
+	  int pnt = p2str.right(2).simplifyWhiteSpace().toInt() - 1;
 	  int structur = 2;
 	  if (p1str == "X") structur = 0;
 	  else if (p1str == "Y") structur = 1;

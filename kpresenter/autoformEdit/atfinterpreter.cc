@@ -380,7 +380,7 @@ void ATFInterpreter::interpret()
 	    }
 	  else if (level.top()->l == LEVEL_X || level.top()->l == LEVEL_Y || level.top()->l == LEVEL_ATTR)
 	    {
-	      switch (line.at(0))
+	      switch (QChar(line[0]))
 		{
 		case VAR_1:
 		  {
@@ -425,7 +425,7 @@ void ATFInterpreter::interpret()
 		  } break;
 		case VAR_PW:
 		  {
-		    pw = 1; pw = line.at(2) - 48;
+		    pw = 1; pw = ((char)QChar(line.at(2))) - 48;
 		    attrib.pwDiv = qstrdup(line);
 		  } break;
 		case '}':
@@ -492,7 +492,7 @@ QString ATFInterpreter::simplify(QString s)
 QList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString _s)
 {
   QCString s(_s.ascii());
-  
+
   QList<Sign> list;
   for (unsigned int i=0;i < s.length();i++)
     {
@@ -702,7 +702,7 @@ QString ATFInterpreter::stretch(QString s)
   for (i=0;i < s.length()-1;i++)
     {
       res += s.at(i);
-      if ((isNum(s.at(i)) && !isNum(s.at(i+1))) || (!isNum(s.at(i))))
+      if ((isNum((char)QChar(s.at(i))) && !isNum((char)QChar(s.at(i+1)))) || (!isNum((char)QChar(s.at(i)))))
 	res += " ";
     }
   res += s.at(s.length()-1);
