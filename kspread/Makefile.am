@@ -1,6 +1,6 @@
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES  = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) \
-	-I$(srcdir)/dialogs -I$(srcdir)/tests \
+	-I$(srcdir)/tests \
 	$(KOSCRIPT_INCLUDES) -I$(top_srcdir)/interfaces \
 	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
 

@@ -26,107 +26,111 @@
 
 #include <kprinter.h> // has to be first
 
+// standard C/C++ includes
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
 
+// Qt includes
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qpaintdevicemetrics.h>
+#include <qregexp.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
-#include <qregexp.h>
 
-#include <klineeditdlg.h>
-#include <kprocio.h>
-#include <kspell.h>
-#include <kspelldlg.h>
-#include <kstdaction.h>
-#include <kmessagebox.h>
-#include <knotifyclient.h>
-#include <ktempfile.h>
-#include <kstandarddirs.h>
-#include <kpassdlg.h>
-#include <tkcoloractions.h>
-
+// KDE includes
 #include <dcopclient.h>
 #include <dcopref.h>
-
-#include <kdebug.h>
-#include <kstatusbar.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kfind.h>
-#include <kfontdialog.h>
-#include <kreplace.h>
 #include <kfinddialog.h>
+#include <kfontdialog.h>
+#include <klineeditdlg.h>
+#include <kmessagebox.h>
+#include <knotifyclient.h>
+#include <kpassdlg.h>
+#include <kprocio.h>
+#include <kreplace.h>
 #include <kreplacedialog.h>
-#include <koToolBox.h>
-#include <kdatatool.h>
-#include <koCharSelectDia.h>
-#include <koMainWindow.h>
-#include <koPartSelectAction.h>
-#include <kocommandhistory.h>
-#include <kozoomaction.h>
-#include <kotabbar.h>
-#include <koTemplateCreateDia.h>
-
+#include <kspell.h>
+#include <kspelldlg.h>
+#include <kstatusbar.h>
+#include <kstdaction.h>
+#include <kstandarddirs.h>
+#include <ktempfile.h>
 #include <kparts/partmanager.h>
 
+// KOffice includes
+#include <tkcoloractions.h>
+#include <kdatatool.h>
+#include <koCharSelectDia.h>
+#include <kocommandhistory.h>
+#include <koMainWindow.h>
+#include <koPartSelectAction.h>
+#include <kotabbar.h>
+#include <koToolBox.h>
+#include <koTemplateCreateDia.h>
+#include <kozoomaction.h>
+
+// KSpread includes
 #include "commands.h"
-#include "kspread_map.h"
-#include "kspread_selection.h"
-#include "kspread_locale.h"
-#include "kspread_dlg_csv.h"
-#include "kspread_dlg_cons.h"
-#include "kspread_dlg_database.h"
-#include "kspread_dlg_goalseek.h"
-//#include "kspread_dlg_multipleop.h"
-#include "kspread_dlg_subtotal.h"
+#include "damages.h"
+#include "digest.h"
+#include "handler.h"
+#include "inspector.h"
 #include "kspread_canvas.h"
-#include "kspread_dlg_formula.h"
-#include "kspread_dlg_special.h"
-#include "kspread_dlg_sort.h"
-#include "kspread_dlg_anchor.h"
-#include "kspread_dlg_layout.h"
-#include "kspread_dlg_show.h"
-#include "kspread_dlg_insert.h"
+#include "kspread_editors.h"
+#include "kspread_events.h"
 #include "kspread_global.h"
 #include "kspread_handler.h"
-#include "kspread_events.h"
-#include "kspread_editors.h"
+#include "kspread_locale.h"
+#include "kspread_map.h"
+#include "kspread_selection.h"
 #include "kspread_sheetprint.h"
-#include "valuecalc.h"
-#include "valueconverter.h"
-#include "kspread_dlg_format.h"
-#include "kspread_dlg_conditional.h"
-#include "kspread_dlg_series.h"
-#include "kspread_dlg_reference.h"
-#include "kspread_dlg_area.h"
-#include "kspread_dlg_resize2.h"
-#include "kspread_dlg_preference.h"
-#include "kspread_dlg_comment.h"
-#include "kspread_dlg_angle.h"
-#include "kspread_dlg_goto.h"
-#include "kspread_dlg_validity.h"
-#include "kspread_dlg_pasteinsert.h"
-#include "kspread_dlg_showColRow.h"
-#include "kspread_dlg_styles.h"
-#include "kspread_dlg_list.h"
-#include "sheet_properties.h"
-
-#include "kspread_undo.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
-#include "handler.h"
-#include "digest.h"
-#include "damages.h"
-
+#include "kspread_undo.h"
 #include "testrunner.h"
-#include "inspector.h"
+#include "valuecalc.h"
+#include "valueconverter.h"
 
+// dialogs
+#include "dialogs/kspread_dlg_anchor.h"
+#include "dialogs/kspread_dlg_angle.h"
+#include "dialogs/kspread_dlg_area.h"
+#include "dialogs/kspread_dlg_comment.h"
+#include "dialogs/kspread_dlg_conditional.h"
+#include "dialogs/kspread_dlg_cons.h"
+#include "dialogs/kspread_dlg_csv.h"
+#include "dialogs/kspread_dlg_database.h"
+#include "dialogs/kspread_dlg_format.h"
+#include "dialogs/kspread_dlg_formula.h"
+#include "dialogs/kspread_dlg_goalseek.h"
+#include "dialogs/kspread_dlg_goto.h"
+#include "dialogs/kspread_dlg_insert.h"
+#include "dialogs/kspread_dlg_layout.h"
+#include "dialogs/kspread_dlg_list.h"
+//#include "dialogs/kspread_dlg_multipleop.h"
+#include "dialogs/kspread_dlg_paperlayout.h"
+#include "dialogs/kspread_dlg_pasteinsert.h"
+#include "dialogs/kspread_dlg_preference.h"
+#include "dialogs/kspread_dlg_reference.h"
+#include "dialogs/kspread_dlg_resize2.h"
+#include "dialogs/kspread_dlg_series.h"
+#include "dialogs/kspread_dlg_show.h"
+#include "dialogs/kspread_dlg_showColRow.h"
+#include "dialogs/kspread_dlg_sort.h"
+#include "dialogs/kspread_dlg_special.h"
+#include "dialogs/kspread_dlg_styles.h"
+#include "dialogs/kspread_dlg_subtotal.h"
+#include "dialogs/kspread_dlg_validity.h"
+#include "dialogs/sheet_properties.h"
+
+// KSpread DCOP
 #include "KSpreadViewIface.h"
-#include "kspread_dlg_paperlayout.h"
 
 // non flickering version of KSpell.
 // DF: those fixes have been applied to kde-3.2-pre, so KSpreadSpell
