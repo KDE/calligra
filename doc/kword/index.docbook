@@ -23,35 +23,43 @@ need them for translation coordination !
 Please respect the format of the date (DD/MM/YYYY) and of the version
 (Major.minor.lesser), it could be used by automation scripts -->
 
-<date>27/2/2000</date>
-<releaseinfo>0.1.5</releaseinfo>
+<date>7/3/2000</date>
+<releaseinfo>0.1.6</releaseinfo>
 
 <revhistory>
 <revision>
-<revnumber>1.5.0</revnumber>
+<revnumber>0.1.6</revnumber>
+<date>7/3/2000</date>
+<authorinitials>MPM</authorinitials>
+<revremark>Working on "Detailed Guides" (Document layout).</revremark>
+</revision>
+<!-- *************** -->   
+<revision>
+<revnumber>0.1.5</revnumber>
 <date>27/2/2000</date>
 <authorinitials>MPM</authorinitials>
 <revremark>Working on "Detailed Guides" (Document layout).</revremark>
 </revision>
-<revision><revnumber>1.4.0</revnumber>
+<!-- *************** -->   
+<revision><revnumber>1.4</revnumber>
 <date>29/01/2000</date>
 <authorinitials>MPM</authorinitials>
 <revremark>Additional work on Detailed Guides.  All screenshots/icons work now.</revremark>
 </revision>
 <!-- *************** -->   
-<revision><revnumber>1.3.0</revnumber>
+<revision><revnumber>0.1.3</revnumber>
 <date>24/01/2000</date>
 <authorinitials>MPM</authorinitials>
 <revremark>More work on Detailed Guides.  Other minor edits</revremark>
 </revision>
 <!-- *************** -->   
-<revision><revnumber>1.2.0</revnumber>
+<revision><revnumber>0.1.2</revnumber>
 <date>22/01/2000</date>
 <authorinitials>MPM</authorinitials>
 <revremark>Started writing Detailed Guides.  More pics added.</revremark>
 </revision>
 <!-- *************** -->   
-<revision><revnumber>1.1.0</revnumber>
+<revision><revnumber>0.1.1</revnumber>
 <date>20/01/2000</date>
 <authorinitials>MPM</authorinitials>
 <revremark>Updated overall layout, split several large sections into small ones, all pictures should be included this time.  Revision numbers now match numbers on CVS.</revremark>
@@ -62,12 +70,7 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <authorinitials>MPM</authorinitials>
 <revremark>Substantial updates.  Moved all graphics elements to /pics directories.</revremark>
 </revision>
-<!-- *************** -->   
-<revision><revnumber>0.1.0</revnumber>
-<date>19/01/2000</date>
-<authorinitials>MPM</authorinitials>
-<revremark>First made available to the CVS</revremark>
-</revision></revhistory>
+</revhistory>
 <!-- Abstract about this handbook -->
 
 <abstract>
@@ -115,7 +118,7 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 
 <chapter ID="Introduction"><title>Introduction</title>
 
-<sect1 id="introduction">
+<sect1 id="Introduction1">
 <title>Introduction</title>
 <para>KWord, is a full featured WYSIWYG (What You See Is What You Get) Wordprocessor/Desktop Publishing Program. </para>
 <para> KWord is part of the KOffice productivity suite for the K Dekstop Environment.  Other applications in KOffice include</para>
@@ -345,7 +348,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 </sect1>
 </chapter>
 <chapter id="KWordScreen"><title>The KWord Screen</title>
-<sect1><title>Overview</title>
+<sect1 id="screenover"><title>Overview</title>
 <para>KWord, like most GUI based programs, divides the screen up into several areas. Each area of the screen is used to perform a group of similar features
 .  When you start the KWord screen, it is initially divided into 4 major areas:</para>
 <orderedlist numeration="arabic">
@@ -1052,7 +1055,7 @@ This is an excellent choice for every day correspondance, or general word proces
 </sect1>
 <sect1 id="Formatpara"><title>Formatting paragraph</title>
 <para>This section will detail all the options available to format your paragraphs.</para>
-<para>Before you start forma</para>
+<para>Before you start formating a paragraph, ensure your cursor is currently located in the paragraph you want to format.</para>
 <para>The formatting paragraphs dialog consists of 5 tabbed sections labled "Indent and spacing", "Flows", "Borders", "Numbering", and "Tabulators"</para>
 <screenshot><graphic fileref="pics/fpara1" format="png" align="center"></graphic></screenshot>
 <para>This dialog box allows you to set the paragraph margins, the spacing between lines, and the spacing between paragraphs.</para>
@@ -1105,7 +1108,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>This dialog is used to adjust the tab stops.  For more details, see <link linkend="TabStops">Using Tab Stops</link>.</para>
 </sect1>
 <sect1 id="TabStops"><title>Using Tab Stops</title>
-<para>Tab stops are a holdover from the days of typewriters.  They allow you to align text into columns quickly and easily.</para>
+<para>Tab stops are a (very useful) holdover from the days of typewriters.  They allow you to align text into columns quickly and easily.</para>
 <para>When a tab stop is in place, you can immediatly jump to that horizontal position on the page by pressing the "Tab" key.  Tab stops are most commonly used to allign columns in a table, or to automatically indent paragraphs.</para>
 <para>Tab stops are part of the properties of a paragraph.  Each paragraph keeps track of its own set of tab stops.  You can view the tab stops of a particular paragraph by placing the mouse cursor within a paragraph, clicking once, and checking the top ruler.  The tab stops are marked as symbols in black. </para>
 <para>KWord recognises 4 types of tab stops.  Each of these types has a corresponding symbol to help you identify the type in the ruler.  </para>
@@ -1211,21 +1214,398 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>When you are done adding tab stops, you can click "OK" to finish.</para>
 </sect3></sect2></sect1>
 <sect1 id="FormatChar"><title>Formatting Characters</title>
+<para>This section will cover the changes you can make to individual or blocks of characters including:</para>
+<itemizedlist>
+<listitem><para><link linkend="chfnt1">Size</link></para></listitem>
+<listitem><para><link linkend="chfnt1">Font</link></para></listitem>
+<listitem><para><link linkend="chfnt1">Font Style</link></para></listitem>
+<listitem><para><link linkend="chfnt1">Character Set</link></para></listitem>
+<listitem><para><link linkend="chfnt2">Character Color</link></para></listitem>
+</itemizedlist>
+<sect2 id="chfnt1"><title>Changing Size, Font, Font Style and Character Set</title>
+<sect3 id="chfnt1a"><title>Using the Keyboard or Toolbars</title>
+<para>There are several keyboard shortcuts which you can use to make common changes to character formatting. After selecting the text, you can use these key combinations to toggle each attribute.</para>
+<para>The Basic Formatting Toolbar also has buttons which you can use to toggle these same attributes.  </para>
+<para>The following table details each attribute, the toolbar buttons and the keyboard shortcuts.</para>
+<informaltable frame=all><tgroup cols=3 align=left>
+<thead>
+<row><entry align=right>Attribute</entry><entry align=center>Toolbar Button</entry><entry align=center>Key Combo</entry></row>
+</thead><tbody>
+<row><entry align=right>Font Size</entry><entry align=center><inlinegraphic fileref="pics/chsizebut" format="png" align="center"></inlinegraphic></entry><entry align=center>-</entry></row>
+<row><entry align=right>Font</entry><entry align=center><inlinegraphic fileref="pics/chfontbut" format="png" align="center"></inlinegraphic></entry><entry align=center>-</entry></row>
+<row><entry align=right>Bold Face</entry><entry align=center><inlinegraphic fileref="pics/bold" format="png" align="center"></inlinegraphic></entry><entry align=center><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
+<row><entry align=right>Italics</entry><entry align=center><inlinegraphic fileref="pics/ital" format="png" align="center"></inlinegraphic></entry><entry align=center><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
+<row><entry align=right>Underline</entry><entry align=center><inlinegraphic fileref="pics/undl" format="png" align="center"></inlinegraphic></entry><entry align=center><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
+</tbody></tgroup></informaltable>
+<note><para>You cannot change the Character Set using the keyboard or the toolbar, you must <link linkend="chfnt1b">use the dialog box</link>.</para></note>
+</sect3>
+<sect3 id="chfnt1b"><title>Using the Dialog Box</title>
+<para>If you have many changes to make, you can also use a dialog box to set these same attributes.</para>
+<para>You can open the Character Formatting Dialog box in one of two ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Font</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Alt</keycap><keycap>F</keycap></keycombo></para></listitem>
+</itemizedlist>
+<para>Either method will open a dialog box</para>
+<screenshot><graphic fileref="pics/fchardlg" format="png" align="center"></graphic></screenshot>
+<para>Using this dialog box, you can select the font, size, character set, italics and boldface options.</para>
+<para>The preview box along the bottom, will show you how your current settings will appear.</para>
+<para>Clicking "OK" will commit your changes to the document.</para>
+<para>Clicking "Cancel" will abort all changes made.</para>
+<note><para>The default sentance for the preview box is "The Quick Brown Fox Jumps Over The Lazy Dog".</para>
+<para>You can change this sentance by clicking once within the sentance.  You can then change the sample sentance to anything you want.</para>
+<para>This can be especially useful if you need to view numbers, special characters, or non-arabic characters</para>
+<para>The sample sentance will revert to the default the next time you open this dialog.</para></note>
+</sect3></sect2>
+<sect2 id="chfnt2"><title>Changing Font Color</title>
+<para>The "Change Font Color" command can be invoked 3 ways:</para>
+<itemizedlist>
+<listitem><para>By selecting <menuchoice> <guimenu>Format</guimenu><guimenuitem>Font Color</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>C</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinegraphic fileref="pics/chcolorbut" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
+</itemizedlist><para></para>
+<para>You can now choose a color for the selected text using the <link linkend="SelColor">Color Selection Dialog Box</link>.</para>
+</sect2></sect1>
+<sect1 id="Styles"><title>Styles</title>
+<para>When you build documents that are more complex than a business letter, such as a book, newsletter, or resume, the document is often broken down into sections.  Each of these sections may have a similar appearance.  </para>
+<para>You can use styles to easily keep a consistant look throughout your document.</para>
+<tip><para>If you are familiar with "Styles" in Microsoft Word, KWord styles perform the same functions.  You can skip to the next section.</para></tip>
+<para>As an example, if we look at a snipit of a document, and assign different styles to appropriate parts :</para>
+<informaltable frame=none><tgroup cols=2 align=left>
+<tbody>
+<row><entry></entry><entry><emphasis>Section Title ----></emphasis></entry><entry>Setion 1:  How to use your new computer</entry></row>
+<row><entry></entry><entry></entry></row>
+<row><entry></entry><entry><emphasis>Normal Text ----></emphasis></entry><entry><para>Do to a revolutionary new teaching method, we can now teach you how to use you computer in 10 minutes.  </para><para></para></entry></row>
+<row><entry></entry><entry></entry></row>
+<row><entry></entry><entry></entry><entry><para>We should begin by quickly summarizing the parts of your new computer.</para><para></para></entry></row>
+<row><entry></entry><entry></entry></row>
+<row><entry></entry><entry></entry><entry>(text deleted)</entry></row>
+<row><entry></entry><entry></entry></row>
+<row><entry></entry><entry><emphasis>Section Title ----></emphasis></entry><entry>Section 2:  What to do if the 10 minute manual didn't work.</entry></row>
+</tbody></tgroup></informaltable>
+<para>In this example, you can see this computer manual consists of two sections.  To the title text of each section, we have changed the text style to "Section Title". The rest of the document text is left as "Normal Text".</para>
+<para>We do not need to know how exactly we want the text and paragraphs of these sections to look yet.  All we need to do is identify these sections of text as "Section Titles" or "Normal Text".</para>
+<para>Once we have finished the document, you can change the look of all the text labled "Section Title" all at once.  </para>
+<para>This will ensure that all section titles appear consistant throughout your document.</para>
+<para>KWord has 11 predefined Styles.  For a list of them, and the formatting options, <link linkend="PredefinedStyles">click here</link>.</para>
+<sect2 id="StyleSel"><title>Changing the Style of Text</title>
+<para>To change the style of text, first, <link linkend="select">select the text</link> you want the changes to apply to.</para>
+<para>You can now change the character style in one of two ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Style</guimenuitem></menuchoice> from the Menu bar.  This will open the list of available styles, select the style from the list.</para></listitem>
+<listitem><para>You can select the style using the drop down box on the Character Formatting Toolbar. (  <inlinegraphic fileref="pics/chstylebut" format="png" align="center"></inlinegraphic>  )</para></listitem>
+</itemizedlist></sect2>
+<sect2 id="StyleAdd"><title>Creating a Style</title>
+<para>If you plan on using Styles extensively in a large document, you will probably want to create new styles specific for your needs.  </para>
+<para>To create a new style:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><graphic fileref="pics/styldlg1" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>Click "Add".</para><para>This will bring up another dialog box</para>
+<screenshot><graphic fileref="pics/styldlg3" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>Type a descriptive name in the box labled "Name".  This will be the name of the style.</para></listitem>
+<listitem><para>Now select a style from the dropdown box labled "Following Style Template". This will be the basic style that you modify to create your new style (You have to start somewhere right?).  If in doubt, "Standard" is fine.</para></listitem>
+<listitem><para>Now you can make the changes you need to create your new style.</para>
+<para>The preview box will show you what your new style will look like.</para>
+<para>Use the buttons labled 
+<link linkend="styfont">Font</link>, 
+<link linkend="stycolor">Color</link>, 
+<link linkend="styspc">Spacing and Indents</link>, 
+<link linkend="styalgn">Alignment</link>, 
+<link linkend="stybord">Borders</link>, 
+<link linkend="stynumb">Numbering</link>, and 
+<link linkend="stytab">Tabulators</link> to create the style.</para>
+<para>If you want to change the scope of the style, see the section entitled <link linkend="StyleCtrl">Controlling Styles</link>.</para>
+<para>Click "OK" to create your new style.</para>
+<para>Click "Cancel" to abort the creation of the style.</para>
+</listitem>
+</orderedlist>
+<sect3 id="styfont"><title>Changing the Font Size, Type etc.</title><para>You can change the font size, character set, font, character set and toggle italics and bold face by clicking on "Font".  This will open a new dialog box.
+</para><screenshot><graphic fileref="pics/fchardlg" format="png" align="center"></graphic></screenshot>
+<para>Using this dialog box, you can select the font, size, character set, italics and boldface options.</para>
+<para>The preview box along the bottom, will show you how your current settings will appear.</para>
+<para>Clicking "OK" will commit your changes to the style.</para>
+<para>Clicking "Cancel" will abort all changes made in this dialog box.</para></sect3>
+<sect3 id="stycolor"><title>Changing the Font Color</title><para>You can change the font color of your new style, by click on "Color".</para><para>You can now choose a color for the selected text using the <link linkend="SelColor">Color Selection Dialog Box</link>.</para></sect3>
+<sect3 id="styspc"><title>Changing Paragraph Spacing and Indents</title><para></para>
+<para>To change the paragraph spacing and indention of the paragraph of your style, click on "Spacing and Indents".  This opens a new dialog box.</para>
+<screenshot><graphic fileref="pics/styldlg4" format="png" align="center"></graphic></screenshot>
+<para>This dialog box allows you to set the paragraph margins, the spacing between lines, and the spacing between paragraphs.</para>
+<para>The first section of this dialog box is labled "Indent", and consists of three parts:</para>
+<variablelist>
+<varlistentry><term>"Left"</term><listitem><para>You can indent all the lines of a paragraph by entering a value in this box. The first line is unaffected by this box.  If you want to alter the first line, you must specify that seperately.</para></listitem></varlistentry>
+<varlistentry><term>"Right"</term><listitem><para>!!!!Just blacked out!!!!!</para></listitem></varlistentry>
+<varlistentry><term>"First Line"</term><listitem><para>Any non-zero value entered in this text box, will shift the left margin of the first line.</para></listitem></varlistentry>
+</variablelist>
+<para>The next section is labled "Line Spacing".  It consists of two elements:</para>
+<variablelist>
+<varlistentry><term>Dropdown box</term><listitem><para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para></listitem></varlistentry>
+<varlistentry><term>Text box</term><listitem><para>By entering a value in here, you can adjust the spacing between lines from the default.  If you enter a positive number, you will increase the spacing between lines.  If, on the other hand, you enter a negative number, you will decrease the spacing between lines.</para><note><para>Changes to this entry do NOT affect the line spaceing between lines of different paragraphs.</para></note></listitem></varlistentry>
+</variablelist>
+<para>The last section is labled "Paragraph Space".  It consists of two entries:</para>
+<variablelist>
+<varlistentry><term>"Before"</term><listitem><para>By entering a value in here, you can adjust the spacing before each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing before a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing before each paragraph.</para></listitem></varlistentry>
+<varlistentry><term>"After"</term><listitem><para>By entering a value in here, you can adjust the spacing after each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing after a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing after each paragraph.</para></listitem></varlistentry>
+</variablelist>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+</sect3>
+<sect3 id="styalgn"><title>Changing Paragraph Alignment</title>
+<para>To change how he text is placed within the line, click on "Alignment".  This will open a new dialog box.</para>
+<screenshot><graphic fileref="pics/styldlg5" format="png" align="center"></graphic></screenshot>
+<para>As you can see, there are only 4 choices.</para>
+<para>If you choose "Left", "Right" or "Center", the text will be moved on the line.</para>
+<para>If you choose "Block", KWord will increase the space <emphasis>between</emphasis> words, so that each line (with the exception of the last liine), reaches both the left and right margins.</para>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+</sect3>
+<sect3 id="stybord"><title>Changing Paragraph Borders</title><para>To add borders to your style, click on "Borders".  This will open a new dialog box.</para>
+<screenshot><graphic fileref="pics/styldlg6" format="png" align="center"></graphic></screenshot>
+<para>You can tell KWord to surround (on some or all sides) a paragraph with a border.  This border can be solid or not, of any color and of any size.  You use this dialog panel to adjust the borders.</para>
+<para>To define some borders for a paragraph, you first determine how the borders should appear on the document.  Then you select which paragraph borders should be used.  You can mix and match styles, weights and colors of paragraph borders for maximum flexibility in you document.</para>
+<para><emphasis>Determine the "Look" of the border.</emphasis></para>
+<variablelist>
+<varlistentry><term>"Style"</term><listitem><para>You can use this dropdown box to select the overall type of the new border. </para><para>Your choices are: Solid Line, Dash Line, Dot line, Dash Dot line, Dash Dot Dot line</para></listitem></varlistentry>
+<varlistentry><term>"Width"</term><listitem><para>This will determine how wide the resulting border will be.  It is measured in points.</para>  </listitem></varlistentry>
+<varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Selecting the borders</emphasis></para>
+<informaltable frame=none>
+<tgroup cols=2 align=left>
+<tbody>
+<row><entry><inlinegraphic fileref="pics/borbutL" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutR" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutT" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutB" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+</tbody></tgroup></informaltable>
+<para>The "Preview" window will show you how your paragraph borders will look.</para></sect3>
+<sect3 id="stynumb"><title>Changing Paragraph Numbering/Bullets</title><para>To add bullets or numbering to your style, click "Numbering".</para>
+<screenshot><graphic fileref="pics/styldlg7" format="png" align="center"></graphic></screenshot><para>!!!!!!!!!!Still needs work before writing!!!!!!!!!</para></sect3>
+<sect3 id="stytab"><title>Changing Tabstops.</title><para>You can define tab stops for your styles.  To do so, click "Tabulators".  This will open a new dialog box.</para>
+<screenshot><graphic fileref="pics/styldlg8" format="png" align="center"></graphic></screenshot><para>You can now add tab stops by:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Type the horizontal location of the tab stop in the space provided.  The units are listed above the text box.</para></listitem>
+<listitem><para>Select the type of tab stop from the list on the right.</para></listitem>
+<listitem><para>Click Add.</para></listitem>
+</orderedlist>
+<para>When you are done adding tab stops, you can click "OK" to finish.</para></sect3>
+</sect2>
+<sect2 id="StyleDel"><title>Deleting a Style</title>
+<para>Deleting an unneeded style is easy.</para>
+<orderedlist numeration="arabic">
+<listitem><para>Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><graphic fileref="pics/styldlg1" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>From the list of available styles, select the style you want to delete by clicking once with the mouse left mouse button.</para>
+<warning><para>Be sure you have selected  the correct style before you click "Delete".  KWord will not ask for confirmation, so you will not be given an oportunity to back out.</para></warning></listitem>
+<listitem><para>Click "Delete".</para><para>The style is now deleted.</para></listitem>
+</orderedlist>
+<tip><para>Certain styles in KWord are considered fundimental (Standard, Head 1, Head2, Head 3, Enumerated List, Bulleted List, and Alphabetical list) and cannot be deleted.</para>
+<para>When you select any one of these styles to delete it, the "Delete" button will not function.</para></tip>
+</sect2>
+<sect2 id="StyleEdit"><title>Editing a Style</title>
+<para>The true power of styles, is the ability to edit the formatting options of that style <emphasis>after</emphasis> you have defined the style.  By changing the formatting of the style, you immediatly change every paragraph with that style, and you maintain a consistant look to your document.</para>
+<para>You will also notice, that editing the formatting options of a style, uses the same interface you used to create the style in the first place.</para>
+<para>To edit a current style:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><graphic fileref="pics/styldlg1" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>Select the style you want to edit from the list in the left</para></listitem>
+<listitem><para>Click "Edit".</para><para>This will bring up another dialog box</para>
+<screenshot><graphic fileref="pics/styldlg3" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>Now you can make the changes you want to this style.</para>
+<para>The preview box will show you what your new style will look like.</para>
+<warning><para>Do not change the name of your template.</para>
+<para>Doing so will delete your current style from the list (and create a new one with the new name).</para>
+<para>Any paragraphs which were origninally formatted with this style, will revert to "Standard".</para></warning>
+
+<para>Use the buttons labled 
+<link linkend="chstyfont">Font</link>, 
+<link linkend="chstycolor">Color</link>, 
+<link linkend="chstyspc">Spacing and Indents</link>, 
+<link linkend="chstyalgn">Alignment</link>, 
+<link linkend="chstybord">Borders</link>, 
+<link linkend="chstynumb">Numbering</link>, and 
+<link linkend="chstytab">Tabulators</link> to alter the look of the style.</para>
+<para>If you want to change the scope of the style, see the section entitled <link linkend="StyleCtrl">Controlling Styles</link>.</para>
+<para>Click "OK" to commit your changes.</para>
+<para>Click "Cancel" to abort all changes to this style.</para>
+</listitem>
+</orderedlist>
+<sect3 id="chstyfont"><title>Changing the Font Size, Type etc.</title><para>You can change the font size, character set, font, character set and toggle italics and bold face by clicking on "Font".  This will open a new dialog box.
+</para><screenshot><graphic fileref="pics/fchardlg" format="png" align="center"></graphic></screenshot>
+<para>Using this dialog box, you can select the font, size, character set, italics and boldface options.</para>
+<para>The preview box along the bottom, will show you how your current settings will appear.</para>
+<para>Clicking "OK" will commit your changes to the style.</para>
+<para>Clicking "Cancel" will abort all changes made in this dialog box.</para></sect3>
+<sect3 id="chstycolor"><title>Changing the Font Color</title><para>You can change the font color of your style, by clicking on "Color".</para><para>You can now choose a color for the style using the <link linkend="SelColor">Color Selection Dialog Box</link>.</para></sect3>
+<sect3 id="chstyspc"><title>Changing Paragraph Spacing and Indents</title><para></para>
+<para>To change the paragraph spacing and indention of the paragraph of your style, click on "Spacing and Indents".  This opens a new dialog box.</para>
+<screenshot><graphic fileref="pics/styldlg4" format="png" align="center"></graphic></screenshot>
+<para>This dialog box allows you to set the paragraph margins, the spacing between lines, and the spacing between paragraphs.</para>
+<para>The first section of this dialog box is labled "Indent", and consists of three parts:</para>
+<variablelist>
+<varlistentry><term>"Left"</term><listitem><para>You can indent all the lines of a paragraph by entering a value in this box. The first line is unaffected by this box.  If you want to alter the first line, you must specify that seperately.</para></listitem></varlistentry>
+<varlistentry><term>"Right"</term><listitem><para>!!!!Just blacked out!!!!!</para></listitem></varlistentry>
+<varlistentry><term>"First Line"</term><listitem><para>Any non-zero value entered in this text box, will shift the left margin of the first line.</para></listitem></varlistentry>
+</variablelist>
+<para>The next section is labled "Line Spacing".  It consists of two elements:</para>
+<variablelist>
+<varlistentry><term>Dropdown box</term><listitem><para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para></listitem></varlistentry>
+<varlistentry><term>Text box</term><listitem><para>By entering a value in here, you can adjust the spacing between lines from the default.  If you enter a positive number, you will increase the spacing between lines.  If, on the other hand, you enter a negative number, you will decrease the spacing between lines.</para><note><para>Changes to this entry do NOT affect the line spaceing between lines of different paragraphs.</para></note></listitem></varlistentry>
+</variablelist>
+<para>The last section is labled "Paragraph Space".  It consists of two entries:</para>
+<variablelist>
+<varlistentry><term>"Before"</term><listitem><para>By entering a value in here, you can adjust the spacing before each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing before a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing before each paragraph.</para></listitem></varlistentry>
+<varlistentry><term>"After"</term><listitem><para>By entering a value in here, you can adjust the spacing after each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing after a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing after each paragraph.</para></listitem></varlistentry>
+</variablelist>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+<para>Click "OK" to accept your changes.</para>
+<para>Click "Cancel" to reject any changes you made with this dialog box.</para>
+</sect3>
+<sect3 id="chstyalgn"><title>Changing Paragraph Alignment</title>
+<para>To change how he text is placed within the line, click on "Alignment".  This will open a new dialog box.</para>
+<screenshot><graphic fileref="pics/styldlg5" format="png" align="center"></graphic></screenshot>
+<para>As you can see, there are only 4 choices.</para>
+<para>If you choose "Left", "Right" or "Center", the text will be moved on the line.</para>
+<para>If you choose "Block", KWord will increase the space <emphasis>between</emphasis> words, so that each line (with the exception of the last liine), reaches both the left and right margins.</para>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+<para>If you are happy with the change you made, click "OK" to accept your changes.</para>
+<para>Click "Cancel" to reject any changes you made with this dialog box.</para>
+</sect3>
+<sect3 id="chstybord"><title>Changing Paragraph Borders</title><para>To add borders to your style, click on "Borders".  This will open a new dialog box.</para>
+<screenshot><graphic fileref="pics/styldlg6" format="png" align="center"></graphic></screenshot>
+<para>You can tell KWord to surround (on some or all sides) a paragraph with a border.  This border can be solid or not, of any color and of any size.  You use this dialog panel to adjust the borders.</para>
+<para>To define some borders for a paragraph, you first determine how the borders should appear on the document.  Then you select which paragraph borders should be used.  You can mix and match styles, weights and colors of paragraph borders for maximum flexibility in you document.</para>
+<para><emphasis>Determine the "Look" of the border.</emphasis></para>
+<variablelist>
+<varlistentry><term>"Style"</term><listitem><para>You can use this dropdown box to select the overall type of the new border. </para><para>Your choices are: Solid Line, Dash Line, Dot line, Dash Dot line, Dash Dot Dot line</para></listitem></varlistentry>
+<varlistentry><term>"Width"</term><listitem><para>This will determine how wide the resulting border will be.  It is measured in points.</para>  </listitem></varlistentry>
+<varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Selecting the borders</emphasis></para>
+<informaltable frame=none>
+<tgroup cols=2 align=left>
+<tbody>
+<row><entry><inlinegraphic fileref="pics/borbutL" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutR" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutT" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinegraphic fileref="pics/borbutB" format="png" align="right"></inlinegraphic></entry><entry valign=middle>Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+</tbody></tgroup></informaltable>
+<para>The "Preview" window will show you how your paragraph borders will look.</para>
+<para>Click "OK" to accept your changes.</para>
+<para>Click "Cancel" to reject any changes you made with this dialog box.</para></sect3>
+<sect3 id="chstynumb"><title>Changing Paragraph Numbering/Bullets</title><para>To add bullets or numbering to your style, click "Numbering".</para>
+<screenshot><graphic fileref="pics/styldlg7" format="png" align="center"></graphic></screenshot><para>!!!!!!!!!!Still needs work before writing!!!!!!!!!</para>
+<para>Click "OK" to accept your changes.</para>
+<para>Click "Cancel" to reject any changes you made with this dialog box.</para>
+</sect3>
+<sect3 id="chstytab"><title>Changing Tabstops.</title><para>You can define tab stops for your styles.  To do so, click "Tabulators".  This will open a new dialog box.</para>
+<screenshot><graphic fileref="pics/styldlg8" format="png" align="center"></graphic></screenshot><para>You can now add tab stops by:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Type the horizontal location of the tab stop in the space provided.  The units are listed above the text box.</para></listitem>
+<listitem><para>Select the type of tab stop from the list on the right.</para></listitem>
+<listitem><para>Click Add.</para></listitem>
+</orderedlist>
+<para>When you are done adding tab stops, you can click "OK" to finish.</para></sect3></sect2>
+<sect2 id="StyleCtrl"><title>Controlling Styles</title>
+<para>With some documents, you will want to ensure that every character within your document <emphasis>exactly</emphasis> matches the document style.  With other documents, you will need some additional flexability.  In this second case, you need to configure KWord so it only changes certain specific aspects of the style with each update.</para>
+<para>To edit a current style:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><graphic fileref="pics/styldlg1" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>Now click on the tab labled "Update Configuration".</para>
+<screenshot><graphic fileref="pics/styldlg2" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>This dialog box is broken down into 7 major parts, and a single check box.  </para>
+<para><emphasis>Fonts</emphasis></para>
+<para>The first drop down box, determines what font attributes a style should control, and when they should be applied. Your choices for this drop-down box are:</para>
+<variablelist>
+<varlistentry><term>Dont Update Fonts</term>
+<listitem><para>If this option is selected, KWord will not alter any fonts (with respect to size, font name, italics or bold face, etc) when applying the style.</para></listitem></varlistentry>
+<varlistentry><term>Update Font Families of same sized Fonts.</term>
+<listitem><para>When selected, KWord will not alter any fonts when applying the style unless the fonts size attribute of the selected text matches the font size within the style.  If the font sizes do not match, KWord will not change any font attributes. If the size does match, the selected text will be changed to the font family of the style.  No otherchanges (bold face, italics, etc) will be made.</para></listitem></varlistentry>
+<varlistentry><term>Update Font Families of all sized Fonts.</term>
+<listitem><para>With this option, KWord will convert the Font Family (but no other attributes), to the font defined in the style irrespective of font size.</para></listitem></varlistentry>
+<varlistentry><term>Update Font Families and Attributes of same sized Fonts.</term>
+<listitem><para>When selected, KWord will not alter any fonts when applying the style unless the fonts size attribute of the selected text matches the font size within the style.  If the font sizes do not match, KWord will not change any font attributes. If the size does match, the selected text will be changed to match the style.  All attributes (bold face, italics, etc) will be changed.</para></listitem></varlistentry>
+<varlistentry><term>Update Font Families and Attributes of all sized Fonts.</term>
+<listitem><para>With this option, KWord will change all text, irrespective of size or attributes, to match the font specified in the style.</para></listitem></varlistentry></variablelist>
+<para><emphasis>Font Color</emphasis></para>
+<para>This drop down box allows you to specify if the Font colors should be changed to match the style or not.</para>
 <para></para>
-
-
-
-
-
-
-
+<variablelist>
+<varlistentry><term>Dont Update Colors</term>
+<listitem><para>If this option is selected, KWord will not alter any font colors</para></listitem></varlistentry>
+<varlistentry><term>Update Colors</term>
+<listitem><para>When selected, KWord will change the font colors of selected text to match the color defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Indents and Spacings</emphasis></para>
+<para>This drop down box allows you to specify if the indenting and paragraph spacing should be changed to match the style or not.</para>
+<variablelist>
+<varlistentry><term>Dont Update Indents and Spacings</term>
+<listitem><para>If this option is selected, KWord will not alter any indenting or paragraph spacing settings.</para></listitem></varlistentry>
+<varlistentry><term>Update Colors</term>
+<listitem><para>When selected, KWord will change the indenting or paragraph spacing settings of selected text to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Aligns/Flows</emphasis></para>
+<para>This drop down box allows you to specify if the paragraph alignment should be changed to match the style or not.</para>
+<variablelist><varlistentry><term>Dont Aligns/Flows</term>
+<listitem><para>If this option is selected, KWord will not alter any paragraph alignment settings.</para></listitem></varlistentry>
+<varlistentry><term>Update Aligns/Flows</term>
+<listitem><para>When selected, KWord will change the paragraph alignment settings of selected text to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Numbering</emphasis></para>
+<variablelist><varlistentry><term>Dont Update Numbering</term>
+<listitem><para>If this option is selected, KWord will not alter any autonumbering settings.</para></listitem></varlistentry>
+<varlistentry><term>Update Colors</term>
+<listitem><para>When selected, KWord will change the autonumbering attributes of selected text to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Borders</emphasis></para>
+<variablelist><varlistentry><term>Dont Update Borders</term>
+<listitem><para>If this option is selected, KWord will not alter any paragraph borders.</para></listitem></varlistentry>
+<varlistentry><term>Update Borders</term>
+<listitem><para>When selected, KWord will change the paragraph borders to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Tabulators</emphasis></para>
+<variablelist><varlistentry><term>Dont Update Tabulators</term>
+<listitem><para>If this option is selected, KWord will not alter any tab stops.</para></listitem></varlistentry>
+<varlistentry><term>Update Tabulators</term>
+<listitem><para>When selected, KWord will change the tab stops to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist></listitem>
+<listitem><para>When you are finished, click "Close" to apply your changes.</para></listitem></orderedlist></sect2>
 </sect1>
-<sect1 id="Styles"><title>Styles</title><para></para></sect1>
 <sect1 id="Columns"><title>Columns</title>
+<para>You can divide the page into several columns, of equal width, with a user controlled space in between each column.</para>
+<note><para>This feature is only available in Wordprocessing Templates.</para><para>If you are working in a DTP Template, you can build up several columns using a different frame for each column.</para></note>
+<para>To change the number and width of columns:</para>
+<orderedlist numeration="arabic">
+<listitem><para>First, you must be in Frame Edit Mode.  If you are not currently in frame edit mode, you can change to Frame Edit Mode, in one of three ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinegraphic fileref="pics/framemode" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
+</itemizedlist></listitem>
+<listitem><para>Place the mouse cursor inside the frame you want to move, and click once with the left mouse button. This selects this frame as the current frame.</para></listitem>
+<listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Page</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><graphic fileref="pics/wpfmtpg1" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>Click on the table labled "Columns".</para>
+<para>This will change the dialog panel.</para>
+<screenshot><graphic fileref="pics/wpfmtpg2" format="png" align="center"></graphic></screenshot></listitem>
+<listitem><para>You can now select the number of columns, and the spacing in between.</para>
+<para>The preview box shows you what you can expect.</para></listitem>
+<listitem><para>Click "OK" when you are done.</para></listitem>
+<listitem><para>Click "Cancel" to abort changes.</para></listitem>
+</orderedlist></sect1>
+<sect1 id="Tables"><title>Tables</title>
 <para></para>
-<screenshot><graphic fileref="pics/wpfmtpg2" format="png" align="center"></graphic></screenshot>
+<sect2 id="tablenew"><title>Adding a new Table</title><para></para></sect2>
+<sect2 id="tabledel"><title>Deleting a Table</title><para></para></sect2>
+<sect2 id="tabirow"><title>Insert Row in Table</title><para></para></sect2>
+<sect2 id="tabicol"><title>Insert Column in Table</title><para></para></sect2>
+<sect2 id="tabdrow"><title>Delete Row in Table</title><para></para></sect2>
+<sect2 id="tabdcol"><title>Delete Column in Table</title><para></para></sect2>
+<sect2 id="tabjoin"><title>Join Cells in Table</title><para></para></sect2>
+<sect2 id="tabsplit"><title>Split Cells in Table</title><para></para></sect2>
+<sect2 id="tabungroup"><title>Ungroup a Table</title><para></para></sect2>
+<sect2 id="tabformat"><title>Format a Table</title><para></para></sect2>
 </sect1>
-<sect1 id="Tables"><title>Tables</title><para></para></sect1>
 <sect1 id="HeadFoot"><title>Headers/Footers</title><para></para></sect1>
 <sect1 id="TempCr"><title>Creating Templates/Saving a document as a template</title><para></para></sect1>
 
@@ -2057,53 +2437,73 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <!-- **************************************************************************************************** -->   
 <chapter id="Appendix"><title>Appendix</title>
 
-<glossary id="Glossery"><title>Glossary</title><para></para>
-<glossentry><glossterm><anchor id="defascii">ASCII</glossterm><glossdef><para>Stands for "American standard code for information interchange".  This is what many people mean when they say "plain text". KWord can read and write documents in ASCII format.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defaspectratio">Aspect Ratio</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defbinarycode">Binary code</glossterm><glossdef><para>Binary code is the actual instructions for the computer.  So if we refer to "binaries" we mean the executable &KWord; program.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defbitmap">Bitmap Image</glossterm><glossdef><para>Bit mapped images are composed of individual dots.  The filenames of such pictures often end in jpeg, png or gif.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defcell">Cells</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defclipart">Clipart</glossterm><glossdef><para>Clip art refers to vector based graphics.  </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defclipboard">Clipboard</glossterm><glossdef><para>The clipboard is where you're cut or copied selection is stored, so it later can be "pasted".  </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defcompiling">Compiling</glossterm><glossdef><para>When you compile a program, you are converting it from a source file (which is easily edited by a programmer) into a binary file (which the computer uses).  If you are planning on compiling KWord, please try to find a binary verison of KOffice first.  Compiling programs is not for the beginner.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defcustomvariables">Custom Variables</glossterm><glossdef><para>Using custom variables you can store certain values (e.g. numbers or text) for later use in your document or in a script.  If you want to find out more about custom variables, see STUFF (link to manual).</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defdeb">DEB</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defdialogbox">Dialog Box</glossterm><glossdef><para>A dialog box is a window where you </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defdtp">DTP</glossterm><glossdef><para>Stands for DeskTop Publishing.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deffaq">FAQ</glossterm><glossdef><para>Stands for "Frequently Asked Questions" and normally means a document, where those questions are answered. If you have a question to the developers of KOffice, you should always have a look at the FAQ first. You'll find the latest version <ulink url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deffilemask">File Mask</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deffilter">Filter</glossterm><glossdef><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deffooter">Footer</glossterm><glossdef><para>The footer of a page is an area below the normal text area. Often it contains the page numbering and maybe some additional information. The contents of the footer normally are the same for most pages, and changing the footer on one page will change all other pages as well. See <link linkend="defheader">Header</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defframe">Frame</glossterm><glossdef><para>Well, about everything in &KWord; is a frame. Text is always in a text frame. Pictures are in picture frames. Parts are in part frames. A frame is basically just a rectangle that can contain something and often can be moved, resized, deleted etc.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defframeset">Frameset</glossterm><glossdef><para>A frameset is a group of frames which "belong together". If you're writing text that doesn't fit into the first frame of a frameset, it will continue in the next frame belonging to that frameset.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defframeeditmode">Frame Edit Mode</glossterm><glossdef><para>In the "frame edit mode" &KWord; will act on whole <link linkend="defframe">frames</link>, rather than on their content. For example, if you click into a text frame when you're in "frame edit mode", the frame will be selected and can be moved, resized etc. If you're in <link linkend="deftexteditmode">"text edit mode"</link>, the cursor will be placed inside the frame (so "text edit mode" is the way your old word processor probably reacted).</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defftp">FTP</glossterm><glossdef><para>FTP is the "File Transfer Protocol". It's an internet protocol that allows you to retrieve files from so-called FTP servers. If you want to download KOffice from the internet, you'll probably use FTP.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defhardframebreak">Hard Frame Break</glossterm><glossdef><para>Normally, only when your text reaches the end of a frame, &KWord; will automatically continue with the next frame in your current <link linkend="defframeset">frameset</link>. By inserting a hard frame break you can force &KWord; to continue with the next frame at a certain position in your text.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defheader">Header</glossterm><glossdef><para>The header of a page is an area above the normal text area. Often it contains the page numbering and maybe some additional information. The contents of the header normally are the same for most pages, and changing the header on one page will change all other pages as well. See <link linkend="deffooter">Footer</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defhtml">HTML</glossterm><glossdef><para>Stands for HyperText Markup Language.  KWord can read and write HTML documents for publishing on the World Wide Web.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defkde2">KDE 2.0</glossterm><glossdef><para>Stands for the K Desktop Environment version 2.0 which is required for KWord to operate.  The KDesktop Environment is user interface which allows users to manipulate files and operate programs graphically.  For more information, please visit <ulink url="http://www.kde.org">www.kde.org</ulink>  </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defkeybinding">Key Binding</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deflandscape">Landscape</glossterm><glossdef><para>Landscape is a page orientation with greater width than height, i.e. just how you don't want to print your letters. See <link linkend="defportrait">Portrait</link>(STUFF: maybe insert a small pixmap? :)</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defmaximize">Maximize</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defmenubar">Menubar</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defminimize">Minimize</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defpicture">Picture</glossterm><glossdef><para>Yes, I know what your thinking--Who doesn't know what a picture is?  When we speak of pictures with KWord, however, the term has a very specific meaning and should not be confused with clip-art.  Pictures are bit-mapped images. See Clipart for more information..</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defportrait">Portrait</glossterm><glossdef><para>Portrait is a page orientation with greater height than width, i.e. the orientation that's normally used for letters. See <link linkend="deflandscape">Landscape</link>(STUFF: maybe insert a small pixmap? :)</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defrpm">RPM</glossterm><glossdef><para>RPM is the RedHat package manager, a widely used packaging tool for the linux operating system.  If you still have to get KOffice and your system supports RPM packages, you should get KOffice packages ending in ".rpm". They're very easy to use.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defscalingpicture">Scaling Pictures</glossterm><glossdef><para>Whenever you change the size of a graphics image, you are scaling that image.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defserialletter">Serial Letters</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defsourcecode">Source Code</glossterm><glossdef><para>Source code is the human readable version of an application (such as KWord).  Computers cannot use source code directly.  Instead, source code must be compiled into binary code, before use.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftar">TAR</glossterm><glossdef><para>Tar is a tool used for the archiving of files in so-called "tar-files" which you recognize by their suffix ".tar".  You'll find KOffice source and binary distributions as <link linkend="deftgz">gzipped tar-files</link>. However, you shouldn't use them if there are special packages for your system and package manager. See <link linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftargz">tar.gz</glossterm><glossdef><para>See <link linkend="deftgz">TGZ</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftexteditmode">Text Edit Mode</glossterm><glossdef><para>In the "text edit mode" &KWord; will act on the contents of a <link linkend="defframe">frame</link>, rather than on the frame itself. This probably is the way your old word processor worked. See <link linkend="defframeeditmode">frame edit mode</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftgz">TGZ</glossterm><glossdef><para>Files ending in ".tar.gz" or ".tgz" are <link linkend="deftar">tar-files</link> compressed with the gzip program.  You'll find KOffice source and binary distributions in this format. However, you shouldn't use them if there are special packages for your system and package manager. See <link linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftoolbar">Toolbar</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defvectorimage">Vector Image</glossterm><glossdef><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defviews">Views</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defwysiwyg">WYSIWYG</glossterm><glossdef><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defx">X Windows system</glossterm><glossdef><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></glossdef></glossentry>
-</glossary>
+<sect1 id="Glossery"><title>Glossary</title><para></para>
+<variablelist>
+<varlistentry><term><anchor id="defascii">ASCII</term><listitem><para>Stands for STUFF.  KWord can read and write documents in ASCII format.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defaspectratio">Aspect Ratio</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defbinarycode">Binary code</term><listitem><para>Binary code is the actual instructioins for the computer.  </para></listitem></varlistentry>
+<varlistentry><term><anchor id="defbitmap">Bitmap Image</term><listitem><para>Bit mapped images are composed of individual dots.  The filenames of pictures often end in jpeg, png or gif.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defcell">Cells</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defclipart">Clipart</term><listitem><para>Clip art refers to vector based graphics.   </para></listitem></varlistentry>
+<varlistentry><term><anchor id="defclipboard">Clipboard</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defcompiling">Compiling</term><listitem><para>When you compile a program, you are converting it from a source file (which is easily edited by a programmer) into a binary file (which the computer uses).  If you are planning on compiling KWord, please try to find a binary verison of KOffice first.  Compiling programs is not for the beginner.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defcustomvariables">Custom Variables</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defdeb">DEB</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defdialogbox">Dialog Box</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defdtp">DTP</term><listitem><para>Stands for DeskTop Publishing.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffaq">FAQ</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffilemask">File Mask</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffilter">Filter</term><listitem><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffooter">Footer</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defframe">Frame</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defframeset">Frameset</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deffrmaeeditmode">Frame Edit Mode</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defftp">FTP</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defhardframebreak">Hard Frame Break</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defheader">Header</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defhtml">HTML</term><listitem><para>Stands for HyperText Markup Language.  KWord can read and write HTML documents for publishing on the World Wide Web.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defkde2">KDE 2.0</term><listitem><para>Stands for the K Desktop Environment version 2.0 which is required for KWord to operate.  The KDesktop Environment is user interface which allows users to manipulate files and operate programs graphically.  For more information, please visit <ulink url="http://www.kde.org">www.kde.org</ulink>  </para></listitem></varlistentry>
+<varlistentry><term><anchor id="defkeybinding">Key Binding</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deflandscape">Landscape</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defmaximize">Maximize</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defmenubar">Menubar</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defminimize">Minimize</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defpicture">Picture</term><listitem><para>Yes, I know what your thinking--Who doesn't know what a picture is?  When we speak of pictures with KWord, however, the term has a very specific meaning and should not be confused with clip-art.  Pictures are bit-mapped images. See Clipart for more information..</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defportrait">Portrait</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defrpm">RPM</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defscalingpicture">Scaling Pictures</term><listitem><para>Whenever you change the size of a graphics image, you are scaling that image.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defserialletter">Serial Letters</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defsourcecode">Source Code</term><listitem><para>Source code is the human readable version of an application (such as KWord).  Computers cannot use source code directly.  Instead, source code must be compiled into binary code, before use.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="deftar">TAR</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deftexteditmode">Text Edit Mode</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deftgz">TGZ</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="deftoolbar">Toolbar</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defvectorimage">Vector Image</term><listitem><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></listitem></varlistentry>
+<varlistentry><term><anchor id="defviews">Views</term><listitem><para></para></listitem></varlistentry>
+<varlistentry><term><anchor id="defwysiwyg">WYSIWYG</term><listitem><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></listitem></varlistentry>
+<varlistentry><term><anchor id="defx">X Windows system</term><listitem><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></listitem></varlistentry>
 
+</variablelist>
+</sect1>
+<sect1 id="PredefinedStyles"><title>Pre-defined Styles in KWord</title>
+<para>KWord comes with 11 pre-defined Styles.</para>
+<para>The table below provides you a quick glimpse of the formatting that is predefined for these styles.</para>
+<informaltable>
+<tgroup cols=2 align=left><thead>
+<row><entry>Style</entry><entry>Characters</entry><entry>Paragraph</entry><entry>Borders</entry></row>
+</thead><tbody>
+<row><entry>Standard</entry><entry><para>Times</para><para>12 Point</para><para>Regular Style</para></entry><entry>Left Justified</entry><entry>None</entry></row>
+<row><entry>Head 1</entry><entry><para>Helvetica</para><para>24 Point</para><para>Bold</para></entry><entry><para>Left Justified</para><para>Arabic Numbering (Chapter Numbering, Depth 0, Start with 1)</para></entry><entry>None</entry></row>
+<row><entry>Head 2</entry><entry><para>Helvetica</para><para>16 Point</para><para>Bold</para></entry><entry><para>Left Justified</para><para>Arabic Numbering (Chapter Numbering, Depth 1, Start with 1)</para></entry><entry>None</entry></row>
+<row><entry>Head 3</entry><entry><para>Helvetica</para><para>12 Point</para><para>Bold</para></entry><entry><para>Left Justified</para><para>Arabic Numbering (Chapter Numbering, Depth 2, Start with 1)</para></entry><entry>None</entry></row>
+<row><entry>Enumerated List</entry><entry><para>Times</para><para>12 Point</para><para>Regular Style</para></entry><entry><para>Left Justified</para><para>Arabic Numbering (List Numbering, Depth 0, Start with 1)</para></entry><entry>None</entry></row>
+<row><entry>Alphabetical List</entry><entry><para>Times</para><para>12 Point</para><para>Regular Style</para></entry><entry><para>Left Justified</para><para>Lower Alphabetic Numbering (List Numbering, Depth 0, Start with a)</para></entry><entry>None</entry></row>
+<row><entry>Bulleted List</entry><entry><para>Times</para><para>12 Point</para><para>Regular Style</para></entry><entry><para>Left Justified</para><para>Open Circle Bullets</para></entry><entry>None</entry></row>
+<row><entry>Contents Title</entry><entry><para>Helvetica</para><para>20 Point</para><para>Bold</para></entry><entry>Centered</entry><entry><para>Solid Borders</para><para>1 pt width</para><para>Top and Bottom Only</para></entry></row>
+<row><entry>Contents Head 1</entry><entry><para>Helvetica</para><para>16 Point</para><para>Bold</para></entry><entry>Left Justified</entry><entry>None</entry></row>
+<row><entry>Contents Head 2</entry><entry><para>Helvetica</para><para>12 Point</para><para>Bold</para></entry><entry>Left Justified</entry><entry>None</entry></row>
+<row><entry>Contents Head 3</entry><entry><para>Helvetica</para><para>12 Point</para><para>Italics</para></entry><entry>Left Justified</entry><entry>None</entry></row>
+</tbody></tgroup></informaltable></sect1>
 <sect1 id="Filters"><title>Import/Export Filters</title><para></para>
 <sect2 id="FilterAscii"><title>Ascii Filter</title><para></para></sect2> 
 <sect2 id="FilterHTML"><title>HTML Filter</title><para></para></sect2> 
@@ -2147,6 +2547,9 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <row><entry align=center>Selects all characters from the start of the selection, to the character directly down one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Down Arrow</keycap></keycombo></entry></row>
 <row><entry align=center>Selects all characters from the start of the selection, to the beginning of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry></row>
 <row><entry align=center>Selects all characters from the start of the selection, to the end of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry></row>
+<row><entry align=center>Toggle Boldface On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
+<row><entry align=center>Toggle Italics On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
+<row><entry align=center>Toggle Underline On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
 </tbody></tgroup></table></para></sect1>  
 </chapter>     
 <!-- **************************************************************************************************** -->   
