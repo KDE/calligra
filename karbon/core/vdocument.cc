@@ -21,9 +21,7 @@
 #include <qdom.h>
 
 #include "vdocument.h"
-#include "vfill.h"
 #include "vselection.h"
-#include "vstroke.h"
 #include "vvisitor.h"
 #include "vpainter.h"
 
