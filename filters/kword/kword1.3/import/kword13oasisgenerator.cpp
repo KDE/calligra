@@ -21,6 +21,7 @@
 
 #include <qstring.h>
 #include <qtextstream.h>
+#include <qbuffer.h>
 
 #include <kdebug.h>
 #include <kzip.h>
@@ -35,7 +36,8 @@
 
 #include "kword13oasisgenerator.h"
 
-KWord13OasisGenerator::KWord13OasisGenerator( void ) : m_kwordDocument( 0 ), m_zip( 0 ), m_store( 0 ), m_streamOut( 0 )
+KWord13OasisGenerator::KWord13OasisGenerator( void ) : m_kwordDocument( 0 ), m_zip( 0 ), m_store( 0 ),
+    m_streamOut( 0 ), m_manifestWriter( 0 )
 {
 }
 
@@ -793,6 +795,12 @@ void KWord13OasisGenerator::writeStylesXml( void )
     stylesWriter.endDocument();
     io.close();
     m_store->close();
+    
+    if ( m_manifestWriter )
+    {
+        m_manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+    }
+
 }
 #else
 {
@@ -921,6 +929,12 @@ void KWord13OasisGenerator::writeContentXml(void)
     writer.endDocument();
     io.close();
     m_store->close();
+
+    if ( m_manifestWriter )
+    {
+        m_manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    }
+
 #else
     if (!m_zip)
         return;
@@ -1071,6 +1085,11 @@ void KWord13OasisGenerator::writeMetaXml(void)
     
     io.close();
     m_store->close();
+    
+    if ( m_manifestWriter )
+    {
+        m_manifestWriter->addManifestEntry( "meta.xml", "text/xml" );
+    }
 }
 
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
@@ -1091,11 +1110,34 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     }
     m_store->disallowNameExpansion();
     
+    // Prepare manifest file - in memory (inspired by KoDocument::saveNativeFormat)
+    QByteArray manifestData;
+    QBuffer manifestBuffer( manifestData );
+    manifestBuffer.open( IO_WriteOnly );
+    KoXmlWriter* m_manifestWriter = new KoXmlWriter( &manifestBuffer );
+    m_manifestWriter->startDocument( "manifest:manifest" );
+    m_manifestWriter->startElement( "manifest:manifest" );
+    m_manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
+    
+    // ### TODO: check if writing the store is successful
+    
     writeStylesXml();
     writeContentXml();
     writeMetaXml();
     
-# if 1 // DEBUG
+        // Write out manifest file
+    m_manifestWriter->endElement();
+    m_manifestWriter->endDocument();
+    delete m_manifestWriter;
+    m_manifestWriter = 0;
+    if ( m_store->open( "META-INF/manifest.xml" ) )
+    {
+        m_store->write( manifestData );
+        m_store->close();
+    }
+
+    
+# if 1 // DEBUG (out of specification)
     m_store->open("debug.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!

@@ -1,7 +1,6 @@
 KFormula (frameType==4)
 <PAPER>, <PAPERBORDERS>
 <ATTRIBUTES>
-Generate Manifest file
 Automatic styles for pictures
 Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?...)
 Tables (cell borders...)
@@ -10,6 +9,7 @@ Variables/fields
 Footnote line (section 2.3 esp. 2.3.6)
 dir attribute of <FLOW>
 correctly define the default style (by default "Standard", if not, the 1st style) (see bug #45868)
+copy the thumbnail (and transform it if it is not in the desired format)
 ...
 
 === What the old filter knew ===
