@@ -692,10 +692,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     /* but reobscure the ones that are forced obscuring */
     forceExtraCells(m_iColumn, m_iRow, m_iMergedXCells, m_iMergedYCells);
 
-    ColumnLayout *cl1 = m_pTable->columnLayout( column() );
-    RowLayout *rl1 = m_pTable->rowLayout( row() );
+    ColumnLayout *cl1 = m_pTable->columnLayout( _col );
+    RowLayout *rl1 = m_pTable->rowLayout( _row );
     if( cl1->isHide() || (rl1->height()<=2))
+    {
+        clearFlag(Flag_LayoutDirty);
         return;
+    }
     /**
      * RichText
      */
@@ -815,7 +818,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     {
         m_strOutText = QString::null;
         if ( isDefault() )
+        {
+            clearFlag(Flag_LayoutDirty);
             return;
+        }
     }
 
     //
@@ -950,11 +956,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int a = defineAlignX();
     //apply indent if text is align to left not when text is at right or middle
     if(  a==KSpreadCell::Left && !isEmpty())
-        indent=getIndent(column(),row());
+        indent=getIndent( _col, _row );
 
-    if( verticalText( column(), row() ) ||getAngle(column(), row())!=0)
+    if( verticalText( _col, _row ) || getAngle( _col, _row ) != 0)
     {
-       RowLayout *rl = m_pTable->rowLayout( row() );
+       RowLayout *rl = m_pTable->rowLayout( _row );
 
        if(m_iOutTextHeight>=rl->height())
        {
