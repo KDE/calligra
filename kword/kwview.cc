@@ -3485,8 +3485,12 @@ void KWView::changePicture()
     {
         KWFrame * frame = m_doc->getFirstSelectedFrame();
         KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->getFrameSet());
+
+         KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change picture"), FrameIndex(frame), frameset->image().key().filename(), file, true ) ;
+
         frameset->loadImage( file, m_doc->zoomRect( *frame ).size() );
         m_doc->frameChanged( frame );
+        m_doc->addCommand(cmd);
     }
 }
 
@@ -3500,8 +3504,12 @@ void KWView::changeClipart()
         KWFrame * frame = m_doc->getFirstSelectedFrame();
 
         KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->getFrameSet());
+
+        KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change clipart"), FrameIndex( frame ), frameset->key().filename(), file, false ) ;
+
         frameset->loadClipart( file );
         m_doc->frameChanged( frame );
+        m_doc->addCommand(cmd);
     }
 }
 

@@ -128,6 +128,25 @@ protected:
 };
 
 /**
+ * Command created when we changed a clipart or picture
+ */
+class KWFrameChangePictureClipartCommand : public KCommand
+{
+public:
+    KWFrameChangePictureClipartCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile, bool _isAPicture) ;
+    ~KWFrameChangePictureClipartCommand() {}
+
+    void execute();
+    void unexecute();
+
+protected:
+    FrameIndex m_indexFrame;
+    QString m_oldFile;
+    QString m_newFile;
+    bool m_isAPicture;
+};
+
+/**
  * Command created when one or more frames are moved
  */
 class KWFrameMoveCommand : public KCommand

@@ -409,8 +409,59 @@ void KWFrameResizeCommand::unexecute()
     doc->frameChanged( frame );
 }
 
+KWFrameChangePictureClipartCommand::KWFrameChangePictureClipartCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile, bool _isAPicture ) :
+    KCommand(name),
+    m_indexFrame(_frameIndex),
+    m_isAPicture(_isAPicture),
+    m_oldFile(_oldFile),
+    m_newFile(_newFile)
 
-KWFramePartMoveCommand::KWFramePartMoveCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameMove ) :
+{
+}
+
+void KWFrameChangePictureClipartCommand::execute()
+{
+    KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
+    ASSERT( frameSet );
+    KWFrame *frame = frameSet->getFrame(m_indexFrame.m_iFrameIndex);
+    ASSERT( frame );
+    KWDocument * doc = frameSet->kWordDocument();
+    if(m_isAPicture)
+    {
+        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->getFrameSet());
+        frameset->loadImage( m_newFile , doc->zoomRect( *frame ).size() );
+    }
+    else
+    {
+        KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->getFrameSet());
+        frameset->loadClipart( m_newFile );
+    }
+    doc->frameChanged( frame );
+}
+
+void KWFrameChangePictureClipartCommand::unexecute()
+{
+    KWFrameSet *frameSet =m_indexFrame.m_pFrameSet;
+    KWFrame *frame=frameSet->getFrame(m_indexFrame.m_iFrameIndex);
+    KWDocument * doc = frameSet->kWordDocument();
+    if(m_isAPicture)
+    {
+        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->getFrameSet());
+        frameset->loadImage( m_oldFile , doc->zoomRect( *frame ).size() );
+    }
+    else
+    {
+        KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->getFrameSet());
+        frameset->loadClipart( m_oldFile );
+    }
+
+
+    //update frames
+    doc->frameChanged( frame );
+}
+
+
+KWFramePartMoveCommand::KWFramePartMoveCommand( const QString &name, FrameIndex _frameIndex,  FrameResizeStruct _frameMove ) :
     KCommand(name),
     m_indexFrame(_frameIndex),
     m_frameMove(_frameMove)
