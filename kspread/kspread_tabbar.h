@@ -104,20 +104,11 @@ public:
 
     bool canScrollRight() const;
 
-    void scrollLeft();
-    void scrollRight();
-    void scrollFirst();
-    void scrollLast();
-
     /**
      * Highlights this tab.
      */
     void setActiveTab( const QString& _text );
 
-    /**
-     * Open a context menu.
-     */
-    void openPopupMenu( const QPoint &_global );
     /**
     * Remove table name from tabList and
     * put tablename in tablehide
@@ -147,6 +138,11 @@ public:
      */
     QStringList hiddenTabs();
 
+public slots:
+    void scrollLeft();
+    void scrollRight();
+    void scrollFirst();
+    void scrollLast();
 
 signals:
     /**
@@ -172,6 +168,7 @@ protected slots:
 
 protected:
     virtual void paintEvent ( QPaintEvent* ev );
+    virtual void resizeEvent( QResizeEvent* ev );
     virtual void mousePressEvent ( QMouseEvent* ev );
     virtual void mouseReleaseEvent ( QMouseEvent* ev );
     virtual void mouseDoubleClickEvent ( QMouseEvent* ev );

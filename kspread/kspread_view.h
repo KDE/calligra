@@ -411,23 +411,6 @@ protected slots:
     void slotPopupAdjustRow();
 
     /**
-     * Scroll @ref #tabBar.
-     */
-    void slotScrollToFirstTable();
-    /**
-     * Scroll @ref #tabBar.
-     */
-    void slotScrollToLeftTable();
-    /**
-     * Scroll @ref #tabBar.
-     */
-    void slotScrollToRightTable();
-    /**
-     * Scroll @ref #tabBar.
-     */
-    void slotScrollToLastTable();
-
-    /**
      * list from list choose
      */
     void slotItemSelected( int );
@@ -520,10 +503,6 @@ private:
     KSpreadEditWidget *m_pEditWidget;
     QWidget *m_pFrame;
     QFrame *m_pToolWidget;
-    QButton *m_pTabBarFirst;
-    QButton *m_pTabBarLeft;
-    QButton *m_pTabBarRight;
-    QButton *m_pTabBarLast;
     QButton *m_pOkButton;
     QButton *m_pCancelButton;
     KSpread::TabBar *m_pTabBar;

@@ -331,16 +331,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pHorzScrollBar->setRange( 0, 4096 );
     m_pHorzScrollBar->setOrientation( QScrollBar::Horizontal );
 
-    // Tab Bar
-    m_pTabBarFirst = newIconButton( "tab_first" );
-    QObject::connect( m_pTabBarFirst, SIGNAL( clicked() ), SLOT( slotScrollToFirstTable() ) );
-    m_pTabBarLeft = newIconButton( "tab_left" );
-    QObject::connect( m_pTabBarLeft, SIGNAL( clicked() ), SLOT( slotScrollToLeftTable() ) );
-    m_pTabBarRight = newIconButton( "tab_right" );
-    QObject::  connect( m_pTabBarRight, SIGNAL( clicked() ), SLOT( slotScrollToRightTable() ) );
-    m_pTabBarLast = newIconButton( "tab_last" );
-    QObject::connect( m_pTabBarLast, SIGNAL( clicked() ), SLOT( slotScrollToLastTable() ) );
-
     m_pTabBar = new KSpread::TabBar( this );
     QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
     QObject::connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ),
@@ -3158,12 +3148,6 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
     m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
 
-  // enable/disable state of sheet scroll buttons
-  m_pTabBarFirst->setEnabled( m_pTabBar->canScrollLeft() );
-  m_pTabBarLeft->setEnabled( m_pTabBar->canScrollLeft() );
-  m_pTabBarRight->setEnabled( m_pTabBar->canScrollRight() );
-  m_pTabBarLast->setEnabled( m_pTabBar->canScrollRight() );
-
   m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
   m_protectSheet->setChecked( m_pTable->isProtected() );
   m_protectDoc->setChecked( m_pDoc->map()->isProtected() );
@@ -3238,49 +3222,6 @@ void KSpreadView::changeTable( const QString& _name )
     m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
     m_pCanvas->slotMaxRow( m_pTable->maxRow() );
     m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
-}
-
-void KSpreadView::slotScrollToFirstTable()
-{
-  m_pDoc->emitBeginOperation(false);
-  m_pTabBar->scrollFirst();
-  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
-}
-
-void KSpreadView::slotScrollToLeftTable()
-{
-  m_pDoc->emitBeginOperation(false);
-  m_pTabBar->scrollLeft();
-  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
-
-  m_pTabBarFirst->setEnabled( m_pTabBar->canScrollLeft() );
-  m_pTabBarLeft->setEnabled( m_pTabBar->canScrollLeft() );
-  m_pTabBarRight->setEnabled( m_pTabBar->canScrollRight() );
-  m_pTabBarLast->setEnabled( m_pTabBar->canScrollRight() );
-}
-
-void KSpreadView::slotScrollToRightTable()
-{
-  m_pDoc->emitBeginOperation(false);
-  m_pTabBar->scrollRight();
-  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
-
-  m_pTabBarFirst->setEnabled( m_pTabBar->canScrollLeft() );
-  m_pTabBarLeft->setEnabled( m_pTabBar->canScrollLeft() );
-  m_pTabBarRight->setEnabled( m_pTabBar->canScrollRight() );
-  m_pTabBarLast->setEnabled( m_pTabBar->canScrollRight() );
-}
-
-void KSpreadView::slotScrollToLastTable()
-{
-  m_pDoc->emitBeginOperation(false);
-  m_pTabBar->scrollLast();
-  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
-
-  m_pTabBarFirst->setEnabled( m_pTabBar->canScrollLeft() );
-  m_pTabBarLeft->setEnabled( m_pTabBar->canScrollLeft() );
-  m_pTabBarRight->setEnabled( m_pTabBar->canScrollRight() );
-  m_pTabBarLast->setEnabled( m_pTabBar->canScrollRight() );
 }
 
 void KSpreadView::insertTable()
@@ -4844,35 +4785,12 @@ void KSpreadView::refreshView()
   if ( table->isRightToLeft() && m_pDoc->getShowVerticalScrollBar() )
     left = widthVScrollbar;
 
-  if (m_pDoc->getShowTabBar())
-  {
-    m_pTabBarFirst->setGeometry( left, height() - heightHScrollbar,
-                                 heightHScrollbar, heightHScrollbar );
-    m_pTabBarLeft->setGeometry( left + heightHScrollbar, height() - heightHScrollbar,
-                                heightHScrollbar, heightHScrollbar );
-    m_pTabBarRight->setGeometry( left + heightHScrollbar * 2, height() - heightHScrollbar,
-                                 heightHScrollbar, heightHScrollbar );
-    m_pTabBarLast->setGeometry( left + heightHScrollbar * 3, height() - heightHScrollbar,
-                                  heightHScrollbar, heightHScrollbar );
-    m_pTabBarFirst->show();
-    m_pTabBarLeft->show();
-    m_pTabBarRight->show();
-    m_pTabBarLast->show();
-  }
-  else
-  {
-    m_pTabBarFirst->hide();
-    m_pTabBarLeft->hide();
-    m_pTabBarRight->hide();
-    m_pTabBarLast->hide();
-  }
-
   if (!m_pDoc->getShowHorizontalScrollBar())
-    m_pTabBar->setGeometry( left + heightHScrollbar * 4, height() - heightHScrollbar,
-                            width() - heightHScrollbar * 4, heightHScrollbar );
+    m_pTabBar->setGeometry( left, height() - heightHScrollbar,
+                            width(), heightHScrollbar );
   else
-    m_pTabBar->setGeometry( left + heightHScrollbar * 4, height() - heightHScrollbar,
-                            width() / 2 - heightHScrollbar * 4, heightHScrollbar );
+    m_pTabBar->setGeometry( left, height() - heightHScrollbar,
+                            width() / 2, heightHScrollbar );
   if ( m_pDoc->getShowTabBar() )
     m_pTabBar->show();
   else

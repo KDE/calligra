@@ -31,10 +31,12 @@
 #include "kspread_view.h"
 
 #include <qdrawutil.h>
+#include <qhbox.h>
 #include <qpainter.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtimer.h>
+#include <qtoolbutton.h>
 #include <qvaluevector.h>
 #include <qwidget.h>
 
@@ -49,6 +51,12 @@ public:
     // the view and the tabbar
     KSpreadView* view;
     TabBar* tabbar;
+
+    // scroll buttons
+    QToolButton* scrollFirstButton;
+    QToolButton* scrollLastButton;
+    QToolButton* scrollLeftButton;
+    QToolButton* scrollRightButton;
 
     // list of visible tabs, in order of appearance
     QStringList visibleTabs;
@@ -68,6 +76,9 @@ public:
     // the active tab in the range form 1..n.
     // if this value is 0, that means that no tab is active.
     int activeTab;
+
+    // unusable space on the left, taken by the buttons
+    int offset;
 
     // when the user drag the tab (in order to move it)
     // this is the target position
@@ -93,12 +104,80 @@ public:
     // move tab into another position
     // handle the active tab as necessary
     void moveTab( int tab, int target );
+
+    // update the enable/disable status of scroll buttons
+    void updateButtons();
 };
 
 
 };
 
 using namespace KSpread;
+
+// built-in pixmap for scroll-first button
+const char * scroll_first_xpm[] = {
+"10 10 2 1",
+" 	c None",
+".	c #000000",
+"          ",
+"  .    .  ",
+"  .   ..  ",
+"  .  ...  ",
+"  . ....  ",
+"  .  ...  ",
+"  .   ..  ",
+"  .    .  ",
+"          ",
+"          "};
+
+// built-in pixmap for scroll-last button
+const char * scroll_last_xpm[] = {
+"10 10 2 1",
+" 	c None",
+".	c #000000",
+"          ",
+"  .    .  ",
+"  ..   .  ",
+"  ...  .  ",
+"  .... .  ",
+"  ...  .  ",
+"  ..   .  ",
+"  .    .  ",
+"          ",
+"          "};
+
+// built-in pixmap for scroll-left button
+const char * scroll_left_xpm[] = {
+"10 10 2 1",
+" 	c None",
+".	c #000000",
+"          ",
+"      .   ",
+"     ..   ",
+"    ...   ",
+"   ....   ",
+"    ...   ",
+"     ..   ",
+"      .   ",
+"          ",
+"          "};
+
+// built-in pixmap for scroll-right button
+const char * scroll_right_xpm[] = {
+"10 10 2 1",
+" 	c None",
+".	c #000000",
+"          ",
+"   .      ",
+"   ..     ",
+"   ...    ",
+"   ....   ",
+"   ...    ",
+"   ..     ",
+"   .      ",
+"          ",
+"          "};
+
 
 void TabBarPrivate::layoutTabs()
 {
@@ -127,7 +206,7 @@ void TabBarPrivate::layoutTabs()
 
     rightTab = tabRects.count();
     for( unsigned i = 0; i < tabRects.count(); i++ )
-      if( tabRects[i].right()-10 > tabbar->width() )
+      if( tabRects[i].right()-10+offset > tabbar->width() )
       {
         rightTab = i;
         break;
@@ -208,6 +287,14 @@ void TabBarPrivate::moveTab( int tab, int target )
         activeTab = target+1;
 }
 
+void TabBarPrivate::updateButtons()
+{
+    scrollFirstButton->setEnabled( tabbar->canScrollLeft() );
+    scrollLeftButton->setEnabled( tabbar->canScrollLeft() );
+    scrollRightButton->setEnabled( tabbar->canScrollRight() );
+    scrollLastButton->setEnabled( tabbar->canScrollRight() );
+}
+
 // creates a new tabbar
 TabBar::TabBar( KSpreadView *view, const char* name )
     : QWidget( view, name, Qt::WResizeNoErase | Qt::WRepaintNoErase )
@@ -220,6 +307,26 @@ TabBar::TabBar( KSpreadView *view, const char* name )
     d->activeTab = 0;
     d->targetTab = 0;
     d->autoScroll = false;
+    d->offset = 64;
+
+    // initialize the scroll buttons
+    d->scrollFirstButton = new QToolButton( this );
+    d->scrollFirstButton->setPixmap( scroll_first_xpm );
+    connect( d->scrollFirstButton, SIGNAL( clicked() ),
+      this, SLOT( scrollFirst() ) );
+    d->scrollLastButton = new QToolButton( this );
+    d->scrollLastButton->setPixmap( scroll_last_xpm );
+    connect( d->scrollLastButton, SIGNAL( clicked() ),
+      this, SLOT( scrollLast() ) );
+    d->scrollLeftButton = new QToolButton( this );
+    d->scrollLeftButton->setPixmap( scroll_left_xpm );
+    connect( d->scrollLeftButton, SIGNAL( clicked() ),
+      this, SLOT( scrollLeft() ) );
+    d->scrollRightButton = new QToolButton( this );
+    d->scrollRightButton->setPixmap( scroll_right_xpm );
+    connect( d->scrollRightButton, SIGNAL( clicked() ),
+      this, SLOT( scrollRight() ) );
+    d->updateButtons();
 }
 
 // destroys the tabbar
@@ -278,7 +385,6 @@ QStringList TabBar::hiddenTabs()
     return d->hiddenTabs;
 }
 
-
 bool TabBar::canScrollLeft() const
 {
     if ( d->visibleTabs.count() == 0 )
@@ -310,6 +416,8 @@ void TabBar::scrollLeft()
         return;
 
     d->leftTab--;
+    d->layoutTabs();
+    d->updateButtons();
     update();
 }
 
@@ -319,6 +427,8 @@ void TabBar::scrollRight()
         return;
 
     d->leftTab++;
+    d->layoutTabs();
+    d->updateButtons();
     update();
 }
 
@@ -328,6 +438,8 @@ void TabBar::scrollFirst()
         return;
 
     d->leftTab = 1;
+    d->layoutTabs();
+    d->updateButtons();
     update();
 }
 
@@ -338,7 +450,7 @@ void TabBar::scrollLast()
 
     d->layoutTabs();
     int fullWidth = d->tabRects[ d->tabRects.count()-1 ].right();
-    int delta = fullWidth - width();
+    int delta = fullWidth - width() + d->offset;
     for( unsigned i = 0; i < d->tabRects.count(); i++ )
         if( d->tabRects[i].x() > delta )
         {
@@ -346,6 +458,8 @@ void TabBar::scrollLast()
           break;
         }
 
+    d->layoutTabs();
+    d->updateButtons();
     update();
 }
 
@@ -359,6 +473,7 @@ void TabBar::setActiveTab( const QString& text )
         return;
 
     d->activeTab = i + 1;
+    d->updateButtons();
     update();
 
     emit tabChanged( text );
@@ -442,7 +557,19 @@ void TabBar::paintEvent( QPaintEvent* )
     }
 
     painter.end();
-    bitBlt( this, 0, 0, &pm );
+    bitBlt( this, d->offset, 0, &pm );
+}
+
+void TabBar::resizeEvent( QResizeEvent* )
+{
+    int bw = height();
+    d->offset = bw * 4;
+    d->scrollFirstButton->setGeometry( 0, 0, bw, bw );
+    d->scrollLeftButton->setGeometry( bw, 0, bw, bw );
+    d->scrollRightButton->setGeometry( bw*2, 0, bw, bw );
+    d->scrollLastButton->setGeometry( bw*3, 0, bw, bw );
+    d->updateButtons();
+    update();
 }
 
 void TabBar::renameTab( const QString& old_name, const QString& new_name )
@@ -464,7 +591,8 @@ void TabBar::mousePressEvent( QMouseEvent* ev )
 
     d->layoutTabs();
 
-    int tab = d->tabAt( ev->pos() ) + 1;
+    QPoint pos = ev->pos() - QPoint( d->offset,0 );
+    int tab = d->tabAt( pos ) + 1;
     if( ( tab > 0 ) && ( tab != d->activeTab ) )
     {
         d->activeTab = tab;
@@ -499,8 +627,10 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
     if ( !d->view->koDocument()->isReadWrite() )
          return;
 
+    QPoint pos = ev->pos() - QPoint( d->offset,0 );
+
     // check if user drags a tab to move it
-    int i = d->tabAt( ev->pos() ) + 1;
+    int i = d->tabAt( pos ) + 1;
     if( ( i > 0 ) && ( i != d->targetTab ) )
     {
         if( i == d->activeTab ) i = 0;
@@ -509,6 +639,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
         if( i != d->targetTab )
         {
            d->targetTab = i;
+           d->autoScroll = false;
            update();
         }
     }
@@ -517,36 +648,35 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
     // e.g move a tab to the last ordering position
     QRect r = d->tabRects[ d->tabRects.count()-1 ];
     if( r.isValid() )
-    if( ev->pos().x() > r.right() )
-    if( ev->pos().x() < width() )
+    if( pos.x() > r.right() )
+    if( pos.x() < width() )
     if( d->targetTab != d->tabRects.count()+1 )
     {
         d->targetTab = d->tabRects.count()+1;
+        d->autoScroll = false;
         update();
     }
 
     // outside far too left ? activate autoscroll...
-    if ( ev->pos().x() < 0 && !d->autoScroll  )
+    if ( pos.x() < 0 && !d->autoScroll  )
     {
         d->autoScroll = true;
         autoScrollLeft();
     }
 
     // outside far too right ? activate autoscroll...
-    if ( ev->pos().x() > width() && !d->autoScroll )
+    int w = width() - d->offset;
+    if ( pos.x() > w && !d->autoScroll )
     {
         d->autoScroll = true;
         autoScrollRight();
     }
-
-    // deactivate autoscroll if inside the tab bar again
-    if( rect().contains( ev->pos() ) )
-        d->autoScroll = false;
 }
 
-void TabBar::mouseDoubleClickEvent( QMouseEvent*  )
+void TabBar::mouseDoubleClickEvent( QMouseEvent* ev )
 {
-    emit doubleClicked();
+    if( ev->pos().x() > d->offset )
+        emit doubleClicked();
 }
 
 void TabBar::hideTable()
