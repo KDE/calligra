@@ -2476,13 +2476,13 @@ void KSpreadCell::paintPageBorders(QPainter& painter, KSpreadView* /*view*/,
 }
 
 
-void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* /*view*/,
+void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* view,
                                    QPoint corner, QPoint cellRef)
 {
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int width = colLayout->width();
   int height = rowLayout->height();
-  int width =  colLayout->width();
 
   /* we might not paint some borders if this cell is merged with another in
      that direction */
@@ -2527,9 +2527,18 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* /*view*/,
               ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
     int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
 
+    //TODO: Remove following hack when we switch to koText
+    //We don't get the correct width of the pen, so we disable correct corners when zoomed
+    //Ugly corners are better than painting to wide IMHO, Philipp
+    if ( view != NULL && view->zoom() != 1.0 )
+    {
+      top = 0;
+      bottom = 0;
+    }
+
     painter.setPen( left_pen );
-    painter.drawLine( corner.x(), corner.y() - top, corner.x(),
-                      corner.y() + height + bottom );
+    painter.drawLine( corner.x(), corner.y() - top, 
+                      corner.x(), corner.y() + height + bottom );
 
     left_offset = left_pen.width() - ( left_pen.width() / 2 );
   }
@@ -2538,16 +2547,25 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* /*view*/,
     int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 +
               ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
     int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
+    //TODO: Remove following hack when we switch to koText
+    //We don't get the correct width of the pen, so we disable correct corners when zoomed
+    //Ugly corners are better than painting to wide IMHO, Philipp
+    if ( view != NULL && view->zoom() != 1.0 )
+    {
+      top = 0;
+      bottom = 0;
+    }
 
     painter.setPen( right_pen );
     painter.drawLine( width + corner.x(), corner.y() - top,
-                       width + corner.x(), corner.y() + height + bottom );
+                      width + corner.x(), corner.y() + height + bottom );
     right_offset = right_pen.width() / 2;
   }
   if ( top_pen.style() != Qt::NoPen && paintTop)
   {
     painter.setPen( top_pen );
-    painter.drawLine( corner.x(), corner.y(), corner.x() + width, corner.y() );
+    painter.drawLine( corner.x(), corner.y(), 
+                      corner.x() + width, corner.y() );
 
     top_offset = top_pen.width() - ( top_pen.width() / 2 );
   }
@@ -2602,17 +2620,26 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* /*view*/,
   {
     horz_pen = cell_l->topBorderPen( cellRef.x() - 1, cellRef.y() );
     int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+    //TODO: Remove following hack when we switch to koText
+    //We don't get the correct width of the pen, so we disable correct corners when zoomed
+    //Ugly corners are better than painting to wide IMHO, Philipp
+    if ( view != NULL && view->zoom() != 1.0 )
+        bottom = 0;
     painter.setPen( vert_pen );
-    painter.drawLine( corner.x(), corner.y(), corner.x(),
-                      corner.y() + bottom );
+    painter.drawLine( corner.x(), corner.y(), 
+                      corner.x(), corner.y() + bottom );
   }
-
   // Fix the borders which meet at the top right corner
   vert_pen = cell_t->rightBorderPen( cellRef.x(), cellRef.y() - 1 );
   if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) )
   {
     horz_pen = cell_r->topBorderPen( cellRef.x() + 1, cellRef.y() );
     int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+    //TODO: Remove following hack when we switch to koText
+    //We don't get the correct width of the pen, so we disable correct corners when zoomed
+    //Ugly corners are better than painting to wide IMHO, Philipp
+    if ( view != NULL && view->zoom() != 1.0 )
+        bottom = 0;
     painter.setPen( vert_pen );
     painter.drawLine( corner.x() + width, corner.y(),
                       corner.x() + width, corner.y() + bottom );
@@ -2627,9 +2654,14 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* /*view*/,
     {
       horz_pen = cell_l->bottomBorderPen( cellRef.x() - 1, cellRef.y() );
       int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2;
+      //TODO: Remove following hack when we switch to koText
+      //We don't get the correct width of the pen, so we disable correct corners when zoomed
+      //Ugly corners are better than painting to wide IMHO, Philipp
+      if ( view != NULL && view->zoom() != 1.0 )
+          bottom = 0;
       painter.setPen( vert_pen );
-      painter.drawLine( corner.x(), corner.y() + height - bottom, corner.x(),
-                        corner.y() + height );
+      painter.drawLine( corner.x(), corner.y() + height - bottom, 
+                        corner.x(), corner.y() + height );
     }
 
     // Fix the borders which meet at the bottom right corner
@@ -2638,6 +2670,11 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* /*view*/,
     {
       horz_pen = cell_r->bottomBorderPen( cellRef.x() + 1, cellRef.y() );
       int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2;
+      //TODO: Remove following hack when we switch to koText
+      //We don't get the correct width of the pen, so we disable correct corners when zoomed
+      //Ugly corners are better than painting to wide IMHO, Philipp
+      if ( view != NULL && view->zoom() != 1.0 )
+          bottom = 0;
       painter.setPen( vert_pen );
       painter.drawLine( corner.x() + width, corner.y() + height - bottom,
                         corner.x() + width, corner.y() + height );
