@@ -79,6 +79,7 @@ void Counter::invalidate()
     m_cache.text = QString::null;
     m_cache.width = -1;
     m_cache.parent = INVALID_PARAG;
+    m_cache.counterFormat = 0;
 }
 
 bool Counter::isBullet() const
@@ -454,7 +455,7 @@ QString Counter::text( const KWTextParag *paragraph )
 int Counter::width( const KWTextParag *paragraph )
 {
     // Return cached value if possible.
-    if ( m_cache.width != -1 )
+    if ( m_cache.width != -1 && paragraph->at( 0 )->format() == m_cache.counterFormat )
         return m_cache.width;
 
     // Ensure paragraph text is valid.
@@ -462,13 +463,13 @@ int Counter::width( const KWTextParag *paragraph )
         text( paragraph );
 
     // Now calculate width.
-    QTextFormat *format = paragraph->at( 0 )->format();/*paragraph->paragFormat()*/;
+    m_cache.counterFormat = paragraph->at( 0 )->format();/*paragraph->paragFormat()*/;
     m_cache.width = 0;
     QString text = m_cache.text;
     if ( !text.isEmpty() )
         text.append( ' ' ); // append a trailing space, see KWTextParag::drawLabel
     for ( unsigned int i = 0; i < text.length(); i++ )
-        m_cache.width += format->width( text, i );
+        m_cache.width += m_cache.counterFormat->width( text, i );
     //kdDebug() << "Counter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
     return m_cache.width;
 }

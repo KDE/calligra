@@ -20,6 +20,8 @@
 #include <qstring.h>
 class KWTextParag;
 class QDomElement;
+namespace Qt3 { class QTextFormat; }
+using namespace Qt3;
 
 #ifndef counter_h
 #define counter_h
@@ -120,17 +122,19 @@ private:
 
     // The cached, calculated values for this counter:
     //
-    //  VALUE                       VALUE WHEN INVALID
-    //  number of this counter      -1
-    //  text of this counter        QString::null
-    //  width of the label          -1
-    //  parent                      (KWTextParag *)-1
+    //  VALUE                                       VALUE WHEN INVALID
+    //  number of this counter                           -1
+    //  text of this counter                             QString::null
+    //  width of the label                               -1
+    //  parent                                           (KWTextParag *)-1
+    //  the format that was used to calculate the width  0
     struct
     {
         int number;
         QString text;
         int width;
         KWTextParag *parent;
+        QTextFormat * counterFormat;
     } m_cache;
 };
 
