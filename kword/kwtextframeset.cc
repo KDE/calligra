@@ -2214,7 +2214,10 @@ void KWTextFrameSet::renumberFootNotes()
         {
             if ( var->frameSet() ) //safety
             {
-                var->frameSet()->setName( i18n("Footnote %1").arg( var->text() ) );
+                if ( var->numberingType()== KWFootNoteVariable::Manual)
+                    var->frameSet()->setName( m_doc->generateFramesetName(i18n("Footnote %1")));
+                else
+                    var->frameSet()->setName( i18n("Footnote %1").arg( var->text() ) );
                 var->frameSet()->setCounterText( var->text() );
             }
             var->resize();
