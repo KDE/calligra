@@ -26,6 +26,8 @@
 class PowerPointFilter:
     public FilterBase
 {
+    Q_OBJECT
+
 public:
     PowerPointFilter(
         const myFile &mainStream,
