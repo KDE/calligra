@@ -82,7 +82,7 @@ class KexiTableViewPrivate
 //	int sortedColumn;
 //	bool sortOrder;
 
-	KexiTableView::InsertionPolicy insertionPolicy;
+//	KexiTableView::InsertionPolicy insertionPolicy;
 	KexiTableView::DeletionPolicy deletionPolicy;
 
 	QPixmap			*pBufferPm;
@@ -157,6 +157,9 @@ class KexiTableViewPrivate
 	 It's OR'es together with above flag.
 	*/
 	bool acceptsRowEditAfterCellAccepting : 1;
+
+	/*! if inserting empty rows are enabled (false by default) */
+	bool emptyRowInsertingEnabled : 1;
 
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 

@@ -38,7 +38,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	pBufferPm = 0;
 //	deletionPolicy = KexiTableView::NoDelete;
 	deletionPolicy = KexiTableView::AskDelete;
-	insertionPolicy = KexiTableView::AutoInsert;
+//	insertionPolicy = KexiTableView::AutoInsert;
 	disableDrawContents = false;
 	readOnly = -1; //don't know
 	insertingEnabled = -1; //don't know
@@ -58,6 +58,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	inside_acceptEditor = false;
 	internal_acceptsRowEditAfterCellAccepting = false;
 	acceptsRowEditAfterCellAccepting = false;
+	emptyRowInsertingEnabled = false;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

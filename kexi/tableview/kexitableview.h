@@ -72,7 +72,7 @@ public:
 	KexiTableView(KexiTableViewData* data=0, QWidget* parent=0, const char* name=0);
 	~KexiTableView();
 
-	virtual void initActions(KActionCollection *col);
+//	virtual void initActions(KActionCollection *col);
 
 	KexiTableViewData *data() const { return m_data; }
 
@@ -130,20 +130,22 @@ public:
 	/*! Sets readOnly flag for this table view.
 	 Unless the flag is set, the widget inherits readOnly flag from it's data
 	 structure assigned with setData(). The default value if false.
-	 
+
 	 This method is useful when you need to switch on the flag indepentently 
 	 from the data structure.
 	 Note: it is not allowed to force readOnly off
 	 when internal data is readOnly - in that case the method does nothing.
 	 You can check internal data flag calling data()->readOnly().
+
+	 If \a set is true, insertingEnabled flag will be cleared automatically.
+	 \sa isInsertingEnabled()
 	*/
 	void setReadOnly(bool set);
 
-	/*! \return true if data inserting is enabled (the default).
-	*/
+	/*! \return true if data inserting is enabled (the default). */
 	bool isInsertingEnabled() const;
 
-	/*! Sets insertEnabled flag. If true, empty row is available 
+	/*! Sets insertingEnabled flag. If true, empty row is available 
 	 at the end of this widget for new entering new data. 
 	 Unless the flag is set, the widget inherits insertingEnabled flag from it's data
 	 structure assigned with setData(). The default value if false.
@@ -152,9 +154,19 @@ public:
 	 has insertingEnabled set off - in that case the method does nothing.
  	 You can check internal data flag calling data()->insertingEnabled().
 	 
+	 If \a set is true, read-only flag will be cleared automatically.
 	 \sa setReadOnly()
 	*/
 	void setInsertingEnabled(bool set);
+
+	/*! \return true if inserting empty rows are enabled (false by default).
+	 Mostly usable for not db-aware table views (e.g. used in Kexi Alter Table). 
+	 Note, that if inserting is disabled, this flag is ignored. */
+	bool isEmptyRowInsertingEnabled() const;
+
+	/*! Sets emptyRowInserting flag. 
+	 Note, that if inserting is disabled, this flag is ignored. */
+	void setEmptyRowInsertingEnabled(bool set);
 
 	/*! \return true if row deleting is enabled.
 	*/
@@ -177,7 +189,7 @@ public:
 	/*! Enables or disables filtering. Filtering is enabled by default. */
 	void setFilteringEnabled(bool set);
 
-	/*! \return true is filtering is enabled. */
+	/*! \return true if filtering is enabled. */
 	bool filteringEnabled() const;
 		
 	int currentColumn() const;
@@ -225,13 +237,14 @@ public:
 	//! Specifies if this table view has full-row-selection mode set. \sa fullRowSelectionEnabled()
 	void setFullRowSelectionEnabled(bool set);
 
-	//! \return true is the vertical header is visible
+	//! \return true if the vertical header is visible
 	bool verticalHeaderVisible() const;
 	//! Sets vertical header's visibility
 	void setVerticalHeaderVisible(bool set);
 
-	//! \return true is the horizontal header is visible
+	//! \return true if the horizontal header is visible
 	bool horizontalHeaderVisible() const;
+
 	//! Sets horizontal header's visibility
 	void setHorizontalHeaderVisible(bool set);
 
@@ -262,12 +275,12 @@ public:
 //	void		setInsertItem(KexiTableItem *i);
 //	KexiTableItem	*insertItem() const;
 
-	enum InsertionPolicy
+/*	enum InsertionPolicy
 	{
 		NoInsert,
 		AutoInsert,
 		SignalInsert
-	};
+	};*/
 
 	enum DeletionPolicy
 	{
@@ -277,9 +290,9 @@ public:
 		SignalDelete
 	};
 
-	virtual void	setInsertionPolicy(InsertionPolicy policy);
-	/*! \return deletion policy for the table view. The default (after allocating) is AutoInsert. */
-	InsertionPolicy	insertionPolicy() const;
+//	virtual void	setInsertionPolicy(InsertionPolicy policy);
+//	/*! \return deletion policy for the table view. The default (after allocating) is AutoInsert. */
+//	InsertionPolicy	insertionPolicy() const;
 
 	virtual void	setDeletionPolicy(DeletionPolicy policy);
 	/*! \return deletion policy for the table view. The default (after allocating) is AskDelete. */
@@ -364,6 +377,14 @@ public slots:
 	 is cancelled before deleting.  */
 	void deleteCurrentRow();
 
+	/*! Inserts one empty row above row \a row. If \a row is -1 (the default),
+	 new row is inserted above current row.
+	 This method does nothing if:
+	 -inserting flag is disabled (see isInsertingEnabled())
+	 -read-only flag is set (see isReadOnly())
+	*/
+	void insertEmptyRow(int row = -1);
+
 	//! used when Return key is pressed on cell or "+" nav. button is clicked
 	void startEditCurrentCell();
 
@@ -373,7 +394,7 @@ public slots:
 
 	/*! Accepts row editing. All changes made to the editing 
 	 row during this current session will be accepted (saved). 
-	 \return true is accepting was successfull, false otherwise 
+	 \return true if accepting was successfull, false otherwise 
 	 (e.g. when current row contain data that does not meet given constraints). */
 	bool acceptRowEdit();
 
@@ -444,6 +465,10 @@ signals:
 	//! emmited when row editing is terminated (for updating or inserting)
 	//! no matter if accepted or not
 	void rowEditTerminated(int row);
+
+	//! Emitted in initActions() to force reload actions
+	//! You should remove existing actions and add them again.
+	void reloadActions();
 
 protected slots:
 	void columnWidthChanged( int col, int os, int ns );

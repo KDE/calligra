@@ -307,6 +307,24 @@ int KexiTableViewData::cmpStr(Item item1, Item item2)
 	return m_order*(au-bu);
 }
 
+void KexiTableViewData::setReadOnly(bool set)
+{
+	if (m_readOnly == set)
+		return;
+	m_readOnly = set;
+	if (m_readOnly)
+		setInsertingEnabled(false);
+}
+
+void KexiTableViewData::setInsertingEnabled(bool set)
+{
+	if (m_insertingEnabled == set)
+		return;
+	m_insertingEnabled = set;
+	if (m_insertingEnabled)
+		setReadOnly(false);
+}
+
 void KexiTableViewData::clearRowEditBuffer()
 {
 	//init row edit buffer

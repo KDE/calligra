@@ -40,9 +40,10 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 
 		virtual bool valueChanged();
 
-		//! \return true is editor's value is null (not empty)
+		//! \return true if editor's value is null (not empty)
 		virtual bool valueIsNull();
-		//! \return true is editor's value is empty (not null). 
+
+		//! \return true if editor's value is empty (not null). 
 		//! Only few field types can accept "EMPTY" property 
 		//! (check this with KexiDB::Field::hasEmptyProperty()), 
 		virtual bool valueIsEmpty();

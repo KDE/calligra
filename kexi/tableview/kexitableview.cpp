@@ -217,10 +217,10 @@ KexiTableView::~KexiTableView()
 	delete d;
 }
 
-void KexiTableView::initActions(KActionCollection *)
+/*void KexiTableView::initActions(KActionCollection *ac)
 {
-
-}
+	emit reloadActions(ac);
+}*/
 
 //! Setup navigator widget
 void KexiTableView::setupNavigator()
@@ -537,6 +537,15 @@ void KexiTableView::deleteCurrentRow()
 
 	if (!deleteItem(d->pCurrentItem)) {
 	}
+}
+
+void KexiTableView::insertEmptyRow(int row)
+{
+	if ( !acceptRowEdit() || !isEmptyRowInsertingEnabled() 
+		|| (row!=-1 && row >= (rows()+isInsertingEnabled()?1:0) ) )
+		return;
+
+	//TODO
 }
 
 void KexiTableView::clearData(bool repaint)
@@ -1466,6 +1475,8 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 		return e->key() == Key_Delete && e->state()==ShiftButton;
 	if (action_name=="edit_delete")
 		return e->key() == Key_Delete && e->state()==NoButton;
+	if (action_name=="data_insert_empty_row")
+		return e->key() == Key_Insert && e->state()==(ShiftButton | ControlButton);
 
 	return false;
 }
@@ -1537,6 +1548,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			return;
 		} else if (shortCutPressed(e, "edit_delete")) {
 			deleteAndStartEditCurrentCell();
+			e->accept();
+			return;
+		}
+		else if (shortCutPressed(e, "data_insert_empty_row")) {
+			insertEmptyRow();
 			e->accept();
 			return;
 		}
@@ -2668,7 +2684,7 @@ void KexiTableView::setAcceptsRowEditAfterCellAccepting(bool set)
 	d->acceptsRowEditAfterCellAccepting = set;
 }
 
-void KexiTableView::setInsertionPolicy(InsertionPolicy policy)
+/*void KexiTableView::setInsertionPolicy(InsertionPolicy policy)
 {
 	d->insertionPolicy = policy;
 //	updateContextMenu();
@@ -2677,7 +2693,7 @@ void KexiTableView::setInsertionPolicy(InsertionPolicy policy)
 KexiTableView::InsertionPolicy KexiTableView::insertionPolicy() const
 {
 	return d->insertionPolicy;
-}
+}*/
 
 void KexiTableView::setDeletionPolicy(DeletionPolicy policy)
 {
@@ -2989,9 +3005,13 @@ QVariant KexiTableView::columnDefaultValue(int col) const
 
 void KexiTableView::setReadOnly(bool set)
 {
-	if (m_data->isReadOnly() && !set)
+	if (isReadOnly() == set || m_data->isReadOnly() && !set)
 		return; //not allowed!
 	d->readOnly = (set ? 1 : 0);
+	if (set)
+		setInsertingEnabled(false);
+	update();
+	emit reloadActions();
 }
 
 bool KexiTableView::isReadOnly() const
@@ -3003,11 +3023,15 @@ bool KexiTableView::isReadOnly() const
 
 void KexiTableView::setInsertingEnabled(bool set)
 {
-	if (!m_data->isInsertingEnabled() && set)
+	if (isInsertingEnabled() == set || !m_data->isInsertingEnabled() && set)
 		return; //not allowed!
 	d->insertingEnabled = (set ? 1 : 0);
 	d->navBtnNew->setEnabled(set);
 	d->pVerticalHeader->showInsertRow(set);
+	if (set)
+		setReadOnly(false);
+	update();
+	emit reloadActions();
 }
 
 bool KexiTableView::isInsertingEnabled() const
@@ -3015,6 +3039,17 @@ bool KexiTableView::isInsertingEnabled() const
 	if (d->insertingEnabled == 1 || d->insertingEnabled == 0)
 		return (bool)d->insertingEnabled;
 	return m_data->isInsertingEnabled();
+}
+
+bool KexiTableView::isEmptyRowInsertingEnabled() const
+{
+	return d->emptyRowInsertingEnabled;//js && isInsertingEnabled();
+}
+
+void KexiTableView::setEmptyRowInsertingEnabled(bool set)
+{
+	d->emptyRowInsertingEnabled = set;
+	emit reloadActions();
 }
 
 bool KexiTableView::isDeleteEnabled() const

@@ -51,7 +51,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		//! @return true if editor's value is changed (compared to original value)
 		virtual bool valueChanged();
 
-		//! \return true is editor's value is null (not empty)
+		//! \return true if editor's value is null (not empty)
 		virtual bool valueIsNull() = 0;
 
 		//! \return true if editor's value is empty (not null). 

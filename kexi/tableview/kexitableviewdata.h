@@ -75,7 +75,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 		virtual bool acceptsFirstChar(const QChar& ch) const;
 
-		/*! \return true is the column is read-only
+		/*! \return true if the column is read-only
 		 For db-aware column this can depend on whether the column 
 		 is in parent table of this query. \sa setReadOnly() */
 		inline bool readOnly() const { return m_readOnly; }
@@ -180,11 +180,21 @@ public:
 	/*! Columns information */
 	KexiTableViewColumn::List columns;
 
+	/*! \return true if data is not editable. */
 	virtual bool isReadOnly() const { return m_readOnly; }
-	virtual void setReadOnly(bool set) { m_readOnly = set; }
 
+	/*! Sets readOnly flag for this data.
+	 If \a set is true, insertingEnabled flag will be cleared automatically.
+	 \sa isInsertingEnabled() */
+	virtual void setReadOnly(bool set);
+
+	/*! \return true if data inserting is enabled (the default). */
 	virtual bool isInsertingEnabled() const { return m_insertingEnabled; }
-	virtual void setInsertingEnabled(bool set) { m_insertingEnabled = set; }
+
+	/*! Sets insertingEnabled flag. If true, empty row is available 
+	 If \a set is true, read-only flag will be cleared automatically.
+	 \sa setReadOnly() */
+	virtual void setInsertingEnabled(bool set);
 
 	/*! Clears and initializes internal row edit buffer for incoming editing. 
 	 Creates buffer using KexiDB::RowEditBuffer(false) (false means not db-aware type) id our data is not db-aware,
