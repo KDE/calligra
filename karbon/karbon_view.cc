@@ -321,8 +321,10 @@ KarbonView::editDeselectAll()
 void
 KarbonView::editDeleteSelection()
 {
-	m_part->addCommand( new VDeleteCmd( &m_part->document() ), true );
-	m_part->document().selection()->clear();
+kdDebug() << "*********" << endl;
+	m_part->addCommand(
+		new VDeleteCmd( &m_part->document() ),
+		true );
 }
 
 void
