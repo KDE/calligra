@@ -112,6 +112,8 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
 	// m_projectDialog->exec();
 
 	result = true;
+    } else {
+        result = false;
     }
     setAutoSave(0); // disable
     setModified(false);
