@@ -65,7 +65,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     setKeyCompression( TRUE );
     setFocusPolicy( QWidget::StrongFocus );
     viewport()->setFocusProxy( this );
-    
+
     editNum = -1;
     recalcingText = FALSE;
     maybeDrag = FALSE;
@@ -2308,7 +2308,7 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
 
     if ( pln != fc->getParag()->getParagLayout()->getName() )
     {
-	format = fc->getParag()->getParagLayout()->getFormat();
+	format = *fc->getParag()->getParagLayout()->getFormat();
 	fc->apply( format );
     }
     else
@@ -4177,7 +4177,7 @@ void KWPage::startDrag()
 	stopBlinkCursor();
 
     KWordDrag *drag = new KWordDrag( this );
-    
+
     if ( doc->has_selection() )
 	doc->copySelectedText();
 
@@ -4186,7 +4186,7 @@ void KWPage::startDrag()
     drag->setPlain( cb->data()->encodedData( "text/plain" ) );
     if ( drag->drag() )
 	doc->deleteSelectedText( fc );
-    
+
     if ( blinking )
 	startBlinkCursor();
 }
@@ -4325,14 +4325,14 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	system( cmd.ascii() );
 	e->acceptAction();
     } else if ( QUriDrag::canDecode( e ) ) {
-    
+
 	QStringList lst;
 	QUriDrag::decodeLocalFiles( e, lst );
 
 	QStringList::Iterator it = lst.begin();
 	for ( ;it != lst.end(); ++it ) {
 	    KURL url( *it );
-	    if ( !url.isLocalFile() ) 
+	    if ( !url.isLocalFile() )
 		return;
 
 	    QString filename = url.path();
@@ -4378,7 +4378,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	editPaste( s );
 	e->acceptAction();
     }
-    
+
     startBlinkCursor();
 }
 

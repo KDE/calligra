@@ -420,7 +420,7 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     for ( unsigned int i = 0; i < text.size(); i++ )
     {
 	if ( !text.data()[ i ].attrib )
-	    setFormat( i, 1, paragLayout->getFormat() );
+	    setFormat( i, 1, *paragLayout->getFormat() );
     }
 }
 
@@ -465,8 +465,8 @@ void KWParag::applyStyle( QString _style )
 	    for ( unsigned int i = 0; i < getTextLen(); i++ )
 	    {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getPTFontSize() == paragLayout->getFormat().getPTFontSize() &&
-		     f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
+		if ( f2->getPTFontSize() == paragLayout->getFormat()->getPTFontSize() &&
+		     f2->getUserFont()->getFontName() == paragLayout->getFormat()->getUserFont()->getFontName() )
 		{
 		    f = *f2;
 		    f.setUserFont( pl->getFormat().getUserFont() );
@@ -486,7 +486,7 @@ void KWParag::applyStyle( QString _style )
 	    for ( unsigned int i = 0; i < getTextLen(); i++ )
 	    {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
+		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat()->getUserFont()->getFontName() )
 		{
 		    f = *f2;
 		    f.setUserFont( pl->getFormat().getUserFont() );
@@ -506,10 +506,10 @@ void KWParag::applyStyle( QString _style )
 	    for ( unsigned int i = 0; i < getTextLen(); i++ )
 	    {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getPTFontSize() == paragLayout->getFormat().getPTFontSize() &&
-		     f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
+		if ( f2->getPTFontSize() == paragLayout->getFormat()->getPTFontSize() &&
+		     f2->getUserFont()->getFontName() == paragLayout->getFormat()->getUserFont()->getFontName() )
 		{
-		    QColor c = paragLayout->getFormat().getColor();
+		    QColor c = paragLayout->getFormat()->getColor();
 		    f = pl->getFormat();
 		    f.setColor( c );
 		    freeChar( text.data()[ i ], document );
@@ -528,9 +528,9 @@ void KWParag::applyStyle( QString _style )
 	    for ( unsigned int i = 0; i < getTextLen(); i++ )
 	    {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
+		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat()->getUserFont()->getFontName() )
 		{
-		    QColor c = paragLayout->getFormat().getColor();
+		    QColor c = paragLayout->getFormat()->getColor();
 		    f = pl->getFormat();
 		    f.setColor( c );
 		    freeChar( text.data()[ i ], document );
@@ -543,7 +543,7 @@ void KWParag::applyStyle( QString _style )
 
 	if ( !document->getApplyStyleTemplate() & KWordDocument::U_COLOR )
 	{
-	    QColor c = paragLayout->getFormat().getColor();
+	    QColor c = paragLayout->getFormat()->getColor();
 	    pl->getFormat().setColor( c );
 	}
 	else
@@ -604,8 +604,8 @@ void KWParag::replace( int _pos, int _len, QString _text, KWFormat &_format )
 /*================================================================*/
 void KWParag::correctFormat( KWParag *newParag, KWParag *oldParag )
 {
-    KWFormat &pfOld = oldParag->getParagLayout()->getFormat();
-    KWFormat &pfNew = newParag->getParagLayout()->getFormat();
+    KWFormat &pfOld = *oldParag->getParagLayout()->getFormat();
+    KWFormat &pfNew = *newParag->getParagLayout()->getFormat();
     KWFormat nf;
     
     for ( unsigned int i = 0; i < oldParag->getTextLen(); ++i ) {

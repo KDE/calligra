@@ -95,7 +95,7 @@ public:
     void setBulletFont( const QString& _f ) { counter.bulletFont = _f; }
     QString getBulletFont() const { return counter.bulletFont; }
 
-    KWFormat& getFormat() { return format; }
+    const KWFormat* getFormat() { return format; }
     QString getName() const { return name; }
     KWUnit getFirstLineLeftIndent() const { return firstLineLeftIndent; }
     KWUnit getLeftIndent() const { return leftIndent; }
@@ -112,7 +112,7 @@ public:
     int getCounterDepth() const { return counter.counterDepth; }
     QString getCounterLeftText() const { return counter.counterLeftText; }
     QString getCounterRightText() const { return counter.counterRightText.data(); }
-    
+
     QString getFollowingParagLayout() { return followingParagLayout; }
 
     QDOM::Element save( QDOM::Document& );
@@ -128,7 +128,7 @@ public:
     bool hasSpecialTabs() const { return specialTabs; }
 
 protected:
-    KWFormat format;
+    KWFormat *format;
 
     Flow flow;
     KWUnit paragFootOffset;
