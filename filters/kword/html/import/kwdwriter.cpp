@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "kwdwriter.h"
+#include <stdlib.h>
 #include "qrect.h"
 
 KWDWriter::KWDWriter(KoStore *store){
