@@ -836,6 +836,118 @@ m_pDoc->setModified( true );
     }
 }
 
+void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, QColor bd_Color )
+{
+    bool selected = ( m_rctSelection.left() != 0 );
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  int it_Row=it.current()->row();
+	  int it_Col=it.current()->column();	  		  if(it.current()->topBorderStyle(it_Row,it_Col)!=Qt::NoPen )
+   	   	it.current()->setTopBorderColor( bd_Color );
+   	  if(it.current()->leftBorderStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setLeftBorderColor(bd_Color);
+   	  if(it.current()->fallDiagonalStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setFallDiagonalColor(bd_Color);
+   	  if(it.current()->goUpDiagonalStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setGoUpDiagonalColor(bd_Color);    	   
+	  if(it.current()->bottomBorderStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setBottomBorderColor(bd_Color);
+   	  if(it.current()->rightBorderStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setRightBorderColor(bd_Color);
+   	   	
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  int it_Row=it.current()->row();
+	  int it_Col=it.current()->column();
+	  if(it.current()->topBorderStyle(it_Row,it_Col)!=Qt::NoPen )
+   	   	it.current()->setTopBorderColor( bd_Color );
+   	  if(it.current()->leftBorderStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setLeftBorderColor(bd_Color);
+   	  if(it.current()->fallDiagonalStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setFallDiagonalColor(bd_Color);
+   	  if(it.current()->goUpDiagonalStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setGoUpDiagonalColor(bd_Color);    	   
+	  if(it.current()->bottomBorderStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setBottomBorderColor(bd_Color);
+   	  if(it.current()->rightBorderStyle(it_Row,it_Col)!=Qt::NoPen)
+   	   	it.current()->setRightBorderColor(bd_Color);
+	  
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    else
+    {
+	QRect r( m_rctSelection );
+	if ( !selected )
+	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+	KSpreadUndoCellLayout *undo;
+	if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
+	
+	for ( int x = r.left(); x <= r.right(); x++ )
+	    for ( int y = r.top(); y <= r.bottom(); y++ )
+	    {		
+		KSpreadCell *cell = cellAt( x, y );
+
+		if ( cell != m_pDefaultCell )
+           	{
+			cell->setDisplayDirtyFlag();
+           		if(cell->topBorderStyle(x,y)!=Qt::NoPen )
+   	   			cell->setTopBorderColor( bd_Color );
+   	   		if(cell->leftBorderStyle(x,y)!=Qt::NoPen)
+   	   			cell->setLeftBorderColor(bd_Color);
+   	   		if(cell->fallDiagonalStyle(x,y)!=Qt::NoPen)
+   	   			cell->setFallDiagonalColor(bd_Color);
+   	   		if(cell->goUpDiagonalStyle(x,y)!=Qt::NoPen)
+   	   			cell->setGoUpDiagonalColor(bd_Color);    	   
+	   		if(cell->bottomBorderStyle(x,y)!=Qt::NoPen)
+   	   			cell->setBottomBorderColor(bd_Color);
+   	   		if(cell->rightBorderStyle(x,y)!=Qt::NoPen)
+   	   			cell->setRightBorderColor(bd_Color);
+    	   		cell->clearDisplayDirtyFlag();
+    	   	}
+		
+		
+	    }
+	
+	emit sig_updateView( this, r );
+    }
+}
+
 void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type)
 {
 m_pDoc->setModified( true );
@@ -845,7 +957,7 @@ int y = r.top();
 int x = r.left();
 int posx=0;
 int posy=0;
-//for ( int incr=start;incr<=end;incr=incr+step )
+
 for ( int incr=start;incr<=end; )
         {
 	KSpreadCell *cell = cellAt( x+posx, y+posy );

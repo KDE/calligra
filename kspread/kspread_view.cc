@@ -934,7 +934,7 @@ void KSpreadView::changeBorderColor()
 	if ( KColorDialog::getColor( color ) )
 	{
 	    m_borderColor->setColor( color );
-	
+	    m_pTable->setSelectionBorderColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), color );
 	}
     }
 }

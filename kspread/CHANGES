@@ -427,4 +427,11 @@ and atan2
 -Now init toggle button in initialPosition() because used QTimer::singleShot
 => all is init before change state of button.
 -Add caption to kspread_dlg_format
--Add modal for all dialogbox
+-Add modal for all dialogbox (bug reported by jp.martin" <jpmartin@iroise.com>)
+
+2000-05-01 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add modal for all MessageBox (bug reported by jp.martin" <jpmartin@iroise.com>)
+-Now when you change boder color in toolbar all borders into area selected
+changed (idea of jp.martin" <jpmartin@iroise.com>)
+=>thanks to jp.martin

@@ -380,6 +380,7 @@ public:
 
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
+    void setSelectionBorderColor( const QPoint &_marker, QColor bd_Color );
 
     void deleteSelection( const QPoint &_marker );
     void copySelection( const QPoint &_marker );
