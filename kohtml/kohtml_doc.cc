@@ -20,6 +20,7 @@
 */
 #include "kohtml_doc.h"
 #include "kohtml_doc.moc"
+#include "kohtml_shell.h"
 
 #include <unistd.h>
 
