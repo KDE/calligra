@@ -131,9 +131,7 @@ bool KSpreadDoc::initDoc()
     if ( ret == KoTemplateChooseDia::File ) {
         QString fileName(f);
 	KURL::encode( fileName );
-	bool ok = openURL( KURL( fileName ) );
-	resetURL();
-	return ok;
+	return openURL( KURL( fileName ) );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	KSpreadTable *t = createTable();
 	m_pMap->addTable( t );
