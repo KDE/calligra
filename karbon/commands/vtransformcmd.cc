@@ -59,6 +59,7 @@ VTransformCmd::VTransformCmd( VDocument *doc, const QString& name, const QString
 		? document()->selection()->clone()
 		: new VSelection();
 
+	kdDebug() << "Now count : " << m_selection->objects().count() << endl;
 	if( m_duplicate )
 	{
 		if( !m_selection || m_selection->objects().count() == 1 )
@@ -106,12 +107,14 @@ VTransformCmd::execute()
 		}
 	}
 
+	kdDebug() << "Now count : " << m_selection->objects().count() << endl;
 	setSuccess( true );
 }
 
 void
 VTransformCmd::unexecute()
 {
+	kdDebug() << "VTransformCmd::unexecute() " << endl;
 	// inverting the matrix should undo the affine transformation
 	m_mat = m_mat.invert();
 
@@ -135,12 +138,9 @@ VTransformCmd::unexecute()
 	else
 	{
 		// move objects back to original position
-		VObjectListIterator itr( m_selection->objects() );
-
-		for( ; itr.current() ; ++itr )
-		{
-			visit( *itr.current() );
-		}
+		kdDebug() << "Visiting : selection" << endl;
+	kdDebug() << "Now count : " << m_selection->objects().count() << endl;
+		visit( *m_selection );
 	}
 	// reset
 	m_mat = m_mat.invert();
@@ -152,6 +152,7 @@ VTransformCmd::unexecute()
 void
 VTransformCmd::visitVComposite( VComposite& composite )
 {
+	kdDebug() << "Visiting composite "  << endl;
 	// Apply transformation to gradients.
 	if( composite.stroke()->type() == VStroke::grad )
 		composite.stroke()->gradient().transform( m_mat );
@@ -165,6 +166,7 @@ VTransformCmd::visitVComposite( VComposite& composite )
 void
 VTransformCmd::visitVPath( VPath& path )
 {
+	kdDebug() << "Visiting : path" << endl;
 	VSegment* segment = path.first();
 
 	while( segment )
