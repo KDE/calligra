@@ -1289,12 +1289,15 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     	KWFrame *parentFrame=frame;
     	while (parentFrameset->isFloating()) {
 		parentFrameset=parentFrameset->anchorFrameset();
+		KWFrame *oldParentFrame = parentFrame;
 		parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
                 if( parentFrame)
                 {
                     QRect r = painter->xForm( viewMode->normalToView( parentFrame->outerRect() ) );
                     reg &= r;
-                }
+                } else {
+		    parentFrame = oldParentFrame;
+		}
     	}
 
 	// if this frame was not inline, parentFrame == frame so normal clipping happens.
