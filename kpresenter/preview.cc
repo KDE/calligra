@@ -1,97 +1,129 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+/* vi: ts=8 sts=4 sw=4
+ *
+ * This file is part of the KDE project
+ * Copyright (C) 2001 Martin R. Jones <mjones@kde.org>
+ *
+ * You can Freely distribute this program under the GNU General Public
+ * License. See the file "COPYING" for the exact licensing terms.
+ */
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
+#include <qwhatsthis.h>
+#include <qtimer.h>
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+#include <kapp.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kstddirs.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kfiledialog.h>
+#include <kimageio.h>
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
-
-#include <qpicture.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
 #include "preview.h"
-#include "preview.moc"
-#include "qwmf.h"
-#include <qfileinfo.h>
-#include <qscrollview.h>
 
-class PixmapView : public QScrollView
+/**** KImageFilePreview ****/
+
+KImageFilePreview::KImageFilePreview( QWidget *parent )
+    : QWidget( parent )
 {
-public:
-    PixmapView( QWidget *parent )
-	: QScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
+    autoMode = FALSE;
 
-    void setPixmap( const QPixmap &pix ) {
-	pixmap = pix;
-        const QBitmap nullBitmap;
-        pixmap.setMask( nullBitmap );  //don't show transparency
-	resizeContents( pixmap.size().width(), pixmap.size().height() );
-	viewport()->repaint( false );
-    }
+    QVBoxLayout *vb = new QVBoxLayout( this, KDialog::marginHint() );
 
-    void setClipart( const QString &s ) {
-	QWinMetaFile wmf;
+    imageLabel = new QLabel( this );
+    imageLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    imageLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+    imageLabel->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) );
+    vb->addWidget( imageLabel, 1 );
 
-	if ( wmf.load( s ) ) {
-	    QPicture pic;
-	    wmf.paint( &pic );
+    infoLabel = new QLabel( this );
+    vb->addWidget( infoLabel );
 
-	    pixmap = QPixmap( 200, 200 );
-	    QPainter p;
+    QHBoxLayout *hb = new QHBoxLayout( vb );
 
-	    p.begin( &pixmap );
-	    p.setBackgroundColor( Qt::white );
-	    pixmap.fill( Qt::white );
+    autoPreview = new QCheckBox( i18n("&Automatic preview"), this );
+    hb->addWidget( autoPreview );
+    connect( autoPreview, SIGNAL(toggled(bool)), SLOT(toggleAuto(bool)) );
 
-	    QRect oldWin = p.window();
-	    QRect vPort = p.viewport();
-	    p.setViewport( 0, 0, 200, 200 );
-	    p.drawPicture( pic );
-	    p.setWindow( oldWin );
-	    p.setViewport( vPort );
-	    p.end();
-	    resizeContents( pixmap.size().width(), pixmap.size().height() );
-	    viewport()->repaint( false );
-	}
-    }
+    previewButton = new QPushButton( i18n("&Preview"), this );
+    hb->addWidget( previewButton );
+    connect( previewButton, SIGNAL(clicked()), SLOT(updatePreview()) );
 
-    void drawContents( QPainter *p, int, int, int, int ) {
-	p->drawPixmap( 0, 0, pixmap );
-    }
-
-private:
-    QPixmap pixmap;
-};
-
-KImagePreview::KImagePreview( QWidget *parent )
-    : QVBox( parent )
-{
-    pixmap = new PixmapView( this );
+    timer = new QTimer( this );
+    connect( timer, SIGNAL(timeout()), SLOT(showImage()) );
 }
 
-void KImagePreview::showPreview( const KURL &u )
+void KImageFilePreview::showPreview( const KURL &url )
 {
-    if ( u.isLocalFile() ) {
-	QString path = u.path();
-        QFileInfo fi( path );
-	if ( fi.extension().lower() == "wmf" )
-	    pixmap->setClipart( path );
-	else {
-	    QPixmap pix( path );
-	    pixmap->setPixmap( pix );
+    if ( url != currentURL )
+    {
+	currentURL = url;
+	currentImage = QImage();
+	if ( autoMode )
+	{
+	    if ( currentURL.isLocalFile() )
+		currentImage.load( currentURL.path() );
 	}
-    } else {
-	pixmap->setPixmap( QPixmap() );
+	    
+	timer->start( 20, true );
     }
 }
+
+void KImageFilePreview::updatePreview()
+{
+    if ( currentURL.isLocalFile() )
+	currentImage.load( currentURL.path() );
+    timer->start( 0, true );
+}
+
+void KImageFilePreview::toggleAuto( bool a )
+{
+    autoMode = a;
+    if ( autoMode )
+    {
+	updatePreview();
+    }
+}
+
+void KImageFilePreview::resizeEvent( QResizeEvent * )
+{
+    timer->start( 100, true );
+}
+
+QSize KImageFilePreview::sizeHint() const
+{
+    return QSize( 20, 200 ); // otherwise it ends up huge???
+}
+
+void KImageFilePreview::showImage()
+{
+    QPixmap pm;
+    if ( !currentImage.isNull() ) {
+	infoLabel->setText( i18n( "%1bpp image, %2 x %3 pixels" )
+	    .arg(currentImage.depth()).arg(currentImage.width())
+	    .arg(currentImage.height()) );
+	double hscale = double(imageLabel->contentsRect().width()-4) /
+			currentImage.width();
+	double vscale = double(imageLabel->contentsRect().height()-4) /
+			currentImage.height();
+	if ( hscale < 1.0 || vscale < 1.0 )
+	{
+	    double scale = QMIN( hscale, vscale );
+	    int w = int(currentImage.width() * scale);
+	    int h = int(currentImage.height() * scale);
+	    pm.convertFromImage( currentImage.smoothScale( w, h ) );
+	}
+	else
+	    pm.convertFromImage( currentImage );
+    }
+    if ( pm.isNull() )
+	infoLabel->clear();
+    imageLabel->setPixmap( pm );
+}
+
+

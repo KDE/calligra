@@ -1,43 +1,57 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+/* vi: ts=8 sts=4 sw=4
+ *
+ * This file is part of the KDE project.
+ * Copyright (C) 2001 Martin R. Jones <mjones@kde.org>
+ * 
+ * You can Freely distribute this program under the GNU General Public
+ * License. See the file "COPYING" for the exact licensing terms.
+ */
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+#ifndef KIMAGEFILEPREVIEW_H
+#define KIMAGEFILEPREVIEW_H
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
-
-#ifndef __kimagepreview_h
-#define __kimagepreview_h
-
-#include <qvbox.h>
+#include <qwidget.h>
+#include <qimage.h>
 
 #include <kurl.h>
 
-class PixmapView;
+class QCheckBox;
+class QPushButton;
+class QLabel;
+class QTimer;
 
-class KImagePreview : public QVBox
+/**
+ * Image preview widget for the file dialog.
+ */
+class KImageFilePreview : public QWidget
 {
     Q_OBJECT
-
 public:
-    KImagePreview( QWidget *parent );
+    KImageFilePreview( QWidget *parent );
+
+    virtual QSize sizeHint() const;
 
 public slots:
-     void showPreview( const KURL &u );
+    void showPreview( const KURL & );
+
+protected slots:
+    void showImage();
+    void updatePreview();
+    void toggleAuto( bool );
+
+protected:
+    virtual void resizeEvent( QResizeEvent * );
 
 private:
-    PixmapView *pixmap;
+    bool autoMode;
+    KURL currentURL;
+    QImage currentImage;
+    QTimer *timer;
+    QLabel *imageLabel;
+    QLabel *infoLabel;
+    QCheckBox *autoPreview;
+    QPushButton *previewButton;
 };
 
-#endif
+
+#endif // KIMAGEFILEPREVIEW_H
