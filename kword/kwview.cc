@@ -103,7 +103,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 {
     m_doc = _doc;
     m_gui = 0;
-    m_kspell = 0;
+    m_spell.kspell = 0;
     m_border.left.color = white;
     m_border.left.style = Border::SOLID;
     m_border.left.ptWidth = 0;
@@ -2128,8 +2128,14 @@ void KWView::formatFrameSet()
 
 void KWView::extraSpelling()
 {
-    if (m_kspell) return; // Already in progress
-    m_spellCurrFrameSetNum = -1;
+    if (m_spell.kspell) return; // Already in progress
+    m_spell.spellCurrFrameSetNum = -1;
+
+    m_spell.textFramesets.clear();
+     for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
+        KWFrameSet *frameset = m_doc->getFrameSet( i );
+        frameset->addTextFramesets(m_spell.textFramesets);
+     }
     startKSpell();
 }
 
@@ -2983,33 +2989,32 @@ void KWView::startKSpell()
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if(m_doc->getKSpellConfig() && !m_ignoreWord.isEmpty())
         m_doc->getKSpellConfig()->setIgnoreList(m_ignoreWord);
-    m_kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
+    m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
 
 
 #ifdef KSPELL_HAS_IGNORE_UPPER_WORD
-     m_kspell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
-     m_kspell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
+     m_spell.kspell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
+     m_spell.kspell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
 #endif
 
-    QObject::connect( m_kspell, SIGNAL( death() ),
+    QObject::connect( m_spell.kspell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
-    QObject::connect( m_kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
+    QObject::connect( m_spell.kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
                       this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
-    QObject::connect( m_kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
+    QObject::connect( m_spell.kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
                       this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
-    QObject::connect( m_kspell, SIGNAL( done( const QString & ) ),
+    QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
                       this, SLOT( spellCheckerDone( const QString & ) ) );
 }
 
 void KWView::spellCheckerReady()
 {
-    for ( unsigned int i = m_spellCurrFrameSetNum + 1; i < m_doc->getNumFrameSets(); i++ ) {
-        KWFrameSet *frameset = m_doc->getFrameSet( i );
-        if ( !frameset->isVisible() || frameset->type() != FT_TEXT )
-            continue;
-        m_spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
+    for ( unsigned int i = m_spell.spellCurrFrameSetNum + 1; i < m_spell.textFramesets.count(); i++ ) {
+        KWTextFrameSet *textfs = m_spell.textFramesets.at( i );
+
+        m_spell.spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;
-        KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet*>( frameset );
+
         QTextParag * p = textfs->textDocument()->firstParag();
         QString text;
         while ( p ) {
@@ -3019,22 +3024,22 @@ void KWView::spellCheckerReady()
             p = p->next();
         }
         text += '\n';
-        m_kspell->check( text );
+        m_spell.kspell->check( text );
         return;
     }
     //kdDebug() << "KWView::spellCheckerReady done" << endl;
 
     // Done
-    m_kspell->cleanUp();
-    delete m_kspell;
-    m_kspell = 0;
-    m_ignoreWord.clear();
+    m_spell.kspell->cleanUp();
+    delete m_spell.kspell;
+    m_spell.kspell = 0;
+    m_spell.ignoreWord.clear();
 }
 
 void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
 {
     //kdDebug() << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
-    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( m_doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
     ASSERT( fs );
     if ( !fs ) return;
     QTextParag * p = fs->textDocument()->firstParag();
@@ -3053,7 +3058,7 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
 {
     //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 
-    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( m_doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
     ASSERT( fs );
     if ( !fs ) return;
     QTextParag * p = fs->textDocument()->firstParag();
@@ -3075,19 +3080,19 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
 
 void KWView::spellCheckerDone( const QString & )
 {
-    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( m_doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
     ASSERT( fs );
     if ( fs )
         fs->removeHighlight();
 
-    int result = m_kspell->dlgResult();
+    int result = m_spell.kspell->dlgResult();
 
     //store ignore word
-    m_ignoreWord=m_kspell->ksConfig ().ignoreList ();
+    m_spell.ignoreWord=m_spell.kspell->ksConfig().ignoreList ();
 
-    m_kspell->cleanUp();
-    delete m_kspell;
-    m_kspell = 0;
+    m_spell.kspell->cleanUp();
+    delete m_spell.kspell;
+    m_spell.kspell = 0;
 
     if ( result != KS_CANCEL && result != KS_STOP )
     {
@@ -3100,9 +3105,9 @@ void KWView::spellCheckerDone( const QString & )
 
 void KWView::spellCheckerFinished()
 {
-    KSpell::spellStatus status = m_kspell->status();
-    delete m_kspell;
-    m_kspell = 0;
+    KSpell::spellStatus status = m_spell.kspell->status();
+    delete m_spell.kspell;
+    m_spell.kspell = 0;
     if (status == KSpell::Error)
     {
         KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
@@ -3112,7 +3117,7 @@ void KWView::spellCheckerFinished()
     {
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
-    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( m_doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
     ASSERT( fs );
     if ( fs )
         fs->removeHighlight();

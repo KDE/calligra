@@ -200,7 +200,9 @@ public:
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = QTextFormat::Format,
                      bool zoomFormats = true, bool createUndoRedo = true, bool interactive = true );
 
-    virtual void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    
+    virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ );
 
     KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList );
 

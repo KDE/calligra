@@ -56,6 +56,7 @@ class KWTextFrameSetEdit;
 class TKSelectColorAction;
 class KoPartSelectAction;
 class KCharSelectDia;
+class KWTextFrameset;
 
 namespace Qt3 {
 class QTextFormat;
@@ -415,10 +416,6 @@ private:
 
     KWSearchContext *searchEntry, *replaceEntry;
 
-    // Spell-checking
-    KSpell *m_kspell;
-    int m_spellCurrFrameSetNum;
-
     int m_currentPage; // 0-based current page number
 
     // Statusbar items
@@ -431,6 +428,15 @@ private:
 
     bool m_viewFrameBorders /*, m_viewTableGrid*/;
     QStringList m_ignoreWord;
+
+    // Spell-checking
+    struct {
+	KSpell *kspell;
+	int spellCurrFrameSetNum; 
+	QList<KWTextFrameSet> textFramesets;
+	QStringList ignoreWord;
+     } m_spell;
+
 };
 
 /******************************************************************/

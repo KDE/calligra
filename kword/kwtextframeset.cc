@@ -1542,6 +1542,12 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
     emit updateUI( true );
 }
 
+void KWTextFrameSet::addTextFramesets( QList<KWTextFrameSet> & lst )
+{
+    lst.append(this);
+}
+
+
 #if 0
 KWTextFrameSet *KWTextFrameSet::getCopy() {
     /* returns a deep copy of self */

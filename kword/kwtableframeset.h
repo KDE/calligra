@@ -80,7 +80,9 @@ public:
     friend class Cell;
 
     virtual FrameSetType type() { return FT_TABLE; }
-    virtual void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+
+    virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ );
+
     // constructors
     KWTableFrameSet( KWDocument *_doc, const QString & name );
     KWTableFrameSet( KWTableFrameSet &original );

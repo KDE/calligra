@@ -104,7 +104,7 @@ public:
     virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
     virtual QSize contentsSize() {return QSize();}
 
-    virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ){}
+    virtual void drawPageBorders( QPainter * , const QRect & , const QRegion &  ){}
     virtual bool drawSelections() {return false;}
 };
 

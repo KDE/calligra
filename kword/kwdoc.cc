@@ -2131,9 +2131,15 @@ void KWDocument::updateAllStyleLists()
 
 void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged )
 {
+    QList<KWTextFrameSet> textFramesets;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
-            fit.current()->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+        fit.current()->addTextFramesets(textFramesets);
+    }
+
+    KWTextFrameSet *frm;
+    for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
+        frm->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
     }
 }
 

@@ -23,7 +23,6 @@
 #include "defs.h"
 #include "kwimage.h"
 #include <koClipart.h>
-
 #include <koRect.h>
 #include <qbrush.h>
 #include <qlist.h>
@@ -45,7 +44,6 @@ class KWFrameSet;
 class KWResizeHandle;
 class KWTableFrameSet;
 class KWTextDocument;
-class KWTextFrameSet;
 class KWTextParag;
 class KWView;
 class KWViewMode;
@@ -55,6 +53,7 @@ class QPoint;
 class QRegion;
 class QSize;
 class QProgressDialog;
+class KWTextFrameSet;
 
 /**
  * This class represents a single frame.
@@ -300,8 +299,8 @@ public:
 
     virtual FrameSetType type() { return FT_BASE; }
 
-    virtual void applyStyleChange( KWStyle * , int , int  ) {};
-
+    virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ ) {};
+    
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>
      * FI_FIRST_HEADER = Header on page 1<br>
