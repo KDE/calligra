@@ -2,7 +2,7 @@ kde_module_LTLIBRARIES = libkexipart.la
 libkexipart_la_SOURCES = kexipart.cpp
 
 libkexipart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkexipart_la_LIBADD = $(LIB_KOFFICEUI) core/libkexicore.la
+libkexipart_la_LIBADD = $(LIB_KOFFICEUI) -lkpath core/libkexicore.la
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kexi.la
@@ -22,7 +22,9 @@ dummy.cc:
 
 SUBDIRS = kexiDB formeditor core tableview widget . plugins pics data interfaces filters
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
+-DKEXIFILTER_EXPORT= -DKFORMEDITOR_EXPORT= -DKEXI_HAND_TBL_EXPORT= -DKEXI_HAND_QUERY_EXPORT= \
+-DKEXI_HAND_RELAT_EXPORT= -DKEXI_HAND_FORM_EXPORT= -DKEXIEXTWIDGETS_EXPORT= -DKEXIDATATABLE_EXPORT=
 
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop
