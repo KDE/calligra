@@ -1888,7 +1888,7 @@ ColumnLayout::~ColumnLayout()
 	m_prev->setNext( m_next );
     delete m_dcop;
 }
-#include "KSpreadColumnIface.h"
+
 DCOPObject* ColumnLayout::dcopObject()
 {
     if( !m_dcop)

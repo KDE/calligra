@@ -26,7 +26,6 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kpresenter_doc.h>
-#include "kpresenter_view.h"
 #include "kprcanvas.h"
 #include <kdebug.h>
 

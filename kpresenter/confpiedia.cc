@@ -26,16 +26,13 @@
 #include <qlayout.h>
 
 #include <klocale.h>
-#include <knuminput.h>
 #include <kbuttonbox.h>
+#include <knuminput.h>
 
 #include <qpen.h>
 #include <qbrush.h>
 #include <qcombobox.h>
 #include <global.h>
-
-#include <knuminput.h>
-#include <qcombobox.h>
 
 #include <stdlib.h>
 
