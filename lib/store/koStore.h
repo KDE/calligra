@@ -121,12 +121,12 @@ public:
   /**
    * @return true if an error occured
    */
-  bool bad() { return !m_bGood; } // :)
+  bool bad() const { return !m_bGood; } // :)
 
   /**
    * @return the mode used when opening, read or write
    */
-  Mode mode() { return m_mode; }
+  Mode mode() const { return m_mode; }
 
   // See QIODevice
   bool at( QIODevice::Offset pos );

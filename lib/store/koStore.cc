@@ -80,7 +80,7 @@ QString KoStore::toExternalNaming( const QString & _internalNaming )
   if (_internalNaming == ROOTPART)
     return MAINNAME;
 
-  if ( _internalNaming.left(5) == "tar:/" )
+  if ( _internalNaming.startsWith( "tar:/" ) )
   {
     QString intern( _internalNaming.mid( 5 ) ); // remove protocol
     QString result( "" );
