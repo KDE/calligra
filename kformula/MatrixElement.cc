@@ -55,13 +55,6 @@ void MatrixElement::draw(QPoint drawPoint,int resolution)
     int rows=atoi(content.mid(3,3));
     int cols=atoi(content.mid(6,3));
    
-    if(beActive){    
-    if(position==0)
-    formula->setCursor(QRect(x+familySize.x()-2,y-7,5,14));
-    else
-    formula->setCursor(QRect(x+localSize.width()+5,y-7,5,14));	
-      }
-
     if( beActive )
 	pen->setPen(Qt::red);
     /*

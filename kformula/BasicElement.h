@@ -122,6 +122,11 @@ class BasicElement
      */
     
     virtual int takeActionFromKeyb(int action);
+
+
+
+    virtual QRect getCursor(int atPos);
+  
   
     /*
      * Return element font
@@ -136,7 +141,7 @@ class BasicElement
     /*
      * Return globalsize (see globalSize)
      */
-    int getPosition() const { return position; }
+//    int getPosition() const { return position; }
     
     /*
      * Return next
@@ -176,8 +181,10 @@ class BasicElement
      * This function sets the value of "position"
      * & also set the Active element if necessary.
      */
-    virtual void setPosition(int pos);    
-    virtual bool isValidPosition(int pos);
+//    virtual void setPosition(int pos);    
+//    virtual bool isValidPosition(int pos);
+      virtual void makeList(bool active=0);
+
     /*
      * change type
      * clone MUST be a derived class of BasicElement 
@@ -308,8 +315,8 @@ class BasicElement
     * pos==0  Before element
     * pos!=0  After.  
     */
-    int position;   
-  
+//    int position;   
+     QRect cursor; 
 };
 
 #endif

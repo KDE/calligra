@@ -26,6 +26,9 @@ BracketElement::BracketElement(KFormulaDoc *Formula,
   childrenNumber=1;
   minChildren=1;
   child.resize(childrenNumber);
+  child[0]=0L;
+
+
 }
 
 BracketElement::~BracketElement()
@@ -38,13 +41,6 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
   QPainter *pen=formula->painter();
   int x=drawPoint.x();
   int y=drawPoint.y();
-
- if(beActive){    
-    if(position==0)
-    formula->setCursor(QRect(x+familySize.x()-2,y-7,5,14));
-    else
-    formula->setCursor(QRect(x+localSize.width()+5,y-7,5,14));	
-      }
 
   if( beActive )
     pen->setPen(Qt::red);

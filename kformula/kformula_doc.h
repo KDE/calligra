@@ -21,6 +21,12 @@ class KFormulaDoc;
 #include <qpainter.h>
 
 #define MIME_TYPE "application/x-kformula"
+class BasicElement;
+struct PosType
+ {
+  BasicElement *element;
+  int pos;
+ };
 
 class KFormulaDoc : public QObject,
 		    virtual public KoDocument,
@@ -117,6 +123,8 @@ class KFormulaDoc : public QObject,
     void setFont(const QFont& f) { theFont=f;}
     void setColor(const QColor& c) { theColor=c;}
     void setFirstElement(BasicElement* c);
+    QList<PosType> eList;
+    int thePosition;
     QPainter * painter() const { return thePainter; } 
     BasicElement *activeElement() const { return theActiveElement; } 
     QRect cursor() const { return theCursor; }

@@ -124,7 +124,7 @@ class TextElement : public BasicElement
    /*
     * Cursor Internal position
     */
-//   uint position;   //MOved to Basic Element
+   uint position;  
    
  };
 #endif
