@@ -61,7 +61,7 @@
  *  TAB Frameset
  *      here the user can select from the current TEXT framesets, a new one is
  *      included in the list.
- *      Afterwards (on ok) the frame should be checked if it is allready owned by a
+ *      Afterwards (on ok) the frame should be checked if it is already owned by a
  *      frameset, if so that connection must be disconnected (if different) and
  *      framebehaviour will be copied from the frameset
  *      then the new connection should be made.
@@ -75,13 +75,13 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frame = _frame;
-    frameType=frame->getFrameType();
-    doc=0;
+    frameType = frame->getFrameSet() ? frame->getFrameSet()->getFrameType() : (FrameType) -1;
+    doc = 0;
     init();
 }
 
 /* Contructor when the dialog is used on creation of frame */
-KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame,KWDocument *_doc,FrameType _ft)
+KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, FrameType _ft )
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frameType=_ft;

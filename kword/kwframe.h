@@ -133,10 +133,7 @@ public:
     FrameBehaviour getFrameBehaviour() { return frameBehaviour; }
     void setFrameBehaviour( FrameBehaviour fb ) { frameBehaviour = fb; }
 
-    FrameInfo getFrameInfo();
-    FrameType getFrameType();
-
-    /* frame duplication properties */
+    /* Frame duplication properties */
     SheetSide getSheetSide() { return sheetSide; }
     void setSheetSide( SheetSide ss ) { sheetSide = ss; }
 

@@ -241,22 +241,6 @@ QCursor KWFrame::getMouseCursor( int mx, int my, bool table )
 }
 
 /*================================================================*/
-FrameInfo KWFrame::getFrameInfo()
-{
-    if(frameSet)
-        return frameSet->getFrameInfo();
-    return (FrameInfo) -1;
-}
-
-/*================================================================*/
-FrameType KWFrame::getFrameType()
-{
-    if(frameSet)
-        return frameSet->getFrameType();
-    return (FrameType)  -1;
-}
-
-/*================================================================*/
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
     KWFrame *frm = new KWFrame(getFrameSet(), x(), y(), width(), height(), getRunAround(), getRunAroundGap() );
