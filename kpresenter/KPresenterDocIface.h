@@ -34,22 +34,22 @@ public:
     KPresenterDocIface( KPresenterDoc *doc_ );
 
 k_dcop:
-    virtual int numPages();
+    virtual int numPages() const;
     virtual DCOPRef page( int num );
 
     virtual DCOPRef stickyPage();
 
     bool selectPage( int page,bool select);
 
-    virtual double indentValue();
+    virtual double indentValue() const;
     virtual void setIndentValue(double _ind);
 
-    virtual bool dontCheckUpperWord();
+    virtual bool dontCheckUpperWord() const;
     virtual void setDontCheckUpperWord(bool _b);
 
-    virtual bool dontCheckTitleCase();
+    virtual bool dontCheckTitleCase() const ;
     virtual void setDontCheckTitleCase(bool _b);
-    virtual int maxRecentFiles();
+    virtual int maxRecentFiles() const ;
 
     virtual void setUndoRedoLimit(int val);
 
@@ -66,7 +66,7 @@ k_dcop:
     virtual void setStartingPage(int nb);
 
     virtual void setDisplayLink(bool b);
-    virtual bool displayLink();
+    virtual bool displayLink() const;
     virtual bool insertNewPage(int pos );
     virtual bool deletePage( int _page );
     virtual void deSelectAllObj();
@@ -207,6 +207,7 @@ k_dcop:
     double helpPointPosX( int idx ) const ;
     double helpPointPosY( int idx ) const ;
 
+    unsigned int nbHelpPoint() const;
 
     void addHelpPoint( double posX, double posY );
 

@@ -148,17 +148,17 @@ k_dcop:
     virtual void brushChosen();
 
     // in presentation mode
-    virtual int getCurrentPresPage();
-    virtual int getCurrentPresStep();
-    virtual int getPresStepsOfPage();
-    virtual int getNumPresPages();
-    virtual bool gotoPresPage( int pg );
+    virtual int getCurrentPresPage() const;
+    virtual int getCurrentPresStep() const;
+    virtual int getPresStepsOfPage() const;
+    virtual int getNumPresPages() const;
+    virtual bool gotoPresPage( int pg ) const;
 
     // in edit mode
-    virtual int getCurrentPageNum();
+    virtual int getCurrentPageNum() const;
 
     // in both modes
-    virtual double getCurrentFaktor();
+    virtual double getCurrentFaktor()const;
 
     virtual void insertCustomVariable();
     virtual void insertNewCustomVariable();
@@ -169,7 +169,8 @@ k_dcop:
 
     virtual void refreshAllVariable();
 
-    virtual void skipToPage( int _num );
+    //return false when we can't "skipToPage" (num > nbpage )
+    virtual bool skipToPage( int _num );
 
     virtual void configureCompletion();
 

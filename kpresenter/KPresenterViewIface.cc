@@ -451,38 +451,38 @@ void KPresenterViewIface::brushChosen()
     view->brushChosen();
 }
 
-int KPresenterViewIface::getCurrentPresPage()
+int KPresenterViewIface::getCurrentPresPage() const
 {
     return view->getCurrentPresPage();
 }
 
-int KPresenterViewIface::getCurrentPresStep()
+int KPresenterViewIface::getCurrentPresStep() const
 {
     return view->getCurrentPresStep();
 }
 
-int KPresenterViewIface::getPresStepsOfPage()
+int KPresenterViewIface::getPresStepsOfPage() const
 {
     return view->getPresStepsOfPage();
 }
 
 
-int KPresenterViewIface::getNumPresPages()
+int KPresenterViewIface::getNumPresPages() const
 {
     return view->getNumPresPages();
 }
 
-bool KPresenterViewIface::gotoPresPage( int pg )
+bool KPresenterViewIface::gotoPresPage( int pg ) const
 {
     return view->gotoPresPage( pg );
 }
 
-int KPresenterViewIface::getCurrentPageNum()
+int KPresenterViewIface::getCurrentPageNum() const
 {
     return view->getCurrPgNum();
 }
 
-double KPresenterViewIface::getCurrentFaktor()
+double KPresenterViewIface::getCurrentFaktor() const
 {
     return (double)view->getCurrentFaktor();
 }
@@ -547,12 +547,13 @@ void KPresenterViewIface::refreshAllVariable()
     view->extraAutoFormat();
 }
 
-void KPresenterViewIface::skipToPage( int _num )
+bool KPresenterViewIface::skipToPage( int _num )
 {
     //don't try to skip to a not exist page
     if(_num>(int)view->kPresenterDoc()->getPageNums()-1)
-        return;
+        return false;
     view->skipToPage(_num);
+    return true;
 }
 
 

@@ -34,7 +34,7 @@ KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
    doc = doc_;
 }
 
-int KPresenterDocIface::numPages()
+int KPresenterDocIface::numPages() const
 {
     return doc->getPageNums();
 }
@@ -53,7 +53,7 @@ DCOPRef KPresenterDocIface::stickyPage()
 		    doc->stickyPage()->dcopObject()->objId() );
 }
 
-double KPresenterDocIface::indentValue()
+double KPresenterDocIface::indentValue() const
 {
     return doc->getIndentValue();
 }
@@ -63,7 +63,7 @@ void KPresenterDocIface::setIndentValue(double _ind)
     doc->setIndentValue(_ind);
 }
 
-bool KPresenterDocIface::dontCheckUpperWord()
+bool KPresenterDocIface::dontCheckUpperWord() const
 {
     return doc->dontCheckUpperWord();
 }
@@ -73,7 +73,7 @@ void KPresenterDocIface::setDontCheckUpperWord(bool _b)
     doc->setDontCheckUpperWord(_b);
 }
 
-bool KPresenterDocIface::dontCheckTitleCase()
+bool KPresenterDocIface::dontCheckTitleCase() const
 {
     return doc->dontCheckTitleCase();
 }
@@ -83,7 +83,7 @@ void KPresenterDocIface::setDontCheckTitleCase(bool _b)
     doc->setDontCheckTitleCase(_b);
 }
 
-int KPresenterDocIface::maxRecentFiles()
+int KPresenterDocIface::maxRecentFiles()const
 {
     return doc->maxRecentFiles();
 }
@@ -147,7 +147,7 @@ void KPresenterDocIface::setStartingPage(int nb)
     doc->recalcVariables(VT_PGNUM);
 }
 
-bool KPresenterDocIface::displayLink()
+bool KPresenterDocIface::displayLink() const
 {
     return doc->getVariableCollection()->variableSetting()->displayLink();
 }
@@ -607,6 +607,11 @@ unsigned int KPresenterDocIface::nbHorizontalHelpLine() const
 unsigned int KPresenterDocIface::nbVerticalHelpLine() const
 {
     return doc->vertHelplines().count();
+}
+
+unsigned int KPresenterDocIface::nbHelpPoint() const
+{
+    return doc->helpPoints().count();
 }
 
 bool KPresenterDocIface::moveHorizontalHelpLine( int index, double newPos)
