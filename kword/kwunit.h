@@ -37,19 +37,19 @@ public:
     // Prepare ptValue to be displayed in pt
     static double toPoint( double ptValue ) {
         // No conversion, only rounding (to 0.001 precision)
-        return qRound( ptValue * 1000 ) / 1000;
+        return qRound( ptValue * 1000.0 ) / 1000.0;
     }
 
     // Prepare ptValue to be displayed in mm
     static double toMM( double ptValue ) {
         // "mm" values are rounded to 0.0001 millimeters
-        return qRound( POINT_TO_MM( ptValue ) * 10000 ) / 10000;
+        return qRound( POINT_TO_MM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
     // Prepare ptValue to be displayed in inch
     static double toInch( double ptValue ) {
         // "in" values are rounded to 0.00001 inches
-        return qRound( POINT_TO_INCH( ptValue ) * 100000 ) / 100000;
+        return qRound( POINT_TO_INCH( ptValue ) * 100000.0 ) / 100000.0;
     }
 
     // This method is the one to use to display a value in a dialog
