@@ -27,30 +27,29 @@
 #ifndef KSPREAD_VIEW
 #define KSPREAD_VIEW
 
-#include <qptrlist.h>
 #include <qpoint.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 
-#include <koView.h>
 #include <koDocument.h>
+#include <koView.h>
 
 class QScrollBar;
 
-class KSpreadView;
-class KSpreadEditWidget;
-class KSpreadCanvas;
-class KSpreadHBorder;
-class KSpreadVBorder;
-class KSpreadSheet;
-class KSpreadDoc;
-class KSpreadChild;
-class KSpreadCell;
-class KSpreadLocationEditWidget;
 class KoDocumentEntry;
-class KSpreadSpell;
-class KSpreadSelection;
 
-class DCOPObject;
+class KSpreadCanvas;
+class KSpreadCell;
+class KSpreadChild;
+class KSpreadDoc;
+class KSpreadEditWidget;
+class KSpreadHBorder;
+class KSpreadLocationEditWidget;
+class KSpreadSelection;
+class KSpreadSheet;
+class KSpreadSpell;
+class KSpreadVBorder;
+class KSpreadView;
 
 namespace KSpread
 {
@@ -206,6 +205,10 @@ public:
 
     void initConfig();
 
+    /**
+     * Returns true if document is being loaded. It is useful to be checked for
+     * when doing view update.
+     */
     bool isLoading() const;
 
     /**
@@ -389,15 +392,28 @@ public slots:
     void changeAngle();
     void setSelectionAngle(int angle);
 
+    /**
+     * Merges selected cells into one cell. This will not work if only one
+     * cell is selected. An entire row or column can't be merged as well.
+     *
+     * \sa dissociateCell
+     */
     void mergeCell();
+
+    /**
+     * Breaks merged cell. Obviously this can be done only on merged cells.
+     *
+     * \sa mergeCell
+     */
     void dissociateCell();
+
     void gotoCell();
     void increaseIndent();
     void decreaseIndent();
     void copyAsText();
 
     void moveTable( unsigned table, unsigned target );
-    
+
     /**
      * Switch the active sheet to the name. This slot is connected to the tab bar
      * and activated when the user selects a new sheet in the tab bar.
