@@ -24,6 +24,7 @@ KChart::KChart( KChartType type ) :
   _charttype( type )
 {
   _cp = 0;
+  _blockautoupdate = false;
   setChartType( type );
 }
 
@@ -40,33 +41,30 @@ void KChart::setChartType( KChartType charttype )
 
   delete _cp;
 
+  // Don't auto-update during construction
+  _blockautoupdate = true;
+
   // Create a chart painter object of the appropriate type
-  switch( _charttype ) {
-  case Bars:
+  if( _charttype == Bars ) 
 	_cp = new KChartBarsPainter( this );
-	break;
-  case Lines:
+  else if (_charttype == Lines )
 	_cp = new KChartLinesPainter( this );
-	break;
-  case Points:
+  else if( _charttype == Points )
 	_cp = new KChartPointsPainter( this );
-	break;
-  case LinesPoints:
+  else if( _charttype == LinesPoints )
 	_cp = new KChartLinesPointsPainter( this );
-	break;
-  case Area:
+  else if( _charttype == Area )
 	_cp = new KChartAreaPainter( this );
-	break;
-  case Pie:
+  else if( _charttype == Pie )
 	_cp = new KChartPiePainter( this );
-	break;
-  case Pie3D:
+  else if( _charttype == Pie3D )
 	_cp = new KChartPie3DPainter( this );
-	break;
-  default:
+  else {
 	KDEBUG( KDEBUG_WARN, 34001, "Unknown chart type selected, choosing bars" );
 	_cp = new KChartBarsPainter( this );
   };
+
+  _blockautoupdate = false;
 
   doAutoUpdate();
 }
@@ -687,6 +685,20 @@ QFont KChart::legendFont() const
 }
 
 
+void KChart::setPieHeight( int height )
+{
+  _pieheight = height;
+
+  doAutoUpdate();
+}
+
+
+int KChart::pieHeight() const
+{
+  return _pieheight;
+}
+
+
 void KChart::addAutoUpdate( QPaintDevice* device )
 {
   _autoupdatedevices.append( device );
@@ -701,6 +713,8 @@ void KChart::removeAutoUpdate( QPaintDevice* device )
 
 void KChart::doAutoUpdate()
 {
+  if( _blockautoupdate == true )
+	return;
   QPaintDevice* device = _autoupdatedevices.first();
   while( device ) {
 	repaintChart( device );

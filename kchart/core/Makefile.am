@@ -45,6 +45,8 @@ test6_SOURCES = main6.cpp
 test7_SOURCES = main7.cpp
 test10_SOURCES = main10.cpp
 test11_SOURCES = main11.cpp
+test12_SOURCES = main12.cpp
+test13_SOURCES = main13.cpp
 test14_SOURCES = main14.cpp
 
 LDFLAGS = $(all_libraries)

@@ -25,6 +25,7 @@ friend class KChartAreaPainter;
 friend class KChartAxesPainter;
 friend class KChartPointsPainter;
 friend class KChartPiePainter;
+friend class KChartPie3DPainter;
 
 	Q_OBJECT
 
@@ -86,6 +87,7 @@ public:
   void lineTypes( PenStyle types[], int& number );
   int legendMarkerWidth() const;
   int legendMarkerHeight() const;
+  int pieHeight() const;
 
 public slots:
   void setChartType( KChartType charttype );
@@ -131,6 +133,7 @@ public slots:
   void setLineTypes( PenStyle types[], int number );
   void setLegendMarkerWidth( int width );
   void setLegendMarkerHeight( int height );
+  void setPieHeight( int height );
 
 private:
   void doAutoUpdate();
@@ -163,6 +166,7 @@ private:
   QString _y1label;
   QString _y2label;
   QString _ylabel;
+  bool _blockautoupdate;
   bool _boxaxis;
   bool _longticks;
   bool _transparency;
@@ -182,7 +186,6 @@ private:
   double _ymin; // user-supplied
   double _ymins[2]; // calculated
   int _axisspace;
-  int _pieheight;
   int _legendcols;
   int _legendelementheight;
   int _legendelementwidth;
@@ -198,6 +201,7 @@ private:
   int _legendysize;
   int _legendystart;
   int _linewidth;
+  int _pieheight;
   int _startangle;
   int _textfontheight;
   int _textfontwidth;

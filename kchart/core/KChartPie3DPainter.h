@@ -13,6 +13,12 @@ public:
   KChartPie3DPainter( KChart* chart );
   ~KChartPie3DPainter();
 
+protected:
+	virtual void drawData( QPainter* painter );
+	virtual void drawPie( QPainter* painter );
+	bool setupCoords( QPaintDevice* );
+
+
 private:
 };
 

@@ -13,7 +13,6 @@
 #include <qstrlist.h>
 
 #include <math.h> // rint
-#include <typeinfo>
 
 KChartAxesPainter::KChartAxesPainter( KChart* chart ) :
   KChartPainter( chart )
@@ -300,8 +299,8 @@ bool KChartAxesPainter::setMaxMin()
 
   // Make sure bars and area always have zero offset
   if( _chart->_ymins[0] >= 0 )
-	if( ( typeid( *this ) == typeid( KChartBarsPainter ) ) ||
-		( typeid( *this ) == typeid( KChartAreaPainter ) ) )
+	if( ( _chart->_charttype == Bars ) ||
+		( _chart->_charttype == Area ) )
 	  _chart->_ymins[0] = 0;
 
   // Override defaults with user-supplied values

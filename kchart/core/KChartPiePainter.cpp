@@ -31,8 +31,6 @@ void KChartPiePainter::paintChart( QPaintDevice* paintdev )
   if( !checkData() )
 	return;
 
-  debug( "Sorry, not implemented: legends for pies" );
-  //  setupLegend( paintdev );
   if( !setupCoords( paintdev ) ) // this can go wrong if the paintable size 
 	                             // is too small
 	return;
@@ -42,8 +40,6 @@ void KChartPiePainter::paintChart( QPaintDevice* paintdev )
   drawText( painter );
   drawPie( painter );
   drawData( painter ); 
-  debug( "Sorry, not implemented: legends for pies" );
-  //  drawLegend( painter );
 
   painter->end();
   delete painter; // was allocated by setupPaintDev
@@ -157,32 +153,57 @@ void KChartPiePainter::drawData( QPainter* painter )
 	if( pb  > 360 )
 	  pb -= 360;
 
-	// calculate the end points of the lines at the boundaries of the
-	// pie slice  
-// 	QPoint e = cartesian( _chart->_width/2, pa, 
-// 						  _xcenter, _ycenter,
-// 						  _chart->_height/_chart->_width );
-	
-// 	painter->setPen( _chart->_accentcolor );
-// 	painter->drawLine( _xcenter, _ycenter, e.x(), e.y() );
+	// Cater for rounding errors by making sure that the last angle
+	// adds at 0 again. (Otherwise, the endpoint might be 1, thus
+	// overwriting a bit of the first slice and giving nasty lines.
+	if( i == _chart->chartData()->maxPos() )
+		pb = 360;
 
-	// Make an estimate of a point in the middle of the pie slice and
-	// fill it.
-	//	e = cartesian( 3*_chart->_width/8, (pa+px)/2,
-	//		   _xcenter, _ycenter, _chart->_height/_chart->_width
-	//		   );
-
-	
 	// draw the pie slice
 	painter->setBrush( filledbrush );
 	painter->setPen( _chart->_accentcolor );
-	if( pa< pb )
-	painter->drawPie( _chart->_left, _chart->_top,
-						_chart->_width, _chart->_height,
-						pa*16, pb*16 );
 
-	fprintf( stderr, "filling (%d,%d) to (%d,%d) angle %d-%d\n",
-			 _chart->_left, _chart->_top, _chart->_width,
-			 _chart->_height, pa, pb );
+	// This distinction is not necessary if the angle offset is 0,
+	// because we never end up with a slice crossing the 0 angle, but
+	// I leave it in just in case I (or someone else) will make the
+	// starting angle configurable.
+	if( pa < pb )
+	  painter->drawPie( _chart->_left, _chart->_top,
+						_chart->_width, _chart->_height,
+						pa*16, (pb-pa)*16 );
+	else
+		{ // crosses the 0 angle
+			painter->drawPie( _chart->_left, _chart->_top,
+							  _chart->_width, _chart->_height,
+							  pa*16, (360-pa)*16 );
+			painter->drawPie( _chart->_left, _chart->_top,
+							  _chart->_width, _chart->_height,
+							  0, pb*16 );
+		}
+
+	// Find a point in the middle of the pie slice for the labelling.
+	QPoint xe = cartesian( 3 * _chart->_width/8, (pa+pb)/2,
+						   _xcenter, _ycenter,
+						   _chart->_height/_chart->_width );
+
+	putLabel( painter, xe.x(), xe.y(), _chart->chartData()->xValue( i ) );
   }
+}
+
+void KChartPiePainter::putLabel( QPainter* painter, int x, int y, 
+								 const char* label )
+{
+  x -= QString( label ).length()*_chart->_valuefontwidth/2;
+  y -= _chart->_valuefontwidth/2;
+  QFontMetrics fm( _chart->_valuefont );
+  painter->setFont( _chart->_valuefont );
+  painter->setPen( _chart->_textcolor );
+  painter->drawText( x, y, fm.width( label ), fm.height(), AlignLeft,
+					 label );
+}
+
+QPoint KChartPiePainter::cartesian( int r, int phi, int xi, int yi, int cr )
+{
+  return QPoint( xi+r*cos(PI*(phi + _angleoffset)/180 ),
+				 yi+cr*r*sin( PI * (phi + _angleoffset) / 180 ) );
 }

@@ -21,7 +21,9 @@ public:
   virtual void drawPie( QPainter* painter );
 
 protected:
-  const int _angleoffset = 90;
+  QPoint cartesian( int, int, int, int, int );
+  void putLabel( QPainter* painter, int x, int y, const char* label );
+  const int _angleoffset = 0;
   bool setupCoords( QPaintDevice* );
 
   int _xcenter;
