@@ -68,7 +68,7 @@ class KSpreadPlugin
  public:
   KSpreadPlugin() {}
   virtual ~KSpreadPlugin() {}
-  virtual QDomElement saveXML( QDomDocument & doc ) = 0;
+  virtual QDomElement saveXML( QDomDocument & doc ) const = 0;
 };
 
 /**
@@ -94,7 +94,7 @@ public:
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
   QDomElement saveAreaName( QDomDocument& doc ) ;
   void loadAreaName( const QDomElement& element );
-    virtual void addView( KoView *_view );
+  virtual void addView( KoView *_view );
 
   virtual bool initDoc();
 
@@ -104,7 +104,7 @@ public:
    * @return a pointer to a new KSpreadSheet. The KSpreadSheet is not added to the map
    *         nor added to the GUI.
    */
-  KSpreadSheet* createTable();
+  KSpreadSheet * createTable();
 
   /**
    * Adds a KSpreadSheet to the GUI and makes it active. In addition the KSpreadSheet is
@@ -113,15 +113,15 @@ public:
    * @see KSpreadView
    * @see KSpreadMap
    */
-  void addTable( KSpreadSheet *_table );
+  void addTable( KSpreadSheet * _table );
 
-  KSpreadMap *map() const { return m_pMap; }
+  KSpreadMap * map() const { return m_pMap; }
   KSpreadStyleManager * styleManager() const { return m_pStyleManager; }
 
   /**
    * @return the locale which was used for creating this document.
    */
-  KLocale* locale() { return &m_locale; }
+  KLocale * locale() { return & m_locale; }
 
   /**
    * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -153,7 +153,7 @@ public:
    * @return a context that can be used for evaluating formulas.
    *         This function does remove any exception from the context.
    */
-  KSContext& context() { m_context.setException( 0 ); return m_context; }
+  KSContext & context() { m_context.setException( 0 ); return m_context; }
 
   /**
    * Undo the last operation.
@@ -169,9 +169,9 @@ public:
    * @return the object that is respnsible for keeping track
    *         of the undo buffer.
    */
-  KSpreadUndo *undoBuffer()const { return m_pUndoBuffer; }
+  KSpreadUndo * undoBuffer()const { return m_pUndoBuffer; }
 
-    // virtual void printMap( QPainter &_painter );
+  // virtual void printMap( QPainter & _painter );
 
   void enableUndo( bool _b );
   void enableRedo( bool _b );
@@ -179,13 +179,15 @@ public:
   /**
    * @return TRUE if the document is currently loading.
    */
-  bool isLoading()const { return m_bLoading; }
+  bool isLoading() const { return m_bLoading; }
 
-  void setDefaultGridPen( const QPen& );
-  const QPen& defaultGridPen() { return m_defaultGridPen; }
+  void setDefaultGridPen( const QPen & );
+  const QPen & defaultGridPen() { return m_defaultGridPen; }
 
-  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
-  void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadSheet* table, bool drawCursor=true );
+  virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false, 
+                             double zoomX = 1.0, double zoomY = 1.0 );
+  void paintContent( QPainter & painter, const QRect & rect, bool transparent, 
+                     KSpreadSheet * table, bool drawCursor = true );
   
   bool docData( QString const & xmlTag, QDomElement & data );
   void deregisterPlugin( KSpreadPlugin * plugin );
@@ -320,10 +322,10 @@ public:
   void setShowStatusBar(bool _statusBar) { m_bShowStatusBar=_statusBar;}
   bool getShowStatusBar()const { return  m_bShowStatusBar;}
 
-  void insertChild( KoDocumentChild *child ) { KoDocument::insertChild( child ); }
+  void insertChild( KoDocumentChild * child ) { KoDocument::insertChild( child ); }
 
   void initConfig();
-    void saveConfig();
+  void saveConfig();
   void refreshLocale();
 
   /**
@@ -362,13 +364,13 @@ public:
 
   void updateBorderButton();
 
-    void insertTable( KSpreadSheet * table );
-    void takeTable( KSpreadSheet * table );
-
-    // The user-chosen global unit
-    QString getUnitName()const { return KoUnit::unitName( m_unit ); }
-    KoUnit::Unit getUnit()const { return m_unit; }
-    void setUnit( KoUnit::Unit _unit );
+  void insertTable( KSpreadSheet * table );
+  void takeTable( KSpreadSheet * table );
+  
+  // The user-chosen global unit
+  QString getUnitName()const { return KoUnit::unitName( m_unit ); }
+  KoUnit::Unit getUnit()const { return m_unit; }
+  void setUnit( KoUnit::Unit _unit );
 
   /**
    * Returns the syntax version of the currently opened file
