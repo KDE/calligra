@@ -110,6 +110,7 @@ AC_OUTPUT( \
 	kpresenter/dtd/Makefile \
 	kspread/Makefile \
 	kspread/pics/Makefile \
+	kspread/toolbar/Makefile \
 	kspread/scripts/Makefile \
 	kspread/dtd/Makefile \
 	kspread/filters/Makefile \
