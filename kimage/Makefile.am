@@ -1,6 +1,6 @@
 
-INCLUDES  = $(all_includes) $(MICO_INCLUDES) -I$(idldir) \
-	-I../lib/kofficecore -I../lib/kofficeui
+INCLUDES  = $(MICO_INCLUDES)  \
+	-I../lib/kofficecore -I../lib/kofficeui $(all_includes) -I$(idldir)
 LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD =  ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la \

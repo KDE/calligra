@@ -1,6 +1,6 @@
 
-INCLUDES =	$(all_includes) -I$(idldir) $(MICO_INCLUDES) \
-	-I../lib/kofficecore -I../lib/kofficeui -I../lib/koml
+INCLUDES = $(MICO_INCLUDES) -I../lib/kofficecore -I../lib/kofficeui \
+	-I../lib/koml $(all_includes) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 	../lib/kofficeui/libkofficeui.la \
