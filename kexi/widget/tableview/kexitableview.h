@@ -618,8 +618,6 @@ protected slots:
 	void slotAutoScroll();
 
 	//! for navigator
-	void navRowNumber_ReturnPressed(const QString& text);
-	void navRowNumber_lostFocus();
 	void slotNavRecordNumberEntered(uint r);
 	void navBtnLastClicked();
 	void navBtnPrevClicked();

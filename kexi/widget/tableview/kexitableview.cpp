@@ -455,13 +455,8 @@ void KexiTableView::setupNavigator()
 	navPanelLyr->addSpacing( 6 );
 	navPanelLyr->addStretch(10);
 */
-//	connect(d->navRowNumber,SIGNAL(returnPressed(const QString&)),
-//		this,SLOT(navRowNumber_ReturnPressed(const QString&)));
 	connect(d->navPanel, SIGNAL(recordNumberEntered(uint)), 
 		this, SLOT(slotNavRecordNumberEntered(uint)));
-
-//	connect(d->navRowNumber,SIGNAL(lostFocus()),
-//		this,SLOT(navRowNumber_lostFocus()));
 
 	connect(d->navPanel,SIGNAL(prevButtonClicked()),this,SLOT(navBtnPrevClicked()));
 	connect(d->navPanel,SIGNAL(nextButtonClicked()),this,SLOT(navBtnNextClicked()));
@@ -4028,25 +4023,6 @@ int KexiTableView::validRowNumber(const QString& text)
 	return r-1;
 }
 
-//! for navigator
-void KexiTableView::navRowNumber_ReturnPressed(const QString& text)
-{
-	setFocus();
-	selectRow( validRowNumber(text) );
-	d->skipKeyPress=true;
-}
-
-void KexiTableView::navRowNumber_lostFocus()
-{
-#if 0//TODO
-	int r = validRowNumber(d->navRowNumber->text());
-	d->navPanel->setCurrentRecordNumber(r+1);
-//	setNavRowNumber(r);
-	selectRow( r );
-	//setFocus();
-#endif
-}
-
 void KexiTableView::slotNavRecordNumberEntered( uint r )
 {
 	r--;
@@ -4055,16 +4031,6 @@ void KexiTableView::slotNavRecordNumberEntered( uint r )
 	setFocus();
 	selectRow( r );
 }
-
-#if 0
-void KexiTableView::updateRowCountInfo()
-{
-//	d->navRowNumberValidator->setRange(1,rows()+(isInsertingEnabled()?1:0));
-//	kdDebug() << QString("updateRowCountInfo(): d->navRowNumberValidator: bottom=%1 top=%2").arg(d->navRowNumberValidator->bottom()).arg(d->navRowNumberValidator->top()) << endl;
-	setNavRowCount(rows());
-//	d->navRowCount->setText(QString::number(rows()));
-}
-#endif
 
 void KexiTableView::navBtnLastClicked()
 {
