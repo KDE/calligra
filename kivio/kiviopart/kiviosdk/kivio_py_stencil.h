@@ -85,11 +85,11 @@ public:
     virtual QFont textFont();
     virtual void setTextFont( const QFont & );
 
-    virtual int hTextAlign() { return Qt::AlignHCenter; }
-    virtual int vTextAlign() { return Qt::AlignVCenter; }
+    virtual int hTextAlign();
+    virtual int vTextAlign();
 
-    virtual void setHTextAlign(int) { ; }
-    virtual void setVTextAlign(int) { ; }
+    virtual void setHTextAlign(int);
+    virtual void setVTextAlign(int);
 
     virtual void setText( const QString & );
     virtual QString text();

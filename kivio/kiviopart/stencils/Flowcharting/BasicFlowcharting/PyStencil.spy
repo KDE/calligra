@@ -27,7 +27,7 @@ y2=y+w
 style = {
           "color" : "blue",
           "bgcolor" : "white",
-          "linewidth" : 1
+          "linewidth" : 1,
         }
 
 connections = []
@@ -73,10 +73,10 @@ shapes = {
                    },
           "text"  : {
                    "type" : "TextBox",
-                   "x"    : x,
-                   "y"    : y,
-                   "w"    : w,
-                   "h"    : h,
+                   "x"    : x+5,
+                   "y"    : y+5,
+                   "w"    : w-10,
+                   "h"    : h-10,
                    "text" : "abc"
                    }
        }

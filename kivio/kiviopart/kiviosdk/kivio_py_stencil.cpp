@@ -868,7 +868,7 @@ QString KivioPyStencil::text()
 
 void KivioPyStencil::setTextFont( const QFont &f )
 {
-    float fs = f.pointSize();
+    float fs = f.pointSizeFloat();
     QString family = f.family();
 
     PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "fontsize"  , Py_BuildValue("f",fs ) ) ;
@@ -880,11 +880,48 @@ QFont KivioPyStencil::textFont()
     PyObject *fn = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "font" );
     PyObject *fs = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "fontsize" );
 
-    if ( fn && fs )
-        if ( PyNumber_Check(fs) && PyString_Check(fn) )
-            return ( QFont (PyString_AsString(fn), PyInt_AsLong( PyNumber_Int(fs))));
+    QFont f;
 
-    return QFont();
+    if ( fs )
+        if ( PyNumber_Check(fs))
+            f.setPointSize( PyInt_AsLong( PyNumber_Int(fs)));
+    if ( fn )
+        if ( PyString_Check(fn))
+            f.setFamily( PyString_AsString(fn));
+
+    return f;
+}
+
+int KivioPyStencil::hTextAlign()
+{
+    PyObject *hta = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "htextalign" );
+
+    if ( hta )
+        if ( PyNumber_Check(hta) )
+            return ( PyInt_AsLong( PyNumber_Int(hta)));
+
+    return Qt::AlignHCenter;
+}
+
+int KivioPyStencil::vTextAlign()
+{
+    PyObject *vta = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "vtextalign" );
+
+    if ( vta )
+        if ( PyNumber_Check(vta) )
+            return ( PyInt_AsLong( PyNumber_Int(vta)));
+
+    return Qt::AlignVCenter;
+}
+
+void KivioPyStencil::setHTextAlign(int hta)
+{
+    PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "htextalign"  , Py_BuildValue("i",hta));
+}
+
+void KivioPyStencil::setVTextAlign(int vta)
+{
+    PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "vtextalign"  , Py_BuildValue("i",vta));
 }
 
 #endif // HAVE_PYTHON
