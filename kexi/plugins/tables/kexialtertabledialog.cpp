@@ -332,6 +332,8 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 		else if (dirty() && !parentDialog()->neverSaved()) {
 			cancelled = (KMessageBox::No == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design is not yet supported.\nDo you want to discard your changes now?")));
 			dontStore = !cancelled;
+			if (dontStore)
+				setDirty(false);
 		}
 //</temporary>
 		//todo
