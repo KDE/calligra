@@ -21,7 +21,8 @@
 
 #include <qpainter.h>
 #include <qpointarray.h>
-
+#include <qpoint.h>
+#include <qcolor.h>
 #include <qsize.h>
 
 /*========================== draw a figure =======================*/

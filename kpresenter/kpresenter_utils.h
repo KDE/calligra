@@ -20,11 +20,11 @@
 #ifndef _kpresenter_utils_h__
 #define _kpresenter_utils_h__
 
-#include <qpoint.h>
-#include <qcolor.h>
+
 
 #include <global.h>
-
+class QPoint;
+class QColor;
 class QPainter;
 
 void drawFigure( LineEnd figure, QPainter* painter, QPoint coord, QColor color, int _w, float angle );

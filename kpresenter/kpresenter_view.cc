@@ -111,6 +111,8 @@
 #include <kstatusbar.h>
 #include "kprtextdocument.h"
 
+#include <koChangeCaseDia.h>
+
 #define DEBUG
 
 static const char *pageup_xpm[] = {
@@ -260,6 +262,9 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     }
     connect( page, SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
+
+    connect (page, SIGNAL(selectionChanged(bool)),
+             actionChangeCase, SLOT(setEnabled(bool)));
 
     connect( h_ruler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), this,
              SLOT( tabListChanged( const KoTabulatorList & ) ) );
@@ -2621,6 +2626,10 @@ void KPresenterView::setupActions()
                                   this, SLOT( decreaseFontSize() ),
                                   actionCollection(), "decreaseFontSize" );
 
+    actionChangeCase=new KAction( i18n( "Change case..." ), 0,
+                                  this, SLOT( changeCaseOfText() ),
+                                  actionCollection(), "change_case" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -2728,6 +2737,7 @@ void KPresenterView::objectSelectedChanged()
     {
         actionEditCopy->setEnabled(state);
         actionEditCut->setEnabled(state);
+        actionChangeCase->setEnabled( state);
     }
 
     actionExtraShadow->setEnabled(!page->haveASelectedPictureObj());
@@ -4582,6 +4592,19 @@ void KPresenterView::slotHRulerDoubleClicked()
         formatParagraph();
     else
         openPageLayoutDia();
+}
+
+void KPresenterView::changeCaseOfText()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if(!edit)
+        return;
+    KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
+    if(caseDia->exec())
+    {
+        edit->changeCaseOfText(caseDia->getTypeOfCase());
+    }
+    delete caseDia;
 }
 
 #include <kpresenter_view.moc>

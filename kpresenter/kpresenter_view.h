@@ -299,6 +299,8 @@ public slots:
     void slotHRulerDoubleClicked( double ptpos );
     void slotHRulerDoubleClicked();
 
+    void changeCaseOfText();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -712,6 +714,7 @@ private:
     KAction *actionOpenLink;
     KAction *actionIncreaseFontSize;
     KAction *actionDecreaseFontSize;
+    KAction *actionChangeCase;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
@@ -721,6 +724,7 @@ private:
 
     KoCharSelectDia *m_specialCharDlg;
     
+
     QStringList m_ignoreWord;
     // Spell-checking
     struct {
@@ -733,6 +737,7 @@ private:
 
     KActionMenu *actionInsertVariable;
     KActionMenu *actionInsertCustom;
+
     struct VariableDef {
         int type;
         int subtype;

@@ -24,6 +24,7 @@
 #include <qdialog.h>
 #include <qvaluelist.h>
 
+
 class KPresenterDoc;
 class KPresenterView;
 class Page;
