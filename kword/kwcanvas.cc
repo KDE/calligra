@@ -627,7 +627,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     QList<KWTableFrameSet> tablesMoved;
     tablesMoved.setAutoDelete( FALSE );
     bool bFirst = true;
-
+    KoPoint _move=m_boundingRect.topLeft() - oldBoundingRect.topLeft();
     QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
     for ( ; framesetIt.current(); ++framesetIt, bFirst=false )
     {
@@ -652,7 +652,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                 } else {
                     QRect oldRect( frame->outerRect() );
                     // Move the frame
-                    frame->moveTopLeft( frame->topLeft() + m_boundingRect.topLeft() - oldBoundingRect.topLeft() );
+                    frame->moveTopLeft( frame->topLeft() + _move );
                     // Calculate new rectangle for this frame
                     QRect newRect( frame->outerRect() );
                     // Repaing only the changed rects (oldRect U newRect)
@@ -671,7 +671,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
             for ( unsigned k = 0; k < table->getNumCells(); k++ ) {
                 KWFrame * frame = table->getCell( k )->getFrame( 0 );
                 QRect oldRect( frame->outerRect() );
-                frame->moveTopLeft( frame->topLeft() + m_boundingRect.topLeft() - oldBoundingRect.topLeft() );
+                frame->moveTopLeft( frame->topLeft() + _move );
                 // Calculate new rectangle for this frame
                 QRect newRect( frame->outerRect() );
                 // Repaing only the changed rects (oldRect U newRect)

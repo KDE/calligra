@@ -585,8 +585,13 @@ void KWFrameMoveCommand::execute()
         KWFrameSet *frameSet =tmp->m_pFrameSet;
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
-        frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
-
+        KWTableFrameSet *table=frameSet->getGroupManager();
+        if(table)
+        {
+            table->moveBy(tmpFrameMove->sizeOfEnd.left()-tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfEnd.top()-tmpFrameMove->sizeOfBegin.top());
+        }
+        else
+            frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
 
         if(frame->isSelected())
             frame->updateResizeHandles();
@@ -609,7 +614,13 @@ void KWFrameMoveCommand::unexecute()
         KWFrameSet *frameSet =tmp->m_pFrameSet;
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
-        frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
+        KWTableFrameSet *table=frameSet->getGroupManager();
+        if(table)
+        {
+            table->moveBy(tmpFrameMove->sizeOfBegin.left()-tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfBegin.top()-tmpFrameMove->sizeOfEnd.top());
+        }
+        else
+            frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
 
         if(frame->isSelected())
             frame->updateResizeHandles();
