@@ -58,6 +58,7 @@
 #include "kprdrag.h"
 #include <qclipboard.h>
 #include <koSize.h>
+#include <float.h>
 using namespace std;
 
 /******************************************************************/
@@ -150,7 +151,7 @@ KPTextObject::~KPTextObject()
 DCOPObject* KPTextObject::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPTextObjectIface( this );
+        dcop = new KPTextObjectIface( this );
     return dcop;
 }
 
@@ -191,8 +192,8 @@ void KPTextObject::resizeTextDocument( bool widthChanged, bool heightChanged )
 /*======================= set size ===============================*/
 void KPTextObject::setSize( double _width, double _height )
 {
-    bool widthModified = KABS( _width - ext.width() ) > 1e-5; // floating-point equality test
-    bool heightModified = KABS( _height - ext.height() ) > 1e-5;
+    bool widthModified = KABS( _width - ext.width() ) > DBL_EPSILON ; // floating-point equality test
+    bool heightModified = KABS( _height - ext.height() ) > DBL_EPSILON;
     if ( widthModified || heightModified )
     {
         KPObject::setSize( _width, _height );
@@ -251,7 +252,6 @@ double KPTextObject::load(const QDomElement &element)
         settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( attrBulletType4, 0 ).toInt();
         ktextobject.document()->setTextSettings( settings );
 #endif
-        //  <P ....> .... </P>
 
         loadKTextObject( e );
     }
@@ -683,7 +683,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                     n=n.nextSibling().toElement();
                     if ( txt.isEmpty() )
                         txt = ' ';
-                    if ( ( !txt[txt.length()-1].isSpace()  && n.isNull() ) )
+                    if ( !txt[txt.length()-1].isSpace() && n.isNull() )
                         txt += ' '; // trailing space at end of paragraph
                     lastParag->append( txt, true );
                     lastParag->setFormat( i, txt.length(), textDocument()->formatCollection()->format( &fm ) );
