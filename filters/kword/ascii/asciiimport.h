@@ -82,6 +82,7 @@ private: // not yet changed
     bool IsListItem( QString FirstLine, QChar mark );
 
 private:
+    void prepareDocument(QDomDocument& mainDocument, QDomElement& mainFramesetElement);
     void processParagraph(QDomDocument& mainDocument,
         QDomElement& mainFramesetElement, const QStringList& paragraph);
     void writeOutParagraph(QDomDocument& mainDocument,

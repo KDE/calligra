@@ -52,6 +52,134 @@ ASCIIImport::ASCIIImport(KoFilter *parent, const char *name, const QStringList &
                      KoFilter(parent, name) {
 }
 
+void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainFramesetElement)
+{
+    // TODO: other paper formats
+    KoFormat paperFormat=PG_DIN_A4; // ISO A4
+    KoOrientation paperOrientation=PG_PORTRAIT;
+
+    mainDocument.appendChild(
+        mainDocument.createProcessingInstruction(
+        "xml","version=\"1.0\" encoding=\"UTF-8\""));
+
+    QDomElement elementDoc;
+    elementDoc=mainDocument.createElement("DOC");
+    elementDoc.setAttribute("editor","KWord's Plain Text Import Filter");
+    elementDoc.setAttribute("mime","application/x-kword");
+    // TODO: We claim to be syntax version 2, but we should verify that it is also true.
+    elementDoc.setAttribute("syntaxVersion",2);
+    mainDocument.appendChild(elementDoc);
+
+    QDomElement element;
+    element=mainDocument.createElement("ATTRIBUTES");
+    element.setAttribute("processing",0);
+    element.setAttribute("standardpage",1);
+    element.setAttribute("hasHeader",0);
+    element.setAttribute("hasFooter",0);
+    element.setAttribute("unit","mm");
+    elementDoc.appendChild(element);
+
+    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
+    // default paper format of AbiWord is "Letter"
+    QDomElement elementPaper=mainDocument.createElement("PAPER");
+    elementPaper.setAttribute("format",paperFormat);
+    elementPaper.setAttribute("width" ,KoPageFormat::width (paperFormat,paperOrientation) * 72.0 / 25.4);
+    elementPaper.setAttribute("height",KoPageFormat::height(paperFormat,paperOrientation) * 72.0 / 25.4);
+    elementPaper.setAttribute("orientation",PG_PORTRAIT);
+    elementPaper.setAttribute("columns",1);
+    elementPaper.setAttribute("columnspacing",2);
+    elementPaper.setAttribute("hType",0);
+    elementPaper.setAttribute("fType",0);
+    elementPaper.setAttribute("spHeadBody",9);
+    elementPaper.setAttribute("spFootBody",9);
+    elementPaper.setAttribute("zoom",100);
+    elementDoc.appendChild(elementPaper);
+
+    element=mainDocument.createElement("PAPERBORDERS");
+    element.setAttribute("left",28);
+    element.setAttribute("top",42);
+    element.setAttribute("right",28);
+    element.setAttribute("bottom",42);
+    elementPaper.appendChild(element);
+
+    QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
+    mainDocument.documentElement().appendChild(framesetsPluralElementOut);
+
+    mainFramesetElement=mainDocument.createElement("FRAMESET");
+    mainFramesetElement.setAttribute("frameType",1);
+    mainFramesetElement.setAttribute("frameInfo",0);
+    mainFramesetElement.setAttribute("autoCreateNewFrame",1);
+    mainFramesetElement.setAttribute("removable",0);
+    // TODO: "name" attribute (needs I18N)
+    framesetsPluralElementOut.appendChild(mainFramesetElement);
+
+    QDomElement frameElementOut=mainDocument.createElement("FRAME");
+    frameElementOut.setAttribute("left",28);
+    frameElementOut.setAttribute("top",42);
+    frameElementOut.setAttribute("bottom",566);
+    frameElementOut.setAttribute("right",798);
+    frameElementOut.setAttribute("runaround",1);
+    mainFramesetElement.appendChild(frameElementOut);
+
+    QDomElement elementStylesPlural=mainDocument.createElement("STYLES");
+    elementDoc.appendChild(elementStylesPlural);
+
+    QDomElement elementStyleStandard=mainDocument.createElement("STYLE");
+    elementStylesPlural.appendChild(elementStyleStandard);
+
+    element=mainDocument.createElement("NAME");
+    element.setAttribute("value","Standard");
+    elementStyleStandard.appendChild(element);
+
+    element=mainDocument.createElement("FOLLOWING");
+    element.setAttribute("name","Standard");
+    elementStyleStandard.appendChild(element);
+
+    QDomElement elementFormat=mainDocument.createElement("FORMAT");
+    elementStyleStandard.appendChild(elementFormat);
+
+    element=mainDocument.createElement("FONT");
+    element.setAttribute("name","Helvetica"); // PROVISORY TODO: use KControl's default font
+    elementFormat.appendChild(element);
+
+    element=mainDocument.createElement("SIZE");
+    element.setAttribute("value",12); // PROVISORY TODO: use KControl's default font size
+    elementFormat.appendChild(element);
+
+    element=mainDocument.createElement("ITALIC");
+    element.setAttribute("value",0);
+    elementFormat.appendChild(element);
+        
+    element=mainDocument.createElement("WEIGHT");
+    element.setAttribute("value",50);
+    elementFormat.appendChild(element);
+
+    element=mainDocument.createElement("UNDERLINE");
+    element.setAttribute("value",0);
+    elementFormat.appendChild(element);
+
+    element=mainDocument.createElement("STRIKEOUT");
+    element.setAttribute("value",0);
+    elementFormat.appendChild(element);
+
+    element=mainDocument.createElement("VERTALIGN");
+    element.setAttribute("value",0);
+    elementFormat.appendChild(element);
+
+    element=mainDocument.createElement("COLOR");
+    element.setAttribute("red",  0);
+    element.setAttribute("green",0);
+    element.setAttribute("blue", 0);
+    elementFormat.appendChild(element);
+
+    element=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
+    element.setAttribute("red",  255);
+    element.setAttribute("green",255);
+    element.setAttribute("blue", 255);
+    elementFormat.appendChild(element);
+
+}
+
 bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
                          const QString& from, const QString& to,
                          const QString &) {
@@ -75,74 +203,10 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
 
     QString tbl;  // string for table XML
 
-    // TODO: other paper formats
-    KoFormat paperFormat=PG_DIN_A4; // ISO A4
-    KoOrientation paperOrientation=PG_PORTRAIT;
-
-    QDomDocument mainDocument("DOC");
-    mainDocument.appendChild(
-        mainDocument.createProcessingInstruction(
-        "xml","version=\"1.0\" encoding=\"UTF-8\""));
-
-    QDomElement elementDoc;
-    elementDoc=mainDocument.createElement("DOC");
-    elementDoc.setAttribute("editor","KWord's Plain Text Import Filter");
-    elementDoc.setAttribute("mime","application/x-kword");
-    // TODO: We claim to be syntax version 2, but we should verify that it is also true.
-    elementDoc.setAttribute("syntaxVersion",2);
-    mainDocument.appendChild(elementDoc);
-
-    QDomElement element;
-    element=mainDocument.createElement("ATTRIBUTES");
-    element.setAttribute("processing",0);
-    element.setAttribute("standardpage",1);
-    element.setAttribute("hasHeader",0);
-    element.setAttribute("hasFooter",0);
-    element.setAttribute("unit","mm");
-    elementDoc.appendChild(element);
-
-    QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
-    mainDocument.documentElement().appendChild(framesetsPluralElementOut);
-
-    QDomElement mainFramesetElement=mainDocument.createElement("FRAMESET");
-    mainFramesetElement.setAttribute("frameType",1);
-    mainFramesetElement.setAttribute("frameInfo",0);
-    mainFramesetElement.setAttribute("autoCreateNewFrame",1);
-    mainFramesetElement.setAttribute("removable",0);
-    // TODO: "name" attribute (needs I18N)
-    framesetsPluralElementOut.appendChild(mainFramesetElement);
-
-    QDomElement frameElementOut=mainDocument.createElement("FRAME");
-    frameElementOut.setAttribute("left",28);
-    frameElementOut.setAttribute("top",42);
-    frameElementOut.setAttribute("bottom",566);
-    frameElementOut.setAttribute("right",798);
-    frameElementOut.setAttribute("runaround",1);
-    mainFramesetElement.appendChild(frameElementOut);
-
-    QDomElement elementPaper;
-    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
-    // default paper format of AbiWord is "Letter"
-    elementPaper=mainDocument.createElement("PAPER");
-    elementPaper.setAttribute("format",paperFormat);
-    elementPaper.setAttribute("width",KoPageFormat::width(paperFormat,paperOrientation) * 72.0 / 25.4);
-    elementPaper.setAttribute("height",KoPageFormat::height(paperFormat,paperOrientation) * 72.0 /25.4);
-    elementPaper.setAttribute("orientation",PG_PORTRAIT);
-    elementPaper.setAttribute("columns",1);
-    elementPaper.setAttribute("columnspacing",2);
-    elementPaper.setAttribute("hType",0);
-    elementPaper.setAttribute("fType",0);
-    elementPaper.setAttribute("spHeadBody",9);
-    elementPaper.setAttribute("spFootBody",9);
-    elementPaper.setAttribute("zoom",100);
-    elementDoc.appendChild(elementPaper);
-
-    element=mainDocument.createElement("PAPERBORDERS");
-    element.setAttribute("left",28);
-    element.setAttribute("top",42);
-    element.setAttribute("right",28);
-    element.setAttribute("bottom",42);
-    elementPaper.appendChild(element);
+    QDomDocument mainDocument;
+    QDomElement mainFramesetElement;
+    
+    prepareDocument(mainDocument,mainFramesetElement);
 
     QTextStream stream(&in);
     bool lastCharWasCr=false; // Was the previous character a Carriage Return?
@@ -201,29 +265,6 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
 #if 0
     // Add table info
     if( table_no > 0) str += tbl;
-#endif
-
-// TODO: give styles with QDomDocument (however KWord 1.2 works well also without)
-#if 0
-    str+=" <STYLES>\n";
-    str+="  <STYLE>\n";
-    str+="   <NAME value=\"Standard\" />\n";
-    str+="   <FLOW align=\"left\" />\n";
-    str+="   <OFFSETS before=\"14.1733\" />\n";
-    str+="   <FOLLOWING name=\"Standard\" />\n";
-    str+="   <FORMAT id=\"1\" >\n";
-    str+="    <WEIGHT value=\"50\" />\n";
-    str+="    <COLOR blue=\"0\" red=\"0\" green=\"0\" />\n";
-    // TODO: use KControl's default font
-    str+="    <FONT name=\"Helvetica\" />\n";
-    str+="    <SIZE value=\"12\" />\n";
-    str+="    <ITALIC value=\"0\" />\n";
-    str+="    <UNDERLINE value=\"0\" />\n";
-    str+="    <STRIKEOUT value=\"0\" />\n";
-    str+="    <VERTALIGN value=\"0\" />\n";
-    str+="   </FORMAT>\n";
-    str+="  </STYLE>\n";
-    str+=" </STYLES>\n";
 #endif
 
 #if 1
@@ -626,7 +667,7 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
     for (uint i = index; i < text.length(); i++)
     {
         c = text.at(i);
-    // kdeDebug(30502) << "i = " << i << " found = " << found << " c = " << c << " lastchar = " << lastchar << endl;
+    // kdDebug(30502) << "i = " << i << " found = " << found << " c = " << c << " lastchar = " << lastchar << endl;
         if ( (c != ' ') && found)
             return i;
         else if (c == ' ' && lastchar == ' ')
@@ -840,15 +881,20 @@ QString ASCIIImport::readLine(QTextStream& textstream, bool& lastCharWasCr)
             }
             else
             {
-                // We have a normal Line Feed, therefore end the line
+                // We have a normal Line Feed, therefore we end the line
                 break;
             }
         }
         else if (ch=="\r")
         {
-            // We have a Carraiage Return, therefore end the line
+            // We have a Carriage Return, therefore we end the line
             lastCharWasCr=true;
             break;
+        }
+        else if (ch==char(12)) // Form Feed
+        {
+            // Ignore the form feed
+            continue;
         }
         else
         {
