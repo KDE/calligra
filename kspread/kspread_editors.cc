@@ -35,7 +35,8 @@ KSpreadCellEditor::~KSpreadCellEditor()
 
 KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name ),
-    m_sizeUpdate(false)
+    m_sizeUpdate(false),
+    m_length(0)
 {
   m_pEdit = new KLineEdit( this );
   m_pEdit->installEventFilter( this );
@@ -120,17 +121,24 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
       m_pEdit->setCursorPosition(1);
     }
   }
-  QFontMetrics fm( m_pEdit->font() );
-  int mw = fm.width( t ) + fm.width('x');
-  int mh = fm.height();
 
-  if (mh < height())
-    mh = height();
+  if (t.length() > m_length)
+  {
+    m_length = t.length() + 10;
+    QFontMetrics fm( m_pEdit->font() );
+    // Too slow for long texts
+    //  int mw = fm.width( t ) + fm.width('x');
+    int mw = fm.width('x') * m_length;
+    int mh = fm.height();
 
-  if (mw < width())
-    mw = width();
-
-  setGeometry(x(), y(), mw, mh);
+    if (mh < height())
+      mh = height();
+    
+    if (mw < width())
+      mw = width();
+    
+    setGeometry(x(), y(), mw, mh);
+  }
 
   canvas()->view()->editWidget()->setText( t );
   

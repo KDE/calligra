@@ -1186,6 +1186,24 @@ void KSpreadView::initialPosition()
       initConfig();
 }
 
+void KSpreadView::updateEditWidgetOnPress()
+{
+    int column = m_pCanvas->markerColumn();
+    int row    = m_pCanvas->markerRow();
+
+    KSpreadCell* cell = m_pTable->cellAt( column, row );
+    if ( !cell )
+    {
+        editWidget()->setText( "" );
+        return;
+    }
+
+    if ( cell->content() == KSpreadCell::VisualFormula )
+        editWidget()->setText( "" );
+    else
+        editWidget()->setText( cell->text() );
+}
+
 void KSpreadView::updateEditWidget()
 {
     bool active=activeTable()->getShowFormula();
@@ -3617,7 +3635,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
         m_mergeCell->setEnabled(false);
         m_insertChartFrame->setEnabled(false);
     }
-    else
+    else if ( (n.left() != n.right()) || (n.top() != n.bottom()) )
     {
         m_tableFormat->setEnabled( TRUE );
         m_mergeCell->setEnabled(true);

@@ -1232,7 +1232,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     }
 
     // Update the edit box
-    m_pView->updateEditWidget();
+    m_pView->updateEditWidgetOnPress();
 
     updatePosWidget();
 

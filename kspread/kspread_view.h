@@ -140,6 +140,10 @@ public:
      * cursor moved.
      */
     void updateEditWidget();
+    /**
+     * Same as updateEditEidget() but no update of menus and toolbars
+     */
+    void updateEditWidgetOnPress();
 
 
     /**
