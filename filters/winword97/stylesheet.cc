@@ -26,7 +26,7 @@ StyleSheet::StyleSheet(const myFile &t, const FIB * const f) : table(t),
             tmp=read16(table.data+tmpOffset);       // the length
             tmpOffset+=2;                           // length field is a short
             tmp<<=1;                                // we use 2-byte chars!
-            mySTD.name="";                          // reset name
+            mySTD.name="";                          // clear name
             for(unsigned int i=0; i<tmp; i=i+2)
                 mySTD.name+=QChar(char2uni(read16(table.data+tmpOffset+i)));
             tmpOffset+=tmp+2;
@@ -34,8 +34,6 @@ StyleSheet::StyleSheet(const myFile &t, const FIB * const f) : table(t),
                 mySTD.style.paragStyle=true;
                 tmp=read16(table.data+tmpOffset);   // read the length of the UPX
                 tmpOffset+=2;                       // Adjust offset (2 bytes length info)
-                if(read16(table.data+tmpOffset)+1!=istd)
-                    kdebug(KDEBUG_WARN, 31000, "StyleSheet::chain_rec(): istd is not correct!?!");
                 mySTD.style.fcPAPX=tmpOffset+2;
                 mySTD.style.lenPAPX=tmp;
                 tmpOffset+=tmp;
@@ -56,19 +54,9 @@ StyleSheet::StyleSheet(const myFile &t, const FIB * const f) : table(t),
             else
                 kdebug(KDEBUG_ERROR, 31000, "StyleSheet::chain_rec(): Error: Don't know this stylesheet-format!");
             offset+=len;                            // next STD
+            mySTD.istd=istd-1;
+            styleMap.insert(sti, mySTD);
         }
-        else {                                      // empty slot!
-            sti=0xffff;
-            mySTD.istdBase=0xffff;
-            mySTD.name="";
-            mySTD.style.paragStyle=false;
-            mySTD.style.fcPAPX=0xffffffff;
-            mySTD.style.lenPAPX=0xffff;
-            mySTD.style.fcCHPX=0xffffffff;
-            mySTD.style.lenCHPX=0xffff;
-        }
-        mySTD.istd=istd-1;
-        styleMap.insert(sti, mySTD);
         ++istd;
     } while(offset<limit && istd<=cstd);
 }

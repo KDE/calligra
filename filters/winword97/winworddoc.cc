@@ -203,7 +203,6 @@ const bool WinWordDoc::locatePieceTbl() {
         tmp+=read16(table.data+tmp+1)+3;
 
     if(*(table.data+tmp)==2) {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::locatePieceTbl(): Hoohoo! Found pclfpcd :)");
         found=true;
         ptCPBase=tmp+1;
         ptSize=read32(table.data+ptCPBase);
