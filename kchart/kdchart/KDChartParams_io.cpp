@@ -27,6 +27,7 @@
  **
  **********************************************************************/
 #include "KDChartParams.h"
+#include "KDXMLTools.h"
 
 /**
   \fn QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
