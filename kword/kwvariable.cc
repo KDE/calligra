@@ -348,6 +348,10 @@ QString KWFootNoteVariable::applyStyle(  )
     case KoParagCounter::STYLE_ROM_NUM_U:
         tmp = KoParagCounter::makeRomanNumber( val ).upper();
         break;
+    case KoParagCounter::STYLE_CUSTOMBULLET:
+        //todo change font
+        tmp = tmpCounter.customBulletCharacter();
+        break;
     default:
         tmp.setNum( val );
         break;
