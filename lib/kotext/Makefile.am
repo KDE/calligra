@@ -6,7 +6,7 @@ libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
 	kotextformat.cc koparagcounter.cc kostyle.cc kocommand.cc \
 	kotextparag.cc kotextdocument.cc kotextformatter.cc koparaglayout.cc \
 	kotextobject.cc kotextview.cc koAutoFormat.cc koAutoFormatDia.cc \
-	koParagDia.cc koVariable.cc koUtils.cc koVariableDlgs.cc \
+	koParagDia.cc koVariable.cc koVariableDlgs.cc \
 	koChangeCaseDia.cc koStylist.cc koSearchDia.cc \
 	timedateformatwidget.ui timeformatwidget_impl.cc dateformatwidget_impl.cc \
 	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc koBgSpellCheck.cc \
