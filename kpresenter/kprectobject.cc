@@ -19,6 +19,7 @@
 
 #include <kprectobject.h>
 #include <kpgradient.h>
+#include "KPRectObjectIface.h"
 
 #include <kdebug.h>
 #include <qregion.h>
@@ -37,6 +38,13 @@ KPRectObject::KPRectObject()
 {
     xRnd = 0;
     yRnd = 0;
+}
+
+DCOPObject* KPRectObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPRectObjectIface( this );
+    return dcop;
 }
 
 /*================== overloaded constructor ======================*/

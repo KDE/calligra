@@ -23,6 +23,7 @@
 #include <kpobject.h>
 
 class KPGradient;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPRectObject                                            */
@@ -36,6 +37,7 @@ public:
                   const QColor &_gColor1, const QColor &_gColor2, BCType _gType, int _xRnd, int _yRnd,
                   bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPRectObject() {}
+    virtual DCOPObject* dcopObject();
 
     KPRectObject &operator=( const KPRectObject & );
 
