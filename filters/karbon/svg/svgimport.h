@@ -28,6 +28,7 @@
 #include <core/vgradient.h>
 #include <core/vfill.h>
 #include <core/vstroke.h>
+#include <core/vfillrule.h>
 
 class VGroup;
 class VComposite;
@@ -51,9 +52,10 @@ protected:
 			stroke.setType( VStroke::none ); // default is no stroke
 			stroke.setLineWidth( 1.0 );
 			fill.setColor( VColor( Qt::black ) );
-			fill.setFillRule( VFill::evenOdd );
+			fillRule = evenOdd;
 		}
 		VFill		fill;
+		VFillRule	fillRule;
 		VStroke		stroke;
 		QWMatrix	matrix;
 		QFont		font;

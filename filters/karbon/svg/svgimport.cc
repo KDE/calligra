@@ -418,9 +418,9 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 	else if( command == "fill-rule" )
 	{
 		if( params == "nonzero" )
-			gc->fill.setFillRule( VFill::winding );
+			gc->fillRule = winding;
 		else if( params == "evenodd" )
-			gc->fill.setFillRule( VFill::evenOdd );
+			gc->fillRule = evenOdd;
 	}
 	else if( command == "stroke" )
 	{
@@ -563,6 +563,8 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	}
 
 	obj->setFill( gc->fill );
+	if( dynamic_cast<VComposite *>( obj ) )
+		dynamic_cast<VComposite *>( obj )->setFillRule( gc->fillRule );
 	// stroke scaling
 	gc->stroke.setLineWidth( gc->stroke.lineWidth() * sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
 	obj->setStroke( gc->stroke );
@@ -684,6 +686,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "text" )
 		{
+			continue; // TODO : remove when text loading works
 			VText *text = new VText( &m_document );
 			text->setText( b.text() );
 			VPath base( 0L );

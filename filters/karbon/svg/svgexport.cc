@@ -157,8 +157,12 @@ SvgExport::visitVComposite( VComposite& composite )
 	composite.saveSvgPath( d );
 	*m_body << " d=\"" << d << "\" " << endl;
 
-	*m_body << " />" << endl;
+	if( composite.fillRule() == evenOdd )
+		*m_body << " fill-rule=\"evenodd\"";
+	else
+		*m_body << " fill-rule=\"nonzero\"";
 
+	*m_body << " />" << endl;
 }
 
 void
@@ -245,10 +249,6 @@ SvgExport::getFill( const VFill& fill )
 		getHexColor( m_body, fill.color() );
 	*m_body << "\"";
 	*m_body << " fill-opacity=\"" << fill.color().opacity() << "\"";
-	if( fill.fillRule() == VFill::evenOdd )
-		*m_body << " fill-rule=\"evenodd\"";
-	else
-		*m_body << " fill-rule=\"nonzero\"";
 }
 
 void
