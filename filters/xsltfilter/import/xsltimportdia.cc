@@ -25,7 +25,7 @@
 
 #include <qcombobox.h>
 #include <qstringlist.h>
-#include <dir.h>
+#include <qdir.h>
 
 #include <kapplication.h>
 #include <klocale.h>
