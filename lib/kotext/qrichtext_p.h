@@ -399,8 +399,10 @@ public:
     virtual ~KoTextCustomItem();
     virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected ) /* = 0*/;
 
-    // Called whenever this item is being moved by the text formatter
-    virtual void move( int x, int y ) { xpos = x; ypos = y; }
+    // Called after the item's paragraph has been formatted
+    virtual void finalize() {}
+
+    void move( int x, int y ) { xpos = x; ypos = y; }
     int x() const { return xpos; }
     int y() const { return ypos; }
 
@@ -1358,7 +1360,7 @@ private:
     KoTextParag *p, *n;
     KoTextDocument *doc;
     uint changed : 1;
-    uint firstFormat : 1;
+    //uint firstFormat : 1; /// unused
     uint firstPProcess : 1;
     uint needPreProcess : 1;
     uint fullWidth : 1;

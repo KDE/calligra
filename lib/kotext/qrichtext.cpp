@@ -40,6 +40,8 @@
 #include "qdrawutil.h"
 
 #include <stdlib.h>
+//#include <kdebug.h>
+//#include <kdebugclasses.h>
 
 //#define PARSER_DEBUG
 //#define DEBUG_COLLECTION
@@ -3667,7 +3669,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 	doc->setLastParag( this );
 
     changed = FALSE;
-    firstFormat = TRUE;
+    //firstFormat = TRUE; //// unused
     state = -1;
     needPreProcess = FALSE;
 
@@ -3899,6 +3901,7 @@ void KoTextParag::format( int start, bool doMove )
  formatAgain:
     r.setWidth( documentWidth() );
 
+    // Not really useful....
     if ( doc && mFloatingItems ) {
 	for ( KoTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() ) {
 	    if ( i->placement() == KoTextCustomItem::PlaceRight )
@@ -3952,6 +3955,7 @@ void KoTextParag::format( int start, bool doMove )
     // do page breaks if required
     if ( doc && doc->isPageBreakEnabled() ) {
         int shift = doc->formatter()->formatVertically( doc, this );
+        //qDebug("formatVertically returned shift=%d",shift);
         if ( shift && !formattedAgain ) {
             formattedAgain = TRUE;
             goto formatAgain;
@@ -3959,12 +3963,17 @@ void KoTextParag::format( int start, bool doMove )
     }
 
     if ( n && doMove && n->invalid == -1 && r.y() + r.height() != n->r.y() ) {
+        //kdDebug() << "r=" << r << " n->r=" << n->r << endl;
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	KoTextParag *s = n;
 	bool makeInvalid = p && p->lastInFrame;
-	//qDebug("moving of dy=%d. previous's lastInFrame (=makeInvalid): %d", dy, makeInvalid);
+	//qDebug("might move of dy=%d. previous's lastInFrame (=makeInvalid): %d", dy, makeInvalid);
 	while ( s && dy ) {
-	    if ( !s->isFullWidth() || s->movedDown ) // ### this s->movedDown isn't in QRT
+            if ( s->movedDown ) { // (not in QRT) : moved down -> invalidate and stop moving down
+                s->invalidate( 0 ); // (there is no point in moving down a parag that has a frame break...)
+                break;
+            }
+	    if ( !s->isFullWidth() )
 		makeInvalid = TRUE;
 	    if ( makeInvalid )
 		s->invalidate( 0 );
@@ -3975,7 +3984,13 @@ void KoTextParag::format( int start, bool doMove )
 	}
     }
 
-    firstFormat = FALSE;
+    if ( mFloatingItems ) {
+	for ( KoTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() ) {
+	    i->finalize();
+	}
+    }
+
+    //firstFormat = FALSE; //// unused
     changed = TRUE;
     invalid = -1;
     string()->setTextChanged( FALSE );

@@ -1504,7 +1504,7 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
                 emit chapterParagraphFormatted( parag );
 
             if ( parag != m_lastFormatted )
-                kdWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId();
+                kdWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId() << endl;
             else if (!parag->isValid())
                 kdWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
             m_lastFormatted = parag->next();
@@ -1559,17 +1559,13 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
 
 void KoTextObject::doChangeInterval()
 {
-#ifdef DEBUG_FORMAT_MORE
-    kdDebug() << "KoTextObject::doChangeInterval back to interval=0" << endl;
-#endif
+    //kdDebug() << "KoTextObject::doChangeInterval back to interval=0" << endl;
     interval = 0;
 }
 
 void KoTextObject::typingStarted()
 {
-#ifdef DEBUG_FORMAT_MORE
-    kdDebug() << "KoTextObject::typingStarted" << endl;
-#endif
+    //kdDebug() << "KoTextObject::typingStarted" << endl;
     changeIntervalTimer->stop();
     interval = 10;
 }
