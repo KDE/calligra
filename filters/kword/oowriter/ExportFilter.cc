@@ -1,4 +1,4 @@
-//
+// $Header$
 
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
@@ -442,7 +442,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
 
 bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
 {
-    kdDebug(30518) << "New image/clipart: " << anchor.picture.koStoreName
+    kdDebug(30518) << "New picture: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
 
     QString koStoreName(anchor.picture.koStoreName);
@@ -458,7 +458,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
 
     bool isImageLoaded=false;
 
-    if (strExtension=="png") // Which other image formats does OOWriter support?
+    if (strExtension=="png")
     {
         isImageLoaded=loadSubFile(koStoreName,image);
     }
@@ -466,6 +466,12 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     {
         isImageLoaded=loadSubFile(koStoreName,image);
         strExtension="jpg";
+    }
+    else if ((strExtension=="gif")
+        || (strExtension=="tif") || (strExtension=="tiff"))
+        // ### TODO: Which other image formats does OOWriter support?
+    {
+        isImageLoaded=loadSubFile(koStoreName,image);
     }
     else
     {
