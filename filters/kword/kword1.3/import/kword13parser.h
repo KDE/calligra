@@ -54,7 +54,8 @@ enum StackItemKWord13Type
     KWord13TypeFormat,      ///< \<FORMAT\>, child of \<FORMATS\>
     KWord13TypeLayoutFormatOne,///< \<FORMAT id="1"\> as child of \<LAYOUT\>
     KWord13TypeFormatsPlural,///< \<FORMATS\>, as child of \<PARAGRAPH\>
-    KWord13TypeVariable     ///< \<FORMAT id="4"\> or \<VARIABLE\>
+    KWord13TypeVariable,        ///< \<FORMAT id="4"\> or \<VARIABLE\>
+    KWord13TypePicturesPlural   ///< \<PICTURES\>, \<PIXMAPS\> or \<CLIPARTS\>
 };
 
 class StackItem

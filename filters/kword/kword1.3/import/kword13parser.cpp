@@ -531,6 +531,12 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
         stackItem->elementType = KWord13TypeIgnore;
         success = true;
     }
+    else if ( name == "PICTURES" || name == "PIXMAPS" || name == "CLIPARTS" )
+    {
+        // We just need a separate "type" for the <KEY> children
+        stackItem->elementType = KWord13TypePicturesPlural;
+        success = true;
+    }
     else
     {
         stackItem->elementType = KWord13TypeUnknown;
