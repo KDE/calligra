@@ -2106,13 +2106,13 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
         //kdDebug() << "KWTextFrameSet::readFormats copying from " << c1.index() << " to " << c1.parag()->length()-1 << " into lastIndex=" << lastIndex << endl;
         for ( i = c1.index(); i < c1.parag()->length(); ++i, ++lastIndex )
             copyCharFormatting( c1.parag()->at( i ), lastIndex, moveCustomItems );
-        // The last ++lastIndex skipped the '\n' already.
+        ++lastIndex; // skip the '\n'.
         QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             //kdDebug() << "KWTextFrameSet::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
             for ( i = 0; i < p->length(); ++i )
                 copyCharFormatting( p->at( i ), i + lastIndex, moveCustomItems );
-            lastIndex += p->length(); // skips the '\n'
+            lastIndex += p->length() + 1; // skip the '\n'
             //kdDebug() << "KWTextFrameSet::readFormats lastIndex now " << lastIndex << endl;
             p = p->next();
         }
@@ -2211,7 +2211,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
             QString str;
             for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
             {
-                str += parag->string()->toString(); // ## do we need to add a '\n' here ?
+                str += parag->string()->toString() + '\n';
                 lstFormats.append( parag->paragFormat() );
             }
             kdDebug() << "KWTextFrameSet::applyStyle str=" << str << endl;
