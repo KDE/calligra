@@ -1123,10 +1123,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		    kpobject = objectList().at( i );
 		    KoSize s = kpobject->getSize();
 		    KoPoint pnt = kpobject->getOrig();
-                    KoRect rect(pnt.x() /*- m_view->zoomHandler()->unzoomItX(diffx())*/, pnt.y() /*- m_view->zoomHandler()->unzoomItY( diffy())*/, s.width(), s.height() );
+                    KoRect rect(pnt.x(), pnt.y() , s.width(), s.height() );
                     if ( rect.contains( docPoint ) ) {
                         if ( kpobject->isSelected() ) {
-			    setCursor( kpobject->getCursor( /*QPoint( e->x(), e->y() )*/m_view->zoomHandler()->unzoomPoint(e->pos()) , modType ) );
+			    setCursor( kpobject->getCursor( /*QPoint( e->x(), e->y() )*/m_view->zoomHandler()->unzoomPoint(e->pos()+QPoint(diffx(),diffy())) , modType ) );
 			    cursorAlreadySet = true;
 			    break;
 			}
@@ -4691,8 +4691,8 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     QPtrList<KPObject> _objects;
     QPainter p;
     _objects.setAutoDelete( false );
-    x=m_view->zoomHandler()->unzoomItX(x);
-    y=m_view->zoomHandler()->unzoomItY(y);
+    double newPosX=m_view->zoomHandler()->unzoomItX(x);
+    double newPosY=m_view->zoomHandler()->unzoomItY(y);
     if ( (int)objectList().count() - 1 >= 0 ) {
         for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
             kpobject = objectList().at( i );
@@ -4700,7 +4700,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
                 p.begin( this );
                 kpobject->setMove( true );
                 kpobject->draw( &p,m_view->zoomHandler() );
-                kpobject->moveBy( KoPoint( x, y ) );
+                kpobject->moveBy( KoPoint( newPosX, newPosY ) );
                 kpobject->draw( &p,m_view->zoomHandler() );
                 p.end();
 
@@ -4718,7 +4718,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
 
     if ( key ) {
         MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
-                                              KoPoint( x, y ),
+                                              KoPoint( newPosX, newPosY ),
                                               _objects, m_view->kPresenterDoc(),m_activePage );
         m_view->kPresenterDoc()->addCommand( moveByCmd );
     }
