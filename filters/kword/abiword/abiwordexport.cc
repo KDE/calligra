@@ -166,9 +166,9 @@ static void ProcessSizeTag (QDomNode myNode, void* , QString& abiprops)
     if (size>0)
     {
         abiprops += "font-size:";
-	abiprops += QString::number(size,10);
-	abiprops += "pt"; // Don't forget the unit symbol!
-	abiprops += "; "; // Note: Trailing space is important!
+        abiprops += QString::number(size,10);
+        abiprops += "pt"; // Don't forget the unit symbol!
+        abiprops += "; "; // Note: Trailing space is important!
     }
 }
 
@@ -183,8 +183,8 @@ static void ProcessFontTag (QDomNode myNode, void* , QString& abiprops)
     if (!fontName.isEmpty())
     {
         abiprops += "font-family:";
-    	abiprops += fontName; //TODO: font name translation
-    	abiprops += "; "; // Note: Trailing space is important!
+        abiprops += fontName; //TODO: font name translation
+        abiprops += "; "; // Note: Trailing space is important!
     }
 }
 
@@ -203,14 +203,33 @@ static void ProcessColorTag (QDomNode myNode, void* , QString& abiprops)
     //We must have two hex digits for each colour channel!
     abiprops += QString::number((red&0xf0)>>4,16);
     abiprops += QString::number(red&0x0f,16);
-    
+
     abiprops += QString::number((green&0xf0)>>4,16);
     abiprops += QString::number(green&0x0f,16);
-    
+
     abiprops += QString::number((blue&0xf0)>>4,16);
     abiprops += QString::number(blue&0x0f,16);
-    
+
     abiprops += "; "; // Note: Trailing space is important!
+}
+
+static void ProcessVertAlignTag (QDomNode myNode, void* , QString& abiprops)
+{
+    int value=-1;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "int", (void *)&value) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if (1==value)
+    {
+        abiprops += "text-position:subscript";
+    }
+    else if (2==value)
+    {
+        abiprops += "text-position:superscript";
+    }
+    // if the value is not the one of the two mentioned then we consider that we have nothing special!
 }
 
 // FormatData is a container for data retreived from the FORMAT tag
@@ -227,8 +246,8 @@ class FormatData
 
         int pos; // Start of text to which this format applies
         int len; // Len of text to which this format applies
-	
-	QString abiprops; // Value of the "props" attribute
+
+        QString abiprops; // Value of the "props" attribute
                           // of Abiword's "<c>"	tag
 };
 
@@ -265,19 +284,20 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
     tagProcessingList.append ( TagProcessing ( "SIZE",      ProcessSizeTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    NULL ) );
+    tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,NULL ) );
 
     //Now let's the sub tags fill in the AbiWord's "props" attribute
     ProcessSubtags (myNode, tagProcessingList, formatData.abiprops);
-    
+
     //Find the last semi-comma
     int result=formatData.abiprops.findRev(";");
-    
+
     if (result>=0)
     {
         // Remove the last semi-comma and the space thereafter
-        formatData.abiprops.remove(result,2); 
+        formatData.abiprops.remove(result,2);
     }
-    
+
     formatDataList->append (formatData);
 }
 
@@ -336,30 +356,30 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
         const QRegExp regExpApos("'");
         const QRegExp regExpQuot("\"");
 
-	QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+        QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
-	QString partialText;
-	
+        QString partialText;
+
         for ( paraFormatDataIt = paraFormatDataList.begin ();
               paraFormatDataIt != paraFormatDataList.end ();
               paraFormatDataIt++ )
-        { 	    
-	    //Retrieve text
-	    partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-	    //Code all posible predefined XML entities
-	    partialText.replace (regExpAmp , strAmp); //Must be the first!!
-	    partialText.replace (regExpLt  , strLt);
-	    partialText.replace (regExpGt  , strGt);
-	    partialText.replace (regExpApos, strApos);
-	    partialText.replace (regExpQuot, strQuot);
-  	    // TODO: AbiWord tries to be 7bit clean! (So may be other replacements are needed!)
-            
-	    if ((*paraFormatDataIt).abiprops.isEmpty())
-            { 
-		//It's just normal text, so no "props" attribute
-		//Should rarely happen, as we have always the font name and size
+        {
+            //Retrieve text
+            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+            //Code all posible predefined XML entities
+            partialText.replace (regExpAmp , strAmp); //Must be the first!!
+            partialText.replace (regExpLt  , strLt);
+            partialText.replace (regExpGt  , strGt);
+            partialText.replace (regExpApos, strApos);
+            partialText.replace (regExpQuot, strQuot);
+            // TODO: AbiWord tries to be 7bit clean! (So may be other replacements are needed!)
+
+            if ((*paraFormatDataIt).abiprops.isEmpty())
+            {
+                //It's just normal text, so no "props" attribute
+                //Should rarely happen, as we have always the font name and size
                 //Note: you must use a <c> tag!
-             	outputText += "<c>";
+                outputText += "<c>";
             }
             else
             { //Text with properties: embed it in a <c> tag!
@@ -390,9 +410,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     ProcessSubtags (myNode, tagProcessingList, outputText);
 
     //Note: AbiWord at the state of version 0.7.12 cannot use styles yet but styles are defined in the file format!
-    
-    //Problem: in KWord what is the difference between <STYLE> and <LAYOUT> ?
-    
+
 #if 0
     if ( paraLayout == "Head 1" )
     {
@@ -438,7 +456,7 @@ static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText 
 {
     int frameType=-1;
     int frameInfo=-1;
-    
+
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "frameType", "int", (void*) &frameType ) );
     attrProcessingList.append ( AttrProcessing ( "frameInfo", "int", (void*) &frameInfo) );
@@ -448,13 +466,13 @@ static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText 
     ProcessAttributes (myNode, attrProcessingList);
 
     if ((1==frameType) && (0==frameInfo))
-    {	//Main text
+    {   //Main text
         outputText+="<section>\n";
-	
+
         QValueList<TagProcessing> tagProcessingList;
-    	tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
+        tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
         tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
-    	ProcessSubtags (myNode, tagProcessingList, outputText);
+        ProcessSubtags (myNode, tagProcessingList, outputText);
 
         outputText+="</section>\n";
     }
@@ -471,6 +489,34 @@ static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText 
     ProcessSubtags (myNode, tagProcessingList, outputText);
 }
 
+static void ProcessStyleTag (QDomNode myNode, void *, QString   &outputText )
+{
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "NAME",          NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "FOLLOWING",     NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",          NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "INDENTS",       NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",       NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "LINESPACING",   NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "LEFTBORDER",    NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "RIGHTBORDER",   NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "TOPBORDER",     NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "BOTTOMBORDER",  NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "FORMAT",        NULL, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+}
+
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString   &outputText )
+{
+    AllowNoAttributes (myNode);
+
+    // We have the advantage that for styles, KWord and AbiWord have nearly the same way.
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText);
+}
 
 static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
 {
@@ -484,7 +530,7 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
     tagProcessingList.append ( TagProcessing ( "PAPER",       NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
@@ -607,25 +653,25 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     stringBufOut += "</abiword>\n"; //Close the file for XML
 
     QCString strOut=stringBufOut.utf8(); //Retrieve UTF8 info into a byte array
-    
+
     bool success=false;
-    
+
     //Choose if gzipped or not
-    
+
     //At first, find the last extension
     QString strExt;
     const int result=filenameOut.findRev('.');
     if (result>=0)
     {
-	strExt=filenameOut.mid(result);
+        strExt=filenameOut.mid(result);
     }
-    
+
     kdDebug() << "AbiWord Filter: -" << strExt << "-" << endl;
-    
-    if ((strExt==".gz")||(strExt==".GZ")    	    //in case of .abw.gz (logical extension)
-	    ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
-    {//GZipped
-	success=writeOutputFileGZipped(filenameOut,strOut);
+
+    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
+        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
+    {// GZipped
+        success=writeOutputFileGZipped(filenameOut,strOut);
     }
     else
     {// Uncompressed
