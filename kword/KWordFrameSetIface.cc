@@ -101,6 +101,13 @@ QBrush KWordFrameSetIface::backgroundColor() const
     return m_frame->frame(0)->backgroundColor();
 }
 
+void KWordFrameSetIface::setBackgroundColor( const QString &_color )
+{
+    QBrush brush= m_frame->frame(0)->backgroundColor();
+    brush.setColor( QColor( _color ));
+    m_frame->frame(0)->setBackgroundColor( brush );
+}
+
 double KWordFrameSetIface::ptMarginLeft()const
 {
     return m_frame->frame(0)->bLeft();
@@ -433,3 +440,82 @@ bool KWordFrameSetIface::isFootEndNote() const
 {
     return m_frame->isFootEndNote();
 }
+
+QString KWordFrameSetIface::frameSetInfo() const
+{
+    switch( m_frame->frameSetInfo() )
+    {
+    case KWFrameSet::FI_BODY:
+        return QString("body");
+        break;
+    case KWFrameSet::FI_FIRST_HEADER:
+        return QString("First header");
+        break;
+    case KWFrameSet::FI_EVEN_HEADER:
+        return QString("First even header");
+        break;
+    case KWFrameSet::FI_ODD_HEADER:
+        return QString("First odd header");
+        break;
+    case KWFrameSet::FI_FIRST_FOOTER:
+        return QString("First footer");
+        break;
+    case KWFrameSet::FI_ODD_FOOTER:
+        return QString("Odd footer");
+        break;
+    case KWFrameSet::FI_EVEN_FOOTER:
+        return QString("Even footer");
+        break;
+    case KWFrameSet::FI_FOOTNOTE:
+        return QString("FootNote");
+        break;
+    default:
+        return QString::null;
+        break;
+    }
+}
+
+void KWordFrameSetIface::setFrameSetInfo( const QString & _type)
+{
+    if ( _type.lower() =="body")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_BODY );
+    }
+    else if ( _type.lower() =="first header")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_FIRST_HEADER );
+    }
+    else if ( _type.lower() =="first even header")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
+    }
+    else if ( _type.lower() =="first odd header")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
+    }
+    else if ( _type.lower() =="first footer")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_FIRST_FOOTER );
+    }
+    else if ( _type.lower() =="odd footer")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
+    }
+    else if ( _type.lower() =="even footer")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
+    }
+    else if ( _type.lower() =="even footer")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
+    }
+    else if ( _type.lower() =="footnote")
+    {
+        m_frame->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
+    }
+    else
+    {
+        kdDebug()<<" Error in setFrameSetInfo() :"<<_type<<endl;
+    }
+}
+

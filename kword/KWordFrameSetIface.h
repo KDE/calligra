@@ -52,6 +52,8 @@ k_dcop:
     virtual int zOrder() const;
     virtual int pageNum() const;
     virtual QBrush backgroundColor() const;
+    virtual void setBackgroundColor( const QString &_color );
+
     virtual double ptMarginLeft()const;
     virtual double ptMarginRight()const;
     virtual double ptMarginTop()const;
@@ -90,6 +92,10 @@ k_dcop:
     void setTopBorderStyle(const QString & _style);
     void setLeftBorderStyle(const QString & _style);
     void setRightBorderStyle(const QString & _style);
+
+    QString frameSetInfo() const;
+    void setFrameSetInfo( const QString & _type);
+
 
 private:
     KWFrameSet *m_frame;
