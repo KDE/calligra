@@ -2326,7 +2326,7 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     return true;
 }
 
-void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
+void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
 {
     int availHeight = availableHeight();
     // The + 2 here leaves 2 pixels below the last line. Without it we hit
@@ -2379,7 +2379,6 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
                     table->recalcCols(cell->firstCol(), cell->firstRow());
                     table->recalcRows(cell->firstCol(), cell->firstRow());
                     m_doc->delayedRepaintAllViews();
-                    *abort = false;
                 }
             }
         } else {
@@ -2431,7 +2430,8 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     else if ( !lastFormatted && bottom + 2 < availHeight &&
               (frames.last()->frameBehavior() == KWFrame::AutoExtendFrame&& !isProtectSize()) )
     {
-        slotAfterFormattingTooMuchSpace( bottom, abort );
+        slotAfterFormattingTooMuchSpace( bottom );
+        *abort = false;
     }
 
     if ( m_doc->processingType() == KWDocument::WP

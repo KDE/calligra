@@ -309,7 +309,7 @@ protected slots:
 private:
     void init();
     bool slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted );
-    void slotAfterFormattingTooMuchSpace( int bottom, bool* abort );
+    void slotAfterFormattingTooMuchSpace( int bottom );
     void getMargins( int yp, int h, int reqMinWidth, int* marginLeft, int* marginRight, int* pageWidth, int* validHeight,
                      int* breakBegin, int* breakEnd, KoTextParag* parag );
     bool checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
