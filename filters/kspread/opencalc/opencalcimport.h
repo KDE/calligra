@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Norbert Andres <nandres@web.de>
+   Copyright (C) 2004 Montel Laurent <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +32,7 @@ class KSpreadDoc;
 class KSpreadSheet;
 class KSpreadValidity;
 class KoStyleStack;
+class KSpreadConditional;
 
 class OpenCalcImport : public KoFilter
 {
@@ -98,6 +100,12 @@ class OpenCalcImport : public KoFilter
   void loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStack &styleStack );
     void loadOasisValidationValue( KSpreadValidity* val, const QStringList &listVal );
     QString translatePar( QString & par ) const;
+    void loadCondition( KSpreadCell *cell,const QDomElement &property );
+    void loadOasisCondition(KSpreadCell *cell,const QDomElement &property );
+    void loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition );
+    void loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition );
+    void loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition );
+
   KoFilter::ConversionStatus openFile();
 };
 

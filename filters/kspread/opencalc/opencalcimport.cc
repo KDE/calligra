@@ -486,15 +486,21 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
       {
         kdDebug(30518) << "Style: adapting " << endl;
         QDomNode node = st->firstChild();
-
+        bool foundValidation = false;
         while( !node.isNull() )
         {
           QDomElement property = node.toElement();
-
-          if ( !property.isNull() && property.tagName() == "style:properties" )
+          if ( !property.isNull() )
+          {
+              kdDebug()<<"property.tagName() :"<<property.tagName()<<endl;
+              if ( property.tagName()=="style:map" && !foundValidation)
+              {
+                  loadCondition( cell, property );
+                  foundValidation = true;
+              }
+          else if ( property.tagName() == "style:properties" )
           {
             loadStyleProperties( cell, property );
-
             if ( cell->getAngle( columns, row ) != 0 )
             {
               QFontMetrics fm( cell->textFont( columns, row ) );
@@ -520,6 +526,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
                 l->setHeight( textHeight + 2 );
               }
             }
+          }
           }
           node = node.nextSibling();
         }
@@ -741,6 +748,162 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
 
   return true;
 }
+
+
+void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )
+{
+    kdDebug()<<"void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )*******\n";
+    kdDebug()<<" cell has a conditional cell attribute \n";
+    loadOasisCondition( cell, property );
+}
+
+void OpenCalcImport::loadOasisCondition(KSpreadCell *cell,const QDomElement &property )
+{
+    QDomElement elementItem( property );
+    KSpreadStyleManager * manager = cell->sheet()->doc()->styleManager();
+
+    QValueList<KSpreadConditional> cond;
+    while ( !elementItem.isNull() )
+    {
+        kdDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
+        if ( elementItem.tagName()== "style:map"  )
+        {
+            bool ok = true;
+            kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attribute("style:condition" )<<endl;
+            KSpreadConditional newCondition;
+            loadOasisConditionValue( elementItem.attribute("style:condition" ), newCondition );
+            if ( elementItem.hasAttribute( "style:apply-style-name" ) )
+            {
+                kdDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attribute( "style:apply-style-name" )<<endl;
+                newCondition.styleName = new QString( elementItem.attribute( "style:apply-style-name" ) );
+                newCondition.style = manager->style( *newCondition.styleName );
+                if ( !newCondition.style )
+                    ok = false;
+                else
+                    ok = true;
+            }
+
+            if ( ok )
+                cond.append( newCondition );
+            else
+                kdDebug() << "Error loading condition " << elementItem.nodeName()<< endl;
+        }
+        elementItem = elementItem.nextSibling().toElement();
+    }
+    if ( !cond.isEmpty() )
+        cell->setConditionList( cond );
+}
+
+void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition )
+{
+    QString val( styleCondition );
+    if ( val.contains( "cell-content()" ) )
+    {
+        val = val.remove( "cell-content()" );
+        loadOasisCondition( val,newCondition );
+    }
+    //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+    //for the moment we support just int/double value, not text/date/time :(
+    if ( val.contains( "cell-content-is-between(" ) )
+    {
+        val = val.remove( "cell-content-is-between(" );
+        val = val.remove( ")" );
+        QStringList listVal = QStringList::split( "," , val );
+        loadOasisValidationValue( listVal, newCondition );
+        newCondition.cond = Between;
+    }
+    if ( val.contains( "cell-content-is-not-between(" ) )
+    {
+        val = val.remove( "cell-content-is-not-between(" );
+        val = val.remove( ")" );
+        QStringList listVal = QStringList::split( ",", val );
+        loadOasisValidationValue( listVal,newCondition );
+        newCondition.cond = Different;
+    }
+
+}
+
+
+void OpenCalcImport::loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition )
+{
+    QString value;
+    if (valExpression.find( "<=" )==0 )
+    {
+        value = valExpression.remove( 0,2 );
+        newCondition.cond = InferiorEqual;
+    }
+    else if (valExpression.find( ">=" )==0 )
+    {
+        value = valExpression.remove( 0,2 );
+        newCondition.cond = SuperiorEqual;
+    }
+    else if (valExpression.find( "!=" )==0 )
+    {
+        //add Differentto attribute
+        value = valExpression.remove( 0,2 );
+        newCondition.cond = DifferentTo;
+    }
+    else if ( valExpression.find( "<" )==0 )
+    {
+        value = valExpression.remove( 0,1 );
+        newCondition.cond = Inferior;
+    }
+    else if(valExpression.find( ">" )==0 )
+    {
+        value = valExpression.remove( 0,1 );
+        newCondition.cond = Superior;
+    }
+    else if (valExpression.find( "=" )==0 )
+    {
+        value = valExpression.remove( 0,1 );
+        newCondition.cond = Equal;
+    }
+    else
+        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+    kdDebug()<<" value :"<<value<<endl;
+    bool ok = false;
+    newCondition.val1 = value.toDouble(&ok);
+    if ( !ok )
+    {
+        newCondition.val1 = value.toInt(&ok);
+        if ( !ok )
+        {
+            newCondition.strVal1 = new QString( value );
+            kdDebug()<<" Try to parse this value :"<<value<<endl;
+        }
+
+    }
+}
+
+
+void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition )
+{
+    bool ok = false;
+    kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+    newCondition.val1 = listVal[0].toDouble(&ok);
+    if ( !ok )
+    {
+        newCondition.val1 = listVal[0].toInt(&ok);
+        if ( !ok )
+        {
+            newCondition.strVal1 = new QString( listVal[0] );
+            kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+        }
+    }
+    ok=false;
+    newCondition.val2 = listVal[1].toDouble(&ok);
+    if ( !ok )
+    {
+        newCondition.val2 = listVal[1].toInt(&ok);
+        if ( !ok )
+        {
+            newCondition.strVal2 = new QString( listVal[1] );
+            kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+        }
+    }
+}
+
 
 bool OpenCalcImport::readRowsAndCells( QDomElement & content, KSpreadSheet * table )
 {
