@@ -31,6 +31,7 @@ class KWord13Picture;
 #include <qptrlist.h>
 #include <qdatetime.h>
 #include <qdict.h>
+#include <qstringlist.h>
 
 #include "kword13frameset.h"
 
@@ -74,6 +75,7 @@ public:
     QPtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
     QDict<KWord13Picture> m_pictureDict; ///< "Dictionnary" of all pictures' data
     KTempFile* m_previewFile;
+    QStringList m_anchoredFramesetNames; ///< List of framesets that are anchored
 };
 
 #endif // KWORD_1_3_DOCUMENT_H

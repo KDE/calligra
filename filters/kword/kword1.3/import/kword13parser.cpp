@@ -471,7 +471,11 @@ bool KWord13Parser::startElementAnchor( const QString& name, const QXmlAttribute
 	    return false;
 	}
 	// ### TODO: set anchor to the format
-	// ### TODO: add frameset name to the list of anchored framesets
+	// add frameset name to the list of anchored framesets
+	if ( m_kwordDocument->m_anchoredFramesetNames.find( frameset ) == m_kwordDocument->m_anchoredFramesetNames.end() )
+	{
+	    m_kwordDocument->m_anchoredFramesetNames.append( frameset );
+	}
     }
     else
     {
