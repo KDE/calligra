@@ -25,6 +25,7 @@
 #include "kspread_table.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
+#include "kspread_tabbar.h"
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -189,7 +190,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   bool horizontal=true;
   bool rowHeader=true;
   bool colHeader=true;
-
+  bool tabbar=true;
   QVBoxLayout *box = new QVBoxLayout( this );
   box->setMargin( 5 );
   box->setSpacing( 10 );
@@ -209,6 +210,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
         vertical=config->readBoolEntry("Vert ScrollBar",true);
         colHeader=config->readBoolEntry("Column Header",true);
         rowHeader=config->readBoolEntry("Row Header",true);
+	tabbar=config->readBoolEntry("Tabbar",true);
         }
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
@@ -231,6 +233,11 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->addWidget(showRowHeader);
   showRowHeader->setChecked(rowHeader);
 
+  showTabBar =new QCheckBox(i18n("Show tabs"),tmpQGroupBox);
+  lay1->addWidget(showTabBar);
+  showTabBar->setChecked(tabbar);
+
+
   box->addWidget( tmpQGroupBox);
 
 }
@@ -238,11 +245,12 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
 
 void configure::slotDefault()
 {
-showHScrollBar->setChecked(true);
-showRowHeader->setChecked(true);
-showVScrollBar->setChecked(true);
-showColHeader->setChecked(true);
-nbPage->setValue(1);
+  showHScrollBar->setChecked(true);
+  showRowHeader->setChecked(true);
+  showVScrollBar->setChecked(true);
+  showColHeader->setChecked(true);
+  showTabBar->setChecked(true);
+  nbPage->setValue(1);
 }
 
 
@@ -290,6 +298,10 @@ if( m_pView->vBorderWidget()->isVisible()!=showRowHeader->isChecked())
                 m_pView->vBorderWidget()->hide();
         m_pView->doc()->setShowRowHeader(showRowHeader->isChecked());
         }
+
+
+ config->writeEntry( "Tabbar", showTabBar->isChecked());
+ m_pView->doc()->setShowTabBar(showTabBar->isChecked());
 }
 
 

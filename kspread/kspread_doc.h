@@ -307,7 +307,11 @@ public:
   void setTypeOfCalc( MethodOfCalc _calc) { m_EMethodOfCalc=_calc;}
   MethodOfCalc getTypeOfCalc(){ return m_EMethodOfCalc;}
 
-
+  /**
+   * show/hide tabbar
+   */
+  void setShowTabBar(bool _tabbar) {  m_bShowTabBar=_tabbar;}
+  bool getShowTabBar() { return  m_bShowTabBar;}
 
 public slots:
   /**
@@ -546,6 +550,8 @@ protected:
   bool m_bShowError;
   
   MethodOfCalc m_EMethodOfCalc;
+
+  bool m_bShowTabBar;
 };
 
 #endif

@@ -473,6 +473,7 @@ if( config->hasGroup("Parameters" ))
         m_pDoc->setMoveToValue((MoveTo)config->readNumEntry("Move",(int)(Bottom)));
         m_pDoc->setIndentValue(config->readNumEntry( "Indent",10 ) );
         m_pDoc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(Sum)));
+	m_pDoc->setShowTabBar(config->readBoolEntry("Tabbar",true));
 	}
 }
 
@@ -1875,6 +1876,7 @@ void KSpreadView::refreshView()
     // be changed, too.
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
     int top = 30;
+    m_pTabBar->repaint();
 
     m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
     m_pTabBarFirst->show();
@@ -1926,19 +1928,19 @@ void KSpreadView::refreshView()
         }
 
 
-    m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical/*16*/, 16 );
+    m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical, 16 );
     m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
 
-    m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical /*- 16*/, height() - 16 - top );
+    m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical, height() - 16 - top );
     m_pFrame->show();
 
-    m_pCanvas->setGeometry( /*YBORDER_WIDTH*/widthRowHeader, /*XBORDER_HEIGHT*/heightColHeader,
-                            m_pFrame->width() -widthRowHeader /*YBORDER_WIDTH*/, m_pFrame->height() - heightColHeader/*XBORDER_HEIGHT*/ );
+    m_pCanvas->setGeometry( widthRowHeader, heightColHeader,
+                            m_pFrame->width() -widthRowHeader, m_pFrame->height() - heightColHeader );
 
-    m_pHBorderWidget->setGeometry( /*YBORDER_WIDTH*/widthRowHeader, 0, m_pFrame->width() - /*YBORDER_WIDTH*/widthRowHeader, /*XBORDER_HEIGHT*/heightColHeader );
+    m_pHBorderWidget->setGeometry( widthRowHeader, 0, m_pFrame->width() - widthRowHeader, heightColHeader );
 
-    m_pVBorderWidget->setGeometry( 0, /*XBORDER_HEIGHT*/heightColHeader, /*YBORDER_WIDTH*/widthRowHeader,
-                                   m_pFrame->height() - heightColHeader/*XBORDER_HEIGHT*/ );
+    m_pVBorderWidget->setGeometry( 0,heightColHeader, widthRowHeader,
+                                   m_pFrame->height() - heightColHeader );
 }
 
 void KSpreadView::resizeEvent( QResizeEvent * )

@@ -72,6 +72,7 @@ protected:
   QCheckBox *showHScrollBar;
   QCheckBox *showColHeader;
   QCheckBox *showRowHeader;
+  QCheckBox *showTabBar;
   KConfig* config;
 } ;
 
