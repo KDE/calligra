@@ -2315,6 +2315,12 @@ a task from the menubar.  Click on that task for more details. </para>
 <row><entry></entry><entry>Right Facing Characters</entry></row>
 <row><entry></entry><entry>Left Facing Characters</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formspecchar.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Special Symbols</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kforminscol.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Insert Column</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kformappcol.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Append Column</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kformremcol.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Remove Column</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kforminsrow.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Insert Row</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kformapprow.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Append Row</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kformremrow.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Remove Row</entry></row>
 </tbody></tgroup></informaltable>
 
 </sect1>
