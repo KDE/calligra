@@ -112,6 +112,7 @@ private:
     KConfig* config;
     QFont *font;
     QLabel *fontName;
+    QLabel *tabStop;
 
     KoUnitDoubleSpinBox* m_columnSpacing;
 

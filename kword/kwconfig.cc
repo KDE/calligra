@@ -761,7 +761,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     labelStartingPage->setBuddy( m_variableNumberOffset );
 
     QHBox* hbTabStop = new QHBox( gbDocumentSettings );
-    new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), hbTabStop);
+    tabStop = new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), hbTabStop);
     m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
                                               MM_TO_POINT(2),
                                               doc->ptPaperWidth(),
@@ -892,6 +892,7 @@ void ConfigureDefaultDocPage::setUnit( KoUnit::Unit unit )
 {
     m_columnSpacing->setUnit( unit );
     m_tabStopWidth->setUnit( unit );
+    tabStop->setText(i18n("Tab stop (%1):").arg(KoUnit::unitName(unit)));
 }
 
 ////
