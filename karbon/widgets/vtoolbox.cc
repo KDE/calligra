@@ -109,6 +109,9 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	button = addButton( "14_text", i18n( "Insert text" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );
 
+	// dummy
+	button = addButton( "", i18n( "" ) );
+
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );
 }
 
@@ -116,9 +119,13 @@ QToolButton *
 VToolBox::addButton( const char* iconName, QString tooltip )
 {
 	QToolButton *button = new QToolButton( insertLeft ? left : right );
-	QPixmap pixmap = BarIcon( iconName, KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
+	if( iconName != "" )
+	{
+		QPixmap pixmap = BarIcon( iconName, KarbonFactory::instance() );
+		button->setPixmap( pixmap );
+		button->setToggleButton( true );
+	}
+	if( !tooltip.isEmpty() )
 	QToolTip::add( button, tooltip );
 	if( insertLeft )
 		leftLayout->addWidget( button );
