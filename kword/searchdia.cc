@@ -315,6 +315,7 @@ void KWFindReplace::proceed()
         QTextCursor c2 = firstFrameSet->textDocument()->selectionEndCursor( QTextDocument::Standard );
         // Find in the selection
         findInFrameSet( firstFrameSet, firstParag, firstIndex, c2.parag(), c2.index() );
+        terminateFind( firstFrameSet );
     }
     else // Not 'find in selection', need to iterate over the framesets
     {
@@ -327,23 +328,22 @@ void KWFindReplace::proceed()
             if ( fs && fs->isVisible() )
             {
                 QTextParag * lastParag = fs->textDocument()->lastParag();
+                bool ret = true;
                 if (!firstFrameSetFound && firstFrameSet == fs && firstParag)  // first frameset
                 {
                     firstFrameSetFound = true;
-                    bool ret = findInFrameSet( fs, firstParag, firstIndex, lastParag, lastParag->length()-1 );
-                    if (!ret) break;
+                    ret = findInFrameSet( fs, firstParag, firstIndex, lastParag, lastParag->length()-1 );
                 }
                 else if ( firstFrameSetFound ) // another frameset -> search entirely
                 {
-                    bool ret = findInFrameSet( fs, fs->textDocument()->firstParag(), 0, lastParag, lastParag->length()-1 );
-                    if (!ret) break;
+                    ret = findInFrameSet( fs, fs->textDocument()->firstParag(), 0, lastParag, lastParag->length()-1 );
                 }
+                terminateFind( fs );  // we're done with this frameset
+                if (!ret) break;      // stop here if the user cancelled
             }
         }
     }
 }
-
-#define HIGHLIGHTSELECTION 1
 
 bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
                                     QTextParag * lastParag, int lastIndex )
@@ -351,18 +351,16 @@ bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag
     // TODO formatting options are not implemented !
     // We need to reimplement what KoFind::find does, and add that.
     m_currentFrameSet = fs;
-    fs->textDocument()->addSelection( HIGHLIGHTSELECTION );
-    fs->textDocument()->setSelectionColor( HIGHLIGHTSELECTION,
+    fs->textDocument()->addSelection( KWTextFrameSet::HighlightSelection );
+    fs->textDocument()->setSelectionColor( KWTextFrameSet::HighlightSelection,
                                            QApplication::palette().color( QPalette::Active, QColorGroup::Dark ) );
     m_currentParag = firstParag;
     m_offset = 0;
     if ( firstParag == lastParag )
     {
         m_offset = firstIndex;
-        bool ret = process( firstParag->string()->toString().mid( firstIndex, lastIndex-firstIndex ),
+        return process( firstParag->string()->toString().mid( firstIndex, lastIndex-firstIndex ),
                          fs->paragRect( firstParag ) );
-        fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
-        return ret;
     }
     else
     {
@@ -374,14 +372,13 @@ bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag
             QString str = m_currentParag->string()->toString();
             str.truncate( str.length() - 1 ); // damn trailing space
             ret = process( str.mid( firstIndex ), fs->paragRect( firstParag ) );
-            fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
             if (!ret) return false;
         }
         else
         {
             m_currentParag = lastParag;
-            ret = process( lastParag->string()->toString().left( lastIndex + 1 ), fs->paragRect( lastParag ) );
-            fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
+            ret = process( lastParag->string()->toString().left( lastIndex + 1 ),
+                           fs->paragRect( lastParag ) );
             if (!ret) return false;
         }
 
@@ -392,27 +389,36 @@ bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag
         {
             QString str = m_currentParag->string()->toString();
             ret = process( str.left(str.length()-1), fs->paragRect( m_currentParag ) );
-            fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
             if (!ret) return false;
             m_currentParag = forw ? m_currentParag->next() : m_currentParag->prev();
         }
         ASSERT( endParag == m_currentParag );
         if ( forw )
         {
-            ret = process( lastParag->string()->toString().left( lastIndex + 1 ), fs->paragRect( lastParag ) );
+            ret = process( lastParag->string()->toString().left( lastIndex + 1 ),
+                           fs->paragRect( lastParag ) );
         } else {
             m_offset = firstIndex;
             QString str = m_currentParag->string()->toString();
             str.truncate( str.length() - 1 ); // damn trailing space
             ret = process( str.mid( firstIndex ), fs->paragRect( firstParag ) );
         }
-        fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
         return ret;
     }
-    // Note: all the removeSelection calls here should also force a repaint so that
-    // the highlight-selection goes away when we're done. But in fact this doesn't
-    // matter much, the next cursor move repaints, and it could be useful to still
-    // see the last match after the dialog is closed (maybe?).
+}
+
+void KWFindReplace::terminateFind( KWTextFrameSet * fs )
+{
+    kdDebug() << "KWFindReplace::terminateFind" << endl;
+    QTextDocument * textdoc = fs->textDocument();
+    if ( textdoc->hasSelection( KWTextFrameSet::HighlightSelection ) )
+    {
+        QTextParag * oldParag = textdoc->selectionStart( KWTextFrameSet::HighlightSelection );
+        oldParag->setChanged( true );
+        textdoc->removeSelection( KWTextFrameSet::HighlightSelection );
+    }
+    m_currentParag->setChanged( true );
+    m_canvas->repaintChanged( fs, true );
 }
 
 bool KWFindReplace::process( const QString &_text, const QRect &expose)
@@ -444,12 +450,13 @@ void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 void KWFindReplace::selectMatch( int index, int matchingLength )
 {
     QTextDocument * textdoc = m_currentFrameSet->textDocument();
+    terminateFind( m_currentFrameSet ); // remove previous highlighted selection
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
-    textdoc->setSelectionStart( HIGHLIGHTSELECTION, &cursor );
+    textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
     cursor.setIndex( index + matchingLength );
-    textdoc->setSelectionEnd( HIGHLIGHTSELECTION, &cursor );
+    textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
 }
 
 void KWFindReplace::replace( const QString &, int matchingIndex,
@@ -463,7 +470,7 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
     // Remove the match - this relies on highlight doing the right thing :)
-    textdoc->removeSelectedText( HIGHLIGHTSELECTION, &cursor );
+    textdoc->removeSelectedText( KWTextFrameSet::HighlightSelection, &cursor );
     // Insert the replacement
     QTextFormat * format = m_currentParag->at( index )->format();
     // ## TODO back references (qt3)

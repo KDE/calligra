@@ -1766,8 +1766,8 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
 void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
 {
     QTextDocument * textdoc = textDocument();
-    for ( int i = 1; i < (int)QTextDocument::Temp; ++i )
-       textdoc->removeSelection( i );
+    //for ( int i = 1; i < (int)QTextDocument::Temp; ++i )
+    //   textdoc->removeSelection( i );
     emit hideCursor();
     checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
     if ( !undoRedoInfo.valid() ) {
@@ -2112,14 +2112,14 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
     interval = 10;
 #endif
 
-    bool selChanged = FALSE;
-    for ( int i = 1; i < textDocument()->numSelections(); ++i ) // start with 1 as we don't want to remove the Standard-Selection
+    /* bool selChanged = FALSE;
+    for ( int i = 1; i < textDocument()->numSelections(); ++i )
 	selChanged = textDocument()->removeSelection( i ) || selChanged;
 
     if ( selChanged ) {
 	// cursor->parag()->document()->nextDoubleBuffered = TRUE; ######## we need that only if we have nested items/documents
         textFrameSet()->selectionChanged();
-    }
+    }*/
 
     bool clearUndoRedoInfo = TRUE;
 
@@ -2477,8 +2477,8 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
             }
         }
 
-        for ( int i = 1; i < textdoc->numSelections(); ++i ) // start with 1 as we don't want to remove the Standard-Selection
-            redraw = textdoc->removeSelection( i ) || redraw;
+        //for ( int i = 1; i < textdoc->numSelections(); ++i )
+        //    redraw = textdoc->removeSelection( i ) || redraw;
 
         if ( !redraw ) {
             emit showCursor();

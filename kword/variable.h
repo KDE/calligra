@@ -34,6 +34,8 @@ enum VariableFormatType { VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGE
 
 /******************************************************************/
 /* Class: KWVariableFormat                                        */
+/* Base class for the contents of any variable                    */
+/* The variable itself is implemented by KWVariable               */
 /******************************************************************/
 
 class KWVariableFormat
@@ -169,6 +171,7 @@ public:
     KWVariable( KWDocument *_doc );
     virtual ~KWVariable();
 
+    /* Clones a variable */
     virtual KWVariable *copy() {
         KWVariable *v = new KWVariable( doc );
         v->setVariableFormat( varFormat );

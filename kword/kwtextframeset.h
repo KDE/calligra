@@ -123,6 +123,12 @@ public:
     /** Set format changes on selection or current cursor */
     void setFormat( QTextCursor * cursor, KWTextFormat * & currentFormat, KWTextFormat *format, int flags, bool zoomFont = false );
 
+    /** Selections ids */
+    enum SelectionIds {
+        HighlightSelection = 1, // used to highlight during search/replace
+        VarsSelectionBegin = 20000  // 20000-32000 used for variables
+    };
+
     enum KeyboardActionPrivate { // keep in sync with QTextEdit
 	ActionBackspace,
 	ActionDelete,

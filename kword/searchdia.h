@@ -165,6 +165,7 @@ public:
 protected:
     bool findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
                          QTextParag * lastParag, int lastIndex );
+    void terminateFind( KWTextFrameSet * fs );
     bool process( const QString &_text, const QRect &expose);
     void selectMatch( int index, int length );
 
