@@ -446,6 +446,23 @@ KoTextCursor KoTextView::selectWordUnderCursor()
     if ( !m_cursor->parag()->at( m_cursor->index() )->c.isSpace() && !m_cursor->atParagEnd() && !m_cursor->parag()->at( m_cursor->index() )->isCustom())
         c2.gotoWordRight();
 
+    KoTextString *s = m_cursor->parag()->string();
+    bool beginFound=false;
+    for ( int i = c1.index(); i< c2.index(); i++)
+    {
+        QChar ch = s->at(i).c;
+        if( !beginFound && !ch.isSpace() && !ch.isPunct() )
+        {
+            c1.setIndex(i);
+            beginFound=true;
+        }
+        else if ( beginFound && (ch.isSpace() || ch.isPunct()) )
+        {
+            c2.setIndex(i);
+            break;
+        }
+    }
+
     textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
     textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
     return c2;
