@@ -912,6 +912,7 @@ void ConfigureDefaultDocPage::selectNewDefaultFont() {
         font = new QFont(dlg.font());
         fontName->setText(font->family() + ' ' + QString::number(font->pointSize()));
         fontName->setFont(*font);
+        m_pView->kWordDocument()->setDefaultFont( *font );
     }
 }
 
@@ -932,7 +933,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpressionPath().join(";") );
     (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
     (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
-#if 0 // KWORD_HORIZONTAL_LINE    
+#if 0 // KWORD_HORIZONTAL_LINE
     (void) new QListViewItem( m_pPathView, i18n("Horizontal Line Path"),doc->horizontalLinePath().join(";") );
 #endif
 

@@ -394,6 +394,9 @@ public:
     KWTableTemplateCollection * tableTemplateCollection()const  { return m_tableTemplateColl;}
 
     QFont defaultFont() const { return m_defaultFont; }
+    void setDefaultFont( const QFont & newFont ) {
+        m_defaultFont = newFont;
+    }
 
     int numPages() const { return m_pages; }
 
