@@ -9,7 +9,7 @@
 <!ELEMENT DOC (LAYER*) >
 <!ATTLIST DOC editor  CDATA "Karbon"
               mime   CDATA "application/x-karbon"
-              version CDATA "0.1"
+              syntaxVersion CDATA #IMPLIED
 >
 
 <!--

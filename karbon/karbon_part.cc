@@ -57,7 +57,8 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 
 	if(
 		doc.attribute( "mime" ) != "application/x-karbon" ||
-		doc.attribute( "version" ) != "0.1" )
+		( !doc.attribute("syntaxVersion" ).isEmpty() &&
+		doc.attribute( "syntaxVersion" ) != "0.1" ) )
 	{
 		return false;
 	}
@@ -97,7 +98,7 @@ KarbonPart::saveXML()
 	QDomElement doc = document.createElement( "DOC" );
 	doc.setAttribute( "editor", "karbon14 0.0.1" );
 	doc.setAttribute( "mime", "application/x-karbon" );
-	doc.setAttribute( "version", "0.1" );
+	doc.setAttribute( "syntaxVersion", "0.1" );
 	document.appendChild( doc );
 
 	// save layers:
