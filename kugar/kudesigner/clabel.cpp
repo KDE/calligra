@@ -120,7 +120,10 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
     props["FontItalic"] = propValues;
     propValues.second.clear();
 
-    propValues.first = "0";
+    if (QString("").isRightToLeft())
+	propValues.first = "2";
+    else
+        propValues.first = "0";
     propValues.second << i18n("Text horizontal alignment");
     propValues.second << "int_from_list";
     propValues.second << i18n("0 - Left")
