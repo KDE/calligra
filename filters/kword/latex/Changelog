@@ -1,3 +1,12 @@
+06 november 2001
+- features
+	o support of picture inline (don't still work).
+	o compile with qt3
+
+27 October
+- features
+	o support of unicode with omega
+
 14 October
 - BUG FIXES
 	o Some special char. were not corected generated.

@@ -44,11 +44,11 @@ bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
         return false;
     }
     /* input file Reading */
-    QByteArray array=in.read(in.size());
+    //QByteArray array=in.read(in.size());
     in.close();
 
-    LATEXExportDia* dialog = new LATEXExportDia();
-    dialog->setInputData(array);
+    LATEXExportDia* dialog = new LATEXExportDia(in);
+    //dialog->setInputData(array);
     dialog->setOutputFile(fileOut);
 
     dialog->exec();

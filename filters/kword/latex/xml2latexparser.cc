@@ -48,6 +48,19 @@ Xml2LatexParser::Xml2LatexParser(QByteArray array, QString fileOut, QString conf
 	analyse_config(config);
 }
 
+Xml2LatexParser::Xml2LatexParser(const KoStore& in, QString fileOut, QString config):
+		XmlParser(in), _file(fileOut)
+{
+	//kdDebug() << fileIn.latin1() << endl;
+	_in = new KoStore(in);
+	kdDebug() << fileOut.latin1() << endl;
+	_filename = fileOut;
+	setFileHeader(_fileHeader);
+	setRoot(&_document);
+	_isEmbeded = false;
+	analyse_config(config);
+}
+
 void Xml2LatexParser::analyse_config(QString config)
 {
 	kdDebug() << config << endl;
@@ -67,9 +80,8 @@ void Xml2LatexParser::analyse()
 {
 	QDomNode balise;
 	balise = init();
-	balise = getChild(balise, "DOC");
+	//balise = getChild(balise, "DOC");
 	kdDebug() <<"ENTETE -> PAPER" << endl;
-	kdDebug() << getChildName(balise, 0) << endl;
 	_header.analysePaper(getChild(balise, "PAPER"));
 	kdDebug() <<"ENTETE -> ATTRIBUTES" << endl;
 	_header.analyseAttributs(getChild(balise, "ATTRIBUTES"));
@@ -77,7 +89,9 @@ void Xml2LatexParser::analyse()
 	_document.analyse(getChild(balise, "FRAMESETS"));
 	kdDebug() <<"ENTETE -> FIN FRAMESETS" << endl;
 	//kdDebug() <<"ENTETE -> STYLES" << endl;
-	//kdDebug() <<"ENTETE -> PIXMAPS" << endl;
+	//
+	kdDebug() <<"ENTETE -> PIXMAPS" << endl;
+	_document.analysePixmaps(getChild(balise, "PIXMAPS"));
 	//kdDebug() <<"ENTETE -> SERIALL" << endl;
 	kdDebug() << "FIN ANALYSE" << endl;
 }

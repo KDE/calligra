@@ -41,6 +41,20 @@ LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
 			i18n("Latex export filter parameters"), Ok|Cancel)
 {
 	kapp->restoreOverrideCursor();
+	createDialog();
+}
+
+LATEXExportDia::LATEXExportDia(const KoStore& in, QWidget *parent, const char *name) :
+			KDialogBase(parent, name, true,
+			i18n("Latex export filter parameters"), Ok|Cancel)
+{
+	kapp->restoreOverrideCursor();
+	_in = new KoStore(in);
+	createDialog();
+}
+
+void LATEXExportDia::createDialog()
+{
 	resize(size());
 	QWidget *page = new QWidget( this );
 	setMainWidget(page);
@@ -138,7 +152,8 @@ void LATEXExportDia::slotOk()
 	hide();
 	kdDebug() << "config : " << state() << endl;
 	kdDebug() << "LATEX FILTER --> BEGIN" << endl;
-	Xml2LatexParser LATEXParser(_arrayIn, _fileOut, state());
+	//Xml2LatexParser LATEXParser(_arrayIn, _fileOut, state());
+	Xml2LatexParser LATEXParser(*_in, _fileOut, state());
 	LATEXParser.analyse();
 	kdDebug() << "---------- generate file -------------" << endl;
 	LATEXParser.generate();

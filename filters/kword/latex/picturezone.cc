@@ -27,7 +27,8 @@
 
 #include "picturezone.h"
 #include "para.h"
-
+#include "pixmap.h"
+#include "document.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -53,14 +54,14 @@ PictureZone::~PictureZone()
 /*******************************************/
 void PictureZone::analyse(const QDomNode balise)
 {
-	kdDebug() << "FORMAT" << endl;
+	kdDebug() << "Picture format" << endl;
 	/* Get header information (size, position)
 	 * Get infos. to delete the text
 	 */
 
 	//if(balise != 0)
 		analysePictureFormat(balise);
-
+	
 	/* Convert the picture */
 
 	kdDebug() << "END FORMAT" << endl;
@@ -78,7 +79,9 @@ void PictureZone::generate(QTextStream &out)
 
 	/* Display the picture */
 	//convert(getFilename());
-	out << "\\includegraphics{" << getFilenameEPS()<< "}" << endl;
+	Pixmap* image = getRoot()->searchPixmap(getKey());
+	if(image != NULL)
+		out << "\\includegraphics{" << image->getFilenamePS()<< "}" << endl;
 
 	generate_format_end(out);
 }

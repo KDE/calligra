@@ -73,7 +73,8 @@ void PictureFormat::analyseImage(const QDomNode balise)
 	
 	/* Children Markups Analyse */
 	fils = getChild(balise, "FILENAME");
-	setFilename(getAttr(fils, "VALUE"));
+	setKey(getAttr(fils, "value"));
+	kdDebug() << "Cle = " << getKey() << endl;
 	//setPathname(arg->zValue);
 	_fileHeader->useGraphics();
 }

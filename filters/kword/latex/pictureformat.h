@@ -30,10 +30,7 @@ class PictureFormat: public Format
 {
 	int      _pos;
 	int      _length;	/* Length of the string !! */
-	QString  _filename,
-		 _filenameEPS,
-		 _path,
-		 _pathEPS;
+	QString  _key;
 
 	public:
 		PictureFormat(): _pos(0)
@@ -43,16 +40,16 @@ class PictureFormat: public Format
 
 		int     getPos        () const { return _pos;         }
 		int     getLength     () const { return _length;      }
-		QString getFilename   () const { return _filename;    }
-		QString getFilenameEPS() const { return _filenameEPS; }
+		QString getKey        () const { return _key;         }
+		/*QString getFilenameEPS() const { return _filenameEPS; }
 		QString getPath       () const { return _path;        }
-		QString getPathEPS    () const { return _pathEPS;     }
+		QString getPathEPS    () const { return _pathEPS;     }*/
 
 		void setPos        (const int p)   { _pos         = p; }
 		void setLength     (const int t)   { _length      = t; }
-		void setFilename   (QString f)     { _filename    = f; }
-		void setFilenameEPS(QString f)     { _filenameEPS = f; }
-		void setPathEPS    (QString p)     { _pathEPS     = p; }
+		void setKey        (QString k)     { _key         = k; }
+		/*void setFilenameEPS(QString f)     { _filenameEPS = f; }
+		void setPathEPS    (QString p)     { _pathEPS     = p; }*/
 
 		void analysePictureFormat(const QDomNode);
 		void analyseParam        (const QDomNode);

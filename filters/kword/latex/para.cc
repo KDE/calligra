@@ -24,7 +24,7 @@
 #include "para.h"
 #include "texte.h"		/* father class.        */
 #include "format.h"		/* children classes.    */
-#include "picturezone.h"
+//#include "picturezone.h"
 #include "textzone.h"
 #include "footnote.h"
 #include "anchor.h"
@@ -301,8 +301,8 @@ void Para::analyseFormat(const QDomNode balise)
 				}
 			break;
 		case EF_PICTURE: /* It's a picture (2) */
-				zone = new PictureZone(this);
-				zone->analyse(balise);
+				/*zone = new PictureZone(this);
+				zone->analyse(balise);*/
 			break;
 		case EF_VARIABLE: /* It's a variable (4) */
 		//		zone = new VariableZone(this);

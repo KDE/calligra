@@ -65,8 +65,8 @@ enum THeadfoot
 {
 	TH_ALL   = 0,		/* 0 */
 	TH_XXX   = 1,		/* 1 */
-	TH_FIRST = 2,	/* 2 */
-	TH_EVODD = 3	/* 3 */
+	TH_FIRST = 2,		/* 2 */
+	TH_EVODD = 3		/* 3 */
 };
 
 enum TProcType
@@ -180,7 +180,8 @@ class FileHeader: public XmlParser
 		void analysePaperParam(const QDomNode);
 
 		void generatePaper    (QTextStream&);
-		void generatePreambule(QTextStream&);
+		void generateLatinPreambule(QTextStream&);
+		void generateUnicodePreambule(QTextStream&);
 		void generatePackage  (QTextStream&);
 
 };

@@ -27,6 +27,7 @@
 
 //#include "fileheader.h"		/* class header file.      */
 #include "listtable.h"		/* list of tables (another kind of list of elements). */
+//#include "pixmap.h"
 
 enum EGenerate
 {
@@ -45,11 +46,13 @@ enum EGenerate
  */
 class Document: public XmlParser
 {
+
 	QPtrList<Element> _headers;
 	QPtrList<Element> _footers;
 	QPtrList<Element> _footnotes;
 	QPtrList<Element> _formulas;
 	QPtrList<Element> _corps;
+	QPtrList<Element> _pixmaps;
 
 	ListTable      _tables;
 	//QPtrList<Element> _parts;
@@ -82,10 +85,12 @@ class Document: public XmlParser
 		//void setFileHeader(FileHeader *h) { _fileHeader = h; }
 
 		void analyse(const QDomNode);
+		void analysePixmaps(const QDomNode);
 
 		void generate(QTextStream&, bool);
 		Element* searchAnchor(QString);
 		Element* searchFootnote(QString);
+		//Pixmap*  searchPixmap(QString);
 
 	private:
 		/**

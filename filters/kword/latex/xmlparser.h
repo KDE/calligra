@@ -25,6 +25,7 @@
 
 #include "qstring.h"
 #include "qdom.h"
+#include "koStore.h"
 
 class FileHeader;
 class Document;
@@ -33,11 +34,12 @@ class XmlParser
 {
 	QString      _filename;
 	QDomDocument _document;
+	static KoStore*     _in;
 
 	/* OPTIONS */
-	bool _useLatexStyle;
-	bool _useLatin1;
-	bool _useUnicode;
+	static bool _useLatexStyle;
+	static bool _useLatin1;
+	static bool _useUnicode;
 
 	protected:
 		/* All the inherit class must be have a link with 
@@ -48,11 +50,14 @@ class XmlParser
 
 	public:
 		XmlParser(QString);
-		XmlParser(QByteArray);
+		XmlParser(QByteArray);	/* deprecated */
+		XmlParser(const KoStore&);
 		XmlParser();
 		virtual ~XmlParser();
 
 		bool        isKwordStyleUsed() const { return (_useLatexStyle == false); }
+		bool        mustUseUnicode  () const { return _useUnicode;          }
+		bool        mustUseLatin1   () const { return _useLatin1;           }
 		QString     getFilename     () const { return _filename;            }
 		QString     getDocument     () const { return _document.toString(); }
 		Document*   getRoot         () const { return _root;                }
@@ -71,8 +76,8 @@ class XmlParser
 
 		QDomNode init() { return _document.documentElement(); }
 
-		void        useUnicodeEnc   ()              { _useUnicode    = true;  }
-		void        useLatin1Enc    ()              { _useLatin1     = true;  }
+		void        useUnicodeEnc   ()              { _useUnicode    = true; _useLatin1 = false;  }
+		void        useLatin1Enc    ()              { _useLatin1     = true; _useUnicode = false; }
 		void        useLatexStyle   ()              { _useLatexStyle = true;  }
 		void        useKwordStyle   ()              { _useLatexStyle = false; }
 

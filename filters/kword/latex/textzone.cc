@@ -321,7 +321,10 @@ void TextZone::generate(QTextStream &out)
 		generate_format_begin(out);
 
 	/* Display the text */
-	display(escapeLatin1(_texte), out);
+	if(mustUseLatin1())
+		display(escapeLatin1(_texte), out);
+	else if(mustUseUnicode())
+		display(_texte, out);
 
 	if(useFormat())
 		generate_format_end(out);
@@ -345,12 +348,18 @@ void TextZone::display(QString texte, QTextStream& out)
 	while(end < (signed int) texte.length() && end != -1)
 	{
 		/* There are something to display */
-		out << line << endl;
+		if(mustUseUnicode())
+			out << line.utf8() << endl;
+		else if(mustUseLatin1())
+			out << line << endl;
 		index = end;
 		end = texte.find(' ', index + 60, false);
 		line = texte.mid(index, end - index);
 	}
-	out << line;
+	if(mustUseUnicode())
+		out << line.utf8();
+	else if(mustUseLatin1())
+		out << line;
 }
 
 /*******************************************/

@@ -27,6 +27,7 @@
 #include "document.h"
 #include "texte.h"
 #include "formula.h"
+#include "pixmap.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -49,9 +50,11 @@ Document::~Document()
 void Document::analyse(const QDomNode balise)
 {
 	//QDomNode balise = getChild(balise_initial, "FRAMESET");
+	kdDebug() << getChildName(balise, 0) << endl;
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		Element *elt = 0;
+		kdDebug() << "--------------------------------------------------" << endl;
 		kdDebug() << "NEW ELEMENT" << endl;
 		
 		kdDebug() << getChildName(balise, index) << endl;
@@ -67,8 +70,8 @@ void Document::analyse(const QDomNode balise)
 				break;
 			case ST_PICTURE:
 				kdDebug() << "PICTURE" << endl;
-				// elt = new Image;
-				// elt->analyse(getChild(balise, index));
+				elt = new Pixmap;
+				elt->analyse(getChild(balise, index));
 				break;
 			case ST_PART:
 				kdDebug() << "PART" << endl;
@@ -107,7 +110,6 @@ void Document::analyse(const QDomNode balise)
 						switch(elt->getType())
 						{
 							case ST_TEXT:
-							case ST_PICTURE:
 									_corps.append(elt);
 									kdDebug() << " BODY" << endl;
 								break;
@@ -119,6 +121,11 @@ void Document::analyse(const QDomNode balise)
 									kdDebug() << " FORMULA" <<endl;
 									_formulas.append(elt);
 								break;
+							case ST_PICTURE:
+									kdDebug() << " PIXMAP" <<endl;
+									_pixmaps.append(elt);
+								break;
+
 						}
 					}
 					break;
@@ -140,6 +147,23 @@ void Document::analyse(const QDomNode balise)
 			}
 		}
 		kdDebug() << "END OF ANALYSE OF A FRAMESET" << endl;
+	}
+}
+
+/*******************************************/
+/* AnalysePixmaps                          */
+/*******************************************/
+void Document::analysePixmaps(const QDomNode balise)
+{
+	//QDomNode balise = getChild(balise_initial, "FRAMESET");
+	for(int index= 0; index < getNbChild(balise); index++)
+	{
+		Pixmap *pic = 0;
+		kdDebug() << "NEW PIXMAP" << endl;
+		
+		pic = new Pixmap();
+		pic->analyse(getChild(balise, "KEY"));
+		_pixmaps.append(pic);
 	}
 }
 
@@ -333,6 +357,14 @@ Element* Document::searchAnchor(QString anchor)
 			return elt;
 		elt = _formulas.next();
 	}
+	kdDebug() << "Pas de tables ni de formules, recherche dans les images" << endl;
+	elt = _pixmaps.first();
+	while(elt != 0)
+	{
+		if(elt->getName() == anchor)
+			return elt;
+		elt = _pixmaps.next();
+	}
 	return NULL;
 
 }
@@ -349,3 +381,16 @@ Element* Document::searchFootnote(QString footnote)
 	return NULL;
 
 }
+
+/*Pixmap* Document::searchPixmap(QString key)
+{
+	Pixmap* pic = _pixmaps.first();
+	while(pic != 0)
+	{
+		if(pic->getKey().compare(key))
+			return pic;
+		pic = _pixmaps.next();
+	}
+	return NULL;
+}*/
+
