@@ -899,8 +899,9 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 
 QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 {
-	if (querySchema.fieldCount()<1)
-		return QString::null;
+//"SELECT FROM ..." is theoretically allowed "
+//if (querySchema.fieldCount()<1)
+//		return QString::null;
 
 	if (!querySchema.statement().isEmpty())
 		return querySchema.statement();
@@ -913,9 +914,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 	Field *f;
 	for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
 		if (querySchema.isFieldVisible(number)) {
-			if (sql.isEmpty())
-				sql = "SELECT ";
-			else
+			if (!sql.isEmpty())
 				sql += ", ";
 
 			if (f->isQueryAsterisk()) {
@@ -931,20 +930,19 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 			}
 		}
 	}
-	sql += " FROM ";
+	sql.prepend("SELECT ");
 	TableSchema::List* tables = querySchema.tables();
-	if (!tables || tables->isEmpty()) //sanity check
-		return QString::null;
-	
-	QString s_from;
-	TableSchema *table;
-	for (TableSchema::ListIterator it(*tables); (table = it.current()); ++it) {
-		if (!s_from.isEmpty())
-			s_from += ", ";
-		s_from += table->name();
+	if (tables && !tables->isEmpty()) {
+		sql += " FROM ";
+		QString s_from;
+		TableSchema *table;
+		for (TableSchema::ListIterator it(*tables); (table = it.current()); ++it) {
+			if (!s_from.isEmpty())
+				s_from += ", ";
+			s_from += table->name();
+		}
+		sql += s_from;
 	}
-	sql += s_from;
-
 	QString s_where;
 	s_where.reserve(4096);
 

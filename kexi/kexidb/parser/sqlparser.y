@@ -618,6 +618,7 @@ SQL_TYPE
 SelectStatement:
 Select ColViews
 {
+	kdDebug() << "Select ColViews" << endl;
 /*
 	parser->select()->setBaseTable($4);
 	if(parser->select()->unresolvedWildcard() && parser->db())
@@ -634,13 +635,21 @@ Select ColViews
 	}
 */
 }
-| SelectStatement Tables
+| Select ColViews Tables
 {
-	kdDebug() << "from detail" << endl;
+	kdDebug() << "Select ColViews Tables" << endl;
 }
-| SelectStatement Tables Conditions
+| Select Tables
 {
-	kdDebug() << "from detail (conditioned)" << endl;
+	kdDebug() << "Select ColViews Tables" << endl;
+}
+| Select ColViews Conditions
+{
+	kdDebug() << "Select ColViews Conditions" << endl;
+}
+| Select ColViews Tables Conditions
+{
+	kdDebug() << "Select ColViews Tables Conditions" << endl;
 }
 ;
 
