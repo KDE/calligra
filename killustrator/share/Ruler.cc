@@ -182,13 +182,28 @@ void Ruler::paintEvent (QPaintEvent *e) {
 void Ruler::drawRuler () {
   Painter p;
   char buf[10];
+  int step = 0, step1 = 0, step2 = 0;
 
   if (! buffer)
     return;
 
-  int step = (int) (10.0 * zoom);
-  int step1 = (int) (100.0 * zoom);
-  int step2 = (int) (50.0 * zoom);
+  switch (munit) {
+  case UnitPoint:
+    step = (int) (10.0 * zoom);
+    step1 = (int) (100.0 * zoom);
+    step2 = (int) (50.0 * zoom);
+    break;
+  case UnitInch:
+    step = (int) (1.0 * zoom);
+    step1 = (int) (10.0 * zoom);
+    step2 = (int) (5.0 * zoom);
+    break;
+  case UnitMillimeter:
+    step = (int) (2.0 * zoom);
+    step1 = (int) (20.0 * zoom);
+    step2 = (int) (10.0 * zoom);
+    break;
+  }
 
   p.begin (buffer);
   p.setBackgroundColor (lightGray);
@@ -197,6 +212,8 @@ void Ruler::drawRuler () {
   buffer->fill (backgroundColor ());
   p.eraseRect (0, 0, width (), height ());
 
+#define MM_FACTOR 72.0 / 25.4
+#define INCH_FACTOR 7.2
   
   if (orientation == Horizontal) {
     switch (munit) {
@@ -216,7 +233,37 @@ void Ruler::drawRuler () {
 	break;
       }
     case UnitMillimeter:
+      {
+	for (int i = 0; i < buffer->width (); i += step) {
+	  int pos = qRound (i * MM_FACTOR);
+	  if (i % step1 == 0) {
+	    p.drawLine (pos, 10, pos, 30);
+	    sprintf (buf, "%d", (int) (((float) i) / zoom));
+	    p.drawText (pos + 3, 18, buf);
+	  }
+	  else if (i % step2 == 0)
+	    p.drawLine (pos, 15, pos, 30);
+	  else
+	    p.drawLine (pos, 20, pos, 30);
+	}
+	break;
+      }
     case UnitInch:
+      {
+	for (int i = 0; i < buffer->width (); i += step) {
+	  int pos = qRound (i * INCH_FACTOR);
+	  if (i % step1 == 0) {
+	    p.drawLine (pos, 10, pos, 30);
+	    sprintf (buf, "%d", (int) ((float) i / (zoom * 10)));
+	    p.drawText (pos + 3, 18, buf);
+	  }
+	  else if (i % step2 == 0)
+	    p.drawLine (pos, 15, pos, 30);
+	  else
+	    p.drawLine (pos, 20, pos, 30);
+	}
+	break;
+      }
     default:
       break;
     }
@@ -239,7 +286,37 @@ void Ruler::drawRuler () {
 	break;
       }
     case UnitMillimeter:
+      {
+	for (int i = 0; i < buffer->height (); i += step) {
+	  int pos = qRound (i * MM_FACTOR);
+	  if (i % step1 == 0) {
+	    p.drawLine (10, pos, 30, pos);
+	    sprintf (buf, "%d", (int) (((float) i) / zoom));
+	    p.drawText (10, pos + 9, buf);
+	  }
+	  else if (i % step2 == 0)
+	    p.drawLine (15, pos, 30, pos);
+	  else
+	    p.drawLine (20, pos, 30, pos);
+	}
+	break;
+      }
     case UnitInch:
+      {
+	for (int i = 0; i < buffer->height (); i += step) {
+	  int pos = qRound (i * INCH_FACTOR);
+	  if (i % step1 == 0) {
+	    p.drawLine (10, pos, 30, pos);
+	    sprintf (buf, "%d", (int) (((float) i) / (zoom * 10.0)));
+	    p.drawText (10, pos + 9, buf);
+	  }
+	  else if (i % step2 == 0)
+	    p.drawLine (15, pos, 30, pos);
+	  else
+	    p.drawLine (20, pos, 30, pos);
+	}
+	break;
+      }
     default:
       break;
     }

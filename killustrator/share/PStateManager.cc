@@ -124,7 +124,10 @@ MeasurementUnit PStateManager::defaultMeasurementUnit () {
 }
 
 void PStateManager::setDefaultMeasurementUnit (MeasurementUnit unit) {
+  MeasurementUnit old = defaultUnit;
   defaultUnit = unit;
+  if (old != defaultUnit)
+    emit settingsChanged ();
 }
 
 void PStateManager::saveDefaultSettings () {

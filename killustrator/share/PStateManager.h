@@ -48,6 +48,7 @@ public:
 
 signals:
   void recentFilesChanged ();
+  void settingsChanged ();
 
 public slots:
   void saveDefaultSettings ();

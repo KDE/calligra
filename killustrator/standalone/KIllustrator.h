@@ -129,6 +129,7 @@ public slots:
   void updateZoomFactor (float zFactor);
 
   void updateRecentFiles ();
+  void updateSettings ();
 
 protected slots:
   void zoomFactorSlot (int);

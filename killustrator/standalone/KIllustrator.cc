@@ -129,6 +129,8 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
 
   connect (PStateManager::instance (), SIGNAL (recentFilesChanged ()),
   	   this, SLOT (updateRecentFiles ()));
+  connect (PStateManager::instance (), SIGNAL (settingsChanged ()),
+  	   this, SLOT (updateSettings ()));
 
   if (url != 0L)
     openURL (url);
@@ -156,8 +158,9 @@ void KIllustrator::setupMainView () {
   QWidget *w = new QWidget (this);
   gridLayout = new QGridLayout (w, 2, 2);
   
-  hRuler = new Ruler (Ruler::Horizontal, UnitPoint, w);
-  vRuler = new Ruler (Ruler::Vertical, UnitPoint, w);
+  MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
+  hRuler = new Ruler (Ruler::Horizontal, mu, w);
+  vRuler = new Ruler (Ruler::Vertical, mu, w);
   gridLayout->addWidget (hRuler, 0, 1);
   gridLayout->addWidget (vRuler, 1, 0);
 
@@ -243,6 +246,11 @@ void KIllustrator::initToolBars () {
   toolbar->insertButton (pixmap, ID_FILE_SAVE, true,
 			 i18n ("Save Document"));
   
+  toolbar->insertSeparator ();
+  
+  pixmap = loader->loadIcon ("fileprint.xpm");
+  toolbar->insertButton (pixmap, ID_FILE_PRINT, true,
+			 i18n ("Print Document"));
   toolbar->insertSeparator ();
   
   pixmap = loader->loadIcon ("editcopy.xpm");
@@ -523,6 +531,13 @@ void KIllustrator::showCursorPosition (int x, int y) {
 
 void KIllustrator::showCurrentMode (const char* msg) {
   statusbar->changeItem (msg, 2);
+}
+
+void KIllustrator::updateSettings () {
+  MeasurementUnit munit = 
+    PStateManager::instance ()->defaultMeasurementUnit ();
+  hRuler->setMeasurementUnit (munit);
+  vRuler->setMeasurementUnit (munit);
 }
 
 void KIllustrator::menuCallback (int item) {
