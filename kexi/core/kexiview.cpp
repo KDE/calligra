@@ -69,6 +69,8 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, c
 	setInstance(KexiFactory::global());
 	setXMLFile("kexiui.rc");
 
+	initActions();
+
 	if(winmode != EmbeddedMode)
 	{
 		initMainDock();
@@ -127,7 +129,6 @@ void KexiView::finalizeInit()
 				height());
 		}
 	}
-	initActions();
 }
 
 void KexiView::initMainDock()
@@ -140,6 +141,8 @@ void KexiView::initBrowser()
 {
 	m_browser = new KexiTabBrowser(this, m_workspace, "Document Browser");
 	m_browser->show(); //TODO: read settings
+	m_actionBrowser->setChecked(m_browser->isVisible());
+	connect(m_actionBrowser, SIGNAL(toggled(bool)), m_browser, SLOT(setVisible(bool)));
 	kdDebug() << "KexiView::initBrowser: done" << endl;
 }
 
@@ -147,21 +150,13 @@ void KexiView::initHelper()
 {
 #ifndef KEXI_NO_CTXT_HELP
 	m_helper=new KexiContextHelp(this, m_workspace, "Context Help");
-  //add that as we have a help!
+	//add that as we have a help!
 	m_helper->setContextHelp(i18n("Welcome"), i18n("%1 is in a early state of development, not all planed features are implemented<br>you can help with kexi development by filing <a href=\"http://bugs.kde.org/wizard.cgi?package=kexi\">feature-requests and bug reports</a><br><br><i>the kexi team wishes you fun and productive work</i>").arg(KEXI_APP_NAME));
+	m_actionHelper->setChecked(m_helper->isVisible());
+	connect(m_actionHelper, SIGNAL(toggled(bool)), m_helper, SLOT(setVisible(bool)));
 #endif
 }
-/*
-void KexiView::toggleBrowser(bool on)
-{
-	on ? m_browser->show() : m_browser->hide();
-}
 
-void KexiView::toggleHelper(bool on)
-{
-	on ? m_helper->show() : m_helper->hide();
-}
-*/
 void KexiView::initActions()
 {
 	//creating a list of actions for the form-designer
@@ -184,14 +179,10 @@ void KexiView::initActions()
 
 	m_actionBrowser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
 	 actionCollection(), "show_nav");
-	m_actionBrowser->setChecked(m_browser->isVisible());
-	connect(m_actionBrowser, SIGNAL(toggled(bool)), m_browser, SLOT(setVisible(bool)));
 
 #ifndef KEXI_NO_CTXT_HELP
 	m_actionHelper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
 	 actionCollection(), "show_contexthelp");
-	m_actionHelper->setChecked(m_helper->isVisible());
-	connect(m_actionHelper, SIGNAL(toggled(bool)), m_helper, SLOT(setVisible(bool)));
 #endif
 
 	connect(m_project, SIGNAL(dbAvaible()), this, SLOT(slotDBAvaible()));
