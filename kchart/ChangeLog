@@ -1,4 +1,11 @@
-2005-02-19  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+2005-02-22  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 99765:
+	* kchartConfigDialog.cc (initSubtypePage): Don't create a
+	configuration page for subtype if the type doesn't have a
+	subtype.  Applicable to Pie, Ring and Box&Whiskers.
+
+2005-02-19  Inge Wallin  <inge@lysator.liu.se>
 
 	Start of a new page in the config dialog for configuring Data.
 	This is not yet finished.

@@ -378,7 +378,9 @@ void KChartConfigDialog::initSubtypePage()
         m_subTypePage = new KChartPolarSubTypeChartPage( m_params, this );
         break;
     default:
-        ; // do nothing
+	// Do nothing.  In particular, don't add a page.
+	return;
+        ; 
     }
     addTab( m_subTypePage, i18n( "Chart &Subtype" ) );
 }
