@@ -26,20 +26,19 @@
 #include "paragdia.h"
 
 class KWDocument;
-class KWStyleEditor;
-class QWidget;
-class QGridLayout;
-class QListBox;
-class QPushButton;
-class KButtonBox;
-class QComboBox;
-class QLineEdit;
-class QLabel;
-class QCheckBox;
+class KWFontChooser;
 class KWStyle;
-class QTabWidget;
+class KWStyleEditor;
 class KWStyleManagerTab;
 class KWStylePreview;
+class QCheckBox;
+class QComboBox;
+class QGridLayout;
+class QLineEdit;
+class QListBox;
+class QPushButton;
+class QTabWidget;
+class QWidget;
 
 /******************************************************************/
 /* Class: KWStyleManager                                          */
@@ -65,8 +64,8 @@ protected:
     QListBox *m_stylesList;
     QLineEdit *m_nameString;
     QComboBox *m_styleCombo;
-    QPushButton *m_okButton;
-    QPushButton *m_cancelButton;
+    //QPushButton *m_okButton;
+    //QPushButton *m_cancelButton;
     QPushButton *m_deleteButton;
     QPushButton *m_newButton;
     KWStylePreview *preview;
@@ -82,16 +81,17 @@ protected slots:
     virtual void slotOk();
     //virtual void slotCancel();
     void switchStyle();
+    void switchTabs();
     void addStyle();
     void deleteStyle();
     void renameStyle(const QString &);
+protected:
     void addTab( KWStyleManagerTab * tab );
 };
 
 /******************************************************************/
 /* Class: KWStylePreview                                         */
 /******************************************************************/
-
 class KWStylePreview : public QGroupBox
 {
     Q_OBJECT
@@ -146,12 +146,20 @@ private:
     KWParagLayoutWidget * m_widget;
 };
 
-/*
-class KWStyleFontTab : public KWStyleManagerTab {
+// The "font" tab. Maybe we should put the text color at the bottom ?
+class KWStyleFontTab : public KWStyleManagerTab
+{
+    Q_OBJECT
+public:
+    KWStyleFontTab( QWidget * parent );
     virtual void update();
-    virtual QString tabName(); }
+    virtual QString tabName();
     virtual void save();
-}*/
+protected:
+    virtual void resizeEvent( QResizeEvent *e );
+private:
+    KWFontChooser * m_chooser;
+};
 
 /*
 Font            simple font dia

@@ -25,35 +25,48 @@
 #include <qcheckbox.h>
 #include <qfont.h>
 
-
-class KWFontDia : public QDialog
+// The embeddable font chooser widget
+class KWFontChooser : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  KWFontDia(  QWidget* parent, const char* name, const QFont &_font, bool _subscript,bool _superscript, bool _withSubSuperScript=true);
+    KWFontChooser( QWidget * parent, const char* name = 0L, bool _withSubSuperScript = true );
+    virtual ~KWFontChooser() {}
 
-  bool getSuperScript() const { return m_superScript->isChecked();}
-  bool getSubScript() const { return m_subScript->isChecked();}
-  QFont getNewFont() const {return newFont;}
+    void setFont( const QFont &_font, bool _subscript, bool _superscript );
 
-private:
-  KFontChooser *m_chooseFont;
-  QCheckBox *m_underline;
-  QCheckBox *m_superScript;
-  QCheckBox *m_subScript;
-  QCheckBox *m_strikeOut;
-  QFont newFont;
+    bool getSuperScript() const { return m_superScript->isChecked(); }
+    bool getSubScript() const { return m_subScript->isChecked(); }
+    QFont getNewFont() const { return m_newFont; }
 
 public slots:
-  void slotOk();
-  void slotCancel();
-  void slotSuperScriptClicked();
-  void slotSubScriptClicked();
-  void slotUnderlineClicked();
-  void slotStrikeOutClicked();
-  void slotFontChanged(const QFont &);
-signals:
-  void okClicked();
+    void slotSuperScriptClicked();
+    void slotSubScriptClicked();
+    void slotUnderlineClicked();
+    void slotStrikeOutClicked();
+    void slotFontChanged(const QFont &);
+
+private:
+    KFontChooser *m_chooseFont;
+    QCheckBox *m_underline;
+    QCheckBox *m_superScript;
+    QCheckBox *m_subScript;
+    QCheckBox *m_strikeOut;
+    QFont m_newFont;
+};
+
+class KWFontDia : public KDialogBase
+{
+    Q_OBJECT
+public:
+    KWFontDia( QWidget* parent, const char* name, const QFont &_font,
+               bool _subscript, bool _superscript, bool _withSubSuperScript=true );
+
+    bool getSuperScript() const { return m_chooser->getSuperScript(); }
+    bool getSubScript() const { return m_chooser->getSubScript(); }
+    QFont getNewFont() const { return m_chooser->getNewFont(); }
+private:
+    KWFontChooser * m_chooser;
 };
 
 #endif

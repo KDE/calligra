@@ -75,7 +75,11 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     KWUnit::Unit unit = m_doc->getUnit();
 
     setupWidget(); // build the widget with the buttons and the list selector.
+
     addGeneralTab();
+
+    KWStyleFontTab * fontTab = new KWStyleFontTab( m_tabs );
+    addTab( fontTab );
 
     KWStyleParagTab *newTab = new KWStyleParagTab( m_tabs );
     newTab->setWidget( new KWIndentSpacingWidget( unit, newTab ) );
@@ -169,6 +173,7 @@ kdDebug() << " style " << i << ": " << styles.at(i)->name() << " (" << styles.at
     form1Layout->addLayout( layout2 );
 #endif
     connect( m_stylesList, SIGNAL( selectionChanged() ), this, SLOT( switchStyle() ) );
+    connect( m_tabs, SIGNAL( currentChanged ( QWidget * ) ), this, SLOT( switchTabs() ) );
 }
 
 void KWStyleManager::addGeneralTab() {
@@ -231,6 +236,13 @@ void KWStyleManager::switchStyle() {
     noSignals=false;
 }
 
+void KWStyleManager::switchTabs()
+{
+    // Called when the user switches tabs
+    // We call save() to update our style, for the preview on the 1st tab
+    save();
+}
+
 int KWStyleManager::getStyleByName(const QString & name) {
     for(unsigned int i=0; i < m_changedStyles.count(); i++) {
 
@@ -278,6 +290,7 @@ kdDebug() << "following style3: " << m_changedStyles.at(getStyleByName(m_styleCo
 kdDebug() << "following style4: " << m_changedStyles.at(getStyleByName(m_styleCombo->currentText()))->name() << endl;
         m_currentStyle->setFollowingStyle(m_changedStyles.at(getStyleByName(m_styleCombo->currentText())));
     }
+    preview->repaint(true);
 }
 
 void KWStyleManager::addStyle() {
@@ -323,16 +336,10 @@ void KWStyleManager::deleteStyle() {
     updateGUI();
 }
 
-#if 0
-void KWStyleManager::slotCancel() {
-    done(0);
-}
-#endif
-
 void KWStyleManager::slotOk() {
     save();
     apply();
-    //done(1);
+    KDialogBase::slotOk();
 }
 
 void KWStyleManager::apply() {
@@ -376,7 +383,7 @@ void KWStyleManager::renameStyle(const QString &theText) {
     m_stylesList->changeItem(theText, m_stylesList->currentItem());
     noSignals=false;
     bool state=!theText.isEmpty();
-    m_okButton->setEnabled(state);
+    enableButtonOK(state);
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
 }
@@ -395,11 +402,7 @@ void KWStylePreview::drawContents( QPainter *painter ) {
     painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
                           r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
 
-    QFont f( style->format().font().family(), style->format().font().pointSize() );
-    f.setBold( style->format().font().weight() == 75 ? true : false );
-    f.setItalic( style->format().font().italic() );
-    f.setUnderline( style->format().font().underline()  );
-    f.setStrikeOut( style->format().font().strikeOut()  );
+    QFont f( style->format().font() );
     QColor c( style->format().color() );
 
     painter->setPen( QPen( c ) );
@@ -416,13 +419,8 @@ void KWStylePreview::drawContents( QPainter *painter ) {
 
 
 #if 0
-
-
 void KWStyleEditor::changeFont() {
-    QFont f( style->format().font().family(), style->format().font().pointSize() );
-    f.setBold( style->format().font().weight() == 75 ? true : false );
-    f.setItalic( style->format().font().italic() );
-    f.setUnderline( style->format().font().underline() );
+    QFont f( style->format().font() );
 
     KWFontDia *fontDia = new KWFontDia( this, "",f,false, false,false );
     connect( fontDia, SIGNAL( okClicked() ), this, SLOT( slotFontDiaOk() ) );
@@ -443,115 +441,6 @@ void KWStyleEditor::changeColor() {
     style->format().setColor( c );
     preview->repaint( true );
   }
-}
-
-void KWStyleEditor::changeSpacing() {
-    if ( paragDia ) {
-        paragDia->close();
-        delete paragDia;
-        paragDia = 0;
-    }
-    paragDia = new KWParagDia( this, "", KWParagDia::PD_SPACING, doc );
-    paragDia->setCaption( i18n( "Paragraph Spacing" ) );
-    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
-    paragDia->setSpaceBeforeParag( style->paragLayout().margins[QStyleSheetItem::MarginTop] );
-    paragDia->setSpaceAfterParag( style->paragLayout().margins[QStyleSheetItem::MarginBottom] );
-    paragDia->setLineSpacing( style->paragLayout().lineSpacing );
-    paragDia->setLeftIndent( style->paragLayout().margins[QStyleSheetItem::MarginLeft] );
-    paragDia->setFirstLineIndent( style->paragLayout().margins[QStyleSheetItem::MarginFirstLine] );
-    paragDia->setRightIndent( style->paragLayout().margins[QStyleSheetItem::MarginRight] );
-    paragDia->show();
-}
-
-void KWStyleEditor::changeAlign() {
-    if ( paragDia ) {
-        paragDia->close();
-        delete paragDia;
-        paragDia = 0;
-    }
-    paragDia = new KWParagDia( this, "", KWParagDia::PD_ALIGN, doc );
-    paragDia->setCaption( i18n( "Paragraph Alignment" ) );
-    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
-    paragDia->setAlign( style->paragLayout().alignment );
-    paragDia->show();
-}
-
-void KWStyleEditor::changeBorders() {
-    if ( paragDia ) {
-        paragDia->close();
-        delete paragDia;
-        paragDia = 0;
-    }
-    paragDia = new KWParagDia( this, "", KWParagDia::PD_BORDERS, doc );
-    paragDia->setCaption( i18n( "Paragraph Borders" ) );
-    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
-    // ## use display() instead
-    paragDia->setLeftBorder( style->paragLayout().leftBorder );
-    paragDia->setRightBorder( style->paragLayout().rightBorder );
-    paragDia->setTopBorder( style->paragLayout().topBorder );
-    paragDia->setBottomBorder( style->paragLayout().bottomBorder);
-    paragDia->setAfterInitBorder(true);
-    paragDia->show();
-}
-
-void KWStyleEditor::changeNumbering() {
-    if ( paragDia ) {
-        paragDia->close();
-        delete paragDia;
-        paragDia = 0;
-    }
-    paragDia = new KWParagDia( this, "", KWParagDia::PD_NUMBERING, doc );
-    paragDia->setCaption( i18n( "Numbering" ) );
-    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
-    if ( !style->paragLayout().counter )
-        style->paragLayout().counter = new Counter; // default one if none set
-    paragDia->setCounter( *style->paragLayout().counter );
-    paragDia->show();
-}
-
-void KWStyleEditor::changeTabulators() {
-    if ( paragDia ) {
-        paragDia->close();
-        delete paragDia;
-        paragDia = 0;
-    }
-    paragDia = new KWParagDia( this, "", KWParagDia::PD_TABS, doc );
-    paragDia->setCaption( i18n( "Tabulators" ) );
-    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
-    paragDia->setTabList( style->paragLayout().tabList() );
-    paragDia->show();
-}
-
-void KWStyleEditor::paragDiaOk() {
-   switch ( paragDia->getFlags() ) {
-   case KWParagDia::PD_SPACING: {
-     style->paragLayout().margins[QStyleSheetItem::MarginTop]=paragDia->spaceBeforeParag() ;
-     style->paragLayout().margins[QStyleSheetItem::MarginBottom]=paragDia->spaceAfterParag() ;
-     style->paragLayout().lineSpacing= paragDia->lineSpacing() ;
-     style->paragLayout().margins[QStyleSheetItem::MarginLeft]=paragDia->leftIndent() ;
-     style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]= paragDia->firstLineIndent();
-     style->paragLayout().margins[QStyleSheetItem::MarginRight]= paragDia->rightIndent();
-   } break;
-    case KWParagDia::PD_ALIGN:
-      style->paragLayout().alignment=paragDia->align() ;
-      break;
-   case KWParagDia::PD_BORDERS: {
-     style->paragLayout().leftBorder= paragDia->leftBorder() ;
-     style->paragLayout().rightBorder= paragDia->rightBorder() ;
-     style->paragLayout().topBorder= paragDia->topBorder() ;
-     style->paragLayout().bottomBorder= paragDia->bottomBorder() ;
-   } break;
-   case KWParagDia::PD_NUMBERING:
-     delete style->paragLayout().counter;
-     style->paragLayout().counter = new Counter( paragDia->counter() );
-     break;
-   case KWParagDia::PD_TABS:
-       style->paragLayout().setTabList(paragDia->tabListTabulator());
-     break;
-   default: break;
-   }
-
-    preview->repaint( true );
 }
 
 bool KWStyleEditor::apply() {
@@ -601,3 +490,39 @@ void KWStyleParagTab::resizeEvent( QResizeEvent *e )
     QWidget::resizeEvent( e );
     if ( m_widget ) m_widget->resize( size() );
 }
+
+KWStyleFontTab::KWStyleFontTab( QWidget * parent )
+    : KWStyleManagerTab( parent )
+{
+    m_chooser = new KWFontChooser( this );
+}
+
+void KWStyleFontTab::update()
+{
+    bool subScript = m_style->format().vAlign() == QTextFormat::AlignSubScript;
+    bool superScript = m_style->format().vAlign() == QTextFormat::AlignSuperScript;
+    m_chooser->setFont( m_style->format().font(), subScript, superScript );
+}
+
+void KWStyleFontTab::save()
+{
+    m_style->format().setFont( m_chooser->getNewFont() );
+    if ( m_chooser->getSubScript() )
+        m_style->format().setVAlign( QTextFormat::AlignSubScript );
+    else if ( m_chooser->getSuperScript() )
+        m_style->format().setVAlign( QTextFormat::AlignSuperScript );
+    else
+        m_style->format().setVAlign( QTextFormat::AlignNormal );
+}
+
+QString KWStyleFontTab::tabName()
+{
+    return i18n("Font");
+}
+
+void KWStyleFontTab::resizeEvent( QResizeEvent *e )
+{
+    QWidget::resizeEvent( e );
+    if ( m_chooser ) m_chooser->resize( size() );
+}
+
