@@ -2577,7 +2577,14 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
+    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
+    }
+
     contentWriter.endElement(); // office:automatic-styles
+
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
