@@ -1403,6 +1403,31 @@ static bool kspreadfunc_isnum( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_istime( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISTIME", true ) )
+    return false;
+
+  bool logic = KSUtil::checkType( context, args[0], KSValue::TimeType, true );
+  context.setValue( new KSValue(logic));
+  return true;
+}
+
+static bool kspreadfunc_isdate( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISDATE", true ) )
+    return false;
+
+  bool logic = KSUtil::checkType( context, args[0], KSValue::DateType, true );
+  context.setValue( new KSValue(logic));
+  return true;
+}
+
+
 static bool kspreadfunc_pow( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -3826,6 +3851,63 @@ static bool kspreadfunc_count( KSContext& context )
 }
 
 
+static bool kspreadfunc_decsex( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "DECSEX",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  double inter;
+  double val=args[0]->doubleValue();
+  double hours,minutes,second;
+  if(val>0)
+    inter=1;
+  else
+    inter=-1;
+  hours=inter*(int)(fabs(val));
+  minutes=(int)(60*val-60*(int)(val));
+  second=(int)(3600*val-3600*(int)(val)-60*(int)(60*val-60*(int)(val)));
+  QTime _time(hours,minutes,second);
+  context.setValue( new KSValue(_time));
+
+  return true;
+}
+
+static bool kspreadfunc_sexdec( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  double result;
+  if ( !KSUtil::checkArgumentsCount( context,3, "SEXDEC",true ) )
+    {
+      if ( !KSUtil::checkArgumentsCount( context,1, "SEXDEC",true ) )
+	return false;
+      if ( !KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
+	return false; 
+      
+      result=args[0]->timeValue().hour()+(double)args[0]->timeValue().minute()/60.0+(double)args[0]->timeValue().second()/3600.0;
+      
+      context.setValue( new KSValue(result));
+    }
+  else
+    {
+      if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+	return false;
+      if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+	return false;
+      if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+	return false;
+      result=args[0]->intValue()+(double)args[1]->intValue()/60.0+(double)args[2]->intValue()/3600.0;
+      
+      context.setValue( new KSValue(result));
+    }
+
+  return true;
+}
+
+
+
 static bool kspreadfunc_cell( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -4066,9 +4148,10 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "SQRTn", new KSValue( new KSBuiltinFunction( module, "SQRTn", kspreadfunc_sqrtn ) ) );
   module->addObject( "count", new KSValue( new KSBuiltinFunction( module, "count", kspreadfunc_count ) ) );
   module->addObject( "CUR", new KSValue( new KSBuiltinFunction( module, "CUR", kspreadfunc_cur ) ) );
-
-
-
+  module->addObject( "DECSEX", new KSValue( new KSBuiltinFunction( module, "DECSEX", kspreadfunc_decsex) ) );
+  module->addObject( "SEXDEC", new KSValue( new KSBuiltinFunction( module, "SEXDEC", kspreadfunc_sexdec) ) );
+  module->addObject( "ISTIME", new KSValue( new KSBuiltinFunction( module, "ISTIME", kspreadfunc_istime) ) );
+  module->addObject( "ISDATE", new KSValue( new KSBuiltinFunction( module, "ISDATE", kspreadfunc_isdate) ) );
   return module;
 }
 

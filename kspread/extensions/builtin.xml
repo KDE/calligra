@@ -481,6 +481,44 @@
     </Function>
 
     <Function>
+      <Name>DECSEX</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+        <Text>The DECSEX() function converts a double value to time value.</Text>
+        <Syntax>DECSEX( double )</Syntax>
+        <Example>DECSEX(1.6668) returns 1:40 </Example>
+        <Example>DECSEX(7.8) returns 7:47</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SEXDEC</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Hour</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Minute</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The SEXDEC() function returns decimal value. You can also give a time value</Text>
+        <Syntax>SEXDEC( time value ) or SEXDEC(hour,minute,second)</Syntax>
+        <Example>SEXDEC(1;5;7) returns 1.0852778 </Example>
+        <Example>DECSEX("8:05") returns 8.08333333</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>CARY</Name>
       <Type>Double</Type>
       <Parameter>
@@ -498,6 +536,8 @@
         <Example>CARY(12;0) returns 0</Example>
       </Help>
     </Function>
+
+
 
   </Group>
   <Group>
@@ -1904,6 +1944,38 @@
 	<Example>ISNUM(hello) returns False</Example>
       </Help>
     </Function>
+
+    <Function>
+      <Name>ISTIME</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISTIME() function returns True if the parameter is a time value otherwise it returns False</Text>
+	<Syntax>ISTIME( x )</Syntax>
+	<Example>ISTIME("12:05") returns True</Example>
+	<Example>ISTIME(hello) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISDATE</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISDATE() function returns True if the parameter is a date value otherwise it returns False</Text>
+	<Syntax>ISDATE( x )</Syntax>
+	<Example>ISDATE("2000-2-2") returns True</Example>
+	<Example>ISDATE(hello) returns False</Example>
+      </Help>
+    </Function>
+
+
 
     <Function>
       <Name>ISTEXT</Name>

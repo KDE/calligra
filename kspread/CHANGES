@@ -1147,3 +1147,8 @@ used "cell layout" dialogbox -> misc -> "don't print text"
 2001-01-03-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now you can create "Sort list" for autofill
+
+2001-01-08-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Add new functions : ISDATE ISTIME DECSEX (convert decimal to time value)
+SEXDEC( converts time value to decimal)
