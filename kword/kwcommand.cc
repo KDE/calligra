@@ -136,7 +136,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
         //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
     textFs->zoom( false );
-
+    textFs->renumberFootNotes();
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();
     doc->processImageRequests();
@@ -199,6 +199,10 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
 
     doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
 
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(lastParag->document());
+    KWTextFrameSet * textFs = textdoc->textFrameSet();
+
+    textFs->renumberFootNotes();
     if ( m_idx == 0 )
         firstParag->setParagLayout( m_oldParagLayout );
     return c;
