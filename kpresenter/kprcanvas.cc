@@ -731,7 +731,12 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         {
                             drawRubber = true;
                             rubber = QRect( e->x(), e->y(), 0, 0 );
+                            tmpHelpLinePosX=-1;
+                            tmpHelpLinePosY=-1;
+                            tmpHelpPointPos=KoPoint( -1, -1 );
+
                         }
+
 
                     }
 
