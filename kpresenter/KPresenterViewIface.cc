@@ -454,3 +454,23 @@ void KPresenterViewIface::insertLink()
 {
     view->insertLink();
 }
+
+void KPresenterViewIface::editCustomVars()
+{
+    view->editCustomVars();
+}
+
+void KPresenterViewIface::insertVariable()
+{
+    view->insertVariable();
+}
+
+void KPresenterViewIface::insertCustomVariable()
+{
+    view->insertCustomVariable();
+}
+
+void KPresenterViewIface::insertNewCustomVariable()
+{
+    view->insertNewCustomVariable();
+}

@@ -1413,6 +1413,13 @@ void Page::deSelectAllObj()
         if ( kpobject->isSelected() ) deSelectObj( kpobject );
     }
 
+    //desactivate kptextview when we switch of page
+    if(m_currentTextObjectView)
+    {
+        m_currentTextObjectView->terminate();
+        delete m_currentTextObjectView;
+        m_currentTextObjectView=0L;
+    }
     mouseSelectedObject = false;
     emit objectSelectedChanged();
 }
@@ -3767,6 +3774,7 @@ void Page::exitEditMode()
             }
             // Title of slide may have changed
             emit updateSideBarItem( currPgNum()-1 );
+            emit objectSelectedChanged();
 
         } else if ( kpobject->getType() == OT_PART ) {
             kpobject->deactivate();

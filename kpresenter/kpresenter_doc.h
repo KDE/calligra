@@ -304,8 +304,6 @@ public:
     void groupObjects();
     void ungroupObjects();
 
-    //KTextEditFormatCollection *formatCollection() const { return fCollection; }
-
     QStringList manualTitleList;
 
     void initConfig();

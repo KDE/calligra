@@ -140,6 +140,12 @@ k_dcop:
     // in both modes
     virtual double getCurrentFaktor();
 
+    virtual void insertCustomVariable();
+    virtual void insertNewCustomVariable();
+    virtual void insertVariable();
+
+    virtual void editCustomVars ();
+
 private:
     KPresenterView *view;
 
