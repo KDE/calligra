@@ -633,7 +633,7 @@ protected:
 class KPrPasteTextCommand : public Qt3::QTextCommand
 {
 public:
-    KPrPasteTextCommand( QTextDocument *d, int parag, int idx,
+    KPrPasteTextCommand( KoTextDocument *d, int parag, int idx,
                     const QCString & data );
     ~KPrPasteTextCommand() {}
     Qt3::QTextCursor *execute( Qt3::QTextCursor *c );

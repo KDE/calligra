@@ -830,7 +830,7 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
     if ( pgnum == -1 )
         pgnum = doc->getPageNums();
 
-    QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
+    QPtrListIterator<Qt3::QTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         KPrPgNumVariable * var = dynamic_cast<KPrPgNumVariable *>( cit.current() );
@@ -975,8 +975,8 @@ KCommand * KPTextObject::pasteKPresenter( QTextCursor * cursor, const QCString &
 
     //kdDebug(32001) << "KWTextFrameSet::pasteKWord" << endl;
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste Text") );
-    if ( removeSelected && textDocument()->hasSelection( QTextDocument::Standard ) )
-        macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, QTextDocument::Standard ) );
+    if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
+        macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
     m_textobj->emitHideCursor();
     m_textobj->setLastFormattedParag( cursor->parag()->prev() ?
                            cursor->parag()->prev() : cursor->parag() );
@@ -1058,7 +1058,7 @@ void KPTextView::terminate()
 
 void KPTextView::cut()
 {
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         copy();
         textObject()->removeSelectedText( cursor() );
     }
@@ -1066,7 +1066,7 @@ void KPTextView::cut()
 
 void KPTextView::copy()
 {
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         KPrTextDrag *kd = newDrag( 0L );
         QApplication::clipboard()->setData( kd );
     }
@@ -1220,9 +1220,9 @@ void KPTextView::keyReleaseEvent( QKeyEvent *e )
 
 void KPTextView::clearSelection()
 {
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
     {
-        textDocument()->removeSelection(QTextDocument::Standard );
+        textDocument()->removeSelection(KoTextDocument::Standard );
     }
 }
 
@@ -1348,8 +1348,8 @@ void KPTextView::insertVariable( KoVariable *var )
 
 KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
 {
-    QTextCursor c1 = textDocument()->selectionStartCursor( QTextDocument::Standard );
-    QTextCursor c2 = textDocument()->selectionEndCursor( QTextDocument::Standard );
+    QTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+    QTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
 
     QString text;
 
@@ -1429,11 +1429,11 @@ void KPTextView::dropEvent( QDropEvent * e )
         if ( ( e->source() == m_page ) &&
              e->action() == QDropEvent::Move ) {
             //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
-            if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+            if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
             {
                 // Dropping into the selection itself ?
-                QTextCursor startSel = textDocument()->selectionStartCursor( QTextDocument::Standard );
-                QTextCursor endSel = textDocument()->selectionEndCursor( QTextDocument::Standard );
+                QTextCursor startSel = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+                QTextCursor endSel = textDocument()->selectionEndCursor( KoTextDocument::Standard );
                 bool inSelection = false;
                 if ( startSel.parag() == endSel.parag() )
                     inSelection = ( dropCursor.parag() == startSel.parag() )
@@ -1460,7 +1460,7 @@ void KPTextView::dropEvent( QDropEvent * e )
                 if ( inSelection )
                 {
                     delete macroCmd;
-                    textDocument()->removeSelection( QTextDocument::Standard );
+                    textDocument()->removeSelection( KoTextDocument::Standard );
                     textObject()->selectionChangedNotify();
                     hideCursor();
                     *cursor() = dropCursor;
@@ -1487,7 +1487,7 @@ void KPTextView::dropEvent( QDropEvent * e )
                     }
                     kdDebug(32001) << "dropCursor: parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
                 }
-                macroCmd->addCommand(textObject()->removeSelectedTextCommand( cursor(), QTextDocument::Standard ));
+                macroCmd->addCommand(textObject()->removeSelectedTextCommand( cursor(), KoTextDocument::Standard ));
             }
             hideCursor();
             *cursor() = dropCursor;
@@ -1496,7 +1496,7 @@ void KPTextView::dropEvent( QDropEvent * e )
 
         } else
         {   // drop coming from outside -> forget about current selection
-            textDocument()->removeSelection( QTextDocument::Standard );
+            textDocument()->removeSelection( KoTextDocument::Standard );
             textObject()->selectionChangedNotify();
         }
 
@@ -1546,7 +1546,7 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
     KoTextFormat *lastFormat = 0;
     QString tmpText;
     for ( int i = from; i <= to; ++i ) {
-        QTextStringChar &c = parag->string()->at(i);
+        KoTextStringChar &c = parag->string()->at(i);
         if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
             if ( lastFormat )
                 paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));

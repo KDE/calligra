@@ -1569,7 +1569,7 @@ void ResizeCmd::unexecute( bool _repaint )
 }
 
 
-KPrPasteTextCommand::KPrPasteTextCommand( QTextDocument *d, int parag, int idx,
+KPrPasteTextCommand::KPrPasteTextCommand( KoTextDocument *d, int parag, int idx,
                                 const QCString & data )
     : QTextCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
 {
@@ -1685,7 +1685,7 @@ QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
     }
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
-    doc->setSelectionStart( QTextDocument::Temp, &cursor );
+    doc->setSelectionStart( KoTextDocument::Temp, &cursor );
 
     Qt3::QTextParag *lastParag = doc->paragAt( m_lastParag );
     if ( !lastParag ) {
@@ -1694,10 +1694,10 @@ QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
     }
     cursor.setParag( lastParag );
     cursor.setIndex( m_lastIndex );
-    doc->setSelectionEnd( QTextDocument::Temp, &cursor );
+    doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
     // Delete all custom items
 
-    doc->removeSelectedText( QTextDocument::Temp, c /* sets c to the correct position */ );
+    doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
     if ( m_idx == 0 )
         static_cast<KoTextParag *>( firstParag )->setParagLayout( m_oldParagLayout );
     return c;

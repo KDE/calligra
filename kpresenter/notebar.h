@@ -45,7 +45,7 @@ public:
 
 private slots:
     void slotTextChanged();
-    void slotSelectionChanged(); 
+    void slotSelectionChanged();
     void slotCopyAvailable( bool );
     void slotUndoAvailable( bool );
     void slotRedoAvailable( bool );
@@ -53,7 +53,7 @@ private slots:
 private:
     QString getAllNoteTextForPrinting();
 
-    QTextEdit *textEdit;
+    ::QTextEdit *textEdit;
 
     KPresenterDoc *doc;
     KPresenterView *view;
