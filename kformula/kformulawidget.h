@@ -102,7 +102,7 @@ protected:
     /**
      * Our cursor.
      */
-    KFormula::FormulaCursor* getCursor();
+    FormulaCursor* getCursor();
 
 private:
 
