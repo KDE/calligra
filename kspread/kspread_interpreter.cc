@@ -2015,41 +2015,29 @@ static double taylor_helper (double* pPolynom, uint nMax, double x)
   return nVal;
 }
 
-static bool kspreadfunc_gauss(KSContext& context)
-{
-  //returns the integral values of the standard normal cumulative distribution
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "GAUSS", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  double x = args[0]->doubleValue();
-
+static double gauss_helper(double x) {
   double t0[] =
-        { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
-         -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
-          0.00000066596935163, -0.00000004122667415,  0.00000000227352982,
-          0.00000000011301172,  0.00000000000511243, -0.00000000000021218 };
+    { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
+     -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
+      0.00000066596935163, -0.00000004122667415,  0.00000000227352982,
+      0.00000000011301172,  0.00000000000511243, -0.00000000000021218 };
   double t2[] =
-        { 0.47724986805182079,  0.05399096651318805, -0.05399096651318805,
-          0.02699548325659403, -0.00449924720943234, -0.00224962360471617,
-          0.00134977416282970, -0.00011783742691370, -0.00011515930357476,
-          0.00003704737285544,  0.00000282690796889, -0.00000354513195524,
-          0.00000037669563126,  0.00000019202407921, -0.00000005226908590,
-         -0.00000000491799345,  0.00000000366377919, -0.00000000015981997,
-         -0.00000000017381238,  0.00000000002624031,  0.00000000000560919,
-         -0.00000000000172127, -0.00000000000008634,  0.00000000000007894 };
+    { 0.47724986805182079,  0.05399096651318805, -0.05399096651318805,
+      0.02699548325659403, -0.00449924720943234, -0.00224962360471617,
+      0.00134977416282970, -0.00011783742691370, -0.00011515930357476,
+      0.00003704737285544,  0.00000282690796889, -0.00000354513195524,
+      0.00000037669563126,  0.00000019202407921, -0.00000005226908590,
+     -0.00000000491799345,  0.00000000366377919, -0.00000000015981997,
+     -0.00000000017381238,  0.00000000002624031,  0.00000000000560919,
+     -0.00000000000172127, -0.00000000000008634,  0.00000000000007894 };
   double t4[] =
-        { 0.49996832875816688,  0.00013383022576489, -0.00026766045152977,
-          0.00033457556441221, -0.00028996548915725,  0.00018178605666397,
-         -0.00008252863922168,  0.00002551802519049, -0.00000391665839292,
-         -0.00000074018205222,  0.00000064422023359, -0.00000017370155340,
-          0.00000000909595465,  0.00000000944943118, -0.00000000329957075,
-          0.00000000029492075,  0.00000000011874477, -0.00000000004420396,
-          0.00000000000361422,  0.00000000000143638, -0.00000000000045848 };
+    { 0.49996832875816688,  0.00013383022576489, -0.00026766045152977,
+      0.00033457556441221, -0.00028996548915725,  0.00018178605666397,
+     -0.00008252863922168,  0.00002551802519049, -0.00000391665839292,
+     -0.00000074018205222,  0.00000064422023359, -0.00000017370155340,
+      0.00000000909595465,  0.00000000944943118, -0.00000000329957075,
+      0.00000000029492075,  0.00000000011874477, -0.00000000004420396,
+      0.00000000000361422,  0.00000000000143638, -0.00000000000045848 };
   double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
 
   double xAbs = fabs(x);
@@ -2064,9 +2052,27 @@ static bool kspreadfunc_gauss(KSContext& context)
   else
     nVal = 0.5 + phi_helper(xAbs) * taylor_helper(asympt, 4, 1.0 / (xAbs * xAbs)) / xAbs;
   if (x < 0.0)
-    context.setValue( new KSValue(-nVal) );
+    return -nVal;
   else
-    context.setValue( new KSValue(nVal) );
+    return nVal;
+}
+
+static bool kspreadfunc_gauss(KSContext& context)
+{
+  //returns the integral values of the standard normal cumulative distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "GAUSS", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+
+  double tmp = gauss_helper(x);
+
+  context.setValue( new KSValue(tmp) );
  
   return true;
 }
@@ -2325,7 +2331,7 @@ static bool kspreadfunc_betadist( KSContext& context ) {
 }
 
 static bool kspreadfunc_fisher( KSContext& context ) {
-  //Returns the Fisher transformation for x
+  //returns the Fisher transformation for x
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "FISHER", true ) )
@@ -2341,7 +2347,7 @@ static bool kspreadfunc_fisher( KSContext& context ) {
 }
 
 static bool kspreadfunc_fisherinv( KSContext& context ) {
-  //Returns the inverse of the Fisher transformation for x
+  //returns the inverse of the Fisher transformation for x
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "FISHERINV", true ) )
@@ -2353,6 +2359,37 @@ static bool kspreadfunc_fisherinv( KSContext& context ) {
   double fVal = args[0]->doubleValue();
 
   context.setValue( new KSValue((exp(2.0*fVal)-1.0)/(exp(2.0*fVal)+1.0)));
+  return true;
+}
+
+static bool kspreadfunc_normdist(KSContext& context ) {
+  //returns the normal cumulative distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  
+  if ( !KSUtil::checkArgumentsCount( context, 4, "NORMDIST", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double mue = args[1]->doubleValue();
+  double sigma = args[2]->doubleValue();
+  double k = args[3]->doubleValue();
+
+  if (sigma <= 0.0)
+    return false;
+  else if (k == 0)	// density
+    context.setValue( new KSValue(phi_helper((x-mue)/sigma)/sigma));
+  else			// distribution
+    context.setValue( new KSValue(0.5 + gauss_helper((x-mue)/sigma)));
+
   return true;
 }
 
@@ -2370,10 +2407,10 @@ static bool kspreadfunc_fv( KSContext& context )
     return false;
   if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
     return false;
+
   double present = args[0]->doubleValue();
   double interest = args[1]->doubleValue();
   double periods = args[2]->doubleValue();
-
 
   context.setValue( new KSValue( present * pow(1+interest, periods)));
   return true;
@@ -4853,6 +4890,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "BETADIST", new KSValue( new KSBuiltinFunction( module, "BETADIST", kspreadfunc_betadist) ) );
   module->addObject( "FISHER", new KSValue( new KSBuiltinFunction( module, "FISHER", kspreadfunc_fisher) ) );
   module->addObject( "FISHERINV", new KSValue( new KSBuiltinFunction( module, "FISHERINV", kspreadfunc_fisherinv) ) );
+  module->addObject( "NORMDIST", new KSValue( new KSBuiltinFunction( module, "NORMDIST", kspreadfunc_normdist) ) );
 
   return module;
 }

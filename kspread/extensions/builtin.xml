@@ -2587,6 +2587,39 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>NORMDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>linear middle of the distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>standard deviation of the distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>0 = density, 1 = distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the normal cumulative distribution. 
+          Number is the value of the distribution based on which the normal distribution is to be calculated.
+          MV is the linear middle of the distribution.
+          STD is the standard deviation of the distribution.
+          K = 0 calculates the density function; K = 1 calculates the distribution.
+        </Text>
+        <Syntax>NORMDIST(Number;MV;STD;K)</Syntax>
+        <Example>NORMDIST(0.859;0.6;0.258;0) equals 0.934236</Example>
+        <Example>NORMDIST(0.859;0.6;0.258;1) equals 0.842281</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>
