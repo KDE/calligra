@@ -433,6 +433,12 @@ void KivioView::setupActions()
   QWidget* lineWidthWidget = new QWidget(this, "kde toolbar widget");
   QLabel* lineWidthLbl = new QLabel(lineWidthWidget, "kde toolbar widget");
   lineWidthLbl->setPixmap(kapp->iconLoader()->loadIcon("linewidth", KIcon::Toolbar, 22));
+
+  // Hide if readonly!
+  if(!m_pDoc->isReadWrite()) {
+    lineWidthWidget->hide();
+  }
+
   m_setLineWidth = new KoUnitDoubleSpinBox(lineWidthWidget, 0.0, 1000.0, 0.1, 1.0, m_pDoc->units(), 2, "kde toolbar widget");
   QHBoxLayout* lwl = new QHBoxLayout(lineWidthWidget);
   lwl->addWidget(lineWidthLbl);
