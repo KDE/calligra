@@ -60,7 +60,9 @@ class ClassExportFilterBase
                           const QString  &from, const QString  &to, const QString& );
         QString& escapeText(QString& str) const;
     public: //virtual
+        virtual bool isXML(void) {return false;}
         virtual QString getDocType(void) const = 0;
+        virtual QString getHtmlOpeningTagExtraAttributes(void) const = 0;
     protected:
         QDomDocument qDomDocumentIn;
 };
@@ -754,17 +756,18 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, ClassE
 }
 
 // ClassExportFilterBase
-         const QString strAmp ("&amp;");
-        const QString strLt  ("&lt;");
-        const QString strGt  ("&gt;");
-        //const QString strApos("&apos;");  //Only predefined in XHTML
-        const QString strQuot("&quot;");
 
-        const QRegExp regExpAmp ("&");
-        const QRegExp regExpLt  ("<");
-        const QRegExp regExpGt  (">");
-        //const QRegExp regExpApos("'");    //Only predefined in XHTML
-        const QRegExp regExpQuot("\"");
+const QString strAmp ("&amp;");
+const QString strLt  ("&lt;");
+const QString strGt  ("&gt;");
+//const QString strApos("&apos;");  //Only predefined in XHTML
+const QString strQuot("&quot;");
+
+const QRegExp regExpAmp ("&");
+const QRegExp regExpLt  ("<");
+const QRegExp regExpGt  (">");
+//const QRegExp regExpApos("'");    //Only predefined in XHTML
+const QRegExp regExpQuot("\"");
 
 
 QString& ClassExportFilterBase::escapeText(QString& str) const
@@ -816,17 +819,21 @@ const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QStri
     streamOut.setEncoding( QTextStream::UnicodeUTF8 ); // TODO: possibility of choosing other encodings
 
     // Make the file header
-    // TODO: For XHTML, write the XML declaration!
+
+    if (isXML())
+    {   //Write out the XML declaration
+        streamOut << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+    }
     // write <!DOCTYPE
     streamOut << getDocType() << endl;
 
-    // No "lang" attribute for <HTML>, as we do not know in which language the document is!
-    streamOut << "<html>" << endl;  //TODO: XHTML has special attribute
+    // No "lang" or "xml:lang" attribute for <html>, as we do not know in which language the document is!
+    streamOut << "<html"<< getHtmlOpeningTagExtraAttributes() << ">" << endl;
 
     streamOut << "<head>" << endl;
 
     // Declare that we are using UTF-8
-    streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"; //TODO: in XHTML empty element!
+    streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\""<< (isXML()?" /":"") << ">" << endl;
 
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
     QString strVersion("$Revision$");
@@ -834,7 +841,7 @@ const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QStri
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
     streamOut << "<meta name=\"Generator\" content=\"KWord HTML Export Filter Version ="
               << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double escape character (one for C++, one for QRegExp!)
-              << "\">" << endl; //TODO: in XHTML empty element!
+              << "\""<< (isXML()?" /":"") << ">" << endl;
 
     // Put the filename as HTML title // TODO: take the real title from documentinfo.xml (if any!)
     QString strTitle(filenameOut);
@@ -871,6 +878,7 @@ class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
         virtual ~ClassExportFilterHtmlTransitional(void) {}
     public: //virtual
         virtual QString getDocType(void) const;
+        virtual QString getHtmlOpeningTagExtraAttributes(void) const { return QString::null; }
 };
 
 QString ClassExportFilterHtmlTransitional::getDocType(void) const
@@ -888,7 +896,9 @@ class ClassExportFilterXHtmlTransitional : public ClassExportFilterBase
         ClassExportFilterXHtmlTransitional(void) {}
         virtual ~ClassExportFilterXHtmlTransitional(void) {}
     public: //virtual
+        virtual bool isXML(void) {return true;}
         virtual QString getDocType(void) const;
+        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
 };
 
 QString ClassExportFilterXHtmlTransitional::getDocType(void) const
@@ -898,6 +908,12 @@ QString ClassExportFilterXHtmlTransitional::getDocType(void) const
     return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">";
 }
 
+QString ClassExportFilterXHtmlTransitional::getHtmlOpeningTagExtraAttributes(void) const
+{
+    // XHTML must return an extra attribute defining its namespace (in the <html> opening tag)
+    return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
+
+}
 // HTMLExport
 HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
