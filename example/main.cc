@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 static const char* description=I18N_NOOP("Example KOffice Program");
-static const char* version="01";
+static const char* version="0.1";
 
 static const KCmdLineOptions options[]=
 {
