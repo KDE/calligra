@@ -1525,9 +1525,8 @@ QDomDocument KWDocument::saveXML()
     for ( KWStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
         p->save( styles );
 
-#if 0
-    // TODO !
-    out << otag << "<PIXMAPS>" << endl;
+    QDomElement pixmaps = doc.createElement( "PIXMAPS" );
+    kwdoc.appendChild( pixmaps );
 
     QDictIterator<KWImage> it = imageCollection.iterator();
     QStringList keys, images;
@@ -1544,14 +1543,14 @@ QDomDocument KWDocument::saveXML()
         if ( !isStoredExtern() )
           pictureName.prepend( url().url() + "/" );
 
-        out << indent << "<KEY key=\"" << it.current()->getFilename()
-            << "\" name=\"" << pictureName
-            << "\"/>" << endl;
+        QDomElement key = doc.createElement( "KEY" );
+        pixmaps.appendChild( key );
+        key.setAttribute( "key", it.current()->getFilename() );
+        key.setAttribute( "name", pictureName );
+
         keys.append( it.currentKey() );
         images.append( it.current()->getFilename() );
     }
-    out << etag << "</PIXMAPS>" << endl;
-#endif
 
     // Not needed anymore
 #if 0

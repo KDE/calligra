@@ -806,6 +806,8 @@ void KWPictureFrameSet::setSize( QSize _imgSize )
 void KWPictureFrameSet::save( QDomElement & parentElem )
 {
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
+    parentElem.appendChild( framesetElem );
+
     framesetElem.setAttribute( "frameType", static_cast<int>( getFrameType() ) );
     framesetElem.setAttribute( "frameInfo", static_cast<int>( frameInfo ) );
 
