@@ -31,6 +31,7 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kmdcodec.h>
 #include <kgenericfactory.h>
 #include <koDocumentInfo.h>
 #include <koFilterChain.h>
@@ -332,6 +333,19 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
   QDomElement autoStyles = doc.createElement( "office:automatic-styles" );
   QDomElement body       = doc.createElement( "office:body" );
 
+  if ( ksdoc->map()->isProtected() )
+  {
+    body.setAttribute( "table:structure-protected", "true" );
+    
+    QCString passwd;
+    ksdoc->map()->password( passwd );
+    if ( passwd.length() > 0 )
+    {
+      QCString str( KCodecs::base64Encode( passwd ) );
+      body.setAttribute( "table:protection-key", QString( str.data() ) );        
+    }
+  }
+
   QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
 
   for( it.toFirst(); it.current(); ++it )
@@ -345,6 +359,20 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
 
     QDomElement tabElem = doc.createElement( "table:table" );
     tabElem.setAttribute( "table:style-name", m_styles.sheetStyle( ts ) );
+    
+    if ( sheet->isProtected() )
+    {
+      tabElem.setAttribute( "table:protected", "true" );
+
+      QCString passwd;
+      sheet->password( passwd );
+      if ( passwd.length() > 0 )
+      {
+        QCString str( KCodecs::base64Encode( passwd ) );
+        tabElem.setAttribute( "table:protection-key", QString( str.data() ) );        
+      }
+    }
+
     QString name( sheet->tableName() );
 
     int n = name.find( ' ' );

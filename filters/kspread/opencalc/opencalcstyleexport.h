@@ -99,6 +99,9 @@ class CellStyle
   QPen        right;
   QPen        top;
   QPen        bottom;
+  bool        hideAll;
+  bool        hideFormula;
+  bool        notProtected;
 
   KSpreadFormat::Align  alignX;
   KSpreadFormat::AlignY alignY;

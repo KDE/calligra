@@ -262,11 +262,22 @@ void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles
       prop.setAttribute( "style:rotation-angle", QString::number( t->angle ) );
 
     if ( !t->print )
-    {
-      prop.setAttribute( "style:cell-protect", "protected" );
       prop.setAttribute( "style:print-content", "false" );
-    }
 
+    if ( t->hideAll )
+      prop.setAttribute( "style:cell-protect", "hidden-and-protected" );
+    else
+    if ( t->notProtected && !t->hideFormula )
+      prop.setAttribute( "style:cell-protect", "none" );
+    else
+    if ( t->notProtected && t->hideFormula )
+      prop.setAttribute( "style:cell-protect", "formula-hidden" );
+    else if ( t->hideFormula )
+      prop.setAttribute( "style:cell-protect", "protected formula-hidden" );
+    else if ( !t->notProtected )
+      prop.setAttribute( "style:cell-protect", "protected" );
+      
+      
     if ( ( t->left == t->right ) && ( t->left == t->top ) && ( t->left == t->bottom ) )
     {
       if ( ( t->left.width() != 0 ) && ( t->left.style() != Qt::NoPen ) )
@@ -380,6 +391,9 @@ CellStyle::CellStyle()
     right( Qt::black, 0, Qt::NoPen ),
     top  ( Qt::black, 0, Qt::NoPen ),
     bottom( Qt::black, 0, Qt::NoPen ),
+    hideAll( false ),
+    hideFormula( false ),
+    notProtected ( false ),
     alignX( KSpreadFormat::Undefined ),
     alignY( KSpreadFormat::Middle )
 {
@@ -387,21 +401,24 @@ CellStyle::CellStyle()
 
 void CellStyle::copyData( CellStyle const & ts )
 {
-  font        = ts.font;
-  numberStyle = ts.numberStyle;
-  color       = ts.color;
-  bgColor     = ts.bgColor;
-  indent      = ts.indent;
-  wrap        = ts.wrap;
-  vertical    = ts.vertical;
-  angle       = ts.angle;
-  print       = ts.print;
-  left        = ts.left;
-  right       = ts.right;
-  top         = ts.top;
-  bottom      = ts.bottom;
-  alignX      = ts.alignX;
-  alignY      = ts.alignY;
+  font          = ts.font;
+  numberStyle   = ts.numberStyle;
+  color         = ts.color;
+  bgColor       = ts.bgColor;
+  indent        = ts.indent;
+  wrap          = ts.wrap;
+  vertical      = ts.vertical;
+  angle         = ts.angle;
+  print         = ts.print;
+  left          = ts.left;
+  right         = ts.right;
+  top           = ts.top;
+  bottom        = ts.bottom;
+  hideAll       = ts.hideAll;
+  hideFormula   = ts.hideFormula;
+  notProtected  = ts.notProtected;
+  alignX        = ts.alignX;
+  alignY        = ts.alignY;
 }
 
 bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
@@ -413,7 +430,8 @@ bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
        && ( t1->vertical == t2.vertical ) && ( t1->angle == t2.angle )
        && ( t1->print == t2.print ) && ( t1->left == t2.left )
        && ( t1->right == t2.right ) && ( t1->top == t2.top )
-       && ( t1->bottom == t2.bottom )
+       && ( t1->bottom == t2.bottom ) && ( t1->hideAll == t2.hideAll )
+       && ( t1->hideFormula == t2.hideFormula ) && ( t1->notProtected == t2.notProtected )
       )
     return true;
 
@@ -474,6 +492,15 @@ void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
 
   if ( cell->hasProperty( KSpreadFormat::PBottomBorder ) || !cell->hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
     cs.bottom  = cell->bottomBorderPen( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PNotProtected ) || !cell->hasNoFallBackProperties( KSpreadFormat::PNotProtected ) )
+    cs.notProtected = cell->notProtected( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PHideAll ) || !cell->hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
+    cs.hideAll = cell->isHideAll( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PHideFormula ) || !cell->hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
+    cs.hideFormula = cell->isHideFormula( col, row );
 }
 
 bool NumberStyle::isEqual( NumberStyle const * const t1, NumberStyle const & t2 )
