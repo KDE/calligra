@@ -1,4 +1,4 @@
-INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(idldir) -I$(top_srcdir)/lib/kscript -I$(top_builddir)/lib/kscript
+INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(top_srcdir)/lib/kscript -I$(top_builddir)/lib/kscript
 LDFLAGS   = $(all_libraries) $(KDE_RPATH)
 LDADD = ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
 

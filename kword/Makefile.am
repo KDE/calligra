@@ -1,5 +1,5 @@
 
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la -lkspell $(LIB_KIMGIO)
 

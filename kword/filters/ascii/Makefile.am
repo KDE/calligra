@@ -1,6 +1,6 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
-	$(all_includes) $(MICO_INCLUDES) -I$(idldir)
+	$(all_includes) $(MICO_INCLUDES) 
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = $(LIB_KOFFICECORE)
 
