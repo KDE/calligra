@@ -2487,7 +2487,24 @@ void ExcelReader::handleColInfo( ColInfoRecord* record )
 {
   if( !record ) return;
   
-  // FIXME do something here !
+  if( !d->activeSheet ) return;
+  
+  unsigned firstColumn = record->firstColumn();
+  unsigned lastColumn = record->lastColumn();
+  unsigned xfIndex = record->xfIndex();
+  unsigned width = record->width();
+  bool hidden = record->hidden();
+  
+  for( unsigned i = firstColumn; i <= lastColumn; i++ )
+  {
+    Column* column = d->activeSheet->column( i, true );
+    if( column )
+    {
+      column->setWidth( width / 120 );
+      column->setFormat( convertFormat( xfIndex ) );
+      column->setVisible( !hidden );
+    }
+  }  
 }
 
 void ExcelReader::handleDate1904( Date1904Record* record )
