@@ -125,7 +125,7 @@ void KWFormat::decRef()
 { 
   --ref;
   QString key = doc->getFormatCollection()->generateKey(this);
-  debug("dec ref (%d): %s",ref,key.data());
+  //debug("dec ref (%d): %s",ref,key.data());
 
   if (ref <= 0 && doc) 
     doc->getFormatCollection()->removeFormat(this); 
@@ -137,5 +137,5 @@ void KWFormat::incRef()
 { 
   ++ref;
   QString key = doc->getFormatCollection()->generateKey(this);
-  debug("inc ref (%d): %s",ref,key.data());
+  //debug("inc ref (%d): %s",ref,key.data());
 }
