@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="84">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="85">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -294,6 +294,7 @@
   <Action name="view_footer"/>
   <Separator/>
   <Action name="edit_paste"/>
+  <ActionList name="picture_action"/>
 </Menu>
 <Menu name="textobject_popup">
   <Action name="edit_cut"/>

@@ -78,6 +78,9 @@ public:
     void setPageSoundFileName( const QString &_soundFileName )
     { soundFileName = _soundFileName; }
 
+    KoPicture picture()const { return backImage;}
+    KoPicture clipart()const { return backClipart;}
+
     BackType getBackType() const
     { return backType; }
     BackView getBackView() const

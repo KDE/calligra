@@ -409,6 +409,9 @@ public slots:
     void insertFile();
     void editCustomVariable();
     void importStyle();
+
+    void backgroundPicture();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -1016,6 +1019,9 @@ private:
 
     KAction *actionSaveClipart;
     KAction *actionSavePicture;
+
+    KAction *actionSaveBackgroundPicture;
+
 
     KAction *actionInsertFile;
 

@@ -3397,6 +3397,10 @@ void KPresenterView::setupActions()
                                     this, SLOT( importStyle() ),
                                     actionCollection(), "import_style" );
 
+    actionSaveBackgroundPicture= new KAction( i18n( "Save Background Picture..." ), 0,
+                                    this, SLOT(backgroundPicture() ),
+                                    actionCollection(), "save_bgpicture" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -4902,7 +4906,23 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-     static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
+    QPtrList<KAction> actionList= QPtrList<KAction>();
+    KActionSeparator *separator=new KActionSeparator();
+    switch( m_canvas->activePage()->getBackType())
+    {
+    case BT_COLOR:
+        break;
+    case BT_PICTURE:
+    case BT_CLIPART:
+        actionList.append(separator);
+        actionList.append(actionSaveBackgroundPicture);
+        break;
+    }
+    if ( actionList.count()>0)
+        plugActionList( "picture_action", actionList );
+    static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->exec(_point);
+    unplugActionList( "picture_action" );
+    delete separator;
 }
 
 void KPresenterView::openPopupMenuTextObject( const QPoint & _point )
@@ -7110,5 +7130,80 @@ void KPresenterView::importStyle()
     }
 }
 
+
+void KPresenterView::backgroundPicture()
+{
+    //todo
+    QStringList mimetypes;
+    QString oldFile;
+    KFileDialog *fd=0L;
+    KURL url;
+    switch( m_canvas->activePage()->getBackType())
+    {
+    case BT_COLOR:
+        break;
+    case BT_PICTURE:
+        mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
+        oldFile=m_canvas->activePage()->background()->picture().getKey().filename();
+
+        fd=new KFileDialog( oldFile, QString::null, 0, 0, TRUE );
+        fd->setMimeFilter( mimetypes );
+        fd->setCaption(i18n("Save Image"));
+        if ( fd->exec() == QDialog::Accepted )
+        {
+            url = fd->selectedURL();
+            if( url.isEmpty() )
+            {
+                KMessageBox::sorry( this,
+                                    i18n("File name is empty"),
+                                    i18n("Save Picture"));
+                delete fd;
+                return;
+            }
+
+            QFile file( url.path() );
+            if ( file.open( IO_ReadWrite ) ) {
+                m_canvas->activePage()->background()->picture().save( &file );
+                file.close();
+            } else {
+                KMessageBox::error(this,
+                                   i18n("Error during saving"),
+                                   i18n("Save Picture"));
+            }
+        }
+        break;
+    case BT_CLIPART:
+        oldFile=m_canvas->activePage()->background()->clipart().getKey().filename();
+
+        mimetypes = KoPictureFilePreview::clipartMimeTypes();
+        fd=new KFileDialog( oldFile, QString::null, 0, 0, TRUE );
+        fd->setMimeFilter( mimetypes );
+        fd->setCaption(i18n("Save Clipart"));
+        if ( fd->exec() == QDialog::Accepted )
+        {
+            url = fd->selectedURL();
+            if( url.isEmpty() )
+            {
+                KMessageBox::sorry( this,
+                                    i18n("File name is empty"),
+                                    i18n("Save Clipart"));
+                delete fd;
+                return;
+            }
+            QFile file( url.path() );
+            if ( file.open( IO_ReadWrite ) ) {
+                m_canvas->activePage()->background()->clipart().save( &file );
+                file.close();
+            } else {
+                KMessageBox::error(this,
+                                   i18n("Error during saving"),
+                                   i18n("Save Clipart"));
+            }
+        }
+        break;
+    }
+    delete fd;
+
+}
 
 #include <kpresenter_view.moc>
