@@ -50,8 +50,7 @@ General bugs
   + 68190: Empty document generates 2 printed pages (testcase)	      1 ----
   + 70073: printing with kspread gives big black areas		      1 ----
   + 72798: selective print comes up with "nothing to print"	      1 ----
-  + 77962: print range doesn't work into kspread		      1 ----
-  + 81253: Print from KSpread: artifacts in pdf and on paper	      1 ----
+  + 77962: print range doesn't work into kspread		      1 DONE
   + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 ----
   + 87367: Ugly postscript rendering of cell borders.		      1 ----
   + 88252: content larger than column are not print as PDF	      1 ----
