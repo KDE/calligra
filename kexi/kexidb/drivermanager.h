@@ -47,40 +47,23 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 		DriverManager();
 		virtual ~DriverManager();
 
-		/*! Tries to load db driver \a name.
-		 \return db driver, or 0 if error (then error message is also set) */
+		/*! Tries to load db driver with named name \a name.
+			The name is case insensitive.
+			\return db driver, or 0 if error (then error message is also set) */
 		Driver* driver(const QCString& name);
 
-		/*! returns list of available drivers names. That drivers can be loaded
-		 by first use of driver() method. */
+		/*! returns list of available drivers names. 
+			That drivers can be loaded by first use of driver() method. */
 		const QStringList driverNames();
 
-		/*! \return info. about driver (service info) */
+		/*! \return service information about driver's named with \a name.
+			The name is case insensitive. */
 		KService::Ptr serviceInfo(const QString &name);
 
-		//! \return a map structure of the services. Not necessary for everyday use.
+		/*! \return a map structure of the services. Not necessary for everyday use. */
 		const ServicesMap& services();
 
-//		/*! increments the refcount for the manager*/
-//		void incRefCount();
-//		/*! decrements the refcount for the manager
-//			if the refcount reaches a value less than 1 the manager is freed */
-//		void decRefCount();
-	protected:
-//		/*! Used by self() */
-//		DriverManager();
-
-//		void lookupDrivers();
-
-//		static DriverManager* s_self;
-
-//		ServicesMap m_services;
-//		QDict<Driver> m_drivers;
-//		ulong m_refCount;
-
 	private:
-//		class Private;
-//		Private *d;
 		DriverManagerInternal *d_int;
 };
 

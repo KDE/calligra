@@ -71,7 +71,8 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 
 		static KexiDB::DriverManagerInternal* s_self;
 
-		KexiDB::DriverManager::ServicesMap m_services;
+		KexiDB::DriverManager::ServicesMap m_services; //! services map
+		KexiDB::DriverManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
 		QDict<KexiDB::Driver> m_drivers;
 		ulong m_refCount;
 
@@ -115,8 +116,12 @@ void DriverManagerInternal::lookupDrivers()
 	for(; it != tlist.end(); ++it)
 	{
 		KService::Ptr ptr = (*it);
-		m_services.insert(ptr->property("X-Kexi-DriverName").toString(), ptr);
-		kdDebug() << "KexiDB::DriverManager::lookupDrivers(): registered driver: " << ptr->name() << "(" << ptr->library() << ")" << endl;
+		QString srv_name = ptr->property("X-Kexi-DriverName").toString();
+		if (!m_services_lcase.contains(srv_name.lower())) {
+			m_services.insert(srv_name, ptr);
+			m_services_lcase.insert(srv_name.lower(), ptr);
+			kdDebug() << "KexiDB::DriverManager::lookupDrivers(): registered driver: " << ptr->name() << "(" << ptr->library() << ")" << endl;
+		}
 	}
 
 	if (tlist.isEmpty())
@@ -130,17 +135,17 @@ Driver* DriverManagerInternal::driver(const QCString& name)
 	clearError();
 	kdDebug() << "DriverManager::driver(): loading " << name << endl;
 
-	Driver *drv = m_drivers.find(name);
+	Driver *drv = m_drivers.find(name.lower());
 	if (drv)
 		return drv; //cached
 
-	if (!m_services.contains(name)) {
+	if (!m_services_lcase.contains(name.lower())) {
 		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver '%1'.").arg(name) );
 		return 0;
 	}
 
 //	KLibLoader *libLoader = KLibLoader::self();
-	KService::Ptr ptr= *(m_services.find(name));
+	KService::Ptr ptr= *(m_services_lcase.find(name.lower()));
 
 	kdDebug() << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
 	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(ptr,
@@ -153,7 +158,7 @@ Driver* DriverManagerInternal::driver(const QCString& name)
 	kdDebug() << "KexiDBInterfaceManager::load(): loading succeed: " << name << endl;
 
 	drv->m_service = ptr; //store info
-	m_drivers.insert(name, drv); //cache it
+	m_drivers.insert(name.lower(), drv); //cache it
 	return drv;
 }
 
@@ -222,8 +227,8 @@ const QStringList DriverManager::driverNames()
 KService::Ptr DriverManager::serviceInfo(const QString &name)
 {
 	clearError();
-	if (d_int->m_services.contains(name)) {
-		return *d_int->m_services.find(name);
+	if (d_int->m_services_lcase.contains(name.lower())) {
+		return *d_int->m_services_lcase.find(name.lower());
 	} else {
 		setError(ERR_DRIVERMANAGER, i18n("No such driver service: '%1'.").arg(name) );
 		return 0;
