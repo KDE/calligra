@@ -311,7 +311,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
             coordinate=activeCell->getFrame(0)->right();
             bool found=false;
             for ( unsigned int i = 0; i < m_rows; i++) {
-                if(i!=row) {
+                if(i!=row && (i!=activeCell->m_rows+activeCell->m_row-1)) {
                     cell=getCell(i,activeCell->m_cols+activeCell->m_col-1);
                     if(cell && cell->m_col+cell->m_cols==activeCell->m_cols+activeCell->m_col) {
                         coordinate=cell->getFrame(0)->right();
@@ -448,7 +448,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             // find old coord.
             coordinate=activeCell->getFrame(0)->bottom();
             for ( unsigned int i = 0; i < m_cols; i++) {
-                if(i!=col) {
+                if(i!=col&& (i!=activeCell->m_col+activeCell->m_cols-1)) {
                     cell=getCell(activeCell->m_row+activeCell->m_rows-1,i);
                     if(cell->m_row+cell->m_rows==activeCell->m_row+activeCell->m_rows) {
                         coordinate=cell->getFrame(0)->bottom();
