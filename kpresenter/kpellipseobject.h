@@ -25,6 +25,7 @@
 
 class KPGradient;
 class QPainter;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPEllipseObject                                         */
@@ -38,6 +39,9 @@ public:
                      const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPEllipseObject() {}
+
+    virtual DCOPObject* dcopObject();
+
 
     KPEllipseObject &operator=( const KPEllipseObject & );
 

@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#include "KPFreehandObjectIface.h"
 #include <kpfreehandobject.h>
 #include <kpresenter_utils.h>
 #include <kozoomhandler.h>
@@ -57,6 +57,14 @@ KPFreehandObject &KPFreehandObject::operator=( const KPFreehandObject & )
 {
     return *this;
 }
+
+DCOPObject* KPFreehandObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPFreehandObjectIface( this );
+    return dcop;
+}
+
 
 /*========================= save =================================*/
 QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )

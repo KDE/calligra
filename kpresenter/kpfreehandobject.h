@@ -27,6 +27,7 @@
 #define RAD_FACTOR 180.0 / M_PI
 
 class QPainter;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPFreehandObject                                        */
@@ -38,6 +39,7 @@ public:
     KPFreehandObject();
     KPFreehandObject( const KoPointArray &_points, const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPFreehandObject() {}
+    virtual DCOPObject* dcopObject();
 
     KPFreehandObject &operator=( const KPFreehandObject & );
 

@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#include "KPresenterObject2DIface.h"
 #include <kpellipseobject.h>
 #include <kpgradient.h>
 
@@ -63,6 +63,14 @@ KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
 {
     return *this;
 }
+
+DCOPObject* KPEllipseObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPresenterObject2DIface( this );
+    return dcop;
+}
+
 
 /*================================================================*/
 void KPEllipseObject::setFillType( FillType _fillType )
