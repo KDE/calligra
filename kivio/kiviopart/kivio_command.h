@@ -22,6 +22,7 @@
 
 #include <kcommand.h>
 #include <qfont.h>
+#include <qcolor.h>
 #include "kivio_rect.h"
 #include "tkpagelayout.h"
 class KivioPage;
@@ -269,6 +270,22 @@ protected:
     KivioStencil *m_stencil;
     QFont oldFont;
     QFont newFont;
+};
+
+class KivioChangeStencilTextColorCommand : public KNamedCommand
+{
+public:
+    KivioChangeStencilTextColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor & _oldColor,  const QColor & _newColor);
+    ~KivioChangeStencilTextColorCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    QColor oldColor;
+    QColor newColor;
 };
 
 #endif

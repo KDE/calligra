@@ -899,12 +899,25 @@ void KivioView::setTextColor()
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
-
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Text Color"));
+    bool createMacro = false;
     while( pStencil )
     {
-        pStencil->setTextColor( m_setTextColor->color() );
-        pStencil = m_pActivePage->selectedStencils()->next();
+        QColor col(m_setTextColor->color());
+        if ( col != pStencil->textColor() )
+        {
+            KivioChangeStencilTextColorCommand * cmd = new KivioChangeStencilTextColorCommand( i18n("Change Text Color"), m_pActivePage, pStencil, pStencil->textColor(), col);
+
+            pStencil->setTextColor( m_setTextColor->color() );
+            pStencil = m_pActivePage->selectedStencils()->next();
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
     }
+    if ( createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
     m_pDoc->updateView(m_pActivePage);
 }
 

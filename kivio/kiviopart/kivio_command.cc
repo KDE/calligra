@@ -390,3 +390,28 @@ void KivioChangeStencilFontCommand::unexecute()
     m_stencil->setTextFont( oldFont );
     m_page->doc()->updateView(m_page);
 }
+
+KivioChangeStencilTextColorCommand::KivioChangeStencilTextColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor &_oldColor,  const QColor & _newColor)
+    :KNamedCommand( _name),
+     m_page(_page),
+     m_stencil( _stencil ),
+     oldColor( _oldColor),
+     newColor( _newColor)
+{
+}
+
+KivioChangeStencilTextColorCommand::~KivioChangeStencilTextColorCommand()
+{
+}
+
+void KivioChangeStencilTextColorCommand::execute()
+{
+    m_stencil->setTextColor( newColor );
+    m_page->doc()->updateView(m_page);
+}
+
+void KivioChangeStencilTextColorCommand::unexecute()
+{
+    m_stencil->setTextColor( oldColor );
+    m_page->doc()->updateView(m_page);
+}
