@@ -77,9 +77,12 @@
   <Action name="format_frameset"/>
   <Action name="edit_delframe"/>
   <Separator/>
+  <Action name="raiseframe"/>
+  <Action name="lowerframe"/>
+  <Separator/>
   <!--<Action name="border_color"/> Can't do that while we're sharing the action with paragraphs-->
   <Action name="border_backgroundcolor"/>
-  <Menu name="Frame"><text>Configure Frame Borders</text>
+  <Menu name="FrameBorders"><text>Configure Frame Borders</text>
    <Action name="border_outline"/>
    <Action name="border_left"/>
    <Action name="border_right"/>
@@ -249,7 +252,7 @@
  <Action name="edit_delframe"/>
  <Separator/> 
  <Action name="border_backgroundcolor"/>
- <Menu name="Frame"><text>Configure Frame Borders</text>
+ <Menu name="FrameBorders"><text>Configure Frame Borders</text>
   <Action name="border_outline"/>
   <Action name="border_left"/>
   <Action name="border_right"/>
