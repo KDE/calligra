@@ -1,7 +1,6 @@
 <!DOCTYPE autocorrection>
 <Word>
  <items>
-  <item find="prés de" replace="près de" />
   <item find="Dés que" replace="Dès que" />
   <item find="accroitre" replace="accroître" />
   <item find="aller de paire" replace="aller de pair" />
@@ -70,7 +69,6 @@
   <item find="vert de gris" replace="vert-de-gris" />
   <item find="À pirori" replace="A priori" />
   <item find="à peu pré" replace="à peu près" />
-  <item find="a tord" replace="a tort" />
   <item find="Haiti" replace="Haïti" />
   <item find="Http://" replace="http://" />
   <item find="Irladne" replace="Irlande" />
@@ -223,7 +221,6 @@
   <item find="vasy" replace="vas-y" />
   <item find="veulliez" replace="veuillez" />
   <item find="ça dépends" replace="ça dépend" />
-  <item find="ont tord" replace="ont tort" />
   <item find="Cepedant" replace="Cependant" />
   <item find="Irelande" replace="Irlande" />
   <item find="Mr" replace="M." />
@@ -580,7 +577,6 @@
   <item find="uqi" replace="qui" />
   <item find="vis a vis" replace="vis-à-vis" />
   <item find="voute" replace="voûte" />
-  <item find="avez tord" replace="avez tort" />
   <item find="A-t'il" replace="A-t-il" />
   <item find="Bien sur" replace="Bien sûr" />
   <item find="Méditerrannée" replace="Méditerranée" />
@@ -1139,6 +1135,7 @@
   <item find="utilsateurs" replace="utilisateurs" />
   <item find="utilser" replace="utiliser" />
   <item find="vis à vis" replace="vis-à-vis" />
+  <item find="Prés de" replace="Près de" />
   <item find="Cependent" replace="Cependant" />
   <item find="Esquimeau" replace="Esquimau" />
   <item find="Le publique" replace="Le public" />
