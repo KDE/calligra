@@ -52,9 +52,12 @@ VSelectTool::draw()
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
+	KoPoint current = m_current;
+	current.setY( -current.y() + view()->canvasWidget()->viewport()->height() );
+
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
-	if( m_state != normal || rect.contains( m_current ) )
+	if( m_state != normal || rect.contains( current ) )
 	{
 		if( m_state == normal )
 			m_state = moving;
@@ -83,6 +86,7 @@ VSelectTool::draw()
 /*
 
 	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+	fp.setY( -fp.y() + view()->canvasWidget()->viewport()->height() );
 	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();
@@ -282,9 +286,14 @@ VSelectTool::mouseDragRelease( const KoPoint& current )
 {
 	if( m_state == normal )
 	{
+		// Y mirroring
+		KoPoint fp = first();
+		fp.setY( -fp.y() + view()->canvasWidget()->viewport()->height() );
+		KoPoint lp = last();
+		lp.setY( -lp.y() + view()->canvasWidget()->viewport()->height() );
 		view()->part()->document().selection()->clear();
 		view()->part()->document().selection()->append(
-			KoRect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() ).normalize() );
+			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 
 		view()->selectionChanged();
 		view()->part()->repaintAllViews( true );
