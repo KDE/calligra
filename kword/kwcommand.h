@@ -264,14 +264,13 @@ struct pageLayout {
 class KWPageLayoutCommand : public KCommand
 {
 public:
-    KWPageLayoutCommand( const QString &name,KWDocument *_doc,KWGUI *_gui,pageLayout &_oldLayout, pageLayout &_newLayout) ;
+    KWPageLayoutCommand( const QString &name,KWDocument *_doc,pageLayout &_oldLayout, pageLayout &_newLayout) ;
     ~KWPageLayoutCommand() {}
 
     void execute();
     void unexecute();
 protected:
     KWDocument *m_pDoc;
-    KWGUI *m_pGui;
     pageLayout m_OldLayout;
     pageLayout m_NewLayout;
 };

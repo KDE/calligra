@@ -620,10 +620,9 @@ void KWFrameMoveCommand::unexecute()
 
 
 
-KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,KWGUI *_gui,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
+KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
     KCommand(name),
     m_pDoc(_doc),
-    m_pGui(_gui),
     m_OldLayout(_oldLayout),
     m_NewLayout(_newLayout)
 {

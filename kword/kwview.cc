@@ -1537,7 +1537,7 @@ void KWView::formatPage()
         tmpNewLayout._cl=cl;
         tmpNewLayout._hf=kwhf;
 
-        KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,gui,tmpOldLayout,tmpNewLayout ) ;
+        KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,tmpOldLayout,tmpNewLayout ) ;
         doc->addCommand(cmd);
 
         doc->setPageLayout( pgLayout, cl, kwhf );
@@ -2612,7 +2612,7 @@ void KWView::newPageLayout( KoPageLayout _layout )
     tmpNewLayout._cl=cl;
     tmpNewLayout._hf=hf;
 
-    KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,gui,tmpOldLayout,tmpNewLayout ) ;
+    KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,tmpOldLayout,tmpNewLayout ) ;
     doc->addCommand(cmd);
 
     doc->updateRuler();
