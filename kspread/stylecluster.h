@@ -54,12 +54,27 @@ class KSPREAD_EXPORT StyleCluster : public QObject
 
     ~StyleCluster();
     
+    /**
+     * Example usage: A cell should be changed to bold.
+     * First, the current style is looked up with lookup(),
+     * then a new KSpreadStyle is created based on the
+     * returned style and set to bold. Then the style
+     * should be checked against existing styles (use existing
+     * one and delete your created one).
+     * Now use your style to insert it into x,y.
+     */
     void insert( int x, int y, KSpreadStyle * style);
     
-    /// TODO use manipulators
+//     /**
+//      * Practically same usage as above, but use a range to apply the style.
+//      */
+//     void insert( const KSpreadRange & range, const KSpreadStyle * style);
     
-//     void insert( const KSpreadRange & range, const KSpreadStyle & style);
-    
+    /**
+     * If you intend to modify this returned style, create
+     * a new one based on the returned style.
+     * @see insert
+     */
     const KSpreadStyle& lookup(int x, int y);
 
 //     friend class StyleManipulator;
