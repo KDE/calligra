@@ -5846,7 +5846,7 @@ int KWView::canvasYOffset() const
     return m_gui->canvasWidget()->contentsY();
 }
 
-void KWView::canvasAddChild( KoViewChild *child )
+void KWView::canvasAddChild( KoViewChild * /*child*/ )
 {
     // Not necessary anymore
     //m_gui->canvasWidget()->addChild( child->frame() );
