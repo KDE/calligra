@@ -147,6 +147,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_vertRuler = new KoRuler( this, m_canvas->viewport(), Qt::Vertical, part()->pageLayout(), 0, part()->unit() );
 	connect( m_vertRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
 	m_vertRuler->showMousePos( true );
+	m_horizRuler->setReadWrite( shell() );
+	m_vertRuler->setReadWrite( shell() );
 
 	m_canvas->show();
 	m_horizRuler->show();
