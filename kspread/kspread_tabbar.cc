@@ -179,7 +179,7 @@ void TabBarPrivate::layoutTabs()
     for( unsigned c = 0; c < tabs.count(); c++ )
     {
       QRect rect;
-      if( c >= leftTab-1 )
+      if( (int)c >= leftTab-1 )
       {
           QString text = tabs[ c ];
           int tw = fm.width( text ) + 4;
@@ -356,7 +356,7 @@ void TabBar::setTabs( const QStringList& list )
     if( !left.isNull() )
     {
         d->leftTab = d->tabs.findIndex( left ) + 1;
-        if( d->leftTab > d->tabs.count() )
+        if( d->leftTab > (int)d->tabs.count() )
             d->leftTab = 1;
         if( d->leftTab <= 0 )
             d->leftTab = 1;
@@ -466,7 +466,7 @@ void TabBar::moveTab( unsigned tab, unsigned target )
       it = d->tabs.end();
     d->tabs.insert( it, tabName );
 
-    if( d->activeTab == tab+1 )
+    if( d->activeTab == (int)tab+1 )
         d->activeTab = target+1;
 
     update();
@@ -554,12 +554,12 @@ void TabBar::paintEvent( QPaintEvent* )
     // draw the move marker
     if( d->targetTab > 0 )
     {
-        int p = QMIN( d->targetTab, d->tabRects.count() );
+        int p = QMIN( d->targetTab, (int)d->tabRects.count() );
         QRect rect = d->tabRects[ p-1 ];
         if( !rect.isNull() )
         {
             int x = rect.x();
-            if( d->targetTab > d->tabRects.count() )
+            if( d->targetTab > (int)d->tabRects.count() )
               x = rect.right()-7;
             d->drawMoveMarker( painter, x, rect.y() );
         }
@@ -658,7 +658,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
     if( r.isValid() )
     if( pos.x() > r.right() )
     if( pos.x() < width() )
-    if( d->targetTab != d->tabRects.count()+1 )
+    if( d->targetTab != (int)d->tabRects.count()+1 )
     {
         d->targetTab = d->tabRects.count()+1;
         d->autoScroll = false;
