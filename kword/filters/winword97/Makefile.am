@@ -9,7 +9,7 @@ LDADD = $(LIB_KOFFICECORE)
 bin_PROGRAMS = kword_winword97
 
 kword_winword97_SOURCES = main.cc wordfilter.cc winworddoc.cc \
-kworddoc.cc
+kworddoc.cc klaola.cc
 
 noinst_HEADERS = main.h wordfilter.h winworddoc.h kworddoc.h \
 anld.h anlv.h asumy.h asumyi.h atrd.h bkd.h bkf.h bkl.h brc.h \
@@ -17,7 +17,7 @@ brc10.h bte.h chp.h chpx.h chpx_fkp.h dcs.h dogrid.h doptypography.h \
 dttm.h ffn.h fib.h fld.h frd.h fspa.h ftxbxs.h lfo.h lfolvl.h \
 lspd.h lstf.h lvlf.h myfile.h numrm.h olst.h pap.h papx.h \
 papx_fkp.h pcd.h pgd.h phe.h picf.h plcf.h prm.h rr.h rs.h \
-sed.h sep.h sepx.h shd.h tap.h tbd.h tc.h tlp.h wkb.h
+sed.h sep.h sepx.h shd.h tap.h tbd.h tc.h tlp.h wkb.h klaola.h
 
 METASOURCES = main.moc
 

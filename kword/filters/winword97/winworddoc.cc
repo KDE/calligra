@@ -5,9 +5,8 @@
 #include "winworddoc.h"
 
 WinWordDoc::WinWordDoc(myFile in) {
-    
     doc=in;
-	fib=(FIB*)doc.data;
+	KLaola myLaola(in);  // for testing purpose
 }
 
 WinWordDoc::~WinWordDoc() {

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <qstring.h>
 #include <kdebug.h>
+#include "klaola.h"
 #include "myfile.h"
 #include "fib.h"
 
