@@ -518,9 +518,9 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter )
 {
-  //if (parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK || 
-  //parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
-  //    calcTextLen();
+  if (parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK || 
+      parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
+    calcTextLen();
 
     ptPos = 0;
     spaces = 0;
@@ -643,7 +643,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	    // This is the correct point to make a line break
 	    lineEndPos = textPos + 1;
 	    // If we break here, then the line has the following width ...
-	    ptTextLen = tmpPTWidth;
+	    //ptTextLen = tmpPTWidth;
 	    ptAscender = tmpPTAscender;
 	    ptDescender = tmpPTDescender;
 	    if ( ptAscender > ptMaxAscender )
@@ -683,7 +683,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     {
 	// We have to take the last possible linebreak
 	lineEndPos = textPos;
-	ptTextLen = tmpPTWidth;
+	//ptTextLen = tmpPTWidth;
 	ptAscender = tmpPTAscender;
 	ptDescender = tmpPTDescender;
 	if ( ptAscender > ptMaxAscender )
@@ -772,7 +772,7 @@ void KWFormatContext::calcTextLen()
 
   ptTextLen = 0;
   
-  unsigned int pos = 0,tmpPTPos = 0,_ptPos = 0,tmpPos = 0;
+  unsigned int pos = lineStartPos,tmpPTPos = 0,_ptPos = 0;
   KWChar *text = parag->getText();
   unsigned int xShift = document->getPTLeftBorder() + ( column - 1 ) * ( document->getPTColumnWidth() + document->getPTColumnSpacing() );
 
@@ -781,7 +781,7 @@ void KWFormatContext::calcTextLen()
   displayFont = font;
 
 
-  while ( pos < textPos )
+  while ( _ptPos < xShift + document->getPTColumnWidth() && pos < getParag()->getTextLen())
     {
       char c = text[ pos ].c;
       
@@ -795,8 +795,8 @@ void KWFormatContext::calcTextLen()
       
       if (c == ' ')
 	{
+	  ptTextLen += tmpPTPos;
 	  tmpPTPos = 0;
-	  tmpPos = 0;
 	}
 	
       // Do we have some format definition here ?
@@ -805,20 +805,13 @@ void KWFormatContext::calcTextLen()
       else // A usual character ...
 	{ 
 	  _ptPos += font->getPTWidth( c );
-	  ptTextLen += font->getPTWidth( c );
 	  tmpPTPos += font->getPTWidth( c );
 	  pos++;
-	  tmpPos++;
-
-	  if (_ptPos > xShift + document->getPTColumnWidth())
-	    {
-	      lineStartPos = tmpPos;
-	      ptTextLen = tmpPTPos;
-	      _ptPos = 0;
-	    }
 	}
     }
 
-  lineEndPos = getParag()->getTextLen();
+  if ( textPos >= parag->getTextLen() - 1 )
+    ptTextLen += tmpPTPos - 16;
+
   debug("%d %d",lineStartPos,ptTextLen);
 }

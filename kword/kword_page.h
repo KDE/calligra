@@ -1,9 +1,8 @@
-/******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer 1997-1998                   */
-/* based on Torben Weis' KWord                                    */
+/******************************************************************/ 
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
+/* Author: Reginald Stadlbauer, Torben Weis                       */
+/* E-Mail: reggie@kde.org, weis@kde.org                           */
 /* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
 /* needs c++ library Qt (http://www.troll.no)                     */
 /* written for KDE (http://www.kde.org)                           */

@@ -75,3 +75,8 @@ Reggie, 16.9.1998:
   updated automatically when moving the cursor. Now I have to
   work on the implementation of CENTER and RIGHT, this is really
   broken at the moment...
+
+Reggie, 17.9.1998:
+------------------
+- Started working on CENTER flow
+- Started writing a dialog for paragraph settings
