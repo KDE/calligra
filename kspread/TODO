@@ -22,7 +22,7 @@ Normal bugs
 #27847: resizing charts in embedded kspread part returns to parent document
 #29417: Font of kcalc included in kspread
 #29537: file not displayed properly
-#30048: Bugs in screen representation of cell in multiline mode
+#30048: Bugs in screen representation of cell in multiline mode                       (Norbert - done beta1)
 #30765: split view does not work on different tables
 #31448: Bad import data from file & clipboard
 #31753: slow load save time
@@ -101,9 +101,16 @@ Wishlist items
 #40037: cell default format should be definend
 #40388: unable to insert an image in a Kspread document
 
+
+
 Others bugs not in BT system (Report by - taken by):
+
 - Crash in open/save dialog when you try to create a directory          (Philipp - open)
 - Crash in print preview, when you make second preview                  (Philipp - Philipp)
+- Clicking into canvas causes to much flickering if many items 
+        (especially multirow cells) are in visible rect
+- MultiRow cells will only be drawn if obscuring is forced!
+
 
 
 Other things: (please add the things you are working on!)
