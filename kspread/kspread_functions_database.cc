@@ -111,6 +111,7 @@ static bool approx_equal (double a, double b)
 
 void getCond( KSpreadDB::Condition & cond, QString text )
 {
+  cond.comp = KSpreadDB::isEqual;
   text = text.stripWhiteSpace();
 
   if ( text.startsWith( "<=" ) )
