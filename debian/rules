@@ -54,6 +54,17 @@ install: build
 binary-indep: build install
 	dh_testroot
 	dh_testdir
+	dh_clean -k
+	dh_installdocs -i
+	dh_installchangelogs -i
+	cp debian/README.task debian/tmp/usr/share/doc/task-koffice/README
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
 
 
 binary-arch: build install
@@ -72,12 +83,9 @@ binary-arch: build install
 		echo "$$i.1" >> debian/undocumented ; \
 	done
 	dh_undocumented
-	dh_movefiles
-	#-rm -rf debian/tmp/usr debian/tmp/etc
-	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
-	dh_installdocs
-	dh_installmenu
-	dh_installchangelogs -ptask-koffice
+	dh_movefiles -a
+	dh_installdocs -a
+	dh_installmenu -a
 	dh_installchangelogs -pkoffice-libs
 	dh_installchangelogs -pkword kword/CHANGES
 	dh_installchangelogs -pkspread kspread/ChangeLog
@@ -88,19 +96,19 @@ binary-arch: build install
 	dh_installchangelogs -pkivio kivio/CHANGELOG
 	dh_installchangelogs -pkformula
 	dh_installchangelogs -pkoffice-dev
-	dh_installmime
-	dh_strip
-	dh_perl
-	dh_compress
-	dh_fixperms
+	dh_installmime -a
+	dh_strip -a
+	dh_perl -a
+	dh_compress -a
+	dh_fixperms -a
 	-chmod 644 debian/kpresenter/usr/bin/kprconverter.pl
-	dh_suidregister
-	dh_makeshlibs -pkoffice-libs
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums 
-	dh_builddeb
+	dh_suidregister -a
+	dh_makeshlibs -a -V
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
 
 # Below here is fairly generic really
 
