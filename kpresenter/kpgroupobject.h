@@ -23,6 +23,7 @@
 
 class KPresenterDoc;
 class KoOasisContext;
+class KPrPage;
 
 #include "kpobject.h"
 
@@ -67,7 +68,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
+    virtual void loadOasisGroupObject( KPresenterDoc *doc, int pos, KPrPage * newpage, const QDomElement &element, KoOasisContext & context, QDomElement *animation);
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );

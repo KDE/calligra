@@ -141,6 +141,7 @@ class KPresenterDoc : public KoDocument
 
     // load
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, KoStore* store );
+    void loadOasisObject( int pos, KPrPage * page, QDomNode & drawPage, KoOasisContext & context);
 
     virtual bool loadXML( const QDomDocument& doc );
     virtual bool loadXML( QIODevice *, const QDomDocument & doc );

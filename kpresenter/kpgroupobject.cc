@@ -130,17 +130,19 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPGroupObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+void KPGroupObject::loadOasisGroupObject( KPresenterDoc *_doc, int pos, KPrPage * newpage,const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     KPObject::loadOasis( element, context, animation );
     updateObjs = false;
     //todo load group object
+    QDomNode node = element.firstChild();
+    _doc->loadOasisObject( pos, newpage, node, context);
 //remove duplicate code
     updateObjs = true;
 }
 
 
-double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
+double KPGroupObject::load( const QDomElement &element, KPresenterDoc *doc)
 {
     //FIXME
     double offset=KPObject::load(element);

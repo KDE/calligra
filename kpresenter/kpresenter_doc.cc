@@ -1082,108 +1082,8 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 	//All animation object for current page is store into this element
 	createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement());
         // parse all objects
-        for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
-        {
-            kdDebug()<<"load Object \n";
-            QDomElement o = object.toElement();
-            QString name = o.tagName();
-	    QDomElement * animationShow = 0L;
+        loadOasisObject(pos, newpage, drawPage, context);
 
-	    if( o.hasAttribute("draw:id"))
-	      animationShow = m_loadingInfo->animationShowById(o.attribute("draw:id"));
-
-            context.styleStack().save();
-
-            if ( name == "draw:text-box" ) // textbox
-            {
-                fillStyleStack( o, context );
-                KPTextObject *kptextobject = new KPTextObject( this );
-                kptextobject->loadOasis(o, context, animationShow);
-                newpage->appendObject(kptextobject);
-            }
-            else if ( name == "draw:rect" ) // rectangle
-            {
-                fillStyleStack( o, context );
-                KPRectObject *kprectobject = new KPRectObject();
-                kprectobject->loadOasis(o, context , animationShow);
-                newpage->appendObject(kprectobject);
-            }
-            else if ( name == "draw:circle" || name == "draw:ellipse" )
-            {
-                fillStyleStack( o, context );
-                if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
-                {
-                   KPPieObject *kppieobject = new KPPieObject();
-                    kppieobject->loadOasis(o, context, animationShow);
-                    newpage->appendObject(kppieobject);
-                }
-                else  // circle or ellipse
-                {
-                    KPEllipseObject *kpellipseobject = new KPEllipseObject();
-                    kpellipseobject->loadOasis(o,context, animationShow);
-                    newpage->appendObject(kpellipseobject);
-                }
-            }
-            else if ( name == "draw:line" ) // line
-            {
-                fillStyleStack( o, context );
-                KPLineObject *kplineobject = new KPLineObject();
-                kplineobject->loadOasis(o, context, animationShow);
-                newpage->appendObject(kplineobject);
-            }
-            else if (name=="draw:polyline") { // polyline
-                fillStyleStack( o, context );
-                KPPolylineObject *kppolylineobject = new KPPolylineObject();
-                kppolylineobject->loadOasis(o, context, animationShow);
-                newpage->appendObject(kppolylineobject);
-            }
-            else if (name=="draw:polygon") { // polygon
-                fillStyleStack( o, context );
-                KPPolygonObject *kpPolygonObject = new KPPolygonObject();
-                kpPolygonObject->loadOasis( o, context, animationShow);
-                newpage->appendObject(kpPolygonObject);
-            }
-            else if ( name == "draw:image" ) // image
-            {
-                fillStyleStack( o, context );
-                KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
-                kppixmapobject->loadOasis( o, context, animationShow);
-                newpage->appendObject(kppixmapobject);
-            }
-            else if ( name == "draw:g" )
-            {
-                fillStyleStack( o, context );
-                KPGroupObject *kpgroupobject = new KPGroupObject();
-                kpgroupobject->loadOasis( o, context, animationShow);
-                newpage->appendObject(kpgroupobject);
-                kdDebug()<<" grouping object*****************\n";
-            }
-            else if ( name == "presentation:notes" ) // notes
-            {
-                //we must extend note attribute
-	      kdDebug()<<"presentation:notes----------------------------------\n";
-                QDomNode textBox = o.namedItem( "draw:text-box" );
-                if ( !textBox.isNull() )
-                {
-                    QString note;
-                    for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
-                    {
-                        // We don't care about styles as they are not supported in kpresenter.
-                        // Only add a linebreak for every child.
-                        QDomElement t = text.toElement();
-                        note += t.text() + "\n";
-                    }
-                    m_pageList.at(pos)->setNoteText(note );
-                }
-            }
-            else
-            {
-                kdDebug() << "Unsupported object '" << name << "'" << endl;
-                context.styleStack().restore();
-                continue;
-            }
-	    context.styleStack().restore();
-        }
         context.styleStack().restore();
 	m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
 	m_loadingInfo->clearAnimationHideDict(); // clear all hide animations style
@@ -1205,6 +1105,113 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     m_loadingInfo=0L;
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return true;
+}
+
+
+void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context)
+{
+    for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
+    {
+        kdDebug()<<"load Object \n";
+        QDomElement o = object.toElement();
+        QString name = o.tagName();
+        QDomElement * animationShow = 0L;
+
+        if( o.hasAttribute("draw:id"))
+            animationShow = m_loadingInfo->animationShowById(o.attribute("draw:id"));
+
+        context.styleStack().save();
+
+        if ( name == "draw:text-box" ) // textbox
+        {
+            fillStyleStack( o, context );
+            KPTextObject *kptextobject = new KPTextObject( this );
+            kptextobject->loadOasis(o, context, animationShow);
+            newpage->appendObject(kptextobject);
+        }
+        else if ( name == "draw:rect" ) // rectangle
+        {
+            fillStyleStack( o, context );
+            KPRectObject *kprectobject = new KPRectObject();
+            kprectobject->loadOasis(o, context , animationShow);
+            newpage->appendObject(kprectobject);
+        }
+        else if ( name == "draw:circle" || name == "draw:ellipse" )
+        {
+            fillStyleStack( o, context );
+            if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
+            {
+                KPPieObject *kppieobject = new KPPieObject();
+                kppieobject->loadOasis(o, context, animationShow);
+                newpage->appendObject(kppieobject);
+            }
+            else  // circle or ellipse
+            {
+                KPEllipseObject *kpellipseobject = new KPEllipseObject();
+                kpellipseobject->loadOasis(o,context, animationShow);
+                newpage->appendObject(kpellipseobject);
+            }
+        }
+        else if ( name == "draw:line" ) // line
+        {
+            fillStyleStack( o, context );
+            KPLineObject *kplineobject = new KPLineObject();
+            kplineobject->loadOasis(o, context, animationShow);
+            newpage->appendObject(kplineobject);
+        }
+        else if (name=="draw:polyline") { // polyline
+            fillStyleStack( o, context );
+            KPPolylineObject *kppolylineobject = new KPPolylineObject();
+            kppolylineobject->loadOasis(o, context, animationShow);
+            newpage->appendObject(kppolylineobject);
+        }
+        else if (name=="draw:polygon") { // polygon
+            fillStyleStack( o, context );
+            KPPolygonObject *kpPolygonObject = new KPPolygonObject();
+            kpPolygonObject->loadOasis( o, context, animationShow);
+            newpage->appendObject(kpPolygonObject);
+        }
+        else if ( name == "draw:image" ) // image
+        {
+            fillStyleStack( o, context );
+            KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
+            kppixmapobject->loadOasis( o, context, animationShow);
+            newpage->appendObject(kppixmapobject);
+        }
+        else if ( name == "draw:g" )
+        {
+            fillStyleStack( o, context );
+            KPGroupObject *kpgroupobject = new KPGroupObject();
+            kpgroupobject->loadOasisGroupObject( this, pos, newpage, o, context, animationShow);
+            newpage->appendObject(kpgroupobject);
+            kdDebug()<<" grouping object*****************\n";
+        }
+        else if ( name == "presentation:notes" ) // notes
+        {
+            //we must extend note attribute
+            kdDebug()<<"presentation:notes----------------------------------\n";
+            QDomNode textBox = o.namedItem( "draw:text-box" );
+            if ( !textBox.isNull() )
+            {
+                QString note;
+                for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
+                {
+                    // We don't care about styles as they are not supported in kpresenter.
+                    // Only add a linebreak for every child.
+                    QDomElement t = text.toElement();
+                    note += t.text() + "\n";
+                }
+                m_pageList.at(pos)->setNoteText(note );
+            }
+        }
+        else
+        {
+            kdDebug() << "Unsupported object '" << name << "'" << endl;
+            context.styleStack().restore();
+            continue;
+        }
+        context.styleStack().restore();
+    }
 }
 
 void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
