@@ -3161,14 +3161,15 @@ void KPresenterView::objectSelectedChanged()
     actionExtraAlignObjCenterV->setEnabled(state &&  !headerfooterselected && canMove);
     actionExtraAlignObjBottom->setEnabled(state &&  !headerfooterselected && canMove );
     actionEditDelete->setEnabled(state);
-    state = state && m_canvas->numberOfObjectSelected()==1;
+    int nbobj=m_canvas->numberOfObjectSelected();
+    actionDuplicateObj->setEnabled(state && (nbobj>=1));
+
+    state = state && (nbobj==1);
     actionExtraRaise->setEnabled(state );
     actionExtraLower->setEnabled(state );
-    actionDuplicateObj->setEnabled(state);
 
     actionExtraBringForward->setEnabled(state);
-    actionExtraSendBackward->setEnabled(state );
-
+    actionExtraSendBackward->setEnabled(state);
 
     //actionExtraConfigPicture->setEnabled( state && m_canvas->haveASelectedPixmapObj() );
     //actionBrushColor->setEnabled(state);

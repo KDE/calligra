@@ -176,6 +176,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
     if ( clip_str.isEmpty() ) return;
     KMacroCommand *macro = new KMacroCommand( i18n("Paste Objects" ));
     bool createMacro = false;
+    int nbNewObject = -1 ;
     for ( int i = 0 ; i < nbCopy ; i++ )
     {
         KCommand *cmd = m_doc->loadPastedObjs( clip_str,this );
@@ -184,18 +185,24 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
             macro->addCommand( cmd );
             createMacro = true ;
         }
+        if ( nbNewObject == -1 )
+            nbNewObject = m_objectList.count() - num;
     }
 
     //move and select all new pasted in objects
     KPObject *_tempObj;
-    for (_tempObj = m_objectList.at(num); _tempObj; _tempObj = m_objectList.next()) {
+    int i = 0;
+    int mod = 1;
+    for (_tempObj = m_objectList.at(num); _tempObj; _tempObj = m_objectList.next(),  i++ ) {
+        if ( i >= nbNewObject )
+            mod++;
         if ( moveX != 0 || moveY != 0)
         {
-            _tempObj->moveBy( moveX,moveY);
+            _tempObj->moveBy( moveX*(double)mod,moveY*(double)mod);
         }
         else
         {
-            _tempObj->moveBy( 20.0,20.0 );
+            _tempObj->moveBy( 20.0*(double)mod,20.0*(double)mod );
         }
       _tempObj->setSelected( true );
       if ( angle == 0.0 || increaseY != 0.0 || increaseX != 0.0)
