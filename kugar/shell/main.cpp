@@ -26,11 +26,11 @@ int main(int argc,char **argv)
 		I18N_NOOP("Kugar merges XML data files with XML templates\n"
 		"to display and print high quality reports."),
 		"http://www.thekompany.com/projects/kugar",
-		"phil@river-bank.demon.co.uk");
-	about.addAuthor("Phil Thompson", I18N_NOOP("Current maintainer, Shell, Konqueror Part"),
-		"phil@river-bank.demon.co.uk");
-	about.addAuthor("Alexander Dymo", I18N_NOOP("General Enhancements, Bugfixes"), "cloudtemple@mksat.net",
+		"cloudtemple@mksat.net");
+	about.addAuthor("Alexander Dymo", I18N_NOOP("Current maintainer, Report Designer, General Enhancements, Bugfixes"), "cloudtemple@mksat.net",
 		"http://www.cloudtemple.mksat.net");
+	about.addAuthor("Phil Thompson", I18N_NOOP("Former maintainer, Shell, Konqueror Part"),
+		"phil@river-bank.demon.co.uk");
 	about.addAuthor("Mutiny Bay Software", "Original author", "info@mutinybaysoftware.com");
 
 	// Handle the command line.
