@@ -72,7 +72,9 @@ QPoint
 VCanvas::toContents( const QPoint &p ) const
 {
 	QPoint p2 = p;
-	p2.setY( ( contentsHeight() / m_view->zoom() ) - ( p.y() + contentsY() ) );
+	//kdDebug() << p.y() << endl;
+	p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) * m_view->zoom() ) / m_view->zoom() );
+	//kdDebug() << p2.y() << endl;
 	return p2;
 }
 
