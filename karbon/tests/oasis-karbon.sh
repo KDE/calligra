@@ -7,7 +7,7 @@
 
 # To use this script, you need to change this path to an existing kwd file
 # Don't use a relative path, dcopstart won't handle it
-input=/mnt/kde/test.karbon
+input=$1
 
 test -f "$input" || { echo "No such file $input"; exit 1; }
 
