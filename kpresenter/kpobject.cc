@@ -1239,6 +1239,8 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
             else
                 kdDebug()<<" hatch style not supported !!!!!!!!!!!!: "<<style<<endl;
 
+            //type not defined by default
+            //try to use style.
             QDomElement* draw = oasisStyles.drawStyles()[style];
             //fixme !!!!
             kdDebug()<<" draw :"<<draw<<endl;
@@ -1246,6 +1248,24 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
                 {
                     kdDebug()<<" color !!!!!!!!!!!!!!!!!!!!!!!!\n";
                     tmpBrush.setColor(draw->attribute( "draw:color" ) );
+                    if( draw->hasAttribute( "draw:rotation" ))
+                        {
+                            int angle = (draw->attribute( "draw:rotation" ).toInt())/10;
+                            switch( angle )
+                                {
+                                case 0:
+                                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 9 ) );
+                                    break;
+                                case 45:
+                                    break;
+                                case 90:
+                                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>(10 ) );
+                                    break;
+                                default:
+                                    kdDebug()<<" angle : "<<angle<<endl;
+                                    break;
+                                }
+                        }
                 }
             setBrush( tmpBrush );
         }
