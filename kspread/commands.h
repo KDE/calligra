@@ -34,30 +34,30 @@ class KSpreadUndoAction;
 
 To implement undo and redo functionality, every possible action
 by the user for editing and manipulating the document is encapsulated
-in a command (based on KCommand). 
-There is one command class (which will be instantiated) for every unique 
-action. You need to reimplement the execute() and unexecute() methods 
+in a command (based on KCommand).
+There is one command class (which will be instantiated) for every unique
+action. You need to reimplement the execute() and unexecute() methods
 of KCommand.
- 
-Each command is created from the user interface, and then added 
-to the command history (see KSpreadDoc::commandHistory) using 
-KSpreadDoc::addCommand method. Because the command is not immediately 
+
+Each command is created from the user interface, and then added
+to the command history (see KSpreadDoc::commandHistory) using
+KSpreadDoc::addCommand method. Because the command is not immediately
 executed, you also need to call the execute() method of that command.
 This is an example of typical use of command:
- 
+
 \code
 KCommand* command = new RenameSheetCommand( sheet, name );
 doc->addCommand( command );
 command->execute();
 \endcode
- 
-Then whenever the user triggers an "undo", the corresponding 
+
+Then whenever the user triggers an "undo", the corresponding
 unexecute() method of the command is called by the undo action,
-thereby reverting the previously executed command. Similar thing 
+thereby reverting the previously executed command. Similar thing
 happens for the "redo".
 
 Alphabetical list of commands:
- 
+
 \li AddSheetCommand
 \li DissociateCellCommand
 \li MergeCellCommand
@@ -67,7 +67,7 @@ Alphabetical list of commands:
 
 \sa KSpreadDoc::addCommand
 \sa KoCommandHistory
- 
+
 */
 
 /**
@@ -97,11 +97,11 @@ class MergeCellCommand : public KCommand
 {
 public:
   MergeCellCommand( KSpreadCell* cell, int colSpan, int rowSpan );
-  
+
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
-  
+
 protected:
   KSpreadCell* cell;
   int colSpan;
@@ -119,11 +119,11 @@ class DissociateCellCommand : public KCommand
 {
 public:
   DissociateCellCommand( KSpreadCell* cell );
-  
+
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
-  
+
 protected:
   KSpreadCell* cell;
   int oldColSpan;
@@ -208,6 +208,24 @@ public:
 protected:
     KSpreadSheet* sheet;
     KSpreadDoc* doc;
+};
+
+
+class InsertColumnCommand : public KCommand
+{
+public:
+  InsertColumnCommand( KSpreadSheet* s , unsigned int _column, unsigned int _nbCol );
+
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+
+protected:
+    KSpreadDoc* doc;
+    QString sheetName;
+    unsigned int insertPosColumn;
+    unsigned int nbColumnInserted;
+
 };
 
 #endif /* KSPREAD_COMMANDS */

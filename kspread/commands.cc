@@ -65,7 +65,7 @@ MergeCellCommand::MergeCellCommand( KSpreadCell* c, int cs, int rs )
     rangeName = util_rangeName( area );
   }
 }
-  
+
 QString MergeCellCommand::name() const
 {
   return i18n("Merge Cells");
@@ -93,7 +93,7 @@ DissociateCellCommand::DissociateCellCommand( KSpreadCell* c )
   oldColSpan = cell->extraXCells();
   oldRowSpan = cell->extraYCells();
 }
-  
+
 QString DissociateCellCommand::name() const
 {
   return i18n("Dissociate Cell");
@@ -252,4 +252,34 @@ void RemoveSheetCommand::unexecute()
 QString RemoveSheetCommand::name() const
 {
     return i18n("Remove Sheet");
+}
+
+
+// ----- InsertColumnCommand -----
+
+InsertColumnCommand::InsertColumnCommand( KSpreadSheet* s , unsigned int _column, unsigned int _nbCol )
+{
+  doc = s->doc();
+  sheetName = s->tableName();
+  insertPosColumn = _column;
+  nbColumnInserted = _nbCol;
+}
+
+void InsertColumnCommand::execute()
+{
+    KSpreadSheet* sheet = doc->map()->findTable( sheetName );
+    if( !sheet ) return;
+    sheet->insertColumn( insertPosColumn,nbColumnInserted);
+}
+
+void InsertColumnCommand::unexecute()
+{
+    KSpreadSheet* sheet = doc->map()->findTable( sheetName );
+    if( !sheet ) return;
+    sheet->removeColumn( insertPosColumn,nbColumnInserted );
+}
+
+QString InsertColumnCommand::name() const
+{
+    return i18n("Insert Columns");
 }
