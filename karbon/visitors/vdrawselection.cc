@@ -140,12 +140,12 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				}
 
 				// Draw knot:
-				m_painter->setPen( Qt::NoPen );
+				m_painter->setPen( editnodes ? Qt::yellow : Qt::blue );
 
 				if( jtr.current()->knotIsSelected() )
-					m_painter->setBrush( editnodes ? Qt::yellow : Qt::red );
+					m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
 				else
-					m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue.light() );
+					m_painter->setBrush( Qt::white );
 
 				m_painter->drawNode( jtr.current()->knot(), composite.stroke()->lineWidth() > 5.0 ? 3 : 2 );
 			}
