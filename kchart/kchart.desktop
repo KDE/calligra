@@ -60,5 +60,5 @@ Icon=kchart
 MimeType=application/x-kchart
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,KOfficeChart
 X-KDE-NativeMimeType=application/x-kchart
-KDE-X-StartupNotify=true
+X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi

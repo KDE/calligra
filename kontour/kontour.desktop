@@ -56,5 +56,5 @@ Icon=kontour
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kontour
 DocPath=kontour/index.html
-KDE-X-StartupNotify=true
+X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi

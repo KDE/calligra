@@ -74,5 +74,5 @@ Comment[tr]=KOffice Ortamı
 Comment[xx]=xx
 Type=Application
 Icon=koshell
-KDE-X-StartupNotify=true
+X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
