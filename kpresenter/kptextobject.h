@@ -163,6 +163,7 @@ public:
     void dragEnterEvent( QDragEnterEvent * );
     void dragMoveEvent( QDragMoveEvent *, const QPoint & );
     void dragLeaveEvent( QDragLeaveEvent * );
+    void dropEvent( QDropEvent * );
 
     void clearSelection();
     void insertSpecialChar(QChar _c);

@@ -3540,8 +3540,7 @@ void Page::dropEvent( QDropEvent *e )
     }
     else if (m_currentTextObjectView)
     {
-        //todo
-        //m_currentTextObjectView->dropEvent( e, normalPoint, docPoint );
+        m_currentTextObjectView->dropEvent( e );
     }
     else if ( QTextDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );
