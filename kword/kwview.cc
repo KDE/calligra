@@ -1152,7 +1152,7 @@ void KWView::setupActions()
                                             actionCollection(), "tool_auto_spellcheck" );
 
 
-    actionGoToFootEndNote = new KAction( i18n( "Go to Foot End Note" ), 0,
+    actionGoToFootEndNote = new KAction( QString::null /*set dynamically*/, 0,
                                             this, SLOT( goToFootEndNote() ),
                                             actionCollection(), "goto_footendnote" );
 
@@ -5290,6 +5290,8 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
             else if (frameSet->isFootEndNote())
             {
                 actionList.append(separator);
+                actionGoToFootEndNote->setText( frameSet->isFootNote() ?
+                    i18n( "Go to Footnote" ) : i18n( "Go to Endnote" ) );
                 actionList.append(actionGoToFootEndNote);
             }
             bool state = !frameSet->isHeaderOrFooter() && !frameSet->isFootEndNote();
