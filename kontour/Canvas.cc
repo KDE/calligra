@@ -82,6 +82,8 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
 //  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
   buffer = new QPixmap();
+
+  setBackgroundMode (NoBackground);
 }
 
 Canvas::~Canvas()
@@ -404,6 +406,7 @@ void Canvas::changePage()
   mXCenter = (width() - mGDoc->xCanvas()) / 2;
   mYCenter = (height() - mGDoc->yCanvas()) / 2;
   center();
+  updateBuf();
   repaint();
 }
 

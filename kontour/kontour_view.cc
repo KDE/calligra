@@ -32,6 +32,7 @@
 #include <qregexp.h>
 #include <qdockwindow.h>
 #include <qdockarea.h>
+#include <qtabwidget.h>
 
 #include <kaction.h>
 #include <kprinter.h>
@@ -308,10 +309,19 @@ void KontourView::setupPanels()
   connect(activeDocument(), SIGNAL(updateLayerView()), mLayerPanel, SLOT(updatePanel()));
   mRightDock->moveDockWindow(win);
 
+  /* Paint properties panel */
   QDockWindow *win1 = new QDockWindow();
   win1->setResizeEnabled(true);
-  KoColorChooser *mColorPanel = new KoColorChooser(win1);
-  win1->setWidget(mColorPanel);
+  QTabWidget *tab = new QTabWidget(win1, "Tab");
+  tab->setTabShape(QTabWidget::Triangular);
+  KoColorChooser *mColorPanel = new KoColorChooser(tab);
+  tab->insertTab(mColorPanel, "Color");
+  // TODO : add some content here :)
+  tab->insertTab(new QWidget(tab), "Gradient");
+  tab->insertTab(new QWidget(tab), "Pattern");
+  win1->setWidget(tab);
+  win1->setResizeEnabled(false);
+  //win1->setCaption(i18n("Paint properties"));
   mRightDock->moveDockWindow(win1);
 }
 
@@ -765,7 +775,7 @@ void KontourView::slotOptions()
 //TODO need this dialog?
 void KontourView::showTransformationDialog(int id)
 {
-/*    TransformationDialog *transformationDialog = new TransformationDialog (&cmdHistory);
+    /*TransformationDialog *transformationDialog = new TransformationDialog (&cmdHistory);
     QObject::connect (m_pDoc->gdoc(), SIGNAL (selectionChanged ()),
                       transformationDialog, SLOT (update ()));
     transformationDialog->setDocument ( m_pDoc->gdoc() );
