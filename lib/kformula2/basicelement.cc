@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-
+#include "contextstyle.h"
 #include "basicelement.h"
 #include "formulacursor.h"
 #include "sequenceelement.h"

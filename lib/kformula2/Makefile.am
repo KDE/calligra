@@ -9,7 +9,9 @@ lib_LTLIBRARIES = libkformula2.la
 KFORMULA2VERSION=	0.0.1
 KFORMULA2PATCH=	0
 
-libkformula2_la_SOURCES	= 
+libkformula2_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
+	formulaelement.cc indexelement.cc kformulacontainer.cc kformulawidget.cc \
+	sequenceelement.cc textelement.cc bracketelement.cc operatorelement.cc
 
 include_HEADERS = 
 
@@ -18,3 +20,6 @@ libkformula2_la_LIBADD  = $(LIB_KDEUI) $(all_libraries) $(KDE_RPATH)
 
 libkformula2_la_METASOURCES = AUTO
 
+check_PROGRAMS = kformulatest
+kformulatest_SOURCES = main.cc
+kformulatest_LDADD = libkformula2.la
