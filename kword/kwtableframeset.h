@@ -96,9 +96,8 @@ public:
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/ );
 
-    // constructors
+    // constructor
     KWTableFrameSet( KWDocument *_doc, const QString & name );
-    KWTableFrameSet( KWTableFrameSet &original );
     // destructor
     virtual ~KWTableFrameSet();
 
@@ -147,7 +146,7 @@ public:
     /** returns the number of rows */
     unsigned int getRows() { return m_rows; }
     /** returns the number of columns */
-    unsigned int getCols() { return m_cols; }
+    unsigned int getCols() { return m_colPositions.count()-1; }
 
     /** returns the number of cells the table contains, this includes
      * temporary headers. */
@@ -271,15 +270,12 @@ private:
     /** returns the absolute top-position of the row in the grid */
     double getPositionOfRow(unsigned int row, bool bottom=false);
 
-    unsigned int m_rows, m_cols;
-    CellSize m_widthMode;
-    CellSize m_heightMode;
+    unsigned int m_rows;
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;
     bool m_active;
     QPtrList<Cell> m_cells;
     QValueList<unsigned int> m_pageBoundaries;
-    static const unsigned int tableCellSpacing;
     unsigned int redrawFromCol;
     QValueList<double> m_rowPositions, m_colPositions;
 };
