@@ -64,6 +64,10 @@ public:
     // Used by ~KoTextParag to know if it should die quickly
     bool isDestroying() const { return m_bDestroying; }
 
+    // Automatically called by QTextFormatterBreakWords, but we don't want that feature
+    // (it breaks completely when e.g. the available width is 0 for some reason).
+    virtual bool setMinimumWidth( int, QTextParag * ) { return true; }
+
 private:
     KoZoomHandler * m_zoomHandler;
     bool m_bDestroying;
