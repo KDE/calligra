@@ -100,17 +100,34 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 VDocumentTab::VDocumentTab( KarbonPart* part, QWidget* parent )
 		: QWidget( parent, "DocumentTab" ), m_part( part )
 {
+	QFrame* frame;
 	QGridLayout* layout = new QGridLayout( this );
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
-	layout->addMultiCellWidget( m_documentPreview = new VDocumentPreview( &m_part->document(), this ), 0, 5, 1, 1 );
+	layout->addMultiCellWidget( m_documentPreview = new VDocumentPreview( &m_part->document(), this ), 0, 7, 2, 2 );
 	layout->addWidget( new QLabel( i18n( "Width:" ), this ), 0, 0 );
-	layout->addWidget( new QLabel( i18n( "Height:" ), this ), 2, 0 );
-	layout->addWidget( new QLabel( i18n( "Zoom factor:" ), this ), 4, 0 );
-	layout->addWidget( m_width = new QLabel( this ), 1, 0 );
-	layout->addWidget( m_height = new QLabel( this ), 3, 0 );
-	layout->setRowStretch( 5, 1 );
+	layout->addWidget( new QLabel( i18n( "Height:" ), this ), 1, 0 );
+	layout->addMultiCellWidget( frame = new QFrame( this ), 2, 2, 0, 1 );
+	frame->setFrameShape( QFrame::HLine );
+	layout->addWidget( new QLabel( i18n( "Layers:" ), this ), 3, 0 );
+	layout->addWidget( new QLabel( i18n( "Format:" ), this ), 4, 0 );
+	layout->addMultiCellWidget( frame = new QFrame( this ), 5, 5, 0, 1 );
+	frame->setFrameShape( QFrame::HLine );
+	layout->addMultiCellWidget( new QLabel( i18n( "Zoom factor:" ), this ), 6, 6, 0, 1 );
+	layout->addWidget( m_width = new QLabel( this ), 0, 1 );
+	layout->addWidget( m_height = new QLabel( this ), 1, 1 );
+	layout->addWidget( m_layers = new QLabel( this ), 3, 1 );
+	layout->addWidget( m_format = new QLabel( this ), 4, 1 );
+	layout->setRowStretch( 7, 1 );
+	layout->setColStretch( 0, 0 );
+	layout->setColStretch( 1, 0 );
+	layout->setColStretch( 2, 2 );
 	//layout->addWidget(
+	
+	m_width->setAlignment( AlignRight );
+	m_height->setAlignment( AlignRight );
+	m_layers->setAlignment( AlignRight );
+	m_format->setAlignment( AlignRight );
 	
 	updateDocumentInfo();
 } // VDocumentTab::VDocumentTab
@@ -123,6 +140,7 @@ void VDocumentTab::updateDocumentInfo()
 {
 	m_width->setText( KoUnit::userValue( m_part->document().width(), m_part->unit() ) + m_part->unitName() );
 	m_height->setText( KoUnit::userValue( m_part->document().height(), m_part->unit() ) + m_part->unitName() );
+	m_layers->setText( QString::number( m_part->document().layers().count() ) );
 } // VDocumentTab::updateDocumentInfo
 
 /*************************************************************************
@@ -707,11 +725,13 @@ void VHistoryTab::groupingChanged( int )
  *************************************************************************/
 
 VDocumentDocker::VDocumentDocker( KarbonView* view )
+		: VDocker( view )
 {
 	setCaption( i18n( "Overview" ) );
 
 	QTabWidget* tabWidget;
 	setWidget( tabWidget = new QTabWidget( this ) );
+	tabWidget->setFont( font() );
 	tabWidget->addTab( m_documentTab = new VDocumentTab( view->part(), this ), i18n( "Document" ) );
 	tabWidget->addTab( m_layersTab = new VLayersTab( view, this ), i18n( "Layers" ) );
 	tabWidget->addTab( m_historyTab = new VHistoryTab( view->part(), this ), i18n( "History" ) );

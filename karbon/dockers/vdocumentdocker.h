@@ -69,6 +69,8 @@ class VDocumentTab : public QWidget
 		VDocumentPreview* m_documentPreview;
 		QLabel*           m_height;
 		QLabel*           m_width;
+		QLabel*           m_layers;
+		QLabel*           m_format;
 		
 		KarbonPart*        m_part;
 }; // VDocumentTab
