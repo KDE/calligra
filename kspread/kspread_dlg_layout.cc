@@ -972,8 +972,6 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     grid->addWidget(currencyLabel, 1, 2);
     currencyLabel->setText( i18n("Currency:") );
 
-    kdDebug() << "here4" << endl;
-
     currency = new QComboBox( box, "ComboCurrency" );
     grid->addWidget(currency, 1, 3);
 
@@ -983,7 +981,6 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     bool ok = true;
     QString text;
 
-    kdDebug() << "here5" << endl;
     while ( ok )
     {
       text = KSpreadCurrency::getChooseString( index, ok );
@@ -994,19 +991,15 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
       else
       {
         break;
-        kdDebug() << ok << endl;
       }
 
       ++index;
     }
 
-    kdDebug() << "here3" << endl;
-
     currency->setCurrentItem( 0 );
     currency->hide();
     currencyLabel->hide();
 
-    kdDebug() << "here3" << endl;
     if ( !dlg->bFloatFormat || !dlg->bFloatColor )
         format->setCurrentItem( 5 );
     else if ( dlg->floatFormat == KSpreadCell::OnlyNegSigned && dlg->floatColor == KSpreadCell::AllBlack )
@@ -1023,15 +1016,15 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
 
     cellFormatType=dlg->formatType;
 
-    if(!cellFormatType)
+    if (!cellFormatType)
           number->setChecked(true);
     else
-        {
-        if(cellFormatType==KSpreadCell::Number)
+    {
+        if (cellFormatType==KSpreadCell::Number)
                 number->setChecked(true);
-        else if(cellFormatType==KSpreadCell::Percentage)
+        else if (cellFormatType==KSpreadCell::Percentage)
                 percent->setChecked(true);
-        else if(cellFormatType==KSpreadCell::Money)
+        else if (cellFormatType==KSpreadCell::Money)
         {
                 money->setChecked(true);
                 currencyLabel->show();
@@ -1052,32 +1045,32 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
                   currency->setCurrentText( tmp );
                 }
         }
-        else if(cellFormatType==KSpreadCell::Scientific)
-                scientific->setChecked(true);
-        else if(cellFormatType==KSpreadCell::TextDate ||
-        cellFormatType==KSpreadCell::ShortDate
-        ||((int)(cellFormatType)>=200 && (int)(cellFormatType)<=217))
+        else if ( cellFormatType == KSpreadCell::Scientific )
+          scientific->setChecked(true);
+        else if ( cellFormatType == KSpreadCell::TextDate 
+                  || cellFormatType==KSpreadCell::ShortDate
+                  || ( ( (int)( cellFormatType ) >= 200 ) && ( (int)(cellFormatType) <= 217 ) ) )
                 date->setChecked(true);
-        else if(cellFormatType==KSpreadCell::Time ||
-        cellFormatType==KSpreadCell::SecondeTime
-        ||cellFormatType==KSpreadCell::Time_format1
-        ||cellFormatType==KSpreadCell::Time_format2
-        ||cellFormatType==KSpreadCell::Time_format3
-        ||cellFormatType==KSpreadCell::Time_format4
-        ||cellFormatType==KSpreadCell::Time_format5
-        ||cellFormatType==KSpreadCell::Time_format6)
-                time->setChecked(true);
-        else if(cellFormatType==KSpreadCell::fraction_half ||
-        cellFormatType==KSpreadCell::fraction_quarter ||
-        cellFormatType==KSpreadCell::fraction_eighth ||
-        cellFormatType==KSpreadCell::fraction_sixteenth ||
-        cellFormatType==KSpreadCell::fraction_tenth ||
-        cellFormatType==KSpreadCell::fraction_hundredth ||
-        cellFormatType==KSpreadCell::fraction_one_digit ||
-        cellFormatType==KSpreadCell::fraction_two_digits ||
-        cellFormatType==KSpreadCell::fraction_three_digits)
-                fraction->setChecked(true);
-	else if(cellFormatType==KSpreadCell::Text_format)
+        else if ( cellFormatType==KSpreadCell::Time 
+                  || cellFormatType==KSpreadCell::SecondeTime
+                  || cellFormatType==KSpreadCell::Time_format1
+                  ||cellFormatType==KSpreadCell::Time_format2
+                  ||cellFormatType==KSpreadCell::Time_format3
+                  ||cellFormatType==KSpreadCell::Time_format4
+                  ||cellFormatType==KSpreadCell::Time_format5
+                  ||cellFormatType==KSpreadCell::Time_format6)
+          time->setChecked(true);
+        else if ( cellFormatType==KSpreadCell::fraction_half 
+                  || cellFormatType==KSpreadCell::fraction_quarter ||
+                  cellFormatType==KSpreadCell::fraction_eighth ||
+                  cellFormatType==KSpreadCell::fraction_sixteenth ||
+                  cellFormatType==KSpreadCell::fraction_tenth ||
+                  cellFormatType==KSpreadCell::fraction_hundredth ||
+                  cellFormatType==KSpreadCell::fraction_one_digit ||
+                  cellFormatType==KSpreadCell::fraction_two_digits ||
+                  cellFormatType==KSpreadCell::fraction_three_digits)
+          fraction->setChecked(true);
+	else if (cellFormatType==KSpreadCell::Text_format)
 	  textFormat->setChecked(true);
         }
 

@@ -7019,7 +7019,7 @@ void KSpreadSheet::emit_updateRow( RowFormat *_format, int _row )
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
       if ( c->row() == _row )
-          c->setLayoutDirtyFlag();
+          c->setLayoutDirtyFlag( true );
 
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
@@ -7035,7 +7035,7 @@ void KSpreadSheet::emit_updateColumn( ColumnFormat *_format, int _column )
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
         if ( c->column() == _column )
-            c->setLayoutDirtyFlag();
+            c->setLayoutDirtyFlag( true );
 
     emit sig_updateHBorder( this );
     emit sig_updateView( this );

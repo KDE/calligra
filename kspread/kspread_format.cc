@@ -347,9 +347,13 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc,int _col, int _row, boo
     if ( hasProperty( PFactor ) || hasNoFallBackProperties( PFactor ) || force )
 	format.setAttribute( "faktor", factor(_col, _row ) );
     if ( hasProperty( PFormatType ) || hasNoFallBackProperties( PFormatType ) || force )
-	format.setAttribute( "format",(int)getFormatType(_col,_row ));
+        format.setAttribute( "format",(int)getFormatType(_col,_row ));
     if ( hasProperty( PCustomFormat ) || hasNoFallBackProperties( PCustomFormat ) || force )
-        format.setAttribute( "custom", getFormatString( _col, _row ));
+    {
+        QString s( getFormatString( _col, _row ) );
+        if ( s.length() > 0 )
+            format.setAttribute( "custom", s );
+    }
     if ( m_eFormatType == Money )
     {
       format.setAttribute( "type", (int) m_currency.type );
@@ -462,6 +466,7 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
     if ( hasProperty( PFormatType ) || hasNoFallBackProperties( PFormatType ) || force )
 	format.setAttribute( "format",(int) m_eFormatType);
     if ( hasProperty( PCustomFormat ) || hasNoFallBackProperties( PCustomFormat ) || force )
+      if ( m_strFormat.length() > 0 )
         format.setAttribute( "custom", m_strFormat );
     if ( m_eFormatType == Money )
     {
@@ -610,8 +615,10 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
     }
     if ( f.hasAttribute( "format" ) )
     {
-        setFormatType((FormatType)f.attribute("format").toInt( &ok ));
-        if ( !ok ) return false;
+        int fo = f.attribute("format").toInt( &ok );
+        if ( ! ok )
+          return false;
+        setFormatType( ( FormatType ) fo );
     }
     if ( f.hasAttribute( "custom" ) )
     {
@@ -734,7 +741,7 @@ bool KSpreadFormat::load( const QDomElement& f,PasteMode pm )
 //
 /////////////
 
-void KSpreadFormat::setFormatString( QString const & format, FormatType type )
+void KSpreadFormat::setFormatString( QString const & format )
 {
   if ( format.isEmpty() )
   {
@@ -759,7 +766,7 @@ void KSpreadFormat::setFormatString( QString const & format, FormatType type )
   }
 
   m_strFormat = format;
-  setFormatType( type ); // calls formatChanged();
+  formatChanged();
 }
 
 void KSpreadFormat::setAlign( Align _align )
@@ -847,16 +854,16 @@ void KSpreadFormat::setPostfix( const QString& _postfix )
 
 void KSpreadFormat::setPrecision( int _p )
 {
-    if(_p==-1)
-        {
+    if ( _p == -1 )
+    {
         clearProperty( PPrecision );
         setNoFallBackProperties( PPrecision );
-        }
+    }
     else
-        {
+    {
         setProperty( PPrecision );
         clearNoFallBackProperties( PPrecision );
-        }
+    }
     m_iPrecision = _p;
     formatChanged();
 }
@@ -1279,19 +1286,18 @@ void KSpreadFormat::setVerticalText( bool _b )
 void KSpreadFormat::setFormatType(FormatType _format)
 {
     if ( _format == KSpreadFormat::Number )
-        {
+    {
         clearProperty( PFormatType );
         setNoFallBackProperties( PFormatType);
-        }
+    }
     else
-        {
+    {
         setProperty( PFormatType );
         clearNoFallBackProperties( PFormatType);
-        }
+    }
 
     m_eFormatType=_format;
     formatChanged();
-
 }
 
 void KSpreadFormat::setAngle(int _angle)
@@ -1610,7 +1616,7 @@ int KSpreadFormat::precision( int col, int row ) const
 }
 
 KSpreadFormat::FloatFormat KSpreadFormat::floatFormat( int col, int row ) const
-{
+{  
     if ( !hasProperty( PFloatFormat ) && !hasNoFallBackProperties(PFloatFormat ))
     {
 	const KSpreadFormat* l = fallbackFormat( col, row );

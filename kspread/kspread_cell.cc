@@ -200,7 +200,8 @@ void KSpreadCell::defaultStyle()
 
 void KSpreadCell::formatChanged()
 {
-  setFlag(Flag_LayoutDirty);
+  setFlag( Flag_LayoutDirty );
+  setFlag( Flag_TextFormatDirty );
 }
 
 KSpreadFormat* KSpreadCell::fallbackFormat( int, int row )
@@ -256,7 +257,7 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
     // QPainter painter;
     // painter.begin( m_pTable->gui()->canvasWidget() );
 
-    setFlag(Flag_LayoutDirty);
+    setFlag( Flag_LayoutDirty );
 }
 
 void KSpreadCell::move( int col, int row )
@@ -292,15 +293,17 @@ void KSpreadCell::move( int col, int row )
       //  forceExtraCells( col, row, ex, ey );
 }
 
-void KSpreadCell::setLayoutDirtyFlag()
+void KSpreadCell::setLayoutDirtyFlag( bool format )
 {
-    setFlag(Flag_LayoutDirty);
+    setFlag( Flag_LayoutDirty );
+    if ( format )
+        setFlag( Flag_TextFormatDirty );
 
     QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
     QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
     for ( ; it != end; ++it )
     {
-	(*it)->setLayoutDirtyFlag();
+	(*it)->setLayoutDirtyFlag( format );
     }
 }
 
@@ -818,7 +821,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         return;
     }
 
-    setOutputText();
+    if ( m_strText.length() > 0 )
+      setOutputText();
 
     // Empty text?
     if ( m_strOutText.isEmpty() )
@@ -1089,11 +1093,17 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
 void KSpreadCell::setOutputText()
 {
-  if (isDefault())
+  if ( isDefault() )
   {
     m_strOutText = QString::null;
     return;
   }
+
+  if ( !testFlag( Flag_TextFormatDirty ) )
+    return;
+
+  clearFlag( Flag_TextFormatDirty );
+
   if (hasError())
   {
     if (testFlag(Flag_ParseError))
@@ -1606,6 +1616,7 @@ bool KSpreadCell::makeFormula()
     m_strFormulaOut = "####";
     m_value.setError ( "####" );
     setFlag(Flag_LayoutDirty);
+    setFlag(Flag_TextFormatDirty);
     if (m_pTable->doc()->getShowMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
@@ -1634,6 +1645,9 @@ void KSpreadCell::clearFormula()
 
 bool KSpreadCell::calc(bool delay)
 {
+  if ( !isFormula() )
+    return true;
+
   if ( testFlag(Flag_Progress) )
   {
     kdError(36001) << "ERROR: Circle" << endl;
@@ -1649,47 +1663,35 @@ bool KSpreadCell::calc(bool delay)
     return false;
   }
 
+  if ( m_pCode == 0 )
+  {
+    if (testFlag(Flag_ParseError))  // there was a parse error
+      return false;
+    else
+    {
+      /* we were probably at a "isLoading() = true" state when we originally
+       * parsed
+       */
+      makeFormula();
+
+      if (m_pCode == 0) // there was a parse error
+        return false;
+    }
+  }
+
   if ( !testFlag(Flag_CalcDirty) )
     return true;
 
   if (delay)
   {
     if ( m_pTable->doc()->delayCalculation() )
-    {
       return true;
-    }
   }
 
   setFlag(Flag_LayoutDirty);
+  setFlag(Flag_TextFormatDirty);
   clearFlag(Flag_CalcDirty);
 
-  if ( !isFormula() )
-  {
-    return true;
-  }
-
-
-  if (m_pCode == 0)
-  {
-    if (testFlag(Flag_ParseError))
-    // there was a parse error
-    {
-      return false;
-    }
-    else
-    {
-      /* we were probably at a "isLoading() = true" state when we originally
-         parsed
-      */
-      makeFormula();
-
-      if (m_pCode == 0)
-      {
-        // there was a parse error
-        return false;
-      }
-    }
-  }
   setFlag(Flag_Progress);
 
   /* calculate any dependancies */
@@ -1901,7 +1903,7 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
   // Need to make a new layout ?
 
   /* TODO - this needs to be taken out eventually - it is done in canvas::paintUpdates */
-  if ( testFlag(Flag_LayoutDirty) )
+  if ( testFlag( Flag_LayoutDirty ) )
     makeLayout( painter, cellRef.x(), cellRef.y() );
 
 
@@ -3497,7 +3499,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
 
 
-void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
+void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
 {
 
   m_pTable->doc()->emitBeginOperation(false);
@@ -3514,6 +3516,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   if ( !m_strText.isEmpty() && m_strText[0] == '=' )
   {
     setFlag(Flag_LayoutDirty);
+    setFlag(Flag_TextFormatDirty);
 
     m_content = Formula;
     if ( !m_pTable->isLoading() )
@@ -3531,6 +3534,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   {
     m_pQML = new QSimpleRichText( m_strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
     setFlag(Flag_LayoutDirty);
+    setFlag(Flag_TextFormatDirty);
     m_content = RichText;
   }
   /**
@@ -3544,6 +3548,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     checkTextInput();
 
     setFlag(Flag_LayoutDirty);
+    setFlag(Flag_TextFormatDirty);
   }
 
   /**
@@ -3782,6 +3787,7 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     m_pQML = 0;
 
     setFlag(Flag_LayoutDirty);
+    setFlag(Flag_TextFormatDirty);
     m_content = Text;
 
     m_pTable->setRegionPaintDirty(cellRect());
@@ -3791,18 +3797,21 @@ void KSpreadCell::setValue( const KSpreadValue& v )
 
 bool KSpreadCell::isDate() const
 {
+  FormatType ft = formatType();
   // workaround, since date/time is stored as floating-point
-  return m_value.isNumber() &&
-  ( ( (formatType()>=date_format1) && (formatType()<=date_format26) ) ||
-    formatType()==CustomDate );
+  return m_value.isNumber() 
+    &&  ( ft == ShortDate || ft == TextDate || ( (ft >= date_format1) && (ft <= date_format26) ) 
+          || ft == CustomDate );
 }
 
 bool KSpreadCell::isTime() const
 {
+  FormatType ft = formatType();
+
   // workaround, since date/time is stored as floating-point
-  return m_value.isNumber() &&
-  ( ( (formatType()>=Time_format1) && (formatType()<=Time_format6) ) ||
-    formatType()==CustomTime );
+  return m_value.isNumber() 
+    && ( ( (ft >= Time) && (ft <= Time_format6) ) 
+         || ft == CustomTime );
 }
 
 QDate KSpreadCell::valueDate() const
@@ -4186,7 +4195,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
             format.setAttribute( "rowspan", extraYCells() );
     }
     if ( style() )
-        format.setAttribute( "style", (int)m_style );
+        format.setAttribute( "style", (int) m_style );
 
 
     QDomElement conditionElement = conditions.saveConditions(doc);
@@ -4196,7 +4205,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
       cell.appendChild( conditionElement );
     }
 
-    if( m_Validity!=0 )
+    if ( m_Validity != 0 )
     {
         QDomElement validity = doc.createElement("validity");
 
@@ -4215,37 +4224,37 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         validity.appendChild( message );
 
         QString tmp;
-        if(  m_Validity->timeMin.isValid())
-                {
+        if ( m_Validity->timeMin.isValid() )
+        {
                 QDomElement timeMin = doc.createElement( "timemin" );
                 tmp=m_Validity->timeMin.toString();
                 timeMin.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( timeMin );
-                }
-        if(  m_Validity->timeMax.isValid())
-                {
+        }
+        if ( m_Validity->timeMax.isValid() )
+        {
                 QDomElement timeMax = doc.createElement( "timemax" );
                 tmp=m_Validity->timeMax.toString();
                 timeMax.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( timeMax );
-                }
+        }
 
-        if(m_Validity->dateMin.isValid())
-                {
+        if ( m_Validity->dateMin.isValid() )
+        {
                 QDomElement dateMin = doc.createElement( "datemin" );
                 QString tmp("%1/%2/%3");
                 tmp = tmp.arg(m_Validity->dateMin.year()).arg(m_Validity->dateMin.month()).arg(m_Validity->dateMin.day());
                 dateMin.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( dateMin );
-                }
-        if( m_Validity->dateMax.isValid())
-                {
+        }
+        if ( m_Validity->dateMax.isValid() )
+        {
                 QDomElement dateMax = doc.createElement( "datemax" );
                 QString tmp("%1/%2/%3");
                 tmp = tmp.arg(m_Validity->dateMax.year()).arg(m_Validity->dateMax.month()).arg(m_Validity->dateMax.day());
                 dateMax.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( dateMax );
-                }
+        }
 
         cell.appendChild( validity );
     }
@@ -4272,8 +4281,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
 
             /* we still want to save the results of the formula */
             QDomElement formulaResult = doc.createElement( "result" );
-            QString str( m_strOutText );
-            saveCellResult( doc, formulaResult, str );
+            saveCellResult( doc, formulaResult, m_strOutText );
             cell.appendChild( formulaResult );
 
         }
@@ -4288,9 +4296,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         else
         {
             // Save the cell contents (in a locale-independent way)
-            QString str( m_strText );
             QDomElement text = doc.createElement( "text" );
-            saveCellResult( doc, text, str );
+            saveCellResult( doc, text, m_strText );
             cell.appendChild( text );
         }
     }
@@ -4302,13 +4309,11 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
 }
 
 bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
-                                  QString defaultStr )
+                                  QString str )
 {
-  QString str = defaultStr;
-
   QString dataType = "Other"; // fallback
 
-  if( m_value.isNumber() )
+  if ( m_value.isNumber() )
   {
       if ( isDate() )
       {
@@ -4332,19 +4337,20 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
       }
   }
 
-  if( m_value.isBoolean() )
+  if ( m_value.isBoolean() )
   {
       dataType = "Bool";
       str = m_value.asBoolean() ? "true" : "false";
   }
 
-  if( m_value.isString() )
+  if ( m_value.isString() )
   {
       dataType = "Str";
       str = m_value.asString();
   }
 
   result.setAttribute( "dataType", dataType );
+  result.setAttribute( "outStr", m_strOutText );
   result.appendChild( doc.createTextNode( str ) );
 
   return true; /* really isn't much of a way for this function to fail */
@@ -4386,7 +4392,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
          && ( (pm == Normal) || (pm == Format) || (pm == NoBorder) ) )
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
-        if ( !KSpreadFormat::load( f,pm ) )
+
+        if ( !KSpreadFormat::load( f, pm ) )
             return false;
 
         if ( f.hasAttribute( "colspan" ) )
@@ -4423,9 +4430,9 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             }
         }
 
-        if(testFlag(Flag_ForceExtra))
+        if ( testFlag( Flag_ForceExtra ) )
         {
-            forceExtraCells(m_iColumn,m_iRow,m_iExtraXCells,m_iExtraYCells);
+            forceExtraCells( m_iColumn, m_iRow, m_iExtraXCells, m_iExtraYCells );
         }
 
     }
@@ -4445,69 +4452,68 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         QDomElement param = validity.namedItem( "param" ).toElement();
         if(!param.isNull())
         {
-        m_Validity=new KSpreadValidity;
-        if ( param.hasAttribute( "cond" ) )
-            {
-            m_Validity->m_cond=(Conditional) param.attribute("cond").toInt( &ok );
+          m_Validity = new KSpreadValidity;
+          if ( param.hasAttribute( "cond" ) )
+          {
+            m_Validity->m_cond = (Conditional) param.attribute("cond").toInt( &ok );
             if ( !ok )
-                return false;
-            }
-         if ( param.hasAttribute( "action" ) )
-            {
-            m_Validity->m_action=(Action) param.attribute("action").toInt( &ok );
+              return false;
+          }
+          if ( param.hasAttribute( "action" ) )
+          {
+            m_Validity->m_action = (Action) param.attribute("action").toInt( &ok );
             if ( !ok )
-                return false;
-            }
-         if ( param.hasAttribute( "allow" ) )
-            {
-            m_Validity->m_allow=(Allow) param.attribute("allow").toInt( &ok );
+              return false;
+          }
+          if ( param.hasAttribute( "allow" ) )
+          {
+            m_Validity->m_allow = (Allow) param.attribute("allow").toInt( &ok );
             if ( !ok )
-                return false;
-            }
-         if ( param.hasAttribute( "valmin" ) )
-            {
-            m_Validity->valMin=param.attribute("valmin").toDouble( &ok );
+              return false;
+          }
+          if ( param.hasAttribute( "valmin" ) )
+          {
+            m_Validity->valMin = param.attribute("valmin").toDouble( &ok );
             if ( !ok )
-                return false;
-            }
-         if ( param.hasAttribute( "valmax" ) )
-            {
-            m_Validity->valMax=param.attribute("valmax").toDouble( &ok );
+              return false;
+          }
+          if ( param.hasAttribute( "valmax" ) )
+          {
+            m_Validity->valMax = param.attribute("valmax").toDouble( &ok );
             if ( !ok )
-                return false;
-            }
+              return false;
+          }
         }
         QDomElement title = validity.namedItem( "title" ).toElement();
-        if(!title.isNull())
+        if (!title.isNull())
         {
-                 m_Validity->title= title.text();
+            m_Validity->title = title.text();
         }
         QDomElement message = validity.namedItem( "message" ).toElement();
-        if(!message.isNull())
+        if (!message.isNull())
         {
-                 m_Validity->message= message.text();
+            m_Validity->message = message.text();
         }
         QDomElement timeMin = validity.namedItem( "timemin" ).toElement();
         if ( !timeMin.isNull()  )
         {
-            m_Validity->timeMin=toTime(timeMin);
-         }
+            m_Validity->timeMin = toTime(timeMin);
+        }
         QDomElement timeMax = validity.namedItem( "timemax" ).toElement();
         if ( !timeMax.isNull()  )
         {
-            m_Validity->timeMax=toTime(timeMax);
+            m_Validity->timeMax = toTime(timeMax);
          }
         QDomElement dateMin = validity.namedItem( "datemin" ).toElement();
         if ( !dateMin.isNull()  )
         {
-            m_Validity->dateMin=toDate(dateMin);
+            m_Validity->dateMin = toDate(dateMin);
          }
         QDomElement dateMax = validity.namedItem( "datemax" ).toElement();
         if ( !dateMax.isNull()  )
         {
-            m_Validity->dateMax=toDate(dateMax);
+            m_Validity->dateMax = toDate(dateMax);
          }
-
     }
 
     //
@@ -4536,14 +4542,95 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
       {
         text.setAttribute( "dataType", cell.attribute( "dataType" ) );
       }
-      if ( pm ==::Result )
+
+      loadCellData(text, op);
+
+      QDomElement result = cell.namedItem( "result" ).toElement();
+      if ( !result.isNull() )
       {
-          QDomElement result = cell.namedItem( "result" ).toElement();
-          if ( !result.isNull() )
-              loadCellData(result, op);
+        QString dataType;
+        QString t = result.text();
+
+        if ( result.hasAttribute( "dataType" ) )
+          dataType = result.attribute( "dataType" );
+        if ( result.hasAttribute( "outStr" ) ) 
+        {
+          m_strOutText = result.attribute( "outStr" );
+          clearFlag( Flag_TextFormatDirty );
+        }
+
+        bool clear = true;
+        // boolean ?
+        if( dataType == "Bool" )
+        {
+          if ( t == "false" )
+            m_value.setValue( true );
+          else if ( t == "true" )
+            m_value.setValue( false );
+          else
+            clear = false;
+        }
+        else if( dataType == "Num" )
+        {
+          bool ok = false;
+          double d = t.toDouble( &ok );
+          if ( ok )
+            m_value.setValue ( d );
+          else
+            clear = false;
+        }
+        else if( dataType == "Date" )
+        {
+          bool ok = false;
+          double d = t.toDouble( &ok );
+          if ( ok )          
+            m_value.setValue ( d );
+          else
+          {
+            int pos   = t.find( '/' );
+            int year  = t.mid( 0, pos ).toInt();
+            int pos1  = t.find( '/', pos + 1 );
+            int month = t.mid( pos + 1, ( ( pos1 - 1 ) - pos ) ).toInt();
+            int day   = t.right( t.length() - pos1 - 1 ).toInt();
+            QDate date( year, month, day );
+            if ( date.isValid() )
+              m_value.setValue( date );
+            else
+              clear = false;
+          }
+        }
+        else if( dataType == "Time" )
+        {
+          bool ok = false;
+          double d = t.toDouble( &ok );
+          if ( ok )          
+            m_value.setValue( d );
+          else
+          {
+            int hours   = -1;
+            int minutes = -1;
+            int second  = -1;
+            int pos, pos1;
+            pos   = t.find( ':' );
+            hours = t.mid( 0, pos ).toInt();
+            pos1  = t.find( ':', pos + 1 );
+            minutes = t.mid( pos + 1, ( ( pos1 - 1 ) - pos ) ).toInt();
+            second  = t.right( t.length() - pos1 - 1 ).toInt();
+            QTime time( hours, minutes, second );
+            if ( time.isValid() )
+              m_value.setValue( time );
+            else
+              clear = false;
+          }
+        }
+        else
+        {
+          m_value.setValue( t );
+        }
+
+        if ( clear )
+          clearFlag( Flag_CalcDirty );
       }
-      else
-          loadCellData(text, op);
     }
 
     if ( !f.isNull() && f.hasAttribute( "style" ) )
@@ -4552,7 +4639,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     return true;
 }
 
-bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
+bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 {
   QString t = text.text();
   t = t.stripWhiteSpace();
@@ -4565,6 +4652,7 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
     m_strText = pasteOperation( t, m_strText, op );
 
     setFlag(Flag_LayoutDirty);
+    setFlag(Flag_CalcDirty);
     clearAllErrors();
     m_content = Formula;
 
@@ -4575,10 +4663,8 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
   // rich text ?
   else if (t[0] == '!' )
   {
-      kdDebug()<<" text :"<<t<<endl;
       m_pQML = new QSimpleRichText( t.mid(1),  QApplication::font() );//, m_pTable->widget() );
       m_strText = t;
-
   }
   else
   {
@@ -4669,9 +4755,10 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
         int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
         int day = t.right(t.length()-pos1-1).toInt();
         m_value.setValue( QDate(year,month,day) );
-        if(valueDate().isValid() ) // Should always be the case for new docs
+        if ( valueDate().isValid() ) // Should always be the case for new docs
           m_strText = locale()->formatDate( valueDate(), true );
-        else { // This happens with old docs, when format is set wrongly to date
+        else // This happens with old docs, when format is set wrongly to date
+        { 
           m_strText = pasteOperation( t, m_strText, op );
           checkTextInput();
         }
@@ -4690,11 +4777,12 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
         minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
         second = t.right(t.length()-pos1-1).toInt();
         m_value.setValue( QTime(hours,minutes,second) );
-        if(valueTime().isValid() ) // Should always be the case for new docs
+        if ( valueTime().isValid() ) // Should always be the case for new docs
           m_strText = locale()->formatTime( valueTime(), true );
-        else { // This happens with old docs, when format is set wrongly to time
+        else  // This happens with old docs, when format is set wrongly to time
+        {
           m_strText = pasteOperation( t, m_strText, op );
-        checkTextInput();
+          checkTextInput();
         }
       }
 
@@ -4704,12 +4792,19 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
         m_strText = pasteOperation( t, m_strText, op );
         m_value.setValue( m_strText );
       }
-      setFlag(Flag_LayoutDirty);
     }
   }
 
+  if ( text.hasAttribute( "outStr" ) ) // very new docs
+  {
+    m_strOutText = text.attribute( "outStr" );
+    clearFlag( Flag_TextFormatDirty );
+  }
+  else
+    setFlag( Flag_TextFormatDirty );
+
   if ( !m_pTable->isLoading() )
-    setCellText(m_strText);
+    setCellText( m_strText );
 
   return true;
 }
@@ -5142,7 +5237,7 @@ void SelectPrivate::slotItemSelected( int _id )
 {
     m_iIndex = _id;
 
-    m_pCell->setLayoutDirtyFlag();
+    m_pCell->setLayoutDirtyFlag( true );
     m_pCell->checkTextInput(); // is this necessary ?
 
     m_pCell->m_pTable->setRegionPaintDirty(m_pCell->cellRect());

@@ -525,7 +525,7 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
   m_bLoading = false;
 
-  m_pMap->update();
+  //  m_pMap->update();
 
   kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 

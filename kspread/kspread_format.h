@@ -157,7 +157,7 @@ public:
     /**
      * sets the format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
      */
-    virtual void setFormatString( QString const & format, FormatType type = Custom );
+    virtual void setFormatString( QString const & format );
 
     virtual void setAlign( Align _align );
     virtual void setAlignY( AlignY _alignY );

@@ -497,7 +497,7 @@ public:
      * This flag is for example set if the width of the column changes or if
      * some cell specific format value like font or text change.
      */
-    virtual void setLayoutDirtyFlag();
+    virtual void setLayoutDirtyFlag( bool format = false );
     bool layoutDirtyFlag() const;
 
     void clearDisplayDirtyFlag();
@@ -703,7 +703,8 @@ public:
       Flag_ParseError            = 0x01000000,
       Flag_CircularCalculation   = 0x02000000,
       Flag_DependancyError       = 0x04000000,
-      Flag_PaintingCell          = 0x08000000
+      Flag_PaintingCell          = 0x08000000,
+      Flag_TextFormatDirty       = 0x10000000
     };
 
     void clearFlag( CellFlags flag );
@@ -1034,7 +1035,7 @@ private:
   /* helper functions to the load/save routines */
   bool loadCellData(const QDomElement &text, Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
-                       QString defaultStr );
+                       QString str );
 };
 
 #endif
