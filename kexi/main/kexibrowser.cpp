@@ -60,6 +60,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	lyr->addWidget(m_list);
 //	setFocusProxy(m_list);
 	m_list->renameLineEdit()->installEventFilter(this);
+//	m_list->installEventFilter(this);
 //	m_ac = m_parent->actionCollection();
 //	KexiActionProxy ap;
 	//shared actions
@@ -297,6 +298,13 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 {
 	if (o==m_list->renameLineEdit() && e->type()==QEvent::Hide) {
 		itemRenameDone();
+	}
+	else if (e->type()==QEvent::AccelOverride) {
+		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+		//override delete action
+		if (ke->key()==Key_Delete && ke->state()==NoButton) {
+			slotRemove();
+		}
 	}
 	return false;
 }
