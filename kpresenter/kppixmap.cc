@@ -39,8 +39,11 @@ KPPixmap::KPPixmap( QString _filename, KSize _size )
 	QBuffer buf( str );
 	buf.open( IO_WriteOnly );
 	QImageIO io( &buf, "XPM" );
-	io.setImage( pixmap.convertToImage() );
+	io.setImage( orig_pixmap.convertToImage() );
 	io.write();
+// 	QString fn= "/tmp/kpresenter.xpm";
+// 	pixmap.save( fn, "XPM" );
+
 	data = string_to_native_string( str.data() );
 
 	if ( _size != pixmap.size() && _size != orig_size && pixmap.width() != 0 && pixmap.height() != 0 )
