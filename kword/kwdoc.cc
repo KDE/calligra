@@ -201,6 +201,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bInsertDirectCursor=false;
     m_globalLanguage = KGlobal::locale()->language();
     m_bGlobalHyphenation = false;
+    m_bGeneratingPreview = false;
     m_lastViewMode="ModeNormal";
     m_viewMode = 0;
 
@@ -950,7 +951,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
 
         // If the number of pages changed, update views and variables etc.
         // (now that the frame layout has been done)
-        if ( m_pages != oldPages )
+        if ( m_pages != oldPages && !m_bGeneratingPreview )
         {
             // Very much like the end of appendPage, but we don't want to call recalcFrames ;)
             emit newContentsSize();
@@ -2811,9 +2812,12 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
     return new KWView( m_viewMode, parent, name, this );
 }
 
+// Paint this document when it's embedded
+// This is also used to paint the preview.png that goes into the ZIP file
 void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool transparent, double zoomX, double zoomY )
 {
     //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+
     setZoom( 100 );
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
@@ -2859,12 +2863,25 @@ QPixmap KWDocument::generatePreview( const QSize& size )
     double oldZoomX = zoomedResolutionX();
     double oldZoomY = zoomedResolutionY();
 
+    // Sometimes (due to the different resolution?) the layout creates a new page
+    // while saving the preview. If this happens, we don't want to repaint the real views
+    // (due to KWCanvas::slotNewContentsSize)
+    for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
+        viewPtr->getGUI()->canvasWidget()->setUpdatesEnabled( false );
+    }
+    Q_ASSERT( !m_bGeneratingPreview );
+    m_bGeneratingPreview = true;
     QPixmap pix = KoDocument::generatePreview(size);
 
+    // Restore everything as it was before
     setResolution( oldResolutionX, oldResolutionY );
     setZoom( oldZoom );
     newZoomAndResolution( false, false );
 
+    for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
+        viewPtr->getGUI()->canvasWidget()->setUpdatesEnabled( true );
+    }
+    m_bGeneratingPreview = false;
     if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() ) {
         formulaDocument->setZoomAndResolution( oldZoom, oldZoomX, oldZoomY );
     }
@@ -3122,7 +3139,8 @@ void KWDocument::afterAppendPage( int pageNum )
 #ifdef DEBUG_PAGES
     kdDebug(32002) << "KWDocument::afterAppendPage " << pageNum << endl;
 #endif
-    emit newContentsSize();
+    if ( !m_bGeneratingPreview )
+        emit newContentsSize();
 
     if ( isHeaderVisible() || isFooterVisible() || m_bHasEndNotes )
     {
@@ -3219,7 +3237,8 @@ void KWDocument::afterRemovePages()
         fit.current()->updateFrames();
 
     recalcVariables( VT_PGNUM );
-    emit newContentsSize();
+    if ( !m_bGeneratingPreview )
+        emit newContentsSize();
 }
 
 void KWDocument::tryRemovingPages()
@@ -3962,7 +3981,9 @@ void KWDocument::refreshMenuCustomVariable()
 void KWDocument::recalcVariables( int type )
 {
     m_varColl->recalcVariables(type);
-    slotRepaintVariable();
+    if ( !m_bGeneratingPreview )
+        slotRepaintVariable();
+
 #if 0
     bool update = false;
     QPtrListIterator<KWVariable> it( variables );
@@ -3995,7 +4016,7 @@ void KWDocument::slotRepaintVariable()
 {
     QPtrListIterator<KWFrameSet> it = framesetsIterator();
     for (; it.current(); ++it )
-        if( it.current()->type()==FT_TEXT)
+        if( it.current()->type()==FT_TEXT && it.current()->isVisible() )
             slotRepaintChanged( (*it) );
 #if 0
     KWTextFrameSet * textfs = static_cast<KWTextDocument *>(it.current()->textDocument())->textFrameSet();

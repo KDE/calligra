@@ -979,6 +979,7 @@ private:
     // MOC_SKIP_END
 #endif
     bool m_bGlobalHyphenation;
+    bool m_bGeneratingPreview;
 };
 
 
