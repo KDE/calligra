@@ -54,6 +54,8 @@ public:
 
     void processSubDocQueue();
 
+    void finishDocument();
+
     typedef wvWare::HeaderFunctor SubDocument;
     bool hasSubDocument() const;
     SubDocument popSubDocument();
@@ -67,7 +69,6 @@ protected slots:
     void pushSubDocument( const wvWare::HeaderFunctor& functor /*const SubDocument& subdoc*/ );
 
 private:
-    void prepareDocument();
     void processStyles();
     void createInitialFrame( QDomElement& parentFramesetElem );
 
@@ -77,6 +78,8 @@ private:
     KWordTextHandler* m_textHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
+    bool m_hasHeader;
+    bool m_hasFooter;
 };
 
 #endif // DOCUMENT_H

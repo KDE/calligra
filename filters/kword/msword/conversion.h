@@ -68,6 +68,8 @@ namespace Conversion
     // Convert wv2's Header Type to a KWord frameset name
     QString headerTypeToFramesetName( unsigned char type );
 
+    bool isHeader( unsigned char type );
+
 };
 
 #endif

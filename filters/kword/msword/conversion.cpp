@@ -213,3 +213,14 @@ QString Conversion::headerTypeToFramesetName( unsigned char type )
     }
     return QString::null;
 }
+
+bool Conversion::isHeader( unsigned char type )
+{
+    switch (type) {
+    case wvWare::HeaderData::HeaderEven:
+    case wvWare::HeaderData::HeaderOdd:
+    case wvWare::HeaderData::HeaderFirst:
+        return true;
+    }
+    return false;
+}

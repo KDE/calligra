@@ -56,6 +56,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, framesetsElem );
     document.parse();
     document.processSubDocQueue();
+    document.finishDocument();
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if ( !out ) {

@@ -34,7 +34,8 @@
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement )
     : m_mainDocument( mainDocument ), m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ),
-      m_parser( wvWare::ParserFactory::createParser( fileName ) )
+      m_parser( wvWare::ParserFactory::createParser( fileName ) ),
+      m_hasHeader(false), m_hasFooter(false)
 {
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
@@ -44,7 +45,6 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
-        prepareDocument();
         processStyles();
     }
 }
@@ -54,7 +54,7 @@ Document::~Document()
     delete m_replacementHandler;
 }
 
-void Document::prepareDocument()
+void Document::finishDocument()
 {
     const wvWare::Word97::DOP& dop = m_parser->dop();
 
@@ -63,8 +63,8 @@ void Document::prepareDocument()
     QDomElement element;
     element = m_mainDocument.createElement("ATTRIBUTES");
     element.setAttribute("processing",0); // WP
-    element.setAttribute("hasHeader",0); // TODO
-    element.setAttribute("hasFooter",0); // TODO
+    element.setAttribute("hasHeader", m_hasHeader);
+    element.setAttribute("hasFooter", m_hasFooter);
     element.setAttribute("unit","mm"); // How to figure out the unit to use?
 
     element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
@@ -204,6 +204,10 @@ void Document::startHeader( unsigned char type )
 
     m_textHandler->setFrameSetElement( framesetElement );
 
+    if ( Conversion::isHeader( type ) )
+        m_hasHeader = true;
+    else
+        m_hasFooter = true;
 }
 
 void Document::endHeader()
