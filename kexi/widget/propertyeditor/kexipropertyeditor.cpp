@@ -117,7 +117,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 		slotEditorAccept(m_currentEditor);
 		delete m_currentEditor;
 	}
-	
+
 //	m_defaults->hide();
 
 	m_editItem = i;
@@ -137,7 +137,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 		case QVariant::Int:
 			editor = new PropertyEditorSpin(viewport(), i->property());
 			break;
-			
+
 		case QVariant::Double:
 			editor = new PropertyEditorDblSpin(viewport(), i->property());
 			break;
@@ -152,24 +152,24 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 		case QVariant::BitArray:
 //			editor = new EventEditorEditor(viewport(), i);
 			break;
-			
+
 		case QVariant::Font:
 			editor = new PropertyEditorFont(viewport(), i->property());
 			break;
-			
+
 		case QVariant::Pixmap:
 		case QVariant::Invalid:
 			editor = new PropertyEditorPixmap(viewport(), i->property());
 			break;
-			
+
 		case QVariant::Color:
 			editor = new PropertyEditorColor(viewport(), i->property());
 			break;
-			
+
 		case QVariant::Date:
 			editor = new PropertyEditorDate(viewport(), i->property());
 			break;
-		
+
 		case QVariant::Time:
 			editor = new PropertyEditorTime(viewport(), i->property());
 			break;
@@ -177,7 +177,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 		case QVariant::DateTime:
 			editor = new PropertyEditorDateTime(viewport(), i->property());
 			break;
-	
+
 		case QVariant::Cursor:
 			editor = new PropertyEditorCursor(viewport(), i->property());
 			break;
@@ -202,7 +202,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 		addChild(editor);
 		moveChild(editor, geometry.x(), geometry.y());
 		editor->show();
-	
+
 		editor->setFocus();
 	}
 	m_currentEditor = editor;
@@ -246,7 +246,7 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 	{
 		QVariant value = m_currentEditor->value();
 //js: not needed		m_editItem->setValue(value);
-		bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ? 
+		bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ?
 		         m_sync : (bool)m_editItem->property()->autoSync();
 		if(m_buffer && sync)
 		{
@@ -321,7 +321,7 @@ KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor *editor)
 {
 	if(m_currentEditor)
 	{
-		bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ? 
+		bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ?
 		         m_sync : (bool)m_editItem->property()->autoSync();
 		if(!sync)
 		{
@@ -406,7 +406,7 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
 	if (m_buffer) {
 		m_buffer->disconnect(this);
 	}
-	m_buffer = b; 
+	m_buffer = b;
 	if (m_buffer) {
 		//receive property changes
 		connect(m_buffer,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
@@ -415,7 +415,7 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
 			this, SLOT(slotPropertyReset(KexiPropertyBuffer&,KexiProperty&)));
 		connect(m_buffer,SIGNAL(destroying()), this, SLOT(slotBufferDestroying()));
 	}
-	fill(); 
+	fill();
 }
 
 void KexiPropertyEditor::slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty &prop)
@@ -437,7 +437,7 @@ void KexiPropertyEditor::slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty 
 void KexiPropertyEditor::slotBufferDestroying()
 {
 	m_buffer = 0;
-	fill(); 
+	fill();
 }
 
 void
@@ -449,7 +449,7 @@ KexiPropertyEditor::fill()
 		return;
 
 	KexiProperty::ListIterator it(*m_buffer->list());
-	
+
 	if(!m_topItem)
 	{
 		m_topItem = new KexiPropertyEditorItem(this,"Top Item");
@@ -533,6 +533,8 @@ KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &pr
 	KexiPropertyEditorItem* item = m_items[prop.name()];
 	if (!item) //this property is not visible here
 		return;
+	if(item == m_editItem)
+		m_currentEditor->setValue(prop.value());
 	item->updateValue();
 	item->updateChildrenValue();
 }
