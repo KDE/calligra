@@ -54,8 +54,20 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 
     setInstance( KChartFactory::global(), false );
 
+    // Init some members that need it.  
+    {
+	// Create the chart parameters and let the default be a bar chart
+	// with 3D looks.
+	m_params = new KChartParams();
+	m_params->setChartType( KDChartParams::Bar );
+	m_params->setBarChartSubType( KDChartParams::BarNormal );
+	//m_params->setThreeDBars( true );
+
+	// Handle data in rows per default.
+	m_auxiliary.m_dataDirection = KChartAuxiliary::DataRows;
+    }
+
     (void)new WizardExt( this );
-    initDoc(KoDocument::InitDocEmpty);
     m_bCanChangeValue=true;
 
     // Display parameters
@@ -77,23 +89,14 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     // Initialize the parameter set for this chart document
     kdDebug(35001) << "================================================================" << endl;
-    kdDebug(35001) << "InitDOC" << endl;
+    kdDebug(35001) << "InitDOC: flags = " << flags << endl;
     kdDebug(35001) << "================================================================" << endl;
 
     QString f;
 
-    // Init some members that need it.  
-    {
-	// Create the chart parameters and let the default be a bar chart
-	// with 3D looks.
-	m_params = new KChartParams();
-	m_params->setChartType( KDChartParams::Bar );
-	m_params->setBarChartSubType( KDChartParams::BarNormal );
-	//m_params->setThreeDBars( true );
-
-	// Handle data in rows per default.
-	m_auxiliary.m_dataDirection = KChartAuxiliary::DataRows;
-    }
+    // If this is an embedded document, e.g. in KSpread, then do nothing.
+    if (flags == KoDocument::InitDocEmbedded)
+	return true;
 
     // Mark the document as empty.
     if (flags == KoDocument::InitDocEmpty) {

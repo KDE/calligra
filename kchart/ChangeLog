@@ -1,3 +1,10 @@
+2005-03-25  Inge Wallin  <inge@lysator.liu.se>
+
+	* kchart_part.cc (constructor): Initialize members but don't call
+	initDoc().
+	(initDoc): don't initialize members, and return immediately if
+	called for an embedded chart.
+
 2005-03-24  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 55606: [modified] tag doesn't work correctly.
