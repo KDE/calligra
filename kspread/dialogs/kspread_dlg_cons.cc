@@ -40,7 +40,8 @@
 
 #include <koscript.h>
 
-#include <kspread_dlg_cons.h>
+#include "kspread_dlg_cons.h"
+
 #include <kspread_canvas.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>

@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <kspread_dlg_csv.h>
+#include "kspread_dlg_csv.h"
 #include <kspread_cell.h>
 #include <kspread_doc.h>
 #include <kspread_sheet.h>
@@ -722,4 +722,4 @@ void KSpreadCSVDialog::ignoreDuplicatesChanged(int)
   fillTable();
 }
 
-#include <kspread_dlg_csv.moc>
+#include "kspread_dlg_csv.moc"

@@ -32,12 +32,12 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_cell.h>
-#include <kspread_functions.h>
-#include <kspread_functions_helper.h>
-#include <kspread_interpreter.h>
-#include <kspread_util.h>
-#include <kspread_value.h>
+#include "kspread_cell.h"
+#include "kspread_functions.h"
+#include "kspread_functions_helper.h"
+#include "kspread_interpreter.h"
+#include "kspread_util.h"
+#include "kspread_value.h"
 
 // prototypes, sorted
 bool kspreadfunc_currentDate( KSContext& context );

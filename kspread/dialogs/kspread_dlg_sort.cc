@@ -599,4 +599,4 @@ void KSpreadSortDlg::firstRowHeaderChanged( int state )
   }
 }
 
-#include <kspread_dlg_sort.moc>
+#include "kspread_dlg_sort.moc"

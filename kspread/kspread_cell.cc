@@ -58,7 +58,7 @@
 #include "kspread_util.h"
 #include "ksploadinginfo.h"
 
-#include <kspread_value.h>
+#include "kspread_value.h"
 #include <koxmlwriter.h>
 
 #include <kmessagebox.h>

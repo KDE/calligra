@@ -27,7 +27,6 @@
 #include "koGlobal.h"
 
 #include <qptrstack.h>
-#include <qstring.h>
 #include <qrect.h>
 #include <qptrlist.h>
 #include <qvaluelist.h>

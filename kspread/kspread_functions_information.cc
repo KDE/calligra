@@ -36,10 +36,10 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_functions.h>
-#include <kspread_util.h>
-#include <kspread_doc.h>
-#include <kspread_sheet.h>
+#include "kspread_functions.h"
+#include "kspread_util.h"
+#include "kspread_doc.h"
+#include "kspread_sheet.h"
 
 // prototypes (sort alphabetically)
 //bool kspreadfunc_countblank( KSContext & context );

@@ -35,8 +35,8 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <kspread_functions.h>
-#include <kspread_util.h>
+#include "kspread_functions.h"
+#include "kspread_util.h"
 
 // prototypes
 bool kspreadfunc_char( KSContext& context );
@@ -564,11 +564,11 @@ bool kspreadfunc_regexp(KSContext & context)
   QString s( args[0]->stringValue() );
   QString str( args[2]->stringValue() );
 
-  kdDebug() << "Search: " << args[1]->stringValue() << " in " << s 
+  kdDebug() << "Search: " << args[1]->stringValue() << " in " << s
             << ", Result: " << exp.search( s ) << endl;
 
   int pos = 0;
-  while ( ( pos = exp.search( s, pos ) ) != -1 ) 
+  while ( ( pos = exp.search( s, pos ) ) != -1 )
   {
     int i = exp.matchedLength();
     s = s.replace( pos, i, str );

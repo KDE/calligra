@@ -20,7 +20,7 @@
 #include <qstring.h>
 #include <qregexp.h>
 
-#include <kspread_tokens.h>
+#include "kspread_tokens.h"
 
 // helper function: return operator of given token text
 // e.g "+" yields Operator::Asterisk, and so on

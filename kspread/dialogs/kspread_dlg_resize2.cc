@@ -30,7 +30,7 @@
 
 #include <koUnit.h>
 
-#include <kspread_dlg_resize2.h>
+#include "kspread_dlg_resize2.h"
 #include <kspread_global.h>
 #include <kspread_canvas.h>
 #include <kspread_sheet.h>

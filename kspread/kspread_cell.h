@@ -56,7 +56,7 @@ class KSParseNode;
 #include "kspread_depend.h"
 #include "kspread_condition.h"
 
-#include <kspread_value.h>
+#include "kspread_value.h"
 #include <kozoomhandler.h>
 #include <koOasisStyles.h>
 

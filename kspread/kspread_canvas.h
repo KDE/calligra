@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 1999-2001,2003 David Faure <faure@kde.org>
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
@@ -38,8 +38,8 @@
 #include <kcombobox.h>
 
 #include <koQueryTrader.h>
-#include <kspread_view.h>
-#include <kspread_doc.h>
+#include "kspread_view.h"
+#include "kspread_doc.h"
 #include "kspread_selection.h"
 
 class KSpreadEditWidget;

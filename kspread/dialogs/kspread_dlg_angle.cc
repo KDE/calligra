@@ -21,7 +21,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kspread_dlg_angle.h>
+#include "kspread_dlg_angle.h"
 #include <kspread_cell.h>
 #include <kspread_view.h>
 #include <kspread_doc.h>

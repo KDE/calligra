@@ -21,7 +21,7 @@
 #include <qstring.h>
 #include <qshared.h>
 
-#include <kspread_value.h>
+#include "kspread_value.h"
 
 // helper class for KSpreadValue
 class KSpreadValueData: public QShared
@@ -319,7 +319,7 @@ QDateTime KSpreadValue::asDateTime() const
   double f = asFloat();
   dt = dt.addSecs( (f-(int)f) * 86400 );
   if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
-  
+
   return dt;
 }
 
@@ -330,7 +330,7 @@ QDate KSpreadValue::asDate() const
 
   double f = asFloat();
   if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
-  
+
   return dt;
 }
 
@@ -338,10 +338,10 @@ QDate KSpreadValue::asDate() const
 QTime KSpreadValue::asTime() const
 {
   QTime dt;
-  
+
   double f = asFloat();
   dt = dt.addSecs( (f-(int)f) * 86400 );
-  
+
   return dt;
 }
 

@@ -25,9 +25,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <kspread_functions.h>
+#include "kspread_functions.h"
 #include "kspread_functions_helper.h"
-#include <kspread_util.h>
+#include "kspread_util.h"
 
 
 // copied from gnumeric: src/format.c:
@@ -283,13 +283,13 @@ double combin(int n, int k)
 double gaussinv_helper (double x)
 {
   double q,t,z;
-  
+
   q=x-0.5;
-  
+
   if(fabs(q)<=.425)
   {
     t=0.180625-q*q;
-    
+
     z=
     q*
     (
@@ -322,7 +322,7 @@ double gaussinv_helper (double x)
               (
                 (
                   t*5226.495278852854561+28729.085735721942674
-                ) 
+                )
                 *t+39307.89580009271061
               )
               *t+21213.794301586595867
@@ -335,19 +335,19 @@ double gaussinv_helper (double x)
       )
       *t+1.0
     );
-    
+
   }
   else
   {
     if(q>0)  t=1-x;
     else    t=x;
-  
+
     t=sqrt(-log(t));
-  
+
     if(t<=5.0)
     {
       t+=-1.6;
-      
+
       z=
       (
         (
@@ -392,12 +392,12 @@ double gaussinv_helper (double x)
         )
         *t+1.0
       );
-      
+
     }
     else
     {
       t+=-5.0;
-      
+
       z=
       (
         (
@@ -442,12 +442,12 @@ double gaussinv_helper (double x)
         )
         *t+1.0
       );
-      
+
     }
-  
+
     if(q<0.0) z=-z;
   }
-  
+
   return z;
 }
 

@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
-#include <kspread_value.h>
+#include "kspread_value.h"
 
 class KLocale;
 class KSpreadTable;
