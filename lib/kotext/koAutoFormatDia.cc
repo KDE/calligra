@@ -223,7 +223,7 @@ void KoAutoFormatDia::setupTab1()
     ( void )new QWidget( tab1 );
 
     cbAutoReplaceNumber=new QCheckBox( tab1 );
-    cbAutoReplaceNumber->setText( i18n( "Replace 1/2... by " )+QString("½...") );
+    cbAutoReplaceNumber->setText( i18n( "Replace 1/2... with " )+QString("½...") );
     cbAutoReplaceNumber->resize( cbAutoReplaceNumber->sizeHint() );
     cbAutoReplaceNumber->setChecked( m_autoFormat.getConfigAutoReplaceNumber());
     ( void )new QWidget( tab1 );

@@ -510,7 +510,7 @@ void KoAutoFormat::doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag
             replacement=QString("¼");
         else if (word == QString("3/4") )
             replacement=QString("¾");
-        QString cmdName=i18n("Autocorrect (replace 1/2... by ")+QString("½...)");
+        QString cmdName=i18n("Autocorrect (replace 1/2... with ")+QString("½...)");
         txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,
                                                            KoTextObject::HighlightSelection,
                                                                 cmdName ));
