@@ -66,6 +66,7 @@ public:
       reverse = false;
       wholeWords = false;
       wildcard = false;
+      ask = false;
     }
 
     QString expr;
@@ -76,6 +77,7 @@ public:
     bool bold,italic,underline;
     KWFormat::VertAlign vertAlign;
     bool caseSensitive,regexp,reverse,wholeWords,wildcard;
+    bool ask;
   };
 
   KWSearchDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page,KWordView *_view,

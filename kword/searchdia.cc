@@ -532,6 +532,7 @@ void KWSearchDia::setupTab2()
  
   cAsk = new QCheckBox(i18n("Ask before replacing"),wid);
   cAsk->resize(cAsk->sizeHint());
+  cAsk->setChecked(replaceEntry->ask);
   subgrid->addWidget(cAsk,0,1);
 
   subgrid->addRowSpacing(0,bbReplace->height());
@@ -764,16 +765,39 @@ void KWSearchDia::saveSettings()
   searchEntry->wildcard = cWildcard->isChecked();
 
   view->setSearchEntry(searchEntry);
+
+  replaceEntry->expr = eReplace->text();
+  replaceEntry->ask = cAsk->isChecked();
+
+  view->setReplaceEntry(replaceEntry);
 }
 
 /*================================================================*/
 void KWSearchDia::replaceFirst()
 {
+  QString expr = eSearch->text();
+  if (expr.isEmpty()) return;
+
+  page->removeSelection();
+
+  if (!cRev->isChecked())
+    page->find(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),false,false);
+  else
+    page->findRev(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),false,false);
 }
 
 /*================================================================*/
 void KWSearchDia::replaceNext()
 {
+  QString expr = eSearch->text();
+  if (expr.isEmpty()) return;
+
+  page->removeSelection();
+
+  if (!cRev->isChecked())
+    page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),false,false);
+  else
+    page->findRev(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),false,false);
 }
 
 /*================================================================*/
@@ -784,71 +808,152 @@ void KWSearchDia::replaceAll()
 /*================================================================*/
 void KWSearchDia::rslotCheckFamily()
 {
+  replaceEntry->checkFamily = rcFamily->isChecked();
+
+  if (rcFamily->isChecked())
+    {
+      rcmFamily->setEnabled(true);
+      rslotFamily(rcmFamily->currentText());
+    }
+  else rcmFamily->setEnabled(false);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotCheckColor()
 {
+  replaceEntry->checkColor = rcColor->isChecked();
+
+  if (rcColor->isChecked())
+    {
+      rbColor->setEnabled(true);
+      rslotColor(rbColor->color());
+    }
+  else rbColor->setEnabled(false);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotCheckSize()
 {
+  replaceEntry->checkSize = rcSize->isChecked();
+
+  if (rcSize->isChecked())
+    {
+      rcmSize->setEnabled(true);
+      rslotSize(rcmSize->currentText());
+    }
+  else rcmSize->setEnabled(false);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotCheckBold()
 {
+  replaceEntry->checkBold = rcBold->isChecked();
+
+  if (rcBold->isChecked())
+    {
+      rcmBold->setEnabled(true);
+      rslotBold();
+    }
+  else rcmBold->setEnabled(false);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotCheckItalic()
 {
+  replaceEntry->checkItalic = rcItalic->isChecked();
+
+  if (rcItalic->isChecked())
+    {
+      rcmItalic->setEnabled(true);
+      rslotItalic();
+    }
+  else rcmItalic->setEnabled(false);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotCheckUnderline()
 {
+  replaceEntry->checkUnderline = rcUnderline->isChecked();
+
+  if (rcUnderline->isChecked())
+    {
+      rcmUnderline->setEnabled(true);
+      rslotUnderline();
+    }
+  else rcmUnderline->setEnabled(false);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotCheckVertAlign()
 {
+  replaceEntry->checkVertAlign = rcVertAlign->isChecked();
+
+  if (rcVertAlign->isChecked())
+    {
+      rcmVertAlign->setEnabled(true);
+      rslotVertAlign(rcmVertAlign->currentItem());
+    }
+  else rcmVertAlign->setEnabled(false);
 }
 
 /*================================================================*/
-void KWSearchDia::rslotFamily(const char*)
+void KWSearchDia::rslotFamily(const char* family)
 {
+  replaceEntry->family = qstrdup(family);
+  view->setReplaceEntry(replaceEntry);
 }
 
 /*================================================================*/
-void KWSearchDia::rslotSize(const char*)
+void KWSearchDia::rslotSize(const char* size)
 {
+  replaceEntry->size = atoi(size);
+  view->setReplaceEntry(replaceEntry);
 }
 
 /*================================================================*/
-void KWSearchDia::rslotColor(const QColor&)
+void KWSearchDia::rslotColor(const QColor& color)
 {
+  replaceEntry->color = QColor(color);
+  view->setReplaceEntry(replaceEntry);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotBold()
 {
+  replaceEntry->bold = rcmBold->isChecked();
+  view->setReplaceEntry(replaceEntry);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotItalic()
 {
+  replaceEntry->italic = rcmItalic->isChecked();
+  view->setReplaceEntry(replaceEntry);
 }
 
 /*================================================================*/
 void KWSearchDia::rslotUnderline()
 {
+  replaceEntry->underline = rcmUnderline->isChecked();
+  view->setReplaceEntry(replaceEntry);
 }
 
 /*================================================================*/
-void KWSearchDia::rslotVertAlign(int)
+void KWSearchDia::rslotVertAlign(int num)
 {
+  switch (num)
+    {
+    case 0:
+      replaceEntry->vertAlign = KWFormat::VA_NORMAL;
+      break;
+    case 1:
+      replaceEntry->vertAlign = KWFormat::VA_SUB;
+      break;
+    case 3:
+      replaceEntry->vertAlign = KWFormat::VA_SUPER;
+      break;
+    }
+  view->setReplaceEntry(replaceEntry);
 }
 
 /*================================================================*/

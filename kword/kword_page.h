@@ -174,9 +174,9 @@ public:
   void clear() { buffer.fill(white); drawBuffer(); }
 
   bool find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
-	    bool _regexp = false,bool _wildcard = false);
+	    bool _regexp = false,bool _wildcard = false,bool _select = true,bool _addlen = true);
   bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
-	       bool _regexp = false,bool _wildcard = false);
+	       bool _regexp = false,bool _wildcard = false,bool _select = true,bool _addlen = true);
   
   void removeSelection();
 
@@ -298,7 +298,7 @@ protected:
   int editNum;
 
   KWParag *currFindParag;
-  int currFindPos;
+  int currFindPos,currFindLen;
   int currFindFS;
   int selectedFrameSet,selectedFrame;
 
