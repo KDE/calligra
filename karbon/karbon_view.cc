@@ -42,6 +42,8 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
+#include "karbon_dlg_config.h"
+
 //#include "vtext.h"
 #include "vtoolcontainer.h"
 
@@ -76,8 +78,14 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 0 );
 
+        if ( shell() )
+        {
+            changeNbOfRecentFiles( m_part->maxRecentFiles() );
+        }
+
 	// initial tool is select-tool:
 	selectTool();
+        reorganizeGUI();
 }
 
 KarbonView::~KarbonView()
@@ -110,6 +118,7 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	m_painterFactory->painter()->resize( width(), height() );
 	m_painterFactory->editpainter()->resize( width(), height() );
 	m_canvas->resize( width(), height() );
+        reorganizeGUI();
 }
 
 void
@@ -699,6 +708,11 @@ KarbonView::initActions()
 	connect( m_toolbox, SIGNAL(fillColorChanged(const QColor &)), this, SLOT(slotFillColorChanged(const QColor &)) );
 	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
 	m_toolbox->show();
+
+        actionConfigure = new KAction( i18n( "Configure Karbon..." ),
+					"configure", 0,
+					this, SLOT( configure() ),
+					actionCollection(), "configure" );
 }
 
 void
@@ -720,5 +734,28 @@ KarbonView::eventFilter( QObject* object, QEvent* event )
 		return false;
 }
 
-#include "karbon_view.moc"
+void KarbonView::reorganizeGUI()
+{
+    if( statusBar())
+    {
+        if(m_part->showStatusBar())
+            statusBar()->show();
+        else
+            statusBar()->hide();
+    }
+}
 
+void KarbonView::changeNbOfRecentFiles(int _nb)
+{
+    if ( shell() ) // 0 when embedded into konq !
+        shell()->setMaxRecentItems( _nb );
+}
+
+void KarbonView::configure()
+{
+    KarbonConfig configDia( this );
+    configDia.exec();
+}
+
+
+#include "karbon_view.moc"

@@ -18,7 +18,8 @@ lib_LTLIBRARIES = \
 libkarbonpart_la_SOURCES = \
 	karbon_part.cc \
 	karbon_view.cc \
-	karbon_factory.cc karbon_view_iface.skel karbon_view_iface.cc
+	karbon_factory.cc karbon_view_iface.skel karbon_view_iface.cc \
+	karbon_dlg_config.cc 
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
@@ -44,4 +45,5 @@ dummy.cc:
 noinst_HEADERS = \
 	karbon_part.h \
 	karbon_view.h \
-	karbon_factory.h
+	karbon_factory.h \
+	karbon_dlg_config.h 

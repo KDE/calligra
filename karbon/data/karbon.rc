@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="Karbon" version="3">
+<kpartgui name="Karbon" version="4">
 <MenuBar>
 	<Menu name="edit">
 		<text>&amp;Edit</text>
@@ -66,6 +66,10 @@
 	<Action name="view_refresh"/>
 	<Separator/>
 	<Action name="view_color_manager"/>
+	</Menu>
+	 <Menu name="settings"><text>&amp;Settings</text>
+		<Separator/>
+  		<Action name="configure" group="settings_configure"/>
 	</Menu>
 	</MenuBar>
 	<ToolBar name="view_toolbar" fullWidth="false">

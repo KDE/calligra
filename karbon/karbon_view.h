@@ -55,6 +55,12 @@ public:
 	virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
 
+	KarbonPart* part() {
+            return m_part;
+        }
+
+    void reorganizeGUI();
+    void changeNbOfRecentFiles( int _nb );
 public slots:
 	// editing:
 	void editCut();
@@ -76,6 +82,7 @@ public slots:
 	// TODO: remove this someday:
 	void dummyForTesting();
 
+    void configure();
 protected slots:
 
 	// object related operations:
@@ -152,6 +159,8 @@ private:
 	KToggleAction *m_setUnderline;
 	//KSelectColorAction *m_setTextColor;
 
+
+    KAction * actionConfigure;
 	//toolbox
 	KSharedPtr< VToolContainer > m_toolbox;
 	DCOPObject *m_dcop;

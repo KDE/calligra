@@ -7,11 +7,12 @@
 #include <qpainter.h>
 
 #include "karbon_part.h"
+#include "karbon_factory.h"
 #include "karbon_view.h"
 #include "vcommand.h"
 #include "vpainterfactory.h"
 #include "vpainter.h"
-
+#include <kconfig.h>
 #include <kdebug.h>
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
@@ -19,7 +20,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
 	m_commandHistory = new VCommandHistory( this );
-
+        m_bShowStatusBar = true;
+        m_maxRecentFiles = 10;
 	m_layers.setAutoDelete( true );
 
 	// create a layer. we need at least one:
@@ -30,6 +32,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 	float r = 1.0, g = 1.0, b = 1.0;
 	m_defaultFillColor.setValues( &r, &g, &b, 0L );
+
+        initConfig();
 }
 
 KarbonPart::~KarbonPart()
@@ -412,6 +416,44 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 
 	p->end();
 	delete painterFactory;
+}
+
+void KarbonPart::setShowStatusBar (bool b)
+{
+    m_bShowStatusBar = b;
+}
+
+void KarbonPart::reorganizeGUI ()
+{
+    QPtrListIterator<KoView> itr( views() );
+    for ( ; itr.current() ; ++itr )
+    {
+        static_cast<KarbonView*>( itr.current() )->reorganizeGUI ();
+    }
+}
+
+void KarbonPart::setUndoRedoLimit(int val)
+{
+    m_commandHistory->setUndoLimit(val);
+    m_commandHistory->setRedoLimit(val);
+}
+
+void KarbonPart::initConfig()
+{
+    KConfig* config = KarbonPart::instance()->config();
+    if( config->hasGroup("Interface") ) {
+        config->setGroup( "Interface" );
+        setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
+        m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
+        setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
+    }
+    if(config->hasGroup("Misc" ) )
+    {
+        config->setGroup( "Misc" );
+        int undo=config->readNumEntry("UndoRedo",-1);
+        if(undo!=-1)
+            setUndoRedoLimit(undo);
+    }
 }
 
 #include "karbon_part.moc"

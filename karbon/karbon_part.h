@@ -71,6 +71,15 @@ public:
 	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
 	void applyDefaultColors( VObject & ) const;
 
+    bool showStatusBar () const {return m_bShowStatusBar;}
+    void setShowStatusBar (bool b);
+    void reorganizeGUI ();
+
+    void setUndoRedoLimit( int _undo );
+
+    void initConfig();
+    int maxRecentFiles() const { return m_maxRecentFiles; }
+
 public slots:
     void repaintAllViews( bool erase = false );
     void slotDocumentRestored();
@@ -89,6 +98,9 @@ private:
 
 	VColor m_defaultStrokeColor;
 	VColor m_defaultFillColor;
+
+    bool m_bShowStatusBar;
+    int m_maxRecentFiles;
 };
 
 #endif
