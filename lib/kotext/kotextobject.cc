@@ -1943,6 +1943,19 @@ KCommand *KoTextFormatInterface::setUnderlineCommand( bool on )
     return setFormatCommand( &format, KoTextFormat::ExtendUnderLine );
 }
 
+KCommand *KoTextFormatInterface::setUnderlineColorCommand( const QColor &color )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setTextUnderlineColor( color);
+    return setFormatCommand( &format, KoTextFormat::ExtendUnderLine );
+}
+
+KCommand *KoTextFormatInterface::setDoubleUnderlineCommand( bool on )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setNbLineType( on ? KoTextFormat::DOUBLE : KoTextFormat::NONE);
+    return setFormatCommand( &format, KoTextFormat::ExtendUnderLine );
+}
 
 KCommand *KoTextFormatInterface::setStrikeOutCommand( bool on )
 {
@@ -1991,6 +2004,11 @@ QColor KoTextFormatInterface::textColor() const
 bool KoTextFormatInterface::textUnderline()const
 {
     return currentFormat()->underline();
+}
+
+bool KoTextFormatInterface::textDoubleUnderline()const
+{
+    return currentFormat()->doubleUnderline();
 }
 
 bool KoTextFormatInterface::textBold()const

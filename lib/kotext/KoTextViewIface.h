@@ -39,16 +39,18 @@ k_dcop:
     void setBold(bool b);
     void setItalic(bool on);
     void setUnderline(bool on);
+    void setDoubleUnderline(bool on);
     void setStrikeOut(bool on);
     void setPointSize( int s );
     void setTextSubScript(bool on);
     void setTextSuperScript(bool on);
-
+    void setUnderlineColor( const QColor & color );
     void setDefaultFormat();
 
     QColor textColor() const;
     QString textFontFamily()const;
     QColor textBackgroundColor()const;
+    QColor textUnderlineColor() const;
     bool textDoubleUnderline() const;
 
     bool textItalic() const;

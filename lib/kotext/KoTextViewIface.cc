@@ -61,6 +61,12 @@ void KoTextViewIface::setUnderline(bool on)
     delete cmd;
 }
 
+void KoTextViewIface::setDoubleUnderline(bool on)
+{
+    KCommand *cmd=m_textView->setDoubleUnderlineCommand(on);
+    delete cmd;
+}
+
 
 void KoTextViewIface::setStrikeOut(bool on)
 {
@@ -107,6 +113,17 @@ QColor KoTextViewIface::textBackgroundColor()const
     return m_textView->textBackgroundColor();
 }
 
+QColor KoTextViewIface::textUnderlineColor() const
+{
+    return m_textView->textUnderlineColor();
+}
+
+void KoTextViewIface::setUnderlineColor( const QColor & color )
+{
+    KCommand *cmd=m_textView->setUnderlineColorCommand(color);
+    delete cmd;
+}
+
 void KoTextViewIface::setTextColor(const QColor &color)
 {
     KCommand *cmd=m_textView->setTextColorCommand(color);
@@ -146,9 +163,7 @@ void KoTextViewIface::setAlign(const QString &align)
 
 bool KoTextViewIface::textDoubleUnderline() const
 {
-    return false;
-    //FIXME !!!!!!!!!!!!!!!!!!!!!!!!!
-    //return m_textView->textDoubleUnderline();
+    return m_textView->textDoubleUnderline();
 }
 
 bool KoTextViewIface::textItalic() const

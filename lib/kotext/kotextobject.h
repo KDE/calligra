@@ -71,6 +71,8 @@ public:
     //void setUnderline(bool on);
     KCommand *setUnderlineCommand(bool on);
     //void setStrikeOut(bool on);
+    KCommand *setDoubleUnderlineCommand( bool on );
+    KCommand *setUnderlineColorCommand( const QColor &color );
     KCommand *setStrikeOutCommand(bool on);
     //void setTextColor(const QColor &color);
     KCommand *setTextColorCommand(const QColor &color);
@@ -117,6 +119,8 @@ public:
 
 
     bool textUnderline()const;
+    bool textDoubleUnderline()const;
+
     bool textBold()const;
     bool textStrikeOut()const;
     bool textItalic() const;
