@@ -1263,7 +1263,12 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
 	}
 	break;
     case Percentage :
-	localizedNumber = KGlobal::locale()->formatNumber(value, p)+ " %";
+        localizedNumber = KGlobal::locale()->formatNumber(value, p)+ " %";
+        if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
+        {
+	    if(KGlobal::locale()->positiveSign().isEmpty())
+		localizedNumber='+'+localizedNumber;
+	}
 	break;
     case Money :
 	localizedNumber = KGlobal::locale()->formatMoney(value,KGlobal::locale()->currencySymbol(),p );
@@ -1277,7 +1282,11 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
 	localizedNumber= QString::number(value, 'E', p);
 	if((pos=localizedNumber.find('.'))!=-1)
 	    localizedNumber=localizedNumber.replace(pos,1,decimal_point);
-
+        if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
+        {
+	    if(KGlobal::locale()->positiveSign().isEmpty())
+		localizedNumber='+'+localizedNumber;
+	}
 	break;
     case ShortDate:
     case TextDate :
@@ -1308,6 +1317,11 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     case fraction_two_digits:
     case fraction_three_digits:
 	localizedNumber=createFractionFormat(value);
+        if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
+        {
+	    if(KGlobal::locale()->positiveSign().isEmpty())
+		localizedNumber='+'+localizedNumber;
+	}
 	break;
     default :
 	kdDebug(36001)<<"Error in m_eFormatNumber\n";

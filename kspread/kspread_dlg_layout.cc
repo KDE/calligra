@@ -433,7 +433,7 @@ void CellLayoutDlg::init()
         QColor black = colorGroup.text(); // not necessarily black :)
 	formatOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", black );
 	formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", Qt::red );
-	formatRedNeverSignedPixmap = paintFormatPixmap( "123.456", black, "123.456", black );
+	formatRedNeverSignedPixmap = paintFormatPixmap( "123.456", black, "123.456", Qt::red );
 	formatAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", black );
 	formatRedAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", Qt::red );
 
@@ -721,12 +721,14 @@ if(dlg->m_bValue)
         precision->setEnabled(true);
         prefix->setEnabled(true);
         postfix->setEnabled(true);
+        format->setEnabled(true);
         }
 else
         {
         precision->setEnabled(false);
         prefix->setEnabled(false);
         postfix->setEnabled(false);
+        format->setEnabled(false);
         }
 if(number->isChecked())
         listFormat->setEnabled(false);
@@ -738,6 +740,7 @@ else if(scientific->isChecked())
         listFormat->setEnabled(false);
 else if(date->isChecked())
         {
+        format->setEnabled(false);
         precision->setEnabled(false);
         prefix->setEnabled(false);
         postfix->setEnabled(false);
@@ -784,7 +787,9 @@ else if(time->isChecked())
         precision->setEnabled(false);
         prefix->setEnabled(false);
         postfix->setEnabled(false);
+        format->setEnabled(false);
         listFormat->setEnabled(true);
+
         list+=KGlobal::locale()->formatTime(QTime::currentTime(),false);
         list+=KGlobal::locale()->formatTime(QTime::currentTime(),true);
         listFormat->insertStringList(list);

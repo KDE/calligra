@@ -854,3 +854,7 @@ is red)
 -bug fix
 -Bug fix : now ajust area works when a text size is bigger than
 cell size. =>( ** )
+
+2000-07-31-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now Negative and Positive format works with fraction format and others
