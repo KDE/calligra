@@ -62,7 +62,8 @@ KWSpinBox::KWSpinBox( QWidget * parent, const char * name )
     : QSpinBox(parent,name)
 {
     m_Etype=NONE;
-    setMaxValue ( 65535 );
+    //max value supported by roman number
+    setMaxValue ( 3999 );
 }
 KWSpinBox::~KWSpinBox( )
 {
@@ -89,7 +90,6 @@ QString KWSpinBox::mapValueToText( int value )
         return QString("0");
     else if(value==0 && m_Etype!=NUM)
         return QString::null;
-
     switch(m_Etype)
     {
         case NUM:

@@ -72,6 +72,10 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
 
     loadFile();
     initCombobox();
+    bool state=!m_typeExpression->currentText().isEmpty();
+    m_addExpression->setEnabled(state);
+    m_delExpression->setEnabled(state);
+
     slotExpressionActivated(m_typeExpression->currentText() );
     resize(200,300);
 }
@@ -196,6 +200,9 @@ void KWEditPersonnalExpression::slotAddGroup()
         initCombobox();
         m_typeExpression->setCurrentItem(m_typeExpression->listBox()->index(m_typeExpression->listBox()->findItem ( expr )));
         m_listOfExpression->clear();
+        m_addExpression->setEnabled(true);
+        m_delExpression->setEnabled(true);
+
     }
 }
 
