@@ -1736,7 +1736,7 @@ void KivioView::setLineWidthUnit(KoUnit::Unit u)
 void KivioView::viewZoom(const QString& s)
 {
   QString z(s);
-  z.replace("%", "");
+  z.remove('%');
   z.simplifyWhiteSpace();
   bool ok = false;
   int zoom = z.toInt(&ok);
