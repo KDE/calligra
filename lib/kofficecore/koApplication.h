@@ -26,11 +26,8 @@
 
 class KoMainWindow;
 
-inline QString colorToName( const QColor &c ) {
-    QString r;
-    r.sprintf( "#%02X%02X%02X", c.red(), c.green(), c.blue() );
-    return r;
-}
+// Moved here until Qt 2.1 is available
+QString colorToName( const QColor &c );
 
 class KoApplication : public OPApplication
 {

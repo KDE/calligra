@@ -32,9 +32,9 @@ KoApplication::KoApplication(int &argc, char **argv, const QString& rAppName)
     , m_bWithGUI( true )
 {
   KGlobal::locale()->insertCatalogue("koffice");
-  KGlobal::dirs()->addResourceType("toolbar", 
+  KGlobal::dirs()->addResourceType("toolbar",
 	   KStandardDirs::kde_default("data") + "/koffice/toolbar/");
-  KGlobal::dirs()->addResourceType("toolbar", 
+  KGlobal::dirs()->addResourceType("toolbar",
 	   KStandardDirs::kde_default("data") + "/koffice/pics/");
 
   // checking wether start the app as server or not
@@ -94,6 +94,14 @@ void KoApplication::start()
       }
     }
   }
+}
+
+// Moved here until Qt 2.1 is available
+extern QString colorToName( const QColor &c )
+{
+    QString r;
+    r.sprintf( "#%02X%02X%02X", c.red(), c.green(), c.blue() );
+    return r;
 }
 
 #include "koApplication.moc"
