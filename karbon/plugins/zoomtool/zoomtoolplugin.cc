@@ -106,7 +106,6 @@ VZoomTool::mouseButtonRelease()
 	KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
 	rect = rect.normalize();
 	view()->canvasWidget()->setContentsRect( rect );
-	view()->canvasWidget()->repaintAll();
 }
 
 void
@@ -125,13 +124,11 @@ VZoomTool::mouseDragRelease()
 	KoRect rect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() );
 	rect = rect.normalize();
 	view()->canvasWidget()->setContentsRect( rect );
-	view()->canvasWidget()->repaintAll( rect );
 }
 
 void
 VZoomTool::arrowKeyReleased( Qt::Key key )
 {
-	kdDebug() << "VZoomTool::arrowKeyReleased" << endl;
 	double zoomChange = 0;
 	if( key == Qt::Key_Up )
 		zoomChange = 0.75;
@@ -139,15 +136,7 @@ VZoomTool::arrowKeyReleased( Qt::Key key )
 		zoomChange = 1.50;
 
 	if( zoomChange != 0 )
-	{
-		kdDebug() << zoomChange << endl;
-		double viewportX = view()->canvasWidget()->visibleWidth() * zoomChange / view()->zoom();
-		double viewportY = view()->canvasWidget()->visibleHeight() * zoomChange / view()->zoom();
-		KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
-		rect = rect.normalize();
-		view()->canvasWidget()->setContentsRect( rect );
-		view()->canvasWidget()->repaintAll();
-	}
+		view()->setZoom( view()->zoom() * zoomChange );
 }
 
 void
