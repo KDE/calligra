@@ -594,10 +594,16 @@ void KSpreadDatabaseDlg::accept()
   KSpreadCell * cell;
   QSqlQuery query( QString::null, m_dbConnection );
 
-  if ( ( queryStr.find("DELETE", 0, false) != -1 )
-       || ( queryStr.find("INSERT", 0, false) != -1 )
-       || ( queryStr.find("UPDATE", 0, false) != -1 )
-       || ( queryStr.find("SELECT", 0, false) == -1 ) )
+  // Check the whole query for SQL that might modify database.
+  // If there is an update command, then it must be at the start of the string,
+  // or after an open bracket (e.g. nested update) or a space to be valid SQL.
+  // An update command must also be followed by a space, or it would be parsed
+  // as an identifier.
+  // For sanity, also check that there is a SELECT 
+  QRegExp couldModifyDB( "(^|[( \s])(UPDATE|DELETE|INSERT|CREATE) ", false /* cs */ );
+  QRegExp couldQueryDB( "(^|[( \s])(SELECT) ", false /* cs */ );
+
+  if (couldModifyDB.search( queryStr ) != -1 || couldQueryDB.search ( queryStr ) == -1 )
   {
     KMessageBox::error( this, i18n("You are not allowed to change data in the database.") );
     m_sqlQuery->setFocus();
