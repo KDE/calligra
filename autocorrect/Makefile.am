@@ -1,4 +1,6 @@
+# (Is autocorrect.xml still used?)
 
-scripts_DATA = autocorrect.xml cs.xml de.xml en_US.xml es.xml fr.xml hu.xml it.xml nn.xml sk.xml
+# WARNING: Do not add any other language here - use kde-i18n/*/data/koffice/autocorrect for that.
+scripts_DATA = autocorrect.xml en_US.xml
 scriptsdir = $(kde_datadir)/koffice/autocorrect
 
