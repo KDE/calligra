@@ -377,6 +377,8 @@ void KWFrameSet::addFrame(KWFrame _frame)
 /*================================================================*/
 void KWFrameSet::addFrame(KWFrame *_frame)
 {
+  if (frames.findRef(_frame) != -1) return;
+  
   frames.append(_frame);
   if (frames.count() == 1) init();
   update();
@@ -396,12 +398,12 @@ void KWFrameSet::delFrame(unsigned int _num)
 	  break;
 	}
     }
-  
+
   if (!del)
     frames.take(_num);
   else
     frames.remove(_num);
-  
+
   update();
 }
 
@@ -1592,7 +1594,7 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 	}
     }
   hasTmpHeaders = false;
-  
+
   for (unsigned int j = 0;j < rows;j++)
     {
       unsigned int i = 0;
@@ -1645,7 +1647,7 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 	  hasTmpHeaders = true;
 	  insertRow(j,_painter,false,true);
 	}
-      
+
       for (i = 0;i < cols;i++)
 	{
 	  if (_addRow)
@@ -1946,7 +1948,7 @@ void KWGroupManager::deleteCol(unsigned int _idx)
 void KWGroupManager::updateTempHeaders()
 {
   //if (!hasTmpHeaders) return;
-  
+
   for (unsigned int i = 1;i < rows;i++)
     {
       for (unsigned int j = 0;j < cols;j++)

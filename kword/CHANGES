@@ -864,3 +864,7 @@ Reggie, 26.2.1999:
 - Margins, borders, background colors, etc. of temp table headers are updated correctly now
 - Started with more configuration possibilities for tables
 - Some fixes with adding/removing temp table headers and cells in general
+
+Reggie, 27.2.1999:
+------------------
+- Some more fixes in tables
