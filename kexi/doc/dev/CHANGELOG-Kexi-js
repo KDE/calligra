@@ -320,6 +320,10 @@ CCPASTEUR:
 	-backgroundOrigin property should have 'ParentOrigin' as default 
 	 (not it's as in QtDesigner, and it's not intuitive)
 
+2004-06-28
+KexiCore
+- KexiViewBase now knows own view mode
+
 2004-06-25
 KexiCore
 - fixed switching for other mode 
