@@ -24,6 +24,7 @@ EXTRA_DIST = \
 		straight_connector.xpm
 
 install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(stencildir)
 	$(RM) $(DESTDIR)$(stencildir)/straight_connector.ksp
 	$(LN_S) $(DESTDIR)$(kde_moduledir)/libstraight_connector.so $(DESTDIR)$(stencildir)/straight_connector.ksp
 
