@@ -167,19 +167,24 @@ public:
      */
     void setReadWrite( bool _readWrite );
 
-    /*
-     * Change KoRuler flag, for kword is useful to
-     * disable Indent function when frame is different
-     * from text frame
+    /**
+     * Change the flag (i.e. activate or deactivate certain features of KoRuler)
      */
     void changeFlags(int _flags);
+
+    /**
+     * @return the current flags
+     */
+    int flags() const;
 
 signals:
     void newPageLayout( KoPageLayout );
     void newLeftIndent( double );
     void newFirstIndent( double );
     void newRightIndent( double );
+    /** Old signal, kept for compatibility. Use doubleClicked instead. */
     void openPageLayoutDia();
+    void doubleClicked();
     void tabListChanged( const KoTabulatorList & );
     void unitChanged( QString );
 

@@ -118,6 +118,9 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     m_bFrameStartSet = false;
 
     setupMenu();
+
+    // For compatibility, emitting doubleClicked shall emit openPageLayoutDia
+    connect( this, SIGNAL( doubleClicked() ), this, SIGNAL( openPageLayoutDia() ) );
 }
 
 /*================================================================*/
@@ -807,13 +810,18 @@ void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
 {
     if(!d->m_bReadWrite)
         return;
-    if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 && d->removeTab!=d->tabList.end() && !d->tabList.isEmpty()) {
-        d->tabList.remove( d->removeTab );
-        d->removeTab=d->tabList.end();
-        emit tabListChanged( d->tabList );
-        repaint( false );
-    }
-    emit openPageLayoutDia();
+    if ( d->tabChooser && ( d->flags & F_TABS ) ) {
+        // Double-click -> need to remove the tab that mousePressEvent added
+        // - this sucks, we should insert the tab on release and that's it.
+        if ( d->tabChooser->getCurrTabType() != 0 && d->removeTab!=d->tabList.end() && !d->tabList.isEmpty()) {
+            d->tabList.remove( d->removeTab );
+            d->removeTab=d->tabList.end();
+            emit tabListChanged( d->tabList );
+            repaint( false );
+        }
+        emit doubleClicked(); // usually paragraph dialog
+    } else
+        emit doubleClicked(); // usually page layout dialog
 }
 
 /*================================================================*/
@@ -979,6 +987,11 @@ void KoRuler::setRightIndent( double _right )
 void KoRuler::changeFlags(int _flags)
 {
     d->flags = _flags;
+}
+
+int KoRuler::flags() const
+{
+    return d->flags;
 }
 
 #include "koRuler.moc"
