@@ -16,6 +16,3 @@ METASOURCES = dialog.moc pdfimport.moc
 
 service_DATA = kword_pdf_import.desktop
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/kwordpdfimport.pot

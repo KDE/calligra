@@ -44,7 +44,7 @@ class PdfImportFactory : KGenericFactory<PdfImport, KoFilter>
 
  protected:
     virtual void setupTranslations() {
-        KGlobal::locale()->insertCatalogue("kwordpdfimport");
+        KGlobal::locale()->insertCatalogue("kofficefilters");
     }
 };
 
