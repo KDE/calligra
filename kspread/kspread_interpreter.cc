@@ -1941,7 +1941,7 @@ static bool kspreadfunc_cell( KSContext& context )
     if ( it2 == line.end() )
       return FALSE;
 
-    qDebug("x=%i",x);
+    kdDebug(36002) <<"x= "<<x<<endl;
     for( ; it != lines.end(); ++it )
     {
       const QValueList<KSValue::Ptr>& l = (*it)->listValue();

@@ -4578,7 +4578,7 @@ void KSpreadTable::dissociateCell( const QPoint &_marker,bool makeUndo)
 
 void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 {
-    qDebug("PRINTING ....");
+    kdDebug(36001)<<"PRINTING ...."<<endl;
 
     // Override the current grid pen setting
     QPen gridPen = m_pDoc->defaultGridPen();
@@ -4713,7 +4713,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
         top = bottom + 1;
     }
 
-    qDebug("PRINTING %i pages", page_list.count() );
+     kdDebug(36001)<<"PRINTING "<< page_list.count()<<" pages"<<endl;
 
     int pagenr = 1;
 
@@ -4813,13 +4813,14 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     QListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
     {
-        qDebug("Testing child %i/%i %i/%i against view %i/%i %i/%i",
-               it.current()->contentRect().left(),
-               it.current()->contentRect().top(),
-               it.current()->contentRect().right(),
-               it.current()->contentRect().bottom(),
-               view.left(), view.top(), view.right(), view.bottom() );
-
+        QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
+        .arg(it.current()->contentRect().left())
+        .arg(it.current()->contentRect().top())
+        .arg(it.current()->contentRect().right())
+        .arg(it.current()->contentRect().bottom())
+        .arg(view.left()).arg(view.top()).arg(view.right()).arg(view.bottom() );
+        kdDebug(36001)<<tmp<<endl;
+    
         QRect bound = it.current()->boundingRect();
         if ( ((KSpreadChild*)it.current())->table() == this && bound.intersects( view ) )
         {

@@ -2057,7 +2057,8 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grp = new QButtonGroup( i18n("Indent"),this);
     grid2 = new QGridLayout(grp,1,1,15,7);
     indent=new KIntNumInput(dlg->indent, grp, 10);
-    indent->setRange(0, 400, 1);
+    indent->setRange(0, 400, 10);
+    indent->setSuffix(i18n(" pt"));
     grid2->addWidget(indent,0,0);
     grid3->addWidget(grp,2,1);
 
