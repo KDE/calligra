@@ -1163,7 +1163,7 @@ bool KoDocument::openURL( const KURL & _url )
     d->lastErrorMessage = QString::null;
 
     // Reimplemented, to add a check for autosave files and to improve error reporting
-    if ( _url.isMalformed() )
+    if ( !_url.isValid() )
     {
         d->lastErrorMessage = i18n( "Malformed URL\n%1" ).arg( _url.url() ); // ## used anywhere ?
         return false;
