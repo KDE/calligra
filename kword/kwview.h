@@ -167,6 +167,7 @@ public slots:
     void insertVariablePageNum();
     void insertVariableCustom();
     void insertVariableSerialLetter();
+    void insertVariableFileName();	
     void insertFootNoteEndNote();
     void insertContents();
 
@@ -306,6 +307,7 @@ protected:
     KAction *actionInsertVarTimeFix;
     KAction *actionInsertVarTime;
     KAction *actionInsertVarPgNum;
+    KAction *actionInsertVarFileName;
     KAction *actionInsertVarCustom;
     KAction *actionInsertVarSerialLetter;
 

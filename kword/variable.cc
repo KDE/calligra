@@ -74,6 +74,19 @@ QString KWVariableTimeFormat::convert( KWVariable *_var )
 /******************************************************************/
 /* Class: KWVariableCustomFormat                                  */
 /******************************************************************/
+QString KWVariableFileNameFormat::convert( KWVariable *_var )
+{
+    if ( _var->getType() != VT_FILENAME ) {
+        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a file name!!!" << endl;
+        return QString();
+    }
+
+    return dynamic_cast<KWFileNameVariable*>( _var )->getFileName();
+}
+
+/******************************************************************/
+/* Class: KWVariableCustomFormat                                  */
+/******************************************************************/
 QString KWVariableCustomFormat::convert( KWVariable *_var )
 {
     if ( _var->getType() != VT_CUSTOM ) {
@@ -280,6 +293,41 @@ void KWTimeVariable::load( QDomElement& elem )
     if ( !fix )
         time = QTime::currentTime();
 }
+
+/******************************************************************/
+/* Class: KWFileNameVariable                                      */
+/******************************************************************/
+KWFileNameVariable::KWFileNameVariable( KWTextFrameSet *fs,const QString &_fileName, KWVariableFormat *_varFormat )
+    : KWVariable( fs, _varFormat ), filename( _fileName )
+{
+    doc->unregisterVariable( this );
+    doc->registerVariable( this );
+    recalc();
+}
+
+
+void KWFileNameVariable::save( QDomElement& parentElem )
+{
+    KWVariable::save( parentElem );
+    QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "name", correctQString( filename ) );
+}
+
+
+void KWFileNameVariable::load( QDomElement& elem )
+{
+    doc->unregisterVariable( this );
+    doc->registerVariable( this );
+    recalc();
+    KWVariable::load( elem );
+    QDomElement e = elem.namedItem( "FILENAME" ).toElement();
+    if (!e.isNull())
+    {
+        filename = e.attribute( "name" );
+    }
+}
+
 
 /******************************************************************/
 /* Class: KWCustomVariable                                        */

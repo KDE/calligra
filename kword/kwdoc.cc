@@ -2273,6 +2273,9 @@ KWVariableFormat * KWDocument::variableFormat( int type )
             case VT_PGNUM:
                 format = new KWVariablePgNumFormat();
                 break;
+            case VT_FILENAME:
+                format = new KWVariableFileNameFormat();
+                break;
             case VT_CUSTOM:
                 format = new KWVariableCustomFormat();
                 break;

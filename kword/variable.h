@@ -29,7 +29,7 @@ class KWVariable;
 class QDomElement;
 
 enum VariableType { VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
-                    VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_NONE };
+                    VT_NUMPAGES = 5, VT_FILENAME = 6 ,VT_CUSTOM = 7, VT_SERIALLETTER = 8 , VT_NONE };
 //enum VariableFormatType { VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4,
 //                          VFT_SERIALLETTER = 5 };
 
@@ -60,6 +60,21 @@ public:
 
 //    virtual VariableFormatType getType() const
 //    { return VFT_DATE; }
+
+    virtual QString convert( KWVariable *_var );
+
+};
+
+/******************************************************************/
+/* Class: KWVariableFileNameFormat                                */
+/******************************************************************/
+class KWVariableFileNameFormat : public KWVariableFormat
+{
+public:
+    KWVariableFileNameFormat() : KWVariableFormat() {}
+
+//    virtual VariableFormatType getType() const
+//    { return VFT_TIME; }
 
     virtual QString convert( KWVariable *_var );
 
@@ -291,6 +306,35 @@ protected:
     QTime time;
     bool fix;
 
+};
+
+/******************************************************************/
+/* Class: KWFileNameVariable                                      */
+/******************************************************************/
+
+class KWFileNameVariable : public KWVariable
+{
+public:
+    KWFileNameVariable( KWTextFrameSet *fs, const QString &_fileName, KWVariableFormat *_varFormat );
+
+/*    virtual KWVariable *copy() {
+        KWFileNameVariable *var = new KWFileNameVariable( doc, filename );
+        var->setVariableFormat( varFormat );
+        var->setInfo( frameSetNum, frameNum, pageNum, parag );
+        return var;
+        }*/
+
+    virtual VariableType getType() const
+    { return VT_FILENAME; }
+
+    QString getFileName() const { return filename; }
+    void setFileName( QString _filename ) { filename = _filename; }
+
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+protected:
+    QString filename;
 };
 
 /******************************************************************/

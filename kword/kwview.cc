@@ -334,6 +334,9 @@ void KWView::setupActions()
     actionInsertVarPgNum = new KAction( i18n( "&Page Number" ), 0,
                                         this, SLOT( insertVariablePageNum() ),
                                         actionCollection(), "insert_var_pgnum" );
+    actionInsertVarFileName = new KAction( i18n( "File Name" ), 0,
+                                        this, SLOT( insertVariableFileName() ),
+                                        actionCollection(), "insert_var_filename" );
     actionInsertVarCustom = new KAction( i18n( "&Custom..." ), 0,
                                          this, SLOT( insertVariableCustom() ),
                                          actionCollection(), "insert_var_custom" );
@@ -1441,6 +1444,14 @@ void KWView::insertVariablePageNum()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertVariable( VT_PGNUM );
+}
+
+/*===============================================================*/
+void KWView::insertVariableFileName()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_FILENAME );
 }
 
 /*===============================================================*/
@@ -2849,7 +2860,7 @@ void KWView::updateButtons()
     actionInsertVarTime->setEnabled(state);
     actionInsertVarPgNum->setEnabled(state);
     actionInsertVarCustom->setEnabled(state);
-
+    actionInsertVarFileName->setEnabled(state);
 
 }
 

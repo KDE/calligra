@@ -2882,6 +2882,9 @@ void KWTextFrameSetEdit::insertVariable( int type )
         case VT_PGNUM: {
             var = new KWPgNumVariable( textFrameSet(), varFormat );
         } break;
+        case  VT_FILENAME: {
+            var = new KWFileNameVariable( textFrameSet(),doc->url().isEmpty()?i18n("<None>"):doc->url().filename(), varFormat );
+        } break;
         case VT_CUSTOM: {
             // Choose an existing variable
             KWVariableNameDia dia( m_canvas, doc->getVariables() );
