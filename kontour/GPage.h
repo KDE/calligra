@@ -140,6 +140,7 @@ public:
   void changeOutlineStyles(const KoColor &c);
   void changeStroked(bool stroked);
   void changeFilled(bool filled);
+  void changeLinewidth(unsigned int lwidth);
 
 public slots:
 //  void objectChanged ();

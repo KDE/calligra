@@ -340,4 +340,9 @@ void GObject::changeFilled(bool filled)
   st.filled(filled);
 }
 
+void GObject::changeOutlineWidth(unsigned int lwidth)
+{
+  st.outlineWidth(lwidth);
+}
+
 #include "GObject.moc"
