@@ -33,6 +33,7 @@ class QDomElement;
 enum VariableType { VT_NONE = -1,
                     VT_DATE = 0, VT_TIME = 2, VT_PGNUM = 4,
                     VT_CUSTOM = 6, VT_MAILMERGE = 7, VT_FIELD = 8, VT_LINK=9,
+                    VT_NOTE,
                     VT_ALL=256 };
 
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
@@ -513,7 +514,30 @@ public:
 protected:
     QString m_linkName;
     QString m_url;
-
 };
+
+class KoNoteVariable : public KoVariable
+{
+public:
+    KoNoteVariable( KoTextDocument *textdoc, const QString & _note,KoVariableFormat *varFormat, KoVariableCollection *_varColl );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
+
+    virtual VariableType type() const
+    { return VT_NOTE; }
+
+    static QStringList actionTexts();
+
+    virtual void saveVariable( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+    virtual QString text();
+    QString note() const { return m_note; }
+    void setNote( const QString & _note) { m_note = _note; }
+    virtual void recalc();
+
+protected:
+    QString m_note;
+};
+
 
 #endif

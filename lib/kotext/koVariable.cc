@@ -648,6 +648,9 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_LINK:
             varFormat = coll->format( "STRING" );
             break;
+        case VT_NOTE:
+            varFormat = coll->format( "STRING" );
+            break;
         }
     }
     Q_ASSERT( varFormat );
@@ -674,8 +677,11 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_MAILMERGE:
             var = new KoMailMergeVariable( textdoc, QString::null, varFormat ,this);
             break;
-    case VT_LINK:
+        case VT_LINK:
             var = new KoLinkVariable( textdoc,QString::null, QString::null, varFormat ,this);
+            break;
+        case VT_NOTE:
+            var = new KoNoteVariable( textdoc, QString::null, varFormat ,this);
             break;
     }
     Q_ASSERT( var );
@@ -1148,7 +1154,7 @@ QStringList KoFieldVariable::subTypeText()
 }
 
 /******************************************************************/
-/* Class: KoPgNumVariable                                         */
+/* Class: KoLinkVariable                                          */
 /******************************************************************/
 KoLinkVariable::KoLinkVariable( KoTextDocument *textdoc, const QString & _linkName, const QString & _ulr,KoVariableFormat *varFormat,KoVariableCollection *_varColl )
     : KoVariable( textdoc, varFormat,_varColl ), m_linkName(_linkName),m_url(_ulr)
@@ -1214,3 +1220,80 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
     p->drawText( x, y + bl + offset, text() );
     p->restore();
 }
+
+
+/******************************************************************/
+/* Class: KoNoteVariable                                          */
+/******************************************************************/
+KoNoteVariable::KoNoteVariable( KoTextDocument *textdoc, const QString & _note,KoVariableFormat *varFormat,KoVariableCollection *_varColl )
+    : KoVariable( textdoc, varFormat,_varColl ), m_note(_note)
+{
+}
+
+void KoNoteVariable::saveVariable( QDomElement& parentElem )
+{
+    QDomElement linkElem = parentElem.ownerDocument().createElement( "NOTE" );
+    parentElem.appendChild( linkElem );
+    linkElem.setAttribute( "note", m_note );
+}
+
+void KoNoteVariable::load( QDomElement& elem )
+{
+    KoVariable::load( elem );
+    QDomElement linkElem = elem.namedItem( "NOTE" ).toElement();
+    if (!linkElem.isNull())
+    {
+        m_note = linkElem.attribute("note");
+    }
+}
+
+void KoNoteVariable::recalc()
+{
+    resize();
+}
+
+QStringList KoNoteVariable::actionTexts()
+{
+    return QStringList( i18n( "Note..." ) );
+}
+
+QString KoNoteVariable::text()
+{
+    //for a note return just a "space" we can look at
+    //note when we "right button"
+    return QString(" ");
+
+}
+
+void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
+{
+    KoTextFormat * f = static_cast<KoTextFormat *>(format());
+    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+    int bl, _y;
+    KoTextParag * parag = static_cast<KoTextParag *>( paragraph() );
+    //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
+    int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
+
+    h = zh->layoutUnitToPixelY( y, h );
+    bl = zh->layoutUnitToPixelY( y, bl );
+
+    p->save();
+    p->setPen( QPen( f->color() ) );
+    if ( f->textBackgroundColor().isValid() )
+        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
+    if ( selected )
+    {
+        p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
+        p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
+
+    }
+    else if ( textDocument() && p->device()->devType() != QInternal::Printer )
+    {
+        p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h,  Qt::yellow);
+        p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
+        p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
+    }
+    p->restore();
+}
+
+
