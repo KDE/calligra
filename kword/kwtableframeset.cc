@@ -23,6 +23,7 @@ DESCRIPTION
 */
 
 // ### TODO: Doxygen-ify the description above
+// ### TODO (JJ:) : change the QMAX into kMax and QMIN into kMin, especially if one parameter is a function
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -99,6 +100,7 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
 {
     // TODO multi-page case
 #ifdef SUPPORT_MULTI_PAGE_TABLES
+    kdDebug(32004) << "KWTableFrameSet::moveFloatingFrame: " << position << endl;
     const double dx = position.x() - m_colPositions[0];
     const double dy = position.y() - m_rowPositions[0];
 
@@ -568,7 +570,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             unsigned int breakRow = lineNumber-1;
             // find out of no cells are spanning multiple rows meaning we have to break higher.
 #if 0
-    I did not get a chance do debug this yet!  TZ.
+    // ### TODO: I did not get a chance do debug this yet!  TZ.
             for(int i=0; i < getCols() ; i++) {
                 kdDebug() << "i: " << i<< endl;
                 Cell *c= getCell(breakRow, i);
