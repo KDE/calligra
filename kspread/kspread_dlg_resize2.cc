@@ -32,6 +32,8 @@
 #include <kspread_doc.h>
 #include <kspread_undo.h>
 
+#include <qlabel.h>
+
 KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n("Resize Row"), Ok|Cancel|Default )
 {
@@ -40,26 +42,31 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
     QWidget *page = new QWidget( this );
     setMainWidget( page );
 
-    QVBoxLayout *lay = new QVBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *vLay = new QVBoxLayout( page, 0, spacingHint() );
+    QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
     QRect selection( m_pView->selection() );
     RowFormat* rl = m_pView->activeTable()->rowFormat( selection.top() );
     rowHeight = rl->dblHeight();
 
+    QLabel * label1 = new QLabel( page, "label1" );
+    label1->setText( i18n( "Height:" ) );
+    hLay->addWidget( label1 );
+
     m_pHeight = new KDoubleNumInput( page );
-    m_pHeight->setRange( KoUnit::ptToUnit( 2, m_pView->doc()->getUnit() ),
-                         KoUnit::ptToUnit( 400, m_pView->doc()->getUnit() ),
-                         KoUnit::ptToUnit( 1, m_pView->doc()->getUnit() ) );
-    m_pHeight->setLabel( i18n("Height:") );
     m_pHeight->setPrecision( 2 );
     m_pHeight->setValue( KoUnit::ptToUnit( rowHeight,
                                            m_pView->doc()->getUnit() ) );
     m_pHeight->setSuffix( m_pView->doc()->getUnitName() );
-    lay->addWidget( m_pHeight );
+    hLay->addWidget( m_pHeight );
 
-    QWidget *spacer = new QWidget( page );
-    spacer->setMinimumSize( spacingHint(), spacingHint() );
-    lay->addWidget( spacer );
+    QWidget *hSpacer = new QWidget( page );
+    hSpacer->setMinimumSize( spacingHint(), spacingHint() );
+    hLay->addWidget( hSpacer );
+
+    QWidget *vSpacer = new QWidget( page );
+    vSpacer->setMinimumSize( spacingHint(), spacingHint() );
+    vLay->addWidget( vSpacer );
 
     m_pHeight->setFocus();
 
@@ -73,7 +80,7 @@ void KSpreadResizeRow::slotOk()
     double height = KoUnit::ptFromUnit( m_pHeight->value(), m_pView->doc()->getUnit() );
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
-    if ( height - rowHeight > DBL_EPSILON )
+    if ( fabs( height - rowHeight ) > DBL_EPSILON )
     {
         QRect selection( m_pView->selection() );
 
@@ -105,25 +112,30 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QVBoxLayout *lay = new QVBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *vLay = new QVBoxLayout( page, 0, spacingHint() );
+    QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
     QRect selection( m_pView->selection() );
     ColumnFormat* cl = m_pView->activeTable()->columnFormat( selection.left() );
     columnWidth = cl->dblWidth();
 
+    QLabel * label1 = new QLabel( page, "label1" );
+    label1->setText( i18n( "Width:" ) );
+    hLay->addWidget( label1 );
+
     m_pWidth = new KDoubleNumInput( page );
-    m_pWidth->setRange( KoUnit::ptToUnit( 2, m_pView->doc()->getUnit() ),
-                        KoUnit::ptToUnit( 400, m_pView->doc()->getUnit() ),
-                        KoUnit::ptToUnit( 1, m_pView->doc()->getUnit() ) );
-    m_pWidth->setLabel( i18n("Width:") );
     m_pWidth->setPrecision( 2 );
     m_pWidth->setValue( KoUnit::ptToUnit( columnWidth, m_pView->doc()->getUnit() ) );
     m_pWidth->setSuffix( m_pView->doc()->getUnitName() );
-    lay->addWidget( m_pWidth );
+    hLay->addWidget( m_pWidth );
 
-    QWidget *spacer = new QWidget( page );
-    spacer->setMinimumSize( spacingHint(), spacingHint() );
-    lay->addWidget( spacer );
+    QWidget *hSpacer = new QWidget( page );
+    hSpacer->setMinimumSize( spacingHint(), spacingHint() );
+    hLay->addWidget( hSpacer );
+
+    QWidget *vSpacer = new QWidget( page );
+    vSpacer->setMinimumSize( spacingHint(), spacingHint() );
+    vLay->addWidget( vSpacer );
 
     m_pWidth->setFocus();
 
@@ -137,7 +149,7 @@ void KSpreadResizeColumn::slotOk()
     double width = KoUnit::ptFromUnit( m_pWidth->value(), m_pView->doc()->getUnit() );
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
-    if ( width - columnWidth > DBL_EPSILON )
+    if ( fabs( width - columnWidth ) > DBL_EPSILON )
     {
         QRect selection( m_pView->selection() );
 
@@ -147,7 +159,7 @@ void KSpreadResizeColumn::slotOk()
             m_pView->doc()->undoBuffer()->appendUndo( undo );
         }
 
-        for( int i=selection.left(); i<=selection.top(); i++ )
+        for( int i = selection.left(); i <= selection.right(); i++ )
             m_pView->hBorderWidget()->resizeColumn( width, i, false );
 
     }
@@ -158,7 +170,7 @@ void KSpreadResizeColumn::slotOk()
 
 void KSpreadResizeColumn::slotDefault()
 {
-    double width = colWidth;
+    double width = KoUnit::ptToUnit( colWidth, m_pView->doc()->getUnit() );
     m_pWidth->setValue( width );
 }
 
