@@ -22,8 +22,13 @@
 
 #include <iostream>
 #include <torben.h>
+#ifdef HAVE_MINI_STL
+#include <ministl/map>
+#include <ministl/string>
+#else
 #include <map>
 #include <string>
+#endif
 
 class Base64
 {
