@@ -174,7 +174,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( m_pTabBar, SIGNAL( doubleClicked() ), SLOT( renamePage() ) );
   connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ), 
       SLOT( popupTabBarMenu( const QPoint& ) ) );
-
+  m_pTabBar->setReverseLayout( QApplication::reverseLayout() );
+  
   // Scroll Bar
   QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
   QScrollBar* horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
