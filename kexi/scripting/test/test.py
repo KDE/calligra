@@ -210,7 +210,7 @@ def testfunc(msg):
     return "this is the __main__.testfunc() returnvalue!"
 
 def testobjectCallback():
-    print "testobjectCallback() returnvalue !!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    print "testobjectCallback() returnvalue !!!!!!!!!!!!!!!!!!!!!!!!"
     return "this is the __main__.testobjectCallback() returnvalue!"
 
 print "########## BEGIN ##########"
@@ -220,14 +220,15 @@ testKexiDB()
 #maintestfunc()
 #print __name__
 #print mymodule.exttest()
-testobject = Kross.get("TestObject")
-print "testobject = %s %s" % (str(testobject),dir(testobject))
-print "propertyNames = %s" % testobject.propertyNames()
-print "slotNames = %s" % testobject.slotNames()
-print "signalNames = %s" % testobject.signalNames()
-testobject.connect("testSignal()","testobjectCallback")
-testobject.signal("testSignal()")
-testobject.slot("testSlot()")
-testobject.disconnect("testSignal()")
+
+#testobject = Kross.get("TestObject")
+#print "testobject = %s %s" % (str(testobject),dir(testobject))
+#print "propertyNames = %s" % testobject.propertyNames()
+#print "slotNames = %s" % testobject.slotNames()
+#print "signalNames = %s" % testobject.signalNames()
+#testobject.connect("testSignal()","testobjectCallback")
+#testobject.signal("testSignal()")
+#testobject.slot("testSlot()")
+#testobject.disconnect("testSignal()")
 
 print "########## END ##########"

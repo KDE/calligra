@@ -41,11 +41,16 @@ namespace Kross { namespace Python {
             explicit PythonScript(Kross::Api::Interpreter* interpreter, Kross::Api::ScriptContainer* scriptcontainer);
             virtual ~PythonScript();
 
+            virtual const QStringList& getFunctionNames();
             virtual Kross::Api::Object* execute();
             virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args);
 
         private:
             Py::Module* m_module;
+
+            void initialize();
+            void finalize();
+
     };
 
 }}

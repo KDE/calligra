@@ -35,17 +35,40 @@ PythonScript::PythonScript(Kross::Api::Interpreter* interpreter, Kross::Api::Scr
     : Kross::Api::Script(interpreter, scriptcontainer)
     , m_module(0)
 {
-    PyObject* pymod = PyModule_New((char*)m_scriptcontainer->getName().latin1());
-    m_module = new Py::Module(pymod, true);
 }
 
 PythonScript::~PythonScript()
 {
+    finalize();
+}
+
+void PythonScript::initialize()
+{
+    finalize();
+    PyObject* pymod = PyModule_New((char*)m_scriptcontainer->getName().latin1());
+    m_module = new Py::Module(pymod, true);
+}
+
+void PythonScript::finalize()
+{
     delete m_module; m_module = 0;
+}
+
+const QStringList& PythonScript::getFunctionNames()
+{
+    if(! m_module) initialize();
+    QStringList list;
+    Py::List l = m_module->getDict().keys();
+    int length = l.length();
+    for(Py::List::size_type i = 0; i < length; ++i)
+        list.append( l[i].str().as_string().c_str() );
+    return list;
 }
 
 Kross::Api::Object* PythonScript::execute()
 {
+    if(! m_module) initialize();
+
     try {
         Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->m_mainmodule->getDict();
 
@@ -72,6 +95,8 @@ Kross::Api::Object* PythonScript::execute()
 
 Kross::Api::Object* PythonScript::callFunction(const QString& name, Kross::Api::List* args)
 {
+    if(! m_module) initialize();
+
     try {
         Py::Dict moduledict = m_module->getDict();
 

@@ -38,11 +38,12 @@ namespace Kross { namespace Api {
             Q_OBJECT
 
         public:
-            SignalHandler(QtObject* qtobj);
+            explicit SignalHandler(QtObject* qtobj);
+            explicit SignalHandler(QObject* obj);
             ~SignalHandler();
 
-            void connect(QObject *sender, const char *signal, const QString& function);
-            bool disconnect(QObject *sender, const char *signal, const char *slot);
+            bool connect(QObject *sender, const char *signal, const QString& functionname);
+            bool disconnect(QObject *sender, const char *signal, const QString& functionname);
 
             // we don't have a qobject-receiver, or?!
             //void connect(const char *signal, QObject *receiver, const char *slot);
@@ -71,8 +72,8 @@ namespace Kross { namespace Api {
                 QString function;
             };
 
-            void connect(const Connection& connection);
-            void disconnect(const Connection& connection);
+            bool connect(const Connection& connection);
+            bool disconnect(const Connection& connection);
 
             //QGuardedPtr<QObject> m_object;
             QValueList<Connection> m_connections;

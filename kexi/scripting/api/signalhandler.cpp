@@ -37,30 +37,36 @@ SignalHandler::SignalHandler(QtObject* qtobj)
 {
 }
 
+SignalHandler::SignalHandler(QObject* obj)
+    : QObject(obj)
+    , m_qtobj(0)
+{
+}
+
 SignalHandler::~SignalHandler()
 {
 }
 
 //void SignalHandler::connect(QObject *sender, const char *signal, const char *slot)
-void SignalHandler::connect(QObject *sender, const char *signal, const QString& function)
+bool SignalHandler::connect(QObject *sender, const char *signal, const QString& functionname)
 {
     Connection conn;
     conn.sender = sender;
     conn.signal = signal;
-    conn.function = function;
+    conn.function = functionname;
     m_connections << conn;
-    connect(conn);
+    return connect(conn);
 }
 
-bool SignalHandler::disconnect(QObject *sender, const char *signal, const char *slot)
+bool SignalHandler::disconnect(QObject *sender, const char *signal, const QString& functionname)
 {
     for(QValueList<Connection>::Iterator it = m_connections.begin(); it != m_connections.end(); ++it) {
         Connection conn = *it;
         if((QObject*)conn.sender == sender
            && qstrcmp(conn.signal, signal) == 0
-           //&& qstrcmp(conn.slot, slot) == 0
+           //&& qstrcmp(conn.function, functionname) == 0
         ) {
-            disconnect(conn);
+            if(! disconnect(conn)) return false;
             m_connections.remove(it);
             return true;
         }
@@ -78,7 +84,7 @@ bool SignalHandler::disconnect(const char *signal, QObject *receiver, const char
 }
 */
 
-void SignalHandler::connect(const Connection& connection)
+bool SignalHandler::connect(const Connection& connection)
 {
     if(connection.sender) {
 
@@ -98,10 +104,13 @@ void SignalHandler::connect(const Connection& connection)
         QObject::connect((QObject*)object, connection.signal, (QObject*)connection.receiver, connection.slot);
     }
     */
+    return true;
 }
 
-void SignalHandler::disconnect(const Connection& connection)
+bool SignalHandler::disconnect(const Connection& connection)
 {
+    //TODO
+    return true;
 }
 
 void SignalHandler::callback()

@@ -21,6 +21,7 @@
 #define KROSS_API_SCRIPT_H
 
 #include <qstring.h>
+#include <qstringlist.h>
 
 namespace Kross { namespace Api {
 
@@ -47,6 +48,12 @@ namespace Kross { namespace Api {
              * Destructor.
              */
             virtual ~Script();
+
+            /**
+             * Return a list of callable functionnames this
+             * script spends.
+             */
+            virtual const QStringList& getFunctionNames() = 0;
 
             /**
              * Execute the script.

@@ -34,6 +34,7 @@ namespace Kross { namespace Api {
     class List;
     class QtObject;
     class Script;
+    class SignalHandler;
 
     /**
      * The ScriptContainer class represents a single scriptfile.
@@ -46,8 +47,14 @@ namespace Kross { namespace Api {
 
             /**
              * Constructor.
+             *
+             * \param manager The \a Manager instance used to
+             *       create this ScriptContainer.
+             * \param name The unique name this ScriptContainer
+             *       has. It's used e.g. at the \a Manager to
+             *       identify the ScriptContainer.
              */
-            explicit ScriptContainer(Manager* manager, const QString& name);
+            ScriptContainer(Manager* manager, const QString& name);
 
             /**
              * Destructor.
@@ -82,42 +89,37 @@ namespace Kross { namespace Api {
             void setInterpreterName(const QString&);
 
             /**
-             * Return the functionname to call on \a execute.
+             * Return a list of functionnames the with
+             * \a setCode defined scriptcode spends.
              */
-            const QString& getFunctionName();
-
-            /**
-             * Set the functionname to call on \a execute.
-             */
-            void setFunctionName(const QString&);
-
-            /**
-             * Return a list of arguments to pass if the with
-             * \a setFunctionName defined function got called
-             * on \a execute.
-             */
-            Kross::Api::List* getFunctionArguments();
-
-            /**
-             * Set the list of arguments to pass if the with
-             * \a setFunctionName defined function got called
-             * on \a execute.
-             */
-            void setFunctionArguments(Kross::Api::List*);
-
-            /**
-             * Return the interpreter dependend from \a Script
-             * inherited class this ScriptContainer uses or
-             * NULL if not initialized jet.
-             */
-            Script* getScript();
+            const QStringList& getFunctionNames();
 
             /**
              * Execute the script container.
              */
             Kross::Api::Object* execute();
 
-            Kross::Api::Object* callFunction();
+            /**
+             * Call a function in the script container.
+             *
+             * \param functionname The name of the function
+             *       to call.
+             * \param arguments Optional list of arguments
+             *       passed to the function.
+             * \return \a Kross::Api::Object instance representing
+             *        the functioncall returnvalue.
+             */
+            Kross::Api::Object* callFunction(const QString& functionname, Kross::Api::List* arguments = 0);
+
+            /**
+             * Connect QObject signal with function.
+             */
+            bool connect(QObject *sender, const char *signal, const QString& functionname);
+
+            /**
+             * Disconnect QObject signal from function.
+             */
+            bool disconnect(QObject *sender, const char *signal, const QString& functionname);
 
         signals:
             //void done();
@@ -130,23 +132,21 @@ namespace Kross { namespace Api {
         private:
             Manager* m_manager;
             Script* m_script;
+            SignalHandler* m_signalhandler;
 
             QString m_name;
             QString m_code;
             QString m_interpretername;
 
-            QString m_functionname;
-            Kross::Api::List* m_functionargs;
+            /**
+             * Initialize the \a Script instance.
+             */
+            void initialize();
 
             /**
-             * Set the interpreter dependend from \a Script
-             * inherited class this ScriptContainer uses.
-             *
-             * \param script The \a Script to use or NULL
-             *        if set dirty (means the ScriptContainer
-             *        is uninitialized again).
+             * Finalize the \a Script instance.
              */
-            void setScript(Script* script = 0);
+            void finalize();
     };
 
 }}

@@ -110,13 +110,17 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     scriptcontainer->setInterpreterName(interpretername);
     scriptcontainer->setCode(scriptcode);
 
-scriptcontainer->setFunctionName("testobjectCallback");
-//scriptcontainer->setFunctionArguments();
-
     try {
         scriptcontainer->execute();
-scriptcontainer->callFunction();
-testobject->testSlot();
+
+        // Call a function.
+        //scriptcontainer->callFunction("testobjectCallback" /*, functionarguments */);
+
+        // Connect QObject signal with scriptfunction.
+        scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
+        // Call the testSlot to emit the testSignal.
+        testobject->testSlot();
+
     }
     catch(Kross::Api::Exception& e) {
         kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;

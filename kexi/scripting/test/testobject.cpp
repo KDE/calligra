@@ -24,13 +24,13 @@
 TestObject::TestObject(QObject* parent)
     : QObject(parent, "TestObject")
 {
-    kdDebug() << "TestObject::TestObject called" << endl;
+    //kdDebug() << "TestObject::TestObject called" << endl;
     connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
 }
 
 TestObject::~TestObject()
 {
-    kdDebug() << "TestObject::~TestObject called" << endl;
+    //kdDebug() << "TestObject::~TestObject called" << endl;
 }
 
 void TestObject::testSlot()

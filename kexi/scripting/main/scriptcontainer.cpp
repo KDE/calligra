@@ -24,6 +24,7 @@
 #include "../api/qtobject.h"
 #include "../api/interpreter.h"
 #include "../api/script.h"
+#include "../api/signalhandler.h"
 
 using namespace Kross::Api;
 
@@ -32,13 +33,14 @@ ScriptContainer::ScriptContainer(Manager* manager, const QString& name)
     , m_manager(manager)
     , m_name(name)
     , m_script(0)
-    , m_functionargs(0)
+    , m_signalhandler(0)
 {
 }
 
 ScriptContainer::~ScriptContainer()
 {
-    setScript();
+    delete m_signalhandler;
+    finalize();
 }
 
 const QString& ScriptContainer::getName()
@@ -53,7 +55,7 @@ const QString& ScriptContainer::getCode()
 
 void ScriptContainer::setCode(const QString& code)
 {
-    setScript();
+    finalize();
     m_code = code;
 }
 
@@ -64,61 +66,54 @@ const QString& ScriptContainer::getInterpreterName()
 
 void ScriptContainer::setInterpreterName(const QString& name)
 {
-    setScript();
+    finalize();
     m_interpretername = name;
 }
 
-const QString& ScriptContainer::getFunctionName()
+const QStringList& ScriptContainer::getFunctionNames()
 {
-    return m_functionname;
+    return m_script ? m_script->getFunctionNames() : QStringList();
 }
 
-void ScriptContainer::setFunctionName(const QString& name)
+void ScriptContainer::initialize()
 {
-    m_functionname = name;
+    finalize();
+    Interpreter* interpreter = m_manager->getInterpreter(m_interpretername);
+    if(! interpreter)
+        throw Kross::Api::TypeException(i18n("Unknown interpreter on ScriptContainer::execute()."));
+    m_script = interpreter->createScript(this);
 }
 
-Kross::Api::List* ScriptContainer::getFunctionArguments()
+void ScriptContainer::finalize()
 {
-    return m_functionargs;
-}
-
-void ScriptContainer::setFunctionArguments(Kross::Api::List* args)
-{
-    m_functionargs = args;
-}
-
-Script* ScriptContainer::getScript()
-{
-    return m_script;
-}
-
-void ScriptContainer::setScript(Script* script)
-{
-    if(script != m_script) {
-        delete m_script;
-        m_script = script;
-    }
+    delete m_script; m_script = 0;
 }
 
 Kross::Api::Object* ScriptContainer::execute()
 {
-    if(! m_script) {
-        Interpreter* interpreter = m_manager->getInterpreter(m_interpretername);
-        if(! interpreter)
-            throw Kross::Api::TypeException(i18n("Unknown interpreter on ScriptContainer::execute()."));
-        setScript( interpreter->createScript(this) );
-    }
+    if(! m_script) initialize();
     return m_script->execute();
 }
 
-Kross::Api::Object* ScriptContainer::callFunction()
+Kross::Api::Object* ScriptContainer::callFunction(const QString& functionname, Kross::Api::List* arguments)
 {
-    if(m_functionname.isEmpty())
+    if(functionname.isEmpty())
         throw Kross::Api::RuntimeException(i18n("No functionname defined for ScriptContainer::callFunction()."));
 
-    if(! m_script) // we need to initialize the script before.
-        execute();
-
-    return m_script->callFunction(m_functionname, m_functionargs);
+    if(! m_script) initialize();
+    return m_script->callFunction(functionname, arguments);
 }
+
+bool ScriptContainer::connect(QObject *sender, const char *signal, const QString& functionname)
+{
+    if(! m_signalhandler) // create instance on demand
+        m_signalhandler = new SignalHandler(this);
+    return m_signalhandler->connect(sender, signal, functionname);
+}
+
+bool ScriptContainer::disconnect(QObject *sender, const char *signal, const QString& functionname)
+{
+    if(! m_signalhandler) return false;
+    return m_signalhandler->disconnect(sender, signal, functionname);
+}
+
