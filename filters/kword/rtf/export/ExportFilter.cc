@@ -878,6 +878,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         if ( formatData.bgColor.isValid() )
         {
             strElement+=lookupColor("\\cb", formatData.bgColor);
+            strElement+=lookupColor("\\highlight", formatData.bgColor); 
         }
     }
 
