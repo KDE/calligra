@@ -16,7 +16,7 @@ KSpreadCellEditor::~KSpreadCellEditor()
 {
 }
 
- 
+
 KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, QWidget* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name )
 {
@@ -77,7 +77,7 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
   if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
   {
     QKeyEvent* k = (QKeyEvent*)e;
-    if ( k->key() == Key_Escape || k->key() == Key_Left || k->key() == Key_Right )
+    if ( k->key() == Key_Escape )
     {
       QApplication::sendEvent( parent(), e );
       return TRUE;

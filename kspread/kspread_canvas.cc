@@ -53,7 +53,7 @@ void KSpreadEditWidget::slotDoneEdit()
 
 void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
-  m_pView->canvasWidget()->setEditorActivate(false);
+    m_pView->canvasWidget()->setEditorActivate(false);
 
   if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
   {
@@ -836,7 +836,6 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 {
   KSpreadTable *table = activeTable();
 
-
   if ( !table )
     return;
 
@@ -900,10 +899,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	if ( m_pEditor )
 	{
-	  setFocus();
-	  m_pView->setText( m_pEditor->text() );
-	  delete m_pEditor;
-	  m_pEditor = 0;
+	    m_pEditor->handleKeyPressEvent( _ev );
+	    //_ev->accept();
+	    return;
+// 	    setFocus();
+// 	  m_pView->setText( m_pEditor->text() );
+// 	  delete m_pEditor;
+// 	  m_pEditor = 0;
 	}
 	setEditorActivate(false);
 	break;
@@ -915,10 +917,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	if ( m_pEditor )
 	{
-	  setFocus();
-	  m_pView->setText( m_pEditor->text() );
-	  delete m_pEditor;
-	  m_pEditor = 0;
+	    m_pEditor->handleKeyPressEvent( _ev );
+	    //_ev->accept();
+	    return;
+// 	  setFocus();
+// 	  m_pView->setText( m_pEditor->text() );
+// 	  delete m_pEditor;
+// 	  m_pEditor = 0;
 	}
 	setEditorActivate(false);
 	break;
