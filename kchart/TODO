@@ -25,14 +25,15 @@ Item								   Prio Status
       - Paint chart using it						done
 
 * Issues with KSpread
-  + Printing: The chart is of thumbnail size, and wrongly placed.     2	----
+  + Handling: The chart changes size when selected and unselected.    2 KSPR
+  + Printing: The chart is of thumbnail size, and wrongly placed.     2	KSPR
   + Labels are no longer generated correctly.			      1	DONE
 
 * Other fixes
   + Include me in Authors					      2	DONE
   + Can HiLo charts be made thicker than one pixel?                   3 ----
     New page in config dialog like pie settings?
-  + Tooltips & What's this help?				     S1 ----
+  + Tooltips & What's this help all over the program?		     S1 ----
   + Remove the predefined bar chart?				      2 ----
   + Make the settings in Edit->"Page Layout" clearer?		      1 ----
   + Singular or plural for tooltips, not both.			     S1 ----
@@ -56,6 +57,7 @@ Item								   Prio Status
 	are decreased.
   + Make Apply button work.						DONE
   + Smaller column widths?						DONE
+  + Transfer the Tooltips and WhatsThis from the old editor.	      1	DONE
 
 * Config dialog
   + Make Data page work.						DONE
@@ -68,7 +70,6 @@ Item								   Prio Status
 * Wizard
   + Pages:
     - "Select Chart Type" page: Reorder like the toolbark		DONE
-                                Black border around selected type?    3 --
   + Make Help button work or disable it.			      1 ----
   + The Back button should be in the same place on all pages.	      3 ----
   + Subtype page should have icons for subtypes like config dialog.   2 ----

@@ -32,28 +32,17 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
    m_table = new QTable(page);
 
-   QString rowwhatsthis = i18n("<p><b>Sets the number of rows in the data table."
-			       "</b><br><br>Each row represents one data set.</p>");
-   QString colwhatsthis = i18n("<p><b>Sets the number of columns in the data table."
-			       "</b><br><br>The number of columns defines the number of data values in each data set (row).</p>");
-  
    m_rowsLA = new QLabel( i18n("# Rows:" ), page );
    m_rowsLA->resize( m_rowsLA->sizeHint() );
-   QWhatsThis::add(m_rowsLA, rowwhatsthis);
    m_rowsSB = new QSpinBox( page );
    m_rowsSB->resize( m_rowsSB->sizeHint() );
    m_rowsSB->setMinValue(1);
-   QToolTip::add(m_rowsSB, i18n("Number of active data rows"));
-   QWhatsThis::add(m_rowsSB, rowwhatsthis);
   
    m_colsLA = new QLabel( i18n("# Columns:" ), page );
    m_colsLA->resize( m_colsLA->sizeHint() );
-   QWhatsThis::add(m_colsLA, colwhatsthis);
    m_colsSB = new QSpinBox( page );
    m_colsSB->resize( m_colsSB->sizeHint() );
    m_colsSB->setMinValue(1);
-   QToolTip::add(m_colsSB, i18n("Number of active data columns"));
-   QWhatsThis::add(m_colsSB, colwhatsthis);
 
    QVBoxLayout  *topLayout = new QVBoxLayout( page );
    topLayout->addWidget(m_table);
@@ -88,7 +77,43 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     // A confirmation dialog will make sure that the user knows what
     // (s)he is doing.
     m_userWantsToShrink = false;
+
+    addDocs();
 }
+
+
+// Add Tooltips and WhatsThis help to various parts of the Data Editor.
+//
+void kchartDataEditor::addDocs()
+{
+    // The rows settings.
+    QString rowwhatsthis = i18n("<p><b>Sets the number of rows in the data table."
+				"</b><br><br>Each row represents one data set.</p>");
+    QToolTip::add(m_rowsSB, i18n("Number of active data rows"));
+    QWhatsThis::add(m_rowsLA, rowwhatsthis);
+    QWhatsThis::add(m_rowsSB, rowwhatsthis);
+
+    // The columns settings.
+    QString colwhatsthis = i18n("<p><b>Sets the number of columns in the data table."
+				"</b><br><br>The number of columns defines the number of data values in each data set (row).</p>");
+    QToolTip::add(m_colsSB, i18n("Number of active data columns"));
+    QWhatsThis::add(m_colsLA, colwhatsthis);
+    QWhatsThis::add(m_colsSB, colwhatsthis);
+
+    // The table.
+    QToolTip::add(m_table, i18n("Chart data, each row is a data set. "
+			       "First row and column are headers."));
+    QWhatsThis::add(m_table, i18n("<p>This table represents the complete data"
+    " for the chart.<br><br> Each row is one data set of values."
+    " The name of such a data set can be changed in the first column (on the left)"
+    " of the table. In a line diagram each row is one line. In a ring diagram each row"
+    " is one slice. <br><br> Each column represents one value of each data set."
+    " Just like rows you can also change the name of each value in the"
+    " first row (at the top) of the table. In a bar diagram the number of columns"
+    " defines the number of value sets. In a ring diagram each column is one ring.</p>"));
+
+}
+
 
 // Set the data in the data editor.
 //

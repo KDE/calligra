@@ -1,3 +1,10 @@
+2005-03-11  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+	Move Tooltips and Whatsthis help from the old data editor to the
+	new one.
+	* kchartDataEditor.cc (addDocs): New method
+	(constructor): Clean up by moving all help generation to addDocs().
+
 2005-03-11  Inge Wallin  <inge@lysator.liu.se>
 
 	Enable "Finish" button for all pages in the wizard.
