@@ -27,16 +27,17 @@
 #include <klocale.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include "configfootnotedia.h"
 
 
 /******************************************************************/
 /* Class: KWFootNoteDia                                           */
 /******************************************************************/
 
-KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, const QString & _manualString, QWidget *parent, const char *name )
-    : KDialogBase( parent, name, true, QString::null, Ok|Cancel, Ok, true )
+KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, const QString & _manualString, QWidget *parent, KWDocument *_doc, const char *name )
+    : KDialogBase( parent, name, true, QString::null, Ok|Cancel|User1, Ok, true )
 {
-
+    m_doc =_doc;
     setButtonOKText(i18n("&Insert"));
 
     setCaption( i18n("Insert Footnote/Endnote") );
@@ -76,6 +77,8 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     else
         m_rbEndNote->setChecked( true );
     footNoteTypeChanged();
+    setButtonText( KDialogBase::User1, i18n("Configure") );
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotConfigurate()));
 }
 
 void KWFootNoteDia::footNoteTypeChanged()
@@ -111,4 +114,11 @@ KWFootNoteVariable::Numbering KWFootNoteDia::numberingType()const
 QString KWFootNoteDia::manualString()const
 {
     return m_footLine->text();
+}
+
+void KWFootNoteDia::slotConfigurate()
+{
+    KWConfigFootNoteDia *dia = new KWConfigFootNoteDia( this, "configfootnote", m_doc );
+    dia->exec();
+    delete dia;
 }

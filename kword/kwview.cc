@@ -2735,7 +2735,7 @@ void KWView::insertFootNote()
                                       "endnotes into the first frameset."),
                                 i18n("Insert Footnote"));
         } else {
-            KWFootNoteDia dia( m_gui->canvasWidget()->footNoteType(), m_gui->canvasWidget()->numberingFootNoteType(), QString::null, this, 0 );
+            KWFootNoteDia dia( m_gui->canvasWidget()->footNoteType(), m_gui->canvasWidget()->numberingFootNoteType(), QString::null, this, m_doc, 0 );
             if ( dia.exec() ) {
                 edit->insertFootNote( dia.noteType(), dia.numberingType(), dia.manualString() );
                 m_gui->canvasWidget()->setFootNoteType( dia.noteType() );
@@ -5245,7 +5245,7 @@ void KWView::changeFootNoteType()
         KWFootNoteVariable * var = dynamic_cast<KWFootNoteVariable *>(tmpVar);
         if(var && var->frameSet())
         {
-            KWFootNoteDia dia( var->noteType(), var->numberingType(), (var->numberingType()==KWFootNoteVariable::Auto) ? QString::null : var->manualString(), this, 0 );
+            KWFootNoteDia dia( var->noteType(), var->numberingType(), (var->numberingType()==KWFootNoteVariable::Auto) ? QString::null : var->manualString(), this, m_doc, 0 );
             if ( dia.exec() )
             {
                 FootNoteParameter oldParam( var );
