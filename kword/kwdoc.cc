@@ -1983,10 +1983,8 @@ void KWDocument::repaintAllViews( bool erase )
 void KWDocument::appendPage( /*unsigned int _page*/ )
 {
     int thisPageNum = m_pages-1;
-    kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
+    //kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
-
-    recalcVariables( VT_PGNUM );
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1994,6 +1992,8 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
         KWFrameSet * frameSet = fit.current();
         // don't add tables! A table cell ( frameset ) _must_ not have cells auto-added to them!
         if ( frameSet->getFrameType() == FT_TABLE ) continue;
+
+        //kdDebug(32002) << "KWDocument::appendPage looking at frameset " << frameSet->getName() << endl;
 
         // KWFrameSet::addFrame triggers a reshuffle in the frames list (KWTextFrameSet::updateFrames)
         // which destroys the iterators -> append the new frames at the end.
@@ -2007,8 +2007,9 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
                                   - it is on the former page and the frame is set to double sided.
                                   - AND the frame is set to be reconnected or copied
                                   -  */
-            //kdDebug(32002) << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
-            //kdDebug(32002) << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
+            /*kdDebug(32002) << "   frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
+            static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
+            kdDebug(32002) << "   frame->getNewFrameBehaviour()==" << newFrameBh[frame->getNewFrameBehaviour()] << endl;*/
             if ( (frame->pageNum() == thisPageNum ||
                   (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide) )
                  &&
@@ -2024,6 +2025,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
                 frm->moveBy( 0, ptPaperHeight() );
                 frm->setPageNum( frame->pageNum()+1 );
                 newFrames.append( frm );
+                //kdDebug(32002) << "   => created frame " << frm << endl;
             }
         }
         QListIterator<KWFrame> newFrameIt( newFrames );
@@ -2036,7 +2038,8 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
         recalcFrames();  // Get headers and footers on the new page
     // setModified(TRUE); This is called by formatMore, possibly on loading -> don't set modified
 
-     emit pageNumChanged();
+    recalcVariables( VT_PGNUM );
+    emit pageNumChanged();
 }
 
 bool KWDocument::canRemovePage( int num )
