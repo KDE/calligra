@@ -106,7 +106,14 @@ KoRect operator&(const KoRect &lhs, const KoRect &rhs);
 bool operator==(const KoRect &lhs, const KoRect &rhs);
 bool operator!=(const KoRect &lhs, const KoRect &rhs);
 
+
+/** Show a floating point value with great precision (use within kdDebug) */
+#define DEBUGDOUBLE(d) QString::number( (d), 'g', 20 )
+
+/** Show the position and size of a rectangle (use within kdDebug) */
 #define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
+
+/** Show the rectangles that form a region (use as a standalone statement) */
 #define DEBUGREGION(reg) { QArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
                            kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
 
