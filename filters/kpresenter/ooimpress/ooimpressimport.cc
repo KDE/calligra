@@ -1257,7 +1257,7 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
     if ( isOrdered )
         counter.setAttribute( "type", 1 );
     else
-        counter.setAttribute( "type", 10 );
+        counter.setAttribute( "type", 10 ); // a disc bullet
 
     // Don't 'appendChild()'! Text elements have to be the last children of the
     // paragraph element otherwise kpresenter will cut off the last character of
@@ -1427,7 +1427,8 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
         // parse the text-properties
         if ( m_styleStack.hasAttribute( "fo:color" ) )
             text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
-        if ( m_styleStack.hasAttribute( "fo:font-family" ) )
+        if ( m_styleStack.hasAttribute( "fo:font-family" )  // 3.10.9
+             || m_styleStack.hasAttribute("style:font-name") )//3.10.8
         {
             // 'Thorndale/Albany' are not known outside OpenOffice so we substitute them
             // with 'Times New Roman/Arial' that look nearly the same.
@@ -1461,11 +1462,11 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
                 text.setAttribute( "relativetextsize", relativetextsize );
         }
 
-        bool wordByWord = (m_styleStack.hasAttribute("fo:score-spaces"))
+        bool wordByWord = (m_styleStack.hasAttribute("fo:score-spaces"))// 3.10.25
                           && (m_styleStack.attribute("fo:score-spaces") == "false");
 
         // strikeout
-        if ( m_styleStack.hasAttribute("style:text-crossing-out")
+        if ( m_styleStack.hasAttribute("style:text-crossing-out")// 3.10.6
              && m_styleStack.attribute("style:text-crossing-out") != "none")
         {
             QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
@@ -1490,10 +1491,10 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
         }
 
         // underlining
-        if ( m_styleStack.hasAttribute( "style:text-underline" ) )
+        if ( m_styleStack.hasAttribute( "style:text-underline" ) ) // 3.10.22
         {
             QString underType = m_styleStack.attribute( "style:text-underline" );
-            QString underLineColor = m_styleStack.attribute( "style:text-underline-color" );
+            QString underLineColor = m_styleStack.attribute( "style:text-underline-color" );// 3.10.23
             if ( underType == "single" )
             {
                 text.setAttribute( "underline", 1 );
@@ -1547,7 +1548,24 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
             if (wordByWord)
                 text.setAttribute("wordbyword", 1);
         }
-
+#if 0 // strange ooimpress doesn't implement it
+         // Small caps, lowercase, uppercase
+        if ( m_styleStack.hasAttribute( "fo:font-variant" ) // 3.10.1
+         || m_styleStack.hasAttribute( "fo:text-transform" ) ) // 3.10.2
+        {
+            QDomElement fontAttrib( doc.createElement( "FONTATTRIBUTE" ) );
+            bool smallCaps = m_styleStack.attribute( "fo:font-variant" ) == "small-caps";
+            if ( smallCaps )
+            {
+                text.setAttribute( "fontattribute", "smallcaps" );
+            } else
+            {
+                // Both KWord/KPresenter and OO use "uppercase" and "lowercase".
+                // TODO in KWord: "capitalize".
+                text.setAttribute( "fontattribute", m_styleStack.attribute( "fo:text-transform" ) );
+            }
+        }
+#endif
         // background color (property of the paragraph in OOo, of the text in kword/kpresenter)
         if (m_styleStack.hasAttribute( "fo:background-color" ))
         {
