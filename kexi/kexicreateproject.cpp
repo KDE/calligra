@@ -78,8 +78,8 @@ KexiCreateProject::next()
 void
 KexiCreateProject::accept()
 {
-	static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB();
-	KWizard::accept();
+	if(static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB())
+		KWizard::accept();
 }
 
 KexiCreateProject::~KexiCreateProject()

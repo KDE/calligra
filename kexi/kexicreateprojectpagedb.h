@@ -37,7 +37,7 @@ class KexiCreateProjectPageDB : public KexiCreateProjectPage
 		~KexiCreateProjectPageDB();
 
 		void		connectHost(QString driver, QString host, QString user, QString password);
-		void		connectDB();
+		bool		connectDB();
 
 	protected:
 		KListView	*m_databases;

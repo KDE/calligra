@@ -99,7 +99,7 @@ KexiDB::connect(QString, QString, QString, QString)
 QString
 KexiDB::driverName()
 {
-	return QString::null;
+	return QString::fromLatin1("NONE");
 }
 
 bool

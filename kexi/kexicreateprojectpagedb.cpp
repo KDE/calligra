@@ -69,12 +69,13 @@ KexiCreateProjectPageDB::connectHost(QString driver, QString host, QString user,
 	}
 }
 
-void
+bool
 KexiCreateProjectPageDB::connectDB()
 {
 	m_cred.database = data("database").toString();
 	if(kexi->project()->initDbConnection(m_cred))
 	{
+		return true;
 		kexi->mainWindow()->browser()->generateView();
 	}
 }

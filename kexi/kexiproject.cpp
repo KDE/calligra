@@ -141,9 +141,13 @@ KexiProject::initDbConnection(const Credentials &cred)
 	kdDebug() << "KexiProject::initDbConnection(): database:" << cred.database << endl;
 
 	
-	if(!m_db->driverName() == cred.driver)
+	if(m_db->driverName() != cred.driver)
+	{
+		kdDebug() << "KexiProject::initDBConnection(): abroating" << endl;
 		initHostConnection(cred);
+	}
 
+	kdDebug() << "KexiProject::initDBConnection(): using simple method\n  because current driver is: " << m_db->driverName() << endl;
 	if(m_db->connect(cred.host, cred.user, cred.password, cred.database))
 	{
 		m_cred = cred;
