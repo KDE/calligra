@@ -387,3 +387,8 @@ Done:
 -> save/load style
 -> save/load cell border attribute
 
+Fixe todo:
+----------
+-> fix loading validation
+-> fix loading column/row style
+
