@@ -70,7 +70,7 @@ class KexiProjectHandler : public QObject
 		virtual QPixmap			itemPixmap() = 0;
 
 		virtual void saveXML(QDomDocument&);
-		virtual void loadXML(const QDomDocument&);
+		virtual void loadXML(const QDomDocument&, const QDomElement&);
 		virtual void store (KoStore*);
 		virtual void load (KoStore*);
 		virtual ItemList		*items();
@@ -79,6 +79,8 @@ class KexiProjectHandler : public QObject
 
 		KexiProject *kexiProject();
 
+		static QString localIdentifier(const QString &globalIdentifier);
+		QString globalIdentifier(const QString &localIdentifier);
 	signals:
 		void itemListChanged(KexiProjectHandler*);
 

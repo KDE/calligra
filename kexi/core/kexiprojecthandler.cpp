@@ -29,7 +29,8 @@ KexiProjectHandler::KexiProjectHandler(KexiProject *project)
 {
 	m_project=project;
 	m_items = new ItemList();
-	
+	m_items->setAutoDelete(true);	
+
 	if(project)
 		project->registerProjectHandler(this);
 }
@@ -83,8 +84,22 @@ KexiProjectHandler::items()
 }
 
 void KexiProjectHandler::saveXML(QDomDocument&){;}
-void KexiProjectHandler::loadXML(const QDomDocument&){;}
+void KexiProjectHandler::loadXML(const QDomDocument&, const QDomElement&){;}
 void KexiProjectHandler::store (KoStore*){;}
 void KexiProjectHandler::load (KoStore*){;}
+
+QString KexiProjectHandler::localIdentifier(const QString &globalIdentifier)
+{
+	if (!globalIdentifier.startsWith("kexi/")) return globalIdentifier;
+	QString tmp=globalIdentifier;
+	tmp=tmp.right(tmp.length()-tmp.find("/")-1);
+	tmp=tmp.right(tmp.length()-tmp.find("/")-1);
+	return tmp;
+}
+QString KexiProjectHandler::globalIdentifier(const QString &localIdentifier)
+{
+	if (localIdentifier.startsWith("kexi/")) return localIdentifier;
+	return mime()+"/"+localIdentifier;
+}
 
 #include "kexiprojecthandler.moc"

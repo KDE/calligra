@@ -267,9 +267,11 @@ bool KexiProject::loadXML( QIODevice *, const QDomDocument &domDoc )
 			m_dbconnection = KexiDBConnection::loadInfo(el);
 		else if (tagname=="references")
 			loadReferences(el);
+		else {
+			for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
+			hand->loadXML(domDoc,el);
+		}
 	}
-	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
-		hand->loadXML(domDoc);
 	return true;
 }
 
