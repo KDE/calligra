@@ -52,3 +52,23 @@ void kchartDataEditor::getData(KChartData* dat) {
       }
     }
 }
+
+void kchartDataEditor::setLabel(QStringList lbl)
+{
+for (int row = 0;row < _widget->rows();row++)
+	{
+	if(!lbl[row].isNull())
+		{
+		QString tmp=lbl[row];
+		_widget->fillY(row,tmp);
+		}
+	}
+}
+
+void kchartDataEditor::getLabel(KChartParameters* params)
+{
+
+for (int row = 0;row < _widget->rows();row++)
+	params->lbl[row]=_widget->getY(row);	
+	
+}

@@ -172,7 +172,7 @@ int kchartEngine::out_graph() {
       drawBorder();
     }
 
-    if( params->shelf && params->threeD() &&								/* front of 0 shelf */
+    if( params->shelf && params->threeD() &&	/* front of 0 shelf */
 	( (lowest < 0.0 && highest > 0.0) ||
 	  (lowest < 0.0 && highest > 0.0) ) &&!params->isPie())
 	   {
@@ -186,12 +186,4 @@ int kchartEngine::out_graph() {
     }    
 }
 
-
-
 /* rem circle:  x = rcos(@), y = rsin(@)	*/
-
-
-
-
-
-

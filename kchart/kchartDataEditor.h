@@ -4,6 +4,8 @@
 #include <kdialog.h>   
 #include "kchart_part.h"
 #include "sheetdlg.h"  
+#include <qstrlist.h>
+#include "kchartparams.h"
 
 class kchartDataEditor : public KDialog {
    Q_OBJECT
@@ -11,6 +13,8 @@ class kchartDataEditor : public KDialog {
      kchartDataEditor();
    void setData(KChartData* dat);
    void getData(KChartData* dat);
+   void getLabel(KChartParameters* params);
+   void setLabel(QStringList lbl);
  private:
    SheetDlg *_widget;
 };

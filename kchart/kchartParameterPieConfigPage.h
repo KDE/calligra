@@ -11,6 +11,7 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
+#include <qspinbox.h>
 
 #include "kchartparams.h"
 
@@ -22,7 +23,9 @@ public:
     KChartParameterPieConfigPage( KChartParameters* params,QWidget* parent );
     void init();
     void apply();
- 
+
+public slots:
+    void changeState(bool );	
 private:
     KChartParameters* _params;
     QRadioButton *_typeNone;
@@ -32,7 +35,7 @@ private:
     QRadioButton *_typeLeft;
     QCheckBox *lineLabel;
     QLineEdit *title;
-    QLineEdit *dist;  
+    QSpinBox *dist;  
 };
 
 #endif

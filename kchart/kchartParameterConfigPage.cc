@@ -114,7 +114,11 @@ void KChartParameterConfigPage::init()
     if(_params->has_yaxis2())
     	{
     	yaxis2->setChecked(_params->yaxis2);
-    	ylabel2_fmt->setText(_params->ylabel2_fmt);
+    	if(!_params->ylabel2_fmt.isEmpty())
+    		{
+    		int len=_params->ylabel2_fmt.length();
+         	ylabel2_fmt->setText(_params->ylabel2_fmt.right(len-3));
+         	}
     	ytitle2->setText(_params->ytitle2);
     	}
     else
@@ -130,6 +134,12 @@ void KChartParameterConfigPage::init()
     title->setText(_params->title);
     xtitle->setText(_params->xtitle);
     ytitle->setText(_params->ytitle);
+    if(!_params->ylabel_fmt.isEmpty())
+    		{
+    		int len=_params->ylabel_fmt.length();
+         	ylabel_fmt->setText(_params->ylabel_fmt.right(len-3));
+         	}
+
 }
 void KChartParameterConfigPage::apply()
 {
@@ -141,7 +151,8 @@ void KChartParameterConfigPage::apply()
     if(_params->has_yaxis2())
     	{
     	_params->yaxis2=yaxis2->isChecked(); 
-    	_params->ylabel2_fmt=ylabel2_fmt->text();
+    	if(!ylabel2_fmt->text().isEmpty())
+    		_params->ylabel2_fmt="%g "+ylabel2_fmt->text();
     	_params->ytitle2=ytitle2->text();
     	}
     
@@ -151,4 +162,7 @@ void KChartParameterConfigPage::apply()
     _params->title=title->text();
     _params->xtitle=xtitle->text();
     _params->ytitle=ytitle->text();
+    if(!ylabel_fmt->text().isEmpty())
+    	_params->ylabel_fmt="%g "+ylabel_fmt->text();
+      
 }

@@ -1,3 +1,4 @@
+
 #include "engine.h"
 #include "engine2.h"
 #include "enginehelper.h"
@@ -64,14 +65,13 @@ static int ocmpr( const void *p1, const void *p2 )
  *  'missing' slices don't get labels
  *  sum(val[0], ... val[num_points-1]) is assumed to be 100%
 \* ======================================================= */
-void
-pie_gif( short			imagewidth,
-         short			imageheight,
-		 QPainter*      p,					// paint here
-         KChartParameters*	params,				// all the parameters
-         int			num_points,
-         char			*lbl2[],/* *lbl[] */				/* data labels */
-         float			val[] )				/* data */
+void 
+pie_gif( short imagewidth,
+         short imageheight,
+	 QPainter*      p, // paint here
+         KChartParameters* params, // all the parameters
+         int  num_points,
+         float val[] )	/* data */
 {
     int	i;
 
@@ -100,13 +100,6 @@ pie_gif( short			imagewidth,
     int	do3Dx = 0;  // reserved for macro use
     int do3Dy = 0;
 
-/* try */
-/*remove it when pie chart works */
-    char lbl[num_points][10];
- sprintf( lbl[0],"toto" );
- sprintf( lbl[1],"voiture" );
- sprintf( lbl[2],"titi" );
- sprintf( lbl[3],"Gool" );
 
     //	GDCPIE_3d_angle = MOD_360(90-params->_3d_angle+360);
     
@@ -177,18 +170,28 @@ pie_gif( short			imagewidth,
 		    
                     /* start slice label height, width     */
                     /*  accounting for PCT placement, font */
-                    if( lbl && lbl[i] )	
+                    /*if( lbl && lbl[i] )*/
+		    if( !params->lbl.isEmpty() && params->lbl[i] )
 		      {
                         char foo[1+4+1+1]; /* XPG2 compatibility */
                         int pct_len;
                         int lbl_len = 0;
-                        lbl_hgt = ( cnt_nl(lbl[i], &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
-								params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
+                        /*lbl_hgt = ( cnt_nl(lbl[i], &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
+			  params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
+			  * (params->labelFontHeight()+1);*/
+			lbl_hgt = ( cnt_nl(params->lbl[i], &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
+									params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
 			  * (params->labelFontHeight()+1);
-                        sprintf( foo,
+                        /*sprintf( foo,
                                  (params->percent_labels==KCHARTPCTTYPE_LEFT ||
                                   params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
                                  lbl[i]? "(%.0f%%)":
+                                 "%.0f%%",
+                                 this_pct * 100.0 );*/
+			sprintf( foo,
+                                 (params->percent_labels==KCHARTPCTTYPE_LEFT ||
+                                  params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
+                                 params->lbl[i]? "(%.0f%%)":
                                  "%.0f%%",
                                  this_pct * 100.0 );
                         pct_len = params->percent_labels == KCHARTPCTTYPE_NONE? 0: strlen(foo);
@@ -203,13 +206,24 @@ pie_gif( short			imagewidth,
                     /* diamiter limited by this piont's: explosion, label                 */
                     /* (radius to box @ slice_angle) - (explode) - (projected label size) */
                     /* radius constraint due to labels */
-                    this_y_explode_limit = (float)this_cos==0.0? MAXFLOAT:
+                    /*this_y_explode_limit = (float)this_cos==0.0? MAXFLOAT:
                         (	(float)( (double)cheight/ABS(this_cos) ) -
 							(float)( this_explode + (lbl[i]? params->label_dist: 0) ) -
+							(float)( lbl_hgt/2 ) / (float)ABS(this_cos)	);*/
+
+		    this_y_explode_limit = (float)this_cos==0.0? MAXFLOAT:
+                        (	(float)( (double)cheight/ABS(this_cos) ) -
+							(float)( this_explode + (params->lbl[i]? params->label_dist: 0) ) -
 							(float)( lbl_hgt/2 ) / (float)ABS(this_cos)	);
-                    this_x_explode_limit = (float)this_sin==0.0? MAXFLOAT:
+
+		    /*this_x_explode_limit = (float)this_sin==0.0? MAXFLOAT:
                         (	(float)( (double)cwidth/ABS(this_sin) ) -
 							(float)( this_explode + (lbl[i]? params->label_dist: 0) ) -
+							(float)( lbl_wdth ) / (float)ABS(this_sin)	);*/
+
+		    this_x_explode_limit = (float)this_sin==0.0? MAXFLOAT:
+                        (	(float)( (double)cwidth/ABS(this_sin) ) -
+							(float)( this_explode + (params->lbl[i]? params->label_dist: 0) ) -
 							(float)( lbl_wdth ) / (float)ABS(this_sin)	);
 				
                     rad = MIN( rad, this_y_explode_limit );
@@ -398,7 +412,7 @@ pie_gif( short			imagewidth,
                     // algorithm here.
                     //					gdImageFillToBorder( im, IX(i,0,1), IY(i,0,1), SliceColorShd[i], SliceColorShd[i] );
                     rad = rad1;
-                    if( params->EdgeColor != QColor() ) 
+                    /*if( params->EdgeColor != QColor() ) 
                     {
                         p->setPen( EdgeColorShd );
                         p->drawLine( CX(i,1),CY(i,1),
@@ -423,7 +437,7 @@ pie_gif( short			imagewidth,
                         // 									rad*2, rad*2,
                         // 									TO_INT_DEG(slice_angle[1][i])+270, TO_INT_DEG(slice_angle[2][i])+270,
                         // 									EdgeColorShd);
-                    }
+			}*/
                 }
         }
         /* fill in connection to foreground pie */
@@ -507,15 +521,16 @@ pie_gif( short			imagewidth,
 				}
 				
 				
-				if( params->EdgeColor != QColor() ) {
-					p->setPen( EdgeColorShd );
-					p->drawLine( CX(i,0),CY(i,0),
-						     CX(i,1),CY(i,1) );
-					p->drawLine( OX(i,tmp_slice[t].angle,0),
-								 OY(i,tmp_slice[t].angle,0),
-								 OX(i,tmp_slice[t].angle,1),
-								 OY(i,tmp_slice[t].angle,1) );
-				}
+				/*if( params->EdgeColor != QColor() ) 
+				  {
+				    p->setPen( EdgeColorShd );
+				    p->drawLine( CX(i,0),CY(i,0),
+						 CX(i,1),CY(i,1) );
+				    p->drawLine( OX(i,tmp_slice[t].angle,0),
+						 OY(i,tmp_slice[t].angle,0),
+						 OX(i,tmp_slice[t].angle,1),
+						 OY(i,tmp_slice[t].angle,1) );
+						 }*/
 			}
 		}
 	}
@@ -577,7 +592,7 @@ pie_gif( short			imagewidth,
 					     IX(i,0,0), IY(i,0,0) );
 				
 				rad = rad1;
-				if( params->EdgeColor != QColor() ) 
+				/*if( params->EdgeColor != QColor() ) 
 				  {
 				        p->setPen( EdgeColor );
 					p->drawLine( CX(i,0),CY(i,0),
@@ -591,7 +606,7 @@ pie_gif( short			imagewidth,
 
 					// New - Qt:
 					
-					p->setBrush(SliceColor[i]);	
+					p->setBrush(EdgeColor);	
 					p->drawPie( CX(i,0)-rad,//  x
 						    CY(i,0)-rad ,//   y
 					           rad*2, rad*2,// w, h
@@ -604,7 +619,7 @@ pie_gif( short			imagewidth,
 					// 								rad*2, rad*2,
 					// 								TO_INT_DEG(slice_angle[1][i])+270, TO_INT_DEG(slice_angle[2][i])+270,
 					// 								EdgeColor );
-				}
+					}*/
 			}
 	}
     /* text is writting bye over function*/	
@@ -632,7 +647,7 @@ pie_gif( short			imagewidth,
 		}*/
 	
 	/* labels */
-	if( lbl ) 
+	if( !params->lbl.isEmpty() ) 
 		{
 		float	liner = rad;
 
@@ -643,23 +658,26 @@ pie_gif( short			imagewidth,
 		    if( !others[i] &&
 		     (params->missing.isNull() || !params->missing[i]) ) 
 		     {
-				char	pct_str[1+4+1+1];
-				int		pct_wdth;
-				int		lbl_wdth;
-				short	num_nl = cnt_nl( lbl[i], &lbl_wdth );
-				int		lblx,  pctx,
-					lbly,  pcty,
-					linex, liney;
+				char pct_str[1+4+1+1];
+				int pct_wdth;
+				int lbl_wdth;
+				/*short	num_nl = cnt_nl( lbl[i], &lbl_wdth );*/
+				short num_nl = cnt_nl( params->lbl[i], &lbl_wdth );
+				int lblx,  pctx;
+				int lbly,  pcty;
+				int linex, liney;
 				
 				lbl_wdth *= params->labelFontWidth();
-				sprintf( pct_str,(params->percent_labels==KCHARTPCTTYPE_LEFT ||params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
+				/*sprintf( pct_str,(params->percent_labels==KCHARTPCTTYPE_LEFT ||params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
 						 lbl[i]? "(%.0f%%)":
+						 "%.0f%%",
+						 (val[i]/tot_val) * 100.0 );*/
+				sprintf( pct_str,(params->percent_labels==KCHARTPCTTYPE_LEFT ||params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
+						 params->lbl[i]? "(%.0f%%)":
 						 "%.0f%%",
 						 (val[i]/tot_val) * 100.0 );
 
-				pct_wdth = params->percent_labels == KCHARTPCTTYPE_NONE?
-					0:
-					strlen(pct_str) * params->labelFontWidth();
+				pct_wdth = params->percent_labels == KCHARTPCTTYPE_NONE?0:strlen(pct_str) * params->labelFontWidth();
 				
 				lbly = (liney = IY(i,0,0))-( num_nl * (1+params->labelFontHeight()) ) / 2;
 				lblx = pctx = linex = IX(i,0,0);
@@ -698,32 +716,44 @@ pie_gif( short			imagewidth,
 				case KCHARTPCTTYPE_NONE:
 				default:
 					break;
+					
 				}
+				
 				
 				if( params->percent_labels != KCHARTPCTTYPE_NONE ) {
 					p->setPen( LineColor );
 					p->setFont( params->labelFont() );
 					p->drawText( slice_angle[0][i] <= M_PI? pctx:
-								 pctx+lbl_wdth-pct_wdth,
-								 pcty,
-								 pct_str );
+						     pctx+lbl_wdth-pct_wdth,
+						     pcty,
+						     pct_str );
 				}
-				if( lbl[i] ) 
+				/*if( lbl[i] )*/
+				if( !params->lbl[i].isNull() ) 
 				  {
+				    /*QRect br = QFontMetrics( params->labelFont() ).boundingRect( 0, 0, MAXINT, MAXINT, slice_angle[0][i] <= M_PI ?
+				      Qt::AlignLeft : Qt::AlignRight, lbl[i] );*/
 				    QRect br = QFontMetrics( params->labelFont() ).boundingRect( 0, 0, MAXINT, MAXINT, slice_angle[0][i] <= M_PI ?
-												 Qt::AlignLeft : Qt::AlignRight, lbl[i] );
+												 Qt::AlignLeft : Qt::AlignRight, params->lbl[i] );
+				    p->setPen( LineColor);
+				    /*p->drawText( lblx, lbly,
+						 br.width(), br.height(),
+						 slice_angle[0][i] <= M_PI ?
+						 Qt::AlignLeft : Qt::AlignRight,
+						 lbl[i] );*/
 				    p->drawText( lblx, lbly,
 						 br.width(), br.height(),
 						 slice_angle[0][i] <= M_PI ?
 						 Qt::AlignLeft : Qt::AlignRight,
-						 lbl[i] );
-				}
-				if( params->label_line )	{
+						 params->lbl[i] );
+				  }
+				if( params->label_line )	
+				  {
 					float rad = liner;
 					p->setPen( LineColor );
 					p->drawLine( linex, liney,
 						  IX(i,0,0), IY(i,0,0) );
-				}
+				  }
 			}
 		}
 		rad -= params->label_dist;

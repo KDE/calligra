@@ -210,7 +210,7 @@ if(chartSubType)
  else if(percent->isChecked())
         {
         _chart->params()->stack_type = KCHARTSTACKTYPE_PERCENT;
-        _chart->params()->ylabel_fmt = "%g %%";
+        //_chart->params()->ylabel_fmt = "%g %%";
         }
 
  else

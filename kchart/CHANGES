@@ -44,3 +44,10 @@ But Pb for writing % in label for the moment it's not good
 -Pie chart works a lot but not for add in kchart for the moment
 => when you click on PIE3D or PIE2D =>you look at anythink
 -bug fix.
+
+2000-01-16 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Now in Bar chart percent % is writting in yaxis
+-Improved configparameters
+-bug fix
+-Start to install label 

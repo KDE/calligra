@@ -202,12 +202,11 @@ EXTERND void				*GDC_image			DEFAULTO( (void*)NULL );	/* in/out */
 #endif
 /**************************************************/
 
-void pie_gif( short			width,
-			  short			height,
-			  QPainter*,						/* open file pointer, can be stdout */
+void pie_gif( short width,
+			  short	height,
+			  QPainter*,/* open file pointer, can be stdout */
 			  KChartParameters* params,
-			  int			num_points,
-			  char			*labels[],		/* slice labels */
-			  float			data[] );
+			  int num_points,
+			  float	data[] );
 
 #endif /*!_GDCPIE_H*/

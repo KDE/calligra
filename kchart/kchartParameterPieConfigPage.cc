@@ -112,7 +112,8 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
     label2->setAlignment(Qt::AlignCenter);
     grid3->addWidget( label2,2,0 );
 
-    dist = new QLineEdit( gb2 );
+    //dist = new QLineEdit( gb2 );
+    dist = new QSpinBox(1, 400, 1, gb2);
     dist->resize(100, dist->sizeHint().height() );
     grid3->addWidget( dist,3,0 );
     label2->setBuddy( dist );
@@ -155,15 +156,30 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
     grid1->setRowStretch(1,1);
     grid1->addColSpacing(1,gb2->width());
     grid1->activate();       
-   
+    
+    if(_params->label_line)
+    	lineLabel->setEnabled(true);
+    else
+    	lineLabel->setEnabled(false);
+    connect( lineLabel, SIGNAL( toggled( bool ) ),
+  		   this, SLOT( changeState( bool ) ) );
 }
 
+void KChartParameterPieConfigPage::changeState(bool state)
+{
+if(state)
+   dist->setEnabled(true);
+else
+   dist->setEnabled(false);
+
+}
 
 
 void KChartParameterPieConfigPage::init()
 {
     title->setText(_params->title);
     lineLabel->setChecked(_params->label_line);   
+    dist->setValue(_params->label_dist);
     switch(_params->percent_labels)
     	{
     	case KCHARTPCTTYPE_ABOVE:
@@ -191,6 +207,8 @@ void KChartParameterPieConfigPage::apply()
    
     _params->title=title->text();
     _params->label_line=lineLabel->isChecked();
+    if(lineLabel->isChecked())
+    	_params->label_dist=dist->value();
     if(_typeAbove->isChecked())
     	_params->percent_labels=KCHARTPCTTYPE_ABOVE;
     else if(_typeNone->isChecked())
