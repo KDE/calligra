@@ -10,10 +10,6 @@ usr/share/icons/locolor/16x16/apps/kivio.png
 usr/share/icons/locolor/22x22/apps/kivio.png
 usr/share/icons/locolor/32x32/apps/kivio.png
 usr/share/mimelnk/application/x-kivio.desktop
-usr/share/services/kivioconnectortool.desktop
-usr/share/services/kiviotexttool.desktop
-usr/share/services/kiviozoomtool.desktop
-usr/share/services/kivioselecttool.desktop
 usr/lib/libkiviopart.so
 usr/lib/libkiviopart.la
 usr/lib/kivio.so

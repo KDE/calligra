@@ -48,7 +48,6 @@ usr/share/icons/hicolor/22x22/actions/funct.png
 usr/share/icons/hicolor/22x22/actions/percent.png
 usr/share/icons/hicolor/22x22/actions/prec_minus.png
 usr/share/icons/hicolor/22x22/actions/prec_plus.png
-usr/share/services/kspreadcalc.desktop
 usr/share/doc/koffice/kspread/*
 usr/share/doc/kde/HTML/en/kspread/*
 usr/share/lintian/overrides/kspread
