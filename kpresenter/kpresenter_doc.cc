@@ -3266,13 +3266,19 @@ void KPresenterDoc::insertFile(const QString & file )
 
     m_insertFilePage = 0;
     // Update the views
+    int newPos = m_pageList.count()-1;
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBar();
-    selectPage(m_pageList.count()-1, true );
-
     _clean = clean;
     updatePresentationButton();
+
+    //active this page
+    emit sig_changeActivePage(m_pageList.at( newPos ) );
+    QPtrListIterator<KoView>it2( views() );
+    for (; it2.current(); ++it2 )
+        static_cast<KPresenterView*>(it2.current())->skipToPage(newPos);
+    emit sig_changeActivePage(m_pageList.at( newPos ) );
 }
 
 void KPresenterDoc::spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm)
