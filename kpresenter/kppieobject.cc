@@ -248,7 +248,7 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         QPen pen2( pen );
         pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
         _painter->setPen( pen2 );
-        _painter->setBrush( brush );
+        _painter->setBrush( getBrush() );
     }
     switch ( pieType )
     {

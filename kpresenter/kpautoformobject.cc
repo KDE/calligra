@@ -57,9 +57,10 @@ KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, con
     lineEnd = _lineEnd;
     redrawPix = true;
 
-    if ( fillType == FT_GRADIENT )
+    //tz TODO memory leak as the gradient is allready created in the base class
+    if ( getFillType() == FT_GRADIENT )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -87,16 +88,16 @@ void KPAutoformObject::setFileName( const QString & _filename )
 
 void KPAutoformObject::setFillType( FillType _fillType )
 {
-    fillType = _fillType;
+    m_brush.setFillType( _fillType );
 
-    if ( fillType == FT_BRUSH && gradient )
+    if ( _fillType == FT_BRUSH && gradient )
     {
         delete gradient;
         gradient = 0;
     }
-    if ( fillType == FT_GRADIENT && !gradient )
+    if ( _fillType == FT_GRADIENT && !gradient )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
         redrawPix = true;
     }
 }
@@ -194,7 +195,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     _painter->setPen( pen2 );
     pwOrig = ( pen2.style() == Qt::NoPen ) ? 1 : pen2.width();
     if ( !drawContour )
-        _painter->setBrush( brush );
+        _painter->setBrush( getBrush() );
 
     QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),
                                                     _zoomHandler->zoomItY( ext.height() ) );
@@ -219,7 +220,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     {
         if ( pntArray2.at( 0 ) == pntArray2.at( pntArray2.size() - 1 ) )
         {
-            if ( drawContour || (drawingShadow || fillType == FT_BRUSH || !gradient) )
+            if ( drawContour || (drawingShadow || getFillType() == FT_BRUSH || !gradient) )
                 _painter->drawPolygon( pntArray2 );
             else
             {

@@ -38,6 +38,7 @@
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
 #include "kprloadinginfo.h"
+#include "kprbrush.h"
 
 class KoSavingContext;
 class QPainter;
@@ -283,9 +284,6 @@ protected:
     QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);
     QDomElement createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
                                       int type, bool unbalanced, int xfactor, int yfactor, QDomDocument &doc);
-    void toGradient(const QDomElement &element, QColor &c1, QColor &c2, BCType &type,
-                    bool &unbalanced, int &xfactor, int &yfactor) const;
-
     QDomElement createPenElement(const QString &tag, const QPen &pen, QDomDocument &doc);
     QPen toPen(const QDomElement &element) const;
 
@@ -410,38 +408,38 @@ public:
                 bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KP2DObject() { delete gradient; }
 
-    virtual void setFillType( FillType _fillType );
-    virtual void setBrush( const QBrush &_brush )
-        { brush = _brush; }
-    virtual void setGColor1( const QColor &_gColor1 )
-        { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
-    virtual void setGColor2( const QColor &_gColor2 )
-        { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
-    virtual void setGType( BCType _gType )
-        { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
+    virtual void setFillType( FillType fillType );
+    virtual void setBrush( const QBrush &brush )
+        { m_brush.setBrush( brush ); }
+    virtual void setGColor1( const QColor &gColor1 )
+        { if ( gradient ) gradient->setColor1( gColor1 ); m_brush.setGColor1( gColor1 ); }
+    virtual void setGColor2( const QColor &gColor2 )
+        { if ( gradient ) gradient->setColor2( gColor2 ); m_brush.setGColor2( gColor2 ); }
+    virtual void setGType( BCType gType )
+        { if ( gradient ) gradient->setBackColorType( gType ); m_brush.setGType( gType ); }
     virtual void setGUnbalanced( bool b )
-        { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
-    virtual void setGXFactor( int f )
-        { if ( gradient ) gradient->setXFactor( f ); xfactor = f; }
-    virtual void setGYFactor( int f )
-        { if ( gradient ) gradient->setYFactor( f ); yfactor = f; }
+        { if ( gradient ) gradient->setUnbalanced( b ); m_brush.setGUnbalanced( b ); }
+    virtual void setGXFactor( int xfactor )
+        { if ( gradient ) gradient->setXFactor( xfactor ); m_brush.setGXFactor( xfactor ); }
+    virtual void setGYFactor( int yfactor )
+        { if ( gradient ) gradient->setYFactor( yfactor ); m_brush.setGYFactor( yfactor ); }
 
     virtual FillType getFillType() const
-        { return fillType; }
+        { return m_brush.getFillType(); }
     virtual QBrush getBrush() const
-        { return brush; }
+        { return m_brush.getBrush(); }
     virtual QColor getGColor1() const
-        { return gColor1; }
+        { return m_brush.getGColor1(); }
     virtual QColor getGColor2() const
-        { return gColor2; }
+        { return m_brush.getGColor2(); }
     virtual BCType getGType() const
-        { return gType; }
+        { return m_brush.getGType(); }
     virtual bool getGUnbalanced() const
-        { return unbalanced; }
+        { return m_brush.getGUnbalanced(); }
     virtual int getGXFactor() const
-        { return xfactor; }
+        { return m_brush.getGXFactor(); }
     virtual int getGYFactor() const
-        { return yfactor; }
+        { return m_brush.getGYFactor(); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
@@ -456,13 +454,7 @@ protected:
 
     virtual void saveOasisMarginElement( KoGenStyle& /*styleobjectauto*/ ) const { /* nothing just used into kptextobject*/};
 
-    QBrush brush;
-    QColor gColor1, gColor2;
-    BCType gType;
-    FillType fillType;
-    bool unbalanced;
-    int xfactor, yfactor;
-
+    KPrBrush m_brush;
     KPGradient *gradient;
 };
 

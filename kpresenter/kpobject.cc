@@ -1419,20 +1419,6 @@ QDomElement KPObject::createGradientElement(const QString &tag, const QColor &c1
     return elem;
 }
 
-void KPObject::toGradient(const QDomElement &element, QColor &c1, QColor &c2, BCType &type,
-                          bool &unbalanced, int &xfactor, int &yfactor) const {
-    c1=retrieveColor(element, attrC1, "red1", "green1", "blue1");
-    c2=retrieveColor(element, attrC2, "red2", "green2", "blue2");
-    if(element.hasAttribute(attrType))
-        type=static_cast<BCType>(element.attribute(attrType).toInt());
-    if(element.hasAttribute(attrUnbalanced))
-        unbalanced=static_cast<bool>(element.attribute(attrUnbalanced).toInt());
-    if(element.hasAttribute(attrXFactor))
-        xfactor=element.attribute(attrXFactor).toInt();
-    if(element.hasAttribute(attrYFactor))
-        yfactor=element.attribute(attrYFactor).toInt();
-}
-
 QDomElement KPObject::createPenElement(const QString &tag, const QPen &pen, QDomDocument &doc) {
 
     QDomElement elem=doc.createElement(tag);
@@ -1771,56 +1757,63 @@ QPen KPShadowObject::defaultPen() const
 }
 
 KP2DObject::KP2DObject()
-    : KPShadowObject(), gColor1( Qt::red ), gColor2( Qt::green )
+    : KPShadowObject()
 {
     gradient = 0;
-    fillType = FT_BRUSH;
-    gType = BCT_GHORZ;
-    unbalanced = false;
-    xfactor = 100;
-    yfactor = 100;
 }
 
 KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
                         const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor )
-    : KPShadowObject( _pen ), brush( _brush ), gColor1( _gColor1 ), gColor2( _gColor2 )
+    : KPShadowObject( _pen )
+    , m_brush( _brush, _gColor1, _gColor2, _gType, _fillType, _unbalanced, _xfactor, _yfactor )
 {
-    gType = _gType;
-    fillType = _fillType;
-    unbalanced = _unbalanced;
-    xfactor = _xfactor;
-    yfactor = _yfactor;
-
-    if ( fillType == FT_GRADIENT )
-        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
+    if ( getFillType() == FT_GRADIENT )
+    {
+        gradient = new KPGradient( getGColor1(), getGColor2(),
+                                   getGType(), getGUnbalanced(),
+                                   getGXFactor(), getGYFactor() );
+    }
     else
         gradient = 0;
 }
 
 void KP2DObject::setFillType( FillType _fillType )
 {
-    fillType = _fillType;
+    m_brush.setFillType( _fillType );
 
-    if ( fillType == FT_BRUSH && gradient )
+    if ( _fillType == FT_BRUSH && gradient )
     {
         delete gradient;
         gradient = 0;
     }
-    if ( fillType == FT_GRADIENT && !gradient )
-        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
+    if ( _fillType == FT_GRADIENT && !gradient )
+    {
+        gradient = new KPGradient( getGColor1(), getGColor2(),
+                                   getGType(), getGUnbalanced(),
+                                   getGXFactor(), getGYFactor() );
+    }
 }
 
 QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 {
     QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);
-    if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
-        fragment.appendChild(KPObject::createBrushElement(tagBRUSH, brush, doc));
-    if(fillType!=FT_BRUSH)
-        fragment.appendChild(KPObject::createValueElement(tagFILLTYPE, static_cast<int>(fillType), doc));
-    if(gColor1!=Qt::red || gColor2!=Qt::green || gType!=BCT_GHORZ || unbalanced || xfactor!=100 || yfactor!=100)
-        fragment.appendChild(KPObject::createGradientElement(tagGRADIENT, gColor1, gColor2, static_cast<int>(gType),
-                                                             unbalanced, xfactor, yfactor, doc));
+    QBrush brush = getBrush();
+    if ( brush != QBrush() )
+        fragment.appendChild( KPObject::createBrushElement( tagBRUSH, brush, doc ) );
+
+    FillType fillType = getFillType();
+    if ( fillType != FT_BRUSH )
+        fragment.appendChild( KPObject::createValueElement( tagFILLTYPE, static_cast<int>(fillType), doc ) );
+    QColor gColor1 = getGColor1();
+    QColor gColor2 = getGColor2();
+    BCType gType = getGType();
+    bool unbalanced = getGUnbalanced();
+    int xfactor = getGXFactor();
+    int yfactor = getGYFactor();
+    if ( gColor1!=Qt::red || gColor2!=Qt::green || gType!=BCT_GHORZ || unbalanced || xfactor != 100 || yfactor != 100 )
+        fragment.appendChild( KPObject::createGradientElement( tagGRADIENT, gColor1, gColor2, static_cast<int>(gType),
+                                                               unbalanced, xfactor, yfactor, doc));
     return fragment;
 }
 
@@ -1832,74 +1825,77 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
         styleobjectauto = KoGenStyle( KPresenterDoc::STYLE_PRESENTATIONSTICKYOBJECT, "presentation" );
     else
         styleobjectauto = KoGenStyle( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
-    switch ( fillType )
+    switch ( getFillType() )
     {
-    case FT_BRUSH:
-        //todo FIXME when text object doesn't have a background
-        if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
+        case FT_BRUSH:
         {
-            if ( brush.style() == Qt::SolidPattern )
+            QBrush brush( getBrush() );
+            //todo FIXME when text object doesn't have a background
+            if( brush != QBrush() )
             {
-                styleobjectauto.addProperty( "draw:fill","solid" );
-                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                if ( brush.style() == Qt::SolidPattern )
+                {
+                    styleobjectauto.addProperty( "draw:fill","solid" );
+                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                }
+                else if ( brush.style() == Qt::Dense1Pattern )
+                {
+                    styleobjectauto.addProperty( "draw:transparency", "94%" );
+                    styleobjectauto.addProperty( "draw:fill","solid" );
+                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                }
+                else if ( brush.style() == Qt::Dense2Pattern )
+                {
+                    styleobjectauto.addProperty( "draw:transparency", "88%" );
+                    styleobjectauto.addProperty( "draw:fill","solid" );
+                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                }
+                else if ( brush.style() == Qt::Dense3Pattern )
+                {
+                    styleobjectauto.addProperty( "draw:transparency", "63%" );
+                    styleobjectauto.addProperty( "draw:fill","solid" );
+                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                }
+                else if ( brush.style() == Qt::Dense4Pattern )
+                {
+                    styleobjectauto.addProperty( "draw:transparency", "50%" );
+                    styleobjectauto.addProperty( "draw:fill","solid" );
+                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                }
+                else if ( brush.style() == Qt::Dense5Pattern )
+                {
+                    styleobjectauto.addProperty( "draw:transparency", "37%" );
+                    styleobjectauto.addProperty( "draw:fill","solid" );
+                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                }
+                else if ( brush.style() == Qt::Dense6Pattern )
+                {
+                    styleobjectauto.addProperty( "draw:transparency", "12%" );
+                    styleobjectauto.addProperty( "draw:fill","solid" );
+                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                }
+                else if ( brush.style() == Qt::Dense7Pattern )
+                {
+                    styleobjectauto.addProperty( "draw:transparency", "6%" );
+                    styleobjectauto.addProperty( "draw:fill","solid" );
+                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                }
+                else //otherstyle
+                {
+                    styleobjectauto.addProperty( "draw:fill","hatch" );
+                    styleobjectauto.addProperty( "draw:fill-hatch-name", saveOasisHatchStyle( mainStyles ) );
+                }
             }
-            else if ( brush.style() == Qt::Dense1Pattern )
+            else
             {
-                styleobjectauto.addProperty( "draw:transparency", "94%" );
-                styleobjectauto.addProperty( "draw:fill","solid" );
-                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+                styleobjectauto.addProperty( "draw:fill","none" );
             }
-            else if ( brush.style() == Qt::Dense2Pattern )
-            {
-                styleobjectauto.addProperty( "draw:transparency", "88%" );
-                styleobjectauto.addProperty( "draw:fill","solid" );
-                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-            }
-            else if ( brush.style() == Qt::Dense3Pattern )
-            {
-                styleobjectauto.addProperty( "draw:transparency", "63%" );
-                styleobjectauto.addProperty( "draw:fill","solid" );
-                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-            }
-            else if ( brush.style() == Qt::Dense4Pattern )
-            {
-                styleobjectauto.addProperty( "draw:transparency", "50%" );
-                styleobjectauto.addProperty( "draw:fill","solid" );
-                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-            }
-            else if ( brush.style() == Qt::Dense5Pattern )
-            {
-                styleobjectauto.addProperty( "draw:transparency", "37%" );
-                styleobjectauto.addProperty( "draw:fill","solid" );
-                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-            }
-            else if ( brush.style() == Qt::Dense6Pattern )
-            {
-                styleobjectauto.addProperty( "draw:transparency", "12%" );
-                styleobjectauto.addProperty( "draw:fill","solid" );
-                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-            }
-            else if ( brush.style() == Qt::Dense7Pattern )
-            {
-                styleobjectauto.addProperty( "draw:transparency", "6%" );
-                styleobjectauto.addProperty( "draw:fill","solid" );
-                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-            }
-            else //otherstyle
-            {
-                styleobjectauto.addProperty( "draw:fill","hatch" );
-                styleobjectauto.addProperty( "draw:fill-hatch-name", saveOasisHatchStyle( mainStyles ) );
-            }
+            break;
         }
-        else
-        {
-            styleobjectauto.addProperty( "draw:fill","none" );
-        }
-        break;
-    case FT_GRADIENT:
-        styleobjectauto.addProperty( "draw:fill","gradient" );
-        styleobjectauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
-        break;
+        case FT_GRADIENT:
+            styleobjectauto.addProperty( "draw:fill","gradient" );
+            styleobjectauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
+            break;
     }
     saveOasisObjectProtectStyle( styleobjectauto );
 
@@ -1916,6 +1912,7 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
 
 QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles ) const
 {
+    QBrush brush( getBrush() );
     KoGenStyle hatchStyle( KPresenterDoc::STYLE_HATCH /*no family name*/);
     hatchStyle.addAttribute( "draw:color", brush.color().name() );
     //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into kpresenter
@@ -1956,21 +1953,21 @@ QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles ) const
 QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
 {
     KoGenStyle gradientStyle( KPresenterDoc::STYLE_GRADIENT /*no family name*/);
-    gradientStyle.addAttribute( "draw:start-color", gColor1.name() );
-    gradientStyle.addAttribute( "draw:end-color", gColor2.name() );
+    gradientStyle.addAttribute( "draw:start-color", getGColor1().name() );
+    gradientStyle.addAttribute( "draw:end-color", getGColor2().name() );
 
     QString unbalancedx( "50%" );
     QString unbalancedy( "50%" );
 
-    if ( unbalanced )
+    if ( getGUnbalanced() )
     {
-        unbalancedx = QString( "%1%" ).arg( xfactor / 4 + 50 );
-        unbalancedy = QString( "%1%" ).arg( yfactor / 4 + 50 );
+        unbalancedx = QString( "%1%" ).arg( getGXFactor() / 4 + 50 );
+        unbalancedy = QString( "%1%" ).arg( getGYFactor() / 4 + 50 );
     }
     gradientStyle.addAttribute( "draw:cx", unbalancedx );
     gradientStyle.addAttribute( "draw:cy", unbalancedy );
 
-    switch( gType )
+    switch( getGType() )
     {
     case BCT_PLAIN:
         gradientStyle.addAttribute( "draw:angle", 0 );
@@ -2253,8 +2250,8 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
 
             if ( draw )
             {
-                gColor1 =  draw->attributeNS( KoXmlNS::draw, "start-color", QString::null );
-                gColor2 = draw->attributeNS( KoXmlNS::draw, "end-color", QString::null );
+                setGColor1( draw->attributeNS( KoXmlNS::draw, "start-color", QString::null ) );
+                setGColor2( draw->attributeNS( KoXmlNS::draw, "end-color", QString::null ) );
 
                 QString type = draw->attributeNS( KoXmlNS::draw, "style", QString::null );
                 kdDebug()<<" type :"<<type<<endl;
@@ -2281,22 +2278,22 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
                     }
                     // nearAngle should now be one of: 0, 45, 90, 135, 180...
                     if ( nearAngle == 0 || nearAngle == 180 )
-                        gType = BCT_GHORZ; // horizontal
+                        setGType( BCT_GHORZ ); // horizontal
                     else if ( nearAngle == 90 || nearAngle == 270 )
-                        gType = BCT_GVERT; // vertical
+                        setGType( BCT_GVERT ); // vertical
                     else if ( nearAngle == 45 || nearAngle == 225 )
-                        gType = BCT_GDIAGONAL1; // diagonal 1
+                        setGType( BCT_GDIAGONAL1 ); // diagonal 1
                     else if ( nearAngle == 135 || nearAngle == 315 )
-                        gType = BCT_GDIAGONAL2; // diagonal 2
+                        setGType( BCT_GDIAGONAL2 ); // diagonal 2
                 }
                 else if ( type == "radial" || type == "ellipsoid" )
-                    gType = BCT_GCIRCLE; // circle
+                    setGType( BCT_GCIRCLE ); // circle
                 else if ( type == "square" || type == "rectangular" )
-                    gType = BCT_GRECT; // rectangle
+                    setGType( BCT_GRECT ); // rectangle
                 else if ( type == "axial" )
-                    gType = BCT_GPIPECROSS; // pipecross
+                    setGType( BCT_GPIPECROSS ); // pipecross
                 else //safe
-                    gType = BCT_PLAIN; // plain
+                    setGType( BCT_PLAIN ); // plain
 
                 // Hard to map between x- and y-center settings of ooimpress
                 // and (un-)balanced settings of kpresenter. Let's try it.
@@ -2313,21 +2310,21 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
 
                 if ( x == 50 && y == 50 )
                 {
-                    unbalanced =  0;
-                    xfactor =  100;
-                    yfactor= 100;
+                    setGUnbalanced( false );
+                    setGXFactor( 100 );
+                    setGYFactor( 100 );
                 }
                 else
                 {
-                    unbalanced =  1;
+                    setGUnbalanced( true );
                     // map 0 - 100% to -200 - 200
-                    xfactor = ( 4 * x - 200 );
-                    yfactor = ( 4 * y - 200 );
+                    setGXFactor( 4 * x - 200 );
+                    setGYFactor( 4 * y - 200 );
                 }
             }
             tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
             setBrush( tmpBrush );
-            setFillType(FT_GRADIENT );
+            setFillType( FT_GRADIENT );
         }
         else if ( fill == "none" )
         {
@@ -2362,21 +2359,30 @@ double KP2DObject::load(const QDomElement &element)
     if(!e.isNull())
         setBrush(KPObject::toBrush(e));
     else
-        brush=QBrush();
+        setBrush( QBrush() );
 
     e=element.namedItem(tagGRADIENT).toElement();
     if(!e.isNull()) {
-        KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
+        setGColor1( retrieveColor( e, attrC1, "red1", "green1", "blue1" ) );
+        setGColor2( retrieveColor( e, attrC2, "red2", "green2", "blue2" ) );
+        if( e.hasAttribute( attrType ) )
+            setGType( static_cast<BCType>( e.attribute( attrType ).toInt() ) );
+        if( e.hasAttribute( attrUnbalanced ) )
+            setGUnbalanced( static_cast<bool>( e.attribute( attrUnbalanced ).toInt() ) );
+        if( e.hasAttribute( attrXFactor ) )
+            setGXFactor( e.attribute( attrXFactor ).toInt() );
+        if( e.hasAttribute( attrYFactor ) )
+            setGYFactor( e.attribute( attrYFactor ).toInt() );
         if(gradient)
-            gradient->setParameters(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
+            gradient->setParameters(getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
     }
     else {
-        gColor1=Qt::red;
-        gColor2=Qt::green;
-        gType=BCT_GHORZ;
-        unbalanced=false;
-        xfactor=100;
-        yfactor=100;
+        setGColor1( Qt::red );
+        setGColor2( Qt::green );
+        setGType( BCT_GHORZ );
+        setGUnbalanced( false );
+        setGXFactor( 100 );
+        setGYFactor( 100 );
     }
     return offset;
 }
@@ -2385,23 +2391,24 @@ void KP2DObject::flip( bool horizontal ) {
     KPObject::flip( horizontal );
 
     // flip the gradient
-    if ( fillType == FT_GRADIENT ) {
+    if ( getFillType() == FT_GRADIENT ) {
+        BCType gType = getGType();
         if ( gType == BCT_GDIAGONAL1 ) {
-            gType = BCT_GDIAGONAL2;
+            setGType( BCT_GDIAGONAL2 );
         }
         else if ( gType == BCT_GDIAGONAL2 ) {
-            gType = BCT_GDIAGONAL1;
+            setGType( BCT_GDIAGONAL1 );
         }
         if ( ( ! horizontal && gType == BCT_GDIAGONAL1 ) ||
              ( ! horizontal && gType == BCT_GDIAGONAL2 ) ||
              ( ! horizontal && gType == BCT_GHORZ ) ||
              ( horizontal && gType == BCT_GVERT ) ) {
             QColor gColorTemp;
-            gColorTemp = gColor1;
-            gColor1 = gColor2;
-            gColor2 = gColorTemp;
+            gColorTemp = getGColor1();
+            setGColor1( getGColor2() );
+            setGColor2( gColorTemp );
         }
         delete gradient;
-        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( getGColor1(), getGColor2(), gType, getGUnbalanced(), getGXFactor(), getGYFactor() );
     }
 }

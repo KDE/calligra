@@ -53,7 +53,6 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     : KP2DObject()
 {
     imageCollection = _imageCollection;
-    brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
@@ -74,7 +73,6 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
     imageCollection = _imageCollection;
 
     ext = KoSize(); // invalid size means unset
-    brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
@@ -502,7 +500,7 @@ void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandle
     QPen pen2(pen);
     pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
     _painter->setPen( pen2 );
-    _painter->setBrush( brush );
+    _painter->setBrush( getBrush() );
 
     double sx = 0;
     double sy = 0;
@@ -555,13 +553,13 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 
     // Draw background
     paint.setPen( Qt::NoPen );
-    paint.setBrush( brush );
+    paint.setBrush( getBrush() );
 
     QRect rect( (int)( penw ), (int)( penw ),
                 (int)( _zoomHandler->zoomItX( ext.width() ) - 2.0 * penw ),
                 (int)( _zoomHandler->zoomItY( ext.height() ) - 2.0 * penw ) );
 
-    if ( fillType == FT_BRUSH || !gradient )
+    if ( getFillType() == FT_BRUSH || !gradient )
         paint.drawRect( rect );
     else {
         // ### TODO: this was also drawn for drawContour==true, but why?

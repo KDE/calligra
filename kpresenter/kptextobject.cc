@@ -120,8 +120,6 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 #ifdef HAVE_LIBKSPELL2
     m_doc->backSpeller()->registerNewTextObject( m_textobj );
 #endif
-    brush = Qt::NoBrush;
-    brush.setColor(QColor());
     pen = defaultPen();
     drawEditRect = true;
     drawEmpty = true;
@@ -172,7 +170,7 @@ void KPTextObject::slotParagraphDeleted(KoTextParag*_parag)
 
 QBrush KPTextObject::getBrush() const
 {
-    QBrush tmpBrush(brush);
+    QBrush tmpBrush( m_brush.getBrush() );
     if(!tmpBrush.color().isValid())
         tmpBrush.setColor(QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
     return tmpBrush;
@@ -433,8 +431,8 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
         _painter->setBrush( QBrush( m_doc->txtBackCol(), Qt::SolidPattern ) );
     else {
         // Handle the rotation, draw the background/border, then call drawText()
-        if ( fillType == FT_BRUSH || !gradient ) {
-            _painter->setBrush( brush );
+        if ( getFillType() == FT_BRUSH || !gradient ) {
+            _painter->setBrush( getBrush() );
         }
         else {
             QSize size( _zoomHandler->zoomSize( ext ) );

@@ -50,11 +50,6 @@ public:
     virtual void setGColor2( const QColor &_gColor2 ) { KP2DObject::setGColor2( _gColor2 ); redrawPix = true; }
     virtual void setGType( BCType _gType ) { KP2DObject::setGType( _gType ); redrawPix = true; }
 
-    virtual FillType getFillType() const { return fillType; }
-    virtual QColor getGColor1() const { return gColor1; }
-    virtual QColor getGColor2() const { return gColor2; }
-    virtual BCType getGType() const { return gType; }
-
     virtual ObjType getType() const { return OT_CLOSED_LINE; }
     virtual QString getTypeString() const { return typeString; }
 

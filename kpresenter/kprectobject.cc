@@ -168,9 +168,9 @@ void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
     int pw = ( pen2.style() == Qt::NoPen ) ? 1 : pen2.width();
     _painter->setPen( pen2 );
 
-    if ( drawingShadow || fillType == FT_BRUSH || !gradient ) { //plain fill
+    if ( drawingShadow || getFillType() == FT_BRUSH || !gradient ) { //plain fill
         _painter->setPen( pen2 );
-        _painter->setBrush( brush );
+        _painter->setBrush( getBrush() );
     }
     else { //gradient
         QSize size( _zoomHandler->zoomSize( ext ) );

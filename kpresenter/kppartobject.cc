@@ -33,7 +33,6 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     : KP2DObject()
 {
     child = _child;
-    brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
     _enableDrawing = true;
 }
@@ -112,10 +111,10 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
     _painter->save();
     child->transform( *_painter );
     _painter->setPen( Qt::NoPen );
-    _painter->setBrush( brush );
+    _painter->setBrush( getBrush() );
 
     if ( angle == 0 ) {
-        if ( fillType == FT_BRUSH || !gradient )
+        if ( getFillType() == FT_BRUSH || !gradient )
             _painter->drawRect( penw, penw, _zoomhandler->zoomItX( ext.width() - 2 * penw ),
                                 _zoomhandler->zoomItY( ext.height() - 2 * penw ) );
         else {
@@ -127,7 +126,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
     }
     else
     {
-        if ( fillType == FT_BRUSH || !gradient )
+        if ( getFillType() == FT_BRUSH || !gradient )
             _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                                 _zoomhandler->zoomItX( ext.width() - 2 * penw ),
                                 _zoomhandler->zoomItY( ext.height() - 2 * penw ) );

@@ -57,8 +57,9 @@ KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_si
 
     redrawPix = false;
 
-    if ( fillType == FT_GRADIENT ) {
-        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
+    //tz TODO fix memory leak
+    if ( getFillType() == FT_GRADIENT ) {
+        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
         redrawPix = true;
     }
     else
@@ -237,15 +238,15 @@ void KPPolygonObject::updatePoints( double _fx, double _fy )
 
 void KPPolygonObject::setFillType( FillType _fillType )
 {
-    fillType = _fillType;
+    m_brush.setFillType( _fillType );
 
-    if ( fillType == FT_BRUSH && gradient ) {
+    if ( _fillType == FT_BRUSH && gradient ) {
         delete gradient;
         gradient = 0;
     }
 
-    if ( fillType == FT_GRADIENT && !gradient ) {
-        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
+    if ( _fillType == FT_GRADIENT && !gradient ) {
+        gradient = new KPGradient( getGColor1(), getGColor2(), getGType(), getGUnbalanced(), getGXFactor(), getGYFactor() );
         redrawPix = true;
     }
 }
@@ -268,9 +269,9 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     QPen pen2( pen );
     pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
 
-    if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
+    if ( drawingShadow || getFillType() == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );
-        _painter->setBrush( brush );
+        _painter->setBrush( getBrush() );
         _painter->drawPolygon( pointArray );
     }
     else {
@@ -370,7 +371,7 @@ void KPPolygonObject::drawPolygon()
 
     points = tmpPoints;
 
-    if ( fillType == FT_GRADIENT && gradient )
+    if ( getFillType() == FT_GRADIENT && gradient )
         redrawPix = true;
 }
 
@@ -408,7 +409,7 @@ void KPPolygonObject::flip( bool horizontal )
     }
     points = tmpPoints;
 
-    if ( fillType == FT_GRADIENT ) {
+    if ( getFillType() == FT_GRADIENT ) {
         redrawPix = true;
     }
 }
