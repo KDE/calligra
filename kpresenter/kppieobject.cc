@@ -17,8 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kppieobject.h>
-#include <kpgradient.h>
+#include "kppieobject.h"
+#include "kpgradient.h"
+#include "KPPieObjectIface.h"
 
 #include <qregion.h>
 #include <qpicture.h>
@@ -57,6 +58,14 @@ KPPieObject::KPPieObject( const QPen &_pen, const QBrush &_brush, FillType _fill
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
 }
+
+DCOPObject* KPPieObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPPieObjectIface( this );
+    return dcop;
+}
+
 
 /*================================================================*/
 KPPieObject &KPPieObject::operator=( const KPPieObject & )

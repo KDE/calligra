@@ -23,7 +23,7 @@
 #include <kpobject.h>
 
 class KPGradient;
-
+class DCOPObject;
 /******************************************************************/
 /* Class: KPPieObject                                             */
 /******************************************************************/
@@ -37,7 +37,7 @@ public:
                  int _p_angle, int _p_len, LineEnd _lineBegin, LineEnd _lineEnd,
                  bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPPieObject() {}
-
+    virtual DCOPObject* dcopObject();
     KPPieObject &operator=( const KPPieObject & );
 
     virtual void setPieType( PieType _pieType )
