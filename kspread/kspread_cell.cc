@@ -1186,6 +1186,13 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     QString localizedNumber= locale()->formatNumber( value, p );
     int pos = 0;
 
+    // round the number, based on desired precision
+    double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
+    double mm = (p > 10) ? pow(10.0,p) : m[p];
+    bool neg = value < 0;
+    value = floor( fabs(value)*mm + 0.5 ) / mm;
+    if( neg ) value = -value;
+
     switch( formatType() )
     {
     case Number:

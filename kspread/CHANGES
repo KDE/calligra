@@ -17,6 +17,7 @@ Bugfixes:
 - Fix Embedded chart changes titles when opening again
 - Fix #44628 (Grave): 1.1 document not read with 1.2 - circular references
 - Fix #40150 (Normal): Precision problem in calculations
+- Fix #29524:  KSpread Formula editors tooltip should be changed
 
 Until RC1:
 ----------
