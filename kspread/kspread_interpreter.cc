@@ -13,10 +13,6 @@
 
 #include <kdebug.h>
 
-#ifndef F_PI
-#define F_PI            3.14159265358979323846
-#endif
-
 // defined in kspread_functions_trig.cc
 bool kspreadfunc_sin( KSContext& context );
 bool kspreadfunc_cos( KSContext& context );
