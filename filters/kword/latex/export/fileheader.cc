@@ -112,7 +112,7 @@ void FileHeader::generate(QTextStream &out)
 	generatePackage(out);
 	if(getFormat() == TF_CUSTOM)
 		generatePaper(out);
-	out << "%%%%%%%%%%%%%%%%%% END OF PREAMBULE %%%%%%%%%%%%%%%%%%" << endl << endl;
+	out << "%%%%%%%%%%%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%%%%%%%" << endl << endl;
 }
 
 /*******************************************/
