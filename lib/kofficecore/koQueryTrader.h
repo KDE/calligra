@@ -28,7 +28,6 @@
 class QStringList;
 class KoDocument;
 class KoFilter;
-class KoFilterDialog;
 
 /**
  *  Represents an available koffice component
@@ -141,43 +140,6 @@ public:
    * @internal for debugging purposes
    */
   KService::Ptr service() const { return m_service; }
-
-private:
-  KService::Ptr m_service;
-};
-
-/**
- *  Represents an available filter dialog.
- */
-class KoFilterDialogEntry
-{
-
-public:
-
-  KoFilterDialogEntry() { m_service = 0L; }
-  KoFilterDialogEntry( KService::Ptr service );
-  ~KoFilterDialogEntry() { }
-
-  KoFilterDialog* createFilterDialog( QObject* parent = 0, const char* name = 0);
-
-  /**
-   *  The imported mimetype of the matching filter.
-   */
-  QStringList import;
-
-  /**
-   *    The exported mimetype of the matching filter.
-   */
-  QStringList export_;
-
-  /**
-   *  This function will query KDED to find all available filter dialogs.
-   *
-   *  @param _constr is a constraint expression as used by KDEDs trader interface.
-   *                 You can use it to set additional restrictions on the available
-   *                 components.
-   */
-  static QValueList<KoFilterDialogEntry> query( const QString & _constr = QString::null );
 
 private:
   KService::Ptr m_service;

@@ -32,7 +32,6 @@
 #include <kfiledialog.h>
 #include <koDocument.h>
 #include <koFilter.h>
-#include <koFilterDialog.h>
 #include <koFilterManager.h>
 
 #include <unistd.h>
@@ -41,19 +40,18 @@
 class KoFilterManagerPrivate {
 
 public:
-    KoFilterManagerPrivate() { prepare=false; exitCode=0; }
+    KoFilterManagerPrivate() { exitCode=0; }
     ~KoFilterManagerPrivate() {}
 
     QString tmpFile;
     QString exportFile;
     QString native_format, mime_type;
-    bool prepare;
+
+    QString config; // configuration string sent to the filter (currently unused)
+                    // (TODO, for instance so that koconverter can skip dialogs in filters)
     KoDocument *document;
     QValueList<KoFilterEntry> m_vec;
-    PreviewStack *ps;
-    mutable QMap<QString, int> dialogMap;
-    QMap<int, KoFilterDialog*> originalDialogs;
-    QString config;  // stores the config information
+
     int exitCode; // the exit code of the external filter process
     QString tempfname; // yes, ugly :)
 };
@@ -197,8 +195,6 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
             constraint += "Import";
     }
 
-    d->config=QString::null;   // reset the config string
-
 #if KDE_VERSION >= 220 // kdelibs > 2.1 -> use the nice setMimeFilter
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constraint );
 
@@ -224,87 +220,11 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                        _native_name, allfiles));
 #endif
 
-    QValueList<KoFilterDialogEntry> vec1 = KoFilterDialogEntry::query( constraint );
-
-    d->ps=new PreviewStack(0L, "preview stack", this);
-
-    unsigned int id=1;                 // id for the next widget
-
-    for(unsigned int i=0; i<vec1.count(); ++i) {
-        KMimeType::Ptr t;
-        QStringList mimes;
-        if ( direction == Import )
-            mimes = vec1[i].import;
-        else
-            mimes = vec1[i].export_;
-
-        QStringList::ConstIterator it = mimes.begin();
-        for ( ; it != mimes.end() ; ++it )
-        {
-            QString mime ( *it );
-            t = KMimeType::mimeType( mime );
-            // Did we get exactly this mime type ?
-            if ( t && mime == t->name() )
-            {
-                KoFilterDialog *filterdia=vec1[i].createFilterDialog();
-                if (!filterdia)
-                    continue;
-                QStringList patterns = t->patterns();
-                QString tmp;
-                unsigned short k;
-                for(unsigned int j=0; j<patterns.count(); ++j) {
-                    tmp=patterns[j];
-                    k=0;
-
-                    while(tmp[tmp.length()-k]!=QChar('.')) {
-                        ++k;
-                    }
-                    d->dialogMap.insert(tmp.right(k), id);
-                }
-                d->ps->addWidget(filterdia, id);
-                d->originalDialogs.insert(id, filterdia);
-                ++id;
-            }
-        }
-    }
-    if(!d->dialogMap.isEmpty()) {
-        dialog->setPreviewWidget(d->ps);
-        if(direction==Export) {
-            QObject::connect(dialog, SIGNAL(filterChanged(const QString &)),
-                             d->ps, SLOT(filterChanged(const QString &)));
-        }
-    }
     return true;
 }
 
 void KoFilterManager::cleanUp() {
-    if(!d->dialogMap.isEmpty() && d->ps!=0L && !d->ps->isHidden()) {
-        int id=d->ps->id(d->ps->visibleWidget());
-        if(id!=0) {
-            QMap<int, KoFilterDialog*>::Iterator it = d->originalDialogs.find(id);
-            if ( it != d->originalDialogs.end() )
-            {
-                KoFilterDialog *dia=it.data();
-                if(dia!=0L) {
-                    d->config=dia->state();
-                    kdDebug(s_area) << d->config << endl;
-                }
-                else
-                    kdWarning(s_area) << "default dia - no config!" << endl;
-            } else
-                kdWarning(s_area) << "Not found in map. id=" << id << endl;
-        }
-    }
-}
-
-const int KoFilterManager::findWidget(const QString &ext) const {
-
-    QMap<QString, int>::Iterator it=d->dialogMap.find(ext);
-
-    if(it!=d->dialogMap.end())
-        return it.data();
-    else
-        return 0;  // default Widget
+    // Nothing anymore
 }
 
 QString KoFilterManager::import( const QString &_file, QString &mimeType,
@@ -401,6 +321,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
     while(i<vec.count() && !ok) {
         // first check the "external" case
         if(vec[i].implemented.lower()=="bulletproof") {
+            d->document=document;
             KProcess *process=new KProcess();
             *process << "filter_wrapper";
             *process << constr << file << storePrefix << mimeType
@@ -446,7 +367,6 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
                 ok=filter->filter( file, d->tempfname, storePrefix, mimeType, _native_format, d->config );
             else
                 ok=filter->filter( file, d->tempfname, mimeType, _native_format, d->config );
-            // tempfname=tempFile.name(); // hack for -DQT_NO_BLAH stuff <-- huh??? (Werner)
         }
         else if(vec[i].implemented.lower()=="qdom") {
             //kdDebug(s_area) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
@@ -550,15 +470,12 @@ QString KoFilterManager::prepareExport( const QString & file,
         if (tempFile.status() != 0)
             return file;
         d->tmpFile = tempFile.name();
-        d->prepare=true;
         return d->tmpFile;
     }
     return file;
 }
 
 bool KoFilterManager::export_() {
-    d->prepare=false;
-
     unsigned int i=0;
     bool ok=false;
     while(i<d->m_vec.count() && !ok) {
@@ -579,28 +496,6 @@ bool KoFilterManager::export_() {
     return ok;
 }
 
-#if 0
-void KoFilterManager::incRef()
-{
-  s_refCnt++;
-}
-
-void KoFilterManager::decRef()
-{
-  s_refCnt--;
-  if ( s_refCnt == 0 && s_pSelf )
-  {
-    delete s_pSelf;
-    s_pSelf = 0;
-  }
-}
-
-unsigned long KoFilterManager::refCnt()
-{
-  return s_refCnt;
-}
-#endif
-
 void KoFilterManager::processExited(KProcess *p) {
 
     if(p->normalExit())
@@ -610,7 +505,7 @@ void KoFilterManager::processExited(KProcess *p) {
     kapp->exit_loop();
 }
 
-void KoFilterManager::receivedStdout(KProcess */*p*/, char *buffer, int buflen) {
+void KoFilterManager::receivedStdout(KProcess * /*p*/, char *buffer, int buflen) {
 
     kdDebug() << "KoFilterManager::receivedStdout  -- len: " << buflen << "buffer: " << buffer << endl;
     if(d->document && buflen>0 && buffer[0]=='P') {
@@ -623,63 +518,6 @@ void KoFilterManager::receivedStdout(KProcess */*p*/, char *buffer, int buflen) 
     else if(buflen>0 && buffer[0]=='F') {
         QCString tmp(++buffer, buflen-1);
         d->tempfname=tmp;
-    }
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-// PreviewStack
-
-PreviewStack::PreviewStack(QWidget *parent, const char *name,
-                           KoFilterManager *m) : QWidgetStack(parent, name),
-                           mgr(m), hidden(false) {
-}
-
-PreviewStack::~PreviewStack() {
-}
-
-void PreviewStack::showPreview(const KURL &url) {
-
-    QString tmp=url.url();
-    unsigned short k=0;
-    unsigned int foo=tmp.length();
-
-    // try to find the extension
-    while(tmp[foo-k]!=QChar('.') && k<=foo) {
-        ++k;
-    }
-    change(tmp.right(k));
-}
-
-void PreviewStack::filterChanged(const QString &filter) {
-    change(filter.mid(1));
-}
-
-void PreviewStack::change(const QString &ext) {
-
-    if(ext.isNull() || ext[0]!='.') {
-        if(!hidden) {
-            hide();
-            hidden=true;
-        }
-        return;
-    }
-    // do we have a dialog for that extension? (0==we don't have one)
-    unsigned short id=mgr->findWidget(ext);
-
-    if(id==0) {
-        if(!hidden) {
-            hide();
-            hidden=true;
-        }
-        return;
-    }
-    else {
-        raiseWidget(id);
-        if(hidden) {
-            show();
-            hidden=false;
-        }
     }
 }
 

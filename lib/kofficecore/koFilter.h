@@ -32,15 +32,13 @@ class KoDocument;
  * See http://koffice.kde.org/filters/index.html for further information
  * on filter development!
  * @ref KoFilterManager
- * @ref KoFilterDialog
  *
  * @author Werner Trobin
  * @short Abstract base class for filters
  */
-
+class KoFilter : public QObject {
 // Note: This class has to be derived from QObject, because we open the
 // filter libs dynamically (KLibLoader)!
-class KoFilter : public QObject {
 
     Q_OBJECT
 

@@ -31,12 +31,10 @@ class QDomDocument;
 
 class KFileDialog;
 class KoDocument;
-class KoFilterDialog;
 class KURL;
 class KProcess;
 
 class KoFilterManagerPrivate;
-class PreviewStack;
 
 /**
  *  This class manages all filters for a KOffice application. Normally
@@ -45,7 +43,6 @@ class PreviewStack;
  *
  *  @short The class managing all the filters.
  *  @ref KoFilter
- *  @ref KoFilterDialog
  *
  *  @author Kalle Dalheimer <kalle@kde.org>
  *  @author Torben Weis <weis@kde.org>
@@ -143,7 +140,7 @@ public:
      * @param mimeType Output the Native Format supported by the application selected
      *                 to handle this file.
      * @param config Configuration information for the filter. The format of this
-     *               is filter-specific.
+     *               is filter-specific [and currently unused]
      * @return the file name to load, either QString::null (error, QDomDocument, or KoDocument),
      * _url (no conversion) or a /tmp file (conversion)
      */
@@ -197,40 +194,9 @@ private:
      */
     const int findWidget(const QString &ext) const;
 
-    friend class PreviewStack;
-
     static KoFilterManager* s_pSelf;
     KoFilterManagerPrivate *d;
     //static unsigned long s_refCnt;
 };
 
-
-/**
- * This class is used internally by KoFilterManager to stack all the
- * available dialogs. (@internal)
- */
-class PreviewStack : public QWidgetStack {
-
-    Q_OBJECT
-
-public:
-    PreviewStack(QWidget *parent, const char *name, KoFilterManager *m);
-    virtual ~PreviewStack();
-
-    // As the stack can be hidden/visible one has to know the status
-    bool isHidden() const { return hidden; }
-
-public slots:
-    // The URL has changed -> show the correct dialog
-    void showPreview(const KURL &url);
-    // When exporting (saving) we can only check adapt
-    // the dialog via the filter b/c there is no URL
-    void filterChanged(const QString &filter);
-
-private:
-    void change(const QString &ext);
-
-    const KoFilterManager * const mgr;
-    bool hidden;
-};
 #endif  // __koffice_filter_manager_h__
