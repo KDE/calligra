@@ -23,6 +23,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
+#include <qapplication.h>
 #include <qhbox.h>
 #include <qlayout.h>
 #include <kdebug.h>
@@ -74,6 +75,8 @@ QGridView(parent, name)
   mItemCount = 0;
   mItemWidth = aIconSize.width();
   mItemHeight = aIconSize.height();
+  mMouseButtonDown = false;
+  mDragEnabled = false;
 }
 
 KoIconChooser::~KoIconChooser()
@@ -142,9 +145,11 @@ void KoIconChooser::setCurrentItem(KoIconItem *item)
 void KoIconChooser::mousePressEvent(QMouseEvent *e)
 {
   QGridView::mousePressEvent(e);
+  mMouseButtonDown = true;
   if(e->button() == LeftButton)
   {
     QPoint p = e->pos();
+    mDragStartPos = p;
     int row = rowAt(contentsY() + p.y());
     int col = columnAt(contentsX() + p.x());
 
@@ -169,9 +174,30 @@ void KoIconChooser::mousePressEvent(QMouseEvent *e)
   }
 }
 
+void KoIconChooser::mouseMoveEvent(QMouseEvent *e)
+{
+  if(mMouseButtonDown && mDragEnabled )
+  {
+    if(mPixmapWidget)
+    {
+      delete mPixmapWidget;
+      mPixmapWidget = 0L;
+    }
+    if( ( mDragStartPos - e->pos() ).manhattanLength() > QApplication::startDragDistance() )
+      startDrag();
+  }
+}
+
+void
+KoIconChooser::startDrag()
+{
+  mMouseButtonDown = false;
+}
+
 // when a big item is shown in full size, delete it on mouseRelease
 void KoIconChooser::mouseReleaseEvent(QMouseEvent * /*e*/)
 {
+  mMouseButtonDown = false;
   if(mPixmapWidget)
   {
     delete mPixmapWidget;

@@ -72,6 +72,9 @@ public:
   KoIconItem *currentItem();
   void setCurrentItem(KoIconItem *item);
 
+  void setDragEnabled(bool allow) { mDragEnabled = allow; }
+  bool dragEnabled() const { return mDragEnabled; }
+
 signals:
   void  selected(KoIconItem *item);
 
@@ -79,8 +82,10 @@ protected:
   void keyPressEvent(QKeyEvent *e);
   void mousePressEvent( QMouseEvent *e);
   void mouseReleaseEvent( QMouseEvent *e);
+  void mouseMoveEvent( QMouseEvent *e);
   void resizeEvent(QResizeEvent *e);
   void paintCell(QPainter *p, int row, int col);
+  virtual void startDrag();
 
 private:
   KoIconItem *itemAt(int row, int col);
@@ -99,6 +104,9 @@ private:
   int                     mCurRow;
   int                     mCurCol;
   int                     mMargin;
+  QPoint                  mDragStartPos;
+  bool                    mMouseButtonDown;
+  bool                    mDragEnabled;
 };
 
 // This is a first attempt at a pattern chooser widget abstraction which is at least
