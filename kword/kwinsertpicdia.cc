@@ -36,6 +36,7 @@
 
 #include "kwdoc.h"
 #include "kwinsertpicdia.h"
+#include <qtimer.h>
 
 /**
  * This is the preview that appears on the right of the "Insert picture" dialog.
@@ -134,7 +135,9 @@ void KWInsertPicDia::slotChooseImage()
     if ( m_picture.isNull() && m_bFirst)
     {
         kdDebug() << "KWInsertPicDia::slotChooseImage cancelled by user." << endl;
-        KDialogBase::close();
+        // Close, but delayed, otherwise it won't work (we only return from the ctor)
+        QTimer::singleShot( 0, this, SLOT( cancel() ) );
+        return;
     }
     enableButtonOK ( m_preview->setPicture( m_picture ) );
     m_bFirst = false;
