@@ -1049,7 +1049,7 @@ void KoCompletionDia::setup()
     // TODO whatsthis or text, to tell about the key to use for autocompletion....
     cbAddCompletionWord = new QCheckBox( page );
     cbAddCompletionWord->setText( i18n( "&Automatically add new words to completion list" ) );
-    QWhatsThis::add( cbAddCompletionWord, i18n("If this is option is enabled, any word typed in this document will automatically be added to the list of words used by the completion." ) );
+    QWhatsThis::add( cbAddCompletionWord, i18n("If this option is enabled, any word typed in this document will automatically be added to the list of words used by the completion." ) );
 
     m_lbListCompletion = new QListBox( page );
     connect( m_lbListCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
