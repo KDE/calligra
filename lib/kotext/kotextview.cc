@@ -1089,10 +1089,9 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
 
 void KoTextView::openLink()
 {
-    if(m_refLink.find("http://")!=-1 || m_refLink.find("mailto:")!=-1
-       || m_refLink.find("ftp://")!=-1 || m_refLink.find("file:")!=-1
-       || m_refLink.find("news:")!=-1)
-        (void) new KRun( m_refLink );
+    KURL url( m_refLink );
+    if( url.isValid() )
+        (void) new KRun( url );
     else
         KMessageBox::sorry(0L,i18n("%1 is not a valid link.").arg(m_refLink));
 }
