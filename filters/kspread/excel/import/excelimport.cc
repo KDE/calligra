@@ -142,7 +142,21 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
           root += "<cell row=\"" + QString::number( row+1 ) + "\"" +
             "column=\"" + QString::number( col+1 ) + "\" >\n";
 
-          root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
+
+          const Sidewinder::Format& format = cell->format();
+
+          unsigned align = 0;
+          switch( format.alignment().alignX() )
+          {
+            case Sidewinder::Format::Left: align = 1; break;
+            case Sidewinder::Format::Center: align = 2; break;
+            case Sidewinder::Format::Right: align = 3; break;
+            default: align = 0; break;
+          };
+
+          root += "<format align=\"";
+          root += QString::number( align );
+          root += "\">";
           root += "</format>\n";
 
           Sidewinder::Value value = cell->value();
