@@ -65,6 +65,7 @@ QString Document::cleanText(
 QString Document::getFont(unsigned fc)
 {
     QString font = MsWord::getFont(fc).xstzName;
+
     static const unsigned ENTRIES = 6;
     static QString fuzzyLookup[ENTRIES][2] =
     {

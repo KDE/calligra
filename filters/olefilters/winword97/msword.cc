@@ -1767,9 +1767,9 @@ unsigned MsWord::read(const U8 *in, FFN *out)
     bytes += MsWordGenerated::read(in + bytes, &out->chs);
     bytes += MsWordGenerated::read(in + bytes, &out->ixchSzAlt);
     bytes += MsWordGenerated::read(in + bytes, &out->panose[0], sizeof(out->panose));
-    bytes += MsWordGenerated::read(in + bytes, &out->fs[0], sizeof(out->fs));
+    bytes += MsWordGenerated::read(in + bytes, &out->fs[0], sizeof(out->fs)); 
     unsigned count = (out->cbFfnM1 + 1 - bytes) / 2;
-    bytes += read(m_fib.lid, in + bytes, &out->xstzName, count - 1, true);
+    bytes += read(m_fib.lid, in + bytes, &out->xstzName, count - 1, true, m_fib.nFib);
 
     // Set the length to the offset of the last stored byte.
 
