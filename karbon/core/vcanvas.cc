@@ -59,8 +59,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->setZoomFactor( m_view->zoom() );
 		QWMatrix mat;
 		mat.scale( 1, -1 );
-		kdDebug() << "viewport()->height() : " << viewport()->height() << endl;
-		mat.translate( -contentsX(), contentsY() - viewport()->height() );
+		kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
+		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 		p->setWorldMatrix( mat );
 
 		m_part->document().draw( p, r );
@@ -75,7 +75,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( -contentsX(), contentsX() - viewport()->height() );
+	mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	qpainter.setWorldMatrix( mat );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
@@ -101,8 +101,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 		p->setZoomFactor( m_view->zoom() );
 		QWMatrix mat;
 		mat.scale( 1, -1 );
-		kdDebug() << "contentsHeight() : " << viewport()->height() << endl;
-		mat.translate( -contentsX(), contentsY() - viewport()->height() );
+		kdDebug() << "contentsHeight() : " << contentsHeight() << endl;
+		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 		p->setWorldMatrix( mat );
 
 		m_part->document().draw( p, KoRect::fromQRect( rect ) );
@@ -115,7 +115,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( -contentsX(), contentsX() - viewport()->height() );
+	mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	qpainter.setWorldMatrix( mat );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 

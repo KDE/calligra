@@ -55,7 +55,7 @@ VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
 	recalc();
 
 	// Y mirroring
-	m_p.setY( -m_p.y() + view()->canvasWidget()->viewport()->height() );
+	m_p.setY( -m_p.y() + view()->canvasWidget()->contentsHeight() );
 	if( m_isPolar )
 	{
 		// TODO : fix polar, flip?
