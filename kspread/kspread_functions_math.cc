@@ -879,7 +879,7 @@ bool kspreadfunc_int( KSContext& context )
   else
     val=args[0]->doubleValue();
 
-  context.setValue( new KSValue((int)val));
+  context.setValue( new KSValue( floor( val ) ) );
   return true;
 }
 
