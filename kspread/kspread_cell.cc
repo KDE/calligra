@@ -4325,7 +4325,7 @@ void KSpreadCell::update()
 bool KSpreadCell::testValidity() const
 {
     bool valid = false;
-    if( d->extra()->validity != NULL )
+    if( d->extra()->validity && d->extra()->validity->m_allow != Allow_All )
     {
         //fixme
         if ( d->extra()->validity->allowEmptyCell && d->strText.isEmpty() )
