@@ -365,7 +365,8 @@ public:
     void deleteSelection( const QPoint &_marker );
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
-    void paste( const QPoint &_marker );
+    enum Special_paste { ALL,Formula,Format,Wborder};
+    void paste( const QPoint &_marker,Special_paste=ALL );
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
@@ -457,7 +458,7 @@ public:
     /**
      * @see #paste
      */
-    bool loadSelection( istream& _in, int _xshift, int _yshift );
+    bool loadSelection( istream& _in, int _xshift, int _yshift,Special_paste = ALL );
     
     /**
      * Deletes all cells in the given rectangle.

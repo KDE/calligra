@@ -2243,8 +2243,9 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
   return true;
 }
 
-bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _xshift, int _yshift )
+bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _xshift, int _yshift,Special_paste sp )
 {
+
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end(); it++ )
   {
@@ -2289,7 +2290,7 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
     {
       KOMLParser::parseTag( tag.c_str(), name, lst );
 
-      if ( name == "FORMAT" )
+      if ( name == "FORMAT" &&(sp==ALL || sp==Format || sp==Wborder))
         {
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for( ; it != lst.end(); it++ )
@@ -2401,15 +2402,15 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	      cerr << "Unknown attrib FORMAT:'" << (*it).m_strName << "'" << endl;
 	  }
 	}
-	else if ( name == "PEN" )
+	else if ( name == "PEN" &&(sp==ALL ||sp==Format || sp==Wborder))
         {
 	  setTextPen( tagToPen( lst ) );
 	}
-	else if ( name == "FONT" )
+	else if ( name == "FONT" &&(sp==ALL ||sp==Format || sp==Wborder) )
         {
 	  setTextFont( tagToFont( lst ) );
 	}
-	else if ( name == "LEFTBORDER" )
+	else if ( name == "LEFTBORDER" &&(sp==ALL ||sp==Format))
         {
 	  // PEN
 	  while( parser.open( 0L, tag ) )
@@ -2430,7 +2431,7 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	    }
 	  }
 	}
-	else if ( name == "TOPBORDER" )
+	else if ( name == "TOPBORDER" &&(sp==ALL ||sp==Format))
 	{
 	  // PEN
 	  while( parser.open( 0L, tag ) )
@@ -2468,12 +2469,13 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   // HACK: Once we have Unicode in KOML we dont need that
   t = QString::fromUtf8( text.c_str() );
   t = t.stripWhiteSpace();
-
+  if(sp==ALL || sp==Wborder ||sp==FORMULA)
+  {
   if ( t[0] == '=' )
     t = decodeFormular( t, m_iColumn, m_iRow );
 
   setText( t );
-
+  }
   return true;
 }
 

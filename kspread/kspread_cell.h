@@ -44,6 +44,8 @@ class KSParseNode;
 
 #include "kspread_layout.h"
 
+
+
 /**
  */
 struct KSpreadDepend
@@ -97,14 +99,14 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
-
+    enum Special_paste { ALL,FORMULA,Format,Wborder};
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
     virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0 );
-    virtual bool load( KOMLParser& _parser, vector<KOMLAttrib>& _attrib ) { return load( _parser, _attrib, 0, 0 ); }
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift );
 
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,Special_paste sp=ALL );
+    virtual bool load( KOMLParser& _parser, vector<KOMLAttrib>& _attrib ) { return load( _parser, _attrib, 0, 0 ); }
     /**
      * Copyies the layout from the cell at the position (_column|_row).
      */

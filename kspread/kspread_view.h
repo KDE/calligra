@@ -178,6 +178,11 @@ public:
      */
     void paste();
     /**
+     * Menu Edit->Special Paste
+     */
+     void Specialpaste();
+
+    /**
      * Menu Edit->Cell
      */
     void editCell();
@@ -511,6 +516,8 @@ protected:
     CORBA::Long m_idMenuEdit_Paste;
     CORBA::Long m_idMenuEdit_Cell;
     CORBA::Long m_idMenuEdit_Layout;
+    CORBA::Long m_idMenuEdit_Special;
+
     OpenPartsUI::Menu_var m_vMenuEdit_Insert;
     CORBA::Long m_idMenuEdit_Insert_Table;
     CORBA::Long m_idMenuEdit_Insert_Chart;

@@ -61,6 +61,7 @@ module KSpread
 		slot void cutSelection();
 		slot void copySelection();
 		slot void paste();
+		slot void Specialpaste();
 		slot void editCell();
 		slot void paperLayoutDlg();
 		slot void togglePageBorders();

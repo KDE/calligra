@@ -1791,6 +1791,7 @@ void KSpreadTable::copySelection( const QPoint &_marker )
 
   QClipboard *clip = QApplication::clipboard();
   clip->setText( data.c_str() );
+
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )
@@ -1801,7 +1802,7 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
     deleteSelection( _marker );
 }
 
-void KSpreadTable::paste( const QPoint &_marker )
+void KSpreadTable::paste( const QPoint &_marker,Special_paste sp)
 {
   string data = QApplication::clipboard()->text().ascii();
   if ( data.empty() )
@@ -1811,13 +1812,13 @@ void KSpreadTable::paste( const QPoint &_marker )
   }
 
   istrstream in( data.c_str() );
-  loadSelection( in, _marker.x() - 1, _marker.y() - 1 );
+  loadSelection( in, _marker.x() - 1, _marker.y() - 1,sp );
 
   m_pDoc->setModified( true );
   emit sig_updateView( this );
 }
 
-bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift )
+bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Special_paste sp )
 {
   KOMLStreamFeed feed( _in );
   KOMLParser parser( &feed );
@@ -1825,6 +1826,27 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift )
   string tag;
   vector<KOMLAttrib> lst;
   string name;
+  KSpreadCell::Special_paste sp_cell;
+
+  switch(sp)
+  	{
+  	case ALL:
+  		sp_cell=KSpreadCell::ALL;
+  		break;
+  	case Formula:
+  		sp_cell=KSpreadCell::FORMULA;
+  		break;
+  	case Format:
+  		sp_cell= KSpreadCell::Format;
+  		break;
+  	case Wborder:
+  		sp_cell= KSpreadCell::Wborder;
+  		break;
+  	default:
+  		sp_cell=KSpreadCell::ALL;
+  	}
+  	
+  		
 
   // DOC
   if ( !parser.open( "DOC", tag ) )
@@ -1855,7 +1877,7 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift )
     if ( name == "CELL" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      cell->load( parser, lst, _xshift, _yshift );
+      cell->load( parser, lst, _xshift, _yshift,sp_cell );
       insertCell( cell );
     }
     else

@@ -56,7 +56,7 @@
 #include "kspread_tabbar.h"
 #include "kspread_view.h"
 #include "kspread_dlg_formula.h"
-
+#include "kspread_dlg_special.h"
 
 /*****************************************************************************
  *
@@ -755,6 +755,8 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap( BarIcon("editpaste") );
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "&Paste") ) ), this, "paste", stdAccel.paste(), -1, -1 );
 
+  m_idMenuEdit_Special = m_vMenuEdit->insertItem( ( wstr = Q2C( i18n( "Special Paste" ) ) ), this, "Specialpaste", 0 );
+
   m_vMenuEdit->insertSeparator( -1 );
 
   m_vMenuEdit->insertItem8( ( wstr = Q2C( i18n( "&Insert" ) ) ), m_vMenuEdit_Insert, -1, -1 );
@@ -1319,6 +1321,15 @@ void KSpreadView::paste()
     m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 }
 
+void KSpreadView::Specialpaste()
+{
+  if ( m_pTable )
+  	{
+  	KSpreadspecial *dlg=new KSpreadspecial(this,"Special Paste");
+  	dlg->show();
+  	}
+  	
+}
 void KSpreadView::consolidate()
 {
   KSpreadConsolidate* dlg = new KSpreadConsolidate( this, "Consolidate" );
@@ -2021,14 +2032,14 @@ void KSpreadView::insertChart()
 void KSpreadView::autoFill()
 {
   // TODO
-  /* if( m_pTable )
+   /*if( m_pTable )
   {
     if( !m_pAutoFillDialog )
       m_pAutoFillDialog = new AutoFillDialog;
 
     m_pAutoFillDialog->setTable( m_pTable );
     m_pAutoFillDialog->show();
-  } */
+  }*/
 }
 
 /*
