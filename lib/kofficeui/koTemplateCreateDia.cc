@@ -234,10 +234,11 @@ void KoTemplateCreateDia::slotOk() {
     // try to find the extension for the template file :P
     const int pos = m_file.findRev( '.' );
     if ( pos > -1 )
-        file += m_file.right( pos );
+        file += m_file.mid( pos );
     else
         kdWarning(30004) << "Template extension not found!" << endl;
 
+    kdDebug(30004) << "Trying to create template: " << d->m_name->text() << "URL=" << ".source/"+file << " ICON=" << tmpIcon << endl;
     KoTemplate *t=new KoTemplate(d->m_name->text(), QString::null, ".source/"+file, tmpIcon, false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(t->name());
