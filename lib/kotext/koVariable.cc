@@ -1294,9 +1294,7 @@ QString KoNoteVariable::text()
 
 }
 
-// This is a "variable" that doesn't really have text inline...
-// so we can't call drawCustomItemHelper
-void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int /*offset*/ )
+void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset )
 {
     if ( !m_varColl->variableSetting()->displayComment())
         return;
@@ -1325,6 +1323,8 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
         p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
+    //call it for use drawCustomItemHelper just for draw font effect
+    KoVariable::drawCustomItem( p, x, y, cx, cy, cw, ch, cg, selected, offset );
 
     p->restore();
 }
