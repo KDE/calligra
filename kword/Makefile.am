@@ -1,5 +1,5 @@
 
-KDE_CXXFLAGS = $(USE_RTTI) -g
+KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 ####### Files
