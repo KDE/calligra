@@ -31,3 +31,12 @@ Apply the following patch to configure.in.in
   # This last check is copied from kdenonbeta/gsf/configure.in.in
   ##########################################################################
 
+The experimental Excel import filter based on Sidewinder resides in
+koffice/filters/kspread/excel/import. If you compile it, here's a step to
+resolve conflict with the current Excel import filter: put the following
+uninstall.desktop in koffice/filters/olefilters/excel97 to disable the it.
+
+[Desktop Entry]
+Encoding=UTF-8
+Hidden=true
+
