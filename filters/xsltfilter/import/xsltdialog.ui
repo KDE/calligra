@@ -138,7 +138,7 @@
         </property>
         <property stdset="1">
             <name>text</name>
-            <string>Annuler</string>
+            <string>Cancel</string>
         </property>
     </widget>
     <widget>
