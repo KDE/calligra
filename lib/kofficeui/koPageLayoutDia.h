@@ -85,7 +85,7 @@ protected:
 class KoPageLayoutDiaPrivate;
 
 /**
- *  With this dialog the user can specify the layout of this paper during printing.
+ *  With this dialog the user can specify the layout of the paper during printing.
  */
 class KoPageLayoutDia : public KDialogBase
 {
@@ -101,7 +101,7 @@ public:
      *  @param layout   The layout.
      *  @param headfoot The header and the footer.
      *  @param tabs     The number of tabs.
-     *  @param unit       The unit to use for displaying the values to the user
+     *  @param unit     The unit to use for displaying the values to the user
      */
     KoPageLayoutDia( QWidget* parent, const char* name,
 		     const KoPageLayout& layout,

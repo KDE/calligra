@@ -44,8 +44,10 @@ public:
     KoDocumentIface( KoDocument * doc, const char * name = 0 );
     ~KoDocumentIface();
 
-    // Generate a name for this interface. Automatically used if name=0 is
-    // passed to the constructor
+    /**
+     * Generate a name for this interface. Automatically used if name=0 is
+     * passed to the constructor
+     */
     static QCString newIfaceName();
 
 k_dcop:
@@ -54,18 +56,42 @@ k_dcop:
      */
     QString url();
 
+    /**
+     * Opens a document stored in @p url
+     */
     void openURL( QString url );
 
+    /**
+     * @return TRUE is the document has been modified
+     */
     bool isModified();
 
+    /**
+     * @return the number of views this document is displayed in
+     */
     int viewCount();
+
+    /**
+     * @return a DCOP reference (@ref DCOPRef) to the view with index @p idx
+     */
     DCOPRef view( int idx );
 
-    // DCOP-action proxy
+    /**
+     * DCOP-action proxy
+     */
     DCOPRef action( const QCString &name );
+    /**
+     * @return list of actions
+     */
     QCStringList actions();
+    /**
+     * @return a map of (action name, DCOP reference)
+     */
     QMap<QCString,DCOPRef> actionMap();
 
+    /**
+     * Saves the document under a new name
+     */
     void saveAs( const QString & url );
     void setOutputMimeType( const QCString & mimetype );
 

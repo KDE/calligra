@@ -27,7 +27,7 @@
 #include <qvaluestack.h>
 
 /**
- * Saves and loads koffice documents using various backends. Currently supported
+ * Saves and loads KOffice documents using various backends. Currently supported
  * backends are ZIP, tar and directory.
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
@@ -179,8 +179,8 @@ public:
   /**
    * Imports a local directory
    * @param dirPath path to the directory on a disk
-   * @param dest path in the store where the direcotry should get saved
-   * @returns the directory index
+   * @param dest path in the store where the directory should get saved
+   * @return the directory index
    */
   QStringList addLocalDirectory( const QString &dirPath, const QString &dest );
 
@@ -192,9 +192,11 @@ public:
    */
   bool extractFile( const QString &srcName, const QString &fileName );
 
-  // See QIODevice
+  /// See QIODevice
   bool at( QIODevice::Offset pos );
+  /// See QIODevice
   QIODevice::Offset at() const;
+  /// See QIODevice
   bool atEnd() const;
 
 
@@ -263,11 +265,15 @@ private:
    */
   QString toExternalNaming( const QString & _internalNaming );
 
-  // Expands a full path name for a stream (directories+filename)
+  /**
+   *  Expands a full path name for a stream (directories+filename)
+   */
   QString expandEncodedPath( QString intern );
 
-  // Expans only directory names(!)
-  // Needed for the path handling code, as we only operate on internal names
+  /**
+   * Expands only directory names(!)
+   * Needed for the path handling code, as we only operate on internal names
+   */
   QString expandEncodedDirectory( QString intern );
 
   enum
@@ -276,34 +282,35 @@ private:
       NAMING_VERSION_2_2
   } m_namingVersion;
 
-  // Enter *one* single directory. Nothing like foo/bar/bleh allowed.
-  // Performs some checking when in Read mode
+  /**
+   * Enter *one* single directory. Nothing like foo/bar/bleh allowed.
+   * Performs some checking when in Read mode
+   */
   bool enterDirectoryInternal( const QString& directory );
 
 protected:
 
   Mode m_mode;
 
-  // Store the filenames (with full path inside the archive) when writing, to avoid duplicates
+  /// Store the filenames (with full path inside the archive) when writing, to avoid duplicates
   QStringList m_strFiles;
 
-  // The "current directory" (path)
+  /// The "current directory" (path)
   QStringList m_currentPath;
 
-  // Used to push/pop directories to make it easy to save/restore
-  // the state
+  /// Used to push/pop directories to make it easy to save/restore the state
   QValueStack<QString> m_directoryStack;
 
-  // Current filename (between an open() and a close())
+  /// Current filename (between an open() and a close())
   QString m_sName;
-  // Current size of the file named m_sName
+  /// Current size of the file named m_sName
   QIODevice::Offset m_iSize;
 
-  // The stream for the current read or write operation
+  /// The stream for the current read or write operation
   QIODevice * m_stream;
 
   bool m_bIsOpen;
-  // Must be set by the constructor.
+  /// Must be set by the constructor.
   bool m_bGood;
 
   static const int s_area;

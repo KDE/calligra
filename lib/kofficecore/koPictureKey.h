@@ -35,10 +35,10 @@ namespace KoPictureType
     enum Type
     {
         TypeUnknown = 0,
-        TypeImage,          // Image, QImage-based
-        TypeEps,
-        TypeClipart,        // Clipart, QPicture-based
-        TypeWmf             // WMF (Windows Meta File)
+        TypeImage,          /// Image, QImage-based
+        TypeEps,            /// Encapsulated Postscript
+        TypeClipart,        /// Clipart, QPicture-based
+        TypeWmf             /// WMF (Windows Meta File)
     };
 };
 
@@ -48,6 +48,8 @@ namespace KoPictureType
  * KoPictureKey is the structure describing an image in a unique way.
  * It currently includes the original path to the image and the modification
  * date.
+ *
+ * @short Structure describing an image on disk
  */
 class KoPictureKey
 {
@@ -66,7 +68,7 @@ public:
     KoPictureKey( const QString &fn, const QDateTime &mod );
 
     /**
-     * Constructs a key, from a filename (whitout modification date)
+     * Constructs a key, from a filename (without modification date)
      */
     KoPictureKey( const QString &fn );
 
@@ -115,6 +117,9 @@ public:
      */
     QDateTime lastModified() const { return m_lastModified; }
 
+    /**
+     * Sets the key according to @p filename modification time
+     */
     void setKeyFromFile (const QString& filename);
 
 protected:

@@ -34,7 +34,7 @@
 class KoWmfRead;
 
 /**
- * KoWmfReadPrivate allow to read WMF files
+ * KoWmfReadPrivate allows to read WMF files
  *
  */
 
@@ -50,100 +50,100 @@ public:
     bool load( const QByteArray& array );
 
     /**
-     * Play a metafile on readKwmf and returns true on success.
-     * to draw on a device you have to inherit the class ReadKwmf
+     * Plays a metafile in @p readKwmf and returns true on success.
+     * To draw on a device you have to inherit the class ReadKwmf
      */
     bool play( KoWmfRead* readKwmf );
 
 
-    /** Metafile painter methods */
+    /* Metafile painter methods */
 
-    // set window origin
+    /// set window origin
     void setWindowOrg( Q_UINT32 size, QDataStream& stream );
-    // set window extents
+    /// set window extents
     void setWindowExt( Q_UINT32 size, QDataStream& stream );
-    // scale window extents
+    /// scale window extents
     void ScaleWindowExt( Q_UINT32, QDataStream& stream );
-    // offset in window origin
+    /// offset in window origin
     void OffsetWindowOrg( Q_UINT32, QDataStream& stream );
 
     /****************** Drawing *******************/
-    // draw line to coord
+    /// draw line to coord
     void lineTo( Q_UINT32 size, QDataStream& stream );
-    // move pen to coord
+    /// move pen to coord
     void moveTo( Q_UINT32 size, QDataStream& stream );
-    // draw ellipse
+    /// draw ellipse
     void ellipse( Q_UINT32 size, QDataStream& stream );
-    // draw polygon
+    /// draw polygon
     void polygon( Q_UINT32 size, QDataStream& stream );
-    /* draw a list of polygons */
+    /// draw a list of polygons
     void polyPolygon( Q_UINT32 size, QDataStream& stream );
-    // draw series of lines
+    /// draw series of lines
     void polyline( Q_UINT32 size, QDataStream& stream );
-    /* draw a rectangle */
+    /// draw a rectangle
     void rectangle( Q_UINT32 size, QDataStream& stream );
-    /* draw round rectangle */
+    /// draw round rectangle
     void roundRect( Q_UINT32 size, QDataStream& stream );
-    /* draw arc */
+    /// draw arc
     void arc( Q_UINT32 size, QDataStream& stream );
-    /* draw chord */
+    /// draw chord
     void chord( Q_UINT32 size, QDataStream& stream );
-    /* draw pie */
+    /// draw pie
     void pie( Q_UINT32 size, QDataStream& stream );
-    // set polygon fill mode
+    /// set polygon fill mode
     void setPolyFillMode( Q_UINT32 size, QDataStream& stream );
-    // set background pen color
+    /// set background pen color
     void setBkColor( Q_UINT32 size, QDataStream& stream );
-    // set background pen mode
+    /// set background pen mode
     void setBkMode( Q_UINT32 size, QDataStream& stream );
-    /* set a pixel */
+    /// set a pixel
     void setPixel( Q_UINT32 size, QDataStream& stream );
-    // Set raster operation mode
+    /// set raster operation mode
     void setRop( Q_UINT32 size, QDataStream& stream );
-    /* save device context */
+    /// save device context */
     void saveDC( Q_UINT32 size, QDataStream& stream );
-    /* restore device context */
+    /// restore device context
     void restoreDC( Q_UINT32 size, QDataStream& stream );
-    /*  clipping region is the intersection of this region and the original region */
+    ///  clipping region is the intersection of this region and the original region
     void intersectClipRect( Q_UINT32 size, QDataStream& stream );
-    /* delete a clipping rectangle of the original region */
+    /// delete a clipping rectangle of the original region
     void excludeClipRect( Q_UINT32 size, QDataStream& stream );
 
     /****************** Text *******************/
-    /* set text color */
+    /// set text color
     void setTextColor( Q_UINT32 size, QDataStream& stream );
-    /* set text alignment */
+    /// set text alignment
     void setTextAlign( Q_UINT32 size, QDataStream& stream );
-    /* draw text */
+    /// draw text
     void textOut( Q_UINT32 size, QDataStream& stream );
     void extTextOut( Q_UINT32 size, QDataStream& stream );
 
     /****************** Bitmap *******************/
     void SetStretchBltMode( Q_UINT32, QDataStream& stream );
-    /* copies a DIB into a dest location */
+    /// copies a DIB into a dest location
     void dibBitBlt( Q_UINT32 size, QDataStream& stream );
-    /* stretches a DIB into a dest location */
+    /// stretches a DIB into a dest location
     void dibStretchBlt( Q_UINT32 size, QDataStream& stream );
     void stretchDib( Q_UINT32 size, QDataStream& stream );
-    /* create a pattern brush */
+    /// create a pattern brush
     void dibCreatePatternBrush( Q_UINT32 size, QDataStream& stream );
 
     /****************** Object handle *******************/
-    // Activate object handle
+    /// activate object handle
     void selectObject( Q_UINT32 size, QDataStream& stream );
-    // Free object handle
+    /// free object handle
     void deleteObject( Q_UINT32 size, QDataStream& stream );
-    /* create an empty object in the object list */
+    /// create an empty object in the object list
     void createEmptyObject();
-    // create a logical brush
+    /// create a logical brush
     void createBrushIndirect( Q_UINT32 size, QDataStream& stream );
-    // create a logical pen
+    /// create a logical pen
     void createPenIndirect( Q_UINT32 size, QDataStream& stream );
-    /* create a logical font */
+    /// create a logical font
     void createFontIndirect( Q_UINT32 size, QDataStream& stream );
 
     /****************** misc *******************/
-    // end of meta file
+    /// end of meta file
     void end( Q_UINT32, QDataStream& stream );
 
     /** Calculate header checksum */
@@ -170,7 +170,7 @@ public:
     void createBitmapIndirect( Q_UINT32, QDataStream& stream );
     void createPalette( Q_UINT32, QDataStream& stream );
     void createRegion( Q_UINT32, QDataStream& stream );
-    
+
 private:
     //-----------------------------------------------------------------------------
     // Utilities and conversion Wmf -> Qt
@@ -203,22 +203,22 @@ public:
     bool mStandard;
     bool mPlaceable;
     bool mEnhanced;
-    
-    // bounding rectangle
-    QRect  mBBox;     // placeable file : this is the header 
-                      // standard file : this is the value in setWindowOrg and setWindowExt
-    // number of point per inch for the default size
-    int  mDpi;       
 
-    // number of functions to draw (==0 for all)
-    int    mNbrFunc;  
+    /// bounding rectangle
+    QRect  mBBox;     // placeable file : this is the header
+                      // standard file : this is the value in setWindowOrg and setWindowExt
+    /// number of points per inch for the default size
+    int mDpi;
+
+    /// number of functions to draw (==0 for all)
+    int mNbrFunc;
 
 private:
     // the output
     KoWmfRead *mReadWmf;
 
     // current coordinate != mBBox
-    QRect  mWindow;  
+    QRect  mWindow;
     // current state of the drawing
     QColor  mTextColor;
     Q_UINT16  mTextAlign;
@@ -232,7 +232,7 @@ private:
     // stack of object handle
     KoWmfHandle**  mObjHandleTab;
     // number of object on the stack
-    int    mNbrObject;    
+    int    mNbrObject;
     bool   mStackOverflow;
 };
 
@@ -249,7 +249,7 @@ private:
       { &KoWmfReadPrivate::setRop }, // 4
       { &KoWmfReadPrivate::setRelAbs }, // 5
       { &KoWmfReadPrivate::setPolyFillMode }, // 6
-      { &KoWmfReadPrivate::SetStretchBltMode }, // 7 
+      { &KoWmfReadPrivate::SetStretchBltMode }, // 7
       { &KoWmfReadPrivate::notyet }, // 8
       { &KoWmfReadPrivate::setTextColor }, // 9
       { &KoWmfReadPrivate::ScaleWindowExt }, // 10
@@ -282,24 +282,24 @@ private:
       { &KoWmfReadPrivate::polyline }, // 37
       { &KoWmfReadPrivate::escape }, // 38
       { &KoWmfReadPrivate::restoreDC }, // 39
-      { &KoWmfReadPrivate::region }, // 40 
-      { &KoWmfReadPrivate::region }, // 41 
-      { &KoWmfReadPrivate::region }, // 42 
-      { &KoWmfReadPrivate::region }, // 43 
-      { &KoWmfReadPrivate::region }, // 44 
+      { &KoWmfReadPrivate::region }, // 40
+      { &KoWmfReadPrivate::region }, // 41
+      { &KoWmfReadPrivate::region }, // 42
+      { &KoWmfReadPrivate::region }, // 43
+      { &KoWmfReadPrivate::region }, // 44
       { &KoWmfReadPrivate::selectObject }, // 45
       { &KoWmfReadPrivate::setTextAlign }, // 46
       { 0 }, // 47
       { &KoWmfReadPrivate::chord }, // 48
-      { &KoWmfReadPrivate::notyet }, // 49 
+      { &KoWmfReadPrivate::notyet }, // 49
       { &KoWmfReadPrivate::extTextOut }, // 50
-      { &KoWmfReadPrivate::setDibToDev }, // 51 
+      { &KoWmfReadPrivate::setDibToDev }, // 51
       { &KoWmfReadPrivate::palette }, // 52
       { &KoWmfReadPrivate::palette }, // 53
-      { &KoWmfReadPrivate::palette }, // 54 
-      { &KoWmfReadPrivate::palette }, // 55 
+      { &KoWmfReadPrivate::palette }, // 54
+      { &KoWmfReadPrivate::palette }, // 55
       { &KoWmfReadPrivate::polyPolygon }, // 56
-      { &KoWmfReadPrivate::palette }, // 57 
+      { &KoWmfReadPrivate::palette }, // 57
       { 0 }, // 58
       { 0 }, // 59
       { 0 }, // 60

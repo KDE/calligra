@@ -29,7 +29,7 @@ class QPushButton;
 
 /**
  *  This dialog presents the user all available
- *  KOffice components ( KSpread,KWord etc ) with name
+ *  KOffice components ( KSpread, KWord etc ) with name
  *  and mini icon. The user may select one and
  *  the corresponding KoDocumentEntry is returned.
  */

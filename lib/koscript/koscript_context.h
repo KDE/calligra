@@ -61,46 +61,50 @@ public:
      */
     virtual KSValue::Ptr member( KSContext&, const QString& name );
     /**
-     * May set a exception if the member could not be set.
+     * May set an exception if the member could not be set.
      */
     virtual bool setMember( KSContext&, const QString& name, const KSValue::Ptr& v );
 
     /**
      * Reimplemented by KSPebblesModule.
      */
-    virtual bool isPebbles() const { return FALSE; }
+    virtual bool isPebbles() const { return FALSE; } // BIC: remove
 
     /**
-     * @return the modules name.
+     * @return the module's name.
      */
     QString name() const { return m_name; }
 
     /**
+     * @internal
      * @return the namespace that contains all members of the module.
      *
-     * This method is INTERNAL. Dont use!
+     * This method is INTERNAL. Don't use!
      */
     KSNamespace* nameSpace() { return &m_space; }
 
     /**
+     * @internal
      * Find a symbol in the modules namespace. If the symbol is not known 0
      * is returned.
      *
-     * This method is INTERNAL. Dont use!
+     * This method is INTERNAL. Don't use!
      *
      * @see #member
      */
     KSValue* object( const QString& name );
     /**
+     * @internal
      * Insert a symbol in the modules namespace.
      *
-     * This method is INTERNAL. Dont use!
+     * This method is INTERNAL. Don't use!
      */
     void addObject( const QString& name, const KSValue::Ptr& v );
     /**
-     * Removed a symbol in the modules namespace.
+     * @internal
+     * Remove a symbol in the modules namespace.
      *
-     * This method is INTERNAL. Dont use!
+     * This method is INTERNAL. Don't use!
      */
     void removeObject( const QString& name );
     /**
@@ -140,6 +144,10 @@ public:
    * Adds a new namespace at the end of the list.
    */
   void pushNamespace( KSNamespace* nspace ) { m_spaces.append( nspace ); }
+
+  /**
+   * Removes the last namespace from the list.
+   */
   void popNamespace() { m_spaces.removeLast(); }
 
 private:
@@ -227,7 +235,7 @@ public:
 
   void setValue( const KSValue::Ptr& p ) { m_value = p; }
   /**
-   * Assumes that the value already has an increased refernce count. That means you
+   * Assumes that the value already has an increased reference count. That means you
    * can pass new created values or values gotten from @ref #shareValue to this
    * function.
    */
@@ -241,7 +249,7 @@ public:
   /**
    * @return the value of this context. The value has an increaed reference count. That means you
    *         can assign it directly to another context. Mention however, that @ref KSValue is a shared
-   *         object, so if you need a real copy, then dont use this function.
+   *         object, so if you need a real copy, then don't use this function.
    */
   KSValue* shareValue() { if ( !m_value ) return 0; m_value->ref(); return m_value; }
 

@@ -65,11 +65,12 @@ class KoTCDIconViewItem : public KIconViewItem
 	    : KIconViewItem ( parent )
 	    {}
 
-	KoTCDIconViewItem(QIconView *parent=0, const QString &text=0, const QPixmap &icon=0, const QString &descr=0, const QString &fullname=0)
+	KoTCDIconViewItem(QIconView *parent=0, const QString &text=0, const QPixmap &icon=0,
+                      const QString &descr=0, const QString &fullname=0)
 	    : KIconViewItem(parent, text, icon)
 	    {
-		m_descr = descr;
-		m_full = fullname;
+            m_descr = descr;
+            m_full = fullname;
 	    }
 
 	QString getDescr() { return m_descr; }
@@ -86,7 +87,7 @@ class KInstance;
 class KoTemplateChooseDiaPrivate;
 
 /**
- *  class KoTemplateChooseDia - This class is used to show the template dialog
+ *  This class is used to show the template dialog
  *  on startup. Unless you need something special, you should use the static
  *  method choose().
  *
@@ -98,7 +99,7 @@ class KoTemplateChooseDia : public KDialogBase
 {
     Q_OBJECT
 
-    public:
+public:
 	/**
 	 * The Dialog returns one of these values depending
 	 * on the input of the user.
@@ -122,12 +123,12 @@ class KoTemplateChooseDia : public KDialogBase
 	 * @param name the Qt internal name
 	 * @param global the KInstance of your app
 	 * @param format is the mimetype of the app (e.g. application/x-kspread)
-	 * @param nativeName is the name of your app (e.g KSpread)
 	 * @param nativePattern is the native pattern (e.g. *.ksp)
+	 * @param nativeName is the name of your app (e.g KSpread)
 	 * @param dialogType the type of the dialog
 	 * @param templateType the template type of your application (see kword or
 	 *        kpresenter for details)
-	 * @param hasCancel if there should be a "Cancel" button
+     *
 	 * @return The return type (see above)
 	 */
 	KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
@@ -149,7 +150,7 @@ class KoTemplateChooseDia : public KDialogBase
 	 * @param dialogType the type of the dialog
 	 * @param templateType the template type of your application (see kword or
 	 *        kpresenter for details)
-	 * @param hasCancel if there should be a "Cancel" button
+     *
 	 * @return The return type (see above)
 	 */
 	static ReturnType choose(KInstance* global, QString &file,
@@ -176,13 +177,13 @@ class KoTemplateChooseDia : public KDialogBase
 	 */
 	DialogType getDialogType();
 
-    protected slots:
-	    /**
-	     * Activated when the Ok button has been clicked.
-	     */
-	    virtual void slotOk();
+protected slots:
+    /**
+     * Activated when the Ok button has been clicked.
+     */
+    virtual void slotOk();
 
-    private:
+private:
 
 	KoTemplateChooseDiaPrivate *d;
 

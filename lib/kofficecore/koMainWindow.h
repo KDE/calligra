@@ -37,11 +37,14 @@ namespace KParts
 }
 
 /**
+ *
  * This class is used to represent a main window
  * of a KOffice component. Each main window contains
  * a menubar and some toolbars.
  *
  * This class does NOT need to be subclassed in your application.
+ *
+ * @short Main window for a KOffice application
  */
 class KoMainWindow : public KParts::MainWindow
 {
@@ -51,7 +54,7 @@ public:
     /**
      *  Constructor.
      *
-     *  Initializes a KOffice Main-Window (with its basic GUI etc.).
+     *  Initializes a KOffice main window (with its basic GUI etc.).
      */
     KoMainWindow( KInstance *instance, const char *_name = 0 );
 
@@ -83,10 +86,9 @@ public:
 
     /**
      * Prints the document
-     * @p quick wether the print  setup dialog is to be displayed
+     * @param quick whether the print setup dialog is to be displayed
      **/
     void print(bool quick);
-
 
     /**
      * The application should call this to show or hide a toolbar.
@@ -94,6 +96,9 @@ public:
      */
     void showToolbar( const char * tbName, bool shown );
 
+    /**
+     * @return TRUE if the toolbar @p tbName is visible
+     */
     bool toolbarIsVisible(const char *tbName);
 
     /**
@@ -102,10 +107,13 @@ public:
      */
     QLabel * statusBarLabel();
 
+    /**
+     * Sets the maximum number of recent documents entries.
+     */
     void setMaxRecentItems(uint _number);
 
     /**
-     * The document opened a URL -> store into recent list.
+     * The document opened a URL -> store into recent documents list.
      */
     void addRecentURL( const KURL& url );
 
@@ -119,14 +127,21 @@ public:
 
     /**
      * Load the URL into this document (and make it root doc after loading)
+     *
      * Special method for KoApplication::start, don't use.
      */
     bool openDocument( KoDocument *newdoc, const KURL & url );
 
     virtual DCOPObject * dcopObject();
 
+    /**
+     * Reloads the recent documents list.
+     */
     void reloadRecentFileList();
 
+    /**
+     * Updates the window caption based on the document info and path.
+     */
     void updateCaption( const QString caption, bool mod ); // BCI: make virtual
     void updateReloadFileAction(KoDocument *doc);
 
@@ -138,24 +153,26 @@ signals:
 
 public slots:
 
-    /** Slot for eMailing the document using KMail
+    /**
+     * Slot for eMailing the document using KMail
+     *
      * This is a very simple extension that will allow any document
      * that is currently being edited to be emailed using KMail.
-     *
      */
     void slotEmailFile();
+
     /**
      *  Slot for opening a new document.
      *
-     *  If the current document is empty, the new document replaces the it.
-     *  If not a new shell will be opened for showing the document.
+     *  If the current document is empty, the new document replaces it.
+     *  If not, a new shell will be opened for showing the document.
      */
     virtual void slotFileNew();
 
     /**
      *  Slot for opening a saved file.
      *
-     *  If the current document is empty, the opened document replaces the it.
+     *  If the current document is empty, the opened document replaces it.
      *  If not a new shell will be opened for showing the opened file.
      */
     virtual void slotFileOpen();
@@ -163,7 +180,7 @@ public slots:
     /**
      *  Slot for opening a file among the recently opened files.
      *
-     *  If the current document is empty, the opened document replaces the it.
+     *  If the current document is empty, the opened document replaces it.
      *  If not a new shell will be opened for showing the opened file.
      */
     virtual void slotFileOpenRecent( const KURL & );
@@ -188,6 +205,9 @@ public slots:
      */
     void slotFilePrintPreview(); // make virtual later
 
+    /**
+     * Show a dialog with author and document information.
+     */
     virtual void slotDocumentInfo();
 
     /**
@@ -201,12 +221,12 @@ public slots:
     virtual void slotFileQuit();
 
     /**
-     *  Configure key bindings
+     *  Configure key bindings.
      */
     virtual void slotConfigureKeys();
 
     /**
-     *  Configure toolbars
+     *  Configure toolbars.
      */
     virtual void slotConfigureToolbars();
 
@@ -227,6 +247,7 @@ public slots:
     virtual void slotSplitView();
     virtual void slotRemoveView();
     virtual void slotSetOrientation();
+
     /**
      * Close all views
      */
@@ -288,10 +309,17 @@ protected:
 
     virtual void closeEvent( QCloseEvent * e );
     virtual void resizeEvent( QResizeEvent * e );
+
+    /**
+     * Ask user about saving changes to the document upon exit.
+     */
     virtual bool queryClose();
 
     virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
 
+    /**
+     * Save the list of recent files.
+     */
     void saveRecentFiles();
 
     /**

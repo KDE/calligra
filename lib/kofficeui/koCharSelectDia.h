@@ -39,10 +39,12 @@ class KoCharSelectDia : public KDialogBase
 public:
 
     // constructor - destructor
-    KoCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont, bool _modal=true );
+    KoCharSelectDia( QWidget *parent, const char *name, const QChar &_chr,
+                     const QString &_font, bool _enableFont, bool _modal=true );
 
     //constructor when you want to insert multi char
-    KoCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal=true );
+    KoCharSelectDia( QWidget *parent, const char *name, const QString &_font,
+                     const QChar &_chr, bool _modal=true );
     ~KoCharSelectDia();
     // select char dialog
     static bool selectChar( QString &_font, QChar &_chr, bool _enableFont = true );

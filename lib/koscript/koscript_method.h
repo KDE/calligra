@@ -34,13 +34,14 @@
 
 /**
  * A method holds a reference to some instance and some function. The function
- * may be of the type @ref KSFunction, KSBuiltinFunction or KSStructBuiltinFunction.
- * The instance may be a @ref KSObject or @ref KSStruct or derived types.
+ * may be of the type KSFunction, KSBuiltinFunction or KSStructBuiltinFunction.
+ * The instance may be a KSObject or KSStruct or derived types.
  */
 class KSMethod : public QShared
 {
 public:
-  KSMethod( KSModule* m, const KSValue::Ptr& obj, const KSValue::Ptr& func ) : QShared(), m_object( obj ), m_func( func ), m_module( m ) { }
+  KSMethod( KSModule* m, const KSValue::Ptr& obj, const KSValue::Ptr& func )
+      : QShared(), m_object( obj ), m_func( func ), m_module( m ) { }
   /**
    * Use this method if the function is KSBuiltinFunction or KSStructBuiltinFunction.
    * In this case we pass the name of the method. No copy of this name is made and the

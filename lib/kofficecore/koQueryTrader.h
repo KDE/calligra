@@ -31,7 +31,7 @@ class KoFilter;
 class KoFilterChain;
 
 /**
- *  Represents an available koffice component
+ *  Represents an available KOffice component
  *  that supports the document interface.
  */
 class KoDocumentEntry
@@ -39,13 +39,19 @@ class KoDocumentEntry
 
 public:
   KoDocumentEntry() { m_service = 0L; } // for QValueList
-  KoDocumentEntry( KService::Ptr _service );
+  KoDocumentEntry( KService::Ptr service );
   ~KoDocumentEntry() { }
 
   KService::Ptr service() const { return m_service; }
 
+  /**
+   * @return TRUE if the service pointer is null
+   */
   bool isEmpty() const { return m_service == 0L; }
 
+  /**
+   * @return name of the associated service
+   */
   QString name() const { return m_service->name(); }
 
   /**
@@ -60,8 +66,8 @@ public:
   { return mimeTypes().contains( _mimetype ); }
 
   /**
-   *  Uses the factory of the component  to create
-   *  a document. If that is not possible 0 is returned.
+   *  Uses the factory of the component to create
+   *  a document. If that is not possible, 0 is returned.
    */
   KoDocument* createDoc( KoDocument* parent = 0, const char* name = 0 ) const;
 
@@ -78,7 +84,7 @@ public:
   /**
    *  This function will query KDED to find all available filters.
    *
-   *  @param _onlyDocEmb specifies if only KOffice Parts should be listed, which are
+   *  @param _onlyDocEmb specifies if only KOffice Parts should be listed which are
    *                 embeddable into other koDocuments, or all (if false)
    *                 (eg.: it makes no sense to embedd Kexi into KWord,
    *                 but it makes sense to embedd it into KoShell)
@@ -136,18 +142,18 @@ public:
   unsigned int weight;
 
   /**
-   *  Do we have to check during runtime?.
+   *  Do we have to check during runtime?
    */
   QString available;
 
   /**
-   *  @return TRUE if the filter can imports the requested mimetype.
+   *  @return TRUE if the filter can import the requested mimetype.
    */
   bool imports( const QString& _mimetype ) const
   { return ( import.contains( _mimetype ) ); }
 
   /**
-   *  @return TRUE if the filter can exports the requested mimetype.
+   *  @return TRUE if the filter can export the requested mimetype.
    */
   bool exports( const QString& _m ) const
   { return ( export_.contains( _m ) ); }

@@ -25,85 +25,99 @@
 class QLineEdit;
 class KURLRequester;
 
-
+/**
+ * @internal
+ */
 class internetLinkPage : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  internetLinkPage( QWidget *parent = 0, char *name = 0 );
-  QString linkName()const;
-  QString hrefName();
+    internetLinkPage( QWidget *parent = 0, char *name = 0 );
+    QString linkName()const;
+    QString hrefName();
     void setLinkName(const QString & _name);
     void setHrefName(const QString &_name);
 private:
-  QString createInternetLink();
-  QLineEdit* m_linkName, *m_hrefName;
+    QString createInternetLink();
+    QLineEdit* m_linkName, *m_hrefName;
 private slots:
-  void textChanged ( const QString & );
+    void textChanged ( const QString & );
 signals:
-  void textChanged();
+    void textChanged();
 };
 
+/**
+ * @internal
+ */
 class bookmarkLinkPage : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  bookmarkLinkPage( QWidget *parent = 0, char *name = 0 );
-  QString linkName()const;
-  QString hrefName();
+    bookmarkLinkPage( QWidget *parent = 0, char *name = 0 );
+    QString linkName()const;
+    QString hrefName();
     void setLinkName(const QString & _name);
     void setHrefName(const QString &_name);
     void setBookmarkList(const QStringList &bkmlist);
 private:
-  QString createBookmarkLink();
-  QLineEdit* m_linkName;
-  QComboBox *m_hrefName;
+    QString createBookmarkLink();
+    QLineEdit* m_linkName;
+    QComboBox *m_hrefName;
 private slots:
-  void textChanged ( const QString & );
+    void textChanged ( const QString & );
 signals:
-  void textChanged();
+    void textChanged();
 };
 
+/**
+ * @internal
+ */
 class mailLinkPage : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  mailLinkPage( QWidget *parent = 0, char *name = 0 );
-  QString linkName()const;
-  QString hrefName();
-    void setLinkName(const QString & _name);
-    void setHrefName(const QString &_name);
-
-private slots:
-  void textChanged ( const QString & );
-private:
-  QString createMailLink();
-  QLineEdit* m_linkName, *m_hrefName;
-signals:
-  void textChanged();
-};
-
-class fileLinkPage : public QWidget
-{
-  Q_OBJECT
-public:
-  fileLinkPage( QWidget *parent = 0, char *name = 0 );
-  QString linkName()const;
+    mailLinkPage( QWidget *parent = 0, char *name = 0 );
+    QString linkName()const;
     QString hrefName();
     void setLinkName(const QString & _name);
     void setHrefName(const QString &_name);
 
 private slots:
-  void textChanged ( const QString & );
-    void slotSelectRecentFile( const QString & );
+    void textChanged ( const QString & );
 private:
-  QString createFileLink();
-  QLineEdit* m_linkName;
-  KURLRequester* m_hrefName;
+    QString createMailLink();
+    QLineEdit* m_linkName, *m_hrefName;
 signals:
-  void textChanged();
+    void textChanged();
 };
 
+/**
+ * @internal
+ */
+class fileLinkPage : public QWidget
+{
+    Q_OBJECT
+public:
+    fileLinkPage( QWidget *parent = 0, char *name = 0 );
+    QString linkName()const;
+    QString hrefName();
+    void setLinkName(const QString & _name);
+    void setHrefName(const QString &_name);
+
+private slots:
+    void textChanged ( const QString & );
+    void slotSelectRecentFile( const QString & );
+private:
+    QString createFileLink();
+    QLineEdit* m_linkName;
+    KURLRequester* m_hrefName;
+signals:
+    void textChanged();
+};
+
+/**
+ * Dialog to insert links to various sources (file, Internet, mail and bookmarks).
+ */
 class KoInsertLinkDia : public KDialogBase
 {
     Q_OBJECT

@@ -34,7 +34,9 @@ class KURL;
 class KoPictureShared;
 
 /**
- * KoPicture is a container class
+ * KoPicture is a container class for various types of images supported by KOffice.
+ *
+ * @short An image container class
  */
 class KoPicture
 {
@@ -90,7 +92,8 @@ public:
      * right of the pixmap.
      *
      */
-    void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
+    void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0,
+              int sw = -1, int sh = -1, bool fastMode = false);
 
     /**
      * Create a dragobject containing this picture.
@@ -108,16 +111,25 @@ public:
     bool save(QIODevice* io);
 
     /**
-     *  Save picture in the format supported by KOffice 1,1
+     *  Save picture in the format supported by KOffice 1.1
      */
     bool saveAsKOffice1Dot1(QIODevice* io);
 
+    /**
+     * @return the image extension (e.g. png)
+     */
     QString getExtension(void) const;
 
+    /**
+     * @return the image MIME type
+     */
     QString getMimeType(void) const;
 
     QString getExtensionAsKOffice1Dot1(void) const;
 
+    /**
+     * @return the original image size
+     */
     QSize getOriginalSize(void) const;
 
     /**
@@ -158,7 +170,7 @@ public:
     bool isClipartAsKOffice1Dot1(void) const;
 
     /**
-     * Downloads and set the key for a possibily remote file
+     * Download and set the key for a possibly remote file.
      */
     bool setKeyAndDownloadPicture(const KURL& url);
 
@@ -170,8 +182,22 @@ public:
      */
     QImage generateImage(const QSize& size);
 
+    /**
+     * @return TRUE if the alpha channel processing has been enabled
+     */
     bool hasAlphaBuffer() const;
+
+    /**
+     * Respect the image alpha buffer
+     */
     void setAlphaBuffer(bool enable);
+
+    /**
+     * Creates an alpha mask for the picture
+     * (first you have to call @ref #setAlphaBuffer).
+     *
+     * @see hasAlphaBuffer() setAlphaBuffer()
+     */
     QImage createAlphaMask(int conversion_flags = 0) const;
 
     /**
@@ -198,7 +224,7 @@ protected:
     void createSharedData(void);
 
 protected:
-    /*
+    /**
      * @internal
      * The key
      */

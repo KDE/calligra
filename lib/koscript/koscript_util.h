@@ -35,6 +35,12 @@ class KSStruct;
 class KSUtil
 {
 public:
+    /**
+     * Checks whether @p method has enough arguments (@p count).
+     *
+     * @return TRUE on success, otherwise FALSE and raises one of @ref #tooFewArgumentsError or
+     * @ref #tooManyArgumentsError exceptions
+     */
     static bool checkArgumentsCount( KSContext& context, uint count, const QString& method, bool fatal = true );
     /**
      * @return TRUE if the value matches the requested type @p t or if KSValue will seamlessly
@@ -43,9 +49,9 @@ public:
      * @param context is used if @p fatal is TRUE and an exception has to be created.
      * @param v is the value that is to be tested.
      * @param t is the type @p v has to match.
-     * @param fatal determines wether an exception is set on error.
+     * @param fatal determines whether an exception is set on error.
      */
-    static bool checkType( KSContext&, KSValue* v, KSValue::Type t, bool fatal = true );
+    static bool checkType( KSContext& context, KSValue* v, KSValue::Type t, bool fatal = true );
     /**
      * @return TRUE if the value matches the requested type @p t or if KSValue will seamlessly
      *         convert to that type.
@@ -53,9 +59,9 @@ public:
      * @param context is used if @p fatal is TRUE and an exception has to be created.
      * @param v is the value that is to be tested.
      * @param t is the type @p v has to match.
-     * @param fatal determines wether an exception is set on error.
+     * @param fatal determines whether an exception is set on error.
      */
-    static bool checkType( KSContext&, const KSValue::Ptr& v, KSValue::Type t, bool fatal = true );
+    static bool checkType( KSContext& context, const KSValue::Ptr& v, KSValue::Type t, bool fatal = true );
     /**
      * Creates an exception for @p context telling that the value @p v did not
      * match the type @p t.
@@ -84,17 +90,17 @@ public:
 
     /**
      * A convenience function that extracts the arguemnts out of "context.value()". It checks
-     * wether this value is really a list.
+     * whether this value is really a list.
      */
-    static bool checkArgs( KSContext&, const QCString& signature, const QString& method, bool fatal = TRUE );
+    static bool checkArgs( KSContext& context, const QCString& signature, const QString& method, bool fatal = TRUE );
     /**
-     * Checks wether the argument list passed in @p args matches the @p signature.
+     * Checks whether the argument list passed in @p args matches the @p signature.
      *
      * @param context is used if @p fatal is TRUE and an exception has to be created.
      * @param args is the list of arguments.
      * @param signature is the functions signature (see below)
      * @param method is the name of the method for which we test the argument list.
-     * @param fatal determines wether an exception is set on error.
+     * @param fatal determines whether an exception is set on error.
      *
      * @return TRUE if the check was successful.
      *
@@ -122,13 +128,13 @@ public:
     static bool checkArgs( KSContext& context, const QValueList<KSValue::Ptr>& args,
 			   const QCString& signature, const QString& method, bool fatal = TRUE );
     /**
-     * Checks wether the argument passed in @p args matches the @p signature.
+     * Checks whether the argument passed in @p args matches the @p signature.
      *
      * @param context is used if @p fatal is TRUE and an exception has to be created.
      * @param arg is the argument to check
      * @param signature is the functions signature (see below)
      * @param method is the name of the method for which we test the argument list.
-     * @param fatal determines wether an exception is set on error.
+     * @param fatal determines whether an exception is set on error.
      *
      * @return TRUE if the check was successful.
      *

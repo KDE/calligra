@@ -1,7 +1,7 @@
 /**
  * @libdoc A formula editor library.
  *
- * The kformula editor library. There are three classes you might be interessted in.
+ * The kformula editor library. There are three classes you might be interested in.
  * First there is the @ref Document . It is, you guess it, the document.
  * Next there is the @ref Container . It represents one formula. Each
  * formula belongs to a document and a document might have any number of formulas.

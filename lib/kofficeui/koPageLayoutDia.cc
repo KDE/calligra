@@ -115,9 +115,9 @@ void KoPagePreview::drawContents( QPainter *painter )
 
 /*==================== constructor ===============================*/
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
-				  const KoPageLayout& _layout,
+                                  const KoPageLayout& _layout,
                                   const KoHeadFoot& _hf, int tabs,
-				  KoUnit::Unit unit, bool modal )
+                                  KoUnit::Unit unit, bool modal )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
                    KDialogBase::Ok, parent, name, modal)
 {

@@ -34,11 +34,11 @@ class KoApplicationIface;
  *  This class handles given arguments giving on the command line and
  *  shows a generic about dialog for all KOffice apps.
  *
- * In addition it adds the standard directories where KOffice applications
- * can find their images etc.
+ *  In addition it adds the standard directories where KOffice applications
+ *  can find their images etc.
  *
- * If the last mainwindow becomes closed, KoApplication automatically
- * calls @ref QApplication::quit.
+ *  If the last mainwindow becomes closed, KoApplication automatically
+ *  calls @ref QApplication::quit.
  *
  *  @short Base class for all KOffice apps.
  */

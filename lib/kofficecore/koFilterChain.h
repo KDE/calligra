@@ -64,7 +64,7 @@ public:
     /**
      * Starts the filtering process.
      * @return The return status of the conversion. KoFilter::OK
-     * if everything is allright.
+     * if everything is alright.
      */
     KoFilter::ConversionStatus invokeChain();
 

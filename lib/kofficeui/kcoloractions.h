@@ -23,7 +23,7 @@
 #include <kaction.h>
 
 /**
- * An action whose pixmap is automatically generated from a color
+ * An action whose pixmap is automatically generated from a color.
  * It knows three types of pixmaps: text color, frame color and background color
  */
 class KColorAction : public KAction

@@ -46,7 +46,7 @@
 #define DD_TO_POINT(dd)((dd)*154.08124)
 #define CC_TO_POINT(cc)((cc)*12.840103)
 /**
- * KWord stores everthing in pt (using "double") internally.
+ * KOffice stores everything in pt (using "double") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  */
@@ -113,19 +113,19 @@ public:
     }
 
     /// This method is the one to use to display a value in a dialog
-    /// Return the value @ptValue converted to @p unit and rounded, ready to be displayed
+    /// @return the value @p ptValue converted to @p unit and rounded, ready to be displayed
     static double ptToUnit( double ptValue, Unit unit );
 
     /// This method is the one to use to display a value in a dialog
-    /// Return the value @ptValue converted to @p unit and rounded, ready to be displayed
+    /// @return the value @p ptValue converted to @p unit and rounded, ready to be displayed
     static QString userValue( double ptValue, Unit unit );
 
     /// This method is the one to use to read a value from a dialog
-    /// Return the value in @p unit, converted to points for internal use
+    /// @return the value in @p unit, converted to points for internal use
     static double ptFromUnit( double value, Unit unit );
 
     /// This method is the one to use to read a value from a dialog
-    /// Return the value in @p unit, converted to points for internal use
+    /// @return the value in @p unit, converted to points for internal use
     static double fromUserValue( const QString& value, Unit unit );
 
     /// Convert a unit name into a Unit enum

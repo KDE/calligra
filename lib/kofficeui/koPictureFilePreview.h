@@ -39,12 +39,15 @@ public:
 
     /**
      * @return a list of patterns of all supported clipart formats.
-     * These patterns can be passed to @ref KFileDialog::getOpenFileName()
+     *
+     * These patterns can be passed to KFileDialog::getOpenFileName
      * for instance.
      */
     static QString clipartPattern();
 
-    // List of mimetypes for all supported clipart formats.
+    /**
+     * @return list of mimetypes for all supported clipart formats.
+     */
     static QStringList clipartMimeTypes();
 
 public slots:

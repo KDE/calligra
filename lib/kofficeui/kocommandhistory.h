@@ -50,6 +50,8 @@ signals:
  * commands, if appropriate. It also activates/deactivates the
  * undo/redo actions in the menu and changes the text according
  * to the name of the command.
+ *
+ * @short History of user commands (for undo/redo)
  */
 class KoCommandHistory : public QObject {
     Q_OBJECT
@@ -65,6 +67,7 @@ public:
      * Creates a command history, to store commands.
      * This also creates an undo and a redo action, in the @p actionCollection,
      * using the standard names ("edit_undo" and "edit_redo").
+     *
      * @param withMenus if true, the actions will display a menu when plugged
      * into a toolbar.
      */
@@ -85,7 +88,8 @@ public:
     /**
      * Adds a command to the history. Call this for each @p command you create.
      * Unless you set @p execute to false, this will also execute the command.
-     * This means, most of the application's code will look like
+     * This means, most of the application's code will look like:
+     *
      *    MyCommand * cmd = new MyCommand(i18n("The Name"), parameters);
      *    m_historyCommand.addCommand( cmd );
      */
@@ -155,7 +159,7 @@ signals:
     void commandExecuted();
     /**
      * Emitted every time we reach the index where you
-     * saved the document for the last time. See @ref documentSaved
+     * saved the document for the last time. See @ref #documentSaved
      */
     void documentRestored();
 

@@ -33,12 +33,12 @@
 class KoWmfReadPrivate;
 
 /**
- * KoWmfRead allow the redirection of the actions store in a WMF file
- * most of the virtuals functions are compatible with QPainter format
+ * KoWmfRead allows the redirection of the actions stored in a WMF file.
+ * Most of the virtuals functions are compatible with QPainter format.
  *
- * how to use :
+ * How to use :
  *   inherit this class and define abstract functions
- *   then create an object and call load() and play()
+ *   then create an object and call @ref load() and @ref play()
  *
  */
 
@@ -76,18 +76,18 @@ public:
     virtual QRect boundingRect( void ) const;
 
     /**
-     * Returns the default DotPerInch for placeable meta file
+     * Returns the default DotPerInch for placeable meta file,
      * return 0 for Standard meta file
      */
     int defaultDpi( void ) const;
 
     /**
-     * Active debug mode.
-     * nbFunc : number of function to draw
+     * Activate debug mode.
+     * nbFunc : number of functions to draw
      * nbFunc!=0 switch to debug mode with trace
      */
     void setDebug( int nbFunc );
-    
+
     // -------------------------------------------------------------------------
     // A virtual QPainter : inherit those virtuals functions
     // for a good documentation : check QPainter documentation
@@ -140,7 +140,7 @@ public:
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented in KWinMetaFile
     virtual void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation ) = 0;
-    
+
     // matrix transformation : only used for bitmap manipulation
     virtual void  setWorldMatrix( const QWMatrix &, bool combine=FALSE ) = 0;
 

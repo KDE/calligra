@@ -34,20 +34,18 @@ class KoStore;
 
 
 /**
- * A collection of cliparts
- * ### TODO: correct documentation
+ * A collection of pictures (a key and the picture itself).
+ *
  */
 class KoPictureCollection : public QMap<KoPictureKey, KoPicture>
 {
 public:
-    /**
-     * CollectionPicture: collection with mixed pictures
-     * CollectionImage: collection with images only
-     * CollectionClipart: collection with cliparts only
-     */
     enum Type {
+        /// collection with mixed pictures
         CollectionPicture=0,
+        /// collection with images only
         CollectionImage,
+        /// collection with cliparts only
         CollectionClipart
     };
 
@@ -68,9 +66,9 @@ public:
     KoPicture insertPicture( const KoPicture& picture );
 
     /**
-     * Download a possibily remote file
-     * If this file is really remote, it is always downloaded
-     * If the file is local, it act as loadPicture.
+     * Download a possibly remote file
+     * If this file is really remote, it is always downloaded.
+     * If the file is local, it acts as @ref #loadPicture.
      */
     KoPicture downloadPicture(const KURL& url);
 
@@ -84,7 +82,7 @@ public:
 
     /**
      * Save the used picturess from the collection into the store
-     * Usually called from completeSaving().
+     * Usually called from @ref #completeSaving.
      *
      * @param store the store in which to save the pictures
      * @param keys the list of keys corresponding to the pictures to save
@@ -92,7 +90,7 @@ public:
     void saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
-     * Save the used picturess from the collection into the store, howver in KOffice 1.1 format
+     * Save the used pictures from the collection into the store, however in KOffice 1.1 format
      *
      * @param store the store in which to save the pictures in KOffice 1.1 format
      * @param keys the list of keys corresponding to the pictures to save
@@ -122,11 +120,14 @@ public:
      */
     StoreMap readXML( QDomElement &pixmapsElem );
 
+    /**
+     * Helper method for @ref #readFromStore
+     */
     void readXML( QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map );
 
     /**
      * Read all pictures from the store, into this collection
-     * The map comes from readXML above, and is used to find which pictures
+     * The map comes from @ref #readXML, and is used to find which pictures
      * to load, and which key to associate them.
      */
     void readFromStore( KoStore * store, const StoreMap & storeMap );
@@ -157,7 +158,8 @@ private:
     /**
      * @internal
      */
-    void saveToStoreInternal(const Type pictureType, KoStore *store, QValueList<KoPictureKey>& keys, const bool koffice11);
+    void saveToStoreInternal(const Type pictureType, KoStore *store,
+                             QValueList<KoPictureKey>& keys, const bool koffice11);
 
     class Private;
     Private* d;

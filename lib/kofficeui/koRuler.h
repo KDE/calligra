@@ -124,11 +124,17 @@ public:
      */
     void setUnit( KoUnit::Unit unit );
 
+    /**
+     * Set the zoom of the ruler (default value of 1.0 is 100%)
+     */
     void setZoom( const double& zoom=1.0 );
+    /**
+     * @return the current zoom level
+     */
     const double& zoom() const { return m_zoom; }
 
     /**
-     * Set the page layout, @see KoPageLayout.
+     * Set the page layout, see @ref KoPageLayout.
      * This defines the size of the page and the margins,
      * from which the size of the ruler is deducted.
      */
@@ -138,7 +144,7 @@ public:
     /**
      * Call showMousePos(true) if the ruler should indicate the position
      * of the mouse. This is usually only the case for drawing applications,
-     * so it is not the case by default.
+     * so it is not enabled by default.
      */
     void showMousePos( bool _showMPos );
     /**
@@ -207,7 +213,7 @@ public:
     void changeFlags(int _flags);
 
     /**
-     * set the size of the grid used for tabs positioning, size in pt.
+     * Set the size of the grid used for tabs positioning, size in pt.
      * default value is 0. 0 means no grid.
      */
     void setGridSize(double newGridSize) { gridSize=newGridSize; }

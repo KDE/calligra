@@ -28,10 +28,9 @@
 class KoWmfRead;
 
 /**
- * WMF file allows manipulation on a stack of object
- * it's possile to create, delete or select an object
+ * WMF file allows manipulation on a stack of object.
+ * It's possile to create, delete or select an object.
  */
-
 class KoWmfHandle
 {
 public:

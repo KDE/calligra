@@ -39,11 +39,13 @@ struct WmfPlaceableHeader;
 /**
  * QWinMetaFile is a WMF viewer based on QT toolkit
  * How to use QWinMetaFile :
+ * <pre>
  * #include "qwmf.h"
  * QWinMetaFile wmf;
  * QPicture pic;     // or QImage pic;
  * if ( wmf.load( filename )
  *    wmf.paint( &pic );
+ * </pre>
  */
 
 
@@ -54,122 +56,124 @@ public:
     virtual ~QWinMetaFile();
 
     /**
-     * Load WMF file. Returns true on success.
+     * Load WMF file.
+     * @return true on success.
      */
     virtual bool load( const QString &fileName );
     virtual bool load( QBuffer &buffer );
 
     /**
      * Paint metafile to given paint-device using absolute or relative coordinate.
-     * abosute coord. reset the world transfomation Matrix
-     * relative coord. use the existing world transfomation Matrix
-     * Returns true on success.
+     * - absolute coord. Reset the world transfomation Matrix
+     * - relative coord. Use the existing world transfomation Matrix
+     *
+     * @return true on success.
      */
     virtual bool paint( const QPaintDevice* target, bool absolute=false );
 
     /**
-     * Returns true if the metafile is placeable.
+     * @return true if the metafile is placeable.
      */
     bool isPlaceable( void ) const { return mIsPlaceable; }
 
     /**
-     * Returns true if the metafile is enhanced.
+     * @return true if the metafile is enhanced.
      */
     bool isEnhanced( void ) const { return mIsEnhanced; }
 
     /**
-     * Returns bounding rectangle
+     * @return bounding rectangle
      */
     QRect bbox( void ) const { return mBBox; }
 
 public: // should be protected but cannot
-    /** Metafile painter methods */
+    /* Metafile painter methods */
 
-    // set window origin
+    /** set window origin */
     void setWindowOrg( long num, short* parms );
-    // set window extents
+    /** set window extents */
     void setWindowExt( long num, short* parms );
 
     /****************** Drawing *******************/
-    // draw line to coord
+    /** draw line to coord */
     void lineTo( long num, short* parms );
-    // move pen to coord
+    /** move pen to coord */
     void moveTo( long num, short* parms );
-    // draw ellipse
+    /** draw ellipse */
     void ellipse( long num, short* parms );
-    // draw polygon
+    /** draw polygon */
     void polygon( long num, short* parms );
-    /* draw a list of polygons */
+    /** draw a list of polygons */
     void polyPolygon( long num, short* parms );
-    // draw series of lines
+    /** draw series of lines */
     void polyline( long num, short* parms );
-    /* draw a rectangle */
+    /** draw a rectangle */
     void rectangle( long num, short* parms );
-    /* draw round rectangle */
+    /** draw round rectangle */
     void roundRect( long num, short* parms );
-    /* draw arc */
+    /** draw arc */
     void arc( long num, short* parms );
-    /* draw chord */
+    /** draw chord */
     void chord( long num, short* parms );
-    /* draw pie */
+    /** draw pie */
     void pie( long num, short* parms );
-    // set polygon fill mode
+    /** set polygon fill mode */
     void setPolyFillMode( long num, short* parms );
-    // set background pen color
+    /** set background pen color */
     void setBkColor( long num, short* parms );
-    // set background pen mode
+    /** set background pen mode */
     void setBkMode( long num, short* parms );
-    /* set a pixel */
+    /** set a pixel */
     void setPixel( long num, short* parms );
-    // Set raster operation mode
+    /** Set raster operation mode */
     void setRop( long num, short* parms );
-    /* save device context */
+    /** save device context */
     void saveDC( long num, short* parms );
-    /* restore device context */
+    /** restore device context */
     void restoreDC( long num, short* parms );
-    /*  clipping region is the intersection of this region and the original region */
+    /**  clipping region is the intersection of this region and the original region */
     void intersectClipRect( long num, short* parms );
-    /* delete a clipping rectangle of the original region */
+    /** delete a clipping rectangle of the original region */
     void excludeClipRect( long num, short* parms );
 
     /****************** Text *******************/
-    /* set text color */
+    /** set text color */
     void setTextColor( long num, short* parms );
-    /* set text alignment */
+    /** set text alignment */
     void setTextAlign( long num, short* parms );
-    /* draw text */
+    /** draw text */
     void textOut( long num, short* parms );
     void extTextOut( long num, short* parms );
 
     /****************** Bitmap *******************/
-    /* copies a DIB into a dest location */
+    /** copies a DIB into a dest location */
     void dibBitBlt( long num, short* parms );
-    /* stretches a DIB into a dest location */
+    /** stretches a DIB into a dest location */
     void dibStretchBlt( long num, short* parms );
     void stretchDib( long num, short* parms );
-    /* create a pattern brush */
+    /** create a pattern brush */
     void dibCreatePatternBrush( long num, short* parms );
 
     /****************** Object handle *******************/
-    // Activate object handle
+    /** Activate object handle */
     void selectObject( long num, short* parms );
-    // Free object handle
+    /** Free object handle */
     void deleteObject( long num, short* parms );
-    /* create an empty object in the object list */
+    /** create an empty object in the object list */
     void createEmptyObject( long num, short* parms );
-    // create a logical brush
+    /** create a logical brush */
     void createBrushIndirect( long num, short* parms );
-    // create a logical pen
+    /** create a logical pen */
     void createPenIndirect( long num, short* parms );
-    /* create a logical font */
+    /** create a logical font */
     void createFontIndirect( long num, short* parms );
 
     /****************** misc *******************/
-    // nothing to do
+    /** nothing to do */
     void noop( long , short* );
-    // end of meta file
+    /** end of meta file */
     void end( long /*num*/, short* /*parms*/ );
-    // Resolution of the image in dots per inch
+    /** Resolution of the image in dots per inch */
     int dpi( void ) const { return mDpi; }
 
 protected:
@@ -213,7 +217,7 @@ protected:
     QRect mHeaderBoundingBox;
     QRect mBBox;
 
-    // informtion shared between Metafile Functions
+    // information shared between Metafile Functions
     QColor mTextColor;
     int mTextAlign, mRotation;
     bool mWinding;

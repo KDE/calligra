@@ -58,16 +58,16 @@ class KoView : public QWidget, public KParts::PartBase
   Q_OBJECT
 public:
   /**
-   * Creates a new view for the document. Usually you dont create views yourself
-   * since the koffice components come with their own view classes which inherit
+   * Creates a new view for the document. Usually you don't create views yourself
+   * since the KOffice components come with their own view classes which inherit
    * KoView.
    *
    * The standard way to retrieve a KoView is to call @ref KoDocument::createView.
    *
    * @param document is the document which should be displayed in this view. This pointer
    *                 must not be zero.
-   *  @param name   Name of the view. The name is used in DCOP, so the name should
-   *                match the pattern [A-Za-z_][A-Za-z_0-9]*.
+   * @param name     Name of the view. The name is used in DCOP, so the name should
+   *                 match the pattern [A-Za-z_][A-Za-z_0-9]*.
    *
    */
   KoView( KoDocument *document, QWidget *parent = 0, const char *name = 0 );
@@ -87,7 +87,7 @@ public:
   void setDocumentDeleted();
   /**
    * @return true if the document has already got deleted.
-   * This can be useful for the view destructor, to know if it can
+   * This can be useful for the view destructor to know if it can
    * access the document or not.
    */
   bool documentDeleted() const;
@@ -164,6 +164,8 @@ public:
    */
   virtual void setZoom( double zoom );
   /**
+   * @return the current scaling factor (zoom level)
+   *
    * @see #setZoom
    */
   virtual double zoom() const;
@@ -216,7 +218,9 @@ public:
    */
   virtual KoDocumentChild *activeChild();
 
-    // #########
+  /**
+   * calls KoDocument::paintEverything()
+   */
   virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false );
 
   /**
@@ -254,9 +258,17 @@ public:
    */
   virtual DCOPObject * dcopObject();
 
+  /**
+   * Overload this method to setup @ref KPrinter before the actual printing.
+   *
+   * @see #print
+   */
   virtual void setupPrinter( KPrinter &printer );
 
   // BCI: make it return a bool, so that aborting doesn't still fire up the print preview afterwards
+  /**
+   * Overload this method with your own printing code.
+   */
   virtual void print( KPrinter &printer );
 
   /**
@@ -306,33 +318,40 @@ public:
    /**
     * Check to see if the view is currently in the middle of an operation which means
     * that there will be no screen refreshes until a signal from the document hits
-    * the endOperation slot
+    * the @ref #endOperation slot
     */
   bool isInOperation() const;
 
 public slots:
-
+    /**
+     * Slot to create a new view around the contained @ref #koDocument.
+     */
     virtual void newView();
 
-    /*
+    /**
      * Slot to allow code to signal the beginning of an operation where the screen should
-     * not update until it is done (see @ref KoView::endOperation)
+     * not update until it is done.
+     *
+     * @see #endOperation
      */
     virtual void beginOperation();
 
-    /*
+    /**
      * Slot to allow code to signal the end of an operation where the screen should
-     * not have been updating.  So now it will update. (see @ref KoView::beginOperation)
+     * not have been updating. So now it will update.
+     *
+     * @see #beginOperation
      */
-   virtual void endOperation();
+    virtual void endOperation();
 
     void slotActionStatusText( const QString &text );
     void slotClearStatusText();
 
 protected:
   /**
-   * This method handles two events: @ref KParts::PartActivateEvent and @ref KParts::PartSelectEvent.
-   * The handlers @ref #partActivateEvent or @ref #partSelectEvent are called if such an event is found.
+   * This method handles three events: @ref KParts::PartActivateEvent, @ref KParts::PartSelectEvent
+   * and @ref KParts::GUIActivateEvent.
+   * The respective handlers are called if such an event is found.
    */
   virtual void customEvent( QCustomEvent *ev );
 
@@ -340,7 +359,13 @@ protected:
    * Handles the event KParts::PartActivateEvent.
    */
   virtual void partActivateEvent( KParts::PartActivateEvent *event );
+  /**
+   * Handles the event KParts::PartSelectEvent.
+   */
   virtual void partSelectEvent( KParts::PartSelectEvent *event );
+  /**
+   * Handles the event KParts::GUIActivateEvent.
+   */
   virtual void guiActivateEvent( KParts::GUIActivateEvent * );
 
 signals:
@@ -363,9 +388,9 @@ signals:
 signals:
 
   /**
-    * Make it possible for ie. plugins to request
+    * Make it possible for plugins to request
     * the embedding of an image into the current
-    * document. Used ie. by the scan-plugin
+    * document. Used e.g. by the scan-plugin
   */
   void embeddImage(const QString &filename);
 
@@ -383,6 +408,9 @@ private:
 
 };
 
+/**
+ * This class aggregates information about an embedded document.
+ */
 class KoViewChild : public KoChild
 {
   Q_OBJECT

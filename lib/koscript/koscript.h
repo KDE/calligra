@@ -36,8 +36,8 @@ class QTextStream;
 class QIODevice;
 
 /**
- * This class offers the API to kscript functionality. If you want to
- * execute a kscript on your hard disk or if you want to embed kscript
+ * This class offers the API to koscript functionality. If you want to
+ * execute a koscript on your hard disk or if you want to embed koscript
  * in your application, then you need an instance of this class.
  *
  * @author Torben Weis <weis@kde.org>
@@ -60,12 +60,13 @@ public:
   /**
    * Reads the script @p filename from the hard disk and tries to execute it.
    *
-   * @param is the list of parameters passed to the main function
+   * @param args is the list of parameters passed to the main function
    *
    * @return the stringified exception or an empty string if everything was ok.
    *         This is a convenience function for @ref #runModule.
    */
   QString runScript( const QString& filename, const QStringList& args );
+
   /**
    * Runs a module located in the file @p filename. The modules name is given by @p name.
    * Usually you may want to use @ref #runScript instead.
@@ -83,6 +84,7 @@ public:
    * This function is for convenience. It searches the module in the
    * search paths by appending a ".ks" suffix.
    */
+
   bool runModule( KSContext& context, const QString& name );
   /**
    * @return the pointer to an already loaded module or 0 if
@@ -124,7 +126,7 @@ public:
   QString readInput();
 
   /**
-   * Internal function used for implementin the $_ operator.
+   * Internal function used for implementing the $_ operator.
    */
   KSValue::Ptr lastInputLine() const;
 

@@ -34,17 +34,18 @@
 class KoWmfWritePrivate;
 
 /**
- * KoWmfWrite allow to create a windows placeable meta file (WMF)
- * most of the functions are compatible with QPainter format
+ * KoWmfWrite allows to create a windows placeable meta file (WMF).
+ * Most of the functions are compatible with QPainter format.
  *
- * sample of utilization :
+ * sample of utilization:
+ *   <pre>
  *   KoWmfWrite  wmf("/home/test.wmf");
  *   wmf.begin();
  *   wmf.setWindow(0, 0, 200, 200);
  *   wmf.drawRect(10, 20, 50, 120);
  *   wmf.end();
+ *   </pre>
  */
-
 class KoWmfWrite
 {
 public:
@@ -67,9 +68,9 @@ public:
     void  restore();
 
     /**
-     * placeable wmf use logical coordinate and have a default DPI
-     * this function set the dot per inch ratio
-     * if not specified the dpi is 1024
+     * Placeable WMF's use logical coordinates and have a default DPI.
+     * This function set the dot per inch ratio.
+     * If not specified the dpi is 1024.
      */
     void setDefaultDpi( int dpi );
 
@@ -89,10 +90,10 @@ public:
 
     // Clipping
     // the 'CoordinateMode' parameter is ommitted : always CoordPainter in wmf
-    // not yet implemented 
+    // not yet implemented
     void  setClipRegion( const QRegion& r );
     void  clipping( bool enable );
-    
+
     // Graphics drawing functions
     void  moveTo( int left, int top );
     void  lineTo( int left, int top );
@@ -111,7 +112,7 @@ public:
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise
-    // not yet implemented 
+    // not yet implemented
     void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation );
 
 private:
@@ -134,7 +135,7 @@ private:
 
 private:
     KoWmfWritePrivate *d;
-    
+
 };
 
 #endif

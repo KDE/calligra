@@ -310,5 +310,5 @@ QString KSInterpreter::readInput()
 
 KSValue::Ptr KSInterpreter::lastInputLine() const
 {
-    return m_lastInputLine;;
+    return m_lastInputLine;
 }

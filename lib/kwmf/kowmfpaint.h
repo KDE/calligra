@@ -23,17 +23,19 @@
 #include "kowmfread.h"
 
 /**
- * KoWmfPaint inherit the abstract class KoWmfRead
- * and redirect WMF actions on a QPaintDevice.
- * Use relative or absolute coordinate.
+ * KoWmfPaint inherits the abstract class KoWmfRead
+ * and redirects WMF actions onto a QPaintDevice.
+ * Uses relative or absolute coordinate.
  *
- * how to use :
+ * how to use:
+ * <pre>
  *   QPixmap pix( 100, 100 );
  *   KoWmfPaint wmf;
  *   if ( wmf.load( "/home/test.wmf" ) ) {
  *      wmf.play( pix );
  *   }
  *   paint.drawPixmap( 0, 0, pix );
+ * </pre>
  *
  */
 
@@ -54,7 +56,7 @@ public:
 
 private:
     // -------------------------------------------------------------------------
-    // A virtual QPainter 
+    // A virtual QPainter
     bool  begin();
     bool  end();
     void  save();
@@ -118,8 +120,8 @@ private:
     QPaintDevice *mTarget;
     bool  mRelativeCoord;
     // memorisation of WMF matrix transformation (in relative coordinate)
-    QWMatrix  mInternalWorldMatrix;   
-    
+    QWMatrix  mInternalWorldMatrix;
+
 };
 
 #endif
