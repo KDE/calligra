@@ -22,6 +22,7 @@
 #include <qfile.h>
 #include <qobject.h>
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
@@ -54,6 +55,7 @@ KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCStr
 
     KoStore in = KoStore(QString(m_chain->inputFile()), KoStore::Read);
     if(!in.open("root")) {
+        kapp->restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "PNG export error" ) );
         return KoFilter::FileNotFound;
     }
@@ -61,6 +63,7 @@ KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCStr
     KoStoreDevice device( &in );
     QDomDocument dom( "KFORMULA" );
     if ( !dom.setContent( &device, false ) ) {
+        kapp->restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "PNG export error" ) );
         return KoFilter::WrongFormat;
     }
