@@ -16,6 +16,7 @@ public:
     // Maybe all that data should go into a KWHeaderFooterFrameSet
     // (or rather a base class shared by KWFootNoteFrameSet....)
     struct HeaderFooterFrameset {
+        // Here, Odd or Even means "with a 0-based page numbering" (unlike the frameInfo in the DTD)
         enum OddEvenAll { Odd, Even, All };
 
         HeaderFooterFrameset( KWTextFrameSet* fs, int start, int end,
@@ -47,7 +48,7 @@ public:
         bool m_positioned;
 
         // frame number for the given page.... -1 if no frame on that page
-        int frameNumberForPage( int page ) const
+        int frameNumberForPage( int page /* 0-based! */ ) const
             {
                 if ( page < m_startAtPage || ( m_endAtPage != -1 && page > m_endAtPage ) )
                     return -1;
@@ -55,12 +56,12 @@ public:
                 switch (m_oddEvenAll) {
                 case Even:
                     // we test page, not bg: even/odd is for the absolute page number, too confusing otherwise
-                    if ( page % 2 ) // Even for the user means odd for KWord's 0-based numbering!
+                    if ( page % 2 == 0 )
                         return pg / 2; // page 0[+start] -> frame 0, page 2[+start] -> frame 1
                     else
                         return -1;
                 case Odd:
-                    if ( page % 2 == 0 ) // Odd for the user means even for KWord's 0-based numbering!
+                    if ( page % 2 )
                         return pg / 2; // page 1 -> 0, page 3 -> 1
                     else
                         return -1;
@@ -107,6 +108,8 @@ public:
      * The main method of this file. Do the frame layout.
      * @param mainTextFrameSet if set, its frames will be resized. Usually: set in WP mode, not set in DTP mode.
      * @param numColumns number of columns to create for the main textframeset. Only relevant if mainTextFrameSet!=0.
+     * @param fromPage first page to layout ( 0-based )
+     * @param toPage last page to layout ( 0-based )
      */
     void layout( KWFrameSet* mainTextFrameSet, int numColumns,
                  int fromPage, int toPage );
