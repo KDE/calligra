@@ -1618,16 +1618,9 @@ bool KSpreadCell::calc(bool delay)
   if ( !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable ) )
   {
     // If we got an error during evaluation ...
-    if (!hasError())
-    {
-      // if the error wasn't already set during the evaluation, it must
-      // be a parse error.
-
-      clearFormula();
-      setFlag(Flag_ParseError);
-      m_strFormulaOut = "####";
-      m_dataType = StringData; //correct?
-    }
+    setFlag(Flag_ParseError);
+    m_strFormulaOut = "####";
+    m_dataType = StringData; //correct?
     setFlag(Flag_LayoutDirty);
     // Print out exception if any
     if ( context.exception() && m_pTable->doc()->getShowMessageError())
@@ -1753,7 +1746,7 @@ bool KSpreadCell::calc(bool delay)
   clearFlag(Flag_Progress);
 
   // if our value changed the cells that depend on us need to be updated
-  if ( m_strFormulaOut != m_strOutText ) 
+  if ( m_strFormulaOut != m_strOutText )
   {
     setFlag(Flag_UpdatingDeps);
 
