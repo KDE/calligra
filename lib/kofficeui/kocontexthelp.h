@@ -112,6 +112,8 @@ class KoHelpWidget : public QWidget
 		void timerEvent( QTimerEvent* );
 		void updateButtons();
 
+		virtual bool eventFilter( QObject*, QEvent* );
+
 	public slots:
 		void scrollUp();
 		void scrollDown();

@@ -184,19 +184,19 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 	QGridLayout* layout = new QGridLayout( this, 3, 3 );
 	layout->setMargin( 2 );
 	layout->addWidget( m_upButton = new KoHelpNavButton( KoHelpNavButton::Up, this ), 0, 1, AlignHCenter );
-	layout->addWidget( m_helpViewport = new QWidget( this ), 1, 1, AlignVCenter | AlignHCenter );
+	layout->addWidget( m_helpViewport = new QWidget( this ), 1, 1 );
 	layout->addWidget( m_downButton = new KoHelpNavButton( KoHelpNavButton::Down, this ), 2, 1, AlignHCenter );
 	layout->addColSpacing( 0, 5 );
 	layout->addColSpacing( 2, 5 );
 	layout->setColStretch( 1, 1 );
 	
 	m_helpLabel = new QLabel( m_helpViewport );
+	m_helpLabel->setAlignment( AlignLeft | AlignVCenter | ExpandTabs | WordBreak );
 	m_helpLabel->setBackgroundMode( PaletteLight );
-	m_helpLabel->setFixedWidth( HELPWIDTH );
-	m_helpViewport->setFixedSize( HELPWIDTH, HELPHEIGHT );
+	m_helpViewport->installEventFilter( this );
+	m_helpViewport->setMinimumSize( HELPWIDTH, HELPHEIGHT );
 	m_helpViewport->setBackgroundMode( PaletteLight );
 	setText( help );
-	updateButtons();
 	
 	setBackgroundMode( PaletteLight );
 	
@@ -206,16 +206,26 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 	connect( m_downButton, SIGNAL( released() ), this, SLOT( stopScrolling() ) );
 } // KoHelpWidget::KoHelpWidget
 
+bool KoHelpWidget::eventFilter( QObject* w, QEvent* e )
+{
+	if ( w == m_helpViewport && e->type() == QEvent::Resize )
+	{
+		m_helpLabel->setFixedWidth( m_helpViewport->width() );
+		m_helpLabel->setFixedHeight( m_helpLabel->heightForWidth( m_helpViewport->width() ) );
+	}
+	return false;
+} // KoHelpWidget::resizeEvent
+
 void KoHelpWidget::updateButtons()
 {
 	m_upButton->setEnabled( m_ypos < 0 );
-	m_downButton->setEnabled( HELPHEIGHT - m_helpLabel->height() - m_ypos < 0 );
+	m_downButton->setEnabled( m_helpViewport->height() - m_helpLabel->height() - m_ypos < 0 );
 } // KoHelpWidget::updateButtons
 
 void KoHelpWidget::setText( QString text )
 {
 	m_helpLabel->setText( text );
-	m_helpLabel->setFixedHeight( m_helpLabel->heightForWidth( HELPWIDTH ) );
+	m_helpLabel->setFixedHeight( m_helpLabel->heightForWidth( m_helpViewport->width() ) );
 	m_helpLabel->move( 0, 0 );
 	m_ypos = 0;
 	updateButtons();
@@ -252,7 +262,7 @@ void KoHelpWidget::scrollUp()
 
 void KoHelpWidget::scrollDown()
 {
-	if ( HELPHEIGHT - m_helpLabel->height() - m_ypos > 0 )
+	if ( m_helpViewport->height() - m_helpLabel->height() - m_ypos > 0 )
 		stopScrolling();
 	else
 	{
@@ -440,18 +450,19 @@ void KoContextHelpAction::closePopup()
 KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 		: QDockWindow( parent, name )
 {
-	setCaption(i18n("Context Help"));
-	QWidget *w=new QWidget(this);
-	QGridLayout* layout = new QGridLayout( w );
-	layout->addWidget( m_helpIcon = new QLabel( w), 0, 0 );
-	layout->addWidget( m_helpTitle = new KoVerticalLabel( w ), 1, 0 );
-	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", w ), 0, 1, 1, 1 );
+	setCaption( i18n( "Context Help" ) );
+	QWidget* mainWidget = new QWidget( this );
+	QGridLayout* layout = new QGridLayout( mainWidget );
+	layout->addWidget( m_helpIcon = new QLabel( mainWidget ), 0, 0 );
+	layout->addWidget( m_helpTitle = new KoVerticalLabel( mainWidget ), 1, 0 );
+	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", mainWidget ), 0, 1, 1, 1 );
 	layout->setMargin( 2 );
 	layout->setSpacing( 1 );
 	layout->setRowStretch( 1, 1 );
-	setWidget(w);
-	w->show();
-	setContextHelp("TITLE","This is some text &TEXT &WAS",0);
+	mainWidget->setMinimumSize( 200, 200 );
+	mainWidget->show();
+	setWidget( mainWidget );
+	setContextHelp( i18n( "Context help" ), i18n( "Here will be shown help according to your actions" ), 0 );
 } // KoContextHelpDocker::KoContextHelpDocker
 
 KoContextHelpDocker::~KoContextHelpDocker()
