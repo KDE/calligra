@@ -55,19 +55,26 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
         if (file)
         {
 		file->reset();
-		m_reportData=QString(file->readAll());
+//		m_reportData=QString(file->readAll());
+        //direct database access
+        MDatabaseReportEngine* rptdata = new MDatabaseReportEngine();
+        qWarning("!!!!!!!!!!!!!!!!!!!!!!!");
+		m_reportData=rptdata->mergeReportDataFile(file);
 
 		if (m_reportData.length()!=0)
 		{
 			ok=m_reportEngine->setReportData(m_reportData);
 //			ok=m_reportEngine->setReportData(doc);
 			kdDebug()<<"KugarPart::loadXML: report data set"<<endl;
+            kdDebug()<<"Report data is " << m_reportData << endl;
 
 			if (m_templateOk)
 			{
+                kdDebug()<<"templateok" << endl;
 				m_reportEngine->renderReport();
 				if (ok)
 				{
+                    kdDebug()<<"ok" << endl;
 					kdDebug()<<m_reportData<<endl;
 					QPtrList<KoView> vs= views();
 					if (vs.count())
@@ -76,7 +83,7 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
 						{
 							ok=static_cast<KugarView*>(v->qt_cast("KugarView"))->renderReport();
 							if (!ok) break;
-						}		
+						}
 					}
         	                }
 			}
@@ -137,6 +144,7 @@ KoView* KugarPart::createViewInstance( QWidget* parent, const char* name )
 
 void KugarPart::slotPreferedTemplate(const QString &tpl)
 {
+    kdDebug() << "slotPreferedTemplate called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tpl = " << tpl.latin1() << endl;
 //        KURL url(m_forcedUserTemplate.isEmpty()?tpl:m_forcedUserTemplate);
 	KURL url(tpl);
         QString localtpl;
@@ -144,23 +152,24 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 
         if (url.isMalformed())
         {
-                if (tpl.find('/') >= 0)
-		{
-			if (tpl.startsWith(".")) 
-			{
-				KURL tmpURL(m_docURL);
-				tmpURL.setFileName("");
-				tmpURL.addPath(tpl);
-				if (KIO::NetAccess::download(tmpURL,localtpl))
-					isTemp=true;
-				else
-				KMessageBox::sorry(0,i18n("Unable to download template file: %1").arg(url.prettyURL()));
-			}
-			else
-			localtpl=tpl;
-		}
+            kdDebug() << "mailformed url" << endl;
+            if (tpl.find('/') >= 0)
+            {
+                if (tpl.startsWith("."))
+                {
+                    KURL tmpURL(m_docURL);
+                    tmpURL.setFileName("");
+                    tmpURL.addPath(tpl);
+                    if (KIO::NetAccess::download(tmpURL,localtpl))
+                        isTemp=true;
+                    else
+                    KMessageBox::sorry(0,i18n("Unable to download template file: %1").arg(url.prettyURL()));
+                }
                 else
-                        localtpl = kapp -> dirs() -> findResource("data","kugar/templates/" + tpl);
+                localtpl=tpl;
+            }
+            else
+                    localtpl = kapp -> dirs() -> findResource("data","kugar/templates/" + tpl);
         }
         else
         {
@@ -170,12 +179,14 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
                         KMessageBox::sorry(0,i18n("Unable to download template file: %1").arg(url.prettyURL()));
         }
 
-        if (!localtpl.isNull())
+        kdDebug() << "localtpl: " << localtpl.latin1()  << endl;
+        if (!localtpl.isEmpty())
         {
                 QFile f(localtpl);
 
                 if (f.open(IO_ReadOnly))
                 {
+                    kdDebug() << "localtpl opened" << endl;
         		// Try to find out whether it is a mime multi part file
 		        char buf[5];
 		        if ( f.readBlock( buf, 4 ) == 4 )
@@ -183,13 +194,17 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 			        bool isRawXML = (strncasecmp( buf, "<?xm", 4 ) == 0);
 				f.close();
 
-				if (isRawXML) 
+				if (isRawXML)
 				{
+                    kdDebug()<<"RawXML"<<endl;
 					f.open(IO_ReadOnly);
 		                        if (!m_reportEngine -> setReportTemplate(&f))
 		                                KMessageBox::sorry(0,i18n("Invalid template file: %1").arg(localtpl));
 					else
+                    {
 						m_templateOk=true;
+                        kdDebug()<<"Setting m_templateOk" << endl;
+                    }
 					f.close();
 				}
 				else

@@ -300,6 +300,25 @@ QString MDatabaseReportEngine::mergeReportDataFile( QIODevice* dev)
 
     QString result = dom.toString(4);
 
+    QDomNode *formerDataSource = 0;
+    QDomNode n = dom.documentElement().firstChild();
+    while ( !n.isNull() ) {
+        if ( n.isElement() ) {
+            QDomElement e = n.toElement();
+            if ( e.tagName() == QString("DataSource") )
+            {
+                formerDataSource = &e;
+                break;
+            }
+        }
+        n = n.nextSibling();
+    }
+    if (formerDataSource == 0)
+    {
+        qWarning("datasource not found");
+        return result;
+    }
+
     QDomElement docElem = dom.documentElement();
     QString templateFile = docElem.attribute("Template");
     if (templateFile.isEmpty())
@@ -327,21 +346,6 @@ QString MDatabaseReportEngine::mergeReportDataFile( QIODevice* dev)
     setBufferFromDatabase( templateFile, true );
 
     // perform merging with existing data in the data file
-    QDomNode *formerDataSource = 0;
-    QDomNode n = dom.documentElement().firstChild();
-    while ( !n.isNull() ) {
-        if ( n.isElement() ) {
-            QDomElement e = n.toElement();
-            if ( e.tagName() == "DataSource" );
-            {
-                formerDataSource = &e;
-                break;
-            }
-        }
-        n = n.nextSibling();
-    }
-    if (!formerDataSource)
-        return result;
 
     QDomDocument d;
     d.setContent("<temp>" + data + "</temp>");
