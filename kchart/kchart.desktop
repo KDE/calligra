@@ -2,6 +2,7 @@
 Name=KChart
 Name[eo]=Kartoj
 Name[hu]=KGrafikon
+Name[mi]=KGrafikon
 Comment=
 Exec=kchart
 X-KDE-Library=libkchart
@@ -9,7 +10,7 @@ X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
 Type=Application
-Icon=kchart.png
-MiniIcon=kchart.png
+Icon=kchart
+MiniIcon=kchart
 MimeType=application/x-kchart
 ServiceTypes=KOfficePart,KPart

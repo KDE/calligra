@@ -7,7 +7,6 @@ Name[ja]=OLE Word97 ¥Õ¥£¥ë¥¿¡¼
 Name[mi]=OLEWinword97Szûrõ
 Comment=KWord WinWord97 Filter
 Comment[ca]=Filtre de WinWord97 pel KWord
-Comment[de]=WinWord97 Filter von KWord
 Comment[eo]=Winword-97-filtrilo por Vorto
 Comment[fi]=KWordin WinWord97 suodatin
 Comment[hu]=WinWord97 szûrõ a KWord-höz
@@ -23,7 +22,7 @@ X-KDE-Library=libolefilter
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
-Icon=unknown.png
-MiniIcon=unknown.png
+Icon=unknown
+MiniIcon=unknown
 ServiceTypes=KOfficeFilter
 

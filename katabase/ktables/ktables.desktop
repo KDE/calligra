@@ -3,8 +3,8 @@
 Type=Application
 Exec=ktables
 CorbaExec=ktables --server
-Icon=ktables.png
-MiniIcon=ktables.png
+Icon=ktables
+MiniIcon=ktables
 DocPath=ktables/index.html
 Comment=
 Type=Application
@@ -18,4 +18,5 @@ BinaryPattern=
 Name=Ktables
 Name[eo]=Tabeloj
 Name[hu]=Ktáblák
+Name[mi]=Ktáblák
 Name[sv]=Tabeller

@@ -3,6 +3,6 @@
 MimeType=application/x-killustrator
 Comment=KIllustrator
 DefaultApp=KIllustrator
-Icon=killustrator.png
+Icon=killustrator
 Type=MimeType
 Patterns=*.kil;

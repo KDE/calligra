@@ -1,13 +1,17 @@
 [Desktop Entry]
 Name=Example
+Name[ca]=Exemple
+Name[no_NY]=Døme
 Exec=example
 X-KDE-Library=libexample
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
 Comment=Torben's Canossa Example
+Comment[ca]=L'exemple Canossa de Torben
+Comment[no_NY]=Torben's Canossa-døme
 MimeType=application/x-example
 Type=Application
-Icon=example.png
-MiniIcon=example.png
+Icon=example
+MiniIcon=example
 ServiceTypes=KOfficePart,KPart

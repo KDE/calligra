@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=MimeType
 MimeType=application/x-powerpoint97
-Icon=unknown.xpm
+Icon=unknown
 Patterns=*.ppt;*.PPT;
 Comment=MS PowerPoint 97 File
 Comment[ca]=Fitxer MS PowerPoint 97
@@ -9,5 +9,8 @@ Comment[eo]=PowerPoint-97-dosiero
 Comment[fi]=MS Powerpoint 97 tiedosto
 Comment[hu]=MS PowerPoint 97 fájl
 Comment[ja]=MS PowerPoint 97 ¥Õ¥¡¥¤¥ë
+Comment[mi]=MS PowerPoint 97 fájl
+Comment[no_NY]=MS PowerPoint 97-fil
+Comment[sr]=M$ PowerPoint 97 fajl
 Comment[sv]=MS PowerPoint 97-fil
 DefaultApp=kpresenter

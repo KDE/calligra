@@ -2,7 +2,15 @@
 [Desktop Entry]
 MimeType=application/x-kword
 Comment=KWord
+Comment[ca]=Processador de textos KWord
+Comment[da]=KWord-programmet
+Comment[is]=kword:  Ritvinnsluforrit K-vЖndulsins
+Comment[pl]=Procesor tekstu
+Comment[pt]=Processador de Texto
+Comment[ro]=Word
+Comment[ru]=Тестовый процессор
+Comment[sv]=Ordbehandlare
 DefaultApp=KWord
-Icon=txt.png
+Icon=txt
 Type=MimeType
 Patterns=*.kwd;

@@ -1,12 +1,22 @@
 [Desktop Entry]
 Name=KIllustrator
+Name[eo]=Ilustranto
+Name[hu]=KIllusztr·tor
+Name[is]=Teiknir
+Name[mi]=KIllusztr·tor
+Name[no]=Illustrat¯r
+Name[pt]=IlustraÁıes
+Name[ro]=Ilustrator
+Name[ru]=ÈÃÃ¿”‘“¡‘œ“
+Name[sv]=Illustrattioner
 Exec=killustrator
 X-KDE-Library=libkillustrator
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
 Comment=KDE Drawing Tool
+Comment[ca]=Eina de dibuix KDE
 MimeType=application/x-killustrator
 Type=Application
-Icon=killustrator.png
+Icon=killustrator
 ServiceTypes=KOfficePart,KPart
