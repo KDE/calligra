@@ -310,7 +310,11 @@ bool KoStore::embed( const QString &dest, KoStore &store, const QString &src )
   {
     if ( store.m_pTar->directory()->entry( srcDir + entries[i] )->isDirectory() )
     {
-      if ( embed( destDir + entries[i], store, srcDir + entries[i] ) )
+      // Recurse to get the files in the next level down.
+
+      if ( embed( destDir + entries[i] + "/" + MAINNAME,
+                  store,
+                  srcDir + entries[i] + "/" + MAINNAME ) )
       {
         kdDebug(s_area) << "KoStore: embedded " << srcDir << " in " << destDir << endl;
       }
@@ -321,6 +325,7 @@ bool KoStore::embed( const QString &dest, KoStore &store, const QString &src )
     }
     else
     {
+kdDebug(s_area) << "KoStore: is file " << endl;
       if ( ( open( destDir + entries[i] ) && store.open( srcDir + entries[i] ) ) )
       {
         kdDebug(s_area) << "KoStore: embedding file " << entries[i] << endl;
