@@ -1,0 +1,100 @@
+# KDiagramm
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Miroslav Vasko <vasko@ies.sk>, 1998.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-12-09 10:15+0100\n"
+"PO-Revision-Date: 1998-12-20 00:00+0100\n"
+"Last-Translator: Miroslav Vasko <vasko@ies.sk>\n"
+"Language-Team: Slovak <sk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO Latin 2\n"
+"Content-Transfer-Encoding: 8859.2\n"
+
+#: kdiagramm_shell.cc:44
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+"Dokument bol zmenený\n"
+"Chcete ho ulo¾i»?"
+
+#: kdiagramm_shell.cc:284
+msgid "KDiagramm Error"
+msgstr "KDiagramm - Chyba"
+
+#: kdiagramm_shell.cc:284
+msgid "Could not create new document"
+msgstr "Nemô¾em vytvori» nový dokument"
+
+#: kdiagramm_shell.cc:297
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr ""
+"Nemô¾em otvori»\n"
+"%s"
+
+#: kdiagramm_shell.cc:298 kdiagramm_shell.cc:317 kdiagramm_shell.cc:327
+msgid "IO Error"
+msgstr "Chyba IO"
+
+#: kdiagramm_shell.cc:316
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr ""
+"Nemô¾em ulo¾i»\n"
+"%s"
+
+#: kdiagramm_shell.cc:326
+msgid "Could not save file"
+msgstr "Nemô¾em ulo¾i» súbor"
+
+#: kdiagramm_view.cc:126
+msgid "Lines"
+msgstr "Èiary"
+
+#: kdiagramm_view.cc:131
+msgid "Areas"
+msgstr "Oblasti"
+
+#: kdiagramm_view.cc:136
+msgid "3D-Bars"
+msgstr "3D-Ståpce"
+
+#: kdiagramm_view.cc:141
+msgid "Cakes"
+msgstr "Koláèe"
+
+#: kdiagramm_view.cc:162
+msgid "&Lines"
+msgstr "È&iary"
+
+#: kdiagramm_view.cc:167
+msgid "&Areas"
+msgstr "Obl&asti"
+
+#: kdiagramm_view.cc:172
+msgid "&Bars"
+msgstr "Stå&pce"
+
+#: kdiagramm_view.cc:177
+msgid "&Cakes"
+msgstr "&Koláèe"
+
+#: kdiagramm_view.cc:181
+msgid "&Edit Data..."
+msgstr "Upra&v dáta..."
+
+#: kdiagramm_view.cc:185
+msgid "&Page Layout"
+msgstr "Vz&hµad stránky"
+
+#: koDiagramm.cc:558
+msgid "Rest"
+msgstr "Zbytok"

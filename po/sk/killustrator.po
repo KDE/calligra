@@ -1,0 +1,804 @@
+# KIllustrator
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Miroslav Vasko <vasko@ies.sk>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-12-09 11:00+0100\n"
+"PO-Revision-Date: 1998-12-20 00:00+0100\n"
+"Last-Translator: Miroslav Vasko <vasko@ies.sk>\n"
+"Language-Team: Slovak <sk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO Latin 2\n"
+"Content-Transfer-Encoding: 8859.2\n"
+
+#: koffice/KIllustrator_shell.cc:86
+msgid "&New"
+msgstr "&Nový"
+
+#: koffice/KIllustrator_shell.cc:105 standalone/KIllustrator.cc:465
+msgid "Import..."
+msgstr "Import..."
+
+#: koffice/KIllustrator_shell.cc:108 standalone/KIllustrator.cc:466
+msgid "Export..."
+msgstr "Export..."
+
+#: koffice/KIllustrator_shell.cc:118
+msgid "Document Info..."
+msgstr "Informácie o dokumente..."
+
+#: koffice/KIllustrator_shell.cc:296 koffice/KIllustrator_shell.cc:309
+#: koffice/KIllustrator_shell.cc:324 koffice/KIllustrator_shell.cc:331
+#: koffice/KIllustrator_shell.cc:368 koffice/KIllustrator_shell.cc:372
+#: koffice/KIllustrator_shell.cc:395 koffice/KIllustrator_shell.cc:399
+#: standalone/KIllustrator.cc:1118 standalone/KIllustrator.cc:1122
+#: standalone/KIllustrator.cc:1148 standalone/KIllustrator.cc:1152
+msgid "KIllustrator Error"
+msgstr "KIllustrator - Chyba"
+
+#: koffice/KIllustrator_shell.cc:297
+msgid "Could not create new document"
+msgstr "Nemô¾em vytvori» nový dokument"
+
+#: koffice/KIllustrator_shell.cc:310
+msgid "Could not open file"
+msgstr "Nemô¾em otvori» súbor"
+
+#: koffice/KIllustrator_shell.cc:325 koffice/KIllustrator_shell.cc:332
+msgid "Could not save file"
+msgstr "Nemô¾em ulo¾i» súbor"
+
+#: koffice/KIllustrator_shell.cc:369 standalone/KIllustrator.cc:1149
+msgid "Cannot import from file"
+msgstr "Nemô¾em importova» zo súboru"
+
+#: koffice/KIllustrator_shell.cc:373 standalone/KIllustrator.cc:1153
+msgid "Unknown import format"
+msgstr "Neznámy formát súboru"
+
+#: koffice/KIllustrator_shell.cc:396 standalone/KIllustrator.cc:1119
+msgid "Cannot export to file"
+msgstr "Nemô¾em exportova» do súboru"
+
+#: koffice/KIllustrator_shell.cc:400 standalone/KIllustrator.cc:1123
+msgid "Unknown export format"
+msgstr "neznámy exportný formát"
+
+#: koffice/KIllustrator_shell.cc:432
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+"Dokument bol zmenený\n"
+"Chcete ho ulo¾i»?"
+
+#: koffice/KIllustrator_view.cc:158 koffice/KIllustrator_view.cc:253
+#: share/AlignCmd.cc:30 share/AlignmentDialog.cc:61
+#: standalone/KIllustrator.cc:534 standalone/KIllustrator.cc:586
+msgid "Align"
+msgstr "Zarovnanie"
+
+#: koffice/KIllustrator_view.cc:160 koffice/KIllustrator_view.cc:255
+#: standalone/KIllustrator.cc:536 standalone/KIllustrator.cc:588
+msgid "To Front"
+msgstr "Dopredu"
+
+#: koffice/KIllustrator_view.cc:161 koffice/KIllustrator_view.cc:258
+#: standalone/KIllustrator.cc:538 standalone/KIllustrator.cc:589
+msgid "To Back"
+msgstr "Dozadu"
+
+#: koffice/KIllustrator_view.cc:162 koffice/KIllustrator_view.cc:261
+#: standalone/KIllustrator.cc:540 standalone/KIllustrator.cc:590
+msgid "Forward One"
+msgstr "O krok vpred"
+
+#: koffice/KIllustrator_view.cc:164 koffice/KIllustrator_view.cc:263
+#: standalone/KIllustrator.cc:543 standalone/KIllustrator.cc:591
+msgid "Back One"
+msgstr "O krok vzad"
+
+#: koffice/KIllustrator_view.cc:210 standalone/KIllustrator.cc:494
+msgid "&Select All"
+msgstr "Vyber &v¹etko"
+
+#: koffice/KIllustrator_view.cc:214
+msgid "&Insert Object..."
+msgstr "V&lo¾ objekt..."
+
+#: koffice/KIllustrator_view.cc:217 standalone/KIllustrator.cc:496
+msgid "Pr&operties"
+msgstr "Vl&astnosti"
+
+#: koffice/KIllustrator_view.cc:223 share/PropertyEditor.cc:111
+#: standalone/KIllustrator.cc:499
+msgid "Outline"
+msgstr "Obrysovo"
+
+#: koffice/KIllustrator_view.cc:226 share/FontSelector.cc:377
+#: standalone/KIllustrator.cc:501
+msgid "Normal"
+msgstr "Normálne"
+
+#: koffice/KIllustrator_view.cc:229
+msgid "Ruler"
+msgstr "Pravítko"
+
+#: koffice/KIllustrator_view.cc:232 share/GridDialog.cc:46
+msgid "Grid"
+msgstr "Mrie¾ka"
+
+#: koffice/KIllustrator_view.cc:236 standalone/KIllustrator.cc:572
+msgid "&Layout"
+msgstr "Vz&hµad"
+
+#: koffice/KIllustrator_view.cc:238 share/koPageLayoutDia.cc:100
+msgid "Page Layout"
+msgstr "Vzhµad stránky"
+
+#: koffice/KIllustrator_view.cc:241 share/GDocument.cc:1003
+#: share/LayerDialog.cc:49
+msgid "Layers"
+msgstr "Vrstvy"
+
+#: koffice/KIllustrator_view.cc:244
+msgid "Setup Grid"
+msgstr "Nastavenie mrie¾ky"
+
+#: koffice/KIllustrator_view.cc:246
+msgid "Align to Grid"
+msgstr "Zarovnaj do mrie¾ky"
+
+#: koffice/KIllustrator_view.cc:251 standalone/KIllustrator.cc:573
+msgid "&Arrange"
+msgstr "&Usporiadaj"
+
+#: koffice/KIllustrator_view.cc:252 share/TransformationDialog.cc:54
+#: standalone/KIllustrator.cc:533
+msgid "Transform"
+msgstr "Transformuj"
+
+#: koffice/KIllustrator_view.cc:266 share/GGroup.cc:64
+#: standalone/KIllustrator.cc:547
+msgid "Group"
+msgstr "Zoskup"
+
+#: koffice/KIllustrator_view.cc:268 share/UngroupCmd.cc:28
+#: standalone/KIllustrator.cc:549
+msgid "Ungroup"
+msgstr "Rozdeµ na èasti"
+
+#: koffice/KIllustrator_view.cc:274 share/TransformationDialog.cc:57
+#: standalone/KIllustrator.cc:518
+msgid "Position"
+msgstr "Umiestnenie"
+
+#: koffice/KIllustrator_view.cc:277 share/TransformationDialog.cc:60
+#: standalone/KIllustrator.cc:520
+msgid "Dimension"
+msgstr "Dimenzia"
+
+#: koffice/KIllustrator_view.cc:280 share/TransformationDialog.cc:63
+#: standalone/KIllustrator.cc:522
+msgid "Rotation"
+msgstr "Otoèenie"
+
+#: koffice/KIllustrator_view.cc:283 share/TransformationDialog.cc:66
+#: standalone/KIllustrator.cc:524
+msgid "Mirror"
+msgstr "Zrkadlo"
+
+#: koffice/KIllustrator_view.cc:318 share/SelectionTool.cc:594
+#: standalone/KIllustrator.cc:326
+msgid "Selection Mode"
+msgstr "Mód oznaèenia"
+
+#: koffice/KIllustrator_view.cc:328 share/EditPointCmd.cc:29
+#: share/EditPointTool.cc:200 standalone/KIllustrator.cc:331
+msgid "Edit Point"
+msgstr "Uprav bod"
+
+#: koffice/KIllustrator_view.cc:338 share/FreeHandTool.cc:172
+msgid "Create FreeHand Line"
+msgstr "Vytvor èiaru voµnou rukou"
+
+#: koffice/KIllustrator_view.cc:348 share/CreatePolylineCmd.cc:29
+#: share/CreatePolylineCmd.cc:39 share/PolylineTool.cc:214
+#: standalone/KIllustrator.cc:342
+msgid "Create Polyline"
+msgstr "Vytvor poly-èiaru"
+
+#: koffice/KIllustrator_view.cc:358 share/BezierTool.cc:288
+#: standalone/KIllustrator.cc:348
+msgid "Create Bezier Curve"
+msgstr "Vytvor Beziérovu krivku"
+
+#: koffice/KIllustrator_view.cc:369 share/CreateRectangleCmd.cc:29
+#: share/CreateRectangleCmd.cc:38 share/RectangleTool.cc:85
+#: standalone/KIllustrator.cc:354
+msgid "Create Rectangle"
+msgstr "Vytvor obdå¾nik"
+
+#: koffice/KIllustrator_view.cc:380 share/CreatePolygonCmd.cc:29
+#: share/CreatePolygonCmd.cc:39 share/PolygonTool.cc:116
+#: standalone/KIllustrator.cc:359
+msgid "Create Polygon"
+msgstr "Vytvor polygón"
+
+#: koffice/KIllustrator_view.cc:392 share/OvalTool.cc:114
+#: standalone/KIllustrator.cc:364
+msgid "Create Ellipse"
+msgstr "Vytvor elipsu"
+
+#: koffice/KIllustrator_view.cc:404
+msgid "Create/Edit Text"
+msgstr "Vytvor/Uprav text"
+
+#: koffice/KIllustrator_view.cc:414 share/ZoomTool.cc:46
+#: standalone/KIllustrator.cc:374
+msgid "Zoom In"
+msgstr "Priblí¾"
+
+#: koffice/KIllustrator_view.cc:487
+msgid "Zoom Factors"
+msgstr "Faktory priblí¾enia"
+
+#: koffice/KIllustrator_view.cc:530 standalone/KIllustrator.cc:410
+msgid "Move Point"
+msgstr "Presuò bod"
+
+#: koffice/KIllustrator_view.cc:540 share/InsertPointCmd.cc:29
+#: standalone/KIllustrator.cc:414
+msgid "Insert Point"
+msgstr "Vlo¾ bod"
+
+#: koffice/KIllustrator_view.cc:550 share/RemovePointCmd.cc:28
+#: standalone/KIllustrator.cc:418
+msgid "Remove Point"
+msgstr "Odstráò bod"
+
+#: koffice/KIllustrator_view.cc:819 koffice/KIllustrator_view.cc:923
+#: koffice/KIllustrator_view.cc:952 standalone/KIllustrator.cc:717
+#: standalone/KIllustrator.cc:1023 standalone/KIllustrator.cc:1049
+msgid ""
+"This action will set the default\n"
+"properties for new objects !\n"
+"Would you like to do it ?"
+msgstr ""
+"Táto èinnos» nastaví ¹tandardné\n"
+"vlastnosti pre nové objekty!\n"
+"Chcete to urobi»?"
+
+#: share/AboutDialog.cc:46
+msgid "About KIllustrator"
+msgstr "O programe KIllustrator"
+
+#: share/AddLineSegmentCmd.cc:29
+msgid "Add Line Segment"
+msgstr "Pridaj segment èiary"
+
+#: share/AlignmentDialog.cc:50
+msgid "Alignment"
+msgstr "Zarovnanie"
+
+#: share/AlignmentDialog.cc:64 share/DistributeCmd.cc:31
+msgid "Distribute"
+msgstr "Distribuova»"
+
+#: share/AlignmentDialog.cc:104 share/AlignmentDialog.cc:180
+#: share/GridDialog.cc:99
+msgid "Vertically"
+msgstr "Vertikálne"
+
+#: share/AlignmentDialog.cc:129 share/AlignmentDialog.cc:210
+#: share/GridDialog.cc:88
+msgid "Horizontally"
+msgstr "Horizontálne"
+
+#: share/AlignmentDialog.cc:154
+msgid "To Grid"
+msgstr "Do mrie¾ky"
+
+#: share/AlignmentDialog.cc:159
+msgid "Align To Center of Page"
+msgstr "Zarovnaj do stredu stránky"
+
+#: share/AlignmentDialog.cc:240
+msgid "Distribute at"
+msgstr "Distribuuj na"
+
+#: share/AlignmentDialog.cc:243
+msgid "Selection"
+msgstr "Oznaèenie"
+
+#: share/AlignmentDialog.cc:248
+msgid "Page"
+msgstr "Stránka"
+
+#: share/CreateBezierCmd.cc:29
+msgid "Create Bezier"
+msgstr "Vytvor Beziéra"
+
+#: share/CreateOvalCmd.cc:29 share/CreateOvalCmd.cc:38
+msgid "Create Oval"
+msgstr "Vytvor ovál"
+
+#: share/CreateTextCmd.cc:29 share/CreateTextCmd.cc:38
+#: standalone/KIllustrator.cc:369
+msgid "Create Text"
+msgstr "Vytvor text"
+
+#: share/DocumentInfo.cc:42 standalone/KIllustrator.cc:471
+msgid "Document Info"
+msgstr "Informácie o dokumente"
+
+#: share/DocumentInfo.cc:56
+msgid "Done"
+msgstr "Hotovo"
+
+#: share/EllipseConfigDialog.cc:47
+msgid "Setup Ellipse Tool"
+msgstr "Nastav nástroj na vytvorenie elipsy"
+
+#: share/EllipseConfigDialog.cc:83
+msgid "Draw ellipse"
+msgstr "Nakresli elipsu"
+
+#: share/EllipseConfigDialog.cc:87
+msgid "between points"
+msgstr "medzi bodmi"
+
+#: share/EllipseConfigDialog.cc:92
+msgid "around fixed center"
+msgstr "okolo pevného stredu"
+
+#: share/FontSelector.cc:85
+msgid "Requested Font"
+msgstr "Po¾adované písmo"
+
+#: share/FontSelector.cc:90
+msgid "Actual Font"
+msgstr "Aktuálne písmo"
+
+#: share/FontSelector.cc:94 share/FontSelector.cc:98
+msgid "Family:"
+msgstr "Rodina:"
+
+#: share/FontSelector.cc:118 share/FontSelector.cc:123
+msgid "Size:"
+msgstr "Veµkos»:"
+
+#: share/FontSelector.cc:132 share/FontSelector.cc:137
+msgid "Weight:"
+msgstr "Váha:"
+
+#: share/FontSelector.cc:146 share/FontSelector.cc:154
+#: share/PropertyEditor.cc:253 share/PropertyEditor.cc:457
+msgid "Style:"
+msgstr "©týl:"
+
+#: share/FontSelector.cc:189
+msgid "Charset"
+msgstr "Znaková sada"
+
+#: share/FontSelector.cc:201
+msgid "Size"
+msgstr "Veµkos»"
+
+#: share/FontSelector.cc:240
+msgid "Weight"
+msgstr "Vý¹ka"
+
+#: share/FontSelector.cc:241 share/FontSelector.cc:339
+msgid "normal"
+msgstr "normálna"
+
+#: share/FontSelector.cc:242 share/FontSelector.cc:341
+msgid "bold"
+msgstr "tuèné"
+
+#: share/FontSelector.cc:251
+msgid "Style"
+msgstr "©týl"
+
+#: share/FontSelector.cc:252 share/FontSelector.cc:352
+#: share/FontSelector.cc:382
+msgid "roman"
+msgstr "roman"
+
+#: share/FontSelector.cc:253 share/FontSelector.cc:354
+#: share/FontSelector.cc:380
+msgid "italic"
+msgstr "kurzíva"
+
+#: share/FontSelector.cc:375
+msgid "Bold"
+msgstr "Tuèné"
+
+#: share/GBezier.cc:212
+msgid "Bezier curve"
+msgstr "Beziérova krivka"
+
+#: share/GClipart.cc:74
+msgid "Clipart object"
+msgstr "Klip-objekt"
+
+#: share/GDocument.cc:1002
+msgid "Document"
+msgstr "Dokument"
+
+#: share/GDocument.cc:1004
+msgid "Objects"
+msgstr "Objekty"
+
+#: share/GLayer.cc:48
+msgid "Layer"
+msgstr "Vrstva"
+
+#: share/GOval.cc:87
+msgid "Circle"
+msgstr "Kru¾nica"
+
+#: share/GOval.cc:89
+msgid "Ellipse"
+msgstr "Elipsa"
+
+#: share/GPolygon.cc:152 share/PolygonConfigDialog.cc:86
+msgid "Polygon"
+msgstr "Polygón"
+
+#: share/GPolygon.cc:154
+msgid "Rectangle"
+msgstr "Obdå¾nik"
+
+#: share/GPolygon.cc:156
+msgid "Square"
+msgstr "©tvorec"
+
+#: share/GPolyline.cc:118
+msgid "Polyline"
+msgstr "Poly-èiara"
+
+#: share/GText.cc:124
+msgid "Text"
+msgstr "Text"
+
+#: share/GridDialog.cc:83
+msgid "Distance"
+msgstr "Vzdialenos»"
+
+#: share/GridDialog.cc:109
+msgid "Snap To Grid"
+msgstr "Prilep k mrie¾ke"
+
+#: share/GridDialog.cc:113 standalone/KIllustrator.cc:508
+msgid "Show Grid"
+msgstr "Uká¾ mrie¾ku"
+
+#: share/GroupCmd.cc:28
+msgid "Group Objects"
+msgstr "Zoskup objekty"
+
+#: share/InsertClipartCmd.cc:30
+msgid "Insert Clipart"
+msgstr "Vlo¾ klip"
+
+#: share/InsertObjCmd.cc:29
+msgid "Insert Object"
+msgstr "Vlo¾ objekt"
+
+#: share/OptionDialog.cc:40
+msgid "Option"
+msgstr "Voµba"
+
+#: share/OptionDialog.cc:44
+msgid "General"
+msgstr "V¹eobecné"
+
+#: share/OptionDialog.cc:66
+msgid "Unit:"
+msgstr "Jednotka:"
+
+#: share/PolygonConfigDialog.cc:47
+msgid "Setup Polygon Tool"
+msgstr "Nastav nástroj na vytvorenie polygónu"
+
+#: share/PolygonConfigDialog.cc:92
+msgid "Concave Polygon"
+msgstr "Konkávny polygón"
+
+#: share/PolygonConfigDialog.cc:99
+msgid "Corners:"
+msgstr "Rohy:"
+
+#: share/PolygonConfigDialog.cc:109
+msgid "Sharpness:"
+msgstr "Ostros»:"
+
+#: share/PropertyEditor.cc:108
+msgid "Info"
+msgstr "Informácie"
+
+#: share/PropertyEditor.cc:114
+msgid "Fill"
+msgstr "Výplò"
+
+#: share/PropertyEditor.cc:158
+msgid "Type:"
+msgstr "Typ:"
+
+#: share/PropertyEditor.cc:170
+msgid "Bounding Box"
+msgstr "Ohranièený box"
+
+#: share/PropertyEditor.cc:176
+msgid "X Position:"
+msgstr "Pozícia X:"
+
+#: share/PropertyEditor.cc:188
+msgid "Y Position:"
+msgstr "Pozícia Y:"
+
+#: share/PropertyEditor.cc:200 share/PropertyEditor.cc:233
+msgid "Width:"
+msgstr "©írka:"
+
+#: share/PropertyEditor.cc:212
+msgid "Height:"
+msgstr "Vý¹ka:"
+
+#: share/PropertyEditor.cc:244 share/PropertyEditor.cc:395
+#: share/PropertyEditor.cc:408 share/PropertyEditor.cc:437
+#: share/PropertyEditor.cc:447
+msgid "Color:"
+msgstr "Farba:"
+
+#: share/PropertyEditor.cc:268
+msgid "Arrows:"
+msgstr "©ípky:"
+
+#: share/PropertyEditor.cc:290
+msgid "Shape:"
+msgstr "Útvar:"
+
+#: share/PropertyEditor.cc:321
+msgid "Roundness:"
+msgstr "Zaguµatenie:"
+
+#: share/PropertyEditor.cc:332
+msgid "Alignment:"
+msgstr "Zarovnanie:"
+
+#: share/PropertyEditor.cc:390
+msgid "Solid Fill"
+msgstr "Plná výplò"
+
+#: share/PropertyEditor.cc:404
+msgid "Pattern Fill"
+msgstr "Výplò vzorom"
+
+#: share/PropertyEditor.cc:419
+msgid "No Fill"
+msgstr "®iadna výplò"
+
+#: share/PropertyEditor.cc:426
+msgid "Tile Fill"
+msgstr "Dla¾dicová výplò"
+
+#: share/PropertyEditor.cc:433
+msgid "Gradient Fill"
+msgstr "Vzostupná výplò"
+
+#: share/PropertyEditor.cc:461
+msgid "Horizontal"
+msgstr "Horizontálna"
+
+#: share/PropertyEditor.cc:462
+msgid "Vertical"
+msgstr "Vertikálna"
+
+#: share/PropertyEditor.cc:463
+msgid "Radial"
+msgstr "Lúèovitá"
+
+#: share/PropertyEditor.cc:464
+msgid "Rectangular"
+msgstr "Obdå¾niková"
+
+#: share/PropertyEditor.cc:690
+msgid "no selection"
+msgstr "¾iadny výber"
+
+#: share/PropertyEditor.cc:692
+msgid "multiple selection"
+msgstr "viacnásobný výber"
+
+#: share/ReorderCmd.cc:28
+msgid "Reorder"
+msgstr "Preusporiadaj"
+
+#: share/RotateCmd.cc:29
+msgid "Rotate"
+msgstr "Otoè"
+
+#: share/ScaleCmd.cc:29 share/ScaleCmd.cc:37
+msgid "Scale"
+msgstr "©kála"
+
+#: share/ScriptConsole.cc:43
+msgid "Scripting Console"
+msgstr "Skriptová konzola"
+
+#: share/ScriptConsole.cc:56
+msgid "Evaluate"
+msgstr "Vyhodno»"
+
+#: share/ScriptDialog.cc:45
+msgid "Scripts"
+msgstr "Skripty"
+
+#: share/ScriptDialog.cc:60
+msgid "Execute"
+msgstr "Vykonaj"
+
+#: share/SetPropertyCmd.cc:30 share/SetPropertyCmd.cc:40
+msgid "Set property"
+msgstr "Nastav vlastnos»"
+
+#: share/SetTextCmd.cc:28 share/SetTextCmd.cc:37
+msgid "Change Text"
+msgstr "Zmeò text"
+
+#: share/ShearCmd.cc:29
+msgid "Shear"
+msgstr "Reza»"
+
+#: share/TransformationDialog.cc:81 share/TransformationDialog.cc:147
+#: share/TransformationDialog.cc:215
+msgid "Horizontal:"
+msgstr "Horizontálne:"
+
+#: share/TransformationDialog.cc:92 share/TransformationDialog.cc:158
+#: share/TransformationDialog.cc:226
+msgid "Vertical:"
+msgstr "Vertikálne:"
+
+#: share/TransformationDialog.cc:102 share/TransformationDialog.cc:236
+msgid "Relative Position"
+msgstr "Relatívne umiestnenie"
+
+#: share/TransformationDialog.cc:110 share/TransformationDialog.cc:176
+#: share/TransformationDialog.cc:245 share/TransformationDialog.cc:287
+msgid "Apply To Duplicate"
+msgstr "Pou¾i na duplikát"
+
+#: share/TransformationDialog.cc:137
+msgid "Absolute"
+msgstr "Absolútne"
+
+#: share/TransformationDialog.cc:141
+msgid "Percentage"
+msgstr "Percentuálne"
+
+#: share/TransformationDialog.cc:168
+msgid "Proportional"
+msgstr "Proporcionálne"
+
+#: share/TransformationDialog.cc:199
+msgid "Angle:"
+msgstr "Uhol:"
+
+#: share/TransformationDialog.cc:210
+msgid "Center"
+msgstr "Centrova»"
+
+#: share/TranslateCmd.cc:28
+msgid "Translate"
+msgstr "Prelo¾i»"
+
+#: standalone/KIllustrator.cc:281
+msgid "New Document"
+msgstr "Nový dokument"
+
+#: standalone/KIllustrator.cc:283
+msgid "Open Document"
+msgstr "Otvor dokument"
+
+#: standalone/KIllustrator.cc:285
+msgid "Save Document"
+msgstr "Ulo¾ dokument"
+
+#: standalone/KIllustrator.cc:288
+msgid "Print Document"
+msgstr "Vytlaè dokument"
+
+#: standalone/KIllustrator.cc:337
+msgid "Create Freehand Line"
+msgstr "Vytvor èiaru voµnou rukou"
+
+#: standalone/KIllustrator.cc:422
+msgid "Split Line"
+msgstr "Rozdeµ èiaru"
+
+#: standalone/KIllustrator.cc:426
+msgid "Join Lines"
+msgstr "Spoj èiary"
+
+#: standalone/KIllustrator.cc:448
+msgid "&New..."
+msgstr "&Nový..."
+
+#: standalone/KIllustrator.cc:456
+msgid "Open Recent"
+msgstr "Otvor èerstvé"
+
+#: standalone/KIllustrator.cc:469
+msgid "&Print"
+msgstr "&Tlaè"
+
+#: standalone/KIllustrator.cc:473
+msgid "New &Window"
+msgstr "Nové &okno"
+
+#: standalone/KIllustrator.cc:504
+msgid "Layers..."
+msgstr "Vrstvy..."
+
+#: standalone/KIllustrator.cc:506
+msgid "Show Ruler"
+msgstr "Uká¾ pravítko"
+
+#: standalone/KIllustrator.cc:512
+msgid "&Page"
+msgstr "&Stránka"
+
+#: standalone/KIllustrator.cc:514
+msgid "&Grid"
+msgstr "&Mrie¾ka"
+
+#: standalone/KIllustrator.cc:529
+msgid "Text along Path"
+msgstr "Text pozdå¾ trajektórie"
+
+#: standalone/KIllustrator.cc:553
+msgid "&Options..."
+msgstr "V&oµby..."
+
+#: standalone/KIllustrator.cc:555
+msgid "&Clipart..."
+msgstr "&Klip"
+
+#: standalone/KIllustrator.cc:559
+msgid "&Help..."
+msgstr "&Pomocník..."
+
+#: standalone/KIllustrator.cc:561
+msgid "About..."
+msgstr "O programe..."
+
+#: standalone/KIllustrator.cc:574
+msgid "E&ffects"
+msgstr "E&fekty"
+
+#: standalone/KIllustrator.cc:575
+msgid "Ex&tras"
+msgstr "Ex&tra"
+
+#: standalone/KIllustrator.cc:946
+msgid ""
+"This Document has been modified.\n"
+"Would you like to save it ?"
+msgstr ""
+"Tento dokument bol zmenený.\n"
+"Chcete ho ulo¾i»?"
+
+#: standalone/KIllustrator.cc:982
+msgid ""
+"This Document already exists.\n"
+"Would you like to override it ?"
+msgstr ""
+"Tento dokument u¾ existuje.\n"
+"Chcete ho prepísa»?"
+

@@ -1,0 +1,775 @@
+# KWord
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Miroslav Vasko <vasko@ies.sk>, 1998.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-12-16 02:30+0100\n"
+"PO-Revision-Date: 1998-12-19 00:00+0100\n"
+"Last-Translator: Miroslav Vasko <vasko@ies.sk>\n"
+"Language-Team: Slovak <sk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO Latin 2\n"
+"Content-Transfer-Encoding: 8859.2\n"
+
+#: framedia.cc:58
+msgid ""
+"&If the text of the frameset doesn't fit into the the frameset anymore \n"
+"(not enough frames), automatically create a new frame."
+msgstr ""
+"&Ak sa text v rámiku u¾ doòho nezmestí (málo rámèekov), automaticky vytvor\n"
+"nový rámik"
+
+#: framedia.cc:71
+msgid "Frameset"
+msgstr "Rámèeky"
+
+#: framedia.cc:83
+msgid "Text Run Around"
+msgstr "Obtekanie textu"
+
+#: framedia.cc:106
+msgid "&Don't run around other frames"
+msgstr "Neobtekaj &okolo ostatných rámikov"
+
+#: framedia.cc:111
+msgid "Run around the &Bounding Rectangle of other frames"
+msgstr "O&btekaj okolo hranièných okrajov ostatných rámikov"
+
+#: framedia.cc:116
+msgid "Run around the &Contur of other frames"
+msgstr "Obteka&j okolo obrysov ostatných rámikov"
+
+#: framedia.cc:140
+msgid "Runaround Gap: (in mm)"
+msgstr "Medzera v obtekaní: (in mm)"
+
+#: framedia.cc:164
+msgid "Text Frame"
+msgstr "Textový rámik"
+
+#: framedia.cc:188
+msgid "Choose a frameset to which the current frame should be connected:"
+msgstr "Vyberte rámiky, ku ktorým bude aktuálny rámik pripojený:"
+
+#: framedia.cc:203
+msgid "Create a new Frameset with this frame"
+msgstr "Vytvor nové rámiky s aktuálnym rámom"
+
+#: framedia.cc:217
+msgid "Connect Text Frames"
+msgstr "Spoj textové rámiky"
+
+#: kword_doc.cc:751 kword_shell.cc:309
+msgid "KWord Error"
+msgstr "KWord - Chyba"
+
+#: kword_doc.cc:751
+msgid "Could not init"
+msgstr "Nemô¾em inicializova»"
+
+#: kword_page.cc:704 kword_page.cc:2350
+msgid "KWord - Frame settings"
+msgstr "KWord - nastavenia rámikov"
+
+#: kword_page.cc:2286
+msgid "Edit Frames"
+msgstr "Uprav rámiky"
+
+#: kword_page.cc:2287
+msgid "Create Text-Frame"
+msgstr "Vytvor textový rámik"
+
+#: kword_page.cc:2288
+msgid "Create Pixmap-Frame"
+msgstr "Vytvor rámik s obrázkom"
+
+#: kword_page.cc:2289
+msgid "Create Clipart-Frame"
+msgstr "Vytvor rámik s klipom"
+
+#: kword_page.cc:2290
+msgid "Create Table-Frame"
+msgstr "Vytvor rámik s tabuµkou"
+
+#: kword_page.cc:2291
+msgid "Create Formula-Frame"
+msgstr "Vytvor rámik so vzorcom"
+
+#: kword_page.cc:2292
+msgid "Create Part-Frame"
+msgstr "Vytvor rozdeµovací rámik"
+
+#: kword_page.cc:2297
+msgid "Properties..."
+msgstr "Vlastnosti..."
+
+#: kword_shell.cc:59
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+"Tento dokument bol zmenený\n"
+"Chcete ho ulo¾i»?"
+
+#: kword_shell.cc:309
+msgid "Could not create new document"
+msgstr "Nemô¾em vytvori» nový dokument"
+
+#: kword_shell.cc:309
+msgid "Ok"
+msgstr "Ok"
+
+#: kword_shell.cc:322
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr ""
+"Nemô¾em otvori»\n"
+"%s"
+
+#: kword_shell.cc:323 kword_shell.cc:342 kword_shell.cc:359
+msgid "IO Error"
+msgstr "Chyba IO"
+
+#: kword_shell.cc:341
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr ""
+"Nemô¾em ulo¾i»\n"
+"%s"
+
+#: kword_shell.cc:358
+msgid "Could not save file"
+msgstr "Nemô¾em ulo¾i» súbor"
+
+#: kword_view.cc:210
+msgid "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!"
+msgstr "Pou¾ívate vzhµad stránok SCREEN. Budem tlaèi» na DIN A4 nale¾ato!"
+
+#: kword_view.cc:216
+msgid "The used page layout is not supported by QPrinter. I set it to DIN A4."
+msgstr "Pou¾itý vzhµad stránky nie je podporovaný QPrinterom. Nastavím ho na DIN A4"
+
+#: kword_view.cc:619 kword_view.cc:761
+msgid ""
+"*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM *.PBM *.PGM *.PPM "
+"*.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG*.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+"*.gif *.GIF|GIF-Pictures\n"
+"*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+"*.bmp *.BMP|Windows Bitmaps\n"
+"*.xbm *.XBM|XWindow Pitmaps\n"
+"*.xpm *.XPM|Pixmaps\n"
+"*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"
+msgstr ""
+"*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM *.PBM *.PGM *.PPM "
+"*.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG*.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|V¹etky obrázky\n"
+"*.gif *.GIF|Obrázky GIF\n"
+"*.jpg *.JPG *.jpeg *.JPEG|Obrázky JPEG\n"
+"*.bmp *.BMP|Windows Bitmapa\n"
+"*.xbm *.XBM|XWindow Pitmapa\n"
+"*.xpm *.XPM|Pixmapy\n"
+"*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|Obrázky PNM"
+
+#: kword_view.cc:664
+msgid "KWord - Paragraph settings"
+msgstr "KWord - Nastavenia odstavcov"
+
+#: kword_view.cc:729 stylist.cc:198
+msgid "KWord - Stylist"
+msgstr "KWord - Návrhár"
+
+#: kword_view.cc:813
+msgid ""
+"KWord 0.0.1 alpha\n"
+"\n"
+"(c) by Torben Weis <weis@kde.org> and \n"
+"Reginald Stadlbauer <reggie@kde.org> 1998\n"
+"\n"
+"KWord is under GNU GPL"
+msgstr ""
+"KWord 0.0.1 alpha\n"
+"\n"
+"(c) Torben Weis <weis@kde.org> a \n"
+"Reginald Stadlbauer <reggie@kde.org> 1998\n"
+"\n"
+"KWord je distribuovaný pod GNU GPL"
+
+#: kword_view.cc:1088 kword_view.cc:1595 paragdia.cc:612 paragdia.cc:1076
+#: paragdia.cc:1101 paragdia.cc:1126 paragdia.cc:1151
+msgid "solid line"
+msgstr "plná èiara"
+
+#: kword_view.cc:1090 kword_view.cc:1596 paragdia.cc:613 paragdia.cc:1078
+#: paragdia.cc:1103 paragdia.cc:1128 paragdia.cc:1153
+msgid "dash line (----)"
+msgstr "preru¹ovaná èiara (---)"
+
+#: kword_view.cc:1092 kword_view.cc:1597 paragdia.cc:614 paragdia.cc:1080
+#: paragdia.cc:1105 paragdia.cc:1130 paragdia.cc:1155
+msgid "dot line (****)"
+msgstr "bodkovaná èiara (****)"
+
+#: kword_view.cc:1094 kword_view.cc:1598 paragdia.cc:615 paragdia.cc:1082
+#: paragdia.cc:1107 paragdia.cc:1132 paragdia.cc:1157
+msgid "dash dot line (-*-*)"
+msgstr "bodkoèiarovaná èiara (-*-*)"
+
+#: kword_view.cc:1096 kword_view.cc:1599 paragdia.cc:616 paragdia.cc:1084
+#: paragdia.cc:1109 paragdia.cc:1134 paragdia.cc:1159
+msgid "dash dot dot line (-**-)"
+msgstr "èiara-bodka-bodka-èiara (-**-)"
+
+#: kword_view.cc:1167
+msgid "No Undo possible"
+msgstr "Krok spä» nie je k dispozícii"
+
+#: kword_view.cc:1171
+msgid "No Redo possible"
+msgstr "Krok vpred nie je k dispozícii"
+
+#: kword_view.cc:1185
+msgid "&Find..."
+msgstr "&Hµada»..."
+
+#: kword_view.cc:1186
+msgid "&Replace..."
+msgstr "Nah&radi»..."
+
+#: kword_view.cc:1193
+msgid "&Formatting Chars"
+msgstr "&Formátovacie znaky"
+
+#: kword_view.cc:1194
+msgid "Frame &Borders"
+msgstr "&Okraje rámikov"
+
+#: kword_view.cc:1204
+msgid "&Picture..."
+msgstr "O&brázok..."
+
+#: kword_view.cc:1207
+msgid "&Clipart..."
+msgstr "&Klip..."
+
+#: kword_view.cc:1212
+msgid "&Special Character..."
+msgstr "©peciálny zn&ak"
+
+#: kword_view.cc:1216
+msgid "&Tools"
+msgstr "&Nástroje"
+
+#: kword_view.cc:1219
+msgid "&Edit Text"
+msgstr "&Upravi» text"
+
+#: kword_view.cc:1222
+msgid "&Edit Frames"
+msgstr "&Upravi» rámiky"
+
+#: kword_view.cc:1225
+msgid "&Create Text Frame"
+msgstr "&Vytvori» textový rám"
+
+#: kword_view.cc:1228
+msgid "&Create Picture Frame"
+msgstr "&Vytvori» rám s obrázkom"
+
+#: kword_view.cc:1231
+msgid "&Create Clipart Frame"
+msgstr "&Vytv
+ori» rám s klipom"
+
+#: kword_view.cc:1234
+msgid "&Create Table Frame"
+msgstr "&Vytvori» rám s tabuµkou"
+
+#: kword_view.cc:1237
+msgid "&Create Formula Frame"
+msgstr "&Vytvori» rám so vzorcom"
+
+#: kword_view.cc:1240
+msgid "&Create Part Frame"
+msgstr "&Vytvori» rozdeµovací rám"
+
+#: kword_view.cc:1246
+msgid "&Format"
+msgstr "&Formát"
+
+#: kword_view.cc:1248 stylist.cc:396
+msgid "&Font..."
+msgstr "&Písmo..."
+
+#: kword_view.cc:1249 stylist.cc:399
+msgid "&Color..."
+msgstr "&Farba..."
+
+#: kword_view.cc:1250
+msgid "Paragraph..."
+msgstr "Odstavec"
+
+#: kword_view.cc:1251
+msgid "Page..."
+msgstr "Stránka..."
+
+#: kword_view.cc:1256
+msgid "&Style..."
+msgstr "©tý&l..."
+
+#: kword_view.cc:1259
+msgid "&Extra"
+msgstr "&Navy¹e"
+
+#: kword_view.cc:1261
+msgid "&Spelling..."
+msgstr "&Pravopis..."
+
+#: kword_view.cc:1262
+msgid "&Stylist..."
+msgstr "&Architekt..."
+
+#: kword_view.cc:1266
+msgid "&Options..."
+msgstr "&Nastavenia..."
+
+#: kword_view.cc:1337
+msgid "Insert Picture"
+msgstr "Vlo¾ obrázok"
+
+#: kword_view.cc:1341
+msgid "Insert Clipart"
+msgstr "Vlo¾ klip"
+
+#: kword_view.cc:1348
+msgid "Insert Special Character"
+msgstr "Vlo¾ ¹peciálny znak"
+
+#: kword_view.cc:1359
+msgid "Edit Text Tool"
+msgstr "Nástroj uprav text"
+
+#: kword_view.cc:1366
+msgid "Edit Frames Tool"
+msgstr "Nástroj uprav rámiky"
+
+#: kword_view.cc:1372
+msgid "Create Text Frame"
+msgstr "Vytvor textový rám"
+
+#: kword_view.cc:1378
+msgid "Create Picture Frame"
+msgstr "Vytvor rám s obrázkom"
+
+#: kword_view.cc:1384
+msgid "Create Clipart Frame"
+msgstr "Vytvor rám s klipom"
+
+#: kword_view.cc:1390
+msgid "Create Table Frame"
+msgstr "Vytvor rám s tabuµkou"
+
+#: kword_view.cc:1396
+msgid "Create Formula Frame"
+msgstr "Vytvor rám so vzorcom"
+
+#: kword_view.cc:1402
+msgid "Create Part Frame"
+msgstr "Vytvor rozdeµovací rám"
+
+#: kword_view.cc:1420
+msgid "Style"
+msgstr "©týl"
+
+#: kword_view.cc:1445
+msgid "Font List"
+msgstr "Zoznam písem"
+
+#: kword_view.cc:1454
+msgid "Bold"
+msgstr "Tuèné"
+
+#: kword_view.cc:1468
+msgid "Underline"
+msgstr "Podèiarknuté"
+
+#: kword_view.cc:1478
+msgid "Text Color"
+msgstr "Farba textu"
+
+#: kword_view.cc:1485
+msgid "Align Left"
+msgstr "Zarovnaj vµavo"
+
+#: kword_view.cc:1492
+msgid "Align Center"
+msgstr "Zarovnaj do stredu"
+
+#: kword_view.cc:1499
+msgid "Align Right"
+msgstr "Zarovnaj vpravo"
+
+#: kword_view.cc:1507
+msgid "Align Block"
+msgstr "Zarovnaj do bloku"
+
+#: kword_view.cc:1516
+msgid "Enumerated List"
+msgstr "Èíslovaný zoznam"
+
+#: kword_view.cc:1523
+msgid "Unsorted List"
+msgstr "Neusporiadaný zoznam"
+
+#: kword_view.cc:1532
+msgid "Superscript"
+msgstr "Horný index"
+
+#: kword_view.cc:1539
+msgid "Subscript"
+msgstr "Dolný index"
+
+#: kword_view.cc:1548
+msgid "Border Left"
+msgstr "¥avý okraj"
+
+#: kword_view.cc:1555
+msgid "Border Right"
+msgstr "Pravý okraj"
+
+#: kword_view.cc:1562
+msgid "Border Top"
+msgstr "Horný okraj"
+
+#: kword_view.cc:1569
+msgid "Border Bottom"
+msgstr "Dolný okraj"
+
+#: kword_view.cc:1577
+msgid "Border Color"
+msgstr "Farba okraju"
+
+#: kword_view.cc:1590
+msgid "Border Width"
+msgstr "©írka okraju"
+
+#: kword_view.cc:1601
+msgid "Border Style"
+msgstr "©týl okraju"
+
+#: paragdia.cc:26 paragdia.cc:86 paragdia.cc:166 paragdia.cc:240
+#: stylist.cc:392
+msgid "Preview"
+msgstr "Náhµad"
+
+#: paragdia.cc:367
+msgid "Indent"
+msgstr "Odsadenie"
+
+#: paragdia.cc:370
+msgid "Left (mm):"
+msgstr "¥avé (mm):"
+
+#: paragdia.cc:384
+msgid "Right (mm):"
+msgstr "Pravé (mm):"
+
+#: paragdia.cc:399
+msgid "First Line (mm):"
+msgstr "Prvý riadok (mm):"
+
+#: paragdia.cc:431
+msgid "Line Spacing"
+msgstr "Riadkovanie"
+
+#: paragdia.cc:435
+msgid "0.5 lines"
+msgstr "0.5 riadkov"
+
+#: paragdia.cc:436
+msgid "1.0 line"
+msgstr "1.0 riadkov"
+
+#: paragdia.cc:437
+msgid "1.5 lines"
+msgstr "1.5 riadkov"
+
+#: paragdia.cc:438
+msgid "2.0 lines"
+msgstr "2.0 riadkov"
+
+#: paragdia.cc:439
+msgid "Space (pt)"
+msgstr "Medzera (pt)"
+
+#: paragdia.cc:472
+msgid "Paragraph Space"
+msgstr "Odsadenie odstavcu"
+
+#: paragdia.cc:475
+msgid "Before (mm):"
+msgstr "Pred (mm):"
+
+#: paragdia.cc:489
+msgid "After (mm):"
+msgstr "Po (mm):"
+
+#: paragdia.cc:537
+msgid "Indent and Spacing"
+msgstr "Odsadenie a medzery"
+
+#: paragdia.cc:547
+msgid "Flow:"
+msgstr "Obtekanie:"
+
+#: paragdia.cc:551 paragdia.cc:797
+msgid "Left"
+msgstr "¥avé"
+
+#: paragdia.cc:556
+msgid "Center"
+msgstr "V strede"
+
+#: paragdia.cc:561 paragdia.cc:801
+msgid "Right"
+msgstr "Pravé"
+
+#: paragdia.cc:566
+msgid "Block"
+msgstr "Blok"
+
+#: paragdia.cc:597
+msgid "Flows"
+msgstr "Obtekania"
+
+#: paragdia.cc:607
+msgid "Style:"
+msgstr "©týl:"
+
+#: paragdia.cc:621
+msgid "Width:"
+msgstr "©írka:"
+
+#: paragdia.cc:636
+msgid "Color:"
+msgstr "Farba:"
+
+#: paragdia.cc:700
+msgid "Borders"
+msgstr "Okraje"
+
+#: paragdia.cc:717
+msgid "&No numbering"
+msgstr "&Neèíslova»"
+
+#: paragdia.cc:722
+msgid "&Arabic Numbers (1, 2, 3, 4, ...)"
+msgstr "&Arabské èíslice (1, 2, 3, 4, ...)"
+
+#: paragdia.cc:727
+msgid "&Lower Roman Numbers (i, ii, iii, iv, ...)"
+msgstr "Ma&lé rímske èíslice (i, ii, iii, iv, ...)"
+
+#: paragdia.cc:732
+msgid "&Upper Roman Numbers (I, II, III, IV, ...)"
+msgstr "&Veµké rímske èíslice (I, II, III, IV, ...)"
+
+#: paragdia.cc:737
+msgid "L&ower Alphabetical (a, b, c, d, ...)"
+msgstr "&Malé písmená (a, b, c, d, ...)"
+
+#: paragdia.cc:742
+msgid "U&pper Alphabetical (A, B, C, D, ...)"
+msgstr "Veµké &písmená (A, B, C, D, ...)"
+
+#: paragdia.cc:747
+msgid "&Bullets"
+msgstr "&Bubliny"
+
+#: paragdia.cc:841
+msgid "Depth:"
+msgstr "Håbka:"
+
+#: paragdia.cc:854
+msgid "Start at:"
+msgstr "Zaèa» na:"
+
+#: paragdia.cc:864
+msgid "&List Numbering"
+msgstr "Èís&lovanie zoznamu"
+
+#: paragdia.cc:869
+msgid "&Chapter Numbering"
+msgstr "Èíslovanie &kapitol"
+
+#: paragdia.cc:921
+msgid "Numbering"
+msgstr "Èíslovanie"
+
+#: paragdia.cc:929
+msgid "Tabulators"
+msgstr "Tabulátory"
+
+#: stylist.cc:58
+msgid "&Add.."
+msgstr "Prid&a»..."
+
+#: stylist.cc:63
+msgid "&Edit..."
+msgstr "&Upravi»..."
+
+#: stylist.cc:65
+msgid "&Copy..."
+msgstr "&Kopírova»..."
+
+#: stylist.cc:67
+msgid "Up"
+msgstr "Hore"
+
+#: stylist.cc:68
+msgid "D&own"
+msgstr "D&olu"
+
+#: stylist.cc:82
+msgid "Style Manager"
+msgstr "Mana¾er ¹týlov"
+
+#: stylist.cc:96
+msgid "Don't update Fonts"
+msgstr "Neaktualizuj písma"
+
+#: stylist.cc:97
+msgid "Update Font Families of same sized Fonts"
+msgstr "Aktualizuj rodiny písem rovnakej veµkosti"
+
+#: stylist.cc:98
+msgid "Update Font Families of all sized Fonts"
+msgstr "Aktualizuj rodiny fontov v¹etkých veµkostí"
+
+#: stylist.cc:99
+msgid "Update Font Families and Attributes of same sized Fonts"
+msgstr "Aktualizuj rodiny a vlastnosti písem rovnakej veµkosti"
+
+#: stylist.cc:100
+msgid "Update Font Families and Attributes of all sized Fonts"
+msgstr "Aktualizuj rodiny a vlastnosti písem v¹etkých veµkostí"
+
+#: stylist.cc:105
+msgid "Don't update Colors"
+msgstr "Neaktualizuj farby"
+
+#: stylist.cc:106
+msgid "Update Colors"
+msgstr "Aktualizuj farby"
+
+#: stylist.cc:111
+msgid "Don't update Indents and Spacing"
+msgstr "Neaktualizuj odsadenia a medzery"
+
+#: stylist.cc:112
+msgid "Update Indents and Spacing"
+msgstr "Aktualizuj odsadenia a medzery"
+
+#: stylist.cc:117
+msgid "Don't update Aligns/Flows"
+msgstr "Neaktualizuj zarovnanie/obtekanie"
+
+#: stylist.cc:118
+msgid "Update Aligns/Flows"
+msgstr "Aktualizuj zarovnanie/obtekanie"
+
+#: stylist.cc:123
+msgid "Don't update Numbering"
+msgstr "Neaktualizuj èíslovanie"
+
+#: stylist.cc:124
+msgid "Update Numbering"
+msgstr "Aktualizuj èíslovanie"
+
+#: stylist.cc:129
+msgid "Don't update Borders"
+msgstr "Neaktualizuj okraje"
+
+#: stylist.cc:130
+msgid "Update Borders"
+msgstr "Aktualizuj okraje"
+
+#: stylist.cc:135
+msgid "Don't update Tabulators"
+msgstr "Neaktualizuj tabulátory"
+
+#: stylist.cc:136
+msgid "Update Tabulators"
+msgstr "Aktualizuj tabulátory"
+
+#: stylist.cc:162
+msgid "Update Configuration"
+msgstr "Aktualizuj nastavenia"
+
+#: stylist.cc:206
+msgid "New Style Template"
+msgstr "Nová ¹ablóna ¹týlu"
+
+#: stylist.cc:303
+msgid "KWord, KOffice's Wordprocessor"
+msgstr "KWord, textový procesor KOffice"
+
+#: stylist.cc:338
+msgid "Name:"
+msgstr "Meno:"
+
+#: stylist.cc:357
+msgid "Following Style Template:"
+msgstr "Nasledujúce ¹ablóny ¹týlov:"
+
+#: stylist.cc:402
+msgid "&Spacing and Indents..."
+msgstr "Medzery a od&sadenie..."
+
+#: stylist.cc:405
+msgid "&Alignment..."
+msgstr "Z&arovnanie..."
+
+#: stylist.cc:408
+msgid "&Borders..."
+msgstr "Ok&raje..."
+
+#: stylist.cc:411
+msgid "&Numbering..."
+msgstr "Èíslova&nie..."
+
+#: stylist.cc:414
+msgid "&Tabulators..."
+msgstr "&Tabulátory..."
+
+#: stylist.cc:433
+msgid "Style Editor"
+msgstr "Editor ¹týlov"
+
+#: stylist.cc:477
+msgid "KWord - Paragraph Spacing"
+msgstr "KWord - rozostupy odstavcov"
+
+#: stylist.cc:498
+msgid "KWord - Paragraph Flow (Alignment)"
+msgstr "KWord - obtekanie odstavcov (zarovnanie)"
+
+#: stylist.cc:515
+msgid "KWord - Paragraph Borders"
+msgstr "KWord - okraje odstavcov"
+
+#: stylist.cc:535
+msgid "KWord - Numbering"
+msgstr "KWord - Èíslovanie"
+
+#: stylist.cc:552
+msgid "KWord - Tabulators"
+msgstr "KWord - tabulátory"

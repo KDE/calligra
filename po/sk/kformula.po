@@ -1,0 +1,511 @@
+# KFormula
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Miroslav Vasko <vasko@ies.sk>, 1998.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-12-09 09:57+0100\n"
+"PO-Revision-Date: 1998-12-20 00:00+0100\n"
+"Last-Translator: Miroslav Vasko <vasko@ies.sk>\n"
+"Language-Team: Slovak <sk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO Latin 2\n"
+"Content-Transfer-Encoding: 8859.2\n"
+
+#: kformula_doc.cc:373
+msgid "Font +"
+msgstr "Písmo +"
+
+#: kformula_doc.cc:374
+msgid "Font -"
+msgstr "Písmo -"
+
+#: kformula_doc.cc:375
+msgid "Font + (also Children)"
+msgstr "Písmo + (tie¾ deti)"
+
+#: kformula_doc.cc:376
+msgid "Font - (also Children)"
+msgstr "Písmo - (tie¾ deti)"
+
+#: kformula_doc.cc:377
+msgid "All Font +"
+msgstr "V¹etky písma +"
+
+#: kformula_doc.cc:378
+msgid "All Font -"
+msgstr "V¹etky písma -"
+
+#: kformula_doc.cc:384
+msgid "Change font"
+msgstr "Zmeò písmo"
+
+#: kformula_doc.cc:385
+msgid "Export as"
+msgstr "Exportuj ako"
+
+#: kformula_shell.cc:44
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+"Dokument bol zmenený\n"
+"Chcete ho ulo¾i»?"
+
+#: kformula_shell.cc:284
+msgid "KFormula Error"
+msgstr "KFormula - Chyba"
+
+#: kformula_shell.cc:284
+msgid "Could not create new document"
+msgstr "Nemô¾em vytvori» nový dokument"
+
+#: kformula_shell.cc:284
+msgid "Ok"
+msgstr "Ok"
+
+#: kformula_shell.cc:297
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr ""
+"Nemô¾em otvori»\n"
+"%s"
+
+#: kformula_shell.cc:298 kformula_shell.cc:317 kformula_shell.cc:327
+msgid "IO Error"
+msgstr "Chyba IO"
+
+#: kformula_shell.cc:316
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr ""
+"Nemô¾em ulo¾i»\n"
+"%s"
+
+#: kformula_shell.cc:326
+msgid "Could not save file"
+msgstr "Nemô¾em ulo¾i» súbor"
+
+#: kformula_view.cc:176
+msgid "Font Toolbar"
+msgstr "Nástrojový pruh písem"
+
+#: kformula_view.cc:177
+msgid "Text Toolbar"
+msgstr "Nástrojový pruh textu"
+
+#: kformula_view.cc:178
+msgid "Type Toolbar"
+msgstr "Nástrojový pruh typov"
+
+#: kformula_view.cc:181
+msgid "&Element"
+msgstr "&Prvok"
+
+#: kformula_view.cc:183
+msgid "&Add Index"
+msgstr "Prid&aj index"
+
+#: kformula_view.cc:186
+msgid "Top left"
+msgstr "Vµavo hore"
+
+#: kformula_view.cc:189
+msgid "Bottom left"
+msgstr "Vµavo dole"
+
+#: kformula_view.cc:192
+msgid "Top right"
+msgstr "Vpravo hore"
+
+#: kformula_view.cc:195
+msgid "Bottom right"
+msgstr "Vpravo dole"
+
+#: kformula_view.cc:197
+msgid "&Add Element"
+msgstr "Prid&aj prvok"
+
+#: kformula_view.cc:200
+msgid "Plain text"
+msgstr "Jednoduchý text"
+
+#: kformula_view.cc:203
+msgid "Root"
+msgstr "Odmocnina"
+
+#: kformula_view.cc:206
+msgid "Bracket"
+msgstr "Zátvorka"
+
+#: kformula_view.cc:209
+msgid "Fraction"
+msgstr "zlomok"
+
+#: kformula_view.cc:211
+msgid "Set color"
+msgstr "Nastav farbu"
+
+#: kformula_view.cc:213
+msgid "Remove element"
+msgstr "Odstráò prvok"
+
+#: kformula_view.cc:217
+msgid "&Text"
+msgstr "&Text"
+
+#: kformula_view.cc:219
+msgid "Set font"
+msgstr "Nastav písmo"
+
+#: kformula_view.cc:222
+msgid "Split at current position"
+msgstr "Rozdeµ na súèasnej pozícii"
+
+#: kformula_view.cc:224
+msgid "&Root"
+msgstr "&Odmocnina"
+
+#: kformula_view.cc:226 kformula_view.cc:246
+msgid "Use pixmap"
+msgstr "Pou¾i bitmapu"
+
+#: kformula_view.cc:229
+msgid "Add root index (Top left)"
+msgstr "Pridaj index odmocniny (vµavo hore)"
+
+#: kformula_view.cc:231
+msgid "&Bracket"
+msgstr "&Zátvorka"
+
+#: kformula_view.cc:234
+msgid "Set delimiter ..."
+msgstr "Nastav oddeµovaè ..."
+
+#: kformula_view.cc:236
+msgid "&Fraction"
+msgstr "&Zlomok"
+
+#: kformula_view.cc:238
+msgid "Vertical align ..."
+msgstr "Vertikálne zarovnanie ..."
+
+#: kformula_view.cc:240
+msgid "Horizontal align ..."
+msgstr "Horizontálne zarovnanie ..."
+
+#: kformula_view.cc:242
+msgid "Set midline"
+msgstr "Nastav stredovú èiaru"
+
+#: kformula_view.cc:244
+msgid "&Integral"
+msgstr "&Integrál"
+
+#: kformula_view.cc:249 kformula_view.cc:519
+msgid "Add higher limit"
+msgstr "Pridaj hornú limitu"
+
+#: kformula_view.cc:252 kformula_view.cc:522
+msgid "Add lower limit"
+msgstr "Pridaj dolnú limitu"
+
+#: kformula_view.cc:254
+msgid "&Matrix"
+msgstr "&Matica"
+
+#: kformula_view.cc:258
+msgid "Set dimension"
+msgstr "Nastav rozmer"
+
+#: kformula_view.cc:261 kformula_view.cc:531
+msgid "Insert a row"
+msgstr "Vlo¾ riadok"
+
+#: kformula_view.cc:264 kformula_view.cc:534
+msgid "Insert a column"
+msgstr "Vlo¾ ståpec"
+
+#: kformula_view.cc:267 kformula_view.cc:537
+msgid "Remove a row"
+msgstr "Odstráò riadok"
+
+#: kformula_view.cc:270 kformula_view.cc:540
+msgid "Remove a column"
+msgstr "Odstráò ståpec"
+
+#: kformula_view.cc:272
+msgid "&Decoration"
+msgstr "&Dekorácia"
+
+#: kformula_view.cc:274
+msgid "&Symbol"
+msgstr "&Symbol"
+
+#: kformula_view.cc:277
+msgid "&Formula"
+msgstr "&Vzorec"
+
+#: kformula_view.cc:279
+msgid "Set general color"
+msgstr "Nastav hlavnú farbu"
+
+#: kformula_view.cc:281
+msgid "Set general font"
+msgstr "Nastav hlavný font"
+
+#: kformula_view.cc:292
+msgid "&Using KFormula"
+msgstr "Po&u¾ijúc KFormula"
+
+#: kformula_view.cc:317
+msgid "Add/change to simple text"
+msgstr "Pridaj/zmeò na jednoduchý text"
+
+#: kformula_view.cc:321
+msgid "Add/change to root"
+msgstr "Pridaj/zmeò na odmocninu"
+
+#: kformula_view.cc:324
+msgid "Add/change fract line"
+msgstr "Pridaj/zmeò zlomkovú èiaru"
+
+#: kformula_view.cc:327
+msgid "Add/change vertical space"
+msgstr "Pridaj/zmeò vertikálny odstup"
+
+#: kformula_view.cc:330
+msgid "Add/change a bracket block"
+msgstr "Pridaj/zmeò blok v zátvorke"
+
+#: kformula_view.cc:333
+msgid "Add/change an integral"
+msgstr "Pridaj/zmeò integrál"
+
+#: kformula_view.cc:336
+msgid "Add/change a block with symbols"
+msgstr "Pridaj/zmeò blok symbolov"
+
+#: kformula_view.cc:339
+msgid "Add/change matrix"
+msgstr "Pridaj/zmeò maticu"
+
+#: kformula_view.cc:342
+msgid "Add an index at position..."
+msgstr "Pridaj index na pozíciu..."
+
+#: kformula_view.cc:355
+msgid "Font Family"
+msgstr "Rodina písma"
+
+#: kformula_view.cc:374
+msgid "Bold"
+msgstr "Tuèné"
+
+#: kformula_view.cc:380
+msgid "Underlined"
+msgstr "Podèiarknuté"
+
+#: kformula_view.cc:403
+msgid "Font scale mode"
+msgstr "Mód ¹kály fontu"
+
+#: kformula_view.cc:409
+msgid "Reduce the fontSize"
+msgstr "Zmen¹i font"
+
+#: kformula_view.cc:412
+msgid "Increase the fontSize"
+msgstr "Zväè¹i font"
+
+#: kformula_view.cc:417
+msgid "Reduce/Increase active element fontSize"
+msgstr "Zmen¹i/zväè¹i font aktívneho prvku"
+
+#: kformula_view.cc:420
+msgid "Reduce/Increase indexes fontSize"
+msgstr "Zmen¹i/zväè¹i font indexov"
+
+#: kformula_view.cc:423
+msgid "Reduce/Increase children (content) fontSize"
+msgstr "Zmen¹i/zväè¹i font detí (obsahu)"
+
+#: kformula_view.cc:426
+msgid "Reduce/Increase next element fontSize"
+msgstr "Zmen¹i/zväè¹i font nasledujúceho prvku"
+
+#: kformula_view.cc:447
+msgid "Split text into 2 elment"
+msgstr "Rozdeµ text na dva prvky"
+
+#: kformula_view.cc:451
+msgid "Add root index (i.e. Top Left index)"
+msgstr "Pridaj index odmocniny (t.j. µavý horný index)"
+
+#: kformula_view.cc:470
+msgid "Left delimiter"
+msgstr "¥avý oddeµovaè"
+
+#: kformula_view.cc:483
+msgid "Right delimiter"
+msgstr "Pravý oddeµovaè"
+
+#: kformula_view.cc:489
+msgid "Align fraction to midline"
+msgstr "Zarovnaj zlomok na stredovú èiaru"
+
+#: kformula_view.cc:492
+msgid "Align fraction to numerator"
+msgstr "Zarovnaj zlomok na èitateµa"
+
+#: kformula_view.cc:495
+msgid "Align fraction to denominator"
+msgstr "Zarovnaj zlomok na menovateµa"
+
+#: kformula_view.cc:498
+msgid "Align center"
+msgstr "Zarovnaj do stredu"
+
+#: kformula_view.cc:501
+msgid "Align left"
+msgstr "Zarovnaj vµavo"
+
+#: kformula_view.cc:504
+msgid "Align Right"
+msgstr "Zarovnaj vpravo"
+
+#: kformula_view.cc:507
+msgid "Reduce element vertical distance"
+msgstr "Zmen¹i vertikálnu vzdialenos» prvku"
+
+#: kformula_view.cc:510
+msgid "Increase element vertical distance"
+msgstr "Zväè¹i vertikálnu vzdialenos» prvku"
+
+#: kformula_view.cc:513
+msgid "Toggle fraction line"
+msgstr "Prepni zlomkovú èiaru"
+
+#: kformula_view.cc:528
+msgid "Set matrix dimension"
+msgstr "Nastav rozmer matice"
+
+#: kformula_view.cc:546
+msgid "Toggle pixmap use"
+msgstr "Prepni pou¾ívanie bitmapy"
+
+#: matrixwidget.cc:27
+msgid "KFormula - Matrix Element Setup "
+msgstr "KFormula - Nastavenie prvkov matice"
+
+#: matrixwidget.cc:34
+msgid "Size & Space:"
+msgstr "Veµkos» a rozostupy:"
+
+#: matrixwidget.cc:38
+msgid "Columns:"
+msgstr "Ståpce:"
+
+#: matrixwidget.cc:44
+msgid "Rows"
+msgstr "Riadky"
+
+#: matrixwidget.cc:52
+msgid "Space:"
+msgstr "Rozostupy:"
+
+#: matrixwidget.cc:59
+msgid "Borders:"
+msgstr "Okraje:"
+
+#: matrixwidget.cc:62 matrixwidget.cc:68 matrixwidget.cc:74 matrixwidget.cc:80
+#: matrixwidget.cc:86 matrixwidget.cc:92
+msgid "No-border"
+msgstr "®iadny okraj"
+
+#: matrixwidget.cc:63 matrixwidget.cc:69 matrixwidget.cc:75 matrixwidget.cc:81
+#: matrixwidget.cc:87 matrixwidget.cc:93
+msgid "Single Line"
+msgstr "Jednoduchá èiara"
+
+#: matrixwidget.cc:64 matrixwidget.cc:70 matrixwidget.cc:76 matrixwidget.cc:82
+#: matrixwidget.cc:88 matrixwidget.cc:94
+msgid "Double Lne"
+msgstr "Dvojitá èiara"
+
+#: matrixwidget.cc:98
+msgid "Internal Horizonatl"
+msgstr "Vnútorná horizontálna"
+
+#: matrixwidget.cc:101
+msgid "Internal Vertical"
+msgstr "Vnútorná vertikálna"
+
+#: matrixwidget.cc:104
+msgid "Top"
+msgstr "Hore"
+
+#: matrixwidget.cc:107
+msgid "Bottom"
+msgstr "Dole"
+
+#: matrixwidget.cc:110
+msgid "Left"
+msgstr "Vµavo"
+
+#: matrixwidget.cc:113
+msgid "Rigth"
+msgstr "Vpravo"
+
+#: matrixwidget.cc:117
+msgid "General"
+msgstr "V¹eobecne"
+
+#: matrixwidget.cc:122
+msgid "Vertical:"
+msgstr "Vertikálne:"
+
+#: matrixwidget.cc:125
+msgid "Fixed Row"
+msgstr "Pevný riadok"
+
+#: matrixwidget.cc:130
+msgid "Half Matrix"
+msgstr "Polovièná matica"
+
+#: matrixwidget.cc:140
+msgid "Row Midline"
+msgstr "Stredová èiara"
+
+#: matrixwidget.cc:143
+msgid "Over the row"
+msgstr "Nad riadkom"
+
+#: matrixwidget.cc:146
+msgid "Under the row"
+msgstr "Pod riadkom"
+
+#: matrixwidget.cc:156
+msgid "Horizontal:"
+msgstr "Horizontálne:"
+
+#: matrixwidget.cc:159
+msgid "Center "
+msgstr "V strede "
+
+#: matrixwidget.cc:160
+msgid "Left side"
+msgstr "¥avá strana"
+
+#: matrixwidget.cc:161
+msgid "Right side"
+msgstr "Pravá strana"
+
+#: matrixwidget.cc:164
+msgid "Align"
+msgstr "Zarovna»"
