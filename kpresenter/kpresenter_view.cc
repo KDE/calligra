@@ -6143,6 +6143,11 @@ void KPresenterView::editReplace()
     }
 }
 
+void KPresenterView::editFindPrevious()
+{
+    //todo
+}
+
 void KPresenterView::editFindNext()
 {
     m_switchPage = m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());

@@ -697,6 +697,7 @@ protected slots:
     void insertDirectCursor();
     void slotCorrectWord();
     void editFindNext();
+    void editFindPrevious();
 
 // end of protected slots
 protected:
