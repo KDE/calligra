@@ -53,6 +53,20 @@
 
 //#define DEBUG_DRAW
 
+
+/******************************************************************/
+/* Class: KWFrameList                                             */
+/******************************************************************/
+
+int KWFrameList::compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
+{
+           int za = ((KWFrame *)a)->zOrder();
+           int zb = ((KWFrame *)b)->zOrder();
+           if (za == zb) return 0;
+           if (za < zb) return -1;
+           return 1;
+}
+
 /******************************************************************/
 /* Class: KWFrame                                                 */
 /******************************************************************/
@@ -91,6 +105,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       brd_bottom( QColor(), KoBorder::SOLID, 0 ),
       handles(),
       m_framesOnTop(),
+      m_framesBelow(),
       m_frameSet( fs )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
@@ -249,6 +264,9 @@ void KWFrame::repaintResizeHandles() {
 
 void KWFrame::frameBordersChanged() {
 	invalidateParentFrameset();
+	if (isSelected()) {
+		updateResizeHandles();
+	}
 }
 
 
@@ -969,6 +987,7 @@ void KWFrameSet::updateFrames()
     QPtrListIterator<KWFrame> fIt( frameIterator() );
     for ( ; fIt.current(); ++fIt ) {
         fIt.current()->clearFramesOnTop();
+	fIt.current()->clearFramesBelow();
         int pg = fIt.current()->pageNum();
         m_firstPage = QMIN( m_firstPage, pg );
         lastPage = QMAX( lastPage, pg );
@@ -985,13 +1004,6 @@ void KWFrameSet::updateFrames()
     for ( int i = oldElements ; i < (int)m_framesInPage.size() ; ++i )
         m_framesInPage.insert( i, new QPtrList<KWFrame>() );
 
-    // Iterate over frames again, to fill the m_framesInPage array
-    fIt.toFirst();
-    for ( ; fIt.current(); ++fIt ) {
-        int pg = fIt.current()->pageNum();
-        Q_ASSERT( pg <= lastPage );
-        m_framesInPage[pg - m_firstPage]->append( fIt.current() );
-    }
 
     if ( m_doc->viewMode()->hasFrames() )
     {
@@ -1031,11 +1043,9 @@ void KWFrameSet::updateFrames()
                                 parentFrame = oldParentFrame;
                         }
                         //kdDebug() << "KWFrameSet::updateFrames comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
-                        if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
+                        KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
+                        if( !intersect.isEmpty() )
                         {
-                            KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
-                            if( !intersect.isEmpty() )
-                            {
 #if 0
                                 kdDebug(32002)
                                     << "KWFrameSet::updateFrames adding frame "
@@ -1044,8 +1054,13 @@ void KWFrameSet::updateFrames()
                                     << "\n   intersect: " << intersect
                                     << " (zoomed: " << m_doc->zoomRect( intersect ) << endl;
 #endif
-                                fIt.current()->addFrameOnTop( frameMaybeOnTop );
-                            }
+	                        if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
+	                        {
+
+        	                        fIt.current()->addFrameOnTop( frameMaybeOnTop );
+                	        } else {
+					fIt.current()->addFrameBelow( frameMaybeOnTop );
+				}
                         }
                     }
                 }
@@ -1053,6 +1068,17 @@ void KWFrameSet::updateFrames()
         }
     }
 
+    // Iterate over frames again, to fill the m_framesInPage array
+    fIt.toFirst();
+    for ( ; fIt.current(); ++fIt ) {
+        int pg = fIt.current()->pageNum();
+        Q_ASSERT( pg <= lastPage );
+        m_framesInPage[pg - m_firstPage]->append( fIt.current() );
+	fIt.current()->sortFramesBelow();
+    }
+
+
+    
     if ( isFloating() )
     {
         //kdDebug() << "KWFrameSet::updateFrames " << getName() << " is floating" << endl;
@@ -1214,9 +1240,8 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
     // Transparency handling
     //QRegion region( crect );
     QRect myFrameRect( m_doc->zoomRect( *frame ) );
-    QPtrList<KWFrame> framesUnderMe = m_doc->framesUnderFrame( frame );
-    //kdDebug() << "KWFrameSet::drawFrame framesUnderMe: " << framesUnderMe.count() << endl;
-    QPtrListIterator<KWFrame> it( framesUnderMe );
+    //kdDebug() << "KWFrameSet::drawFrame frame->framesBelow(): " << frame->framesBelow().count() << endl;
+    QPtrListIterator<KWFrame> it( frame->framesBelow() );
     for ( ; it.current() ; ++it )
     {
         KWFrame* f = it.current();

@@ -61,6 +61,17 @@ class KWFramePartMoveCommand;
 class KWordFrameSetIface;
 class DCOPObject;
 
+
+/**
+ * small utility class representing a sortable (by z-order) list of frames
+ * you can use sort() and inSort(item)
+ **/
+class KWFrameList: public QPtrList<KWFrame>
+{
+protected:
+	virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b);
+};
+
 /**
  * This class represents a single frame.
  * A frame belongs to a frameset which states its contents.
@@ -164,10 +175,20 @@ public:
     /** For KWFrameSet::updateFrames only. Clear list of frames on top of this one.
      */
     void clearFramesOnTop() { m_framesOnTop.clear(); }
+    void clearFramesBelow() { m_framesBelow.clear(); }
+
     /** For KWFrameSet::updateFrames only. Add a frame on top of this one.
      * Note that order doesn't matter in that list, it's for clipping only. */
     void addFrameOnTop( KWFrame* fot ) { m_framesOnTop.append( fot ); }
+    
+    /**
+     * order DOES matter for this one tho. this one is for transparency & selection.
+     **/
+    void addFrameBelow( KWFrame* fbl ) { m_framesBelow.append( fbl ); }
+    void sortFramesBelow() { m_framesBelow.sort(); }
+    
     const QPtrList<KWFrame>& framesOnTop() const { return m_framesOnTop; }
+    const QPtrList<KWFrame>& framesBelow() const { return m_framesBelow; }
 
     /** All borders can be custom drawn with their own colors etc.
      */
@@ -302,7 +323,8 @@ private:
     KoBorder brd_left, brd_right, brd_top, brd_bottom;
 
     QPtrList<KWResizeHandle> handles;
-    QPtrList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
+    KWFrameList m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
+    KWFrameList m_framesBelow; // List of frames below us. needed for selection code & transparency
     KWFrameSet *m_frameSet;
 
     /** Prevent operator=
