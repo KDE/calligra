@@ -35,7 +35,7 @@
 
 namespace Kexi
 {
-	/*! \return true is \a s is a valid identifier, ie. starts with a letter or '_' 
+	/*! \return true if \a s is a valid identifier, ie. starts with a letter or '_' 
 	 and contains only letters, numbers and '_'. */
 	inline bool isIdentifier(const QString& s) {
 		uint i;
@@ -47,7 +47,7 @@ namespace Kexi
 		return i>0 && i==s.length();
 	}
 
-	//! \return true is \a o has parent \a par.
+	//! \return true if \a o has parent \a par.
 	inline bool hasParent(QObject* par, QObject* o)
 	{
 		while (o && o!=par)

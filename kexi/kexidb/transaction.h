@@ -76,7 +76,7 @@ class KEXI_DB_EXPORT Transaction : public QObject
 		 Returns false also if transaction is uninitialised (null). */
 		bool active() const;
 		
-		/*! \return true is transaction is uinitialised (null). */
+		/*! \return true if transaction is uinitialised (null). */
 		bool isNull() const;
 		
 		/*! shortcut that offers uinitialised (null) transaction */
