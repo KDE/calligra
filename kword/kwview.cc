@@ -2122,7 +2122,7 @@ void KWView::editFind()
 
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,m_gui->canvasWidget()->kWordDocument()->frameTextObject());
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,m_gui->canvasWidget()->kWordDocument()->frameTextObject(m_gui->canvasWidget()->viewMode()));
         doFindReplace();
     }
 }
@@ -2147,7 +2147,7 @@ void KWView::editReplace()
     KoReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry,hasSelection );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,m_gui->canvasWidget()->kWordDocument()->frameTextObject());
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,m_gui->canvasWidget()->kWordDocument()->frameTextObject(m_gui->canvasWidget()->viewMode()));
         doFindReplace();
     }
 }
@@ -5621,7 +5621,7 @@ void KWView::applyAutoFormat()
 {
     m_doc->getAutoFormat()->readConfig();
     KMacroCommand *macro = 0L;
-    QPtrList<KoTextObject> list(m_doc->frameTextObject());
+    QPtrList<KoTextObject> list(m_doc->frameTextObject(m_gui->canvasWidget()->viewMode()));
     QPtrListIterator<KoTextObject> fit(list);
     for ( ; fit.current() ; ++fit )
     {

@@ -250,7 +250,7 @@ public:
     // Prefer this over frameSet(i), if iterating over all of them
     QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(m_lstFrameSet); }
 
-    QPtrList<KoTextObject> frameTextObject() const;
+    QPtrList<KoTextObject> frameTextObject(KWViewMode *viewmode) const;
 
     void addFrameSet( KWFrameSet *f, bool finalize = true );
     // Remove frameset from list (don't delete)
@@ -357,7 +357,7 @@ public:
     void removePage( int num );
     void afterRemovePages();
 
-    ProcessingType processingType() { return m_processingType;  }
+    ProcessingType processingType()const { return m_processingType;  }
 
     QCursor getMouseCursor( const QPoint& nPoint, bool controlPressed );
     QPtrList<KWFrame> getSelectedFrames() const;
@@ -425,8 +425,8 @@ public:
 
     void addCommand( KCommand * cmd );
 
-    KCommandHistory * commandHistory() { return m_commandHistory; }
-    KoAutoFormat * getAutoFormat() { return m_autoFormat; }
+    KCommandHistory * commandHistory() const { return m_commandHistory; }
+    KoAutoFormat * getAutoFormat() const { return m_autoFormat; }
 
     // This is used upon loading, to delay certain things until completeLoading.
     // For KWTextImage
