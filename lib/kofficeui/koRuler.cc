@@ -420,7 +420,7 @@ void KoRuler::drawVertical( QPainter *_painter )
             p.translate( qRound(( width() - textheight ) * 0.5),
                          qRound(i) - diffy + qRound(textwidth * 0.5) );
             p.rotate( -90 );
-            p.drawText( 0, 0, textwidth, textheight, AlignLeft | AlignTop, str );
+            p.drawText( 0, 0, textwidth + 1, textheight, AlignLeft | AlignTop, str );
             p.restore();
         }
 
