@@ -266,6 +266,10 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
         return KoFilter::FileNotFound;
     }
 
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+
     kdDebug(30518) << "Trying to open content.xml" << endl;
     if ( !store->open( "content.xml" ) )
     {
@@ -273,8 +277,18 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
         delete store;
         return KoFilter::WrongFormat;
     }
-
-    m_content.setContent( store->device() );
+    
+    
+    if ( !m_content.setContent( store->device(),
+        &errorMsg, &errorLine, &errorColumn ) )
+    {
+	kdError(30518) << "Parsing error in content.xml" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+	store->close();
+	delete store;
+	return KoFilter::ParsingError;
+    }
     store->close();
 
     //kdDebug(30518)<<" m_content.toCString() :"<<m_content.toCString()<<endl;
@@ -288,31 +302,52 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     //QDomDocument styles;
     if ( store->open( "styles.xml" ) )
     {
-        m_stylesDoc.setContent( store->device() );
+        if ( !m_stylesDoc.setContent( store->device(),
+             &errorMsg, &errorLine, &errorColumn ) )
+	{
+	    kdWarning(30518) << "Parsing error in style.xml" << endl
+		<< " In line: " << errorLine << ", column: " << errorColumn << endl
+		<< " Error message: " << errorMsg << endl;
+	}
+        else
+            kdDebug(30518) << "file containing styles loaded" << endl;
         store->close();
 
         //kdDebug(30518)<<" styles.toCString() :"<<m_stylesDoc.toCString()<<endl;
-        kdDebug(30518) << "file containing styles loaded" << endl;
     }
     else
         kdWarning(30518) << "Style definitions do not exist!" << endl;
 
     if ( store->open( "meta.xml" ) )
     {
-        m_meta.setContent( store->device() );
+        if ( !m_meta.setContent( store->device(),
+             &errorMsg, &errorLine, &errorColumn ) )
+	{
+	    kdWarning(30518) << "Parsing error in meta.xml" << endl
+		<< " In line: " << errorLine << ", column: " << errorColumn << endl
+		<< " Error message: " << errorMsg << endl;
+	}
+        else
+            kdDebug(30518) << "File containing meta definitions loaded" << endl;
+        
         store->close();
-
-        kdDebug(30518) << "File containing meta definitions loaded" << endl;
     }
     else
         kdWarning(30518) << "Meta definitions do not exist!" << endl;
 
     if ( store->open( "settings.xml" ) )
     {
-        m_settings.setContent( store->device() );
-        store->close();
+        if ( !m_settings.setContent( store->device(),
+             &errorMsg, &errorLine, &errorColumn ) )
+	{
+	    kdWarning(30518) << "Parsing error in settings.xml" << endl
+		<< " In line: " << errorLine << ", column: " << errorColumn << endl
+		<< " Error message: " << errorMsg << endl;
+	}
+        else
+            kdDebug(30518) << "File containing settings loaded" << endl;
 
-        kdDebug(30518) << "File containing settings loaded" << endl;
+        store->close();
     }
     else
         kdWarning(30518) << "Settings do not exist!" << endl;
