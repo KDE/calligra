@@ -54,7 +54,6 @@ void KWCreateBookmarkDia::init()
     enableButtonOK( false );
     connect( m_bookmarkName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
     setMainWidget( dia );
-    setInitialSize( QSize( 400, 100 ) ); // wide but not very high. It still gets high though.
     m_bookmarkName->setFocus();
 }
 

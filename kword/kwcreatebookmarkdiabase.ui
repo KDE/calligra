@@ -8,28 +8,20 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>358</width>
-            <height>66</height>
+            <width>496</width>
+            <height>104</height>
         </rect>
     </property>
     <property name="caption">
         <string>Create New Bookmark</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel">
+        <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
-                <cstring>lExplain</cstring>
-            </property>
-            <property name="text">
-                <string>&lt;p&gt;Bookmarks allow you to jump between parts of your document.&lt;br&gt;Please provide the name of your bookmark.&lt;/p&gt;</string>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>Layout3</cstring>
+                <cstring>layout2</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -50,7 +42,16 @@
                 </widget>
             </hbox>
         </widget>
-    </vbox>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>lExplain</cstring>
+            </property>
+            <property name="text">
+                <string>Bookmarks allow you to jump between parts of your document.
+Please provide the name of your bookmark.</string>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <layoutdefaults spacing="6" margin="6"/>
 </UI>
