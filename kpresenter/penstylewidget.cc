@@ -213,6 +213,27 @@ void PenStyleWidget::setPen( const PenCmd::Pen &pen )
 }
 
 
+void PenStyleWidget::apply()
+{
+    int flags = getPenConfigChange();
+
+    if ( flags & PenCmd::LineEnd )
+        m_pen.lineEnd = getLineEnd();
+
+    if ( flags & PenCmd::LineBegin )
+        m_pen.lineBegin = getLineBegin();
+
+    if ( flags & PenCmd::Color )
+        m_pen.pen.setColor( getPen().color() );
+
+    if ( flags & PenCmd::Style )
+        m_pen.pen.setStyle( getPen().style() );
+
+    if ( flags & PenCmd::Width )
+        m_pen.pen.setWidth( getPen().width() );
+}
+
+
 void PenStyleWidget::slotReset()
 {
     setPen( m_pen.pen );

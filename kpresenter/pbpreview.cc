@@ -23,7 +23,6 @@
 #include <qpainter.h>
 
 #include <kozoomhandler.h>
-#include "kpgradient.h"
 #include "kpresenter_utils.h"
 
 PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
@@ -34,7 +33,8 @@ PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
     paintType = _paintType;
     pen = QPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );
-    gradient = 0;
+    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, false, 100, 100 );
+    savedGradient = gradient;
 
     setFrameStyle( WinPanel | Sunken );
 
@@ -53,8 +53,10 @@ void PBPreview::resizeEvent( QResizeEvent *e )
     QFrame::resizeEvent( e );
     if ( gradient )
     {
+#if 1
         gradient->setSize( contentsRect().size() );
         repaint();
+#endif
     }
 }
 
@@ -94,7 +96,7 @@ void PBPreview::drawContents( QPainter *painter )
         painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
                            colorGroup().base() );
         painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(), brush );
-    } else if ( paintType == Gradient && gradient )
+    } else if ( paintType == Gradient )
         painter->drawPixmap( 0, 0, gradient->pixmap());
 
     painter->restore();
@@ -103,8 +105,21 @@ void PBPreview::drawContents( QPainter *painter )
 PBPreview::~PBPreview()
 {
     delete _zoomHandler;
+    delete savedGradient;
 }
 
+
+void PBPreview::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
+                             bool _unbalanced, int _xfactor, int _yfactor )
+{
+    gradient->setColor1( _c1 );
+    gradient->setColor2( _c2 );
+    gradient->setBackColorType( _t );
+    gradient->setUnbalanced( _unbalanced );
+    gradient->setXFactor( _xfactor );
+    gradient->setYFactor( _yfactor );
+    repaint( false );
+}
 
 
 #include "pbpreview.moc"

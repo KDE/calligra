@@ -44,7 +44,8 @@ public:
     int getPenConfigChange() const;
 
     void setPen( const PenCmd::Pen &pen );
-    
+    void apply();
+
 private:
     void setPen( const QPen &pen );
     void setLineBegin( LineEnd lb );

@@ -1,0 +1,85 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>BrushPropertyUI</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>BrushPropertyUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>156</width>
+            <height>79</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Brush</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>styleLabel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Style:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>styleCombo</cstring>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="0" column="1">
+            <property name="name">
+                <cstring>styleCombo</cstring>
+            </property>
+        </widget>
+        <widget class="KColorButton" row="1" column="1">
+            <property name="name">
+                <cstring>colorChooser</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>colorLabel</cstring>
+            </property>
+            <property name="text">
+                <string>C&amp;olor:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>colorChooser</cstring>
+            </property>
+        </widget>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+</includehints>
+</UI>

@@ -39,6 +39,7 @@
 #include "backdia.h"
 #include "autoformEdit/afchoose.h"
 #include "styledia.h"
+#include "propertyeditor.h"
 #include "pgconfdia.h"
 #include "effectdia.h"
 #include "rotationdialogimpl.h"
@@ -218,6 +219,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     // init
     afChoose = 0;
     styleDia = 0;
+    m_propertyEditor = 0;
     pgConfDia = 0;
     rotateDia = 0;
     shadowDia = 0;
@@ -397,6 +399,7 @@ KPresenterView::~KPresenterView()
     m_replaceEntry = 0L;
     delete m_specialCharDlg;
     delete styleDia;
+    delete m_propertyEditor;
     delete pgConfDia;
     delete rotateDia;
     delete shadowDia;
@@ -1147,6 +1150,22 @@ void KPresenterView::toolsClosedCubicBezierCurve()
     else
         actionToolsClosedCubicBezierCurve->setChecked( true );
 }
+
+void KPresenterView::extraProperties()
+{
+    m_canvas->setToolEditMode( TEM_MOUSE );
+
+    m_propertyEditor = new PropertyEditor( this, "PropertyEditor", m_canvas->activePage(), m_pKPresenterDoc );
+    //m_propertyEditor->setCaption( i18n( "Properties" ) );
+
+    connect( m_propertyEditor, SIGNAL( propertiesOk() ), this, SLOT( propertiesOk() ) );
+    m_propertyEditor->exec();
+    disconnect( m_propertyEditor, SIGNAL( propertiesOk() ), this, SLOT( propertiesOk() ) );
+
+    delete m_propertyEditor;
+    m_propertyEditor = 0;
+}
+
 
 void KPresenterView::extraPenBrush()
 {
@@ -2660,6 +2679,10 @@ void KPresenterView::setupActions()
                                        this, SLOT( extraPenBrush() ),
                                        actionCollection(), "extra_properties" );
 
+    actionExtraProperties = new KAction( i18n( "New Properties" ), "penbrush", 0,
+                                       this, SLOT( extraProperties() ),
+                                       actionCollection(), "extra_new_properties" );
+
     actionExtraArrangePopup = new KAction( i18n( "Arra&nge Objects" ), "arrange", 0,
                                            this, SLOT(extraArrangePopup()),
                                            actionCollection(), "extra_arrangepopup" );
@@ -3301,6 +3324,17 @@ void KPresenterView::afChooseOk( const QString & c )
 void KPresenterView::slotAfchooseCanceled()
 {
     setTool( TEM_MOUSE );
+}
+
+void KPresenterView::propertiesOk()
+{
+    KCommand *cmd = m_propertyEditor->getCommand();
+
+    if ( cmd )
+    {
+        cmd->execute();
+        kPresenterDoc()->addCommand( cmd );
+    }
 }
 
 void KPresenterView::styleOk()

@@ -12,7 +12,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	styledia.cc kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
 	kpresenter_utils.cc  \
-  effecthandler.cc pageeffects.cc\
+	effecthandler.cc pageeffects.cc\
 	transeffectdia.cc \
 	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
@@ -51,7 +51,9 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kprduplicateobjdia.cc kpclosedlineobject.cc \
 	kprimportstyledia.cc \
 	imageEffectDia.cc imageEffectBase.ui customslideshowdia.cc \
-    pbpreview.cc penstyle.ui penstylewidget.cc \
+	pbpreview.cc penstyle.ui penstylewidget.cc \
+	brushpropertyui.ui gradientpropertyui.ui brushproperty.cc \
+	propertyeditor.cc \
 	slidetransitionwidget.ui slidetransitiondia.cc
 
 if include_ARTS

@@ -43,6 +43,7 @@ class KoRuler;
 class QScrollBar;
 class AFChoose;
 class StyleDia;
+class PropertyEditor;
 class PgConfDia;
 class SlideTransitionDia;
 class RotationDialogImpl;
@@ -239,6 +240,7 @@ public slots:
 
     // extra menu
     void extraPenBrush();
+    void extraProperties();
     void extraRaise();
     void extraLower();
     void extraRotate();
@@ -659,6 +661,7 @@ protected slots:
     void afChooseOk( const QString & );
     void slotAfchooseCanceled();
     void styleOk();
+    void propertiesOk();
     void pgConfOk();
     void rotateOk();
     void shadowOk();
@@ -839,6 +842,7 @@ private:
     // dialogs
     AFChoose *afChoose;
     StyleDia *styleDia;
+    PropertyEditor *m_propertyEditor;
     PgConfDia *pgConfDia;
     RotationDialogImpl *rotateDia;
     ShadowDialogImpl *shadowDia;
@@ -980,6 +984,7 @@ private:
     KAction *actionTextInsertPageNum;
 
     KAction *actionExtraPenBrush;
+    KAction *actionExtraProperties;
     KAction *actionExtraRaise;
     KAction *actionExtraLower;
 

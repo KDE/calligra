@@ -26,7 +26,8 @@
 #include <qframe.h>
 #include <qpen.h>
 
-class KPGradient;
+#include "kpgradient.h"
+
 class KoZoomHandler;
 
 /******************************************************************/
@@ -47,11 +48,20 @@ public:
     PBPreview( QWidget* parent, const char* name, PaintType _paintType = Pen );
     ~PBPreview();
     void setPen( const QPen &_pen ) { pen = _pen; repaint( true ); }
-    void setBrush( const QBrush &_brush ) { brush = _brush; }
+    void setBrush( const QBrush &_brush ) { brush = _brush; repaint( true ); }
     void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint( true ); }
     void setLineEnd( LineEnd le ) { lineEnd = le; repaint( true ); }
-    void setGradient( KPGradient *g ) { gradient = g; }
-    void setPaintType( PaintType pt ) { paintType = pt; repaint(true);}
+    void setGradient( KPGradient *g ) { if ( g ) { gradient = g; } repaint( true ); }
+    void setPaintType( PaintType pt ) { paintType = pt; repaint(true); }
+
+    void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
+                      bool _unbalanced, int _xfactor, int _yfactor );
+    void setColor1( const QColor &_color ) { gradient->setColor1( _color ); repaint( false ); }
+    void setColor2( const QColor &_color ) { gradient->setColor2( _color ); repaint( false ); }
+    void setBackColorType( BCType _type ) { gradient->setBackColorType( _type ); repaint( false ); }
+    void setUnbalanced( bool b ) { gradient->setUnbalanced( b ); repaint( false ); }
+    void setXFactor( int i ) { gradient->setXFactor( i ); repaint( false ); }
+    void setYFactor( int i ) { gradient->setYFactor( i ); repaint( false ); }
 
 protected:
     void drawContents( QPainter *p );
@@ -63,6 +73,7 @@ private:
     QBrush brush;
     LineEnd lineBegin, lineEnd;
     KPGradient *gradient;
+    KPGradient *savedGradient;
     KoZoomHandler *_zoomHandler;
 };
 
