@@ -7339,18 +7339,7 @@ void KPresenterView::copyLink()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
-    {
-        KoLinkVariable * var=edit->linkVariable();
-        if(var)
-        {
-            KURL::List lst;
-            lst.append( var->url() );
-            QApplication::clipboard()->setSelectionMode(true);
-            QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
-            QApplication::clipboard()->setSelectionMode(false);
-            QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
-        }
-    }
+        edit->copyLink();
 }
 
 void KPresenterView::addToBookmark()

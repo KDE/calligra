@@ -165,6 +165,7 @@ public slots:
     QString refLink()const {return m_refLink;}
 
     void openLink();
+    void copyLink();
 
     void completion();
 

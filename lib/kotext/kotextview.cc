@@ -36,6 +36,7 @@
 #include <kostyle.h>
 #include <kbookmarkmanager.h>
 #include <kbookmark.h>
+#include <kurldrag.h>
 
 class KoTextView::KoTextViewPrivate
 {
@@ -1250,6 +1251,20 @@ void KoTextView::addBookmarks(const QString &url)
     group.addBookmark( bookManager, url, KURL( url));
     bookManager->save();
     // delete bookManager;
+}
+
+void KoTextView::copyLink()
+{
+    KoLinkVariable * var=linkVariable();
+    if(var)
+    {
+        KURL::List lst;
+        lst.append( var->url() );
+        QApplication::clipboard()->setSelectionMode(true);
+        QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
+        QApplication::clipboard()->setSelectionMode(false);
+        QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
+    }
 }
 
 #include "kotextview.moc"
