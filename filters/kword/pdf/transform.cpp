@@ -124,11 +124,14 @@ CharType type(Unicode u)
 }
 
 //-----------------------------------------------------------------------------
-static const Unicode LIGATURE_DATA[][3] = {
+static const Unicode LIGATURE_DATA[][4] = {
     { 0xFB01, 0x0066, 0x0069 }, // fi
     { 0xFB02, 0x0066, 0x006C }, // fl
-    // #### ff ??
+    { 0xFB04, 0x0066, 0x0066 }, // ff
     // 0xFB03, 0xFB04, 0xFB05, 0xFB06 ??
+    // ffl is 0x0066 0x0066 0x006c
+    // ffe ??? (coffee)
+    // ffi ??? (KOffice)
     { 0x0000, 0x0000, 0x0000 }
 };
 
