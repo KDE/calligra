@@ -279,5 +279,31 @@ divides the cost evenly over the life of an asset.</Text>
     </Function>
 
 
+    <Function>
+      <Name>DB</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cost</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Salvage</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Life</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The SYD() function will calculate the depreciation of an asset for a given period using the fixed-declining balance method.</Text>
+	<Syntax>DB(cost; salvage value; life; period)</Syntax>
+	<Example>DB(8000;400;6;3) equals 1158.40</Example>
+      </Help>
+    </Function>
+
   </Group>
 </KSpreadFunctions>

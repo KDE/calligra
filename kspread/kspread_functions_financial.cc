@@ -342,3 +342,54 @@ bool kspreadfunc_syd( KSContext& context )
   return true;
 }
 
+// Function: DB
+/* fixed-declining depreciation */
+bool kspreadfunc_db( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 4, "DB", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+
+  double cost = args[0]->doubleValue();
+  double salvage = args[1]->doubleValue();
+  double life = args[2]->doubleValue();
+  double period = args[3]->doubleValue();
+  double month = 12;
+
+  // sentinel check
+  if( cost == 0 || life <= 0.0 ) return false;
+  if( salvage / cost < 0 ) return false;
+
+  double rate = 1000 * (1 - pow( (salvage/cost), (1/life) ));
+  rate = floor( rate + 0.5 )  / 1000; 
+
+  double total = cost * rate * month / 12;
+
+  if( period == 1 )
+  {
+    context.setValue( new KSValue( total ) );
+    return true;
+  }
+
+  for( int i = 1; i < life; ++i )
+    if( i == period-1 )
+    {
+      context.setValue( new KSValue( rate * (cost-total) ) );
+      return true;
+    }
+    else total += rate * (cost-total);
+
+  context.setValue( new KSValue( (cost-total) * rate * (12-month)/12 ) );
+
+  return true;
+}
