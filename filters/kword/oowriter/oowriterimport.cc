@@ -1075,12 +1075,12 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& para, QDomEle
     const int result=href.findRev(".");
     if (result>=0)
     {
-        strExtension=href.mid(result+1);
+        strExtension=href.mid(result);
     }
     KoPicture picture;
     if ( href[0]=='#' )
     {
-        QString filename(href.mid(2));
+        QString filename(href.mid(1));
  
         KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
         if (store->open("filename"))
@@ -1092,7 +1092,8 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& para, QDomEle
         } 
         else
             kdWarning(30518) << "Cannot find picture: " << frameName << " " << href << endl;
-        // ### TODO: correct picture key
+        KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
+        picture.setKey(key);
     }
     else
     {
@@ -1113,8 +1114,10 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& para, QDomEle
          kdWarning(30518) << "Cannot store picture: " << frameName << " " << href << endl;
          
     // Now that we have copied the image, we need to make some bookkeeping
+    
+    QDomElement docElement( doc.documentElement() );
        
-    QDomElement framesetsPluralElement ( doc.documentElement().namedItem("FRAMESETS").toElement() );
+    QDomElement framesetsPluralElement ( docElement.namedItem("FRAMESETS").toElement() );
     
     QDomElement framesetElement=doc.createElement("FRAMESET");
     framesetElement.setAttribute("frameType",2);
@@ -1141,7 +1144,13 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& para, QDomEle
     picture.getKey().saveAttributes(singleKey);
     element.appendChild(singleKey);
 
-    QDomElement picturesPluralElement ( doc.documentElement().namedItem("PICTURES").toElement() );
+    QDomElement picturesPluralElement ( docElement.namedItem("PICTURES").toElement() );
+    if (picturesPluralElement.isNull())
+    {
+        // We do not yet have any <PICTURES> element, so we must create it
+        picturesPluralElement = doc.createElement("PICTURES");
+        docElement.appendChild(picturesPluralElement);
+    }
     
     QDomElement pluralKey ( doc.createElement("KEY") );
     picture.getKey().saveAttributes(pluralKey);
