@@ -17,14 +17,14 @@ lib_LTLIBRARIES = libgraphite.la
 
 libgraphite_la_SOURCES = graphiteshell.cc graphitepart.cc \
     graphiteview.cc graphitefactory.cc gobject.cc \
-    gcanvas.cc gobjectfactory.cc gcommand.cc
+    gcanvas.cc gobjectfactory.cc gcommand.cc gline.cc
 
 graphite_SOURCES = main.cc
 
 noinst_HEADERS =  graphiteglobal.h graphiteshell.h \
     graphitepart.h graphiteview.h graphitefactory.h \
     gobject.h gcanvas.h gobjectfactory.h gcommand.h \
-    gtool.h
+    gtool.h gline.h
 
 libgraphite_la_METASOURCES = AUTO
 

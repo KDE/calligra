@@ -50,7 +50,10 @@ public:
     enum FillStyle { Brush, GradientFilled };  // all possible fill styles
     enum Position { First, Last, Current }; // where to insert the new child object
 
-    virtual ~GObject();
+    virtual ~GObject() {}
+    
+    const bool isOk() { return m_ok; }
+    void setOk(const bool &ok=true) { m_ok=ok; }
 
     virtual GObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
     // create an object and initialize it with the given XML (calls the XML-CTOR)
@@ -88,7 +91,7 @@ public:
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
 
-    virtual GObjectM9r *createM9r();        // create a Manipulator (M9r :) for that object
+    virtual GObjectM9r *createM9r() = 0;        // create a Manipulator (M9r :) for that object
 
     const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
@@ -113,10 +116,6 @@ public:
     const QPen &pen() const { return m_pen; }               // Pen for the lines
     virtual void setPen(const QPen &pen) { m_pen=pen; }
 
-signals:
-    void requestRepaint();                     // request a complete repaint
-    void requestRepaint(const QRegion &);      // request a repaint for this region
-
 protected:
     GObject(const QString &name=QString::null);
     GObject(const GObject &rhs);
@@ -125,19 +124,24 @@ protected:
     const double zoomIt(const double &value) const;
     const int zoomIt(const int &value) const;
     const unsigned int zoomIt(const unsigned int &value) const;
+    // TODO: zoomIt for QPoint,...
+    // TODO: rotate(x,y,angle,center), rotate(QPoint, angle, center)
+    // TODO: scale(x,y,xfactor,yfactor,center), scale(QPoint,...)
 
     QString m_name;                              // name of the object
     State m_state;                               // are there handles to draw or not?
     GObject *m_parent;
     int m_zoom;                                  // zoom value 100 -> 100% -> 1
 
-    mutable bool boundingRectDirty;              // is the cached bounding rect still correct?
-    mutable QRect bounds;                        // bounding rect (cache)
+    mutable bool m_boundingRectDirty;            // is the cached bounding rect still correct?
+    mutable QRect m_boundingRect;                // bounding rect (cache)
 
     FillStyle m_fillStyle;
     QBrush m_brush;
     Gradient m_gradient;
     QPen m_pen;
+    
+    bool m_ok;      // used to express errors (e.g. during loading)
 
 private:
     GObject &operator=(const GObject &rhs);    // don't assign the objects, clone them
@@ -173,6 +177,7 @@ inline const unsigned int GObject::zoomIt(const unsigned int &value) const {
 // remains unhandled, the M9r returns false and the Event has to be processed
 // by the calling method. (some Event stuff in the GCanvas)
 class GObjectM9r {
+
 public:
     virtual ~GObjectM9r() {}
 

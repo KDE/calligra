@@ -21,9 +21,6 @@
 #include <gobject.h>
 
 
-GObject::~GObject() {
-}
-
 QDomElement GObject::save(QDomDocument &doc) const {
 
     // A GObject is saved to a node which is stored inside
@@ -63,20 +60,17 @@ void GObject::setZoom(const short &zoom) {
     m_zoom=zoom;
 }
 
-GObjectM9r *GObject::createM9r() {
-    return new GObjectM9r;
-}
-
 GObject::GObject(const QString &name) : m_name(name) {
 
     m_state=Visible;
-    boundingRectDirty=true;
+    m_boundingRectDirty=true;
     m_fillStyle=Brush;
+    m_ok=true;
 }
 
 GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
-    m_state(rhs.state()), boundingRectDirty(true), m_fillStyle(rhs.fillStyle()),
-    m_brush(rhs.brush()), m_gradient(rhs.gradient()), m_pen(rhs.pen()) {
+    m_state(rhs.state()), m_boundingRectDirty(true), m_fillStyle(rhs.fillStyle()),
+    m_brush(rhs.brush()), m_gradient(rhs.gradient()), m_pen(rhs.pen()), m_ok(true) {
 }
 
 GObject::GObject(const QDomElement &element) {

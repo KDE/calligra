@@ -37,7 +37,7 @@ public:
 
 protected:
     virtual void viewportPaintEvent(QPaintEvent *e);
-    // TODO: Do we need a resizeEvent?
+    // TODO: Do we have to override the resizeEvent?
     // virtual void viewportResizeEvent(QResizeEvent *e);
     virtual void contentsMousePressEvent(QMouseEvent *e) { m_doc->mousePressEvent(e, m_view); }
     virtual void contentsMouseReleaseEvent(QMouseEvent *e) { m_doc->mouseReleaseEvent(e, m_view); }
@@ -46,6 +46,9 @@ protected:
 
     virtual void keyPressEvent(QKeyEvent *e) { m_doc->keyPressEvent(e, m_view); }
     virtual void keyReleaseEvent(QKeyEvent *e) { m_doc->keyReleaseEvent(e, m_view); }
+
+    virtual void focusInEvent(QFocusEvent */*e*/) {}
+    virtual void focusOutEvent(QFocusEvent */*e*/) {}
 private:
     GraphiteView *m_view;
     GraphitePart *m_doc;
