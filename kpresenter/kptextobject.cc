@@ -920,9 +920,10 @@ void KPTextView::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &pos)
     handleMouseDoubleClickEvent( e, pos  );
 }
 
-void KPTextView::mouseMoveEvent( QMouseEvent *e, const QPoint & )
+void KPTextView::mouseMoveEvent( QMouseEvent *e, const QPoint &_pos )
 {
-    //handleMouseMoveEvent(e, QPoint() );
+    kdDebug()<<"handleMouseMoveEvent(e, _pos );**********************************************\n";
+    handleMouseMoveEvent(e, _pos );
 }
 
 void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )

@@ -324,6 +324,7 @@ void Page::mousePressEvent( QMouseEvent *e )
         {
             QPoint pos;
             pos=view->kPresenterDoc()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            mousePressed=true;
             m_currentTextObjectView->mousePressEvent(e, pos);
             return;
         }
@@ -511,6 +512,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
         if(txtObj->contains( e->pos(), diffx(), diffy() ))
         {
             m_currentTextObjectView->mouseReleaseEvent(  e, QPoint());
+            mousePressed=false;
             emit objectSelectedChanged();
             return;
         }
@@ -813,9 +815,11 @@ void Page::mouseMoveEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( e->pos(), diffx(), diffy() ))
+        if(txtObj->contains( e->pos(), diffx(), diffy() )&&mousePressed)
         {
-            m_currentTextObjectView->mouseMoveEvent( e, QPoint());
+            QPoint pos;
+            pos=view->kPresenterDoc()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            m_currentTextObjectView->mouseMoveEvent( e, pos);
             return;
         }
     }
