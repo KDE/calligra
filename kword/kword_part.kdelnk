@@ -1,0 +1,11 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KWord
+Exec=kword.bin --server
+Comment=KWord
+MimeTypes=application/x-kword,
+RepoID=IDL:KWord/Factory:1.0,
+ActivationMode=shared
+Type=OpenPart
+Icon=kword.xpm
+MiniIcon=kword.xpm

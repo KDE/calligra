@@ -1,0 +1,25 @@
+#ifndef kword_idl
+#define kword_idl
+
+#include <parts.idl>
+
+module KWord
+{
+  interface KWordView : OPParts::View
+    {
+      slot void newView();
+
+      slot void extraLayout();
+    };
+
+  interface KWordDocument : OPParts::Document, OPParts::Print
+    {
+    };
+
+  interface Factory : OPParts::Factory
+    {
+    };
+};
+
+#endif
+
