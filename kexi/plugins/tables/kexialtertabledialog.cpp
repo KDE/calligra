@@ -382,7 +382,7 @@ void KexiAlterTableDialog::setPrimaryKey(KexiPropertyBuffer &buf, bool set)
 				break;
 		}
 		if (i<count) {//remove
-			(*b)["autoNumber"] = QVariant(false, 0);
+			(*b)["autoIncrement"] = QVariant(false, 0);
 			(*b)["primaryKey"] = QVariant(false, 0);
 			//remove key from table
 			m_view->data()->clearRowEditBuffer();

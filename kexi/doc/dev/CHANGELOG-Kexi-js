@@ -404,12 +404,14 @@ Property Editor
 --first visible item is activated if no item was active
 - fixed buffer switching (focus is not set)
 - focusing for combo box (list) editor fixed
+- focus is set again if was set before
 Table View Prop. Buffer
 - fixed memory leak and possible crash
 Table Designer
 - switching from design view to data view: it's now posible to discard changes
+- typo in prop name fixed
 Main
-- Key_F7/F8/F9 added for data/design/text modes
+- Key_F6/F7/F8 added for data/design/text modes
 
 2004-11-09
 Main
