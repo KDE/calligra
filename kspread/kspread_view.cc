@@ -4706,7 +4706,7 @@ void KSpreadView::resultOfCalc()
 
 void KSpreadView::statusBarClicked(int _id)
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     if(_id==0) //menu calc
     {
@@ -4853,7 +4853,7 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     if( m_pTabBar )
     {
