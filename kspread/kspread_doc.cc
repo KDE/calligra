@@ -167,6 +167,7 @@ bool KSpreadDoc::initDoc()
         m_pMap->addTable( t );
         }
     resetURL();
+    setEmpty();
 
     initConfig();
 
