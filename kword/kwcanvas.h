@@ -187,6 +187,8 @@ public:
 
     void inlinePictureStarted();
 
+    void ensureCursorVisible();
+
     void editFrameSet( KWFrameSet * frameSet, bool onlyText = false );
     /**
      * Starting editing @p fs if we're not yet doing it.

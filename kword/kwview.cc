@@ -6301,8 +6301,7 @@ void KWView::switchModeView()
     changeZoomMenu( m_doc->zoom() );
     showZoom( m_doc->zoom() );
     updatePageInfo();
-    m_gui->canvasWidget()->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), m_doc->pageLayout() );
-
+    m_doc->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), m_doc->pageLayout() );
 }
 
 void KWView::configureFootEndNote()

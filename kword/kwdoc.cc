@@ -3161,7 +3161,10 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
 KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool firstNonSelected )
 {
     if ( !m_viewMode->hasFrames() )
-        return 0L;
+    {
+        KWViewModeText* vmt = dynamic_cast<KWViewModeText *>( m_viewMode );
+        return vmt ? vmt->textFrameSet()->frame(0) : 0L;
+    }
 #ifdef DEBUG_FRAMESELECT
     kdDebug(32001) << "KWDocument::frameUnderMouse nPoint=" << nPoint << " firstNonSelected=" << firstNonSelected << endl;
 #endif
@@ -3192,7 +3195,8 @@ MouseMeaning KWDocument::getMouseMeaning( const QPoint &nPoint, int keyState, KW
 {
     if ( pFrame )
         *pFrame = 0L;
-    if (positionToSelectRowcolTable(nPoint) != TABLE_POSITION_NONE)
+    if (m_viewMode->hasFrames() &&
+        positionToSelectRowcolTable(nPoint) != TABLE_POSITION_NONE)
         return MEANING_MOUSE_SELECT;
 
     bool border=true;
@@ -3201,7 +3205,10 @@ MouseMeaning KWDocument::getMouseMeaning( const QPoint &nPoint, int keyState, KW
         KWFrameSet *frameSet = frameundermouse->frameSet();
         if ( pFrame )
             *pFrame = frameundermouse;
-        return frameSet->getMouseMeaning(nPoint, keyState);
+        if ( m_viewMode->hasFrames() )
+            return frameSet->getMouseMeaning(nPoint, keyState);
+        else // text view mode
+            return MEANING_MOUSE_INSIDE_TEXT;
     }
     return MEANING_NONE;
 }
@@ -4608,6 +4615,8 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     layout();
 
     repaintAllViews( true );
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->getGUI()->canvasWidget()->ensureCursorVisible();
 }
 
 void KWDocument::changeBgSpellCheckingState( bool b )

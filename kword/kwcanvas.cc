@@ -181,7 +181,7 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
 {
-    //kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
+    //kdDebug(32002) << "KWCanvas::repaintAll erase=" << erase << endl;
     viewport()->repaint( erase );
 }
 
@@ -527,8 +527,10 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         // See if we clicked on a frame's border
         KWFrame* frame;
         m_mouseMeaning = m_doc->getMouseMeaning( normalPoint, e->state(), &frame );
-        kdDebug() << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
-        if ( m_mouseMeaning == MEANING_MOUSE_MOVE || m_mouseMeaning == MEANING_MOUSE_SELECT )
+        //kdDebug(32001) << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
+        switch ( m_mouseMeaning )  {
+        case MEANING_MOUSE_MOVE:
+        case MEANING_MOUSE_SELECT:
         {
             if ( m_currentFrameSetEdit )
                 terminateCurrentEdit();
@@ -563,9 +565,11 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     }
                 }
             } // end select row/col
+            break;
         }
-        else if ( m_mouseMeaning == MEANING_MOUSE_INSIDE || m_mouseMeaning == MEANING_MOUSE_INSIDE_TEXT
-                  || m_mouseMeaning == MEANING_ACTIVATE_PART )
+        case MEANING_MOUSE_INSIDE:
+        case MEANING_MOUSE_INSIDE_TEXT:
+        case MEANING_ACTIVATE_PART:
         {
             // LMB/MMB inside a frame always unselects all frames
             // RMB inside a frame unselects too, except when
@@ -602,8 +606,11 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 else
                     KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted."));
             }
-        } else if ( m_mouseMeaning == MEANING_RESIZE_COLUMN || m_mouseMeaning == MEANING_RESIZE_ROW ) {
-
+            break;
+        }
+        case MEANING_RESIZE_COLUMN:
+        case MEANING_RESIZE_ROW:
+        {
             if ( m_currentFrameSetEdit )
                 terminateCurrentEdit();
 
@@ -623,16 +630,27 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     else
                         m_rowColResized = table->rowEdgeAt( docPoint.y() );
                     curTable = table;
-                    kdDebug() << "resizing row/col edge. m_rowColResized=" << m_rowColResized << endl;
+                    kdDebug(32002) << "resizing row/col edge. m_rowColResized=" << m_rowColResized << endl;
                 }
             }
-
-        } else { // resizing (in a case where the resizehandle didn't get the event)
+            break;
+        }
+        case MEANING_TOPLEFT:
+        case MEANING_TOP:
+        case MEANING_TOPRIGHT:
+        case MEANING_RIGHT:
+        case MEANING_BOTTOMRIGHT:
+        case MEANING_BOTTOM:
+        case MEANING_BOTTOMLEFT:
+        case MEANING_LEFT:
             if ( m_currentFrameSetEdit )
                 terminateCurrentEdit();
             // select frame
             mpEditFrame( e, normalPoint, m_mouseMeaning );
             //mmEditFrameResize( bool top, bool bottom, bool left, bool right, e->state() & ShiftButton );
+            break;
+        case MEANING_NONE:
+            break;
         }
         m_scrollTimer->start( 50 );
     }
@@ -770,7 +788,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         kdWarning(32001) << "KWCanvas::mmEditFrameResize: no frame selected!" << endl;
         return;
     }
-    //kdDebug() << "KWCanvas::mmEditFrameResize top,bottom,left,right: "
+    //kdDebug(32002) << "KWCanvas::mmEditFrameResize top,bottom,left,right: "
     //          << top << "," << bottom << "," << left << "," << right << endl;
 
     // Get the mouse position from QCursor. Trying to get it from KWResizeHandle's
@@ -2061,7 +2079,7 @@ void KWCanvas::pasteFrames()
     return 0L;
 }*/
 
-void KWCanvas::editFrameSet( KWFrameSet * frameSet, bool onlyText )
+void KWCanvas::editFrameSet( KWFrameSet * frameSet, bool onlyText /*=false*/ )
 {
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
@@ -2109,6 +2127,15 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     if ( emitChanged )
         emit currentFrameSetEditChanged();
     emit updateRuler();
+}
+
+void KWCanvas::ensureCursorVisible()
+{
+    Q_ASSERT( m_currentFrameSetEdit );
+    if ( !m_currentFrameSetEdit )
+        return;
+    KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    textedit->ensureCursorVisible();
 }
 
 bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
