@@ -61,6 +61,8 @@ public:
     QPopupMenu *popupMenu(const QString& name);
     void setReportGenerateMenu();
 
+    void projectCalculate();
+    
 public slots:
     void slotUpdate(bool calculate);
 

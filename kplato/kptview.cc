@@ -292,6 +292,10 @@ void KPTView::slotProjectCalendar() {
 }
 
 void KPTView::slotProjectCalculate() {
+    slotUpdate(true);
+}
+
+void KPTView::projectCalculate() {
     getPart()->getProject().calculate();
     KPTDateTime *t = getPart()->getProject().getStartTime();
     delete t;
@@ -597,7 +601,7 @@ void KPTView::slotUpdate(bool calculate)
 {
     //kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
-	    slotProjectCalculate();
+	    projectCalculate();
 
 	if (m_tab->visibleWidget() == m_ganttview)
 	{
