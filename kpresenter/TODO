@@ -15,4 +15,7 @@ Resize an image keeping contrainsts (e.g. Ctrl+click)
 Window title : kpresenter - filename
 Current "align objects" aligns in relation with the page, is there a
  way to align the h or v centers of several objects ?
-
+At the moment all the objects simply appear at a certain moment and stay there
+ forever. What about letting them vanish again (probably with a nice effect
+ e.g. explode, dissolve, tear apart,...). Maybe it is even possible to achieve
+ some irritating flashing-effects :)
