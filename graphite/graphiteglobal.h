@@ -98,7 +98,7 @@ const short pageHeight[]={ 297, 257, 279, 356, 254, 1189, 841, 594,
 // page borders in mm
 struct PageBorders {
     // TODO: Initialize w/ real values
-    PageBorders() : left(20.0), top(20.0), right(20.0), bottom(20.0) {}
+    PageBorders() : left(10.0), top(10.0), right(10.0), bottom(10.0) {}
     double left;
     double top;
     double right;

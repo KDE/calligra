@@ -34,16 +34,15 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
     setInstance(GraphiteFactory::global());
     setXMLFile(QString::fromLatin1("graphite.rc"));
     setupActions();
-
     m_canvas=new GCanvas(this, doc);
     m_canvas->setGeometry(20, 20, m_canvas->viewport()->width()-20,
                           m_canvas->viewport()->height()-20);
+    // *never* remove from here -- will result in a crash (hen <--> egg)
     setupRulers();
     recalcRulers(0, 0);
 }
 
 GraphiteView::~GraphiteView() {
-
     delete m_canvas;
     m_canvas=0L;
 }
@@ -150,6 +149,7 @@ void GraphiteView::slotViewZoom(const QString &t) {
 
 void GraphiteView::recalcRulers(int x, int y) {
 
+    kdDebug() << "GraphiteView::recalcRulers   x: " << x << " y: " << y << endl;
     if(x!=m_oldX)
         m_horiz->setOffset(x, y);
     if(y!=m_oldY)
@@ -194,6 +194,7 @@ void GraphiteView::setupActions() {
 
 void GraphiteView::setupRulers() {
 
+    // FIXME
     KoPageLayout layout=KoPageLayoutDia::standardLayout();
 
     m_vert=new KoRuler(this, m_canvas->viewport(), Qt::Vertical, layout, 0);
@@ -206,7 +207,7 @@ void GraphiteView::setupRulers() {
     connect(m_horiz, SIGNAL(unitChanged(QString)), this,
             SLOT(rulerUnitChanged(QString)));
 
-    m_canvas->setRulers(m_vert, m_horiz);
+    m_canvas->setRulers(m_horiz, m_vert);
     connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
             SLOT(recalcRulers(int, int)));
 }

@@ -221,7 +221,7 @@ void GraphiteGlobal::setZoom(const double &zoom) {
 }
 
 void GraphiteGlobal::setResoltuion(const int &resolution) {
-    m_resolution=static_cast<double>(resolution)/25.399956;
+    m_resolution=Graphite::inch2mm(resolution);
     m_zoomedResolution=m_zoom*m_resolution;
 }
 
@@ -338,8 +338,9 @@ FxRect GraphiteGlobal::toFxRect(const QDomElement &element) const {
 GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
                                    m_rotHandleSize(4), m_thirdHandleTrigger(20),
                                    m_handleOffset(2), m_rotHandleOffset(2),
-                                   m_unit(MM), m_zoom(1.0), m_resolution(2.8346457) {
+                                   m_unit(MM), m_zoom(1.0) {
     m_unitString=QString::fromLatin1("mm");
+    m_resolution=Graphite::inch2mm(QPaintDevice::x11AppDpiY());  // we use *only* Y, because Qt also does that :)
     m_zoomedResolution=m_zoom*m_resolution;
 }
 

@@ -28,7 +28,6 @@
 class KoRuler;
 class GraphiteView;
 
-
 class GCanvas : public QScrollView {
 
     Q_OBJECT
@@ -36,7 +35,7 @@ public:
     GCanvas(GraphiteView *view, GraphitePart *doc);
     virtual ~GCanvas() {}
 
-    void setRulers(KoRuler *vertical, KoRuler *horizontal);
+    void setRulers(KoRuler *hruler, KoRuler *vruler);
     void showMousePos(bool pos);
 
 protected:
@@ -45,7 +44,7 @@ protected:
     virtual void contentsMouseDoubleClickEvent(QMouseEvent *e) { m_doc->mouseDoubleClickEvent(e, m_view); }
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
 
-    virtual void viewportPaintEvent(QPaintEvent *e);  // only drawContents()??
+    virtual void viewportPaintEvent(QPaintEvent *e);
 
     virtual void keyPressEvent(QKeyEvent *e) { m_doc->keyPressEvent(e, m_view); }
     virtual void keyReleaseEvent(QKeyEvent *e) { m_doc->keyReleaseEvent(e, m_view); }

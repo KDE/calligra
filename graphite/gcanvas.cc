@@ -35,32 +35,30 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     viewport()->setBackgroundMode(QWidget::PaletteLight);
     installEventFilter(viewport());
     setFrameStyle(QFrame::NoFrame);
+    resizeContents(1000,1000);
 }
 
-void GCanvas::setRulers(KoRuler *vertical, KoRuler *horizontal) {
-    m_vertical=vertical;
-    m_horizontal=horizontal;
+void GCanvas::setRulers(KoRuler *hruler, KoRuler *vruler) {
+    m_horizontal=hruler;
+    m_vertical=vruler;
 }
 
 void GCanvas::showMousePos(bool pos) {
-
-    if(m_vertical)
-        m_vertical->showMousePos(pos);
-    if(m_horizontal)
-        m_horizontal->showMousePos(pos);
+    m_vertical->showMousePos(pos);
+    m_horizontal->showMousePos(pos);
 }
 
 void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
-
-    if(m_vertical)
-        m_vertical->setMousePos(e->x(), e->y());
-    if(m_horizontal)
-        m_horizontal->setMousePos(e->x(), e->y());
+    m_vertical->setMousePos(e->x()-contentsX(), e->y()-contentsY());
+    m_horizontal->setMousePos(e->x()-contentsX(), e->y()-contentsY());
     m_doc->mouseMoveEvent(e, m_view);
 }
 
 void GCanvas::viewportPaintEvent(QPaintEvent *e) {
 
+    QPainter p(viewport());
+    //QRect clipRect=
+    //p.setClip
     // TODO: 1 - define the region which has to be
     //           repainted and  call m_doc->preparePainting(zoom)!!!
     //       2 - set the clipping region
@@ -78,7 +76,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
     //   (flickering,...)
     // - Double buffers are invalidated via: zoomfactor
     //   changes, background changes,...
-    kdDebug(37001) << "paintEvent: x=" << e->rect().x()
+    /*kdDebug(37001) << "paintEvent: x=" << e->rect().x()
                    << " y=" << e->rect().y()
                    << " width=" << e->rect().width()
                    << " height=" << e->rect().height()
@@ -88,7 +86,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
                    << " | visible: width=" << visibleWidth()
                    << " height=" << visibleHeight()
                    << " | x-offset=" << contentsX()
-                   << " y-offet=" << contentsY() << endl;
+                   << " y-offet=" << contentsY() << endl;*/
 
 }
 

@@ -29,7 +29,6 @@ class KoRuler;
 class KSelectAction;
 class GraphitePart;
 
-
 class GraphiteView : public KoView {
 
     Q_OBJECT
