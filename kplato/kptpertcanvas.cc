@@ -200,8 +200,8 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
         }
         case QEvent::MidButton:
             break;
-		default:
-			break;
+        default:
+            break;
     }
 }
 
@@ -292,7 +292,7 @@ int KPTPertCanvas::row(int minrow, int col)
 	{
     	qHeapSort(rows);
     	bool found = false;
-		for (int i=0; i < rows.size(); ++i)
+		for (uint i=0; i < rows.size(); ++i)
 		{
 			if ( rows[i] < minrow)
 			    continue;
