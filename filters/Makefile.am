@@ -1,11 +1,11 @@
 
-if ! do_not_compile_KARBON
+if compile_filter_KARBON
 if include_KARBON
 KARBONDIR = karbon
 endif
 endif
 
-if ! do_not_compile_KONTOUR
+if compile_filter_KONTOUR
 if include_KARBON
 if maintained_KONTOUR
 KONTOURDIR = kontour
@@ -17,23 +17,23 @@ if include_XSLTFILTERS
 XSLTFILTERDIR = xsltfilter
 endif
 
-if ! do_not_compile_KWORD
+if compile_filter_KWORD
 KWORDDIR = kword
 endif
 
-if ! do_not_compile_KPRESENTER
+if compile_filter_KPRESENTER
 KPRESENTERDIR = kpresenter
 endif
 
-if ! do_not_compile_KSPREAD
+if compile_filter_KSPREAD
 KSPREADDIR = kspread
 endif
 
-if ! do_not_compile_KFORMULA
+if compile_filter_KFORMULA
 KFORMULADIR = kformula
 endif
 
-if ! do_not_compile_KUGAR
+if compile_filter_KUGAR
 KUGARDIR = kugar
 endif
 
