@@ -164,7 +164,6 @@ void KPPolygonObject::setSize( double _width, double _height )
     if ( fillType == FT_GRADIENT && gradient ) {
         gradient->setSize( getSize() );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -186,7 +185,6 @@ void KPPolygonObject::resizeBy( double _dx, double _dy )
     if ( fillType == FT_GRADIENT && gradient ) {
         gradient->setSize( getSize() );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -219,7 +217,6 @@ void KPPolygonObject::setFillType( FillType _fillType )
     if ( fillType == FT_GRADIENT && !gradient ) {
         gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -265,7 +262,7 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
         if ( redrawPix ) {
             redrawPix = false;
             QRegion clipregion( pointArray );
-
+            pix.resize ( _zoomHandler->zoomItX(ext.width()),_zoomHandler->zoomItY(ext.height()) );
             pix.fill( Qt::white );
 
             QPainter p;
@@ -282,7 +279,7 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
 
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawConvexPolygon( pointArray );;
+        _painter->drawConvexPolygon( pointArray );
 
     }
 }

@@ -73,7 +73,6 @@ void KPEllipseObject::setSize( double _width, double _height )
     {
         gradient->setSize( getSize() );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -86,7 +85,6 @@ void KPEllipseObject::resizeBy( double _dx, double _dy )
     {
         gradient->setSize( getSize() );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -104,7 +102,6 @@ void KPEllipseObject::setFillType( FillType _fillType )
     {
         gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -129,9 +126,8 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
         {
             redrawPix = false;
             QRegion clipregion( 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), QRegion::Ellipse );
-
+            pix.resize ( _zoomHandler->zoomItX(ow),_zoomHandler->zoomItY(oh) );
             pix.fill( Qt::white );
-
             QPainter p;
             p.begin( &pix );
             p.setClipRegion( clipregion );

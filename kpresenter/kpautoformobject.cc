@@ -84,7 +84,6 @@ void KPAutoformObject::setSize( double _width, double _height )
     {
         gradient->setSize( getSize() );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -97,7 +96,6 @@ void KPAutoformObject::resizeBy( double _dx, double _dy )
     {
         gradient->setSize( getSize() );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -122,7 +120,6 @@ void KPAutoformObject::setFillType( FillType _fillType )
     {
         gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -301,13 +298,13 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
                     {
                         redrawPix = false;
                         QRegion clipregion( pntArray2 );
-
+                        pix.resize ( _zoomHandler->zoomItX(ext.width()),_zoomHandler->zoomItY(ext.height()) );
                         pix.fill( Qt::white );
 
 
                         QPainter p;
                         p.begin( &pix );
-                        p.setClipRegion( clipregion );
+                        p.setClipRegion( clipregion , QPainter::CoordPainter);
                         p.drawPixmap( 0, 0, *gradient->getGradient() );
                         p.end();
 
