@@ -32,10 +32,10 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KoApplication app;
     KCmdLineArgs::init( argc, argv, KChartFactory::aboutData());
     KCmdLineArgs::addCmdLineOptions( options );
     
+    KoApplication app;
     app.start();
     app.exec();
 
