@@ -952,8 +952,8 @@ QString KPTextObject::decode( const QString &_str )
     // HACK
     str.append( "_" );
 
-    str.replace( QRegExp( "<" ), "&lt; " );
-    str.replace( QRegExp( ">" ), "&gt; " );
+    str.replace( QRegExp( "<" ), "&lt;" );
+    str.replace( QRegExp( ">" ), "&gt;" );
 
     str.remove( str.length() - 1, 1 );
 

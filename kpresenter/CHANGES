@@ -553,3 +553,8 @@ Reggie, 24.11.1999:
 - Key_Escape works now always for exitting the edit mode of a txt obj
 - Key_Home and Key_End work now for txt objs
 
+David, 28.11.1999:
+------------------
+- Added mkstandalone.sh
+- Added handling for KoTempChooseDia's TempFile return type
+- Fixed bug when saving text with '>' or '<' (a space was added).
