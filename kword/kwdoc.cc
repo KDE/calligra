@@ -218,7 +218,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     addStyleTemplate( standardStyle );
 
     if ( name )
-    dcopObject();
+        dcopObject();
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
 
     // It's important to call this to have the kformula actions created.

@@ -318,6 +318,8 @@ public slots:
 protected:
     // Reimplemented from KoTextView
     virtual void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
+    virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
+
     virtual void startDrag();
     KWTextDrag * newDrag( QWidget * parent ) const;
 
