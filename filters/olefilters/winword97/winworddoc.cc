@@ -259,6 +259,7 @@ QString WinWordDoc::generateFormat(
     return formatDef;
 }
 
+// Write out the <FORMATS> for each run in a paragraph.
 void WinWordDoc::generateFormats(
     Attributes &attributes)
 {
@@ -416,7 +417,13 @@ void WinWordDoc::gotParagraph(
     encode(xml_friendly);
     m_body.append("<PARAGRAPH>\n<TEXT>");
     m_body.append(xml_friendly);
-    m_body.append("</TEXT>\n");
+    m_body.append("</TEXT>\n"
+        " <LAYOUT>\n"
+        "  <NAME value=\"");
+    m_body.append(m_styles.names[styles.baseStyle.istd]);
+    m_body.append("\"/>\n");
+    m_body.append(
+        " </LAYOUT>\n");
     generateFormats(styles);
     m_body.append("</PARAGRAPH>\n");
 }
@@ -432,15 +439,17 @@ void WinWordDoc::gotHeadingParagraph(
     m_body.append(xml_friendly);
     m_body.append("</TEXT>\n"
         " <LAYOUT>\n"
-        "  <NAME value=\"Head ");
-    m_body.append(QString::number((int)styles.baseStyle.istd));
-    m_body.append("\"/>\n  <COUNTER type=\"");
-    m_body.append(numbering(styles.baseStyle.anld.nfc));
-    m_body.append("\" depth=\"");
-    m_body.append(QString::number(styles.baseStyle.istd - 1));
-    m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
+        "  <NAME value=\"");
+    m_body.append(m_styles.names[styles.baseStyle.istd]);
+    m_body.append("\"/>\n");
+//    m_body.append("  <COUNTER type=\"");
+//    m_body.append(numbering(styles.baseStyle.anld.nfc));
+//    m_body.append("\" depth=\"");
+//    m_body.append(QString::number(styles.baseStyle.istd - 1));
+//    m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n");
+    m_body.append(
         " </LAYOUT>\n");
-    generateFormats(styles);
+//    generateFormats(styles);
     m_body.append("</PARAGRAPH>\n");
 }
 
@@ -448,38 +457,36 @@ void WinWordDoc::gotListParagraph(
     const QString &text,
     Attributes &styles)
 {
-    static const char *listStyle[6] =
-    {
-        "Enumerated List",
-        "Enumerated List",
-        "Enumerated List",
-        "Alphabetical List",
-        "Alphabetical List",
-        "Bullet List"
-    };
-
     QString xml_friendly = text;
 
+    int styleIndex = styles.baseStyle.istd;
+
+    // If the level has a null style, default to something sane.
+    if (styleIndex == 4095)
+        styleIndex = 0;
     encode(xml_friendly);
     m_body.append("<PARAGRAPH>\n<TEXT>");
     m_body.append(xml_friendly);
     m_body.append("</TEXT>\n"
         " <LAYOUT>\n"
         "  <NAME value=\"");
-    m_body.append(listStyle[styles.baseStyle.anld.nfc]);
-    m_body.append("\"/>\n"
+    m_body.append(m_styles.names[styleIndex]);
+    m_body.append("\"/>\n");
+    m_body.append(
         "  <FOLLOWING name=\"");
-    m_body.append(listStyle[styles.baseStyle.anld.nfc]);
-    m_body.append("\"/>\n"
+    m_body.append(m_styles.names[styleIndex]);
+    m_body.append("\"/>\n");
+    m_body.append(
         "  <COUNTER type=\"");
     m_body.append(numbering(styles.baseStyle.anld.nfc));
     m_body.append("\" depth=\"");
     m_body.append(QString::number((int)styles.baseStyle.ilvl));
     m_body.append("\" bullet=\"183\" start=\"");
     m_body.append(QString::number((int)styles.baseStyle.anld.iStartAt));
-    m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n"
+    m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n");
+    m_body.append(
         " </LAYOUT>\n");
-    generateFormats(styles);
+//    generateFormats(styles);
     m_body.append("</PARAGRAPH>\n");
 }
 
@@ -520,15 +527,13 @@ void WinWordDoc::gotStyle(
     QString styleDef;
     int styleIndex;
 
+    styleIndex = style.getPap()->istd;
     styleDef.append(
         "  <STYLE>\n");
     styleDef.append(
         "   <NAME value=\"");
     styleDef.append(name);
     styleDef.append("\" />\n");
-    styleDef.append(
-        "   <FLOW align=\"left\" />\n");
-    styleIndex = style.getPap()->istd;
     if (isHeading(styleIndex))
     {
         // Headings are followed by normal text.
@@ -537,13 +542,18 @@ void WinWordDoc::gotStyle(
         styleDef.append(m_styles.names[stiNormal]);
         styleDef.append("\"/>\n");
         styleDef.append(
-            "   <COUNTER numberingtype=\"0\" type=\"1\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\".\" start=\"1\" depth=\"");
+            "   <FLOW align=\"left\" />\n");
+        styleDef.append(
+            "   <COUNTER numberingtype=\"1\" type=\"1\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\".\" start=\"1\" depth=\"");
         styleDef.append(QString::number(styleIndex - stiLev1));
         styleDef.append("\" customdef=\"\"/>\n");
     }
     else
     if (isListAlpha(styleIndex) || isListBullet(styleIndex) || isListNumber(styleIndex) || isListContination(styleIndex))
     {
+        // Note: it is quite common to encounter list paragraphs which do not
+        // use a list style (!!). Instead, these seem to be encoded as Normal
+        // text with a number!
         unsigned i;
         ANLD anld;
 
@@ -554,7 +564,9 @@ void WinWordDoc::gotStyle(
         styleDef.append(name);
         styleDef.append("\"/>\n");
         styleDef.append(
-            "   <COUNTER numberingtype=\"1\" type=\"");
+            "   <FLOW align=\"left\" />\n");
+        styleDef.append(
+            "   <COUNTER numberingtype=\"0\" type=\"");
         styleDef.append(numbering(anld.nfc));
         styleDef.append("\" bullet=\"45\" lefttext=\"");
         for (i = 0; i < anld.cxchTextBefore; i++)
@@ -573,6 +585,8 @@ void WinWordDoc::gotStyle(
             "   <FOLLOWING name=\"");
         styleDef.append(m_styles.names[stiNormal]);
         styleDef.append("\"/>\n");
+        styleDef.append(
+            "   <FLOW align=\"left\" />\n");
 //        styleDef.append(
 //            "   <COUNTER numberingtype=\"2\" type=\"0\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\"\" start=\"1\" depth=\"0\" customdef=\"\"/>\n");
     }
@@ -775,6 +789,21 @@ QString WinWordDoc::colour(
     result += QString::number((colourTypes[colour]) & 0xff);
     result += "\" ";
     return result;
+}
+
+char *WinWordDoc::list(unsigned nfc) const
+{
+    static const char *listStyle[6] =
+    {
+        "Enumerated List",
+        "Enumerated List",
+        "Enumerated List",
+        "Alphabetical List",
+        "Alphabetical List",
+        "Bullet List"
+    };
+
+    return listStyle[nfc];
 }
 
 char WinWordDoc::numbering(unsigned nfc) const
