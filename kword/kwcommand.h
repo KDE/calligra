@@ -209,16 +209,16 @@ protected:
 class KWFrameMoveCommand : public KCommand
 {
 public:
-    KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,int _moveX,int moveY ) ;
+    KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,QList<FrameResizeStruct>&_frameMove ) ;
     ~KWFrameMoveCommand() {}
     
     void execute();
     void unexecute();
-
+    QList<FrameResizeStruct> getListFrameMoved() {return m_frameMove;}
+    void setListFrameMoved(QList<FrameResizeStruct>_listMove) {m_frameMove=_listMove;}
 protected:
-    QList<FrameIndex> m_IndexFrame;	
-    int moveX;
-    int moveY;
+    QList<FrameIndex> m_IndexFrame;
+    QList<FrameResizeStruct> m_frameMove;
     KWDocument *m_pDoc;
 };
 #endif

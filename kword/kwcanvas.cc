@@ -43,6 +43,8 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     mousePressed = FALSE;
     setMouseMode( MM_EDIT );
 
+    cmdMoveFrame=0L;
+
     trows = 7;
     tcols = 5;
     twid = TblAuto;
@@ -369,10 +371,27 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
             }
         }
     }
-    if(doc->getFirstSelectedFrame()!=0)
-    {
+    if( doc->getFirstSelectedFrame()!=0)
         rectOfSizeSelected= doc->getFirstSelectedFrame()->normalize();
+
+    QList<KWFrame> selectedFrames=doc->getSelectedFrames();
+    QList<FrameIndex> frameindexList;
+    QList<FrameResizeStruct> frameindexMove;
+    KWFrame *frame=0L;
+    for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
+    {
+        FrameIndex *index=new FrameIndex;
+        FrameResizeStruct *move=new FrameResizeStruct;
+        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+        move->sizeOfBegin=frame->normalize();
+        move->sizeOfEnd=QRect();
+        frameindexList.append(index);
+        frameindexMove.append(move);
     }
+    if(frameindexMove.count()!=0)
+        cmdMoveFrame =new KWFrameMoveCommand( i18n("Move Frame"),doc,frameindexList, frameindexMove ) ;
+
 
     viewport()->setCursor( doc->getMouseCursor( mx, my ) );
 
@@ -836,32 +855,20 @@ void KWCanvas::mrEditFrame()
         }
         else
         {
-            QList <KWFrame> selectedFrames = doc->getSelectedFrames();
-
-            if (selectedFrames.count() != 0)
+            if(cmdMoveFrame!=0L)
             {
-                int tmpMoveX=tmpRect.x()-rectOfSizeSelected.x();
-                int tmpMoveY=tmpRect.y()-rectOfSizeSelected.y();
-                QList<FrameIndex> frameindexList;
-                frame=0L;
+                QList<KWFrame> selectedFrames=doc->getSelectedFrames();
+                QList<FrameResizeStruct> tmpListFrameMoved=cmdMoveFrame->getListFrameMoved();
+                KWFrame *frame=0L;
                 for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
                 {
-                    //you can't move the first frame.
-                    if ( !(doc->processingType() == KWDocument::WP && doc->getFrameSetNum( frame->getFrameSet() ) == 0) )
-                    {
-                        FrameIndex *index=new FrameIndex;
-                        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-                        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
-                        frameindexList.append(index);
-                    }
+                    tmpListFrameMoved.at(selectedFrames.find(frame))->sizeOfEnd=frame->normalize();
                 }
-                if(frameindexList.count()!=0)
-                {
-                    KWFrameMoveCommand *cmd =new KWFrameMoveCommand( i18n("Move Frame"),doc,frameindexList,tmpMoveX,tmpMoveY ) ;
-                    doc->addCommand(cmd);
-                }
-            }
+                cmdMoveFrame->setListFrameMoved(tmpListFrameMoved);
+                doc->addCommand(cmdMoveFrame);
 
+                cmdMoveFrame=0L;
+            }
 
         }
         //recalcAll = TRUE;

@@ -407,11 +407,10 @@ void KWFrameResizeCommand::unexecute()
 }
 
 
-KWFrameMoveCommand::KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,int _moveX, int _moveY ) :
+KWFrameMoveCommand::KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,QList<FrameResizeStruct>&_frameMove  ) :
     KCommand(name),
     m_IndexFrame(_frameIndex),
-    moveX(_moveX),
-    moveY(_moveY),
+    m_frameMove(_frameMove),
     m_pDoc(_doc)
 {
 }
@@ -423,7 +422,9 @@ void KWFrameMoveCommand::execute()
     {
         KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
-        frame->setRect(frame->x()+moveX,frame->y()+moveY,frame->width(),frame->height());
+        FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
+        frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
+
     }
 
     m_pDoc->refreshAllFrames();
@@ -436,7 +437,8 @@ void KWFrameMoveCommand::unexecute()
     {
         KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
-         frame->setRect(frame->x()-moveX,frame->y()-moveY,frame->width(),frame->height());
+        FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
+        frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
     }
 
     m_pDoc->refreshAllFrames();

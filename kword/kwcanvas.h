@@ -31,6 +31,7 @@ class KWFrameSet;
 class KWFrameSetEdit;
 class KWTextFrameSet;
 class KWGroupManager;
+class KWFrameMoveCommand;
 namespace Qt3 {
 class QTextCursor;
 class QTextParag;
@@ -196,6 +197,7 @@ private:
     unsigned int tcols, trows;
     KWTblCellSize twid, thei;
     KWGroupManager *curTable;
+    KWFrameMoveCommand *cmdMoveFrame;
 
     QRect rectOfSizeSelected;
 };
