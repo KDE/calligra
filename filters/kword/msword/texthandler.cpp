@@ -154,9 +154,9 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor )
 {
     if ( !m_currentTable )
     {
-        // We need to be in a paragraph - seems wv2 doesn't always emit paragraphStart!?!?!?!? (table-1.doc)
-        if ( !m_bInParagraph )
-             paragraphStart( 0L );
+        // We need to put the table in a paragraph. For wv2 tables are between paragraphs.
+        Q_ASSERT( !m_bInParagraph );
+        paragraphStart( 0L );
         static int s_tableNumber = 0;
         m_currentTable = new KWord::Table();
         m_currentTable->name = i18n("Table %1").arg( ++s_tableNumber );
