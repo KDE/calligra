@@ -112,6 +112,12 @@ public:
 
   virtual bool isEmpty () { return m_bEmpty; }
 
+  virtual CORBA::Boolean checkForSelection ();
+  virtual KIllustrator::GfxObjectSeq* getSelection ();
+  virtual void addToSelection (KIllustrator::GfxObject_ptr obj);
+  virtual void removeFromSelection (KIllustrator::GfxObject_ptr obj);
+  virtual void groupSelection ();
+
 signals:
   void partInserted (KIllustratorChild* child, GPart* part);
   void childGeometryChanged (KIllustratorChild* child);

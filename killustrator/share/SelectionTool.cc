@@ -163,10 +163,12 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 					   Canvas* canvas) {
   int hmask;
 
+  if (state == S_Inactive)
+    return;
   /**********
    * S_Rubberband
    */
-  if (state == S_Rubberband) {
+  else if (state == S_Rubberband) {
     selPoint[1].x (me->x ());
     selPoint[1].y (me->y ());
     canvas->repaint ();
@@ -299,6 +301,9 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
   bool ctrlFlag = me->state () & ControlButton;
 
+  if (state == S_Inactive)
+    state = S_Init;
+
   /************
    * S_Init
    */
@@ -356,6 +361,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 	    }
 	    else if (selObj->isA ("GPart")) {
 	      cout << "activate part !!!" << endl;
+	      state = S_Inactive;
 	      emit partSelected (selObj);
 	      return;
 	    }

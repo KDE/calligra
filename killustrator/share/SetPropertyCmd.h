@@ -33,6 +33,8 @@ class SetPropertyCmd : public ObjectManipCmd {
 public:
   SetPropertyCmd (GDocument* doc, const GObject::OutlineInfo& oinfo,
 		  const GObject::FillInfo& finfo);
+  SetPropertyCmd (GObject* obj, const GObject::OutlineInfo& oinfo,
+		  const GObject::FillInfo& finfo);
   SetPropertyCmd (GDocument* doc, const GObject::OutlineInfo& oinfo,
 		  const GObject::FillInfo& finfo, 
 		  const GText::TextInfo& tinfo);

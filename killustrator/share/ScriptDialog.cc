@@ -82,7 +82,7 @@ void ScriptDialog::loadScripts () {
 
   // load scripts from system directory
   QString systemScripts = kapp->kde_datadir () + "/killustrator/scripts";
-  QDir systemDir (systemScripts.data (), "*.js", QDir::Name,
+  QDir systemDir (systemScripts.data (), "*.py", QDir::Name,
 		  QDir::Files);
   if (systemDir.exists ()) {
     const QFileInfoList *systemList = systemDir.entryInfoList ();
@@ -97,7 +97,7 @@ void ScriptDialog::loadScripts () {
 
   // load scripts from user's directory
   QString userScripts = QDir::homeDirPath () + "/.killustrator/scripts";
-  QDir userDir (userScripts.data (), "*.js", QDir::Name,
+  QDir userDir (userScripts.data (), "*.py", QDir::Name,
 		  QDir::Files);
   if (userDir.exists ()) {
     const QFileInfoList *userList = userDir.entryInfoList ();

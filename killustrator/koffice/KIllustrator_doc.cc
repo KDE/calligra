@@ -28,7 +28,8 @@
 #include "KIllustrator_shell.h"
 
 #include "GPart.h"
-
+#include "GfxWrapper.h"
+#include <opApplication.h>
 #include <qmessagebox.h>
 
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu, 
@@ -59,7 +60,8 @@ const char* KIllustratorChild::urlForSave () {
 
 KIllustratorDocument::KIllustratorDocument () {
   ADD_INTERFACE("IDL:KOffice/Print:1.0")
-  cout << "create new KIllustratorDocument ..." << endl;
+  cout << "create new KIllustratorDocument: ior = " 
+       << opapp_orb->object_to_string (this) << endl;
 
   GObject::registerPrototype ("object", new GPart ());
 
@@ -238,4 +240,32 @@ void KIllustratorDocument::draw (QPaintDevice* dev,
   painter.end ();
 }
 
+CORBA::Boolean KIllustratorDocument::checkForSelection () {
+  cout << "check for selection..." << endl;
+  return !selectionIsEmpty ();
+}
 
+KIllustrator::GfxObjectSeq* KIllustratorDocument::getSelection () {
+  KIllustrator::GfxObjectSeq* seq = new KIllustrator::GfxObjectSeq;
+  seq->length (selectionCount ());
+  int n = 0;
+  for (list<GObject*>::iterator i = selection.begin ();
+       i != selection.end (); i++) {
+    GfxWrapper* wobj = (GfxWrapper *) (*i)->getWrapper ();
+    if (wobj == 0L) 
+      wobj = new GfxWrapper (this, *i);
+    (*seq)[n++] = KIllustrator::GfxObject::_duplicate (wobj);
+  }
+
+  return seq;
+}
+
+void KIllustratorDocument::addToSelection (KIllustrator::GfxObject_ptr obj) {
+}
+
+void 
+KIllustratorDocument::removeFromSelection (KIllustrator::GfxObject_ptr obj) {
+}
+
+void KIllustratorDocument::groupSelection () {
+}

@@ -39,6 +39,18 @@ ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) :
   document = doc;
 }
 
+ObjectManipCmd::ObjectManipCmd (GObject* obj, const QString& name) : 
+  Command(name) 
+{
+  objects.resize (1);
+  states.resize (1);
+
+  obj->ref ();
+  objects.insert (0, obj);
+  states.insert (0, 0L);
+  document = 0L;
+}
+
 ObjectManipCmd::~ObjectManipCmd () {
   for (unsigned int i = 0; i < objects.count (); i++) {
     objects[i]->unref ();

@@ -50,8 +50,10 @@
 #include "PropertyEditor.h"
 #include "AlignmentDialog.h"
 #include "GridDialog.h"
+#include "HelplineDialog.h"
 #include "TransformationDialog.h"
 #include "LayerDialog.h"
+#include "ScriptDialog.h"
 #include "PStateManager.h"
 #include "ExportFilter.h"
 #include "AboutDialog.h"
@@ -62,6 +64,7 @@
 #include "CutCmd.h"
 #include "CopyCmd.h"
 #include "PasteCmd.h"
+#include "DuplicateCmd.h"
 #include "ReorderCmd.h"
 #include "SetPropertyCmd.h"
 #include "InsertClipartCmd.h"
@@ -103,16 +106,21 @@ QWidget (parent), KoViewIf (doc), OPViewIf (doc), KIllustrator::View_skel () {
   mainWidget = 0L;
   viewport = 0L;
   layerDialog = 0L;
+  scriptDialog = 0L;
   objMenu = 0L;
   // restore default settings
   PStateManager::instance ();
 
-  zFactors.resize (5);
+  zFactors.resize (8);
   zFactors[0] = 0.5;
   zFactors[1] = 1.0;
   zFactors[2] = 1.5;
   zFactors[3] = 2.0;
   zFactors[4] = 4.0;
+  zFactors[5] = 6.0;
+  zFactors[6] = 8.0;
+  zFactors[7] = 10.0;
+
   Canvas::initZoomFactors (zFactors);
 
   cout << "connect doc" << endl;
@@ -235,6 +243,8 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   m_idMenuEdit_Cut = m_vMenuEdit->insertItem (i18n ("C&ut"), this, 
 					      "editCut", 0);
   m_vMenuEdit->insertSeparator (-1);
+  m_idMenuEdit_Duplicate = m_vMenuEdit->insertItem (i18n ("Duplicate"), this,
+						 "editDuplicate", 0);
   m_idMenuEdit_Delete = m_vMenuEdit->insertItem (i18n ("&Delete"), this,
 						 "editDelete", 0);
   m_vMenuEdit->insertSeparator (-1);
@@ -267,27 +277,38 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   m_idMenuView_Normal =
     m_vMenuView->insertItem (i18n ("Normal"), this, "viewNormal", 0);
   m_vMenuView->insertSeparator (-1);
+  m_idMenuView_Layers =
+    m_vMenuView->insertItem (i18n ("Layers"), this, "editLayers", 0);
+  m_vMenuView->insertSeparator (-1);
   m_idMenuView_Ruler =
     m_vMenuView->insertItem (i18n ("Ruler"), this, "toggleRuler", 0);
   m_vMenuView->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
   m_idMenuView_Grid =
     m_vMenuView->insertItem (i18n ("Grid"), this, "toggleGrid", 0);
   m_vMenuView->setItemChecked (m_idMenuView_Grid, false);
+  m_idMenuView_Helplines =
+    m_vMenuView->insertItem (i18n ("Helplines"), this, "toggleHelplines", 0);
+  m_vMenuView->setItemChecked (m_idMenuView_Helplines, false);
 
   // Menu: Layout
   menubar->insertMenu (i18n ("&Layout"), m_vMenuLayout, -1, -1);
   m_idMenuLayout_PageLayout =
     m_vMenuLayout->insertItem (i18n ("Page Layout"), this, "setupPage", 0);
   m_vMenuLayout->insertSeparator (-1);
-  m_idMenuLayout_Layers =
-    m_vMenuLayout->insertItem (i18n ("Layers"), this, "editLayers", 0);
-  m_vMenuLayout->insertSeparator (-1);
   m_idMenuLayout_SetupGrid =
     m_vMenuLayout->insertItem (i18n ("Setup Grid"), this, "setupGrid", 0);
+  m_idMenuLayout_SetupHelplines =
+    m_vMenuLayout->insertItem (i18n ("Setup Helplines"), this, 
+			       "setupHelplines", 0);
+  m_vMenuLayout->insertSeparator (-1);
   m_idMenuLayout_AlignToGrid =
     m_vMenuLayout->insertItem (i18n ("Align to Grid"), this, "alignToGrid", 0);
   m_vMenuLayout->setCheckable (true);
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToGrid, false);
+  m_idMenuLayout_AlignToHelplines =
+    m_vMenuLayout->insertItem (i18n ("Align to Helplines"), this, 
+			       "alignToHelplines", 0);
+  m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToHelplines, false);
 
   // Menu: Arrange
   menubar->insertMenu (i18n ("&Arrange"), m_vMenuArrange, -1, -1);
@@ -331,7 +352,10 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
 				  "transformMirror", 0);
 
   // Menu: Extras  
-  //  menubar->insertMenu (i18n ("&Extras"), m_vMenuExtras, -1, -1);
+  menubar->insertMenu (i18n ("&Extras"), m_vMenuExtras, -1, -1);
+  m_idMenuExtras_Scripts =
+    m_vMenuExtras->insertItem (i18n ("Scripts"), this, 
+				  "showScripts", 0);
 
   // Menu: Help
   m_vMenuHelp = menubar->helpMenu ();
@@ -521,8 +545,8 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEdit->insertSeparator (-1);
 
   OpenPartsUI::StrList zoomSizes;
-  zoomSizes.length (5);
-  for (int i = 0; i < 5; i++) {
+  zoomSizes.length ((int) zFactors.size ());
+  for (int i = 0; i < (int) zFactors.size (); i++) {
     char buf[8];
     sprintf (buf, "%3.0f%%", zFactors[i] * 100);
     zoomSizes[i] = CORBA::string_dup (buf);
@@ -768,7 +792,7 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 }
 
 void KIllustratorView::resizeEvent (QResizeEvent* ) {
-  cout << "resizeEvent" << endl;
+  //  cout << "resizeEvent" << endl;
   if (mainWidget) {
     mainWidget->resize (width (), height ()); 
     if ((KoViewIf::hasFocus () || mode () == KOffice::View::RootMode) &&
@@ -868,6 +892,10 @@ void KIllustratorView::editSelectAll () {
 
 void KIllustratorView::editDelete () {
   cmdHistory.addCommand (new DeleteCmd (m_pDoc), true);
+}
+
+void KIllustratorView::editDuplicate () {
+  cmdHistory.addCommand (new DuplicateCmd (m_pDoc), true);
 }
 
 void KIllustratorView::editInsertObject () {
@@ -987,6 +1015,12 @@ void KIllustratorView::toggleGrid () {
   m_vMenuLayout->setItemChecked (m_idMenuView_Grid, gridIsShown);
 }
 
+void KIllustratorView::toggleHelplines () {
+  bool linesAreShown = ! canvas->showHelplines ();
+  canvas->showHelplines (linesAreShown);
+  m_vMenuLayout->setItemChecked (m_idMenuView_Helplines, linesAreShown);
+}
+
 void KIllustratorView::setupGrid () {
   GridDialog::setupGrid (canvas);
 }
@@ -995,6 +1029,16 @@ void KIllustratorView::alignToGrid () {
   bool snap = ! canvas->snapToGrid ();
   canvas->snapToGrid (snap);
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToGrid, snap);
+}
+
+void KIllustratorView::setupHelplines () {
+  HelplineDialog::setup (canvas);
+}
+
+void KIllustratorView::alignToHelplines () {
+  bool snap = ! canvas->alignToHelplines ();
+  canvas->alignToHelplines (snap);
+  m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToHelplines, snap);
 }
 
 void KIllustratorView::setPenColor (CORBA::Long id) {
@@ -1275,4 +1319,12 @@ void KIllustratorView::activatePart (GObject *obj) {
     part->getView ()->setFocusPolicy (QWidget::StrongFocus);
     part->getView ()->setFocus ();
   }
+}
+
+void KIllustratorView::showScripts () {
+  if (!scriptDialog) 
+    scriptDialog = new ScriptDialog ();
+  scriptDialog->setActiveDocument (m_pDoc);
+  scriptDialog->show ();
+  scriptDialog->loadScripts ();
 }

@@ -94,12 +94,11 @@ void GPart::draw (Painter& p, bool withBasePoints, bool outline) {
     p.drawRect (r.x (), r.y (), r.width (), r.height ());
   }
   else {
+    float s = p.worldMatrix ().m11 ();
     QRect win = p.window ();
     QRect vPort = p.viewport ();
     QPicture *pic = child->draw (1.0, true);
-    p.setViewport (0, 0, 
-		   vPort.width (), vPort.height ());
-    p.translate (r.x (), r.y ());
+    p.setViewport (r.x () * s, r.y () * s, vPort.width (), vPort.height ());
     p.drawPicture (*pic);
     p.setViewport (vPort);
     p.setWindow (win);
@@ -148,6 +147,7 @@ void GPart::setMainWindow (OpenParts::MainWindow_ptr _mainWindow) {
 
 void GPart::activate (int xoff, int yoff) {
   assert (view);
+  cout << "$$$$$$$$$$$ ACTIVATE PART $$$$$$$$$$$$" << endl;
   QRect r = child->geometry ();
   view->setGeometry (r.x () + xoff, r.y () + yoff, r.width (), r.height ());
   view->show ();

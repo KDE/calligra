@@ -18,7 +18,8 @@ killustrator_bin_SOURCES = KIllustrator_main.cc \
 	KIllustrator_view.cc \
 	KIllustrator.cc \
 	InsertPartTool.cc \
-	GPart.cc
+	GPart.cc \
+	GfxWrapper.cc
 
 noinst_HEADERS = KIllustrator_main.h \
 	KIllustrator_doc.h \
@@ -26,7 +27,8 @@ noinst_HEADERS = KIllustrator_main.h \
 	KIllustrator_view.h \
 	KIllustrator.h \
 	InsertPartTool.h \
-	GPart.h
+	GPart.h \
+	GfxWrapper.h
 
 METASOURCES = KIllustrator_main.moc \
 	KIllustrator_shell.moc \

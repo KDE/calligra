@@ -53,6 +53,7 @@ private:
 class ObjectManipCmd : public Command {
 protected:
   ObjectManipCmd (GDocument* doc, const QString& name);
+  ObjectManipCmd (GObject* obj, const QString& name);
 
 public:
   ~ObjectManipCmd ();

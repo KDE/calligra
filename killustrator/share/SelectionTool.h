@@ -66,7 +66,7 @@ private:
 
   enum State { S_Init, S_Pick, S_Intermediate1, S_Intermediate2, 
 	       S_Translate, S_Scale, S_Rubberband, S_RotateSelect,
-	       S_Rotate, S_Shear, S_MoveRotCenter };
+	       S_Rotate, S_Shear, S_MoveRotCenter, S_Inactive };
   enum CursorType { C_Arrow, C_Size, C_Move, C_Rotate };
   State state;
   CursorType ctype;

@@ -53,6 +53,7 @@
 
 class GOState;
 class GLayer;
+class SWrapper;
 
 /**
  * The base class for all graphical objects.
@@ -363,6 +364,9 @@ public:
   const char* getRefId () { return (const char *) refid; }
   bool hasRefId () const { return ! refid.isEmpty (); }
 
+  void setWrapper (SWrapper *wobj);
+  SWrapper* getWrapper () { return wrapper; }
+
   static void registerPrototype (const char* className, GObject *proto);
   static GObject* lookupPrototype (const char *className);
 
@@ -396,6 +400,8 @@ protected:
                            // so don't fill it now
 
   QString id, refid;
+  SWrapper* wrapper;       // Wrapper object for scripting purposes
+
   // default value
   static OutlineInfo defaultOutlineInfo;
   static FillInfo defaultFillInfo;
@@ -420,6 +426,17 @@ private:
   GObject::OutlineInfo oInfo;
   GObject::FillInfo fInfo;
   unsigned int rcount;
+};
+
+class SWrapper {
+protected:
+  SWrapper () : obj (0L) {}
+  
+public:
+  void setObject (GObject* o) { obj = o; }
+
+protected:
+  GObject* obj;
 };
 
 #endif

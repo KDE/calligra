@@ -74,6 +74,7 @@ GObject::GObject () {
   sflag = false;
   layer = 0L;
   inWork = false;
+  wrapper = 0L;
 
   outlineInfo = defaultOutlineInfo;
   outlineInfo.mask = OutlineInfo::Color | OutlineInfo::Style | 
@@ -92,6 +93,7 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
   list<XmlAttribute>::const_iterator first = attribs.begin ();
   layer = 0L;
   inWork = false;
+  wrapper = 0L;
 
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
@@ -137,6 +139,7 @@ GObject::GObject (const GObject& obj) : QObject()
   iMatrix = obj.iMatrix;
   layer = obj.layer;
   inWork = false;
+  wrapper = 0L;
 
   rcount = 1;
 }
@@ -462,4 +465,8 @@ GObject* GObject::lookupPrototype (const char *className) {
   if (it != prototypes.end ())
     result = it->second;
   return result;
+}
+
+void GObject::setWrapper (SWrapper *wobj) {
+  wobj->setObject (this);
 }

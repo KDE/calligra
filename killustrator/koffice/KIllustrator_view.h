@@ -74,6 +74,7 @@ class Canvas;
 class GDocument;
 class QwViewport;
 class LayerDialog;
+class ScriptDialog;
 class ToolController;
 class Canvas;
 class Ruler;
@@ -125,6 +126,7 @@ public:
   void editPaste ();
   void editSelectAll ();
   void editDelete ();
+  void editDuplicate ();
   void editProperties ();
 
   void editInsertObject ();
@@ -150,9 +152,12 @@ public:
 
   void toggleRuler ();
   void toggleGrid ();
+  void toggleHelplines ();
 
   void setupGrid ();
   void alignToGrid ();
+  void setupHelplines ();
+  void alignToHelplines ();
 
   void editLayers ();
   void setupPage ();
@@ -179,6 +184,8 @@ public:
   void configEllipseTool ();
 
   void zoomSizeSelected (const char* s);
+
+  void showScripts ();
 
 protected:
   void init ();
@@ -221,7 +228,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuEdit_Undo, m_idMenuEdit_Redo,
     m_idMenuEdit_Cut, m_idMenuEdit_Copy, m_idMenuEdit_Paste, 
-    m_idMenuEdit_Delete, m_idMenuEdit_SelectAll, 
+    m_idMenuEdit_Duplicate, m_idMenuEdit_Delete, m_idMenuEdit_SelectAll, 
     m_idMenuEdit_InsertObject, m_idMenuEdit_Properties;
 
   /* Menu: Edit->Insert */
@@ -231,13 +238,17 @@ protected:
   /* Menu: View */
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_Outline, 
-    m_idMenuView_Normal, m_idMenuView_Ruler, m_idMenuView_Grid;
+    m_idMenuView_Normal, m_idMenuView_Ruler, m_idMenuView_Grid,
+    m_idMenuView_Helplines, m_idMenuView_Layers;
+
   /* Menu: Layout */
   OpenPartsUI::Menu_var m_vMenuLayout;
   CORBA::Long m_idMenuLayout_InsertPage, 
     m_idMenuLayout_RemovePage, m_idMenuLayout_GotoPage, 
-    m_idMenuLayout_PageLayout, m_idMenuLayout_Layers, 
-    m_idMenuLayout_SetupGrid, m_idMenuLayout_AlignToGrid;
+    m_idMenuLayout_PageLayout, 
+    m_idMenuLayout_SetupGrid, m_idMenuLayout_AlignToGrid,
+    m_idMenuLayout_SetupHelplines, m_idMenuLayout_AlignToHelplines;
+
   /* Menu: Arrange */
   OpenPartsUI::Menu_var m_vMenuArrange;
   OpenPartsUI::Menu_var m_vMenuTransform;
@@ -250,6 +261,8 @@ protected:
     m_idMenuArrange_TextAlongPath;
   /* Menu: Extras */
   OpenPartsUI::Menu_var m_vMenuExtras;
+  CORBA::Long m_idMenuExtras_Scripts;
+
   /* Menu: Help */
   OpenPartsUI::Menu_var m_vMenuHelp;
 
@@ -301,6 +314,7 @@ protected:
   Canvas *canvas;
   Ruler *hRuler, *vRuler;
   LayerDialog *layerDialog;
+  ScriptDialog *scriptDialog;
   QWidget *mainWidget;
   QGridLayout *grid;
   CommandHistory cmdHistory;

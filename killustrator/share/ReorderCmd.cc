@@ -30,20 +30,12 @@ ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos)
   objects.resize (doc->selectionCount ());
   oldpos.resize (doc->selectionCount ());
 
-#ifdef NO_LAYERS
-  QListIterator<GObject> it (doc->getSelection ());
-  for (unsigned int i = 0; it.current (); ++it, ++i) {
-    it.current ()->ref ();
-    objects.insert (i, it.current ());
-  }
-#else
   list<GObject*>::iterator it = doc->getSelection ().begin ();
   for (unsigned int i = 0; it != doc->getSelection ().end (); it++, i++) {
     GObject *o = *it;
     o->ref ();
     objects.insert (i, o);
   }
-#endif
   document = doc;
   position = pos;
 }
