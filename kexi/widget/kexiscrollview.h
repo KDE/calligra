@@ -31,7 +31,7 @@ class KexiRecordNavigator;
 //! The scrollview which inlcudes KexiDBForm
 /*! It allows to resize its m_widget, following snapToGrid setting. 
  Its contents is resized so the widget can always be resized. */
-class KexiScrollView : public QScrollView
+class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 {
 	Q_OBJECT
 
