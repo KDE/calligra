@@ -108,18 +108,14 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & doc );
     virtual bool loadChildren( KoStore* _store );
 
-    virtual bool initDoc() { return insertNewTemplate( 0, 0, true ); }
+    virtual bool initDoc() { return insertNewTemplate( true ); }
     void initEmpty();
-
-    // change geometry of a child
 
     // page layout
     void setPageLayout( KoPageLayout );
     KoPageLayout pageLayout() const { return _pageLayout; }
 
-    // insert a page
-    unsigned int insertNewPage( int, int, bool _restore=true );
-    bool insertNewTemplate( int, int, bool clean=false );
+    bool insertNewTemplate( bool clean=false );
 
     const QPtrList<KPrPage> & getPageList() const {return m_pageList;}
     // We need one that's not const, due to QPtrList::at() not being const

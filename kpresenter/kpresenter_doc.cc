@@ -1334,14 +1334,11 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	    _clipartCollection.insertClipart( it2.node->data, pic );
 	}
 
-//	_pixmapCollection.setAllowChangeRef( true );
-//	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
-
 	if ( _clean )
 	    setPageLayout( __pgLayout );
-	else {
-            m_pageList.last()->updateBackgroundSize();
-	}
+	//else {
+            //m_pageList.last()->updateBackgroundSize();
+	//}
 
 
           KPrPage *page;
@@ -1367,27 +1364,14 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
 
     _pageLayout = pgLayout;
 
-    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
-        m_pageList.at( i )->updateBackgroundSize();
+    //for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+    //    m_pageList.at( i )->updateBackgroundSize();
 
     repaint( false );
     // don't setModified(true) here, since this is called on startup
 }
 
-/*==================== insert a new page =========================*/
-unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore )
-{
-    if ( _restore ) {
-	QRect r = m_pageList.last()->getZoomPageRect();
-        m_pageList.last()->updateBackgroundSize();
-	repaint( false );
-    }
-
-    return getPageNums();
-}
-
-/*================================================================*/
-bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean )
+bool KPresenterDoc::insertNewTemplate( bool clean )
 {
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
@@ -1468,29 +1452,17 @@ void KPresenterDoc::repaint( const QRect& rect )
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
 	r = rect;
-	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getCanvas()->diffx(),
-			       r.y() - ((KPresenterView*)it.current())->getCanvas()->diffy() ) );
-
-	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
-	// decided to overload the non virtual repaint method!
-	//((KPresenterView*)it.current())->repaint( r, false );
-	it.current()->update( r );
+	KPrCanvas* canvas = ((KPresenterView*)it.current())->getCanvas();
+	r.moveTopLeft( QPoint( r.x() - canvas->diffx(),
+			       r.y() - canvas->diffy() ) );
+	canvas->update( r );
     }
 }
 
 /*===================== repaint =================================*/
 void KPresenterDoc::repaint( KPObject *kpobject )
 {
-    QRect r;
-
-    QPtrListIterator<KoView> it( views() );
-    for( ; it.current(); ++it )
-    {
-	r = m_zoomHandler->zoomRect(kpobject->getBoundingRect(  ));
-	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getCanvas()->diffx(),
-			       r.y() - ((KPresenterView*)it.current())->getCanvas()->diffy() ) );
-	it.current()->update( r );
-    }
+    repaint( m_zoomHandler->zoomRect(kpobject->getBoundingRect()) );
 }
 
 QValueList<int> KPresenterDoc::reorderPage( unsigned int num )

@@ -60,11 +60,9 @@
 
 KPrPage::KPrPage(KPresenterDoc *_doc )
 {
-    kdDebug()<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )\n";
+    //kdDebug()<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )\n";
     m_doc=_doc;
-    dcop = 0;
-    kpbackground= new KPBackGround( (m_doc->getImageCollection()), (m_doc->getGradientCollection()),
-                                    (m_doc->getClipartCollection()), this );
+    kpbackground= new KPBackGround( this );
     //create object list for each page.
     m_objectList.setAutoDelete( false );
     manualTitle=QString::null;
@@ -90,11 +88,6 @@ DCOPObject* KPrPage::dcopObject()
 	dcop = new KPresenterPageIface( this );
 
     return dcop;
-}
-
-void KPrPage::updateBackgroundSize()
-{
-    kpbackground->setBgSize( getZoomPageRect().size() );
 }
 
 void KPrPage::appendObject(KPObject *_obj)
@@ -2488,14 +2481,18 @@ void KPrPage::completeLoading( bool _clean, int lastObj )
 {
     KPObject *kpobject = 0;
     for ( kpobject = m_objectList.first(); kpobject; kpobject = m_objectList.next() ) {
+        // Pictures and cliparts have been loaded from the store, we can now
+        // get the pixmap/picture from the collection, and set it in the image/clipart object
         if ( kpobject->getType() == OT_PICTURE ) {
             if ( _clean || m_objectList.findRef( kpobject ) > lastObj )
                 dynamic_cast<KPPixmapObject*>( kpobject )->reload();
         } else if ( kpobject->getType() == OT_CLIPART )
             dynamic_cast<KPClipartObject*>( kpobject )->reload();
-        else if ( kpobject->getType() == OT_TEXT )
-            dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( m_doc );
+        else
+            if ( kpobject->getType() == OT_TEXT )
+                dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( m_doc );
     }
+    kpbackground->restore(); // TODO rename to e.g. reload
 }
 
 

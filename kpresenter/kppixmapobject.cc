@@ -51,7 +51,7 @@ KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection, const KPIma
 {
     imageCollection = _imageCollection;
 
-    ext = orig_size;
+    ext = QSize(); // invalid size means unset
     brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
 
@@ -68,11 +68,9 @@ KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
 void KPPixmapObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    if ( ext == orig_size )
-        ext = KoSize::fromQSize(image.size());
 
-    image = image.scale( ext.toQSize() );
-
+    //image = image.scale( ext.toQSize() );
+    // TODO: copy create-gradient-on-demand from KPBackground
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize().toQSize() );
 }

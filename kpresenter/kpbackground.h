@@ -23,7 +23,7 @@
 #include <qsize.h>
 #include <global.h>
 #include <kpimage.h>
-#include <kpclipartcollection.h>
+#include <kpclipartcollection.h> // for KPClipartKey
 
 class KPresenterDoc;
 class QPainter;
@@ -32,6 +32,7 @@ class KPGradientCollection;
 class QPicture;
 class QDomDocument;
 class QDomElement;
+class KoZoomHandler;
 class KPrPage;
 
 /******************************************************************/
@@ -42,10 +43,8 @@ class KPrPage;
 class KPBackGround
 {
 public:
-    KPBackGround( KPImageCollection *_imageCollection, KPGradientCollection *_gradientCollection,
-                  KPClipartCollection *_clipartCollection, KPrPage *_page );
-    ~KPBackGround()
-    {; }
+    KPBackGround( KPrPage *_page );
+    ~KPBackGround() {}
 
     void setBackType( BackType _backType )
     { backType = _backType; }
@@ -73,8 +72,6 @@ public:
     { soundEffect = _soundEffect; }
     void setPageSoundFileName( const QString &_soundFileName )
     { soundFileName = _soundFileName; }
-
-    void setBgSize( QSize _size, bool visible = true );
 
     BackType getBackType() const
     { return backType; }
@@ -106,10 +103,13 @@ public:
     QString getPageSoundFileName() const
     { return soundFileName; }
 
-    QSize getSize() const
-    { return ext; }
-
-    void draw( QPainter *_painter, bool _drawBorders );
+    // Draw the background.
+    // Uses the @p zoomHandler to determine the size of the background
+    void draw( QPainter *_painter, const KoZoomHandler* zoomHandler,
+               const QRect& crect, bool _drawBorders );
+    // Draw the background. The size of the background is passed explicitely
+    void draw( QPainter *_painter, const QSize& ext,
+               const QRect& crect, bool _drawBorders );
 
     void restore();
 
@@ -117,34 +117,46 @@ public:
     void load( const QDomElement &element );
 
 protected:
-    void drawBackColor( QPainter *_painter );
-    void drawBackPix( QPainter *_painter );
-    void drawBorders( QPainter *_painter );
-    void drawHeaderFooter( QPainter *_painter );
+    void drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect );
+    void drawBackPix( QPainter *_painter, const QSize& ext, const QRect& crect );
+    void drawBorders( QPainter *_painter, const QSize& ext, const QRect& crect );
+    void drawHeaderFooter( QPainter *_painter, const QSize& ext, const QRect& crect );
+    // The current gradient isn't valid anymore (e.g. size or settings changed) -> discard it
     void removeGradient();
 
+    KPImageCollection *imageCollection() const;
+    KPGradientCollection *gradientCollection() const;
+    KPClipartCollection *clipartCollection() const;
+
+private:
     BackType backType;
     BackView backView;
     QColor backColor1;
     QColor backColor2;
     BCType bcType;
     PageEffect pageEffect;
-    bool unbalanced;
-    int xfactor, yfactor;
-    int pageTimer;
-    bool soundEffect;
+    // Sound played when showing this page
     QString soundFileName;
 
+    // Background image or clipart
     KPImage backImage;
-    KPImageCollection *imageCollection;
-    KPGradientCollection *gradientCollection;
-    KPClipartCollection *clipartCollection;
-    QPixmap *gradient;
     KPClipart backClipart;
+    // Pixmap used to cache the drawing of the gradient, at the current size
+    QPixmap *gradient;
 
-    QSize ext;
+    // The page for which this background exists
     KPrPage *m_page;
-    int footerHeight;
+
+    //int footerHeight;
+
+    // Gradient factors
+    int xfactor, yfactor;
+    // ### Not related to the background, but to the page: delay for the page
+    int pageTimer;
+    // ### This could be simply !soundFileName.isEmpty()...
+    bool soundEffect;
+    // Gradient setting
+    bool unbalanced;
 };
 
 #endif

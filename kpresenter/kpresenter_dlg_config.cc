@@ -170,7 +170,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     lay1->addWidget(recentFiles);
 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
-    double val = KoUnit::userValue( ptIndent, unit );
+    double val = KoUnit::ptToUnit( ptIndent, unit );
     indent = new KDoubleNumInput( val, tmpQGroupBox );
     indent->setRange(0.1, 50, 0.1);
     indent->setPrecision(1);
@@ -205,7 +205,7 @@ void configureInterfacePage::apply()
         m_pView->kPresenterDoc()->setAutoSave( autoSaveVal*60 );
     }
 
-    double newIndent = KoUnit::fromUserValue( indent->value(), doc->getUnit() );
+    double newIndent = KoUnit::ptToUnit( indent->value(), doc->getUnit() );
     if( newIndent != doc->getIndentValue() )
     {
         config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
@@ -230,7 +230,7 @@ void configureInterfacePage::slotDefault()
     eRastX->setValue( 10 );
     eRastY->setValue( 10 );
     autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
-    double newIndent = KoUnit::userValue( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->getUnit() );
+    double newIndent = KoUnit::ptToUnit( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);

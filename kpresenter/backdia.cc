@@ -47,14 +47,11 @@
  *******************************************************************/
 
 /*=============================================================*/
-BackPreview::BackPreview( QWidget *parent, KPrPage *m_page )
+BackPreview::BackPreview( QWidget *parent, KPrPage *page )
     : QFrame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
-    back = new KPBackGround( m_page->kPresenterDoc()->getImageCollection(),
-                             m_page->kPresenterDoc()->getGradientCollection(),
-                             m_page->kPresenterDoc()->getClipartCollection(),
-                             m_page );
+    back = new KPBackGround( page );
     setMinimumSize( 300, 200 );
 
 }
@@ -70,15 +67,8 @@ void BackPreview::drawContents( QPainter *p )
     QFrame::drawContents( p );
     p->save();
     p->translate( contentsRect().x(), contentsRect().y() );
-    back->draw( p, false );
+    back->draw( p, contentsRect().size(), contentsRect(), false );
     p->restore();
-}
-
-/*=============================================================*/
-void BackPreview::resizeEvent( QResizeEvent *e )
-{
-    QFrame::resizeEvent( e );
-    back->setBgSize( contentsRect().size(), isVisible() );
 }
 
 /******************************************************************/

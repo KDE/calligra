@@ -48,8 +48,6 @@ public:
 
     KPresenterDoc * kPresenterDoc() const {return m_doc; }
 
-    void updateBackgroundSize();
-
     QString getManualTitle()const;
     void insertManualTitle(const QString & title);
     QString pageTitle( const QString &_title ) const;

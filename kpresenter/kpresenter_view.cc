@@ -4348,7 +4348,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                 changed=true;
             }
 
-            h_ruler->setLeftIndent( KoUnit::userValue( paragDia->leftIndent(), m_pKPresenterDoc->getUnit() ) );
+            h_ruler->setLeftIndent( KoUnit::ptToUnit( paragDia->leftIndent(), m_pKPresenterDoc->getUnit() ) );
         }
 
         if(paragDia->isRightMarginChanged())
@@ -4359,7 +4359,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            h_ruler->setRightIndent( KoUnit::userValue( paragDia->rightIndent(), m_pKPresenterDoc->getUnit() ) );
+            h_ruler->setRightIndent( KoUnit::ptToUnit( paragDia->rightIndent(), m_pKPresenterDoc->getUnit() ) );
         }
         if(paragDia->isSpaceBeforeChanged())
         {
@@ -4387,7 +4387,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            h_ruler->setFirstIndent(KoUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
+            h_ruler->setFirstIndent(KoUnit::ptToUnit( paragDia->leftIndent() + paragDia->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
         }
 
         if(paragDia->isAlignChanged())
@@ -4624,9 +4624,9 @@ void KPresenterView::showRulerIndent( double _leftMargin, double _firstLine, dou
   KoRuler * hRuler = getHRuler();
   if ( hRuler )
   {
-      hRuler->setFirstIndent( KoUnit::userValue( _firstLine + _leftMargin, m_pKPresenterDoc->getUnit() ) );
-      hRuler->setLeftIndent( KoUnit::userValue( _leftMargin, m_pKPresenterDoc->getUnit() ) );
-      hRuler->setRightIndent( KoUnit::userValue( _rightMargin, m_pKPresenterDoc->getUnit() ) );
+      hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine + _leftMargin, m_pKPresenterDoc->getUnit() ) );
+      hRuler->setLeftIndent( KoUnit::ptToUnit( _leftMargin, m_pKPresenterDoc->getUnit() ) );
+      hRuler->setRightIndent( KoUnit::ptToUnit( _rightMargin, m_pKPresenterDoc->getUnit() ) );
       actionTextDepthMinus->setEnabled( _leftMargin>0);
   }
 }

@@ -246,6 +246,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
         bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
     }
+    //else kdDebug(33001) << "KPrCanvas::paintEvent with updates disabled" << endl;
 }
 
 /*======================= draw background ========================*/
@@ -260,7 +261,7 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect )
         //kdDebug() << "KPrCanvas::drawBackground rect=" << DEBUGRECT(rect) << endl;
         if ( rect.intersects( pageRect ) )
         {
-            m_activePage->background()->draw( painter, true ); // TODO pass rect ?
+            m_activePage->background()->draw( painter, m_view->zoomHandler(), rect, true );
         }
         // Include the border now
         pageRect.rLeft() -= 1;
@@ -277,65 +278,9 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect )
     }
     else
     {
-#if 0
-        QRect pgRect = m_view->kPresenterDoc()->pageList().at( currPresPage-1)->getZoomPageRect();
-        kdDebug(33001) << "Page::drawBackground pgRect: " << pgRect.x() << "," << pgRect.y()
-                       << " " << pgRect.width() << "x" << pgRect.height() << endl;
-
-        kdDebug(33001) << " with borders, topleft is: " << pgRect.x() +
-            m_view->kPresenterDoc()->getLeftBorder() * _presFakt
-                       << "," << pgRect.y() +
-            m_view->kPresenterDoc()->getTopBorder() * _presFakt
-                       << endl;
-#endif
-//FIXME (zoom)
-        m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->background()->draw( painter, false );
+        // TODO use m_pageList
+        m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->background()->draw( painter, m_view->zoomHandler(), rect, false );
     }
-    /******************************************************/
-
-
-
-#if 0
-    QPtrListIterator<KPBackGround> it(*backgroundList());
-    for ( int i = 0 ; it.current(); ++it, ++i ) {
-        if ( editMode )
-        {
-            if ( !ignoreSkip && painter->device()->devType() != QInternal::Printer && i != (int)view->getCurrPgNum() - 1 )
-            {
-                //kdDebug(33001) << "KPrCanvas::drawBackground skipping drawing" << endl;
-                continue;
-            }
-            //kdDebug(33001) << "KPrCanvas::drawBackground drawing bg for page " << i+1 << " editMode=" << editMode << endl;
-            QRect pageRect = getPageRect( i, _presFakt );
-            if ( rect.intersects( pageRect ) )
-                it.current()->draw( painter, pageRect.topLeft(), true );
-            // Include the border now
-            pageRect.rLeft() -= 1;
-            pageRect.rTop() -= 1;
-            pageRect.rRight() += 1;
-            pageRect.rBottom() += 1;
-            grayRegion -= pageRect;
-        }
-        else if ( !editMode && static_cast<int>( currPresPage ) == i + 1 )
-        {
-            QRect pgRect = getPageRect( i, _presFakt, false );
-                /*kdDebug(33001) << "Page::drawBackground pgRect: " << pgRect.x() << "," << pgRect.y()
-                          << " " << pgRect.width() << "x" << pgRect.height() << endl;
-
-                kdDebug(33001) << " with borders, topleft is: " << pgRect.x() +
-                    m_view->kPresenterDoc()->getLeftBorder() * _presFakt
-                          << "," << pgRect.y() +
-                    m_view->kPresenterDoc()->getTopBorder() * _presFakt
-                          << endl;
-                */
-            it.current()->draw( painter, QPoint( pgRect.x() +
-                                                 qRound(m_view->kPresenterDoc()->getLeftBorder() * _presFakt),
-                                                 pgRect.y() +
-                                                 qRound(m_view->kPresenterDoc()->getTopBorder() * _presFakt) ),
-                                false );
-        }
-    }
-#endif
 }
 
 // 100% stolen from KWord
@@ -409,7 +354,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
     if(!m_view->koDocument()->isReadWrite())
         return;
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
+    QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
@@ -447,8 +393,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPObject *kpobject = 0;
 
-    oldMx = e->x();
-    oldMy = e->y();
+    oldMx = contentsPoint.x();
+    oldMy = contentsPoint.y();
+    QPoint rasterPoint( ( oldMx / rastX() ) * rastX(), ( oldMy / rastY() ) * rastY() );
 
     resizeObjNum = -1;
 
@@ -459,8 +406,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             mousePressed = true;
 
             if ( m_drawPolyline && toolEditMode == INS_POLYLINE ) {
-                m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
-                                           ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                m_dragStartPoint = rasterPoint;
                 m_pointArray.putPoints( m_indexPointArray, 1,m_view->zoomHandler()->unzoomItX( m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
                 ++m_indexPointArray;
                 return;
@@ -475,8 +421,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     QPoint oldStartPoint = m_dragStartPoint;
 
-                    m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
-                                               ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                    m_dragStartPoint = rasterPoint;
 
                     p.drawLine( oldStartPoint, m_dragStartPoint );  // erase old line
                     p.end();
@@ -486,8 +431,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     m_drawLineWithCubicBezierCurve = false;
                 }
                 else {
-                    QPoint _oldEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
-                                                  ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                    QPoint _oldEndPoint = rasterPoint;
                     QPainter p( this );
                     QPen _pen = QPen( Qt::black, 1, Qt::DashLine );
                     p.setPen( _pen );
@@ -532,8 +476,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     bool deSelAll = true;
                     KPObject *kpobject = 0;
 
-                    firstX = e->x();
-                    firstY = e->y();
+                    firstX = contentsPoint.x();
+                    firstY = contentsPoint.y();
                     if ( (int)objectList().count() - 1 >= 0 ) {
                         for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0 ; i-- ) {
                             kpobject = objectList().at( i );
@@ -730,7 +674,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             }
         }
         else if( e->button() == RightButton && toolEditMode != TEM_MOUSE ) {
-            //desactivate tools when you click on right button
+            //deactivate tools when you click on right button
             setToolEditMode( TEM_MOUSE );
         }
     } else {
@@ -775,14 +719,15 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 /*=================== handle mouse released ======================*/
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
+    QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint ))
         {
-            m_currentTextObjectView->mouseReleaseEvent(  e, QPoint());
+            m_currentTextObjectView->mouseReleaseEvent( e, contentsPoint );
             mousePressed=false;
             emit objectSelectedChanged();
             return;
@@ -800,8 +745,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
 
-    int mx = e->x();
-    int my = e->y();
+    int mx = contentsPoint.x();
+    int my = contentsPoint.y();
     mx = ( mx / rastX() ) * rastX();
     my = ( my / rastY() ) * rastY();
     firstX = ( firstX / rastX() ) * rastX();
@@ -858,17 +803,15 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         } break;
         case MT_MOVE: {
             if ( firstX != mx || firstY != my ) {
-                if ( (int)objectList().count() - 1 >= 0 ) {
-                    for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
-                        kpobject = objectList().at( i );
-                        if ( kpobject->isSelected() ) {
-                            _objects.append( kpobject );
-                            QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
-                            br.moveBy( firstX - mx - diffx(), firstY - my - diffy() );
-                            kdDebug() << "KPrCanvas::mouseReleaseEvent repainting " << DEBUGRECT(br) << endl;
-                            _repaint( br );
-                            _repaint( kpobject );
-                        }
+                for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
+                    kpobject = objectList().at( i );
+                    if ( kpobject->isSelected() ) {
+                        _objects.append( kpobject );
+                        QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
+                        br.moveBy( firstX - mx, firstY - my );
+                        _repaint( br ); // Previous position
+                        //kdDebug() << "KPrCanvas::mouseReleaseEvent repainting " << DEBUGRECT(br) << endl;
+                        _repaint( kpobject ); // New position
                     }
                 }
                 MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
@@ -876,12 +819,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                                                       _objects, m_view->kPresenterDoc(),m_activePage );
                 m_view->kPresenterDoc()->addCommand( moveByCmd );
             } else
-                if ( (int)objectList().count() - 1 >= 0 ) {
-                    for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
-                        kpobject = objectList().at( i );
-                        if ( kpobject->isSelected() ) {
-                            _repaint( kpobject );
-                        }
+                for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
+                    kpobject = objectList().at( i );
+                    if ( kpobject->isSelected() ) {
+                        _repaint( kpobject );
                     }
                 }
         } break;
@@ -1073,14 +1014,15 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 /*==================== handle mouse moved ========================*/
 void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
+    QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint )&&mousePressed)
         {
-            KoPoint pos=m_view->zoomHandler()->unzoomPoint(e->pos()) - txtObj->getOrig();
+            KoPoint pos = docPoint - txtObj->getOrig();
             m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
         }
         return;
@@ -1338,22 +1280,23 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 {
     if(!m_view->koDocument()->isReadWrite())
         return;
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
+    QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
         if(txtObj->contains( /*e->pos()*/docPoint ))
         {
-            KoPoint pos=m_view->zoomHandler()->unzoomPoint(e->pos()) - txtObj->getOrig();
+            KoPoint pos = contentsPoint - txtObj->getOrig();
             //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
-            m_currentTextObjectView->mouseDoubleClickEvent( e, m_view->zoomHandler()->zoomPoint(pos));
+            m_currentTextObjectView->mouseDoubleClickEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) );
             return;
         }
     }
 
     //disallow activating objects outside the "page"
-    if ( !m_activePage->getZoomPageRect().contains(e->pos()))
+    if ( !m_activePage->getPageRect().contains(docPoint))
         return;
 
     if ( toolEditMode != TEM_MOUSE || !editMode ) return;
@@ -2027,45 +1970,6 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*100), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     doc->newZoomAndResolution(false,false);
 
-    if ( m_showOnlyPage == -1 )
-    {
-        // Maybe we should do this on demand ?
-        //FIXME
-        QPtrListIterator<KPrPage> it(doc->pageList());
-        for (  ; it.current(); ++it )
-	    it.current()->updateBackgroundSize();
-    }
-    else
-        doc->pageList().at( m_showOnlyPage-1 )->updateBackgroundSize();
-
-
-    //kdDebug(33001) << "Page::startScreenPresentation Zooming objects" << endl;
-    // Zoom objects to the correct size for full screen
-    // (might need a progress bar!)
-#if 0
-    QPtrListIterator<KPObject> it(getObjectList());
-    for ( int i = 0 ; it.current(); ++it, ++i )
-    {
-        // We need to zoom ALL objects, even to show only one page.
-	// Otherwise, the non-zoomed ones would interfer, being at the wrong page
-        //if ( m_showOnlyPage == -1 || m_showOnlyPage == objPage )
-        //{
-            //kdDebug(33001) << "Zooming object " << i << endl;
-            it.current()->zoom( _presFakt );
-            //kdDebug(33001) << "Zooming object " << i << " - done" << endl;
-            it.current()->drawSelection( false );
-
-            // Objects to draw initially are those on first page (or m_showOnlyPage page, if set)
-            //FIXME Laurent we must change active page
-            if ( (m_showOnlyPage == -1 && objPage == 1) || m_showOnlyPage == objPage )
-            {
-                //kdDebug(33001) << "Adding object " << i << " in page " << objPage << endl;
-                tmpObjs.append( it.current() );
-            }
-
-        //}
-    }
-#endif
     if(m_showOnlyPage==-1)
     {
         QPtrListIterator<KPObject> oIt(doc->pageList().at(0)->objectList());
@@ -2114,18 +2018,8 @@ void KPrCanvas::stopScreenPresentation()
 
     KPresenterDoc * doc = m_view->kPresenterDoc();
     _presFakt = 1.0;
-    // Zoom backgrounds back
     doc->zoomHandler()->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     doc->newZoomAndResolution(false,false);
-    if ( m_showOnlyPage == -1 )
-    {
-        QPtrListIterator<KPrPage> it(doc->pageList());
-        for ( ; it.current(); ++it )
-	    it.current()->updateBackgroundSize();
-    }
-    else
-        doc->pageList().at( m_showOnlyPage-1 )->updateBackgroundSize();
-
     goingBack = false;
     currPresPage = 1;
     editMode = true;
@@ -4282,7 +4176,7 @@ unsigned int KPrCanvas::rastX() const
 /*================================================================*/
 unsigned int KPrCanvas::rastY() const
 {
-    return m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->rastY());
+    return m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->rastY());
 }
 
 /*================================================================*/
@@ -5033,7 +4927,6 @@ QPtrList<KoTextObject> KPrCanvas::objectText()
 
 bool KPrCanvas::oneObjectTextExist()
 {
-    KPObject *kpobject = 0;
     QPtrListIterator<KPObject> it( getObjectList() );
     for ( ; it.current() ; ++it )
     {

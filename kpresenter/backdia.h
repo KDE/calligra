@@ -47,7 +47,7 @@ class BackPreview : public QFrame
     Q_OBJECT
 
 public:
-    BackPreview( QWidget *parent, KPrPage *m_page );
+    BackPreview( QWidget *parent, KPrPage *page );
     virtual ~BackPreview();
 
     KPBackGround *backGround() const {
@@ -55,8 +55,7 @@ public:
     }
 
 protected:
-    void resizeEvent( QResizeEvent *e );
-    void drawContents( QPainter *p );
+    virtual void drawContents( QPainter *p );
 
 private:
     KPBackGround *back;
