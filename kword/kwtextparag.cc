@@ -405,11 +405,14 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
             for ( int i = start ; i < end ; ++i )
             {
                 QTextStringChar &ch = string()->at(i);
+                if ( ch.isCustom() )
+                    continue;
                 if ( ch.c == ' ' )
                 {
                     int w = string()->width(i);
-                    int size = QMAX( 2, QMIN( w/2, h/3 ) ); // Enfore that it's a square, and that it's visible
-                    painter.drawRect( ch.x + (w - size) / 2, lastY + (h - size) / 2, size, size );
+                    int height = ch.ascent();
+                    int size = QMAX( 2, QMIN( w/2, height/3 ) ); // Enfore that it's a square, and that it's visible
+                    painter.drawRect( ch.x + (w - size) / 2, lastY + baseLine - (height - size) / 2, size, size );
                 }
                 else if ( ch.c == '\t' )
                 {
@@ -418,7 +421,7 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
                     int availWidth = nextch.x - ch.x - 1;
                     int x = ch.x + availWidth / 2;
                     int size = QMIN( availWidth, lastFormat->width('W') ) / 2; // actually the half size
-                    int y = lastY + h/2;
+                    int y = lastY + baseLine - ch.ascent()/2;
                     int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
                     painter.drawLine( x + size, y, x - size, y );
                     painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
