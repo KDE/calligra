@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003,2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -107,14 +107,21 @@ class KEXICORE_EXPORT Info
 		void 			setProjectPartID(int id) { m_projectPartID=id; }
 
 		/**
-		 * sets the broken flag
-		 * most likely to be called by @ref KexiPartManager
+		 * Sets the broken flag and error message. 
+		 * Most likely to be called by @ref KexiPart::Manager
 		 */
-		void 			setBroken(bool broken) { m_broken = broken; }
+		void setBroken(bool broken, const QString& errorMessage) 
+		{ m_broken = broken; m_errorMessage = errorMessage; }
+
+		/**
+		 * \return i18n'd error message set by setBroken().
+		 */
+		QString errorMessage() const { return m_errorMessage; }
 
 	private:
 		KService::Ptr 		m_ptr;
 		bool 			m_broken;
+		QString m_errorMessage;
 //		Part 			*m_instance;
 
 		QString m_groupName;

@@ -102,10 +102,16 @@ Manager::~Manager()
 Part *
 Manager::part(Info *i)
 {
-	if(!i || i->broken())
+	clearError();
+	if(!i)
 		return 0;
 
 	kdDebug() << "Manager::part( id = " << i->projectPartID() << " )" << endl;
+
+	if (i->broken()) {
+			setError(i->errorMessage());
+			return 0;
+	}
 
 	Part *p = m_parts[i->projectPartID()];
 	
@@ -117,8 +123,8 @@ Manager::part(Info *i)
 		if(!p) {
 			kdDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
 			kdDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
-			i->setBroken(true);
-			setError(i18n("Error during loading part module \"%1\"").arg(i->objectName()));
+			i->setBroken(true, i18n("Error during loading part module \"%1\"").arg(i->objectName()));
+			setError(i->errorMessage());
 			return 0;
 		}
 
