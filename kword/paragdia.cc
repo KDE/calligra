@@ -40,6 +40,7 @@
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <qvalidator.h>
+#include <qwhatsthis.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -833,16 +834,40 @@ void KWParagDia::setupTab4()
     tgrid->addWidget( rUAlph, 6, 0 );
     g1->insert( rUAlph, 3 );
 
+    rCustom = new QRadioButton( i18n( "&Custom" ), gType );
+    rCustom->resize( rCustom->sizeHint() );
+    tgrid->addWidget( rCustom, 7, 0 );
+    g1->insert( rCustom, 7 );
+
+    eCustomNum = new QLineEdit( gType );
+    eCustomNum->resize( eCustomNum->sizeHint() );
+    eCustomNum->setEnabled( false );
+    tgrid->addWidget( eCustomNum, 8, 0 );
+    connect( rCustom, SIGNAL( toggled(bool) ), eCustomNum, SLOT( setEnabled(bool) ));
+    connect( eCustomNum, SIGNAL( textChanged(const QString&) ),
+             this, SLOT( counterDefChanged(const QString&) ) );
+
+
+    QString custcountwt(i18n("<h1>Create custom counters</h1>"
+	"<p>You can enter a string describing your custom counter, consisting of "
+	" the following symbols. For now, this string may not contain any whitespace "
+	" or additional text. This will change.</p>" 
+	"<ul><li>\\arabic - arabic numbers (1, 2, 3, ...)</li><li>\\roman or \\Roman - lower or uppercase roman numbers</li>"
+	"<li>\\alph or \\Alph - lower or uppercase latin letters</li></ul>"
+	"<p>This will hopefully have more options in the future (like enumerated lists or greek letters).</p>" ));
+    QWhatsThis::add( rCustom, custcountwt );
+    QWhatsThis::add( eCustomNum, custcountwt );
+
     rBullets = new QRadioButton( i18n( "&Bullets" ), gType );
     rBullets->resize( rBullets->sizeHint() );
-    tgrid->addWidget( rBullets, 7, 0 );
+    tgrid->addWidget( rBullets, 9, 0 );
     g1->insert( rBullets, 6 );
 
     bBullets = new QPushButton( gType );
     bBullets->resize( 30, 30 );
     bBullets->setMinimumSize( bBullets->size() );
     bBullets->setMaximumSize( bBullets->size() );
-    tgrid->addWidget( bBullets, 7, 1 );
+    tgrid->addWidget( bBullets, 9, 1 );
     connect( bBullets, SIGNAL( clicked() ), this, SLOT( changeBullet() ) );
 
     connect( g1, SIGNAL( clicked( int ) ), this, SLOT( typeChanged( int ) ) );
@@ -854,8 +879,10 @@ void KWParagDia::setupTab4()
     tgrid->addRowSpacing( 4, rURNums->height() );
     tgrid->addRowSpacing( 5, rLAlph->height() );
     tgrid->addRowSpacing( 6, rUAlph->height() );
-    tgrid->addRowSpacing( 7, rBullets->height() );
-    tgrid->addRowSpacing( 7, bBullets->height() );
+    tgrid->addRowSpacing( 7, rCustom->height() );
+    tgrid->addRowSpacing( 8, eCustomNum->height() );
+    tgrid->addRowSpacing( 9, rBullets->height() );
+    tgrid->addRowSpacing( 9, bBullets->height() );
     tgrid->setRowStretch( 0, 0 );
     tgrid->setRowStretch( 1, 0 );
     tgrid->setRowStretch( 2, 0 );
@@ -865,12 +892,15 @@ void KWParagDia::setupTab4()
     tgrid->setRowStretch( 6, 0 );
     tgrid->setRowStretch( 7, 0 );
     tgrid->setRowStretch( 8, 1 );
+    tgrid->setRowStretch( 9, 1 );
 
     tgrid->addColSpacing( 0, rANums->width() );
     tgrid->addColSpacing( 0, rLRNums->width() );
     tgrid->addColSpacing( 0, rURNums->width() );
     tgrid->addColSpacing( 0, rLAlph->width() );
     tgrid->addColSpacing( 0, rUAlph->width() );
+    tgrid->addColSpacing( 0, rCustom->width() );
+    tgrid->addColSpacing( 0, eCustomNum->width() );
     tgrid->addColSpacing( 0, rBullets->width() );
     tgrid->addColSpacing( 1, bBullets->width() );
     tgrid->setColStretch( 0, 1 );
@@ -1366,6 +1396,12 @@ void KWParagDia::typeChanged( int _type )
 }
 
 /*================================================================*/
+void KWParagDia::counterDefChanged( const QString& _cd )
+{
+    counter.customCounterDef = _cd;
+}
+
+/*================================================================*/
 void KWParagDia::numTypeChanged( int _ntype )
 {
     counter.numberingType = static_cast<KWParagLayout::NumType>( _ntype );
@@ -1416,6 +1452,8 @@ void KWParagDia::setCounter( KWParagLayout::Counter _counter )
 	break;
     case KWParagLayout::CT_BULLET: rBullets->setChecked( true );
 	break;
+    case KWParagLayout::CT_CUSTOM: rCustom->setChecked( true );
+        break;
     }
 
     switch ( counter.numberingType ) {
@@ -1424,6 +1462,8 @@ void KWParagDia::setCounter( KWParagLayout::Counter _counter )
     case KWParagLayout::NT_CHAPTER: rChapter->setChecked( true );
 	break;
     }
+
+    eCustomNum->setText( counter.customCounterDef );
 
     bBullets->setText( counter.counterBullet );
     bBullets->setFont( QFont( counter.bulletFont ) );

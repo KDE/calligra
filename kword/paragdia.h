@@ -213,7 +213,8 @@ protected:
     QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gType, *gText, *gOther;
     QComboBox *cSpacing, *cStyle, *cWidth;
     QRadioButton *rLeft, *rCenter, *rRight, *rBlock, *rANums, *rLRNums, 
-	*rURNums, *rLAlph, *rUAlph, *rBullets, *rList, *rChapter, *rNone;
+	*rURNums, *rLAlph, *rUAlph, *rBullets, *rCustom, *rList, *rChapter, *rNone;
+    QLineEdit *eCustomNum;
     KWPagePreview *prev1;
     KWPagePreview2 *prev2;
     KButtonBox *bb, *bbTabs;
@@ -256,6 +257,7 @@ protected slots:
     void brdColorChanged( const QColor& );
     void changeBullet();
     void typeChanged( int );
+    void counterDefChanged( const QString& );
     void numTypeChanged( int );
     void leftTextChanged( const QString & );
     void rightTextChanged( const QString & );
