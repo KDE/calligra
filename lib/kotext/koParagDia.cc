@@ -1652,7 +1652,7 @@ void KoParagTabulatorsWidget::slotTabValueChanged( double val ) {
     if(noSignals) return;
     noSignals=true;
     m_tabList[lstTabs->currentItem()].ptPos = KoUnit::ptFromUnit( val, m_unit );
-    lstTabs->changeItem(tabToString(&m_tabList[lstTabs->currentItem()]), lstTabs->currentItem());
+    lstTabs->changeItem(tabToString(m_tabList[lstTabs->currentItem()]), lstTabs->currentItem());
 
     sortLists();
     noSignals=false;
@@ -1666,13 +1666,13 @@ void KoParagTabulatorsWidget::slotAlignCharChanged( const QString &/*_text*/ ) {
 
 void KoParagTabulatorsWidget::newClicked() {
     int selected=lstTabs->currentItem();
-    KoTabulator *newTab = new KoTabulator;
+    KoTabulator newTab;
     if(selected < 0) {
-        newTab->ptPos=0;
-        newTab->type=T_LEFT;
-        newTab->filling=TF_BLANK;
-        newTab->ptWidth=0.5;
-        m_tabList.append(*newTab);
+        newTab.ptPos=0;
+        newTab.type=T_LEFT;
+        newTab.filling=TF_BLANK;
+        newTab.ptWidth=0.5;
+        m_tabList.append(newTab);
         lstTabs->insertItem(tabToString(newTab));
         lstTabs->setCurrentItem(0);
     } else {
@@ -1684,11 +1684,11 @@ void KoParagTabulatorsWidget::newClicked() {
         pos=pos + KoUnit::ptFromUnit( add, m_unit );
         if(pos<m_toplimit)
         {
-            newTab->ptPos=pos + KoUnit::ptFromUnit( add, m_unit );
-            newTab->type=m_tabList[selected].type;
-            newTab->filling=m_tabList[selected].filling;
-            newTab->ptWidth=m_tabList[selected].ptWidth;
-            m_tabList.insert(m_tabList.at(selected), *newTab);
+            newTab.ptPos=pos + KoUnit::ptFromUnit( add, m_unit );
+            newTab.type=m_tabList[selected].type;
+            newTab.filling=m_tabList[selected].filling;
+            newTab.ptWidth=m_tabList[selected].ptWidth;
+            m_tabList.insert(m_tabList.at(selected), newTab);
             lstTabs->insertItem( tabToString(newTab), selected);
             lstTabs->setCurrentItem(lstTabs->findItem(tabToString(newTab)));
             sortLists();
@@ -1781,8 +1781,8 @@ void KoParagTabulatorsWidget::setCurrentTab( double tabPos ) {
     kdWarning() << "KoParagTabulatorsWidget::setCurrentTab: no tab found at pos=" << tabPos << endl;
 }
 
-QString KoParagTabulatorsWidget::tabToString(const KoTabulator *tab) {
-    return KoUnit::userValue( tab->ptPos, m_unit);
+QString KoParagTabulatorsWidget::tabToString(const KoTabulator &tab) {
+    return KoUnit::userValue( tab.ptPos, m_unit);
 }
 
 void KoParagTabulatorsWidget::updateAlign(int selected) {
