@@ -178,10 +178,12 @@ void KoImageCollection::readFromStore( KoStore * store, const StoreMap & storeMa
             // old naming I suppose ?
             u = prefix + it.key().toString();
         }
+        //kdDebug() << "KoImageCollection::readFromStore " << u << endl;
 
         if ( u.endsWith( ".eps" ) && store->open( u ) )
         {
             QByteArray data = store->read( store->size() );
+            Q_ASSERT( !data.isNull() );
             store->close();
             if ( !data.isNull() )
                 insertImage( it.key(), data );

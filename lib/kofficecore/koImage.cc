@@ -100,6 +100,7 @@ QImage KoImage::image() const
     // On-demand loading of image from raw data
     if ( d->m_image.isNull() && !d->m_rawData.isNull() )
     {
+        //kdDebug() << "KoImage::image loading from raw data" << endl;
         QBuffer buffer( d->m_rawData );
         buffer.open( IO_ReadOnly );
         QImageIO io( &buffer, 0 );
@@ -141,9 +142,7 @@ QSize KoImage::size() const
 {
     if ( !d ) return QSize();
 
-    // ### empty size in case of rawdata passed and not loaded yet. Is that ok?
-
-    return d->m_image.size();
+    return image().size();
 }
 
 QSize KoImage::originalSize() const
@@ -166,7 +165,7 @@ KoImage KoImage::scale( const QSize &size, bool fastMode /*=false*/ ) const
 {
     if ( !d )
         return *this;
-    //kdDebug() << "KoImage::scale " << size.width() << "x" << size.height() << " fastMode=" << fastMode << endl;
+    //kdDebug() << "KoImage::scale " << size.width() << "x" << size.height() << " fastMode=" << fastMode << " hasRawData=" << !d->m_rawData.isNull() << " hasImage=" << !d->m_image.isNull() << endl;
 
     // Slow mode can be very slow, especially at high zoom levels -> configurable
     static int s_useSlowResizeMode = -1; // unset
@@ -175,8 +174,11 @@ KoImage KoImage::scale( const QSize &size, bool fastMode /*=false*/ ) const
         KConfigGroup group( KGlobal::config(), "KOfficeImage" );
         s_useSlowResizeMode = group.readNumEntry( "HighResolution", 1 );
     }
+    if ( s_useSlowResizeMode == 0 )
+        fastMode = true;
 
-    if ( d->m_rawData.isNull() || fastMode || s_useSlowResizeMode == 0 )
+    // Use QImage::scale if we have no raw data, or if we have an image and fastMode=true
+    if ( d->m_rawData.isNull() || ( !d->m_image.isNull() && fastMode ) )
     {
         KoImage originalImage;
 
