@@ -1,9 +1,0 @@
-?package(krayon):\
-	needs=x11\
-	section=Apps/Graphics\
-	hints="KDE"\
-	kderemove="1"\
-	title="Krayon"\
-	icon="/usr/share/pixmaps/krayon.xpm"\
-	command=krayon
-
