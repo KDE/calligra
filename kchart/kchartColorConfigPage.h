@@ -54,14 +54,18 @@ public:
     QColor xTitleColor() const;
     void setYTitleColor( QColor color );
     QColor yTitleColor() const;
+#if 0
     void setYTitle2Color( QColor color );
     QColor yTitle2Color() const;
+#endif
     void setXLabelColor( QColor color );
     QColor xLabelColor() const;
     void setYLabelColor( QColor color );
     QColor yLabelColor() const;
+#if 0
     void setYLabel2Color( QColor color );
     QColor yLabel2Color() const;
+#endif
     /*void setEdgeColor( QColor color );
     QColor edgeColor() const;*/
 /*     void setDataColor( uint dataset, QColor color ); */
@@ -74,23 +78,27 @@ private slots:
 private:
     void initDataColorList();
 
-    KChartParams* _params;
+    KChartParams   *m_params;
+    KoChart::Data  *m_data;
 
-    KColorButton* _gridCB;
     KColorButton* _lineCB;
+    KColorButton* _gridCB;
     KColorButton* _xtitleCB;
     KColorButton* _ytitleCB;
+#if 0
     KColorButton* _ytitle2CB;
+#endif
     KColorButton* _xlabelCB;
     KColorButton* _ylabelCB;
+#if 0
     KColorButton* _ylabel2CB;
+#endif
     //KColorButton* _edgeCB;
 //    KColorButton* _dataCB[NUMDATACOLORS];
     KListBox* _dataColorLB;
     KColorButton* _dataColorCB;
     KChartColorArray extColor;
     uint index;
-    KoChart::Data *data;
 };
 
 
@@ -142,6 +150,7 @@ inline QColor KChartColorConfigPage::yTitleColor() const
 }
 
 
+#if 0
 inline void KChartColorConfigPage::setYTitle2Color( QColor color )
 {
     _ytitle2CB->setColor( color );
@@ -152,7 +161,7 @@ inline QColor KChartColorConfigPage::yTitle2Color() const
 {
     return _ytitle2CB->color();
 }
-
+#endif
 
 inline void KChartColorConfigPage::setXLabelColor( QColor color )
 {
@@ -178,6 +187,7 @@ inline QColor KChartColorConfigPage::yLabelColor() const
 }
 
 
+#if 0
 inline void KChartColorConfigPage::setYLabel2Color( QColor color )
 {
     _ylabel2CB->setColor( color );
@@ -188,7 +198,7 @@ inline QColor KChartColorConfigPage::yLabel2Color() const
 {
     return _ylabel2CB->color();
 }
-
+#endif
 
 /*inline void KChartColorConfigPage::setEdgeColor( QColor color )
 {

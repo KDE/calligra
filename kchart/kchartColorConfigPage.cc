@@ -39,9 +39,9 @@ namespace KChart
 KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                                               QWidget* parent, KoChart::Data *dat ) :
     QWidget( parent ),
-    _params( params ),
-    index( 0 ),
-    data( dat )
+    m_params( params ),
+    m_data( dat ),
+    index( 0 )
 {
     QWhatsThis::add( this, i18n( "This page lets you configure the colors "
                                  "in which your chart is displayed. Each "
@@ -102,6 +102,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     QWhatsThis::add( ytitleLA, wtstr );
     QWhatsThis::add( _ytitleCB, wtstr );
 
+#if 0
     QLabel* ytitle2LA = new QLabel( i18n( "Y-title color (2nd axis):" ), gb );
     ytitle2LA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( ytitle2LA, 4, 0 );
@@ -114,13 +115,14 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                   "overrides the setting <i>Title Color</i>." );
     QWhatsThis::add( ytitle2LA, wtstr );
     QWhatsThis::add( _ytitle2CB, wtstr );
+#endif
 
     QLabel* xlabelLA = new QLabel( i18n( "X-label color:" ), gb );
     xlabelLA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( xlabelLA, 5, 0 );
+    grid->addWidget( xlabelLA, 4, 0 );
     _xlabelCB = new KColorButton( gb );
     xlabelLA->setBuddy( _xlabelCB );
-    grid->addWidget( _xlabelCB, 5, 1 );
+    grid->addWidget( _xlabelCB, 4, 1 );
     wtstr = i18n( "Here you can configure the color that is used for "
                   "labeling the X (horizontal) axis" );
     QWhatsThis::add( xlabelLA, wtstr );
@@ -128,15 +130,16 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
 
     QLabel* ylabelLA = new QLabel( i18n( "Y-label color:" ), gb );
     ylabelLA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( ylabelLA, 6, 0 );
+    grid->addWidget( ylabelLA, 5, 0 );
     _ylabelCB = new KColorButton( gb );
     ylabelLA->setBuddy( _ylabelCB );
-    grid->addWidget( _ylabelCB, 6, 1 );
+    grid->addWidget( _ylabelCB, 5, 1 );
     wtstr = i18n( "Here you can configure the color that is used for "
                   "labeling the Y (vertical) axis" );
     QWhatsThis::add( ylabelLA, wtstr );
     QWhatsThis::add( _ylabelCB, wtstr );
 
+#if 0
     QLabel* ylabel2LA = new QLabel( i18n( "Y-label color (2nd axis):" ), gb );
     ylabel2LA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( ylabel2LA, 7, 0 );
@@ -149,6 +152,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                   "configured to have two vertical axes." );
     QWhatsThis::add( ylabel2LA, wtstr );
     QWhatsThis::add( _ylabel2CB, wtstr );
+#endif
 
     QHBox* dataColorHB = new QHBox( gb );
     grid->addMultiCellWidget( dataColorHB,  0, 7, 2, 2 );
@@ -186,7 +190,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
 
 void KChartColorConfigPage::changeIndex(int newindex)
 {
-    if(index>_params->maxDataColor())
+    if(index > m_params->maxDataColor())
         _dataColorLB->setEnabled(false);
     else
     {
@@ -208,13 +212,13 @@ void KChartColorConfigPage::activeColorButton()
 void KChartColorConfigPage::initDataColorList()
 {
     QStringList lst;
-    for(uint i =0;i<data->rows();i++)
+    for(uint i = 0; i < m_data->rows(); i++)
     {
-        extColor.resize( _params->maxDataColor() );
-        if(i<_params->maxDataColor())
+        extColor.resize( m_params->maxDataColor() );
+        if(i<m_params->maxDataColor())
         {
-            _dataColorLB->insertItem(_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i+1) :_params->legendText( i ) );
-            extColor[i] =_params->dataColor(i);
+            _dataColorLB->insertItem(m_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i+1) :m_params->legendText( i ) );
+            extColor[i] =m_params->dataColor(i);
         }
     }
     _dataColorLB->setCurrentItem(0);
@@ -225,9 +229,9 @@ void KChartColorConfigPage::initDataColorList()
 void KChartColorConfigPage::apply()
 {
     extColor[index] = _dataColorCB->color();
-    for(uint i =0;i<data->rows();i++)
-        if(i<_params->maxDataColor())
-            _params->setDataColor(i,extColor[i]);
+    for(uint i =0;i<m_data->rows();i++)
+        if(i<m_params->maxDataColor())
+            m_params->setDataColor(i,extColor[i]);
 }
 
 }  //KChart namespace

@@ -218,16 +218,22 @@ void KChartConfigDialog::apply()
             leftparams.setAxisLineColor( _colorpage->yTitleColor() );
         else
             leftparams.setAxisLineColor( QColor() );
+#if 0
         if( _colorpage->yTitle2Color().isValid() )
             rightparams.setAxisLineColor( _colorpage->yTitle2Color() );
         else
             rightparams.setAxisLineColor( QColor() );
+#endif
         bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
         leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
+#if 0
         rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
+#endif
         m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
         m_params->setAxisParams( KDChartAxisParams::AxisPosLeft,   leftparams );
+#if 0
         m_params->setAxisParams( KDChartAxisParams::AxisPosRight,  rightparams );
+#endif
     }
     if((_piepage && _parameterpiepage) ||  m_axespage )
     {
@@ -301,10 +307,14 @@ void KChartConfigDialog::defaults()
         _colorpage->setGridColor( leftparams.axisGridColor() );
         _colorpage->setXTitleColor( bottomparams.axisLineColor() );
         _colorpage->setYTitleColor( leftparams.axisLineColor() );
+#if 0
         _colorpage->setYTitle2Color( rightparams.axisLineColor() );
+#endif
         _colorpage->setXLabelColor( bottomparams.axisLabelsColor() );
         _colorpage->setYLabelColor( leftparams.axisLabelsColor() );
+#if 0
         _colorpage->setYLabel2Color( rightparams.axisLabelsColor() );
+#endif
         // PENDING(kalle) Replace with KDChart equivalents
         //     _colorpage->setBackgroundColor( m_params->BGColor );
         //     _colorpage->setPlotColor( m_params->PlotColor );

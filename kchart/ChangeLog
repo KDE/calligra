@@ -1,4 +1,10 @@
-2005-02-23  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+2005-02-24    <inge@lysator.liu.se>
+
+	Fix part of 99997:
+	* kchartColorConfigPage.{h,cc]: Remove everything that has to do
+	with the second Y Axis.
+
+2005-02-23  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 99715
 	* kchartSubTypeChartPage.h (KChartBarSubTypeChartPage): Rename
