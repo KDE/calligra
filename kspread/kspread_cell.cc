@@ -1863,10 +1863,13 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     }
   if( !comment.isEmpty())
     {
-    _painter.setPen( Qt::red );
-    _painter.drawLine( _tx+w-10, _ty + dy, _tx + w, _ty + dy );
-    _painter.drawLine( _tx+w, _ty+dy , _tx+w , _ty+dy+10  );
-    _painter.drawLine( _tx+w-10, _ty+dy , _tx+w  , _ty + dy+10  );
+    QPointArray point( 3 );
+    point.setPoint( 0,_tx+w-10, _ty + dy );
+    point.setPoint( 1, _tx+w,_ty + dy);
+    point.setPoint( 2,_tx+w,_ty + dy +10 );
+    _painter.setBrush( QBrush(Qt::red  ) );
+    //_painter.setPen( Qt::red );
+    _painter.drawPolygon( point );
     }
   static QColorGroup g( Qt::black, Qt::white, Qt::white, Qt::darkGray, Qt::lightGray, Qt::black, Qt::black );
   static QBrush fill( Qt::lightGray );
