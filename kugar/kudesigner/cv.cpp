@@ -210,7 +210,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	QCanvasRectangle *r = (QCanvasRectangle *)resizing;
 	int w = r->width() + p.x() - moving_start.x();
 	int h = r->height() + p.y() - moving_start.y();
-	if ((w > 10) && (h > 10))
+	if (((w > 10) && (h > 10)) || (resizing->rtti() == RttiCanvasLine))
 	    r->setSize(w, h);
 	moving_start = p;
 	resizing->updateGeomProps();

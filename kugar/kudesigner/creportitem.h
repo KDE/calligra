@@ -43,8 +43,8 @@ public:
     QRect bottomRightResizableRect();
     
     CanvasBand *section();
-    void setSection(CanvasBand *section);
-    void setSectionUndestructive(CanvasBand *section);
+    virtual void setSection(CanvasBand *section);
+    virtual void setSectionUndestructive(CanvasBand *section);
     
 protected:
     CanvasBand *parentSection;
