@@ -442,6 +442,7 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
 
   label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
   typeOfMove=new QComboBox( tmpQGroupBox);
+  label->setBuddy(typeOfMove);
   listType.clear();
   listType+=i18n("Bottom");
   listType+=i18n("Top");
