@@ -2393,6 +2393,8 @@ void KPrCanvas::selectAllObj()
         it.current()->setSelected( true );
     }
 
+    m_view->penColorChanged( m_activePage->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
+    m_view->brushColorChanged( m_activePage->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
     mouseSelectedObject = true;
     _repaint( false );
     emit objectSelectedChanged();
