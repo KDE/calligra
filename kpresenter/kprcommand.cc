@@ -1297,15 +1297,17 @@ PieValueCmd::PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues,
     doc = _doc;
     newValues = _newValues;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 PieValueCmd::~PieValueCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
     oldValues.setAutoDelete( true );
     oldValues.clear();
 }
@@ -1313,16 +1315,16 @@ PieValueCmd::~PieValueCmd()
 /*====================== execute =================================*/
 void PieValueCmd::execute()
 {
-  for ( unsigned int i = 0; i < objects.count(); i++ )
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
     {
-      if(dynamic_cast<KPPieObject*>( objects.at( i ) ))
+        KPPieObject* obj=dynamic_cast<KPPieObject*>( it.current() );
+        if(obj)
 	{
-	  static_cast<KPPieObject*>( objects.at( i ) )->setPieType( newValues.pieType );
-	  static_cast<KPPieObject*>( objects.at( i ) )->setPieAngle( newValues.pieAngle );
-	  static_cast<KPPieObject*>( objects.at( i ) )->setPieLength( newValues.pieLength );
-
+	  obj->setPieType( newValues.pieType );
+	  obj->setPieAngle( newValues.pieAngle );
+	  obj->setPieLength( newValues.pieLength );
 	}
-
     }
   doc->repaint( false );
 }
@@ -1330,17 +1332,17 @@ void PieValueCmd::execute()
 /*====================== unexecute ===============================*/
 void PieValueCmd::unexecute()
 {
-  for ( unsigned int i = 0; i < objects.count(); i++ )
+    for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-      if(dynamic_cast<KPPieObject*>( objects.at( i ) ))
+        KPPieObject* obj=dynamic_cast<KPPieObject*>( objects.at( i ) );
+        if(obj)
 	{
-	  static_cast<KPPieObject*>( objects.at( i ) )->setPieType( oldValues.at( i )->pieType );
-	  static_cast<KPPieObject*>( objects.at( i ) )->setPieAngle( oldValues.at( i )->pieAngle );
-	  static_cast<KPPieObject*>( objects.at( i ) )->setPieLength( oldValues.at( i )->pieLength );
-
+            obj->setPieType( oldValues.at( i )->pieType );
+            obj->setPieAngle( oldValues.at( i )->pieAngle );
+            obj->setPieLength( oldValues.at( i )->pieLength );
 	}
     }
-  doc->repaint( false );
+    doc->repaint( false );
 }
 
 /******************************************************************/
@@ -1375,31 +1377,34 @@ PolygonSettingCmd::~PolygonSettingCmd()
 /*====================== execute =================================*/
 void PolygonSettingCmd::execute()
 {
-  for ( unsigned int i = 0; i < objects.count(); ++i )
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
     {
-      if(dynamic_cast<KPPolygonObject*>( objects.at( i ) ))
+        KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( it.current() );
+        if(obj)
 	{
-	  static_cast<KPPolygonObject*>( objects.at( i ) )->setPolygonSettings( newSettings.checkConcavePolygon,
-										newSettings.cornersValue,
-										newSettings.sharpnessValue );
+            obj->setPolygonSettings( newSettings.checkConcavePolygon,
+                                     newSettings.cornersValue,
+                                     newSettings.sharpnessValue );
 	}
     }
-  doc->repaint( false );
+    doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
 void PolygonSettingCmd::unexecute()
 {
-  for ( unsigned int i = 0; i < objects.count(); ++i )
+    for ( unsigned int i = 0; i < objects.count(); ++i )
     {
-      if(dynamic_cast<KPPolygonObject*>( objects.at( i ) ))
+        KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( objects.at(i) );
+        if(obj)
 	{
-	  static_cast<KPPolygonObject*>( objects.at( i ) )->setPolygonSettings( oldSettings.at( i )->checkConcavePolygon,
-										oldSettings.at( i )->cornersValue,
-										oldSettings.at( i )->sharpnessValue );
+            obj->setPolygonSettings( oldSettings.at( i )->checkConcavePolygon,
+                                     oldSettings.at( i )->cornersValue,
+                                     oldSettings.at( i )->sharpnessValue );
 	}
     }
-  doc->repaint( false );
+    doc->repaint( false );
 }
 
 /******************************************************************/
@@ -1436,27 +1441,29 @@ RectValueCmd::~RectValueCmd()
 /*====================== execute =================================*/
 void RectValueCmd::execute()
 {
-  for ( unsigned int i = 0; i < objects.count(); i++ )
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
     {
-      if(dynamic_cast<KPRectObject*>( objects.at( i ) ))
-	{
-	  static_cast<KPRectObject*>( objects.at( i ) )->setRnds( newValues.xRnd, newValues.yRnd );
-	}
+        KPRectObject *obj=dynamic_cast<KPRectObject*>(it.current() );
+        if(obj)
+            obj->setRnds( newValues.xRnd, newValues.yRnd );
     }
-  doc->repaint( false );
+    doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
 void RectValueCmd::unexecute()
 {
-  for ( unsigned int i = 0; i < objects.count(); i++ )
+    for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-      if(dynamic_cast<KPRectObject*>( objects.at( i ) ))
+        KPRectObject *obj=dynamic_cast<KPRectObject*>( objects.at(i));
+
+        if(obj)
 	{
-	  static_cast<KPRectObject*>( objects.at( i ) )->setRnds( oldValues.at( i )->xRnd, oldValues.at( i )->yRnd );
+            obj->setRnds( oldValues.at( i )->xRnd, oldValues.at( i )->yRnd );
 	}
     }
-  doc->repaint( false );
+    doc->repaint( false );
 }
 
 /******************************************************************/
@@ -1488,7 +1495,6 @@ void ResizeCmd::execute()
     object->resizeBy( r_diff );
     if ( object->getType() == OT_TEXT )
     {
-	//( (KPTextObject*)object )->recalcPageNum( doc );
         if(object->isSelected())
             doc->updateRuler();
     }
@@ -1512,7 +1518,6 @@ void ResizeCmd::unexecute( bool _repaint )
     object->resizeBy( -r_diff.width(), -r_diff.height() );
     if ( object->getType() == OT_TEXT )
     {
-	//( (KPTextObject*)object )->recalcPageNum( doc );
         if(object->isSelected())
             doc->updateRuler();
     }
@@ -1861,14 +1866,16 @@ KPrStickyObjCommand::KPrStickyObjCommand( const QString &_name, QPtrList<KPObjec
     objects.setAutoDelete( false );
     m_doc = _doc;
     m_page=_page;
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 KPrStickyObjCommand::~KPrStickyObjCommand()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
 }
 
 void KPrStickyObjCommand::execute()

@@ -3450,29 +3450,6 @@ void KPresenterView::screenPenColor()
     }
 }
 
-#if 0
-/*====================== paint event ============================*/
-void KPresenterView::repaint( bool erase )
-{
-    QWidget::repaint( erase );
-    m_canvas->repaint( erase );
-}
-
-/*====================== paint event ============================*/
-void KPresenterView::repaint( unsigned int x, unsigned int y, unsigned int w,
-			      unsigned int h, bool erase )
-{
-    QWidget::repaint( x, y, w, h, erase );
-    m_canvas->repaint( x, y, w, h, erase );
-}
-
-/*====================== paint event ============================*/
-void KPresenterView::repaint( QRect r, bool erase )
-{
-    QWidget::repaint( r, erase );
-    m_canvas->repaint( r, erase );
-}
-#endif
 
 /*====================== change pciture =========================*/
 void KPresenterView::changePicture( const QString & filename )

@@ -341,13 +341,6 @@ public:
     // return pointer to document
     KPresenterDoc *kPresenterDoc() const {return m_pKPresenterDoc; }
 
-#if 0
-    // repaint page
-    void repaint( bool );
-    void repaint( unsigned int, unsigned int, unsigned int, unsigned int, bool );
-    void repaint( QRect, bool );
-#endif
-
     // properties
     void changePicture( const QString & );
     void changeClipart( const QString & );

@@ -386,7 +386,7 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
 
     //draw sticky object
     drawObjectsInPage( painter, rect2, drawCursor, selectionMode, doSpecificEffects,
-		       m_view->kPresenterDoc()->stickyPage()->objectList());
+		       stickyPage()->objectList());
 
 }
 
@@ -558,7 +558,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     else
                     {
 			_resizeObj = false;
-                        kpobject = m_view->kPresenterDoc()->stickyPage()->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
+                        kpobject = stickyPage()->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
                         if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
                         {
                             if(objectIsAHeaderFooterHidden(kpobject))
@@ -607,7 +607,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
 		    // find object on sticky page (ignore header/footer)
 		    if ( !kpobject ) {
-			kpobject = m_view->kPresenterDoc()->stickyPage()->getEditObj( docPoint );
+			kpobject = stickyPage()->getEditObj( docPoint );
                         if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
                             if(objectIsAHeaderFooterHidden(kpobject))
                                 kpobject=0L;
@@ -838,7 +838,7 @@ void KPrCanvas::calcBoundingRect()
   m_boundingRect = KoRect();
 
   m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->kPresenterDoc());
-  m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->kPresenterDoc());
+  m_boundingRect=stickyPage()->getBoundingRect(m_boundingRect, m_view->kPresenterDoc());
 
 }
 
@@ -927,7 +927,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                         selectObj( it.current() );
                 }
 
-                QPtrListIterator<KPObject> sIt(m_view->kPresenterDoc()->stickyPage()->objectList() );
+                QPtrListIterator<KPObject> sIt(stickyPage()->objectList() );
                 for ( ; sIt.current() ; ++sIt )
                 {
                     if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber),m_view->zoomHandler() ) )
@@ -956,7 +956,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                     macro->addCommand(cmd);
                     cmdCreate=true;
                 }
-                cmd=m_view->kPresenterDoc()->stickyPage()->moveObject(m_view,x,y);
+                cmd=stickyPage()->moveObject(m_view,x,y);
                 if(cmd)
                 {
                     macro->addCommand(cmd);
@@ -968,7 +968,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                     delete macro;
             } else
             {
-                m_view->kPresenterDoc()->stickyPage()->repaintObj();
+                stickyPage()->repaintObj();
                 m_activePage->repaintObj();
             }
         }
@@ -1087,7 +1087,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
             // User-friendlyness: automatically start editing this textobject
             activePage()->deSelectAllObj();
-	    m_view->kPresenterDoc()->stickyPage()->deSelectAllObj();
+	    stickyPage()->deSelectAllObj();
             createEditing( kptextobject );
             //setTextBackground( kptextobject );
             //setCursor( arrowCursor );
@@ -1209,7 +1209,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
 	     toolEditMode == TEM_MOUSE ) {
 	    bool cursorAlreadySet = false;
-	    if ( (int)objectList().count() - 1 >= 0 || (int)m_view->kPresenterDoc()->stickyPage()->objectList().count() -1>=0 )
+	    if ( (int)objectList().count() - 1 >= 0 || (int)stickyPage()->objectList().count() -1>=0 )
             {
                 kpobject=m_activePage->getCursor(docPoint);
                 if( kpobject)
@@ -1220,7 +1220,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 }
                 else
                 {
-                    kpobject=m_view->kPresenterDoc()->stickyPage()->getCursor(docPoint );
+                    kpobject=stickyPage()->getCursor(docPoint );
                     if( kpobject)
                     {
                         setCursor( kpobject->getCursor( docPoint, modType,m_view->kPresenterDoc() ) );
@@ -1277,7 +1277,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		angle -= startAngle;
 
 		activePage()->rotateObj( angle );
-		m_view->kPresenterDoc()->stickyPage()->rotateObj( angle );
+		stickyPage()->rotateObj( angle );
 	    }break;
 	    case INS_TEXT: case INS_OBJECT: case INS_TABLE:
 	    case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM:
@@ -1484,7 +1484,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
   kpobject=m_activePage->getEditObj(docPoint);
   if( !kpobject)
     {
-      kpobject=m_view->kPresenterDoc()->stickyPage()->getEditObj(docPoint );
+      kpobject=stickyPage()->getEditObj(docPoint );
       if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
       {
           if( objectIsAHeaderFooterHidden(kpobject))
@@ -1737,7 +1737,7 @@ KPObject* KPrCanvas::getObjectAt( const KoPoint&pos )
   KPObject *kpobject=m_activePage->getObjectAt(pos);
   if( !kpobject)
     {
-      kpobject=m_view->kPresenterDoc()->stickyPage()->getObjectAt(pos);
+      kpobject=stickyPage()->getObjectAt(pos);
     }
   return kpobject;
 }
@@ -1768,14 +1768,14 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
 /*====================== select all objects ======================*/
 void KPrCanvas::selectAllObj()
 {
-    int nbObj=objectList().count()+m_view->kPresenterDoc()->stickyPage()->objectList().count();
-    if(nbObj==(m_view->kPresenterDoc()->stickyPage()->numSelected()+m_activePage->numSelected()))
+    int nbObj=objectList().count()+stickyPage()->objectList().count();
+    if(nbObj==(stickyPage()->numSelected()+m_activePage->numSelected()))
         return;
 
     QProgressDialog progress( i18n( "Selecting..." ), 0,
                               nbObj, this );
     int i=0;
-    QPtrListIterator<KPObject> it( m_view->kPresenterDoc()->stickyPage()->objectList() );
+    QPtrListIterator<KPObject> it( stickyPage()->objectList() );
     for ( ; it.current() ; ++it )
     {
         selectObj(it.current());
@@ -1802,7 +1802,7 @@ void KPrCanvas::selectAllObj()
 /*==================== deselect all objects ======================*/
 void KPrCanvas::deSelectAllObj()
 {
-  if(m_activePage->numSelected()==0 && m_view->kPresenterDoc()->stickyPage()->numSelected()==0)
+  if(m_activePage->numSelected()==0 && stickyPage()->numSelected()==0)
         return;
 
     if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 ) {
@@ -1813,7 +1813,7 @@ void KPrCanvas::deSelectAllObj()
         m_view->kPresenterDoc()->raiseAndLowerObject = false;
 
     m_activePage->deSelectAllObj();
-    m_view->kPresenterDoc()->stickyPage()->deSelectAllObj();
+    stickyPage()->deSelectAllObj();
 
     //desactivate kptextview when we switch of page
     if(m_currentTextObjectView)
@@ -1881,7 +1881,7 @@ void KPrCanvas::chPic()
     bool state=m_activePage->chPic( m_view);
     if( state)
         return;
-    m_view->kPresenterDoc()->stickyPage()->chPic(m_view);
+    stickyPage()->chPic(m_view);
 }
 
 /*======================= change clipart  ========================*/
@@ -1890,7 +1890,7 @@ void KPrCanvas::chClip()
     bool state=m_activePage->chClip( m_view);
     if( state)
         return;
-    m_view->kPresenterDoc()->stickyPage()->chClip(m_view);
+    stickyPage()->chClip(m_view);
 }
 
 void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags)
@@ -2120,7 +2120,7 @@ bool KPrCanvas::haveASelectedPictureObj()
     bool state=m_activePage->haveASelectedPictureObj();
     if(state)
         return true;
-    return m_view->kPresenterDoc()->stickyPage()->haveASelectedPictureObj();
+    return stickyPage()->haveASelectedPictureObj();
 }
 
 bool KPrCanvas::haveASelectedPartObj()
@@ -2128,7 +2128,7 @@ bool KPrCanvas::haveASelectedPartObj()
     bool state = m_activePage->haveASelectedPartObj();
     if ( state )
         return true;
-    return m_view->kPresenterDoc()->stickyPage()->haveASelectedPartObj();
+    return stickyPage()->haveASelectedPartObj();
 }
 
 QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
@@ -2447,7 +2447,7 @@ bool KPrCanvas::isOneObjectSelected()
     bool state=m_activePage->isOneObjectSelected();
     if( state)
         return true;
-    return m_view->kPresenterDoc()->stickyPage()->isOneObjectSelected();
+    return stickyPage()->isOneObjectSelected();
 }
 
 /*================================================================*/
@@ -2470,7 +2470,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum )
     drawAllObjectsInPage( &p, m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->objectList() );
 
     //draw sticky object
-    drawAllObjectsInPage( &p, m_view->kPresenterDoc()->stickyPage()->objectList() );
+    drawAllObjectsInPage( &p, stickyPage()->objectList() );
 
     editMode = _editMode;
     p.end();
@@ -4111,7 +4111,7 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
             setCursor( obj->getCursor( pos, modType,m_view->kPresenterDoc() ) );
         else
         {
-            obj=m_view->kPresenterDoc()->stickyPage()->getCursor( pos );
+            obj=stickyPage()->getCursor( pos );
             if(obj)
                 setCursor( obj->getCursor( pos, modType,m_view->kPresenterDoc() ) );
         }
@@ -4387,7 +4387,7 @@ void KPrCanvas::copyObjs()
     presenter.setAttribute("mime", "application/x-kpresenter-selection");
     doc.appendChild(presenter);
     m_activePage->copyObjs(doc, presenter);
-    m_view->kPresenterDoc()->stickyPage()->copyObjs(doc, presenter);
+    stickyPage()->copyObjs(doc, presenter);
 
     QStoredDrag * drag = new QStoredDrag( "application/x-kpresenter-selection" );
     drag->setEncodedData( doc.toCString() );
@@ -4406,7 +4406,7 @@ void KPrCanvas::deleteObjs()
         macro->addCommand(cmd);
         macroCreate=true;
     }
-    cmd=m_view->kPresenterDoc()->stickyPage()->deleteObjs();
+    cmd=stickyPage()->deleteObjs();
     if( cmd)
     {
         macro->addCommand(cmd);
@@ -4684,7 +4684,7 @@ void KPrCanvas::picViewOrigHelper(int x, int y)
 
   obj=m_activePage->picViewOrigHelper();
   if( !obj)
-      obj=m_view->kPresenterDoc()->stickyPage()->picViewOrigHelper();
+      obj=stickyPage()->picViewOrigHelper();
 
 
   if ( obj && !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) )
@@ -4822,7 +4822,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
         macro->addCommand(cmd);
         macroCreate=true;
     }
-    cmd=m_view->kPresenterDoc()->stickyPage()->moveObject(m_view,_move,key);
+    cmd=stickyPage()->moveObject(m_view,_move,key);
     if( cmd && key)
     {
         macro->addCommand(cmd);
@@ -5209,7 +5209,7 @@ bool KPrCanvas::oneObjectTextExist()
     bool state=m_activePage->oneObjectTextExist();
     if(state)
         return true;
-    return m_view->kPresenterDoc()->stickyPage()->oneObjectTextExist();
+    return stickyPage()->oneObjectTextExist();
 }
 
 KPrPage* KPrCanvas::activePage()
@@ -5242,7 +5242,7 @@ bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj)
 int KPrCanvas::numberOfObjectSelected()
 {
     int nb=activePage()->numSelected();
-    nb+=m_view->kPresenterDoc()->stickyPage()->numSelected();
+    nb+=stickyPage()->numSelected();
     return nb;
 }
 
@@ -5251,7 +5251,7 @@ KPObject *KPrCanvas::getSelectedObj()
     KPObject *obj=activePage()->getSelectedObj();
     if(obj)
         return obj;
-    obj=m_view->kPresenterDoc()->stickyPage()->getSelectedObj();
+    obj=stickyPage()->getSelectedObj();
     return obj;
 }
 
@@ -5259,7 +5259,7 @@ int KPrCanvas::getPenBrushFlags()
 {
     int flags=0;
     flags=activePage()->getPenBrushFlags(activePage()->objectList());
-    flags=flags |m_view->kPresenterDoc()->stickyPage()->getPenBrushFlags(m_view->kPresenterDoc()->stickyPage()->objectList());
+    flags=flags |stickyPage()->getPenBrushFlags(stickyPage()->objectList());
     if(flags==0)
       flags = StyleDia::SdAll;
     return flags;
@@ -5268,11 +5268,16 @@ int KPrCanvas::getPenBrushFlags()
 void KPrCanvas::ungroupObjects()
 {
     m_activePage->ungroupObjects();
-    m_view->kPresenterDoc()->stickyPage()->ungroupObjects();
+    stickyPage()->ungroupObjects();
 }
 
 void KPrCanvas::groupObjects()
 {
     m_activePage->groupObjects();
-    m_view->kPresenterDoc()->stickyPage()->groupObjects();
+    stickyPage()->groupObjects();
+}
+
+KPrPage *KPrCanvas::stickyPage()
+{
+    return m_view->kPresenterDoc()->stickyPage();
 }

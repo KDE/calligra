@@ -344,6 +344,8 @@ protected:
     void printRTDebug( int info );
 #endif
 
+    KPrPage *stickyPage();
+
 private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);
