@@ -109,7 +109,7 @@ public:
         // reserved
         U16 unused2_15:1;
 
-    } __attribute__ ((packed)) BRC;
+    } BRC;
     static const unsigned sizeof_BRC = 2 + sizeof_U16;
     static unsigned read(const U8 *in, BRC *out);
 
@@ -149,7 +149,7 @@ public:
 
         // array of characters that should never appear at the end of a line
         XCHAR rgxchLPunct[51];
-    } __attribute__ ((packed)) DOPTYPOGRAPHY;
+    } DOPTYPOGRAPHY;
     static const unsigned sizeof_DOPTYPOGRAPHY = 208 + sizeof_XCHAR * 51;
     static unsigned read(const U8 *in, DOPTYPOGRAPHY *out);
 
@@ -182,7 +182,7 @@ public:
         //     Saturday=6
         U16 wdy:3;
 
-    } __attribute__ ((packed)) DTTM;
+    } DTTM;
     static const unsigned sizeof_DTTM = 2 + sizeof_U16;
     static unsigned read(const U8 *in, DTTM *out);
 
@@ -216,7 +216,7 @@ public:
         // pixels (dymLine)
         //     when fDiffLines is 1, is the total height in pixels of the paragraph (dymHeight)
         S32 dym;
-    } __attribute__ ((packed)) PHE;
+    } PHE;
     static const unsigned sizeof_PHE = 8 + sizeof_S32;
     static unsigned read(const U8 *in, PHE *out);
 
@@ -233,7 +233,7 @@ public:
         // sprm's operand
         U16 val:8;
 
-    } __attribute__ ((packed)) PRM;
+    } PRM;
     static const unsigned sizeof_PRM = 0 + sizeof_U16;
     static unsigned read(const U8 *in, PRM *out);
 
@@ -304,7 +304,7 @@ public:
         //     62 97 Percent
         U16 ipat:6;
 
-    } __attribute__ ((packed)) SHD;
+    } SHD;
     static const unsigned sizeof_SHD = 0 + sizeof_U16;
     static unsigned read(const U8 *in, SHD *out);
 
@@ -378,7 +378,7 @@ public:
 
         // specification of right border of table row.
         BRC brcRight;
-    } __attribute__ ((packed)) TC;
+    } TC;
     static const unsigned sizeof_TC = 16 + sizeof_BRC;
     static unsigned read(const U8 *in, TC *out);
 
@@ -463,7 +463,7 @@ public:
         // unused
         U16 unused2_9:7;
 
-    } __attribute__ ((packed)) TLP;
+    } TLP;
     static const unsigned sizeof_TLP = 2 + sizeof_U16;
     static unsigned read(const U8 *in, TLP *out);
 
@@ -584,7 +584,7 @@ public:
 
         // characters displayed before/after autonumber
         XCHAR rgxch[32];
-    } __attribute__ ((packed)) ANLD;
+    } ANLD;
     static const unsigned sizeof_ANLD = 20 + sizeof_XCHAR * 32;
     static unsigned read(const U8 *in, ANLD *out);
 
@@ -690,7 +690,7 @@ public:
 
         // minimum space between number and paragraph
         U16 dxaSpace;
-    } __attribute__ ((packed)) ANLV;
+    } ANLV;
     static const unsigned sizeof_ANLV = 14 + sizeof_U16;
     static unsigned read(const U8 *in, ANLV *out);
 
@@ -700,7 +700,7 @@ public:
 
         // AutoSummary level
         S32 lLevel;
-    } __attribute__ ((packed)) ASUMY;
+    } ASUMY;
     static const unsigned sizeof_ASUMY = 0 + sizeof_S32;
     static unsigned read(const U8 *in, ASUMY *out);
 
@@ -736,7 +736,7 @@ public:
 
         // show document sentences at or below this level
         S32 lCurrentLevel;
-    } __attribute__ ((packed)) ASUMYI;
+    } ASUMYI;
     static const unsigned sizeof_ASUMYI = 8 + sizeof_S32;
     static unsigned read(const U8 *in, ASUMYI *out);
 
@@ -763,7 +763,7 @@ public:
         // locates the range of CPs in the main document which this
         // annotation references.
         S32 lTagBkmk;
-    } __attribute__ ((packed)) ATRD;
+    } ATRD;
     static const unsigned sizeof_ATRD = 26 + sizeof_S32;
     static unsigned read(const U8 *in, ATRD *out);
 
@@ -804,7 +804,7 @@ public:
         //
         U16 unused4_13:3;
 
-    } __attribute__ ((packed)) BKD;
+    } BKD;
     static const unsigned sizeof_BKD = 4 + sizeof_U16;
     static unsigned read(const U8 *in, BKD *out);
 
@@ -832,7 +832,7 @@ public:
         // specified by [bkf.itcFirst, bkf.itcLim).
         U16 fCol:1;
 
-    } __attribute__ ((packed)) BKF;
+    } BKF;
     static const unsigned sizeof_BKF = 2 + sizeof_U16;
     static unsigned read(const U8 *in, BKF *out);
 
@@ -846,7 +846,7 @@ public:
         // in the hplcbkf to the bkl.ibkf to calculate the index to the BKF
         // that corresponds to this entry.
         S16 ibkf;
-    } __attribute__ ((packed)) BKL;
+    } BKL;
     static const unsigned sizeof_BKL = 0 + sizeof_S16;
     static unsigned read(const U8 *in, BKL *out);
 
@@ -874,7 +874,7 @@ public:
         // reserved
         U16 fSpare:1;
 
-    } __attribute__ ((packed)) BRC10;
+    } BRC10;
     static const unsigned sizeof_BRC10 = 0 + sizeof_U16;
     static unsigned read(const U8 *in, BRC10 *out);
 
@@ -884,7 +884,7 @@ public:
 
         // Page Number for FKP
         U32 pn;
-    } __attribute__ ((packed)) BTE;
+    } BTE;
     static const unsigned sizeof_BTE = 0 + sizeof_U32;
     static unsigned read(const U8 *in, BTE *out);
 
@@ -1290,7 +1290,7 @@ public:
 
         // border
         BRC brc;
-    } __attribute__ ((packed)) CHP;
+    } CHP;
     static const unsigned sizeof_CHP = 132 + sizeof_BRC;
     static unsigned read(const U8 *in, CHP *out);
 
@@ -1305,7 +1305,7 @@ public:
 //        // run of text and the CHP generated by the paragraph and character
 //        // styles that tag the run.
 //        U8[cb] grpprl;
-//    } __attribute__ ((packed)) CHPX;
+//    } CHPX;
 //    static const unsigned sizeof_CHPX = 1 + sizeof_U8[cb];
 //    static unsigned read(const U8 *in, CHPX *out);
 
@@ -1333,7 +1333,7 @@ public:
 //
 //        // count of runs for <b>CHPX FKP,</b>
 //        U8 crun;
-//    } __attribute__ ((packed)) CHPXFKP;
+//    } CHPXFKP;
 //    static const unsigned sizeof_CHPXFKP = 511 + sizeof_U8;
 //    static unsigned read(const U8 *in, CHPXFKP *out);
 
@@ -1354,7 +1354,7 @@ public:
 
         // reserved
         U8 unused1;
-    } __attribute__ ((packed)) DCS;
+    } DCS;
     static const unsigned sizeof_DCS = 1 + sizeof_U8;
     static unsigned read(const U8 *in, DCS *out);
 
@@ -1391,7 +1391,7 @@ public:
         // ignore xaGrid and yaGrid.
         U16 fFollowMargins:1;
 
-    } __attribute__ ((packed)) DOGRID;
+    } DOGRID;
     static const unsigned sizeof_DOGRID = 8 + sizeof_U16;
     static unsigned read(const U8 *in, DOGRID *out);
 
@@ -1887,7 +1887,7 @@ public:
 
         // height of the window in online view during last repag
         S16 dywDispPag;
-    } __attribute__ ((packed)) DOP;
+    } DOP;
     static const unsigned sizeof_DOP = 498 + sizeof_S16;
     static unsigned read(const U8 *in, DOP *out);
 
@@ -1933,7 +1933,7 @@ public:
 //        // font to use if the first named font does not exist on this system.
 //        // Maximal size of xszFfn is 65 characters.
 //        U8 xszFfn[];
-//    } __attribute__ ((packed)) FFN;
+//    } FFN;
 //    static const unsigned sizeof_FFN = 40 + sizeof_U8 * ;
 //    static unsigned read(const U8 *in, FFN *out);
 
@@ -2866,7 +2866,7 @@ public:
 
         //
         U32 lcbSttbfUssr;
-    } __attribute__ ((packed)) FIB;
+    } FIB;
     static const unsigned sizeof_FIB = 894 + sizeof_U32;
     static unsigned read(const U8 *in, FIB *out);
 
@@ -2879,7 +2879,7 @@ public:
 
         // Size of data. Ignore fc if lcb is zero.
         U32 lcb;
-    } __attribute__ ((packed)) FIBFCLCB;
+    } FIBFCLCB;
     static const unsigned sizeof_FIBFCLCB = 4 + sizeof_U32;
     static unsigned read(const U8 *in, FIBFCLCB *out);
 
@@ -2909,7 +2909,7 @@ public:
         //     fNested:1 - 1 when field is nested within another field.
         //     fHasSep:1 - 1 when field has a field separator.
         S8 flt;
-    } __attribute__ ((packed)) FLD;
+    } FLD;
     static const unsigned sizeof_FLD = 1 + sizeof_S8;
     static unsigned read(const U8 *in, FLD *out);
 
@@ -2920,7 +2920,7 @@ public:
         // if > 0, the note is an automatically numbered note, otherwise it
         // has a custom mark
         S16 nAuto;
-    } __attribute__ ((packed)) FRD;
+    } FRD;
     static const unsigned sizeof_FRD = 0 + sizeof_S16;
     static unsigned read(const U8 *in, FRD *out);
 
@@ -2997,7 +2997,7 @@ public:
 
         // count of textboxes in shape (undo doc only)
         S32 cTxbx;
-    } __attribute__ ((packed)) FSPA;
+    } FSPA;
     static const unsigned sizeof_FSPA = 22 + sizeof_S32;
     static unsigned read(const U8 *in, FSPA *out);
 
@@ -3029,7 +3029,7 @@ public:
 
         //
         S32 txidUndo;
-    } __attribute__ ((packed)) FTXBXS;
+    } FTXBXS;
     static const unsigned sizeof_FTXBXS = 18 + sizeof_S32;
     static unsigned read(const U8 *in, FTXBXS *out);
 
@@ -3051,7 +3051,7 @@ public:
 
         // reserved
         U8 reserved[3];
-    } __attribute__ ((packed)) LFO;
+    } LFO;
     static const unsigned sizeof_LFO = 13 + sizeof_U8 * 3;
     static unsigned read(const U8 *in, LFO *out);
 
@@ -3078,7 +3078,7 @@ public:
 
         // reserved
         U8 reserved[3];
-    } __attribute__ ((packed)) LFOLVL;
+    } LFOLVL;
     static const unsigned sizeof_LFOLVL = 5 + sizeof_U8 * 3;
     static unsigned read(const U8 *in, LFOLVL *out);
 
@@ -3094,7 +3094,7 @@ public:
         // for description of the meaning of dyaLine and fMultLinespace
         // fields.
         S16 fMultLinespace;
-    } __attribute__ ((packed)) LSPD;
+    } LSPD;
     static const unsigned sizeof_LSPD = 2 + sizeof_S16;
     static unsigned read(const U8 *in, LSPD *out);
 
@@ -3125,7 +3125,7 @@ public:
 
         // reserved
         U8 reserved;
-    } __attribute__ ((packed)) LSTF;
+    } LSTF;
     static const unsigned sizeof_LSTF = 27 + sizeof_U8;
     static unsigned read(const U8 *in, LSTF *out);
 
@@ -3193,7 +3193,7 @@ public:
 
         // reserved
         U16 reserved;
-    } __attribute__ ((packed)) LVLF;
+    } LVLF;
     static const unsigned sizeof_LVLF = 26 + sizeof_U16;
     static unsigned read(const U8 *in, LVLF *out);
 
@@ -3230,7 +3230,7 @@ public:
 
         // Identifies a memory metafile.
         S16 hMF;
-    } __attribute__ ((packed)) METAFILEPICT;
+    } METAFILEPICT;
     static const unsigned sizeof_METAFILEPICT = 6 + sizeof_S16;
     static unsigned read(const U8 *in, METAFILEPICT *out);
 
@@ -3269,7 +3269,7 @@ public:
         // The text string for the paragraph number, containing level place
         // holders
         XCHAR xst[32];
-    } __attribute__ ((packed)) NUMRM;
+    } NUMRM;
     static const unsigned sizeof_NUMRM = 64 + sizeof_XCHAR * 32;
     static unsigned read(const U8 *in, NUMRM *out);
 
@@ -3285,7 +3285,7 @@ public:
 
         // Index to clipboard format of object
         U16 icf;
-    } __attribute__ ((packed)) OBJHEADER;
+    } OBJHEADER;
     static const unsigned sizeof_OBJHEADER = 6 + sizeof_U16;
     static unsigned read(const U8 *in, OBJHEADER *out);
 
@@ -3311,7 +3311,7 @@ public:
 
         // text before/after number
         XCHAR rgxch[32];
-    } __attribute__ ((packed)) OLST;
+    } OLST;
     static const unsigned sizeof_OLST = 148 + sizeof_XCHAR * 32;
     static unsigned read(const U8 *in, OLST *out);
 
@@ -3601,7 +3601,7 @@ public:
 
         // array of itbdMac tab descriptors
         S16 rgtbd[64];
-    } __attribute__ ((packed)) PAP;
+    } PAP;
     static const unsigned sizeof_PAP = 482 + sizeof_S16 * 64;
     static unsigned read(const U8 *in, PAP *out);
 
@@ -3638,7 +3638,7 @@ public:
 //        // recorded in the list after all of the paragraph sprms. See Sprms
 //        // definitions for list of sprms that are used in PAPXs.
 //        character array grpprl;
-//    } __attribute__ ((packed)) PAPX;
+//    } PAPX;
 //    static const unsigned sizeof_PAPX = 3/4 + sizeof_character array;
 //    static unsigned read(const U8 *in, PAPX *out);
 
@@ -3674,7 +3674,7 @@ public:
 //
 //        // count of paragraphs for <b>PAPX FKP.</b>
 //        U8 crun;
-//    } __attribute__ ((packed)) PAPXFKP;
+//    } PAPXFKP;
 //    static const unsigned sizeof_PAPXFKP = 511 + sizeof_U8;
 //    static unsigned read(const U8 *in, PAPXFKP *out);
 
@@ -3706,7 +3706,7 @@ public:
         // grpprl which contains the sprms that modify the properties of the
         // piece.
         PRM prm;
-    } __attribute__ ((packed)) PCD;
+    } PCD;
     static const unsigned sizeof_PCD = 6 + sizeof_PRM;
     static unsigned read(const U8 *in, PCD *out);
 
@@ -3763,7 +3763,7 @@ public:
 
         //
         S32 dym;
-    } __attribute__ ((packed)) PGD;
+    } PGD;
     static const unsigned sizeof_PGD = 6 + sizeof_S32;
     static unsigned read(const U8 *in, PGD *out);
 
@@ -3785,7 +3785,7 @@ public:
 
         // height of table row
         S32 dymTableHeight;
-    } __attribute__ ((packed)) PHE2;
+    } PHE2;
     static const unsigned sizeof_PHE2 = 8 + sizeof_S32;
     static unsigned read(const U8 *in, PHE2 *out);
 
@@ -3894,7 +3894,7 @@ public:
 
         // unused
         S16 cProps;
-    } __attribute__ ((packed)) PICF;
+    } PICF;
     static const unsigned sizeof_PICF = 66 + sizeof_S16;
     static unsigned read(const U8 *in, PICF *out);
 
@@ -3910,7 +3910,7 @@ public:
 //
 //        // array of some arbitrary structure.
 //        U8 rgstruct[];
-//    } __attribute__ ((packed)) PLCF;
+//    } PLCF;
 //    static const unsigned sizeof_PLCF = 4*(iMac+1) + sizeof_U8 * ;
 //    static unsigned read(const U8 *in, PLCF *out);
 
@@ -3924,7 +3924,7 @@ public:
         // index to a <b>grpprl</b> stored in <b>CLX</b> portion of file.
         U16 igrpprl:15;
 
-    } __attribute__ ((packed)) PRM2;
+    } PRM2;
     static const unsigned sizeof_PRM2 = 0 + sizeof_U16;
     static unsigned read(const U8 *in, PRM2 *out);
 
@@ -3937,7 +3937,7 @@ public:
 
         // count of bytes in recipient string (including null terminator).
         U16 cbSzRecip;
-    } __attribute__ ((packed)) RR;
+    } RR;
     static const unsigned sizeof_RR = 2 + sizeof_U16;
     static unsigned read(const U8 *in, RR *out);
 
@@ -3975,7 +3975,7 @@ public:
 
         // count of recipients.
         S16 cRecip;
-    } __attribute__ ((packed)) RS;
+    } RS;
     static const unsigned sizeof_RS = 14 + sizeof_S16;
     static unsigned read(const U8 *in, RS *out);
 
@@ -3997,7 +3997,7 @@ public:
         // points to offset in FC space of main stream where the Macintosh
         // Print Record for a document created on a Mac will be stored
         U32 fcMpr;
-    } __attribute__ ((packed)) SED;
+    } SED;
     static const unsigned sizeof_SED = 8 + sizeof_U32;
     static unsigned read(const U8 *in, SED *out);
 
@@ -4225,7 +4225,7 @@ public:
 
         // multilevel autonumbering list data (see OLST definition)
         OLST olstAnm;
-    } __attribute__ ((packed)) SEP;
+    } SEP;
     static const unsigned sizeof_SEP = 492 + sizeof_OLST;
     static unsigned read(const U8 *in, SEP *out);
 
@@ -4239,7 +4239,7 @@ public:
 //        // list of sprms that encodes the differences between the properties
 //        // of a section and Word's default section properties.
 //        U8 grpprl[];
-//    } __attribute__ ((packed)) SEPX;
+//    } SEPX;
 //    static const unsigned sizeof_SEPX = 2 + sizeof_U8 * ;
 //    static unsigned read(const U8 *in, SEPX *out);
 
@@ -4296,7 +4296,7 @@ public:
 //        // the UPEs are not stored on the file; they are a cache of the
 //        // based-on chain
 //        U8 grupe[];
-//    } __attribute__ ((packed)) STD;
+//    } STD;
 //    static const unsigned sizeof_STD = 10 + sizeof_XCHAR * ;
 //    static unsigned read(const U8 *in, STD *out);
 
@@ -4327,7 +4327,7 @@ public:
 
         // ftc used by StandardChpStsh for this document
         U16 rgftcStandardChpStsh[3];
-    } __attribute__ ((packed)) STSHI;
+    } STSHI;
     static const unsigned sizeof_STSHI = 12 + sizeof_U16 * 3;
     static unsigned read(const U8 *in, STSHI *out);
 
@@ -4418,7 +4418,7 @@ public:
 
         // array of border defaults for cells
         BRC rgbrcTable[6];
-    } __attribute__ ((packed)) TAP;
+    } TAP;
     static const unsigned sizeof_TAP = 1704 + sizeof_BRC * 6;
     static unsigned read(const U8 *in, TAP *out);
 
@@ -4445,7 +4445,7 @@ public:
         // reserved
         U8 unused0_6:2;
 
-    } __attribute__ ((packed)) TBD;
+    } TBD;
     static const unsigned sizeof_TBD = 0 + sizeof_U8;
     static unsigned read(const U8 *in, TBD *out);
 
@@ -4470,7 +4470,7 @@ public:
 
         // unused
         S32 doc;
-    } __attribute__ ((packed)) WKB;
+    } WKB;
     static const unsigned sizeof_WKB = 8 + sizeof_S32;
     static unsigned read(const U8 *in, WKB *out);
 };
