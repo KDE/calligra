@@ -30,9 +30,6 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-#define HELPWIDTH 140 
-#define HELPHEIGHT 160
-
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
 		: QWidget( parent, name, Qt::WRepaintNoErase )
 {
@@ -194,7 +191,6 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 	m_helpLabel->setAlignment( AlignLeft | AlignVCenter | ExpandTabs | WordBreak );
 	m_helpLabel->setBackgroundMode( PaletteLight );
 	m_helpViewport->installEventFilter( this );
-	m_helpViewport->setMinimumSize( HELPWIDTH, HELPHEIGHT );
 	m_helpViewport->setBackgroundMode( PaletteLight );
 	setText( help );
 	
@@ -303,6 +299,7 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	layout->setSpacing( 1 );
 	layout->setRowStretch( 1, 1 );
 	buttonLayout->setSpacing( 1 );
+	setMinimumSize( 180, 180 );
 	
 	m_isSticky = false;
 	setFocusPolicy( StrongFocus );
@@ -459,7 +456,7 @@ KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 	layout->setMargin( 2 );
 	layout->setSpacing( 1 );
 	layout->setRowStretch( 1, 1 );
-	mainWidget->setMinimumSize( 200, 200 );
+	mainWidget->setMinimumSize( 180, 120 );
 	mainWidget->show();
 	setWidget( mainWidget );
 	setContextHelp( i18n( "Context help" ), i18n( "Here will be shown help according to your actions" ), 0 );
