@@ -53,16 +53,6 @@ DCOPRef KPresenterDocIface::stickyPage()
 		    doc->stickyPage()->dcopObject()->objId() );
 }
 
-double KPresenterDocIface::indentValue() const
-{
-    return doc->getIndentValue();
-}
-
-void KPresenterDocIface::setIndentValue(double _ind)
-{
-    doc->setIndentValue(_ind);
-}
-
 bool KPresenterDocIface::dontCheckUpperWord() const
 {
     return doc->dontCheckUpperWord();
@@ -81,16 +71,6 @@ bool KPresenterDocIface::dontCheckTitleCase() const
 void KPresenterDocIface::setDontCheckTitleCase(bool _b)
 {
     doc->setDontCheckTitleCase(_b);
-}
-
-int KPresenterDocIface::maxRecentFiles()const
-{
-    return doc->maxRecentFiles();
-}
-
-void KPresenterDocIface::setUndoRedoLimit(int val)
-{
-    doc->setUndoRedoLimit(val);
 }
 
 void KPresenterDocIface::setShowRuler(bool b)
@@ -270,21 +250,6 @@ void KPresenterDocIface::saveConfig()
 QString KPresenterDocIface::selectedForPrinting()const
 {
     return doc->selectedForPrinting();
-}
-
-int KPresenterDocIface::leftBorder() const
-{
-    return doc->getLeftBorder();
-}
-
-int KPresenterDocIface::topBorder() const
-{
-    return doc->getTopBorder();
-}
-
-int KPresenterDocIface::bottomBorder() const
-{
-    return doc->getBottomBorder();
 }
 
 bool KPresenterDocIface::isSlideSelected( int pgNum)
@@ -811,16 +776,6 @@ void KPresenterDocIface::setPtTabStopValue ( double _tabStop )
     doc->setTabStopValue (_tabStop );
 }
 
-bool KPresenterDocIface::cursorInProtectedArea()const
-{
-    return doc->cursorInProtectedArea();
-}
-
-void KPresenterDocIface::setCursorInProtectedArea( bool b )
-{
-    doc->setCursorInProtectedArea(b);
-}
-
 void KPresenterDocIface::setRefreshSideBar( bool _b )
 {
     doc->setRefreshSideBar( _b );
@@ -845,26 +800,6 @@ void KPresenterDocIface::setDisplayFieldCode( bool b)
 QString KPresenterDocIface::configAutoFormatLanguage( )const
 {
     return doc->getAutoFormat()->getConfigAutoFormatLanguage( );
-}
-
-QString KPresenterDocIface::picturePath()const
-{
-    return doc->picturePath();
-}
-
-void KPresenterDocIface::setPicturePath( const QString & _path )
-{
-    doc->setPicturePath( _path );
-}
-
-bool KPresenterDocIface::insertDirectCursor() const
-{
-    return doc->insertDirectCursor();
-}
-
-void KPresenterDocIface::setInsertDirectCursor(bool _b)
-{
-    doc->setInsertDirectCursor( _b );
 }
 
 

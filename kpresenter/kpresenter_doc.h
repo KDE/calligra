@@ -94,6 +94,16 @@ protected:
 class KPresenterDoc : public KoDocument
 {
     Q_OBJECT
+    Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
+    Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
+    Q_PROPERTY( double indentValue READ getIndentValue WRITE setIndentValue )
+    Q_PROPERTY( int getLeftBorder READ getLeftBorder )
+    Q_PROPERTY( int getTopBorder READ getTopBorder )
+    Q_PROPERTY( int getBottomBorder READ getBottomBorder )
+    Q_PROPERTY( int getRightBorder READ getRightBorder )
+    Q_PROPERTY( bool cursorInProtectedArea READ cursorInProtectedArea WRITE setCursorInProtectedArea )
+    Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
+    Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
 
 public:
 

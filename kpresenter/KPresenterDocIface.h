@@ -42,17 +42,12 @@ k_dcop:
 
     bool selectPage( int page,bool select);
 
-    virtual double indentValue() const;
-    virtual void setIndentValue(double _ind);
-
     virtual bool dontCheckUpperWord() const;
     virtual void setDontCheckUpperWord(bool _b);
 
     virtual bool dontCheckTitleCase() const ;
     virtual void setDontCheckTitleCase(bool _b);
-    virtual int maxRecentFiles() const ;
 
-    virtual void setUndoRedoLimit(int val);
 
     virtual void setShowRuler(bool );
     virtual bool showRuler() const;
@@ -88,10 +83,6 @@ k_dcop:
     virtual void saveConfig();
 
     virtual QString selectedForPrinting() const;
-
-    virtual int leftBorder() const;
-    virtual int topBorder() const;
-    virtual int bottomBorder() const;
 
     //Be carefull ! when pgNum > num of page we return false
     virtual bool isSlideSelected( int pgNum);
@@ -235,20 +226,12 @@ k_dcop:
     double ptTabStopValue() const;
     void setPtTabStopValue ( double _tabStop );
 
-    bool cursorInProtectedArea()const;
-    void setCursorInProtectedArea( bool b );
 
     void setRefreshSideBar( bool _b );
     bool refreshSideBar()const;
     bool displayFieldCode()const;
     void setDisplayFieldCode( bool b);
     QString configAutoFormatLanguage( )const;
-
-    QString picturePath()const;
-    void setPicturePath( const QString & _path );
-
-    bool insertDirectCursor() const;
-    void setInsertDirectCursor(bool _b);
 
     bool configCapitalizeNameOfDays() const;
     void setConfigCapitalizeNameOfDays( bool b);
