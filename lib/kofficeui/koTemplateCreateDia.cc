@@ -26,23 +26,38 @@
 #include <qgroupbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
-#include <qlistview.h>
 #include <qheader.h>
 
 #include <klineedit.h>
-#include <kseparator.h>
+#include <klistview.h>
 #include <klocale.h>
+#include <koTemplates.h>
+
 
 class KoTemplateCreateDiaPrivate {
 public:
-    KoTemplateCreateDiaPrivate() {}
+    KoTemplateCreateDiaPrivate()
+    {
+	m_tree=0L;
+	m_name=0L;
+	m_default=0L;
+	m_custom=0L;
+	m_select=0L;
+	m_preview=0L;
+	m_customPixmapCached=false;
+	m_groups=0L;
+    }
     ~KoTemplateCreateDiaPrivate() {}
 
+    KoTemplateTree *m_tree;
     KLineEdit *m_name;
     QRadioButton *m_default, *m_custom;
     QPushButton *m_select;
     QLabel *m_preview;
-    QListView *m_groups;
+    QString m_customFile;
+    QPixmap m_customPixmap;
+    bool m_customPixmapCached;
+    KListView *m_groups;
 };
 
 
@@ -53,10 +68,9 @@ public:
  ****************************************************************************/
 
 KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance *instance,
-			 const QString &file, const QPixmap &pix, QWidget *parent ) :
+					  const QString &file, const QPixmap &pix, QWidget *parent ) :
     KDialogBase( parent, "template create dia", true, i18n( "Create a Template" ),
-		 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
-    m_templateType(templateType), m_instance(instance), m_file(file), m_pixmap(pix) {
+		 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_file(file), m_pixmap(pix) {
 
     d=new KoTemplateCreateDiaPrivate();
 
@@ -65,21 +79,36 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
 				      KDialogBase::spacingHint());
     QVBoxLayout *leftbox=new QVBoxLayout(mbox);
 
-    QHBoxLayout *namefield=new QHBoxLayout(leftbox);
     QLabel *label=new QLabel(i18n("Name:"), mainwidget);
+    leftbox->addSpacing(label->fontMetrics().height()/2);
+    QHBoxLayout *namefield=new QHBoxLayout(leftbox);
     namefield->addWidget(label);
     d->m_name=new KLineEdit(mainwidget);
     namefield->addWidget(d->m_name);
 
+    label=new QLabel(i18n("Group:"), mainwidget);
+    leftbox->addWidget(label);
+    d->m_groups=new KListView(mainwidget);
+    leftbox->addWidget(d->m_groups);
+    d->m_groups->addColumn("");
+    d->m_groups->header()->hide();
+    d->m_groups->setRootIsDecorated(true);
+
+    d->m_tree=new KoTemplateTree(templateType, instance, true);
+    // fill group listview
+
+    QVBoxLayout *rightbox=new QVBoxLayout(mbox);
     QGroupBox *pixbox=new QGroupBox(i18n("Picture:"), mainwidget);
-    leftbox->addWidget(pixbox);
+    rightbox->addWidget(pixbox);
     QVBoxLayout *pixlayout=new QVBoxLayout(pixbox, KDialogBase::marginHint(),
 					   KDialogBase::spacingHint());
     pixlayout->addSpacing(pixbox->fontMetrics().height()/2);
     d->m_default=new QRadioButton(i18n("Default"), pixbox);
+    d->m_default->setChecked(true);
     pixlayout->addWidget(d->m_default);
     QHBoxLayout *custombox=new QHBoxLayout(pixlayout);
     d->m_custom=new QRadioButton(i18n("Custom"), pixbox);
+    d->m_custom->setChecked(false);
     custombox->addWidget(d->m_custom);
     d->m_select=new QPushButton(i18n("Select..."), pixbox);
     custombox->addWidget(d->m_select);
@@ -88,18 +117,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
     d->m_preview=new QLabel(pixbox); // setPixmap() -> auto resize?
     pixlayout->addWidget(d->m_preview);
 
-    KSeparator *separator=new KSeparator(QFrame::VLine, mainwidget);
-    mbox->addWidget(separator);
-
-    QVBoxLayout *rightbox=new QVBoxLayout(mbox);
-    label=new QLabel(i18n("Group:"), mainwidget);
-    rightbox->addWidget(label);
-    d->m_groups=new QListView(mainwidget);
-    rightbox->addWidget(d->m_groups);
-    d->m_groups->addColumn("");
-    d->m_groups->header()->hide();
-    d->m_groups->setRootIsDecorated(true);
-    // ...
+    updatePixmap();
 }
 
 void KoTemplateCreateDia::createTemplate( const QString &templateType, KInstance *instance,
@@ -108,6 +126,14 @@ void KoTemplateCreateDia::createTemplate( const QString &templateType, KInstance
     KoTemplateCreateDia *dia = new KoTemplateCreateDia( templateType, instance, file, pix, parent );
     dia->exec();
     delete dia;
+}
+
+void KoTemplateCreateDia::updatePixmap() {
+
+    if(d->m_default->isChecked())
+	d->m_preview->setPixmap(m_pixmap);
+    else {
+    }
 }
 
 #include <koTemplateCreateDia.moc>

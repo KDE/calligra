@@ -48,8 +48,8 @@ public:
 				const QString &file, const QPixmap &pix, QWidget *parent=0L );
 
 private:
-    QString m_templateType;
-    KInstance *m_instance;
+    void updatePixmap();
+
     QString m_file;
     QPixmap m_pixmap;
     KoTemplateCreateDiaPrivate *d;
