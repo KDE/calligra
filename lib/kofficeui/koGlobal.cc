@@ -75,6 +75,7 @@ int KoPageFormat::printerPageSize( KoFormat format )
         case PG_DIN_B6:
             return KPrinter::B6;
     }
+    return KPrinter::A4;   // let's make Tru64's cxx happy
 }
 
 double KoPageFormat::width( KoFormat format, KoOrientation orientation )
@@ -130,6 +131,7 @@ double KoPageFormat::width( KoFormat format, KoOrientation orientation )
         case PG_DIN_B6:
             return 128.0;
     }
+    return PG_A4_WIDTH;   // let's make Tru64's cxx happy
 }
 
 double KoPageFormat::height( KoFormat format, KoOrientation orientation )
@@ -185,6 +187,7 @@ double KoPageFormat::height( KoFormat format, KoOrientation orientation )
         case PG_DIN_B6:
             return 182.0;
     }
+    return PG_A4_HEIGHT;   // let's make Tru64's cxx happy
 }
 
 QString KoPageFormat::formatString( KoFormat format )
@@ -238,6 +241,7 @@ QString KoPageFormat::formatString( KoFormat format )
         case PG_DIN_B6:
             return QString::fromLatin1( "B6" );
     }
+    return QString::fromLatin1( "A4" );   // let's make Tru64's cxx happy
 }
 
 KoFormat KoPageFormat::formatFromString( const QString & string )
@@ -288,6 +292,7 @@ KoFormat KoPageFormat::formatFromString( const QString & string )
         return PG_DIN_B4;
     if ( string == "B6" )
         return PG_DIN_B6;
+    return PG_DIN_A4;   // let's make Tru64's cxx happy
 }
 
 QString KoPageFormat::name( KoFormat format )
@@ -340,6 +345,7 @@ QString KoPageFormat::name( KoFormat format )
         case PG_DIN_B6:
             return i18n( "DIN B6" );
     }
+    return i18n("DIN A4");   // let's make Tru64's cxx happy
 }
 
 QStringList KoPageFormat::allFormats()
