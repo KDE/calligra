@@ -333,10 +333,20 @@ void KWordDocIface::initUnit()
 
 bool KWordDocIface::isHeaderVisible() const
 {
-    doc->isHeaderVisible();
+    return doc->isHeaderVisible();
 }
 
 bool KWordDocIface::isFooterVisible() const
 {
-    doc->isFooterVisible();
+    return doc->isFooterVisible();
+}
+
+bool KWordDocIface::backgroundSpellCheckEnabled() const
+{
+    return doc->backgroundSpellCheckEnabled();
+}
+
+void KWordDocIface::enableBackgroundSpellCheck( bool b )
+{
+    doc->enableBackgroundSpellCheck(b);
 }

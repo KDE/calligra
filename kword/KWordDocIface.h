@@ -100,6 +100,10 @@ k_dcop:
     virtual void setDisplayLink(bool b);
     virtual bool displayLink();
 
+    virtual bool backgroundSpellCheckEnabled() const;
+    virtual void enableBackgroundSpellCheck( bool b );
+
+
     //init/save config
     virtual void initConfig();
     virtual void saveConfig();
