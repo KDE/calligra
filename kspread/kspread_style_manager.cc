@@ -171,16 +171,16 @@ bool KSpreadStyleManager::checkCircle( QString const & name, QString const & par
 {
   KSpreadCustomStyle * s = style( parent );
   if ( !s || s->parent() == 0 )
-    return false;
-  if ( s->parentName() == name )
     return true;
+  if ( s->parentName() == name )
+    return false;
   else
     return checkCircle( name, s->parentName() );
 }
 
 bool KSpreadStyleManager::validateStyleName( QString const & name, KSpreadCustomStyle * style )
 {
-  if ( m_defaultStyle->name() == name && m_defaultStyle != style )
+  if ( m_defaultStyle->name() == name || name == i18n( "Default" ) )
     return false;
 
   Styles::const_iterator iter = m_styles.begin();

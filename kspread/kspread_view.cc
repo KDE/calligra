@@ -5404,6 +5404,13 @@ void KSpreadView::styleDialog()
   dlg.exec();
 
   m_selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
+  if ( m_pTable )
+  {
+    m_pTable->setLayoutDirtyFlag();
+    m_pTable->setRegionPaintDirty( QRect( QPoint( 0,0 ), QPoint( KS_colMax, KS_rowMax ) ) );
+  }
+  if ( m_pCanvas )
+    m_pCanvas->repaint();
 }
 
 void KSpreadView::paperLayoutDlg()

@@ -144,13 +144,20 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDlg * dlg )
   m_parentBox->clear();
   m_parentBox->insertItem( i18n( "<None>" ) );
   m_parentBox->insertStringList( m_dlg->getStyleManager()->styleNames() );
+
   if ( m_dlg->getStyle()->parent() )
     m_parentBox->setCurrentText( m_dlg->getStyle()->parentName() );
   else
   {
     m_parentBox->setCurrentText( i18n( "<None>" ) );
-    m_parentBox->setEnabled( false );
+
+    if ( m_dlg->getStyle()->definesAll() )
+      m_parentBox->setEnabled( false );
   }
+
+  connect( m_parentBox, SIGNAL( textChanged( const QString & ) ), this, SLOT( slotNewParent( const QString & ) ) );
+  connect( m_nameEdit, SIGNAL( lostFocus() ), this, SLOT( slotNameChanged() ) );
+
   groupBoxLayout->addWidget( m_parentBox, 1, 1 );
 
   QSpacerItem * spacer = new QSpacerItem( 20, 260, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -171,18 +178,52 @@ GeneralTab::~GeneralTab()
 {
 }
 
-bool GeneralTab::apply( KSpreadCustomStyle * style )
+void GeneralTab::slotNameChanged()
 {
-  KSpreadCustomStyle * p = 0;
+  checkName();
+}
 
-  if ( m_parentBox->isEnabled() && m_parentBox->currentText() != i18n( "<None>" ) && !m_parentBox->currentText().isEmpty() )
+void GeneralTab::slotNewParent( const QString & parentName )
+{
+  kdDebug() << "New Parent" << endl;
+  if ( !checkParent( parentName ) )
+    return;
+
+  if ( parentName.isEmpty() || parentName == i18n( "<None>" ) )
+    m_dlg->getStyle()->setParent( 0 );
+  else
+    m_dlg->getStyle()->setParent( m_dlg->getStyleManager()->style( parentName ) );
+
+  // Set difference to new parent, set GUI to parent values, add changes made before
+  //  m_dlg->initGUI();
+}
+
+bool GeneralTab::checkName()
+{
+  if ( m_nameEdit->isEnabled() )
   {
-    if ( m_nameEdit->text() == m_parentBox->currentText() )
+    if ( !m_dlg->getStyleManager()->validateStyleName( m_nameEdit->text(), m_dlg->getStyle() ) )
+    {
+      KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
+      return false;
+    }
+  }
+
+  return true;
+}
+
+bool GeneralTab::checkParent( const QString & parentName )
+{
+  if ( m_dlg->getStyle()->parentName() != parentName 
+       && m_parentBox->isEnabled() && parentName != i18n( "<None>" ) && !parentName.isEmpty() )
+  {
+    kdDebug() << "Checking..." << endl;
+    if ( m_nameEdit->text() == parentName )
     {
       KMessageBox::sorry( this, i18n( "A style cannot inherit from itself." ) );
       return false;
     }
-    if ( !m_dlg->checkCircle( m_nameEdit->text(), m_parentBox->currentText() ) )
+    if ( !m_dlg->checkCircle( m_nameEdit->text(), parentName ) )
     {
       KMessageBox::sorry( this, 
                           i18n( "The style cannot inherit from '%1' because of recursive references." )
@@ -190,7 +231,8 @@ bool GeneralTab::apply( KSpreadCustomStyle * style )
       return false;
     }
 
-    p = m_dlg->getStyleManager()->style( m_parentBox->currentText() );
+    KSpreadCustomStyle * p = m_dlg->getStyleManager()->style( parentName );
+
     if ( !p )
     {
       KMessageBox::sorry( this, i18n( "The parent style doesn't exist." ) );
@@ -198,22 +240,36 @@ bool GeneralTab::apply( KSpreadCustomStyle * style )
     }
   }
 
+  return true;
+}
+
+bool GeneralTab::apply( KSpreadCustomStyle * style )
+{
+  if ( !checkParent( m_parentBox->currentText() ) )
+    return false;
+
+  if ( !checkName() )
+    return false;
+
   if ( m_nameEdit->isEnabled() )
   {
-    if ( !m_dlg->getStyleManager()->validateStyleName( m_nameEdit->text(), style ) )
-    {
-      KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
-      return false;
-    }
-    
     if ( style->type() != KSpreadStyle::BUILTIN )
     {
       QString name( style->name() );
       style->setName( m_nameEdit->text() );
-      style->setParent( p );
+      if ( m_parentBox->isEnabled() )
+      {
+        if ( m_parentBox->currentText() == i18n( "None" ) || m_parentBox->currentText().isEmpty() )
+          style->setParent( 0 );
+        else
+          style->setParent( m_dlg->getStyleManager()->style( m_parentBox->currentText() ) );
+      }
       m_dlg->getStyleManager()->changeName( name, m_nameEdit->text() );
     }
   }
+
+  if ( style->type() == KSpreadStyle::TENTATIVE )
+    style->setType( KSpreadStyle::CUSTOM );
 
   return true;
 }
@@ -565,7 +621,12 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadCustomStyle * _style,
     m_styleManager( _manager )
 {
   initMembers();
+  initGUI();
+  init();
+}
 
+void CellFormatDlg::initGUI()
+{
   isRowSelected    = false;
   isColumnSelected = false;
   styleName = m_style->name();
@@ -635,8 +696,6 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadCustomStyle * _style,
   bIsProtected   = !m_style->hasProperty( KSpreadStyle::PNotProtected );
 
   cellText = i18n( "The quick brown fox jumps over the lazy dog" );
-
-  init();
 }
 
 CellFormatDlg::~CellFormatDlg()
@@ -833,15 +892,15 @@ void CellFormatDlg::init()
   floatPage = new CellFormatPageFloat( tab, this );
   tab->addTab( floatPage, i18n("&Data Format") );
   
+  fontPage = new CellFormatPageFont( tab, this );
+  tab->addTab( fontPage, i18n("&Text") );
+  
   borderPage = new CellFormatPageBorder( tab, this );
   tab->addTab( borderPage, i18n("&Border") );
 
   //  miscPage = new CellFormatPageMisc( tab, this );
   //  tab->addTab( miscPage, i18n("&Misc") );
 
-  fontPage = new CellFormatPageFont( tab, this );
-  tab->addTab( fontPage, i18n("&Text") );
-  
   positionPage = new CellFormatPagePosition( tab, this);
   tab->addTab( positionPage, i18n("&Position") );
   
@@ -1293,33 +1352,33 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
         else if ( cellFormatType == KSpreadCell::Scientific )
           scientific->setChecked(true);
         else if ( cellFormatType == KSpreadCell::TextDate 
-                  || cellFormatType==KSpreadCell::ShortDate
+                  || cellFormatType == KSpreadCell::ShortDate
                   || ( ( (int)( cellFormatType ) >= 200 ) && ( (int)(cellFormatType) <= 217 ) ) )
                 date->setChecked(true);
-        else if ( cellFormatType==KSpreadCell::Time 
-                  || cellFormatType==KSpreadCell::SecondeTime
-                  || cellFormatType==KSpreadCell::Time_format1
-                  ||cellFormatType==KSpreadCell::Time_format2
-                  ||cellFormatType==KSpreadCell::Time_format3
-                  ||cellFormatType==KSpreadCell::Time_format4
-                  ||cellFormatType==KSpreadCell::Time_format5
-                  ||cellFormatType==KSpreadCell::Time_format6
-                  ||cellFormatType==KSpreadCell::Time_format7
-                  ||cellFormatType==KSpreadCell::Time_format8)
+        else if ( cellFormatType == KSpreadCell::Time 
+                  || cellFormatType == KSpreadCell::SecondeTime
+                  || cellFormatType == KSpreadCell::Time_format1
+                  || cellFormatType == KSpreadCell::Time_format2
+                  || cellFormatType == KSpreadCell::Time_format3
+                  || cellFormatType == KSpreadCell::Time_format4
+                  || cellFormatType == KSpreadCell::Time_format5
+                  || cellFormatType == KSpreadCell::Time_format6
+                  || cellFormatType == KSpreadCell::Time_format7
+                  || cellFormatType == KSpreadCell::Time_format8)
           time->setChecked(true);
-        else if ( cellFormatType==KSpreadCell::fraction_half 
-                  || cellFormatType==KSpreadCell::fraction_quarter ||
-                  cellFormatType==KSpreadCell::fraction_eighth ||
-                  cellFormatType==KSpreadCell::fraction_sixteenth ||
-                  cellFormatType==KSpreadCell::fraction_tenth ||
-                  cellFormatType==KSpreadCell::fraction_hundredth ||
-                  cellFormatType==KSpreadCell::fraction_one_digit ||
-                  cellFormatType==KSpreadCell::fraction_two_digits ||
-                  cellFormatType==KSpreadCell::fraction_three_digits)
+        else if ( cellFormatType == KSpreadCell::fraction_half 
+                  || cellFormatType == KSpreadCell::fraction_quarter ||
+                  cellFormatType == KSpreadCell::fraction_eighth ||
+                  cellFormatType == KSpreadCell::fraction_sixteenth ||
+                  cellFormatType == KSpreadCell::fraction_tenth ||
+                  cellFormatType == KSpreadCell::fraction_hundredth ||
+                  cellFormatType == KSpreadCell::fraction_one_digit ||
+                  cellFormatType == KSpreadCell::fraction_two_digits ||
+                  cellFormatType == KSpreadCell::fraction_three_digits)
           fraction->setChecked(true);
-	else if (cellFormatType==KSpreadCell::Text_format)
+	else if (cellFormatType == KSpreadCell::Text_format)
 	  textFormat->setChecked(true);
-	else if (cellFormatType==KSpreadCell::Custom)
+	else if (cellFormatType == KSpreadCell::Custom)
 	  customFormat->setChecked(true);
         }
 
@@ -1410,23 +1469,23 @@ void CellFormatPageFloat::slotChangeState()
             list+=i18n("Two digits 15/22");
             list+=i18n("Three digits 153/652");
             listFormat->insertStringList(list);
-            if (cellFormatType==KSpreadCell::fraction_half)
+            if (cellFormatType == KSpreadCell::fraction_half)
                 listFormat->setCurrentItem(0);
-            else if (cellFormatType==KSpreadCell::fraction_quarter)
+            else if (cellFormatType == KSpreadCell::fraction_quarter)
                 listFormat->setCurrentItem(1);
-            else if (cellFormatType==KSpreadCell::fraction_eighth )
+            else if (cellFormatType == KSpreadCell::fraction_eighth )
                 listFormat->setCurrentItem(2);
-            else if (cellFormatType==KSpreadCell::fraction_sixteenth )
+            else if (cellFormatType == KSpreadCell::fraction_sixteenth )
                 listFormat->setCurrentItem(3);
-            else if (cellFormatType==KSpreadCell::fraction_tenth )
+            else if (cellFormatType == KSpreadCell::fraction_tenth )
                 listFormat->setCurrentItem(4);
-            else if (cellFormatType==KSpreadCell::fraction_hundredth )
+            else if (cellFormatType == KSpreadCell::fraction_hundredth )
                 listFormat->setCurrentItem(5);
-            else if (cellFormatType==KSpreadCell::fraction_one_digit )
+            else if (cellFormatType == KSpreadCell::fraction_one_digit )
                 listFormat->setCurrentItem(6);
-            else if (cellFormatType==KSpreadCell::fraction_two_digits )
+            else if (cellFormatType == KSpreadCell::fraction_two_digits )
                 listFormat->setCurrentItem(7);
-            else if (cellFormatType==KSpreadCell::fraction_three_digits )
+            else if (cellFormatType == KSpreadCell::fraction_three_digits )
                 listFormat->setCurrentItem(8);
             else
                 listFormat->setCurrentItem(0);
@@ -1453,25 +1512,25 @@ void CellFormatPageFloat::slotChangeState()
             list+= ( util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format8) + i18n(" (=[hh]::mm)") );
             listFormat->insertStringList(list);
 
-            if ( cellFormatType==KSpreadCell::Time )
+            if ( cellFormatType == KSpreadCell::Time )
                 listFormat->setCurrentItem(0);
-            else if (cellFormatType==KSpreadCell::SecondeTime)
+            else if (cellFormatType == KSpreadCell::SecondeTime)
                 listFormat->setCurrentItem(1);
-            else if (cellFormatType==KSpreadCell::Time_format1)
+            else if (cellFormatType == KSpreadCell::Time_format1)
                 listFormat->setCurrentItem(2);
-            else if (cellFormatType==KSpreadCell::Time_format2)
+            else if (cellFormatType == KSpreadCell::Time_format2)
                 listFormat->setCurrentItem(3);
-            else if (cellFormatType==KSpreadCell::Time_format3)
+            else if (cellFormatType == KSpreadCell::Time_format3)
                 listFormat->setCurrentItem(4);
-            else if (cellFormatType==KSpreadCell::Time_format4)
+            else if (cellFormatType == KSpreadCell::Time_format4)
                 listFormat->setCurrentItem(5);
-            else if (cellFormatType==KSpreadCell::Time_format5)
+            else if (cellFormatType == KSpreadCell::Time_format5)
                 listFormat->setCurrentItem(6);
-            else if (cellFormatType==KSpreadCell::Time_format6)
+            else if (cellFormatType == KSpreadCell::Time_format6)
                 listFormat->setCurrentItem(7);
-            else if (cellFormatType==KSpreadCell::Time_format7)
+            else if (cellFormatType == KSpreadCell::Time_format7)
                 listFormat->setCurrentItem(8);
-            else if (cellFormatType==KSpreadCell::Time_format8)
+            else if (cellFormatType == KSpreadCell::Time_format8)
                 listFormat->setCurrentItem(9);
             else
                 listFormat->setCurrentItem(0);
@@ -1504,61 +1563,61 @@ void CellFormatPageFloat::makeDateFormat()
 {
     KSpreadCell::FormatType tmpFormat=KSpreadCell::ShortDate;
     QString tmp;
-    if ( listFormat->currentItem()==0)
+    if ( listFormat->currentItem() == 0)
         tmpFormat=KSpreadCell::ShortDate;
-    else if (listFormat->currentItem()==1)
+    else if (listFormat->currentItem() == 1)
         tmpFormat=KSpreadCell::TextDate;
-    else if (listFormat->currentItem()==2)/*18-Feb-99*/
+    else if (listFormat->currentItem() == 2)/*18-Feb-99*/
         tmpFormat=KSpreadCell::date_format1;
-    else if (listFormat->currentItem()==3) /*18-Feb-1999*/
+    else if (listFormat->currentItem() == 3) /*18-Feb-1999*/
         tmpFormat=KSpreadCell::date_format2;
-    else if (listFormat->currentItem()==4) /*18-Feb*/
+    else if (listFormat->currentItem() == 4) /*18-Feb*/
         tmpFormat=KSpreadCell::date_format3;
-    else if (listFormat->currentItem()==5) /*18-05*/
+    else if (listFormat->currentItem() == 5) /*18-05*/
         tmpFormat=KSpreadCell::date_format4;
-    else if (listFormat->currentItem()==6) /*18/05/00*/
+    else if (listFormat->currentItem() == 6) /*18/05/00*/
         tmpFormat=KSpreadCell::date_format5;
-    else if (listFormat->currentItem()==7) /*18/05/1999*/
+    else if (listFormat->currentItem() == 7) /*18/05/1999*/
         tmpFormat=KSpreadCell::date_format6;
-    else if (listFormat->currentItem()==8) /*Feb-99*/
+    else if (listFormat->currentItem() == 8) /*Feb-99*/
         tmpFormat=KSpreadCell::date_format7;
-    else if (listFormat->currentItem()==9) /*February-99*/
+    else if (listFormat->currentItem() == 9) /*February-99*/
         tmpFormat=KSpreadCell::date_format8;
-    else if (listFormat->currentItem()==10) /*February-1999*/
+    else if (listFormat->currentItem() == 10) /*February-1999*/
         tmpFormat=KSpreadCell::date_format9;
-    else if (listFormat->currentItem()==11) /*F-99*/
+    else if (listFormat->currentItem() == 11) /*F-99*/
         tmpFormat=KSpreadCell::date_format10;
-    else if (listFormat->currentItem()==12) /*18/Feb*/
+    else if (listFormat->currentItem() == 12) /*18/Feb*/
         tmpFormat=KSpreadCell::date_format11;
-    else if (listFormat->currentItem()==13) /*18/02*/
+    else if (listFormat->currentItem() == 13) /*18/02*/
         tmpFormat=KSpreadCell::date_format12;
-    else if (listFormat->currentItem()==14) /*18/Feb/1999*/
+    else if (listFormat->currentItem() == 14) /*18/Feb/1999*/
         tmpFormat=KSpreadCell::date_format13;
-    else if (listFormat->currentItem()==15) /*2000/Feb/18*/
+    else if (listFormat->currentItem() == 15) /*2000/Feb/18*/
         tmpFormat=KSpreadCell::date_format14;
-    else if (listFormat->currentItem()==16) /*2000-Feb-18*/
+    else if (listFormat->currentItem() == 16) /*2000-Feb-18*/
         tmpFormat=KSpreadCell::date_format15;
-    else if (listFormat->currentItem()==17) /*2000-02-18*/
+    else if (listFormat->currentItem() == 17) /*2000-02-18*/
         tmpFormat=KSpreadCell::date_format16;
-    else if ( listFormat->currentItem()==18) /*2000-02-18*/
+    else if ( listFormat->currentItem() == 18) /*2000-02-18*/
         tmpFormat=KSpreadCell::date_format17;
-    else if ( listFormat->currentItem()==19)
+    else if ( listFormat->currentItem() == 19)
         tmpFormat=KSpreadCell::date_format18;
-    else if ( listFormat->currentItem()==20)
+    else if ( listFormat->currentItem() == 20)
         tmpFormat=KSpreadCell::date_format19;
-    else if ( listFormat->currentItem()==21)
+    else if ( listFormat->currentItem() == 21)
         tmpFormat=KSpreadCell::date_format20;
-    else if ( listFormat->currentItem()==22)
+    else if ( listFormat->currentItem() == 22)
         tmpFormat=KSpreadCell::date_format21;
-    else if ( listFormat->currentItem()==23)
+    else if ( listFormat->currentItem() == 23)
         tmpFormat=KSpreadCell::date_format22;
-    else if ( listFormat->currentItem()==24)
+    else if ( listFormat->currentItem() == 24)
         tmpFormat=KSpreadCell::date_format23;
-    else if ( listFormat->currentItem()==25)
+    else if ( listFormat->currentItem() == 25)
         tmpFormat=KSpreadCell::date_format24;
-    else if ( listFormat->currentItem()==26)
+    else if ( listFormat->currentItem() == 26)
         tmpFormat=KSpreadCell::date_format25;
-    else if ( listFormat->currentItem()==27)
+    else if ( listFormat->currentItem() == 27)
         tmpFormat=KSpreadCell::date_format26;
     tmp= util_dateFormat( dlg->locale(), dlg->m_time.date(), tmpFormat);
     exampleLabel->setText(tmp);
@@ -1618,61 +1677,61 @@ void CellFormatPageFloat::init()
     list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format26);
 
     listFormat->insertStringList(list);
-    if ( cellFormatType==KSpreadCell::ShortDate )
+    if ( cellFormatType == KSpreadCell::ShortDate )
         listFormat->setCurrentItem(0);
-    else if (cellFormatType==KSpreadCell::TextDate)
+    else if (cellFormatType == KSpreadCell::TextDate)
         listFormat->setCurrentItem(1);
-    else if (cellFormatType==KSpreadCell::date_format1)
+    else if (cellFormatType == KSpreadCell::date_format1)
         listFormat->setCurrentItem(2);
-    else if (cellFormatType==KSpreadCell::date_format2)
+    else if (cellFormatType == KSpreadCell::date_format2)
         listFormat->setCurrentItem(3);
-    else if (cellFormatType==KSpreadCell::date_format3)
+    else if (cellFormatType == KSpreadCell::date_format3)
         listFormat->setCurrentItem(4);
-    else if (cellFormatType==KSpreadCell::date_format4)
+    else if (cellFormatType == KSpreadCell::date_format4)
         listFormat->setCurrentItem(5);
-    else if (cellFormatType==KSpreadCell::date_format5)
+    else if (cellFormatType == KSpreadCell::date_format5)
         listFormat->setCurrentItem(6);
-    else if (cellFormatType==KSpreadCell::date_format6)
+    else if (cellFormatType == KSpreadCell::date_format6)
         listFormat->setCurrentItem(7);
-    else if (cellFormatType==KSpreadCell::date_format7)
+    else if (cellFormatType == KSpreadCell::date_format7)
         listFormat->setCurrentItem(8);
-    else if (cellFormatType==KSpreadCell::date_format8)
+    else if (cellFormatType == KSpreadCell::date_format8)
         listFormat->setCurrentItem(9);
-    else if (cellFormatType==KSpreadCell::date_format9)
+    else if (cellFormatType == KSpreadCell::date_format9)
         listFormat->setCurrentItem(10);
-    else if (cellFormatType==KSpreadCell::date_format10)
+    else if (cellFormatType == KSpreadCell::date_format10)
         listFormat->setCurrentItem(11);
-    else if (cellFormatType==KSpreadCell::date_format11)
+    else if (cellFormatType == KSpreadCell::date_format11)
         listFormat->setCurrentItem(12);
-    else if (cellFormatType==KSpreadCell::date_format12)
+    else if (cellFormatType == KSpreadCell::date_format12)
         listFormat->setCurrentItem(13);
-    else if (cellFormatType==KSpreadCell::date_format13)
+    else if (cellFormatType == KSpreadCell::date_format13)
         listFormat->setCurrentItem(14);
-    else if (cellFormatType==KSpreadCell::date_format14)
+    else if (cellFormatType == KSpreadCell::date_format14)
         listFormat->setCurrentItem(15);
-    else if (cellFormatType==KSpreadCell::date_format15)
+    else if (cellFormatType == KSpreadCell::date_format15)
         listFormat->setCurrentItem(16);
-    else if (cellFormatType==KSpreadCell::date_format16)
+    else if (cellFormatType == KSpreadCell::date_format16)
         listFormat->setCurrentItem(17);
-    else if (cellFormatType==KSpreadCell::date_format17)
+    else if (cellFormatType == KSpreadCell::date_format17)
         listFormat->setCurrentItem(18);
-    else if (cellFormatType==KSpreadCell::date_format18)
+    else if (cellFormatType == KSpreadCell::date_format18)
         listFormat->setCurrentItem(19);
-    else if (cellFormatType==KSpreadCell::date_format19)
+    else if (cellFormatType == KSpreadCell::date_format19)
         listFormat->setCurrentItem(20);
-    else if (cellFormatType==KSpreadCell::date_format20)
+    else if (cellFormatType == KSpreadCell::date_format20)
         listFormat->setCurrentItem(21);
-    else if (cellFormatType==KSpreadCell::date_format21)
+    else if (cellFormatType == KSpreadCell::date_format21)
         listFormat->setCurrentItem(22);
-    else if (cellFormatType==KSpreadCell::date_format22)
+    else if (cellFormatType == KSpreadCell::date_format22)
         listFormat->setCurrentItem(23);
-    else if (cellFormatType==KSpreadCell::date_format23)
+    else if (cellFormatType == KSpreadCell::date_format23)
         listFormat->setCurrentItem(24);
-    else if (cellFormatType==KSpreadCell::date_format24)
+    else if (cellFormatType == KSpreadCell::date_format24)
         listFormat->setCurrentItem(25);
-    else if (cellFormatType==KSpreadCell::date_format25)
+    else if (cellFormatType == KSpreadCell::date_format25)
         listFormat->setCurrentItem(26);
-    else if (cellFormatType==KSpreadCell::date_format26)
+    else if (cellFormatType == KSpreadCell::date_format26)
         listFormat->setCurrentItem(27);
     else
         listFormat->setCurrentItem(0);
@@ -1684,25 +1743,25 @@ void CellFormatPageFloat::makeTimeFormat()
     QString tmp;
     int current = listFormat->currentItem();
     KSpreadCell::FormatType tmpFormat=KSpreadCell::Time;
-    if ( current==0)
+    if ( current == 0)
         tmpFormat=KSpreadCell::Time;
-    else if (current==1)
+    else if (current == 1)
         tmpFormat=KSpreadCell::SecondeTime;
-    else if (current==2)
+    else if (current == 2)
         tmpFormat=KSpreadCell::Time_format1;
-    else if (current==3)
+    else if (current == 3)
         tmpFormat=KSpreadCell::Time_format2;
-    else if (current==4)
+    else if (current == 4)
         tmpFormat=KSpreadCell::Time_format3;
-    else if (current==5)
+    else if (current == 5)
         tmpFormat=KSpreadCell::Time_format4;
-    else if (current==6)
+    else if (current == 6)
         tmpFormat=KSpreadCell::Time_format5;
-    else if (current==7)
+    else if (current == 7)
         tmpFormat=KSpreadCell::Time_format6;
-    else if (current==8)
+    else if (current == 8)
         tmpFormat=KSpreadCell::Time_format7;
-    else if (current==9)
+    else if (current == 9)
         tmpFormat=KSpreadCell::Time_format8;
 
     tmp = util_timeFormat( dlg->locale(), dlg->m_time, tmpFormat);
@@ -1713,7 +1772,7 @@ QString CellFormatPageFloat::makeFractionFormat()
 {
     double result = (dlg->m_value)-floor(dlg->m_value);
     QString tmp;
-    if (result == 0 )
+    if (result  ==  0 )
     {
         return tmp.setNum( dlg->m_value );
     }
@@ -1829,7 +1888,7 @@ void CellFormatPageFloat::makeformat()
                     int start=0;
                     if (tmp.find('%')!=-1)
                         start=2;
-                    else if (tmp.find(dlg->cCurrency.symbol)==((int)(tmp.length() - dlg->cCurrency.symbol.length())))
+                    else if (tmp.find(dlg->cCurrency.symbol) == ((int)(tmp.length() - dlg->cCurrency.symbol.length())))
                         start=dlg->cCurrency.symbol.length()+1;
                     else if ((start=tmp.find('E'))!=-1)
                         start=tmp.length()-start;
@@ -2929,7 +2988,7 @@ void CellFormatPageFont::slotSetTextColor( const QColor &_color )
 
 void CellFormatPageFont::apply( KSpreadCustomStyle * style )
 {
-  if ( !bTextColorUndefined )
+  if ( !bTextColorUndefined && textColor != dlg->textColor )
     style->changeTextColor( textColor );
   if ( fontChanged )
   {
@@ -3018,7 +3077,7 @@ void CellFormatPageFont::apply( KSpreadCell *_obj )
 
 void CellFormatPageFont::applyFormat( KSpreadFormat *_obj )
 {
-  if ( !bTextColorUndefined )
+  if ( !bTextColorUndefined && textColor != dlg->textColor )
     _obj->setTextColor( textColor );
   if (fontChanged)
   {
@@ -3120,13 +3179,13 @@ void CellFormatPageFont::setCombos()
  bool found;
 
  if ( dlg->bTextColor )
-        textColor = dlg->textColor;
+   textColor = dlg->textColor;
  else
-        textColor = colorGroup().text();
+   textColor = colorGroup().text();
 
- if (!textColor.isValid())
-     textColor =colorGroup().text();
-
+ if ( !textColor.isValid() )
+   textColor =colorGroup().text();
+ 
  textColorButton->setColor( textColor );
 
 
@@ -3199,14 +3258,14 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grid2->addWidget(right, 3, 1);
     grid3->addWidget(grp, 0, 0);
 
-    if (dlg->alignX==KSpreadCell::Left)
-        left->setChecked(true);
-    else if (dlg->alignX==KSpreadCell::Center)
-        center->setChecked(true);
-    else if (dlg->alignX==KSpreadCell::Right)
-        right->setChecked(true);
-    else if ( dlg->alignX==KSpreadCell::Undefined)
-        standard->setChecked(true);
+    if ( dlg->alignX == KSpreadCell::Left )
+        left->setChecked( true );
+    else if ( dlg->alignX == KSpreadCell::Center )
+        center->setChecked( true );
+    else if ( dlg->alignX == KSpreadCell::Right )
+        right->setChecked( true );
+    else if ( dlg->alignX == KSpreadCell::Undefined )
+        standard->setChecked( true );
 
     connect(grp,  SIGNAL(clicked(int)), this, SLOT(slotStateChanged(int)));
 
@@ -3224,12 +3283,12 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grid2->addWidget(bottom, 3, 0);
     grid3->addWidget(grp, 0, 1);
 
-    if (dlg->alignY==KSpreadCell::Top)
-        top->setChecked(true);
-    else if (dlg->alignY==KSpreadCell::Middle)
-        middle->setChecked(true);
-    else if (dlg->alignY==KSpreadCell::Bottom)
-        bottom->setChecked(true);
+    if ( dlg->alignY ==KSpreadCell::Top )
+        top->setChecked( true );
+    else if ( dlg->alignY ==KSpreadCell::Middle )
+        middle->setChecked(true );
+    else if ( dlg->alignY ==KSpreadCell::Bottom )
+        bottom->setChecked( true );
 
     grp = new QButtonGroup( i18n("Text Option"), this);
     //grp->setRadioButtonExclusive( false );
@@ -3419,20 +3478,20 @@ void CellFormatPagePosition::slotChangeAngle(int _angle)
 
 void CellFormatPagePosition::apply( KSpreadCustomStyle * style )
 {
-  if ( top->isChecked() )
+  if ( top->isChecked() && dlg->alignY != KSpreadCell::Top )
     style->changeAlignY( KSpreadCell::Top );
-  else if ( bottom->isChecked() )
+  else if ( bottom->isChecked() && dlg->alignY != KSpreadCell::Bottom )
     style->changeAlignY( KSpreadCell::Bottom );
-  else if ( middle->isChecked() )
+  else if ( middle->isChecked() && dlg->alignY != KSpreadCell::Middle )
     style->changeAlignY( KSpreadCell::Middle );
 
-  if ( left->isChecked() )
+  if ( left->isChecked() && dlg->alignX != KSpreadCell::Left )
     style->changeAlignX( KSpreadCell::Left );
-  else if ( right->isChecked() )
+  else if ( right->isChecked() && dlg->alignX != KSpreadCell::Right )
     style->changeAlignX( KSpreadCell::Right );
-  else if ( center->isChecked() )
+  else if ( center->isChecked() && dlg->alignX != KSpreadCell::Center )
     style->changeAlignX( KSpreadCell::Center );
-  else if ( standard->isChecked() )
+  else if ( standard->isChecked() && dlg->alignX != KSpreadCell::Undefined )
     style->changeAlignX( KSpreadCell::Undefined );
 
   if ( m_bOptionText )
@@ -3466,6 +3525,26 @@ void CellFormatPagePosition::apply( KSpreadCustomStyle * style )
 
 void CellFormatPagePosition::apply( ColumnFormat *_obj )
 {
+  KSpreadFormat::Align  ax;
+  KSpreadFormat::AlignY ay;
+
+  if ( top->isChecked() )
+    ay = KSpreadCell::Top;
+  else if ( bottom->isChecked() )
+    ay = KSpreadCell::Bottom;
+  else if ( middle->isChecked() )
+    ay = KSpreadCell::Middle;
+
+  if ( left->isChecked() )
+    ax = KSpreadCell::Left;
+  else if ( right->isChecked() )
+    ax = KSpreadCell::Right;
+  else if ( center->isChecked() )
+    ax = KSpreadCell::Center;
+  else if ( standard->isChecked() )
+    ax = KSpreadCell::Undefined;
+
+
   KSpreadSheet * table = dlg->getTable();
   KSpreadCell * c = NULL;
   for ( int col = dlg->left; col <= dlg->right; ++col)
@@ -3478,16 +3557,21 @@ void CellFormatPagePosition::apply( ColumnFormat *_obj )
         c->clearProperty( KSpreadCell::PIndent );
         c->clearNoFallBackProperties( KSpreadCell::PIndent );
       }
-      c->clearProperty(KSpreadCell::PAlign);
-      c->clearNoFallBackProperties( KSpreadCell::PAlign );
-      c->clearProperty(KSpreadCell::PAlignY);
-      c->clearNoFallBackProperties( KSpreadCell::PAlignY );
+      if ( ax != dlg->alignX )
+      {
+        c->clearProperty(KSpreadCell::PAlign);
+        c->clearNoFallBackProperties( KSpreadCell::PAlign );
+      }
+      if ( ay != dlg->alignY )
+      {
+        c->clearProperty(KSpreadCell::PAlignY);
+        c->clearNoFallBackProperties( KSpreadCell::PAlignY );
+      }
       if ( m_bOptionText)
       {
         c->clearProperty(KSpreadCell::PMultiRow);
         c->clearNoFallBackProperties( KSpreadCell::PMultiRow );
       }
-
       if ( m_bOptionText)
       {
         c->clearProperty(KSpreadCell::PVerticalText);
@@ -3501,22 +3585,23 @@ void CellFormatPagePosition::apply( ColumnFormat *_obj )
       }
     }
   }
-  applyFormat(_obj);
+
+  applyFormat( _obj );
 
   RowFormat* rw =dlg->getTable()->firstRow();
   for ( ; rw; rw = rw->next() )
   {
-    if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PAngle) ||
-                              rw->hasProperty(KSpreadCell::PVerticalText) ||
-                              rw->hasProperty(KSpreadCell::PMultiRow) ||
-                              rw->hasProperty(KSpreadCell::PAlignY) ||
-                              rw->hasProperty(KSpreadCell::PAlign) ||
-                              rw->hasProperty(KSpreadCell::PIndent) ))
+    if ( !rw->isDefault() && ( rw->hasProperty(KSpreadCell::PAngle) ||
+                               rw->hasProperty(KSpreadCell::PVerticalText) ||
+                               rw->hasProperty(KSpreadCell::PMultiRow) ||
+                               rw->hasProperty(KSpreadCell::PAlignY) ||
+                               rw->hasProperty(KSpreadCell::PAlign) ||
+                               rw->hasProperty(KSpreadCell::PIndent) ) )
     {
       for ( int i = dlg->left; i <= dlg->right; ++i )
       {
-        KSpreadCell *cell = dlg->getTable()->nonDefaultCell( i, rw->row() );
-        applyFormat(cell );
+        KSpreadCell * cell = dlg->getTable()->nonDefaultCell( i, rw->row() );
+        applyFormat( cell );
       }
     }
   }
@@ -3524,6 +3609,25 @@ void CellFormatPagePosition::apply( ColumnFormat *_obj )
 
 void CellFormatPagePosition::apply( RowFormat *_obj )
 {
+  KSpreadFormat::Align  ax;
+  KSpreadFormat::AlignY ay;
+
+  if ( top->isChecked() )
+    ay = KSpreadCell::Top;
+  else if ( bottom->isChecked() )
+    ay = KSpreadCell::Bottom;
+  else if ( middle->isChecked() )
+    ay = KSpreadCell::Middle;
+
+  if ( left->isChecked() )
+    ax = KSpreadCell::Left;
+  else if ( right->isChecked() )
+    ax = KSpreadCell::Right;
+  else if ( center->isChecked() )
+    ax = KSpreadCell::Center;
+  else if ( standard->isChecked() )
+    ax = KSpreadCell::Undefined;
+
   KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c= NULL;
   for (int row = dlg->top; row <= dlg->bottom; row++)
@@ -3536,11 +3640,16 @@ void CellFormatPagePosition::apply( RowFormat *_obj )
         c->clearProperty(KSpreadCell::PIndent);
         c->clearNoFallBackProperties( KSpreadCell::PIndent );
       }
-      c->clearProperty(KSpreadCell::PAlign);
-      c->clearNoFallBackProperties( KSpreadCell::PAlign );
-      c->clearProperty(KSpreadCell::PAlignY);
-      c->clearNoFallBackProperties( KSpreadCell::PAlignY );
-
+      if ( ax != dlg->alignX )
+      {
+        c->clearProperty(KSpreadCell::PAlign);
+        c->clearNoFallBackProperties( KSpreadCell::PAlign );
+      }
+      if ( ay != dlg->alignY )
+      {
+        c->clearProperty(KSpreadCell::PAlignY);
+        c->clearNoFallBackProperties( KSpreadCell::PAlignY );
+      }
       if ( m_bOptionText)
       {
         c->clearProperty(KSpreadCell::PMultiRow);
@@ -3558,53 +3667,73 @@ void CellFormatPagePosition::apply( RowFormat *_obj )
       }
     }
   }
-  applyFormat(_obj);
+
+  applyFormat( _obj );
 }
 
 
 void CellFormatPagePosition::apply( KSpreadCell *_obj )
 {
-  applyFormat(_obj);
+  applyFormat( _obj );
 }
 
-void CellFormatPagePosition::applyFormat( KSpreadFormat *_obj )
+void CellFormatPagePosition::applyFormat( KSpreadFormat * _obj )
 {
-  if (top->isChecked())
-    _obj->setAlignY(KSpreadCell::Top);
-  else if (bottom->isChecked())
-    _obj->setAlignY(KSpreadCell::Bottom);
-  else if (middle->isChecked())
-    _obj->setAlignY(KSpreadCell::Middle);
+  KSpreadFormat::Align  ax;
+  KSpreadFormat::AlignY ay;
 
-  if (left->isChecked())
-    _obj->setAlign(KSpreadCell::Left);
-  else if (right->isChecked())
-    _obj->setAlign(KSpreadCell::Right);
-  else if (center->isChecked())
-    _obj->setAlign(KSpreadCell::Center);
-  else if ( standard->isChecked())
-    _obj->setAlign(KSpreadCell::Undefined);
+  if ( top->isChecked() )
+    ay = KSpreadCell::Top;
+  else if ( bottom->isChecked() )
+    ay = KSpreadCell::Bottom;
+  else if ( middle->isChecked() )
+    ay = KSpreadCell::Middle;
+
+  if ( left->isChecked() )
+    ax = KSpreadCell::Left;
+  else if ( right->isChecked() )
+    ax = KSpreadCell::Right;
+  else if ( center->isChecked() )
+    ax = KSpreadCell::Center;
+  else if ( standard->isChecked() )
+    ax = KSpreadCell::Undefined;
+
+  if ( top->isChecked() && ay != dlg->alignY )
+    _obj->setAlignY( KSpreadCell::Top );
+  else if ( bottom->isChecked() && ay != dlg->alignY )
+    _obj->setAlignY( KSpreadCell::Bottom );
+  else if ( middle->isChecked() && ay != dlg->alignY )
+    _obj->setAlignY( KSpreadCell::Middle );
+
+  if ( left->isChecked() && ax != dlg->alignX )
+    _obj->setAlign( KSpreadCell::Left );
+  else if ( right->isChecked() && ax != dlg->alignX )
+    _obj->setAlign( KSpreadCell::Right );
+  else if ( center->isChecked() && ax != dlg->alignX )
+    _obj->setAlign( KSpreadCell::Center );
+  else if ( standard->isChecked() && ax != dlg->alignX )
+    _obj->setAlign( KSpreadCell::Undefined );
 
   if ( m_bOptionText )
   {
-    if (multi->isEnabled())
-      _obj->setMultiRow(multi->isChecked());
+    if ( multi->isEnabled() )
+      _obj->setMultiRow( multi->isChecked() );
     else
-      _obj->setMultiRow(false);
+      _obj->setMultiRow( false );
   }
 
-  if (m_bOptionText )
+  if ( m_bOptionText )
   {
-    if (vertical->isEnabled())
-      _obj->setVerticalText(vertical->isChecked());
+    if ( vertical->isEnabled() )
+      _obj->setVerticalText( vertical->isChecked() );
     else
-      _obj->setVerticalText(false);
+      _obj->setVerticalText( false );
   }
 
-  if (dlg->textRotation!=angleRotation->value())
-    _obj->setAngle((-angleRotation->value()));
-  if (dlg->indent!=indent->value() && indent->isEnabled())
-    _obj->setIndent(indent->value());
+  if ( dlg->textRotation!=angleRotation->value() )
+    _obj->setAngle( (-angleRotation->value() ) );
+  if ( dlg->indent != indent->value() && indent->isEnabled() )
+    _obj->setIndent( indent->value() );
 }
 
 double CellFormatPagePosition::getSizeHeight()
@@ -4095,7 +4224,7 @@ void CellFormatPageBorder::applyTopOutline()
 
   if ( dlg->getStyle() )
   {
-    dlg->getStyle()->setTopBorderPen( tmpPen );
+    dlg->getStyle()->changeTopBorderPen( tmpPen );
   }
   else if ( !dlg->isRowSelected )
   {
@@ -4131,7 +4260,7 @@ void CellFormatPageBorder::applyBottomOutline()
   QPen tmpPen( bottom->getColor(), bottom->getPenWidth(), bottom->getPenStyle() );
 
   if ( dlg->getStyle() )
-    dlg->getStyle()->setBottomBorderPen( tmpPen );
+    dlg->getStyle()->changeBottomBorderPen( tmpPen );
   else if ( !dlg->isRowSelected && !dlg->isColumnSelected )
   {
     for ( int x = dlg->left; x <= dlg->right; x++ )
@@ -4161,7 +4290,7 @@ void CellFormatPageBorder::applyLeftOutline()
   QPen tmpPen( left->getColor(), left->getPenWidth(), left->getPenStyle() );
 
   if ( dlg->getStyle() )
-    dlg->getStyle()->setLeftBorderPen( tmpPen );  
+    dlg->getStyle()->changeLeftBorderPen( tmpPen );  
   else if ( !dlg->isColumnSelected )
   {
     for ( int y = dlg->top; y <= dlg->bottom; y++ )
@@ -4205,7 +4334,7 @@ void CellFormatPageBorder::applyRightOutline()
   QPen tmpPen( right->getColor(), right->getPenWidth(), right->getPenStyle() );
 
   if ( dlg->getStyle() )
-    dlg->getStyle()->setRightBorderPen( tmpPen );
+    dlg->getStyle()->changeRightBorderPen( tmpPen );
   else if ( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
   {
     for ( int y = dlg->top; y <= dlg->bottom; y++ )
@@ -4256,9 +4385,9 @@ void CellFormatPageBorder::applyDiagonalOutline()
   if ( dlg->getStyle() )
   {
     if ( fallDiagonal->isChanged() )
-      dlg->getStyle()->setFallDiagonalPen( tmpPenFall );
+      dlg->getStyle()->changeFallBorderPen( tmpPenFall );
     if ( goUpDiagonal->isChanged() )
-      dlg->getStyle()->setGoUpDiagonalPen( tmpPenGoUp );
+      dlg->getStyle()->changeGoUpBorderPen( tmpPenGoUp );
   }
   else if ( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
   {
@@ -4355,7 +4484,7 @@ void CellFormatPageBorder::applyHorizontalOutline()
 
   if ( dlg->getStyle() )
   {
-    dlg->getStyle()->setTopBorderPen( tmpPen );
+    dlg->getStyle()->changeTopBorderPen( tmpPen );
   }
   else if ( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
   {
@@ -4423,7 +4552,7 @@ void CellFormatPageBorder::applyVerticalOutline()
                vertical->getPenStyle());
 
   if ( dlg->getStyle() )
-    dlg->getStyle()->setLeftBorderPen( tmpPen );  
+    dlg->getStyle()->changeLeftBorderPen( tmpPen );  
   else if ( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
   {
     for ( int x = dlg->left+1; x <= dlg->right; x++ )
@@ -4990,9 +5119,9 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
         bgColor = colorGroup().base();
 
     if (!bgColor.isValid())
-        bgColor=colorGroup().base();
+        bgColor = colorGroup().base();
 
-    bgColorButton->setColor(bgColor);
+    bgColorButton->setColor( bgColor );
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
 
@@ -5071,7 +5200,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
     current->slotSelect();
     selectedBrush=current;
     color->setColor(dlg->brushColor);
-    current->setBackgroundColor(bgColor);
+    current->setBackgroundColor( bgColor );
 
     connect( color, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetColorButton( const QColor & ) ) );
@@ -5083,83 +5212,83 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
 
 void CellFormatPagePattern::slotNotAnyColor()
 {
-b_notAnyColor=true;
-bgColorButton->setColor(colorGroup().base());
-current->setBackgroundColor(colorGroup().base());
+  b_notAnyColor = true;
+  bgColorButton->setColor( colorGroup().base() );
+  current->setBackgroundColor( colorGroup().base() );
 }
 
 void CellFormatPagePattern::slotSetBackgroundColor( const QColor &_color )
 {
-bgColor =_color;
-current->setBackgroundColor(bgColor);
-bBgColorUndefined=false;
-b_notAnyColor=false;
+  bgColor =_color;
+  current->setBackgroundColor( bgColor );
+  bBgColorUndefined = false;
+  b_notAnyColor = false;
 }
 
 void CellFormatPagePattern::init()
 {
-    if (dlg->brushStyle==Qt::VerPattern)
-        {
-        brush1->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::HorPattern)
-        {
-        brush2->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::Dense1Pattern)
-        {
-        brush3->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::Dense2Pattern)
-        {
-        brush4->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::Dense3Pattern)
-        {
-        brush5->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::Dense4Pattern)
-        {
-        brush6->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::Dense5Pattern)
-        {
-        brush7->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::Dense6Pattern)
-        {
-        brush8->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::Dense7Pattern)
-        {
-        brush9->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::CrossPattern)
-        {
-        brush10->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::BDiagPattern)
-        {
-        brush11->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::FDiagPattern)
-        {
-        brush12->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::VerPattern)
-        {
-        brush13->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::DiagCrossPattern)
-        {
-        brush14->slotSelect();
-        }
-    else if (dlg->brushStyle==Qt::NoBrush)
-        {
-        brush15->slotSelect();
-        }
-    else
-        kdDebug(36001) << "Error in brushStyle" << endl;
+  if (dlg->brushStyle == Qt::VerPattern)
+  {
+    brush1->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::HorPattern)
+  {
+    brush2->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::Dense1Pattern)
+  {
+    brush3->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::Dense2Pattern)
+  {
+    brush4->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::Dense3Pattern)
+  {
+    brush5->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::Dense4Pattern)
+  {
+    brush6->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::Dense5Pattern)
+  {
+    brush7->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::Dense6Pattern)
+  {
+    brush8->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::Dense7Pattern)
+  {
+    brush9->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::CrossPattern)
+  {
+    brush10->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::BDiagPattern)
+  {
+    brush11->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::FDiagPattern)
+  {
+    brush12->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::VerPattern)
+  {
+    brush13->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::DiagCrossPattern)
+  {
+    brush14->slotSelect();
+  }
+  else if (dlg->brushStyle == Qt::NoBrush)
+  {
+    brush15->slotSelect();
+  }
+  else
+    kdDebug(36001) << "Error in brushStyle" << endl;
 }
 
 void CellFormatPagePattern::slotSetColorButton( const QColor &_color )
@@ -5219,12 +5348,14 @@ void CellFormatPagePattern::slotUnselect2( KSpreadBrushSelect *_p )
     if ( brush15 != _p )
         brush15->slotUnselect();
 
-    current->setBrushStyle(selectedBrush->getBrushStyle());
+    current->setBrushStyle( selectedBrush->getBrushStyle() );
 }
 
 void CellFormatPagePattern::apply( KSpreadCustomStyle * style )
 {
-  if ( selectedBrush != 0L )
+  if ( selectedBrush != 0L 
+    && ( dlg->brushStyle != selectedBrush->getBrushStyle() 
+         || dlg->brushColor != selectedBrush->getBrushColor() ) )
     style->changeBackGroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
 
   /*
@@ -5233,7 +5364,8 @@ void CellFormatPagePattern::apply( KSpreadCustomStyle * style )
     style->changeBgColor( QColor() );
   else 
   */
-  if ( !bBgColorUndefined )
+  kdDebug() << "BGColor: " << bgColor.name() << ", old: " << dlg->getStyle()->bgColor().name() << endl;
+  if ( bgColor != dlg->getStyle()->bgColor() )
     style->changeBgColor( bgColor );
 }
 
@@ -5246,21 +5378,24 @@ void CellFormatPagePattern::apply( ColumnFormat *_obj )
     for (c = table->getFirstCellColumn(col); c != NULL;
          c = table->getNextCellDown(c->column(), c->row()))
     {
-      if ( selectedBrush != 0L )
+      if ( selectedBrush != 0L 
+           && ( dlg->brushStyle != selectedBrush->getBrushStyle() 
+                || dlg->brushColor != selectedBrush->getBrushColor() ) )
       {
         c->clearProperty(KSpreadCell::PBackgroundBrush);
         c->clearNoFallBackProperties( KSpreadCell::PBackgroundBrush );
       }
-      if ( !bBgColorUndefined || b_notAnyColor )
+      if ( ( !bBgColorUndefined || b_notAnyColor )
+           && bgColor != dlg->bgColor )
       {
         c->clearProperty(KSpreadCell::PBackgroundColor);
         c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
       }
     }
   }
-  applyFormat(_obj);
+  applyFormat( _obj );
 
-  RowFormat* rw = dlg->getTable()->firstRow();
+  RowFormat * rw = dlg->getTable()->firstRow();
   for ( ; rw; rw = rw->next() )
   {
     if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PBackgroundColor) || rw->hasProperty(KSpreadCell::PBackgroundBrush)))
@@ -5285,12 +5420,15 @@ void CellFormatPagePattern::apply( RowFormat *_obj )
     for (c = table->getFirstCellRow(row); c != NULL;
          c = table->getNextCellRight(c->column(), c->row()))
     {
-      if (selectedBrush != 0L)
+      if ( selectedBrush != 0L
+           && ( dlg->brushStyle != selectedBrush->getBrushStyle() 
+                || dlg->brushColor != selectedBrush->getBrushColor() ) )
       {
         c->clearProperty(KSpreadCell::PBackgroundBrush);
         c->clearNoFallBackProperties( KSpreadCell::PBackgroundBrush );
       }
-      if (!bBgColorUndefined || b_notAnyColor)
+      if ( ( !bBgColorUndefined || b_notAnyColor )
+           && bgColor != dlg->bgColor )
       {
         c->clearProperty(KSpreadCell::PBackgroundColor);
         c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
@@ -5308,11 +5446,19 @@ void CellFormatPagePattern::apply( KSpreadCell *_obj )
 
 void CellFormatPagePattern::applyFormat( KSpreadFormat *_obj )
 {
-  if ( selectedBrush != 0L )
-        _obj->setBackGroundBrush(QBrush( selectedBrush->getBrushColor(),selectedBrush->getBrushStyle()));
+  if ( selectedBrush != 0L 
+       && ( dlg->brushStyle != selectedBrush->getBrushStyle() 
+            || dlg->brushColor != selectedBrush->getBrushColor() ) )
+    _obj->setBackGroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
+
+  if ( bgColor == dlg->bgColor )
+    return;
+  
   if ( b_notAnyColor)
-        _obj->setBgColor( QColor() );
+    _obj->setBgColor( QColor() );
   else if ( !bBgColorUndefined )
-        _obj->setBgColor( bgColor );
+    _obj->setBgColor( bgColor );
 }
+
 #include "kspread_dlg_layout.moc"
+

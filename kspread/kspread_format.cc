@@ -267,6 +267,9 @@ void KSpreadFormat::clearProperty( Properties p )
 
 bool KSpreadFormat::hasProperty( Properties p ) const
 {
+    if ( m_pStyle->hasFeature( (KSpreadStyle::FlagsSet) p ) )
+        return true;
+
     return ( m_mask & (uint)p );
 }
 

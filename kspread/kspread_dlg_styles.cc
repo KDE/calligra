@@ -169,7 +169,35 @@ void KSpreadStyleDlg::slotOk()
 
 void KSpreadStyleDlg::slotUser1()
 {
-  kdDebug() << "SlotUser1" << endl;
+  KSpreadCustomStyle * s = 0;
+
+  KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
+
+  if ( item )
+  {
+    QString name( item->text( 0 ) );
+    if ( name == i18n( "Default" ) )
+      s = m_styleManager->defaultStyle();
+    else
+      s = m_styleManager->style( name );
+  }
+  else
+    s = m_styleManager->defaultStyle();
+
+  KSpreadCustomStyle * style = new KSpreadCustomStyle( i18n( "style%1" ).arg( m_styleManager->count() + 1 ), s );
+  style->setType( KSpreadStyle::TENTATIVE );
+
+  CellFormatDlg dlg( m_view, style, m_styleManager, m_view->doc() );
+
+  if ( style->type() == KSpreadStyle::TENTATIVE )
+  {
+    delete style;
+    return;
+  }
+
+  m_styleManager->m_styles[ style->name() ] = style;
+
+  slotDisplayMode( m_dlg->m_displayBox->currentItem() );
 }
 
 void KSpreadStyleDlg::slotUser2()
@@ -189,8 +217,6 @@ void KSpreadStyleDlg::slotUser2()
 
   if ( !s )
     return;
-
-  kdDebug() << "Showing dialog" << endl;
 
   CellFormatDlg dlg( m_view, s, m_styleManager, m_view->doc() );
 
@@ -212,7 +238,6 @@ void KSpreadStyleDlg::slotUser3()
   else
     s = m_styleManager->style( name );
 
-  kdDebug() << "S: " << s << ", s->type(): " << s->type() << endl;
   if ( !s )
     return;
 

@@ -120,6 +120,10 @@ class GeneralTab : public QWidget
 
   bool apply( KSpreadCustomStyle * style );
 
+ protected slots:
+  void slotNewParent( const QString & parentName );
+  void slotNameChanged();
+
  private:
   CellFormatDlg * m_dlg;
   KComboBox     * m_parentBox;
@@ -127,6 +131,9 @@ class GeneralTab : public QWidget
 
   QString m_name;
   QString m_parent;
+
+  bool checkParent( const QString & parentName );
+  bool checkName();
 };
 
 /**
@@ -550,6 +557,9 @@ public:
     ~CellFormatDlg();
 
     void init();
+    void initGUI();
+    void initMembers();
+
     void initParameters(KSpreadFormat *_obj,int column,int row);
     void checkBorderRight(KSpreadFormat *obj,int x,int y);
     void checkBorderLeft(KSpreadFormat *obj,int x,int y);
@@ -697,7 +707,6 @@ protected:
     KSpreadStyleManager * m_styleManager;
 
     void applyStyle();
-    void initMembers();
 };
 
 #endif

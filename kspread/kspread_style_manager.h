@@ -50,6 +50,7 @@ class KSpreadStyleManager
   void takeStyle( KSpreadCustomStyle * style );
 
   QStringList styleNames() const;
+  int count() const { return m_styles.count(); }
 
  private:
   friend class KSpreadStyleDlg;

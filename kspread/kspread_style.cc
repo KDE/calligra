@@ -37,7 +37,8 @@ KSpreadStyle::KSpreadStyle()
     m_floatColor( KSpreadFormat::AllBlack ),
     m_formatType( KSpreadFormat::Number ),
     m_textFont( KoGlobal::defaultFont() ),
-    m_backGroundBrush( Qt::red,Qt::NoBrush ),
+    m_bgColor( Qt::white ),
+    m_backGroundBrush( Qt::red, Qt::NoBrush ),
     m_rotateAngle( 0 ),
     m_indent( 0.0 ),
     m_precision( -1 ),
@@ -214,8 +215,6 @@ void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
     goUpDiagonal.appendChild( util_createElement( "pen", m_goUpDiagonalPen, doc ) );
     format.appendChild( goUpDiagonal );
   }
-
-  format.setAttribute( "type", m_type );
 }
 
 bool KSpreadStyle::loadXML( QDomElement & format )
@@ -1285,6 +1284,68 @@ void KSpreadCustomStyle::refreshParentName()
     m_parentName = m_parent->name();
 }
 
+bool KSpreadCustomStyle::definesAll() const
+{
+  if ( !( m_featuresSet & (uint) SAlignX ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SAlignY ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SFactor ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SPrefix ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SPostfix ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SLeftBorder ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SRightBorder ) )
+    return false;
+  if ( !( m_featuresSet & (uint) STopBorder ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SBottomBorder ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SFallDiagonal ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SGoUpDiagonal ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SBackgroundBrush ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SFont ) )
+    return false;
+  if ( !( m_featuresSet & (uint) STextPen ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SBackgroundColor ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SFloatFormat ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SFloatColor ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SMultiRow ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SVerticalText ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SPrecision ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SFormatType ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SAngle ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SIndent ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SDontPrintText ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SCustomFormat ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SNotProtected ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SHideAll ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SHideFormula ) )
+    return false;
+  
+  return true;
+}
+
 void KSpreadCustomStyle::changeAlignX( KSpreadFormat::Align alignX )
 {
   m_alignX = alignX;
@@ -1317,6 +1378,7 @@ void KSpreadCustomStyle::changePen( QPen const & pen )
 
 void KSpreadCustomStyle::changeBgColor( QColor const & color )
 {
+  kdDebug() << "Changing bgColor " << endl;
   m_bgColor = color;
   m_featuresSet |= SBackgroundColor;
 }

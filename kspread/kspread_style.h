@@ -36,7 +36,7 @@ class KSpreadCustomStyle;
 class KSpreadStyle
 {
  public:
-  typedef enum E1 { BUILTIN, CUSTOM, AUTO } StyleType;
+  typedef enum E1 { BUILTIN, CUSTOM, AUTO, TENTATIVE } StyleType;
 
   enum Properties
     {
@@ -287,6 +287,7 @@ class KSpreadCustomStyle : public KSpreadStyle
 
   void setName( QString const & name );
   void refreshParentName();
+  bool definesAll() const;
 
   void changeAlignX( KSpreadFormat::Align  alignX );
   void changeAlignY( KSpreadFormat::AlignY alignY );
