@@ -1311,6 +1311,9 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     QString localizedNumber= locale()->formatNumber( value, p );
     int pos = 0;
 
+    // this will avoid displaying negative zero, i.e "-0.0000"
+    if( fabs( value ) < DBL_EPSILON ) value = 0.0;
+
     // round the number, based on desired precision if not scientific is chosen (scientific has relativ precision)
     if( formatType() != Scientific )
     {
