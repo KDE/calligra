@@ -151,7 +151,7 @@ Environment.  Other applications in KOffice include</para>
 <member><application>KPresenter</application> (presentation creator)</member>
 <member><application>KIllustrator</application> (a vector drawing program)</member>
 <member><application>KImageShop</application> (a bitmap image editor)</member>
-<!--<member>Katabase (database)</!--<member> ****Put this back in if it does become a reality**** -->
+<!-- <member>Katabase (database) </member> ****Put this back in if it does become a reality**** -->
 <member><application>KChart</application> (for charts/graphs)</member>
 <member>and <application>KImage</application> (an image viewer).  </member>
 </simplelist>
