@@ -38,6 +38,7 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc ) :
     m_active = true;
     m_isRendered = false;
     m_cells.setAutoDelete( true );
+    frames.setAutoDelete(false);
 }
 
 /*================================================================*/
@@ -62,6 +63,7 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
         m_cells.append( cell );
     }
     m_doc->addFrameSet( this );
+    frames.setAutoDelete(false);
 }
 
 /*================================================================*/
@@ -99,23 +101,6 @@ void KWTableFrameSet::addCell( Cell *cell )
     }
 #endif
     m_cells.insert( i, cell );
-}
-
-/*================================================================*/
-const QList<KWFrame> &KWTableFrameSet::frameIterator() const
-{
-    // Initialise the list of frames, and then return it. TBD: cache this?
-    m_cellFrames.clear();
-    QListIterator<Cell> cells( m_cells );
-    for ( ; cells.current() ; ++cells )
-    {
-        QListIterator<KWFrame> frames = cells.current()->frameIterator();
-        for ( ; frames.current() ; ++frames )
-        {
-            m_cellFrames.append( frames.current() );
-        }
-    }
-    return m_cellFrames;
 }
 
 /*================================================================*/
@@ -509,6 +494,7 @@ void KWTableFrameSet::recalcRows()
             }
         }
     }
+    if( m_pageBoundaries.count() == 1 )  m_pageBoundaries.append(m_cells.count()-1);
 }
 
 /*================================================================*/
@@ -821,6 +807,7 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
         if ( row >= cell->m_row  && row < cell->m_row + cell->m_rows) { // cell is indeed in row
             if(cell->m_rows == 1) { // lets remove it
                 m_cells.remove( i );
+                frames.remove(i);
                 i--;
             } else { // make cell span rowspan less rows
                 cell->m_rows -= rowspan;
@@ -861,6 +848,7 @@ void KWTableFrameSet::deleteCol( unsigned int col )
         if ( col >= cell->m_col  && col < cell->m_col + cell->m_cols) { // cell is indeed in col
             if(cell->m_cols == 1) { // lets remove it
                 m_cells.remove( i );
+                frames.remove( i );
                 i--;
             } else { // make cell span colspan less cols
                 cell->m_cols -= colspan;
@@ -961,6 +949,7 @@ bool KWTableFrameSet::joinCells() {
         for(unsigned int j=rowBegin; j<=rowEnd;j++) {
             Cell *cell = getCell(j,i);
             if(cell && cell!=firstCell) {
+                frames.remove(cell->getFrame(0));
                 m_cells.remove(cell);
             }
         }
@@ -1241,10 +1230,8 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
     for ( ; cells.current() ; ++cells )
     {
         Cell *cell = cells.current();
-        QListIterator<KWFrame> frames = cell->frameIterator();
-        for ( ; frames.current() ; ++frames )
-        {
-            KWFrame *frame = frames.current();
+        for ( unsigned i =0; i < frames.count() ; i++) {
+            KWFrame *frame = frames.at(i);
             QRect frameRect( m_doc->zoomRect(  *frame ) );
             frameRect.rLeft() -= 1;
             frameRect.rTop() -= 1;

@@ -73,6 +73,7 @@ public:
 
         unsigned int m_row, m_col;
         unsigned int m_rows, m_cols;
+        virtual void addFrame(KWFrame *_frame) { getGroupManager()->addFrame(_frame); KWTextFrameSet::addFrame(_frame); }
 
         bool isAboveOrLeftOf( unsigned row, unsigned col );
     private:
@@ -93,9 +94,6 @@ public:
     virtual void drawBorders( QPainter *painter, const QRect &crect, QRegion &region );
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged );
-
-    // Frame management.
-    virtual const QList<KWFrame> &frameIterator() const;
 
     // Frameset management
     Cell *getCell( int i ) { return m_cells.at( i ); }
@@ -207,7 +205,6 @@ protected:
     bool m_isRendered;
     QList<Cell> m_cells;
     QValueList<int> m_pageBoundaries;
-    mutable QList<KWFrame> m_cellFrames;
     void addCell( Cell *cell );
 };
 

@@ -2436,41 +2436,41 @@ void KWDocument::setKSpellConfig(KSpellConfig _kspell)
 
 void KWDocument::printDebug() {
 
-    static const char * typeFrameset[] = { "base", "txt", "pic", "part", "formula", "ERROR" };
+    static const char * typeFrameset[] = { "base", "txt", "pic", "part", "formula", "table","ERROR" };
     static const char * infoFrameset[] = { "body", "first header", "odd headers", "even headers",
                                            "first footer", "odd footers", "even footers", "footnote", "ERROR" };
     static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
     static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
     static const char * runaround[] = { "No Runaround", "Bounding Rect", "Horizontal Space", "ERROR" };
 
-    KWDocument * doc = this; // this code was in another class :)
     kdDebug() << "----------------------------------------"<<endl;
     kdDebug() << "                 Debug info"<<endl;
-    kdDebug() << "Document:" << doc <<endl;
-    kdDebug() << "Type of document: (0=WP, 1=DTP) " << doc->processingType() <<endl;
-    kdDebug() << "size: x:" << doc->ptLeftBorder()<< ", y:"<<doc->ptTopBorder() << ", w:"<< doc->ptPaperWidth() << ", h:"<<doc->ptPaperHeight()<<endl;
-    kdDebug() << "Header visible: " << doc->isHeaderVisible() << endl;
-    kdDebug() << "Footer visible: " << doc->isFooterVisible() << endl;
-    kdDebug() << "Units: " << doc->getUnit() <<endl;
-    kdDebug() << "# Framesets: " << doc->getNumFrameSets() <<endl;
-    for (unsigned int iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
-        KWFrameSet * frameset = doc->getFrameSet(iFrameset);
+    kdDebug() << "Document:" << this <<endl;
+    kdDebug() << "Type of document: (0=WP, 1=DTP) " << processingType() <<endl;
+    kdDebug() << "size: x:" << ptLeftBorder()<< ", y:"<<ptTopBorder() << ", w:"<< ptPaperWidth() << ", h:"<<ptPaperHeight()<<endl;
+    kdDebug() << "Header visible: " << isHeaderVisible() << endl;
+    kdDebug() << "Footer visible: " << isFooterVisible() << endl;
+    kdDebug() << "Units: " << getUnit() <<endl;
+    kdDebug() << "# Framesets: " << getNumFrameSets() <<endl;
+    for (unsigned int iFrameset = 0; iFrameset < getNumFrameSets(); iFrameset++ ) {
+        KWFrameSet * frameset = getFrameSet(iFrameset);
         kdDebug() << "Frameset " << iFrameset << ": '" <<
             frameset->getName() << "' (" << frameset << ")" <<endl;
         kdDebug() << " |  Visible: " << frameset->isVisible() << endl;
         kdDebug() << " |  Type: " << typeFrameset[ frameset->getFrameType() ] << endl;
         kdDebug() << " |  Info: " << infoFrameset[ frameset->getFrameInfo() ] << endl;
-        if(frameset->getGroupManager()) {
-            kdDebug() << " |  Groupmanager: " << frameset->getGroupManager() << endl;
-            KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)frameset;
-            kdDebug() << " |  |- row :" << cell->m_row << endl;
-            kdDebug() << " |  |- col :" << cell->m_col << endl;
-            kdDebug() << " |  |- rows:" << cell->m_rows << endl;
-            kdDebug() << " |  +- cols:" << cell->m_cols << endl;
-        }
+
         QListIterator<KWFrame> frameIt = frameset->frameIterator();
         for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
             KWFrame * frame = frameIt.current();
+            KWFrameSet * fs = frame->getFrameSet();
+            if(fs != frameset) {
+                KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)fs;
+                kdDebug() << " |  |- row :" << cell->m_row << endl;
+                kdDebug() << " |  |- col :" << cell->m_col << endl;
+                kdDebug() << " |  |- rows:" << cell->m_rows << endl;
+                kdDebug() << " |  +- cols:" << cell->m_cols << endl;
+            }
             kdDebug() << " +-- Frame " << j << " of "<< frameset->getNumFrames() << "    (" << frame << ")" << endl;
             kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
             kdDebug() << "     RunAround: "<< runaround[ frame->getRunAround() ] << endl;
@@ -2484,8 +2484,8 @@ void KWDocument::printDebug() {
         }
     }
     /*
-    kdDebug() << "# Images: " << doc->getImageCollection()->iterator().count() <<endl;
-    QDictIterator<KWImage> it( doc->getImageCollection()->iterator() );
+    kdDebug() << "# Images: " << getImageCollection()->iterator().count() <<endl;
+    QDictIterator<KWImage> it( getImageCollection()->iterator() );
     while ( it.current() ) {
         kdDebug() << " + " << it.current()->getFilename() << ": "<<it.current()->refCount() <<endl;
         ++it;
