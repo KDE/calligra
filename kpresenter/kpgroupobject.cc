@@ -130,6 +130,16 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+void KPGroupObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+{
+    KPObject::loadOasis( element, context, animation );
+    updateObjs = false;
+    //todo load group object
+//remove duplicate code
+    updateObjs = true;
+}
+
+
 double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 {
     //FIXME
@@ -262,7 +272,7 @@ void KPGroupObject::updateSizes( double fx, double fy )
         double _x = ( it.current()->getOrig().x() - orig.x() ) * fx + orig.x();
         double _y = ( it.current()->getOrig().y() - orig.y() ) * fy + orig.y();
         it.current()->setOrig( _x, _y );
-        
+
         double _w = it.current()->getSize().width() * fx;
         double _h = it.current()->getSize().height() * fy;
         it.current()->setSize( _w, _h );
@@ -543,17 +553,17 @@ void KPGroupObject::flip( bool horizontal ) {
         it.current()->flip( horizontal );
         double mx = 0;
         double my = 0;
-        if ( horizontal ) 
+        if ( horizontal )
         {
             double disttop = it.current()->getOrig().y() - orig.y();
             double distbottom = ext.height() - disttop - it.current()->getSize().height();
-            my = distbottom - disttop; 
+            my = distbottom - disttop;
         }
-        else 
+        else
         {
             double distleft = it.current()->getOrig().x() - orig.x();
             double distright = ext.width() - distleft - it.current()->getSize().width();
-            mx = distright - distleft; 
+            mx = distright - distleft;
         }
         it.current()->moveBy( mx, my );
     }

@@ -1150,6 +1150,14 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                 kppixmapobject->loadOasis( o, context, animationShow);
                 newpage->appendObject(kppixmapobject);
             }
+            else if ( name == "draw:g" )
+            {
+                fillStyleStack( o, context );
+                KPGroupObject *kpgroupobject = new KPGroupObject();
+                kpgroupobject->loadOasis( o, context, animationShow);
+                newpage->appendObject(kpgroupobject);
+                kdDebug()<<" grouping object*****************\n";
+            }
             else if ( name == "presentation:notes" ) // notes
             {
                 //we must extend note attribute

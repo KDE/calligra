@@ -22,6 +22,7 @@
 #define kpgroupobject_h
 
 class KPresenterDoc;
+class KoOasisContext;
 
 #include "kpobject.h"
 
@@ -66,6 +67,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );
@@ -88,7 +90,7 @@ public:
     virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force=false );
 
     virtual void flip( bool horizontal );
-    
+
 protected:
     void updateSizes( double fx, double fy );
     void updateCoords( double dx, double dy );
