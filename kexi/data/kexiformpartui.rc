@@ -1,11 +1,15 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpart" version="1">
+<kpartgui name="kexiform" version="1">
 
-<MenuBar>
-	<Menu name="widgets">
-		<text>&amp;Create</text>
-		<Action name="formpart_create"/>
-	</Menu>
-</MenuBar>
+<ToolBar name="widgets" fullWidth="false">
+ <text>Widgets</text>
+   <Action name="library_widget_Button Group"/>
+   <Action name="library_widget_Tab Widget"/>
+   <Action name="library_widget_Line Edit"/>
+   <Action name="library_widget_Text Label"/>
+   <Action name="library_widget_Spacer"/>
+ <ActionList name="library_widgets" />
+</ToolBar>
 
 </kpartgui>
+
