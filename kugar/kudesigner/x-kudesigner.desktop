@@ -1,0 +1,12 @@
+# KDE Config File
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/x-kudesigner
+Comment=Kugar Report Template
+Icon=kugardata
+Type=MimeType
+Patterns=*.kut;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kut
