@@ -51,6 +51,10 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		virtual bool	rename(const QString &name);
 
 		QString		name() const { return m_name; }
+		QString		className() const { return m_className; }
+		void		debug(int ident);
+
+		virtual void	addChild(ObjectTreeItem *it);
 
 	private:
 		QString		m_className;
@@ -65,6 +69,9 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		ObjectTree(const QString &className=QString::null, const QString &name=QString::null);
 		virtual ~ObjectTree();
 
+		/**
+		 * renames a item and returns false if name is doublicated
+		 */
 		virtual bool	rename(const QString &name);
 
 		ObjectTreeItem	*lookup(const QString &name);
@@ -73,7 +80,11 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		void		addChild(ObjectTreeItem *parent, ObjectTreeItem *c);
 		void		addChild(ObjectTreeItem *c);
 
+		void		removeChild(const QString &);
+
 		QString		genName(const QString &base);
+
+		void		debug();
 
 	private:
 		TreeDict	m_treeDict;

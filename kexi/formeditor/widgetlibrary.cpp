@@ -111,6 +111,7 @@ WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, cons
 	for(; it.current(); ++it)
 	{
 		LibActionWidget *a = new LibActionWidget(*it, parent);
+		kdDebug() << "WidgetLibrary::createActions(): action " << a << " added" << endl;
 		connect(a, SIGNAL(prepareInsert(const QString &)), receiver, slot);
 		actions.append(a);
 	}

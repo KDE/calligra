@@ -35,7 +35,7 @@ Form::Form(QObject *parent, const char *name, WidgetLibrary *lib)
 		m_widgetLib = lib;
 
 	m_toplevel = 0;
-	m_topTree = 0;
+	m_topTree = new ObjectTree("QWidget", "main");
 }
 
 void
@@ -44,6 +44,8 @@ Form::createToplevel(QWidget *container)
 	kdDebug() << "Form::createToplevel()" << endl;
 
 	m_toplevel = new Container(0, container, this, "form1");
+	m_toplevel->setObjectTree(m_topTree);
+	m_toplevel->setForm(this);
 
 	connect(m_widgetLib, SIGNAL(prepareInsert(const QString&)), this,
 	 SLOT(insertWidget(const QString&)));

@@ -1,20 +1,30 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kformdesigner" version="0.1">
+<kpartgui name="kformdesigner" version="3">
 
 <MenuBar>
   <Menu name="widgets">
    <text>&amp;Widgets</text>
    <Merge/>
    <Separator/>
-   <Action name="library_widget0"/>
-   <Action name="library_widget1"/>
+   <Action name="library_widget_Button Group"/>
+   <Action name="library_widget_Tab Widget"/>
+   <Separator/>
+   <Action name="library_widget_Line Edit"/>
+   <Action name="library_widget_Text Label"/>
+  </Menu>
+  <Menu name="Debug">
+   <text>&amp;Debug</text>
+   <Action name="dtree"/>
   </Menu>
 </MenuBar>
 
+
 <ToolBar name="widgets" fullWidth="false">
  <text>Widgets</text>
- <Action name="library_widget0"/>
- <Action name="library_widget1"/>
+   <Action name="library_widget_Button Group"/>
+   <Action name="library_widget_Tab Widget"/>
+   <Action name="library_widget_Line Edit"/>
+   <Action name="library_widget_Text Label"/>
  <ActionList name="library_widgets" />
 </ToolBar>
 

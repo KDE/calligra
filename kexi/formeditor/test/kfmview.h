@@ -9,6 +9,12 @@
  *
  * Lucijan Busch
  **/
+
+namespace KFormDesigner
+{
+	class Form;
+}
+
 class KFMView : public KMainWindow
 {
 	Q_OBJECT
@@ -18,7 +24,11 @@ class KFMView : public KMainWindow
 		~KFMView();
 
 	public slots:
+		void	debugTree();
+
+	public slots:
 		void	slotWidget();
+		KFormDesigner::Form *m_form;
 };
 
 #endif

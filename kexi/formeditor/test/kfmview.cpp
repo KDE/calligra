@@ -15,6 +15,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "objecttree.h"
 #include "widgetlibrary.h"
 #include "container.h"
 #include "form.h"
@@ -26,8 +27,6 @@ KFMView::KFMView()
 {
 	KFormDesigner::WidgetLibrary *l = new KFormDesigner::WidgetLibrary();
 //	l->createActions(actionCollection());
-	createGUI("kfmui.rc", true);
-	setXMLFile("kfmui.rc", true);
 //	plugActionList("library_widgets", l->createActions(actionCollection()));
 
 
@@ -39,23 +38,40 @@ KFMView::KFMView()
 	setCentralWidget(w);
 	w->show();
 
-	KFormDesigner::Form *form = new KFormDesigner::Form(this, "", l);
+	m_form = new KFormDesigner::Form(this, "", l);
 	QWidget *formV = new QWidget(w, "form1");
-	form->createToplevel(formV);
+	m_form->createToplevel(formV);
 	formV->setCaption("Form1");
 	formV->show();
 	formV->resize(350, 300);
 
 	QTabWidget *tab = new QTabWidget(formV, "tabwidget1");
+	KFormDesigner::ObjectTree *ttab = new KFormDesigner::ObjectTree(tab->className(), tab->name());
+	m_form->objectTree()->addChild(ttab);
+
 	QWidget *tabcontainer = new QWidget(tab, "tabc1");
-	new KFormDesigner::Container(form->toplevelContainer(), tabcontainer);
+	KFormDesigner::Container *pc1 = new KFormDesigner::Container(m_form->toplevelContainer(), tabcontainer);
+	KFormDesigner::ObjectTree *tt1 = new KFormDesigner::ObjectTree(tabcontainer->className(), tabcontainer->name());
+	pc1->setObjectTree(tt1);
+	m_form->objectTree()->addChild(ttab, tt1);
 	tab->addTab(tabcontainer, "Page 1");
 	tab->show();
-	form->toplevelContainer()->addWidget(tab, QRect(20, 20, 130, 140));
+	m_form->toplevelContainer()->addWidget(tab, QRect(20, 20, 130, 140));
 	QWidget *tabcontainer2 = new QWidget(tab, "tabc");
-	new KFormDesigner::Container(form->toplevelContainer(), tabcontainer2);
+	KFormDesigner::Container *pc2 = new KFormDesigner::Container(m_form->toplevelContainer(), tabcontainer2);
+	KFormDesigner::ObjectTree *tt2 = new KFormDesigner::ObjectTree(tabcontainer2->className(), tabcontainer2->name());
+	pc2->setObjectTree(tt2);
+	m_form->objectTree()->addChild(ttab, tt2);
 	tab->addTab(tabcontainer2, "Page 2");
 
+	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), this, SLOT(debugTree()), actionCollection(), "dtree");
+
+	m_form->createActions(actionCollection());
+	createGUI("kfmui.rc", true);
+	setXMLFile("kfmui.rc", true);
+
+	
+//	l->createActions(actionCollection(), toolBar("widgets"));
 //	new KFormDesigner::ContainerFactory(0, form);
 
 }
@@ -64,6 +80,12 @@ void
 KFMView::slotWidget()
 {
 	kdDebug() << "KFMView::slotWidget()" << endl;
+}
+
+void
+KFMView::debugTree()
+{
+	m_form->objectTree()->debug();
 }
 
 KFMView::~KFMView()

@@ -36,7 +36,8 @@ namespace KFormDesigner {
 class Container;
 //class ResizeHandleSet;
 class WidgetLibrary;
-class ObjectTree;
+class ObjectTreeItem;
+class Form;
 
 /**
  * this class makes a container out
@@ -54,7 +55,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 * (e.g. inserting widgets, painting the grid, ...)
 		 */
 
-		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0);
+		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0, bool attach=false);
 		~Container();
 
 		/**
@@ -78,11 +79,19 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 * sets the object tree
 		 * NOTE: this is needed if we are toplevel
 		 */
-		void		setObjectTree(ObjectTree *t) { m_tree = t; }
+		void		setObjectTree(ObjectTreeItem *t) { m_tree = t; }
 
-		ObjectTree	*tree();
+		/**
+		 * @returns the treenode assosiated with current container
+		 */
+		ObjectTreeItem	*tree();
 
 		void		emitPrepareInsert(WidgetLibrary *, const QString &);
+
+		/**
+		 * registers a sub-container and adds it to the widget tree
+		 */
+		void		registerChild(Container *t);
 
 	signals:
 		/**
@@ -118,12 +127,28 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 */
 		void		stopInsert();
 
+		/**
+		 * @returns the watched widget
+		 */
+		QWidget		*widget() { return m_container; }
+
+		void		setForm(Form *form) { m_form = form; }
+
+		/**
+		 * @returns the form this container belongs to
+		 */
+		Form		*form();
+
+	public slots:
+		void		deleteItem();
+
 	protected slots:
 		/**
 		 * this slot uselets widgets
 		 */
 		void		slotSelectionChanged(QWidget *selected);
 
+		void		widgetDeleted();
 
 	signals:
 		void		prepareInsert(WidgetLibrary *, const QString &);
@@ -161,7 +186,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QRect		m_insertRect;
 		WidgetLibrary	*m_lib;
 		QString		m_insertClass;
-		ObjectTree	*m_tree;
+		ObjectTreeItem	*m_tree;
+
+		Form		*m_form;
 };
 
 }

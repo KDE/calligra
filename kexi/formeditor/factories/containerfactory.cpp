@@ -55,15 +55,14 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	{
 		QButtonGroup *w = new QButtonGroup("btn", p, n);
 		kdDebug() << "ContainerFactory::create(): container=" << container << endl;
-		if(container)
-			new KFormDesigner::Container(container->toplevel(), w);
+		new KFormDesigner::Container(container->toplevel(), w, container);
 		return w;
 	}
 	else if(c == "QTabWidget")
 	{
 		QTabWidget *tab = new QTabWidget(p, n);
 		QWidget *p1 = new QWidget(tab);
-		new KFormDesigner::Container(container->toplevel(), p1);
+		/*KFormDesigner::Container *c =*/ new KFormDesigner::Container(container->toplevel(), p1, container, "", true);
 		tab->addTab(p1, "Page 1");
 
 		return tab;

@@ -20,17 +20,21 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qcursor.h>
+#include <qpopupmenu.h>
+//#include <qcurosor.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "container.h"
 //#include "resizehandle.h"
 #include "widgetlibrary.h"
 #include "objecttree.h"
+#include "form.h"
 
 namespace KFormDesigner {
 
-Container::Container(Container *toplevel, QWidget *container, QObject *parent, const char *name)
+Container::Container(Container *toplevel, QWidget *container, QObject *parent, const char *name, bool attach)
 :QObject(parent, name)
 {
 	m_container = container;
@@ -43,6 +47,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	m_lib = 0;
 	m_selected = 0;
 	m_tree = 0;
+	m_form = 0;
 	m_toplevel = toplevel;
 
 	container->installEventFilter(this);
@@ -55,6 +60,24 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 		connect(toplevel, SIGNAL(prepareInsert(WidgetLibrary *, const QString &)), this,
 		 SLOT(slotPrepareInsert(WidgetLibrary *, const QString &)));
+
+		Container *pc = static_cast<Container *>(parent);
+
+		if(attach)
+		{
+			if(!pc)
+			{
+				toplevel->registerChild(this);
+			}
+			else
+			{
+				ObjectTreeItem *it = new ObjectTreeItem(widget()->className(), widget()->name());
+				setObjectTree(it);
+				form()->objectTree()->addChild(pc->tree(), it);
+			}
+		}
+
+		connect(container, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
 	}
 }
 
@@ -98,17 +121,15 @@ Container::eventFilter(QObject *s, QEvent *e)
 		}
 		case QEvent::MouseButtonRelease:
 		{
+			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
 			if(m_prepare)
 			{
 				if(!m_lib)
 					return true;
 
-				const char *name = "";
-				if(tree())
-					name = tree()->genName(m_insertClass).latin1();
-				else
-					name = m_insertClass.latin1();
-				QWidget *w = m_lib->createWidget(m_insertClass, m_container, name, this);
+//				const char *name = form()->objectTree()->genName(m_insertClass).latin1();
+				QString name = form()->objectTree()->genName(m_insertClass);
+				QWidget *w = m_lib->createWidget(m_insertClass, m_container, name.latin1(), this);
 
 				if(m_toplevel)
 					m_toplevel->stopInsert();
@@ -119,8 +140,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return true;
 
 				addWidget(w, m_insertRect);
-				if(tree())
-					tree()->addChild(new ObjectTreeItem(m_insertClass, name));
+//				if(tree())
+				form()->objectTree()->addChild(tree(), new ObjectTreeItem(m_insertClass, name));
+				kdDebug() << "Container::eventFilter(): widget added " << this << endl;
+			}
+			else if(mev->button() == RightButton)
+			{
+				kdDebug() << "Container::eventFilter(): context menu" << endl;
+				QPopupMenu p;
+				p.insertItem(i18n("Remove Item"), this, SLOT(deleteItem()));
+				p.exec(QCursor::pos());
 			}
 			return true; // eat
 		}
@@ -175,6 +204,15 @@ Container::addWidget(QWidget *w, QRect r)
 	w->show();
 }
 
+Form *
+Container::form()
+{
+	if(m_toplevel)
+		return m_toplevel->form();
+
+	return m_form;
+}
+
 void
 Container::updateBackground()
 {
@@ -221,6 +259,15 @@ Container::setSelectionChanged(QWidget *w)
 void
 Container::setEditingMode(bool)
 {
+}
+
+void
+Container::registerChild(Container *t)
+{
+	ObjectTreeItem *it = new ObjectTreeItem(t->widget()->className(), t->widget()->name());
+	t->setObjectTree(it);
+
+	form()->objectTree()->addChild(it);
 }
 
 void
@@ -282,13 +329,31 @@ Container::toplevel()
 		return this;
 }
 
-ObjectTree*
+ObjectTreeItem*
 Container::tree()
 {
-	if(m_toplevel)
-		return m_toplevel->tree();
-
 	return m_tree;
+}
+
+void
+Container::deleteItem()
+{
+	//take it out of da tree
+	if(m_selected)
+	{
+		form()->objectTree()->removeChild(m_selected->name());
+		delete m_selected;
+		delete m_resizeHandles;
+
+		m_selected = 0;
+		m_resizeHandles = 0;
+	}
+}
+
+void
+Container::widgetDeleted()
+{
+	delete this;
 }
 
 Container::~Container()

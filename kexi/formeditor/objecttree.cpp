@@ -16,6 +16,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include <iostream>
+#include <kdebug.h>
 
 #include "objecttree.h"
 
@@ -30,7 +32,7 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name)
 }
 
 bool
-ObjectTreeItem::rename(const QString &name)
+ObjectTreeItem::rename(const QString &/*name*/)
 {
 	//do something useful (e.g. update the list etc)
 	return true;
@@ -40,6 +42,25 @@ ObjectTreeItem::~ObjectTreeItem()
 {
 	// delete all children...
 	// take me out of the dict... :)
+}
+
+void
+ObjectTreeItem::addChild(ObjectTreeItem *c)
+{
+	m_children.append(c);
+}
+
+void
+ObjectTreeItem::debug(int ident)
+{
+	for(ObjectTreeItem *it = m_children.first(); it; it = m_children.next())
+	{
+		for(int i=0; i < ident; i++)
+			std::cerr << " ";
+
+		qDebug("%s (%s)", it->className().latin1(), it->name().latin1());
+		it->debug(ident + 4);
+	}
 }
 
 /* object tree */
@@ -66,29 +87,50 @@ void
 ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
 {
 	m_treeDict.insert(c->name(), c);
-	parent->children().append(c);
+	if(!parent)
+	{
+		kdDebug() << "*************************************************" << endl;
+		kdDebug() << "* ObjectTree::addChild(): no parent!            *" << endl;
+		kdDebug() << "*************************************************" << endl;
+	}
+	else
+	{
+		parent->addChild(c);
+	}
+	kdDebug() << "ObjectTree::addChild(): adding " << c->name() << " to " << parent->name() << endl;
 }
 
 void
 ObjectTree::addChild(ObjectTreeItem *c)
 {
 	m_treeDict.insert(c->name(), c);
-	children().append(c);
+	ObjectTreeItem::addChild(c);
+	kdDebug() << "ObjectTree::addChild(): count is now: " << children().count() << endl;
+}
+
+void
+ObjectTree::removeChild(const QString &name)
+{
+	ObjectTreeItem *c = lookup(name);
+	m_treeDict.remove(name);
+	delete c;
 }
 
 QString
 ObjectTree::genName(const QString &c)
 {
-	int appendix = m_names[c];
-	QString name = c + QString::number(appendix);
-	while(m_treeDict[name])
-	{
-		appendix++;
-		name = c + QString::number(appendix);
-	}
-
-	m_names.insert(c, appendix);
+	int appendix = m_names[c] + 1;
+	QString name(c);
+	name.append(QString::number(appendix));
+	m_names[c] = appendix;
 	return name;
+}
+
+void
+ObjectTree::debug()
+{
+	kdDebug() << "ObjectTree::debug(): tree dumb" << endl;
+	ObjectTreeItem::debug(0);
 }
 
 ObjectTree::~ObjectTree()
