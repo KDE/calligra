@@ -18,65 +18,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qevent.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qwidget.h>
 
 #include <klocale.h>
 #include <knuminput.h>
-#include "vellipsedlg.h"
 #include <koUnit.h>
+
 #include "karbon_part.h"
+#include "vellipsedlg.h"
 
 VEllipseDlg::VEllipseDlg( KarbonPart*part, QWidget* parent, const char* name )
-	: KDialog( parent, name, true, Qt::WStyle_Customize |
-	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title ),
-          m_part(part)
+	: KDialogBase( parent, name, true, i18n( "Insert Ellipse" ), Ok | Cancel ), m_part( part )
 {
-	setCaption( i18n( "Insert Ellipse" ) );
-
-	QBoxLayout* outerbox = new QHBoxLayout( this );
-
 	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this
- );
- 	outerbox->addWidget( group );
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Ellipse Properties" ), this );
 
 	// add width/height-input:
-	m_widthLabel =new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), group );
+	m_widthLabel = new QLabel( i18n( "Width(%1):" ).arg( m_part->getUnitName() ), group );
 	m_width = new KDoubleNumInput( 0, group );
-	m_heightLabel =new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), group );
+	m_heightLabel = new QLabel( i18n( "Height(%1):" ).arg( m_part->getUnitName() ), group );
 	m_height = new KDoubleNumInput( 0, group );
-
-	outerbox->addSpacing( 2 );
-
-	// add buttons on the right side:
-	QBoxLayout* innerbox = new QVBoxLayout( outerbox );
-
-	innerbox->addStretch();
-
-	QPushButton* okbutton = new QPushButton( i18n( "&Ok" ), this );
-	QPushButton* cancelbutton = new QPushButton( i18n( "&Cancel" ), this );
-
-	okbutton->setMaximumSize( okbutton->sizeHint() );
-	cancelbutton->setMaximumSize( cancelbutton->sizeHint() );
-
-	okbutton->setFocus();
-
-	innerbox->addWidget( okbutton );
-	innerbox->addSpacing( 2 );
-	innerbox->addWidget( cancelbutton );
+	group->setMinimumWidth( 300 );
 
 	// signals and slots:
-	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
-        resize( 300, 80);
+	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
+	
+	setMainWidget( group );
+	setFixedSize( baseSize() );
 }
 
 double

@@ -21,30 +21,30 @@
 #ifndef __VELLIPSEDLG_H__
 #define __VELLIPSEDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
 class KarbonPart;
 class QLabel;
 
-class VEllipseDlg : public KDialog
+class VEllipseDlg : public KDialogBase
 {
 	Q_OBJECT
 
 public:
-	VEllipseDlg( KarbonPart*part,QWidget* parent = 0L, const char* name = 0L );
+	VEllipseDlg( KarbonPart* part,QWidget* parent = 0L, const char* name = 0L );
 
 	double width() const;
 	double height() const;
 	void setWidth( double value );
 	void setHeight( double value );
-    void refreshUnit ();
+	void refreshUnit ();
 private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
-    KarbonPart*m_part;
-    QLabel *m_heightLabel;
-    QLabel *m_widthLabel;
+	KarbonPart* m_part;
+	QLabel* m_heightLabel;
+	QLabel* m_widthLabel;
 };
 
 #endif
