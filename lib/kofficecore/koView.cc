@@ -71,7 +71,6 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
   connect( d->m_doc, SIGNAL( childChanged( KoDocumentChild * ) ),
 	   this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
 
-  setupGlobalActions();
   QValueList<KAction*> docActions = document->actionCollection()->actions();
   QValueList<KAction*>::ConstIterator it = docActions.begin();
   QValueList<KAction*>::ConstIterator end = docActions.end();
@@ -81,7 +80,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 
 KoView::~KoView()
 {
-  //kdDebug(30003) << "KoView::~KoView " << this << endl;
+  kdDebug(30003) << "KoView::~KoView " << this << endl;
   if ( d->m_manager && !koDocument()->singleViewMode() )
     d->m_manager->removePart( koDocument() );
 
@@ -411,29 +410,6 @@ void KoView::slotChildChanged( KoDocumentChild *child )
 {
   QRegion region( child->oldPointArray( matrix() ) );
   emit regionInvalidated( child->frameRegion( matrix(), true ).unite( region ), true );
-}
-
-void KoView::setupGlobalActions() {
-    actionNewView = new KAction( i18n( "&New View" ), 0,
-        this, SLOT( newView() ),
-        actionCollection(), "view_newview" );
-    actionCloseAllViews = new KAction( i18n( "&Close All Views" ), 0,
-        this, SLOT( closeAllViews() ),
-        actionCollection(), "view_closeallviews" );
-}
-
-void KoView::closeAllViews() {
-// TODO
-  kdDebug(30003) << "KoView::closeAllViews not implemented yet" <<  endl;
-}
-
-void KoView::newView() {
-    assert( ( d!=0L && d->m_doc != 0L ) );
- 
-    KoDocument *thisDocument = d->m_doc;
-    KoMainWindow *shell = thisDocument->createShell();
-    shell->setRootDocument(thisDocument); 
-    shell->show();
 }
 
 

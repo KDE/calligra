@@ -184,6 +184,11 @@ public slots:
     virtual void slotSplitView();
     virtual void slotRemoveView();
     virtual void slotSetOrientation();
+    /**
+     * Added these as well. (TZ)
+     */
+    virtual void slotNewView();
+    virtual void slotCloseAllViews();
 
 protected:
 
@@ -223,7 +228,7 @@ protected:
      */
     virtual bool saveDocument( bool _saveas = FALSE );
 
-    virtual bool queryClose();
+    virtual bool queryClose(bool forQuit=FALSE);
 
     KRecentFilesAction *m_recent;
 

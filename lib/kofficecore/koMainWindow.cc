@@ -142,14 +142,23 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     // set up the action list for the splitter stuff
     d->m_splitViewActionList=new QList<KAction>;
-    d->m_splitViewActionList->append(new KAction(i18n("Split View"), 0, this, SLOT(slotSplitView()),
-						actionCollection(), "view_split"));
-    d->m_removeView=new KAction(i18n("Remove View"), 0, this, SLOT(slotRemoveView()),
-				actionCollection(), "view_rm_splitter");
+    d->m_splitViewActionList->append(new KAction(i18n("New View"), 0, 
+        this, SLOT(slotNewView()),
+        actionCollection(), "view_newview"));
+    d->m_splitViewActionList->append(new KAction(i18n("Close All Views"), 0, 
+        this, SLOT(slotCloseAllViews()),
+        actionCollection(), "view_closeallviews"));
+    d->m_splitViewActionList->append(new KAction(i18n("Split View"), 0, 
+        this, SLOT(slotSplitView()),
+        actionCollection(), "view_split"));
+    d->m_removeView=new KAction(i18n("Remove View"), 0, 
+        this, SLOT(slotRemoveView()),
+        actionCollection(), "view_rm_splitter");
     d->m_splitViewActionList->append(d->m_removeView);
     d->m_removeView->setEnabled(false);
-    d->m_orientation=new KSelectAction(i18n("Splitter Orientation"), 0, this, SLOT(slotSetOrientation()),
-				       actionCollection(), "view_splitter_orientation");
+    d->m_orientation=new KSelectAction(i18n("Splitter Orientation"), 0, 
+        this, SLOT(slotSetOrientation()),
+        actionCollection(), "view_splitter_orientation");
     QStringList items;
     items << i18n("Vertical")
 	  << i18n("Horizontal");
@@ -418,13 +427,14 @@ bool KoMainWindow::saveDocument( bool saveas )
       return pDoc->save();
 }
 
-bool KoMainWindow::queryClose()
+bool KoMainWindow::queryClose(bool forQuit)
 {
   if ( rootDocument() == 0 )
     return true;
   kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount() << endl;
-  if ( rootDocument()->viewCount() > 1 )
-    return true; // no, so no problem for closing
+  if ( !forQuit && rootDocument()->viewCount() > 1 )
+        // there are more open, and we are closing just one, so no problem for closing
+    return true; 
 
   // see DTOR for a descr. for the 2nd test
   if ( rootDocument()->isModified() &&
@@ -609,6 +619,23 @@ void KoMainWindow::slotSplitView() {
     d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->current() );
     d->m_removeView->setEnabled(true);
 }
+
+void KoMainWindow::slotNewView() {
+    kdDebug(30003) << "KoMainWindow::slotNewView() called" << endl;
+    KoMainWindow *shell = d->m_rootDoc->createShell();
+    shell->setRootDocument(d->m_rootDoc);
+    shell->show();
+}
+
+void KoMainWindow::slotCloseAllViews() {
+    kdDebug(30003) << "KoMainWindow::slotCloseAllViews() called" << endl;
+    
+    if(queryClose(true)){
+    kdDebug(30003) << "KoMainWindow::slotCloseAllViews doing a delete on the doc" << endl;
+       delete d->m_rootDoc;
+    } 
+}
+
 
 void KoMainWindow::slotRemoveView() {
 
