@@ -28,6 +28,7 @@
 #include <qmetaobject.h>
 #include <qregexp.h>
 #include <qvaluevector.h>
+#include <qvbox.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -42,6 +43,8 @@
 #include <kactionclasses.h>
 #include <kapplication.h>
 #include <kglobal.h>
+#include <kdialogbase.h>
+#include <ktextedit.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
@@ -70,6 +73,9 @@ using namespace KFormDesigner;
 FormManager::FormManager(QObject *parent,
 	const QStringList& supportedFactoryGroups, const char *name)
    : QObject(parent, name)
+#ifdef KEXI_SHOW_DEBUG_ACTIONS
+   , m_uiCodeDialog(0)
+#endif
 {
 	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
 	m_buffer = new ObjectPropertyBuffer(this, this, "buffer");
@@ -108,6 +114,9 @@ FormManager::~FormManager()
 {
 	delete m_popup;
 	delete m_connection;
+#ifdef KEXI_SHOW_DEBUG_ACTIONS
+	delete m_uiCodeDialog;
+#endif
 }
 
 void
@@ -1119,6 +1128,33 @@ void
 FormManager::deleteWidgetLaterTimeout()
 {
 	m_deleteWidgetLater_list.clear();
+}
+
+void 
+FormManager::showFormUICode()
+{
+#ifdef KEXI_SHOW_DEBUG_ACTIONS
+	if(!activeForm() || !activeForm()->objectTree())
+		return;
+
+	QString uiCode;
+	KFormDesigner::FormIO::saveFormToString(activeForm(), uiCode, 3);
+
+	if (!m_uiCodeDialog) {
+		m_uiCodeDialog = new KDialogBase(0, "uiwindow", true, i18n("Form's UI Code"),
+				KDialogBase::Close,	KDialogBase::Close);
+		m_uiCodeDialog->resize(700, 400);
+		QVBox *box = m_uiCodeDialog->makeVBoxMainWidget();
+		m_uiCodeDialogEditor = new KTextEdit(QString::null, QString::null, box);
+		m_uiCodeDialogEditor->setReadOnly(true);
+		QFont f( m_uiCodeDialogEditor->font() );
+		f.setFamily("courier");
+		m_uiCodeDialogEditor->setFont(f);
+		m_uiCodeDialogEditor->setTextFormat(Qt::PlainText);
+	}
+	m_uiCodeDialogEditor->setText( uiCode );
+	m_uiCodeDialog->show();
+#endif
 }
 
 #include "formmanager.moc"

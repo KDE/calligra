@@ -70,19 +70,24 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		FormIO(QObject *parent, const char *name);
 		~FormIO(){;}
 
-		/*! \return 0 if saving failed, 1 otherwise\n
+		/*! \return 0 if saving failed, 1 otherwise
 		    Save the Form in the \a domDoc QDomDocument. Called by saveForm().
 		    \sa saveForm()
 		 */
 		static int saveFormToDom(Form *form, QDomDocument &domDoc);
 
-		/*! \return 0 if saving failed, 1 otherwise\n
+		/*! \return 0 if saving failed, 1 otherwise
 		    Save the Form \a form to the file \a filename. If \a filename is null or not given,
 		    a Save File dialog will be shown to choose dest file.
 		    \todo Add errors code and error dialog
 		*/
 		static int saveFormToFile(Form *form, const QString &filename=QString::null);
-		static int saveFormToString(Form *form, QString &dest);
+
+		/*! \return 0 if saving failed, 1 otherwise
+		    Save the Form to the \a dest string. \a indent can be specified to apply indentation.
+		    \sa saveForm()
+		 */
+		static int saveFormToString(Form *form, QString &dest, int indent = 0);
 
 		/*! \return 0 if saving failed, 1 otherwise\n
 		 *  Saves the \a form inside the \a dest QByteArray.

@@ -33,6 +33,8 @@ class KexiPropertyBuffer;
 class KActionCollection;
 class KAction;
 class KToggleAction;
+class KDialogBase;
+class KTextEdit;
 class KXMLGUIClient;
 class KMainWindow;
 
@@ -68,64 +70,84 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		virtual ~FormManager();
 
-		/*! Creates all the KAction related to widget insertion, and plug them into the KActionCollection \a parent.
+		/*! Creates all the KAction related to widget insertion, and plug them 
+		  into the KActionCollection \a parent.
 		  These actions are automatically connected to \ref insertWidget() slot.
 		  \return a QPtrList of the created actions.
 		 */
 		ActionList createActions(KActionCollection *parent);
-		bool              isPasteEnabled();
+
+		bool isPasteEnabled();
 
 		//! \return A pointer to the WidgetLibrary owned by this Manager.
-		WidgetLibrary*    lib() const { return m_lib; }
+		WidgetLibrary* lib() const { return m_lib; }
+
 		//! \return A pointer to the ObjectPropertyBuffer owned by this Manager.
-		ObjectPropertyBuffer*  buffer() const { return m_buffer; }
-		/*! \return true if one of the insert buttons was pressed and the forms are ready to create a widget. */
-		bool              isInserting() const { return m_inserting; }
-		/*! \return The name of the class being inserted, corresponding to the menu item or the toolbar button clicked.
-		 */
-		QCString           insertClass() const { return m_insertClass; }
+		ObjectPropertyBuffer* buffer() const { return m_buffer; }
+
+		/*! \return true if one of the insert buttons was pressed and the forms 
+		 are ready to create a widget. */
+		bool isInserting() const { return m_inserting; }
+
+		/*! \return The name of the class being inserted, corresponding 
+		 to the menu item or the toolbar button clicked. */
+		QCString insertClass() const { return m_insertClass; }
 
 		/*! Sets the point where the pasted widget should be moved to. */
-		void              setInsertPoint(const QPoint &p);
+		void setInsertPoint(const QPoint &p);
 
 		//! \return If we are creating a Connection by drag-and-drop or not.
-		bool              isCreatingConnection() { return m_drawingSlot; }
+		bool isCreatingConnection() { return m_drawingSlot; }
+
 		//! \return the \ref Connection being created.
-		Connection*       createdConnection() { return m_connection; }
+		Connection* createdConnection() { return m_connection; }
+
 		/*! Resets the Connection being created. We stay in Connection creation mode,
 		  but we start a new connection (when the user clicks
 		 outside of signals/slots menu). */
-		void              resetCreatedConnection();
+		void resetCreatedConnection();
+
 		//! Creates and display a menu with all the signals of widget \a w.
-		void              createSignalMenu(QWidget *w);
+		void createSignalMenu(QWidget *w);
+
 		//! Creates and display a menu with all the slots of widget \a w.
-		void              createSlotMenu(QWidget *w);
+		void createSlotMenu(QWidget *w);
+
 		//! Emits the signal \ref createFormSlot(). Used by \ref ObjectPropertyBuffer.
-		void  emitCreateSlot(const QString &widget, const QString &value) { emit createFormSlot(m_active, widget, value); }
+		void  emitCreateSlot(const QString &widget, const QString &value) 
+			{ emit createFormSlot(m_active, widget, value); }
 
 		/*! \return The Form actually active and focused.
 		 */
-		Form*             activeForm() const;
-		//! \return the Form whose toplevel widget is \a w, or 0 if there is not or the Form is in preview mode.
-		Form*             formForWidget(QWidget *w);
-		/*! \return true if \a w is a toplevel widget, ie it is the main widget of a Form (so it should have a caption ,
-		 an icon ...)
-		*/
-		bool              isTopLevel(QWidget *w);
+		Form* activeForm() const;
+
+		/*! \return the Form whose toplevel widget is \a w, or 0 
+		 if there is not or the Form is in preview mode. */
+		Form* formForWidget(QWidget *w);
+
+		/*! \return true if \a w is a toplevel widget, 
+		 ie. it is the main widget of a Form (so it should have a caption ,
+		 an icon ...) */
+		bool isTopLevel(QWidget *w);
 
 		//! \return A pointer to the KexiPropertyEditor we use.
 		KexiPropertyEditor* propertyEditor() const { return m_editor; }
+
 		/*! Shows a propertybuffer in PropertyBuffer */
 		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
-		/*! Sets the external editors used by FormDesigner (as they may be docked). This function also connects
-		  appropriate signals and slots to ensure sync with the current Form.
+
+		/*! Sets the external editors used by FormDesigner (as they may be docked). 
+		 This function also connects appropriate signals and slots to ensure 
+		 sync with the current Form.
 		 */
 		void setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview);
 
 		/*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
 		void previewForm(Form *form, QWidget *w, Form *toForm=0);
+
 		/*! Adds a existing form w and changes it to a container */
 		void importForm(Form *form=0, bool preview=false);
+
 		/*! Deletes the Form \a form and removes it from our list. */
 		void deleteForm(Form *form);
 
@@ -140,17 +162,22 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	public slots:
 		/*! Deletes the selected widget in active Form and all of its children. */
 		void deleteWidget();
+
 		/*! Copies the slected widget and all its children of the active Form using an XML representation. */
 		void copyWidget();
+
 		/*! Cuts (ie Copies and deletes) the selected widget and all its children of
 		 the active Form using an XML representation. */
 		void cutWidget();
+
 		/*! Pastes the XML representation of the copied or cut widget. The widget is
 		  pasted when the user clicks the Form to
 		  indicate the new position of the widget, or at the position of the contextual menu if there is one. */
 		void pasteWidget();
+
 		/*! Selects all toplevel widgets in trhe current form. */
 		void selectAll();
+
 		/*! Clears the contents of the selected widget(s) (eg for a line edit or a listview). */
 		void clearWidgetContent();
 
@@ -160,19 +187,25 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Displays a dialog where the user can modify the tab order of the active Form,
 		 by drag-n-drop or using up/down buttons. */
 		void editTabOrder();
+
 		/*! Adjusts the size of the selected widget, ie resize it to its size hint. */
 		void adjustWidgetSize();
+
 		/*! Creates a dialog to edit the \ref activeForm() PixmapCollection. */
 		void editFormPixmapCollection();
+
 		/*! Creates a dialog to edit the Connection of \ref activeForm(). */
 		void editConnections();
 
 		//! Lay out selected widgets using HBox layout (calls \ref CreateLayoutCommand).
 		void layoutHBox();
+
 		//! Lay out selected widgets using VBox layout.
 		void layoutVBox();
+
 		//! Lay out selected widgets using Grid layout.
 		void layoutGrid();
+
 		//! Breaks selected layout(calls \ref BreakLayoutCommand).
 		void breakLayout();
 
@@ -183,29 +216,37 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void alignWidgetsToGrid();
 
 		void adjustSizeToGrid();
+
 		//! Resize all selected widgets to the width of the narrowest widget.
 		void adjustWidthToSmall();
+
 		//! Resize all selected widgets to the width of the widest widget.
 		void adjustWidthToBig();
+
 		//! Resize all selected widgets to the height of the shortest widget.
 		void adjustHeightToSmall();
+
 		//! Resize all selected widgets to the height of the tallest widget.
 		void adjustHeightToBig();
 
 		void bringWidgetToFront();
 		void sendWidgetToBack();
 
-		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for
+		/*! This slot is called when the user presses a "Widget" toolbar button 
+		  or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */
 		void insertWidget(const QString &classname);
+
 		/*! Stops the current widget insertion (ie unset the cursor ...). */
 		void stopInsert();
+
 		//! Slot called when the user presses 'Pointer' icon. Switch to Default mode.
 		void slotPointerClicked();
 
 		//! Enter the Connection creation mode.
 		void startCreatingConnection();
+
 		//! Leave the Connection creation mode.
 		void stopCreatingConnection();
 
@@ -217,6 +258,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		//! Used to delayed widgets' deletion (in Container::deleteItem())
 		void deleteWidgetLater( QWidget *w );
+
+		/*! For debugging purposes only: 
+		 shows a text window containing contents of .ui XML definition of the current form. */
+		void showFormUICode();
 
 	signals:
 		/*! this signal is emmited as the property buffer switched */
@@ -324,6 +369,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		//! Used to delayed widgets deletion
 		QTimer m_deleteWidgetLater_timer;
 		QPtrList<QWidget> m_deleteWidgetLater_list;
+
+#ifdef KEXI_SHOW_DEBUG_ACTIONS
+		KDialogBase *m_uiCodeDialog;
+		KTextEdit *m_uiCodeDialogEditor;
+#endif
 
 		friend class PropertyCommand;
 		friend class GeometryPropertyCommand;

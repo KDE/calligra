@@ -104,15 +104,16 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
 	form->setFilename(m_filename);
 
 	QDomDocument domDoc;
-	saveFormToDom(form, domDoc);
+	if (!saveFormToDom(form, domDoc))
+		return 0;
 
 	QFile file(m_filename);
-	if(file.open(IO_WriteOnly))
-	{
-		QTextStream stream(&file);
-		stream << domDoc.toString(3) << endl;
-		file.close();
-	}
+	if (!file.open(IO_WriteOnly))
+		return 0;
+
+	QTextStream stream(&file);
+	stream << domDoc.toString(3) << endl;
+	file.close();
 
 	return 1;
 }
@@ -127,11 +128,11 @@ FormIO::saveFormToByteArray(Form *form, QByteArray &dest)
 }
 
 int
-FormIO::saveFormToString(Form *form, QString &dest)
+FormIO::saveFormToString(Form *form, QString &dest, int indent)
 {
 	QDomDocument domDoc;
 	saveFormToDom(form, domDoc);
-	dest = domDoc.toString();
+	dest = domDoc.toString(indent);
 	return 1;
 }
 
