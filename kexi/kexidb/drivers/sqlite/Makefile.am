@@ -8,7 +8,7 @@ kexidb_sqlitedriver_la_METASOURCES = AUTO
 
 kexidb_sqlitedriver_la_SOURCES = sqliteconnection.cpp sqlitedriver.cpp sqlitecursor.cpp
 
-kexidb_sqlitedriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT)  $(top_builddir)/kexi/3rdparty/kexisql/src/libkexisql.la $(top_builddir)/kexi/kexidb/libkexidb.la
+kexidb_sqlitedriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT)  $(top_builddir)/kexi/3rdparty/kexisql/src/libkexisql.la $(top_builddir)/kexi/kexidb/libkexidb.la $(top_builddir)/kexi/kexidb/parser/libkexidbparser.la
 
 kexidb_sqlitedriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) 
 
