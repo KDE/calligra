@@ -1689,7 +1689,7 @@ void CellLayoutPageBorder::loadIcon( QString _pix,KSpreadBorderButton *_button)
     {
 	QString str( i18n( "Could not load image %1" ) );
 	str = str.arg( _pix );
-	QMessageBox::critical( this, i18n("KSpread Error"), str );
+	KMessageBox::error( this, str );
 	return;
     }*/
     _button->setPixmap( *pix );

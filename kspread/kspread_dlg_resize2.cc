@@ -19,7 +19,7 @@
 
 #include <qprinter.h>
 
-#include "kspread_dlg_resize.h"
+#include "kspread_dlg_resize2.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
 #include "kspread_util.h"
@@ -32,7 +32,7 @@
 //#include <iostream.h>
 #include <kdebug.h>
 
-KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize re)
+KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resize re)
 	: QDialog( parent, name,TRUE )
 {
 
@@ -51,18 +51,16 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
   switch(type)
 	{
 	case resize_row:
-		pos=m_pView->vBorderWidget()->markerRow();
-		tmp=i18n("Row ")+tmp.setNum(pos);
-		rl = m_pView->activeTable()->rowLayout(pos);
-		size=rl->height(m_pView->canvasWidget());
+		setCaption( i18n("Resize row") );
+//		size=rl->height(m_pView->canvasWidget());
+		size=20;
 		label=i18n("Height");
 		tmpCheck+=" (20)";
 		break;
 	case resize_column:
-		pos=m_pView->hBorderWidget()->markerColumn();
-		tmp=i18n("Column ")+util_columnLabel(pos);
-		cl = m_pView->activeTable()->columnLayout(pos);
-		size=cl->width(m_pView->canvasWidget());
+		setCaption( i18n("Resize column") );
+		//size=cl->width(m_pView->canvasWidget());
+		size=60;
 		label=i18n("Width");
 		tmpCheck+=" (60)";
 		break;
@@ -71,7 +69,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 		break;
 	}
 
-  setCaption( tmp );
+  
 
   m_pSize2=new KIntNumInput(size, this, 10);
   m_pSize2->setRange(20, 400, 1);
@@ -95,8 +93,9 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 
 }
 
-void KSpreadresize::slotOk()
+void KSpreadresize2::slotOk()
 {
+QRect selection( m_pView->activeTable()->selectionRect() ); 
 int new_size=m_pSize2->value();
 if(m_pDefault->isChecked())
 {
@@ -104,11 +103,13 @@ switch(type)
 	{
 	case resize_row:
 		if(size!=20)
-			m_pView->vBorderWidget()->resizeRow(20 );
+			for(int i=selection.top();i<=selection.bottom();i++)
+				m_pView->vBorderWidget()->resizeRow(20,i );
 		break;
 	case resize_column:
 		if(size!=60)
-			m_pView->hBorderWidget()->resizeColumn(60 );
+			for(int i=selection.left();i<=selection.right();i++)
+				m_pView->hBorderWidget()->resizeColumn(60,i );
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
@@ -123,15 +124,19 @@ switch(type)
 	{
 	case resize_row:
 		if(m_pDefault->isChecked())
-			m_pView->vBorderWidget()->resizeRow(20 );
+			for(int i=selection.top();i<=selection.bottom();i++)
+					m_pView->vBorderWidget()->resizeRow(20,i );
 		else
-			m_pView->vBorderWidget()->resizeRow(new_size );
+			for(int i=selection.top();i<=selection.bottom();i++)
+				m_pView->vBorderWidget()->resizeRow(new_size,i );
 		break;
 	case resize_column:
 		if(m_pDefault->isChecked())
-			m_pView->hBorderWidget()->resizeColumn(60 );
+			for(int i=selection.left();i<=selection.right();i++)
+				m_pView->hBorderWidget()->resizeColumn(60,i );
 		else
-			m_pView->hBorderWidget()->resizeColumn(new_size );
+			for(int i=selection.left();i<=selection.right();i++)
+				m_pView->hBorderWidget()->resizeColumn(new_size,i );
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
@@ -142,11 +147,11 @@ switch(type)
 accept();
 }
 
-void KSpreadresize::slotClose()
+void KSpreadresize2::slotClose()
 {
 
 reject();
 }
 
 
-#include "kspread_dlg_resize.moc"
+#include "kspread_dlg_resize2.moc"

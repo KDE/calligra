@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kspread_dlg_resize__
-#define __kspread_dlg_resize__
+#ifndef __kspread_dlg_resize2__
+#define __kspread_dlg_resize2__
 
 #include <qdialog.h>
 #include <qpushbutton.h>
@@ -30,12 +30,12 @@
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
-class KSpreadresize : public QDialog
+class KSpreadresize2 : public QDialog
 {
   Q_OBJECT
 public:
   enum type_resize {resize_column,resize_row};
-  KSpreadresize( KSpreadView* parent, const char* name,type_resize re);
+  KSpreadresize2( KSpreadView* parent, const char* name,type_resize re);
 
   type_resize type;
   int size;

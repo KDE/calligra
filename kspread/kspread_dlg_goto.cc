@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <qrangecontrol.h>
-
+#include <kmessagebox.h>
 
 KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
 	: QDialog( parent, name,TRUE )
@@ -79,8 +79,7 @@ void KSpreadgoto::slotOk()
         }
     else
         {
-        QMessageBox::warning( this, i18n("Error"), i18n("Area Text is empty!"),
-			   i18n("Ok") );
+        KMessageBox::error( this, i18n("Area Text is empty!") );
         }
 }
 

@@ -248,7 +248,8 @@ public slots:
     void slotRemoveRow();
     void slotInsertColumn();
     void slotRemoveColumn();
-
+    void resizeRow();
+    void resizeColumn();
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -443,6 +444,8 @@ private:
     KAction* m_showArea;
     KToggleAction* m_showFormular;
     KToggleAction* m_LcMode;
+    KAction* m_resizeRow;
+    KAction* m_resizeColumn;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

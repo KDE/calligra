@@ -465,3 +465,9 @@ thanks
 -Now there is LC mode => you can show area selected 
 as 3Lx5C, L1C1 (A1)
 -bug fix
+-Now you can resize differents row or column
+icon lo22-action-adjustrow.png lo22-action-adjustcol.png
+lo22-action-middle.png,lo22-action-top.png,lo22-action-bottom.png
+created by jp.martin <jpmartin@iroise.com> thanks
+-Improved kspread_dlg_resize
+-start to replace QMessageBox by KMessageBox

@@ -30,7 +30,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-
+#include <kmessagebox.h>
 
 KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name,TRUE )
@@ -88,11 +88,11 @@ void KSpreadanchor::slotOk()
 KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
 if(l_cell->text().isEmpty()||text->text().isEmpty())
 	{
-	QMessageBox::warning( this, i18n("Error"), i18n("Area Text or cell is empty!"),i18n("Ok") );
+	KMessageBox::error( this, i18n("Area Text or cell is empty!") );
 	}
 else if(!cell->isDefault())
 	{
-	int ret = QMessageBox::warning( this, i18n("Warning"), i18n("Cell is not empty.\nDo you want to continue?"), i18n("Yes"), i18n("No"), QString::null, 1, 1);
+	int ret = KMessageBox::warningYesNo( this, i18n("Cell is not empty.\nDo you want to continue?"));
  	if ( ret == 0 )
  		{
  		QString tmp;

@@ -8,6 +8,7 @@
 #include <ksimpleconfig.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -16,7 +17,7 @@
 #include <qstringlist.h>
 #include <qdom.h>
 #include <qfile.h>
-#include <qmessagebox.h>
+
 
 KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     : QDialog( view, name, TRUE )
@@ -72,7 +73,7 @@ void KSpreadFormatDlg::slotActivated( int index )
     {
 	QString str( i18n( "Could not find image %1" ) );
 	str = str.arg( m_entries[ index ].image );
-	QMessageBox::critical( this, i18n("KSpread Error"), str );
+	KMessageBox::error( this, str );
 	return;
     }
 
@@ -81,7 +82,7 @@ void KSpreadFormatDlg::slotActivated( int index )
     {
 	QString str( i18n( "Could not load image %1" ) );
 	str = str.arg( img );
-	QMessageBox::critical( this, i18n("KSpread Error"), str );
+	KMessageBox::error( this,str );
 	return;
     }
 	
@@ -95,7 +96,7 @@ void KSpreadFormatDlg::slotOk()
     {
 	QString str( i18n( "Could not find table-style XML file '%1'" ) );
 	str = str.arg( m_entries[ m_combo->currentItem() ].xml );
-	QMessageBox::critical( this, i18n("KSpread Error"), str );
+	KMessageBox::error( this, str );
 	return;
     }
 
@@ -108,7 +109,7 @@ void KSpreadFormatDlg::slotOk()
     {
 	QString str( i18n( "Parsing error in table-style XML file %1" ) );
 	str = str.arg( m_entries[ m_combo->currentItem() ].xml );
-	QMessageBox::critical( this, i18n("KSpread Error"), str );
+	KMessageBox::error( this, str );
 	return;
     }
 	

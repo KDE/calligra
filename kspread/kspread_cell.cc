@@ -45,6 +45,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kmessagebox.h>
 #include <kscript_parsenode.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
@@ -428,7 +429,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     QString tmp(i18n("Error in cell %1\n\n"));
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
     tmp += context.exception()->toString( context );
-    QMessageBox::critical((QWidget*)0L , i18n("KSpread error"), tmp, i18n("OK"));
+    KMessageBox::error((QWidget*)0L , tmp);
     return;
   }
 
@@ -440,7 +441,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 	  QString tmp(i18n("Error in cell %1\n\n"));
 	  tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
 	  tmp += context2.exception()->toString( context2 );
-	  QMessageBox::critical( (QWidget*)0L, i18n("KSpread error"), tmp, i18n("OK"));
+	  KMessageBox::error( (QWidget*)0L, tmp);
       }
 }
 
@@ -1610,7 +1611,7 @@ bool KSpreadCell::makeFormular()
     QString tmp(i18n("Error in cell %1\n\n"));
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
     tmp += context.exception()->toString( context );
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread error"), tmp, i18n("OK"));
+    KMessageBox::error( (QWidget*)0L, tmp);
     return false;
   }
 
@@ -1731,7 +1732,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	QString tmp(i18n("Error in cell %1\n\n"));
 	tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
 	tmp += context.exception()->toString( context );
-	QMessageBox::critical( (QWidget*)0L, i18n("KSpread error"), tmp, i18n("OK"));
+	KMessageBox::error( (QWidget*)0L, tmp);
       }
       m_bError = true;
       m_strFormularOut = "####";

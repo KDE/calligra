@@ -77,6 +77,7 @@
 #include "kspread_dlg_series.h"
 #include "kspread_dlg_reference.h"
 #include "kspread_dlg_area.h"
+#include "kspread_dlg_resize2.h"
 #include <kscript_scriptmenu.h>
 
 #include "handler.h"
@@ -245,6 +246,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
     m_areaName = new KAction( i18n("Area name"), 0, this, SLOT( setAreaName() ), actionCollection(), "areaname" );
     m_showArea = new KAction( i18n("Show area..."), 0, this, SLOT( showAreaName() ), actionCollection(), "showArea" );
+    m_resizeRow = new KAction( i18n("Resize row..."),"adjustrow", 0, this, SLOT( resizeRow() ), actionCollection(), "resizeRow" );
+    m_resizeColumn = new KAction( i18n("Resize column..."),"adjustcol", 0, this, SLOT( resizeColumn() ), actionCollection(), "resizeCol" );
     m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
     m_undo->setEnabled( FALSE );
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
@@ -396,7 +399,7 @@ void KSpreadView::initialPosition()
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
 	tbl->recalc(true);
-    m_bLoading =true;
+    m_bLoading =true;    
 }
 
 /*
@@ -1541,7 +1544,7 @@ void KSpreadView::copySelection()
 
   	if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
   		{
-  		QMessageBox::critical( this, "KSpread Error", "Not supported", i18n("OK"));
+  		KMessageBox::error( this, i18n("Not supported"));
 		}
   	else
    	 	m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
@@ -1557,7 +1560,7 @@ void KSpreadView::cutSelection()
 
     if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
   		{
-  		QMessageBox::critical( this, "KSpread Error", "Not supported", i18n("OK"));
+  		KMessageBox::error( this, i18n("Not supported"));
 		}
   	else
   		{
@@ -2188,6 +2191,31 @@ void KSpreadView::showAreaName()
     KSpreadreference* dlg = new KSpreadreference( this, "Show area" );
     dlg->show();
 }
+
+void KSpreadView::resizeRow()
+{
+    QRect selection( activeTable()->selectionRect() ); 
+    if(selection.bottom()==0x7FFF)
+    	KMessageBox::error( this, i18n("Area too large!"));
+    else
+    	{	
+    	KSpreadresize2* dlg = new KSpreadresize2( this, "Resize row", KSpreadresize2::resize_row );
+    	dlg->show();
+    	}
+}
+
+void KSpreadView::resizeColumn()
+{
+    QRect selection( activeTable()->selectionRect() ); 
+    if(selection.right()==0x7FFF)
+    	KMessageBox::error( this, i18n("Area too large!"));
+    else
+    	{	
+	KSpreadresize2* dlg = new KSpreadresize2( this, "Resize column", KSpreadresize2::resize_column );
+    	dlg->show();
+    	}
+}
+
 
 void KSpreadView::layoutDlg()
 {

@@ -92,8 +92,7 @@ void KSpreadarea::slotOk()
   }
   else
   {
-        QMessageBox::warning( this, i18n("Error"), i18n("Area text is empty!"),
-			   i18n("Ok") );
+        KMessageBox::error( this, i18n("Area text is empty!") );
   }
 }
 

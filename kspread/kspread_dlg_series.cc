@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
+#include <kmessagebox.h>
 #include <knumvalidator.h>
 
 KSpreadseries::KSpreadseries( KSpreadView* parent, const char* name,const QPoint &_marker)
@@ -147,8 +148,7 @@ else if(geometric->isChecked())
 
 if(step->text().isEmpty()||start->text().isEmpty()||end->text().isEmpty())
 	{
-	QMessageBox::warning( this, i18n("Error"), i18n("Area text is empty!"),
-			   i18n("Ok") );
+	KMessageBox::error( this, i18n("Area text is empty!") );
 	}
 else
 	{
@@ -167,8 +167,7 @@ else
 		}
 	else
 		{
-	 	QMessageBox::warning( this, i18n("Error"), i18n("Step is negative !"),
-			   i18n("Ok") );
+	 	KMessageBox::error( this, i18n("Step is negative !") );
 		}
 	}
 }

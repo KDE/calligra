@@ -29,7 +29,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-
+#include <kmessagebox.h>
 
 KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name,TRUE )
@@ -83,15 +83,13 @@ if(l_replace->text()==l_find->text())
 	}
 else if(l_replace->text().isEmpty() || l_find->text().isEmpty())
 	{
-	 QMessageBox::warning( this, i18n("Error"), i18n("A Qlineedit is empty"),
-			   i18n("Ok") );
+	 KMessageBox::error( this, i18n("A Qlineedit is empty") );
 	}
 else
 	{
 	if(!(m_pView->activeTable()->replace( marker,l_find->text(),l_replace->text())))
 		{
-		 QMessageBox::warning( this, i18n("Error"), i18n("Not any text replaces"),
-			   i18n("Ok") );
+		 KMessageBox::error( this, i18n("Not any text replaces") );
 	        }
 	 else
 	 	{

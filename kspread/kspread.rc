@@ -53,11 +53,20 @@
   <Action name="showPageBorders"/>
  </Menu>
  <Menu name="Folder"><text>Folder</text>
+  <Menu name="Row"><text>Row</text>
+    <Action name="resizeRow"/>
+  </Menu>
+  <Separator/>
+  <Menu name="Column"><text>Column</text>
+    <Action name="resizeCol"/>
+  </Menu>
+  <Separator/>
   <Action name="insertTable"/>
   <Action name="removeTable"/>
   <Action name="hideTable"/>
   <Action name="showTable"/>
   <Action name="hideGrid"/>
+  <Separator/>
   <Action name="showArea"/>
   <Action name="showFormular"/>
   <Action name="LcMode"/>
