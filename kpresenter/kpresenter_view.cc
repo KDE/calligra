@@ -2874,43 +2874,15 @@ void KPresenterView::updateReadWrite( bool readwrite )
 #ifdef __GNUC__
 #warning TODO
 #endif
-    QValueList<KAction *> actions = actionCollection()->actions();
-    QValueList<KAction *>::ConstIterator aIt = actions.begin();
-    QValueList<KAction *>::ConstIterator aEnd = actions.end();
-    for (; aIt != aEnd; ++aIt )
-	(*aIt)->setEnabled( readwrite );
-}
-#if 0
-
-/*========================= change undo =========================*/
-void KPresenterView::changeUndo( QString _text, bool _enable )
-{
-    if ( _enable ) {
-	actionEditUndo->setEnabled( true );
-	QString str;
-	str=i18n( "Undo: %1" ).arg(_text);
-	actionEditUndo->setText( str );
-    } else {
-	actionEditUndo->setEnabled( false );
-	actionEditUndo->setText( i18n( "No Undo possible" ) );
+    if ( !readwrite )
+    {
+        QValueList<KAction *> actions = actionCollection()->actions();
+        QValueList<KAction *>::ConstIterator aIt = actions.begin();
+        QValueList<KAction *>::ConstIterator aEnd = actions.end();
+        for (; aIt != aEnd; ++aIt )
+            (*aIt)->setEnabled( readwrite );
     }
 }
-
-/*========================= change redo =========================*/
-void KPresenterView::changeRedo( QString _text, bool _enable )
-{
-    if ( _enable ) {
-	actionEditRedo->setEnabled( true );
-	QString str;
-	str=i18n( "Redo: %1" ).arg(_text);
-	actionEditRedo->setText( str );
-    } else {
-	actionEditRedo->setEnabled( false );
-	actionEditRedo->setText( i18n( "No Redo possible" ) );
-    }
-}
-
-#endif
 
 /*======================== setup popup menus ===================*/
 void KPresenterView::setupPopupMenus()
