@@ -550,6 +550,7 @@ protected:
     int createPresentationAnimation(const QDomElement& element, int order = 0 ,bool increaseOrder = true);
 
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
+    void saveOasisPresentationCustionSlideShow( KoXmlWriter &contentTmpWriter );
 
     void saveOasisSettings( KoXmlWriter &contentTmpWriter );
     void loadOasisSettings();

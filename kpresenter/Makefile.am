@@ -50,7 +50,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPPolyLineObjectIface.skel KPPolyLineObjectIface.cc \
 	kprduplicateobjdia.cc kpclosedlineobject.cc \
 	kprimportstyledia.cc \
-	imageEffectDia.cc imageEffectBase.ui
+	imageEffectDia.cc imageEffectBase.ui customslideshowdia.cc
 
 if include_ARTS
 ARTSKDE = -lartskde
@@ -90,7 +90,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		rotationdialogimpl.h KPFreehandObjectIface.h kprstylemanager.h \
 		kprbgspellcheck.h kprhelplinedia.h confpicturedia.h \
 		KPPolyLineObjectIface.h kprduplicateobjdia.h kpclosedlineobject.h kprimportstyledia.h \
-		imageEffectDia.h kprloadinginfo.h
+		imageEffectDia.h kprloadinginfo.h customslideshowdia.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

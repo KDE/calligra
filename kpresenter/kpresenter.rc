@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="109">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="110">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -164,6 +164,8 @@
   <Separator/>
   <Action name="screen_start"/>
   <Action name="screen_startfromfirst"/>
+  <Separator/>
+  <Action name="custom_slide_show"/>
   <Separator/>
   <Action name="screen_first"/>
   <Action name="screen_prev"/>

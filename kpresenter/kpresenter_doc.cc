@@ -1151,7 +1151,18 @@ void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter
     contentTmpWriter.startElement( "presentation:settings" );
     contentTmpWriter.addAttribute( "presentation:endless",  ( _spInfiniteLoop ? "true" : "false" ) );
     contentTmpWriter.addAttribute( "presentation:force-manual",  ( _spManualSwitch ? "true" : "false" ) );
+    saveOasisPresentationCustionSlideShow( contentTmpWriter );
     contentTmpWriter.endElement();
+}
+
+void KPresenterDoc::saveOasisPresentationCustionSlideShow( KoXmlWriter &contentTmpWriter )
+{
+    //todo
+    //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
+    //contentTmpWriter.startElement( "presentation:show" );
+    //contentTmpWriter.addAttribute( "presentation:name", "" );
+    //contentTmpWriter.addAttribute( "presentation:pages", "" );
+    //contentTmpWriter.endElement();
 }
 
 void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* tmpStyckyFile ) const
@@ -1359,7 +1370,12 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             }
             ++pos;
             //m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
-            newpage->insertManualTitle(dp.attribute( "draw:name" ));
+
+            //necessary to create a unique name for page
+            QString str = dp.attribute( "draw:name" );
+            QString idPage = dp.attribute( "draw:id" );
+            if ( str != QString( "page%1" ).arg( idPage ) )
+                newpage->insertManualTitle(str);
             context.styleStack().setTypeProperties( "drawing-page" );
             if ( context.styleStack().hasAttribute( "draw:fill" )
                  || context.styleStack().hasAttribute( "presentation:transition-style" ) )

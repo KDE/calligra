@@ -59,6 +59,7 @@
 #include "sidebar.h"
 #include "notebar.h"
 #include "insertpagedia.h"
+#include "customslideshowdia.h"
 
 #include <koPictureFilePreview.h>
 #include <koCreateStyleDia.h>
@@ -3114,6 +3115,14 @@ void KPresenterView::setupActions()
     actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
                                                    this, SLOT( addWordToDictionary() ),
                                                    actionCollection(), "add_word_to_dictionary" );
+    actionCustomSlideShow = new KAction( i18n( "Custom Side Show..." ), 0,
+                                         this, SLOT( customSlideShow() ),
+                                         actionCollection(), "custom_slide_show" );
+}
+
+void KPresenterView::customSlideShow()
+{
+    //todo
 }
 
 void KPresenterView::textSubScript()

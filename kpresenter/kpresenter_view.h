@@ -455,6 +455,8 @@ public slots:
     void refreshGroupButton();
     void slotAddIgnoreAllWord();
     void addWordToDictionary();
+    void customSlideShow();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -1014,6 +1016,8 @@ private:
     KAction *actionEditFindNext;
     KAction *actionEditFindPrevious;
     KAction *actionEditReplace;
+
+    KAction *actionCustomSlideShow;
 
     KAction *actionColorBar;
     KAction *actionExtraDefaultTemplate;

@@ -214,6 +214,8 @@ k_dcop:
     void insertFile( const QString & file );
     void addWordToDictionary();
 
+    void customSlideShow();
+
 private:
     KPresenterView *view;
 

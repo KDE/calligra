@@ -231,7 +231,8 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
 {
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
-    xmlWriter.addAttribute( "draw:name", m_manualTitle ); //we must store a name
+    QString namePage = m_manualTitle.isEmpty() ?  QString( "page%1" ).arg( posPage ) : m_manualTitle;
+    xmlWriter.addAttribute( "draw:name", namePage ); //we must store a name
     xmlWriter.addAttribute( "draw:id", posPage );
     xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
 

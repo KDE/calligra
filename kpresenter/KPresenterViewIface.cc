@@ -659,3 +659,8 @@ void KPresenterViewIface::addWordToDictionary()
 {
     view->addWordToDictionary();
 }
+
+void KPresenterViewIface::customSlideShow()
+{
+    view->customSlideShow();
+}

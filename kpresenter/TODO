@@ -35,6 +35,16 @@ KOffice in general:
   - Restart with last presentation (suggesting it in initial "open" dialog)
     (using kapp->getConfig)
 
+
+KPresenter after koffice 1.3
+============================
+Todo:
+
+In Progress:
+-> implement custom slide show
+
+Done:
+
 KPresenter Oasis Format:
 ========================
 Done:
