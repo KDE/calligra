@@ -1413,7 +1413,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
 void KWDocument::startBackgroundSpellCheck()
 {
-    if(backgroundSpellCheckEnabled())
+    //don't start bg spell checking if
+    if(backgroundSpellCheckEnabled() && isReadWrite())
     {
         m_bgSpellCheck->objectForSpell(textFrameSet(0));
         m_bgSpellCheck->startBackgroundSpellCheck();
