@@ -7,11 +7,6 @@
 
 #include "vcontour.h"
 
-VContour::VContour()
-	: VSegmentListTraverser(), m_lineWidth( 3.0 ), m_lineCap( cap_butt ), m_lineJoin( join_miter )
-{
-}
-
 VContour::VContour( const double width, const VLineCap cap, const VLineJoin join )
 	: VSegmentListTraverser(), m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join )
 {
@@ -19,17 +14,23 @@ VContour::VContour( const double width, const VLineCap cap, const VLineJoin join
 
 void
 VContour::draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
-	bool pure )
+	bool plain )
 {
 	m_zoomFactor = zoomFactor;
 
 	m_pa.resize( 0 );
 	VSegment::traverse( list, *this );
 
-	if( !pure )
+	if( !plain )
 	{
+		int r;
+		int g;
+		int b;
+		
+		m_color.values( VColor::rgb, &r, &g, &b );
+
 		QPen pen(
-			Qt::black,
+			QColor( r, g, b ),
 			qRound( zoomFactor * m_lineWidth ) );
 
 		if( m_lineCap == cap_butt )

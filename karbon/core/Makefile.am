@@ -9,6 +9,7 @@ noinst_LTLIBRARIES = libkarboncore.la
 noinst_HEADERS = \
 	vboundingbox.h \
 	vcanvas.h \
+	vcolor.h \
 	vcommand.h \
 	vcontour.h \
 	vfill.h \
@@ -21,6 +22,7 @@ noinst_HEADERS = \
 libkarboncore_la_SOURCES = \
 	vboundingbox.cc \
 	vcanvas.cc \
+	vcolor.cc \
 	vcommand.cc \
 	vcontour.cc \
 	vfill.cc \

@@ -23,6 +23,8 @@ VPath::VPath()
 {
 	// add a initial segment at (0,0):
 	m_segments.append( new VSegment() );
+
+	m_contour.setLineWidth( 3.0 );
 }
 
 VPath::VPath( const VPath& /*path*/ )
