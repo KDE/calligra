@@ -621,11 +621,15 @@ void KWTableTemplateCommand::unexecute()
 }
 
 
-KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) :
+KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, const FrameResizeStruct& _frameResize ) :
     KNamedCommand(name),
     m_indexFrame(_frameIndex),
     m_FrameResize(_frameResize)
 {
+    //kdDebug() << "Resize command: oldRect=" << m_FrameResize.oldRect
+    //          << " oldMinHeight=" << m_FrameResize.oldMinHeight
+    //          << " newRect=" << m_FrameResize.newRect
+    //          << " newMinHeight=" << m_FrameResize.newMinHeight << endl;
 }
 
 void KWFrameResizeCommand::execute()
@@ -634,7 +638,8 @@ void KWFrameResizeCommand::execute()
     Q_ASSERT( frameSet );
     KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
     Q_ASSERT( frame );
-    frame->setCoords(m_FrameResize.sizeOfEnd.left(),m_FrameResize.sizeOfEnd.top(),m_FrameResize.sizeOfEnd.right(),m_FrameResize.sizeOfEnd.bottom());
+    frame->setCoords(m_FrameResize.newRect.left(),m_FrameResize.newRect.top(),m_FrameResize.newRect.right(),m_FrameResize.newRect.bottom());
+    frame->setMinFrameHeight(m_FrameResize.newMinHeight);
 
     KWTableFrameSet *table = frame->frameSet()->getGroupManager();
     if (table) {
@@ -666,7 +671,8 @@ void KWFrameResizeCommand::unexecute()
 {
     KWFrameSet *frameSet =m_indexFrame.m_pFrameSet;
     KWFrame *frame=frameSet->frame(m_indexFrame.m_iFrameIndex);
-    frame->setCoords(m_FrameResize.sizeOfBegin.left(),m_FrameResize.sizeOfBegin.top(),m_FrameResize.sizeOfBegin.right(),m_FrameResize.sizeOfBegin.bottom());
+    frame->setCoords(m_FrameResize.oldRect.left(),m_FrameResize.oldRect.top(),m_FrameResize.oldRect.right(),m_FrameResize.oldRect.bottom());
+    frame->setMinFrameHeight(m_FrameResize.oldMinHeight);
     KWTableFrameSet *table = frame->frameSet()->getGroupManager();
     if (table) {
         KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
@@ -739,7 +745,7 @@ void KWFramePartMoveCommand::execute()
     Q_ASSERT( frameSet );
     KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
     Q_ASSERT( frame );
-    frame->setCoords(m_frameMove.sizeOfEnd.left(),m_frameMove.sizeOfEnd.top(),m_frameMove.sizeOfEnd.right(),m_frameMove.sizeOfEnd.bottom());
+    frame->setCoords(m_frameMove.newRect.left(),m_frameMove.newRect.top(),m_frameMove.newRect.right(),m_frameMove.newRect.bottom());
 
     KWDocument * doc = frameSet->kWordDocument();
 
@@ -751,7 +757,7 @@ void KWFramePartMoveCommand::unexecute()
 {
     KWFrameSet *frameSet =m_indexFrame.m_pFrameSet;
     KWFrame *frame=frameSet->frame(m_indexFrame.m_iFrameIndex);
-    frame->setCoords(m_frameMove.sizeOfBegin.left(),m_frameMove.sizeOfBegin.top(),m_frameMove.sizeOfBegin.right(),m_frameMove.sizeOfBegin.bottom());
+    frame->setCoords(m_frameMove.oldRect.left(),m_frameMove.oldRect.top(),m_frameMove.oldRect.right(),m_frameMove.oldRect.bottom());
 
     KWDocument * doc = frameSet->kWordDocument();
     frame->updateRulerHandles();
@@ -762,7 +768,7 @@ void KWFramePartMoveCommand::unexecute()
 
 bool KWFramePartMoveCommand::frameMoved()
 {
-    return  (m_frameMove.sizeOfBegin!=m_frameMove.sizeOfEnd);
+    return  (m_frameMove.oldRect!=m_frameMove.newRect);
 }
 
 KWFramePartInternalCommand::KWFramePartInternalCommand( const QString &name, KWPartFrameSet *part ) :
@@ -801,34 +807,34 @@ void KWFramePartExternalCommand::unexecute()
 }
 
 
-KWFrameMoveCommand::KWFrameMoveCommand( const QString &name, QPtrList<FrameIndex> &_frameIndex, QPtrList<FrameResizeStruct>&_frameMove  ) :
+KWFrameMoveCommand::KWFrameMoveCommand( const QString &name,
+                                        const QValueList<FrameIndex> & _frameIndex,
+                                        const QValueList<FrameMoveStruct> & _frameMove  ) :
     KNamedCommand(name),
     m_indexFrame(_frameIndex),
     m_frameMove(_frameMove)
 {
-    // Brrr... why don't we use QValueList rather ?
-    m_indexFrame.setAutoDelete(true);
-    m_frameMove.setAutoDelete(true);
 }
 
 void KWFrameMoveCommand::execute()
 {
     bool needRelayout = false;
-    FrameIndex *tmp;
     KWDocument * doc = 0L;
-    for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
+    QValueList<FrameMoveStruct>::Iterator moveIt = m_frameMove.begin();
+    QValueList<FrameIndex>::Iterator tmp = m_indexFrame.begin();
+    for( ; tmp != m_indexFrame.end() && moveIt != m_frameMove.end(); ++tmp, ++moveIt )
     {
-        KWFrameSet *frameSet = tmp->m_pFrameSet;
+        KWFrameSet *frameSet = (*tmp).m_pFrameSet;
         doc = frameSet->kWordDocument();
-        KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
-        FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_indexFrame.find(tmp));
-        KWTableFrameSet *table=frameSet->getGroupManager();
+        KWFrame *frame = frameSet->frame((*tmp).m_iFrameIndex);
+        KWTableFrameSet *table = frameSet->getGroupManager();
         if(table)
         {
-            table->moveBy(tmpFrameMove->sizeOfEnd.left()-tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfEnd.top()-tmpFrameMove->sizeOfBegin.top());
+            KoPoint diff = (*moveIt).newPos - (*moveIt).oldPos;
+            table->moveBy( diff.x(), diff.y() );
         }
         else
-            frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
+            frame->moveTopLeft( (*moveIt).newPos );
 
         frame->updateRulerHandles();
         needRelayout = needRelayout || ( frame->runAround() != KWFrame::RA_NO );
@@ -847,21 +853,22 @@ void KWFrameMoveCommand::execute()
 void KWFrameMoveCommand::unexecute()
 {
     bool needRelayout = false;
-    FrameIndex *tmp;
     KWDocument * doc = 0L;
-    for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
+    QValueList<FrameMoveStruct>::Iterator moveIt = m_frameMove.begin();
+    QValueList<FrameIndex>::Iterator tmp = m_indexFrame.begin();
+    for( ; tmp != m_indexFrame.end() && moveIt != m_frameMove.end(); ++tmp, ++moveIt )
     {
-        KWFrameSet *frameSet =tmp->m_pFrameSet;
+        KWFrameSet *frameSet = (*tmp).m_pFrameSet;
         doc = frameSet->kWordDocument();
-        KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
-        FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_indexFrame.find(tmp));
-        KWTableFrameSet *table=frameSet->getGroupManager();
+        KWFrame *frame = frameSet->frame((*tmp).m_iFrameIndex);
+        KWTableFrameSet *table = frameSet->getGroupManager();
         if(table)
         {
-            table->moveBy(tmpFrameMove->sizeOfBegin.left()-tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfBegin.top()-tmpFrameMove->sizeOfEnd.top());
+            KoPoint diff = (*moveIt).oldPos - (*moveIt).newPos;
+            table->moveBy( diff.x(), diff.y() );
         }
         else
-            frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
+            frame->moveTopLeft( (*moveIt).oldPos );
 
         frame->updateRulerHandles();
         needRelayout = needRelayout || ( frame->runAround() != KWFrame::RA_NO );
@@ -2123,5 +2130,5 @@ void KWRenameBookmarkCommand::execute()
 
 void KWRenameBookmarkCommand::unexecute()
 {
-        m_doc->renameBookMark( m_newName, m_oldName);
+    m_doc->renameBookMark( m_newName, m_oldName);
 }

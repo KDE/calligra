@@ -1895,7 +1895,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     if (  frmBehavior ==  KWFrame::AutoCreateNewFrame )
     {
         KWFrame *theFrame = settingsFrame( frames.last() );
-        double minHeight = minFrameHeight + theFrame->bTop() + theFrame->bBottom()+5;
+        double minHeight = s_minFrameHeight + theFrame->bTop() + theFrame->bBottom()+5;
         if ( availHeight < minHeight )
             frmBehavior = KWFrame::Ignore;
     }
@@ -2073,11 +2073,11 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
     {
         double wantedPosition = theFrame->bottom() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug() << "slotAfterFormatting wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
+        kdDebug() << "slotAfterFormatting wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + s_minFrameHeight << endl;
 #endif
-        wantedPosition = QMAX( wantedPosition, theFrame->top() + minFrameHeight );
-        if ( wantedPosition != theFrame->bottom()) {
-            if(theFrame->frameSet()->getGroupManager() ) {
+        wantedPosition = QMAX( wantedPosition, theFrame->top() + s_minFrameHeight );
+        if( theFrame->frameSet()->getGroupManager() ) {
+            if ( wantedPosition != theFrame->bottom()) {
                 KWTableFrameSet *table = theFrame->frameSet()->getGroupManager();
                 // When a frame can be smaller we don't rescale it if it is a table, since
                 // we don't have the full picture of the change.
@@ -2093,7 +2093,11 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
                     table->recalcRows(cell->m_col,cell->m_row);
                     *abort = false;
                 }
-            } else {
+            }
+        } else {
+            // Also apply the frame's minimum height
+            wantedPosition = QMAX( wantedPosition, theFrame->top() + theFrame->minFrameHeight() );
+            if ( wantedPosition != theFrame->bottom()) {
 #ifdef DEBUG_FORMAT_MORE
                 kdDebug() << "    the frame was " << *theFrame << endl;
                 kdDebug() << "setBottom " << wantedPosition << endl;

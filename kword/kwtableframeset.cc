@@ -318,9 +318,9 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
         for(unsigned int i=col; i < m_colPositions.count(); i++) {
             double &colPos = m_colPositions[i];
             colPos = colPos + difference;
-            if(colPos-last < minFrameWidth) { // Never make it smaller then allowed!
-                difference += minFrameWidth - colPos;
-                colPos = minFrameWidth + last;
+            if(colPos-last < s_minFrameWidth) { // Never make it smaller then allowed!
+                difference += s_minFrameWidth - colPos;
+                colPos = s_minFrameWidth + last;
             }
             last=colPos;
         }
@@ -477,11 +477,11 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 }
             }
             if(lineNumber >= (int)row)  { // below changed row
-                if(*(j)-last < minFrameHeight) // Never make it smaller then allowed!
-                    difference += minFrameHeight - *(j) + last;
+                if(*(j)-last < s_minFrameHeight) // Never make it smaller then allowed!
+                    difference += s_minFrameHeight - *(j) + last;
                 last=*(j);
                 kdDebug(32004) << "moving " << *(j) << " by " << difference << "; to " << (*j) + difference << endl;
-                (*j) = (*j) + difference; // move line.
+                (*j) += difference; // move line.
             }
             j++;
         }
@@ -1151,7 +1151,7 @@ void KWTableFrameSet::insertRow( unsigned int newRowNumber,QPtrList<KWFrameSet> 
 }
 
 void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> redoFrameset, QPtrList<KWFrame>redoFrame, double width /* =KWTableFrameSet::ms_defaultWidth.*/ ) {
-    width=QMAX(width,minFrameWidth);
+    width=QMAX(width,s_minFrameWidth);
 
     if(! redoFrame.isEmpty()) {
         KWFrame *f = redoFrame.at(0);

@@ -298,6 +298,7 @@ private:
     MouseMode m_mouseMode;
     MouseMeaning m_mouseMeaning; // set by mousePress, used by mouseMove
     KoRect m_resizedFrameInitialSize; // when resizing a frame
+    double m_resizedFrameInitialMinHeight; // when resizing a frame
     KoRect m_insRect;  // when creating a new frame
     KoRect m_boundingRect; // when moving frame(s)
     KoPoint m_hotSpot; // when moving frame(s)

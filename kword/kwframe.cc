@@ -86,7 +86,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       // easier to compare this list with the member vars list (compiler ensures order).
       m_sheetSide( AnySide ),
       m_runAround( _ra ),
-      m_frameBehavior( AutoCreateNewFrame ),
+      m_frameBehavior( AutoExtendFrame ),
       m_newFrameBehavior( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
       m_runAroundGap( _gap ),
       bleft( 0 ),
@@ -355,6 +355,8 @@ void KWFrame::save( QDomElement &frameElem )
     frameElem.setAttribute( "top", QString::number( top(), 'g', DBL_DIG ) );
     frameElem.setAttribute( "right", QString::number( right(), 'g', DBL_DIG ) );
     frameElem.setAttribute( "bottom", QString::number( bottom(), 'g', DBL_DIG ) );
+    if ( minFrameHeight() > 0 )
+        frameElem.setAttribute( "min-height", QString::number( minFrameHeight(), 'g', DBL_DIG ) );
 
     if(runAround()!=RA_NO)
     {
@@ -453,6 +455,7 @@ void KWFrame::save( QDomElement &frameElem )
 
 void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion )
 {
+    m_minFrameHeight = KWDocument::getAttribute( frameElem, "min-height", 0.0 );
     m_runAround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_NO ) );
     QString str = frameElem.attribute( "runaroundSide" );
     if ( str == "left" )
@@ -1636,10 +1639,12 @@ void KWFrameSet::resizeFrameSetCoords( KWFrame* frame, double newLeft, double ne
     resizeFrame( frame, newRight - newLeft, newBottom - newTop, finalSize );
 }
 
-void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool )
+void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
 {
     frame->setWidth( newWidth );
     frame->setHeight( newHeight );
+    if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
+        frame->setMinFrameHeight( newHeight );
 }
 
 bool KWFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& point, bool borderOfFrameOnly) {

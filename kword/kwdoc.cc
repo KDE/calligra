@@ -1460,15 +1460,15 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         } else if (fs->type() == FT_TEXT) {
             for (int f=fs->getNumFrames()-1; f>=0; f--) {
                 KWFrame *frame = fs->frame(f);
-                if(frame->height() < static_cast <int>(minFrameHeight)) {
+                if(frame->height() < s_minFrameHeight) {
                     kdWarning() << fs->getName() << " frame " << f << " height is so small no text will fit, adjusting (was: "
-                                << frame->height() << " is: " << minFrameHeight << ")" << endl;
-                    frame->setHeight(minFrameHeight);
+                                << frame->height() << " is: " << s_minFrameHeight << ")" << endl;
+                    frame->setHeight(s_minFrameHeight);
                 }
-                if(frame->width() < static_cast <int>(minFrameWidth)) {
+                if(frame->width() < s_minFrameWidth) {
                     kdWarning() << fs->getName() << " frame " << f << " width is so small no text will fit, adjusting (was: "
-                                << frame->width() << " is: " << minFrameWidth  << ")" << endl;
-                    frame->setWidth(minFrameWidth);
+                                << frame->width() << " is: " << s_minFrameWidth  << ")" << endl;
+                    frame->setWidth(s_minFrameWidth);
                 }
             }
         }

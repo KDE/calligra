@@ -418,6 +418,8 @@ don't put a </?xml...> at the end of the file!).
             right, left, top,
             bottom:             absolute coordinates in pt.
 
+            min-height:         If set (and >0), this is the minimum height. Applies to AutoExtendFrame.
+
             runaround:          0...No run around
                                 1...Frame repels text in overlapping frames
                                 2...Text in overlapping frames will avoid the
@@ -1162,7 +1164,7 @@ don't put a </?xml...> at the end of the file!).
      - a mail-merge variable
      - the global mail merge settings
      
-     The mail-merge variable has the atribute "name" (#REQUIRED in that case) and no children (EMPTY)
+     The mail-merge variable has the attribute "name" (#REQUIRED in that case) and no children (EMPTY)
      The global seetings has no attributes but has children (PLUGIN and DATASOURCE)
 -->
 <!ELEMENT MAILMERGE

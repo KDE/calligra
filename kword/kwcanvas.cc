@@ -86,6 +86,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
     curTable = 0L;
     m_printing = false;
     m_deleteMovingRect = false;
+    m_resizedFrameInitialMinHeight = 0;
 
     viewport()->setBackgroundMode( PaletteBase );
     viewport()->setAcceptDrops( TRUE );
@@ -406,11 +407,12 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
         if ( frame->frameSet()->isHeaderOrFooter() )
             frame = frame->frameSet()->frame( 0 );
         m_resizedFrameInitialSize = frame->normalize();
+        m_resizedFrameInitialMinHeight = frame->minFrameHeight();
     }
 
     QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-    QPtrList<FrameIndex> frameindexList;
-    QPtrList<FrameResizeStruct> frameindexMove;
+    QValueList<FrameIndex> frameindexList;
+    QValueList<FrameMoveStruct> frameindexMove;
     KWFrame *frame=0L;
     // When moving many frames, we look at the bounding rect.
     // It's the one that will be checked against the limits, etc.
@@ -433,13 +435,9 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
             {
                 m_boundingRect |= frame->outerKoRect();
             }
-            FrameIndex *index=new FrameIndex( frame );
-            FrameResizeStruct *move=new FrameResizeStruct;
-
-            move->sizeOfBegin=frame->normalize();
-            move->sizeOfEnd=KoRect();
-            frameindexList.append(index);
-            frameindexMove.append(move);
+            frameindexList.append( FrameIndex( frame ) );
+            // The final position will only be known afterwards
+            frameindexMove.append( FrameMoveStruct( frame->topLeft(), KoPoint() ) );
         }
 
     }
@@ -788,32 +786,32 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     if ( page == oldPage )
     {
         //kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
-        int minHeight = minFrameHeight + static_cast<int>(frame->bTop() + frame->bBottom());
-        int minWidth = minFrameWidth + static_cast<int>(frame->bLeft() + frame->bRight());
+        int minHeight = s_minFrameHeight + static_cast<int>(frame->bTop() + frame->bBottom());
+        int minWidth = s_minFrameWidth + static_cast<int>(frame->bLeft() + frame->bRight());
         if ( top && newTop != y )
         {
-            if (newBottom - y < /*minFrameHeight*/minHeight+5)
-                y = newBottom - /*minFrameHeight*/minHeight - 5;
+            if (newBottom - y < minHeight+5)
+                y = newBottom - minHeight - 5;
             y = QMAX( y, m_doc->ptPageTop( oldPage ) );
             newTop = y;
         } else if ( bottom && newBottom != y )
         {
-            if (y - newTop < minHeight/*minFrameHeight*/+5)
-                y = newTop + /*minFrameHeight*/minHeight + 5;
+            if (y - newTop < minHeight+5)
+                y = newTop + minHeight + 5;
             y = QMIN( y, m_doc->ptPageTop( oldPage + 1 ) );
             newBottom = y;
         }
 
         if ( left && newLeft != x )
         {
-            if (newRight - x < minWidth/*minFrameWidth*/)
-                x = newRight - minWidth/*minFrameWidth*/ - 5;
+            if (newRight - x < minWidth)
+                x = newRight - minWidth - 5;
             x = QMAX( x, 0 );
             newLeft = x;
         } else if ( right && newRight != x )
         {
-            if (x - newLeft < /*minFrameWidth*/minWidth)
-                x = newLeft + /*minFrameWidth*/minWidth + 5; // why +5 ?
+            if (x - newLeft < minWidth)
+                x = newLeft + minWidth + 5; // why +5 ?
             x = QMIN( x, m_doc->ptPaperWidth() );
             newRight = x;
         }
@@ -1228,9 +1226,9 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             if ( frame )
             {
                 FrameIndex index( frame );
-                FrameResizeStruct tmpResize;
-                tmpResize.sizeOfBegin = m_resizedFrameInitialSize;
-                tmpResize.sizeOfEnd = frame->normalize();
+                kdDebug() << "mrEditFrame: initial minframeheight = " << m_resizedFrameInitialMinHeight << endl;
+                FrameResizeStruct tmpResize( m_resizedFrameInitialSize, m_resizedFrameInitialMinHeight,
+                                             frame->normalize() );
 
                 KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize );
                 m_doc->addCommand(cmd);
@@ -1256,15 +1254,16 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             {
                 // Store final positions
                 QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-                int i = 0;
-                for(KWFrame * frame=selectedFrames.first(); frame; frame=selectedFrames.next() )
+                QValueList<FrameMoveStruct>::Iterator it = cmdMoveFrame->listFrameMoved().begin();
+                for(KWFrame * frame=selectedFrames.first(); frame && it != cmdMoveFrame->listFrameMoved().end();
+                    frame=selectedFrames.next() )
                 {
                     KWFrameSet * fs = frame->frameSet();
                     if ( !(m_doc->processingType() == KWDocument::WP && m_doc->frameSetNum( fs ) == 0 )&& !fs->isAHeader() && !fs->isAFooter()  )
                     {
 
-                        cmdMoveFrame->listFrameMoved().at(i)->sizeOfEnd = frame->normalize();
-                        i++;
+                        (*it).newPos = frame->topLeft();
+                        ++it;
                     }
                     // Needed for evaluatable formulas
                     fs->moveFrame( frame );
@@ -1323,6 +1322,7 @@ void KWCanvas::mrCreateText()
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
+        frame->setMinFrameHeight( frame->height() ); // so that AutoExtendFrame doesn't resize it down right away
         frame->setNewFrameBehavior(KWFrame::Reconnect);
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
@@ -1408,7 +1408,7 @@ void KWCanvas::mrCreateTable()
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
-        if ( m_table.cols * minFrameWidth + m_insRect.x() > m_doc->ptPaperWidth() )
+        if ( m_table.cols * s_minFrameWidth + m_insRect.x() > m_doc->ptPaperWidth() )
         {
             KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there "
                                        "is not enough space available."));

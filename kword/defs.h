@@ -34,8 +34,8 @@
 #define DEBUGREGION(reg) { QMemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
                            kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
 
-const unsigned int minFrameWidth=4;
-const unsigned int minFrameHeight=11;
+const unsigned int s_minFrameWidth=4;
+const unsigned int s_minFrameHeight=11;
 
 /** The different types of framesets
  * FT_BASE = unused <br>

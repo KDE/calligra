@@ -117,7 +117,7 @@ void KWPartFrameSet::slotChildChanged()
         frame->updateResizeHandles();
         //there is just a frame
         if(m_cmdMoveChild)
-            m_cmdMoveChild->listFrameMoved().sizeOfEnd = frame->normalize();
+            m_cmdMoveChild->listFrameMoved().newRect = frame->normalize();
     }
     else
         kdDebug(32001) << "Frame not found!" << endl;
@@ -165,12 +165,10 @@ void KWPartFrameSet::startEditing()
     if (!frame)
         return;
     FrameIndex index( frame );
-    FrameResizeStruct tmpMove;
-    tmpMove.sizeOfBegin = frame->normalize();
-    tmpMove.sizeOfEnd = KoRect();
+    FrameResizeStruct tmpMove( frame->normalize(), 0, KoRect() );
 
     if(!m_cmdMoveChild)
-        m_cmdMoveChild=new KWFramePartMoveCommand( i18n("Move Frame"), index, tmpMove );
+        m_cmdMoveChild=new KWFramePartMoveCommand( i18n("Move/Resize Frame"), index, tmpMove );
 }
 
 void KWPartFrameSet::endEditing()

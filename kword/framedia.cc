@@ -1870,22 +1870,17 @@ bool KWFrameDia::applyChanges()
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Make Frameset Inline") );
 
-                QPtrList<FrameIndex> frameindexList;
-                QPtrList<FrameResizeStruct> frameindexMove;
+                QValueList<FrameIndex> frameindexList;
+                QValueList<FrameMoveStruct> frameindexMove;
 
-                FrameIndex *index=new FrameIndex( f );
-                FrameResizeStruct *move=new FrameResizeStruct;
-
-                move->sizeOfBegin=f->normalize();
+                KoPoint oldPos = f->topLeft();
 
                 // turn non-floating frame into floating frame
                 KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
                 cmd->execute();
 
-                move->sizeOfEnd=f->normalize();
-
-                frameindexList.append(index);
-                frameindexMove.append(move);
+                frameindexList.append( FrameIndex( f ) );
+                frameindexMove.append( FrameMoveStruct( oldPos, f->topLeft() ) );
 
                 KWFrameMoveCommand *cmdMoveFrame = new KWFrameMoveCommand( QString::null, frameindexList, frameindexMove );
 
@@ -1920,10 +1915,10 @@ bool KWFrameDia::applyChanges()
                     if( !doc->isOutOfPage( rect , f->pageNum() ) )
                     {
                         FrameIndex index( f );
-                        FrameResizeStruct tmpResize;
-                        tmpResize.sizeOfBegin = f->normalize();
+                        KoRect initialRect = f->normalize();
+                        double initialMinFrameHeight = f->minFrameHeight();
                         f->setRect( px, py, pw, ph );
-                        tmpResize.sizeOfEnd = f->normalize();
+                        FrameResizeStruct tmpResize( initialRect, initialMinFrameHeight, frame->normalize() );
                         if(!macroCmd)
                             macroCmd = new KMacroCommand( i18n("Resize Frame") );
 

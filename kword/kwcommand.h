@@ -30,6 +30,8 @@
 #include "kwframestyle.h"
 #include <kocommand.h>
 #include "kwvariable.h"
+#include <koPoint.h>
+
 class KWFrameSet;
 class KWTableStyle;
 class KWTableTemplate;
@@ -139,11 +141,6 @@ protected:
     QBrush m_newColor;
 };
 
-struct FrameResizeStruct {
-    KoRect sizeOfBegin;
-    KoRect sizeOfEnd;
-};
-
 /**
  * Command created when applying a framestyle
  */
@@ -203,13 +200,28 @@ protected:
     KMacroCommand * m_tableCommands;
 };
 
+struct FrameResizeStruct {
+    // Note that the new "minimum frame height" is always s2.height(),
+    // since this is called when the user manually resizes a frame (not when
+    // some text changes the size of a frame).
+    FrameResizeStruct( const KoRect& s1, double min1, const KoRect& s2 )
+        : oldRect(s1), oldMinHeight(min1),
+          newRect( s2), newMinHeight(s2.height()) {
+    }
+    KoRect oldRect;
+    double oldMinHeight;
+    KoRect newRect;
+    double newMinHeight;
+};
+
 /**
  * Command created when a frame is resized
+ * (or "moved and resized" as for KWPartFrameSet)
  */
 class KWFrameResizeCommand : public KNamedCommand
 {
 public:
-    KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) ;
+    KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, const FrameResizeStruct& _frameResize ) ;
     ~KWFrameResizeCommand() {}
 
     void execute();
@@ -238,21 +250,32 @@ protected:
     KoPictureKey m_newKey;
 };
 
+struct FrameMoveStruct {
+    FrameMoveStruct() {} // for QValueList
+    FrameMoveStruct( const KoPoint& p1, const KoPoint& p2 )
+        : oldPos(p1), newPos(p2) {
+    }
+    KoPoint oldPos;
+    KoPoint newPos;
+};
+
 /**
  * Command created when one or more frames are moved
  */
 class KWFrameMoveCommand : public KNamedCommand
 {
 public:
-    KWFrameMoveCommand( const QString &name,QPtrList<FrameIndex> &_frameIndex,QPtrList<FrameResizeStruct>&_frameMove ) ;
+    KWFrameMoveCommand( const QString &name,
+                        const QValueList<FrameIndex> & _frameIndex,
+                        const QValueList<FrameMoveStruct> & _frameMove );
     ~KWFrameMoveCommand() {}
 
     void execute();
     void unexecute();
-    QPtrList<FrameResizeStruct> & listFrameMoved() { return m_frameMove; }
+    QValueList<FrameMoveStruct> & listFrameMoved() { return m_frameMove; }
 protected:
-    QPtrList<FrameIndex> m_indexFrame;
-    QPtrList<FrameResizeStruct> m_frameMove;
+    QValueList<FrameIndex> m_indexFrame;
+    QValueList<FrameMoveStruct> m_frameMove;
 };
 
 /**

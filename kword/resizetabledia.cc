@@ -80,12 +80,10 @@ bool KWResizeTableDia::doResize()
         if (frm)
         {
             FrameIndex index( frm );
-            FrameResizeStruct resize;
-            resize.sizeOfBegin= frm->normalize();
             KoRect newRect( frm->normalize() );
             newRect.setHeight( KoUnit::ptFromUnit(  position->value(), doc->getUnit() ));
-            resize.sizeOfEnd= newRect;
-            KWFrameResizeCommand * cmd =new KWFrameResizeCommand( i18n("Resize Column"), index, resize );
+            FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
+            KWFrameResizeCommand * cmd = new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
             cmd->execute();
             doc->addCommand( cmd );
         }
@@ -96,13 +94,10 @@ bool KWResizeTableDia::doResize()
         if (frm)
         {
             FrameIndex index( frm );
-            FrameResizeStruct resize;
-            resize.sizeOfBegin= frm->normalize();
             KoRect newRect( frm->normalize() );
             newRect.setWidth( KoUnit::ptFromUnit(  position->value(), doc->getUnit() ));
-            resize.sizeOfEnd= newRect;
-
-            KWFrameResizeCommand * cmd =new KWFrameResizeCommand( i18n("Resize Column"), index, resize );
+            FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
+            KWFrameResizeCommand * cmd =new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
             cmd->execute();
             doc->addCommand( cmd );
         }

@@ -5931,21 +5931,16 @@ void KWView::inlineFrame()
     {
 
         KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Frameset Inline") );
-        QPtrList<FrameIndex> frameindexList;
-        QPtrList<FrameResizeStruct> frameindexMove;
+        QValueList<FrameIndex> frameindexList;
+        QValueList<FrameMoveStruct> frameindexMove;
 
-        FrameIndex *index=new FrameIndex( frame );
-        FrameResizeStruct *move=new FrameResizeStruct;
-
-        move->sizeOfBegin=frame->normalize();
+        KoPoint initialPos = frame->topLeft();
         // turn non-floating frame into floating frame
         KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make Frameset Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
         cmd->execute();
 
-        move->sizeOfEnd=frame->normalize();
-
-        frameindexList.append(index);
-        frameindexMove.append(move);
+        frameindexList.append( FrameIndex( frame ) );
+        frameindexMove.append( FrameMoveStruct( initialPos, frame->topLeft() ) );
 
         KWFrameMoveCommand *cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
 
