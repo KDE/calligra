@@ -1,13 +1,14 @@
 #include "wordfilter.h"
 #include "wordfilter.moc"
 
-WordFilter::WordFilter(const myFile &mainStream, const myFile &tableStream,
-                       const myFile &dataStream) : FilterBase() {
+WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
+                       const myFile &table1Stream, const myFile &dataStream) :
+                       FilterBase() {
 
     success=false; // normally true; only at the moment...
 
     myDoc=0L;
-    myDoc=new WinWordDoc(mainStream, tableStream, dataStream);
+    myDoc=new WinWordDoc(mainStream, table0Stream, table1Stream, dataStream);
     connect(myDoc, SIGNAL(signalFilterError()), this, SLOT(slotFilterError()));
 
     myKwd=0L;

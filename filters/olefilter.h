@@ -31,9 +31,14 @@ protected slots:
     void slotSavePic(const char *data, const char *type, const unsigned int size,
                      char **nameOUT);
     void slotPart(const char *nameIN, const char *type, char **nameOUT);
+    void slotGetStream(const long &handle, myFile &stream);
+    // Note: might return wrong stream as names are NOT unique!!!
+    // (searching only in current dir)
+    void slotGetStream(const QString &name, myFile &stream);
 
 private:
-    void convert(const QString &name);   // do the real work, recursively
+    void convert(const QString &dirname);   // do the real work, recursively
+    void connectCommon(FilterBase **myFilter);
 
     myFile fileIn;                   // will hopefully be changed, soon (to filename only)
     QString fileOutName;             // path+name of the output file

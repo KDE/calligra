@@ -16,7 +16,6 @@
 #include "main.h"
 #include "main.moc"
 
-
 typedef KOMAutoLoader<Factory> MyAutoLoader;
 
 /******************************************************************/
@@ -101,14 +100,12 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
     CORBA::ULong len = data.length();
     if (len==0)
         return;
-
     unsigned char *buffer = new unsigned char[len + 1];
     for(CORBA::ULong i=0; i<len; ++i)
         buffer[i] = static_cast<unsigned char>(data[i]);
     buffer[len] = 0;
 
     QString nameOut="/tmp/testOLE.kwd.tgz";
-
     docFile.data=buffer;   // see myfile.h
     docFile.length=len;
     myOLEFilter=new OLEFilter(docFile, nameOut, in, out);
@@ -417,14 +414,12 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
             "</DOC>";
         }
     }
-    
     // will disappear soon
     QCString cstr=QCString(str.utf8());
-
     len = cstr.length();
     data.length(len);
     
-    // will we give back the name?
+    // will we give back the name only, soon?
     for(CORBA::ULong i=0; i<len; ++i)
         data[i]=cstr[i];
 

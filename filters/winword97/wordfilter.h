@@ -28,8 +28,8 @@ class WordFilter : public FilterBase {
     Q_OBJECT
 
 public:
-    WordFilter(const myFile &mainStream, const myFile &tableStream,
-               const myFile &dataStream);
+    WordFilter(const myFile &mainStream, const myFile &table0Stream,
+               const myFile &table1Stream, const myFile &dataStream);
     virtual ~WordFilter();
 
 private:

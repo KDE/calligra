@@ -50,7 +50,7 @@ public:
     KLaola(const myFile &file);               // see myfile.h!
     ~KLaola();
 
-    const bool isOk() {return ok;};
+    const bool isOk() {return ok;}
 
     const QList<OLENode> parseRootDir();
     const QList<OLENode> parseCurrentDir();
@@ -60,12 +60,13 @@ public:
     const QArray<long> currentPath() const;
 
     const OLEInfo streamInfo(const long &handle);
-    const QString stream(const long &handle);       // Note: 512 byte blocks!
-
+    const myFile stream(const long &handle);    // Note: data - 512 byte blocks, but
+                                                // length is set correctly :)
+                                                // make sure that you delete [] the data!
     const QArray<long> find(const QString &name);
 
     void testIt();                     // dump some info (similar to "lls"
-                                       // of the LAOLA-project), TODO
+                                       // of the LAOLA-project)
  
 private:
     struct OLETree {

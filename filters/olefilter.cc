@@ -33,7 +33,7 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
             tmp.prepend(static_cast<char>(c));
         }
         if(tmp.isEmpty())
-            tmp="/nix";
+            tmp="/main";
 
         dir=tmp.right(tmp.length()-1);
         tmp=dir;
@@ -102,6 +102,33 @@ void OLEFilter::slotPart(const char *nameIN, const char *type,
     }
 }
 
+void OLEFilter::slotGetStream(const long &handle, myFile &stream) {
+    stream=docfile->stream(handle);
+}
+
+// I can't guarantee that you get the right stream as the names
+// are not unique! (searching only the current dir!)
+void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
+
+    QList<OLENode> list=docfile->parseCurrentDir();
+    OLENode *node;
+    bool found=false;
+
+    node=list.first();
+    while(node!=0 && !found) {
+        if(node->name==name)
+            found=true;
+        else
+            node=list.next();
+    }
+    if(found)
+        stream=docfile->stream(node->handle);
+    else {
+        stream.data=0L;
+        stream.length=0;
+    }
+}
+
 void OLEFilter::convert(const QString &dirname) {
 
     QList<OLENode> list=docfile->parseCurrentDir();
@@ -129,31 +156,55 @@ void OLEFilter::convert(const QString &dirname) {
                node->name=="0Table" || node->name=="ObjectPool") {
                 // Word
                 kdebug(KDEBUG_INFO, 31000, "WinWord");
-                myFilter=new FilterBase();
+                // fetch streams, TODO
+                myFilter=new FilterBase(); // normally a WordFilter :)
+                // connect SIGNALs&SLOTs
+                connectCommon(&myFilter);
             }
             else if(node->name=="Workbook") {
                 // Excel
                 kdebug(KDEBUG_INFO, 31000, "Excel");
                 myFilter=new FilterBase();
+                // connect SIGNALs&SLOTs
+                connectCommon(&myFilter);
             }
             else if(node->name=="PowerPoint Document") {
                 // PowerPoint
                 kdebug(KDEBUG_INFO, 31000, "Power Point");
                 myFilter=new FilterBase();
+                // connect SIGNALs&SLOTs
+                connectCommon(&myFilter);
             }
             else if(node->name=="Equation Native") {
                 // MS Equation
-                kdebug(KDEBUG_INFO, 31000, "Formel");
+                kdebug(KDEBUG_INFO, 31000, "MS Equation");
                 myFilter=new FilterBase();
+                // connect SIGNALs&SLOTs
+                connectCommon(&myFilter);
             }
+
+            // some more will be here, soon...
+
             node=list.next();
         } while(myFilter==0L && node!=0);
 
         if(myFilter==0L) {
             // unknown
-            kdebug(KDEBUG_INFO, 31000, "keine Ahnung");
+            kdebug(KDEBUG_INFO, 31000, "unknown");
         }
-
         delete myFilter;
     }
+}
+
+void OLEFilter::connectCommon(FilterBase **myFilter) {
+
+    connect(*myFilter, SIGNAL(signalSavePic(const char *, const char *,
+            const unsigned int, char **)), this, SLOT(slotSavePic(const char *,
+            const char *, const unsigned int, char **)));
+    connect(*myFilter, SIGNAL(signalPart(const char *, const char *, char **)),
+            this, SLOT(slotPart(const char *, const char *, char **)));
+    connect(*myFilter, SIGNAL(signalGetStream(const long &, myFile &)), this,
+            SLOT(slotGetStream(const long &, myFile &)));
+    connect(*myFilter, SIGNAL(signalGetStream(const QString &, myFile &)), this,
+            SLOT(slotGetStream(const QString &, myFile &)));
 }

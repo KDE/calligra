@@ -1,23 +1,34 @@
 #include "winworddoc.h"
 #include "winworddoc.moc"
 
-WinWordDoc::WinWordDoc(const myFile &, const myFile &, const myFile &) : QObject() {
+WinWordDoc::WinWordDoc(const myFile &, const myFile &, const myFile &,
+                       const myFile &) : QObject() {
 
     success=true;
-    main=0L;
-    table=0L;
+    main.data=0L;
+    table0.data=0L;
+    table1.data=0L;
+    data.data=0L;
 
     // more to come...
 }
 
 WinWordDoc::~WinWordDoc() {
-    if(main) {
-        delete main;
-        main=0L;
+    if(main.data) {
+        delete [] main.data;
+        main.data=0L;
     }
-    if(table) {
-        delete table;
-        table=0L;
+    if(table0.data) {
+        delete [] table0.data;
+        table0.data=0L;
+    }
+    if(table1.data) {
+        delete [] table1.data;
+        table1.data=0L;
+    }
+    if(data.data) {
+        delete [] data.data;
+        data.data=0L;
     }
 }
 
