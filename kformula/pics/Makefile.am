@@ -10,6 +10,6 @@ data_DATA = kformula2-1.xpm mini-symbols.xpm enlarge.xpm \
     index3.xpm index.xpm indexsw.xpm nextsw.xpm childrensw.xpm elementsw.xpm \
     split.xpm matrix.xpm lower.xpm higher.xpm upalign.xpm downalign.xpm midalign.xpm\
     midline.xpm delimiter.xpm insrow.xpm inscol.xpm remrow.xpm remcol.xpm rootindex.xpm\
-    bold.xpm italic.xpm underl.xpm 
-    
+    bold.xpm italic.xpm underl.xpm near.xpm far.xpm leftalign.xpm rightalign.xpm centralign.xpm \
+    pixmap.xpm
     
