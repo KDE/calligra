@@ -37,6 +37,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
 
     // TODO: 1 - define the region which has to be
     //           repainted. (Don't forget to add the offset!)
+    //           call m_doc->preparePainting(zoom)!!!
     //           Create a dbuffer and create a painter on this buffer.
     //       2 - call m_doc->painContent(). This draws
     //           the objects to the buffer. Note: don't

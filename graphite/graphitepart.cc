@@ -92,6 +92,10 @@ KoMainWindow *GraphitePart::createShell() {
     return shell;
 }
 
+void GraphitePart::preparePainting(const int &zoom) {
+    // TODO - call something like m_nodeZeroObject->setZoom(zoom)
+}
+
 void GraphitePart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool /*transparent*/) {
 
     kdDebug(37001) << "GraphitePart::painEvent()" << endl;

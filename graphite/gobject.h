@@ -108,9 +108,8 @@ public:
     virtual void rotate(const QPoint &center, const double &angle) = 0;
     virtual void setAngle(const double &angle) { m_angle=angle; }
     const double &angle() const { return m_angle; }
-    
+
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor) = 0;
-    
     virtual void resize(const QRect &boundingRect) = 0;  // resize, that it fits in this rect
 
     const State &state() const { return m_state; }               // what's the current state?
@@ -154,6 +153,8 @@ protected:
 		    const QPoint &center);
     void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
 		    const QPoint &center);
+
+    const int double2Int(const double &value);   // convert back to int
 
     QString m_name;                              // name of the object
     State m_state;                               // are there handles to draw or not?
@@ -202,22 +203,8 @@ inline const QPoint GObject::zoomIt(const QPoint &point) const {
 inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) {
 
     double r=sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
-    // dy
-    double d=r*sin(angle);
-    if( static_cast<double>((d-static_cast<int>(d)))>=0.5 )
-	y+=static_cast<int>(d)+1;
-    else if( static_cast<double>((d-static_cast<int>(d)))<=-0.5 )
-	y+=static_cast<int>(d)-1;
-    else
-	y+=static_cast<int>(d);
-    // dx
-    d=r*(1-cos(angle));
-    if( static_cast<double>((d-static_cast<int>(d)))>=0.5 )
-	x+=static_cast<int>(d)+1;
-    else if( static_cast<double>((d-static_cast<int>(d)))<=-0.5 )
-	x+=static_cast<int>(d)-1;
-    else
-	x+=static_cast<int>(d);
+    y+=double2Int(r*sin(angle));
+    x+=double2Int(r*(1-cos(angle)));
 }
 
 inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) {
@@ -234,6 +221,44 @@ inline void GObject::rotatePoint(double &x, double &y, const double &angle, cons
 inline void GObject::rotatePoint(QPoint &p, const double &angle, const QPoint &center) {
     rotatePoint(p.rx(), p.ry(), angle, center);
 }
+
+inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
+			 const QPoint &center) {
+    if(xfactor<=0 || yfactor<=0)
+	return;
+    x=double2Int( static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor );
+    y=double2Int( static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor );
+}
+
+inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
+			 const double &yfactor, const QPoint &center) {
+    scalePoint(static_cast<int>(x), static_cast<int>(y), xfactor, yfactor, center);
+}
+
+inline void GObject::scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
+			 const QPoint &center) {
+    if(xfactor<=0 || yfactor<=0)
+	return;
+    x=static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor;
+    y=static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor;
+}
+
+
+inline void GObject::scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
+			 const QPoint &center) {
+    scalePoint(p.rx(), p.ry(), xfactor, yfactor, center);
+}
+
+inline const int GObject::double2Int(const double &value) {
+
+    if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
+	return static_cast<int>(value)+1;
+    else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
+	return static_cast<int>(value)-1;
+    else
+	return static_cast<int>(value);
+}
+
 
 // This is the manipulator class for GObject. Manipulators (M9r's)
 // are used to handle the selection, movement, rotation,... of objects.

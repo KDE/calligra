@@ -57,9 +57,9 @@ public:
     virtual void rotate(const QPoint &center, const double &angle);
     virtual void setAngle(const double &angle) { m_angle=angle; }
     const double &angle() const { return m_angle; }
-        
+
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
-    
+
     virtual void resize(const QRect &boundingRect);
 
     const QPoint &a() const { return m_a; }
@@ -77,8 +77,8 @@ private:
 class GLineM9r : public GObjectM9r {
 
 public:
-    GLineM9r(GLine *line) : m_line(line) {}
-    virtual ~GLineM9r() {}
+    GLineM9r(GLine *line) : m_line(line) { m_line->setState(GObject::Handles); }
+    virtual ~GLineM9r() { m_line->setState(GObject::Visible); }
 
     virtual const bool mouseMoveEvent(QMouseEvent *e);
     virtual const bool mousePressEvent(QMouseEvent *e);

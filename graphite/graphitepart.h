@@ -41,6 +41,7 @@ public:
     virtual KoView *createView(QWidget *parent=0, const char *name=0);
     virtual KoMainWindow *createShell();
 
+    void preparePainting(const int &zoom=100); // prepare the painting (i.e. zoom,...)
     virtual void paintContent(QPainter &painter, const QRect &rect, bool transparent=false);
 
     virtual bool initDoc();

@@ -43,6 +43,7 @@ GraphiteView::~GraphiteView() {
     m_canvas=0L;
 }
 
+// Is done in GCanvas :)
 /*void GraphiteView::paintEvent(QPaintEvent *ev) {
 
     kdDebug(37001) << "GraphiteView::painEvent()" << endl;
