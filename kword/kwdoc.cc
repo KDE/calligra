@@ -2039,7 +2039,7 @@ void KWDocument::processAnchorRequests()
         KWFrameSet * fs = frameSetByName( fsname );
         Q_ASSERT( fs );
         if ( fs )
-            fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true );
+            fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true, false /*don't repaint yet*/ );
     }
     m_anchorRequests.clear();
 }

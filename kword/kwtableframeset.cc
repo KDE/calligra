@@ -130,7 +130,8 @@ KWAnchor * KWTableFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
     return new KWAnchor( txt, this, frameNum );
 }
 
-void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
+void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/,
+                                     bool repaint )
 {
     //kdDebug(32004) << "KWTableFrameSet::createAnchors" << endl;
     // TODO make one rect per page, and create one anchor per page
@@ -144,7 +145,8 @@ void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeH
         kdDebug(32004) << "KWTableFrameSet::createAnchors setting anchor" << endl;
     }
     parag->setChanged( true );
-    emit repaintChanged( m_anchorTextFs );
+    if ( repaint )
+        emit repaintChanged( m_anchorTextFs );
 }
 
 void KWTableFrameSet::deleteAnchors()

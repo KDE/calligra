@@ -764,7 +764,6 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     // ...except when printing, or embedded doc, or disabled.
     if ( !viewMode || !viewMode->drawFrameBorders() )
     {
-        kdDebug(32001) << k_funcinfo << " deactivating pen" << endl;
         viewSetting = NoPen;
         minBorder = 0;
     }
@@ -799,12 +798,12 @@ void KWFrameSet::setFloating()
         setAnchored( frameSet, parag->paragId(), index );
         frameSet->layout();
         frames.first()->updateResizeHandles();
-        m_doc->frameChanged(  frames.first() );
+        m_doc->frameChanged( frames.first() );
         return;
     }
 }
 
-void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */ )
+void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */, bool repaint )
 {
     Q_ASSERT( textfs );
     kdDebug(32001) << "KWFrameSet::setAnchored " << textfs << " " << paragId << " " << index << " " << placeHolderExists << endl;
@@ -814,7 +813,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bo
     KWTextParag * parag = static_cast<KWTextParag *>( textfs->textDocument()->paragAt( paragId ) );
     Q_ASSERT( parag );
     if ( parag )
-        createAnchors( parag, index, placeHolderExists );
+        createAnchors( parag, index, placeHolderExists, repaint );
 
     m_doc->updateAllFrames(); // We just became floating, so we need to be removed from "frames on top/below".
     // TODO pass page number - hmm, we could have several frames in theory
@@ -867,7 +866,8 @@ KWAnchor * KWFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
     return anchor;
 }
 
-void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
+void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/,
+                                bool repaint )
 {
     kdDebug(32001) << "KWFrameSet::createAnchors" << endl;
     Q_ASSERT( m_anchorTextFs );
@@ -884,7 +884,8 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
         }
     }
     parag->setChanged( true );
-    emit repaintChanged( m_anchorTextFs );
+    if ( repaint )
+        emit repaintChanged( m_anchorTextFs );
 }
 
 void KWFrameSet::deleteAnchor( KWAnchor * anchor )

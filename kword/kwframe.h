@@ -691,7 +691,7 @@ public:
     /** Make this frameset floating, as close to its current position as possible. */
     void setFloating();
     /** Make this frameset floating, with the anchor at @p paragId,@p index in the text frameset @p textfs */
-    void setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists = false );
+    void setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists = false, bool repaint = true );
     /** Note that this frameset has been made floating already, and store anchor position */
     void setAnchored( KWTextFrameSet* textfs );
     /** Make this frameset fixed, i.e. not anchored */
@@ -801,7 +801,7 @@ protected:
 
     void deleteAnchor( KWAnchor * anchor );
     virtual void deleteAnchors();
-    virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false );
+    virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false, bool repaint = true );
 
 
     KWDocument *m_doc;            // Document
