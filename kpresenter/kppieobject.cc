@@ -138,22 +138,35 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 {
     double ow = ext.width();
     double oh = ext.height();
-    QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
-    _painter->setPen( pen2 );
     double pw = pen.width() / 2;
-    _painter->setBrush( brush );
+
+    if ( drawContour ) {
+	QPen pen3( Qt::black, 1, Qt::DotLine );
+	_painter->setPen( pen3 );
+    }
+    else {
+	QPen pen2( pen );
+	pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
+	_painter->setPen( pen2 );
+	_painter->setBrush( brush );
+    }
 
     switch ( pieType )
     {
     case PT_PIE:
-        _painter->drawPie( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY( pw), _zoomHandler->zoomItX( ow - 2 * pw), _zoomHandler->zoomItY( oh - 2 * pw), p_angle, p_len );
+        _painter->drawPie( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY( pw),
+			   _zoomHandler->zoomItX( ow - 2 * pw),
+			   _zoomHandler->zoomItY( oh - 2 * pw), p_angle, p_len );
         break;
     case PT_ARC:
-        _painter->drawArc( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
+        _painter->drawArc( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+			   _zoomHandler->zoomItX(ow - 2 * pw),
+			   _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
         break;
     case PT_CHORD:
-        _painter->drawChord( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
+        _painter->drawChord( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
+			     _zoomHandler->zoomItX(ow - 2 * pw),
+			     _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
         break;
     default: break;
     }
