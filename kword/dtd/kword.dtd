@@ -295,12 +295,15 @@ don't put a </?xml...> at the end of the file!).
             runaroundGap:       when runaround is 1 specify here the distance (in pt)
                                 between overlapping frames and runaround text
 
-            autoCreateNewFrame: What to do if the text is bigger than the frame allows:
-                                0...AutoExtendFrame
+            autoCreateNewFrame: What to do if the text is bigger than the frame:
+                                0...AutoExtendFrame  
+                                    Make frame bigger to fit text.
                                 1...AutoCreateNewFrame (use this for the normal text body)
+                                    Place a new frame on next page.
                                 2...Ignore extra text
 
-            newFrameBehaviour:  0...On creating a new page, reconnect frame
+            newFrameBehaviour:  DEPRICATED use newFrameBehavior instead.
+            newFrameBehavior:  0...On creating a new page, reconnect frame
                                     to current frameset (use this for the normal text body).
                                 1...Don't create a followup frame on the new
                                     page.
