@@ -261,7 +261,8 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 	    } else {
 		// Breakable char was found
 		i = lastBreak;
-		QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align, w - string->at( i ).x );
+		QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align,
+		                                                w - string->at( i ).x - ( string->isRightToLeft() && lastChr == '\n'? (c - 1)->width: 0 ) );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 		lineStart = lineStart2;
@@ -425,7 +426,8 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 	// last line in a paragraph is not justified
 	if ( align == Qt::AlignJustify )
 	    align = Qt::AlignAuto;
-	QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c, align, w - x );
+	QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c, align,
+	                                                w - x + ( string->isRightToLeft()? c->width: 0 ) ); // don't calc the line break when having right to left text
 	h += doc ? parag->lineSpacing( linenr++ ) : 0;
 	lineStart->h = h;
 	delete lineStart2;

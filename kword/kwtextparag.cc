@@ -29,6 +29,8 @@
 #include <kdebug.h>
 #include <assert.h>
 
+//#define DEBUG_FORMATTING
+
 // Called by KoTextParag::drawParagString - all params are in pixel coordinates
 void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/, int start, int len,
                                        int /*startX*/, int /*lastY*/, int /*baseLine*/, int /*h*/, // in LU
@@ -78,12 +80,17 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                 else
                 {
                     // drawing the end of the parag
-                    KoTextFormat* format = static_cast<KoTextFormat *>( at( length() - 1 )->format() );
-                    int w = format->screenFontMetrics(zh).width('x'); // see KWTextFrameSet::formatVertically
+                    KoTextStringChar &ch = string()->at( length() - 1 );
+                    KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );
+                    int w = format->screenFontMetrics(zh).width('X');
                     int size = QMIN( w, h_pix * 3 / 4 );
                     // x,y is the bottom right corner of the ¶
                     //kdDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
-                    int x = ( startX_pix + bw ) + w - 1;
+                    int x;
+                    if ( rightToLeft )
+                        x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + ch.pixelwidth - 1;
+                    else
+                        x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + w;
                     int y = lastY_pix + baseLine_pix;
                     //kdDebug() << "KWTextParag::drawFormattingChars drawing CR at " << x << "," << y << endl;
                     painter.drawLine( (int)(x - size * 0.2), y - size, (int)(x - size * 0.2), y );
@@ -91,6 +98,12 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                     painter.drawLine( x, y, (int)(x - size * 0.7), y );
                     painter.drawLine( x, y - size, (int)(x - size * 0.5), y - size);
                     painter.drawArc( x - size, y - size, size, (int)(size / 2), -90*16, -180*16 );
+#ifdef DEBUG_FORMATTING
+                    painter.setPen( Qt::blue );
+                    painter.drawRect( zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj - 1, lastY_pix, ch.pixelwidth, baseLine_pix );
+                    QPen pen( cg.color( QColorGroup::Highlight ) );
+                    painter.setPen( pen );
+#endif
                 }
             }
 
@@ -99,6 +112,12 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
             for ( int i = start ; i < end ; ++i )
             {
                 KoTextStringChar &ch = string()->at(i);
+#ifdef DEBUG_FORMATTING
+                painter.setPen( (i % 2)? Qt::red: Qt::green );
+                painter.drawRect( zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj - 1, lastY_pix, ch.pixelwidth, baseLine_pix );
+                QPen pen( cg.color( QColorGroup::Highlight ) );
+                painter.setPen( pen );
+#endif
                 if ( ch.isCustom() )
                     continue;
                 if ( ch.c == ' ' )
@@ -128,8 +147,16 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                     int y = lastY_pix + baseLine_pix - zh->layoutUnitToPixelY( ch.ascent()/2 );
                     int arrowsize = zh->zoomItY( 2 );
                     painter.drawLine( x + size, y, x - size, y );
-                    painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
-                    painter.drawLine( x + size, y, x + size - arrowsize, y + arrowsize );
+                    if ( rightToLeft )
+                    {
+                        painter.drawLine( x - size, y, x - size + arrowsize, y - arrowsize );
+                        painter.drawLine( x - size, y, x - size + arrowsize, y + arrowsize );
+                    }
+                    else
+                    {
+                        painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
+                        painter.drawLine( x + size, y, x + size - arrowsize, y + arrowsize );
+                    }
                 }
                 else if ( ch.c == '\n' )
                 {
@@ -138,17 +165,28 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                     int w = format->screenFontMetrics(zh).width('X');
                     int size = QMIN( w, h_pix * 3 / 4 );
                     int arrowsize = zh->zoomItY( 2 );
-                    KoTextStringChar &ch = string()->at(i);
                     // x,y is the bottom right corner of the reversed L
                     //kdDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
-                    int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + w - 1;
                     int y = lastY_pix + baseLine_pix - arrowsize;
                     //kdDebug() << "KWTextParag::drawFormattingChars drawing Line Break at " << x << "," << y << endl;
-                    painter.drawLine( x, y - size, x, y );
-                    painter.drawLine( x, y, (int)(x - size * 0.7), y );
-                    // Now the arrow
-                    painter.drawLine( (int)(x - size * 0.7), y, (int)(x - size * 0.7 + arrowsize), y - arrowsize );
-                    painter.drawLine( (int)(x - size * 0.7), y, (int)(x - size * 0.7 + arrowsize), y + arrowsize );
+                    if ( rightToLeft )
+                    {
+                        int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + ch.pixelwidth - 1;
+                        painter.drawLine( x - size, y - size, x - size, y );
+                        painter.drawLine( x - size, y, (int)(x - size * 0.3), y );
+                        // Now the arrow
+                        painter.drawLine( (int)(x - size * 0.3), y, (int)(x - size * 0.3 - arrowsize), y - arrowsize );
+                        painter.drawLine( (int)(x - size * 0.3), y, (int)(x - size * 0.3 - arrowsize), y + arrowsize );
+                    }
+                    else
+                    {
+                        int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + w - 1;
+                        painter.drawLine( x, y - size, x, y );
+                        painter.drawLine( x, y, (int)(x - size * 0.7), y );
+                        // Now the arrow
+                        painter.drawLine( (int)(x - size * 0.7), y, (int)(x - size * 0.7 + arrowsize), y - arrowsize );
+                        painter.drawLine( (int)(x - size * 0.7), y, (int)(x - size * 0.7 + arrowsize), y + arrowsize );
+                    }
                 }
             }
             painter.restore();

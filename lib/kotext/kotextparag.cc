@@ -443,13 +443,18 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 
     // don't want to draw line breaks but want them when drawing formatting chars
     int draw_len = len;
+    int draw_startX = startX;
     int draw_bw = bw;
-    if ( at( start + len - 1 )->c == '\n' ) {
-        draw_len--;
-        draw_bw -= at( start + len - 1 )->pixelwidth;
+    if ( at( start + len - 1 )->c == '\n' )
+    {
+      draw_len--;
+      draw_bw -= at( start + len - 1 )->pixelwidth;
+      if ( rightToLeft )
+        draw_startX = at( start + draw_len - 1 )->x;
     }
+    int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj;
 
-    drawParagStringInternal( painter, s, start, draw_len, startX_pix,
+    drawParagStringInternal( painter, s, start, draw_len, draw_startX_pix,
                              lastY_pix, baseLine_pix,
                              draw_bw, // Note that bw is already in pixels (see QTextParag::paint)
                              h_pix, drawSelections, lastFormat, i, selectionStarts,
@@ -670,10 +675,25 @@ int KoTextParag::nextTab( int chnum, int x )
         // We stored them there for faster access
         int * tArray = tabArray();
         int i = 0;
-        while ( tArray[ i ] ) {
+        if ( string()->isRightToLeft() )
+            i = m_layout.tabList().size() - 1;
+
+        while ( i >= 0 && i < m_layout.tabList().size() ) {
             //kdDebug() << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
-            if ( tArray[ i ] > x ) {
+            int tab = tArray[ i ];
+            if ( string()->isRightToLeft() )
+                tab = rect().width() - tab;
+
+            if ( tab > x ) {
                 int type = m_layout.tabList()[i].type;
+
+                // fix the tab type for right to left text
+                if ( string()->isRightToLeft() )
+                    if ( type == T_RIGHT )
+                        type = T_LEFT;
+                    else if ( type == T_LEFT )
+                        type = T_RIGHT;
+
                 switch ( type ) {
                 case T_RIGHT:
                 case T_CENTER:
@@ -684,17 +704,23 @@ int KoTextParag::nextTab( int chnum, int x )
                     while ( c < string()->length() - 1 && string()->at( c ).c != '\t' && string()->at( c ).c != '\n' )
                     {
                         KoTextStringChar & ch = string()->at( c );
-                        // Determine char width (same code as the one in QTextFormatterBreak[In]Words::format())
-                        if ( ch.c.unicode() >= 32 || ch.isCustom() )
-                            w += string()->width( c );
+                        // Determine char width
+                        // This must be done in the same way as in KoTextFormatter::format() or there can be different rounding errors.
+                        if ( ch.isCustom() )
+                            w += ch.customItem()->width;
                         else
-                            w += ch.format()->width( ' ' );
+                        {
+                            KoTextFormat *charFormat = static_cast<KoTextFormat *>( ch.format() );
+                            int ww = charFormat->charWidth( textDocument()->formattingZoomHandler(), false, &ch, this, c );
+                            ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
+                            w += ww;
+                        }
                         ++c;
                     }
                     if ( type == T_RIGHT )
-                        return tArray[ i ] - w;
+                        return tab - w;
                     else // T_CENTER
-                        return tArray[ i ] - w/2;
+                        return tab - w/2;
                 }
                 case T_DEC_PNT:
                 {
@@ -704,34 +730,54 @@ int KoTextParag::nextTab( int chnum, int x )
                     int w = 0;
                     int decimalPoint = KGlobal::locale()->decimalSymbol()[0].unicode();
                     bool digitFound = false;
+                    bool decimalPointFound = false;
                     while ( c < string()->length()-1 && string()->at( c ).c != '\t' && string()->at( c ).c != '\n' )
                     {
                         KoTextStringChar & ch = string()->at( c );
+                        
                         if ( ch.c.isDigit() )
                             digitFound = true;
                         else if ( digitFound && ( ch.c == '.' || ch.c.unicode() == decimalPoint ) )
                         {
-                            w += string()->width( c ) / 2; // center around the decimal point
-                            break;
+                            if ( string()->isRightToLeft() )
+                            {
+                                decimalPointFound = true;
+                                w = string()->width( c ) / 2; // center around the decimal point
+                                ++c;
+                                continue;
+                            }
+                            else
+                            {
+                                w += string()->width( c ) / 2; // center around the decimal point
+                                break;
+                            }
                         }
                         else
                             digitFound = false; // The digit has to be right before the dot
 
-                        // Determine char width (same code as the one in QTextFormatterBreak[In]Words::format())
-                        if ( ch.c.unicode() >= 32 || ch.isCustom() )
-                            w += string()->width( c );
+                        // Determine char width
+                        if ( ch.isCustom() )
+                            w += ch.customItem()->width;
                         else
-                            w += ch.format()->width( ' ' );
+                        {
+                            KoTextFormat *charFormat = static_cast<KoTextFormat *>( ch.format() );
+                            int ww = charFormat->charWidth( textDocument()->formattingZoomHandler(), false, &ch, this, c );
+                            ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
+                            w += ww;
+                        }
 
                         ++c;
                     }
-                    return tArray[ i ] - w;
+                    return tab - w;
                 }
                 default: // case T_LEFT:
-                    return tArray[ i ];
+                    return tab;
                 }
             }
-            ++i;
+            if ( string()->isRightToLeft() )
+                --i;
+            else
+                ++i;
         }
         // No more tabs
         return tArray[0];

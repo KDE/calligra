@@ -5047,7 +5047,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag * /*parag*/, Ko
 		c->startOfRun = FALSE;
 		int ww = 0;
 		if ( c->c.unicode() >= 32 || c->c == '\t' || c->c == '\n' || c->isCustom() ) {
-		    ww = text->width( pos );
+		    ww = c->width;
 		} else {
 		    ww = c->format()->width( ' ' );
 		}
@@ -5074,7 +5074,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag * /*parag*/, Ko
 		c->startOfRun = FALSE;
 		int ww = 0;
 		if ( c->c.unicode() >= 32 || c->c == '\t' || c->isCustom() ) {
-		    ww = text->width( pos );
+		    ww = c->width;
 		} else {
 		    ww = c->format()->width( ' ' );
 		}
