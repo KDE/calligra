@@ -5798,7 +5798,7 @@ void KWView::addBookmark()
             QString bookName = dia.bookmarkName();
             int startSel = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard ).index();
             int endSel = edit->textDocument()->selectionEndCursor( KoTextDocument::Standard ).index();
-            m_doc->insertBookMark(bookName, static_cast<KWTextParag*>(edit->cursor()->parag()), edit->textFrameSet(), startSel, endSel-startSel+1);
+            m_doc->insertBookMark(bookName, static_cast<KWTextParag*>(edit->cursor()->parag()), edit->textFrameSet(), startSel, endSel-startSel);
         }
     }
 }
