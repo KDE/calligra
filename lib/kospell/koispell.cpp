@@ -460,7 +460,7 @@ void KOISpell::checkWord2 (KProcIO *)
     }
   else if( mistake )
     {
-      emit misspelling (word, sugg, lastpos);
+      misspellingWord (word, sugg, lastpos);
     }
 
   //emits a "corrected" signal _even_ if no change was made
@@ -718,7 +718,7 @@ void KOISpell::checkList3a (KProcIO *)
 		}
 	      else
 		{
-		  emit misspelling (word, sugg, lastpos);
+		  misspellingWord (word, sugg, lastpos);
  		}
 	    }
 
@@ -901,7 +901,7 @@ void KOISpell::check2 (KProcIO *)
                       dialog (word, sugg, SLOT (check3()));
                   } else {
                       // No dialog, just emit misspelling and continue
-                      emit misspelling (word, sugg, lastpos);
+                      misspellingWord (word, sugg, lastpos);
                       dlgresult = KOS_IGNORE;
                       check3();
                   }
@@ -1006,7 +1006,7 @@ void KOISpell::dialog(const QString & word, QStringList & sugg, const char *_slo
   dialogwillprocess=TRUE;
   connect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
   ksdlg->init (word, &sugg);
-  emit misspelling (word, sugg, lastpos);
+  misspellingWord (word, sugg, lastpos);
 
   emitProgress();
   ksdlg->show();
@@ -1096,7 +1096,7 @@ void KOISpell::ispellExit (KProcess *)
   if (m_status == Starting)
      m_status = Error;
   else if (m_status == Cleaning)
-     m_status = Finished;
+      m_status = m_bNoMisspellingsEncountered ? FinishedNoMisspellingsEncountered : Finished;
   else if (m_status == Running)
      m_status = Crashed;
   else // Error, Finished, Crashed

@@ -123,9 +123,17 @@ KOSpell::~KOSpell()
     delete ksdlg;
 }
 
+void KOSpell::misspellingWord (const QString & originalword, const QStringList & suggestions, unsigned int pos)
+{
+    m_bNoMisspellingsEncountered = false;
+    emit misspelling (originalword, suggestions, pos);
+}
+
+
 void KOSpell::initSpell( KOSpellConfig *_ksc )
 {
-    autoDelete=false;
+    m_bNoMisspellingsEncountered = true;
+    autoDelete = false;
     //won't be using the dialog in ksconfig, just the option values
     if (_ksc!=0)
         ksconfig = new KOSpellConfig (*_ksc);

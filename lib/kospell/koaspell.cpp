@@ -444,9 +444,9 @@ void KOASpell::dialog(const QString & word, QStringList & sugg )
     connect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
     ksdlg->init (word, &sugg);
     if (!ksdlg->previousWord())
-        emit misspelling (word, sugg, lastpos+offset-word.length());
+        misspellingWord (word, sugg, lastpos+offset-word.length());
     else
-        emit misspelling (word, sugg, lastpos+offset+1);
+        misspellingWord (word, sugg, lastpos+offset+1);
 
     ksdlg->show();
 }

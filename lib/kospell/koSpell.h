@@ -30,7 +30,7 @@ class KOSpell : public QObject
 {
     Q_OBJECT
 public:
-    enum spellStatus { Starting = 0, Running, Cleaning, Finished, Error, Crashed };
+    enum spellStatus { Starting = 0, Running, Cleaning, Finished, Error, Crashed, FinishedNoMisspellingsEncountered };
     ~KOSpell();
     //slot necessary for old lib
     //receive used this by default
@@ -295,6 +295,7 @@ private slots:
 
 protected:
     void initSpell( KOSpellConfig *_ksc );
+    void misspellingWord (const QString & originalword, const QStringList & suggestions, unsigned int pos);
 
     KOSpell(QWidget *parent, const QString &caption,KOSpellConfig *kcs=0,
             bool modal = FALSE, bool _autocorrect =FALSE );
@@ -304,6 +305,7 @@ protected:
     bool m_bIgnoreUpperWords;
     bool m_bIgnoreTitleCase;
     bool autoDelete;
+    bool m_bNoMisspellingsEncountered;
     unsigned int totalpos;
     unsigned int lastline;
     unsigned int posinline;
