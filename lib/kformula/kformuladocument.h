@@ -127,6 +127,9 @@ public:
     KAction* getAddThickSpaceAction();
     KAction* getAddQuadSpaceAction();
     KAction* getAddBracketAction();
+    KAction* getAddSBracketAction();
+    KAction* getAddCBracketAction();
+    KAction* getAddAbsAction(); 
     KAction* getAddFractionAction();
     KAction* getAddRootAction();
     KAction* getAddSumAction();

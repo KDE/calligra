@@ -151,6 +151,9 @@ KAction* Document::getAddMediumSpaceAction()   { return impl->addMediumSpaceActi
 KAction* Document::getAddThickSpaceAction()    { return impl->addThickSpaceAction; }
 KAction* Document::getAddQuadSpaceAction()     { return impl->addQuadSpaceAction; }
 KAction* Document::getAddBracketAction()       { return impl->addBracketAction; }
+KAction* Document::getAddSBracketAction()      { return impl->addSBracketAction;}
+KAction* Document::getAddCBracketAction()      { return impl->addCBracketAction;}
+KAction* Document::getAddAbsAction()           { return impl->addAbsAction;}
 KAction* Document::getAddFractionAction()      { return impl->addFractionAction; }
 KAction* Document::getAddRootAction()          { return impl->addRootAction; }
 KAction* Document::getAddSumAction()           { return impl->addSumAction; }
