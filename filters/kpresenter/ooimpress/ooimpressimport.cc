@@ -59,11 +59,11 @@ OoImpressImport::~OoImpressImport()
 
 KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCString const & to )
 {
-    kdDebug() << "Entering Ooimpress Import filter: " << from << " - " << to << endl;
+    kdDebug(30518) << "Entering Ooimpress Import filter: " << from << " - " << to << endl;
 
     if ( from != "application/vnd.sun.xml.impress" || to != "application/x-kpresenter" )
     {
-        kdWarning() << "Invalid mimetypes " << from << " " << to << endl;
+        kdWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -80,7 +80,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
     if( out )
     {
         QCString info = docinfo.toCString();
-        //kdDebug() << " info :" << info << endl;
+        //kdDebug(30518) << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( info , info.length() );
     }
@@ -93,11 +93,11 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
     if( out )
     {
         QCString content = doccontent.toCString();
-        //kdDebug() << " content :" << content << endl;
+        //kdDebug(30518) << " content :" << content << endl;
         out->writeBlock( content , content.length() );
     }
 
-    kdDebug() << "######################## OoImpressImport::convert done ####################" << endl;
+    kdDebug(30518) << "######################## OoImpressImport::convert done ####################" << endl;
     return KoFilter::OK;
 }
 
@@ -108,13 +108,13 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
 
     if ( !store )
     {
-        kdWarning() << "Couldn't open the requested file." << endl;
+        kdWarning(30518) << "Couldn't open the requested file." << endl;
         return KoFilter::FileNotFound;
     }
 
     if ( !store->open( "content.xml" ) )
     {
-        kdWarning() << "This file doesn't seem to be a valid OoImpress file" << endl;
+        kdWarning(30518) << "This file doesn't seem to be a valid OoImpress file" << endl;
         delete store;
         return KoFilter::WrongFormat;
     }
@@ -124,39 +124,39 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
     m_content.setContent( store->device() );
     store->close();
 
-    //kdDebug() << "m_content.toCString() :" << m_content.toCString() << endl;
-    kdDebug() << "File containing content loaded " << endl;
+    //kdDebug(30518) << "m_content.toCString() :" << m_content.toCString() << endl;
+    kdDebug(30518) << "File containing content loaded " << endl;
 
     if ( store->open( "styles.xml" ) )
     {
         styles.setContent( store->device() );
         store->close();
 
-        //kdDebug() << "styles.toCString() :" << styles.toCString() << endl;
-        kdDebug() << "File containing styles loaded" << endl;
+        //kdDebug(30518) << "styles.toCString() :" << styles.toCString() << endl;
+        kdDebug(30518) << "File containing styles loaded" << endl;
     }
     else
-        kdWarning() << "Style definitions do not exist!" << endl;
+        kdWarning(30518) << "Style definitions do not exist!" << endl;
 
     if ( store->open( "meta.xml" ) )
     {
         m_meta.setContent( store->device() );
         store->close();
 
-        kdDebug() << "File containing meta definitions loaded" << endl;
+        kdDebug(30518) << "File containing meta definitions loaded" << endl;
     }
     else
-        kdWarning() << "Meta definitions do not exist!" << endl;
+        kdWarning(30518) << "Meta definitions do not exist!" << endl;
 
     if ( store->open( "settings.xml" ) )
     {
         m_settings.setContent( store->device() );
         store->close();
 
-        kdDebug() << "File containing settings loaded" << endl;
+        kdDebug(30518) << "File containing settings loaded" << endl;
     }
     else
-        kdWarning() << "Settings do not exist!" << endl;
+        kdWarning(30518) << "Settings do not exist!" << endl;
 
     delete store;
 
@@ -207,7 +207,7 @@ void OoImpressImport::createDocumentInfo( QDomDocument &docinfo )
 #endif
     docinfo.appendChild(doc);
 
-    //kdDebug() << " meta-info :" << m_meta.toCString() << endl;
+    //kdDebug(30518) << " meta-info :" << m_meta.toCString() << endl;
 }
 
 void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
@@ -383,7 +383,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 QDomElement pgEffect = doc.createElement("PGEFFECT");
 
                 const QString effect = m_styleStack.attribute("presentation:transition-style");
-                //kdDebug() << "Transition name: " << effect << endl;
+                //kdDebug(30518) << "Transition name: " << effect << endl;
                 int pef;
 
                 if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
@@ -610,7 +610,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             }
             else
             {
-                kdDebug() << "Unsupported object '" << name << "'" << endl;
+                kdDebug(30518) << "Unsupported object '" << name << "'" << endl;
                 continue;
             }
 
@@ -1172,7 +1172,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
             e = parseList( doc, t );
         else
         {
-            kdDebug() << "Unsupported texttype '" << name << "'" << endl;
+            kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
             continue;
         }
 
@@ -1185,7 +1185,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
 
 QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& list )
 {
-    //kdDebug() << k_funcinfo << "parsing list"<< endl;
+    //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
     bool isOrdered;
     if ( list.tagName() == "text:ordered-list" )
@@ -1372,7 +1372,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             double value = OoUtils::toPoint(m_styleStack.attribute("style:line-height-at-least"));
             QDomElement lineSpacing = doc.createElement("LINESPACING");
 
-            //kdDebug() << "Line height:" << value << endl;
+            //kdDebug(30518) << "Line height:" << value << endl;
 
             lineSpacing.setAttribute("type", "atleast");
             lineSpacing.setAttribute("spacingvalue", value);
@@ -1383,7 +1383,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
         QDomElement text = saveHelper(textData, doc);
 
-        //kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
+        //kdDebug(30518) << k_funcinfo << "Para text is: " << paragraph.text() << endl;
 
         if (m_styleStack.hasAttribute("fo:language")) {
             QString lang = m_styleStack.attribute("fo:language");
@@ -1707,7 +1707,7 @@ void OoImpressImport::insertStyles( const QDomElement& styles )
 
         QString name = e.attribute( "style:name" );
         m_styles.insert( name, new QDomElement( e ) );
-        //kdDebug() << "Style: '" << name << "' loaded " << endl;
+        //kdDebug(30518) << "Style: '" << name << "' loaded " << endl;
     }
 }
 
@@ -1766,7 +1766,7 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
     fi.setFile(object.attribute("xlink:href"));
     QString url = fi.absFilePath();
 
-    //kdDebug() << "Sound URL: " << url << endl;
+    //kdDebug(30518) << "Sound URL: " << url << endl;
 
     QFile file(url);
     if (!file.exists())
