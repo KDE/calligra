@@ -87,15 +87,18 @@ void
 KexiTablePart::getTables()
 {
 	m_tableNames.clear();
-	m_tableNames = kexiProject()->db()->tables();
 	kdDebug() << "KexiTablePart::getTables(): kexiProject()->db()->tables()" << endl;
 	ItemList *list=items();
 	list->clear();
 
-	for ( QStringList::Iterator it = m_tableNames.begin(); it != m_tableNames.end(); ++it )
-	{
-		kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
-		list->insert("kexi/table/" + (*it), new KexiProjectHandlerItem(this, (*it), "kexi/table", (*it)));
+	if (kexiProject()->db()) {
+		m_tableNames = kexiProject()->db()->tables();
+
+		for ( QStringList::Iterator it = m_tableNames.begin(); it != m_tableNames.end(); ++it )
+		{
+			kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
+			list->insert("kexi/table/" + (*it), new KexiProjectHandlerItem(this, (*it), "kexi/table", (*it)));
+		}
 	}
 
 
