@@ -26,7 +26,7 @@ class KSpreadCanvas;
 
 class KFormula;
 
-class QSimpleTextDocument;
+class QSimpleRichText;
 
 #include <iostream.h>
 #include <komlParser.h>
@@ -286,7 +286,7 @@ public:
     void update();
 
     QString testAnchor( int _x, int _y, QWidget* _canvas );
-  
+
     /**
      * Called if the user clicks on a cell. If the cell is for example a button, then
      * @ref #m_strAction is executed.
@@ -486,7 +486,7 @@ protected:
     double m_dValue;
     bool m_bValue;
     bool m_bBool;
-  
+
     /**
      * Flag showing wether the current layout is OK.
      * If you change for example the fonts point size, set this flag. When the cell
@@ -588,7 +588,7 @@ protected:
     /**
      * Perhaps this cell contains QML ?
      */
-    QSimpleTextDocument* m_pQML;
+    QSimpleRichText *m_pQML;
     /**
      * Perhaps this cell contains a visual formula ?
      */

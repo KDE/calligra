@@ -26,7 +26,7 @@
 #include <qdrawutl.h>
 #include <qpoint.h>
 #include <qpointarray.h>
-#include <qsimpletextdocument.h>
+#include <qsimplerichtext.h>
 #include <qpopupmenu.h>
 
 #include "kspread_table.h"
@@ -59,12 +59,12 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const cha
   m_pVisualFormula = 0;
 
   m_lstDepends.setAutoDelete( TRUE );
-  
+
   if ( _text != 0L )
     m_strText = _text;
 
   m_bLayoutDirtyFlag= FALSE;
-  
+
   QFont font( "Times", 12 );
   m_textFont = font;
 
@@ -73,18 +73,18 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const cha
 
   m_iRow = _row;
   m_iColumn = _column;
-  
+
   m_bCalcDirtyFlag = FALSE;
   m_bValue = FALSE;
   m_bBool = FALSE;
   m_bProgressFlag = FALSE;
   m_bDisplayDirtyFlag = false;
-  
+
   m_bForceExtraCells = FALSE;
   m_iExtraXCells = 0;
   m_iExtraYCells = 0;
   m_pObscuringCell = 0;
-  
+
   m_iPrecision = -1;
 }
 
@@ -474,7 +474,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       if ( cell && !cell->isEmpty() )
 	ende = true;
       else
-      {  
+      {
 	ColumnLayout *cl = m_pTable->columnLayout( c );
 	max_width += cl->width();
 
@@ -497,7 +497,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int h = m_pQML->height();
     int w = m_pQML->width();
     debug("QML w=%i max=%i",w,max_width);
-    
+
     // Occupy the needed extra cells in horizontal direction
     max_width = width( _col );
     ende = ( max_width >= w );
@@ -544,7 +544,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     m_iExtraYCells = r - _row - 1;
     m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
-    
+
     m_bLayoutDirtyFlag = false;
     return;
   }
@@ -563,7 +563,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       if ( cell && !cell->isEmpty() )
 	ende = true;
       else
-      {  
+      {
 	ColumnLayout *cl = m_pTable->columnLayout( c );
 	max_width += cl->width();
 	++right;
@@ -582,7 +582,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int h = size.height();
     int w = size.width();
     printf("Formula w=%i h=%i\n",w,h);
-    
+
     // Occupy the needed extra cells in horizontal direction
     max_width = width( _col );
     ende = ( max_width >= w );
@@ -629,11 +629,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     m_iExtraYCells = r - _row - 1;
     m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
-    
+
     m_bLayoutDirtyFlag = false;
     return;
   }
-  
+
   const char *ptext;
   if ( isFormular() )
     ptext = m_strFormularOut;
@@ -1223,7 +1223,7 @@ bool KSpreadCell::calc( bool _makedepend )
   }
   else
     ASSERT( 0 );
-  
+
   m_bProgressFlag = false;
 
   DO_UPDATE;
@@ -1547,7 +1547,7 @@ int KSpreadCell::width( int _col, KSpreadCanvas *_canvas )
 {
   if ( _col < 0 )
     _col = m_iColumn;
-  
+
   if ( _canvas )
   {
     if ( m_bForceExtraCells )
@@ -1568,7 +1568,7 @@ int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
 {
   if ( _row < 0 )
     _row = m_iRow;
-  
+
   if ( _canvas )
   {
     if ( m_bForceExtraCells )
@@ -1910,7 +1910,7 @@ void KSpreadCell::setText( const QString& _text )
     m_bCalcDirtyFlag = true;
     m_bLayoutDirtyFlag= true;
     m_content = Formula;
-    
+
     if ( !makeFormular() )
       printf("ERROR: Syntax ERROR\n");
     // A Hack!!!! For testing only
@@ -1922,8 +1922,8 @@ void KSpreadCell::setText( const QString& _text )
     if ( isFormular() )
       clearFormular();
 
-    m_pQML = new QSimpleTextDocument( m_strText.mid(1), m_pTable->widget() );
-    
+    m_pQML = new QSimpleRichText( m_strText.mid(1) );//, m_pTable->widget() );
+
     m_bValue = false;
     m_bBool = false;
     m_bLayoutDirtyFlag = true;
