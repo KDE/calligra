@@ -533,6 +533,7 @@ don't put a </?xml...> at the end of the file!).
         Some special character codes map to special features:
             0xad is a soft hyphen
             0xa0 is a non-breaking space
+            0x2011 is a non-breaking hyphen
             \n is a linebreak (within the paragraph)
             \t is a tabulator
 
