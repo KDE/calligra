@@ -4059,9 +4059,6 @@ void KSpreadView::toggleProtectDoc( bool mode )
    if ( !m_pDoc || !m_pDoc->map() )
      return;
 
-   if ( m_protectDoc->isChecked() == mode )
-     return;
-
    QCString passwd;
    if ( mode )
    {
@@ -4134,9 +4131,6 @@ void KSpreadView::toggleProtectSheet( bool mode )
 {
    if ( !m_pTable )
        return;
-
-   if ( m_protectSheet->isChecked() == mode )
-     return;
 
    QCString passwd;
    if ( mode )
