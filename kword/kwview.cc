@@ -4250,8 +4250,18 @@ void KWView::frameSelectedChanged()
         return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
     KoTextFormat format=*(lst.first()->currentFormat());
-    format.setPointSize(KoTextZoomHandler::layoutUnitPtToPt(format.font().pointSize()));
+    format.setPointSize((int)KoTextZoomHandler::layoutUnitPtToPt(format.font().pointSize()));
     showFormat(format );
+
+    const KoParagLayout * paragLayout=lst.first()->currentParagLayoutFormat();
+    if(paragLayout->counter)
+    {
+        KoParagCounter counter=*(paragLayout->counter);
+        showCounter( counter );
+    }
+    else
+        actionFormatList->setChecked( false );
+    showAlign(  paragLayout->alignment );
 }
 
 void KWView::docStructChanged(int _type)
