@@ -41,7 +41,7 @@ DCOPRef KWordTextFrameSetIface::startEditing()
 {
     KWDocument *doc=m_frametext->kWordDocument();
     QPtrList <KWView> lst=doc->getAllViews();
-    lst.at(0)->getGUI()->canvasWidget()->checkCurrentTextEdit(m_frametext);
+    lst.at(0)->getGUI()->canvasWidget()->checkCurrentEdit(m_frametext, true);
     return DCOPRef( kapp->dcopClient()->appId(),
 		    (static_cast<KWTextFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() );
 }

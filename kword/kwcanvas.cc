@@ -1192,7 +1192,7 @@ void KWCanvas::mrCreateText()
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
         frameDia.setCaption(i18n("Connect Frame"));
         frameDia.exec();
-	checkCurrentTextEdit(frame->frameSet());
+	checkCurrentEdit(frame->frameSet(), true);
     }
     setMouseMode( MM_EDIT );
     m_doc->repaintAllViews();
@@ -1823,28 +1823,37 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     emit updateRuler();
 }
 
-// The only difference with checkCurrentEdit is that we don't want to start editing a non-text-frameset, right?
-// In that case a bool would prevent much code duplication......
-bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
+bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText)
 {
     bool emitChanged = false;
     if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
     {
+        KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
+        if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
+            return false;
+
         KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
-        if(edit)
+        if(edit && onlyText)
         {
             // Don't use terminateCurrentEdit here, we want to emit changed only once
             //don't remove selection in dnd
             m_currentFrameSetEdit->terminate(false);
-            delete m_currentFrameSetEdit;
-            m_currentFrameSetEdit = 0L;
-            emitChanged = true;
         }
+        else
+            m_currentFrameSetEdit->terminate();
+        delete m_currentFrameSetEdit;
+        m_currentFrameSetEdit = 0L;
+        emitChanged = true;
+
     }
 
     // Edit the frameset under the mouse, if any
     if ( fs && !m_currentFrameSetEdit )
     {
+        KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
+        if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
+            return false;
+
         //just text frameset
         if(fs->type()==FT_TABLE || fs->type()==FT_TEXT)
         {
@@ -1852,37 +1861,11 @@ bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
             KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
             if ( textedit )
                 textedit->ensureCursorVisible();
-            // Display page number in statusbar.
-            gui()->getView()->updatePageInfo();
-            emitChanged = true;
         }
-    }
-    return emitChanged;
-}
-
-bool KWCanvas::checkCurrentEdit( KWFrameSet * fs )
-{
-    bool emitChanged = false;
-    if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
-    {
-        // Don't use terminateCurrentEdit here, we want to emit changed only once
-        KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
-        if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
-            return false;
-
-        m_currentFrameSetEdit->terminate();
-        delete m_currentFrameSetEdit;
-        m_currentFrameSetEdit = 0L;
-        emitChanged = true;
-    }
-
-    // Edit the frameset under the mouse, if any
-    if ( fs && !m_currentFrameSetEdit )
-    {
-        KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
-        if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
-            return false;
-        m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+        else if ( !onlyText )
+        {
+            m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+        }
         // Display page number in statusbar.
         gui()->getView()->updatePageInfo();
         emitChanged = true;
@@ -1995,7 +1978,7 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
         {
             KWTableFrameSet *table = fs->getGroupManager();
             //kdDebug()<<"table :"<<table<<endl;
-            emitChanged = checkCurrentTextEdit( table ? table : fs );
+            emitChanged = checkCurrentEdit( table ? table : fs,true );
         }
         if ( m_currentFrameSetEdit )
         {

@@ -166,9 +166,7 @@ public:
 
     void editFrameSet( KWFrameSet * frameSet );
     void editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index );
-    bool checkCurrentTextEdit( KWFrameSet * fs );
-    bool checkCurrentEdit( KWFrameSet * fs );
-
+    bool checkCurrentEdit( KWFrameSet * fs , bool onlyText = false);
 
 
     NoteType footNoteType()const{return m_footEndNote.noteType;}
