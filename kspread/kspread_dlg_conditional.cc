@@ -43,7 +43,7 @@
 KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char* name, WFlags fl )
     : QWidget( parent, name, fl )
 {
-  QGridLayout * Form1Layout = new QGridLayout( this, 1, 1, 11, 6, "Form1Layout"); 
+  QGridLayout * Form1Layout = new QGridLayout( this, 1, 1, 11, 6, "Form1Layout");
 
   QGroupBox * groupBox1_3 = new QGroupBox( this, "groupBox1_3" );
   groupBox1_3->setColumnLayout(0, Qt::Vertical );
@@ -61,12 +61,12 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
   m_firstValue_3 = new KLineEdit( groupBox1_3, "m_firstValue_3" );
   m_firstValue_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_firstValue_3, 0, 2 );
-  
+
   m_secondValue_3 = new KLineEdit( groupBox1_3, "m_secondValue_3" );
   m_secondValue_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_secondValue_3, 0, 3 );
-  
-  m_style_3 = new QComboBox( false, groupBox1_3, "m_style_3" );  
+
+  m_style_3 = new QComboBox( false, groupBox1_3, "m_style_3" );
   m_style_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_style_3, 1, 1 );
 
@@ -90,26 +90,26 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
 
   QLabel * textLabel1_2 = new QLabel( groupBox1_2, "textLabel1_2" );
   groupBox1_2Layout->addWidget( textLabel1_2, 0, 0 );
-  
+
   QLabel * textLabel2_2 = new QLabel( groupBox1_2, "textLabel2_2" );
   groupBox1_2Layout->addWidget( textLabel2_2, 1, 0 );
-  
+
   m_condition_2 = new QComboBox( false, groupBox1_2, "m_condition_2" );
   groupBox1_2Layout->addWidget( m_condition_2, 0, 1 );
-    
+
   m_style_2 = new QComboBox( false, groupBox1_2, "m_style_2" );
   m_style_2->setEnabled( false );
   groupBox1_2Layout->addWidget( m_style_2, 1, 1 );
 
   m_firstValue_2 = new KLineEdit( groupBox1_2, "m_firstValue_2" );
-  m_firstValue_2->setEnabled( false );  
+  m_firstValue_2->setEnabled( false );
   groupBox1_2Layout->addWidget( m_firstValue_2, 0, 2 );
 
   m_secondValue_2 = new KLineEdit( groupBox1_2, "m_secondValue_2" );
   m_secondValue_2->setEnabled( false );
 
   groupBox1_2Layout->addWidget( m_secondValue_2, 0, 3 );
-  
+
   QSpacerItem * spacer_3 = new QSpacerItem( 41, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   groupBox1_2Layout->addItem( spacer_3, 1, 2 );
   QSpacerItem * spacer_4 = new QSpacerItem( 61, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -120,23 +120,23 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
   groupBox1_1->setColumnLayout(0, Qt::Vertical );
   groupBox1_1->layout()->setSpacing( 6 );
   groupBox1_1->layout()->setMargin( 11 );
-  
+
   QGridLayout * groupBox1_1Layout = new QGridLayout( groupBox1_1->layout() );
   groupBox1_1Layout->setAlignment( Qt::AlignTop );
-  
+
   QLabel * textLabel1_1 = new QLabel( groupBox1_1, "textLabel1_2_2" );
   groupBox1_1Layout->addWidget( textLabel1_1, 0, 0 );
 
   QLabel * textLabel2_1 = new QLabel( groupBox1_1, "textLabel2_2_2" );
   groupBox1_1Layout->addWidget( textLabel2_1, 1, 0 );
 
-  m_condition_1 = new QComboBox( false, groupBox1_1, "m_condition_1" );  
+  m_condition_1 = new QComboBox( false, groupBox1_1, "m_condition_1" );
   groupBox1_1Layout->addWidget( m_condition_1, 0, 1 );
-  
-  m_style_1 = new QComboBox( false, groupBox1_1, "m_style_1" );  
+
+  m_style_1 = new QComboBox( false, groupBox1_1, "m_style_1" );
   m_style_1->setEnabled( false );
   groupBox1_1Layout->addWidget( m_style_1, 1, 1 );
-  
+
   m_firstValue_1 = new KLineEdit( groupBox1_1, "m_firstValue_1" );
   m_firstValue_1->setEnabled( false );
   groupBox1_1Layout->addWidget( m_firstValue_1, 0, 2 );
@@ -163,14 +163,14 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
   list += i18n( "equal to or less than" );
   list += i18n( "between" );
   list += i18n( "different from" );
-  
+
   m_condition_1->clear();
   m_condition_2->clear();
   m_condition_3->clear();
   m_condition_1->insertStringList( list );
   m_condition_2->insertStringList( list );
   m_condition_3->insertStringList( list );
-  
+
   groupBox1_1->setTitle( i18n( "First Condition" ) );
   groupBox1_2->setTitle( i18n( "Second Condition" ) );
   groupBox1_3->setTitle( i18n( "Third Condition" ) );
@@ -182,13 +182,13 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
   textLabel2_3->setText( i18n( "Cell style" ) );
 
   kdDebug() << "Creating connections" << endl;
-  connect( m_condition_1, SIGNAL( textChanged( const QString & ) ), this, SLOT( slotTextChanged1( const QString & ) ) );
-  connect( m_condition_2, SIGNAL( textChanged( const QString & ) ), this, SLOT( slotTextChanged2( const QString & ) ) );
-  connect( m_condition_3, SIGNAL( textChanged( const QString & ) ), this, SLOT( slotTextChanged3( const QString & ) ) ); 
+  connect( m_condition_1, SIGNAL( highlighted( const QString & ) ), this, SLOT( slotTextChanged1( const QString & ) ) );
+  connect( m_condition_2, SIGNAL( highlighted( const QString & ) ), this, SLOT( slotTextChanged2( const QString & ) ) );
+  connect( m_condition_3, SIGNAL( highlighted( const QString & ) ), this, SLOT( slotTextChanged3( const QString & ) ) );
 }
 
 KSpreadConditionalWidget::~KSpreadConditionalWidget()
-{ 
+{
 }
 
 void KSpreadConditionalWidget::slotTextChanged1( const QString & text )
@@ -275,7 +275,7 @@ void KSpreadConditionalWidget::slotTextChanged3( const QString & text )
 
 KSpreadConditionalDlg::KSpreadConditionalDlg( KSpreadView * parent, const char * name,
                                               const QRect & marker )
-  : KDialogBase( parent, name, true, "", KDialogBase::Ok | KDialogBase::Cancel, 
+  : KDialogBase( parent, name, true, "", KDialogBase::Ok | KDialogBase::Cancel,
                  KDialogBase::Ok, false ),
     m_view( parent ),
     m_dlg( new KSpreadConditionalWidget( this ) ),
@@ -402,7 +402,7 @@ void KSpreadConditionalDlg::init( KSpreadConditional const & tmp, int numConditi
    case None :
     break;
 
-   case Equal :    
+   case Equal :
     cb->setCurrentItem( 1 );
     break;
 
@@ -421,7 +421,7 @@ void KSpreadConditionalDlg::init( KSpreadConditional const & tmp, int numConditi
    case InferiorEqual :
     cb->setCurrentItem( 5 );
     break;
-    
+
    case Between :
     cb->setCurrentItem(6);
 
@@ -449,7 +449,7 @@ void KSpreadConditionalDlg::init( KSpreadConditional const & tmp, int numConditi
   if ( tmp.cond != None )
   {
     kl1->setEnabled( true );
-    
+
     if ( tmp.strVal1 )
       kl1->setText( *tmp.strVal1 );
     else
@@ -505,7 +505,7 @@ bool KSpreadConditionalDlg::checkInputData( KLineEdit const * const edit1,
 
   edit1->text().toDouble( &b1 );
   edit2->text().toDouble( &b2 );
-  
+
   if ( b1 != b2 )
   {
     if ( b1 )
@@ -557,11 +557,11 @@ bool KSpreadConditionalDlg::getCondition( KSpreadConditional & newCondition, QCo
   {
     d1 = 0.0;
     s1 = new QString( edit1->text() );
-    
+
     if ( edit2->isEnabled() )
       s2 = new QString( edit2->text() );
   }
-    
+
   newCondition.val1      = d1;
   newCondition.val2      = d2;
   newCondition.strVal1   = s1;
@@ -589,21 +589,21 @@ void KSpreadConditionalDlg::slotOk()
   QValueList<KSpreadConditional> newList;
 
   KSpreadConditional newCondition;
-  
+
   if ( getCondition( newCondition, m_dlg->m_condition_1, m_dlg->m_firstValue_1,
                      m_dlg->m_secondValue_1, m_dlg->m_style_1, manager->style( m_dlg->m_style_1->currentText() ) ) )
     newList.append( newCondition );
-  
+
   if ( getCondition( newCondition, m_dlg->m_condition_2, m_dlg->m_firstValue_2,
                      m_dlg->m_secondValue_2, m_dlg->m_style_2, manager->style( m_dlg->m_style_1->currentText() ) ) )
     newList.append( newCondition );
-  
+
   if ( getCondition( newCondition, m_dlg->m_condition_3, m_dlg->m_firstValue_3,
                      m_dlg->m_secondValue_3, m_dlg->m_style_3, manager->style( m_dlg->m_style_1->currentText() ) ) )
     newList.append( newCondition );
 
   kdDebug() << "Setting conditional list" << endl;
-  m_view->activeTable()->setConditional( m_view->selectionInfo(), newList );    
+  m_view->activeTable()->setConditional( m_view->selectionInfo(), newList );
   m_view->slotUpdateView( m_view->activeTable(), m_view->selectionInfo()->selection() );
 
   accept();
