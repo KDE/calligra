@@ -2248,7 +2248,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout
         else
         {
 	    node.setAttribute( "type", "custom" );
-	    node.setAttribute( "spacevalue", 0.05*layout.spaceBetween );
+	    node.setAttribute( "spacingvalue", 0.05*layout.spaceBetween );
         }
 	node.closeNode( "LINESPACING" );
     }
@@ -2256,8 +2256,8 @@ void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout
     {
         // negative linespace means "exact"
 	node.addNode( "LINESPACING" );
-	node.setAttribute( "type", "exactly" );
-	node.setAttribute( "spacevalue", -0.05*layout.spaceBetween );
+	node.setAttribute( "type", "fixed" );
+	node.setAttribute( "spacingvalue", -0.05*layout.spaceBetween );
 	node.closeNode( "LINESPACING" );
     }
 
