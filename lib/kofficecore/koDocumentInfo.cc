@@ -502,9 +502,7 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
 
 bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
 {
-    //kdDebug()<<"bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )****************\n";
     QDomElement e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "title" );
-    //kdDebug()<<" e.isNull() :"<<e.isNull()<<endl;
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         m_title = e.text();
