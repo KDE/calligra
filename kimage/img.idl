@@ -1,0 +1,24 @@
+#ifndef __img_idl__
+#define __img_idl__
+
+#include <parts.idl>
+
+module KImage
+{
+	interface ImageView : OPParts::View
+	{
+		oneway void toggleFitToWindow();
+		oneway void newView();
+		oneway void insertImage();
+		oneway void exportImage();
+		oneway void importImage();
+	};
+
+	interface ImageDocument : OPParts::Document
+	{
+		boolean import( in string filename );
+		boolean export( in string filename, in string format );
+	};
+};
+
+#endif
