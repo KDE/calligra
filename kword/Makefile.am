@@ -6,7 +6,7 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
 kde_module_LTLIBRARIES = libkwordpart.la
 
 ## The part
-libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc \
+libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc kwformulaframe.cc \
 		kwfactory.cc kwdoc.cc \
 		kwview.cc  \
                 kwviewmode.cc \
@@ -39,9 +39,9 @@ libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc \
 		kwbgspellcheck.cc resizetabledia.cc kwframelayout.cc \
 		configfootnotedia.cc kwcreatebookmarkdia.cc kwimportstyledia.cc \
 		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc \
-        kwcreatebookmarkdiabase.ui  kwselectbookmarkdiabase.ui KWordHorizontalLineFrameSetIface.skel KWordHorizontalLineFrameSetIface.cc \
-		kwinserthorizontallinedia.cc sortdia.cc kwinsertpagedia.cc \
-		kwformulaframe.cc
+	        kwcreatebookmarkdiabase.ui  kwselectbookmarkdiabase.ui KWordHorizontalLineFrameSetIface.skel \
+		KWordHorizontalLineFrameSetIface.cc kwinserthorizontallinedia.cc \
+		sortdia.cc kwinsertpagedia.cc
 
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
