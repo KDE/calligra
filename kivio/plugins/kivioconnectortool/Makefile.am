@@ -2,7 +2,9 @@ SUBDIRS = straight_connector
 lib_LTLIBRARIES =libkivioconnectortool.la
 
 
-INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
+	-I$(top_builddir)/kivio/kiviopart/config \
+	-I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
 	-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector \

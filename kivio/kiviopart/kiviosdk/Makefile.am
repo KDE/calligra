@@ -2,9 +2,13 @@ KDE_OPTIONS = nofinal
 
 noinst_LTLIBRARIES =libkiviosdk.la
 
-INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
+	-I$(top_builddir)/kivio/kiviopart/config \
+	-I$(top_srcdir)/kivio/kiviopart\
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) $(PYTHONINC)
+
 libkiviosdk_la_METASOURCES = AUTO
+
 libkiviosdk_la_SOURCES = \
 		kivio_common.cpp\
 		kivio_wrap.cpp\

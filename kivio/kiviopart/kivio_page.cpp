@@ -55,6 +55,7 @@
 #include "kivio_canvas.h"
 #include "kivio_guidelines.h"
 #include "kivio_view.h"
+#include "kivio_config.h"
 
 #include "kivio_common.h"
 #include "kivio_connector_point.h"
@@ -104,7 +105,7 @@ KivioPage::KivioPage( KivioMap *_map, const QString &pageName, const char *_name
     setName( s.data() );
   }
 
-  m_pPageLayout = Kivio::defaultPageLayout();
+  m_pPageLayout = Kivio::Config::defaultPageLayout();
   gLines = new KivioGuideLines(this);
 }
 

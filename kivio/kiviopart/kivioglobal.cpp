@@ -1268,30 +1268,13 @@ QPixmap Kivio::lockPixmap()
   return QPixmap(lock_xpm);
 }
 
-KoPageLayout Kivio::defaultPageLayout()
+QString Kivio::systemDefaultUnit()
 {
-  KoPageLayout layout;
+  QString defMS = "mm";
   
-  layout.format = KoPageFormat::formatFromString(Settings::format());
-  layout.orientation = Kivio::orientationFromString(Settings::orientation());
-  layout.ptTop = Settings::borderTop();
-  layout.ptBottom = Settings::borderBottom();
-  layout.ptLeft = Settings::borderLeft();
-  layout.ptRight = Settings::borderRight();
-  layout.ptWidth = Settings::width();
-  layout.ptHeight = Settings::height();
+  if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+    defMS = "in";
+  }
   
-  return layout;
-}
-
-void Kivio::setDefaultPageLayout(const KoPageLayout& layout)
-{
-  Settings::setFormat(KoPageFormat::formatString(layout.format));
-  Settings::setOrientation(Kivio::orientationString(layout.orientation));
-  Settings::setBorderTop(layout.ptTop);
-  Settings::setBorderBottom(layout.ptBottom);
-  Settings::setBorderLeft(layout.ptLeft);
-  Settings::setBorderRight(layout.ptRight);
-  Settings::setWidth(layout.ptWidth);
-  Settings::setHeight(layout.ptHeight);
+  return defMS;
 }

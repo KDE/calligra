@@ -84,7 +84,6 @@
 #include "kivio_doc.h"
 #include "kivio_canvas.h"
 #include "kivio_stencil_spawner.h"
-#include "kivio_zoomaction.h"
 #include "kivio_grid_data.h"
 
 #include "tkcoloractions.h"
@@ -125,6 +124,7 @@
 #include "kivioarrowheadformatdlg.h"
 #include "kiviodragobject.h"
 #include "kivioglobal.h"
+#include "kivio_config.h"
 
 #include "kolinewidthaction.h"
 #include "kolinestyleaction.h"
@@ -201,11 +201,11 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   m_pCanvas->setFocusPolicy(QWidget::StrongFocus);
 
   // Rulers
-  vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, Kivio::defaultPageLayout(),
+  vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, Kivio::Config::defaultPageLayout(),
     KoRuler::F_HELPLINES, m_pDoc->units());
   vRuler->showMousePos(true);
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
-  hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, Kivio::defaultPageLayout(),
+  hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, Kivio::Config::defaultPageLayout(),
     KoRuler::F_HELPLINES, m_pDoc->units());
   hRuler->showMousePos(true);
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());

@@ -26,6 +26,7 @@
 #include "kivio_guidelines.h"
 #include "kivio_canvas.h"
 #include "kivio_settings.h"
+#include "kivio_config.h"
 
 #include <klocale.h>
 #include <koApplication.h>
@@ -104,8 +105,8 @@ void KivioOptionsDialog::initPage()
 
   KivioView* view = static_cast<KivioView*>(parent());
   KoUnit::Unit unit = view->doc()->units();
-  m_layout = Kivio::defaultPageLayout();
-  m_font = view->doc()->defaultFont();
+  m_layout = Kivio::Config::defaultPageLayout();
+  m_font = Kivio::Config::font();
 
   QLabel* unitLbl = new QLabel(i18n("Default &units:"), page);
   m_unitCombo = new QComboBox(page);
@@ -308,8 +309,8 @@ void KivioOptionsDialog::applyPage()
 {
   KivioView* view = static_cast<KivioView*>(parent());
   view->doc()->setUnits(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
-  Kivio::setDefaultPageLayout(m_layout);
-  view->doc()->setDefaultFont(m_font);
+  Kivio::Config::setDefaultPageLayout(m_layout);
+  Kivio::Config::setFont(m_font);
   view->togglePageMargins(m_marginsChBox->isChecked());
   view->toggleShowRulers(m_rulersChBox->isChecked());
 }
@@ -354,26 +355,25 @@ void KivioOptionsDialog::applyGuides()
 
 void KivioOptionsDialog::defaultPage()
 {
-  bool defaults = Kivio::Settings::self()->useDefaults(true);
-  m_layout = Kivio::defaultPageLayout();
-  m_font = KoGlobal::defaultFont();
-  m_unitCombo->setCurrentItem(KoUnit::U_MM);
+  KivioView* view = static_cast<KivioView*>(parent());
+  m_layout = Kivio::Config::defaultPageLayout();
+  m_font = Kivio::Config::font();
+  m_unitCombo->setCurrentItem(view->doc()->units());
   setLayoutText(m_layout);
   m_marginsChBox->setChecked(true);
   m_rulersChBox->setChecked(true);
-  Kivio::Settings::self()->useDefaults(defaults);
 }
 
 void KivioOptionsDialog::defaultGrid()
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  m_spaceHorizUSpin->setValue(KoUnit::ptToUnit(10.0, unit));
-  m_spaceVertUSpin->setValue(KoUnit::ptToUnit(10.0, unit));
-  m_snapHorizUSpin->setValue(KoUnit::ptToUnit(10.0, unit));
-  m_snapVertUSpin->setValue(KoUnit::ptToUnit(10.0, unit));
-  m_gridChBox->setChecked(true);
-  m_snapChBox->setChecked(true);
-  m_gridColorBtn->setColor(QColor(228,228,228));
+  m_spaceHorizUSpin->setValue(KoUnit::ptToUnit(Kivio::Config::gridXSpacing(), unit));
+  m_spaceVertUSpin->setValue(KoUnit::ptToUnit(Kivio::Config::gridYSpacing(), unit));
+  m_snapHorizUSpin->setValue(KoUnit::ptToUnit(Kivio::Config::gridXSnap(), unit));
+  m_snapVertUSpin->setValue(KoUnit::ptToUnit(Kivio::Config::gridYSnap(), unit));
+  m_gridChBox->setChecked(Kivio::Config::showGrid());
+  m_snapChBox->setChecked(Kivio::Config::snapGrid());
+  m_gridColorBtn->setColor(Kivio::Config::gridColor());
 }
 
 void KivioOptionsDialog::defaultGuides()
@@ -434,13 +434,16 @@ void KivioOptionsDialog::slotApply()
   applyPage();
   applyGrid();
   applyGuides();
+  Kivio::Config::writeConfig();
 }
 
 void KivioOptionsDialog::slotDefault()
 {
+  bool defaults = Kivio::Config::self()->useDefaults(true);
   defaultPage();
   defaultGrid();
   defaultGuides();
+  Kivio::Config::self()->useDefaults(defaults);
 }
 
 void KivioOptionsDialog::setMaxHorizSnap(double v)

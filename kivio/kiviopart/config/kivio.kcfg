@@ -7,6 +7,8 @@
   <include>koGlobal.h</include>
   <include>kglobal.h</include>
   <include>klocale.h</include>
+  <include>qfont.h</include>
+  <include>qcolor.h</include>
   <group name="DefaultPageLayout">
     <entry name="Format" type="String">
       <label>The default page layout.</label>
@@ -39,6 +41,44 @@
     <entry name="BorderRight" type="Double">
       <label>The size of the border at the right of the page.</label>
       <default code="true">KoPageLayoutDia::standardLayout().ptRight</default>
+    </entry>
+  </group>
+  <group name="Interface">
+    <entry name="ShowGrid" type="Bool">
+      <label>Show the grid.</label>
+      <default>true</default>
+    </entry>
+    <entry name="SnapGrid" type="Bool">
+      <label>Snap to the grid.</label>
+      <default>true</default>
+    </entry>
+    <entry name="GridColor" type="Color">
+      <label>Color of the grid lines.</label>
+      <default code="true">QColor(200, 200, 200)</default>
+    </entry>
+    <entry name="GridXSpacing" type="Double">
+      <label>Spacing between vertical grid lines.</label>
+      <default>10.0</default>
+    </entry>
+    <entry name="GridYSpacing" type="Double">
+      <label>Spacing between horizontal grid lines.</label>
+      <default>10.0</default>
+    </entry>
+    <entry name="GridXSnap" type="Double">
+      <label>Horizontal snap distance.</label>
+      <default>10.0</default>
+    </entry>
+    <entry name="GridYSnap" type="Double">
+      <label>Vertical snap distance.</label>
+      <default>10.0</default>
+    </entry>
+    <entry name="Unit" type="String">
+      <label>Unit</label>
+      <default code="true">Kivio::systemDefaultUnit()</default>
+    </entry>
+    <entry name="Font" type="Font">
+      <label>Default font.</label>
+      <default code="true">KoGlobal::defaultFont()</default>
     </entry>
   </group>
 </kcfg>

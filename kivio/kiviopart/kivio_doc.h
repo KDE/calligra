@@ -29,6 +29,8 @@
 #include <koUnit.h>
 #include <koGlobal.h>
 
+#include "kivio_config.h"
+
 class KivioDoc;
 class KivioView;
 class KivioMap;
@@ -123,7 +125,7 @@ class KivioDoc : public KoDocument
 
     static QPtrList<KivioDoc>& documents();
 
-    KoUnit::Unit units()const { return m_units; }
+    KoUnit::Unit units()const { return KoUnit::unit(Kivio::Config::unit()); }
 
     KivioGridData grid() { return gridData; }
     void setGrid(KivioGridData g) { gridData = g; emit sig_updateGrid();}

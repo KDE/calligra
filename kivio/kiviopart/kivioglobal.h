@@ -80,16 +80,11 @@ namespace Kivio
    * Returns the lock pixmap
    */
   QPixmap lockPixmap();
-
-  /**
-   * Set the default page layout
-   */
-  void setDefaultPageLayout(const KoPageLayout& layout);
   
   /**
-   * Get the default page layout
+   * Get system default unit
    */
-  KoPageLayout defaultPageLayout();
+  QString systemDefaultUnit();
 }
 
 #endif
