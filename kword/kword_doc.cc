@@ -778,6 +778,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
     f.setUserFont( findUserFont( "helvetica" ) );
     f.setItalic( TRUE );
+    f.setWeight( 50 );
     f.setPTFontSize( 12 );
     lay = new KWParagLayout( this );
     lay->setName( "Contents Head 3" );
