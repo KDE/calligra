@@ -10,6 +10,7 @@ KOfficeCore:
 KOfficeUI:
 - Fix overwriting of templates (#73537)
 - Fix loading icons when creating templates
+- Allow template icons up to 64x64 instead of 60x60 and scale better if too big
 
 KoText:
 - Date variables for printing-date, last-modified, and creation-date were
