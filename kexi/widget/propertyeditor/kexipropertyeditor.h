@@ -151,6 +151,10 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		*/
 		void slotClicked(QListViewItem *item);
 
+		/*! used to fix selection when unselectable item was activated.
+		 This can occur when */
+		void slotCurrentChanged(QListViewItem *);
+
 		void slotExpanded(QListViewItem *item);
 		void slotCollapsed(QListViewItem *item);
 
@@ -175,8 +179,6 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		void showDefaultsButton( bool show );
 
 		int baseRowHeight() const { return m_baseRowHeight; }
-
-		virtual void keyPressEvent( QKeyEvent* ev );
 
 		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;
 		KexiPropertyEditorItem *m_editItem;

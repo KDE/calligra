@@ -63,6 +63,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	setBufferLater_buffer = 0;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
+	connect(this, SIGNAL(currentChanged(QListViewItem *)), this, SLOT(slotCurrentChanged(QListViewItem *)));
 	connect(this, SIGNAL(expanded(QListViewItem *)), this, SLOT(slotExpanded(QListViewItem *)));
 	connect(this, SIGNAL(collapsed(QListViewItem *)), this, SLOT(slotCollapsed(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
@@ -99,11 +100,26 @@ KexiPropertyEditor::slotClicked(QListViewItem *item)
 {
 	if (!item)
 		return;
+
 //		int y = viewportToContents(QPoint(0, itemRect(item).y())).y();
 //		kdDebug() << "KexiPropertyEditor::slotClicked() y: " << y << endl;
 //		QRect g(columnWidth(0), y, columnWidth(1), item->height());
 	KexiPropertyEditorItem *i = static_cast<KexiPropertyEditorItem *>(item);
 	createEditor(i);//, g);
+}
+
+void
+KexiPropertyEditor::slotCurrentChanged(QListViewItem *item)
+{
+	if (item==firstChild()) {
+		QListViewItem *oldItem = item;
+		while (item && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemBelow();
+		if (item && item!=oldItem) {
+			setSelected(item,true);
+			return;
+		}
+	}
 }
 
 void
@@ -646,14 +662,6 @@ KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &pr
 		m_currentEditor->setValue(prop.value());
 	item->updateValue();
 	item->updateChildrenValue();
-}
-
-void
-KexiPropertyEditor::keyPressEvent( QKeyEvent* ev )
-{
-//	if (handleKeyPress(ev))
-//		return;
-	KListView::keyPressEvent(ev);
 }
 
 bool
