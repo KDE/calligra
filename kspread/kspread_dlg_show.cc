@@ -46,7 +46,7 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
   list=new QListBox(this);
   lay1->addWidget( list );
 
-  setCaption( i18n("Table hided") );
+  setCaption( i18n("Table hidden") );
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();

@@ -22,9 +22,9 @@ Add CTRL+Key_G => call dlg : goto
 1999-09-13 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 Add new functions :
-	-logic : IF , NO , TRUE,FALSE
+	-logic : IF, NO, TRUE, FALSE
 	-Math : INT
-	-Text : EXACT, RIGHT, LEFT,conc ,NBCAR,STXT
+	-Text : EXACT, RIGHT, LEFT, JOIN ,LEN, STXT
 
 1999-09-15 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------		

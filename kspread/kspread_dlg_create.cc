@@ -125,7 +125,7 @@ void KSpreadcreate::init()
         if( name=="right"||name=="left")
 		tmp_label->setText(i18n("Number of characters"));
         else if(name=="REPT")
-        	tmp_label->setText(i18n("Number of repetition"));
+        	tmp_label->setText(i18n("Number of repetitions"));
         s_param=new QLineEdit( this );
   	lay1->addWidget(s_param,3,0);
   	exp_funct=name+"("+"String,Double"+")";
@@ -176,7 +176,7 @@ void KSpreadcreate::init()
   		edit[0]=type_double;
    	}
    else if( name=="sum" || name=="max" || name=="min" ||
-	    name=="mult" || name=="average" || name=="variante" || name=="ecartype")
+	    name=="multiply" || name=="average" || name=="variance" || name=="stddev")
    {
    	nb_param=5;
    	
@@ -286,7 +286,7 @@ void KSpreadcreate::init()
        edit[0]=type_string;
        edit[1]=type_string;
    }
-   else if (name=="nbcar")
+   else if (name=="len")
    {
        nb_param=1;
        tmp_label = new QLabel( this);
@@ -300,7 +300,7 @@ void KSpreadcreate::init()
        tmp_label->setText(exp_funct);
        edit[0]=type_string;
    }
-   else if(name=="conc")
+   else if(name=="join")
    {
        nb_param=5;
        tmp_label = new QLabel( this);
@@ -534,7 +534,7 @@ QString KSpreadcreate::make_formula( const QString& _text,int nb_line)
 	{
 	    if(nb_line!=4)
 		//When nb_line =4 =>function multi parameter
-		// conc(string,string,.....)
+		// join(string,string,.....)
 	    {
 		text="\""+text+"\"";
 	    }

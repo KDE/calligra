@@ -130,8 +130,8 @@ void KSpreaddlgformula::slotselected(const QString & string)
 {
 QStringList list_stat;
 list_stat+="average";
-list_stat+="variante";
-list_stat+="ecartype";
+list_stat+="variance";
+list_stat+="stddev";
 
 QStringList list_anal;
 list_anal+="sum";
@@ -144,7 +144,7 @@ list_anal+="floor";
 list_anal+="ceil";
 list_anal+="max";
 list_anal+="min";
-list_anal+="mult";
+list_anal+="multiply";
 list_anal+="ENT";
 list_anal+="PI";
 
@@ -169,10 +169,10 @@ list_logic+="if";
 list_logic+="not";
 
 QStringList list_text;
-list_text+="conc";
+list_text+="join";
 list_text+="right";
 list_text+="left";
-list_text+="nbcar";
+list_text+="len";
 list_text+="EXACT";
 list_text+="STXT";
 list_text+="REPT";

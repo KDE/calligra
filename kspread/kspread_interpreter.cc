@@ -589,7 +589,7 @@ static bool kspreadfunc_average( KSContext& context )
   return b;
 }
 
-static bool kspreadfunc_variante_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
+static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -598,7 +598,7 @@ static bool kspreadfunc_variante_helper( KSContext& context, QValueList<KSValue:
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_variante_helper( context, (*it)->listValue(), result ,avera) )
+      if ( !kspreadfunc_variance_helper( context, (*it)->listValue(), result ,avera) )
 	return false;
 	
     }
@@ -613,7 +613,7 @@ static bool kspreadfunc_variante_helper( KSContext& context, QValueList<KSValue:
   return true;
 }
 
-static bool kspreadfunc_variante( KSContext& context )
+static bool kspreadfunc_variance( KSContext& context )
 {
   double result = 0.0;
   double avera = 0.0;
@@ -624,7 +624,7 @@ static bool kspreadfunc_variante( KSContext& context )
   	{
   	avera=result/number;
   	result=0.0;
-  	bool b = kspreadfunc_variante_helper( context, context.value()->listValue(), result,avera );
+  	bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result,avera );
     	if(b)
     		context.setValue( new KSValue(result/number ) );
       	}
@@ -632,7 +632,7 @@ static bool kspreadfunc_variante( KSContext& context )
   return b;
 }
 
-static bool kspreadfunc_ecarttype_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
+static bool kspreadfunc_stddev_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -641,7 +641,7 @@ static bool kspreadfunc_ecarttype_helper( KSContext& context, QValueList<KSValue
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_ecarttype_helper( context, (*it)->listValue(), result ,avera) )
+      if ( !kspreadfunc_stddev_helper( context, (*it)->listValue(), result ,avera) )
 	return false;
 	
     }
@@ -656,7 +656,7 @@ static bool kspreadfunc_ecarttype_helper( KSContext& context, QValueList<KSValue
   return true;
 }
 
-static bool kspreadfunc_ecarttype( KSContext& context )
+static bool kspreadfunc_stddev( KSContext& context )
 {
   double result = 0.0;
   double avera = 0.0;
@@ -667,7 +667,7 @@ static bool kspreadfunc_ecarttype( KSContext& context )
   	{
   	avera=result/number;
   	result=0.0;
-  	bool b = kspreadfunc_ecarttype_helper( context, context.value()->listValue(), result,avera );
+  	bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result,avera );
     	if(b)
     		context.setValue( new KSValue(sqrt(result/number )) );
       	}
@@ -708,7 +708,7 @@ static bool kspreadfunc_mult( KSContext& context )
 }
 
 
-static bool kspreadfunc_conc_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& tmp )
+static bool kspreadfunc_join_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& tmp )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -717,7 +717,7 @@ static bool kspreadfunc_conc_helper( KSContext& context, QValueList<KSValue::Ptr
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_conc_helper( context, (*it)->listValue(), tmp ) )
+      if ( !kspreadfunc_join_helper( context, (*it)->listValue(), tmp ) )
 	return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
@@ -730,10 +730,10 @@ static bool kspreadfunc_conc_helper( KSContext& context, QValueList<KSValue::Ptr
   return true;
 }
 
-static bool kspreadfunc_conc( KSContext& context )
+static bool kspreadfunc_join( KSContext& context )
 {
   QString tmp;
-  bool b = kspreadfunc_conc_helper( context, context.value()->listValue(), tmp );
+  bool b = kspreadfunc_join_helper( context, context.value()->listValue(), tmp );
 
   if ( b )
     context.setValue( new KSValue( tmp ) );
@@ -850,11 +850,11 @@ static bool kspreadfunc_mid( KSContext& context )
     return true;
 }
 
-static bool kspreadfunc_nbcar( KSContext& context )
+static bool kspreadfunc_len( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "nbcar", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "len", true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
@@ -1159,16 +1159,16 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "degree", new KSValue( new KSBuiltinFunction( module, "degree", kspreadfunc_degree ) ) );
   module->addObject( "radian", new KSValue( new KSBuiltinFunction( module, "radian", kspreadfunc_radian ) ) );
   module->addObject( "average", new KSValue( new KSBuiltinFunction( module, "average", kspreadfunc_average ) ) );
-  module->addObject( "variante", new KSValue( new KSBuiltinFunction( module, "variante", kspreadfunc_variante) ) );
-  module->addObject( "mult", new KSValue( new KSBuiltinFunction( module, "mult", kspreadfunc_mult) ) );
-  module->addObject( "ecartype", new KSValue( new KSBuiltinFunction( module, "ecartype", kspreadfunc_ecarttype) ) );
-  module->addObject( "conc", new KSValue( new KSBuiltinFunction( module, "conc", kspreadfunc_conc) ) );
+  module->addObject( "variance", new KSValue( new KSBuiltinFunction( module, "variance", kspreadfunc_variance) ) );
+  module->addObject( "multiply", new KSValue( new KSBuiltinFunction( module, "multiply", kspreadfunc_mult) ) );
+  module->addObject( "stddev", new KSValue( new KSBuiltinFunction( module, "stderr", kspreadfunc_stddev) ) );
+  module->addObject( "join", new KSValue( new KSBuiltinFunction( module, "join", kspreadfunc_join) ) );
   module->addObject( "not", new KSValue( new KSBuiltinFunction( module, "not", kspreadfunc_not) ) );
   module->addObject( "if", new KSValue( new KSBuiltinFunction( module, "if", kspreadfunc_if) ) );
   module->addObject( "left", new KSValue( new KSBuiltinFunction( module, "left", kspreadfunc_left) ) );
   module->addObject( "right", new KSValue( new KSBuiltinFunction( module, "right", kspreadfunc_right) ) );
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", kspreadfunc_mid) ) );
-  module->addObject( "nbcar", new KSValue( new KSBuiltinFunction( module, "nbcar", kspreadfunc_nbcar) ) );
+  module->addObject( "len", new KSValue( new KSBuiltinFunction( module, "len", kspreadfunc_len) ) );
   module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
   module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
