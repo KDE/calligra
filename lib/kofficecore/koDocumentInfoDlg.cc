@@ -205,7 +205,7 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
   QGrid *grid = d->m_dialog->addGridPage( 2, QGrid::Horizontal, i18n( "About" ) );
   grid->setMargin(KDialog::marginHint());
   grid->setSpacing(KDialog::spacingHint());
-  
+
   (void) new QLabel( i18n( "Title :" ), grid );
   d->m_leDocTitle = new QLineEdit( aboutInfo->title(), grid );
 
@@ -304,7 +304,8 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props )
     QBuffer buffer( d->m_docInfoFile->data() );
     buffer.open( IO_ReadOnly );
 
-    QDomDocument doc( &buffer );
+    QDomDocument doc;
+    doc.setContent( &buffer );
 
     d->m_info->load( doc );
   }

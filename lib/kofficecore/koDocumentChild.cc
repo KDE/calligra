@@ -194,7 +194,17 @@ bool KoDocumentChild::load( const QDomElement& element )
 	if ( e.tagName() == "rect" )
         {
 	    brect = true;
-	    m_tmpGeometry = e.toRect();
+	    int x, y, w, h;
+	    x=y=w=h=0;
+	    if ( e.hasAttribute( "x" ) )
+		x = e.attribute( "x" ).toInt();
+	    if ( e.hasAttribute( "y" ) )
+		y = e.attribute( "y" ).toInt();
+	    if ( e.hasAttribute( "w" ) )
+		w = e.attribute( "w" ).toInt();
+	    if ( e.hasAttribute( "h" ) )
+		h = e.attribute( "h" ).toInt();	
+	    m_tmpGeometry = QRect(x, y, w, h);
 	}
     }
 

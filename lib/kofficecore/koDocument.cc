@@ -688,7 +688,8 @@ bool KoDocument::loadNativeFormat( const QString & file )
       buffer.close();
       buffer.open( IO_ReadOnly );
 
-      QDomDocument doc( &buffer );
+      QDomDocument doc;
+      doc.setContent( &buffer );
       d->m_docInfo->load( doc );
 
       buffer.close();
