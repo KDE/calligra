@@ -388,7 +388,7 @@ void KFormulaDoc::mousePressEvent( QMouseEvent *a,QWidget *wid)
 
     setActiveElement(theFirstElement->isInside(a->pos()));
     if(theActiveElement!=0)
-     theActiveElement->setPosition(0);
+     theActiveElement->setPosition(-2);
     emitModified();
     if(a->button()==RightButton){
 	QPopupMenu *mousepopup = new QPopupMenu;
