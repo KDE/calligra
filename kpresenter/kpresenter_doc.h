@@ -295,6 +295,9 @@ public:
   void alignObjsLeft();
   void alignObjsCenterH();
   void alignObjsRight();
+  void alignObjsTop();
+  void alignObjsCenterV();
+  void alignObjsBottom();
 
 signals:
 

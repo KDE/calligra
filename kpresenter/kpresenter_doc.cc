@@ -1542,6 +1542,7 @@ void KPresenterDocument_impl::alignObjsLeft()
   QList<QPoint> _diffs;
   _objects.setAutoDelete(false);
   _diffs.setAutoDelete(false);
+  int _x = getPageSize(1,0,0).x();
 
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
@@ -1549,7 +1550,7 @@ void KPresenterDocument_impl::alignObjsLeft()
       if (kpobject->isSelected())
 	{
 	  _objects.append(kpobject);
-	  _diffs.append(new QPoint(getPageSize(1,0,0).x() - kpobject->getOrig().x(),0));
+	  _diffs.append(new QPoint(_x - kpobject->getOrig().x(),0));
 	}
     }
 
@@ -1566,7 +1567,8 @@ void KPresenterDocument_impl::alignObjsCenterH()
   QList<QPoint> _diffs;
   _objects.setAutoDelete(false);
   _diffs.setAutoDelete(false);
-  int _w = getPageSize(1,0,0).x() + getPageSize(1,0,0).width();
+  int _x = getPageSize(1,0,0).x();
+  int _w = getPageSize(1,0,0).width();
 
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
@@ -1574,7 +1576,7 @@ void KPresenterDocument_impl::alignObjsCenterH()
       if (kpobject->isSelected())
 	{
 	  _objects.append(kpobject);
-	  _diffs.append(new QPoint((_w - kpobject->getSize().width()) / 2 - kpobject->getOrig().x(),0));
+	  _diffs.append(new QPoint((_w - kpobject->getSize().width()) / 2 - kpobject->getOrig().x() + _x,0));
 	}
     }
 
@@ -1604,6 +1606,97 @@ void KPresenterDocument_impl::alignObjsRight()
     }
 
   MoveByCmd2 *moveByCmd2 = new MoveByCmd2(i18n("Align object(s) right"),_diffs,_objects,this);
+  _commands.addCommand(moveByCmd2);
+  moveByCmd2->execute();
+}
+
+/*==================== align objects top ========================*/
+void KPresenterDocument_impl::alignObjsTop()
+{
+  KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  QList<QPoint> _diffs;
+  _objects.setAutoDelete(false);
+  _diffs.setAutoDelete(false);
+  int pgnum,_y;
+
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  pgnum = getPageOfObj(i,0,0);
+	  if (pgnum != -1)
+	    {
+	      _y = getPageSize(pgnum - 1,0,0).y();
+	      _objects.append(kpobject);
+	      _diffs.append(new QPoint(0,_y - kpobject->getOrig().y()));
+	    }
+	}
+    }
+
+  MoveByCmd2 *moveByCmd2 = new MoveByCmd2(i18n("Align object(s) top"),_diffs,_objects,this);
+  _commands.addCommand(moveByCmd2);
+  moveByCmd2->execute();
+}
+
+/*==================== align objects center v ===================*/
+void KPresenterDocument_impl::alignObjsCenterV()
+{
+  KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  QList<QPoint> _diffs;
+  _objects.setAutoDelete(false);
+  _diffs.setAutoDelete(false);
+  int pgnum,_y,_h;
+
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  pgnum = getPageOfObj(i,0,0);
+	  if (pgnum != -1)
+	    {
+	      _y = getPageSize(pgnum - 1,0,0).y(); 
+	      _h = getPageSize(pgnum - 1,0,0).height();
+	      _objects.append(kpobject);
+	      _diffs.append(new QPoint(0,(_h - kpobject->getSize().height()) / 2 - kpobject->getOrig().y() + _y));
+	    }
+	}
+    }
+
+  MoveByCmd2 *moveByCmd2 = new MoveByCmd2(i18n("Align object(s) top"),_diffs,_objects,this);
+  _commands.addCommand(moveByCmd2);
+  moveByCmd2->execute();
+}
+
+/*==================== align objects top ========================*/
+void KPresenterDocument_impl::alignObjsBottom()
+{
+  KPObject *kpobject = 0;
+  QList<KPObject> _objects;
+  QList<QPoint> _diffs;
+  _objects.setAutoDelete(false);
+  _diffs.setAutoDelete(false);
+  int pgnum,_h;
+
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  pgnum = getPageOfObj(i,0,0);
+	  if (pgnum != -1)
+	    {
+	      _h = getPageSize(pgnum - 1,0,0).y() + getPageSize(pgnum - 1,0,0).height();
+	      _objects.append(kpobject);
+	      _diffs.append(new QPoint(0,_h - kpobject->getSize().height() - kpobject->getOrig().y()));
+	    }
+	}
+    }
+
+  MoveByCmd2 *moveByCmd2 = new MoveByCmd2(i18n("Align object(s) top"),_diffs,_objects,this);
   _commands.addCommand(moveByCmd2);
   moveByCmd2->execute();
 }

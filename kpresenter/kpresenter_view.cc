@@ -1048,16 +1048,19 @@ void KPresenterView_impl::extraAlignObjRightidl()
 /*======================= align object top ======================*/
 void KPresenterView_impl::extraAlignObjTopidl()
 {
+  KPresenterDoc()->alignObjsTop();
 }
 
 /*======================= align object center v =================*/
 void KPresenterView_impl::extraAlignObjCenterVidl()
 {
+  KPresenterDoc()->alignObjsCenterV();
 }
 
 /*======================= align object bottom ===================*/
 void KPresenterView_impl::extraAlignObjBottomidl()
 {
+  KPresenterDoc()->alignObjsBottom();
 }
 
 /*======================= set document ==========================*/
