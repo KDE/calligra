@@ -649,7 +649,7 @@ void KSpreadUndoResizeColRow::undo()
 
     createList( m_lstRedoColumn,m_lstRedoRow, table );
 
-    if( m_rctRect.bottom()==0x7FFF) // colonne(s) entiere(s)
+    if( m_rctRect.bottom()==0x7FFF) // complete column(s)
     {
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
@@ -658,7 +658,7 @@ void KSpreadUndoResizeColRow::undo()
            cl->setWidth((*it2).columnWidth);
         }
     }
-    else if(m_rctRect.right()==0x7FFF) // ligne(s) entiere(s)
+    else if(m_rctRect.right()==0x7FFF) // complete row(s)
     {
     QValueList<rowSize>::Iterator it2;
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
@@ -667,7 +667,7 @@ void KSpreadUndoResizeColRow::undo()
            rw->setHeight((*it2).rowHeight);
         }
     }
-    else //ligne et colonne
+    else // row and column
     {
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
@@ -693,7 +693,7 @@ void KSpreadUndoResizeColRow::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    if( m_rctRect.bottom()==0x7FFF) // colonne(s) entiere(s)
+    if( m_rctRect.bottom()==0x7FFF) // complete column(s)
     {
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
@@ -702,7 +702,7 @@ void KSpreadUndoResizeColRow::redo()
            cl->setWidth((*it2).columnWidth);
         }
     }
-    else if(m_rctRect.right()==0x7FFF) // ligne(s) entiere(s)
+    else if(m_rctRect.right()==0x7FFF) // complete row(s)
     {
     QValueList<rowSize>::Iterator it2;
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
@@ -711,7 +711,7 @@ void KSpreadUndoResizeColRow::redo()
            rw->setHeight((*it2).rowHeight);
         }
     }
-    else //ligne et colonne
+    else // row and column
     {
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
@@ -727,9 +727,7 @@ void KSpreadUndoResizeColRow::redo()
         }
     }
 
-
-    //fonction pour raffraichir les colonnes et row
-    //a definir
+    // TODO: function for refreshing rows and columns
 
     doc()->undoBuffer()->unlock();
 }
