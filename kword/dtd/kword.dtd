@@ -458,9 +458,14 @@ don't put a </?xml...> at the end of the file!).
         glyphs. Note: the format-tags navigate in the text using an index
         which starts at 0 and runs up till it reaches length-1.
 
-        Attribues:
-            
-             xml:space:          "preserve" tells to keep white spaces
+        Some special character codes map to special features:
+            0xad is a soft hyphen
+            0xa0 is a non-breaking space
+            \n is a linebreak (within the paragraph)
+
+        Attributes:
+
+             xml:space:          "preserve" tells parsers to keep white spaces
 -->
 <!ELEMENT TEXT
     (#PCDATA)>
