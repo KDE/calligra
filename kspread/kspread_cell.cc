@@ -6048,10 +6048,16 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
       {
         text.setAttribute( "dataType", cell.attribute( "dataType" ) );
       }
-
-      loadCellData(text, op);
-
       QDomElement result = cell.namedItem( "result" ).toElement();
+      QString txt = text.text();
+      if ((pm == ::Result) && (txt[0] == '='))
+          // paste text of the element, if we want to paste result
+          // and the source cell contains a formula
+          d->strText = result.text();
+      else
+          //otherwise copy everything
+          loadCellData(text, op);
+
       if ( !result.isNull() )
       {
         QString dataType;
