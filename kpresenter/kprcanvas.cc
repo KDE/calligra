@@ -3217,7 +3217,7 @@ bool KPrCanvas::pNext( bool )
     {
         if ( !spManualSwitch() && m_setPageTimer )
         {
-            m_view->setAutoPresTimer( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->getPageTimer() / doc->getPresSpeed() );
+            m_view->setAutoPresTimer( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->getPageTimer() / ( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->background()->getPresSpeed() ) );
             m_setPageTimer = false;
             return false;
         }
@@ -3252,7 +3252,7 @@ bool KPrCanvas::pNext( bool )
 
         QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
         --it;
-        
+
         //tz
         KPBackGround * backtmp=doc->pageList().at( ( *it ) - 1 )->background();
         PageEffect _pageEffect = backtmp->getPageEffect();
@@ -3265,9 +3265,7 @@ bool KPrCanvas::pNext( bool )
             playSound( _soundFileName );
         }
 
-        //kPchangePages( this, _pix1, _pix2, _pageEffect, pageSpeedFakt() );
-
-        m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, m_view->kPresenterDoc()->getPresSpeed() );
+        m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, backtmp->getPresSpeed() );
         if ( m_pageEffect->doEffect() )
         {
             delete m_pageEffect;
@@ -3569,7 +3567,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
             allObjects.append( it.current() );
     }
 
-    m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view );
+    m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view, m_activePage->background()->getPresSpeed() );
     if ( m_effectHandler->doEffect() )
     {
         delete m_effectHandler;
@@ -3644,7 +3642,7 @@ bool KPrCanvas::finishPageEffect( bool cancel )
             m_pageEffect->finish();
         delete m_pageEffect;
         m_pageEffect = 0;
-        
+
         if ( !cancel )
         {
             doObjEffects( true );
@@ -4569,26 +4567,6 @@ QRect KPrCanvas::getPageRect( bool decBorders ) const
 unsigned int KPrCanvas::pageNums() const
 {
     return m_view->kPresenterDoc()->getPageNums();
-}
-
-float KPrCanvas::objSpeedFakt() const
-{
-    /*
-      Used to be 0(slow)->70, 1(medium)->50, 2(fast)->30.
-      It's now 0->75, 1->50, 2->37, etc. That's the reason for this strange formula :)
-    */
-    return 150.0 / static_cast<float>( m_view->kPresenterDoc()->getPresSpeed() + 2 );
-    //return ObjSpeed[ static_cast<int>( m_view->kPresenterDoc()->getPresSpeed() ) ];
-}
-
-float KPrCanvas::pageSpeedFakt() const
-{
-    /*
-      Used to be 0(slow)->8, 1(medium)->16, 2(fast)->32.
-      It's now 0->10, 1->20, 2->30, 3->40, 4->50......
-    */
-    return 10.0 * ( m_view->kPresenterDoc()->getPresSpeed() + 1 );
-    //return PageSpeed[ static_cast<int>( m_view->kPresenterDoc()->getPresSpeed() ) ];
 }
 
 void KPrCanvas::_repaint( bool /*erase*/ )

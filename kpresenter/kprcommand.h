@@ -149,7 +149,7 @@ public:
         float angle;
     };
 
-    RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects, 
+    RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects,
                KPresenterDoc *doc, bool addAngle = false );
     ~RotateCmd();
 
@@ -449,7 +449,7 @@ public:
 protected:
     void addObjects( const QPtrList<KPObject> &_objects );
     void applyBrush( KP2DObject *object, Brush *tmpBrush );
-    
+
     KPresenterDoc *doc;
     QPtrList<Brush> oldBrush;
     QPtrList<KP2DObject> objects;
@@ -463,11 +463,9 @@ class PgConfCmd : public KNamedCommand
 public:
     PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                bool _showPresentationDuration, QPen _pen,
-               PresSpeed _presSpeed,
                QValueList<bool> _selectedSlides,
                bool _oldManualSwitch, bool _oldInfiniteLoop,
                bool _oldShowPresentationDuration, QPen _oldPen,
-               PresSpeed _oldPresSpeed,
                QValueList<bool> _oldSelectedSlides,
                KPresenterDoc *_doc );
 
@@ -480,7 +478,6 @@ protected:
     bool showPresentationDuration, oldShowPresentationDuration;
     QPen pen, oldPen;
     QValueList<bool> selectedSlides, oldSelectedSlides;
-    PresSpeed presSpeed, oldPresSpeed;
     KPresenterDoc *doc;
 };
 

@@ -714,6 +714,15 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDom
 
 }
 
+void KPresenterDoc::compatibityPresSpeed()
+{
+    //todo when we save with old format create compatibility
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+        //TODO move presSpeed to m_infoLoading (use just for loading)
+        m_pageList.at(i)->background()->setPresSpeed( presSpeed );
+    }
+}
+
 void KPresenterDoc::enableEmbeddedParts( bool f )
 {
     QPtrListIterator<KPrPage> it( m_pageList );
@@ -1208,6 +1217,11 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     delete m_loadingInfo;
     m_loadingInfo=0L;
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+
+    emit sigProgress( 100 );
+    recalcVariables( VT_FIELD );
+    emit sigProgress( -1 );
+
     return true;
 }
 
@@ -2429,6 +2443,8 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
         else
             setPageLayout( m_pageLayout );
     }
+
+    compatibityPresSpeed();
 
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );
@@ -3884,6 +3900,5 @@ void KPresenterDoc::addWordToDictionary( const QString & word)
     //if ( m_bgSpellCheck )
     //m_bgSpellCheck->addPersonalDictonary( word );
 }
-
 
 #include "kpresenter_doc.moc"

@@ -137,12 +137,12 @@ public:
      */
     void startScreenPresentation( float presFakt, int curPgNum = -1);
     void stopScreenPresentation();
-    
+
     /**
      * Go to the next step in the presentation.
      */
     bool pNext( bool );
-    
+
     /**
      * Go back one step in the presentation.
      */
@@ -169,15 +169,15 @@ public:
 
     /**
     \brief Draw page into QPixmap.
-    
+
     Draws page pgnum of the currently open presentation into a QPixmap
     using the specified zoom factor (or fixed width/height dimensions, resp.)
-    
+
     Set forceWidth and/or forceHeight to override the zoom factor
     and obtain a pixmap of the specified width and/or height.
     By omitting one of them you make sure that the aspect ratio
     of your page is used for the resulting image.
-    
+
     \sa exportPage
     */
     void drawPageInPix( QPixmap&, int pgnum, int zoom,
@@ -187,11 +187,11 @@ public:
 
     /**
      \brief Save page to bitmap file.
-     
+
      Export a page of the currently open presentation to disk
      using a bitmap format like e.g. PNG.
      This method uses a QPixmap::save() call.
-      
+
      \param nPage the internally used <b>0-based</b> page number
      \param nWidth the desired image width in px
      \param nHeight the desired image height in px
@@ -200,20 +200,20 @@ public:
        which is then copied over to the desired location.
      \param format the format of the image file (see QPixmap::save())
       \param quality the quality of the image (see QPixmap::save())
-     
+
      example:
 \verbatim
 exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 \endverbatim
      \returns True if the file was written successfully.
-     
+
      \sa drawPageInPix, KPresenterViewIface::exportPage
      */
     bool exportPage( int nPage, int nWidth, int nHeight,
                      const KURL& fileURL,
                      const char* format,
                      int quality = -1 );
-    
+
     void gotoPage( int pg );
 
     /**
@@ -223,7 +223,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void presGotoFirstPage();
 
     KPrPage* activePage() const;
-    
+
     bool oneObjectTextExist() const;
     bool oneObjectTextSelected() const;
     bool isOneObjectSelected() const;
@@ -329,7 +329,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     KPTextObject * textObjectByPos( int pos ) const;
 
     /**
-     * Align all selected and not protected objects on the 
+     * Align all selected and not protected objects on the
      * active and on the sticky page according to the AlignType
      */
     void alignObjects( AlignType at );
@@ -412,12 +412,12 @@ signals:
     void colorChanged( const QColor & );
     void alignChanged( int );
     void updateSideBarItem( int );
-    /** 
+    /**
      * Emmitted when presentation should be restarted
      * This is used in automatic screen and infinite loop mode.
      */
     void stopAutomaticPresentation();
-    /** 
+    /**
      * Emmitted when presentation should be restarted
      * This is used in automatic screen and infinite loop mode.
      */
@@ -439,18 +439,18 @@ protected:
      * m_subStep    the current sub step 0 based for text animation
      * m_animate    true if the current step should be animated
      * m_animateSub true if the current sub step should be animated
-     */  
+     */
     class PresStep
     {
     public:
-        PresStep() 
-        : m_pageNumber( 0 ), m_step( 0 ), m_subStep( 0 ), 
-          m_animate( false ), m_animateSub( false ) 
+        PresStep()
+        : m_pageNumber( 0 ), m_step( 0 ), m_subStep( 0 ),
+          m_animate( false ), m_animateSub( false )
         {};
-        PresStep( unsigned int pageNumber, unsigned int step, unsigned int subStep, 
+        PresStep( unsigned int pageNumber, unsigned int step, unsigned int subStep,
                   bool animate = false, bool animateSub = false )
-        : m_pageNumber( pageNumber ), m_step( step ), m_subStep( subStep ), 
-          m_animate( animate ), m_animateSub( animateSub ) 
+        : m_pageNumber( pageNumber ), m_step( step ), m_subStep( subStep ),
+          m_animate( animate ), m_animateSub( animateSub )
         {};
 
         int m_pageNumber;
@@ -473,7 +473,7 @@ protected:
      * This method is used for repainting the canvas.
      */
     virtual void paintEvent( QPaintEvent* );
-    
+
     /**
      * Draws the background of page to painter.
      * Set edit to true if in edit mode, false in presentation mode.
@@ -484,37 +484,37 @@ protected:
      * Draw obj to painter.
      */
     void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj ) const;
-    
+
     /**
      * Draw _objects shown at step to painter.
      * This method is used for presentation mode, printing.
      */
     void drawObjectsPres( QPainter *painter, const QPtrList<KPObject> &_objects, PresStep step ) const;
-    
+
     /**
-     * Draw _objects to painter. 
+     * Draw _objects to painter.
      * Only rect is painted.
      * This method is used for edit mode.
      */
     void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects, SelectionMode selectionMode ) const;
 
     /**
-     * Draw _objects to painter. 
+     * Draw _objects to painter.
      * contour if true only countor of selected objects is drawn
      * selectionMode selected objects use this selection mode
      * textView if set print editable textobject (used by drawObjectsEdit)
      * This method is used by drawObjectsPres and drawObjectsEdit.
      */
-    void drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode, 
+    void drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode,
                       bool contour, KPTextView * textView ) const;
-    
+
     /**
      * Draw _objects of page to painter.
      * This method is used for edit mode.
      */
-    void drawEditPage( QPainter *painter, const QRect &_rect, 
+    void drawEditPage( QPainter *painter, const QRect &_rect,
                        KPrPage *page, SelectionMode selectionMode ) const;
-    
+
     /**
      * Draw _objects of page shown at step to painter.
      * This method is used for presentation mode, printing.
@@ -531,7 +531,7 @@ protected:
 
     /**
      * Finish the object effects.
-     * This shown the last step of the effect. It stops the effect timer and 
+     * This shown the last step of the effect. It stops the effect timer and
      * disconnect it and the effect handler deleted.
      */
     bool finishObjectEffects();
@@ -569,8 +569,6 @@ protected:
     bool spManualSwitch() const;
     QRect getPageRect( bool decBorders = true ) const;
     unsigned int pageNums() const;
-    float objSpeedFakt() const;
-    float pageSpeedFakt() const;
     void calcRatio( double &dx, double &dy, ModifyType _modType, double ratio ) const;
 
     void _repaint( bool erase=true );
@@ -582,7 +580,7 @@ protected:
      * This method is used for printing a presentation.
      */
     void printPage( QPainter*, PresStep step );
-    
+
     /**
      * This method animates the objects in the presentation.
      */
@@ -646,7 +644,7 @@ private:
     /**
      * This is used in automatic presentation mode.
      * If it is set to true and we are in automatic presentation
-     * mode the timer of the page will be activated after the last 
+     * mode the timer of the page will be activated after the last
      * effect has been shown.
      */
     bool m_setPageTimer;
@@ -659,7 +657,7 @@ private:
     QPoint limitOfPoint(const QPoint& _point) const;
 
     void calcBoundingRect();
-    
+
     /**
      * Return true if object is a header/footer which is hidden.
      */
@@ -681,13 +679,13 @@ private slots:
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
     void toAlignChanged( int a ) { emit alignChanged( a ); }
     /**
-     * Switch to drawing mode. In drawing mode it is possible to draw on the 
+     * Switch to drawing mode. In drawing mode it is possible to draw on the
      * current slide.
      * Only to be used in presentation mode.
      */
     void setDrawingMode();
     /**
-     * Set switching mode. This ends drawing mode and goes back to 
+     * Set switching mode. This ends drawing mode and goes back to
      * stepping between the pages.
      * If continueTimer is true the autoPres timer is continued
      * Only to be used in presentation mode.
@@ -725,7 +723,7 @@ private:
     bool fillBlack;
     KPresenterView *m_view;
     bool editMode, goingBack;
-    /** 
+    /**
      * True when we are in drawing mode.
      * False when we are in switching mode.
      */
@@ -735,9 +733,9 @@ private:
      * Used in drawing mode.
      */
     bool m_drawLineInDrawMode;
-    
+
     /**
-     * Save the lines drawed in drawMode. 
+     * Save the lines drawed in drawMode.
      * This is used for paint events.
      * Used in drawing mode.
      */
@@ -748,7 +746,7 @@ private:
      * Used in drawing mode.
      */
     int m_drawModeLineIndex;
-    
+
     bool mouseSelectedObject;
     /// information about current step of the presentation
     PresStep m_step;
@@ -767,7 +765,7 @@ private:
 
     /// EffectTimer
     QTimer m_effectTimer;
-    
+
     QTimer m_pageEffectTimer;
 
     /// menu identifier for draw mode
@@ -776,7 +774,7 @@ private:
     int delPageId;
     bool drawRubber;
     QRect rubber;
-    
+
     //---- stuff needed for resizing ----
     /// object which gets resized
     KPObject *m_resizeObject;
@@ -786,15 +784,15 @@ private:
     bool m_keepRatio;
     /// ratio of the object ( width / height )
     double m_ratio;
-    
+
     //---- stuff needed for rotating ----
     /// object which gets rotated
     KPObject *m_rotateObject;
     /// center of the rotated object
     KoPoint m_rotateCenter;
-    /// angle of the object at start of rotate 
+    /// angle of the object at start of rotate
     double m_angleBeforeRotate;
-    
+
     ToolEditMode toolEditMode;
     QRect insRect;
     KoDocumentEntry partEntry;

@@ -244,9 +244,6 @@ class KPresenterDoc : public KoDocument
 
     void replaceObjs( bool createUndoRedo = true );
 
-    PresSpeed getPresSpeed() const { return presSpeed; }
-    void setPresSpeed( PresSpeed _presSpeed ) { presSpeed = _presSpeed; }
-
     int getLeftBorder() const;
     int getTopBorder() const;
     int getBottomBorder() const;
@@ -545,6 +542,9 @@ protected:
     void createPresentationAnimation(const QDomElement& element);
 
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
+
+    //we move presSpeed to each table => compatibility with old file format
+    void compatibityPresSpeed();
 
     // ************ variables ************
 

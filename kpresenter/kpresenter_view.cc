@@ -1610,12 +1610,12 @@ void KPresenterView::screenNext()
 {
     if ( m_canvas->currentTextObjectView() )
         return;
-    if ( presStarted ) 
+    if ( presStarted )
     {
         m_canvas->pNext( true );
         m_canvas->setFocus();
-    } 
-    else 
+    }
+    else
     {
         nextPage();
     }
@@ -3564,13 +3564,11 @@ void KPresenterView::pgConfOk()
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Slide Show" ),
                                           pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
                                           pgConfDia->getPresentationDuration(), pgConfDia->getPen(),
-                                          pgConfDia->getPresSpeed(),
                                           pgConfDia->getSelectedSlides(),
                                           kPresenterDoc()->spManualSwitch(),
                                           kPresenterDoc()->spInfiniteLoop(),
                                           kPresenterDoc()->presentationDuration(),
                                           kPresenterDoc()->presPen(),
-                                          kPresenterDoc()->getPresSpeed(),
                                           selectedSlides,
                                           kPresenterDoc() );
     pgConfCmd->execute();
@@ -3586,7 +3584,7 @@ void KPresenterView::transEffectOk()
                                                          transEffectDia->getPageEffect(), transEffectDia->getPresSpeed(),
                                                          transEffectDia->getSoundEffect(), transEffectDia->getSoundFileName(),
                                                          transEffectDia->getAutoAdvance(), transEffectDia->getSlideTime(),
-                                                         page->getPageEffect(), kPresenterDoc()->getPresSpeed(),
+                                                         page->getPageEffect(), page->background()->getPresSpeed(),
                                                          page->getPageSoundEffect(), page->getPageSoundFileName(),
                                                          /* TODO page->getAutoAdvance() */ false, page->getPageTimer(),
                                                          page );

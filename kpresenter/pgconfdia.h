@@ -53,10 +53,9 @@ public:
     ~PgConfDia();
     bool getInfiniteLoop() const;
     bool getManualSwitch() const;
-    bool getPresentationDuration()const;
+    bool getPresentationDuration() const;
     QPen getPen() const;
     QValueList<bool> getSelectedSlides() const;
-    PresSpeed getPresSpeed() const;
 
 protected:
 
@@ -68,7 +67,6 @@ protected:
     KIntNumInput* penWidth;
 
     QListView *slides;
-    QSlider *speedSlider;
 
     void setupPageGeneral();
     void setupPageSlides();

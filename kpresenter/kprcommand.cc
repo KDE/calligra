@@ -245,25 +245,25 @@ void SetBackCmd::unexecute()
     }
 }
 
-RotateCmd::RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects, 
+RotateCmd::RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects,
                       KPresenterDoc *doc, bool addAngle )
     : KNamedCommand( _name ), m_doc( doc ), m_newAngle( newAngle ), m_addAngle( addAngle )
 {
     m_objects.setAutoDelete( false );
     m_oldAngles.setAutoDelete( false );
-    
+
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         m_objects.append( it.current() );
-        
+
         RotateValues *old = new RotateValues;
         old->angle = it.current()->getAngle();
         m_oldAngles.append( old );
-        
+
         it.current()->incCmdRef();
     }
-    
+
     m_page = m_doc->findSideBarPage( m_objects );
 }
 
@@ -773,17 +773,17 @@ AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignTyp
     objects.setAutoDelete( false );
     diffs.setAutoDelete( true );
     m_page = doc->findSideBarPage( _objects );
-    
+
     QPtrListIterator<KPObject> it( _objects );
     KoRect boundingRect;
     for ( ; it.current() ; ++it )
     {
         boundingRect |= it.current()->getRealRect();
     }
-    
+
     if ( _objects.count() == 1 )
         boundingRect = m_page->getPageRect();
-    
+
     it.toFirst();
     for ( ; it.current() ; ++it )
     {
@@ -797,19 +797,19 @@ AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignTyp
               diff = new KoPoint( 0, boundingRect.y() - it.current()->getRealOrig().y() );
               break;
             case AT_RIGHT:
-              diff = new KoPoint( boundingRect.x() + boundingRect.width() - 
+              diff = new KoPoint( boundingRect.x() + boundingRect.width() -
                                   it.current()->getRealOrig().x() - it.current()->getRealSize().width(), 0 );
               break;
             case AT_BOTTOM:
-              diff = new KoPoint( 0, boundingRect.y() + boundingRect.height() - 
+              diff = new KoPoint( 0, boundingRect.y() + boundingRect.height() -
                                   it.current()->getRealOrig().y() - it.current()->getRealSize().height() );
               break;
             case AT_HCENTER:
-              diff = new KoPoint( ( boundingRect.width() - it.current()->getRealSize().width() ) / 2 - 
+              diff = new KoPoint( ( boundingRect.width() - it.current()->getRealSize().width() ) / 2 -
                                   it.current()->getRealOrig().x() + boundingRect.x(), 0 );
               break;
             case AT_VCENTER:
-              diff = new KoPoint( 0, ( boundingRect.height() - it.current()->getRealSize().height() ) / 2 - 
+              diff = new KoPoint( 0, ( boundingRect.height() - it.current()->getRealSize().height() ) / 2 -
                                   it.current()->getRealOrig().y() + boundingRect.y() );
               break;
         }
@@ -881,7 +881,7 @@ PenCmd::PenCmd( const QString &_name, QPtrList<KPObject> &_objects, Pen _newPen,
     oldPen.setAutoDelete( false );
 
     addObjects( _objects );
-}  
+}
 
 PenCmd::~PenCmd()
 {
@@ -924,7 +924,7 @@ void PenCmd::execute()
 void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
 {
     switch (object->getType()) {
-        case OT_LINE: 
+        case OT_LINE:
         {
             KPLineObject* obj=dynamic_cast<KPLineObject*>( object );
             if( obj )
@@ -947,12 +947,12 @@ void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
                 obj->setLineBegin( tmpPen->lineBegin );
                 obj->setLineEnd( tmpPen->lineEnd );
                 //doc->repaint( obj );
-            } 
+            }
         } break;
         default:
             break;
     }
-    
+
     KPShadowObject *obj = dynamic_cast<KPShadowObject*>( object );
     if ( obj )
     {
@@ -1016,7 +1016,7 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
                 default:
                    break;
             }
-            
+
             KPShadowObject *obj = dynamic_cast<KPShadowObject*>( object );
             if ( obj )
             {
@@ -1065,7 +1065,7 @@ void BrushCmd::addObjects( const QPtrList<KPObject> &_objects )
             {
                 objects.append( obj );
                 obj->incCmdRef();
-                
+
                 Brush * brush = new BrushCmd::Brush;
                 brush->brush = obj->getBrush();
                 brush->fillType = obj->getFillType();
@@ -1075,7 +1075,7 @@ void BrushCmd::addObjects( const QPtrList<KPObject> &_objects )
                 brush->unbalanced = obj->getGUnbalanced();
                 brush->xfactor = obj->getGXFactor();
                 brush->yfactor = obj->getGYFactor();
-                
+
                 oldBrush.append( brush );
             }
         }
@@ -1148,16 +1148,16 @@ void BrushCmd::unexecute()
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
         applyBrush( objects.at( i ), oldBrush.at( i ) );
     }
-    
+
     int pos=doc->pageList().findRef(m_page);
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
 
 
 PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
-                      bool _showPresentationDuration, QPen _pen, PresSpeed _presSpeed,
+                      bool _showPresentationDuration, QPen _pen,
                       QValueList<bool> _selectedSlides, bool _oldManualSwitch, bool _oldInfiniteLoop,
-                      bool _oldShowPresentationDuration, QPen _oldPen, PresSpeed _oldPresSpeed,
+                      bool _oldShowPresentationDuration, QPen _oldPen,
                       QValueList<bool> _oldSelectedSlides, KPresenterDoc *_doc )
     : KNamedCommand( _name )
 {
@@ -1171,8 +1171,6 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLo
     oldShowPresentationDuration = _oldShowPresentationDuration;
     oldPen = _oldPen;
     oldSelectedSlides = _oldSelectedSlides;
-    presSpeed = _presSpeed;
-    oldPresSpeed = _oldPresSpeed;
     doc = _doc;
 }
 
@@ -1182,7 +1180,6 @@ void PgConfCmd::execute()
     doc->setInfiniteLoop( infiniteLoop );
     doc->setPresentationDuration( showPresentationDuration );
     doc->setPresPen( pen );
-    doc->setPresSpeed( presSpeed );
 
     QPtrList<KPrPage> pages = doc->pageList();
     unsigned count = selectedSlides.count();
@@ -1197,7 +1194,6 @@ void PgConfCmd::unexecute()
     doc->setInfiniteLoop( oldInfiniteLoop );
     doc->setPresentationDuration( oldShowPresentationDuration );
     doc->setPresPen( oldPen );
-    doc->setPresSpeed( oldPresSpeed );
 
     QPtrList<KPrPage> pages = doc->pageList();
     unsigned count = oldSelectedSlides.count();
@@ -1239,6 +1235,7 @@ void TransEffectCmd::execute()
     m_page->setPageSoundFileName( soundFileName );
     // TODO m_page->setAutoAdvance( autoAdvance );
     m_page->setPageTimer(  slideTime );
+    m_page->background()->setPresSpeed( transSpeed );
 }
 
 void TransEffectCmd::unexecute()
@@ -1249,6 +1246,7 @@ void TransEffectCmd::unexecute()
     m_page->setPageSoundFileName( oldSoundFileName );
     // TODO m_page->setAutoAdvance( oldAutoAdvance );
     m_page->setPageTimer(  oldSlideTime );
+    m_page->background()->setPresSpeed( oldTransSpeed );
 }
 
 
@@ -1323,7 +1321,7 @@ void PieValueCmd::execute()
         }
     }
     doc->repaint( false );
-    
+
     int pos=doc->pageList().findRef(m_page);
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
@@ -1341,7 +1339,7 @@ void PieValueCmd::unexecute()
         }
     }
     doc->repaint( false );
-    
+
     int pos=doc->pageList().findRef(m_page);
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
@@ -1389,7 +1387,7 @@ void PolygonSettingCmd::execute()
         }
     }
     doc->repaint( false );
-    
+
     int pos=doc->pageList().findRef(m_page);
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
@@ -1541,7 +1539,7 @@ void RectValueCmd::unexecute()
             obj->setRnds( oldValues.at( i )->xRnd, oldValues.at( i )->yRnd );
     }
     doc->repaint( false );
-    
+
     int pos=doc->pageList().findRef(m_page);
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
@@ -2052,7 +2050,7 @@ void KPrStickyObjCommand::unstickObj(KPObject *_obj)
     _obj->setSticky(false);
 }
 
-KPrNameObjectCommand::KPrNameObjectCommand( const QString &_name, const QString &_objectName, 
+KPrNameObjectCommand::KPrNameObjectCommand( const QString &_name, const QString &_objectName,
                                             KPObject *_obj, KPresenterDoc *_doc ):
     KNamedCommand( _name ),
     newObjectName( _objectName ),
@@ -2131,7 +2129,7 @@ KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPresenterDoc *
     objects.setAutoDelete( false );
 
     m_page = m_doc->findSideBarPage( objects );
-    
+
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();

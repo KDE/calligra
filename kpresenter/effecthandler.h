@@ -31,20 +31,20 @@ class QPaintDevice;
 class KPObject;
 class KPresenterView;
 
-class EffectHandler 
+class EffectHandler
 {
 public:
   /**
    * Creates an EffectsHandler for the effect step step and the effect sub step subStep.
-   * step    the effect step for which the effect should be displayed  
-   * subStep the sub effect step for which the effect should be displayed  
+   * step    the effect step for which the effect should be displayed
+   * subStep the sub effect step for which the effect should be displayed
    * back    set to true if the effect step was reached by going backwards
    * dst     the paint device on which the Effects will be shown
    * src     this pixmap holds the pixmap before any effects are started
-   * objects all objects of the page 
-   * view    pointer to the active KPresenterView 
+   * objects all objects of the page
+   * view    pointer to the active KPresenterView
    */
-  EffectHandler( int step, int subStep, bool back, QPaintDevice *dst, QPixmap *src, const QPtrList<KPObject> &objects, KPresenterView *view );
+  EffectHandler( int step, int subStep, bool back, QPaintDevice *dst, QPixmap *src, const QPtrList<KPObject> &objects, KPresenterView *view, int _presSpeed );
 
   /**
    * Delete the EffectHandler.
@@ -52,17 +52,17 @@ public:
   ~EffectHandler();
 
   /**
-   * doEffect handle the next step of the object effect. 
+   * doEffect handle the next step of the object effect.
    * Returns true if all effects in the current step are finished.
    * In automatic presentation mode:
    * On the first step it stops the automatic presentation timer.
-   * The automatic presentation timer will be restared when all 
+   * The automatic presentation timer will be restared when all
    * effects are done.
    */
   bool doEffect();
 
   /**
-   * Ends the effect for the current step by displaying all objects 
+   * Ends the effect for the current step by displaying all objects
    * on their final position.
    * In automatic presentation mode:
    * Restarts the automatic presentation timer.
@@ -74,7 +74,7 @@ protected:
    * Returns true if the effect for the object is finished.
    */
   bool doAppearEffectStep( KPObject *object );
-  
+
   /**
    * Calls the right disappear effect method for the object object.
    * Returns true if the effect for the object is finished.
@@ -249,11 +249,11 @@ protected:
   bool disappearWipeBottom( KPObject *object );
 
   /**
-   * Draws the object object to the pixmap screen with the offset defined 
+   * Draws the object object to the pixmap screen with the offset defined
    * in x and y. If clipRect is set the only the clipRect will be painted.
    */
   void drawObject( KPObject *object, int x, int y, QPixmap *screen, QRect *clipRect = 0 );
-  
+
   /**
    * The internal step of the effect. This is used to calculate the position
    * of the object.
@@ -282,8 +282,8 @@ protected:
 
   /**
    * Pixmap used as source for displaying on.
-   * m_src contains all objects which are allready on the 
-   * final position. 
+   * m_src contains all objects which are allready on the
+   * final position.
    */
   QPixmap *m_src;
 
@@ -296,10 +296,10 @@ protected:
    * List of all objects of the current page
    */
   QPtrList<KPObject> m_objects;
-  
+
   /**
    * List of all objects which appear in the current step.
-   * If a object has reached its final position it is removed from 
+   * If a object has reached its final position it is removed from
    * this list
    */
   QPtrList<KPObject> m_appearEffectObjects;
@@ -312,22 +312,22 @@ protected:
 
   /// the active KPresenterView
   KPresenterView *m_view;
-  
+
   /**
    * The width of a step.
    */
   int m_stepWidth;
-  
+
   /**
    * The height of a step.
    */
   int m_stepHeight;
-  
+
   /**
    * The rects which have to be bitblt
    */
   QPtrList<QRect> m_repaintRects;
-  
+
   /**
    * The rects which have to be bitblt as the objects
    * are no longer there.

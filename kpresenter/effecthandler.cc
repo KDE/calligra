@@ -32,9 +32,9 @@
 #include <qpaintdevice.h>
 
 
-EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *dst, QPixmap *src, 
-                              const QPtrList<KPObject> &objects, KPresenterView *view )
-: m_effectStep(0), m_step(step), m_subStep(subStep), m_back(back), m_dst(dst), 
+EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *dst, QPixmap *src,
+                              const QPtrList<KPObject> &objects, KPresenterView *view, int _presSpeed )
+: m_effectStep(0), m_step(step), m_subStep(subStep), m_back(back), m_dst(dst),
   m_paint(*src), m_objects(objects), m_view(view), m_soundEffect(QString::null),
   m_objectTimer(0)
 {
@@ -44,9 +44,9 @@ EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *ds
     for ( ; it.current(); ++it )
     {
         KPObject *object = it.current();
-        if ( object->getAppearStep() == m_step 
-          && ( m_subStep == 0 
-            || ( object->getType() == OT_TEXT 
+        if ( object->getAppearStep() == m_step
+          && ( m_subStep == 0
+            || ( object->getType() == OT_TEXT
               && object->getEffect2() == EF2T_PARA ) ) )
         {
             m_appearEffectObjects.append( object );
@@ -60,7 +60,7 @@ EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *ds
                 m_objectTimer = object->getAppearTimer();
             }
         }
-        else if ( object->getDisappear() && object->getDisappearStep() == m_step ) 
+        else if ( object->getDisappear() && object->getDisappearStep() == m_step )
         {
             m_disappearEffectObjects.append( object );
             if ( object->getEffect3() != EF3_NONE && object->getDisappearSoundEffect() )
@@ -75,7 +75,7 @@ EffectHandler::EffectHandler( int step, int subStep, bool back, QPaintDevice *ds
         }
     }
 
-    float speedFactor = 150.0 / static_cast<float>( m_view->kPresenterDoc()->getPresSpeed() + 2 );
+    float speedFactor = 150.0 / static_cast<float>( _presSpeed + 2 );
     m_stepWidth = static_cast<int>( m_src->width() / speedFactor );
     m_stepHeight = static_cast<int>( m_src->height() / speedFactor );
     m_lastRepaintRects.setAutoDelete( true );
@@ -90,7 +90,7 @@ EffectHandler::~EffectHandler()
 
 bool EffectHandler::doEffect()
 {
-    if ( m_effectStep == 0 ) 
+    if ( m_effectStep == 0 )
     {
         if ( !m_view->kPresenterDoc()->spManualSwitch() && m_objectTimer > 0 )
         {
@@ -146,7 +146,7 @@ bool EffectHandler::doEffect()
                     }
                     m_disappearEffectObjects.remove();
                 }
-                
+
                 if ( next )
                     disappearObject = m_disappearEffectObjects.next();
                 else
@@ -172,7 +172,7 @@ bool EffectHandler::doEffect()
             //bitBlt( m_dst, r->x(), r->y(), &m_paint, r->x(), r->y(), r->width(), r->height() );
             bitBlt( m_dst, r->x() - 5, r->y() - 5, &m_paint, r->x() - 5, r->y() - 5, r->width() + 10, r->height() + 10 );
         }
-#else        
+#else
         bitBlt( m_dst, 0, 0, &m_paint);
 #endif
 
@@ -190,7 +190,7 @@ bool EffectHandler::doEffect()
 
     }
     bool retval = ( m_appearEffectObjects.isEmpty() && m_disappearEffectObjects.isEmpty() );
-    
+
     if ( retval && !m_view->kPresenterDoc()->spManualSwitch() && m_objectTimer > 0 )
     {
         m_view->setAutoPresTimer( m_objectTimer );
@@ -239,7 +239,7 @@ void EffectHandler::finish()
                 next = false;
             }
             m_disappearEffectObjects.remove();
-            
+
             if ( next )
                 disappearObject = m_disappearEffectObjects.next();
             else
@@ -300,7 +300,7 @@ bool EffectHandler::doAppearEffectStep( KPObject *object )
         case EF_WIPE_BOTTOM:
             positionReached = appearWipeBottom( object );
             break;
-        default: 
+        default:
             break;
     }
     return positionReached;
@@ -351,7 +351,7 @@ bool EffectHandler::doDisappearEffectStep( KPObject *object )
         case EF3_WIPE_BOTTOM:
             positionReached = disappearWipeBottom( object );
             break;
-        default: 
+        default:
             break;
     }
     return positionReached;
@@ -370,7 +370,7 @@ bool EffectHandler::appearComeLeft( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth - objectRect.width();
     if ( x >= ox )
@@ -392,7 +392,7 @@ bool EffectHandler::appearComeTop( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int y = m_effectStep * m_stepHeight - objectRect.height();
     if ( y >= oy )
@@ -414,9 +414,9 @@ bool EffectHandler::appearComeRight( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
-    
+
     bool positionReached = false;
-    int x = m_src->width() - m_effectStep * m_stepWidth; 
+    int x = m_src->width() - m_effectStep * m_stepWidth;
     if ( x <= ox )
     {
         x = ox;
@@ -436,7 +436,7 @@ bool EffectHandler::appearComeBottom( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int y = m_src->height() - m_effectStep * m_stepHeight;
     if ( y <= oy )
@@ -459,11 +459,11 @@ bool EffectHandler::appearComeLeftTop( KPObject *object )
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth - objectRect.width();
     int y = m_effectStep * m_stepHeight - objectRect.height();
-    
+
     if ( x >= ox )
         x = ox;
 
@@ -489,11 +489,11 @@ bool EffectHandler::appearComeLeftBottom( KPObject *object )
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth - objectRect.width();
     int y = m_src->height() - m_effectStep * m_stepHeight;
-    
+
     if ( x >= ox )
         x = ox;
 
@@ -519,11 +519,11 @@ bool EffectHandler::appearComeRightTop( KPObject *object )
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
-    int x = m_src->width() - m_effectStep * m_stepWidth; 
+    int x = m_src->width() - m_effectStep * m_stepWidth;
     int y = m_effectStep * m_stepHeight - objectRect.height();
-    
+
     if ( x <= ox )
         x = ox;
 
@@ -549,11 +549,11 @@ bool EffectHandler::appearComeRightBottom( KPObject *object )
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
-    int x = m_src->width() - m_effectStep * m_stepWidth; 
+    int x = m_src->width() - m_effectStep * m_stepWidth;
     int y = m_src->height() - m_effectStep * m_stepHeight;
-    
+
     if ( x <= ox )
         x = ox;
 
@@ -578,15 +578,15 @@ bool EffectHandler::appearWipeLeft( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ow = objectRect.width();
-    
+
     bool positionReached = false;
-    int w = m_effectStep * m_stepWidth; 
+    int w = m_effectStep * m_stepWidth;
     if ( w >= ow )
     {
         w = ow;
         positionReached = true;
     }
-    
+
     objectRect.setWidth(w);
     m_repaintRects.append( new QRect( objectRect ) );
     //kdDebug(33001) << "EffectHandler appearWipeLeft w = " << w << positionReached << endl;
@@ -598,15 +598,15 @@ bool EffectHandler::appearWipeRight( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ow = objectRect.width();
-    
+
     bool positionReached = false;
-    int w = m_effectStep * m_stepWidth; 
+    int w = m_effectStep * m_stepWidth;
     if ( w >= ow )
     {
         w = ow;
         positionReached = true;
     }
-    
+
     objectRect.setLeft( objectRect.right() - w);
     m_repaintRects.append( new QRect( objectRect ) );
     //kdDebug(33001) << "EffectHandler appearWipeLeft w = " << w << positionReached << endl;
@@ -619,15 +619,15 @@ bool EffectHandler::appearWipeTop( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int oh = objectRect.height();
-    
+
     bool positionReached = false;
-    int h = m_effectStep * m_stepHeight; 
+    int h = m_effectStep * m_stepHeight;
     if ( h >= oh )
     {
         h = oh;
         positionReached = true;
     }
-    
+
     objectRect.setHeight( h );
     m_repaintRects.append( new QRect( objectRect ) );
     //kdDebug(33001) << "EffectHandler appearWipeLeft h = " << h << positionReached << endl;
@@ -640,15 +640,15 @@ bool EffectHandler::appearWipeBottom( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int oh = objectRect.height();
-    
+
     bool positionReached = false;
-    int h = m_effectStep * m_stepHeight; 
+    int h = m_effectStep * m_stepHeight;
     if ( h >= oh )
     {
         h = oh;
         positionReached = true;
     }
-    
+
     objectRect.setTop( objectRect.bottom() - h );
     m_repaintRects.append( new QRect( objectRect ) );
     //kdDebug(33001) << "EffectHandler appearWipeLeft h = " << h << positionReached << endl;
@@ -661,7 +661,7 @@ bool EffectHandler::disappearGoLeft( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth;
     if ( ox - x <= -objectRect.width() )
@@ -684,7 +684,7 @@ bool EffectHandler::disappearGoTop( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int y = m_effectStep * m_stepHeight;
     if ( oy - y <= -objectRect.height() )
@@ -707,7 +707,7 @@ bool EffectHandler::disappearGoRight( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth;
     if ( x + ox >= m_src->width() )
@@ -730,7 +730,7 @@ bool EffectHandler::disappearGoBottom( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int y = m_effectStep * m_stepHeight;
     if ( oy + y >= m_src->height() )
@@ -754,7 +754,7 @@ bool EffectHandler::disappearGoLeftTop( KPObject *object )
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth;
     int y = m_effectStep * m_stepHeight;
@@ -779,7 +779,7 @@ bool EffectHandler::disappearGoLeftBottom( KPObject *object )
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth;
     int y = m_effectStep * m_stepHeight;
@@ -804,7 +804,7 @@ bool EffectHandler::disappearGoRightTop( KPObject *object )
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth;
     int y = m_effectStep * m_stepHeight;
@@ -829,7 +829,7 @@ bool EffectHandler::disappearGoRightBottom( KPObject *object )
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
-    
+
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth;
     int y = m_effectStep * m_stepHeight;
@@ -853,14 +853,14 @@ bool EffectHandler::disappearWipeLeft( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ow = objectRect.width();
-    
+
     bool positionReached = false;
-    int w = ow - m_effectStep * m_stepWidth; 
+    int w = ow - m_effectStep * m_stepWidth;
     if ( w <= 0 )
     {
         positionReached = true;
     }
-    else 
+    else
     {
         objectRect.setWidth( w );
         m_repaintRects.append( new QRect( objectRect ) );
@@ -875,14 +875,14 @@ bool EffectHandler::disappearWipeRight( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int ow = objectRect.width();
-    
+
     bool positionReached = false;
-    int w = ow - m_effectStep * m_stepWidth; 
+    int w = ow - m_effectStep * m_stepWidth;
     if ( w <= 0 )
     {
         positionReached = true;
     }
-    else 
+    else
     {
         objectRect.setLeft( objectRect.right() - w );
         m_repaintRects.append( new QRect( objectRect ) );
@@ -897,14 +897,14 @@ bool EffectHandler::disappearWipeTop( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int oh = objectRect.height();
-    
+
     bool positionReached = false;
-    int h = oh - m_effectStep * m_stepHeight; 
+    int h = oh - m_effectStep * m_stepHeight;
     if ( h <= 0 )
     {
         positionReached = true;
     }
-    else 
+    else
     {
         objectRect.setHeight( h );
         m_repaintRects.append( new QRect( objectRect ) );
@@ -919,14 +919,14 @@ bool EffectHandler::disappearWipeBottom( KPObject *object )
 {
     QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
     int oh = objectRect.height();
-    
+
     bool positionReached = false;
-    int h = oh - m_effectStep * m_stepHeight; 
+    int h = oh - m_effectStep * m_stepHeight;
     if ( h <= 0 )
     {
         positionReached = true;
     }
-    else 
+    else
     {
         objectRect.setTop( objectRect.bottom() - h );
         m_repaintRects.append( new QRect( objectRect ) );
@@ -948,7 +948,7 @@ void EffectHandler::drawObject( KPObject *object, int x, int y, QPixmap *screen,
 
     p.translate( x, y );
 
-    if ( object->getAppearStep() == m_step && ! m_back ) 
+    if ( object->getAppearStep() == m_step && ! m_back )
     {
         object->setSubPresStep( m_subStep );
         object->doSpecificEffects( true );
@@ -956,12 +956,12 @@ void EffectHandler::drawObject( KPObject *object, int x, int y, QPixmap *screen,
 
     object->draw( &p, m_view->zoomHandler(), SM_NONE, false );
 
-    if ( object->getAppearStep() == m_step && ! m_back ) 
+    if ( object->getAppearStep() == m_step && ! m_back )
     {
         object->setSubPresStep( 0 );
         object->doSpecificEffects( false );
     }
-    
+
     p.translate( -x, -y );
 
     // redraw objects which lie above the currenty drawn
@@ -969,18 +969,18 @@ void EffectHandler::drawObject( KPObject *object, int x, int y, QPixmap *screen,
     KPObject *obj;
     while ( ( obj = m_objects.next() ) != 0 )
     {
-        if ( ( obj->getAppearStep() < m_step 
+        if ( ( obj->getAppearStep() < m_step
             || obj->getAppearStep() == m_step && !m_appearEffectObjects.containsRef( obj ) )
             && ( ( obj->getDisappear() && obj->getDisappearStep() > m_step ) || ! obj->getDisappear() )
             && m_view->zoomHandler()->zoomRect( obj->getRealRect()).intersects(*m_repaintRects.getLast()) )
         {
-            if ( obj->getAppearStep() == m_step && ! m_back ) 
+            if ( obj->getAppearStep() == m_step && ! m_back )
             {
                 obj->setSubPresStep( m_subStep );
                 obj->doSpecificEffects( true );
             }
             obj->draw( &p, m_view->zoomHandler(), SM_NONE, false );
-            if ( obj->getAppearStep() == m_step && ! m_back ) 
+            if ( obj->getAppearStep() == m_step && ! m_back )
             {
                 obj->setSubPresStep( 0 );
                 obj->doSpecificEffects( false );

@@ -134,7 +134,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     effectPreview->setPixmap( pix );
 
     pageEffect = pg->getPageEffect();
-    speed = doc->getPresSpeed();
+    speed = pg->background()->getPresSpeed();
 
     QVBoxLayout *leftlayout = new QVBoxLayout( leftpart, KDialog::marginHint(), KDialog::spacingHint() );
     leftlayout->setAutoAdd( true );

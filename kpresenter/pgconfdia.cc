@@ -84,27 +84,6 @@ void PgConfDia::setupPageGeneral()
     m_autoButton = new QRadioButton( i18n("&Automatic transition to next step or slide"), switchGroup );
     m_autoButton->setChecked( !m_doc->spManualSwitch() );
 
-    QLabel *speedLabel = new QLabel( i18n("Speed:"), generalPage );
-    QWhatsThis::add( speedLabel, i18n("<p>This slider allows you to configure the speed "
-				       "of transition through the presentation.</p>") );
-
-    QWidget* sp = new QWidget( generalPage );
-    QBoxLayout* speedLayout = new QHBoxLayout( sp, 0, spacingHint() );
-    speedLayout->setAutoAdd( true );
-
-    QLabel *slowLabel = new QLabel( i18n("Slow"), sp );
-    speedSlider = new QSlider( 1, 10, 1, 1, Qt::Horizontal, sp );
-    speedSlider->setValue( m_doc->getPresSpeed() );
-    speedSlider->setTickmarks( QSlider::Below );
-    speedSlider->setTickInterval( 1 );
-    QLabel *fastLabel = new QLabel( i18n("Fast"), sp );
-    QWhatsThis::add( speedSlider, i18n("<p>This slider allows you to configure the speed "
-				       "of transition through the presentation.</p>" ) );
-    QWhatsThis::add( slowLabel, i18n("<p>This slider allows you to configure the speed "
-				     "of transition through the presentation.</p>" ) );
-    QWhatsThis::add( fastLabel, i18n("<p>This slider allows you to configure the speed "
-				     "of transition through the presentation.</p>" ) );
-
     infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
     QWhatsThis::add( infiniteLoop, i18n("<p>If this checkbox is selected, then the slideshow "
 					"will restart at the first slide after the last slide "
@@ -252,13 +231,6 @@ void PgConfDia::deselectAllSlides()
         if( checkItem ) checkItem->setOn( false );
         item = item->nextSibling();
     }
-}
-
-PresSpeed PgConfDia::getPresSpeed() const
-{
-    int value = speedSlider->value();
-    if( value <= 0 ) value = 1;
-    return static_cast<PresSpeed>(value);
 }
 
 #include "pgconfdia.moc"
