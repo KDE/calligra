@@ -60,7 +60,7 @@ void KPSlidePreview::setPage( QListViewItem *item )
 
     float faktW = static_cast<float>( width() ) / static_cast<float>( doc->getPageRect( 0, 0, 0 ).width() );
     float faktH = static_cast<float>( height() ) / static_cast<float>( doc->getPageRect( 0, 0, 0 ).height() );
-    float fakt = QMIN( faktW, faktH ) - 0.1;
+    float fakt = QMIN( faktW, faktH ) - 0.05;
 
     QWMatrix m;
     m.scale( fakt, fakt );
@@ -93,7 +93,7 @@ void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
     page = p;
     pageNum = pgnum;
     if ( page && !parent() )
-        setPixmap( 0, KPBarIcon( "dot" ) );
+        setPixmap( 0, KPBarIcon( "newPoint" ) );
 }
 
 /*================================================================*/
@@ -221,7 +221,8 @@ void KPPresStructView::setupPagePreview()
     showPreview = new QCheckBox( i18n( "&Show Preview" ), box );
     showPreview->setChecked( true );
     // #### for now
-    showPreview->setEnabled( false );
+    // lukas: what was it meant to do?
+    showPreview->hide( );
 
     slidePreview = new KPSlidePreview( box, doc, view );
     connect( slides, SIGNAL( selectionChanged( QListViewItem * ) ),
@@ -255,7 +256,10 @@ void KPPresStructView::makeStuffVisible( QListViewItem *item )
         else
             return;
         view->getPage()->deSelectAllObj();
-        view->skipToPage( item->text( 0 ).toInt() - 1 );
+        if (item->parent())
+            view->skipToPage( item->parent()->text( 0 ).toInt() - 1 );
+        else
+            view->skipToPage( item->text( 0 ).toInt() - 1 );
         int obj = s.toInt() - 1;
         KPObject *kpobject = doc->objectList()->at( obj );
         QRect rect( kpobject->getBoundingRect( 0, 0 ) );
