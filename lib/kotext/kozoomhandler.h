@@ -93,6 +93,9 @@ public:
     double zoomedResolutionX() const { return m_zoomedResolutionX; }
     double zoomedResolutionY() const { return m_zoomedResolutionY; }
 
+    double resolutionX() const { return m_resolutionX; }
+    double resolutionY() const { return m_resolutionY; }
+    
     int zoom() const { return m_zoom; }
 
     // Input: pt. Output: pixels. Resolution and zoom are applied.
