@@ -30,7 +30,6 @@
 #include <string>
 
 #include <unistd.h>
-#include <k2url.h>
 #include <kapp.h>
 #include <qdatetm.h>
 
