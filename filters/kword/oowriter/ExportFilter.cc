@@ -53,7 +53,8 @@
 OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
     m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
-    m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0)
+    m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0),
+    m_footnoteNumber(0)
 {
 }
 
@@ -186,14 +187,15 @@ void OOWriterWorker::writeStylesXml(void)
     writeStartOfFile("styles");
 
     zipWriteData( " <office:font-decls>\n");
-    for (QStringList::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
+    for (QMap<QString,QString>::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
     {
         zipWriteData("  <style:font-decl style:name=\"");
-        zipWriteData(escapeOOText(*it));
+        zipWriteData(escapeOOText(it.key()));
         zipWriteData("\" fo:font-family=\"");
-        zipWriteData(escapeOOText(*it));
-        // ### TODO: correct font pitch pitch
-        zipWriteData("\" style:font-pitch=\"variable\" />\n");
+        zipWriteData(escapeOOText(it.key()));
+        zipWriteData("\" ");
+        zipWriteData(it.data()); // already in XML, so do not escape
+        zipWriteData(" />\n");
     }
     zipWriteData(" </office:font-decls>\n");
 
@@ -252,14 +254,15 @@ void OOWriterWorker::writeContentXml(void)
     writeStartOfFile("content");
 
     zipWriteData( " <office:font-decls>\n");
-    for (QStringList::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
+    for (QMap<QString,QString>::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
     {
         zipWriteData("  <style:font-decl style:name=\"");
-        zipWriteData(escapeOOText(*it));
+        zipWriteData(escapeOOText(it.key()));
         zipWriteData("\" fo:font-family=\"");
-        zipWriteData(escapeOOText(*it));
-        // ### TODO: correct font pitch
-        zipWriteData("\" style:font-pitch=\"variable\" />\n");
+        zipWriteData(escapeOOText(it.key()));
+        zipWriteData("\" ");
+        zipWriteData(it.data()); // already in XML, so do not escape
+        zipWriteData(" />\n");
     }
     zipWriteData(" </office:font-decls>\n");
 
@@ -487,7 +490,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     }
     else if ((strExtension=="gif")
         || (strExtension=="tif") || (strExtension=="tiff"))
-        // ### TODO: Which other image formats does OOWriter support?
+        // ### TODO: Which other image formats does OOWriter support directly?
     {
         isImageLoaded=loadSubFile(koStoreName,image);
     }
@@ -510,7 +513,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     const double width =anchor.right  - anchor.left;
 
      // We need a 32 digit hex value of the picture number
-     // Please note: it is an exactly 32 digit value, truncated if value is more than 512 bits wide. :-)
+     // Please note: it is an exact 32 digit value, truncated if the value is more than 512 bits wide. :-)
     QString number;
     number.fill('0',32);
     number += QString::number(++m_pictureNumber,16); // in hex
@@ -525,7 +528,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     // TODO: we are only using the filename, not the rest of the key
     // TODO:  (bad if there are two images of the same name, but of a different key)
     *m_streamOut << "<draw:image draw:name=\"" << anchor.picture.key.filename() << "\"";
-    // ### TODO: missing draw:style-name (with an automatic "graphic" style name)
+    *m_streamOut << " draw:style-name=\"Graphics\""; // ### TODO: should be an automatic "graphic" style name instead
     *m_streamOut << " text:anchor-type=\"paragraph\"";
     *m_streamOut << " svg:height=\"" << height << "pt\" svg:width=\"" << width << "pt\"";
     *m_streamOut << " draw:z-index=\"0\" xlink:href=\"#" << ooName << "\"";
@@ -535,7 +538,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
     if (m_zip)
     {
 #if 0
-        // Why is the following line not working? (It makes unzip having problems with meta.xml)
+        // ### FIXME Why is the following line not working? (It makes unzip having problems with meta.xml)
         m_zip->writeFile(ooName,QString::null, QString::null, image.size(), image.data());
 #else
         zipPrepareWriting(ooName);
@@ -579,12 +582,11 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         QString automaticStyle;
         if (it==m_mapTextStyleKeys.end())
         {
-            // We have not any match, so we need an automatic style for the text
+            // We have not any match, so we need a new automatic text style
             automaticStyle="T";
             automaticStyle += QString::number(++m_automaticTextStyleNumber,10); // ### TODO: verify that it is not a normal style
             kdDebug(30518) << "Creating automatic text style: " << automaticStyle << " key: " << styleKey << endl;
             m_mapTextStyleKeys[styleKey]=automaticStyle;
-            m_mapTextStyles[automaticStyle]=props;
 
             m_contentAutomaticStyles += "  <style:style";
             m_contentAutomaticStyles += " style:name=\"" + escapeOOText(automaticStyle) + "\"";
@@ -622,7 +624,6 @@ void OOWriterWorker::processVariable ( const QString&,
     }
     else if (4==formatData.variable.m_type)
     {
-        QString strFieldType;
         if (formatData.variable.isPageNumber())
         {
             *m_streamOut << "<text:page-number text:select-page=\"current\"/>";
@@ -639,38 +640,34 @@ void OOWriterWorker::processVariable ( const QString&,
     }
     else if (9==formatData.variable.m_type)
     {
-        // A link (### TODO is the <text:span> really needed?)
+        // A link
         *m_streamOut << "<text:a xlink:href=\""
             << escapeOOText(formatData.variable.getHrefName())
-            << " xlink:type=\"simple\" xlink:actuate=\"onRequest\"><text:span>" // ### TODO: does the span needs an extra style?
+            << "\" xlink:type=\"simple\">"
             << escapeOOText(formatData.variable.getLinkName())
-            << "</text:span></text:a>";
+            << "</text:a>";
     }
-#if 0
-                else if (11==(*paraFormatDataIt).variable.m_type)
-                {
-                    // Footnote
-                    QString value = (*paraFormatDataIt).variable.getFootnoteValue();
-                    bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
-                    QValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
-                    if( paraList )
-                    {
-                        QString fstr;
-                        QValueList<ParaData>::ConstIterator it;
-                        for (it=paraList->begin();it!=paraList->end();it++)
-                            fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
-                        str += "{\\super ";
-                        str += automatic ? "\\chftn " : value;
-                        str += "{\\footnote ";
-                        str += "{\\super ";
-                        str += automatic ? "\\chftn " : value;
-                        str += fstr;
-                        str += " }";
-                        str += " }";
-                        str += " }";
-                    }
-                }
-#endif
+    else if (11==formatData.variable.m_type)
+    {
+        // Footnote
+        const QString value = formatData.variable.getFootnoteValue();
+        //const bool automatic = formatData.variable.getFootnoteAuto();
+        QValueList<ParaData> *paraList = formatData.variable.getFootnotePara();
+        if( paraList )
+        {
+            *m_streamOut << "<text:footnote text:id=\"ft";
+            *m_streamOut << (++m_footnoteNumber);
+            *m_streamOut << "\">";
+            *m_streamOut << "<text:footnote-citation>" << escapeOOText(value) << "</text:footnote-citation>";
+            *m_streamOut << "<text:footnote-body>\n";
+
+            doFullAllParagraphs(*paraList);
+
+            *m_streamOut << "\n</text:footnote-body>";
+            *m_streamOut << "</text:footnote>";
+
+        }
+    }
     else
     {
         // Generic variable
@@ -730,7 +727,7 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
 QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
     const LayoutData& layout, const bool force, QString& styleKey)
 {
-    QString props; // Props has to remian empty, if there is no differences.
+    QString props; // Props has to remian empty, if there is no difference.
 
     styleKey += layout.styleName;
     styleKey += ',';
@@ -806,19 +803,22 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     styleKey += ',';
 
-    // ### TODO: add support of at least
+    // ### TODO: add support of at least, multiple...
     if (!force
         && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
         && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
     {
         // Do nothing!
-        styleKey += "100%";
     }
     else if (!layout.lineSpacingType)
     {
         // We have a custom line spacing (in points)
         props += QString("fo:line-height=\"%1pt\" ").arg(layout.lineSpacing);
         styleKey += QString::number(layout.lineSpacing);
+    }
+    else if ( 10==layout.lineSpacingType  )
+    {
+        styleKey += "100%"; // One
     }
     else if ( 15==layout.lineSpacingType  )
     {
@@ -830,7 +830,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         props += "fo:line-height=\"200%\" "; // Two
         styleKey += "200%";
     }
-    else if ( layout.lineSpacingType!=10  )
+    else
     {
         kdWarning(30518) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
@@ -859,6 +859,8 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     props += ">";
 
+    styleKey += '@'; // A more visible seperator
+
     // ### TODO/FIXME: what if all tabulators must be erased?
     if (!layout.tabulatorList.isEmpty()
         && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
@@ -870,16 +872,18 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             props+="     <style:tab-stop style:position=\"";
             props += QString::number((*it).m_ptpos);
             props += "pt\"";
+            styleKey += QString::number((*it).m_ptpos);
             switch ((*it).m_type)
             {
-                case 0:  props += " style:type=\"left\""; break;
-                case 1:  props += " style:type=\"center\""; break;
-                case 2:  props += " style:type=\"right\""; break;
-                case 3:  props += " style:type=\"char\" style:char=\".\""; break; // decimal
-                default: props += " style:type=\"left\""; break;
+                case 0:  props += " style:type=\"left\""; styleKey += "L"; break;
+                case 1:  props += " style:type=\"center\""; styleKey += "C"; break;
+                case 2:  props += " style:type=\"right\""; styleKey += "R"; break;
+                case 3:  props += " style:type=\"char\" style:char=\".\""; styleKey += "D"; break; // decimal
+                default: props += " style:type=\"left\""; styleKey += "L"; break;
             }
             // ### TODO: style:leader-char
             props += "/>\n";
+            styleKey +='/';
         }
         props += "    </style:tab-stops>\n   ";
     }
@@ -917,12 +921,11 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 
         if (it==m_mapParaStyleKeys.end())
         {
-            // We have additional properties, so we need an autmatic style for the paragraph
+            // We have additional properties, so we need an automatic style for the paragraph
             automaticStyle += "P";
             automaticStyle += QString::number(++m_automaticParagraphStyleNumber,10); // ### TODO: verify that it is not a normal style
             kdDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << endl;
             m_mapParaStyleKeys[styleKey]=automaticStyle;
-            m_mapParaStyles[automaticStyle]=props;
 
             m_contentAutomaticStyles += "  <style:style";
             m_contentAutomaticStyles += " style:name=\"" + escapeOOText(automaticStyle) + "\"";
@@ -970,6 +973,9 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
+    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Grpahics is a normal style
+    m_styles += "   <style:properties/>";
+    m_styles += "  </style:style>";
     return true;
 }
 
@@ -1073,7 +1079,7 @@ void OOWriterWorker::declareFont(const QString& fontName)
     if (m_fontNames.find(fontName)==m_fontNames.end())
     {
         // New font, so register it
-        m_fontNames.append(fontName);
+        m_fontNames[fontName]="style:font-pitch=\"variable\""; // ### TODO: check if font is variable or fixed
     }
 }
 

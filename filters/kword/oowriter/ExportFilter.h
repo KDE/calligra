@@ -108,12 +108,13 @@ private:
     double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
     KWEFDocumentInfo m_docInfo; // document information
     QByteArray m_contentBody; // office:body element of content.xml
-    KZip* m_zip;
-    QStringList m_fontNames; // List of used font names
+    KZip* m_zip; // Output OOWriter file
+    QMap<QString,QString> m_fontNames; // List of used font names (the data() are extra attributes for font declaration time.)
 
     ulong m_pictureNumber; // Number of picture (increment *before* use)
     ulong m_automaticParagraphStyleNumber; // Number of paragraph-based automatic styles (increment *before* use)
     ulong m_automaticTextStyleNumber; // Number of text-based automatic styles (increment *before* use)
+    ulong m_footnoteNumber; // Number of footnote (for text:id) (increment *before* use)
 
     QString m_styles; // Normal paragraph styles
     QString m_contentAutomaticStyles; // Automatic styles for content.xml
@@ -125,9 +126,6 @@ private:
     int m_paperOrientation;
 
     QMap<QString,QString> m_mapTextStyleKeys; // Map of keys to automatic text styles
-    QMap<QString,QString> m_mapTextStyles; // Map of automatic text styles
-
     QMap<QString,QString> m_mapParaStyleKeys; // Map of keys to automatic paragraph styles
-    QMap<QString,QString> m_mapParaStyles; // Map of automatic paragraph styles
 };
 #endif // _EXPORTFILTER_H
