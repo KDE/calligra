@@ -3622,7 +3622,6 @@ void KWView::inlineFrame()
         FrameResizeStruct *move=new FrameResizeStruct;
 
         move->sizeOfBegin=frame->normalize();
-
         // turn non-floating frame into floating frame
         KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
         cmd->execute();
@@ -3636,7 +3635,7 @@ void KWView::inlineFrame()
 
         macroCmd->addCommand(cmdMoveFrame);
         macroCmd->addCommand(cmd);
-        m_doc->addCommand(cmd);
+        m_doc->addCommand(macroCmd);
     }
     else
     {
