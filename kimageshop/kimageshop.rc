@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KImageShop" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KImageShop" version="2">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="undo"/>
@@ -9,6 +9,11 @@
   <Action name="paste"/>
  </Menu>
  <Menu name="View"><text>View</text>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
+  <ActionList name="view_split"/>
+  <Separator/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
   <Separator/>

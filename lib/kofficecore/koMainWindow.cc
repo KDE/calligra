@@ -234,6 +234,14 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_rootViews.current()->show();
     d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
+
+    KAction *docinfo=actionCollection()->action("file_documentinfo");
+    if(docinfo) {
+      if(doc->isEmbedded())
+	docinfo->setEnabled(false);
+      else
+	docinfo->setEnabled(true);
+    }
   }
 
   updateCaption();

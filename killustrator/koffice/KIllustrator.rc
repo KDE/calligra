@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="2">
 <MenuBar>
  <Menu name="file"><text>File</text>
   <Action name="import"/>
@@ -25,6 +25,11 @@
   <Action name="properties"/>
  </Menu>
  <Menu name="view"><text>View</text>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
+  <ActionList name="view_split"/>
+  <Separator/>
   <Action name="outline"/>
   <Action name="normal"/>
   <Separator/>
