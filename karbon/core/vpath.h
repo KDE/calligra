@@ -19,6 +19,7 @@ class VPoint;
 // help-class for VPath (see below). Segments share exactly one point: the
 // lastPoint of the previos segment.
 
+// TODO: - make VSegment _really_ abstract.
 class VSegment
 {
 public:
@@ -33,6 +34,9 @@ public:
  	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
 		{ return 0L; }
  	const VPoint* lastPoint() const { return &m_lastPoint; }
+
+/* gxpath2.c */
+	virtual const VSegment revert( const VSegment& prevSeg );
 
 	virtual void transform( const VAffineMap& affmap );
 
@@ -49,6 +53,11 @@ class VLine : public VSegment
 {
 public:
 	VLine( const double lp_x = 0.0, const double lp_y = 0.0 );
+
+	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
+		const double& zoomFactor ) const;
+
+	virtual const VSegment revert( const VSegment& prevSeg );
 };
 
 
@@ -71,6 +80,8 @@ public:
 		{ return &m_firstCtrlPoint; }
  	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
 		{ return &m_lastCtrlPoint; }
+
+	virtual const VSegment revert( const VSegment& prevSeg );
 
 	virtual void transform( const VAffineMap& affmap );
 
@@ -97,6 +108,8 @@ public:
  	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
 		{ return &m_lastCtrlPoint; }
 
+	virtual const VSegment revert( const VSegment& prevSeg );
+
 	virtual void transform( const VAffineMap& affmap );
 
 private:
@@ -120,6 +133,8 @@ public:
 		{ return &m_firstCtrlPoint; }
  	virtual const VPoint* lastCtrlPoint( const VSegment& prevSeg ) const
 		{ return &m_lastPoint; }
+
+	virtual const VSegment revert( const VSegment& prevSeg );
 
 	virtual void transform( const VAffineMap& affmap );
 
@@ -198,6 +213,8 @@ public:
 
 	VPath& close();
 	const bool isClosed() { return( m_isClosed ); }
+
+	const VPath& revert();
 
 	virtual VObject& transform( const VAffineMap& affmap );
 

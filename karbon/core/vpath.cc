@@ -18,18 +18,6 @@ VSegment::VSegment( const double lp_x, const double lp_y )
 {
 }
 
-const QPointArray&
-VSegment::getQPointArray( const VSegment& prevSeg,
-	const double& zoomFactor ) const
-{
-	if ( m_isDirty )
-	{
-// xxxxxx
-		m_isDirty = false;
-	}
-
-	return m_QPointArray;
-}
 
 void
 VSegment::transform( const VAffineMap& affmap )
@@ -44,6 +32,28 @@ VLine::VLine( const double lp_x, const double lp_y )
 {
 }
 
+
+const QPointArray&
+VLine::getQPointArray( const VSegment& prevSeg,
+	const double& zoomFactor ) const
+{
+	if ( m_isDirty )
+	{
+// xxxxxx
+		m_isDirty = false;
+	}
+
+	return m_QPointArray;
+}
+
+const VSegment
+VLine::revert( const VSegment& prevSeg )
+{
+	return VLine(
+		prevSeg.lastPoint()->x(),
+		prevSeg.lastPoint()->y() );
+}
+
 // -----------------------------------
 
 VCurve::VCurve(
@@ -54,6 +64,12 @@ VCurve::VCurve(
 	  m_firstCtrlPoint( fcp_x, fcp_y ),
 	  m_lastCtrlPoint( lcp_x, lcp_y )
 {
+}
+
+const VSegment
+VCurve::revert( const VSegment& prevSeg )
+{
+	return VCurve();
 }
 
 void
@@ -75,6 +91,12 @@ VCurve1::VCurve1(
 {
 }
 
+const VSegment
+VCurve1::revert( const VSegment& prevSeg )
+{
+	return VCurve1();
+}
+
 void
 VCurve1::transform( const VAffineMap& affmap )
 {
@@ -91,6 +113,12 @@ VCurve2::VCurve2(
 	: VSegment( lp_x, lp_y ),
 	  m_firstCtrlPoint( fcp_x, fcp_y )
 {
+}
+
+const VSegment
+VCurve2::revert( const VSegment& prevSeg )
+{
+	return VCurve2();
 }
 
 void
