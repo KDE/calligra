@@ -64,8 +64,8 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 		for(i=selection.top()+1;i<=selection.bottom();i++)
 			if(size!=m_pView->activeTable()->rowLayout(i)->height(m_pView->canvasWidget()))
 			equals=false;
-		label=i18n("Height");
-		tmpCheck+=" (20)";
+		label=i18n("Height (mm)");
+		tmpCheck+=" (20 mm)";
 		break;
 	case resize_column:
 		setCaption( i18n("Resize column") );
@@ -78,8 +78,8 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 			if(size!=m_pView->activeTable()->columnLayout(i)->width(m_pView->canvasWidget()))
 			equals=false;
 
-		label=i18n("Width");
-		tmpCheck+=" (60)";
+		label=i18n("Width (mm)");
+		tmpCheck+=" (60 mm)";
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
