@@ -1573,7 +1573,7 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
         QXmlInputSource source( store->device() );
         // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
         QXmlSimpleReader reader;
-        setupXmlReader( reader, false /*namespaceProcessing*/ );
+        setupXmlReader( reader, true /*namespaceProcessing*/ );
         //reader.setUndefEntityInAttrHack(true);
 
         ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );

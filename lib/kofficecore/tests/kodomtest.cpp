@@ -81,6 +81,9 @@ void testKoDom( const QDomDocument& doc )
     assert( p.localName() == "p" );
     assert( p.namespaceURI() == KoXmlNS::text );
 
+    const QDomElement officeStyle = KoDom::namedItemNS( docElem, KoXmlNS::office, "styles" );
+    assert( !officeStyle.isNull() );
+
     // Look for a non-existing element
     QDomElement notexist = KoDom::namedItemNS( body, KoXmlNS::text, "notexist" );
     assert( notexist.isNull() );
@@ -112,7 +115,7 @@ int main( int argc, char** argv ) {
                          + "\" xmlns=\"" + KoXmlNS::text
                          + "\" xmlns:text=\"" + KoXmlNS::text
                          + "\">\n"
-		"<o:body><p text:style-name=\"L1\">foobar</p><p>2nd</p></o:body>\n"
+		"<o:body><p text:style-name=\"L1\">foobar</p><p>2nd</p></o:body><o:styles></o:styles>\n"
 		"</o:document-content>\n";
     QDomDocument doc;
     //QXmlSimpleReader reader;
