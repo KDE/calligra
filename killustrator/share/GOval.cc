@@ -35,8 +35,8 @@
 
 GOval::GOval (bool cFlag) : circleFlag (cFlag) {
   sAngle = eAngle = 270;
-  outlineInfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
-  outlineInfo.custom.shape = GObject::OutlineInfo::EK_Default;
+  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
+  //  outlineInfo.custom.shape = GObject::OutlineInfo::EK_Default;
 }
 
 GOval::GOval (const list<XmlAttribute>& attribs, bool cFlag) 
@@ -45,8 +45,8 @@ GOval::GOval (const list<XmlAttribute>& attribs, bool cFlag)
   float x = 0, y = 0, rx = 0, ry = 0;
 
   sAngle = eAngle = 270;
-  outlineInfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
-  outlineInfo.custom.shape = GObject::OutlineInfo::EK_Default;
+  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
+  //  outlineInfo.custom.shape = GObject::OutlineInfo::EK_Default;
 
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
@@ -65,11 +65,11 @@ GOval::GOval (const list<XmlAttribute>& attribs, bool cFlag)
     else if (attr == "kind") {
       const string& v = (*first).stringValue ();
       if (v == "arc") 
-	outlineInfo.custom.shape = GObject::OutlineInfo::EK_Arc;
+	outlineInfo.shape = GObject::OutlineInfo::ArcShape;
       else if (v == "pie") 
-	outlineInfo.custom.shape = GObject::OutlineInfo::EK_Pie;
+	outlineInfo.shape = GObject::OutlineInfo::PieShape;
       else
-	outlineInfo.custom.shape = GObject::OutlineInfo::EK_Default;
+	outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
     }
     first++;
   }
@@ -104,20 +104,20 @@ void GOval::draw (Painter& p, bool withBasePoints) {
   p.setPen (pen);
   p.setBrush (brush);
   p.setWorldMatrix (tmpMatrix, true);
-  switch (outlineInfo.custom.shape) {
-  case GObject::OutlineInfo::EK_Default:
+  switch (outlineInfo.shape) {
+  case GObject::OutlineInfo::DefaultShape:
     p.drawEllipse (sPoint.x (), sPoint.y (),
 		   ePoint.x () - sPoint.x (), 
 		   ePoint.y () - sPoint.y ());
     break;
-  case GObject::OutlineInfo::EK_Pie:
+  case GObject::OutlineInfo::PieShape:
     alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
     p.drawPie (sPoint.x (), sPoint.y (),
 	       ePoint.x () - sPoint.x (), 
 	       ePoint.y () - sPoint.y (),
 	       -eAngle * 16, -alen * 16);
     break;
-  case GObject::OutlineInfo::EK_Arc:
+  case GObject::OutlineInfo::ArcShape:
     alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
     p.drawArc (sPoint.x (), sPoint.y (),
 	       ePoint.x () - sPoint.x (), 
@@ -138,6 +138,28 @@ void GOval::draw (Painter& p, bool withBasePoints) {
     }
   }
   p.restore ();
+}
+
+void GOval::writeToPS (ostream& os) {
+  GObject::writeToPS (os);
+  if (sPoint.x () < ePoint.x ())
+    os << sPoint.x () << ' ' << sPoint.y () << ' '
+       << ePoint.x () << ' ' << ePoint.y () << ' ';
+  else
+    os << ePoint.x () << ' ' << ePoint.y () << ' '
+       << sPoint.x () << ' ' << sPoint.y () << ' ';
+  switch (outlineInfo.shape) {
+  case GObject::OutlineInfo::PieShape:
+    os << (fillInfo.style == NoBrush  ? " false" : " true")
+       << sAngle << ' ' << eAngle << " DrawPie\n";
+  case GObject::OutlineInfo::ArcShape:
+    os << sAngle << ' ' << eAngle << " DrawArc\n";
+    break;
+  case GObject::OutlineInfo::DefaultShape:
+    os << (fillInfo.style == NoBrush  ? " false" : " true")
+       << " DrawEllipse\n";
+    break;
+  }
 }
 
 bool GOval::contains (const Coord& p) {
@@ -274,10 +296,10 @@ void GOval::movePoint (int idx, float dx, float dy) {
   float a2 = qRound (eAngle < 0 ? eAngle + 360 : eAngle);
   if (a1 >= a2 - 1 && a1 <= a2 + 1) {
     eAngle = sAngle;
-    outlineInfo.custom.shape = GObject::OutlineInfo::EK_Default;
+    outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
   }
-  else if (outlineInfo.custom.shape == GObject::OutlineInfo::EK_Default)
-    outlineInfo.custom.shape = GObject::OutlineInfo::EK_Arc;
+  else if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
+    outlineInfo.shape = GObject::OutlineInfo::ArcShape;
 
   calcBoundingBox ();
   emit changed ();
@@ -322,6 +344,6 @@ void GOval::writeToXml (XmlWriter& xml) {
   xml.addAttribute ("ry", h2);
   xml.addAttribute ("angle1", sAngle);
   xml.addAttribute ("angle2", eAngle);
-  xml.addAttribute ("kind", kind[outlineInfo.custom.shape]);
+  xml.addAttribute ("kind", kind[outlineInfo.shape]);
   xml.closeTag (true);
 }

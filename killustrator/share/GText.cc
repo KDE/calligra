@@ -27,6 +27,7 @@
 #include <assert.h>
 #include "GText.h"
 #include "GText.moc"
+#include "Canvas.h"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -130,6 +131,32 @@ void GText::draw (Painter& p, bool) {
     p.drawLine (x1, y1, x2, y2);
   }
   p.restore ();
+}
+
+void GText::writeToPS (ostream &os) {
+  GObject::writeToPS (os);
+  QListIterator<QString> it (text);
+  os << "[ ";
+  for (; it.current (); ++it) {
+    QString& s = *it.current ();
+    os << "(";
+    for (unsigned int i = 0; i < s.length (); i++) {
+      switch (s[i]) {
+      case '(':
+        os << "\\("; break;
+      case ')':
+        os << "\\)"; break;
+      case '\\':
+        os << "\\\\"; break;
+      default:
+        os << s[i]; break;
+      }
+    }
+    os << ")";
+  }
+  os << " ] " << opos.x () << ' ' << opos.y () << ' '
+     << Canvas::getPSFont (font) << ' ' << font.pointSize () 
+     << " DrawText\n";
 }
 
 void GText::setCursor (int x, int y) {

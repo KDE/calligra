@@ -25,8 +25,10 @@
 #ifndef Canvas_h_
 #define Canvas_h_
 
+#include <iostream.h>
 #include <qwidget.h>
 #include <qpixmap.h>
+#include <qfont.h>
 #include <qarray.h>
 
 #include "Painter.h"
@@ -64,6 +66,12 @@ public:
   GDocument* getDocument ();
   
   void printDocument ();
+
+  void printPSDocument ();
+  void writePSHeader (ostream& os);
+
+  static bool writePSProlog (ostream& os);
+  static const char* getPSFont (const QFont& qfont);
 
   void zoomIn (int x, int y);
   void zoomOut ();
@@ -117,6 +125,7 @@ private:
   int hGridDistance, vGridDistance;
   bool drawBasePoints;
   static QArray<float> zoomFactors;
+  static QString psPrologPath;
 };
 
 #endif

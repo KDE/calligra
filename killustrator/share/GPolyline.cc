@@ -39,7 +39,7 @@ GPolyline::GPolyline () {
   points.setAutoDelete (true);
   sArrow = eArrow = 0L;
   sAngle = eAngle = 0;
-  outlineInfo.ckind = GObject::OutlineInfo::Custom_Line;
+  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Line;
 }
 
 GPolyline::GPolyline (const list<XmlAttribute>& attribs) : GObject (attribs) {
@@ -48,22 +48,22 @@ GPolyline::GPolyline (const list<XmlAttribute>& attribs) : GObject (attribs) {
   points.setAutoDelete (true);
   sArrow = eArrow = 0L;
   sAngle = eAngle = 0;
-  outlineInfo.ckind = GObject::OutlineInfo::Custom_Line;
+  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Line;
 
   list<XmlAttribute>::const_iterator first = attribs.begin ();
 	
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
     if (attr == "arrow1")
-      outlineInfo.custom.arrow.startId = (*first).intValue ();
+      outlineInfo.startArrowId = (*first).intValue ();
     else if (attr == "arrow2")
-      outlineInfo.custom.arrow.endId = (*first).intValue ();
+      outlineInfo.endArrowId = (*first).intValue ();
     first++;
   }
-  sArrow = (outlineInfo.custom.arrow.startId > 0 ? 
-	    Arrow::getArrow (outlineInfo.custom.arrow.startId) : 0L);
-  eArrow = (outlineInfo.custom.arrow.endId > 0 ? 
-	    Arrow::getArrow (outlineInfo.custom.arrow.endId) : 0L);
+  sArrow = (outlineInfo.startArrowId > 0 ? 
+	    Arrow::getArrow (outlineInfo.startArrowId) : 0L);
+  eArrow = (outlineInfo.endArrowId > 0 ? 
+	    Arrow::getArrow (outlineInfo.endArrowId) : 0L);
   calcBoundingBox ();
 }
   
@@ -136,15 +136,14 @@ void GPolyline::draw (Painter& p, bool withBasePoints) {
 		points.at (i)->x (), points.at (i)->y ());
   }
   p.restore ();
+  float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
   if (sArrow != 0L) {
     Coord p1 = points.at (0)->transform (tmpMatrix);
-    sArrow->draw (p, p1, outlineInfo.color, 
-		  outlineInfo.width, sAngle);
+    sArrow->draw (p, p1, outlineInfo.color, w, sAngle);
   }
   if (eArrow != 0L) {
     Coord p2 = points.at (num - 1)->transform (tmpMatrix);
-    eArrow->draw (p, p2, outlineInfo.color, 
-		  outlineInfo.width, eAngle);
+    eArrow->draw (p, p2, outlineInfo.color, w, eAngle);
   }
   p.save ();
   if (withBasePoints) {
@@ -158,6 +157,25 @@ void GPolyline::draw (Painter& p, bool withBasePoints) {
     }
   }
   p.restore ();
+}
+
+void GPolyline::writeToPS (ostream& os) {
+  GObject::writeToPS (os);
+  os << '[';
+  for (int i = points.count () - 1; i >= 0; i--) {
+    Coord* c = points.at (i);
+    os << ' ' << c->x () << ' ' << c->y ();
+  }
+  os << "] DrawPolyline\n";
+  float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
+  if (sArrow != 0L) {
+    Coord p1 = points.at (0)->transform (tmpMatrix);
+    sArrow->writeToPS (os, p1, outlineInfo.color, w, sAngle);
+  }
+  if (eArrow != 0L) {
+    Coord p2 = points.at (points.count () - 1)->transform (tmpMatrix);
+    eArrow->writeToPS (os, p2, outlineInfo.color, w, eAngle);
+  }
 }
 
 bool GPolyline::contains (const Coord& p) {
@@ -321,17 +339,17 @@ void GPolyline::calcBoundingBox () {
 }
 
 void GPolyline::updateProperties () {
-  if (outlineInfo.ckind != GObject::OutlineInfo::Custom_Line)
-    return;
+  //  if (outlineInfo.ckind != GObject::OutlineInfo::Custom_Line)
+  //    return;
 
-  if ((sArrow == 0L && outlineInfo.custom.arrow.startId > 0) ||
-      (sArrow && sArrow->arrowID () != outlineInfo.custom.arrow.startId) ||
-      (eArrow == 0L && outlineInfo.custom.arrow.endId > 0) ||
-      (eArrow && eArrow->arrowID () != outlineInfo.custom.arrow.endId)) {
-    sArrow = (outlineInfo.custom.arrow.startId > 0 ? 
-	      Arrow::getArrow (outlineInfo.custom.arrow.startId) : 0L);
-    eArrow = (outlineInfo.custom.arrow.endId > 0 ? 
-	      Arrow::getArrow (outlineInfo.custom.arrow.endId) : 0L);
+  if ((sArrow == 0L && outlineInfo.startArrowId > 0) ||
+      (sArrow && sArrow->arrowID () != outlineInfo.startArrowId) ||
+      (eArrow == 0L && outlineInfo.endArrowId > 0) ||
+      (eArrow && eArrow->arrowID () != outlineInfo.endArrowId)) {
+    sArrow = (outlineInfo.startArrowId > 0 ? 
+	      Arrow::getArrow (outlineInfo.startArrowId) : 0L);
+    eArrow = (outlineInfo.endArrowId > 0 ? 
+	      Arrow::getArrow (outlineInfo.endArrowId) : 0L);
     calcBoundingBox (); // for computing angles of arrows
     emit changed ();
   }
@@ -340,8 +358,8 @@ void GPolyline::updateProperties () {
 void GPolyline::writeToXml (XmlWriter& xml) {
   xml.startTag ("polyline", false);
   writePropertiesToXml (xml);
-  xml.addAttribute ("arrow1", outlineInfo.custom.arrow.startId);
-  xml.addAttribute ("arrow2", outlineInfo.custom.arrow.endId);
+  xml.addAttribute ("arrow1", outlineInfo.startArrowId);
+  xml.addAttribute ("arrow2", outlineInfo.endArrowId);
   xml.closeTag (false);
 
   for (QListIterator<Coord> it (points); it.current (); ++it) {

@@ -23,18 +23,26 @@
 */
 
 #include <iostream.h>
+#include <fstream.h>
 #include <assert.h>
+#include <stdlib.h>
 #include <qpainter.h>
 #include <qprinter.h>
+#include <qprintdialog.h>
 #include <qcolor.h>    
+#include <qdatetime.h>    
+#include <kmsgbox.h>
 #include "Canvas.h"
 #include "Canvas.moc"
 #include "GDocument.h"
 #include "Handle.h"
 #include "ToolController.h"
 #include "QwViewport.h"
+#include "version.h"
 
 QArray<float> Canvas::zoomFactors;
+QString Canvas::psPrologPath = 
+     kapp->kde_datadir () + "/killustrator/prolog.ps";
 
 Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent, 
 		const char* name) : QWidget (parent, name) {
@@ -60,7 +68,7 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
   setBackgroundMode (NoBackground);
 
   dragging = false;
-  ensureVisibilityFlag = true;
+  ensureVisibilityFlag = false;
 }
 
 Canvas::~Canvas () {
@@ -279,16 +287,6 @@ void Canvas::drawGrid (Painter& p) {
     p.drawLine (h, 0, h, ph);
   for (v = vGridDistance; v < ph; v += vGridDistance)
     p.drawLine (0, v, pw, v);
-
-  /*
-  QPen pen2 (blue);
-  p.setPen (pen2);
-  for (h = 0; h <= pw; h += hGridDistance) 
-    for (v = 0; v <= ph; v += vGridDistance) {
-      p.drawLine (h - 1, v, h + 1, v);
-      p.drawLine (h, v - 1, h, v + 1);
-    }
-    */
   p.restore ();
 }
 
@@ -303,6 +301,64 @@ void Canvas::printDocument () {
       it.current ()->draw (paint);
 
     paint.end ();
+  }
+}
+
+void Canvas::writePSHeader (ostream& os) {
+  os << "%!PS-Adobe-2.0\n"
+     << "%%Title: " << (const char *) document->fileName () << '\n'
+     << "%%Creator: KIllustrator " << APP_VERSION << '\n'
+     << "%%CreationDate: " << QDateTime::currentDateTime ().toString () << '\n'
+     << "%%EndComments" << endl;
+}
+
+bool Canvas::writePSProlog (ostream& os) {
+  ifstream prolog (psPrologPath);
+  if (!prolog) 
+    return false;
+  
+  char buf[128];
+  while (!prolog.eof ()) {
+    prolog.getline (buf, 128);
+    os << buf << '\n';
+  }
+  return true;
+}
+
+const char* Canvas::getPSFont (const QFont& qfont) {
+  return "/Times-Roman";
+}
+
+void Canvas::printPSDocument () {
+  QPrinter pSetup;
+  const char* tmpName;
+ 
+  if (QPrintDialog::getPrinterSetup (&pSetup)) {
+    if (! pSetup.outputToFile ())
+     tmpName = tempnam (NULL, "kps");
+    else 
+      tmpName = pSetup.outputFileName ();
+
+    ofstream psStream (tmpName);
+    if (!psStream)
+      return;
+
+    // write header
+    writePSHeader (psStream);
+    if (! writePSProlog (psStream)) {
+      KMsgBox::message (this, i18n ("Error"), i18n ("Cannot find PS prolog !"),
+                        KMsgBox::STOP, i18n ("Abort"));
+      return;
+    }
+    psStream << "/PaperWidth " << document->getPaperWidth () << " def\n"
+             << "/PaperHeight " << document->getPaperHeight () << " def\n"
+             << "InitTMatrix\n";
+
+    // write objects
+    QListIterator<GObject> it = document->getObjects ();
+    for (; it.current (); ++it) 
+      it.current ()->writeToPS (psStream);
+    psStream << "showpage" << endl;
   }
 }
 

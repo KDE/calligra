@@ -286,11 +286,24 @@ int GBezier::cPoint (int idx) {
     return idx + (isEndPoint (idx + 1) ? 2 : -2); 
 }
 
+void GBezier::writeToPS (ostream& os) {
+  GObject::writeToPS (os);
+  os << points.at (1)->x () << ' ' << points.at (1)->y () << " moveto\n";
+  unsigned int num = points.count ();
+  for (unsigned int i = 2; i < num - 2; i += 3) {
+    for (unsigned int j = 0; j < 3; j++) 
+      os << points.at (i + j)->x () << ' '
+         << points.at (i + j)->y () << ' ';
+    os << "curveto\n";
+  }
+  os << "SOCol stroke\nsetmatrix\n";
+}
+
 void GBezier::writeToXml (XmlWriter& xml) {
   xml.startTag ("bezier", false);
   writePropertiesToXml (xml);
-  xml.addAttribute ("arrow1", outlineInfo.custom.arrow.startId);
-  xml.addAttribute ("arrow2", outlineInfo.custom.arrow.endId);
+  xml.addAttribute ("arrow1", outlineInfo.startArrowId);
+  xml.addAttribute ("arrow2", outlineInfo.endArrowId);
   xml.closeTag (false);
 
   for (QListIterator<Coord> it (points); it.current (); ++it) {

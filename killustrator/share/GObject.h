@@ -69,6 +69,15 @@ public:
     PenStyle style;      // outline style
     float width;         // outline width
     // custom properties (depend on object type)
+    float roundness;     // roundness for rectangles
+    enum Shape { 
+      DefaultShape, ArcShape, PieShape 
+    };           
+    Shape shape;         // shape of ellipse 
+    int startArrowId,    // arrow heads (for lines and bezier curves)
+      endArrowId;
+#if 0
+    // custom properties (depend on object type)
     enum {
       Custom_None, Custom_Line, Custom_Rectangle, Custom_Ellipse
     } ckind;
@@ -83,6 +92,7 @@ public:
       // shape of ellipse 
       Shape shape;           
     } custom;
+#endif
   };
 
   struct FillInfo {
@@ -258,6 +268,8 @@ public:
    * @return The rectangle with the bounding box parameters.
    */
   const Rect& boundingBox () const { return box; }
+
+  virtual void writeToPS (ostream& os);
 
   void writePropertiesToXml (XmlWriter& xml);
 

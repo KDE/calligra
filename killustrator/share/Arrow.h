@@ -25,6 +25,7 @@
 #ifndef Arrow_h_
 #define Arrow_h_
 
+#include <iostream.h>
 #include <qintdict.h>
 #include <qpntarry.h>
 #include <qpixmap.h>
@@ -42,6 +43,8 @@ public:
   QPixmap& rightPixmap ();
   void draw (Painter& p, const Coord& c, const QColor& color, 
 	     float width, float angle);
+  void writeToPS (ostream& os, const Coord& c, const QColor& color, 
+	          float width, float angle);
 
   static void install (Arrow* arrow);
   static Arrow* getArrow (long id);

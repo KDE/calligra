@@ -226,6 +226,7 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
   widthField = new FloatSpinBox (w);
   widthField->setFormatString ("%-3.3f");
   widthField->setEditable (true);
+  widthField->setRange (0, 20);
   widthField->move (80, 20);
 
   label = new QLabel (w);
@@ -360,22 +361,22 @@ void PropertyEditor::applyPressed () {
     oinfo.color = penColorField->getColor ();
     oinfo.style = (PenStyle) penStyleField->currentItem ();
     if (leftArrows != 0L && rightArrows != 0L) {
-      oinfo.ckind = GObject::OutlineInfo::Custom_Line;
-      oinfo.custom.arrow.startId = leftArrows->currentItem ();
-      oinfo.custom.arrow.endId = rightArrows->currentItem ();
+      //      oinfo.ckind = GObject::OutlineInfo::Custom_Line;
+      oinfo.startArrowId = leftArrows->currentItem ();
+      oinfo.endArrowId = rightArrows->currentItem ();
     }
     else if (ellipseKind[0] != 0L) {
-      oinfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
+    //      oinfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
       if (ellipseKind[1]->isOn ())
-	oinfo.custom.shape = GObject::OutlineInfo::EK_Arc;
+	oinfo.shape = GObject::OutlineInfo::ArcShape;
       else if (ellipseKind[2]->isOn ())
-	oinfo.custom.shape = GObject::OutlineInfo::EK_Pie;
+	oinfo.shape = GObject::OutlineInfo::PieShape;
       else
-	oinfo.custom.shape = GObject::OutlineInfo::EK_Default;
+	oinfo.shape = GObject::OutlineInfo::DefaultShape;
     }
     else if (roundnessSlider != 0L) {
-      oinfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
-      oinfo.custom.roundness = roundnessSlider->value ();
+      //      oinfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
+      oinfo.roundness = roundnessSlider->value ();
     }
     oinfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style |
                 GObject::OutlineInfo::Width | GObject::OutlineInfo::Custom;
@@ -445,23 +446,23 @@ void PropertyEditor::readProperties () {
       penColorField->setColor (oInfo.color);
       penStyleField->setCurrentItem (oInfo.style);
       if (object->isA ("GPolyline")) {
-	assert (oInfo.ckind == GObject::OutlineInfo::Custom_Line); 
-	leftArrows->setCurrentItem (oInfo.custom.arrow.startId);
-	rightArrows->setCurrentItem (oInfo.custom.arrow.endId);
+//	assert (oInfo.ckind == GObject::OutlineInfo::Custom_Line); 
+	leftArrows->setCurrentItem (oInfo.startArrowId);
+	rightArrows->setCurrentItem (oInfo.endArrowId);
       }
       else if (object->isA ("GPolygon")) {
 	GPolygon* polygon = (GPolygon *) object;
-	if (oInfo.ckind == GObject::OutlineInfo::Custom_Rectangle &&
+	if (/*oInfo.ckind == GObject::OutlineInfo::Custom_Rectangle && */
 	    polygon->isRectangle ())
-	  roundnessSlider->setValue (oInfo.custom.roundness);
+	  roundnessSlider->setValue (oInfo.roundness);
       }
       else if (object->isA ("GOval")) {
-	assert (oInfo.ckind == GObject::OutlineInfo::Custom_Ellipse);
-	switch (oInfo.custom.shape) {
-	case GObject::OutlineInfo::EK_Arc:
+//	assert (oInfo.ckind == GObject::OutlineInfo::Custom_Ellipse);
+	switch (oInfo.shape) {
+	case GObject::OutlineInfo::ArcShape:
 	  ellipseKind[1]->setOn (true);
 	  break;
-	case GObject::OutlineInfo::EK_Pie:
+	case GObject::OutlineInfo::PieShape:
 	  ellipseKind[2]->setOn (true);
 	  break;
 	default:

@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kapp.h>
 
-#define Roundness outlineInfo.custom.roundness
+#define Roundness outlineInfo.roundness
 
 static const int xfactors[] = { 0, 1, -1, 0, 0, -1, 1, 0 };
 static const int yfactors[] = { 1, 0, 0, 1, -1, 0, 0, -1 };
@@ -82,14 +82,14 @@ static bool intersects (const Coord& p11, const Coord& p12,
 GPolygon::GPolygon (GPolygon::Kind pkind) : GPolyline () {
   points.setAutoDelete (true);
   kind = pkind;
-  outlineInfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
+  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
 }
   
 GPolygon::GPolygon (const list<XmlAttribute>& attribs, Kind pkind) 
   : GPolyline (attribs) {
   points.setAutoDelete (true);
   kind = pkind;
-  outlineInfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
+  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
   if (kind != PK_Polygon) {
     list<XmlAttribute>::const_iterator first = attribs.begin ();
     float x = 0, y = 0, w = 0, h = 0;
@@ -199,6 +199,35 @@ void GPolygon::draw (Painter& p, bool withBasePoints) {
     }
   }
   p.restore ();
+}
+
+void GPolygon::writeToPS (ostream& os) {
+  GObject::writeToPS (os);
+  if (kind == PK_Polygon || outlineInfo.roundness == 0) {
+    os << '[';
+    for (int i = points.count () - 1; i >= 0; i--) {
+      Coord* c = points.at (i);
+      os << ' ' << c->x () << ' ' << c->y ();
+    }
+    os << "]" 
+       << (fillInfo.style == NoBrush  ? " false" : " true")
+       << " DrawPolygon\n";
+  }
+  else {
+    Coord *c1 = points.at (0);
+    Coord *c2 = points.at (2);
+    if (c1->x () < c2->x ())
+      os << c1->x () << ' ' << c1->y () << ' '
+         << c2->x () << ' ' << c2->y () << ' ';
+    else
+      os << c2->x () << ' ' << c2->y () << ' '
+	 << c1->x () << ' ' << c1->y () << ' ';
+    os << (fillInfo.style == NoBrush  ? "false" : "true");
+    if (outlineInfo.roundness == 100)
+      os << " DrawEllipse\n";
+    else
+      os << ' ' << outlineInfo.roundness << " DrawRoundedRect\n";
+  }
 }
 
 bool GPolygon::contains (const Coord& p) {

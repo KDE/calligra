@@ -123,6 +123,14 @@ void GGroup::propagateProperties () {
   }
 }
 
+void GGroup::writeToPS (ostream& os) {
+  GObject::writeToPS (os);
+  QListIterator<GObject> it (members);
+  for (; it.current (); ++it)
+    it.current ()->writeToPS (os);
+  os << "setmatrix\n";
+}
+
 void GGroup::writeToXml (XmlWriter& xml) {
   xml.startTag ("group", false);
 
