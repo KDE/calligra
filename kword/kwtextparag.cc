@@ -315,6 +315,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
     QDomElement paragElem = doc.createElement( "PARAGRAPH" );
     parentElem.appendChild( paragElem );
     QDomElement textElem = doc.createElement( "TEXT" );
+    textElem.setAttribute("xml:space", "preserve");
     paragElem.appendChild( textElem );
     QString text = string()->toString();
     Q_ASSERT( text.right(1)[0] == ' ' );
