@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.stardivision.math
+Patterns=*.sdf;*.SDF;
+Icon=kformula_kfo
+Comment=StarOffice Math Document
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.sdf
