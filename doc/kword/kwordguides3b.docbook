@@ -1,0 +1,327 @@
+<sect1 id="Styles"><title>Styles</title>
+<para>When you build documents that are more complex than a business letter, such as a book, newsletter, or resume, the document is often broken down into sections.  Each of these sections may have a similar appearance.  </para>
+<para>You can use styles to easily keep a consistant look throughout your document.</para>
+<tip><para>If you are familiar with "Styles" in Microsoft Word, KWord styles perform the same functions.  You can skip to the next section.</para></tip>
+<para>As an example, if we look at a snipit of a document, and assign different styles to appropriate parts :</para>
+<informaltable frame="none"><tgroup cols="2" align="left">
+<tbody>
+<row><entry></entry><entry><emphasis>Section Title ----&gt;</emphasis></entry><entry>Setion 1:  How to use your new computer</entry></row>
+<row><entry></entry><entry></entry></row>
+<row><entry></entry><entry><emphasis>Normal Text ----&gt;</emphasis></entry><entry><para>Do to a revolutionary new teaching method, we can now teach you how to use you computer in 10 minutes.  </para><para></para></entry></row>
+<row><entry></entry><entry></entry></row>
+<row><entry></entry><entry></entry><entry><para>We should begin by quickly summarizing the parts of your new computer.</para><para></para></entry></row>
+<row><entry></entry><entry></entry></row>
+<row><entry></entry><entry></entry><entry>(text deleted)</entry></row>
+<row><entry></entry><entry></entry></row>
+<row><entry></entry><entry><emphasis>Section Title ----&gt;</emphasis></entry><entry>Section 2:  What to do if the 10 minute manual didn't work.</entry></row>
+</tbody></tgroup></informaltable>
+<para>In this example, you can see this computer manual consists of two sections.  To the title text of each section, we have changed the text style to "Section Title". The rest of the document text is left as "Normal Text".</para>
+<para>We do not need to know how exactly we want the text and paragraphs of these sections to look yet.  All we need to do is identify these sections of text as "Section Titles" or "Normal Text".</para>
+<para>Once we have finished the document, you can change the look of all the text labled "Section Title" all at once.  </para>
+<para>This will ensure that all section titles appear consistant throughout your document.</para>
+<para>KWord has 11 predefined Styles.  For a list of them, and the formatting options, <link linkend="PredefinedStyles">click here</link>.</para>
+<sect2 id="StyleSel"><title>Changing the Style of Text</title>
+<para>To change the style of text, first, <link linkend="select">select the text</link> you want the changes to apply to.</para>
+<para>You can now change the character style in one of two ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Style</guimenuitem></menuchoice> from the Menu bar.  This will open the list of available styles, select the style from the list.</para></listitem>
+<listitem><para>You can select the style using the drop down box on the Character Formatting Toolbar. (  <inlinemediaobject><imageobject><imagedata fileref="chstylebut" format="PNG" align="center"/></imageobject></inlinemediaobject>  )</para></listitem>
+</itemizedlist></sect2>
+<sect2 id="StyleAdd"><title>Creating a Style</title>
+<para>If you plan on using Styles extensively in a large document, you will probably want to create new styles specific for your needs.  </para>
+<para>To create a new style:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg1" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>Click "Add".</para><para>This will bring up another dialog box</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg3" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>Type a descriptive name in the box labled "Name".  This will be the name of the style.</para></listitem>
+<listitem><para>Now select a style from the dropdown box labled "Following Style Template". This will be the basic style that you modify to create your new style (You have to start somewhere right?).  If in doubt, "Standard" is fine.</para></listitem>
+<listitem><para>Now you can make the changes you need to create your new style.</para>
+<para>The preview box will show you what your new style will look like.</para>
+<para>Use the buttons labled 
+<link linkend="styfont">Font</link>, 
+<link linkend="stycolor">Color</link>, 
+<link linkend="styspc">Spacing and Indents</link>, 
+<link linkend="styalgn">Alignment</link>, 
+<link linkend="stybord">Borders</link>, 
+<link linkend="stynumb">Numbering</link>, and 
+<link linkend="stytab">Tabulators</link> to create the style.</para>
+<para>If you want to change the scope of the style, see the section entitled <link linkend="StyleCtrl">Controlling Styles</link>.</para>
+<para>Click "OK" to create your new style.</para>
+<para>Click "Cancel" to abort the creation of the style.</para>
+</listitem>
+</orderedlist>
+<sect3 id="styfont"><title>Changing the Font Size, Type etc.</title><para>You can change the font size, character set, font, character set and toggle italics and bold face by clicking on "Font".  This will open a new dialog box.
+</para><screenshot><mediaobject><imageobject><imagedata fileref="fchardlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>Using this dialog box, you can select the font, size, character set, italics and boldface options.</para>
+<para>The preview box along the bottom, will show you how your current settings will appear.</para>
+<para>Clicking "OK" will commit your changes to the style.</para>
+<para>Clicking "Cancel" will abort all changes made in this dialog box.</para></sect3>
+<sect3 id="stycolor"><title>Changing the Font Color</title><para>You can change the font color of your new style, by click on "Color".</para><para>You can now choose a color for the selected text using the <link linkend="SelColor">Color Selection Dialog Box</link>.</para></sect3>
+<sect3 id="styspc"><title>Changing Paragraph Spacing and Indents</title><para></para>
+<para>To change the paragraph spacing and indention of the paragraph of your style, click on "Spacing and Indents".  This opens a new dialog box.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg4" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>This dialog box allows you to set the paragraph margins, the spacing between lines, and the spacing between paragraphs.</para>
+<para>The first section of this dialog box is labled "Indent", and consists of three parts:</para>
+<variablelist>
+<varlistentry><term>"Left"</term><listitem><para>You can indent all the lines of a paragraph by entering a value in this box. The first line is unaffected by this box.  If you want to alter the first line, you must specify that seperately.</para></listitem></varlistentry>
+<varlistentry><term>"Right"</term><listitem><para>!!!!Just blacked out!!!!!</para></listitem></varlistentry>
+<varlistentry><term>"First Line"</term><listitem><para>Any non-zero value entered in this text box, will shift the left margin of the first line.</para></listitem></varlistentry>
+</variablelist>
+<para>The next section is labled "Line Spacing".  It consists of two elements:</para>
+<variablelist>
+<varlistentry><term>Dropdown box</term><listitem><para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para></listitem></varlistentry>
+<varlistentry><term>Text box</term><listitem><para>By entering a value in here, you can adjust the spacing between lines from the default.  If you enter a positive number, you will increase the spacing between lines.  If, on the other hand, you enter a negative number, you will decrease the spacing between lines.</para><note><para>Changes to this entry do NOT affect the line spaceing between lines of different paragraphs.</para></note></listitem></varlistentry>
+</variablelist>
+<para>The last section is labled "Paragraph Space".  It consists of two entries:</para>
+<variablelist>
+<varlistentry><term>"Before"</term><listitem><para>By entering a value in here, you can adjust the spacing before each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing before a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing before each paragraph.</para></listitem></varlistentry>
+<varlistentry><term>"After"</term><listitem><para>By entering a value in here, you can adjust the spacing after each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing after a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing after each paragraph.</para></listitem></varlistentry>
+</variablelist>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+</sect3>
+<sect3 id="styalgn"><title>Changing Paragraph Alignment</title>
+<para>To change how he text is placed within the line, click on "Alignment".  This will open a new dialog box.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg5" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>As you can see, there are only 4 choices.</para>
+<para>If you choose "Left", "Right" or "Center", the text will be moved on the line.</para>
+<para>If you choose "Block", KWord will increase the space <emphasis>between</emphasis> words, so that each line (with the exception of the last liine), reaches both the left and right margins.</para>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+</sect3>
+<sect3 id="stybord"><title>Changing Paragraph Borders</title><para>To add borders to your style, click on "Borders".  This will open a new dialog box.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg6" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>You can tell KWord to surround (on some or all sides) a paragraph with a border.  This border can be solid or not, of any color and of any size.  You use this dialog panel to adjust the borders.</para>
+<para>To define some borders for a paragraph, you first determine how the borders should appear on the document.  Then you select which paragraph borders should be used.  You can mix and match styles, weights and colors of paragraph borders for maximum flexibility in you document.</para>
+<para><emphasis>Determine the "Look" of the border.</emphasis></para>
+<variablelist>
+<varlistentry><term>"Style"</term><listitem><para>You can use this dropdown box to select the overall type of the new border. </para><para>Your choices are: Solid Line, Dash Line, Dot line, Dash Dot line, Dash Dot Dot line</para></listitem></varlistentry>
+<varlistentry><term>"Width"</term><listitem><para>This will determine how wide the resulting border will be.  It is measured in points.</para>  </listitem></varlistentry>
+<varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Selecting the borders</emphasis></para>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+</tbody></tgroup></informaltable>
+<para>The "Preview" window will show you how your paragraph borders will look.</para></sect3>
+<sect3 id="stynumb"><title>Changing Paragraph Numbering/Bullets</title><para>To add bullets or numbering to your style, click "Numbering".</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg7" format="PNG" align="center"/></imageobject></mediaobject></screenshot><para>!!!!!!!!!!Still needs work before writing!!!!!!!!!</para></sect3>
+<sect3 id="stytab"><title>Changing Tabstops.</title><para>You can define tab stops for your styles.  To do so, click "Tabulators".  This will open a new dialog box.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg8" format="PNG" align="center"/></imageobject></mediaobject></screenshot><para>You can now add tab stops by:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Type the horizontal location of the tab stop in the space provided.  The units are listed above the text box.</para></listitem>
+<listitem><para>Select the type of tab stop from the list on the right.</para></listitem>
+<listitem><para>Click Add.</para></listitem>
+</orderedlist>
+<para>When you are done adding tab stops, you can click "OK" to finish.</para></sect3>
+</sect2>
+<sect2 id="StyleDel"><title>Deleting a Style</title>
+<para>Deleting an unneeded style is easy.</para>
+<orderedlist numeration="arabic">
+<listitem><para>Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg1" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>From the list of available styles, select the style you want to delete by clicking once with the mouse left mouse button.</para>
+<warning><para>Be sure you have selected  the correct style before you click "Delete".  KWord will not ask for confirmation, so you will not be given an oportunity to back out.</para></warning></listitem>
+<listitem><para>Click "Delete".</para><para>The style is now deleted.</para></listitem>
+</orderedlist>
+<tip><para>Certain styles in KWord are considered fundimental (Standard, Head 1, Head2, Head 3, Enumerated List, Bulleted List, and Alphabetical list) and cannot be deleted.</para>
+<para>When you select any one of these styles to delete it, the "Delete" button will not function.</para></tip>
+</sect2>
+<sect2 id="StyleEdit"><title>Editing a Style</title>
+<para>The true power of styles, is the ability to edit the formatting options of that style <emphasis>after</emphasis> you have defined the style.  By changing the formatting of the style, you immediatly change every paragraph with that style, and you maintain a consistant look to your document.</para>
+<para>You will also notice, that editing the formatting options of a style, uses the same interface you used to create the style in the first place.</para>
+<para>To edit a current style:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg1" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>Select the style you want to edit from the list in the left</para></listitem>
+<listitem><para>Click "Edit".</para><para>This will bring up another dialog box</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg3" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>Now you can make the changes you want to this style.</para>
+<para>The preview box will show you what your new style will look like.</para>
+<warning><para>Do not change the name of your template.</para>
+<para>Doing so will delete your current style from the list (and create a new one with the new name).</para>
+<para>Any paragraphs which were origninally formatted with this style, will revert to "Standard".</para></warning>
+
+<para>Use the buttons labled 
+<link linkend="chstyfont">Font</link>, 
+<link linkend="chstycolor">Color</link>, 
+<link linkend="chstyspc">Spacing and Indents</link>, 
+<link linkend="chstyalgn">Alignment</link>, 
+<link linkend="chstybord">Borders</link>, 
+<link linkend="chstynumb">Numbering</link>, and 
+<link linkend="chstytab">Tabulators</link> to alter the look of the style.</para>
+<para>If you want to change the scope of the style, see the section entitled <link linkend="StyleCtrl">Controlling Styles</link>.</para>
+<para>Click "OK" to commit your changes.</para>
+<para>Click "Cancel" to abort all changes to this style.</para>
+</listitem>
+</orderedlist>
+<sect3 id="chstyfont"><title>Changing the Font Size, Type etc.</title><para>You can change the font size, character set, font, character set and toggle italics and bold face by clicking on "Font".  This will open a new dialog box.
+</para><screenshot><mediaobject><imageobject><imagedata fileref="fchardlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>Using this dialog box, you can select the font, size, character set, italics and boldface options.</para>
+<para>The preview box along the bottom, will show you how your current settings will appear.</para>
+<para>Clicking "OK" will commit your changes to the style.</para>
+<para>Clicking "Cancel" will abort all changes made in this dialog box.</para></sect3>
+<sect3 id="chstycolor"><title>Changing the Font Color</title><para>You can change the font color of your style, by clicking on "Color".</para><para>You can now choose a color for the style using the <link linkend="SelColor">Color Selection Dialog Box</link>.</para></sect3>
+<sect3 id="chstyspc"><title>Changing Paragraph Spacing and Indents</title><para></para>
+<para>To change the paragraph spacing and indention of the paragraph of your style, click on "Spacing and Indents".  This opens a new dialog box.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg4" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>This dialog box allows you to set the paragraph margins, the spacing between lines, and the spacing between paragraphs.</para>
+<para>The first section of this dialog box is labled "Indent", and consists of three parts:</para>
+<variablelist>
+<varlistentry><term>"Left"</term><listitem><para>You can indent all the lines of a paragraph by entering a value in this box. The first line is unaffected by this box.  If you want to alter the first line, you must specify that seperately.</para></listitem></varlistentry>
+<varlistentry><term>"Right"</term><listitem><para>!!!!Just blacked out!!!!!</para></listitem></varlistentry>
+<varlistentry><term>"First Line"</term><listitem><para>Any non-zero value entered in this text box, will shift the left margin of the first line.</para></listitem></varlistentry>
+</variablelist>
+<para>The next section is labled "Line Spacing".  It consists of two elements:</para>
+<variablelist>
+<varlistentry><term>Dropdown box</term><listitem><para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para></listitem></varlistentry>
+<varlistentry><term>Text box</term><listitem><para>By entering a value in here, you can adjust the spacing between lines from the default.  If you enter a positive number, you will increase the spacing between lines.  If, on the other hand, you enter a negative number, you will decrease the spacing between lines.</para><note><para>Changes to this entry do NOT affect the line spaceing between lines of different paragraphs.</para></note></listitem></varlistentry>
+</variablelist>
+<para>The last section is labled "Paragraph Space".  It consists of two entries:</para>
+<variablelist>
+<varlistentry><term>"Before"</term><listitem><para>By entering a value in here, you can adjust the spacing before each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing before a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing before each paragraph.</para></listitem></varlistentry>
+<varlistentry><term>"After"</term><listitem><para>By entering a value in here, you can adjust the spacing after each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing after a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing after each paragraph.</para></listitem></varlistentry>
+</variablelist>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+<para>Click "OK" to accept your changes.</para>
+<para>Click "Cancel" to reject any changes you made with this dialog box.</para>
+</sect3>
+<sect3 id="chstyalgn"><title>Changing Paragraph Alignment</title>
+<para>To change how he text is placed within the line, click on "Alignment".  This will open a new dialog box.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg5" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>As you can see, there are only 4 choices.</para>
+<para>If you choose "Left", "Right" or "Center", the text will be moved on the line.</para>
+<para>If you choose "Block", KWord will increase the space <emphasis>between</emphasis> words, so that each line (with the exception of the last liine), reaches both the left and right margins.</para>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+<para>If you are happy with the change you made, click "OK" to accept your changes.</para>
+<para>Click "Cancel" to reject any changes you made with this dialog box.</para>
+</sect3>
+<sect3 id="chstybord"><title>Changing Paragraph Borders</title><para>To add borders to your style, click on "Borders".  This will open a new dialog box.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg6" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>You can tell KWord to surround (on some or all sides) a paragraph with a border.  This border can be solid or not, of any color and of any size.  You use this dialog panel to adjust the borders.</para>
+<para>To define some borders for a paragraph, you first determine how the borders should appear on the document.  Then you select which paragraph borders should be used.  You can mix and match styles, weights and colors of paragraph borders for maximum flexibility in you document.</para>
+<para><emphasis>Determine the "Look" of the border.</emphasis></para>
+<variablelist>
+<varlistentry><term>"Style"</term><listitem><para>You can use this dropdown box to select the overall type of the new border. </para><para>Your choices are: Solid Line, Dash Line, Dot line, Dash Dot line, Dash Dot Dot line</para></listitem></varlistentry>
+<varlistentry><term>"Width"</term><listitem><para>This will determine how wide the resulting border will be.  It is measured in points.</para>  </listitem></varlistentry>
+<varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Selecting the borders</emphasis></para>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+</tbody></tgroup></informaltable>
+<para>The "Preview" window will show you how your paragraph borders will look.</para>
+<para>Click "OK" to accept your changes.</para>
+<para>Click "Cancel" to reject any changes you made with this dialog box.</para></sect3>
+<sect3 id="chstynumb"><title>Changing Paragraph Numbering/Bullets</title><para>To add bullets or numbering to your style, click "Numbering".</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg7" format="PNG" align="center"/></imageobject></mediaobject></screenshot><para>!!!!!!!!!!Still needs work before writing!!!!!!!!!</para>
+<para>Click "OK" to accept your changes.</para>
+<para>Click "Cancel" to reject any changes you made with this dialog box.</para>
+</sect3>
+<sect3 id="chstytab"><title>Changing Tabstops.</title><para>You can define tab stops for your styles.  To do so, click "Tabulators".  This will open a new dialog box.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg8" format="PNG" align="center"/></imageobject></mediaobject></screenshot><para>You can now add tab stops by:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Type the horizontal location of the tab stop in the space provided.  The units are listed above the text box.</para></listitem>
+<listitem><para>Select the type of tab stop from the list on the right.</para></listitem>
+<listitem><para>Click Add.</para></listitem>
+</orderedlist>
+<para>When you are done adding tab stops, you can click "OK" to finish.</para></sect3></sect2>
+<sect2 id="StyleCtrl"><title>Controlling Styles</title>
+<para>With some documents, you will want to ensure that every character within your document <emphasis>exactly</emphasis> matches the document style.  With other documents, you will need some additional flexability.  In this second case, you need to configure KWord so it only changes certain specific aspects of the style with each update.</para>
+<para>To edit a current style:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg1" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>Now click on the tab labled "Update Configuration".</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="styldlg2" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>This dialog box is broken down into 7 major parts, and a single check box.  </para>
+<para><emphasis>Fonts</emphasis></para>
+<para>The first drop down box, determines what font attributes a style should control, and when they should be applied. Your choices for this drop-down box are:</para>
+<variablelist>
+<varlistentry><term>Dont Update Fonts</term>
+<listitem><para>If this option is selected, KWord will not alter any fonts (with respect to size, font name, italics or bold face, etc) when applying the style.</para></listitem></varlistentry>
+<varlistentry><term>Update Font Families of same sized Fonts.</term>
+<listitem><para>When selected, KWord will not alter any fonts when applying the style unless the fonts size attribute of the selected text matches the font size within the style.  If the font sizes do not match, KWord will not change any font attributes. If the size does match, the selected text will be changed to the font family of the style.  No otherchanges (bold face, italics, etc) will be made.</para></listitem></varlistentry>
+<varlistentry><term>Update Font Families of all sized Fonts.</term>
+<listitem><para>With this option, KWord will convert the Font Family (but no other attributes), to the font defined in the style irrespective of font size.</para></listitem></varlistentry>
+<varlistentry><term>Update Font Families and Attributes of same sized Fonts.</term>
+<listitem><para>When selected, KWord will not alter any fonts when applying the style unless the fonts size attribute of the selected text matches the font size within the style.  If the font sizes do not match, KWord will not change any font attributes. If the size does match, the selected text will be changed to match the style.  All attributes (bold face, italics, etc) will be changed.</para></listitem></varlistentry>
+<varlistentry><term>Update Font Families and Attributes of all sized Fonts.</term>
+<listitem><para>With this option, KWord will change all text, irrespective of size or attributes, to match the font specified in the style.</para></listitem></varlistentry></variablelist>
+<para><emphasis>Font Color</emphasis></para>
+<para>This drop down box allows you to specify if the Font colors should be changed to match the style or not.</para>
+<para></para>
+<variablelist>
+<varlistentry><term>Dont Update Colors</term>
+<listitem><para>If this option is selected, KWord will not alter any font colors</para></listitem></varlistentry>
+<varlistentry><term>Update Colors</term>
+<listitem><para>When selected, KWord will change the font colors of selected text to match the color defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Indents and Spacings</emphasis></para>
+<para>This drop down box allows you to specify if the indenting and paragraph spacing should be changed to match the style or not.</para>
+<variablelist>
+<varlistentry><term>Dont Update Indents and Spacings</term>
+<listitem><para>If this option is selected, KWord will not alter any indenting or paragraph spacing settings.</para></listitem></varlistentry>
+<varlistentry><term>Update Colors</term>
+<listitem><para>When selected, KWord will change the indenting or paragraph spacing settings of selected text to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Aligns/Flows</emphasis></para>
+<para>This drop down box allows you to specify if the paragraph alignment should be changed to match the style or not.</para>
+<variablelist><varlistentry><term>Dont Aligns/Flows</term>
+<listitem><para>If this option is selected, KWord will not alter any paragraph alignment settings.</para></listitem></varlistentry>
+<varlistentry><term>Update Aligns/Flows</term>
+<listitem><para>When selected, KWord will change the paragraph alignment settings of selected text to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Numbering</emphasis></para>
+<variablelist><varlistentry><term>Dont Update Numbering</term>
+<listitem><para>If this option is selected, KWord will not alter any autonumbering settings.</para></listitem></varlistentry>
+<varlistentry><term>Update Colors</term>
+<listitem><para>When selected, KWord will change the autonumbering attributes of selected text to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Borders</emphasis></para>
+<variablelist><varlistentry><term>Dont Update Borders</term>
+<listitem><para>If this option is selected, KWord will not alter any paragraph borders.</para></listitem></varlistentry>
+<varlistentry><term>Update Borders</term>
+<listitem><para>When selected, KWord will change the paragraph borders to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Tabulators</emphasis></para>
+<variablelist><varlistentry><term>Dont Update Tabulators</term>
+<listitem><para>If this option is selected, KWord will not alter any tab stops.</para></listitem></varlistentry>
+<varlistentry><term>Update Tabulators</term>
+<listitem><para>When selected, KWord will change the tab stops to match those defined in the font style.</para></listitem></varlistentry>
+</variablelist></listitem>
+<listitem><para>When you are finished, click "Close" to apply your changes.</para></listitem></orderedlist></sect2>
+</sect1>
+<sect1 id="Columns"><title>Columns</title>
+<para>You can divide the page into several columns, of equal width, with a user controlled space in between each column.</para>
+<note><para>This feature is only available in Wordprocessing Templates.</para><para>If you are working in a DTP Template, you can build up several columns using a different frame for each column.</para></note>
+<para>To change the number and width of columns:</para>
+<orderedlist numeration="arabic">
+<listitem><para>First, you must be in Frame Edit Mode.  If you are not currently in frame edit mode, you can change to Frame Edit Mode, in one of three ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="framemode" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+</itemizedlist></listitem>
+<listitem><para>Place the mouse cursor inside the frame you want to move, and click once with the left mouse button. This selects this frame as the current frame.</para></listitem>
+<listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Page</guimenuitem></menuchoice> from the Menu bar.</para><para>This will bring up a dialog box</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="wpfmtpg1" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>Click on the table labled "Columns".</para>
+<para>This will change the dialog panel.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="wpfmtpg2" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
+<listitem><para>You can now select the number of columns, and the spacing in between.</para>
+<para>The preview box shows you what you can expect.</para></listitem>
+<listitem><para>Click "OK" when you are done.</para></listitem>
+<listitem><para>Click "Cancel" to abort changes.</para></listitem>
+</orderedlist></sect1>

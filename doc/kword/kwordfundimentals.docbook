@@ -1,0 +1,212 @@
+<chapter id="Fundimental">
+<title>Fundimentals</title>
+
+<para>This next section is designed to show you how to start
+<application>KWord</application> and some basic but important concepts
+you should understand when using KW</para>
+
+<sect1 id="StartingKword">
+<title>Starting Kword</title>
+
+<para>
+KWord can be started one of four ways:
+<orderedlist>
+<listitem><para>You can select Kword through the system menus, under:  <menuchoice>
+    <guimenu>K-Button</guimenu><guimenuitem>Office</guimenuitem>
+  <guimenuitem>KWord</guimenuitem>
+</menuchoice>.</para> </listitem>
+<listitem><para>If you are in a terminal program (KVT, Xterm, etc), you can type:
+<screen><prompt>$</prompt> <command>kword &amp;</command></screen></para>
+<para>Or</para>
+<para><screen><prompt>$</prompt> <command>kword <replaceable>filename</replaceable> &amp;</command></screen></para></listitem>
+<listitem><para>Using <application>Konqerer</application>, you can click on your data file (KWord documents end in .kwd).  This will automatically start <application>KWord</application> and begin editing the file.</para></listitem>
+<listitem><para>Using the KOffice Workspace.</para></listitem>
+</orderedlist></para>
+
+</sect1>
+
+<sect1 id="TemplateIntro">
+<title>An Introduction to Templates</title>
+
+<para>OK, so the first question you may have is:</para>
+
+<para><emphasis>Why do I need to use a frames based word processor, when
+I am perfectly happy writing my letters on my current, Page Layout,
+word processor? </emphasis></para>
+
+<para>Well the good news is, adjusting to a frames based word processor
+is easy and once you select a template, <application>KWord</application>
+will act just like the Page Layout wordprocessor you are used to.
+There are templates available for simple correspondance and day to day
+use.</para>
+
+<para>When you need to generate a more complex document (newsletters,
+posters, etc), however, you will not need to switch to a different program
+to generate these special documents. There are templates which will help
+you generate your newsletters or other more complicated documents.</para>
+
+<para>OK. So now that you are willing to give this a try, we should talk
+briefly about what templates are, what templates can do for you and how
+you work with templates.</para>
+
+<para><emphasis>What are templates and what can they do for me</emphasis></para>
+
+<para>A template can be thought of as an initial mold for your document.
+When we sit down to write a document, we already have an idea of what the
+final product will look like. If you are writing a letter to a business,
+you want a document with only one column, which goes all the way accross
+the page, and from top to bottom of the page.
+When you sit down to author a newsletter for a local organization,
+however, you may want a large title accross the top, and several columns
+for quick news articles.</para>
+
+<para>With &kword;, you can use this preplanned notion of how your
+document should look and using a template, you can create a set of
+frames to approximate this final layout. For your business letter,
+you can select one large frame that covers the page from top to bottom
+and side to side (excluding margins of course). For that newsletter,
+however, you may decide that a two or three column document is more
+to your liking. Once you select this template, KWord will create the
+frames for you.</para>
+
+<para><emphasis>What if I decide later to change my layout</emphasis></para>
+
+<para>This is not a problem. If you begin your document as a single
+column document and decide later that two columns is better for your
+needs, you can add another column. The purpose of templates is not to
+limit your ability to change your layout, but rather to take some of
+the work load off you whenever possible.
+Choosing the correct template when you begin your document will simplify
+the formating (as opposed to always selecting the default template and
+making your changes later.), but it is also important to remember that
+choosing the wrong template will not limit your work.</para>
+
+<para><emphasis>Working with frames (aka Your First Document)</emphasis></para>
+
+<para>The following section, consists of two fundimental topics which
+you should understand before we continue, followed by a step by step walk through
+of the most important functions you will need to understand to complete
+a complex document. We will generate the start of a newsletter using
+this tutorial. If you do not want to complete the tutorial, or have
+questions about a specific aspect of frames, you can use the following
+to jump directly to that section of the tutorial:</para>
+
+<orderedlist numeration="arabic">
+<listitem><para><link linkend="WPVSDTP">The difference between Normal and Publishing templates</link></para></listitem>
+<listitem><para><link linkend="TextandFrame">The difference between text edit mode and frame edit mode</link></para></listitem>
+<listitem><para><link linkend="ChooseTemplate">Choosing the initial template</link></para></listitem>
+<listitem><para><link linkend="FrameSelect">Selecting a frame and entering text into that frame</link></para></listitem>
+<listitem><para><link linkend="ResizeFrame">Changing the size of a frame</link></para></listitem>
+<listitem><para><link linkend="MoveFrame">Moving a frame on the page</link></para></listitem>
+<listitem><para><link linkend="AddFrame">Adding a new frame and making text flow between two frames</link></para></listitem>
+<listitem><para><link linkend="DelFrame">Deleting a frame</link></para></listitem>
+</orderedlist>
+
+<para>This tutorial is designed to be done in order, starting with
+<link linkend="WPVSDTP">The difference between Text Oriented and Page Layout
+templates.</link> I recommend going through the tutorial in order at least once.</para>
+</sect1>
+
+<sect1 id="WPVSDTP"> 
+<title>The difference between Text Oriented and Page Layout templates</title>
+<para>Before we begin with the tutorial, it is important that the
+difference between Text Oriented and Page Layout templates is clear in your
+mind.</para>
+
+<variablelist>
+<varlistentry>
+<term>Text Oriented</term>
+<listitem><para>The Text Oriented templates are designed to act like
+page-oriented wordprocessors. When you select a Text Oriented template, you
+will create a template with one or more frames. The first frame is
+distinctly tied to the paper size of your document. When you increase
+or decrease the paper size or change the margins, the frame size is automatically adjusted.
+You are <emphasis>not</emphasis> able to move this frame around on the
+page and you cannot delete this frame. If you need to adjust the size
+or position of this frame, you must <link linkend="PageFormat">adjust
+the margins</link>. On top of the
+first frame, you can, of course, add additional frames. These frames
+can contain pictures, text or whatever you want. These new frames can
+be moved, resized and deleted to suit your needs. If you want it, KWord
+will even wrap the text from the first frame around any information in
+any subsiquent frames.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Page Layout</term>
+<listitem><para>These templates are designed for desktop publishing.
+When you select a template from this class, all of the frames are
+"created equal". This is where the difference between Page Layout and
+Text Oriented template lies. None of the frames in a Page Layout template
+are tied to the page as tightly as the main frame in a Text Oriented template
+is. Each of the frames is independent of the page size, and can be moved
+or resized without changing margins, etc. Of course this also means
+that altering the margins or papersize of your document requires that
+you individually move/resize each frame.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>As you can see, the choice between Page Layout and Text Oriented templates
+is a choice between flexibility (Page Layout) and convenince (Text Oriented).
+You can create any document you like with either type of template.</para>
+
+<para>If the concept of templates is still unclear, please follow along with
+the following tutorial. The first document you create will use
+a Page Layout template. This should help clairify exactly how templates
+function.</para></sect1>
+
+<sect1 id="TextandFrame">
+<title>The difference between Text Edit mode and Frame Edit mode</title>
+
+<para>Before we begin the tutorial, there is one other feature of
+<application>KWord</application> we should cover.</para>
+
+<para>If you think about it, most documents consist of two separate but
+often interrelated components:
+<orderedlist Numeration="Arabic">
+<listitem><para>The content, which consists of text you enter through
+the keyboard, the pictures you have on your hard disk, the data in your
+spreadsheet, etc.  This is the subject of your document. This is the information you want to convey.</para></listitem>
+<listitem><para>The layout, which consists of how the information is
+given to the reader. Multiple columns, boxes surrounding text, italics
+for emphasis, etc. Using good layout, you can organize and emphasize your information in a way that is easily understood by the reader.  </para></listitem>
+</orderedlist>
+</para>
+
+<para>This same division exists when using KWord.</para>
+
+<para>KWord has two modes of operations:</para>
+<itemizedlist>
+<listitem><para>Text Edit Mode</para></listitem>
+<listitem><para>Frame Edit Mode</para></listitem>
+</itemizedlist>
+<para>Text Edit Mode is most commonly used for the <emphasis>entry of
+the content</emphasis> of the document. In Text Edit Mode, you enter
+text from the keyboard, cut and paste from other applications, fill
+tables with your data, etc.</para>
+<para>Frame Edit Mode is most commonly used for the
+<emphasis>layout</emphasis> of the document. Using Frame Edit Mode,
+you can adjust the width of text, resize pictures, etc.</para>
+<para>This is not to say that you will never enter content from Frame
+Edit Mode, and never alter layout in the Text Edit Mode, but you will
+find that most often the previous guides will serve you well.</para>
+<para>You can enter Text Edit Mode using the menu by
+selecting: <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit
+Text</guimenuitem></menuchoice>, by pressing F4, or by clicking on the
+Text Edit toolbar button
+<inlinemediaobject><imageobject><imagedata format="PNG" fileref="textmode.png" align="center"/></imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject>
+</para>
+
+<para>You can enter Frame Edit Mode using the menu by selecting:
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit
+Frame</guimenuitem></menuchoice>, by pressing
+F5, or by clicking on the Frame  Edit toolbar
+button <inlinemediaobject><imageobject><imagedata format="PNG" fileref="framemode.png"/></imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject>
+</para>
+
+<para>It is important to keep this distinction in mind when using &kword;. Depending on whether you are in Frame Edit Mode or Text Edit Mode, &kword; will act differently.</para>
+
+<para>Now that we have discussed the differences between publishing and Text Oriented Documents and introduced the differences between Text Edit Mode and Frame Edit Mode, we will begin the tutorial</para>
+
+</sect1>
+</chapter>

@@ -1,0 +1,522 @@
+
+<para><link linkend="Guides">Two sections ago</link>, we talked about <link linkend="NewDoc">creating</link>, <link linkend="Saving">saving</link>, <link linkend="Loading">loading</link> and <link linkend="Printing">printing documents</link>. <link linkend="Guides2">In the section after that</link> (the previous section), we discussed <link linkend="select">entering the textual information</link>, <link linkend="Clipboard">moving it around</link>, <link linkend="SpellCheck">spell checing</link>, and <link linkend="Autocorrect">autocorrecting</link> your text.</para>
+<para>This section of the guide is designed to help you layout your documents.  We will begin with changing the size and shape of the page and the margins, and work progressively through smaller and smaller blocks of text (frames, then paragraphs, then characters).</para>
+<para>After we have discussed formatting individual characters, we will deal with some miscellaneous topics related to layout of your document.</para>
+<sect1 id="PageFormat"><title>Formatting the Page</title>
+<para>If you will remember back to when we talked about <link linkend="WPVSDTP">Text Oriented Documents and Publishing Templates</link>, we mentioned that there were differences in your formatting options.</para>
+<para>Well these differences are most important when we talk about Formatting the Page.  What follows are two sections, one for formatting the page with a <link linkend="WPPageFormat">Text Oriented Document</link>, and another section for formatting the page with a <link linkend="DTPPageFormat">Publishing Template</link>. Each section is independent of each other, so you should refer to the section that applies to your document.</para>
+<sect2 id="WPPageFormat"><title> Formatting the Page (Text Oriented Document)</title>
+<para>When you are working with a Text Oriented Document, you control the size and shape of the main frame by setting the margins. </para>
+<para>Formating the page is usually done by selecting: </para>
+<para><menuchoice> <guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice></para>
+<para>From the menubar.</para>
+<tip><para>You can also go straight to the <guimenuitem>Format Page</guimenuitem> options by double clicking on either of the rulers.</para></tip>
+<para>A dialog box will appear with 3 tabs, labled <guilabel>Format and Borders</guilabel>, <guilabel>Columns</guilabel> and <guilabel>Header and Footer</guilabel>.</para>
+<para>The <guilabel>Format and Borders</guilabel> tab is for altering the paper size, and changing the margins.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="wpfmtpg1.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>First you will notice, that a preview box appears on the right half of this dialog.  This will <emphasis>approximate</emphasis> the final look of your document.  It is updated with each change, and should be used as a guide for your changes. </para>
+<para>On the left, the dialog first informs you what unit of measurement it is using.  This unit of measurement is the same unit of measurement you have set for your rulers. (In this example, we are using inches.)</para>
+<para>Below that, you can determine the paper format you will eventually print to.  Your choices are:</para>
+<itemizedlist>
+<listitem><para>DIN A3</para></listitem>
+<listitem><para>DIN A4</para></listitem>
+<listitem><para>DIN A5</para></listitem>
+<listitem><para>DIN B5</para></listitem>
+<listitem><para>US Letter</para></listitem>
+<listitem><para>US Legal</para></listitem>
+<listitem><para>US Exective</para></listitem>
+<listitem><para>Screen</para></listitem>
+<listitem><para>Custom</para></listitem>
+</itemizedlist>
+<para>All of these options (with the exception of Screen and Custom), refers to standard paper sizes.</para>
+<para><guilabel>Screen</guilabel> is used to generate a document where each "page" has an <link linkend="defaspectratio">aspect ratio</link> (shape) which matches the aspect ratios of computer monitors.</para>
+<para>If you select the <guilabel>Custom</guilabel> paper size, two text entry boxes (labled "Width" and "Height") become active.  Using these two boxes you can now enter any size paper you need.</para>
+<para>Next to the paper format, you can select either <guilabel><link linkend="defportrait">Portrait</link></guilabel> or <guilabel><link linkend="deflandscape">Landscape</link></guilabel> layout for your document. </para>
+<para>Below the page format options, is the Page Borders Options, which consists of 4 entry boxes labled (<guilabel>Right</guilabel>, <guilabel>Left</guilabel>, <guilabel>Top</guilabel> and <guilabel>Bottom</guilabel>).</para>
+<para>The <guilabel>Page Borders</guilabel> (aka Margins), define the whitespace surrounding the text in your main frame.  You can enter any number from 0 to the maximum size of the page in these boxes.  The units are the same for all four boxes, and is the same as the measurement listed at the top of the dialog..</para>
+<para>Clicking on the <guilabel>Columns</guilabel> tab allows you to change the number of columns on each page.  Details can be found <link linkend="Columns">here</link>.</para>
+<para>Clicking on the <guilabel>Header and Footer</guilabel> tab changes the dialog options.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="wpfmtpg3.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>This dialog can be broken into two major sections, with each section being divided in to smaller divisions.</para>
+<para>If you are not familiar with Headers and Footers yet, you should first read the section entitled <link linkend="HeadFoot">Headers/Footers</link></para>
+<para><emphasis>Headers</emphasis></para>
+<para>This section lets you determine the placement of headers, and which pages have which headers on them.</para>
+<para>In the text box labled <guilabel>Spacing between header and body</guilabel>, you can specify how much empty space should be placed between the bottom of the header, and the top of the main frame.</para>
+<para>You are also presented with three options.  You must choose one:</para>
+<itemizedlist>
+<listitem><para><guilabel>Same header for all pages</guilabel> - If you select this option, all pages, even or odd, including the first page, will have the same headers. This is the default.</para></listitem>
+<listitem><para><guilabel>Different header for first page</guilabel> - If you select this option, the first page will use a different header than the other pages.  After the first page, all pages have use the same header</para></listitem>
+<listitem><para><guilabel>Different header for even and odd pages</guilabel> - If you select this option, the even pages will use one header, the odd pages use another header.  You can use this to ensure the page numbers are always on the outside of the page, or to list the title of the document on odd pages and the chapter number on the even pages.</para></listitem>
+</itemizedlist>
+<para><emphasis>Footers</emphasis></para>
+<para>This section lets you determine the placement of footers, and which pages have which footers on them.</para>
+<para>In the text box labled <guilabel>Spacing between footer and body</guilabel>, you can specify how much empty space should be placed between the top of the footer, and the bottom of the main frame.</para>
+<para>You are also presented with three options.  You must choose one:</para>
+<itemizedlist>
+<listitem><para><guilabel>Same footer for all pages</guilabel> - If you select this option, all pages, even or odd, including the first page, will have the same footer. This is the default.</para></listitem>
+<listitem><para><guilabel>Different footer for first page</guilabel> - If you select this option, the first page will use a different footer than the other pages.  After the first page, all pages have use the same footer</para></listitem>
+<listitem><para><guilabel>Different footer for even and odd pages</guilabel> - If you select this option, the even pages will use one footer, the odd pages use another footer.  </para></listitem>
+</itemizedlist>
+<para>When you are satisfied with the changes you are ready to make, click <guibutton>OK</guibutton>.</para>
+<para>If you click <guibutton>Cancel</guibutton>, all your changes will be ignored.</para>
+</sect2>
+<sect2 id="DTPPageFormat"><title> Formatting the Page (Page Layout Template)</title>
+<para>When you are working with a DTP Template, you control the size and shape of all the frames individually. </para>
+<para>Formating the page is usually done by selecting: </para>
+<para><menuchoice> <guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice></para>
+<para>From the menubar.</para>
+<tip><para>You can also go straight to the "Format Page" options by double clicking on either of the rulers.</para></tip>
+<para>A dialog box will appear with 3 tabs, labled <guilabel>Format and Borders</guilabel>, <guilabel>Columns</guilabel> and <guilabel>Header and Footer</guilabel>.</para>
+<para>The <guilabel>Format and Borders</guilabel> tab is for altering the paper size, and changing the margins.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="dtpfmtpg1.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>First you will notice, that a preview box appears on the right half of this dialog.  This will <emphasis>approximate</emphasis> the final look of your document.  It is updated with each change, and should be used as a guide for your changes. </para>
+<para>On the left, the dialog first informs you what unit of measurement it is using.  This unit of measurement is the same unit of measurement you have set for your rulers. (In this example, we are using inches.)</para>
+<para>Below that, you can determine the paper format you will eventually print to.  Your choices are:</para>
+<itemizedlist>
+<listitem><para>DIN A3</para></listitem>
+<listitem><para>DIN A4</para></listitem>
+<listitem><para>DIN A5</para></listitem>
+<listitem><para>DIN B5</para></listitem>
+<listitem><para>US Letter</para></listitem>
+<listitem><para>US Legal</para></listitem>
+<listitem><para>US Exective</para></listitem>
+<listitem><para>Screen</para></listitem>
+<listitem><para>Custom</para></listitem>
+</itemizedlist>
+<para>All of these options (with the exception of Screen and Custom), refers to standard paper sizes.</para>
+<para><guilabel>Screen</guilabel> is used to generate a document where each "page" has an <link linkend="defaspectratio">aspect ratio</link> (shape) which matches the aspect ratios of computer monitors.</para>
+<para>If you select the <guilabel>Custom</guilabel> paper size, two text entry boxes (labled "Width" and "Height") become active.  Using these two boxes you can now enter any size paper you need.</para>
+<para>Next to the paper format, you can select either <guilabel><link linkend="defportrait">Portrait</link></guilabel> or <guilabel><link linkend="deflandscape">Landscape</link></guilabel> layout for your document. </para>
+<para>Below the page format options, is the Page Borders Options, which consists of 4 entry boxes labled (<guilabel>Right</guilabel>, <guilabel>Left</guilabel>, <guilabel>Top</guilabel> and <guilabel>Bottom</guilabel>). These boxes cannot be edited and have no effect when working with Page Layout Templates.</para>
+<para>Clicking on the <guilabel>Header and Footer</guilabel> tab changes the dialog options.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="dtpfmtpg2.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>This dialog can be broken into two major sections, with each section being divided in to smaller divisions.</para>
+<para>If you are not familiar with Headers and Footers yet, you should first read the section entitled <link linkend="HeadFoot">Headers/Footers</link></para>
+<para><emphasis>Headers</emphasis></para>
+<para>This section lets you determine the placement of headers, and which pages have which headers on them.</para>
+<para>In the text box labled <guilabel>Spacing between header and body</guilabel>, you can specify how much empty space should be placed between the bottom of the header, and the top of the main frame.</para>
+<para>You are also presented with three options.  You must choose one:</para>
+<itemizedlist>
+<listitem><para><guilabel>Same header for all pages</guilabel> - If you select this option, all pages, even or odd, including the first page, will have the same headers. This is the default.</para></listitem>
+<listitem><para><guilabel>Different header for first page</guilabel> - If you select this option, the first page will use a different header than the other pages.  After the first page, all pages have use the same header</para></listitem>
+<listitem><para><guilabel>Different header for even and odd pages</guilabel> - If you select this option, the even pages will use one header, the odd pages use another header.  You can use this to ensure the page numbers are always on the outside of the page, or to list the title of the document on odd pages and the chapter number on the even pages.</para></listitem>
+</itemizedlist>
+<para><emphasis>Footers</emphasis></para>
+<para>This section lets you determine the placement of footers, and which pages have which footers on them.</para>
+<para>In the text box labled <guilabel>Spacing between footer and body</guilabel>, you can specify how much empty space should be placed between the top of the footer, and the bottom of the main frame.</para>
+<para>You are also presented with three options.  You must choose one:</para>
+<itemizedlist>
+<listitem><para><guilabel>Same footer for all pages</guilabel> - If you select this option, all pages, even or odd, including the first page, will have the same footer. This is the default.</para></listitem>
+<listitem><para><guilabel>Different footer for first page</guilabel> - If you select this option, the first page will use a different footer than the other pages.  After the first page, all pages have use the same footer</para></listitem>
+<listitem><para><guilabel>Different footer for even and odd pages</guilabel> - If you select this option, the even pages will use one footer, the odd pages use another footer.  </para></listitem>
+</itemizedlist>
+<para>When you are satisfied with the changes you are ready to make, click <guibutton>OK</guibutton>.</para>
+<para>If you click <guibutton>Cancel</guibutton>, all your changes will be ignored.</para>
+</sect2></sect1>
+<sect1 id="Frames"><title>Working with Frames</title>
+<para>Since KWord is a frames based wordprocessor, an understanding of Frames is necessary for all but the most simple of documents.</para>
+<para>This section is designed to give you a firm understanding of how to create, destroy and manipulate frames so KWord can provide you with the exact document you want.</para>
+<sect2 id="lFrameset"><title>Framesets</title>
+<para>Before we continue our discussion of Frames, its important that we define a couple terms now:</para>
+<variablelist>
+<varlistentry><term>Frame</term><listitem><para>A frame is a rectangular space on the page.  This space defines an area where text (or other data), can be placed.</para></listitem></varlistentry>
+<varlistentry><term>Frameset</term><listitem><para>A frameset is a group of frames.  Each frame in the framset has a position within the framset</para>
+<para>The position is determined when the frames are created.  The first frame created is Frame #1, the second is Frame #2, etc.</para>
+<para>All text flows from one frame to another <emphasis>within a frameset, and only within a frameset.</emphasis> Text flows from frame to frame within the frameset <emphasis>according to the position of each frame</emphasis></para>
+<para>As an example:  If we have a frameset that consists of three frames (#1, #2, and #3).</para>
+<para>As we type text into Frame #1, the text is shaped to the outline of Frame #1</para>
+<para>When the text will no longer fit within Frame #1, it is automatically continued into Frame #2.</para>
+</listitem></varlistentry></variablelist>
+<para>As you can see, text must (and does) move freely between frames within a framset.</para>
+</sect2>
+<sect2 id="lAddFrame"><title>Adding a Text Frame to a Document</title>
+<para>Adding a text frame can be done one of three ways:</para>
+<itemizedlist>
+<listitem><para>By selecting <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Text Frame...</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F6</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="tfcreatebut.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Whatever method you choose, KWord responds by changing the cursor to a set of crosshairs.</para>
+<para>Using the mouse, place the cursor at one of the corners of your new text frame. (Any corner will work)</para>
+<para>Now click and hold with the left mouse button.</para>
+<para>Drag the mouse towards the opposite corner of the rectangle.  As you drag the mouse, you will see a box drawn.  This box represents the boundries of your new text frame.</para>
+<para>When you are satisfied with the size and shape of your new text box, release the mouse button.  </para>
+<para>A dialog box appears.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="Tut15.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>The purpose of this dialog box is two fold:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Determine which frameset this new frame will belong to</para></listitem>
+<listitem><para>Set up text flow options.</para></listitem>
+</orderedlist>
+<para>The tab labeled <guilabel>Connect Text Frames</guilabel> in this dialog box is used to determine which frameset this new text box belongs.</para>
+<para>Using the example given, you have just created a new frame in a document which currently has two framesets (called <guilabel>Frameset 1</guilabel>, and <guilabel>Frameset 2</guilabel>).</para>
+<para>You now have the option of either:</para>
+<orderedlist numeration="arabic">
+<listitem><para>appending this text box to one of the previously created framesets.</para>
+<para>To do this, simply select the frameset you want to connect this new text box two (either <guilabel>Frameset 1</guilabel>, or <guilabel>Frameset 2</guilabel>)</para>
+<para>When this text frame is created, the new text frame will become the last frame in the selected frameset.</para>
+<para>or</para></listitem>
+<listitem><para>You can create a new frameset.  This newly added frame will be the first (and currently only) frame in the frameset.</para>
+<para>If you want this to be a new frameset, you can enter a descriptive name for your new frameset.  (A name which will tell you what you might find in that frameset).  This name should be entered in the text box labled <guilabel>Name of new Frameset</guilabel>.</para></listitem>
+</orderedlist>
+<para>The other tabs in this dialog box, can be used to set some options for this frame.  For more information on these options, see the section entitled <link linkend="FormatFrame">Formatting Frames</link>.</para>
+<para>If you click <guibutton>OK</guibutton>, the new frame will be created.</para>
+<para>If you click <guibutton>Cancel</guibutton>, the new frame will not be created, and you will be returned to editing your document.</para>
+<note><para>KWord assumes you want to continue to add new text frames until you say otherwise.  </para>
+<para>In other words, when you have created your new text frame, you must now tell KWord you want to <link linkend="lresizeframe">resize a frame</link>, or insert text into the frame, etc...</para>
+<para>If you fail to change to another function, clicking with the mouse will create yet another text frame.</para></note>
+</sect2>
+<sect2 id="ldeleteframe"><title>Deleteing a Frame From a Document</title>
+<para>You may decide you no longer need a frame in your document.  You could leave it blank (so it would not be visible in the final output), but you should probably delete it to keep your document as simple as possible.</para>
+<para>By deleting a frame, you will also be deleting from you document any data inside that frame.</para>
+<para>In order to delete a frame, you must be in "Frame Edit Mode".  To change to Frame Edit Mode, you can:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="framemode.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.</para>
+<para>Place the arrow inside the frame you want to delete, and click once with the left mouse button.</para>
+<para>There is now 8 black squares on the edges of the frame.</para>
+<para>If this is the frame you want to delete, you can do so by:</para>
+<itemizedlist>
+<listitem><para>selecting <menuchoice> <guimenu>Frames</guimenu><guimenuitem>Delete Frame</guimenuitem></menuchoice> from the Menu bar</para><para>or</para></listitem>
+<listitem><para>While the cursor is inside the frame you want to delete, click once with the <emphasis>right</emphasis> mouse button.</para><para>A small menu will appear.  Select <guimenuitem>Delete Frame</guimenuitem>.</para></listitem>
+</itemizedlist>
+<para>If you are trying to delete the last frame in a frameset, KWord will ask you if you want to delete the current text frame.  If you click <guibutton>Delete</guibutton>, the frame, all frames connected to it, and the data within these frames (if there is any), will be deleted. If you click <guibutton>Cancel</guibutton>, the frame will not be deleted.</para>
+<para>If you are trying to delete a frame that is not the last frame in a frameset, KWord will not ask for a confirmation.  It will delete the current frame immediately, and move the data into the next frame in a frameset. No data will be deleted. </para>
+<warning><para>Deleteing the last frame in a framset will delete the entire frameset.  All data within that frameset will be lost.  Always use caution when deleting the last frame in a frameset.</para></warning>
+</sect2>
+<sect2 id="lmoveframe"><title>Moving an Existing Frame</title>
+<para>If you want to move a frame around on a page, you must be in Frame Edit Mode.  To change to Frame Edit Mode, you can:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Frames</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="framemode.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.</para>
+<para>Place the arrow inside the frame you want to move, and click once with the left mouse button.</para>
+<para>There are now 8 black squares on the edges of the frame.</para>
+<para>If this is the frame you need to move, place the cursor inside the frame.</para>
+<para>Move the cursor slightly in any direction.  The cursor will now change to four arrows arranged in a cross.</para>
+<para>Hold the left mouse button down, and drag the cursor in the direction you want to move the frame.</para>
+<para>You will see an outline of the frame as you move it.  When the outline is at the new location on the page, release the mouse button.</para>
+</sect2>
+<sect2 id="lresizeframe"><title>Resizing an Existing Frame</title>
+<para>If you want to resize a frame, you must be in Frame Edit Mode.  If you are not currently in frame edit mode, you can change to Frame Edit Mode, in one of three ways.:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Frames</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="framemode.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.</para>
+<para>Place the arrow inside the frame you want to move, and click once with the left mouse button. This selects this frame as the current frame.</para>
+<para>There are now 8 black squares on the edges of the frame. By moving these squares, you will be able to drag the frame border(s) to a new location.</para>
+<para>Each square will move a different combination of borders.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="framers.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>As an example:  To move the bottom border of a frame, place the mouse over the box at the six oclock position in the frame.  When the mouse is over the box, it will change to a double headed arrow.</para>
+<para>Now click with the left mouse button and hold the button down.  As you move the mouse up and down on the page, you will see that the frame changes shape to match your mouse movements. When you have the bottom edge of the frame where you want it, simply release the mouse button, and your changes will become permenant.</para>
+<para>If you need to resize the frame of a neighboring frame, you should click once inside that frame (to make it the current frame), and you can move its borders in the same fashion.</para>
+<note><para>If you are using a Wordprocessing Template, you cannot change the size of the primary frame by draging the edges of the frame.  If you want to resize this frame, you must do so by <link linkend="PageFormat">Changing the margins</link> </para></note>
+</sect2>
+<sect2 id="lconnectframe"><title>Reconnecing Frames in a Frameset/Changing text flow..</title>
+<para>This section of the Users Guide is devoted to controlling where (which text frame) text flows when the current frame is full.</para>
+<para>Normally, you will create each new text frame with a specific purpose.  Sometimes, however, as the document is changed, you will want the text to flow to a new text frame.  To acomplish this, you will need to know how to move a frame from one frameset to another.</para>
+<para>First, you must be in frame edit mode. To change to Frame Edit Mode, you can:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Frames</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="framemode.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.</para>
+<para>Place the arrow inside the frame you want to change, and click once with the left mouse button.  This will select the frame.</para>
+<para>You can change the frameset of the currently selected frame by selecting <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Reconnect  Frame</guimenuitem></menuchoice> from the Menu bar</para>
+<para>This will bring up a dialog box with 4 tabs.  Select the tab labeled <guilabel>Connect Text Frames</guilabel>.</para>
+<para>You will be presented with a list of framesets.  Simply select the frameset you want, and the currently selected frame will be added <emphasis>to the end</emphasis> of that frameset.</para>
+<para>When you click OK, you will notice that &kword; automatically updates the text flow immediatly.</para>
+</sect2>
+<sect2 id="lhardbreak"><title>Hard Frame Breaks</title>
+<para>A hard frame break is a special formatting character.  It is invisible on the final printed output.</para>
+<para>The purpose of a hard frame break, is to force all the text that follows it into the next frame in the framset.</para>
+<para>If we have the following sentance:  <emphasis>We have nothing to fear but fear itself</emphasis></para>
+<para>and we insert a Hard Frame Break, just before the word <emphasis>but</emphasis>.</para>
+<para>We will end up with one frame containing <emphasis>We have nothing to fear</emphasis>, and the next frame in the frameset begins with <emphasis>but fear itself</emphasis>.</para>
+<para>To add a Hard Frame Break, you should first place the keyboard cursor where you want the break to be located in the document.</para>
+<para>A Hard Frame Break can be inserted one of two ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Hard Frame Break</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>Return</keycap></keycombo></para></listitem>
+</itemizedlist>
+<para>If you want to remove a Hard Frame Break, you simply delete it like you would any other character.  Since this is not a character that you can see, I recommend the following procedure to most easily delete the Hard Frame Break.</para>
+<para>First, I recommend turning on <guimenuitem>View Formatting Characters</guimenuitem> (Select <menuchoice> <guimenu>View</guimenu><guimenuitem>Formatting Characters</guimenuitem></menuchoice> from the Menu bar)</para>
+<para>This will let you see the charage returns, and tab stops in your document.</para>
+<para>Find the <emphasis>last</emphasis> carrage return <emphasis>before</emphasis> the break in your text.  Place the cursor in front of this carrage return.</para>
+<para>Now press the delete key.</para>
+</sect2>
+</sect1>
+<sect1 id="FormatFrame"><title>Setting the Properties for a Frame/Formatting Frames</title>
+<para>For each frame in your document, you can determine how:</para>
+<itemizedlist>
+<listitem><para>How Kword handles full text frames</para></listitem>
+<listitem><para>How text wraps on overlapping frames</para></listitem>
+<listitem><para>You can determine the frames exact size</para></listitem>
+<listitem><para>You can establish margins within a frame.</para></listitem>
+</itemizedlist>
+<para>All of these settings can be determined in the <guilabel>Frame Properties</guilabel> dialog box.</para>
+<para>In order to adjust the properties of any frame, you must be in Frame Edit Mode.</para>
+<para>If you are not currently in frame edit mode, you can change to Frame Edit Mode, in one of three ways.:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="framemode.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.  Place this arrow inside the frame you want to modify, and click once with the left button. You have now designated that frame as the current frame.</para>
+<para>You can now edit the properties one of two ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Frame/Frameset</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>Place the mouse pointer inside the current frame, and click once with the right mouse button.  A small menu will appear.  Select <guilabel>Properties</guilabel>.</para></listitem>
+</itemizedlist>
+<para>The Properties dialog consists of one dialog box, with four index tabs labled <guilabel>Options</guilabel>, <guilabel>Text Run Around</guilabel>, <guilabel>Connect Text Frames</guilabel> and <guilabel>Geometry</guilabel>.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="formframe1.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>It is a common situation.  You define a frame, and begin to type.  There is too much text to fit within the current bounds of the frame.</para>
+<para>KWord has three solutions to this problem.  Using this dialog, you can determine which method it uses.</para>
+<para>If you choose <guilabel>Create automatically a new frame</guilabel>, whenever a frameset becomes full, KWord automatically creates a new page. On this new page, it creates a new frame, of the same size and position.  It also sets the frame so that your text automatically flows into the new frame</para>
+<para>If you choose <guilabel>Resize automatically last frame</guilabel>, whenever a frameset becomes full, KWord automatically extends the bottom border of the text frame to accomidate the new text.  It will continue to expand as new text is added.</para>
+<para>The third solution is not really a solution at all.  If you selecte <guilabel>Don't show the extra text</guilabel>, KWord does not create a new frame or change the current frame in any way.  You will need to manually resize the current frame, or add a new frame to the frameset.</para>
+<note><para>Remember these options only apply to a full frameset.  If there is already another window for text to flow into, the text will flow into the next frame in the frameset as you have previously determined.</para></note>
+<para>To adjust how text flows around overlapping frames, click the tab labled "Text Frame".</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="formframe2.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>When you overlay two text frames, and text from both frames is competing for the same space on the page, KWord can (at your option), make sure that text from two frames does not overlap. </para>
+<para>As you can see from the options in the dialog box, there are three possible choices.</para>
+<variablelist>
+<varlistentry><term><guilabel>Run through this frames</guilabel></term><listitem><para>By selecting this option, you are telling KWord to ignore all other frames when it displays the text in this frame.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Run around the bounding rectangle of other frames</guilabel></term><listitem><para>By selecting this option, you are telling KWord to wrap the text of this frame around other overlapping frames.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Don't run around this frames</guilabel></term><listitem><para>By selecting this option, you are telling KWord to not wrap any text around the edges of other frames, but instead, to skip down below the other frames before continuing to display text in this frame..</para></listitem></varlistentry>
+</variablelist>
+<para>You can also determine how close your frames appear by setting the "Runaround Gap" in the textbox provided.  Increasing the size of the runaround gap will create a white border between the text in the two text frames. </para>
+<tip><para>One common problem people have, when setting the text wrap features, is that they set both paragraphs to the same setting (Run around the bounding Rectangle of other frames).  When they do this, they end up with two paragraphs that look like this:</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="formframe4.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>As you can see, both Frame 1 and Frame 2 are wrapping around each other.  This leaves a blank space where the two frames overlap.  You can eliminate this space, and produce a cleaner look by changing either Frame 1 or Frame 2 to "Run through other frames". </para></tip>
+<para>You can adjust the size, position and margins of your frame by clicking on the tab labled "Geometry"</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="formframe3.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>This dialog box allows you to specify <emphasis>exactly</emphasis> where the frame goes and how large it is.</para>
+<para>You can locate your frame on the page by first entering the top and left measurements.  This determines where the top left corner of the frame will be.  All measurements are from the top left corner of the page.</para>
+<para>You can also determine the exact size of the frame by entering its height and width in the text boxes provided.  These two measurements are relative to the top left corner of the frame you specified above.</para>
+<para>You can also use this dialog box to specify margins for your frame.  The margins of the frame are similar to margins on a page. By entering a margin into the text boxes, you can have KWord automatically set aside a border of whitespace around the text in this frame.  This will ensure that the text will not be located too closely to other frames or margins.</para>
+<tip><para>It is important to understand the difference between setting the margins here, and setting the "Runaround Gap" (see above).  </para>
+<para>KWord only applies the Runaround Gap when two frames overlap.  If two frames are placed right next to each other, the runaround gap does not affect the final output.</para>
+<para>When you set a margin for a frame, however, the whitspace is set aside reguardless of what other frames may be overlapping.</para></tip>
+</sect1>
+<sect1 id="Formatpara"><title>Formatting paragraph</title>
+<para>This section will detail all the options available to format your paragraphs.</para>
+<para>Before you start formating a paragraph, ensure your cursor is currently located in the paragraph you want to format.</para>
+<para>The formatting paragraphs dialog consists of 5 tabbed sections labled "Indent and spacing", "Flows", "Borders", "Numbering", and "Tabulators"</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="fpara1" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>This dialog box allows you to set the paragraph margins, the spacing between lines, and the spacing between paragraphs.</para>
+<para>The first section of this dialog box is labled "Indent", and consists of three parts:</para>
+<variablelist>
+<varlistentry><term>"Left"</term><listitem><para>You can indent all the lines of a paragraph by entering a value in this box. The first line is unaffected by this box.  If you want to alter the first line, you must specify that seperately.</para></listitem></varlistentry>
+<varlistentry><term>"Right"</term><listitem><para>!!!!Just blacked out!!!!!</para></listitem></varlistentry>
+<varlistentry><term>"First Line"</term><listitem><para>Any non-zero value entered in this text box, will shift the left margin of the first line.</para></listitem></varlistentry>
+</variablelist>
+<para>The next section is labled "Line Spacing".  It consists of two elements:</para>
+<variablelist>
+<varlistentry><term>Dropdown box</term><listitem><para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para></listitem></varlistentry>
+<varlistentry><term>Text box</term><listitem><para>By entering a value in here, you can adjust the spacing between lines from the default.  If you enter a positive number, you will increase the spacing between lines.  If, on the other hand, you enter a negative number, you will decrease the spacing between lines.</para><note><para>Changes to this entry do NOT affect the line spaceing between lines of different paragraphs.</para></note></listitem></varlistentry>
+</variablelist>
+<para>The last section is labled "Paragraph Space".  It consists of two entries:</para>
+<variablelist>
+<varlistentry><term>"Before"</term><listitem><para>By entering a value in here, you can adjust the spacing before each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing before a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing before each paragraph.</para></listitem></varlistentry>
+<varlistentry><term>"After"</term><listitem><para>By entering a value in here, you can adjust the spacing after each paragraph from the default spacing.  If you enter a positive number, you will increase the spacing after a paragraph.  If, on the other hand, you enter a negative number, you will decrease the spacing after each paragraph.</para></listitem></varlistentry>
+</variablelist>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+<para>The next section is labled "Flows".  This section determines how the text is placed <emphasis>within the line</emphasis>.  With other packages, you may have referred to flows as "Alighment", or "Justfication".</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="fpara2" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>As you can see, there are only 4 choices.</para>
+<para>If you choose "Left", "Right" or "Center", the text will be moved on the line.</para>
+<para>If you choose "Block", KWord will increase the space <emphasis>between</emphasis> words, so that each line (with the exception of the last liine), reaches both the left and right margins.</para>
+<para>On the right of the dialog box, is a preview box, which will <emphasis>approximate</emphasis> the final layout of your document.</para>
+<para>The next section is labled "Borders".</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="fpara3" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>You can tell KWord to surround (on some or all sides) a paragraph with a border.  This border can be solid or not, of any color and of any size.  You use this dialog panel to adjust the borders.</para>
+<para>To define some borders for a paragraph, you first determine how the borders should appear on the document.  Then you select which paragraph borders should be used.  You can mix and match styles, weights and colors of paragraph borders for maximum flexibility in you document.</para>
+<para><emphasis>Determine the "Look" of the border.</emphasis></para>
+<variablelist>
+<varlistentry><term>"Style"</term><listitem><para>You can use this dropdown box to select the overall type of the new border. </para><para>Your choices are: Solid Line, Dash Line, Dot line, Dash Dot line, Dash Dot Dot line</para></listitem></varlistentry>
+<varlistentry><term>"Width"</term><listitem><para>This will determine how wide the resulting border will be.  It is measured in points.</para>  </listitem></varlistentry>
+<varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
+</variablelist>
+<para><emphasis>Selecting the borders</emphasis></para>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+</tbody></tgroup></informaltable>
+<para>The "Preview" window will show you how your paragraph borders will look.</para>
+
+<para>!!!!!!!!!!Still needs work before writing!!!!!!!!!</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="fpara5" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>This dialog is used to adjust the tab stops.  For more details, see <link linkend="TabStops">Using Tab Stops</link>.</para>
+</sect1>
+<sect1 id="TabStops"><title>Using Tab Stops</title>
+<para>Tab stops are a (very useful) holdover from the days of typewriters.  They allow you to align text into columns quickly and easily.</para>
+<para>When a tab stop is in place, you can immediatly jump to that horizontal position on the page by pressing the "Tab" key.  Tab stops are most commonly used to allign columns in a table, or to automatically indent paragraphs.</para>
+<para>Tab stops are part of the properties of a paragraph.  Each paragraph keeps track of its own set of tab stops.  You can view the tab stops of a particular paragraph by placing the mouse cursor within a paragraph, clicking once, and checking the top ruler.  The tab stops are marked as symbols in black. </para>
+<para>KWord recognises 4 types of tab stops.  Each of these types has a corresponding symbol to help you identify the type in the ruler.  </para>
+<informaltable frame="none"><tgroup cols="4" align="left">
+<colspec colname="c1"/>
+<colspec colname="c2"/>
+<colspec colname="c3"/>
+<colspec colname="c4"/>
+<spanspec spanname="hspan" namest="c3" nameend="c4" align="left"/>
+<tbody>
+<row><entry align="center">Type</entry><entry align="center">Symbol</entry><entry align="center">Description</entry></row>
+<row><entry>Right Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="rtab" format="PNG" align="center"/></imageobject></mediaobject></entry>
+<entry spanname="hspan">With a right tab stop, "the right edge of the next set of words is aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="rtab2" format="PNG" align="center"/></imageobject></mediaobject></entry></row>
+<row><entry></entry></row>
+<row><entry>Center Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="ctab" format="PNG" align="center"/></imageobject></mediaobject></entry>
+<entry spanname="hspan">With a right tab stop, the text is centered at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="ctab2" format="PNG" align="center"/></imageobject></mediaobject></entry></row>
+<row><entry></entry></row>
+<row><entry>Left Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="ltab" format="PNG" align="center"/></imageobject></mediaobject></entry>
+<entry spanname="hspan">With a left tab stop, the left edge of the next set of words is aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="ltab2" format="PNG" align="center"/></imageobject></mediaobject></entry></row>
+<row><entry></entry></row>
+<row><entry>Decimal Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="dtab" format="PNG" align="center"/></imageobject></mediaobject></entry>
+<entry spanname="hspan">With a decimal tab stop, the decimal points of the text are aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="dtab2" format="PNG" align="center"/></imageobject></mediaobject></entry></row>
+</tbody></tgroup></informaltable>
+<sect2 id="TabStopsetting"><title>Setting Tab Stops</title>
+<para>Tab stops can be set one of two ways:</para>
+<itemizedlist>
+<listitem><para><link linkend="TabStopsettingr">Using the rulers of KWord</link></para></listitem>
+<listitem><para><link linkend="TabStopsettingdb">Using a specialized dialog panel.</link></para></listitem>
+</itemizedlist>
+<sect3 id="TabStopsettingr"><title>Using the Ruler</title>
+<para>You can use the top ruler on KWord to interactively insert tab stops.  </para>
+<para>First, you should select the type of tab stop you want to use.</para>
+<para>Place the mouse cursor over the current tab character (located directly to the left of the top ruler).  Click once with the right button of the mouse.  A small submenu will appear.  You can select the tab stop you want from the sub menu.</para>
+<tip><para>You can also use the left mouse button to cycle through the different types of tab stops.  </para>
+<para>Click once on the current tab character, and the tab stop changes from "Left Tab Stop", to "Center Tab Stop".  If you continue to click with the left mouse button, you will change to "Right Tab Stop", then to "Decimal Tab Stop", then back to "Left Tab Stop". </para></tip>
+<para>Once you have the correct type of tab stop, you can simply place the mouse cursor on the top ruler bar, and click once with the left mouse button.  This will place a tab stop at that position.</para>
+</sect3>
+<sect3 id="TabStopsettingdb"><title>Using the Dialog Box</title>
+<para>The fastest way to get to the tab stop dialog panel, is to select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice> from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+<para>Click on the tab labled "Tabulators"</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="fpara5" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>You can now add tab stops by:</para>
+<orderedlist numeration="arabic">
+<listitem><para>Type the horizontal location of the tab stop in the space provided.  The units are listed above the text box.</para></listitem>
+<listitem><para>Select the type of tab stop from the list on the right.</para></listitem>
+<listitem><para>Click Add.</para></listitem>
+</orderedlist>
+<para>When you are done adding tab stops, you can click "OK" to finish.</para>
+</sect3></sect2>
+<sect2 id="TabStopmoving"><title>Moving Tab Stops</title>
+<para>Tab stops can be moved one of two ways:</para>
+<itemizedlist>
+<listitem><para><link linkend="TabStopmover">Using the rulers of KWord</link></para></listitem>
+<listitem><para><link linkend="TabStopmovedb">Using a specialized dialog panel.</link></para></listitem>
+</itemizedlist>
+<sect3 id="TabStopmover"><title>Using the Ruler</title>
+<orderedlist numeration="arabic">
+<listitem><para>To move a tab stop with the ruler, place the mouse over the desired tab stop.  The mouse cursor will change to a double arrow.</para></listitem>
+<listitem><para>Click and hold down the right button on the mouse.  Drag the tab stop to its new location</para></listitem>
+<listitem><para>When the tab stop is where you want it, release the mouse button.</para></listitem>
+</orderedlist>
+</sect3>
+<sect3 id="TabStopmovedb"><title>Using the Dialog Box</title>
+<para>The fastest way to get to the tab stop dialog panel, is to select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice> from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+<para>Click on the tab labled "Tabulators"</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="fpara5" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>You can now move tab stops by: !!!!!!!!!This is assumed, not working when written!!!!!!!!!!!</para>
+<orderedlist numeration="arabic">
+<listitem><para>Click on the tab stop you want moved.  The list of all tab stops is in the box on the left side of the dialog panel</para></listitem>
+<listitem><para>Click "Modify".</para></listitem>
+<listitem><para>Edit the horizontal location of the tab stop in the space provided.  The units are listed above the text box.</para></listitem>
+<listitem><para>If you need to make changes, select the type of tab stop from the list on the right.</para></listitem>
+<listitem><para>Click "OK".</para></listitem>
+</orderedlist></sect3></sect2>
+<sect2 id="TabStopremove"><title>Removing Tab Stops</title><para>Tab stops can be removed one of two ways:</para>
+<itemizedlist>
+<listitem><para><link linkend="TabStopdelr">Using the rulers of KWord</link></para></listitem>
+<listitem><para><link linkend="TabStopdeldb">Using a specialized dialog panel.</link></para></listitem>
+</itemizedlist>
+<sect3 id="TabStopdelr"><title>Using the Ruler</title>
+<orderedlist numeration="arabic">
+<listitem><para>To delete a tab stop with the ruler, place the mouse over the desired tab stop.  The mouse cursor will change to a double arrow.</para></listitem>
+<listitem><para>Click and hold down the right button on the mouse. Drag the tab stop off the edge of the document.</para></listitem>
+<listitem><para>Release the mouse button.</para></listitem>
+</orderedlist></sect3>
+<sect3 id="TabStopdeldb"><title>Using the Dialog Box</title>
+<para>The fastest way to get to the tab stop dialog panel, is to select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice> from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+<para>Click on the tab labled "Tabulators"</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="fpara5" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>You can now delete tab stops by: !!!!!!!!!This is assumed, not working when written!!!!!!!!!!!</para>
+<orderedlist numeration="arabic">
+<listitem><para>Click on the tab stop you want moved.  The list of all tab stops is in the box on the left side of the dialog panel</para></listitem>
+<listitem><para>Click "Delete".</para></listitem>
+</orderedlist>
+<para>When you are done adding tab stops, you can click "OK" to finish.</para>
+</sect3></sect2></sect1>
+<sect1 id="FormatChar"><title>Formatting Characters</title>
+<para>This section will cover the changes you can make to individual or blocks of characters including:</para>
+<itemizedlist>
+<listitem><para><link linkend="chfnt1">Size</link></para></listitem>
+<listitem><para><link linkend="chfnt1">Font</link></para></listitem>
+<listitem><para><link linkend="chfnt1">Font Style</link></para></listitem>
+<listitem><para><link linkend="chfnt1">Character Set</link></para></listitem>
+<listitem><para><link linkend="chfnt2">Character Color</link></para></listitem>
+</itemizedlist>
+<sect2 id="chfnt1"><title>Changing Size, Font, Font Style and Character Set</title>
+<sect3 id="chfnt1a"><title>Using the Keyboard or Toolbars</title>
+<para>There are several keyboard shortcuts which you can use to make common changes to character formatting. After selecting the text, you can use these key combinations to toggle each attribute.</para>
+<para>The Basic Formatting Toolbar also has buttons which you can use to toggle these same attributes.  </para>
+<para>The following table details each attribute, the toolbar buttons and the keyboard shortcuts.</para>
+<informaltable frame="all"><tgroup cols="3" align="left">
+<thead>
+<row><entry align="right">Attribute</entry><entry align="center">Toolbar Button</entry><entry align="center">Key Combo</entry></row>
+</thead><tbody>
+<row><entry align="right">Font Size</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chsizebut" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Font</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chfontbut" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Bold Face</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bold" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
+<row><entry align="right">Italics</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="ital" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
+<row><entry align="right">Underline</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="undl" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
+</tbody></tgroup></informaltable>
+<note><para>You cannot change the Character Set using the keyboard or the toolbar, you must <link linkend="chfnt1b">use the dialog box</link>.</para></note>
+</sect3>
+<sect3 id="chfnt1b"><title>Using the Dialog Box</title>
+<para>If you have many changes to make, you can also use a dialog box to set these same attributes.</para>
+<para>You can open the Character Formatting Dialog box in one of two ways:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Font</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Alt</keycap><keycap>F</keycap></keycombo></para></listitem>
+</itemizedlist>
+<para>Either method will open a dialog box</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="fchardlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>Using this dialog box, you can select the font, size, character set, italics and boldface options.</para>
+<para>The preview box along the bottom, will show you how your current settings will appear.</para>
+<para>Clicking "OK" will commit your changes to the document.</para>
+<para>Clicking "Cancel" will abort all changes made.</para>
+<note><para>The default sentance for the preview box is "The Quick Brown Fox Jumps Over The Lazy Dog".</para>
+<para>You can change this sentance by clicking once within the sentance.  You can then change the sample sentance to anything you want.</para>
+<para>This can be especially useful if you need to view numbers, special characters, or non-arabic characters</para>
+<para>The sample sentance will revert to the default the next time you open this dialog.</para></note>
+</sect3></sect2>
+<sect2 id="chfnt2"><title>Changing Font Color</title>
+<para>The "Change Font Color" command can be invoked 3 ways:</para>
+<itemizedlist>
+<listitem><para>By selecting <menuchoice> <guimenu>Format</guimenu><guimenuitem>Font Color</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>C</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="chcolorbut" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+</itemizedlist><para></para>
+<para>You can now choose a color for the selected text using the <link linkend="SelColor">Color Selection Dialog Box</link>.</para>
+</sect2></sect1>
