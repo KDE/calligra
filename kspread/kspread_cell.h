@@ -912,6 +912,12 @@ protected:
     */
     int m_nbLines;
 
+    /**
+    * When it's True displays **
+    * it's true when text size is bigger that cell size
+    * and when Align is center or left
+    */
+    bool m_bCellTooShort;
 
     KSpreadCell* m_nextCell;
     KSpreadCell* m_previousCell;

@@ -852,3 +852,5 @@ is red)
 -Move "Comment" code to kspread_layout
 =>undo works with "comment"
 -bug fix
+-Bug fix : now ajust area works when a text size is bigger than
+cell size. =>( ** )

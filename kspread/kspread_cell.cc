@@ -106,6 +106,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_conditionIsTrue=false;
   m_numberOfCond=-1;
   m_nbLines=0;
+  m_bCellTooShort=false;
 }
 
 void KSpreadCell::copyLayout( KSpreadCell *_cell )
@@ -684,7 +685,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
 
     m_nbLines = 0;
-
+    m_bCellTooShort=false;
     //
     // Free all obscured cells.
     //
@@ -1194,7 +1195,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	if ( m_bForceExtraCells )
         {
 	    // The text does not fit in the cell
-	    m_strOutText = "**";
+	    //m_strOutText = "**";
+            m_bCellTooShort=true;
 	}
 	else
         {
@@ -1234,7 +1236,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	    }
 	    else
 	    {
-		m_strOutText = "**";
+                m_bCellTooShort=true;
+                //m_strOutText = "**";
 	    }
 	}
     }
@@ -2602,7 +2605,12 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	}
         _painter.setPen(tmpPen);
 	//_painter.setFont( m_textFont );
-	conditionAlign( _painter, _col, _row );
+        QString tmpText=m_strOutText;
+        if(m_bCellTooShort)
+                m_strOutText="**";
+
+        conditionAlign( _painter, _col, _row );
+
 
 	if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
 	    _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
@@ -2691,6 +2699,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    }
 	    while ( j != i );
 	}
+
+        if(m_bCellTooShort)
+                m_strOutText=tmpText;
     }
 
     // Dont draw page borders or the marker when printing
