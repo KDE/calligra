@@ -28,8 +28,8 @@
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qglobal.h>
+#include <qpainter.h>
 #include <kimgio.h>
-#include "Painter.h"
 #include "ImageExport.h"
 #include "GDocument.h"
 #include "gif.h"
@@ -79,7 +79,7 @@ bool ImageExport::exportToFile (GDocument* doc) {
     return false;
 
   buffer->fill (QT_PRFX::white);
-  Painter p;
+  QPainter p;
   p.begin (buffer);
   p.setBackgroundColor (QT_PRFX::white);
   p.eraseRect (0, 0, w, h);

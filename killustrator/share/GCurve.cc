@@ -185,10 +185,10 @@ bool GSegment::contains (const Coord& p) {
   return false;
 }
   
-void GSegment::draw (Painter& p, bool withBasePoints, bool /*outline*/, 
+void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/, 
 		     bool drawFirst) {
   if (skind == sk_Line)
-    p.drawLine (points[0].x (), points[0].y (),
+    Painter::drawLine (p, points[0].x (), points[0].y (),
 		points[1].x (), points[1].y ());
   else 
     p.drawQuadBezier (bpoints);
@@ -197,11 +197,11 @@ void GSegment::draw (Painter& p, bool withBasePoints, bool /*outline*/,
     p.setPen (QT_PRFX::black);
 //    p.setBrush (QT_PRFX::white);
     if (drawFirst)
-      p.drawRect (points[0].x () - 2, points[0].y () - 2, 4, 4);
+      Painter::drawRect (p, points[0].x () - 2, points[0].y () - 2, 4, 4);
     if (skind == sk_Line)
-      p.drawRect (points[1].x () - 2, points[1].y () - 2, 4, 4);
+      Painter::drawRect (p, points[1].x () - 2, points[1].y () - 2, 4, 4);
     else
-      p.drawRect (points[3].x () - 2, points[3].y () - 2, 4, 4);
+      Painter::drawRect (p, points[3].x () - 2, points[3].y () - 2, 4, 4);
     p.restore ();
   }
 }
@@ -279,7 +279,7 @@ GCurve::GCurve (const GCurve& obj) : GObject (obj) {
   segments = obj.segments;
 }
 
-void GCurve::draw (Painter& p, bool withBasePoints, bool outline) {
+void GCurve::draw (QPainter& p, bool withBasePoints, bool outline) {
   QPen pen;
   QBrush brush;
   initPen (pen);
@@ -305,7 +305,7 @@ void GCurve::draw (Painter& p, bool withBasePoints, bool outline) {
     p.setBrush (QT_PRFX::white);
     for (unsigned int i = 0; i < points.size (); i++) {
       QPoint pnt = points.point (i);
-      p.drawRect (pnt.x () - 2, pnt.y () - 2, 4, 4);
+      Painter::drawRect (p, pnt.x () - 2, pnt.y () - 2, 4, 4);
     }
   }
    

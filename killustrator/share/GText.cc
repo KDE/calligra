@@ -139,7 +139,7 @@ QString GText::typeName () const {
   return SI18N ("Text");
 }
 
-void GText::draw (Painter& p, bool, bool) {
+void GText::draw (QPainter& p, bool, bool) {
   QPen pen (outlineInfo.color, (uint) outlineInfo.width,
             outlineInfo.style);
   p.save ();
@@ -155,7 +155,7 @@ void GText::draw (Painter& p, bool, bool) {
 }
 
 
-void GText::drawSimpleText (Painter& p) {
+void GText::drawSimpleText (QPainter& p) {
   vector<QString>::iterator it = text.begin ();
   float y = fm->ascent ();
   for (; it != text.end (); it++) {
@@ -189,7 +189,7 @@ void GText::drawSimpleText (Painter& p) {
   }
 }
 
-void GText::drawPathText (Painter& p) {
+void GText::drawPathText (QPainter& p) {
   vector<QString>::iterator it = text.begin ();
   int idx = 0;
 

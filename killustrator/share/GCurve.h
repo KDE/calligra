@@ -45,7 +45,7 @@ public:
   void setPoint (int i, const Coord& c);
 
   void writeToXml (XmlWriter& xml);
-  void draw (Painter& p, bool withBasePoints, bool outline, bool drawFirst);
+  void draw (QPainter& p, bool withBasePoints, bool outline, bool drawFirst);
   void movePoint (int idx, float dx, float dy);
 
   Rect boundingBox ();
@@ -70,7 +70,7 @@ public:
   GCurve (const GCurve& obj);
   ~GCurve () {}
 
-  virtual void draw (Painter& p, bool withBasePoints = false,
+  virtual void draw (QPainter& p, bool withBasePoints = false,
 		     bool outline = false);
   virtual bool contains (const Coord& p);
   virtual QString typeName () const;

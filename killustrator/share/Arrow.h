@@ -31,7 +31,6 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include "Coord.h"
-#include "Painter.h"
 
 class Arrow {
 public:
@@ -41,7 +40,7 @@ public:
   long arrowID () const;
   QPixmap& leftPixmap ();
   QPixmap& rightPixmap ();
-  void draw (Painter& p, const Coord& c, const QColor& color, 
+  void draw (QPainter& p, const Coord& c, const QColor& color, 
 	     float width, float angle);
 
   Rect boundingBox (const Coord& c, float width, float angle);

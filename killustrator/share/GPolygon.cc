@@ -168,7 +168,7 @@ bool GPolygon::isFilled () const {
   return fillInfo.fstyle != GObject::FillInfo::NoFill;
 }
 
-void GPolygon::draw (Painter& p, bool withBasePoints, bool outline) {
+void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
   unsigned int i, num;
 
   QPen pen;
@@ -206,7 +206,8 @@ void GPolygon::draw (Painter& p, bool withBasePoints, bool outline) {
 		       p2.x () - p1.x (),
 		       p2.y () - p1.y (), Roundness, Roundness);
     else
-      p.drawRect (p1.x (), p1.y (), p2.x () - p1.x (), p2.y () - p1.y ());
+      Painter::drawRect (p, p1.x (), p1.y (), p2.x () - p1.x (), 
+			 p2.y () - p1.y ());
   }
 
   p.restore ();
@@ -225,7 +226,7 @@ void GPolygon::draw (Painter& p, bool withBasePoints, bool outline) {
     else {
       for (i = 0; i < rpoints.count (); i++) {
 	Coord c = rpoints.at (i)->transform (tmpMatrix);
-	p.drawRect (c.x () - 2, c.y () - 2, 4, 4);
+	Painter::drawRect (p, c.x () - 2, c.y () - 2, 4, 4);
       }
     }
   }

@@ -149,7 +149,7 @@ int GDocument::getPaperHeight () const {
   return paperHeight;
 }
 
-void GDocument::drawContents (Painter& p, bool withBasePoints, bool outline) {
+void GDocument::drawContents (QPainter& p, bool withBasePoints, bool outline) {
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {
     GLayer* layer = *i;
@@ -162,7 +162,7 @@ void GDocument::drawContents (Painter& p, bool withBasePoints, bool outline) {
   }
 }
 
-void GDocument::drawContentsInRegion (Painter& p, const Rect& r, 
+void GDocument::drawContentsInRegion (QPainter& p, const Rect& r, 
 				      bool withBasePoints, bool outline) {
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {

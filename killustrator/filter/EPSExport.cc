@@ -32,9 +32,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <qprinter.h>
+#include <qpainter.h>
 #include <qglobal.h>
 #include "version.h"
-#include "Painter.h"
 #include "GDocument.h"
 #include "EPSExport.h"
 
@@ -76,7 +76,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
   printer.setOrientation (doc->pageLayout ().orientation == PG_PORTRAIT ?
 			  QPrinter::Portrait : QPrinter::Landscape);
 
-  Painter paint;
+  QPainter paint;
   paint.begin (&printer);
 #if 1
   // define the bounding box as clipping region

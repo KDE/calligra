@@ -121,7 +121,7 @@ QString GPolyline::typeName () const {
   return SI18N ("Polyline");
 }
 
-void GPolyline::draw (Painter& p, bool withBasePoints, bool /*outline*/) {
+void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/) {
   unsigned int i;
   QPen pen;
 
@@ -134,10 +134,10 @@ void GPolyline::draw (Painter& p, bool withBasePoints, bool /*outline*/) {
 
   unsigned int num = points.count ();
   for (i = 1; i < num; i++) {
-    p.drawLine (points.at (i - 1)->x () + ((i==1) ? sdx : 0), 
-		points.at (i - 1)->y () + ((i==1) ? sdy : 0),
-		points.at (i)->x () - ((i==num-1) ? edx : 0), 
-		points.at (i)->y () - ((i==num-1) ? edy : 0));     
+    Painter::drawLine (p, points.at (i - 1)->x () + ((i==1) ? sdx : 0), 
+		       points.at (i - 1)->y () + ((i==1) ? sdy : 0),
+		       points.at (i)->x () - ((i==num-1) ? edx : 0), 
+		       points.at (i)->y () - ((i==num-1) ? edy : 0));     
   }
 
   p.restore ();

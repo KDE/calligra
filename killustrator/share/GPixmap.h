@@ -47,7 +47,7 @@ public:
   GPixmap (const GPixmap& obj);
   ~GPixmap ();
   
-  virtual void draw (Painter& p, bool withBasePoints = false,
+  virtual void draw (QPainter& p, bool withBasePoints = false,
 		     bool outline = false);
 
   virtual QString typeName () const;

@@ -97,7 +97,7 @@ QString GPixmap::typeName () const {
   return SI18N ("Pixmap object");
 }
 
-void GPixmap::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
+void GPixmap::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
   p.save ();
   p.setWorldMatrix (tmpMatrix, true);
   if (outline) {

@@ -50,7 +50,7 @@ public:
   void setRotCenter (const Coord& p);
   Coord rotCenter () const { return rcenter; }
 
-  void draw (Painter& p);
+  void draw (QPainter& p);
   int contains (const Coord& p);
   void setMode (Mode m, bool propagate = false);
   void show (bool flag = true);
@@ -61,7 +61,7 @@ signals:
 private:
   enum ArrowDirection { Arrow_Left, Arrow_Right, Arrow_Up, Arrow_Down };
 
-  void drawArrow (Painter& p, int x, int y, ArrowDirection d);
+  void drawArrow (QPainter& p, int x, int y, ArrowDirection d);
 
   Coord pos[8];
   Rect box;

@@ -25,6 +25,7 @@
 #include <qcolor.h>
 #include "Arrow.h"
 #include "version.h"
+#include "Painter.h"
 
 #if 0
 static QCOORD sysArrow_1[] = { -5, -3, 10, 0, -5, 3 };
@@ -69,7 +70,7 @@ QPixmap& Arrow::leftPixmap () {
   if (lpreview == 0L) {
     lpreview = new QPixmap (50, 20);
     lpreview->fill ();
-    Painter p;
+    QPainter p;
     p.begin (lpreview);
     p.scale (2, 2);
     p.drawLine (5, 5, 35, 5);
@@ -84,7 +85,7 @@ QPixmap& Arrow::rightPixmap () {
   if (rpreview == 0L) {
     rpreview = new QPixmap (50, 20);
     rpreview->fill ();
-    Painter p;
+    QPainter p;
     p.begin (rpreview);
     p.scale (2, 2);
     //    p.drawLine (0, 5, 10, 5);
@@ -96,7 +97,7 @@ QPixmap& Arrow::rightPixmap () {
   return *rpreview;
 }
 
-void Arrow::draw (Painter& p, const Coord& c, const QColor& color,
+void Arrow::draw (QPainter& p, const Coord& c, const QColor& color,
 		  float width, float angle) {
   p.save ();
   p.translate (c.x (), c.y ());

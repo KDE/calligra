@@ -62,7 +62,7 @@ public:
   GText (const GText& obj);
   ~GText ();
   
-  virtual void draw (Painter& p, bool withBasePoints = false,
+  virtual void draw (QPainter& p, bool withBasePoints = false,
 		     bool outline = false);
 
   void setOrigin (const Coord& p);
@@ -113,8 +113,8 @@ protected:
 
   void initState (GOState* state);
 
-  void drawPathText (Painter& p);
-  void drawSimpleText (Painter& p);
+  void drawPathText (QPainter& p);
+  void drawSimpleText (QPainter& p);
 
 private:
   //  Coord opos;

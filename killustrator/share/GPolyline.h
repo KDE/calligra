@@ -48,7 +48,7 @@ public:
   GPolyline (const GPolyline& obj);
   ~GPolyline () {}
   
-  virtual void draw (Painter& p, bool withBasePoints = false,
+  virtual void draw (QPainter& p, bool withBasePoints = false,
 		     bool outline = false);
   virtual bool contains (const Coord& p);
   

@@ -30,17 +30,16 @@
 #include <qlist.h> 
 #include "Coord.h"
 
-class Painter : public QPainter {
+class Painter {
 public:
-  Painter ();
-  Painter (const QPaintDevice* device);
-
-  void drawLine (float x1, float y1, float x2, float y2);
-  void drawRect (float x, float y, float w, float h);
-  void drawEllipse (float x, float y, float w, float h);
-  void drawArc (float x, float y, float w, float h, float a, float alen);
-  void drawPie (float x, float y, float w, float h, float a, float alen);
-  void drawBezier (QList<Coord>& points, int index);
+  static void drawLine (QPainter& p, float x1, float y1, float x2, float y2);
+  static void drawRect (QPainter& p, float x, float y, float w, float h);
+  static void drawEllipse (QPainter& p, float x, float y, float w, float h);
+  static void drawArc (QPainter& p, float x, float y, float w, float h, 
+		       float a, float alen);
+  static void drawPie (QPainter& p, float x, float y, float w, float h, 
+		       float a, float alen);
+  static void drawBezier (QPainter& p, QList<Coord>& points, int index);
 
 private:
   static inline int round (float f) {

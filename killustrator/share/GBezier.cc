@@ -214,7 +214,7 @@ const char* GBezier::typeName () {
   return I18N ("Bezier curve");
 }
 
-void GBezier::draw (Painter& p, bool withBasePoints, bool outline) {
+void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
   QPen pen;
   QBrush brush;
   int sdx = 0;
@@ -312,19 +312,17 @@ void GBezier::draw (Painter& p, bool withBasePoints, bool outline) {
     drawHelpLinesForWorkingSegment (p);
 }
 
-void GBezier::drawHelpLines (Painter& p) {
+void GBezier::drawHelpLines (QPainter& p) {
   unsigned int i, num = points.count ();
 
   p.save ();
   for (i = 0; i < num; i++) {
     Coord c = points.at (i)->transform (tmpMatrix);
-    int x = (int) c.x ();
-    int y = (int) c.y ();
     if (isEndPoint (i))
       p.setPen (black);
     else
       p.setPen (blue);
-    p.drawRect (x - 2, y - 2, 4, 4);
+    Painter::drawRect (p, c.x () - 2.0, c.y () - 2.0, 4, 4);
   }
 
   QPen pen (blue, 1, DotLine);
@@ -336,12 +334,12 @@ void GBezier::drawHelpLines (Painter& p) {
     
     Coord c1 = points.at (i)->transform (tmpMatrix);
     Coord c2 = points.at (i + 2)->transform (tmpMatrix);
-    p.drawLine (c1.x (), c1.y (), c2.x (), c2.y ());
+    Painter::drawLine (p, c1.x (), c1.y (), c2.x (), c2.y ());
   }
   p.restore ();
 }
 
-void GBezier::drawHelpLinesForWorkingSegment (Painter& p) {
+void GBezier::drawHelpLinesForWorkingSegment (QPainter& p) {
   p.save ();
 
   QPen pen1 (blue, 1, DotLine);
@@ -357,10 +355,10 @@ void GBezier::drawHelpLinesForWorkingSegment (Painter& p) {
     p.setPen (pen1);
     Coord c1 = points.at (i)->transform (tmpMatrix);
     Coord c2 = points.at (i + 2)->transform (tmpMatrix);
-    p.drawLine (c1.x (), c1.y (), c2.x (), c2.y ());
+    Painter::drawLine (p, c1.x (), c1.y (), c2.x (), c2.y ());
     p.setPen (pen2);
-    p.drawRect (c1.x () - 2, c1.y () - 2, 4, 4);
-    p.drawRect (c2.x () - 2, c2.y () - 2, 4, 4);
+    Painter::drawRect (p, c1.x () - 2, c1.y () - 2, 4, 4);
+    Painter::drawRect (p, c2.x () - 2, c2.y () - 2, 4, 4);
   }
   p.restore ();
 }

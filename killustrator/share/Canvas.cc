@@ -430,7 +430,7 @@ void Canvas::redrawView (bool repaintFlag) {
   QPaintDevice *pdev;
   pendingRedraws = 0;
 
-  Painter p;
+  QPainter p;
   float s = scaleFactor ();
   int w = document->getPaperWidth (), h = document->getPaperHeight ();
 
@@ -502,7 +502,7 @@ void Canvas::updateRegion (const Rect& reg) {
       r = regionForUpdate;
   }
 
-  Painter p;
+  QPainter p;
   float s = scaleFactor ();
 
   // compute the clipping region
@@ -565,7 +565,7 @@ void Canvas::updateRegion (const Rect& reg) {
   repaint (clip, false);
 }
 
-void Canvas::drawHelplines (Painter& p) {
+void Canvas::drawHelplines (QPainter& p) {
   int pw = document->getPaperWidth ();
   int ph = document->getPaperHeight ();
   unsigned int i;
@@ -586,7 +586,7 @@ void Canvas::drawHelplines (Painter& p) {
   p.restore ();
 }
 
-void Canvas::drawGrid (Painter& p) {
+void Canvas::drawGrid (QPainter& p) {
   int pw = document->getPaperWidth ();
   int ph = document->getPaperHeight ();
   float h, v;
@@ -629,7 +629,7 @@ void Canvas::printDocument () {
   printer.setOrientation (document->pageLayout ().orientation == PG_PORTRAIT ?
 			  QPrinter::Portrait : QPrinter::Landscape);
   if (printer.setup (this)) {
-    Painter paint;
+    QPainter paint;
     paint.begin (&printer);
     paint.setClipping (false);
     document->drawContents (paint);

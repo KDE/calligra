@@ -25,37 +25,31 @@
 
 #define DELTA 0.05
 
-Painter::Painter () : QPainter () {
+void Painter::drawLine (QPainter& p, float x1, float y1, float x2, float y2) {
+  p.drawLine (round (x1), round (y1), round (x2), round (y2));
 }
 
-Painter::Painter (const QPaintDevice* pd) : QPainter (pd) {
+void Painter::drawRect (QPainter& p, float x, float y, float w, float h) {
+  p.drawRect (round (x), round (y), round (w), round (h));
 }
 
-void Painter::drawLine (float x1, float y1, float x2, float y2) {
-  QPainter::drawLine (round (x1), round (y1), round (x2), round (y2));
+void Painter::drawEllipse (QPainter& p, float x, float y, float w, float h) {
+  p.drawEllipse (round (x), round (y), round (w), round (h));
 }
 
-void Painter::drawRect (float x, float y, float w, float h) {
-  QPainter::drawRect (round (x), round (y), round (w), round (h));
-}
-
-void Painter::drawEllipse (float x, float y, float w, float h) {
-  QPainter::drawEllipse (round (x), round (y), round (w), round (h));
-}
-
-void Painter::drawArc (float x, float y, float w, float h, 
+void Painter::drawArc (QPainter& p, float x, float y, float w, float h, 
 		       float a, float alen) {
-  QPainter::drawArc (round (x), round (y), round (w), round (h),
+  p.drawArc (round (x), round (y), round (w), round (h),
 		     round (a), round (alen));
 }
 
-void Painter::drawPie (float x, float y, float w, float h, 
+void Painter::drawPie (QPainter& p, float x, float y, float w, float h, 
 		       float a, float alen) {
-  QPainter::drawPie (round (x), round (y), round (w), round (h),
-		     round (a), round (alen));
+  p.drawPie (round (x), round (y), round (w), round (h),
+	     round (a), round (alen));
 }
 
-void Painter::drawBezier (QList<Coord>& points, int index) {
+void Painter::drawBezier (QPainter& p, QList<Coord>& points, int index) {
     float th,th2,th3;
     float t,t2,t3;      
     int x0,y0,x1,y1;
@@ -82,7 +76,7 @@ void Painter::drawBezier (QList<Coord>& points, int index) {
            3*t*th2*(int)points.at (i1)->y() +
            3*t2*th*(int)points.at (i2)->y() +
            t3*(int)points.at (i3)->y());
-        QPainter::drawLine(x0, y0, x1, y1);
+        p.drawLine(x0, y0, x1, y1);
       }
 
 } 

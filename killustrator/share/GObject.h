@@ -36,8 +36,8 @@
 
 #include "Gradient.h"
 #include "Coord.h"
-#include "Painter.h"
 #include "GradientShape.h"
+#include "Painter.h"
 
 #include "version.h"
 
@@ -320,7 +320,7 @@ public:
    * @param withBasePoints If true, draw the base points of the 
    *                       object.
    */
-  virtual void draw (Painter& /*p*/, bool /*withBasePoints*/ = false,
+  virtual void draw (QPainter& /*p*/, bool /*withBasePoints*/ = false,
 		     bool /*outline*/ = false) {}
 
   /**

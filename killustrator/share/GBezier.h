@@ -46,7 +46,7 @@ public:
   GBezier (const GBezier& obj);
   ~GBezier () {}
 
-  virtual void draw (Painter& p, bool withBasePoints = false,
+  virtual void draw (QPainter& p, bool withBasePoints = false,
 		     bool outline = false);
   virtual bool contains (const Coord& p);
 
@@ -87,8 +87,8 @@ protected:
   void calcBoundingBox ();
 
   int cPoint (int idx);
-  void drawHelpLines (Painter& p);
-  void drawHelpLinesForWorkingSegment (Painter& p);
+  void drawHelpLines (QPainter& p);
+  void drawHelpLinesForWorkingSegment (QPainter& p);
   void updateBasePoint (int idx);
 
   void computePPoints ();

@@ -67,7 +67,7 @@ bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
       float xtrans = - bb.left () + PREVIEW_BORDER;
       float ytrans = - bb.top () + PREVIEW_BORDER;      
       
-      Painter p;
+      QPainter p;
 
       p.begin (&pixmap);
       p.setBackgroundColor (QT_PRFX::white);
@@ -107,7 +107,7 @@ bool wmfPreviewHandler (const KFileInfo* fInfo, const QString fileName,
       wmf.paint (&pic);                                                     
       
       pixmap = QPixmap (PREVIEW_HEIGHT, PREVIEW_HEIGHT);
-      Painter p;
+      QPainter p;
       p.begin (&pixmap);
       p.setBackgroundColor (QT_PRFX::white);
       pixmap.fill (QT_PRFX::white);
@@ -149,7 +149,7 @@ bool pixmapPreviewHandler (const KFileInfo* fInfo, const QString fileName,
         pixmap = QPixmap (origPixmap.width () * scale, PREVIEW_HEIGHT);
       }
       
-      Painter p;
+      QPainter p;
       p.begin (&pixmap);
       p.scale (scale, scale);
       p.drawPixmap(0, 0, origPixmap);

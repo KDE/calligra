@@ -90,7 +90,7 @@ QString GOval::typeName () const {
     return SI18N ("Ellipse");
 }
 
-void GOval::draw (Painter& p, bool withBasePoints, bool outline) {
+void GOval::draw (QPainter& p, bool withBasePoints, bool outline) {
   float alen = 0;
   QPen pen;
   QBrush brush;
@@ -113,23 +113,23 @@ void GOval::draw (Painter& p, bool withBasePoints, bool outline) {
 
   switch (outlineInfo.shape) {
   case GObject::OutlineInfo::DefaultShape:
-    p.drawEllipse (sPoint.x (), sPoint.y (),
-		   ePoint.x () - sPoint.x (), 
-		   ePoint.y () - sPoint.y ());
+    Painter::drawEllipse (p, sPoint.x (), sPoint.y (),
+			  ePoint.x () - sPoint.x (), 
+			  ePoint.y () - sPoint.y ());
     break;
   case GObject::OutlineInfo::PieShape:
     alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    p.drawPie (sPoint.x (), sPoint.y (),
-	       ePoint.x () - sPoint.x (), 
-	       ePoint.y () - sPoint.y (),
-	       -eAngle * 16, -alen * 16);
+    Painter::drawPie (p, sPoint.x (), sPoint.y (),
+		      ePoint.x () - sPoint.x (), 
+		      ePoint.y () - sPoint.y (),
+		      -eAngle * 16, -alen * 16);
     break;
   case GObject::OutlineInfo::ArcShape:
     alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    p.drawArc (sPoint.x (), sPoint.y (),
-	       ePoint.x () - sPoint.x (), 
-	       ePoint.y () - sPoint.y (),
-	       -eAngle * 16, -alen * 16);
+    Painter::drawArc (p, sPoint.x (), sPoint.y (),
+		      ePoint.x () - sPoint.x (), 
+		      ePoint.y () - sPoint.y (),
+		      -eAngle * 16, -alen * 16);
     break;
   }
   p.restore ();
@@ -139,9 +139,7 @@ void GOval::draw (Painter& p, bool withBasePoints, bool outline) {
     p.setBrush (white);
     for (int i = 0; i < 2; i++) {
       Coord c = segPoint[i].transform (tmpMatrix);
-      int x = (int) c.x ();
-      int y = (int) c.y ();
-      p.drawRect (x - 2, y - 2, 4, 4);
+      Painter::drawRect (p, c.x () - 2.0, c.y () - 2.0, 4, 4);
     }
   }
   p.restore ();

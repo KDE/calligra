@@ -47,7 +47,7 @@ QPixmap& LineStyle::pixmap () {
   if (preview == 0L) {
     preview = new QPixmap (100, 20);
     preview->fill ();
-    Painter p;
+    QPainter p;
     QPen pen (QT_PRFX::black, 2, (QT_PRFX::PenStyle) id);
     p.begin (preview);
     p.setPen (pen);

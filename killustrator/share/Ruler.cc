@@ -59,7 +59,7 @@ Ruler::Ruler (Orientation o, MeasurementUnit mu, QWidget *parent,
 }
 
 void Ruler::initMarker (int w, int h) {
-  Painter p;
+  QPainter p;
   QPointArray pts (3);
   static QCOORD hpoints [] = { 0,0, MARKER_WIDTH-1,0, 
 			       (MARKER_WIDTH-1)/2,MARKER_HEIGHT-1 };
@@ -217,7 +217,7 @@ void Ruler::paintEvent (QPaintEvent *e) {
 }
 
 void Ruler::drawRuler () {
-  Painter p;
+  QPainter p;
   char buf[10];
   int step = 0, step1 = 0, step2 = 0, start = 0, ioff = 0;
   float cvtFactor = 1.0;

@@ -62,7 +62,7 @@ void Handle::setRotCenter (const Coord& p) {
   emit handleChanged ();
 }
 
-void Handle::draw (Painter& p) {
+void Handle::draw (QPainter& p) {
   if (! showIt)
     return;
 
@@ -160,7 +160,7 @@ void Handle::setMode (Handle::Mode m, bool propagate) {
   }
 }
 
-void Handle::drawArrow (Painter& p, int x, int y, ArrowDirection d) {
+void Handle::drawArrow (QPainter& p, int x, int y, ArrowDirection d) {
   static QCOORD rpoints[] = { 0, -2, 6, 0, 0, 2};
   static QCOORD lpoints[] = { 0, -2, -6, 0, 0, 2};
   static QCOORD upoints[] = { -2, 0, 0, -6, 2, 0};

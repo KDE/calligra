@@ -33,8 +33,9 @@
 #include <qfont.h>
 #include <qarray.h>
 #include <qdict.h>
+#include <qpainter.h>
 
-#include "Painter.h"
+#include "Coord.h"
 
 class GDocument;
 class GObject;
@@ -130,8 +131,8 @@ private slots:
 private:
   void propagateMouseEvent (QMouseEvent *e);
   void propagateKeyEvent (QKeyEvent *e);
-  void drawGrid (Painter& p);
-  void drawHelplines (Painter& p);
+  void drawGrid (QPainter& p);
+  void drawHelplines (QPainter& p);
   void redrawView (bool repaintFlag = true);
 
   QwViewport* viewport;
