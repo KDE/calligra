@@ -107,6 +107,10 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
              SLOT( slotAvailableHeightNeeded() ) );
     connect( m_textobj, SIGNAL( repaintChanged( KoTextObject* ) ),
              SLOT( slotRepaintChanged() ) );
+
+    // Send our "repaintChanged" signals to the document.
+    connect( this, SIGNAL( repaintChanged( KPTextObject * ) ),
+             m_doc, SLOT( slotRepaintChanged( KPTextObject * ) ) );
 }
 
 KPTextObject::~KPTextObject()
@@ -400,7 +404,6 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         textobj.appendChild(paragraph);
         parag = parag->next();
     }
-//#endif
     return textobj;
 }
 
@@ -566,6 +569,7 @@ void KPTextObject::slotRepaintChanged()
     //todo emit repaintChanged( this ), connected in e.g. the document
     // (see KWDocument::slotRepaintChanged in kword)
     kdDebug()<<"KPTextObject::slotRepaintChanged() \n";
+    emit repaintChanged( this );
 }
 
 KPTextView::KPTextView( KPTextObject * txtObj )

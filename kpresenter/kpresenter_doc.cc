@@ -3811,4 +3811,11 @@ void KPresenterDoc::pageTitleDelete( unsigned int pageNumber )
     manualTitleList.remove( manualTitleList.at(pageNumber) );
 }
 
+void KPresenterDoc::slotRepaintChanged( KPTextObject *kptextobj )
+{
+    //todo
+    //use this function for the moment
+    repaint( kptextobj );
+}
+
 #include <kpresenter_doc.moc>

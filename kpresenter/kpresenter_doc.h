@@ -320,6 +320,8 @@ public slots:
     void selectPage( int pgNum, bool select );
     void clipboardDataChanged();
 
+    void slotRepaintChanged( KPTextObject * );
+
 signals:
 
     void enablePaste( bool );

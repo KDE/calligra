@@ -119,6 +119,9 @@ private:
     KoTextObject * m_textobj;
     KPresenterDoc *m_doc;
     KPTextView *m_textobjview;
+
+signals:
+    void repaintChanged( KPTextObject* );
 };
 
 
