@@ -90,9 +90,10 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
 KWCanvas::~KWCanvas()
 {
+    if ( !m_gui->getView()->documentDeleted() )
+        selectAllFrames( false ); // destroy resize handles properly (they are our children at the Qt level!)
     delete m_currentFrameSetEdit;
     m_currentFrameSetEdit = 0L;
-    selectAllFrames( false ); // destroy resize handles properly (they are our children at the Qt level!)
 }
 
 void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
@@ -413,6 +414,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
                 {
                     // Terminate edition of that frameset
+                    m_currentFrameSetEdit->terminate();
                     delete m_currentFrameSetEdit;
                     m_currentFrameSetEdit = 0L;
                     emitChanged = true;
@@ -1509,6 +1511,7 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
     if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == table )
     {
         // Terminate edition of that frameset
+        m_currentFrameSetEdit->terminate();
         delete m_currentFrameSetEdit;
         m_currentFrameSetEdit = 0L;
         repaintAll();
@@ -1530,6 +1533,7 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
         if ( newMouseMode != MM_EDIT )
         {
             // Terminate edition of current frameset
+            m_currentFrameSetEdit->terminate();
             delete m_currentFrameSetEdit;
             m_currentFrameSetEdit = 0L;
             emit currentFrameSetEditChanged();

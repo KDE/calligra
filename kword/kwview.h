@@ -260,6 +260,10 @@ protected:
 
     virtual void updateReadWrite( bool readwrite );
 
+    void borderShowValues();
+    void borderSet();
+
+private:
     KWDocument *doc;
 
     KAction *actionEditCut;
@@ -331,8 +335,6 @@ protected:
     KSelectAction *actionBorderWidth;
     KSelectAction *actionBorderStyle;
     TKSelectColorAction *actionBackgroundColor;
-    void borderShowValues();
-    void borderSet();
     struct
     {
         Border left;    // Values specific to left border.

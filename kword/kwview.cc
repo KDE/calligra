@@ -150,6 +150,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
 KWView::~KWView()
 {
+    // Delete gui while we still exist ( it needs documentDeleted() )
+    delete gui;
     if(statusBar())
         statusBar()->removeItem(statusPage);
 }

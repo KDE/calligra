@@ -610,13 +610,13 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
 
     QPoint cPoint;
     QRect r = parag->rect();
-    kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << endl;
+    //kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << endl;
     KWFrame * frame = internalToContents( r.bottomLeft(), cPoint );
     int frameBottom = kWordDocument()->zoomItY( frame->bottom() );
     ASSERT( cPoint.y() <= frameBottom );
-    kdDebug(32002) << " parag bottom=" << cPoint.y()
-                   << " frameBottom=" << frameBottom
-                   << " height of fillRect: " << frameBottom - cPoint.y() << endl;
+    //kdDebug(32002) << " parag bottom=" << cPoint.y()
+    //               << " frameBottom=" << frameBottom
+    //               << " height of fillRect: " << frameBottom - cPoint.y() << endl;
 
     p->fillRect( r.x(), r.bottom(),
                  kWordDocument()->zoomItX( frame->width() ) /*r.width()*/, // erase the whole width of the frame
@@ -940,7 +940,7 @@ QTextFormat * KWTextFrameSet::zoomFormatFont( const QTextFormat * f )
 
 void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
 {
-    kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
+    //kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
     QTextDocument * textdoc = textDocument();
     emit hideCursor();
     KWStyle * style = m_doc->findStyle( changedStyle, true );
@@ -2189,12 +2189,16 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
-    kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
+    //kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
+    delete cursor;
+}
+
+void KWTextFrameSetEdit::terminate()
+{
+    disconnect( frameSet(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
     textDocument()->removeSelection( QTextDocument::Standard );
     textFrameSet()->selectionChangedNotify();
-    disconnect( frameSet(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
     hideCursor();
-    delete cursor;
 }
 
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )

@@ -258,6 +258,8 @@ public:
 
     virtual KWFrameSetEdit* currentTextEdit(){return this;}
 
+    virtual void terminate();
+
     /**
      * Paint this frameset with a cursor
      */

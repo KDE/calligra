@@ -243,7 +243,15 @@ public:
     KWCanvas * canvas() const { return m_canvas; }
     KWFrame * currentFrame() const { return m_currentFrame; }
 
-    virtual KWFrameSetEdit* currentTextEdit(){return 0L;}
+    /**
+     * Return the current most-low-level text edit object
+     */
+    virtual KWFrameSetEdit* currentTextEdit() { return 0L; }
+
+    /**
+     * Called before destruction, when terminating edition - use to e.g. hide cursor
+     */
+    virtual void terminate() {}
 
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
