@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kspread_canvas.h"
 #include "kspread_changes.h"
 #include "kspread_dlg_changes.h"
 #include "kspread_doc.h"
@@ -393,11 +394,13 @@ KSpreadAcceptDlg::~KSpreadAcceptDlg()
 
 void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges::ChangeRecord * record )
 {
-  QString action;
+  QString action1;
+  QString action2;
   QString author;
   QString timestamp;
   QString comment;
   QString newValue;
+  bool    take2 = false;
   KListViewItem * parent = element;
 
   author    = m_changes->getAuthor( record->m_change->authorID );
@@ -407,6 +410,10 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
   QString cellName( record->m_table->tableName() + '!' + 
                     util_encodeColumnLabelText( record->m_cell.x() )
                     + QString::number( record->m_cell.y() ) );
+
+  if ( record->m_state == KSpreadChanges::ChangeRecord::PENDING )
+    take2 = true;
+
   if ( record->m_dependants.first() )
   {
     KSpreadChanges::ChangeRecord * r = record->m_dependants.first();
@@ -424,8 +431,12 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
   switch( record->m_type )
   {
    case KSpreadChanges::ChangeRecord::CELL:
-    action = i18n( "Changed content" );
     ch = (KSpreadChanges::CellChange *) record->m_change;
+    action1 = i18n( "Changed content" );
+    action2 = QString( "'%1' -> '%2'" )
+      .arg( ch->oldValue.length() > 0 ? ch->oldValue : i18n( "<empty>" ) )
+      .arg( newValue.length() > 0 ? newValue : i18n( "<empty>" ) );
+
     if ( record->m_state == KSpreadChanges::ChangeRecord::REJECTED )
       comment += i18n( "(Cell %1 changed from '%2' to '%3')" )
         .arg( cellName )
@@ -439,31 +450,31 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
     break;
     
    case KSpreadChanges::ChangeRecord::INSERTCOLUMN:
-    action = i18n( "Inserted column" );
+    action1 = i18n( "Inserted column" );
     break;
     
    case KSpreadChanges::ChangeRecord::INSERTROW:
-    action = i18n( "Inserted row" );
+    action1 = i18n( "Inserted row" );
     break;
     
    case KSpreadChanges::ChangeRecord::INSERTTABLE:
-    action = i18n( "Inserted table" );
+    action1 = i18n( "Inserted table" );
     break;
     
    case KSpreadChanges::ChangeRecord::DELETECOLUMN:
-    action = i18n( "Deleted column" );
+    action1 = i18n( "Deleted column" );
     break;
     
    case KSpreadChanges::ChangeRecord::DELETEROW:
-    action = i18n( "Deleted row" );
+    action1 = i18n( "Deleted row" );
     break;
     
    case KSpreadChanges::ChangeRecord::DELETETABLE:
-    action = i18n( "Deleted table" );
+    action1 = i18n( "Deleted table" );
     break;
 
    case KSpreadChanges::ChangeRecord::MOVE:
-    action = i18n( "Moved content" );
+    action1 = i18n( "Moved content" );
     break;
   };
   
@@ -510,13 +521,13 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
 
   if ( parent != 0 )
   {
-    el = new KListViewItem( parent, action,
+    el = new KListViewItem( parent, ( take2 ? action2 : action1 ),
                             cellName , author, timestamp,
                             comment );    
     parent->setExpandable( true );
   }
   else
-    el = new KListViewItem( m_dialog->m_listView, action,
+    el = new KListViewItem( m_dialog->m_listView, action1,
                             cellName , author, timestamp,
                             comment );    
 
@@ -729,7 +740,40 @@ void KSpreadAcceptDlg::listViewSelectionChanged( QListViewItem * item )
   if ( !item )
     return;
 
-  kdDebug() << "Selected: " << item->text( 0 ) << " | " << item->text( 1 ) << endl;
+  ItemMap::const_iterator iter = m_itemMap.find( (KListViewItem *) item );
+  if ( iter != m_itemMap.end() )
+  {
+    KSpreadChanges::ChangeRecord * record = iter.data();
+
+    switch( record->m_type )
+    {
+     case KSpreadChanges::ChangeRecord::CELL:
+      m_view->canvasWidget()->gotoLocation( record->m_cell, record->m_table );
+      break;
+    
+     case KSpreadChanges::ChangeRecord::INSERTCOLUMN:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::INSERTROW:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::INSERTTABLE:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::DELETECOLUMN:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::DELETEROW:
+      break;
+    
+     case KSpreadChanges::ChangeRecord::DELETETABLE:
+      break;
+
+     case KSpreadChanges::ChangeRecord::MOVE:
+      break;
+    }    
+  }
+
   enableButtons( true );
 }
 
