@@ -235,7 +235,7 @@ KWSerialLetterConfigDialog::~KWSerialLetterConfigDialog()
 {
 }
 
-/******************************************************************KWSerialLetterConfigDialog()
+/******************************************************************
  *
  * Class: KWSerialLetterVariableInsertDia
  *
