@@ -207,7 +207,6 @@ public:
 
     KWImageCollection *imageCollection() { return &m_imageCollection; }
 
-    bool selection();
     QList <KWView> getAllViews() { return m_lstViews; }
 
     void appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE*/ );

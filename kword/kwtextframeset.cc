@@ -640,7 +640,11 @@ void KWTextFrameSet::updateFrames()
         //               << " setWidth=" << frames.first()->width() << endl;
         textdoc->setWidth( kWordDocument()->zoomItX( frames.first()->width() ) );
         // ## we need support for variable width.... (could be done in adjustRMargin in fact)
-    } else kdWarning(32002) << "KWTextFrameSet::update no frames" << endl;
+    } else
+    {
+        //kdDebug(32002) << "KWTextFrameSet::update no frames" << endl;
+        return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
+    }
 
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;
@@ -2077,7 +2081,14 @@ void KWTextFrameSet::selectAll( bool select )
 	textDocument()->removeSelection( QTextDocument::Standard );
     else
 	textDocument()->selectAll( QTextDocument::Standard );
+    selectionChangedNotify();
+}
+
+void KWTextFrameSet::selectionChangedNotify( bool enableActions /* = true */)
+{
     emit repaintChanged( this );
+    if ( enableActions )
+        emit selectionChanged( hasSelection() );
 }
 
 QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
@@ -2111,6 +2122,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     connect( fs, SIGNAL( updateUI() ), this, SLOT( updateUI() ) );
     connect( fs, SIGNAL( showCurrentFormat() ), this, SLOT( showCurrentFormat() ) );
     connect( fs, SIGNAL( ensureCursorVisible() ), this, SLOT( ensureCursorVisible() ) );
+    connect( fs, SIGNAL( selectionChanged(bool) ), canvas, SIGNAL( selectionChanged(bool) ) );
 
     cursor = new QTextCursor( textDocument() );
 
@@ -2118,6 +2130,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     blinkTimer = new QTimer( this );
     connect( blinkTimer, SIGNAL( timeout() ),
 	     this, SLOT( blinkCursor() ) );
+    blinkTimer->start( QApplication::cursorFlashTime() / 2 );
 
     dragStartTimer = new QTimer( this );
     connect( dragStartTimer, SIGNAL( timeout() ),
@@ -2137,7 +2150,8 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
     kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
     textDocument()->removeSelection( QTextDocument::Standard );
-    m_canvas->repaintChanged( textFrameSet(), true );
+    textFrameSet()->selectionChangedNotify();
+    disconnect( frameSet(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
     hideCursor();
     delete cursor;
 }
@@ -2156,7 +2170,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 
     if ( selChanged ) {
 	// cursor->parag()->document()->nextDoubleBuffered = TRUE; ######## we need that only if we have nested items/documents
-        textFrameSet()->selectionChanged();
+        textFrameSet()->selectionChangedNotify();
     }*/
 
     bool clearUndoRedoInfo = TRUE;
@@ -2312,7 +2326,7 @@ void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool shift,
 	moveCursor( direction, control );
 	if ( textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) ) {
 	    //	    cursor->parag()->document()->nextDoubleBuffered = TRUE; ##### we need that only if we have nested items/documents
-            textFrameSet()->selectionChanged();
+            textFrameSet()->selectionChangedNotify();
 	} else {
 	    showCursor();
 	}
@@ -2320,15 +2334,12 @@ void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool shift,
     } else {
 	bool redraw = textDocument()->removeSelection( QTextDocument::Standard );
 	moveCursor( direction, control );
-	if ( !redraw ) {
-	    ensureCursorVisible();
-	    showCursor();
-	} else {
-	    //	    cursor->parag()->document()->nextDoubleBuffered = TRUE; ############# we need that only if we have nested items/documents
-            textFrameSet()->selectionChanged();
-	    ensureCursorVisible();
-	    showCursor();
-	}
+	if ( redraw ) {
+	    //cursor->parag()->document()->nextDoubleBuffered = TRUE; // we need that only if we have nested items/documents
+            textFrameSet()->selectionChangedNotify();
+        }
+        ensureCursorVisible();
+        showCursor();
     }
 
     showCursor();
@@ -2354,13 +2365,31 @@ void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool contro
 	if ( !control )
 	    cursor->gotoUp();
 	else
-	    cursor->gotoPageUp( m_canvas->visibleHeight() );
+        {
+	    //cursor->gotoPageUp( m_canvas->visibleHeight() );
+            // M. Brade suggested up one paragraph instead.
+            QTextParag * parag = cursor->parag()->prev();
+            if ( parag )
+            {
+                cursor->setParag( parag );
+                cursor->setIndex( 0 );
+            }
+        }
     } break;
     case MoveDown: {
 	if ( !control )
 	    cursor->gotoDown();
 	else
-	    cursor->gotoPageDown( m_canvas->visibleHeight() );
+        {
+	    //cursor->gotoPageDown( m_canvas->visibleHeight() );
+            // M. Brade suggested down one paragraph instead.
+            QTextParag * parag = cursor->parag()->next();
+            if ( parag )
+            {
+                cursor->setParag( parag );
+                cursor->setIndex( 0 );
+            }
+        }
     } break;
     case MoveHome: {
 	if ( !control )
@@ -2540,10 +2569,11 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
         //for ( int i = 1; i < textdoc->numSelections(); ++i )
         //    redraw = textdoc->removeSelection( i ) || redraw;
 
+        kdDebug() << "KWTextFrameSetEdit::mousePressEvent redraw=" << redraw << endl;
         if ( !redraw ) {
             emit showCursor();
         } else {
-            textFrameSet()->selectionChanged();
+            textFrameSet()->selectionChangedNotify();
         }
     }
 }
@@ -2574,6 +2604,7 @@ void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent * )
         if ( textDocument()->selectionStartCursor( QTextDocument::Standard ) == textDocument()->selectionEndCursor( QTextDocument::Standard ) )
             textDocument()->removeSelection( QTextDocument::Standard );
 
+        textFrameSet()->selectionChangedNotify();
         // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
         //if ( !textDocument()->selectedText( QTextDocument::Standard ).isEmpty() )
         //    textDocument()->copySelectedText( QTextDocument::Standard );
@@ -2593,6 +2624,7 @@ void KWTextFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
 
     textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
     textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
+    textFrameSet()->selectionChangedNotify();
 
     *cursor = c2;
 }
@@ -2642,7 +2674,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
                 if ( textDocument()->inSelection( QTextDocument::Standard, dropPoint ) )
                 {
                     textDocument()->removeSelection( QTextDocument::Standard );
-                    textFrameSet()->selectionChanged();
+                    textFrameSet()->selectionChangedNotify();
                     hideCursor();
                     *cursor = dropCursor;
                     showCursor();
@@ -2681,6 +2713,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
         } else
         {   // drop coming from outside -> forget about current selection
             textDocument()->removeSelection( QTextDocument::Standard );
+            textFrameSet()->selectionChangedNotify();
         }
 
         if ( e->provides( MIME_TYPE ) )
@@ -2751,7 +2784,7 @@ void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
         textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
 
     if ( redraw )
-        textFrameSet()->selectionChanged();
+        textFrameSet()->selectionChangedNotify( false );
 
     showCursor();
 }

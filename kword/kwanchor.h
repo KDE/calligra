@@ -23,27 +23,33 @@
 #include <qrichtext_p.h>
 using namespace Qt3;
 class KWTextDocument;
+class KWFrame;
 
 /**
  * An anchor is a special character, or 'custom item'.
+ * It never appears as such. It is as big as the frame it is related to,
+ * so that the frame is effectively inline in the text.
  */
 class KWAnchor : public QTextCustomItem
 {
 public:
-    KWAnchor( KWTextDocument *textdoc );
+    KWAnchor( KWTextDocument *textdoc, KWFrame * m_frame );
     ~KWAnchor() {}
 
-    QPoint origin();
+    // The frame related to this anchor.
+    KWFrame * frame() const { return m_frame; }
 
-    Placement placement() const { return PlaceInline; }
-    // Currently no visual support
-    void adjustToPainter( QPainter* ) {} // ####
-    int widthHint() const { return 0; } // ####
-    int minimumWidth() const { return 0; } // ####
+    // Return the size of the item, i.e. the size of the frame (zoomed)
+    QSize size() const;
+
+    virtual Placement placement() const { return PlaceInline; }
+    virtual void adjustToPainter( QPainter* ) {}
+    virtual int widthHint() const { return size().width(); }
+    virtual int minimumWidth() const { return size().width(); }
 
     void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
 private:
-    // ###
+    KWFrame * m_frame;
 };
 
 #endif

@@ -370,10 +370,13 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         QRect frameRect( m_doc->zoomRect( *frame ) );
         QRect outerRect( frame->outerRect() );
         //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
-        //kdDebug(32002) << "KWCanvas::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
+        kdDebug(32002) << "KWCanvas::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
 
         if ( !crect.intersects( outerRect ) )
+        {
+            kdDebug() << "KWFrameSet::drawBorders no interesection with " << DEBUGRECT(crect) << endl;
             continue;
+        }
 
         region = region.subtract( outerRect );
 
@@ -512,6 +515,7 @@ void KWFrameSet::updateFrames()
         if ( !foundThis || !frameSet->isVisible() )
             continue;
 
+        kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
         QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
@@ -528,8 +532,8 @@ void KWFrameSet::updateFrames()
             }
         }
     }
-    //kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
-    //               << m_framesOnTop.count() << endl;
+    kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
+                   << m_framesOnTop.count() << endl;
 }
 
 /*================================================================*/

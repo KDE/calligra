@@ -128,8 +128,6 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     //                  this, SLOT( slotInsertObject( KWChild*, KWPartFrameSet* ) ) );
     QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
                       this, SLOT( insertPicture( const QString & ) ) ); /////// # wrong one ! should create a picture frame (TODO)
-    QObject::connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
-                      this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
 
     KFontChooser::getFontList(fontList, false); // Shouldn't this be in the doc, or not at all ?
     setKeyCompression( TRUE );
@@ -137,8 +135,21 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     createKWGUI();
     initConfig();
 
-    QObject::connect( doc, SIGNAL( pageNumChanged() ),
-                      this, SLOT( updatePageInfo() ) );
+    connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
+             this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
+    connect( doc, SIGNAL( pageNumChanged() ),
+             this, SLOT( updatePageInfo() ) );
+
+    connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
+             this, SLOT( clipboardDataChanged() ) );
+
+    connect( gui->canvasWidget(), SIGNAL(currentFrameSetEditChanged()),
+             this, SLOT(updateButtons()) );
+    // Cut and copy are directly connected to the selectionChanged signal
+    connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+             actionEditCut, SLOT(setEnabled(bool)) );
+    connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+             actionEditCopy, SLOT(setEnabled(bool)) );
 
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
@@ -195,7 +206,7 @@ void KWView::initGui()
 
     if ( gui )
         gui->showGUI();
-    actionToolsEdit->setChecked( TRUE );
+    setTool( MM_EDIT );
     actionViewFrameBorders->setChecked( doc->getViewFrameBorders() );
     actionViewFormattingChars->setChecked( doc->getViewFormattingChars());
 
@@ -680,13 +691,22 @@ void KWView::updatePageInfo()
 /*================================================================*/
 void KWView::clipboardDataChanged()
 {
-//     if ( kapp->clipboard()->text().isEmpty() ) {
-//      m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, FALSE );
-//      m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, FALSE );
-//     } else {
-//      m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, TRUE );
-//      m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, TRUE );
-//     }
+    // Can we paste into something ?
+    if ( !gui || !gui->canvasWidget()->currentFrameSetEdit() )
+    {
+        actionEditPaste->setEnabled(false);
+        return;
+    }
+    // Is there plain text in the clipboard ?
+    if ( !QApplication::clipboard()->text().isEmpty() )
+    {
+        actionEditPaste->setEnabled(true);
+        return;
+    }
+    // Is there kword XML in the clipboard ?
+    QMimeSource *data = QApplication::clipboard()->data();
+    actionEditPaste->setEnabled( data->provides( MIME_TYPE ) );
+
 }
 
 /*=========================== file print =======================*/
@@ -977,7 +997,7 @@ void KWView::setTool( MouseMode _mouseMode )
         actionToolsCreatePix->setChecked( TRUE );
         break;
     case MM_CREATE_TABLE:
-        //actionToolsCreateTable->setChecked( TRUE );
+        // no such tool
         break;
     case MM_CREATE_FORMULA:
         actionToolsCreateFormula->setChecked( TRUE );
@@ -993,6 +1013,10 @@ void KWView::setTool( MouseMode _mouseMode )
         //because when you change mode to edit frame
         // there isn't any frame selected => border button
         //should be unselect.
+
+        /// ### But this is a hack (what happens when selecting a frame and then unselecting it again ?)
+        // The same code should be called, but it isn't. And the same applied to Delete Frame, etc.
+        // --> TODO: a signal (from canvas preferrably), when the selected frames change.
         actionBorderOutline->setChecked(false);
         actionBorderLeft->setChecked(false);
         actionBorderRight->setChecked(false);
@@ -1057,10 +1081,6 @@ void KWView::updateStyleList()
 /*===============================================================*/
 void KWView::editCut()
 {
-#if 0
-    if ( gui->canvasWidget()->formulaIsActive() )
-        gui->canvasWidget()->insertFormulaChar( CUT_CHAR );
-#endif
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->cut();
@@ -1069,11 +1089,6 @@ void KWView::editCut()
 /*===============================================================*/
 void KWView::editCopy()
 {
-#if 0
-    if ( gui->canvasWidget()->formulaIsActive() )
-        gui->canvasWidget()->insertFormulaChar( COPY_CHAR );
-    else
-#endif
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->copy();
@@ -2846,25 +2861,25 @@ void KWView::configure( )
 
 KWTextFrameSetEdit *KWView::currentTextEdit()
 {
-    if(gui && gui->canvasWidget()->currentFrameSetEdit())
-    {
-        return  dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
-    }
+    if (!gui)
+        return 0L;
+    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    if ( edit )
+        return dynamic_cast<KWTextFrameSetEdit *>(edit->currentTextEdit());
     return 0L;
 }
 
 /*================================================================*/
 void KWView::updateButtons()
 {
-    bool state=false;
     KWTextFrameSetEdit * edit = currentTextEdit();
-    if (edit)
-        state=true;
 
-    actionEditCut->setEnabled(state);
-    actionEditCopy->setEnabled(state);
-    actionEditPaste->setEnabled(state);
+    bool hasSelection = edit && edit->textFrameSet()->hasSelection();
+    actionEditCut->setEnabled( hasSelection );
+    actionEditCopy->setEnabled( hasSelection );
+    clipboardDataChanged(); // for paste
 
+    bool state = (edit != 0L);
     actionEditSelectAll->setEnabled(state);
     actionFormatFont->setEnabled(state);
     actionFormatFontSize->setEnabled(state);
@@ -2982,7 +2997,6 @@ KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
     setAcceptDrops( TRUE );
     setFocusPolicy( QWidget::NoFocus );
 
-    connect(canvas,SIGNAL(currentFrameSetEditChanged()),view,SLOT(updateButtons()));
     canvas->setContentsPos( 0, 0 );
 }
 

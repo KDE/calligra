@@ -2045,10 +2045,13 @@ KWFrameSet *KWDocument::getFirstSelectedFrameSet() {
 /*================================================================*/
 void KWDocument::updateAllFrames()
 {
-    kdDebug(32002) << "KWDocument::updateAllFrames" << endl;
+    kdDebug(32002) << "KWDocument::updateAllFrames " << frames.count() << " framesets." << endl;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
+    {
+        kdDebug() << "KWDocument::updateAllFrames updating " << fit.current() << endl;
         fit.current()->updateFrames();
+    }
 }
 
 // Tell this method when a frame is moved / resized / created / deleted
@@ -2377,16 +2380,6 @@ bool KWDocument::isOutOfPage( QRect & r, int page ) const
         r.right() > ptPaperWidth() ||
         r.y() < page * ptPaperHeight() ||
         r.bottom() > ( page + 1 ) * ptPaperHeight();
-}
-
-bool KWDocument::selection() {
-    for (unsigned int i=0; i < getNumFrameSets(); i++) {
-        KWFrameSet *frameSet = getFrameSet( i );
-
-        if ( frameSet->getFrameType() == FT_TEXT &&
-             static_cast<KWTextFrameSet *>( frameSet )->textDocument()->hasSelection(QTextDocument::Standard)) return true;
-    }
-    return false;
 }
 
 void KWDocument::addCommand( KCommand * cmd )

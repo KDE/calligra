@@ -171,8 +171,11 @@ protected:
     void selectAllFrames( bool select );
     void selectFrame( int mx, int my, bool select );
 
- signals:
+signals:
+    // Emitted when the current frameset edit changes
     void currentFrameSetEditChanged();
+    // Emitted by the current frameset edit when its selection changes
+    void selectionChanged( bool hasSelection );
 
 private slots:
     void slotContentsMoving( int, int );
@@ -224,7 +227,6 @@ private:
         KWTblCellSize height;
         bool useAnchor;
     } m_table;
-    KWAnchor *m_anchor;
     KWTableFrameSet *curTable;
     KWFrameMoveCommand *cmdMoveFrame;
 };

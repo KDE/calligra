@@ -20,20 +20,33 @@
 #include "kwanchor.h"
 #include "kwtextdocument.h"
 #include "kwtextframeset.h"
+#include "kwdoc.h"
 
-KWAnchor::KWAnchor( KWTextDocument *textdoc )
-    : QTextCustomItem( textdoc )
+KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrame * frame )
+    : QTextCustomItem( textdoc ), m_frame( frame )
 {
+    QSize s = size();
+    width = s.width();
+    height = s.height();
 }
 
-QPoint KWAnchor::origin()
+void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
 {
-    // KWTextFrameSet * fs = static_cast<KWTextDocument *>(parent)->textFrameSet();
-    // internalToContents ... argl how do I find my coordinates ?
-    return QPoint(0,0); // #########
+    if ( placement() != PlaceInline ) {
+        x = xpos;
+        y = ypos;
+    }
+
+    KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
+    // Move the frame to position x,y.
+    m_frame->moveTopLeft( QPoint( x / doc->zoomedResolutionX(), y / doc->zoomedResolutionY() ) );
+
+    QColorGroup cg2( cg );
+    m_frame->getFrameSet()->drawContents( p, QRect( cx, cy, cw, ch ), cg2, false /*?*/, false /*?*/ );
 }
 
-void KWAnchor::draw( QPainter*, int, int, int, int, int, int, const QColorGroup& )
+QSize KWAnchor::size() const
 {
-
+    KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
+    return QSize( doc->zoomItX( m_frame->width() ), doc->zoomItY( m_frame->height() ) );
 }

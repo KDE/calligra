@@ -117,7 +117,7 @@ public:
     void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
     void pasteText( QTextCursor * cursor, const QString & text, KWTextFormat * currentFormat, bool removeSelected );
     void selectAll( bool select );
-    void selectionChanged() { emit repaintChanged( this ); }
+    void selectionChangedNotify( bool enableActions = true );
     QRect paragRect( QTextParag * parag ) const;
 
     /** Set format changes on selection or current cursor */
@@ -175,6 +175,8 @@ signals:
     void showCurrentFormat();
     // The views should make sure the cursor is visible
     void ensureCursorVisible();
+    // Tell the views that the selection changed (for cut/copy...)
+    void selectionChanged( bool hasSelection );
 
 public slots:
     void formatMore();

@@ -468,7 +468,7 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
         break;
     }
 
-    double ragap;
+    double ragap = 0;
     if ( frame )
         ragap = frame->getRunAroundGap();
     else
@@ -964,11 +964,12 @@ bool KWFrameDia::applyChanges()
                     doc->getFrameSet( _num )->addFrame( frame );
                     currFS = _num;
                 } else { // create a new frameset
+                    kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
                     KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
                     _frameSet->setName( name );
                     _frameSet->addFrame( frame );
                     doc->addFrameSet( _frameSet );
-                    KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), doc,  frame) ;
+                    KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), doc, frame) ;
                     doc->addCommand(cmd);
                     updateFrames();
                     return true;
@@ -992,8 +993,6 @@ bool KWFrameDia::applyChanges()
 
             frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
         }
-
-        doc->repaintAllViews();
 
         if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                                 ( doc->processingType() == KWDocument::WP &&
@@ -1021,19 +1020,20 @@ bool KWFrameDia::applyChanges()
 
 void KWFrameDia::updateFrames()
 {
-    doc->layout();
     QList<KWFrame> frames=doc->getSelectedFrames();
-    bool updateFrameDone=false;
     if(frames.count()==1)
     {
-        KWFrame *theFrame = frames.at(0);
+        KWFrame *theFrame = frames.first();
         doc->frameChanged(theFrame);
         if(theFrame->isSelected())
             theFrame->setSelected(true);
-        updateFrameDone=true;
     }
-    if(!updateFrameDone)
+    else
+    {
+        doc->updateAllFrames();
+        doc->layout();
         doc->repaintAllViews();
+    }
 }
 
 void KWFrameDia::slotOk()

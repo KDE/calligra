@@ -46,7 +46,6 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_gui = lGui;
     m_currentFrameSetEdit = 0L;
     mousePressed = false;
-    setMouseMode( MM_EDIT );
 
     cmdMoveFrame=0L;
 
@@ -56,7 +55,6 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_table.width = TblAuto;
     m_table.height = TblAuto;
     m_table.useAnchor = false;
-    m_anchor = 0L;
 
     curTable = 0L;
 
@@ -85,7 +83,8 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     resizeContents( doc->paperWidth(), doc->pageTop( doc->getPages() ) );
 
     // Create the current frameset-edit last, to have everything ready for it
-    m_currentFrameSetEdit = doc->getFrameSet( 0 )->createFrameSetEdit( this );
+    m_mouseMode = (MouseMode) -1;
+    setMouseMode( MM_EDIT );
 }
 
 KWCanvas::~KWCanvas()
@@ -108,7 +107,7 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
 {
-    //kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
+    kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
     viewport()->repaint( erase );
 }
 
@@ -442,7 +441,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             case MM_CREATE_TEXT:
             case MM_CREATE_PART:
             case MM_CREATE_TABLE:
-            case MM_CREATE_FORMULA:// case MM_CREATE_KSPREAD_TABLE:
+            case MM_CREATE_FORMULA:
             case MM_CREATE_PIX:
             {
                 // Select the frame first
@@ -508,7 +507,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             mpEditFrame( e, mx, my );
             break;
         case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
-        case MM_CREATE_FORMULA:// case MM_CREATE_KSPREAD_TABLE:
+        case MM_CREATE_FORMULA:
             mpCreate( mx, my );
             break;
         case MM_CREATE_PIX:
@@ -536,11 +535,6 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
     m_table.width = wid;
     m_table.height = hei;
     m_table.useAnchor = isFloating;
-    if ( isFloating && m_currentFrameSetEdit )
-    {
-        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
-        m_anchor = new KWAnchor( fs->textDocument() );
-    }
     setMouseMode( MM_CREATE_TABLE );
 }
 
@@ -790,10 +784,6 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
 
 void KWCanvas::drawMovingRect( QPainter & p )
 {
-    if ( m_table.useAnchor ) {
-        p.setPen( QPen( black, 0, Qt::DashLine ) );
-        p.drawLine( m_anchor->origin(), doc->zoomPoint( m_insRect.topLeft() ) );
-    }
     p.setPen( black );
     p.drawRect( doc->zoomRect( m_insRect ) );
 }
@@ -820,7 +810,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 deleteMovingRect = TRUE;
             } break;
             case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART:
-            case MM_CREATE_TABLE: case MM_CREATE_FORMULA:// case MM_CREATE_KSPREAD_TABLE:
+            case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
                 mmCreate( mx, my );
             default: break;
         }
@@ -923,6 +913,7 @@ void KWCanvas::mrCreateText()
         frameDia->show();
         delete frameDia;
     }
+    setMouseMode( MM_EDIT );
 }
 
 void KWCanvas::mrCreatePixmap()
@@ -943,7 +934,7 @@ void KWCanvas::mrCreatePixmap()
     setMouseMode( MM_EDIT );
 }
 
-void KWCanvas::mrCreatePart() // mouse release, when creating part or kspread table
+void KWCanvas::mrCreatePart() // mouse release, when creating part
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
@@ -979,11 +970,12 @@ void KWCanvas::mrCreateTable()
         else {
             KWTableFrameSet *table = new KWTableFrameSet( doc );
 
-            if ( m_table.useAnchor )
+            /*if ( m_table.useAnchor )
             {
-                table->setAnchor( m_anchor );
-                m_anchor = 0L;
-            }
+                KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
+                KWAnchor * anchor = new KWAnchor( fs->textDocument(), table );
+                table->setAnchor( anchor );
+                }*/
 
             QString _name;
             int numTables = 1;
@@ -1023,8 +1015,6 @@ void KWCanvas::mrCreateTable()
     }
     setMouseMode( MM_EDIT );
     m_table.useAnchor = false;
-    delete m_anchor;
-    m_anchor = 0L;
 }
 
 void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
@@ -1046,7 +1036,7 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
             case MM_CREATE_PIX:
                 mrCreatePixmap();
                 break;
-            case MM_CREATE_PART: //case MM_CREATE_KSPREAD_TABLE:
+            case MM_CREATE_PART:
                 mrCreatePart();
                 break;
             case MM_CREATE_TABLE:
@@ -1592,22 +1582,37 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
     doc->repaintAllViews();
 }
 
-void KWCanvas::setMouseMode( MouseMode _mm )
+void KWCanvas::setMouseMode( MouseMode newMouseMode )
 {
-    if ( m_mouseMode != _mm )
+    if ( m_mouseMode != newMouseMode )
     {
+        KWFrame * frame = doc->getFirstSelectedFrame();
         selectAllFrames( false );
-        if ( _mm != MM_EDIT )
+
+        if ( newMouseMode != MM_EDIT )
         {
             // Terminate edition of current frameset
             delete m_currentFrameSetEdit;
             m_currentFrameSetEdit = 0L;
             emit currentFrameSetEditChanged();
             repaintAll();
+        } else
+        {
+            ASSERT( !m_currentFrameSetEdit );
+            // When switching to edit mode, start edition of main frameset
+            // If a frame was selected, we edit that one instead - ## well, its frameset at least.
+            KWFrameSet * fs = frame ? frame->getFrameSet() : doc->getFrameSet( 0 );
+            ASSERT( fs );
+            if ( fs )
+            {
+                //kdDebug() << "KWCanvas::setMouseMode editing " << fs << endl;
+                m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+                emit currentFrameSetEditChanged();
+            }
         }
     }
 
-    m_mouseMode = _mm;
+    m_mouseMode = newMouseMode;
     //mmUncheckAll();
     m_gui->getView()->setTool( m_mouseMode );
 
@@ -1632,10 +1637,6 @@ void KWCanvas::setMouseMode( MouseMode _mm )
             viewport()->setCursor( crossCursor );
             //mm_menu->setItemChecked( mm_create_table, TRUE );
         } break;
-        /*case MM_CREATE_KSPREAD_TABLE: {
-            viewport()->setCursor( crossCursor );
-            //mm_menu->setItemChecked( mm_create_kspread_table, TRUE );
-        } break;*/
         case MM_CREATE_FORMULA: {
             viewport()->setCursor( crossCursor );
             //mm_menu->setItemChecked( mm_create_formula, TRUE );
