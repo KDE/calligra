@@ -133,7 +133,7 @@
         <Text>Supported pressure units: Pa (Pascal), atm (atmosphere), mmHg (mm of Mercury), psi, Torr.</Text>
         <Text>Supported force units: N (Newton), dyn, pond.</Text>
         <Text>Supported energy units: J (Joule), e (erg), c (Thermodynamic calorie), cal (IT calorie), eV (electronvolt), HPh (Horsepower-hour), Wh (Watt-hour), flb (foot-pound), BTU.</Text>
-        <Text>Supported power unit: W (Watt), HP (horsepower), PS (Pferdestärke).</Text>
+        <Text>Supported power units: W (Watt), HP (horsepower), PS (Pferdestaerke).</Text>
         <Text>Supported magnetism units: T (Tesla), ga (Gauss).</Text>
         <Text>Supported temperature units: C (Celcius), F (Fahrenheit), K (Kelvin).</Text>
         <Text>Supported volume units: l (liter), tsp (teaspoon), tbs (ablespoon), oz (ounce liquid), cup, pt (pint), qt (quart), gal (gallone), barrel, m3 (cubic meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 (cubic foot), yd3 (cubic yard).</Text>
