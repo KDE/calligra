@@ -192,7 +192,11 @@ KoMainWindow::~KoMainWindow()
     }
     delete d->m_rootViews;
 
-    if ( d->m_rootDoc && d->m_rootDoc->viewCount() == 0 )
+    // We have to check if this was a root document.
+    // -> We aren't allowed to delete the (embedded) document!
+    // This has to be checked from queryClose, too :)
+    if ( d->m_rootDoc && d->m_rootDoc->viewCount() == 0 &&
+	 !(d->m_rootDoc->parent() && d->m_rootDoc->parent()->inherits( "KoDocument" )))
     {
         kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
         delete d->m_rootDoc;
@@ -418,10 +422,12 @@ bool KoMainWindow::queryClose()
   if ( rootDocument() == 0 )
     return true;
   kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount() << endl;
-  if ( rootDocument()->viewCount() > 1 ) // last view ?
+  if ( rootDocument()->viewCount() > 1 )
     return true; // no, so no problem for closing
 
-  if ( rootDocument()->isModified() )
+  // see DTOR for a descr. for the 2nd test
+  if ( rootDocument()->isModified() &&
+       !(rootDocument()->parent() && rootDocument()->parent()->inherits( "KoDocument" )))
   {
       int res = KMessageBox::warningYesNoCancel( 0L,
                     i18n( "The document has been modified\nDo you want to save it ?" ));
@@ -593,7 +599,7 @@ void KoMainWindow::slotRemoveView() {
     kdDebug(30003) << "KoMainWindow::slotRemoveView() called" << endl;
 
     KoView *view;
-    if(d->m_rootViews->findRef(d->m_activeView)!=-1)    
+    if(d->m_rootViews->findRef(d->m_activeView)!=-1)
         view=d->m_rootViews->current();
     else
 	view=d->m_rootViews->first();
