@@ -22,6 +22,7 @@
 #define __kspread_sheetprint_h__
 
 class KSpreadDoc;
+class KSpreadPrintNewPageEntry;
 
 #include <qobject.h>
 
@@ -331,6 +332,11 @@ public:
      */
     double zoom(){ return m_dZoom; }
 
+    /**
+     * Checks wether the page has content to print
+    */
+    bool pageNeedsPrinting( QRect& page_range );
+
 signals:
     void sig_updateView( KSpreadSheet *_table );
 
@@ -341,6 +347,7 @@ private:
 
     /**
      * Prints the page specified by 'page_range'.
+     * This for the printout it uses @ref printRect and @ref printHeaderFooter
      *
      * @return the last vertical line which was printed plus one.
      *
@@ -351,12 +358,35 @@ private:
      * @param _childOffset KoPoint used to calculate the correct position of children,
      *                    if there are repeated columns/rows
      */
-    void printPage( QPainter &_painter, const QRect& page_range, const KoRect& view, const KoPoint _childOffset );
+    void printPage( QPainter &_painter, const QRect& page_range,
+                    const KoRect& view, const KoPoint _childOffset );
+
+    /**
+     * Prints a rect of cells defined by printRect at the position topLeft.
+     */
+    void printRect( QPainter &painter, const KoPoint& topLeft,
+                    const QRect& printRect, const KoRect& view,
+                    QRegion &clipRegion );
+
+    /**
+     * Prints the header and footer on a page
+     */
+    void printHeaderFooter( QPainter &painter, int pageNo );
 
     /**
      * Looks at @ref #m_paperFormat and calculates @ref #m_paperWidth and @ref #m_paperHeight.
      */
     void calcPaperSize();
+
+    /**
+     * Returns the iterator for the column in the newPage list for columns
+     */
+    QValueList<KSpreadPrintNewPageEntry>::iterator findNewPageColumn( int col );
+
+    /**
+     * Returns the iterator for the row in the newPage list for rows
+     */
+    QValueList<KSpreadPrintNewPageEntry>::iterator findNewPageRow( int row );
 
     /**
      * Replaces macros like <name>, <file>, <date> etc. in the string and
@@ -366,6 +396,22 @@ private:
      * @param _KSpreadSheet is the name of the KSpreadSheet for which we generate the headings.
      */
     QString completeHeading( const QString &_data, int _page, const QString &_table ) const ;
+
+    /**
+     * Returns a rect, which contains the cols and rows to be printed.
+     * It respects the printrange and the children
+     */
+    QRect cellsPrintRange();
+
+    /**
+     * Returns the numbers of pages in x direction
+     */
+    int pagesX( QRect& cellsPrintRange );
+
+    /**
+     * Returns the numbers of pages in y direction
+     */
+    int pagesY( QRect& cellsPrintRange );
 
     /**
      * The orientation of the paper.
@@ -469,23 +515,33 @@ private:
     bool m_bPrintCommentIndicator;
 
     /**
-     * Width of repeated columns in mm, stored for perfomance reasons
+     * Width of repeated columns in points, stored for perfomance reasons
      */
     double m_dPrintRepeatColumnsWidth;
     /**
-     * Height of repeated rows in mm, stored for perfomance reasons
+     * Height of repeated rows in points, stored for perfomance reasons
      */
     double m_dPrintRepeatRowsHeight;
 
     /**
      * Stores the new page columns
      */
-     QValueList<int> m_lnewPageListX;
+     QValueList<KSpreadPrintNewPageEntry> m_lnewPageListX;
 
     /**
      * Stores the new page columns
      */
-     QValueList<int> m_lnewPageListY;
+     QValueList<KSpreadPrintNewPageEntry> m_lnewPageListY;
+
+    /**
+     * Stores internally the maximum column that was checked already
+     */
+     int m_maxCheckedNewPageX;
+
+    /**
+     * Stores internally the maximum row that was checked already
+     */
+     int m_maxCheckedNewPageY;
 
     /**
      * Zoom level of printout
@@ -493,4 +549,40 @@ private:
     double m_dZoom;
 };
 
+
+class KSpreadPrintNewPageEntry
+{
+public:
+    KSpreadPrintNewPageEntry() :
+        m_iStartItem( 0 ), m_iEndItem( 0 ), m_dSize( 0 ),
+        m_dOffset( 0 ){}
+
+    KSpreadPrintNewPageEntry( int startItem, int endItem = 0, double size = 0,
+                              double offset = 0 ) :
+        m_iStartItem( startItem ), m_iEndItem( endItem ), m_dSize( size ),
+        m_dOffset( offset ) {}
+
+    int startItem() { return m_iStartItem; } const
+    void setStartItem( int startItem ) { m_iStartItem = startItem; }
+
+    int endItem() { return m_iEndItem; } const
+    void setEndItem( int endItem ) { m_iEndItem = endItem; }
+
+    double size() { return m_dSize; } const
+    void setSize( double size ) { m_dSize = size; }
+
+    double offset() { return m_dOffset; }
+    void setOffset( double offset ) { m_dOffset = offset; }
+
+    bool operator==( KSpreadPrintNewPageEntry const & entry ) const;
+
+
+private:
+    int m_iStartItem;
+    int m_iEndItem;
+    double m_dSize;
+    double m_dOffset;
+};
+
 #endif
+

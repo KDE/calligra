@@ -61,6 +61,8 @@ KSpreadSheetPrint::KSpreadSheetPrint( KSpreadSheet* sheet )
     m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
     m_lnewPageListX.append( 1 );
     m_lnewPageListY.append( 1 );
+    m_maxCheckedNewPageX = 1;
+    m_maxCheckedNewPageY = 1;
     m_dPrintRepeatColumnsWidth = 0.0;
     m_dPrintRepeatRowsHeight = 0.0;
     m_printRepeatColumns = qMakePair( 0, 0 );
@@ -74,26 +76,9 @@ KSpreadSheetPrint::~KSpreadSheetPrint()
 {
   // nothing todo yet
 }
-
-void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
+QRect KSpreadSheetPrint::cellsPrintRange()
 {
-    kdDebug(36001)<<"PRINTING ...."<<endl;
-
-    // Override the current grid pen setting, when set to disable
-    QPen gridPen;
-    bool oldShowGrid = m_pSheet->getShowGrid();
-    m_pSheet->setShowGrid( m_bPrintGrid );
-    if ( !m_bPrintGrid )
-    {
-        gridPen = m_pDoc->defaultGridPen();
-        QPen nopen;
-        nopen.setStyle( NoPen );
-        m_pDoc->setDefaultGridPen( nopen );
-    }
-
-    //
     // Find maximum right/bottom cell with content
-    //
     QRect cell_range;
     cell_range.setCoords( 1, 1, 1, 1 );
 
@@ -116,164 +101,142 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
     for( ; cit.current(); ++cit )
     {
         QRect bound = cit.current()->boundingRect();
+
         i = m_pSheet->leftColumn( bound.right(), dummy );
         if ( i > cell_range.right() )
             cell_range.setRight( i );
+
         i = m_pSheet->topRow( bound.bottom(), dummy );
         if ( i > cell_range.bottom() )
             cell_range.setBottom( i );
     }
+    cell_range = cell_range.intersect( m_printRange );
 
-    // Adjust to the print range
-    if ( cell_range.top() < m_printRange.top() ) cell_range.setTop( m_printRange.top() );
-    if ( cell_range.left() < m_printRange.left() ) cell_range.setLeft( m_printRange.left() );
-    if ( cell_range.bottom() > m_printRange.bottom()-1 ) cell_range.setBottom( m_printRange.bottom()-1 );
-    if ( cell_range.right() > m_printRange.right()-1 ) cell_range.setRight( m_printRange.right()-1 );
+    return cell_range;
+}
 
-    //If we have repeated columns/rows, children get an offset on pages
-    double offsetX = 0;
-    double offsetY = 0;
-    double currentOffsetX = 0;
-    double currentOffsetY = 0;
-    //Calculate offsetX for repeated columns
-    if ( m_printRepeatColumns.first != 0 )
+int KSpreadSheetPrint::pagesX( QRect& cellsPrintRange )
+{
+    int pages = 0;
+
+    for( int i = cellsPrintRange.left(); i <= cellsPrintRange.right(); i++  )
     {
-        //When we need repeated columns, reservate space for them
-        for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
-            offsetX += m_pSheet->columnFormat( i )->dblWidth();
+        if( isOnNewPageX( i ) )
+            pages++;
     }
-    //Calculate offsetY for repeated rows
-    if ( m_printRepeatRows.first != 0 )
+    return pages;
+}
+
+int KSpreadSheetPrint::pagesY( QRect& cellsPrintRange )
+{
+    int pages = 0;
+
+    for( int i = cellsPrintRange.top(); i <= cellsPrintRange.bottom(); i++  )
     {
-        //When we need repeated rows, reservate space for them
-        for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
-            offsetY += m_pSheet->rowFormat( i )->dblHeight();
+        if( isOnNewPageY( i ) )
+            pages++;
+    }
+    return pages;
+}
+
+
+bool KSpreadSheetPrint::pageNeedsPrinting( QRect& page_range )
+{
+    bool filled = FALSE;
+
+    // Look at the cells
+    for( int r = page_range.top(); !filled && ( r <= page_range.bottom() ); ++r )
+        for( int c = page_range.left(); !filled && ( c <= page_range.right() ); ++c )
+            if ( m_pSheet->cellAt( c, r )->needsPrinting() )
+                filled = TRUE;
+
+    if( !filled ) //Page empty, but maybe children on it?
+    {
+        QRect intView = QRect( QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.left() ) ),
+                                       m_pDoc->zoomItY( m_pSheet->dblRowPos( page_range.top() ) ) ),
+                               QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.right() ) +
+                                                        m_pSheet->columnFormat( page_range.right() )->dblWidth() ),
+                                       m_pDoc->zoomItY( m_pSheet->dblRowPos( page_range.bottom() ) +
+                                                        m_pSheet->rowFormat( page_range.bottom() )->dblHeight() ) ) );
+
+        QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
+        for( ; !filled && it.current(); ++it )
+        {
+            QRect bound = it.current()->boundingRect();
+            if ( bound.intersects( intView ) )
+                filled = TRUE;
+        }
     }
 
-    //
+    return filled;
+}
+
+void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
+{
+    kdDebug(36001)<<"PRINTING ...."<<endl;
+
+    // Override the current grid pen setting, when set to disable
+    QPen gridPen;
+    bool oldShowGrid = m_pSheet->getShowGrid();
+    m_pSheet->setShowGrid( m_bPrintGrid );
+    if ( !m_bPrintGrid )
+    {
+        gridPen = m_pDoc->defaultGridPen();
+        QPen nopen;
+        nopen.setStyle( NoPen );
+        m_pDoc->setDefaultGridPen( nopen );
+    }
+
+    //Update m_dPrintRepeatColumnsWidth for repeated columns
+    //just in case it isn't done yet
+    if ( !m_pSheet->isShowPageBorders() && m_printRepeatColumns.first != 0 )
+        updatePrintRepeatColumnsWidth();
+
+    //Update m_dPrintRepeatRowsHeight for repeated rows
+    //just in case it isn't done yet
+    if ( !m_pSheet->isShowPageBorders() && m_printRepeatRows.first != 0 )
+        updatePrintRepeatRowsHeight();
+
+    //Calculate the range to be printed
+    QRect cell_range = cellsPrintRange();
+
+    //Ensure, that our newPage lists are generated for the whole sheet to print
+    //For this we add to the lists the width/height of 1 page
+    bool tmp;
+    tmp = isOnNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cell_range.right() ) + printableWidthPts() ) );
+    tmp = isOnNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cell_range.bottom() ) + printableHeightPts() ) );
+//    tmp = isOnNewPageY( cell_range.bottom() + 1 );
+
     // Find out how many pages need printing
     // and which cells to print on which page.
-    //
-    QValueList<QRect> page_list;
-    QValueList<KoRect> page_frame_list;
-    QValueList<KoPoint> page_frame_list_offset;
+    QValueList<QRect> page_list;  //contains the cols and rows of a page
+    QValueList<KoRect> page_frame_list;  //contains the coordinate range of a page
+    QValueList<KoPoint> page_frame_list_offset;  //contains the offset of the not repeated area
 
-    // How much space is on every page for table content ?
-    QRect rect;
-    rect.setCoords( 0, 0, (int)( printableWidthPts() ),
-                          (int)( printableHeightPts() ) );
-
-    // Up to this row everything is already handled, starting with the print range
-    int bottom = m_printRange.top()-1;
-    // Start of the next page
-    int top = bottom + 1;
-    // Calculate all pages, but if we are embedded, print only the first one
-    while ( bottom <= cell_range.bottom() /* && page_list.count() == 0 */ )
+    QValueList<KSpreadPrintNewPageEntry>::iterator itX;
+    QValueList<KSpreadPrintNewPageEntry>::iterator itY;
+    for( itX = m_lnewPageListX.begin(); itX != m_lnewPageListX.end(); ++itX )
     {
-        // Up to this column everything is already printed, starting with the print range
-        int right = m_printRange.left()-1;
-        // Start of the next page
-        int left = right + 1;
-        while ( right <= cell_range.right() )
+        for( itY = m_lnewPageListY.begin(); itY != m_lnewPageListY.end(); ++itY )
         {
-            QRect page_range;
-            page_range.setLeft( left );
-            page_range.setTop( top );
-
-            int col = left;
-            double x = m_pSheet->columnFormat( col )->dblWidth();
-
-            //Check if we have to repeat some columns
-            if ( ( m_printRepeatColumns.first != 0 ) && ( col > m_printRepeatColumns.first ) )
-            {
-                //When we need repeated columns, reservate space for them
-                x += offsetX;
-                currentOffsetX = offsetX;
-            }
-
-            //Count the columns which still fit on the page
-            while ( ( x < rect.width() ) && ( col <= m_printRange.right() ) )
-            {
-                col++;
-                x += m_pSheet->columnFormat( col )->dblWidth();
-            }
-
-            // We want to print at least one column
-            if ( col == left )
-                col = left + 1;
-            page_range.setRight( col - 1 );
-
-            int row = top;
-            double y = m_pSheet->rowFormat( row )->dblHeight();
-
-            //Check if we have to repeat some rows
-            if ( ( m_printRepeatRows.first != 0 ) && ( row > m_printRepeatRows.first ) )
-            {
-                //When we need repeated rows, reservate space for them
-                y += offsetY;
-                currentOffsetY = offsetY;
-            }
-
-            //Count the rows, which still fit on the page
-            while ( ( y < rect.height() ) && ( row <= m_printRange.bottom() ) )
-            {
-                row++;
-                y += m_pSheet->rowFormat( row )->dblHeight();
-            }
-
-            // We want to print at least one row
-            if ( row == top )
-                row = top + 1;
-            page_range.setBottom( row - 1 );
-
-            right = page_range.right();
-            bottom = page_range.bottom();
-
-            //
-            // Test wether there is anything on the page at all.
-            //
-
-            // Look at the cells
-            bool empty = TRUE;
-            for( int r = page_range.top(); empty && ( r <= page_range.bottom() ); ++r )
-                for( int c = page_range.left(); empty && ( c <= page_range.right() ); ++c )
-                    if ( m_pSheet->cellAt( c, r )->needsPrinting() )
-                        empty = FALSE;
-
-            // Look for children
-            QRect intView = QRect( QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.left() ) ),
-                                           m_pDoc->zoomItY( m_pSheet->dblRowPos( page_range.top() ) ) ),
-                                   QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( col-1 ) +
-                                                            m_pSheet->columnFormat( col-1 )->dblWidth() ),
-                                           m_pDoc->zoomItY( m_pSheet->dblRowPos( row-1 ) +
-                                                            m_pSheet->rowFormat( row-1 )->dblHeight() ) ) );
-            QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
-            for( ; empty && it.current(); ++it )
-            {
-                QRect bound = it.current()->boundingRect();
-                if ( bound.intersects( intView ) )
-                    empty = FALSE;
-            }
-
+            QRect page_range( QPoint( (*itX).startItem(), (*itY).startItem() ),
+                              QPoint( (*itX).endItem(),   (*itY).endItem() ) );
             //Append page when there is something to print
-            if ( !empty )
+            if ( pageNeedsPrinting( page_range ) )
             {
                 KoRect view = KoRect( KoPoint( m_pSheet->dblColumnPos( page_range.left() ),
                                                m_pSheet->dblRowPos( page_range.top() ) ),
-                                      KoPoint( m_pSheet->dblColumnPos( col-1 ) +
-                                               m_pSheet->columnFormat( col-1 )->dblWidth(),
-                                               m_pSheet->dblRowPos( row-1 ) +
-                                               m_pSheet->rowFormat( row-1 )->dblHeight() ) );
+                                      KoPoint( m_pSheet->dblColumnPos( page_range.right() ) +
+                                               m_pSheet->columnFormat( page_range.right() )->dblWidth(),
+                                               m_pSheet->dblRowPos( page_range.bottom() ) +
+                                               m_pSheet->rowFormat( page_range.bottom() )->dblHeight() ) );
                 page_list.append( page_range );
                 page_frame_list.append( view );
-                page_frame_list_offset.append( KoPoint( currentOffsetX, currentOffsetY ) );
+                page_frame_list_offset.append( KoPoint( (*itX).offset(), (*itY).offset() ) );
             }
-
-            left = right + 1;
         }
-
-        top = bottom + 1;
     }
+
 
     kdDebug(36001) << "PRINTING " << page_list.count() << " pages" << endl;
     m_uprintPages = page_list.count();
@@ -294,62 +257,20 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
         return;
     }
 
-    int pagenr = 1;
+    int pageNo = 1;
 
     //
     // Print all pages in the list
     //
-
     QValueList<QRect>::Iterator it = page_list.begin();
     QValueList<KoRect>::Iterator fit = page_frame_list.begin();
     QValueList<KoPoint>::Iterator fito = page_frame_list_offset.begin();
-    double w;
-    for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pagenr )
-    {
-        // print head line
-        QFont font( "Times" );
-        font.setPointSizeFloat( 0.01 * m_pDoc->zoom() * /* Font size of 10 */ 10 / m_dZoom );
-        painter.setFont( font );
-        QFontMetrics fm = painter.fontMetrics();
-        w = fm.width( headLeft( pagenr, m_pSheet->tableName() ) ) / m_dZoom;
-        if ( w > 0 )
-            painter.drawText( m_pDoc->zoomItX( leftBorderPts() ),
-                              m_pDoc->zoomItY( MM_TO_POINT( 10.0 ) / m_dZoom ),
-                              headLeft( pagenr, m_pSheet->tableName() ) );
-        w = fm.width( headMid( pagenr, m_pSheet->tableName() ) ) / m_dZoom;
-        if ( w > 0 )
-            painter.drawText( m_pDoc->zoomItX( leftBorderPts() ) +
-                              ( m_pDoc->zoomItX( printableWidthPts() ) -
-                                w ) / 2.0,
-                              m_pDoc->zoomItY( MM_TO_POINT( 10.0 ) / m_dZoom ),
-                              headMid( pagenr, m_pSheet->tableName() ) );
-        w = fm.width( headRight( pagenr, m_pSheet->tableName() ) ) / m_dZoom;
-        if ( w > 0 )
-            painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
-                                               printableWidthPts() ) - w,
-                              m_pDoc->zoomItY( MM_TO_POINT( 10.0 ) / m_dZoom ),
-                              headRight( pagenr, m_pSheet->tableName() ) );
 
-        // print foot line
-        w = fm.width( footLeft( pagenr, m_pSheet->tableName() ) ) / m_dZoom;
-        if ( w > 0 )
-            painter.drawText( m_pDoc->zoomItX( leftBorderPts() ),
-                              m_pDoc->zoomItY( paperHeightPts() - MM_TO_POINT( 10.0 ) / m_dZoom ),
-                              footLeft( pagenr, m_pSheet->tableName() ) );
-        w = fm.width( footMid( pagenr, m_pSheet->tableName() ) ) / m_dZoom;
-        if ( w > 0 )
-            painter.drawText( m_pDoc->zoomItX( leftBorderPts() ) +
-                              ( m_pDoc->zoomItX( printableWidthPts() ) -
-                                w ) / 2.0,
-                              m_pDoc->zoomItY( paperHeightPts() - MM_TO_POINT( 10.0 ) / m_dZoom ),
-                              footMid( pagenr, m_pSheet->tableName() ) );
-        w = fm.width( footRight( pagenr, m_pSheet->tableName() ) ) / m_dZoom;
-        if ( w > 0 )
-            painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
-                                               printableWidthPts() ) -
-                                               w,
-                              m_pDoc->zoomItY( paperHeightPts() - MM_TO_POINT( 10.0 ) / m_dZoom ),
-                              footRight( pagenr, m_pSheet->tableName() ) );
+    for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
+    {
+        painter.setClipRect( 0, 0, m_pDoc->zoomItX( paperWidthPts() ),
+                                   m_pDoc->zoomItY( paperHeightPts() ) );
+        printHeaderFooter( painter, pageNo );
 
         painter.translate( m_pDoc->zoomItX( leftBorderPts() ),
                            m_pDoc->zoomItY( topBorderPts() ) );
@@ -360,181 +281,114 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
         painter.translate( - m_pDoc->zoomItX( leftBorderPts() ),
                            - m_pDoc->zoomItY( topBorderPts()  ) );
 
-        if ( pagenr < (int)page_list.count() )
+        if ( pageNo < (int)page_list.count() )
             _printer->newPage();
     }
 
     if ( !m_bPrintGrid )
     {
-	// Restore the grid pen
-	m_pDoc->setDefaultGridPen( gridPen );
+        // Restore the grid pen
+        m_pDoc->setDefaultGridPen( gridPen );
     }
     m_pSheet->setShowGrid( oldShowGrid );
 }
 
-void KSpreadSheetPrint::printPage( QPainter &_painter, const QRect& page_range, const KoRect& view, const KoPoint _childOffset )
+void KSpreadSheetPrint::printPage( QPainter &_painter, const QRect& page_range,
+                                   const KoRect& view, const KoPoint _childOffset )
 {
-      /*kdDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", w="
-      << page_range.width() << " h="  << page_range.height() << "  offsetx: "<< _childOffset.x()
-      << "  offsety: " << _childOffset.y() <<"  view-x: "<<view.x()<< endl;*/
+      kdDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", r="
+      << page_range.right() << " b="  << page_range.bottom() << "  offsetx: "<< _childOffset.x()
+      << "  offsety: " << _childOffset.y() <<"  view-x: "<<view.x()<< endl;
 
     //Don't paint on the page borders
     QRegion clipRegion( m_pDoc->zoomItX( leftBorderPts() ),
                         m_pDoc->zoomItY( topBorderPts() ),
-                        m_pDoc->zoomItX( view.width() ),
-                        m_pDoc->zoomItY( view.height() ) );
+                        m_pDoc->zoomItX( view.width() + _childOffset.x() ),
+                        m_pDoc->zoomItY( view.height() + _childOffset.y() ) );
     _painter.setClipRegion( clipRegion );
 
     //
     // Draw the cells.
     //
-    double xpos;
-    double xpos_Start;
-    double ypos;
-    double ypos_Start;
+    //Check if we have to repeat some rows and columns (top left rect)
+    if ( ( _childOffset.x() != 0.0 ) && ( _childOffset.y() != 0.0 ) )
+    {
+        QRect _printRect( m_printRepeatColumns.first, m_printRepeatRows.first,
+                          m_printRepeatColumns.second, m_printRepeatRows.second );
+        KoPoint _topLeft( 0.0, 0.0 );
+
+        printRect( _painter, _topLeft, _printRect, view, clipRegion );
+    }
+
+    //Check if we have to repeat some rows (left rect)
+    if ( _childOffset.y() != 0 )
+    {
+        QRect _printRect( page_range.left(), m_printRepeatRows.first,
+                          page_range.right(), m_printRepeatRows.second );
+        KoPoint _topLeft( _childOffset.x(), 0.0 );
+
+        printRect( _painter, _topLeft, _printRect, view, clipRegion );
+    }
+
+    //Check if we have to repeat some columns (top right rect)
+    if ( _childOffset.x() != 0 )
+    {
+        QRect _printRect( m_printRepeatColumns.first, page_range.top(),
+                          m_printRepeatColumns.second, page_range.bottom() );
+        KoPoint _topLeft( 0.0, _childOffset.y() );
+
+        printRect( _painter, _topLeft, _printRect, view, clipRegion );
+    }
+
+
+    //Print the cells (right data rect)
+    KoPoint _topLeft( _childOffset.x(), _childOffset.y() );
+
+    printRect( _painter, _topLeft, page_range, view, clipRegion );
+}
+
+
+void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
+                                   const QRect& printRect, const KoRect& view,
+                                   QRegion &clipRegion )
+{
+    //
+    // Draw the cells.
+    //
     KSpreadCell *cell;
     RowFormat *row_lay;
     ColumnFormat *col_lay;
 
-    //Check if we have to repeat some rows and columns
-    xpos = 0.0;
-    ypos = 0.0;
-    xpos_Start = 0.0;
-    ypos_Start = 0.0;
-    if ( m_printRepeatColumns.first != 0 && page_range.left() > m_printRepeatColumns.first &&
-         m_printRepeatRows.first != 0    && page_range.top() > m_printRepeatRows.first )
-    {
-        for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
-        {
-            row_lay = m_pSheet->rowFormat( y );
-            xpos = 0.0;
+    double xpos;
+    double ypos =  topLeft.y();
 
-            for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
-            {
-                col_lay = m_pSheet->columnFormat( x );
+    //Calculate the output rect
+    KoPoint bottomRight( topLeft );
+    for ( int x = printRect.left(); x <= printRect.right(); x++ )
+        bottomRight.setX( bottomRight.x() +
+                          m_pSheet->columnFormat( x )->dblWidth() );
+    for ( int y = printRect.top(); y <= printRect.bottom(); y++ )
+        bottomRight.setY( bottomRight.y() +
+                          m_pSheet->rowFormat( y )->dblHeight() );
+    KoRect rect( topLeft, bottomRight );
 
-                cell = m_pSheet->cellAt( x, y );
-                KoRect r( 0.0, 0.0, view.width(), view.height() );
-
-                bool paintBordersRight = ( x == m_printRepeatColumns.second );
-                bool paintBordersBottom = ( y == m_printRepeatRows.second );
-
-                cell->paintCell( r, _painter, NULL,
-                                 KoPoint( xpos, ypos ),
-                                 QPoint( x, y ), paintBordersRight, paintBordersBottom );
-
-                xpos += col_lay->dblWidth();
-            }
-
-            ypos += row_lay->dblHeight();
-        }
-        ypos_Start = ypos;
-        xpos_Start = xpos;
-        //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion ( m_pDoc->zoomItX( leftBorderPts() ),
-                                m_pDoc->zoomItY( topBorderPts() ),
-                                m_pDoc->zoomItX( xpos ),
-                                m_pDoc->zoomItY( ypos ) );
-        _painter.setClipRegion( clipRegion );
-    }
-
-    //Check if we have to repeat some rows
-    xpos = xpos_Start;
-    ypos = 0.0;
-    if ( m_printRepeatRows.first != 0 && page_range.top() > m_printRepeatRows.first )
-    {
-        for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
-        {
-            row_lay = m_pSheet->rowFormat( y );
-            xpos = xpos_Start;
-
-            for ( int x = page_range.left(); x <= page_range.right(); x++ )
-            {
-                col_lay = m_pSheet->columnFormat( x );
-
-                cell = m_pSheet->cellAt( x, y );
-                KoRect r( 0.0, 0.0, view.width() + xpos, view.height() );
-
-                bool paintBordersRight = ( x == page_range.right() );
-                bool paintBordersBottom = ( y == m_printRepeatRows.second );
-
-                cell->paintCell( r, _painter, NULL,
-                                 KoPoint( xpos, ypos ),
-                                 QPoint( x, y ), paintBordersRight, paintBordersBottom );
-
-                xpos += col_lay->dblWidth();
-            }
-
-            ypos += row_lay->dblHeight();
-        }
-        ypos_Start = ypos;
-        //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion( m_pDoc->zoomItX( leftBorderPts() + xpos_Start ),
-                               m_pDoc->zoomItY( topBorderPts() ),
-                               m_pDoc->zoomItX( xpos - xpos_Start ),
-                               m_pDoc->zoomItY( ypos ) );
-        _painter.setClipRegion( clipRegion );
-    }
-
-    //Check if we have to repeat some columns
-    xpos = 0.0;
-    ypos = ypos_Start;
-    if ( m_printRepeatColumns.first != 0 && page_range.left() > m_printRepeatColumns.first )
-    {
-        for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
-        {
-            row_lay = m_pSheet->rowFormat( y );
-            xpos = 0.0;
-
-            for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
-            {
-                col_lay = m_pSheet->columnFormat( x );
-
-                cell = m_pSheet->cellAt( x, y );
-                KoRect r( 0.0, 0.0, view.width() + xpos, view.height() + ypos );
-
-                bool paintBordersRight = ( x == m_printRepeatColumns.second );
-                bool paintBordersBottom = ( y == page_range.bottom() );
-
-                cell->paintCell( r, _painter, NULL,
-                                 KoPoint( xpos, ypos ),
-                                 QPoint( x, y ), paintBordersRight, paintBordersBottom );
-
-                xpos += col_lay->dblWidth();
-            }
-
-            ypos += row_lay->dblHeight();
-        }
-        xpos_Start = xpos;
-        //Don't let obscuring cells and children overpaint this area
-        clipRegion -= QRegion( m_pDoc->zoomItX( leftBorderPts() ),
-                               m_pDoc->zoomItY( topBorderPts() + ypos_Start ),
-                               m_pDoc->zoomItX( xpos ),
-                               m_pDoc->zoomItY( ypos - ypos_Start ) );
-        _painter.setClipRegion( clipRegion );
-    }
-
-    //Print the cells
-    xpos = xpos_Start;
-    ypos = ypos_Start;
-    for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
+    for ( int y = printRect.top(); y <= printRect.bottom(); y++ )
     {
         row_lay = m_pSheet->rowFormat( y );
-        xpos = xpos_Start;
+        xpos = topLeft.x();
 
-        for ( int x = page_range.left(); x <= page_range.right(); x++ )
+        for ( int x = printRect.left(); x <= printRect.right(); x++ )
         {
             col_lay = m_pSheet->columnFormat( x );
 
             cell = m_pSheet->cellAt( x, y );
-            KoRect r( 0.0, 0.0, view.width() + xpos, view.height() + ypos );
 
-            bool paintBordersRight = ( x == page_range.right() );
-            bool paintBordersBottom = ( y == page_range.bottom() );
+            bool paintBordersRight = ( x == printRect.right() );
+            bool paintBordersBottom = ( y == printRect.bottom() );
 
-            cell->paintCell( r, _painter, NULL,
-                             KoPoint( xpos, ypos ),
-                             QPoint( x, y ), paintBordersRight, paintBordersBottom );
+            cell->paintCell( rect, painter, NULL,
+                             KoPoint( xpos, ypos ), QPoint( x, y ),
+                             paintBordersRight, paintBordersBottom );
 
             xpos += col_lay->dblWidth();
         }
@@ -562,117 +416,267 @@ void KSpreadSheetPrint::printPage( QPainter &_painter, const QRect& page_range, 
         if ( ( ( KSpreadChild* )it.current() )->table() == m_pSheet &&
              bound.intersects( zoomedView ) )
         {
-            _painter.save();
+            painter.save();
 
-            _painter.translate( -zoomedView.left() + m_pDoc->zoomItX( _childOffset.x() ),
-                                -zoomedView.top()  + m_pDoc->zoomItY( _childOffset.y() ) );
+            painter.translate( -zoomedView.left() + m_pDoc->zoomItX( topLeft.x() ),
+                               -zoomedView.top()  + m_pDoc->zoomItY( topLeft.y() ) );
             bound.moveBy( -bound.x(), -bound.y() );
 
-            it.current()->transform( _painter );
-            it.current()->document()->paintEverything( _painter,
+            it.current()->transform( painter );
+            it.current()->document()->paintEverything( painter,
                                                        bound,
                                                        it.current()->isTransparent() );
-            _painter.restore();
+            painter.restore();
         }
     }
+
+    //Don't let obscuring cells and children overpaint this area
+    clipRegion -= QRegion ( m_pDoc->zoomItX( leftBorderPts() + topLeft.x() ),
+                            m_pDoc->zoomItY( topBorderPts() + topLeft.y() ),
+                            m_pDoc->zoomItX( xpos ),
+                            m_pDoc->zoomItY( ypos ) );
+    painter.setClipRegion( clipRegion );
+}
+
+
+void KSpreadSheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
+{
+    double w;
+    double headFootDistance = MM_TO_POINT( 10.0 /*mm*/ ) / m_dZoom;
+    QFont font( "Times" );
+    font.setPointSizeFloat( 0.01 * m_pDoc->zoom() *
+                            /* Font size of 10 */ 10.0 / m_dZoom );
+    painter.setFont( font );
+    QFontMetrics fm = painter.fontMetrics();
+
+    // print head line left
+    w = fm.width( headLeft( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    if ( w > 0 )
+        painter.drawText( m_pDoc->zoomItX( leftBorderPts() ),
+                          m_pDoc->zoomItY( headFootDistance ),
+                          headLeft( pageNo, m_pSheet->tableName() ) );
+    // print head line middle
+    w = fm.width( headMid( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    if ( w > 0 )
+        painter.drawText( m_pDoc->zoomItX( leftBorderPts() ) +
+                          ( m_pDoc->zoomItX( printableWidthPts() ) -
+                            w ) / 2.0,
+                          m_pDoc->zoomItY( headFootDistance ),
+                          headMid( pageNo, m_pSheet->tableName() ) );
+    // print head line right
+    w = fm.width( headRight( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    if ( w > 0 )
+        painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
+                                           printableWidthPts() ) - w,
+                          m_pDoc->zoomItY( headFootDistance ),
+                          headRight( pageNo, m_pSheet->tableName() ) );
+
+    // print foot line left
+    w = fm.width( footLeft( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    if ( w > 0 )
+        painter.drawText( m_pDoc->zoomItX( leftBorderPts() ),
+                          m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
+                          footLeft( pageNo, m_pSheet->tableName() ) );
+    // print foot line middle
+    w = fm.width( footMid( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    if ( w > 0 )
+        painter.drawText( m_pDoc->zoomItX( leftBorderPts() ) +
+                          ( m_pDoc->zoomItX( printableWidthPts() ) -
+                            w ) / 2.0,
+                          m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
+                          footMid( pageNo, m_pSheet->tableName() ) );
+    // print foot line right
+    w = fm.width( footRight( pageNo, m_pSheet->tableName() ) ) / m_dZoom;
+    if ( w > 0 )
+        painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
+                                           printableWidthPts() ) -
+                                           w,
+                          m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
+                          footRight( pageNo, m_pSheet->tableName() ) );
 }
 
 bool KSpreadSheetPrint::isOnNewPageX( int _column )
 {
+    float offset = 0.0;
+
     //Are these the edges of the print range?
     if ( _column == m_printRange.left() || _column == m_printRange.right() + 1 )
+    {
+        if( _column > m_maxCheckedNewPageX )
+            m_maxCheckedNewPageX = _column;
         return true;
+    }
 
     //beyond the print range it's always false
     if ( _column < m_printRange.left() || _column > m_printRange.right() )
+    {
+        if( _column > m_maxCheckedNewPageX )
+            m_maxCheckedNewPageX = _column;
         return false;
+    }
 
-    //If we start, then add the printrange
+    //If we start, then add the left printrange
     if ( m_lnewPageListX.empty() )
         m_lnewPageListX.append( m_printRange.left() ); //Add the first entry
 
-    //Now check if we find the column already
+    //Now check if we find the column already in the list
     if ( m_lnewPageListX.findIndex( _column ) != -1 )
+    {
+        if( _column > m_maxCheckedNewPageX )
+            m_maxCheckedNewPageX = _column;
         return true;
+    }
 
     //If _column is greater than the last entry, we need to calculate the result
-    if ( _column > m_lnewPageListX.last() ) //this columns hasn't been calculated before
+    if ( _column > m_lnewPageListX.last().startItem() &&
+         _column > m_maxCheckedNewPageX ) //this columns hasn't been calculated before
     {
-        int col = m_lnewPageListX.last();
-        float x = m_pSheet->columnFormat( col )->mmWidth();
+        int startCol = m_lnewPageListX.last().startItem();
+        int col = startCol;
+        double x = m_pSheet->columnFormat( col )->dblWidth();
+
         //Add repeated column width, when necessary
         if ( col > m_printRepeatColumns.first )
+        {
             x += m_dPrintRepeatColumnsWidth;
+            offset = m_dPrintRepeatColumnsWidth;
+        }
 
         while ( ( col <= _column ) && ( col < m_printRange.right() ) )
         {
-            if ( x > printableWidth() / m_dZoom )
+            if ( x > printableWidthPts() ) //end of page?
             {
                 //We found a new page, so add it to the list
                 m_lnewPageListX.append( col );
+
+                //Now store into the previous entry the enditem and the width
+                QValueList<KSpreadPrintNewPageEntry>::iterator it;
+                it = findNewPageColumn( startCol );
+                (*it).setEndItem( col - 1 );
+                (*it).setSize( x - m_pSheet->columnFormat( col )->dblWidth() );
+                (*it).setOffset( offset );
+
+/*QValueList<KSpreadPrintNewPageEntry>::iterator itt;
+kdDebug(36001)<<"neuer Aufruf isOnNewPageX*************"<<endl;
+for( itt = m_lnewPageListX.begin(); itt != m_lnewPageListX.end(); ++itt )
+{
+    kdDebug(36001)<<"start: "<<(*itt).startItem()<<"  end: "<<(*itt).endItem()<<"  offset: "<<(*itt).offset()<<endl;
+}*/
+                //start a new page
+                startCol = col;
                 if ( col == _column )
+                {
+                    if( _column > m_maxCheckedNewPageX )
+                        m_maxCheckedNewPageX = _column;
                     return TRUE;
+                }
                 else
                 {
-                    x = m_pSheet->columnFormat( col )->mmWidth();
+                    x = m_pSheet->columnFormat( col )->dblWidth();
                     if ( col >= m_printRepeatColumns.first )
+                    {
                         x += m_dPrintRepeatColumnsWidth;
+                        offset = m_dPrintRepeatColumnsWidth;
+                    }
                 }
             }
 
             col++;
-            x += m_pSheet->columnFormat( col )->mmWidth();
+            x += m_pSheet->columnFormat( col )->dblWidth();
         }
     }
+
+    if( _column > m_maxCheckedNewPageX )
+        m_maxCheckedNewPageX = _column;
+
     return FALSE;
 }
 
 bool KSpreadSheetPrint::isOnNewPageY( int _row )
 {
+    float offset = 0.0;
+
     //Are these the edges of the print range?
     if ( _row == m_printRange.top() || _row == m_printRange.bottom() + 1 )
+    {
+        if( _row > m_maxCheckedNewPageY )
+            m_maxCheckedNewPageY = _row;
         return true;
+    }
 
      //beyond the print range it's always false
     if ( _row < m_printRange.top() || _row > m_printRange.bottom() )
+    {
+        if( _row > m_maxCheckedNewPageY )
+            m_maxCheckedNewPageY = _row;
         return false;
+    }
 
-    //If we start, then add the printrange
+    //If we start, then add the top printrange
     if ( m_lnewPageListY.empty() )
         m_lnewPageListY.append( m_printRange.top() ); //Add the first entry
 
-    //Now check if we find the row already
+    //Now check if we find the row already in the list
     if ( m_lnewPageListY.findIndex( _row ) != -1 )
+    {
+        if( _row > m_maxCheckedNewPageY )
+            m_maxCheckedNewPageY = _row;
         return true;
+    }
 
     //If _column is greater than the last entry, we need to calculate the result
-    if ( _row > m_lnewPageListY.last() ) //this columns hasn't been calculated before
+    if ( _row > m_lnewPageListY.last().startItem() &&
+         _row > m_maxCheckedNewPageY ) //this columns hasn't been calculated before
     {
-        int row = m_lnewPageListY.last();
-        float y = m_pSheet->rowFormat( row )->mmHeight();
+        int startRow = m_lnewPageListY.last().startItem();
+        int row = startRow;
+        double y = m_pSheet->rowFormat( row )->dblHeight();
+
         //Add repeated row height, when necessary
         if ( row > m_printRepeatRows.first )
+        {
             y += m_dPrintRepeatRowsHeight;
+            offset = m_dPrintRepeatRowsHeight;
+        }
+
         while ( ( row <= _row ) && ( row < m_printRange.bottom() ) )
         {
-            if ( y > printableHeight() / m_dZoom )
+            if ( y > printableHeightPts() )
             {
                 //We found a new page, so add it to the list
                 m_lnewPageListY.append( row );
 
+                //Now store into the previous entry the enditem and the width
+                QValueList<KSpreadPrintNewPageEntry>::iterator it;
+                it = findNewPageRow( startRow );
+                (*it).setEndItem( row - 1 );
+                (*it).setSize( y - m_pSheet->rowFormat( row )->dblHeight() );
+                (*it).setOffset( offset );
+
+                //start a new page
+                startRow = row;
                 if ( row == _row )
+                {
+                    m_maxCheckedNewPageY = _row;
                     return TRUE;
+                }
                 else
                 {
-                    y = m_pSheet->rowFormat( row )->mmHeight();
+                    y = m_pSheet->rowFormat( row )->dblHeight();
                     if ( row >= m_printRepeatRows.first )
+                    {
                         y += m_dPrintRepeatRowsHeight;
+                        offset = m_dPrintRepeatRowsHeight;
+                    }
                 }
             }
             row++;
-            y += m_pSheet->rowFormat( row )->mmHeight();
+            y += m_pSheet->rowFormat( row )->dblHeight();
         }
     }
+
+    if( _row > m_maxCheckedNewPageY )
+        m_maxCheckedNewPageY = _row;
 
     return FALSE;
 }
@@ -680,17 +684,18 @@ bool KSpreadSheetPrint::isOnNewPageY( int _row )
 void KSpreadSheetPrint::updateNewPageListX( int _col )
 {
     //If the new range is after the first entry, we need to delete the whole list
-    if ( m_lnewPageListX.first() != m_printRange.left() )
+    if ( m_lnewPageListX.first().startItem() != m_printRange.left() )
     {
         m_lnewPageListX.clear();
+        m_maxCheckedNewPageX = m_printRange.left();
         m_lnewPageListX.append( m_printRange.left() );
         return;
     }
 
-    if ( _col < m_lnewPageListX.last() )
+    if ( _col < m_lnewPageListX.last().startItem() )
     {
         //Find the page entry for this column
-        QValueList<int>::iterator it;
+        QValueList<KSpreadPrintNewPageEntry>::iterator it;
         it = m_lnewPageListX.find( _col );
         while ( ( it == m_lnewPageListX.end() ) && _col > 0 )
         {
@@ -706,22 +711,25 @@ void KSpreadSheetPrint::updateNewPageListX( int _col )
         if ( m_lnewPageListX.empty() )
             m_lnewPageListX.append( m_printRange.left() );
     }
+
+    m_maxCheckedNewPageX = _col;
 }
 
 void KSpreadSheetPrint::updateNewPageListY( int _row )
 {
     //If the new range is after the first entry, we need to delete the whole list
-    if ( m_lnewPageListY.first() != m_printRange.top() )
+    if ( m_lnewPageListY.first().startItem() != m_printRange.top() )
     {
         m_lnewPageListY.clear();
+        m_maxCheckedNewPageY = m_printRange.top();
         m_lnewPageListY.append( m_printRange.top() );
         return;
     }
 
-    if ( _row < m_lnewPageListY.last() )
+    if ( _row < m_lnewPageListY.last().startItem() )
     {
         //Find the page entry for this row
-        QValueList<int>::iterator it;
+        QValueList<KSpreadPrintNewPageEntry>::iterator it;
         it = m_lnewPageListY.find( _row );
         while ( ( it == m_lnewPageListY.end() ) && _row > 0 )
         {
@@ -737,6 +745,8 @@ void KSpreadSheetPrint::updateNewPageListY( int _row )
         if ( m_lnewPageListY.empty() )
             m_lnewPageListY.append( m_printRange.top() );
     }
+
+    m_maxCheckedNewPageY = _row;
 }
 
 void KSpreadSheetPrint::definePrintRange( KSpreadSelection* selectionInfo )
@@ -967,6 +977,31 @@ void KSpreadSheetPrint::calcPaperSize()
     }
 }
 
+QValueList<KSpreadPrintNewPageEntry>::iterator KSpreadSheetPrint::findNewPageColumn( int col )
+{
+    QValueList<KSpreadPrintNewPageEntry>::iterator it;
+    for( it = m_lnewPageListX.begin(); it != m_lnewPageListX.end(); ++it )
+    {
+        if( (*it).startItem() == col )
+            return it;
+    }
+    return it;
+//                QValueList<KSpreadPrintNewPageEntry>::iterator it;
+//                it = m_lnewPageListX.find( startCol );
+}
+
+QValueList<KSpreadPrintNewPageEntry>::iterator KSpreadSheetPrint::findNewPageRow( int row )
+{
+    QValueList<KSpreadPrintNewPageEntry>::iterator it;
+    for( it = m_lnewPageListY.begin(); it != m_lnewPageListY.end(); ++it )
+    {
+        if( (*it).startItem() == row )
+            return it;
+    }
+    return it;
+}
+
+
 QString KSpreadSheetPrint::paperFormatString()const
 {
     if ( m_paperFormat == PG_CUSTOM )
@@ -1117,7 +1152,7 @@ void KSpreadSheetPrint::setPrintCommentIndicator( bool _printCommentIndicator )
 
 void KSpreadSheetPrint::setPrintFormulaIndicator( bool _printFormulaIndicator )
 {
-    if ( m_bPrintFormulaIndicator == _printFormulaIndicator )
+    if( m_bPrintFormulaIndicator == _printFormulaIndicator )
         return;
 
     m_bPrintFormulaIndicator = _printFormulaIndicator;
@@ -1127,11 +1162,11 @@ void KSpreadSheetPrint::setPrintFormulaIndicator( bool _printFormulaIndicator )
 void KSpreadSheetPrint::updatePrintRepeatColumnsWidth()
 {
     m_dPrintRepeatColumnsWidth = 0.0;
-    if ( m_printRepeatColumns.first != 0 )
+    if( m_printRepeatColumns.first != 0 )
     {
-        for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
+        for( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++ )
         {
-            m_dPrintRepeatColumnsWidth += m_pSheet->columnFormat( i )->mmWidth();
+            m_dPrintRepeatColumnsWidth += m_pSheet->columnFormat( i )->dblWidth();
         }
     }
 }
@@ -1139,12 +1174,12 @@ void KSpreadSheetPrint::updatePrintRepeatColumnsWidth()
 
 void KSpreadSheetPrint::updatePrintRepeatRowsHeight()
 {
-    m_dPrintRepeatRowsHeight += 0.0;
+    m_dPrintRepeatRowsHeight = 0.0;
     if ( m_printRepeatRows.first != 0 )
     {
         for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
         {
-            m_dPrintRepeatRowsHeight += m_pSheet->rowFormat( i )->mmHeight();
+            m_dPrintRepeatRowsHeight += m_pSheet->rowFormat( i )->dblHeight();
         }
     }
 }
@@ -1197,11 +1232,11 @@ void KSpreadSheetPrint::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
     int oldFirst = m_printRepeatRows.first;
     m_printRepeatRows = _printRepeatRows;
 
-    //Refresh calculation of stored page breaks, the lower one of old and new
-    updateNewPageListY( QMIN( oldFirst, _printRepeatRows.first ) );
-
     //Recalcualte the space needed for the repeated rows
     updatePrintRepeatRowsHeight();
+
+    //Refresh calculation of stored page breaks, the lower one of old and new
+    updateNewPageListY( QMIN( oldFirst, _printRepeatRows.first ) );
 
     //Refresh view, if page borders are shown
     if ( m_pSheet->isShowPageBorders() )
@@ -1218,7 +1253,7 @@ void KSpreadSheetPrint::insertColumn( int col, int nbCol )
         int left = m_printRange.left();
         int right = m_printRange.right();
 
-        for( int i=0; i<=nbCol; i++ )
+        for( int i = 0; i <= nbCol; i++ )
         {
             if ( left >= col ) left++;
             if ( right >= col ) right++;
@@ -1226,7 +1261,8 @@ void KSpreadSheetPrint::insertColumn( int col, int nbCol )
         //Validity checks
         if ( left > KS_colMax ) left = KS_colMax;
         if ( right > KS_colMax ) right = KS_colMax;
-        setPrintRange( QRect( QPoint( left, m_printRange.top() ), QPoint( right, m_printRange.bottom() ) ) );
+        setPrintRange( QRect( QPoint( left, m_printRange.top() ),
+                              QPoint( right, m_printRange.bottom() ) ) );
     }
 }
 
@@ -1238,7 +1274,7 @@ void KSpreadSheetPrint::insertRow( int row, int nbRow )
         int top = m_printRange.top();
         int bottom = m_printRange.bottom();
 
-        for( int i=0; i<=nbRow; i++ )
+        for( int i = 0; i <= nbRow; i++ )
         {
             if ( top >= row ) top++;
             if ( bottom >= row ) bottom++;
@@ -1246,7 +1282,8 @@ void KSpreadSheetPrint::insertRow( int row, int nbRow )
         //Validity checks
         if ( top > KS_rowMax ) top = KS_rowMax;
         if ( bottom > KS_rowMax ) bottom = KS_rowMax;
-        setPrintRange( QRect( QPoint( m_printRange.left(), top ), QPoint( m_printRange.right(), bottom ) ) );
+        setPrintRange( QRect( QPoint( m_printRange.left(), top ),
+                              QPoint( m_printRange.right(), bottom ) ) );
     }
 }
 
@@ -1258,7 +1295,7 @@ void KSpreadSheetPrint::removeColumn( int col, int nbCol )
         int left = m_printRange.left();
         int right = m_printRange.right();
 
-        for( int i=0; i<=nbCol; i++ )
+        for( int i = 0; i <= nbCol; i++ )
         {
             if ( left > col ) left--;
             if ( right >= col ) right--;
@@ -1266,7 +1303,8 @@ void KSpreadSheetPrint::removeColumn( int col, int nbCol )
         //Validity checks
         if ( left < 1 ) left = 1;
         if ( right < 1 ) right = 1;
-        setPrintRange( QRect( QPoint( left, m_printRange.top() ), QPoint( right, m_printRange.bottom() ) ) );
+        setPrintRange( QRect( QPoint( left, m_printRange.top() ),
+                              QPoint( right, m_printRange.bottom() ) ) );
     }
 
     //update repeat columns, when it has been defined
@@ -1275,7 +1313,7 @@ void KSpreadSheetPrint::removeColumn( int col, int nbCol )
         int left = m_printRepeatColumns.first;
         int right = m_printRepeatColumns.second;
 
-        for( int i=0; i<=nbCol; i++ )
+        for( int i = 0; i <= nbCol; i++ )
         {
             if ( left > col ) left--;
             if ( right >= col ) right--;
@@ -1295,7 +1333,7 @@ void KSpreadSheetPrint::removeRow( int row, int nbRow )
         int top = m_printRange.top();
         int bottom = m_printRange.bottom();
 
-        for( int i=0; i<=nbRow; i++ )
+        for( int i = 0; i <= nbRow; i++ )
         {
             if ( top > row ) top--;
             if ( bottom >= row ) bottom--;
@@ -1303,7 +1341,8 @@ void KSpreadSheetPrint::removeRow( int row, int nbRow )
         //Validity checks
         if ( top < 1 ) top = 1;
         if ( bottom < 1 ) bottom = 1;
-        setPrintRange( QRect( QPoint( m_printRange.left(), top ), QPoint( m_printRange.right(), bottom ) ) );
+        setPrintRange( QRect( QPoint( m_printRange.left(), top ),
+                              QPoint( m_printRange.right(), bottom ) ) );
     }
 
     //update repeat rows, when it has been defined
@@ -1312,7 +1351,7 @@ void KSpreadSheetPrint::removeRow( int row, int nbRow )
         int top = m_printRepeatRows.first;
         int bottom = m_printRepeatRows.second;
 
-        for( int i=0; i<=nbRow; i++ )
+        for( int i = 0; i <= nbRow; i++ )
         {
             if ( top > row ) top--;
             if ( bottom >= row ) bottom--;
@@ -1330,7 +1369,10 @@ void KSpreadSheetPrint::setZoom( double _zoom )
     {
         return;
     }
+
     m_dZoom = _zoom;
+    updatePrintRepeatColumnsWidth();
+    updatePrintRepeatRowsHeight();
     updateNewPageListX( 0 );
     updateNewPageListY( 0 );
     if( m_pSheet->isShowPageBorders() )
@@ -1338,3 +1380,9 @@ void KSpreadSheetPrint::setZoom( double _zoom )
 
     m_pDoc->setModified( true );
 }
+
+bool KSpreadPrintNewPageEntry::operator==( KSpreadPrintNewPageEntry const & entry ) const
+{
+    return m_iStartItem == entry.m_iStartItem;
+}
+
