@@ -340,8 +340,13 @@ KexiQueryDesignerGuiEditor::tempData()
 	return static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
 }
 
-void 
-KexiQueryDesignerGuiEditor::buildSchema()
+static QString msgCannotSwitch_EmptyDesign() { 
+	return i18n("Cannot switch to data view, because query design is empty.\n"
+		"First, please create your design.");
+}
+
+bool
+KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 {
 	//build query schema
 	KexiQueryPart::TempData * temp = tempData();
@@ -350,6 +355,7 @@ KexiQueryDesignerGuiEditor::buildSchema()
 	else
 		temp->query = new KexiDB::QuerySchema();
 
+	bool fieldsFound = false;
 	for (int i=0; i<(int)m_buffers->size(); i++) {
 		KexiPropertyBuffer *buf = m_buffers->at(i);
 		if (buf) {
@@ -362,6 +368,7 @@ KexiQueryDesignerGuiEditor::buildSchema()
 			bool fieldVisible = (*buf)["visible"]->value().toBool();
 			if (fieldName=="*") {
 				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
+				fieldsFound = true;
 			}
 			else {
 				KexiDB::Field *f = t->field( fieldName );
@@ -370,10 +377,17 @@ KexiQueryDesignerGuiEditor::buildSchema()
 					continue;
 				}
 				temp->query->addField(f, fieldVisible);
+				fieldsFound = true;
 			}
 		}
 	}
+	if (!fieldsFound) {
+		if (errMsg)
+			*errMsg = msgCannotSwitch_EmptyDesign();
+		return false;
+	}
 	//TODO
+	return true;
 }
 
 bool
@@ -388,18 +402,24 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 	else if (mode==Kexi::DataViewMode) {
 		if (!dirty() && parentDialog()->neverSaved()) {
 			cancelled=true;
-			KMessageBox::information(this, i18n("Cannot switch to data view, because query design is empty.\n"
-				"First, please create your design.") );
+			KMessageBox::information(this, msgCannotSwitch_EmptyDesign());
 			return true;
 		}
 		//remember current design in a temporary structure
 		dontStore=true;
-
-		buildSchema();
+		QString errMsg;
+		//build schema; problems are not allowed
+		if (!buildSchema(&errMsg)) {
+			cancelled=true;
+			KMessageBox::information(this, errMsg);
+			return false;
+		}
 		//TODO
 		return true;
 	}
 	else if (mode==Kexi::TextViewMode) {
+		dontStore=true;
+		//build schema; ignore problems
 		buildSchema();
 		//todo
 		return true;

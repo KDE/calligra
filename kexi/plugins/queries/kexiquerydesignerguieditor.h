@@ -87,8 +87,10 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 			const QString& tableName, const QString& fieldName, bool newOne = false );
 
 		/*! Builds query schema out of information provided by gui. 
-		 The schema is stored in temp->query member. */
-		void buildSchema();
+		 The schema is stored in temp->query member. 
+		 \a errMsg is optional error message returned. 
+		 \return true on proper schema creation. */
+		bool buildSchema(QString *errMsg = 0);
 
 		KexiQueryPart::TempData * tempData();
 
