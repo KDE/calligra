@@ -1,3 +1,10 @@
+2005-03-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Begin to support the Apply button in the data editor.
+	* kchartDataEditor.cc (kchartDataEditor): connect applyClicked()
+	to apply()
+	* kchartDataEditor.{h,cc} (apply): new method.
+
 2005-03-05  Inge Wallin  <inge@lysator.liu.se>
 
 	Ego stroking:

@@ -16,7 +16,7 @@ Before release of KOffice 1.4
   - Remove the predefined bar chart?
   - What do the settins in Edit->Page Setup do?
 
-  - Fix ChangeLog re: bug titles.
+  - Fix ChangeLog re: bug titles.					DONE
   - Grep for FIXME and fix them
 
 * Toolbars
@@ -30,6 +30,7 @@ Before release of KOffice 1.4
 
 * Data editor
   - Make table size handling work.
+  - Make Apply button work.
   - Smaller column widths?
 
 * Config dialog

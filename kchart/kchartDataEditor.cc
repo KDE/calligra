@@ -73,6 +73,8 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     setMaximumSize(size());
     setMinimumSize(size());
 #endif
+
+    connect(this, SIGNAL(applyClicked()), this, SLOT(apply()));
 }
 
 // Set the data in the data editor.
@@ -293,5 +295,15 @@ void kchartDataEditor::getXLabel( KChartParams* params )
         shortLabels->clear();
     }
 }
+
+
+// ================================================================
+
+
+void kchartDataEditor::apply()
+{
+    kdDebug(35001) << "Apply called" << endl;
+}
+
 
 }  //KChart namespace

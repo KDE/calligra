@@ -29,6 +29,9 @@ public:
     void setAxisLabelTextLong( QStringList *_longLabels ) { longLabels = _longLabels; }
     void setAxisLabelTextShort( QStringList *_shortLabels ){ shortLabels = _shortLabels; }
 
+public slots:
+    void apply();
+
 private:
     // Data Editor, Old version
     SheetDlg *_widget;
