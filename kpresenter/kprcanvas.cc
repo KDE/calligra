@@ -1762,17 +1762,30 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
 /*====================== select all objects ======================*/
 void KPrCanvas::selectAllObj()
 {
-    if((m_activePage->numSelected()==(int)objectList().count()) || (m_view->kPresenterDoc()->stickyPage()->numSelected()==(int)m_view->kPresenterDoc()->stickyPage()->objectList().count()))
+    int nbObj=objectList().count()+m_view->kPresenterDoc()->stickyPage()->objectList().count();
+    if(nbObj==(m_view->kPresenterDoc()->stickyPage()->numSelected()+m_activePage->numSelected()))
         return;
 
     QProgressDialog progress( i18n( "Selecting..." ), 0,
-                              objectList().count(), this );
-
-    for ( uint i = 0; i <= objectList().count(); i++ ) {
-        selectObj( i );
-
+                              nbObj, this );
+    int i=0;
+    QPtrListIterator<KPObject> it( m_view->kPresenterDoc()->stickyPage()->objectList() );
+    for ( ; it.current() ; ++it )
+    {
+        selectObj(it.current());
         progress.setProgress( i );
         kapp->processEvents();
+        i++;
+    }
+
+    it= m_activePage->objectList();
+    for ( ; it.current() ; ++it )
+    {
+        selectObj(it.current());
+        progress.setProgress( i );
+
+        kapp->processEvents();
+        i++;
     }
 
     mouseSelectedObject = true;
