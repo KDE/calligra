@@ -84,12 +84,12 @@ bool kspreadfunc_cur( KSContext& context )
   return true;
 }
 
-// Function: fabs/abs
-bool kspreadfunc_fabs( KSContext& context )
+// Function: ABS
+bool kspreadfunc_abs( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "fabs", true ) || !KSUtil::checkArgumentsCount( context, 1, "abs", true ))
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ABS", true ) || !KSUtil::checkArgumentsCount( context, 1, "ABS", true ))
     return false;
 
   double val=0.0;
@@ -708,7 +708,7 @@ bool kspreadfunc_mult( KSContext& context )
 }
 
 // Function: INT
-bool kspreadfunc_INT( KSContext& context )
+bool kspreadfunc_int( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 

@@ -52,58 +52,58 @@ bool kspreadfunc_PI( KSContext& context );
 bool kspreadfunc_atan2( KSContext& context );
 
 // defined in kspread_functions_math.cc
-bool kspreadfunc_sqrt( KSContext& context );
-bool kspreadfunc_sqrtn( KSContext& context );
-bool kspreadfunc_cur( KSContext& context );
-bool kspreadfunc_fabs( KSContext& context );
-bool kspreadfunc_exp( KSContext& context );
+bool kspreadfunc_abs( KSContext& context );
 bool kspreadfunc_ceil( KSContext& context );
-bool kspreadfunc_floor( KSContext& context );
-bool kspreadfunc_ln( KSContext& context );
-bool kspreadfunc_logn( KSContext& context );
-bool kspreadfunc_log( KSContext& context );
-bool kspreadfunc_sum( KSContext& context );
-bool kspreadfunc_product( KSContext& context );
-bool kspreadfunc_div( KSContext& context );
-bool kspreadfunc_sumsq( KSContext& context );
-bool kspreadfunc_max( KSContext& context );
-bool kspreadfunc_lcd( KSContext & context );
-bool kspreadfunc_lcm( KSContext & context );
-bool kspreadfunc_min( KSContext& context );
-bool kspreadfunc_mult( KSContext& context );
-bool kspreadfunc_INT( KSContext& context );
-bool kspreadfunc_eps( KSContext& context );
-bool kspreadfunc_rand( KSContext& context );
-bool kspreadfunc_randbetween( KSContext& context );
-bool kspreadfunc_pow( KSContext& context );
-bool kspreadfunc_mod( KSContext& context );
-bool kspreadfunc_fact( KSContext& context );
-bool kspreadfunc_sign( KSContext& context );
-bool kspreadfunc_inv( KSContext& context );
-bool kspreadfunc_rounddown( KSContext& context );
-bool kspreadfunc_roundup( KSContext& context );
-bool kspreadfunc_round( KSContext& context );
 bool kspreadfunc_complex( KSContext& context );
 bool kspreadfunc_complex_imag( KSContext& context );
 bool kspreadfunc_complex_real( KSContext& context );
-bool kspreadfunc_imsum( KSContext& context );
-bool kspreadfunc_imsub( KSContext& context );
-bool kspreadfunc_improduct( KSContext& context );
-bool kspreadfunc_imconjugate( KSContext& context );
-bool kspreadfunc_imargument( KSContext& context );
-bool kspreadfunc_imabs( KSContext& context );
-bool kspreadfunc_imcos( KSContext& context );
-bool kspreadfunc_imsin( KSContext& context );
-bool kspreadfunc_imln( KSContext& context );
-bool kspreadfunc_imexp( KSContext& context );
-bool kspreadfunc_imsqrt( KSContext& context );
-bool kspreadfunc_impower( KSContext& context );
-bool kspreadfunc_imdiv( KSContext& context );
-bool kspreadfunc_delta( KSContext& context );
-bool kspreadfunc_even( KSContext& context );
-bool kspreadfunc_odd( KSContext& context );
 bool kspreadfunc_count( KSContext& context );
+bool kspreadfunc_cur( KSContext& context );
+bool kspreadfunc_delta( KSContext& context );
+bool kspreadfunc_div( KSContext& context );
+bool kspreadfunc_eps( KSContext& context );
+bool kspreadfunc_even( KSContext& context );
+bool kspreadfunc_exp( KSContext& context );
+bool kspreadfunc_fact( KSContext& context );
 bool kspreadfunc_fib( KSContext& context );
+bool kspreadfunc_floor( KSContext& context );
+bool kspreadfunc_imabs( KSContext& context );
+bool kspreadfunc_imargument( KSContext& context );
+bool kspreadfunc_imconjugate( KSContext& context );
+bool kspreadfunc_imcos( KSContext& context );
+bool kspreadfunc_imdiv( KSContext& context );
+bool kspreadfunc_imexp( KSContext& context );
+bool kspreadfunc_imln( KSContext& context );
+bool kspreadfunc_impower( KSContext& context );
+bool kspreadfunc_improduct( KSContext& context );
+bool kspreadfunc_imsin( KSContext& context );
+bool kspreadfunc_imsqrt( KSContext& context );
+bool kspreadfunc_imsub( KSContext& context );
+bool kspreadfunc_imsum( KSContext& context );
+bool kspreadfunc_int( KSContext& context );
+bool kspreadfunc_inv( KSContext& context );
+bool kspreadfunc_lcd( KSContext & context );
+bool kspreadfunc_lcm( KSContext & context );
+bool kspreadfunc_ln( KSContext& context );
+bool kspreadfunc_log( KSContext& context );
+bool kspreadfunc_logn( KSContext& context );
+bool kspreadfunc_max( KSContext& context );
+bool kspreadfunc_min( KSContext& context );
+bool kspreadfunc_mod( KSContext& context );
+bool kspreadfunc_mult( KSContext& context );
+bool kspreadfunc_odd( KSContext& context );
+bool kspreadfunc_pow( KSContext& context );
+bool kspreadfunc_product( KSContext& context );
+bool kspreadfunc_rand( KSContext& context );
+bool kspreadfunc_randbetween( KSContext& context );
+bool kspreadfunc_round( KSContext& context );
+bool kspreadfunc_rounddown( KSContext& context );
+bool kspreadfunc_roundup( KSContext& context );
+bool kspreadfunc_sign( KSContext& context );
+bool kspreadfunc_sqrt( KSContext& context );
+bool kspreadfunc_sqrtn( KSContext& context );
+bool kspreadfunc_sum( KSContext& context );
+bool kspreadfunc_sumsq( KSContext& context );
 
 // defined in kspread_functions_datetime.cc
 bool kspreadfunc_years( KSContext& context );
@@ -470,62 +470,61 @@ static const functionEntry funcTab[] = {
   { "ASINH", kspreadfunc_asinh },
   { "ATANH", kspreadfunc_atanh },
   { "ATAN2", kspreadfunc_atan2 },
+  { "PI", kspreadfunc_PI },
 
   // math
-  { "SUM", kspreadfunc_sum },
-  { "SUMSQ", kspreadfunc_sumsq },
-  { "DIV", kspreadfunc_div },
-  { "PRODUCT", kspreadfunc_product },
-  { "SQRT", kspreadfunc_sqrt },
-  { "FABS", kspreadfunc_fabs },
-  { "ABS", kspreadfunc_fabs },
-  { "MAX", kspreadfunc_max },
-  { "MIN", kspreadfunc_min },
-  { "FLOOR", kspreadfunc_floor },
+  { "ABS", kspreadfunc_abs },
   { "CEIL", kspreadfunc_ceil },
-  { "INT", kspreadfunc_INT },
+  { "COMPLEX", kspreadfunc_complex },
+  { "COUNT", kspreadfunc_count },
+  { "CUR", kspreadfunc_cur },
+  { "DELTA", kspreadfunc_delta },
+  { "DIV", kspreadfunc_div },
+  { "EPS", kspreadfunc_eps },
+  { "EVEN", kspreadfunc_even },
   { "EXP", kspreadfunc_exp },
+  { "FACT", kspreadfunc_fact },
+  { "FIB", kspreadfunc_fib }, // KSpread-specific, like Quattro-Pro's FIB
+  { "FLOOR", kspreadfunc_floor },
+  { "IMABS", kspreadfunc_imabs },
+  { "IMAGINARY", kspreadfunc_complex_imag },
+  { "IMARGUMENT", kspreadfunc_imargument },
+  { "IMCONJUGATE", kspreadfunc_imconjugate },
+  { "IMCOS", kspreadfunc_imcos },
+  { "IMDIV", kspreadfunc_imdiv },
+  { "IMEXP", kspreadfunc_imexp },
+  { "IMLN", kspreadfunc_imln },
+  { "IMPOWER", kspreadfunc_impower },
+  { "IMPRODUCT", kspreadfunc_improduct },
+  { "IMREAL", kspreadfunc_complex_real },
+  { "IMSIN", kspreadfunc_imsin },
+  { "IMSQRT", kspreadfunc_imsqrt },
+  { "IMSUB", kspreadfunc_imsub },
+  { "IMSUM", kspreadfunc_imsum },
+  { "INT", kspreadfunc_int },
+  { "INV", kspreadfunc_inv },
+  { "LCD", kspreadfunc_lcd },
+  { "LCM", kspreadfunc_lcm },
   { "LN", kspreadfunc_ln },
   { "LOG", kspreadfunc_log },
-  { "LCM", kspreadfunc_lcm },
-  { "LCD", kspreadfunc_lcd },
-  { "MULTIPLY", kspreadfunc_mult },
-  { "PI", kspreadfunc_PI },
-  { "EPS", kspreadfunc_eps },
-  { "RAND", kspreadfunc_rand },
-  { "POW", kspreadfunc_pow },
-  { "MOD", kspreadfunc_mod },
-  { "FACT", kspreadfunc_fact },
-  { "SIGN", kspreadfunc_sign },
-  { "INV", kspreadfunc_inv },
-  { "RANDBETWEEN", kspreadfunc_randbetween },
   { "LOGN", kspreadfunc_logn },
-  { "SQRTN", kspreadfunc_sqrtn },
-  { "COUNT", kspreadfunc_count },
-  { "FIB", kspreadfunc_fib }, // KSpread-specific, like Quattro-Pro's FIB
-  { "CUR", kspreadfunc_cur },
+  { "MAX", kspreadfunc_max },
+  { "MIN", kspreadfunc_min },
+  { "MOD", kspreadfunc_mod },
+  { "MULTIPLY", kspreadfunc_mult },
+  { "ODD", kspreadfunc_odd },
+  { "POW", kspreadfunc_pow },
+  { "PRODUCT", kspreadfunc_product },
+  { "RAND", kspreadfunc_rand },
+  { "RANDBETWEEN", kspreadfunc_randbetween },
   { "ROUND", kspreadfunc_round },
   { "ROUNDDOWN", kspreadfunc_rounddown },
   { "ROUNDUP", kspreadfunc_roundup },
-  { "DELTA", kspreadfunc_delta },
-  { "EVEN", kspreadfunc_even },
-  { "ODD", kspreadfunc_odd },
-  { "COMPLEX", kspreadfunc_complex },
-  { "IMAGINARY", kspreadfunc_complex_imag },
-  { "IMREAL", kspreadfunc_complex_real },
-  { "IMSUM", kspreadfunc_imsum },
-  { "IMSUB", kspreadfunc_imsub },
-  { "IMPRODUCT", kspreadfunc_improduct },
-  { "IMCONJUGATE", kspreadfunc_imconjugate },
-  { "IMARGUMENT", kspreadfunc_imargument },
-  { "IMABS", kspreadfunc_imabs },
-  { "IMDIV", kspreadfunc_imdiv },
-  { "IMCOS", kspreadfunc_imcos },
-  { "IMSIN", kspreadfunc_imsin },
-  { "IMEXP", kspreadfunc_imexp },
-  { "IMLN", kspreadfunc_imln },
-  { "IMSQRT", kspreadfunc_imsqrt },
-  { "IMPOWER", kspreadfunc_impower },
+  { "SIGN", kspreadfunc_sign },
+  { "SQRT", kspreadfunc_sqrt },
+  { "SQRTN", kspreadfunc_sqrtn },
+  { "SUM", kspreadfunc_sum },
+  { "SUMSQ", kspreadfunc_sumsq },
 
   // date & time
   { "DATE", kspreadfunc_date },
@@ -691,11 +690,12 @@ static const functionEntry funcTab[] = {
   // compatibility with KSpread < 1.2
   // somehow should marked "obsolete" in the manual
   { "not", kspreadfunc_not },
-  { "ENT", kspreadfunc_INT },
+  { "ENT", kspreadfunc_int },
   { "DECHEX", kspreadfunc_dec2hex },
   { "DECBIN", kspreadfunc_dec2bin },
   { "DECOCT", kspreadfunc_dec2oct },
   { "ISLOGIC", kspreadfunc_islogical }, // obsolete, use ISLOGICAL
+  { "FABS", kspreadfunc_abs }, // obsolete, use ABS
 
   // end  marker
   { NULL, NULL }
