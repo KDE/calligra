@@ -127,19 +127,19 @@ Manager::info(const QString &mime)
 }
 
 
-void
+bool
 Manager::checkProject(KexiDB::Connection *conn)
 {
 //TODO: catch errors!
 	if(!conn->isDatabaseUsed())
-		return;
+		return false;
 
 	KexiDB::Cursor *cursor = conn->executeQuery("SELECT * FROM kexi__parts", KexiDB::Cursor::Buffered);
 	if(!cursor)
-		return;
+		return false;
 
 	int id=0;
-
+//	QStringList parts_found;
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
 		id++;
@@ -156,27 +156,30 @@ Manager::checkProject(KexiDB::Connection *conn)
 		else
 		{
 			i->setProjectPartID(cursor->value(0).toInt());
+//			parts_found+=cursor->value(2).toString();
 		}
 	}
 
 	conn->deleteCursor(cursor);
 
-	if(id < 2)
-	{
-		KexiDB::TableSchema *ts = conn->tableSchema("kexi__parts");
-		if (!ts)
-			return;
-			
-		KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
-		if (!fl)
-			return;
-
-		conn->insertRecord(*fl, QVariant(1), QVariant("Tables"), QVariant("kexi/table"), QVariant("http://"));
-		conn->insertRecord(*fl, QVariant(2), QVariant("Queries"), QVariant("kexi/query"), QVariant("http://"));
+#if 0 //js: moved to Connection::createDatabase()
+	//add missing default part entries
+	KexiDB::TableSchema *ts = conn->tableSchema("kexi__parts");
+	if (!ts)
+		return false;
+	KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
+	if (!fl)
+		return false;
+	if (!parts_found.contains("kexi/table")) {
+		if (!conn->insertRecord(*fl, QVariant(1), QVariant("Tables"), QVariant("kexi/table"), QVariant("http://")))
+			return false;
 	}
-
-
-	return;
+	if (!parts_found.contains("kexi/query")) {
+		if (!conn->insertRecord(*fl, QVariant(2), QVariant("Queries"), QVariant("kexi/query"), QVariant("http://")))
+			return false;
+	}
+#endif
+	return true;
 }
 
 #include "kexipartmanager.moc"

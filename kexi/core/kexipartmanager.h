@@ -94,7 +94,7 @@ class KEXICORE_EXPORT Manager : public QObject
 		 *
 		 * use @ref missingParts() to get a list of missing parts
 		 */
-		void		checkProject(KexiDB::Connection *conn);
+		bool		checkProject(KexiDB::Connection *conn);
 
 		/**
 		 * @returns parts metioned in the project meta tables but not available locally

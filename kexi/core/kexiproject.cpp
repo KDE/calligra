@@ -183,7 +183,8 @@ KexiProject::initProject()
 //	emit dbAvailable();
 	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
 	
-	Kexi::partManager().checkProject(m_connection);
+	if (!Kexi::partManager().checkProject(m_connection))
+		return false;
 
 	//TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
 	KexiDB::RowData data;

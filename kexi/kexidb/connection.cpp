@@ -370,7 +370,18 @@ bool Connection::createDatabase( const QString &dbName )
 			createDatabase_ERROR;
 		ts = m_kexiDBSystemtables.next();
 	}
-	
+
+	//-create default part info
+	if (!(ts = tableSchema("kexi__parts")))
+		createDatabase_ERROR;
+	FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
+	if (!fl)
+		createDatabase_ERROR;
+	if (!insertRecord(*fl, QVariant(1), QVariant("Tables"), QVariant("kexi/table"), QVariant("http://koffice.org/kexi/")))
+		createDatabase_ERROR;
+	if (!insertRecord(*fl, QVariant(2), QVariant("Queries"), QVariant("kexi/query"), QVariant("http://koffice.org/kexi/")))
+		createDatabase_ERROR;
+
 	//-insert KexiDB version info:
 	TableSchema *t_db = tableSchema("kexi__db");
 	if (!t_db)
@@ -1626,7 +1637,7 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("db_value", Field::LongText ) );
 
 	TableSchema *t_parts = newKexiDBSystemTableSchema("kexi__parts");
-	t_parts->addField( new Field("p_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
+	t_parts->addField( new Field("p_id", Field::Integer, Field::PrimaryKey, Field::Unsigned) )
 	.addField( new Field("p_name", Field::Text) )
 	.addField( new Field("p_mime", Field::Text ) )
 	.addField( new Field("p_url", Field::Text ) );

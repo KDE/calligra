@@ -309,6 +309,24 @@ Detailed TODO for Beta3:
   e.g. width, height properties ca be displayed this way. See also property editor 
 	at http://freshmeat.net/screenshots/41728/
 
+TODO: fix lucijan's hack, with part loading (29 feb)
+--- koffice/kexi/core/kexipartinfo.h  #1.9:1.10
+@@ -92,4 +92,5 @@ class KEXICORE_EXPORT Info
+                 friend class Manager;
+                 friend class KexiProject;
++                friend class KexiMainWindowImpl;
+ 
+
+2004-03-03
+2004-03-02
+Kexi Dialog / View 
+-fixed internal view's focusing: on click on a view, dialog is activated
+-focus cell is now grayed for disabled table views, not for unfocused
+KexiDB
+-"kexi__parts" table is now filled with default (required) parts info
+  automatically in Connection::createDatabase(), not somewhere outside
+TODO: add version info?
+
 2004-02-27
 Kexi Property Editor, Kexi Property Framework
 	-propertyChanged() signal is received from assigned property buffer, 

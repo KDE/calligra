@@ -16,6 +16,8 @@ f_caption Text(200), f_help Text);
 
 CREATE TABLE kexi__querydata (q_id Integer, q_sql LongText, q_valid Boolean );
 
+CREATE TABLE kexi__parts (p_id Integer, p_name Text, p_mime Text, p_url Text);
+
 CREATE TABLE kexi__db (db_property Text(32), db_value LongText );
 
 insert into kexi__objects values (1, 1, 'persons', 'Persons', 'Persons group in our factory');

@@ -119,7 +119,15 @@ kexi__fields
 //these are additional properties:
 	f_order integer,
 	f_caption varchar(200),
-	f_help varchar,
+	f_help varchar
+
+//This table contains a list of parts defined for this database
+kexi__parts
+	p_id integer unsigned primary key auto_increment,
+	p_name varchar(200),
+	p_mime varchar(200),
+	p_url varchar
+TODO: add version?
 
 //This table contains global (predefined or not) properties for this database
 kexi__db
