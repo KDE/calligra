@@ -60,3 +60,6 @@ Comment[uk]=Генератор звітів
 Comment[zh_TW]=簡報設計家
 MimeType=application/x-kudesigner
 X-KDE-NativeMimeType=application/x-kudesigner
+X-KDE-Library=libkudesignerpart
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+
