@@ -15,6 +15,7 @@ dvcenter.xpm \
 dvdist.xpm \
 ellipsetool.xpm \
 linetool.xpm \
+freehandtool.xpm \
 recttool.xpm \
 selecttool.xpm \
 texttool.xpm \
