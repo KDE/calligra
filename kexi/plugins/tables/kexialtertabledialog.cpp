@@ -185,7 +185,7 @@ void KexiAlterTableDialog::initData()
 	m_view->setData(m_data);
 }
 
-bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiPropertyBuffer& buf)
+static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiPropertyBuffer& buf)
 {
 	bool changed = false;
 	KexiProperty *prop;
