@@ -1,0 +1,34 @@
+#!/usr/bin/perl  
+
+# A small script for removing comments and word wrapping in PostScript
+# code. 
+
+$pos = 0;
+
+while (<>) {
+  chop;
+  if (/^%%/) {        # a "%%" string starts a DSC comment
+    if ($pos > 0) {
+      print "\n";
+      $pos = 0;
+    }
+    print "$_\n";
+  }
+  else {
+    s/^[ \t\n]*//g;    # remove leading whitespaces
+    s/%(.)*//sg;       # remove the trailing comments
+    @words = split (/ /);
+    foreach $w (@words) {
+      $len = length ($w) + 1;
+      if ($pos + $len < 80) {
+	print $w, " ";
+	$pos += $len;
+      }
+      else {           # line too long, wrap it
+	print "\n", $w, " ";
+	$pos = $len;
+      }
+    }
+  }
+}
+print "\n";
