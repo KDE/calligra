@@ -1,0 +1,55 @@
+Lotus AmiPro File Format (NOT FINISHED YET)
+
+Ariya Hidayat <ariyahidayat@yahoo.de>
+Last rev: February 27, 2002
+
+1  Foreword
+-----------
+This is solely based on my reverse-engineering work whilst
+I work on AmiPro import filter for KWord.
+
+2  Structure of AmiPro document
+-------------------------------
+An AmiPro document consists of (in order of appearance):
+- header
+- content, i.e the text
+- embedded objects (frame, image, ...)
+
+3  Formatting
+-------------
+Basic text formatting, such as bold, italic, and so on is
+done inline by enclosing the text in a form of tag (like
+HTML tag). A tag is something like: <+$>
+
+The following list summarizes known formmating tags:
+  <+!> bold on
+  <-!> bold off
+  <+"> italic on
+  <-"> italic off
+  <+#> underline on
+  <-#> underline off
+  <+)> double underline on
+  <-)> double underline off
+  <+$> word underline on
+  <-$> word underline off
+  <+&> superscript on
+  <-&> superscript off
+  <+'> subscript on
+  <-'> subscript off
+  <+%> strikethrough on
+  <-%> strikethrough off
+
+Note: Word underline is just like underline, except that
+spaces between words are not underlined.
+
+4  Styles
+---------
+Styles are defined in the header. More about this will be
+examined later.
+
+Styles are applied using the following sequences:
+@StyleName@, which put inline (within the text/content).
+
+5  Frame, Image, Table
+----------------------
+still pretty much a mystery :-P
