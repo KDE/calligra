@@ -1,6 +1,6 @@
 dnl ================
 dnl checks for MySQL
-dnl tooken form KDEDB
+dnl taken form KDEDB
 dnl ================
 
 AC_ARG_ENABLE(mysql, [  --enable-mysql              build MySQL-plugin [default=yes]],
@@ -66,3 +66,71 @@ fi
 
 AM_CONDITIONAL(compile_mysql_plugin, test "$compile_mysql_plugin" = "yes")
 
+dnl =====================
+dnl checks for PostgreSQL
+dnl =====================
+
+dnl add configure-args
+
+AC_ARG_ENABLE(pgsql, [  --enable-pgsql              build PostgreSQL-plugin [default=yes] ],
+              pgsql_plugin=$enableval, pgsql_plugin=yes)
+
+AC_ARG_WITH(pgsqlincdir,
+[  --with-pgsql-includes=DIR   use PostgreSQL-includes installed in this directory ],
+[
+  ac_pgsql_dir=$withval
+], ac_pgsql_dir=/usr/local/include
+)
+
+AC_ARG_WITH(pgsqllibdir,
+[  --with-pgsql-libraries=DIR  use PostgreSQL-libraries installed in this directory ],
+[
+  ac_pgsql_libdir=$withval
+], ac_pgsql_libdir=/usr/local/lib
+)
+
+dnl check for PostgreSQL should be compiled
+dnl and where headers and libraries are installed
+dnl if present compile postgresql-plugin
+
+AC_MSG_CHECKING([for PostgreSQL])
+
+compile_pgsql_plugin="yes"
+
+if test "x$pgsql_plugin" != "xyes"; then
+  compile_pgsql_plugin="no"
+fi
+
+if test "$compile_pgsql_plugin" = "yes"; then
+  dnl check header files
+  pgsql_incdirs="$ac_pgsql_incdir /usr/include /usr/include/pgsql /usr/include/postgresql /usr/local/include /usr/local/pgsql/include /opt/postgres/include"
+  AC_FIND_FILE(libpq-fe.h, $pgsql_incdirs, pgsql_incdir)
+  if test ! -r $pgsql_incdir/libpq-fe.h; then
+    compile_pgsql_plugin="no"
+    AC_MSG_CHECKING("include ")
+  else
+    PG_INCDIR=$pgsql_incdir
+    AC_SUBST(PG_INCDIR)
+  fi
+fi
+
+if test "$compile_pgsql_plugin" = "yes"; then
+  dnl check libraries
+  pgsql_libdirs="$ac_pgsql_libdir /usr/lib /usr/local/lib /usr/local/pgsql/lib /opt/postgres/lib"
+  AC_FIND_FILE(libpq.so, $pgsql_libdirs, pgsql_libdir)
+  if test ! -r $pgsql_libdir/libpq.so; then
+    compile_pgsql_plugin="no"
+    AC_MSG_CHECKING("library ")
+  else
+    PG_LIBDIR=$pgsql_libdir
+    AC_SUBST(PG_LIBDIR)
+  fi
+fi
+
+if test "$compile_pgsql_plugin" = "yes"; then
+  AC_MSG_RESULT([libraries $pgsql_libdir, headers $pgsql_incdir])
+else
+  AC_MSG_RESULT(not found)
+fi
+
+AM_CONDITIONAL(compile_pgsql_plugin, test "$compile_pgsql_plugin" = "yes")
