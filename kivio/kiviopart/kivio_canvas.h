@@ -142,7 +142,7 @@ class KivioCanvas : public QWidget
     void updateScrollBars();
 
     void setZoom(int);
-    
+
   protected:
     virtual void mousePressEvent( QMouseEvent* );
     virtual void mouseReleaseEvent( QMouseEvent* );

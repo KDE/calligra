@@ -450,16 +450,17 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
-  KoPageLayout pl = page->paperLayout();
+  KivioRect r = page->getRectForAllStencils();
 
-  float zw = (float) rect.width() / (float)zoom.zoomItX(pl.ptWidth);
-  float zh = (float) rect.height() / (float)zoom.zoomItY(pl.ptHeight);
+  float zw = (float) rect.width() / (float)zoom.zoomItX(r.w());
+  float zh = (float) rect.height() / (float)zoom.zoomItY(r.h());
   float z = QMIN(zw, zh);
 
   zoom.setZoomAndResolution(qRound(z * 100), QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
   KivioScreenPainter ksp(&painter);
-  paintContent(ksp,rect,transparent,page, QPoint(0, 0), &zoom, false);
+  ksp.painter()->translate( - zoom.zoomItX(r.x()), - zoom.zoomItY(r.y()) );
+  paintContent(ksp,rect,transparent,page, QPoint(zoom.zoomItX(r.x()), zoom.zoomItY(r.y())), &zoom, false);
   ksp.setPainter(0L); // Important! Don't delete the QPainter!!!
 }
 

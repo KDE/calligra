@@ -1796,6 +1796,8 @@ void KivioView::setMousePos( int mx, int my )
   if(sb && (mx >= 0) && (my >= 0)) {
     QString unit = KoUnit::unitName(m_pDoc->units());
     KoPoint xy = m_pCanvas->mapFromScreen(QPoint(mx, my));
+    xy.setX(KoUnit::ptToUnit(xy.x(), m_pDoc->units()));
+    xy.setY(KoUnit::ptToUnit(xy.y(), m_pDoc->units()));
     QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
       .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
     sb->changeItem(text, MOUSEPOS_TEXT);
