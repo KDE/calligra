@@ -259,6 +259,7 @@ void KexiStartupDialog::show()
 	//just some cleanup
 	d->selectedTemplateKey=QString::null;
 	d->existingFileToOpen=QString::null;
+	d->result=-1;
 	
 	KDialog::centerOnScreen(this);
 	KDialogBase::show();
@@ -271,6 +272,9 @@ int KexiStartupDialog::result() const
 
 void KexiStartupDialog::done(int r)
 {
+	if (d->result!=-1) //already done!
+		return;
+
 	kdDebug() << "KexiStartupDialog::done(" << r << ")" << endl;
 	updateSelectedTemplateKeyInfo();
 	
@@ -311,7 +315,7 @@ void KexiStartupDialog::done(int r)
 
 void KexiStartupDialog::reject()
 {
- 	d->result = CancelResult;
+//	d->result = CancelResult;
 	KDialogBase::reject();
 }
 

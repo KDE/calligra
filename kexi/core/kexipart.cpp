@@ -70,7 +70,8 @@ GUIClient::GUIClient(KexiMainWindow *win, Part* part, const QString &i18nInstanc
 	new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this, 
 		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").latin1());
 		setXMLFile(QString("kexi")+part->info()->objectName()+"partui.rc");
-		win->guiFactory()->addClient(this);
+
+	win->guiFactory()->addClient(this);
 }
 
 

@@ -23,11 +23,10 @@
 
 #include <qobject.h>
 #include <qdict.h>
+#include <qintdict.h>
 #include <qvaluelist.h>
 #include <qptrlist.h>
 #include <kservice.h>
-
-#include "kexipartinfo.h"
 
 namespace KexiDB
 {
@@ -36,8 +35,8 @@ namespace KexiDB
 
 namespace KexiPart
 {
-	class Part;
 	class Info;
+	class Part;
 
 
 	struct Missing
@@ -47,10 +46,11 @@ namespace KexiPart
 		QString url;
 	};
 
-	typedef QDict<Info> PartDict;
-	typedef QDictIterator<Info> PartDictIterator;
+	typedef QDict<Info> PartInfoDict;
+	typedef QDictIterator<Info> PartInfoDictIterator;
 	typedef QValueList<Missing> MissingList;
-	typedef QPtrList<Info> PartList;
+	typedef QPtrList<Info> PartInfoList;
+	typedef QIntDict<Part> PartDict;
 
 /**
  * queries parts and dlopens them when needed, they aren't dlopened at startup tough
@@ -105,11 +105,15 @@ class Manager : public QObject
 		/**
 		 * @returns a list of the available KexiParts
 		 */
-		PartList		*partList() { return &m_partlist; }
+		PartInfoList		*partInfoList() { return &m_partlist; }
+
+	signals:
+		void partLoaded(KexiPart::Part*);
 
 	private:
-		PartList	m_partlist;
-		PartDict	m_partsByMime;
+		PartDict m_parts;
+		PartInfoList	m_partlist;
+		PartInfoDict	m_partsByMime;
 		MissingList	m_missing;
 };
 

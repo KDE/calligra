@@ -49,15 +49,15 @@ class KEXICORE_EXPORT KexiBrowser : public KListView
 	Q_OBJECT
 
 	public:
-		KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part);
+		KexiBrowser(KexiMainWindow *parent);
 
 	public slots:
 		void		addGroup(KexiPart::Info *info);
-		void		addItem(KexiPart::Item item);
+		void		addItem(KexiPart::Item *item);
 
 	signals: 
 		//! item execution requested
-		void executeItem( KexiPart::Item );
+		void executeItem( KexiPart::Item* );
 
 	protected slots:
 		void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
@@ -66,8 +66,8 @@ class KEXICORE_EXPORT KexiBrowser : public KListView
 
 	private:
 //		KexiView	*m_view;
-		KexiPart::Info	*m_part;
-		QString		m_mime;
+//		KexiPart::Info	*m_part;
+//		QString		m_mime;
 		KexiMainWindow	*m_parent;
 		BaseItemList	m_baseItems;
 

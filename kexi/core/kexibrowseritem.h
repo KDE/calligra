@@ -45,7 +45,7 @@ class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 //		KexiBrowserItem(KListViewItem *parent, QString mime, QString name, int identifier);
 
 		KexiBrowserItem(KListView *parent, KexiPart::Info *i);
-		KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item item);
+		KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
 //		KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item);
 
 		~KexiBrowserItem() {};
@@ -59,7 +59,7 @@ class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 		KexiPart::Info	*info() { return m_info; }
 
 		//! can be null
-		KexiPart::Item	item() { return m_item; }
+		KexiPart::Item* item() { return m_item; }
 
 	protected:
 		void initItem();
@@ -71,7 +71,7 @@ class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 //js		QString			m_name;
 //js		int			m_identifier;
 		KexiPart::Info *m_info;
-		KexiPart::Item m_item;
+		KexiPart::Item *m_item;
 
 		QString m_sortKey;
 		bool m_fifoSorting : 1;

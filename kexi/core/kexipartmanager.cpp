@@ -23,10 +23,12 @@
 #include <kdebug.h>
 #include <kparts/componentfactory.h>
 
+#include "kexipartmanager.h"
+
 #include "kexipart.h"
 #include "kexipartinfo.h"
-#include "kexipartmanager.h"
-#include "../kexi_global.h"
+
+#include "kexi_global.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
@@ -38,7 +40,7 @@ Manager::Manager(QObject *parent)
 {
 	m_partlist.setAutoDelete(true);
 	m_partsByMime.setAutoDelete(false);
-	
+	m_parts.setAutoDelete(false);//KApp will remove parts
 }
 
 void
@@ -69,17 +71,24 @@ Manager::part(Info *i)
 	if(!i || i->broken())
 		return 0;
 
-	kdDebug() << "Manager::part().." << endl;
-	Part *p = KParts::ComponentFactory::createInstanceFromService<Part>(i->ptr(), this, 0, QStringList());
-
-	if(!p)
-	{
-		kdDebug() << "Manager::part(): failed :(" << endl;
-		i->setBroken(true);
-		return 0;
+	Part *p = m_parts[i->projectPartID()];
+	
+	if(!p) {
+		kdDebug() << "Manager::part().." << endl;
+		p = KParts::ComponentFactory::createInstanceFromService<Part>(i->ptr(), this, 0, QStringList());
+		if(!p) {
+			kdDebug() << "Manager::part(): failed :(" << endl;
+			i->setBroken(true);
+			return 0;
+		}
+		p->setInfo(i);
+		m_parts.insert(i->projectPartID(),p);
+		emit partLoaded(p);
+	}
+	else {
+		kdDebug() << "Manager::part(): cached: " << i->groupName() << endl;
 	}
 
-	p->setInfo(i);
 	kdDebug() << "Manager::part(): fine!" << endl;
 	return p;
 }

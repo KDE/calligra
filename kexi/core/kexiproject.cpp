@@ -48,8 +48,8 @@ KexiProject::KexiProject(KexiProjectData *pdata)
 
 //TODO: partmanager is outside project, so can be initialised just once:
 
-	m_itemListsCache = QIntDict<KexiPart::ItemList>(199);
-	m_itemListsCache.setAutoDelete(true);
+	m_itemDictsCache = QIntDict<KexiPart::ItemDict>(199);
+	m_itemDictsCache.setAutoDelete(true);
 	Kexi::partManager().lookup();
 	
 	m_connection = 0;
@@ -179,73 +179,78 @@ KexiProject::isConnected()
 	return false;
 }
 
-KexiPart::ItemList
+KexiPart::ItemDict*
 KexiProject::items(KexiPart::Info *i)
 {
 	kdDebug() << "KexiProject::items()" << endl;
 	if(!i || !isConnected())
-		return KexiPart::ItemList();
+		return 0;
 
 	//trying in cache...
-	KexiPart::ItemList *list = m_itemListsCache[ i->projectPartID() ];
-	if (list)
-		return *list;
+	KexiPart::ItemDict *dict = m_itemDictsCache[ i->projectPartID() ];
+	if (dict)
+		return dict;
 	//retrieve:
 	KexiDB::Cursor *cursor = m_connection->executeQuery(
 		"SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " 
 		+ QString::number(i->projectPartID()), KexiDB::Cursor::Buffered);
 	if(!cursor)
-		return KexiPart::ItemList();
+		return 0;
 
-	list = new KexiPart::ItemList();
+	dict = new KexiPart::ItemDict(101);
+	dict->setAutoDelete(true);
 
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
-		KexiPart::Item it;
-		it.setIdentifier(cursor->value(0).toInt());
-		it.setMime(i->mime());
-		it.setName(cursor->value(1).toString());
-		it.setCaption(cursor->value(2).toString());
+		KexiPart::Item *it = new KexiPart::Item();
+		it->setIdentifier(cursor->value(0).toInt());
+		it->setMime(i->mime());
+		it->setName(cursor->value(1).toString());
+		it->setCaption(cursor->value(2).toString());
 
-		list->append(it);
+		dict->insert(it->identifier(), it);
 		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<cursor->value(1).toString()<<endl;
 	}
 
 	m_connection->deleteCursor(cursor);
-	kdDebug() << "KexiProject::items(): end with count " << list->count() << endl;
-	m_itemListsCache.insert( i->projectPartID(), list );
-	return *list;
+	kdDebug() << "KexiProject::items(): end with count " << dict->count() << endl;
+	m_itemDictsCache.insert( i->projectPartID(), dict );
+	return dict;
 }
 
-KexiPart::ItemList
+KexiPart::ItemDict*
 KexiProject::items(const QString &mime)
 {
 	KexiPart::Info *info = Kexi::partManager().info(mime);
 	return items(info);
 }
 
-KexiPart::Item
+KexiPart::Item*
 KexiProject::item(const QString &mime, const QString &name)
 {
-	KexiPart::ItemList list = items(mime);
+	KexiPart::ItemDict *dict = items(mime);
+	if (!dict)
+		return 0;
 	const QString l_name = name.lower();
-	for (KexiPart::ItemList::Iterator it = list.begin(); it!=list.end(); ++ it) {
-		if ((*it).name().lower()==l_name)
-			return *it;
+	for (KexiPart::ItemDictIterator it( *dict ); it.current(); ++it) {
+		if (it.current()->name().lower()==l_name)
+			return it.current();
 	}
-	return KexiPart::Item();
+	return 0;
 }
 
-KexiPart::Item
+KexiPart::Item*
 KexiProject::item(KexiPart::Info *i, const QString &name)
 {
-	KexiPart::ItemList list = items(i);
+	KexiPart::ItemDict *dict = items(i);
+	if (!dict)
+		return 0;
 	const QString l_name = name.lower();
-	for (KexiPart::ItemList::Iterator it = list.begin(); it!=list.end(); ++ it) {
-		if ((*it).name().lower()==l_name)
-			return *it;
+	for (KexiPart::ItemDictIterator it( *dict ); it.current(); ++it) {
+		if (it.current()->name().lower()==l_name)
+			return it.current();
 	}
-	return KexiPart::Item();
+	return 0;
 }
 
 void KexiProject::setError(int code, const QString &msg )

@@ -21,7 +21,7 @@
 #define KEXIPROJECTPARTITEM_H
 
 #include <qobject.h>
-
+#include <qintdict.h>
 
 /** Project Part Item stores 
 	- KexiProjectHandler
@@ -68,7 +68,9 @@ class KEXICORE_EXPORT Item
 		int		m_id;
 };
 
-typedef QValueList<Item> ItemList;
+//typedef QValueList<Item> ItemList;
+typedef QIntDict<KexiPart::Item> ItemDict;
+typedef QIntDictIterator<KexiPart::Item> ItemDictIterator;
 
 }
 

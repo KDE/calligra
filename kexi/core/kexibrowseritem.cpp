@@ -27,6 +27,7 @@
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
  : KListViewItem(parent, " "+ i->groupName())
 {
+	m_item = 0;
 	m_info = i;
 	setPixmap(0, SmallIcon(i->groupIcon()));
 	setOpen(true);
@@ -35,8 +36,8 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
 	m_fifoSorting = 1; //because this is top level item
 }
 
-KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item item)
- : KListViewItem(parent, " "+ item.name())
+KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item)
+ : KListViewItem(parent, " "+ item->name())
 {
 	m_item = item;
 	m_info = i;
@@ -57,100 +58,6 @@ void KexiBrowserItem::initItem()
 	m_sortKey.sprintf("%2.2d",sortKey);
 	kdDebug() << "m_sortKey=" << m_sortKey << endl;
 }
-
-#if 0
-KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, int identifier, KexiPart::Info *info)
- : KListViewItem(parent, " "+ name)
-{
-	m_mime = mime;
-	m_name = name;
-	m_identifier = identifier;
-	m_info = info;
-
-//	m_proxy = 0;
-//	m_item = 0;
-	
-	initItem();
-	m_fifoSorting = 1; //because this is top level item
-}
-
-KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy *proxy)
- : KListViewItem(parent, " "+ proxy->part()->groupName())
-{
-	m_mime = proxy->part()->mime();
-	m_name = proxy->part()->groupName();
-	m_identifier = QString::null;
-
-	m_proxy = proxy;
-	m_item = 0;
-	
-	initItem();
-	m_fifoSorting = 1; //because this is top level item
-}
-
-KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item)
- : KListViewItem(parent, " "+ item->title())
-{
-	m_mime = item->mime();
-	m_name = item->title();
-	m_identifier = item->fullIdentifier();
-	m_item = item;
-	m_proxy = 0;
-	
-	initItem();
-	m_fifoSorting = 1; //because this is top level item
-}
-
-KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString name, int identifier)
- : KListViewItem(parent, " "+ name)
-{
-	m_mime = mime;
-	m_name = name;
-	m_identifier = identifier;
-//	m_proxy = 0;
-//	m_item = 0;
-	m_info = 0;
-
-	initItem();
-}
-
-KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item)
- : KListViewItem(parent, " "+ item->title())
-{
-	m_mime = item->mime();
-	m_name = item->title();
-	m_identifier = item->fullIdentifier();
-	m_item = item;
-	m_proxy = 0;
-	
-	initItem();
-}
-#endif
-
-
-/*KexiProjectHandlerProxy*
-KexiBrowserItem::proxy()
-{
-	return m_proxy;
-}
-
-KexiProjectHandlerItem*
-KexiBrowserItem::item()
-{
-	return m_item;
-}*/
-
-/*QString
-KexiBrowserItem::mime()
-{
-	return m_mime;
-}
-
-QString
-KexiBrowserItem::name()
-{
-	return m_name;
-}*/
 
 void
 KexiBrowserItem::clearChildren()

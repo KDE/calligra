@@ -91,17 +91,17 @@ class KexiProject : public QObject, public KexiDB::Object
 		/**
 		 * @return all items of a type \a i in this project
 		 */
-		KexiPart::ItemList items(KexiPart::Info *i);
+		KexiPart::ItemDict* items(KexiPart::Info *i);
 
 		/**
 		 * @return all items of a type \a mime in this project
 		 * It is a convenience function.
 		 */
-		KexiPart::ItemList items(const QString &mime);
+		KexiPart::ItemDict* items(const QString &mime);
 
-		KexiPart::Item item(const QString &mime, const QString &name);
+		KexiPart::Item* item(const QString &mime, const QString &name);
 		//! convenience function
-		KexiPart::Item item(KexiPart::Info *i, const QString &name);
+		KexiPart::Item* item(KexiPart::Info *i, const QString &name);
 
 		/**
 		 * @return the database connection assosiated with this project
@@ -144,11 +144,12 @@ class KexiProject : public QObject, public KexiDB::Object
 		QString m_error_title;
 
 		//! a cache for item() method, indexed by project part's ids
-		QIntDict<KexiPart::ItemList> m_itemListsCache;
+		QIntDict<KexiPart::ItemDict> m_itemDictsCache;
 //		KexiProjectConnectionData	*m_connData;
 //js		KexiPart::Manager		*m_partManager;
 //		QString				m_error;
 };
+
 
 #endif
 

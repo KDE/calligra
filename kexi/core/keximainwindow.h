@@ -36,6 +36,7 @@ namespace KexiDB {
 }
 namespace KexiPart {
 	class Item;
+	class Part;
 }
 
 /**
@@ -134,8 +135,6 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		initNavigator();
 
-		void		slotImportFile();
-
 		/**
 		 * this slot is called if a window changes
 		 */
@@ -147,11 +146,12 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		childClosed(KMdiChildView *dlg);
 
-		bool executeObject(KexiPart::Item item);
+		bool executeObject(KexiPart::Item *item);
 
 		//! for convenience
 		bool executeObject(const QString& mime, const QString& name);
 
+		void slotPartLoaded(KexiPart::Part* p);
 
 		//! Shows an error message signaled by project's objects, connections, etc.
 		void showErrorMessage(const QString&,KexiDB::Object *obj);
@@ -171,6 +171,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void slotProjectProperties();
 		void slotProjectClose();
 		void slotQuit();
+		void slotImportFile();
 
 	private:
 

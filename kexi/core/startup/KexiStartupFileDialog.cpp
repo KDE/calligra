@@ -88,7 +88,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
 	}
 	mime = KMimeType::mimeType("all/allfiles");
 	if (mime) {
-		filter += mime->patterns().join(" ") + "|" + mime->comment()+ " (*)\n";
+		filter += (mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) + "|" + mime->comment()+ " (*)\n";
 	}
 	
 	if (allfilters.count()>1) {//prepend "all supoported files" entry
@@ -211,6 +211,7 @@ void KexiStartupFileDialog::setLocationText(const QString& fn)
 {
 #ifdef Q_WS_WIN
 	//js @todo
+	setSelection(fn);
 #else
 	locationWidget()->setCurrentText(fn);
 #endif

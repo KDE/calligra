@@ -35,11 +35,12 @@
 #include "kexidialogbase.h"
 #include "keximainwindow.h"
 
-KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part )
+//KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part )
+KexiBrowser::KexiBrowser(KexiMainWindow *parent )
  : KListView(parent,"KexiBrowser")
 {
-	m_mime = mime;
-	m_part = part;
+//	m_mime = mime;
+//	m_part = part;
 	m_parent = parent;
 
 	setCaption(i18n("Navigator"));
@@ -60,12 +61,12 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *p
 //connect(this, SIGNAL(doubleClicked(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
 	connect(this, SIGNAL(returnPressed(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
 
-	if(part)
+/*	if(part)
 	{
 //		connect(part, SIGNAL(itemListChanged(KexiProjectHandler *)), this, SLOT(slotItemListChanged(KexiProjectHandler *)));
 //		slotItemListChanged(part);
 	}
-
+*/
 }
 
 void
@@ -82,10 +83,12 @@ KexiBrowser::addGroup(KexiPart::Info *info)
 }
 
 void
-KexiBrowser::addItem(KexiPart::Item item)
+KexiBrowser::addItem(KexiPart::Item *item)
 {
+	if (!item)
+		return;
 	//part object for this item
-	KexiBrowserItem *parent = m_baseItems.find(item.mime().lower());
+	KexiBrowserItem *parent = m_baseItems.find(item->mime().lower());
 	if (!parent) //TODO: add "Other" part group for that
 		return;
 	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
@@ -177,7 +180,7 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 	kdDebug() << "KexiBrowser::slotExecuteItem()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
 
-	if (it->item().identifier()==0)
+	if (!it->item())
 		return;
 	emit executeItem( it->item() );
 

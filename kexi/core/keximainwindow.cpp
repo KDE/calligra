@@ -42,6 +42,8 @@
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
 #include "kexipart.h"
+#include "kexipartinfo.h"
+#include "kexipartguiclient.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
 #include "kexi.h"
@@ -103,6 +105,9 @@ KexiMainWindow::KexiMainWindow()
 	setXMLFile("kexiui.rc");
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
 	setStandardMDIMenuEnabled();
+
+	//get informed
+	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
 
 	initActions();
 	createShellGUI(true);
@@ -326,9 +331,9 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 			continue;
 		}
 
-		KexiPart::Item item = d->prj->item(i, (*it).second);
+		KexiPart::Item *item = d->prj->item(i, (*it).second);
 
-		if (item.isNull()) {
+		if (!item) {
 			not_found_msg += ( (*it).second + " - " + i18n("object not found") +"<br>" );
 			continue;
 		}
@@ -399,32 +404,35 @@ KexiMainWindow::initNavigator()
 
 	if(!d->nav)
 	{
-		d->nav = new KexiBrowser(this, "kexi/db", 0);
+//		d->nav = new KexiBrowser(this, "kexi/db", 0);
+		d->nav = new KexiBrowser(this);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
-		connect(d->nav,SIGNAL(executeItem(KexiPart::Item)),this,SLOT(executeObject(KexiPart::Item)));
+		connect(d->nav,SIGNAL(executeItem(KexiPart::Item*)),this,SLOT(executeObject(KexiPart::Item*)));
 
 	}
-	if(d->prj->isConnected())
-	{
+	if(d->prj->isConnected()) {
 		d->nav->clear();
 
-		KexiPart::PartList *pl = Kexi::partManager().partList(); //d->prj->partManager()->partList();
+		KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList(); //d->prj->partManager()->partList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
 			kdDebug() << "KexiMainWindow::initNavigator(): adding " << it->groupName() << endl;
 			d->nav->addGroup(it);
-			KexiPart::Part *p=Kexi::partManager().part(it);
+
+/*			KexiPart::Part *p=Kexi::partManager().part(it);
 			if (!p) {
 				//TODO: js - OPTIONALLY: show error
 				continue;
 			}
-			p->createGUIClient(this);
+			p->createGUIClient(this);*/
 			//lookup project's objects (part items)
 			//js: FUTURE TODO - don't do that when DESIGN MODE is OFF 
-			KexiPart::ItemList item_list = d->prj->items(p->info());
-			for (KexiPart::ItemList::Iterator item_it = item_list.begin(); item_it != item_list.end(); ++item_it) {
-				d->nav->addItem(*item_it);
+			KexiPart::ItemDict *item_dict = d->prj->items(it);
+			if (!item_dict)
+				continue;
+			for (KexiPart::ItemDictIterator item_it( *item_dict ); item_it.current(); ++item_it) {
+				d->nav->addItem(item_it);
 			}
 		}
 	}
@@ -433,6 +441,11 @@ KexiMainWindow::initNavigator()
 //	d->action_show_nav->setChecked(d->nav->isVisible());
 //TODO	d->nav->plugToggleAction(m_actionBrowser);
 
+}
+
+void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
+{
+	new KexiPart::GUIClient(this, p, p->instanceName());
 }
 
 void
@@ -739,6 +752,9 @@ KexiMainWindow::slotProjectClose()
 {
 }
 
+void KexiMainWindow::slotImportFile() {
+}
+
 void
 KexiMainWindow::slotQuit()
 {
@@ -801,9 +817,6 @@ KexiMainWindow::showErrorMessage(const QString &title, KexiDB::Object *obj)
 	showErrorMessage(msg, details);
 }
 
-void KexiMainWindow::slotImportFile() {
-}
-
 void
 KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
@@ -840,24 +853,26 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 bool
 KexiMainWindow::executeObject(const QString& mime, const QString& name)
 {
-	KexiPart::Item item = d->prj->item(mime,name);
-	if (item.isNull())
+	KexiPart::Item *item = d->prj->item(mime,name);
+	if (!item)
 		return false;
 	return executeObject(item);
 }
 
 bool
-KexiMainWindow::executeObject(KexiPart::Item item)
+KexiMainWindow::executeObject(KexiPart::Item* item)
 {
-	if (activateWindow(item.identifier()))
+	if (!item)
+		return false;
+	if (activateWindow(item->identifier()))
 		return true;
 
-	KexiPart::Part *part = Kexi::partManager().part(item.mime());
+	KexiPart::Part *part = Kexi::partManager().part(item->mime());
 	if (!part) {
 		//TOOD js: error msg
 		return false;
 	}
-	return part->execute(this, item) != 0;
+	return part->execute(this, *item) != 0;
 }
 
 #include "keximainwindow.moc"
