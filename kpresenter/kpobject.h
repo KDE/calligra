@@ -292,9 +292,6 @@ protected:
         &tagDISAPPEAR, &attrDoit, &attrNum, &tagFILLTYPE,
         &tagGRADIENT, &tagPEN, &tagBRUSH, &attrValue;
 
-    KoPoint origTopLeftPointInGroup;
-    KoSize origSizeInGroup;
-
 private:
     // Don't copy or assign it
     KPObject(const KPObject &rhs);
