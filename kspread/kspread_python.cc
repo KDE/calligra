@@ -1,8 +1,7 @@
 #include "kspread_python.h"
 
 #include <assert.h>
-
-PyObject *pyDict;
+#include <iostream>
 
 KPythonModule::KPythonModule( const char *_name )
 {
@@ -13,6 +12,8 @@ KPythonModule::KPythonModule( const char *_name )
   assert( m_pModule );
   
   m_pDict = PyModule_GetDict( m_pModule );
+  assert( m_pDict );
+  
   PyDict_SetItemString( m_pDict, "__dummy__", Py_None );
   PyDict_SetItemString( m_pDict, "__builtins__", PyEval_GetBuiltins() );
 }
@@ -77,11 +78,41 @@ void KPythonModule::registerMethods( struct PyMethodDef* _methods )
     Py_InitModule( (char*)(m_strName.data()), _methods );
 }
 
-KSpreadPythonModule::KSpreadPythonModule( const char *_name ) : KPythonModule( _name )
+KSpreadPythonModule::KSpreadPythonModule( const char *_name, int _doc_id ) : KPythonModule( _name )
 {
+  PyObject* o = Py_BuildValue( "i", _doc_id );
+  PyObject_SetAttrString( m_pModule, "_document_id", o );
+  Py_DECREF( o );
 }
 
-bool KSpreadPythonModule::eval( const char* _cmd, QString & _result )
+bool KSpreadPythonModule::setContext( int _map_id, int _table_id )
+{
+  QString buffer;
+  buffer.sprintf( "Workbooks(%i).Worksheets", _map_id );  
+  PyObject *obj;
+  obj = eval( buffer );
+  if ( !obj )
+  {
+    cerr << "ERROR in python stuff 1" << endl;
+    return false;
+  }
+  PyObject_SetAttrString( m_pModule, "Worksheets", obj );
+  Py_DECREF( obj );
+
+  buffer.sprintf( "Worksheets(%i).Range", _table_id );  
+  obj = eval( buffer );
+  if ( !obj )
+  {
+    cerr << "ERROR in python stuff 2" << endl;
+    return false;
+  }
+  PyObject_SetAttrString( m_pModule, "Range", obj );
+  Py_DECREF( obj );
+
+  return true;
+}
+
+PyObject* KSpreadPythonModule::eval( const char* _cmd )
 {
     printf("Running '%s'\n",_cmd);
     
@@ -92,7 +123,7 @@ bool KSpreadPythonModule::eval( const char* _cmd, QString & _result )
 
 	PyObject *e = PyErr_Occurred();
 	if ( e == NULL )
-	    return FALSE;
+	    return 0L;
 
 	PyObject *e1, *e2, *e3;
 	PyErr_Fetch( &e1, &e2, &e3 );
@@ -113,168 +144,11 @@ bool KSpreadPythonModule::eval( const char* _cmd, QString & _result )
 	
 	PyErr_Clear();
 	
-	return FALSE;
-    }
-
-    double res;
-    if ( !PyArg_Parse( v, "d", &res ) )
-    {
-	char *str;
-	if ( !PyArg_Parse( v, "s", &str ) )
-	{
-	    printf(" Could not parse\n");
-	    return FALSE;
-	}
-	_result = str;
-	_result.detach();
-    }
-    else
-    {
-	char buffer[ 1024 ];
-	sprintf( buffer, "%f", res );
-	_result = buffer;
-	_result.detach();
+	return 0L;
     }
     
-    Py_DECREF( v );
-
-    printf("RESULT is '%s'\n",_result.data());
-    
-    return TRUE;
+    return v;
 }
 
-void pythonInit( int argc, char** argv )
-{
-    /* Initialize the Python interpreter.  Required. */
-    Py_Initialize();
 
-    /* Define sys.argv.  It is up to the application if you
-       want this; you can also let it undefined (since the Python 
-       code is generally not a main program it has no business
-       touching sys.argv...) */
-    PySys_SetArgv(argc, argv);
 
-    PyObject *m = PyImport_AddModule("__main__");
-    if ( m == NULL )
-    {
-	printf("ERROR: Python: Could not import __main__\n");
-	exit(1);
-    }
-    pyDict = PyModule_GetDict( m );
-
-    /* Execute some Python statements (in module __main__) */
-    PyRun_SimpleString("import sys\n");
-    PyRun_SimpleString("from xcllib import *\n");
-    PyRun_SimpleString("import xcl\n");
-    PyRun_SimpleString("print sys.builtin_module_names\n");
-    // PyRun_SimpleString("print sys.argv\n");
-
-    // PyObject *m2 = Py_InitModule("xcl", xcl_methods);
-
-    /* PyObject *m2 = PyImport_AddModule("xcl");
-    if ( m2 == NULL )
-    {
-	printf("ERROR: Python: Could not import xcl\n");
-	exit(1);
-    } 
-
-    pyKSpreadDict = PyModule_GetDict( m2 ); */
-
-    /* if ( PyRun_SimpleFile( 0L, "xcl.py" ) != 0 )
-    {
-	printf("Could not exec xcl.py\n");
-	exit(1);
-    } */
-
-    /* QString erg;
-    if ( !pythonEval( "import xcl", erg ) )
-    {
-	printf("Could not exec xcl.py\n");
-	exit(1);
-    } */
-}
-
-void initqt()
-{
-}
-
-bool pythonEval( const char* _cmd, QString & _result )
-{
-    PyObject *v = PyRun_String( (char*)_cmd, eval_input ,pyDict, pyDict );
-    if ( v == 0L )
-    {
-	printf("ERROR: Python: Could not exec\n");
-
-	PyObject *e = PyErr_Occurred();
-	if ( e == NULL )
-	    return FALSE;
-
-	PyObject *e1, *e2, *e3;
-	PyErr_Fetch( &e1, &e2, &e3 );
-	
-	char *str1 = "";
-	if ( e1 != 0L )
-	    PyArg_Parse( e1, "s", &str1 );
-	
-	char *str2 = "";
-	if ( e2 != 0L )
-	    PyArg_Parse( e2, "s", &str2 );
-
-	char *str3 = "";
-	if ( e2 != 0L )
-	    PyArg_Parse( e3, "s", &str3 );
-
-	printf("Traceback:\n%s\n%s\n%s\n",str1,str2,str3);
-	
-	PyErr_Clear();
-	
-	return FALSE;
-    }
-
-    /*    s = PyObject_Str( v );
-    if ( s == NULL )
-    {
-	printf("Could not convert to string\n");
-	exit(1);
-    } */
-    
-    /* char *str;
-    if ( !PyArg_Parse( v, "s", &str ) )
-    {
-	printf(" Could not parse\n");
-	return FALSE;
-    }
-    printf("=%s\n",str); */
-
-    /* int res;
-    if ( !PyArg_Parse( v, "i", &res ) )
-    {
-	printf(" Could not parse int\n");
-	return 1;
-    }
-    printf("=%i\n",res); */
-
-    double res;
-    if ( !PyArg_Parse( v, "d", &res ) )
-    {
-	char *str;
-	if ( !PyArg_Parse( v, "s", &str ) )
-	{
-	    printf(" Could not parse\n");
-	    return FALSE;
-	}
-	_result = str;
-	_result.detach();
-    }
-    else
-    {
-	char buffer[ 1024 ];
-	sprintf( buffer, "%f", res );
-	_result = buffer;
-	_result.detach();
-    }
-    
-    Py_DECREF( v );
-    
-    return TRUE;
-}

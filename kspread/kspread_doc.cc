@@ -15,35 +15,147 @@
 #include <kapp.h>
 #include <qdatetm.h>
 #include <klocale.h>
+#include <string>
+#include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h>
 
 int documentCount = 0;
 int moduleCount = 0;
 
 PyObject * xcl_Cell( PyObject* self, PyObject *args);
+PyObject * xcl_SetCell( PyObject*, PyObject *args);
+PyObject * xcl_ParseRange( PyObject*, PyObject *args);
 
 struct PyMethodDef xcl_methods[] = {
-    {"Cell",	xcl_Cell, 1},
+    {"cell",	xcl_Cell, 1},
+    {"setCell",	xcl_SetCell, 1},
+    {"parseRange", xcl_ParseRange, 1},
     {NULL,		NULL}		/* sentinel */
 };
 
 PyObject * xcl_Cell( PyObject*, PyObject *args)
 {
-    KSpreadTable *table;
-    int row, column;
-    if ( !PyArg_ParseTuple( args, "lii", &table, &column, &row ) )
+  int tableid;
+  int row, column;
+  int docid;
+  
+  if ( !PyArg_ParseTuple( args, "iiii", &docid, &tableid, &column, &row ) )
+  {
+    printf("ERROR: Could not parse\n");
+    return NULL;
+  }
+
+  /*
+  KSpreadDoc* doc = KSpreadDoc::find( docid );
+  if ( !doc )
+  {
+    cerr << "ERROR: Unknown document " << docid << endl;
+    return NULL;
+  }
+  */
+  KSpreadTable *t = KSpreadTable::find( tableid );
+  if ( t == 0L )
+  {
+    cerr << "ERROR: Unknown table " << tableid << endl;
+    return NULL;
+  }
+    
+  KSpreadCell *obj = t->cellAt( column, row );
+
+  if ( obj->isValue() )
+    return Py_BuildValue( "d", (double)obj->valueDouble() );
+  else if ( obj->valueString() != NULL )
+    return Py_BuildValue( "s", obj->valueString() );
+  else
+    return Py_BuildValue( "s", "" );
+}
+
+PyObject * xcl_SetCell( PyObject*, PyObject *args)
+{
+  int tableid;
+  int row, column;
+  const char* value;
+  int docid;
+  
+  if ( PyArg_ParseTuple( args, "iiiis", &docid, &tableid, &column, &row, &value ) )
+  {
+    /* KSpreadDoc* doc = KSpreadDoc::find( docid );
+    if ( !doc )
     {
-	printf("ERROR: Could not parse\n");
-	return NULL;
+      cerr << "ERROR: Unknown document " << docid << endl;
+      return NULL;
     }
+    */
+    KSpreadTable *t = KSpreadTable::find( tableid );
+    if ( t == 0L )
+    {
+      cerr << "ERROR: Unknown table " << tableid << endl;
+      return NULL;
+    }
+    KSpreadCell *obj = t->nonDefaultCell( column, row );
 
-    KSpreadCell *obj = table->cellAt( column, row );
+    obj->setText( value );
+    return Py_None;
+  }
 
-    if ( obj->isValue() )
-	return Py_BuildValue( "d", (double)obj->valueDouble() );
-    else if ( obj->valueString() != NULL )
-	return Py_BuildValue( "s", obj->valueString() );
-    else
-	return Py_BuildValue( "s", "" ); 
+  double dvalue;
+  if ( !PyArg_ParseTuple( args, "iiiid", &docid, &tableid, &column, &row, &dvalue ) )
+  {
+    printf("ERROR: Could not parse\n");
+    return NULL;
+  }
+
+  /* KSpreadDoc* doc = KSpreadDoc::find( docid );
+  if ( !doc )
+  {
+    cerr << "ERROR: Unknown document " << docid << endl;
+    return NULL;
+  } */
+    
+  KSpreadTable *t = KSpreadTable::find( tableid );
+  if ( t == 0L )
+  {
+    cerr << "ERROR: Unknown table " << tableid << endl;
+    return NULL;
+  }
+
+  KSpreadCell *obj = t->nonDefaultCell( column, row );
+  obj->setValue( dvalue );
+  return Py_None;
+}
+
+PyObject * xcl_ParseRange( PyObject*, PyObject *args)
+{
+  const char* range;
+  int docid;
+  int tabelid;
+  /*
+  if ( !PyArg_ParseTuple( args, "iis", &docid, &tableid, &range ) )
+  {
+    printf("ERROR: Could not parse\n");
+    return NULL;
+  }
+  
+  KSpreadDoc* doc = KSpreadDoc::find( docid );
+  if ( !doc )
+  {
+    cerr << "ERROR: Unknown document " << docid << endl;
+    return NULL;
+  }
+  
+  KSpreadTable *t = doc->map()->findTable( table );
+  if ( t == 0L )
+  {
+    cerr << "ERROR: Unknown table " << table << endl;
+    return NULL;
+  }
+    
+  KSpreadCell *obj = t->cellAt( column, row );
+  */
+
+  // Returns ( table, col1, row1, col2, row2 )
+  return Py_BuildValue( "(iiiii)",2,5,8,7,6 );
 }
 
 /*****************************************************************************
@@ -52,8 +164,24 @@ PyObject * xcl_Cell( PyObject*, PyObject *args)
  *
  *****************************************************************************/
 
+int KSpreadDoc::s_docId = 0L;
+QIntDict<KSpreadDoc>* KSpreadDoc::s_mapDocuments;
+
+KSpreadDoc* KSpreadDoc::find( int _docId )
+{
+  if ( !s_mapDocuments )
+    return 0L;
+  
+  return (*s_mapDocuments)[ _docId ];
+}
+
 KSpreadDoc::KSpreadDoc()
 {
+    if ( s_mapDocuments == 0L )
+      s_mapDocuments = new QIntDict<KSpreadDoc>;
+    m_docId = s_docId++;
+    s_mapDocuments->insert( m_docId, this );
+    
     m_pEditor = 0L;
     m_pPython = 0L;
     
@@ -67,6 +195,8 @@ KSpreadDoc::KSpreadDoc()
     calcPaperSize();
     m_orientation = PG_PORTRAIT;
     m_pMap = 0L;
+    m_bLoading = false;
+    m_bEmpty = true;
     
     m_iTableId = 1;
 
@@ -91,15 +221,22 @@ CORBA::Boolean KSpreadDoc::init()
 
 void KSpreadDoc::cleanUp()
 {
+  cerr << "CLeanUp KSpreadDoc" << endl;
+  
   if ( m_bIsClean )
     return;
 
   assert( m_lstViews.count() == 0 );
+
+  if ( m_pMap )
+  {
+    delete m_pMap;
+    m_pMap = 0L;
+  }
   
   m_lstAllChildren.clear();
-  // m_lstChildren.clear();
 
-  Document_impl::cleanUp();
+  KoDocument::cleanUp();
 }
 
 void KSpreadDoc::removeView( KSpreadView* _view )
@@ -107,17 +244,21 @@ void KSpreadDoc::removeView( KSpreadView* _view )
   m_lstViews.removeRef( _view );
 }
 
-OPParts::View_ptr KSpreadDoc::createView()
+KSpreadView* KSpreadDoc::createSpreadView()
 {
   KSpreadView *p = new KSpreadView( 0L, 0L, this );
-  p->setGeometry( 5000, 5000, 100, 100 );
   p->QWidget::show();
   m_lstViews.append( p );
   
-  return OPParts::View::_duplicate( p );
+  return p;
 }
 
-void KSpreadDoc::viewList( OPParts::Document::ViewList*& _list )
+OpenParts::View_ptr KSpreadDoc::createView()
+{
+  return OpenParts::View::_duplicate( createSpreadView() );
+}
+
+void KSpreadDoc::viewList( OpenParts::Document::ViewList*& _list )
 {
   (*_list).length( m_lstViews.count() );
 
@@ -125,11 +266,16 @@ void KSpreadDoc::viewList( OPParts::Document::ViewList*& _list )
   QListIterator<KSpreadView> it( m_lstViews );
   for( ; it.current(); ++it )
   {
-    (*_list)[i++] = OPParts::View::_duplicate( it.current() );
+    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
   }
 }
 
-void KSpreadDoc::makeChildListIntern( OPParts::Document_ptr _root, const char *_path )
+int KSpreadDoc::viewCount()
+{
+  return m_lstViews.count();
+}
+
+void KSpreadDoc::makeChildListIntern( KOffice::Document_ptr _root, const char *_path )
 {
   m_pMap->makeChildList( _root, _path );
 }
@@ -139,7 +285,7 @@ bool KSpreadDoc::hasToWriteMultipart()
   return m_pMap->hasToWriteMultipart();
 }
 
-bool KSpreadDoc::save( ostream& out )
+bool KSpreadDoc::save( ostream& out, const char* /* format */ )
 {
   out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KSpread"
@@ -170,8 +316,12 @@ bool KSpreadDoc::save( ostream& out )
   return true;
 }
 
-bool KSpreadDoc::load( KOMLParser& parser )
+bool KSpreadDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
+  cerr << "------------------------ LOADING --------------------" << endl;
+
+  m_bLoading = true;
+  
   string tag;
   vector<KOMLAttrib> lst;
   string name;
@@ -180,6 +330,7 @@ bool KSpreadDoc::load( KOMLParser& parser )
   if ( !parser.open( "DOC", tag ) )
   {
     cerr << "Missing DOC" << endl;
+    m_bLoading = false;
     return false;
   }
   
@@ -192,6 +343,7 @@ bool KSpreadDoc::load( KOMLParser& parser )
       if ( (*it).m_strValue != "application/x-kspread" )
       {
 	cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	m_bLoading = false;
 	return false;
       }
     }
@@ -289,6 +441,7 @@ bool KSpreadDoc::load( KOMLParser& parser )
 	if ( !parser.close( tag ) )
         {
 	  cerr << "ERR: Closing Child" << endl;
+	  m_bLoading = false;
 	  return false;
 	}
       }
@@ -296,7 +449,10 @@ bool KSpreadDoc::load( KOMLParser& parser )
     else if ( name == "MAP" )
     {
       if ( !m_pMap->load( parser, lst ) )
+      {
+	m_bLoading = false;  
 	return false;
+      }
     }
     else
       cerr << "Unknown tag '" << tag << "' in TABLE" << endl;    
@@ -304,15 +460,31 @@ bool KSpreadDoc::load( KOMLParser& parser )
     if ( !parser.close( tag ) )
     {
       cerr << "ERR: Closing Child" << endl;
+      m_bLoading = false;
       return false;
     }
   }
 
   parser.close( tag ); 
 
+  cerr << "------------------------ LOADING DONE --------------------" << endl;
+  
   return true;
 }
 
+bool KSpreadDoc::completeLoading( KOStore::Store_ptr /* _store */ )
+{
+  cerr << "------------------------ COMPLETING --------------------" << endl;
+
+  m_pMap->update();
+
+  cerr << "------------------------ COMPLETION DONE --------------------" << endl;
+
+  m_bLoading = false;
+  m_bModified = false;
+
+  return true;
+}
 
 KSpreadTable* KSpreadDoc::createTable()
 {
@@ -384,6 +556,10 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 	f = PG_DIN_A4;
     else if ( strcmp( "A5", _paper ) == 0L )
 	f = PG_DIN_A5;
+    else if ( strcmp( "B5", _paper ) == 0L )
+	f = PG_DIN_B5;
+    else if ( strcmp( "Executive", _paper ) == 0L )
+	f = PG_US_EXECUTIVE;
     else if ( strcmp( "Letter", _paper ) == 0L )
 	f = PG_US_LETTER;
     else if ( strcmp( "Legal", _paper ) == 0L )
@@ -430,6 +606,14 @@ void KSpreadDoc::calcPaperSize()
 	m_paperWidth = PG_A3_WIDTH;
 	m_paperHeight = PG_A3_HEIGHT;
 	break;
+    case PG_DIN_B5:
+	m_paperWidth = PG_B5_WIDTH;
+	m_paperHeight = PG_B5_HEIGHT;
+	break;
+    case PG_US_EXECUTIVE:
+	m_paperWidth = PG_US_EXECUTIVE_WIDTH;
+	m_paperHeight = PG_US_EXECUTIVE_HEIGHT;
+	break;
     case PG_US_LETTER:
 	m_paperWidth = PG_US_LETTER_WIDTH;
 	m_paperHeight = PG_US_LETTER_HEIGHT;
@@ -456,6 +640,10 @@ QString KSpreadDoc::paperFormatString()
 	return QString( "A4" );
     case PG_DIN_A3:
 	return QString( "A3" );
+    case PG_DIN_B5:
+	return QString( "B5" );
+    case PG_US_EXECUTIVE:
+	return QString( "Executive" );
     case PG_US_LETTER:
 	return QString( "Letter" );
     case PG_US_LEGAL:
@@ -547,26 +735,55 @@ void KSpreadDoc::reloadScripts()
     t->setCalcDirtyFlag();
   }
 
-  // TODO
-  // emit signal
-  /* if ( pGui )
-	pGui->canvasWidget()->repaint(); */
+  for ( t = m_pMap->firstTable(); t != 0L; t = m_pMap->nextTable() )
+    t->recalc();
+
+  emit sig_updateView();
 }
 
 void KSpreadDoc::initPython()
-{
-    QString d = kapp->kde_datadir().copy();
-    d += "/kspread/scripts/xcllib.py";
-
-    // if ( access( d, R_OK ) < 0 )
-    //warning( i18n( "Could not read '%s'\n" ), d.data() );
-    assert( access( d, R_OK ) >= 0 );
-    
+{    
     QString t2;
     t2.sprintf( "xclModule%i", ++moduleCount );
-    m_pPython = new KSpreadPythonModule( t2 );
+    m_pPython = new KSpreadPythonModule( t2, docId() );
     m_pPython->registerMethods( xcl_methods );
+
+    QString d = kapp->kde_datadir().copy();
+    d += "/kspread/scripts/xcllib.py";
+    assert( access( d, R_OK ) >= 0 );
     m_pPython->runFile( d );
+
+    d = kapp->kde_datadir().copy();
+    d += "/kspread/scripts/classes.py";
+    assert( access( d, R_OK ) >= 0 );
+    m_pPython->runFile( d );
+
+    string path = kapp->localkdedir().data();
+    path += "/share/apps/kspread/scripts";
+
+    DIR *dp = 0L;
+    struct dirent *ep;
+
+    dp = opendir( path.c_str() );
+    if ( dp == 0L )
+      return;
+    
+    while ( ( ep = readdir( dp ) ) != 0L )
+    {  
+      string f = path;
+      f += "/";
+      f += ep->d_name;
+      struct stat buff;
+      if ( f != "." && f != ".." && ( stat( f.c_str(), &buff ) == 0 ) && S_ISREG( buff.st_mode ) &&
+	   f[ f.size() - 1 ] != '%' && f[ f.size() - 1 ] != '~' )
+      {  
+	cerr << "Executing " << f << endl;
+	m_pPython->runFile( f.c_str() );
+	cerr << "Done" << endl;
+      }
+    }
+
+    closedir( dp );
 }
 
 bool KSpreadDoc::editPythonCode()
@@ -674,6 +891,10 @@ void KSpreadDoc::paperLayoutDlg()
 
 KSpreadDoc::~KSpreadDoc()
 {
+  cerr << "KSpreadDoc::~KSpreadDoc()" << endl;
+
+  s_mapDocuments->remove( m_docId );
+  
   if ( m_pPython )
     delete m_pPython;
     

@@ -1,7 +1,6 @@
 #include <qprinter.h>
 #include "kspread_view.h"
 
-#include <utils.h>
 #include <kapp.h>
 #include <qpushbt.h>
 #include <qmsgbox.h>
@@ -12,6 +11,9 @@
 #include <qkeycode.h>
 #include <kbutton.h>
 #include <klocale.h>
+#include <opUIUtils.h>
+#include <opMainWindow.h>
+#include <opMainWindowIf.h>
 
 #include <koPartSelectDia.h>
 #include <koPrintDia.h>
@@ -21,6 +23,7 @@
 #include "kspread_dlg_scripts.h"
 #include "kspread_doc.h"
 #include "kspread_shell.h"
+#include "kspread_dlg_cons.h"
 
 /*****************************************************************************
  *
@@ -31,11 +34,13 @@
 KSpreadScripts* KSpreadView::m_pGlobalScriptsDialog = 0L;
 
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc ) :
-  QWidget( _parent, _name ), View_impl(), KSpread::View_skel()
+  QWidget( _parent, _name ), KoViewIf( _doc ), OPViewIf( _doc ), KSpread::View_skel()
 {
+  m_bInitialized = false;
+  
   setWidget( this );
 
-  Control_impl::setFocusPolicy( OPControls::Control::ClickFocus ); 
+  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus ); 
 
   m_lstFrames.setAutoDelete( true );  
 #ifdef USE_PICTURE
@@ -43,8 +48,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
 #endif
 
   m_pDoc = _doc;
-
-  m_bShowGUI = true;
 
   m_iXOffset = 0;
   m_iYOffset = 0;
@@ -60,160 +63,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_iMarkerVisible = 1;
 
   m_pPopupMenu = 0L;
-}
 
-void KSpreadView::createGUI()
-{      
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
   m_defaultGridPen.setStyle( SolidLine );
-  
-  // Toolbar
-  m_vToolBarFactory = m_vPartShell->toolBarFactory();
-  if ( !CORBA::is_nil( m_vToolBarFactory ) )
-  {
-    m_rToolBarEdit = m_vToolBarFactory->createToolBar( this, CORBA::string_dup( "Edit" ) );
 
-    QString tmp = kapp->kde_toolbardir().copy();
-    tmp += "/editcopy.xpm";
-    QString pix = loadPixmap( tmp );
-    m_idButtonEdit_Copy = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Copy" ) ),
-							this, "copySelection" );
-
-    tmp = kapp->kde_toolbardir().copy();
-    tmp += "/editcut.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonEdit_Cut = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Cut" ) ),
-						       this, "cutSelection" );
-
-    tmp = kapp->kde_toolbardir().copy();
-    tmp += "/editpaste.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonEdit_Paste = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Paste" ) ),
-							 this, "paste" );
-
-    m_rToolBarEdit->insertSeparator();
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/rowout.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonEdit_DelRow = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Delete Row" ) ),
-							  this, "deleteRow" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/colout.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonEdit_DelCol = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Delete Column" ) ),
-							  this, "deleteColumn" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/rowin.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonEdit_InsRow = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Insert Row" ) ),
-							  this, "insertRow" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/colin.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonEdit_InsCol = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Insert Column" ) ),
-							  this, "insertColumn" );
-
-    m_rToolBarLayout = m_vToolBarFactory->createToolBar( this, CORBA::string_dup( i18n( "Layout" ) ) );
-
-    m_idComboLayout_Font = m_rToolBarLayout->insertCombo( false, CORBA::string_dup( i18n( "Font" ) ), 120, this, "fontSelected" );
-    m_rToolBarLayout->insertComboItem ( m_idComboLayout_Font, CORBA::string_dup( "Courier" ), -1 );
-    m_rToolBarLayout->insertComboItem ( m_idComboLayout_Font, CORBA::string_dup( "Helvetica" ), -1 );
-    m_rToolBarLayout->insertComboItem ( m_idComboLayout_Font, CORBA::string_dup( "Symbol" ), -1 );
-    m_rToolBarLayout->insertComboItem ( m_idComboLayout_Font, CORBA::string_dup( "Times" ), -1 );
-  
-    m_idComboLayout_FontSize = m_rToolBarLayout->insertCombo( false, CORBA::string_dup( i18n( "Font Size" ) ), 50,
-							      this, "fontSizeSelected" );
-    int sizes[24] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 48, 64 };
-    for( int i = 0; i < 24; i++ )
-    {
-      char buffer[ 10 ];
-      sprintf( buffer, "%i", sizes[i] );
-      m_rToolBarLayout->insertComboItem ( m_idComboLayout_FontSize, CORBA::string_dup( buffer ), -1 );
-    }
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/bold.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_Bold = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Bold" ) ),
-							    this, "bold" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/italic.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_Italic = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Italic" ) ),
-							      this, "italic" );
-
-    m_rToolBarLayout->insertSeparator();
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/money.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_Money = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Money Format" ) ),
-							     this, "moneyFormat" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/percent.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_Percent = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Percent Format" ) ),
-							       this, "percent" );
-
-    m_rToolBarLayout->insertSeparator();
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/left.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_Left = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Align Left" ) ),
-							    this, "alignLeft" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/center.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_Center = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Align Center" ) ),
-							      this, "alignCenter" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/right.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_Right = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Align Right" ) ),
-							     this, "alignRight" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/multirow.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_MultiRows = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ),
-								 CORBA::string_dup( i18n( "Allow multiple lines" ) ),
-								 this, "multiRow" );
-
-    m_rToolBarLayout->insertSeparator();
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/precminus.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_PrecMinus = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ),
-								 CORBA::string_dup( i18n( "Lower Precision" ) ),
-								 this, "precisionMinus" );
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/precplus.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_PrecPlus = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), 
-								CORBA::string_dup( i18n( "Higher Precision" ) ),
-								this, "precisionPlus" );
-
-    m_rToolBarLayout->insertSeparator();
-
-    tmp = kapp->kde_datadir().copy();
-    tmp += "/kspread/pics/chart.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonLayout_Chart = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Insert Chart" ) ),
-							     this, "insertChart" );
-  }
-  
   // Vert. Scroll Bar
   m_pVertScrollBar = new QScrollBar( this, "ScrollBar_2" );
   QObject::connect( m_pVertScrollBar, SIGNAL( valueChanged(int) ), this, SLOT( slotScrollVert(int) ) );
@@ -271,101 +125,7 @@ void KSpreadView::createGUI()
   
   m_pHBorderWidget = new KSpreadHBorder( m_pFrame, this );
   m_pVBorderWidget = new KSpreadVBorder( m_pFrame, this );
-
-  /******************************************************
-   * Menu
-   ******************************************************/
-
-  m_vMenuBarFactory = m_vPartShell->menuBarFactory();
-  if ( !CORBA::is_nil( m_vMenuBarFactory ) )
-  {
-    // Menubar
-    m_rMenuBar = m_vMenuBarFactory->createMenuBar( this );
-
-    // Edit
-    m_idMenuEdit = m_rMenuBar->insertMenu( CORBA::string_dup( i18n( "&Edit" ) ) );
-    m_idMenuEdit_Undo = m_rMenuBar->insertItem( CORBA::string_dup( i18n( "Un&do" ) ), m_idMenuEdit,
-						       this, CORBA::string_dup( "undo" ) );
-    m_idMenuEdit_Redo = m_rMenuBar->insertItem( CORBA::string_dup( i18n( "&Redo" ) ), m_idMenuEdit,
-						       this, CORBA::string_dup( "redo" ) );
-
-    m_rMenuBar->insertSeparator( m_idMenuEdit );
-
-    QString path = kapp->kde_toolbardir().copy();
-    path += "/editcut.xpm";
-    QString pix = loadPixmap( path );
-    m_idMenuEdit_Cut = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), i18n( "C&ut" ), m_idMenuEdit, this,
-						CORBA::string_dup( "cutSelection" ) );
-
-    path = kapp->kde_toolbardir().copy();
-    path += "/editcopy.xpm";
-    pix = loadPixmap( path );
-    m_idMenuEdit_Copy = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), i18n( "&Copy" ), m_idMenuEdit, this,
-						 CORBA::string_dup( "copySelection" ) );
-
-    path = kapp->kde_toolbardir().copy();
-    path += "/editpaste.xpm";
-    pix = loadPixmap( path );
-    m_idMenuEdit_Paste = m_rMenuBar->insertItemP( CORBA::string_dup( pix ), i18n( "&Paste" ), m_idMenuEdit, this,
-						  CORBA::string_dup( "paste" ) );
-
-    m_rMenuBar->insertSeparator( m_idMenuEdit );
-
-    m_idMenuEdit_Insert = m_rMenuBar->insertSubMenu( i18n( "&Insert" ), m_idMenuEdit );
-    m_idMenuEdit_Insert_Table = m_rMenuBar->insertItem( i18n( "&Table" ), m_idMenuEdit_Insert, this, "insertTable" );
-    m_idMenuEdit_Insert_Table = m_rMenuBar->insertItem( i18n( "&Image" ), m_idMenuEdit_Insert, this, "insertImage" );
-    m_idMenuEdit_Insert_Table = m_rMenuBar->insertItem( i18n( "&Chart" ), m_idMenuEdit_Insert, this, "insertChart" );
-    m_idMenuEdit_Insert_Table = m_rMenuBar->insertItem( i18n( "&Object ..." ), m_idMenuEdit_Insert, this, "insertObject" );
-    
-    m_rMenuBar->insertSeparator( m_idMenuEdit );
-
-    m_idMenuEdit_Cell = m_rMenuBar->insertItem( "C&ell", m_idMenuEdit, this, CORBA::string_dup( "editCell" ) );
-	
-    m_rMenuBar->insertSeparator( m_idMenuEdit );
-
-    m_idMenuEdit_Layout = m_rMenuBar->insertItem( "Paper &Layout", m_idMenuEdit, this, CORBA::string_dup( "paperLayoutDlg" ) );
-
-    // View
-    m_idMenuView = m_rMenuBar->insertMenu( CORBA::string_dup( i18n( "&View" ) ) );
-
-    m_rMenuBar->setCheckable( m_idMenuView, true );
-    m_idMenuView_NewView = m_rMenuBar->insertItem( CORBA::string_dup( i18n( "New View" ) ), m_idMenuView, this,
-							 CORBA::string_dup( "newView" ) );
-
-    m_rMenuBar->insertSeparator( m_idMenuView );
-    m_idMenuView_ShowPageBorders = m_rMenuBar->insertItem( CORBA::string_dup( i18n( "Show Page Borders" ) ), m_idMenuView, this,
-							 CORBA::string_dup( "togglePageBorders" ) );
-	
-    // Folder
-    m_idMenuFolder = m_rMenuBar->insertMenu( CORBA::string_dup( i18n( "F&older" ) ) );
-
-    m_idMenuFolder_NewTable = m_rMenuBar->insertItem( i18n( "New Table" ), m_idMenuFolder, this, CORBA::string_dup( "insertNewTable" ) );
-
-    // Format
-    m_idMenuFormat = m_rMenuBar->insertMenu( CORBA::string_dup( i18n( "Fo&rmat" ) ) );
-
-    m_idMenuFormat_AutoFill = m_rMenuBar->insertItem( i18n( "&Auto Fill ..." ), m_idMenuFormat, this, CORBA::string_dup( "autoFill" ) );
-
-    // Scripts
-    m_idMenuScripts = m_rMenuBar->insertMenu( CORBA::string_dup( i18n( "&Scripts" ) ) );
-
-    m_idMenuScripts_EditGlobal = m_rMenuBar->insertItem( i18n( "Edit &global scripts..." ), m_idMenuScripts, this,
-							 CORBA::string_dup( "editGlobalScripts" ) );
-    m_idMenuScripts_EditLocal = m_rMenuBar->insertItem( i18n( "Edit &local script" ), m_idMenuScripts, this,
-							 CORBA::string_dup( "editLocalScripts" ) );
-    m_idMenuScripts_Reload = m_rMenuBar->insertItem( i18n( "&Reload scripts" ), m_idMenuScripts, this,
-							 CORBA::string_dup( "reloadScripts" ) );
-
-    // Help
-    m_idMenuHelp = m_rMenuBar->insertMenu( CORBA::string_dup( i18n( "&Help" ) ) );
-
-    m_idMenuHelp_About = m_rMenuBar->insertItem( i18n( "&About" ), m_idMenuHelp, this, CORBA::string_dup( "helpAbout" ) );
-    m_idMenuHelp_Using = m_rMenuBar->insertItem( i18n( "&Using KSpread" ), m_idMenuHelp, this, CORBA::string_dup( "helpUsing" ) );
-	
-    enableUndo( false );
-    enableRedo( false );
-  }      
-
+  
   KSpreadTable *tbl;
   for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
     addTable( tbl );
@@ -373,11 +133,356 @@ void KSpreadView::createGUI()
   QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
 }
 
-KSpreadView::~KSpreadView()
+void KSpreadView::init()
 {
-  m_pDoc->removeView( this );
+  /******************************************************
+   * Menu
+   ******************************************************/
+
+  cerr << "Registering menu as " << id() << endl;
+  
+  OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
+  if ( !CORBA::is_nil( menu_bar_manager ) )
+    menu_bar_manager->registerClient( id(), this );
+  else
+    cerr << "Did not get a menu bar manager" << endl;
+
+  /******************************************************
+   * Toolbar
+   ******************************************************/
+
+  OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
+  if ( !CORBA::is_nil( tool_bar_manager ) )
+    tool_bar_manager->registerClient( id(), this );
+  else
+    cerr << "Did not get a tool bar manager" << endl;  
+
+  /******************************************************
+   * Create views for child documents
+   ******************************************************/
+
+  QListIterator<KSpreadChild> it = m_pTable->childIterator();
+  for( ; it.current(); ++it )
+    slotInsertChild( it.current() );
 }
 
+KSpreadView::~KSpreadView()
+{
+  cerr << "KSpreadView::~KSpreadView() " << _refcnt() << endl;
+
+  cleanUp();
+}
+
+void KSpreadView::cleanUp()
+{
+  cerr << "void KSpreadView::cleanUp() " << endl;
+
+  cerr << "1) VIEW void KOMBase::incRef() = " << m_ulRefCount << endl;
+  cerr << "1) VIEW void KOMBase::refcnt() = " << _refcnt() << endl;
+  
+  if ( m_bIsClean )
+    return;
+
+  cerr << "1a) Deactivate Frames" << endl;
+  
+  QListIterator<KSpreadChildFrame> it( m_lstFrames );
+  for( ; it.current() != 0L; ++it )
+  {
+    it.current()->detach();
+  }
+  
+  cerr << "1b) Unregistering menu and toolbar" << endl;
+  
+  OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
+  if ( !CORBA::is_nil( menu_bar_manager ) )
+    menu_bar_manager->unregisterClient( id() );
+
+  OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
+  if ( !CORBA::is_nil( tool_bar_manager ) )
+    tool_bar_manager->unregisterClient( id() );
+  
+  m_pDoc->removeView( this );
+
+  KoViewIf::cleanUp();
+
+  cerr << "2) VIEW void KOMBase::incRef() = " << m_ulRefCount << endl;
+  cerr << "2) VIEW void KOMBase::refcnt() = " << _refcnt() << endl;
+}
+
+// #define MAPPING( event, type, func ) if ( __ev == event ) { type __t; if ( __v >>= __t ) return func( __t ); }
+
+bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
+{
+  cerr << "CALLED" << endl;
+  
+  EVENT_MAPPER( _event, _value );
+
+  MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
+  MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
+
+  END_EVENT_MAPPER;
+  
+  return false;
+}
+
+bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
+{
+  cerr << "bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
+  
+  if ( CORBA::is_nil( _factory ) )
+  {
+    cerr << "Setting to nil" << endl;
+    m_vToolBarEdit = 0L;
+    m_vToolBarLayout = 0L;
+    cerr << "niled" << endl;
+    return true;
+  }
+
+  m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+
+  QString tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editcopy.xpm";
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "copySelection", true, i18n( "Copy" ), -1 );
+
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editcut.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "cutSelection", true, i18n( "Cut" ), -1 );
+
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editpaste.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "paste", true, i18n( "Paste" ), -1 );
+
+  m_vToolBarEdit->insertSeparator( -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/rowout.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_DelRow = m_vToolBarEdit->insertButton2( pix, 4, SIGNAL( clicked() ), this, "deleteRow", true, i18n( "Delete Row" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/colout.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_DelCol = m_vToolBarEdit->insertButton2( pix, 5, SIGNAL( clicked() ), this, "deleteColumn", true, i18n( "Delete Column"), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/rowin.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_InsRow = m_vToolBarEdit->insertButton2( pix, 6, SIGNAL( clicked() ), this, "insertRow", true, i18n( "Insert Row"  ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/colin.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_InsCol = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "insertColumn", true, i18n( "Insert Column"  ), -1 );
+  
+  m_vToolBarEdit->enable( OpenPartsUI::Show );
+  
+  m_vToolBarLayout = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+
+  OpenPartsUI::StrList fonts;
+  fonts.length( 4 );
+  fonts[0] = CORBA::string_dup( "Courier" );
+  fonts[1] = CORBA::string_dup( "Helvetica" );
+  fonts[2] = CORBA::string_dup( "Symbol" );
+  fonts[3] = CORBA::string_dup( "Times" );
+
+  m_idComboLayout_Font = m_vToolBarLayout->insertCombo( fonts, 1, false, SIGNAL( activated() ), this,
+							"fontSelected", true, i18n("Font"),
+							120, -1, OpenPartsUI::AtBottom );
+
+  OpenPartsUI::StrList sizelist;
+  int sizes[24] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 48, 64 };
+  sizelist.length( 24 );
+  for( int i = 0; i < 24; i++ )
+  {
+    char buffer[ 10 ];
+    sprintf( buffer, "%i", sizes[i] );
+    sizelist[i] = CORBA::string_dup( buffer );
+  }
+  m_idComboLayout_FontSize = m_vToolBarLayout->insertCombo( sizelist, 2, true, SIGNAL( activated() ),
+							    this, "fontSizeSelected", true,
+							    i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/bold.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_Bold = m_vToolBarLayout->insertButton2( pix, 3, SIGNAL( clicked() ), this, "bold", true, i18n( "Bold" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/italic.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_Italic = m_vToolBarLayout->insertButton2( pix, 4, SIGNAL( clicked() ), this, "italic", true, i18n( "Italic" ), -1 );
+
+  m_vToolBarLayout->insertSeparator( -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/money.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_Money = m_vToolBarLayout->insertButton2( pix, 5, SIGNAL( clicked() ), this, "moneyFormat", true, i18n( "Money Format" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/percent.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_Percent = m_vToolBarLayout->insertButton2( pix, 6, SIGNAL( clicked() ), this, "percent", true, i18n( "Percent Format" ), -1 );
+
+  m_vToolBarLayout->insertSeparator( -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/left.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_Left = m_vToolBarLayout->insertButton2( pix, 7, SIGNAL( clicked() ), this, "alignLeft", true, i18n( "Align Left" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/center.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_Center = m_vToolBarLayout->insertButton2( pix, 8, SIGNAL( clicked() ), this, "alignCenter", true, i18n( "Align Center" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/right.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_Right = m_vToolBarLayout->insertButton2( pix, 9, SIGNAL( clicked() ), this, "alignRight", true, i18n( "Align Right" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/multirow.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_MultiRows = m_vToolBarLayout->insertButton2( pix, 10, SIGNAL( clicked() ), this, "multiRow", true,
+							       i18n( "Allow multiple lines" ), -1 );
+
+  m_vToolBarLayout->insertSeparator( -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/precminus.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_PrecMinus = m_vToolBarLayout->insertButton2( pix, 11, SIGNAL( clicked() ), this, "precisionMinus", true,
+								 i18n( "Lower Precision"  ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/precplus.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_PrecPlus = m_vToolBarLayout->insertButton2( pix, 12, SIGNAL( clicked() ), this, "precisionPlus", true,
+							      i18n( "Higher Precision" ), -1 );
+
+  m_vToolBarLayout->insertSeparator( -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kspread/pics/chart.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonLayout_Chart = m_vToolBarLayout->insertButton2( pix, 13, SIGNAL( clicked() ), this, "insertChart", true, i18n( "Insert Chart" ), -1 );
+
+  m_vToolBarLayout->enable( OpenPartsUI::Show );
+
+  return true;
+}
+
+bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
+{
+  if ( CORBA::is_nil( _menubar ) )
+  {
+    cerr << "********************** DELETING Menu bar stuff ****************" << endl;
+    
+    m_vMenuEdit = 0L;
+    m_vMenuEdit_Insert = 0L;
+    m_vMenuView = 0L;
+    m_vMenuData = 0L;
+    m_vMenuFolder = 0L;
+    m_vMenuFormat = 0L;
+    m_vMenuScripts = 0L;
+    m_vMenuHelp = 0L;
+    return true;
+  }
+
+  // Edit  
+  _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
+
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem4( "Un&do", this, "undo", 0, -1, -1 );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem4( "&Redo", this, "redo", 0, -1, -1 );
+
+  m_vMenuEdit->insertSeparator( -1 );
+
+  QString path = kapp->kde_toolbardir().copy();
+  path += "/editcut.xpm";
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( path );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, "C&ut", this, "cutSelection", CTRL + Key_N, -1, -1 );
+  
+  path = kapp->kde_toolbardir().copy();
+  path += "/editcopy.xpm";
+  pix = OPUIUtils::loadPixmap( path );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, "&Copy", this, "copySelection", CTRL + Key_N, -1, -1 );
+  
+  path = kapp->kde_toolbardir().copy();
+  path += "/editpaste.xpm";
+  pix = OPUIUtils::loadPixmap( path );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, "&Paste", this, "paste", CTRL + Key_N, -1, -1 );
+    
+  _menubar->insertSeparator( -1 );
+
+  m_vMenuEdit->insertItem8( i18n( "&Insert" ), m_vMenuEdit_Insert, -1, -1 );
+  m_idMenuEdit_Insert_Table = m_vMenuEdit_Insert->insertItem( i18n( "&Table" ), this, "insertTable", 0 );
+  m_idMenuEdit_Insert_Image = m_vMenuEdit_Insert->insertItem( i18n( "&Image" ), this, "insertImage", 0 );
+  m_idMenuEdit_Insert_Chart = m_vMenuEdit_Insert->insertItem( i18n( "&Chart" ), this, "insertChart", 0 );
+  m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem( i18n( "&Object ..." ), this, "insertObject", 0 );
+    
+  m_vMenuEdit->insertSeparator( -1 );
+
+  m_idMenuEdit_Cell = m_vMenuEdit->insertItem( i18n( "C&ell" ), this, "editCell", 0 );
+	
+  m_vMenuEdit->insertSeparator( -1 );
+
+  m_idMenuEdit_Layout = m_vMenuEdit->insertItem( i18n( "Paper &Layout" ), this, "paperLayoutDlg", 0 );
+
+  // View
+  _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
+  m_vMenuView->setCheckable( true );
+
+  m_idMenuView_NewView = m_vMenuView->insertItem( i18n( "New View" ), this, "newView", 0 );
+
+  m_vMenuView->insertSeparator( -1 );
+
+  m_idMenuView_ShowPageBorders = m_vMenuView->insertItem( i18n( "Show Page Borders" ), this, "togglePageBorders", 0 );
+  m_vMenuView->setItemChecked( m_idMenuView_ShowPageBorders, m_pTable->isShowPageBorders() );
+
+  // Data
+  _menubar->insertMenu( i18n( "D&ata" ), m_vMenuData, -1, -1 );
+
+  m_idMenuData_Consolidate = m_vMenuData->insertItem( i18n( "Consolidate" ), this, "consolidate", 0 );
+
+  // Folder
+  _menubar->insertMenu( i18n( "F&older" ), m_vMenuFolder, -1, -1 );
+
+  m_idMenuFolder_NewTable = m_vMenuFolder->insertItem( i18n( "New Table" ), this, "insertNewTable", 0 );
+
+  // Format
+  _menubar->insertMenu( i18n( "Fo&rmat" ), m_vMenuFormat, -1, -1 );
+
+  m_idMenuFormat_AutoFill = m_vMenuFormat->insertItem( i18n( "&Auto Fill ..." ), this, "autoFill", 0 );
+
+  // Scripts
+  _menubar->insertMenu( i18n( "&Scripts" ), m_vMenuScripts, -1, -1 );
+
+  m_idMenuScripts_EditGlobal = m_vMenuScripts->insertItem( i18n( "Edit &global scripts..." ), this, "editGlobalScripts", 0 );
+  m_idMenuScripts_EditLocal = m_vMenuScripts->insertItem( i18n( "Edit &local script" ), this, "editLocalScripts", 0 );
+  m_idMenuScripts_Reload = m_vMenuScripts->insertItem( i18n( "&Reload scripts" ), this, "reloadScripts", 0 );
+
+  // Help
+  m_vMenuHelp = _menubar->helpMenu();
+  if ( CORBA::is_nil( m_vMenuHelp ) )
+  {
+    _menubar->insertSeparator( -1 );
+    _menubar->setHelpMenu( _menubar->insertMenu( i18n( "&Help" ), m_vMenuHelp, -1, -1 ) );
+  }
+    
+  // m_idMenuHelp_About = m_vMenuHelp->insertItem( i18n( "&About" ), this, "helpAbout", 0 );
+  m_idMenuHelp_Using = m_vMenuHelp->insertItem( i18n( "&Using KSpread" ), this, "helpUsing", 0 );
+	
+  enableUndo( false );
+  enableRedo( false );
+
+  return true;
+}      
+
+/*
 void KSpreadView::setMode( OPParts::Part::Mode _mode )
 {
   Part_impl::setMode( _mode );
@@ -402,11 +507,7 @@ void KSpreadView::setFocus( CORBA::Boolean _mode )
   if ( old != m_bShowGUI )
     resizeEvent( 0L );
 }
-
-void KSpreadView::helpAbout()
-{
-  KoAboutDia::about( KoAboutDia::KSpread, "0.0.1" );
-}
+*/
 
 void KSpreadView::helpUsing()
 {
@@ -438,13 +539,19 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 
 void KSpreadView::enableUndo( bool _b )
 {
-  m_rMenuBar->setItemEnabled( m_idMenuEdit_Undo, _b );
+  if ( CORBA::is_nil( m_vMenuEdit ) )
+    return;
+  
+  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, _b );
   m_bUndo = _b;
 }
 
 void KSpreadView::enableRedo( bool _b )
 {
-  m_rMenuBar->setItemEnabled( m_idMenuEdit_Redo, _b );
+  if ( CORBA::is_nil( m_vMenuEdit ) )
+    return;
+
+  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, _b );
   m_bRedo = _b;
 }
 
@@ -577,23 +684,27 @@ void KSpreadView::removeAllTables()
 
 void KSpreadView::setActiveTable( KSpreadTable *_t )
 {
-   if ( _t == m_pTable )
-     return;
+  if ( _t == m_pTable )
+    return;
     
-   m_pTable = _t;
-   if ( m_pTable == 0L )
-     return;
+  m_pTable = _t;
+  if ( m_pTable == 0L )
+    return;
    
-   m_pTabBar->setActiveTab( _t->name() );
+  m_pTabBar->setActiveTab( _t->name() );
 
-   m_lstFrames.clear();
-   QListIterator<KSpreadChild> it = m_pTable->childIterator();
-   for( ; it.current(); ++it )
-     slotInsertChild( it.current() );
-
-   m_pVBorderWidget->repaint();
-   m_pHBorderWidget->repaint();
-   m_pCanvasWidget->repaint();
+  // Create views for child documents
+  if ( m_bInitialized )
+  {   
+    m_lstFrames.clear();
+    QListIterator<KSpreadChild> it = m_pTable->childIterator();
+    for( ; it.current(); ++it )
+      slotInsertChild( it.current() );
+  }
+  
+  m_pVBorderWidget->repaint();
+  m_pHBorderWidget->repaint();
+  m_pCanvasWidget->repaint();
 }
 
 KSpreadTable* KSpreadView::findTable( const char *_name )
@@ -669,18 +780,19 @@ void KSpreadView::paste()
     m_pTable->paste( QPoint( m_iMarkerColumn, m_iMarkerRow ) );
 }
 
+void KSpreadView::consolidate()
+{
+  KSpreadConsolidate* dlg = new KSpreadConsolidate( this, "Consolidate" );
+  dlg->show();
+}
+
 void KSpreadView::newView()
 {
   assert( (m_pDoc != 0L) );
 
-  KSpreadShell_impl* shell = new KSpreadShell_impl;
-  shell->enableMenuBar();
-  shell->PartShell_impl::enableStatusBar();
-  shell->enableToolBars();
+  KSpreadShell* shell = new KSpreadShell;
   shell->show();
   shell->setDocument( m_pDoc );
-  
-  CORBA::release( shell );
 }
 
 CORBA::Boolean KSpreadView::printDlg()
@@ -714,10 +826,10 @@ void KSpreadView::markChildPicture( KSpreadChildPicture *_pic )
 
   m_lstFrames.append( p );
   
-  QObject::connect( p, SIGNAL( sig_geometryEnd( PartFrame_impl* ) ),
-		    this, SLOT( slotChildGeometryEnd( PartFrame_impl* ) ) );
-  QObject::connect( p, SIGNAL( sig_moveEnd( PartFrame_impl* ) ),
-		    this, SLOT( slotChildMoveEnd( PartFrame_impl* ) ) );  
+  QObject::connect( p, SIGNAL( sig_geometryEnd( KoFrame* ) ),
+		    this, SLOT( slotChildGeometryEnd( KoFrame* ) ) );
+  QObject::connect( p, SIGNAL( sig_moveEnd( KoFrame* ) ),
+		    this, SLOT( slotChildMoveEnd( KoFrame* ) ) );  
 
   m_lstPictures.removeRef( _pic );
 }
@@ -763,20 +875,24 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
   p->setGeometry( _child->geometry() );
   m_lstFrames.append( p );
 
-  OPParts::PartShell_var shell = partShell();
-  OPParts::View_var v = _child->createView( shell );
+  OpenParts::View_var v = _child->createView( m_vKoMainWindow );
   if ( !CORBA::is_nil( v ) )
-    p->attach( v );
-
-  QObject::connect( p, SIGNAL( sig_geometryEnd( PartFrame_impl* ) ),
-		    this, SLOT( slotChildGeometryEnd( PartFrame_impl* ) ) );
-  QObject::connect( p, SIGNAL( sig_moveEnd( PartFrame_impl* ) ),
-		    this, SLOT( slotChildMoveEnd( PartFrame_impl* ) ) );  
+  {
+    KOffice::View_var kv = KOffice::View::_narrow( v );
+    kv->setMode( KOffice::View::ChildMode );
+    assert( !CORBA::is_nil( kv ) );
+    p->attachView( kv );
+  }
+  
+  QObject::connect( p, SIGNAL( sig_geometryEnd( KoFrame* ) ),
+		    this, SLOT( slotChildGeometryEnd( KoFrame* ) ) );
+  QObject::connect( p, SIGNAL( sig_moveEnd( KoFrame* ) ),
+		    this, SLOT( slotChildMoveEnd( KoFrame* ) ) );  
 
   p->show();
 }
 
-void KSpreadView::slotChildGeometryEnd( PartFrame_impl* _frame )
+void KSpreadView::slotChildGeometryEnd( KoFrame* _frame )
 {
   // ATTENTION: This is an upcast
   KSpreadChildFrame *f = (KSpreadChildFrame*)_frame;
@@ -784,7 +900,7 @@ void KSpreadView::slotChildGeometryEnd( PartFrame_impl* _frame )
   m_pTable->changeChildGeometry( f->child(), _frame->partGeometry() );
 }
 
-void KSpreadView::slotChildMoveEnd( PartFrame_impl* _frame )
+void KSpreadView::slotChildMoveEnd( KoFrame* _frame )
 {
   // ATTENTION: This is an upcast
   KSpreadChildFrame *f = (KSpreadChildFrame*)_frame;
@@ -819,7 +935,7 @@ void KSpreadView::togglePageBorders()
    if ( !m_pTable )
        return;
    
-   m_rMenuBar->setItemChecked( m_idMenuView_ShowPageBorders, !m_pTable->isShowPageBorders() );
+   m_vMenuView->setItemChecked( m_idMenuView_ShowPageBorders, !m_pTable->isShowPageBorders() );
    m_pTable->setShowPageBorders( !m_pTable->isShowPageBorders() );
 }
 
@@ -833,13 +949,46 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
   QApplication::sendEvent( m_pCanvasWidget, _ev );
 }
 
+void KSpreadView::setFocus( CORBA::Boolean mode )
+{
+  CORBA::Boolean old = m_bFocus;
+  
+  KoViewIf::setFocus( mode );
+  
+  if ( old == m_bFocus )
+    return;
+
+  if ( KoViewIf::mode() != KOffice::View::RootMode )
+    resizeEvent( 0L );
+}
+
+CORBA::ULong KSpreadView::leftGUISize()
+{
+  return YBORDER_WIDTH;
+}
+
+CORBA::ULong KSpreadView::rightGUISize()
+{
+  return 20;
+}
+
+CORBA::ULong KSpreadView::topGUISize()
+{
+  return 30 + XBORDER_HEIGHT;
+}
+
+CORBA::ULong KSpreadView::bottomGUISize()
+{
+  return 20;
+}
+
 void KSpreadView::resizeEvent( QResizeEvent * )
 {
   // HACK
   if ( x() == 5000 && y() == 5000 )
     return;
   
-  if ( m_bShowGUI )
+  if ( KoViewIf::hasFocus() || mode() == KOffice::View::RootMode )
   { 
     m_pToolWidget->show();
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
@@ -1439,18 +1588,22 @@ void KSpreadTable::drawCellList()
 }
 */
 
-void KSpreadView::marker( int &row, int &column)
+QPoint KSpreadView::marker()
 {
+  int row, column;
+  
   if ( !isMarkerVisible() )
   {
-    row=-1;
-    column=-1;
+    row = -1;
+    column = -1;
   }
   else
   {
     row = m_iMarkerRow;
-    column=m_iMarkerColumn;
+    column = m_iMarkerColumn;
   }
+
+  return QPoint( column, row );
 }
 
 //------------------------------------------------
@@ -1542,6 +1695,9 @@ void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, int 
     return;
 
   drawCell( _cell, _col, _row );
+
+  if ( _col == m_iMarkerColumn && _row == m_iMarkerRow )
+    editWidget()->setText( _cell->text() );
 }
 
 void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
@@ -1666,7 +1822,7 @@ void KSpreadCanvas::setAction( Actions _act )
     {
       QMessageBox::critical( this, i18n("KSpread Error" ), i18n("You must first select the cells\n"
 								"which contain the data." ),
-			     i18n( "OK" ) );
+			     i18n( "Ok" ) );
       return;
     }
   }
@@ -2080,7 +2236,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 			 m_pView->markerRow() + cell->extraYCells() );
 
     // if ( old_selection.left() != 0 || cell->extraXCells() != 0 || cell->extraYCells() != 0 )
-      table->setSelection( selection );
+    table->setSelection( selection );
     m_iMouseStartColumn = m_pView->markerColumn();
     m_iMouseStartRow = m_pView->markerRow();
   }
@@ -2102,10 +2258,13 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 {
+  if ( m_pView->doc()->isLoading() )
+    return;
+
   // HACK
   if ( x() == 5000 && y() == 5000 )
     return;
-
+  
   KSpreadTable *table = m_pView->activeTable();
   if ( !table )
     return;
@@ -2793,7 +2952,8 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
 void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 {
   KSpreadTable *table = m_pView->activeTable();
-  assert( table );
+  if ( !table )
+    return;
 
   QPainter painter;
   painter.begin( this );
@@ -3130,20 +3290,10 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
  **********************************************************/
 
 KSpreadChildFrame::KSpreadChildFrame( KSpreadView* _view, KSpreadChild* _child ) :
-  PartFrame_impl( _view->canvasWidget() )
+  KoFrame( _view->canvasWidget() )
 {
   m_pView = _view;
   m_pChild = _child;
-
-  QObject::connect( this, SIGNAL( sig_attachPart( PartFrame_impl* ) ), this, SLOT( slotAttachPart( PartFrame_impl* ) ) );
-}
-
-void KSpreadChildFrame::slotAttachPart( PartFrame_impl* )
-{
-  OPParts::PartShell_var shell = m_pView->partShell();
-  OPParts::View_var v = m_pChild->createView( shell );
-  if ( !CORBA::is_nil( v ) )
-    attach( v );
 }
 
 /**********************************************************

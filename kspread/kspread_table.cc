@@ -131,18 +131,34 @@ void ChartBinding::cellChanged( KSpreadCell* )
  *
  *****************************************************************************/
 
+int KSpreadTable::s_id = 0L;
+QIntDict<KSpreadTable>* KSpreadTable::s_mapTables;
+
+KSpreadTable* KSpreadTable::find( int _id )
+{
+  if ( !s_mapTables )
+    return 0L;
+  
+  return (*s_mapTables)[ _id ];
+}
+
 KSpreadTable::KSpreadTable( KSpreadDoc *_doc, const char *_name )
 {
+  if ( s_mapTables == 0L )
+    s_mapTables = new QIntDict<KSpreadTable>;
+  m_id = s_id++;
+  s_mapTables->insert( m_id, this );
+  
   m_pDoc = _doc;
   
   m_bShowPageBorders = FALSE;
    
-  m_bLoading = FALSE;
-    
   m_lstCellBindings.setAutoDelete( FALSE );
             
   m_strName = _name;
-    
+
+  m_lstChildren.setAutoDelete( true );
+  
   m_dctCells.setAutoDelete( true );
   m_dctRows.setAutoDelete( true );
   m_dctColumns.setAutoDelete( true );
@@ -373,7 +389,14 @@ void KSpreadTable::setCalcDirtyFlag()
 {
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it ) 
-	it.current()->setCalcDirtyFlag();
+      it.current()->setCalcDirtyFlag();
+}
+
+void KSpreadTable::recalc()
+{
+    QIntDictIterator<KSpreadCell> it( m_dctCells );
+    for ( ; it.current(); ++it ) 
+      it.current()->calc();
 }
 
 void KSpreadTable::unselect()
@@ -393,6 +416,18 @@ void KSpreadTable::setSelection( const QRect &_sel )
   if ( _sel == m_rctSelection )
     return;
   
+  // We want to see wether a single cell was clicked like a button.
+  if ( _sel.left() == 0 && _sel.right() == 0 && _sel.top() == 0 && _sel.bottom() == 0 )
+  {    
+    // So we test first wether only a single cell was selected
+    KSpreadCell *cell = cellAt( m_rctSelection.left(), m_rctSelection.top() );
+    // Did we mark only a single cell ?
+    // Take care: One cell may obscure other cells ( extra size! ).
+    if ( m_rctSelection.left() + cell->extraXCells() == m_rctSelection.right() &&
+	 m_rctSelection.top() + cell->extraYCells() == m_rctSelection.bottom() )
+      cell->clicked();
+  }
+
   QRect old( m_rctSelection );
   m_rctSelection = _sel;
   
@@ -1152,7 +1187,7 @@ void KSpreadTable::paste( const QPoint &_marker )
   string data = QApplication::clipboard()->text();
   if ( data.empty() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n( "KSpread Error" ), i18n( "Clipboard is empty" ), i18n( "OK" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n( "KSpread Error" ), i18n( "Clipboard is empty" ), i18n( "Ok" ) );
     return;
   }
   
@@ -1618,11 +1653,18 @@ bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   return true;
 }
 
-bool KSpreadTable::loadChildren( OPParts::MimeMultipartDict_ptr _dict )
+void KSpreadTable::update()
+{
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for ( ; it.current(); ++it ) 
+    it.current()->setText( it.current()->valueString() );
+}
+
+bool KSpreadTable::loadChildren( KOStore::Store_ptr _store )
 {
   QListIterator<KSpreadChild> it( m_lstChildren );
   for( ; it.current(); ++it )
-    if ( !it.current()->loadDocument( _dict ) )
+    if ( !it.current()->loadDocument( _store, it.current()->mimeType() ) )
       return false;
   
   return true;
@@ -2275,19 +2317,32 @@ void KSpreadTable::insertRowLayout( RowLayout *_l )
 
 void KSpreadTable::emit_updateCell( KSpreadCell *_cell, int _col, int _row )
 {
+  if ( doc()->isLoading() )
+    return;
+  
   emit sig_updateCell( this, _cell, _col, _row );
   _cell->clearDisplayDirtyFlag();
 }
 
-void KSpreadTable::emit_updateRow( RowLayout *_layout, int )
+void KSpreadTable::emit_updateRow( RowLayout *_layout, int _row )
 {
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for ( ; it.current(); ++it ) 
+    if ( it.current()->row() == _row )
+      it.current()->setLayoutDirtyFlag();
+
   emit sig_updateVBorder( this );
   emit sig_updateView( this );
   _layout->clearDisplayDirtyFlag();
 }
 
-void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int )
+void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
 {
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for ( ; it.current(); ++it ) 
+    if ( it.current()->column() == _column )
+      it.current()->setLayoutDirtyFlag();
+
   emit sig_updateHBorder( this );
   emit sig_updateView( this );
   _layout->clearDisplayDirtyFlag();
@@ -2295,21 +2350,21 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int )
 
 void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRect& _data )
 {
-  OPParts::Document_var doc = imr_createDocByServerName( _arg );
-  doc->init();
+  KOffice::Document_var doc = imr_createDocByServerName( _arg );
+  // doc->init();
   CORBA::Object_var obj = doc->getInterface( "IDL:Chart/SimpleChart:1.0" );
   if ( CORBA::is_nil( obj ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "The server %s does not support the required interface" ), _arg );
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ), tmp, i18n("OK" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ), tmp, i18n("Ok" ) );
     return;
   }
   Chart::SimpleChart_var chart = Chart::SimpleChart::_narrow( obj );
   if ( CORBA::is_nil( chart ) )
   {
     QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ),
-			   i18n("The chart application seems to have an internal error" ), i18n("OK" ) );
+			   i18n("The chart application seems to have an internal error" ), i18n("Ok" ) );
     return;
   }
   
@@ -2325,7 +2380,7 @@ void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRec
 
 void KSpreadTable::insertChild( const QRect& _rect, const char *_arg )
 {
-  OPParts::Document_var doc = imr_createDocByServerName( _arg );
+  KOffice::Document_var doc = imr_createDocByServerName( _arg );
   doc->init();
   
   KSpreadChild* ch = new KSpreadChild( m_pDoc, this, _rect, doc );
@@ -2351,7 +2406,7 @@ QListIterator<KSpreadChild> KSpreadTable::childIterator()
   return QListIterator<KSpreadChild> ( m_lstChildren );
 }
 
-void KSpreadTable::makeChildList( OPParts::Document_ptr _doc, const char *_path )
+void KSpreadTable::makeChildList( KOffice::Document_ptr _doc, const char *_path )
 {
   int i = 0;
   
@@ -2363,7 +2418,7 @@ void KSpreadTable::makeChildList( OPParts::Document_ptr _doc, const char *_path 
     QString path( _path );
     path += tmp.data();
     
-    OPParts::Document_var doc = it.current()->document();    
+    KOffice::Document_var doc = it.current()->document();    
     doc->makeChildList( _doc, path );
   }
 }
@@ -2382,6 +2437,8 @@ bool KSpreadTable::hasToWriteMultipart()
 
 KSpreadTable::~KSpreadTable()
 {
+  s_mapTables->remove( m_id );
+  
   m_pPainter->end();
   delete m_pPainter;
   delete m_pWidget;
@@ -2393,7 +2450,7 @@ KSpreadTable::~KSpreadTable()
  *
  **********************************************************/
 
-KSpreadChild::KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc )
+KSpreadChild::KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, KOffice::Document_ptr _doc )
   : KoDocumentChild( _rect, _doc )
 {
   m_pTable = _table;
@@ -2417,7 +2474,7 @@ KSpreadChild::~KSpreadChild()
  *
  **********************************************************/
 
-ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc )
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, KOffice::Document_ptr _doc )
   : KSpreadChild( _spread, _table, _rect, _doc )
 {
   m_pBinding = 0L;

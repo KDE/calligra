@@ -1,11 +1,13 @@
 #ifndef __img_idl__
 #define __img_idl__
 
-#include <parts.idl>
+#include <openparts.idl>
+#include <koffice.idl>
+#include <openparts_ui.idl>
 
 module KSpread
 {
-	interface View : OPParts::View
+	interface View : KOffice::View
 	{
 		slot void undo();
 		slot void redo();
@@ -21,7 +23,6 @@ module KSpread
 		slot void editGlobalScripts();
 		slot void editLocalScripts();
 		slot void reloadScripts();
-		slot void helpAbout();
 		slot void helpUsing();
 		slot void deleteRow();
 		slot void deleteColumn();
@@ -43,13 +44,10 @@ module KSpread
 		slot void insertObject();
 		slot void fontSizeSelected( in string size );
 		slot void fontSelected( in string font );
+		slot void consolidate();
 	};
 
-	interface Document : OPParts::Document
-	{
-	};
-
-	interface Factory : OPParts::Factory
+	interface Document : KOffice::Document
 	{
 	};
 };

@@ -9,6 +9,7 @@ class KSpreadDoc;
 
 #include <qlist.h>
 #include <qstring.h>
+#include <qintdict.h>
 
 #include "kspread_table.h"
 
@@ -30,9 +31,9 @@ public:
 
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
-    virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict );
+    virtual bool loadChildren( KOStore::Store_ptr _store );
   
-    void makeChildList( OPParts::Document_ptr _doc, const char *_path );
+    void makeChildList( KOffice::Document_ptr _doc, const char *_path );
     /*
      * @return true if one of the direct children wants to
      *              be saved embedded. If there are no children or if
@@ -81,7 +82,13 @@ public:
     bool getPythonCodeFromFile();
     const char* getPythonCodeFile() { return m_strPythonCodeFile.data(); }
     bool isPythonCodeInFile() { return m_bPythonCodeInFile; }
-    
+
+    void update();
+  
+    int mapId() { return m_mapId; }
+  
+    static KSpreadMap* find( int _map_id );  
+
 protected:
 
     /**
@@ -97,6 +104,11 @@ protected:
     QString m_strPythonCode;
     bool m_bPythonCodeInFile;
     QString m_strPythonCodeFile;
+
+    int m_mapId;
+  
+    static int s_mapId;
+    static QIntDict<KSpreadMap>* s_mapMaps;
 };
 
 #endif

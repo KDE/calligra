@@ -10,16 +10,20 @@
 #include <qpoint.h>
 #include <qprinter.h>
 #include <qcursor.h>
+#include <qpointarray.h>
 
 #include "kspread_table.h"
 #include "kspread_view.h"
 #include "kspread_python.h"
 #include "kspread_map.h"
 #include "kspread_doc.h"
+#include "kspread_cell.h"
 
 #include <koStream.h>
 #include <komlWriter.h>
 #include <torben.h>
+
+#include "kspread_calc.h"
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
@@ -33,6 +37,8 @@
 
 KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text ) : KSpreadLayout( _table )
 {   
+    m_pPrivate = 0L;
+  
     m_lstDepends.setAutoDelete( TRUE );
 
     if ( _text != 0L )
@@ -42,6 +48,8 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const cha
 
     QFont font( "Times", 12 );
     m_textFont = font;
+
+    m_style = KSpreadCell::ST_Normal;
 
     m_iRow = _row;
     m_iColumn = _column;
@@ -172,6 +180,31 @@ void KSpreadCell::unobscure()
 {
   m_pObscuringCell = 0L;
   m_bLayoutDirtyFlag= TRUE;
+}
+
+void KSpreadCell::clicked()
+{
+  cerr << "CELL CLICKED" << endl;
+  if ( m_style == KSpreadCell::ST_Normal )
+    return;
+  
+  if ( m_strAction.isEmpty() )
+    return;
+
+  if ( !m_pTable->doc()->pythonModule()->setContext( m_pTable->map()->mapId(), m_pTable->id() ) )
+  {
+    cerr << "Could not set context" << endl;
+    return;
+  }
+
+  PyObject *obj;
+  obj = m_pTable->doc()->pythonModule()->eval( m_strAction );
+  if ( !obj )
+  {
+    cerr << "ERROR in python stuff 3" << endl;
+    return;
+  }
+  Py_DECREF( obj );
 }
 
 QString KSpreadCell::encodeFormular( int _col, int _row )
@@ -463,7 +496,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
   int w = cl->width();
   int h = rl->height();
-
+  if ( m_style == ST_Select )
+    w -= 16;
+  
   // Calculate the extraWidth and extraHeight if needed
   if ( m_bForceExtraCells )
   {
@@ -785,7 +820,10 @@ bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _secon
 
 bool KSpreadCell::makeFormular()
 {
-    char buffer[ 100 ];
+  m_strFormular = m_strText.data();
+  ::makeDepend( m_strFormular.data() + 1, m_pTable, &m_lstDepends );
+  
+  /* char buffer[ 100 ];
     char *p = m_strText.data();
     int pos = 0;
     int start = -1;
@@ -852,7 +890,7 @@ bool KSpreadCell::makeFormular()
 	    pos++;
 	}
     }
-
+    */
     return true;
 }
 
@@ -927,14 +965,26 @@ bool KSpreadCell::calc( bool _makedepend )
     }
   }
     
-  if ( !m_pTable->doc()->pythonModule()->eval( m_strFormular.data() + 1, m_strFormularOut ) )
+  if ( !evalFormular( m_strFormular.data() + 1, m_pTable, m_dValue ) )
+  {
+    m_strFormularOut = "##";
+    printf("ERROR in python stuff\n");
+    checkValue();
+  }
+  else
+  {    
+    m_bValue = true;
+    m_strFormularOut.sprintf( "%f", m_dValue );
+  }
+    
+  /* if ( !m_pTable->doc()->pythonModule()->eval( m_strFormular.data() + 1, m_strFormularOut ) )
   {
     m_strFormularOut = "##";
     printf("ERROR in python stuff\n");
   }
   
   checkValue();
-	
+  */
   m_bProgressFlag = FALSE;
   m_bCalcDirtyFlag = FALSE;
 
@@ -1016,6 +1066,34 @@ void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &
   else
     _painter.setPen( m_topBorderPen );
   _painter.drawLine( _tx, _ty + dy, _tx + w, _ty + dy );
+
+  static QColorGroup g( black, white, white, darkGray, lightGray, black, black );
+  static QBrush fill( lightGray );
+  /**
+   * Modification for drawing the button
+   */
+  if ( m_style == KSpreadCell::ST_Button )
+  {
+    qDrawShadePanel( &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, g, selected, 1, &fill );
+  }
+  /**
+   * Modification for drawing the combo box
+   */  
+  else if ( m_style == KSpreadCell::ST_Select )
+  {    
+    qDrawShadePanel( &_painter, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, g, selected, 1, &fill );
+    QPointArray a;
+    // qDrawArrow( &_painter, DownArrow, WindowsStyle, selected, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, g );
+    int aw = 16;
+    int ah = h - 2*dy - 1;
+    int ax = _tx + w - dx - 16;
+    int ay = _ty + dy - 1;
+    a.setPoints( 7, -3,-1, 3,-1, -2,0, 2,0, -1,1, 1,1, 0,2 );
+    a.translate( ax+aw/2, ay+ah/2 );
+    _painter.setPen( black );
+    _painter.drawLineSegments( a, 0, 3 );
+    _painter.drawPoint( a[6] );
+  }
     
   if ( !m_strOutText.isNull() && m_strOutText.length() > 0 )
   {
@@ -1457,22 +1535,65 @@ void KSpreadCell::initAfterLoading()
 
 void KSpreadCell::setText( const char *_text )
 {
-  if ( m_pTable->isLoading() )
-  {
-    m_strText = _text;
-    return;
-  }
-  
-  UPDATE_BEGIN;
+  m_strText = _text;
 
   m_lstDepends.clear();
     
-  if ( *_text == '=' )
+  /**
+   *  Special handling for loading time
+   */
+
+  if ( !m_strText.isEmpty() && m_strText[0] == '=' )
   {
     m_bCalcDirtyFlag = TRUE;
     m_bLayoutDirtyFlag= TRUE;
     m_bFormular = TRUE;
-    m_strText = _text;
+    
+    if ( !makeFormular() )
+      printf("ERROR: Syntax ERROR\n");
+    // A Hack!!!! For testing only
+    // QString ret = encodeFormular( column, row );
+    // decodeFormular( ret, column, row );
+  }
+  else
+  {
+    if ( m_bFormular )
+      clearFormular();
+    
+    checkValue();
+		
+    m_bLayoutDirtyFlag= TRUE;
+    m_bFormular = FALSE;
+  }
+
+  // Do not update formulars and stuff here
+  if ( !m_pTable->doc()->isLoading() )
+    update();      
+}
+
+void KSpreadCell::setValue( double _d )
+{
+  m_bValue = true;
+  m_dValue = _d;
+  m_bLayoutDirtyFlag= TRUE;
+  m_bFormular = FALSE;
+
+  m_lstDepends.clear();
+      
+  update();
+}
+
+void KSpreadCell::update()
+{
+  UPDATE_BEGIN;
+
+  /* m_lstDepends.clear();
+    
+  if ( !m_strText.isEmpty() && m_strText[0] == '=' )
+  {
+    m_bCalcDirtyFlag = TRUE;
+    m_bLayoutDirtyFlag= TRUE;
+    m_bFormular = TRUE;
 
     if ( !makeFormular() )
       printf("ERROR: Syntax ERROR\n");
@@ -1485,14 +1606,13 @@ void KSpreadCell::setText( const char *_text )
     if ( m_bFormular )
       clearFormular();
     
-    m_strText = _text;
-
     checkValue();
 		
     m_bLayoutDirtyFlag= TRUE;
     m_bFormular = FALSE;
-  }
-    
+  } */
+
+  // Every cell that references us must set its calc dirty flag
   QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
   for( ; it.current(); ++it )
   {
@@ -1501,7 +1621,8 @@ void KSpreadCell::setText( const char *_text )
       if ( it3.current() != this )
 	it3.current()->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
   }
-  
+
+  // Recalculate every cell with calc dirty flag
   QListIterator<KSpreadTable> it2( m_pTable->map()->tableList() );
   for( ; it2.current(); ++it2 )
   {    
@@ -1817,17 +1938,11 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	}
 	else if ( name == "PEN" )
         {
-	  cerr << "!!!!!!!!!!!!!!!!!! PEN !!!!!!!!!!!!!!!!!!!!" << endl;
 	  setTextPen( tagToPen( lst ) );
 	}
 	else if ( name == "FONT" )
         {
-	  cerr << "!!!!!!!!!!!!!!!!!! FONT !!!!!!!!!!!!!!!!!!!!" << endl;
 	  setTextFont( tagToFont( lst ) );
-	  if ( m_textFont.bold() )
-	    cerr << "!!!!! IS BOLD !!!!!!!!!" << endl;
-	  else
-	    cerr << "!!!!! IS NOT BOLD !!!!!!!!!" << endl;
 	}
 	else if ( name == "LEFTBORDER" )
         {
@@ -1884,7 +1999,7 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   } while( res );
 
   text.stripWhiteSpace();
-  cerr << "TEXT: '" << text << "'" << endl;
+  // cerr << "TEXT: '" << text << "'" << endl;
   if ( text[0] == '=' )
   {
     QString tmp = decodeFormular( text.c_str(), m_iColumn, m_iRow );
@@ -1898,5 +2013,7 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 
 KSpreadCell::~KSpreadCell()
 {
+  if ( m_pPrivate )
+    delete m_pPrivate;
 }
 

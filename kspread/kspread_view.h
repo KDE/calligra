@@ -12,17 +12,20 @@ class KSpreadDoc;
 class KSpreadPaperLayout;
 class KSpreadChildPicture;
 class KSpreadChildFrame;
+class KSpreadShell;
 
-#include <part_frame_impl.h>
-#include <view_impl.h>
-#include <document_impl.h>
-#include <menu_impl.h>
-#include <toolbar_impl.h>
+#include <koFrame.h>
+#include <koView.h>
+#include <opMenu.h>
+#include <opToolBar.h>
+#include <koFrame.h>
+#include <openparts_ui.h>
 
 #include <qlist.h>
 #include <qscrbar.h>
 #include <qlabel.h> 
 #include <qbutton.h>
+#include <qpoint.h>
 
 #include "kspread_tabbar.h"
 #include "kspread_table.h"
@@ -43,7 +46,7 @@ protected:
 };
 #endif
 
-class KSpreadChildFrame : public PartFrame_impl
+class KSpreadChildFrame : public KoFrame
 {
   Q_OBJECT
 public:
@@ -53,11 +56,8 @@ public:
   /**
    * @return the view owning this frame.
    */
-  KSpreadView* view() { return m_pView; }
+  KSpreadView* spreadView() { return m_pView; }
 
-public slots:
-  void slotAttachPart( PartFrame_impl* );
-  
 protected:
   KSpreadChild *m_pChild;
   KSpreadView *m_pView;
@@ -258,7 +258,7 @@ protected:
 /**
  */
 class KSpreadView : public QWidget,
-		    virtual public View_impl,
+		    virtual public KoViewIf,
 		    virtual public KSpread::View_skel
 {
     Q_OBJECT
@@ -266,8 +266,7 @@ public:
     KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc *_doc );
     ~KSpreadView();
 
-    virtual void createGUI();
-  
+    // C++
     KSpreadCanvas* canvasWidget() { return m_pCanvasWidget; }
     QWidget* hBorderWidget() { return m_pHBorderWidget; }    
     QWidget* vBorderWidget() { return m_pVBorderWidget; }    
@@ -294,7 +293,7 @@ public:
 
     void openPopupMenu( const QPoint &_global );
   
-    void marker( int &row, int &column);
+    QPoint marker();  
     bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
     int markerColumn() { return m_iMarkerColumn; }
     int markerRow() { return m_iMarkerRow; }
@@ -350,14 +349,16 @@ public:
      */
     void insertChild( const QRect& _geometry, const char *_arg );
 
+    void setFocus( CORBA::Boolean mode );
+
 #ifdef USE_PICTURE
     QListIterator<KSpreadChildPicture> pictures() { return QListIterator<KSpreadChildPicture>( m_lstPictures ); }
 
     void markChildPicture( KSpreadChildPicture *_pic );
 #endif
     // IDL
-    virtual void setMode( OPParts::Part::Mode _mode );
-    virtual void setFocus( CORBA::Boolean mode );
+    /* virtual void setMode( OPParts::Part::Mode _mode );
+    virtual void setFocus( CORBA::Boolean mode ); */
     virtual CORBA::Boolean printDlg();
 
     // IDL Slots
@@ -423,7 +424,12 @@ public:
      * Menu View->Show Page Borders
      */
     void togglePageBorders();
-    
+
+    /**
+     * Menu Data
+     */
+    void consolidate();
+  
     /**
      * Menu Folder
      */
@@ -434,10 +440,6 @@ public:
      */
     void autoFill();    
 
-    /**
-     * Menu for help menu
-     */
-    void helpAbout();
     /**
      * Menu for help menu
      */
@@ -530,7 +532,9 @@ public:
      * ToolBar
      */
     void insertRow();
-      
+
+    virtual void cleanUp();
+  
 protected slots:
     // C++
     /**
@@ -595,18 +599,26 @@ public slots:
     void slotUpdateChildGeometry( KSpreadChild *_child );
 
     // KSpreadChildFrame signals
-    void slotChildGeometryEnd( PartFrame_impl* );
-    void slotChildMoveEnd( PartFrame_impl* );
+    void slotChildGeometryEnd( KoFrame* );
+    void slotChildMoveEnd( KoFrame* );
+
+    // IDL
+    virtual CORBA::ULong leftGUISize();
+    virtual CORBA::ULong rightGUISize();
+    virtual CORBA::ULong topGUISize();
+    virtual CORBA::ULong bottomGUISize();
 
 protected:
     // C++
+    virtual void init();
+    // IDL
+    virtual bool event( const char* _event, const CORBA::Any& _value );
+    // C++
+    virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
+    virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
+  
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
-
-    virtual int leftGUISize() { return YBORDER_WIDTH; }
-    virtual int rightGUISize() { return 20; }
-    virtual int topGUISize() { return XBORDER_HEIGHT + 30; }
-    virtual int bottomGUISize() { return 20; }
 
     /**
      * Used to draw the grey grid that is usually only visible on the
@@ -645,14 +657,7 @@ protected:
     KSpreadTabBar *m_pTabBar;
     QLabel *m_pPosWidget;  
 
-    OPParts::ToolBarFactory_var m_vToolBarFactory;
-  /* ToolBar_ref m_rToolBarFile;
-    CORBA::Long m_idButtonFile_Open;
-    CORBA::Long m_idButtonFile_Save;
-    CORBA::Long m_idButtonFile_Print;
-    CORBA::Long m_idButtonFile_ZoomOut;
-    CORBA::Long m_idButtonFile_ZoomIn; */
-    ToolBar_ref m_rToolBarEdit;
+    OpenPartsUI::ToolBar_var m_vToolBarEdit;
     CORBA::Long m_idButtonEdit_Copy;
     CORBA::Long m_idButtonEdit_Paste;
     CORBA::Long m_idButtonEdit_Cut;
@@ -660,7 +665,7 @@ protected:
     CORBA::Long m_idButtonEdit_DelCol;
     CORBA::Long m_idButtonEdit_InsRow;
     CORBA::Long m_idButtonEdit_InsCol;
-    ToolBar_ref m_rToolBarLayout;
+    OpenPartsUI::ToolBar_var m_vToolBarLayout;
     CORBA::Long m_idComboLayout_Font;
     CORBA::Long m_idComboLayout_FontSize;
     CORBA::Long m_idButtonLayout_Bold;
@@ -675,9 +680,7 @@ protected:
     CORBA::Long m_idButtonLayout_PrecPlus;
     CORBA::Long m_idButtonLayout_Chart;
 
-    OPParts::MenuBarFactory_var m_vMenuBarFactory;
-    MenuBar_ref m_rMenuBar;
-    CORBA::Long m_idMenuEdit;
+    OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;
     CORBA::Long m_idMenuEdit_Redo;
     CORBA::Long m_idMenuEdit_Cut;
@@ -685,20 +688,25 @@ protected:
     CORBA::Long m_idMenuEdit_Paste;
     CORBA::Long m_idMenuEdit_Cell;
     CORBA::Long m_idMenuEdit_Layout;
-    CORBA::Long m_idMenuEdit_Insert;
+    OpenPartsUI::Menu_var m_vMenuEdit_Insert;
     CORBA::Long m_idMenuEdit_Insert_Table;
-    CORBA::Long m_idMenuView;
+    CORBA::Long m_idMenuEdit_Insert_Chart;
+    CORBA::Long m_idMenuEdit_Insert_Image;
+    CORBA::Long m_idMenuEdit_Insert_Object;
+    OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
     CORBA::Long m_idMenuView_ShowPageBorders;
-    CORBA::Long m_idMenuFolder;
+    OpenPartsUI::Menu_var m_vMenuData;
+    CORBA::Long m_idMenuData_Consolidate;
+    OpenPartsUI::Menu_var m_vMenuFolder;
     CORBA::Long m_idMenuFolder_NewTable;
-    CORBA::Long m_idMenuFormat;
+    OpenPartsUI::Menu_var m_vMenuFormat;
     CORBA::Long m_idMenuFormat_AutoFill;
-    CORBA::Long m_idMenuScripts;
+    OpenPartsUI::Menu_var m_vMenuScripts;
     CORBA::Long m_idMenuScripts_EditGlobal;
     CORBA::Long m_idMenuScripts_EditLocal;
     CORBA::Long m_idMenuScripts_Reload;
-    CORBA::Long m_idMenuHelp;
+    OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_About;
     CORBA::Long m_idMenuHelp_Using;
 
@@ -725,10 +733,6 @@ protected:
     
     float m_fZoom;
     
-    /**
-     * Pointer to the part that this GUI is belonging to.
-     */
-    Part_impl *m_pPart;
     KSpreadDoc *m_pDoc;
   
     QPopupMenu *viewMenu;
@@ -769,6 +773,11 @@ protected:
 #ifdef USE_PICTURES
     QList<KSpreadChildPicture> m_lstPictures;
 #endif
+
+  /**
+   * Set to true if the function @ref #init is entered. The start value if false.
+   */
+   bool m_bInitialized;
 };
 
 #endif

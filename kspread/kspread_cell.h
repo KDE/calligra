@@ -14,23 +14,37 @@ class KSpreadView;
 #include <qpainter.h>
 #include <qrect.h>
 #include <qlist.h>
+#include <qstrlist.h>
 
 #include "kspread_layout.h"
 
 /**
  */
-class KSpreadDepend
+struct KSpreadDepend
+{
+  int m_iColumn;
+  int m_iRow;
+  KSpreadTable *m_pTable;
+  /**
+   * Column of second corner
+   *  If this is set to -1, no second corner is defined.
+   */
+  int m_iColumn2;
+  int m_iRow2;
+};
+
+class KSpreadCellPrivate
 {
 public:
-    int m_iColumn;
-    int m_iRow;
-    KSpreadTable *m_pTable;
-    /**
-     * Column of second corner
-     *  If this is set to -1, no second corner is defined.
-     */
-    int m_iColumn2;
-    int m_iRow2;
+  virtual ~KSpreadCellPrivate() { }
+};
+
+class SelectPrivate : public KSpreadCellPrivate
+{
+public:
+  virtual ~SelectPrivate() { }
+  
+  QStrList m_lstItems;
 };
 
 /**
@@ -38,6 +52,8 @@ public:
 class KSpreadCell : public KSpreadLayout
 {
 public:    
+    enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
+  
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
@@ -158,6 +174,9 @@ public:
 
     void setMultiRow( bool _b ) { m_bMultiRow = _b; m_bLayoutDirtyFlag = TRUE; }
 
+    void setStyle( Style _s ) { m_style = _s; m_bLayoutDirtyFlag = true; }
+    void setAction( const char* _action ) { m_strAction = _action; }
+  
     /**
      * Since the GUI supports zooming, you can get the value zoomed
      * or not scaled. The not scaled value may be of interest in a
@@ -192,6 +211,9 @@ public:
      */
     const QColor& bgColor( int _col, int _row );
 
+    Style style() { return m_style; }
+    const char* action() { return m_strAction; }
+  
     /**
      * @param _col the column this cell is assumed to be in
      * @param _row the row this cell is assumed to be in
@@ -206,7 +228,16 @@ public:
     bool isValue() { return m_bValue; }
     double valueDouble() { return m_dValue; }
     const char* valueString();
-    
+    void setValue( double _d );
+
+    void update();
+  
+    /**
+     * Called if the user clicks on a cell. If the cell is for example a button, then
+     * @ref #m_strAction is executed.
+     */
+    void clicked();
+  
     /**
      * Starts calculating.
      * If a table is ok and you change this cell only, then you dont need to
@@ -331,6 +362,7 @@ public:
     QString decodeFormular( const char *_text, int _col = -1, int _row = -1 );
     
 protected:
+  
     virtual void makeLayout( QPainter &_painter, int _col, int _row );
     /**
      * Parses the formular.
@@ -422,8 +454,8 @@ protected:
     QString m_strFormular;
     /**
      * The value we got from calculation.
-     * If @ref #isFormular is TRUE, @ref #makeKSpreadLayout will use @ref #formularOut
-     * instead of @ref text since @ref text stores the formular the user entered.
+     * If @ref #isFormular is TRUE, @ref #makeLayout will use @ref #m_strFormularOut
+     * instead of @ref m_strText since m_strText stores the formular the user entered.
      */
     QString m_strFormularOut;
     
@@ -488,6 +520,11 @@ protected:
      * The row of the cell obscuring this one
      */
     int m_iObscuringCellsRow;
+
+    Style m_style;
+    QString m_strAction;
+
+    KSpreadCellPrivate *m_pPrivate;
 };
 
 #endif

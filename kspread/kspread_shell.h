@@ -3,36 +3,61 @@
 
 class KSpreadShell_impl;
 
-#include <default_shell_impl.h>
-#include <document_impl.h>
+#include <koMainWindow.h>
 
-#include "kspread_doc.h"
+class KSpreadDoc;
+class KSpreadView;
 
-class KSpreadShell_impl : public DefaultShell_impl
+#include <qlist.h>
+#include <qtimer.h>
+#include <qstring.h>
+
+class KSpreadShell : public KoMainWindow
 {
   Q_OBJECT
 public:
   // C++
-  KSpreadShell_impl();
-  ~KSpreadShell_impl();
+  KSpreadShell();
+  ~KSpreadShell();
 
-  // IDL
-  virtual void fileNew();
-  
   // C++
-  virtual void setDocument( KSpreadDoc *_doc );
-  
-  virtual bool openDocument( const char *_filename );
-  virtual bool saveDocument( const char *_file, const char *_format );
-  virtual bool printDlg();
-
-  virtual void helpAbout();
-  
   virtual void cleanUp();
-  
+  void setDocument( KSpreadDoc *_doc );
+
+  // C++
+  virtual bool newDocument();
+  virtual bool openDocument( const char *_filename, const char* _format );
+  virtual bool saveDocument( const char *_file, const char *_format );
+  virtual bool closeDocument();
+  virtual bool closeAllDocuments();
+
+protected slots:
+  void slotFileNew();
+  void slotFileOpen();
+  void slotFileSave();
+  void slotFileSaveAs();
+  void slotFilePrint();
+  void slotFileClose();
+  void slotFileQuit();
+
 protected:
-  Document_ref m_rDoc;
-  OPParts::View_var m_vView;
+  // C++
+  virtual KoDocument* document();
+  virtual KoViewIf* view();
+
+  virtual bool printDlg();
+  virtual void helpAbout();
+  virtual int documentCount();
+
+  bool isModified();
+  bool requestClose();
+
+  void releaseDocument();
+  
+  KSpreadDoc* m_pDoc;
+  KSpreadView* m_pView;
+
+  static QList<KSpreadShell>* s_lstShells;
 };
 
 #endif

@@ -133,7 +133,9 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     textFontItalic = obj->textFontItalic();
     // Needed to initialize the font correctly ( bug in Qt )
     textFont = obj->textFont();
- 
+    eStyle = obj->style();
+    actionText = obj->action();
+    
     // We assume, that all other objects have the same values
     bLeftBorderStyle = TRUE;
     bLeftBorderColor = TRUE;
@@ -206,6 +208,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bTextFontItalic = FALSE;
 	    if ( bgColor != obj->bgColor( x, y ) )
 		bBgColor = FALSE;
+	    if ( eStyle != obj->style() )
+		eStyle = KSpreadCell::ST_Undef;
 	}
 
     // Look for the Outline
@@ -963,6 +967,48 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     connect( bgColorButton, SIGNAL( clicked() ),
 	     this, SLOT( slotBackgroundColor() ) );
 
+    tmpQLabel = new QLabel( this, "Label_3" );
+    tmpQLabel->setGeometry( 20, 100, 120, 30 );
+    tmpQLabel->setText( i18n("Functionality") );
+
+    styleButton = new QComboBox( this, "ComboBox_2" );
+    styleButton->setGeometry( 20, 130, 100, 30 );    
+    idStyleNormal = 0; styleButton->insertItem( i18n("Normal"), 0 );
+    idStyleButton = 1; styleButton->insertItem( i18n("Button"), 1 );
+    idStyleSelect = 2; styleButton->insertItem( i18n("Select"), 2 );
+    if ( dlg->eStyle == KSpreadCell::ST_Undef )
+    {
+      idStyleUndef = 3; styleButton->insertItem( i18n("######"), 3 );
+    }
+    else
+      idStyleUndef = -1;
+    connect( styleButton, SIGNAL( activated( int ) ), this, SLOT( slotStyle( int ) ) );
+    
+    tmpQLabel = new QLabel( this, "Label_3" );
+    tmpQLabel->setGeometry( 20, 180, 120, 30 );
+    tmpQLabel->setText( i18n("Action") );
+
+    actionText = new QLineEdit( this );
+    actionText->setGeometry( 20, 210, 200, 30 );
+    if ( dlg->isSingleCell() )
+    {
+      if ( !dlg->actionText.isEmpty() )
+	actionText->setText( dlg->actionText );
+      if ( dlg->eStyle == KSpreadCell::ST_Normal || dlg->eStyle == KSpreadCell::ST_Undef )
+	actionText->setEnabled( false );
+    }
+    else
+      actionText->setEnabled( false );
+    
+    if ( dlg->eStyle == KSpreadCell::ST_Normal )
+      styleButton->setCurrentItem( idStyleNormal );
+    else if ( dlg->eStyle == KSpreadCell::ST_Button )
+      styleButton->setCurrentItem( idStyleButton );
+    else if ( dlg->eStyle == KSpreadCell::ST_Select )
+      styleButton->setCurrentItem( idStyleSelect );
+    else if ( dlg->eStyle == KSpreadCell::ST_Undef )
+      styleButton->setCurrentItem( idStyleUndef );
+
     if ( dlg->bTextColor )
     {
 	textColor = dlg->textColor;
@@ -994,6 +1040,22 @@ void CellLayoutPageMisc::apply( KSpreadCell *_obj )
 	_obj->setTextColor( textColor );
     if ( !bBgColorUndefined )
 	_obj->setBgColor( bgColor );
+    if ( styleButton->currentItem() == idStyleNormal )
+      _obj->setStyle( KSpreadCell::ST_Normal );
+    else if ( styleButton->currentItem() == idStyleButton )
+      _obj->setStyle( KSpreadCell::ST_Button );
+    else if ( styleButton->currentItem() == idStyleSelect )
+      _obj->setStyle( KSpreadCell::ST_Select );
+    if ( actionText->isEnabled() )
+      _obj->setAction( actionText->text() );
+}
+
+void CellLayoutPageMisc::slotStyle( int _i )
+{
+  if ( dlg->isSingleCell() && _i != idStyleNormal && _i != idStyleUndef )
+    actionText->setEnabled( true );
+  else
+    actionText->setEnabled( false );
 }
 
 void CellLayoutPageMisc::slotTextColor()

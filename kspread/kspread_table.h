@@ -19,13 +19,13 @@ class QPainter;
 #include <komlParser.h>
 #include <komlMime.h>
 #include <koDocument.h>
-#include <document_impl.h>
 
 #include <qpen.h>
 #include <qlist.h>
 #include <qintdict.h>
 #include <qarray.h>
 #include <qrect.h>
+#include <qpalette.h>
 
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388
@@ -90,7 +90,7 @@ protected:
 class KSpreadChild : public KoDocumentChild
 {
 public:
-  KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc );
+  KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, KOffice::Document_ptr _doc );
   KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table );
   ~KSpreadChild();
   
@@ -130,7 +130,7 @@ protected:
 class ChartChild : public KSpreadChild
 {
 public:
-  ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc );
+  ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, KOffice::Document_ptr _doc );
   ChartChild( KSpreadDoc *_spread, KSpreadTable *_table );
   ~ChartChild();
 
@@ -162,9 +162,9 @@ public:
 
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
-    virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict );
+    virtual bool loadChildren( KOStore::Store_ptr _store );
  
-    virtual void makeChildList( OPParts::Document_ptr _doc, const char *_path );
+    virtual void makeChildList( KOffice::Document_ptr _doc, const char *_path );
     /*
      * @return true if one of the direct children wants to
      *              be saved embedded. If there are no children or if
@@ -223,9 +223,18 @@ public:
     void setLayoutDirtyFlag();
     /**
      * Sets the @ref KSpreadCell::calcDirtyFlag in all cells.
+     * That means that the cells are marked dirty and will recalculate
+     * if requested. This function does only MARK, it does NOT actually calculate.
+     * Use @ref #recalc to recaculate dirty values.
      */
     void setCalcDirtyFlag();
-    
+    /**
+     * Recalculates the current table. If you want to recalculate EVERYTHING, then 
+     * call @ref Table::setCalcDirtyFlag for all tables in the @ref #m_pMap to make
+     * shure that no invalid values in other tables make you trouble.
+     */
+    void recalc();
+  
     /**
      * Sets the contents of the cell at row,column to text
      */
@@ -306,16 +315,6 @@ public:
     void removeCellBinding( CellBinding *_bind );    
     CellBinding* firstCellBinding() { return m_lstCellBindings.first(); }
     CellBinding* nextCellBinding() { return m_lstCellBindings.next(); }
-
-  // HACK
-  // ChartCellBinding* createChartCellBinding( PartFrame *_frame, const QRect &_rect );
-  
-    /**
-     * @return TRUE if the table is in the middle of loading.
-     *
-     * @see #bLoading
-     */
-    bool isLoading() { return m_bLoading; }
 
     /**
      * Used by the 'chart' to get the table on which the chart is build.
@@ -399,6 +398,14 @@ public:
     void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
     QListIterator<KSpreadChild> childIterator();
 
+    void update();
+  
+    const QColorGroup& colorGroup() { return m_pWidget->colorGroup(); }
+
+    int id() { return m_id; }
+
+    static KSpreadTable* find( int _id );
+  
     /**
      * Emits the signal @ref #sig_updateCell and sets the cells @ref KSpreadCell::m_bDisplayDirtyFlag to false.
      */
@@ -480,14 +487,6 @@ protected:
     char m_arrColumnLabel[20];
 
     /**
-     * If this flag is set, then we are in the middle of loading a file. In this
-     * case one should not do any action beyond loading.
-     *
-     * @see #isLoading
-     */
-    bool m_bLoading;
-
-    /**
      * The map to which this table belongs.
      */
     KSpreadMap *m_pMap;
@@ -506,10 +505,11 @@ protected:
      * List of all embedded objects.
      */
     QList<KSpreadChild> m_lstChildren;
+
+    int m_id;
+  
+    static int s_id;
+    static QIntDict<KSpreadTable>* s_mapTables;
 };
 
 #endif
-
-
-
-

@@ -1,10 +1,10 @@
-#ifndef __kspread_h__
-#define __kspread_h__
+#ifndef __kspread_doc_h__
+#define __kspread_doc_h__
 
 class KSpreadDoc;
 
-#include <part_frame_impl.h>
-#include <document_impl.h>
+#include <koFrame.h>
+#include <koDocument.h>
 
 #include <iostream.h>
 
@@ -22,8 +22,8 @@ class KSpreadDoc;
 #include "kspread_view.h"
 #include "kspread_map.h"
 
-#include "koPageLayoutDia.h"
-#include "koDocument.h"
+#include <koPageLayoutDia.h>
+
 
 #define MIME_TYPE "application/x-kspread"
 #define EDITOR "IDL:KSpread/Document:1.0"
@@ -42,26 +42,39 @@ public:
   ~KSpreadDoc();
 
   // C++
-  virtual bool save( ostream& );
+  virtual bool save( ostream&, const char *_format );
 
   // C++
-  virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict ) { return m_pMap->loadChildren( _dict ); }
-  virtual bool load( KOMLParser& );
+  virtual bool loadChildren( KOStore::Store_ptr _store ) { return m_pMap->loadChildren( _store ); }
+  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
   
   virtual void cleanUp();
 
   virtual void removeView( KSpreadView* _view );
-  
+
+  // C++
+  virtual KSpreadView* createSpreadView();
+
   // IDL
   virtual CORBA::Boolean init();
   
-  virtual OPParts::View_ptr createView();
+  /**
+   * Wrapper for @ref #createSpreadView
+   */
+  virtual OpenParts::View_ptr createView();
   
-  virtual void viewList( OPParts::Document::ViewList*& _list );
+  virtual void viewList( OpenParts::Document::ViewList*& _list );
   
   virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
   
   virtual CORBA::Boolean isModified() { return m_bModified; }
+  
+  // C++
+  virtual int viewCount();
+  
+  // C++
+  virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
+  virtual bool isEmpty() { return m_bEmpty; }
   
   // C++
   /**
@@ -162,16 +175,7 @@ public:
   
   void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
 			const char *_footl, const char *_footm, const char *_footr );
-  
-  /**
-   * @return the URL of this part if it has been created from a file ( @ref #load )
-   *         or if it has been saved to a file ( @ref #save ). Otherwise the
-   *         return value is 0L.
-   */
-  const char* url() { return m_strFileURL.data(); }
-  
-  virtual void setModified( bool _c ) { m_bModified = _c; }
-  
+    
   KSpreadPythonModule *pythonModule() { return m_pPython; }
   void reloadScripts();
   
@@ -186,7 +190,13 @@ public:
   
   void enableUndo( bool _b );
   void enableRedo( bool _b );
+
+  bool isLoading() { return m_bLoading; }
+
+  int docId() { return m_docId; }
   
+  static KSpreadDoc* find( int _doc_id ); 
+
 public slots:
     /**
      * Open a dialog for the "Page Layout".
@@ -201,113 +211,123 @@ signals:
     void sig_updateView();
   
 protected:
-    virtual void makeChildListIntern( OPParts::Document_ptr _root, const char *_path );
+  virtual bool completeLoading( KOStore::Store_ptr );
+
+  virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );
   
-    /*
-     * @return true if one of the direct children wants to
-     *              be saved embedded. If there are no children or if
-     *              every direct child saves itself into its own file
-     *              then false is returned.
-     * 
-     */
-    virtual bool hasToWriteMultipart();
-
-    void initPython();
-
-    /**
-     * Looks at @ref #m_paperFormat and calculates @ref #m_paperWidth and @ref #m_paperHeight.
-     */
-    void calcPaperSize();
-
-    /**
-     * Replaces macros like <name>, <file>, <date> etc. in the string and
-     * returns the modified one.
-     * 
-     * @param _page is the page number for which the heading is produced.
-     * @param _KSpreadTable is the name of the KSpreadTable for which we generate the headings.
-     */
-    QString completeHeading( const char *_data, int _page, const char *_KSpreadTable );
-
-    virtual const char* copyright() { return "kspread (c) Torben Weis, <weis@kde.org> 1998"; }
-
-    KSpreadMap *m_pMap;
+  /*
+   * @return true if one of the direct children wants to
+   *              be saved embedded. If there are no children or if
+   *              every direct child saves itself into its own file
+   *              then false is returned.
+   * 
+   */
+  virtual bool hasToWriteMultipart();
   
-    /**
-     * This variable is used to give every KSpreadTable a unique default name.
-     *
-     * @see #newKSpreadTable
-     */
-    int m_iTableId;
+  void initPython();
 
-    /**
-     * The orientation of the paper.
-     */
-    KoOrientation m_orientation;
-    /**
-     * Tells about the currently seleced paper size.
-     */
-    KoFormat m_paperFormat;
+  /**
+   * Looks at @ref #m_paperFormat and calculates @ref #m_paperWidth and @ref #m_paperHeight.
+   */
+  void calcPaperSize();
+
+  /**
+   * Replaces macros like <name>, <file>, <date> etc. in the string and
+   * returns the modified one.
+   * 
+   * @param _page is the page number for which the heading is produced.
+   * @param _KSpreadTable is the name of the KSpreadTable for which we generate the headings.
+   */
+  QString completeHeading( const char *_data, int _page, const char *_KSpreadTable );
+
+  virtual const char* copyright() { return "kspread (c) Torben Weis, <weis@kde.org> 1998"; }
+
+  KSpreadMap *m_pMap;
   
-    /**
-     * The paper width in millimeters. Dont change this value, it is calculated by
-     * @ref #calcPaperSize from the value @ref #m_paperFormat.
-     */
-    float m_paperWidth;
-    /**
-     * The paper height in millimeters. Dont change this value, it is calculated by
-     * @ref #calcPaperSize from the value @ref #m_paperFormat.
-     */
-    float m_paperHeight;    
-    /**
-     * The left border in millimeters.
-     */
-    float m_leftBorder;
-    /**
-     * The right border in millimeters.
-     */
-    float m_rightBorder;
-    /**
-     * The top border in millimeters.
-     */
-    float m_topBorder;
-    /**
-     * The right border in millimeters.
-     */
-    float m_bottomBorder;
+  /**
+   * This variable is used to give every KSpreadTable a unique default name.
+   *
+   * @see #newKSpreadTable
+   */
+  int m_iTableId;
+  
+  /**
+   * The orientation of the paper.
+   */
+  KoOrientation m_orientation;
+  /**
+   * Tells about the currently seleced paper size.
+   */
+  KoFormat m_paperFormat;
+  
+  /**
+   * The paper width in millimeters. Dont change this value, it is calculated by
+   * @ref #calcPaperSize from the value @ref #m_paperFormat.
+   */
+  float m_paperWidth;
+  /**
+   * The paper height in millimeters. Dont change this value, it is calculated by
+   * @ref #calcPaperSize from the value @ref #m_paperFormat.
+   */
+  float m_paperHeight;    
+  /**
+   * The left border in millimeters.
+   */
+  float m_leftBorder;
+  /**
+   * The right border in millimeters.
+   */
+  float m_rightBorder;
+  /**
+   * The top border in millimeters.
+   */
+  float m_topBorder;
+  /**
+   * The right border in millimeters.
+   */
+  float m_bottomBorder;
+  
+  QString m_headLeft;
+  QString m_headRight;
+  QString m_headMid;
+  QString m_footLeft;
+  QString m_footRight;
+  QString m_footMid;
+  
+  /**
+   * The URL of the this part. This variable is only set if the @ref #load function
+   * had been called with an URL as argument.
+   *
+   * @see #load
+   */
+  QString m_strFileURL;
+  
+  /**
+   * Indicates wether the user should save the document before deleting it.
+   *
+   * @see #isModified
+   */
+  bool m_bModified;
+  bool m_bEmpty;
+  
+  KSpreadPythonModule *m_pPython;
+  
+  KMetaEditor *m_pEditor;
+  /**
+   * Used by @ref #editor
+   */
+  QString m_editorBuffer;
+  
+  KSpreadUndo *m_pUndoBuffer;
+  
+  QList<KSpreadView> m_lstViews;
+  
+  bool m_bLoading;
 
-    QString m_headLeft;
-    QString m_headRight;
-    QString m_headMid;
-    QString m_footLeft;
-    QString m_footRight;
-    QString m_footMid;
-    
-    /**
-     * The URL of the this part. This variable is only set if the @ref #load function
-     * had been called with an URL as argument.
-     *
-     * @see #load
-     */
-    QString m_strFileURL;
-
-    /**
-     * Indicates wether the user should save the document before deleting it.
-     *
-     * @see #isModified
-     */
-    bool m_bModified;
-
-    KSpreadPythonModule *m_pPython;
-
-    KMetaEditor *m_pEditor;
-    /**
-     * Used by @ref #editor
-     */
-    QString m_editorBuffer;
-
-    KSpreadUndo *m_pUndoBuffer;
-
-    QList<KSpreadView> m_lstViews;
+  int m_docId;
+  
+  static int s_docId;
+  static QIntDict<KSpreadDoc>* s_mapDocuments;
 };
 
 #endif

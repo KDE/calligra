@@ -10,8 +10,24 @@
 
 #include <komlWriter.h>
 
+int KSpreadMap::s_mapId = 0L;
+QIntDict<KSpreadMap>* KSpreadMap::s_mapMaps;
+
+KSpreadMap* KSpreadMap::find( int _mapId )
+{
+  if ( !s_mapMaps )
+    return 0L;
+  
+  return (*s_mapMaps)[ _mapId ];
+}
+
 KSpreadMap::KSpreadMap( KSpreadDoc *_doc )
 {
+  if ( s_mapMaps == 0L )
+    s_mapMaps = new QIntDict<KSpreadMap>;
+    m_mapId = s_mapId++;
+    s_mapMaps->insert( m_mapId, this );
+
     m_pDoc = _doc;
     
     m_lstTables.setAutoDelete( true );
@@ -22,6 +38,7 @@ KSpreadMap::KSpreadMap( KSpreadDoc *_doc )
 
 KSpreadMap::~KSpreadMap()
 {
+  s_mapMaps->remove( m_mapId );
 }
 
 void KSpreadMap::addTable( KSpreadTable *_table )
@@ -77,6 +94,13 @@ bool KSpreadMap::load( KOMLParser& parser, vector<KOMLAttrib>& )
   }
 
   return true;
+}
+
+void KSpreadMap::update()
+{
+  QListIterator<KSpreadTable> it( m_lstTables );
+  for( ; it.current(); ++it )
+    it.current()->update();
 }
 
 /*
@@ -300,7 +324,7 @@ bool KSpreadMap::getPythonCodeFromFile()
     return TRUE;
 }
 
-void KSpreadMap::makeChildList( OPParts::Document_ptr _doc, const char *_path )
+void KSpreadMap::makeChildList( KOffice::Document_ptr _doc, const char *_path )
 {
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
@@ -312,11 +336,11 @@ void KSpreadMap::makeChildList( OPParts::Document_ptr _doc, const char *_path )
   }
 }
 
-bool KSpreadMap::loadChildren( OPParts::MimeMultipartDict_ptr _dict )
+bool KSpreadMap::loadChildren( KOStore::Store_ptr _store )
 {
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
-    if ( !it.current()->loadChildren( _dict ) )
+    if ( !it.current()->loadChildren( _store ) )
       return false;
   
   return true;

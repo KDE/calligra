@@ -142,7 +142,8 @@ public:
 public slots:
     void slotTextColor();
     void slotBackgroundColor();
-    
+    void slotStyle( int );
+   
 protected:
     void setColor( QPushButton *_button, const QColor &_color );
 
@@ -154,6 +155,14 @@ protected:
     QPushButton *textColorButton;
     QPushButton *bgColorButton;
 
+    QComboBox* styleButton;
+    int idStyleNormal;
+    int idStyleUndef;
+    int idStyleButton;
+    int idStyleSelect;
+   
+    QLineEdit* actionText;
+  
     CellLayoutDlg *dlg;
 };
     
@@ -242,7 +251,9 @@ public:
     int exec();
 
     KSpreadTable* getTable() {	return table; }
-    
+
+    bool isSingleCell() { return ( left == right && top == bottom ); }
+  
     // The layout of the selected area
     PenStyle leftBorderStyle;
     int leftBorderWidth;
@@ -289,7 +300,9 @@ public:
     QFont textFont;
     QColor bgColor;
     bool bBgColor;
-    
+    KSpreadCell::Style eStyle;
+    QString actionText;
+  
     static QPixmap* formatOnlyNegSignedPixmap;
     static QPixmap* formatRedOnlyNegSignedPixmap;
     static QPixmap* formatRedNeverSignedPixmap;

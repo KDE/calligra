@@ -6,6 +6,8 @@
 
 #include <qstring.h>
 
+class KSpreadDoc;
+
 void pythonInit( int argc, char** argv );
 
 bool pythonEval( const char* _cmd, QString & _result );
@@ -35,9 +37,10 @@ protected:
 class KSpreadPythonModule : public KPythonModule
 {
 public:
-    KSpreadPythonModule( const char *_name );
-    
-    bool eval( const char* _cmd, QString & _result );
+    KSpreadPythonModule( const char *_name, int _doc_id );
+
+    bool setContext( int _map_id, int _table_id );
+    PyObject* eval( const char* _cmd );
 };
 
 #endif
