@@ -1925,7 +1925,7 @@ void KWView::formatParagraph()
         bool changed=false;
         if(paragDia->isLeftMarginChanged())
         {
-            cmd=edit->setMargin( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -1937,7 +1937,7 @@ void KWView::formatParagraph()
 
         if(paragDia->isRightMarginChanged())
         {
-            cmd=edit->setMargin( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -1948,7 +1948,7 @@ void KWView::formatParagraph()
         }
         if(paragDia->isSpaceBeforeChanged())
         {
-            cmd=edit->setMargin( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -1957,7 +1957,7 @@ void KWView::formatParagraph()
         }
         if(paragDia->isSpaceAfterChanged())
         {
-            cmd=edit->setMargin( QStyleSheetItem::MarginBottom, paragDia->spaceAfterParag() );
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginBottom, paragDia->spaceAfterParag() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -1966,7 +1966,7 @@ void KWView::formatParagraph()
         }
         if(paragDia->isFirstLineChanged())
         {
-            cmd=edit->setMargin( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -1978,7 +1978,7 @@ void KWView::formatParagraph()
 
         if(paragDia->isAlignChanged())
         {
-            cmd=edit->setAlign( paragDia->align() );
+            cmd=edit->setAlignCommand( paragDia->align() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -1987,7 +1987,7 @@ void KWView::formatParagraph()
         }
         if(paragDia->isCounterChanged())
         {
-            cmd=edit->setCounter( paragDia->counter() );
+            cmd=edit->setCounterCommand( paragDia->counter() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -1996,7 +1996,7 @@ void KWView::formatParagraph()
         }
         if(paragDia->listTabulatorChanged())
         {
-            cmd=edit->setTabList( paragDia->tabListTabulator() );
+            cmd=edit->setTabListCommand( paragDia->tabListTabulator() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -2006,7 +2006,7 @@ void KWView::formatParagraph()
 
         if(paragDia->isLineSpacingChanged())
         {
-            cmd=edit->setLineSpacing( paragDia->lineSpacing() );
+            cmd=edit->setLineSpacingCommand( paragDia->lineSpacing() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -2015,7 +2015,7 @@ void KWView::formatParagraph()
         }
         if(paragDia->isBorderChanged())
         {
-            cmd=edit->setBorders( paragDia->leftBorder(), paragDia->rightBorder(),
+            cmd=edit->setBordersCommand( paragDia->leftBorder(), paragDia->rightBorder(),
                               paragDia->topBorder(), paragDia->bottomBorder() );
             if(cmd)
             {
@@ -2025,7 +2025,7 @@ void KWView::formatParagraph()
         }
         if ( paragDia->isPageBreakingChanged() )
         {
-            cmd=edit->setPageBreaking( paragDia->pageBreaking() );
+            cmd=edit->setPageBreakingCommand( paragDia->pageBreaking() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
@@ -2497,7 +2497,7 @@ void KWView::textAlignLeft()
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
         {
-            KCommand *cmd=edit->setAlign(Qt::AlignLeft);
+            KCommand *cmd=edit->setAlignCommand(Qt::AlignLeft);
             if(cmd)
                 m_doc->addCommand(cmd);
         }
@@ -2512,7 +2512,7 @@ void KWView::textAlignCenter()
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
         {
-            KCommand *cmd=edit->setAlign(Qt::AlignCenter);
+            KCommand *cmd=edit->setAlignCommand(Qt::AlignCenter);
             if(cmd)
                 m_doc->addCommand(cmd);
         }
@@ -2527,7 +2527,7 @@ void KWView::textAlignRight()
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
         {
-            KCommand *cmd=edit->setAlign(Qt::AlignRight);
+            KCommand *cmd=edit->setAlignCommand(Qt::AlignRight);
             if(cmd)
                 m_doc->addCommand(cmd);
         }
@@ -2542,7 +2542,7 @@ void KWView::textAlignBlock()
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
         {
-            KCommand *cmd=edit->setAlign(Qt3::AlignJustify);
+            KCommand *cmd=edit->setAlignCommand(Qt3::AlignJustify);
             if(cmd)
                 m_doc->addCommand(cmd);
         }
@@ -2566,7 +2566,7 @@ void KWView::textList()
     ASSERT(edit);
     if ( edit )
     {
-        KCommand *cmd=edit->setCounter( c );
+        KCommand *cmd=edit->setCounterCommand( c );
         if(cmd)
             m_doc->addCommand(cmd);
     }
@@ -2620,7 +2620,7 @@ void KWView::textIncreaseIndent()
         // a frame anywhere, even closer to the edges than left/right border allows (DF).
         //if( newVal <= (m_doc->ptPaperWidth()-m_doc->ptRightBorder()-m_doc->ptLeftBorder()))
         {
-            KCommand *cmd=edit->setMargin( QStyleSheetItem::MarginLeft, newVal );
+            KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, newVal );
             if(cmd)
                 m_doc->addCommand(cmd);
         }
@@ -2637,7 +2637,7 @@ void KWView::textDecreaseIndent()
         {
             double indent = m_doc->getIndentValue();
             double newVal = leftMargin - indent;
-            KCommand *cmd=edit->setMargin( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
+            KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
             if(cmd)
                 m_doc->addCommand(cmd);
         }
@@ -2777,7 +2777,7 @@ void KWView::borderSet()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if ( edit )
     {
-        KCommand *cmd=edit->setBorders( m_border.left, m_border.right, m_border.top, m_border.bottom );
+        KCommand *cmd=edit->setBordersCommand( m_border.left, m_border.right, m_border.top, m_border.bottom );
         if(cmd)
             m_doc->addCommand(cmd);
     }
@@ -2828,7 +2828,7 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit)
         return;
-    KCommand *cmd=edit->setTabList( tabList );
+    KCommand *cmd=edit->setTabListCommand( tabList );
     if(cmd)
         m_doc->addCommand(cmd);
 }
@@ -2871,7 +2871,7 @@ void KWView::newFirstIndent( double _firstIndent )
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit) return;
     double val = _firstIndent - edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-    KCommand *cmd=edit->setMargin( QStyleSheetItem::MarginFirstLine, val );
+    KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, val );
     if(cmd)
         m_doc->addCommand(cmd);
 }
@@ -2881,7 +2881,7 @@ void KWView::newLeftIndent( double _leftIndent)
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
     {
-        KCommand *cmd=edit->setMargin( QStyleSheetItem::MarginLeft, _leftIndent );
+        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, _leftIndent );
         if(cmd)
             m_doc->addCommand(cmd);
     }

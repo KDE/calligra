@@ -412,15 +412,15 @@ public:
     QString textFontFamily()const;
 
     // -- Paragraph settings --
-    KCommand * setCounter( const KoParagCounter & counter ) { return textFrameSet()->setCounterCommand( cursor, counter ); }
-    KCommand * setAlign( int align ) { return textFrameSet()->setAlignCommand( cursor, align ); }
-    KCommand * setPageBreaking( int pageBreaking ) { return textFrameSet()->setPageBreakingCommand( cursor, pageBreaking ); }
-    KCommand * setLineSpacing( double spacing ) { return textFrameSet()->setLineSpacingCommand( cursor, spacing ); }
-    KCommand * setBorders( Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder )
+    KCommand * setCounterCommand( const KoParagCounter & counter ) { return textFrameSet()->setCounterCommand( cursor, counter ); }
+    KCommand * setAlignCommand( int align ) { return textFrameSet()->setAlignCommand( cursor, align ); }
+    KCommand * setPageBreakingCommand( int pageBreaking ) { return textFrameSet()->setPageBreakingCommand( cursor, pageBreaking ); }
+    KCommand * setLineSpacingCommand( double spacing ) { return textFrameSet()->setLineSpacingCommand( cursor, spacing ); }
+    KCommand * setBordersCommand( Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder )
           { return textFrameSet()->setBordersCommand( cursor, leftBorder, rightBorder, bottomBorder, topBorder ); }
-    KCommand * setMargin( QStyleSheetItem::Margin m, double margin )
+    KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin )
           { return textFrameSet()->setMarginCommand( cursor, m, margin ); }
-    KCommand * setTabList( const KoTabulatorList & tabList ){ return textFrameSet()->setTabListCommand( cursor, tabList ); }
+    KCommand * setTabListCommand( const KoTabulatorList & tabList ){ return textFrameSet()->setTabListCommand( cursor, tabList ); }
 
     void applyStyle( const KWStyle * style );
 
