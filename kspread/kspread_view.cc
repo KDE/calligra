@@ -19,6 +19,7 @@
 #include <koPrintDia.h>
 #include <koAboutDia.h>
 #include <koScanTools.h>
+#include <koQueryTypes.h>
 #include <koIMR.h>
 
 #include <time.h>
@@ -41,6 +42,8 @@ KSpreadScripts* KSpreadView::m_pGlobalScriptsDialog = 0L;
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc ) :
   QWidget( _parent, _name ), KoViewIf( _doc ), OPViewIf( _doc ), KSpread::View_skel()
 {
+  ADD_INTERFACE( "IDL:KSpread/View:1.0" );
+  
   m_bInitialized = false;
   
   setWidget( this );
@@ -1089,13 +1092,22 @@ void KSpreadView::markChildPicture( KSpreadChildPicture *_pic )
 
 void KSpreadView::insertChart( const QRect& _geometry )
 {
-  // HACK: Ask the trader for the server name
-  m_pTable->insertChart( _geometry, "KDiagramm", m_pTable->selection() );
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoID", 1 );
+  if ( vec.size() == 0 )
+  {    
+    cout << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    return;
+  }
+
+  cerr << "USING component " << vec[0].name << endl;
+  
+  m_pTable->insertChart( _geometry, vec[0], m_pTable->selection() );
 }
 
-void KSpreadView::insertChild( const QRect& _geometry, const char *_arg )
+void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 {
-  m_pTable->insertChild( _geometry, _arg );
+  m_pTable->insertChild( _geometry, _e );
 }
 
 void KSpreadView::slotRemoveChild( KSpreadChild *_child )
@@ -1619,21 +1631,32 @@ void KSpreadView::percent()
 
 void KSpreadView::insertTable()
 {
-  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "KSpread" );
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0' in RepoID", 1 );
+  if ( vec.size() == 0 )
+  {    
+    cout << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no spread sheet  component registered"),
+			   i18n("Ok") );
+    return;
+  }
+
+  cerr << "USING component " << vec[0].name << endl;
+
+  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, vec[0] );
 }
 
 void KSpreadView::insertImage()
 {
-  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "KImage" );
+  // m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "KImage" );
 }
 
 void KSpreadView::insertObject()
 {
-  KoPartEntry* pe = KoPartSelectDia::selectPart();
-  if ( !pe )
+  KoDocumentEntry e = KoPartSelectDia::selectPart();
+  if ( e.name.isEmpty() )
     return;
   
-  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, pe->name() );
+  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, e );
 }
 
 void KSpreadView::insertChart()
@@ -2157,9 +2180,9 @@ void KSpreadCanvas::setAction( Actions _act )
   m_eAction = _act;
 }
 
-void KSpreadCanvas::setAction( Actions _act, const char *_arg )
+void KSpreadCanvas::setAction( Actions _act, KoDocumentEntry& _e )
 {
-  m_strActionArgument = _arg;
+  m_actionArgument = _e;
   setAction( _act );
 }
 
@@ -2371,7 +2394,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
     if ( m_eAction == InsertChart )
       m_pView->insertChart( r );
     else if ( m_eAction == InsertChild )
-      m_pView->insertChild( r, m_strActionArgument );
+      m_pView->insertChild( r, m_actionArgument );
 	      
     m_eMouseAction = NoAction;
     m_eAction = DefaultAction;

@@ -27,7 +27,7 @@
 #include "KIllustrator.h"
 #include "KIllustrator_shell.h"
 
-#include <koScanParts.h>
+#include <koQueryTypes.h>
 #include <koApplication.h>
 #include <koFactory.h>
 #include <koDocument.h>
@@ -52,8 +52,8 @@ KIllustratorApp::~KIllustratorApp () {
 void KIllustratorApp::start () {
   if (withGUI) {
     imr_init ();
-    koScanParts ();
-
+    koInitTrader();
+    
     if (openFiles.size () == 0) {
       KIllustratorShell *m_pShell = new KIllustratorShell;
       m_pShell->show ();

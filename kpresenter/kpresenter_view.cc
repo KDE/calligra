@@ -17,7 +17,8 @@
 #include "kpresenter_view.h"
 #include "kpresenter_view.moc"
 #include "page.h"
-#include "opUIUtils.h"
+#include <opUIUtils.h>
+#include <koQueryTypes.h>
 
 #define DEBUG
 
@@ -517,12 +518,16 @@ void KPresenterView::toolsDiagramm()
   page->deSelectAllObj();
   page->setToolEditMode(INS_DIAGRAMM);
 
-  QStrList mimes,repos;
-  mimes.append("application/x-kdiagramm");
-  repos.append("IDL:KDiagramm/DocumentFactory:1.0");
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoID", 1 );
+  if ( vec.size() == 0 )
+  {    
+    cout << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    return;
+  }
 
-  KoPartEntry *pe = new KoPartEntry("KDiagramm","kdiagramm.bin --server","shared","Torben's Chart",mimes,repos);
-  page->setPartEntry(pe);
+  cerr << "USING component " << vec[0].name << endl;
+  page->setPartEntry(vec[0]);
 }
 
 /*==============================================================*/
@@ -531,12 +536,16 @@ void KPresenterView::toolsTable()
   page->deSelectAllObj();
   page->setToolEditMode(INS_TABLE);
 
-  QStrList mimes,repos;
-  mimes.append("application/x-kspread");
-  repos.append("IDL:KSpread/DocumentFactory:1.0");
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0' in RepoID", 1 );
+  if ( vec.size() == 0 )
+  {    
+    cout << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    return;
+  }
 
-  KoPartEntry *pe = new KoPartEntry("KSpread","kspread.bin --server","shared","Torben's Spread Sheet",mimes,repos);
-  page->setPartEntry(pe);
+  cerr << "USING component " << vec[0].name << endl;
+  page->setPartEntry(vec[0]);
 }
 
 /*==============================================================*/
@@ -545,12 +554,16 @@ void KPresenterView::toolsFormula()
   page->deSelectAllObj();
   page->setToolEditMode(INS_FORMULA);
 
-  QStrList mimes,repos;
-  mimes.append("application/x-kformula");
-  repos.append("IDL:KFormula/DocumentFactory:1.0");
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KFormula/DocumentFactory:1.0' in RepoID", 1 );
+  if ( vec.size() == 0 )
+  {    
+    cout << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    return;
+  }
 
-  KoPartEntry *pe = new KoPartEntry("KFormula","kformula.bin --server","shared","Andrea's Formula Editor",mimes,repos);
-  page->setPartEntry(pe);
+  cerr << "USING component " << vec[0].name << endl;
+  page->setPartEntry(vec[0]);
 }
 
 /*===================== insert a textobject =====================*/
@@ -586,8 +599,10 @@ void KPresenterView::toolsObject()
 {
   page->deSelectAllObj();
   page->setToolEditMode(TEM_MOUSE);
-  KoPartEntry* pe = KoPartSelectDia::selectPart();
-  if (!pe) return;
+
+  KoDocumentEntry pe = KoPartSelectDia::selectPart();
+  if ( pe.name.isEmpty() )
+    return;
   
   page->setToolEditMode(INS_OBJECT);
   page->setPartEntry(pe);

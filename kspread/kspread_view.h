@@ -22,6 +22,7 @@ class KoToolEntry;
 #include <opToolBar.h>
 #include <koFrame.h>
 #include <koScanPlugins.h>
+#include <koQueryTypes.h>
 #include <openparts_ui.h>
 #include <datatools.h>
 
@@ -111,10 +112,8 @@ public:
     void setAction( Actions _act );
     /**
      * This is usually called with '_act' equal KSpreadCanvas::InsertChild.
-     * The '_arg' does then hold information about the object that is going
-     * to be inserted. Usually this is the mime type.
      */
-    void setAction( Actions _act, const char* arg );
+    void setAction( Actions _act, KoDocumentEntry& _entry );
   
     void updateCellRect( const QRect &_rect );
 
@@ -151,10 +150,10 @@ protected:
      */
     Actions m_eAction;
     /**
-     * This holds some information about the action and is not
-     * interpreted by this class.
+     * If the @ref m_eAction is InsertChild or InsertChart, then this record
+     * holds informations about which component we should use here.
      */
-    QString m_strActionArgument;
+    KoDocumentEntry m_actionArgument;
   
     /**
      * Used to indicate wether the user started drawing a rubber band rectangle.
@@ -355,9 +354,8 @@ public:
      * Called by @ref KSpreadCanvas if its action is @ref KSpreadCanvas::InsertObject.
      *
      * @param _geometry is the zoomed geometry of the new child.
-     * @param _arg is the string passed to @ref KSpreadCanvas::setAction.
      */
-    void insertChild( const QRect& _geometry, const char *_arg );
+    void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
 
     void setFocus( CORBA::Boolean mode );
 

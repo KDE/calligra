@@ -48,7 +48,6 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0)
       fillBlack = true;
       drawRubber = false;
       toolEditMode = TEM_MOUSE;
-      partEntry = 0;
       tmpObjs.setAutoDelete(false);
     }
   else 
@@ -2721,25 +2720,25 @@ void Page::insertAutoform(KRect _r)
 /*================================================================*/
 void Page::insertObject(KRect _r)
 {
-  view->kPresenterDoc()->insertObject(_r,partEntry->name(),diffx(),diffy());
+  view->kPresenterDoc()->insertObject(_r,partEntry,diffx(),diffy());
 }
 
 /*================================================================*/
 void Page::insertTable(KRect _r)
 {
-  view->kPresenterDoc()->insertObject(_r,partEntry->name(),diffx(),diffy());
+  view->kPresenterDoc()->insertObject(_r,partEntry,diffx(),diffy());
 }
 
 /*================================================================*/
 void Page::insertDiagramm(KRect _r)
 {
-  view->kPresenterDoc()->insertObject(_r,partEntry->name(),diffx(),diffy());
+  view->kPresenterDoc()->insertObject(_r,partEntry,diffx(),diffy());
 }
 
 /*================================================================*/
 void Page::insertFormula(KRect _r)
 {
-  view->kPresenterDoc()->insertObject(_r,partEntry->name(),diffx(),diffy());
+  view->kPresenterDoc()->insertObject(_r,partEntry,diffx(),diffy());
 }
 
 /*================================================================*/

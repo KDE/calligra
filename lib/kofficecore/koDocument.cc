@@ -199,7 +199,8 @@ bool KoDocumentChild::save( ostream& out )
   CORBA::String_var u = m_rDoc->url();
   CORBA::String_var mime = m_rDoc->mimeType();
   
-  out << indent << "<OBJECT url=\"" << u << "\" mime=\"" << mime << "\">" << m_geometry << "</OBJECT>" << endl;
+  out << indent << "<OBJECT url=\"" << u << "\" mime=\"" << mime << "\">"
+      << m_geometry << "</OBJECT>" << endl;
 
   return true;
 }
@@ -332,6 +333,7 @@ KoDocumentChild::~KoDocumentChild()
 
 KoDocument::KoDocument()
 {
+  ADD_INTERFACE( "IDL:KOffice/Document:1.0" );
 }
 
 void KoDocument::cleanUp()

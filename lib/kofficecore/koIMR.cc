@@ -20,12 +20,12 @@
 #include "koIMR.h"
 #include "koMediator.h"
 #include "koPOAMediator.h"
+#include "koQueryTrader.h"
 
 #include <klocale.h>
 #include <kapp.h>
 
 #include <opApplication.h>
-#include "koScanParts.h"
 #include <qmsgbox.h>
 
 /**
@@ -203,33 +203,19 @@ KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repo
   return doc;
 }
 
-KOffice::Document_ptr imr_createDocByServerName( const char *_server_name )
+KOffice::Document_ptr imr_createDoc( KoDocumentEntry& _e )
 {
-  QListIterator<KoPartEntry> it( *g_plstPartEntries );
-  for( ; it.current(); ++it )
-  {
-    if ( strcmp( it.current()->name(), _server_name ) == 0 )
-    {
-      QStrListIterator sit = it.current()->repoID();
-      assert ( sit.current() != 0L );
-      return imr_createDoc( it.current()->name(), sit.current() );
-    }
-  }
-
-  return 0L;
+  return imr_createDoc( _e.name, _e.repoID.first() );
 }
 
 KOffice::Document_ptr imr_createDocByMimeType( const char *_mime_type )
 {
-  QListIterator<KoPartEntry> it( *g_plstPartEntries );
-  for( ; it.current(); ++it )
+  vector<KoDocumentEntry> lst = koQueryDocuments();
+  vector<KoDocumentEntry>::iterator it = lst.begin();
+  for( ; it != lst.end(); ++it )
   {
-    if ( it.current()->supports( _mime_type ) )
-    {
-      QStrListIterator sit = it.current()->repoID();
-      assert ( sit.current() != 0L );
-      return imr_createDoc( it.current()->name(), sit.current() );
-    }
+    if ( it->supportsMimeType( _mime_type ) )
+      return imr_createDoc( it->name, it->repoID.first() );
   }
 
   return 0L;

@@ -204,6 +204,8 @@ void KoMainWindow::slotHelpAbout()
 
 KoMainWindowIf::KoMainWindowIf( KoMainWindow* _main ) : OPMainWindowIf( _main )
 {
+  ADD_INTERFACE( "IDL:KOffice/MainWindow:1.0" );
+  
   m_pKoMainWindow = _main;
   m_iMarkedPart = 0;
 }
@@ -227,7 +229,7 @@ KOffice::View_ptr KoMainWindowIf::view()
   return KOffice::View::_duplicate( m_pKoMainWindow->view() );  
 }
 
-void KoMainWindowIf::partClicked( OpenParts::Id _part_id )
+CORBA::Boolean KoMainWindowIf::partClicked( OpenParts::Id _part_id, CORBA::Long /* _button */ )
 {
   assert( _part_id != 0 );
   
@@ -239,14 +241,14 @@ void KoMainWindowIf::partClicked( OpenParts::Id _part_id )
   {
     cerr << "ERROR: void OPMainWindowIf::setActivePart( OpenParts::Id _id )" << endl;
     cerr << "       id " << _part_id << " is unknown" << endl;
-    return;
+    return false;
   }
  
   KOffice::View_var view = KOffice::View::_narrow( part );
   if ( CORBA::is_nil( view ) )
   {    
     setActivePart( _part_id );
-    return;
+    return false;
   }
   
   // Special handling for the root view, since the root view is
@@ -256,7 +258,7 @@ void KoMainWindowIf::partClicked( OpenParts::Id _part_id )
     if ( _part_id != m_iMarkedPart )
       unmarkPart();
     setActivePart( _part_id );
-    return;
+    return false;
   }
   
   if ( view->isMarked() )
@@ -264,7 +266,7 @@ void KoMainWindowIf::partClicked( OpenParts::Id _part_id )
     if ( _part_id != m_iMarkedPart )
       unmarkPart();
     setActivePart( _part_id );
-    return;
+    return false;
   }
   else if ( !view->hasFocus() )
   {
@@ -272,8 +274,11 @@ void KoMainWindowIf::partClicked( OpenParts::Id _part_id )
       unmarkPart();
     view->setMarked( true );
     m_iMarkedPart = _part_id;
-    return;
+    return true;
   }
+
+  // Ever reached? I dont think so ...
+  return true;
 }
 
 void KoMainWindowIf::unmarkPart()

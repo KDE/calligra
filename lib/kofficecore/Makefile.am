@@ -11,14 +11,14 @@ lib_LTLIBRARIES = libkofficecore.la
 BUILT_SOURCES =  moc_koFrame.cc moc_koMainWindow.cc moc_koApplication.cc
 
 libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.cc \
-	koFrame.cc koIMR.cc koScanParts.cc koStream.cc \
+	koFrame.cc koIMR.cc koStream.cc koQueryTrader.cc \
 	koMediator.cc koPrintExt.cc koMainWindow.cc koScanTools.cc \
-	koScanPlugins.cc koApplication.cc koPOAMediator.cc $(BUILT_SOURCES)
+	koScanPlugins.cc koApplication.cc koPOAMediator.cc trader.cc $(BUILT_SOURCES)
 
-include_HEADERS = koffice.h koView.h koFrame.h koIMR.h koScanParts.h \
+include_HEADERS = koffice.h koView.h koFrame.h koIMR.h \
 	koStream.h koDocument.h koPrintExt.h koFactory.h \
 	koMainWindow.h koMediator.h koScanTools.h koScanPlugins.h \
-	koApplication.h koPOAMediator.h
+	koApplication.h koPOAMediator.h trader.h koQueryTrader.h koQueryTypes.h
 
 idl_DATA = koffice.idl
 idl_HEADERS =  koffice.h
@@ -44,4 +44,7 @@ koDocument.h: koffice.h
 koffice.cc: koffice.h
 koffice.h: koffice.idl
 	$(IDL) --query-server-for-narrow --relative-paths -I../store -I$(idldir) koffice.idl
+trader.cc: trader.h
+trader.h: ../interfaces/trader.idl
+	$(IDL) $(IDL_FLAGS) ../interfaces/trader.idl
 

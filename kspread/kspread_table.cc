@@ -1573,22 +1573,6 @@ bool KSpreadTable::save( ostream &out )
     chl.current()->save( out );
   }
   
-  // TODO
-  // Save all KParts.
-
-  // Write the list of KParts
-  /*  value = korb->newValue( o_table, p_parts, t_pList );
-    device = korb->deviceForValue( value, device );
-    stream.setDevice( device );
-    stream << (UINT32)plStack.count();
-    printf("Writing %i parts\n",plStack.count());
-    while ( !plStack.isEmpty() )
-    {
-	stream << *( plStack.pop() );
-	stream << ( kStack.top()->visual()->x() + xOffset() );
-	stream << ( kStack.pop()->visual()->y() + yOffset() );
-    } */
-
   out << etag << "</TABLE>" << endl;
   
   return true;
@@ -1640,6 +1624,12 @@ bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
       ch->load( parser, lst );
       insertChild( ch );
     }
+    else if ( name == "CHART" )
+    {
+      ChartChild *ch = new ChartChild( m_pDoc, this );
+      ch->load( parser, lst );
+      insertChild( ch );
+    }
     else
       cerr << "Unknown tag '" << tag << "' in TABLE" << endl;
 
@@ -1669,533 +1659,6 @@ bool KSpreadTable::loadChildren( KOStore::Store_ptr _store )
   
   return true;
 }
-
-/*
-bool KSpreadTable::load( KorbSession *korb, OBJECT o_table )
-{
-    QDataStream stream;
-
-    // For use as values in the KSpreadCellType property
-    TYPE t_table =  korb->findType( "KDE:kxcl:KSpreadTable" );
-
-    // Real types
-    TYPE t_cellList  =  korb->findType( "KDE:kxcl:CellList" );
-    TYPE t_rlList  =  korb->findType( "KDE:kxcl:RowLayoutList" );
-    TYPE t_clList  =  korb->findType( "KDE:kxcl:ColumnLayoutList" );
-    TYPE t_pList  =  korb->findType( "KDE:kxcl:KPartList" );
-
-    PROPERTY p_name   = korb->findProperty( "KDE:kxcl:Name" );
-    PROPERTY p_cells = korb->findProperty( "KDE:kxcl:Cells" );
-    PROPERTY p_rl = korb->findProperty( "KDE:kxcl:RowLayouts" );
-    PROPERTY p_cl = korb->findProperty( "KDE:kxcl:ColumnLayouts" );
-    PROPERTY p_parts = korb->findProperty( "KDE:kxcl:KParts" );
-    PROPERTY p_partClass = korb->findProperty( "KDE:kpart:Class" );
-
-    PROPERTY p_isPartCell = korb->findProperty( "KDE:kxcl:IsPartCell" );
-
-    if ( p_name == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:Name \n");
-	return FALSE;
-    }
-    if ( p_cells == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:Cells \n");
-	return FALSE;
-    }
-    if ( p_cl == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:ColumnLayouts \n");
-	return FALSE;
-    }
-    if ( p_rl == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:RowLayouts \n");
-	return FALSE;
-    }
-    if ( t_cellList == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:CellList \n");
-	return FALSE;
-    }
-    if ( t_clList == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:ColumnLayoutList \n");
-	return FALSE;
-    }
-    if ( t_rlList == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:RowLayoutList \n");
-	return FALSE;
-    }
-    if ( t_table == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:KSpreadTable \n");
-	return FALSE;
-    }
-
-    // Read the tables name
-    QString t = korb->readStringValue( o_table, p_name );
-    if ( t.isNull() )
-    {
-	printf("ERROR: Could not load tables name\n");
-	return FALSE;
-    }
-    name = t.data();
-
-    // Load all RowLayouts
-    VALUE value = korb->findValue( o_table, p_rl, t_rlList );
-    if ( value == 0L )
-    {
-	printf("Error: Error in table\n");
-	return FALSE;
-    }
-
-    KorbDevice *dev = korb->deviceForValue( value );
-    stream.setDevice( dev );
-    UINT32 crl;
-    stream >> crl;
-    printf("Loading %i RowLayouts\n",crl);
-
-    for ( UINT32 j = 0; j < crl; j++ )
-    {
-	OBJECT o_rl;
-	stream >> o_rl;
-	printf("Loading RowLayout id %i .... \n",o_rl);
-	
-	RowLayout *rl = new RowLayout( this, 0 );
-	if ( !rl->load( korb, o_rl ) )
-	{
-	    printf("ERROR: while loading RowLayout\n");
-	    stream.unsetDevice();
-	    korb->release( dev );
-	    delete dev;
-	    return FALSE;
-	}
-	
-	printf(".... Loaded RowLayout\n");
-	
-	m_dctRows.insert( rl->row(), rl );
-    }
-
-    // Load all ColumnLayouts
-    value = korb->findValue( o_table, p_cl, t_clList );
-    if ( value == 0L )
-    {
-	printf("Error: Error in table\n");
-	return FALSE;
-    }
-
-    dev = korb->deviceForValue( value, dev );
-    stream.setDevice( dev );
-    UINT32 ccl;
-    stream >> ccl;
-    printf("Loading %i ColumnLayouts\n",ccl);
-
-    for ( UINT32 j = 0; j < ccl; j++ )
-    {
-	OBJECT o_cl;
-	stream >> o_cl;
-	printf("Loading ColumnLayout id %i .... \n",o_cl);
-	
-	ColumnLayout *cl = new ColumnLayout( this, 0 );
-	if ( !cl->load( korb, o_cl ) )
-	{
-	    printf("ERROR: while loading ColumnLayout\n");
-	    stream.unsetDevice();
-	    korb->release( dev );
-	    delete dev;
-	    return FALSE;
-	}
-	
-	printf(".... Loaded ColumnLayout\n");
-	
-	m_dctColumns.insert( cl->column(), cl );
-    }
-
-    // Load all cells
-    value = korb->findValue( o_table, p_cells, t_cellList );
-    if ( value == 0L )
-    {
-	printf("Error: Error in table\n");
-	return FALSE;
-    }
-
-    dev = korb->deviceForValue( value, dev );
-    stream.setDevice( dev );
-    UINT32 ccells;
-    stream >> ccells;
-    printf("Loading %i cells\n",ccells);
-
-    for ( UINT32 j = 0; j < ccells; j++ )
-    {
-	OBJECT o_cell;
-	stream >> o_cell;
-	// printf("Loading cell id %i .... \n",o_cell);
-
-	KSpreadCell *cell;
-	bool b = FALSE;
-	if ( p_isPartCell != 0L && korb->readBoolValue( o_cell, p_isPartCell, b ) && b )
-	{
-	    printf("Loading PartCell\n");
-	    cell = new PartCell( this );
-	    if ( !cell->load( korb, o_cell ) )
-	    {
-		printf("ERROR: while loading cell\n");
-		stream.unsetDevice();
-		korb->release( dev );
-		delete dev;
-		return FALSE;
-	    }
-	}
-	else
-	{
-	    cell = new KSpreadCell( this, 0, 0 );
-	    if ( !cell->load( korb, o_cell ) )
-	    {
-		printf("ERROR: while loading cell\n");
-		stream.unsetDevice();
-		korb->release( dev );
-		delete dev;
-		return FALSE;
-	    }
-	}
-	
-	// printf(".... Loaded cell\n");
-	
-	int key = cell->row() + ( cell->column() * 0x10000 );
-	m_dctCells.insert( key, cell );
-    }
-
-    // Load all KParts
-    value = korb->findValue( o_table, p_parts, t_pList );
-    if ( value == 0L )
-    {
-	printf("Error: Error in table\n");
-	return FALSE;
-    }
-
-    dev = korb->deviceForValue( value, dev );
-    stream.setDevice( dev );
-    UINT32 p;
-    stream >> p;
-    printf("Loading %i KParts\n",p);
-
-    for ( UINT32 j = 0; j < p; j++ )
-    {
-	OBJECT o_p;
-	UINT32 x,y;
-	stream >> o_p;
-	stream >> x;
-	stream >> y;
-	printf("Loading KPart id %i .... \n",o_p);
-	QString clas = korb->readStringValue( o_p, p_partClass );
-	if ( clas.isNull() )
-	{
-	    printf("ERROR: while loading KPart\nDont know class");
-	    stream.unsetDevice();
-	    korb->release( dev );
-	    delete dev;
-	    return FALSE;
-	}
-	printf("KPart of class '%s'\n",clas.data());
-	if ( clas == "kchart" )
-	{
-	    KPart *bp = m_pDoc->shell()->newPart( "kchart" );
-
-	    ChartPart *cp = (ChartPart*)bp;
-	    cp->setKSpreadTable( this );
-
-	    if ( !cp->load( korb, o_p ) )
-	    {
-		printf("ERROR: while loading KPart Chart\n");
-		stream.unsetDevice();
-		korb->release( dev );
-		delete dev;
-		return FALSE;
-	    }
-	    
-	    if ( pGui )
-	    {
-		cp->createVisual( pGui->canvasWidget() );
-		cp->visual()->move( x, y );
-		cp->visual()->show();
-	    }
-	    
-	    appendPart( cp );
-	}
-	else
-	{
-	    KPart *bp = m_pDoc->shell()->newPart( clas.data() );
-	    if ( !bp->load( korb, o_p ) )
-	    {
-		printf("ERROR: while loading KPart '%s'\n",clas.data());
-		stream.unsetDevice();
-		korb->release( dev );
-		delete dev;
-		return FALSE;
-	    }
-	    
-	    if ( pGui )
-	    {
-		bp->createVisual( pGui->canvasWidget() );
-		bp->visual()->move( x, y );
-		bp->visual()->show();
-	    }
-	    
-	    appendPart( bp );
-	}
-	
-	printf(".... Loaded KPart\n");
-    }
-    
-    printf("Loading done\n");
-    
-    stream.unsetDevice();
-    korb->release( dev );
-    delete dev;
-
-    m_pDoc->setDocumentChanged( FALSE );
-
-    return TRUE;
-}
-
-void KSpreadTable::initAfterLoading()
-{
-    bLoading = FALSE;
-    
-    setKSpreadLayoutDirtyFlag();
-    setDisplayDirtyFlag();
-
-    // Now we can do the rest of the initialization, since all objects are
-    // created now => No more pointer problems
-    KSpreadCell *cell;
-    for ( cell = objectList.first(); cell != 0L; cell = objectList.next() )
-	cell->initAfterLoading();
-    
-    for ( cell = objectList.first(); cell != 0L; cell = objectList.next() )
-	if ( cell->isForceExtraCells() && !cell->isDefault() )
-	    cell->forceExtraCells( cell->column(), cell->row(),
-				  cell->extraXCells(), cell->extraYCells() );
-
-    // Complete the loading of all KParts
-    KPart *p;
-    for ( p = partList.first(); p != 0L; p = partList.next() )
-	p->initAfterLoading();
-    
-    // Update all cell bindings
-    CellBinding *bind;
-    for ( bind = cellBindingsList.first(); bind != 0L; bind = cellBindingsList.next() )
-    {
-	bind->setIgnoreChanges( FALSE );
-	bind->cellChanged( 0L );
-    }
-}
-
-OBJECT KSpreadTable::saveCells( KorbSession *korb, int _left, int _top, int _right, int _bottom )
-{
-    QDataStream stream;
-
-    // For use as values in the KSpreadCellType property
-    TYPE t_cellRectangle =  korb->registerType( "KDE:kxcl:CellRectangle" );
-
-    // Real types
-    TYPE t_cellList  =  korb->registerType( "KDE:kxcl:CellList" );
-
-    PROPERTY p_cells = korb->registerProperty( "KDE:kxcl:Cells" );
-    PROPERTY p_rows = korb->registerProperty( "KDE:kxcl:Rows" );
-    PROPERTY p_columns = korb->registerProperty( "KDE:kxcl:Columns" );
-
-    OBJECT o_cells( korb->newCell( t_cellRectangle ) );
-
-    // A list of all cell object ids.
-    QStack<OBJECT> cellStack;
-    cellStack.setAutoDelete( TRUE );
-
-    // Save all cells.
-    QListIterator<KSpreadCell> it( objectList );
-    for ( ; it.current(); ++it ) 
-    {
-	if ( !it.current()->isDefault() && it.current()->row() >= _top &&
-	     it.current()->row() <= _bottom && it.current()->column() >= _left &&
-	     it.current()->column() <= _right )
-	{
-	    OBJECT *o_cell = new OBJECT( it.current()->save( korb, _left, _top ) );
-	    
-	    if ( *o_cell == 0 )
-		return 0;
-	    
-	    cellStack.push( o_cell );
-	}
-    }
-
-    // Write size of rectangle
-    korb->writeUIntValue( o_cells, p_rows, _bottom - _top + 1 );	
-    korb->writeUIntValue( o_cells, p_columns, _right - _left + 1 );
-    
-    // Write the list of cells
-    VALUE value = korb->newValue( o_cells, p_cells, t_cellList );
-    KorbDevice *device = korb->deviceForValue( value );
-    stream.setDevice( device );
-    stream << (UINT32)cellStack.count();
-    printf("Writing %i cells\n",cellStack.count());
-    while ( !cellStack.isEmpty() )
-	stream << *( cellStack.pop() );
-    stream.unsetDevice();
-    korb->release( device );
-
-    delete device;
-    
-    return o_cells;
-}
-
-bool KSpreadTable::loadCells( KorbSession *korb, OBJECT o_cells, int _insert_x, int _insert_y )
-{
-    QDataStream stream;
-
-    TYPE t_cellList  =  korb->findType( "KDE:kxcl:CellList" );
-
-    PROPERTY p_cells = korb->findProperty( "KDE:kxcl:Cells" );
-    PROPERTY p_rows = korb->findProperty( "KDE:kxcl:Rows" );
-    PROPERTY p_columns = korb->findProperty( "KDE:kxcl:Columns" );
-
-    PROPERTY p_isPartCell = korb->findProperty( "KDE:kxcl:IsPartCell" );
-
-    if ( p_cells == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:Cells \n");
-	return FALSE;
-    }
-    if ( p_rows == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:Rows \n");
-	return FALSE;
-    }
-    if ( p_columns == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:Columns \n");
-	return FALSE;
-    }
-    if ( t_cellList == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:CellList \n");
-	return FALSE;
-    }
-
-    unsigned int columns, rows;
-    
-    if ( !korb->readUIntValue( o_cells, p_rows, rows ) )
-    {
-	printf("ERROR: Could not find rows\n");
-	return FALSE;
-    }
-    else if ( !korb->readUIntValue( o_cells, p_columns, columns ) )
-    {
-	printf("ERROR: Could not find columns\n");
-	return FALSE;
-    }
-
-    // Delete the cells we want to overwrite
-    deleteCells( _insert_x, _insert_y, _insert_x + columns - 1, _insert_y + rows - 1 );
-
-    // Load all cells
-    VALUE value = korb->findValue( o_cells, p_cells, t_cellList );
-    if ( value == 0L )
-    {
-	printf("Error: Error in table\n");
-	return FALSE;
-    }
-
-    bLoading = TRUE;
-    
-    KorbDevice* dev = korb->deviceForValue( value, 0L );
-    stream.setDevice( dev );
-    UINT32 ccells;
-    stream >> ccells;
-    printf("Loading %i cells\n",ccells);
-
-    QList<KSpreadCell> list;
-    list.setAutoDelete( FALSE );
-    
-    for ( UINT32 j = 0; j < ccells; j++ )
-    {
-	OBJECT o_cell;
-	stream >> o_cell;
-	printf("Loading cell id %i .... \n",o_cell);
-
-	KSpreadCell *cell;
-	bool b = FALSE;
-	if ( p_isPartCell != 0L && korb->readBoolValue( o_cell, p_isPartCell, b ) && b )
-	{
-	    printf("Loading PartCell\n");
-	    cell = new PartCell( this );
-	    if ( !cell->load( korb, o_cell, _insert_x, _insert_y ) )
-	    {
-		printf("ERROR: while loading cell\n");
-		stream.unsetDevice();
-		korb->release( dev );
-		bLoading = FALSE;
-		delete dev;
-		return FALSE;
-	    }
-	    list.append( cell );
-	    
-	}
-	else
-	{
-	    cell = new KSpreadCell( this, _insert_x, _insert_y );
-	    if ( !cell->load( korb, o_cell, _insert_x, _insert_y ) )
-	    {
-		printf("ERROR: while loading cell\n");
-		stream.unsetDevice();
-		korb->release( dev );
-		bLoading = FALSE;
-		delete dev;
-		return FALSE;
-	    }
-	    list.append( cell );
-	}
-	
-	printf(".... Loaded cell\n");
-	
-	// cell->setRow( cell->row() + _insert_y - 1 );
-	// cell->setColumn( cell->column() + _insert_x - 1 );
-	
-	int key = cell->row() + ( cell->column() * 0x10000 );
-	m_dctCells.insert( key, cell );
-    }
-
-    bLoading = FALSE;
-		
-    setKSpreadLayoutDirtyFlag();
-    setDisplayDirtyFlag();
-
-    KSpreadCell *cell;
-    for ( cell = list.first(); cell != 0L; cell = list.next() )
-	cell->initAfterLoading();
-
-    for ( cell = objectList.first(); cell != 0L; cell = objectList.next() )
-	if ( cell->isForceExtraCells() && !cell->isDefault() )
-	    cell->forceExtraCells( cell->column(), cell->row(),
-				  cell->extraXCells(), cell->extraYCells() );
-
-    // Update all cell bindings
-    CellBinding *bind;
-    for ( bind = cellBindingsList.first(); bind != 0L; bind = cellBindingsList.next() )
-    {
-	bind->setIgnoreChanges( FALSE );
-	bind->cellChanged( 0L );
-    }
-    
-    stream.unsetDevice();
-    korb->release( dev );
-    delete dev;
-
-    m_pDoc->setModified( true );
-
-    return TRUE;
-}
-*/
 
 void KSpreadTable::setShowPageBorders( bool _b ) 
 {
@@ -2278,19 +1741,6 @@ const char *KSpreadTable::columnLabel(int column)
   return m_arrColumnLabel;
 }                           
 
-/*
-bool KSpreadTable::cellRectangle( const QRect& _range, QList<KSpreadCell> &_list )
-{
-  _list.clear();
-  
-  for ( int y = _range.top(); y <= _range.bottom(); y++ )
-    for ( int x = _range.left(); x <= _range.right(); x++ )
-      _list.append( cellAt( x, y ) );
-  
-  return TRUE;
-}
-*/
-
 KSpreadTable* KSpreadTable::findTable( const char *_name )
 {
   if ( !m_pMap )
@@ -2348,9 +1798,9 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
   _layout->clearDisplayDirtyFlag();
 }
 
-void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRect& _data )
+void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
 {
-  KOffice::Document_var doc = imr_createDocByServerName( _arg );
+  KOffice::Document_var doc = imr_createDoc( _e );
   if ( CORBA::is_nil( doc ) )
     // Error message is already displayed, so just return
     return;
@@ -2362,7 +1812,7 @@ void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRec
   if ( CORBA::is_nil( obj ) )
   {
     QString tmp;
-    tmp.sprintf( i18n( "The server %s does not support the required interface" ), _arg );
+    tmp.sprintf( i18n( "The server %s does not support the required interface" ), _e.name.data() );
     QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error" ), tmp, i18n("Ok" ) );
     return;
   }
@@ -2384,9 +1834,9 @@ void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRec
   insertChild( ch );
 }
 
-void KSpreadTable::insertChild( const QRect& _rect, const char *_arg )
+void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
 {
-  KOffice::Document_var doc = imr_createDocByServerName( _arg );
+  KOffice::Document_var doc = imr_createDoc( _e );
   if ( CORBA::is_nil( doc ) )
     // Error message is already displayed, so just return
     return;
@@ -2521,5 +1971,143 @@ void ChartChild::update()
   if ( m_pBinding )
     m_pBinding->cellChanged( 0L );
 }
+
+bool ChartChild::save( ostream& out )
+{
+  CORBA::String_var u = m_rDoc->url();
+  CORBA::String_var mime = m_rDoc->mimeType();
+  
+  out << indent << "<CHART url=\"" << u << "\" mime=\"" << mime << "\">"
+      << m_geometry;
+  if ( m_pBinding )
+    out << "<BINDING>" << m_pBinding->dataArea() << "</BINDING>";
+  out << "</CHART>" << endl;
+
+  return true;
+}
+
+bool ChartChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+{
+  cerr << "######################### CC:load ################" << endl;
+
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "url" )
+    {
+      m_strURL = (*it).m_strValue.c_str();
+    }
+    else if ( (*it).m_strName == "mime" )
+    {
+      m_strMimeType = (*it).m_strValue.c_str();
+    }
+    else
+      cerr << "Unknown attrib 'CHART:" << (*it).m_strName << "'" << endl;
+  }
+
+  if ( m_strURL.isEmpty() )
+  {
+    cerr << "Empty 'id' attribute in CHART" << endl;
+    return false;
+  }
+  else if ( m_strMimeType.isEmpty() )
+  {
+    cerr << "Empty mime attribute in CHART" << endl;
+    return false;
+  }
+  
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+  
+  bool brect = false;
+  bool bbind = false;
+  QRect bind;
+  
+  // RECT, BINDING
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+
+    if ( name == "RECT" )
+    {
+      brect = true;
+      m_geometry = tagToRect( lst );
+    }
+    else if ( name == "BINDING" )
+    {
+      string tag2;
+      vector<KOMLAttrib> lst2;
+      string name2;
+      // RECT
+      while( parser.open( 0L, tag2 ) )
+      {
+	KOMLParser::parseTag( tag2.c_str(), name2, lst2 );
+ 
+	if ( name2 == "RECT" )
+	{
+	  bbind = true;
+	  bind = tagToRect( lst2 );
+	}
+	else
+	  cerr << "Unknown tag '" << tag2 << "' in BINDING" << endl;    
+
+      }
+      if ( !parser.close( tag ) )
+      {
+	cerr << "ERR: Closing BINDING" << endl;
+	return false;
+      }
+    }
+    else
+      cerr << "Unknown tag '" << tag << "' in CHART" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing Child in CHART" << endl;
+      return false;
+    }
+  }
+
+  if ( !brect )
+  {
+    cerr << "Missing RECT in CHART" << endl;
+    return false;
+  }
+  if ( !bbind )
+  {    
+    cerr << "Missing BINDING in CHART" << endl;
+    return false;
+  }
+  
+  setDataArea( bind );
+  
+  return true;
+}
+
+bool ChartChild::loadDocument( KOStore::Store_ptr _store, const char *_format )
+{
+  cerr << "######################### CC:loadDoc ################" << endl;
+  
+  bool res = KSpreadChild::loadDocument( _store, _format );
+  if ( !res )
+    return res;
+
+  CORBA::Object_var obj = m_rDoc->getInterface( "IDL:Chart/SimpleChart:1.0" );
+  Chart::SimpleChart_var chart = Chart::SimpleChart::_narrow( obj );
+  if ( CORBA::is_nil( chart ) )
+  {
+    QMessageBox::critical( 0L, i18n("Internal Error"), 
+			   i18n("Chart does not support the required interface"),
+			   i18n("OK") );
+    return false;
+  }
+
+  setChart( chart );
+  update();
+  
+  return true;
+}
+
 
 #include "kspread_table.moc"

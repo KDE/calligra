@@ -11,6 +11,7 @@ class KSpreadMap;
 class ChartCellBinding;
 class KSpreadView;
 class KSpreadDoc;
+class KoDocumentEntry;
 
 class QWidget;
 class QPainter;
@@ -137,6 +138,10 @@ public:
   void setChart( Chart::SimpleChart_ptr );
   void setDataArea( const QRect& _data );
   void update();
+  
+  virtual bool loadDocument( KOStore::Store_ptr _store, const char *_format );
+  virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+  virtual bool save( ostream& out );
   
 protected:
   ChartBinding *m_pBinding;
@@ -393,8 +398,8 @@ public:
 
     void print( QPainter &painter, QPrinter *_printer );
 
-    void insertChart( const QRect& _geometry, const char *_arg, const QRect& _data );
-    void insertChild( const QRect& _geometry, const char *_arg );
+    void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
+    void insertChild( const QRect& _geometry, KoDocumentEntry& );
     void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
     QListIterator<KSpreadChild> childIterator();
 

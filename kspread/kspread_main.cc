@@ -1,8 +1,8 @@
 #include <qprinter.h>
 #include "kspread_main.h"
-#include <koScanParts.h>
 #include <koScanTools.h>
 #include <koScanPlugins.h>
+#include <koQueryTypes.h>
 #include <koIMR.h>
 #include <koApplication.h>
 #include <koFactory.h>
@@ -37,7 +37,7 @@ void KSpreadApp::start()
   if ( g_bWithGUI )
   {
     imr_init();
-    koScanParts();
+    koInitTrader();
     koScanTools();
     koScanPlugins();
     

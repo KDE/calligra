@@ -1,7 +1,6 @@
 #include <qprinter.h>
 #include "kformula_main.h"
-#include <koScanParts.h>
-#include <koScanTools.h>
+#include <koQueryTypes.h>
 #include <koIMR.h>
 #include <koFactory.h>
 #include <koDocument.h>
@@ -35,9 +34,8 @@ void KFormulaApp::start()
   if ( g_bWithGUI )
   {
     imr_init();
-    koScanParts();
-    koScanTools();
-
+    koInitTrader();
+    
     if ( g_openFiles.size() == 0 )
     {
       m_pShell = new KFormulaShell;

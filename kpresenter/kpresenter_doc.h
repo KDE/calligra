@@ -23,6 +23,7 @@ class KPresenterView;
 
 #include <koDocument.h>
 #include <koView.h>
+#include <koQueryTypes.h>
 
 #include <qapp.h>
 #include <qlist.h>
@@ -176,7 +177,7 @@ public:
   virtual void removeView(KPresenterView *_view);
   
   // insert an object
-  virtual void insertObject(const KRect&,const char*,int,int);
+  virtual void insertObject(const KRect&,KoDocumentEntry&,int,int);
   virtual void insertChild( KPresenterChild *_child );
   
   // change geomentry of a child

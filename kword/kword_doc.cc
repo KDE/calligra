@@ -867,12 +867,12 @@ OpenParts::View_ptr KWordDocument::createView()
 }
 
 /*================================================================*/
-void KWordDocument::insertObject(const KRect& _rect,const char *_server_name,int diffx,int diffy)
+void KWordDocument::insertObject(const KRect& _rect, KoDocumentEntry& _e, int diffx, int diffy )
 {
-  KOffice::Document_var doc = imr_createDocByServerName(_server_name);
+  KOffice::Document_var doc = imr_createDoc( _e );
   if (CORBA::is_nil(doc))
     return;
-  
+
   if (!doc->init())
     {
       QMessageBox::critical((QWidget*)0L,i18n("KWord Error"),i18n("Could not init"),i18n("OK"));

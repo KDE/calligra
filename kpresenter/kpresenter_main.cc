@@ -16,12 +16,12 @@
 #include "kpresenter_main.moc"
 #include "kpresenter_doc.h"
 #include <string.h>
-#include <koScanParts.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
 #include "kpresenter_shell.h"
 #include <koIMR.h>
+#include <koQueryTypes.h>
 #include "formats.h"
 
 bool g_bWithGUI = true;
@@ -52,7 +52,7 @@ void KPresenterApp::start()
   if ( g_bWithGUI )
   {
     imr_init();
-    koScanParts();
+    koInitTrader();
 
     if ( g_openFiles.size() == 0 )
     {

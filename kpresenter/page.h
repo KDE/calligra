@@ -39,7 +39,7 @@
 #include <qpopmenu.h>
 #include <qimage.h>
 #include <qdatetm.h>
-
+#include <koQueryTypes.h>
 #include "ktextobject.h"
 #include "global.h"
 #include "qwmf.h"
@@ -106,8 +106,8 @@ public:
   void print(QPainter*,QPrinter*,float,float);
 
   void editSelectedTextArea();
-  void setPartEntry(KoPartEntry *pe)
-    { partEntry = pe; }
+  void setPartEntry( KoDocumentEntry& _e )
+    { partEntry = _e; }
   void setToolEditMode(ToolEditMode _m);
   void setAutoForm(QString _autoform)
     { autoform = _autoform; }
@@ -221,8 +221,8 @@ protected:
   KRect rubber,oldBoundingRect;
   ToolEditMode toolEditMode;
   KRect insRect;
-  KoPartEntry* partEntry;
-  QList<KPObject> tmpObjs;
+  KoDocumentEntry partEntry;
+  QList <KPObject> tmpObjs;
   QString autoform;
   
 public slots:

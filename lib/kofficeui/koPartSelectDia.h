@@ -20,9 +20,14 @@
 #ifndef DlgPartSelect_included
 #define DlgPartSelect_included
 
-#include <koScanParts.h>
+#include <koQueryTrader.h>
 
 #include "koPartSelectDia_data.h"
+
+#include <qstring.h>
+#include <qpixmap.h>
+
+#include <list>
 
 class KoBeListBoxItem : public QListBoxItem
 {
@@ -45,15 +50,16 @@ public:
     KoPartSelectDia( QWidget* parent = NULL, const char* name = NULL );
     virtual ~KoPartSelectDia();
   
-    KoPartEntry* result();
+    KoDocumentEntry result();
 
     /**
-     * Do NOT delete the object returned by this function.
-     *
-     * @returns 0L if no part was selected, or a pointer to the
-     *          parts record otherwise.
+     * @returns an empty string if no part was selected, or the name
+     *          of the server that implements the selected component.
      */
-    static KoPartEntry* selectPart();
+    static KoDocumentEntry selectPart();
+
+protected:
+    vector<KoDocumentEntry> m_lstEntries;
 };
 
 #endif // DlgPartSelect_included

@@ -177,38 +177,40 @@ KSpreadDoc* KSpreadDoc::find( int _docId )
 
 KSpreadDoc::KSpreadDoc()
 {
-    if ( s_mapDocuments == 0L )
-      s_mapDocuments = new QIntDict<KSpreadDoc>;
-    m_docId = s_docId++;
-    s_mapDocuments->insert( m_docId, this );
+  ADD_INTERFACE( "IDL:KSpread/Document:1.0" );
+  
+  if ( s_mapDocuments == 0L )
+    s_mapDocuments = new QIntDict<KSpreadDoc>;
+  m_docId = s_docId++;
+  s_mapDocuments->insert( m_docId, this );
     
-    m_pEditor = 0L;
-    m_pPython = 0L;
+  m_pEditor = 0L;
+  m_pPython = 0L;
+  
+  m_leftBorder = 20.0;
+  m_rightBorder = 20.0;
+  m_topBorder = 20.0;
+  m_bottomBorder = 20.0;
+  m_paperFormat = PG_DIN_A4;
+  m_paperWidth = PG_A4_WIDTH;
+  m_paperHeight = PG_A4_HEIGHT;
+  calcPaperSize();
+  m_orientation = PG_PORTRAIT;
+  m_pMap = 0L;
+  m_bLoading = false;
+  m_bEmpty = true;
     
-    m_leftBorder = 20.0;
-    m_rightBorder = 20.0;
-    m_topBorder = 20.0;
-    m_bottomBorder = 20.0;
-    m_paperFormat = PG_DIN_A4;
-    m_paperWidth = PG_A4_WIDTH;
-    m_paperHeight = PG_A4_HEIGHT;
-    calcPaperSize();
-    m_orientation = PG_PORTRAIT;
-    m_pMap = 0L;
-    m_bLoading = false;
-    m_bEmpty = true;
+  m_iTableId = 1;
+  
+  initPython();
+  
+  m_pMap = new KSpreadMap( this );
     
-    m_iTableId = 1;
-
-    initPython();
-    
-    m_pMap = new KSpreadMap( this );
-    
-    m_pUndoBuffer = new KSpreadUndo( this );
-    
-    m_bModified = FALSE;
-
-    m_lstViews.setAutoDelete( false );
+  m_pUndoBuffer = new KSpreadUndo( this );
+  
+  m_bModified = FALSE;
+  
+  m_lstViews.setAutoDelete( false );
 }
 
 CORBA::Boolean KSpreadDoc::init()

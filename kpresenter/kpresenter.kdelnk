@@ -11,5 +11,5 @@ MimeTypes=application/x-kpresenter,
 RepoID=IDL:KPresenter/DocumentFactory:1.0,
 ActivationMode=shared
 Type=OpenPart
-Icon=kpresenter.xpm
-MiniIcon=kpresenter.xpm
+Icon=$KDEDIR/share/apps/kpresenter/pics/kpresenter.xpm
+MiniIcon=$KDEDIR/share/apps/kpresenter/pics/kpresenter.xpm

@@ -98,6 +98,8 @@ AC_OUTPUT( \
 	lib/store/Makefile \
 	tools/Makefile \
 	tools/spell/Makefile \
+	trader/Makefile \
+	trader/data/Makefile \
 	plugins/Makefile \
 	plugins/recorder/Makefile \
 	pics/Makefile

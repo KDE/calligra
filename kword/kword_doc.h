@@ -22,6 +22,7 @@ class QPrinter;
 
 #include <koDocument.h>
 #include <koPrintExt.h>
+#include <koQueryTypes.h>
 
 #include <iostream>
 
@@ -145,7 +146,7 @@ public:
   virtual void addView(KWordView *_view);
   virtual void removeView(KWordView *_view);
 
-  virtual void insertObject(const KRect& _rect,const char *_part_name,int diffx,int diffy);
+  virtual void insertObject(const KRect& _rect,KoDocumentEntry& _e, int diffx, int diffy );
   virtual void changeChildGeometry(KWordChild *_child,const KRect&);
   
   virtual QListIterator<KWordChild> childIterator();

@@ -370,11 +370,8 @@ KOM::Plugin_ptr KoPluginProxy::ref()
     return 0L;
   }
   
-  KOM::RequestedInterfaces ifaces;
-  ifaces.length( 1 );
-  ifaces[0].repoid = CORBA::string_dup( "IDL:OpenParts/View:1.0" );
-  ifaces[0].obj = m_pManager->view();
-  m_vPlugin = factory->create( ifaces );
+  KOM::Component_var comp = m_pManager->view();
+  m_vPlugin = factory->create( comp );
   if ( CORBA::is_nil( m_vPlugin ) )
   {    
     QString tmp;

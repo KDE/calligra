@@ -17,7 +17,7 @@
 #include "kword_doc.h"
 #include <string.h>
 #include <koFactory.h>
-#include <koScanParts.h>
+#include <koQueryTypes.h>
 #include <koIMR.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
@@ -56,7 +56,7 @@ void KWordApp::start()
   if ( g_bWithGUI )
   {
     imr_init();
-    koScanParts();
+    koInitTrader();
 
     if ( g_openFiles.size() == 0 )
     {

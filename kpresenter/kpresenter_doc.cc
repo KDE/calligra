@@ -691,9 +691,9 @@ void KPresenterDoc::removeView(KPresenterView *_view)
 }
 
 /*========================= insert an object =====================*/
-void KPresenterDoc::insertObject(const KRect& _rect, const char* _server_name,int _diffx,int _diffy)
+void KPresenterDoc::insertObject(const KRect& _rect, KoDocumentEntry& _e,int _diffx,int _diffy)
 {
-  KOffice::Document_var doc = imr_createDocByServerName( _server_name);
+  KOffice::Document_var doc = imr_createDoc( _e );
   if (CORBA::is_nil(doc))
     return;
   

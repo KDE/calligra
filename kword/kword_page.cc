@@ -73,7 +73,6 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   frameDia = 0;
   pixmap_name = "";
   doRaster = true;
-  partEntry = 0L;
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -745,7 +744,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	repaint(false);
 
 	if (insRect.width() != 0 && insRect.height() != 0)
-	  doc->insertObject(insRect,partEntry->name(),xOffset,yOffset);
+	  doc->insertObject(insRect,partEntry,xOffset,yOffset);
 	mmEdit();
       } break;
     default: repaint(false);

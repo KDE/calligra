@@ -25,12 +25,14 @@
 
 #include <qstrlist.h>
 
+class KoDocumentEntry;
+
 void imr_init();
 bool imr_create( const char* _name, const char* _mode, const char *_exec, QStrList &_repoids, CORBA::ImplRepository_ptr _imr );
 CORBA::Object_ptr imr_activate( const char *_server, const char *_repoid = "IDL:KOffice/DocumentFactory:1.0",
 				CORBA::ImplRepository_ptr imr = 0L, const char *_addr = 0L );
+KOffice::Document_ptr imr_createDoc( KoDocumentEntry& _e );
 KOffice::Document_ptr imr_createDocByMimeType( const char *_mime_type );
-KOffice::Document_ptr imr_createDocByServerName( const char *_server_name );
 KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repoid );
 
 #endif

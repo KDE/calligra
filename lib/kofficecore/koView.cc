@@ -5,6 +5,8 @@
 
 KoViewIf::KoViewIf( KoDocument* _doc ) : OPViewIf( _doc )
 {
+  ADD_INTERFACE( "IDL:KOffice/View:1.0" );
+  
   SIGNAL_IMPL( "stateChanged" );
   
   m_bMarked = false;

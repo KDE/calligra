@@ -50,7 +50,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) : DlgPartS
 {
   setCaption( i18n( "Insert Object" ) );
 
-  if ( g_plstPartEntries == 0L )
+  /* if ( g_plstPartEntries == 0L )
     koScanParts();
   
   QListBox *list = listBox();
@@ -63,34 +63,42 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) : DlgPartS
     QPixmap pix;
     pix.load( p );
     list->insertItem( new KoBeListBoxItem( e->name(), pix ) );
+  } */
+  
+
+  QListBox *list = listBox();
+
+  m_lstEntries = koQueryDocuments();
+  vector<KoDocumentEntry>::iterator it = m_lstEntries.begin();
+  for( ; it != m_lstEntries.end(); ++it )
+  {
+    list->insertItem( new KoBeListBoxItem( it->name, it->miniIcon ) );    
   }
 
   connect( ok, SIGNAL( pressed() ), this, SLOT( accept() ) );
   connect( cancel, SIGNAL( pressed() ), this, SLOT( reject() ) );
 }
 
-KoPartEntry* KoPartSelectDia::result()
+KoDocumentEntry KoPartSelectDia::result()
 {
-  int i = listBox()->currentItem();
-  assert( g_plstPartEntries->at( i ) );
-  return g_plstPartEntries->at( i );
+  return m_lstEntries[ listBox()->currentItem() ];
 }
 
 /*======================= show dialog ============================*/
-KoPartEntry* KoPartSelectDia::selectPart()
+KoDocumentEntry KoPartSelectDia::selectPart()
 {
-  KoPartEntry* p = 0L;
+  KoDocumentEntry e;
 
   KoPartSelectDia *dlg = new KoPartSelectDia( 0, "PartSelect" );
 
   if (dlg->exec() == QDialog::Accepted)
   {
-    p = dlg->result();
+    e = dlg->result();
   }
 
   delete dlg;
 
-  return p;
+  return e;
 }
 
 KoPartSelectDia::~KoPartSelectDia()
@@ -98,3 +106,11 @@ KoPartSelectDia::~KoPartSelectDia()
 }
 
 #include "koPartSelectDia.moc"
+
+
+
+
+
+
+
+

@@ -75,7 +75,7 @@ public:
   virtual void setMarkedPart( OpenParts::Id id );		
   virtual KOffice::Document_ptr document();
   virtual KOffice::View_ptr view();
-  virtual void partClicked( OpenParts::Id _part_id );
+  virtual CORBA::Boolean partClicked( OpenParts::Id _part_id, CORBA::Long _button );
   
 protected:
   void unmarkPart();

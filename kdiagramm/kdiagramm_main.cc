@@ -1,10 +1,10 @@
 #include <qprinter.h>
 #include "kdiagramm_main.h"
-#include <koScanParts.h>
 #include <koIMR.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <koApplication.h>
+#include <koQueryTypes.h>
 #include <opAutoLoader.h>
 #include "kdiagramm_shell.h"
 #include "kdiagramm_doc.h"
@@ -35,7 +35,7 @@ void KDiagrammApp::start()
   if ( g_bWithGUI )
   {
     imr_init();
-    koScanParts();
+    koInitTrader();
 
     if ( g_openFiles.size() == 0 )
     {

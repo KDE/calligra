@@ -836,12 +836,16 @@ void KWordView::toolsTable()
 {
   gui->getPaperWidget()->mmTable();
 
-  QStrList mimes,repos;
-  mimes.append("application/x-kspread");
-  repos.append("IDL:KSpread/DocumentFactory:1.0");
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0' in RepoID", 1 );
+  if ( vec.size() == 0 )
+  {    
+    cout << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    return;
+  }
 
-  KoPartEntry *pe = new KoPartEntry("KSpread","kspread.bin --server","shared","",mimes,repos);
-  gui->getPaperWidget()->setPartEntry(pe);
+  cerr << "USING component " << vec[0].name << endl;
+  gui->getPaperWidget()->setPartEntry(vec[0]);
 }
 
 /*===============================================================*/
@@ -849,20 +853,24 @@ void KWordView::toolsFormula()
 {
   gui->getPaperWidget()->mmFormula();
 
-  QStrList mimes,repos;
-  mimes.append("application/x-kformula");
-  repos.append("IDL:KFormula/DocumentFactory:1.0");
-
-  KoPartEntry *pe = new KoPartEntry("KFormula","kformula.bin --server","shared","",mimes,repos);
-  gui->getPaperWidget()->setPartEntry(pe);
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KFormula/DocumentFactory:1.0' in RepoID", 1 );
+  if ( vec.size() == 0 )
+  {    
+    cout << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    return;
+  }
+  gui->getPaperWidget()->setPartEntry(vec[0]);
 }
 
 /*===============================================================*/
 void KWordView::toolsPart()
 {
   gui->getPaperWidget()->mmEdit();
-  KoPartEntry* pe = KoPartSelectDia::selectPart();
-  if (!pe) return;
+
+  KoDocumentEntry pe = KoPartSelectDia::selectPart();
+  if ( pe.name.isEmpty() )
+    return;
   
   gui->getPaperWidget()->mmPart();
   gui->getPaperWidget()->setPartEntry(pe);
