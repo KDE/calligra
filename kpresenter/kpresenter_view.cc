@@ -5633,6 +5633,28 @@ void KPresenterView::addVariableActions( int type, const QStringList & texts,
 
 void KPresenterView::refreshCustomMenu()
 {
+    KActionPtrList lst2 = actionCollection()->actions("custom-variable-action");
+    QValueList<KAction *> actions = lst2;
+    QValueList<KAction *>::ConstIterator it2 = lst2.begin();
+    QValueList<KAction *>::ConstIterator end = lst2.end();
+    QMap<QString, KShortcut> shortCut;
+
+    for (; it2 != end; ++it2 )
+    {
+        if ( !(*it2)->shortcut().toString().isEmpty())
+        {
+            shortCut.insert((*it2)->text(), KShortcut( (*it2)->shortcut()));
+        }
+        delete *it2;
+    }
+
+    delete actionInsertCustom;
+    actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
+                                          actionCollection(), "insert_custom" );
+
+    actionInsertVariable->insert(actionInsertCustom, 0);
+
+
     actionInsertCustom->popupMenu()->clear();
     QPtrListIterator<KoVariable> it( m_pKPresenterDoc->getVariableCollection()->getVariables() );
     KAction * act=0;
@@ -5650,9 +5672,15 @@ void KPresenterView::refreshCustomMenu()
                  lst.append( varName );
                  QCString name = QString("custom-action_%1").arg(i).latin1();
 
-                 act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
-                                    actionCollection(), name );
-                 act->setGroup( "custom-action" );
+                 if ( shortCut.contains( varName ))
+                 {
+                     act = new KAction( varName, (shortCut)[varName], this, SLOT( insertCustomVariable() ),actionCollection(), name );
+                 }
+                 else
+                     act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
+                                        actionCollection(), name );
+
+                 act->setGroup( "custom-variable-action" );
                  actionInsertCustom->insert( act );
                  i++;
             }
@@ -5663,7 +5691,7 @@ void KPresenterView::refreshCustomMenu()
         actionInsertCustom->popupMenu()->insertSeparator();
 
     act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), QString("custom-action_%1").arg(i).latin1() );
-    act->setGroup( "custom-action" );
+    act->setGroup( "custom-variable-action" );
     actionInsertCustom->insert( act );
 
     actionInsertCustom->popupMenu()->insertSeparator();
