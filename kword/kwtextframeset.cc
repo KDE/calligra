@@ -325,7 +325,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *theFrame = frameIt.current();
-        QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ), m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() )+1, m_doc->ptToLayoutUnitPixY( theFrame->innerHeight()+1 ) );
+        QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ), m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() )+1, m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() )+1 );
 #ifdef DEBUG_ITD
         kdDebug() << "ITD: r=" << r << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
 #endif
@@ -1439,7 +1439,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
             {
                 int height = m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() );
 #ifdef DEBUG_ITD
-                kdDebug() << "ITD: height=" << height << endl;
+                kdDebug() << "ITD: height=" << height << " -> the bottom is at " << internalY+height << endl;
 #endif
                 if ( iPoint.y() < internalY + height )
                 {
@@ -1540,8 +1540,9 @@ void KWTextFrameSet::printDebug()
             int pgNum = i + m_firstPage;
             for ( ; it.current() ; ++it )
                 kdDebug() << "  " << pgNum << ": " << it.current() << "   " << *it.current()
-                          << " internalY=" << it.current()->internalY()
-                          << " (in LU:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() ) << ")" << endl;
+                          << " internalY=" << it.current()->internalY() << "pt "
+                          << " (in LU:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() )
+                          << " height=" << m_doc->ptToLayoutUnitPixX( it.current()->innerHeight() ) << ")" << endl;
         }
     }
 
@@ -2650,6 +2651,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     int y = 0; int dummy;
     parag->lineHeightOfChar( cursor()->index(), &dummy, &y );
     y += parag->rect().y() + cursor()->offsetY();
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible y=" << y << endl;
     int w = 1;
     KoPoint pt;
     KoPoint hintDPoint;
@@ -2666,6 +2668,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     p = m_canvas->viewMode()->normalToView( p );
     w = textFrameSet()->kWordDocument()->layoutUnitToPixelX( w );
     h = textFrameSet()->kWordDocument()->layoutUnitToPixelY( h );
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible pt=" << pt << " p=" << p << " w=" << w << " y=" << y << endl;
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
 }
 
