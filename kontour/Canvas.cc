@@ -426,6 +426,7 @@ void Canvas::changeZoomFactor(double scale)
   mYCenter = (height() - mGDoc->yCanvas()) / 2;
   hBar->setValue(mXCenter - mXOffset);
   vBar->setValue(mYCenter - mYOffset);
+  updateBuf();
   repaint();
 }
 
