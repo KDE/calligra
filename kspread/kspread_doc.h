@@ -188,7 +188,7 @@ public:
    * @param drawCursor whether or not to draw the selection rectangle and the choose
    *                   marker
    */
-  void paintCellRegions(QPainter& painter, QRect viewRect, KSpreadView* view,
+  void paintCellRegions(QPainter& painter, const QRect &viewRect, KSpreadView* view,
                         QValueList<QRect> cellRegions,
                         const KSpreadTable* table, bool drawCursor);
 

@@ -700,7 +700,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
 }
 
 
-void KSpreadDoc::paintCellRegions(QPainter& painter, QRect viewRect,
+void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
                                   KSpreadView* view,
                                   QValueList<QRect> cellRegions,
                                   const KSpreadTable* table, bool drawCursor)
