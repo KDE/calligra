@@ -19,7 +19,6 @@
 #include <qapplication.h>
 #include <qtimer.h>
 #include <float.h>
-#include <math.h>
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
                                                       KSpreadView * _view )
@@ -3472,9 +3471,9 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
   double dblYpos;
   //Get the top row and the current y-position
-  int y = table->topRow( static_cast<int>( ceil( (_ev->rect().y() + m_pCanvas->yOffset() ) ) / m_pCanvas->zoom() ), dblYpos );
-  //Unzoom the position and align to the offset
-  dblYpos = dblYpos - m_pCanvas->yOffset() / m_pCanvas->zoom();
+  int y = table->topRow( qRound( int( (_ev->rect().y() + m_pCanvas->yOffset() ) / m_pCanvas->zoom() ) ), dblYpos );
+  //Align to the unzoomed offset
+  dblYpos = dblYpos - qRound( m_pCanvas->yOffset() / m_pCanvas->zoom() );
   //Simulate the scaling
   int scaledYpos = qRound( dblYpos * m_pCanvas->zoom() );
 
@@ -4041,9 +4040,9 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   // Determine which columns need painting
   double dblXpos;
   //Get the left column and the current x-position
-  int x = table->leftColumn( static_cast<int>( ceil( (_ev->rect().x() + m_pCanvas->xOffset() ) ) / m_pCanvas->zoom() ), dblXpos );
-  //Unzoom the position and align to the offset
-  dblXpos = dblXpos - m_pCanvas->xOffset() / m_pCanvas->zoom();
+  int x = table->leftColumn( qRound( int(_ev->rect().x() + m_pCanvas->xOffset() ) / m_pCanvas->zoom() ), dblXpos );
+  //Align to the unzoomed offset
+  dblXpos = dblXpos - qRound( m_pCanvas->xOffset() / m_pCanvas->zoom() );
   //Simulate the scaling
   int scaledXpos = qRound( dblXpos * m_pCanvas->zoom() );
 
