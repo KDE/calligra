@@ -62,24 +62,20 @@ VStar::VStar( VObject* parent,
 		int jumpto = 0;
 		for ( uint i = 1; i < edges + 1; ++i )
 		{
-			p.setX( innerRadius *
-				cos( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 ) ) );
-			p.setY( innerRadius *
-				sin( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 ) ) );
+			double nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 );
+			p.setX( innerRadius * cos( nextInnerAngle ) );
+			p.setY( innerRadius * sin( nextInnerAngle ) );
 			lineTo( p );
 
 			jumpto = ( i * j ) % edges;
-
-			p.setX( innerRadius *
-				cos( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto - 0.5 ) ) );
-			p.setY( innerRadius *
-				sin( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto - 0.5 ) ) );
+			nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto - 0.5 );
+			p.setX( innerRadius * cos( nextInnerAngle ) );
+			p.setY( innerRadius * sin( nextInnerAngle ) );
 			lineTo( p );
 
-			p.setX( outerRadius *
-				cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto ) );
-			p.setY( outerRadius *
-				sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto ) );
+			double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+			p.setX( outerRadius * cos( nextOuterAngle ) );
+			p.setY( outerRadius * sin( nextOuterAngle ) );
 			lineTo( p );
 		}
 	}
@@ -92,12 +88,12 @@ VStar::VStar( VObject* parent,
 		double outerRoundness = ( VGlobal::twopi * outerRadius * roundness ) / edges;
 		for ( uint i = 0; i < edges; ++i )
 		{
+			double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 );
+			double nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 );
 			if( m_type != polygon )
 			{
-				p.setX( innerRadius *
-					cos( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
-				p.setY( innerRadius *
-					sin( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+				p.setX( innerRadius * cos( nextInnerAngle ) );
+				p.setY( innerRadius * sin( nextInnerAngle ) );
 
 				if( roundness == 0.0 )
 					lineTo( p );
@@ -110,38 +106,30 @@ VStar::VStar( VObject* parent,
 						sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i ) ) -
 						sin( angle + VGlobal::twopi / edges * ( i ) ) * outerRoundness );
 
-					p3.setX( innerRadius *
-						cos( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) +
+					p3.setX( innerRadius * cos( nextInnerAngle ) +
 						cos( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
-					p3.setY( innerRadius *
-						sin( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) +
+					p3.setY( innerRadius * sin( nextInnerAngle ) +
 						sin( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
 
 					curveTo( p2, p3, p );
 				}
 			}
 
-			p.setX( outerRadius *
-				cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
-			p.setY( outerRadius *
-				sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
+			p.setX( outerRadius * cos( nextOuterAngle ) );
+			p.setY( outerRadius * sin( nextOuterAngle ) );
 
 			if( roundness == 0.0 )
 				lineTo( p );
 			else
 			{
-				p2.setX( innerRadius *
-					cos( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) -
+				p2.setX( innerRadius * cos( nextInnerAngle ) -
 					cos( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
-				p2.setY( innerRadius *
-					sin( angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) -
+				p2.setY( innerRadius * sin( nextInnerAngle ) -
 					sin( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
 
-				p3.setX( outerRadius *
-					cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) +
+				p3.setX( outerRadius * cos( nextOuterAngle ) +
 					cos( angle + VGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
-				p3.setY( outerRadius *
-					sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) +
+				p3.setY( outerRadius * sin( nextOuterAngle ) +
 					sin( angle + VGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
 
 				curveTo( p2, p3, p );
@@ -151,10 +139,9 @@ VStar::VStar( VObject* parent,
 	if( m_type == wheel || m_type == framed_star )
 		for ( int i = edges - 1; i >= 0; --i )
 		{
-			p.setX( outerRadius *
-				cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
-			p.setY( outerRadius *
-				sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 ) ) );
+			double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 );
+			p.setX( outerRadius * cos( nextOuterAngle ) );
+			p.setY( outerRadius * sin( nextOuterAngle ) );
 			lineTo( p );
 		}
 	close();
