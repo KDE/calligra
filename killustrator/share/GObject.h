@@ -427,7 +427,7 @@ private:
 inline float seg_length (const Coord& c1, const Coord& c2) {
     float dx = c2.x () - c1.x ();
     float dy = c2.y () - c1.y ();
-    return std::sqrt (dx * dx + dy * dy);
+    return sqrt (dx * dx + dy * dy);
 }
 
 namespace KIllustrator {

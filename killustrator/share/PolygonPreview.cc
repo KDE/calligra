@@ -62,12 +62,12 @@ void PolygonPreview::paintEvent (QPaintEvent *) {
         for (int i = 1; i < nCorners * 2; ++i) {
             double xp, yp;
             if (i % 2) {
-                xp =  r * std::sin(a);
-                yp = -r * std::cos(a);
+                xp =  r * sin(a);
+                yp = -r * cos(a);
             }
             else {
-                xp = radius * std::sin(a);
-                yp = -radius * std::cos(a);
+                xp = radius * sin(a);
+                yp = -radius * cos(a);
             }
             a += angle;
             points.setPoint (i, (int) xp, (int) yp);
@@ -76,8 +76,8 @@ void PolygonPreview::paintEvent (QPaintEvent *) {
     else {
         double a = angle;
         for (int i = 1; i < nCorners; i++) {
-            double xp = radius * std::sin(a);
-            double yp = -radius * std::cos(a);
+            double xp = radius * sin(a);
+            double yp = -radius * cos(a);
             a += angle;
             points.setPoint (i, (int) xp, (int) yp);
         }

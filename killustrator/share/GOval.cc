@@ -222,8 +222,8 @@ int GOval::getNeighbourPoint (const Coord& p) {
 }
 
 void GOval::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
-  float adx = std::fabs (dx);
-  float ady = std::fabs (dy);
+  float adx = fabs (dx);
+  float ady = fabs (dy);
   float angle = 0;
 
   if (idx == 0 && segPoint[0] == segPoint[1])
@@ -243,7 +243,7 @@ void GOval::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
       x = r.right ();
 
     x -= (r.left () + a);
-    angle = std::acos (x / a) * RAD_FACTOR;
+    angle = acos (x / a) * RAD_FACTOR;
     if (segPoint[idx].y () < r.center ().y ())
       angle = 360 - angle;
   }
@@ -255,7 +255,7 @@ void GOval::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
       y = r.bottom ();
 
     y -= (r.top () + b);
-    angle = std::asin (y / b) * RAD_FACTOR;
+    angle = asin (y / b) * RAD_FACTOR;
     if (segPoint[idx].y () < r.center ().y ()) {
       if (segPoint[idx].x () > r.center ().x ())
         angle += 360;
@@ -294,15 +294,15 @@ void GOval::update_segments () {
   float b = r.height () / 2.0;
 
   float angle = sAngle * M_PI / 180.0;
-  x = a * std::cos (angle) + r.left () + a;
-  y = b * std::sin (angle) + r.top () + b;
+  x = a * cos (angle) + r.left () + a;
+  y = b * sin (angle) + r.top () + b;
 
   segPoint[0].x (x);
   segPoint[0].y (y);
 
   angle = eAngle * M_PI / 180.0;
-  x = a * std::cos (angle) + r.left () + a;
-  y = b * std::sin (angle) + r.top () + b;
+  x = a * cos (angle) + r.left () + a;
+  y = b * sin (angle) + r.top () + b;
 
   segPoint[1].x (x);
   segPoint[1].y (y);
@@ -395,8 +395,8 @@ void GOval::updateGradientShape (QPainter& p) {
         x1 = m.x () - segPoint[1].x ();
         y1 = m.y () - segPoint[1].y ();
 
-        x = x1 * std::cos (WINKEL) - y1 * std::sin (WINKEL);
-        y = x1 * std::sin (WINKEL) + y1 * std::cos (WINKEL);
+        x = x1 * cos (WINKEL) - y1 * sin (WINKEL);
+        y = x1 * sin (WINKEL) + y1 * cos (WINKEL);
 
         x *= 1.5; y *= 1.5;
 
@@ -428,8 +428,8 @@ void GOval::updateGradientShape (QPainter& p) {
         x1 = m.x () - segPoint[1].x ();
         y1 = m.y () - segPoint[1].y ();
 
-        x = x1 * std::cos (-WINKEL) - y1 * std::sin (-WINKEL);
-        y = x1 * std::sin (-WINKEL) + y1 * std::cos (-WINKEL);
+        x = x1 * cos (-WINKEL) - y1 * sin (-WINKEL);
+        y = x1 * sin (-WINKEL) + y1 * cos (-WINKEL);
 
         x *= 1.5; y *= 1.5;
 

@@ -160,7 +160,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     if (me->state () & ControlButton) {
       Coord oldp = line->getPoint (last > 0 ? last - 1 : 0);
-      if (std::fabs (xpos - oldp.x ()) > std::fabs (ypos - oldp.y ()))
+      if (fabs (xpos - oldp.x ()) > fabs (ypos - oldp.y ()))
         ypos = oldp.y ();
       else
         xpos = oldp.x ();
