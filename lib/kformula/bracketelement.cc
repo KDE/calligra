@@ -31,7 +31,6 @@
 #include "sequenceelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
-using namespace std;
 
 BracketElement::BracketElement(char l, char r, BasicElement* parent)
     : BasicElement(parent)
@@ -105,8 +104,8 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
     else {
         lu contentHeight = 2 * QMAX( content->getMidline(),
                                      content->getHeight() - content->getMidline() );
-        left->calcSizes(style, contentHeight);
-        right->calcSizes(style, contentHeight);
+        left->calcSizes( style, tstyle, contentHeight );
+        right->calcSizes( style, tstyle, contentHeight );
 
         // height
         setHeight(QMAX(contentHeight,
@@ -151,8 +150,8 @@ void BracketElement::draw( QPainter& painter, const LuRect& r,
     else {
         lu contentHeight = 2 * QMAX(content->getMidline(),
                                     content->getHeight() - content->getMidline());
-        left->draw(painter, r, style, contentHeight, myPos);
-        right->draw(painter, r, style, contentHeight, myPos);
+        left->draw(painter, r, style, tstyle, contentHeight, myPos);
+        right->draw(painter, r, style, tstyle, contentHeight, myPos);
     }
 
     // Debug

@@ -111,7 +111,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     double distX = style.getThinSpace( tstyle );
     double distY = style.getThinSpace( tstyle );
 
-    symbol.calcSizes(style, qRound(mySize*1.5));
+    symbol.calcSizes(style, tstyle, mySize);
     content->calcSizes(style, tstyle, istyle);
 
     //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
@@ -208,7 +208,7 @@ void SymbolElement::draw( QPainter& painter, const LuRect& r,
         return;
 
     lu mySize = style.getAdjustedSize( tstyle );
-    symbol.draw( painter, r, style, mySize, myPos );
+    symbol.draw( painter, r, style, tstyle, mySize, myPos );
     content->draw( painter, r, style, tstyle, istyle, myPos );
     if ( hasUpper() ) {
         upper->draw( painter, r, style, style.convertTextStyleIndex( tstyle ),

@@ -117,7 +117,7 @@ public:
                                                      ( tstyle == scriptScriptStyle ); }
 
     /**
-     * TeX like spacings. Zoomed.
+     * TeX like spacings.
      */
     lu getSpace( TextStyle tstyle, SpaceWidths space ) const;
     lu getThinSpace( TextStyle tstyle ) const;
@@ -127,9 +127,7 @@ public:
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
-     *
-     * Takes into account the current zoom factor.
-     **/
+     */
     lu getAdjustedSize( TextStyle tstyle ) const;
 
     /**

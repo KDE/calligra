@@ -75,84 +75,73 @@ Artwork::Artwork(SymbolType t)
 }
 
 
-void Artwork::calcCharSize( const ContextStyle& style, lu height, QChar ch )
+inline bool doSimpleRoundBracket( lu height, lu baseHeight )
 {
-    QFont f = style.getSymbolFont();
-    f.setPointSize( height );
-    fontSize = height;
+    return height < 1.5*baseHeight;
+}
 
-    QFontMetrics fm(f);
-    LuRect bound = fm.boundingRect( ch );
-    setWidth( fm.width( ch ) );
-    setHeight( bound.height() );
-    setBaseline( -bound.top() );
+inline bool doSimpleSquareBracket( lu height, lu baseHeight )
+{
+    return height < 1.5*baseHeight;
+}
+
+inline bool doSimpleCurlyBracket( lu height, lu baseHeight )
+{
+    return height < 2*baseHeight;
 }
 
 
-bool Artwork::doSimpleRoundBracket( const ContextStyle& style, lu height )
+void Artwork::calcSizes( const ContextStyle& style,
+                         ContextStyle::TextStyle tstyle,
+                         lu parentSize )
 {
-    return height < style.getBaseSize();
-}
-
-bool Artwork::doSimpleSquareBracket( const ContextStyle& style, lu height )
-{
-    return height < style.getBaseSize();
-}
-
-bool Artwork::doSimpleCurlyBracket( const ContextStyle& style, lu height )
-{
-    return height < 2*( style.getBaseSize() );
-}
-
-
-void Artwork::calcSizes( const ContextStyle& style, lu parentSize )
-{
+    lu mySize = style.getAdjustedSize( tstyle );
     switch (type) {
     case LeftSquareBracket:
-        if (!doSimpleSquareBracket(style, parentSize)) {
-            calcSquareBracket(style, leftSquareBracket, parentSize);
+        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+            calcSquareBracket( style, leftSquareBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, parentSize, '[');
+            calcCharSize( style, mySize, '[' );
         }
         break;
     case RightSquareBracket:
-        if (!doSimpleSquareBracket(style, parentSize)) {
-            calcSquareBracket(style, rightSquareBracket, parentSize);
+        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+            calcSquareBracket( style, rightSquareBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, parentSize, ']');
+            calcCharSize(style, mySize, ']');
         }
         break;
     case LineBracket:
-        calcCharSize(style, parentSize, '|');
+        calcCharSize(style, mySize, '|');
         break;
     case SlashBracket:
-        calcCharSize(style, parentSize, '/');
+        calcCharSize(style, mySize, '/');
         break;
     case BackSlashBracket:
-        calcCharSize(style, parentSize, '\\');
+        calcCharSize(style, mySize, '\\');
         break;
     case LeftCornerBracket:
-        calcCharSize(style, parentSize, static_cast<char>(225));
+        calcCharSize(style, mySize, static_cast<char>(225));
         break;
     case RightCornerBracket:
-        calcCharSize(style, parentSize, static_cast<char>(241));
+        calcCharSize(style, mySize, static_cast<char>(241));
         break;
     case LeftRoundBracket:
-        if (!doSimpleRoundBracket(style, parentSize)) {
-            calcRoundBracket(style, leftRoundBracket, parentSize);
+        if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
+            calcRoundBracket( style, leftRoundBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, parentSize, '(');
+            calcCharSize(style, mySize, '(');
         }
         break;
     case RightRoundBracket:
-        if (!doSimpleRoundBracket(style, parentSize)) {
-            calcRoundBracket(style, rightRoundBracket, parentSize);
+        if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
+            calcRoundBracket( style, rightRoundBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, parentSize, ')');
+            calcCharSize(style, mySize, ')');
         }
         break;
     case Empty:
@@ -160,29 +149,29 @@ void Artwork::calcSizes( const ContextStyle& style, lu parentSize )
         setWidth(style.getEmptyRectWidth());
         break;
     case LeftCurlyBracket:
-        if (!doSimpleCurlyBracket(style, parentSize)) {
-            calcCurlyBracket(style, leftCurlyBracket, parentSize);
+        if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
+            calcCurlyBracket( style, leftCurlyBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, parentSize, '{');
+            calcCharSize(style, mySize, '{');
         }
         break;
     case RightCurlyBracket:
-        if (!doSimpleCurlyBracket(style, parentSize)) {
-            calcCurlyBracket(style, rightCurlyBracket, parentSize);
+        if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
+            calcCurlyBracket( style, rightCurlyBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, parentSize, '}');
+            calcCharSize(style, mySize, '}');
         }
         break;
     case Integral:
-        calcCharSize(style, parentSize, static_cast<char>(242));
+        calcCharSize( style, 1.5*mySize, static_cast<char>(242) );
         break;
     case Sum:
-        calcCharSize(style, parentSize, static_cast<char>(229));
+        calcCharSize( style, 1.5*mySize, static_cast<char>(229) );
         break;
     case Product:
-        calcCharSize(style, parentSize, static_cast<char>(213));
+        calcCharSize( style, 1.5*mySize, static_cast<char>(213) );
         break;
     }
 }
@@ -191,7 +180,7 @@ void Artwork::calcSizes( const ContextStyle& style, lu parentSize )
 void Artwork::calcSizes( const ContextStyle& style,
                          ContextStyle::TextStyle tstyle )
 {
-    double mySize = style.getAdjustedSize( tstyle );
+    lu mySize = style.getAdjustedSize( tstyle );
     switch (type) {
     case LeftSquareBracket:
         calcCharSize(style, mySize, '[');
@@ -237,9 +226,11 @@ void Artwork::calcSizes( const ContextStyle& style,
 }
 
 
-void Artwork::draw(QPainter& painter, const LuRect& r, const ContextStyle& style,
+void Artwork::draw(QPainter& painter, const LuRect& r,
+                   const ContextStyle& style, ContextStyle::TextStyle tstyle,
                    lu parentSize, const LuPoint& origin)
 {
+    lu mySize = style.getAdjustedSize( tstyle );
     lu myX = origin.x() + getX();
     lu myY = origin.y() + getY();
     if ( !LuRect( myX, myY, getWidth(), getHeight() ).intersects( r ) )
@@ -249,80 +240,79 @@ void Artwork::draw(QPainter& painter, const LuRect& r, const ContextStyle& style
 
     switch (type) {
     case LeftSquareBracket:
-        if (!doSimpleSquareBracket(style, parentSize)) {
-            drawLeftSquareBracket(painter, style, myX, myY, parentSize);
+        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+            drawLeftSquareBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, '[');
+            drawCharacter(painter, style, myX, myY, mySize, '[');
         }
         break;
     case RightSquareBracket:
-        if (!doSimpleSquareBracket(style, parentSize)) {
-            drawRightSquareBracket(painter, style, myX, myY, parentSize);
+        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+            drawRightSquareBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, ']');
+            drawCharacter(painter, style, myX, myY, mySize, ']');
         }
         break;
     case LeftCurlyBracket:
-        if (!doSimpleCurlyBracket(style, parentSize)) {
-            drawLeftCurlyBracket(painter, style, myX, myY, parentSize);
+        if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
+            drawLeftCurlyBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, '{');
+            drawCharacter(painter, style, myX, myY, mySize, '{');
         }
         break;
     case RightCurlyBracket:
-        if (!doSimpleCurlyBracket(style, parentSize)) {
-            drawRightCurlyBracket(painter, style, myX, myY, parentSize);
+        if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
+            drawRightCurlyBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, '}');
+            drawCharacter(painter, style, myX, myY, mySize, '}');
         }
         break;
     case LineBracket:
-        drawCharacter(painter, style, myX, myY, '|');
+        drawCharacter(painter, style, myX, myY, mySize, '|');
         break;
     case SlashBracket:
-        drawCharacter(painter, style, myX, myY, '/');
+        drawCharacter(painter, style, myX, myY, mySize, '/');
         break;
     case BackSlashBracket:
-        drawCharacter(painter, style, myX, myY, '\\');
+        drawCharacter(painter, style, myX, myY, mySize, '\\');
         break;
     case LeftCornerBracket:
-        drawCharacter(painter, style, myX, myY, static_cast<char>(225));
+        drawCharacter(painter, style, myX, myY, mySize, static_cast<char>(225));
         break;
     case RightCornerBracket:
-        drawCharacter(painter, style, myX, myY, static_cast<char>(241));
+        drawCharacter(painter, style, myX, myY, mySize, static_cast<char>(241));
         break;
     case LeftRoundBracket:
-        if (!doSimpleRoundBracket(style, parentSize)) {
-            drawLeftRoundBracket(painter, style, myX, myY, parentSize);
+        if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
+            drawLeftRoundBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, '(');
+            drawCharacter(painter, style, myX, myY, mySize, '(');
         }
         break;
     case RightRoundBracket:
-        if (!doSimpleRoundBracket(style, parentSize)) {
-            drawRightRoundBracket(painter, style, myX, myY, parentSize);
+        if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
+            drawRightRoundBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, ')');
+            drawCharacter(painter, style, myX, myY, mySize, ')');
         }
         break;
     case Empty:
         //drawEmpty(painter, myX, myY, getHeight());
         break;
     case Integral:
-        //drawIntegral(painter, style, myX, myY+getHeight()/2, getHeight()/2);
-        drawCharacter(painter, style, myX, myY, static_cast<char>(242));
+        drawCharacter(painter, style, myX, myY, 1.5*mySize, static_cast<char>(242));
         break;
     case Sum:
-        drawCharacter(painter, style, myX, myY, static_cast<char>(229));
+        drawCharacter(painter, style, myX, myY, 1.5*mySize, static_cast<char>(229));
         break;
     case Product:
-        drawCharacter(painter, style, myX, myY, static_cast<char>(213));
+        drawCharacter(painter, style, myX, myY, 1.5*mySize, static_cast<char>(213));
         break;
     }
 
@@ -333,9 +323,11 @@ void Artwork::draw(QPainter& painter, const LuRect& r, const ContextStyle& style
 }
 
 
-void Artwork::draw(QPainter& painter, const LuRect& r, const ContextStyle& style,
-                   ContextStyle::TextStyle, const LuPoint& parentOrigin)
+void Artwork::draw(QPainter& painter, const LuRect& r,
+                   const ContextStyle& style, ContextStyle::TextStyle tstyle,
+                   const LuPoint& parentOrigin)
 {
+    lu mySize = style.getAdjustedSize( tstyle );
     lu myX = parentOrigin.x() + getX();
     lu myY = parentOrigin.y() + getY();
     if ( !LuRect( myX, myY, getWidth(), getHeight() ).intersects( r ) )
@@ -345,37 +337,37 @@ void Artwork::draw(QPainter& painter, const LuRect& r, const ContextStyle& style
 
     switch (type) {
     case LeftSquareBracket:
-        drawCharacter(painter, style, myX, myY, '[');
+        drawCharacter(painter, style, myX, myY, mySize, '[');
         break;
     case RightSquareBracket:
-        drawCharacter(painter, style, myX, myY, ']');
+        drawCharacter(painter, style, myX, myY, mySize, ']');
         break;
     case LeftCurlyBracket:
-        drawCharacter(painter, style, myX, myY, '{');
+        drawCharacter(painter, style, myX, myY, mySize, '{');
         break;
     case RightCurlyBracket:
-        drawCharacter(painter, style, myX, myY, '}');
+        drawCharacter(painter, style, myX, myY, mySize, '}');
         break;
     case LineBracket:
-        drawCharacter(painter, style, myX, myY, '|');
+        drawCharacter(painter, style, myX, myY, mySize, '|');
         break;
     case SlashBracket:
-        drawCharacter(painter, style, myX, myY, '/');
+        drawCharacter(painter, style, myX, myY, mySize, '/');
         break;
     case BackSlashBracket:
-        drawCharacter(painter, style, myX, myY, '\\');
+        drawCharacter(painter, style, myX, myY, mySize, '\\');
         break;
     case LeftCornerBracket:
-        drawCharacter(painter, style, myX, myY, static_cast<char>(225));
+        drawCharacter(painter, style, myX, myY, mySize, static_cast<char>(225));
         break;
     case RightCornerBracket:
-        drawCharacter(painter, style, myX, myY, static_cast<char>(241));
+        drawCharacter(painter, style, myX, myY, mySize, static_cast<char>(241));
         break;
     case LeftRoundBracket:
-        drawCharacter(painter, style, myX, myY, '(');
+        drawCharacter(painter, style, myX, myY, mySize, '(');
         break;
     case RightRoundBracket:
-        drawCharacter(painter, style, myX, myY, ')');
+        drawCharacter(painter, style, myX, myY, mySize, ')');
         break;
     case Empty:
         break;
@@ -387,10 +379,23 @@ void Artwork::draw(QPainter& painter, const LuRect& r, const ContextStyle& style
 }
 
 
-void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, lu x, lu y, QChar ch )
+void Artwork::calcCharSize( const ContextStyle& style, lu height, QChar ch )
 {
     QFont f = style.getSymbolFont();
-    f.setPointSizeFloat( style.layoutUnitToFontSize( fontSize, false ) );
+    f.setPointSize( height );
+
+    QFontMetrics fm(f);
+    setWidth( fm.width( ch ) );
+    LuRect bound = fm.boundingRect( ch );
+    setHeight( bound.height() );
+    setBaseline( -bound.top() );
+}
+
+
+void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, lu x, lu y, lu height, QChar ch )
+{
+    QFont f = style.getSymbolFont();
+    f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
 
     painter.setFont( f );
     painter.drawText( style.layoutUnitToPixelX( x ),
@@ -403,54 +408,42 @@ void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, lu x,
 }
 
 
-void Artwork::calcRoundBracket(const ContextStyle& style, const char chars[], lu height)
+void Artwork::calcRoundBracket( const ContextStyle& style, const char chars[],
+                                lu height, lu charHeight )
 {
-    lu charHeight;
-    char uppercorner = chars[0];
-    char lowercorner = chars[1];
+    //char uppercorner = chars[0];
+    //char lowercorner = chars[1];
     char line = chars[2];
 
-    if ( height <= 80*20 ) {
-        charHeight = height/2;
-    }
-    else {
-        charHeight = 40*20;
-    }
-
     QFont f = style.getSymbolFont();
-    f.setPointSize(charHeight);
-    QFontMetrics fm(f);
-    LuRect upperBound = fm.boundingRect(uppercorner);
-    LuRect lowerBound = fm.boundingRect(lowercorner);
+    f.setPointSize( charHeight );
+    QFontMetrics fm( f );
+    //LuRect upperBound = fm.boundingRect(uppercorner);
+    //LuRect lowerBound = fm.boundingRect(lowercorner);
 
     setWidth( fm.width( QChar( line ) ) );
-    if ( height <= 80*20 ) {
-        setHeight(upperBound.height() + lowerBound.height());
-    }
-    else {
-        setHeight(height);
-    }
+    setHeight( ( ( height-1 ) / charHeight + 1 ) * charHeight );
 }
 
-void Artwork::drawLeftRoundBracket(QPainter& p, const ContextStyle& style, lu x, lu y, lu height)
+void Artwork::drawLeftRoundBracket( QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight )
 {
-    if ( height <= 80*20 ) {
-        drawSmallRoundBracket(p, style, leftRoundBracket, x, y, height/2);
+    if ( height <= 2*charHeight ) {
+        drawSmallRoundBracket( p, style, leftRoundBracket, x, y, charHeight );
 	//cout << "drawLeftSmallRoundBracket" << endl;
     }
     else {
-        drawBigRoundBracket(p, style, leftRoundBracket, x, y, 40*20, height);
+        drawBigRoundBracket( p, style, leftRoundBracket, x, y, charHeight );
 	//cout << "drawLeftBigRoundBracket" << endl;
     }
 }
 
-void Artwork::drawRightRoundBracket(QPainter& p, const ContextStyle& style, lu x, lu y, lu height)
+void Artwork::drawRightRoundBracket( QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight )
 {
-    if ( height <= 80*20 ) {
-        drawSmallRoundBracket(p, style, rightRoundBracket, x, y, height/2);
+    if ( height <= 2*charHeight ) {
+        drawSmallRoundBracket( p, style, rightRoundBracket, x, y, charHeight );
     }
     else {
-        drawBigRoundBracket(p, style, rightRoundBracket, x, y, 40*20, height);
+        drawBigRoundBracket( p, style, rightRoundBracket, x, y, charHeight );
         //p.drawRect( x, y, getWidth(), getHeight() );
     }
 }
@@ -481,8 +474,8 @@ void Artwork::drawSmallRoundBracket(QPainter& p, const ContextStyle& style, cons
     p.drawText( ptX, ptY+upperBound.height()-lowerBound.top(), QString( QChar( lowercorner ) ) );
 }
 
-void Artwork::drawBigRoundBracket(QPainter& p, const ContextStyle& style, const char chars[],
-                                  lu x, lu y, lu charHeight, lu height)
+void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const char chars[],
+                                   lu x, lu y, lu charHeight )
 {
     //kdDebug() << "Artwork::drawBigRoundBracket" << endl;
     QFont f = style.getSymbolFont();
@@ -500,6 +493,7 @@ void Artwork::drawBigRoundBracket(QPainter& p, const ContextStyle& style, const 
 
     pt ptX = style.layoutUnitToPixelX( x );
     pt ptY = style.layoutUnitToPixelY( y );
+    pt height = style.layoutUnitToPixelY( getHeight() );
 
     p.drawText( ptX, ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
     p.drawText( ptX, ptY+height-lowerBound.top()-lowerBound.height(),
@@ -526,106 +520,79 @@ void Artwork::drawBigRoundBracket(QPainter& p, const ContextStyle& style, const 
 }
 
 
-void Artwork::calcSquareBracket(const ContextStyle& style, const char chars[], lu height)
+void Artwork::calcSquareBracket( const ContextStyle& style, const char chars[], lu height, lu charHeight )
 {
-    lu charHeight;
-    char uppercorner = chars[0];
-    char lowercorner = chars[1];
+    //char uppercorner = chars[0];
+    //char lowercorner = chars[1];
     char line = chars[2];
 
-    if ( height <= 80*20 ) {
-        charHeight = height/2;
-    }
-    else {
-        charHeight = 40*20;
-        //line = leftBigRoundBracket[2];
-    }
-
     QFont f = style.getSymbolFont();
-    f.setPointSize(charHeight);
-    QFontMetrics fm(f);
-    LuRect upperBound = fm.boundingRect(uppercorner);
-    LuRect lowerBound = fm.boundingRect(lowercorner);
+    f.setPointSize( charHeight );
+    QFontMetrics fm( f );
+    //LuRect upperBound = fm.boundingRect(uppercorner);
+    //LuRect lowerBound = fm.boundingRect(lowercorner);
 
     setWidth( fm.width( QChar( line ) ) );
-    if (height <= 80*20) {
-        setHeight(upperBound.height() + lowerBound.height());
+    setHeight( ( ( height-1 ) / charHeight + 1 ) * charHeight );
+}
+
+void Artwork::drawLeftSquareBracket( QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight )
+{
+    if ( height <= 2*charHeight ) {
+        drawSmallRoundBracket( p, style, leftSquareBracket, x, y, charHeight );
     }
     else {
-        setHeight(height);
+        drawBigRoundBracket( p, style, leftSquareBracket, x, y, charHeight );
     }
 }
 
-void Artwork::drawLeftSquareBracket(QPainter& p, const ContextStyle& style, lu x, lu y, lu height)
+void Artwork::drawRightSquareBracket( QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight )
 {
-    if ( height <= 80*20 ) {
-        drawSmallRoundBracket(p, style, leftSquareBracket, x, y, height/2);
+    if ( height <= 2*charHeight ) {
+        drawSmallRoundBracket( p, style, rightSquareBracket, x, y, charHeight );
     }
     else {
-        drawBigRoundBracket(p, style, leftSquareBracket, x, y, 40*20, height);
-    }
-}
-
-void Artwork::drawRightSquareBracket(QPainter& p, const ContextStyle& style, lu x, lu y, lu height)
-{
-    if (height <= 80*20) {
-        drawSmallRoundBracket(p, style, rightSquareBracket, x, y, height/2);
-    }
-    else {
-        drawBigRoundBracket(p, style, rightSquareBracket, x, y, 40*20, height);
+        drawBigRoundBracket( p, style, rightSquareBracket, x, y, charHeight );
     }
 }
 
 
-void Artwork::calcCurlyBracket(const ContextStyle& style, const char chars[], lu height)
+void Artwork::calcCurlyBracket( const ContextStyle& style, const char chars[], lu height, lu charHeight )
 {
-    lu charHeight;
-    char uppercorner = chars[0];
-    char lowercorner = chars[1];
+    //char uppercorner = chars[0];
+    //char lowercorner = chars[1];
     char line = chars[2];
-    char middle = chars[3];
-
-    if (height <= 120*20) {
-        charHeight = height/3;
-    }
-    else {
-        charHeight = 40*20;
-    }
+    //char middle = chars[3];
 
     QFont f = style.getSymbolFont();
-    f.setPointSize(charHeight);
-    QFontMetrics fm(f);
-    LuRect upperBound = fm.boundingRect(uppercorner);
-    LuRect lowerBound = fm.boundingRect(lowercorner);
+    f.setPointSize( charHeight );
+    QFontMetrics fm( f );
+    //LuRect upperBound = fm.boundingRect(uppercorner);
+    //LuRect lowerBound = fm.boundingRect(lowercorner);
     //LuRect lineBound = fm.boundingRect(line);
-    LuRect middleBound = fm.boundingRect(middle);
+    //LuRect middleBound = fm.boundingRect(middle);
 
     setWidth( fm.width( QChar( line ) ) );
-    if ( height <= 120*20 ) {
-        setHeight(upperBound.height() + lowerBound.height() + middleBound.height());
+    setHeight( ( ( height-1 ) / charHeight + 1 ) * charHeight );
+}
+
+void Artwork::drawLeftCurlyBracket( QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight )
+{
+    if ( height <= 3*charHeight ) {
+        drawSmallCurlyBracket( p, style, leftCurlyBracket, x, y, charHeight );
     }
     else {
-        setHeight(height);
+        drawBigCurlyBracket( p, style, leftCurlyBracket, x, y, charHeight );
     }
 }
 
-void Artwork::drawLeftCurlyBracket(QPainter& p, const ContextStyle& style, lu x, lu y, lu height)
+void Artwork::drawRightCurlyBracket( QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight )
 {
-    if (height <= 120*20) {
-        drawSmallCurlyBracket(p, style, leftCurlyBracket, x, y, height/3);
+    if ( height <= 3*charHeight ) {
+        drawSmallCurlyBracket( p, style, rightCurlyBracket, x, y, charHeight );
     }
     else {
-        drawBigCurlyBracket(p, style, leftCurlyBracket, x, y, 40*20, height);
-    }
-}
-
-void Artwork::drawRightCurlyBracket(QPainter& p, const ContextStyle& style, lu x, lu y, lu height)
-{
-    if (height <= 120*20) {
-        drawSmallCurlyBracket(p, style, rightCurlyBracket, x, y, height/3);
-    }
-    else {
-        drawBigCurlyBracket(p, style, rightCurlyBracket, x, y, 40*20, height);
+        drawBigCurlyBracket( p, style, rightCurlyBracket, x, y, charHeight );
     }
 }
 
@@ -660,8 +627,8 @@ void Artwork::drawSmallCurlyBracket(QPainter& p, const ContextStyle& style, cons
                 QString( QChar( lowercorner ) ) );
 }
 
-void Artwork::drawBigCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[],
-                                  lu x, lu y, lu charHeight, lu height)
+void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const char chars[],
+                                   lu x, lu y, lu charHeight )
 {
     QFont f = style.getSymbolFont();
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
@@ -680,6 +647,7 @@ void Artwork::drawBigCurlyBracket(QPainter& p, const ContextStyle& style, const 
 
     pt ptX = style.layoutUnitToPixelX( x );
     pt ptY = style.layoutUnitToPixelY( y );
+    pt height = style.layoutUnitToPixelY( getHeight() );
 
     //p.setPen(Qt::gray);
     //p.drawRect(x, y, upperBound.width() + offset, height);

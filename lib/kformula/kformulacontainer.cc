@@ -577,8 +577,14 @@ void Container::compactExpression()
             KFCReplace* command = new KFCReplace( i18n( "Add element" ), this );
             command->addElement( element );
             execute( command );
+            return;
         }
     }
+    cursor->moveEnd();
+    cursor->moveRight();
+
+    emit cursorChanged( cursor );
+    emit cursorMoved( cursor );
 }
 
 
