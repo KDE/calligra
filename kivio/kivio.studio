@@ -1,13 +1,14 @@
 [BookmarkGlobal]
-Data=<!DOCTYPE Bookmarks ><Bookmarks type="root" >\n <Item line="243" projectName="kiviopart" type="item" id="1" name="setupActions" fileName="kivio_view.cpp" />\n <Item line="1019" projectName="kiviopart" type="item" id="2" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item line="1052" projectName="kiviopart" type="item" id="3" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="432" type="item" id="4" name="kiviopart:kivio_doc.cpp:374" fileName="kivio_doc.cpp" />\n <Item projectName="kiviosdk" line="85" type="item" id="5" name="kiviosdk:kivio_layer.cpp:63" fileName="kivio_layer.cpp" />\n</Bookmarks>\n
+Data=<!DOCTYPE Bookmarks ><Bookmarks type="root" >\n <Item projectName="kiviopart" line="243" type="item" id="1" name="setupActions" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="1019" type="item" id="2" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item projectName="kiviopart" line="1052" type="item" id="3" name="updateToolBar" fileName="kivio_view.cpp" />\n <Item line="438" projectName="kiviopart" type="item" id="4" name="kiviopart:kivio_doc.cpp:374" fileName="kivio_doc.cpp" />\n <Item line="85" projectName="kiviosdk" type="item" id="5" name="kiviosdk:kivio_layer.cpp:63" fileName="kivio_layer.cpp" />\n</Bookmarks>\n
 [Editor Options]
 ConfigFlags=1051
-TabWidth=4
+TabWidth=2
 UndoSteps=50
 [Main]
 DefaultLibrary=LIB_KDECORE = -lkdecore (LIB_QT),LIB_KDEUI = -lkdeui (LIB_KDECORE),LIB_QT = -lqt (LIB_X11),LIB_X11 = -lX11 -lXext,LIB_KFILE = -lkfile (LIB_KFM) (LIB_KDEUI),LIB_KFM = -lkfm (LIB_KDECORE),LIB_KAB = -lkab (LIB_KIMGIO) (LIB_KDECORE),LIB_KHTMLW = -lkhtmlw (LIB_KIMGIO) -ljscript,LIB_KIMGIO = -lkimgio (LIBJPEG) (LIBTIFF) (LIBPNG) (LIB_QT),LIB_MEDIATOOL = -lmediatool (LIB_KDECORE),LIBJPEG = -ljpeg,LIBPNG = -lpng (LIBZ) -lm,LIBTIFF = -ltiff (LIBJPEG) (LIBZ),LIBZ = -lz,XPMLIB = -lXpm (LIB_X11),GLLIB = -lMesaGL -lMesaGLU (LIB_X11)
 Name=kivio
 [kivio]
+ConfigureArguments=
 DebugMode=false
 DefRunPrj=kivio
 File=configure.in.in,res.cpp
@@ -16,6 +17,7 @@ Memo=
 TargetName=kivio
 Type=7
 Version=
+touchMakefile=false
 [kivio/kiviopart]
 AddCompileOptions=
 AddLinkOptions=
@@ -41,6 +43,7 @@ Version=
 isBinInstallProcess=true
 isHeaderInstallProcess=false
 isLibInstallProcess=true
+touchMakefile=false
 [kivio/kiviopart/kiviosdk]
 AddCompileOptions=
 AddToIncludePath=
@@ -60,6 +63,7 @@ Type=2
 Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=false
+touchMakefile=false
 [kivio/kiviopart/pics]
 File=arrow_back.xpm,arrow_first.xpm,arrow_forward.xpm,arrow_last.xpm,view_grid.xpm,view_guidelines.xpm,view_margins.xpm,view_pageborder.xpm,view_ruler.xpm,add_stencil.xpm,remove_stencil.xpm,pencolor.xpm,textcolor.xpm,fillcolor.xpm,copy_stencil.xpm,paste_stencil.xpm,cut_stencil.xpm,group_stencils.xpm,ungroup_stencils.xpm,font_bold.xpm,font_italic.xpm,font_under.xpm,linewidth.xpm,open_stencilset.png,font_names.xpm,font_size.xpm,bring_stencil_to_front.xpm,send_stencil_to_back.xpm,guides_horizontal.xpm,guides_vertical.xpm,view_manager.xpm,page_disabled.xpm,page_enabled.xpm,zoom_disabled.xpm,zoom_enabled.xpm,item_rename.xpm,item_add.xpm,item_remove.xpm,view_page.xpm,layer_add.xpm,layer_editable.xpm,layer_noeditable.xpm,layer_noprint.xpm,layer_novisible.xpm,layer_print.xpm,layer_remove.xpm,layer_visible.xpm,layer_connect.xpm,layer_noconnect.xpm
 Group=
@@ -69,22 +73,27 @@ TargetName=pics
 Type=8
 Version=
 isDataInstallProcess=true
+touchMakefile=false
 [kivio/kiviopart/stencils]
 File=
 Group=TestStencil1,Flowcharting
 InstallDataPath=$(kde_datadir)/kivio/stencils
 Memo=
+TargetName=stencils
 Type=8
 Version=
 isDataInstallProcess=true
+touchMakefile=false
 [kivio/kiviopart/stencils/Flowcharting]
 File=desc,icon.xpm
 Group=BasicFlowcharting
 InstallDataPath=$(kde_datadir)/kivio/stencils/Flowcharting
 Memo=
+TargetName=Flowcharting
 Type=8
 Version=
 isDataInstallProcess=true
+touchMakefile=false
 [kivio/kiviopart/stencils/Flowcharting/BasicFlowcharting]
 File=Card.sml,Card.xpm,Data.sml,Data.xpm,Decision.sml,Decision.xpm,DirectData.sml,DirectData.xpm,Display.sml,Display.xpm,Document.sml,Document.xpm,InternalStorage.sml,InternalStorage.xpm,LoopLimit.sml,LoopLimit.xpm,ManualInput.sml,ManualInput.xpm,ManualOperation.sml,ManualOperation.xpm,OffPageRef.sml,OffPageRef.xpm,OnPageRef.sml,OnPageRef.xpm,PaperTape.sml,PaperTape.xpm,PredefinedProcess.sml,PredefinedProcess.xpm,Preperation.sml,Preperation.xpm,Process.sml,Process.xpm,SequentialData.sml,SequentialData.xpm,StoredData.sml,StoredData.xpm,Terminator.sml,Terminator.xpm,desc,icon.xpm
 Group=
@@ -94,6 +103,7 @@ TargetName=BasicFlowcharting
 Type=8
 Version=1
 isDataInstallProcess=true
+touchMakefile=false
 [kivio/kiviopart/stencils/TestStencil1]
 AddCompileOptions=
 AddToIncludePath=
@@ -113,6 +123,7 @@ Type=2
 Version=1
 isHeaderInstallProcess=false
 isLibInstallProcess=true
+touchMakefile=false
 [kivio/kiviopart/tiles]
 File=tile_scissors1.xpm,tile_skulls1.xpm,tile_yellow_swirl.xpm
 Group=
@@ -122,6 +133,7 @@ TargetName=tiles
 Type=8
 Version=
 isDataInstallProcess=true
+touchMakefile=false
 [kivio/kiviopart/tklib]
 AddCompileOptions=
 AddToIncludePath=
@@ -141,6 +153,7 @@ Type=2
 Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=false
+touchMakefile=false
 [kivio/kiviopart/tools]
 AddCompileOptions=
 AddToIncludePath=
@@ -160,12 +173,13 @@ Type=2
 Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=false
+touchMakefile=false
 [kivio/kiviopart/ui]
 AddCompileOptions=
 AddToIncludePath=
 ConvenienceList=
 DebugInfo=false
-File=guidessetupdialogbase.ui,guidessetupdialog.cpp,guidessetupdialog.h,guides1pagebase.ui,guides2pagebase.ui,guides1page.cpp,guides1page.h,guides2page.cpp,guides2page.h,aligndialog.ui,kiviooptionsdialogbase.ui,kiviooptionsdialog.cpp,kiviooptionsdialog.h,enternamedialogbase.ui,viewitemrenamedialog.cpp,viewitemrenamedialog.h,kivio_birdeye_panel.cpp,kivio_birdeye_panel.h,kivio_birdeye_panel_base.ui,kivio_layer_panel_base.ui,kivio_layer_panel.cpp,kivio_layer_panel.h,gridsetupdialogbase.ui,gridsetupdialog.cpp,gridsetupdialog.h,pagesetupdialogbase.ui,pagesetupdialog.cpp,pagesetupdialog.h,pageoptionsdialogbase.ui,pageoptionsdialog.cpp,pageoptionsdialog.h,stencilsbaroptionsdialogbase.ui,stencilsbaroptionsdialog.cpp,stencilsbaroptionsdialog.h
+File=guidessetupdialogbase.ui,guidessetupdialog.cpp,guidessetupdialog.h,guides1pagebase.ui,guides2pagebase.ui,guides1page.cpp,guides1page.h,guides2page.cpp,guides2page.h,aligndialog.ui,kiviooptionsdialogbase.ui,kiviooptionsdialog.cpp,kiviooptionsdialog.h,enternamedialogbase.ui,viewitemrenamedialog.cpp,viewitemrenamedialog.h,kivio_birdeye_panel.cpp,kivio_birdeye_panel.h,kivio_birdeye_panel_base.ui,kivio_layer_panel_base.ui,kivio_layer_panel.cpp,kivio_layer_panel.h,gridsetupdialogbase.ui,gridsetupdialog.cpp,gridsetupdialog.h,pagesetupdialogbase.ui,pagesetupdialog.cpp,pagesetupdialog.h,pageoptionsdialogbase.ui,pageoptionsdialog.cpp,pageoptionsdialog.h,stencilsbaroptionsdialogbase.ui,stencilsbaroptionsdialog.cpp,stencilsbaroptionsdialog.h,kivioabout.ui
 Group=
 InstallHeaderPath=
 InstallLibPath=
@@ -179,12 +193,16 @@ Type=2
 Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=false
+touchMakefile=false
 [kivio/plugins]
 Group=kivioconnectortool,kiviotexttool,kiviozoomtool,kivioselecttool
 InstallDataPath=
+Memo=
 TargetName=plugins
 Type=8
+Version=
 isDataInstallProcess=false
+touchMakefile=false
 [kivio/plugins/kivioconnectortool]
 AddCompileOptions=
 AddToIncludePath=
@@ -204,6 +222,7 @@ Type=2
 Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=true
+touchMakefile=false
 [kivio/plugins/kivioconnectortool/straight_connector]
 AddCompileOptions=
 AddToIncludePath=
@@ -223,6 +242,7 @@ Type=2
 Version=1
 isHeaderInstallProcess=false
 isLibInstallProcess=true
+touchMakefile=false
 [kivio/plugins/kivioselecttool]
 AddCompileOptions=
 AddToIncludePath=
@@ -242,6 +262,7 @@ Type=2
 Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=true
+touchMakefile=false
 [kivio/plugins/kivioselecttool/select_pics]
 File=kivio_arrow.xpm
 Group=
@@ -251,6 +272,7 @@ TargetName=select_pics
 Type=8
 Version=
 isDataInstallProcess=true
+touchMakefile=false
 [kivio/plugins/kiviotexttool]
 AddCompileOptions=
 AddToIncludePath=
@@ -270,6 +292,7 @@ Type=2
 Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=true
+touchMakefile=false
 [kivio/plugins/kiviozoomtool]
 AddCompileOptions=
 AddToIncludePath=
@@ -289,6 +312,7 @@ Type=2
 Version=
 isHeaderInstallProcess=false
 isLibInstallProcess=true
+touchMakefile=false
 [kivio/plugins/kiviozoomtool/zoom_pics]
 File=kivio_zoom.xpm,kivio_zoom_allobject.xpm,kivio_zoom_hand.xpm,kivio_zoom_height.xpm,kivio_zoom_minus.xpm,kivio_zoom_page.xpm,kivio_zoom_plus.xpm,kivio_zoom_selected.xpm,kivio_zoom_width.xpm
 Group=
@@ -298,6 +322,7 @@ TargetName=zoom_pics
 Type=8
 Version=
 isDataInstallProcess=true
+touchMakefile=false
 [kivio/po]
 File=it.po,kivio.pot,ru.po
 Group=
@@ -305,3 +330,4 @@ Memo=
 TargetName=po
 Type=0
 Version=
+touchMakefile=false

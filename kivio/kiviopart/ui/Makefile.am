@@ -41,6 +41,7 @@ libui_la_SOURCES = \
 		kivio_protection_panel_base.ui\
 		kivio_protection_panel.cpp\
 		export_page_dialog_base.ui\
+		kivioabout.ui\
 		export_page_dialog.cpp
 EXTRA_DIST = \
 		guidessetupdialogbase.ui\
@@ -82,6 +83,7 @@ EXTRA_DIST = \
 		kivio_protection_panel.h\
 		export_page_dialog_base.ui\
 		export_page_dialog.cpp\
+		kivioabout.ui\
 		export_page_dialog.h
 ##############################################################
 ####                  END KDEStudio part                  ####

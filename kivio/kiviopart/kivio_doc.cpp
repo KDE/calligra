@@ -19,6 +19,7 @@
 #include <qdom.h>
 #include <qtextstream.h>
 #include <qbuffer.h>
+#include <qtabwidget.h>
 
 #include "tkunits.h"
 #include "kivio_doc.h"
@@ -26,6 +27,7 @@
 #include "kivio_map.h"
 #include "kivio_view.h"
 #include "kivio_factory.h"
+#include "kivioabout.h"
 
 #include "export_page_dialog.h"
 #include "kivio_config.h"
@@ -757,19 +759,23 @@ void KivioDoc::addShell(KoMainWindow *shell)
   help->insertSeparator();
   help->insertItem(BarIcon("kivio"), i18n("Get Stencil Sets"), this, SLOT(aboutGetStencilSets()));
 
+  shell->menuBar()->removeItemAt(shell->menuBar()->count() - 1);
   shell->menuBar()->insertItem(i18n("&Help"), help);
 }
 
 void KivioDoc::aboutKivio()
 {
-     kdDebug() << "aboutKivio" << endl;
-//  debug("aboutKivio");
+  KivioAbout *d = new KivioAbout(0, 0, true);
+  d->exec();
+  delete d;
 }
 
 void KivioDoc::aboutGetStencilSets()
 {
-     kdDebug() << "aboutGetStencilSets" << endl;
-//  debug("aboutGetStencilSets");
+  KivioAbout *d = new KivioAbout(0, 0, true);
+  d->tabWidget->setCurrentPage(3);
+  d->exec();
+  delete d;
 }
 
 #include "kivio_doc.moc"
