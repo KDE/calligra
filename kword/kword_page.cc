@@ -3902,6 +3902,22 @@ void KWPage::insertVariable(VariableType type)
       warning("HUHU... No variable format for type %d available!",static_cast<int>(type));
       return;
     }
+
+  switch (type)
+    {
+    case VT_DATE_FIX:
+      {
+	KWDateVariable *var = new KWDateVariable(doc,true,QDate::currentDate());
+	var->setVariableFormat(doc->getVarFormats().find(static_cast<int>(type)));
+	fc->getParag()->insertVariable(fc->getTextPos(),var);
+	fc->getParag()->setFormat(fc->getTextPos(),1,format);
+      } break;
+    default: break;
+    }
+
+  recalcPage(0L);
+  recalcCursor(true);
+  
   
   debug("void KWPage::insertVariable(VariableType type) ... successful");
 }

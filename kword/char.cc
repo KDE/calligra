@@ -21,12 +21,12 @@ KWString::KWString(QString _str)
     _max_ = 0;
     return;
   }
-  
+
   _len_ = strlen( _str );
   _max_ = _len_;
-  
+
   _data_ = alloc( _len_ );
-  
+
   unsigned int i = 0;
   while( _str[i] != 0L )
     _data_[i].c = _str[i++];
@@ -59,7 +59,7 @@ KWChar* KWString::alloc( unsigned int _len )
     p->attrib = 0L;
     p++;
   }
-  
+
   return c;
 }
 
@@ -68,7 +68,7 @@ void KWString::free( KWChar* _data, unsigned int _len )
   for( unsigned int i = 0; i < _len; ++i )
     freeChar( _data[ i ] );
 }
-  
+
 void KWString::append(KWChar *_text,unsigned int _len)
 {
   unsigned int oldlen = _len_;
@@ -85,16 +85,16 @@ void KWString::append(KWChar *_text,unsigned int _len)
 void KWString::insert( unsigned int _pos,QString _text)
 {
   assert( _pos <= _len_ );
- 
+
   unsigned int nl = strlen( _text );
-  
+
   unsigned int l = _len_;
 
   resize( _len_ + nl );
-  
+
   if ( _pos < l )
     memmove( _data_ + _pos + nl, _data_ + _pos, sizeof(KWChar) * ( l - _pos ) );
-  
+
   for( unsigned int i = 0; i < nl; ++i )
     {
       _data_[ _pos + i ].c = _text[i];
@@ -107,14 +107,14 @@ void KWString::insert( unsigned int _pos, const char _c )
   assert( _pos <= _len_ );
 
   unsigned int l = _len_;
-  
+
   resize( _len_ + 1 );
-  
+
   if ( _pos < l )
     memmove( _data_ + _pos + 1, _data_ + _pos, sizeof(KWChar) * ( l - _pos ) );
-  
+
   _data_[ _pos ].c = _c;
-  _data_[ _pos ].attrib = 0L;  
+  _data_[ _pos ].attrib = 0L;
 }
 
 void KWString::insert(unsigned int _pos,KWCharImage *_image)
@@ -122,12 +122,12 @@ void KWString::insert(unsigned int _pos,KWCharImage *_image)
   assert(_pos <= _len_);
 
   unsigned int l = _len_;
-  
+
   resize(_len_ + 1);
-  
+
   if (_pos < l)
     memmove(_data_ + _pos + 1,_data_ + _pos,sizeof(KWChar) * (l - _pos));
-  
+
   _data_[ _pos ].c = 0;
   _data_[ _pos ].attrib = _image;
 }
@@ -137,14 +137,29 @@ void KWString::insert(unsigned int _pos,KWCharTab *_tab)
   assert(_pos <= _len_);
 
   unsigned int l = _len_;
-  
+
   resize(_len_ + 1);
-  
+
   if (_pos < l)
     memmove(_data_ + _pos + 1,_data_ + _pos,sizeof(KWChar) * (l - _pos));
-  
+
   _data_[ _pos ].c = 0;
   _data_[ _pos ].attrib = _tab;
+}
+
+void KWString::insert(unsigned int _pos,KWCharVariable *_var)
+{
+  assert(_pos <= _len_);
+
+  unsigned int l = _len_;
+
+  resize(_len_ + 1);
+
+  if (_pos < l)
+    memmove(_data_ + _pos + 1,_data_ + _pos,sizeof(KWChar) * (l - _pos));
+
+  _data_[ _pos ].c = 0;
+  _data_[ _pos ].attrib = _var;
 }
 
 bool KWString::remove( unsigned int _pos,unsigned int _len = 1 )
@@ -200,14 +215,14 @@ QString KWString::toString(unsigned int _pos,unsigned int _len)
 void KWString::saveFormat(ostream &out)
 {
   unsigned int start = 0;
-  
+
   for (unsigned int i = 0;i < _len_;i++)
     {
       if (_data_[i].attrib->getClassId() != ID_KWCharFormat)
 	{
 	  if (start < i)
 	    {
-	      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start 
+	      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start
 		  << "\" len=\"" << i - start << "\">" << endl;
 	      _data_[start].attrib->save(out);
 	      out << etag << "</FORMAT>" << endl;
@@ -234,7 +249,7 @@ void KWString::saveFormat(ostream &out)
 	{
 	  if (start < i)
 	    {
-	      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start 
+	      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start
 		  << "\" len=\"" << i - start << "\">" << endl;
 	      _data_[start].attrib->save(out);
 	      out << etag << "</FORMAT>" << endl;
@@ -245,7 +260,7 @@ void KWString::saveFormat(ostream &out)
 
   if (start < _len_)
     {
-      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start 
+      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start
 	  << "\" len=\"" << _len_ - start << "\">" << endl;
       _data_[start].attrib->save(out);
       out << etag << "</FORMAT>" << endl;
@@ -260,7 +275,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
+	
       // format
       if (name == "FORMAT")
 	{
@@ -330,7 +345,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 	      _load = false;
 	    }
 	}
-      
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -343,7 +358,7 @@ void KWString::resize(unsigned int _size,bool del = true)
 {
   if ( _size == _len_ )
     return;
-  
+
   if ( _size < _len_ )
   {
     if (del) free( _data_ + _size, _len_ - _size );
@@ -351,18 +366,18 @@ void KWString::resize(unsigned int _size,bool del = true)
 
     return;
   }
-  
+
   /* _size > _len_ */
   if ( _size < _max_ )
   {
     _len_ = _size;
     return;
   }
-  
+
   // Alloc some bytes more => faster when increasing size in steps of 1
   KWChar *d = alloc( _size + 10 );
   if ( _data_ )
-  {      
+  {
     memcpy( d, _data_, _len_ * sizeof(KWChar) );
     delete []_data_;
   }
@@ -375,9 +390,9 @@ void KWString::resize(unsigned int _size,bool del = true)
 KWChar* KWString::copy(KWChar *_data,unsigned int _len)
 {
   KWChar *__data;
-  
+
   __data = alloc(_len);
-  
+
   unsigned int i = 0;
   for (i = 0;i < _len;i++)
     {
@@ -386,16 +401,16 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
 	{
 	  switch (_data[i].attrib->getClassId())
 	    {
-	    case ID_KWCharFormat: 
+	    case ID_KWCharFormat:
 	      {
-		KWCharFormat *attrib = (KWCharFormat*)_data[i].attrib; 
+		KWCharFormat *attrib = (KWCharFormat*)_data[i].attrib;
 		attrib->getFormat()->incRef();
 		KWCharFormat *f = new KWCharFormat(attrib->getFormat());
 		__data[i].attrib = f;
 	      } break;
 	    case ID_KWCharImage:
 	      {
-		KWCharImage *attrib = (KWCharImage*)_data[i].attrib; 
+		KWCharImage *attrib = (KWCharImage*)_data[i].attrib;
 		attrib->getImage()->incRef();
 		KWCharImage *f = new KWCharImage(attrib->getImage());
 		__data[i].attrib = f;
@@ -420,11 +435,11 @@ int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,
   if (res != -1)
     {
       if (!_format && !_whole) return res;
-      
-      if (!_format && _whole) 
+
+      if (!_format && _whole)
 	{
 	  if ((res == 0 || res > 0 && str[res - 1] == ' ') &&
-	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) < 
+	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) <
 	       static_cast<int>(_len_) && str[res + _expr.length()] == ' '))
 	    return res;
 	  return -2;
@@ -435,9 +450,9 @@ int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,
 	{	
 	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
 	    return -2;
-	  
+	
 	  format = dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat();
-	  
+	
 	  if (_format->checkFamily && _format->family != format->getUserFont()->getFontName())
 	    return -2;
 	  if (_format->checkColor && _format->color != format->getColor())
@@ -459,7 +474,7 @@ int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,
       else
 	{
 	  if ((res == 0 || res > 0 && str[res - 1] == ' ') &&
-	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) < 
+	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) <
 	       static_cast<int>(_len_) && str[res + _expr.length()] == ' '))
 	    return res;
 	  return -2;
@@ -478,15 +493,15 @@ int KWString::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _inde
   if (res != -1)
     {
       if (!_format) return res;
-      
+
       KWFormat *format;
       for (int i = 0;i < _len;i++)
 	{	
 	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
 	    return -2;
-	  
+	
 	  format = dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat();
-	  
+	
 	  if (_format->checkFamily && _format->family != format->getUserFont()->getFontName())
 	    return -2;
 	  if (_format->checkColor && _format->color != format->getColor())
@@ -516,11 +531,11 @@ int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _ind
   if (res != -1)
     {
       if (!_format && !_whole) return res;
-      
-      if (!_format && _whole) 
+
+      if (!_format && _whole)
 	{
 	  if ((res == 0 || res > 0 && str[res - 1] == ' ') &&
-	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) < 
+	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) <
 	       static_cast<int>(_len_) && str[res + _expr.length()] == ' '))
 	    return res;
 	  return -2;
@@ -531,9 +546,9 @@ int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _ind
 	{	
 	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
 	    return -2;
-	  
+	
 	  format = dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat();
-	  
+	
 	  if (_format->checkFamily && _format->family != format->getUserFont()->getFontName())
 	    return -2;
 	  if (_format->checkColor && _format->color != format->getColor())
@@ -555,7 +570,7 @@ int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _ind
       else
 	{
 	  if ((res == 0 || res > 0 && str[res - 1] == ' ') &&
-	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) < 
+	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) <
 	       static_cast<int>(_len_) && str[res + _expr.length()] == ' '))
 	    return res;
 	  return -2;
@@ -578,6 +593,7 @@ void freeChar( KWChar& _char )
       case ID_KWCharFormat:
       case ID_KWCharImage:
       case ID_KWCharTab:
+      case ID_KWCharVariable:
 	delete _char.attrib;
 	break;
       default:

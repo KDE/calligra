@@ -12,6 +12,7 @@ class KWordDocument;
 #include "frame.h"
 #include "kword_utils.h"
 #include "searchdia.h"
+#include "variable.h"
 
 #include <assert.h>
 #include <iostream>
@@ -23,7 +24,7 @@ class KWordDocument;
  */
 class KWParag
 {
-public:    
+public:
   /**
    * Creates a new instance of KWParag.
    *
@@ -45,7 +46,7 @@ public:
    * The destructor does not remove this paragrph from the chain of paragraphs!
    */
   ~KWParag();
-  
+
   /**
    * @return the paragraph following this one or 0L if this is the last one.
    */
@@ -53,7 +54,7 @@ public:
   /**
    * @return the paragraph before this one or 0L if this is the first one.
    */
-  KWParag* getPrev() { return prev; }    
+  KWParag* getPrev() { return prev; }
   /**
    * @return The page this paragraph starts on. This value is only valid if this paragraph is
    *         in front of the last modified paragraph. The value is zoomed.
@@ -82,7 +83,7 @@ public:
    *         The value is zoomed.
    */
   unsigned int getPTYEnd() { return ptYEnd; }
-  
+
   /**
    * @return the size of the text in bytes. This does NOT mean
    *         the amount of characters or whatever. The size needed
@@ -96,14 +97,14 @@ public:
   KWChar* getText() { return text.data(); }
   KWChar* getChar( unsigned int _pos ) { assert( _pos < text.size() ); return text.data() + _pos; }
   KWString* getKWString() { return &text; }
-  
+
   /**
    * @return the paragraph Layout of this paragraph.
    */
   KWParagLayout* getParagLayout() { return paragLayout; }
-  
+
   void setParagLayout(KWParagLayout* _paragLayout) { *paragLayout = *_paragLayout; }
-  
+
   /**
    * Fille '_str' with the counters text. If this paragraph has no counter,
    * an empty but non null string is returned.
@@ -114,7 +115,7 @@ public:
   void makeCounterWidth();
   QString getCounterText() { return counterText; }
   QString getCounterWidth() { return counterWidth; }
-  
+
   /**
    * Set the paragraph following this one.
    */
@@ -123,35 +124,36 @@ public:
    * Set the paragraph before this one.
    */
   void setPrev( KWParag* _p ) { prev = _p; }
-  
+
   void setStartPage( unsigned int _page ) { startPage = _page; }
   void setEndPage( unsigned int _page ) { endPage = _page; }
-  void setStartFrame( unsigned int _frame ) { startFrame = _frame; }    
-  void setEndFrame( unsigned int _frame ) { endFrame = _frame; }    
+  void setStartFrame( unsigned int _frame ) { startFrame = _frame; }
+  void setEndFrame( unsigned int _frame ) { endFrame = _frame; }
   void setPTYStart( unsigned int _y ) { ptYStart = _y; }
   void setPTYEnd( unsigned int _y ) { ptYEnd = _y; }
-  
-  void insertText( unsigned int _pos,QString _text);
+
+  void insertText(unsigned int _pos,QString _text);
+  void insertVariable(unsigned int _pos,KWVariable *_var);
   void insertPictureAsChar(unsigned int _pos,QString _filename);
   void insertTab(unsigned int _pos);
   void appendText(KWChar *_text,unsigned int _len);
   bool deleteText( unsigned int _pos, unsigned int _len = 1);
   void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
-  
+
   void save(ostream &out);
   void load(KOMLParser&,vector<KOMLAttrib>&);
-  
+
   int *getCounterData() { return counterData; }
-  
+
   void applyStyle(QString _style);
   void tabListChanged(QList<KoTabulator>*);
-  
+
   int find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole);
   int find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false);
   int findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole);
   int findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false);
   void replace(int _pos,int _len,QString _text,KWFormat &_format);
-  
+
   void setHardBreak(bool hb) { hardBreak = hb; }
   bool hasHardBreak() { return hardBreak; }
 
@@ -161,7 +163,7 @@ public:
     { frameSet = _fs; }
   void setDocument(KWordDocument *_doc)
     { document = _doc; }
-  
+
 protected:
   /**
    * Pointer to the previous paragraph or 0L if this is the first one.
@@ -171,7 +173,7 @@ protected:
    * Pointer to the next paragraph or 0L if this is the last one.
    */
   KWParag *next;
-  
+
   /**
    * Pointer to the paragraph layout used.
    *
@@ -222,13 +224,13 @@ protected:
    * The value is not zoomed.
    */
   unsigned int ptYEnd;
-  
+
   KWTextFrameSet *frameSet;
   int counterData[16];
   QString counterText;
   QString counterWidth;
   bool hardBreak;
-  
+
   QString paragName;
 
 };

@@ -39,9 +39,9 @@ public:
 
   virtual void setFormat(QString _format)
   { format = _format; }
-  
+
   virtual QString convert(KWVariable *_var) = 0;
-  
+
 protected:
   QString format;
 
@@ -60,9 +60,9 @@ public:
   { return VFT_DATE; }
 
   virtual void setFormat(QString _format);
-  
+
   virtual QString convert(KWVariable *_var);
-  
+
 };
 
 /******************************************************************/
@@ -100,9 +100,9 @@ public:
   QString getText()
   { return varFormat->convert(this); }
 
-  virtual void setInfo(int _frameSetNum,int _frameNum,int _pageNum,int _paragNum) 
+  virtual void setInfo(int _frameSetNum,int _frameNum,int _pageNum,int _paragNum)
   { frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; paragNum = _pageNum; }
-  
+
   virtual void recalc() {}
 
 protected:
@@ -110,7 +110,7 @@ protected:
   KWVariableFormat *varFormat;
   QString text;
   int frameSetNum,frameNum,paragNum,pageNum;
-  
+
 };
 
 /******************************************************************/
@@ -124,7 +124,7 @@ public:
 
   virtual VariableType getType()
   { return VT_PGNUM; }
-  
+
   virtual void recalc() {}
 
 protected:
@@ -146,10 +146,13 @@ public:
 
   virtual void recalc();
 
+  QDate getDate() { return date; }
+  
 protected:
   QDate date;
   bool fix;
-  
+
 };
 
 #endif
+

@@ -1121,7 +1121,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       varFormats.insert(VT_DATE_VAR,new KWVariableDateFormat());
       // ... and so on ...
     }
-      
+
   return true;
 }
 
@@ -1614,7 +1614,8 @@ KWParag* KWordDocument::findFirstParagOfRect(unsigned int _ypos,unsigned int _pa
 }
 
 /*================================================================*/
-bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,bool _viewFormattingChars = false)
+bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,
+			      bool _viewFormattingChars = false,bool _drawVarBack = true)
 {
   _painter.save();
 
@@ -1756,6 +1757,20 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 					  ((_fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt())
 					   - ((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage()->height())),
 				   *((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage());
+		_fc.cursorGotoNextChar( _painter );
+	      } break;
+	    case ID_KWCharVariable:
+	      {
+		KWCharVariable *v = dynamic_cast<KWCharVariable*>(text[_fc.getTextPos()].attrib);
+		
+		if (_drawVarBack)
+		  _painter.fillRect(tmpPTPos - xOffset,_fc.getPTY(),
+				    _painter.fontMetrics().width(v->getText()),_fc.getLineHeight(),gray);
+		
+		_painter.drawText(tmpPTPos - xOffset,
+				 _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
+				 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus,v->getText());
+		
 		_fc.cursorGotoNextChar( _painter );
 	      } break;
 	    case ID_KWCharTab:
@@ -2872,7 +2887,7 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 		  fc->init(dynamic_cast<KWTextFrameSet*>(frames.at(fc->getFrameSet() - 1))->getFirstParag(),*painter,false,true);
 		while (!bend)
 		  {
-		    printLine(*fc,*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
+		    printLine(*fc,*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight(),false,false);
 		    bend = !fc->makeNextLineLayout(*painter);
 		  }
 	      } break;

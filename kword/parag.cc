@@ -11,7 +11,7 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, KWParag* _next, 
+KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, KWParag* _next,
 		 KWParagLayout* _paragLayout )
 {
   prev = _prev;
@@ -20,12 +20,12 @@ KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, 
   *paragLayout = *_paragLayout;
   document = _doc;
   frameSet = _frameSet;
-  
+
   if (prev)
     prev->setNext(this);
   else
     frameSet->setFirstParag(this);
-    
+
   if (next)
     next->setPrev(this);
 
@@ -78,7 +78,7 @@ KWParag::~KWParag()
 void KWParag::makeCounterText()
 {
   QString buffer = "";
-  
+
   switch (paragLayout->getCounterType())
     {
     case KWParagLayout::CT_BULLET:
@@ -157,7 +157,7 @@ void KWParag::makeCounterText()
       } break;
     default: break;
     }
-  
+
   //buffer += " ";
   counterText = buffer.copy();
 
@@ -179,6 +179,12 @@ void KWParag::makeCounterWidth()
 void KWParag::insertText( unsigned int _pos,QString _text)
 {
   text.insert(_pos,_text);
+}
+
+void KWParag::insertVariable(unsigned int _pos,KWVariable *_var)
+{
+  KWCharVariable *v = new KWCharVariable(document,_var);
+  text.insert(_pos,v);
 }
 
 void KWParag::insertPictureAsChar(unsigned int _pos,QString _filename)
@@ -211,10 +217,22 @@ bool KWParag::deleteText( unsigned int _pos, unsigned int _len = 1)
 void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_format )
 {
   assert( _pos < text.size() );
-  
+
   for (unsigned int i = 0;i < _len;i++)
     {
-      if (text.data()[_pos + i].c == 0) continue;
+      if (text.data()[_pos + i].c == 0) 
+	{
+	  switch (text.data()[_pos + i].attrib->getClassId())
+	    {
+	    case ID_KWCharVariable:
+	      {
+		KWFormat *format = document->getFormatCollection()->getFormat(_format);
+		dynamic_cast<KWCharVariable*>(text.data()[_pos + i].attrib)->setFormat(format);
+	      } break;
+	    default: break;
+	    }
+	continue;
+	}
       freeChar(text.data()[_pos + i]);
       KWFormat *format = document->getFormatCollection()->getFormat(_format);
       KWCharFormat *f = new KWCharFormat(format);
@@ -239,13 +257,13 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
   string tag;
   string name;
   string tmp;
-  
+
   QString tmp2;
 
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
+	
       // text
       if (name == "TEXT")
 	{
@@ -303,8 +321,8 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       else
-	cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -391,7 +409,7 @@ void KWParag::applyStyle(QString _style)
 		}
 	    }
 	}
-      
+
       if (document->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_SAME_SIZE)
 	{
 	  KWFormat f(document);
@@ -445,13 +463,13 @@ void KWParag::applyStyle(QString _style)
 	  QColor c = tmp->getFormat().getColor();
 	  pl->getFormat().setColor(c);
 	}
-      
+
       if (!document->getApplyStyleTemplate() & KWordDocument::U_TABS)
 	pl->setTabList(paragLayout->getTabList());
 
       delete paragLayout;
       paragLayout = pl;
-    }  
+    }
 }
 
 void KWParag::tabListChanged(QList<KoTabulator>* _tabList)

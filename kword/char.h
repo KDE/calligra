@@ -18,7 +18,7 @@ class KWordDocument;
 class KWTextFrameSet;
 
 enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2,ID_KWCharTab = 3,ID_KWCharVariable = 4};
- 
+
 class KWCharAttribute
 {
 public:
@@ -30,7 +30,7 @@ public:
   virtual bool operator==(const KWCharAttribute &_attrib)
     { return classId == const_cast<KWCharAttribute>(_attrib).getClassId(); }
 
-  virtual void save(ostream &out) 
+  virtual void save(ostream &out)
     {;}
 
 protected:
@@ -43,15 +43,15 @@ class KWCharFormat : public KWCharAttribute
 public:
   KWCharFormat() : KWCharAttribute() { classId = ID_KWCharFormat; format = 0L; }
   KWCharFormat( KWFormat* _format ) : KWCharAttribute() { classId = ID_KWCharFormat; format = _format; }
-  ~KWCharFormat() { format->decRef(); format = 0L; }
+  ~KWCharFormat() { if (format) format->decRef(); format = 0L; }
 
   virtual KWFormat* getFormat()
     { return format; }
   virtual void setFormat(KWFormat *_format)
     { format = _format; }
-  virtual bool operator==(KWCharFormat &_attrib) { 
-    return classId == _attrib.getClassId() && 
-      (format) && *format == *_attrib.getFormat(); 
+  virtual bool operator==(KWCharFormat &_attrib) {
+    return classId == _attrib.getClassId() &&
+      (format) && *format == *_attrib.getFormat();
   }
 
   virtual void save(ostream &out)
@@ -91,21 +91,16 @@ public:
 
 };
 
-class KWCharVariable : public KWCharAttribute
+class KWCharVariable : public KWCharFormat
 {
 public:
-  KWCharVariable(KWordDocument *_doc) : var(_doc) { classId = ID_KWCharVariable; format = 0L; }
-  ~KWCharVariable() { format->decRef(); format = 0L; }
+  KWCharVariable(KWordDocument *_doc,KWVariable *_var) : KWCharFormat() { classId = ID_KWCharVariable; var = _var; }
+  ~KWCharVariable() { if (var) delete var; if (format) format->decRef(); format = 0L; }
 
-  virtual KWFormat* getFormat()
-    { return format; }
-  virtual void setFormat(KWFormat *_format)
-    { format = _format; }
-  QString getText();
+  QString getText() { return var->getText(); }
 
 protected:
-  KWFormat *format;
-  KWVariable var;
+  KWVariable *var;
 
 };
 
@@ -121,16 +116,16 @@ struct KWChar
 class KWString
 {
 public:
-  KWString() 
+  KWString()
     { _max_ = 0; _len_ = 0; _data_ = 0L; }
   KWString(QString _text);
   KWString(const KWString &_string);
-  ~KWString() 
+  ~KWString()
     { free(_data_,_len_); delete [] _data_; }
 
   KWString &operator=(const KWString &_string);
 
-  unsigned int size() 
+  unsigned int size()
     { return _len_; }
   unsigned int max()
     { return _max_; }
@@ -139,6 +134,7 @@ public:
   void insert(unsigned int _pos,const char _c);
   void insert(unsigned int _pos,KWCharImage *_image);
   void insert(unsigned int _pos,KWCharTab *_tab);
+  void insert(unsigned int _pos,KWCharVariable *_var);
   void resize(unsigned int _size,bool del = true);
   bool remove(unsigned int _pos,unsigned int _len = 1);
   KWChar* split(unsigned int _pos);
@@ -163,7 +159,7 @@ protected:
   unsigned int _len_;
   unsigned int _max_;
   KWChar* _data_;
-  
+
 };
 
 void freeChar(KWChar& _char);

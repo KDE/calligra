@@ -24,13 +24,20 @@ void KWVariableDateFormat::setFormat(QString _format)
 {
   KWVariableFormat::setFormat(_format);
 }
-  
+
 /*================================================================*/
 QString KWVariableDateFormat::convert(KWVariable *_var)
 {
-  return QString();
+  if (_var->getType() != VT_DATE_FIX)
+    {
+      warning("Can't convert variable of type %d to a date!!!",_var->getType());
+      return QString();
+    }
+  
+  // for now...
+  return dynamic_cast<KWDateVariable*>(_var)->getDate().toString();
 }
- 
+
 /******************************************************************/
 /* Class: KWDateVariable                                          */
 /******************************************************************/
@@ -43,7 +50,7 @@ KWDateVariable::KWDateVariable(KWordDocument *_doc,bool _fix,QDate _date)
     date = QDate::currentDate();
   else
     date = _date;
-  
+
   recalc();
 }
 

@@ -256,7 +256,8 @@ public:
    */
   bool isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos);
 
-  bool printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,bool _viewFormattingChars = false);
+  bool printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,
+		 bool _viewFormattingChars = false,bool _drawVarBack = true);
   void printBorders(QPainter &_painter,int xOffset,int yOffset,int _w,int _h);
 
   void drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset);
@@ -390,7 +391,7 @@ public:
   void updateTableHeaders(QList<KWGroupManager> &grpMgrs);
 
   QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
-  
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -490,7 +491,7 @@ protected:
   int numParags;
 
   KWCommandHistory history;
-  
+
   QIntDict<KWVariableFormat> varFormats;
   
 };

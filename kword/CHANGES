@@ -872,3 +872,9 @@ Reggie, 27.2.1999:
 Reggie, 28.2.1999:
 ------------------
 - Much more work on variables
+
+Reggie, 1.3.1999:
+-----------------
+- Implemented date variable and date variable format
+- Implemented inserting variables (works with date variables)
+- Some fixes in formatting text
