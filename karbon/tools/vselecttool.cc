@@ -78,6 +78,7 @@ VSelectTool::draw()
 		if( m_state == normal )
 		{
 			m_state = ( m_activeNode == node_none ) ? moving : scaling;
+			recalc();
 		}
 
 		VObjectListIterator itr = m_objects;
@@ -101,60 +102,6 @@ VSelectTool::draw()
 
 		m_state = normal;
 	}
-/*
-
-	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
-	fp.setY( -fp.y() + view()->canvasWidget()->contentsHeight() );
-	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
-
-	KoRect rect = view()->part()->document().selection()->boundingBox();
-
-	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
-	if( view()->part()->document().selection()->objects().count() > 0 &&
-		( m_state != normal || m_activeNode != node_none || rect.contains( fp * ( 1.0 /  view()->zoom() ) ) ) )
-	{
-		if( m_state == normal )
-			m_state = ( m_activeNode == node_none ) ? moving : scaling;
-
-		// move operation
-		QWMatrix mat;
-		if( m_state == moving )
-			mat.translate(	( m_lp.x() - fp.x() ) / view()->zoom(),
-							( m_lp.y() - fp.y() ) / view()->zoom() );
-		else
-		{
-			KoPoint sp = KoPoint( m_sp.x() - view()->canvasWidget()->contentsX(), m_sp.y() - view()->canvasWidget()->contentsY() );
-			mat.translate( sp.x(), sp.y() );
-			mat.scale( m_s1, m_s2 );
-			mat.translate(	- ( sp.x() + view()->canvasWidget()->contentsX() ),
-							- ( sp.y() + view()->canvasWidget()->contentsY() ) );
-		}
-
-		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = view()->part()->document().selection()->objects();
-		VObjectList list;
-		list.setAutoDelete( true );
-		for( ; itr.current() ; ++itr )
-		{
-			list.append( itr.current()->clone() );
-		}
-		VObjectListIterator itr2 = list;
-		painter->setZoomFactor( view()->zoom() );
-		for( ; itr2.current() ; ++itr2 )
-		{
-			itr2.current()->setState( VObject::edit );
-			itr2.current()->transform( mat );
-
-			itr2.current()->draw(
-				painter,
-				itr2.current()->boundingBox() );
-		}
-		painter->setZoomFactor( 1.0 );
-	}
-	else
-
-	view()->painterFactory()->painter()->end();
-*/
 }
 
 void
@@ -273,6 +220,7 @@ VSelectTool::mouseDragRelease()
 		view()->part()->addCommand(
 			new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ),
 			true );
+		m_s1 = m_s2 = 1;
 	}
 }
 
