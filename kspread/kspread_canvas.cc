@@ -16,7 +16,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
-#include <cassert>
+#include <assert.h>
 #include <stdio.h>
 #include <qlabel.h>
 #include <qpainter.h>

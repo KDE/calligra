@@ -17,10 +17,32 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <unistd.h>
+#include <assert.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <pwd.h>
+
 #include <qprinter.h>
 #include <qdom.h>
 #include <qtextstream.h>
 #include <qbuffer.h>
+#include <qdatetime.h>
+
+#include <kstddirs.h>
+#include <kdebug.h>
+#include <kconfig.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+#include <kurl.h>
+#include <kapp.h>
+#include <klocale.h>
+
+#include <koscript_context.h>
+#include <koTemplateChooseDia.h>
+#include <koFilterManager.h>
+#include <koStoreDevice.h>
 
 #include "kspread_doc.h"
 #include "kspread_shell.h"
@@ -31,27 +53,6 @@
 #include "kspread_factory.h"
 
 #include "KSpreadDocIface.h"
-
-#include <unistd.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-#include <kurl.h>
-#include <kapp.h>
-#include <cassert>
-#include <qdatetime.h>
-#include <klocale.h>
-#include <sys/types.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <pwd.h>
-
-#include <koscript_context.h>
-#include <kstddirs.h>
-#include <kdebug.h>
-#include <kconfig.h>
-#include <koTemplateChooseDia.h>
-#include <koFilterManager.h>
-#include <koStoreDevice.h>
 
 using namespace std;
 

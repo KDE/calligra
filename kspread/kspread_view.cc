@@ -20,15 +20,14 @@
 #include <qprinter.h> // has to be first
 
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <cassert>
+#include <stdlib.h>
+#include <time.h>
+#include <assert.h>
 
 #include <qpushbutton.h>
 #include <qprintdialog.h>
 #include <qcollection.h>
 #include <qkeycode.h>
-#include <kaction.h>
 #include <qmime.h>
 #include <qtoolbutton.h>
 #include <qtimer.h>
@@ -42,6 +41,7 @@
 #include <kmessagebox.h>
 #include <kformulaedit.h>
 #include <kcoloractions.h>
+#include <kaction.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
