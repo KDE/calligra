@@ -32,7 +32,6 @@
 #include <ktmainwindow.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
-#include <kfm.h>
 #include <drag.h>
 
 #include <qlist.h>
@@ -158,7 +157,7 @@ public slots:
   void setPenColor (const QBrush& b);
   void setFillColor (const QBrush& b);
 
-  void slotKFMJobDone ();
+  void slotKFMJobDone (int id);
   void dropActionSlot (KDNDDropZone* dzone);
 
   void showCursorPosition (int x, int y);
@@ -242,8 +241,6 @@ private:
 
   // direction of file transfer
   TransferDirection ioDir;
-  // the KFM connection
-  KFM *kfmConn;
   // the drop zone
   KDNDDropZone *dropZone;
   

@@ -36,6 +36,7 @@
 #endif
 
 #include <kapp.h>
+#include <kio_job.h>
 #include "version.h"
 #include "KIllustrator.h"
 #include "PStateManager.h"
@@ -45,6 +46,7 @@ int main (int argc, char** argv) {
   fpsetmask (fpgetmask() & ~(FP_X_DZ|FP_X_INV));
 #endif
   KApplication* app = new KApplication (argc, argv, APP_NAME);
+  KIOJob::initStatic();
 
   QObject::connect (app, SIGNAL(saveYourself ()), 
 		    PStateManager::instance (), SLOT(saveDefaultSettings ()));

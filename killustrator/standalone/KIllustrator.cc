@@ -84,6 +84,7 @@
 #include <unistd.h>
 #include <kimgio.h>
 #include <ktoolbar.h>
+#include <kio_job.h>
 
 #include "koPageLayoutDia.h"
 
@@ -103,10 +104,6 @@ bool KIllustrator::previewHandlerRegistered = false;
 KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   windows.setAutoDelete (false);
   windows.append (this);
-
-  // if kfmConn is null, there is no
-  // current IO job.
-  kfmConn = 0;
 
   psm = PStateManager::instance ();
 
@@ -1052,16 +1049,14 @@ void KIllustrator::openURL (const char* surl) {
   }
   else {
     // network file
-    kfmConn = new KFM;
-    if (kfmConn->isOK ()) {
-      QString tmpFile;
+    KIOJob * kiojob = new KIOJob;
+    QString tmpFile;
 
-      connect (kfmConn, SIGNAL(finished ()), this, SLOT (slotKFMJobDone ()));
-      tmpFile.sprintf ("file:/tmp/killu%i", time (0L));
-      kfmConn->copy (surl, tmpFile);
-      KURL tmpURL (tmpFile);
-      localFile = tmpURL.path ();
-    }
+    connect (kiojob, SIGNAL(finished ( int )), this, SLOT (slotKFMJobDone ( int )));
+    tmpFile.sprintf ("file:/tmp/killu%i", time (0L));
+    kiojob->copy (surl, tmpFile);
+    KURL tmpURL (tmpFile);
+    localFile = tmpURL.path ();
   }
 }
 
@@ -1269,9 +1264,7 @@ void KIllustrator::dropActionSlot (KDNDDropZone* dzone) {
   }
 }
 
-void KIllustrator::slotKFMJobDone () {
-  delete kfmConn;
-  kfmConn = 0L;
+void KIllustrator::slotKFMJobDone ( int ) {
   openFile ((const char *)localFile);
 }
 
