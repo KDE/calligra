@@ -65,24 +65,21 @@ public:
 public slots:
 
   void slotUpdateView(const QRect &area);
-  // slots the CanvasView connects to 
   void slotCVPaint(QPaintEvent *e);
   void slotCVMousePress(QMouseEvent *e);
   void slotCVMouseMove(QMouseEvent *e);
   void slotCVMouseRelease(QMouseEvent *e);
+  void scrollH(int);
+  void scrollV(int);
+
   virtual void slotActivateMoveTool();
   virtual void slotActivateBrushTool();
 
 protected:
-
-  void scrollH( int );
-  void scrollV( int );
-
   virtual void init();
 
   void setupScrollbars();
   void setupRulers();
-  void setRanges();
 
   virtual bool event( const char* _event, const CORBA::Any& _value );
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );

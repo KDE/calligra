@@ -272,7 +272,6 @@ void KImageShopView::createGUI()
   // setup GUI
   setupScrollbars();
   setupRulers();
-  setRanges();
 
   // connect canvasview
   QObject::connect(m_pCanvasView, SIGNAL(sigPaint(QPaintEvent*)), this, SLOT(slotCVPaint(QPaintEvent*)));
@@ -322,61 +321,16 @@ void KImageShopView::setupRulers()
 {
   m_pHRuler = new KRuler( KRuler::horizontal, this );
   m_pVRuler = new KRuler( KRuler::vertical, this );
-  m_pCanvasView->resize( m_pCanvasView->width() - 20, m_pCanvasView->height() - 20 );
-  m_pCanvasView->move( 20, 20 );
-  m_pHRuler->setGeometry( 20, 0, m_pCanvasView->width(), 20 );
-  m_pVRuler->setGeometry( 0, 20, 20, m_pCanvasView->height() );
+  m_pCanvasView->resize( m_pCanvasView->width() - 20, m_pCanvasView->height() - 20);
+  m_pCanvasView->move(20, 20);
+  m_pHRuler->setGeometry(20, 0, m_pCanvasView->width(), 20);
+  m_pVRuler->setGeometry(0, 20, 20, m_pCanvasView->height());
 
-  m_pVRuler->setOffset(0);
-  m_pHRuler->setOffset(0);
+  m_pVRuler->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+  m_pHRuler->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
   m_pVRuler->setRulerStyle(KRuler::pixel);
   m_pHRuler->setRulerStyle(KRuler::pixel);
-
-  m_pVRuler->showTinyMarks(true);
-  m_pVRuler->showLittleMarks(true);
-  m_pVRuler->showMediumMarks(true);
-  m_pVRuler->showBigMarks(true);
-  m_pVRuler->showEndMarks(true);
-
-  m_pHRuler->showTinyMarks(true);
-  m_pHRuler->showLittleMarks(true);
-  m_pHRuler->showMediumMarks(true);
-  m_pHRuler->showBigMarks(true);
-  m_pHRuler->showEndMarks(true);
-}
-
-void KImageShopView::setRanges()
-{
-  int docHeight = m_pDoc->height();
-  int docWidth = m_pDoc->width();
-
-  m_pVRuler->setRange(0, docHeight);
-  m_pHRuler->setRange(0, docWidth);
-
-  if(docHeight <= height() - 20)
-    {
-      m_pVert->hide();
-      m_pVert->setValue(0);
-      m_pVRuler->setOffset(-(m_pCanvasView->height() - docHeight)/2);
-    }
-  else
-    {
-      m_pVert->setRange(0, docHeight - height() + 36);
-      m_pVert->show();
-    }
-
-  if(docWidth <= width() - 20)
-    {
-      m_pHorz->hide();
-      m_pHorz->setValue(0);
-      m_pHRuler->setOffset(-(m_pCanvasView->width() -  docWidth)/2);
-      }
-  else
-    {
-      m_pHorz->setRange(0, docWidth - width() + 36);
-      m_pHorz->show();
-    }
 }
 
 void KImageShopView::scrollH(int )
@@ -421,19 +375,46 @@ CORBA::Boolean KImageShopView::printDlg()
   return true;
 }
 
-void KImageShopView::resizeEvent( QResizeEvent* )
+void KImageShopView::resizeEvent(QResizeEvent*)
 {
-  if ( ( KoViewIf::hasFocus() || mode() == KOffice::View::RootMode ) )
+  if ((KoViewIf::hasFocus() || mode() == KOffice::View::RootMode))
     {
-      m_pHorz->show();
-      m_pVert->show();
+      int docHeight = m_pDoc->height();
+      int docWidth = m_pDoc->width();
 
-      setRanges();
-      
-      if ( m_pHRuler )
-	m_pHRuler->show();
-      if ( m_pVRuler )
-	m_pVRuler->show();
+      m_pHRuler->show();
+      m_pVRuler->show();
+
+      m_pCanvasView->move(20, 20);
+
+      if (docHeight <= (height() - 20) && docWidth <= (width() - 20))
+	{
+	  m_pVert->hide();
+	  m_pHorz->hide();
+	  m_pVert->setValue(0);
+	  m_pHorz->setValue(0);
+	}
+      else if (docHeight <= (height() - 20))
+	{
+	  m_pVert->hide();
+	  m_pVert->setValue(0);
+	  m_pHorz->setRange(0, docWidth - width() + 20);
+	  m_pHorz->show();
+	}
+      else if(docWidth <= (width() - 20))
+	{
+	  m_pHorz->hide();
+	  m_pHorz->setValue(0);
+	  m_pVert->setRange(0, docHeight - height() + 20);
+	  m_pVert->show();
+	}
+      else
+	{
+	  m_pVert->setRange(0, docHeight - height() + 36);
+	  m_pVert->show();
+	  m_pHorz->setRange(0, docWidth - width() + 36);
+	  m_pHorz->show();
+	}
 	
       if (m_pHorz->isVisible() && m_pVert->isVisible())
 	m_pCanvasView->resize( width() - 36, height() - 36 );
@@ -444,22 +425,32 @@ void KImageShopView::resizeEvent( QResizeEvent* )
       else
 	m_pCanvasView->resize( width() - 20, height() - 20 );
 
-      m_pCanvasView->move( 20, 20 );
+      m_pHRuler->setGeometry(20, 0, m_pCanvasView->width(), 20);
+      m_pVRuler->setGeometry(0, 20, 20, m_pCanvasView->height());
+
+      m_pVRuler->setRange(0, docHeight);
+      m_pHRuler->setRange(0, docWidth);
+
+      if(!m_pVert->isVisible())
+	m_pVRuler->setOffset(-(m_pCanvasView->height() - docHeight)/2);
+      else
+	m_pVRuler->setOffset(0);
+
+      if(!m_pHorz->isVisible())
+	m_pHRuler->setOffset(-(m_pCanvasView->width() -  docWidth)/2);
+      else
+	m_pHRuler->setOffset(0);
+  
 
       if (m_pHorz->isVisible())
-	m_pVert->setGeometry( width() - 16, 0, 16, height() - 16 );
+	m_pVert->setGeometry(width() - 16, 0, 16, height() - 16);
       else
-	m_pVert->setGeometry( width() - 16, 0, 16, height() );
+	m_pVert->setGeometry(width() - 16, 0, 16, height());
 
       if (m_pVert->isVisible())
-	m_pHorz->setGeometry( 0, height() - 16, width() - 16, 16 );
+	m_pHorz->setGeometry(0, height() - 16, width() - 16, 16);
       else
-	m_pHorz->setGeometry( 0, height() - 16, width(), 16 );
-      
-      if ( m_pHRuler )
-	m_pHRuler->setGeometry( 20, 0, m_pCanvasView->width(), 20 );
-      if ( m_pVRuler )
-	m_pVRuler->setGeometry( 0, 20, 20, m_pCanvasView->height() );
+	m_pHorz->setGeometry(0, height() - 16, width(), 16);
     }
   else
     {
@@ -471,8 +462,8 @@ void KImageShopView::resizeEvent( QResizeEvent* )
       if ( m_pVRuler )
 	m_pVRuler->hide();
 
-      m_pCanvasView->move( 0, 0 );
-      m_pCanvasView->resize( widget()->width(), widget()->height() );
+      m_pCanvasView->move(0, 0);
+      m_pCanvasView->resize(widget()->width(), widget()->height());
     }
 }
 
@@ -608,8 +599,8 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
 
   m_pTool->mouseMove(mouseEvent);
   
-  m_pHRuler->slotNewValue(e->x());
-  m_pVRuler->slotNewValue(e->y());
+  m_pHRuler->slotNewValue(e->x() - x);
+  m_pVRuler->slotNewValue(e->y() - y);
 }
 
 void KImageShopView::slotCVMouseRelease(QMouseEvent *e)

@@ -1,5 +1,10 @@
-Current todo list: (add ideas here :-)
+Current todo list:
+(add ideas here :-)
 
+- zooming
+- zoom tool
+- menu: view->zoom in, zoom out, zoom factor
+- ruler context menu to select metrics
 - paint on/move linked layers
 - color buttons (fore-/background) + color dialog
 - extend brushtool to use foreground color
