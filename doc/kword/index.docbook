@@ -63,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-18</date>
+<date>2002-07-19</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -651,10 +651,15 @@ additional templates, and other updates that are developed outside of the &kword
 
 <itemizedlist>
 <title>&kword; Developers (Alphabetically)</title>
+<listitem><para>Dag Andersen <email>danders@get2net.dk</email></para></listitem>
 <listitem><para>John Califf <email>jcaliff@compuzone.net</email></para></listitem>
+<listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
+<listitem><para>Krister Wicksell Eriksson <email>krister.wicksell@spray.se</email></para></listitem>
 <listitem><para>David Faure <email>faure@kde.org</email></para></listitem>
+<listitem><para>Nicolas Goutte <email>nicog@snafu.de</email></para></listitem>
 <listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
 <listitem><para>Simon Hausmann <email>hausmann@kde.org</email></para></listitem>
+<listitem><para>Nash Hoogwater <email>nrhoogwater@wanadoo.nl</email></para></listitem>
 <listitem><para>Stephan Kulow <email>coolo@kde.org</email></para></listitem>
 <listitem><para>Sven L&uuml;ppken <email>sven@kde.org></email></para></listitem>
 <listitem><para>Laurent Montel <email>montell@club-internet.fr</email></para></listitem>
@@ -724,34 +729,35 @@ main ftp site of the &kde; project. </para>
 
 <itemizedlist>
 <listitem>
-<para>&Qt; Toolkit 3.0.2 or later.  This can be obtained from <ulink
+<para>QT Toolkit 3.0.0 or later.  This can be obtained from <ulink
 url="http://www.trolltech.com">Trolltech</ulink>.</para>
-
+<tip><para>While &koffice; will compile and run with any version of QT 3.0.0 or later, it is recommended that you compile and install
+QT 3.0.5 to take advantage of all the bug fixes that have occured.</para></tip>
 </listitem>
 
 <listitem>
-<para>&kde; 3.0.1 libraries (kdelibs) and the &kde; 3.0.1 base package
+<para>&kde; 3.0.0 libraries (kdelibs) and the &kde; 3.0.0 base package
 (kdebase).  These can be obtained from the <ulink
 url="http://www.kde.org">&kde; web page.</ulink></para>
+<tip><para>While &koffice; will compile and run with any version of &kde; 3.0.0 or later, it is recommended that you compile and install
+&kde; 3.0.2 to take advantage of all the bug fixes that have occured.</para>
+<para>It is also recommended that you instal the arts package 1.0 from the 
+<ulink url="ftp://ftp.kde.org/pub/kde/">KDE FTP site</ulink>.</para></tip>
 </listitem>
 
 <listitem>
-<para>&GNU; c++ compiler.  For help on obtaining this, please refer to
-your installations documentation.</para>
+<para>&GNU; c++ compiler or any c++ compiler that supports exceptions.  For help on obtaining this, please refer to
+your distributions web site.</para>
 </listitem>
 
 <listitem>
-<para><command>autoconf</command> and <command>automake</command></para>
+<para><application>autoconf 2.52</application> and <application>automake 1.5 or 1.6</application></para>
 </listitem>
 </itemizedlist>
 
-<para>All required libraries (kdelibs and kdebase) as well as &kword; itself can be found on
-<ulink url="http://kword.koffice.org">The &kword; home
-page</ulink>.</para>
-
 <note><para>In order to use external databases for mail merging documents, you must have
 the QT toolkit compiled with SQL support.  To add SQL support (as a plugin), simply include
-<option>--plugin-sql-<replaceable>driver</replaceable></option> in your configure line.</para>
+<option>-plugin-sql-<replaceable>driver</replaceable></option> in your configure line.</para>
 <para><replaceable>driver</replaceable> should be replaced with <replaceable>mysql</replaceable>, <replaceable>odbc</replaceable>,
 <replaceable>CVS</replaceable>, or <replaceable>psql</replaceable> as is appropriate for your database needs.</para></note>
 </sect1>

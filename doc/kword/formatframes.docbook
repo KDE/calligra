@@ -314,7 +314,7 @@ become 1 cm in size.</para>
 </sect2>
 
 <sect2 id="framestyles">
-<title>Using framesyles</title>
+<title>Using frame styles</title>
 <sect3 id="framestyles-use">
 <title>Formatting a frame with a framestyle</title>
 <para>To format a frame using a predefined framestyle simply:</para>

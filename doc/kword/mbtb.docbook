@@ -663,7 +663,7 @@ using the menubar.</para></listitem>
 </sect2>
 
 <sect2 id="view">
-<title>View</title><variablelist>
+<title>View Menu</title><variablelist>
 
 <varlistentry>
 <term>
@@ -783,6 +783,8 @@ for editing your document.</para>
 characters.  Selecting this option will display non-printable characters
 (spaces, character returns, and tab stops).  Selecting this option again
 will turn the display of these characters off.</action></para>
+<para>Which formatting characters are visible can be configured in the 
+<link linkend="opt-misc">KWord configuration dialog</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -795,7 +797,7 @@ will turn the display of these characters off.</action></para>
 <listitem>
 <para><action>Clicking on this option toggles the display of the borders
 to frames.  Normally, &kword; draws a gray line around each frame, so
-that know the borders of the frames.  If you want this option turned
+you can see the borders of the frames.  If you want this option turned
 off, you can select this option.  Selecting this option again will turn
 the borders back on.  </action></para>
 </listitem>
@@ -809,8 +811,7 @@ the borders back on.  </action></para>
 </term>
 <listitem>
 <para><action>Clicking on this option toggles the display of the document
-structure window.</action> Selecting this option again will turn
-the window back on.  For more information, refer to the section entitled
+structure window.</action> For more information, refer to the section entitled
 <link linkend="doc-structure">Document Structure</link>.</para>
 </listitem>
 </varlistentry>
@@ -855,7 +856,7 @@ documents.</para>
 </sect2>
 
 <sect2 id="insert">
-<title>Insert</title>
+<title>Insert Menu</title>
 <variablelist>
 <varlistentry>
 <term id="menu-insert-special-character">
@@ -915,7 +916,7 @@ linkend="endnotes-and-footnotes">Footnotes</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will insert a Table of Contents at the current cursor
+<para><action>This will insert or update a table of contents at the current cursor
 position.</action>  More detailed information can be found in <link
 linkend="toc">Table of Contents</link>.</para>
 </listitem>
@@ -933,7 +934,7 @@ numbers, date, time, author information, &etc;</action> You can find
 specific information about page numbers <link
 linkend="page-number">here</link>.  More information about Date and
 Times can be found under <link linkend="date-time">Inserting the Date
-and Time</link>. More information on other variables can be found <link
+and Time</link>. More information on other variables can be found in <link
 linkend="variables">Document Variables</link>.</para>
 </listitem>
 </varlistentry>
@@ -955,7 +956,7 @@ entitled <link linkend="expressions">Expressions</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Link</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -969,7 +970,7 @@ For more information refer to the section entitled
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Comment</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Comment...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -995,11 +996,11 @@ For more information refer to the section entitled
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Add Bookmark</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Add Bookmark...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to add comments to selected text.</action>
+<para><action>Allows you to mark your place in the document for easy retreiveal.</action>
 For more information refer to the section entitled
 <link linkend="bookmarks">Document Bookmarks</link>.</para>
 </listitem>
@@ -1038,7 +1039,7 @@ menubar.</para>
 <shortcut>
 <keycombo action="simul"><keycap>F3</keycap></keycombo>
 </shortcut>
-<guimenu>Insert</guimenu><guimenuitem>Picture</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Picture...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1086,7 +1087,7 @@ the menubar.</para>
 <varlistentry>
 <term id="menu-create-table">
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Table</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Table...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1133,7 +1134,7 @@ using the menubar. </para>
 </sect2>
 
 <sect2 id="format">
-<title>Format</title><variablelist>
+<title>Format Menu</title><variablelist>
 
 <varlistentry>
 <term id="format-default">
@@ -1156,7 +1157,7 @@ default settings for the selected text.</action></para>
 <shortcut>
 <keycombo action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo>
 </shortcut>
-<guimenu>Format</guimenu><guimenuitem>Font</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Font...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1177,7 +1178,7 @@ using the menubar. </para>
 <keycombo action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo>
 </shortcut>
 <guimenu>Format</guimenu>
-<guimenuitem>Paragraph</guimenuitem>
+<guimenuitem>Paragraph...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1193,7 +1194,7 @@ using the menubar.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1209,7 +1210,7 @@ including size, headers and footers.</action> For more details, go to
 <shortcut>
 <keycombo action="simul">&Alt;&Ctrl;<keycap>S</keycap></keycombo>
 </shortcut>
-<guimenu>Format</guimenu><guimenuitem>Stylist</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Style Manager...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1224,7 +1225,7 @@ using the menubar. </para>
 <varlistentry>
 <term id="menu-import-style">
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Import Style</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Import Style...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1261,11 +1262,11 @@ information go to <link linkend="styles">Styles</link></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Footnotes and Endnotes...</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Footnote...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to change the look of your footnotes and endnotes.</action>
+<para><action>Allows you to change the look of your footnotes.</action>
 For more information see <link linkend="endnotes-and-footnotes">
 Footnotes</link>.</para>
 </listitem>
@@ -1286,7 +1287,7 @@ more information go to <link linkend="formulas">Formulas</link></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Header</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Show Header</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1301,7 +1302,7 @@ linkend="headers-and-footers">Headers and Footers</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Footer</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Show Footer</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1320,18 +1321,18 @@ linkend="headers-and-footers">Headers and Footers</link>.</para>
 </sect2>
 
 <sect2 id="menu-frames">
-<title>Frames</title>
+<title>Frames Menu</title>
 
 <variablelist>
 <varlistentry>
 <term id="reconnect-frame">
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Allows you to configure basic formating options for the
-Frameset.</action> More information on this subject can be found in
+frameset.</action> More information on this subject can be found in
 <link linkend="format-frame">Setting properties for
 frames</link>.</para>
 </listitem>
@@ -1345,8 +1346,7 @@ frames</link>.</para>
 </term>
 <listitem>
 <para><action>This will allow you to delete the entire frame, and all of
-the text and objects contained within the frame.  You will be prompted
-before the frame is deleted.</action></para>
+the text and objects contained within the frame.</action></para>
 </listitem>
 </varlistentry>
 
@@ -1414,12 +1414,12 @@ using the menubar. </para>
 <shortcut>
 <keycombo action="simul">&Alt;&Ctrl;<keycap>R</keycap></keycombo>
 </shortcut>
-<guimenu>Frames</guimenu><guimenuitem>Framestylist</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Allows you to edit the frame styles.</action> For more information see the section entitled
-Framestylist.</para>
+<link linkend="framestyles">Using frame styles</link>.</para>
 <para>Typing <keycombo action="simul">&Alt;&Ctrl;<keycap>R</keycap></keycombo> is equivalent to
 using the menubar. </para>
 </listitem>
@@ -1444,15 +1444,15 @@ using the menubar. </para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to format the selected frame(s) with a pre-defined Framestyle.</action> For more information see the section entitled
-<link linkend="framestyles">Framestyle</link>.</para>
+<para><action>Allows you to format the selected frame(s) with a pre-defined framestyle.</action> For more information see the section entitled
+<link linkend="framestyles">Using frame styles</link>.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Text Background Color</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Text Background Color...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1481,7 +1481,7 @@ appear with all available border styles.  Select the correct style and the borde
 </sect2>
 
 <sect2 id="table">
-<title>Table</title>
+<title>Table Menu</title>
 
 <variablelist>
 
@@ -1660,7 +1660,7 @@ find more about tables in the section entitled <link linkend="tablestyle">Tables
 </sect2>
 
 <sect2 id="tools">
-<title>Tools</title>    
+<title>Tools Menu</title>
 
 <variablelist>
 
@@ -1801,7 +1801,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 </sect2>
 
 <sect2 id="settings">
-<title>Settings</title>
+<title>Settings Menu</title>
 
 <variablelist>
 <varlistentry>
@@ -1973,7 +1973,7 @@ linkend="options-kword">here</link></para>
 </sect2>
 
 <sect2 id="help">
-<title>Help</title>
+<title>Help Menu</title>
 
 &help.menu.documentation;
 
