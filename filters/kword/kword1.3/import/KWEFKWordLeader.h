@@ -74,7 +74,6 @@ class KWEFKWordLeader
         virtual int headerType() { return m_hType; }
         virtual int footerType() { return m_fType; }
 
-        virtual bool doFullDocument (const QValueList<ParaData> &);
         virtual bool doFullAllParagraphs (const QValueList<ParaData>& paraList);
 
     protected: // leader/worker functions
@@ -85,8 +84,6 @@ class KWEFKWordLeader
         virtual bool doCloseDocument (void)=0;
         virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
             const ValueListFormatData& paraFormatDataList)=0;
-        virtual bool doOpenTextFrameSet (void); // Like AbiWord's <section>
-        virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
 
     public:
         /// -1: unknown, 1: KWord 0.8, 2: KWord 1.1 & 1.2, 3: KWord 1.3

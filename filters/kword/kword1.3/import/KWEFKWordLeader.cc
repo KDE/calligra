@@ -386,10 +386,10 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             if ( grpMgr.isEmpty () )
             {
                 // As we do not support anything else than normal text, process only normal text.
-                // TODO: Treat the other types of frames (frameType)
                 if (frameInfo==0)
                 {
                     // Normal Text
+                    kdDebug(30520) << "Processing Frameset: " << leader->m_currentFramesetName << endl;
                     QValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, paraList ));
@@ -1089,7 +1089,15 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
     leader->doCloseHead();
     leader->doOpenBody();
 
-    leader->doFullDocument (paraList);
+    leader->doFullAllParagraphs( paraList );
+
+    kdDebug(30520) << "Unachored Framesets : START" << endl;
+    QStringList::ConstIterator it;
+    for ( it = leader->m_unanchoredFramesets.begin(); it != leader->m_unanchoredFramesets.end(); ++it )
+    {
+        kdDebug(30520) << (*it) << endl;
+    }
+    kdDebug(30520) << "Unachored Framesets : END" << endl;
 
     FreeCellParaLists (paraList);
 
@@ -1118,8 +1126,6 @@ DO_VOID_DEFINITION (doOpenBody)
 DO_VOID_DEFINITION (doCloseBody)
 DO_VOID_DEFINITION (doOpenSpellCheckIgnoreList)
 DO_VOID_DEFINITION (doCloseSpellCheckIgnoreList)
-DO_VOID_DEFINITION (doOpenTextFrameSet)
-DO_VOID_DEFINITION (doCloseTextFrameSet)
 
 bool KWEFKWordLeader::doPageInfo ( const int headerType, const int footerType )
 {
@@ -1305,25 +1311,6 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     doCloseFile ();
 
     return KoFilter::OK;
-}
-
-bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData>& paraList)
-{
-    if (!doOpenTextFrameSet())
-        return false;
-    if (!doFullAllParagraphs(paraList))
-        return false;
-    if (!doCloseTextFrameSet())
-        return false;
-
-    kdDebug(30520) << "Unachored Framesets : START" << endl;
-    QStringList::ConstIterator it;
-    for ( it = m_unanchoredFramesets.begin(); it != m_unanchoredFramesets.end(); ++it )
-    {
-        kdDebug(30520) << (*it) << endl;
-    }
-    kdDebug(30520) << "Unachored Framesets : END" << endl;
-    return true;
 }
 
 bool KWEFKWordLeader::doFullAllParagraphs (const QValueList<ParaData>& paraList)
