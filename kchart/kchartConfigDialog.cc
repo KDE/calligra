@@ -61,7 +61,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     else if( flags & KC_BACK )
     {
         _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
-        addTab( _backgroundpixpage, i18n( "&Background pixmap" ) );
+        addTab( _backgroundpixpage, i18n( "&Background" ) );
     }
     else if( flags & KC_LEGEND )
     {
@@ -149,32 +149,6 @@ void KChartConfigDialog::apply()
 
     if(_colorpage)
     {
-        const QColor backColor( _colorpage->backgroundColor() );
-        //
-        // temp. hack: the background is removed if set to 230,222,222.
-        //
-        //             For KOffice 1.2 this is to be removed by a checkbox.
-        //                                                (khz, 10.12.2001)
-        if( 230 == backColor.red() && 222 == backColor.green() && 222 == backColor.blue() ){
-            bool bFound;
-            const KDChartParams::KDChartFrameSettings * innerFrame =
-                _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
-            if( bFound ) {
-                KDFrame& frame( (KDFrame&)innerFrame->frame() );
-                frame.setBackground();
-            }
-        }
-        else
-            _params->setSimpleFrame( KDChartEnums::AreaInnermost,
-                                     0,0,  0,0,
-                                     true,
-                                     true,
-                                     KDFrame::FrameFlat,
-                                     1,
-                                     0,
-                                     QPen( Qt::NoPen ),
-                                     QBrush( _colorpage->backgroundColor() ) );
-
 
         KDChartAxisParams leftparams = _params->axisParams( KDChartAxisParams::AxisPosLeft );
         leftparams.setAxisGridColor( _colorpage->gridColor() );
@@ -249,25 +223,6 @@ void KChartConfigDialog::defaults()
     // color page
     if(_colorpage)
     {
-
-        bool bFound;
-        const KDChartParams::KDChartFrameSettings * innerFrame =
-            _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
-        if( bFound )
-        {
-            const QPixmap* backPixmap;
-            KDFrame::BackPixmapMode backPixmapMode;
-            const QBrush& background = innerFrame->frame().background( backPixmap, backPixmapMode );
-            if( ! backPixmap || backPixmap->isNull() ) {
-                _colorpage->setBackgroundColor( background.color() );
-            }
-            // pending KHZ
-            // else
-            //     ..  // set the background pixmap
-        }
-        else
-            _colorpage->setBackgroundColor( QColor(230, 222, 222) );
-
         _colorpage->setLineColor( _params->outlineDataColor() );
         KDChartAxisParams leftparams( _params->axisParams( KDChartAxisParams::AxisPosLeft ) );
         KDChartAxisParams rightparams( _params->axisParams( KDChartAxisParams::AxisPosRight ) );

@@ -15,6 +15,8 @@ class QSpinBox;
 class QRadioButton;
 class QComboBox;
 class QPixmap;
+class QListBox;
+class KColorButton;
 
 class KChartBackgroundPixmapConfigPage : public QWidget
 {
@@ -44,6 +46,8 @@ private:
     QRadioButton* tiledRB;
     QString wallFile;
     QPixmap wallPixmap;
+    QListBox *regionList;
+    KColorButton* _backgroundCB;	
 };	
 
 #endif

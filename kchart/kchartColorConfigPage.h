@@ -48,7 +48,6 @@ public:
 /*     QColor dataColor( uint dataset ) const; */
 
 private:
-    KColorButton* _backgroundCB;
     KColorButton* _gridCB;
     KColorButton* _lineCB;
     KColorButton* _plotCB;
@@ -62,18 +61,6 @@ private:
     //KColorButton* _edgeCB;
 //    KColorButton* _dataCB[NUMDATACOLORS];
 };
-
-
-inline void KChartColorConfigPage::setBackgroundColor( QColor color )
-{
-    _backgroundCB->setColor( color );
-}
-
-
-inline QColor KChartColorConfigPage::backgroundColor() const
-{
-    return _backgroundCB->color();
-}
 
 
 inline void KChartColorConfigPage::setGridColor( QColor color )

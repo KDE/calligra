@@ -22,6 +22,8 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qlistbox.h>
+#include <kcolorbutton.h>
 
 #include "kchart_params.h"
 
@@ -35,8 +37,14 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                                  "scaled or centered" ) );
 
     QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
-    QVBoxLayout* left = new QVBoxLayout( 10 );
-    toplevel->addLayout( left, 2 );
+
+    QVBoxLayout* left=new QVBoxLayout(10);
+    toplevel->addLayout(left,2);
+    regionList=new QListBox(this);
+    left->addWidget(regionList);
+
+    QVBoxLayout* center = new QVBoxLayout( 10 );
+    toplevel->addLayout( center, 2 );
 
     wallCB = new QComboBox( false, this, "wallCombo" );
     QWhatsThis::add( wallCB, i18n( "You can select a background image from "
@@ -45,7 +53,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                                    "find what you are looking for here, you can "
                                    "select any image file by clicking on the "
                                    "<i>Browse</i> button below." ) );
-    left->addWidget( wallCB );
+    center->addWidget( wallCB );
     wallCB->insertItem( i18n("None") );
 
     QStringList list = KGlobal::dirs()->findAllResources( "wallpaper" );
@@ -58,7 +66,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     QPushButton* browsePB = new QPushButton( i18n("&Browse..."), this );
     QWhatsThis::add( browsePB, i18n( "Click this button to select a background "
                                      "image not yet present in the list above. " ) );
-    left->addWidget( browsePB );
+    center->addWidget( browsePB );
     connect( browsePB, SIGNAL( clicked() ), SLOT( slotBrowse() ) );
 
     wallWidget = new QWidget( this );
@@ -67,10 +75,22 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                                        "Note that the image will be scaled and "
                                        "thus might have a different ratio than "
                                        "it originally had." ) );
-    left->addWidget( wallWidget, 2 );
+    center->addWidget( wallWidget );
 
     connect( wallCB, SIGNAL( activated( int ) ),
              this, SLOT( slotWallPaperChanged( int ) ) );
+
+
+    QLabel* backgroundLA = new QLabel( i18n( "&Background color" ), this );
+    center->addWidget( backgroundLA );
+    _backgroundCB = new KColorButton( this );
+    backgroundLA->setBuddy( _backgroundCB );
+    center->addWidget( _backgroundCB);
+    QString wtstr = i18n( "Here you set the color in which the background "
+                          "of the chart is painted." );
+    QWhatsThis::add( backgroundLA, wtstr );
+    QWhatsThis::add( _backgroundCB, wtstr );
+
 
     QVGroupBox* right = new QVGroupBox( i18n( "Configuration" ), this );
     QWhatsThis::add( right, i18n( "In this box, you can set various settings "
@@ -108,7 +128,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                      i18n( "If you check this box, the selected image will "
                            "be centered over the selected area. If the image "
                            "is larger then the area, you will only see the "
-                           "middle part of it." ) ); 
+                           "middle part of it." ) );
     tiledRB = new QRadioButton( i18n( "Tiled" ), right );
     QWhatsThis::add( tiledRB,
                      i18n( "If you check this box, the selected image will "
@@ -133,6 +153,24 @@ void KChartBackgroundPixmapConfigPage::init()
 //     intensitySB->setValue( (int)(_params->backgroundPixmapIntensity * 100.0) );
 //     scaledCB->setChecked( _params->backgroundPixmapScaled );
 //     centeredCB->setChecked( _params->backgroundPixmapCentered );
+
+    bool bFound;
+    const KDChartParams::KDChartFrameSettings * innerFrame =
+        _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
+    if( bFound )
+    {
+        const QPixmap* backPixmap;
+        KDFrame::BackPixmapMode backPixmapMode;
+        const QBrush& background = innerFrame->frame().background( backPixmap, backPixmapMode );
+        if( ! backPixmap || backPixmap->isNull() ) {
+            _backgroundCB->setColor( background.color() );
+        }
+        // pending KHZ
+        // else
+        //     ..  // set the background pixmap
+    }
+    else
+        _backgroundCB->setColor(QColor(230, 222, 222) );
 }
 
 void KChartBackgroundPixmapConfigPage::apply()
@@ -171,6 +209,33 @@ void KChartBackgroundPixmapConfigPage::apply()
 // 	_params->backgroundPixmapCentered = centeredCB->isChecked();
 // 	_params->backgroundPixmapIsDirty = true;
 //     }
+
+    const QColor backColor( _backgroundCB->color() );
+    //
+    // temp. hack: the background is removed if set to 230,222,222.
+    //
+    //             For KOffice 1.2 this is to be removed by a checkbox.
+    //                                                (khz, 10.12.2001)
+    if( 230 == backColor.red() && 222 == backColor.green() && 222 == backColor.blue() ){
+        bool bFound;
+        const KDChartParams::KDChartFrameSettings * innerFrame =
+            _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
+        if( bFound ) {
+            KDFrame& frame( (KDFrame&)innerFrame->frame() );
+            frame.setBackground();
+        }
+    }
+    else
+        _params->setSimpleFrame( KDChartEnums::AreaInnermost,
+                                 0,0,  0,0,
+                                 true,
+                                 true,
+                                 KDFrame::FrameFlat,
+                                 1,
+                                 0,
+                                 QPen( Qt::NoPen ),
+                                 QBrush( _backgroundCB->color() ) );
+
 }
 
 
