@@ -461,73 +461,6 @@ void TabBar::renameTab( const QString& old_name, const QString& new_name )
     update();
 }
 
-void TabBar::slotRename()
-{
-    // Store the current name of the active table
-    KSpreadSheet * table = d->view->activeTable();
-
-    bool ok;
-    QString activeName = table->tableName();
-    QString newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), activeName, &ok, this );
-
-    rename( table, newName, activeName, ok );
-}
-
-void TabBar::rename( KSpreadSheet * table, QString newName, QString const & activeName, bool ok )
-{
-    // Have a different name ?
-    if ( ok ) // User pushed an OK button.
-    {
-        while (!util_validateTableName(newName))
-        {
-            KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."),
-                                      i18n("Change Sheet Name") );
-
-            newName = newName.simplifyWhiteSpace();
-
-            int n = newName.find('-');
-            if ( n > -1 )
-              newName[n] = '_';
-
-            n = newName.find('!');
-            if ( n > -1 )
-              newName[n] = '_';
-
-            n = newName.find('$');
-            if ( n > -1 )
-              newName[n] = '_';
-
-            newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );
-
-            if ( !ok )
-              return;
-        }
-
-        if ( (newName.stripWhiteSpace()).isEmpty() ) // Table name is empty.
-        {
-            KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Sheet name cannot be empty."), i18n("Change Sheet Name") );
-            // Recursion
-            slotRename();
-        }
-        else if ( newName != activeName ) // Table name changed.
-        {
-            // Is the name already used
-            if ( !table->setTableName( newName ) )
-            {
-                KNotifyClient::beep();
-                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Sheet Name") );
-                // Recursion
-                slotRename();
-                return;
-            }
-
-            d->view->updateEditWidget();
-            d->view->doc()->setModified( true );
-        }
-    }
-}
 
 void TabBar::mousePressEvent( QMouseEvent* _ev )
 {
@@ -563,7 +496,6 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
         emit contextMenu( _ev->globalPos() );
     }
 }
-
 
 void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
 {
@@ -632,10 +564,6 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 void TabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
     emit doubleClicked();
-
-  if ( !d->view->koDocument()->isReadWrite()|| !d->view->doc()->getShowTabBar() || d->view->activeTable()->isProtected())
-        return;
-    slotRename();
 }
 
 void TabBar::hideTable()

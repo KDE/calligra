@@ -176,12 +176,6 @@ signals:
      */
     void doubleClicked();
 
-public slots:
-    /**
-     * Opens a dialog to rename active tab.
-     */
-    void slotRename( );
-
 protected slots:
     void autoScrollLeft();
     void autoScrollRight();

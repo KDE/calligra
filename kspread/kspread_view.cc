@@ -6031,9 +6031,58 @@ void KSpreadView::removeTable()
 
 void KSpreadView::slotRename()
 {
-  m_pDoc->emitBeginOperation(false);
-  m_pTabBar->slotRename();
-  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+
+  KSpreadSheet * table = activeTable();
+
+  bool ok;
+  QString activeName = table->tableName();
+  QString newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), activeName, &ok, this );
+
+  if( !ok ) return;
+
+  while (!util_validateTableName(newName))
+  {
+    KNotifyClient::beep();
+    KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."),
+      i18n("Change Sheet Name") );
+
+    newName = newName.simplifyWhiteSpace();
+    int n = newName.find('-');
+    if ( n > -1 ) newName[n] = '_';
+    n = newName.find('!');
+    if ( n > -1 ) newName[n] = '_';
+    n = newName.find('$');
+    if ( n > -1 ) newName[n] = '_';
+
+    newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );
+
+    if ( !ok ) return;
+  }
+
+  if ( (newName.stripWhiteSpace()).isEmpty() ) // Table name is empty.
+  {
+    KNotifyClient::beep();
+    KMessageBox::information( this, i18n("Sheet name cannot be empty."), i18n("Change Sheet Name") );
+    // Recursion
+    slotRename();
+  }
+  else if ( newName != activeName ) // Table name changed.
+  {
+    // Is the name already used
+    if ( !table->setTableName( newName ) )
+    {
+      KNotifyClient::beep();
+      KMessageBox::information( this, i18n("This name is already used."), i18n("Change Sheet Name") );
+      // Recursion
+      slotRename();
+      return;
+    }
+
+    m_pDoc->emitBeginOperation(false);
+    updateEditWidget();
+    doc()->setModified( true );
+    m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+  }
 }
 
 void KSpreadView::setText( const QString & _text )
