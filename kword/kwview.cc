@@ -65,7 +65,7 @@
 #include "mailmerge.h"
 #include "mailmerge_actions.h"
 #include "splitcellsdia.h"
-#include "stylist.h"
+#include "kwstylemanager.h"
 #include "tabledia.h"
 #include "kwvariable.h"
 #include "KWordViewIface.h"

@@ -16,7 +16,7 @@ libkwordpart_la_SOURCES =  kwfactory.cc kwdoc.cc \
 		kwvariable.cc \
 		framedia.cc footnotedia.cc \
                 tabledia.cc insdia.cc deldia.cc docstruct.cc \
-                contents.cc stylist.cc searchdia.cc \
+                contents.cc kwstylemanager.cc searchdia.cc \
                 resizehandles.cc kwcommand.cc \
 		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cc mailmerge.cc \
 		mailmerge_actions.cc \

@@ -18,12 +18,12 @@
 */
 
 #include "kwdoc.h"
-#include "stylist.h"
-#include "stylist.moc"
+#include "kwstylemanager.h"
+#include "kwstylemanager.moc"
+
 #include <koUnit.h>
-#include <kdebug.h>
-#include <koStylist.h>
 #include <kostyle.h>
+#include <kdebug.h>
 /******************************************************************/
 /* Class: KWStyleManager                                          */
 /******************************************************************/

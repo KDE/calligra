@@ -1999,7 +1999,7 @@ void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChange
 
 void KWDocument::repaintAllViews( bool erase )
 {
-    kdDebug(32001) << "KWDocument::repaintAllViews" << endl;
+    //kdDebug(32001) << "KWDocument::repaintAllViews" << endl;
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
 }

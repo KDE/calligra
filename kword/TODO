@@ -5,7 +5,7 @@ Bugs:
 -----
 - textformatter: need to check for line-level breaking during the formatting of each line
 Currently we do it afterwards, so if the margins differ, where the line ends up, we can't notice.
-- footnotes: check move to next page, copy-n-paste
+- footnotes: check move to next page, copy-n-paste, endnotes
 - anything else that http://bugs.kde.org mentions ;)
 
 Missing or incomplete stuff:

@@ -17,11 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef stylist_h
-#define stylist_h
+#ifndef KWSTYLEMANAGER_H
+#define KWSTYLEMANAGER_H
 
-#include <kdialogbase.h>
-#include <qstringlist.h>
 #include <koStylist.h>
 
 class KWDocument;
@@ -35,7 +33,7 @@ class KWStyleManager : public KoStyleManager
     Q_OBJECT
 
 public:
-    KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc, const QPtrList<KoStyle> & style );
+    KWStyleManager( QWidget *_parent, KoUnit::Unit unit, KWDocument *_doc, const QPtrList<KoStyle> & style );
 
     virtual KoStyle* addStyleTemplate(KoStyle *style);
     virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );

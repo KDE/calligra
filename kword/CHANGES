@@ -143,11 +143,13 @@ New "PageUp/PageDown moves the caret" option, which defaults to false.
 
 Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 ===================================================
-- Add support for "Apply autoformat"
-- Add support for find/replace with format
-- Now we can create style directly from selection
+- Footnotes
+- "Apply autoformat" feature
+- Extended Find/Replace to allow specifying text formatting
+- Support for frame margins
+- Support for frame "runaround gap"
+- Creating a style directly from the selection
 - Paragraph selection, clicking on the left of the text frame
-- Add "protect content" feature
-- Add double line boder type
-- Add a dialogbox to resize column in table
-- Add support for frame margins
+- "Protect content" feature
+- Double line border type for frames and paragraphs
+- New dialogbox to resize a column in a table
