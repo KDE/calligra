@@ -51,7 +51,7 @@ StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&)
 {
     hasHeader = false;
     hasFooter = false;
-    framesNumber = 0;
+    framesNumber = 1;
 }
 
 StarWriterImport::~StarWriterImport()
@@ -297,7 +297,8 @@ bool StarWriterImport::parseTable(QByteArray n)
     Q_UINT8 row, column;
 
     // Set table name
-    tableName = QString("Table in Frame %1").arg(framesNumber);
+    tableName = QString("Table %1").arg(framesNumber);
+
     framesNumber++;
 
     // Skip useless sections and retrieve the right point
@@ -306,6 +307,8 @@ bool StarWriterImport::parseTable(QByteArray n)
         len = readU24(n, p+1);
         p += len;
     }
+
+    row = 0;
 
     // Read rows
     while (n[p] == 'L') {
@@ -331,7 +334,8 @@ bool StarWriterImport::parseTable(QByteArray n)
             text = convertToKWordString(s);
 
             // FIXME: check this stuff
-            tableText.append(QString(" <FRAMESET name=\"%1 Cell %2,%3\" frameType=\"1\" frameInfo=\"0\" removable=\"0\" visible=\"1\" grpMgr=\"%1\" row=\"%2\" col=\"%3\" rows=\"1\" cols=\"1\" protectSize=\"0\">\n").arg(tableName).arg(row).arg(column));
+            QString frameName = QString("%1 Cell %2,%3").arg(tableName).arg(row).arg(column);
+            tableText.append(QString(" <FRAMESET name=\"%1\" frameType=\"1\" frameInfo=\"0\" removable=\"0\" visible=\"1\" grpMgr=\"%2\" row=\"%3\" col=\"%4\" rows=\"1\" cols=\"1\" protectSize=\"0\">\n").arg(frameName).arg(tableName).arg(row).arg(column));
             tableText.append(" <FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\" runaroundSide=\"biggest\" autoCreateNewFrame=\"0\" />\n");
             tableText.append("  <PARAGRAPH>\n");
             tableText.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
