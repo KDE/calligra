@@ -892,17 +892,21 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 #endif
 
         m_pages = QMAX( pages2, m_pages );
-        if ( m_pages != oldPages )
-        {
-            emit pageNumChanged();
-            recalcVariables( VT_PGNUM );
-        }
-
 
         if ( toPage == -1 )
             toPage = m_pages - 1;
         KWFrameLayout frameLayout( this, headerFooterList, footnotesHFList );
         frameLayout.layout( frameset, m_pageColumns.columns, fromPage, toPage );
+
+        // If the number of pages changed, update views and variables etc.
+        // (now that the frame layout has been done)
+        if ( m_pages != oldPages )
+        {
+            // Very much like the end of appendPage, but we don't want to call recalcFrames ;)
+            emit newContentsSize();
+            emit pageNumChanged();
+            recalcVariables( VT_PGNUM );
+        }
 
     } else {
         // DTP mode: calculate the number of pages from the frames.
