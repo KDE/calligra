@@ -322,3 +322,66 @@ KoPointArray KPCubicBezierCurveObject::getCubicBezierPointsFrom( const KoPointAr
 
     return _allPoints;
 }
+
+void KPCubicBezierCurveObject::flip(bool horizontal )
+{
+    KoPointArray tmpPoints;
+    int index = 0;
+    if ( horizontal )
+    {
+	KoPointArray::ConstIterator it;
+        double horiz = getSize().height()/2;
+        for ( it = origControlPoints.begin(); it != origControlPoints.end(); ++it )
+        {
+            KoPoint point = (*it);
+            if ( point.y()> horiz )
+                tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
+            else
+                tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
+            ++index;
+        }
+        origControlPoints = tmpPoints;
+
+        index=0;
+        for ( it = origAllPoints.begin(); it != origAllPoints.end(); ++it )
+        {
+            KoPoint point = (*it);
+            if ( point.y()> horiz )
+                tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
+            else
+                tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
+            ++index;
+        }
+        origAllPoints = tmpPoints;
+
+    }
+    else
+    {
+        KoPointArray::ConstIterator it;
+        double vert = getSize().width()/2;
+        for ( it = origControlPoints.begin(); it != origControlPoints.end(); ++it )
+        {
+            KoPoint point = (*it);
+            if ( point.x()> vert )
+                tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
+            else
+                tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
+            ++index;
+        }
+        origControlPoints = tmpPoints;
+
+        index = 0;
+        for ( it = origAllPoints.begin(); it != origAllPoints.end(); ++it )
+        {
+            KoPoint point = (*it);
+            if ( point.y()> vert )
+                tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
+            else
+                tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
+            ++index;
+        }
+        origAllPoints = tmpPoints;
+
+    }
+    updatePoints( 1.0, 1.0 );
+}

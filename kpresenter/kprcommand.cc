@@ -2072,6 +2072,22 @@ void KPrFlipPolyLineCommand::execute()
         m_doc->repaint( obj );
 
     }
+    else if ( m_object->getType() == OT_CUBICBEZIERCURVE)
+    {
+        KPCubicBezierCurveObject *obj=dynamic_cast<KPCubicBezierCurveObject *>(m_object);
+        if ( obj)
+            obj->flip(horizontal);
+        m_doc->repaint( obj );
+    }
+    else if ( m_object->getType() == OT_QUADRICBEZIERCURVE)
+    {
+        KPQuadricBezierCurveObject *obj=dynamic_cast<KPQuadricBezierCurveObject *>(m_object);
+        if ( obj)
+            obj->flip(horizontal);
+        m_doc->repaint( obj );
+    }
+
+
 }
 
 void KPrFlipPolyLineCommand::unexecute()
@@ -2089,8 +2105,22 @@ void KPrFlipPolyLineCommand::unexecute()
         if ( obj)
             obj->flip(horizontal);
         m_doc->repaint( obj );
-
     }
+    else if ( m_object->getType() == OT_CUBICBEZIERCURVE)
+    {
+        KPCubicBezierCurveObject *obj=dynamic_cast<KPCubicBezierCurveObject *>(m_object);
+        if ( obj)
+            obj->flip(horizontal);
+        m_doc->repaint( obj );
+    }
+    else if ( m_object->getType() == OT_QUADRICBEZIERCURVE)
+    {
+        KPQuadricBezierCurveObject *obj=dynamic_cast<KPQuadricBezierCurveObject *>(m_object);
+        if ( obj)
+            obj->flip(horizontal);
+        m_doc->repaint( obj );
+    }
+
 }
 
 KPrProtectObjCommand::KPrProtectObjCommand( const QString &_name, QValueList<bool> &_b, QPtrList<KPObject> &_objects, bool _newValue, KPresenterDoc *_doc ):

@@ -95,3 +95,13 @@ QString KPCubicBezierCurveObjectIface::lineEnd() const
     return QString::null;
 
 }
+
+void KPCubicBezierCurveObjectIface::horizontalFlips()
+{
+    obj->flip( true );
+}
+
+void KPCubicBezierCurveObjectIface::verticalFlips()
+{
+    obj->flip( false );
+}

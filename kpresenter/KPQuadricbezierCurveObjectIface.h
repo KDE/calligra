@@ -40,6 +40,8 @@ k_dcop:
     virtual void setLineEnd( const QString & );
     QString lineBegin()const;
     QString lineEnd() const;
+    void horizontalFlips();
+    void verticalFlips();
 
 private:
     KPQuadricBezierCurveObject *obj;
