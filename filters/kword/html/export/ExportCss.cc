@@ -362,28 +362,68 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
 
     // TODO: Konqueror/KHTML does not support "line-height"
-    if (!force
-        && ( layoutOrigin.lineSpacingType == layout.lineSpacingType )
-        && ( layoutOrigin.lineSpacing == layout.lineSpacing ) )
+    if (force
+        || ( layoutOrigin.lineSpacingType != layout.lineSpacingType )
+        || ( layoutOrigin.lineSpacing != layout.lineSpacing ) )
     {
-        // Do nothing!
-    }
-    else if ( !layout.lineSpacingType )
-    {
-        // We have a custom line spacing (in points)
-        strLayout += QString("line-height:%1pt; ").arg(layout.lineSpacing);
-    }
-    else if ( 15==layout.lineSpacingType  )
-    {
-        strLayout += "line-height:1.5; "; // One-and-half
-    }
-    else if ( 20==layout.lineSpacingType  )
-    {
-        strLayout += "line-height:2.0; "; // Two
-    }
-    else if ( layout.lineSpacingType!=10  )
-    {
-        kdWarning(30503) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+        switch ( layout.lineSpacingType )
+        {
+        case LayoutData::LS_CUSTOM:
+            {
+                // We have a custom line spacing (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                strLayout += "style:line-spacing:";
+                strLayout += height;
+                strLayout += "pt; ";
+                break;
+            }
+        case LayoutData::LS_SINGLE:
+            {
+                strLayout += "line-height:normal; "; // One
+                break;
+            }
+        case LayoutData::LS_ONEANDHALF:
+            {
+                strLayout += "line-height:150%; "; // One-and-half
+                break;
+            }
+        case LayoutData::LS_DOUBLE:
+            {
+                strLayout += "line-height:200%; "; // Two
+                break;
+            }
+        case LayoutData::LS_MULTIPLE:
+            {
+                const QString mult ( QString::number( qRound( layout.lineSpacing * 100 ) ) );
+                strLayout += "line-height:";
+                strLayout += mult;
+                strLayout += "%; ";
+                break;
+            }
+        case LayoutData::LS_FIXED:
+            {
+                // We have a fixed line height (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                strLayout += "line-height:";
+                strLayout += height;
+                strLayout += "pt; ";
+                break;
+            }
+        case LayoutData::LS_ATLEAST:
+            {
+                // We have a at-least line height (in points)
+                const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
+                strLayout += "style:line-height-at-least:";
+                strLayout += height;
+                strLayout += "pt; ";
+                break;
+            }
+        default:
+            {
+                kdWarning(30503) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                break;
+            }
+        }
     }
 
     // TODO: Konqueror/KHTML does not support "text-shadow"
