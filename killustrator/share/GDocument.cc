@@ -34,6 +34,8 @@
 #include "GClipart.h"
 #include "GGroup.h"
 
+#include "Canvas.h" // for getPSFont !
+
 #include <string>
 #include <iostream.h>
 #include <fstream.h>
@@ -296,9 +298,6 @@ bool GDocument::saveToXml (const char* fname) {
   static const char* orientations[] = {
     "portrait", "landscape"
   };
-  static const char* units[] = {
-    "mm", "cm", "inch"
-  };
 
   ofstream os (fname);
   if (os.fail ())
@@ -317,7 +316,7 @@ bool GDocument::saveToXml (const char* fname) {
   xml.addAttribute ("tmargin", pLayout.top);
   xml.addAttribute ("rmargin", pLayout.right);
   xml.addAttribute ("bmargin", pLayout.bottom);
-  xml.addAttribute ("unit", "pt");
+  //  xml.addAttribute ("unit", "pt");
   xml.closeTag (true);
 
   xml.endTag (); // </head>
@@ -331,67 +330,6 @@ bool GDocument::saveToXml (const char* fname) {
   setModified (false);
   return ! os.fail ();
 }
-
-#if 0
-bool GDocument::saveToFile (QFile& file) {
-  if (! file.open (IO_WriteOnly))
-    return false;
-
-  filename = file.name ();
-  QDataStream strm (&file);
-  
-  /*
-   * file identifier
-   */
-  strm << FILE_ID_STRING;
-
-  /*
-   * save the document properties
-   */
-  strm << (Q_INT8) SECTION_ID_DOCUMENT;
-  // paper size
-  strm << (Q_INT8) pLayout.format << (Q_INT8) pLayout.orientation
-       << pLayout.width << pLayout.height;
-  // margins
-  strm << pLayout.left << pLayout.right
-       << pLayout.top << pLayout.bottom;
-  strm << (Q_INT8) pLayout.unit;
-
-  /*
-   * save the dictionary of user-defined arrows
-   */
-  strm << (Q_INT8) SECTION_ID_ARROWS;
-  // the number of arrows
-  strm << (Q_UINT32) 0;
-
-  /*
-   * save the dictionary of user-defined line styles
-   */
-  strm << (Q_INT8) SECTION_ID_LINESTYLES;
-  // the number of styles
-  strm << (Q_UINT32) 0;
-
-  /*
-   * save the dictionary of user-defined fill styles
-   */
-  strm << (Q_INT8) SECTION_ID_FILLSTYLES;
-  // the number of styles
-  strm << (Q_UINT32) 0;
-
-  /*
-   * now save the objects
-   */
-  strm << (Q_INT8) SECTION_ID_OBJECTS;
- 
-  QListIterator<GObject> it (objects);
-  for (; it.current (); ++it) 
-    it.current ()->write (strm);
-
-  file.close ();
-  setModified (false);
-  return true;
-}
-#endif
 
 bool GDocument::readFromXml (const char* fname) {
   bool endOfHeader = false, endOfBody = false;
@@ -450,8 +388,8 @@ bool GDocument::readFromXml (const char* fname) {
 	  pLayout.right = (*first).floatValue ();
         else if ((*first).name () == "bmargin")
 	  pLayout.bottom = (*first).floatValue ();
-        else if ((*first).name () == "unit")
-	  ;
+	//        else if ((*first).name () == "unit")
+	//	  ;
         first++;
       }
     }
@@ -591,95 +529,6 @@ bool GDocument::readFromXml (const char* fname) {
   return true;
 }
 
-#if 0
-bool GDocument::restoreFromFile (QFile& file) {
-  Q_INT8 id, value8; 
-  Q_UINT32 value32;
-
-  if (! file.open (IO_ReadOnly))
-    return false;
-  QDataStream strm (&file);
-  
-  char *code;
-  strm >> code;
-  if (::strcmp (code, FILE_ID_STRING)) {
-    delete code;
-    return false;
-  }
-  delete code;
-
-  /*
-   * restore document properties
-   */
-  strm >> id;
-  if (id != SECTION_ID_DOCUMENT)
-    return false;
-  // paper size
-  strm >> value8;
-  pLayout.format = value8;
-  strm >> value8;
-  pLayout.orientation = value8;
-  strm >> pLayout.width >> pLayout.height;
-  // margins
-  strm >> pLayout.left >> pLayout.right
-       >> pLayout.top >> pLayout.bottom;
-  strm >> value8;
-  pLayout.unit = value8;
-  setPageLayout (pLayout);
-
-  if (strm.eof ())
-    return false;
-
-  /*
-   * restore user-defined arrows
-   */
-  strm >> id;
-  if (id != SECTION_ID_ARROWS)
-    return false;
-  strm >> value32;
-  if (strm.eof ())
-    return false;
-
-  /*
-   * restore user-defined line styles
-   */
-  strm >> id;
-  if (id != SECTION_ID_LINESTYLES)
-    return false;
-  strm >> value32;
-  if (strm.eof ())
-    return false;
-
-  /*
-   * restore user-defined fill styles
-   */
-  strm >> id;
-  if (id != SECTION_ID_FILLSTYLES)
-    return false;
-  strm >> value32;
-  if (strm.eof ())
-    return false;
-
-  /*
-   * now restore the objects
-   */
-
-  strm >> id;
-  if (id != SECTION_ID_OBJECTS)
-    return false;
-
-  while (! strm.eof ()) {
-    GObject* obj = GObject::restore (strm);
-    if (obj != 0L)
-      insertObject (obj);
-  }
-  file.close ();
-  setModified (false);
-  filename = file.name ();
-  return true;
-}
-#endif
-
 unsigned int GDocument::findIndexOfObject (GObject *obj) {
   return objects.findRef (obj);
 }
@@ -718,5 +567,17 @@ void GDocument::setPageLayout (const KoPageLayout& layout) {
   paperHeight = (int) (pLayout.height / 25.4 * 72.0);
   modifyFlag = true;
   emit sizeChanged ();
+}
+
+bool GDocument::requiredFonts (set<string>& fonts) {
+  QListIterator<GObject> it (objects);
+  for (; it.current (); ++it) {
+    if (it.current ()->isA ("GText")) {
+      GText* tobj = (GText *) it.current ();
+      const QFont& font = tobj->getFont ();
+      fonts.insert (Canvas::getPSFont (font));
+    }
+  }
+  return ! fonts.empty ();
 }
 

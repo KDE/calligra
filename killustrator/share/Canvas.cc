@@ -41,6 +41,7 @@
 #include "ToolController.h"
 #include "QwViewport.h"
 #include "version.h"
+#include <kconfig.h>
 
 QArray<float> Canvas::zoomFactors;
 QString Canvas::psPrologPath = 
@@ -62,8 +63,7 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
 
   pixmap = 0L;
 
-  vGridDistance = hGridDistance = 50;
-  gridIsOn = false;
+  readGridProperties ();
 
   calculateSize ();
   setFocusPolicy (ClickFocus);
@@ -115,17 +115,24 @@ float Canvas::getZoomFactor () const {
 }
 
 void Canvas::showGrid (bool flag) {
-  gridIsOn = flag;
-  updateView ();
+  if (gridIsOn != flag) {
+    gridIsOn = flag;
+    updateView ();
+    saveGridProperties ();
+  }
 }
 
 void Canvas::snapToGrid (bool flag) {
-  gridSnapIsOn = flag;
+  if (gridSnapIsOn != flag) {
+    gridSnapIsOn = flag;
+    saveGridProperties ();
+  }    
 }
 
 void Canvas::setGridDistance (int hdist, int vdist) {
   hGridDistance = hdist;
   vGridDistance = vdist;
+  saveGridProperties ();
 }
 
 void Canvas::snapPositionToGrid (int& x, int& y) {
@@ -147,7 +154,6 @@ void Canvas::snapPositionToGrid (int& x, int& y) {
     y = n;
   }
 }
-
 
 void Canvas::setToolController (ToolController* tc) {
   toolController = tc;
@@ -332,9 +338,17 @@ const char* Canvas::getPSFont (const QFont& qfont) {
   if (fontMap.isEmpty ()) {
     QString psFontmapPath = kapp->kde_datadir () + "/killustrator/fontmap";
     ifstream fin ((const char *) psFontmapPath);
-    fin.ignore (INT_MAX, '\n');
-    char key[128], value[128];
+    //    fin.ignore (INT_MAX, '\n');
+    char key[128], value[128], c;
     while (! fin.eof ()) {
+      fin.get (c);
+      if (c == '#') {
+	// just a comment, ignore the rest of line
+	fin.ignore (INT_MAX, '\n');
+	continue;
+      }
+      else
+	fin.unget ();
       fin >> key >> value;
       if (key[0] == '\0')
 	break;
@@ -406,11 +420,24 @@ void Canvas::printPSDocument () {
                         KMsgBox::STOP, i18n ("Abort"));
       return;
     }
+
     psStream << "%%BeginSetup\n"
 	     << "/PaperWidth " << document->getPaperWidth () << " def\n"
              << "/PaperHeight " << document->getPaperHeight () << " def\n"
-             << "InitTMatrix\n"
-	     << "%%EndSetup\n";
+             << "InitTMatrix\n";
+
+    if (pSetup.orientation () == QPrinter::Landscape)
+      psStream << "Landscape\n";
+
+    set<string> reqFonts;
+    if (document->requiredFonts (reqFonts)) {
+      set<string>::iterator i = reqFonts.begin ();
+      for (; i != reqFonts.end (); i++) {
+        const char* fontName = i->c_str ();
+	psStream << i->c_str () << " /_" << &fontName[1] << " TransFont\n";
+      }
+    }
+    psStream << "%%EndSetup\n";
 
     // write objects
     QListIterator<GObject> it = document->getObjects ();
@@ -446,4 +473,33 @@ void Canvas::zoomOut () {
   assert (pos != -1);
   if (pos > 0)
     setZoomFactor (zoomFactors[pos - 1]);
+}
+
+void Canvas::readGridProperties () {
+  KConfig* config = kapp->getConfig ();
+  QString oldgroup = config->group ();
+
+  config->setGroup ("Grid");
+
+  vGridDistance = config->readNumEntry ("vGridDistance", 50);
+  hGridDistance = config->readNumEntry ("hGridDistance", 50);
+  gridIsOn = config->readBoolEntry ("showGrid", false);
+  gridSnapIsOn = config->readBoolEntry ("snapTopGrid", false);
+
+  config->setGroup (oldgroup);
+}
+
+void Canvas::saveGridProperties () {
+  KConfig* config = kapp->getConfig ();
+  QString oldgroup = config->group ();
+
+  config->setGroup ("Grid");
+
+  config->writeEntry ("vGridDistance", vGridDistance);
+  config->writeEntry ("hGridDistance", hGridDistance);
+  config->writeEntry ("showGrid", gridIsOn);
+  config->writeEntry ("snapTopGrid", gridSnapIsOn);
+
+  config->setGroup (oldgroup);
+  config->sync ();
 }

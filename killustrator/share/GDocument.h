@@ -25,6 +25,9 @@
 #ifndef GDocument_h_
 #define GDocument_h_
 
+#include <set>
+#include <string>
+
 #include <qobject.h>
 #include <qlist.h>
 #include <qfile.h>
@@ -94,6 +97,8 @@ public:
 
   KoPageLayout pageLayout ();
   void setPageLayout (const KoPageLayout& layout);
+
+  bool requiredFonts (set<string>& fonts);
 
 protected:
   void updateHandle ();

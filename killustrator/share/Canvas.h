@@ -84,6 +84,9 @@ public:
   static void initZoomFactors (QArray<float>& factors);
 
 protected:
+  void saveGridProperties ();
+  void readGridProperties ();
+
   void mousePressEvent (QMouseEvent *e);
   void mouseReleaseEvent (QMouseEvent *e);
   void mouseMoveEvent (QMouseEvent *e);
