@@ -61,6 +61,7 @@ void StyleClusterTester::check_value( const char *file, int line, const char* ms
     ts << ", ";
     ts << "Expected:";
     ts << expected;
+    kdDebug() << message << endl;
     fail( file, line, message );
   }
 }
@@ -76,6 +77,7 @@ void StyleClusterTester::check_fails_value( const char *file, int line, const ch
     ts << msg;
     ts << "  Result shouldn't be:";
     ts << result;
+    kdDebug() << message << endl;
     fail( file, line, message );
   }
 }
@@ -108,6 +110,7 @@ void StyleClusterTester::run()
   CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   CHECK_STYLE(stylecluster.lookup(1000,2000), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   KSpreadStyle *style1 = new KSpreadStyle();
+  style1->addRef();
   stylecluster.insert(1000,2000, style1);
   CHECK_STYLE(stylecluster.lookup(1000,2000), *style1); 
   CHECK_STYLE(stylecluster.lookup(1001,2000), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
@@ -118,6 +121,7 @@ void StyleClusterTester::run()
   void *quad1 = stylecluster.lookupNode(0,0); 
   CHECK_QUAD(stylecluster.lookupNode(0,0), quad1);
   CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1000,2000)); 
+  kdDebug() << "0. Insert done" << endl;
   stylecluster.insert(1000,2000, m_sheet->doc()->styleManager()->defaultStyle());
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1000,2000)); 
   
@@ -128,19 +132,37 @@ void StyleClusterTester::run()
   kdDebug() << "2. Insert done" << endl;
   stylecluster.insert(0,1, style1);
   kdDebug() << "3. Insert done" << endl;
-//  CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
-//  stylecluster.insert(1,1, style1);
+  CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
   
-/*  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
+  kdDebug() << "4. check done" << endl;
+  stylecluster.insert(1,1, style1);
+  
+  kdDebug() << "5. Insert done" << endl;
+  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
+  kdDebug() << "6. check done" << endl;
   CHECK_QUAD(stylecluster.lookupNode(1,0), stylecluster.lookupNode(1,1));
+  kdDebug() << "7. check done" << endl;
 
   CHECK_STYLE(stylecluster.lookup(0,0), *style1);
+  kdDebug() << "8. check done" << endl;
   CHECK_STYLE(stylecluster.lookup(0,1), *style1);
+  kdDebug() << "9. check done" << endl;
   CHECK_STYLE(stylecluster.lookup(1,0), *style1);
+  kdDebug() << "10. check done" << endl;
   CHECK_STYLE(stylecluster.lookup(1,1), *style1);
+  kdDebug() << "11. check done" << endl;
   CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
-*/
+  kdDebug() << "12. check done" << endl;
 
+  if(style1->release()) {
+    kdDebug() << "DELETING STYLE in test runner" << endl;
+    delete style1;
+    style1 = 0;
+    testCount++;
+  } else {
+    testCount++;
+  //  fail( __FILE__, __LINE__, "Style was not correctly freed" );
+  }
 
 
 }

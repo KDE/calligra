@@ -48,9 +48,9 @@ class StyleClusterQuad
     ~StyleClusterQuad();
 
     /**
-     * Returns the number of m_{top,bottom}{left,right} pointers that are non-null
+     * Returns the number of m_{top,bottom}{left,right} pointers that are null
      */
-    int numChildren();
+    int numNullChildren();
 
   
     typedef enum { Simple = 0, Quad = 1} QuadType;
@@ -72,6 +72,7 @@ KSpreadStyle *StyleClusterQuad::getStyle() {
 }
 void StyleClusterQuad::setStyle(KSpreadStyle * style) {
   if(m_style && m_style->release()) {
+    kdDebug() << "DELETING STYLE in getStyle()" << endl;
     delete m_style;
   }
   m_style = style;
@@ -94,6 +95,7 @@ StyleClusterQuad::~StyleClusterQuad()
 {
   if (m_style && m_style->release())
   {
+    kdDebug() << "DELETING STYLE in destructor" << endl;
     delete m_style;
     m_style = NULL;
   }
@@ -109,9 +111,10 @@ StyleClusterQuad::~StyleClusterQuad()
     if (m_bottomRight)
       delete m_bottomRight;
   }
+  m_topLeft = m_topRight = m_bottomLeft = m_bottomRight = 0;
 }
 
-int StyleClusterQuad::numChildren() {
+int StyleClusterQuad::numNullChildren() {
   int num_children = 0;
   if(!m_topLeft) num_children++;
   if(!m_topRight) num_children++;
@@ -167,6 +170,8 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
   
   while (true)
   {
+    Q_ASSERT (current_node);
+    Q_ASSERT( *current_node);
     //The below should be true.  It is obviously true from the code, so feel free to comment out
     Q_ASSERT( (*current_node)->m_type == StyleClusterQuad::Quad );
   
@@ -210,16 +215,16 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
       if( style == last_node->getStyle()) return;
 
       if(half_quad_size == 0) {  //We are now on a single cell
-	int num_children_in_parent = last_node->numChildren();
+	int num_null_children_in_parent = last_node->numNullChildren();
 	
-        Q_ASSERT(num_children_in_parent > 0);
-	if(num_children_in_parent == 1) {// We are the only one using the style info in parent, so just change the m_style in parent
+        Q_ASSERT(num_null_children_in_parent > 0);
+	if(num_null_children_in_parent == 1) {// We are the only one using the style info in parent, so just change the m_style in parent
 
           kdDebug() << "Making a simple, and simplifying " << endl;
 	  last_node->setStyle(style);
 	  simplify(path);
 	} else {  //someone else in the parent is using the style info in parent, so we have to create our own child
-          *current_node = new StyleClusterQuad(); //defaults to a Simple
+          (*current_node) = new StyleClusterQuad(); //defaults to a Simple
           (*current_node)->setStyle(style);
           kdDebug() << "Making a simple " << endl;
 	}
@@ -232,10 +237,11 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
       //we will go into this next time round the loop
       // so make it a quad
       (*current_node)->m_type = StyleClusterQuad::Quad;
-      kdDebug() << "Making a quad " << endl;
+      kdDebug() << "Making a quad at size " << half_quad_size <<  endl;
 
-      if(last_node->numChildren() == 0) {
+      if(last_node->numNullChildren() == 0) {
         last_node->setStyle(0); //nothing is using this anymore
+	kdDebug() << "Parent has no more null children.  Removing style" << endl;
       }
 
     } else if( (*current_node)->m_type == StyleClusterQuad::Simple ) { 
@@ -251,14 +257,10 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
           delete (*current_node);  //style is released in the destructor
           *current_node = NULL;
           //Now it may be that there are no other children in the last_node, so the style is for all 4 of its children quads
-	  if(last_node && last_node->numChildren() == 4) {
-            kdDebug() << "Parent has no more quads under it.  Simplifying" << endl;
-	    last_node->m_type = StyleClusterQuad::Simple;
-	    simplify(path);
-	  } else {
-            kdDebug() << "Parent has " << last_node->numChildren() << "more children, so doing nothing." << endl;
-	  }
-        } else if (last_node->getStyle() == 0) {
+	  
+	  simplify(path);
+        
+	} else if (last_node->getStyle() == 0) {
 	  //We are the _only_ child that is Simple.  Can't happen for half_quad_size==0
 	  Q_ASSERT(false);
 	  return;
@@ -271,7 +273,6 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
       //else make this a quad, and go inside it
       (*current_node)->m_type = StyleClusterQuad::Quad;
     } // else it's a quad, and we will go into it on the next time round the while loop
-    
     half_quad_size /= 2;
   }
   
@@ -284,11 +285,13 @@ void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) {
   StyleClusterQuad** current_node;
   StyleClusterQuad* last_node = NULL;
 
+  if( path.isEmpty()) return;
   current_node = path.pop();
-  if(path.top())
+  if( !path.isEmpty() && path.top())
     last_node = *(path.top());
   
-  if(!current_node || !*current_node) return;
+  Q_ASSERT( current_node && *current_node);
+
   if((*current_node)->m_bottomLeft && (*current_node)->m_bottomLeft->m_type == StyleClusterQuad::Simple && (*current_node)->m_bottomLeft->getStyle() == (*current_node)->getStyle()) {
     delete (*current_node)->m_bottomLeft;
     (*current_node)->m_bottomLeft = 0;
@@ -307,10 +310,14 @@ void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) {
   }
 
   
-  if((*current_node)->numChildren() == 4) { //we can simplify - all children in the quad are pointing to use.
+  if((*current_node)->numNullChildren() == 4) { //we can simplify - all children in the quad are pointing to use.
     (*current_node)->m_type = StyleClusterQuad::Simple;
 	  
     if(!last_node) {
+      kdDebug() << "At the top of simplification, and child has no children, and just made this Simple.  The tree is totally empty!" << endl;
+      
+      Q_ASSERT( m_topQuad == *current_node );
+
       return;
     }
     if(last_node->getStyle() == (*current_node)->getStyle()) {
@@ -324,7 +331,7 @@ void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) {
       last_node->setStyle( (*current_node)->getStyle() );
       delete (*current_node);
       *current_node = 0; 
-    } else if(last_node->numChildren() == 0) {
+    } else if(last_node->numNullChildren() == 0) {
       //The style in the parent is different, but we are the only one using that style
       last_node->setStyle( (*current_node)->getStyle() );
       delete (*current_node);
