@@ -98,11 +98,28 @@ private:
     QCheckBox* m_displayLink;
 };
 
+class ConfigureDefaultDocPage : public QObject
+{
+    Q_OBJECT
+public:
+    ConfigureDefaultDocPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
+    void apply();
+    void slotDefault();
+public slots:
+    void selectNewDefaultFont();
+private:
+    KPresenterView* m_pView;
+    KConfig* config;
+    QFont *font;
+    QLabel *fontName;
+};
+
+
 class KPConfig : public KDialogBase
 {
     Q_OBJECT
 public:
-    enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8 };
+    enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8, KP_DOC=16 };
     KPConfig( KPresenterView* parent );
 public slots:
     void slotApply();
@@ -113,6 +130,7 @@ private:
     configureColorBackground *_colorBackground;
     ConfigureSpellPage *_spellPage;
     ConfigureMiscPage *_miscPage;
+    ConfigureDefaultDocPage *_defaultDocPage;
 };
 
 #endif

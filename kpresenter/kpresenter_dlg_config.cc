@@ -42,6 +42,9 @@
 #include <knumvalidator.h>
 #include <qlineedit.h>
 #include <kprcommand.h>
+#include <qvgroupbox.h>
+#include <kfontdialog.h>
+
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -64,6 +67,16 @@ KPConfig::KPConfig( KPresenterView* parent )
                         BarIcon("misc", KIcon::SizeMedium) );
     _miscPage=new ConfigureMiscPage(parent, page);
 
+
+    page = addVBoxPage( i18n("Misc"), i18n("Misc"),
+                        BarIcon("misc", KIcon::SizeMedium) );
+    _miscPage=new ConfigureMiscPage(parent, page);
+
+    page = addVBoxPage( i18n("Document"), i18n("Document defaults"),
+                        BarIcon("documentdefaults", KIcon::SizeMedium) );
+
+    _defaultDocPage=new ConfigureDefaultDocPage(parent, page);
+
     connect( this, SIGNAL( okClicked() ),this, SLOT( slotApply() ) );
 }
 
@@ -77,6 +90,8 @@ void KPConfig::openPage(int flags)
         showPage(2);
     else if(flags & KP_MISC)
         showPage(3 );
+    else if(flags & KP_DOC)
+        showPage(4 );
 }
 
 void KPConfig::slotApply()
@@ -85,6 +100,8 @@ void KPConfig::slotApply()
     _colorBackground->apply();
     _spellPage->apply();
     _miscPage->apply();
+    _defaultDocPage->apply();
+
 }
 
 void KPConfig::slotDefault()
@@ -101,6 +118,9 @@ void KPConfig::slotDefault()
             break;
         case 3:
            _miscPage->slotDefault();
+            break;
+        case 4:
+            _defaultDocPage->slotDefault();
             break;
         default:
             break;
@@ -471,6 +491,71 @@ void ConfigureMiscPage::slotDefault()
    m_displayLink->setChecked(true);
 }
 
+
+ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *box, char *name )
+    : QObject( box->parent(), name )
+{
+    m_pView=_view;
+    config = KPresenterFactory::global()->config();
+    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document defaults"), box, "GroupBox" );
+    gbDocumentDefaults->setMargin( 10 );
+    gbDocumentDefaults->setInsideSpacing( 5 );
+
+    QString defaultFont="Sans serif,12,-1,5,50,0,0,0,0,0";
+    if( config->hasGroup("Document defaults") )
+    {
+        config->setGroup( "Document defaults" );
+        defaultFont=config->readEntry("DefaultFont",defaultFont);
+    }
+
+    QWidget *fontContainer = new QWidget(gbDocumentDefaults);
+    QGridLayout * fontLayout = new QGridLayout(fontContainer, 1, 3);
+
+    fontLayout->setColStretch(0, 0);
+    fontLayout->setColStretch(1, 1);
+    fontLayout->setColStretch(2, 0);
+
+    QLabel *fontTitle = new QLabel(i18n("Default font"), fontContainer);
+
+    font= new QFont();
+    font->fromString(defaultFont);
+
+    QString labelName = font->family() + ' ' + QString::number(font->pointSize());
+    fontName = new QLabel(labelName, fontContainer);
+    fontName->setFont(*font);
+
+    QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
+    connect(chooseButton, SIGNAL(clicked()), this, SLOT(selectNewDefaultFont()));
+
+    fontLayout->addWidget(fontTitle, 0, 0);
+    fontLayout->addWidget(fontName, 0, 1);
+    fontLayout->addWidget(chooseButton, 0, 2);
+}
+
+void ConfigureDefaultDocPage::apply()
+{
+    config->setGroup( "Document defaults" );
+    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    config->writeEntry("DefaultFont",font->toString());
+}
+
+void ConfigureDefaultDocPage::slotDefault()
+{
+}
+
+void ConfigureDefaultDocPage::selectNewDefaultFont() {
+    QStringList list;
+    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
+    KFontDialog dlg( m_pView, "Font Selector", false, true, list, true );
+    dlg.setFont(*font);
+    int result = dlg.exec();
+    if (KDialog::Accepted == result) {
+        delete font;
+        font = new QFont(dlg.font());
+        fontName->setText(font->family() + ' ' + QString::number(font->pointSize()));
+        fontName->setFont(*font);
+    }
+}
 
 
 #include <kpresenter_dlg_config.moc>

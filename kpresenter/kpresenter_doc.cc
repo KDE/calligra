@@ -137,9 +137,25 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
     m_styleColl->addStyleTemplate( m_standardStyle );
 
-    m_defaultFont = KoGlobal::defaultFont();
-    // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
-    m_defaultFont.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( QFontInfo(m_defaultFont).pointSize() ) );
+    KConfig *config = KPresenterFactory::global()->config();
+    config->setGroup("Document defaults" );
+    QString defaultFontname=config->readEntry("DefaultFont");
+    if ( !defaultFontname.isEmpty() )
+        m_defaultFont.fromString( defaultFontname );
+    // If not found, we automatically fallback to the application font (the one from KControl's font module)
+
+    // Try to force a scalable font.
+    m_defaultFont.setStyleStrategy( QFont::ForceOutline );
+    //kdDebug() << "Default font: requested family: " << m_defaultFont.family() << endl;
+    //kdDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
+
+    int ptSize = m_defaultFont.pointSize();
+    if ( ptSize == -1 ) // specified with a pixel size ?
+        ptSize = QFontInfo(m_defaultFont).pointSize();
+
+    // Zoom its size to layout units
+    m_defaultFont.setPointSize( m_zoomHandler->ptToLayoutUnitPt( ptSize ) );
+
     m_standardStyle->format().setFont( m_defaultFont );
     m_zoomHandler = new KoZoomHandler;
 
