@@ -292,7 +292,8 @@ public:
 
     void applyOutline( int _left, int _top, int _right, int _bottom );
     void invertState(KSpreadBorderButton *_button);
-    QPixmap* paintFormatPixmap(PenStyle _style);
+    QPixmap paintFormatPixmap(PenStyle _style);
+
 public slots:
     void changeState(KSpreadBorderButton *_this);
     void preselect( KSpreadBorderButton *_this);
@@ -418,6 +419,8 @@ public:
      */
     CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _left, int _top, int _right, int _bottom );
 
+    ~CellLayoutDlg();
+
     void init();
     /**
      * Run the dialogs event loop and return when closed.
@@ -515,13 +518,13 @@ public:
     int heigthSize;
     int widthSize;
 
-    static QPixmap* formatOnlyNegSignedPixmap;
-    static QPixmap* formatRedOnlyNegSignedPixmap;
-    static QPixmap* formatRedNeverSignedPixmap;
-    static QPixmap* formatAlwaysSignedPixmap;
-    static QPixmap* formatRedAlwaysSignedPixmap;
+    QPixmap* formatOnlyNegSignedPixmap;
+    QPixmap* formatRedOnlyNegSignedPixmap;
+    QPixmap* formatRedNeverSignedPixmap;
+    QPixmap* formatAlwaysSignedPixmap;
+    QPixmap* formatRedAlwaysSignedPixmap;
+    QPixmap* undefinedPixmap;
 
-    static QPixmap* undefinedPixmap;
     int textRotation;
     bool bTextRotation;
 
@@ -541,14 +544,6 @@ public slots:
 
 protected:
 
-    /**
-     * Used to draw the @ref #redPixmap and friends
-     */
-    QPixmap* paintColorPixmap( const QColor &color );
-    /**
-     * Used to draw the @ref border1Pixmap and friends.
-     */
-    QPixmap* paintBorderPixmap( PenStyle _style, int _width  );
     /**
      * Used to draw the @ref #formatPixmap and friends.
      */

@@ -25,9 +25,7 @@ class RowLayout;
 class KSpreadCell;
 class KSpreadTable;
 class KSpreadView;
-class AutoFillDeltaSequence;
 class KSpreadMap;
-class ChartCellBinding;
 class KSpreadCanvas;
 class KSpreadDoc;
 class KoDocumentEntry;
@@ -46,14 +44,13 @@ class DCOPObject;
 #include <qintdict.h>
 #include <qarray.h>
 #include <qrect.h>
-#include <qpalette.h>
+#include <qwidget.h>
 
 #define BORDER_SPACE 1
 
 #include "kspread_autofill.h"
 #include "kspread_layout.h"
 #include "kspread_cell.h"
-#include "kspread_dlg_layout.h"
 #include "kspread_global.h"
 #include "kspread_cluster.h"
 

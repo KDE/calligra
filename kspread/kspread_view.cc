@@ -65,6 +65,7 @@
 #include "kspread_dlg_sort.h"
 #include "kspread_dlg_anchor.h"
 #include "kspread_dlg_resize.h"
+#include "kspread_dlg_layout.h"
 #include "kspread_dlg_show.h"
 #include "kspread_dlg_insert.h"
 #include "kspread_handler.h"

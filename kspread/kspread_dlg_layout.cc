@@ -1,4 +1,4 @@
-                                   /* This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -113,16 +113,16 @@ void KSpreadPatternSelect::slotSelect()
     repaint();
 }
 
-QPixmap* CellLayoutDlg::formatOnlyNegSignedPixmap = 0L;
-QPixmap* CellLayoutDlg::formatRedOnlyNegSignedPixmap = 0L;
-QPixmap* CellLayoutDlg::formatRedNeverSignedPixmap = 0L;
-QPixmap* CellLayoutDlg::formatAlwaysSignedPixmap = 0L;
-QPixmap* CellLayoutDlg::formatRedAlwaysSignedPixmap = 0L;
-QPixmap* CellLayoutDlg::undefinedPixmap = 0L;
-
 CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _left, int _top,
 			      int _right, int _bottom ) : QObject()
 {
+    undefinedPixmap = 0L;
+    formatOnlyNegSignedPixmap = 0L;
+    formatRedOnlyNegSignedPixmap = 0L;
+    formatRedNeverSignedPixmap = 0L;
+    formatAlwaysSignedPixmap = 0L;
+    formatRedAlwaysSignedPixmap = 0L;
+    undefinedPixmap = 0L;
     table = _table;
     left = _left;
     top = _top;
@@ -414,6 +414,16 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     init();
 }
 
+CellLayoutDlg::~CellLayoutDlg()
+{
+  delete undefinedPixmap;
+  delete formatOnlyNegSignedPixmap;
+  delete formatRedOnlyNegSignedPixmap;
+  delete formatRedNeverSignedPixmap;
+  delete formatAlwaysSignedPixmap;
+  delete formatRedAlwaysSignedPixmap;
+}
+
 void CellLayoutDlg::init()
 {
     QColorGroup colorGroup = QApplication::palette().active();
@@ -589,13 +599,12 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 	prefix->setText( dlg->prefix.data() );
 
 
-
-    format->insertItem( *CellLayoutDlg::formatOnlyNegSignedPixmap, 0 );
-    format->insertItem( *CellLayoutDlg::formatRedOnlyNegSignedPixmap, 1 );
-    format->insertItem( *CellLayoutDlg::formatRedNeverSignedPixmap, 2 );
-    format->insertItem( *CellLayoutDlg::formatAlwaysSignedPixmap, 3 );
-    format->insertItem( *CellLayoutDlg::formatRedAlwaysSignedPixmap, 4 );
-    format->insertItem( *CellLayoutDlg::undefinedPixmap, 5 );
+    format->insertItem( *_dlg->formatOnlyNegSignedPixmap, 0 );
+    format->insertItem( *_dlg->formatRedOnlyNegSignedPixmap, 1 );
+    format->insertItem( *_dlg->formatRedNeverSignedPixmap, 2 );
+    format->insertItem( *_dlg->formatAlwaysSignedPixmap, 3 );
+    format->insertItem( *_dlg->formatRedAlwaysSignedPixmap, 4 );
+    format->insertItem( *_dlg->undefinedPixmap, 5 );
 
     tmpQLabel = new QLabel( box, "Label_4" );
     grid->addWidget(tmpQLabel,0,2);
@@ -1941,11 +1950,11 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
     style=new QComboBox(tmpQGroupBox);
     grid3->addWidget(style,1,1);
-    style->insertItem(*paintFormatPixmap(DotLine),0 );
-    style->insertItem(*paintFormatPixmap(DashLine) ,1);
-    style->insertItem(*paintFormatPixmap(DashDotLine),2 );
-    style->insertItem(*paintFormatPixmap(DashDotDotLine),3  );
-    style->insertItem(*paintFormatPixmap(SolidLine),4);
+    style->insertItem(paintFormatPixmap(DotLine),0 );
+    style->insertItem(paintFormatPixmap(DashLine) ,1);
+    style->insertItem(paintFormatPixmap(DashDotLine),2 );
+    style->insertItem(paintFormatPixmap(DashDotDotLine),3  );
+    style->insertItem(paintFormatPixmap(SolidLine),4);
     style->setBackgroundColor( colorGroup().background() );
 
     grid2->addMultiCell(grid3,6,6,0,1);
@@ -2222,15 +2231,15 @@ void CellLayoutPageBorder::slotChangeStyle(int)
  slotUnselect2(preview);
 }
 
-QPixmap* CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
+QPixmap CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
 {
-    QPixmap *pixmap = new QPixmap( style->width(), 14 );
+    QPixmap pixmap( style->width(), 14 );
     QPainter painter;
     QPen pen;
     pen.setColor( colorGroup().text() );
     pen.setStyle( _style );
     pen.setWidth( 1 );
-    painter.begin( pixmap );
+    painter.begin( &pixmap );
     painter.fillRect( 0, 0, style->width(), 14, colorGroup().background() );
     painter.setPen( pen );
     painter.drawLine( 0, 7, style->width(), 7 );
@@ -2240,8 +2249,7 @@ QPixmap* CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
 
 void CellLayoutPageBorder::loadIcon( QString _pix,KSpreadBorderButton *_button)
 {
-    QPixmap *pix = new QPixmap( KSBarIcon(_pix) );
-    _button->setPixmap( *pix );
+    _button->setPixmap( QPixmap( KSBarIcon(_pix) ) );
 }
 
 void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _bottom )

@@ -18,6 +18,7 @@
 */
 
 #include <qmessagebox.h>
+#include <qapplication.h>
 #include <qpointarray.h>
 #include <qstring.h>
 #include <qpopupmenu.h>
