@@ -42,37 +42,21 @@ KWord13Picture::~KWord13Picture( void )
 bool KWord13Picture::loadPicture( KoStore* store )
 {
     kdDebug(30520) << "Loading picture: " << m_storeName << endl;
-    if ( ! store->open( m_storeName ) )
-    {
-        kdWarning(30520) << "Cannot load: " << m_storeName << endl;
-    }
-    KoStoreDevice ioPicture( store );
-    ioPicture.open( IO_ReadOnly );
-    QByteArray array ( ioPicture.readAll() );
-    ioPicture.close();
-    store->close();
-    
-    if ( array.isNull() )
-    {
-        kdWarning(30520) << "Null picture read!" << endl;
-        return false;
-    }
-
+ 
     m_tempFile = new KTempFile( QString::null, ".bin" );
     m_tempFile->setAutoDelete( true );
-    
-    QFile file ( m_tempFile->name() );
-    if ( ! file.open( IO_WriteOnly ) )
+ 
+    if ( ! store->extractFile( m_storeName, m_tempFile->name() ) )   
     {
-        kdWarning(30520) << "Xan write temporary file!" << endl;
+        kdWarning(30520) << "Could not write temporary file!" << endl;
         delete m_tempFile;
-        m_tempFile = false;
+        m_tempFile = 0;
         m_valid = false;
-        return false;
     }
-    file.writeBlock( array );
-    file.close();
-    m_valid = true;
-    return true;
+    else
+    {
+        m_valid = true;
+    }
+    return m_valid;
 }
 
