@@ -154,6 +154,7 @@ void VClipartWidget::addClipart()
 		clipart->transform( trMatrix );
 		m_clipartChooser->addItem( KarbonFactory::rServer()->addClipart( clipart ) );
 	}
+	m_clipartChooser->updateContents();
 } // VClipartWidget::addClipart
 
 VClipartTool::VClipartTool( KarbonView* view )
