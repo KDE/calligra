@@ -28,6 +28,9 @@ class KexiTableEdit : public QWidget
 	public:
 		KexiTableEdit(QWidget* parent = 0, const char* name = 0) : QWidget(parent, name){ };
 		virtual QVariant value() = 0;
+		virtual void resize(int w, int h);
+	protected:
+		QWidget* m_view;
 };
 
 #endif

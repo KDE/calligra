@@ -36,8 +36,6 @@ class KexiComboBoxTableEdit : public KexiTableEdit
 			QWidget *parent=0, const char *name=0);
 		
 		virtual QVariant value();
-	private:
-		KComboBox* m_view;
 };
 
 #endif

@@ -52,7 +52,7 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 	}
 
 	m_text = KGlobal::_locale->formatDate(m_data.toDate(), true);
-	m_view->setText(m_text);
+	static_cast<QLineEdit*>(m_view)->setText(m_text);
 	setCursor(QCursor(ArrowCursor));
 
 	m_mouseDown = false;
@@ -181,7 +181,7 @@ KexiDateTableEdit::slotDateChanged(QDate date)
 {
 	m_data = date;
 	m_text = KGlobal::_locale->formatDate(m_data.toDate(), true);
-	m_view->setText(m_text);
+	static_cast<QLineEdit*>(m_view)->setText(m_text);
 
 	repaint();
 }

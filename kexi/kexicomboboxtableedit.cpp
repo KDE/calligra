@@ -26,14 +26,13 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDBField::ColumnType t, const QS
  const char *name) : KexiTableEdit(parent, name)
 {
 	m_view = new KComboBox(this, "tableCombo");
-	m_view->clear();
-	m_view->insertStringList(list);
-	m_view->setCurrentItem(static_cast<int>(t));
-	(new QVBoxLayout(this))->addWidget(m_view);
+	static_cast<KComboBox*>(m_view)->clear();
+	static_cast<KComboBox*>(m_view)->insertStringList(list);
+	static_cast<KComboBox*>(m_view)->setCurrentItem(static_cast<int>(t));
 }
 
 
 QVariant KexiComboBoxTableEdit::value()
 {
-	return QVariant(m_view->currentItem());
+	return QVariant(static_cast<KComboBox*>(m_view)->currentItem());
 }

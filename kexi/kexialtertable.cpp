@@ -41,11 +41,11 @@ KexiAlterTable::KexiAlterTable(QWidget *parent, QString table, const char *name)
 	l->addWidget(m_statusbar);
 	
 	//Cols
-	kdDebug() << "KexuiAlterTable::KexuiAlterTable(...): Add the columns to the tableview" << endl;
+	kdDebug() << "KexiAlterTable::KexiAlterTable(...): Add the columns to the tableview" << endl;
 	m_view->addColumn(i18n("Field Name"), QVariant::String, true);
 	
 	QStringList strings;
-	strings.append(i18n("Choose Datatype"));
+	strings.append(i18n("Select Datatype"));
 	
 	for(int i = 1; i < 18; i++)
 	{
