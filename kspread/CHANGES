@@ -5,6 +5,8 @@ Changes from 1.1 to 1.2
 - support up to 2^15 columns and rows, formerly it was 676 columns and 10000 rows
 - add support for spell-check
 - many new built-in functions (see detailed list below)
+- function name is now case-insensitive
+- "Related Function" in formula editor
 - move functions in kspread_interpreter into several kspread_functions_*.cc
 
 
