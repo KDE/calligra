@@ -85,7 +85,10 @@ VCommandHistory::addCommand( VCommand* command, bool execute )
 	kdDebug() << "History: new command: " << m_commands.findRef( command ) << endl;
 
 	if( execute )
+	{
 		command->execute();
+		emit commandExecuted( command );
+	}
 
 	updateActions();
 
