@@ -71,7 +71,7 @@ public:
     KoPoint bottomRight() const { return m_br; }
     KoPoint topRight() const { return KoPoint(m_br.x(), m_tl.y()); }
     KoPoint bottomLeft() const { return KoPoint(m_tl.x(), m_br.y()); }
-    //KoPoint center() const;
+    KoPoint center() const;
 
     void moveTopLeft(const KoPoint &topleft);
     void moveBottomRight(const KoPoint &bottomright);

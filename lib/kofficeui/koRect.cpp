@@ -20,6 +20,11 @@ KoRect KoRect::normalize() const
     return r;
 }
 
+KoPoint KoRect::center() const
+{
+  return KoPoint((left() + right()) / 2, (top() + bottom()) / 2);
+}
+
 void KoRect::moveTopLeft(const KoPoint &topleft)
 {
     m_br.rx() += topleft.x() - m_tl.x();
