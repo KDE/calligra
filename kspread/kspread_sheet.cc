@@ -44,6 +44,7 @@
 #include <kprinter.h>
 #include <koDocumentInfo.h>
 
+#include "kspread_changes.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_global.h"
@@ -618,7 +619,7 @@ KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
 
 void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool updateDepends )
 {
-    KSpreadCell *cell = nonDefaultCell( _column, _row );
+    KSpreadCell * cell = nonDefaultCell( _column, _row );
 
     if ( isProtected() )
     {
@@ -631,8 +632,14 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool up
         KSpreadUndoSetText *undo = new KSpreadUndoSetText( m_pDoc, this, cell->text(), _column, _row,cell->formatType() );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
-
-    kdDebug() << "SetCellText" << endl;
+    
+    // feed the change recorder
+    if ( map() && map()->changes() )
+    {
+      map()->changes()->addChange( this, cell, QPoint( _column, _row ),
+                                   cell->getFormatString( _column, _row ), 
+                                   cell->text() );
+    }
 
     // The cell will force a display refresh itself, so we dont have to care here.
     cell->setCellText( _text, updateDepends );

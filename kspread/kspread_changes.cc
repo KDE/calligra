@@ -50,6 +50,7 @@ void KSpreadChanges::setProtected( QCString const & hash )
 
 void KSpreadChanges::saveXml( QDomDocument & doc, QDomElement & map )
 {
+  kdDebug() << "Entering saveXML" << endl;
   if ( m_changeRecords.first() == 0 )
     return;
 
@@ -66,9 +67,13 @@ void KSpreadChanges::saveXml( QDomDocument & doc, QDomElement & map )
       records.setAttribute( "protected", "" );      
   }
 
+  kdDebug() << "Saving authors" << endl;
+
   saveAuthors( doc, records );
+  kdDebug() << "Saving changes" << endl;
   saveChanges( doc, records );
 
+  kdDebug() << "Saving done" << endl;
   map.appendChild( records );
 }
 
@@ -95,11 +100,7 @@ void KSpreadChanges::saveChanges( QDomDocument & doc, QDomElement & changes )
   QPtrListIterator<ChangeRecord> it( m_changeRecords );
   for ( ; it.current(); ++it )
   {
-    QDomElement record = doc.createElement( "change" );
-
-    it.current()->saveXml( doc, record );
-
-    records.appendChild( record );
+    it.current()->saveXml( doc, records );
   }
   changes.appendChild( records );
 }
@@ -244,12 +245,13 @@ KSpreadChanges::ChangeRecord::ChangeRecord()
   m_dependants.setAutoDelete( false );
 }
 
-KSpreadChanges::ChangeRecord::ChangeRecord( int id, State state, ChangeType type, KSpreadSheet const * table, 
+KSpreadChanges::ChangeRecord::ChangeRecord( int id, State state, ChangeType type, KSpreadSheet * table, 
                                             QPoint const & cellRef, Change * change )
   : m_id( id ), m_state( state ), m_type( type ), m_table ( table ),
     m_cell( cellRef ), m_change( change )
 {
   m_dependants.setAutoDelete( false );
+  m_dependancies.setAutoDelete( false );
 }
 
 KSpreadChanges::ChangeRecord::~ChangeRecord()
@@ -259,6 +261,8 @@ KSpreadChanges::ChangeRecord::~ChangeRecord()
 
 void KSpreadChanges::ChangeRecord::saveXml( QDomDocument & doc, QDomElement & changes ) const
 {
+  kdDebug() << "Entering ChangeRecord::saveXML" << endl;
+
   QDomElement change = doc.createElement( "record" );
   change.setAttribute( "y",     QString::number( m_cell.y() ) );
   change.setAttribute( "x",     QString::number( m_cell.x() ) );
@@ -266,6 +270,8 @@ void KSpreadChanges::ChangeRecord::saveXml( QDomDocument & doc, QDomElement & ch
   change.setAttribute( "state", QString::number( (int) m_state ) );
   change.setAttribute( "type",  QString::number( (int) m_type ) );
   change.setAttribute( "table", m_table->tableName() );
+
+  kdDebug() << "save dependants entries" << endl;
 
   QPtrListIterator<ChangeRecord> it( m_dependants );
   for ( ; it.current(); ++it )
@@ -275,6 +281,7 @@ void KSpreadChanges::ChangeRecord::saveXml( QDomDocument & doc, QDomElement & ch
     change.appendChild( dep );
   }  
 
+  kdDebug() << "saving change entry: " << m_change << endl;
   m_change->saveXml( doc, change );
 
   changes.appendChild( change );
@@ -289,10 +296,13 @@ bool KSpreadChanges::ChangeRecord::isDependant( KSpreadSheet const * const table
   if ( table != m_table )
     return false;
 
-  if ( cell.x() != 0 && cell.x() == m_cell.x() )
+  if ( cell.x() == m_cell.x() && cell.y() == m_cell.y() )
     return true;
 
-  if ( cell.y() != 0 && cell.y() == m_cell.y() )
+  if ( cell.x() != 0 && ( cell.x() == m_cell.x() && m_cell.y() == 0 ) )
+    return true;
+
+  if ( cell.y() != 0 && ( cell.y() == m_cell.y() && m_cell.x() == 0 ) )
     return true;
 
   return false;
@@ -306,10 +316,15 @@ void KSpreadChanges::ChangeRecord::addDependant( ChangeRecord * record, QPoint c
     if ( it.current()->isDependant( record->table(), cellRef ) )
     {
       it.current()->addDependant( record, cellRef );
-      return;
+      record->addDependancy( it.current() );
     }
   }
   m_dependants.append( record );
+}
+
+void KSpreadChanges::ChangeRecord::addDependancy( ChangeRecord * record )
+{
+  m_dependancies.append( record );
 }
 
 /*
@@ -369,13 +384,7 @@ bool KSpreadChanges::CellChange::loadXml( QDomElement const & change,
 
 void KSpreadChanges::CellChange::saveXml( QDomDocument & doc, QDomElement & change ) const
 {
-    int        authorID;
-    QDateTime  timestamp;
-    QString *  comment;
-    QString       formatString;
-    QString       oldValue;
-    KSpreadCell * cell;
-
+  kdDebug() << "Saving CellChange object" << endl;
   QDomElement cellChange = doc.createElement( "cell" );
   cellChange.setAttribute( "author", QString::number( authorID ) );
   cellChange.setAttribute( "time",   QString::number( (int) timestamp.toTime_t() ) );

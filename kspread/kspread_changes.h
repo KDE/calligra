@@ -106,12 +106,12 @@ class KSpreadChanges : public QObject
   class ChangeRecord
   {
    public:
-    typedef enum E1 { ACCEPTED, PENDING, REJECTED } State;
+    typedef enum E1 { ACCEPTED, FILTERED, PENDING, REJECTED } State;
     typedef enum E2 { CELL, INSERTCOLUMN, INSERTROW, INSERTTABLE, 
                       DELETECOLUMN, DELETEROW, DELETETABLE } ChangeType;
 
     ChangeRecord();
-    ChangeRecord( int id, State state, ChangeType type, KSpreadSheet const * table, 
+    ChangeRecord( int id, State state, ChangeType type, KSpreadSheet * table, 
                   QPoint const & cellRef, Change * change );
     ~ChangeRecord();
 
@@ -120,6 +120,10 @@ class KSpreadChanges : public QObject
 
     bool isDependant( KSpreadSheet const * const table, QPoint const & cell ) const;
     void addDependant( ChangeRecord * record, QPoint const & cellRef );
+    void addDependancy( ChangeRecord * record );
+
+    void  setState( State state ) { m_state = state; }
+    State state() const { return m_state; }
 
     int id() const { return m_id; }
     KSpreadSheet const * const table() const { return m_table; }
@@ -134,6 +138,7 @@ class KSpreadChanges : public QObject
     Change *       m_change;
 
     QPtrList<ChangeRecord> m_dependants;
+    QPtrList<ChangeRecord> m_dependancies;
   };
 
   QPtrList<ChangeRecord> m_dependancyList;
