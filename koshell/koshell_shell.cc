@@ -326,9 +326,7 @@ void KoShellWindow::closeDocument()
     m_pFrame->setView( 0L ); // safety measure
     m_pKoolBar->removeItem( m_grpDocuments, (*m_activePage).m_id );
     (*m_activePage).m_pDoc->removeShell(this);
-    delete (*m_activePage).m_pView;
-    if ( (*m_activePage).m_pDoc->viewCount() <= 1 )
-      delete (*m_activePage).m_pDoc;
+    Page oldPage = (*m_activePage); // make a copy of the struct
     m_lstPages.remove( m_activePage );
     m_activePage = m_lstPages.end(); // no active page right now
 
@@ -344,6 +342,14 @@ void KoShellWindow::closeDocument()
       setRootDocument( 0L );
       partManager()->setActivePart( 0L, 0L );
     }
+
+    // Now delete the old view and page
+    // Don't do it before, because setActivePart will call slotActivePartChanged,
+    // which needs the old view (to unplug it and its plugins)
+    delete oldPage.m_pView;
+    if ( oldPage.m_pDoc->viewCount() <= 1 )
+      delete oldPage.m_pDoc;
+
   }
   kdDebug() << "m_lstPages has " << m_lstPages.count() << " documents" << endl;
 }
