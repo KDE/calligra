@@ -347,7 +347,7 @@ VCanvas::repaintAll( const KoRect & )
 	//if( m_view->layersDocker() )
 //		m_view->layersDocker()->updatePreviews();
 	VPainter *p = m_view->painterFactory()->painter();
-	KoRect rect( rect().x(), rect().y(), rect().width(), rect().height() );
+	KoRect rect = KoRect::fromQRect( this->rect() );
 	p->blit( rect );
 
 	// draw handle:
