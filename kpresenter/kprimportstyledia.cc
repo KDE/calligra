@@ -148,7 +148,7 @@ void KPrImportStyleDia::loadFile()
         else
         {
             KMessageBox::error( this,
-                                i18n("File is not a kpresenter file!"),
+                                i18n("File is not a KPresenter file!"),
                                 i18n("Import Style"));
         }
         store->close();

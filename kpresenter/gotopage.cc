@@ -45,7 +45,7 @@ KPGotoPage::KPGotoPage( const KPresenterDoc *doc,
     setMainWidget(page);
     QVBoxLayout *ml = new QVBoxLayout( page, KDialog::marginHint(),
                                          KDialog::spacingHint());
-    QLabel *label = new QLabel( i18n( "Goto page:" ), page );
+    QLabel *label = new QLabel( i18n( "Go to page:" ), page );
     ml->addWidget( label );
     spinbox = new QListBox( page );
     connect( spinbox, SIGNAL(doubleClicked( QListBoxItem* )),
