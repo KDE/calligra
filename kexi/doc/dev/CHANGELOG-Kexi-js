@@ -57,23 +57,64 @@ TODO: change texts in projectwizard to more descriptive:
 "Authentication" --> "Database server's user authentication"
 "Database Location" --> "Database Server Location"
 
-TODO: finish transactions code: do simulated autocommit
-TODO: implement better references (foreign key information) between tables
+TODO: [complexity=small] add dynamic resize for dict members like Connection::m_tables
+TODO: [complexity=big] make KexiDB really ASYNC, multithreaded!
+
+TODO(GUI):
+-add "Change data source" button in project wizard
+-after pressing this button, show "connections selection dialog"
+-create "connections selection dialog" instead of project wizard:
+--add "Always show me this advanced dialog" checkbox to connections selection dialog
+--add "Set selected connection as default" checkbox to connections selection dialog
+-old project wizard is now "connection wizard" (for creating new connection);
+ "connection" created by user stores full info needed to get databases list
+-connection data is a mime type of local xml file, so it can be used to create shortcuts
+-kexi project is just connection extended with providing database name and user (local)
+ settings for this given database
+-on startup: by default offer:
+--creating empty temporary db on startup with name "New database"
+--creating new database using database wizard
+--opening existing Kexi projects
+--importing existing non-kexi databases
+
+TODO: implement better references (foreign key information) between tables + storage
+TODO: implement WHERE clause + storage
+TODO: implement GROUP BY clause + storage
 TODO: add kexi driver version info
 TODO: add server version info retrieval
+TODO: add schema to kexi__* tables on createTable()
+TODO: add support for creation temporary databases
+
+2003-10-09
+KexiDB::Connection: 
+- "select * from ..." substituted by "select <field name(s)> from ..."
+  where possible, so after future kexi_* tables change it will still work.
+- list of internally used kexi__* tables available with new static method
+- bool TableSchema::isKexiDBSystem() added for tables that are internal for KexiDB
+- bool SchemaData::isNative() added for objects that are native, ie. not contain additional
+   metadata information.
+
+- Connection::destroy() instead of Connection::disconnect() should be called 
+  from xxxxConnection subclasses.
 
 2003-10-07
--KexiDB::QueryAsterisk class introduced to define select queries with asterisks, like
+- KexiDB::QueryAsterisk class introduced to define select queries with asterisks, like
  "staff.*" in "SELECT staff.*, cars.model from staff, cars WHERE staff.car = cars.number"
  (1st ttype) or "*" in "SELECT * from staff, cars WHERE staff.car = cars.number" (2nd type)
- 
+- Query schemas storage added
+- using include path returned by 'mysql_config --mysql_config' as 
+  is instead of eating mysql suffix
+- Transaction::null and isNull() added
+- Connection: Simulated AutoCommit feature implemented,
+   createTable() added - it uses autocommit if enabled.
+- Driver: DriverBehaviour member added - Detailed definition 
+  of driver's default behaviour.
 
 2003-10-06
 -KexiDB::QuerySchema: 
  - field aliases added and checking if there is alias
  - list of tables used in query added
  - debug() updated
-
 
 2003-10-05
 -KexiDB:: 
