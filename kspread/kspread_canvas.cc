@@ -1076,7 +1076,6 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
-  kdDebug() << "Mouse pressed" << endl;
     if ( _ev->button() == LeftButton )
         m_bMousePressed = true;
 

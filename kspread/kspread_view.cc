@@ -2740,8 +2740,10 @@ void KSpreadView::consolidate()
   {
     m_pCanvas->deleteEditor( true ); // save changes
   }
-  KSpreadConsolidate dlg( this, "Consolidate" );
-  dlg.exec();
+
+  KSpreadConsolidate * dlg = new KSpreadConsolidate( this, "Consolidate" );
+  dlg->show();
+  // dlg destroys itself
 }
 
 void KSpreadView::sortList()
