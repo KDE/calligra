@@ -632,7 +632,7 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 		const char *ptr = d.latin1();
 		const char *end = d.latin1() + d.length() + 1;
 
-		double contrlx, contrly, curx, cury, tox, toy, x1, y1, x2, y2, xc, yc;
+		double contrlx, contrly, curx, cury, subpathx, subpathy, tox, toy, x1, y1, x2, y2, xc, yc;
 		bool relative;
 		char command = *(ptr++), lastCommand = ' ';
 
@@ -654,11 +654,12 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					curx = relative ? curx + tox : tox;
-					cury = relative ? cury + toy : toy;
+					subpathx = curx = relative ? curx + tox : tox;
+					subpathy = cury = relative ? cury + toy : toy;
 
 					//if( lastCommand == 'z' || lastCommand == 'Z' )
 					//	path->close();
+					obj->end();
 					obj->moveTo( KoPoint( curx, cury ) );
 					break;
 				}
@@ -707,8 +708,8 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 				case 'Z':
 				{
 					// reset curx, cury for next path
-					curx = obj->currentPoint().x();
-					cury = obj->currentPoint().y();
+					curx = subpathx;
+					cury = subpathy;
 					obj->close();
 					break;
 				}
