@@ -313,11 +313,14 @@ void KWFrame::setSelected( bool _selected )
         removeResizeHandles();
 }
 
-QRect KWFrame::outerRect() const
+QRect KWFrame::outerRect( KWViewMode* viewMode ) const
 {
     KWDocument *doc = frameSet()->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
-    if(!(frameSet() && frameSet()->getGroupManager())) {
+    bool isFrameVisible = viewMode && viewMode->drawFrameBorders();
+    if (frameSet() && frameSet()->getGroupManager())
+        isFrameVisible = false;
+    if ( isFrameVisible ) {
         outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.width(), doc, 1 );
         outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.width(), doc, 1 );
         outerRect.rRight() += KoBorder::zoomWidthX( brd_right.width(), doc, 1 );
@@ -672,7 +675,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
-        QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
+        QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect(viewMode) ) );
         //kdDebug(32001) << "KWFrameSet::createEmptyRegion outerRect=" << outerRect << " crect=" << crect << endl;
         outerRect &= crect; // This is important, to avoid calling subtract with a Y difference > 65536
         if ( !outerRect.isEmpty() )
@@ -687,7 +690,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
 
 void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, const QColorGroup &, KWViewMode *viewMode )
 {
-    QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+    QRect outerRect( viewMode->normalToView( frame->outerRect(viewMode) ) );
     //kdDebug(32001) << "KWFrameSet::drawMargins frame: " << frameFromPtr( frame )
     //               << " outerRect: " << outerRect
     //               << " crect: " << crect << endl;
@@ -708,7 +711,7 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
     int topMargin = m_doc->zoomItY(frame->bTop());
     int rightMargin = m_doc->zoomItX(frame->bRight());
     int bottomMargin = m_doc->zoomItY(frame->bBottom());
-    //kdDebug(32001) << "KWFrameSet::drawMargins leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
+    kdDebug(32001) << "KWFrameSet::drawMargins leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
 
     if ( topMargin != 0 )
     {
@@ -737,7 +740,7 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
 
 void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode )
 {
-    QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+    QRect outerRect( viewMode->normalToView( frame->outerRect( viewMode ) ) );
     //kdDebug(32001) << "KWFrameSet::drawFrameBorder frame: " << frameFromPtr( frame )
     //               << " outerRect: " << outerRect << endl;
 
@@ -757,10 +760,13 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
 
     // Draw default borders using view settings...
     QPen viewSetting( QApplication::palette().color( QPalette::Active, QColorGroup::Mid ) );
+    int minBorder = 1;
     // ...except when printing, or embedded doc, or disabled.
     if ( !viewMode || !viewMode->drawFrameBorders() )
     {
-        viewSetting.setColor( bgBrush.color() );
+        kdDebug(32001) << k_funcinfo << " deactivating pen" << endl;
+        viewSetting = NoPen;
+        minBorder = 0;
     }
 
     // Draw borders either as the user defined them, or using the view settings.
@@ -770,7 +776,7 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     KoBorder::drawBorders( *painter, m_doc, frameRect,
                            settingsFrame->leftBorder(), settingsFrame->rightBorder(),
                            settingsFrame->topBorder(), settingsFrame->bottomBorder(),
-                           1, viewSetting );
+                           minBorder, viewSetting );
     painter->restore();
 }
 
@@ -1171,7 +1177,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         return;
     }
 
-    QRect normalOuterFrameRect( frame->outerRect() );
+    QRect normalOuterFrameRect( frame->outerRect( viewMode ) );
     QRect outerFrameRect( viewMode->normalToView( normalOuterFrameRect ) );
     QRect outerCRect = crect.intersect( outerFrameRect );
 #ifdef DEBUG_DRAW
@@ -1286,7 +1292,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 #ifdef DEBUG_DRAW
             kdDebug(32001) << "  looking at frame below us: " << f->frameSet()->getName() << " frame " << frameFromPtr( frame ) << endl;
 #endif
-            QRect viewFrameCRect = outerCRect.intersect( viewMode->normalToView( f->outerRect() ) );
+            QRect viewFrameCRect = outerCRect.intersect( viewMode->normalToView( f->outerRect( viewMode ) ) );
             if ( !viewFrameCRect.isEmpty() )
             {
 #ifdef DEBUG_DRAW
@@ -1582,7 +1588,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 	QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
         for ( ; fIt.current() ; ++fIt )
         {
-            QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
+            QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect( viewMode ) ) );
 #ifdef DEBUG_DRAW
             //kdDebug(32002) << "frameClipRegion subtract rect "<< r << endl;
 #endif
@@ -1648,7 +1654,7 @@ void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight,
 }
 
 bool KWFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& point, bool borderOfFrameOnly) {
-    QRect outerRect( frame->outerRect() );
+    QRect outerRect( frame->outerRect( m_doc->viewMode() ) );
     // Give the user a bit of margin for clicking on it :)
     const int margin = 2;
     outerRect.rLeft() -= margin;

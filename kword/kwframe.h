@@ -202,8 +202,9 @@ public:
     void invalidateParentFrameset();
 
     /** Return the _zoomed_ rectangle for this frame, including the border - for drawing
+     * @param viewMode needed to know if borders are visible or not
      */
-    QRect outerRect() const;
+    QRect outerRect( KWViewMode* viewMode ) const;
 
     /** Return the unzoomed rectangle, including the border, for the frames-on-top list.
      * The default border of size 1-pixel that is drawn on screen is _not_ included here

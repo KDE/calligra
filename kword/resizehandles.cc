@@ -160,7 +160,7 @@ void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
 void KWResizeHandle::updateGeometry()
 {
     //KWDocument * doc = frame->frameSet()->kWordDocument();
-    QRect newRect( frame->outerRect() );
+    QRect newRect( frame->outerRect( m_canvas->viewMode() ) );
     QRect frameRect( m_canvas->viewMode()->normalToView( newRect ) );
     switch ( direction ) {
     case LeftUp:

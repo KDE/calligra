@@ -361,7 +361,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
         }
         else if ( (posn = m_doc->positionToSelectRowcolTable( nPoint, &table))
             != KWDocument::TABLE_POSITION_NONE)  // we are in position to select full row/cells of a table + hold shift
-        { 
+        {
             if( e->state() & ShiftButton ) {
                 KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
                 if(posn == KWDocument::TABLE_POSITION_RIGHT)
@@ -858,7 +858,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     if( newLeft != frame->left() || newRight != frame->right() || newTop != frame->top() || newBottom != frame->bottom() )
     {
         // Keep copy of old rectangle, for repaint()
-        QRect oldRect = m_viewMode->normalToView( frame->outerRect() );
+        QRect oldRect = m_viewMode->normalToView( frame->outerRect(m_viewMode) );
 
         frameSet->resizeFrameSetCoords( frame, newLeft, newTop, newRight, newBottom, false /*not final*/ );
         /*frame->setLeft(newLeft);
@@ -902,7 +902,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         // Move resize handles to new position
         frame->updateResizeHandles();
         // Calculate new rectangle for this frame
-        QRect newRect( m_viewMode->normalToView( frame->outerRect() ) );
+        QRect newRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
         // Repaint only the changed rects (oldRect U newRect)
         repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
         m_frameResized = true;
@@ -1048,11 +1048,11 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
                     if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
                         tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
                 } else {
-                    QRect oldRect( m_viewMode->normalToView( frame->outerRect() ) );
+                    QRect oldRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
                     // Move the frame
                     frame->moveTopLeft( frame->topLeft() + _move );
                     // Calculate new rectangle for this frame
-                    QRect newRect( frame->outerRect() );
+                    QRect newRect( frame->outerRect(m_viewMode) );
 
                     QRect frameRect( m_viewMode->normalToView( newRect ) );
                     // Repaint only the changed rects (oldRect U newRect)
@@ -1070,10 +1070,10 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
             KWTableFrameSet *table = tablesMoved.at( i );
             for ( KWTableFrameSet::TableIter k(table) ; k ; ++k ) {
                 KWFrame * frame = k->frame( 0 );
-                QRect oldRect( m_viewMode->normalToView( frame->outerRect() ) );
+                QRect oldRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
                 frame->moveTopLeft( frame->topLeft() + _move );
                 // Calculate new rectangle for this frame
-                QRect newRect( frame->outerRect() );
+                QRect newRect( frame->outerRect(m_viewMode) );
                 QRect frameRect( m_viewMode->normalToView( newRect ) );
                 // Repaing only the changed rects (oldRect U newRect)
                 repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
