@@ -103,7 +103,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
 {
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
-    xmlWriter.addAttribute( "draw:name", m_manualTitle );
+    xmlWriter.addAttribute( "draw:name", m_manualTitle ); //we must store a name
     xmlWriter.addAttribute( "draw:id", posPage );
     //xmlWriter.addAttribute( "draw:master-page-name", master-page-name); ??? FIXME
 
@@ -156,7 +156,12 @@ bool KPrPage::saveOasisNote( KoXmlWriter &xmlWriter )
         return true;
     xmlWriter.startElement( "presentation:notes" );
     xmlWriter.startElement( "draw:text-box" );
-    //todo add note text here.
+    QStringList text = QStringList::split( "\n", m_noteText );
+    for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
+        xmlWriter.startElement( "text:p" );
+        xmlWriter.addTextNode( *it );
+        xmlWriter.endElement();
+    }
     xmlWriter.endElement();
     xmlWriter.endElement();
 
@@ -2019,7 +2024,7 @@ void KPrPage::setNoteText( const QString &_text )
     m_doc->setModified(true);
 }
 
-QString KPrPage::noteText(  )const
+QString KPrPage::noteText() const
 {
     return m_noteText;
 }

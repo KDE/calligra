@@ -1216,7 +1216,6 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
 {
     for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
     {
-        //kdDebug()<<"load Object \n";
         QDomElement o = object.toElement();
         QString name = o.tagName();
         QDomElement * animationShow = 0L;
