@@ -21,6 +21,7 @@
 #ifndef GDK_PIXBUF_XLIB_PRIVATE_H
 #define GDK_PIXBUF_XLIB_PRIVATE_H
 
+#include <config.h>
 #include "gdk-pixbuf-xlib.h"
 #include <X11/Xlib.h>
 
@@ -30,6 +31,9 @@ extern int gdk_pixbuf_screen;
 #define KSVG_LITTLE_ENDIAN 1
 #define KSVG_BIG_ENDIAN 2
 
-/* FIXME: Make this auto-detectable */
-#define KSVG_BYTE_ORDER KSVG_LITTLE_ENDIAN
+#ifndef WORDS_BIGENDIAN 
+#define KSVG_BYTE_ORDER KSVG_LITTLE_ENDIAN 
+#else 
+#define KSVG_BYTE_ORDER KSVG_BIG_ENDIAN 
+#endif 
 #endif
