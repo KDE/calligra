@@ -32,6 +32,7 @@
 #include "kformuladocument.h"
 #include "kformulaview.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 struct KFormulaView::KFormulaView_Impl {
 
@@ -385,4 +386,7 @@ void KFormulaView::emitCursorChanged()
     }
 }
 
+KFORMULA_NAMESPACE_END
+
+using namespace KFormula;
 #include "kformulaview.moc"

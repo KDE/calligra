@@ -27,6 +27,7 @@
 #include "matrixelement.h"
 #include "sequenceelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
@@ -559,3 +560,5 @@ QString MatrixElement::toLatex()
 
     return matrix;
 }
+
+KFORMULA_NAMESPACE_END

@@ -29,6 +29,7 @@
 #include "kformulacontainer.h"
 #include "formulacursor.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * Base for all kformula commands.
@@ -245,7 +246,7 @@ public:
      * @returns true if nothing happened.
      */
     virtual bool isSenseless() { return removedList.isEmpty(); }
-    
+
 private:
 
     /**
@@ -380,5 +381,6 @@ private:
     TextElement* textElement;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // KFORMULACOMMAND_H

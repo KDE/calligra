@@ -26,6 +26,7 @@
 
 #include "basicelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * The element that contains a number of children.
@@ -326,5 +327,7 @@ private:
      */
     bool textSequence;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // SEQUENCEELEMENT_H

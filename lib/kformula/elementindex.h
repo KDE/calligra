@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -25,6 +25,8 @@
 #include <memory>
 
 #include "basicelement.h"
+
+KFORMULA_NAMESPACE_BEGIN
 
 class ElementIndex;
 
@@ -41,7 +43,7 @@ class ElementIndex {
 public:
 
     virtual ~ElementIndex() { /*cerr << "ElementIndex destroyed.\n";*/ }
-    
+
     /**
      * Moves the cursor inside the index. The index has to exist.
      */
@@ -65,5 +67,6 @@ public:
     virtual BasicElement* getElement() = 0;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // ELEMENTINDEX_H

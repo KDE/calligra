@@ -30,6 +30,7 @@
 #include "sequenceparser.h"
 #include "textelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 int ElementType::evilDestructionCount = 0;
 
@@ -365,3 +366,4 @@ void ComplexElementType::output()
     cout << "ElementType" << endl;
 }
 
+KFORMULA_NAMESPACE_END

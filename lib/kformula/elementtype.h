@@ -26,8 +26,11 @@
 
 #include "contextstyle.h"
 
-class OperatorToken;
 class QPainter;
+
+KFORMULA_NAMESPACE_BEGIN
+
+class OperatorToken;
 class SequenceElement;
 class SequenceParser;
 class SymbolTableEntry;
@@ -331,5 +334,7 @@ public:
     // debug
     virtual void output();
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // ELEMENTTYPE_H

@@ -36,16 +36,20 @@
 #include "elementindex.h"
 #include "formuladefs.h"
 
+class QColorGroup;
+class QKeyEvent;
+class QPainter;
+
+class KCommand;
+
+KFORMULA_NAMESPACE_BEGIN
+
 class BasicElement;
 class FormulaCursor;
 class FormulaElement;
 class IndexElement;
-class KCommand;
 class KFormulaCommand;
 class KFormulaDocument;
-class QColorGroup;
-class QKeyEvent;
-class QPainter;
 class SymbolTable;
 
 
@@ -382,5 +386,6 @@ private:
     friend class TestCommands;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // KFORMULACONTAINER_H

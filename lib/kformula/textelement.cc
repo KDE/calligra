@@ -31,6 +31,7 @@
 #include "textelement.h"
 #include "symboltable.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 TextElement::TextElement(QChar ch, BasicElement* parent)
         : BasicElement(parent), character(ch), symbol(false)
@@ -244,3 +245,5 @@ QString TextElement::toLatex()
         return character;
     }
 }
+
+KFORMULA_NAMESPACE_END

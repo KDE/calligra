@@ -29,6 +29,7 @@
 #include "artwork.h"
 #include "contextstyle.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 const char Artwork::leftRoundBracket[] = {
     static_cast<char>(230), // uppercorner
@@ -683,3 +684,5 @@ void Artwork::drawBigCurlyBracket(QPainter& p, const ContextStyle& style, const 
         }
     }
 }
+
+KFORMULA_NAMESPACE_END

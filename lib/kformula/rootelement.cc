@@ -27,6 +27,7 @@
 #include "rootelement.h"
 #include "sequenceelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 RootElement::RootElement(BasicElement* parent)
@@ -488,3 +489,5 @@ QString RootElement::toLatex()
 
     return root;
 }
+
+KFORMULA_NAMESPACE_END

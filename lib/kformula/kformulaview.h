@@ -27,11 +27,14 @@
 
 #include "formuladefs.h"
 
+class QColorGroup;
+
+KFORMULA_NAMESPACE_BEGIN
+
 class BasicElement;
 class FormulaCursor;
 class FormulaElement;
 class KFormulaContainer;
-class QColorGroup;
 
 
 /**
@@ -157,5 +160,7 @@ private:
     bool& smallCursor();
     KFormulaContainer* container() const;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // __KFORMULAVIEW_H

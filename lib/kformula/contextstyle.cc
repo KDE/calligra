@@ -23,6 +23,7 @@
 
 #include "contextstyle.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 ContextStyle::ContextStyle()
         : m_zoomedResolutionX(1.0), m_zoomedResolutionY(1.0),
@@ -209,3 +210,4 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
     return result;
 }
 
+KFORMULA_NAMESPACE_END

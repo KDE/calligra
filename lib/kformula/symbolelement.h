@@ -26,6 +26,7 @@
 #include "elementindex.h"
 #include "formuladefs.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * A symbol is simply a piece of art.
@@ -280,5 +281,6 @@ private:
     Artwork symbol;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // SYMBOLELEMENT_H

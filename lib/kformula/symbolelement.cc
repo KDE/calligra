@@ -25,6 +25,7 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 SymbolElement::SymbolElement(SymbolType type, BasicElement* parent)
@@ -676,3 +677,5 @@ QString SymbolElement::toLatex()
 
     return sym;
 }
+
+KFORMULA_NAMESPACE_END

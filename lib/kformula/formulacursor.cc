@@ -28,6 +28,7 @@
 #include "symbolelement.h"
 #include "textelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 FormulaCursor::FormulaCursor(FormulaElement* element)
         : selectionFlag(false), linearMovement(false),
@@ -665,3 +666,5 @@ SequenceElement* FormulaCursor::getNormal()
 {
     return dynamic_cast<SequenceElement*>(current);
 }
+
+KFORMULA_NAMESPACE_END

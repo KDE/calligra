@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -25,6 +25,8 @@
 #include <qstring.h>
 
 #include "formuladefs.h"
+
+KFORMULA_NAMESPACE_BEGIN
 
 class BasicElement;
 class ElementType;
@@ -69,7 +71,7 @@ public:
      * The character that makes a text symbol.
      */
     static const QChar textSymbol;
-    
+
 private:
 
     /**
@@ -81,7 +83,7 @@ private:
      * Reads a sequence of digits.
      */
     void readDigits();
-    
+
     /**
      * Reads the next token which is some text.
      */
@@ -96,7 +98,7 @@ private:
      * @returns the char at tokenEnd.
      */
     QChar getEndChar();
-    
+
     /**
      * The elements we want to parse. The parser must not change
      * it!
@@ -113,7 +115,7 @@ private:
      * The first position after the current token.
      */
     uint tokenEnd;
-    
+
     /**
      * The type of the current token.
      */
@@ -125,5 +127,6 @@ private:
     const SymbolTable& table;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // SEQUENCEPARSER_H

@@ -27,6 +27,7 @@
 #include "formulaelement.h"
 #include "sequenceelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
@@ -1215,3 +1216,5 @@ QString IndexElement::toLatex()
     }
     return index;
 }
+
+KFORMULA_NAMESPACE_END

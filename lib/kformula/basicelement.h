@@ -35,6 +35,8 @@
 #include "contextstyle.h"
 #include "formuladefs.h"
 
+KFORMULA_NAMESPACE_BEGIN
+
 class ComplexElement;
 class ElementType;
 class FormulaCursor;
@@ -444,5 +446,7 @@ private:
     BasicElement(BasicElement&) {}
     BasicElement& operator= (BasicElement&) { return *this; }
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // BASICELEMENT_H

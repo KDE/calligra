@@ -53,6 +53,7 @@
 #include "textelement.h"
 
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
@@ -740,4 +741,7 @@ bool KFormulaContainer::importOldText(QString text)
     return load(doc);
 }
 
+KFORMULA_NAMESPACE_END
+
+using namespace KFormula;
 #include "kformulacontainer.moc"

@@ -26,6 +26,7 @@
 #include "fractionelement.h"
 #include "sequenceelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 FractionElement::FractionElement(BasicElement* parent)
@@ -423,3 +424,5 @@ QString FractionElement::toLatex()
     }
     return fra;
 }
+
+KFORMULA_NAMESPACE_END

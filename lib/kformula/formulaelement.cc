@@ -27,6 +27,7 @@
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 FormulaElement::FormulaElement(FormulaDocument* container)
     : document(container)
@@ -118,3 +119,5 @@ QString FormulaElement::toLatex()
 {
     return inherited::toLatex();   //Consider $$ sorround
 }
+
+KFORMULA_NAMESPACE_END

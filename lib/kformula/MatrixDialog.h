@@ -24,6 +24,10 @@
 #include <qdialog.h>
 #include <qvalidator.h>
 
+#include "formuladefs.h"
+
+KFORMULA_NAMESPACE_BEGIN
+
 /**
  * Dialog for entering matrix sizes.
  * @internal
@@ -47,5 +51,7 @@ protected slots:
     void setWidth(int value);
     void setHeight(int value);
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // MATRIXDIALOG_H_INCLUDED

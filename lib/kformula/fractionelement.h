@@ -23,6 +23,7 @@
 
 #include "basicelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 class SequenceElement;
 
 
@@ -179,5 +180,6 @@ private:
     bool withLine;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // FRACTIONELEMENT_H

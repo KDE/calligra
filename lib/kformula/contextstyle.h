@@ -30,7 +30,9 @@
 #include <qstring.h>
 
 //Formula include
+#include "formuladefs.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * Contains all the style information for the formela. The idea
@@ -278,5 +280,7 @@ private:
     // information. There is no ContextStyle while parsing.
     //QString exponentChars;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // CONTEXTSTYLE_H

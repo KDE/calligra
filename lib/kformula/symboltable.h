@@ -25,6 +25,9 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
+#include "formuladefs.h"
+
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * An entry of our symbol table.
@@ -87,5 +90,7 @@ private:
      */
     QString greekLetters;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // SYMBOLTABLE_H

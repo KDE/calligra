@@ -20,6 +20,7 @@
 
 #include "symboltable.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 SymbolTableEntry::SymbolTableEntry(QString n, QChar ch)
         : name(n), symbolChar(ch)
@@ -209,3 +210,5 @@ QStringList SymbolTable::getAllNames() const
     list.sort();
     return list;
 }
+
+KFORMULA_NAMESPACE_END

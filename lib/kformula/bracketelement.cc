@@ -30,6 +30,7 @@
 #include "formulaelement.h"
 #include "sequenceelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 BracketElement::BracketElement(char l, char r, BasicElement* parent)
@@ -377,3 +378,4 @@ QString BracketElement::latexString(char type)
     return ".";
 }
 
+KFORMULA_NAMESPACE_END

@@ -25,6 +25,7 @@
 
 #include "basicelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * A matrix.
@@ -207,5 +208,6 @@ private:
     QList<QList<SequenceElement> > content;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // MATRIXELEMENT_H

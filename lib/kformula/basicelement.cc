@@ -26,6 +26,7 @@
 #include "formulacursor.h"
 #include "sequenceelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
@@ -222,3 +223,4 @@ QString BasicElement::toLatex()
 return "{}";
 }
 
+KFORMULA_NAMESPACE_END

@@ -26,6 +26,7 @@
 #include "basicelement.h"
 #include "elementindex.h"
 
+KFORMULA_NAMESPACE_BEGIN
 class SequenceElement;
 
 
@@ -217,5 +218,6 @@ private:
     KoPoint rootOffset;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // ROOTELEMENT_H

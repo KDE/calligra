@@ -24,6 +24,8 @@
 #include "kformulawidget.h"
 #include "scrollview.h"
 
+using namespace KFormula;
+
 
 class TestWidget : public KFormulaWidget {
 public:

@@ -26,6 +26,8 @@
 
 #include "basicelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
+
 class Artwork;
 class SequenceElement;
 
@@ -183,5 +185,6 @@ private:
 
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // BRACKETELEMENT_H

@@ -23,6 +23,7 @@
 #include <qdom.h>
 #include <qstring.h>
 
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * Converter from the other kformula lib string
@@ -47,13 +48,13 @@ private:
 
     void appendNextSequence(QDomDocument doc, QDomElement element);
     QDomElement getLastSequence(QDomDocument doc, QDomElement sequence);
-    
+
     QDomElement findIndexNode(QDomDocument doc, QDomElement sequence);
 
     ushort nextToken() { return formulaString[pos++].unicode(); }
     ushort lookAhead(uint i) const { return formulaString[pos+i].unicode(); }
     void pushback() { pos--; }
-    
+
     bool hasNext() const { return pos < formulaString.length(); }
     uint tokenLeft() const { return formulaString.length()-pos; }
 
@@ -67,5 +68,7 @@ private:
      */
     uint pos;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // KFORMULACOMPATIBILITY_H

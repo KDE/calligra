@@ -25,6 +25,7 @@
 #include "basicelement.h"
 #include "elementindex.h"
 
+KFORMULA_NAMESPACE_BEGIN
 class SequenceElement;
 
 
@@ -376,5 +377,6 @@ private:
     SequenceElement* lowerRight;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // INDEXELEMENT_H

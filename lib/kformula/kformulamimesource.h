@@ -27,6 +27,7 @@
 #include "kformulacontainer.h"
 #include "symboltable.h"
 
+KFORMULA_NAMESPACE_BEGIN
 class FormulaElement;
 
 
@@ -52,5 +53,7 @@ private:
 
     FormulaElement* rootElement;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // KFORMULAMIMESOURCE_H

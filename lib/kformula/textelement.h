@@ -26,6 +26,7 @@
 
 #include "basicelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * A element that represents one char.
@@ -165,5 +166,6 @@ private:
     bool symbol;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // TEXTELEMENT_H

@@ -22,6 +22,7 @@
 #include <qstring.h>
 #include "kformulamathmlread.h"
 
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
@@ -441,4 +442,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
     return true;
 }
 
+KFORMULA_NAMESPACE_END
+
+using namespace KFormula;
 #include "kformulamathmlread.moc"

@@ -3,7 +3,7 @@
 
    This file is based on the other kformula lib
    Copyright (C) 1999 Ilya Baran (ibaran@mit.edu)
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -27,6 +27,7 @@
 #include "formuladefs.h"
 #include "kformulacompatibility.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 const int SYMBOL_ABOVE = 20000;
 const int UNUSED_OFFSET = 1000;
@@ -158,10 +159,10 @@ QDomElement KFormulaCompatibility::readMatrix(QDomDocument doc)
     uint cols = nextToken();
     nextToken();
     uint rows = nextToken();
-    
+
     element.setAttribute("ROWS", rows);
     element.setAttribute("COLUMNS", cols);
-    
+
     if ((nextToken() == '}') && (nextToken() == OF_MATRIX) && (nextToken() == '{')) {
         QValueList<QDomElement> matrix;
         for (uint c = 0; c < cols; c++) {
@@ -190,7 +191,7 @@ QDomElement KFormulaCompatibility::readMatrix(QDomDocument doc)
     else {
         pushback();
     }
-    
+
     return element;
 }
 
@@ -212,7 +213,7 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
         //cout << "read: " << ch << " (" << static_cast<char>(ch) << ')' << endl;
 
         if (leftIndexSeen > 0) leftIndexSeen--;
-        
+
         switch (ch) {
             case '{':
                 appendToSequence(sequence, readSequence(doc), leftIndexSeen);
@@ -226,7 +227,7 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                 if (!sequence.lastChild().isNull()) {
                     sequence.removeChild(sequence.lastChild());
                 }
-                
+
                 QDomElement element = doc.createElement("BRACKET");
                 appendToSequence(sequence, element, leftIndexSeen);
                 element.setAttribute("LEFT", ch);
@@ -239,11 +240,11 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
             }
             case OF_DIVIDE: {
                 QDomElement element = doc.createElement("FRACTION");
-                
+
                 QDomElement num = doc.createElement("NUMERATOR");
                 element.appendChild(num);
                 num.appendChild(getLastSequence(doc, sequence));
-                
+
                 QDomElement den = doc.createElement("DENOMINATOR");
                 element.appendChild(den);
                 appendNextSequence(doc, den);
@@ -256,7 +257,7 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                 QDomElement con = doc.createElement("CONTENT");
                 element.appendChild(con);
                 appendNextSequence(doc, con);
-                
+
                 QDomElement ind = doc.createElement("INDEX");
                 element.appendChild(ind);
                 ind.appendChild(getLastSequence(doc, sequence));
@@ -374,7 +375,7 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                 element.setAttribute("TYPE",
                                      (ch==INTEGRAL) ? Integral :
                                      ((ch==SUM) ? Sum : Product));
-                
+
                 QDomElement con = doc.createElement("CONTENT");
                 element.appendChild(con);
                 con.appendChild(readSequence(doc));
@@ -398,3 +399,5 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
     }
     return sequence;
 }
+
+KFORMULA_NAMESPACE_END

@@ -29,6 +29,7 @@
 
 class QPainter;
 
+KFORMULA_NAMESPACE_BEGIN
 
 /**
  * A piece of art that may be used by any element.
@@ -112,5 +113,6 @@ private:
     static const char rightCurlyBracket[];
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // ARTWORK_H

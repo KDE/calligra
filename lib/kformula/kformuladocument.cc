@@ -32,6 +32,7 @@
 #include "kformuladocument.h"
 #include "symboltable.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 struct KFormulaDocument::KFormulaDocument_Impl {
 
@@ -598,4 +599,7 @@ bool KFormulaDocument::hasFormula()
     return (formula() != 0) && (formula()->getActiveCursor() != 0);
 }
 
+KFORMULA_NAMESPACE_END
+
+using namespace KFormula;
 #include "kformuladocument.moc"

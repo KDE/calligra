@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -25,6 +25,8 @@
 #include <qdom.h>
 #include "kformulainputfilter.h"
 
+KFORMULA_NAMESPACE_BEGIN
+
 /**
  This class converts MathML to KFormula XML.
  Right now is implemented only the PresentationMarkup.
@@ -32,21 +34,21 @@
 
 class MathMl2KFormula : public KFInputFilter
 {
-Q_OBJECT    
+Q_OBJECT
     public:
 	/**
 	 * Build a MathML 2 KFormula converter.
-	 * call @startConversion to convert and wait for 
+	 * call @startConversion to convert and wait for
 	 * a @conversionFinished signal, than call
 	 * @getKFormulaDom to get the converted DOM
 	 */
 	MathMl2KFormula(QDomDocument *mmldoc);
-	
+
 	/*
 	 * Get the just created DOM.
 	 */
 	virtual QDomDocument getKFormulaDom();
-    
+
 
     public slots:
 	virtual void startConversion();
@@ -58,5 +60,7 @@ Q_OBJECT
 	QDomDocument *origdoc;
 	QDomDocument formuladoc;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // KFORMULAMATHMLREAD_H

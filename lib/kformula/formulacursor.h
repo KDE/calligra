@@ -26,6 +26,8 @@
 #include "basicelement.h"
 #include "formuladefs.h"
 
+KFORMULA_NAMESPACE_BEGIN
+
 class FormulaElement;
 class IndexElement;
 class RootElement;
@@ -430,5 +432,6 @@ private:
     bool readOnly;
 };
 
+KFORMULA_NAMESPACE_END
 
 #endif // FORMULACURSOR_H

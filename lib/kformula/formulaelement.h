@@ -24,6 +24,8 @@
 // Formula include
 #include "sequenceelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
+
 class BasicElement;
 class ContextStyle;
 class FormulaDocument;
@@ -123,5 +125,7 @@ private:
      */
     FormulaDocument* document;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // FORMULAELEMENT_H

@@ -27,9 +27,12 @@
 #include <kaction.h>
 #include <kcommand.h>
 
+#include "formuladefs.h"
+
+KFORMULA_NAMESPACE_BEGIN
+
 class ContextStyle;
 class KFormulaContainer;
-class KFormulaWidget;
 class SymbolTable;
 
 
@@ -177,5 +180,7 @@ private:
 
     KFormulaContainer* formula() const;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // KFORMULADOCUMENT_H

@@ -30,6 +30,7 @@
 #include "sequenceelement.h"
 #include "textelement.h"
 
+KFORMULA_NAMESPACE_BEGIN
 
 int KFormulaCommand::evilDestructionCount = 0;
 
@@ -361,3 +362,5 @@ bool KFCMakeSymbol::isSenseless()
 {
     return !textElement->isSymbol();
 }
+
+KFORMULA_NAMESPACE_END

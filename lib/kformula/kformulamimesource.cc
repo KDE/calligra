@@ -34,7 +34,7 @@
 #include "formulaelement.h"
 #include "kformulamimesource.h"
 
-
+KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
@@ -152,3 +152,5 @@ const SymbolTable& KFormulaMimeSource::getSymbolTable() const
 {
     return table;
 }
+
+KFORMULA_NAMESPACE_END
