@@ -6,7 +6,6 @@
 
 #include "vdashpattern.h"
 
-
 VDashPattern::VDashPattern( double offset )
 	: m_offset( offset )
 {

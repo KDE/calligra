@@ -14,9 +14,9 @@
 
 enum VStrokeType
 {
-	stroke_none     = 0,
-	stroke_stroke   = 1,
-	stroke_gradient = 2,
+	stroke_none     = 0,	/// no stroke at all
+	stroke_stroke   = 1,	/// solid stroke
+	stroke_gradient = 2,	/// gradient as stroke
 	stroke_unknown  = 3
 };
 
@@ -39,7 +39,12 @@ class QDomElement;
 
 /**
  * Manages stroke properties.
+ * Supported are line join/cap styles equivalents to the qpainter ones.
+ * Also the line width in pixels and line stroke type (solid / gradient).
+ * Finally it also managed the dashing pattern, see VDashPattern.
  *
+ * Default is black solid outline of width 1 with miter join, butt cap
+ * style and no dashes.
  */
 class VStroke
 {
@@ -47,23 +52,9 @@ public:
 	VStroke( float width = 1.0, const VLineCap cap = cap_butt,
 			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
 
-	/**
-	 * Gives the current stroke color.
-	 *
-	 * @return The current stroke color.
-	 */
 	const VColor& color() const { return m_color; }
-
-	/**
-	 * Sets the current stroke color to color.
-	 */
 	void setColor( const VColor& color ) { m_color = color; }
 
-	/**
-	 * Gets the linewidth in pixels.
-	 *
-	 * @return 
-	 */
 	double lineWidth() const { return m_lineWidth; }
 	void setLineWidth( const double width ) { m_lineWidth = width; }
 

@@ -9,6 +9,16 @@
 
 class QDomElement;
 
+/**
+ * The dash pattern consistes of a sequence of on/off values.
+ * For example 10 5 5 10 would result in a dash of 10 pixels,
+ * next 5 pixels no dash, then 5 pixels of dashing, finally 10 pixels
+ * of no dash. This sequence is repeated until the whole outline is dashed.
+ *
+ * Also it supports an offset value for when to start the dashing.
+ *
+ * Default is no dashes.
+ */
 class VDashPattern
 {
 public:

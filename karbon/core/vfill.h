@@ -18,15 +18,23 @@ enum VFillRule
 
 enum VFillType
 {
-	fill_none     = 0,
-	fill_fill     = 1,
-	fill_gradient = 2,
+	fill_none     = 0,	/// no fill at all
+	fill_fill     = 1,	/// solid fill
+	fill_gradient = 2,	/// gradient fill
 	fill_unknown  = 3
 };
 
-
 class QDomElement;
 
+/**
+ * Manages the fill of shapes.
+ *
+ * The fill can be solid or gradient.
+ * Also two fill rules are supported that effect how the shape is
+ * filled. For explanation see the QPainter documentation.
+ *
+ * Default is no fill and even-odd filling rule.
+ */
 class VFill
 {
 public:

@@ -11,7 +11,14 @@
 class QDomElement;
 class QColor;
 
-
+/**
+ * This class keeps track of color properties.
+ * The actual color values can be represented in
+ * rgb and hsv color spaces. Also each color has
+ * a related opacity value.
+ *
+ * Default is opaque, rgb, black color.
+ */
 class VColor
 {
 public:
@@ -25,6 +32,7 @@ public:
 
 	VColor();
 
+	/// color values in all color spaces range from 0.0 to 1.0
 	void pseudoValues( int& v1, int& v2, int& v3 ) const;
 	void values(
 		float* v1 = 0L, float* v2 = 0L,
@@ -33,6 +41,7 @@ public:
 		const float* v1 = 0L, const float* v2 = 0L,
 		const float* v3 = 0L, const float* v4 = 0L );
 
+	/// opacity is a value ranging from 0.0(fully transparent) to 1.0(opaque)
 	float opacity() const { return m_opacity; }
 	void setOpacity( float opacity ) { m_opacity = opacity; }
 
@@ -42,6 +51,7 @@ public:
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
+	/// convenience method
 	QColor toQColor() const;
 
 private:
