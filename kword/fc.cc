@@ -640,8 +640,11 @@ void KWFormatContext::cursorGotoLine( unsigned int _textpos )
 	ret = makeNextLineLayout();
     } while ( ret );
 
-    qWarning( "ERROR: Textpos behind content of parag! Strange things may happen now!" );
-    qWarning( "(If you just opened an empty document you can IGNORE this message!!!" );
+    if ( !doc->isEmpty() )
+    {
+      qWarning( "ERROR: Textpos behind content of parag! Strange things may happen now!" );
+      qWarning( "(If you just opened an empty document you can IGNORE this message!!!" );
+    }
 }
 
 /*================================================================*/
