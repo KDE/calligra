@@ -18,6 +18,7 @@
 */
 
 #include <ctype.h>
+#include <stdlib.h>
 #include <qstringlist.h>
 #include "ailexer.h"
 
