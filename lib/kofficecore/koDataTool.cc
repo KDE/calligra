@@ -1,5 +1,5 @@
 #include "koDataTool.h"
-#include "koTrader.h"
+#include <ktrader.h>
 
 #include <kglobal.h>
 #include <kstddirs.h>
@@ -168,7 +168,7 @@ QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const
 
 bool KoDataToolInfo::isValid() const
 {
-    return( m_service != (KService*)0 );
+    return( m_service );
 }
 			
 /*************************************************

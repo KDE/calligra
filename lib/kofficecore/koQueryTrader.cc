@@ -21,7 +21,7 @@
 
 #include "koQueryTypes.h"
 #include "koDocument.h"
-#include "koTrader.h"
+#include <ktrader.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
