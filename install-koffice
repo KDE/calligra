@@ -1,0 +1,63 @@
+#!/bin/sh
+
+echo "--------------------------------"
+echo "      Installing libraries"
+echo "--------------------------------"
+
+cd lib
+cd koml
+make clean
+make depend
+make all
+make install
+cd ../kofficecore
+make clean
+make depend
+make all
+make install
+cd ../kofficeui
+make clean
+make depend
+make all
+make install
+cd test
+make clean
+make depend
+make all
+cd ../../..
+
+echo "--------------------------------"
+echo "      Installing KImage"
+echo "--------------------------------"
+
+cd kimage
+make clean
+make depend
+make all
+make install
+cd ..
+
+echo "--------------------------------"
+echo "     Installing KPresenter"
+echo "--------------------------------"
+
+cd kpresenter
+make clean
+make depend
+make all
+make install
+cd ..
+
+echo "--------------------------------"
+echo "      Installing KSpread"
+echo "--------------------------------"
+
+cd kspread
+make clean
+make depend
+make all
+make install
+
+echo "--------------------------------"
+echo "            Finished"
+echo "--------------------------------"
