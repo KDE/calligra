@@ -370,6 +370,9 @@ public:
     int undoRedoLimit();
     void setUndoRedoLimit(int _val);
 
+
+    void updateRuler();
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -384,6 +387,7 @@ signals:
     void enablePaste( bool );
     void sig_refreshMenuCustomVariable();
     void pageNumChanged();
+    void sig_updateRuler();
 
 protected slots:
     void slotDocumentRestored();

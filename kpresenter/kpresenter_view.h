@@ -478,6 +478,8 @@ protected slots:
     void doAutomaticScreenPres();
 
     void getPageMouseWheelEvent( QWheelEvent *e );
+    void updateRuler();
+
 // end of protected slots
 protected:
 
@@ -507,7 +509,6 @@ protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
 
-    void updateRuler();
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 private:
 // ********** variables **********

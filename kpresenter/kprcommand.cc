@@ -740,6 +740,7 @@ void MoveByCmd::execute()
 	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
+        doc->updateRuler();
     }
 }
 
@@ -755,6 +756,7 @@ void MoveByCmd::unexecute()
 	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
+        doc->updateRuler();
     }
 }
 
@@ -800,6 +802,7 @@ void MoveByCmd2::execute()
 	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
+        doc->updateRuler();
     }
 }
 
@@ -815,6 +818,7 @@ void MoveByCmd2::unexecute()
 	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
+        doc->updateRuler();
     }
 }
 

@@ -4059,5 +4059,9 @@ void KPresenterDoc::setUndoRedoLimit(int val)
     m_commandHistory->setRedoLimit(val);
 }
 
+void KPresenterDoc::updateRuler()
+{
+    emit sig_updateRuler();
+}
 
 #include <kpresenter_doc.moc>

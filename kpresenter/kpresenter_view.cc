@@ -274,6 +274,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect( m_pKPresenterDoc, SIGNAL( pageNumChanged() ), this, SLOT( pageNumChanged()) );
     connect( this, SIGNAL( currentPageChanged(int) ), this, SLOT( pageNumChanged()) );
     connect( page, SIGNAL( objectSelectedChanged() ), this, SLOT( updateObjectStatusBarItem() ));
+    connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateRuler()));
 
     KStatusBar * sb = statusBar();
     m_sbPageLabel = 0L;
