@@ -23,17 +23,21 @@
 #include <qdom.h>
 
 class KivioStencilSpawner;
+class QStringList;
+
 class KivioStencilSpawnerSet
 {
-protected:
+  protected:
     QString m_dir;
     QString m_name;
     QString m_id;
     
+    QStringList m_files;
+    
     QPtrList<KivioStencilSpawner> *m_pSpawners;
     KivioStencilSpawner *m_pSelected;
     
-public:
+  public:
     KivioStencilSpawnerSet(const QString& name=QString::null);
     virtual ~KivioStencilSpawnerSet();
     
@@ -61,6 +65,8 @@ public:
 
     static QString readTitle( const QString & );
     static QString readId( const QString & );
+    
+    QStringList files() const { return m_files; }
 };
 
 #endif

@@ -101,8 +101,8 @@ class KivioDoc : public KoDocument
     * Adds a KivioStencilSpawnerSet to the list of spawner sets and make it active.
     *
     */
-    KivioStencilSpawnerSet *addSpawnerSet( const QString& );
-    KivioStencilSpawnerSet *addSpawnerSetDuringLoad( const QString& );
+    void addSpawnerSet( const QString& );
+    void addSpawnerSetDuringLoad( const QString& );
     bool removeSpawnerSet( KivioStencilSpawnerSet * );
 
     QPtrList<KivioStencilSpawnerSet> *spawnerSets()const { return m_pLstSpawnerSets; }
@@ -160,6 +160,7 @@ class KivioDoc : public KoDocument
   protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
+    void loadStencil();
 
   signals:
     void sig_selectionChanged();
@@ -238,6 +239,11 @@ class KivioDoc : public KoDocument
     KCommandHistory * m_commandHistory;
 
     QFont m_font;
+    
+    QTimer* m_loadTimer;
+    int m_currentFile;
+    KivioStencilSpawnerSet* m_currentSet;
+    QValueList<KivioStencilSpawnerSet*> m_stencilSetLoadQueue;
 };
 
 #endif

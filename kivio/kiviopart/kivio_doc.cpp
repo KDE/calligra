@@ -79,6 +79,7 @@
 #include <kcommand.h>
 #include <kozoomhandler.h>
 #include <koApplication.h>
+#include <kglobal.h>
 
 //using namespace std;
 
@@ -94,9 +95,9 @@ int KivioDoc::s_docId = 0;
 KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* parent, const char* name, bool singleViewMode )
 : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-    dcop = 0;
-    if (!s_docs)
-        s_docs = new QPtrList<KivioDoc>;
+  dcop = 0;
+  if (!s_docs)
+    s_docs = new QPtrList<KivioDoc>;
 
   s_docs->append(this);
 
@@ -104,6 +105,8 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   m_pLstSpawnerSets = new QPtrList<KivioStencilSpawnerSet>;
   m_pLstSpawnerSets->setAutoDelete(true);
+  m_loadTimer = 0;
+  m_currentFile = 0;
 
   setInstance( KivioFactory::global(), false );
 
@@ -358,75 +361,68 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
 bool KivioDoc::loadStencilSpawnerSet( const QString &id )
 {
-    KStandardDirs *dirs = KGlobal::dirs();
-    QStringList dirList = dirs->findDirs("data", "kivio/stencils");
-    QString rootDir;
+  KStandardDirs *dirs = KGlobal::dirs();
+  QStringList dirList = dirs->findDirs("data", "kivio/stencils");
+  QString rootDir;
 
-    // Iterate through all data directories
-    for( QStringList::Iterator it = dirList.begin(); it != dirList.end(); ++it )
+  // Iterate through all data directories
+  for( QStringList::Iterator it = dirList.begin(); it != dirList.end(); ++it )
+  {
+    rootDir = (*it);
+
+    // Within each data directory, iterate through all directories looking
+    // for a filename (dir) that matches the parameter
+    QDir d(rootDir);
+    d.setFilter( QDir::Dirs );
+    d.setSorting( QDir::Name );
+
+    const QFileInfoList *list = d.entryInfoList();
+    QFileInfoListIterator listIT( *list );
+    QFileInfo *fi;
+
+    // Loop through the outer directories (like BasicFlowcharting)
+    while( (fi=listIT.current()) )
     {
-        rootDir = (*it);
+      if( fi->fileName() != "." &&
+          fi->fileName() != ".." )
+      {
+        QDir innerD(fi->absFilePath() );
+        innerD.setFilter( QDir::Dirs );
+        innerD.setSorting( QDir::Name );
 
-        // Within each data directory, iterate through all directories looking
-        // for a filename (dir) that matches the parameter
-        QDir d(rootDir);
-        d.setFilter( QDir::Dirs );
-        d.setSorting( QDir::Name );
+        const QFileInfoList *innerList = innerD.entryInfoList();
+        QFileInfoListIterator innerIT( *innerList );
+        QFileInfo *innerFI;
 
-        const QFileInfoList *list = d.entryInfoList();
-        QFileInfoListIterator listIT( *list );
-        QFileInfo *fi;
-
-        // Loop through the outer directories (like BasicFlowcharting)
-        while( (fi=listIT.current()) )
+        // Loop through the inner directories (like FlowChartingShapes1)
+        while( (innerFI = innerIT.current()) )
         {
-            if( fi->fileName() != "." &&
-                fi->fileName() != ".." )
+          if( innerFI->fileName() != ".." &&
+              innerFI->fileName() != "." )
+          {
+            // Compare the descriptions
+            QString foundId;
+
+            // TODO: use ID system here for loading
+            foundId = KivioStencilSpawnerSet::readId(innerFI->absFilePath());
+            if( foundId == id)
             {
-                QDir innerD(fi->absFilePath() );
-                innerD.setFilter( QDir::Dirs );
-                innerD.setSorting( QDir::Name );
 
-                const QFileInfoList *innerList = innerD.entryInfoList();
-                QFileInfoListIterator innerIT( *innerList );
-                QFileInfo *innerFI;
-
-                // Loop through the inner directories (like FlowChartingShapes1)
-                while( (innerFI = innerIT.current()) )
-                {
-                    if( innerFI->fileName() != ".." &&
-                        innerFI->fileName() != "." )
-                    {
-                        // Compare the descriptions
-                        QString foundId;
-
-			// TODO: use ID system here for loading
-                        foundId = KivioStencilSpawnerSet::readId(innerFI->absFilePath());
-                        if( foundId == id)
-                        {
-
-                            // Load the spawner set with  rootDir + "/" + fi.fileName()
-                            KivioStencilSpawnerSet *pSet = addSpawnerSetDuringLoad( innerFI->absFilePath() );
-                            if( pSet )
-                            {
-			       ;
-                            }
-                            else
-                            {
-			       kdDebug(43000) << "KivioDoc::loadStencilSpawnerSet() - Failed to load stencil:  "
-					 << innerFI->absFilePath() << endl;
-                            }
-                            return true;
-                        }
-                    }
-                    ++innerIT;
-                }
+              // Load the spawner set with  rootDir + "/" + fi.fileName()
+              addSpawnerSetDuringLoad( innerFI->absFilePath() );
+              return true;
             }
-            ++listIT;
+          }
+          
+          ++innerIT;
         }
+      }
+      
+      ++listIT;
     }
+  }
 
-    return false;
+  return false;
 }
 
 bool KivioDoc::completeLoading( KoStore* )
@@ -484,7 +480,7 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
   float zw = (float) rect.width() / (float)zoom.zoomItX(r.width());
   float zh = (float) rect.height() / (float)zoom.zoomItY(r.height());
   float z = QMIN(zw, zh);
-  kdDebug(43000) << "paintContent: w = " << rect.width() << " h = " << rect.height() << endl;
+  //kdDebug(43000) << "paintContent: w = " << rect.width() << " h = " << rect.height() << endl;
 
   zoom.setZoomAndResolution(qRound(z * 100), QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
@@ -604,52 +600,62 @@ bool KivioDoc::setIsAlreadyLoaded( QString dirName, QString id )
     return false;
 }
 
-KivioStencilSpawnerSet *KivioDoc::addSpawnerSet( const QString &dirName )
+void KivioDoc::addSpawnerSet( const QString &dirName )
 {
-    KivioStencilSpawnerSet *set;
+  QString id = KivioStencilSpawnerSet::readId( dirName );
 
-    QString id = KivioStencilSpawnerSet::readId( dirName );
-
-    if( setIsAlreadyLoaded( dirName, id ) )
-    {
-       kdDebug(43000) << "KivioDoc::addSpawnerSet() - Cannot load duplicate stencil sets" << endl;
-        return NULL;
-    }
+  if( setIsAlreadyLoaded( dirName, id ) )
+  {
+      kdDebug(43000) << "KivioDoc::addSpawnerSet() - Cannot load duplicate stencil sets" << endl;
+      return;
+  }
 
 
-    set = new KivioStencilSpawnerSet();
+  KivioStencilSpawnerSet* set = new KivioStencilSpawnerSet();
 
-    if( set->loadDir(dirName)==false )
-    {
-       kdDebug(43000) << "KivioDoc::addSpawnerSet() - Error loading dir set" << endl;
-        delete set;
-        return NULL;
-    }
-
-
-    m_pLstSpawnerSets->append( set );
-    setModified(true);
-
-    emit sig_addSpawnerSet( set );
-
-    return set;
+  if( set->loadDir(dirName)==false )
+  {
+      kdDebug(43000) << "KivioDoc::addSpawnerSet() - Error loading dir set" << endl;
+      delete set;
+      return;
+  }
+  
+  // Queue set for loading stencils
+  m_stencilSetLoadQueue.append(set);
+  
+  if(!m_loadTimer) {
+    m_loadTimer = new QTimer(this);
+    connect(m_loadTimer, SIGNAL(timeout()), this, SLOT(loadStencil()));
+  }
+  
+  if(!m_loadTimer->isActive()) {
+    m_loadTimer->start(0, false);
+  }
 }
 
-KivioStencilSpawnerSet *KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
+void KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
 {
-    KivioStencilSpawnerSet *set;
+  KivioStencilSpawnerSet *set;
 
-    set = new KivioStencilSpawnerSet();
-    if( set->loadDir(dirName)==false )
-    {
-       kdDebug(43000) << "KivioDoc::addSpawnerSetDuringLoad() - Error loading dir set" << endl;
-        delete set;
-        return NULL;
-    }
+  set = new KivioStencilSpawnerSet();
+  if( set->loadDir(dirName)==false )
+  {
+    kdDebug(43000) << "KivioDoc::addSpawnerSetDuringLoad() - Error loading dir set" << endl;
+    delete set;
+    return;
+  }
 
-    m_pLstSpawnerSets->append( set );
-
-    return set;
+  // Queue set for loading stencils
+  m_stencilSetLoadQueue.append(set);
+  
+  if(!m_loadTimer) {
+    m_loadTimer = new QTimer(this);
+    connect(m_loadTimer, SIGNAL(timeout()), this, SLOT(loadStencil()));
+  }
+  
+  if(!m_loadTimer->isActive()) {
+    m_loadTimer->start(0, false);
+  }
 }
 
 KivioDoc::~KivioDoc()
@@ -707,7 +713,13 @@ void KivioDoc::initConfig()
         d.snap.setWidth(config->readDoubleNumEntry("GridXSnap", 10.0));
         d.snap.setHeight(config->readDoubleNumEntry("GridYSnap", 10.0));
         setGrid(d);
-        m_units = KoUnit::unit(config->readEntry("Unit", "mm"));
+        QString defMS = "mm";
+        
+        if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+          defMS = "in";
+        }
+        
+        m_units = KoUnit::unit(config->readEntry("Unit", defMS));
         QFont def = KoGlobal::defaultFont();
         m_font = config->readFontEntry("Font", &def);
     }
@@ -913,8 +925,32 @@ void KivioDoc::updateProtectPanelCheckBox()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KivioView*)it.current())->updateProtectPanelCheckBox();
+      ((KivioView*)it.current())->updateProtectPanelCheckBox();
 }
 
+void KivioDoc::loadStencil()
+{
+  KivioStencilSpawnerSet* set = m_stencilSetLoadQueue.first();
+  QString fileName = set->dir() + "/" + set->files()[m_currentFile];
+  set->loadFile(fileName);
+  m_currentFile++;
+  
+  if(m_currentFile >= set->files().count()) {    
+    m_pLstSpawnerSets->append(set);
+    
+    if(!m_bLoading) {
+      setModified(true);
+      emit sig_addSpawnerSet(set);
+    }
+    
+    m_currentFile = 0;
+    set = 0;
+    m_stencilSetLoadQueue.pop_front();
+    
+    if(m_stencilSetLoadQueue.isEmpty()) {
+      m_loadTimer->stop();
+    }
+  }
+}
 
 #include "kivio_doc.moc"

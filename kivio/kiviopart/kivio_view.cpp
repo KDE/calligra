@@ -836,7 +836,7 @@ void KivioView::toggleShowGrid(bool b)
 
 void KivioView::slotUpdateGrid()
 {
-    m_pCanvas->update();
+  m_pCanvas->update();
 }
 
 void KivioView::toggleSnapGrid(bool b)
@@ -851,105 +851,118 @@ void KivioView::toggleSnapGrid(bool b)
 
 void KivioView::addStencilSet( const QString& name )
 {
-    m_pDoc->addSpawnerSet(name);
+  m_pDoc->addSpawnerSet(name);
 }
 
 void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
-    if( !pSpawner )
-    {
-       kdDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
-        return;
-    }
+  if( !pSpawner )
+  {
+    kdDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
+    return;
+  }
 
-    KivioIconView *pView = new KivioIconView(m_pDoc->isReadWrite()  );
-    QObject::connect( pView, SIGNAL(createNewStencil(KivioStencilSpawner*)), this, SLOT(addStencilFromSpawner(KivioStencilSpawner*)));
+  KivioIconView *pView = new KivioIconView(m_pDoc->isReadWrite()  );
+  QObject::connect( pView, SIGNAL(createNewStencil(KivioStencilSpawner*)), this, SLOT(addStencilFromSpawner(KivioStencilSpawner*)));
 
-    pView->setStencilSpawnerSet( pSpawner );
+  pView->setStencilSpawnerSet( pSpawner );
 
-    m_pDockManager->insertStencilSet(pView, pSpawner->name());
+  m_pDockManager->insertStencilSet(pView, pSpawner->name());
 }
 
 void KivioView::setFGColor()
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-    if (!pStencil)
-      return;
-    KMacroCommand * macro = new KMacroCommand( i18n("Change Foreground Color"));
-    bool createMacro = false;
-    while( pStencil )
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  if (!pStencil)
+    return;
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Foreground Color"));
+  bool createMacro = false;
+  while( pStencil )
+  {
+    QColor col( m_setFGColor->color());
+    
+    if ( col != pStencil->fgColor() )
     {
-        QColor col( m_setFGColor->color());
-        if ( col != pStencil->fgColor() )
-        {
-            KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Fg Color"), m_pActivePage, pStencil, pStencil->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
+      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Fg Color"), m_pActivePage, pStencil, pStencil->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
 
-            pStencil->setFGColor( col );
-            macro->addCommand( cmd );
-            createMacro = true;
-        }
-        pStencil = m_pActivePage->selectedStencils()->next();
+      pStencil->setFGColor( col );
+      macro->addCommand( cmd );
+      createMacro = true;
     }
-    if ( createMacro )
-        m_pDoc->addCommand( macro );
-    else
-        delete macro;
-    m_pDoc->updateView(m_pActivePage);
+    
+    pStencil = m_pActivePage->selectedStencils()->next();
+  }
+  
+  if ( createMacro )
+    m_pDoc->addCommand( macro );
+  else
+    delete macro;
+  
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setBGColor()
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-    if (!pStencil)
-      return;
-    KMacroCommand * macro = new KMacroCommand( i18n("Change Background Color"));
-    bool createMacro = false;
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  if (!pStencil)
+    return;
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Background Color"));
+  bool createMacro = false;
 
-    while( pStencil )
+  while( pStencil )
+  {
+    QColor col( m_setBGColor->color());
+    
+    if ( col != pStencil->bgColor() )
     {
-        QColor col( m_setBGColor->color());
-        if ( col != pStencil->bgColor() )
-        {
-            KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Bg Color"), m_pActivePage, pStencil, pStencil->bgColor(), col, KivioChangeStencilColorCommand::CT_BGCOLOR);
+      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Bg Color"), m_pActivePage, pStencil, pStencil->bgColor(), col, KivioChangeStencilColorCommand::CT_BGCOLOR);
 
-            pStencil->setBGColor( col );
-            macro->addCommand( cmd );
-            createMacro = true;
-        }
-        pStencil = m_pActivePage->selectedStencils()->next();
+      pStencil->setBGColor( col );
+      macro->addCommand( cmd );
+      createMacro = true;
     }
-    if ( createMacro )
-        m_pDoc->addCommand( macro );
-    else
-        delete macro;
+    
+    pStencil = m_pActivePage->selectedStencils()->next();
+  }
+  
+  if ( createMacro )
+    m_pDoc->addCommand( macro );
+  else
+    delete macro;
 
-    m_pDoc->updateView(m_pActivePage);
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setTextColor()
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-    if (!pStencil)
-      return;
-    KMacroCommand * macro = new KMacroCommand( i18n("Change Text Color"));
-    bool createMacro = false;
-    while( pStencil )
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  
+  if (!pStencil)
+    return;
+  
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Text Color"));
+  bool createMacro = false;
+  while( pStencil )
+  {
+    QColor col(m_setTextColor->color());
+    
+    if ( col != pStencil->textColor() )
     {
-        QColor col(m_setTextColor->color());
-        if ( col != pStencil->textColor() )
-        {
-            KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Text Color"), m_pActivePage, pStencil, pStencil->textColor(), col, KivioChangeStencilColorCommand::CT_TEXTCOLOR);
-            pStencil->setTextColor( col );
-            macro->addCommand( cmd );
-            createMacro = true;
-        }
-        pStencil = m_pActivePage->selectedStencils()->next();
+      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Text Color"), m_pActivePage, pStencil, pStencil->textColor(), col, KivioChangeStencilColorCommand::CT_TEXTCOLOR);
+      pStencil->setTextColor( col );
+      macro->addCommand( cmd );
+      createMacro = true;
     }
-    if ( createMacro )
-        m_pDoc->addCommand( macro );
-    else
-        delete macro;
-    m_pDoc->updateView(m_pActivePage);
+    
+    pStencil = m_pActivePage->selectedStencils()->next();
+  }
+  
+  if ( createMacro )
+    m_pDoc->addCommand( macro );
+  else
+    delete macro;
+  
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setLineWidth(double width)

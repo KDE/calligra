@@ -99,23 +99,17 @@ QDomElement KivioStencilSpawnerSet::saveXML( QDomDocument &doc )
 
 bool KivioStencilSpawnerSet::loadDir( const QString &dirName )
 {
-    QDir d(dirName);
-    QString fileName;
+  QDir d(dirName);
+  QString fileName;
 
-    m_dir = dirName;
-    m_name = readTitle( dirName );
-    m_id = readId( dirName );
+  m_dir = dirName;
+  m_name = readTitle( dirName );
+  m_id = readId( dirName );
 
-    d.setNameFilter("*.so, *.sml *.ksp *.spy *.shape");
+  d.setNameFilter("*.so, *.sml *.ksp *.spy *.shape");
+  m_files = d.entryList();
 
-    for( int i=0; i<(int)d.count(); i++ )
-    {
-       kdDebug(43000) << "SpawnerSet: " << fileName << endl;
-        fileName = dirName + "/" + d[i];
-        loadFile(fileName);
-    }
-
-    return true;
+  return true;
 }
 
 KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
