@@ -1,0 +1,18 @@
+ReadMe For Kexi pqkexidb_pqxxslqdriver.desktop~xx PostgreSQL Driver
+
+This driver requires libpqxx available from pqxx.tk or gborg.postgresql.org.
+
+Currently the driver builds against 1.9.4 of libpqxx, but it should always work with the latest version.
+When 2.0.0 comes out then that will be the version to use.
+
+The driver may require PostgreSQL >=7.4.  Using the old api this was a requirement, but the rewrite
+isnt far enough in to get into those kinds of details, so at the mement it should be happy with earlier versions.
+Im using PostgreSQL from CVS so i cant say for sure.
+
+To build the driver you may need to add 'pqxx' to the list of subdirs in Makefile.am in kexi/drivers/
+
+Thats it for now
+
+Adam Pigg
+adam@piggz.fsnet.co.uk
+adampigg.9p.org.uk
