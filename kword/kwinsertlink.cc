@@ -45,20 +45,24 @@ KWInsertLinkDia::KWInsertLinkDia( QWidget *parent, const char *name )
 {
   QVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",KIcon::SizeMedium));
   internetLink = new  internetLinkPage(page );
+  connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
 
   page=addVBoxPage(i18n("Mail"), QString::null,BarIcon("mail_generic",KIcon::SizeMedium));
   mailLink = new  mailLinkPage(page );
+  connect(mailLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
-   page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",KIcon::SizeMedium));
+  page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",KIcon::SizeMedium));
   fileLink = new  fileLinkPage(page );
+  connect(fileLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
   setFocus();
+  slotTextChanged ( );
   resize(400,300);
 }
 
 
-void KWInsertLinkDia::slotTextChanged ( const QString & )
+void KWInsertLinkDia::slotTextChanged ( )
 {
-  //enableButtonOK( !(m_linkName->text().isEmpty()  || m_hrefName->text().isEmpty()));
+    enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()));
 }
 
 bool KWInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName)
@@ -148,6 +152,8 @@ internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
 
   lay2->addWidget(m_hrefName);
 
+  connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
+  connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
@@ -175,6 +181,11 @@ QString internetLinkPage::hrefName()
   return createInternetLink();
 }
 
+void internetLinkPage::textChanged ( const QString & )
+{
+    emit textChanged();
+}
+
 mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
@@ -199,7 +210,8 @@ mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
   m_hrefName = new QLineEdit( this );
 
   lay2->addWidget(m_hrefName);
-
+  connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
+  connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
@@ -227,6 +239,11 @@ QString mailLinkPage::hrefName()
   return createMailLink();
 }
 
+void mailLinkPage::textChanged ( const QString & )
+{
+    emit textChanged();
+}
+
 fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
@@ -252,6 +269,9 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
 
   lay2->addWidget(m_hrefName);
 
+  connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
+  connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
+
   KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
@@ -276,6 +296,11 @@ QString fileLinkPage::linkName()
 QString fileLinkPage::hrefName()
 {
   return createFileLink();
+}
+
+void fileLinkPage::textChanged ( const QString & )
+{
+    emit textChanged();
 }
 
 #include "kwinsertlink.moc"

@@ -36,6 +36,10 @@ public:
 private:
   QString createInternetLink();
   QLineEdit* m_linkName, *m_hrefName;
+private slots:
+  void textChanged ( const QString & );
+signals:
+  void textChanged();
 };
 
 class mailLinkPage : public QWidget
@@ -45,9 +49,13 @@ public:
   mailLinkPage( QWidget *parent = 0, char *name = 0 );
   QString linkName();
   QString hrefName();
+private slots:
+  void textChanged ( const QString & );
 private:
   QString createMailLink();
   QLineEdit* m_linkName, *m_hrefName;
+signals:
+  void textChanged();
 };
 
 class fileLinkPage : public QWidget
@@ -57,10 +65,14 @@ public:
   fileLinkPage( QWidget *parent = 0, char *name = 0 );
   QString linkName();
   QString hrefName();
+private slots:
+  void textChanged ( const QString & );
 private:
   QString createFileLink();
   QLineEdit* m_linkName;
   KURLRequester* m_hrefName;
+signals:
+  void textChanged();
 };
 
 class KWInsertLinkDia : public KDialogBase
@@ -76,7 +88,7 @@ public:
 
 protected slots:
     virtual void slotOk();
-    void slotTextChanged ( const QString & );
+    void slotTextChanged (  );
 
 private:
     fileLinkPage *fileLink;
