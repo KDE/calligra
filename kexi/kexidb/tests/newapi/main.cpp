@@ -13,9 +13,10 @@ void usage(char *a)
 	kdDebug() << "usage: " << a << " <driver_name>" << endl;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
-	KInstance instance( QFileInfo(argv[0]).baseName().latin1() );
+	QFileInfo info=QFileInfo(argv[0]);
+	KInstance instance( info.baseName().latin1() );
 	if (argc<=1) {
 		usage(argv[0]);
 		return 0;
@@ -91,16 +92,16 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby", KexiDB::Cursor::Buffered );
-	debug("executeQuery() = %d",!!cursor);
+	kdDebug()<<"executeQuery() = "<<!!cursor<<endl;
 	if (cursor) {
-		debug("Cursor::moveLast() == %d",cursor->moveLast());
-		debug("Cursor::moveFirst() == %d",cursor->moveFirst());
+		kdDebug()<<"Cursor::moveLast() == "<<cursor->moveLast()<<endl;
+		kdDebug()<<"Cursor::moveFirst() == "<<cursor->moveFirst()<<endl;
 
-		debug("Cursor::moveNext() == %d",cursor->moveNext());
-		debug("Cursor::moveNext() == %d",cursor->moveNext());
-		debug("Cursor::moveNext() == %d",cursor->moveNext());
-		debug("Cursor::moveNext() == %d",cursor->moveNext());
-		debug("Cursor::eof() == %d",cursor->eof());
+		kdDebug()<<"Cursor::moveNext() == "<<cursor->moveNext()<<endl;
+		kdDebug()<<"Cursor::moveNext() == "<<cursor->moveNext()<<endl;
+		kdDebug()<<"Cursor::moveNext() == "<<cursor->moveNext()<<endl;
+		kdDebug()<<"Cursor::moveNext() == "<<cursor->moveNext()<<endl;
+		kdDebug()<<"Cursor::eof() == "<<cursor->eof()<<endl;
 		conn->deleteCursor(cursor);
 //		delete cursor;
 	}
