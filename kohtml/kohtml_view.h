@@ -55,15 +55,15 @@ class KMyHTMLView;
 
 class KoHTMLFrame : public KoFrame
 {
-public:  
+public:
   KoHTMLFrame(KoHTMLView *, KoHTMLChild *);
-  
+
   KoHTMLChild *getChild() { return m_pKoHTMLChild; }
   KoHTMLView *getView() { return m_pKoHTMLView; }
-  
+
 protected:
   KoHTMLChild *m_pKoHTMLChild;
-  KoHTMLView *m_pKoHTMLView;  
+  KoHTMLView *m_pKoHTMLView;
 };
 
 class KoHTMLView : public KMyHTMLView,
@@ -74,26 +74,26 @@ class KoHTMLView : public KMyHTMLView,
 public:
   KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc);
   ~KoHTMLView();
-  
+
   KoHTMLDoc *doc() { return m_pDoc; }
 
   virtual void cleanUp();
 
-  virtual void slotNewWindow();
-  virtual void slotClose();
-  
+  virtual void slotNewWindow() {}
+  virtual void slotClose() {}
+
   virtual void editCopy();
   virtual void editHTMLCode();
   virtual void editSettings();
   virtual void editKeys();
-  
+
   virtual void viewToolBar();
   virtual void viewStatusBar();
 //  virtual void toggleCache();
 
   virtual void newView();
   virtual void insertObject();
-  
+
   virtual void slotStatusMsg(const char *text);
   virtual void statusCallback(CORBA::Long ID);
 
@@ -109,39 +109,39 @@ public:
   virtual void slotReload();
   virtual void slotStop();
   virtual void slotOpenURLDlg();
-  
+
   virtual void slotDocumentStarted();
   virtual void slotDocumentDone();
-  
+
   virtual void setFocus(CORBA::Boolean mode);
   virtual CORBA::Boolean printDlg();
 
   virtual void scanBookmarks( OpenPartsUI::Menu_var menu, const char *path );
-  
+
 public slots:
   void slotInsertObject(KoHTMLChild *child);
   void slotUpdateChildGeometry(KoHTMLChild *child);
 
-  void slotGeometryEnd(KoFrame *frame);  
+  void slotGeometryEnd(KoFrame *frame);
   void slotMoveEnd(KoFrame *frame);
 
   void slotBack2();
   void slotForward2();
-  
+
   void slotDocumentContentChanged();
-  
+
   void slotSetCaption(const char *title);
   void slotShowURL(KHTMLView *view, const char *url);
   void slotOpenURL(KHTMLView *view, const char *url, int button, const char *target);
   void slotOpenURL();
   void slotOpenURLInNewWindow();
-  void slotURLPopup(KHTMLView *view, const char *url, const QPoint &coord);  
+  void slotURLPopup(KHTMLView *view, const char *url, const QPoint &coord);
   void slotCopyURLtoClipboard();
 
   void slotUpdateConfig();
 
   void eventOpenURL( const char *url, bool reload );
-  
+
 protected:
   virtual void init();
   virtual bool event(const char *event, const CORBA::Any &value);
@@ -183,12 +183,12 @@ protected:
   CORBA::Long m_idConfigure;
   CORBA::Long m_idInsert_Object;
   CORBA::Long m_idEditHTMLCode;
-  
+
   OpenPartsUI::ToolBar_var m_vLocationToolBar;
   CORBA::Long m_idLocation;
 
   OpenPartsUI::StatusBar_var m_vStatusBar;
-  
+
   CORBA::Long m_idStatusBar_StatusMsg;
   CORBA::Long m_idStatusBar_URLMsg;
 
@@ -217,16 +217,16 @@ protected:
   KoHTMLDoc *m_pDoc;
 
   QString m_strTmpFile;
-    
+
   int m_idBookmarkId;
   map<int,QString*> m_mapBookmarks;
-  
+
   QString m_strCurrentURL;
 
   bool m_bStackLock;
   QStack<SavedPage> m_backStack;
   QStack<SavedPage> m_forwardStack;
-    
+
   QList<KoHTMLFrame> m_lstFrames;
 
   QString m_strCaptionText;
