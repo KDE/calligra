@@ -67,7 +67,7 @@ void KPPartObject::rotate( float _angle )
 
 /*======================== draw ==================================*/
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
-			 bool drawSelection, bool drawContour )
+			 SelectionMode selectionMode, bool drawContour )
 {
     updateChildGeometry();
     double ow = ext.width();
@@ -97,7 +97,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
         _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                             _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
 
-        paint( _painter,_zoomhandler, drawSelection, drawContour );
+        paint( _painter,_zoomhandler, selectionMode, drawContour );
     }
     else
     {
@@ -119,12 +119,12 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
         _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                             _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
 
-        paint( _painter, _zoomhandler, drawSelection, drawContour );
+        paint( _painter, _zoomhandler, selectionMode, drawContour );
     }
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomhandler, drawSelection, drawContour );
+    KPObject::draw( _painter, _zoomhandler, selectionMode, drawContour );
 }
 
 /*================================================================*/

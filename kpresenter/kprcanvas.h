@@ -257,9 +257,12 @@ protected:
     void drawBackground( QPainter*, const QRect& );
 
     //draw all object : object in current page + object in sticky page
-    void drawObjects( QPainter*, const QRect&, bool drawCursor, bool drawSelection, bool doSpecificEffects );
+    void drawObjects( QPainter*, const QRect&, bool drawCursor,
+		      SelectionMode selectionMode, bool doSpecificEffects );
 
-    void drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor, bool drawSelection, bool doSpecificEffects, const QPtrList<KPObject> & obj);
+    void drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor,
+			   SelectionMode selectionMode, bool doSpecificEffects,
+			   const QPtrList<KPObject> & obj);
 
     void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj );
 

@@ -2116,7 +2116,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
     QPtrListIterator<KPObject> it( page->objectList() );
     for ( ; it.current() ; ++it )
     {
-        it.current()->draw( &painter, zoomHandler(), false );
+        it.current()->draw( &painter, zoomHandler(), SM_NONE );
     }
     it= m_stickyPage->objectList();
     //draw sticky obj
@@ -2124,7 +2124,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
     {
         if( (it.current()==_header && !hasHeader())||(it.current()==_footer && !hasFooter()))
             continue;
-        it.current()->draw( &painter, zoomHandler(), false );
+        it.current()->draw( &painter, zoomHandler(), SM_NONE );
     }
 
 }

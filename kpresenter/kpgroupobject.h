@@ -71,7 +71,7 @@ public:
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
-		       bool drawSelection, bool drawContour = FALSE );
+		       SelectionMode selectionMode, bool drawContour = FALSE );
 
     void setUpdateObjects( bool b ) {
         updateObjs = b;

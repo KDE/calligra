@@ -140,7 +140,7 @@ double KPPixmapObject::load(const QDomElement &element)
 
 /*========================= draw =================================*/
 void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			   bool drawSelection, bool drawContour )
+			   SelectionMode selectionMode, bool drawContour )
 {
     if ( image.isNull() ) return;
 
@@ -296,5 +296,5 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, drawSelection, drawContour );
+    KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
 }

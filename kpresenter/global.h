@@ -68,6 +68,11 @@ enum ObjType {
     OT_CUBICBEZIERCURVE = 14,
     OT_POLYGON = 15
 };
+enum SelectionMode {
+    SM_NONE = 0,
+    SM_MOVERESIZE = 1,
+    SM_ROTATE = 2
+};
 enum LineType {
     LT_HORZ = 0,
     LT_VERT,

@@ -249,10 +249,10 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
         drawBackground( &bufPainter, crect );
 
-        bool drawSelection = true;
+        SelectionMode selectionMode = SM_MOVERESIZE;
         if ( !editMode )
-            drawSelection = false; // case of screen presentation mode
-        drawObjects( &bufPainter, crect, true/*cursor*/, drawSelection/*selected objs*/, true /*specific effects*/ );
+            selectionMode = SM_NONE; // case of screen presentation mode
+        drawObjects( &bufPainter, crect, true, selectionMode, true );
 
         bufPainter.end();
 
@@ -308,7 +308,9 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 }
 
 // Draw all object in page : draw object in current page and sticky objects
-void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor, bool drawSelection, bool doSpecificEffects, const QPtrList<KPObject> & obj)
+void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor,
+				  SelectionMode selectionMode, bool doSpecificEffects,
+				  const QPtrList<KPObject> & obj)
 {
     QPtrListIterator<KPObject> it( obj );
     for ( ; it.current() ; ++it )
@@ -343,12 +345,12 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
                                              m_currentTextObjectView->cursor(), true /* idem */ );
                 }
 		else
-                    it.current()->draw( painter, m_view->zoomHandler(), drawSelection,
+                    it.current()->draw( painter, m_view->zoomHandler(), selectionMode,
 					((it.current())->isSelected()) && drawContour );
             }
             else
             {
-                it.current()->draw( painter, m_view->zoomHandler(), drawSelection,
+                it.current()->draw( painter, m_view->zoomHandler(), selectionMode,
 				    ((it.current())->isSelected()) && drawContour );
 
             }
@@ -360,16 +362,19 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
 }
 
 /*========================= draw objects =========================*/
-void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCursor, bool drawSelection, bool doSpecificEffects )
+void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCursor,
+			     SelectionMode selectionMode, bool doSpecificEffects )
 {
     int pgNum = editMode ? (int)m_view->getCurrPgNum() : currPresPage;
     KoRect rect2 = m_view->zoomHandler()->unzoomRect(rect);
 
     //objects in current page
-    drawObjectsInPage( painter, rect2, drawCursor,drawSelection, doSpecificEffects,m_view->kPresenterDoc()->pageList().at(pgNum-1)->objectList());
+    drawObjectsInPage( painter, rect2, drawCursor, selectionMode, doSpecificEffects,
+		       m_view->kPresenterDoc()->pageList().at(pgNum-1)->objectList());
 
     //draw sticky object
-    drawObjectsInPage( painter, rect2, drawCursor,drawSelection, doSpecificEffects,m_view->kPresenterDoc()->stickyPage()->objectList());
+    drawObjectsInPage( painter, rect2, drawCursor, selectionMode, doSpecificEffects,
+		       m_view->kPresenterDoc()->stickyPage()->objectList());
 
 }
 
@@ -382,7 +387,7 @@ void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject
     for ( ; it.current(); ++it ) {
         if ( objectIsAHeaderFooterHidden( it.current() ) )
             continue;
-        it.current()->draw( painter, m_view->zoomHandler(), false, false );
+        it.current()->draw( painter, m_view->zoomHandler(), SM_NONE, false );
     }
 }
 
@@ -2481,7 +2486,7 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix )
     p.begin( &_pix );
 
     drawBackground( &p, _pix.rect() );
-    drawObjects( &p, _pix.rect(), false/*no cursor*/, false/*no selected objects*/, true/*obj-specific effects*/ );
+    drawObjects( &p, _pix.rect(), false/*no cursor*/, SM_NONE, true/*obj-specific effects*/ );
 
     p.end();
 }
@@ -2494,8 +2499,7 @@ void KPrCanvas::printPage( QPainter* painter, int pageNum )
     QRect rect = page->getZoomPageRect();
 // TODO set current page to "page" ?
     drawBackground( painter, rect );
-    drawObjects( painter, rect, false/*no cursor*/, false/*no selected objects*/,
-                 false/*no specific effects*/ );
+    drawObjects( painter, rect, false, SM_NONE, false/*no specific effects*/ );
 }
 
 /*=========================== change pages =======================*/
@@ -2951,7 +2955,7 @@ void KPrCanvas::doObjEffects()
         p.begin( &screen_orig );
 	QRect desktopRect = QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
         drawBackground( &p, desktopRect );
-        drawObjects( &p, desktopRect, false, false, true );
+        drawObjects( &p, desktopRect, false, SM_NONE, true );
         p.end();
         inEffect = false;
         bitBlt( this, 0, 0, &screen_orig, 0, 0, screen_orig.width(), screen_orig.height() );
@@ -3596,7 +3600,8 @@ void KPrCanvas::doObjEffects()
         QPainter p;
         p.begin( this );
         p.drawPixmap( 0, 0, screen_orig );
-        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), false, false, true );
+        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ),
+		     false, SM_NONE, true );
         p.end();
     }
     else
@@ -3604,7 +3609,8 @@ void KPrCanvas::doObjEffects()
         //kdDebug(33001) << "KPrCanvas::doObjEffects effects" << endl;
         QPainter p;
         p.begin( screen );
-        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), false, false, true );
+        drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ),
+		     false, SM_NONE, true );
         p.end();
         bitBlt( this, 0, 0, screen );
     }
@@ -3645,7 +3651,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
         kpobject->setOwnClipping( ownClipping );
     }
     p.translate(_x,_y);
-    kpobject->draw( &p, m_view->zoomHandler(), false /*no selection*/,
+    kpobject->draw( &p, m_view->zoomHandler(), SM_NONE,
 		    ( kpobject->isSelected()) && drawContour );
     kpobject->setSubPresStep( 0 );
     kpobject->doSpecificEffects( false );
@@ -3657,7 +3663,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
         if ( kpobject->getBoundingRect(m_view->zoomHandler() ).intersects( obj->getBoundingRect( m_view->zoomHandler() ) ) &&
              obj->getPresNum() < static_cast<int>( currPresStep ) )
         {
-            obj->draw( &p, m_view->zoomHandler(), false /*no selection*/,
+            obj->draw( &p, m_view->zoomHandler(), SM_NONE,
 		       (obj->isSelected()) && drawContour);
         }
     }
@@ -4805,7 +4811,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     QPainter p;
     p.begin( this );
     kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
-    kpobject->draw( &p, m_view->zoomHandler(), true,
+    kpobject->draw( &p, m_view->zoomHandler(), SM_MOVERESIZE,
 		    (kpobject->isSelected()) && drawContour);
     switch ( _modType ) {
     case MT_RESIZE_LU: {
@@ -4895,7 +4901,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     default: break;
     }
-    kpobject->draw( &p, m_view->zoomHandler(), true,
+    kpobject->draw( &p, m_view->zoomHandler(), SM_MOVERESIZE,
 		    (kpobject->isSelected()) && drawContour );
     kpobject->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     p.end();

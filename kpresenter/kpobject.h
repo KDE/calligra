@@ -172,13 +172,9 @@ public:
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true )
     { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
 
-    /**
-     * The main drawing method.
-     * @param drawSelection if true and the object is selected, draw the handles around it
-     * (this can be set to false when printing, when generating previews etc.)
-     */
+    // the main drawing method.
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour = FALSE );
+		       SelectionMode selectionMode, bool drawContour = FALSE );
 
     virtual bool contains( const KoPoint &_point,KoZoomHandler *_zoomHandler  ) const;
     virtual bool intersects( const KoRect & _rect,KoZoomHandler *_zoomHandler  ) const;
@@ -207,7 +203,8 @@ public:
 
     virtual void setOrigSizeInGroup( const KoSize &_size ) { origSizeInGroup = _size; }
     virtual KoSize getOrigSizeInGroup() const{ return origSizeInGroup; }
-    void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler );
+    void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler,
+			 SelectionMode selectionMode );
 protected:
     /**
      * Modifies x and y to add the shadow offsets
@@ -305,7 +302,7 @@ public:
     virtual double load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour = FALSE );
+		       SelectionMode selectionMode, bool drawContour = FALSE );
 protected:
     /**
      * This method is to be implemented by all KShadowObjects, to draw themselves.

@@ -529,7 +529,7 @@ void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHand
 }
 
 /*======================== paint selection =======================*/
-void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
+void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, SelectionMode mode )
 {
     if ( !selected )
 	return;
@@ -685,10 +685,10 @@ QColor KPObject::retrieveColor(const QDomElement &element, const QString &cattr,
 }
 
 void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		     bool drawSelection, bool drawContour )
+		     SelectionMode selectionMode, bool drawContour )
 {
-    if ( drawSelection &&  !drawContour )
-	paintSelection( _painter, _zoomHandler );
+    if ( selectionMode != SM_NONE &&  !drawContour )
+	paintSelection( _painter, _zoomHandler, selectionMode );
 }
 
 
@@ -742,7 +742,7 @@ double KPShadowObject::load(const QDomElement &element)
 
 
 void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour )
+			   SelectionMode selectionMode, bool drawContour )
 {
     double ox = orig.x();
     double oy = orig.y();
@@ -788,7 +788,7 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, drawSelection, drawContour );
+    KPObject::draw( _painter, _zoomHandler, selectionMode, drawContour );
 }
 
 KP2DObject::KP2DObject()

@@ -70,7 +70,7 @@ public:
     virtual double load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-		       bool drawSelection, bool drawContour = FALSE );
+		       SelectionMode selectionMode, bool drawContour = FALSE );
 
 protected:
     KPPixmapObject() {}
