@@ -24,7 +24,7 @@
 
 #include "karbon_view.h"
 #include "karbon_part.h"
-#include "vcontexthelpdocker.h"
+#include "kocontexthelpaction.h"
 #include "vtool.h"
 #include "vtooloptionsdocker.h"
 
@@ -39,7 +39,7 @@ VTool::VTool( KarbonView* view )
 void VTool::activateAll()
 {
 	view()->toolOptionsDocker()->manageTool( this );
-	view()->contextHelpDocker()->manageTool( this );
+	view()->contextHelpAction()->updateHelp( name(), contextHelp() );
 
 	activate();
 }

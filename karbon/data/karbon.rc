@@ -72,6 +72,7 @@
   		<Action name="edit_redo"/>
 		<Action name="view_mode"/>
 		<Action name="view_zoom"/>
+		<Action name="help_context"/>
 	</ToolBar>
 	<ToolBar name="PenProp" fullWidth="false">
 		<Text>Stroke Properties</Text>

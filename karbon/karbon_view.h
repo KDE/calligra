@@ -43,11 +43,11 @@ class KFontSizeAction;
 class KSelectAction;
 class KSelectColorAction;
 class KToggleAction;
+class KoContextHelpAction;
 
 class KoUnitDoubleSpinComboBox;
 
 class VColorDocker;
-class VContextHelpDocker;
 class VDocumentDocker;
 class VToolOptionsDocker;
 
@@ -129,9 +129,9 @@ public:
 		return m_part;
 	}
 
-	VContextHelpDocker* contextHelpDocker() const
+	KoContextHelpAction* contextHelpAction() const
 	{
-		return m_contextHelpDocker;
+		return m_contextHelpAction;
 	}
 
 	VToolOptionsDocker* toolOptionsDocker() const
@@ -214,7 +214,6 @@ protected slots:
 //	void viewLayersDocker();
 	void viewToolOptions();
 	void viewStrokeDocker();
-	void viewContextHelp();
 //	void viewHistory();
 
 	// Toolbox dialogs.
@@ -289,6 +288,8 @@ private:
 
 	// settings:
 	KAction* m_configureAction;
+	
+	KoContextHelpAction* m_contextHelpAction;
 
 	// dialogs:
 	VInsertKnotsDlg* m_insertKnotsDlg;
@@ -298,7 +299,6 @@ private:
 
 	//dockers
 	VColorDocker* m_ColorManager;
-	VContextHelpDocker* m_contextHelpDocker;
 	VDocumentDocker* m_documentDocker;
 	VStrokeDocker* m_strokeDocker;
 	VToolOptionsDocker* m_toolOptionsDocker;

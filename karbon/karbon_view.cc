@@ -37,6 +37,7 @@
 #include <koMainWindow.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
+#include "kocontexthelpaction.h"
 
 #include "vtoolbox.h"
 
@@ -87,7 +88,6 @@
 
 // Dockers.
 #include "vcolordocker.h"
-#include "vcontexthelpdocker.h"
 #include "vdocumentdocker.h"
 #include "vstrokedocker.h"
 #include "vtooloptionsdocker.h"
@@ -315,8 +315,6 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 
 			m_documentDocker = new VDocumentDocker( this );
 			mainWindow()->addDockWindow( m_documentDocker, DockRight );
-			m_contextHelpDocker = new VContextHelpDocker( this );
-			mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
 			m_toolOptionsDocker = new VToolOptionsDocker( this );
 			m_toolOptionsDocker->show();
 			selectTool();
@@ -336,7 +334,6 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	if( m_toolbox )
 	{
 		delete m_toolbox;
-		delete m_contextHelpDocker;
 		delete m_toolOptionsDocker;
 		delete m_documentDocker;
 		m_toolbox = 0L;
@@ -1099,16 +1096,6 @@ KarbonView::viewStrokeDocker()
 }
 
 void
-KarbonView::viewContextHelp()
-{
-	if( m_contextHelpDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
-		m_contextHelpDocker->show();
-	}
-}
-
-void
 KarbonView::initActions()
 {
 
@@ -1247,9 +1234,6 @@ KarbonView::initActions()
 		i18n( "&Tool Options" ), "tooloptions", 0, this,
 		SLOT( viewToolOptions() ), actionCollection(), "view_tool_options" );
 	new KAction(
-		i18n( "Context &Help" ), "helpdocker", 0, this,
-		SLOT( viewContextHelp() ), actionCollection(), "view_context_help" );
-	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
 		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
 /*	new KAction(
@@ -1293,6 +1277,8 @@ KarbonView::initActions()
 	m_configureAction = new KAction(
 							i18n( "Configure Karbon..." ), "configure", 0, this,
 							SLOT( configure() ), actionCollection(), "configure" );
+
+	m_contextHelpAction = new KoContextHelpAction( actionCollection() );
 }
 
 void
