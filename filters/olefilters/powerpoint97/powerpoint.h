@@ -59,7 +59,7 @@ public:
     typedef struct
     {
         unsigned persistentReference;
-        QList<SlideText> text;
+        QPtrList<SlideText> text;
     } Slide;
 
 protected:
@@ -100,7 +100,7 @@ private:
     } m_pass;
     unsigned m_textType;
     Slide *m_slide;
-    QList<Slide> m_slides;
+    QPtrList<Slide> m_slides;
 
     // Common Header.
 

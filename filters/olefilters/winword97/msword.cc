@@ -1027,8 +1027,8 @@ void MsWord::parse()
             clxtPlcfpcd = 2
         } clxtENUM;
 
-        QArray<unsigned> grpprlCounts;
-        QArray<const U8 *> grpprlPtrs;
+        QMemArray<unsigned> grpprlCounts;
+        QMemArray<const U8 *> grpprlPtrs;
         unsigned pieceCount;
         const U8 *piecePtr;
 
@@ -1822,7 +1822,7 @@ unsigned MsWord::read(const U8 *in, FFN *out)
     if (m_fib.nFib > s_maxWord6Version)
     {
         bytes += MsWordGenerated::read(in + bytes, &out->panose[0], sizeof(out->panose));
-        bytes += MsWordGenerated::read(in + bytes, &out->fs[0], sizeof(out->fs)); 
+        bytes += MsWordGenerated::read(in + bytes, &out->fs[0], sizeof(out->fs));
         count = (out->cbFfnM1 + 1 - bytes) / 2;
     }
     else
