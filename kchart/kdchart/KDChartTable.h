@@ -101,20 +101,20 @@ public:
     }
 
     CellT& cell( uint _row, uint _col ) {
-        ASSERT( _row < row_count && _col < col_count );
+        Q_ASSERT( _row < row_count && _col < col_count );
         return matrix[ static_cast < int > ( _row * col_count + _col ) ];
     }
     const CellT& cell( uint _row, uint _col ) const {
-        ASSERT( _row < row_count && _col < col_count );
+        Q_ASSERT( _row < row_count && _col < col_count );
         return matrix[ static_cast < int > ( _row * col_count + _col ) ];
     }
     void setCell( uint _row, uint _col, const CellT& _element ) {
-        ASSERT( _row < row_count && _col < col_count );
+        Q_ASSERT( _row < row_count && _col < col_count );
         matrix[ static_cast < int > ( _row * col_count + _col ) ] = _element;
     }
 
     void clearCell( uint _row, uint _col ) {
-        ASSERT( _row < row_count && _col < col_count );
+        Q_ASSERT( _row < row_count && _col < col_count );
         matrix[ static_cast < int > ( _row * col_count + _col ) ].clearValue();
     }
 
@@ -125,38 +125,38 @@ public:
     }
 
     RowT& row( uint _row ) {
-        ASSERT( _row < row_count );
+        Q_ASSERT( _row < row_count );
         return row_list[ _row ];
     }
 
     const RowT& row( uint _row ) const {
-        ASSERT( _row < row_count );
+        Q_ASSERT( _row < row_count );
         return row_list[ _row ];
     }
 
     void setRow( uint _row, const RowT& _v ) {
-        ASSERT( _row < row_count );
+        Q_ASSERT( _row < row_count );
         row_list[ _row ] = _v;
     }
 
     ColT& col( uint _col ) {
-        ASSERT( _col < col_count );
+        Q_ASSERT( _col < col_count );
         return col_list[ _col ];
     }
 
 
     const ColT& col( uint _col ) const {
-        ASSERT( _col < col_count );
+        Q_ASSERT( _col < col_count );
         return col_list[ _col ];
     }
 
     void setCol( uint _col, const ColT& _v ) {
-        ASSERT( _col < col_count );
+        Q_ASSERT( _col < col_count );
         col_list[ _col ] = _v;
     }
 
     void insertColumn( uint _c ) {
-        ASSERT( _c <= col_count );
+        Q_ASSERT( _c <= col_count );
         ++col_count;
         typename QValueList < CellT > ::Iterator it;
         for ( uint i = 0; i < row_count; ++i ) {
@@ -169,7 +169,7 @@ public:
     }
 
     void insertRow( uint _r ) {
-        ASSERT( _r <= row_count );
+        Q_ASSERT( _r <= row_count );
         ++row_count;
         typename QValueList < CellT > ::Iterator it = matrix.at( _r * col_count );
         for ( uint i = 0; i < col_count; ++i )
@@ -180,7 +180,7 @@ public:
     }
 
     void removeColumn( uint _c ) {
-        ASSERT( _c < col_count );
+        Q_ASSERT( _c < col_count );
         --col_count;
         typename QValueList < CellT > ::Iterator it;
         for ( uint i = 0; i < row_count; ++i ) {
@@ -193,7 +193,7 @@ public:
     }
 
     void removeRow( uint _r ) {
-        ASSERT( _r < row_count );
+        Q_ASSERT( _r < row_count );
         --row_count;
         typename QValueList < CellT > ::Iterator it = matrix.at( _r * col_count );
         for ( uint i = 0; i < col_count; ++i )
@@ -409,7 +409,7 @@ public:
     }
 
     void setUsedRows( uint _rows ) {
-        ASSERT( _rows <= rows() );
+        Q_ASSERT( _rows <= rows() );
         _usedRows = _rows;
     }
 
@@ -418,7 +418,7 @@ public:
     }
 
     void setUsedCols( uint _cols ) {
-        ASSERT( _cols <= cols() );
+        Q_ASSERT( _cols <= cols() );
         _usedCols = _cols;
     }
 
