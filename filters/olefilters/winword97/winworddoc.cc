@@ -17,9 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <properties.h>
+#include <qregexp.h>
 #include <winworddoc.h>
-#include <qarray.h>
 #define DISABLE_FLOATING true
+#define ROW_SIZE 30
 
 WinWordDoc::WinWordDoc(
     QDomDocument &part,
@@ -27,7 +29,7 @@ WinWordDoc::WinWordDoc(
     const myFile &table0Stream,
     const myFile &table1Stream,
     const myFile &dataStream) :
-        MsWord(
+        Document(
             mainStream.data,
             table0Stream.data,
             table1Stream.data,
@@ -37,12 +39,77 @@ WinWordDoc::WinWordDoc(
     m_phase = INIT;
     m_success = TRUE;
     m_body = QString("");
-    m_tableManager = 0;
     m_cellEdges.setAutoDelete(true);
 }
 
 WinWordDoc::~WinWordDoc()
 {
+}
+
+//
+// Add to/lookup a cell edge in the cache of cell edges for a given table.
+//
+
+int WinWordDoc::cacheCellEdge(
+    unsigned tableNumber,
+    unsigned cellEdge)
+{
+    QArray<unsigned> *edges = m_cellEdges[tableNumber - 1];
+    unsigned i;
+    unsigned *data;
+    unsigned index;
+    
+    // Do we already know about this edge?
+
+    data = edges->data();
+    index = edges->size();
+    for (i = 0; i < index; i++)
+    {
+        if (data[i] == cellEdge)
+            return i;
+    }
+
+    // Add the edge to the (sorted) array.
+
+    edges->resize(index + 1);
+    data = edges->data();
+    data[index] = cellEdge;
+    for (i = index; i > 0; i--)
+    {
+        unsigned tmp;
+
+        if (data[i - 1] > data[i])
+        {
+            tmp = data[i - 1];
+            data[i - 1] = data[i];
+            data[i] = tmp;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return i;
+}
+
+//
+// Compute the Word notion of cell edge ordinate into a Kword one.
+//
+
+unsigned WinWordDoc::computeCellEdge(
+    TAP &row,
+    unsigned edge)
+{
+    unsigned rowWidth = row.rgdxaCenter[row.itcMac] - row.rgdxaCenter[0];
+    unsigned cellEdge;
+
+    // We want to preserve the proportion of row widths in the original document.
+    // For now, we do so on the assumption that the table occupies the full width of
+    // the page.
+
+    cellEdge = row.rgdxaCenter[edge] - row.rgdxaCenter[0];
+    cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin) / rowWidth);
+    return cellEdge + s_hMargin;
 }
 
 const bool WinWordDoc::convert()
@@ -65,14 +132,12 @@ const bool WinWordDoc::convert()
         m_body.append("\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
         m_body.append("\" autoCreateNewFrame=\"1\" newFrameBehaviour=\"0\"/>\n");
         m_phase = TEXT_PASS;
-        m_tableManager = 0;
         parse();
         m_body.append(
             "  </FRAMESET>\n");
         if (m_success)
         {
             m_phase = TABLE_PASS;
-            m_tableManager = 0;
             parse();
         }
     }
@@ -139,7 +204,67 @@ void WinWordDoc::encode(QString &text)
 
   text.replace(QRegExp("&"), "&amp;");
   text.replace(QRegExp("<"), "&lt;");
+
+  // Strictly, there is no need to encode >, but we do so to for safety.
+
   text.replace(QRegExp(">"), "&gt;");
+
+  // Strictly, there is no need to encode " or ', but we do so to allow
+  // them to co-exist!
+
+  text.replace(QRegExp("\""), "&quot;");
+  text.replace(QRegExp("'"), "&apos;");
+}
+
+void WinWordDoc::generateFormats(Attributes &attributes)
+{
+    QString formats = "";
+    unsigned i;
+
+    formats.append("<FORMATS>\n");
+    for (i = 0; i < attributes.runs.size(); i++)
+    {
+        const CHP *chp = attributes.runs[i].values->getChp();
+
+        formats.append("<FORMAT id=\"1\" pos=\"");
+        formats.append(QString::number(attributes.runs[i].start));
+        formats.append("\" len=\"");
+        formats.append(QString::number(attributes.runs[i].end - attributes.runs[i].start));
+        formats.append("\">\n");
+        formats.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
+        formats.append("<FONT name=\"times\"/>\n");
+        formats.append("<SIZE value=\"");
+        // TBD: where should we really get the size?
+        //formats.append(QString::number(chp->hps / 2));
+        formats.append(QString::number(12));
+        formats.append("\"/>\n");
+        if (chp->fBold)
+            formats.append("<WEIGHT value=\"75\"/>\n");
+        else
+            formats.append("<WEIGHT value=\"50\"/>\n");
+        if (chp->fItalic)
+            formats.append("<ITALIC value=\"1\"/>\n");
+        else
+            formats.append("<ITALIC value=\"0\"/>\n");
+        if (chp->kul != 0)
+            formats.append("<UNDERLINE value=\"1\"/>\n");
+        else
+            formats.append("<UNDERLINE value=\"0\"/>\n");
+        if (chp->iss != 0)
+        {
+            if (chp->iss == 1)
+                formats.append("<VERTALIGN value=\"2\"/>\n");
+            else
+                formats.append("<VERTALIGN value=\"1\"/>\n");
+        }
+        else
+        {
+            formats.append("<VERTALIGN value=\"0\"/>\n");
+        }
+        formats.append("</FORMAT>\n");
+    }
+    formats.append("</FORMATS>\n");
+    m_body.append(formats);
 }
 
 void WinWordDoc::gotError(const QString &text)
@@ -156,7 +281,9 @@ void WinWordDoc::gotError(const QString &text)
     m_success = false;
 }
 
-void WinWordDoc::gotParagraph(const QString &text, PAP &/*style*/)
+void WinWordDoc::gotParagraph(
+    const QString &text,
+    Attributes &attributes)
 {
     if (m_phase == TEXT_PASS)
     {
@@ -165,11 +292,15 @@ void WinWordDoc::gotParagraph(const QString &text, PAP &/*style*/)
         encode(xml_friendly);
         m_body.append("<PARAGRAPH>\n<TEXT>");
         m_body.append(xml_friendly);
-        m_body.append("</TEXT>\n</PARAGRAPH>\n");
+        m_body.append("</TEXT>\n");
+        generateFormats(attributes);
+        m_body.append("</PARAGRAPH>\n");
     }
 }
 
-void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
+void WinWordDoc::gotHeadingParagraph(
+    const QString &text,
+    Attributes &attributes)
 {
     if (m_phase == TEXT_PASS)
     {
@@ -181,18 +312,19 @@ void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
         m_body.append("</TEXT>\n"
             " <LAYOUT>\n"
             "  <NAME value=\"Head ");
-        m_body.append(QString::number((int)style.istd));
+        m_body.append(QString::number((int)attributes.baseStyle.istd));
         m_body.append("\"/>\n  <COUNTER type=\"");
-        m_body.append(numberingType(style.anld.nfc));
+        m_body.append(numberingType(attributes.baseStyle.anld.nfc));
         m_body.append("\" depth=\"");
-        m_body.append(QString::number(style.istd - 1));
+        m_body.append(QString::number(attributes.baseStyle.istd - 1));
         m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
-            " </LAYOUT>\n"
-            "</PARAGRAPH>\n");
+            " </LAYOUT>\n");
+        generateFormats(attributes);
+        m_body.append("</PARAGRAPH>\n");
     }
 }
 
-void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
+void WinWordDoc::gotListParagraph(const QString &text, Attributes &attributes)
 {
     static const char *listStyle[6] =
     {
@@ -214,131 +346,69 @@ void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
         m_body.append("</TEXT>\n"
             " <LAYOUT>\n"
             "  <NAME value=\"");
-        m_body.append(listStyle[style.anld.nfc]);
+        m_body.append(listStyle[attributes.baseStyle.anld.nfc]);
         m_body.append("\"/>\n"
             "  <FOLLOWING name=\"");
-        m_body.append(listStyle[style.anld.nfc]);
+        m_body.append(listStyle[attributes.baseStyle.anld.nfc]);
         m_body.append("\"/>\n"
             "  <COUNTER type=\"");
-        m_body.append(numberingType(style.anld.nfc));
+        m_body.append(numberingType(attributes.baseStyle.anld.nfc));
         m_body.append("\" depth=\"");
-        m_body.append(QString::number((int)style.ilvl));
+        m_body.append(QString::number((int)attributes.baseStyle.ilvl));
         m_body.append("\" bullet=\"183\" start=\"");
-        m_body.append(QString::number((int)style.anld.iStartAt));
+        m_body.append(QString::number((int)attributes.baseStyle.anld.iStartAt));
         m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n"
-            " </LAYOUT>\n"
-            "</PARAGRAPH>\n");
+            " </LAYOUT>\n");
+        generateFormats(attributes);
+        m_body.append("</PARAGRAPH>\n");
     }
 }
 
-void WinWordDoc::gotTableBegin()
+void WinWordDoc::gotTableBegin(
+    unsigned tableNumber)
 {
-    // Create a unique group manager for each new table.
-
-    m_tableManager++;
-    m_tableRow = 0;
     if (m_phase == TEXT_PASS)
     {
-        m_cellEdges.resize(m_tableManager);
-        m_cellEdges.insert(m_tableManager - 1, new QArray<unsigned>);
+        // Add an entry for the column computation data for this table.
+
+        m_cellEdges.resize(tableNumber);
+        m_cellEdges.insert(tableNumber - 1, new QArray<unsigned>);
         m_body.append("<PARAGRAPH>\n<TEXT>");
+
+        // This '0' will be replaced with the anchor character.
+
 if (DISABLE_FLOATING)
 {
-        if (m_tableManager == 1)
+        if (tableNumber == 1)
             m_body.append("This filter is currently unable to position tables correctly."
                 " All the tables are at the end of this document. Other tables can be found by looking for strings like"
                 "\"Table 1 goes here\"");
         m_body.append("Table ");
-        m_body.append(QString::number(m_tableManager));
+        m_body.append(QString::number(tableNumber));
         m_body.append(" goes here.</TEXT>\n</PARAGRAPH>\n");
 }
 else
 {
-        // This '0' will be replaced with the anchor character.
         m_body.append('0');
         m_body.append("</TEXT>\n<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
         m_body.append("<ANCHOR type=\"grpMgr\" instance=\"grpmgr_");
-        m_body.append(QString::number(m_tableManager));
+        m_body.append(QString::number(tableNumber));
         m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n</PARAGRAPH>\n");
 }
     }
 }
 
-void WinWordDoc::gotTableEnd()
+void WinWordDoc::gotTableEnd(
+    unsigned /*tableNumber*/)
 {
 }
 
-//
-// Add to/lookup a cell edge in the cache of cell edges for a given table.
-//
-
-int WinWordDoc::cacheCellEdge(
-    unsigned tableManager,
-    unsigned cellEdge)
-{
-    QArray<unsigned> *edges = m_cellEdges[tableManager - 1];
-    unsigned i;
-    unsigned *data;
-    unsigned index;
-    
-    /*
-     * Do we already know about this edge?
-     */
-
-    data = edges->data();
-    index = edges->size();
-    for (i = 0; i < index; i++)
-    {
-        if (data[i] == cellEdge)
-            return i;
-    }
-
-    /*
-     * Add the edge to the (sorted) array.
-     */
-
-    edges->resize(index + 1);
-    data = edges->data();
-    data[index] = cellEdge;
-    for (i = index; i > 0; i--)
-    {
-        unsigned tmp;
-
-        if (data[i - 1] > data[i])
-        {
-            tmp = data[i - 1];
-            data[i - 1] = data[i];
-            data[i] = tmp;
-        }
-        else
-        {
-            break;
-        }
-    }
-    return i;
-}
-
-//
-// Compute the Word notion of cell edge ordinate into a Kword one.
-//
-
-unsigned WinWordDoc::computeCellEdge(
-    TAP &row,
-    unsigned edge)
-{
-    unsigned rowWidth = row.rgdxaCenter[row.itcMac] - row.rgdxaCenter[0];
-    unsigned cellEdge;
-
-    // We want to preserve the proportion of row widths in the original document.
-    // For now, we do so on the assumption that the table occupies the full width of
-    // the page.
-
-    cellEdge = row.rgdxaCenter[edge] - row.rgdxaCenter[0];
-    cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin) / rowWidth);
-    return cellEdge + s_hMargin;
-}
-
-void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP &row)
+void WinWordDoc::gotTableRow(
+    unsigned tableNumber,
+    unsigned rowNumber,
+    const QString texts[],
+    const PAP /*styles*/[],
+    TAP &row)
 {
     if (m_phase == TEXT_PASS)
     {
@@ -346,8 +416,8 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP 
 
         for (unsigned i = 0; i < row.itcMac; i++)
         {
-            cacheCellEdge(m_tableManager, computeCellEdge(row, i));
-            cacheCellEdge(m_tableManager, computeCellEdge(row, i + 1));
+            cacheCellEdge(tableNumber, computeCellEdge(row, i));
+            cacheCellEdge(tableNumber, computeCellEdge(row, i + 1));
         }
     }
     if (m_phase == TABLE_PASS)
@@ -364,11 +434,11 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP 
             unsigned cellEdge;
 
             cell.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
-            cell.append(QString::number(m_tableManager));
+            cell.append(QString::number(tableNumber));
             cell.append("\" row=\"");
-            cell.append(QString::number(m_tableRow));
+            cell.append(QString::number(rowNumber));
             cell.append("\" col=\"");
-            left = cacheCellEdge(m_tableManager, computeCellEdge(row, i));
+            left = cacheCellEdge(tableNumber, computeCellEdge(row, i));
             cell.append(QString::number(left));
             cell.append("\" rows=\"");
             cell.append(QString::number(1));
@@ -379,30 +449,30 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP 
 
             if ((int)i < row.itcMac - 1)
             {
-                right = cacheCellEdge(m_tableManager, computeCellEdge(row, i + 1));
+                right = cacheCellEdge(tableNumber, computeCellEdge(row, i + 1));
             }
             else
             {
-                right = m_cellEdges[m_tableManager - 1]->size() - 1;
+                right = m_cellEdges[tableNumber - 1]->size() - 1;
             }
             cell.append(QString::number(right - left));
             cell.append("\" removeable=\"0\" visible=\"1\">\n"
                 " <FRAME left=\"");
-            cellEdge = m_cellEdges[m_tableManager - 1]->at(left);
+            cellEdge = m_cellEdges[tableNumber - 1]->at(left);
             cell.append(QString::number(cellEdge));
             cell.append("\" right=\"");
-            cellEdge = m_cellEdges[m_tableManager - 1]->at(right);
+            cellEdge = m_cellEdges[tableNumber - 1]->at(right);
             cell.append(QString::number(cellEdge));
             cell.append("\" top=\"");
 if (DISABLE_FLOATING)
-            cell.append(QString::number(400 + m_tableManager * 10 + m_tableRow * 30));
+            cell.append(QString::number(400 + tableNumber * 10 + rowNumber * ROW_SIZE));
 else
-            cell.append(QString::number(30 + m_tableRow * 30));
+            cell.append(QString::number(ROW_SIZE + rowNumber * ROW_SIZE));
             cell.append("\" bottom=\"");
 if (DISABLE_FLOATING)
-            cell.append(QString::number(430 + m_tableManager * 10 + m_tableRow * 30));
+            cell.append(QString::number(400 + ROW_SIZE + tableNumber * 10 + rowNumber * ROW_SIZE));
 else
-            cell.append(QString::number(60 + m_tableRow * 30));
+            cell.append(QString::number(2 * ROW_SIZE + rowNumber * ROW_SIZE));
             cell.append(
                 "\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\" "
                 "lWidth=\"1\" lStyle=\"0\" " +
@@ -415,7 +485,6 @@ else
                 colourType(row.rgtc[i].brcBottom.ico, "bRed", "bGreen", "bBlue") +
                 colourType(row.rgshd[i].icoBack, "bkRed", "bkGreen", "bkBlue", 8) +
                 "bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
-
             cell.append("\" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
             cell.append("<PARAGRAPH>\n<TEXT>");
             xml_friendly = texts[i];
@@ -426,7 +495,6 @@ else
             m_body.append(cell);
         }
     }
-    m_tableRow++;
 }
 
 QString WinWordDoc::colourType(

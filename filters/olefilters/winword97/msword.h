@@ -34,7 +34,7 @@ DESCRIPTION
 #include <mswordgenerated.h>
 #include <qarray.h>
 
-class Paragraph;
+class Properties;
 
 class MsWord: public MsWordGenerated
 {
@@ -60,13 +60,6 @@ public:
     // the text along with any relevant attributes.
 
     void parse();
-    virtual void gotError(const QString &text);
-    virtual void gotParagraph(const QString &text, PAP &style);
-    virtual void gotHeadingParagraph(const QString &text, PAP &style);
-    virtual void gotListParagraph(const QString &text, PAP &style);
-    virtual void gotTableBegin();
-    virtual void gotTableEnd();
-    virtual void gotTableRow(const QString texts[], const PAP styles[], TAP &row);
 
 // TBD: this will be not remain public once I figure out how the nested classes
 // can be made to work (as friends?).
@@ -185,7 +178,7 @@ public:
     // Cache for styles in stylesheet. This is an array of fully "decoded"
     // PAPs - that will help performance with lots of paragraphs.
 
-    Paragraph **m_styles;
+    Properties **m_styles;
 
     // Cache for list styles. This is an array of LVLF pointersfully "decoded"
     // PAPs - that will help performance with lots of paragraphs.
@@ -265,8 +258,39 @@ public:
         U8 m_i;
     };
 
+protected:
+    // Character property handling.
+
+    typedef struct
+    {
+        U32 startFc;
+        U32 endFc;
+        CHPXFKP data;
+    } CHPX;
+
+    typedef QArray<CHPX> CHPXarray;
+
+    virtual void gotParagraph(
+        const QString &text,
+        const PAP &pap,
+        const CHPXarray &chpxs) = 0;
+    virtual void gotHeadingParagraph(
+        const QString &text,
+        const PAP &pap,
+        const CHPXarray &chpxs) = 0;
+    virtual void gotListParagraph(
+        const QString &text,
+        const PAP &pap,
+        const CHPXarray &chpxs) = 0;
+    virtual void gotTableBegin() = 0;
+    virtual void gotTableEnd() = 0;
+    virtual void gotTableRow(
+        const QString texts[],
+        const PAP styles[],
+        TAP &row) = 0;
+
 private:
-    friend class Paragraph;
+    friend class Properties;
 
     // Error handling and reporting support.
 
@@ -278,13 +302,6 @@ private:
 
     // Character property handling.
 
-    typedef struct
-    {
-        U32 startFc;
-        U32 endFc;
-        CHPXFKP data;
-    } CHPX;
-    typedef QArray<CHPX> CHPXarray;
     void getChpxs(U32 startFc, U32 endFc, CHPXarray &result);
     void getChpxs(const U8 *fkp, U32 startFc, U32 endFc, CHPXarray &result);
 
@@ -300,7 +317,11 @@ private:
         U32 startFc,
         U32 endFc,
         bool unicode);
-    QString m_partialParagraph;
+    struct
+    {
+        QString text;
+        CHPXarray chpxs;
+    } m_partialParagraph;
 
     // Convert a char into a unicode character.
 

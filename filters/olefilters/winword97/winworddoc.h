@@ -20,18 +20,16 @@
 #ifndef WINWORDDOC_H
 #define WINWORDDOC_H
 
+#include <document.h>
+#include <kdebug.h>
+#include <myfile.h>
+#include <properties.h>
 #include <qarray.h>
 #include <qstring.h>
 #include <qdom.h>
 #include <qvector.h>
 
-#include <properties.h>
-#include <myfile.h>
-#include <msword.h>
-
-#include <kdebug.h>
-
-class WinWordDoc: private MsWord
+class WinWordDoc: private Document
 {
 public:
     WinWordDoc(QDomDocument &part, const myFile &mainStream,
@@ -74,17 +72,19 @@ private:
 
     char numberingType(unsigned nfc) const;
 
+    // Convert from Word character format to our own format.
+
+    void generateFormats(Attributes &attributes);
+
     void gotError(const QString &text);
-    void gotParagraph(const QString &text, PAP &style);
-    void gotHeadingParagraph(const QString &text, PAP &style);
-    void gotListParagraph(const QString &text, PAP &style);
-    void gotTableBegin();
-    void gotTableEnd();
-    void gotTableRow(const QString texts[], const PAP styles[], TAP &row);
+    void gotParagraph(const QString &text, Attributes &attributes);
+    void gotHeadingParagraph(const QString &text, Attributes &attributes);
+    void gotListParagraph(const QString &text, Attributes &attributes);
+    void gotTableBegin(unsigned tableNumber);
+    void gotTableEnd(unsigned tableNumber);
+    void gotTableRow(unsigned tableNumber, unsigned rowNumber, const QString texts[], const PAP styles[], TAP &row);
 
     QDomDocument m_part;
-    unsigned m_tableManager;
-    unsigned m_tableRow;
 
     // Word has a very flexible concept of columns: each row can vary the
     // edges of each column. We must map this onto a set of fixed-width columns
@@ -94,7 +94,7 @@ private:
 
     QVector< QArray<unsigned> > m_cellEdges;                                    
     int cacheCellEdge(
-        unsigned tableManager,
+        unsigned tableNumber,
         unsigned cellEdge);
     unsigned computeCellEdge(
         MsWord::TAP &row,

@@ -167,19 +167,23 @@ void MsWord::constructionError(unsigned line, const char *reason)
     kdError(s_area) << m_constructionError << endl;
 }
 
-void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::PAPXFKP &style, CHPXarray &/*chpxs*/)
+void MsWord::decodeParagraph(
+    const QString &text,
+    MsWord::PHE &layout,
+    MsWord::PAPXFKP &style,
+    CHPXarray &chpxs)
 {
-    Paragraph paragraph = Paragraph(*this);
+    Properties properties = Properties(*this);
 
     // Work out the paragraph details.
 
-    paragraph.apply(style);
-    paragraph.apply(layout);
+    properties.apply(style);
+    properties.apply(layout);
 
     // We treat table paragraphs somewhat differently...so deal with
     // them first.
 
-    if (paragraph.m_pap.fInTable)
+    if (properties.m_pap.fInTable)
     {
         if (!m_wasInTable)
         {
@@ -190,15 +194,15 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
 
         // When we get to the end of the row, output the whole lot.
 
-        if (paragraph.m_pap.fTtp)
+        if (properties.m_pap.fTtp)
         {
-            gotTableRow(m_tableText, m_tableStyle, paragraph.m_tap);
+            gotTableRow(m_tableText, m_tableStyle, properties.m_tap);
             m_tableColumn = 0;
         }
         else
         {
             m_tableText[m_tableColumn] = text;
-            m_tableStyle[m_tableColumn] = paragraph.m_pap;
+            m_tableStyle[m_tableColumn] = properties.m_pap;
             m_tableColumn++;
         }
         return;
@@ -209,12 +213,12 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
 
     // What kind of paragraph was this?
 
-    if ((paragraph.m_pap.istd >= 1) && (paragraph.m_pap.istd <= 9))
+    if ((properties.m_pap.istd >= 1) && (properties.m_pap.istd <= 9))
     {
-        gotHeadingParagraph(text, paragraph.m_pap);
+        gotHeadingParagraph(text, properties.m_pap, chpxs);
     }
     else
-    if (paragraph.m_pap.ilfo)
+    if (properties.m_pap.ilfo)
     {
         const U8 *ptr = m_tableStream + m_fib.fcPlfLfo; //lcbPlfLfo.
         const U8 *ptr2;
@@ -226,14 +230,14 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
 
         ptr += MsWordGenerated::read(ptr, &lfoCount);
         ptr2 = ptr + lfoCount * sizeof(LFO);
-        if (lfoCount < paragraph.m_pap.ilfo)
+        if (lfoCount < properties.m_pap.ilfo)
             kdError(s_area) << "MsWord::decodeParagraph: error finding LFO[" <<
-                paragraph.m_pap.ilfo << "]" << endl;
+                properties.m_pap.ilfo << "]" << endl;
 
         // Skip all the LFOs before our one, so that we can traverse the variable
         // length LFOLVL arrays.
 
-        for (i = 1; i < paragraph.m_pap.ilfo; i++)
+        for (i = 1; i < properties.m_pap.ilfo; i++)
         {
             LFO data;
             LFOLVL levelOverride;
@@ -267,7 +271,7 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
         // Read our LFO, apply the LSTF and then search any LFOLVLs for a matching level.
 
         ptr += MsWordGenerated::read(ptr, &data);
-        paragraph.apply(data);
+        properties.apply(data);
         for (i = 0; i < data.clfolvl; i++)
         {
             LFOLVL levelOverride;
@@ -288,7 +292,7 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
 
             // If this LFOLVL is ours, we are done!
 
-            if (paragraph.m_pap.ilvl == levelOverride.ilvl)
+            if (properties.m_pap.ilvl == levelOverride.ilvl)
             {
                 // If the LFOLVL was not a complete override, resort to the LVLF
                 // for whatever is missing.
@@ -298,12 +302,12 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
                     // Apply the grpprl.
 
                     kdDebug(s_area) << "getting formatting from LVLF" << endl;
-                    paragraph.apply(ptr3, level.cbGrpprlPapx);
+                    properties.apply(ptr3, level.cbGrpprlPapx);
 
                     // Apply the startAt.
 
-                    paragraph.m_pap.anld.iStartAt = level.iStartAt;
-                    kdDebug(s_area) << "got startAt " << paragraph.m_pap.anld.iStartAt <<
+                    properties.m_pap.anld.iStartAt = level.iStartAt;
+                    kdDebug(s_area) << "got startAt " << properties.m_pap.anld.iStartAt <<
                         " from LVLF" << endl;
                 }
                 else
@@ -311,8 +315,8 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
                 {
                     // Apply the startAt.
 
-                    paragraph.m_pap.anld.iStartAt = levelOverride.iStartAt;
-                    kdDebug(s_area) << "got startAt " << paragraph.m_pap.anld.iStartAt <<
+                    properties.m_pap.anld.iStartAt = levelOverride.iStartAt;
+                    kdDebug(s_area) << "got startAt " << properties.m_pap.anld.iStartAt <<
                         " from LFOLVL" << endl;
                 }
                 break;
@@ -320,13 +324,13 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
         }
 
         // TBD: We often seem to get invalid nfc's. Map them to a safe value.
-        if (paragraph.m_pap.anld.nfc > 5)
-            paragraph.m_pap.anld.nfc = 5;
-        gotListParagraph(text, paragraph.m_pap);
+        if (properties.m_pap.anld.nfc > 5)
+            properties.m_pap.anld.nfc = 5;
+        gotListParagraph(text, properties.m_pap, chpxs);
     }
     else
     {
-        gotParagraph(text, paragraph.m_pap);
+        gotParagraph(text, properties.m_pap, chpxs);
     }
 }
 
@@ -639,10 +643,8 @@ void MsWord::getParagraphsFromPapxs(
                 discardedEnd = true;
             }
 
-            // Read the text we are after, and output it if we got to the end
-            // of the paragraph. Otherwise, we save it away for next time
-            // around. TBD: Make sure we output any trailing partial
-            // paragraph.
+            // Read the text we are after, and get the CHPXs that apply to
+            // the range of characters.
 
             read(
                 m_fib.lid,
@@ -650,66 +652,67 @@ void MsWord::getParagraphsFromPapxs(
                 &text,
                 (actualEndFc - actualStartFc) / (unicode ? 2 : 1),
                 unicode);
-            if (discardedEnd)
-            {
-                m_partialParagraph += text;
-                continue;
-            }
-            text = m_partialParagraph + text;
-            m_partialParagraph = "";
+            getChpxs(actualStartFc, actualEndFc, chpxs);
 
-            // Get the CHPXs that apply to this paragraph, then bias all the
-            // start and end positions to be relative to the string we just
-            // extracted.
+            // Adjust the end position to be in character count terms,
+            // independent of the original encoding.
 
             unsigned i;
+            unsigned length;
 
-            getChpxs(actualStartFc, actualEndFc, chpxs);
             for (i = 0; i < chpxs.size(); i++)
             {
-                chpxs[i].startFc -= actualStartFc;
-                chpxs[i].endFc -= actualStartFc;
+                length = chpxs[i].endFc - chpxs[i].startFc;
+                length /= (unicode ? 2 : 1);
+                chpxs[i].endFc = chpxs[i].startFc + length;
             }
 
             // TBD: Now eliminate any deleted text.
 
             for (i = 0; i < chpxs.size(); i++)
             {
-                // Paragraph paragraph = Paragraph(*this);
+                // Properties properties = Properties(*this);
 
-                // paragraph.apply(chpxs[i].data.ptr, chpxs[i].data.count);
+                // properties.apply(chpxs[i].data.ptr, chpxs[i].data.count);
             }
 
+            // If we got to the end of the properties, output it. Otherwise, we
+            // save it and its CHPXs away for next time around. TBD: Make sure
+            // we output any trailing partial paragraph.
+
+            unsigned extra;
+
+            m_partialParagraph.text += text;
+            length = m_partialParagraph.chpxs.size();
+            extra = chpxs.size();
+            m_partialParagraph.chpxs.resize(length + extra);
+            for (i = 0; i < extra; i++)
+                m_partialParagraph.chpxs[length + i] = chpxs[i];
+            if (discardedEnd)
+            {
+                continue;
+            }
+            text = m_partialParagraph.text;
+            chpxs = m_partialParagraph.chpxs;
+            m_partialParagraph.text = "";
+            m_partialParagraph.chpxs.resize(0);
+
+            // Bias all the start and end positions to be in a monotonic
+            // sequence starting from zero within the paragraph.
+
+            for (i = 0; i < chpxs.size(); i++)
+            {
+                chpxs[i].endFc -= chpxs[i].startFc;
+                chpxs[i].startFc = 0;
+                if (i > 0)
+                {
+                    chpxs[i].endFc += chpxs[i - 1].endFc;
+                    chpxs[i].startFc += chpxs[i - 1].endFc;
+                }
+            }
             decodeParagraph(text, layout, style, chpxs);
         }
     }
-//    else
-//        kdDebug(s_area) << "ignore non-body text from: " << m_currentTextStreamPosition << ".." << m_currentTextStreamPosition+textLength<< endl;
-/*
-    else
-    if (m_currentTextStreamPosition < m_fib.ccpFtn)
-        kdDebug(s_area) << "output footnotes to: " << m_currentTextStreamPosition << endl;
-    else
-    if (m_currentTextStreamPosition < m_fib.ccpHdd)
-        kdDebug(s_area) << "output headers to: " << m_currentTextStreamPosition << endl;
-    else
-    if (m_currentTextStreamPosition < m_fib.ccpAtn)
-        kdDebug(s_area) << "output annotations to: " << m_currentTextStreamPosition << endl;
-    else
-    if (m_currentTextStreamPosition < m_fib.ccpEdn)
-        kdDebug(s_area) << "output endnotes to: " << m_currentTextStreamPosition << endl;
-    else
-    if (m_currentTextStreamPosition < m_fib.ccpTxbx)
-        kdDebug(s_area) << "output textbox to: " << m_currentTextStreamPosition << endl;
-    else
-    if (m_currentTextStreamPosition < m_fib.ccpHdrTxbx)
-        kdDebug(s_area) << "output header textbox to: " << m_currentTextStreamPosition << endl;
-*/
-
-    // If the string ends in a CR, strip it off.
-
-//    if (!unicode && (char8 == '\r'))
-//        out->truncate(count - 1);
 }
 
 // Create a cache of information about lists.
@@ -822,7 +825,7 @@ void MsWord::getStyles()
 
     // Construct the array of styles, and then walk the array reading in the style definitions.
 
-    m_styles = new Paragraph *[stshi.cstd];
+    m_styles = new Properties *[stshi.cstd];
     for (unsigned i = 0; i < stshi.cstd; i++)
     {
         U16 cbStd;
@@ -838,7 +841,7 @@ void MsWord::getStyles()
 
             // Fill the paragraph with its characteristics.
 
-            m_styles[i] = new Paragraph(*this);
+            m_styles[i] = new Properties(*this);
             m_styles[i]->apply(std);
         }
         else
@@ -850,41 +853,6 @@ void MsWord::getStyles()
         }
         ptr += cbStd;
     }
-}
-
-void MsWord::gotError(const QString &text)
-{
-    kdError(s_area) << text << endl;
-}
-
-void MsWord::gotParagraph(const QString &/*text*/, PAP &/*style*/)
-{
-    kdDebug(s_area) << "MsWord::gotParagraph: normal" << endl;
-}
-
-void MsWord::gotHeadingParagraph(const QString &text, PAP &style)
-{
-    kdDebug(s_area) << "MsWord::gotParagraph: heading level: " << style.istd << ": " << text << endl;
-}
-
-void MsWord::gotListParagraph(const QString &/*text*/, PAP &style)
-{
-    kdDebug(s_area) << "MsWord::gotParagraph: list level: " << style.ilvl << endl;
-}
-
-void MsWord::gotTableBegin()
-{
-    kdDebug(s_area) << "MsWord::gotParagraph: table begin" << endl;
-}
-
-void MsWord::gotTableEnd()
-{
-    kdDebug(s_area) << "MsWord::gotParagraph: table end" << endl;
-}
-
-void MsWord::gotTableRow(const QString /*texts*/[], const PAP /*styles*/[], TAP &row)
-{
-    kdDebug(s_area) << "MsWord::gotParagraph: table row: cells: " << row.itcMac << endl;
 }
 
 MsWord::MsWord(
@@ -959,14 +927,15 @@ void MsWord::parse()
 {
     if (m_constructionError.length())
     {
-       gotError(m_constructionError);
+       kdError(s_area) << m_constructionError << endl;
        return;
     }
 
     // Initialise the parse state.
 
     m_wasInTable = false;
-    m_partialParagraph = "";
+    m_partialParagraph.text = "";
+    m_partialParagraph.chpxs.resize(0);
 
     // Note that we test for the presence of complex structure, rather than
     // m_fib.fComplex. This allows us to treat newer files which always seem
@@ -1089,7 +1058,7 @@ void MsWord::parse()
             }
             else
             {
-                U16 opcode = Paragraph::getRealOpcode(data.prm.isprm);
+                U16 opcode = Properties::getRealOpcode(data.prm.isprm);
 
                 sprm[0] = opcode;
                 sprm[1] = opcode >> 8;
@@ -1101,9 +1070,9 @@ void MsWord::parse()
             // TBD: Now eliminate any deleted text.
 
             {
-                Paragraph paragraph = Paragraph(*this);
+                Properties properties = Properties(*this);
 
-                paragraph.apply(prmPtr, prmCount);
+                properties.apply(prmPtr, prmCount);
             }
             getParagraphsFromBtes(
                 data.fc,

@@ -19,14 +19,15 @@
 
 DESCRIPTION
 
-    This file implements an abstraction for paragraph properties in Microsoft
-    Word documents. In other words, it is an abstraction for the PAP structure.
+    This file implements an abstraction for properties in Microsoft
+    Word documents. In other words, it is an abstraction for the PAP/CHP/TAP
+    structures.
 */
 
 #include <properties.h>
 
 // Create a paragraph with default properties.
-Paragraph::Paragraph(MsWord &document) :
+Properties::Properties(MsWord &document) :
     m_document(document)
 {
     memset(&m_pap, 0, sizeof(m_pap));
@@ -45,12 +46,12 @@ Paragraph::Paragraph(MsWord &document) :
     memset(&m_tap, 0, sizeof(m_tap));
 }
 
-Paragraph::~Paragraph()
+Properties::~Properties()
 {
 }
 
 // An array of SPRMs (grpprl).
-void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
+void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
 {
     MsWord::U16 opcodeValue;
     struct
@@ -595,7 +596,7 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
                 bytes += MsWordGenerated::read(in + bytes, &t8);
                 operandSize = t8;
                 if (operandSize == 255)
-                    kdError(MsWord::s_area) << "Paragraph::apply: cannot parse sprmPChgTabs" << endl;
+                    kdError(MsWord::s_area) << "Properties::apply: cannot parse sprmPChgTabs" << endl;
                 break;
             case sprmTDefTable10:
             case sprmTDefTable:
@@ -613,7 +614,7 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
 
         MsWord::U8 tmp;
 
-        //kdDebug(s_area) << "Paragraph::apply: opcode:" << opcodeValue << endl;
+        //kdDebug(s_area) << "Properties::apply: opcode:" << opcodeValue << endl;
         switch (opcodeValue)
         {
         case sprmNoop: // 0x0000
@@ -706,6 +707,10 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
             MsWordGenerated::read(in + bytes, &tmp);
             m_chp.fObj = tmp == 1;
             break;
+        case sprmCFUsePgsuSettings: // 0x0868
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_chp.fUsePgsuSettings = tmp == 1;
+            break;
         case sprmPJc: // 0x2403
             MsWordGenerated::read(in + bytes, &m_pap.jc);
             break;
@@ -752,15 +757,15 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
             break;
         case sprmCKul: // 0x2A3E
             MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.kul = tmp >> 3;
+            m_chp.kul = tmp;
             break;
         case sprmCIco: // 0x2A42
             MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.ico = tmp >> 0;
+            m_chp.ico = tmp;
             break;
         case sprmCIss: // 0x2A48
             MsWordGenerated::read(in + bytes, &tmp);
-            m_chp.iss = tmp >> 0;
+            m_chp.iss = tmp;
             break;
         case sprmTFCantSplit: // 0x3403
             MsWordGenerated::read(in + bytes, &tmp);
@@ -816,11 +821,11 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
             MsWordGenerated::read(in + bytes, &m_pap.brcRight);
             break;
         case sprmPBrcBetween: // 0x6628
-             MsWordGenerated::read(in + bytes, &m_pap.brcBetween);
-             break;
+            MsWordGenerated::read(in + bytes, &m_pap.brcBetween);
+            break;
         case sprmPBrcBar: // 0x6629
-             MsWordGenerated::read(in + bytes, &m_pap.brcBar);
-             break;
+            MsWordGenerated::read(in + bytes, &m_pap.brcBar);
+            break;
         case sprmCPicLocation: // 0x6A03
             MsWordGenerated::read(in + bytes, &m_chp.fcPic_fcObj_lTagObj);
             m_chp.fSpec = 1;
@@ -899,7 +904,7 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
             }
             else
             {
-                kdWarning(MsWord::s_area) << "Paragraph::apply: unsupported opcode:" << opcodeValue << endl;
+                kdWarning(MsWord::s_area) << "Properties::apply: unsupported opcode:" << opcodeValue << endl;
             }
             break;
         }
@@ -908,7 +913,7 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
 }
 
 // An existing base style.
-void Paragraph::apply(MsWord::U16 style)
+void Properties::apply(const MsWord::U16 style)
 {
     unsigned originalStyle;
 
@@ -923,7 +928,7 @@ void Paragraph::apply(MsWord::U16 style)
 }
 
 // List format.
-void Paragraph::apply(MsWord::LFO &style)
+void Properties::apply(const MsWord::LFO &style)
 {
     const MsWord::U8 *ptr = m_document.m_tableStream + m_document.m_fib.fcPlcfLst; //lcbPlcfLst.
     MsWord::U16 lstfCount;
@@ -975,12 +980,19 @@ void Paragraph::apply(MsWord::LFO &style)
         }
     }
     if (i == lstfCount)
-        kdError(MsWord::s_area) << "Paragraph::apply: error finding LSTF[" << style.lsid << "]" << endl;
+        kdError(MsWord::s_area) << "Properties::apply: error finding LSTF[" << style.lsid << "]" << endl;
 }
 
-// Property exceptions.
+// Paragraph property set.
 
-void Paragraph::apply(MsWord::PAPXFKP &style)
+void Properties::apply(const MsWord::PAP &style)
+{
+    m_pap = style;
+}
+
+// Paragraph property exceptions.
+
+void Properties::apply(const MsWord::PAPXFKP &style)
 {
     // Record the style index.
 
@@ -992,16 +1004,16 @@ void Paragraph::apply(MsWord::PAPXFKP &style)
     apply(style.ptr, style.count);
 }
 
-// Paragraph height.
+// Properties height.
 
-void Paragraph::apply(MsWord::PHE &layout)
+void Properties::apply(const MsWord::PHE &layout)
 {
     m_pap.phe = layout;
 }
 
 // Predefined style from stylesheet.
 
-void Paragraph::apply(MsWord::STD &style)
+void Properties::apply(const MsWord::STD &style)
 {
     const MsWord::U8 *grpprl;
     MsWord::U16 cbUpx;
@@ -1052,12 +1064,12 @@ void Paragraph::apply(MsWord::STD &style)
     // If things went unexpectedly wrong...
 
     if (cupx != 0)
-        kdError(MsWord::s_area) << "Paragraph::apply: unexpected cupx: " << style.cupx << endl;
+        kdError(MsWord::s_area) << "Properties::apply: unexpected cupx: " << style.cupx << endl;
 }
 
 // Conversion from compact PRM opcode to real opcode.
 
-MsWord::U16 Paragraph::getRealOpcode(unsigned shortOpcode)
+MsWord::U16 Properties::getRealOpcode(unsigned shortOpcode)
 { 
     static const MsWord::U16 rgsprmPrm[0x80] =
     {

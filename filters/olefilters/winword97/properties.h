@@ -19,46 +19,49 @@
 
 DESCRIPTION
 
-    This file implements an abstraction for paragraph properties in Microsoft
-    Word documents. In other words, it is an abstraction for the PAP structure.
+    This file implements an abstraction for properties in Microsoft
+    Word documents. In other words, it is an abstraction for the PAP/CHP/TAP
+    structures.
 */
 
-#ifndef PARAGRAPH_H
-#define PARAGRAPH_H
+#ifndef PROPERTIES_H
+#define PROPERTIES_H
 
 #include <msword.h>
 
-class Paragraph
+class Properties
 {
 public:
 
-    // Create a paragraph with default properties.
+    // Create an object with default properties.
 
-    Paragraph(MsWord &document);
-    ~Paragraph();
+    Properties(MsWord &document);
+    ~Properties();
 
-    // Modify the paragraph with style information from various sources...
+    // Modify the properties with style information from various sources...
     //
     // An array of SPRMs (grpprl).
     // An existing base style.
     // List format.
-    // Property exceptions.
+    // Paragraph property set.
+    // Paragraph property exceptions.
     // Paragraph height.
     // Predefined style from stylesheet.
 
     void apply(const MsWord::U8 *grpprl, unsigned count);
-    void apply(MsWord::U16 style);
-    void apply(MsWord::LFO &style);
-    void apply(MsWord::PAPXFKP &style);
-    void apply(MsWord::PHE &layout);
-    void apply(MsWord::STD &style);
+    void apply(const MsWord::U16 style);
+    void apply(const MsWord::LFO &style);
+    void apply(const MsWord::PAP &style);
+    void apply(const MsWord::PAPXFKP &style);
+    void apply(const MsWord::PHE &layout);
+    void apply(const MsWord::STD &style);
 
     // Conversion from compact PRM opcode to real opcode.
 
     static MsWord::U16 getRealOpcode(unsigned shortOpcode); 
 
     // Get the properties.
- 
+
     const MsWord::PAP *getPap(void) { return &m_pap; }
     const MsWord::CHP *getChp(void) { return &m_chp; }
     const MsWord::TAP *getTap(void) { return &m_tap; }
@@ -68,11 +71,11 @@ private:
     MsWord &m_document;
     MsWord::PAP m_pap;
 
-    // The default character properties for this paragraph.
+    // The character properties.
 
     MsWord::CHP m_chp;
 
-    // Any table properties for the row terminated by this paragraph.
+    // Any table properties.
 
     MsWord::TAP m_tap;
 
