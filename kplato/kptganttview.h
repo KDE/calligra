@@ -69,7 +69,7 @@ class KPTGanttView : public QSplitter
     KPTNode *currentNode();
 
     void clear();
-    void print(KPrinter &printer);
+    void print(KPrinter &prts);
 
     void addTaskLink(KDGanttViewTaskLink *link);
     

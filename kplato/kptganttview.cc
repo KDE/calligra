@@ -52,6 +52,8 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qvaluelist.h>
+#include <qpainter.h> 
+#include <qpaintdevicemetrics.h> 
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -66,7 +68,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_mainview( view ),
 	m_currentItem(0),
     m_taskView(0),
-    m_showSlack(true),
+    m_showSlack(false),
     m_firstTime(true)
 {
 
@@ -75,11 +77,12 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_gantt = new KDGanttView(this, "Gantt view");
     m_gantt->setLinkItemsEnabled(true);
     // For test, we need "slack functinallity" in KDGantt...
-    m_gantt->addColumn("Earliest start");
-    m_gantt->addColumn("Start");
-    m_gantt->addColumn("End");
-    m_gantt->addColumn("Latest finish");
-    
+    if (m_showSlack) {
+        m_gantt->addColumn("Earliest start");
+        m_gantt->addColumn("Start");
+        m_gantt->addColumn("End");
+        m_gantt->addColumn("Latest finish");
+    }
     m_gantt->setHeaderVisible(true);
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
@@ -697,9 +700,67 @@ void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* /*item*/)
 {
 }
 
-void KPTGanttView::print(KPrinter &printer) {
-    kdDebug()<<k_funcinfo<<endl;
+//TODO: 1) make it koffice compliant, 
+//      2) allow printing on multiple pages
+void KPTGanttView::print(KPrinter &prt) {
+    //kdDebug()<<k_funcinfo<<endl;
 
+    KDGanttViewItem *selItem = m_gantt->selectedItem();
+    if (selItem)
+        selItem->setSelected(false);
+    
+    //Comment from KWord
+    //   We don't get valid metrics from the printer - and we want a better resolution
+    //   anyway (it's the PS driver that takes care of the printer resolution).
+    //But KSpread uses fixed 300 dpis, so we can use it.
+
+    QPaintDeviceMetrics metrics( &prt );
+
+    // get the size of the desired output for scaling.
+    // here we want to print: ListView and TimeLine (default)
+    // for this purpose, we call drawContents() with a 0 pointer as painter
+    QSize size = m_gantt->drawContents(0);
+        
+    QPainter p;
+    p.begin( &prt );
+    
+    // Make a simple header
+    p.drawRect(0,0,metrics.width(),metrics.height());
+    QString text = "Project: " + m_mainview->getPart()->getProject().name();
+    QRect r = p.boundingRect(1,0,0,0, Qt::AlignLeft, text );
+    p.drawText( r, Qt::AlignLeft, text );
+    int hei = r.height();
+    //kdDebug()<<"Project r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
+    text = QDateTime::currentDateTime().toString();
+    r = p.boundingRect(metrics.width()-1,0,0,0, Qt::AlignRight, text );
+    p.drawText( r, Qt::AlignRight, text );
+    hei = QMAX(hei, r.height());
+    //kdDebug()<<"Date r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
+    hei++;
+    p.drawLine(0,hei,metrics.width(),hei);
+    hei +=2; // Problem: results differ dependent on portrait/landscape ?
+    // compute the scale
+    float dx = (float) (metrics.width()-2)  / (float)size.width();
+    float dy  = (float)(metrics.height()-hei) / (float)size.height();
+    float scale;
+    // scale to fit the width or height of the paper
+    if ( dx < dy )
+        scale = dx;
+    else
+        scale = dy;
+    // set the scale
+    p.scale( scale, scale );
+    p.translate(1,hei);
+    m_gantt->drawContents(&p);
+    // the drawContents() has the side effect, that the painter translation is
+    // after drawContents() set to the bottom of the painted stuff
+    // for instance a
+    // p.drawText(0, 0, "printend");
+    // would be painted directly below the paintout of drawContents()
+    
+    p.end();
+    if (selItem)
+        selItem->setSelected(true);
 }
 
 void KPTGanttView::slotItemRenamed(KDGanttViewItem* item, int col, const QString& str) {
