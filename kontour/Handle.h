@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,13 +23,14 @@
 
 */
 
-#ifndef Handle_h_
-#define Handle_h_
+#ifndef __Handle_h__
+#define __Handle_h__
 
-#include <Coord.h>
+#include <koPoint.h>
+#include <koRect.h>
 
+class GPage;
 class QPainter;
-class GDocument;
 
 #define Handle_Top     1
 #define Handle_Right   2
@@ -39,33 +41,32 @@ class GDocument;
 class Handle
 {
 public:
-  enum Mode { HMode_Default, HMode_Rotate };
-  enum Position { HPos_Top = 1, HPos_Right = 2, HPos_Bottom = 4,
-                  HPos_Left = 8, HPos_Center = 16 };
+  enum Mode{ HMode_Default, HMode_Rotate };
+  Handle(GPage *aGPage);
 
-  Handle (GDocument* parent);
-  ~Handle () {};
+  void show(bool flag = true);
 
-  void setBox (const Rect& r);
-  void setRotCenter (const Coord& p);
-  Coord rotCenter () const { return rcenter; }
+  void mode(Mode m, bool propagate = false);
 
-  void draw (QPainter& p);
-  int contains (const Coord& p);
-  void setMode (Mode m, bool propagate = false);
-  void show (bool flag = true);
+  void box(const KoRect &r);
+  
+  KoPoint rotCenter() const {return mRotCenter; }
+  void rotCenter(const KoPoint &p);
+  
+  void draw(QPainter &p);
+  int contains(const KoPoint &p);
 
 private:
   enum ArrowDirection { Arrow_Left, Arrow_Right, Arrow_Up, Arrow_Down };
+  void drawArrow(QPainter &p, int x, int y, ArrowDirection d);
 
-  void drawArrow (QPainter& p, int x, int y, ArrowDirection d);
-
-  GDocument* m_parentDoc;
-  Coord pos[8];
-  Rect box;
-  Coord rcenter;
-  Mode mode;
-  bool showIt;
+private:
+  GPage *mGPage;
+  KoPoint pos[8];
+  KoRect mBox;
+  KoPoint mRotCenter;
+  Mode mMode;
+  bool mShow;
 };
 
 #endif

@@ -41,8 +41,6 @@ GStyle::GStyle(GStyle &obj)
 {
   ocolor = obj.ocolor;
   fcolor = obj.fcolor;
-  oopac = obj.oopac;
-  fopac = obj.fopac;
 }
   
 QDomElement GStyle::writeToXml(QDomDocument &document)

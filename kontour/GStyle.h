@@ -30,14 +30,7 @@
 class QDomDocument;
 class QDomElement;
 
-/**
- * Class for drawing style.
- *
- * Documentation
- *
- * @author  Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
- * @version $Revision$
- */
+/* Class for drawing style */
 
 class GStyle
 {
@@ -59,8 +52,6 @@ public:
 private:
   KoColor ocolor;      // outline color
   KoColor fcolor;      // fill color
-  int oopac:8;         // outline opacity  (0...100%)
-  int fopac:8;         // fill opacity     (0...100%)
 };
 
 #endif

@@ -85,6 +85,7 @@ void GOval::type(Type t)
 void GOval::startPoint(const KoPoint &p)
 {
   sPoint = p;
+  updateRegion();
 }
 
 void GOval::endPoint(const KoPoint &p)
@@ -108,6 +109,7 @@ void GOval::endPoint(const KoPoint &p)
   }
   else*/
     ePoint = p;
+  updateRegion();
 }
 
 void GOval::setAngles(double sa, double ea)
@@ -206,29 +208,29 @@ void GOval::draw(QPainter &p, bool withBasePoints, bool outline, bool)
  */
 }
 
-void GOval::calcBoundingBox ()
+void GOval::calcBoundingBox()
 {
-//  calcUntransformedBoundingBox(sPoint, KoPoint(ePoint.x(), sPoint.y()), ePoint, KoPoint(sPoint.x(), ePoint.y()));
-/*  double x, y;
+  calcUntransformedBoundingBox(sPoint, KoPoint(ePoint.x(), sPoint.y()), ePoint, KoPoint(sPoint.x(), ePoint.y()));
+  double x, y;
 
-  Rect r (sPoint, ePoint);
+  KoRect r(sPoint, ePoint);
   r.normalize ();
-  double a = r.width () / 2.0;
-  double b = r.height () / 2.0;
+  double a = r.width() / 2.0;
+  double b = r.height() / 2.0;
 
   double angle = sAngle * M_PI / 180.0;
-  x = a * cos (angle) + r.left () + a;
-  y = b * sin (angle) + r.top () + b;
+  x = a * cos(angle) + r.left() + a;
+  y = b * sin(angle) + r.top() + b;
 
-  segPoint[0].x (x);
-  segPoint[0].y (y);
+  segPoint[0].setX(x);
+  segPoint[0].setY(y);
 
   angle = eAngle * M_PI / 180.0;
-  x = a * cos (angle) + r.left () + a;
-  y = b * sin (angle) + r.top () + b;
+  x = a * cos(angle) + r.left () + a;
+  y = b * sin(angle) + r.top () + b;
 
-  segPoint[1].x (x);
-  segPoint[1].y (y);*/
+  segPoint[1].setX(x);
+  segPoint[1].setY(y);
 }
 
 int GOval::getNeighbourPoint(const KoPoint &p)

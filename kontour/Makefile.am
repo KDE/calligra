@@ -1,7 +1,7 @@
 # This file you have to edit. Change the name here
 SUBDIRS = pics
 
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(srcdir) $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir) $(all_includes)
 
 messages: rc.cpp
 	$(XGETTEXT) -kI18N -kSI18N rc.cpp *.cc kontour_about.h -o $(podir)/kontour.pot
@@ -54,13 +54,13 @@ libkontourpart_la_SOURCES = \
 	RectTool.cc \
 	OvalTool.cc \
 	ZoomTool.cc \
+	Handle.cc \
 	Command.cc \
 	CreateOvalCmd.cc \
 	CreateRectCmd.cc \
 	OptionsDialog.cc \
 	UnitBox.cc \
 	units.cc \
-	koColor.cc \
 	koFrameButton.cc \
 	koColorChooser.cc \
 	colorframe.cc \
@@ -68,6 +68,6 @@ libkontourpart_la_SOURCES = \
 
 
 libkontourpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkontourpart_la_LIBADD = $(top_builddir)/lib/kofficeui/libkofficeui.la
+libkontourpart_la_LIBADD = $(top_builddir)/lib/kofficeui/libkofficeui.la $(LIB_KOPAINTER)
 
 METASOURCES = AUTO

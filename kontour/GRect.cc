@@ -193,7 +193,7 @@ void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
 
 void GRect::calcBoundingBox ()
 {
-//  calcUntransformedBoundingBox(sPoint, KoPoint(ePoint.x(), sPoint.y()), ePoint, KoPoint(sPoint.x(), ePoint.y()));
+  calcUntransformedBoundingBox(sPoint, KoPoint(ePoint.x(), sPoint.y()), ePoint, KoPoint(sPoint.x(), ePoint.y()));
 /*  double x, y;
 
   Rect r (sPoint, ePoint);

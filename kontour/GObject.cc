@@ -25,6 +25,8 @@
 
 #include "GObject.h"
 
+#include <kdebug.h>
+
 #include <qdom.h>
 
 GObject::GObject()
@@ -163,8 +165,12 @@ void GObject::updateBoundingBox(const KoPoint &p1, const KoPoint &p2)
 void GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft)
 {
   KoPoint p[4];
-  KoRect r;
+  KoRect r(tleft, bright);
 
+  kdDebug(38000) << "tl: x=" << tleft.x() << " y=" << tleft.y() << endl;
+  kdDebug(38000) << "br: x=" << bright.x() << " y=" << bright.y() << endl;
+
+  // TODO implement transform()
 /*  p[0] = tleft.transform(tmpMatrix);
   p[1] = tright.transform(tmpMatrix);
   p[2] = bleft.transform(tmpMatrix);

@@ -30,6 +30,7 @@
 #include <qptrlist.h>
 #include <koRect.h>
 #include <koPageLayoutDia.h>
+#include "Handle.h"
 
 class GDocument;
 class GLayer;
@@ -58,6 +59,8 @@ public:
 
   KoPageLayout pageLayout();
   void pageLayout(const KoPageLayout &layout);
+
+  Handle &handle() {return mHandle; }
 
   QDomElement saveToXml(QDomDocument &document);
   bool readFromXml(const QDomElement &page);
@@ -127,6 +130,8 @@ public:
   bool findNearestObject(const QString &otype, int x, int y, double max_dist, GObject *&obj, int &pidx, bool all = false);
   bool findContainingObjects(int x, int y, QPtrList<GObject> &olist);
   bool findObjectsContainedIn(const KoRect &r, QPtrList<GObject> &olist);
+  
+  void updateHandle();
 
 public slots:
 //  void objectChanged ();
@@ -152,13 +157,13 @@ private:
 
   int mCurLayerNum;
 
-  KoRect mSelBox;
-  bool selBoxIsValid;
-
-  bool autoUpdate;
-
   KoPageLayout mPageLayout;
-  //Handle selHandle;
+
+  bool autoUpdate:1;
+
+  KoRect mSelBox;
+  bool selBoxIsValid:1;  
+  Handle mHandle;
 };
 
 #endif

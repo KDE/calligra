@@ -42,7 +42,8 @@
 #include <values.h>
 #endif*/
 
-GPage::GPage(GDocument *aGDoc)
+GPage::GPage(GDocument *aGDoc):
+mHandle(this)
 {
   mGDoc = aGDoc;
 //  connect(this, SIGNAL(wasModified(bool)),doc, SLOT(setModified(bool)));
@@ -277,6 +278,7 @@ void GPage::insertObject(GObject *obj)
 {
 //  obj->ref ();
   active_layer->insertObject(obj);
+  selectObject(obj);
 //  connect(obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
 //  connect (obj, SIGNAL(changed(const KoRect&)), this, SLOT(objectChanged(const KoRect&)));
 //  setModified();
@@ -301,7 +303,7 @@ void GPage::deleteObject(GObject *obj)
     if(selected)
     {
       selBoxIsValid = false;
-//      updateHandle();
+      updateHandle();
       if(autoUpdate)
         emit selectionChanged();
     }
@@ -357,7 +359,7 @@ void GPage::selectObject(GObject *obj)
     obj->select (true);
     selection.append(obj);
     selBoxIsValid = false;
-//    updateHandle ();
+    updateHandle();
     if (autoUpdate)
     {
       emit changed ();
@@ -375,7 +377,7 @@ void GPage::unselectObject(GObject *obj)
     obj->select (false);
     selection.remove(i);
     selBoxIsValid = false;
-//    updateHandle ();
+    updateHandle();
     if (autoUpdate)
     {
       emit changed ();
@@ -480,7 +482,7 @@ void GPage::deleteSelectedObjects()
   
 KoRect GPage::boundingBoxForSelection()
 {
-  if (! selBoxIsValid)
+  if(!selBoxIsValid)
   {
     if (! selectionIsEmpty ())
     {
@@ -663,6 +665,15 @@ bool GPage::findObjectsContainedIn(const KoRect &r, QPtrList<GObject> &olist)
     }
   }
   return olist.count () > 0;
+}
+
+void GPage::updateHandle()
+{
+  KoRect r = boundingBoxForSelection();
+  if(selectionIsEmpty())
+    mHandle.show(false);
+  else
+    mHandle.box(r);
 }
 
 /*******************[OLD]*********************
