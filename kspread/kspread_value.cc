@@ -832,8 +832,37 @@ QTextStream& operator<<( QTextStream& ts, KSpreadValue::Type type )
     case KSpreadValue::Integer: ts << "Integer"; break;
     case KSpreadValue::Float:   ts << "Float"; break;
     case KSpreadValue::String:  ts << "String"; break;
+    case KSpreadValue::Array:   ts << "Array"; break;
     case KSpreadValue::Error:   ts << "Error"; break;
     default: ts << "Unknown!"; break;
   };
+  return ts;
+}
+
+QTextStream& operator<<( QTextStream& ts, KSpreadValue value ) 
+{
+  ts << value.type();
+  switch( value.type() )
+  {
+    case KSpreadValue::Empty:   break;
+    
+    case KSpreadValue::Boolean: 
+      ts << ": "; 
+      if (value.asBoolean()) ts << "TRUE"; 
+      else ts << "FALSE"; break;
+      
+    case KSpreadValue::Integer: 
+      ts << ": " << value.asInteger(); break;
+      
+    case KSpreadValue::Float:   
+      ts << ": " << value.asFloat(); break;
+      
+    case KSpreadValue::String:  
+      ts << ": " << value.asString(); break;
+      
+    case KSpreadValue::Error:   break;
+    
+    default: break;
+  }
   return ts;
 }

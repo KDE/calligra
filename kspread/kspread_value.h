@@ -463,7 +463,8 @@ class KSpreadValue
     KSpreadValueData* d; // can't never be 0
 };
 
-QTextStream& operator<< ( QTextStream& ts, KSpreadValue::Type type );
+QTextStream& operator<<( QTextStream& ts, KSpreadValue::Type type );
+QTextStream& operator<<( QTextStream& ts, KSpreadValue value );
 
 
 #endif // KSPREAD_VALUE_H
