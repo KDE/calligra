@@ -447,6 +447,8 @@ public slots:
 protected:
     void placeCursor( const QPoint &pos /* in internal coordinates */ );
     QTextCursor selectWordUnderCursor();
+    void deleteWordBack();
+    void deleteWordForward();
     void selectAll( bool select ) { textFrameSet()->selectAll( select ); }
     KWTextDrag * newDrag( QWidget * parent ) const;
 

@@ -831,13 +831,13 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, QTextParag * parag, 
                     }
                 }
                 else
-		{
+                {
                     ls->y += dy;
 #ifdef DEBUG_FLOW
-		    if ( dy )
+                    if ( dy )
                         kdDebug(32002) << "                   moving down to position ls->y=" << ls->y << endl;
 #endif
-		}
+                }
             }
             parag->setMovedDown( true );
             parag->setHeight( h + dy );
@@ -3663,6 +3663,38 @@ void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
         m_currentFrame = 0L;
 }
 
+void KWTextFrameSetEdit::deleteWordForward()
+{
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+        textFrameSet()->removeSelectedText( cursor );
+        return;
+    }
+    textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
+
+    do {
+        cursor->gotoRight();
+    } while ( !cursor->atParagEnd()
+              && !cursor->parag()->at( cursor->index() )->c.isSpace() );
+    textDocument()->setSelectionEnd( QTextDocument::Standard, cursor );
+    textFrameSet()->removeSelectedText( cursor, QTextDocument::Standard, i18n("Remove word") );
+}
+
+void KWTextFrameSetEdit::deleteWordBack()
+{
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+        textFrameSet()->removeSelectedText( cursor );
+        return;
+    }
+    textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
+
+    do {
+        cursor->gotoLeft();
+    } while ( !cursor->atParagStart()
+              && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() );
+    textDocument()->setSelectionEnd( QTextDocument::Standard, cursor );
+    textFrameSet()->removeSelectedText( cursor, QTextDocument::Standard, i18n("Remove word") );
+}
+
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 {
     textFrameSet()->typingStarted();
@@ -3677,6 +3709,19 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
     }*/
 
     bool clearUndoRedoInfo = TRUE;
+
+#if KDE_VERSION >= 220
+    if ( KStdAccel::isEqual( e, KStdAccel::deleteWordBack() ) )
+    {
+        deleteWordBack();
+        clearUndoRedoInfo = TRUE;
+    } else if ( KStdAccel::isEqual( e, KStdAccel::deleteWordForward() ) )
+    {
+        deleteWordForward();
+        clearUndoRedoInfo = TRUE;
+    }
+    else
+#endif
 
     switch ( e->key() ) {
     case Key_Left:
@@ -3715,19 +3760,11 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
             break;
         }
 
+#if KDE_VERSION < 220
         if ( e->state() & ControlButton )
-        {
-            // Delete a word
-            textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
-
-            do {
-                cursor->gotoRight();
-            } while ( !cursor->atParagEnd()
-                      && !cursor->parag()->at( cursor->index() )->c.isSpace() );
-            textDocument()->setSelectionEnd( QTextDocument::Standard, cursor );
-            textFrameSet()->removeSelectedText( cursor, QTextDocument::Standard, i18n("Remove word") );
-        }
+            deleteWordForward();
         else
+#endif
             textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionDelete );
 
         clearUndoRedoInfo = FALSE;
@@ -3737,6 +3774,8 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
             textFrameSet()->removeSelectedText( cursor );
             break;
         }
+	// It's a good thing that this (removing a counter with Backspace)
+	// is not activated with Ctrl-Backspace starting from kde-2.2.
         if ( !cursor->parag()->prev() &&
              cursor->atParagStart() )
         {
@@ -3745,19 +3784,11 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionBackspace );
             break;
         }
+#if KDE_VERSION < 220
         if ( e->state() & ControlButton )
-        {
-            // Delete a word
-            textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
-
-            do {
-                cursor->gotoLeft();
-            } while ( !cursor->atParagStart()
-                      && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() );
-            textDocument()->setSelectionEnd( QTextDocument::Standard, cursor );
-            textFrameSet()->removeSelectedText( cursor, QTextDocument::Standard, i18n("Remove word") );
-        }
+            deleteWordBack();
         else
+#endif
             textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionBackspace );
 
         clearUndoRedoInfo = FALSE;
