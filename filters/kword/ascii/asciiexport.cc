@@ -37,6 +37,7 @@
 #include <kgenericfactory.h>
 
 #include <koFilterChain.h>
+#include <koFilterManager.h>
 #include <koStore.h>
 
 #include <KWEFStructures.h>
@@ -442,21 +443,22 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QCString& from, const QCSt
     {
         return KoFilter::NotImplemented;
     }
-
-    AsciiExportDialog* dialog = new AsciiExportDialog();
-
-    if (!dialog)
+    AsciiExportDialog* dialog = 0;
+    if (!m_chain->manager()->getBatchMode())
     {
-        kdError(30502) << "Dialog has not been created! Aborting!" << endl;
-        return KoFilter::StupidError;
+      dialog = new AsciiExportDialog();
+      if (!dialog)
+      {
+	kdError(30502) << "Dialog has not been created! Aborting!" << endl;
+	return KoFilter::StupidError;
+      }
+      
+      if (!dialog->exec())
+      {
+	kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
+	return KoFilter::UserCancelled;
+      }
     }
-
-    if (!dialog->exec())
-    {
-        kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
-        return KoFilter::UserCancelled;
-    }
-
     ASCIIWorker* worker = new ASCIIWorker();
 
     if (!worker)
@@ -465,8 +467,12 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QCString& from, const QCSt
         delete dialog;
         return KoFilter::StupidError;
     }
-
-    QTextCodec* codec = dialog->getCodec();
+    QTextCodec* codec;
+    if (dialog)
+    	codec = dialog->getCodec();
+    else
+        codec = QTextCodec::codecForName("UTF-8");
+    
     if ( !codec )
     {
         kdError(30502) << "No codec!" << endl;
@@ -475,7 +481,10 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QCString& from, const QCSt
     }
 
     worker->setCodec( codec );
-    worker->setEndOfLine(dialog->getEndOfLine());
+    if (dialog)
+    	worker->setEndOfLine(dialog->getEndOfLine());
+    else
+        worker->setEndOfLine("\n");
 
     delete dialog;
 

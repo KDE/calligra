@@ -44,6 +44,7 @@
 #include <koPageLayout.h>
 #include <koStore.h>
 #include <koFilterChain.h>
+#include <koFilterManager.h>
 
 #include <asciiimport.h>
 #include <asciiimport.moc>
@@ -201,18 +202,35 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCS
     if (to!="application/x-kword" || from!="text/plain")
         return KoFilter::NotImplemented;
 
-    AsciiImportDialog* dialog = new AsciiImportDialog();
-    if (!dialog->exec())
+    AsciiImportDialog* dialog = 0;
+    if (!m_chain->manager()->getBatchMode())
     {
-        kdDebug(30502) << "Dialog was aborted! Aborting filter!" << endl; // this isn't an error!
-        return KoFilter::UserCancelled;
+    	dialog = new AsciiImportDialog();
+	if (!dialog)
+	{
+	  kdError(30502) << "Dialog has not been created! Aborting!" << endl;
+	  return KoFilter::StupidError;
+	}
+	if (!dialog->exec())
+	{
+	  kdDebug(30502) << "Dialog was aborted! Aborting filter!" << endl; // this isn't an error!
+	  return KoFilter::UserCancelled;
+	}
     }
 
-    QTextCodec* codec=dialog->getCodec();
-    int paragraphStrategy=dialog->getParagraphStrategy();
-
-    delete dialog;
-
+    QTextCodec* codec;
+    int paragraphStrategy;
+    if (dialog)
+    {
+      	codec = dialog->getCodec();
+	paragraphStrategy=dialog->getParagraphStrategy();
+	delete dialog;
+    }
+    else
+    {
+      codec = QTextCodec::codecForName("UTF-8");
+      paragraphStrategy=0;
+    }
 
     QFile in(m_chain->inputFile());
     if(!in.open(IO_ReadOnly)) {
