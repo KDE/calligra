@@ -377,46 +377,6 @@ QCursor KWFrame::getMouseCursor( int mx, int my, bool table )
     return Qt::arrowCursor;
 }
 
-/*================================================================*/
-QString KWFrame::leftBrd2String()
-{
-    QString str;
-    str.sprintf( " lWidth=\"%d\" lRed=\"%d\" lGreen=\"%d\" lBlue=\"%d\" lStyle=\"%d\" ",
-                 brd_left.ptWidth, brd_left.color.red(), brd_left.color.green(), brd_left.color.blue(),
-                 static_cast<int>( brd_left.style ) );
-    return str;
-}
-
-/*================================================================*/
-QString KWFrame::rightBrd2String()
-{
-    QString str;
-    str.sprintf( " rWidth=\"%d\" rRed=\"%d\" rGreen=\"%d\" rBlue=\"%d\" rStyle=\"%d\" ",
-                 brd_right.ptWidth, brd_right.color.red(), brd_right.color.green(), brd_right.color.blue(),
-                 static_cast<int>( brd_right.style ) );
-    return str;
-}
-
-/*================================================================*/
-QString KWFrame::topBrd2String()
-{
-    QString str;
-    str.sprintf( " tWidth=\"%d\" tRed=\"%d\" tGreen=\"%d\" tBlue=\"%d\" tStyle=\"%d\" ",
-                 brd_top.ptWidth, brd_top.color.red(), brd_top.color.green(), brd_top.color.blue(),
-                 static_cast<int>( brd_top.style ) );
-    return str;
-}
-
-/*================================================================*/
-QString KWFrame::bottomBrd2String()
-{
-    QString str;
-    str.sprintf( " bWidth=\"%d\" bRed=\"%d\" bGreen=\"%d\" bBlue=\"%d\" bStyle=\"%d\" ",
-                 brd_bottom.ptWidth, brd_bottom.color.red(), brd_bottom.color.green(), brd_bottom.color.blue(),
-                 static_cast<int>( brd_bottom.style ) );
-    return str;
-}
-
 FrameInfo KWFrame::getFrameInfo()
 {
     if(frameSet)

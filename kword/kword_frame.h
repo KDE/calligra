@@ -130,11 +130,6 @@ public:
     QBrush getBackgroundColor() { return backgroundColor; }
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
 
-    QString leftBrd2String();
-    QString rightBrd2String();
-    QString topBrd2String();
-    QString bottomBrd2String();
-
     unsigned int getNextFreeYPos( unsigned int _y, unsigned int _h );
 
     void setBLeft( KWUnit b ) { bleft = b; }
