@@ -47,7 +47,7 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 					path.current()->selectPoint( i, false );
 			}
 
-			if( path.current()->type() == VSegment::curve )
+			if( path.current()->isCurve() )
 			{
 				if( m_rect.contains( path.current()->point( 0 ) ) )
 				{
@@ -69,7 +69,7 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 			if( m_rect.contains( path.current()->knot() ) )
 			{
 				path.current()->selectKnot( m_select );
-				if( path.current()->type() == VSegment::curve )
+				if( path.current()->isCurve() )
 				{
 					path.current()->selectPoint( 1, m_select );
 				}

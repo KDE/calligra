@@ -195,7 +195,7 @@ VWhirlPinchCmd::visitVSubpath( VSubpath& path )
 			path.current()->setKnot( path.current()->knot().transform( m ) );
 		}
 
-		if( path.current()->type() == VSegment::curve )
+		if( path.current()->isCurve() )
 		{
 			delta = path.current()->point( 0 ) - m_center;
 			dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );

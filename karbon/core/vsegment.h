@@ -45,16 +45,6 @@ class VSegment
 
 public:
 	/**
-	 * Segment types.
-	 */
-	enum VSegmentType
-	{
-		begin,		// initial moveto
-		curve,		// curveto (bezier)
-		line		// lineto
-	};
-
-	/**
 	 * Tells which control point is "fixed" i.e. located at the
 	 * corresponding knot and invisible. This flag makes no sense for
 	 * line segments.
@@ -94,17 +84,12 @@ public:
 	 */
 	void setDegree( unsigned short deg );
 
-
 	/**
-	 * Returns the segment type ("begin", "line" or "curve").
+	 * Tests for the segment type ("begin", "line" or "curve").
 	 */
-	// TODO: this is a backward compatibility function. It should go someday
-	// together with VSegmentType.
-	VSegmentType type() const
-	{
-		return !prev() ? begin : ( degree() == 1 ? line : curve);
-	}
-
+	bool isBegin() const { return (degree() == 1) && !prev(); }
+	bool isLine() const { return (degree() == 1) && prev(); }
+	bool isCurve() const { return degree() > 1; }
 
 	/**
 	 * Returns the segment state.

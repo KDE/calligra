@@ -108,7 +108,7 @@ VDrawSelection::visitVPath( VPath &composite )
 				m_painter->setBrush( Qt::NoBrush );
 
 				if( ( editnodes || composite.state() == VObject::selected && m_nodeediting ) &&
-						jtr.current()->type() == VSegment::curve )
+						jtr.current()->isCurve() )
 				{
 					// Draw control lines.
 					if(

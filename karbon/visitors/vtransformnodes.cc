@@ -34,12 +34,12 @@ VTransformNodes::visitVSubpath( VSubpath& path )
 	path.first();
 	while( path.current() )
 	{
-		if( path.current()->type() == VSegment::curve )
+		if( path.current()->isCurve() )
 		{
 			if( !path.current()->knotIsSelected() &&
 				path.current()->pointIsSelected( 1 ) &&
 				path.current()->next() &&
-				path.current()->next()->type() == VSegment::curve &&
+				path.current()->next()->isCurve() &&
 				!path.current()->next()->pointIsSelected( 0 ) &&
 				path.current()->isSmooth() )
 			{
@@ -50,7 +50,7 @@ VTransformNodes::visitVSubpath( VSubpath& path )
 			}
 			if( path.current()->pointIsSelected( 0 ) &&
 				path.current()->prev() &&
-				path.current()->prev()->type() == VSegment::curve &&
+				path.current()->prev()->isCurve() &&
 				!path.current()->prev()->knotIsSelected() &&
 				!path.current()->prev()->pointIsSelected( 1 ) &&
 				path.current()->prev()->isSmooth() )

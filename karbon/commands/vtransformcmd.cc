@@ -276,13 +276,13 @@ VTranslateBezierCmd::~VTranslateBezierCmd()
 void
 VTranslateBezierCmd::execute()
 {
-	if( m_segment->type() == VSegment::curve )
+	if( m_segment->degree() == 3 )
 	{
 		QWMatrix m2( m_mat.m11(), m_mat.m12(), m_mat.m21(), m_mat.m22(), -m_mat.dx(), -m_mat.dy() );
 		if( m_firstControl )
 		{
 			if( m_segment->prev() &&
-				m_segment->prev()->type() == VSegment::curve &&
+				m_segment->prev()->degree() == 3 &&
 				m_segment->prev()->isSmooth() )
 			{
 				m_segmenttwo = m_segment->prev();
@@ -297,7 +297,7 @@ VTranslateBezierCmd::execute()
 		}
 		else
 		{
-			m_segmenttwo = ( m_segment->isSmooth() && m_segment->next()->type() == VSegment::curve ) ? m_segment->next() : 0L;
+			m_segmenttwo = ( m_segment->isSmooth() && m_segment->next()->degree() == 3 ) ? m_segment->next() : 0L;
 			if( m_segmenttwo )
 			{
 				for( uint i = 0;i < m_segmenttwo->degree();i++ )
