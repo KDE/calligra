@@ -1,7 +1,7 @@
 ###### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICECORE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
+INCLUDES = $(KSTORE_INCLUDES) $(KOFFICECORE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkofficeui_la_LDFLAGS	= -version-info 1:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE)
 
