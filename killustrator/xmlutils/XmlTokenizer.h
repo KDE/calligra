@@ -41,8 +41,31 @@ public:
   /**
    * The expected tokens for a XML stream.
    */
-  enum Token { Tok_EOF, Tok_Lt, Tok_Gt, Tok_Symbol, Tok_String, Tok_QSign, 
-	       Tok_Eq, Tok_Slash, Tok_Text, Tok_Comment, Tok_Invalid };
+  enum Token { Tok_Invalid,
+	       Tok_EOF, 
+	       Tok_Symbol, 
+	       Tok_String, 
+	       Tok_Text, 
+	       Tok_Comment, 
+	       Tok_Lt,       /* < */
+	       Tok_Gt,       /* > */
+	       Tok_QSign,    /* ? */
+	       Tok_Eq,       /* = */
+	       Tok_Slash,    /* / */
+	       Tok_Exclam,   /* ! */
+	       Tok_Bar,      /* | */
+	       Tok_LParen,   /* ( */
+	       Tok_RParen,   /* ) */
+	       Tok_LBracket, /* [ */
+	       Tok_RBracket, /* ] */
+	       Tok_Plus,     /* + */
+	       Tok_Asterisk, /* * */
+	       Tok_Comma,    /* , */
+	       Tok_Semicolon,/* ; */
+	       Tok_NSign,    /* # */
+	       Tok_Apostr,   /* ' */
+	       Tok_Percent   /* % */
+	       };
 
   /**
    * Create a XmlTokenizer instance for the given input stream.

@@ -86,21 +86,65 @@ XmlTokenizer::Token XmlTokenizer::nextToken () {
   case '=':
     return last_tok = Tok_Eq;
     break;
+  case '(':
+    return last_tok = Tok_LParen;
+    break;
+  case ')':
+    return last_tok = Tok_RParen;
+    break;
+  case '[':
+    return last_tok = Tok_LBracket;
+    break;
+  case ']':
+    return last_tok = Tok_RBracket;
+    break;
+  case '|':
+    return last_tok = Tok_Bar;
+    break;
+  case '*':
+    return last_tok = Tok_Asterisk;
+    break;
+  case '+':
+    return last_tok = Tok_Plus;
+    break;
+  case ',':
+    return last_tok = Tok_Comma;
+    break;
+  case ';':
+    return last_tok = Tok_Semicolon;
+    break;
+  case '%':
+    return last_tok = Tok_Percent;
+    break;
+  case '#':
+    return last_tok = Tok_NSign;
+    break;
+  case '\'':
+    return last_tok = Tok_Apostr;
+    break;
   case '"':
     // String einlesen
     return last_tok = readString ();
     break;
   default:
     if (is_open) {
-      if (isalpha (c)) {
+      if (isalpha (c) || isdigit (c)) {
 	// Symbol (Element oder Attributbezeichner)
 	strm.unget ();
 	return last_tok = readSymbol ();
       }
-      else if (c == '!') 
-	return last_tok = readComment ();
-      else
+      else if (c == '!') {
+	strm.get (c);
+	strm.unget ();
+	if (c == '-')
+	  return last_tok = readComment ();
+	else
+	  return last_tok = Tok_Exclam;
+      }
+      else {
+	cout << "HIER1:" << c << endl;
 	return last_tok = Tok_Invalid;
+      }
     }
     else {
       strm.unget ();
@@ -123,7 +167,8 @@ XmlTokenizer::Token XmlTokenizer::readSymbol () {
     if (strm.eof () || isspace (c))
       // Symbol ist abgeschlossen
       break;
-    else if (c == '=' || c == '/' || c == '>' || c == '?') {
+    else if (c == '=' || c == '/' || c == '>' || c == '?' || c == '|' ||
+	     c == ')' || c == '\'' || c == ',' || c == ';') {
       // Symbol ist abgeschlossen, das gelesene Zeichen wird 
       // aber noch benoetigt
       strm.unget ();
@@ -134,6 +179,7 @@ XmlTokenizer::Token XmlTokenizer::readSymbol () {
       elem += tolower (c);
     else {
       // Zeichen nicht erlaubt ?
+      cout << "HIER2: " << c << endl;
       return Tok_Invalid;
     }
   }
@@ -222,6 +268,45 @@ int main (int argc, char** argv) {
 
   while ((tok = tokenizer.nextToken ()) != XmlTokenizer::Tok_EOF) {
     switch (tok) {
+    case XmlTokenizer::Tok_Exclam:
+      cout << "! ";
+      break;
+    case XmlTokenizer::Tok_Bar:
+      cout << "| ";
+      break;
+    case XmlTokenizer::Tok_LParen:
+      cout << "( ";
+      break;
+    case XmlTokenizer::Tok_RParen:
+      cout << ") ";
+      break;
+    case XmlTokenizer::Tok_LBracket:
+      cout << "[ ";
+      break;
+    case XmlTokenizer::Tok_RBracket:
+      cout << "] ";
+      break;
+    case XmlTokenizer::Tok_Plus:
+      cout << "+ ";
+      break;
+    case XmlTokenizer::Tok_Asterisk:
+      cout << "* ";
+      break;
+    case XmlTokenizer::Tok_Comma:
+      cout << ", ";
+      break;
+    case XmlTokenizer::Tok_Semicolon:
+      cout << "; ";
+      break;
+    case XmlTokenizer::Tok_NSign:
+      cout << "# ";
+      break;
+    case XmlTokenizer::Tok_Apostr:
+      cout << "' ";
+      break;
+    case XmlTokenizer::Tok_Percent:
+      cout << "% ";
+      break;
     case XmlTokenizer::Tok_Lt:
       cout << "< ";
       break;
@@ -243,8 +328,11 @@ int main (int argc, char** argv) {
     case XmlTokenizer::Tok_String:
       cout << "STRING(" << tokenizer.element () << ") ";
       break;
+    case XmlTokenizer::Tok_Comment:
+      cout << "COMMENT > ";
+      break;
     default:
-      cout << "INVALID" << endl;
+      cout << "INVALID(" << tok << ")" << endl;
       return 1;
       break;
     }
