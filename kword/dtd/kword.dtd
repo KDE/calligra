@@ -458,7 +458,7 @@ don't put a </?xml...> at the end of the file!).
 
             bkRed, bkGreen, bkBlue: color (rgb) used as the frame's background color
             bkStyle : style of a frame background color
-            SolidPattern = 0, Dense1Pattern = 1, Dense2Pattern = 2, Dense3Pattern = 3, Dense4Pattern = 4 etc... (look at in qbrush documentation)
+            None = 0, SolidPattern = 1, Dense1Pattern = 2, Dense2Pattern = 3, Dense3Pattern = 4, Dense4Pattern = 5 etc... (look at in qbrush documentation)
 
             bleftpt, brightpt, btoppt, bbottompt: frame margins
 -->
