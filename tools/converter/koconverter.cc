@@ -108,7 +108,9 @@ int main( int argc, char **argv )
             }
         }
 
+        QApplication::setOverrideCursor( Qt::waitCursor );
         bool ok = convert( uIn, inputMimetype->name(), uOut, outputMimetype->name() );
+        QApplication::restoreOverrideCursor();
         return ok ? 0 : 2;
     }
 
