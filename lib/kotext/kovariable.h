@@ -44,6 +44,7 @@ enum VariableType { VT_NONE = -1,
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
 
 class KoVariable;
+class KoOasisSettings;
 
 class KoVariableSettings
 {
@@ -82,6 +83,9 @@ class KoVariableSettings
 
     QDateTime modificationDate() const;
     void setModificationDate( const QDateTime & _date);
+
+    virtual void saveOasis( KoXmlWriter &settingsWriter );
+    virtual void loadOasis(const KoOasisSettings&settingsDoc);
 
 
  private:

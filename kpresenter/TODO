@@ -36,6 +36,7 @@ KPresenter after koffice 1.3
 ============================
 Todo:
 - Create compatibility for saving in old format for page effect speed.
+- Put in zip format copy/paste object to dnd between OO and koffice
 
 
 In Progress:
@@ -86,6 +87,7 @@ Done:
 -> save/load header/footer object
 -> save/load display header/footer
 -> save/load regular polygon
+-> save/load variable settings
 
 Todo:
 -> save/load cubic/quadric/freehand object (define as svg object)

@@ -1064,6 +1064,8 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
     settingsWriter.endElement(); // config:config-item-set
 
+    m_varColl->variableSetting()->saveOasis( settingsWriter );
+
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root:Element
     settingsWriter.endDocument();
@@ -1618,6 +1620,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     {
         loadOasisSettings( settingsDoc );
         loadOasisIgnoreList( settingsDoc );
+        m_varColl->variableSetting()->loadOasis( settingsDoc );
     }
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );

@@ -25,6 +25,7 @@
 #include "kocommand.h"
 #include "kotextobject.h"
 #include "kooasiscontext.h"
+#include <koOasisSettings.h>
 
 #include <koDocumentInfo.h>
 #include <koOasisStyles.h>
@@ -109,6 +110,47 @@ void KoVariableSettings::setModificationDate( const QDateTime & _date)
     d->m_modificationDate = _date;
 }
 
+void KoVariableSettings::saveOasis( KoXmlWriter &settingsWriter )
+{
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "configuration-variable-settings");
+    settingsWriter.addConfigItem("displaylink", m_displayLink );
+    settingsWriter.addConfigItem( "underlinelink", m_underlineLink);
+    settingsWriter.addConfigItem( "displaycomment", m_displayComment);
+    settingsWriter.addConfigItem( "displayfieldcode", m_displayFieldCode);
+    if(m_startingPageNumber!=1)
+    {
+        settingsWriter.addConfigItem( "startingPageNumber", m_startingPageNumber);
+    }
+    if ( d->m_lastPrintingDate.isValid())
+        settingsWriter.addConfigItem("lastPrintingDate", d->m_lastPrintingDate.toString(Qt::ISODate));
+
+    if ( d->m_creationDate.isValid())
+        settingsWriter.addConfigItem("creationDate", d->m_creationDate.toString(Qt::ISODate));
+
+    if ( d->m_modificationDate.isValid())
+        settingsWriter.addConfigItem("modificationDate", d->m_modificationDate.toString(Qt::ISODate));
+
+    settingsWriter.endElement(); // config:config-item-set
+}
+
+void KoVariableSettings::loadOasis(const KoOasisSettings&settingsDoc)
+{
+    KoOasisSettings::Items configurationSettings = settingsDoc.itemSet( "configuration-variable-settings" );
+    if ( !configurationSettings.isNull() )
+    {
+        m_displayLink = configurationSettings.parseConfigItemBool( "displaylink", true );
+        m_underlineLink = configurationSettings.parseConfigItemBool( "underlinelink", true );
+        m_displayComment = configurationSettings.parseConfigItemBool( "displaycomment", true );
+        m_displayFieldCode = configurationSettings.parseConfigItemBool( "displayfieldcode", false );
+        m_startingPageNumber = configurationSettings.parseConfigItemInt( "startingPageNumber",  1 );
+
+        d->m_lastPrintingDate = QDateTime::fromString( configurationSettings.parseConfigItemString( "lastPrintingDate",  "" ) );
+        d->m_creationDate = QDateTime::fromString( configurationSettings.parseConfigItemString( "creationDate",  "" ) );
+        d->m_modificationDate = QDateTime::fromString( configurationSettings.parseConfigItemString( "modificationDate",  "" ) );
+    }
+
+}
 
 void KoVariableSettings::save( QDomElement &parentElem )
 {

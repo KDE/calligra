@@ -1203,6 +1203,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( !settings.isNull() )
     {
         loadOasisSettings( settings );
+        m_varColl->variableSetting()->loadOasis( settings );
     }
     //printDebug();
 
@@ -2664,6 +2665,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
     settingsWriter.endElement(); // config:config-item-set
 
+    m_varColl->variableSetting()->saveOasis( settingsWriter );
 
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element

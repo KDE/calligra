@@ -7,7 +7,7 @@
 
 # To use this script, you need to change this path to an existing kwd file
 # Don't use a relative path, dcopstart won't handle it
-input=/mnt/devel/kofficetests/documents/native/kpresenter/test.kpr
+input=/home/laurent/test.kpr
 
 test -f "$input" || { echo "No such file $input"; exit 1; }
 
