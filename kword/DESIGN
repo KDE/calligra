@@ -37,6 +37,17 @@ cell, we contain the cells in their own KWTextFrameset.
         + ---> KWTextFrameSet    |
                    +-> KWFrame <-+
 
+Custom items
+============
+A custom item is anything (like an inline frame, a variable etc.) that
+is treated as a special character. QTextCustomItem is the base class for
+it, we have KoTextCustomItem in kotext.
+
+Inline frames are one kind of custom item. The frame (and its englobing
+frameset) exist as usual, but a KWAnchor instance is created, inserted
+into the text, and linked to the frame. The anchor always has the same size
+as the frame. When the text is flowed, the anchor is positioned, it tells
+the frame to move to the new position.
 
 Painting
 ========
@@ -82,7 +93,7 @@ Internal coordinates (the coordinates given to QRT - in "layout units")
 This last transformation doesn't depend on the view-mode arrangement,
 nor on the zoom. It's only about going from the frameset coord to the
 qrt internal coord (i.e. the high-resolution coordinates in which the
-text layout is done).
+text layout is done, for WYSIWYG purposes).
 
 Font sizes: note that the text formats in memory (format collection),
 for characters, styles etc. have font sizes in layout units (very big).
