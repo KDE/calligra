@@ -724,6 +724,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 
 bool KoDocument::openURL( const KURL & _url )
 {
+  kdDebug() << "KoDocument::openURL url=" << _url.url() << endl;
   // Reimplemented, to add a check for autosave files
   if ( _url.isMalformed() )
     return false;
@@ -762,6 +763,7 @@ bool KoDocument::openURL( const KURL & _url )
       // So, fixing here:
       m_url = url;
       m_file = m_url.path();
+      //kdDebug(30003) << "openURL: m_file=" << m_file << endl;
       ret = openFile();
       if ( ret )
           emit completed();
@@ -775,7 +777,7 @@ bool KoDocument::openURL( const KURL & _url )
   else
   {
       if ( d->m_shells.isEmpty() )
-          kdWarning() << "KoDocument::openURL no shell yet !" << endl;
+          kdWarning(30003) << "KoDocument::openURL no shell yet !" << endl;
       // Add to recent actions list in our shells
       QPtrListIterator<KoMainWindow> it( d->m_shells );
       for (; it.current(); ++it )
@@ -786,7 +788,7 @@ bool KoDocument::openURL( const KURL & _url )
 
 bool KoDocument::openFile()
 {
-  kdDebug(30003) << "KoDocument::openFile for " << m_file << endl;
+  //kdDebug(30003) << "KoDocument::openFile for " << m_file << endl;
   if ( ! QFile::exists(m_file) )
   {
     // Maybe offer to create a new document with that name ?
@@ -911,10 +913,9 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     if ( store->open( "root" ) )
     {
-      KoStoreDevice dev( store );
       QDomDocument doc;
-      doc.setContent( &dev );
-      if ( !loadXML( &dev, doc ) )
+      doc.setContent( store->device() );
+      if ( !loadXML( store->device(), doc ) )
       {
         delete store;
         QApplication::restoreOverrideCursor();
@@ -963,10 +964,9 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 {
   if ( _store->open( url.url() ) )
   {
-    KoStoreDevice dev( _store );
     QDomDocument doc;
-    doc.setContent( &dev );
-    if ( !loadXML( &dev, doc ) )
+    doc.setContent( _store->device() );
+    if ( !loadXML( _store->device(), doc ) )
       return false;
     _store->close();
   }

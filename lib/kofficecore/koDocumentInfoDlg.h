@@ -30,7 +30,7 @@ class KDialogBase;
 class KoDocumentInfo;
 class KoDocumentInfoAuthor;
 class KoDocumentInfoAbout;
-class KTarEntry;
+class KArchiveEntry;
 
 class KoDocumentInfoDlg : public QObject
 {
@@ -69,7 +69,7 @@ public:
   virtual void applyChanges();
 
 private:
-  void copy( const QString &path, const KTarEntry *entry );
+  void copy( const QString &path, const KArchiveEntry *entry );
   class KoDocumentInfoPropsPagePrivate;
   KoDocumentInfoPropsPagePrivate *d;
 };
