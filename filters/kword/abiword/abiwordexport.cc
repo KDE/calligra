@@ -35,6 +35,7 @@
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
 
+#include <qtextstream.h>
 #include <qdom.h>
 
 #include <kdebug.h>
@@ -960,44 +961,6 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
     ProcessSubtags (myNode, tagProcessingList, outputText);
 }
 
-static bool writeOutputFileUncompressed(const QString& filename, const QCString& strOut)
-{
-    //Now all is ready to write to a file
-    QFile fileOut (filename);
-
-    if ( !fileOut.open (IO_WriteOnly) )
-    {
-        kdError(30506) << "Unable to open output file!" << endl;
-        return false;
-    }
-
-    //Warning: do not use QString::length() (as in asciiexport.cc) but QCString::length()
-    // "QString::length()" gives the number of characters, not the number of bytes needed to represent them in UTF8!
-    fileOut.writeBlock ( (const char *) strOut, strOut.length() ); //Write the file
-
-    fileOut.close (); //Really close the file
-    return true;
-}
-
-static bool writeOutputFileGZipped(const QString& filename, const QCString& strOut)
-{
-    //Now all is ready to write to a file
-    KQIODeviceGZip fileOut (filename);
-
-    if ( !fileOut.open (IO_WriteOnly) )
-    {
-        kdError(30506) << "Unable to open output file!" << endl;
-        return false;
-    }
-
-    //Warning: do not use QString::length() (as in asciiexport.cc) but QCString::length()
-    // "QString::length()" gives the number of characters, not the number of bytes needed to represent them in UTF8!
-    fileOut.writeBlock ( (const char *) strOut, strOut.length() ); //Write the file
-
-    fileOut.close (); //Really close the file
-    return true;
-}
-
 bool ABIWORDExport::filter(const QString  &filenameIn,
                            const QString  &filenameOut,
                            const QString  &from,
@@ -1022,58 +985,11 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
     QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
     koStoreIn.close ();
 
-    QDomDocument qDomDocumentIn;
-
-    // let parse the buffer just read from the file
-    qDomDocumentIn.setContent(byteArrayIn);
-
-    QDomNode docNodeIn = qDomDocumentIn.documentElement ();
-
-    QString stringBufOut;
-
-    // Make the file header
-
-    // First the XML header in UTF-8 version
-    // (AbiWord and QString handles UTF-8 well, so we stay with this encoding!)
-    stringBufOut = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-    // NOTE: AbiWord CVS 2001-08-21 has now a DOCTYPE
-    stringBufOut += "<!DOCTYPE abw PUBLIC \"-//ABISOURCE//DTD ABW 1.0 Strict//EN\"";
-    stringBufOut += " \"http://www.abisource.com/awml.dtd\">\n";
-
-    // First magic: "<abiword"
-    stringBufOut += "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
-    // Second magic: "<!-- This file is an AbiWord document."
-    stringBufOut += "<!-- This file is an AbiWord document. -->\n";
-    // We have chosen NOT to have the full comment header that AbiWord files normally have.
-    stringBufOut += "\n";
-
-    // Put the rest of the information in the way AbiWord puts its debug info!
-
-    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
-    stringBufOut += "<!-- KWord_Export_Filter_Version =";
-    QString strVersion("$Revision$");
-    // Eliminate the dollar signs
-    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    stringBufOut += strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
-    stringBufOut += " -->\n\n";
-
-#if 1
-    // Some "security" to see if I have forgotten to run "make install"
-    // (Can be deleted when the filter will be stable.)
-    kdDebug(30506) << "abiwordexport.cc " << __DATE__ " " __TIME__ << " " << strVersion << endl;
-#endif
-
-    // Now that we have the header, we can do the real work!
-    ProcessDocTag (docNodeIn, NULL, stringBufOut);
-
-    // Add the tail of the file
-    stringBufOut += "</abiword>\n"; //Close the file for XML
-
-    QCString strOut=stringBufOut.utf8(); //Retrieve UTF8 info into a byte array
-
-    bool success=false;
-
+    //
+    // Create a QIODevice for writing
+    // TODO: replace it with KFilterDev
+    //
+    QIODevice* ioDevice=NULL;
     //Choose if gzipped or not
 
     //At first, find the last extension
@@ -1087,13 +1003,84 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
     if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (standard extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
     {// GZipped
-        success=writeOutputFileGZipped(filenameOut,strOut);
+        ioDevice=new KQIODeviceGZip(filenameOut);
     }
     else
     {// Uncompressed
-        success=writeOutputFileUncompressed(filenameOut,strOut);
+        ioDevice=new QFile(filenameOut);
     }
 
-    return success;
+    if (!ioDevice)
+    {
+        kdError(30506) << "Could not create QIODevice! Aborting!" << endl;
+        return false;
+    }
+
+    // Open the
+    if ( !ioDevice->open (IO_WriteOnly) )
+    {
+        kdError(30506) << "Unable to open output file! Aborting!" << endl;
+        return false;
+    }
+
+    // Now that we have a QIODevice, make a QTextStream
+    QTextStream streamOut(ioDevice);
+    streamOut.setEncoding( QTextStream::UnicodeUTF8 );
+
+    QDomDocument qDomDocumentIn;
+
+    // let parse the buffer just read from the file
+    qDomDocumentIn.setContent(byteArrayIn);
+
+    QDomNode docNodeIn = qDomDocumentIn.documentElement ();
+
+    // Make the file header
+
+    // First the XML header in UTF-8 version
+    // (AbiWord and QT handle UTF-8 well, so we stay with this encoding!)
+    streamOut << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+
+    // NOTE: AbiWord CVS 2001-08-21 has now a DOCTYPE
+    streamOut << "<!DOCTYPE abw PUBLIC \"-//ABISOURCE//DTD ABW 1.0 Strict//EN\"";
+    streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
+
+    // First magic: "<abiword"
+    streamOut << "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
+    // Second magic: "<!-- This file is an AbiWord document."
+    streamOut << "<!-- This file is an AbiWord document. -->\n";
+    // We have chosen NOT to have the full comment header that AbiWord files normally have.
+    streamOut << "\n";
+
+    // Put the rest of the information in the way AbiWord puts its debug info!
+
+    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
+    streamOut << "<!-- KWord_Export_Filter_Version =";
+    QString strVersion("$Revision$");
+    // Eliminate the dollar signs
+    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
+    streamOut << strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
+    streamOut << " -->\n\n";
+
+#if 1
+    // Some "security" to see if I have forgotten to run "make install"
+    // (Can be deleted when the filter will be stable.)
+    kdDebug(30506) << "abiwordexport.cc " << __DATE__ " " __TIME__ << " " << strVersion << endl;
+#endif
+
+    QString stringBufOut;
+    // Now that we have the header, we can do the real work!
+    ProcessDocTag (docNodeIn, NULL, stringBufOut);
+    streamOut << stringBufOut;
+
+    // Add the tail of the file
+    streamOut << "</abiword>\n"; //Close the file for XML
+
+    // At the end, close the output file
+
+    ioDevice->close();
+
+    delete ioDevice;
+
+    return true;
 }
 
