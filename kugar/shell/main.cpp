@@ -23,10 +23,10 @@ int main(int argc,char **argv)
 			 KAboutData::License_GPL_V2,
 			 "Copyright (c) 1999-2000 Mutiny Bay Software\n"
 			 "Copyright (c) 2000 Phil Thompson",
-			 "http://www.thekompany.com/projects/kugar",
 			 I18N_NOOP(
 		"Kugar merges XML data files with XML templates\n"
 		"to display and print high quality reports."),
+                         "http://www.thekompany.com/projects/kugar",
 			 "phil@river-bank.demon.co.uk");
 
 	// Handle the command line.
