@@ -422,7 +422,7 @@ KPresenterDoc::~KPresenterDoc()
     delete m_pKSpellConfig;
     m_pageList.setAutoDelete( true );
     m_pageList.clear();
-    kdDebug()<<" delete m_deletedPageList \n";
+    kdDebug(33001)<<" delete m_deletedPageList \n";
     m_deletedPageList.setAutoDelete( true );
     m_deletedPageList.clear();
     tmpSoundFileList.setAutoDelete( true );
@@ -432,7 +432,7 @@ KPresenterDoc::~KPresenterDoc()
 
 void KPresenterDoc::addCommand( KCommand * cmd )
 {
-    kdDebug() << "KPresenterDoc::addCommand " << cmd->name() << endl;
+    kdDebug(33001) << "KPresenterDoc::addCommand " << cmd->name() << endl;
     m_commandHistory->addCommand( cmd, false );
     setModified( true );
 }
@@ -945,7 +945,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
         startBackgroundSpellCheck();
     }
 
-    kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+    kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
     return b;
 }
 
@@ -1014,7 +1014,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     loadTextStyle( document );
 
     while(!elem.isNull()) {
-        kdDebug() << "Element name: " << elem.tagName() << endl;
+        kdDebug(33001) << "Element name: " << elem.tagName() << endl;
         if(elem.tagName()=="EMBEDDED") {
             KPresenterChild *ch = new KPresenterChild( this );
             KPPartObject *kppartobject = 0L;
@@ -2118,7 +2118,7 @@ void KPresenterDoc::takePage(KPrPage *_page)
 
 void KPresenterDoc::addRemovePage( int pos, bool addPage )
 {
-    kdDebug() << "addRemovePage pos = " << pos << endl;
+    kdDebug(33001) << "addRemovePage pos = " << pos << endl;
     recalcPageNum();
 
     recalcVariables( VT_PGNUM );
@@ -2141,7 +2141,7 @@ void KPresenterDoc::addRemovePage( int pos, bool addPage )
 
 void KPresenterDoc::movePageTo( int oldPos, int newPos )
 {
-    kdDebug() << "movePage oldPos = " << oldPos << ", neuPos = " << newPos << endl;
+    kdDebug(33001) << "movePage oldPos = " << oldPos << ", neuPos = " << newPos << endl;
     recalcPageNum();
 
     recalcVariables( VT_PGNUM );
@@ -2535,7 +2535,6 @@ KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
 
 KPrPage * KPresenterDoc::findSideBarPage(QPtrList<KPObject> &objects)
 {
-    //todo
     KPObject *object;
     for ( object = objects.first(); object; object=objects.next() ) {
         if ( object->isSticky() ) {
@@ -3027,7 +3026,7 @@ void KPresenterDoc::addVertHelpline(double pos)
 void KPresenterDoc::removeHorizHelpline(int index)
 {
     if ( index >= (int)m_horizHelplines.count())
-        kdDebug()<<" index of remove horiz helpline doesn't exit !\n";
+        kdDebug(33001)<<" index of remove horiz helpline doesn't exit !\n";
     else
         m_horizHelplines.remove(m_horizHelplines[index]);
 }
@@ -3035,7 +3034,7 @@ void KPresenterDoc::removeHorizHelpline(int index)
 void KPresenterDoc::removeVertHelpline( int index )
 {
     if ( index >= (int)m_vertHelplines.count())
-        kdDebug()<<" index of remove vertical helpline doesn't exit !\n";
+        kdDebug(33001)<<" index of remove vertical helpline doesn't exit !\n";
     else
         m_vertHelplines.remove(m_vertHelplines[index]);
 
@@ -3113,7 +3112,7 @@ void KPresenterDoc::updateGridButton()
 void KPresenterDoc::removeHelpPoint( int index )
 {
     if ( index >= (int)m_helpPoints.count())
-        kdDebug()<<" removeHelpPoint( int index ) : index is bad !\n";
+        kdDebug(33001)<<" removeHelpPoint( int index ) : index is bad !\n";
     else
         m_helpPoints.remove(m_helpPoints[index]);
 }
@@ -3126,7 +3125,7 @@ void KPresenterDoc::addHelpPoint( KoPoint pos )
 void KPresenterDoc::updateHelpPoint( int idx, KoPoint pos )
 {
     if ( idx >= (int)m_helpPoints.count())
-        kdDebug()<<" updateHelpPoint : index is bad !\n";
+        kdDebug(33001)<<" updateHelpPoint : index is bad !\n";
     else
     {
         m_helpPoints[idx] = pos;
