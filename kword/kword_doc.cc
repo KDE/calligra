@@ -715,6 +715,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 /*================================================================*/
 KWordDocument::~KWordDocument()
 {
+    delete contents;
     delete cUserFont;
     delete slDataBase;
     paragLayoutList.setAutoDelete(true);
