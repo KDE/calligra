@@ -1728,8 +1728,8 @@
 	<Text>The IMARGUMENT(complex number) returns the argument of a complex number of form x+yi.</Text>
 	<Syntax>IMARGUMENT( complex number )</Syntax>
 	<Example>IMARGUMENT("1.2+5i") returns 0.6072</Example>
-	<Example>IMARGUMENT("-i") returns nan</Example>
-                <Example>IMARGUMENT("12") returns "#Div/0"</Example>
+	<Example>IMARGUMENT("-i") returns -1.57079633 </Example>
+        <Example>IMARGUMENT("12") returns "#Div/0"</Example>
       </Help>
     </Function>
 
