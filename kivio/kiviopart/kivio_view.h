@@ -276,6 +276,7 @@ class KivioView : public KoView
     KAction* m_hidePage;
     KAction* m_showPage;
     KAction* m_exportPage;
+    KAction* m_arrowHeadsMenuAction;
     KSelectAction* m_viewZoom;
 
     TKSelectColorAction *m_setFGColor;

@@ -401,9 +401,9 @@ void KivioView::setupActions()
   (void) new KAction(i18n("&Stencils && Connectors..."), 0, 0, this, SLOT(stencilFormat()),
     actionCollection(), "stencilFormat");
 
-   action = new KAction(i18n("&Arrowheads..."), 0, 0, this, SLOT(arrowHeadFormat()),
+   m_arrowHeadsMenuAction = new KAction(i18n("&Arrowheads..."), 0, 0, this, SLOT(arrowHeadFormat()),
     actionCollection(), "arrowHeadFormat");
-   action->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
+   m_arrowHeadsMenuAction->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
 
   /* Create the fg color button */
   m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
@@ -1261,8 +1261,18 @@ void KivioView::updateToolBars()
         m_pStencilGeometryPanel->setSize( pStencil->w(), pStencil->h() );
         m_pStencilGeometryPanel->setPosition( pStencil->x(), pStencil->y() );
 
-        m_setArrowHeads->setCurrentStartArrow( pStencil->startAHType() );
-        m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );
+        if ( pStencil->type() != kstConnector )
+        {
+           m_setArrowHeads->setEnabled (false);
+           m_arrowHeadsMenuAction->setEnabled (false);
+        }
+        else
+        {
+            m_setArrowHeads->setEnabled (true);
+            m_arrowHeadsMenuAction->setEnabled (true);
+            m_setArrowHeads->setCurrentStartArrow( pStencil->startAHType() );
+            m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );
+        }
     }
 
     m_pStencilGeometryPanel->setEmitSignals(true);
