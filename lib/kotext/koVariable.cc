@@ -252,6 +252,11 @@ QString KoVariableCollection::getVariableValue( const QString &name ) const
     return varValues[ name ];
 }
 
+bool KoVariableCollection::customVariableExist(const QString &varname) const
+{
+    return varValues.contains( varname );
+}
+
 /******************************************************************/
 /* Class: KoVariable                                              */
 /******************************************************************/

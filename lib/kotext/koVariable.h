@@ -192,6 +192,8 @@ public:
         return variables;
     }
 
+    bool customVariableExist(const QString &varname)const ;
+
     virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
 
     KoVariableSettings *variableSetting(){return m_variableSettings;}
