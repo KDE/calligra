@@ -884,7 +884,7 @@ bool KWFrameDia::applyChanges()
         }
     } // end of 'tab1 and text frame'
 
-    if ( tab1 )
+    if ( tab4 )
     {
         // The floating attribute applies to the whole frameset...
         KWFrameSet * fs = frame->getFrameSet();
