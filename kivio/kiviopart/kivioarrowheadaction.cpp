@@ -19,7 +19,7 @@
 */
 
 #include "kivioarrowheadaction.h"
-#include "kivio_lineendspix.h"
+#include "kivioglobal.h"
 
 #include <qbitmap.h>
 #include <qpixmap.h>
@@ -160,7 +160,7 @@ int KivioArrowHeadAction::plug( QWidget* widget, int index)
 void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup, bool inverted)
 {
   QBitmap mask;
-  QPixmap pixAll(lineends);
+  QPixmap pixAll = Kivio::arrowHeadPixmap();
   int tw = popup->fontMetrics().width(" 99:");
 
   if (inverted) {

@@ -25,6 +25,7 @@
 #include <koSize.h>
 
 class QDomElement;
+class QPixmap;
 
 namespace Kivio
 {
@@ -38,7 +39,7 @@ namespace Kivio
   KoPageLayout loadPageLayout(const QDomElement& e);
   /**
    * Convert from the old TkUnit to KoUnit
-   */ 
+   */
   KoUnit::Unit convToKoUnit(int tkUnit);
   /**
    * Return an approperiate string for the orientation
@@ -49,7 +50,7 @@ namespace Kivio
    */
   KoOrientation orientationFromString(const QString& s);
   void setFormatOrientation(KoPageLayout& layout);
-  
+
   /**
    * Load a KoSize from a QDomElement
    */
@@ -58,6 +59,11 @@ namespace Kivio
    * Save a KoSize to a QDomElement
    */
   void saveSize(QDomElement& e, const QString& name, const KoSize& size);
+
+  /**
+   * Returns a pixmap with all arrowheads
+   */
+  QPixmap arrowHeadPixmap();
 };
 
 #endif

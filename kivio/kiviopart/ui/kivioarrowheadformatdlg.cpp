@@ -32,7 +32,7 @@
 #include <koUnitWidgets.h>
 
 #include "kivio_view.h"
-#include "kivio_lineendspix.h"
+#include "kivioglobal.h"
 
 KivioArrowHeadFormatDlg::KivioArrowHeadFormatDlg(KivioView* parent, const char* name)
   : KDialogBase(parent, name, true, i18n("Arrowhead Format"), Ok|Cancel|Default, Ok)
@@ -78,7 +78,7 @@ void KivioArrowHeadFormatDlg::init()
 void KivioArrowHeadFormatDlg::loadArrowHeads(KComboBox* combo, bool inverted)
 {
   QBitmap mask;
-  QPixmap pixAll(lineends);
+  QPixmap pixAll = Kivio::arrowHeadPixmap();
   int tw = combo->fontMetrics().width(" 99:");
 
   if (inverted) {

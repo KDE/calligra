@@ -65,7 +65,6 @@ EXTRA_DIST = \
 		tooldockbase.h\
 		tooldockmanager.cpp\
 		tooldockmanager.h\
-		kivio_lineendspix.h\
 		stencil_text_dlg.cpp\
 		stencil_text_dlg.h\
 		lo16-app-kivio.png\
