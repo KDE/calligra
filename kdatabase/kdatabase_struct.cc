@@ -49,7 +49,7 @@ bool KDBStruct::createReport(QString* reportName, QString reportSQL){
 QPtrList<QString> KDBStruct::getTables(){
 
     QPtrList<QString> *tableList = new QPtrList <QString>;
-    kdDebug() << "myKDBNode.toString=" << myKDBNode->toString() << endl;
+//    kdDebug() << "myKDBNode.toString=" << myKDBNode->toString() << endl;
     if(myKDBNode->isNull()) {
        kdDebug() << "KDBNode is already null" << endl;
       }
@@ -67,7 +67,7 @@ QPtrList<QString> KDBStruct::getTables(){
         const QString* tableDescript = new QString(myElement.attribute("description"));
         tableList->append(tableName);
         tableList->append(tableDescript);
-        kdDebug() << "In while loop...last table was " << &tableName << endl;
+        kdDebug() << "In while loop...last table was " << *tableName << endl;
         myTableWalker = myTableWalker.nextSibling();
         }
 
@@ -111,9 +111,13 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
     while(!tableFound) {
         myElement = myTableWalker.toElement();
         QString myTableName = myElement.attribute("name");
-        if (QString::localeAwareCompare(tableName->latin1(),myTableName.latin1())==0) { tableFound=TRUE; }
-        else {myTableWalker = myTableWalker.nextSibling(); }
-        kdDebug() << "In while loop...last table was " << &tableName << endl;
+        kdDebug() << "getColumns::In while loop...checking table name :" << *tableName << endl;
+        if (QString::localeAwareCompare(tableName->latin1(),myTableName.latin1())==0) {
+          kdDebug() << "getColumns::In while loop...found table " << *tableName << endl;
+          tableFound=TRUE; }
+        else {
+          kdDebug() << "getColumns::In while loop...not yet found table " << *tableName << endl;
+          myTableWalker = myTableWalker.nextSibling(); }
         }
 
      //now that the table is found, build the list of its fields

@@ -39,6 +39,8 @@ KDatabaseView::KDatabaseView( KDatabasePart* part, QWidget* parent, const char* 
     KStdAction::copy(this, SLOT( copy() ), actionCollection(), "copy" );
     KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
     KStdAction::paste(this, SLOT( paste() ), actionCollection(), "paste" );
+
+    KStdAction::close(this, SLOT( close()), actionCollection(), "close" );
     
     m_actionToggleDocBrowser = new KToggleAction(i18n("&View Document Browser"), "toggle_docbrowser", Key_F2, this, SLOT(toggleDocBrowser()),
     			actionCollection(), "toggle_docbrowser");
@@ -52,6 +54,7 @@ KDatabaseView::KDatabaseView( KDatabasePart* part, QWidget* parent, const char* 
     m_docBrowserVisible = true;
 
 	m_gridLayout = new QGridLayout(this);
+	m_docVisible = false;
 
 	
     // Note: Prefer KStdAction::* to any custom action if possible.
@@ -94,6 +97,16 @@ void KDatabaseView::paste()
     kdDebug(31000) << "KDatabaseView::paste(): PASTE called" << endl;
 }
 
+void KDatabaseView::close()
+{
+    kdDebug(31000) << "KDatabaseView::close(): CLOSE called" << endl;
+}
+
+void KDatabaseView::close_all()
+{
+    kdDebug(31000) << "KDatabaseView::close_all(): CLOSE_ALL called" << endl;
+}
+
 void KDatabaseView::toggleDocBrowser()
 {
     kdDebug(31000) << "KDatabaseView::toggleDocBrowser(): called" << endl;
@@ -113,18 +126,26 @@ void KDatabaseView::toggleDocBrowser()
 
 void KDatabaseView::openView(QWidget* w)
 {
+    kdDebug() << "KDatabase::openView at top" << endl;
+
 	if(m_docVisible)
 	{
+      kdDebug() << "KDatabase::openView top of if" << endl;
 		m_currentWidget->hide();
+      kdDebug() << "KDatabase::openView if  after hiding curent widget" << endl;
 		delete m_currentWidget;
+      kdDebug() << "KDatabase::openView end of if" << endl;
 	}
+    kdDebug() << "KDatabase::openView after if" << endl;
 	m_gridLayout->addWidget(w, 0, 0);
+    kdDebug() << "KDatabase::openView after addWidget" << endl;
 	w->show();
+    kdDebug() << "KDatabase::openView after show" << endl;
 	m_currentWidget = w;
 
 	m_docVisible = true;
 	
-	
+   kdDebug() << "KDatabase::openView at bottom" << endl;
 
 }
 

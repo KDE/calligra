@@ -10,6 +10,12 @@
  <Menu name="View"><text>View</text>
   <Action name="toggle_docbrowser"/>
  </Menu>
+
+ <Menu name="Window"><text>Window</text>
+  <Action name="close"/>
+  <Action name="close_all"/>
+ </Menu>
+
 </MenuBar>
 
 

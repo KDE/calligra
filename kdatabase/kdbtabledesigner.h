@@ -21,14 +21,14 @@
 #include <kdialog.h>
 #include <qstringlist.h>
 #include <kdatabase_struct.h>
-//#include <qtable.h>
+#include <qtable.h>
 
 /**
   *@author root
   */
 
-class QTable;
-class QStringList;
+//class QTable;
+//class QStringList;
 
 class KDBTableDesigner : public QWidget  {
          Q_OBJECT

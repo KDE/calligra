@@ -65,10 +65,16 @@ void KDBDocBrowser::slotTblItemClicked(QListViewItem *itemClicked){
 
      if(!(itemClicked == NULL)) {
         kdDebug() << "KDatabase:MainDlg tbl Item Clicked - " << itemClicked->text(0) << endl;
-        m_tblDesigner=new KDBTableDesigner(m_parentWidget, m_struct);
+		m_tblDesigner=new KDBTableDesigner(m_parentWidget, m_struct);
+        kdDebug() << "KDatabase:MainDlg tblDesigner created" << endl;
 		m_parent->openView(m_tblDesigner);
-		//m_tblDesigner->populateTblDesigner(itemClicked->text(0));
-        m_tblDesigner->show();
+        kdDebug() << "KDatabase:MainDlg tblDesigner view opened" << endl;
+       QString *tblName = new QString(itemClicked->text(0));
+        kdDebug() << "KDatabase:MainDlg tblName string created" << endl;
+		m_tblDesigner->populateTblDesigner(*tblName);
+        kdDebug() << "KDatabase:MainDlg tblDesigner populated" << endl;
+		m_tblDesigner->show();
+        kdDebug() << "KDatabase:MainDlg tblDesigner shown" << endl;
         }
 }
 

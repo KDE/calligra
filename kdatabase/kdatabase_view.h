@@ -43,6 +43,8 @@ protected slots:
 	void cut();
 	void copy();
 	void paste();
+	void close();
+	void close_all();
 	void toggleDocBrowser();
 
 protected:
