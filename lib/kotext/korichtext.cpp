@@ -556,7 +556,6 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
     int cw;
     int curpos = s->length()-1;
     int dist = 10000000;
-    bool inCustom = FALSE;
     while ( i < nextLine ) {
 	chr = s->at(i);
 	int cpos = x + chr->x;
@@ -566,12 +565,6 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
                   pos.y() >= y + cy && pos.y() <= y + cy + chr->height() ) {
                 if ( customItemIndex )
                     *customItemIndex = i;
-                if ( chr->customItem()->isNested() )
-                {
-                    curpos = i;
-                    inCustom = TRUE;
-                    break;
-                }
 	    }
 	}
         if( chr->rightToLeft )

@@ -30,6 +30,8 @@ class KoSavingContext;
 class KCommand;
 class KoTextFormat;
 class QProgressDialog;
+class KoLinkVariable;
+class KoVariable;
 
 //#define TIMING_FORMAT
 //#include <qdatetime.h>
@@ -419,6 +421,17 @@ public:
     bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected );
     int numberOfparagraphLineSelected( KoTextParag *parag);
 
+    /**
+     * Return the variable at the given point (in document coordinates), if any
+     */
+    KoVariable* variableAtPoint( const QPoint& iPoint ) const;
+
+    /**
+     * Return the variable at the given position, if any.
+     * Passing KoTextView's m_cursor here is usually wrong, index must come from the variablePosition
+     * value returned by KoTextCursor::place().
+     */
+    KoVariable* variableAtPosition( KoTextParag* parag, int index ) const;
 
     enum ParagModifyType { AddChar = 0, RemoveChar = 1, ChangeFormat = 2 };
 

@@ -6059,17 +6059,7 @@ void KWView::inlineFrame()
 
 void KWView::openLink()
 {
-  openLink(currentTextEdit());
-}
-
-void KWView::openLink(KWTextFrameSetEdit *edit)
-{
-    if(edit && edit->refLink().startsWith("bkm://") && m_doc->bookMarkByName(edit->refLink().mid(6)))
-    {
-	edit->cursor()->setParag(m_doc->bookMarkByName(edit->refLink().mid(6))->startParag());
-	edit->ensureCursorVisible();
-	return;
-    }
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->openLink();
 }
@@ -7095,7 +7085,7 @@ void KWView::slotAddIgnoreAllWord()
 {
     KWTextFrameSetEdit* edit = currentTextEdit();
     if ( edit )
-        m_doc->addIgnoreWordAll( edit->underCursorWord() );
+        m_doc->addIgnoreWordAll( edit->currentWordOrSelection() );
 }
 
 void KWView::sortText()

@@ -146,6 +146,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_bAutoSuperScript( false ),
       m_bAutoCorrectionWithFormat( false ),
       m_bCapitalizeNameOfDays( false ),
+      m_wordInserted( false ),
       m_bulletStyle(),
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
@@ -160,7 +161,6 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_maxFindLength( 0 ),
       m_minCompletionWordLength( 5 ),
       m_nbMaxCompletionWord( 500 ),
-      m_wordInserted( false ),
       m_countMaxWords(0),
       m_completionBox(0)
 

@@ -24,8 +24,9 @@
 #include "kostyle.h"
 #include "koFontDia.h"
 #include "kooasiscontext.h"
-#include <koxmlns.h>
+#include "kovariable.h"
 #include "koAutoFormat.h"
+#include <koxmlns.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -588,9 +589,9 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
 }
 
 void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
-                             const QString &txt, bool checkNewLine,
-                             bool removeSelected, const QString & commandName,
-                             CustomItemsMap customItemsMap, int selectionId, bool repaint )
+                           const QString &txt, bool checkNewLine,
+                           bool removeSelected, const QString & commandName,
+                           CustomItemsMap customItemsMap, int selectionId, bool repaint )
 {
     if ( protectContent() )
         return;
@@ -645,6 +646,13 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     textdoc->setFormat( KoTextDocument::InputMethodPreedit, currentFormat, KoTextFormat::Format );
     textdoc->removeSelection( KoTextDocument::Temp );
 
+    if ( !customItemsMap.isEmpty() ) {
+        // Some custom items (e.g. variables) depend on the format
+        CustomItemsMap::Iterator it = customItemsMap.begin();
+        for ( ; it != customItemsMap.end(); ++it )
+            it.data()->resize();
+    }
+
     // Speed optimization: if we only type a char, and it doesn't
     // invalidate the next parag, only format the current one
     // ### This idea is wrong. E.g. when the last parag grows and must create a new page.
@@ -698,8 +706,9 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         if ( textdoc->removeSelection( selectionId ) && repaint )
             selectionChangedNotify(); // does the repaint
     }
-    if ( !customItemsMap.isEmpty() )
+    if ( !customItemsMap.isEmpty() ) {
         clearUndoRedoInfo();
+    }
 
     // Notifications
     emit paragraphModified( oldCursor.parag(), AddChar, cursor->index(), txt.length() );
@@ -2204,6 +2213,23 @@ int KoTextObject::numberOfparagraphLineSelected( KoTextParag *parag)
     return (lineEnd - lineStart+1);
 }
 
+KoVariable* KoTextObject::variableAtPoint( const QPoint& iPoint ) const
+{
+    KoTextCursor cursor( textDocument() );
+    int variablePosition = -1;
+    cursor.place( iPoint, textDocument()->firstParag(), false, &variablePosition );
+    if ( variablePosition == -1 )
+        return 0;
+    return variableAtPosition( cursor.parag(), variablePosition );
+}
+
+KoVariable* KoTextObject::variableAtPosition( KoTextParag* parag, int index ) const
+{
+    KoTextStringChar * ch = parag->at( index );
+    if ( ch->isCustom() )
+        return dynamic_cast<KoVariable *>( ch->customItem() );
+    return 0;
+}
 
 #ifndef NDEBUG
 void KoTextObject::printRTDebug(int info)

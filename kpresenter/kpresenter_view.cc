@@ -6825,7 +6825,7 @@ void KPresenterView::slotAddIgnoreAllWord()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
-        m_pKPresenterDoc->addIgnoreWordAll( edit->underCursorWord() );
+        m_pKPresenterDoc->addIgnoreWordAll( edit->currentWordOrSelection() );
 }
 
 void KPresenterView::addWordToDictionary()
@@ -6854,8 +6854,6 @@ void KPresenterView::imageEffect()
         m_canvas->setToolEditMode(TEM_MOUSE);
 
         if (imageEffectDia->exec()==QDialog::Accepted) {
-            KMacroCommand *macro=0L;
-
             KCommand *cmd=m_canvas->activePage()->setImageEffect(imageEffectDia->getEffect(), imageEffectDia->getParam1(),
                                                                  imageEffectDia->getParam2(), imageEffectDia->getParam3());
             if ( cmd )

@@ -1764,7 +1764,7 @@ QPoint KPTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
   QPoint topLeft = parag->rect().topLeft();         // in QRT coords
   int lineY;
     // Cursor height, in pixels
-  int cursorHeight = zh->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
+  //int cursorHeight = zh->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
   QPoint iPoint( topLeft.x() + cursor->x(), topLeft.y() + lineY );
   iPoint = zh->layoutUnitToPixel( iPoint );
   iPoint.rx() -= canvas->diffx();
@@ -1991,7 +1991,7 @@ void KPTextView::textIncreaseIndent()
 {
   m_canvas->setTextDepthPlus();
 }
-  
+
 bool KPTextView::textDecreaseIndent()
 {
   if (m_paragLayout.margins[QStyleSheetItem::MarginLeft]>0)
@@ -2118,19 +2118,21 @@ void KPTextView::drawCursor( bool b )
     kpTextObject()->drawCursor( &painter, cursor(), b, m_canvas );
 }
 
-QPoint KPTextView::cursorPosition( const QPoint & pos )
+// Convert a mouse position into a QRT document position
+QPoint KPTextView::viewToInternal( const QPoint & pos ) const
 {
 #if 0
+    KoZoomHandler* zh = kpTextObject()->kPresenterDocument()->zoomHandler();
     QPoint tmp(pos);
     QWMatrix m;
-    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getSize().width() / 2.0),
-                 kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getSize().height() /  2.0) );
+    m.translate( zh->zoomItX(kpTextObject()->getSize().width() / 2.0),
+                 zh->zoomItY(kpTextObject()->getSize().height() /  2.0) );
     m.rotate( kpTextObject()->getAngle() );
 
 
 
-    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getOrig().x()),
-                 kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getOrig().y()) );
+    m.translate( zh->zoomItX(kpTextObject()->getOrig().x()),
+                 zh->zoomItY(kpTextObject()->getOrig().y()) );
     //m = m.invert();
     tmp = m * pos;
 
@@ -2144,11 +2146,11 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
     double xPos = -rr.x();
     rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
 
-    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(pw / 2.0),
-                 kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(ph / 2.0 ));
+    m.translate( zh->zoomItX(pw / 2.0),
+                 zh->zoomItY(ph / 2.0 ));
     m.rotate( kpTextObject()->getAngle() );
-    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(rr.left() + xPos),
-                 kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(rr.top() + yPos) );
+    m.translate( zh->zoomItX(rr.left() + xPos),
+                 zh->zoomItY(rr.top() + yPos) );
 
     m = m.invert();
 
@@ -2157,19 +2159,14 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
     kdDebug(33001)<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 #endif
 
-    QPoint iPoint=pos - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(
-        kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),
-                                           kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
-    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit(
-        QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
-    return iPoint;
+    return kpTextObject()->viewToInternal( pos, m_canvas );
 }
 
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &/*_pos*/)
 {
-    bool addParag = handleMousePressEvent( e, cursorPosition( e->pos() ),true /*bool canStartDrag*/,
+    bool addParag = handleMousePressEvent( e, viewToInternal( e->pos() ),true /*bool canStartDrag*/,
                                            kpTextObject()->kPresenterDocument()->insertDirectCursor() );
-    
+
     if ( addParag )
         kpTextObject()->kPresenterDocument()->setModified( true );
 }
@@ -2184,20 +2181,25 @@ void KPTextView::mouseMoveEvent( QMouseEvent *e, const QPoint &_pos )
     if ( textView()->maybeStartDrag( e ) )
         return;
     if ( _pos.y() > 0  )
-        textView()->handleMouseMoveEvent( e,cursorPosition( e->pos() ) );
+        textView()->handleMouseMoveEvent( e,viewToInternal( e->pos() ) );
 }
 
-bool KPTextView::isLinkVariable(const KoPoint & dPoint, bool setUrl )
+bool KPTextView::isLinkVariable( const QPoint & pos )
 {
-  KoTextCursor temp = *cursor();
-  placeTempCursor(cursorPosition(QPoint(dPoint.x(),dPoint.y())));
-  bool const result = linkVariable();
-  if (setUrl && result && linkVariable() )
-    setRefLink( linkVariable()->url() );
-  KoTextView::setCursor(&temp);
-  return result;
+    const QPoint iPoint = viewToInternal( pos );
+    KoLinkVariable* linkVariable = dynamic_cast<KoLinkVariable *>( textObject()->variableAtPoint( iPoint ) );
+    return linkVariable != 0;
 }
 
+void KPTextView::openLink()
+{
+    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    if ( doc->getVariableCollection()->variableSetting()->displayLink() ) {
+        KoLinkVariable* v = linkVariable();
+        if ( v )
+            KoTextView::openLink( v );
+    }
+}
 
 void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
 {
@@ -2216,7 +2218,8 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
     actionList.clear();
 
     view->kPresenterDoc()->getVariableCollection()->setVariableSelected(variable());
-    if ( variable() )
+    KoVariable* var = variable();
+    if ( var )
     {
         variableList = view->kPresenterDoc()->getVariableCollection()->popupActionList();
     }
@@ -2235,16 +2238,17 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
         bool singleWord= false;
         actionList = dataToolActionList(view->kPresenterDoc()->instance(), word, singleWord);
         //kdDebug(33001) << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
-        if(refLink().isNull())
+        KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
+        QPopupMenu * popup;
+        if ( !linkVar )
         {
-            QPopupMenu * popup;
             view->plugActionList( "datatools", actionList );
 
-            KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(variable());
-            KoCustomVariable * varCustom = dynamic_cast<KoCustomVariable *>(variable());
-            if( var )
+            KoNoteVariable * noteVar = dynamic_cast<KoNoteVariable *>( var );
+            KoCustomVariable * customVar = dynamic_cast<KoCustomVariable *>( var );
+            if( noteVar )
                 popup = view->popupMenu("note_popup");
-            else if( varCustom )
+            else if( customVar )
                 popup = view->popupMenu("custom_var_popup");
             else
             {
@@ -2262,37 +2266,32 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
                 else
                     popup = view->popupMenu("text_popup");
             }
-            Q_ASSERT(popup);
-            if (popup)
-                popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
         }
         else
         {
             view->plugActionList( "datatools_link", actionList );
-            QPopupMenu * popup = view->popupMenu("text_popup_link");
-            Q_ASSERT(popup);
-            if (popup)
-                popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+            popup = view->popupMenu("text_popup_link");
         }
+        Q_ASSERT(popup);
+        if (popup)
+            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
     }
 }
 
 void KPTextView::insertCustomVariable( const QString &name)
 {
-    KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
-    var = new KoCustomVariable( textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),
+    KoVariable * var = new KoCustomVariable( textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),
                                 doc->getVariableCollection());
     insertVariable( var);
 }
 
 void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 {
-    KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
-    var = new KoLinkVariable( textDocument(),_linkName, hrefName,
-                              doc->variableFormatCollection()->format( "STRING" ),
-                              doc->getVariableCollection());
+    KoVariable * var = new KoLinkVariable( textDocument(), _linkName, hrefName,
+                                           doc->variableFormatCollection()->format( "STRING" ),
+                                           doc->getVariableCollection());
     insertVariable( var);
 }
 
@@ -2453,10 +2452,7 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
         e->ignore();
         return;
     }
-    QPoint iPoint=e->pos() - doc->zoomHandler()->zoomPoint(
-        kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
-    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit(
-        QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
+    QPoint iPoint = viewToInternal( e->pos() );
 
     textObject()->emitHideCursor();
     placeCursor( iPoint );
@@ -2471,9 +2467,7 @@ void KPTextView::dropEvent( QDropEvent * e )
     {
         e->acceptAction();
         KoTextCursor dropCursor( textDocument() );
-        QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint(
-            kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
-        dropPoint=doc->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
+        QPoint dropPoint = viewToInternal( e->pos() );
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         bool addMacroCmd = false;
         dropCursor.place( dropPoint, textDocument()->firstParag() );
@@ -2594,4 +2588,15 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
 QPen KPTextObject::defaultPen() const
 {
     return QPen( Qt::black, 1, Qt::NoPen );
+}
+
+QPoint KPTextObject::viewToInternal( const QPoint & pos, KPrCanvas* canvas ) const
+{
+    KoZoomHandler* zh = kPresenterDocument()->zoomHandler();
+    QPoint iPoint = pos - zh->zoomPoint(
+        getOrig() + KoPoint( bLeft(),
+                             bTop() + alignmentValue()) );
+    iPoint = zh->pixelToLayoutUnit(
+        QPoint( iPoint.x() + canvas->diffx(), iPoint.y() + canvas->diffy() ) );
+    return iPoint;
 }

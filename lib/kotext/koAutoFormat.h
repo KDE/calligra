@@ -50,7 +50,7 @@ class KoCompletionBox : public QLabel
 {
   Q_OBJECT
   public:
-    KoCompletionBox( QWidget * parent = 0, const char * name = 0, WFlags f = 0 ); 
+    KoCompletionBox( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
     ~KoCompletionBox();
     QString& lastWord();
     void setLastWord(QString const &);
@@ -118,11 +118,11 @@ public:
      * Called by edit widget when a call a competion
      */
     bool doCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int const index,KoTextObject *txtObj );
-    
-    bool doToolTipCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );    
+
+    bool doToolTipCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );
     void showToolTipBox(KoTextParag *parag,  int index, QWidget *widget, const QPoint &pos);
     void removeToolTipCompletion();
-    
+
     bool doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch );
 
     /**
@@ -166,7 +166,7 @@ public:
     void configAutoNumberStyle( bool b );
 
     void configCompletion( bool b );
-    
+
     void configToolTipCompletion( bool b );
 
     void configAppendSpace( bool b);
@@ -378,6 +378,8 @@ private:
     bool m_bAutoSuperScript;
     bool m_bAutoCorrectionWithFormat;
     bool m_bCapitalizeNameOfDays;
+    /// Indicates if doAutoFormat has called itself
+    bool m_wordInserted;
     QChar m_bulletStyle;
 
     TypographicQuotes m_typographicSimpleQuotes;
@@ -403,8 +405,6 @@ private:
     uint m_nbMaxCompletionWord;
     uint m_countMaxWords;
     QStringList m_cacheNameOfDays;
-    /// Indicates if doAutoFormat has called itself
-    bool m_wordInserted;
     KoCompletionBox *m_completionBox;
 };
 

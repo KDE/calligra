@@ -233,24 +233,31 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
 	keyPressEvent(keyev);
 	return true;
       }
+      break;
+    }
+    case QEvent::AccelOverride:
+    {
 #ifndef NDEBUG
+      QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
         // Debug keys
         if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
         {
             switch ( keyev->key() ) {
             case Key_P: // 'P' -> paragraph debug
                 printRTDebug( 0 );
+                keyev->accept();
                 break;
             case Key_V: // 'V' -> verbose parag debug
                 printRTDebug( 1 );
+                keyev->accept();
                 break;
             default:
                 break;
             }
         }
 #endif
+        break;
     }
-    break;
     default:
         break;
     }
@@ -625,29 +632,8 @@ QRect KPrCanvas::getOldBoundingRect( const KPObject *obj )
 
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
-  QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-  KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
-
-  if (m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayLink() && m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->underlineLink() && e->button()==Qt::LeftButton)
-  {
-    KPObject *tmp_kpobject = getObjectAt( docPoint );
-    if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
-    {
-      KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( tmp_kpobject );
-      KPTextView *textview = kptextobject->createKPTextView(this, true);
-      if ( textview && textview->isLinkVariable(e->pos(),true) ) //the user clicked on a link
-      {
-	textview->openLink();
- 	if (!(m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == kptextobject))
-	  kptextobject->setEditingTextObj( false ); //don't edit the temporary selected text object
-	delete textview;
-	return;
-      }
-      if (!(m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == kptextobject))
-	kptextobject->setEditingTextObj( false ); //don't edit the temporary selected text object
-      delete textview;
-    }
-  }
+    QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
 
     if(!m_view->koDocument()->isReadWrite())
         return;
@@ -659,7 +645,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         if(txtObj->contains( docPoint ))
         {
             KoPoint pos = docPoint - txtObj->innerRect().topLeft(); // in pt, but now translated into the object's coordinate system
-            mousePressed=true;
+            // This is common to all mouse buttons, so that RMB and MMB place the cursor too
+            m_currentTextObjectView->mousePressEvent(e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
+            mousePressed = true;
             if(e->button() == RightButton)
             {
                 m_currentTextObjectView->showPopup( m_view, QCursor::pos(), m_view->actionList() );
@@ -671,8 +659,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_currentTextObjectView->paste();
                 QApplication::clipboard()->setSelectionMode( false );
             }
-            else
-                m_currentTextObjectView->mousePressEvent(e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
             return;
         }
     }
@@ -1184,8 +1170,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_view->continueAutoPresTimer();
         }
     }
-    
-    
+
+
 #if 0 // Where do you need this ? (toshitaka)
     // ME: I have no idea why this is needed at all
     if ( toolEditMode == TEM_MOUSE )
@@ -1509,7 +1495,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	return;
       }
       setCursor( arrowCursor );
-	
+
       KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
       Q_ASSERT(txtObj);
       if(txtObj->contains( docPoint )&&mousePressed)
@@ -1519,32 +1505,27 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
       }
       return;
     }
-	
-	if (m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayLink() && m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->underlineLink())
-	{
-	  KPObject *tmp_kpobject = getObjectAt( docPoint );
-	  if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
-	  {
-	    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( tmp_kpobject );
-	    KPTextView *textview = kptextobject->createKPTextView(this, true);
-	    if ( textview && textview->isLinkVariable(e->pos()))// the mouse cursor points on a link
-	    {
-	      setCursor(Qt::PointingHandCursor);
-	      kptextobject->setEditingTextObj( false );
-	      delete textview;
-	      return;
-	    }
-	    else
-	    {
-	      kptextobject->setEditingTextObj( false );
-	      delete textview;
-	    }
-	  }
-	}
-	
+
+    if (m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayLink())
+    {
+        KPObject *tmp_kpobject = getObjectAt( docPoint );
+        if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
+        {
+	    KPTextObject *kptextobject = static_cast<KPTextObject*>( tmp_kpobject );
+            QPoint iPoint = kptextobject->viewToInternal( e->pos(), this );
+            KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( kptextobject->textObject()->variableAtPoint( iPoint ) );
+
+            if ( linkVar )
+            {
+                setCursor(Qt::PointingHandCursor);
+                return;
+            }
+        }
+    }
+
 	if ( editMode ) {
 	  m_view->setRulerMousePos( e->x(), e->y() );
-	  
+
         KPObject *kpobject;
         if ( ( !mousePressed || ( m_tmpHorizHelpline !=-1 && m_tmpVertHelpline != -1 && modType == MT_NONE ) )&&
              ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
@@ -4760,7 +4741,6 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     scrollCanvas(boundingRect);
 
     KoPoint _move=m_boundingRect.topLeft()-boundingRect.topLeft();
-    KMacroCommand *macro=0L;
     KCommand *cmd=m_activePage->moveObject(m_view,_move,key);
     if( cmd && key)
     {

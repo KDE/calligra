@@ -36,6 +36,7 @@
 #include "kwloadinginfo.h"
 #include "contents.h"
 #include "mailmerge.h"
+#include "kwbookmark.h"
 #include "kwvariable.h"
 
 #include <koparagcounter.h>
@@ -2479,7 +2480,7 @@ KCommand * KWTextFrameSet::pasteOasis( KoTextCursor * cursor, const QByteArray &
     if (protectContent() )
         return 0;
 
-    kdDebug(32001) << "KWTextFrameSet::pasteOasis" << endl;
+    kdDebug(32001) << "KWTextFrameSet::pasteOasis data:" << data.size() << " bytes" << endl;
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste") );
     if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
@@ -2487,8 +2488,6 @@ KCommand * KWTextFrameSet::pasteOasis( KoTextCursor * cursor, const QByteArray &
     m_textobj->setLastFormattedParag( cursor->parag()->prev() ?
                            cursor->parag()->prev() : cursor->parag() );
 
-    // We have our own command for this.
-    // Using insert() wouldn't help storing the parag stuff for redo
     KWOasisPasteCommand * cmd = new KWOasisPasteCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
 
@@ -2967,8 +2966,18 @@ KWFootNoteFrameSet * KWTextFrameSet::insertFootNote( NoteType noteType, KWFootNo
      return fs;
 }
 
-MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
+MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& dPoint )
 {
+    if (m_doc->getVariableCollection()->variableSetting()->displayLink()
+        && m_doc->getVariableCollection()->variableSetting()->underlineLink() )
+    {
+        QPoint iPoint;
+        if ( documentToInternal( dPoint, iPoint ) ) {
+            KoLinkVariable* linkVariable = dynamic_cast<KoLinkVariable *>( textObject()->variableAtPoint( iPoint ) );
+            if ( linkVariable )
+                return MEANING_MOUSE_OVER_LINK;
+        }
+    }
     return MEANING_MOUSE_INSIDE_TEXT;
 }
 
@@ -3231,6 +3240,7 @@ QDragObject * KWTextFrameSetEdit::newDrag( QWidget * parent )
     KMultipleDrag* multiDrag = new KMultipleDrag( parent );
     multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
     KoStoreDrag* storeDrag = new KoStoreDrag( KWTextDrag::selectionMimeType(), 0 );
+    kdDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
     storeDrag->setEncodedData( buffer.buffer() );
     multiDrag->addDragObject( storeDrag );
     return multiDrag;
@@ -3348,10 +3358,8 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
         }
         }
     }
-    //Calculate position of tooltip for autocompletion if we are in a valid frame
-    QPoint pos;
-    if( m_currentFrame != 0 )
-      pos = textFrameSet()->cursorPos( cursor(), m_canvas, m_currentFrame );
+    // Calculate position of tooltip for autocompletion
+    QPoint pos = textFrameSet()->cursorPos( cursor(), m_canvas, m_currentFrame );
     textView()->handleKeyPressEvent( e, m_canvas, pos );
 }
 
@@ -3429,16 +3437,34 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint,
 
 }
 
-bool KWTextFrameSetEdit::isLinkVariable(const KoPoint & dPoint, bool setUrl )
+bool KWTextFrameSetEdit::openLink( KoLinkVariable* variable )
 {
-  QPoint iPoint;
-  KWTextFrameSet::RelativePosition relPos;
-  textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos );
-  placeTempCursor(iPoint);
-  bool const result = linkVariable();
-  if (setUrl && result && textView()->linkVariable() )
-    setRefLink(textView()->linkVariable()->url() );
-  return result;
+    KWTextFrameSet* fs = textFrameSet();
+    KWDocument* doc = fs->kWordDocument();
+    if ( doc->getVariableCollection()->variableSetting()->displayLink() ) {
+
+        const QString url = variable->url();
+        if( url.startsWith("bkm://") )
+        {
+            KWBookMark* bookmark = doc->bookMarkByName(url.mid(6) );
+            if ( bookmark )
+            {
+                cursor()->setParag( bookmark->startParag() );
+                ensureCursorVisible();
+                return true;
+            }
+        }
+        KoTextView::openLink( variable );
+        return true;
+    }
+    return false;
+}
+
+void KWTextFrameSetEdit::openLink()
+{
+    KoLinkVariable* v = linkVariable();
+    if ( v )
+        openLink( v );
 }
 
 void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & )
@@ -3494,16 +3520,17 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
         if ( !textFrameSet()->documentToInternal( dPoint, dropPoint ) )
             return; // Don't know where to paste
 
-        KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
-        bool createMacro = false;
+        KMacroCommand * macroCmd = 0;
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(32001) << "KWTextFrameSetEdit::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
         if ( ( e->source() == m_canvas ||
                e->source() == m_canvas->viewport() ) &&
-             e->action() == QDropEvent::Move ) {
-            int numberFrameSet=-1;
-            numberFrameSet=KWTextDrag::decodeFrameSetNumber( e );
+               e->action() == QDropEvent::Move ) {
+            // TODO move this to the drag() code - drag() returns true when a move was requested
+            // Probably needed: call acceptAction() here and accept() in the other cases
+
+            const int numberFrameSet = KWTextDrag::decodeFrameSetNumber( e );
             //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;
             //KWFrameSet *frameset= frameSet()->kWordDocument()->frameSet( numberFrameSet );
             KWFrameSet *frameset= frameSet()->kWordDocument()->textFrameSetFromIndex( numberFrameSet, false );
@@ -3515,8 +3542,8 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                 KCommand *cmd=textView()->dropEvent(tmp->textObject(), dropCursor, dropInSameObj);
                 if(cmd)
                 {
+                    macroCmd = new KMacroCommand(i18n("Move Text"));
                     macroCmd->addCommand(cmd);
-                    createMacro = true;
                     //relayout textframeset after a dnd otherwise autoextend
                     //frameset is not re-layout
                     tmp->layout();
@@ -3524,7 +3551,6 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                 }
                 else
                 {
-                    delete macroCmd;
                     return;
                 }
             }
@@ -3540,11 +3566,12 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             QByteArray arr = e->encodedData( returnedTypeMime );
             if ( arr.size() )
             {
-                KCommand *cmd=textFrameSet()->pasteOasis( cursor(), QCString(arr, arr.size()+1 ), false );
+                KCommand *cmd = textFrameSet()->pasteOasis( cursor(), arr, false );
                 if ( cmd )
                 {
+                    if ( !macroCmd )
+                        macroCmd = new KMacroCommand(i18n("Paste Text"));
                     macroCmd->addCommand(cmd);
-                    createMacro = true;
                 }
             }
         }
@@ -3554,10 +3581,8 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             if ( QTextDrag::decode( e, text ) )
                 textObject()->pasteText( cursor(), text, currentFormat(), false );
         }
-        if ( createMacro )
+        if ( macroCmd )
             frameSet()->kWordDocument()->addCommand(macroCmd);
-        else
-            delete macroCmd;
     }
 }
 
@@ -3823,8 +3848,8 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /
         kdDebug() << "KWTextFrameSetEdit::insertVariable format=" << format << endl;
 #endif
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
-                                false, removeSelectedText, i18n("Insert Variable"),
-                                customItemsMap );
+                              false, removeSelectedText, i18n("Insert Variable"),
+                              customItemsMap );
         frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
         if ( var->type()==VT_CUSTOM && refreshCustomMenu)
             frameSet()->kWordDocument()->refreshMenuCustomVariable();
@@ -3943,18 +3968,6 @@ void KWTextFrameSetEdit::showFormat( KoTextFormat *format )
 
 void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPoint &point )
 {
-    // Decided against that - no other word processor does it that way apparently
-#if 0
-    // Place a KoTextCursor where we clicked
-    KoTextCursor cursor( textDocument() );
-    KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( m_canvas->viewMode()->viewToNormal( point ) );
-    QPoint iPoint;
-    if ( textFrameSet()->documentToInternal( dPoint, iPoint, true ) )
-        cursor.place( iPoint, textDocument()->firstParag() );
-    else
-        kdWarning() << "documentToInternal couldn't place cursor for RMB position! " << point.x() << "," << point.y() << endl;
-    QString word = wordUnderCursor( cursor );
-#endif
     QString word = wordUnderCursor( *cursor() );
 
     // Remove previous stuff
@@ -3974,8 +3987,9 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     KWDocument * doc = frameSet()->kWordDocument();
     actionList = dataToolActionList(doc->instance(), word, singleWord);
 
-    doc->getVariableCollection()->setVariableSelected(variable());
-    if ( variable() )
+    KoVariable* var = variable();
+    doc->getVariableCollection()->setVariableSelected(var);
+    if ( var )
     {
         variableList = doc->getVariableCollection()->popupActionList();
     }
@@ -3991,29 +4005,30 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     else
     {
         kdDebug() << "showPopup: plugging actionlist with " << actionList.count() << " actions" << endl;
-        if(refLink().isNull())
+        KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
+        QPopupMenu * popup;
+        if ( !linkVar )
         {
-            QPopupMenu * popup;
             view->plugActionList( "datatools", actionList );
-            KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(variable());
-            KoCustomVariable * varCustom = dynamic_cast<KoCustomVariable *>(variable());
-            KWFootNoteVariable * varFootNote = dynamic_cast<KWFootNoteVariable *>(variable());
+            KoNoteVariable * noteVar = dynamic_cast<KoNoteVariable *>( var );
+            KoCustomVariable * customVar = dynamic_cast<KoCustomVariable *>( var );
+            KWFootNoteVariable * footNoteVar = dynamic_cast<KWFootNoteVariable *>( var );
 
-            if( var )
+            if( noteVar )
                 popup = view->popupMenu("comment_popup");
-            else if( varCustom )
+            else if( customVar )
                 popup = view->popupMenu("custom_var_popup");
-            else if ( varFootNote )
+            else if ( footNoteVar )
             {
-                view->changeFootNoteMenuItem( varFootNote->noteType() == FootNote );
+                view->changeFootNoteMenuItem( footNoteVar->noteType() == FootNote );
                 popup = view->popupMenu("footnote_popup");
             }
             else
             {
-                if ( singleWord)
+                if ( singleWord )
                 {
-                    QPtrList<KAction> actionCheckSpellList =view->listOfResultOfCheckWord( word );
-                    if ( actionCheckSpellList.count()>0)
+                    QPtrList<KAction> actionCheckSpellList = view->listOfResultOfCheckWord( word );
+                    if ( !actionCheckSpellList.isEmpty() )
                     {
                         view->plugActionList( "spell_result_action", actionCheckSpellList );
                         popup = view->popupMenu("text_popup_spell_with_result");
@@ -4024,18 +4039,15 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
                 else
                     popup = view->popupMenu("text_popup");
             }
-            Q_ASSERT(popup);
-            if (popup)
-                popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
         }
         else
         {
             view->plugActionList( "datatools_link", actionList );
-            QPopupMenu * popup = view->popupMenu("text_popup_link");
-            Q_ASSERT(popup);
-            if (popup)
-                popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+            popup = view->popupMenu("text_popup_link");
         }
+        Q_ASSERT(popup);
+        if (popup)
+            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
     }
 }
 
@@ -4046,14 +4058,15 @@ QPoint KWTextFrameSet::cursorPos( KoTextCursor *cursor, KWCanvas* canvas, KWFram
     KWViewMode *viewMode = canvas->viewMode();
 
     KoTextParag* parag = cursor->parag();
-    QPoint const topLeft = parag->rect().topLeft();         // in QRT coords
+    const QPoint topLeft = parag->rect().topLeft();         // in QRT coords
     int lineY;
     parag->lineHeightOfChar( cursor->index(), 0, &lineY );
-    const QPoint iPoint( topLeft.x() + cursor->x() + parag->at( cursor->index() )->width, topLeft.y() + lineY ); // iPoint is the topright corner of the current character
+    // iPoint is the topright corner of the current character
+    QPoint iPoint( topLeft.x() + cursor->x() + parag->at( cursor->index() )->width, topLeft.y() + lineY );
 
     KoPoint dPoint;
     QPoint vPoint;
-    KoPoint hintDPoint = currentFrame->innerRect().topLeft();
+    KoPoint hintDPoint = currentFrame ? currentFrame->innerRect().topLeft() : KoPoint();
     if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
     {
         vPoint = viewMode->normalToView( m_doc->zoomPoint( dPoint ) ); // from doc to view contents

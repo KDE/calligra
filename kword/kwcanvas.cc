@@ -52,7 +52,7 @@
 #include <kurl.h>
 #include <kurldrag.h>
 #include <kio/netaccess.h>
-#include <kmimetype.h> 
+#include <kmimetype.h>
 
 #include <assert.h>
 
@@ -508,34 +508,10 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
 
-    
+
     if ( e->button() == LeftButton )
     {
-      if (m_doc->getVariableCollection()->variableSetting()->displayLink() && m_doc->getVariableCollection()->variableSetting()->underlineLink() )
-      {
-	bool border=true;
-	KWFrame *frameundermouse = m_doc->frameUnderMouse(normalPoint, &border);
-	if (frameundermouse && frameundermouse->frameSet())
-	{
-	  KWTextFrameSet *frameset= dynamic_cast<KWTextFrameSet *>(frameundermouse->frameSet());
-	  if (frameset)
-	  {
-	    KWFrameSetEdit *framesetedit = frameset->createFrameSetEdit(this, true);
-	    if ( framesetedit )
-	    {
-	      KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(framesetedit);
-	      if (textedit && textedit->isLinkVariable(docPoint,true))
-	      {
-		gui()->getView()->openLink(textedit); //open the link
-		delete textedit;
-		return;
-	      }
-	    }
-	    delete framesetedit;
-	  }
-	}
-      }
-        m_mousePressed = true;
+      m_mousePressed = true;
     }
 
     // Only edit-mode (and only LMB) allowed on read-only documents (to select text)
@@ -592,6 +568,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             break;
         }
         case MEANING_MOUSE_INSIDE:
+        case MEANING_MOUSE_OVER_LINK:
         case MEANING_MOUSE_INSIDE_TEXT:
         case MEANING_ACTIVATE_PART:
         {
@@ -1208,31 +1185,6 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
         return;
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-    
-    if (m_doc->getVariableCollection()->variableSetting()->displayLink() && m_doc->getVariableCollection()->variableSetting()->underlineLink() )
-    {
-      bool border=true;
-      KWFrame *frameundermouse = m_doc->frameUnderMouse(normalPoint, &border);
-      if (frameundermouse && frameundermouse->frameSet())
-      {
-	KWTextFrameSet *frameset= dynamic_cast<KWTextFrameSet *>(frameundermouse->frameSet());
-	if (frameset)
-	{
-	  KWFrameSetEdit *framesetedit = frameset->createFrameSetEdit(this, true);
-	  if ( framesetedit )
-	  {
-	    KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(framesetedit);
-	    if (textedit && textedit->isLinkVariable(docPoint))
-	    {
-	      viewport()->setCursor(Qt::PointingHandCursor); // the cursor is placed on a link
-	      delete textedit;
-	      return;
-	    }
-	  }
-	  delete framesetedit;
-	}
-      }
-    }
 
     if ( m_mousePressed ) {
         //doAutoScroll();

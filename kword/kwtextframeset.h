@@ -426,7 +426,13 @@ public:
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
     virtual void removeToolTipCompletion();
-    bool isLinkVariable(const KoPoint &, bool setUrl=false);
+
+    //bool isLinkVariable(const KoPoint &, bool setUrl=false);
+
+    /// Called by KoTextView when clicking on a link
+    bool openLink( KoLinkVariable* variable );
+    /// Called by KWView when using the action
+    void openLink();
 
 public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals

@@ -169,6 +169,9 @@ public:
     double alignmentValue() const {  return alignVertical; }
     virtual KPTextObject *nextTextObject() { return this;}
     static void saveFormat( QDomElement & element, KoTextFormat*lastFormat );
+
+    QPoint viewToInternal( const QPoint & pos, KPrCanvas* canvas ) const;
+
 signals:
     void repaintChanged( KPTextObject* );
 
@@ -258,9 +261,11 @@ public:
 
     /** return true if some text is selected */
     bool hasSelection() const;
-    
+
     virtual void removeToolTipCompletion();
-    bool isLinkVariable(const KoPoint &, bool setUrl=false);
+    bool isLinkVariable(const QPoint &);
+    void openLink();
+    QPoint viewToInternal( const QPoint & pos ) const;
 
 public slots:
     void cut();
@@ -281,7 +286,7 @@ protected:
     virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
     virtual bool doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
-    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int  ); 
+    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int  );
     virtual void showToolTipBox(KoTextParag *parag, int index, QWidget *widget, const QPoint &pos);
     virtual void textIncreaseIndent();
     virtual bool textDecreaseIndent();
@@ -289,8 +294,6 @@ protected:
 
     virtual bool pgUpKeyPressed();
     virtual bool pgDownKeyPressed();
-
-    QPoint cursorPosition( const QPoint & pos );
 
     KPTextObject *m_kptextobj;
     KPrCanvas *m_canvas;

@@ -507,7 +507,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     return true;
 }
 
-QString KPrPage::saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const
+QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
 {
     KoGenStyle stylepageauto( KPresenterDoc::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
     stylepageauto.addProperty( "presentation:background-visible", m_useMasterBackground == true ? "true" : "false" );

@@ -89,7 +89,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     possibleTripleClick = FALSE;
     afterTripleClick = FALSE;
     m_currentFormat = 0;
-    variablePosition =-1;
+    m_variablePosition =-1;
     //updateUI( true, true );
 }
 
@@ -154,7 +154,7 @@ void KoTextView::deleteWordLeft()
 void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoint &pos)
 {
     textObject()->typingStarted();
-    
+
     /* bool selChanged = FALSE;
     for ( int i = 1; i < textDocument()->numSelections(); ++i )
         selChanged = textDocument()->removeSelection( i ) || selChanged;
@@ -213,7 +213,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         moveCursor( e->state() & ControlButton ? MovePgDown : MoveViewportDown, e->state() & ShiftButton );
         break;
     case Key_Return: case Key_Enter:
-        
+
         if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1) )
                 if ( (e->state() & (ShiftButton|ControlButton)) == 0 )
                 {
@@ -299,7 +299,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 			break;
 		}
             }
-            
+
             if ( e->text().length() &&
 //               !( e->state() & AltButton ) &&
                  ( !e->ascii() || e->ascii() >= 32 ) ||
@@ -357,7 +357,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
                 }
                 else
                     removeToolTipCompletion();
-                
+
             }
             // We should use KAccel instead, to make this configurable !
             // Well, those are all alternate keys, for keys already configurable (KDE-wide)
@@ -389,12 +389,12 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 	      }
 	      break;
 	    }
-            
+
             if ( clearUndoRedoInfo )
                 textObject()->clearUndoRedoInfo();
             textObject()->typingDone();
             return;
-            
+
         }
     }
 
@@ -699,6 +699,12 @@ bool KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
         return addParag;
     }
 
+    KoLinkVariable* lv = linkVariable();
+    if ( lv && openLink( lv ) )
+    {
+        return addParag;
+    }
+
     KoTextDocument * textdoc = textDocument();
     if ( canStartDrag && textdoc->inSelection( KoTextDocument::Standard, iPoint ) ) {
         mightStartDrag = TRUE;
@@ -914,20 +920,11 @@ bool KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
         s = textDocument()->lastParag();
     else
         s = textDocument()->firstParag();
-    m_cursor->place( pos, s, false, &variablePosition );
+    m_cursor->place( pos, s, false, &m_variablePosition );
+    if ( m_variablePosition != -1 )
+        kdDebug() << k_funcinfo << " m_variablePosition set to " << m_variablePosition << endl;
     updateUI( true );
     return addParag;
-}
-
-void KoTextView::placeTempCursor( const QPoint &pos)
-{
-    bool addParag = false;
-    KoTextParag *s = 0L;
-    if ( addParag )
-        s = textDocument()->lastParag();
-    else
-        s = textDocument()->firstParag();
-    m_cursor->place( pos, s, false, &variablePosition );
 }
 
 void KoTextView::blinkCursor()
@@ -1063,14 +1060,10 @@ KoTextDocument * KoTextView::textDocument() const
 
 KoVariable *KoTextView::variable()
 {
-    if ( variablePosition > -1 ) /// ### shouldn't be a member var, but should be determined here
-    {
-        KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-        ch = m_cursor->parag()->at( variablePosition );
-        if(ch->isCustom())
-            return dynamic_cast<KoVariable *>(ch->customItem());
-    }
-    return 0L;
+    if ( m_variablePosition < 0 )
+        return 0;
+    // Can't use m_cursor here, it could be before or after the variable, depending on which half of it was clicked
+    return textObject()->variableAtPosition( m_cursor->parag(), m_variablePosition );
 }
 
 KoLinkVariable * KoTextView::linkVariable()
@@ -1082,10 +1075,6 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QSt
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
-    m_refLink= QString::null;
-    KoLinkVariable* linkVar = linkVariable();
-    if(linkVar)
-        m_refLink = linkVar->url();
     QString text;
     if ( textObject()->hasSelection() )
     {
@@ -1131,14 +1120,12 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QSt
     return KDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KDataToolInfo &, const QString & ) ) );
 }
 
-QString KoTextView::underCursorWord()
+QString KoTextView::currentWordOrSelection() const
 {
-    QString text;
     if ( textObject()->hasSelection() )
-        text = textObject()->selectedText();
+        return textObject()->selectedText();
     else
-        text = m_wordUnderCursor;
-    return text;
+        return m_wordUnderCursor;
 }
 
 void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & command )
@@ -1193,13 +1180,20 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
     delete tool;
 }
 
-void KoTextView::openLink()
+bool KoTextView::openLink( KoLinkVariable* variable )
 {
-    KURL url( m_refLink );
+    kdDebug() << k_funcinfo << variable->url() << endl;
+    KURL url( variable->url() );
     if( url.isValid() )
+    {
         (void) new KRun( url );
+        return true;
+    }
     else
-        KMessageBox::sorry(0L,i18n("%1 is not a valid link.").arg(m_refLink));
+    {
+        KMessageBox::sorry( 0, i18n("%1 is not a valid link.").arg( variable->url() ) );
+        return false;
+    }
 }
 
 
@@ -1435,46 +1429,28 @@ KCommand *KoTextView::dropEvent( KoTextObject *tmp, KoTextCursor dropCursor, boo
 
 void KoTextView::copyTextOfComment()
 {
-    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-    if(ch->isCustom())
+    KoNoteVariable *var = dynamic_cast<KoNoteVariable *>( variable() );
+    if( var )
     {
-        KoNoteVariable *var=dynamic_cast<KoNoteVariable *>(ch->customItem());
-        if( var )
-        {
-            KURL::List lst;
-            lst.append( var->note() );
-            QApplication::clipboard()->setSelectionMode(true);
-            QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
-            QApplication::clipboard()->setSelectionMode(false);
-            QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
-        }
+        KURL::List lst;
+        lst.append( var->note() );
+        QApplication::clipboard()->setSelectionMode(true);
+        QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
+        QApplication::clipboard()->setSelectionMode(false);
+        QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
     }
 }
 
 void KoTextView::removeComment()
 {
-    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-    if(ch->isCustom())
+    KoNoteVariable *var = dynamic_cast<KoNoteVariable *>( variable() );
+    if( var )
     {
-        KoNoteVariable *var=dynamic_cast<KoNoteVariable *>(ch->customItem());
-        if( var )
-        {
-            if( variablePosition == m_cursor->index() )
-                m_cursor->setIndex( m_cursor->index() );
-            else
-                m_cursor->setIndex( m_cursor->index() -1 );
-
-            textDocument()->setSelectionStart( KoTextDocument::Temp, m_cursor );
-
-            if( variablePosition == m_cursor->index() )
-                m_cursor->setIndex( m_cursor->index() +1);
-            else
-                m_cursor->setIndex( m_cursor->index()  );
-
-            textDocument()->setSelectionEnd( KoTextDocument::Temp, m_cursor );
-
-            textObject()->removeSelectedText( m_cursor,  KoTextDocument::Temp, i18n("Remove Comment") );
-        }
+        m_cursor->setIndex( m_variablePosition );
+        textDocument()->setSelectionStart( KoTextDocument::Temp, m_cursor );
+        m_cursor->setIndex( m_variablePosition + 1 );
+        textDocument()->setSelectionEnd( KoTextDocument::Temp, m_cursor );
+        textObject()->removeSelectedText( m_cursor,  KoTextDocument::Temp, i18n("Remove Comment") );
     }
 }
 

@@ -3872,6 +3872,8 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, int keyState )
         return QCursor(); // default cursor !?!?
     case MEANING_MOUSE_INSIDE_TEXT:
         return Qt::ibeamCursor;
+    case MEANING_MOUSE_OVER_LINK:
+        return Qt::PointingHandCursor;
     case MEANING_MOUSE_MOVE:
         return Qt::sizeAllCursor;
     case MEANING_MOUSE_SELECT:

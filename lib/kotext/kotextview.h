@@ -158,13 +158,12 @@ public:
     KoParagStyle * createStyleFromSelection(const QString & name);
     void updateStyleFromSelection(KoParagStyle* style);
 
-    QString underCursorWord();
-    
-    virtual void removeToolTipCompletion() {;};
-    
+    QString currentWordOrSelection() const;
+
+    virtual void removeToolTipCompletion() {}
+
     // return true if we "insert direct cursor" and we insert new parag
     bool placeCursor( const QPoint &pos /* in internal coordinates */, bool insertDirectCursor=false );
-    void placeTempCursor( const QPoint &pos);
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
@@ -182,14 +181,10 @@ public slots:
     void insertText( const QString &text );
     void newParagraph();
 
-    QString refLink()const {return m_refLink;};
-    void setRefLink(QString const &link){m_refLink=link;};
-
-    void openLink();
     void copyLink();
     void removeLink();
     void completion();
-    
+
     void setCursor( KoTextCursor * _cursor ) { *m_cursor = *_cursor; }
 
 protected slots:
@@ -210,12 +205,12 @@ protected:
                                int /*index*/, QChar /*ch*/ ) { }
 
     virtual bool doCompletion( KoTextCursor* , KoTextParag *, int  ) { return false;}
-    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int  ) { return false;} 
+    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int  ) { return false;}
     virtual void showToolTipBox(KoTextParag *, int , QWidget *, const QPoint &){;};
-    
+
     virtual void textIncreaseIndent(){;};
     virtual bool textDecreaseIndent(){return true;};
-    
+
     //return true if we are a doubleSpace
     virtual bool doIgnoreDoubleSpace(KoTextParag * /*parag*/,
         int /*index*/,QChar /*ch*/ ) { return false;}
@@ -229,6 +224,8 @@ protected:
      */
     virtual void drawCursor( bool b );
 
+    /// Called when clicking on a link
+    virtual bool openLink( KoLinkVariable* linkVariable );
 
     /** Reimplement this to handle PageUp. Example implementation:
         textView->cursor()->gotoPageUp( scrollview->visibleHeight() ); */
@@ -277,6 +274,9 @@ protected:
 private:
     KoTextObject *m_textobj;
     KoTextCursor *m_cursor;
+    // Store the index of the variable on which we last clicked, to position m_cursor
+    int m_variablePosition;
+
     KoTextFormat *m_currentFormat;
     QTimer *blinkTimer, *dragStartTimer;
     class KoTextViewPrivate;
@@ -292,10 +292,6 @@ private:
 
     bool m_singleWord;
     QString m_wordUnderCursor;
-    QString m_refLink;
-    //store variable position.
-    //all type of variable
-    int variablePosition;
 };
 
 #endif
