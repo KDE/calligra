@@ -388,9 +388,13 @@ void
 VPolylineTool::mouseDragCtrlPressed()
 {
 	// Moves the mouse to the other bezier vector position.
-	KoPoint p = *m_bezierPoints.at( m_bezierPoints.count() - 4) - *m_bezierPoints.at( m_bezierPoints.count() - 3 );
+	if( m_bezierPoints.count() > 3 )
+	{
+		KoPoint p;
+		p = *m_bezierPoints.at( m_bezierPoints.count() - 4) - *m_bezierPoints.at( m_bezierPoints.count() - 3 );
 
-	view()->setPos( p );
+		view()->setPos( p );
+	}
 }
 
 void
@@ -401,9 +405,13 @@ VPolylineTool::mouseDragShiftReleased()
 void
 VPolylineTool::mouseDragCtrlReleased()
 {
-	KoPoint p = *m_bezierPoints.at( m_bezierPoints.count() - 3) - *m_bezierPoints.at( m_bezierPoints.count() - 4 );
+	if( m_bezierPoints.count() > 3 )
+	{
+		KoPoint p;
+		p = *m_bezierPoints.at( m_bezierPoints.count() - 3) - *m_bezierPoints.at( m_bezierPoints.count() - 4 );
 
-	view()->setPos( p );
+		view()->setPos( p );
+	}
 }
 
 void
