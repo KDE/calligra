@@ -1,7 +1,7 @@
 ####### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) $(all_includes)
+INCLUDES= $(KSTORE_INCLUDES) $(all_includes)
 libkofficecore_la_LIBADD  = \
 	$(top_builddir)/lib/store/libkstore.la $(LIB_KPARTS) $(LIB_KDEPRINT)
 
