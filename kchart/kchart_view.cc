@@ -34,7 +34,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_edit = new KAction( tr("&Edit data"), KChartBarIcon("pencil"), 0,
 			 this, SLOT( edit() ),
                          actionCollection(), "edit");
-    m_config = new KAction( tr( "&Config" ), KChartBarIcon( "config" ), 0,
+    m_config = new KAction( tr( "&Config" ), KChartBarIcon( "options" ), 0,
 			    this, SLOT( config() ),
 			    actionCollection(), "config" );
     m_loadconfig = new KAction( tr("Load config"), KChartBarIcon("loadconfig"),
