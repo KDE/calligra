@@ -22,14 +22,8 @@ VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJ
 
 VStroke::VStroke( const VStroke& stroke )
 {
-	// dont copy the parent!
-	m_type = stroke.m_type;
-	m_lineWidth = stroke.m_lineWidth;
-	m_lineCap = stroke.m_lineCap;
-	m_lineJoin = stroke.m_lineJoin;
-	m_miterLimit = stroke.m_miterLimit;
-	m_color = stroke.m_color;
-	m_dashPattern = stroke.m_dashPattern;
+	// doesnt copy parent:
+	*this = stroke;
 }
 
 void
@@ -37,6 +31,7 @@ VStroke::setLineWidth( float width )
 {
 	m_lineWidth = width;
 
+	// tell our parent so he can update his bbox:
 	if( m_parent )
 		m_parent->invalidateBoundingBox();
 }
