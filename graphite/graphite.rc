@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui><kpartgui name="graphite">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="graphite">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
