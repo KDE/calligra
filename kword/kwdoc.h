@@ -710,6 +710,7 @@ public:
 
     KoPageLayout pageLayout() const;
 
+    QPtrListIterator<KWBookMark> bookmarkIterator() const { return QPtrListIterator<KWBookMark>(m_bookmarkList); }
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );

@@ -219,6 +219,35 @@ KWTextDeleteCommand::KWTextDeleteCommand( KoTextDocument *d, int i, int idx, con
                          const QValueList<KoParagLayout> & oldParagLayouts )
     :KoTextDeleteCommand(d, i, idx, str, customItemsMap, oldParagLayouts)
 {
+    //createBookmarkList();
+}
+
+void KWTextDeleteCommand::createBookmarkList()
+{
+#if 0
+    KoTextParag *s = doc ? doc->paragAt( id ) : parag;
+    if ( !s ) {
+        qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
+        return;
+    }
+
+    // Now restore the parag layouts (i.e. libkotext specific stuff)
+    QValueList<KoParagLayout>::Iterator lit = m_oldParagLayouts.begin();
+    kdDebug(32500) << "KWTextDeleteCommand::createBookmarkList " << m_oldParagLayouts.count() << " parag layouts. First parag=" << s->paragId() << endl;
+    Q_ASSERT( id == s->paragId() );
+    KoTextParag *p = s;
+    while ( p ) {
+        if ( lit != m_oldParagLayouts.end() )
+        {
+            kdDebug(32500) << "KWTextDeleteCommand::unexecute find bookmark in parag " << p->paragId() << endl;
+            //p->setParagLayout( *lit );
+        }
+        else
+            break;
+        p = p->next();
+        ++lit;
+    }
+#endif
 }
 
 KoTextCursor *KWTextDeleteCommand::execute( KoTextCursor *c )

@@ -63,6 +63,12 @@ protected:
     KoParagLayout m_oldParagLayout;
 };
 
+struct ParagBookmark {
+    QString m_bookName;
+    int m_startParagIndex;
+    int m_endParagIndex;
+};
+
 class KWTextDeleteCommand : public KoTextDeleteCommand
 {
 public:
@@ -71,6 +77,9 @@ public:
                          const QValueList<KoParagLayout> & oldParagLayouts );
     KoTextCursor *execute( KoTextCursor *c );
     KoTextCursor *unexecute( KoTextCursor *c );
+    void createBookmarkList();
+private:
+    QValueList<ParagBookmark> m_listParagBookmark;
 };
 
 
