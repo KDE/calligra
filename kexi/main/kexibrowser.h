@@ -68,6 +68,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 
 		void installEventFilter ( const QObject * filterObj );
 
+		virtual bool eventFilter ( QObject *o, QEvent * e );
+
 	public slots:
 		void		addGroup(KexiPart::Info *info);
 		void		addItem(KexiPart::Item *item);
@@ -96,7 +98,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 //		void		slotItemListChanged(KexiPart::Info *);
 		void		slotExecuteItem(QListViewItem *item);
 		void slotSelectionChanged(QListViewItem* i);
-		void slotItemRenamed(QListViewItem *item);
+//		void slotItemRenamed(QListViewItem *item);
+
 
 		void slotNewObject();
 		void slotOpenObject();
@@ -108,7 +111,9 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void slotPaste();
 		void slotRename();
 
-	private:
+	protected:
+		void itemRenameDone();
+
 //		KexiView	*m_view;
 //		KexiPart::Info	*m_part;
 //		QString		m_mime;

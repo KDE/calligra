@@ -250,7 +250,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Removes object pointed by \a item from current project. 
 		 Asks for confirmation. \return true on success
 		 or cancelled if removing was cancelled (only possible if \a dontAsk is false). */
-		tristate removeObject( KexiPart::Item *item, bool dontAsk = true );
+		tristate removeObject( KexiPart::Item *item, bool dontAsk = false );
 
 		/*! Renames object pointed by \a item to a new name \a _newName.
 		 Sets \a success to false on failure. Used as a slot connected 

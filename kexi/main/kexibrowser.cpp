@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <klistview.h>
+#include <klistviewlineedit.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kimageeffect.h>
@@ -59,7 +60,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list = new KexiBrowserListView(this);
 	lyr->addWidget(m_list);
 //	setFocusProxy(m_list);
-//	m_list->installEventFilter(this);
+	m_list->renameLineEdit()->installEventFilter(this);
 //	m_ac = m_parent->actionCollection();
 //	KexiActionProxy ap;
 	//shared actions
@@ -92,7 +93,8 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 
 	connect(m_list, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 	connect(m_list, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
-	connect(m_list, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotItemRenamed(QListViewItem*)));
+//	connect(m_list->renameLineEdit(), SIGNAL(done(QListViewItem *, int)), this, SLOT(slotItemRenameDone(QListViewItem *, int)));
+//	connect(m_list, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotItemRenamed(QListViewItem*)));
 
 	//init popups
 	m_itemPopup = new KPopupMenu(this, "itemPopup");
@@ -290,6 +292,14 @@ void KexiBrowser::installEventFilter ( const QObject * filterObj )
 	KexiViewBase::installEventFilter ( filterObj );
 }
 
+bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
+{
+	if (o==m_list->renameLineEdit() && e->type()==QEvent::Hide) {
+		itemRenameDone();
+	}
+	return false;
+}
+
 void KexiBrowser::slotRemove()
 {
 //	kdDebug() << "KexiBrowser::slotRemove()" << endl;
@@ -353,10 +363,13 @@ void KexiBrowser::slotRename()
 		m_list->rename(it, 0);
 }
 
-void KexiBrowser::slotItemRenamed(QListViewItem *item)
+//slotItemRenamed(QListViewItem *item)
+void KexiBrowser::itemRenameDone()
 {
-	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
-	QString txt = item->text(0).stripWhiteSpace();
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+	if (!it)
+		return;
+	QString txt = it->text(0).stripWhiteSpace();
 	bool ok = it->item()->name().lower()!=txt.lower(); //the new name must be different
 	if (ok) {
 		/* TODO */
@@ -365,8 +378,8 @@ void KexiBrowser::slotItemRenamed(QListViewItem *item)
 	if (!ok) {
 		txt = it->item()->name(); //revert
 	}
-	item->setText(0, QString(" ") + txt + " ");
-	item->parent()->sort();
+	it->setText(0, QString(" ") + txt + " ");
+	it->parent()->sort();
 	m_list->setFocus();
 }
 
@@ -404,6 +417,8 @@ KexiBrowserListView::KexiBrowserListView(QWidget *parent)
 
 void KexiBrowserListView::rename(QListViewItem *item, int c)
 {
+	if (renameLineEdit()->isVisible())
+		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
 	if (it->item() && c==0) {
 		//only edit 1st column for items, not item groups

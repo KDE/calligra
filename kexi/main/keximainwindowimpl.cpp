@@ -80,7 +80,7 @@
 
 //Extreme verbose debug
 #if defined(Q_WS_WIN)
-//# define KexiVDebug kdDebug()
+# define KexiVDebug kdDebug()
 #endif
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) kdDebug()
@@ -435,12 +435,13 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
 	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
 
-	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", Key_Delete, "edit_delete");
+	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", 
+		0/*Key_Delete*/, "edit_delete");
 	d->action_edit_delete->setToolTip(i18n("Delete object"));
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "delete_table_row",
-		SHIFT+Key_Delete, "edit_delete_row");
+		CTRL+Key_Delete, "edit_delete_row");
 	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table."));
 	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
 
