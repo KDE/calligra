@@ -26,8 +26,9 @@
 class QRadioButton;
 class QWidget;
 class QPainter;
-class QLineEdit;
+class KDoubleNumInput;
 class QGroupBox;
+class QVButtonGroup;
 class QPushButton;
 
 /******************************************************************/
@@ -47,6 +48,7 @@ public:
 
 protected:
     void drawContents( QPainter* );
+    //void resizeEvent( QResizeEvent *e );
 
     float _angle;
 
@@ -70,8 +72,9 @@ public:
 
 protected:
     QRadioButton *deg0, *deg90, *deg180, *deg270, *degCustom;
-    QLineEdit *custom;
-    QGroupBox *angle, *preview;
+    KDoubleNumInput *custom;
+    QGroupBox *preview;
+    QVButtonGroup *angle;
     RotatePreview *rPreview;
     QPushButton *okBut, *applyBut, *cancelBut;
 
@@ -83,7 +86,7 @@ protected slots:
     void deg180clicked();
     void deg270clicked();
     void degCustomclicked();
-    void degCustomChanged( const QString & );
+    void degCustomChanged( double );
     void Apply() {emit rotateDiaOk(); }
 
 signals:

@@ -22,7 +22,10 @@
 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qgroupbox.h>
+#include <qvbuttongroup.h>
+#include <qhbox.h>
+#include <qvbox.h>
+#include <qlayout.h>
 #include <qradiobutton.h>
 #include <qcolor.h>
 #include <qpainter.h>
@@ -30,14 +33,14 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qwmatrix.h>
-#include <qvalidator.h>
-#include <qlineedit.h>
-
 #include <qpoint.h>
 #include <qrect.h>
-#include <kapp.h>
+#include <qsizepolicy.h>
+
 #include <klocale.h>
 #include <kglobalsettings.h>
+#include <kbuttonbox.h>
+#include <knuminput.h>
 
 #include <stdlib.h>
 
@@ -51,6 +54,8 @@ RotatePreview::RotatePreview( QWidget* parent, const char* name )
 {
     setFrameStyle( WinPanel | Sunken );
     setBackgroundColor( white );
+
+    setMinimumSize( 200, 200 );
 }
 
 /*====================== draw contents ===========================*/
@@ -86,6 +91,14 @@ void RotatePreview::drawContents( QPainter* painter )
     painter->restore();
 }
 
+/*
+void RotatePreview::resizeEvent( QResizeEvent *e )
+{
+    QFrame::resizeEvent( e );
+    this->resize( contentsRect().size() );
+}
+*/
+
 /******************************************************************/
 /* class RotateDia                                                */
 /******************************************************************/
@@ -94,8 +107,17 @@ void RotatePreview::drawContents( QPainter* painter )
 RotateDia::RotateDia( QWidget* parent, const char* name )
     : QDialog( parent, name, true )
 {
-    angle = new QGroupBox( i18n( "Angle" ), this );
-    angle->move( 20, 20 );
+    // ------------------------ layout
+    QVBoxLayout *layout = new QVBoxLayout( this );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
+    QHBoxLayout *hbox = new QHBoxLayout( layout );
+    hbox->setSpacing( 5 );
+       
+    // ------------------------ angles
+    angle = new QVButtonGroup( i18n( "Angle" ), this);
+    angle->setExclusive(true);
+    angle->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
 
     deg0 = new QRadioButton( "0°", angle );
     deg90 = new QRadioButton( "90°", angle );
@@ -103,74 +125,44 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
     deg270 = new QRadioButton( "270°", angle );
     degCustom = new QRadioButton( i18n( "Custom: " ), angle );
 
-    deg270->resize( deg270->sizeHint() );
-    deg0->resize( deg270->size() );
-    deg90->resize( deg270->size() );
-    deg180->resize( deg270->size() );
-    degCustom->resize( degCustom->sizeHint() );
+    custom = new KDoubleNumInput(0.0, angle);
+    custom->setRange(0.0, 360.0);
+    custom->setSuffix(" °"); 
 
-    custom = new QLineEdit( angle );
-    custom->setValidator( new QDoubleValidator( custom ) );
-    custom->resize( custom->sizeHint().width() / 2, custom->sizeHint().height() );
-    custom->setText( "0.0" );
-
-    int w = degCustom->width() + custom->width() + 10;
-
-    deg0->move( 20, 30 );
-    deg90->move( 20 + w - deg90->width(), 30 );
-    deg180->move( 20, deg0->y() + deg0->height() + 10 );
-    deg270->move( 20 + w - deg90->width(), deg180->y() );
-
-    degCustom->move( 20, deg180->y() + deg180->height() + 10 );
-    custom->move( degCustom->x() + degCustom->width() + 10, degCustom->y() );
-
-    angle->resize( custom->x() + custom->width() + 20, custom->y() + custom->height() + 20 );
+    hbox->addWidget( angle );
 
     connect( deg0, SIGNAL( clicked() ), this, SLOT( deg0clicked() ) );
     connect( deg90, SIGNAL( clicked() ), this, SLOT( deg90clicked() ) );
     connect( deg180, SIGNAL( clicked() ), this, SLOT( deg180clicked() ) );
     connect( deg270, SIGNAL( clicked() ), this, SLOT( deg270clicked() ) );
     connect( degCustom, SIGNAL( clicked() ), this, SLOT( degCustomclicked() ) );
-    connect( custom, SIGNAL( textChanged( const QString & ) ), this, SLOT( degCustomChanged( const QString & ) ) );
+    connect( custom, SIGNAL( valueChanged( double ) ), this, SLOT( degCustomChanged( double ) ) );
 
-    preview = new QGroupBox( i18n( "Preview" ), this );
-    preview->move( angle->x() + angle->width() + 20, 20 );
-    preview->resize( angle->size() );
+    // ------------------------ preview
+    rPreview = new RotatePreview( this, "preview" );
 
-    rPreview = new RotatePreview( preview, "preview" );
-    rPreview->setGeometry( 10, 20, preview->width() - 20, preview->height() - 30 );
+    hbox->addWidget( rPreview );
 
-    cancelBut = new QPushButton( this, "BCancel" );
-    cancelBut->setText( i18n( "Cancel" ) );
+    // ------------------------ buttons
+    KButtonBox *bb = new KButtonBox( this );
+    bb->addStretch();
 
-    applyBut = new QPushButton( this, "BApply" );
-    applyBut->setText( i18n( "Apply" ) );
-
-    okBut = new QPushButton( this, "BOK" );
-    okBut->setText( i18n( "OK" ) );
+    okBut = bb->addButton( i18n( "OK" ) );
     okBut->setAutoRepeat( false );
     okBut->setAutoResize( false );
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
-
-    int butW = QMAX(cancelBut->sizeHint().width(),
-                   QMAX(applyBut->sizeHint().width(),okBut->sizeHint().width()));
-    int butH = cancelBut->sizeHint().height();
-
-    cancelBut->resize( butW, butH );
-    applyBut->resize( butW, butH );
-    okBut->resize( butW, butH );
-
-    cancelBut->move( preview->x() + preview->width() - butW, preview->y() + preview->height() + 25 );
-    applyBut->move( cancelBut->x() - 5 - applyBut->width(), cancelBut->y() );
-    okBut->move( applyBut->x() - 10 - okBut->width(), cancelBut->y() );
+    applyBut = bb->addButton( i18n( "Apply" ) );
+    cancelBut = bb->addButton( i18n( "Cancel" ) );
 
     connect( okBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
     connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
     connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-    resize( preview->x() + preview->width() + 20, preview->y() + preview->height() + 20 + butH + 20 );
+    bb->layout();
+
+    layout->addWidget( bb );
 }
 
 /*===================== destructor ===============================*/
@@ -197,8 +189,7 @@ void RotateDia::setAngle( float __angle )
     else {
         degCustom->setChecked( true );
         custom->setEnabled( true );
-        QString str=QString::number( _angle );
-        custom->setText( str );
+        custom->setValue( _angle );
     }
 
     rPreview->setAngle( _angle );
@@ -207,11 +198,6 @@ void RotateDia::setAngle( float __angle )
 /*======================= deg 0 clicked ==========================*/
 void RotateDia::deg0clicked()
 {
-    deg0->setChecked( true );
-    deg90->setChecked( false );
-    deg180->setChecked( false );
-    deg270->setChecked( false );
-    degCustom->setChecked( false );
     custom->setEnabled( false );
     rPreview->setAngle( 0 );
     _angle = 0.0;
@@ -220,11 +206,6 @@ void RotateDia::deg0clicked()
 /*======================= deg 90 clicked =========================*/
 void RotateDia::deg90clicked()
 {
-    deg0->setChecked( false );
-    deg90->setChecked( true );
-    deg180->setChecked( false );
-    deg270->setChecked( false );
-    degCustom->setChecked( false );
     custom->setEnabled( false );
     rPreview->setAngle( 90 );
     _angle = 90.0;
@@ -233,11 +214,6 @@ void RotateDia::deg90clicked()
 /*======================= deg 180 clicked ========================*/
 void RotateDia::deg180clicked()
 {
-    deg0->setChecked( false );
-    deg90->setChecked( false );
-    deg180->setChecked( true );
-    deg270->setChecked( false );
-    degCustom->setChecked( false );
     custom->setEnabled( false );
     rPreview->setAngle( 180 );
     _angle = 180.0;
@@ -246,11 +222,6 @@ void RotateDia::deg180clicked()
 /*======================= deg 270 clicked ========================*/
 void RotateDia::deg270clicked()
 {
-    deg0->setChecked( false );
-    deg90->setChecked( false );
-    deg180->setChecked( false );
-    deg270->setChecked( true );
-    degCustom->setChecked( false );
     custom->setEnabled( false );
     rPreview->setAngle( 270 );
     _angle = 270.0;
@@ -259,32 +230,14 @@ void RotateDia::deg270clicked()
 /*======================= deg custom clicked =====================*/
 void RotateDia::degCustomclicked()
 {
-    deg0->setChecked( false );
-    deg90->setChecked( false );
-    deg180->setChecked( false );
-    deg270->setChecked( false );
-    degCustom->setChecked( true );
     custom->setEnabled( true );
-
-    QString str = custom->text();
-    rPreview->setAngle( str.toDouble() );
-    _angle = str.toDouble();
+    rPreview->setAngle( custom->value() );
+    _angle = custom->value();
 }
 
 /*======================= deg custom changed =====================*/
-void RotateDia::degCustomChanged( const QString & t )
+void RotateDia::degCustomChanged( double t )
 {
-    _angle=t.toDouble();
-    rPreview->setAngle( _angle );
+    rPreview->setAngle( t );
+    _angle=t;
 }
-
-
-
-
-
-
-
-
-
-
-
