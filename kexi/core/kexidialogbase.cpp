@@ -437,7 +437,7 @@ bool KexiDialogBase::storeNewData(bool &cancel)
 	if (cancel)
 		return true;
 	if (!m_schemaData) {
-		setStatus(i18n("Saving object's definition failed."),""); 
+		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's definition failed."),""); 
 		return false;
 	}
 	/* Sets 'dirty' flag on every dialog's view. */
@@ -462,7 +462,7 @@ bool KexiDialogBase::storeData(bool &cancel)
 	if (cancel)
 		return true;
 	if (!r) {
-		setStatus(i18n("Saving object's data failed."),""); 
+		setStatus(m_parentWindow->project()->dbConnection(), i18n("Saving object's data failed."),""); 
 		return false;
 	}
 	/* Sets 'dirty' flag on every dialog's view. */
@@ -505,7 +505,7 @@ bool KexiDialogBase::loadDataBlock( QString &dataString, const QString& dataID )
 		+ " and " + KexiDB::sqlWhere(conn->driver(), KexiDB::Field::Text, "o_sub_id", dataID), 
 		dataString ))
 	{
-		setStatus(conn->errorMsg(), ""); 
+		setStatus(conn, ""); 
 		return false;
 	}
 	return true;
@@ -526,7 +526,7 @@ bool KexiDialogBase::removeDataBlock( QString & /*dataString*/, const QString& d
 		ok = KexiDB::deleteRow(*conn, "kexi__objectdata", 
 		"o_id", KexiDB::Field::Integer, id(), "o_sub_id", KexiDB::Field::Text, dataID);
 	if (!ok)
-		setStatus(conn->errorMsg(), ""); 
+		setStatus(conn, ""); 
 	return ok;
 }
 #endif

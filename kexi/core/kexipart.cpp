@@ -205,7 +205,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 		//we have to load schema data for this dialog
 		dlg->m_schemaData = loadSchemaData(dlg, sdata);
 		if (!dlg->m_schemaData) {
-			m_status = Kexi::ObjectStatus( i18n("Failed loading object's definition."), i18n("Data may be corrupted."));
+			m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), i18n("Failed loading object's definition."), i18n("Data may be corrupted."));
 			dlg->close(); //this will destroy dlg
 			return 0;
 		}
@@ -253,7 +253,7 @@ KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase * /*dlg*/, const KexiDB:
 bool Part::loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID)
 {
 	if (!dlg->mainWin()->project()->dbConnection()->loadDataBlock( dlg->id(), dataString, dataID )) {
-		m_status = Kexi::ObjectStatus( i18n("Failed loading object's data."), i18n("Data identifier: \"%1\".").arg(dataID) );
+		m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), i18n("Failed loading object's data."), i18n("Data identifier: \"%1\".").arg(dataID) );
 		m_status.append( *dlg );
 		return false;
 	}

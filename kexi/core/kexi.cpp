@@ -201,6 +201,11 @@ ObjectStatus::ObjectStatus(const QString& message, const QString& description)
 	setStatus(message, description);
 }
 
+ObjectStatus::ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
+{
+	setStatus(dbObject, message, description);
+}
+
 const ObjectStatus& ObjectStatus::status() const
 {
 	return *this;
@@ -213,6 +218,14 @@ bool ObjectStatus::error() const
 
 void ObjectStatus::setStatus(const QString& message, const QString& description)
 {
+	this->dbObj=0;
+	this->message=message;
+	this->description=description;
+}
+
+void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
+{
+	this->dbObj=dbObject;
 	this->message=message;
 	this->description=description;
 }

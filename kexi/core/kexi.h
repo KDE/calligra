@@ -115,14 +115,21 @@ namespace Kexi
 		public:
 			ObjectStatus();
 			ObjectStatus(const QString& message, const QString& description);
+			ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description);
 			const ObjectStatus& status() const;
 			bool error() const;
 			void setStatus(const QString& message, const QString& description);
+			void setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description = QString::null);
 			void clearStatus();
 			QString singleStatusString() const;
 			void append( const ObjectStatus& otherStatus );
 
+			KexiDB::Object *dbObject() const { return dbObj; }
+
 			QString message, description;
+		protected:
+//todo: make it guarded!
+			KexiDB::Object *dbObj; 
 	};
 
 	/*! Generates an icons set created by bitblt-ing a small "star" icon 
