@@ -149,6 +149,10 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     cbBackgroundSpellCheck->setChecked( m_pView->kWordDocument()->backgroundSpellCheckEnabled() );
     grid1->addWidget(cbBackgroundSpellCheck,4,0);
 
+    clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History"),tmpQGroupBox);
+    grid1->addMultiCellWidget(clearIgnoreAllHistory,5,5,0,1);
+    connect( clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
+
     if( config->hasGroup("KSpell kword") )
     {
         config->setGroup( "KSpell kword" );
@@ -186,6 +190,12 @@ void ConfigureSpellPage::apply()
   doc->enableBackgroundSpellCheck( state );
   doc->reactivateBgSpellChecking();
 }
+
+void ConfigureSpellPage::slotClearIgnoreAllHistory()
+{
+    m_pView->kWordDocument()->clearIgnoreWordAll();
+}
+
 
 void ConfigureSpellPage::slotDefault()
 {
@@ -545,7 +555,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);
     fontName->setFont(*font);
-    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);    
+    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
     QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
     connect(chooseButton, SIGNAL(clicked()), this, SLOT(selectNewDefaultFont()));

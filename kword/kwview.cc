@@ -4074,7 +4074,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 void KWView::startKSpell()
 {
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
-    if(m_doc->getKSpellConfig() && !m_doc->spellListIgnoreAll().isEmpty())
+    if(m_doc->getKSpellConfig())
         m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
 
