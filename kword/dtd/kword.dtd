@@ -464,7 +464,7 @@ don't put a </?xml...> at the end of the file!).
         other than its text and formatting.
 -->
 <!ELEMENT LAYOUT
-    (FLOW|INDENTS|OFFSETS|LINESPACING|
+    (NAME|FLOW|INDENTS|OFFSETS|LINESPACING|
      LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
      COUNTER|FORMAT|TABULATOR|COUNTERSTART)*>
 
