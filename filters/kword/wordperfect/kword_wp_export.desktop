@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KWord WordPerfect Export Filter
+Import=application/x-kword
+Export=application/wordperfect
+Implemented=file
+X-KDE-Library=libwpexport
+ServiceTypes=KOfficeFilter
