@@ -2,15 +2,18 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
+#include <qpainter.h>
+
+#include "karbon_view.h"
 #include "vccmd_roundrect.h"	// command
 #include "vcdlg_roundrect.h"	// dialog
 #include "vctool_roundrect.h"
+#include "vpath.h"
 
 VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
 
 VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
-	: m_part( part ), m_isDragging( false ), 
-      m_isSquare( false ), m_isCentered( false )
+	: VTool( part )
 {
 	// create config dialog:
 	m_dialog = new VCDlgRoundRect();
@@ -35,174 +38,42 @@ VCToolRoundRect::instance( KarbonPart* part )
 	return s_instance;
 }
 
-bool
-VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
+void
+VCToolRoundRect::drawTemporaryObject(
+	KarbonView* view, const QPoint& tl, const QPoint& br )
 {
+	QPainter painter( view->canvasWidget()->viewport() );
+	
+	VCCmdRoundRect* cmd =
+		new VCCmdRoundRect( part(), tl.x(), tl.y(), br.x(), br.y(),
+			m_dialog->valueRound() );
 
-	if ( event->type() == QEvent::MouseMove && m_isDragging )
-	{
-		// erase old object:
-		drawTemporaryObject( view );
+	VPath* path = cmd->createPath();
+	path->setState( VObject::edit );
+	path->draw( painter, path->boundingBox() );
 
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
-
-		recalcCoords();
-
-		// paint new object:
-		drawTemporaryObject( view );
-
-		return true;
-	}
-
-	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
-	{
-		m_isDragging = false;
-		m_isSquare = false;
-		m_isCentered = false;
-
-		// erase old object:
-		drawTemporaryObject( view );
-
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
-
-		// did we drag the mouse?
-		if ( m_fp == m_lp )
-		{
-			// we didnt drag => show a config-dialog:
-			if ( m_dialog->exec() )
-			{
-				m_part->addCommand(
-					new VCCmdRoundRect( m_part,
-						m_fp.x(), m_fp.y(),
-						m_fp.x() + m_dialog->valueWidth(),
-						m_fp.y() + m_dialog->valueHeight(),
-						m_dialog->valueRound() ) );
-			}
-		}
-		else
-		{
-			m_part->addCommand(
-				new VCCmdRoundRect( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(),
-					m_dialog->valueRound() ) );
-		}
-
-		return true;
-	}
-
-	// handle pressing of keys:
-	if ( event->type() == QEvent::KeyPress )
-	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*> ( event );
-
-		// cancel dragging with ESC-key:
-		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
-		{
-			m_isDragging = false;
-			m_isSquare = false;
-			m_isCentered = false;
-
-			// erase old object:
-			drawTemporaryObject( view );
-
-			return true;
-		}
-
-		// if SHIFT is pressed, we want a square:
-		if ( key_event->key() == Qt::Key_Shift )
-		{
-			m_isSquare = true;
-
-			if ( m_isDragging )
-			{
-				// erase old object:
-				drawTemporaryObject( view );
-				recalcCoords();
-				// draw new old object:
-				drawTemporaryObject( view );
-			}
-
-			return true;
-		}
-
-		// if Ctrl is pressed, we want a centered path:
-		if ( key_event->key() == Qt::Key_Control )
-		{
-			m_isCentered = true;
-
-			if ( m_isDragging )
-			{
-				// erase old object:
-				drawTemporaryObject( view );
-				recalcCoords();
-				// draw new old object:
-				drawTemporaryObject( view );
-			}
-
-			return true;
-		}
-	}
-
-	// handle releasing of keys:
-	if ( event->type() == QEvent::KeyRelease )
-	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*> ( event );
-
-		if ( key_event->key() == Qt::Key_Shift )
-		{
-			m_isSquare = false;
-
-			if ( m_isDragging )
-			{
-				// erase old object:
-				drawTemporaryObject( view );
-				recalcCoords();
-				// draw new old object:
-				drawTemporaryObject( view );
-			}
-
-			return true;
-		}
-
-		if ( key_event->key() == Qt::Key_Control )
-		{
-			m_isCentered = false;
-
-			if ( m_isDragging )
-			{
-				// erase old object:
-				drawTemporaryObject( view );
-				recalcCoords();
-				// draw new old object:
-				drawTemporaryObject( view );
-			}
-
-			return true;
-		}
-	}
-
-	// the whole story starts with this event:
-	if ( event->type() == QEvent::MouseButtonPress )
-	{
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_fp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
-
-		// set initial object:
-		m_tl.setX( m_fp.x() );
-		m_tl.setY( m_fp.y() );
-		m_br.setX( m_fp.x() + 1 );
-		m_br.setY( m_fp.y() + 1 );
-
-		// draw initial object:
-		drawTemporaryObject( view );
-
-		m_isDragging = true;
-
-		return true;
-	}
-
-	return false;
+	delete( cmd );
+	delete( path );
 }
 
+VCommand*
+VCToolRoundRect::createCmdFromDialog( const QPoint& point )
+{
+	if ( m_dialog->exec() )
+		return
+			new VCCmdRoundRect( part(), point.x(), point.y(),
+				point.x() + m_dialog->valueWidth(),
+				point.y() + m_dialog->valueHeight(),
+				m_dialog->valueRound() );
+	else
+		return 0L;
+}
+
+VCommand*
+VCToolRoundRect::createCmdFromDragging( const QPoint& tl, const QPoint& br )
+{
+	return
+		new VCCmdRoundRect( part(), tl.x(), tl.y(), br.x(), br.y(),
+				m_dialog->valueRound() );
+}
 

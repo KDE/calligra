@@ -21,7 +21,8 @@ VMCmdSelect::execute()
 	if ( m_object )
 		m_object->setState( VObject::normal );
 	else
-		m_part->selectObjects( QRect( m_tlX, m_tlY, m_brX - m_tlX, m_brY - m_tlY).normalize() );
+		m_part->selectObjects(
+			QRect( m_tlX, m_tlY, m_brX - m_tlX, m_brY - m_tlY ).normalize() );
 }
 
 void
@@ -44,3 +45,4 @@ VMCmdSelect::createPath()
 
 	return path;
 }
+

@@ -22,8 +22,9 @@ void
 VMCmdDelete::unexecute()
 {
 	QPtrListIterator<VObject> itr = m_objects;
-    for ( ; itr.current() ; ++itr )
-    {
+	for ( ; itr.current(); ++itr )
+	{
 		itr.current()->setState( VObject::selected );
 	}
 }
+

@@ -8,7 +8,6 @@ INCLUDES = \
 noinst_LTLIBRARIES = libkarbontools.la
 
 noinst_HEADERS = \
-	vccommand.h \
 	vccmd_ellipse.h \
 	vccmd_polygon.h \
 	vccmd_rectangle.h \
@@ -16,6 +15,7 @@ noinst_HEADERS = \
 	vccmd_sinus.h \
 	vccmd_spiral.h \
 	vccmd_star.h \
+	vccommand.h \
 	vctool_ellipse.h \
 	vctool_rectangle.h \
 	vctool_roundrect.h \
@@ -27,7 +27,6 @@ noinst_HEADERS = \
 	vtool.h
 
 libkarbontools_la_SOURCES = \
-	vccommand.cc \
 	vccmd_ellipse.cc \
 	vccmd_polygon.cc \
 	vccmd_rectangle.cc \
@@ -35,6 +34,7 @@ libkarbontools_la_SOURCES = \
 	vccmd_sinus.cc \
 	vccmd_spiral.cc \
 	vccmd_star.cc \
+	vccommand.cc \
 	vctool_ellipse.cc \
 	vctool_rectangle.cc \
 	vctool_roundrect.cc \
@@ -42,7 +42,8 @@ libkarbontools_la_SOURCES = \
 	vctool_star.cc \
 	vmcmd_delete.cc \
 	vmcmd_select.cc \
-	vmtool_select.cc
+	vmtool_select.cc \
+	vtool.cc
 
 libkarbontools_la_LIBADD = \
 	../ui/libkarbonui.la

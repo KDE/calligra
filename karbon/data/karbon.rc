@@ -11,6 +11,11 @@
 		<Action name="edit_paste"/>
 		<Action name="edit_selectall"/>
 		<Action name="delete"/>
+		<Separator/>
+		<Menu name="object">
+			<text>P&amp;urge</text>
+			<Action name="edit_purge_history"/>
+		</Menu>
 	</Menu>
 	<Menu name="object">
 		<text>&amp;Modify</text>

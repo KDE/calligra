@@ -7,8 +7,6 @@
 
 #include <qrect.h>
 
-#include "vtool.h"
-
 class QPainter;
 class QWMatrix;
 
@@ -27,9 +25,6 @@ public:
 
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor ) = 0;
-
-	virtual VCommand* accept( const VTool& tool )
-		{ return tool.manipulate( this ); }
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 

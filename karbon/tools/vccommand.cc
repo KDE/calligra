@@ -23,6 +23,7 @@ VCCommand::execute()
 void
 VCCommand::unexecute()
 {
-    if ( m_object )
+	if ( m_object )
 		m_object->setState( VObject::deleted );
 }
+

@@ -1,6 +1,8 @@
-INCLUDES = $(all_includes)
+INCLUDES = \
+	$(all_includes)
 
-noinst_LTLIBRARIES = libkarbonui.la
+noinst_LTLIBRARIES = \
+	libkarbonui.la
 
 noinst_HEADERS = \
 	vcdlg_ellipse.h \
