@@ -17,6 +17,10 @@
    Boston, MA 02111-1307, USA.
  */
 
+#include "kexiinputtableedit.h"
+
+#include <kexidb/field.h>
+
 #include <qregexp.h>
 #include <qevent.h>
 #include <qlayout.h>
@@ -29,9 +33,8 @@
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 	
-#include "kexiinputtableedit.h"
 
-KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov, bool mark, QWidget *parent, const char *name, QStringList comp)
+KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, QString ov, bool mark, QWidget *parent, const char *name, QStringList comp)
  : KexiTableEdit()
 {
 	m_type = type; //TODO(js) remove m_type !
@@ -56,33 +59,25 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 
 	 m_cview->completionBox()->setTabHandling(true);
 
-
-   switch(m_type) {
-     case QVariant::Double:
-     case QVariant::Int:
-     case QVariant::UInt:
-      m_cview->setAlignment(AlignRight);
-      break;
-     default:;
-   }
-
+	if (KexiDB::Field::isNumericType(m_type)) {
+		m_cview->setAlignment(AlignRight);
+	}
+	
+#if 0 //js
 	if(!ov.isEmpty())
 	{
-		switch(m_type)
-		{
-			case QVariant::Double:
-				if(ov == KGlobal::locale()->decimalSymbol() || ov == KGlobal::locale()->monetaryDecimalSymbol())
-					m_cview->setText(ov);
-				break;
-			case QVariant::Int:
-				if(ov == KGlobal::locale()->negativeSign())
-					m_cview->setText(ov);
-				break;
-			case QVariant::UInt:
+		if (m_type==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
+			if(ov == KGlobal::locale()->decimalSymbol() || ov == KGlobal::locale()->monetaryDecimalSymbol())
+				m_cview->setText(ov);
+		}
+		else if (m_type==KexiDB::Field::Integer) {
+			if(ov == KGlobal::locale()->negativeSign())
+				m_cview->setText(ov);
+		}
+		else if (	case QVariant::UInt:
 				m_cview->setAlignment(AlignRight);
 				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
 					m_cview->setText(ov);
-//					break;
 				if(ov == "=")
 				{
 					kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): calculated!" << endl;
@@ -99,8 +94,8 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 		}
 	}
 	else
-	{
-		if (m_type==QVariant::Double) {
+#endif
+		if (m_type==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
 			QString tmp_val = value.toString();
 			//TODO(js): get decimal places settings here...
 			QStringList sl = QStringList::split(".", tmp_val);
@@ -130,7 +125,6 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 		m_cview->end(false);
 #endif
 //		setRestrictedCompletion();
-	}
 
 	m_comp = comp;
 	setFocusProxy(m_view);
@@ -266,6 +260,7 @@ KexiInputTableEdit::completed(const QString &s)
 QVariant
 KexiInputTableEdit::value()
 {
+#if 0
 	//let qt&mysql understand what we mean... (numeric values)
 	QString v;
 	switch(m_type)
@@ -344,7 +339,8 @@ KexiInputTableEdit::value()
 			kdDebug() << "KexiInputTableEdit::value() default..." << endl;
 			return QVariant(m_cview->text());
 	}
-//	return QVariant(0);
+#endif
+	return QVariant(0);
 }
 
 void

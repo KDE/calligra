@@ -93,9 +93,10 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	KexiDB::Field::List *list = m_cursor->query()->fieldsExpanded();
 	KexiDB::Field *f = list->first();
 	KexiTableViewData *tv_data = new KexiTableViewData();
-	KexiTableViewColumn col;
+	KexiDBTableViewColumn col;
 	while (f) {
-		col.type = f->variantType();
+		col=KexiDBTableViewColumn(*m_cursor->query(), *f);
+/*		col.type = f->type();
 		if (!f->caption().isEmpty())
 			col.caption = f->caption();
 		else {
@@ -104,7 +105,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 			//last hance: use field name
 			if (col.caption.isEmpty())
 				col.caption = f->name();
-		}
+		}*/
 		/*TEMPORARY: not editable -- TODO: set editable if supported*/
 		tv_data->columns.append( col );
 

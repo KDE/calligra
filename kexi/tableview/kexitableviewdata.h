@@ -28,26 +28,47 @@
 #include <qptrlist.h>
 #include <qvariant.h>
 #include <qvaluevector.h>
+#include <qstring.h>
 
 #include "kexitableitem.h"
+
+namespace KexiDB {
+class Field;
+class QuerySchema;
+}
 
 /*! Single column definition. */
 class KexiTableViewColumn {
 	public:
-		KexiTableViewColumn() 
-		: type(QVariant::Invalid)
-		, defaultValue(QVariant())
-		, width(100)
-		, readOnly(false)
-		{}
-		~KexiTableViewColumn() 
-		{}
+		KexiTableViewColumn();
+		virtual ~KexiTableViewColumn();
+
+		virtual bool acceptsFirstChar(const QChar& ch) const;
 
 		QString caption;
-		QVariant::Type type;
-		QVariant defaultValue;
+		int type; //!< one of KexiDB::Field::Type
 		uint width;
 		bool readOnly : 1;
+		
+/*		virtual QString caption() const;
+		virtual void setCaption(const QString& c);
+	*/	
+	protected:
+		//! special ctor that do not allocate d member;
+		KexiTableViewColumn(bool);
+		
+//		class Private;
+//		Private *d;
+};
+
+class KexiDBTableViewColumn : public KexiTableViewColumn {
+	public:
+		KexiDBTableViewColumn();
+		KexiDBTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::Field& field);
+		virtual bool acceptsFirstChar(const QChar& ch) const;
+	
+	protected:
+		KexiDB::Field* m_field;
 };
 
 /*! List of column definitions. */

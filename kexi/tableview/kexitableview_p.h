@@ -31,10 +31,17 @@
 #include "kexitableheader.h"
 
 #include <qevent.h>
+#include <qtimer.h>
+#include <qvalidator.h>
+
+#include <kpushbutton.h>
+#include <ktoolbarbutton.h>
+#include <klineedit.h>
 
 class KexiTableItem;
 class KexiTableRM;
 class KexiTableEdit;
+class QLabel;
 
 class KexiTableViewPrivate 
 {
@@ -55,7 +62,7 @@ class KexiTableViewPrivate
 	// foreign widgets
 	QHeader			*pTopHeader;
 	KexiTableRM	*pVerticalHeader;
-	KexiTableRM		*pRecordMarker;
+//	KexiTableRM		*pRecordMarker;
 	KexiTableEdit	*pEditor;
 
 //	int numRows;
@@ -103,16 +110,39 @@ class KexiTableViewPrivate
 
 	//! 'sorting by column' availability flag for widget
 	bool isSortingEnabled : 1;
+
+	/*! true if navigation panel is enabled (visible) for the view.
+	 True by default. */
+	bool navigationPanelEnabled : 1;
+
+	/*! used to force single skip keyPress event. */
+	bool skipKeyPress : 1;
 	
 	/*! 1 if table view is readOnly, 0 if not; 
-	 otherwise the 'readOnly' flag from table views' internal data structure
-	 (KexiTableViewData *KexiTableView::m_data) is used. */
+	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
+	 internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 
+	 */
 	int readOnly;
 
 	/*! like for readOnly: 1 if inserting is enabled */
 	int insertingEnabled;
 
 	QColor emptyAreaColor;
+	
+	/*! Navigation widgets, used if navigationPanelEnabled is true. */
+	QFrame *navPanel; //!< main navigation widget
+	QToolButton *navBtnFirst, *navBtnPrev, *navBtnNext, *navBtnLast, *navBtnNew;
+	KLineEdit *navRowNumber;
+	QIntValidator *navRowNumberValidator;
+	KLineEdit *navRowCount; //!< readonly counter
+
+	QLabel *scrollBarTip;
+	QTimer scrollBarTipTimer;
+	uint scrollBarTipTimerCnt; //!< helper for timeout counting
+	
+	//! row colors
+	QColor baseColor; 
+	QColor altColor;
 };
 
 #endif

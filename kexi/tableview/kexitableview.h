@@ -107,7 +107,8 @@ public:
 	 any sorting has been performed. */
 	bool sortingAscending() const;
 
-	QVariant::Type columnType(int col) const;
+	//! one of KexiDB::Field::Type
+	int columnType(int col) const;
 	QVariant columnDefaultValue(int col) const;
 	bool columnEditable(int col) const;
 	inline KexiTableItem *itemAt(int row) const;
@@ -145,6 +146,13 @@ public:
 	*/
 	void setInsertingEnabled(bool set);
 
+	/*! \return true if navigation panel is enabled (visible) for the view.
+	  True by default. */
+	bool navigationPanelEnabled() const;
+	
+	/*! Enables or disables navigation panel visibility for the view. */
+	void setNavigationPanelEnabled(bool set);
+	
 	int currentColumn() const;
 	int currentRow() const;
 
@@ -196,7 +204,7 @@ public:
 
 	void		emitSelected();
 
-	KexiTableRM	*recordMarker() const;
+//	KexiTableRM	*recordMarker() const;
 	KexiTableRM *verticalHeader() const;
 	
 //	void		takeInsertItem();
@@ -224,6 +232,7 @@ public:
 	virtual void	setDeletionPolicy(DeletionPolicy policy);
 	DeletionPolicy	deletionPolicy() const;
 
+	//! single shot after 1ms for contents updatinh
 	void triggerUpdate();
 
 	typedef enum ScrollDirection
@@ -233,6 +242,80 @@ public:
 		ScrollLeft,
 		ScrollRight
 	};
+
+	virtual bool eventFilter( QObject *o, QEvent *e );
+
+public slots:
+	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
+	//! this will dont work if sorting is disabled with setSortingEnabled()
+	void setSorting(int col, bool ascending=true);
+	/*! Enables or disables sorting for this table view
+		This method is different that setSorting() because it prevents both user
+		and programmer from sorting by clicking a column's header or calling setSorting().
+		By default sorting is enabled for table view.
+	*/
+	void setSortingEnabled(bool set);
+	//! Sorts all rows by column selected with setSorting()
+	void sort();
+	void setCursor(int row, int col = -1);
+	void selectRow(int row);
+	void selectNextRow();
+	void selectPrevRow();
+	void selectFirstRow();
+	void selectLastRow();
+//	void			gotoNext();
+//js	int			findString(const QString &string);
+	
+	/*! Removes currently selected record; does nothing if no record 
+	 is currently selected. If record is in edit mode, editing 
+	 is cancelled before removing.  */
+	void removeCurrentRecord();
+	
+//	virtual void		addRecord();
+
+signals:
+	void itemSelected(KexiTableItem *);
+	void itemReturnPressed(KexiTableItem *, int);
+	void itemDblClicked(KexiTableItem *, int);
+	void itemChanged(KexiTableItem *, int);
+	void itemChanged(KexiTableItem *, int,QVariant oldValue);
+	void itemRemoveRequest(KexiTableItem *);
+	void currentItemRemoveRequest();
+	void addRecordRequest();
+	void dropped(QDropEvent *);
+	void contextMenuRequested(KexiTableItem *, int col, const QPoint &);
+	void sortedColumnChanged(int col);
+
+protected slots:
+	void columnWidthChanged( int col, int os, int ns );
+	void cancelEditor();
+	virtual void acceptEditor();
+	virtual void boolToggled();
+	void slotUpdate();
+	void sortColumnInternal(int col);
+
+	/*! Accepts row editing. All changes made to the editing 
+	 row duing this current session will be accepted. */
+	void acceptRowEdit();
+	/*! Cancels row editing All changes made to the editing 
+	 row duing this current session will be undone. */
+	void cancelRowEdit();
+
+	void slotAutoScroll();
+
+	//! for navigator
+	void navRowNumber_ReturnPressed(const QString& text);
+	void navRowNumber_lostFocus();
+	void navBtnLastClicked();
+	void navBtnPrevClicked();
+	void navBtnNextClicked();
+	void navBtnFirstClicked();
+	void navBtnNewClicked();
+
+	//! internal, used after vscrollbar's value has been changed
+	void vScrollBarValueChanged(int v);
+	void vScrollBarSliderReleased();
+	void scrollBarTipTimeout();
 
 protected:
 	// painting and layout
@@ -261,8 +344,9 @@ protected:
 	virtual void contentsDragMoveEvent(QDragMoveEvent *e);
 	virtual void contentsDropEvent(QDropEvent *ev);
 
-	void	createEditor(int row, int col, QString addText = QString::null, bool backspace = false);
-	bool	focusNextPrevChild(bool next);
+	void createEditor(int row, int col, const QString& addText = QString::null, bool removeOld = false);
+
+	bool focusNextPrevChild(bool next);
 
 	/*! Updates visibility/accesibility of popup menu items,
 	returns false if no items are visible after update. */
@@ -280,70 +364,25 @@ protected:
 	/*! internal */
 	inline void paintRow(KexiTableItem *item,
 		QPainter *pb, int r, int rowp, int cx, int cy, 
-		int colfirst, int collast, int maxwc,
-		const QColor& baseCol, const QColor& altCol);
+		int colfirst, int collast, int maxwc);
 
 	void remove(KexiTableItem *item, bool moveCursor=true);
 
-protected slots:
-	void			columnWidthChanged( int col, int os, int ns );
-	void			cancelEditor();
-	virtual void	acceptEditor();
-	virtual void	boolToggled();
-	void			slotUpdate();
-	void sortColumnInternal(int col);
+	virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 
-	/*! Accepts row editing. All changes made to the editing 
-	 row duing this current session will be accepted. */
-	void acceptRowEdit();
-	/*! Cancels row editing All changes made to the editing 
-	 row duing this current session will be undone. */
-	void cancelRowEdit();
-
-	void			slotAutoScroll();
-
-public slots:
-	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
-	//! this will dont work if sorting is disabled with setSortingEnabled()
-	void setSorting(int col, bool ascending=true);
-	/*! Enables or disables sorting for this table view
-		This method is different that setSorting() because it prevents both user
-		and programmer from sorting by clicking a column's header or calling setSorting().
-		By default sorting is enabled for table view.
-	*/
-	void setSortingEnabled(bool set);
-	//! Sorts all rows by column selected with setSorting()
-	void sort();
-	void			setCursor(int row, int col = -1);
-	void			selectRow(int row);
-	void			selectNextRow();
-	void			selectPrevRow();
-	void			selectFirstRow();
-	void			selectLastRow();
-//	void			gotoNext();
-//js	int			findString(const QString &string);
+	void setupNavigator();
 	
-	/*! Removes currently selected record; does nothing if no record 
-	 is currently selected. If record is in edit mode, editing 
-	 is cancelled before removing.  */
-	void removeCurrentRecord();
-	
-//	virtual void		addRecord();
+	//! used to update info about row count after a change
+	void updateRowCountInfo();
 
-signals:
-	void			itemSelected(KexiTableItem *);
-	void			itemReturnPressed(KexiTableItem *, int);
-	void			itemDblClicked(KexiTableItem *, int);
-	void			itemChanged(KexiTableItem *, int);
-	void			itemChanged(KexiTableItem *, int,QVariant oldValue);
-	void			itemRemoveRequest(KexiTableItem *);
-	void			currentItemRemoveRequest();
-	void			addRecordRequest();
-	void			dropped(QDropEvent *);
-	void			contextMenuRequested(KexiTableItem *, int col, const QPoint &);
-	void			sortedColumnChanged(int col);
+	//! used when Return key is pressed on cell or "+" nav. button is clicked
+	void startEditCurrentCell();
 
-protected:
+	//! internal, to determine valid row number when navigator text changed
+	int validRowNumber(const QString& text);
+
+	//--------------------------
+		
 	KexiTableViewData *m_data;
 	bool m_owner : 1;
 

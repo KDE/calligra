@@ -30,7 +30,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov=QString::null, bool mark=false,
+		KexiInputTableEdit(QVariant value, int type, QString ov=QString::null, bool mark=false,
 		 QWidget *parent=0, const char *name=0, QStringList comp = QStringList());
 
 		virtual QVariant value();
@@ -47,7 +47,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 	protected:
 		void showHintButton();
 
-		QVariant::Type	m_type;
+		int	m_type;
 		QVariant	m_value;
 
 		bool		m_calculatedCell;

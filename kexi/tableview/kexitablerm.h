@@ -28,9 +28,9 @@
 #include <qwidget.h>
 #include <qimage.h>
 
-/**record marker (at the left side of a table)
-  *@author till busch
-  */
+/** Record marker (at the left side of a table view)
+ Original Author: Till Busch
+*/
 
 class KEXIDATATABLE_EXPORT KexiTableRM : public QWidget
 {

@@ -25,6 +25,7 @@
 */
 
 #include "kexitableview_p.h"
+#include <qlabel.h>
 
 KexiTableViewPrivate::KexiTableViewPrivate()
 {
@@ -40,12 +41,19 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	
 	contentsMousePressEvent_dblClick = false;
 	isSortingEnabled = true;
+	navigationPanelEnabled = true;
+	navPanel = 0;
+	skipKeyPress = false;
+	navRowNumber = 0;
+	scrollBarTipTimerCnt = 0;
+	scrollBarTip = 0;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
 {
 	delete pBufferPm;
 	delete pInsertItem;
+	delete scrollBarTip;
 }
 
 void KexiTableViewPrivate::clearVariables() {

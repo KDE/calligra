@@ -24,6 +24,9 @@
 
 #include "kexitableviewdata.h"
 
+#include <kexidb/field.h>
+#include <kexidb/queryschema.h>
+
 unsigned short KexiTableViewData::charTable[]=
 {
 	#include "chartable.txt"
@@ -37,7 +40,94 @@ KexiTableList::KexiTableList() {};
 KexiTableList::~KexiTableList() {};
 */
 
-KexiTableViewData::KexiTableViewData() 
+/*class KexiTableViewColumn::Private
+{
+	public:
+		QVariant defaultValue;
+};*/
+
+KexiTableViewColumn::KexiTableViewColumn()
+//	: d( new KexiTableViewColumn::Private() )
+{
+	type = KexiDB::Field::InvalidType;
+	width = 100;
+	readOnly = false;
+}
+
+KexiTableViewColumn::KexiTableViewColumn(bool)
+//	: d(0)
+{
+	type = KexiDB::Field::InvalidType;
+	width = 100;
+	readOnly = false;
+}
+
+/*QString KexiTableViewColumn::caption() const
+{
+	return d->caption;
+}
+
+void KexiTableViewColumn::setCaption(const QString& c)
+{
+	d->caption = c;
+}*/
+
+bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
+{
+	if (KexiDB::Field::isNumericType(type)) {
+		return ch=="-" || ch=="+" || (ch>="0" && ch<="9");
+	}
+	return true;
+}
+
+KexiTableViewColumn::~KexiTableViewColumn() 
+{
+//	delete d;
+}
+
+//------------------------------------------------------
+
+KexiDBTableViewColumn::KexiDBTableViewColumn()
+ : KexiTableViewColumn(), m_field(0)
+{
+}
+
+KexiDBTableViewColumn::KexiDBTableViewColumn(
+	const KexiDB::QuerySchema &query, KexiDB::Field& field)
+ : KexiTableViewColumn(true), m_field(&field)
+{
+	type = m_field->type();
+
+	if (!m_field->caption().isEmpty()) {
+		caption = m_field->caption();
+	}
+	else {
+		//reuse alias if available:
+		caption = query.alias(m_field);
+		//last hance: use field name
+		if (caption.isEmpty())
+			caption = m_field->name();
+	}
+}
+
+bool KexiDBTableViewColumn::acceptsFirstChar(const QChar& ch) const
+{
+	if (m_field->isNumericType()) {
+		if (ch=="-")
+			 return !m_field->isUnsigned();
+		if (ch=="+" || (ch>="0" && ch<="9"))
+			return true;
+		return false;
+	}
+	else if (m_field->type() == KexiDB::Field::Boolean)
+		return false;
+		
+	return true;
+}
+
+//------------------------------------------------------
+
+KexiTableViewData::KexiTableViewData()
 	: KexiTableViewDataBase()
 	, m_key(0)
 	, m_order(1)
@@ -76,15 +166,11 @@ void KexiTableViewData::setSorting(int column, bool ascending)
 		return;
 	}
 
-	switch(columns[m_key].type)
-	{
-		case QVariant::Bool:
-		case QVariant::Int:
-			cmpFunc = &KexiTableViewData::cmpInt;
-			break;
-		default:
-			cmpFunc = &KexiTableViewData::cmpStr;
-	}
+	const int t = columns[m_key].type;
+	if (t == KexiDB::Field::Boolean || KexiDB::Field::isNumericType(t))
+		cmpFunc = &KexiTableViewData::cmpInt;
+	else
+		cmpFunc = &KexiTableViewData::cmpStr;
 }
 
 int KexiTableViewData::compareItems(Item item1, Item item2)
@@ -96,7 +182,6 @@ int KexiTableViewData::cmpInt(Item item1, Item item2)
 {
 	return m_order* (((KexiTableItem *)item1)->at(m_key).toInt() - ((KexiTableItem *)item2)->at(m_key).toInt());
 }
-
 
 int KexiTableViewData::cmpStr(Item item1, Item item2)
 {
