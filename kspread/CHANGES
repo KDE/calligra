@@ -13,6 +13,9 @@ Bugfixes:
 - Fix #45943 (Crash): crash after "money format"
 - Fix function documentation (YEAR(), FACTDOUBLE() )
 - Fix parsing and error checking for spreadsheet names.
+- Fix #46045 (Normal): serious errors in forumulas
+- Fix Embedded chart changes titles when opening again
+- Fix #44628 (Grave): 1.1 document not read with 1.2 - circular references
 
 Until RC1:
 ----------

@@ -20,7 +20,8 @@ Others bugs not in BT system (Report by - taken by):
 
 Other things: (please add the things you are working on!)
 
-- MUST: more than one currency!!
+- Speed up selecting many cells!
+- general speed up!
 - WYSIWYG
 - insert manual page break
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
@@ -39,7 +40,7 @@ Other things: (please add the things you are working on!)
 - Multible Operations (in Excel: "Data"->"Table") (Norbert)
 - Pivot tables
 - more chart types
-- Styles
+- multible Selections
 - background spell check
 - links to cells in other kspread files
 - much more formulas (financial, database...)
@@ -100,6 +101,9 @@ Norbert
 - solver (see gnumeric)
 - option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
 - CSV export dialog: define deliminers, Table(s), cell content in ".."
+- MUST: more than one currency!!
+- Style support
+- StarCalc/OpenCalc filter (when styles are done)
 
 - Multiple Operations
 - Database functions 
