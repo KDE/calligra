@@ -716,3 +716,13 @@ bool KPresenterDocIface::removeHelpPoint( int index )
     return true;
 }
 
+bool KPresenterDocIface::configAutoSuperScript() const
+{
+    return doc->getAutoFormat()->getConfigAutoSuperScript();
+}
+
+void KPresenterDocIface::setConfigAutoSuperScript( bool b)
+{
+    doc->getAutoFormat()->configAutoSuperScript( b );
+}
+

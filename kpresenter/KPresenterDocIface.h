@@ -203,6 +203,9 @@ k_dcop:
     //return false when index doesn't exist
     bool removeHelpPoint( int index );
 
+    bool configAutoSuperScript() const;
+    void setConfigAutoSuperScript( bool b);
+
 private:
     KPresenterDoc *doc;
 
