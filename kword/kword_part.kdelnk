@@ -1,6 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KWord
+Name[da]=Ord
 Name[is]=Ritvinnsla
 Name[no]=Ord
 Name[ro]=Word
@@ -8,6 +9,7 @@ Name[ru]=Ù≈À”‘œ◊Ÿ  –“œ√≈””œ“
 Name[sv]=Ord
 Exec=kword.bin --server
 Comment=KWord
+Comment[da]=KWord-programmet
 Comment[fi]=Tekstink‰sittelyohjelma
 Comment[fr]=Traitement de texte KWord
 Comment[is]=kword:  Ritvinnsluforrit K vˆndulsins

@@ -1,6 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KFormula
+Name[da]=Kformel
 Name[is]=Formúlur
 Name[no]=Formel
 Name[ro]=Formula
@@ -9,6 +10,7 @@ Name[sv]=Formler
 Exec=kformula.bin --server
 Icon=kformula.xpm
 Comment=The Formula Editor
+Comment[da]=Formeleditor
 Comment[es]=El Editor de Formulas
 Comment[fi]=Kaavaeditori
 Comment[fr]=L'éditeur de formules

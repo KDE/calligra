@@ -1,9 +1,11 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KSpreadFilter
+Name[da]=Regnearksfilter
 Name[sv]=Kalkyl-filter
 Exec=kspread_filter --server
 Comment=Torben's KSpread Filter
+Comment[da]=Torbens regneark filter
 Comment[pt_BR]=Filtro do KSpread
 Comment[ru]=Фильтр таблиц Torben'а
 Comment[sk]=Torbenov KSpread Filter

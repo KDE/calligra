@@ -1,6 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KImage
+Name[da]=KBillede
 Name[fi]=Kimage
 Name[is]=Myndrınir
 Name[no]=Bilde
@@ -9,6 +10,7 @@ Name[ru]=éÚÏÂÒÁÖÅÎÉÅ
 Name[sv]=Bild
 Exec=kimage.bin --server
 Comment=Torben's Image Viewer
+Comment[da]=Torbens billedfremviser
 Comment[es]=El Visor de Imagenes de Torben
 Comment[fi]=Torbenin kuvannäyttäjä
 Comment[is]=Myndbirtir K vöndulsins

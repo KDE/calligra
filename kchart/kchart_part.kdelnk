@@ -1,11 +1,13 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KChart
+Name[da]=Graf
 Name[no]=Graf
 Name[ro]=Chart
 Name[ru]=Графики
 Exec=kchart.bin --server
 Comment=Kalles Charter
+Comment[da]=Kalles graf
 Comment[es]=El Renderizador de Tablas de Kalle
 Comment[fi]=Kallen kuvaajaohjelma
 Comment[no]=Kalles graf
