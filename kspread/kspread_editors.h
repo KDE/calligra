@@ -24,6 +24,9 @@ public:
   virtual void handleKeyPressEvent( QKeyEvent* _ev ) = 0;
   virtual QString text() = 0;
   virtual void setText(QString text) = 0;
+  virtual int cursorPosition()=0;
+  virtual void setCursorPosition(int pos)=0;
+  virtual void setFocus()=0;
 private:
   KSpreadCell* m_pCell;
 };
@@ -38,7 +41,9 @@ public:
   virtual void handleKeyPressEvent( QKeyEvent* _ev );
   virtual QString text();
   virtual void setText(QString text);
-
+  virtual int cursorPosition();
+  virtual void setCursorPosition(int pos);
+  virtual void setFocus();
 protected:
   void resizeEvent( QResizeEvent* );
   /**
@@ -61,7 +66,9 @@ public:
   virtual void handleKeyPressEvent( QKeyEvent* _ev );
   virtual QString text();
   virtual void setText(QString text);
-
+  virtual int cursorPosition();
+  virtual void setCursorPosition(int pos);
+  virtual void setFocus();
 protected slots:
   void slotSizeHint( QSize );
 

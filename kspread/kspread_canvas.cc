@@ -168,6 +168,21 @@ QString KSpreadCanvas::editEditor()
 return m_pEditor->text();
 }
 
+int KSpreadCanvas::posEditor()
+{
+return m_pEditor->cursorPosition();
+}
+
+void KSpreadCanvas::focusEditor()
+{
+ m_pEditor->setFocus();
+}
+
+void KSpreadCanvas::setPosEditor(int pos)
+{
+ m_pEditor->setCursorPosition(pos);
+}
+
 void KSpreadCanvas::setEditor(QString text)
 {
 m_pEditor->setText(text);

@@ -96,6 +96,9 @@ public:
     //laurent
     QString editEditor();
     void setEditor(QString text);
+    int posEditor();
+    void focusEditor();
+    void setPosEditor(int pos);
     KSpreadCellEditor * pointeur() {return m_pEditor ;}
 
     bool EditorisActivate() {return E_activate;}

@@ -54,6 +54,21 @@ if(m_pEdit !=0)
 	m_pEdit->setText(text);
 }	
 
+int KSpreadTextEditor::cursorPosition()
+{
+return m_pEdit->cursorPosition();
+}
+
+void KSpreadTextEditor::setCursorPosition(int pos)
+{
+ m_pEdit->setCursorPosition(pos);
+}
+
+void KSpreadTextEditor::setFocus()
+{
+m_pEdit->setFocus();
+}
+
 bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 {
   if ( o != m_pEdit )
@@ -123,7 +138,23 @@ void KSpreadFormulaEditor::setText(QString text)
 if(m_pEdit !=0)
 	m_pEdit->setText(text);
 }	
+int KSpreadFormulaEditor::cursorPosition()
+{
+// function cursorPosition() no implanted in libkformula
+//m_pEdit->cursorPosition();
+return 0;
+}
 
+
+void KSpreadFormulaEditor::setFocus()
+{
+m_pEdit->setFocus();
+}
+void KSpreadFormulaEditor::setCursorPosition(int pos)
+{
+//no implanted
+ //m_pEdit->setCursorPosition(pos);
+}
 
 bool KSpreadFormulaEditor::eventFilter( QObject* o, QEvent* e )
 {
