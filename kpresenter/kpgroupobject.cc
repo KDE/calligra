@@ -200,7 +200,7 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                 } break;
                 case OT_CLIPART:
                 case OT_PICTURE: {
-                    KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getPictureCollection() );
+                    KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->pictureCollection() );
                     objOffset = kppixmapobject->load(current);
                     kppixmapobject->setOrig(kppixmapobject->getOrig().x(),objOffset);
                     kppixmapobject->reload();
@@ -328,12 +328,12 @@ void KPGroupObject::rotate( float _angle )
     for ( ; it.current() ; ++it ) {
         // find distance of object center to group center
         double px = it.current()->getOrig().x() + it.current()->getSize().width() / 2.0 - centerx;
-        double py = it.current()->getOrig().y() + it.current()->getSize().height() / 2.0 - centery; 
+        double py = it.current()->getOrig().y() + it.current()->getSize().height() / 2.0 - centery;
         // find distance for move
         double mx = px * cos( angInRad ) - py * sin( angInRad ) - px;
         double my = px * sin( angInRad ) + py * cos( angInRad ) - py;
         double objAngle = it.current()->getAngle();
-        // If part of group was already rotated the difference has to be added 
+        // If part of group was already rotated the difference has to be added
         // to the angle
         if ( objAngle != oldAngle ) {
             it.current()->rotate( objAngle + diffAngle );

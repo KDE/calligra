@@ -28,6 +28,8 @@
 #include <koRect.h>
 #include <kostyle.h>
 #include <qvariant.h>
+#include <koDocumentChild.h>
+
 class KURL;
 class KPTextView;
 class KPObject;
@@ -94,7 +96,7 @@ public:
     void pasteObjs( const QByteArray & data, int nbCopy = 1, double angle = 0.0 , double _increaseX=0.0, double increaseY = 0.0, double moveX=0.0, double moveY=0.0);
     KCommand * replaceObjs( bool createUndoRedo, double _orastX, double _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
-    void copyObjs(QDomDocument &doc, QDomElement &presenter) const;
+    void copyObjs(QDomDocument &doc, QDomElement &presenter, QValueList<KoPictureKey> & lst) const;
 
     KPObject* getSelectedObj() const;
     KPPixmapObject* getSelectedImage() const;
@@ -280,7 +282,7 @@ public:
     KPObject *nextTextObject(KPTextObject *obj);
 
     void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false );
-
+    void getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects );
 protected:
 
 private:

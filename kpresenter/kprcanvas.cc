@@ -76,6 +76,9 @@
 #include <kprvariable.h>
 #include <kpgroupobject.h>
 
+#include <koStore.h>
+#include <koStoreDrag.h>
+
 /******************************************************************/
 /* class KPrCanvas - KPrCanvas                                    */
 /******************************************************************/
@@ -4940,15 +4943,63 @@ void KPrCanvas::copyObjs()
     QDomDocument doc("DOC");
     QDomElement presenter=doc.createElement("DOC");
     presenter.setAttribute("editor", "KPresenter");
-    presenter.setAttribute("mime", "application/x-kpresenter-selection");
-    doc.appendChild(presenter);
-    m_activePage->copyObjs(doc, presenter);
-    stickyPage()->copyObjs(doc, presenter);
+    presenter.setAttribute("mime", "application/x-kpresenter");
 
-    QStoredDrag * drag = new QStoredDrag( "application/x-kpresenter-selection" );
-    drag->setEncodedData( doc.toCString() );
-    kdDebug(33001)<<"doc.toCString() :"<<doc.toCString()<<endl;
-    QApplication::clipboard()->setData( drag );
+    doc.appendChild(presenter);
+
+    QPtrList<KoDocumentChild> embeddedObjects;
+
+    KoStoreDrag *kd = new KoStoreDrag( "application/x-kpresenter", 0L );
+    QByteArray arr;
+    QBuffer buffer(arr);
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/x-kpresenter" );
+
+    m_activePage->getAllEmbeddedObjectSelected(embeddedObjects );
+    stickyPage()->getAllEmbeddedObjectSelected(embeddedObjects );
+
+    // Save internal embedded objects first, since it might change their URL
+    int i = 0;
+    QValueList<KoPictureKey> savePictures;
+    QPtrListIterator<KoDocumentChild> chl( embeddedObjects );
+    for( ; chl.current(); ++chl ) {
+        KoDocument* childDoc = chl.current()->document();
+        if ( childDoc && !childDoc->isStoredExtern() )
+            (void) childDoc->saveToStore( store, QString::number( i++ ) );
+    }
+
+
+    m_activePage->copyObjs(doc, presenter, savePictures);
+    stickyPage()->copyObjs(doc, presenter, savePictures);
+#if 0
+    if ( embeddedObjects.count()>0 ) {
+        delete store;
+        delete kd;
+        return;
+    }
+#endif
+
+#if 0 //FIXME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if ( !embeddedObjects.isEmpty() )
+        m_view->kPresenterDoc()->saveEmbeddedObjects( topElem, embeddedObjects );
+#endif
+    if ( !savePictures.isEmpty() ) {
+        // Save picture list at the end of the main XML
+        presenter.appendChild( m_view->kPresenterDoc()->pictureCollection()->saveXML( KoPictureCollection::CollectionPicture, doc, savePictures ) );
+        // Save the actual picture data into the store
+        m_view->kPresenterDoc()->pictureCollection()->saveToStore( KoPictureCollection::CollectionPicture, store, savePictures );
+    }
+
+    if ( store->open( "root" ) )
+    {
+        QCString s = doc.toCString(); // this is already Utf8!
+        kdDebug() << "KPrCanvas::copyObject: " << s << endl;
+        (void)store->write( s.data(), s.size()-1 );
+        store->close();
+    }
+
+    delete store;
+    kd->setEncodedData( arr );
+    QApplication::clipboard()->setData( kd );
 }
 
 /*================================================================*/

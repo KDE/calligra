@@ -64,21 +64,21 @@ void KPBackGround::setBackPixmap( const QString &_filename, const QDateTime &_la
 {
     if ( backType != BT_PICTURE )
         return;
-    backPicture = getPictureCollection()->findOrLoad( _filename, _lastModified );
+    backPicture = pictureCollection()->findOrLoad( _filename, _lastModified );
 }
 
 void KPBackGround::setBackPicture( const KoPicture& picture )
 {
     if ( backType != BT_PICTURE )
         return;
-    backPicture = getPictureCollection()->insertPicture(picture);
+    backPicture = pictureCollection()->insertPicture(picture);
 }
 
 void KPBackGround::setBackPicture ( const KoPictureKey& key )
 {
     if ( backType != BT_PICTURE )
         return;
-    backPicture = getPictureCollection()->findOrLoad(key.filename(), key.lastModified() );
+    backPicture = pictureCollection()->findOrLoad(key.filename(), key.lastModified() );
 }
 
 void KPBackGround::draw( QPainter *_painter, const KoZoomHandler* zoomHandler,
@@ -323,7 +323,7 @@ void KPBackGround::load( const QDomElement &element )
             }
             if ( openPic )
                 // !! this loads it from the disk (unless it's in the image collection already)
-                backPicture = getPictureCollection()->loadPicture( _fileName );
+                backPicture = pictureCollection()->loadPicture( _fileName );
             else
             {
                 KoPictureKey key( _fileName );
@@ -367,9 +367,9 @@ void KPBackGround::load( const QDomElement &element )
                     _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
                 }
             }
-            //KPClipartKey clipKey( _fileName, QDateTime( getPictureCollection()->tmpDate(),
-            //                                            getPictureCollection()->tmpTime() ) );
-            backPicture = getPictureCollection()->loadPicture( _fileName ); // load from disk !
+            //KPClipartKey clipKey( _fileName, QDateTime( pictureCollection()->tmpDate(),
+            //                                            pictureCollection()->tmpTime() ) );
+            backPicture = pictureCollection()->loadPicture( _fileName ); // load from disk !
         }
     }
     e=element.namedItem("PGTIMER").toElement();
@@ -518,13 +518,13 @@ void KPBackGround::removeGradient()
     }
 }
 
-KoPictureCollection * KPBackGround::getPictureCollection() const
+KoPictureCollection * KPBackGround::pictureCollection() const
 {
-    return m_page->kPresenterDoc()->getPictureCollection();
+    return m_page->kPresenterDoc()->pictureCollection();
 }
 
 KPGradientCollection * KPBackGround::gradientCollection() const
 {
-    return m_page->kPresenterDoc()->getGradientCollection();
+    return m_page->kPresenterDoc()->gradientCollection();
 }
 

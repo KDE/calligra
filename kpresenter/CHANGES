@@ -143,3 +143,4 @@ Changes after KPresenter 1.2
 - Add support for global language
 - Add new lineSpacing type :"At least"/"exactly"/"Multiple"
 - Use new kospell API
+- Allow to copy/paste image/embedded object from different kpresenter app, thanks to David to implement koStoreDrag

@@ -140,6 +140,8 @@
 #include "kprimportstyledia.h"
 #include <kurldrag.h>
 #include <config.h>
+#include <koStore.h>
+#include <koStoreDrag.h>
 
 #ifdef HAVE_LIBASPELL
 #include <koSpell.h>
@@ -565,7 +567,6 @@ void KPresenterView::editPaste()
         m_canvas->setToolEditMode( TEM_MOUSE );
         m_canvas->deSelectAllObj();
         QMimeSource *data = QApplication::clipboard()->data();
-        QString clip_str = QString::fromUtf8( data->encodedData("application/x-kpresenter-selection") );
         if ( data->provides( "text/uri-list" ) )
         {
             m_pKPresenterDoc->pastePage( data, currPg );
@@ -573,9 +574,9 @@ void KPresenterView::editPaste()
             skipToPage( currPg );
             updateSideBarMenu();
         }
-        else if ( data->provides( "application/x-kpresenter-selection" ) )
+        else if ( data->provides( KoStoreDrag::mimeType("application/x-kpresenter" ) ))
         {
-            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"));
+            m_canvas->activePage()->pasteObjs( data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")));
 
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();
@@ -7054,10 +7055,10 @@ void KPresenterView::duplicateObj()
         m_canvas->setToolEditMode( TEM_MOUSE );
         m_canvas->deSelectAllObj();
         QMimeSource *data = QApplication::clipboard()->data();
-        QString clip_str = QString::fromUtf8( data->encodedData("application/x-kpresenter-selection") );
-        if ( data->provides( "application/x-kpresenter-selection" ) )
+        QString clip_str = QString::fromUtf8( data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")) );
+        if ( data->provides( KoStoreDrag::mimeType("application/x-kpresenter") ) )
         {
-            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"),
+            m_canvas->activePage()->pasteObjs( data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")),
                                                nbCopy, angle, increaseX,increaseY, moveX, moveY );
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();

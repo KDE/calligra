@@ -133,7 +133,7 @@ protected:
     // Generate a new gradient pixmap, for the given size
     void generateGradient( const QSize& size );
 
-    KoPictureCollection *getPictureCollection() const;
+    KoPictureCollection *pictureCollection() const;
     KPGradientCollection *gradientCollection() const;
 
 private:

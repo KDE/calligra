@@ -57,6 +57,7 @@
 #include <kostyle.h>
 #include <koVariable.h>
 #include <qrichtext_p.h>
+#include <qbuffer.h>
 
 /******************************************************************/
 /* class KPrPage - KPrPage                                        */
@@ -154,7 +155,7 @@ KCommand * KPrPage::deleteObjs( bool _add )
     return deleteCmd ;
 }
 
-void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter) const
+void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter, QValueList<KoPictureKey> & savePictures) const
 {
     if ( !numSelected() )
         return;
@@ -164,6 +165,12 @@ void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter) const
     {
         if(it.current()->isSelected())
         {
+            if ( it.current()->getType() == OT_PICTURE )
+            {
+                KoPictureKey key = static_cast<KPPixmapObject *>( it.current() )->getKey();
+                if ( !savePictures.contains( key ) )
+                    savePictures.append( key );
+            }
             QDomElement object=doc.createElement("OBJECT");
             object.setAttribute("type", static_cast<int>( it.current()->getType() ));
             object.appendChild(it.current()->save( doc,0 ));
@@ -176,22 +183,52 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
 {
     m_doc->deSelectAllObj();
     int num = m_objectList.count();
-    QString clip_str = QString::fromUtf8( data );
-    if ( clip_str.isEmpty() ) return;
-    KMacroCommand *macro = 0L;
+    if ( !data.size() )
+        return;
+    QBuffer buffer( data );
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Read );
     int nbNewObject = -1 ;
-    for ( int i = 0 ; i < nbCopy ; i++ )
+    KMacroCommand *macro = 0L;
+    if ( !store->bad() )
     {
-        KCommand *cmd = m_doc->loadPastedObjs( clip_str,this );
-        if (cmd )
+        if ( store->open( "root" ) )
         {
-            if ( !macro )
-                macro = new KMacroCommand( i18n("Paste Objects" ));
-            macro->addCommand( cmd );
+            QString errorMsg;
+            int errorLine;
+            int errorColumn;
+            QDomDocument domDoc;
+            if ( !domDoc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn ) )
+            {
+                kdError (30003) << "Parsing Error! Aborting! (in KPrPage::PasteObj)" << endl
+                                << "  Line: " << errorLine << " Column: " << errorColumn << endl
+                                << "  Message: " << errorMsg << endl;
+                delete store;
+                return;
+            }
+            kdDebug() <<"paste object content !"<< domDoc.toCString() << endl;
+            QDomElement topElem = domDoc.documentElement();
+
+            for ( int i = 0 ; i < nbCopy ; i++ )
+            {
+                KCommand *cmd = m_doc->loadPastedObjs( domDoc.toCString(),this );
+                if (cmd )
+                {
+                    if ( !macro )
+                        macro = new KMacroCommand( i18n("Paste Objects" ));
+                    macro->addCommand( cmd );
+                }
+                if ( nbNewObject == -1 )
+                    nbNewObject = m_objectList.count() - num;
+            }
+
+            m_doc->loadPictureMap( topElem );
+            store->close();
+            m_doc->loadImagesFromStore( store );
+            //m_doc->insertEmbedded( store, topElem, macroCmd, 20.0 );
+            //m_doc->completePasting();
         }
-        if ( nbNewObject == -1 )
-            nbNewObject = m_objectList.count() - num;
     }
+    delete store;
 
     //move and select all new pasted in objects
     KPObject *_tempObj;
@@ -208,9 +245,9 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
         {
             _tempObj->moveBy( 20.0*(double)mod,20.0*(double)mod );
         }
-      _tempObj->setSelected( true );
-      if ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0))
-        m_doc->repaint(_tempObj);
+        _tempObj->setSelected( true );
+        if ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0))
+            m_doc->repaint(_tempObj);
     }
 
     if ( angle != 0.0)
@@ -2468,7 +2505,7 @@ void KPrPage::changePicture( const KURL & url )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
-    KoPicture image = m_doc->getPictureCollection()->downloadPicture( url );
+    KoPicture image = m_doc->pictureCollection()->downloadPicture( url );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -2478,7 +2515,7 @@ void KPrPage::changePicture( const KURL & url )
             KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
             if( obj)
             {
-                KPPixmapObject *pix = new KPPixmapObject( m_doc->getPictureCollection(), image.getKey() );
+                KPPixmapObject *pix = new KPPixmapObject( m_doc->pictureCollection(), image.getKey() );
                 ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change Pixmap" ),obj,pix, m_doc,this );
                 chgPixCmd->execute();
                 m_doc->addCommand( chgPixCmd );
@@ -2490,8 +2527,8 @@ void KPrPage::changePicture( const KURL & url )
 
 void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 {
-    KoPictureKey key = m_doc->getPictureCollection()->loadPicture( filename ).getKey();
-    KPPixmapObject *kppixmapobject = new KPPixmapObject(m_doc->getPictureCollection() , key );
+    KoPictureKey key = m_doc->pictureCollection()->loadPicture( filename ).getKey();
+    KPPixmapObject *kppixmapobject = new KPPixmapObject(m_doc->pictureCollection() , key );
     double x=m_doc->zoomHandler()->unzoomItX(_x);
     double y=m_doc->zoomHandler()->unzoomItY(_y);
 
@@ -2521,8 +2558,8 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 
 void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 {
-    KoPictureKey key = m_doc->getPictureCollection()->loadPicture( _file ).getKey();
-    KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->getPictureCollection() , key );
+    KoPictureKey key = m_doc->pictureCollection()->loadPicture( _file ).getKey();
+    KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->pictureCollection() , key );
 
     kppixmapobject->setOrig( _rect.x(), _rect.y() );
     kppixmapobject->setSize( _rect.width(), _rect.height() );
@@ -2953,7 +2990,7 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
         if ( oIt.current()==m_doc->header() || oIt.current()==m_doc->footer())
             continue;
         if ( oIt.current()->getType() == OT_PART )
-            continue;
+        continue;
         QDomElement object=doc.createElement("OBJECT");
         object.setAttribute("type", static_cast<int>( oIt.current()->getType() ));
         bool _sticky = oIt.current()->isSticky();
@@ -3626,6 +3663,18 @@ void KPrPage::getAllObjectSelectedList(QPtrList<KPObject> &lst, bool force )
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
         it.current()->getAllObjectSelectedList( lst,force );
+}
+
+void KPrPage::getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects )
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_PART )
+        {
+            embeddedObjects.append( static_cast<KPPartObject *>(it.current())->getChild() );
+        }
+    }
 }
 
 KPPixmapObject* KPrPage::getSelectedImage() const

@@ -1537,7 +1537,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             } break;
             case OT_CLIPART:
             case OT_PICTURE: {
-                KPPixmapObject *kppixmapobject = new KPPixmapObject( getPictureCollection() );
+                KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
                 offset=kppixmapobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -1821,16 +1821,20 @@ void KPresenterDoc::loadUsedSoundFileFromXML( const QDomElement &element )
     }
 }
 
+void KPresenterDoc::loadImagesFromStore( KoStore *_store )
+{
+    if ( _store ) {
+        m_pictureCollection.readFromStore( _store, m_pictureMap );
+        m_pictureMap.clear(); // Release memory
+    }
+}
 /*===================================================================*/
 bool KPresenterDoc::completeLoading( KoStore* _store )
 {
     emit sigProgress( 80 );
 
     if ( _store ) {
-        m_pictureCollection.readFromStore( _store, m_pictureMap );
-        m_pictureMap.clear(); // Release memory
-
-
+        loadImagesFromStore( _store );
         emit sigProgress( 90 );
 
         if ( !usedSoundFile.isEmpty() )
@@ -2317,7 +2321,7 @@ KCommand * KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
 
     bool ok = false;
 
-    if(document.hasAttribute("mime") && document.attribute("mime")=="application/x-kpresenter-selection")
+    if(document.hasAttribute("mime") && document.attribute("mime")=="application/x-kpresenter")
         ok=true;
 
     if ( !ok )

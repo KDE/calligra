@@ -229,8 +229,8 @@ public:
     void deSelectObj(KPObject *obj);
     void updateHeaderFooterButton();
 
-    KoPictureCollection *getPictureCollection(){ return &m_pictureCollection; }
-    KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
+    KoPictureCollection *pictureCollection(){ return &m_pictureCollection; }
+    KPGradientCollection *gradientCollection() { return &_gradientCollection; }
 
     KoAutoFormat * getAutoFormat()const { return m_autoFormat; }
 
@@ -473,6 +473,8 @@ public:
     void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
 
     void addWordToDictionary( const QString & word);
+
+    void loadImagesFromStore( KoStore *_store );
 
 public slots:
     void movePage( int from, int to );
