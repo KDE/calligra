@@ -43,6 +43,7 @@ public slots:
       void hiLoChart();
       void ringChart();
       void polarChart();
+      void bwChart();
       void slotRepaint();
       void slotConfigBack();
       void slotConfigFont();
@@ -82,6 +83,7 @@ private:
     KToggleAction* m_charthilo;
     KToggleAction* m_chartring;
     KToggleAction* m_chartpolar;
+    KToggleAction* m_chartbw;
 
     DCOPObject *dcop;
 };

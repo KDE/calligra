@@ -4,29 +4,29 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #include <KDChartWidget.h>
 #include <KDChart.h>
 #include <KDChartParams.h>
@@ -62,10 +62,10 @@ KDChartWidget::KDChartWidget( KDChartParams* params,
                               KDChartTableDataBase* data,
                               QWidget* parent, const char* name ) :
     QWidget( parent, name ),
-_params( params ),
-_data( data ),
-_activeData( false ),
-_mousePressedOnRegion( 0 )
+    _params( params ),
+    _data( data ),
+    _activeData( false ),
+    _mousePressedOnRegion( 0 )
 {
     _dataRegions.setAutoDelete( true );
     setDoubleBuffered( true );
@@ -81,35 +81,47 @@ KDChartWidget::~KDChartWidget()
     _dataRegions.clear();
 }
 
+void KDChartWidget::paintTo( QPainter& painter,
+                             const QRect* rect )
+{
+    KDChart::paint( &painter, _params, _data, &_dataRegions, rect );
+}
+
+void KDChartWidget::print( QPainter& painter,
+                           const QRect* rect )
+{
+    bool oldOpt=true;
+    if( _params ){
+        oldOpt = _params->optimizeOutputForScreen();
+        _params->setOptimizeOutputForScreen( false );
+    }
+    bool bOldBuf = _doubleBuffered;
+    _doubleBuffered = false;
+    paintTo( painter, rect );
+    _doubleBuffered = bOldBuf;
+    if( _params )
+        _params->setOptimizeOutputForScreen( oldOpt );
+}
 
 void KDChartWidget::paintEvent( QPaintEvent* event )
 {
-#ifdef USE_EXCEPTIONS
-    try {
-#endif
-        if( _doubleBuffered ) {
-            // if double-buffering, paint onto the pixmap and copy
-            // afterwards
-            _buffer.fill( backgroundColor() );
-            QPainter painter( &_buffer );
-            KDChart::paint( &painter, _params, _data, &_dataRegions );
-            bitBlt( this, event->rect().topLeft(), &_buffer, event->rect() );
-        } else {
-            // if not double-buffering, paint directly into the window
-            QPainter painter( this );
-            KDChart::paint( &painter, _params, _data, &_dataRegions );
-        }
-#ifdef USE_EXCEPTIONS
-    } catch ( ... ) {
-        ::qDebug( "Exception occurred during chart painting" );
-        throw;
+    if( _doubleBuffered ) {
+        // if double-buffering, paint onto the pixmap and copy
+        // afterwards
+        _buffer.fill( backgroundColor() );
+        QPainter painter( &_buffer );
+        paintTo( painter );
+        bitBlt( this, event->rect().topLeft(), &_buffer, event->rect() );
+    } else {
+        // if not double-buffering, paint directly into the window
+        QPainter painter( this );
+        paintTo( painter );
     }
-#endif
 }
 
 
 /**
-  \internal
+   \internal
 */
 void KDChartWidget::mousePressEvent( QMouseEvent* event )
 {
@@ -264,9 +276,9 @@ bool KDChartWidget::isDoubleBuffered() const
 
 
 /**
-    Set an entire new parameter set.
-    (Normally you might prefer modifying the existing parameters
-     rather than specifying a new set.)
+   Set an entire new parameter set.
+   (Normally you might prefer modifying the existing parameters
+   rather than specifying a new set.)
 */
 void KDChartWidget::setParams( KDChartParams* params )
 {
@@ -274,9 +286,25 @@ void KDChartWidget::setParams( KDChartParams* params )
 }
 
 /**
-    Set an entire new data table.
+   Set an entire new data table.
 */
 void KDChartWidget::setData( KDChartTableDataBase* data )
 {
     _data = data;
+}
+
+/**
+   Returns a pointer to the current parameter set.
+*/
+KDChartParams* KDChartWidget::params() const
+{
+    return _params;
+}
+
+/**
+   Returns a pointer to the current data table.
+*/
+KDChartTableDataBase* KDChartWidget::data() const
+{
+    return _data;
 }

@@ -4,48 +4,38 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #include "KDChartRingPainter.h"
 #include "KDChartParams.h"
 
 #include <qpainter.h>
 #include <qvaluestack.h>
 
-#define DEGTORAD(d) (d)*M_PI/180
-
-#if defined( __WINDOWS__ ) || defined( _SGIAPI )
-#include <math.h>
-#else
-#include <cmath>
 #include <stdlib.h>
-#endif
 
-#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI ) || ( defined HP11_aCC && defined HP1100 )
-#define std
-#endif
-
+#define DEGTORAD(d) (d)*M_PI/180
 
 /**
    \class KDChartRingPainter KDChartRingPainter.h
@@ -96,16 +86,25 @@ void KDChartRingPainter::paintData( QPainter* painter,
     QRect ourClipRect( _dataRect );
 
     const QWMatrix & world = painter->worldMatrix();
-    ourClipRect = world.mapRect( ourClipRect );
+    ourClipRect =
+#if COMPAT_QT_VERSION >= 0x030000
+        world.mapRect( ourClipRect );
+#else
+    world.map( ourClipRect );
+#endif
 
+    ourClipRect.setTop(ourClipRect.top()-1);
+    ourClipRect.setLeft(ourClipRect.left()-1);
+    ourClipRect.setBottom(ourClipRect.bottom()+1);
+    ourClipRect.setRight(ourClipRect.right()+1);
     painter->setClipRect( ourClipRect );
 
     uint datasetStart, datasetEnd;
     if ( params()->neverUsedSetChartSourceMode()
-            || !params()->findDataset( KDChartParams::DataEntry,
-                                        datasetStart,
-                                        datasetEnd,
-                                        chart ) ) {
+         || !params()->findDataset( KDChartParams::DataEntry,
+                                    datasetStart,
+                                    datasetEnd,
+                                    chart ) ) {
         uint maxRow, maxRowMinus1;
         switch ( data->usedRows() ) {
         case 0:
@@ -175,8 +174,8 @@ void KDChartRingPainter::paintData( QPainter* painter,
         if( params()->relativeRingThickness() ) {
             // 50% should be the same thickness as the one used when ring
             // thickness is constant.
-            ringthicknesses[d2] = (uint)std::floor( (rowsums[d2] / totalSum) *
-                                                    ( 2.0 * (double)ringthickness ) + 0.5 );
+            ringthicknesses[d2] = (uint)floor( (rowsums[d2] / totalSum) *
+                                               ( 2.0 * (double)ringthickness ) + 0.5 );
         } else {
             ringthicknesses[d2] = ringthickness;
         }
@@ -187,13 +186,13 @@ void KDChartRingPainter::paintData( QPainter* painter,
     for( int dataset = (int)datasetStart; dataset <= (int)datasetEnd; dataset++ ) {
         double sectorsPerValue = 5760.0 / rowsums[dataset]; // 5760 == 16*360, number of sections in Qt circle
         //int sectorsPerValueI = static_cast<int>( sectorsPerValue );
-        int currentstartpos = params()->ringStart()*16;
+        double currentstartpos = (double)params()->ringStart() * 16.0;
         // Loop through all the values; each value is one piece on the ring.
         for( int value = 0; value < _numValues; value++ ) {
             // is there anything at all at this value?
             double cellValue = 0.0;
             if( data->cell( dataset, value ).isDouble() ) {
-                cellValue = std::fabs( data->cell( dataset, value ).doubleValue() );
+                cellValue = fabs( data->cell( dataset, value ).doubleValue() );
                 // Explosion: Only explode if explosion is turned on generally
                 // and we are on the first ring. Besides, if there is a list
                 // of explodeable values, the current value must be on this
@@ -201,19 +200,18 @@ void KDChartRingPainter::paintData( QPainter* painter,
 
                 QValueList<int> explodeList = params()->explodeValues();
                 bool explode = params()->explode() && // explosion is on at all
-                   ( dataset == (int)datasetStart ) && // outermost ring
-     ( ( explodeList.count() == 0 ) || // either nothing on explode list
-       ( explodeList.find( value ) != explodeList.end() ) ); // or pie is on it
+                               ( dataset == (int)datasetStart ) && // outermost ring
+                               ( ( explodeList.count() == 0 ) || // either nothing on explode list
+                                 ( explodeList.find( value ) != explodeList.end() ) ); // or pie is on it
 
                 drawOneSegment( painter,
                                 currentouterradius,
                                 currentouterradius-ringthicknesses[dataset],
                                 currentstartpos,
-                                static_cast<int>( currentstartpos+sectorsPerValue*cellValue ),
+                                sectorsPerValue * cellValue,
                                 dataset, value, chart, explode, regions );
             }
-
-            currentstartpos += static_cast<uint>( sectorsPerValue*cellValue );
+            currentstartpos += sectorsPerValue * cellValue;
         }
         currentouterradius -= ringthicknesses[dataset];
     }
@@ -224,8 +222,8 @@ void KDChartRingPainter::paintData( QPainter* painter,
 void KDChartRingPainter::drawOneSegment( QPainter* painter,
                                          uint outerRadius,
                                          uint innerRadius,
-                                         uint startAngle,
-                                         uint endAngle,
+                                         double startAngle,
+                                         double angles,
                                          uint dataset,
                                          uint value,
                                          uint chart,
@@ -233,10 +231,8 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
                                          KDChartDataRegionList* regions )
 {
     // special case for full circle
-    if( ( startAngle % 5760 ) == 0 && ( endAngle % 5760 ) == 0 ) {
-        startAngle = 0;
-        endAngle = 5759;
-    }
+    if( angles == 5760.0 )
+        startAngle =  0.0;
 
     painter->setPen( QPen( params()->outlineDataColor(),
                            params()->outlineDataLineWidth() ) );
@@ -248,7 +244,7 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
     QRect drawPosition = _position;
     if ( explode ) {
         // need to compute a new position for each pie
-        double explodeAngle = ( startAngle + ( endAngle - startAngle + 1 ) / 2 ) / 16;
+        double explodeAngle = ( startAngle + angles / 2.0 ) / 16.0;
         double explodeAngleRad = DEGTORAD( explodeAngle );
         double cosAngle = cos( explodeAngleRad );
         double sinAngle = -sin( explodeAngleRad );
@@ -264,8 +260,7 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
         double explodeX = explodeFactor * _size * cosAngle;
         double explodeY = explodeFactor * _size * sinAngle;
         drawPosition.moveBy( static_cast<int>( explodeX ), static_cast<int>( explodeY ) );
-    } else
-        drawPosition = _position;
+    }
 
     QRect outerRect( drawPosition.x() +
                      ( drawPosition.width() - outerRadius2 ) / 2,
@@ -280,34 +275,32 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
 
     // Start with getting the points for the inner arc.
     QPointArray innerArc;
-    innerArc.makeArc( innerRect.x(), innerRect.y(),
-                      innerRect.width(), innerRect.height(),
-                      startAngle, endAngle - startAngle + 1 );
+    makeArc( innerArc, innerRect, startAngle, angles );
 
     // And the points for the outer arc
     QPointArray outerArc;
-    outerArc.makeArc( outerRect.x(), outerRect.y(),
-                      outerRect.width(), outerRect.height(),
-                      startAngle, endAngle - startAngle + 1 );
+    makeArc( outerArc, outerRect, startAngle, angles );
 
     // Now copy the points from the outer arc in the reverse order onto the
     // inner arc array and draw that.
     uint innerArcPoints = innerArc.size();
     uint outerArcPoints = outerArc.size();
     innerArc.resize( innerArcPoints + outerArcPoints );
-    for ( int i = outerArc.size() - 1; i >= 0; i-- ) {
+    for ( int i = outerArcPoints - 1; i >= 0; i-- ) {
         innerArc.setPoint( innerArcPoints+outerArcPoints-i-1,
                            outerArc.point( i ) );
     }
+
     painter->drawPolygon( innerArc );
     if ( regions /* && ( innerArc.size() > 2 )*/ ) {
         KDChartDataRegion* datReg = new KDChartDataRegion( QRegion( innerArc ),
                                                            dataset,
                                                            value,
                                                            chart );
-        int aA = startAngle;
-        int aM = (startAngle + endAngle) / 2;
-        int aZ = endAngle;
+
+        const int aA = static_cast<int>( startAngle );
+        const int aM = static_cast<int>( startAngle + angles / 2.0 );
+        const int aZ = static_cast<int>( startAngle + angles );
 
         datReg->points[ KDChartEnums::PosTopLeft ]
             = pointOnCircle( outerRect, aZ );
@@ -325,30 +318,48 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
 
         datReg->points[ KDChartEnums::PosCenterLeft ]
             = QPoint( (   datReg->points[ KDChartEnums::PosTopLeft      ].x()
-                        + datReg->points[ KDChartEnums::PosBottomLeft   ].x() ) / 2,
+                          + datReg->points[ KDChartEnums::PosBottomLeft   ].x() ) / 2,
                       (   datReg->points[ KDChartEnums::PosTopLeft      ].y()
-                        + datReg->points[ KDChartEnums::PosBottomLeft   ].y() ) / 2 );
+                          + datReg->points[ KDChartEnums::PosBottomLeft   ].y() ) / 2 );
         datReg->points[ KDChartEnums::PosCenter ]
             = QPoint( (   datReg->points[ KDChartEnums::PosTopCenter    ].x()
-                        + datReg->points[ KDChartEnums::PosBottomCenter ].x() ) / 2,
+                          + datReg->points[ KDChartEnums::PosBottomCenter ].x() ) / 2,
                       (   datReg->points[ KDChartEnums::PosTopCenter    ].y()
-                        + datReg->points[ KDChartEnums::PosBottomCenter ].y() ) / 2 );
+                          + datReg->points[ KDChartEnums::PosBottomCenter ].y() ) / 2 );
         datReg->points[ KDChartEnums::PosCenterRight ]
             = QPoint( (   datReg->points[ KDChartEnums::PosTopRight     ].x()
-                        + datReg->points[ KDChartEnums::PosBottomRight  ].x() ) / 2,
+                          + datReg->points[ KDChartEnums::PosBottomRight  ].x() ) / 2,
                       (   datReg->points[ KDChartEnums::PosTopRight     ].y()
-                        + datReg->points[ KDChartEnums::PosBottomRight  ].y() ) / 2 );
+                          + datReg->points[ KDChartEnums::PosBottomRight  ].y() ) / 2 );
+
+        // test the 9 positions:
         /*
-        // test the center positions:
-        painter->drawEllipse( datReg->points[ KDChartEnums::PosCenterLeft ].x() - 2,
-                            datReg->points[ KDChartEnums::PosCenterLeft ].y() - 2,  5, 5);
-        painter->drawEllipse( datReg->points[ KDChartEnums::PosCenter     ].x() - 4,
-                            datReg->points[ KDChartEnums::PosCenter     ].y() - 4,  9, 9);
-        painter->drawEllipse( datReg->points[ KDChartEnums::PosCenterRight].x() - 8,
-                            datReg->points[ KDChartEnums::PosCenterRight].y() - 8, 17,17);
+          painter->drawEllipse( datReg->points[ KDChartEnums::PosTopLeft     ].x() - 2,
+          datReg->points[ KDChartEnums::PosTopLeft     ].y() - 2,  5, 5);
+          painter->drawEllipse( datReg->points[ KDChartEnums::PosCenterLeft ].x() - 2,
+          datReg->points[ KDChartEnums::PosCenterLeft ].y() - 2,  5, 5);
+          painter->drawEllipse( datReg->points[ KDChartEnums::PosBottomLeft  ].x() - 2,
+          datReg->points[ KDChartEnums::PosBottomLeft  ].y() - 2,  5, 5);
+
+          qDebug( "\ncenter: (%i, %i)",
+          datReg->points[ KDChartEnums::PosCenter   ].x(),
+          datReg->points[ KDChartEnums::PosCenter   ].y() );
+          painter->drawEllipse( datReg->points[ KDChartEnums::PosTopCenter   ].x() - 2,
+          datReg->points[ KDChartEnums::PosTopCenter   ].y() - 2,  5, 5);
+          painter->drawEllipse( datReg->points[ KDChartEnums::PosCenter      ].x() - 2,
+          datReg->points[ KDChartEnums::PosCenter      ].y() - 2,  5, 5);
+          painter->drawEllipse( datReg->points[ KDChartEnums::PosBottomCenter].x() - 2,
+          datReg->points[ KDChartEnums::PosBottomCenter].y() - 2,  5, 5);
+
+          painter->drawRect( datReg->points[ KDChartEnums::PosCenterRight ].x() - 2,
+          datReg->points[ KDChartEnums::PosCenterRight ].y() - 2,  5, 5);
+          //painter->drawRect( datReg->points[ KDChartEnums::PosTopRight    ].x() - 2,
+          //                    datReg->points[ KDChartEnums::PosTopRight    ].y() - 2,  5, 5);
+          painter->drawRect( datReg->points[ KDChartEnums::PosBottomRight ].x() - 2,
+          datReg->points[ KDChartEnums::PosBottomRight ].y() - 2,  5, 5);
         */
-        datReg->startAngle = startAngle;
-        datReg->angleLen   = endAngle - startAngle + 1;
+        datReg->startAngle = static_cast<int>( startAngle );
+        datReg->angleLen   = static_cast<int>( angles );
         regions->append( datReg );
     }
 }

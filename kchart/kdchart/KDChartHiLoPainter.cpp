@@ -4,29 +4,29 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #include "KDChartHiLoPainter.h"
 #include <KDChartParams.h>
 #include "KDChartTextPiece.h"
@@ -64,360 +64,6 @@ KDChartHiLoPainter::~KDChartHiLoPainter()
 
 
 /**
-   Paints the actual data area and registers the region for the data
-   points if \a regions is not 0.
-
-   \param painter the QPainter onto which the chart should be painted
-   \param data the data that will be displayed as a chart
-   \param paint2nd specifies whether the main chart or the additional chart is to be drawn now
-   \param regions a pointer to a list of regions that will be filled
-   with regions representing the data segments, if not null
-*/
-void KDChartHiLoPainter::paintData( QPainter* painter,
-                                    KDChartTableDataBase* data,
-                                    bool paint2nd,
-                                    KDChartDataRegionList* /* regions */)
-{
-    uint chart = paint2nd ? 1 : 0;
-
-    // find out the ordinate axis (or axes, resp.) belonging to this chart
-    // (up to 4 ordinates might be in use: 2 left ones and 2 right ones)
-    uint axesCount;
-    KDChartParams::Ordinates axes;
-    if( !params()->chartAxes( chart, axesCount, axes ) ) {
-        // no axis - no fun!
-        return;
-        // We cannot draw data without an axis having calculated high/low
-        // values and position of the zero line before.
-
-        // PENDING(khz) Allow drawing without having a visible axis!
-    }
-
-    //const KDChartParams::ChartType params_chartType
-    //    = paint2nd ? params()->additionalChartType() : params()->chartType();
-
-    double logHeight = _dataRect.height();
-    double logWidth = _dataRect.width();
-    //double areaWidthP1000 = logWidth / 1000.0;
-
-    // PENDING(khz) Match this to values defined above...   :-(
-    const double averageValueP1000 = ( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
-
-    QRect ourClipRect( _dataRect );
-    ourClipRect.setHeight( ourClipRect.height() - 1 );
-
-    const QWMatrix & world = painter->worldMatrix();
-    ourClipRect = world.mapRect( ourClipRect );
-
-    painter->setClipRect( ourClipRect );
-    painter->translate( _dataRect.x(), _dataRect.y() );
-
-    painter->setPen( params()->outlineDataColor() );
-
-    // find out which datasets are to be represented by this chart
-    uint chartDatasetStart, chartDatasetEnd;
-    if ( params()->neverUsedSetChartSourceMode()
-         || !params()->findDataset( KDChartParams::DataEntry,
-                                    chartDatasetStart,
-                                    chartDatasetEnd,
-                                    chart ) ) {
-        uint maxRow, maxRowMinus1;
-        switch ( data->usedRows() ) {
-        case 0:
-            return ;
-        case 1:
-            maxRow = 0;
-            maxRowMinus1 = 0;
-            break;
-        default:
-            maxRow = data->usedRows() - 1;
-            maxRowMinus1 = maxRow - 1;
-        }
-        chartDatasetStart = paint2nd ? maxRow : 0;
-        chartDatasetEnd = paint2nd
-                          ? maxRow
-                          : (   ( KDChartParams::NoType
-                                  == params()->additionalChartType() )
-                                ? maxRow
-                                : maxRowMinus1 );
-
-    }
-
-
-    const KDChartAxisParams& axisPara
-        = params()->axisParams( paint2nd
-                                ? KDChartAxisParams::AxisPosRight
-                                : KDChartAxisParams::AxisPosLeft );
-
-    uint datasetStart, datasetEnd;
-    if ( params()->neverUsedSetChartSourceMode()
-         || !params()->findDataset( KDChartParams::DataEntry,
-                                    datasetStart,
-                                    datasetEnd,
-                                    chart ) ) {
-        uint maxRow, maxRowMinus1;
-        switch ( data->usedRows() ) {
-        case 0:
-            return ;
-        case 1:
-            maxRow = 0;
-            maxRowMinus1 = 0;
-            break;
-        default:
-            maxRow = data->usedRows() - 1;
-            maxRowMinus1 = maxRow - 1;
-        }
-        datasetStart = paint2nd ? maxRow : 0;
-        datasetEnd = paint2nd ? maxRow
-                     : ( ( KDChartParams::NoType
-                           == params()->additionalChartType() )
-                         ? maxRow
-                         : maxRowMinus1 );
-    }
-
-    uint datasetNum = ( chartDatasetEnd - chartDatasetStart ) + 1;
-
-    // We need to make sure that we have a certain number of
-    // datasets, depending on the sub type to display.
-    if( ( params()->hiLoChartSubType() == KDChartParams::HiLoSimple &&
-          datasetNum < 2 ) ||
-        ( params()->hiLoChartSubType() == KDChartParams::HiLoClose &&
-          datasetNum < 3 ) ||
-        ( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose &&
-          datasetNum < 4 ) ) {
-        qDebug( "Not enough data to chart" );
-        return; // PENDING(kalle) Throw exception?
-    }
-
-    // Number of values: If -1, use all values, otherwise use the
-    // specified number of values.
-    int numValues = 0;
-    if ( params()->numValues() != -1 )
-        numValues = params()->numValues();
-    else
-        numValues = data->usedCols();
-
-    double maxColumnValue = axisPara.trueAxisHigh();
-    double minColumnValue = axisPara.trueAxisLow();
-    double columnValueDistance = maxColumnValue - minColumnValue;
-
-    double pixelsPerUnit = 0.0;
-    pixelsPerUnit = logHeight / columnValueDistance;
-
-    // Distance between the individual "stocks"
-    double pointDist = logWidth / ( ( double ) numValues );
-
-    // compute the position of the 0 axis
-    double zeroXAxisI = axisPara.axisZeroLineStartY() - _dataRect.y();
-
-    // Loop over the value, draw one "stock" line for each value.
-    for( int value = 0; value < numValues; value++ ) {
-        // We already know that we have enough datasets. The first and the
-        // second dataset are always high and low; we sort them
-        // accordingly.
-        if( data->cell( 0, value ).isDouble() &&
-            data->cell( 1, value ).isDouble() ) {
-            double cellValue1 = data->cell( 0, value ).doubleValue();
-            double cellValue2 = data->cell( 1, value ).doubleValue();
-            double lowValue = QMIN( cellValue1, cellValue2 );
-            double highValue = QMAX( cellValue1, cellValue2 );
-            double lowDrawValue = lowValue * pixelsPerUnit;
-            double highDrawValue = highValue * pixelsPerUnit;
-
-            // It is correct that we use the value to index the data color
-            // here, not the dataset as with the other charts.
-            painter->setPen( QPen( params()->dataColor( value ),
-                                   params()->lineWidth() ) );
-            // draw line from low to high
-            int xpos = static_cast<int>( pointDist * ( (double)value + 0.5
-                                                       ) );
-            painter->drawLine( xpos,
-                               static_cast<int>( zeroXAxisI - lowDrawValue ),
-                               xpos,
-                               static_cast<int>( zeroXAxisI - highDrawValue ) );
-
-            // Find out how long open/close lines need to be in case we
-            // need them. We make them 1/10 of the space available for one
-            // "stock".
-            int openCloseTickLength = static_cast<int>( pointDist * 0.1 );
-            // we need these here because we might need to consider these
-            // later when drawing the low and high labels
-            bool hasOpen = false, hasClose = false;
-            double openValue = 0.0, openDrawValue = 0.0,
-                  closeValue = 0.0, closeDrawValue = 0.0;
-
-            // if we have an open/close chart, show the open value
-            if( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
-                // Only do this if there is a value in the third dataset.
-                if( data->cell( 2, value ).isDouble() ) {
-                    hasOpen = true;
-                    openValue = data->cell( 2, value ).doubleValue();
-                    openDrawValue = openValue * pixelsPerUnit;
-                    painter->drawLine( xpos - openCloseTickLength,
-                                       static_cast<int>( zeroXAxisI - openDrawValue ),
-                                       xpos,
-                                       static_cast<int>( zeroXAxisI - openDrawValue ) );
-                }
-            }
-
-            // If we have an open/close chart or a close chart, show the
-            // close value, but only if there is a value in the
-            // corresponding dataset (2 for HiLoClose, 3 for
-            // HiLoOpenClose).
-            if( ( params()->hiLoChartSubType() == KDChartParams::HiLoClose &&
-                  data->cell( 2, value ).isDouble() ) ||
-                ( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose &&
-                  data->cell( 3, value ).isDouble() ) ) {
-                hasClose = true;
-                closeValue = ( params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ?
-                             data->cell( 2, value ).doubleValue() :
-                           data->cell( 3, value ).doubleValue();
-                closeDrawValue = closeValue * pixelsPerUnit;
-                painter->drawLine( xpos,
-                                   static_cast<int>( zeroXAxisI - closeDrawValue ),
-                                   xpos + openCloseTickLength,
-                                   static_cast<int>( zeroXAxisI - closeDrawValue ) );
-            }
-
-            // Draw the low value, if requested.
-            if( params()->hiLoChartPrintLowValues() ) {
-                // PENDING(kalle) Number formatting?
-                QFont theFont( params()->hiLoChartLowValuesFont() );
-                if ( params()->hiLoChartLowValuesUseFontRelSize() ) {
-                    int nTxtHeight =
-                        static_cast < int > ( params()->hiLoChartLowValuesFontRelSize()
-                                            * averageValueP1000 );
-                    theFont.setPointSizeFloat( nTxtHeight );
-                }
-                KDChartTextPiece lowText( QString::number( lowValue ),
-                                          theFont );
-                int width = lowText.width();
-                int height = lowText.height();
-
-                // Check whether there is enough space below the data display
-                int valX = 0, valY = 0;
-                if( ( height + lowText.fontLeading() ) < lowDrawValue ) {
-                    // enough space
-                    valX = xpos - ( width / 2 );
-                    valY = (int)lowDrawValue - lowText.fontLeading();
-                } else {
-                    // not enough space - move to left
-                    if( !hasOpen || height < openDrawValue ) {
-                        // Either there is no open value or it is high enough
-                        // that we can put the low value to the left.
-                        valX = xpos - width;
-                        valY = height;
-                    } else
-                        ; // no way to draw it (really?)
-                }
-                lowText.draw( painter,
-                              valX, static_cast<int>( zeroXAxisI - valY ),
-                              ourClipRect,
-                              params()->hiLoChartLowValuesColor() );
-            }
-
-            // Draw the high value, if requested.
-            if( params()->hiLoChartPrintHighValues() ) {
-                // PENDING(kalle) Number formatting?
-                QFont theFont( params()->hiLoChartHighValuesFont() );
-                if ( params()->hiLoChartHighValuesUseFontRelSize() ) {
-                    int nTxtHeight =
-                        static_cast < int > ( params()->hiLoChartHighValuesFontRelSize()
-                                            * averageValueP1000 );
-                    theFont.setPointSizeFloat( nTxtHeight );
-                }
-                KDChartTextPiece highText( QString::number( highValue ),
-                                           theFont );
-                int width = highText.width();
-                int height = highText.height();
-
-                // Check whether there is enough space above the data display
-                int valX = 0, valY = 0;
-                if( ( height + highText.fontLeading() ) <
-                    ( _dataRect.height() - highDrawValue ) ) {
-                    // enough space
-                    valX = xpos - ( width / 2 );
-                    valY = (int)highDrawValue + highText.fontLeading() + height;
-                } else {
-                    // not enough space - move to right
-                    if( !hasClose ||
-                        height < ( _dataRect.height() - closeDrawValue ) ) {
-                        // Either there is no close value or it is low enough
-                        // that we can put the high value to the right.
-                        valX = xpos;
-                        valY = _dataRect.height();
-                    } else
-                        ; // no way to draw it (really?)
-                }
-                highText.draw( painter,
-                               valX, static_cast<int>( zeroXAxisI - valY ),
-                               ourClipRect,
-                               params()->hiLoChartHighValuesColor() );
-            }
-
-            // Draw the open value, if requested.
-            if( params()->hiLoChartPrintOpenValues() &&
-                params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
-                // PENDING(kalle) Number formatting?
-                QFont theFont( params()->hiLoChartOpenValuesFont() );
-                if ( params()->hiLoChartOpenValuesUseFontRelSize() ) {
-                    int nTxtHeight =
-                        static_cast < int > ( params()->hiLoChartOpenValuesFontRelSize()
-                                            * averageValueP1000 );
-                    theFont.setPointSizeFloat( nTxtHeight );
-                }
-                KDChartTextPiece openText( QString::number( openValue ),
-                                           theFont );
-                int width = openText.width();
-                int height = openText.height();
-
-                // We can pretty safely assume that there is always enough
-                // space to the left and right of the data display.
-                int valX = 0, valY = 0;
-                valX = xpos - openCloseTickLength - width;
-                valY = (int)openDrawValue + ( height / 2 );
-                openText.draw( painter,
-                               valX, static_cast<int>( zeroXAxisI - valY ),
-                               ourClipRect,
-                               params()->hiLoChartOpenValuesColor() );
-            }
-
-            // Draw the close value, if requested.
-            if( params()->hiLoChartPrintCloseValues() &&
-                ( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose
-                  ||
-                  params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ) {
-                // PENDING(kalle) Number formatting?
-                QFont theFont( params()->hiLoChartCloseValuesFont() );
-                if ( params()->hiLoChartCloseValuesUseFontRelSize() ) {
-                    int nTxtHeight =
-                        static_cast < int > ( params()->hiLoChartCloseValuesFontRelSize()
-                                            * averageValueP1000 );
-                    theFont.setPointSizeFloat( nTxtHeight );
-                }
-                KDChartTextPiece closeText( QString::number( closeValue ),
-                                           theFont );
-                //int width = closeText.width();
-                int height = closeText.height();
-
-                // We can pretty safely assume that there is always enough
-                // space to the left and right of the data display.
-                int valX = 0, valY = 0;
-                valX = xpos + openCloseTickLength;
-                valY = (int)closeDrawValue + ( height / 2 );
-                closeText.draw( painter,
-                               valX, static_cast<int>( zeroXAxisI - valY ),
-                               ourClipRect,
-                               params()->hiLoChartCloseValuesColor() );
-            }
-
-        } else
-            continue; // we cannot display this value
-    }
-}
-
-
-/**
    This method is a specialization that returns a fallback legend text
    appropriate for HiLo that do not have the same notion of a dataset like
    e.g. bars.
@@ -447,5 +93,292 @@ QString KDChartHiLoPainter::fallbackLegendText( uint dataset ) const
 */
 uint KDChartHiLoPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
-    return data->usedCols();
+    return data->usedRows();
+}
+
+
+bool KDChartHiLoPainter::isNormalMode() const
+{
+    return KDChartParams::HiLoNormal == params()->hiLoChartSubType();
+}
+
+int KDChartHiLoPainter::clipShiftUp( bool, double ) const
+{
+    return 0;
+}
+
+void KDChartHiLoPainter::specificPaintData( QPainter* painter,
+                                            const QRect& ourClipRect,
+                                            KDChartTableDataBase* data,
+                                            KDChartDataRegionList* /*regions*/,
+                                            const KDChartAxisParams* axisPara,
+                                            bool /*bNormalMode*/,
+                                            uint /*chart*/,
+                                            double logWidth,
+                                            double areaWidthP1000,
+                                            double logHeight,
+                                            double axisYOffset,
+                                            double /*minColumnValue*/,
+                                            double /*maxColumnValue*/,
+                                            double /*columnValueDistance*/,
+                                            uint chartDatasetStart,
+                                            uint chartDatasetEnd,
+                                            uint datasetStart,
+                                            uint datasetEnd )
+{
+    double areaHeightP1000 = logHeight / 1000.0;
+    double averageValueP1000 = ( areaWidthP1000 + areaHeightP1000 ) / 2.0;
+    int datasetNum=abs(static_cast<int>(chartDatasetEnd-chartDatasetStart))+1;
+
+    painter->setPen( params()->outlineDataColor() );
+
+    // Number of values: If -1, use all values, otherwise use the
+    // specified number of values.
+    int numValues = 0;
+    if ( params()->numValues() != -1 )
+        numValues = params()->numValues();
+    else
+        numValues = data->usedCols();
+
+    // We need to make sure that we have a certain number of
+    // cells in the dataset(s), depending on the sub type to display.
+    if( (numValues < 2) ||
+        ((params()->hiLoChartSubType() == KDChartParams::HiLoClose)     && (numValues < 3)) ||
+        ((params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose) && (numValues < 4)) ){
+        qDebug( "\nNot enough data to display a High/Low Chart!\n" );
+        qDebug( "type                 requiring" );
+        qDebug( "----                 ---------" );
+        qDebug( "High/Low             2 data cells per series" );
+        qDebug( "High/Low/Close       3 data cells per series" );
+        qDebug( "High/Low/open/Close  4 data cells per series\n" );
+        return; // PENDING(kalle) Throw exception?
+    }
+
+    double pixelsPerUnit = 0.0;
+    if( 0.0 != axisPara->trueAxisHigh() - axisPara->trueAxisLow() )
+        pixelsPerUnit = logHeight / (axisPara->trueAxisHigh() - axisPara->trueAxisLow());
+    else
+        pixelsPerUnit = logHeight / 10;
+
+    // Distance between the individual "stocks"
+    double pointDist = logWidth / (double)datasetNum;
+
+    // compute the position of the 0 axis
+    double zeroXAxisI = axisPara->axisZeroLineStartY() - _dataRect.y();
+
+    const int nLineWidth = params()->lineWidth();
+
+    // Loop over the datasets, draw one "stock" line for each series.
+    for ( uint dataset  = chartDatasetStart;
+          dataset <= chartDatasetEnd;
+          ++dataset ) {
+        // The first and the second col are always high and low; we sort them
+        // accordingly.
+        if( dataset >= datasetStart &&
+            dataset <= datasetEnd &&
+            data->cell( dataset, 0 ).isDouble() &&
+            data->cell( dataset, 1 ).isDouble() ) {
+            double cellValue1 = data->cell( dataset, 0 ).doubleValue();
+            double cellValue2 = data->cell( dataset, 1 ).doubleValue();
+            double lowValue = QMIN( cellValue1, cellValue2 );
+            double highValue = QMAX( cellValue1, cellValue2 );
+            double lowDrawValue = lowValue * pixelsPerUnit;
+            double highDrawValue = highValue * pixelsPerUnit;
+
+            painter->setPen( QPen( params()->dataColor( dataset ),
+                                   nLineWidth ) );
+            // draw line from low to high
+            int xpos = static_cast<int>(
+                pointDist * ( (double)(dataset-chartDatasetStart) + 0.5 ) );
+            int lowYPos  = static_cast<int>( zeroXAxisI - lowDrawValue );
+            int highYPos = static_cast<int>( zeroXAxisI - highDrawValue );
+
+            painter->drawLine( xpos, lowYPos, xpos, highYPos );
+
+            // Find out how long open/close lines need to be in case we
+            // need them. We make them 1/10 of the space available for one
+            // "stock".
+            int openCloseTickLength = static_cast<int>( pointDist * 0.1 );
+            // we need these here because we might need to consider these
+            // later when drawing the low and high labels
+            bool hasOpen = false, hasClose = false;
+            double openValue = 0.0, openDrawValue = 0.0,
+                  closeValue = 0.0, closeDrawValue = 0.0;
+
+            // if we have an open/close chart, show the open value
+            if( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
+                // Only do this if there is a value in the third col.
+                if( data->cell( dataset, 2 ).isDouble() ) {
+                    hasOpen = true;
+                    openValue = data->cell( dataset, 2 ).doubleValue();
+                    openDrawValue = openValue * pixelsPerUnit;
+                    painter->drawLine( xpos - openCloseTickLength,
+                                       static_cast<int>( zeroXAxisI - openDrawValue ),
+                                       xpos,
+                                       static_cast<int>( zeroXAxisI - openDrawValue ) );
+                }
+            }
+
+            // If we have an open/close chart or a close chart, show the
+            // close value, but only if there is a value in the
+            // corresponding column (2 for HiLoClose, 3 for
+            // HiLoOpenClose).
+            if( ( params()->hiLoChartSubType() == KDChartParams::HiLoClose &&
+                  data->cell( dataset, 2 ).isDouble() ) ||
+                ( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose &&
+                  data->cell( dataset, 3 ).isDouble() ) ) {
+                hasClose = true;
+                closeValue = ( params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ?
+                             data->cell( dataset, 2 ).doubleValue() :
+                             data->cell( dataset, 3 ).doubleValue();
+                closeDrawValue = closeValue * pixelsPerUnit;
+                painter->drawLine( xpos,
+                                   static_cast<int>( zeroXAxisI - closeDrawValue ),
+                                   xpos + openCloseTickLength,
+                                   static_cast<int>( zeroXAxisI - closeDrawValue ) );
+            }
+
+            // Draw the low value, if requested.
+            if( params()->hiLoChartPrintLowValues() ) {
+                // PENDING(kalle) Number formatting?
+                QFont theFont( params()->hiLoChartLowValuesFont() );
+                if ( params()->hiLoChartLowValuesUseFontRelSize() ) {
+                    int nTxtHeight =
+                        static_cast < int > ( params()->hiLoChartLowValuesFontRelSize()
+                                              * averageValueP1000 );
+                    theFont.setPointSizeFloat( nTxtHeight );
+                }
+                KDChartTextPiece lowText( QString::number( lowValue ),
+                                          theFont );
+                int width = lowText.width();
+                int height = lowText.height();
+
+                // Check whether there is enough space below the data display
+                int valX = 0, valY = 0;
+                //qDebug("\nzeroXAxisI %f   lowDrawValue %f   height %i   logHeight %f   _dataRect.y() %i   axisYOffset %f",zeroXAxisI,highDrawValue,height,logHeight,_dataRect.y(),axisYOffset);
+                //qDebug("zeroXAxisI - lowDrawValue + height %f    <   axisYOffset + logHeight %f",
+                //zeroXAxisI - lowDrawValue + height, axisYOffset+logHeight);
+                if( zeroXAxisI - lowDrawValue + height < axisYOffset+logHeight ) {
+                    // enough space
+                    valX = xpos - ( width / 2 );
+                    valY = (int)lowDrawValue - lowText.fontLeading();
+                } else {
+                    // not enough space - move to left
+                    if( !hasOpen || height < openDrawValue ) {
+                        // Either there is no open value or it is high enough
+                        // that we can put the low value to the left.
+                        valX = xpos - width - nLineWidth;
+                        valY = static_cast<int>(zeroXAxisI)
+                               - lowYPos
+                               + height/2
+                               + nLineWidth/2;
+                    } else
+                        ; // no way to draw it (really?)
+                }
+                lowText.draw( painter,
+                              valX, static_cast<int>( zeroXAxisI - valY ),
+                              ourClipRect,
+                              params()->hiLoChartLowValuesColor() );
+            }
+
+            // Draw the high value, if requested.
+            if( params()->hiLoChartPrintHighValues() ) {
+                // PENDING(kalle) Number formatting?
+                QFont theFont( params()->hiLoChartHighValuesFont() );
+                if ( params()->hiLoChartHighValuesUseFontRelSize() ) {
+                    int nTxtHeight =
+                        static_cast < int > ( params()->hiLoChartHighValuesFontRelSize()
+                                              * averageValueP1000 );
+                    theFont.setPointSizeFloat( nTxtHeight );
+                }
+                KDChartTextPiece highText( QString::number( highValue ),
+                                           theFont );
+                int width = highText.width();
+                int height = highText.height();
+
+                // Check whether there is enough space above the data display
+                int valX = 0, valY = 0;
+                if( zeroXAxisI - highDrawValue - height > axisYOffset ) {
+                    // enough space
+                    valX = xpos - ( width / 2 );
+                    valY = (int)highDrawValue + highText.fontLeading() + height;
+                } else {
+                    // not enough space - move to right
+                    if( !hasClose ||
+                        height < ( _dataRect.height() - closeDrawValue ) ) {
+                        // Either there is no close value or it is low enough
+                        // that we can put the high value to the right.
+                        valX = xpos + nLineWidth;
+                        valY = static_cast<int>(zeroXAxisI)
+                               - highYPos
+                               + height/2
+                               - nLineWidth/2;
+                    } else
+                        ; // no way to draw it (really?)
+                }
+                highText.draw( painter,
+                               valX, static_cast<int>( zeroXAxisI - valY ),
+                               ourClipRect,
+                               params()->hiLoChartHighValuesColor() );
+            }
+
+            // Draw the open value, if requested.
+            if( params()->hiLoChartPrintOpenValues() &&
+                params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
+                // PENDING(kalle) Number formatting?
+                QFont theFont( params()->hiLoChartOpenValuesFont() );
+                if ( params()->hiLoChartOpenValuesUseFontRelSize() ) {
+                    int nTxtHeight =
+                        static_cast < int > ( params()->hiLoChartOpenValuesFontRelSize()
+                                              * averageValueP1000 );
+                    theFont.setPointSizeFloat( nTxtHeight );
+                }
+                KDChartTextPiece openText( QString::number( openValue ),
+                                           theFont );
+                int width = openText.width();
+                int height = openText.height();
+
+                // We can pretty safely assume that there is always enough
+                // space to the left and right of the data display.
+                int valX = 0, valY = 0;
+                valX = xpos - openCloseTickLength - width;
+                valY = (int)openDrawValue + ( height / 2 );
+                openText.draw( painter,
+                               valX, static_cast<int>( zeroXAxisI - valY ),
+                               ourClipRect,
+                               params()->hiLoChartOpenValuesColor() );
+            }
+
+            // Draw the close value, if requested.
+            if( params()->hiLoChartPrintCloseValues() &&
+                ( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose
+                  ||
+                  params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ) {
+                // PENDING(kalle) Number formatting?
+                QFont theFont( params()->hiLoChartCloseValuesFont() );
+                if ( params()->hiLoChartCloseValuesUseFontRelSize() ) {
+                    int nTxtHeight =
+                        static_cast < int > ( params()->hiLoChartCloseValuesFontRelSize()
+                                              * averageValueP1000 );
+                    theFont.setPointSizeFloat( nTxtHeight );
+                }
+                KDChartTextPiece closeText( QString::number( closeValue ),
+                                            theFont );
+                //int width = closeText.width();
+                int height = closeText.height();
+
+                // We can pretty safely assume that there is always enough
+                // space to the left and right of the data display.
+                int valX = 0, valY = 0;
+                valX = xpos + openCloseTickLength;
+                valY = (int)closeDrawValue + ( height / 2 );
+                closeText.draw( painter,
+                                valX, static_cast<int>( zeroXAxisI - valY ),
+                                ourClipRect,
+                                params()->hiLoChartCloseValuesColor() );
+            }
+
+        } else
+            continue; // we cannot display this value
+    }
 }

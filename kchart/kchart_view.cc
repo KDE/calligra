@@ -94,6 +94,11 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      "polarchart");
     m_chartpolar->setExclusiveGroup( "charttypes" );
 
+    m_chartbw = new KToggleAction( i18n("&Bo&x && Whisker"), "bw", 0, this,
+                                     SLOT( bwChart() ), actionCollection(),
+                                     "bwchart");
+    m_chartbw->setExclusiveGroup( "charttypes" );
+
 
     m_colorConfig = new KAction( i18n( "&Configure Colors..." ), 0,
                             this, SLOT( slotConfigColor() ),
@@ -264,14 +269,14 @@ void KChartView::updateGuiTypeOfChart()
     case KDChartParams::HiLo:
       m_charthilo->setChecked(true);
       break;
-    case KDChartParams::Gantt:
-      //todo
-      break;
     case KDChartParams::Ring:
       m_chartring->setChecked(true);
       break;
     case KDChartParams::Polar:
         m_chartpolar->setChecked(true);
+        break;
+    case KDChartParams::BoxWhisker:
+        m_chartbw->setChecked( true );
         break;
     default:
       //todo
@@ -426,6 +431,19 @@ void KChartView::polarChart()
     }
     else
         m_chartpolar->setChecked( true ); // always one has to be checked !
+}
+
+void KChartView::bwChart()
+{
+    if( m_chartbw->isChecked() )
+    {
+        KDChartParams* params = ((KChartPart*)koDocument())->params();
+        params->setChartType( KDChartParams::BoxWhisker );
+        params->setBWChartSubType( KDChartParams::BWNormal );
+        repaint();
+    }
+    else
+        m_chartbw->setChecked( true ); // always one has to be checked !
 }
 
 void KChartView::mousePressEvent ( QMouseEvent *e )

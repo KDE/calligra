@@ -4,29 +4,29 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #ifndef __KDCHARTVECTORTABLE_H__
 #define __KDCHARTVECTORTABLE_H__
 
@@ -62,36 +62,40 @@ public:
     void expand( uint _rows, uint _cols ) {
         // Save the old table
         QValueVector<KDChartData> save( matrix );
-        
+
         // Delete old data, then resize
         matrix.resize( 0 );
         matrix.resize( _rows * _cols, KDChartData() );
-        
+
         // Copy over the old data
-        for( uint row = 0; row < row_count; row++ )
-            for( uint col = 0; col < col_count; col++ )
+        for( uint row = 0; row < QMIN( row_count, _rows ); row++ )
+            for( uint col = 0; col < QMIN( col_count, _cols ); col++ )
                 matrix[ row * _cols + col ] = save[ row * col_count + col ];
-        
+
         // set the new counts
         col_count = _cols;
         row_count = _rows;
     }
-    
+
     KDChartData& cell( uint _row, uint _col ) {
-        Q_ASSERT( _row < row_count && _col < col_count );
+        Q_ASSERT( _row < row_count  );
+        Q_ASSERT( _col < col_count );
         return matrix[ static_cast < int > ( _row * col_count + _col ) ];
     }
     const KDChartData& cell( uint _row, uint _col ) const {
-        Q_ASSERT( _row < row_count && _col < col_count );
+        Q_ASSERT( _row < row_count  );
+        Q_ASSERT( _col < col_count );
         return matrix[ static_cast < int > ( _row * col_count + _col ) ];
     }
     void setCell( uint _row, uint _col, const KDChartData& _element ) {
-        Q_ASSERT( _row < row_count && _col < col_count );
+        Q_ASSERT( _row < row_count  );
+        Q_ASSERT( _col < col_count );
         matrix[ static_cast < int > ( _row * col_count + _col ) ] = _element;
     }
 
     void clearCell( uint _row, uint _col ) {
-        Q_ASSERT( _row < row_count && _col < col_count );
+        Q_ASSERT( _row < row_count  );
+        Q_ASSERT( _col < col_count );
         matrix[ static_cast < int > ( _row * col_count + _col ) ].clearValue();
     }
 
@@ -116,8 +120,8 @@ private:
 
 public:
     /**
-    * Typedefs
-    */
+     * Typedefs
+     */
     typedef QValueVector<KDChartData>::iterator Iterator;
     typedef QValueVector<KDChartData>::const_iterator ConstIterator;
 
@@ -128,25 +132,28 @@ public:
     typedef QValueVector<int>::const_iterator ConstColIterator;
 
     /**
-    * API
-    */
-    KDChartVectorTableData() {
+     * API
+     */
+    KDChartVectorTableData() :
+        KDChartTableDataBase() {
         sh = new Priv;
         _usedCols = 0;
         _usedRows = 0;
     }
-    KDChartVectorTableData( uint _rows, uint _cols ) {
+    KDChartVectorTableData( uint _rows, uint _cols ) :
+        KDChartTableDataBase() {
         sh = new Priv( _rows, _cols );
         _usedRows = _rows;
         _usedCols = _cols;
     }
 
     KDChartVectorTableData( const KDChartVectorTableData& _t ) :
-      KDChartTableDataBase( _t ) {
+        KDChartTableDataBase( _t ) {
         _usedRows = _t._usedRows;
         _usedCols = _t._usedCols;
         sh = _t.sh;
         sh->ref();
+        setSorted( _t.sorted() );
     }
 
     virtual ~KDChartVectorTableData() {
@@ -163,6 +170,7 @@ public:
         if ( sh->deref() )
             delete sh;
         sh = t.sh;
+        setSorted( t.sorted() );
         return *this;
     }
 
@@ -227,6 +235,8 @@ public:
 
     void setUsedRows( uint _rows ) {
         Q_ASSERT( _rows <= rows() );
+        if( _usedRows < _rows )
+            setSorted( false );
         _usedRows = _rows;
     }
 
@@ -236,6 +246,8 @@ public:
 
     void setUsedCols( uint _cols ) {
         Q_ASSERT( _cols <= cols() );
+        if( _usedCols < _cols )
+            setSorted( false );
         _usedCols = _cols;
     }
 
@@ -245,13 +257,14 @@ public:
 
 private:
     /**
-    * Helpers
-    */
+     * Helpers
+     */
     void detach() {
         if ( sh->count > 1 ) {
             sh->deref();
             sh = new Priv( *sh );
         }
+        setSorted( false );
     }
 
     /**

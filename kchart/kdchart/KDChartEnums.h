@@ -4,29 +4,29 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #ifndef __KDCHARTENUMS_H__
 #define __KDCHARTENUMS_H__
 
@@ -40,8 +40,8 @@
 */
 
 /**
-    Project global class providing some enums needed both by KDChartParams
-    and by KDChartCustomBox.
+   Project global class providing some enums needed both by KDChartParams
+   and by KDChartCustomBox.
 */
 class KDChartEnums
 {
@@ -65,11 +65,11 @@ public:
                             LayoutPolicyShrinkFontSize };
 
     /**
-    Converts the specified text layout policy enum to a
-    string representation.
+       Converts the specified text layout policy enum to a
+       string representation.
 
-    \param type the text layout policy to convert
-    \return the string representation of the text layout policy enum
+       \param type the text layout policy to convert
+       \return the string representation of the text layout policy enum
     */
     static QString layoutPolicyToString( TextLayoutPolicy type ) {
         switch( type ) {
@@ -91,10 +91,10 @@ public:
 
 
     /**
-    Converts the specified string to a text layout policy enum value.
+       Converts the specified string to a text layout policy enum value.
 
-    \param string the string to convert
-    \return the text layout policy enum value
+       \param string the string to convert
+       \return the text layout policy enum value
     */
     static TextLayoutPolicy stringToLayoutPolicy( const QString& string ) {
         if( string ==      "JustOverwrite" )
@@ -110,7 +110,7 @@ public:
         else // default, should not happen
             return LayoutJustOverwrite;
     }
-    
+
 
     /**
        Areas of the chart that may have their own backgrounds
@@ -172,28 +172,15 @@ public:
                     AreaBASEMask                     = 0xF000 };
 
 
-   /**
+    /**
        The general position flag to specify a point of
        an area, for example this could be the anchor point
        which an annotation box should be aligned to.
 
        The following picture shows the different positions:
-       \verbatim
 
-   PosTopLeft------------PosTopCenter---------PosTopRight
-        |                                          |
-        |                                          |
-        |                                          |
-        |                                          |
-  PosCenterLeft           PosCenter          PosCenterRight
-        |                                          |
-        |                                          |
-        |                                          |
-        |                                          |
-  PosBottomLeft--------PosBottomCenter-------PosBottomRight
-
-       \endverbatim
-
+       \image html "../refman_images/positions.png"
+       \image latex "../refman_images/positions.png" "the PositionFlag enum" width=4in
 
        \note The position and alignment of content to be printed at (or
        inside of, resp.) an area or a point -- like for printing data value texts next
@@ -206,31 +193,8 @@ public:
        position is shown in the following drawing, note that annotation #2 and annotation #3
        share the same PositionFlag but have different alignment flags set:
 
-       \verbatim
-                               PositionFlag    Qt::AlignmentFlags
-                               ------------    ------------------
-                           1:  PosTopLeft      AlignBottom +AlignLeft
-      _______________      2:  PosCenterRight  AlignVCenter+AlignRight
-     /               \     3:  PosCenterRight  AlignTop    +AlignLeft
-    |  1. annotation  |    4:  PosBottomRight  AlignCenter
-     \_______________/
-    +-----------------------+----------------------+
-    |                                              |
-    |                                              |
-    |                                              |
-    |                                              |
-    |                                  ___________ |
-    |                                 /           \|
-    +                       +        |  2. annot.  + ___________
-    |                                 \___________/|/           \
-    |                                              |  3. annot.  |
-    |                                              |\___________/
-    |                                              |
-    |                                         ___________
-    |                                        /           \
-    +-----------------------+-------------- |  4. annot.  |
-                                             \___________/
-       \endverbatim
+       \image html "../refman_images/alignment.png"
+       \image latex "../refman_images/alignment.png" "positioning and aligning" width=4in
 
        \sa KDChartParams::setPrintDataValues
     */
@@ -240,14 +204,14 @@ public:
 
 
     /**
-        Returns the point representing a position of a rectangle.
+       Returns the point representing a position of a rectangle.
     */
     static QPoint positionFlagToPoint( const QRect& rect,
                                        PositionFlag pos )
-    {
-        QPoint pt;
-        if( rect.isValid() ) {
-            switch( pos ) {
+        {
+            QPoint pt;
+            if( rect.isValid() ) {
+                switch( pos ) {
                 case KDChartEnums::PosTopLeft:
                     pt = rect.topLeft();
                     break;
@@ -279,34 +243,34 @@ public:
                 case KDChartEnums::PosBottomRight:
                     pt = rect.bottomRight();
                     break;
+                }
             }
+            return pt;
         }
-        return pt;
-    }
 
 
     /**
-        Returns the point representing a position of a corresponding
-        QPointArray.
+       Returns the point representing a position of a corresponding
+       QPointArray.
 
-        \note The array \c points <b>must</b> have at least nine elements.
+       \note The array \c points <b>must</b> have at least nine elements.
     */
     static QPoint positionFlagToPoint( const QPointArray& points,
                                        PositionFlag pos )
-    {
-        QPoint pt;
-        if( 9 <= points.size() )
-            pt = points[ pos ];
-        return pt;
-    }
+        {
+            QPoint pt;
+            if( 9 <= points.size() )
+                pt = points[ pos ];
+            return pt;
+        }
 
 
     /**
-    Converts the specified content position enum to a
-    string representation.
+       Converts the specified content position enum to a
+       string representation.
 
-    \param type the content position to convert
-    \return the string representation of the type enum
+       \param type the content position to convert
+       \return the string representation of the type enum
     */
     static QString positionFlagToString( PositionFlag type ) {
         switch( type ) {
@@ -336,10 +300,10 @@ public:
 
 
     /**
-    Converts the specified string to a content position enum value.
+       Converts the specified string to a content position enum value.
 
-    \param string the string to convert
-    \return the content position enum value
+       \param string the string to convert
+       \return the content position enum value
     */
     static PositionFlag stringToPositionFlag( const QString& string ) {
         if( string ==      "TopLeft" )

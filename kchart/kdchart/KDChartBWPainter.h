@@ -1,5 +1,4 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
 */
 
@@ -27,22 +26,23 @@
  ** licensing are not clear to you.
  **
  **********************************************************************/
-#ifndef __KDCHARTHILOPAINTER_H__
-#define __KDCHARTHILOPAINTER_H__
+#ifndef __KDCHARTBWPAINTER_H__
+#define __KDCHARTBWPAINTER_H__
 
 #include "KDChartAxesPainter.h"
+#include <KDChartParams.h>
 #include <KDChartTable.h>
 
 #include <qnamespace.h>
 
 class KDChartParams;
 
-class KDChartHiLoPainter : public KDChartAxesPainter, public Qt
+class KDChartBWPainter : public KDChartAxesPainter, public Qt
 {
     friend class KDChartPainter;
 protected:
-    KDChartHiLoPainter( KDChartParams* params );
-    virtual ~KDChartHiLoPainter();
+    KDChartBWPainter( KDChartParams* params );
+    virtual ~KDChartBWPainter();
 
     virtual bool isNormalMode() const;
     virtual int clipShiftUp( bool, double ) const;
@@ -67,6 +67,10 @@ protected:
 
     virtual QString fallbackLegendText( uint dataset ) const;
     virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
+private:
+    int calculateStats( KDChartTableDataBase&, uint );// returns number of used cells containing a double
+    double stats[   KDChartParams::BWStatValOffEndValue]; // y cordinates
+    int nFirstQ1, nLastQ1, nFirstQ3, nLastQ3;
 };
 
 #endif

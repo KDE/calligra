@@ -4,48 +4,40 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #include "KDChartEnums.h"
 #include "KDChartPiePainter.h"
 #include "KDChartParams.h"
 
 #include <qpainter.h>
 #include <qvaluestack.h>
+#include <qmessagebox.h>
 
 #define DEGTORAD(d) (d)*M_PI/180
 
-#if defined( __WINDOWS__ ) || defined( _SGIAPI )
 #include <math.h>
-#else
-#include <cmath>
-#endif
-
-#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI ) || ( defined HP11_aCC && defined HP1100 )
-#define std
-#endif
-
 
 /**
    \class KDChartPiePainter KDChartPiePainter.h
@@ -96,15 +88,20 @@ void KDChartPiePainter::paintData( QPainter* painter,
     QRect ourClipRect( _dataRect );
 
     const QWMatrix & world = painter->worldMatrix();
-    ourClipRect = world.mapRect( ourClipRect );
+    ourClipRect =
+#if COMPAT_QT_VERSION >= 0x030000
+        world.mapRect( ourClipRect );
+#else
+    world.map( ourClipRect );
+#endif
 
     painter->setClipRect( ourClipRect );
 
     // find which dataset to paint
     uint dataset;
     if ( !params()->findDataset( KDChartParams::DataEntry
-                                  ,
-                                  dataset, dataset ) ) {
+                                 ,
+                                 dataset, dataset ) ) {
         return ; // nothing to draw
     }
 
@@ -175,8 +172,8 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
         if ( data->cell( dataset, value ).isDouble() ) {
             _startAngles[ value ] = currentValue;
-            double cellValue = std::fabs( data->cell( dataset, value ).doubleValue() );
-            _angleLens[ value ] = ( int ) std::floor( cellValue * sectorsPerValue + 0.5 );
+            double cellValue = fabs( data->cell( dataset, value ).doubleValue() );
+            _angleLens[ value ] = ( int ) floor( cellValue * sectorsPerValue + 0.5 );
             atLeastOneValue = true;
         } else { // mark as non-existent
             _angleLens[ value ] = 0;
@@ -290,6 +287,16 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
 
 
+/**
+   Internal method that draws one of the pies in a pie chart.
+
+   \param painter the QPainter to draw in
+   \param dataset the dataset to draw the pie for
+   \param pie the pie to draw
+   \param the chart to draw the pie in
+   \param regions a pointer to a list of regions that will be filled
+   with regions representing the data segments, if not null
+*/
 void KDChartPiePainter::drawOnePie( QPainter* painter,
                                     KDChartTableDataBase* /*data*/,
                                     uint dataset, uint pie, uint chart,
@@ -351,9 +358,9 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
                                        drawPosition.width(),
                                        drawPosition.height() );
                 datReg = new KDChartDataRegion( region->unite( QRegion( hitregion ) ),
-                                                       dataset,
-                                                       pie,
-                                                       chart );
+                                                dataset,
+                                                pie,
+                                                chart );
                 datReg->points[ KDChartEnums::PosCenter ]
                     = drawPosition.center();
                 datReg->points[ KDChartEnums::PosCenterRight ]
@@ -388,9 +395,9 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
                 hitregion.setPoint( hitregion.size() - 1,
                                     drawPosition.center() );
                 datReg = new KDChartDataRegion( region->unite( QRegion( hitregion ) ),
-                                                       dataset,
-                                                       pie,
-                                                       chart );
+                                                dataset,
+                                                pie,
+                                                chart );
 
                 datReg->points[ KDChartEnums::PosTopLeft ]
                     = pointOnCircle( drawPosition, startAngle + angleLen );
@@ -401,25 +408,25 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
 
                 datReg->points[   KDChartEnums::PosBottomLeft   ] = drawPosition.center();
                 datReg->points[   KDChartEnums::PosBottomCenter ]
-                = datReg->points[ KDChartEnums::PosBottomLeft   ];
+                    = datReg->points[ KDChartEnums::PosBottomLeft   ];
                 datReg->points[   KDChartEnums::PosBottomRight  ]
-                = datReg->points[ KDChartEnums::PosBottomLeft   ];
+                    = datReg->points[ KDChartEnums::PosBottomLeft   ];
 
                 datReg->points[ KDChartEnums::PosCenterLeft ]
-                = QPoint( (   datReg->points[ KDChartEnums::PosTopLeft      ].x()
-                            + datReg->points[ KDChartEnums::PosBottomLeft   ].x() ) / 2,
-                          (   datReg->points[ KDChartEnums::PosTopLeft      ].y()
-                            + datReg->points[ KDChartEnums::PosBottomLeft   ].y() ) / 2 );
+                    = QPoint( (   datReg->points[ KDChartEnums::PosTopLeft      ].x()
+                                  + datReg->points[ KDChartEnums::PosBottomLeft   ].x() ) / 2,
+                              (   datReg->points[ KDChartEnums::PosTopLeft      ].y()
+                                  + datReg->points[ KDChartEnums::PosBottomLeft   ].y() ) / 2 );
                 datReg->points[ KDChartEnums::PosCenter ]
-                = QPoint( (   datReg->points[ KDChartEnums::PosTopCenter    ].x()
-                            + datReg->points[ KDChartEnums::PosBottomCenter ].x() ) / 2,
-                          (   datReg->points[ KDChartEnums::PosTopCenter    ].y()
-                            + datReg->points[ KDChartEnums::PosBottomCenter ].y() ) / 2 );
+                    = QPoint( (   datReg->points[ KDChartEnums::PosTopCenter    ].x()
+                                  + datReg->points[ KDChartEnums::PosBottomCenter ].x() ) / 2,
+                              (   datReg->points[ KDChartEnums::PosTopCenter    ].y()
+                                  + datReg->points[ KDChartEnums::PosBottomCenter ].y() ) / 2 );
                 datReg->points[ KDChartEnums::PosCenterRight ]
-                = QPoint( (   datReg->points[ KDChartEnums::PosTopRight     ].x()
-                            + datReg->points[ KDChartEnums::PosBottomRight  ].x() ) / 2,
-                          (   datReg->points[ KDChartEnums::PosTopRight     ].y()
-                            + datReg->points[ KDChartEnums::PosBottomRight  ].y() ) / 2 );
+                    = QPoint( (   datReg->points[ KDChartEnums::PosTopRight     ].x()
+                                  + datReg->points[ KDChartEnums::PosBottomRight  ].x() ) / 2,
+                              (   datReg->points[ KDChartEnums::PosTopRight     ].y()
+                                  + datReg->points[ KDChartEnums::PosBottomRight  ].y() ) / 2 );
 
                 datReg->startAngle = startAngle;
                 datReg->angleLen   = angleLen;
@@ -430,6 +437,18 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
 }
 
 
+/**
+   Internal method that draws the shadow creating the 3D effect of a pie
+
+   \param painter the QPainter to draw in
+   \param rect the position to draw at
+   \param dataset the dataset to draw the pie for
+   \param pie the pie to draw the shadow for
+   \param the chart to draw the pie in
+   \param threeDHeight the height of the shadow
+   \param regions a pointer to a list of regions that will be filled
+   with regions representing the data segments, if not null
+*/
 void KDChartPiePainter::draw3DEffect( QPainter* painter,
                                       const QRect& drawPosition,
                                       uint dataset, uint pie, uint chart,
@@ -461,7 +480,7 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
     //int centerY = drawPosition.center().y();
 
     if ( startAngle == endAngle ||
-            startAngle == endAngle - 5760 ) { // full circle
+         startAngle == endAngle - 5760 ) { // full circle
         drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
                               threeDHeight, 2880, 5760, region );
     } else if ( startAngle <= 90 * 16 ) {
@@ -618,12 +637,22 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
 }
 
 
+/**
+   Internal method that draws a segment with a straight 3D effect
+
+   \param painter the QPainter to draw in
+   \param rect the position to draw at
+   \param threeDHeight the height of the shadow
+   \param angle the angle of the segment
+   \param regions a pointer to a list of regions that will be filled
+   with regions representing the data segments, if not null
+*/
 void KDChartPiePainter::drawStraightEffectSegment( QPainter* painter,
-        const QRect& rect,
-        uint /*dataset*/, uint /*pie*/, uint /*chart*/,
-        int threeDHeight,
-        int angle,
-        QRegion* region )
+                                                   const QRect& rect,
+                                                   uint /*dataset*/, uint /*pie*/, uint /*chart*/,
+                                                   int threeDHeight,
+                                                   int angle,
+                                                   QRegion* region )
 {
     QPoint center = rect.center();
     QPointArray points( 4 );
@@ -639,13 +668,24 @@ void KDChartPiePainter::drawStraightEffectSegment( QPainter* painter,
 }
 
 
+/**
+   Internal method that draws a segment with an arc 3D effect
+
+   \param painter the QPainter to draw in
+   \param rect the position to draw at
+   \param threeDHeight the height of the shadow
+   \param startAngle the starting angle of the segment
+   \param endAngle the ending angle of the segment
+   \param regions a pointer to a list of regions that will be filled
+   with regions representing the data segments, if not null
+*/
 void KDChartPiePainter::drawArcEffectSegment( QPainter* painter,
-        const QRect& rect,
-        uint /*dataset*/, uint /*pie*/, uint /*chart*/,
-        int threeDHeight,
-        int startAngle,
-        int endAngle,
-        QRegion* region )
+                                              const QRect& rect,
+                                              uint /*dataset*/, uint /*pie*/, uint /*chart*/,
+                                              int threeDHeight,
+                                              int startAngle,
+                                              int endAngle,
+                                              QRegion* region )
 {
     // Start with getting the points for the inner arc.
     QPointArray collect;
@@ -668,12 +708,19 @@ void KDChartPiePainter::drawArcEffectSegment( QPainter* painter,
 }
 
 
+/**
+   Internal method that finds the pie that is located at the position
+   specified by \c angle.
+
+   \param angle the angle at which to search for a pie
+   \return the number of the pie found
+*/
 uint KDChartPiePainter::findPieAt( int angle )
 {
     for ( int i = 0; i < _numValues; i++ ) {
         int endseg = _startAngles[ i ] + _angleLens[ i ];
         if ( ( _startAngles[ i ] <= angle ) &&
-                ( endseg >= angle ) )
+             ( endseg >= angle ) )
             // found!
             return i;
     }
@@ -683,6 +730,13 @@ uint KDChartPiePainter::findPieAt( int angle )
 }
 
 
+/**
+   Internal method that finds the pie that is located to the left of
+   the pie specified by \c pie.
+
+   \param pie the pie to start the search from
+   \return the number of the pie to the left of \c pie
+*/
 uint KDChartPiePainter::findLeftPie( uint pie )
 {
     if ( pie == 0 )
@@ -696,6 +750,13 @@ uint KDChartPiePainter::findLeftPie( uint pie )
 }
 
 
+/**
+   Internal method that finds the pie that is located to the right of
+   the pie specified by \c pie.
+
+   \param pie the pie to start the search from
+   \return the number of the pie to the right of \c pie
+*/
 uint KDChartPiePainter::findRightPie( uint pie )
 {
     int rightpie = pie + 1;

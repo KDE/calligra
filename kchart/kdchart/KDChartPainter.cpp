@@ -4,31 +4,31 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #include <KDChartParams.h>
-#ifdef __WINDOWS__
+#ifdef Q_WS_WIN
 #include <math.h>
 #else
 #include <cmath>
@@ -51,9 +51,11 @@
 #include <KDChartPolarPainter.h>
 #include <KDChartRingPainter.h>
 #include <KDChartHiLoPainter.h>
+#include <KDChartBWPainter.h>
 #include <KDChartTextPiece.h>
 
 #include <qpainter.h>
+#include <qpaintdevice.h>
 #include <qpaintdevicemetrics.h>
 
 #define DEGTORAD(d) (d)*M_PI/180
@@ -91,8 +93,9 @@
    \param params the parameters of the chart to be drawn
 */
 KDChartPainter::KDChartPainter( KDChartParams* params ) :
-  _legendTitle( 0 ),
-    _params( params )
+    _legendTitle( 0 ),
+    _params( params ),
+    _legendTitleHeight( 0 )
 {
     // This constructor intentionally left blank so far; we cannot setup the
     // geometry yet since we do not know the size of the painter.
@@ -107,6 +110,17 @@ KDChartPainter::~KDChartPainter()
     delete _legendTitle;
 }
 
+bool KDChartPainter::calculateAllAxesLabelTextsAndCalcValues(
+    KDChartTableDataBase*,
+    double,
+    double,
+    double& )
+{
+    // This function intentionally returning false; it is implemented
+    // by the KDChartAxesPainter class only.
+    return false;
+}
+
 /**
    Creates an object of a concrete subclass of KDChartPainter that
    KDChart::paint() (and consequently, the application) can use to
@@ -117,48 +131,38 @@ KDChartPainter::~KDChartPainter()
    \param params the parameter set which is used to determine the
    painter implementation to be used
    \return a pointer to an object of a subclass of KDChartPainter that
-   can be used to draw charts as defined by the \a params parameter
-   \throw KDChartUnknownTypeException if there is no registered
+   can be used to draw charts as defined by the \a params
+   parameter. Returns 0 if there is no registered
    KDChartPainter subclass for the type specified in \a params. This
    can only happen with user-defined chart types.
 */
 KDChartPainter* KDChartPainter::create( KDChartParams* params, bool make2nd )
-#ifdef USE_EXCEPTIONS
-throw ( KDChartUnknownTypeException )
-#endif
 {
     KDChartParams::ChartType cType = make2nd
                                      ? params->additionalChartType()
                                      : params->chartType();
     switch ( cType )
-        {
-        case KDChartParams::Bar:
-            return new KDChartBarPainter( params );
-            break;
-        case KDChartParams::Line:
-            return new KDChartLinesPainter( params );
-            break;
-        case KDChartParams::Area:
-            return new KDChartAreaPainter( params );
-            break;
-        case KDChartParams::Pie:
-            return new KDChartPiePainter( params );
-            break;
-        case KDChartParams::Ring:
-            return new KDChartRingPainter( params );
-            break;
-        case KDChartParams::HiLo:
-            return new KDChartHiLoPainter( params );
-	case KDChartParams::Polar:
-	  return new KDChartPolarPainter( params );
-        case KDChartParams::NoType:
-        default:
-#ifdef USE_EXCEPTIONS
-            throw KDChartUnknownTypeException( QString::number( cType ) );
-#else
-            return 0;
-#endif
-        }
+    {
+    case KDChartParams::Bar:
+        return new KDChartBarPainter( params );
+    case KDChartParams::Line:
+        return new KDChartLinesPainter( params );
+    case KDChartParams::Area:
+        return new KDChartAreaPainter( params );
+    case KDChartParams::Pie:
+        return new KDChartPiePainter( params );
+    case KDChartParams::Ring:
+        return new KDChartRingPainter( params );
+    case KDChartParams::HiLo:
+        return new KDChartHiLoPainter( params );
+    case KDChartParams::BoxWhisker:
+        return new KDChartBWPainter( params );
+    case KDChartParams::Polar:
+        return new KDChartPolarPainter( params );
+    case KDChartParams::NoType:
+    default:
+        return 0;
+    }
 }
 
 
@@ -194,13 +198,8 @@ void KDChartPainter::registerPainter( const QString& /*painterName*/,
 
    \param the name under which the painter implementation is
    registered
-   \throw KDChartUnknownTypeException if no painter implementation is
-   registered under the specified name
 */
 void KDChartPainter::unregisterPainter( const QString& /*painterName*/ )
-#ifdef USE_EXCEPTIONS
-throw( KDChartUnknownTypeException )
-#endif
 {
     // PENDING(kalle) Implement this
     qDebug( "Sorry, not implemented:  KDChartPainter::unregisterPainter()" );
@@ -226,6 +225,9 @@ void KDChartPainter::paint( QPainter* painter,
                             KDChartDataRegionList* regions,
                             const QRect* rect )
 {
+    if( paintFirst && regions )
+        regions->clear();
+
     // Protect against non-existing data
     if ( data->usedCols() == 0 && data->usedRows() == 0 )
         return ;
@@ -235,22 +237,52 @@ void KDChartPainter::paint( QPainter* painter,
     setupGeometry
         ( painter, data, actLegendFont, actLegendTitleFont, rect );
 
+
     // Note: In addition to the below paintArea calls there might be several
     //       other paintArea calls regarding to the BASE areas (AreaAxisBASE,
     //       AreaHdFtBASE, AreaCustomBoxesBASE).
-    //       These additional calls result in smaler areas being drawn inside
+    //       These additional calls result in smaller areas being drawn inside
     //       on the larger ones specifies here.
     if ( paintFirst ) {
         paintArea(   painter, KDChartEnums::AreaOutermost );
         paintArea(   painter, KDChartEnums::AreaInnermost );
+
         paintArea(   painter, KDChartEnums::AreaDataAxesLegendHeadersFooters );
+
         paintArea(   painter, KDChartEnums::AreaHeaders );
-        paintHeader( painter, data );
         paintArea(   painter, KDChartEnums::AreaFooters );
-        paintFooter( painter, data );
+        // header areas are drawn in the following order:
+        //   1st center: main header, left main header, right main header
+        //   2nd above:  header #0,   left header #0,   right header #0
+        //   3rd below:  header #2,   left header #2,   right header #2
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeader  );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeaderL );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeaderR );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeader0  );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeader0L );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeader0R );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeader2  );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeader2L );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosHeader2R );
+        // footer areas are drawn in the same order as the header areas:
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooter  );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooterL );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooterR );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooter0  );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooter0L );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooter0R );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooter2  );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooter2L );
+        paintArea( painter, KDChartEnums::AreaHdFtBASE + KDChartParams::HdFtPosFooter2R );
+
+        paintHeaderFooter( painter, data );
+
         paintArea(   painter, KDChartEnums::AreaDataAxesLegend );
         paintArea(   painter, KDChartEnums::AreaDataAxes );
         paintArea(   painter, KDChartEnums::AreaAxes );
+        for( int axis = KDChartAxisParams::AxisPosSTART;
+             KDChartAxisParams::AxisPosEND >= axis; ++axis )
+            paintArea( painter, KDChartEnums::AreaAxisBASE + axis );
         paintArea(   painter, KDChartEnums::AreaData );
         paintAxes(   painter, data );
     }
@@ -260,7 +292,12 @@ void KDChartPainter::paint( QPainter* painter,
     painter->restore();
 
     if ( paintLast ) {
-        paintDataValues( painter, data, regions );
+        // paint the frame lines of all little data region areas
+        // on top of all data representations
+        paintDataRegionAreas( painter, regions );
+        if( KDChartParams::Bar          != params()->chartType() ||
+            KDChartParams::BarMultiRows != params()->barChartSubType() )
+            paintDataValues( painter, data, regions );
         paintArea(   painter, KDChartEnums::AreaLegend );
         paintLegend( painter, data, actLegendFont, actLegendTitleFont );
         paintCustomBoxes( painter, regions );
@@ -269,7 +306,7 @@ void KDChartPainter::paint( QPainter* painter,
 
 
 /**
-    Paints an area frame.
+   Paints an area frame.
 */
 void KDChartPainter::paintArea( QPainter* painter,
                                 uint area,
@@ -278,83 +315,109 @@ void KDChartPainter::paintArea( QPainter* painter,
                                 uint dataCol,
                                 uint data3rd )
 {
-    uint maskBASE = KDChartEnums::AreaBASEMask & area;
-    //bool allCustomBoxes = false;
-    bool bFound;
-    const KDChartParams::KDChartFrameSettings* settings =
-                                params()->frameSettings( area, bFound );
+    if( KDChartEnums::AreaCustomBoxesBASE != (KDChartEnums::AreaBASEMask & area) ){
+        bool bFound;
+        const KDChartParams::KDChartFrameSettings* settings =
+            params()->frameSettings( area, bFound );
+        if( bFound ) {
+            bool allCustomBoxes;
+            QRect rect( calculateAreaRect( allCustomBoxes,
+                                           area,
+                                           dataRow, dataCol, data3rd, regions ) );
 
-    // in case no settings for a single custom box were found try to retrieve
-    // global custom box settings:
-    if( !bFound && (KDChartEnums::AreaCustomBoxesBASE == maskBASE) )
-        settings = params()->frameSettings( KDChartEnums::AreasCustomBoxes, bFound );
-    if( bFound ) {
-        bool allCustomBoxes;
-
-        QRect rect( calculateAreaRect( allCustomBoxes,
-                                       area,
-                                       dataRow, dataCol, data3rd, regions ) );
-
-        if( allCustomBoxes ) {
-            uint idx;
-            for( idx = 0; idx <= params()->maxCustomBoxIdx(); ++idx ) {
-                const KDChartCustomBox* box = params()->customBox( idx );
-                if( box ) {
-                    const KDChartParams::KDChartFrameSettings * singleSettings
-                        = params()->frameSettings(
-                            KDChartEnums::AreaCustomBoxesBASE + idx, bFound );
-
-                    rect = box->trueRect( calculateAnchor( *box ),
-                                          _areaWidthP1000,
-                                          _areaHeightP1000 );
-                    paintAreaWithGap( painter, rect,
-                                      bFound ? *singleSettings : *settings );
-                }
-            }
-        } else
-            paintAreaWithGap( painter, rect, *settings );
+            if( !allCustomBoxes )
+                paintAreaWithGap( painter, rect, *settings );
+        }
     }
 }
 
 
+void KDChartPainter::paintDataRegionAreas( QPainter* painter,
+                                           KDChartDataRegionList* regions )
+{
+    if( regions ){
+        int iterIdx;
+        bool bFound;
+        const KDChartParams::KDChartFrameSettings* settings =
+            params()->frameSettings( KDChartEnums::AreaChartDataRegion, bFound, &iterIdx );
+        while( bFound ) {
+            bool bDummy;
+            QRect rect( calculateAreaRect( bDummy,
+                                           KDChartEnums::AreaChartDataRegion,
+                                           settings->dataRow(),
+                                           settings->dataCol(),
+                                           settings->data3rd(),
+                                           regions ) );
+            // NOTE: we can *not* draw any background behind the
+            //       data representations.
+            // reason: for being able to do that we would have to
+            //         know the respective regions _before_ the
+            //         data representations are drawn; since that
+            //         is impossible, we just draw the borders only
+            //         ( == the corners and the edges ) and ignore the background
+            //
+            // (actually: Since the respective interface function does not allow
+            //            specifying a background there is nothing to be ignored anyway.)
+            settings->frame().paint( painter,
+                                     KDFrame::PaintBorder,
+                                     trueFrameRect( rect, settings ) );
+            settings = params()->nextFrameSettings( bFound, &iterIdx );
+        }
+    }
+}
+
+
+QRect KDChartPainter::trueFrameRect( const QRect& orgRect,
+                                     const KDChartParams::KDChartFrameSettings* settings ) const
+{
+    QRect rect( orgRect );
+    if( settings ){
+        rect.moveBy( -settings->innerGapX(), -settings->innerGapY() );
+        rect.setWidth(  rect.width()  + 2*settings->innerGapX() );
+        rect.setHeight( rect.height() + 2*settings->innerGapY() );
+    }
+    return rect;
+}
+
+
 /**
-    Paints an area frame.
-    This methode is called internally by KDChartPainter::paintArea.
+   Paints an area frame.
+   This methode is called internally by KDChartPainter::paintArea.
+   NOTE: areas around KDChartCustomBoxes are _not_ drawn here but
+   in KDChartCustomBox::paint() which is called by paintCustomBoxes().
 */
 void KDChartPainter::paintAreaWithGap( QPainter* painter,
                                        QRect rect,
                                        const KDChartParams::KDChartFrameSettings& settings )
 {
-    if( rect.isValid() ) {
-        rect.moveBy( -settings.innerGapX(), -settings.innerGapY() );
-        rect.setWidth(  rect.width()  + 2*settings.innerGapX() );
-        rect.setHeight( rect.height() + 2*settings.innerGapY() );
-        settings.frame().paint( painter, KDFrame::PaintAll, rect );
-    }
+    if( painter && rect.isValid() )
+        settings.frame().paint( painter,
+                                KDFrame::PaintAll,
+                                trueFrameRect( rect, &settings ) );
 }
 
 
 /**
-    Paints the data value texts near the data representations.
+   Paints the data value texts near the data representations.
 */
 void KDChartPainter::paintDataValues( QPainter* painter,
                                       KDChartTableDataBase* data,
                                       KDChartDataRegionList* regions )
 {
-	KDChartDataRegion* region;
+    KDChartDataRegion* region;
     if (    painter
-         && data
-         && regions
-         && regions->count()
-         && params()
-         && (    params()->printDataValues( 0 )
-              || params()->printDataValues( 1 ) ) ) {
+            && data
+            && regions
+            && regions->count()
+            && params()
+            && (    params()->printDataValues( 0 )
+                    || params()->printDataValues( 1 ) ) ) {
 
         painter->save();
 
         QFont font0( params()->dataValuesFont( 0 ) );
         if( params()->dataValuesUseFontRelSize(  0 ) ) {
-            float size = _areaWidthP1000 * params()->dataValuesFontRelSize( 0 );
+            float size = QMIN(_areaWidthP1000, _areaHeightP1000) * abs(params()->dataValuesFontRelSize( 0 ));
             if ( 9.0 > size )
                 size = 9.0;
             font0.setPointSizeFloat( size );
@@ -363,7 +426,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
         double fm0HeightP100( fm0.height() / 100.0 );
         QFont font1( params()->dataValuesFont( 1 ) );
         if( params()->dataValuesUseFontRelSize(  1 ) ) {
-            float size = _areaWidthP1000 * params()->dataValuesFontRelSize( 1 );
+            float size = QMIN(_areaWidthP1000, _areaHeightP1000) * abs(params()->dataValuesFontRelSize( 1 ));
             if ( 9.0 > size )
                 size = 9.0;
             font1.setPointSizeFloat( size );
@@ -378,13 +441,13 @@ void KDChartPainter::paintDataValues( QPainter* painter,
               region = regions->next() ) {
             const KDChartData& cell = data->cell( region->row, region->col );
             if (     cell.isString()
-                && !cell.stringValue().isEmpty()
-                && !cell.stringValue().isNull() )
+                     && !cell.stringValue().isEmpty()
+                     && !cell.stringValue().isNull() )
                 region->text = cell.stringValue();
             else {
                 double value( cell.doubleValue() );
                 region->negative = 0.0 > value;
-                double divi( pow( 10, params()->dataValuesDivPow10( region->chart ) ) );
+                double divi( pow( 10.0, params()->dataValuesDivPow10( region->chart ) ) );
                 if ( 1.0 != divi )
                     value /= divi;
                 int digits( params()->dataValuesDigitsBehindComma( region->chart ) );
@@ -394,33 +457,39 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                         digits = 10;
                 } else
                     (   region->chart
-                    ? lastDigitIrrelevant1
-                    : lastDigitIrrelevant0 ) = false;
-                region->text.setNum( value, 'f', digits );
-                if ( autoDigits && region->text.contains( '.' ) ) {
-                    int len = region->text.length();
-                    while (    3 < len
-                            && '0' == region->text[ len-1 ]
-                            && '.' != region->text[ len-2 ] ) {
-                        --len;
-                        region->text.truncate( len );
+                        ? lastDigitIrrelevant1
+                        : lastDigitIrrelevant0 ) = false;
+                if( value == NEG_INFINITE )
+                    region->text = "-LEMNISKATE";
+                else if( value == POS_INFINITE )
+                    region->text = "+LEMNISKATE";
+                else {
+                    region->text.setNum( value, 'f', digits );
+                    if ( autoDigits && region->text.contains( '.' ) ) {
+                        int len = region->text.length();
+                        while (    3 < len
+                                   && '0' == region->text[ len-1 ]
+                                   && '.' != region->text[ len-2 ] ) {
+                            --len;
+                            region->text.truncate( len );
+                        }
+                        if( '0' != region->text[ len-1 ] )
+                            (   region->chart
+                                ? lastDigitIrrelevant1
+                                : lastDigitIrrelevant0 ) = false;
                     }
-                    if( '0' != region->text[ len-1 ] )
-                        (   region->chart
-                          ? lastDigitIrrelevant1
-                          : lastDigitIrrelevant0 ) = false;
                 }
             }
         }
 
         if ( lastDigitIrrelevant0 || lastDigitIrrelevant1 )
             for ( region=regions->first();
-                region != 0;
-                region = regions->next() )
+                  region != 0;
+                  region = regions->next() )
                 if (   (     ( lastDigitIrrelevant0 && !region->chart )
-                          || ( lastDigitIrrelevant1 &&  region->chart ) )
-                    && region->text.contains( '.' )
-                    && ( 2 < region->text.length() ) )
+                             || ( lastDigitIrrelevant1 &&  region->chart ) )
+                       && region->text.contains( '.' )
+                       && ( 2 < region->text.length() ) )
                     region->text.truncate ( region->text.length() - 2 );
 
 
@@ -436,33 +505,45 @@ void KDChartPainter::paintDataValues( QPainter* painter,
         uint oldChart = UINT_MAX;
         uint oldDatacolorNo = UINT_MAX;
         for ( region=regions->first();
-            region != 0;
-            region = regions->next() ) {
+              region != 0;
+              region = regions->next() ) {
             if ( region->text.length() ) {
+                /*
+                  qDebug("KDChartPainter::paintDataValues()  region.x = %i, region.y = %i, region.w = %i, region.h = %i",
+                  region->region.boundingRect().x(), region->region.boundingRect().y(),
+                  region->region.boundingRect().width(), region->region.boundingRect().height());
+                */
                 bool zero(    0.0 == data->cell( region->row, region->col ).doubleValue()
-                           || 0   == data->cell( region->row, region->col ).doubleValue() );
+                              || 0   == data->cell( region->row, region->col ).doubleValue() );
                 uint align( params()->dataValuesAnchorAlign( region->chart,
                                                              region->negative ) );
                 KDChartParams::ChartType cType = region->chart
-                                               ? params()->additionalChartType()
-                                               : params()->chartType();
+                                                 ? params()->additionalChartType()
+                                                 : params()->chartType();
+
+
+                // these use the bounding rect of region-region:
+                bool bIsAreaChart = KDChartParams::Area == cType;
                 bool rectangular = (    KDChartParams::Bar   == cType
-                                     || KDChartParams::Line  == cType
-                                     || KDChartParams::HiLo  == cType
-                                     || KDChartParams::Gantt == cType );
+                                        || KDChartParams::Line  == cType
+                                        || bIsAreaChart
+                                        || KDChartParams::HiLo  == cType
+                                        || KDChartParams::BoxWhisker == cType );
+
+                // these use the nine anchor points stored in region->points
                 bool circular    = (    KDChartParams::Pie   == cType
-                                     || KDChartParams::Ring  == cType
-                                     || KDChartParams::Polar == cType );
+                                        || KDChartParams::Ring  == cType
+                                        || KDChartParams::Polar == cType );
+
 
                 KDChartEnums::PositionFlag anchorPos(
-                                params()->dataValuesAnchorPosition( region->chart,
-                                                                    region->negative ) );
+                    params()->dataValuesAnchorPosition( region->chart, region->negative ) );
                 QPoint anchor(
                     rectangular
-                    ? KDChartEnums::positionFlagToPoint( region->region.boundingRect(),
-                                                         anchorPos )
-                    : KDChartEnums::positionFlagToPoint( region->points,
-                                                         anchorPos ) );
+                    ? KDChartEnums::positionFlagToPoint( region->region.boundingRect(), anchorPos )
+                    : KDChartEnums::positionFlagToPoint( region->points, anchorPos ) );
+
+
                 double & fmHeightP100 = region->chart ? fm1HeightP100 : fm0HeightP100;
 
                 int angle = region->startAngle;
@@ -477,21 +558,19 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                 case KDChartEnums::PosBottomCenter:
                     angle += region->angleLen / 2;
                     break;
-                /*
-                case KDChartEnums::PosTopRight:
-                case KDChartEnums::PosCenterRight:
-                case KDChartEnums::PosBottomRight:
-                    angle += 0;
-                    break;
-                */
+                    /*
+                      case KDChartEnums::PosTopRight:
+                      case KDChartEnums::PosCenterRight:
+                      case KDChartEnums::PosBottomRight:
+                      angle += 0;
+                      break;
+                    */
                 default:
                     break;
                 }
-                double anchorDX( params()->dataValuesAnchorDeltaX( region->chart,
-                                                                   region->negative )
+                double anchorDX( params()->dataValuesAnchorDeltaX( region->chart, region->negative )
                                  * fmHeightP100 );
-                double anchorDY( params()->dataValuesAnchorDeltaY( region->chart,
-                                                                   region->negative )
+                double anchorDY( params()->dataValuesAnchorDeltaY( region->chart, region->negative )
                                  * fmHeightP100 );
                 if ( circular ) {
                     if ( 0.0 != anchorDY ) {
@@ -502,7 +581,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                         double dX( pM.x() - anchor.x() );
                         double dY( pM.y() - anchor.y() );
                         double radialLen( sinAngle ? dY / sinAngle : dY );
-                        double radialFactor( ( radialLen - anchorDY ) / radialLen );
+                        double radialFactor( ( radialLen == 0.0 ) ? 0.0 : ( ( radialLen - anchorDY ) / radialLen ) );
                         anchor.setX( static_cast < int > ( pM.x() - dX * radialFactor ) );
                         anchor.setY( static_cast < int > ( pM.y() - dY * radialFactor ) );
                     }
@@ -511,22 +590,58 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                     anchor.setY( anchor.y() + static_cast < int > ( anchorDY ) );
                 }
 
+
+                if(anchor.x() < -250){
+                    //qDebug(region->text);
+                    anchor.setX(-250);
+                    //qDebug("!! bad negative x position in KDChartPainter::paintDataValues() !!");
+                }
+                if(anchor.y() < -2500){
+                    //qDebug(region->text);
+                    anchor.setY(-2500);
+                    //qDebug("!! bad negative y position in KDChartPainter::paintDataValues() !!");
+                }
+
+
                 int rotation( params()->dataValuesRotation( region->chart,
                                                             region->negative ) );
+                bool incRotationBy90 = false;
+                if( region->text == "-LEMNISKATE" ||
+                    region->text == "+LEMNISKATE" ){
+                    if( params()->dataValuesShowInfinite( region->chart ) ){
+                        //bool bIsLineChart = KDChartParams::Line == cType;
+                        if( region->text == "-LEMNISKATE" )
+                            align = Qt::AlignRight + Qt::AlignVCenter;
+                        else
+                            align = Qt::AlignLeft  + Qt::AlignVCenter;
+                        if( !rotation )
+                            rotation = 90;
+                        else
+                            incRotationBy90 = true;
+                        region->text = " 8 ";
+                    }else{
+                        region->text = "";
+                    }
+                }
+
                 if ( rotation ) {
                     if (    KDChartParams::SAGGITAL_ROTATION   == rotation
-                         || KDChartParams::TANGENTIAL_ROTATION == rotation ) {
+                            || KDChartParams::TANGENTIAL_ROTATION == rotation ) {
                         rotation =  (   KDChartParams::TANGENTIAL_ROTATION == rotation
-                                      ? -1440
-                                      : 0 )
+                                        ? -1440
+                                        : 0 )
                                     + angle;
                         rotation /= 16;
+                        if( incRotationBy90 )
+                            rotation += 90;
                         if ( 360 <= rotation )
                             rotation -= 360;
                         else if ( 0 > rotation )
                             rotation += 360;
                         rotation = 360 - rotation;
-                    }
+                    }else if( incRotationBy90 )
+                        rotation = (rotation + 90) % 360;
+
 
                     if( rotation != oldRotation ) {
                         painter->rotate( rotation - oldRotation );
@@ -554,7 +669,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                     if( allowOverlapping )
                         drawThisOne = true;
                     else {
-                       QRegion sectReg( infosKDD.region.intersect( lastRegionDone ) );
+                        QRegion sectReg( infosKDD.region.intersect( lastRegionDone ) );
                         drawThisOne = sectReg.isEmpty();
                     }
                     if( drawThisOne ) {
@@ -564,29 +679,43 @@ void KDChartPainter::paintDataValues( QPainter* painter,
 
                         /*
 
-                          NOTE: The following will be REMOVED again once
-                                the layout policy feature is implemented !!!
+                        NOTE: The following will be REMOVED again once
+                        the layout policy feature is implemented !!!
 
                         */
                         if( params()->dataValuesAutoColor( region->chart ) ) {
-                            if( zero ) {
-                                if( oldDatacolorNo != UINT_MAX ) {
-                                    painter->setPen( Qt::black );
-                                    oldDatacolorNo = UINT_MAX;
+                            if( bIsAreaChart ){
+                                QColor color( params()->dataColor( region->row ) );
+                                /*
+                                  if(    ( (0.0 > anchorDY) &&  region->negative )
+                                  || ( (0.0 < anchorDY) && !region->negative ) )
+                                  painter->setPen(
+                                  QColor( static_cast < int > ( 255- color.red() ),
+                                  static_cast < int > ( 255- color.green() ),
+                                  static_cast < int > ( 255- color.blue() ) ) );
+                                  else
+                                */
+                                painter->setPen( color.dark() );
+                            }else{
+                                if( zero ) {
+                                    if( oldDatacolorNo != UINT_MAX ) {
+                                        painter->setPen( Qt::black );
+                                        oldDatacolorNo = UINT_MAX;
+                                    }
                                 }
-                            }
-                            else {
-                                uint datacolorNo = (    KDChartParams::Pie   == cType
-                                                    || KDChartParams::Ring  == cType )
-                                                  ? region->col
-                                                  : region->row;
-                                if(  oldDatacolorNo != datacolorNo ) {
-                                    oldDatacolorNo = datacolorNo;
-                                    QColor color( params()->dataColor( datacolorNo ) );
-                                    painter->setPen( QColor(
-                                        static_cast < int > (255-color.red()  ),
-                                        static_cast < int > (255-color.green()),
-                                        static_cast < int > (255-color.blue() )));
+                                else {
+                                    uint datacolorNo = (    KDChartParams::Pie   == cType
+                                                            || KDChartParams::Ring  == cType )
+                                                       ? region->col
+                                                       : region->row;
+                                    if(  oldDatacolorNo != datacolorNo ) {
+                                        oldDatacolorNo = datacolorNo;
+                                        QColor color( params()->dataColor( datacolorNo ) );
+                                        painter->setPen( QColor(
+                                                             static_cast < int > (255-color.red()  ),
+                                                             static_cast < int > (255-color.green()),
+                                                             static_cast < int > (255-color.blue() )));
+                                    }
                                 }
                             }
                         }
@@ -595,11 +724,28 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                             painter->setPen( params()->dataValuesColor( region->chart ) );
                         }
 
-
-                        painter->drawText( infosKDD.x, infosKDD.y,
-                                          infosKDD.width, infosKDD.height,
-                                          Qt::AlignLeft | Qt::AlignTop | Qt::SingleLine,
-                                          region->text );
+                        if( params()->optimizeOutputForScreen() ){
+                            painter->rotate( -oldRotation );
+                            oldRotation = 0;
+                            //qDebug("anchor: (%i, %i)",anchor.x(),anchor.y());
+                            KDDrawText::drawRotatedText( painter,
+                                                         rotation,
+                                                         anchor,
+                                                         region->text,
+                                                         region->chart ? &font1 : &font0,
+                                                         align,
+                                                         false,   // bool showAnchor
+                                                         0,       // const QFontMetrics* fontMet
+                                                         false,   // bool noFirstrotate
+                                                         false,   // bool noBackrotate
+                                                         0,       // KDDrawTextRegionAndTrueRect* infos
+                                                         true );  // bool optimizeOutputForScreen
+                        }else{
+                            painter->drawText( infosKDD.x, infosKDD.y,
+                                               infosKDD.width+1, infosKDD.height+1,
+                                               Qt::AlignLeft | Qt::AlignTop | Qt::SingleLine,
+                                               region->text );
+                        }
                     } // if not intersect
 
                 } else {
@@ -620,21 +766,21 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                     int dy = 0;
                     switch( align & ( Qt::AlignLeft | Qt::AlignRight | Qt::AlignHCenter ) ) {
                     case Qt::AlignRight:
-                                dx = -w+1;
-                                break;
+                        dx = -w+1;
+                        break;
                     case Qt::AlignHCenter:
-                                dx = -w / 2;
-                                break;
+                        dx = -w / 2;
+                        break;
                     }
                     switch( align & ( Qt::AlignTop | Qt::AlignBottom | Qt::AlignVCenter ) ) {
                     case Qt::AlignBottom:
-                                dy = -h+1;
-                                break;
+                        dy = -h+1;
+                        break;
                     case Qt::AlignVCenter:
-                                dy = -h / 2;
-                                break;
+                        dy = -h / 2;
+                        break;
                     }
-                    
+
                     QRegion thisRegion(
                         QRect( anchor.x() + dx, anchor.y() + dy, w, h ) );
                     if( allowOverlapping )
@@ -657,30 +803,54 @@ void KDChartPainter::paintDataValues( QPainter* painter,
 
                         /*
 
-                          NOTE: The following will be REMOVED again once
-                                the layout policy feature is implemented !!!
+                        NOTE: The following will be REMOVED again once
+                        the layout policy feature is implemented !!!
 
                         */
+                        QRect textRect( region->textRegion.boundingRect() );
+                        if( bIsAreaChart ){
+                            QBrush brush( params()->dataValuesBackground( region->chart ) );
+                            painter->setBrush( brush );
+                            painter->setPen(   Qt::NoPen );
+                            QRect rect( textRect );
+                            rect.moveBy( -2, 0 );
+                            rect.setWidth( rect.width() + 4 );
+                            painter->drawRect( rect );
+                        }
                         painter->setFont( region->chart ? font1 : font0 );
                         if( params()->dataValuesAutoColor( region->chart ) ) {
-                            if( zero )
-                                painter->setPen( Qt::black );
-                            else {
-                                QColor color( params()->dataColor(
-                                    (    KDChartParams::Pie   == params()->chartType()
-                                      || KDChartParams::Ring  == params()->chartType() )
-                                    ? region->col
-                                    : region->row ) );
-                                painter->setPen( QColor( static_cast < int > ( 255- color.red() ),
-                                                        static_cast < int > ( 255- color.green() ),
-                                                        static_cast < int > ( 255- color.blue() ) ) );
+                            if( bIsAreaChart ){
+                                QColor color( params()->dataColor( region->row ) );
+                                /*
+                                  if(    ( (0.0 > anchorDY) &&  region->negative )
+                                  || ( (0.0 < anchorDY) && !region->negative ) )
+                                  painter->setPen(
+                                  QColor( static_cast < int > ( 255- color.red() ),
+                                  static_cast < int > ( 255- color.green() ),
+                                  static_cast < int > ( 255- color.blue() ) ) );
+                                  else
+                                */
+                                painter->setPen( color.dark() );
+                            }else{
+                                if( zero )
+                                    painter->setPen( Qt::black );
+                                else {
+                                    QColor color( params()->dataColor(
+                                                      (    KDChartParams::Pie   == params()->chartType()
+                                                           || KDChartParams::Ring  == params()->chartType() )
+                                                      ? region->col
+                                                      : region->row ) );
+                                    painter->setPen( QColor( static_cast < int > ( 255- color.red() ),
+                                                             static_cast < int > ( 255- color.green() ),
+                                                             static_cast < int > ( 255- color.blue() ) ) );
+                                }
                             }
-                        }
-                        else
+                        }else{
                             painter->setPen( params()->dataValuesColor( region->chart ) );
-                        QRect rect( region->textRegion.boundingRect() );
-                        painter->drawText( rect.left(),rect.top(),rect.width(),rect.height(),
-                                          Qt::AlignLeft | Qt::AlignTop, region->text );
+                        }
+                        painter->drawText( textRect.left(),    textRect.top(),
+                                           textRect.width()+1, textRect.height()+1,
+                                           Qt::AlignLeft | Qt::AlignTop, region->text );
                     }
 
 
@@ -693,12 +863,16 @@ void KDChartPainter::paintDataValues( QPainter* painter,
 
 
 /**
-    Paints all custom boxes.
+   Paints all custom boxes.
 */
 void KDChartPainter::paintCustomBoxes( QPainter* painter,
                                        KDChartDataRegionList* regions )
 {
-    // paint all of the custom boxes
+    // paint all of the custom boxes AND their surrounding frames+background (if any)
+    bool bGlobalFound;
+    const KDChartParams::KDChartFrameSettings* globalFrameSettings
+        = params()->frameSettings( KDChartEnums::AreasCustomBoxes, bGlobalFound );
+
     uint idx;
     for( idx = 0; idx <= params()->maxCustomBoxIdx(); ++idx ) {
         const KDChartCustomBox * box = params()->customBox( idx );
@@ -710,17 +884,30 @@ void KDChartPainter::paintCustomBoxes( QPainter* painter,
                        box->dataRow(),
                        box->dataCol(),
                        box->data3rd() );
+            // retrieve frame information
+            bool bIndividualFound;
+            const KDChartParams::KDChartFrameSettings * individualFrameSettings
+                = params()->frameSettings( KDChartEnums::AreaCustomBoxesBASE + idx,
+                                           bIndividualFound );
+            const KDChartParams::KDChartFrameSettings * settings
+                = bIndividualFound ? individualFrameSettings
+                : bGlobalFound ? globalFrameSettings : 0;
             // paint content
-            box->paint( painter, calculateAnchor( *box, regions ),
-                                 _areaWidthP1000,
-                                 _areaHeightP1000 );
+            const QPoint anchor( calculateAnchor( *box, regions ) );
+            box->paint( painter,
+                        anchor,
+                        _areaWidthP1000,
+                        _areaHeightP1000,
+                        settings ? settings->framePtr() : 0,
+                        trueFrameRect( box->trueRect( anchor, _areaWidthP1000, _areaHeightP1000 ),
+                                       settings ) );
         }
     }
 }
 
 
 /**
-    Calculated the top left corner of a custom box.
+   Calculated the top left corner of a custom box.
 */
 QPoint KDChartPainter::calculateAnchor( const KDChartCustomBox & box,
                                         KDChartDataRegionList* regions ) const
@@ -762,7 +949,7 @@ QPoint KDChartPainter::calculateAnchor( const KDChartCustomBox & box,
             //  The reason for this is that you may NOT use  AreasCustomBoxes
             //  as a value for the KDChartCustomBox anchor area.
             //
-            //  This is due to the fact that an anchor area always must specify one AREA
+            //  This is due to the fact that an anchor area allways must specify one AREA
             //  or some contiguous areas that form an area when combined.
             //  The flag  AreasCustomBoxes  however specifies a list of custom boxes
             //  that normally do not form a contiguos ares, so they cannot be used as anchor area.
@@ -780,7 +967,8 @@ QPoint KDChartPainter::calculateAnchor( const KDChartCustomBox & box,
 
 
 /**
-    Calculated the rectangle covered by an area.
+   Calculated the rectangle covered by an area.
+   NOTE: KDChartCustomBox areas are _not_ calculated here.
 */
 QRect KDChartPainter::calculateAreaRect( bool & allCustomBoxes,
                                          uint area,
@@ -791,130 +979,130 @@ QRect KDChartPainter::calculateAreaRect( bool & allCustomBoxes,
 {
     QRect rect(0,0, 0,0);
     allCustomBoxes = false;
-	uint pos;
+    uint pos;
     switch( area ) {
-        case KDChartEnums::AreaData:
-            rect = _dataRect;
-            break;
-        case KDChartEnums::AreaAxes:
-            break;
-        case KDChartEnums::AreaLegend:
-            rect = _legendRect;
-            break;
-        case KDChartEnums::AreaDataAxes:
-            rect = _axesRect;
-            break;
-        case KDChartEnums::AreaDataAxesLegend:
-            rect = _axesRect;
-            if( _legendRect.isValid() ) {
-                if( rect.isValid() )
-                    rect = rect.unite( _legendRect );
+    case KDChartEnums::AreaData:
+        rect = _dataRect;
+        break;
+    case KDChartEnums::AreaAxes:
+        break;
+    case KDChartEnums::AreaLegend:
+        rect = _legendRect;
+        break;
+    case KDChartEnums::AreaDataAxes:
+        rect = _axesRect;
+        break;
+    case KDChartEnums::AreaDataAxesLegend:
+        rect = _axesRect;
+        if( _legendRect.isValid() ) {
+            if( rect.isValid() )
+                rect = rect.unite( _legendRect );
+            else
+                rect = _legendRect;
+        }
+        break;
+    case KDChartEnums::AreaHeaders: {
+        bool bStart = true;
+        for( pos = KDChartParams::HdFtPosHeadersSTART;
+             KDChartParams::HdFtPosHeadersEND >= pos;
+             ++pos ) {
+            const QRect& r = params()->headerFooterRect( pos );
+            if( r.isValid() ) {
+                if( bStart )
+                    rect = r;
                 else
-                    rect = _legendRect;
+                    rect = rect.unite( r );
+                bStart = false;
             }
-            break;
-        case KDChartEnums::AreaHeaders: {
-                bool bStart = true;
-                for( pos = KDChartParams::HdFtPosHeadersSTART;
-                    KDChartParams::HdFtPosHeadersEND >= pos;
-                    ++pos ) {
-                    const QRect& r = params()->headerFooterRect( pos );
-                    if( r.isValid() ) {
-                        if( bStart )
-                            rect = r;
-                        else
-                            rect = rect.unite( r );
-                        bStart = false;
-                    }
+        }
+    }
+        break;
+    case KDChartEnums::AreaFooters: {
+        bool bStart = true;
+        for( pos = KDChartParams::HdFtPosFootersSTART;
+             KDChartParams::HdFtPosFootersEND >= pos;
+             ++pos ) {
+            const QRect& r = params()->headerFooterRect( pos );
+            if( r.isValid() ) {
+                if( bStart )
+                    rect = r;
+                else
+                    rect = rect.unite( r );
+                bStart = false;
+            }
+        }
+    }
+        break;
+    case KDChartEnums::AreaDataAxesLegendHeadersFooters: {
+        rect = _axesRect;
+        bool bStart = !rect.isValid();
+        if( _legendRect.isValid() ) {
+            if( bStart )
+                rect = _legendRect;
+            else
+                rect = rect.unite( _legendRect );
+            bStart = false;
+        }
+        for( pos = KDChartParams::HdFtPosSTART;
+             KDChartParams::HdFtPosEND >= pos;
+             ++pos ) {
+            const QRect& r = params()->headerFooterRect( pos );
+            if( r.isValid() ) {
+                if( bStart )
+                    rect = r;
+                else
+                    rect = rect.unite( r );
+                bStart = false;
+            }
+        }
+    }
+        break;
+    case KDChartEnums::AreaOutermost:
+        rect = _outermostRect;
+        break;
+    case KDChartEnums::AreaInnermost:
+        rect = _innermostRect;
+        break;
+    case KDChartEnums::AreasCustomBoxes:
+        allCustomBoxes = true;
+        break;
+    case KDChartEnums::AreaChartDataRegion:
+        if( regions ) {
+            KDChartDataRegion* current;
+            for ( current = regions->first();
+                  current != 0;
+                  current =  regions->next() ) {
+                if (    current->row == dataRow
+                        && current->col == dataCol
+                        //
+                        // the line below prepared for true 3-dimensional data charts
+                        //
+                        /* && current->region.thirdDimension == data3rd */ ) {
+                    rect = current->region.boundingRect();
+                    break;
                 }
             }
-            break;
-        case KDChartEnums::AreaFooters: {
-                bool bStart = true;
-                for( pos = KDChartParams::HdFtPosFootersSTART;
-                    KDChartParams::HdFtPosFootersEND >= pos;
-                    ++pos ) {
-                    const QRect& r = params()->headerFooterRect( pos );
-                    if( r.isValid() ) {
-                        if( bStart )
-                            rect = r;
-                        else
-                            rect = rect.unite( r );
-                        bStart = false;
-                    }
-                }
-            }
-            break;
-        case KDChartEnums::AreaDataAxesLegendHeadersFooters: {
-                rect = _axesRect;
-                bool bStart = !rect.isValid();
-                if( _legendRect.isValid() ) {
-                    if( bStart )
-                        rect = _legendRect;
-                    else
-                        rect = rect.unite( _legendRect );
-                    bStart = false;
-                }
-                for( pos = KDChartParams::HdFtPosSTART;
-                    KDChartParams::HdFtPosEND >= pos;
-                    ++pos ) {
-                    const QRect& r = params()->headerFooterRect( pos );
-                    if( r.isValid() ) {
-                        if( bStart )
-                            rect = r;
-                        else
-                            rect = rect.unite( r );
-                        bStart = false;
-                    }
-                }
-            }
-            break;
-        case KDChartEnums::AreaOutermost:
-            rect = _outermostRect;
-            break;
-        case KDChartEnums::AreaInnermost:
-            rect = _innermostRect;
-            break;
-        case KDChartEnums::AreasCustomBoxes:
-            allCustomBoxes = true;
-            break;
-        case KDChartEnums::AreaChartDataRegion:
-            if( regions ) {
-                KDChartDataRegion* current;
-                for ( current = regions->first();
-                      current != 0;
-                      current =  regions->next() ) {
-                    if (    current->row == dataRow
-                         && current->col == dataCol
-                         //
-                         // the line below prepared for true 3-dimensional data charts
-                         //
-                         /* && current->region.thirdDimension == data3rd */ ) {
-                        rect = current->region.boundingRect();
-                        break;
-                    }
-                }
-            }
-            break;
-        case KDChartEnums::AreaUNKNOWN:
-            break;
+        }
+        break;
+    case KDChartEnums::AreaUNKNOWN:
+        break;
 
-        default: {
-                uint maskBASE = KDChartEnums::AreaBASEMask & area;
-                pos = area - maskBASE;
-                if ( KDChartEnums::AreaAxisBASE == maskBASE ) {
-                    rect = params()->axisParams( pos ).axisTrueAreaRect();
-                } else if ( KDChartEnums::AreaHdFtBASE == maskBASE ) {
-                    rect = params()->headerFooterRect( pos );
-                } else if ( KDChartEnums::AreaCustomBoxesBASE == maskBASE ) {
-                    const KDChartCustomBox * box = params()->customBox( pos );
-                    if( box ) {
-                        rect = box->trueRect( calculateAnchor( *box, regions ),
-                                            _areaWidthP1000,
-                                            _areaHeightP1000 );
-                    }
-                }
+    default: {
+        uint maskBASE = KDChartEnums::AreaBASEMask & area;
+        pos = area - maskBASE;
+        if ( KDChartEnums::AreaAxisBASE == maskBASE ) {
+            rect = params()->axisParams( pos ).axisTrueAreaRect();
+        } else if ( KDChartEnums::AreaHdFtBASE == maskBASE ) {
+            rect = params()->headerFooterRect( pos );
+        } else if ( KDChartEnums::AreaCustomBoxesBASE == maskBASE ) {
+            const KDChartCustomBox * box = params()->customBox( pos );
+            if( box ) {
+                rect = box->trueRect( calculateAnchor( *box, regions ),
+                                      _areaWidthP1000,
+                                      _areaHeightP1000 );
             }
+        }
+    }
     }
     return rect;
 }
@@ -939,6 +1127,41 @@ QPoint KDChartPainter::pointOnCircle( const QRect& rect, int angle )
                    ( int ) posY + rect.center().y() );
 }
 
+void KDChartPainter::makeArc( QPointArray& points,
+                              const QRect& rect,
+                              double startAngle, double angles )
+{
+    double endAngle = startAngle + angles;
+    int rCX = rect.center().x();
+    int rCY = rect.center().y();
+    double rWid2 = ( double ) rect.width() / 2.0;
+    double rHig2 = ( double ) rect.height() / 2.0;
+    int numSteps = static_cast<int>(angles);
+    if( floor( angles ) < angles )
+        ++numSteps;
+    points.resize( numSteps );
+    double angle = startAngle;
+    if( angle < 0.0 )
+        angle += 5760.0;
+    else if( angle >= 5760.0 )
+        angle -= 5760.0;
+    for(int i = 0; i < numSteps; ++i){
+        double normAngle = angle / 16.0;
+        double normAngleRad = DEGTORAD( normAngle );
+        double cosAngle = cos( normAngleRad );
+        double sinAngle = -sin( normAngleRad );
+        double posX = floor( cosAngle * rWid2 + 0.5 );
+        double posY = floor( sinAngle * rHig2 + 0.5 );
+        points[i] = QPoint( ( int ) posX + rCX,
+                            ( int ) posY + rCY );
+        if( i+1 >= numSteps-1 )
+            angle = endAngle; // the very last step width may be smaller than 1.0
+        else
+            angle += 1.0;
+        if( angle >= 5760.0 )
+            angle -= 5760.0;
+    }
+}
 
 /**
    Paints the axes for the chart. The implementation in KDChartPainter
@@ -956,9 +1179,9 @@ void KDChartPainter::paintAxes( QPainter* /*painter*/, KDChartTableDataBase* /*d
 
 
 /**
- Paints the legend for the chart. The implementation in KDChartPainter
- draws a standard legend that should be suitable for most chart
- types. Subclasses can provide their own implementations.
+   Paints the legend for the chart. The implementation in KDChartPainter
+   draws a standard legend that should be suitable for most chart
+   types. Subclasses can provide their own implementations.
 
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
@@ -985,158 +1208,562 @@ void KDChartPainter::paintLegend( QPainter* painter,
     if( !bFrameFound )
         painter->drawRect( _legendRect );
 
-    int xpos = _legendRect.left() + _legendEMSpace,
-        ypos = _legendRect.top() +
-                static_cast < int > ( _legendTitle->height() * 0.15 );
+    const int xpos = _legendRect.left() + _legendEMSpace;
+    // add the space of the box plus the space between the box and the text
+    const int x2 = xpos + 2 * _legendEMSpace;
+
+    int ypos = _legendRect.top() + _legendEMSpace / 2;
 
     // first paint the title, if any
-    if ( _legendTitle != 0 ) { // shows that there is a title
+    if ( _legendTitle ) { // shows that there is a title
         _legendTitle->draw( painter, xpos, ypos,
                             QRegion( xpos, ypos,
                                      _legendRect.width() - ( xpos - _legendRect.left() ),
-                                     _legendTitle->height() ),
+                                     _legendTitleHeight ),
                             params()->legendTitleTextColor() );
-        ypos += _legendTitle->height();
+        ypos += _legendTitleHeight
+                + static_cast < int > ( _legendTitleHeight * 0.20 );
     }
 
     // loop over all the datasets, each one has one row in the legend
     // if its data are to be used in at least one of the charts drawn
+    // *but* only if there is a legend text for it!
     painter->setFont( actLegendFont );
     int dataset;
-    for ( dataset = 0; dataset < _numLegendTexts; dataset++ ) {
+    for ( dataset = 0; dataset < _numLegendTexts; ++dataset ) {
         /*
-        if( KDChartParams::DataEntry == params()->chartSourceMode( dataset ) ) {
-*/
-        painter->setBrush( QBrush( params()->dataColor( dataset ),
-                                   QBrush::SolidPattern ) );
-        painter->setPen( Qt::black );
-        painter->drawRect( xpos,
-                           ( _legendHeight - _legendEMSpace ) / 2 + ypos,
-                           _legendEMSpace, _legendEMSpace );
-        xpos += _legendEMSpace; // the box
-        xpos += _legendEMSpace; // the space between the box and the text
-        painter->setPen( params()->legendTextColor() );
-        painter->drawText( xpos, ypos, _legendRect.width() - ( xpos - _legendRect.left() ),
-                           _legendHeight, Qt::AlignLeft | Qt::AlignVCenter, _legendTexts[ dataset ] );
+          if( KDChartParams::DataEntry == params()->chartSourceMode( dataset ) ) {
+        */
+        if( !_legendTexts[ dataset ].isEmpty() ){
+            painter->setBrush( QBrush( params()->dataColor( dataset ),
+                                       QBrush::SolidPattern ) );
+            painter->setPen( Qt::black );
+            painter->drawRect( xpos,
+                               ( _legendHeight - _legendEMSpace ) / 2 + ypos,
+                               _legendEMSpace, _legendEMSpace );
+            painter->setPen( params()->legendTextColor() );
+            painter->drawText( x2, ypos,
+                               _legendRect.width() - ( x2 - _legendRect.left() ), _legendHeight,
+                               Qt::AlignLeft | Qt::AlignVCenter,
+                               _legendTexts[ dataset ] );
 
-        xpos = _legendRect.left() + _legendEMSpace;
-        ypos += _legendSpacing;
-        /*
+            ypos += _legendSpacing;
         }
-*/
+        /*
+          }
+        */
     }
 
     painter->restore();
+}
+
+
+bool KDChartPainter::axesOverlapping( int axis1, int axis2 )
+{
+    KDChartAxisParams::AxisPos basicPos = KDChartAxisParams::basicAxisPos( axis1 );
+    if( basicPos != KDChartAxisParams::basicAxisPos( axis2 ) )
+        // Only axes of the same position can be compared. (e.g. 2 left axes)
+        return false;
+
+    if( KDChartAxisParams::AxisPosLeft  != basicPos &&
+        KDChartAxisParams::AxisPosRight != basicPos )
+        // Available space usage only possible for (vertical) ordinate axes.
+        return false;
+
+    int f1 = params()->axisParams( axis1 ).axisUseAvailableSpaceFrom();
+    int t1 = params()->axisParams( axis1 ).axisUseAvailableSpaceTo();
+    int f2 = params()->axisParams( axis2 ).axisUseAvailableSpaceFrom();
+    int t2 = params()->axisParams( axis2 ).axisUseAvailableSpaceTo();
+    return (f1 > f2 && f1 < t2) || (t1 > f2 && t1 < t2);
+}
+
+
+void internSetAxisArea( KDChartParams* params, int axis,
+                        int x0, int y0, int w0, int h0 )
+{
+    // axis may never occupy more than 1000 per mille of the available space
+    int nFrom = QMAX(-1000, params->axisParams( axis ).axisUseAvailableSpaceFrom());
+    int nTo   = QMAX(-1000, params->axisParams( axis ).axisUseAvailableSpaceTo());
+
+    if( abs(nFrom) > abs(nTo) ){
+        int n = nFrom;
+        nFrom = nTo;
+        nTo = n;
+    }
+
+    //qDebug("\naxis: "+QString::number(axis)+"  nFrom: "+QString::number(nFrom)+"  nTo: "+QString::number(nTo)
+    //+"\nx0:"+QString::number(x0)+"   y0:"+QString::number(y0)+"   w0:"+QString::number(w0)+"   h0:"+QString::number(h0));
+
+    KDChartAxisParams::AxisPos basicPos = KDChartAxisParams::basicAxisPos( axis );
+    int x, y, w, h;
+    if( KDChartAxisParams::AxisPosBottom == basicPos ||
+        KDChartAxisParams::AxisPosTop    == basicPos ){
+
+        // Note: available space usage is ignored for abscissa axes!
+        //
+        //if( nFrom < 0 )
+        //  x = x0 + w0*nFrom/-1000;
+        //else
+        //  x = x0 +    nFrom;
+        //y = y0;
+        //if( nTo < 0 )
+        //  w = x0 + w0*nTo/-1000 - x;
+        //else
+        //  w = x0 +    nTo       - x;
+        //h = h0;
+
+        x = x0;
+        y = y0;
+        w = w0;
+        h = h0;
+
+    }else{
+        x = x0;
+        if( nTo < 0 )
+            y = y0 + h0 - h0*nTo/-1000;
+        else
+            y = y0 + h0 -    nTo;
+        w = w0;
+        if( nFrom < 0 )
+            h = y0 + h0 - h0*nFrom/-1000 - y;
+        else
+            h = y0 + h0 -    nFrom       - y;
+    }
+
+    //qDebug("x: "+QString::number(x)+"   y: "+QString::number(y)+"   w: "+QString::number(w)+"   h: "+QString::number(h));
+
+    params->setAxisArea( axis,
+                         QRect( x,
+                                y,
+                                w,
+                                h ) );
 }
 
 
 /**
- Paints the header for the chart. The implementation in KDChartPainter
- draws a standard header that should be suitable for most chart
- types. Subclasses can provide their own implementations.
+   Paints the header and footers for the chart. The implementation
+   in KDChartPainter draws a standard header that should be suitable
+   for most chart types. Subclasses can provide their own implementations.
 
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintHeader( QPainter* painter,
-                                  KDChartTableDataBase* /*data*/ )
+void KDChartPainter::paintHeaderFooter( QPainter* painter,
+                                        KDChartTableDataBase* /*data*/ )
 {
-    /*
-    //
-    //
-    //   CODE - REORGANISATION   P L A N N E D . . .
-    //
-    //   ( NOT RELEVANT FOR 1st RELEASE )
-
-
-    N a t u e r l i c h     wird der folgende Abschnitt
-
-    komplett umgestellt und durch eine schlanke Funktion
-    ersetzt, die alle Header/Footer Sektionen behandelt.
-
-
-*/
-    const double averageValueP1000 = ( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+    const double averageValueP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
 
     painter->save();
 
-    QString h1 = params()->header1Text();
-    if ( !h1.isEmpty() ) {
-        QFont actFont( params()->header1Font() );
-        if ( params()->headerFooterFontUseRelSize(
-                                                  KDChartParams::HdFtPosHeader ) ) {
-            actFont.setPointSizeFloat(
-                                      params()->headerFooterFontRelSize(
-                                                                        KDChartParams::HdFtPosHeader ) * averageValueP1000 );
+    for( int iHdFt  = KDChartParams::HdFtPosSTART;
+         iHdFt <= KDChartParams::HdFtPosEND;  ++iHdFt ){
+        QString txt( params()->headerFooterText( iHdFt ) );
+        if ( !txt.isEmpty() ) {
+            QFont actFont( params()->headerFooterFont( iHdFt ) );
+            if ( params()->headerFooterFontUseRelSize( iHdFt ) )
+                actFont.setPointSizeFloat(
+                    params()->headerFooterFontRelSize( iHdFt ) * averageValueP1000 );
+            painter->setPen( params()->headerFooterColor( iHdFt ) );
+            painter->setFont( actFont );
+            // Note: The alignment flags used here match the rect calculation
+            //       done in KDChartPainter::setupGeometry().
+            //       AlignTop is done to ensure that the hd/ft texts of the same
+            //       group (e.g. Hd2L and Hd2 and Hd2R) have the same baselines.
+
+            QRect rect( params()->headerFooterRect( iHdFt ) );
+            int dXY = iHdFt < KDChartParams::HdFtPosFootersSTART
+                      ? _hdLeading/3
+                      : _ftLeading/3;
+            rect.moveBy(dXY, dXY);
+            rect.setWidth(  rect.width() -2*dXY +1 );
+            rect.setHeight( rect.height()-2*dXY +1 );
+            painter->drawText( rect,
+                               Qt::AlignLeft | Qt::AlignTop | Qt::SingleLine,
+                               txt );
         }
-        painter->setPen( params()->headerFooterColor( KDChartParams::HdFtPosHeader ) );
-        painter->setFont( actFont );
-        painter->drawText( _header1Rect,
-                           Qt::AlignCenter | Qt::SingleLine, h1 );
-    }
-    QString h2 = params()->header2Text();
-    if ( !h2.isEmpty() ) {
-        QFont actFont( params()->header2Font() );
-        if ( params()->headerFooterFontUseRelSize(
-                                                  KDChartParams::HdFtPosHeader2 ) ) {
-            actFont.setPointSizeFloat(
-                                      params()->headerFooterFontRelSize(
-                                                                        KDChartParams::HdFtPosHeader2 ) * averageValueP1000 );
-        }
-        painter->setPen( params()->headerFooterColor( KDChartParams::HdFtPosHeader2 ) );
-        painter->setFont( actFont );
-        painter->drawText( _header2Rect,
-                           Qt::AlignCenter | Qt::SingleLine, h2 );
     }
     painter->restore();
 }
 
-/**
- Paints the footer for the chart. The implementation in KDChartPainter
- draws a standard footer that should be suitable for most chart
- types. Subclasses can provide their own implementations.
 
-   \param painter the QPainter onto which the chart should be drawn
-   \param data the data that will be displayed as a chart
-*/
-void KDChartPainter::paintFooter( QPainter* painter,
-                                  KDChartTableDataBase* /*data*/ )
+int KDChartPainter::calculateHdFtRects( double averageValueP1000,
+                                        int  xposLeft,
+                                        int  xposRight,
+                                        bool bHeader,
+                                        int& yposTop,
+                                        int& yposBottom )
 {
-    /*
-    //
-    //
-    //   CODE - REORGANISATION   P L A N N E D . . .
-    //
-    //   ( NOT RELEVANT FOR 1st RELEASE )
+    int& leading = (bHeader ? _hdLeading : _ftLeading);
+    leading = 0; // pixels between the header (or footer, resp.) text
+    // and the border of the respective Hd/Ft area
 
+    const int rangesCnt = 3;
+    const int ranges[ rangesCnt ]
+        = { bHeader ? KDChartParams::HdFtPosHeaders0START : KDChartParams::HdFtPosFooters0START,
+            bHeader ? KDChartParams::HdFtPosHeaders1START : KDChartParams::HdFtPosFooters1START,
+            bHeader ? KDChartParams::HdFtPosHeaders2START : KDChartParams::HdFtPosFooters2START };
+    const int rangeSize = 3;
+    QFontMetrics* metrics[rangesCnt * rangeSize];
 
-    N a t u e r l i c h     wird der folgende Abschnitt
-
-    komplett umgestellt und durch eine schlanke Funktion
-    ersetzt, die alle Header/Footer Sektionen behandelt.
-
-
-*/
-    const double averageValueP1000 = ( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
-
-    painter->save();
-
-    QString f = params()->footerText();
-    if ( !f.isEmpty() ) {
-        QFont actFont( params()->footerFont() );
-        if ( params()->headerFooterFontUseRelSize(
-                                                  KDChartParams::HdFtPosFooter ) ) {
-            actFont.setPointSizeFloat(
-                                      params()->headerFooterFontRelSize(
-                                                                        KDChartParams::HdFtPosFooter ) * averageValueP1000 );
+    int iRange;
+    int i;
+    int iHdFt;
+    for( iRange = 0; iRange < rangesCnt; ++iRange ){
+        for( i = 0; i < 3; ++i ){
+            iHdFt = ranges[iRange] + i;
+            QString txt( params()->headerFooterText( iHdFt ) );
+            if ( !txt.isEmpty() ) {
+                QFont actFont( params()->headerFooterFont( iHdFt ) );
+                if ( params()->headerFooterFontUseRelSize( iHdFt ) ) {
+                    actFont.setPointSizeFloat(
+                        params()->headerFooterFontRelSize( iHdFt ) * averageValueP1000 );
+                }
+                metrics[ iRange*3 + i ] = new QFontMetrics( actFont );
+                leading = QMAX( leading, metrics[ iRange*3 + i ]->lineSpacing() / 2 );
+            }else{
+                metrics[ iRange*3 + i ] = 0;
+            }
         }
-        painter->setPen( params()->headerFooterColor( KDChartParams::HdFtPosFooter ) );
-        painter->setFont( actFont );
-        painter->drawText( _footerRect,
-                           Qt::AlignCenter | Qt::SingleLine, f );
     }
-    painter->restore();
+
+    if( bHeader )
+        ++yposTop;//yposTop += leading/3;
+    //else
+    //--yposBottom;//yposBottom -= leading/3;
+
+    int leading23 = leading*2/3 +1;
+
+    for( iRange =
+             bHeader ? 0                  : rangesCnt-1;
+         bHeader ? iRange < rangesCnt : iRange >= 0;
+         bHeader ? ++iRange           : --iRange ){
+        // Ascents and heights must be looked at to ensure that the hd/ft texts
+        // of the same group (e.g. Hd2L and Hd2 and Hd2R) have equal baselines.
+        int ascents[3];
+        int heights[3];
+        int widths[ 3];
+        int maxAscent = 0;
+        int maxHeight = 0;
+        for( i = 0; i < 3; ++i ){
+            iHdFt = ranges[iRange] + i;
+            if ( metrics[ iRange*3 + i ] ) {
+                QFontMetrics& m = *metrics[ iRange*3 + i ];
+                ascents[i] = m.ascent();
+                heights[i] = m.height() + leading23;
+                widths[ i] = m.boundingRect( params()->headerFooterText( iHdFt ) ).width() + leading23;
+                maxAscent = QMAX( maxAscent, ascents[i] );
+                maxHeight = QMAX( maxHeight, heights[i] );
+            }else{
+                heights[i] = 0;
+            }
+        }
+
+        if( !bHeader )
+            yposBottom -= maxHeight;
+
+        for( i = 0; i < 3; ++i ){
+            if( heights[i] ){
+                iHdFt = ranges[iRange] + i;
+                int x1;
+                switch( i ){
+                case 1:  x1 = xposLeft+1;
+                    break;
+                case 2:  x1 = xposRight-widths[i]-1;
+                    break;
+                default: x1 = xposLeft + (xposRight-xposLeft-widths[i]) / 2;
+                }
+                ((KDChartParams*)params())->__internalStoreHdFtRect( iHdFt,
+                                                                     QRect( x1,
+                                                                            bHeader
+                                                                            ? yposTop    + maxAscent - ascents[i]
+                                                                            : yposBottom + maxAscent - ascents[i],
+                                                                            widths[ i],
+                                                                            heights[i] - 1 ) );
+            }
+        }
+        if( bHeader )
+            yposTop    += leading + maxHeight;
+        else
+            yposBottom -= leading;
+    }
+    for( iRange = 0; iRange < rangesCnt*rangeSize; ++iRange )
+        if( metrics[ iRange ] )
+            delete metrics[ iRange ];
+    return leading;
 }
+
+
+
+void KDChartPainter::calculateAllAxesRects(
+    bool finalPrecision,
+    KDChartTableDataBase* data
+    )
+{
+    const bool bMultiRows = KDChartParams::Bar == params()->chartType() &&
+ KDChartParams::BarMultiRows == params()->barChartSubType();
+
+    const int trueWidth  = _outermostRect.width();
+    const int trueHeight = _outermostRect.height();
+    const double averageValueP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+
+    // store the axes' 0 offsets
+    int nAxesLeft0   = _axesRect.left() - _outermostRect.left();
+    int nAxesRight0  = _outermostRect.right() - _axesRect.right();
+    int nAxesTop0    = _axesRect.top() - _outermostRect.top();
+    int nAxesBottom0 = _outermostRect.bottom() - _axesRect.bottom();
+    if( bMultiRows ){
+        nAxesRight0 += _axesRect.width()  / 3;
+        nAxesTop0   += _axesRect.height() / 3;
+    }
+    // store the distances to be added to the axes' 0 offsets
+    int nAxesLeftADD  =0;
+    int nAxesRightADD =0;
+    int nAxesTopADD   =0;
+    int nAxesBottomADD=0;
+
+    // determine whether the axes widths of one side should be added
+    // or their maximum should be used
+    bool bAddLeft = axesOverlapping( KDChartAxisParams::AxisPosLeft,
+                                     KDChartAxisParams::AxisPosLeft2 );
+    bool bAddRight = axesOverlapping( KDChartAxisParams::AxisPosRight,
+                                      KDChartAxisParams::AxisPosRight2 );
+    bool bAddTop = axesOverlapping( KDChartAxisParams::AxisPosTop,
+                                    KDChartAxisParams::AxisPosTop2 );
+    bool bAddBottom = axesOverlapping( KDChartAxisParams::AxisPosBottom,
+                                       KDChartAxisParams::AxisPosBottom2 );
+    // iterate over all axes
+    uint iAxis;
+    for ( iAxis = 0; iAxis < KDCHART_MAX_AXES; ++iAxis ) {
+
+        const KDChartAxisParams& para = params()->axisParams( iAxis );
+        int areaSize = 0;
+
+        if ( para.axisVisible()
+             && KDChartAxisParams::AxisTypeUnknown != para.axisType() ) {
+
+            const KDChartAxisParams::AxisPos
+                basicPos( KDChartAxisParams::basicAxisPos( iAxis ) );
+
+            int areaMin = para.axisAreaMin();
+            int areaMax = para.axisAreaMin();
+            if ( 0 > areaMin )
+                areaMin = static_cast < int > ( -1.0 * averageValueP1000 * areaMin );
+            if ( 0 > areaMax )
+                areaMax = static_cast < int > ( -1.0 * averageValueP1000 * areaMax );
+
+            // make sure areaMin will not be too small
+            // for the label texts
+            switch ( basicPos ) {
+            case KDChartAxisParams::AxisPosBottom:
+            case KDChartAxisParams::AxisPosTop:
+                if ( para.axisLabelsVisible() ) {
+                    int fntHeight;
+                    if ( para.axisLabelsFontUseRelSize() )
+                        fntHeight = static_cast < int > (
+                            para.axisLabelsFontRelSize()
+                            * averageValueP1000 );
+                    else {
+                        QFontMetrics metrics( para.axisLabelsFont() );
+                        fntHeight = metrics.height();
+                    }
+                    // adjust text height in case of formatted Date/Time values
+                    uint dataDataset, dataDataset2;
+                    if( !params()->findDataset( KDChartParams::DataEntry,
+                                                dataDataset,
+                                                dataDataset2,
+                                                KDChartParams::KDCHART_ALL_CHARTS ) ) {
+                        qDebug( "IMPLEMENTATION ERROR: findDataset( DataEntry, ... ) should *always* return true. (a)" );
+                        dataDataset = KDChartParams::KDCHART_ALL_DATASETS;
+                    }
+                    KDChartData::ValueType valType = KDChartData::NoValue;
+                    const bool dataCellsHaveSeveralCoordinates =
+                        (KDChartParams::KDCHART_ALL_DATASETS == dataDataset)
+                        ? data->cellsHaveSeveralCoordinates( &valType )
+                        : data->cellsHaveSeveralCoordinates( dataDataset, dataDataset2, &valType );
+                    QString format( para.axisLabelsDateTimeFormat() );
+                    if(    dataCellsHaveSeveralCoordinates
+                           && KDChartData::DateTime == valType
+                           && KDChartAxisParams::AXIS_LABELS_AUTO_DATETIME_FORMAT == format )
+                        areaMin = QMAX( areaMin, static_cast < int > ( fntHeight * 6.75 ) );
+                    else
+                        areaMin = QMAX( areaMin, fntHeight * ( 3 + format.contains("\n") ) );
+                }
+                break;
+            case KDChartAxisParams::AxisPosLeft:
+            case KDChartAxisParams::AxisPosRight:
+            default:
+                break;
+            }
+
+
+            switch ( para.axisAreaMode() ) {
+            case KDChartAxisParams::AxisAreaModeAutoSize:
+            {
+                areaSize = areaMin;
+                switch ( basicPos ) {
+                case KDChartAxisParams::AxisPosBottom:
+                case KDChartAxisParams::AxisPosTop:
+                    break;
+                case KDChartAxisParams::AxisPosLeft:
+                case KDChartAxisParams::AxisPosRight:
+                    if( finalPrecision ){
+                        internal__KDChart__CalcValues& cv = calcVal[iAxis];
+                        const int nUsableAxisWidth = static_cast < int > (cv.pTextsW);
+                        const KDChartAxisParams & para = params()->axisParams( iAxis );
+                        QFont axisLabelsFont( para.axisLabelsFont() );
+                        if ( para.axisLabelsFontUseRelSize() ) {
+                            axisLabelsFont.setPointSizeFloat( cv.nTxtHeight );
+                        }
+                        QFontMetrics axisLabelsFontMetrics( axisLabelsFont );
+                        const int lenEM( axisLabelsFontMetrics.boundingRect("M").width() );
+                        const QStringList* labelTexts = para.axisLabelTexts();
+                        uint nLabels = ( 0 != labelTexts )
+                                       ? labelTexts->count()
+                                       : 0;
+                        int maxLabelsWidth = 0;
+                        for ( uint i = 0; i < nLabels; ++i )
+                            maxLabelsWidth =
+                                QMAX( maxLabelsWidth,
+                                      axisLabelsFontMetrics.boundingRect(*labelTexts->at(i)).width() );
+                        if( nUsableAxisWidth < maxLabelsWidth )
+                            areaSize = maxLabelsWidth
+                                       + (para.axisTrueAreaRect().width() - nUsableAxisWidth)
+                                       + lenEM;
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
+            break;
+            case KDChartAxisParams::AxisAreaModeMinMaxSize:
+            {
+                qDebug( "Sorry, not implemented: AxisAreaModeMinMaxSize" );
+            }
+
+            //
+            //
+            //   F E A T U R E   P L A N N E D   F O R   F U T U R E . . .
+            //
+            //
+
+            // break;
+
+            case KDChartAxisParams::AxisAreaModeFixedSize:
+            {
+                areaSize = areaMin;
+            }
+            break;
+            }
+
+            switch ( basicPos ) {
+            case KDChartAxisParams::AxisPosBottom:
+                if( bAddBottom )
+                    nAxesBottomADD += areaSize;
+                else
+                    nAxesBottomADD = QMAX( nAxesBottomADD, areaSize );
+                break;
+            case KDChartAxisParams::AxisPosLeft:
+                if( bAddLeft )
+                    nAxesLeftADD += areaSize;
+                else
+                    nAxesLeftADD = QMAX( nAxesLeftADD, areaSize );
+                break;
+            case KDChartAxisParams::AxisPosTop:
+                if( bAddTop )
+                    nAxesTopADD += areaSize;
+                else
+                    nAxesTopADD = QMAX( nAxesTopADD, areaSize );
+                break;
+            case KDChartAxisParams::AxisPosRight:
+                if( bAddRight )
+                    nAxesRightADD += areaSize;
+                else
+                    nAxesRightADD = QMAX( nAxesRightADD, areaSize );
+                break;
+            default:
+                break;
+            }
+        }
+        // Note: to prevent users from erroneously calling this
+        //       function we do *not* provide a wrapper for it
+        //       in the KDChartParams class but rather call it
+        //       *directly* using a dirty typecast.
+        ( ( KDChartAxisParams& ) para ).setAxisTrueAreaSize( areaSize );
+    }
+    int nMinDistance = static_cast < int > ( 30.0 * averageValueP1000 );
+    int nAxesBottom = QMAX( nAxesBottom0 + nAxesBottomADD, nMinDistance );
+    int nAxesLeft   = QMAX( nAxesLeft0   + nAxesLeftADD,   nMinDistance );
+    int nAxesTop    = QMAX( nAxesTop0    + nAxesTopADD,    nMinDistance );
+    int nAxesRight  = QMAX( nAxesRight0  + nAxesRightADD,  nMinDistance );
+
+    int nBottom  = params()->axisParams( KDChartAxisParams::AxisPosBottom ).axisTrueAreaSize();
+    int nLeft    = params()->axisParams( KDChartAxisParams::AxisPosLeft ).axisTrueAreaSize();
+    int nTop     = params()->axisParams( KDChartAxisParams::AxisPosTop ).axisTrueAreaSize();
+    int nRight   = params()->axisParams( KDChartAxisParams::AxisPosRight ).axisTrueAreaSize();
+    int nBottom2 = params()->axisParams( KDChartAxisParams::AxisPosBottom2 ).axisTrueAreaSize();
+    int nLeft2   = params()->axisParams( KDChartAxisParams::AxisPosLeft2 ).axisTrueAreaSize();
+    int nTop2    = params()->axisParams( KDChartAxisParams::AxisPosTop2 ).axisTrueAreaSize();
+    int nRight2  = params()->axisParams( KDChartAxisParams::AxisPosRight2 ).axisTrueAreaSize();
+
+    internSetAxisArea( _params,
+                       KDChartAxisParams::AxisPosBottom,
+                       _outermostRect.left() + nAxesLeft,
+                       _outermostRect.top()  + trueHeight - nAxesBottom,
+                       trueWidth - nAxesLeft - nAxesRight + 1,
+                       nBottom );
+    internSetAxisArea( _params,
+                       KDChartAxisParams::AxisPosLeft,
+                       _outermostRect.left() + (bAddLeft ? nAxesLeft0 + nLeft2 : nAxesLeft0),
+                       _outermostRect.top()  + nAxesTop,
+                       nLeft,
+                       trueHeight - nAxesTop - nAxesBottom + 1 );
+
+    internSetAxisArea( _params,
+                       KDChartAxisParams::AxisPosTop,
+                       _outermostRect.left() + nAxesLeft,
+                       _outermostRect.top()  + (bAddTop ? nAxesTop0 + nTop2 : nAxesTop0),
+                       trueWidth - nAxesLeft - nAxesRight + 1,
+                       nTop );
+    internSetAxisArea( _params,
+                       KDChartAxisParams::AxisPosRight,
+                       _outermostRect.left() + trueWidth - nAxesRight,
+                       _outermostRect.top()  + nAxesTop,
+                       nRight,
+                       trueHeight - nAxesTop - nAxesBottom + 1 );
+
+    internSetAxisArea( _params,
+                       KDChartAxisParams::AxisPosBottom2,
+                       _outermostRect.left() + nAxesLeft,
+                       _outermostRect.top()  + trueHeight - nAxesBottom + (bAddBottom ? nBottom : 0),
+                       trueWidth - nAxesLeft - nAxesRight + 1,
+                       nBottom2 );
+    internSetAxisArea( _params,
+                       KDChartAxisParams::AxisPosLeft2,
+                       _outermostRect.left() + nAxesLeft0,
+                       _outermostRect.top()  + nAxesTop,
+                       nLeft2,
+                       trueHeight - nAxesTop - nAxesBottom + 1 );
+
+    internSetAxisArea( _params,
+                       KDChartAxisParams::AxisPosTop2,
+                       _outermostRect.left() + nAxesLeft,
+                       _outermostRect.top()  + nAxesTop0,
+                       trueWidth - nAxesLeft - nAxesRight + 1,
+                       nTop2 );
+    internSetAxisArea( _params,
+                       KDChartAxisParams::AxisPosRight2,
+                       _outermostRect.left() + trueWidth - nAxesRight + (bAddRight ? nRight : 0),
+                       _outermostRect.top()  + nAxesTop,
+                       nRight2,
+                       trueHeight - nAxesTop - nAxesBottom + 1 );
+
+    _dataRect = QRect( _outermostRect.left() + nAxesLeft,
+                       _outermostRect.top()  + nAxesTop,
+                       trueWidth - nAxesLeft - nAxesRight + 1,
+                       trueHeight - nAxesTop - nAxesBottom + 1 );
+}
+
 
 
 /**
@@ -1157,45 +1784,32 @@ void KDChartPainter::paintFooter( QPainter* painter,
    parameter will contain the font that is to be used for the legend
    title (unless there is no legend title in which case the value of
    this parameter will be undefined)
-   \throw KDChartNotEnoughSpaceException if it is not possible to draw
-   all parts of the chart in the available space (only if KDChart is
-   compiled to use exceptions).
 */
 void KDChartPainter::setupGeometry( QPainter* painter,
                                     KDChartTableDataBase* data,
                                     QFont& actLegendFont,
                                     QFont& actLegendTitleFont,
                                     const QRect* rect )
-#ifdef USE_EXCEPTIONS
-throw( KDChartNotEnoughSpaceException )
-#endif
 {
-    QPaintDeviceMetrics painterMetrics( painter->device() );
     QRect drawRect;
     if( rect )
         drawRect = *rect;
-    else
+    else{
+        QPaintDeviceMetrics painterMetrics( painter->device() );
         drawRect = QRect( 0, 0, painterMetrics.width(), painterMetrics.height() );
+        drawRect.setWidth( drawRect.width()-2 );
+        drawRect.setHeight( drawRect.height()-2 );
+    }
 
-    /*
-      Philipp:
-      Hack to display the surrounding frame.
-      Frames are displayed by the rect (rect-1,rect-1,width+1,height+1) See KDFrame::paintEdges
-      The QMAX in it makes it even worth.
-      As the primary rect "drawRect" doesn't contain these coordinates, it would be displayed wrong.
-      So I'm deducting on each side 1 pixel to enable the display of the surrounding frame
-    */
-    drawRect.moveBy( 1,1 );
-    drawRect.setWidth( drawRect.width()-2 );
-    drawRect.setHeight( drawRect.height()-2 );
+    int yposTop    = drawRect.topLeft().y();
+    int xposLeft   = drawRect.topLeft().x();
+    int yposBottom = drawRect.bottomRight().y();
+    int xposRight  = drawRect.bottomRight().x();
 
-    int yposTop    = drawRect.top();
-    int xposLeft   = drawRect.left();
-    int yposBottom = drawRect.height();
-    int xposRight  = drawRect.width();
+    _outermostRect = drawRect;
 
-    int trueWidth  = drawRect.width();
-    int trueHeight = drawRect.height();
+    const int trueWidth  = _outermostRect.width();
+    const int trueHeight = _outermostRect.height();
 
     // Temporary values used to calculate start values xposLeft, yposTop, xposRight, yposBottom.
     // They will be replaced immediately after these calculations.
@@ -1203,24 +1817,21 @@ throw( KDChartNotEnoughSpaceException )
     _areaHeightP1000   = trueHeight / 1000.0;
 
 
-    _outermostRect = drawRect;
-
     xposLeft   +=   0 < params()->globalLeadingLeft()
-                  ? params()->globalLeadingLeft()
-                  : static_cast < int > ( params()->globalLeadingLeft()  * -_areaWidthP1000 );
+                    ? params()->globalLeadingLeft()
+                    : static_cast < int > ( params()->globalLeadingLeft()  * -_areaWidthP1000 );
     yposTop    +=   0 < params()->globalLeadingTop()
-                  ? params()->globalLeadingTop()
-                  : static_cast < int > ( params()->globalLeadingTop()   * -_areaHeightP1000 );
+                    ? params()->globalLeadingTop()
+                    : static_cast < int > ( params()->globalLeadingTop()   * -_areaHeightP1000 );
     xposRight  -=   0 < params()->globalLeadingRight()
-                  ? params()->globalLeadingRight()
-                  : static_cast < int > ( params()->globalLeadingRight() * -_areaWidthP1000 );
+                    ? params()->globalLeadingRight()
+                    : static_cast < int > ( params()->globalLeadingRight() * -_areaWidthP1000 );
     yposBottom -=   0 < params()->globalLeadingBottom()
-                  ? params()->globalLeadingBottom()
-                  : static_cast < int > ( params()->globalLeadingBottom()* -_areaHeightP1000 );
+                    ? params()->globalLeadingBottom()
+                    : static_cast < int > ( params()->globalLeadingBottom()* -_areaHeightP1000 );
 
-    _innermostRect = QRect( xposLeft,           yposTop,
-                            xposRight-xposLeft, yposBottom-yposTop );
-
+    _innermostRect = QRect( QPoint(xposLeft,  yposTop),
+                            QPoint(xposRight, yposBottom) );
 
     _logicalWidth  = xposRight  - xposLeft;
     _logicalHeight = yposBottom - yposTop;
@@ -1231,7 +1842,7 @@ throw( KDChartNotEnoughSpaceException )
     _areaWidthP1000 =  _logicalWidth  / 1000.0;
     _areaHeightP1000 = _logicalHeight / 1000.0;
 
-    double averageValueP1000 = ( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+    double averageValueP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
 
     // new code design:
     //        1. now min-header-leading is text height/2
@@ -1239,121 +1850,14 @@ throw( KDChartNotEnoughSpaceException )
     //           will be added if legend is below the header(s)
     //        3. leading will be added between header and data area
     //           in case there is no top legend but grid is to be shown.
-    int headerLineLeading = 0;
-    bool hasHeader = !params()->header1Text().isEmpty();
-
-
-
-    /*
-    //
-    //
-    //   CODE - REORGANISATION   P L A N N E D . . .
-    //
-    //   ( NOT RELEVANT FOR 1st RELEASE )
-
-
-    N a t u e r l i c h     wird der folgende Abschnitt
-
-    komplett umgestellt: statt dreier, fast identischer Codebloecke
-    wird eine Schleife verwendet ... am Montag.  :)
-
-
-*/
-
-
-
-
-
-    if ( hasHeader ) {
-
-        /* old code:
-       QFontMetrics header1Metrics( params()->header1Font() );
-       end of old code */
-
-        /* new code: QUICK AND DIRTY DUE TO LIMITED TIME */
-        QFont actFont( params()->header1Font() );
-        if ( params()->headerFooterFontUseRelSize(
-                                                  KDChartParams::HdFtPosHeader ) ) {
-            actFont.setPointSizeFloat(
-                                      params()->headerFooterFontRelSize(
-                                                                        KDChartParams::HdFtPosHeader ) * averageValueP1000 );
-        }
-        QFontMetrics header1Metrics( actFont );
-        /* end of new code */
-
-        //headerLineLeading = header1Metrics.leading();
-        //if( !headerLineLeading )
-        headerLineLeading = header1Metrics.lineSpacing() / 2;
-        yposTop += headerLineLeading;
-        _header1Rect = QRect( xposLeft, yposTop, xposRight-xposLeft,
-                              header1Metrics.height() );
-
-        // this command line is ONLY A TEMPORARY HACK - later not needed anymore
-        ((KDChartParams*)params())->__internalStoreHdFtRect( KDChartParams::HdFtPosHeader, _header1Rect );
-
-        yposTop += _header1Rect.height();
-    }
-
-
-    if ( !params()->header2Text().isEmpty() ) {
-
-        /* old code:
-       QFontMetrics header2Metrics( params()->header2Font() );
-       end of old code */
-
-        /* new code: QUICK AND DIRTY DUE TO LIMITED TIME */
-        QFont actFont( params()->header2Font() );
-        if ( params()->headerFooterFontUseRelSize(
-                KDChartParams::HdFtPosHeader2 ) ) {
-            actFont.setPointSizeFloat(
-                params()->headerFooterFontRelSize(
-                    KDChartParams::HdFtPosHeader2 ) * averageValueP1000 );
-        }
-        QFontMetrics header2Metrics( actFont );
-        /* end of new code */
-
-        if ( !hasHeader ) {
-            headerLineLeading = header2Metrics.lineSpacing() / 2;
-        }
-        yposTop += headerLineLeading;
-        _header2Rect = QRect( xposLeft, yposTop, xposRight-xposLeft,
-                              header2Metrics.height() );
-
-        // this command line is ONLY A TEMPORARY HACK - later not needed anymore
-        ((KDChartParams*)params())->__internalStoreHdFtRect( KDChartParams::HdFtPosHeader2A, _header2Rect );
-
-        yposTop += _header2Rect.height();
-        hasHeader = true;
-    }
-
-
-    if ( !params()->footerText().isEmpty() ) {
-
-        /* old code:
-       QFontMetrics footerMetrics( params()->footerFont() );
-       end of old code */
-
-        /* new code: QUICK AND DIRTY DUE TO LIMITED TIME */
-        QFont actFont( params()->footerFont() );
-        if ( params()->headerFooterFontUseRelSize(
-                                                  KDChartParams::HdFtPosFooter ) ) {
-            actFont.setPointSizeFloat(
-                                      params()->headerFooterFontRelSize(
-                                                                        KDChartParams::HdFtPosFooter ) * averageValueP1000 );
-        }
-        QFontMetrics footerMetrics( actFont );
-        /* end of new code */
-
-        _footerRect = QRect( xposLeft, yposBottom - footerMetrics.height(),
-                             xposRight-xposLeft,
-                             footerMetrics.height() );
-
-        // this command line is ONLY A TEMPORARY HACK - later not needed anymore
-        ((KDChartParams*)params())->__internalStoreHdFtRect( KDChartParams::HdFtPosFooter, _footerRect );
-
-        yposBottom -= _footerRect.height();
-    }
-
+    int headerLineLeading = calculateHdFtRects( averageValueP1000,
+                                                xposLeft, xposRight,
+                                                false,
+                                                yposTop, yposBottom );
+    calculateHdFtRects( averageValueP1000,
+                        xposLeft, xposRight,
+                        true,
+                        yposTop, yposBottom );
 
     // Calculate legend position. First check whether there is going
     // to be a legend at all:
@@ -1362,7 +1866,8 @@ throw( KDChartNotEnoughSpaceException )
         findLegendTexts( data );
 
         bool hasLegendTitle = false;
-        if ( !params()->legendTitleText().isEmpty() )
+        if ( params()->legendTitleText() != QString::null &&
+             params()->legendTitleText() != "" )
             hasLegendTitle = true;
 
         int legendTitleWidth = 0;
@@ -1377,10 +1882,11 @@ throw( KDChartNotEnoughSpaceException )
                                           * averageValueP1000 );
                 actLegendTitleFont.setPointSizeFloat( nTxtHeight );
             }
+            QFontMetrics legendTitleMetrics( actLegendTitleFont );
+            _legendTitleHeight = legendTitleMetrics.height();
 
             _legendTitle = new KDChartTextPiece( params()->legendTitleText(),
                                                  actLegendTitleFont );
-            //            _legendTitleHeight = _legendTitle->height();
             legendTitleWidth = _legendTitle->width();
         }
 
@@ -1396,20 +1902,24 @@ throw( KDChartNotEnoughSpaceException )
         _legendHeight = legendMetrics.height();
         _legendLeading = legendMetrics.leading();
 
+        _legendEMSpace = legendMetrics.width( 'M' );
+
         int sizeX = 0;
-        int sizeY = static_cast < int > ( _legendSpacing * (0.5 + _numLegendTexts) );
+        int sizeY = 0;
+
+        for ( int dataset = 0; dataset < _numLegendTexts; dataset++ ) {
+            sizeX = QMAX( sizeX, legendMetrics.width( _legendTexts[ dataset ] ) );
+            if( !_legendTexts[ dataset ].isEmpty() )
+                sizeY += _legendSpacing;
+        }
+        // add space below the legend's bottom line
+        sizeY += _legendEMSpace - _legendLeading;
         // add space for the legend title if any was set
         if ( hasLegendTitle )
-            sizeY += static_cast < int > ( _legendTitle->height() * 1.15 );
-
-        int dataset;
-        for ( dataset = 0; dataset < _numLegendTexts; dataset++ ) {
-            sizeX = QMAX( sizeX, legendMetrics.width( _legendTexts[ dataset ] ) );
-        }
+            sizeY += static_cast < int > ( _legendTitleHeight * 1.20 );
 
         // assume 4 em spaces: before the color box, the color box, after the
         // color box and after the legend text
-        _legendEMSpace = legendMetrics.width( 'M' );
         sizeX += ( _legendEMSpace * 4 );
 
         // We cannot setup the title width earlier as the title does
@@ -1438,7 +1948,7 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendLeft:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( xposLeft, ( yposBottom - yposTop - sizeY ) / 2 +
+            _legendRect = QRect( xposLeft + 1, ( yposBottom - yposTop - sizeY ) / 2 +
                                  yposTop,
                                  sizeX, sizeY );
             xposLeft = _legendRect.right() + params()->legendSpacing();
@@ -1446,7 +1956,7 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendRight:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( xposRight - sizeX,
+            _legendRect = QRect( xposRight - sizeX - 1,
                                  ( yposBottom - yposTop - sizeY ) / 2 + yposTop,
                                  sizeX, sizeY );
             xposRight = _legendRect.left() - params()->legendSpacing();
@@ -1454,26 +1964,26 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendTopLeft:
             if ( headerLineLeading )
                 yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( xposLeft, yposTop, sizeX, sizeY );
+            _legendRect = QRect( xposLeft + 1, yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             xposLeft = _legendRect.right() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopLeftTop:
             if ( headerLineLeading )
                 yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( xposLeft, yposTop, sizeX, sizeY );
+            _legendRect = QRect( xposLeft + 1, yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopLeftLeft:
             if ( headerLineLeading )
                 yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( xposLeft, yposTop, sizeX, sizeY );
+            _legendRect = QRect( xposLeft + 1, yposTop, sizeX, sizeY );
             xposLeft = _legendRect.right() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopRight:
             if ( headerLineLeading )
                 yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( xposRight - sizeX,
+            _legendRect = QRect( xposRight - sizeX - 1,
                                  yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             xposRight = _legendRect.left() - params()->legendSpacing();
@@ -1481,40 +1991,40 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendTopRightTop:
             if ( headerLineLeading )
                 yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( xposRight - sizeX,
+            _legendRect = QRect( xposRight - sizeX - 1,
                                  yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopRightRight:
             if ( headerLineLeading )
                 yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
-            _legendRect = QRect( xposRight - sizeX,
+            _legendRect = QRect( xposRight - sizeX - 1,
                                  yposTop, sizeX, sizeY );
             xposRight = _legendRect.left() - params()->legendSpacing();
             break;
         case KDChartParams::LegendBottomLeft:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( xposLeft, yposBottom - sizeY, sizeX, sizeY );
+            _legendRect = QRect( xposLeft + 1, yposBottom - sizeY, sizeX, sizeY );
             yposBottom = _legendRect.top() - params()->legendSpacing();
             xposLeft = _legendRect.right() + params()->legendSpacing();
             break;
         case KDChartParams::LegendBottomLeftBottom:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( xposLeft, yposBottom - sizeY, sizeX, sizeY );
+            _legendRect = QRect( xposLeft + 1, yposBottom - sizeY, sizeX, sizeY );
             yposBottom = _legendRect.top() - params()->legendSpacing();
             break;
         case KDChartParams::LegendBottomLeftLeft:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( xposLeft, yposBottom - sizeY, sizeX, sizeY );
+            _legendRect = QRect( xposLeft + 1, yposBottom - sizeY, sizeX, sizeY );
             xposLeft = _legendRect.right() + params()->legendSpacing();
             break;
         case KDChartParams::LegendBottomRight:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( xposRight - sizeX,
+            _legendRect = QRect( xposRight - sizeX - 1,
                                  yposBottom - sizeY, sizeX, sizeY );
             yposBottom = _legendRect.top() - params()->legendSpacing();
             xposRight = _legendRect.left() - params()->legendSpacing();
@@ -1522,14 +2032,14 @@ throw( KDChartNotEnoughSpaceException )
         case KDChartParams::LegendBottomRightBottom:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( xposRight - sizeX,
+            _legendRect = QRect( xposRight - sizeX - 1,
                                  yposBottom - sizeY, sizeX, sizeY );
             yposBottom = _legendRect.top() - params()->legendSpacing();
             break;
         case KDChartParams::LegendBottomRightRight:
             if ( params()->showGrid() )
                 yposTop += headerLineLeading;
-            _legendRect = QRect( xposRight - sizeX,
+            _legendRect = QRect( xposRight - sizeX - 1,
                                  yposBottom - sizeY, sizeX, sizeY );
             xposRight = _legendRect.left() - params()->legendSpacing();
             break;
@@ -1539,195 +2049,28 @@ throw( KDChartNotEnoughSpaceException )
         }
     }
 
-    _axesRect = QRect( xposLeft, yposTop,
-                       xposRight - xposLeft,
-                       yposBottom - yposTop );
+    _axesRect = QRect( QPoint(xposLeft, yposTop), QPoint(xposRight, yposBottom) );
 
     // important rule: do *not* calculate axes areas for Polar charts!
     //                 (even if left and bottom axes might be set active)
     if( KDChartParams::Polar == params()->chartType() ) {
         _dataRect = _axesRect;
     } else {
-        int nAxesLeft0   = _axesRect.left();
-        int nAxesRight0  = trueWidth - _axesRect.right();
-        int nAxesTop0    = _axesRect.top();
-        int nAxesBottom0 = trueHeight - _axesRect.bottom();
-
-        int nAxesLeft    = nAxesLeft0;
-        int nAxesRight   = nAxesRight0;
-        int nAxesTop     = nAxesTop0;
-        int nAxesBottom  = nAxesBottom0;
-        int i;
-        for ( i = 0; i < (int)KDChartParams::KDCHART_MAX_AXES; ++i ) {
-
-            const KDChartAxisParams& para = params()->axisParams( i );
-            int areaSize = 0;
-
-            if ( para.axisVisible()
-                && KDChartAxisParams::AxisTypeUnknown != para.axisType() ) {
-
-                const KDChartAxisParams::AxisPos
-                    basicPos( KDChartAxisParams::basicAxisPos( i ) );
-
-                int areaMin = para.axisAreaMin();
-                int areaMax = para.axisAreaMin();
-
-                switch ( basicPos ) {
-                case KDChartAxisParams::AxisPosBottom:
-                case KDChartAxisParams::AxisPosTop:
-                    if ( 0 > areaMin )
-                        areaMin = static_cast < int > (
-                                                    -0.75 * averageValueP1000 * areaMin );
-                    // make sure areaMin will not be too small
-                    // for the label texts
-                    if ( para.axisLabelsVisible() ) {
-                        int fntHeight;
-                        if ( para.axisLabelsFontUseRelSize() )
-                            fntHeight = static_cast < int > (
-                                                            para.axisLabelsFontRelSize()
-                                                            * averageValueP1000 );
-                        else {
-                            QFontMetrics metrics( para.axisLabelsFont() );
-                            fntHeight = metrics.height();
-                        }
-                        areaMin = QMAX( areaMin, 3 * fntHeight );
-                    }
-                    if ( 0 > areaMax )
-                        areaMax = static_cast < int > ( -1.0 * averageValueP1000
-                                                        * areaMax );
-                    break;
-                case KDChartAxisParams::AxisPosLeft:
-                case KDChartAxisParams::AxisPosRight:
-                    if ( 0 > areaMin )
-                        areaMin = static_cast < int > ( -1.0 * averageValueP1000
-                                                        * areaMin );
-                    if ( 0 > areaMax )
-                        areaMax = static_cast < int > ( -1.0 * averageValueP1000
-                                                        * areaMax );
-                    break;
-                default:
-                    break;
-                }
-
-                switch ( para.axisAreaMode() ) {
-                case KDChartAxisParams::AxisAreaModeAutoSize: {
-                    qDebug( "Sorry, not implemented: AxisAreaModeAutoSize" );
-                }
-
-                //
-                //
-                //   F E A T U R E   P L A N N E D   F O R   F U T U R E . . .
-                //
-                //
-
-                // break;
-
-                case KDChartAxisParams::AxisAreaModeMinMaxSize: {
-                    qDebug( "Sorry, not implemented: AxisAreaModeMinMaxSize" );
-                }
-
-                //
-                //
-                //   F E A T U R E   P L A N N E D   F O R   F U T U R E . . .
-                //
-                //
-
-                // break;
-
-                case KDChartAxisParams::AxisAreaModeFixedSize: {
-                    areaSize = areaMin;
-                }
-                break;
-                }
-
-                switch ( basicPos ) {
-                case KDChartAxisParams::AxisPosBottom:
-                    nAxesBottom += areaSize;
-                    break;
-                case KDChartAxisParams::AxisPosLeft:
-                    nAxesLeft += areaSize;
-                    break;
-                case KDChartAxisParams::AxisPosTop:
-                    nAxesTop += areaSize;
-                    break;
-                case KDChartAxisParams::AxisPosRight:
-                    nAxesRight += areaSize;
-                    break;
-                default:
-                    break;
-                }
-
-            }
-            // Note: to prevent users from erroneously calling this
-            //       function we do *not* provide a wrapper for it
-            //       in the KDChartParams class but rather call it
-            //       *directly* using a dirty typecast.
-            ( ( KDChartAxisParams& ) para ).setAxisTrueAreaSize( areaSize );
-        }
-
-        int nMinDistance = static_cast < int > ( 30.0 * averageValueP1000 );
-        nAxesBottom = QMAX( nAxesBottom, nMinDistance );
-        nAxesLeft = QMAX( nAxesLeft, nMinDistance );
-        nAxesTop = QMAX( nAxesTop, nMinDistance );
-        nAxesRight = QMAX( nAxesRight, nMinDistance );
-
-        int nBottom = params()->axisParams( KDChartAxisParams::AxisPosBottom ).axisTrueAreaSize();
-        int nLeft = params()->axisParams( KDChartAxisParams::AxisPosLeft ).axisTrueAreaSize();
-        int nTop = params()->axisParams( KDChartAxisParams::AxisPosTop ).axisTrueAreaSize();
-        int nRight = params()->axisParams( KDChartAxisParams::AxisPosRight ).axisTrueAreaSize();
-        int nBottom2 = params()->axisParams( KDChartAxisParams::AxisPosBottom2 ).axisTrueAreaSize();
-        int nLeft2 = params()->axisParams( KDChartAxisParams::AxisPosLeft2 ).axisTrueAreaSize();
-        int nTop2 = params()->axisParams( KDChartAxisParams::AxisPosTop2 ).axisTrueAreaSize();
-        int nRight2 = params()->axisParams( KDChartAxisParams::AxisPosRight2 ).axisTrueAreaSize();
-
-        _params->setAxisArea( KDChartAxisParams::AxisPosBottom,
-                            QRect( nAxesLeft,
-                                    trueHeight - nAxesBottom,
-                                    trueWidth - nAxesLeft - nAxesRight + 1,
-                                    nBottom ) );
-        _params->setAxisArea( KDChartAxisParams::AxisPosLeft,
-                            QRect( nAxesLeft0 + nLeft2,
-                                    nAxesTop,
-                                    nLeft,
-                                    trueHeight - nAxesTop - nAxesBottom + 1 ) );
-
-        _params->setAxisArea( KDChartAxisParams::AxisPosTop,
-                            QRect( nAxesLeft,
-                                    nAxesTop0 + nTop2,
-                                    trueWidth - nAxesLeft - nAxesRight + 1,
-                                    nTop ) );
-        _params->setAxisArea( KDChartAxisParams::AxisPosRight,
-                            QRect( trueWidth - nAxesRight,
-                                    nAxesTop,
-                                    nRight,
-                                    trueHeight - nAxesTop - nAxesBottom + 1 ) );
-
-        _params->setAxisArea( KDChartAxisParams::AxisPosBottom2,
-                            QRect( nAxesLeft,
-                                    trueHeight - nAxesBottom + nBottom,
-                                    trueWidth - nAxesLeft - nAxesRight + 1,
-                                    nBottom2 ) );
-        _params->setAxisArea( KDChartAxisParams::AxisPosLeft2,
-                            QRect( nAxesLeft0,
-                                    nAxesTop,
-                                    nLeft2,
-                                    trueHeight - nAxesTop - nAxesBottom + 1 ) );
-
-        _params->setAxisArea( KDChartAxisParams::AxisPosTop2,
-                            QRect( nAxesLeft,
-                                    nAxesTop0,
-                                    trueWidth - nAxesLeft - nAxesRight + 1,
-                                    nTop2 ) );
-        _params->setAxisArea( KDChartAxisParams::AxisPosRight2,
-                            QRect( trueWidth - nAxesRight + nRight,
-                                    nAxesTop,
-                                    nRight2,
-                                    trueHeight - nAxesTop - nAxesBottom + 1 ) );
-
-        _dataRect = QRect( nAxesLeft,
-                        nAxesTop,
-                        trueWidth - nAxesLeft - nAxesRight + 1,
-                        trueHeight - nAxesTop - nAxesBottom + 1 );
+        // 1st step: make a preliminary approximation of the axes sizes,
+        //           as a basis of following label texts calculation
+        calculateAllAxesRects( false, data );
+        // 2nd step: calculate all labels (preliminary data, will be
+        //           overwritten by KDChartAxesPainter)
+        //           to find out the longest possible axis labels
+        double dblDummy;
+        if( calculateAllAxesLabelTextsAndCalcValues(
+                data,
+                _areaWidthP1000,
+                _areaHeightP1000,
+                dblDummy ) )
+            // 3rd step: calculate the _true_ axes rects based upon
+            //           the preliminary axes labels
+            calculateAllAxesRects( true, data );
     }
 }
 
@@ -1825,3 +2168,304 @@ uint KDChartPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedRows();
 }
+
+
+/**
+   Draws the marker for one data point according to the specified style.
+
+   \param painter the painter to draw on
+   \param style what kind of marker is drawn (square, diamond or circle)
+   \param color the color in which to draw the marker
+   \param p the center of the marker
+   \param dataset the dataset which this marker represents
+   \param value the value which this marker represents
+   \param regions a list of regions for data points, a new region for the new
+   marker will be appended to this list if it is not 0
+*/
+void KDChartPainter::drawMarker( QPainter* painter,
+                                 KDChartParams::LineMarkerStyle style,
+                                 const QColor& color, const QPoint& p,
+                                 uint dataset, uint value, uint chart,
+                                 KDChartDataRegionList* regions,
+                                 int* width,
+                                 int* height )
+{
+    const double areaSizeP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);
+    int xsize  = width ? *width : params()->lineMarkerSize().width();
+    if( 0 > xsize )
+        xsize = static_cast < int > (xsize * -areaSizeP1000);
+    xsize = QMAX( xsize, 4 );
+    int ysize  = height ? *height : params()->lineMarkerSize().height();
+    if( 0 > ysize )
+        ysize = static_cast < int > (ysize * -areaSizeP1000);
+    ysize = QMAX( ysize, 4 );
+    uint xsize2 = xsize / 2;
+    uint ysize2 = ysize / 2;
+    uint xsize4 = xsize / 4;
+    uint ysize4 = ysize / 4;
+    uint xsize6 = xsize / 6;
+    uint ysize6 = ysize / 6;
+    painter->setPen( color );
+    switch ( style ) {
+    case KDChartParams::LineMarkerSquare: {
+        const QBrush oldBrush( painter->brush() );
+        painter->setBrush( color );
+        QRect rect( QPoint( p.x() - xsize2, p.y() - ysize2 ), QPoint( p.x() + xsize2, p.y() + ysize2 ) );
+        painter->drawRect( rect );
+        // Don't use rect for drawing after this!
+        rect.moveBy( _dataRect.x(), _dataRect.y() );
+        if ( regions )
+            regions->append( new KDChartDataRegion( QRegion( rect ),
+                                                    dataset,
+                                                    value,
+                                                    chart ) );
+        painter->setBrush( oldBrush );
+        break;
+    }
+    case KDChartParams::LineMarkerDiamond:{
+        const QBrush oldBrush( painter->brush() );
+        painter->setBrush( color );
+        QPointArray points( 4 );
+        points.setPoint( 0, p.x() - xsize2, p.y() );
+        points.setPoint( 1, p.x(),          p.y() - ysize2 );
+        points.setPoint( 2, p.x() + xsize2, p.y() );
+        points.setPoint( 3, p.x(),          p.y() + ysize2 );
+        painter->drawPolygon( points );
+        // Don't use points for drawing after this!
+        points.translate( _dataRect.x(), _dataRect.y() );
+        if ( regions )
+            regions->append( new KDChartDataRegion( QRegion( points ),
+                                                    dataset,
+                                                    value,
+                                                    chart ) );
+        painter->setBrush( oldBrush );
+        break;
+    }
+    case KDChartParams::LineMarker1Pixel: {
+        QRect rect( p, p );
+        painter->drawRect( rect );
+        // Don't use rect for drawing after this!
+        rect.moveBy( _dataRect.x(), _dataRect.y() );
+        if ( regions )
+            regions->append( new KDChartDataRegion( QRegion( rect ),
+                                                    dataset,
+                                                    value,
+                                                    chart ) );
+        break;
+    }
+    case KDChartParams::LineMarker4Pixels:{
+        QRect rect( p, QPoint( p.x()+1, p.y()+1 ) );
+        painter->drawRect( rect );
+        // Don't use rect for drawing after this!
+        rect.moveBy( _dataRect.x(), _dataRect.y() );
+        if ( regions )
+            regions->append( new KDChartDataRegion( QRegion( rect ),
+                                                    dataset,
+                                                    value,
+                                                    chart ) );
+        break;
+    }
+    case KDChartParams::LineMarkerRing:   {
+        const QPen oldPen( painter->pen() );
+        painter->setPen( QPen( color, QMIN(xsize4, ysize4) ) );
+        const QBrush oldBrush( painter->brush() );
+        painter->setBrush( Qt::NoBrush );
+        painter->drawEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
+        if ( regions ) {
+            QPointArray points;
+            points.makeEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
+            // Don't use points for drawing after this!
+            points.translate( _dataRect.x(), _dataRect.y() );
+            if( points.size() > 0 )
+                regions->append( new KDChartDataRegion( QRegion( points ),
+                                                        dataset,
+                                                        value,
+                                                        chart ) );
+        }
+        painter->setBrush( oldBrush );
+        painter->setPen(   oldPen );
+        break;
+    }
+    case KDChartParams::LineMarkerCross:  {
+        const QPen oldPen( painter->pen() );
+        painter->setPen( color );
+        const QBrush oldBrush( painter->brush() );
+        painter->setBrush( color );
+        QPointArray points( 12 );
+        points.setPoint( 0, p.x() - xsize6, p.y() - ysize6 );
+        points.setPoint( 1, p.x() - xsize6, p.y() - ysize2 );
+        points.setPoint( 2, p.x() + xsize6, p.y() - ysize2 );
+        points.setPoint( 3, p.x() + xsize6, p.y() - ysize6 );
+        points.setPoint( 4, p.x() + xsize2, p.y() - ysize6 );
+        points.setPoint( 5, p.x() + xsize2, p.y() + ysize6 );
+        points.setPoint( 6, p.x() + xsize6, p.y() + ysize6 );
+        points.setPoint( 7, p.x() + xsize6, p.y() + ysize2 );
+        points.setPoint( 8, p.x() - xsize6, p.y() + ysize2 );
+        points.setPoint( 9, p.x() - xsize6, p.y() + ysize6 );
+        points.setPoint(10, p.x() - xsize2, p.y() + ysize6 );
+        points.setPoint(11, p.x() - xsize2, p.y() - ysize6 );
+        painter->drawPolygon( points );
+        // Don't use points for drawing after this!
+        points.translate( _dataRect.x(), _dataRect.y() );
+        if ( regions )
+            regions->append( new KDChartDataRegion( QRegion( points ),
+                                                    dataset,
+                                                    value,
+                                                    chart ) );
+        painter->setBrush( oldBrush );
+        painter->setPen(   oldPen );
+        break;
+    }
+    case KDChartParams::LineMarkerCircle:
+    default:                              {
+        const QBrush oldBrush( painter->brush() );
+        painter->setBrush( color );
+        painter->drawEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
+        if ( regions ) {
+            QPointArray points;
+            points.makeEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
+            // Don't use points for drawing after this!
+            points.translate( _dataRect.x(), _dataRect.y() );
+            if( points.size() > 0 )
+                regions->append( new KDChartDataRegion( QRegion( points ),
+                                                        dataset,
+                                                        value,
+                                                        chart ) );
+        }
+        painter->setBrush( oldBrush );
+    }
+    }
+}
+
+
+void KDChartPainter::drawExtraLinesAndMarkers(
+    KDChartPropertySet& propSet,
+    const QPen& defaultPen,
+    const KDChartParams::LineMarkerStyle& defaultMarkerStyle,
+    int myPointX,
+    int myPointY,
+    QPainter* painter,
+    const KDChartAxisParams* abscissaPara,
+    const KDChartAxisParams* ordinatePara,
+    const double areaWidthP1000,
+    const double areaHeightP1000,
+    bool bDrawInFront )
+{
+
+    // we can safely call the following functions and ignore their
+    // return values since they will touch the parameters' values
+    // if the propSet *contains* corresponding own values only.
+    int  iDummy;
+    uint extraLinesAlign = 0;
+    propSet.hasOwnExtraLinesAlign( iDummy, extraLinesAlign );
+    if( extraLinesAlign
+        & ( Qt::AlignLeft | Qt::AlignRight  | Qt::AlignHCenter |
+            Qt::AlignTop  | Qt::AlignBottom | Qt::AlignVCenter ) ){
+        bool extraLinesInFront = false;
+        propSet.hasOwnExtraLinesInFront( iDummy, extraLinesInFront );
+        if( bDrawInFront == extraLinesInFront ){
+            const double areaSizeP1000 = QMIN(areaWidthP1000, areaHeightP1000);
+            int          extraLinesLength = -20;
+            int          extraLinesWidth = defaultPen.width();
+            QColor       extraLinesColor = defaultPen.color();
+            Qt::PenStyle extraLinesStyle = defaultPen.style();
+            uint         extraMarkersAlign = 0;
+            propSet.hasOwnExtraLinesLength( iDummy, extraLinesLength );
+            propSet.hasOwnExtraLinesWidth(  iDummy, extraLinesWidth  );
+            propSet.hasOwnExtraLinesColor(  iDummy, extraLinesColor  );
+            propSet.hasOwnExtraLinesStyle(  iDummy, extraLinesStyle  );
+            const int horiLenP2 = (0 > extraLinesLength)
+                                  ? static_cast<int>(areaWidthP1000  * extraLinesLength) / 2
+                                  : extraLinesLength / 2;
+            const int vertLenP2 = (0 > extraLinesLength)
+                                  ? static_cast<int>(areaHeightP1000 * extraLinesLength) / 2
+                                  : extraLinesLength / 2;
+            // draw the extra line(s)
+            QPoint pL( (Qt::AlignLeft == (extraLinesAlign & Qt::AlignLeft))
+                       ? 0
+                       : (Qt::AlignHCenter == (extraLinesAlign & Qt::AlignHCenter))
+                       ? myPointX - horiLenP2
+                       : myPointX,
+                       myPointY );
+            QPoint pR( (Qt::AlignRight == (extraLinesAlign & Qt::AlignRight))
+                       ? abscissaPara->axisTrueAreaRect().width()
+                       : (Qt::AlignHCenter == (extraLinesAlign & Qt::AlignHCenter))
+                       ? myPointX + horiLenP2
+                       : myPointX,
+                       myPointY );
+            QPoint pT( myPointX,
+                       (Qt::AlignTop == (extraLinesAlign & Qt::AlignTop))
+                       ? 0
+                       : (Qt::AlignVCenter == (extraLinesAlign & Qt::AlignVCenter))
+                       ? myPointY - vertLenP2
+                       : myPointY );
+            QPoint pB( myPointX,
+                       (Qt::AlignBottom == (extraLinesAlign & Qt::AlignBottom))
+                       ? ordinatePara->axisTrueAreaRect().height()
+                       : (Qt::AlignVCenter == (extraLinesAlign & Qt::AlignVCenter))
+                       ? myPointY + vertLenP2
+                       : myPointY );
+            const QPen extraPen( extraLinesColor,
+                                 static_cast<int>( 0 > extraLinesWidth
+                                 ? areaSizeP1000 * -extraLinesWidth
+                                 : extraLinesWidth ),
+                                 extraLinesStyle );
+            const QPen oldPen( painter->pen() );
+            painter->setPen( extraPen );
+            if( extraLinesAlign & ( Qt::AlignLeft | Qt::AlignRight | Qt::AlignHCenter ) )
+                painter->drawLine( pL, pR );
+            if( extraLinesAlign & ( Qt::AlignTop | Qt::AlignBottom | Qt::AlignVCenter ) )
+                painter->drawLine( pT, pB );
+            painter->setPen( oldPen );
+            // draw the marker(s) of the extra line(s)
+            propSet.hasOwnExtraMarkersAlign( iDummy, extraMarkersAlign );
+            if( extraMarkersAlign
+                & ( Qt::AlignLeft | Qt::AlignRight |
+                    Qt::AlignTop  | Qt::AlignBottom ) ){
+                QSize  extraMarkersSize  = params()->lineMarkerSize();
+                QColor extraMarkersColor = extraLinesColor;
+                int    extraMarkersStyle = defaultMarkerStyle;
+                propSet.hasOwnExtraMarkersSize(  iDummy, extraMarkersSize );
+                propSet.hasOwnExtraMarkersColor( iDummy, extraMarkersColor );
+                propSet.hasOwnExtraMarkersStyle( iDummy, extraMarkersStyle );
+                // draw the extra marker(s)
+                int w = extraMarkersSize.width();
+                int h = extraMarkersSize.height();
+                if( w < 0 )
+                    w = static_cast < int > (w * -areaSizeP1000);
+                if( h < 0 )
+                    h = static_cast < int > (h * -areaSizeP1000);
+                if( extraMarkersAlign & Qt::AlignLeft )
+                    drawMarker( painter,
+                                (KDChartParams::LineMarkerStyle)extraMarkersStyle,
+                                extraMarkersColor,
+                                pL,
+                                0, 0, 0, 0,
+                                &w, &h );
+                if( extraMarkersAlign & Qt::AlignRight )
+                    drawMarker( painter,
+                                (KDChartParams::LineMarkerStyle)extraMarkersStyle,
+                                extraMarkersColor,
+                                pR,
+                                0, 0, 0, 0,
+                                &w, &h );
+                if( extraMarkersAlign & Qt::AlignTop )
+                    drawMarker( painter,
+                                (KDChartParams::LineMarkerStyle)extraMarkersStyle,
+                                extraMarkersColor,
+                                pT,
+                                0, 0, 0, 0,
+                                &w, &h );
+                if( extraMarkersAlign & Qt::AlignBottom )
+                    drawMarker( painter,
+                                (KDChartParams::LineMarkerStyle)extraMarkersStyle,
+                                extraMarkersColor,
+                                pB,
+                                0, 0, 0, 0,
+                                &w, &h );
+            }
+        }
+    }
+}
+
+

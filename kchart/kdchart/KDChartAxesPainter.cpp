@@ -4,30 +4,31 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #include <qpainter.h>
+#include <qlabel.h>
 
 #include <KDDrawText.h>
 #include "KDChartAxesPainter.h"
@@ -35,16 +36,19 @@
 #include "KDChartParams.h"
 #include "KDChartData.h"
 
-#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI )
-#include <math.h>
-#else
-#include <cmath>
 #include <stdlib.h>
-#endif
 
-#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI ) || ( defined HP11_aCC && defined HP1100 )
-#define std
-#endif
+/**
+   Little helper function returning the number of seconds
+   between UTC start date 1970/01/01 00:00 and a given date \c dt.
+   The return value is negative for \c dt < 1970/01/01.
+*/
+int secondsSinceUTCStart( const QDateTime& dt )
+{
+    QDateTime dtStart( QDate( 1970, 1, 1 ) );
+    return dtStart.secsTo( dt );
+}
+
 
 /**
    \class KDChartAxesPainter KDChartAxesPainter.h
@@ -59,7 +63,7 @@
    \param params the KDChartParams structure that defines the chart
 */
 KDChartAxesPainter::KDChartAxesPainter( KDChartParams* params ) :
-KDChartPainter( params )
+    KDChartPainter( params )
 {
     // Intentionally left blank.
     // We cannot setup the geometry yet
@@ -75,45 +79,269 @@ KDChartAxesPainter::~KDChartAxesPainter()
 }
 
 
-/**
-    Provides some information needed twice by ::paintAxes()  (see below)
-*/
-void KDChartAxesPainter::findInfos( double /*averageValueP1000*/,
-                                    const KDChartAxisParams& para,
-                                    uint axisPos,
-                                    KDChartAxisParams::AxisPos& basicPos,
-                                    QPoint& orig,
-                                    QPoint& dest )
+#if COMPAT_QT_VERSION < 0x030000
+QDateTime dateTimeFromString( const QString& s ) // only ISODate is allowed
 {
+    int year(  s.mid(  0, 4 ).toInt() );
+    int month( s.mid(  5, 2 ).toInt() );
+    int day(   s.mid(  8, 2 ).toInt() );
+    QString t( s.mid( 11 ) );
+    int hour(   t.mid( 0, 2 ).toInt() );
+    int minute( t.mid( 3, 2 ).toInt() );
+    int second( t.mid( 6, 2 ).toInt() );
+    int msec(   t.mid( 9, 3 ).toInt() );
+    if ( year && month && day )
+        return QDateTime( QDate( year, month, day ),
+                          QTime( hour, minute, second, msec ) );
+    else
+        return QDateTime();
+}
+QString dateTimeToString( const QDateTime& dt )  // ISODate is returned
+{
+    QString date;
+    QString month(
+        QString::number( dt.date().month() ).rightJustify( 2, '0' ) );
+    QString day(
+        QString::number( dt.date().day() ).rightJustify( 2, '0' ) );
+    date = QString::number( dt.date().year() ) + "-" + month + "-" + day;
+    QString time;
+    time.sprintf( "%.2d:%.2d:%.2d",
+                  dt.time().hour(), dt.time().minute(), dt.time().second() );
+    return date + "T" + time;
+}
+#endif
 
-    basicPos = KDChartAxisParams::basicAxisPos( axisPos );
 
-    switch ( basicPos ) {
-    case KDChartAxisParams::AxisPosBottom: {
-            orig = para.axisTrueAreaRect().topLeft();
-            dest = para.axisTrueAreaRect().topRight();
+/**
+   ReCalculate the labels based upon given nDelta and nDeltaPix.
+
+   This is necessary to build isometric axes.
+*/
+void reCalculateLabelTexts( const KDChartTableDataBase& data,
+                            const KDChartParams& params,
+                            uint axisNumber,
+                            double averageValueP1000,
+                            double delimLen,
+                            internal__KDChart__CalcValues& cv )
+{
+    KDChartAxesPainter::calculateLabelTexts( data,
+                                             params,
+                                             axisNumber,
+                                             averageValueP1000,
+                                             delimLen,
+                                             // start of reference parameters
+                                             cv.basicPos,
+                                             cv.orig,
+                                             cv.dest,
+                                             cv.pXDeltaFactor,
+                                             cv.pYDeltaFactor,
+                                             cv.pXDelimDeltaFaktor,
+                                             cv.pYDelimDeltaFaktor,
+                                             cv.nSubDelimFactor,
+                                             cv.pDelimDelta,
+                                             cv.nTxtHeight,
+                                             cv.pTextsX,
+                                             cv.pTextsY,
+                                             cv.pTextsW,
+                                             cv.pTextsH,
+                                             cv.textAlign,
+                                             cv.bLogarithmic,
+                                             cv.isDateTime,
+                                             cv.autoDtLabels,
+                                             cv.dtLow,
+                                             cv.dtHigh,
+                                             cv.dtDeltaScale,
+                                             true,
+                                             cv.nDelta,
+                                             cv.nDeltaPix );
+    const KDChartAxisParams & para = params.axisParams( axisNumber );
+    cv.bSteadyCalc = para.axisSteadyValueCalc();
+    cv.nLow        = para.trueAxisLow();
+    cv.nHigh       = para.trueAxisHigh();
+}
+
+
+bool KDChartAxesPainter::calculateAllAxesLabelTextsAndCalcValues(
+    KDChartTableDataBase* data,
+    double areaWidthP1000,
+    double areaHeightP1000,
+    double& delimLen)
+{
+    uint iAxis;
+
+    double averageValueP1000 = QMIN(areaWidthP1000, areaHeightP1000);//( areaWidthP1000 + areaHeightP1000 ) / 2.0;
+    // length of little delimiter-marks indicating axis scaling
+    delimLen = 20.0 * averageValueP1000; // per mille of area
+
+    // Determine axes calculation values and labels before drawing the axes.
+
+    // step #1: calculate all values independendly from the other axes' values
+    for( iAxis = 0;  iAxis < KDCHART_MAX_AXES;  ++iAxis )
+    {
+        internal__KDChart__CalcValues& cv = calcVal[iAxis];
+        cv.processThisAxis = (    params()->axisParams( iAxis ).axisVisible()
+                                  && KDChartAxisParams::AxisTypeUnknown
+                                  != params()->axisParams( iAxis ).axisType() );
+        if( cv.processThisAxis ){
+            cv.nSubDelimFactor = 0.0;
+            cv.pDelimDelta     = 0.0;
+            cv.nTxtHeight      = 0.0;
+            cv.pTextsX         = 0.0;
+            cv.pTextsY         = 0.0;
+            cv.pTextsW         = 0.0;
+            cv.pTextsH         = 0.0;
+            cv.textAlign       = Qt::AlignHCenter | Qt::AlignVCenter;
+            cv.isDateTime      = false;
+            cv.autoDtLabels    = false;
+            calculateLabelTexts( *data,
+                                 *params(),
+                                 iAxis,
+                                 averageValueP1000,
+                                 delimLen,
+                                 // start of reference parameters
+                                 cv.basicPos,
+                                 cv.orig,
+                                 cv.dest,
+                                 cv.pXDeltaFactor,
+                                 cv.pYDeltaFactor,
+                                 cv.pXDelimDeltaFaktor,
+                                 cv.pYDelimDeltaFaktor,
+                                 cv.nSubDelimFactor,
+                                 cv.pDelimDelta,
+                                 cv.nTxtHeight,
+                                 cv.pTextsX,
+                                 cv.pTextsY,
+                                 cv.pTextsW,
+                                 cv.pTextsH,
+                                 cv.textAlign,
+                                 cv.bLogarithmic,
+                                 cv.isDateTime,
+                                 cv.autoDtLabels,
+                                 cv.dtLow,
+                                 cv.dtHigh,
+                                 cv.dtDeltaScale );
+            const KDChartAxisParams & para = params()->axisParams( iAxis );
+            cv.bSteadyCalc = para.axisSteadyValueCalc();
+            cv.nLow        = para.trueAxisLow();
+            cv.nHigh       = para.trueAxisHigh();
+            cv.nDelta      = para.trueAxisDelta();
+            cv.nDeltaPix   = para.trueAxisDeltaPixels();
         }
-        break;
-    case KDChartAxisParams::AxisPosLeft: {
-            orig = para.axisTrueAreaRect().bottomRight();
-            dest = para.axisTrueAreaRect().topRight();
-        }
-        break;
-    case KDChartAxisParams::AxisPosTop: {
-            orig = para.axisTrueAreaRect().bottomLeft();
-            dest = para.axisTrueAreaRect().bottomRight();
-        }
-        break;
-    case KDChartAxisParams::AxisPosRight: {
-            orig = para.axisTrueAreaRect().bottomLeft();
-            dest = para.axisTrueAreaRect().topLeft();
-        }
-        break;
-    default: {
-            qDebug( "IMPLEMENTATION ERROR: KDChartAxesPainter::findInfos() unhandled enum value." );
-        }
-        break;
     }
+
+    // step #2: if isometric axes are desired adjust/re-calculate some values
+    for ( iAxis = 0; iAxis < KDCHART_MAX_AXES; ++iAxis ){
+        internal__KDChart__CalcValues& cv = calcVal[iAxis];
+        if(    cv.processThisAxis
+               && cv.bSteadyCalc ){
+            const KDChartAxisParams & para = params()->axisParams( iAxis );
+            const uint isoRef = para.isometricReferenceAxis();
+            if(    KDChartParams::KDCHART_NO_AXIS != isoRef
+                   && iAxis != isoRef
+                   && (    KDCHART_MAX_AXES  > isoRef
+                           || KDChartParams::KDCHART_ALL_AXES == isoRef ) ){
+                if( KDChartParams::KDCHART_ALL_AXES == isoRef ){
+                    uint iAxis2;
+                    // first find the axis values to be taken as reference
+                    double nDelta          = cv.nDelta;
+                    double nDeltaPix       = cv.nDeltaPix;
+                    double nSubDelimFactor = cv.nSubDelimFactor;
+                    for ( iAxis2 = 0;
+                          iAxis2 < KDCHART_MAX_AXES;
+                          ++iAxis2 ){
+                        internal__KDChart__CalcValues& cv2 = calcVal[iAxis2];
+                        if(    cv2.processThisAxis
+                               && cv2.bSteadyCalc
+                               && (0.0 != cv2.nDelta)
+                               && (fabs(cv2.nDeltaPix / cv2.nDelta) < fabs(nDeltaPix / nDelta)) ){
+                            if( (nDelta >= 0.0) == (cv2.nDelta >= 0.0) )
+                                nDelta = cv2.nDelta;
+                            else
+                                nDelta = cv2.nDelta * -1.0;
+                            if( (nDeltaPix >= 0.0) == (cv2.nDeltaPix >= 0.0) )
+                                nDeltaPix = cv2.nDeltaPix;
+                            else
+                                nDeltaPix = cv2.nDeltaPix * -1.0;
+                            if( (nSubDelimFactor >= 0.0) == (cv2.nSubDelimFactor >= 0.0) )
+                                nSubDelimFactor = cv2.nSubDelimFactor;
+                            else
+                                nSubDelimFactor = cv2.nSubDelimFactor * -1.0;
+                        }
+                    }
+                    // now adjust all axes (if necessary)
+                    for ( iAxis2 = 0;
+                          iAxis2 < KDCHART_MAX_AXES;
+                          ++iAxis2 ){
+                        internal__KDChart__CalcValues& cv2 = calcVal[iAxis2];
+                        if(    cv2.processThisAxis
+                               && cv2.bSteadyCalc
+                               && (    fabs(cv2.nDelta)    != fabs(nDelta)
+                                       || fabs(cv2.nDeltaPix) != fabs(nDeltaPix) ) ){
+                            //qDebug("\nrecalculating scale for axis %x", iAxis2);
+                            //qDebug("cv2.nDelta %f   cv2.nDeltaPix %f       nDelta %f   nDeltaPix %f\n",
+                            //        cv2.nDelta,cv2.nDeltaPix,nDelta,nDeltaPix);
+                            if( (cv2.nDelta >= 0.0) == (nDelta >= 0.0) )
+                                cv2.nDelta = nDelta;
+                            else
+                                cv2.nDelta = nDelta * -1.0;
+                            if( (cv2.nDeltaPix >= 0.0) == (nDeltaPix >= 0.0) )
+                                cv2.nDeltaPix = nDeltaPix;
+                            else
+                                cv2.nDeltaPix = nDeltaPix * -1.0;
+                            reCalculateLabelTexts( *data,
+                                                   *params(),
+                                                   iAxis2,
+                                                   averageValueP1000,
+                                                   delimLen,
+                                                   cv2 );
+                            if( (cv2.nSubDelimFactor >= 0.0) == (nSubDelimFactor >= 0.0) )
+                                cv2.nSubDelimFactor = nSubDelimFactor;
+                            else
+                                cv2.nSubDelimFactor = nSubDelimFactor * -1.0;
+                        }
+                    }
+                }else{
+                    internal__KDChart__CalcValues& cv2 = calcVal[isoRef];
+                    // adjust this axis or the other axis (if necessary)
+                    if(    cv2.processThisAxis
+                           && cv2.bSteadyCalc
+                           && (    cv2.nDelta    != cv.nDelta
+                                   || cv2.nDeltaPix != cv.nDeltaPix ) ){
+                        if(    cv2.nDelta > cv.nDelta
+                               || (     cv2.nDelta   == cv.nDelta
+                                        && cv2.nDeltaPix < cv.nDeltaPix ) ){
+                            // adjust this axis
+                            //qDebug("recalculating scale for this axis %x", iAxis);
+                            cv.nDelta    = cv2.nDelta;
+                            cv.nDeltaPix = cv2.nDeltaPix;
+                            reCalculateLabelTexts( *data,
+                                                   *params(),
+                                                   iAxis,
+                                                   averageValueP1000,
+                                                   delimLen,
+                                                   cv );
+                            cv.nSubDelimFactor = cv2.nSubDelimFactor;
+                        }else{
+                            // adjust the other axis
+                            //qDebug("\nrecalculating scale for other axis %x", isoRef);
+                            //qDebug("cv2.nDelta %f   cv2.nDeltaPix %f       cv.nDelta %f   cv.nDeltaPix %f",
+                            //        cv2.nDelta,cv2.nDeltaPix,cv.nDelta,cv.nDeltaPix);
+                            cv2.nDelta    = cv.nDelta;
+                            cv2.nDeltaPix = cv.nDeltaPix;
+                            reCalculateLabelTexts( *data,
+                                                   *params(),
+                                                   isoRef,
+                                                   averageValueP1000,
+                                                   delimLen,
+                                                   cv2 );
+                            cv2.nSubDelimFactor = cv.nSubDelimFactor;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return true;
 }
 
 
@@ -129,39 +357,49 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
     if ( !painter || !data || 0 == params() )
         return ;
 
+
+
+    const bool bMultiRowBarChart = KDChartParams::Bar == params()->chartType() &&
+     KDChartParams::BarMultiRows == params()->barChartSubType();
+
+
+
     double areaWidthP1000 = _logicalWidth / 1000.0;
     double areaHeightP1000 = _logicalHeight / 1000.0;
-    double averageValueP1000 = ( areaWidthP1000 + areaHeightP1000 ) / 2.0;
+    double averageValueP1000 = QMIN(areaWidthP1000, areaHeightP1000);//( areaWidthP1000 + areaHeightP1000 ) / 2.0;
+    // length of little delimiter-marks indicating axis scaling
+    double delimLen;
 
-    painter->save();
-
-    painter->setPen( Qt::NoPen );
+    calculateAllAxesLabelTextsAndCalcValues( data, areaWidthP1000, areaHeightP1000, delimLen );
 
     /*
     // show complete rect areas of all active axes (for debugging)
-    for( uint i = 0;  i < KDChartParams::KDCHART_MAX_AXES;  ++i )
-        if(    params()->axisParams( i ).axisVisible()
-            &&    KDChartAxisParams::AxisTypeUnknown
-               != params()->axisParams( i ).axisType() ){
-            const KDChartAxisParams& para( params()->axisParams( i ) );
-            painter->fillRect(para.axisTrueAreaRect(),QBrush(Qt::white));
-}
+    for( iAxis = 0;  iAxis < KDCHART_MAX_AXES;  ++iAxis )
+    if( calcVal[iAxis].processThisAxis )
+    painter->fillRect(params()->axisParams(iAxis).axisTrueAreaRect(),
+    QBrush(Qt::white));
     */
 
 
-    for ( uint i = 0; i < KDChartParams::KDCHART_MAX_AXES; ++i )
-        if ( params()->axisParams( i ).axisVisible()
-                && KDChartAxisParams::AxisTypeUnknown
-                != params()->axisParams( i ).axisType() ) {
+    // Now the labels are known, so let us paint the axes...
+    painter->save();
+    painter->setPen( Qt::NoPen );
 
-            const KDChartAxisParams & para = params()->axisParams( i );
-            
-            /* // for debugging:
-            painter->fillRect(para.axisTrueAreaRect(), Qt::yellow);
-            */
+    bool screenOutput = params()->optimizeOutputForScreen();
+    uint iAxis;
 
-            // length of little delimiter-marks indicating axis scaling
-            double delimLen = 20.0 * averageValueP1000; // per mille of area
+    for ( iAxis = 0; iAxis < KDCHART_MAX_AXES; ++iAxis ){
+        internal__KDChart__CalcValues& cv = calcVal[iAxis];
+        if( cv.processThisAxis ){
+
+            const KDChartAxisParams & para = params()->axisParams( iAxis );
+
+            internal__KDChart__CalcValues& cv = calcVal[iAxis];
+
+            const QColor labelsColor( para.axisLabelsColor() );
+
+            // for debugging:
+            //painter->fillRect(para.axisTrueAreaRect(), Qt::yellow);
 
             uint lineWidth = 0 <= para.axisLineWidth()
                              ? para.axisLineWidth()
@@ -170,20 +408,22 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
             ( ( KDChartAxisParams& ) para ).setAxisTrueLineWidth( lineWidth );
 
             uint gridLineWidth
-                 = ( KDChartAxisParams::AXIS_GRID_AUTO_LINEWIDTH
-                     == para.axisGridLineWidth() )
-                 ? lineWidth
-                 : (   ( 0 <= para.axisGridLineWidth() )
-                     ? para.axisGridLineWidth()
-                     : -1 * static_cast < int > ( para.axisGridLineWidth()
-                                                  * averageValueP1000 ) );
+                = ( KDChartAxisParams::AXIS_GRID_AUTO_LINEWIDTH
+                    == para.axisGridLineWidth() )
+                ? lineWidth
+                : (   ( 0 <= para.axisGridLineWidth() )
+                      ? para.axisGridLineWidth()
+                      : -1 * static_cast < int > ( para.axisGridLineWidth()
+                                                   * averageValueP1000 ) );
 
-            KDChartAxisParams::AxisPos basicPos;
-            QPoint orig, dest;
-            findInfos( averageValueP1000, para, i,
-                       basicPos,
-                       orig,
-                       dest );
+            uint gridSubLineWidth
+                = ( KDChartAxisParams::AXIS_GRID_AUTO_LINEWIDTH
+                    == para.axisGridSubLineWidth() )
+                ? lineWidth
+                : (   ( 0 <= para.axisGridSubLineWidth() )
+                      ? para.axisGridSubLineWidth()
+                      : -1 * static_cast < int > ( para.axisGridSubLineWidth()
+                                                   * averageValueP1000 ) );
 
             // Magic to find out axis scaling factors and labels text height
             // =============================================================
@@ -195,7 +435,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
             // 2nd This height is given to calculateLabelTexts() to
             //     calculate the delimiter and sub-delimiter distances as
             //     well as the axis scaling factors.
-            //     If necessary and possible the short replacement strings
+            //     If neccessary and possible the short replacement strings
             //     are taken that might have been specified by the user.
             //     - see KDChartAxisParams::setAxisLabelStringLists() -
             //
@@ -227,325 +467,455 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
             //
             //
 
-            double nSubDelimFactor = 0.0;
-            double pDelimDelta = 0.0;
-            double nTxtHeight = 0.0;
-            double pTextsX = 0.0;
-            double pTextsY = 0.0;
-            double pTextsW = 0.0;
-            double pTextsH = 0.0;
-            int textAlign = Qt::AlignHCenter | Qt::AlignVCenter;
+            // Note: The labels-touch-edges flag may have been set to true
+            //       inside the calculateLabelTexts() function.
+            bool bTouchEdges = para.axisLabelsTouchEdges();
 
-            calculateLabelTexts( *painter,
-                                 *data,
-                                 *params(),
-                                 i,
-                                 averageValueP1000,
-                                 basicPos,
-                                 orig,
-                                 delimLen,
-                                 // start of reference parameters
-                                 nSubDelimFactor,
-                                 pDelimDelta,
-                                 nTxtHeight,
-                                 pTextsX,
-                                 pTextsY,
-                                 pTextsW,
-                                 pTextsH,
-                                 textAlign );
+            // NOTE: The steady-value-calc flag may have been set to true
+            //       inside the calculateLabelTexts() function
+            //       by a special setAxisLabelTextParams() call,
+            //       therefor we do not store its value before calling that function.
+            if( cv.bLogarithmic )
+                cv.nSubDelimFactor = 0.1;
 
-            bool isHorizontalAxis = (KDChartAxisParams::AxisPosBottom == basicPos)
-                                 || (KDChartAxisParams::AxisPosTop    == basicPos);
+            const double nUsableAxisHeight = cv.pTextsH;
+            const double nUsableAxisWidth  = cv.pTextsW;
+
+            const bool isHorizontalAxis
+                = (KDChartAxisParams::AxisPosBottom == cv.basicPos) ||
+                (KDChartAxisParams::AxisPosTop    == cv.basicPos);
 
             QStringList* labelTexts = ( QStringList* ) para.axisLabelTexts();
-            uint nLabels = ( 0 != labelTexts && labelTexts->count() )
+            uint nLabels = ( 0 != labelTexts )
                            ? labelTexts->count()
                            : 0;
             // start point of 1st delimiter on the axis-line == grid-start
-            QPoint p1( orig );
+            QPoint p1( cv.orig );
             // end point of 1st delimiter near the label text
-            QPoint p2( orig );
+            QPoint p2( cv.orig );
             // end point of small sub-delimiter
-            QPoint p2a( orig );
+            QPoint p2a( cv.orig );
             // start point of 1st grid-line (beginnig at the axis)
-            QPoint pGA( orig );
+            QPoint pGA( cv.orig );
             // end point of 1st grid-line at the other side of the chart
-            QPoint pGZ( orig );
+            QPoint pGZ( cv.orig );
             // start point of zero-line, this is often identical with p1
             // but will be different in case of shifted zero-line
             double axisZeroLineStartX = p1.x();
             double axisZeroLineStartY = p1.y();
 
-            double pXDeltaFactor = 0.0;
-            double pYDeltaFactor = 0.0;
-
-            switch ( basicPos ) {
-            case KDChartAxisParams::AxisPosBottom: {
-                    p2.setY( p2.y() + delimLen );
-                    p2a.setY( p2a.y() + delimLen * 2 / 3 );
-                    pGZ.setY( pGZ.y() - _dataRect.height() + 1 );
-                    pXDeltaFactor = 1.0;
-                    pYDeltaFactor = 0.0;
-                }
-                break;
-            case KDChartAxisParams::AxisPosLeft: {
-                    p2.setX( p2.x() - delimLen );
-                    p2a.setX( p2a.x() - delimLen * 2 / 3 );
-                    pGZ.setX( pGZ.x() + _dataRect.width() - 1 );
-                    pXDeltaFactor = 0.0;
-                    pYDeltaFactor = -1.0;
-                }
-                break;
-            case KDChartAxisParams::AxisPosTop: {
-                    p2.setY( p2.y() - delimLen );
-                    p2a.setY( p2a.y() - delimLen * 2 / 3 );
-                    pGZ.setY( pGZ.y() + _dataRect.height() - 1 );
-                    pXDeltaFactor = 1.0;
-                    pYDeltaFactor = 0.0;
-                }
-                break;
-            case KDChartAxisParams::AxisPosRight: {
-                    p2.setX( p2.x() + delimLen );
-                    p2a.setX( p2a.x() + delimLen * 2 / 3 );
-                    pGZ.setX( pGZ.x() - _dataRect.width() + 1 );
-                    pXDeltaFactor = 0.0;
-                    pYDeltaFactor = -1.0;
-                }
-                break;
-            default: {
-                    qDebug( "IMPLEMENTATION ERROR: KDChartAxesPainter::paintAxes() unhandled enum value." );
-                    // NOOP since the 'basicPos' does not support more that these four values.
-                }
-                break;
-            }
-
-            bool bOrdinate = para.axisSteadyValueCalc();
-            bool bTouchEdges = para.axisLabelsTouchEdges();
+            p2.setX( static_cast<int>( p2.x()  + cv.pXDelimDeltaFaktor * delimLen ) );
+            p2.setY(  static_cast<int>(p2.y()  + cv.pYDelimDeltaFaktor * delimLen ) );
+            p2a.setX( static_cast<int>(p2a.x() + cv.pXDelimDeltaFaktor * delimLen * 2 / 3 ) );
+            p2a.setY( static_cast<int>(p2a.y() + cv.pYDelimDeltaFaktor * delimLen * 2 / 3 ) );
+            pGZ.setX( static_cast<int>(pGZ.x() - cv.pXDelimDeltaFaktor * (_dataRect.width()  - 1) ) );
+            pGZ.setY( static_cast<int>(pGZ.y() - cv.pYDelimDeltaFaktor * (_dataRect.height() - 1) ) );
 
             if ( nLabels ) {
-                const double pXDelta = pXDeltaFactor * pDelimDelta;
-                const double pYDelta = pYDeltaFactor * pDelimDelta;
+                // Sometimes the first or last labels partially reach out of
+                // their axis area: we allow this
+                const bool oldClippingFlag = painter->hasClipping();
+                painter->setClipping( false );
 
-                //qDebug("pYDelta = %f",pYDelta);
+                if( para.hasAxisFirstLabelText() )
+                    labelTexts->first() = para.axisFirstLabelText();
+                if( para.hasAxisLastLabelText() )
+                    labelTexts->last() = para.axisLastLabelText();
+
+                const double pXDelta = cv.pXDeltaFactor * cv.pDelimDelta;
+                const double pYDelta = cv.pYDeltaFactor * cv.pDelimDelta;
 
                 // draw label texts and delimiters and grid
                 painter->setPen( QPen( para.axisLineColor(),
                                        lineWidth ) );
+
+                const QString formatDT = cv.isDateTime
+                                         ? para.axisLabelsDateTimeFormat()
+                                         : QString();
+
                 // calculate font size
-                if ( 8.0 > nTxtHeight )
-                    nTxtHeight = 8.0;
+                const double minTextHeight = 7.0;
+                if ( minTextHeight > cv.nTxtHeight )
+                    cv.nTxtHeight = minTextHeight;
                 QFont actFont( para.axisLabelsFont() );
                 if ( para.axisLabelsFontUseRelSize() ) {
-                    actFont.setPointSizeFloat( nTxtHeight );
+                    actFont.setPointSizeFloat( cv.nTxtHeight );
                 }
                 painter->setFont( actFont );
                 QFontMetrics fm( actFont );
 
-                // make sure all label texts fit into their space
-                // by rotating and/or shrinking the texts
-                // or by leaving out some of the labels
-                QRegion unitedRegions;
-                const double
-                    nUsableAxisHeight = para.axisTrueAreaRect().height()
-                                        - delimLen * 1.33;
-                const int axisWidth  = para.axisTrueAreaRect().width();
+                int nLeaveOut = 0;
+                int nRotation = 0;
 
-                const bool tryLeavingOut =
-                    ( para.axisValueLeaveOut()
-                      == KDChartAxisParams::AXIS_LABELS_AUTO_LEAVEOUT )
-                    || ( 0 < para.axisValueLeaveOut() );
-                int nLeaveOut;
-                if( tryLeavingOut ) {
-                    if( para.axisValueLeaveOut()
-                        == KDChartAxisParams::AXIS_LABELS_AUTO_LEAVEOUT )
-                        nLeaveOut = 0;
+                // Draw simple string labels
+                // or calculate and draw nice Date/Time ruler?
+                QString commonDtHeader;
+                if( cv.autoDtLabels ){
+                    cv.textAlign = Qt::AlignCenter;
+                    //qDebug(dtLow.toString("\nd.MM.yyyy  -  h:mm:ss" ));
+                    //qDebug(dtHigh.toString( "d.MM.yyyy  -  h:mm:ss" ));
+                    const QDate& dLow  = cv.dtLow.date();
+                    const QTime& tLow  = cv.dtLow.time();
+                    const QDate& dHigh = cv.dtHigh.date();
+                    const QTime& tHigh = cv.dtHigh.time();
+                    bool sameYear   = dLow.year() == dHigh.year();
+                    bool sameMonth  = sameYear   && (dLow.month()  == dHigh.month() );
+                    bool sameDay    = sameMonth  && (dLow.day()    == dHigh.day()   );
+                    bool sameHour   = sameDay    && (tLow.hour()   == tHigh.hour()  );
+                    bool sameMinute = sameHour   && (tLow.minute() == tHigh.minute());
+                    bool sameSecond = sameMinute && (tLow.second() == tHigh.second());
+                    if( sameDay ){
+                        commonDtHeader = QString::number( dLow.day() )
+                                         + ". "
+#if COMPAT_QT_VERSION >= 0x030000
+                                         + QDate::longMonthName( dLow.month() )
+#else
+                                         + dLow.monthName( dLow.month() )
+#endif
+                                         + ' '
+                                         + QString::number( dLow.year() );
+                        if( sameHour ){
+                            commonDtHeader += "  /  "
+                                              + QString::number( tLow.hour() )
+                                              + ':';
+                            if( sameMinute ){
+                                if( 10 > tLow.minute() )
+                                    commonDtHeader += '0';
+                                commonDtHeader += QString::number( tLow.minute() )
+                                                  + ':';
+                                if( sameSecond ){
+                                    if( 10 > tLow.second() )
+                                        commonDtHeader += '0';
+                                    commonDtHeader += QString::number( tLow.second() );
+                                    //
+                                    // " Huston, we have a problem! "
+                                    //
+                                    // Currently we don't support milli secs
+                                    // since they will not fit into a double
+                                    // when looking at years...
+                                    //
+                                    // This will be improved in release 2.0.
+                                    //                     (khz, 2002/07/12)
+                                }
+                                else
+                                    commonDtHeader += "00";
+                            }
+                            else
+                                commonDtHeader += "00";
+                        }
+                    }else if( sameMonth )
+#if COMPAT_QT_VERSION >= 0x030000
+                        commonDtHeader = QDate::longMonthName( dLow.month() )
+#else
+                        commonDtHeader = dLow.monthName( dLow.month() )
+#endif
+                                         + ' '
+                                         + QString::number( dLow.year() );
+                    else if( sameYear )
+                        commonDtHeader = QString::number( dLow.year() );
+                    //if( !commonDtHeader.isEmpty() )
+                    //    qDebug(commonDtHeader);
+                }else{
+                    // make sure all label texts fit into their space
+                    // by rotating and/or shrinking the texts
+                    // or by leaving out some of the labels
+                    QRegion unitedRegions;
+
+                    const bool tryLeavingOut =
+                        ( para.axisValueLeaveOut()
+                          == KDChartAxisParams::AXIS_LABELS_AUTO_LEAVEOUT )
+                        || ( 0 < para.axisValueLeaveOut() );
+                    if( tryLeavingOut ) {
+                        if( para.axisValueLeaveOut()
+                            == KDChartAxisParams::AXIS_LABELS_AUTO_LEAVEOUT )
+                            nLeaveOut = 0;
+                        else
+                            nLeaveOut = para.axisValueLeaveOut();
+                    }
                     else
-                        nLeaveOut = para.axisValueLeaveOut();
-                }
-                else
-                    nLeaveOut = 0;
-                int stepWidthLeaveOut = nLeaveOut+1;
-                int iStepsLeaveOut = 0;
+                        nLeaveOut = 0;
+                    int stepWidthLeaveOut = nLeaveOut+1;
+                    int iStepsLeaveOut = 0;
 
-                const bool tryShrinking = para.axisLabelsDontShrinkFont();
-                const double nInitialTxtHeight = nTxtHeight;
+                    const bool tryShrinking = !para.axisLabelsDontShrinkFont();
+                    const double nInitialTxtHeight = cv.nTxtHeight;
 
-                const bool tryRotating = isHorizontalAxis
-                                         && !para.axisLabelsDontAutoRotate();
-                const int nInitialRotation = (360 > para.axisLabelsRotation())
-                                           ? para.axisLabelsRotation()
-                                           : 0;
-                bool rotatingDoesNotHelp = false;
-                int nRotation = nInitialRotation;
+                    const bool tryRotating = isHorizontalAxis
+                                             && !para.axisLabelsDontAutoRotate();
+                    const int nInitialRotation = (    (360 >  para.axisLabelsRotation())
+                                                      && (270 <= para.axisLabelsRotation()) )
+                                                 ? para.axisLabelsRotation()
+                                                 : 0;
+                    nRotation = nInitialRotation;
 
-                bool textsMatching;
-                do {
-                    // test if all texts match without mutually overlapping
-                    textsMatching = true;
-                    {
+                    bool textsDontFitIntoArea;
+                    bool textsMatching;
+                    do {
+                        textsDontFitIntoArea = false;
+                        textsMatching = true;
+                        // test if all texts match without mutually overlapping
                         unitedRegions = QRegion();
                         int align = nRotation
-                                  ? (Qt::AlignRight | Qt::AlignVCenter)
-                                  : textAlign;
+                                    ? (Qt::AlignRight | Qt::AlignVCenter) // adjusting for rotation
+                                    : cv.textAlign;
                         QPoint anchor(200,200);
                         int iLeaveOut = 0;
-                        double i=0.0;
+                        double iLabel=0.0;
                         for ( QStringList::Iterator it = labelTexts->begin();
-                                it != labelTexts->end();
-                                ++it ) {
-                            i += 1.0;
+                              it != labelTexts->end();
+                              ++it ) {
+                            iLabel += 1.0;
                             if( iLeaveOut < nLeaveOut ) {
                                 ++iLeaveOut;
                             } else {
                                 iLeaveOut = 0;
                                 anchor.setX(
-                                    static_cast < int > ( 200.0 + pXDelta*i ) );
+                                    static_cast < int > ( p2.x() + pXDelta * (iLabel - 0.5) ) );
                                 anchor.setY(
-                                    static_cast < int > ( 200.0 + pYDelta*i ) );
+                                    static_cast < int > ( p2.y() + pYDelta * (iLabel - 0.5) ) );
+                                QString text;
+                                if( cv.isDateTime ){
+#if COMPAT_QT_VERSION >= 0x030000
+                                    QDateTime dt( QDateTime::fromString( *it,
+                                                                         Qt::ISODate ) );
+                                    text = dt.toString( formatDT );
+#else
+                                    QDateTime dt( dateTimeFromString( *it ) );
+                                    text = dt.toString();
+#endif
+                                }else{
+                                    text = *it;
+                                }
                                 KDDrawTextRegionAndTrueRect infosKDD =
                                     KDDrawText::measureRotatedText( painter,
                                                                     nRotation,
                                                                     anchor,
-                                                                    *it,
+                                                                    text,
                                                                     0,
                                                                     align,
                                                                     &fm,
                                                                     false,
                                                                     false,
                                                                     15 );
-                                QRegion sectReg( infosKDD.region.intersect( unitedRegions ) );
-                                if ( sectReg.isEmpty() )
-                                    unitedRegions = unitedRegions.unite( infosKDD.region );
-                                else {
+                                if( infosKDD.region.boundingRect().left()
+                                    < params()->globalLeadingLeft()+1 ){
                                     textsMatching = false;
+                                    textsDontFitIntoArea = true;
+                                    //qDebug("too wide");
                                     break;
+                                }
+                                else{
+                                    QRegion sectReg( infosKDD.region.intersect( unitedRegions ) );
+                                    if ( sectReg.isEmpty() )
+                                        unitedRegions = unitedRegions.unite( infosKDD.region );
+                                    else {
+                                        textsMatching = false;
+                                        //qDebug("label regions are intersecting");
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    const bool textsOverlapping = !textsMatching;
-                    if( isHorizontalAxis ) {
-                        if( nUsableAxisHeight < unitedRegions.boundingRect().height() )
-                            textsMatching = false;
-                    } else {
-                        if( axisWidth < unitedRegions.boundingRect().width() )
-                            textsMatching = false;
-                    }
-/*if(textsMatching && !i){
-qDebug("--------------------------");
-qDebug(QString::number(nTxtHeight));
-qDebug(QString::number(nRotation));
-qDebug("matching");
-}*/
-                    if( !textsMatching ) {
-                        // step 1: In case of labels being too wide
-                        //         to fit into the available space
-                        //         we try to rotate the texts in 5° steps.
-                        //         This is done for Abscissa axes only.
-                        if ( tryRotating ) {
-                            rotatingDoesNotHelp = false;
-                            if( nRotation ) {
-                                if( 270 < nRotation ) {
-                                    nRotation -= 10;
-                                    if( 270 > nRotation )
-                                        nRotation = 270;
-                                } else {
-                                    nRotation = 0;
-                                }
-                            } else {
-                                // If unitedRegions are too heigh when
-                                // drawing WITHOUT rotation further
-                                // then rotating would not help.
-                                if( textsOverlapping )
-                                    nRotation = 350;
-                                else
-                                    rotatingDoesNotHelp = true;
-                            }                        }
-                        // step 2: In case of labels being too wide and
-                        //         rotating them did not help or is forbidden
-                        //         we try to reduce the font size
-                        if (    !tryRotating
-                             || (nRotation && (270 >= nRotation))
-                             || rotatingDoesNotHelp ) {
-                            if (    !tryShrinking
-                                 || (9.0 >= nTxtHeight) ) {
-                                if(    tryLeavingOut
-                                    && textsOverlapping
-                                    && (nLeaveOut+1
-                                        < static_cast < int > ( nLabels )) ) {
-                                    ++iStepsLeaveOut;
-                                    nLeaveOut =
-                                        iStepsLeaveOut*stepWidthLeaveOut - 1;
-                                    if( tryShrinking )
-                                        nTxtHeight = nInitialTxtHeight;
-                                }
-                                else
-                                    break;
-                            } else {
-                                nTxtHeight -= 1.0;
-                                if ( 9.0 > nTxtHeight )
-                                    nTxtHeight = 9.0;
+                        /*if(!iAxis){
+                          qDebug("nTxtHeight: "+QString::number(nTxtHeight)+"   nRotation: "+QString::number(nRotation)+
+                          "   matching: "+QString(textsMatching ? "TRUE":"FALSE"));
+                          }*/
+                        if( isHorizontalAxis ) {
+                            if( nUsableAxisHeight < unitedRegions.boundingRect().height() ){
+                                textsMatching = false;
+                                textsDontFitIntoArea = true;
+                                //qDebug("too high");
                             }
-                            if( tryShrinking ) {
-                                actFont.setPointSizeFloat( nTxtHeight );
-                                painter->setFont( actFont );
-                                fm = QFontMetrics( actFont );
-                                nRotation = nInitialRotation;
+                        } else {
+                            if( nUsableAxisWidth < unitedRegions.boundingRect().width() ){
+                                //qDebug("textsMatching: %s",textsMatching ? "TRUE" : "FALSE");
+                                textsMatching = false;
+                                textsDontFitIntoArea = true;
+                                //qDebug("too wide");
                             }
+                            //else qDebug("not too wide");
                         }
-                    }
-                } while( !textsMatching );
+                        /*if(textsMatching && !iAxis){
+                          qDebug("--------------------------");
+                          qDebug("nTxtHeight: "+QString::number(nTxtHeight)+"   nRotation: "+QString::number(nRotation));
+                          qDebug("matching");
+                          }*/
+                        if( !textsMatching ) {
+                            bool rotatingDoesNotHelp = false;
+                            // step 1: In case of labels being too wide
+                            //         to fit into the available space
+                            //         we try to rotate the texts in 5° steps.
+                            //         This is done for Abscissa axes only.
+                            if ( tryRotating ) {
+                                //qDebug("try rotating");
+                                // The following is designed for horizontal axes
+                                // since we currently don't support label rotating
+                                // on vertical axes.             (khz, 2002/08/15)
+                                if( textsDontFitIntoArea  ){
+                                    nRotation = nInitialRotation;
+                                    textsDontFitIntoArea = false;
+                                    rotatingDoesNotHelp  = true;
+                                }
+                                else{
+                                    if( nRotation ) {
+                                        if( 270 < nRotation ) {
+                                            nRotation -= 5;
+                                            if( 270 > nRotation )
+                                                nRotation = 270; // drawing vertically now
+                                        } else {
+                                            if( nInitialRotation )
+                                                nRotation = nInitialRotation;
+                                            else
+                                                nRotation = 0; // reset rotation to ZERO°
+                                            rotatingDoesNotHelp = true;
+                                        }
+                                    } else {
+                                        if( nInitialRotation )
+                                            nRotation = nInitialRotation;
+                                        else
+                                            nRotation = 350; // (re-)start rotating with -10°
+                                    }
+                                }
+                            }
+                            if ( !tryRotating || rotatingDoesNotHelp ) {
 
-                if( nRotation )
-                    textAlign = (Qt::AlignRight | Qt::AlignVCenter);
+                                // step 2: In case of labels being too wide and
+                                //         rotating them did not help or is forbidden
+                                //         we try to reduce the font size.
+                                if ( tryShrinking && (minTextHeight < cv.nTxtHeight) ) {
+                                    cv.nTxtHeight -= 1.0;
+                                    if ( minTextHeight > cv.nTxtHeight )
+                                        cv.nTxtHeight = minTextHeight;
+                                } else {
+
+                                    // step 3: In case reducing the font size is not possible
+                                    //         any further (or is not allowed at all) we try
+                                    //         to leave out some of the labels.
+                                    if(    tryLeavingOut
+                                           && !textsDontFitIntoArea
+                                           && (nLeaveOut+1
+                                               < static_cast < int > ( nLabels )) ) {
+                                        ++iStepsLeaveOut;
+                                        //if(iAxis)qDebug("iStepsLeaveOut: %i", iStepsLeaveOut);
+                                        nLeaveOut =
+                                            iStepsLeaveOut*stepWidthLeaveOut - 1;
+                                        if( tryShrinking )
+                                            cv.nTxtHeight = nInitialTxtHeight;
+                                    }
+                                    else
+                                        break;
+                                }
+                                if( tryShrinking ) {
+                                    actFont.setPointSizeFloat( cv.nTxtHeight );
+                                    //qDebug("axis: %i    cv.nTxtHeight: %f", iAxis, cv.nTxtHeight);
+                                    painter->setFont( actFont );
+                                    fm = QFontMetrics( actFont );
+                                }
+                            }
+                        }
+                    } while( !textsMatching );
+
+                    if( nRotation ){
+                        // The following is designed for horizontal axes
+                        // since we currently don't support label rotating
+                        // on vertical axes.             (khz, 2002/08/15)
+                        //int oldVert = textAlign & (Qt::AlignTop | Qt::AlignBottom);
+                        //int steepness = abs(270-nRotation);
+                        //bool steep = (30 > steepness);
+                        cv.textAlign = Qt::AlignRight | Qt::AlignVCenter;  // adjusting for rotation
+                        /*textAlign = Qt::AlignRight |
+                          ( steep ? Qt::AlignVCenter : oldVert);*/
+                        //int dx = pXDelta / 2 - steep ? (nTxtHeight / 4) : 0;
+                        double dx = (pXDelta / 2) - (cv.nTxtHeight / 4);
+                        double dy = /*steep ? 0 : */(cv.nTxtHeight / 2.0);
+                        cv.pTextsX += dx;
+                        cv.pTextsY += dy;
+                    }
+                    /*
+                      QBrush oldBrush = painter->brush();
+                      QRegion oldReg = painter->clipRegion();//QPainter::CoordPainter);
+                      painter->setBrush(Qt::Dense4Pattern);
+                      painter->setClipRegion(unitedRegions);//,QPainter::CoordPainter);
+                      painter->drawRect(0,0,2000,1500);
+                      painter->setClipRegion(oldReg);//,QPainter::CoordPainter);
+                      painter->setBrush(oldBrush);
+                    */
+                    /*if(!iAxis){
+                      qDebug("==========================");
+                      qDebug("nTxtHeight: "+QString::number(nTxtHeight)+"   nRotation: "+QString::number(nRotation));
+                      qDebug(textsMatching ? "matching":"not matching");
+                      }*/
+                }
 
                 painter->setFont( actFont );
                 fm = QFontMetrics( actFont );
 
                 // set colour of grid pen
-                // (used for grid lines and for sub-grid lines)
                 QPen gridPen, leaveOutGridPen;
-                if ( para.axisShowGrid() )
+                if( para.axisShowGrid() && !bMultiRowBarChart )
                     gridPen.setColor( para.axisGridColor() );
 
+                bool bDrawAdditionalSubGridLine = false;
                 double pGXMicroAdjust = 0.0;
                 double pGYMicroAdjust = 0.0;
                 if ( !bTouchEdges ) {
-                    p1.setX( p1.x() + pXDelta / 2 );
-                    p1.setY( p1.y() + pYDelta / 2 );
-                    p2.setX( p2.x() + pXDelta / 2 );
-                    p2.setY( p2.y() + pYDelta / 2 );
-                    p2a.setX( p2a.x() + pXDelta / 2 );
-                    p2a.setY( p2a.y() + pYDelta / 2 );
-                    pGA.setX( pGA.x() + pXDelta );
-                    pGA.setY( pGA.y() + pYDelta );
-                    pGZ.setX( pGZ.x() + pXDelta );
-                    pGZ.setY( pGZ.y() + pYDelta );
-                    pGXMicroAdjust = pXDeltaFactor * lineWidth / 2.0;
-                    pGYMicroAdjust = pYDeltaFactor * lineWidth / 2.0;
+                    // adjust the data values pos
+                    p1.setX( static_cast<int>( p1.x() + pXDelta / 2 ) );
+                    p1.setY( static_cast<int>( p1.y() + pYDelta / 2 ) );
+                    p2.setX( static_cast<int>( p2.x() + pXDelta / 2 ) );
+                    p2.setY( static_cast<int>( p2.y() + pYDelta / 2 ) );
+                    // adjust the short delimiter lines pos
+                    p2a.setX( static_cast<int>( p2a.x() + pXDelta / 2 ) );
+                    p2a.setY( static_cast<int>( p2a.y() + pYDelta / 2 ) );
+                    // adjust grid lines pos
+                    bDrawAdditionalSubGridLine =
+                        isHorizontalAxis && !
+                        params()->axisParams(
+                            KDChartAxisParams::AxisPosRight ).axisVisible() &&
+                        !bMultiRowBarChart;
+                    pGA.setX( static_cast<int>( pGA.x() + pXDelta / 2 ) );
+                    pGA.setY( static_cast<int>( pGA.y() + pYDelta / 2 ) );
+                    pGZ.setX( static_cast<int>( pGZ.x() + pXDelta / 2 ) );
+                    pGZ.setY( static_cast<int>( pGZ.y() + pYDelta / 2 ) );
+                    // fine-tune grid line pos for grid of vertical axis
+                    if( KDChartAxisParams::AxisTypeNORTH == para.axisType() ) {
+                        pGXMicroAdjust = cv.pXDeltaFactor * lineWidth / 2.0;
+                        pGYMicroAdjust = cv.pYDeltaFactor * lineWidth / 2.0;
+                    }
                 }
                 double x1, y1, x2, y2, xGA, yGA, xGZ, yGZ,
-                p1X, p1Y, p2X, p2Y, pGAX, pGAY, pGZX, pGZY, xT, yT;
-                if (    0.0 != nSubDelimFactor
-                     && para.axisShowSubDelimiters()
-                     && para.axisLabelsVisible()
-                     && !nLeaveOut ) {
-                    QPen pen( para.axisLineColor(), 0.5 * lineWidth );
+                    p1X, p1Y, p2X, p2Y, pGAX, pGAY, pGZX, pGZY, xT, yT;
+                if (    !cv.autoDtLabels
+                        && 0.0 != cv.nSubDelimFactor
+                        && para.axisShowSubDelimiters()
+                        && para.axisLabelsVisible()
+                        && !nLeaveOut ) {
+                    QPen pen( para.axisLineColor(), static_cast<int>( 0.5 * lineWidth ) );
                     uint penWidth = pen.width();
                     bool bOk = true;
-                    while ( std::fabs( ( pXDelta + pYDelta ) * nSubDelimFactor / 6.0 )
+
+                    if( cv.bLogarithmic )
+                        cv.nSubDelimFactor = 0.1;
+
+                    while ( fabs( ( pXDelta + pYDelta ) * cv.nSubDelimFactor / 6.0 )
                             <= 1.0 + penWidth
                             && bOk ) {
                         if ( 0 < penWidth ) {
                             --penWidth;
                             pen.setWidth( penWidth );
-                        } else
-                            if ( 0.5 != nSubDelimFactor ) {
-                                // emercency: reduce number of sub-scaling
-                                // delimiters
-                                nSubDelimFactor = 0.5;
-                            } else
-                                bOk = false;
+                        }else{
+                            if( cv.bLogarithmic ){
+                                break; // there is nothing we can do: we allways
+                                // want 10 sub-delims per logarithmic step
+                            }else{
+                                if ( 0.5 != cv.nSubDelimFactor ) {
+                                    // emercency: reduce number of sub-scaling
+                                    // delimiters
+                                    cv.nSubDelimFactor = 0.5;
+                                } else
+                                    bOk = false;
+                            }
+                        }
                     }
                     if ( bOk ) {
                         x1 = p1.x();
@@ -564,36 +934,89 @@ qDebug("matching");
                         pGAY = yGA;
                         pGZX = xGZ;
                         pGZY = yGZ;
-                        // set up grid pen for drawnig the sub-grid lines
+
+                        // set up grid pen for drawing the sub-grid lines
+                        const QPen oldGridPen( gridPen );
                         if ( para.axisShowGrid() ) {
-                            gridPen.setWidth( penWidth );
+                            gridPen.setColor( para.axisGridSubColor() );
+                            gridPen.setWidth( gridSubLineWidth );
                             gridPen.setStyle( para.axisGridSubStyle() );
                         }
                         const QPen oldPen( painter->pen() );
                         painter->setPen( pen );
                         double nSubDelim = ( labelTexts->count() - 1 )
-                                        / nSubDelimFactor;
+                                           / cv.nSubDelimFactor;
                         modf( nSubDelim, &nSubDelim );
-                        double pXSubDelimDelta = pXDelta * nSubDelimFactor;
-                        double pYSubDelimDelta = pYDelta * nSubDelimFactor;
-                        for ( double i = 1.0; i <= nSubDelim + 1.0; i += 1.0 ) {
-                            if ( para.axisShowGrid() ) {
-                                saveDrawLine( *painter,
-                                            QPoint( pGAX, pGAY ),
-                                            QPoint( pGZX, pGZY ), gridPen );
-                                pGAX = xGA + i * pXSubDelimDelta;
-                                pGAY = yGA + i * pYSubDelimDelta;
-                                pGZX = xGZ + i * pXSubDelimDelta;
-                                pGZY = yGZ + i * pYSubDelimDelta;
+                        double pXSubDelimDelta = pXDelta * cv.nSubDelimFactor;
+                        double pYSubDelimDelta = pYDelta * cv.nSubDelimFactor;
+
+                        int logarithCnt = 1;
+                        double xLogarithOffs = 0;
+                        double yLogarithOffs = 0;
+
+                        for ( double iDelim = 1.0;
+                              iDelim <= nSubDelim + 1.0;
+                              iDelim += 1.0, logarithCnt++ ) {
+                            if ( cv.bLogarithmic )
+                            {
+                                if ( logarithCnt == 11 )
+                                {
+                                    xLogarithOffs +=
+                                        pXDelta * log10( 10*cv.nSubDelimFactor*10 );
+                                    yLogarithOffs +=
+                                        pYDelta * log10( 10*cv.nSubDelimFactor*10 );
+                                    logarithCnt=1;
+                                }
+
+                                pXSubDelimDelta =
+                                    pXDelta * log10( 10*cv.nSubDelimFactor*logarithCnt );
+                                pYSubDelimDelta =
+                                    pYDelta * log10( 10*cv.nSubDelimFactor*logarithCnt );
                             }
-                            painter->drawLine( QPoint( p1X, p1Y ),
-                                            QPoint( p2X, p2Y ) );
-                            p1X = x1 + i * pXSubDelimDelta;
-                            p1Y = y1 + i * pYSubDelimDelta;
-                            p2X = x2 + i * pXSubDelimDelta;
-                            p2Y = y2 + i * pYSubDelimDelta;
+
+                            if ( para.axisShowGrid() && !bMultiRowBarChart) {
+                                // draw the sub grid line
+                                saveDrawLine( *painter,
+                                              QPoint( static_cast<int>( pGAX ), static_cast<int>( pGAY ) ),
+                                              QPoint( static_cast<int>( pGZX ), static_cast<int>( pGZY ) ),
+                                              gridPen );
+                                if( cv.bLogarithmic ){
+                                    pGAX = xGA + pXSubDelimDelta + xLogarithOffs;
+                                    pGAY = yGA + pYSubDelimDelta + yLogarithOffs;
+                                    pGZX = xGZ + pXSubDelimDelta + xLogarithOffs;
+                                    pGZY = yGZ + pYSubDelimDelta + yLogarithOffs;
+                                }else{
+                                    pGAX = xGA + iDelim * pXSubDelimDelta;
+                                    pGAY = yGA + iDelim * pYSubDelimDelta;
+                                    pGZX = xGZ + iDelim * pXSubDelimDelta;
+                                    pGZY = yGZ + iDelim * pYSubDelimDelta;
+                                }
+                            }
+                            // draw the short delimiter line
+                            painter->drawLine( QPoint( static_cast<int>( p1X ), static_cast<int>( p1Y ) ),
+                                               QPoint( static_cast<int>( p2X ), static_cast<int>( p2Y ) ) );
+
+                            if( cv.bLogarithmic ){
+                                p1X = x1 + pXSubDelimDelta + xLogarithOffs;
+                                p1Y = y1 + pYSubDelimDelta + yLogarithOffs;
+                                p2X = x2 + pXSubDelimDelta + xLogarithOffs;
+                                p2Y = y2 + pYSubDelimDelta + yLogarithOffs;
+                            }else{
+                                p1X = x1 + iDelim * pXSubDelimDelta;
+                                p1Y = y1 + iDelim * pYSubDelimDelta;
+                                p2X = x2 + iDelim * pXSubDelimDelta;
+                                p2Y = y2 + iDelim * pYSubDelimDelta;
+                            }
+                        }
+                        // draw additional sub grid line
+                        if( bDrawAdditionalSubGridLine
+                            && para.axisShowGrid() ) {
+                            saveDrawLine( *painter,
+                                          QPoint( static_cast<int>( pGAX ), static_cast<int>( pGAY ) ),
+                                          QPoint( static_cast<int>( pGZX ), static_cast<int>( pGZY ) ), gridPen );
                         }
                         painter->setPen( oldPen );
+                        gridPen = oldGridPen;
                     }
                 }
                 x1 = p1.x();
@@ -612,103 +1035,643 @@ qDebug("matching");
                 pGAY = yGA;
                 pGZX = xGZ;
                 pGZY = yGZ;
-                xT = pTextsX;
-                yT = pTextsY;
+                xT = cv.pTextsX;
+                yT = cv.pTextsY;
                 // set up grid pen for drawing the normal grid lines
                 if ( para.axisShowGrid() ) {
                     gridPen.setWidth( gridLineWidth );
                     gridPen.setStyle( para.axisGridStyle() );
                     // if axis not visible draw the 1st grid line too
                     if( !para.axisLineVisible() )
-                        saveDrawLine( *painter, orig, dest, gridPen );
+                        saveDrawLine( *painter, cv.orig, cv.dest, gridPen );
                 }
                 if( nLeaveOut ) {
                     leaveOutGridPen = gridPen;
-                    leaveOutGridPen.setWidth( 0 );
+                    leaveOutGridPen.setWidth( gridLineWidth / 2 );
                     leaveOutGridPen.setStyle( Qt::DotLine );
                 }
-                int iLeaveOut = 0;
-                double i = 0.0;
-                for ( QStringList::Iterator labelit = labelTexts->begin();
-                        labelit != labelTexts->end();
-                        ++labelit ) {
-                    i += 1.0;
-                    if( iLeaveOut < nLeaveOut )
-                        ++iLeaveOut;
-                    else
-                        iLeaveOut = 0;
-                    if ( para.axisShowGrid() ) {
-                        if( !iLeaveOut )
-                            saveDrawLine( *painter,
-                                        QPoint( pGAX - pGXMicroAdjust,
-                                                pGAY - pGYMicroAdjust ),
-                                        QPoint( pGZX - pGXMicroAdjust,
-                                                pGZY - pGYMicroAdjust ),
-                                        gridPen );
-                        else if( para.axisShowSubDelimiters() )
-                            saveDrawLine( *painter,
-                                        QPoint( pGAX - pGXMicroAdjust,
-                                                pGAY - pGYMicroAdjust ),
-                                        QPoint( pGZX - pGXMicroAdjust,
-                                                pGZY - pGYMicroAdjust ),
-                                        leaveOutGridPen );
-                        pGAX = xGA + i * pXDelta;
-                        pGAY = yGA + i * pYDelta;
-                        pGZX = xGZ + i * pXDelta;
-                        pGZY = yGZ + i * pYDelta;
+                //  =========================================================
+                //  ||  The labels and delimiters and grid printing loops  ||
+                //  =========================================================
+                //
+                double iLabel = 0.0;
+                if( cv.autoDtLabels )
+                {
+                    /*
+                      qDebug("\ndtLow: %i %i %i    %i:%i:%i",
+                      dtLow.date().year(),
+                      dtLow.date().month(),
+                      dtLow.date().day(),
+                      dtLow.time().hour(),
+                      dtLow.time().minute(),
+                      dtLow.time().second());
+                      qDebug("dtHigh: %i %i %i    %i:%i:%i",
+                      dtHigh.date().year(),
+                      dtHigh.date().month(),
+                      dtHigh.date().day(),
+                      dtHigh.time().hour(),
+                      dtHigh.time().minute(),
+                      dtHigh.time().second());
+                    */
+                    int pXD = static_cast < int > (cv.pXDelimDeltaFaktor * 1.25 * cv.nTxtHeight);
+                    int pYD = static_cast < int > (cv.pYDelimDeltaFaktor * 1.25 * cv.nTxtHeight);
+                    int orgXD = pXD;
+                    int orgYD = pYD;
+                    cv.pTextsW = fabs( (0.0 == pXDelta) ? pXD : pXDelta );
+                    cv.pTextsH = fabs( (0.0 == pYDelta) ? pYD : pYDelta );
+
+                    double pSecX     = x1;
+                    double pSecY     = y1;
+                    bool   secPaint= false;
+                    double pMinX     = x1;
+                    double pMinY     = y1;
+                    bool   minPaint= false;
+                    double pHourX    = x1;
+                    double pHourY    = y1;
+                    bool   hourPaint= false;
+                    double pDayX     = x1;
+                    double pDayY     = y1;
+                    bool   dayPaint= false;
+                    /* khz: currently not used
+                       double pWeekX    = x1;
+                       double pWeekY    = y1;
+                       bool   weekPaint= false;
+                    */
+                    double pMonthX   = x1;
+                    double pMonthY   = y1;
+                    bool   monthPaint= false;
+                    /*double pQuarterX = x1;
+                      double pQuarterY = y1;
+                      bool   minPaint= false;
+                    */
+                    double pYearX    = x1;
+                    double pYearY    = y1;
+                    bool   yearPaint= false;
+
+                    double pXYDelta = fabs( pXDelta ) + fabs( pYDelta );
+
+                    if( 0.0 == para.trueAxisDeltaPixels() )
+                        ( ( KDChartAxisParams& ) para ).setTrueAxisDeltaPixels( QMIN(_logicalWidth, _logicalHeight) / 150 );
+
+                    if( !commonDtHeader.isEmpty() ){
+                        QPen oldPen( painter->pen() );
+                        painter->setPen( QPen( labelsColor ) );
+                        painter->drawText( static_cast<int>( x1 + 4.0 * pXD ),
+                                           static_cast<int>( y1 + 4.0 * pYD ),
+                                           commonDtHeader );
+                        painter->setPen( oldPen );
                     }
-                    if ( para.axisLabelsVisible() ) {
-/*
-if( 1.0==i ){
-    qDebug("\n  x:");
-    qDebug(QString::number(pTextsX));
-    qDebug("  y:");
-    qDebug(QString::number(pTextsY));
-}
-*/
-                        if( !iLeaveOut ) {
-                            painter->drawLine( QPoint( p1X, p1Y ), QPoint( p2X, p2Y ) );
-                            if(    para.axisLabelsDontShrinkFont()
-                                && isHorizontalAxis
-                                && (Qt::AlignHCenter == (textAlign & Qt::AlignHCenter)) ) {
+                    bool dtGoDown = cv.dtLow > cv.dtHigh;
+                    int  mult = dtGoDown ? -1 : 1;
+                    const QDateTime& startDt = dtGoDown ? cv.dtHigh : cv.dtLow;
 
-                                double w = fm.width( *labelit ) + 4.0;
-                                double x0 = pTextsX + pTextsW / 2.0;
-                                painter->drawText( x0 - w / 2.0, pTextsY, w, pTextsH,
-                                                textAlign, *labelit );
+                    ( ( KDChartAxisParams& ) para ).setAxisDtLowPos( x1, y1 );
+                    // adjust stored dt-low and scale settings
+                    ( ( KDChartAxisParams& ) para ).setTrueAxisDtLow( startDt );
+                    ( ( KDChartAxisParams& ) para ).setTrueAxisDtScale( cv.dtDeltaScale );
 
-                            } else {
-                                if( nRotation )
-                                    KDDrawText::drawRotatedText(
-                                        painter,
-                                        nRotation,
-                                        QPoint( pTextsX, pTextsY ),
-                                        *labelit,
-                                        0,
-                                        textAlign,
-                                        false,
-                                        &fm );
-                                else
-                                    painter->drawText( pTextsX, pTextsY,
-                                                       pTextsW, pTextsH,
-                                                       textAlign | Qt::DontClip,
-                                                       *labelit );
+                    int gridDX = pGZ.x() - pGA.x();
+                    int gridDY = pGZ.y() - pGA.y();
+                    if ( para.axisShowGrid() ) {
+                        gridPen.setColor( para.axisGridColor() );
+                        gridPen.setWidth( gridLineWidth );
+                        gridPen.setStyle( para.axisGridStyle() );
+                    }
+                    QPen subGridPen(    gridPen.color(), 1, para.axisGridStyle() );
+                    QPen subSubGridPen( gridPen.color(), 1, para.axisGridSubStyle() );
+                    QPen pen = subGridPen;
+
+                    QDateTime dt(    startDt );
+                    QDateTime newDt( startDt );
+                    for( uint i=1; i <= nLabels; ++i ){
+                        switch( cv.dtDeltaScale ) {
+                        case KDChartAxisParams::ValueScaleSecond:
+                            dtAddSecs( dt, 1 * mult, newDt );
+                            break;
+                        case KDChartAxisParams::ValueScaleMinute:
+                            dtAddSecs( dt, 60 * mult, newDt );
+                            break;
+                        case KDChartAxisParams::ValueScaleHour:
+                            dtAddSecs( dt, 3600 * mult, newDt );
+                            break;
+                        case KDChartAxisParams::ValueScaleDay:
+                            dtAddDays( dt, 1 * mult, newDt );
+                            break;
+                        case KDChartAxisParams::ValueScaleWeek:
+                            dtAddDays( dt, 7 * mult, newDt );
+                            break;
+                        case KDChartAxisParams::ValueScaleMonth:
+                            dtAddMonths( dt,1 * mult, newDt );
+                            break;
+                        case KDChartAxisParams::ValueScaleQuarter:
+                            dtAddMonths( dt,3 * mult, newDt );
+                            break;
+                        case KDChartAxisParams::ValueScaleYear:
+                            dtAddYears( dt, 1 * mult, newDt );
+                            break;
+                        default:
+                            dtAddDays( dt, 1 * mult, newDt );
+                            break;
+                        }
+                        const QDateTime& testDt
+                            = dtGoDown
+                            ? (   ( newDt < cv.dtLow )
+                                  ? cv.dtLow
+                                  : newDt )
+                            : (   ( newDt > cv.dtHigh )
+                                  ? cv.dtHigh
+                                  : newDt );
+                        /*
+                          qDebug("    dt: %i %i %i    %i:%i:%i",
+                          newDt.date().year(),newDt.date().month(),newDt.date().day(),
+                          newDt.time().hour(),newDt.time().minute(),newDt.time().second());
+                          qDebug("testDt: %i %i %i    %i:%i:%i",
+                          testDt.date().year(),testDt.date().month(),testDt.date().day(),
+                          testDt.time().hour(),testDt.time().minute(),testDt.time().second());
+                        */
+                        bool endLoop = (i == nLabels) || (&testDt != &newDt);
+
+                        secPaint = ( KDChartAxisParams::ValueScaleSecond >= cv.dtDeltaScale ) &&
+                                   ( testDt.time().second() != dt.time().second() ||
+                                     ( endLoop && ((pSecX != x1) || (pSecY != y1))));
+                        minPaint = ( KDChartAxisParams::ValueScaleMinute >= cv.dtDeltaScale ) &&
+                                   ( testDt.time().minute() != dt.time().minute() ||
+                                     ( endLoop && ((pMinX != x1) || (pMinY != y1))));
+                        hourPaint = ( KDChartAxisParams::ValueScaleHour >= cv.dtDeltaScale ) &&
+                                    ( testDt.time().hour() != dt.time().hour() ||
+                                      ( endLoop && ((pHourX != x1) || (pHourY != y1))));
+                        dayPaint = ( KDChartAxisParams::ValueScaleDay >= cv.dtDeltaScale ) &&
+                                   ( testDt.date().day() != dt.date().day() ||
+                                     ( endLoop && ((pDayX != x1) || (pDayY != y1))));
+                        /* khz: currently not used
+                           weekPaint = ( KDChartAxisParams::ValueScaleWeek >= cv.dtDeltaScale ) &&
+                           ( testDt.date().week() != dt.date().week() ||
+                           ( endLoop && ((pWeekX != x1) || (pWeekY != y1))));
+                        */
+                        monthPaint = ( KDChartAxisParams::ValueScaleMonth >= cv.dtDeltaScale ) &&
+                                     ( testDt.date().month() != dt.date().month() ||
+                                       ( endLoop && ((pMonthX != x1) || (pMonthY != y1))));
+                        yearPaint = ( KDChartAxisParams::ValueScaleYear >= cv.dtDeltaScale ) &&
+                                    ( testDt.date().year() != dt.date().year() ||
+                                      ( endLoop && ((pYearX != x1) || (pYearY != y1))));
+
+                        p1X = x1 + iLabel * pXDelta;
+                        p1Y = y1 + iLabel * pYDelta;
+                        p2X = p1X + pXDelta;
+                        p2Y = p1Y + pYDelta;
+                        pXD = orgXD;
+                        pYD = orgYD;
+
+                        if( endLoop ){
+                            ( ( KDChartAxisParams& ) para ).setAxisDtHighPos( p1X, p1Y );
+                            // adjust stored dt-high settings
+                            ( ( KDChartAxisParams& ) para ).setTrueAxisDtHigh( dt );
+                        }
+                        pen = subGridPen;
+                        /*
+                        // old code: just draw the seconds without any tests
+                        // (not wise to do that when supporting sec1000
+                        //  and the like some day...)
+                        if( newDt.time().second() != dt.time().second() ){
+                        painter->drawLine( QPoint( p1X, p1Y ), QPoint( p1X+pXD, p1Y+pYD ) );
+                        painter->drawLine( QPoint( p1X+pXD, p1Y+pYD ),
+                        QPoint( p1X+pXD + pXDelta, p1Y+pYD + pYDelta ) );
+                        painter->drawText( p1X+pXD-orgXD, p1Y+pYD-orgYD,
+                        pTextsW, pTextsH,
+                        textAlign | Qt::DontClip,
+                        QString::number( dt.time().second() ) );
+                        pXD += orgXD;
+                        pYD += orgYD;
+                        }
+                        */
+                        if( secPaint ){
+                            painter->drawLine( QPoint( static_cast<int>( pSecX+pXD ),
+                                                       static_cast<int>( pSecY+pYD ) ),
+                                               QPoint( static_cast<int>( p2X + pXD ),
+                                                       static_cast<int>( p2Y + pYD ) ) );
+                            if( (pXDelta/2.0 < p2X - pSecX) || (pYDelta/2.0 < p2Y - pSecY) ){
+                                QPen oldPen( painter->pen() );
+                                painter->setPen( QPen( labelsColor ) );
+                                painter->drawText( static_cast<int>( pSecX+pXD-orgXD ),
+                                                   static_cast<int>( pSecY+pYD-orgYD ),
+                                                   static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pSecX))),
+                                                   static_cast<int>(fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pSecY))),
+                                                   cv.textAlign | Qt::DontClip,
+                                                   QString::number( dt.time().second() ) );
+                                painter->setPen( oldPen );
+                                if ( para.axisShowGrid() ){
+
+                                    saveDrawLine( *painter,
+                                                  QPoint( static_cast<int>( pSecX ),
+                                                          static_cast<int>( pSecY ) ),
+                                                  QPoint( static_cast<int>( pSecX + gridDX ),
+                                                          static_cast<int>( pSecY + gridDY ) ),
+                                                  pen );
+                                    pen = gridPen;
+                                }
+                                if( !minPaint || pMinX != pSecX || pMinY != pSecY ){
+                                    painter->drawLine( QPoint( static_cast<int>( pSecX ), static_cast<int>( pSecY ) ), QPoint( static_cast<int>( pSecX+pXD ), static_cast<int>( pSecY+pYD ) ) );
+                                }
+                            }
+                            if( endLoop && !minPaint )
+                                painter->drawLine( QPoint( static_cast<int>( p2X ), static_cast<int>( p2Y ) ), QPoint( static_cast<int>( p2X+pXD ), static_cast<int>( p2Y+pYD ) ) );
+                            pSecX = p1X + pXDelta;
+                            pSecY = p1Y + pYDelta;
+                            pXD += orgXD;
+                            pYD += orgYD;
+                        }
+                        if( minPaint ){
+                            painter->drawLine( QPoint( static_cast<int>( pMinX+pXD ), static_cast<int>( pMinY+pYD ) ),
+                                               QPoint( static_cast<int>( p2X + pXD ), static_cast<int>( p2Y + pYD ) ) );
+                            if( (pXDelta/2.0 < p2X - pMinX) || (pYDelta/2.0 < p2Y - pMinY) ){
+                                QPen oldPen( painter->pen() );
+                                painter->setPen( QPen( labelsColor ) );
+                                painter->drawText( static_cast<int>( pMinX+pXD-orgXD ),
+                                                   static_cast<int>( pMinY+pYD-orgYD ),
+                                                   static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pMinX)) ),
+                                                   static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pMinY)) ),
+                                                   cv.textAlign | Qt::DontClip,
+                                                   QString::number( dt.time().minute() ) );
+                                painter->setPen( oldPen );
+                                if ( para.axisShowGrid() ){
+                                    if( !secPaint && 10 < pXYDelta  ){
+                                        saveDrawLine( *painter,
+                                                      QPoint( static_cast<int>( pMinX+pXDelta/2 ),
+                                                              static_cast<int>( pMinY+pYDelta/2 ) ),
+                                                      QPoint( static_cast<int>( pMinX+pXDelta/2 + gridDX ),
+                                                              static_cast<int>( pMinY+pYDelta/2 + gridDY ) ),
+                                                      subSubGridPen );
+                                    }
+                                    saveDrawLine( *painter,
+                                                  QPoint( static_cast<int>( pMinX ),
+                                                          static_cast<int>( pMinY ) ),
+                                                  QPoint( static_cast<int>( pMinX + gridDX ),
+                                                          static_cast<int>( pMinY + gridDY ) ),
+                                                  pen );
+                                    pen = gridPen;
+                                }
+                                if( !hourPaint || pHourX != pMinX || pHourY != pMinY ){
+                                    painter->drawLine( QPoint( static_cast<int>( pMinX ), static_cast<int>( pMinY ) ), QPoint( static_cast<int>( pMinX+pXD ), static_cast<int>( pMinY+pYD ) ) );
+                                }
+                            }
+                            if( endLoop && !hourPaint )
+                                painter->drawLine( QPoint( static_cast<int>( p2X ), static_cast<int>( p2Y ) ), QPoint( static_cast<int>( p2X+pXD ), static_cast<int>( p2Y+pYD ) ) );
+                            pMinX = p1X + pXDelta;
+                            pMinY = p1Y + pYDelta;
+                            pXD += orgXD;
+                            pYD += orgYD;
+                        }
+                        if( hourPaint ){
+                            painter->drawLine( QPoint( static_cast<int>( pHourX+pXD ), static_cast<int>( pHourY+pYD ) ),
+                                               QPoint( static_cast<int>( p2X + pXD ), static_cast<int>( p2Y + pYD ) ) );
+                            /*
+                              qDebug("line");
+                              qDebug("pXDelta / 2.0 : %f", pXDelta/2.0);
+                              qDebug("p2X - pHourX  : %f", p2X - pHourX);
+                            */
+                            if( (pXDelta/2.0 < p2X - pHourX) || (pYDelta/2.0 < p2Y - pHourY) ){
+                                /*
+                                  qDebug("pHourX              %f", pHourX          );
+                                  qDebug("      +pXD          %i",        pXD      );
+                                  qDebug("          -orgXD    %i",            orgXD);
+                                  qDebug("pHourY              %f", pHourY          );
+                                  qDebug("      +pYD          %i",        pYD      );
+                                  qDebug("          -orgYD    %i",            orgYD);
+                                */
+                                QPen oldPen( painter->pen() );
+                                painter->setPen( QPen( labelsColor ) );
+                                painter->drawText( static_cast<int>( pHourX+pXD-orgXD ),
+                                                   static_cast<int>( pHourY+pYD-orgYD ),
+                                                   static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pHourX))),
+                                                   static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pHourY))),
+                                                   cv.textAlign | Qt::DontClip,
+                                                   QString::number( dt.time().hour() ) );
+                                painter->setPen( oldPen );
+                                if ( para.axisShowGrid() ){
+                                    if( !minPaint && 10 < pXYDelta  ){
+                                        saveDrawLine( *painter,
+                                                      QPoint( static_cast<int>( pHourX+pXDelta/2 ),
+                                                              static_cast<int>( pHourY+pYDelta/2 ) ),
+                                                      QPoint( static_cast<int>( pHourX+pXDelta/2 + gridDX ),
+                                                              static_cast<int>( pHourY+pYDelta/2 + gridDY ) ),
+                                                      subSubGridPen );
+                                    }
+                                    saveDrawLine( *painter,
+                                                  QPoint( static_cast<int>( pHourX ),
+                                                          static_cast<int>( pHourY ) ),
+                                                  QPoint( static_cast<int>( pHourX + gridDX ),
+                                                          static_cast<int>( pHourY + gridDY ) ),
+                                                  pen );
+                                    pen = gridPen;
+                                }
+                                if( !dayPaint || pDayX != pHourX || pDayY != pHourY ){
+                                    painter->drawLine( QPoint( static_cast<int>( pHourX ), static_cast<int>( pHourY ) ), QPoint( static_cast<int>( pHourX+pXD ), static_cast<int>( pHourY+pYD ) ) );
+                                }
+                            }
+                            if( endLoop && !dayPaint )
+                                painter->drawLine( QPoint( static_cast<int>( p2X ), static_cast<int>( p2Y ) ), QPoint( static_cast<int>( p2X+pXD ), static_cast<int>( p2Y+pYD ) ) );
+                            pHourX = p1X + pXDelta;
+                            pHourY = p1Y + pYDelta;
+                            pXD += orgXD;
+                            pYD += orgYD;
+                        }
+                        if( dayPaint ){
+                            painter->drawLine( QPoint( static_cast<int>( pDayX+pXD ),
+                                                       static_cast<int>( pDayY+pYD ) ),
+                                               QPoint( static_cast<int>( p2X + pXD ), static_cast<int>( p2Y + pYD ) ) );
+                            if( (pXDelta/2.0 < p2X - pDayX) || (pYDelta/2.0 < p2Y - pDayY) ){
+                                QPen oldPen( painter->pen() );
+                                painter->setPen( QPen( labelsColor ) );
+                                painter->drawText( static_cast<int>( pDayX+pXD-orgXD ),
+                                                   static_cast<int>( pDayY+pYD-orgYD ),
+                                                   static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pDayX)) ),
+                                                   static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pDayY)) ),
+                                                   cv.textAlign | Qt::DontClip,
+                                                   QString::number( dt.date().day() ) );
+                                painter->setPen( oldPen );
+                                /* khz: currently not used
+                                   if( !weekPaint || pWeekX != pDayX || pWeekY != pDayY )
+                                */
+                                if ( para.axisShowGrid() ){
+                                    if( !hourPaint && 10 < pXYDelta  ){
+                                        saveDrawLine( *painter,
+                                                      QPoint( static_cast<int>( pDayX+pXDelta/2 ),
+                                                              static_cast<int>( pDayY+pYDelta/2 ) ),
+                                                      QPoint( static_cast<int>( pDayX+pXDelta/2 + gridDX ),
+                                                              static_cast<int>( pDayY+pYDelta/2 + gridDY ) ),
+                                                      subSubGridPen );
+                                    }
+                                    saveDrawLine( *painter,
+                                                  QPoint( static_cast<int>( pDayX ),
+                                                          static_cast<int>( pDayY ) ),
+                                                  QPoint( static_cast<int>( pDayX + gridDX ),
+                                                          static_cast<int>( pDayY + gridDY ) ),
+                                                  pen );
+                                    pen = gridPen;
+                                }
+                                if( !monthPaint || pMonthX != pDayX || pMonthY != pDayY ){
+                                    painter->drawLine( QPoint( static_cast<int>( pDayX ), static_cast<int>( pDayY ) ), QPoint( static_cast<int>( pDayX+pXD ), static_cast<int>( pDayY+pYD ) ) );
+                                }
+                            }
+                            /* khz: currently not used
+                               if( endLoop && !weekPaint )
+                            */
+                            if( endLoop && !monthPaint )
+                                painter->drawLine( QPoint( static_cast<int>( p2X ), static_cast<int>( p2Y ) ), QPoint( static_cast<int>( p2X+pXD ), static_cast<int>( p2Y+pYD ) ) );
+                            pDayX = p1X + pXDelta;
+                            pDayY = p1Y + pYDelta;
+                            pXD += orgXD;
+                            pYD += orgYD;
+                        }
+                        /* khz: currently unused
+                           if( weekPaint ){
+                           painter->drawLine( QPoint( pWeekX+pXD, pWeekY+pYD ),
+                           QPoint( p2X + pXD, p2Y + pYD ) );
+                           if( (pXDelta/2.0 < p2X - pWeekX) || (pYDelta/2.0 < p2Y - pWeekY) ){
+                           QPen oldPen( painter->pen() );
+                           painter->setPen( QPen( labelsColor ) );
+                           painter->drawText( pWeekX+pXD-orgXD, pWeekY+pYD-orgYD,
+                           painter->setPen( oldPen );
+                           fabs((0.0 == pXDelta) ? pTextsW : (p2X - pWeekX)),
+                           fabs((0.0 == pYDelta) ? pTextsH : (p2Y - pWeekY)),
+                           textAlign | Qt::DontClip,
+                           QString::number( dt.date().week() ) );
+                           if ( para.axisShowGrid() ){
+                           if( !dayPaint && 40 < pXYDelta  ){
+                           // draw 7 lines:
+                           //saveDrawLine( *painter,
+                           //            QPoint( pWeekX+pXDelta/2,
+                           //                    pWeekY+pYDelta/2 ),
+                           //            QPoint( pWeekX+pXDelta/2 + gridDX,
+                           //                    pWeekY+pYDelta/2 + gridDY ),
+                           //            subSubGridPen );
+                           }
+                           saveDrawLine( *painter,
+                           QPoint( pWeekX,
+                           pWeekY ),
+                           QPoint( pWeekX + gridDX,
+                           pWeekY + gridDY ),
+                           pen );
+                           pen = gridPen;
+                           }
+                           if( !monthPaint || pMonthX != pDayX || pMonthY != pDayY ){
+                           painter->drawLine( QPoint( pWeekX, pWeekY ), QPoint( pWeekX+pXD, pWeekY+pYD ) );
+                           }
+                           }
+                           if( endLoop && !monthPaint )
+                           painter->drawLine( QPoint( p2X, p2Y ), QPoint( p2X+pXD, p2Y+pYD ) );
+                           pWeekX = p1X + pXDelta;
+                           pWeekY = p1Y + pYDelta;
+                           pXD += orgXD;
+                           pYD += orgYD;
+                           }
+                        */
+                        if( monthPaint ){
+                            painter->drawLine( QPoint( static_cast<int>( pMonthX+pXD ),
+                                                       static_cast<int>( pMonthY+pYD ) ),
+                                               QPoint( static_cast<int>( p2X + pXD ), static_cast<int>( p2Y + pYD ) ) );
+                            if( (pXDelta/2.0 < p2X - pMonthX) || (pYDelta/2.0 < p2Y - pMonthY) ){
+                                QPen oldPen( painter->pen() );
+                                painter->setPen( QPen( labelsColor ) );
+                                painter->drawText( static_cast<int>( pMonthX+pXD-orgXD ),
+                                                   static_cast<int>( pMonthY+pYD-orgYD ),
+                                                   static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pMonthX)) ),
+                                                   static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pMonthY)) ),
+                                                   cv.textAlign | Qt::DontClip,
+                                                   QString::number( dt.date().month() ) );
+                                painter->setPen( oldPen );
+                                if ( para.axisShowGrid() ){
+                                    /* khz: currently unused
+                                       if( !weekPaint &&
+                                       && 10 < pXYDelta  ){
+                                       saveDrawLine( *painter,
+                                       QPoint( pMonthX+pXDelta/2,
+                                       pMonthY+pYDelta/2 ),
+                                       QPoint( pMonthX+pXDelta/2 + gridDX,
+                                       pMonthY+pYDelta/2 + gridDY ),
+                                       subSubGridPen );
+                                       }
+                                    */
+                                    saveDrawLine( *painter,
+                                                  QPoint( static_cast<int>( pMonthX ),
+                                                          static_cast<int>( pMonthY ) ),
+                                                  QPoint( static_cast<int>( pMonthX + gridDX ),
+                                                          static_cast<int>( pMonthY + gridDY ) ),
+                                                  pen );
+                                    pen = gridPen;
+                                }
+                                if( !yearPaint || pYearX != pMonthX || pYearY != pMonthY ){
+                                    painter->drawLine( QPoint( static_cast<int>( pMonthX ), static_cast<int>( pMonthY ) ), QPoint( static_cast<int>( pMonthX+pXD ), static_cast<int>( pMonthY+pYD ) ) );
+                                }
+                            }
+                            if( endLoop && !yearPaint )
+                                painter->drawLine( QPoint( static_cast<int>( p2X ), static_cast<int>( p2Y ) ), QPoint( static_cast<int>( p2X+pXD ), static_cast<int>( p2Y+pYD ) ) );
+                            pMonthX = p1X + pXDelta;
+                            pMonthY = p1Y + pYDelta;
+                            pXD += orgXD;
+                            pYD += orgYD;
+                        }
+                        if( yearPaint ){
+                            painter->drawLine( QPoint( static_cast<int>( pYearX+pXD ), static_cast<int>( pYearY+pYD  ) ),
+                                               QPoint( static_cast<int>( p2X + pXD ), static_cast<int>( p2Y + pYD ) ) );
+                            if( (pXDelta/2.0 < p2X - pYearX) || (pYDelta/2.0 < p2Y - pYearY) ){
+                                QPen oldPen( painter->pen() );
+                                painter->setPen( QPen( labelsColor ) );
+                                painter->drawText( static_cast<int>( pYearX+pXD-orgXD ),
+                                                   static_cast<int>( pYearY+pYD-orgYD ),
+                                                   static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pYearX)) ),
+                                                   static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pYearY)) ),
+                                                   cv.textAlign | Qt::DontClip,
+                                                   QString::number( dt.date().year() ) );
+                                painter->setPen( oldPen );
+                                if ( para.axisShowGrid() ){
+                                    if( !monthPaint && 10 < pXYDelta  ){
+                                        saveDrawLine( *painter,
+                                                      QPoint( static_cast<int>( pYearX+pXDelta/2 ),
+                                                              static_cast<int>( pYearY+pYDelta/2 ) ),
+                                                      QPoint( static_cast<int>( pYearX+pXDelta/2 + gridDX ),
+                                                              static_cast<int>( pYearY+pYDelta/2 + gridDY ) ),
+                                                      subSubGridPen );
+                                    }
+                                    saveDrawLine( *painter,
+                                                  QPoint( static_cast<int>( pYearX ),
+                                                          static_cast<int>( pYearY ) ),
+                                                  QPoint( static_cast<int>( pYearX + gridDX ),
+                                                          static_cast<int>( pYearY + gridDY ) ),
+                                                  pen );
+                                    pen = gridPen;
+                                }
+                                painter->drawLine( QPoint( static_cast<int>( pYearX ), static_cast<int>( pYearY ) ), QPoint( static_cast<int>( pYearX+pXD ), static_cast<int>( pYearY+pYD ) ) );
+                            }
+                            if( endLoop )
+                                painter->drawLine( QPoint( static_cast<int>( p2X ), static_cast<int>( p2Y ) ), QPoint( static_cast<int>( p2X+pXD ), static_cast<int>( p2Y+pYD ) ) );
+                            pYearX = p1X + pXDelta;
+                            pYearY = p1Y + pYDelta;
+                            pXD += orgXD;
+                            pYD += orgYD;
+                        }
+                        if( &testDt != &newDt )
+                            break;
+                        dt = newDt;
+                        iLabel += 1.0;
+                    }
+                }else{
+                    int iLeaveOut = nLeaveOut;
+
+                    QString label;
+                    for ( QStringList::Iterator labelIter = labelTexts->begin();
+                          labelIter != labelTexts->end();
+                          ++labelIter ) {
+                        QDateTime dt;
+                        if( cv.isDateTime ){
+#if COMPAT_QT_VERSION >= 0x030000
+                            dt = QDateTime::fromString( *labelIter,
+                                                        Qt::ISODate );
+                            label = dt.toString( formatDT );
+#else
+                            dt = dateTimeFromString( *labelIter );
+                            label = dt.toString();
+#endif
+                        }else{
+                            label = *labelIter;
+                        }
+
+                        if( iLeaveOut < nLeaveOut )
+                            ++iLeaveOut;
+                        else
+                            iLeaveOut = 0;
+                        if ( para.axisShowGrid() && !bMultiRowBarChart ) {
+                            if( !iLeaveOut )
+                                // draw the main grid line
+                                saveDrawLine( *painter,
+                                              QPoint( static_cast<int>( pGAX - pGXMicroAdjust ),
+                                                      static_cast<int>( pGAY - pGYMicroAdjust ) ),
+                                              QPoint( static_cast<int>( pGZX - pGXMicroAdjust ),
+                                                      static_cast<int>( pGZY - pGYMicroAdjust ) ),
+                                              gridPen );
+                            else if( para.axisShowSubDelimiters() )
+                                // draw a thin sub grid line instead of main line
+                                saveDrawLine( *painter,
+                                              QPoint( static_cast<int>( pGAX - pGXMicroAdjust ),
+                                                      static_cast<int>( pGAY - pGYMicroAdjust ) ),
+                                              QPoint( static_cast<int>( pGZX - pGXMicroAdjust ),
+                                                      static_cast<int>( pGZY - pGYMicroAdjust ) ),
+                                              leaveOutGridPen );
+                        }
+                        if ( para.axisLabelsVisible() ) {
+                            if( !iLeaveOut ) {
+                                painter->drawLine( QPoint( static_cast<int>( p1X ), static_cast<int>( p1Y ) ), QPoint( static_cast<int>( p2X ), static_cast<int>( p2Y ) ) );
+                                QPen oldPen( painter->pen() );
+                                painter->setPen( QPen( labelsColor ) );
+                                if(    para.axisLabelsDontShrinkFont()
+                                       && isHorizontalAxis
+                                       && (Qt::AlignHCenter == (cv.textAlign & Qt::AlignHCenter)) ) {
+                                    double w = fm.width( label ) + 4.0;
+                                    double x0 = cv.pTextsX + cv.pTextsW / 2.0;
+                                    painter->drawText( static_cast<int>( x0 - w / 2.0 ), static_cast<int>( cv.pTextsY ), static_cast<int>( w ), static_cast<int>( cv.pTextsH ),
+                                                       cv.textAlign, label );
+                                } else {
+                                    if( nRotation )
+                                        KDDrawText::drawRotatedText(
+                                            painter,
+                                            nRotation,
+                                            QPoint( static_cast<int>( cv.pTextsX ), static_cast<int>( cv.pTextsY ) ),
+                                            label,
+                                            0,
+                                            cv.textAlign,
+                                            false,
+                                            &fm,
+                                            screenOutput,screenOutput,0,
+                                            screenOutput );
+                                    else {
+                                        painter->drawText( static_cast<int>( cv.pTextsX ), static_cast<int>( cv.pTextsY ),
+                                                           static_cast<int>( cv.pTextsW ), static_cast<int>( cv.pTextsH ),
+                                                           cv.textAlign | Qt::DontClip,
+                                                           label );
+                                        // show test rect:
+                                        //painter->drawRect(cv.pTextsX,cv.pTextsY,nUsableAxisWidth,nUsableAxisHeight);
+                                    }
+                                }
+                                painter->setPen( oldPen );
                             }
                         }
+                        /* // for debugging:
+                           painter->drawRoundRect(pTextsX,pTextsY,pTextsW,pTextsH);
+                        */
+
+                        if( cv.isDateTime ){
+                            if( labelTexts->begin() == labelIter ){
+                                ((KDChartAxisParams&)para).setAxisDtLowPos(
+                                    pGAX - pGXMicroAdjust,
+                                    pGAY - pGYMicroAdjust );
+                                // adjust stored dt-low settings
+                                ( ( KDChartAxisParams& ) para ).setTrueAxisDtLow( dt );
+                            }else{
+                                ((KDChartAxisParams&)para).setAxisDtHighPos(
+                                    pGAX - pGXMicroAdjust,
+                                    pGAY - pGYMicroAdjust );
+                                // adjust stored dt-high settings
+                                ( ( KDChartAxisParams& ) para ).setTrueAxisDtHigh( dt );
+                            }
+                        }
+
+                        iLabel += 1.0;
+                        p1X = x1 + iLabel * pXDelta;
+                        p1Y = y1 + iLabel * pYDelta;
+                        p2X = x2 + iLabel * pXDelta;
+                        p2Y = y2 + iLabel * pYDelta;
+                        cv.pTextsX = xT + iLabel * pXDelta;
+                        cv.pTextsY = yT + iLabel * pYDelta;
+                        pGAX = xGA + iLabel * pXDelta;
+                        pGAY = yGA + iLabel * pYDelta;
+                        pGZX = xGZ + iLabel * pXDelta;
+                        pGZY = yGZ + iLabel * pYDelta;
                     }
-                    /* // for debugging:
-                    painter->drawRoundRect(pTextsX,pTextsY,pTextsW,pTextsH);
-                    */
-                    p1X = x1 + i * pXDelta;
-                    p1Y = y1 + i * pYDelta;
-                    p2X = x2 + i * pXDelta;
-                    p2Y = y2 + i * pYDelta;
-                    pTextsX = xT + i * pXDelta;
-                    pTextsY = yT + i * pYDelta;
                 }
+
+
                 // adjust zero-line start, if not starting at origin
-                if ( bOrdinate
-                        && 0.0 != para.trueAxisLow() ) {
+                if ( cv.bSteadyCalc && (0.0 != para.trueAxisLow()) ) {
                     double x = p1.x();
                     double y = p1.y();
                     double mult = para.trueAxisLow() / para.trueAxisDelta();
@@ -716,29 +1679,67 @@ if( 1.0==i ){
                     y -= mult * pYDelta;
                     axisZeroLineStartX = x;
                     axisZeroLineStartY = y;
+                    //qDebug( "axisZeroLineStartX %f,  axisZeroLineStartY %f",
+                    //        axisZeroLineStartX, axisZeroLineStartY );
                 }
+
+                painter->setClipping( oldClippingFlag );
             } // if( nLabels )
 
             // draw zero-line (Ok, this might be overwritten by axes
             //  cause those are drawn after all labels and grid and
-            //  zero-line(s) has been painted, see code 15 lines below.)
-            if ( bOrdinate ) {
-                ( ( KDChartAxisParams& ) para ).
-                setAxisZeroLineStart( axisZeroLineStartX, axisZeroLineStartY );
-                if ( ( KDChartAxisParams::AxisPosLeft == i )
-                        || (    ( !params()->axisParams(
-                                     KDChartAxisParams::AxisPosLeft
-                                   ).axisVisible() )
-                             && ( KDChartAxisParams::AxisPosRight == i ) ) ) {
-                    double xFactor = KDChartAxisParams::AxisPosRight == i
-                                     ? -1.0
-                                     : 1.0;
-                    QPoint pZ0( para.axisZeroLineStartX(),
-                                para.axisZeroLineStartY() );
-                    QPoint pZ(  para.axisZeroLineStartX()
-                              + xFactor * _dataRect.width(),
-                                para.axisZeroLineStartY()
-                              - std::fabs( pXDeltaFactor ) * _dataRect.height() );
+            //  zero-line(s) has been painted, see code below, starting
+            // with "// draw all the axes".
+            if ( cv.bSteadyCalc && !cv.isDateTime ) {
+                ( ( KDChartAxisParams& ) para ).setAxisZeroLineStart( axisZeroLineStartX, axisZeroLineStartY );
+                double axisZeroLineStart;
+                int minCoord, maxCoord;
+                double xFactor, yFactor;
+                switch( cv.basicPos ){
+                case KDChartAxisParams::AxisPosLeft:
+                    xFactor =  1.0;
+                    yFactor =  0.0;
+                    axisZeroLineStart = axisZeroLineStartY;
+                    minCoord = QMIN( cv.orig.y(), cv.dest.y() );
+                    maxCoord = QMAX( cv.orig.y(), cv.dest.y() );
+                    break;
+                case KDChartAxisParams::AxisPosRight:
+                    xFactor = -1.0;
+                    yFactor =  0.0;
+                    axisZeroLineStart = axisZeroLineStartY;
+                    minCoord = QMIN( cv.orig.y(), cv.dest.y() );
+                    maxCoord = QMAX( cv.orig.y(), cv.dest.y() );
+                    break;
+                case KDChartAxisParams::AxisPosTop:
+                    xFactor =  0.0;
+                    yFactor =  1.0;
+                    axisZeroLineStart = axisZeroLineStartX;
+                    minCoord = QMIN( cv.orig.x(), cv.dest.x() );
+                    maxCoord = QMAX( cv.orig.x(), cv.dest.x() );
+                    break;
+                case KDChartAxisParams::AxisPosBottom:
+                    xFactor =  0.0;
+                    yFactor = -1.0;
+                    axisZeroLineStart = axisZeroLineStartX;
+                    minCoord = QMIN( cv.orig.x(), cv.dest.x() );
+                    maxCoord = QMAX( cv.orig.x(), cv.dest.x() );
+                    break;
+                default:
+                    xFactor =  0.0;
+                    yFactor =  0.0;
+                    axisZeroLineStart = 0.0;
+                    minCoord = 0;
+                    maxCoord = 0;
+                }
+                if( axisZeroLineStart >= minCoord &&
+                    axisZeroLineStart <= maxCoord ){
+                    QPoint pZ0( static_cast<int>( para.axisZeroLineStartX() ),
+                                static_cast<int>( para.axisZeroLineStartY() ) );
+                    QPoint pZ(  static_cast<int>( para.axisZeroLineStartX()
+                                + xFactor * _dataRect.width() ),
+                                static_cast<int>( para.axisZeroLineStartY()
+                                + yFactor * _dataRect.height() ) );
+                    //qDebug("------");
                     saveDrawLine( *painter,
                                   pZ0,
                                   pZ,
@@ -747,24 +1748,18 @@ if( 1.0==i ){
                 }
             }
         }
+    }
 
-    // draw all the axes
-    for ( uint i2 = 0; i2 < KDChartParams::KDCHART_MAX_AXES; ++i2 )
-        if (    params()->axisParams( i2 ).axisVisible()
-             && params()->axisParams( i2 ).axisLineVisible()
-             &&    KDChartAxisParams::AxisTypeUnknown
-                != params()->axisParams( i2 ).axisType() ) {
-            const KDChartAxisParams & para = params()->axisParams( i2 );
-            KDChartAxisParams::AxisPos basicPos;
-            QPoint orig, dest;
-            findInfos( averageValueP1000, para, i2,
-                       basicPos,
-                       orig,
-                       dest );
+    // draw all the axes lines
+    for( iAxis = 0; iAxis < KDCHART_MAX_AXES; ++iAxis ){
+        internal__KDChart__CalcValues& cv = calcVal[iAxis];
+        const KDChartAxisParams & para = params()->axisParams( iAxis );
+        if( cv.processThisAxis && para.axisLineVisible() ){
             painter->setPen( QPen( para.axisLineColor(),
                                    para.axisTrueLineWidth() ) );
-            painter->drawLine( orig, dest );
+            painter->drawLine( calcVal[iAxis].orig, calcVal[iAxis].dest );
         }
+    }
 
     painter->restore();
 }
@@ -774,8 +1769,8 @@ if( 1.0==i ){
    Calculates the actual label texts for one axis.
 
    \note When calling this function the actual area size for this
-axis must be set, this means you may only call it when
-\c KDChartPainter::setupGeometry() has been called before.
+   axis must be set, this means you may only call it when
+   \c KDChartPainter::setupGeometry() has been called before.
 
    \param painter the QPainter onto which the chart should be painted
    \param data the data that will be displayed as a chart
@@ -783,38 +1778,96 @@ axis must be set, this means you may only call it when
    \param axisNumber the number of this axis (used in some params structures)
    \param averageValueP1000 (average height+width of the prtbl. area) / 1000
    \param basicPos the basic axis position returned by
-    KDChartAxisParams::basicAxisPos()
+   KDChartAxisParams::basicAxisPos()
    \param orig the axis start point
    \param delimLen the length of one delimiter mark
    \param (all others) the reference parameters to be returned
-    by this function
+   by this function
 */
 /**** static ****/
-void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
-        const KDChartTableDataBase& data,
-        const KDChartParams& params,
-        uint axisNumber,
-        double averageValueP1000,
-        KDChartAxisParams::AxisPos basicPos,
-        const QPoint& orig,
-        double delimLen,
-        // start of return parameters
-        double& nSubDelimFactor,
-        double& pDelimDelta,
-        double& nTxtHeight,
-        double& pTextsX,
-        double& pTextsY,
-        double& pTextsW,
-        double& pTextsH,
-        int& textAlign )
+void KDChartAxesPainter::calculateLabelTexts(
+    const KDChartTableDataBase& data,
+    const KDChartParams& params,
+    uint axisNumber,
+    double averageValueP1000,
+    double delimLen,
+    // start of return parameters
+    KDChartAxisParams::AxisPos& basicPos,
+    QPoint& orig,
+    QPoint& dest,
+    double& pXDeltaFactor,
+    double& pYDeltaFactor,
+    double& pXDelimDeltaFaktor,
+    double& pYDelimDeltaFaktor,
+    double& nSubDelimFactor,
+    double& pDelimDelta,
+    double& nTxtHeight,
+    double& pTextsX,
+    double& pTextsY,
+    double& pTextsW,
+    double& pTextsH,
+    int& textAlign,
+    bool& isLogarithmic,
+    bool& isDateTime,
+    bool& autoDtLabels,
+    QDateTime& dtLow,
+    QDateTime& dtHigh,
+    KDChartAxisParams::ValueScale& dtDeltaScale,
+    bool adjustTheValues,
+    double trueDelta,
+    double trueDeltaPix )
 {
-    /*
-        ((KDChartAxisParams&)para).
-            setTrueAxisLowHighDelta( QMIN( data.minValue(), 0.0  ),
-                                     QMAX( data.maxValue(), 0.0 ),
-                                     10.0 );
-    */
+//qDebug("\nentering KDChartAxesPainter::calculateLabelTexts() :   nTxtHeight: "+QString::number(nTxtHeight));
     const KDChartAxisParams & para = params.axisParams( axisNumber );
+
+    basicPos = KDChartAxisParams::basicAxisPos( axisNumber );
+
+    pXDeltaFactor = 0.0;
+    pYDeltaFactor = 0.0;
+    pXDelimDeltaFaktor = 0.0;
+    pYDelimDeltaFaktor = 0.0;
+    int axisLength;
+    switch ( basicPos ) {
+    case KDChartAxisParams::AxisPosBottom: {
+        axisLength = para.axisTrueAreaRect().width();
+        orig = para.axisTrueAreaRect().topLeft();
+        dest = para.axisTrueAreaRect().topRight();
+        pYDelimDeltaFaktor = 1.0;
+        pXDeltaFactor      = 1.0;
+        //qDebug("\nsetting pXDeltaFactor for axis %x", axisNumber);
+        //qDebug("pXDeltaFactor = %f\n",pXDeltaFactor);
+    }
+        break;
+    case KDChartAxisParams::AxisPosLeft: {
+        axisLength = para.axisTrueAreaRect().height();
+        orig = para.axisTrueAreaRect().bottomRight();
+        dest = para.axisTrueAreaRect().topRight();
+        pXDelimDeltaFaktor = -1.0;
+        pYDeltaFactor      = -1.0;
+    }
+        break;
+    case KDChartAxisParams::AxisPosTop: {
+        axisLength = para.axisTrueAreaRect().width();
+        orig = para.axisTrueAreaRect().bottomLeft();
+        dest = para.axisTrueAreaRect().bottomRight();
+        pYDelimDeltaFaktor = -1.0;
+        pXDeltaFactor      =  1.0;
+    }
+        break;
+    case KDChartAxisParams::AxisPosRight: {
+        axisLength = para.axisTrueAreaRect().height();
+        orig = para.axisTrueAreaRect().bottomLeft();
+        dest = para.axisTrueAreaRect().topLeft();
+        pXDelimDeltaFaktor = 1.0;
+        pYDeltaFactor      = -1.0;
+    }
+        break;
+    default: {
+        axisLength = 0;
+        qDebug( "IMPLEMENTATION ERROR: KDChartAxesPainter::paintAxes() unhandled enum value." );
+    }
+        break;
+    }
 
     // which dataset(s) is/are represented by this axis?
     uint dataset, dataset2, chart;
@@ -822,41 +1875,60 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
         dataset = KDChartParams::KDCHART_ALL_DATASETS;
         dataset2 = KDChartParams::KDCHART_ALL_DATASETS;
         chart = 0;
+        //qDebug("\nautomatic set values:   chart: %u,\ndataset: %u,  dataset2: %u",
+        //chart, dataset, dataset2);
     }
-    // which dataset(s) with mode DataEntry is/are represented by this axis?
+    // which dataset(s) with mode DataEntry (or mode ExtraLinesAnchor, resp.)
+    // is/are represented by this axis?
     uint dataDataset, dataDataset2;
-    if( params.findDataset( KDChartParams::DataEntry,
-                            dataDataset,
-                            dataDataset2,
-                            chart ) ) {
+    if( params.findDatasets( KDChartParams::DataEntry,
+                             KDChartParams::ExtraLinesAnchor,
+                             dataDataset,
+                             dataDataset2,
+                             chart ) ) {
         // adjust dataDataset in case MORE THAN ONE AXIS
         //                    is representing THIS CHART
-        if(    KDChartParams::KDCHART_ALL_DATASETS != dataset
-            && KDChartParams::KDCHART_NO_DATASET   != dataset
-            && KDChartParams::KDCHART_ALL_DATASETS != dataDataset
-            && KDChartParams::KDCHART_NO_DATASET   != dataDataset )
-            dataDataset  = QMAX( dataDataset,  dataset  );
-        if(    KDChartParams::KDCHART_ALL_DATASETS != dataset2
-            && KDChartParams::KDCHART_NO_DATASET   != dataset2
-            && KDChartParams::KDCHART_ALL_DATASETS != dataDataset2
-            && KDChartParams::KDCHART_NO_DATASET   != dataDataset2 )
-            dataDataset2 = QMIN( dataDataset2, dataset2 );
+        if(    (    KDChartParams::KDCHART_ALL_DATASETS != dataset
+                    && KDChartParams::KDCHART_NO_DATASET   != dataset )
+               || (    KDChartParams::KDCHART_ALL_DATASETS != dataDataset
+                       && KDChartParams::KDCHART_NO_DATASET   != dataDataset ) ){
+            int ds = (KDChartParams::KDCHART_ALL_DATASETS != dataset)
+                     ? dataset
+                     : 0;
+            int dds = (KDChartParams::KDCHART_ALL_DATASETS != dataDataset)
+                      ? dataDataset
+                      : 0;
+            dataDataset  = QMAX( ds, dds );
+        }
+        if(    (    KDChartParams::KDCHART_ALL_DATASETS != dataset2
+                    && KDChartParams::KDCHART_NO_DATASET   != dataset2 )
+               || (    KDChartParams::KDCHART_ALL_DATASETS != dataDataset2
+                       && KDChartParams::KDCHART_NO_DATASET   != dataDataset2 ) ){
+            int ds2 = (KDChartParams::KDCHART_ALL_DATASETS != dataset2)
+                      ? dataset2
+                      : KDCHART_MAX_AXES-1;
+            int dds2 = (KDChartParams::KDCHART_ALL_DATASETS != dataDataset2)
+                       ? dataDataset2
+                       : KDCHART_MAX_AXES-1;
+            dataDataset2  = QMIN( ds2, dds2 );
+        }
     }
     else {
         // Should not happen
-        qDebug( "IMPLEMENTATION ERROR: findDataset( DataEntry, ... ) should *always* return true." );
+        qDebug( "IMPLEMENTATION ERROR: findDatasets( DataEntry, ExtraLinesAnchor ) should *always* return true. (b)" );
         dataDataset = KDChartParams::KDCHART_ALL_DATASETS;
     }
-    /*
-    qDebug("\nchart: %u,\ndataset: %u,  dataset2: %u,\ndataDataset: %u,  dataDataset2: %u",
-    chart, dataset, dataset2, dataDataset, dataDataset2);
-    */
-    if ( para.axisLabelsFontUseRelSize() )
+    //qDebug("\naxisNumber: %x\nchart: %x\ndataset: %x,  dataset2: %x,\ndataDataset: %x,  dataDataset2: %x",
+    //axisNumber, chart, dataset, dataset2, dataDataset, dataDataset2);
+
+    if ( para.axisLabelsFontUseRelSize() ){
         nTxtHeight = para.axisLabelsFontRelSize()
                      * averageValueP1000;
-    else {
+//qDebug("using rel. size in KDChartAxesPainter::calculateLabelTexts() :   nTxtHeight: "+QString::number(nTxtHeight));
+    }else {
         QFontInfo info( para.axisLabelsFont() );
         nTxtHeight = info.pointSize();
+//qDebug("using FIXED size in KDChartAxesPainter::calculateLabelTexts() :   nTxtHeight: "+QString::number(nTxtHeight));
     }
 
     int behindComma = para.axisDigitsBehindComma();
@@ -866,80 +1938,150 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
     bool bDone = true;
     switch ( para.axisLabelTextsFormDataRow() ) {
     case KDChartAxisParams::LabelsFromDataRowYes: {
-            // Take whatever is in the specified column (even if not a string)
-            QString sVal;
-            int trueBehindComma = -1;
-            for ( uint iDataset = 0; iDataset < data.usedRows(); iDataset++ ) {
-                const KDChartData& cell = data.cell( iDataset, colNum );
-                if ( cell.isString() )
-                    labelTexts.append( cell.stringValue() );
-                else
-                    labelTexts.append(
-                        trunctateBehindComma( cell.doubleValue(),
-                                              behindComma,
-                                              para.axisValueDelta(),
-                                              trueBehindComma ) );
-            }
-            break;
+        // Take whatever is in the specified column (even if not a string)
+        QString sVal;
+        int trueBehindComma = -1;
+        for ( uint iDataset = 0; iDataset < data.usedRows(); iDataset++ ) {
+            const KDChartData& cell = data.cell( iDataset, colNum );
+            if ( cell.isString() )
+                labelTexts.append( cell.stringValue() );
+            else
+                labelTexts.append(
+                    trunctateBehindComma( cell.doubleValue(),
+                                          behindComma,
+                                          para.axisValueDelta(),
+                                          trueBehindComma ) );
         }
+        break;
+    }
     case KDChartAxisParams::LabelsFromDataRowGuess: {
-            for ( uint iDataset = 0; iDataset < data.usedRows(); iDataset++ ) {
-                const KDChartData& cell = data.cell( iDataset, colNum );
-                if ( cell.isString()
-                        && !cell.stringValue().isEmpty()
-                        && !cell.stringValue().isNull() )
-                    labelTexts.append( cell.stringValue() );
-                else {
-                    labelTexts.clear();
-                    bDone = false;
-                    break;
-                }
+        for ( uint iDataset = 0; iDataset < data.usedRows(); iDataset++ ) {
+            const KDChartData& cell = data.cell( iDataset, colNum );
+            if ( cell.isString()
+                 && !cell.stringValue().isEmpty()
+                 && !cell.stringValue().isNull() )
+                labelTexts.append( cell.stringValue() );
+            else {
+                labelTexts.clear();
+                bDone = false;
+                break;
             }
-            break;
         }
+        break;
+    }
     case KDChartAxisParams::LabelsFromDataRowNo: {
-            bDone = false;
-            break;
-        }
+        bDone = false;
+        break;
+    }
     default:
         // Should not happen
         qDebug( "KDChart: Unknown label texts source" );
     }
 
-    bool bOrdinate = para.axisSteadyValueCalc();
+    // if necessary adjust text params *including* the steady value calc setting
+    const bool dataCellsHaveSeveralCoordinates =
+        (KDChartParams::KDCHART_ALL_DATASETS == dataDataset)
+        ? data.cellsHaveSeveralCoordinates()
+        : data.cellsHaveSeveralCoordinates( dataDataset, dataDataset2 );
+    if( dataCellsHaveSeveralCoordinates && !para.axisSteadyValueCalc() )
+        ((KDChartParams&)params).setAxisLabelTextParams(
+            axisNumber,
+            true ); // NOTE: This sets MANY other params to default values too!
 
+
+    const KDChartParams::ChartType params_chartType
+        = ( 0 == chart )
+        ? params.chartType()
+        : params.additionalChartType();
+
+
+    // store whether we are calculating Ordinate-like axis values
+    const bool bSteadyCalc = para.axisSteadyValueCalc();
+
+    // store whether we logarithmic calculation is wanted
+    isLogarithmic = bSteadyCalc &&
+                    (KDChartParams::Line == params_chartType) &&
+                    (KDChartAxisParams::AxisCalcLogarithmic == para.axisCalcMode());
+
+    //qDebug(bSteadyCalc ? "bSteadyCalc":"NOT bSteadyCalc");
+    //qDebug(isLogarithmic? "isLogarithmic":"NOT isLogarithmic");
+
+    // store whether this is a vertical axis or a horizontal axis
+    const bool bVertAxis = (KDChartAxisParams::AxisPosLeft  == basicPos) ||
+                           (KDChartAxisParams::AxisPosRight == basicPos);
+
+    // store the coordinate number to be used for this axis
+    const int coordinate = bVertAxis ? 1 : 2;
+
+    // store whether our coordinates are double or QDateTime values
+    const KDChartData::ValueType valueType =
+        (KDChartParams::KDCHART_ALL_DATASETS == dataDataset)
+        ? data.cellsValueType(                            coordinate )
+        : data.cellsValueType( dataDataset, dataDataset2, coordinate );
+    isDateTime = valueType == KDChartData::DateTime;
+    bool bIsDouble = valueType == KDChartData::Double;
+
+    autoDtLabels = isDateTime && ( KDChartAxisParams::AXIS_LABELS_AUTO_DATETIME_FORMAT
+                                   == para.axisLabelsDateTimeFormat() );
+
+    if( autoDtLabels || bSteadyCalc )
+        ( ( KDChartAxisParams& ) para ).setAxisLabelsTouchEdges( true );
+
+    bool bStatistical = KDChartParams::HiLo       == params_chartType
+ || KDChartParams::BoxWhisker == params_chartType;
+
+    if ( !bVertAxis && KDChartParams::BoxWhisker == params_chartType ) {
+        uint ds1 = (KDChartParams::KDCHART_ALL_DATASETS == dataDataset)
+                   ? 0
+                   : dataDataset;
+        uint ds2 = (KDChartParams::KDCHART_ALL_DATASETS == dataDataset)
+                   ? data.usedRows() - 1
+                   : dataDataset2;
+        for (uint i = ds1; i <= ds2; ++i)
+            labelTexts.append(
+                QObject::tr( "Series " ) + QString::number( i + 1 ) );
+        bDone = true;
+    }
+
+    double nLow   =  1.0;
+    double nHigh  = 10.0;
+    double nDelta =  1.0;
     if ( !bDone ) {
         bDone = true;
 
         // look if exact label specification was made via limits and delta
-        if (    ! bOrdinate
-             && ! para.axisLabelStringList()
-             && ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() )
-             && para.axisValueStart().isDouble()
-             && ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() )
-             && para.axisValueEnd().isDouble()
-             && ! ( para.axisValueStart() == para.axisValueEnd() )
-             && ! ( KDChartAxisParams::AXIS_LABELS_AUTO_DELTA == para.axisValueDelta() )
-             && ! ( 0.0 == para.axisValueDelta() ) ) {
-            double nLow   = para.axisValueStart().doubleValue();
-            double nHigh  = para.axisValueEnd().doubleValue();
-            double nDelta = para.axisValueDelta();
-            double nDist  = nLow - nHigh;
+        if (       ! isLogarithmic
+                   && ! para.axisLabelStringCount()
+                   && ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() )
+                   && para.axisValueStart().isDouble()
+                   && ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() )
+                   && para.axisValueEnd().isDouble()
+                   && ! ( para.axisValueStart() == para.axisValueEnd() )
+                   && ! ( KDChartAxisParams::AXIS_LABELS_AUTO_DELTA == para.axisValueDelta() )
+                   && ! ( 0.0 == para.axisValueDelta() ) ) {
+            nLow   = para.axisValueStart().doubleValue();
+            nHigh  = para.axisValueEnd().doubleValue();
+            nDelta = para.axisValueDelta();
             int precis = KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS == para.axisDigitsBehindComma()
-                       ? 0
-                       : para.axisDigitsBehindComma();
-            double nVal  = 0.0;
-            int nLabels = static_cast < int > (std::fabs( nDist / nDelta ));
-            for ( int i = 0; i < nLabels; ++i ) {
-               labelTexts.append( QString::number( nVal, 'f', precis ) );
-               nVal += nDelta;
+                         ? 0
+                         : para.axisDigitsBehindComma();
+            bool upwards = (nLow < nHigh);
+            if( upwards != (0.0 < nDelta) )
+                nDelta *= -1.0;
+            double nVal = nLow;
+            bDone = false;
+            while( upwards ? (nVal <= nHigh) : (nVal >= nHigh) ){
+                labelTexts.append( QString::number( nVal, 'f', precis ) );
+                nVal += nDelta;
+                bDone = true;
             }
+            ( ( KDChartAxisParams& ) para ).setTrueAxisLowHighDelta( nLow, nHigh, nDelta );
+            //qDebug("\n[Z-0] nLow: %f,  nHigh: %f,  nDelta: %f", nLow, nHigh, nDelta );
         }         // look if a string list was specified
-        else if (    para.axisLabelStringList()
-                  && para.axisLabelStringList()->count() ) {
-            int nLabels = bOrdinate
-                           ? para.axisLabelStringList()->count()
-                           : data.usedCols();
+        else if ( para.axisLabelStringCount() ) {
+            int nLabels = bSteadyCalc
+                          ? para.axisLabelStringCount()
+                          : bStatistical ? data.usedRows() : data.usedCols();
             calculateBasicTextFactors( nTxtHeight, para, averageValueP1000,
                                        basicPos, orig, delimLen, nLabels,
                                        // start of return parameters
@@ -947,13 +2089,13 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                                        pTextsX, pTextsY, pTextsW, pTextsH,
                                        textAlign );
             bool useShortLabels = false;
-            QStringList* tmpList = para.axisLabelStringList();
+            QStringList tmpList( para.axisLabelStringList() );
 
             // find start- and/or end-entry
             int iStart = 0;
-            int iEnd = para.axisLabelStringList()->count() - 1;
+            int iEnd = para.axisLabelStringCount() - 1;
             if(    ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() )
-                || ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() ) ) {
+                   || ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() ) ) {
                 bool testStart = !( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT
                                     == para.axisValueStart()
                                     && para.axisValueStart().isString() );
@@ -968,10 +2110,10 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                                : QString::null;
 
                 uint i = 0;
-                for ( QStringList::Iterator it = tmpList->begin();
-                        it != tmpList->end(); ++it, ++i ) {
+                for ( QStringList::Iterator it = tmpList.begin();
+                      it != tmpList.end(); ++it, ++i ) {
                     if ( 0 == iStart &&
-                            0 == QString::compare( sStart, ( *it ).upper() ) ) {
+                         0 == QString::compare( sStart, ( *it ).upper() ) ) {
                         iStart = i;
                     }
                     if ( 0 == QString::compare( sEnd, ( *it ).upper() ) ) {
@@ -982,18 +2124,17 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
 
             // check text widths to ensure all the entries will fit
             // into the available space
-            if ( para.axisShortLabelsStringList()
-                    && ( para.axisLabelStringList()
-                         != para.axisShortLabelsStringList() )
-                    && para.axisShortLabelsStringList()->count() ) {
+            if (    para.axisLabelStringCount()
+                    && para.axisShortLabelsStringCount()
+                    && para.axisLabelStringList() != para.axisShortLabelsStringList() ) {
                 QFont font( para.axisLabelsFont() );
                 if ( para.axisLabelsFontUseRelSize() )
                     font.setPointSizeFloat( nTxtHeight );
                 QFontMetrics fm( font );
 
-                QStringList::Iterator it = tmpList->begin();
+                QStringList::Iterator it = tmpList.begin();
                 for ( int i = 0; i < nLabels; ++i ) {
-                    if ( it != tmpList->end() ) {
+                    if ( it != tmpList.end() ) {
                         if ( fm.width( *it ) > pTextsW ) {
                             useShortLabels = true;
                             break;
@@ -1007,26 +2148,26 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
             else
                 tmpList = para.axisLabelStringList();
 
-            // prepare transferring the strings into the labelTexts list
+            // prepare transfering the strings into the labelTexts list
             double ddelta
-            = ( KDChartAxisParams::AXIS_LABELS_AUTO_DELTA == para.axisValueDelta() )
-              ? 1.0
-              : para.axisValueDelta();
+                = ( KDChartAxisParams::AXIS_LABELS_AUTO_DELTA == para.axisValueDelta() )
+                ? 1.0
+                : para.axisValueDelta();
             modf( ddelta, &ddelta );
             bool positive = ( 0.0 <= ddelta );
-            int delta = static_cast < int > ( std::fabs( ddelta ) );
+            int delta = static_cast < int > ( fabs( ddelta ) );
             // find 1st significant entry
             QStringList::Iterator it = positive
-                                       ? tmpList->begin()
-                                       : tmpList->fromLast();
+                                       ? tmpList.begin()
+                                       : tmpList.fromLast();
             if ( positive )
-                for ( int i = 0; i < (int)tmpList->count(); ++i ) {
+                for ( int i = 0; i < (int)tmpList.count(); ++i ) {
                     if ( i >= iStart )
                         break;
                     ++it;
                 }
             else
-                for ( int i = tmpList->count() - 1; i >= 0; --i ) {
+                for ( int i = tmpList.count() - 1; i >= 0; --i ) {
                     if ( i <= iEnd )
                         break;
                     --it;
@@ -1034,23 +2175,23 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
             // transfer the strings
             int meter = delta;
             int i2 = positive ? iStart : iEnd;
-            for ( int i = 0; i < nLabels; ) {
+            for ( int iLabel = 0; iLabel < nLabels; ) {
                 if ( positive ) {
-                    if ( it == tmpList->end() ) {
-                        it = tmpList->begin();
+                    if ( it == tmpList.end() ) {
+                        it = tmpList.begin();
                         i2 = 0;
                     }
                 } else {
-                    if ( it == tmpList->begin() ) {
-                        it = tmpList->end();
-                        i2 = tmpList->count();
+                    if ( it == tmpList.begin() ) {
+                        it = tmpList.end();
+                        i2 = tmpList.count();
                     }
                 }
                 if ( ( positive && i2 >= iStart )
-                        || ( !positive && i2 <= iEnd ) ) {
+                     || ( !positive && i2 <= iEnd ) ) {
                     if ( meter >= delta ) {
                         labelTexts << *it;
-                        ++i;
+                        ++iLabel;
                         meter = 1;
                     } else {
                         meter += 1;
@@ -1058,7 +2199,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                 }
                 if ( positive ) {
                     if ( i2 == iEnd ) {
-                        it = tmpList->begin();
+                        it = tmpList.begin();
                         i2 = 0;
                     } else {
                         ++it;
@@ -1066,8 +2207,8 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                     }
                 } else {
                     if ( i2 == iStart ) {
-                        it = tmpList->end();
-                        i2 = tmpList->count();
+                        it = tmpList.end();
+                        i2 = tmpList.count();
                     } else {
                         --it;
                         --i2;
@@ -1078,20 +2219,23 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
             // find out if the associated dataset contains only strings
             // if yes, we will take these as label texts
             uint dset = ( dataset == KDChartParams::KDCHART_ALL_DATASETS ) ? 0 : dataset;
+            //qDebug("\ndset: %u", dset);
+            bDone = false;
             for ( uint col = 0; col < data.usedCols(); ++col ) {
                 const KDChartData& cell = data.cell( dset, col );
                 if ( cell.isString()
-                        && !cell.stringValue().isEmpty()
-                        && !cell.stringValue().isNull() )
+                     && !cell.stringValue().isEmpty()
+                     && !cell.stringValue().isNull() ){
                     labelTexts.append( cell.stringValue() );
-                else {
+                    bDone = true;
+                }else{
                     labelTexts.clear();
-                    bDone = false;
                     break;
                 }
             }
         }
     }
+
 
     if ( bDone ) {
         // Some strings were found, now let us see which of them are
@@ -1101,13 +2245,13 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
         //   F E A T U R E   P L A N N E D   F O R   F U T U R E . . .
         //
         //
-
     }
     else {
         // No strings were found, so let us either calculate the texts
         // based upon the numerical values of the associated dataset(s)
         // or just compose some default texts...
-        if ( bOrdinate && data.usedCols() ) {
+        if ( data.usedCols() && bSteadyCalc ) {
+            // double values for numerical coordinates
             double nLow = 0.0;
             double nHigh = 0.0;
             double orgLow = 0.0;
@@ -1115,147 +2259,388 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
             double nDelta = 0.0;
             double nDist = 0.0;
 
-            const KDChartParams::ChartType params_chartType
-            = ( 0 == chart ) ? params.chartType()
-              : params.additionalChartType();
+            //  VERTICAL axes support three modes:
             enum { Normal, Stacked, Percent } mode;
-            switch ( params_chartType ) {
-            case KDChartParams::Bar:
-                if ( KDChartParams::BarStacked
-                        == params.barChartSubType() )
-                    mode = Stacked;
-                else if ( KDChartParams::BarPercent
-                          == params.barChartSubType() )
-                    mode = Percent;
-                else
+
+            if( bVertAxis ){
+                switch ( params_chartType ) {
+                case KDChartParams::Bar:
+                    if ( KDChartParams::BarStacked
+                         == params.barChartSubType() )
+                        mode = Stacked;
+                    else if ( KDChartParams::BarPercent
+                              == params.barChartSubType() )
+                        mode = Percent;
+                    else
+                        mode = Normal;
+                    break;
+                case KDChartParams::Line:
+                    if ( KDChartParams::LineStacked
+                         == params.lineChartSubType() )
+                        mode = Stacked;
+                    else if ( KDChartParams::LinePercent
+                              == params.lineChartSubType() )
+                        mode = Percent;
+                    else
+                        mode = Normal;
+                    break;
+                case KDChartParams::Area:
+                    if ( KDChartParams::AreaStacked
+                         == params.areaChartSubType() )
+                        mode = Stacked;
+                    else if ( KDChartParams::AreaPercent
+                              == params.areaChartSubType() )
+                        mode = Percent;
+                    else
+                        mode = Normal;
+                    break;
+                case KDChartParams::HiLo:
+                case KDChartParams::BoxWhisker:
                     mode = Normal;
-                break;
-            case KDChartParams::Line:
-                if ( KDChartParams::LineStacked
-                        == params.lineChartSubType() )
-                    mode = Stacked;
-                else if ( KDChartParams::LinePercent
-                          == params.lineChartSubType() )
-                    mode = Percent;
-                else
-                    mode = Normal;
-                break;
-            case KDChartParams::Area:
-                if ( KDChartParams::AreaStacked
-                        == params.areaChartSubType() )
-                    mode = Stacked;
-                else if ( KDChartParams::AreaPercent
-                          == params.areaChartSubType() )
-                    mode = Percent;
-                else
-                    mode = Normal;
-                break;
-            case KDChartParams::HiLo:
-                mode = Normal;
-                break;
-            case KDChartParams::Polar:
-                if ( KDChartParams::PolarStacked
-                        == params.polarChartSubType() )
-                    mode = Stacked;
-                else if ( KDChartParams::PolarPercent
-                          == params.polarChartSubType() )
-                    mode = Percent;
-                else
-                    mode = Normal;
-                break;
-            default: {
+                    break;
+                case KDChartParams::Polar:
+                    if ( KDChartParams::PolarStacked
+                         == params.polarChartSubType() )
+                        mode = Stacked;
+                    else if ( KDChartParams::PolarPercent
+                              == params.polarChartSubType() )
+                        mode = Percent;
+                    else
+                        mode = Normal;
+                    break;
+                default: {
                     // Should not happen
                     qDebug( "IMPLEMENTATION ERROR: Unknown params_chartType in calculateLabelTexts()" );
                     mode = Normal;
                 }
-            }
+                }
+            }else
+                mode = Normal; // this axis is not a vertical axis
+
 
             uint nLabels = 200;
 
             // find highest and lowest value of associated dataset(s)
             bool bOrdFactorsOk = false;
-            bool bAutoCalcStart =
-                   ( Normal == mode )
-                && ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() );
-            bool bAutoCalcEnd =
-                   ( Normal == mode )
-                && ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() );
-            if ( ! bAutoCalcStart && ! bAutoCalcEnd ) {
-                switch ( mode ) {
-                case Normal: {
-                        nLow = para.axisValueStart().doubleValue();
-                        nHigh = para.axisValueEnd().doubleValue();
-                        nDist = nHigh - nLow;
-                        break;
-                    }
-                case Stacked: {
-                        if ( dataDataset == KDChartParams::KDCHART_ALL_DATASETS ) {
-                            nLow  = QMIN( data.minColSum(), 0.0 );
-                            nHigh = QMAX( data.maxColSum(), 0.0 );
-                        } else {
-                            nLow  = QMIN( data.minColSum( dataDataset, dataDataset2 ), 0.0 );
-                            nHigh = QMAX( data.maxColSum( dataDataset, dataDataset2 ), 0.0 );
-                        }
-                        break;
-                    }
-                case Percent: {
-                        nLow   =   0.0;
-                        nHigh  = 100.0;
-                        nDist  = 100.0;
-                        nDelta =  10.0;
-                        nSubDelimFactor = 0.25;
-                        bOrdFactorsOk = true;
-                        break;
-                    }
-                }
-                // qDebug("\n[A] nLow: %f,  nHigh: %f", nLow, nHigh);
-            } else {
-                // Usage of this additional bool parameter instead of
-                // just initializing nLow and nHigh with values taken
-                // from col zero enabels us to compute rows with
-                // missing entries!  :-)
-	        //bool bInit = true;
 
-                if ( dataDataset == KDChartParams::KDCHART_ALL_DATASETS ) {
-                    nLow  = data.minValue();
-                    nHigh = data.maxValue();
-                } else {
-                    nLow  = data.minInRows( dataDataset, dataDataset2 );
-                    nHigh = data.maxInRows( dataDataset, dataDataset2 );
+            if( adjustTheValues ){
+                nDelta = fabs( trueDelta );
+                pDelimDelta = trueDeltaPix;
+                nLow = QMIN( para.trueAxisLow(), para.trueAxisHigh() );
+                //qDebug("\nsearching: para.trueAxisLow() %f    para.trueAxisHigh() %f",para.trueAxisLow(),para.trueAxisHigh());
+                double orgLow( nLow );
+                modf( nLow / nDelta, &nLow );
+                nLow *= nDelta;
+                if ( nLow > orgLow )
+                    nLow -= nDelta;
+                if ( 0.0 < nLow && 0.0 >= orgLow )
+                    nLow = 0.0;
+                nHigh = nLow;
+                double dx = fabs( pXDeltaFactor * pDelimDelta );
+                double dy = fabs( pYDeltaFactor * pDelimDelta );
+                double x = 0.0;
+                double y = 0.0;
+                nLabels = 1;
+                if( axisLength ){
+                    do{
+                        ++nLabels;
+                        nHigh += nDelta;
+                        x += dx;
+                        y += dy;
+                    }while( x < axisLength && y < axisLength );
+                    nHigh -= nDelta;
+                    --nLabels;
                 }
-                /*
-                qDebug("\n[A] chart: %u,\ndataset: %u,  dataset2: %u,\ndataDataset: %u,  dataDataset2: %u",
-                chart, dataset, dataset2, dataDataset, dataDataset2);
-                qDebug("nLow: %f,  nHigh: %f", nLow, nHigh);
-                */
-                // Note: a double that was initialized with 0.0
-                //       is NOT equal a double initialized with 0 !!!
-                if(    DBL_MAX == nLow
-                    || (    ( 0.0 == nHigh || 0 == nHigh )
-                         && ( 0.0 == nLow  || 0 == nLow ) ) ) {
-                    // qDebug("NO values or all values have ZERO value, showing 0.0 - 1.0 span");
+                nDist = nHigh - nLow;
+                bOrdFactorsOk = true;
+
+            }
+
+            if( !bOrdFactorsOk ){
+                const bool bAutoCalcStart =
+                    ( Percent != mode )
+                    && ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() );
+                const bool bAutoCalcEnd =
+                    ( Percent != mode )
+                    && ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() );
+
+                if( !bIsDouble && !isDateTime ){
+                    // no data at all: let us use our default 0..10 range
                     nLow   = 0.0;
-                    nHigh  = 1.0;
-                    nDist  = 1.0;
-                    nDelta = 0.5;
-                    nSubDelimFactor = 0.2;
+                    nHigh  = 10.0;
+                    nDist  = 10.0;
+                    nDelta = 1.0;
+                    nSubDelimFactor = 0.5;
+                    bIsDouble     = true;
+                    bOrdFactorsOk = true;
+                }else if( mode == Percent ){
+                    // precentage mode: we use a 0..100 range
+                    nLow   =   0.0;
+                    nHigh  = 100.0;
+                    nDist  = 100.0;
+                    nDelta =  10.0;
+                    nSubDelimFactor = 0.25;
+                    bOrdFactorsOk = true;
+                }else{
+                    // get the raw start value
+                    const bool bStackedMode = (mode == Stacked);
+                    if( bAutoCalcStart ){
+                        if ( dataDataset == KDChartParams::KDCHART_ALL_DATASETS ) {
+                            if( bIsDouble ){
+                                nLow = bStackedMode
+                                       ? QMIN( data.minColSum(), 0.0 )
+                                       : data.minValue( coordinate );
+                            }else{
+                                dtLow = data.minDtValue( coordinate );
+                            }
+                        } else {
+                            if( bIsDouble ){
+                                nLow = bStackedMode
+                                       ? QMIN( data.minColSum( dataDataset, dataDataset2 ),
+                                               0.0 )
+                                       : data.minInRows( dataDataset,dataDataset2,
+                                                         coordinate );
+                            }else{
+                                dtLow = data.minDtInRows( dataDataset,dataDataset2,
+                                                          coordinate );
+                            }
+                        }
+                    }else{
+                        if( bIsDouble )
+                            nLow  = para.axisValueStart().doubleValue();
+                        else
+                            dtLow = para.axisValueStart().dateTimeValue( coordinate );
+                    }
+
+                    // get the raw end value
+                    if( bAutoCalcEnd ){
+                        if ( dataDataset == KDChartParams::KDCHART_ALL_DATASETS ) {
+                            if( bIsDouble )
+                                nHigh = bStackedMode
+                                        ? QMAX( data.maxColSum(), 0.0 )
+                                        : data.maxValue( coordinate );
+                            else
+                                dtHigh = data.maxDtValue( coordinate );
+                        } else {
+                            if( bIsDouble )
+                                nHigh = bStackedMode
+                                        ? QMAX( data.maxColSum( dataDataset, dataDataset2 ),
+                                                0.0 )
+                                        : data.maxInRows( dataDataset,dataDataset2,
+                                                          coordinate );
+                            else
+                                dtHigh = data.maxDtInRows( dataDataset,dataDataset2,
+                                                           coordinate );
+                        }
+                    }else{
+                        if( bIsDouble )
+                            nHigh  = para.axisValueEnd().doubleValue();
+                        else
+                            dtHigh = para.axisValueEnd().dateTimeValue( coordinate );
+                    }
+                }
+
+                if( bIsDouble ) {
+                    if(    DBL_MAX == nLow
+                           || (    ( 0.0 == nHigh || 0 == nHigh )
+                                   && ( 0.0 == nLow  || 0 == nLow  ) ) ) {
+                        // qDebug("NO values or all values have ZERO value, showing 0.0 - 10.0 span");
+                        nLow   = 0.0;
+                        nHigh  = 10.0;
+                        nDist  = 10.0;
+                        nDelta = 1.0;
+                        nSubDelimFactor = 0.5;
+                        bOrdFactorsOk = true;
+                        //qDebug("nLow: %f,  nHigh: %f", nLow, nHigh);
+                    }else if( nLow == nHigh ){
+                        // if both values are equal, but NOT Zero
+                        // -> move the appropriate one to Zero
+                        if( nLow < 0.0 )
+                            nHigh = 0.0;
+                        else
+                            nLow = 0.0;
+                        //qDebug("nLow: %f,  nHigh: %f", nLow, nHigh);
+                    }else if( nHigh < nLow ){
+                        // make sure nLow is <= nHigh
+                        double nTmp = nLow;
+                        nLow = nHigh;
+                        nHigh = nTmp;
+                    }
+                } else if( isDateTime ){
+                    bool toggleDts = dtLow > dtHigh;
+                    if( toggleDts ) {
+                        QDateTime dt( dtLow );
+                        dtLow = dtHigh;
+                        dtHigh = dt;
+                    }
+                    int secDist = dtLow.secsTo( dtHigh );
+                    int aDist = abs( secDist );
+                    const int secMin   = 60 * 1;
+                    const int secHour  = 60 * secMin;
+                    const int secDay   = 24 * secHour;
+                    //
+                    // we temporarily disable week alignment until bug
+                    // is fixed (1st week of year must not start in the
+                    // preceeding year but rather be shown incompletely)
+                    //
+                    //                                 (khz, 2002/07/12)
+                    //
+                    //const int secWeek  =  7 * secDay;
+                    const int secMonth = 30 * secDay;   // approx.
+                    const int secYear  = 12 * secMonth; // approx.
+                    if(      2*secMin > aDist )
+                        dtDeltaScale = KDChartAxisParams::ValueScaleSecond;
+                    else if( 2*secHour > aDist )
+                        dtDeltaScale = KDChartAxisParams::ValueScaleMinute;
+                    else if( 2*secDay > aDist )
+                        dtDeltaScale = KDChartAxisParams::ValueScaleHour;
+                    // khz: else if( 2*secWeek > aDist )
+                    // khz:    dtDeltaScale = KDChartAxisParams::ValueScaleDay;
+                    else if( 2*secMonth > aDist )
+                        dtDeltaScale = KDChartAxisParams::ValueScaleDay;
+                    // khz: dtDeltaScale = KDChartAxisParams::ValueScaleWeek;
+
+                    else if( 2*secYear > aDist )
+                        dtDeltaScale = KDChartAxisParams::ValueScaleMonth;
+                    else if( 10*secYear > aDist )
+                        dtDeltaScale = KDChartAxisParams::ValueScaleQuarter;
+                    else
+                        dtDeltaScale = KDChartAxisParams::ValueScaleYear;
+
+
+                    //const int yearLow   = dtLow.date().year();
+                    const int monthLow  = dtLow.date().month();
+                    // khz: currently unused: const int dowLow    = dtLow.date().dayOfWeek();
+                    const int dayLow    = dtLow.date().day();
+                    const int hourLow   = dtLow.time().hour();
+                    const int minuteLow = dtLow.time().minute();
+                    const int secondLow = dtLow.time().second();
+
+                    //const int yearHigh   = dtHigh.date().year();
+                    const int monthHigh  = dtHigh.date().month();
+                    // khz: currently unused: const int dowHigh    = dtHigh.date().dayOfWeek();
+                    const int hourHigh   = dtHigh.time().hour();
+                    const int minuteHigh = dtHigh.time().minute();
+                    const int secondHigh = dtHigh.time().second();
+                    int yearLowD   = 0;
+                    int monthLowD  = 0;
+                    int dayLowD    = 0;
+                    int hourLowD   = 0;
+                    int minuteLowD = 0;
+                    int secondLowD = 0;
+                    int yearHighD   = 0;
+                    int monthHighD  = 0;
+                    int dayHighD    = 0;
+                    int hourHighD   = 0;
+                    int minuteHighD = 0;
+                    int secondHighD = 0;
+                    bool gotoEndOfMonth = false;
+                    switch( dtDeltaScale ) {
+                    case KDChartAxisParams::ValueScaleSecond:
+                        //qDebug("\nKDChartAxisParams::ValueScaleSecond");
+                        secondLowD = secondLow % 5;
+                        if( secondHigh % 5 )
+                            secondHighD = 5 - secondHigh % 5;
+                        break;
+                    case KDChartAxisParams::ValueScaleMinute:
+                        //qDebug("\nKDChartAxisParams::ValueScaleMinute");
+                        secondLowD = secondLow;
+                        secondHighD = 59-secondHigh;
+                        break;
+                    case KDChartAxisParams::ValueScaleHour:
+                        //qDebug("\nKDChartAxisParams::ValueScaleHour");
+                        minuteLowD = minuteLow;
+                        secondLowD = secondLow;
+                        minuteHighD = 59-minuteHigh;
+                        secondHighD = 59-secondHigh;
+                        break;
+                    case KDChartAxisParams::ValueScaleDay:
+                        //qDebug("\nKDChartAxisParams::ValueScaleDay");
+                        hourLowD   = hourLow;
+                        minuteLowD = minuteLow;
+                        secondLowD = secondLow;
+                        hourHighD   = 23-hourHigh;
+                        minuteHighD = 59-minuteHigh;
+                        secondHighD = 59-secondHigh;
+                        break;
+                    case KDChartAxisParams::ValueScaleWeek:
+                        //qDebug("\nKDChartAxisParams::ValueScaleWeek");
+                        // khz: week scaling is disabled at the moment
+                        /*
+                          dayLowD = dowLow - 1;
+                          hourLowD   = hourLow;
+                          minuteLowD = minuteLow;
+                          secondLowD = secondLow;
+                          if( 7 > dowHigh )
+                          dayHighD = 7 - dowHigh + 1;
+                        */
+                        break;
+                    case KDChartAxisParams::ValueScaleMonth:
+                        //qDebug("\nKDChartAxisParams::ValueScaleMonth");
+                        if( 1 < dayLow )
+                            dayLowD = dayLow - 1;
+                        hourLowD   = hourLow;
+                        minuteLowD = minuteLow;
+                        secondLowD = secondLow;
+                        gotoEndOfMonth = true;
+                        break;
+                    case KDChartAxisParams::ValueScaleQuarter:
+                        //qDebug("\nKDChartAxisParams::ValueScaleQuarter");
+                        monthLowD = ( monthLow - 1 ) % 3;
+                        dayLowD    = dayLow;
+                        hourLowD   = hourLow;
+                        minuteLowD = minuteLow;
+                        secondLowD = secondLow;
+                        if( ( monthHigh - 1 ) % 3 )
+                            monthHighD = 3 - ( monthHigh - 1 ) % 3;
+                        gotoEndOfMonth = true;
+                        break;
+                    case KDChartAxisParams::ValueScaleYear:
+                        //qDebug("\nKDChartAxisParams::ValueScaleYear");
+                        monthLowD  = monthLow;
+                        dayLowD    = dayLow;
+                        hourLowD   = hourLow;
+                        minuteLowD = minuteLow;
+                        secondLowD = secondLow;
+                        if( 12 > monthHigh )
+                            monthHighD = 12 - monthHigh;
+                        gotoEndOfMonth = true;
+                        break;
+                    default:
+                        /* NOOP */
+                        break;
+                    }
+                    dtLow  = dtLow.addSecs(   -1 * (secondLowD + 60*minuteLowD + 3600*hourLowD) );
+                    dtLow  = dtLow.addDays(   -1 * dayLowD   );
+                    dtAddMonths( dtLow, -1 * monthLowD, dtLow );
+                    dtAddYears(  dtLow, -1 * yearLowD,  dtLow );
+                    dtHigh = dtHigh.addSecs(   secondHighD + 60*minuteHighD + 3600* hourHighD );
+                    dtHigh = dtHigh.addDays(   dayHighD   );
+                    dtAddMonths( dtHigh, monthHighD, dtHigh );
+                    dtAddYears(  dtHigh, yearHighD,  dtHigh );
+                    if( gotoEndOfMonth ){
+                        dtHigh.setDate( QDate( dtHigh.date().year(),
+                                               dtHigh.date().month(),
+                                               dtHigh.date().daysInMonth() ) );
+                        dtHigh.setTime( QTime( 23, 59, 59 ) );
+                    }
+                    if( toggleDts ) {
+                        QDateTime dt( dtLow );
+                        dtLow = dtHigh;
+                        dtHigh = dt;
+                    }
+                    // secDist = dtLow.secsTo( dtHigh );
+
+                    // NOTE: nSubDelimFactor is not set here since it
+                    //        cannot be used for QDateTime values.
+                    nSubDelimFactor = 0.0;
                     bOrdFactorsOk = true;
                 }
-                // ignore one of the above found values?
-                if ( !bAutoCalcStart ) {
-                    nLow = para.axisValueStart().doubleValue();
-                    bOrdFactorsOk = false;
-                }
-                if ( !bAutoCalcEnd ) {
-                    nHigh = para.axisValueEnd().doubleValue();
-                    bOrdFactorsOk = false;
-                }
 
-                if ( !bOrdFactorsOk ) {
+
+                if( !bOrdFactorsOk ) {
                     // adjust one or both of our limit values
                     // according to first two digits of (nHigh - nLow) delta
-                    double nDivisor;
-                    double nRound;
                     nDist = nHigh - nLow;
                     // replace nLow (or nHigh, resp.) by zero if NOT ALL OF
                     // our values are located outside of the 'max. empty
@@ -1263,133 +2648,261 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                     // that may to contain NO data entries)
                     int maxEmpty = para.axisMaxEmptyInnerSpan();
                     if( bAutoCalcStart ) {
-                    // qDebug("\nbAutoCalcStart:\n  nLow:  %f\n  nHigh: %f", nLow, nHigh );
+                        //qDebug("\nbAutoCalcStart:\n  nLow:  %f\n  nHigh: %f", nLow, nHigh );
                         if( 0.0 < nLow ) {
                             if(    maxEmpty == KDChartAxisParams::AXIS_IGNORE_EMPTY_INNER_SPAN
-                                || maxEmpty > ( nLow / nHigh * 100.0 ) )
-                               nLow = 0.0;
+                                   || maxEmpty > ( nLow / nHigh * 100.0 ) )
+                                nLow = 0.0;
                             else if( nDist / 100.0 < nLow )
                                 nLow -= nDist / 100.0; // shift lowest value
 
                         }
-                        else if( nDist / 100.0 < std::fabs( nLow ) )
+                        else if( nDist / 100.0 < fabs( nLow ) )
                             nLow -= nDist / 100.0; // shift lowest value
                         nDist = nHigh - nLow;
-                    // qDebug("* nLow:  %f\n  nHigh: %f", nLow, nHigh );
+                        // qDebug("* nLow:  %f\n  nHigh: %f", nLow, nHigh );
                     }
                     if( bAutoCalcEnd ) {
-                    // qDebug("\nbAutoCalcEnd:\n  nLow:  %f\n  nHigh: %f", nLow, nHigh );
+                        // qDebug("\nbAutoCalcEnd:\n  nLow:  %f\n  nHigh: %f", nLow, nHigh );
                         if( 0.0 > nHigh ) {
                             if(    maxEmpty == KDChartAxisParams::AXIS_IGNORE_EMPTY_INNER_SPAN
-                                || maxEmpty > ( nHigh / nLow * 100.0 ) )
+                                   || maxEmpty > ( nHigh / nLow * 100.0 ) )
                                 nHigh = 0.0;
                             else if( nDist / 100.0 > nHigh )
                                 nHigh += nDist / 100.0; // shift highest value
                         }
-                        else if( nDist / 100.0 < std::fabs( nHigh ) )
+                        else if( nDist / 100.0 < fabs( nHigh ) )
                             nHigh += nDist / 100.0; // shift highest value
                         nDist = nHigh - nLow;
-                    // qDebug("* nLow:  %f\n  nHigh: %f", nLow, nHigh );
+                        //qDebug("* nLow:  %f\n  nHigh: %f\n\n", nLow, nHigh );
                     }
+                }
+
+
+                if( isLogarithmic ){
+                    if( bIsDouble ) {
+                        //qDebug("\n[L-0] nLow: %f,  nHigh: %f,  nDelta: %f", nLow, nHigh, nDelta );
+                        nLow  = QMAX(log10( QMAX( nLow,  0.0 ) ), 0.0);
+                        nHigh = QMAX(log10( QMAX( nHigh, 0.0 ) ), 0.0);
+                        nDist = nHigh - nLow;
+                        nDelta = 1.0;
+                        nSubDelimFactor = 0.1;
+                        //qDebug("\n[L-1] nLow: %f,  nHigh: %f,  nDelta: %f", nLow, nHigh, nDelta );
+                        bOrdFactorsOk = true;
+                    }
+                }
+
+
+                if ( !bOrdFactorsOk ) {
+                    // adjust one or both of our limit values
+                    // according to first two digits of (nHigh - nLow) delta
+                    double nDivisor;
+                    double nRound;
+                    nDist = nHigh - nLow;
                     // find out factors and adjust nLow and nHigh
-                    orgLow = nLow;
+                    orgLow  = nLow;
                     orgHigh = nHigh;
-                    calculateOrdinateFactors(
-                        para, nDist, nDivisor, nRound,
-                        nDelta, nSubDelimFactor, nLow, nHigh );
+                    calculateOrdinateFactors( para, isLogarithmic,
+                                              nDist, nDivisor, nRound,
+                                              nDelta, nSubDelimFactor,
+                                              nLow, nHigh );
                     nLabels = params.roundVal( nDist / nDelta );
-                    /*
-                    qDebug("\n0.  nDist: %f\n    nHigh: %f\n    nLow %f",
-                    nDist, nHigh, nLow);
-                    qDebug("    nDelta: %f", nDelta);
-                    qDebug("    nRound: %f", nRound);
-                    qDebug("    nLabels: %u", nLabels);
-                    */
+
+                    //qDebug("\n0.  nOrgHigh: %f\n    nOrgLow:  %f",
+                    //       orgHigh, orgLow);
+                    //qDebug("\n    nDist:    %f\n    nHigh:    %f\n    nLow:     %f",
+                    //       nDist, nHigh, nLow);
+                    //qDebug("    nDelta: %f", nDelta);
+                    //qDebug("    nRound: %f", nRound);
+                    //qDebug("    nLabels: %u", nLabels);
+
                     if( para.axisSteadyValueCalc() ) {
                         ++nLabels;
                         // qDebug("*   nLabels: %u", nLabels );
                     }
                 }
-            }
 
-            // calculate the amount of nLabels to be written we could take
-            // based on the space we have for writing the label texts
-            if ( ! ( KDChartAxisParams::AXIS_LABELS_AUTO_DELTA
-                     == para.axisValueDelta() ) ) {
-                nDist = nHigh - nLow;
-                nDelta = para.axisValueDelta();
-                nLabels = params.roundVal( nDist / nDelta );
-                /*
-                qDebug("\nI nLow: %f\n  nHigh: %f\n  nDelta: %f\n  nLabels: %u",
-                        nLow, nHigh, nDelta, nLabels );
-                */
-                if( para.axisSteadyValueCalc() ) {
-                    ++nLabels;
-                    // qDebug("* nLabels: %u", nLabels );
-                }
-            }
 
-            double areaHeight = para.axisTrueAreaRect().height();
-            double nDivisor;
-            double nRound;
-            orgLow = nLow;
-            orgHigh = nHigh;
-            bool bTryNext = false;
-            while ( ( 2 < nLabels )
-                    && ( areaHeight < ( nTxtHeight * 1.5 ) * nLabels ) ) {
-                nDist = nHigh - nLow;
-                nLow = orgLow;
-                nHigh = orgHigh;
-                /*
-                qDebug("\n1.  nDist: %f\n  nLow: %f\n  nHigh: %f\n  nDelta: %f\n  nLabels: %u",
-                        nDist, nLow, nHigh, nDelta, nLabels );
-                */
-                calculateOrdinateFactors( para,
-                                          nDist, nDivisor, nRound,
-                                          nDelta,
-                                          nSubDelimFactor, nLow, nHigh,
-                                          bTryNext );
-                nLabels = params.roundVal( nDist / nDelta );
-                /*
-                qDebug("\n2.  nDist: %f\n+ nLow: %f\n  nHigh: %f\n  nDelta: %f\n  nLabels: %u",
-                        nDist, nLow, nHigh, nDelta, nLabels );
-                */
-                if( para.axisSteadyValueCalc() ) {
-                    ++nLabels;
-                    // qDebug("\nnLabels: %u", nLabels );
+                // calculate the amount of nLabels to be written we could take
+                // based on the space we have for writing the label texts
+                if( ! (    KDChartAxisParams::AXIS_LABELS_AUTO_DELTA
+                           == para.axisValueDelta() ) ){
+                    nDist = nHigh - nLow;
+                    nDelta = para.axisValueDelta();
+                    nLabels = params.roundVal( nDist / nDelta );
+
+                    //qDebug("\nI nLow: %f\n  nHigh: %f\n  nDelta: %f\n  nLabels: %u",
+                    //       nLow, nHigh, nDelta, nLabels );
+
+                    if( para.axisSteadyValueCalc() ) {
+                        ++nLabels;
+                        /*
+                          qDebug("* nLabels: %u", nLabels );
+                        */
+                    }
                 }
-                /*
-                qDebug("n.  nDist = nHigh - nLow: %f = %f - %f",nDist, nHigh, nLow);
-                qDebug("    nRound: %f", nRound);
-                */
-                bTryNext = true;
+
+                // make sure labels fit into available height, if vertical axis
+                if( bVertAxis ) {
+                    double areaHeight = para.axisTrueAreaRect().height();
+                    double nDivisor;
+                    double nRound;
+                    orgLow = nLow;
+                    orgHigh = nHigh;
+                    //qDebug("\ncalc ordinate 0.  nDist: %f\n  nLow: %f\n  nHigh: %f\n  nDelta: %f\n  nLabels: %u",
+                    //        nDist, nLow, nHigh, nDelta, nLabels );
+                    bool bTryNext = false;
+                    uint minLabels = para.axisSteadyValueCalc() ? 3 : 2;
+                    while ( ( minLabels < nLabels )
+                            && ( areaHeight < ( nTxtHeight * 1.5 ) * nLabels ) ) {
+                        nDist = nHigh - nLow;
+                        nLow = orgLow;
+                        nHigh = orgHigh;
+                        //qDebug("\n=============================================================================\ncalc ordinate 1.  nDist: %f\n  nLow: %f\n  nHigh: %f\n  nDelta: %f\n  nLabels: %u",
+                        //        nDist, nLow, nHigh, nDelta, nLabels );
+                        calculateOrdinateFactors( para, isLogarithmic,
+                                                  nDist, nDivisor, nRound,
+                                                  nDelta,
+                                                  nSubDelimFactor, nLow, nHigh,
+                                                  bTryNext );
+                        nLabels = params.roundVal( nDist / nDelta );
+                        //qDebug("\ncalc ordinate 2.  nDist: %f\n+ nLow: %f\n  nHigh: %f\n  nDelta: %f\n  nLabels: %u",
+                        //        nDist, nLow, nHigh, nDelta, nLabels );
+                        if( para.axisSteadyValueCalc() ) {
+                            ++nLabels;
+                            //    qDebug("\nnLabels: %u\n", nLabels );
+                        }
+                        //qDebug("calc ordinate n.  nDist = nHigh - nLow: %f = %f - %f",nDist, nHigh, nLow);
+                        //qDebug("    nRound: %f\n", nRound);
+                        bTryNext = true;
+                    }
+                }
             }
 
             // finally we can build the texts
-            int trueBehindComma = -1;
-            double nVal = nLow;
-            for ( uint i = 0; i < nLabels; ++i ) {
-                labelTexts.append( trunctateBehindComma( nVal,
-                                   behindComma,
-                                   nDelta,
-                                   trueBehindComma ) );
-                nVal += nDelta;
-            }
+            if( bIsDouble ) {
+                int trueBehindComma = -1;
+                double nVal = nLow;
+                for ( uint i = 0; i < nLabels; ++i ) {
+                    if( isLogarithmic )
+                        labelTexts.append( trunctateBehindComma( pow(10,nVal),
+                                                                 behindComma,
+                                                                 nDelta,
+                                                                 trueBehindComma ) );
+                    else
+                        labelTexts.append( trunctateBehindComma( nVal,
+                                                                 behindComma,
+                                                                 nDelta,
+                                                                 trueBehindComma ) );
+                    nVal += nDelta;
+                }
 
-            // save our true Low and High value
-            if ( para.axisSteadyValueCalc() ) {
-                nHigh = nVal - nDelta;
+                // save our true Low and High value
+                //qDebug(para.axisSteadyValueCalc()?"\ntrue " : "\nfalse");
+                //qDebug("nVal: %f,  nDelta: %f", nVal, nDelta );
+                if ( para.axisSteadyValueCalc() ) {
+                    nHigh = nVal - nDelta;
+                }
+                ( ( KDChartAxisParams& ) para ).setTrueAxisLowHighDelta( nLow, nHigh, nDelta );
+                //qDebug("[Z] nLow: %f,  nHigh: %f,  nDelta: %f", nLow, nHigh, nDelta );
+
+            } else {
+                bool goDown = dtLow > dtHigh;
+                int mult = goDown ? -1 : 1;
+                QDateTime dt( dtLow );
+                nLabels = 0;
+                /*
+                  qDebug("dtLow:  ");
+                  qDebug(dtLow.toString(  Qt::ISODate ));
+                  qDebug("dtHigh: ");
+                  qDebug(dtHigh.toString( Qt::ISODate ));
+                */
+                bool bDone=false;
+                while( !bDone ) {
+                    /*
+                      qDebug("dtLow: %i %i %i    %i:%i:%i",
+                      dtLow.date().year(),
+                      dtLow.date().month(),
+                      dtLow.date().day(),
+                      dtLow.time().hour(),
+                      dtLow.time().minute(),
+                      dtLow.time().second());
+                      qDebug("dtHigh: %i %i %i    %i:%i:%i",
+                      dtHigh.date().year(),
+                      dtHigh.date().month(),
+                      dtHigh.date().day(),
+                      dtHigh.time().hour(),
+                      dtHigh.time().minute(),
+                      dtHigh.time().second());
+                      qDebug("dt: %i %i %i    %i:%i:%i",
+                      dt.date().year(),
+                      dt.date().month(),
+                      dt.date().day(),
+                      dt.time().hour(),
+                      dt.time().minute(),
+                      dt.time().second());
+                    */
+                    ++nLabels;
+                    if( autoDtLabels )
+                        labelTexts.append( "x" );
+                    else
+#if COMPAT_QT_VERSION >= 0x030000
+                        labelTexts.append( dt.toString( Qt::ISODate ) );
+#else
+                    labelTexts.append( dateTimeToString( dt ) );
+#endif
+                    bDone = (goDown ? (dt < dtLow ) : (dt > dtHigh));
+                    /*if( bDone ){
+                      dtHigh = dt;
+                      }else*/{
+                        switch( dtDeltaScale ) {
+                        case KDChartAxisParams::ValueScaleSecond:
+                            dtAddSecs( dt, 1 * mult, dt );
+                            break;
+                        case KDChartAxisParams::ValueScaleMinute:
+                            dtAddSecs( dt, 60 * mult, dt );
+                            break;
+                        case KDChartAxisParams::ValueScaleHour:
+                            dtAddSecs( dt, 3600 * mult, dt );
+                            break;
+                        case KDChartAxisParams::ValueScaleDay:
+                            dtAddDays( dt, 1 * mult, dt );
+                            break;
+                        case KDChartAxisParams::ValueScaleWeek:
+                            dtAddDays( dt, 7 * mult, dt );
+                            break;
+                        case KDChartAxisParams::ValueScaleMonth:
+                            dtAddMonths( dt,1 * mult, dt );
+                            break;
+                        case KDChartAxisParams::ValueScaleQuarter:
+                            dtAddMonths( dt,3 * mult, dt );
+                            break;
+                        case KDChartAxisParams::ValueScaleYear:
+                            dtAddYears( dt, 1 * mult, dt );
+                            break;
+                        default:
+                            dtAddDays( dt, 1 * mult, dt );
+                            break;
+                        }
+                    }
+                }
+                //if( autoDtLabels )
+                //    labelTexts.append( "x" );
+                ( ( KDChartAxisParams& ) para ).setTrueAxisDtLowHighDeltaScale(
+                    dtLow, dtHigh,
+                    dtDeltaScale );
+                // note: pDelimDelta will be calculated below,
+                //       look for "COMMOM CALC OF NLABELS, DELIM DELTA..."
             }
-            ( ( KDChartAxisParams& ) para ).setTrueAxisLowHighDelta(
-                                                nLow, nHigh, nDelta );
-            // qDebug("\n[Z] nLow: %f,  nHigh: %f,  nDelta: %f", nLow, nHigh, nDelta );
             bDone = true;
         }
 
         // let's generate some strings
         if ( !bDone ) {
-            // default scenario
-            uint count = data.usedCols() ? data.usedCols() : 1;
+            // default scenario for abscissa axes
+            uint count = bStatistical
+                         ? (data.usedRows() ? data.usedRows() : 1)
+                         : (data.usedCols() ? data.usedCols() : 1);
             KDChartData start( 1.0 );
             double delta( 1.0 );
             KDChartData finis( start.doubleValue()
@@ -1400,7 +2913,6 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                 delta = para.axisValueDelta();
                 deltaIsAuto = false;
             }
-
             if ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() ) {
                 if ( ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() ) ) {
                     finis = start.doubleValue()
@@ -1437,8 +2949,8 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                                       - start.doubleValue() ) / count;
                         } else {
                             count = static_cast < uint > (
-                                        ( finis.doubleValue()
-                                          - start.doubleValue() ) / delta );
+                                ( finis.doubleValue()
+                                  - start.doubleValue() ) / delta );
                         }
                     } else {
                         // auto-rows like
@@ -1489,9 +3001,9 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                     font.setPointSizeFloat( nTxtHeight );
                 QFontMetrics fm( font );
                 if ( fm.width( prefix +
-                               QString::number( -std::fabs( ( s + f ) / 2.0 + delta ),
+                               QString::number( -fabs( ( s + f ) / 2.0 + delta ),
                                                 'f', precis ) )
-                        > pTextsW ) {
+                     > pTextsW ) {
                     prefix = "";
                     postfix = "";
                 }
@@ -1511,7 +3023,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                 calculateBasicTextFactors( nTxtHeight, para,
                                            averageValueP1000,
                                            basicPos, orig, delimLen,
-                                           data.usedCols(),
+                                           count,
                                            // start of return parameters
                                            pDelimDelta,
                                            pTextsX, pTextsY, pTextsW, pTextsH,
@@ -1520,43 +3032,50 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
                 if ( para.axisLabelsFontUseRelSize() )
                     font.setPointSizeFloat( nTxtHeight );
                 QFontMetrics fm( font );
-                if ( fm.width( prefix + QString::number( data.usedCols() - 1 ) )
-                        > pTextsW ) {
+                if ( fm.width( prefix + QString::number( count - 1 ) )
+                     > pTextsW ) {
                     prefix = "";
                     postfix = "";
                 }
 
                 // now transfer the strings into labelTexts
-                for ( uint col = 1; col <= data.usedCols(); ++col )
+                for ( uint i = 1; i <= count; ++i )
                     labelTexts.append(
-                        prefix + QString::number( col ) + postfix );
+                        prefix + QString::number( i ) + postfix );
             }
         }
     }
 
+    /*
+      finishing: COMMOM CALC OF NLABELS, DELIM DELTA...
+    */
     uint nLabels = labelTexts.count()
                    ? labelTexts.count()
                    : 0;
-
-    calculateBasicTextFactors( nTxtHeight, para, averageValueP1000,
-                               basicPos, orig, delimLen, nLabels,
-                               // start of return parameters
-                               pDelimDelta,
-                               pTextsX, pTextsY, pTextsW, pTextsH,
-                               textAlign );
-
-
-
-
-
     ( ( KDChartAxisParams& ) para ).setAxisLabelTexts( &labelTexts );
+
+    if( !adjustTheValues ){
+
+        calculateBasicTextFactors( nTxtHeight, para, averageValueP1000,
+                                   basicPos, orig, delimLen, nLabels,
+                                   // start of return parameters
+                                   pDelimDelta,
+                                   pTextsX, pTextsY, pTextsW, pTextsH,
+                                   textAlign );
+    }
+
+    ( ( KDChartAxisParams& ) para ).setTrueAxisDeltaPixels( pDelimDelta );
+    //qDebug("\nsetting:   para.trueAxisLow() %f    para.trueAxisHigh() %f",para.trueAxisLow(),para.trueAxisHigh());
+    //qDebug("\npDelimDelta: %f", pDelimDelta );
+
     /*
-    	qDebug( "Found label texts:" );
-        for ( QStringList::Iterator it = labelTexts.begin();
-                                it != labelTexts.end(); ++it )
-            qDebug( ">>>  %s", (*it).latin1() );
-        qDebug( "\n" );
+      qDebug( "Found label texts:" );
+      for ( QStringList::Iterator it = labelTexts.begin();
+      it != labelTexts.end(); ++it )
+      qDebug( ">>>  %s", (*it).latin1() );
+      qDebug( "\n" );
     */
+//qDebug("\nleaving KDChartAxesPainter::calculateLabelTexts() :   nTxtHeight: "+QString::number(nTxtHeight));
 }
 
 
@@ -1565,111 +3084,110 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
    by function \c calculateLabelTexts()
 
    \note When calling this function the actual area size for this
-axis must be set, this means you may only call it when
-\c KDChartPainter::setupGeometry() has been called before.
+   axis must be set, this means you may only call it when
+   \c KDChartPainter::setupGeometry() has been called before.
 
    \param nTxtHeight the text height to be used for calculating
-    the return values
+   the return values
    \param para the KDChartAxisParams that were specified for this axis
    \param averageValueP1000 (average height+width of the prtbl. area) / 1000
    \param basicPos the basic axis position returned by
-    KDChartAxisParams::basicAxisPos()
+   KDChartAxisParams::basicAxisPos()
    \param orig the axis start point
    \param delimLen the length of one delimiter mark
    \param nLabels the number of labels to be shown at this axis
    \param (all others) the reference parameters to be returned
-    by this function
+   by this function
 */
 /**** static ****/
 void KDChartAxesPainter::calculateBasicTextFactors( double nTxtHeight,
-        const KDChartAxisParams& para,
-	double /*averageValueP1000*/,
-        KDChartAxisParams::AxisPos basicPos,
-        const QPoint& orig,
-        double delimLen,
-        uint nLabels,
-        // start of return params
-        double& pDelimDelta,
-        double& pTextsX,
-        double& pTextsY,
-        double& pTextsW,
-        double& pTextsH,
-        int& textAlign )
+                                                    const KDChartAxisParams& para,
+                                                    double /*averageValueP1000*/,
+                                                    KDChartAxisParams::AxisPos basicPos,
+                                                    const QPoint& orig,
+                                                    double delimLen,
+                                                    uint nLabels,
+                                                    // start of return params
+                                                    double& pDelimDelta,
+                                                    double& pTextsX,
+                                                    double& pTextsY,
+                                                    double& pTextsW,
+                                                    double& pTextsH,
+                                                    int& textAlign )
 {
     switch ( basicPos ) {
     case KDChartAxisParams::AxisPosBottom: {
-            bool bTouchEdges = para.axisLabelsTouchEdges();
-            double wid = para.axisTrueAreaRect().width();
-            double divi = bTouchEdges
-                          ? ( 1 < nLabels ? nLabels - 1 : 1 )
-              : ( nLabels ? nLabels : 10 );
-            pDelimDelta = wid / divi;
+        bool bTouchEdges = para.axisLabelsTouchEdges();
+        double wid = para.axisTrueAreaRect().width();
+        double divi = bTouchEdges
+                      ? ( 1 < nLabels ? nLabels - 1 : 1 )
+                      : ( nLabels ? nLabels : 10 );
+        pDelimDelta = wid / divi;
 
-            pTextsW = pDelimDelta - 4.0;
-            pTextsX = orig.x() + 2.0
-                      - ( bTouchEdges
-                          ? pDelimDelta / 2.0
-                          : 0.0 );
-            pTextsH = para.axisTrueAreaRect().height() - delimLen * 1.33;
-            pTextsY = orig.y()
-                      + delimLen * 1.33;
-            textAlign = Qt::AlignHCenter | Qt::AlignTop;
-            /*
-            qDebug("pTextsW %f    wid %f    nLabels %u", pTextsW, wid, nLabels );
-            */
-
-        }
+        pTextsW = pDelimDelta - 4.0;
+        pTextsX = orig.x() + 2.0
+                  - ( bTouchEdges
+                      ? pDelimDelta / 2.0
+                      : 0.0 );
+        pTextsH = para.axisTrueAreaRect().height() - delimLen * 1.33;
+        pTextsY = orig.y()
+                  + delimLen * 1.33;
+        textAlign = Qt::AlignHCenter | Qt::AlignTop;
+        /*
+          qDebug("pTextsW %f    wid %f    nLabels %u", pTextsW, wid, nLabels );
+        */
+    }
         break;
     case KDChartAxisParams::AxisPosLeft: {
-            double hig = para.axisTrueAreaRect().height();
-            pDelimDelta = hig / ( 1 < nLabels ? nLabels - 1 : 1 );
+        double hig = para.axisTrueAreaRect().height();
+        pDelimDelta = hig / ( 1 < nLabels ? nLabels - 1 : 1 );
 
-            pTextsX = para.axisTrueAreaRect().bottomLeft().x()
-                      + 2.0;
-            pTextsY = orig.y() - nTxtHeight / 2;
-            pTextsW = para.axisTrueAreaRect().width()
-                      - delimLen * 1.33 - 2.0;
-            pTextsH = nTxtHeight;
-            textAlign = Qt::AlignRight | Qt::AlignVCenter;
-        }
+        pTextsX = para.axisTrueAreaRect().bottomLeft().x()
+                  + 2.0;
+        pTextsY = orig.y() - nTxtHeight / 2;
+        pTextsW = para.axisTrueAreaRect().width()
+                  - delimLen * 1.33 - 2.0;
+        pTextsH = nTxtHeight;
+        textAlign = Qt::AlignRight | Qt::AlignVCenter;
+    }
         break;
     case KDChartAxisParams::AxisPosTop: {
-            bool bTouchEdges = para.axisLabelsTouchEdges();
-            double wid = para.axisTrueAreaRect().width();
-            double divi = bTouchEdges
-                          ? ( 1 < nLabels ? nLabels - 1 : 1 )
-              : ( nLabels ? nLabels : 10 );
-            pDelimDelta = wid / divi;
+        bool bTouchEdges = para.axisLabelsTouchEdges();
+        double wid = para.axisTrueAreaRect().width();
+        double divi = bTouchEdges
+                      ? ( 1 < nLabels ? nLabels - 1 : 1 )
+                      : ( nLabels ? nLabels : 10 );
+        pDelimDelta = wid / divi;
 
-            pTextsW = pDelimDelta - 4.0;
-            pDelimDelta = wid / divi;
+        pTextsW = pDelimDelta - 4.0;
+        pDelimDelta = wid / divi;
 
-            pTextsX = orig.x() + 2.0
-                      - ( bTouchEdges
-                          ? pDelimDelta / 2.0
-                          : 0.0 );
-            pTextsH = para.axisTrueAreaRect().height() - delimLen * 1.33;
-            pTextsY = para.axisTrueAreaRect().topLeft().y();
-            textAlign = Qt::AlignHCenter | Qt::AlignBottom;
-        }
+        pTextsX = orig.x() + 2.0
+                  - ( bTouchEdges
+                      ? pDelimDelta / 2.0
+                      : 0.0 );
+        pTextsH = para.axisTrueAreaRect().height() - delimLen * 1.33;
+        pTextsY = para.axisTrueAreaRect().topLeft().y();
+        textAlign = Qt::AlignHCenter | Qt::AlignBottom;
+    }
         break;
     case KDChartAxisParams::AxisPosRight: {
-            double hig = para.axisTrueAreaRect().height();
-            pDelimDelta = hig / ( 1 < nLabels ? nLabels - 1 : 1 );
+        double hig = para.axisTrueAreaRect().height();
+        pDelimDelta = hig / ( 1 < nLabels ? nLabels - 1 : 1 );
 
-            pTextsX = para.axisTrueAreaRect().bottomLeft().x()
-                      + delimLen * 1.33;
-            pTextsY = orig.y() - nTxtHeight / 2;
-            pTextsW = para.axisTrueAreaRect().width()
-                      - delimLen * 1.33 - 2.0;
-            pTextsH = nTxtHeight;
-            textAlign = Qt::AlignLeft | Qt::AlignVCenter;
-        }
+        pTextsX = para.axisTrueAreaRect().bottomLeft().x()
+                  + delimLen * 1.33;
+        pTextsY = orig.y() - nTxtHeight / 2;
+        pTextsW = para.axisTrueAreaRect().width()
+                  - delimLen * 1.33 - 2.0;
+        pTextsH = nTxtHeight;
+        textAlign = Qt::AlignLeft | Qt::AlignVCenter;
+    }
         break;
     default: {
-            qDebug( "IMPLEMENTATION ERROR: KDChartAxesPainter::calculateBasicTextFactors() unhandled enum value." );
-            // NOOP since the 'basicPos' does not support more that these four values.
-        }
+        qDebug( "IMPLEMENTATION ERROR: KDChartAxesPainter::calculateBasicTextFactors() unhandled enum value." );
+        // NOOP since the 'basicPos' does not support more that these four values.
+    }
         break;
     }
 }
@@ -1689,14 +3207,14 @@ void KDChartAxesPainter::calculateBasicTextFactors( double nTxtHeight,
    \note This function is reserved for internal use.
 */
 QString KDChartAxesPainter::trunctateBehindComma( const double nVal,
-        const int    behindComma,
-        const double nDelta,
-        int& trueBehindComma )
+                                                  const int    behindComma,
+                                                  const double nDelta,
+                                                  int& trueBehindComma )
 {
     QString sVal;
     sVal.setNum( nVal, 'f',   KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS == behindComma
-                            ? 10
-                            : behindComma );
+                 ? 10
+                 : behindComma );
     if ( KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS == behindComma ) {
         int comma = sVal.find( '.' );
         if ( -1 < comma ) {
@@ -1741,6 +3259,7 @@ QString KDChartAxesPainter::trunctateBehindComma( const double nVal,
 */
 void KDChartAxesPainter::calculateOrdinateFactors(
     const KDChartAxisParams& para,
+    bool isLogarithmic,
     double& nDist,
     double& nDivisor,
     double& nRound,
@@ -1811,35 +3330,60 @@ void KDChartAxesPainter::calculateOrdinateFactors(
     }
 
     nDelta = nRound * nDivisor;
+
+    // make sure its a whole number > 0 if its a log axis. Just round up.
+    if( isLogarithmic )
+        nDelta = static_cast < int > ( nDelta ) < nDelta
+                 ? static_cast < int > ( nDelta ) + 1
+                 : static_cast < int > ( nDelta );
+
+    bool bInvertedAxis = ( 0.0 > nDist );
+    if( bInvertedAxis )
+        nDelta *= -1.0;
+
     /*
-    qDebug("  n D i s t       :  %f", nDist   );
-    qDebug("  n D i v i s o r :  %f", nDivisor);
-    qDebug("  n R o u n d     :  %f", nRound  );
-    qDebug("  n D e l t a     :  %f", nDelta  );
-    qDebug("  nHigh           :  %f", nHigh   );
-    qDebug("  nLow            :  %f", nLow    );
+      qDebug("  n D i s t       :  %f", nDist   );
+      qDebug("  n D i v i s o r :  %f", nDivisor);
+      qDebug("  n R o u n d     :  %f", nRound  );
+      qDebug("  n D e l t a     :  %f", nDelta  );
+      qDebug("  nHigh           :  %f", nHigh   );
+      qDebug("  nLow            :  %f", nLow    );
     */
-    if ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() ) {
+    if( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() ) {
         double orgLow( nLow );
         modf( nLow / nDelta, &nLow );
         nLow *= nDelta;
-        if ( nLow > orgLow )
-            nLow -= nDelta;
-        if ( 0.0 < nLow && 0.0 >= orgLow )
-            nLow = 0.0;
+        if( bInvertedAxis ){
+            if ( nLow < orgLow )
+                nLow += nDelta;
+            if ( 0.0 > nLow && 0.0 <= orgLow )
+                nLow = 0.0;
+        }else{
+            if ( nLow > orgLow )
+                nLow -= nDelta;
+            if ( 0.0 < nLow && 0.0 >= orgLow )
+                nLow = 0.0;
+        }
     }
     if ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() ) {
         double orgHigh( nHigh );
         modf( nHigh / nDelta, &nHigh );
         nHigh *= nDelta;
-        if ( nHigh < orgHigh )
-            nHigh += nDelta;
-        if ( 0.0 > nHigh && 0.0 <= orgHigh )
-            nHigh = 0.0;
+        if( bInvertedAxis ){
+            if ( nHigh > orgHigh )
+                nHigh -= nDelta;
+            if ( 0.0 < nHigh && 0.0 >= orgHigh )
+                nHigh = 0.0;
+        }else{
+            if ( nHigh < orgHigh )
+                nHigh += nDelta;
+            if ( 0.0 > nHigh && 0.0 <= orgHigh )
+                nHigh = 0.0;
+        }
     }
     /*
-    qDebug("  n H i g h       :  %f", nHigh   );
-    qDebug("  n L o w         :  %f\n", nLow    );
+      qDebug("  n H i g h       :  %f", nHigh   );
+      qDebug("  n L o w         :  %f\n\n", nLow    );
     */
     if ( 1.0 == nRound )
         nSubDelimFactor = 0.5;
@@ -1869,11 +3413,560 @@ void KDChartAxesPainter::saveDrawLine( QPainter& painter,
 {
     const QPen oldPen( painter.pen() );
     bool bNice =    ( pen.color() == oldPen.color() )
-                 && ( pen.width() == oldPen.width() )
-                 && ( pen.style() == oldPen.style() );
+                    && ( pen.width() == oldPen.width() )
+                    && ( pen.style() == oldPen.style() );
     if ( !bNice )
         painter.setPen( pen );
     painter.drawLine( pA, pZ );
     if ( !bNice )
         painter.setPen( oldPen );
+}
+
+/**** static ****/
+void KDChartAxesPainter::dtAddSecs( const QDateTime& org, const int secs, QDateTime& dest )
+{
+    //qDebug("entering KDChartAxesPainter::dtAddSecs() ..");
+    int s = org.time().second();
+    int m = org.time().minute();
+    int h = org.time().hour();
+    int days = 0;
+    if( -1 < secs ){
+        int mins = (s + secs) / 60;
+        if( 0 == mins )
+            s += secs;
+        else{
+            s = (s + secs) % 60;
+            int hours = (m + mins) / 60;
+            if( 0 == hours )
+                m += mins;
+            else{
+                m = (m + mins) % 60;
+                days = (h + hours) / 24;
+                if( 0 == days )
+                    h += hours;
+                else{
+                    h = (h + hours) % 24;
+                }
+            }
+        }
+    }
+    dest.setTime( QTime(h,m,s) );
+    dest.setDate( org.date() );
+    if( days )
+        dtAddDays( dest, days, dest );
+    //qDebug(".. KDChartAxesPainter::dtAddSecs() done.");
+}
+
+/**** static ****/
+void KDChartAxesPainter::dtAddDays( const QDateTime& org, const int days, QDateTime& dest )
+{
+    //qDebug("entering KDChartAxesPainter::dtAddDays() ..");
+    int d = org.date().day();
+    int m = org.date().month();
+    int y = org.date().year();
+    int dd = (-1 < days) ? 1 : -1;
+    int di = 0;
+    while( di != days ){
+        d += dd;
+        // underrunning day?
+        if( 1 > d ){
+            if( 1 < m ){
+                --m;
+                d = QDate( y,m,1 ).daysInMonth();
+            }
+            else{
+                --y;
+                m = 12;
+                d = 31;
+            }
+            // overrunning day?
+        }else if( QDate( y,m,1 ).daysInMonth() < d ){
+            if( 12 > m )
+                ++m;
+            else{
+                ++y;
+                m = 1;
+            }
+            d = 1;
+        }
+        di += dd;
+    }
+    dest = QDateTime( QDate( y,m,d ), org.time() );
+    //qDebug(".. KDChartAxesPainter::dtAddDays() done.");
+}
+
+/**** static ****/
+void KDChartAxesPainter::dtAddMonths( const QDateTime& org, const int months, QDateTime& dest )
+{
+    //qDebug("entering KDChartAxesPainter::dtAddMonths() ..");
+    int d = org.date().day();
+    int m = org.date().month();
+    int y = org.date().year();
+    int md = (-1 < months) ? 1 : -1;
+    int mi = 0;
+    while( mi != months ){
+        m += md;
+        if( 1 > m ){
+            --y;
+            m = 12;
+        }else if( 12 < m ){
+            ++y;
+            m = 1;
+        }
+        mi += md;
+    }
+    // QMIN takes care for intercalary day
+    dest = QDateTime( QDate( y,m,QMIN( d, QDate( y,m,1 ).daysInMonth() ) ),
+                      org.time() );
+    //qDebug(".. KDChartAxesPainter::dtAddMonths() done.");
+}
+
+/**** static ****/
+void KDChartAxesPainter::dtAddYears( const QDateTime& org, const int years, QDateTime& dest )
+{
+    //qDebug("entering KDChartAxesPainter::dtAddYears() ..");
+    int d = org.date().day();
+    int m = org.date().month();
+    int y = org.date().year() + years;
+    dest.setTime( org.time() );
+    // QMIN takes care for intercalary day
+    dest = QDateTime( QDate( y,m,QMIN( d, QDate( y,m,d ).daysInMonth() ) ),
+                      org.time() );
+    //qDebug(".. KDChartAxesPainter::dtAddYears() done.");
+}
+
+
+
+void KDChartAxesPainter::calculateAbscissaInfos( const KDChartParams& params,
+                                                 const KDChartTableDataBase& data,
+                                                 uint datasetStart,
+                                                 uint datasetEnd,
+                                                 double logWidth,
+                                                 const QRect& dataRect,
+                                                 abscissaInfos& infos )
+{
+    if( params.axisParams( KDChartAxisParams::AxisPosBottom ).axisVisible()
+        && ( KDChartAxisParams::AxisTypeUnknown
+             != params.axisParams( KDChartAxisParams::AxisPosBottom ).axisType() ) )
+        infos.abscissaPara = &params.axisParams( KDChartAxisParams::AxisPosBottom );
+    else
+        if( params.axisParams( KDChartAxisParams::AxisPosBottom2 ).axisVisible()
+            && ( KDChartAxisParams::AxisTypeUnknown
+                 != params.axisParams( KDChartAxisParams::AxisPosBottom2 ).axisType() ) )
+            infos.abscissaPara = &params.axisParams( KDChartAxisParams::AxisPosBottom2 );
+        else
+            if( params.axisParams( KDChartAxisParams::AxisPosTop ).axisVisible()
+                && ( KDChartAxisParams::AxisTypeUnknown
+                     != params.axisParams( KDChartAxisParams::AxisPosTop ).axisType() ) )
+                infos.abscissaPara = &params.axisParams( KDChartAxisParams::AxisPosTop );
+            else
+                if( params.axisParams( KDChartAxisParams::AxisPosTop2 ).axisVisible()
+                    && ( KDChartAxisParams::AxisTypeUnknown
+                         != params.axisParams( KDChartAxisParams::AxisPosTop2 ).axisType() ) )
+                    infos.abscissaPara = &params.axisParams( KDChartAxisParams::AxisPosTop2 );
+                else
+                    // default is bottom axis:
+                    infos.abscissaPara = &params.axisParams( KDChartAxisParams::AxisPosBottom );
+
+    if( infos.abscissaPara->axisLabelsTouchEdges() )
+        infos.bCenterThePoints = false;
+
+    infos.bAbscissaIsLogarithmic
+        = KDChartAxisParams::AxisCalcLogarithmic == infos.abscissaPara->axisCalcMode();
+
+
+    // Number of values: If -1, use all values, otherwise use the
+    // specified number of values.
+    infos.numValues = 0;
+    if ( params.numValues() > -1 )
+        infos.numValues = params.numValues();
+    else
+        infos.numValues = data.usedCols();
+
+    KDChartData::ValueType type2Ref = KDChartData::NoValue;
+    infos.bCellsHaveSeveralCoordinates =
+        data.cellsHaveSeveralCoordinates( datasetStart, datasetEnd,
+                                          &type2Ref );
+
+    infos.numLabels = (infos.abscissaPara &&
+                       infos.abscissaPara->axisLabelTexts())
+                      ? infos.abscissaPara->axisLabelTexts()->count()
+                      : infos.numValues;
+    if( 0 >= infos.numLabels )
+        infos.numLabels = 1;
+
+    infos.bAbscissaHasTrueAxisValues =
+        infos.abscissaPara && (0.0 != infos.abscissaPara->trueAxisDelta());
+    infos.abscissaStart = infos.bAbscissaHasTrueAxisValues
+                          ? infos.abscissaPara->trueAxisLow()
+                          : 0.0;
+    infos.abscissaEnd   = infos.bAbscissaHasTrueAxisValues
+                          ? infos.abscissaPara->trueAxisHigh()
+                          : 1.0 * (infos.numLabels - 1);
+    infos.abscissaSpan  = fabs( infos.abscissaEnd - infos.abscissaStart );
+    infos.abscissaDelta = infos.bAbscissaHasTrueAxisValues
+                          ? infos.abscissaPara->trueAxisDelta()
+                          : (   ( 0.0 != infos.abscissaSpan  )
+                                ? ( infos.abscissaSpan / infos.numLabels )
+                                : infos.abscissaSpan );
+
+    //qDebug( abscissaHasTrueAxisValues ? "abscissaHasTrueAxisValues =  TRUE" : "abscissaHasTrueAxisValues = FALSE");
+    //qDebug( "abscissaDelta = %f", abscissaDelta);
+
+    infos.bAbscissaHasTrueAxisDtValues =
+        (KDChartData::DateTime == type2Ref) &&
+        infos.abscissaPara &&
+        infos.abscissaPara->trueAxisDtLow().isValid();
+    if( infos.bAbscissaHasTrueAxisDtValues ){
+        infos.numLabels = 200;
+        infos.bCenterThePoints = false;
+    }
+
+    infos.dtLowPos = infos.bAbscissaHasTrueAxisDtValues
+                     ? infos.abscissaPara->axisDtLowPosX() - dataRect.x()
+                     : 0.0;
+    infos.dtHighPos = infos.bAbscissaHasTrueAxisDtValues
+                      ? infos.abscissaPara->axisDtHighPosX() - dataRect.x()
+                      : logWidth;
+    infos.abscissaDtStart = infos.bAbscissaHasTrueAxisDtValues
+                            ? infos.abscissaPara->trueAxisDtLow()
+                            : QDateTime();
+    infos.abscissaDtEnd = infos.bAbscissaHasTrueAxisDtValues
+                          ? infos.abscissaPara->trueAxisDtHigh()
+                          : QDateTime();
+    infos.bScaleLessThanDay = ( infos.bAbscissaHasTrueAxisDtValues
+                                ? infos.abscissaPara->trueAxisDtDeltaScale()
+                                : KDChartAxisParams::ValueScaleDay )
+                              < KDChartAxisParams::ValueScaleDay;
+    if( infos.bAbscissaHasTrueAxisDtValues ){
+        if( infos.bScaleLessThanDay  ){
+            infos.abscissaDtSpan = infos.abscissaDtStart.secsTo( infos.abscissaDtEnd );
+            //if( abscissaDtEnd.time().msec() )
+            //    ++abscissaDtSpan += abscissaDtEnd.time().msec() / 1000.0;
+        }
+        else{
+            infos.abscissaDtSpan = infos.abscissaDtStart.daysTo( infos.abscissaDtEnd );
+            //if( abscissaDtEnd.time().msec() )
+            //    abscissaDtSpan += abscissaDtEnd.time().msec()  / (86400.0 * 1000.0);
+            if( infos.abscissaDtEnd.time().second() )
+                infos.abscissaDtSpan += infos.abscissaDtEnd.time().second() / 86400.0;
+            if( infos.abscissaDtEnd.time().minute() )
+                infos.abscissaDtSpan += infos.abscissaDtEnd.time().minute() / 1440.0;
+            if( infos.abscissaDtEnd.time().hour() )
+                infos.abscissaDtSpan += infos.abscissaDtEnd.time().hour()   / 24.0;
+        }
+    }else
+        infos.abscissaDtSpan = 10.0;
+    if( 0 == infos.abscissaDtSpan || 0.0 == infos.abscissaDtSpan )
+        infos.abscissaDtSpan = 1.0;
+    infos.abscissaDtPixelsPerScaleUnit = (infos.dtHighPos - infos.dtLowPos) / infos.abscissaDtSpan;
+    /*
+      qDebug("\n\nabscissaDtStart: %i %i %i    %i:%i:%i",
+      abscissaDtStart.date().year(),
+      abscissaDtStart.date().month(),
+      abscissaDtStart.date().day(),
+      abscissaDtStart.time().hour(),
+      abscissaDtStart.time().minute(),
+      abscissaDtStart.time().second());
+      qDebug("abscissaDtEnd: %i %i %i    %i:%i:%i",
+      abscissaDtEnd.date().year(),
+      abscissaDtEnd.date().month(),
+      abscissaDtEnd.date().day(),
+      abscissaDtEnd.time().hour(),
+      abscissaDtEnd.time().minute(),
+      abscissaDtEnd.time().second());
+      qDebug("dtLowPos:  %f", dtLowPos);
+      qDebug("dtHighPos: %f", dtHighPos);
+      qDebug("bScaleLessThanDay: %b", bScaleLessThanDay);
+      qDebug("abscissaDtSpan: %f", abscissaDtSpan);
+      qDebug("abscissaDtPixelsPerScaleUnit:    %f\n--------------------------------------------", abscissaDtPixelsPerScaleUnit);
+    */
+    if( infos.bAbscissaHasTrueAxisDtValues )
+        infos.abscissaDelta = 20.0;
+
+
+    infos.pointDist
+        = ( infos.abscissaPara && (0.0 != infos.abscissaPara->trueAxisDeltaPixels()) )
+        ? infos.abscissaPara->trueAxisDeltaPixels()
+        : ( logWidth /
+            (
+                (1 > ((double)(infos.numLabels) - (infos.bCenterThePoints ? 0.0 : 1.0)))
+                ? ((double)(infos.numLabels) - (infos.bCenterThePoints ? 0.0 : 1.0))
+                : 1 ) );
+
+    infos.abscissaPixelsPerUnit = ( 0.0 != infos.abscissaDelta  )
+                                  ? ( infos.pointDist / infos.abscissaDelta )
+                                  : infos.pointDist;
+
+    //const double infos.abscissaZeroPos2 = -1.0 * infos.abscissaPixelsPerUnit * infos.abscissaStart;
+    infos.abscissaZeroPos = infos.abscissaPara->axisZeroLineStartX() - dataRect.x();
+    //qDebug("abscissaZeroPos %f    abscissaZeroPos2 %f",abscissaZeroPos,abscissaZeroPos2);
+
+    /*
+      qDebug(abscissaPara ?
+      "\nabscissaPara: OK" :
+      "\nabscissaPara: leer");
+      qDebug(abscissaHasTrueAxisValues ?
+      "abscissaHasTrueAxisValues: TRUE" :
+      "abscissaHasTrueAxisValues: FALSE");
+      qDebug("abscissaStart: %f", abscissaStart);
+      qDebug("abscissaEnd  : %f",   abscissaEnd);
+      qDebug("abscissaPara->trueAxisDelta(): %f", abscissaPara->trueAxisDelta());
+      qDebug("numValues  : %u,      numLabels  : %u",   numValues, numLabels);
+    */
+}
+
+
+
+bool KDChartAxesPainter::calculateAbscissaAxisValue( const KDChartData& cell,
+                                                     abscissaInfos& ai,
+                                                     int colNumber,
+                                                     double& xValue )
+{
+    if( ai.bCellsHaveSeveralCoordinates ) {
+        if( cell.isDouble( 2 ) ) {
+            double cellValue2 = cell.doubleValue( 2 );
+            if( ai.bAbscissaIsLogarithmic )
+                xValue = ai.abscissaPixelsPerUnit * log10(cellValue2);
+            else
+                xValue = ai.abscissaPixelsPerUnit * ( double ) cellValue2;
+            xValue += ai.abscissaZeroPos;
+        }
+        else if( ai.bAbscissaHasTrueAxisDtValues && cell.isDateTime( 2 ) ) {
+            const QDateTime& cellValue2 = cell.dateTimeValue( 2 );
+            double dT = ( ai.bScaleLessThanDay )
+                        ? ai.abscissaDtStart.secsTo( cellValue2 )
+                        : ai.abscissaDtStart.daysTo( cellValue2 );
+            /*
+              qDebug("abscissaDtStart:  %i %i %i   second %i,   minute %i,   hour %i",
+              abscissaDtStart.date().year(),
+              abscissaDtStart.date().month(),
+              abscissaDtStart.date().day(),
+              abscissaDtStart.time().second(),
+              abscissaDtStart.time().minute(),
+              abscissaDtStart.time().hour());
+              qDebug("days to = %f",dT);
+              qDebug("cellValue2:       %i %i %i   second %i,   minute %i,   hour %i",
+              cellValue2.date().year(),
+              cellValue2.date().month(),
+              cellValue2.date().day(),
+              cellValue2.time().second(),
+              cellValue2.time().minute(),
+              cellValue2.time().hour());
+            */
+            xValue = ai.abscissaDtPixelsPerScaleUnit * dT;
+            if( cellValue2.time().msec() )
+                xValue += (ai.abscissaDtPixelsPerScaleUnit * cellValue2.time().msec())
+                          / ( ai.bScaleLessThanDay
+                              ? 1000.0
+                              : (1000.0 * 86400.0) );
+            if( !ai.bScaleLessThanDay ){
+                if( cellValue2.time().second() )
+                    xValue += (ai.abscissaDtPixelsPerScaleUnit * cellValue2.time().second())
+                              / 86400.0;
+                if( cellValue2.time().minute() )
+                    xValue += (ai.abscissaDtPixelsPerScaleUnit * cellValue2.time().minute())
+                              / 1440.0;
+                if( cellValue2.time().hour() )
+                    xValue += (ai.abscissaDtPixelsPerScaleUnit * cellValue2.time().hour())
+                              / 24.0;
+            }
+            xValue += ai.dtLowPos;
+            // qDebug("xValue = dtLowPos + abscissaDtPixelsPerScaleUnit * dT\n%f = %f + %f * %f",
+            // xValue, dtLowPos, abscissaDtPixelsPerScaleUnit, dT);
+        }
+        else
+            return false;
+    } else
+        xValue = ai.pointDist * ( double ) colNumber;
+    return true;
+}
+
+
+
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
+/***                                                                   ***/
+/***  Framework for data drawing using cartesian axes (Bar, Line, ...) ***/
+/***                                                                   ***/
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
+
+/**
+   Paints the actual data area and registers the region for the data
+   points if \a regions is not 0.
+
+   \param painter the QPainter onto which the chart should be painted
+   \param data the data that will be displayed as a chart
+   \param paint2nd specifies whether the main chart or the additional chart is to be drawn now
+   \param regions a pointer to a list of regions that will be filled
+   with regions representing the data segments, if not null
+*/
+void KDChartAxesPainter::paintData( QPainter* painter,
+                                    KDChartTableDataBase* data,
+                                    bool paint2nd,
+                                    KDChartDataRegionList* regions )
+{
+    bool bNormalMode = isNormalMode();
+
+    uint chart = paint2nd ? 1 : 0;
+
+    // find out the ordinate axis (or axes, resp.) belonging to this chart
+    // (up to 4 ordinates might be in use: 2 left ones and 2 right ones)
+    uint axesCount;
+    KDChartParams::AxesArray ordinateAxes;
+    ordinateAxes.resize( KDChartParams::KDCHART_CNT_ORDINATES );
+    if( !params()->chartAxes( chart, axesCount, ordinateAxes ) ) {
+        // no axis - no fun!
+        return;
+        // We cannot draw data without an axis having calculated high/low
+        // values and position of the zero line before.
+
+        // PENDING(khz) Allow drawing without having a visible axis!
+    }
+
+    //const KDChartParams::ChartType params_chartType
+    //  = paint2nd ? params()->additionalChartType() : params()->chartType();
+
+    double logWidth = _dataRect.width();
+    double areaWidthP1000 = logWidth / 1000.0;
+
+    int nClipShiftUp = clipShiftUp(bNormalMode, areaWidthP1000);
+    QRect ourClipRect( _dataRect );
+    if ( 0 < ourClipRect.top() ) {
+        ourClipRect.setTop( ourClipRect.top() - nClipShiftUp );
+        ourClipRect.setHeight( ourClipRect.height() + nClipShiftUp - 1 );
+    } else
+        ourClipRect.setHeight( ourClipRect.height() + nClipShiftUp / 2 - 1 );
+
+    // protect axes ?
+    //ourClipRect.setBottom( ourClipRect.bottom() - 1 );
+    //ourClipRect.setLeft( ourClipRect.left() + 1 );
+    //ourClipRect.setRight( ourClipRect.right() - 1 );
+
+    const QWMatrix & world = painter->worldMatrix();
+    ourClipRect =
+#if COMPAT_QT_VERSION >= 0x030000
+        world.mapRect( ourClipRect );
+#else
+    world.map( ourClipRect );
+#endif
+    painter->setClipRect( ourClipRect );
+    painter->translate( _dataRect.x(), _dataRect.y() );
+
+    painter->setPen( params()->outlineDataColor() );
+
+    // find out which datasets are to be represented by this chart
+    uint chartDatasetStart, chartDatasetEnd;
+    if ( params()->neverUsedSetChartSourceMode()
+         || !params()->findDatasets( KDChartParams::DataEntry,
+                                     KDChartParams::ExtraLinesAnchor,
+                                     chartDatasetStart,
+                                     chartDatasetEnd,
+                                     chart ) ) {
+        uint maxRow, maxRowMinus1;
+        switch ( data->usedRows() ) {
+        case 0:
+            return ;
+        case 1:
+            maxRow = 0;
+            maxRowMinus1 = 0;
+            break;
+        default:
+            maxRow = data->usedRows() - 1;
+            maxRowMinus1 = maxRow - 1;
+        }
+        chartDatasetStart = paint2nd ? maxRow : 0;
+        chartDatasetEnd = paint2nd
+                          ? maxRow
+                          : (   ( KDChartParams::NoType
+                                  == params()->additionalChartType() )
+                                ? maxRow
+                                : maxRowMinus1 );
+
+    }
+
+    // Note: 'aI' is *not* the axis number!
+    for( uint aI = 0; aI < axesCount; ++aI ) {
+        // 'axis' is the REAL axis number!
+        uint axis = ordinateAxes.at( aI );
+
+        const KDChartAxisParams* axisPara = &params()->axisParams( axis );
+
+        uint datasetStart, datasetEnd;
+        uint axisDatasetStart, axisDatasetEnd;
+        uint dummy;
+        if( params()->axisDatasets( axis,
+                                    axisDatasetStart,
+                                    axisDatasetEnd, dummy )
+            && ( KDChartParams::KDCHART_ALL_DATASETS != axisDatasetStart ) ) {
+
+            if( KDChartParams::KDCHART_NO_DATASET == axisDatasetStart ){
+                //==========
+                continue; //  NO DATASETS  -->  STOP PROCESSING THIS AXIS
+                //==========
+            }
+
+            if(    axisDatasetStart >= chartDatasetStart
+                   && axisDatasetStart <= chartDatasetEnd )
+                datasetStart = QMAX( axisDatasetStart, chartDatasetStart );
+            else if(    axisDatasetStart <= chartDatasetStart
+                        && axisDatasetEnd   >= chartDatasetStart )
+                datasetStart = chartDatasetStart;
+            else
+                datasetStart = 20;
+            if(    axisDatasetEnd >= chartDatasetStart
+                   && axisDatasetEnd <= chartDatasetEnd )
+                datasetEnd = QMIN( axisDatasetEnd, chartDatasetEnd );
+            else if(    axisDatasetEnd   >= chartDatasetEnd
+                        && axisDatasetStart <= chartDatasetEnd )
+                datasetEnd = chartDatasetEnd;
+            else
+                datasetEnd = 0;
+        } else {
+            datasetStart = chartDatasetStart;
+            datasetEnd   = chartDatasetEnd;
+        }
+
+        //qDebug("\n=========================================================="
+        //       "\naxis   %u   axisDatasetStart %u   axisDatasetEnd %u   /   chartDatasetStart %u   chartDatasetEnd %u",
+        //axis, axisDatasetStart, axisDatasetEnd, chartDatasetStart, chartDatasetEnd );
+
+        double logHeight   = axisPara->axisTrueAreaRect().height();
+        double axisYOffset = axisPara->axisTrueAreaRect().y() - _dataRect.y();
+
+        //qDebug("\n==========================================================\naxis   %u   logHeight %f   axisDatasetStart %u   chartDatasetStart %u   axisDatasetEnd %u   chartDatasetEnd %u",
+        //axis, logHeight, axisDatasetStart, chartDatasetStart, axisDatasetEnd, chartDatasetEnd );
+        //if( KDChartParams::KDCHART_ALL_DATASETS == axisDatasetStart )
+        //    qDebug("  ALL DATASETS");
+        //if( KDChartParams::KDCHART_NO_DATASET == axisDatasetStart )
+        //    qDebug("  N O   DATESETS");
+
+        double maxColumnValue = axisPara->trueAxisHigh();
+        double minColumnValue = axisPara->trueAxisLow();
+        double columnValueDistance = maxColumnValue - minColumnValue;
+
+        // call the chart type specific data painter:
+        specificPaintData( painter,
+                           ourClipRect,
+                           data,
+                           regions,
+                           axisPara,
+                           bNormalMode,
+                           chart,
+                           logWidth,
+                           areaWidthP1000,
+                           logHeight,
+                           axisYOffset,
+                           minColumnValue,
+                           maxColumnValue,
+                           columnValueDistance,
+                           chartDatasetStart,
+                           chartDatasetEnd,
+                           datasetStart,
+                           datasetEnd );
+    }
+    painter->translate( - _dataRect.x(), - _dataRect.y() );
 }

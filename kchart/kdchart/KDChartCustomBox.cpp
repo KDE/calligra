@@ -4,36 +4,42 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
-#include <KDChartCustomBox.h>
-#include <KDXMLTools.h>
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qregion.h>
 #include <qpalette.h>
 #include <qpoint.h>
+
+
+#include <KDChartCustomBox.h>
+#include <KDXMLTools.h>
+#include <KDFrame.h>
+
+
+const uint KDChartCustomBox::AlignAuto = 0;
 
 
 KDChartCustomBox::~KDChartCustomBox()
@@ -42,63 +48,190 @@ KDChartCustomBox::~KDChartCustomBox()
 }
 
 
-QRect KDChartCustomBox::trueRect( QPoint anchor, double averageWidthP1000, double averageHeightP1000 ) const
+float KDChartCustomBox::trueFontSize( double areaWidthP1000,
+                                      double areaHeightP1000,
+                                      int rectHeight ) const
 {
-    int x = (0 > _deltaX) ? static_cast < int > ( -averageWidthP1000  * _deltaX ) : _deltaX;
-    int y = (0 > _deltaY) ? static_cast < int > ( -averageHeightP1000 * _deltaY ) : _deltaY;
-    int w = (0 > _width ) ? static_cast < int > ( -averageWidthP1000  * _width  ) : _width ;
-    int h = (0 > _height) ? static_cast < int > ( -averageHeightP1000 * _height ) : _height;
-
-    if (      Qt::AlignLeft  == (Qt::AlignLeft  & _anchorAlign) )
-        x =  anchor.x() + x;
-    else if ( Qt::AlignRight == (Qt::AlignRight & _anchorAlign) )
-        x = (anchor.x() - x) - w + 1;
-    else
-        x =  anchor.x() - w / 2;
-
-    if (      Qt::AlignTop    == (Qt::AlignTop    & _anchorAlign) )
-        y =  anchor.y() + y;
-    else if ( Qt::AlignBottom == (Qt::AlignBottom & _anchorAlign) )
-        y = (anchor.y() - y) - h + 1;
-    else
-        y =  anchor.y() - h / 2;
-
-    return QRect( x,y, w, h );
+    float size;
+    if( 0 > _fontSize ) {
+        if( _fontScaleGlobal )
+            size = _fontSize * QMIN(areaWidthP1000, areaHeightP1000) * -1.0;//(areaWidthP1000 + areaHeightP1000) / -2.0;
+        else {
+            // calculate the exact size:
+            float targetLineSpacing = (_fontSize * rectHeight) / -1000.0;
+            size = targetLineSpacing;
+            // step #1  -  try to make the right font size:
+            QFont font( content().font() );
+            font.setPointSizeFloat( size );
+            QFontMetrics fm( font );
+//qDebug(QString("\nsize                   : ")+QString::number(size));
+//qDebug(QString("(float)rectHeight      : ")+QString::number((float)rectHeight));
+//qDebug(QString("(float)fm.lineSpacing(): ")+QString::number((float)fm.lineSpacing()));
+            size *= targetLineSpacing / fm.lineSpacing();
+//qDebug(QString("size                   : ")+QString::number(size));
+            // step #2  -  make sure the font size is not too big:
+            font.setPointSizeFloat( size );
+            QFontMetrics fm2( font );
+            size *= targetLineSpacing / fm2.lineSpacing();
+//qDebug(QString("(float)rectHeight      : ")+QString::number((float)rectHeight));
+//qDebug(QString("(float)fm.lineSpacing(): ")+QString::number((float)fm.lineSpacing()));
+//qDebug(QString("size                   : ")+QString::number(size));
+        }
+    }
+    else {
+        if( _fontSize )
+            size = _fontSize;
+        else{
+            size = content().font().pointSize();
+            if( -1 == size )
+                size = content().font().pixelSize();
+            if( -1 == size )
+                size = 10;
+        }
+    }
+    return size;
 }
 
+
+int KDChartCustomBox::trueFontLineSpacing( double areaWidthP1000,
+                                           double areaHeightP1000,
+                                           int rectHeight ) const
+{
+    QFont font( content().font() );
+    font.setPointSizeFloat( trueFontSize( areaWidthP1000,areaHeightP1000, rectHeight ) );
+    QFontMetrics fm( font );
+    return fm.lineSpacing();
+}
+
+
+void KDChartCustomBox::getTrueShift( double averageWidthP1000,
+                                     double averageHeightP1000,
+                                     int rectHeight,
+                                     int& dX,
+                                     int& dY ) const
+{
+    int x, y;
+    if( _deltaScaleGlobal ){
+        x = (0 > _deltaX) ? static_cast < int > ( -averageWidthP1000  * _deltaX ) : _deltaX;
+        y = (0 > _deltaY) ? static_cast < int > ( -averageHeightP1000 * _deltaY ) : _deltaY;
+    }else{
+        int fontHeight = trueFontLineSpacing( averageWidthP1000, averageHeightP1000, rectHeight );
+        //qDebug("\nfontHeight %i",fontHeight);
+        x = (0 > _deltaX) ? static_cast < int > ( fontHeight * _deltaX / -100.0 ) : _deltaX;
+        y = (0 > _deltaY) ? static_cast < int > ( fontHeight * _deltaY / -100.0 ) : _deltaY;
+        //qDebug("y %i",y);
+    }
+    uint deltaAlign = (AlignAuto == _deltaAlign) ? _anchorAlign : _deltaAlign;
+    if (      Qt::AlignLeft  == (Qt::AlignLeft  & deltaAlign) )
+        dX = x;
+    else if ( Qt::AlignRight == (Qt::AlignRight & deltaAlign) )
+        dX = -x;
+    else
+        dX = 0; //  <--  so the _deltaX value becomes ineffective!
+
+    if (      Qt::AlignTop    == (Qt::AlignTop    & deltaAlign) )
+        dY = y;
+    else if ( Qt::AlignBottom == (Qt::AlignBottom & deltaAlign) )
+        dY = -y;
+    else
+        dY = 0; //  <--  so the _deltaY value becomes ineffective!
+}
+
+
+QRect KDChartCustomBox::trueRect( QPoint anchor, double averageWidthP1000, double averageHeightP1000 ) const
+{
+    int w = (0 > _width ) ? static_cast < int > ( -averageWidthP1000  * _width  ) : _width ;
+    int h = (0 > _height) ? static_cast < int > ( -averageHeightP1000 * _height ) : _height;
+    int x,y;
+    if (      Qt::AlignLeft  == (Qt::AlignLeft  & _anchorAlign) )
+        x = 0;
+    else if ( Qt::AlignRight == (Qt::AlignRight & _anchorAlign) )
+        x = - w + 1;
+    else
+        x = - w / 2;
+
+    if (      Qt::AlignTop    == (Qt::AlignTop    & _anchorAlign) )
+        y = 0;
+    else if ( Qt::AlignBottom == (Qt::AlignBottom & _anchorAlign) )
+        y = - h + 1;
+    else
+        y = - h / 2;
+    int dX,dY;
+    getTrueShift( averageWidthP1000, averageHeightP1000, h,
+                  dX, dY );
+    return QRect( anchor.x()+x+dX, anchor.y()+y+dY, w, h );
+}
+
+
+int KDChartCustomBox::trueRectAlignX(const QRect& rect) const
+{
+    int ret = rect.center().x();
+    if (      Qt::AlignLeft  == (Qt::AlignLeft  & _anchorAlign) )
+        ret -= rect.width();
+    else if ( Qt::AlignRight == (Qt::AlignRight & _anchorAlign) )
+        ret += rect.width();
+    return ret;
+}
+int KDChartCustomBox::trueRectAlignY(const QRect& rect) const
+{
+    int ret = rect.center().y();
+    if (      Qt::AlignTop    == (Qt::AlignTop    & _anchorAlign) )
+        ret -= rect.height();
+    else if ( Qt::AlignBottom == (Qt::AlignBottom & _anchorAlign) )
+        ret += rect.height();
+    return ret;
+}
 
 void KDChartCustomBox::paint( QPainter* painter,
                               QPoint anchor,
                               double areaWidthP1000,
                               double areaHeightP1000,
+                              const KDFrame* frame,
+                              const QRect&   frameRect,
                               const QColor * color,
                               const QBrush * paper ) const
 {
     painter->save();
+    int rotDX = 0;
+    int rotDY = 0;
     QRect myRect( trueRect( anchor, areaWidthP1000, areaHeightP1000 ) );
+    QRect myFrameRect( frameRect );
     if ( myRect.isValid() ) {
+        if( _rotation ){
+            getTrueShift( areaWidthP1000, areaHeightP1000, myRect.height(),
+                          rotDX, rotDY );
+            myRect.moveBy( -rotDX, -rotDY );
+            if( frame )
+                myFrameRect.moveBy( -rotDX, -rotDY );
+//qDebug("\nrotDelta:  x %i  y %i",rotDX,rotDY);
+//qDebug("\nbox myRect center:  x %i  y %i",myRect.center().x(),myRect.center().y());
+            myRect.moveCenter( QPoint( anchor.x() - trueRectAlignX(myRect),
+                                       anchor.y() - trueRectAlignY(myRect) ) );
+            if( frame )
+                myFrameRect.moveCenter( QPoint( anchor.x() - trueRectAlignX(myFrameRect),
+                                                anchor.y() - trueRectAlignY(myFrameRect) ) );
+//qDebug("box myRect center:  x %i  y %i",myRect.center().x(),myRect.center().y());
+            painter->translate( anchor.x(), anchor.y() );
+            painter->rotate( _rotation );
+            painter->translate( rotDX, rotDY );
+        }
+        if( frame )
+            frame->paint( painter, KDFrame::PaintAll, myFrameRect );
         if ( _fontSize ) {
             QFont font( content().font() );
-            float size;
-            if( 0 > _fontSize ) {
-                if( _fontScaleGlobal )
-                    size = _fontSize * (areaWidthP1000 + areaHeightP1000);
-                else
-                    size = _fontSize * (myRect.width() + myRect.height());
-                size /= -2.0;
-            }
-            else
-                size = _fontSize;
-            font.setPointSizeFloat( size );
+            font.setPointSizeFloat( trueFontSize( areaWidthP1000,areaHeightP1000, myRect.height() ) );
             KDChartTextPiece tmpTextPiece( content().text(), font );
-            tmpTextPiece.draw( painter, myRect.x(), myRect.y(), QRegion( myRect ),
+            // for debug purpose:
+            // painter->drawRect( myRect );
+            tmpTextPiece.draw( painter, myRect.x(), myRect.y(), myRect,
                                color ? *color :  _color,
                                paper ?  paper : &_paper );
 
-        } else
-            content().draw( painter, myRect.x(), myRect.y(), QRegion( myRect ),
+        }else{
+            content().draw( painter, myRect.x(), myRect.y(), myRect,
                             color ? *color :  _color,
                             paper ?  paper : &_paper );
+        }
     }
     painter->restore();
 }
@@ -111,6 +244,7 @@ void KDChartCustomBox::createCustomBoxNode( QDomDocument& document,
 {
     QDomElement customBoxElement = document.createElement( elementName );
     parent.appendChild( customBoxElement );
+    KDXML::createIntNode( document, parent, "Rotation", custombox->_rotation );
     KDXML::createStringNode( document, parent, "ContentText",
 			     custombox->_content.text() );
     KDXML::createFontNode( document, parent, "ContentFont",
@@ -136,6 +270,10 @@ void KDChartCustomBox::createCustomBoxNode( QDomDocument& document,
 			  custombox->_dataCol );
     KDXML::createIntNode( document, parent, "Data3rd",
 			  custombox->_data3rd );
+    KDXML::createIntNode( document, parent, "DeltaAlign",
+                          custombox->_deltaAlign );
+    KDXML::createBoolNode( document, parent, "DeltaScaleGlobal",
+                           custombox->_deltaScaleGlobal );
 }
 
 
@@ -145,19 +283,24 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
     bool ok = true;
     QString tempContentText;
     QFont tempContentFont;
-    int tempFontSize, tempDeltaX, tempDeltaY, tempWidth, tempHeight,
-	tempAnchorArea, tempAnchorAlign, tempDataRow, tempDataCol, 
-        tempData3rd;
+    int tempRotation = 0; // must be initialized: new parameter, not present in old versions of KDChart
+    int tempDeltaAlign = AlignAuto; // must be initialized too: new parameter
+    bool tempDeltaScaleGlobal = true;   // must be initialized too: new parameter
+    int tempFontSize, tempDeltaX, tempDeltaY,
+        tempWidth, tempHeight, tempAnchorArea, tempAnchorAlign,
+        tempDataRow, tempDataCol, tempData3rd;
     bool tempFontScaleGlobal;
     QColor tempColor;
     QBrush tempPaper;
-    KDChartEnums::PositionFlag tempAnchorPos;
+    KDChartEnums::PositionFlag tempAnchorPos = KDChartEnums::PosTopLeft;
     QDomNode node = element.firstChild();
     while( !node.isNull() ) {
         QDomElement element = node.toElement();
         if( !element.isNull() ) { // was really an element
             QString tagName = element.tagName();
-            if( tagName == "ContentText" ) {
+            if( tagName == "Rotation" ) {
+                ok = ok & KDXML::readIntNode( element, tempRotation );
+            } else if( tagName == "ContentText" ) {
                 ok = ok & KDXML::readStringNode( element, tempContentText );
             } else if( tagName == "ContentFont" ) {
                 ok = ok & KDXML::readFontNode( element, tempContentFont );
@@ -191,6 +334,10 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
                 ok = ok & KDXML::readIntNode( element, tempDataCol );
             } else if( tagName == "Data3rd" ) {
                 ok = ok & KDXML::readIntNode( element, tempData3rd );
+            } else if( tagName == "DeltaAlign" ) {
+                ok = ok & KDXML::readIntNode( element, tempDeltaAlign );
+            } else if( tagName == "DeltaScaleGlobal" ) {
+                ok = ok & KDXML::readBoolNode( element, tempDeltaScaleGlobal );
             } else {
                 qDebug( "Unknown tag in custom box" );
             }
@@ -201,6 +348,7 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
     if( ok ) {
 	custombox._content = KDChartTextPiece( tempContentText,
 					       tempContentFont );
+        custombox._rotation = tempRotation;
 	custombox._fontSize = tempFontSize;
 	custombox._fontScaleGlobal = tempFontScaleGlobal;
 	custombox._deltaX = tempDeltaX;
@@ -215,6 +363,8 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
 	custombox._dataRow = tempDataRow;
 	custombox._dataCol = tempDataCol;
 	custombox._data3rd = tempData3rd;
+        custombox._deltaAlign       = tempDeltaAlign;
+        custombox._deltaScaleGlobal = tempDeltaScaleGlobal;
     }
 
     return ok;

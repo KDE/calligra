@@ -4,29 +4,29 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #include "KDChartTextPiece.h"
 
 #include <qstylesheet.h>
@@ -58,7 +58,8 @@ KDChartTextPiece::KDChartTextPiece( const KDChartTextPiece& src )
     if( src._richText ) {
         _richText = new QSimpleRichText( src._text, src._font );
         _richText->adjustSize();
-    }
+    } else
+        _richText = 0;
 
     // used for both
     _metrics = new QFontMetrics( *src._metrics );
@@ -123,6 +124,29 @@ int KDChartTextPiece::height() const
 int KDChartTextPiece::fontLeading() const
 {
     return _metrics->leading();
+}
+
+
+void KDChartTextPiece::draw( QPainter *p, int x, int y,
+                             const QRect& clipRect,
+                             const QColor& color,
+                             const QBrush* paper ) const
+{
+    if( _isRichText ) {
+        QColorGroup cg;
+        cg.setColor( QColorGroup::Text, color );
+        _richText->setWidth( clipRect.width() );
+        _richText->draw( p, x, y, clipRect, cg, paper );
+    } else {
+        p->save();
+        p->setFont( _font );
+        if( paper )
+            p->setBrush( *paper );
+        p->setPen( color );
+        p->setClipRect( clipRect );
+        p->drawText( x, y + _metrics->ascent(), _text );
+        p->restore();
+    }
 }
 
 

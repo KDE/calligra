@@ -4,29 +4,29 @@
 */
 
 /****************************************************************************
-** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
-**
-** This file is part of the KDChart library.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** Licensees holding valid commercial KDChart licenses may use this file in
-** accordance with the KDChart Commercial License Agreement provided with
-** the Software.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
-**   information about KDChart Commercial License Agreements.
-**
-** Contact info@klaralvdalens-datakonsult.se if any conditions of this
-** licensing are not clear to you.
-**
-**********************************************************************/
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KDChart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KDChart licenses may use this file in
+ ** accordance with the KDChart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.klaralvdalens-datakonsult.se/?page=products for
+ **   information about KDChart Commercial License Agreements.
+ **
+ ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
 #ifndef __KDCHARTLISTTABLE_H__
 #define __KDCHARTLISTTABLE_H__
 
@@ -53,16 +53,16 @@ public:
         for ( uint k = 0; k < _rows * _cols; k++ )
             matrix.append( KDChartData() );
         col_count = _cols;
-       row_count = _rows;
+        row_count = _rows;
     }
 
     KDChartListTablePrivate( const KDChartListTablePrivate& _t ) :
         QShared(),
-    matrix( _t.matrix ),
-    row_list( _t.row_list ),
-    col_list( _t.col_list ),
-    col_count( _t.col_count ),
-    row_count( _t.row_count ) {}
+        matrix( _t.matrix ),
+        row_list( _t.row_list ),
+        col_list( _t.col_list ),
+        col_count( _t.col_count ),
+        row_count( _t.row_count ) {}
     ~KDChartListTablePrivate() {}
 
     void expand( uint _rows, uint _cols ) {
@@ -205,8 +205,8 @@ private:
 
 public:
     /**
-    * Typedefs
-    */
+     * Typedefs
+     */
     typedef QValueList < KDChartData > ::Iterator Iterator;
     typedef QValueList < KDChartData > ::ConstIterator ConstIterator;
 
@@ -217,25 +217,28 @@ public:
     typedef QValueList < int > ::ConstIterator ConstColIterator;
 
     /**
-    * API
-    */
-    KDChartListTableData() {
+     * API
+     */
+    KDChartListTableData() :
+        KDChartTableDataBase() {
         sh = new Priv;
         _usedCols = 0;
         _usedRows = 0;
     }
-    KDChartListTableData( uint _rows, uint _cols ) {
+    KDChartListTableData( uint _rows, uint _cols ) :
+        KDChartTableDataBase() {
         sh = new Priv( _rows, _cols );
         _usedRows = _rows;
         _usedCols = _cols;
     }
 
     KDChartListTableData( const KDChartListTableData& _t ) :
-      KDChartTableDataBase( _t ) {
+        KDChartTableDataBase( _t ) {
         _usedRows = _t._usedRows;
         _usedCols = _t._usedCols;
         sh = _t.sh;
         sh->ref();
+        setSorted( _t.sorted() );
     }
 
     virtual ~KDChartListTableData() {
@@ -252,6 +255,7 @@ public:
         if ( sh->deref() )
             delete sh;
         sh = t.sh;
+        setSorted( t.sorted() );
         return *this;
     }
 
@@ -284,9 +288,9 @@ public:
     }
 
     ConstColIterator colEnd() const
-{
-    return sh->col_list.end();
-}
+        {
+            return sh->col_list.end();
+        }
 
     RowIterator rowBegin() {
         return sh->row_list.begin();
@@ -384,14 +388,14 @@ public:
         detach();
         sh->removeColumn( _c );
         if( _usedCols  )
-          --_usedCols;
+            --_usedCols;
     }
 
     void removeRow( uint _r ) {
         detach();
         sh->removeRow( _r );
         if( _usedRows  )
-          --_usedRows;
+            --_usedRows;
     }
 
     void expand( uint _rows, uint _cols ) {
@@ -403,6 +407,8 @@ public:
 
     void setUsedRows( uint _rows ) {
         Q_ASSERT( _rows <= rows() );
+        if( _usedRows < _rows )
+            setSorted( false );
         _usedRows = _rows;
     }
 
@@ -412,6 +418,8 @@ public:
 
     void setUsedCols( uint _cols ) {
         Q_ASSERT( _cols <= cols() );
+        if( _usedCols < _cols )
+            setSorted( false );
         _usedCols = _cols;
     }
 
@@ -421,13 +429,14 @@ public:
 
 private:
     /**
-    * Helpers
-    */
+     * Helpers
+     */
     void detach() {
         if ( sh->count > 1 ) {
             sh->deref();
             sh = new Priv( *sh );
         }
+        setSorted( false );
     }
 
     /**

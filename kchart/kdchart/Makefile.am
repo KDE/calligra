@@ -5,14 +5,18 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDChartAxesPainter.cpp	\
 			KDChartAxisParams.cpp	\
 			KDChartBarPainter.cpp	\
+			KDChartBWPainter.cpp	\
 			KDChartCustomBox.cpp 	\
 			KDChartData.cpp 	\
 			KDChartHiLoPainter.cpp	\
 			KDChartLinesPainter.cpp	\
 			KDChartPainter.cpp	\
 			KDChartParams.cpp	\
+			KDChartParams_frame.cpp\
+			KDChartParams_io.cpp	\
 			KDChartPiePainter.cpp	\
 			KDChartPolarPainter.cpp	\
+			KDChartPropertySet.cpp	\
 			KDChartRingPainter.cpp	\
 			KDChartTextPiece.cpp	\
 			KDChartWidget.cpp 	\
@@ -26,6 +30,7 @@ noinst_HEADERS =	KDChart.h 		\
 			KDChartAxesPainter.h	\
 			KDChartAxisParams.h	\
 			KDChartBarPainter.h	\
+			KDChartBWPainter.h	\
 			KDChartCustomBox.h 	\
 			KDChartData.h 		\
 			KDChartDataRegion.h	\
@@ -37,6 +42,7 @@ noinst_HEADERS =	KDChart.h 		\
 			KDChartParams.h		\
 			KDChartPiePainter.h	\
 			KDChartPolarPainter.h	\
+			KDChartPropertySet.h	\
 			KDChartRingPainter.h	\
 			KDChartTextPiece.h	\
 			KDChartUnknownTypeException.h	\
