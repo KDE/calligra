@@ -399,10 +399,10 @@ void KWView::setupActions()
     addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
     */
 
-    
+
     // TODO at the moment serial letters don't work correctly
     addVariableActions( VT_SERIALLETTER, KWSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
-    
+
 
     actionInsertExpression = new KActionMenu( i18n( "&Expression" ),
                                             actionCollection(), "insert_expression" );
@@ -579,9 +579,9 @@ void KWView::setupActions()
     connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
 
 
-    actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor");
+    actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor",true);
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
-
+    connect(actionBackgroundColor,SIGNAL(sig_defaultColor()),SLOT(defaultBackGroundColor()));
     // ---------------------- Table menu
 
     actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
@@ -2880,9 +2880,20 @@ void KWView::borderStyle( const QString &style )
 
 void KWView::backgroundColor()
 {
-    // This action is disabled when no frame is selected.
-    // So here we know that a frame is selected.
     QColor backColor = actionBackgroundColor->color();
+    KWTextFrameSetEdit *edit = currentTextEdit();
+    if ( m_gui)
+    {
+        if(edit)
+            edit->setTextBackgroundColor(backColor);
+        else
+            m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
+    }
+}
+
+void KWView::defaultBackGroundColor()
+{
+    QColor backColor = QColor();
     KWTextFrameSetEdit *edit = currentTextEdit();
     if ( m_gui)
     {

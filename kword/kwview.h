@@ -234,6 +234,7 @@ public slots:
     void borderWidth( const QString &width );
     void borderStyle( const QString &style );
     void backgroundColor();
+    void defaultBackGroundColor();
 
     void showFormulaToolbar( bool show );
 
