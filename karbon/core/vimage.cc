@@ -5,7 +5,10 @@
 
 #include "vimage.h"
 #include "vpainter.h"
+#include "vvisitor.h"
 #include "vpath.h"
+#include "vfill.h"
+#include "vstroke.h"
 
 #include <qdom.h>
 #include <qimage.h>
@@ -15,6 +18,8 @@
 
 VImage::VImage( VObject *parent, const QString &fname ) : VObject( parent ), m_image( 0L ), m_fname( fname )
 {
+	m_stroke = new VStroke( this );
+	m_fill = new VFill();
 	m_image = new QImage( m_fname );
 	if( m_image->depth() != 32 )
         *m_image = m_image->convertDepth( 32 );
@@ -98,4 +103,12 @@ VImage::load( const QDomElement& element )
         *m_image = m_image->convertDepth( 32 );
 	m_image->setAlphaBuffer( true );
 	*m_image = m_image->swapRGB();
+	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
 }
+
+void
+VImage::accept( VVisitor& visitor )
+{
+	visitor.visitVImage( *this );
+}
+

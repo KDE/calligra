@@ -25,7 +25,7 @@
 #include "vpath.h"
 #include "vselection.h"
 #include "vvisitor.h"
-
+#include "vimage.h"
 
 bool
 VVisitor::visit( VObject& object )
@@ -99,6 +99,11 @@ VVisitor::visitVSelection( VSelection& selection )
 
 void
 VVisitor::visitVText( VText& /*text*/ )
+{
+}
+
+void
+VVisitor::visitVImage( VImage& /*img*/ )
 {
 }
 

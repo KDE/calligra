@@ -28,6 +28,8 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
+	virtual void accept( VVisitor& visitor );
+
 private:
 	QImage *m_image;
 	QString m_fname;

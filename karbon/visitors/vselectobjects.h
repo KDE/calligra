@@ -26,6 +26,7 @@
 #include "vcomposite.h"
 #include "vgroup.h"
 #include "vtext.h"
+#include "vimage.h"
 #include "vvisitor.h"
 
 /***
@@ -48,6 +49,8 @@ public:
 	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVText( VText& text )
 		{ visitVObject( text ); }
+	virtual void visitVImage( VImage& img )
+		{ visitVObject( img ); }
 	virtual void visitVLayer( VLayer& layer );
 
 private:

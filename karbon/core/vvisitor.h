@@ -29,7 +29,7 @@ class VObject;
 class VPath;
 class VSelection;
 class VText;
-
+class VImage;
 
 class VVisitor
 {
@@ -48,6 +48,7 @@ public:
 	virtual void visitVPath( VPath& path );
 	virtual void visitVSelection( VSelection& selection );
 	virtual void visitVText( VText& text );
+	virtual void visitVImage( VImage& img );
 
 	bool success() const
 	{
