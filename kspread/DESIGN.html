@@ -588,6 +588,44 @@ Because one piece can cover a very large area, it is possible that it will
 be in more than one leaf in the quad-tree. <i>Details on the possible use of
 quad-tree or other methods should be explored further more</i>.</p>
 
+<h2>Test Framework</h2>
+<p>Status: IN PROGRESS.</p>
+
+<p>It is well known that writing clean and easily understandable module will lead 
+to better maintenance. However testing that particular module everytime there is 
+a significant change requires considerable amount of time and effort. Since KSpread 
+and other applications of its scale consist of hundreds of modules, in this case 
+automatic testing of each module will help a lot, not to mention that it might 
+catch bug as early as possible.</p>
+
+<p>KSpread has a simple test framework to facilitate such kind of test. This can 
+be activated using the shortcut <tt>Ctrl+Shift+T</tt>. This test is however 
+not accessible via menu, because it is intended to be used only by the developers.
+Ideally, there should be tests for all modules contained in KSpread. It is 
+the responsibility of the developer to create the corresponding <tt>tester</tt> 
+for the code that he or she is working on. All tests should be kept in 
+<tt>koffice/kspread/tests/</tt>.</p>
+
+<p>Making a new tester is not difficult. The easiest way is to copy an already 
+existing tester and modify it. Basically, it must be a subclass of class Tester 
+(see <tt>koffice/kspread/tests/tester.h</tt>). Just reimplement the virtual 
+function <tt>run()</tt> and it is ready. In order to make it possible to run 
+the new tester, add an instance of the class in TestRunner 
+(for details, see <tt>koffice/kspread/tests/testrunner.cc</tt>).</p>
+
+<p>Whenever parts of KSpread features are improved or rewritten, it is always 
+a good idea to run the related tests to ensure that all the changes do not do 
+any harm. However, bear in mind that there is no 100% guarantee that the new 
+code is bug-free.</p>
+
+<p>Also, if there is a bug which is not caught by the tester (i.e. it does not 
+fail the tester, but the bug is confirmed), then the relevant tester must be 
+modified to include one or more test cases similar to the offending bug. 
+When the bug is finally fixed, from that point the test should always pass all 
+test cases.</p>
+
+</p>
+
 <h2>Coding Style</h2>
 <p>Status: IN PROGRESS.</p>
 
@@ -600,6 +638,9 @@ on also more difficult to understand.</p>
 <p>Put comment as documentation for classes and member functions. There is still
 lack of documentation as for now, whoever understands something about the
 classes and functions should write the documentation.</p>
+
+<p>Write test cases. This will ease further maintenance. See also the section on Test 
+Framework above.</p>
 
 <p>Do not use the term <i>table</i>. It was incorrectly invented quite likely
 because of the term <i>Tabelle</i> (German, literally means table). The correct
