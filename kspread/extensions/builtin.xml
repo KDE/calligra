@@ -2377,9 +2377,9 @@ parameters. You can multiply values given by a range multiply(A1:B5) or list of 
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>THIS DOESN"T QUITE WORK YET!! The level_coupon() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth level_coupon( 1000; .13; 2; 4; .1) or $1097.10.</Text>
+	<Text>The level_coupon() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth level_coupon( 1000; .13; 2; 4; .1) or $1096.95.</Text>
 	<Syntax>zero_coupon( face value; rate; years )</Syntax>
-	<Example>level_coupon( 1000; .13; 2; 4; .1) equals 1097.10</Example>
+	<Example>level_coupon( 1000; .13; 2; 4; .1) equals 1096.95</Example>
       </Help>
     </Function>
 

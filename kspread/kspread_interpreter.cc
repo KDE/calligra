@@ -1881,13 +1881,10 @@ static bool kspreadfunc_level_coupon( KSContext& context )
   double years = args[3]->doubleValue();
   double market_rate = args[4]->doubleValue();
 
-  double coupon = coupon_rate * face;
+  double coupon = coupon_rate * face / coupon_year;
   double interest =  market_rate/coupon_year;
-//  double pv_face =   face / pow(1+market_rate, years);
-//  double pv_coupon = ( coupon * ( 1 - pow( interest, (years*coupon_year) ) ) / ( 1 - interest ) ) / pow( interest, (years*coupon_year) );
   double pv_annuity = (1 - 1/(pow( (1+interest), (years*coupon_year) ))) / interest ;
   context.setValue( new KSValue( coupon * pv_annuity + (face/ pow( (1+interest), (years*coupon_year) ) ) ) );
-
 
   return true;
 }
