@@ -4,7 +4,6 @@
 */
 
 #include <qdom.h>
-#include <qcolor.h>
 
 #include "vcolor.h"
 
@@ -14,6 +13,15 @@ VColor::VColor()
 	m_value[0] = 0.0;
 	m_value[1] = 0.0;
 	m_value[2] = 0.0;
+	m_value[3] = 0.0;
+}
+
+VColor::VColor( const QRgb &c )
+	: m_colorSpace( rgb ), m_opacity( qAlpha( c ) / 255.0 )
+{
+	m_value[0] = qRed( c ) /  255.0;
+	m_value[1] = qGreen( c ) / 255.0;
+	m_value[2] = qBlue( c ) / 255.0;
 	m_value[3] = 0.0;
 }
 
@@ -281,5 +289,4 @@ VColor::toQColor() const
 	else
 		return QColor();
 }
-
 

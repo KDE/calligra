@@ -44,10 +44,7 @@ void VStrokeFillPreview::paintEvent( QPaintEvent* /*event*/ )
 	m_painter->lineTo( KoPoint( 10.0, 10.0 ) );
 	m_painter->fillPath();
 
-	VColor color;
-	float r = 0.5, g = 0, b = 0.5;
-	color.setValues( &r, &g, &b );
-	color.setOpacity( 0.5 );
+	VColor color( qRgba( 0, 200, 0, 100 ) );
 	VFill fill;
 	fill.setColor( color );
 	m_painter->setBrush( fill );
