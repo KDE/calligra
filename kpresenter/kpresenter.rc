@@ -179,7 +179,6 @@
 </MenuBar>
 <StatusBar/>
 <ToolBar name="mainToolBar"><Text>File</Text>
-  <Action name="extra_webpres"/>
 </ToolBar>
 <ToolBar name="editToolBar" position="top" fullWidth="false"><Text>Edit</Text>
   <Action name="koffice_undo"/>
@@ -210,12 +209,15 @@
   <Action name="tools_closed_linepopup"/>
   <Action name="tools_shapepopup"/>
 </ToolBar>
-<ToolBar name="toolsToolBar" position="left" fullWidth="false"><Text>Tools</Text>
+<ToolBar name="toolsToolBar" position="left" fullWidth="false" hidden="true"><Text>Tools</Text>
   <Action name="tools_rotate"/>
   <Action name="tools_zoom"/>
   <Separator/>
   <Action name="extra_arrangepopup"/>
   <Action name="extra_alignobjs"/>
+  <Separator/>
+  <Action name="extra_group"/>
+  <Action name="extra_ungroup"/>
 </ToolBar>
 <ToolBar name="extraToolBar" position="top" fullWidth="false"><Text>Format</Text>
   <Action name="extra_properties"/>
@@ -223,12 +225,11 @@
   <Action name="extra_lineend"/>
   <Action name="extra_penstyle"/>
   <Action name="extra_penwidth"/>
+  <Action name="brush_color"/>
+  <Action name="pen_color"/>
   <Separator/>
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
-  <Separator/>
-  <Action name="extra_group"/>
-  <Action name="extra_ungroup"/>
 </ToolBar>
 <ToolBar name="textToolBar" position="top" fullWidth="false"><Text>Text</Text>
   <Action name="format_style"/>
@@ -246,20 +247,20 @@
   <Separator/>
   <Action name="format_number"/>
   <Action name="format_bullet"/>
-  <Action name="text_normalText"/>
   <Separator/>
-  <Action name="increaseFontSize"/>
-  <Action name="decreaseFontSize"/>
+  <Action name="text_depthPlus"/>
+  <Action name="text_depthMinus"/>
   <Separator/>
   <Action name="text_color"/>
-  <Action name="brush_color"/>
-  <Action name="pen_color"/>
 </ToolBar>
-<ToolBar name="screenToolBar" position="top" fullWidth="false"><Text>Presentation</Text>
+<ToolBar name="slideShowToolBar" position="top" fullWidth="false"><Text>Slide Show</Text>
+  <Action name="screen_configpages"/>
   <Action name="screen_assigneffect"/>
-  <Separator/>
+  <Action name="screen_transeffect"/>
   <Action name="screen_start"/>
-  <Separator/>
+  <Action name="screen_startfromfirst"/>
+</ToolBar>
+<ToolBar name="navigationToolBar" position="top" hidden="true" fullWidth="false"><Text>Navigation</Text>
   <Action name="screen_first"/>
   <Action name="screen_prev"/>
   <Action name="screen_next"/>
