@@ -50,7 +50,10 @@ class pqxxSqlConnection : public Connection
                 virtual bool drv_executeSQL( const QString& statement );
 		virtual Q_ULLONG drv_lastInsertRowID();
 
-
+//TODO: move this somewhere to low level class (MIGRATION?)
+		virtual bool drv_getTablesList( QStringList &list );
+//TODO: move this somewhere to low level class (MIGRATION?)
+		virtual bool drv_containsTable( const QString &tableName );
 
 		pqxx::connection* m_pqxxsql;
 	private:
