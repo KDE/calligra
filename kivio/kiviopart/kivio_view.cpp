@@ -365,7 +365,7 @@ void KivioView::createAddStencilSetDock()
   m_addStencilSetPanel = new Kivio::AddStencilSetPanel(this);
   ToolDockBase* addStencilSetBase = toolDockManager()->createToolDock(m_addStencilSetPanel, i18n("Add Stencil Set"));
   addStencilSetBase->move(0,0);
-  
+
   KToggleAction *showAddStencilSet = new KToggleAction( i18n("Add Stencil Set"), 0, actionCollection(), "addStencilSetDock" );
   connect(showAddStencilSet, SIGNAL(toggled(bool)), addStencilSetBase, SLOT(makeVisible(bool)));
   connect(addStencilSetBase, SIGNAL(visibleChange(bool)), SLOT(toggleAddStencilSetPanel(bool)));
@@ -479,13 +479,22 @@ void KivioView::setupActions()
 
   showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
   connect( showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
+#if KDE_IS_VERSION(3,2,90)
+  showPageMargins->setCheckedState(i18n("Hide Page Margins"));
+#endif
 
   showRulers = new KToggleAction( i18n("Show Rulers"), "view_ruler", 0, actionCollection(), "showRulers" );
   connect( showRulers, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
+#if KDE_IS_VERSION(3,2,90)
+  showRulers->setCheckedState(i18n("Hide Rulers"));
+#endif
 
   // Grid actions
   showGrid = new KToggleAction( i18n("Show Grid"), "view_grid", 0, actionCollection(), "showGrid" );
   connect( showGrid, SIGNAL(toggled(bool)), SLOT(toggleShowGrid(bool)));
+#if KDE_IS_VERSION(3,2,90)
+  showGrid->setCheckedState(i18n("Hide Grid"));
+#endif
 
   KToggleAction* snapGrid = new KToggleAction( i18n("Snap Grid"), "view_grid", 0, actionCollection(), "snapGrid" );
   connect( snapGrid, SIGNAL(toggled(bool)), SLOT(toggleSnapGrid(bool)));
@@ -493,6 +502,9 @@ void KivioView::setupActions()
   // Guides actions
   showGuides = new KToggleAction( i18n("Show Guides"), 0, actionCollection(), "showGuides" );
   connect( showGuides, SIGNAL(toggled(bool)), SLOT(toggleShowGuides(bool)));
+#if KDE_IS_VERSION(3,2,90)
+  showGuides->setCheckedState(i18n("Hide Guides"));
+#endif
 
   KToggleAction* snapGuides = new KToggleAction( i18n("Snap Guides"), 0, actionCollection(), "snapGuides" );
   connect( snapGuides, SIGNAL(toggled(bool)), SLOT(toggleSnapGuides(bool)));
@@ -505,7 +517,7 @@ void KivioView::setupActions()
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
 
   KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options" );
-  
+
   (void) new KAction(i18n("Install Stencil Set..."), 0, this,
     SLOT(installStencilSet()), actionCollection(), "installStencilSet");
 }
@@ -1709,7 +1721,7 @@ void KivioView::exportPage()
       extList += "*." + QString(pStr).lower();
 
       pStr = (char *)strList.next();
-      
+
       if(pStr) {
         extList += "\n";
       }

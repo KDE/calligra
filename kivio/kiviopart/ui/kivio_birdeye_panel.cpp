@@ -14,7 +14,7 @@
 #include <klocale.h>
 #include <koGlobal.h>
 #include <kozoomhandler.h>
-
+#include <kdeversion.h>
 #include <kiconloader.h>
 
 #include <qpixmap.h>
@@ -40,6 +40,9 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   zoomIn = new KAction( i18n("Zoom In"), "kivio_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
   zoomOut = new KAction( i18n("Zoom Out"), "kivio_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
   KToggleAction* act3 = new KToggleAction( i18n("Show Page Border"),BarIcon("view_pageborder", KivioFactory::global()), 0, this, "pageBorder" );
+#if KDE_IS_VERSION(3,2,90)
+  act3->setCheckedState(i18n("Hide Page Border"));
+#endif
   KAction* act5 = new KAction( i18n("Autoresize"), "window_nofullscreen", 0, this, SLOT(doAutoResizeMin()), this, "autoResizeMin" );
   KAction* act6 = new KAction( i18n("Autoresize"), "window_fullscreen", 0, this, SLOT(doAutoResizeMax()), this, "autoResizeMax" );
 

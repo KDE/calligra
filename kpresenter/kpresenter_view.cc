@@ -2343,12 +2343,18 @@ void KPresenterView::setupActions()
         actionViewShowSideBar = new KToggleAction( i18n("Show Sidebar"), 0,
                                                    this, SLOT( viewShowSideBar() ),
                                                    actionCollection(), "view_showsidebar" );
+#if KDE_IS_VERSION(3,2,90)
+        actionViewShowSideBar->setCheckedState(i18n("Hide Sidebar"));
+#endif
         actionViewShowSideBar->setChecked(true);
 
         actionViewShowNoteBar = new KToggleAction( i18n("Show Notebar"), 0,
                                                    this, SLOT( viewShowNoteBar() ),
                                                    actionCollection(), "view_shownotebar" );
-        actionViewShowNoteBar->setChecked(true);
+#if KDE_IS_VERSION(3,2,90)
+        actionViewShowNoteBar->setCheckedState(i18n("Hide Notebar"));
+#endif
+	actionViewShowNoteBar->setChecked(true);
     }
 
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
@@ -2363,6 +2369,10 @@ void KPresenterView::setupActions()
     actionViewFooter = new KToggleAction( i18n( "Show Foo&ter" ), 0,
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "view_footer" );
+#if KDE_IS_VERSION(3,2,90)
+    actionViewHeader->setCheckedState(i18n("Hide &Header"));
+    actionViewFooter->setCheckedState(i18n("View Foo&ter"));
+#endif
 
     actionViewShowHelpLine= new KToggleAction( i18n( "Help Lines" ), 0,
                                                this, SLOT( viewHelpLines() ),
@@ -2981,6 +2991,9 @@ void KPresenterView::setupActions()
     actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
                                                this, SLOT( slotAllowAutoFormat() ),
                                                actionCollection(), "enable_autocorrection" );
+#if KDE_IS_VERSION(3,2,90)
+    actionAllowAutoFormat->setCheckedState(i18n("Disable Autocorrection"));
+#endif
 
     // ------------------- Actions with a key binding and no GUI item
     new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,

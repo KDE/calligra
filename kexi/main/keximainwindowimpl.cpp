@@ -448,9 +448,15 @@ KexiMainWindowImpl::initActions()
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
 	 actionCollection(), "options_show_contexthelp");
+#if KDE_IS_VERSION(3,2,90)
+	d->action_show_helper->setCheckedState(i18n("Hide Context Help"));
+#endif
 #endif
 
 	KToggleAction *toggleaction = new KToggleAction(i18n("Enable Forms"), "", 0, actionCollection(), "options_enable_forms");
+#if KDE_IS_VERSION(3,2,90)
+	toggleaction->setCheckedState(i18n("Disable Forms"));
+#endif
 	d->config->setGroup("Unfinished");
 	if (d->config->readBoolEntry("EnableForms", false)) {
 		slotOptionsEnableForms( true, true );
@@ -2253,7 +2259,7 @@ void KexiMainWindowImpl::importantInfo(bool onStartup)
 
 		QString lang = KGlobal::locale()->language();
 		QString fname = locate("data", QString("kexi/readme_")+lang);
-		if (fname.isEmpty())//back to default 
+		if (fname.isEmpty())//back to default
 			fname = locate("data", "kexi/readme_en");
 		KTipDialog tipDialog(new KTipDatabase(QString::null), 0);
 		tipDialog.setCaption(i18n("Important information"));
@@ -2276,7 +2282,7 @@ void KexiMainWindowImpl::importantInfo(bool onStartup)
 		QRect desk = QApplication::desktop()->screenGeometry( QApplication::desktop()->screenNumber(this) );
 		tipDialog.resize( QMAX(tipDialog.width(),desk.width()*3/5), QMAX(tipDialog.height(),desk.height()*3/5) );
 		KDialog::centerOnScreen(&tipDialog);
-#if (QT_VERSION >= 0x030200) //TMP 
+#if (QT_VERSION >= 0x030200) //TMP
 		tipDialog.setModal ( true );
 #endif
 		tipDialog.exec();
@@ -2300,11 +2306,11 @@ void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
 		return;
 	QString note = i18n("Please note that forms are currently unstable functionality, provided <u>only for your preview</u>.");
 	if (show) {
-		KMessageBox::information(this, 
+		KMessageBox::information(this,
 			"<p>"+i18n("Forms will be available after restarting Kexi application.")+"</p>"+note+"<p>");
 	}
 	else {
-		KMessageBox::information(this, 
+		KMessageBox::information(this,
 			"<p>"+i18n("Forms will be hidden after restarting Kexi application.")+"</p><p>"+note+"<p>");
 	}
 }

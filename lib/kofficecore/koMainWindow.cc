@@ -1489,7 +1489,10 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
           KToolBar * tb = static_cast<KToolBar *>(it.current());
           KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar").arg( tb->text() ), 0,
                                                actionCollection(), tb->name() );
-          connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
+#if KDE_IS_VERSION(3,2,90)
+	  act->setCheckedState(i18n("Hide %1 Toolbar").arg( tb->text() ));
+#endif
+	  connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
           act->setChecked ( !tb->isHidden() );
           d->m_toolbarList.append( act );
       }
