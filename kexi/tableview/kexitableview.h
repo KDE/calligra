@@ -130,8 +130,8 @@ public:
 	// properties
 	bool		backgroundAltering() const;
 	void		setBackgroundAltering(bool altering);
-	bool		recordIndicator() const;
-	void		setRecordIndicator(bool indicator);
+//	bool		recordIndicator() const;
+//	void		setRecordIndicator(bool indicator);
 	bool		editableOnDoubleClick() const;
 	void		setEditableOnDoubleClick(bool set);
 	QColor		emptyAreaColor() const;
@@ -223,7 +223,17 @@ protected:
 	void	createEditor(int row, int col, QString addText = QString::null, bool backspace = false);
 	bool	focusNextPrevChild(bool next);
 
+	/*! Updates visibility/accesibility of popup menu items,
+	returns false if no items are visible after update. */
 	bool	updateContextMenu();
+	
+	/*! Shows context menu at \a pos for selected cell
+	 if menu is configured,
+	 else: contextMenuRequested() signal is emmited.
+	 Method used in contentsMousePressEvent() (for right button)
+	 and keyPressEvent() for Qt::Key_Menu key.
+	 If \a pos is QPoint(-1,-1) (the default), menu is positioned below the current cell.
+	*/
 	void	showContextMenu( QPoint pos = QPoint(-1,-1) );
 
 protected slots:

@@ -42,7 +42,7 @@ class KexiTableViewPrivate
 	void clearVariables();
 
 	bool editOnDoubleClick : 1;
-	bool recordIndicator : 1;
+//	bool recordIndicator : 1;
 
 	// cursor position
 	int			curRow;
@@ -74,7 +74,6 @@ class KexiTableViewPrivate
 //	QMemArray<int> pColumnModes;
 //	QPtrList<QVariant> pColumnDefaults;
 
-	bool			needAutoScroll;
 	QTimer			*scrollTimer;
 	KexiTableItem	*pInsertItem;
 
@@ -82,7 +81,11 @@ class KexiTableViewPrivate
 
 	KexiTableView::ScrollDirection scrollDirection;
 
-	bool			bgAltering;
+	bool			needAutoScroll : 1;
+
+	bool			bgAltering : 1;
+	
+	bool disableDrawContents : 1;
 
 	QColor emptyAreaColor;
 };

@@ -34,6 +34,8 @@
 #include <qcursor.h>
 #include <qstyle.h>
 
+#include <unistd.h>
+
 #include <config.h>
 
 #include <kglobal.h>
@@ -117,7 +119,11 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //	d->pVerticalHeader->setFixedWidth(d->rowHeight);
 	d->pVerticalHeader->setCurrentRow(-1);
 
-	setMargins(d->pTopHeader->sizeHint().height(), d->pTopHeader->sizeHint().height(), 0, 0);
+	setMargins(
+		QMIN(d->pTopHeader->sizeHint().height(), d->rowHeight),
+		d->pTopHeader->sizeHint().height(), 0, 0);
+
+	setMinimumHeight(horizontalScrollBar()->height() + d->rowHeight + topMargin());
 
 /*	d->pVerticalHeader = new KexiTableHeader(this);
 	
@@ -176,7 +182,6 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 		m_data = data;
 		m_owner = owner;
 		kdDebug() << "KexiTableView::setData(): using shared data" << endl;
-//		d->numRows = contents->count();
 		//add columns
 		d->pTopHeader->setUpdatesEnabled(false);
 		{
@@ -196,34 +201,6 @@ void KexiTableView::addDropFilter(const QString &filter)
 {
 	d->dropFilters.append(filter);
 }
-
-/*js
-void KexiTableView::addColumn(ColumnData colData)
-{
-//	d->numCols++;
-	d->pColumnTypes.resize(d->numCols);
-	d->pColumnModes.resize(d->numCols);
-
-	d->pColumnTypes.at(d->numCols-1) = type;
-
-	if(editable && autoinc)
-	{
-		d->pColumnModes.at(d->numCols-1) = ColumnEditable | ColumnAutoIncrement;
-	}
-	else if(editable)
-	{
-		d->pColumnModes.at(d->numCols-1) = ColumnEditable;
-	}
-	else
-	{
-		d->pColumnModes.at(d->numCols-1) = ColumnReadOnly;
-	}
-
-	d->pColumnDefaults.append(new QVariant(defaultValue));
-	d->pTopHeader->addLabel(name, width);
-	d->pTopHeader->setUpdatesEnabled(true);
-}
-*/
 
 void KexiTableView::setFont(const QFont &f)
 {
@@ -273,13 +250,8 @@ void KexiTableView::addRecord()
 
 void KexiTableView::clearData(bool repaint)
 {
-/*	for(int i=0; i < rows(); i++)
-	{
-		d->pVerticalHeader->removeLabel();
-	}*/
-	d->pVerticalHeader->clear();
-
 	cancelEditor();
+	d->pVerticalHeader->clear();
 	m_data->clear();
 
 	d->clearVariables();
@@ -504,6 +476,8 @@ void KexiTableView::createBuffer(int width, int height)
 
 void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 {
+	if (d->disableDrawContents)
+		return;
 	int colfirst = columnAt(cx);
 	int rowfirst = rowAt(cy);
 	int collast = columnAt(cx + cw-1);
@@ -519,7 +493,6 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 
 	if (rowfirst == -1 || colfirst == -1)
 	{
-//	updateContents(0,0,1000,1000);
 		paintEmptyArea(p, cx, cy, cw, ch);
 		return;
 	}
@@ -636,7 +609,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	p->setPen(pen);
 
 	//	If we are in the focus cell, draw indication
-	if(d->pCurrentItem == item && col == d->curCol && !d->recordIndicator)
+	if(d->pCurrentItem == item && col == d->curCol) //js: && !d->recordIndicator)
 	{
 		if (hasFocus() || viewport()->hasFocus()) {
 			p->drawRect(0, 0, x2, y2);
@@ -897,13 +870,33 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	//	if we have a new focus cell, repaint
 	if (( d->curRow != oldRow) || (d->curCol != oldCol ))
 	{
+		kdDebug() << "KexiTableView::contentsMousePressEvent(): new cell: reapaint!" << endl;
 		int cw = columnWidth( d->curCol );
 		int rh = rowHeight();
-		updateCell( d->curRow, d->curCol );
-		ensureVisible( columnPos( d->curCol ) + cw / 2, rowPos( d->curRow ) + rh / 2, cw / 2, rh / 2 );
-		updateCell( oldRow, oldCol );
+		int cp = columnPos( d->curCol );
+		
+		kdDebug() << "colpos=" << columnPos( d->curCol ) << " cw="<<cw
+		<<" contentsWidth()="<<contentsWidth()<<" contentsX()="<<contentsX()
+		<<" visibleWidth()="<<visibleWidth()<<endl;
+
 		d->pVerticalHeader->setCurrentRow(d->curRow);
 		d->pCurrentItem = itemAt(d->curRow);
+//		d->disableDrawContents = true;
+		ensureVisible( columnPos( d->curCol ) + cw / 2, rowPos( d->curRow ) + rh / 2, cw / 2, rh / 2 );
+//		d->disableDrawContents = false;
+		updateCell( oldRow, oldCol );
+		
+		//update newly visible area:
+		if ((cp+cw) >= visibleWidth()) {
+			//full column update, because it was hidded (at least partially)
+			updateContents( QRect(cp, 0, cw, visibleHeight()) );
+		} 
+		else {
+			//update just new cell
+			updateCell( d->curRow, d->curCol );
+		}
+//		d->pVerticalHeader->setCurrentRow(d->curRow);
+//		d->pCurrentItem = itemAt(d->curRow);
 //		kdDebug()<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) trying to get the current item"<<endl;
 		emit itemSelected(d->pCurrentItem);
 	}
@@ -927,13 +920,6 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	}
 }
 
-/*! Shows context menu at \a pos for selected cell
-	if menu is configured,
-	else: contextMenuRequested() signal is emmited.
-	Method used in contentsMousePressEvent() (for right button)
-	and keyPressEvent() for Qt::Key_Menu key.
-	If \a pos is QPoint(-1,-1) (the default), menu is positioned below the current cell.
-*/
 void KexiTableView::showContextMenu(QPoint pos)
 {
 	if (pos==QPoint(-1,-1)) {
@@ -1399,18 +1385,19 @@ void KexiTableView::contentsDropEvent(QDropEvent *ev)
 
 void KexiTableView::updateCell(int row, int col)
 {
+	kdDebug() << "updateCell("<<row<<", "<<col<<")"<<endl;
 
-	if(!d->recordIndicator)
-	{
+//	if(!d->recordIndicator)
+//	{
 		updateContents(cellGeometry(row, col));
-	}
+	/*}
 	else
 	{
 		for(int i = 0; i < (int)m_data->columnsCount(); i++)
 		{
 			updateContents(cellGeometry(row, i));
 		}
-	}
+	}*/
 
 }
 
@@ -1574,6 +1561,8 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 	d->curRow = QMIN( rows() - 1, d->curRow);
 
 	d->pCurrentItem = itemAt(d->curRow);
+	kdDebug() << "setCursor(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol << endl;
+
 	if ( d->curRow != oldRow || d->curCol != oldCol )
 	{
 //		int cw = columnWidth( d->curCol );
@@ -1632,8 +1621,6 @@ KexiTableView::DeletionPolicy KexiTableView::deletionPolicy() const
 	return d->deletionPolicy;
 }
 
-/*! Updates visibility/accesibility of popup menu items,
-  returns false if no items are visible after update. */
 bool KexiTableView::updateContextMenu()
 {
   // delete d->pContextMenu;
@@ -1662,6 +1649,7 @@ bool KexiTableView::updateContextMenu()
 
 void KexiTableView::slotAutoScroll()
 {
+	kdDebug() << "KexiTableView::slotAutoScroll()" <<endl;
 	if(d->needAutoScroll)
 	{
 		switch(d->scrollDirection)
@@ -1801,8 +1789,8 @@ KexiTableItem *KexiTableView::selectedItem() const
 void KexiTableView::setBackgroundAltering(bool altering) { d->bgAltering = altering; }
 bool KexiTableView::backgroundAltering()  const { return d->bgAltering; }
 
-void KexiTableView::setRecordIndicator(bool indicator) { d->recordIndicator = indicator; }
-bool KexiTableView::recordIndicator() const { return d->recordIndicator; }
+//void KexiTableView::setRecordIndicator(bool indicator) { d->recordIndicator = indicator; }
+//bool KexiTableView::recordIndicator() const { return d->recordIndicator; }
 
 void KexiTableView::setEditableOnDoubleClick(bool set) { d->editOnDoubleClick = set; }
 bool KexiTableView::editableOnDoubleClick() const { return d->editOnDoubleClick; }

@@ -39,14 +39,13 @@ public:
 	KexiTableRM(QWidget *parent);
 	~KexiTableRM();
 
-	void paintEvent(QPaintEvent *e);
-
 public slots:
 	void setOffset(int offset);
 	void setCellHeight(int cellHeight);
 	void setCurrentRow(int row);
 
-	void setInsertRow(int row);
+	void setEditRow(int row);
+	void showInsertRow(bool show);
 	void setColor(const QColor &color);
 
 	void addLabel();
@@ -58,14 +57,18 @@ public slots:
 	void clear();
 
 protected:
+	int maxRow() const;
+	virtual void paintEvent(QPaintEvent *e);
+	
 	int	m_rowHeight;
 	int	m_offset;
 	int	m_currentRow;
-	int	m_insertRow;
+	int	m_editRow;
 	int	m_max;
+	bool m_showInsertRow : 1;
 
 	QColor	m_pointerColor;
-	QImage m_penImg;
+	QImage m_penImg, m_plusImg;
 };
 
 #endif

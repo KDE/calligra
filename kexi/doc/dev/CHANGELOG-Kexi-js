@@ -93,7 +93,7 @@ TODO: add to field's properties list: input mask, validation rule, column width
 FIX: corrupted database can be created sometimes (eg. for tests/newapi sqlite dbcreation)
         --reason: maybe file was not flushed and app too early exited?
 
-TODO: improove Expression class, add code for generationg expression 
+TODO: improove Expression class, add code for generating expression 
  strings in Connection::queryStatement()
 
 <SQLITE>
@@ -143,6 +143,10 @@ ALSO TODO:
 Jowenn's KexiDataProvider class functionality seems to be something like kexidb now offers.
 
 </RENAME_PROPOSALS>
+
+2003-10-15
+- missing QuerySchema::addAsterisk(QueryAsterisk *asterisk) added
+- KexiDataTable headers and cells repainting improoved
 
 2003-10-14
 - DriverBehaviour::ROW_ID_FIELD_NAME added

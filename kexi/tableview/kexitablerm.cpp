@@ -37,6 +37,12 @@ static const unsigned char img_pen_data[] = {
     0xe9,0x85,0x54,0xfb,0xb1,0xa5,0x1b,0x52,0xdc,0x0e,0x00,0xf2,0xea,0x0a,
     0x13
 };
+static const unsigned char img_plus_data[] = {
+    0x00,0x00,0x01,0x90,0x78,0x9c,0xfb,0xff,0xff,0x3f,0xc3,0x7f,0x28,0x86,
+    0x82,0xff,0x50,0x0c,0x17,0x47,0xc7,0xd4,0x50,0x87,0x05,0xc0,0xd5,0xe1,
+    0x10,0xa7,0x16,0x26,0xca,0x5e,0x7c,0xfe,0x20,0x47,0x1d,0xb2,0x5a,0x5c,
+    0xea,0x40,0x72,0x00,0x03,0x6e,0x74,0x8c
+};
 
 static struct EmbedImage {
     int width, height, depth;
@@ -46,8 +52,24 @@ static struct EmbedImage {
     const QRgb *colorTable;
     bool alpha;
     const char *name;
-} embed_image = 
-    { 17, 12, 32, (const unsigned char*)img_pen_data, 57, 0, 0, TRUE, "pen.png" };
+} embed_image[] = {
+    { 17, 12, 32, (const unsigned char*)img_pen_data, 57, 0, 0, TRUE, "tableview_pen.png" },
+    { 10, 10, 32, (const unsigned char*)img_pen_data, 50, 0, 0, TRUE, "tableview_plus.png" }
+};
+
+void getImg(QImage &image, const unsigned char* data, int id)
+{
+	QByteArray baunzip;
+	baunzip = qUncompress( data, embed_image[id].compressed );
+	QImage img((uchar*)baunzip.data(),
+			embed_image[id].width, embed_image[id].height,
+			embed_image[id].depth, (QRgb*)embed_image[id].colorTable,
+			embed_image[id].numColors, QImage::BigEndian
+	);
+	image = img.copy();
+	if ( embed_image[id].alpha )
+		image.setAlphaBuffer(TRUE);
+}
 
 KexiTableRM::KexiTableRM(QWidget *parent)
 :QWidget(parent)
@@ -55,23 +77,13 @@ KexiTableRM::KexiTableRM(QWidget *parent)
 	m_rowHeight = 1;
 	m_offset=0;
 	m_currentRow=-1;
-	m_insertRow=-1;
+	m_editRow=-1;
 	m_pointerColor = QColor(99,0,0);
 	m_max = 0;
-
-	QByteArray baunzip;
-	baunzip = qUncompress( img_pen_data, embed_image.compressed );
-	QImage img((uchar*)baunzip.data(),
-			embed_image.width,
-			embed_image.height,
-			embed_image.depth,
-			(QRgb*)embed_image.colorTable,
-			embed_image.numColors,
-			QImage::BigEndian
-	);
-	m_penImg = img.copy();
-	if ( embed_image.alpha )
-		m_penImg.setAlphaBuffer(TRUE);
+	m_showInsertRow = true;//false;
+	
+	getImg(m_penImg, img_pen_data, 0);
+	getImg(m_plusImg, img_plus_data, 1);
 }
 
 KexiTableRM::~KexiTableRM()
@@ -86,8 +98,10 @@ void KexiTableRM::addLabel()
 
 void KexiTableRM::removeLabel()
 {
-	m_max--;
-	update();
+	if (m_max > 0) {
+		m_max--;
+		update();
+	}
 }
 
 void KexiTableRM::addLabels(int num)
@@ -102,6 +116,14 @@ void KexiTableRM::clear()
 	update();
 }
 
+int KexiTableRM::maxRow() const
+{
+	if (m_showInsertRow)
+		return m_max +1;
+	else
+		return m_max;
+}
+
 void KexiTableRM::paintEvent(QPaintEvent *e)
 {
 	QPainter p(this);
@@ -109,8 +131,8 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 
 	int first = (r.top()    + m_offset) / m_rowHeight + 1;
 	int last  = (r.bottom() + m_offset) / m_rowHeight + 1;
-	if(last > m_max)
-		last = m_max;
+	if(last > maxRow())
+		last = maxRow();
 
 	for(int i=first - 1; i < last; i++)
 	{
@@ -120,27 +142,30 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 		style().drawPrimitive(QStyle::PE_HeaderSection, &p, r, colorGroup());
 	}
 
-	if(m_currentRow >= first-1 && m_currentRow <= last)
-	{
-
+	if (m_editRow >= first && m_editRow <= (last+1/*+1 for insert row*/)) {
+		//show pen when editing
+		int ofs = m_rowHeight / 4;
+		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+1;
+		p.drawImage((m_rowHeight-m_penImg.width())/2+2,(m_rowHeight-m_penImg.height())/2+pos,m_penImg);
+	}
+	else if(m_currentRow >= first-1 && m_currentRow <= last) {
+		//show marker
 		p.setBrush(colorGroup().foreground());
 		QPointArray points(3);
 		int ofs = m_rowHeight / 4;
-		int ofs2 = m_rowHeight / 3;
+		int ofs2 = (width() - ofs) / 2 -1;
 		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+1;
-		points.putPoints(0, 3, ofs2+1, pos+ofs, ofs2 + 1 + ofs, pos+ofs*2, 
-			ofs2+1,pos+ofs*3);
-
-/*
-		int half = m_rowHeight / 2;
-		points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);*/
-
+		points.putPoints(0, 3, ofs2, pos+ofs, ofs2 + ofs, pos+ofs*2, 
+			ofs2,pos+ofs*3);
 		p.drawPolygon(points);
+/*		int half = m_rowHeight / 2;
+		points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);*/
 	}
-
-#if 0 //(js) : will be used
-	p.drawImage((m_rowHeight-m_penImg.width())/2+2,(m_rowHeight-m_penImg.height())/2+pos,m_penImg);
-#endif
+	if (m_showInsertRow && m_editRow < (last+1)) {
+		//show sign
+		int pos = ((m_rowHeight*(maxRow()-1))-m_offset)+(m_rowHeight-m_plusImg.height())/2;
+		p.drawImage((width()-m_plusImg.width())/2-1, pos, m_plusImg);
+	}
 	
 #if 0
 
@@ -174,10 +199,13 @@ void KexiTableRM::setCurrentRow(int row)
 {
 	int oldRow = m_currentRow;
 	m_currentRow=row;//+1;
-	update(0,(m_rowHeight*(oldRow))-m_offset, width(), m_rowHeight);
-	update(0,(m_rowHeight*row)-m_offset, width(), m_rowHeight);
-	update(0,(m_rowHeight*row-1)-m_offset, width(), m_rowHeight);
-	update(0,(m_rowHeight*row+1)-m_offset, width(), m_rowHeight);
+	
+	update(0,(m_rowHeight*(oldRow))-m_offset-1, width()+2, m_rowHeight+2);
+//	update(0,(m_rowHeight*row)-m_offset, width(), m_rowHeight);
+	update(0,(m_rowHeight*row)-m_offset-1, width()+2, m_rowHeight+2);
+//	update(0,(m_rowHeight*row+1)-m_offset, width(), m_rowHeight);
+	
+//	update();
 //	update(0, (m_rowHeight*(row+1))-m_offset, width(), m_rowHeight);
 }
 
@@ -193,9 +221,14 @@ void KexiTableRM::setCellHeight(int cellHeight)
 	m_rowHeight = cellHeight;
 }
 
-void KexiTableRM::setInsertRow(int row)
+void KexiTableRM::setEditRow(int row)
 {
-	m_insertRow = row;
+	m_editRow = row;
+}
+
+void KexiTableRM::showInsertRow(bool show)
+{
+	m_showInsertRow = show;
 }
 
 void KexiTableRM::setColor(const QColor &newcolor)
