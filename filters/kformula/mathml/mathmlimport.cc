@@ -36,7 +36,7 @@
 
 
 typedef KGenericFactory<MathMLImport, KoFilter> MathMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkfomathmlimport, MathMLImportFactory( "kformulamathmlfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libkfomathmlimport, MathMLImportFactory( "kofficefilters" ) )
 
 
 MathMLImport::MathMLImport(KoFilter *, const char *, const QStringList&)

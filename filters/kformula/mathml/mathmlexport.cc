@@ -37,7 +37,7 @@
 
 
 typedef KGenericFactory<MathMLExport, KoFilter> MathMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkfomathmlexport, MathMLExportFactory( "kformulamathmlfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libkfomathmlexport, MathMLExportFactory( "kofficefilters" ) )
 
 
 MathMLExport::MathMLExport( KoFilter */*parent*/, const char */*name*/, const QStringList& )
