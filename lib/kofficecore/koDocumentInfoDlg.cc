@@ -279,7 +279,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
-  QFrame *page = d->m_dialog->addPage( i18n("about the document", "About") );
+  QFrame *page = d->m_dialog->addPage( i18n("about the document", "Document") );
   QGridLayout *grid = new QGridLayout( page, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
   grid->addWidget( new QLabel( i18n( "Title:" ), page ), 0, 0);
