@@ -58,7 +58,7 @@ public:
 
     // Overloaded methods from KoDocument
 
-    virtual bool saveChildren (KoStore* _store, const char *_path);
+    virtual bool saveChildren (KoStore* _store, const QString &_path);
     virtual QDomDocument saveXML() { return m_gdocument->saveToXml(); }
 
     //bool completeSaving (KoStore* store); // not needed? - what about embedded wmf files?

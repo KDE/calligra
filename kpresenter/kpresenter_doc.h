@@ -349,7 +349,7 @@ protected:
     /**
      * Overloaded function from @ref Document_impl. Saves all children.
      */
-    virtual bool saveChildren( KoStore* _store, const char *_path );
+    virtual bool saveChildren( KoStore* _store, const QString &_path );
 
     virtual void draw( QPaintDevice*, long int, long int, float _scale );
 

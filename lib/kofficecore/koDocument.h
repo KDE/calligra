@@ -486,7 +486,7 @@ protected:
    *  return true;
    *  </PRE>
    */
-  virtual bool saveChildren( KoStore* store, const char *path );
+  virtual bool saveChildren( KoStore* store, const QString &path );
 
   /**
    *  Overload this function if you have to load additional files

@@ -1777,7 +1777,7 @@ void KWordDocument::enableEmbeddedParts( bool f )
 }
 
 /*================================================================*/
-bool KWordDocument::saveChildren( KoStore *_store, const char *_path )
+bool KWordDocument::saveChildren( KoStore *_store, const QString &_path )
 {
     int i = 0;
 

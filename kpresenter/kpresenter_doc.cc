@@ -308,7 +308,7 @@ void KPresenterDoc::draw( QPaintDevice* /*_dev*/, long int /*_width*/, long int 
 }
 
 /*======================= make child list intern ================*/
-bool KPresenterDoc::saveChildren( KoStore* _store, const char *_path )
+bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 

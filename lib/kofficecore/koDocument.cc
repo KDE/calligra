@@ -511,10 +511,10 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
   }
 }
 
-bool KoDocument::saveChildren( KoStore* /*_store*/, const char * /*_path*/ )
+bool KoDocument::saveChildren( KoStore* /*_store*/, const QString& /*_path*/ )
 {
   // Lets assume that we do not have children
-  kdWarning(30003) << "KoDocument::saveChildren( KoStore*, const char * )" << endl;
+  kdWarning(30003) << "KoDocument::saveChildren( KoStore*, const QString & )" << endl;
   kdWarning(30003) << "Not implemented ( not really an error )" << endl;
   return true;
 }

@@ -129,7 +129,7 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
       KSpreadTable *t = m_pDoc->createTable();
       m_pDoc->addTable( t );
       if ( !t->loadXML( e ) )
-	return false;
+        return false;
     }
     n = n.nextSibling();
   }
@@ -156,14 +156,14 @@ KSpreadTable* KSpreadMap::findTable( const QString & _name )
 
     for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
     {
-	if ( _name == t->tableName() )
-	    return t;
+        if ( _name == t->tableName() )
+            return t;
     }
 
     return 0L;
 }
 
-bool KSpreadMap::saveChildren( KoStore* _store, const char *_path )
+bool KSpreadMap::saveChildren( KoStore* _store, const QString &_path )
 {
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
@@ -189,7 +189,7 @@ bool KSpreadMap::loadChildren( KoStore* _store )
 DCOPObject* KSpreadMap::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KSpreadMapIface( this );
+        m_dcop = new KSpreadMapIface( this );
 
     return m_dcop;
 }

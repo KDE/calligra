@@ -412,7 +412,7 @@ protected slots:
 
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
-    virtual bool saveChildren( KoStore *_store, const char *_path );
+    virtual bool saveChildren( KoStore *_store, const QString &_path );
 
     virtual bool completeLoading( KoStore* /* _store */ );
 

@@ -98,7 +98,7 @@ bool KIllustratorDocument::loadChildren (KoStore* store)
   return true;
 }
 
-bool KIllustratorDocument::saveChildren (KoStore* _store, const char *_path)
+bool KIllustratorDocument::saveChildren (KoStore* _store, const QString &_path)
 {
   int i = 0;
   QListIterator<KoDocumentChild> it ( children() );

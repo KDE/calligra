@@ -57,7 +57,7 @@ public:
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 
-  bool saveChildren( KoStore* _store, const char *_path );
+  bool saveChildren( KoStore* _store, const QString &_path );
 
   /**
    * @param _table becomes added to the map.

@@ -147,12 +147,12 @@ public:
    * Changes the paper layout and repaints the currently displayed KSpreadTable.
    */
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
-		       KoFormat _paper, KoOrientation orientation );
+                       KoFormat _paper, KoOrientation orientation );
   /**
    * A convenience function using a string as paper format and orientation.
    */
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
-		       const char* _paper, const char* _orientation );
+                       const char* _paper, const char* _orientation );
 
   QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return "";
   return completeHeading( m_headLeft.data(), _p, _t ); }
@@ -175,7 +175,7 @@ public:
   QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.data(); }
 
   void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
-			const char *_footl, const char *_footm, const char *_footr );
+                        const char *_footl, const char *_footm, const char *_footr );
 
   /**
    * @return the KScript Interpreter used by this document.
@@ -286,7 +286,7 @@ protected:
   /**
    * Overloaded function of @ref KoDocument.
    */
-  virtual bool saveChildren( KoStore* _store, const char *_path );
+  virtual bool saveChildren( KoStore* _store, const QString &_path );
 
   /**
    * Initializes the KScript Interpreter.

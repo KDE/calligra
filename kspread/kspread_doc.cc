@@ -67,7 +67,7 @@ int KSpreadDoc::s_docId = 0;
 QList<KSpreadDoc>& KSpreadDoc::documents()
 {
     if ( s_docs == 0 )
-	s_docs = new QList<KSpreadDoc>;
+        s_docs = new QList<KSpreadDoc>;
     return *s_docs;
 }
 
@@ -125,19 +125,19 @@ bool KSpreadDoc::initDoc()
     KoTemplateChooseDia::ReturnType ret;
 
     ret = KoTemplateChooseDia::choose(  KSpreadFactory::global(), f, "application/x-kspread",
-					"*.ksp", "KSpread", KoTemplateChooseDia::NoTemplates );
+                                        "*.ksp", "KSpread", KoTemplateChooseDia::NoTemplates );
 
     if ( ret == KoTemplateChooseDia::File ) {
         KURL url;
         url.setPath(f);
-	return openURL( url );
+        return openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
-	KSpreadTable *t = createTable();
-	m_pMap->addTable( t );
-	resetURL();
-	return true;
+        KSpreadTable *t = createTable();
+        m_pMap->addTable( t );
+        resetURL();
+        return true;
     } else
-	return false;
+        return false;
 }
 
 KoMainWindow* KSpreadDoc::createShell()
@@ -151,11 +151,11 @@ KoMainWindow* KSpreadDoc::createShell()
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 {
     if ( name == 0 )
-	name = "View";
+        name = "View";
     return new KSpreadView( parent, name, this );
 }
 
-bool KSpreadDoc::saveChildren( KoStore* _store, const char *_path )
+bool KSpreadDoc::saveChildren( KoStore* _store, const QString &_path )
 {
   return m_pMap->saveChildren( _store, _path );
 }
@@ -290,13 +290,13 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     {
       QDomElement left = head.namedItem( "left" ).toElement();
       if ( !left.isNull() )
-	hleft = left.text();
+        hleft = left.text();
       QDomElement center = head.namedItem( "center" ).toElement();
       if ( !center.isNull() )
       hcenter = center.text();
       QDomElement right = head.namedItem( "right" ).toElement();
       if ( !right.isNull() )
-	hright = right.text();
+        hright = right.text();
     }
     // <foot>
     QDomElement foot = paper.namedItem( "foot" ).toElement();
@@ -304,13 +304,13 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     {
       QDomElement left = foot.namedItem( "left" ).toElement();
       if ( !left.isNull() )
-	fleft = left.text();
+        fleft = left.text();
       QDomElement center = foot.namedItem( "center" ).toElement();
       if ( !center.isNull() )
-	fcenter = center.text();
+        fcenter = center.text();
       QDomElement right = foot.namedItem( "right" ).toElement();
       if ( !right.isNull() )
-	fright = right.text();
+        fright = right.text();
     }
     setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright );
   }
@@ -371,7 +371,7 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
 }
 
 void KSpreadDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
-			       const char *_footl, const char *_footm, const char *_footr )
+                               const char *_footl, const char *_footm, const char *_footr )
 {
   m_headLeft = _headl;
   m_headRight = _headr;
@@ -384,7 +384,7 @@ void KSpreadDoc::setHeadFootLine( const char *_headl, const char *_headm, const 
 }
 
 void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
-			      KoFormat _paper, KoOrientation _orientation )
+                              KoFormat _paper, KoOrientation _orientation )
 {
   m_leftBorder = _leftBorder;
   m_rightBorder = _rightBorder;
@@ -401,27 +401,27 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 }
 
 void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
-			      const char * _paper, const char* _orientation )
+                              const char * _paper, const char* _orientation )
 {
     KoFormat f = paperFormat();
     KoOrientation o = orientation();
 
     if ( strcmp( "A3", _paper ) == 0L )
-	f = PG_DIN_A3;
+        f = PG_DIN_A3;
     else if ( strcmp( "A4", _paper ) == 0L )
-	f = PG_DIN_A4;
+        f = PG_DIN_A4;
     else if ( strcmp( "A5", _paper ) == 0L )
-	f = PG_DIN_A5;
+        f = PG_DIN_A5;
     else if ( strcmp( "B5", _paper ) == 0L )
-	f = PG_DIN_B5;
+        f = PG_DIN_B5;
     else if ( strcmp( "Executive", _paper ) == 0L )
-	f = PG_US_EXECUTIVE;
+        f = PG_US_EXECUTIVE;
     else if ( strcmp( "Letter", _paper ) == 0L )
-	f = PG_US_LETTER;
+        f = PG_US_LETTER;
     else if ( strcmp( "Legal", _paper ) == 0L )
-	f = PG_US_LEGAL;
+        f = PG_US_LEGAL;
     else if ( strcmp( "Screen", _paper ) == 0L )
-	f = PG_SCREEN;
+        f = PG_SCREEN;
     else if ( strcmp( "Custom", _paper ) == 0L )
     {
       m_paperWidth = 0.0;
@@ -431,17 +431,17 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
       m_paperWidth = atof( _paper );
       int i = tmp.find( 'x' );
       if ( i != -1 )
-	m_paperHeight = atof( tmp.data() + i + 1 );
+        m_paperHeight = atof( tmp.data() + i + 1 );
       if ( m_paperWidth < 10.0 )
-	m_paperWidth = PG_A4_WIDTH;
+        m_paperWidth = PG_A4_WIDTH;
       if ( m_paperHeight < 10.0 )
-	m_paperWidth = PG_A4_HEIGHT;
+        m_paperWidth = PG_A4_HEIGHT;
     }
 
     if ( strcmp( "Portrait", _orientation ) == 0L )
-	o = PG_PORTRAIT;
+        o = PG_PORTRAIT;
     else if ( strcmp( "Landscape", _orientation ) == 0L )
-	o = PG_LANDSCAPE;
+        o = PG_LANDSCAPE;
 
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
 }
@@ -452,32 +452,32 @@ void KSpreadDoc::calcPaperSize()
     {
     case PG_DIN_A5:
         m_paperWidth = PG_A5_WIDTH;
-	m_paperHeight = PG_A5_HEIGHT;
-	break;
+        m_paperHeight = PG_A5_HEIGHT;
+        break;
     case PG_DIN_A4:
-	m_paperWidth = PG_A4_WIDTH;
-	m_paperHeight = PG_A4_HEIGHT;
-	break;
+        m_paperWidth = PG_A4_WIDTH;
+        m_paperHeight = PG_A4_HEIGHT;
+        break;
     case PG_DIN_A3:
-	m_paperWidth = PG_A3_WIDTH;
-	m_paperHeight = PG_A3_HEIGHT;
-	break;
+        m_paperWidth = PG_A3_WIDTH;
+        m_paperHeight = PG_A3_HEIGHT;
+        break;
     case PG_DIN_B5:
-	m_paperWidth = PG_B5_WIDTH;
-	m_paperHeight = PG_B5_HEIGHT;
-	break;
+        m_paperWidth = PG_B5_WIDTH;
+        m_paperHeight = PG_B5_HEIGHT;
+        break;
     case PG_US_EXECUTIVE:
-	m_paperWidth = PG_US_EXECUTIVE_WIDTH;
-	m_paperHeight = PG_US_EXECUTIVE_HEIGHT;
-	break;
+        m_paperWidth = PG_US_EXECUTIVE_WIDTH;
+        m_paperHeight = PG_US_EXECUTIVE_HEIGHT;
+        break;
     case PG_US_LETTER:
-	m_paperWidth = PG_US_LETTER_WIDTH;
-	m_paperHeight = PG_US_LETTER_HEIGHT;
-	break;
+        m_paperWidth = PG_US_LETTER_WIDTH;
+        m_paperHeight = PG_US_LETTER_HEIGHT;
+        break;
     case PG_US_LEGAL:
-	m_paperWidth = PG_US_LEGAL_WIDTH;
-	m_paperHeight = PG_US_LEGAL_HEIGHT;
-	break;
+        m_paperWidth = PG_US_LEGAL_WIDTH;
+        m_paperHeight = PG_US_LEGAL_HEIGHT;
+        break;
     case PG_SCREEN:
         m_paperWidth = PG_SCREEN_WIDTH;
         m_paperHeight = PG_SCREEN_HEIGHT;
@@ -491,19 +491,19 @@ QString KSpreadDoc::paperFormatString()
     switch( m_paperFormat )
     {
     case PG_DIN_A5:
-	return QString( "A5" );
+        return QString( "A5" );
     case PG_DIN_A4:
-	return QString( "A4" );
+        return QString( "A4" );
     case PG_DIN_A3:
-	return QString( "A3" );
+        return QString( "A3" );
     case PG_DIN_B5:
-	return QString( "B5" );
+        return QString( "B5" );
     case PG_US_EXECUTIVE:
-	return QString( "Executive" );
+        return QString( "Executive" );
     case PG_US_LETTER:
-	return QString( "Letter" );
+        return QString( "Letter" );
     case PG_US_LEGAL:
-	return QString( "Legal" );
+        return QString( "Legal" );
     case PG_SCREEN:
         return QString( "Screen" );
     case PG_CUSTOM:
@@ -521,9 +521,9 @@ const char* KSpreadDoc::orientationString()
     switch( m_orientation )
     {
     case QPrinter::Portrait:
-	return "Portrait";
+        return "Portrait";
     case QPrinter::Landscape:
-	return "Landscape";
+        return "Landscape";
     }
 
     assert( 0 );
@@ -536,18 +536,18 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
     page.sprintf( "%i", _page );
     QString f = m_strFileURL;
     if ( f.isNull() )
-	f = "";
+        f = "";
     QString n = "";
     if ( f != "" )
     {
-	KURL u( f );
-	n = u.filename();
+        KURL u( f );
+        n = u.filename();
     }
     QString t = QTime::currentTime().toString().copy();
     QString d = QDate::currentDate().toString().copy();
     QString ta = "";
     if ( _table )
-	ta = _table;
+        ta = _table;
 
     // Read user specific informations....
     KConfig *config = KGlobal::config();
@@ -567,31 +567,31 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
     tmp = _data;
     int pos = 0;
     while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
-	tmp.replace( pos, 6, page );
+        tmp.replace( pos, 6, page );
     pos = 0;
     while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
-	tmp.replace( pos, 6, f );
+        tmp.replace( pos, 6, f );
     pos = 0;
     while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
-	tmp.replace( pos, 6, n );
+        tmp.replace( pos, 6, n );
     pos = 0;
     while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
-	tmp.replace( pos, 6, t );
+        tmp.replace( pos, 6, t );
     pos = 0;
     while ( ( pos = tmp.find( "<date>", pos ) ) != -1 )
-	tmp.replace( pos, 6, d );
+        tmp.replace( pos, 6, d );
     pos = 0;
     while ( ( pos = tmp.find( "<author>", pos ) ) != -1 )
-	tmp.replace( pos, 8, full_name );
+        tmp.replace( pos, 8, full_name );
     pos = 0;
     while ( ( pos = tmp.find( "<email>", pos ) ) != -1 )
-	tmp.replace( pos, 7, email_addr );
+        tmp.replace( pos, 7, email_addr );
     pos = 0;
     while ( ( pos = tmp.find( "<org>", pos ) ) != -1 )
-	tmp.replace( pos, 5, organization );
+        tmp.replace( pos, 5, organization );
     pos = 0;
     while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
-	tmp.replace( pos, 7, ta.data() );
+        tmp.replace( pos, 7, ta.data() );
 
     return QString( tmp.data() );
 }
@@ -632,7 +632,7 @@ void KSpreadDoc::initInterpreter()
       QString name = (*it).mid( pos + 1 );
       pos = name.find( '.' );
       if ( pos != -1 )
-	name = name.left( pos );
+        name = name.left( pos );
       m[ name ] = *it;
     }
   }
@@ -684,9 +684,9 @@ KSValue* KSpreadDoc::lookupKeyword( const QString& keyword )
       KSValue* v = mod->object( keyword );
       if ( v )
       {
-	v->ref();
-	m_kscriptMap.insert( keyword, v );
-	return v;
+        v->ref();
+        m_kscriptMap.insert( keyword, v );
+        return v;
       }
     }
   }
@@ -761,12 +761,12 @@ void KSpreadDoc::paperLayoutDlg()
     hf.footMid = footMid();
 
     if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
-	return;
+        return;
 
     if ( pl.format == PG_CUSTOM )
     {
-	m_paperWidth = pl.mmWidth;
-	m_paperHeight = pl.mmHeight;
+        m_paperWidth = pl.mmWidth;
+        m_paperHeight = pl.mmHeight;
     }
 
     setPaperLayout( pl.mmLeft, pl.mmTop, pl.mmRight, pl.mmBottom, pl.format, pl.orientation );
@@ -778,7 +778,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transp
 {
     KSpreadTable* table = m_pMap->firstTable();
     if ( !table )
-	return;
+        return;
 
     paintContent( painter, rect, transparent, table );
 }
@@ -786,7 +786,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transp
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table )
 {
     if ( isLoading() )
-	return;
+        return;
 
     // if ( !transparent )
     // painter.eraseRect( rect );
@@ -807,20 +807,20 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transp
     int left = xpos;
     for ( int y = top_row; y <= bottom_row; y++ )
     {
-	RowLayout *row_lay = table->rowLayout( y );
-	xpos = left;
+        RowLayout *row_lay = table->rowLayout( y );
+        xpos = left;
 
-	for ( int x = left_col; x <= right_col; x++ )
+        for ( int x = left_col; x <= right_col; x++ )
         {
-	    ColumnLayout *col_lay = table->columnLayout( x );
-	
-	    KSpreadCell *cell = table->cellAt( x, y );
-	    cell->paintCell( rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-	
-	    xpos += col_lay->width();
-	}
+            ColumnLayout *col_lay = table->columnLayout( x );
 
-	ypos += row_lay->height();
+            KSpreadCell *cell = table->cellAt( x, y );
+            cell->paintCell( rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+
+            xpos += col_lay->width();
+        }
+
+        ypos += row_lay->height();
     }
 }
 
@@ -840,7 +840,7 @@ KSpreadDoc::~KSpreadDoc()
 DCOPObject* KSpreadDoc::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KSpreadDocIface( this );
+        m_dcop = new KSpreadDocIface( this );
 
     return m_dcop;
 }
@@ -858,8 +858,8 @@ void KSpreadDoc::removeArea( QString name)
 {
   QValueList<Reference>::Iterator it2;
   for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
-    	{
-    	if((*it2).ref_name==name)
+        {
+        if((*it2).ref_name==name)
                 {
                 m_refs.remove(it2);
                 return;
@@ -871,8 +871,8 @@ void KSpreadDoc::changeAreaTableName(QString oldName,QString tableName)
 {
   QValueList<Reference>::Iterator it2;
   for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
-    	{
-    	if((*it2).table_name==oldName)
+        {
+        if((*it2).table_name==oldName)
                    (*it2).table_name=tableName;
         }
 }

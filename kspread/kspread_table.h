@@ -225,7 +225,7 @@ public:
     virtual bool loadXML( const QDomElement& );
     virtual bool loadChildren( KoStore* _store );
 
-    virtual bool saveChildren( KoStore* _store, const char *_path );
+    virtual bool saveChildren( KoStore* _store, const QString &_path );
 
     bool isLoading();
 
@@ -363,7 +363,7 @@ public:
     void setMarker( const QPoint& _point, KSpreadCanvas *_canvas = 0L );
 
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
-			   signed char _bold = -1, signed char _italic = -1, signed char _underline = -1,
+                           signed char _bold = -1, signed char _italic = -1, signed char _underline = -1,
                            signed char _strike = -1 );
     void setSelectionMoneyFormat( const QPoint &_marker,bool b );
     void setSelectionAlign( const QPoint &_marker, KSpreadLayout::Align _align );
@@ -583,7 +583,7 @@ public:
      * @see #bShowPageBorders
      */
     void setShowPageBorders( bool _b );
-	
+
     /**
      * Tests whether _column is the first column of a new page. In this
      * case the left border of this column may be drawn highlighted to show
