@@ -245,7 +245,8 @@ void KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
 
 void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
 {
-    context.styleStack().push( styleElem );
+    context.styleStack().save();
+    context.addStyles( &styleElem );
     KoParagLayout layout;
     KoParagLayout::loadOasisParagLayout( layout, context );
 
@@ -265,7 +266,7 @@ void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     // to the outline be switched on/off? If not, why is it a parag property?
     m_bOutline = m_name.startsWith( "Heading" );
 
-    context.styleStack().pop();
+    context.styleStack().restore();
 }
 
 const KoParagLayout & KoStyle::paragLayout() const
