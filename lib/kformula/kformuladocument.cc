@@ -36,12 +36,12 @@ KFORMULA_NAMESPACE_BEGIN
 
 struct Document::Document_Impl {
 
-    Document_Impl( KConfig* config )
-            : leftBracketChar('('), rightBracketChar(')'), formula(0)
+    Document_Impl( KConfig* c )
+            : leftBracketChar('('), rightBracketChar(')'), formula(0), firstTime( true ), config( c )
     {
         formulae.setAutoDelete( false );
         //kdDebug( DEBUGID ) << "Document::Document_Impl " << formulae.count() << endl;
-        readConfig( config );
+        contextStyle.readConfig( config );
     }
 
 
@@ -50,10 +50,6 @@ struct Document::Document_Impl {
         if (ownHistory) {
             delete history;
         }
-    }
-
-    void readConfig( KConfig* config ) {
-        contextStyle.readConfig( config );
     }
 
     // We know our actions, maybe a client is interessted...
@@ -132,6 +128,18 @@ struct Document::Document_Impl {
      * All formulae that belong to this document.
      */
     QPtrList<Container> formulae;
+
+    /**
+     * Lazy initialization. Read the symbol table only if
+     * we create a container.
+     */
+    bool firstTime;
+
+    /**
+     * The applications config object. We need to remember this so that
+     * we don't depend on global variables. (We don't know who uses us.)
+     */
+    KConfig* config;
 };
 
 
@@ -259,6 +267,14 @@ void Document::setZoom( double zoomX, double zoomY, bool updateViews, bool forPr
 
 Container* Document::createFormula()
 {
+    if ( impl->firstTime ) {
+        impl->firstTime = false;
+        impl->table.init();
+
+        QStringList names = impl->table.allNames();
+        impl->symbolNamesAction->setItems(names);
+        impl->selectedName = names[0];
+    }
     Container* f = new Container(this);
     impl->formulae.append(f);
     return f;
@@ -476,12 +492,9 @@ void Document::createActions(KActionCollection* collection)
                                         CTRL + Key_I,
                                         this, SLOT(insertSymbol()),
                                         collection, "formula_insertsymbol");
-    QStringList names = impl->table.allNames();
     impl->symbolNamesAction = new KSelectAction(i18n("Symbol names"),
                                           0, this, SLOT(symbolNames()),
                                           collection, "formula_symbolnames");
-    impl->symbolNamesAction->setItems(names);
-    impl->selectedName = names[0];
 }
 
 

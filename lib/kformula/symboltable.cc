@@ -18,33 +18,191 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qfile.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qtextstream.h>
+
+#include <kconfig.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kstddirs.h>
+
 #include "symboltable.h"
 
+
 KFORMULA_NAMESPACE_BEGIN
+
+class ConfigReader {
+public:
+    ConfigReader() {}
+    virtual ~ConfigReader() {}
+
+    void read( QFile& file );
+
+protected:
+
+    virtual void parseLine( QString line ) =0;
+
+    int parseInt( QString s, bool* b=0 );
+    QString parseAssignment( QString s, QString name );
+};
+
+void ConfigReader::read( QFile& file )
+{
+    QTextStream stream( &file );
+    QString line;
+    while ( !( line = stream.readLine() ).isNull() ) {
+        //kdDebug( DEBUGID ) << "ConfigReader::read: " << line << endl;
+        int p = line.find( '#' );
+        if ( p > -1 ) {
+            line = line.left( p );
+        }
+        line = line.stripWhiteSpace();
+        if ( line.length() > 0 ) {
+            parseLine( line );
+        }
+    }
+}
+
+int ConfigReader::parseInt( QString s, bool* b )
+{
+    s = s.stripWhiteSpace();
+    if ( s.length() == 0 ) {
+        if ( b ) *b = false;
+        return 0;
+    }
+    if ( s.length() == 1 ) {
+        return s.toInt( b );
+    }
+    if ( ( s[0]=='0' )&&( s[1]=='x' ) ) {
+        return s.right( s.length()-2 ).toInt( b, 16 );
+    }
+    if ( s[0]=='0' ) {
+        return s.right( s.length()-1 ).toInt( b, 8 );
+    }
+    return s.toInt( b );
+}
+
+QString ConfigReader::parseAssignment( QString s, QString name )
+{
+    int i = s.find( '=' );
+    if ( i > -1 ) {
+        if ( s.left( i-1 ).stripWhiteSpace() == name ) {
+            return s.right( s.length()-i-1 ).stripWhiteSpace();
+        }
+    }
+    return QString::null;
+}
+
+
+class UnicodeReader : public ConfigReader {
+public:
+    UnicodeReader( QMap<QChar, CharTableEntry>* t, QMap<QString, QChar>* e )
+        : ConfigReader(), table( t ), entries( e ) {}
+
+protected:
+
+    virtual void parseLine( QString line );
+
+private:
+    QMap<QChar, CharTableEntry>* table;
+    QMap<QString, QChar>* entries;
+};
+
+void UnicodeReader::parseLine( QString line )
+{
+    QStringList fields = QStringList::split( ',', line );
+    int id = -1;
+    CharClass cc = ORDINARY;
+    QString name;
+    switch ( QMIN( fields.size(), 3 ) ) {
+    case 3:
+        name = fields[ 2 ].stripWhiteSpace();
+    case 2: {
+        QString tmp = fields[ 1 ].stripWhiteSpace();
+        if ( tmp.upper() == "BINOP" ) {
+            cc = BINOP;
+        }
+        else if ( tmp.upper() == "RELATION" ) {
+            cc = RELATION;
+        }
+    }
+    case 1:
+        id = parseInt( fields[ 0 ] );
+    }
+    if ( id != -1 ) {
+        ( *table )[id] = CharTableEntry( name, cc );
+        if ( name.length() > 0 ) {
+            ( *entries )[ name ] = id;
+        }
+    }
+}
+
+
+class FontReader : public ConfigReader {
+public:
+    FontReader( QMap<QChar, CharTableEntry>* t, QValueVector<QFont>* f )
+        : ConfigReader(), table( t ), fontTable( f ), nameRead( false ) {}
+
+protected:
+
+    virtual void parseLine( QString line );
+
+private:
+    QMap<QChar, CharTableEntry>* table;
+    QValueVector<QFont>* fontTable;
+    bool nameRead;
+    uint index;
+};
+
+void FontReader::parseLine( QString line )
+{
+    if ( !nameRead ) {
+        QString fontName = parseAssignment( line, "name" );
+        if ( !fontName.isNull() ) {
+            nameRead = true;
+            index = fontTable->size();
+            fontTable->push_back( QFont( fontName ) );
+        }
+    }
+    else {
+        QStringList fields = QStringList::split( ',', line );
+        if ( fields.size() == 2 ) {
+            int pos = parseInt( fields[ 0 ] );
+            int id = parseInt( fields[ 1 ] );
+            ( *table )[id].setFontChar( static_cast<char>( index ), static_cast<uchar>( pos ) );
+        }
+    }
+}
 
 
 // get the generated table
 #include "symbolfontmapping.cc"
 
 
-CharTableEntry::CharTableEntry( char font, unsigned char ch, CharClass cl )
+CharTableEntry::CharTableEntry( QString n, CharClass cl )
+    : name( n )
 {
-    value = ( cl << 24 ) + ( font << 16 ) + ch;
+    value = cl << 24;
+}
+
+void CharTableEntry::setFontChar( char f, unsigned char c )
+{
+    value = ( charClass() << 24 ) + ( f << 16 ) + c;
 }
 
 
-SymbolFontCharTable::SymbolFontCharTable()
+SymbolFontHelper::SymbolFontHelper()
     : greek("abgdezhqiklmnxpvrstufjcywGDQLXPSUFYVW")
 {
     for ( uint i = 0; symbolFontMap[ i ].unicode != 0; i++ ) {
-        table()[ symbolFontMap[ i ].unicode ] =
-            CharTableEntry( 0, symbolFontMap[ i ].pos, symbolFontMap[ i ].cl );
         compatibility[ symbolFontMap[ i ].pos ] = symbolFontMap[ i ].unicode;
     }
 }
 
 
-QChar SymbolFontCharTable::unicodeFromSymbolFont( QChar pos ) const
+QChar SymbolFontHelper::unicodeFromSymbolFont( QChar pos ) const
 {
     if ( compatibility.contains( pos ) ) {
         return compatibility[ pos.latin1() ];
@@ -54,114 +212,119 @@ QChar SymbolFontCharTable::unicodeFromSymbolFont( QChar pos ) const
 
 
 SymbolTable::SymbolTable()
-    : fontTable( 1 )
 {
-    fontTable.setAutoDelete( true );
-    fontTable.insert( 0, new QFont( "symbol", 12, QFont::Normal, false ) );
+}
 
-    entries.setAutoDelete(true);
+void SymbolTable::init()
+{
+    QString filename = KGlobal::dirs()->findResource( "data", "kformula/unicode.tbl" );
+    if ( QFile::exists( filename ) ) {
+        QFile file( filename );
+        if ( file.open( IO_ReadOnly ) ) {
+            UnicodeReader reader( &unicodeTable, &entries );
+            reader.read( file );
+        }
+        else {
+            kdWarning( DEBUGID ) << "Error opening file '" << filename.latin1() << "'. Using defaults." << endl;
+            defaultInitUnicode();
+        }
+    }
+    else {
+        kdWarning( DEBUGID ) << "'unicode.tbl' not found. Using defaults." << endl;
+        defaultInitUnicode();
+    }
 
-    // constants
-    addEntry("\\e");
+    QStringList fontFiles = KGlobal::dirs()->findAllResources( "data", "kformula/*.font" );
+    if ( fontFiles.size() > 0 ) {
+        bool anySuccess = false;
+        for ( QStringList::Iterator it = fontFiles.begin(); it != fontFiles.end(); ++it ) {
+            //kdDebug() << "SymbolTable::defaultInitUnicode " << *it << endl;
+            QFile file( *it );
+            if ( file.open( IO_ReadOnly ) ) {
+                anySuccess = true;
+                FontReader reader( &unicodeTable, &fontTable );
+                reader.read( file );
+            }
+            else {
+                kdWarning( DEBUGID ) << "Error opening file '" << ( *it ).latin1() << "'." << endl;
+            }
+        }
+        if ( !anySuccess ) {
+            kdWarning( DEBUGID ) << "No font file read. Using defaults." << endl;
+            defaultInitFont();
+        }
+    }
+    else {
+        kdWarning( DEBUGID ) << "No font files found. Using defaults." << endl;
+        defaultInitFont();
+    }
+}
 
-    // functions
-    addEntry("\\lg");
-    addEntry("\\log");
-    addEntry("\\ln");
-
-    addEntry("\\sin");
-    addEntry("\\cos");
-    addEntry("\\tan");
-    addEntry("\\cot");
-    addEntry("\\arcsin");
-    addEntry("\\arccos");
-    addEntry("\\arctan");
-
-    addEntry("\\sinh");
-    addEntry("\\cosh");
-    addEntry("\\tanh");
-    addEntry("\\coth");
-
-    addEntry("\\arg");
-    addEntry("\\det");
-    addEntry("\\dim");
-    addEntry("\\exp");
-    addEntry("\\gcd");
-    addEntry("\\lim");
-
-    addEntry("\\min");
-    addEntry("\\max");
-
+void SymbolTable::defaultInitUnicode()
+{
     for ( uint i = 0; symbolFontMap[ i ].unicode != 0; i++ ) {
+        QString name = symbolFontMap[ i ].latexName;
+        unicodeTable[ symbolFontMap[ i ].unicode ] = CharTableEntry( name, symbolFontMap[ i ].cl );
         if ( symbolFontMap[ i ].latexName != 0 ) {
-            addEntry( symbolFontMap[ i ].latexName, symbolFontMap[ i ].unicode );
+            entries[ name ] = symbolFontMap[ i ].unicode;
         }
     }
 }
 
+void SymbolTable::defaultInitFont()
+{
+    fontTable.push_back( QFont( "symbol" ) );
+    for ( uint i = 0; symbolFontMap[ i ].unicode != 0; i++ ) {
+        unicodeTable[ symbolFontMap[ i ].unicode ].setFontChar( 0, symbolFontMap[ i ].pos );
+    }
+}
 
 bool SymbolTable::contains(QString name) const
 {
-    return entries.find(name) != 0;
+    return entries.find( name ) != entries.end();
 }
 
 QChar SymbolTable::unicode(QString name) const
 {
-    SymbolTableEntry* entry = entries.find(name);
-    if (entry != 0) {
-        return entry->unicode();
-    }
-    return QChar::null;
+    return entries[ name ];
 }
 
 
 QString SymbolTable::name(QChar symbol) const
 {
-    QDictIterator<SymbolTableEntry> it(entries);
-
-    while (it.current()) {
-        if (it.current()->unicode() == symbol) {
-            return it.currentKey();
-        }
-        ++it;
-    }
-    return "";
+    return unicodeTable[symbol].texName();
 }
 
 
 QFont SymbolTable::font( QChar symbol ) const
 {
-    return *fontTable[ symbolFontCharTable.font( symbol ) ];
+    char f = unicodeTable[symbol].font();
+    //kdDebug( DEBUGID ) << "SymbolTable::font " << fontTable.size() << " " << fontTable[f].rawName() << endl;
+    return fontTable[f];
 }
 
 
 uchar SymbolTable::character( QChar symbol ) const
 {
-    return symbolFontCharTable.character( symbol );
+    return unicodeTable[symbol].character();
 }
 
 
 CharClass SymbolTable::charClass( QChar symbol ) const
 {
-    return symbolFontCharTable.charClass( symbol );
+    return unicodeTable[symbol].charClass();
 }
 
 
 QChar SymbolTable::unicodeFromSymbolFont( QChar pos ) const
 {
-    return symbolFontCharTable.unicodeFromSymbolFont( pos );
+    return symbolFontHelper.unicodeFromSymbolFont( pos );
 }
 
 
 QString SymbolTable::greekLetters() const
 {
-    return symbolFontCharTable.greekLetters();
-}
-
-
-void SymbolTable::addEntry(QString name, QChar ch)
-{
-    entries.insert( name, new SymbolTableEntry( name, ch ) );
+    return symbolFontHelper.greekLetters();
 }
 
 
@@ -169,8 +332,10 @@ QStringList SymbolTable::allNames() const
 {
     QStringList list;
 
-    for (QDictIterator<SymbolTableEntry> iter = entries; iter.current() != 0; ++iter) {
-        list.append(iter.current()->name());
+    for ( QMap<QString, QChar>::const_iterator iter = entries.begin();
+          iter != entries.end();
+          ++iter ) {
+        list.append( iter.key() );
     }
     list.sort();
     return list;
