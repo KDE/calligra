@@ -483,7 +483,8 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     str +=  escapeRtfText((*paraFormatDataIt).variable.getHrefName());
                     str += "}}";
                     str += "{\\fldrslt ";
-                    str += "{\\ul\\cf2";   // underline+blue, TODO: use style Hyperlink
+                    str += "{\\ul";   // underline, ### TODO: use style Hyperlink
+                    str += lookupColor("\\cf",QColor(0,0,255));// blue
                     str += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
                     str += "}}}";
                 }
