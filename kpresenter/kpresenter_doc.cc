@@ -2515,7 +2515,7 @@ void KPresenterDoc::copyPageToClipboard( int pgnum )
     KURL url; url.setPath( tempFile.name() );
     KURL::List lst;
     lst.append( url );
-    QApplication::clipboard()->setData( new KURLDrag( lst ) );
+    QApplication::clipboard()->setData( KURLDrag::newDrag( lst ) );
     m_tempFileInClipboard = tempFile.name(); // do this last, the above calls clipboardDataChanged
 }
 
