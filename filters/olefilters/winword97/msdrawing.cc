@@ -250,7 +250,7 @@ unsigned MsDrawing::walkFile(
                     headerBytesToSkip = 17;
                     break;
                 default:
-                    kdError(s_area) << "MsDrawing:walkFile: Unknown Blip signature: " <<
+                    kdError(s_area) << "MsDrawing:walkFile: unknown Blip signature: " <<
                         data.inst << endl;
                     break;
                 }
