@@ -23,7 +23,7 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
 		 KoPageLayout _layout,int _flags)
   : QFrame(_parent), buffer(width(),height())
 {
-  setFrameStyle(Box | Sunken);
+  setFrameStyle(Box | Raised);
 
   canvas = _canvas;
   orientation = _orientation;
@@ -135,13 +135,13 @@ void KoRuler::drawHorizontal(QPainter *_painter)
     p.drawLine(i - diffx,7,i - diffx,height() - 7);
 
   p.setPen(QPen(black));
-  p.drawLine(pw - diffx - 1,1,pw - diffx - 1,height() - 1);
+  //p.drawLine(pw - diffx - 1,1,pw - diffx - 1,height() - 1);
   p.drawLine(pw - diffx + 1,1,pw - diffx + 1,height() - 1);
   p.setPen(QPen(white));
   p.drawLine(pw - diffx,1,pw - diffx,height() - 1);
 
   p.setPen(QPen(black));
-  p.drawLine(-diffx - 2,1,-diffx - 2,height() - 1);
+  //p.drawLine(-diffx - 2,1,-diffx - 2,height() - 1);
   p.drawLine(-diffx,1,-diffx,height() - 1);
   p.setPen(QPen(white));
   p.drawLine(-diffx - 1,1,-diffx - 1,height() - 1);
@@ -209,13 +209,13 @@ void KoRuler::drawVertical(QPainter *_painter)
     p.drawLine(7,i - diffy,width() - 7,i - diffy);
 
   p.setPen(QPen(black));
-  p.drawLine(1,ph - diffy - 1,width() - 1,ph - diffy - 1);
+  //p.drawLine(1,ph - diffy - 1,width() - 1,ph - diffy - 1);
   p.drawLine(1,ph - diffy + 1,width() - 1,ph - diffy + 1);
   p.setPen(QPen(white));
   p.drawLine(1,ph - diffy,width() - 1,ph - diffy);
 
   p.setPen(QPen(black));
-  p.drawLine(1,-diffy - 2,width() - 1,-diffy - 2);
+  //p.drawLine(1,-diffy - 2,width() - 1,-diffy - 2);
   p.drawLine(1,-diffy,width() - 1,-diffy);
   p.setPen(QPen(white));
   p.drawLine(1,-diffy - 1,width() - 1,-diffy - 1);

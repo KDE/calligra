@@ -60,3 +60,19 @@ void ResizeCmd::unexecute()
   doc->repaint(object);
 }
 
+/*====================== unexecute ===============================*/
+void ResizeCmd::unexecute(bool _repaint)
+{
+  QRect oldRect;
+
+  oldRect = object->getBoundingRect(0,0);
+  object->moveBy(-m_diff.x(),-m_diff.y());
+  object->resizeBy(-r_diff.width(),-r_diff.height());
+  
+  if (_repaint)
+    {
+      doc->repaint(oldRect);
+      doc->repaint(object);
+    }
+}
+

@@ -200,7 +200,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -391,7 +391,7 @@
   <OBJECT type="4">
    <ORIG x="219" y="758"/>
    <SIZE width="240" height="30"/>
-   <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
+   <SHADOW distance="1" direction="3" red="255" green="255" blue="255"/>
    <EFFECTS effect="8" effect2="0"/>
    <PRESNUM value="2"/>
    <ANGLE value="0"/>
@@ -403,42 +403,42 @@
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
-       <COLOR red="255" green="255" blue="0"/>
+       <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value="Come"/>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
-       <COLOR red="255" green="255" blue="0"/>
+       <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
-       <COLOR red="255" green="255" blue="0"/>
+       <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value="from"/>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
-       <COLOR red="255" green="255" blue="0"/>
+       <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
-       <COLOR red="255" green="255" blue="0"/>
+       <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value="left/bottom"/>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
-       <COLOR red="255" green="255" blue="0"/>
+       <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
       </OBJ>
@@ -753,7 +753,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -785,7 +785,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -817,7 +817,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -849,7 +849,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
@@ -881,7 +881,7 @@
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
-       <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
        <TEXT value=" "/>

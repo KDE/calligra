@@ -300,6 +300,10 @@ public:
     { return view; }
   KWPage *getPaperWidget()
     { return paperWidget; }
+  KoRuler *getVertRuler()
+    { return r_vert; }
+  KoRuler *getHorzRuler()
+    { return r_horz; }
   
   void setOffset(int _x,int _y)
     { xOffset = _x; yOffset = _y; }

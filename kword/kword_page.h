@@ -104,6 +104,8 @@ public:
 
   void recalcCursor();
 
+  int getVertRulerPos();
+
 protected:
   unsigned int ptLeftBorder();
   unsigned int ptRightBorder();

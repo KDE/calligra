@@ -221,7 +221,7 @@ void KWParagDia::setupTab1()
   cSpacing->insertItem(i18n("1.0 line"));
   cSpacing->insertItem(i18n("1.5 lines"));
   cSpacing->insertItem(i18n("2.0 lines"));
-  cSpacing->insertItem(i18n("Custom (pt)"));
+  cSpacing->insertItem(i18n("Space (pt)"));
   cSpacing->resize(cSpacing->sizeHint());
   connect(cSpacing,SIGNAL(activated(int)),this,SLOT(spacingActivated(int)));
   spacingGrid->addWidget(cSpacing,1,0);

@@ -1073,6 +1073,8 @@ void KWordView_impl::newPageLayout(KoPageLayout _layout)
   m_pKWordDoc->getPageLayout(pgLayout,cl);
 
   m_pKWordDoc->setPageLayout(_layout,cl);
+  gui->getHorzRuler()->setPageLayout(_layout);
+  gui->getVertRuler()->setPageLayout(_layout);
 }
 
 /*================================================================*/
@@ -1117,6 +1119,8 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   doc = _doc;
   view = _view;
 
+  r_horz = r_vert = 0;
+
   paperWidget = new KWPage(this,doc,this);
 
   s_vert = new QScrollBar(QScrollBar::Vertical,this);
@@ -1139,6 +1143,8 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   r_vert = new KoRuler(this,paperWidget,KoRuler::VERTICAL,layout,0);
   connect(r_horz,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
   connect(r_horz,SIGNAL(openPageLayoutDia()),view,SLOT(openPageLayoutDia()));
+  connect(r_vert,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
+  connect(r_vert,SIGNAL(openPageLayoutDia()),view,SLOT(openPageLayoutDia()));
 
   r_horz->hide();
   r_vert->hide();
@@ -1201,6 +1207,8 @@ void KWordGUI::scrollH(int _value)
      
   xOffset = _value;
   paperWidget->scroll(xo - _value,0);
+  if (r_horz)
+    r_horz->setOffset(xOffset,0);
 }
 
 /*================================================================*/
@@ -1210,6 +1218,8 @@ void KWordGUI::scrollV(int _value)
   
   yOffset = _value;
   paperWidget->scroll(0,yo - _value);
+  if (r_vert)
+    r_vert->setOffset(0,-paperWidget->getVertRulerPos());
 }
 
 /*================================================================*/
@@ -1235,10 +1245,10 @@ void KWordGUI::reorganize()
       r_vert->show();
       r_horz->show();
       
-      r_horz->setGeometry(20,0,width() - 20,20);
-      r_vert->setGeometry(0,20,20,height() - 20);
-      s_horz->setGeometry(20,height() - 16,width() - 36,16);
-      s_vert->setGeometry(width() - 16,20,16,height() - 36);
+      r_horz->setGeometry(20,0,width() - 36,20);
+      r_vert->setGeometry(0,20,20,height() - 36);
+      s_horz->setGeometry(0,height() - 16,width() - 16,16);
+      s_vert->setGeometry(width() - 16,0,16,height() - 16);
       paperWidget->setGeometry(20,20,width() - 36,height() - 36);
 
       setRanges();

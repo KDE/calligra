@@ -83,6 +83,14 @@ void KWPage::recalcCursor()
 }
 
 /*================================================================*/
+int KWPage::getVertRulerPos()
+{
+  int page = fc->getPage() - 1;
+
+  return (-yOffset + page * ZOOM(ptPaperHeight()));
+}
+
+/*================================================================*/
 void KWPage::paintEvent(QPaintEvent* e)
 {
   QPainter painter;
@@ -159,6 +167,8 @@ void KWPage::paintEvent(QPaintEvent* e)
 /*================================================================*/
 void KWPage::keyPressEvent(QKeyEvent *e)
 {
+  unsigned int oldPage = fc->getPage();
+
   XKeyboardControl kbdc;
   XKeyboardState kbds;
   bool repeat = true;
@@ -241,10 +251,17 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	painter.end();
 	draw_buffer = false;
+
+	scrollToCursor(*fc);
+
 	repaint(false);
 	// HACK
 	kbdc.auto_repeat_mode = repeat;
 	XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+
+	if (oldPage != fc->getPage())
+	  gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+
 	return;
 
       } break;
@@ -318,6 +335,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    // HACK
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+
+	    if (oldPage != fc->getPage())
+	      gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+
 	    return;
 	  }
 
@@ -473,6 +494,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
   // HACK
   kbdc.auto_repeat_mode = repeat;
   XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+
+  if (oldPage != fc->getPage())
+    gui->getVertRuler()->setOffset(0,-getVertRulerPos());
 }
 
 /*================================================================*/

@@ -1495,13 +1495,16 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
 	      else
 		{
 		  inserted = false;
-		  for (int j = orderList.count()-1;j >= 0;j--)
+		  if (orderList.count() - 1 >= 0)
 		    {
-		      if ((int*)(kpobject->getPresNum()) > orderList.at(j))
+		      for (int j = orderList.count() - 1;j >= 0;j--)
 			{
-			  orderList.insert(j+1,(int*)(kpobject->getPresNum()));
-			  j = -1;
-			  inserted = true;
+			  if ((int*)(kpobject->getPresNum()) > orderList.at(j))
+			    {
+			      orderList.insert(j+1,(int*)(kpobject->getPresNum()));
+			      j = -1;
+			      inserted = true;
+			    }
 			}
 		    }
 		  if (!inserted) orderList.insert(0,(int*)(kpobject->getPresNum()));

@@ -1,3 +1,4 @@
+
 /******************************************************************/
 /* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
 /* Version: 0.0.1                                                 */
@@ -198,19 +199,22 @@ void Page::mousePressEvent(QMouseEvent *e)
 	  firstX = e->x();
 	  firstY = e->y();
 
-	  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0 ;i--)
+	  if (objectList()->count() - 1 >= 0)
 	    {
-	      kpobject = objectList()->at(i);
-	      if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
+	      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0 ;i--)
 		{
-		  overObject = true;
-		  if (kpobject->isSelected() && modType == MT_MOVE) deSelAll = false;
-		  if (kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE)
+		  kpobject = objectList()->at(i);
+		  if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
 		    {
-		      oldBoundingRect = kpobject->getBoundingRect(0,0);
-		      resizeObjNum = i;
+		      overObject = true;
+		      if (kpobject->isSelected() && modType == MT_MOVE) deSelAll = false;
+		      if (kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE)
+			{
+			  oldBoundingRect = kpobject->getBoundingRect(0,0);
+			  resizeObjNum = i;
+			}
+		      break;
 		    }
-		  break;
 		}
 	    }
 
@@ -347,11 +351,14 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 
 	    rubber = rubber.normalize();
 	    KPObject *kpobject = 0;
-	    for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	    if (objectList()->count() - 1 >= 0)
 	      {
-		kpobject = objectList()->at(i);
-		if (rubber.intersects(kpobject->getBoundingRect(diffx(),diffy())))
-		  selectObj(kpobject);
+		for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+		  {
+		    kpobject = objectList()->at(i);
+		    if (rubber.intersects(kpobject->getBoundingRect(diffx(),diffy())))
+		      selectObj(kpobject);
+		  }
 	      }
 	  }
       } break;
@@ -359,18 +366,21 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       {
 	if (firstX != mx || firstY != my)
 	  {
-	    for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	    if (objectList()->count() - 1 >= 0)
 	      {
-		kpobject = objectList()->at(i);
-		if (kpobject->isSelected())
+		for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 		  {
-		    kpobject->setMove(false);
-		    _objects.append(kpobject);
-		    _repaint(QRect(kpobject->getBoundingRect(0,0).x() + (firstX - mx),
-				   kpobject->getBoundingRect(0,0).y() + (firstY - my),
-				   kpobject->getBoundingRect(0,0).width(),
-				   kpobject->getBoundingRect(0,0).height()));
-		    _repaint(kpobject);
+		    kpobject = objectList()->at(i);
+		    if (kpobject->isSelected())
+		      {
+			kpobject->setMove(false);
+			_objects.append(kpobject);
+			_repaint(QRect(kpobject->getBoundingRect(0,0).x() + (firstX - mx),
+				       kpobject->getBoundingRect(0,0).y() + (firstY - my),
+				       kpobject->getBoundingRect(0,0).width(),
+				       kpobject->getBoundingRect(0,0).height()));
+			_repaint(kpobject);
+		      }
 		  }
 	      }
 	    MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object(s)"),QPoint(mx - firstX,my - firstY),
@@ -378,25 +388,29 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    view->KPresenterDoc()->commands()->addCommand(moveByCmd);
 	  } 
 	else
-	  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	  if (objectList()->count() - 1 >= 0)
 	    {
-	      kpobject = objectList()->at(i);
-	      if (kpobject->isSelected())
+	      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 		{
-		  kpobject->setMove(false);
-		  _repaint(kpobject);
+		  kpobject = objectList()->at(i);
+		  if (kpobject->isSelected())
+		    {
+		      kpobject->setMove(false);
+		      _repaint(kpobject);
+		    }
 		}
 	    }
       } break;
     case MT_RESIZE_UP:
       {
+	if (resizeObjNum < 0) break;
 	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object up"),QPoint(0,my - firstY),QSize(0,firstY - my),
 						 kpobject,view->KPresenterDoc());
 	    kpobject->setMove(false);
-	    resizeCmd->unexecute();
+	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
@@ -407,13 +421,14 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_DN:
       {
+	if (resizeObjNum < 0) break;
 	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object down"),QPoint(0,0),QSize(0,my - firstY),
 						 kpobject,view->KPresenterDoc());
 	    kpobject->setMove(false);
-	    resizeCmd->unexecute();
+	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
@@ -424,13 +439,14 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_LF:
       {
+	if (resizeObjNum < 0) break;
 	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left"),QPoint(mx - firstX,0),QSize(firstX - mx,0),
 						 kpobject,view->KPresenterDoc());
 	    kpobject->setMove(false);
-	    resizeCmd->unexecute();
+	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
@@ -441,13 +457,14 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_RT:
       {
+	if (resizeObjNum < 0) break;
 	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right"),QPoint(0,0),QSize(mx - firstX,0),
 						 kpobject,view->KPresenterDoc());
 	    kpobject->setMove(false);
-	    resizeCmd->unexecute();
+	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
@@ -458,13 +475,14 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_LU:
       {
+	if (resizeObjNum < 0) break;
 	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left up"),QPoint(mx - firstX,my - firstY),
 						 QSize(firstX - mx,firstY - my),kpobject,view->KPresenterDoc());
 	    kpobject->setMove(false);
-	    resizeCmd->unexecute();
+	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
@@ -475,13 +493,14 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_LD:
       {
+	if (resizeObjNum < 0) break;
 	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left down"),QPoint(mx - firstX,0),
 						 QSize(firstX - mx,my - firstY),kpobject,view->KPresenterDoc());
 	    kpobject->setMove(false);
-	    resizeCmd->unexecute();
+	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
@@ -492,13 +511,14 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_RU:
       {
+	if (resizeObjNum < 0) break;
 	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right up"),QPoint(0,my - firstY),
 						 QSize(mx - firstX,firstY - my),kpobject,view->KPresenterDoc());
 	    kpobject->setMove(false);
-	    resizeCmd->unexecute();
+	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
@@ -509,13 +529,14 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MT_RESIZE_RD:
       {
+	if (resizeObjNum < 0) break;
 	if (firstX != mx || firstY != my)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right down"),QPoint(0,0),QSize(mx - firstX,my - firstY),
 						 kpobject,view->KPresenterDoc());
 	    kpobject->setMove(false);
-	    resizeCmd->unexecute();
+	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
@@ -544,14 +565,17 @@ void Page::mouseMoveEvent(QMouseEvent *e)
       if (!mousePressed || (!drawRubber && modType == MT_NONE))
 	{
 	  setCursor(arrowCursor);
-	  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	  if (objectList()->count() - 1 >= 0)
 	    {
-	      kpobject = objectList()->at(i);
-	      if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
+	      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 		{
-		  if (kpobject->isSelected())
-		    setCursor(kpobject->getCursor(QPoint(e->x(),e->y()),diffx(),diffy(),modType));
-		  return;
+		  kpobject = objectList()->at(i);
+		  if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
+		    {
+		      if (kpobject->isSelected())
+			setCursor(kpobject->getCursor(QPoint(e->x(),e->y()),diffx(),diffy(),modType));
+		      return;
+		    }
 		}
 	    }
 	}
@@ -584,15 +608,18 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 	      QPainter p;
 	      p.begin(this);
 	      
-	      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	      if (objectList()->count() - 1 >= 0)
 		{
-		  kpobject = objectList()->at(i);
-		  if (kpobject->isSelected())
+		  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 		    {
-		      kpobject->setMove(true);
-		      kpobject->draw(&p,diffx(),diffy());
-		      kpobject->moveBy(QPoint(mx - oldMx,my - oldMy));
-		      kpobject->draw(&p,diffx(),diffy());
+		      kpobject = objectList()->at(i);
+		      if (kpobject->isSelected())
+			{
+			  kpobject->setMove(true);
+			  kpobject->draw(&p,diffx(),diffy());
+			  kpobject->moveBy(QPoint(mx - oldMx,my - oldMy));
+			  kpobject->draw(&p,diffx(),diffy());
+			}
 		    }
 		}
 
@@ -675,27 +702,30 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
   deSelectAllObj();
   KPObject *kpobject = 0;
 
-  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+  if (objectList()->count() - 1 >= 0)
     {
-      kpobject = objectList()->at(i);
-      if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
+      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 	{
-	  if (kpobject->getType() == OT_TEXT)
+	  kpobject = objectList()->at(i);
+	  if (kpobject->contains(QPoint(e->x(),e->y()),diffx(),diffy()))
 	    {
-	      KPTextObject *kptextobject = dynamic_cast<KPTextObject*>(kpobject);
-	      
-	      kpobject->activate(this,diffx(),diffy());
-	      kptextobject->getKTextObject()->setBackgroundColor(txtBackCol());
-	      setFocusProxy(kptextobject->getKTextObject());
-	      setFocusPolicy(QWidget::StrongFocus);
-	      kptextobject->getKTextObject()->setFocus();
-	      kptextobject->getKTextObject()->setShowCursor(true);
-	      connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
-	      connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
-	      connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
-		      this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));      
-	      editNum = i;
-	      break;
+	      if (kpobject->getType() == OT_TEXT)
+		{
+		  KPTextObject *kptextobject = dynamic_cast<KPTextObject*>(kpobject);
+		  
+		  kpobject->activate(this,diffx(),diffy());
+		  kptextobject->getKTextObject()->setBackgroundColor(txtBackCol());
+		  setFocusProxy(kptextobject->getKTextObject());
+		  setFocusPolicy(QWidget::StrongFocus);
+		  kptextobject->getKTextObject()->setFocus();
+		  kptextobject->getKTextObject()->setShowCursor(true);
+		  connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
+		  connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
+			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));      
+		  editNum = i;
+		  break;
+		}
 	    }
 	}
     }
@@ -731,11 +761,14 @@ int Page::getObjectAt(int x,int y)
 {
   KPObject *kpobject = 0;
 
-  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0 ;i--)
+  if (objectList()->count() - 1 >= 0)
     {
-      kpobject = objectList()->at(i);
-      if (kpobject->contains(QPoint(x,y),diffx(),diffy()))
-	return i;
+      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0 ;i--)
+	{
+	  kpobject = objectList()->at(i);
+	  if (kpobject->contains(QPoint(x,y),diffx(),diffy()))
+	    return i;
+	}
     }
   
   return -1;
