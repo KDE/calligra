@@ -43,6 +43,10 @@ struct DependencyList {
   QMap<CellInfo, QValueList<RangeDependency> > rangeDeps;
 };
 
+};
+
+using namespace KSpread;
+
 bool CellInfo::operator== (const CellInfo &cell) const
 {
   return ((row == cell.row) && (column == cell.column));
@@ -386,8 +390,4 @@ RangeList DependencyManager::getDependencies (const CellInfo &cell) const
 {
   //TODO
 }
-
-
-//KSpread namespace end
-};
 
