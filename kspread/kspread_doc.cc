@@ -791,6 +791,8 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( body.isNull() )
     {
         setErrorMessage( i18n( "Invalid document. No office:body." ));
+        delete d->m_loadingInfo;
+        d->m_loadingInfo = 0L;
         return false;
     }
     //load in first
@@ -804,6 +806,8 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( !d->workbook->loadOasis( body, oasisStyles ) )
     {
         d->isLoading = false;
+        delete d->m_loadingInfo;
+        d->m_loadingInfo = 0L;
         return false;
     }
 
