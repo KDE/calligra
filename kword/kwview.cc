@@ -2159,7 +2159,7 @@ void KWView::textDecreaseIndent()
         {
              KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
              double val=(u.pt()-MM_TO_POINT(10));
-             if(val!=0)
+             if(u.pt()!=0)
                  {
                      u.setPT( QMAX(val,0.0) );
                      edit->setMargin( QStyleSheetItem::MarginLeft, u );
