@@ -474,7 +474,7 @@ don't put a </?xml...> at the end of the file!).
             bkStyle : style of a frame background color
             None = 0, SolidPattern = 1, Dense1Pattern = 2, Dense2Pattern = 3, Dense3Pattern = 4, Dense4Pattern = 5 etc... (look at in qbrush documentation)
 
-            bleftpt, brightpt, btoppt, bbottompt: frame margins
+            bleftpt, brightpt, btoppt, bbottompt: frame margins (internal to the frame)
 
             z-index: z index (signed int).
                      Relative to the other frame in the same page.
