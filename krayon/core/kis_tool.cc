@@ -49,9 +49,14 @@ void KisTool::optionsDialog()
         "", FALSE);  
 }
 
-void KisTool::setCursor( const QCursor& c )
+void KisTool::setCursor(const QCursor& c)
 {
     m_Cursor = c;
+}
+
+void KisTool::setCursor()
+{
+	setCursor(arrowCursor);
 }
 
 QCursor KisTool::cursor()
@@ -382,4 +387,9 @@ bool KisTool::pasteClipImage( QPoint pos )
     return true;
 }
 
+void KisTool::setBrush(KisBrush *)
+{
+}
+
 #include "kis_tool.moc"
+

@@ -26,6 +26,8 @@
 #include <qpixmap.h>
 #include <qimage.h>
 
+#include "kis_brush.h"
+
 class KisDoc;
 class KisView;
 
@@ -39,8 +41,10 @@ class KisTool : public QObject
 
     QString toolName();
     QCursor cursor();
-    void setCursor( const QCursor& );
-    
+
+    virtual void setCursor(const QCursor& cursor);
+    virtual void setCursor();
+    virtual void setBrush(KisBrush *b);
     virtual void optionsDialog();
     virtual void clearOld(){}
 
