@@ -11,11 +11,11 @@
 
 #include "karbon_part.h"
 
-class VCommand : public KCommand
+class VCommand : public KNamedCommand
 {
 public:
 	VCommand( KarbonPart* part, const QString& name )
-		: KCommand( name ), m_part( part ) { assert( part ); }
+		: KNamedCommand( name ), m_part( part ) { assert( part ); }
 	virtual ~VCommand() {}
 
 	virtual void execute() = 0;
