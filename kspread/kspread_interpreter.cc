@@ -2814,6 +2814,73 @@ static bool kspreadfunc_imabs( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_imdiv_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_imdiv_helper( context, (*it)->listValue(), result ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
+      {
+      double imag,real,imag1,real1;
+      bool ok;
+      if(!result.isEmpty())
+        {
+        imag=imag_complexe(result, ok);
+        real=real_complexe(result,  ok);
+        imag1=imag_complexe((*it)->stringValue(), ok);
+        real1=real_complexe((*it)->stringValue(), ok);
+        result=kspreadfunc_create_complex((real*real1+imag*imag1)/(real1*real1+imag1*imag1),(real1*imag-real*imag1)/(real1*real1+imag1*imag1));
+        }
+      else
+        {
+        imag1=imag_complexe((*it)->stringValue(), ok);
+        real1=real_complexe((*it)->stringValue(), ok);
+        result=kspreadfunc_create_complex(real1,imag1);
+        }
+      }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+      double imag,real,imag1,real1;
+      bool ok;
+      imag=imag_complexe(result, ok);
+      real=real_complexe(result,  ok);
+      imag1=0;
+      real1=(*it)->doubleValue();
+      if(!result.isEmpty())
+        result=kspreadfunc_create_complex((real*real1+imag*imag1)/(real1*real1+imag1*imag1),(real1*imag-real*imag1)/(real1*real1+imag1*imag1));
+      else
+        result=kspreadfunc_create_complex(real1,imag1);
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_imdiv( KSContext& context )
+{
+  QString result ;
+  bool b = kspreadfunc_imdiv_helper( context, context.value()->listValue(), result );
+  bool ok;
+  QString tmp;
+  double val=result.toDouble(&ok);
+  if(ok&&b)
+        context.setValue( new KSValue( val ) );
+  else if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+
 
 static bool kspreadfunc_polr( KSContext& context )
 {
@@ -2979,6 +3046,105 @@ static bool kspreadfunc_sumx2py2( KSContext& context )
         return true;
         }
   bool b = kspreadfunc_sumx2py2_helper( context,args[0]->listValue(),args[1]->listValue() , result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+
+static bool kspreadfunc_sumx2my2_helper( KSContext& context, QValueList<KSValue::Ptr>& list,QValueList<KSValue::Ptr>& list2, double& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = list.begin();
+  QValueList<KSValue::Ptr>::Iterator end = list.end();
+  QValueList<KSValue::Ptr>::Iterator it2 = list2.begin();
+  QValueList<KSValue::Ptr>::Iterator end2 = list2.end();
+
+  for( ; it != end,it2!=end2; ++it,++it2 )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_sumx2my2_helper( context, (*it)->listValue(),(*it2)->listValue(), result ))
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) && KSUtil::checkType( context, *it2, KSValue::DoubleType, true ))
+      {
+      result +=( pow((*it)->doubleValue(),2)-pow((*it2)->doubleValue(),2));
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_sumx2my2( KSContext& context )
+{
+  double result = 0.0;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context, 2, "SUMX2MY2", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+      return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
+      return false;
+    if(args[0]->listValue().count() !=args[1]->listValue() .count())
+        {
+        context.setValue( new KSValue( i18n("Err") ) );
+        return true;
+        }
+  bool b = kspreadfunc_sumx2my2_helper( context,args[0]->listValue(),args[1]->listValue() , result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+static bool kspreadfunc_sumxmy2_helper( KSContext& context, QValueList<KSValue::Ptr>& list,QValueList<KSValue::Ptr>& list2, double& result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = list.begin();
+  QValueList<KSValue::Ptr>::Iterator end = list.end();
+  QValueList<KSValue::Ptr>::Iterator it2 = list2.begin();
+  QValueList<KSValue::Ptr>::Iterator end2 = list2.end();
+
+  for( ; it != end,it2!=end2; ++it,++it2 )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_sumxmy2_helper( context, (*it)->listValue(),(*it2)->listValue(), result ))
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) && KSUtil::checkType( context, *it2, KSValue::DoubleType, true ))
+      {
+      result +=pow(( (*it)->doubleValue()-(*it2)->doubleValue()),2);
+      }
+    else
+      return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_sumxmy2( KSContext& context )
+{
+  double result = 0.0;
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context, 2, "SUM2XMY", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::ListType, true ) )
+      return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::ListType, true ) )
+      return false;
+    if(args[0]->listValue().count() !=args[1]->listValue() .count())
+        {
+        context.setValue( new KSValue( i18n("Err") ) );
+        return true;
+        }
+  bool b = kspreadfunc_sumxmy2_helper( context,args[0]->listValue(),args[1]->listValue() , result );
 
   if ( b )
     context.setValue( new KSValue( result ) );
@@ -3204,6 +3370,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "IMABS", new KSValue( new KSBuiltinFunction( module, "IMABS", kspreadfunc_imabs ) ) );
   module->addObject( "SUMPRODUCT", new KSValue( new KSBuiltinFunction( module, "SUMPRODUCT", kspreadfunc_sumproduct ) ) );
   module->addObject( "SUMX2PY2", new KSValue( new KSBuiltinFunction( module, "SUMX2PY2", kspreadfunc_sumx2py2 ) ) );
+  module->addObject( "SUMX2MY2", new KSValue( new KSBuiltinFunction( module, "SUMX2MY2", kspreadfunc_sumx2my2 ) ) );
+  module->addObject( "SUM2XMY", new KSValue( new KSBuiltinFunction( module, "SUM2XMY", kspreadfunc_sumxmy2 ) ) );
+  module->addObject( "IMDIV", new KSValue( new KSBuiltinFunction( module, "IMDIV", kspreadfunc_imdiv ) ) );
   return module;
 }
 
