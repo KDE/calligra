@@ -67,23 +67,17 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         return KoFilter::NotImplemented;
     }
 
-    HtmlExportDialog* dialog = new HtmlExportDialog();
+    HtmlExportDialog dialog;
 
-    if (!dialog)
+    if (!dialog.exec())
     {
-        kdError(30503) << "Dialog has not been created! Aborting!" << endl;
-        return KoFilter::StupidError;
-    }
-
-    if (!dialog->exec())
-    {
-        kdError(30503) << "Dialog was aborted! Aborting filter!" << endl;
+        kdDebug(30503) << "Dialog was aborted! Aborting filter!" << endl;
         return KoFilter::UserCancelled;
     }
 
     HtmlWorker* worker;
 
-    const HtmlExportDialog::Mode mode =dialog->getMode();
+    const HtmlExportDialog::Mode mode = dialog.getMode();
     switch (mode)
     {
     case HtmlExportDialog::Light:
@@ -96,10 +90,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
       worker=new HtmlCssWorker();
     }
 
-    worker->setXML(dialog->isXHtml());
-    worker->setCodec(dialog->getCodec());
-
-    delete dialog;
+    worker->setXML(dialog.isXHtml());
+    worker->setCodec(dialog.getCodec());
 
     KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
 
