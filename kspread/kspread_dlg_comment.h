@@ -31,11 +31,11 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadcomment : public QDialog
+class KSpreadComment : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadcomment( KSpreadView* parent, const char* name,const QPoint &_marker );
+  KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker );
 
 public slots:
   void slotOk();

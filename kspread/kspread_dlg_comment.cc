@@ -31,52 +31,53 @@
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 
-KSpreadcomment::KSpreadcomment( KSpreadView* parent, const char* name,const QPoint &_marker)
+KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name,TRUE )
 {
-  m_pView = parent;
-  marker= _marker;
-  setCaption( i18n("Cell comment") );
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+    m_pView = parent;
+    marker= _marker;
+    
+    setCaption( i18n("Cell comment") );
+    
+    QVBoxLayout *lay1 = new QVBoxLayout( this );
+    lay1->setMargin( 5 );
+    lay1->setSpacing( 10 );
 
-  multiLine = new QMultiLineEdit( this );
-  lay1->addWidget(multiLine);
+    multiLine = new QMultiLineEdit( this );
+    lay1->addWidget(multiLine);
 
+    multiLine->setFocus();
 
-  multiLine->setFocus();
+    KButtonBox *bb = new KButtonBox( this );
+    bb->addStretch();
+    m_pOk = bb->addButton( i18n("Ok") );
+    m_pOk->setDefault( TRUE );
+    m_pClose = bb->addButton( i18n( "Close" ) );
+    bb->layout();
+    lay1->addWidget( bb);
 
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("Ok") );
-  m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
-  bb->layout();
-  lay1->addWidget( bb);
-
-  KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
-  if(!cell->getComment().isEmpty())
+    KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
+    if(!cell->getComment().isEmpty())
         multiLine->setText(cell->getComment());
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  
+    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
+    connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+}
 
+void KSpreadComment::slotOk()
+{
+    // if(multiLine->text().find("\n",multiLine->text().length()-1)==-1)
+    // m_pView->activeTable()->setSelectionComment(marker,multiLine->text()+"\n");
+    //    else
+    
+    m_pView->activeTable()->setSelectionComment(marker,multiLine->text().stripWhiteSpace() );
+    accept();
 }
 
 
-void KSpreadcomment::slotOk()
+void KSpreadComment::slotClose()
 {
-if(multiLine->text().find("\n",multiLine->text().length()-1)==-1)
-        m_pView->activeTable()->setSelectionComment(marker,multiLine->text()+"\n");
-else
-        m_pView->activeTable()->setSelectionComment(marker,multiLine->text());
-accept();
-}
-
-
-void KSpreadcomment::slotClose()
-{
-reject();
+    reject();
 }
 
 #include "kspread_dlg_comment.moc"

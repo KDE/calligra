@@ -7,6 +7,7 @@
 #include <qrect.h>
 #include <qstring.h>
 #include <qpen.h>
+#include <qtooltip.h>
 
 #include <koQueryTrader.h>
 #include <kspread_view.h>
@@ -22,8 +23,8 @@ class KSpreadRange;
 class KSpreadCellEditor;
 class KSpreadCell;
 
-class QLabel;
 class QPainter;
+class QLabel;
 
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
@@ -282,7 +283,7 @@ public:
     void equalizeRow();
     void equalizeColumn();
 
-    void showComment(int row=-1,int col=-1);
+    // #### void showComment(int row=-1,int col=-1);
 
     void updatePosWidget();
 
@@ -413,7 +414,6 @@ private:
      */
     int m_iYOffset;
 
-    //QLabel *m_pPosWidget;
     KSpreadLocationEditWidget *m_pPosWidget;
     KSpreadEditWidget *m_pEditWidget;
     KSpreadCellEditor *m_pEditor;
@@ -459,8 +459,6 @@ private:
      * @see #lastEditorWithFocus
      */
     EditorType m_focusEditorType;
-
-    QLabel *labelComment;
 };
 
 /**
@@ -558,6 +556,21 @@ protected:
      * The label used for showing the current size, when resizing
      */
     QLabel *m_lSize;
+};
+
+class KSpreadToolTip : public QToolTip
+{
+public:
+    KSpreadToolTip( KSpreadCanvas* canvas );
+    
+protected:
+    /**
+     * @reimp
+     */
+    void maybeTip( const QPoint& p );
+    
+private:
+    KSpreadCanvas* m_canvas;
 };
 
 #endif

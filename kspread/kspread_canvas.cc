@@ -53,14 +53,14 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 		tmp = text().left(pos)+text().mid(pos).upper();
 	    else
 		tmp=text().upper();
-	    
+	
 	    // Selection entered in location widget
-	    if ( text().contains( ':' ) ) 
+	    if ( text().contains( ':' ) )
 		m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp, m_pView->doc()->map() ) );
 	    // Location entered in location widget
-	    else 
+	    else
 		m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ));
-	    
+	
 	    // Set the focus back on the canvas.
 	    m_pView->canvasWidget()->setFocus();
 	    _ev->accept();
@@ -240,8 +240,9 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   choose_visible = false;
 
-  labelComment=0;
   setFocus();
+
+  (void)new KSpreadToolTip( this );
 }
 
 void KSpreadCanvas::startChoose()
@@ -617,12 +618,13 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     // Get the current selected rectangle
     QRect selection( table->selectionRect() );
 
+    /*
     // Over which cell is the mouse ?
     int ypos, xpos;
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
     KSpreadCell* cell = table->visibleCellAt( col, row );
-    
+
     QString comment;
     // Test whether the mouse is over some anchor
     if ( cell )
@@ -638,7 +640,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     int extraRow = row;
     int xpos1 = xpos;
     int ypos1 = ypos;
-  
+
     // Special treatment for obscured cells.
     if ( cell->isObscured() && cell->isObscuringForced() )
     {
@@ -668,103 +670,97 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 	delete labelComment;
 	labelComment=0;
     }
-    
-  // Test whether we are in the lower right corner of the marker
-  // if so => change the cursor
-  {
+    */
+
     int xpos;
     int ypos;
-    int w, h;
+    int row = table->topRow( _ev->pos().y(), ypos, this );
+    int col = table->leftColumn( _ev->pos().x(), xpos, this );
+
+    // Find out where the little "corner" (in lower right direction) is.
+    QRect corner;
     // No selection or just complete rows/columns ?
     if ( selection.left() == 0 || selection.right() == 0x7fff || selection.bottom() == 0x7fff )
     {
-      xpos = table->columnPos( markerColumn(), this );
-      ypos = table->rowPos( markerRow(), this );
-      KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
-      w = cell->width( markerColumn(), this );
-      h = cell->height( markerRow(), this );
+	int x = table->columnPos( markerColumn(), this );
+	int y = table->rowPos( markerRow(), this );
+	KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
+	int w = cell->width( markerColumn(), this );
+	int h = cell->height( markerRow(), this );
+      
+	corner = QRect( x + w - 2, y + h -1, 5, 5 );
     }
     else // if we have a rectangular selection ( not complete rows or columns )
     {
-      xpos = table->columnPos( selection.left(), this );
-      ypos = table->rowPos( selection.top(),  this );
-      int x = table->columnPos( selection.right(), this );
-      KSpreadCell *cell = table->cellAt( selection.right(), selection.top() );
-      int tw = cell->width( selection.right(), this );
-      w = ( x - xpos ) + tw;
-      cell = table->cellAt( selection.left(), selection.bottom() );
-      int y = table->rowPos( selection.bottom(), this );
-      int th = cell->height( selection.bottom(), this );
-      h = ( y - ypos ) + th;
+	int x = table->columnPos( selection.left(), this );
+	int y = table->rowPos( selection.top(),  this );
+	int x2 = table->columnPos( selection.right(), this );
+	KSpreadCell *cell = table->cellAt( selection.right(), selection.top() );
+	int tw = cell->width( selection.right(), this );
+	int w = ( x2 - x ) + tw;
+	cell = table->cellAt( selection.left(), selection.bottom() );
+	int y2 = table->rowPos( selection.bottom(), this );
+	int th = cell->height( selection.bottom(), this );
+	int h = ( y2 - y ) + th;
+      
+	corner = QRect( x + w - 2, y + h -1, 5, 5 );
     }
 
-    if ( _ev->pos().x() >= xpos + w - 2 && _ev->pos().x() <= xpos + w + 3 &&
-         _ev->pos().y() >= ypos + h - 1 && _ev->pos().y() <= ypos + h + 4 )
+    if ( corner.contains( _ev->pos() ) )
       setCursor( sizeFDiagCursor );
     else if ( !m_strAnchor.isEmpty() )
       setCursor( KCursor::handCursor() );
     else
       setCursor( arrowCursor );
-  }
 
-  if ( m_eMouseAction == NoAction )
-    return;
-  /*if ( row == selection.bottom() && col == selection.right() )
-    return;
-  */
+    if ( m_eMouseAction == NoAction )
+	return;
 
-  // Set the new lower right corner of the selection
-  /*selection.setRight( col );
-  selection.setBottom( row );
-  table->setSelection( selection, this );
-  */
-  if ( col <= m_iMouseStartColumn )
-     {
-     selection.setLeft( col );
-     selection.setRight( m_iMouseStartColumn );
-     }
-  else
-     selection.setRight( col );
-  if ( row <= m_iMouseStartRow )
-     {
-     selection.setTop( row );
-     selection.setBottom( m_iMouseStartRow);
-     }
-  else
-     selection.setBottom( row );
+    // Set the new lower right corner of the selection
+    if ( col <= m_iMouseStartColumn )
+    {
+	selection.setLeft( col );
+	selection.setRight( m_iMouseStartColumn );
+    }
+    else
+	selection.setRight( col );
+    if ( row <= m_iMouseStartRow )
+    {
+	selection.setTop( row );
+	selection.setBottom( m_iMouseStartRow);
+    }
+    else
+	selection.setBottom( row );
 
-  bool selectionChanged = ( selection != table->selectionRect() );
-  if ( selectionChanged )
-    hideMarker();
+    bool selectionChanged = ( selection != table->selectionRect() );
+    if ( selectionChanged )
+	hideMarker();
 
-  table->setSelection( selection, this );
+    table->setSelection( selection, this );
 
-  //kdDebug(36001)<<"left"<<selection.left()<<"right"<<selection.right()<<endl;
-  //kdDebug(36001)<<"top"<<selection.top()<<"bottom"<<selection.bottom()<<endl;
+    // Scroll the table if necessary
+    if ( _ev->pos().x() < 0 )
+	horzScrollBar()->setValue( xOffset() + xpos );
+    else if ( _ev->pos().x() > width() )
+    {
+	ColumnLayout *cl = table->columnLayout( col + 1 );
+	xpos = table->columnPos( col + 1, this );
+	horzScrollBar()->setValue( xOffset() + ( xpos + cl->width( this ) - width() ) );
+    }
+    if ( _ev->pos().y() < 0 )
+	vertScrollBar()->setValue( yOffset() + ypos );
+    else if ( _ev->pos().y() > height() )
+    {
+	RowLayout *rl = table->rowLayout( row + 1 );
+	ypos = table->rowPos( row + 1, this );
+	vertScrollBar()->setValue( yOffset() + ( ypos + rl->height( this ) - height() ) );
+    }
 
-  // Scroll the table if necessary
-  if ( _ev->pos().x() < 0 )
-    horzScrollBar()->setValue( xOffset() + xpos );
-  else if ( _ev->pos().x() > width() )
-  {
-    ColumnLayout *cl = table->columnLayout( col + 1 );
-    xpos = table->columnPos( col + 1, this );
-    horzScrollBar()->setValue( xOffset() + ( xpos + cl->width( this ) - width() ) );
-  }
-  if ( _ev->pos().y() < 0 )
-    vertScrollBar()->setValue( yOffset() + ypos );
-  else if ( _ev->pos().y() > height() )
-  {
-    RowLayout *rl = table->rowLayout( row + 1 );
-    ypos = table->rowPos( row + 1, this );
-    vertScrollBar()->setValue( yOffset() + ( ypos + rl->height( this ) - height() ) );
-  }
+    updatePosWidget();
+    if ( selectionChanged )
+	showMarker();
 
-  updatePosWidget();
-  if ( selectionChanged )
-    showMarker();
-
-  m_bMouseMadeSelection = true;
+    m_bMouseMadeSelection = true;
 }
 
 void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
@@ -1673,12 +1669,14 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
   bool own_painter = FALSE;
 
   //delete labelComment when you change position
+  /* #####
   if(labelComment)
         {
         delete labelComment;
         labelComment=0;
         }
-
+  */
+  
   if ( _painter == 0L )
   {
     _painter = new QPainter();
@@ -2088,6 +2086,7 @@ void KSpreadCanvas::equalizeColumn()
 
 }
 
+/* ####
 void KSpreadCanvas::showComment(int _row,int _col)
 {
 QPainter painter;
@@ -2148,6 +2147,7 @@ QPainter painter;
   labelComment->setText(tmp);
   labelComment->show();
 }
+*/
 
 /****************************************************************
  *
@@ -2928,6 +2928,64 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   }
   m_pCanvas->updatePosWidget();
   painter.end();
+}
+
+/****************************************************************
+ *
+ * KSpreadToolTip
+ *
+ ****************************************************************/
+
+KSpreadToolTip::KSpreadToolTip( KSpreadCanvas* canvas )
+    : QToolTip( canvas ), m_canvas( canvas )
+{
+}
+
+void KSpreadToolTip::maybeTip( const QPoint& p )
+{
+    KSpreadTable *table = m_canvas->activeTable();
+    if ( !table )
+	return;
+
+    // Get the current selected rectangle
+    QRect selection( table->selectionRect() );
+
+    // Over which cell is the mouse ?
+    int ypos, xpos;
+    int row = table->topRow( p.y(), ypos, m_canvas );
+    int col = table->leftColumn( p.x(), xpos, m_canvas );
+    KSpreadCell* cell = table->visibleCellAt( col, row );
+    if ( !cell )
+	return;
+
+    // Get the comment
+    QString comment= cell->getComment();
+
+    // Determine position and width of the current cell.
+    cell = table->cellAt( col, row );
+    int u = cell->width( col, m_canvas );
+
+    // Special treatment for obscured cells.
+    if ( cell->isObscured() && cell->isObscuringForced() )
+    {
+	// Find the obscuring cell
+	int moveX = cell->obscuringCellsColumn();
+	int moveY = cell->obscuringCellsRow();
+	cell = table->cellAt( moveX, moveY );
+	
+	// Use the obscuring cells dimensions
+	u = cell->width( moveX, m_canvas );
+	xpos = table->columnPos( moveX, m_canvas );
+	ypos = table->rowPos( moveY, m_canvas );
+    }
+
+    // Is the cursor over the comment marker (if there is any) then
+    // show the comment.
+    QRect marker( xpos + u - 10, ypos, 10, 10 );
+    if ( marker.contains( p ) )
+    {
+	tip( marker, comment );
+    }
 }
 
 #include "kspread_canvas.moc"

@@ -278,9 +278,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_verticalText = new KToggleAction( i18n("Vertical text"),"vertical_text" ,0 ,actionCollection(), "verticaltext" );
     connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
     m_changeAngle = new KAction( i18n("Change Angle ..."), 0, this, SLOT( changeAngle() ), actionCollection(), "changeangle" );
-    m_addModifyComment = new KAction( i18n("&amp;Add/modify comment..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
+    m_addModifyComment = new KAction( i18n("&Add/modify comment ..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
     //m_showComment = new KAction( i18n("Show comment"), 0, this, SLOT( showComment() ), actionCollection(), "showcomment" );
-    m_removeComment = new KAction( i18n("&amp;Remove comment"),"removecomment", 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );
+    m_removeComment = new KAction( i18n("&Remove comment"),"removecomment", 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
@@ -1870,7 +1870,7 @@ void KSpreadView::addModifyComment()
   if ( !m_pTable )
        return;
 
-  KSpreadcomment* dlg = new  KSpreadcomment( this, "comment",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  KSpreadComment* dlg = new  KSpreadComment( this, "comment",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   if(dlg->exec())
         updateEditWidget();
 }
