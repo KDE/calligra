@@ -304,3 +304,4 @@ Changes after KWord-1.2
 - Now right button gives spell check result
 - Load pictures only one time when inserting from file (Good for remote files)
 - Hyphenation support. Configurable as a character property (to disable hyphenation on specific words).
+- New checkbox in the style manager: "Include in table of contents".
