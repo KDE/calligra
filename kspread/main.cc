@@ -26,7 +26,7 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv );
+    KoApplication app( argc, argv, "kspread" );
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
     ASSERT( !entry.isEmpty() );

@@ -26,7 +26,7 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv );
+    KoApplication app( argc, argv, "kimageshop" );
 
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "kimageshop" );

@@ -45,10 +45,6 @@ KWordFactory::KWordFactory( QObject* parent, const char* name )
 				       KStandardDirs::kde_default("data") + "koffice/toolbar/");
     s_global->dirs()->addResourceType( "toolbar",
 				       KStandardDirs::kde_default("data") + "kformula/pics/");
-    s_global->dirs()->addResourceType( "toolbar",
-				       KStandardDirs::kde_default("data") + "kword/toolbar/");
-    KGlobal::dirs()->addResourceType( "toolbar",
-				      KStandardDirs::kde_default("data") + "kword/toolbar/");
 }
 
 KWordFactory::~KWordFactory()

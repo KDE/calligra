@@ -31,7 +31,7 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv );
+    KoApplication app( argc, argv, "kpresenter" );
 
     init_kpresenter();
 	

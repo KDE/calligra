@@ -27,7 +27,7 @@ class KoApplication : public KApplication
 {
     Q_OBJECT
 public:
-    KoApplication( int &argc, char **argv, const QCString& rAppName = NULL );
+    KoApplication( int &argc, char **argv, const QCString& rAppName );
     virtual ~KoApplication();
 	
     void aboutKDE() { aboutKDE(); }
