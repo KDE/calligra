@@ -183,6 +183,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     if ( body.isNull() )
         return;
 
+    QDomElement customSlideShow = doc.createElement( "CUSTOMSLIDESHOWCONFIG" );
+
     // presentation settings
     QDomElement settings = KoDom::namedItemNS( body, ooNS::presentation, "settings");
     if (!settings.isNull())
@@ -202,6 +204,21 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         }
     }
 
+    QDomElement presentationShow;
+    forEachElement( presentationShow, settings )
+    {
+        if ( presentationShow.localName()=="show" && presentationShow.namespaceURI() == ooNS::presentation )
+        {
+            if ( presentationShow.hasAttributeNS( ooNS::presentation, "pages")  &&
+                 presentationShow.hasAttributeNS( ooNS::presentation, "name"))
+            {
+                QDomElement slide=doc.createElement("CUSTOMSLIDESHOW");
+                slide.setAttribute( "pages",  presentationShow.attributeNS( ooNS::presentation, "pages", QString::null ));
+                slide.setAttribute( "name", presentationShow.attributeNS( ooNS::presentation, "name", QString::null ));
+                customSlideShow.appendChild( slide );
+            }
+        }
+    }
     // it seems that ooimpress has different paper-settings for every slide.
     // we take the settings of the first slide for the whole document.
     QDomElement drawPage = KoDom::namedItemNS( body, ooNS::draw, "page" );
@@ -217,7 +234,6 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
     QDomElement helpLineElement = doc.createElement( "HELPLINES" );
     QDomElement attributeElement = doc.createElement( "ATTRIBUTES" );
-
     QDomElement *master = m_styles[drawPage.attributeNS( ooNS::draw, "master-page-name", QString::null )];
 
     appendObject(*master, doc, soundElement,pictureElement,pageNoteElement,objectElement, 0, true);
@@ -339,6 +355,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
     docElement.appendChild( selSlideElement );
+    docElement.appendChild( customSlideShow );
     docElement.appendChild( soundElement );
     docElement.appendChild( pictureElement );
 
