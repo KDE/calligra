@@ -42,6 +42,6 @@
 
   void copy() { page->copy(); }
   void cut() { page->cut(); }
-  void paste() { page->paste(view->zoomHandler()); }
+  void paste() { page->paste(view); }
 
 #endif
