@@ -17,12 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _kspread_dependencies_h
-#define _kspread_dependencies_h
+#ifndef _dependencies_h
+#define _dependencies_h
 
 #include <qvaluelist.h>
 
 class KSpreadSheet;
+
+// KSpread namespace
+namespace KSpread {
+
 
 struct DependencyList;
 
@@ -66,12 +70,12 @@ This class manages dependencies.
 TODO: describe how it works and why there are two types of dependencies
 */
 
-class KSpreadDependencyManager {
+class DependencyManager {
  public:
   /** constructor */
-   KSpreadDependencyManager (KSpreadSheet *s);
+   DependencyManager (KSpreadSheet *s);
   /** destructor */
-  ~KSpreadDependencyManager ();
+  ~DependencyManager ();
  
   /** clear all data */
   void reset ();
@@ -102,5 +106,8 @@ class KSpreadDependencyManager {
   DependencyList *deps;
 };
 
-#endif //_kspread_dependencies_h
+//end of namespace
+};
+
+#endif //_dependencies_h
 

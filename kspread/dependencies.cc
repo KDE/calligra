@@ -18,15 +18,22 @@
 */
 
 
-#include "kspread_dependencies.h"
+#include "dependencies.h"
 
 #include <qmap.h>
 #include <qvaluelist.h>
 
-/** d-pointer of KSpreadDependencyManager */
+namespace KSpread {
+
+
+/** d-pointer of DependencyManager */
 struct DependencyList {
   //TODO
 };
 
-//TODO: KSpreadDependencyManager ;)
+//TODO: DependencyManager ;)
+
+
+//KSpread namespace end
+};
 
