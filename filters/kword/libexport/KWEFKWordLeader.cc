@@ -569,9 +569,9 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "width",               width       )
                        << AttrProcessing ( "height",              height      )
                        << AttrProcessing ( "orientation",         orientation )
-                       << AttrProcessing ( "columns" )
-                       << AttrProcessing ( "columnspacing" )
-                       << AttrProcessing ( "pages" )
+                       << AttrProcessing ( "columns",             leader->m_columns )
+                       << AttrProcessing ( "columnspacing",       leader->m_columnspacing )
+                       << AttrProcessing ( "pages",               leader->m_numPages )
                        << AttrProcessing ( "hType",               hType        )
                        << AttrProcessing ( "fType",               fType        )
                        << AttrProcessing ( "spHeadBody" )
@@ -581,6 +581,23 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "slFootNoteLength" )
                        << AttrProcessing ( "slFootNoteWidth" )
                        << AttrProcessing ( "slFootNoteType" );
+
+    if ( leader->m_oldSyntax )
+    {
+        // ### TODO: in syntax 1 hType and fType have other values!
+        attrProcessingList
+            << AttrProcessing ( "ptWidth", width )
+            << AttrProcessing ( "ptHeight", height )
+            << AttrProcessing ( "ptColumnspc", leader->m_columnspacing )
+            << AttrProcessing ( "mmWidth" )
+            << AttrProcessing ( "mmHeight" )
+            << AttrProcessing ( "mmColumnspc" )
+            << AttrProcessing ( "inchWidth" )
+            << AttrProcessing ( "inchHeight" )
+            << AttrProcessing ( "inchColumnspc" )
+            ;
+    }
+
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->setHeaderType( hType );
@@ -600,7 +617,13 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 {
     VariableSettingsData vs;
-    QString print, creation, modification; // Dates
+    QString print, creation, modification; // Dates (in ISO 8601 format)
+    int creationYear = -1;
+    int creationMonth = -1;
+    int creationDay = -1;
+    int modificationYear = -1;
+    int modificationMonth = -1;
+    int modificationDay = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "startingPageNumber", vs.startingPageNumber )
@@ -608,17 +631,54 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
                        << AttrProcessing ( "underlinelink", vs.underlinelink )
                        << AttrProcessing ( "displaycomment", vs.displaycomment )
                        << AttrProcessing ( "displayfieldcode", vs.displayfieldcode )
-                       << AttrProcessing ( "lastPrintingDate", print )
-                       << AttrProcessing ( "creationDate", creation )
-                       << AttrProcessing ( "modificationDate", modification );
+        ;
+
+
+    // The following 3 attributes are from syntax 3 but at least the RTF import filter generate them with syntax 2.
+    attrProcessingList
+        << AttrProcessing ( "lastPrintingDate", print )
+        << AttrProcessing ( "creationDate", creation )
+        << AttrProcessing ( "modificationDate", modification );
+    ;
+
+    // Some files have the creation and modification date not in one attribute but in an attribute for each the year, the month, the day
+    // ( e.g. syntax 2 file kofficetests/documents/export/kword/text/all.kwd )
+    attrProcessingList
+        << AttrProcessing( "modifyFileYear", modificationYear )
+        << AttrProcessing( "modifyFileMonth", modificationMonth )
+        << AttrProcessing( "modifyFileDay", modificationDay )
+        << AttrProcessing( "createFileYear", creationYear )
+        << AttrProcessing( "createFileMonth", creationMonth )
+        << AttrProcessing( "createFileDay", creationDay )
+        ;
+
     ProcessAttributes (myNode, attrProcessingList);
 
-    if (!creation.isEmpty())
+    if ( creation.isEmpty() )
+    {
+        if ( ( creationYear >= 1970 ) && QDate::isValid( creationYear, creationMonth, creationDay ) )
+        {
+            vs.creationTime = QDateTime( QDate( creationYear, creationMonth, creationDay ) );
+        }
+    }
+    else
         vs.creationTime=QDateTime::fromString(creation, Qt::ISODate);
-    if (!modification.isEmpty())
+    //kdDebug(30508) << "Creation time: " << vs.creationTime.toString( Qt::ISODate ) << endl;
+
+    if ( modification.isEmpty() )
+    {
+        if ( ( modificationYear >= 1970 ) && QDate::isValid( modificationYear, modificationMonth, modificationDay ) )
+        {
+            vs.modificationTime = QDateTime( QDate( modificationYear, modificationMonth, modificationDay ) );
+        }
+    }
+    else
         vs.modificationTime=QDateTime::fromString(modification, Qt::ISODate);
+    //kdDebug(30508) << "Modification time: " << vs.modificationTime.toString( Qt::ISODate ) << endl;
+
     if (!print.isEmpty())
         vs.printTime=QDateTime::fromString(print, Qt::ISODate);
+    //kdDebug(30508) << "Print time: " << vs.printTime.toString( Qt::ISODate ) << endl;
 
     leader->doVariableSettings (vs);
 }

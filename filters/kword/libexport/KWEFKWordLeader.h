@@ -84,6 +84,9 @@ class KWEFKWordLeader
         int m_syntaxVersion;
         /// true if oldSyntax (KWord 0.8)
         bool m_oldSyntax;
+        int m_numPages;
+        int m_columns;
+        double m_columnspacing;
         /// Name of the current frame set
         QString m_currentFramesetName;
     private:
