@@ -311,8 +311,8 @@ void Canvas::writePSHeader (ostream& os) {
   os << "%!PS-Adobe-2.0\n"
      << "%%Title: " << (const char *) document->fileName () << '\n'
      << "%%Creator: KIllustrator " << APP_VERSION << '\n'
-     << "%%CreationDate: " << QDateTime::currentDateTime ().toString () << '\n'
-     << "%%EndComments" << endl;
+     << "%%CreationDate: " << QDateTime::currentDateTime ().toString () 
+     << endl;
 }
 
 bool Canvas::writePSProlog (ostream& os) {
@@ -379,6 +379,28 @@ void Canvas::printPSDocument () {
 
     // write header
     writePSHeader (psStream);
+
+    // paper format
+    psStream << "%%DocumentPaperSizes: ";
+    switch (pSetup.pageSize ()) {
+    case QPrinter::A4:
+      psStream << "A4";
+      break;
+    case QPrinter::B5:
+      psStream << "B5";
+      break;
+    case QPrinter::Letter:
+      psStream << "Letter";
+      break;
+    case QPrinter::Legal:
+      psStream << "Legal";
+      break;
+    case QPrinter::Executive:
+      psStream << "Executive";
+      break;
+    }
+
+    psStream << "\n%%EndComments" << endl;
     if (! writePSProlog (psStream)) {
       KMsgBox::message (this, i18n ("Error"), i18n ("Cannot find PS prolog !"),
                         KMsgBox::STOP, i18n ("Abort"));
