@@ -680,51 +680,35 @@ ConfigureToolsPage::ConfigureToolsPage( KPresenterView *_view, QVBox *box, char 
     box->setSpacing( 10 );
 
     m_confPenDia = new ConfPenDia(tab, 0, StyleDia::SdAll);
-    m_confPenDia->setPen(m_pView->getCanvas()->activePage()->getPen(m_pView->getPen()));
-    m_confPenDia->setLineBegin(m_pView->getCanvas()->activePage()->getLineBegin(m_pView->getLineBegin()));
-    m_confPenDia->setLineEnd(m_pView->getCanvas()->activePage()->getLineEnd(m_pView->getLineEnd()));
+    m_confPenDia->setPen(m_pView->getPen());
+    m_confPenDia->setLineBegin(m_pView->getLineBegin());
+    m_confPenDia->setLineEnd(m_pView->getLineEnd());
     tab->addTab(m_confPenDia, i18n("&Pen"));
 
     m_confBrushDia = new ConfBrushDia(tab, 0, StyleDia::SdAll);
-    m_confBrushDia->setBrush(m_pView->getCanvas()->activePage()->getBrush(m_pView->getBrush()));
-    m_confBrushDia->setFillType(m_pView->getCanvas()->activePage()->getFillType(m_pView->getFillType()));
-    m_confBrushDia->setGradient(m_pView->getCanvas()->activePage()->getGColor1(m_pView->getGColor1()),
-                                m_pView->getCanvas()->activePage()->getGColor2(m_pView->getGColor2()),
-                                m_pView->getCanvas()->activePage()->getGType(m_pView->getGType()),
-                                m_pView->getCanvas()->activePage()->getGUnbalanced(m_pView->getGUnbalanced()),
-                                m_pView->getCanvas()->activePage()->getGXFactor(m_pView->getGXFactor()),
-                                m_pView->getCanvas()->activePage()->getGYFactor(m_pView->getGYFactor()));
+    m_confBrushDia->setBrush(m_pView->getBrush());
+    m_confBrushDia->setFillType(m_pView->getFillType());
+    m_confBrushDia->setGradient(m_pView->getGColor1(), m_pView->getGColor2(), m_pView->getGType(),
+                                m_pView->getGUnbalanced(), m_pView->getGXFactor(), m_pView->getGYFactor());
     tab->addTab(m_confBrushDia, i18n("&Brush"));
 
-    m_confPieDia = new ConfPieDia(tab, "ConfPageDia");
-    m_confPieDia->setType(m_pView->getCanvas()->activePage()->getPieType(m_pView->getPieType()));
-    m_confPieDia->setAngle(m_pView->getCanvas()->activePage()->getPieAngle(m_pView->getPieAngle()));
-    m_confPieDia->setLength(m_pView->getCanvas()->activePage()->getPieLength(m_pView->getPieLength()));
-    m_confPieDia->setPenBrush(m_pView->getCanvas()->activePage()->getPen(m_pView->getPen()),
-                            m_pView->getCanvas()->activePage()->getBrush(m_pView->getBrush()));
+    m_confPieDia = new ConfPieDia(tab, "ConfPieDia");
+    m_confPieDia->setType(m_pView->getPieType());
+    m_confPieDia->setAngle(m_pView->getPieAngle());
+    m_confPieDia->setLength(m_pView->getPieLength());
+    m_confPieDia->setPenBrush(m_pView->getPen(), m_pView->getBrush());
     tab->addTab(m_confPieDia, i18n("P&ie"));
 
-    bool _checkConcavePolygon;
-    int _cornersValue;
-    int _sharpnessValue;
-
-    if (!m_pView->getCanvas()->activePage()->getPolygonSettings(&_checkConcavePolygon, &_cornersValue, &_sharpnessValue))
-    {
-        _checkConcavePolygon = m_pView->getCheckConcavePolygon();
-        _cornersValue = m_pView->getCornersValue();
-        _sharpnessValue = m_pView->getSharpnessValue();
-    }
-
-    m_confPolygonDia = new ConfPolygonDia(tab, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
-    m_confPolygonDia->setPenBrush(m_pView->getCanvas()->activePage()->getPen(m_pView->getPen()),
-                                  m_pView->getCanvas()->activePage()->getBrush(m_pView->getBrush()));
+    m_confPolygonDia = new ConfPolygonDia(tab, "ConfPolygonDia");
+    m_confPolygonDia->setCheckConcavePolygon(m_pView->getCheckConcavePolygon());
+    m_confPolygonDia->setCornersValue(m_pView->getCornersValue());
+    m_confPolygonDia->setSharpnessValue(m_pView->getSharpnessValue());
+    m_confPolygonDia->setPenBrush(m_pView->getPen(), m_pView->getBrush());
     tab->addTab(m_confPolygonDia, i18n("P&olygon"));
 
     m_confRectDia = new ConfRectDia(tab, "ConfRectDia" );
-    m_confRectDia->setRnds(m_pView->getCanvas()->activePage()->getRndX(m_pView->getRndX()),
-                           m_pView->getCanvas()->activePage()->getRndY(m_pView->getRndY()));
-    m_confRectDia->setPenBrush(m_pView->getCanvas()->activePage()->getPen(m_pView->getPen()),
-                               m_pView->getCanvas()->activePage()->getBrush(m_pView->getBrush()));
+    m_confRectDia->setRnds(m_pView->getRndX(), m_pView->getRndY());
+    m_confRectDia->setPenBrush(m_pView->getPen(), m_pView->getBrush());
     tab->addTab(m_confRectDia, i18n("&Rectangle"));
 }
 

@@ -215,10 +215,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     rotateDia = 0;
     shadowDia = 0;
     presStructView = 0;
-    confPieDia = 0;
-    confRectDia = 0;
-    confPolygonDia = 0;
-    confPictureDia = 0;
     presDurationDia = 0;
     v_ruler = 0;
     h_ruler = 0;
@@ -396,7 +392,6 @@ KPresenterView::~KPresenterView()
     delete rb_pstyle;
     delete rb_pwidth;
     delete afChoose;
-    delete confPictureDia;
     delete m_fontDlg;
     delete m_paragDlg;
 }
@@ -4024,10 +4019,17 @@ void KPresenterView::updatePageParameter()
         pieLength = page->getPieLength(pieLength);
         rndX = page->getRndX( rndX );
         rndY = page->getRndY( rndY );
-        page->getPolygonSettings( &checkConcavePolygon, &cornersValue, &sharpnessValue );
+        checkConcavePolygon = page->getCheckConcavePolygon(checkConcavePolygon);
+        cornersValue = page->getCornersValue(cornersValue);
+        sharpnessValue = page->getSharpnessValue(sharpnessValue);
 
         QPixmap tmpPix;
-        page->getPictureSettingsAndPixmap( &mirrorType, &depth, &swapRGB, &grayscal, &bright, &tmpPix );
+        mirrorType = page->getPictureMirrorType(mirrorType);
+        depth = page->getPictureDepth(depth);
+        swapRGB = page->getPictureSwapRGB(swapRGB);
+        grayscal = page->getPictureGrayscal(grayscal);
+        bright = page->getPictureBright(bright);
+        tmpPix = page->getPicturePixmap();
 
         lineBegin=page->getLineEnd( lineBegin );
         lineEnd=page->getLineBegin( lineEnd );

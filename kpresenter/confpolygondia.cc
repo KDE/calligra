@@ -41,15 +41,11 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-PolygonPreview::PolygonPreview( QWidget* parent, const char* name, bool _checkConcavePolygon,
-                                int _cornersValue, int _sharpnessValue )
+PolygonPreview::PolygonPreview( QWidget* parent, const char* name)
     : QFrame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
     setBackgroundColor( white );
-    nCorners = _cornersValue;
-    sharpness = _sharpnessValue;
-    isConcave = _checkConcavePolygon;
 
     setMinimumSize( 200, 100 );
 }
@@ -111,7 +107,7 @@ void PolygonPreview::slotConcavePolygon()
     repaint();
 }
 
-void PolygonPreview::slotConersValue( int value )
+void PolygonPreview::slotCornersValue( int value )
 {
     nCorners = value;
     repaint();
@@ -128,18 +124,9 @@ void PolygonPreview::slotSharpnessValue( int value )
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkConcavePolygon,
-                                int _cornersValue, int _sharpnessValue )
+ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name )
     : QWidget( parent, name )
 {
-    checkConcavePolygon = _checkConcavePolygon;
-    cornersValue = _cornersValue;
-    sharpnessValue = _sharpnessValue;
-
-    oldCornersValue = _cornersValue;
-    oldSharpnessValue = _sharpnessValue;
-    oldCheckConcavePolygon = _checkConcavePolygon;
-
     // ------------------------ layout
     QVBoxLayout *layout = new QVBoxLayout( this, 0 );
     layout->setMargin( 5 );
@@ -161,12 +148,12 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     m_concavePolygon = new QRadioButton( i18n( "Concave Polygon" ), group );
     connect( m_concavePolygon, SIGNAL( clicked() ), this, SLOT( slotConcavePolygon() ) );
 
-    m_corners = new KIntNumInput( _cornersValue, gSettings );
+    m_corners = new KIntNumInput( 0 , gSettings );
     m_corners->setRange( 3, 100, 1 );
     m_corners->setLabel( i18n( "Corners:" ) );
-    connect( m_corners, SIGNAL( valueChanged( int ) ), this, SLOT( slotConersValue( int ) ) );
+    connect( m_corners, SIGNAL( valueChanged( int ) ), this, SLOT( slotCornersValue( int ) ) );
 
-    m_sharpness = new KIntNumInput( _sharpnessValue, gSettings );
+    m_sharpness = new KIntNumInput( 0 , gSettings );
     m_sharpness->setRange( 0, 100, 1 );
     m_sharpness->setLabel( i18n( "Sharpness:" ) );
     connect( m_sharpness, SIGNAL( valueChanged( int ) ), this, SLOT( slotSharpnessValue( int ) ) );
@@ -174,7 +161,7 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     hbox->addWidget( gSettings );
 
     // ------------------------ preview
-    polygonPreview = new PolygonPreview( this, "preview", checkConcavePolygon, cornersValue, sharpnessValue );
+    polygonPreview = new PolygonPreview( this, "preview");
     hbox->addWidget( polygonPreview );
 
     connect ( m_convexPolygon, SIGNAL( clicked() ), polygonPreview,
@@ -182,7 +169,7 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     connect ( m_concavePolygon, SIGNAL( clicked() ), polygonPreview,
               SLOT( slotConcavePolygon() ) );
     connect( m_corners, SIGNAL( valueChanged( int ) ), polygonPreview,
-             SLOT( slotConersValue( int ) ) );
+             SLOT( slotCornersValue( int ) ) );
     connect( m_sharpness, SIGNAL( valueChanged( int ) ), polygonPreview,
              SLOT( slotSharpnessValue( int ) ) );
     slotReset();
@@ -206,7 +193,7 @@ void ConfPolygonDia::slotConcavePolygon()
     checkConcavePolygon = true;
 }
 
-void ConfPolygonDia::slotConersValue( int value )
+void ConfPolygonDia::slotCornersValue( int value )
 {
     cornersValue = value;
 }
@@ -221,7 +208,6 @@ void ConfPolygonDia::slotReset()
     if ( oldCheckConcavePolygon )
     {
         m_convexPolygon->setChecked( false );
-
         polygonPreview->slotConcavePolygon();
     }
     else
@@ -241,6 +227,7 @@ void ConfPolygonDia::slotReset()
 void ConfPolygonDia::setCheckConcavePolygon(bool _concavePolygon)
 {
     checkConcavePolygon = _concavePolygon;
+    oldCheckConcavePolygon = _concavePolygon;
     if (checkConcavePolygon)
     {
         m_concavePolygon->setChecked(true);
@@ -258,12 +245,16 @@ void ConfPolygonDia::setCheckConcavePolygon(bool _concavePolygon)
 void ConfPolygonDia::setCornersValue(int _cornersValue)
 {
     cornersValue = _cornersValue;
+    oldCornersValue = _cornersValue;
+    polygonPreview->slotCornersValue(cornersValue);
     m_corners->setValue(cornersValue);
 }
 
 void ConfPolygonDia::setSharpnessValue(int _sharpnessValue)
 {
     sharpnessValue = _sharpnessValue;
+    oldSharpnessValue = _sharpnessValue;
+    polygonPreview->slotSharpnessValue(sharpnessValue);
     m_sharpness->setValue(sharpnessValue);
 }
 

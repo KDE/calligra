@@ -382,24 +382,6 @@ QPixmap KPPixmapObject::getOrignalPixmap()
     return _pixmap;
 }
 
-void KPPixmapObject::setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal, int _bright )
-{
-    mirrorType = _mirrorType;
-    depth = _depth;
-    swapRGB = _swapRGB;
-    grayscal = _grayscal;
-    bright = _bright;
-}
-
-void KPPixmapObject::getPictureSettings( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, bool *_grayscal, int *_bright )
-{
-    *_mirrorType = mirrorType;
-    *_depth = depth;
-    *_swapRGB = swapRGB;
-    *_grayscal = grayscal;
-    *_bright = bright;
-}
-
 QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
 {
 

@@ -65,8 +65,12 @@ public:
     virtual ObjType getType() const { return OT_POLYGON; }
     virtual QString getTypeString() const { return i18n( "Polygon" ); }
 
-    void setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
-    void getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue );
+    void setCheckConcavePolygon(bool _concavePolygon) { checkConcavePolygon = _concavePolygon; drawPolygon(); }
+    void setCornersValue(int _cornersValue) { cornersValue = _cornersValue; drawPolygon(); }
+    void setSharpnessValue(int _sharpnessValue) { sharpnessValue = _sharpnessValue; drawPolygon(); }
+    bool getCheckConcavePolygon() const { return checkConcavePolygon; }
+    int getCornersValue() const { return cornersValue; }
+    int getSharpnessValue() const { return sharpnessValue; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );

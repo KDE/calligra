@@ -44,8 +44,7 @@ class PolygonPreview : public QFrame
     Q_OBJECT
 
 public:
-    PolygonPreview( QWidget* parent, const char*, bool _checkConcavePolygon,
-                    int _cornersValue, int _sharpnessValue );
+    PolygonPreview( QWidget* parent, const char*);
     ~PolygonPreview() {}
 
     void setPenBrush( const QPen &_pen, const QBrush &_brush )
@@ -54,7 +53,7 @@ public:
 public slots:
     void slotConvexPolygon();
     void slotConcavePolygon();
-    void slotConersValue( int value );
+    void slotCornersValue( int value );
     void slotSharpnessValue( int value );
 
 protected:
@@ -77,8 +76,7 @@ class ConfPolygonDia : public QWidget
     Q_OBJECT
 
 public:
-    ConfPolygonDia( QWidget *parent, const char *name, bool _checkConcavePolygon,
-                    int _cornersValue, int _sharpnessValue );
+    ConfPolygonDia( QWidget *parent, const char *name );
     ~ConfPolygonDia();
 
     bool getCheckConcavePolygon() const { return checkConcavePolygon; }
@@ -96,17 +94,14 @@ protected:
     QGroupBox *gSettings;
     PolygonPreview *polygonPreview;
 
-    int cornersValue;
-    int sharpnessValue;
-    int oldCornersValue;
-    int oldSharpnessValue;
-
+    int cornersValue, oldCornersValue;
+    int sharpnessValue, oldSharpnessValue;
     bool checkConcavePolygon, oldCheckConcavePolygon;
 
 protected slots:
     void slotConvexPolygon();
     void slotConcavePolygon();
-    void slotConersValue( int value );
+    void slotCornersValue( int value );
     void slotSharpnessValue( int value );
     void Apply() { emit confPolygonDiaOk(); }
     void slotReset();

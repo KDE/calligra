@@ -36,7 +36,9 @@ public:
     KPPolygonObjectIface( KPPolygonObject *obj_ );
 
 k_dcop:
-    void setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
+    void setCheckConcavePolygon(bool _concavePolygon);
+    void setCornersValue(int _cornersValue);
+    void setSharpnessValue(int _sharpnessValue);
 
     int cornersValue()const;
     int sharpnessValue()const;

@@ -100,9 +100,15 @@ public:
     void ungroupObjects();
     void raiseObjs( bool forward );
     void lowerObjs( bool backward );
-    bool getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue );
-    bool getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, bool *_grayscal,
-                                      int *_bright, QPixmap *_origPixmap );
+    bool getCheckConcavePolygon( bool check ) const;
+    int getCornersValue( int corners ) const;
+    int getSharpnessValue( int sharpness ) const;
+    PictureMirrorType getPictureMirrorType( PictureMirrorType type ) const;
+    int getPictureDepth( int depth ) const;
+    bool getPictureSwapRGB( bool swapRGB ) const;
+    bool getPictureGrayscal( bool grayscal ) const;
+    int getPictureBright( int bright ) const;
+    QPixmap getPicturePixmap() const;
     int getRndY( int _ry );
     int getRndX( int _rx );
     int getPieAngle( int pieAngle );

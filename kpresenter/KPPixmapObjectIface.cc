@@ -37,103 +37,45 @@ QString KPPixmapObjectIface::fileName() const
 
 bool KPPixmapObjectIface::swapRGB() const
 {
-    PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-    return _swapRGB;
+    return obj->getPictureSwapRGB();
 }
 
 bool KPPixmapObjectIface::grayscal() const
 {
-    PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-    return _grayscal;
+    return obj->getPictureGrayscal();
 }
 
 int KPPixmapObjectIface::depth() const
 {
-    PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-    return _depth;
+    return obj->getPictureDepth();
 }
 
 int KPPixmapObjectIface::pictureMirrorType() const
 {
-    PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-    return (int)_mirrorType;
+    return obj->getPictureMirrorType();
 }
 
 int KPPixmapObjectIface::bright() const
 {
-    PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-    return (int)_bright;
+    return obj->getPictureBright();
 }
 
 void KPPixmapObjectIface::setDepth(int depth )
 {
-    PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-
-    obj->setPictureSettings( _mirrorType, depth, _swapRGB, _grayscal, _bright );
+    obj->setPictureDepth(depth);
 }
 
 void KPPixmapObjectIface::setBright(int bright )
 {
-    PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-
-    obj->setPictureSettings( _mirrorType, _depth, _swapRGB, _grayscal, bright );
+    obj->setPictureBright(bright);
 }
 
 void KPPixmapObjectIface::setSwapRGB(bool swapRGB )
 {
-    PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-
-    obj->setPictureSettings( _mirrorType, _depth, swapRGB, _grayscal, _bright );
+    obj->setPictureSwapRGB(swapRGB);
 }
 
 void KPPixmapObjectIface::setGrayscal( bool grayscal )
 {
-        PictureMirrorType _mirrorType;
-    int _depth=0;
-    bool _swapRGB=false;
-    bool _grayscal = false;
-    int _bright=0;
-    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright );
-
-    obj->setPictureSettings( _mirrorType, _depth, _swapRGB, grayscal, _bright );
+    obj->setPictureGrayscal(grayscal);
 }

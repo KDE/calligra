@@ -31,37 +31,32 @@ KPPolygonObjectIface::KPPolygonObjectIface( KPPolygonObject *_obj )
    obj = _obj;
 }
 
-void KPPolygonObjectIface::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
+void KPPolygonObjectIface::setCheckConcavePolygon(bool _concavePolygon)
 {
-    obj->setPolygonSettings( _checkConcavePolygon,_cornersValue, _sharpnessValue );
+    obj->setCheckConcavePolygon(_concavePolygon);
+}
+
+void KPPolygonObjectIface::setCornersValue(int _cornersValue)
+{
+    obj->setCheckConcavePolygon(_cornersValue);
+}
+
+void KPPolygonObjectIface::setSharpnessValue(int _sharpnessValue)
+{
+    obj->setSharpnessValue(_sharpnessValue);
 }
 
 int KPPolygonObjectIface::cornersValue()const
 {
-    bool check;
-    int cornerVal;
-    int sharpnessVal;
-    obj->getPolygonSettings( &check,&cornerVal,&sharpnessVal  );
-    return cornerVal;
+    return obj->getCornersValue();
 }
 
 int KPPolygonObjectIface::sharpnessValue()const
 {
-    bool check;
-    int cornerVal;
-    int sharpnessVal;
-    obj->getPolygonSettings( &check,&cornerVal,&sharpnessVal  );
-    return sharpnessVal;
-
+    return obj->getSharpnessValue();
 }
 
 bool KPPolygonObjectIface::checkConcavePolygon()const
 {
-    bool check;
-    int cornerVal;
-    int sharpnessVal;
-    obj->getPolygonSettings( &check,&cornerVal,&sharpnessVal  );
-    return check;
-
+    return obj->getCheckConcavePolygon();
 }
-

@@ -896,61 +896,148 @@ int KPrPage::getRndY( int _ry )
     return _ry;
 }
 
-/*================================================================*/
-bool KPrPage::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue )
+bool KPrPage::getCheckConcavePolygon( bool check ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected() && it.current()->getType()==OT_POLYGON)
         {
-            bool tmp_checkConcavePolygon;
-            int tmp_cornersValue;
-            int tmp_sharpnessValue;
             KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( it.current() );
             if(obj)
-            {
-
-                obj->getPolygonSettings( &tmp_checkConcavePolygon,
-                                         &tmp_cornersValue,
-                                         &tmp_sharpnessValue );
-                *_checkConcavePolygon = tmp_checkConcavePolygon;
-                *_cornersValue = tmp_cornersValue;
-                *_sharpnessValue = tmp_sharpnessValue;
-                return true;
-            }
+                return obj->getCheckConcavePolygon();
         }
     }
 
-    return false;
+    return check;
 }
 
-bool KPrPage::getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, bool *_grayscal,
-                                           int *_bright, QPixmap *_origPixmap )
+int KPrPage::getCornersValue( int corners ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it ) {
-        if( it.current()->isSelected() && it.current()->getType() == OT_PICTURE ) {
-            PictureMirrorType tmp_mirrorType;
-            int tmp_depth;
-            bool tmp_swapRGB;
-            bool tmp_grayscal;
-            int tmp_bright;
-            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
-            if( obj ) {
-                obj->getPictureSettings( &tmp_mirrorType, &tmp_depth, &tmp_swapRGB, &tmp_grayscal, &tmp_bright );
-                *_mirrorType = tmp_mirrorType;
-                *_depth = tmp_depth;
-                *_swapRGB = tmp_swapRGB;
-                *_grayscal = tmp_grayscal;
-                *_bright = tmp_bright;
-                *_origPixmap = obj->getOrignalPixmap();
-                return true;
-            }
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected() && it.current()->getType()==OT_POLYGON)
+        {
+            KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( it.current() );
+            if(obj)
+                return obj->getCornersValue();
         }
     }
 
-    return false;
+    return corners;
+}
+
+int KPrPage::getSharpnessValue( int sharpness ) const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected() && it.current()->getType()==OT_POLYGON)
+        {
+            KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( it.current() );
+            if(obj)
+                return obj->getSharpnessValue();
+        }
+    }
+
+    return sharpness;
+}
+
+PictureMirrorType KPrPage::getPictureMirrorType( PictureMirrorType type ) const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        {
+            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj )
+                return obj->getPictureMirrorType();
+        }
+    }
+
+    return type;
+}
+
+int KPrPage::getPictureDepth( int depth ) const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        {
+            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj )
+                return obj->getPictureDepth();
+        }
+    }
+
+    return depth;
+}
+
+bool KPrPage::getPictureSwapRGB( bool swapRGB ) const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        {
+            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj )
+                return obj->getPictureSwapRGB();
+        }
+    }
+
+    return swapRGB;
+}
+
+bool KPrPage::getPictureGrayscal( bool grayscal ) const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        {
+            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj )
+                return obj->getPictureGrayscal();
+        }
+    }
+
+    return grayscal;
+}
+
+int KPrPage::getPictureBright( int bright ) const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        {
+            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj )
+                return obj->getPictureBright();
+        }
+    }
+
+    return bright;
+}
+
+QPixmap KPrPage::getPicturePixmap() const
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        {
+            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj )
+                return obj->getOrignalPixmap();
+        }
+    }
+
+    return QPixmap();
 }
 
 /*======================== lower objects =========================*/
@@ -2229,9 +2316,9 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
         {
             if ( it.current()->isSelected() ) {
                 tmp = new PolygonSettingCmd::PolygonSettings;
-                dynamic_cast<KPPolygonObject*>( it.current() )->getPolygonSettings( &tmp->checkConcavePolygon,
-                                                                                    &tmp->cornersValue,
-                                                                                    &tmp->sharpnessValue );
+                tmp->checkConcavePolygon = dynamic_cast<KPPolygonObject*>(it.current())->getCheckConcavePolygon();
+                tmp->cornersValue = dynamic_cast<KPPolygonObject*>(it.current())->getCornersValue();
+                tmp->sharpnessValue = dynamic_cast<KPPolygonObject*>(it.current())->getSharpnessValue();
                 _oldSettings.append( tmp );
                 _objects.append( it.current() );
 
@@ -2280,11 +2367,11 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
         if ( it.current()->getType() == OT_PICTURE ) {
             if ( it.current()->isSelected() ) {
                 tmp = new PictureSettingCmd::PictureSettings;
-                dynamic_cast<KPPixmapObject*>( it.current() )->getPictureSettings( &tmp->mirrorType,
-                                                                                   &tmp->depth,
-                                                                                   &tmp->swapRGB,
-                                                                                   &tmp->grayscal,
-                                                                                   &tmp->bright );
+                tmp->mirrorType = dynamic_cast<KPPixmapObject*>(it.current())->getPictureMirrorType();
+                tmp->depth = dynamic_cast<KPPixmapObject*>(it.current())->getPictureDepth();
+                tmp->swapRGB = dynamic_cast<KPPixmapObject*>(it.current())->getPictureSwapRGB();
+                tmp->grayscal = dynamic_cast<KPPixmapObject*>(it.current())->getPictureGrayscal();
+                tmp->bright = dynamic_cast<KPPixmapObject*>(it.current())->getPictureBright();
                 _oldSettings.append( tmp );
                 _objects.append( it.current() );
 

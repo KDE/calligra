@@ -1426,9 +1426,9 @@ void PolygonSettingCmd::execute()
         KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( it.current() );
         if(obj)
 	{
-            obj->setPolygonSettings( newSettings.checkConcavePolygon,
-                                     newSettings.cornersValue,
-                                     newSettings.sharpnessValue );
+            obj->setCheckConcavePolygon(newSettings.checkConcavePolygon);
+            obj->setCornersValue(newSettings.cornersValue);
+            obj->setSharpnessValue(newSettings.sharpnessValue );
 	}
     }
     doc->repaint( false );
@@ -1442,9 +1442,9 @@ void PolygonSettingCmd::unexecute()
         KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( objects.at(i) );
         if(obj)
 	{
-            obj->setPolygonSettings( oldSettings.at( i )->checkConcavePolygon,
-                                     oldSettings.at( i )->cornersValue,
-                                     oldSettings.at( i )->sharpnessValue );
+            obj->setCheckConcavePolygon(oldSettings.at( i )->checkConcavePolygon);
+            obj->setCornersValue(oldSettings.at( i )->cornersValue);
+            obj->setSharpnessValue(oldSettings.at( i )->sharpnessValue);
 	}
     }
     doc->repaint( false );
@@ -1486,11 +1486,11 @@ void PictureSettingCmd::execute()
     for ( ; it.current() ; ++it ) {
         KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
         if ( obj ) {
-            obj->setPictureSettings( newSettings.mirrorType,
-                                     newSettings.depth,
-                                     newSettings.swapRGB,
-                                     newSettings.grayscal,
-                                     newSettings.bright );
+            obj->setPictureMirrorType(newSettings.mirrorType);
+            obj->setPictureDepth(newSettings.depth);
+            obj->setPictureSwapRGB(newSettings.swapRGB);
+            obj->setPictureGrayscal(newSettings.grayscal);
+            obj->setPictureBright(newSettings.bright);
 	}
     }
     doc->repaint( false );
@@ -1502,11 +1502,11 @@ void PictureSettingCmd::unexecute()
     for ( unsigned int i = 0; i < objects.count(); ++i ) {
         KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
         if ( obj ) {
-            obj->setPictureSettings( oldSettings.at( i )->mirrorType,
-                                     oldSettings.at( i )->depth,
-                                     oldSettings.at( i )->swapRGB,
-                                     oldSettings.at( i )->grayscal,
-                                     oldSettings.at( i )->bright );
+            obj->setPictureMirrorType(oldSettings.at( i )->mirrorType);
+            obj->setPictureDepth(oldSettings.at( i )->depth);
+            obj->setPictureSwapRGB(oldSettings.at( i )->swapRGB);
+            obj->setPictureGrayscal(oldSettings.at( i )->grayscal);
+            obj->setPictureBright(oldSettings.at( i )->bright);
 	}
     }
     doc->repaint( false );

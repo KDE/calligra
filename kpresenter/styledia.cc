@@ -732,9 +732,9 @@ void StyleDia::styleDone()
 void StyleDia::setupTabPen()
 {
     m_confPenDia = new ConfPenDia(this, 0, flags);
-    m_confPenDia->setPen( m_canvas->activePage()->getPen( m_doc->getKPresenterView()->getPen() ) );
-    m_confPenDia->setLineBegin( m_canvas->activePage()->getLineBegin( m_doc->getKPresenterView()->getLineBegin() ) );
-    m_confPenDia->setLineEnd( m_canvas->activePage()->getLineEnd( m_doc->getKPresenterView()->getLineEnd() ) );
+    m_confPenDia->setPen(m_canvas->getPen(m_doc->getKPresenterView()->getPen()));
+    m_confPenDia->setLineBegin(m_canvas->getLineBegin(m_doc->getKPresenterView()->getLineBegin()));
+    m_confPenDia->setLineEnd(m_canvas->getLineEnd(m_doc->getKPresenterView()->getLineEnd()));
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPenDia, SLOT( slotReset() ) );
     if (flags & SdPen)
@@ -746,14 +746,14 @@ void StyleDia::setupTabPen()
 void StyleDia::setupTabBrush()
 {
     m_confBrushDia = new ConfBrushDia(this, 0, flags);
-    m_confBrushDia->setBrush( m_canvas->activePage()->getBrush( m_doc->getKPresenterView()->getBrush() ) );
-    m_confBrushDia->setFillType( m_canvas->activePage()->getFillType( m_doc->getKPresenterView()->getFillType() ) );
-    m_confBrushDia->setGradient( m_canvas->activePage()->getGColor1( m_doc->getKPresenterView()->getGColor1() ),
-                                 m_canvas->activePage()->getGColor2( m_doc->getKPresenterView()->getGColor2() ),
-                                 m_canvas->activePage()->getGType( m_doc->getKPresenterView()->getGType() ),
-                                 m_canvas->activePage()->getGUnbalanced( m_doc->getKPresenterView()->getGUnbalanced() ),
-                                 m_canvas->activePage()->getGXFactor( m_doc->getKPresenterView()->getGXFactor() ),
-                                 m_canvas->activePage()->getGYFactor( m_doc->getKPresenterView()->getGYFactor() ) );
+    m_confBrushDia->setBrush(m_canvas->getBrush( m_doc->getKPresenterView()->getBrush()));
+    m_confBrushDia->setFillType(m_canvas->getFillType(m_doc->getKPresenterView()->getFillType()));
+    m_confBrushDia->setGradient(m_canvas->getGColor1(m_doc->getKPresenterView()->getGColor1()),
+                                m_canvas->getGColor2(m_doc->getKPresenterView()->getGColor2()),
+                                m_canvas->getGType(m_doc->getKPresenterView()->getGType()),
+                                m_canvas->getGUnbalanced(m_doc->getKPresenterView()->getGUnbalanced()),
+                                m_canvas->getGXFactor(m_doc->getKPresenterView()->getGXFactor()),
+                                m_canvas->getGYFactor(m_doc->getKPresenterView()->getGYFactor()));
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confBrushDia, SLOT( slotReset() ) );
     if (flags & SdBrush)
@@ -895,11 +895,11 @@ void StyleDia::setupTabGeometry()
 void StyleDia::setupTabPie()
 {
     m_confPieDia = new ConfPieDia( this, "ConfPageDia" );
-    m_confPieDia->setType( m_canvas->activePage()->getPieType( m_doc->getKPresenterView()->getPieType() ) );
-    m_confPieDia->setAngle( m_canvas->activePage()->getPieAngle( m_doc->getKPresenterView()->getPieAngle() ) );
-    m_confPieDia->setLength( m_canvas->activePage()->getPieLength( m_doc->getKPresenterView()->getPieLength() ) );
-    m_confPieDia->setPenBrush( m_canvas->activePage()->getPen( m_doc->getKPresenterView()->getPen() ),
-                               m_canvas->activePage()->getBrush( m_doc->getKPresenterView()->getBrush() ) );
+    m_confPieDia->setType(m_canvas->getPieType(m_doc->getKPresenterView()->getPieType()));
+    m_confPieDia->setAngle(m_canvas->getPieAngle(m_doc->getKPresenterView()->getPieAngle()));
+    m_confPieDia->setLength(m_canvas->getPieLength(m_doc->getKPresenterView()->getPieLength()));
+    m_confPieDia->setPenBrush(m_canvas->getPen(m_doc->getKPresenterView()->getPen()),
+                              m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPieDia, SLOT( slotReset() ) );
     addTab( m_confPieDia, i18n( "P&ie" ) );
@@ -907,19 +907,12 @@ void StyleDia::setupTabPie()
 
 void StyleDia::setupTabPolygon()
 {
-    bool _checkConcavePolygon;
-    int _cornersValue;
-    int _sharpnessValue;
-
-    if ( !m_canvas->activePage()->getPolygonSettings( &_checkConcavePolygon, &_cornersValue, &_sharpnessValue ) ) {
-        _checkConcavePolygon = m_doc->getKPresenterView()->getCheckConcavePolygon();
-        _cornersValue = m_doc->getKPresenterView()->getCornersValue();
-        _sharpnessValue = m_doc->getKPresenterView()->getSharpnessValue();
-    }
-
-    m_confPolygonDia = new ConfPolygonDia( this, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
-    m_confPolygonDia->setPenBrush( m_canvas->activePage()->getPen( m_doc->getKPresenterView()->getPen() ),
-                                   m_canvas->activePage()->getBrush( m_doc->getKPresenterView()->getBrush() ) );
+    m_confPolygonDia = new ConfPolygonDia(this, "ConfPolygonDia");
+    m_confPolygonDia->setCheckConcavePolygon(m_canvas->getCheckConcavePolygon(m_doc->getKPresenterView()->getCheckConcavePolygon()));
+    m_confPolygonDia->setCornersValue(m_canvas->getCornersValue(m_doc->getKPresenterView()->getCornersValue()));
+    m_confPolygonDia->setSharpnessValue(m_canvas->getSharpnessValue(m_doc->getKPresenterView()->getSharpnessValue()));
+    m_confPolygonDia->setPenBrush(m_canvas->getPen(m_doc->getKPresenterView()->getPen()),
+                                  m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPolygonDia, SLOT( slotReset() ) );
     addTab( m_confPolygonDia, i18n( "P&olygon" ) );
@@ -927,28 +920,13 @@ void StyleDia::setupTabPolygon()
 
 void StyleDia::setupTabPicture()
 {
-    PictureMirrorType _mirrorType;
-    int _depth;
-    bool _swapRGB;
-    bool _grayscal;
-    int _bright;
-    QPixmap _origPixmap;
-
-    if ( !m_canvas->activePage()->getPictureSettingsAndPixmap( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright, &_origPixmap ) ) {
-        _mirrorType = m_doc->getKPresenterView()->getPictureMirrorType();
-        _depth = m_doc->getKPresenterView()->getPictureDepth();
-        _swapRGB= m_doc->getKPresenterView()->getPictureSwapRGB();
-        _grayscal = m_doc->getKPresenterView()->getPictureGrayscal();
-        _bright = m_doc->getKPresenterView()->getPictureBright();
-        _origPixmap = QPixmap();
-    }
-
-    if ( _origPixmap.isNull() )
-    {
-        _origPixmap=BarIcon("kpresenter", KIcon::SizeMedium);
-    }
-
-    m_confPictureDia = new ConfPictureDia( this, "ConfPictureDia", _mirrorType, _depth, _swapRGB, _grayscal, _bright, _origPixmap );
+    m_confPictureDia = new ConfPictureDia( this, "ConfPictureDia");
+    m_confPictureDia->setPictureMirrorType(m_canvas->getPictureMirrorType(m_doc->getKPresenterView()->getPictureMirrorType()));
+    m_confPictureDia->setPictureDepth(m_canvas->getPictureDepth(m_doc->getKPresenterView()->getPictureDepth()));
+    m_confPictureDia->setPictureSwapRGB(m_canvas->getPictureSwapRGB(m_doc->getKPresenterView()->getPictureSwapRGB()));
+    m_confPictureDia->setPictureGrayscal(m_canvas->getPictureGrayscal(m_doc->getKPresenterView()->getPictureGrayscal()));
+    m_confPictureDia->setPictureBright(m_canvas->getPictureBright(m_doc->getKPresenterView()->getPictureBright()));
+    m_confPictureDia->setPicturePixmap(m_canvas->getPicturePixmap());
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confPictureDia, SLOT( slotReset() ) );
     addTab( m_confPictureDia, i18n( "Pi&cture" ) );
@@ -957,10 +935,10 @@ void StyleDia::setupTabPicture()
 void StyleDia::setupTabRectangle()
 {
     m_confRectDia = new ConfRectDia( this, "ConfRectDia" );
-    m_confRectDia->setRnds( m_canvas->activePage()->getRndX( m_doc->getKPresenterView()->getRndX() ),
-                          m_canvas->activePage()->getRndY( m_doc->getKPresenterView()->getRndY()) );
-    m_confRectDia->setPenBrush( m_canvas->activePage()->getPen( m_doc->getKPresenterView()->getPen() ),
-                                m_canvas->activePage()->getBrush( m_doc->getKPresenterView()->getBrush() ) );
+    m_confRectDia->setRnds(m_canvas->getRndX(m_doc->getKPresenterView()->getRndX()),
+                           m_canvas->getRndY(m_doc->getKPresenterView()->getRndY()));
+    m_confRectDia->setPenBrush(m_canvas->getPen(m_doc->getKPresenterView()->getPen()),
+                               m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
 
     connect( this, SIGNAL( defaultButtonPressed () ), m_confRectDia, SLOT( slotReset() ) );
     addTab( m_confRectDia, i18n( "&Rectangle" ) );

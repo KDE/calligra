@@ -43,12 +43,13 @@ class PicturePreview : public QFrame
     Q_OBJECT
 
 public:
-    PicturePreview( QWidget* parent, const char* name, PictureMirrorType _mirrorType,
-                    int _dept, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap );
+    PicturePreview( QWidget* parent, const char* name);
     ~PicturePreview() {}
 
     void setDepth( int depth);
     void setMirrorType (PictureMirrorType _t);
+    void setPicturePixmap(QPixmap _pixmap);
+
 public slots:
     void slotNormalPicture();
     void slotHorizontalMirrorPicture();
@@ -87,8 +88,7 @@ class ConfPictureDia : public QWidget
     Q_OBJECT
 
 public:
-    ConfPictureDia( QWidget *parent, const char *name, PictureMirrorType _mirrorType,
-                    int _depth, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap );
+    ConfPictureDia( QWidget *parent, const char *name);
     ~ConfPictureDia();
 
     PictureMirrorType getPictureMirrorType() const { return mirrorType; }
@@ -96,6 +96,13 @@ public:
     bool getPictureSwapRGB() const { return swapRGB; }
     bool getPictureGrayscal() const { return grayscal; }
     int getPictureBright() const { return bright; }
+
+    void setPictureMirrorType(PictureMirrorType _mirrorType);
+    void setPictureDepth(int _depth);
+    void setPictureSwapRGB(bool _swapRGB);
+    void setPictureGrayscal(bool _grayscal);
+    void setPictureBright(int _bright);
+    void setPicturePixmap(QPixmap _pixmap);
 
 protected:
     QRadioButton *m_normalPicture, *m_horizontalMirrorPicture, *m_verticalMirrorPicture, *m_horizontalAndVerticalMirrorPicture;

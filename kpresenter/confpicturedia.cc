@@ -42,18 +42,10 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-PicturePreview::PicturePreview( QWidget* parent, const char* name, PictureMirrorType _mirrorType,
-                                int _depth, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap )
+PicturePreview::PicturePreview( QWidget* parent, const char* name)
     : QFrame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
-    mirrorType = _mirrorType;
-    depth = _depth;
-    swapRGB = _swapRGB;
-    grayscal = _grayscal;
-    bright = _bright;
-    origPixmap = _origPixmap;
-
     setMinimumSize( 300, 200 );
 }
 
@@ -300,29 +292,20 @@ void PicturePreview::setMirrorType (PictureMirrorType _t)
     }
 }
 
+void PicturePreview::setPicturePixmap(QPixmap _pixmap)
+{
+    origPixmap = _pixmap;
+    repaint();
+}
+
 /******************************************************************/
 /* class ConfPictureDia                                           */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirrorType _mirrorType,
-                                int _depth, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap )
+ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name)
     : QWidget( parent, name )
 {
-    mirrorType = _mirrorType;
-    depth = _depth;
-    swapRGB = _swapRGB;
-    bright = _bright;
-    grayscal = _grayscal;
-
-    oldMirrorType = _mirrorType;
-    oldDepth = _depth;
-    oldSwapRGB = _swapRGB;
-    oldGrayscal = _grayscal;
-    oldBright = _bright;
-
-    origPixmap = _origPixmap;
-
     // ------------------------ layout
     QVBoxLayout *layout = new QVBoxLayout( this, 0 );
     layout->setMargin( 5 );
@@ -333,7 +316,6 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
 
     // ------------------------ settings
     gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), this );
-
 
     QButtonGroup *mirrorGroup = new QVButtonGroup( i18n( "Mirror" ), gSettings );
 
@@ -383,7 +365,7 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     hbox->addWidget( gSettings );
 
     // ------------------------ preview
-    picturePreview = new PicturePreview( this, "preview", mirrorType, depth, swapRGB, grayscal, bright, origPixmap );
+    picturePreview = new PicturePreview(this, "preview");
     hbox->addWidget( picturePreview );
 
     connect( m_normalPicture, SIGNAL( clicked() ), picturePreview, SLOT( slotNormalPicture() ) );
@@ -498,6 +480,59 @@ void ConfPictureDia::slotGrayscalPicture( bool _on )
 void ConfPictureDia::slotBrightValue( int _value )
 {
     bright = _value;
+}
+
+void ConfPictureDia::setPictureMirrorType(PictureMirrorType _mirrorType)
+{
+    mirrorType = _mirrorType;
+    oldMirrorType = _mirrorType;
+    picturePreview->setMirrorType(mirrorType);
+    m_normalPicture->setChecked(mirrorType == PM_NORMAL);
+    m_horizontalMirrorPicture->setChecked(mirrorType == PM_HORIZONTAL);
+    m_verticalMirrorPicture->setChecked(mirrorType == PM_VERTICAL);
+    m_horizontalAndVerticalMirrorPicture->setChecked(mirrorType == PM_HORIZONTALANDVERTICAL);
+}
+
+void ConfPictureDia::setPictureDepth(int _depth)
+{
+    depth = _depth;
+    oldDepth = _depth;
+    picturePreview->setDepth(depth);
+    m_depth0->setChecked(depth == 0);
+    m_depth1->setChecked(depth == 1);
+    m_depth8->setChecked(depth == 8);
+    m_depth16->setChecked(depth == 16);
+    m_depth32->setChecked(depth == 32);
+}
+
+void ConfPictureDia::setPictureSwapRGB(bool _swapRGB)
+{
+    swapRGB = _swapRGB;
+    oldSwapRGB = _swapRGB;
+    picturePreview->slotSwapRGBPicture(swapRGB);
+    m_swapRGBCheck->setChecked(swapRGB);
+}
+
+void ConfPictureDia::setPictureGrayscal(bool _grayscal)
+{
+    grayscal = _grayscal;
+    oldGrayscal = _grayscal;
+    picturePreview->slotGrayscalPicture(grayscal);
+    m_grayscalCheck->setChecked( oldGrayscal );
+}
+
+void ConfPictureDia::setPictureBright(int _bright)
+{
+    bright = _bright;
+    oldBright = _bright;
+    picturePreview->slotBrightValue(bright);
+    m_brightValue->setValue( oldBright );
+}
+
+void ConfPictureDia::setPicturePixmap(QPixmap _pixmap)
+{
+    origPixmap = _pixmap;
+    picturePreview->setPicturePixmap(origPixmap);
 }
 
 #include <confpicturedia.moc>

@@ -271,22 +271,6 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     }
 }
 
-void KPPolygonObject::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
-{
-    checkConcavePolygon = _checkConcavePolygon;
-    cornersValue = _cornersValue;
-    sharpnessValue = _sharpnessValue;
-
-    drawPolygon();
-}
-
-void KPPolygonObject::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue )
-{
-    *_checkConcavePolygon = checkConcavePolygon;
-    *_cornersValue = cornersValue;
-    *_sharpnessValue = sharpnessValue;
-}
-
 void KPPolygonObject::drawPolygon()
 {
     KoRect _rect = points.boundingRect();
@@ -316,10 +300,10 @@ void KPPolygonObject::drawPolygon()
             }
             a += angle;
             _points.setPoint( i, xp, yp );
-            if (xp < xmin) 
-               xmin = xp; 
-            if (yp < ymin) 
-               ymin = yp; 
+            if (xp < xmin)
+               xmin = xp;
+            if (yp < ymin)
+               ymin = yp;
         }
     }
     else {
@@ -329,10 +313,10 @@ void KPPolygonObject::drawPolygon()
             double yp = -radius * cos( a );
             a += angle;
             _points.setPoint( i, xp, yp );
-            if (xp < xmin) 
-               xmin = xp; 
-            if (yp < ymin) 
-               ymin = yp; 
+            if (xp < xmin)
+               xmin = xp;
+            if (yp < ymin)
+               ymin = yp;
         }
     }
 

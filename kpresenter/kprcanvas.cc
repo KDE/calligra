@@ -7512,6 +7512,118 @@ int KPrCanvas::getGYFactor( int _g )const
     return stickyPage()->getGYFactor( _g);
 }
 
+int KPrCanvas::getRndY( int _ry )const
+{
+    int value = m_activePage->getRndY(_ry);
+    if (value != _ry)
+        return value;
+    return stickyPage()->getRndY(_ry);
+}
+
+int KPrCanvas::getRndX( int _rx )const
+{
+    int value = m_activePage->getRndX(_rx);
+    if (value != _rx)
+        return value;
+    return stickyPage()->getRndX(_rx);
+}
+
+int KPrCanvas::getPieAngle( int pieAngle )const
+{
+    int value = m_activePage->getPieAngle(pieAngle);
+    if (value != pieAngle)
+        return value;
+    return stickyPage()->getPieAngle(pieAngle);
+}
+
+int KPrCanvas::getPieLength( int pieLength )const
+{
+    int value = m_activePage->getPieLength(pieLength);
+    if (value != pieLength)
+        return value;
+    return stickyPage()->getPieLength(pieLength);
+}
+
+PieType KPrCanvas::getPieType( PieType pieType )const
+{
+    PieType type = m_activePage->getPieType(pieType);
+    if (type != pieType)
+        return type;
+    return stickyPage()->getPieType(pieType);
+}
+
+bool KPrCanvas::getCheckConcavePolygon( bool check ) const
+{
+    bool value = m_activePage->getCheckConcavePolygon(check);
+    if (value != check)
+        return value;
+    return stickyPage()->getCheckConcavePolygon(check);
+}
+
+int KPrCanvas::getCornersValue( int corners ) const
+{
+    int value = m_activePage->getCornersValue(corners);
+    if (value != corners)
+        return value;
+    return stickyPage()->getCornersValue(corners);
+}
+
+int KPrCanvas::getSharpnessValue( int sharpness ) const
+{
+    int value = m_activePage->getSharpnessValue(sharpness);
+    if (value != sharpness)
+        return value;
+    return stickyPage()->getSharpnessValue(sharpness);
+}
+
+PictureMirrorType KPrCanvas::getPictureMirrorType( PictureMirrorType type ) const
+{
+    PictureMirrorType value = m_activePage->getPictureMirrorType(type);
+    if (value != type)
+        return value;
+    return stickyPage()->getPictureMirrorType(type);
+}
+
+int KPrCanvas::getPictureDepth( int depth ) const
+{
+    int value = m_activePage->getPictureDepth(depth);
+    if (value != depth)
+        return value;
+    return stickyPage()->getPictureDepth(depth);
+}
+
+bool KPrCanvas::getPictureSwapRGB( bool swapRGB ) const
+{
+    bool value = m_activePage->getPictureSwapRGB(swapRGB);
+    if (value != swapRGB)
+        return value;
+    return stickyPage()->getPictureSwapRGB(swapRGB);
+}
+
+bool KPrCanvas::getPictureGrayscal( bool grayscal ) const
+{
+    bool value = m_activePage->getPictureGrayscal(grayscal);
+    if (value != grayscal)
+        return value;
+    return stickyPage()->getPictureGrayscal(grayscal);
+}
+
+int KPrCanvas::getPictureBright( int bright ) const
+{
+    int value = m_activePage->getPictureBright(bright);
+    if (value != bright)
+        return value;
+    return stickyPage()->getPictureBright(bright);
+}
+
+QPixmap KPrCanvas::getPicturePixmap() const
+{
+    QPixmap pixmap = m_activePage->getPicturePixmap();
+    if (!pixmap.isNull())
+        return pixmap;
+    return stickyPage()->getPicturePixmap();
+}
+
 KCommand *KPrCanvas::setProtectContent( bool b )
 {
     KMacroCommand *macro = new KMacroCommand( i18n("Protect Content"));
