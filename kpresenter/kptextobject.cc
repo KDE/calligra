@@ -483,7 +483,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     KoTextParag *parag = static_cast<KoTextParag*> (textDocument()->firstParag());
     // ### fix this loop (Werner)
     while ( parag ) {
-        saveParagraph( doc, parag, textobj, 0, parag->length()-2 );
+        saveParagraph( doc, parag, textobj, 0, parag->length()-1 );
         parag = static_cast<KoTextParag*>( parag->next());
     }
     return textobj;
@@ -551,7 +551,7 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
 
 QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
 {
-
+    kdDebug()<<" QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)**************\n";
     QDomElement element=doc.createElement(tagTEXT);
 
     saveFormat ( element, lastFormat );
@@ -1992,11 +1992,11 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
     else
     {
         text += c1.parag()->toString( c1.index() ) + "\n";
-        m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c1.parag()->length()-2 );
+        m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c1.parag()->length()-1 );
         KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             text += p->toString() + "\n";
-            m_kptextobj->saveParagraph( domDoc, p, elem, 0, p->length()-2 );
+            m_kptextobj->saveParagraph( domDoc, p, elem, 0, p->length()-1 );
             p = p->next();
         }
         text += c2.parag()->toString( 0, c2.index() );
@@ -2141,6 +2141,7 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
         }
         else
         {
+            kdDebug()<<" ebtre !!!!!!!!!!!!! :"<<tmpText<<endl;
             if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
                 if ( lastFormat )
                     paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
