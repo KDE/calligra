@@ -54,8 +54,7 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 
 kchart_SOURCES = main.cc
 
-noinst_HEADERS =  kchart_global.h \
-		  kchart_shell.h kchart_part.h \
+noinst_HEADERS =  kchart_shell.h kchart_part.h \
 		  kchart_view.h kchart_factory.h	\
 	          engine.h \
 		kchartBarConfigDialog.h \
@@ -106,7 +105,7 @@ linktest_LDADD = $(lib_LTLIBRARIES)
 linktest_LDFLAGS = $(libkchart_LDFLAGS)
 
 # SUBDIRS =  . plugins pics dtd toolbar
-SUBDIRS =  . toolbar
+SUBDIRS =  . toolbar pics
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kchart.pot
