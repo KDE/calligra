@@ -120,7 +120,7 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
     if( !factory )
 	return 0;
 
-    QObject* obj = factory->create( KLibFactory::KofficeDocument, parent, name );
+    QObject* obj = factory->create( parent, name, "KoDocument" );
     if ( !obj || !obj->inherits( "KoDocument" ) )
     {
 	delete obj;

@@ -43,7 +43,7 @@ QObject* KChartFactory::create( QObject* parent, const char* name, const char *c
     }
 */
 
-    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KChartPart *part = new KChartPart( (KoDocument*)parent, name, !bWantKoDocument );
 

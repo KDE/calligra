@@ -74,7 +74,7 @@ KisFactory::~KisFactory()
 
 QObject* KisFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
-    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KisDoc *doc = new KisDoc( parent, name, !bWantKoDocument );
 

@@ -43,7 +43,7 @@ QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* 
 */
 //    return new KSpreadDoc( (KoDocument*)parent, name );
 
-  bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+  bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
   KSpreadDoc *doc = new KSpreadDoc( parent, name, !bWantKoDocument );
 

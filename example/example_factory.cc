@@ -38,7 +38,7 @@ QObject* ExampleFactory::create( QObject* parent, const char* name, const char* 
     }
 */
 
-    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     ExamplePart *part = new ExamplePart( parent, name, !bWantKoDocument );
 

@@ -80,7 +80,7 @@ QObject* KPresenterFactory::create( QObject* parent, const char* name,
 	return 0;
     }
 */
-    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KPresenterDoc *doc = new KPresenterDoc( (KoDocument*)parent, name, !bWantKoDocument );
 

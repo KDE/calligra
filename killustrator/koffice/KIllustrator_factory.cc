@@ -35,7 +35,7 @@ QObject* KIllustratorFactory::create( QObject* parent, const char* name, const c
     }
 */
 
-    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KIllustratorDocument *doc = new KIllustratorDocument( parent, name, !bWantKoDocument );
 

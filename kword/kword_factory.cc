@@ -80,7 +80,7 @@ QObject* KWordFactory::create( QObject* parent, const char* name, const char* cl
 	return 0;
     }
 */
-    bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
+    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KWordDocument *doc = new KWordDocument( parent, name, !bWantKoDocument );
 

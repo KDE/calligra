@@ -35,7 +35,7 @@ QObject *KGraphFactory::create(QObject *parent, const char *name, const char *cl
     }
 */
 
-    bool bWantKoDocument=(strcmp(classname, "KofficeDocument")==0);
+    bool bWantKoDocument=(strcmp(classname, "KoDocument")==0);
 
     KGraphPart *part = new KGraphPart(parent, name, !bWantKoDocument);
 
