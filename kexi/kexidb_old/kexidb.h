@@ -53,6 +53,7 @@ class KexiDB : public QObject
 		KexiDB *add(const QString &driver);
 		KexiDBDriver *driverInfo(const QString &driver);
 
+	public slots:
 		QStringList getDrivers();
 
 		//now driver related functions
@@ -99,12 +100,15 @@ class KexiDB : public QObject
 
 		void appendManager(KexiDBInterfaceManager *m);
 
-
-	protected:
 		KexiDBInterfaceManager	*manager();
 
-		KexiDBInterfaceManager	*m_manager;
 		KexiDBDriver		*m_currentDriver;
+
+		uint us(int i) { return i; }
+
+	protected:
+
+		KexiDBInterfaceManager	*m_manager;
 		KexiDBWatcher		*m_dbwatcher;
 };
 

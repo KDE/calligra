@@ -22,7 +22,7 @@ Boston, MA 02111-1307, USA.
 
 #include <qvariant.h>
 
-KexiDBResult::KexiDBResult(QObject *parent) : QObject(parent, 0)
+KexiDBResult::KexiDBResult(QObject *parent)
 {
 }
 
@@ -66,5 +66,3 @@ KexiDBResult::numRows()
 KexiDBResult::~KexiDBResult()
 {
 }
-
-#include "kexidbresult.moc"

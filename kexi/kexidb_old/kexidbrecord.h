@@ -22,15 +22,18 @@ Boston, MA 02111-1307, USA.
 
 #include "kexidbfield.h"
 #include "kdebug.h"
+#include <qobject.h>
 
 class QVariant;
 
 class KexiDBResult;
 
-class KexiDBRecord
+class KexiDBRecord : public QObject
 {
+	Q_OBJECT
+
 	public:
-		/*! 
+		/*!
 		 *  this class provides a easy function to browse
 		 *  between records, update, delete and insert-functions (if there is a primery or unique key)
 		 *  it is thougt for things like forms, reports, and table-widgets.
@@ -41,8 +44,10 @@ class KexiDBRecord
 		 *  @param buffer use true if you have e.g. a form-desingner and don't want to save your own,
 		 *  but note, that it will be quite memory-consuming so use it with care
 		 */
-		KexiDBRecord() {};
+		KexiDBRecord(QObject *parent, const char *name);
 		virtual ~KexiDBRecord() {kdDebug()<<"KexiDBRecord::~KexiDBRecord()"<<endl;};
+
+	public slots:
 
 //		virtual KexiDBRecord *query(KexiDB *db, QString query) static;
 

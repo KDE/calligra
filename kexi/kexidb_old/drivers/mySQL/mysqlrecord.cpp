@@ -27,8 +27,8 @@ Boston, MA 02111-1307, USA.
 #include "mysqlresult.h"
 #include "mysqlrecord.h"
 
-MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, bool buffer, MySqlRecord *parent)
- : KexiDBRecord(), MySqlResult(result, db)
+MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, const char *name, bool buffer, MySqlRecord *parent)
+ : KexiDBRecord(db, name), MySqlResult(result, db)
 {
 	m_db = db;
 	m_lastItem = 0;
@@ -300,3 +300,4 @@ MySqlRecord::~MySqlRecord()
 	kdDebug()<<"MySqlRecord::~MySqlRecord()"<<endl;
 }
 
+#include "mysqlrecord.moc"

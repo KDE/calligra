@@ -54,8 +54,10 @@ typedef QMap<uint, QVariant> KeyBuffer;
 
 class MySqlRecord : public KexiDBRecord, public MySqlResult
 {
+	Q_OBJECT
+
 	public:
-		MySqlRecord(MYSQL_RES *result, MySqlDB *db, bool buffer, MySqlRecord *parent=0);
+		MySqlRecord(MYSQL_RES *result, MySqlDB *db, const char *name, bool buffer, MySqlRecord *parent=0);
 		virtual ~MySqlRecord();
 
 		//KexiDBRecord members
@@ -91,7 +93,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		void gotoRecord(unsigned int record);
 
 		unsigned int fieldCount();
-		
+
 		QString fieldName(unsigned int field);
 
 		bool next();

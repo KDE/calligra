@@ -58,6 +58,9 @@ class KexiQSAHost : public QObject
 		QStringList	globalFunctions() const;
 		QSInterpreter	*interpreter() { return m_interpreter; }
 
+	protected slots:
+		void		slotDB();
+
 	private:
 		QSProject		*m_project;
 		QSInterpreter		*m_interpreter;

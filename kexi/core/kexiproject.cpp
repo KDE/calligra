@@ -50,7 +50,7 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 {
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
-	m_db = new KexiDB(this);
+	m_db = new KexiDB(this, "db");
 	m_dbconnection = new KexiDBConnection();
 	m_relationManager=new KexiRelation(this);
 

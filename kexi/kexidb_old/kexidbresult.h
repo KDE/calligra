@@ -25,9 +25,8 @@ Boston, MA 02111-1307, USA.
 
 class KexiDBField;
 
-class KexiDBResult : public QObject
+class KexiDBResult
 {
-	Q_OBJECT
 	
 	public:
 		/*! you mostly won't construct a field by your self

@@ -55,11 +55,14 @@ class KexiDBInterfaceManager : public QObject
 		KexiDBDriver *getDriverInfo(const QString &driver);
 		KexiDB *require(const QString &driver);
 
+		KexiDB	*part() { return m_part; }
+
 	protected:
 		void load(const QString &driver);
 		void lookupDrivers();
 
 		DriverList	m_driverList;
+		KexiDB		*m_part;
 //		KLibLoader	m_libLoader;
 };
 

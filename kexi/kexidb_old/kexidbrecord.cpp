@@ -19,4 +19,9 @@ Boston, MA 02111-1307, USA.
 
 #include "kexidbrecord.h"
 
+KexiDBRecord::KexiDBRecord(QObject *parent, const char *name)
+ : QObject(parent, name)
+{
+}
 
+#include "kexidbrecord.moc"

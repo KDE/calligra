@@ -51,6 +51,7 @@ class MySqlDB : public KexiDB
 //		int		connect(const char *host, const char *user, const char *passwd,
 //					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
 
+	public slots:
 		QString		driverName();
 
 		KexiDBRecord	*queryRecord(QString querystatement, bool buffer=false);
@@ -62,10 +63,6 @@ class MySqlDB : public KexiDB
 		QStringList	databases();
 		QStringList	tables();
 
-		/*!
-		 *  get the last error
-		 */
-		QString		error();
 
 		/*!
 		 * execute a query
@@ -80,8 +77,6 @@ class MySqlDB : public KexiDB
 
 		QString		escape(const QString &str);
 		QString		escape(const QByteArray& str);
-		QString		realEscape(const QString &str);
-		QByteArray	realEscape(const QByteArray &a);
 		bool alterField(const QString& table, const QString& field, const QString& newFieldName,
 			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
 			bool binary, bool unsignedType, const QString& defaultVal);
@@ -104,11 +99,6 @@ class MySqlDB : public KexiDB
 		KexiDBResult	*storeResult();
 		KexiDBResult	*useResult();
 
-		KexiDBResult	*listProcesses();
-
-		int		threadID();
-
-		unsigned long	insertID();
 		unsigned long	affectedRows();
 
 		unsigned long	lastAuto();

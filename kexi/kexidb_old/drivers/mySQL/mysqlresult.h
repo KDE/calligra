@@ -33,8 +33,6 @@ typedef QIntDict<KexiDBField> FieldInfo;
 
 class MySqlResult : public KexiDBResult
 {
-	Q_OBJECT
-	
 	public:
 		MySqlResult(MYSQL_RES *result, QObject *parent=0);
 		~MySqlResult();

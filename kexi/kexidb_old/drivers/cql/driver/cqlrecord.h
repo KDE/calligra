@@ -40,8 +40,10 @@ typedef QValueVector<bool> NullVector;
 
 class CqlRecord : public KexiDBRecord
 {
+	Q_OBJECT
+
 	public:
-		CqlRecord(SqlHandle *handle, const QString statement, bool force=true);
+		CqlRecord(QObject *p, const char *name, SqlHandle *handle, const QString statement, bool force=true);
 		~CqlRecord();
 
 		bool		readOnly();

@@ -47,6 +47,8 @@ KexiQSAHost::KexiQSAHost(KexiScriptHandler *parent, const char *name)
 //	m_project->open("/home/luci/db/kexi.qsa");
 	m_interpreter = QSInterpreter::defaultInterpreter();
 	new KexiQSAClasses(m_interpreter);
+	connect(m_parent->kexiProject(), SIGNAL(dbAvaible()), this, SLOT(slotDB()));
+
 //	m_editors.setAutoDelete(true);
 //	m_interpreter->setProject(m_project);
 
@@ -131,6 +133,14 @@ KexiQSAHost::globalFunctions() const
 {
 	return m_interpreter->globalFunctions();
 }
+
+void
+KexiQSAHost::slotDB()
+{
+	kdDebug() << "KexiQSAHost::slotDB(): adding " << m_parent->kexiProject()->db()->name() << endl;
+	m_interpreter->addObject(m_parent->kexiProject()->db());
+}
+
 
 KexiQSAHost::~KexiQSAHost()
 {

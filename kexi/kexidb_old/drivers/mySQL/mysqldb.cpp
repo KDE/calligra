@@ -61,7 +61,7 @@ MySqlDB::queryRecord(QString querystatement, bool buffer)
 
 		if(res)
 		{
-			MySqlRecord *rec = new MySqlRecord(res, this, false);
+			MySqlRecord *rec = new MySqlRecord(res, this, "record", false);
 			return rec;
 		}
 	}

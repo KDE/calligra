@@ -27,8 +27,8 @@ Boston, MA 02111-1307, USA.
 #include "cqldb.h"
 #include "cqlrecord.h"
 
-CqlRecord::CqlRecord(SqlHandle *handle, const QString statement, bool force)
- : KexiDBRecord()
+CqlRecord::CqlRecord(QObject *p, const char *name, SqlHandle *handle, const QString statement, bool force)
+ : KexiDBRecord(p, name)
 {
 	m_force = force;
 	try
@@ -233,4 +233,4 @@ CqlRecord::~CqlRecord()
 {
 }
 
-//#include "cqlrecord.moc"
+#include "cqlrecord.moc"
