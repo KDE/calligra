@@ -108,15 +108,16 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>12 may 2001</td>
+     <td>07 July 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td>Can export to LaTeX documents, documents with some text only. Formulas are analysed,
-	picture are not translated (the name is not write in the tex markup with new extension),
-	<b>simple</b> table are supported now (just a little pb with the size of cells and the
-	location is not yet supported) but part	is still not supported yet.</td>
+     <td>Can export to LaTeX formats, somes documents with text only. Formulas are analysed,
+	picture are not translated (the name is not write in the latex markup with new extension),
+	<b>simple</b> table are supported now but part is still not supported yet.<br>
+	Kword is used only as a word processing not WYSIWYG.
+	</td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
@@ -157,12 +158,73 @@
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
      <td>
 	<ul>
-	<li>december 2000 : first version (doesn't work)
-		<ul>
-			<li>generate a line,</li>
-			<li>architecture design,</li>
-			<li>important memory leak.</li>
-		</ul>
+	<li>07 july 2001
+	<ul>
+		<li>bug fixes
+			<ul>
+				<li>section are embeded in a list because of the last changes ;</li>
+				<li>new paragraph (let a blanck line now) ;</li>
+				<li>no environment (right, center, ...) in a header or footer
+				  (from the last changes).</li>
+			</ul>
+		</li>
+		<li>features
+			<ul>
+				<li>generate embedable file</li>
+				<li>new xml parser = QDom</li>
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li>3 june 2001
+	<ul>
+		<li>bugs fixes
+			<ul>
+				<li>color</li>
+				<li>if a section doesn't exist in latex, now the title is in bold</li>
+				<li>blanck line between 2 paragraphes.</li>
+				<li>textsize</li>
+				<li>end of environment</li>
+			</ul>
+		</li>
+		<li>clean code generated</li>
+		<li>use QList for all lists</li>
+		<li>improve the table generation. Now it is pretty good.</li>
+		<li>new features
+			<ul>
+				<li>improve the special character support but still a lot of work (mathematical
+				mode, ...).</li>
+				<li>table now support border line (only top line)</li>
+				<li>a dialog box to select some features (style, language/encoding)</li>
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li>06 may 2001
+	<ul>
+		<li>bug fixes
+			<ul>
+				<li>enum bug fixes</li>
+			</ul>
+		</li>
+		<li>new features
+			<ul>
+				<li>formula, part and table class (not still usable, though)</li>
+				<li>stock formula parts (no generation)</li>
+				<li>stock table part</li>
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li>07 may 2001 : fix bug list (now list work fine), analyse a formula (but can not 
+		be generated), simples tables are supported (no cell splited or merged) but with
+		a little "bug" for cell size (nb of lines).
+	</li>
+
+	<li>28 april 2001 : second update to support the new dtd, bugs fixes and
+		implements class to support pictures.
+	</li>
+	<li>19 march 2001 : just a first update to support the new dtd.
 	</li>
 	<li>end of january 2001: second version
 		<ul>
@@ -173,14 +235,12 @@
 			<li>paper size and orientation, column (to improve).</li>
 		</ul>
 	</li>
-	<li>19 march 2001 : just a first update to support the new dtd.
-	</li>
-	<li>28 april 2001 : second update to support the new dtd, bugs fixes and
-		implements class to support pictures.
-	</li>
-	<li>07 may 2001 : fix bug list (now list work fine), analyse a formula (but can not 
-		be generated), simples tables are supported (no cell splited or merged) but with
-		a little "bug" for cell size (nb of lines).
+	<li>december 2000 : first version (doesn't work)
+		<ul>
+			<li>generate a line,</li>
+			<li>architecture design,</li>
+			<li>important memory leak.</li>
+		</ul>
 	</li>
 	</ul>
     </td>
@@ -201,8 +261,7 @@
      <td>
 <H2>Markup supported at 28 april 2001</H2>
 
-<PRE>
-<b>note</b> : it's the full support of the new dtd (now all "work", if it doesn't, it's a bug)).
+<b>note</b> : it's the full support of the new dtd (now all "work", if it doesn't, it's a bug).
 <table BORDER="0" WIDTH="100%">
 <tr><td colspan="2"><b><i>PAPER</i></b></td></tr>
 <tr><td>format</td>		<td></td>			<td>SUPPORTED</td></tr>
