@@ -243,6 +243,7 @@ public:
     void insertSymbol( RTFProperty *property );
     void insertHexSymbol( RTFProperty * );
     void insertUnicodeSymbol( RTFProperty * );
+    void insertDateTime( RTFProperty *property );
     void parseBlipUid( RTFProperty* );
     void parseField( RTFProperty* );
     void parseFldinst( RTFProperty* );
@@ -265,7 +266,7 @@ public:
     void addParagraph( DomNode &node, bool frameBreak );
     void addVariable(DomNode& spec, int type, QCString key, RTFFormat* fmt=0);
     void addImportedPicture( const QString& rawFileName );
-    void addDateTime( const QString& format, const bool isDate );
+    void addDateTime( const QString& format, const bool isDate, RTFFormat& fmt );
     void finishTable();
     void writeOutPart( const char *name, QByteArray &array );
 

@@ -113,6 +113,8 @@ static RTFProperty propertyTable[] =
 	PROP(	"Text",		"cell",		insertTableCell,	0L, 0 ),
 	PROP(	0L,		"cellx",	insertCellDef,		0L, 0 ),
 	MEMBER(	0L,		"cf",		setNumericProperty,	state.format.color, 0 ),
+	PROP(	0L,		"chdate",	insertDateTime,		0L, TRUE ),
+	PROP(	0L,		"chtime",	insertDateTime,		0L, FALSE ),
 	MEMBER(	0L,		"clbrdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[3]) ),
 	MEMBER(	0L,		"clbrdrl",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[0]) ),
 	MEMBER(	0L,		"clbrdrr",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[1]) ),
@@ -1451,7 +1453,21 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     frameSets.closeNode( "FRAMESET" );
 }
 
-void RTFImport::addDateTime( const QString& format, const bool isDate )
+/**
+ * Insert a date or time field
+ */
+void RTFImport::insertDateTime( RTFProperty *property )
+{
+    kdDebug(30515) << "insertDateTime: " << property->value << endl;
+    addDateTime( QString::null, bool(property->value), state.format );
+}
+
+/**
+ *  Add a date/time field and split it for KWord
+ * @param format format of the date/time
+ * @param isDate is it a date field? (For the default format, if needed)
+ */
+void RTFImport::addDateTime( const QString& format, const bool isDate, RTFFormat& fmt )
 {
     DomNode node;
     if (format.isEmpty())
@@ -1465,7 +1481,7 @@ void RTFImport::addDateTime( const QString& format, const bool isDate )
             node.setAttribute("day", 0);
             node.setAttribute("fix", 0);
             node.closeNode("DATE");
-            addVariable(node, 0, "DATElocale", &fldfmt);
+            addVariable(node, 0, "DATElocale", &fmt);
         }
         else
         {
@@ -1476,7 +1492,7 @@ void RTFImport::addDateTime( const QString& format, const bool isDate )
             node.setAttribute("second", 0);
             node.setAttribute("fix", 0);
             node.closeNode("TIME");
-            addVariable(node, 2, "TIMElocale", &fldfmt);
+            addVariable(node, 2, "TIMElocale", &fmt);
         }
         return;
     }
@@ -1494,7 +1510,7 @@ void RTFImport::addDateTime( const QString& format, const bool isDate )
             else if(type==2)//we had time and we want date
             {
                 //finish time
-                addVariable(node, type, key.utf8(), &fldfmt);
+                addVariable(node, type, key.utf8(), &fmt);
                 type=-1;
             }
             if(type==-1) //start date
@@ -1520,7 +1536,7 @@ void RTFImport::addDateTime( const QString& format, const bool isDate )
             else if(type==0)//we had date and we want time
             {
                 //finish time
-                addVariable(node, type, key.utf8(), &fldfmt);
+                addVariable(node, type, key.utf8(), &fmt);
                 type=-1;
             }
             if(type==-1) //start time
@@ -1556,7 +1572,7 @@ void RTFImport::addDateTime( const QString& format, const bool isDate )
     }
     if(type>=0)
     {
-        addVariable( node, type, key.utf8(), &fldfmt );
+        addVariable( node, type, key.utf8(), &fmt );
     }
 }
 
@@ -1688,7 +1704,7 @@ void RTFImport::parseField( RTFProperty * )
 		format.replace("AM/PM", "AP");
 		format.replace("A/P", "AP"); // Approximation
 		format.remove("'"); // KWord 1.3 cannot protect text in date/time
-                addDateTime( format, (fieldName == "DATE") );
+                addDateTime( format, (fieldName == "DATE"), fldfmt );
             }
             else if (fieldName == "IMPORT")
             {
