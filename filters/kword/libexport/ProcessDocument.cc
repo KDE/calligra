@@ -35,6 +35,12 @@
    License version 2.
 */
 
+/*
+   Part of the code is based on code licensed under the terms of the
+   GNU Library General Public License version 2:
+   Copyright 2001 Michael Johnson <mikej@xnet.com>
+*/
+
 #include <qdom.h>
 #include <qvaluelist.h>
 
