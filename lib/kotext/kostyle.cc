@@ -51,6 +51,8 @@ KoStyle* KoStyleCollection::findStyle( const QString & _name )
         }
     }
 
+    if(_name == "Standard") return m_styleList.at(0); // fallback..
+
     return 0L;
 }
 
