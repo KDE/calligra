@@ -53,7 +53,7 @@ void BracketElement::draw(QPoint drawPoint,int resolution)
     char ch=0;
     x+=1;
     for(int i=0;i<2;i++) {
-	ch=content[i];
+	ch=QChar(content[i]);
 	if(i) x+=familySize.width()-unit-ofs-3;
 	switch (ch)
 	    {
@@ -241,20 +241,20 @@ void  BracketElement::save(ostream& out)
 	if(index[i]!=0L)
 	    {
 		out << " <ELEM INDEX=" << i << " ";
-		index[i]->save(out);     
-	    } 
-    
+		index[i]->save(out);
+	    }
+
     for(int i=0;i<childrenNumber;i++)
 	if(child[i]!=0L)
 	    {
 		out << " <ELEM CHILD=" << i << " ";
-		child[i]->save(out);     
-	    } 
+		child[i]->save(out);
+	    }
     if(next!=0)
 	{
 	    out << " <ELEM NEXT ";
-	    next->save(out);     
-	}         
+	    next->save(out);
+	}
     out << "</ELEM>" << endl;
 }
 

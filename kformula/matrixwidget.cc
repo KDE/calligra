@@ -22,7 +22,7 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
 {
     setMinimumSize(380,360);
     setMaximumSize(380,360);
-    
+
     KTabCtl *tab = new KTabCtl( this, "ktab" );
     setCaption( i18n("KFormula - Matrix Element Setup " ));
     tab->setGeometry(5,10,340,300);
@@ -74,7 +74,7 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
     co[2]->insertItem(i18n("No-border"));
     co[2]->insertItem(i18n("Single Line"));		
     co[2]->insertItem(i18n("Double Lne"));		
-    
+
     co[3] = new QComboBox(w,"Combo4");
     co[3]->setGeometry( 200,190,100,20);
     co[3]->insertItem(i18n("No-border"));
@@ -86,7 +86,7 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
     co[4]->insertItem(i18n("No-border"));
     co[4]->insertItem(i18n("Single Line"));		
     co[4]->insertItem(i18n("Double Lne"));		
-    
+
     co[5] = new QComboBox(w,"Combo6");
     co[5]->setGeometry( 200,230,100,20);
     co[5]->insertItem(i18n("No-border"));
@@ -129,9 +129,9 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
     cb[1]->setGeometry( 15, 120, 120, 30 );
     cb[1]->setText( i18n("Half Matrix") );
     tmpQButtonGroup->insert( cb[0] );
-    tmpQButtonGroup->insert( cb[1] );    
+    tmpQButtonGroup->insert( cb[1] );
     tmpQButtonGroup->setExclusive( TRUE );
-    
+
     tmpQButtonGroup = new QButtonGroup( w, "ButtonGroup_5" );
     tmpQButtonGroup->setGeometry( 1, 1, 0, 0 );	
     tmpQButtonGroup->setFrameStyle( 0 );
@@ -143,10 +143,10 @@ MatrixSetupWidget::MatrixSetupWidget(QWidget* parent,
     cb[3]->setText( i18n("Over the row" ));
     cb[4] = new QRadioButton( w, "RadioButton_2" );
     cb[4]->setGeometry( 190, 85, 120, 30 );
-    cb[4]->setText( i18n("Under the row" ));    
+    cb[4]->setText( i18n("Under the row" ));
 
 	tmpQButtonGroup->insert( cb[2] );
-	tmpQButtonGroup->insert( cb[3] );    
+	tmpQButtonGroup->insert( cb[3] );
 	tmpQButtonGroup->insert( cb[4] );
 	tmpQButtonGroup->setExclusive( TRUE );
 	
@@ -190,7 +190,7 @@ if ( cb[1]->isChecked() )
   vch='C';
 
 if ( cb[0]->isChecked() )
-  {   
+  {
     warning("CB1 checked");
      if (cb[2]->isChecked())
       vch='M';
@@ -230,7 +230,7 @@ void MatrixSetupWidget::valueChanged()
 int x=spb[2]->getValue();
 spb[0]->setRange(1,x);
 if(spb[0]->getValue()>x)
-  spb[0]->setValue(x);    
+  spb[0]->setValue(x);
 }
 
 void MatrixSetupWidget::setString(QString str)
@@ -247,7 +247,7 @@ cb[3]->setChecked((str[1]=='U'));  //over
 cb[4]->setChecked((str[1]=='D'));  //under
 for (int k=0;k<6;k++)
  {
-  char bch=str[15+k];
+  char bch=QChar(str[15+k]);
   if(bch=='N')co[k]->setCurrentItem(0);
   if(bch=='L')co[k]->setCurrentItem(1);
   if(bch=='D')co[k]->setCurrentItem(2);
