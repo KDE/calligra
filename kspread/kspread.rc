@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="25">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="26">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -172,6 +172,7 @@
  <Action name="copy"/>
  <Action name="paste"/>
  <Separator/>
+ <Action name="insertHyperlink"/>
  <Action name="autoSum"/>
  <Action name="sortInc"/>
  <Action name="sortDec"/>
