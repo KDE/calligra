@@ -25,22 +25,21 @@
 /*
 FIXME:
 -Fix "no mimesource" warning of QTextBrowser
+-Sort case-insensitively
 -click in thesaurus doesn't always select immediately
 -See the fixme's in the source below
 
 TODO:
--Add back/forwar buttons
--Don't start WordNet before its tab is activated
+-Add part of speech information
+-Add back/forward buttons
+-Don't start WordNet before its tab is activated?
 -Move the edit field outside the tabs and make it work for both
 -Help link about WordNet
 -Also "Replace" with text selection in m_resultbox?
 -Make dialog non-modal???
 -Be more verbose if the result is empty
 -Better table layout (no empty space on top)
--Function words (like "if" etc) are not part of WordNet. There  are not *that*
- many of them, so maybe we should add them. See search tools' stop word list for
- function words.
--Don't forget to insert comments for the translators where necessary
+-Don't forget to insert comments for the translators if necessary
  (because WordNet is English language only)
 */
 
@@ -279,7 +278,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
     
     // Find oly whole words. Looks clumsy, but this way we don't have to rely on
     // features that might only be in certain versions of grep:
-    QString term_tmp = ";" + term + ";";
+    QString term_tmp = ";" + term.stripWhiteSpace() + ";";
     m_thesproc->clearArguments();
     *m_thesproc << "grep" << "-i" << term_tmp;
     *m_thesproc << KGlobal::dirs()->findResourceDir("data", "thesaurus/")
@@ -303,7 +302,7 @@ void Thesaurus::thesExited(KProcess *)
         return;
     }
 
-    QString search_term = m_thes_edit->currentText();
+    QString search_term = m_thes_edit->currentText().stripWhiteSpace();
     
     QStringList syn;
     QStringList hyper;
@@ -419,23 +418,27 @@ void Thesaurus::findTermWordnet(const QString &term)
         *m_wnproc << "-holon";
         m_mode = other;
     } else if( m_combobox->currentItem() == 6 ) {
+        // e.g. "size -> large/small"
+        *m_wnproc << "-attrn" << "-attra";
+        m_mode = other;
+    } else if( m_combobox->currentItem() == 7 ) {
         // e.g. "kill -> die"
         *m_wnproc << "-causv";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 7) {
+    } else if( m_combobox->currentItem() == 8 ) {
         // e.g. "walk -> step"
         *m_wnproc << "-entav";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 8) {
+    } else if( m_combobox->currentItem() == 9 ) {
         *m_wnproc << "-famln" << "-famlv" << "-famla" << "-famlr";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 9) {
+    } else if( m_combobox->currentItem() == 10 ) {
         *m_wnproc << "-framv";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 10 ) {
+    } else if( m_combobox->currentItem() == 11 ) {
         *m_wnproc << "-grepn" << "-grepv" << "-grepa" << "-grepr";
         m_mode = grep;
-    } else if( m_combobox->currentItem() == 11 ) {
+    } else if( m_combobox->currentItem() == 12 ) {
         *m_wnproc << "-over";
         m_mode = other;
     }
@@ -451,11 +454,12 @@ void Thesaurus::findTermWordnet(const QString &term)
     m_combobox->insertItem(i18n("Meroyms - %1 has a...").arg(m_edit->currentText()));
     // 5:
     m_combobox->insertItem(i18n("Holonyms - ...has a %1").arg(m_edit->currentText()));
+    m_combobox->insertItem(i18n("Attributes"));
     m_combobox->insertItem(i18n("Cause to (for some verbs only)"));
     m_combobox->insertItem(i18n("Verb Entailment (for some verbs only)"));
     m_combobox->insertItem(i18n("Familiarity & Polysemy count"));
-    m_combobox->insertItem(i18n("Verb Frames (examples of use)"));
     // 10:
+    m_combobox->insertItem(i18n("Verb Frames (examples of use)"));
     m_combobox->insertItem(i18n("List of Compound Words"));
     m_combobox->insertItem(i18n("Overview of senses"));
 
@@ -471,8 +475,7 @@ void Thesaurus::findTermWordnet(const QString &term)
       */
 
     /** TODO?:
-      * -attr
-      * -pert
+      * -pert (e.g. nuclear -> nuclues, but "=>" are nested, difficult to display)
       * -nomn(n|v), e.g. deny -> denial, but this doesn't seem to work?
       */
 
