@@ -2756,37 +2756,7 @@ void KWView::extraCreateTemplate()
 {
     int width = 60;
     int height = 60;
-    double ratio = m_doc->ptPaperHeight() / m_doc->ptPaperWidth();
-    if ( ratio > 1 )
-        width = qRound( 60 / ratio );
-    else
-        height = qRound( 60 / ratio );
-    double zoom = (double)width / m_doc->ptPaperWidth();
-    int oldZoom = m_doc->zoom();
-    setZoom( qRound( 100 * zoom ), false );
-    kdDebug() << "KWView::extraCreateTemplate ratio=" << ratio << " preview size: " << width << "," << height
-              << " zoom:" << zoom << endl;
-    QPixmap pix( width, height );
-    pix.fill( Qt::white );
-    QPainter painter;
-    painter.begin( &pix );
-    QRect pageRect( 0, 0, m_doc->paperWidth(), m_doc->paperHeight() );
-
-    KWViewModeNormal * viewMode = new KWViewModeNormal( m_doc );
-    QColorGroup cg = QApplication::palette().active();
-
-    // Draw all framesets contents
-    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * frameset = fit.current();
-        if ( frameset->isVisible() && !frameset->isFloating() )
-            frameset->drawContents( &painter, pageRect, cg, false, false, 0L, viewMode, 0L );
-    }
-
-    painter.end();
-    delete viewMode;
-    setZoom( oldZoom, false );
+    QPixmap pix = m_doc->generatePreview(QSize(width, height));
 
     KTempFile tempFile( QString::null, ".kwt" );
     tempFile.setAutoDelete(true);

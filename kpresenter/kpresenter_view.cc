@@ -1119,19 +1119,13 @@ void KPresenterView::extraConfigure()
 /*===============================================================*/
 void KPresenterView::extraCreateTemplate()
 {
-    QRect r=m_pKPresenterDoc->pageList().at(0)->getZoomPageRect();
-    QPixmap pix( QSize( r.width(),
-			r.height() ) );
-    pix.fill( Qt::white );
-    int i = getCurrPgNum() - 1;
-    //todo fix me
-    m_canvas->drawPageInPix( pix, i );
-    QImage _img( pix.convertToImage().smoothScale( 60, 45, QImage::ScaleFree ) );
-    pix.convertFromImage( _img );
+    int width = 60;
+    int height = 60;
+    QPixmap pix = m_pKPresenterDoc->generatePreview(QSize(width, height));
 
     KTempFile tempFile( QString::null, ".kpt" );
     tempFile.setAutoDelete( true );
-    m_pKPresenterDoc->savePage( tempFile.name(), i );
+    m_pKPresenterDoc->savePage( tempFile.name(), getCurrPgNum() - 1);
 
     KoTemplateCreateDia::createTemplate( "kpresenter_template", KPresenterFactory::global(),
 					 tempFile.name(), pix, this);
