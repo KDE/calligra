@@ -52,12 +52,12 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	columnsLayouter->setSpacing( 2 );
 
 	d = orientation() == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
-	left= new QWidget( base );
+	left = new QWidget( base );
 	leftLayout = new QBoxLayout( left, d );
 	leftLayout->setSpacing( 2 );
 	columnsLayouter->addWidget( left );
 
-	right= new QWidget( base );
+	right = new QWidget( base );
 	rightLayout = new QBoxLayout( right, d );
 	rightLayout->setSpacing( 2 );
 	columnsLayouter->addWidget( right );
@@ -70,40 +70,40 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	button = addButton( "14_selectnodes", i18n( "Select nodes tool") );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( selectNodesToolActivated() ) );
 
-	button = addButton( "14_rotate", i18n( "rotate tool" ) );
+	button = addButton( "14_rotate", i18n( "Rotate tool" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( rotateToolActivated() ) );
 
-	button = addButton("14_shear", i18n( "shear tool" ) );
+	button = addButton("14_shear", i18n( "Shear tool" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( shearToolActivated() ) );
 
-	button = addButton( "14_rectangle", i18n( "create rectangle tool" ) );
+	button = addButton( "14_rectangle", i18n( "Create rectangle" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( rectangleToolActivated() ) );
 
-	button = addButton( "14_roundrect", i18n( "create rounded rectangle tool" ) );
+	button = addButton( "14_roundrect", i18n( "Create rounded rectangle" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( roundRectToolActivated() ) );
 
-	button = addButton( "14_ellipse", i18n( "create ellipse tool" ) );
+	button = addButton( "14_ellipse", i18n( "Create ellipse" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( ellipseToolActivated() ) );
 
-	button = addButton( "14_polygon", i18n( "create poligon tool" ) );
+	button = addButton( "14_polygon", i18n( "Create polygon" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polygonToolActivated() ) );
 
-	button = addButton( "14_star", i18n( "create star tool" ) );
+	button = addButton( "14_star", i18n( "Create star" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( starToolActivated() ) );
 
-	button = addButton( "14_sinus", i18n("create sinus wave tool" ) );
+	button = addButton( "14_sinus", i18n("Create sine wave" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( sinusToolActivated() ) );
 
-	button = addButton( "14_spiral", i18n( "create spiral tool" ) );
+	button = addButton( "14_spiral", i18n( "Create spiral" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( spiralToolActivated() ) );
 
-	button = addButton( "14_gradient", i18n( "fill with gradient tool" ) );
+	button = addButton( "14_gradient", i18n( "Fill with gradient" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( gradToolActivated() ) );
 
-	button = addButton( "14_polyline", i18n( "create polyline tool" ) );
+	button = addButton( "14_polyline", i18n( "Create polyline" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polylineToolActivated() ) );
 
-	button = addButton( "14_clipart", i18n( "insert clipart tool" ) );
+	button = addButton( "14_clipart", i18n( "Insert clipart" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( clipartToolActivated() ) );
 
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );

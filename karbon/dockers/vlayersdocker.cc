@@ -102,19 +102,19 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	m_buttonGroup->setInsideMargin( 3 );
 	button = new QToolButton( m_buttonGroup );
 	button->setIconSet( SmallIcon( "14_layer_newlayer.png" ) );
-	button->setTextLabel( "New" );
+	button->setTextLabel( i18n( "New" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
 	button->setIconSet( SmallIcon( "14_layer_raiselayer.png" ) );
-	button->setTextLabel( "Raise" );
+	button->setTextLabel( i18n( "Raise" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
 	button->setIconSet( SmallIcon( "14_layer_lowerlayer.png" ) );
-	button->setTextLabel( "Lower" );
+	button->setTextLabel( i18n( "Lower" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
 	button->setIconSet( SmallIcon( "14_layer_deletelayer.png" ) );
-	button->setTextLabel( "Delete" );
+	button->setTextLabel( i18n( "Delete" ) );
 	m_buttonGroup->insert( button );
 	layout->addWidget( m_buttonGroup, 1);
 	layout->setSpacing( 0 );
@@ -207,7 +207,7 @@ void VLayersDocker::raiseLayer()
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Raise layer"), 
+	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Raise layer" ), 
 			layerItem->layer(), VLayerCmd::raiseLayer );
 	m_view->part()->addCommand( cmd, true );
 	updatePreviews();
@@ -218,7 +218,7 @@ void VLayersDocker::lowerLayer()
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Lower layer"), 
+	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Lower layer" ), 
 			layerItem->layer(), VLayerCmd::lowerLayer );
 	m_view->part()->addCommand( cmd, true );
 	updatePreviews();
@@ -229,7 +229,7 @@ void VLayersDocker::deleteLayer()
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Delete layer"), 
+	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Delete layer" ), 
 			layerItem->layer(), VLayerCmd::deleteLayer );
 	m_view->part()->addCommand( cmd, true );
 	updateLayers();
