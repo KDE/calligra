@@ -25,11 +25,6 @@
 #include "kptresource.h"
 #include <qtable.h>
 
-class KPTTaskGeneralPanelBase;
-class KPTRequestResourcesPanel;
-class KPTTaskNotesPanelBase;
-class KPTPart;
-class KPTTask;
 class KLineEdit;
 class KMacroCommand;
 class QTextEdit;
@@ -39,6 +34,17 @@ class QButtonGroup;
 class QListBox;
 class QTable;
 class QDateTime;
+
+//TODO ui files are not in the KPlato namespace!!
+class KPTTaskGeneralPanelBase;
+class KPTTaskNotesPanelBase;
+
+namespace KPlato
+{
+
+class KPTRequestResourcesPanel;
+class KPTPart;
+class KPTTask;
 
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
@@ -62,5 +68,7 @@ private:
 
     // TODO: Duration and risk fields
 };
+
+} //KPlato namespace
 
 #endif // KPTTASKDIALOG_H

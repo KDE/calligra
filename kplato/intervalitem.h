@@ -24,6 +24,8 @@
 #include <qdatetime.h>
 #include <qpair.h>
 
+namespace KPlato
+{
 
 class IntervalItem : public QListViewItem
 {
@@ -39,6 +41,8 @@ private:
     QTime m_start;
     QTime m_end;
 };
+
+}  //KPlato namespace
 
 #endif /* INTERVALITEM_H */
 

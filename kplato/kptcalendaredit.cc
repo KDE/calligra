@@ -45,6 +45,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 KPTCalendarEdit::KPTCalendarEdit (QWidget *parent, const char *name)
     : KPTCalendarEditBase(parent),
       m_calendar(0)
@@ -297,5 +300,7 @@ void KPTCalendarEdit::slotWeekSelected(int week, int year) {
 void KPTCalendarEdit::slotSelectionCleared() {
     clearEditPart();
 }
+
+}  //KPlato namespace
 
 #include "kptcalendaredit.moc"

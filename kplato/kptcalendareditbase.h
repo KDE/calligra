@@ -17,7 +17,6 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QGroupBox;
-class KPTCalendarPanel;
 class QLabel;
 class QComboBox;
 class QButtonGroup;
@@ -25,6 +24,11 @@ class QPushButton;
 class QListView;
 class QListViewItem;
 class QTimeEdit;
+
+namespace KPlato
+{
+
+class KPTCalendarPanel;
 
 class KPTCalendarEditBase : public QWidget
 {
@@ -60,5 +64,7 @@ protected slots:
     virtual void languageChange();
 
 };
+
+}  //KPlato namespace
 
 #endif // KPTCALENDAREDITBASE_H

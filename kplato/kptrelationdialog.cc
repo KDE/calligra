@@ -34,7 +34,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-
+namespace KPlato
+{
 
 KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, const char *n)
     : KDialogBase(Plain, i18n("Add Relationship"), Ok|Cancel, Ok, p, n, true, true)
@@ -154,5 +155,7 @@ KPTModifyTimingRelationCmd *KPTModifyRelationDialog::buildCommand(KPTPart *part,
     kdDebug()<<k_funcinfo<<endl;
     return new KPTModifyTimingRelationCmd(part, rel, m_relation->timingRelation(), i18n("Modify Timing Relation"));
 }
+
+}  //KPlato namespace
 
 #include "kptrelationdialog.moc"

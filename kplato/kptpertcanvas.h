@@ -27,11 +27,15 @@
 #include <qmemarray.h>
 #include <qptrdict.h>
 
-class KPTPertNodeItem;
 class QTimer;
 class QPainter;
 class QPoint;
 class QSize;
+
+namespace KPlato
+{
+
+class KPTPertNodeItem;
 
 class KPTPertCanvas : public QCanvasView
 {
@@ -94,4 +98,7 @@ private:
 #endif
 
 };
+
+}  //KPlato namespace
+
 #endif

@@ -22,16 +22,20 @@
 
 #include <qsplitter.h>
 
-class KPTView;
-class KPTPertCanvas;
-class KPTNode;
-class KPTRelation;
 class QLayout;
 class QListViewItem;
 
 class KPrinter;
 
- class KPTPertView : public QWidget
+namespace KPlato
+{
+
+class KPTView;
+class KPTPertCanvas;
+class KPTNode;
+class KPTRelation;
+
+class KPTPertView : public QWidget
 {
     Q_OBJECT
     
@@ -66,5 +70,7 @@ private:
     KPTNode *m_node;
     int m_defaultFontSize;
 };
+
+}  //KPlato namespace
 
 #endif

@@ -35,6 +35,11 @@ class KAction;
 class KSelectAction;
 class KToggleAction;
 
+class DCOPObject;
+
+namespace KPlato
+{
+
 class KPTGanttView;
 class KPTPertView;
 class KPTResourceView;
@@ -43,8 +48,6 @@ class KPTPart;
 class KPTNode;
 class KPTProject;
 class KPTRelation;
-
-class DCOPObject;
 
 class KPTView : public KoView {
     Q_OBJECT
@@ -59,7 +62,7 @@ public:
 
     KPTPart *getPart()const;
 
-	KPTProject& getProject() const;
+    KPTProject& getProject() const;
 
     virtual void setupPrinter(KPrinter &printer);
     virtual void print(KPrinter &printer);
@@ -188,5 +191,7 @@ private:
     KAction *actionDeleteTask;
     KAction *actionEditResource;
 };
+
+}; //Kplato namespace
 
 #endif

@@ -58,6 +58,9 @@
 #include <kprinter.h>
 #include <kmessagebox.h>
 
+namespace KPlato
+{
+
 KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     : QSplitter(parent, name),
     m_mainview( view ),
@@ -772,4 +775,7 @@ void KPTGanttView::slotModifyLink(KDGanttViewTaskLink* link) {
     if (rel)
         emit modifyRelation(rel);
 }
+
+}  //KPlato namespace
+
 #include "kptganttview.moc"

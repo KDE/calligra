@@ -48,6 +48,9 @@
 #include <qpushbutton.h>
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, n, true, true),
       m_task(task)
@@ -140,5 +143,7 @@ void KPTTaskDialog::slotOk() {
     m_resourcesTab->slotOk();
     accept();
 }
+
+}  //KPlato namespace
 
 #include "kpttaskdialog.moc"

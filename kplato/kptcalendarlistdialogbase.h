@@ -20,9 +20,13 @@ class QListView;
 class QListViewItem;
 class QLineEdit;
 class QPushButton;
-class KPTCalendarEdit;
 class QComboBox;
 class QLabel;
+
+namespace KPlato
+{
+
+class KPTCalendarEdit;
 
 class KPTCalendarListDialogBase : public QWidget
 {
@@ -51,5 +55,7 @@ protected slots:
     virtual void languageChange();
 
 };
+
+} //KPlato namespace
 
 #endif // KPTCALENDARLISTDIALOGBASE_H

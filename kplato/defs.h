@@ -20,6 +20,9 @@
 #ifndef defs_h
 #define defs_h
 
+namespace KPlato
+{
+
 #define KPTBarIcon( x ) BarIcon( x, KPTFactory::global() )
 
 /** 
@@ -55,5 +58,7 @@ enum TimingRelation {
   FINISH_START=0,
   FINISH_FINISH=1,
   START_START=2 };
+  
+}  //KPlato namespace
 
 #endif

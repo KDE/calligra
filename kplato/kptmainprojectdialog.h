@@ -24,6 +24,9 @@
 
 #include <kdialogbase.h>
 
+namespace KPlato
+{
+
 class KPTProject;
 class KPTResourcesPanel;
 
@@ -55,5 +58,7 @@ private:
     KPTMainProjectDialogImpl *dia;
     KPTResourcesPanel *resourcesTab;
 };
+
+}  //KPlato namespace
 
 #endif // KPTMAINPROJECTDIALOG_H

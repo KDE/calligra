@@ -35,7 +35,8 @@
 
 #include <kdebug.h>
 
-
+namespace KPlato
+{
 
 KPTProject::KPTProject(KPTNode *parent)
     : KPTNode(parent)
@@ -757,3 +758,5 @@ void KPTProject::printCalendarDebug(QCString indent) {
         m_standardWorktime->printDebug();
 }
 #endif
+
+}  //KPlato namespace

@@ -40,6 +40,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 class CalendarListViewItem : public QListViewItem
 {
 public:
@@ -329,5 +332,7 @@ CalendarListViewItem *KPTCalendarListDialogImpl::findItem(KPTCalendar *cal) {
     }
     return 0;
 }
+
+}  //KPlato namespace
 
 #include "kptcalendarlistdialog.moc"

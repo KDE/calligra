@@ -22,9 +22,6 @@
 
 #include <qsplitter.h>
 
-class KPTView;
-class KPTProject;
-class KPTResource;
 class QLayout;
 class KDGanttView;
 class KDGanttViewItem;
@@ -32,11 +29,19 @@ class QPoint;
 class QListView;
 class QListViewItem;
 
+class KPrinter;
+
+namespace KPlato
+{
+
+class KPTView;
+class KPTProject;
+class KPTResource;
+
 class KPTResourceGroup;
 class KPTResource;
 class ResourceItemPrivate;
 
-class KPrinter;
 
  class KPTResourceView : public QSplitter
 {
@@ -48,7 +53,7 @@ class KPrinter;
 
     //~KPTResourceView();
 
-	void zoom(double zoom);
+    void zoom(double zoom);
 
     void draw(KPTProject &project);
     KPTView *mainView();
@@ -73,4 +78,7 @@ private:
     QListView *appList;
 
 };
- #endif
+
+}  //KPlato namespace
+
+#endif

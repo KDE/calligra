@@ -30,6 +30,8 @@
 #include <kdebug.h>
 #include <koRect.h> //DEBUGRECT
 
+namespace KPlato
+{
 
 KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
     m_resource.setAutoDelete(true);
@@ -883,4 +885,7 @@ void KPTTask::printDebug(bool children, QCString indent) {
     KPTNode::printDebug(children, indent);
 
 }
+
 #endif
+
+}  //KPlato namespace

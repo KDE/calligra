@@ -234,7 +234,7 @@
     <signal>valueChanged()</signal>
 </signals>
 <slots>
-    <slot>setValue( const KPTDuration &amp; newDuration )</slot>
+    <slot>setValue( const KPlato::KPTDuration &amp; newDuration )</slot>
     <slot access="private">dddLostFocus()</slot>
     <slot access="private">hhLostFocus()</slot>
     <slot access="private">mmLostFocus()</slot>
@@ -245,7 +245,7 @@
 <functions>
     <function access="private">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
-    <function returnType="KPTDuration">value() const</function>
+    <function returnType="KPlato::KPTDuration">value() const</function>
     <function>setVisibleFields( int fieldMask )</function>
     <function returnType="int">visibleFields()</function>
     <function>setFieldLeftscale( int f, unsigned ls )</function>

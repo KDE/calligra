@@ -7,6 +7,8 @@
 ** place of a destructor.
 *****************************************************************************/
 
+using namespace KPlato;
+
 void KPTTaskResourcesPanelBase::init()
 {
     effort = new KPTDurationWidget( groupBox1, "effort" );

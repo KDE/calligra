@@ -26,11 +26,15 @@
 
 #include <qstring.h>
 
+class QCanvas;
+class QDomElement;
+
+namespace KPlato
+{
+
 class KPTNode;
 class KPTProject;
 class KPTPertCanvas;
-class QCanvas;
-class QDomElement;
 
 /**
   * The relation class couples a 2 nodes together which are dependent on each other.
@@ -107,4 +111,7 @@ public:
 
     ~KPTProxyRelation() { m_parent = 0; m_child = 0;}
 };
+
+}  //KPlato namespace
+
 #endif

@@ -30,6 +30,10 @@ class QDomElement;
 class QDateTime;
 class QTime;
 class QDate;
+
+namespace KPlato
+{
+
 class KPTDateTime;
 
 class KPTCalendarDay {
@@ -240,7 +244,7 @@ public:
     KPTCalendarDay *weekday(int day) const { return m_weekdays->weekday(day); }
 
     int parentId() const { return m_parentId; }
-    void setParentId(int id) { m_parentId == id; }
+    void setParentId(int id) { m_parentId = id; }
 
     bool hasParent(KPTCalendar *cal);
 
@@ -367,4 +371,7 @@ public:
     void printDebug(QCString indent="");
 #endif
 };
+
+}  //KPlato namespace
+
 #endif

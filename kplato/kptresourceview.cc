@@ -37,6 +37,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 class ResourceItemPrivate : public QListViewItem {
 public:
     ResourceItemPrivate(KPTResource *r, QListViewItem *parent)
@@ -189,5 +192,7 @@ void KPTResourceView::print(KPrinter &printer) {
     kdDebug()<<k_funcinfo<<endl;
 
 }
+
+}  //KPlato namespace
 
 #include "kptresourceview.moc"

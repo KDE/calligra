@@ -23,12 +23,6 @@
 #include <qsplitter.h>
 #include <qcursor.h>
 
-class KPTView;
-class KPTNode;
-class KPTTask;
-class KPTProject;
-class KPTRelation;
-
 class QLayout;
 class QListViewItem;
 class QPoint;
@@ -44,6 +38,17 @@ class KDGanttViewItem;
 class KDGanttViewTaskLink;
 
 class KPrinter;
+
+class KPTTaskAppointmentsView;  //TODO ui files are not yet in the KPlato namespace
+
+namespace KPlato
+{
+
+class KPTView;
+class KPTNode;
+class KPTTask;
+class KPTProject;
+class KPTRelation;
 
 class KPTGanttView : public QSplitter
 {
@@ -141,7 +146,7 @@ private:
     int m_defaultFontSize;
     KDGanttViewItem *m_currentItem;
     KDGanttView *m_gantt;
-    class KPTTaskAppointmentsView *m_taskView;
+    KPTTaskAppointmentsView *m_taskView;
     bool m_showSlack;
     bool m_firstTime;
     QPtrList<KDGanttViewTaskLink> m_taskLinks;
@@ -152,4 +157,7 @@ private:
     QColor m_itemColorStart, m_itemColorMiddle, m_itemColorEnd;
     QColor m_selectColor;
 };
- #endif
+
+}  //KPlato namespace
+
+#endif

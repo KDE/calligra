@@ -28,6 +28,10 @@
 #include <qstring.h>
 
 class KMacroCommand;
+
+namespace KPlato
+{
+
 class KPTProject;
 class KPTPart;
 
@@ -94,5 +98,7 @@ private:
     KPTStandardWorktimeDialogImpl *dia;
     KPTStandardWorktime *m_original;
 };
+
+} //KPlato namespace
 
 #endif // KPTSTANDARDWORKTIMEDIALOG_H

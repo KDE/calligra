@@ -27,6 +27,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 /////   KPTCalendarDay   ////
 KPTCalendarDay::KPTCalendarDay()
     : m_state(0) {
@@ -914,3 +917,5 @@ void KPTStandardWorktime::printDebug(QCString indent) {
 }
 
 #endif
+
+}  //KPlato namespace

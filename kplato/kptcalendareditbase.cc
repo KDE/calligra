@@ -24,6 +24,9 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
+namespace KPlato
+{
+
 /*
  *  Constructs a KPTCalendarEditBase as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
@@ -122,5 +125,7 @@ void KPTCalendarEditBase::languageChange()
     bClear->setText( tr2i18n( "Clear" ) );
     bAddInterval->setText( tr2i18n( "Add interval" ) );
 }
+
+}  //KPlato namespace
 
 #include "kptcalendareditbase.moc"

@@ -28,6 +28,9 @@
 
 #include <qstring.h>
 
+namespace KPlato
+{
+
 class KPTProject;
 class KPTProjectDialogImpl;
 class KPTResourcesPanel;
@@ -63,5 +66,7 @@ private:
     KPTProjectDialogImpl *dia;
     KPTResourcesPanel *resourcesTab;
 };
+
+}  //KPlato namespace
 
 #endif // KPTPROJECTDIALOG_H

@@ -23,6 +23,10 @@
 #include "kptduration.h"
 #include "durationpanelbase.h"
 #include <kdialogbase.h>
+
+namespace KPlato
+{
+
 class KPTDurationPanel;
 
 class KPTDurationDialog : public KDialogBase {
@@ -51,5 +55,7 @@ signals:
 private:
     KPTDuration *duration;
 };
+
+}  //KPlato namespace
 
 #endif // KPTDURATIONDIALOG_H

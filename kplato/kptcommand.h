@@ -26,6 +26,10 @@
 #include "kptduration.h"
 
 class QString;
+
+namespace KPlato
+{
+
 class KPTProject;
 class KPTTask;
 class KPTCalendar;
@@ -359,5 +363,6 @@ private:
     bool m_mine;
 };
 
+}  //KPlato namespace
 
 #endif //KPTCOMMAND_H

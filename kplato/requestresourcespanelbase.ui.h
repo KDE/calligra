@@ -7,6 +7,7 @@
 ** place of a destructor.
 *****************************************************************************/
 
+using namespace KPlato;
 
 void RequestResourcesPanelBase::init()
 {

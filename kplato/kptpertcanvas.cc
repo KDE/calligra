@@ -50,6 +50,9 @@
 
 #include <koRect.h> //DEBUGRECT
 
+namespace KPlato
+{
+
 KPTPertCanvas::KPTPertCanvas( QWidget *parent )
     : QCanvasView( parent, "Pert canvas" /*WNorthWestGravity WStaticContents| WResizeNoErase | WRepaintNoErase */),
 	m_verticalGap(20),
@@ -388,5 +391,7 @@ void KPTPertCanvas::printDebug( int /*info*/ )
 {
 }
 #endif
+
+}  //KPlato namespace
 
 #include "kptpertcanvas.moc"

@@ -22,6 +22,9 @@
 #include <qdatetime.h>
 #include "kptduration.h"
 
+namespace KPlato
+{
+
 class KPTDuration;
 
 /**
@@ -58,5 +61,7 @@ private:
     void subtract(const KPTDuration &duration);
 
 };
+
+}  //KPlato namespace
 
 #endif

@@ -1,3 +1,5 @@
+// using namespace KPlato;
+
 void KPTTaskGeneralPanelBase::setSchedulingType(int type)
 {
     switch (type)

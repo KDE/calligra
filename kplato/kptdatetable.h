@@ -36,6 +36,9 @@
 #include <qlineedit.h>
 #include <qdatetime.h>
 
+namespace KPlato
+{
+
 /** Week selection widget.
 * @internal
 * @version $Id$
@@ -429,5 +432,7 @@ private:
     class KPTDateTablePrivate;
     KPTDateTablePrivate *d;
 };
+
+}  //KPlato namespace
 
 #endif // KPTDATETABEL_H

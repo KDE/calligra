@@ -21,6 +21,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 KPTDateTime::KPTDateTime() : QDateTime() {
 }
 
@@ -74,3 +77,5 @@ KPTDateTime& KPTDateTime::operator-=(const KPTDuration &duration) {
     subtract(duration);
     return *this;
 }
+
+}  //KPlato namespace

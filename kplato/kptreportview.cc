@@ -44,6 +44,9 @@
 #include <qdom.h>
 #include <qstringlist.h>
 
+namespace KPlato
+{
+
 class ReportTagsPrivate {
 public:
 
@@ -563,6 +566,6 @@ void KPTReportView::slotLastPage() {
     m_reportview->slotLastPage();
 }
 
-
+}  //KPlato namespace
 
 #include "kptreportview.moc"

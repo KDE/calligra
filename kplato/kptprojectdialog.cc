@@ -41,6 +41,8 @@
 #include "kptprojectdialogbase.h"
 #include "kptresourcespanel.h"
 
+namespace KPlato
+{
 
 KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
@@ -137,5 +139,7 @@ void KPTProjectDialogImpl::slotChooseLeader()
 	  leaderfield->setText(a.fullEmail());
   }
 }
+
+}  //KPlato namespace
 
 #include "kptprojectdialog.moc"

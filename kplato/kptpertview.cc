@@ -36,15 +36,18 @@
 
 #include <kprinter.h>
 
- KPTPertView::KPTPertView( KPTView *view, QWidget *parent, QLayout *layout )
+namespace KPlato
+{
+
+KPTPertView::KPTPertView( KPTView *view, QWidget *parent, QLayout *layout )
     : QWidget( parent, "Pert view" ),
     m_mainview( view ),
-	m_node( 0 )
- {
+    m_node( 0 )
+{
     init(layout);
 }
 
- KPTPertView::~KPTPertView()
+KPTPertView::~KPTPertView()
 {
 }
 
@@ -53,7 +56,7 @@ void KPTPertView::init(QLayout *layout)
     //kdDebug()<<k_funcinfo<<endl;
     QGridLayout *gl = new QGridLayout(this, 1, 1, -1, -1, "Pert QGridLayout");
     m_canvasview = new KPTPertCanvas(this);
-	gl->addWidget(m_canvasview, 0, 0);
+        gl->addWidget(m_canvasview, 0, 0);
     draw();
     connect(m_canvasview, SIGNAL(rightButtonPressed(KPTNode *, const QPoint &)), this, SLOT(slotRMBPressed(KPTNode *,const QPoint &)));
     connect(m_canvasview, SIGNAL(updateView(bool)), m_mainview, SLOT(slotUpdate(bool)));
@@ -72,12 +75,12 @@ void KPTPertView::draw()
 void KPTPertView::slotRMBPressed(KPTNode *node, const QPoint & point)
 {
     //kdDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
-	m_node = node;
-	QPopupMenu *menu = m_mainview->popupMenu("node_popup");
-	if (menu)
-	{
-		int id = menu->exec(point);
-	}
+    m_node = node;
+    QPopupMenu *menu = m_mainview->popupMenu("node_popup");
+    if (menu)
+    {
+        int id = menu->exec(point);
+    }
 }
 
 void KPTPertView::slotAddRelation(KPTNode* par, KPTNode* child)
@@ -100,5 +103,7 @@ void KPTPertView::print(KPrinter &printer) {
 KPTNode *KPTPertView::currentNode() {
     return m_canvasview->selectedNode(); 
 }
- 
+
+}  //KPlato namespace
+
 #include "kptpertview.moc"

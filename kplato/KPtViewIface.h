@@ -8,6 +8,9 @@
 #include <qrect.h>
 #include <qcolor.h>
 
+namespace KPlato
+{
+
 class KPTView;
 
 class KPtViewIface : public KoViewIface
@@ -34,5 +37,7 @@ k_dcop:
 private:
     KPTView* m_view;
 };
+
+}
 
 #endif

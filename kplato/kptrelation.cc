@@ -29,6 +29,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag) {
     m_parent=parent;
     m_child=child;
@@ -143,3 +146,4 @@ void KPTRelation::printDebug(QCString indent) {
 }
 #endif
 
+}  //KPlato namespace

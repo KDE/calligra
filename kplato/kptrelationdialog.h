@@ -23,12 +23,15 @@
 
 #include <kdialogbase.h>
 
+class QButtonGroup;
+
+namespace KPlato
+{
+
 class KPTNode;
 class KPTRelation;
 class KPTPart;
 class KPTModifyTimingRelationCmd;
-
-class QButtonGroup;
 
 
 class KPTAddRelationDialog : public KDialogBase 
@@ -73,5 +76,6 @@ private:
     bool m_deleted;
 };
 
+}  //KPlato namespace
 
 #endif // KPTRELATIONDIALOG_H

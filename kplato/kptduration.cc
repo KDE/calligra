@@ -23,6 +23,9 @@
 #include <kdebug.h>
 #include <qregexp.h>
 
+namespace KPlato
+{
+
 // Set the value of KPTDuration::zeroDuration to zero.
 const KPTDuration KPTDuration::zeroDuration( 0, 0, 0 );
 
@@ -201,3 +204,4 @@ void KPTDuration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsign
         *milliseconds = ms;
 }
 
+}  //KPlato namespace

@@ -7,6 +7,8 @@
 // place of a destructor.
 //
 
+using namespace KPlato;
+
 /**
  * This structure describes one of the fields shown.
  */
@@ -110,7 +112,7 @@ void KPTDurationWidget::setValue(const KPTDuration &newDuration)
     emit valueChanged();
 }
 
-KPTDuration KPTDurationWidget::value() const
+KPlato::KPTDuration KPTDurationWidget::value() const
 {
     int i;
     unsigned v[5];
@@ -129,7 +131,7 @@ KPTDuration KPTDurationWidget::value() const
         if (m_fields[i].current->isHidden())
             v[i] = 0;
     }
-    KPTDuration tmp(v[0], v[1], v[2], v[3], v[4]);
+    KPlato::KPTDuration tmp(v[0], v[1], v[2], v[3], v[4]);
     return tmp;
 }
 

@@ -28,14 +28,18 @@
 #include <qtable.h>
 //class QCheckTableItem;
 
+class KCommand;
+class KMacroCommand;
+
+namespace KPlato
+{
+
 class KPTTask;
 class KPTResourceGroup;
 class KPTResource;
 class KPTResourceGroupRequest;
 class KPTResourceRequest;
 class KPTStandardWorktime;
-class KCommand;
-class KMacroCommand;
 class KPTPart;
 class KPTDuration;
 
@@ -111,5 +115,7 @@ private:
     KPTDuration m_origEffort;
     int m_origEfforttype;
 };
+
+}  //KPlato namespace
 
 #endif

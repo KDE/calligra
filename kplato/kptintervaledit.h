@@ -28,6 +28,9 @@
 #include <qptrlist.h>
 #include <qpair.h>
 
+namespace KPlato
+{
+
 class KPTIntervalEditImpl : public KPTIntervalEditBase {
     Q_OBJECT
 public:
@@ -58,5 +61,7 @@ public:
 private:
     KPTIntervalEditImpl *dia;
 };
+
+}  //KPlato namespace
 
 #endif // KPTINTERVALEDIT_H

@@ -37,6 +37,8 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
 
 KPTDateValidator::KPTDateValidator(QWidget* parent, const char* name)
     : QValidator(parent, name)
@@ -1092,5 +1094,6 @@ void KPTPopupFrame::virtual_hook( int, void* )
 void KPTDateTable::virtual_hook( int, void* )
 { /*BASE::virtual_hook( id, data );*/ }
 
+}  //KPlato namespace
 
 #include "kptdatetable.moc"

@@ -33,6 +33,9 @@
 #include <list>
 #include <algorithm>
 
+namespace KPlato
+{
+
 class KPTCalendar;
 class KPTStandardWorktime;
 
@@ -185,4 +188,7 @@ public:
 #endif
 #endif
 };
+
+}  //KPlato namespace
+
 #endif

@@ -30,13 +30,17 @@
 #include <qcanvas.h>
 #include <qrect.h>
 
+class QPainter;
+
+namespace KPlato
+{
+
 class KPTTask;
 class KPTRelation;
 class KPTPertCanvas;
 class KPTPertRelationItem;
 class KPTPertNodeItem;
 class KPTGanttView;
-class QPainter;
 
 class KPTPertNodeItem : public QCanvasPolygon
 {
@@ -278,5 +282,7 @@ protected:
     KDGanttView *m_view;
     bool m_drawn;
 };
+
+}  //KPlato namespace
 
 #endif

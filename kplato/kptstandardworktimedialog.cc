@@ -35,6 +35,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 KPTStandardWorktimeDialog::KPTStandardWorktimeDialog(KPTProject &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Standard Worktime"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
@@ -374,5 +377,7 @@ void KPTStandardWorktimeDialogImpl::slotSaturdayTimeChanged(const QTime& time) {
 
 void KPTStandardWorktimeDialogImpl::slotSundayTimeTimeChanged(const QTime& time) {
 }
+
+}  //KPlato namespace
 
 #include "kptstandardworktimedialog.moc"

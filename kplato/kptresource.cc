@@ -26,6 +26,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 KPTResourceGroup::KPTResourceGroup(KPTProject *project) {
     m_project = project;
     m_id = -1;
@@ -858,3 +861,4 @@ void KPTResourceRequestCollection::printDebug(QString indent)
 }
 #endif
 
+}  //KPlato namespace

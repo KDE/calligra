@@ -22,6 +22,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+namespace KPlato
+{
+
 KPTDurationDialog::KPTDurationDialog(QWidget *parent, KPTDuration *d)
     : KDialogBase( Swallow, i18n("Adjust Duration"), Help|Ok|Cancel, Ok, parent, 0, true, true) {
     duration = d;
@@ -33,5 +36,7 @@ KPTDurationDialog::KPTDurationDialog(QWidget *parent, KPTDuration *d)
 KPTDurationPanel::KPTDurationPanel(QWidget *parent, KPTDuration *d) : DurationPanelBase(parent) {
     duration = d;
 }
+
+}  //KPlato namespace
 
 #include "kptdurationdialog.moc"

@@ -18,32 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kptview.h"
-#include "kptfactory.h"
-#include "kptpart.h"
-#include "kptproject.h"
-#include "kptmainprojectdialog.h"
-#include "kptprojectdialog.h"
-#include "kpttask.h"
-#include "kpttaskdialog.h"
-#include "kptganttview.h"
-#include "kptpertview.h"
-#include "kptreportview.h"
-#include "kptdatetime.h"
-#include "kptcommand.h"
-#include "kptrelation.h"
-#include "kptrelationdialog.h"
-
-#include "kptresourceview.h"
-#include "kptresourcedialog.h"
-#include "kptresource.h"
-#include "kptcalendarlistdialog.h"
-#include "kptstandardworktimedialog.h"
-#include "kptcanvasitem.h"
-
-#include "KDGanttView.h"
-#include "KDGanttViewTaskItem.h"
-#include "KPtViewIface.h"
+#include <kprinter.h>
 
 #include <koKoolBar.h>
 #include <koRect.h>
@@ -77,10 +52,40 @@
 #include <kaccelgen.h>
 #include <kdeversion.h>
 #include <kxmlguifactory.h>
-#include <kprinter.h>
+
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kcommand.h>
+
+#include "kptview.h"
+#include "kptfactory.h"
+#include "kptpart.h"
+#include "kptproject.h"
+#include "kptmainprojectdialog.h"
+#include "kptprojectdialog.h"
+#include "kpttask.h"
+#include "kpttaskdialog.h"
+#include "kptganttview.h"
+#include "kptpertview.h"
+#include "kptreportview.h"
+#include "kptdatetime.h"
+#include "kptcommand.h"
+#include "kptrelation.h"
+#include "kptrelationdialog.h"
+
+#include "kptresourceview.h"
+#include "kptresourcedialog.h"
+#include "kptresource.h"
+#include "kptcalendarlistdialog.h"
+#include "kptstandardworktimedialog.h"
+#include "kptcanvasitem.h"
+
+#include "KDGanttView.h"
+#include "KDGanttViewTaskItem.h"
+#include "KPtViewIface.h"
+
+namespace KPlato
+{
 
 KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     : KoView(part, parent, "Main View"),
@@ -816,4 +821,7 @@ void KPTView::slotPrintCalendarDebug() {
         getPart()->getProject().printCalendarDebug("");
 }
 #endif
+
+}  //KPlato namespace
+
 #include "kptview.moc"

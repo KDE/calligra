@@ -9,6 +9,8 @@
 
 #include <kdebug.h>
 
+using namespace KPlato;
+
 void KPTTaskAppointmentsView::clear()
 {
     if (m_appList) m_appList->clear();

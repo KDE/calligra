@@ -41,6 +41,8 @@
 #include "kptresourcespanel.h"
 #include "kptresource.h"
 
+namespace KPlato
+{
 
 KPTMainProjectDialog::KPTMainProjectDialog(KPTProject &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
@@ -135,5 +137,6 @@ void KPTMainProjectDialogImpl::slotEndDateClicked() {
     slotCheckAllFieldsFilled();
 }
 
+}  //KPlato namespace
 
 #include "kptmainprojectdialog.moc"

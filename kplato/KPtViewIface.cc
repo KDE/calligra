@@ -6,6 +6,9 @@
 #include <dcopclient.h>
 #include <dcopref.h>
 
+namespace KPlato
+{
+
 /************************************************
  *
  * KPtViewIface
@@ -81,3 +84,5 @@ void KPtViewIface::slotConfigure()
 {
   m_view->slotConfigure();
 }
+
+}  //KPlato namespace

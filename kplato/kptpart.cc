@@ -37,6 +37,9 @@
 
 #define CURRENT_SYNTAX_VERSION "0.1"
 
+namespace KPlato
+{
+
 KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
 		 QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
@@ -273,5 +276,7 @@ void KPTPart::setCommandType(int type) {
     else if (type == 1)
         m_calculate = true;
 }
+
+}  //KPlato namespace
 
 #include "kptpart.moc"

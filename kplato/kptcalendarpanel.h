@@ -31,6 +31,10 @@
 
 class QLineEdit;
 class QToolButton;
+
+namespace KPlato
+{
+
 class KPTDateValidator;
 class KPTDateTable;
 class KPTCalendar;
@@ -222,5 +226,7 @@ private:
     // calculate ISO 8601 week number
     int weekOfYear(QDate);
 };
+
+}  //KPlato namespace
 
 #endif //  KPTCALENDARPANEL_H

@@ -31,6 +31,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 KPTIntervalEdit::KPTIntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Edit Interval"), Ok|Cancel, Ok, parent, name, true, true)
 {
@@ -100,4 +103,7 @@ QPtrList<QPair<QTime, QTime> > KPTIntervalEditImpl::intervals() const {
     }
     return l;
 }
+
+}  //KPlato namespace
+
 #include "kptintervaledit.moc"

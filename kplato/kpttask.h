@@ -28,6 +28,9 @@
 
 #include <qptrlist.h>
 
+namespace KPlato
+{
+
 class KPTDateTime;
 
 /**
@@ -197,4 +200,7 @@ public:
 #endif
 
 };
+
+}  //KPlato namespace
+
 #endif

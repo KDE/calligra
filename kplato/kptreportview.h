@@ -27,16 +27,21 @@
 #include <qwidget.h>
 #include <qstring.h>
 
-class KPTView;
-class KPTNode;
-class KReportViewer;
-class KPrinter;
 class KAction;
+class KPrinter;
+class KReportViewer;
+
 //class QString;
 class QStringList;
 class QDomDocument;
 class QDomNode;
 class QIODevice;
+
+namespace KPlato
+{
+
+class KPTView;
+class KPTNode;
 
 class ReportTagsPrivate;
 
@@ -93,4 +98,7 @@ private:
 
     ReportTagsPrivate *m_reportTags;
 };
- #endif
+
+}  //KPlato namespace
+
+#endif

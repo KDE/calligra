@@ -29,6 +29,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 namespace KPTMap {
 enum State { None=0, NonWorking=1, Working=2 };
 };
@@ -153,5 +156,7 @@ public:
         KPTIntMap::toggleClear(week.first*10000 + week.second, state);
     }
 };
+
+}  //KPlato namespace
 
 #endif

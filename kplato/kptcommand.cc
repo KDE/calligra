@@ -27,6 +27,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+namespace KPlato
+{
 
 KPTCalendarAddCmd::KPTCalendarAddCmd(KPTPart *part, KPTProject *project,KPTCalendar *cal, QString name)
     : KNamedCommand(name),
@@ -574,3 +576,4 @@ void KPTRemoveResourceGroupRequestCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
+}  //KPlato namespace

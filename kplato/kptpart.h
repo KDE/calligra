@@ -24,9 +24,13 @@
 #include <koDocument.h>
 
 class KoView;
-class KPTView;
 class KoCommandHistory;
 class KCommand;
+
+namespace KPlato
+{
+
+class KPTView;
 class KPTProject;
 class KPTProjectDialog;
 class KPTResourceGroup;
@@ -80,5 +84,7 @@ private:
     KoCommandHistory *m_commandHistory;
     bool m_update, m_calculate;
 };
+
+}  //KPlato namespace
 
 #endif

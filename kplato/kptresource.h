@@ -29,6 +29,11 @@
 #include <qptrlist.h>
 #include "defs.h"
 
+class QTime;
+
+namespace KPlato
+{
+
 class KPTRisk;
 class KPTEffort;
 class KPTAppointment;
@@ -39,7 +44,6 @@ class KPTResourceRequest;
 class KPTResourceGroupRequest;
 class KPTProject;
 class KPTCalendar;
-class QTime;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -523,5 +527,7 @@ public:
         void printDebug(QString ident);
 #endif
 };
+
+}  //KPlato namespace
 
 #endif

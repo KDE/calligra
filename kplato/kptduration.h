@@ -23,6 +23,9 @@
 #include <qglobal.h>
 #include <qstring.h>
 
+namespace KPlato
+{
+
 /**
  * The duration class can be used to store a timespan in a convenient format.
  * The timespan can be in length in many many hours down to miliseconds.
@@ -119,5 +122,7 @@ class KPTDuration {
          */
         void subtract(const KPTDuration &delta);
 };
+
+}  //KPlato namespace
 
 #endif

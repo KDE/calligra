@@ -23,15 +23,21 @@
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
 
+namespace KPlato
+{
+
 static const KCmdLineOptions options[]=
 {
 	{"+[file]", I18N_NOOP("File to open"),0},
 	KCmdLineLastOption
 };
 
+}  //KPlato namespace
+
+
 extern "C" int kdemain( int argc, char **argv ) {
-    KCmdLineArgs::init( argc, argv, newKPTAboutData());
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::init( argc, argv, KPlato::newKPTAboutData());
+    KCmdLineArgs::addCmdLineOptions( KPlato::options );
 
     KoApplication app;
 

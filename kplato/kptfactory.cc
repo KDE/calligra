@@ -26,6 +26,8 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+using namespace KPlato;
+
 extern "C"
 {
     void* init_libkplatopart()

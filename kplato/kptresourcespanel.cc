@@ -34,6 +34,9 @@
 
 ////////////////////////////   Private classes   //////////////////////////////////
 
+namespace KPlato
+{
+
 class KPTGroupLBItem;
 class KPTResourceItem;
 
@@ -374,5 +377,7 @@ void KPTResourcesPanel::ok() {
         }
     }
 }
+
+}  //KPlato namespace
 
 #include "kptresourcespanel.moc"

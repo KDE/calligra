@@ -41,6 +41,8 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
+namespace KPlato
+{
 
 KPTResourceDialogImpl::KPTResourceDialogImpl (QWidget *parent)
     : ResourceDialogBase(parent)
@@ -149,5 +151,6 @@ void KPTResourceDialog::slotCalendarChanged(int cal) {
     
 }
 
+}  //KPlato namespace
 
 #include "kptresourcedialog.moc"

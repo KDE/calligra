@@ -24,8 +24,12 @@
 
 #include <qptrlist.h>
 
-class KPTCalendar;
 class QDate;
+
+namespace KPlato
+{
+
+class KPTCalendar;
 
 class KPTCalendarEdit : public KPTCalendarEditBase {
     Q_OBJECT
@@ -57,5 +61,7 @@ signals:
 private:
     KPTCalendar *m_calendar;
 };
+
+}  //KPlato namespace
 
 #endif // KPTCALENDAREDIT_H

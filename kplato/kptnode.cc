@@ -24,6 +24,9 @@
 
 #include <kdebug.h>
 
+namespace KPlato
+{
+
 KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     m_parent = parent;
     init();
@@ -654,3 +657,5 @@ void KPTEffort::printDebug(QCString indent) {
     kdDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
 }
 #endif
+
+}  //KPlato namespace

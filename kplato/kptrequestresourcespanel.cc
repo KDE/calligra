@@ -39,6 +39,8 @@
 #include <qdatetime.h>
 #include <qdatetimeedit.h>
 
+namespace KPlato
+{
 
 KPTResourceTableItem::KPTResourceTableItem(KPTResource *resource, KPTResourceRequest *request, bool check) {
     m_resource = resource;
@@ -281,5 +283,7 @@ void KPTRequestResourcesPanel::slotOk() {
 void KPTRequestResourcesPanel::sendChanged() {
     if (!m_blockChanged) emit changed();
 }
+
+}  //KPlato namespace
 
 #include "kptrequestresourcespanel.moc"

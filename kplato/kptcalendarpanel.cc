@@ -43,7 +43,8 @@
 #include <kdebug.h>
 #include <knotifyclient.h>
 
-
+namespace KPlato
+{
 
 class KPTCalendarPanel::KPTCalendarPanelPrivate
 {
@@ -605,5 +606,7 @@ void KPTCalendarPanel::slotSelectionCleared() {
 
 void KPTCalendarPanel::virtual_hook( int /*id*/, void* /*data*/ )
 { /*BASE::virtual_hook( id, data );*/ }
+
+}  //KPlato namespace
 
 #include "kptcalendarpanel.moc"

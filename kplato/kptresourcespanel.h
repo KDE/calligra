@@ -25,6 +25,10 @@
 
 #include <qlistbox.h>
 #include <qstring.h>
+
+namespace KPlato
+{
+
 class KPTProject;
 class KPTGroupItem;
 class KPTResourceItem;
@@ -64,5 +68,7 @@ private:
 
     bool m_blockResourceRename;
 };
+
+} //KPlato namespace
 
 #endif // KPTPRESOURCESPANEL_H

@@ -34,14 +34,16 @@
 
 #include <vector>
 
+class QDomElement;
+
+namespace KPlato
+{
+
 class KPTProject;
 class KPTAppointment;
 class KPTResourceGroup;
 class KPTResource;
 class KPTResourceGroupRequest;
-
-class QDomElement;
-
 
 
 /**
@@ -504,5 +506,7 @@ public:
 #endif
 
 };
+
+}  //KPlato namespace
 
 #endif

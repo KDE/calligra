@@ -29,9 +29,13 @@
 #include <qstring.h>
 
 class KMacroCommand;
+
+namespace KPlato
+{
+
+class CalendarListViewItem;
 class KPTProject;
 class KPTPart;
-class CalendarListViewItem;
 
 class KPTCalendarListDialogImpl : public KPTCalendarListDialogBase {
     Q_OBJECT
@@ -82,5 +86,7 @@ private:
     KPTProject &project;
     KPTCalendarListDialogImpl *dia;
 };
+
+}  //KPlato namespace
 
 #endif // KPTCALENDARLISTDIALOG_H

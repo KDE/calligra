@@ -27,11 +27,15 @@
 #include <qmap.h>
 #include <qcombobox.h>
 
+class QTime;
+class QString;
+
+namespace KPlato
+{
+
 class KPTProject;
 class KPTResource;
 class KPTCalendar;
-class QTime;
-class QString;
 
 class KPTResourceDialogImpl : public ResourceDialogBase {
     Q_OBJECT
@@ -73,5 +77,7 @@ private:
     
     QMap<int, KPTCalendar*> m_calendars;
 };
+
+} //KPlato namespace
 
 #endif

@@ -32,6 +32,9 @@
 #include <kdebug.h>
 #include <koRect.h> //DEBUGRECT
 
+namespace KPlato
+{
+
 KPTPertNodeItem::KPTPertNodeItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
     : QCanvasPolygon(view->canvas()),
 	m_node(node),
@@ -915,3 +918,5 @@ KDGanttViewItem *KPTGanttViewEventItem::find(KDGanttViewItem *item, KPTNode *nod
     }
     return 0;
 }
+
+}  //KPlato namespace

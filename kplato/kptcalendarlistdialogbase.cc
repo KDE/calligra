@@ -24,6 +24,10 @@
 #include <qcombobox.h>
 
 #include <kdebug.h>
+
+namespace KPlato
+{
+
 /*
  *  Constructs a KPTCalendarListDialogBase as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
@@ -102,4 +106,5 @@ void KPTCalendarListDialogBase::languageChange()
     textLabel2->setText( tr2i18n( "Base calendar:" ) );
 }
 
+} //Kplato namespace
 #include "kptcalendarlistdialogbase.moc"
