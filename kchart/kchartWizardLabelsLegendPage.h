@@ -2,9 +2,12 @@
 #define _kchartWIZARDLABELSLEGENDPAGE_H
 
 #include <qwidget.h>
-#include <qpushbutton.h>
 #include <kcolorbtn.h>
-#include <qcolor.h>
+//#include <qpushbutton.h>
+//#include <qcolor.h>
+
+class QColor;
+class QPushButton;
 class QLineEdit;
 class QRadioButton;
 class KChartPart;

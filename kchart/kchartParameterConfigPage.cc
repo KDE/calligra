@@ -11,6 +11,9 @@
 #include <klocale.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
+#include <qlineedit.h>
+#include <qspinbox.h>
 #include <qbuttongroup.h>
 #include <kfontdialog.h>
 

@@ -8,7 +8,8 @@
 #define __KCHARTGEOMETRYCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <qlineedit.h>
+
+class QLineEdit;
 
 class KChartGeometryConfigPage : public QWidget
 {

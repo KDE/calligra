@@ -2,16 +2,22 @@
 #define _kchartWIZARDSETUPAXESPAGE_H
 
 #include <qwidget.h>
-#include <qstring.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qpushbutton.h>
 #include <kcolorbtn.h>
-#include <qcolor.h>
+//#include <qstring.h>
+//#include <qcheckbox.h>
+//#include <qlineedit.h>
+//#include <qspinbox.h>
+//#include <qpushbutton.h>
+//#include <qcolor.h>
 
+
+class QColor;
+class QLineEdit;
+class QSpinBox;
+class QPushButton;
 class KChartPart;
 class kchartWidget;
+class QCheckBox;
 
 class KChartWizardSetupAxesPage : public QWidget
 {

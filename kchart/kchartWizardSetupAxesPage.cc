@@ -15,6 +15,11 @@
 #include <math.h>
 #include <float.h>
 
+#include <qspinbox.h>
+#include <qpushbutton.h>
+#include <qcolor.h>
+
+
 
 KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 													  KChartPart* chart ) :

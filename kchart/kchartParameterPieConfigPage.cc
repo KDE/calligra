@@ -15,11 +15,15 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qlineedit.h>
+#include <qradiobutton.h>
+#include <qspinbox.h>
 
 KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* params,QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-       
+
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
 
     QButtonGroup* gb = new QButtonGroup( i18n( "Labels position" ), this );
@@ -52,7 +56,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
     grid2->addRowSpacing(3,_typeBelow->height());
     grid2->addRowSpacing(4,_typeRight->height());
     grid2->addRowSpacing(5,_typeLeft->height());
-    
+
 
     grid2->setRowStretch(0,0);
     grid2->setRowStretch(1,0);
@@ -68,11 +72,11 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
 
 
     grid2->setColStretch(0,1);
-	
+
     grid2->activate();
     grid1->addWidget(gb,0,0);
 
-	
+
     grid1->addRowSpacing(0,gb->height());
 
     grid1->setRowStretch(0,0);
@@ -85,23 +89,23 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
 
     QGroupBox* gb2 = new QGroupBox( i18n( "Title" ), this );
     QGridLayout *grid3 = new QGridLayout(gb2,4,2,15,7);
-    
+
     lineLabel=new QCheckBox(i18n("Line label"),gb2);
     lineLabel->resize( lineLabel->sizeHint() );
     grid3->addWidget( lineLabel,1,0 );
- 
+
     QLabel* label2 = new QLabel( i18n( "Lenght of line" ), gb2 );
     label2->resize( label2->sizeHint() );
     label2->setAlignment(Qt::AlignCenter);
     grid3->addWidget( label2,2,0 );
 
-  
+
     dist = new QSpinBox(1, 400, 1, gb2);
     dist->resize(100, dist->sizeHint().height() );
     grid3->addWidget( dist,3,0 );
     label2->setBuddy( dist );
 
-    
+
     QLabel* label = new QLabel( i18n( "Title" ), gb2 );
     label->resize( label->sizeHint() );
     label->setAlignment(Qt::AlignCenter);
@@ -129,17 +133,17 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
     //grid3->addColSpacing(4,title->width());
     grid3->setColStretch(0,0);
     grid3->setColStretch(1,1);
-    grid3->setColStretch(2,1);	
+    grid3->setColStretch(2,1);
     grid3->activate();
     grid1->addWidget(gb2,0,1);
-	
-    
+
+
     grid1->addRowSpacing(0,gb2->height());
     grid1->setRowStretch(0,0);
     grid1->setRowStretch(1,1);
     grid1->addColSpacing(1,gb2->width());
-    grid1->activate();       
-    
+    grid1->activate();
+
     if(_params->label_line)
     	dist->setEnabled(true);
     else
@@ -161,7 +165,7 @@ else
 void KChartParameterPieConfigPage::init()
 {
     title->setText(_params->title);
-    lineLabel->setChecked(_params->label_line);   
+    lineLabel->setChecked(_params->label_line);
     dist->setValue(_params->label_dist);
     switch(_params->percent_labels)
     	{
@@ -173,7 +177,7 @@ void KChartParameterPieConfigPage::init()
     		break;
 	case KCHARTPCTTYPE_RIGHT:
     		_typeRight->setChecked(true);
-    		break;   		
+    		break;
 	case KCHARTPCTTYPE_LEFT:
     		_typeLeft->setChecked(true);
     		break;
@@ -204,5 +208,5 @@ void KChartParameterPieConfigPage::apply()
     	_params->percent_labels=KCHARTPCTTYPE_BELOW;
     else
     	kdDebug(35001)<<"Error in QRadioButton\n";
-    
+
 }

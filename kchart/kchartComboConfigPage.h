@@ -8,10 +8,10 @@
 #define __KCHARTCOMBOPAGE_H__
 
 #include <qwidget.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
 
 #include "kchartparams.h"
+
+class QRadioButton;
 
 class KChartComboPage : public QWidget
 {

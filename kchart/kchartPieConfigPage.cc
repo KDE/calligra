@@ -13,6 +13,14 @@
 #include <qlabel.h>
 #include <kfontdialog.h>
 
+#include <qcheckbox.h>
+#include <qlineedit.h>
+#include <qradiobutton.h>
+#include <qpushbutton.h>
+#include <qfont.h>
+#include <qspinbox.h>
+
+
 KChartPieConfigPage::KChartPieConfigPage(KChartParameters* params,QWidget* parent ) :
     QWidget( parent ),_params( params )
 {

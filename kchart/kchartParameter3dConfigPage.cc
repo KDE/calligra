@@ -17,10 +17,9 @@
 KChartParameter3dConfigPage::KChartParameter3dConfigPage(KChartParameters* params,QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  //QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
 
   QGridLayout* layout = new QGridLayout(this, 2, 2,15,7 );
-  //toplevel->addLayout( layout );
+
   QButtonGroup* gb = new QButtonGroup( i18n("3D Parameters"), this );
   QGridLayout *grid1 = new QGridLayout(gb,3,2,15,7);
   layout->addWidget(gb,0,0);

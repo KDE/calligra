@@ -8,14 +8,15 @@
 #define __KCHARTPIECONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qradiobutton.h>
 #include <qlistview.h>
-#include <qpushbutton.h>
-#include <qfont.h>
 #include "kchartparams.h"
-#include <qspinbox.h>
+
+class QSpinBox;
+class QLineEdit;
+class QCheckBox;
+class QPushButton;
+class QFont;
+class QRadioButton;
 
 class KChartPieConfigPage : public QWidget
 {

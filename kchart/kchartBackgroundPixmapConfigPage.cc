@@ -122,19 +122,26 @@ void KChartBackgroundPixmapConfigPage::init()
 
 void KChartBackgroundPixmapConfigPage::apply()
 {
-    if( wallCB->currentText() != _params->backgroundPixmapName ) {
+    if( wallCB->currentText() != _params->backgroundPixmapName )
+    {
+        bool load=true;
         if(wallCB->currentText()==i18n("None"))
         {
-            _params->backgroundPixmapName = "";
-            _params->backgroundPixmap=QPixmap("");
-            _params->backgroundPixmapIsDirty = false;
+            load=false;
         }
         else
         {
             _params->backgroundPixmapName = wallCB->currentText();
+            bool load=_params->backgroundPixmap.load( locate( "wallpaper", _params->backgroundPixmapName ) );
+            if(load)
+                _params->backgroundPixmapIsDirty = true;
+        }
 
-            _params->backgroundPixmap.load( locate( "wallpaper", _params->backgroundPixmapName ) );
-            _params->backgroundPixmapIsDirty = true;
+        if(!load)
+        {
+            _params->backgroundPixmapName = "";
+            _params->backgroundPixmap=QPixmap("");
+            _params->backgroundPixmapIsDirty = false;
         }
     }
     if( (int)(_params->backgroundPixmapIntensity * 100.0) !=
@@ -220,4 +227,3 @@ void KChartBackgroundPixmapConfigPage::loadWallPaper()
   }
   wallWidget->setBackgroundPixmap( wallPixmap );
 }
-

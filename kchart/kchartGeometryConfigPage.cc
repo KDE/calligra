@@ -9,13 +9,6 @@
 #include "kchartGeometryConfigPage.moc"
 
 #include <kapp.h>
-#include <klocale.h>
-
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qgroupbox.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
 
 
 KChartGeometryConfigPage::KChartGeometryConfigPage( QWidget* parent ) :

@@ -12,6 +12,7 @@
 #include <kdebug.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qradiobutton.h>
 #include <qbuttongroup.h>
 
 

@@ -11,6 +11,9 @@
 #include <klocale.h>
 #include <kfontdialog.h>
 #include <qlayout.h>
+#include <qpushbutton.h>
+#include <qcolor.h>
+
 
 KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
   QWidget( parent ),

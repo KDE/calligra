@@ -8,8 +8,6 @@
 #define __KCHARTPARAMETER3DCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <qcheckbox.h>
-//#include <qlineedit.h>
 #include <knuminput.h>
 
 #include "kchartparams.h"

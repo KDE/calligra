@@ -8,13 +8,12 @@
 #define __KCHARTPARAMETERCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-//#include <knuminput.h>
-#include <qspinbox.h>
 #include <kcolorbtn.h>
 
 #include "kchartparams.h"
+class QSpinBox;
+class QCheckBox;
+class QLineEdit;
 
 class KChartParameterConfigPage : public QWidget
 {
