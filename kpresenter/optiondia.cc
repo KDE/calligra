@@ -143,23 +143,4 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
 /*===================== destructor ===============================*/
 OptionDia::~OptionDia()
 {
-  delete lRastX;
-  delete lRastY;
-  delete eRastX;
-  delete eRastY;
-
-  delete lBackCol;
-  delete lSelCol;
-  delete bBackCol;
-  delete bSelCol;
-  delete lRndX;
-  delete lRndY;
-  delete eRndX;
-  delete eRndY;
-
-  delete rect;
-  delete txtObj;
-
-  delete objects;
-  delete general;
 }

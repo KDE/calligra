@@ -45,6 +45,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       goingBack = false;
       drawMode = false;
       presPen.operator=(QPen(red,3,SolidLine));
+      picCache.setAutoDelete(true);
     }
   else 
     {
@@ -1262,6 +1263,7 @@ void Page::stopScreenPresentation()
   drawBack = true;
   repaint(true);
   setCursor(arrowCursor);
+  picCache.clear();
 }
 
 /*========================== next ================================*/
@@ -1867,6 +1869,8 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
   QPainter p;
   p.begin(screen);
   QRect r = p.viewport();
+  int num;
+  PicCache *pc;
 
   switch (_objPtr->objType)
     {
@@ -1882,11 +1886,42 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
 	    switch (_objPtr->effect2)
 	      {
 	      case EF2T_PARA:
-		_objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),
-							   !editMode,subPresStep,subPresStep);
-		break;
+		{
+		  num = isInPicCache(_objPtr->objNum,subPresStep);
+		  if (num != -1)
+		    {
+		      _objPtr->objPic = &picCache.at(num)->pic;
+		      //debug("take from cache");
+		    }
+		  else
+		    {
+		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),
+								 !editMode,subPresStep,subPresStep);
+		      pc = new PicCache;
+		      pc->pic.setData(_objPtr->objPic->data(),_objPtr->objPic->size());
+		      pc->num = _objPtr->objNum;
+		      pc->subPresStep = subPresStep;
+		      picCache.append(pc);
+		    }
+		} break;
 	      default:
-		_objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),!editMode);
+		{
+		  num = isInPicCache(_objPtr->objNum,-1);
+		  if (num != -1)
+		    {
+		      _objPtr->objPic = &picCache.at(num)->pic;
+		      //debug("take from cache");
+		    }
+		  else
+		    {
+		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),!editMode);
+		      pc = new PicCache;
+		      pc->pic.setData(_objPtr->objPic->data(),_objPtr->objPic->size());
+		      pc->num = _objPtr->objNum;
+		      pc->subPresStep = -1;
+		      picCache.append(pc);
+		    }
+		}
 	      }
 	  }
 	else
@@ -1922,4 +1957,17 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y)
   p.end();
 }
 
+/*========== check, if QPicture is in pic-cache ==================*/
+int Page::isInPicCache(int num,int _subPresStep)
+{
+  PicCache *_p;
+
+  if (!picCache.isEmpty())
+    {
+      for (_p = picCache.first();_p != 0;_p = picCache.next())
+	if (_p->num == num && _p->subPresStep == _subPresStep) return picCache.at();
+    }
+
+  return -1;
+}
 

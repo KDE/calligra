@@ -83,14 +83,6 @@ PntInsDia::PntInsDia(QWidget* parent=0,const char* name=0,int points=0)
 /*===================== destructor ===============================*/
 PntInsDia::~PntInsDia()
 {
-  delete label1;
-  delete label2;
-  delete radioBefore;
-  delete radioAfter;
-  delete btnGrp;
-  if (spinBox) delete spinBox;
-  delete cancelBut;
-  delete okBut;
 }
 
 /*========================= ok pressed ===========================*/

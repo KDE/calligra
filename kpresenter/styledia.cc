@@ -201,21 +201,6 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
 /*===================== destructor ===============================*/
 StyleDia::~StyleDia()
 {
-  delete choosePCol;
-  delete penStyle;
-  delete choosePStyle;
-  delete penWidth;
-  delete choosePWidth;
-  delete penPrev;
-  delete chooseBCol;
-  delete brushStyle;
-  delete chooseBStyle;
-  delete brushPrev;
-  delete okBut;
-  delete cancelBut;
-  delete applyBut;
-  delete brushFrame;
-  delete penFrame;
 }
 
 /*=========================== set pen =============================*/

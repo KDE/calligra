@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KCharSelectDia - (c) by Reginald Stadlbauer 1998               */
-/* Version: 0.0.1                                                 */
+/* Version: 0.0.2                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* needs c++ library Qt (http://www.troll.no)                     */
@@ -47,11 +47,11 @@ class KCharSelectDia : public QDialog
 public:
 
   // constructor - destructor
-  KCharSelectDia(QWidget*,const char*,QFont,QColor,int); 
+  KCharSelectDia(QWidget*,const char*,QFont,QColor,int,QStrList); 
   ~KCharSelectDia();                                    
 
   // select char dialog
-  static bool selectChar(QFont&,QColor&,int&);
+  static bool selectChar(QFont&,QColor&,int&,QStrList);
 
   // internal
   QFont font() {return _font;}
@@ -60,8 +60,6 @@ public:
 
 protected:
   
-  void getFonts();
-
   // dialog objects
   QGridLayout *grid,*grid2;
   QComboBox *fontCombo,*sizeCombo;

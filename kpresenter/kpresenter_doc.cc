@@ -1049,7 +1049,7 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
  	      else if (name == "TEXTOBJ")
  		{
  		  objPtr->textObj = new KTextObject(0,"textObj",KTextObject::PLAIN);
-		  objPtr->textObj->clear();
+		  objPtr->textObj->clear(false);
 		  KOMLParser::parseTag(tag.c_str(),name,lst);
 		  vector<KOMLAttrib>::const_iterator it = lst.begin();
 		  for(;it != lst.end();it++)

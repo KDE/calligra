@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KEnumListDia - (c) by Reginald Stadlbauer 1998                 */
-/* Version: 0.0.1                                                 */
+/* Version: 0.0.2                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* needs c++ library Qt (http://www.troll.no)                     */
@@ -48,11 +48,11 @@ public:
   const int ALPHABETH = 2;
 
   // constructor - destructor
-  KEnumListDia(QWidget*,const char*,int,QFont,QColor,QString,QString,int); 
+  KEnumListDia(QWidget*,const char*,int,QFont,QColor,QString,QString,int,QStrList); 
   ~KEnumListDia();                                    
 
   // show enum list dialog
-  static bool enumListDia(int&,QFont&,QColor&,QString&,QString&,int&);
+  static bool enumListDia(int&,QFont&,QColor&,QString&,QString&,int&,QStrList);
 
   // return values
   int type() {return _type;}
@@ -63,8 +63,6 @@ public:
   int start() {return _start;}
 
 protected:
-
-  void getFonts();
 
   // dialog objects
   QGridLayout *grid;

@@ -109,6 +109,13 @@ public slots:
   void restoreBackColor(unsigned int);
   
 protected:
+  
+  struct PicCache
+  {
+    QPicture pic;
+    int num;
+    int subPresStep;
+  };
 
   // functions for displaying
   void paintEvent(QPaintEvent*);    
@@ -158,6 +165,7 @@ protected:
   void changePages(QPixmap,QPixmap,PageEffect);
   void doObjEffects();
   void drawObject(PageObjects*,QPixmap*,int,int);
+  int isInPicCache(int,int);
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
@@ -175,6 +183,7 @@ protected:
   unsigned int currPresPage,currPresStep,subPresStep;
   float _presFakt;
   QList<int> presStepList;
+  QList<PicCache> picCache;
 
   int PM_DM,PM_SM;
 

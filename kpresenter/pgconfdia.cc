@@ -92,21 +92,6 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
 /*===================== destructor ===============================*/
 PgConfDia::~PgConfDia()
 {
-//   delete infinitLoop;
-//   delete manualSwitch;
-  
-//   delete label1;
-//   delete label2;
-//   delete label3;
-//   delete spinBox;
-//   delete time;
-//   delete timeEd;
-  
-//   delete general;
-//   delete page;
-
-//   delete cancelBut;
-//   delete okBut;
 }
 
 

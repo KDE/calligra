@@ -79,14 +79,6 @@ SaveAsDia::SaveAsDia(QWidget* parent=0,const char* name=0)
 /*===================== destructor ===============================*/
 SaveAsDia::~SaveAsDia()
 {
-  delete grpLabel;
-  delete groups;
-  delete grpEdit;
-  delete addGrp;
-  delete nameLabel;
-  delete nameEdit;
-  delete cancelBut;
-  delete okBut;
 }
 
 /*======================= get Groups =============================*/

@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KCharSelectDia - (c) by Reginald Stadlbauer 1998               */
-/* Version: 0.0.1                                                 */
+/* Version: 0.0.2                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* needs c++ library Qt (http://www.troll.no)                     */
@@ -18,7 +18,7 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QFont __font,QColor __color,int __c)
+KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QFont __font,QColor __color,int __c,QStrList _fontList)
   : QDialog(parent,name,true)
 {
   _font = __font;
@@ -29,7 +29,7 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QFont __font,QCo
 
   grid = new QGridLayout(this,5,1,15,7);
 
-  getFonts();
+  fontList = _fontList;
 
   lFont = new QLabel("Font:",this);
   lFont->resize(lFont->sizeHint());
@@ -172,11 +172,11 @@ KCharSelectDia::~KCharSelectDia()
 }
 
 /*======================= about application ======================*/
-bool KCharSelectDia::selectChar(QFont &__font,QColor &__color,int &__c)
+bool KCharSelectDia::selectChar(QFont &__font,QColor &__color,int &__c,QStrList _fontList)
 {
   bool res = false;
 
-    KCharSelectDia *dlg = new KCharSelectDia(0,"Select Character",__font,__color,__c);
+    KCharSelectDia *dlg = new KCharSelectDia(0,"Select Character",__font,__color,__c,_fontList);
     if (dlg->exec() == QDialog::Accepted)
       {
 	__font = dlg->font();
@@ -188,89 +188,6 @@ bool KCharSelectDia::selectChar(QFont &__font,QColor &__color,int &__c)
     delete dlg;
 
     return res;
-}
-
-/*=========================== get Fonts =========================*/
-void KCharSelectDia::getFonts()
-{
-  int numFonts;
-  Display *kde_display;
-  char** fontNames;
-  char** fontNames_copy;
-  QString qfontname;
-  
-  kde_display = XOpenDisplay(0L);
-
-  // now try to load the KDE fonts
-  bool have_installed = kapp->getKDEFonts(&fontList);
-  
-  // if available we are done, the kde fonts are now in the family_combo
-  if (have_installed)
-    return;
-
-  fontNames = XListFonts(kde_display,"*",32767,&numFonts);
-  fontNames_copy = fontNames;
-  
-  for(int i = 0; i < numFonts; i++){
-    
-    if (**fontNames != '-')
-      { 
-      
-      // The font name doesn't start with a dash -- an alias
-      // so we ignore it. It is debatable whether this is the right
-      // behaviour so I leave the following snippet of code around.
-      // Just uncomment it if you want those aliases to be inserted as well.
-      /*
-	qfontname = "";
-      qfontname = *fontNames;
-      if(fontlist.find(qfontname) == -1)
-          fontlist.inSort(qfontname);
-      */
-
-      fontNames ++;
-      continue;
-    };
-      
-    qfontname = "";
-    qfontname = *fontNames;
-    int dash = qfontname.find ('-', 1, TRUE); // find next dash
-
-    if (dash == -1)  // No such next dash -- this shouldn't happen.
-                      // but what do I care -- lets skip it.
-      {
-	fontNames ++;
-	continue;
-      }
-
-    // the font name is between the second and third dash so:
-    // let's find the third dash:
-    int dash_two = qfontname.find ('-', dash + 1 , TRUE); 
-
-    if (dash == -1)  // No such next dash -- this shouldn't happen.
-                      // But what do I care -- lets skip it.
-      {
-	fontNames ++;
-	continue;
-      }
-
-    // fish the name of the font info string
-    qfontname = qfontname.mid(dash +1, dash_two - dash -1);
-
-    if( !qfontname.contains("open look", TRUE))
-      {
-	if(qfontname != "nil"){
-	  if(fontList.find(qfontname) == -1)
-	    fontList.inSort(qfontname);
-	}
-      }
-    
-    
-    fontNames ++;
-
-  }
-  
-  XFreeFontNames(fontNames_copy);
-  XCloseDisplay(kde_display);
 }
 
 /*=========================== Font selected =====================*/

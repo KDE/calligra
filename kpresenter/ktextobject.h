@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KTextObject - (c) by Reginald Stadlbauer 1998                  */
-/* Version: 0.0.1                                                 */
+/* Version: 0.0.2                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* needs c++ library Qt (http://www.troll.no)                     */
@@ -14,6 +14,7 @@
 #define KTEXTOBJECT_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <qkeycode.h>
 #include <qtablevw.h>
@@ -30,6 +31,10 @@
 #include <qcursor.h>
 #include <qpicture.h>
 #include <qscrbar.h>
+#include <qfile.h>
+#include <qtstream.h>
+#include <qregexp.h>
+#include <qpixmap.h>
 
 #include <kapp.h>
 
@@ -48,85 +53,205 @@ class KTextObject;
 /******************************************************************/
 /* class TxtCursor - Text Cursor                                  */
 /******************************************************************/
+
+/**
+ * The TxtCusor class manages everything which has to do with the
+ * position of the textcursor of the KTextObject.<br>
+ * <b>You should <i>never</i> need to do anything with this class. It's the
+ * best, if you only access methodes of the KTextObject.</b> 
+ * @short Class for managing a textcursor.
+ * @author Reginald Stadlbauer <reggie@kde.org>
+ * @version 0.0.1
+ */
+
 class TxtCursor
 {
 public:
 
-  // constructor - destructor 
+  /**
+   * The constructor needs a reference to "his" KTextObject.
+   */
   TxtCursor(KTextObject*);
-  ~TxtCursor() {};
+  TxtCursor();
+  //~TxtCursor() {}
 
-  // move the cursor
+  /**
+   * Move the cursor a char forward.
+   */
   void charForward();
+
+  /**
+   * Move the cursor a char backwards.
+   */
   void charBackward();
+
+  /**
+   * Move the cursor a line up.
+   */
   void lineUp();
+
+  /**
+   * Move the cursor a line down.
+   */
   void lineDown();
+
+  /**
+   * Move the cursor a word forward.
+   */
   void wordForward();
+
+  /**
+   * Move the cursor a word backwards.
+   */
   void wordBackward();
+
+  /**
+   * Move the cursor a line forward.
+   */
   void lineForward();
+
+  /**
+   * Move the cursor a line backwards.
+   */
   void lineBackward();
+
+  /**
+   * Move the cursor a paragraph forward.
+   */
   void paragraphForward();
+
+  /**
+   * Move the cursor a paragraph backwards.
+   */
   void paragraphBackward();
+
+  /**
+   * Move the cursor to the beginning.
+   */
   void pos1();
+
+  /**
+   * Move the cursor to the end.
+   */
   void end();
 
-  // set the cursor before a certain character in the text 
-  void setPositionAbs(unsigned int);
+  /**
+   * Set the absolute position of the cursor in the text (calculated in chars).
+   */
+  void setPositionAbs(unsigned int pos);
 
-  // set the corser before a certain character in a certain paragraph
-  void setPositionParagraph(unsigned int,unsigned int);
+  /**
+   * Set the absolute position of the cursor in a paragraph (calculated in chars).
+   */
+  void setPositionParagraph(unsigned int paragraph,unsigned int pos);
 
-  // set the corser before a certain character in a certain paragraph in a certain line
-  void setPositionLine(unsigned int,unsigned int,unsigned int);
+  /**
+   * Set the absolute position of the cursor in a line (calculated in chars).
+   */
+  void setPositionLine(unsigned int paragraph,unsigned int line,unsigned int pos);
 
-  // get the cursorposition relative to the whole text
+  /**
+   * Returns the cursorposition relative to the whole text.
+   */
   unsigned int positionAbs() {return absPos;}
   
-  // get the paragraph, in which the cursor is
+  /**
+   * Returns the paragraph, in which the cursor is.
+   */
   unsigned int positionParagraph() {return paragraph;}
 
-  // get the cursorposition relative to the paragraph
+  /**
+   * Returns the cursorposition relative to the paragraph.
+   */
   unsigned int positionInParagraph() {return inParagraph;}
 
-  // get the line in the paragraph, in which the the cursor is
+  /**
+   * Returns the line in the paragraph, in which the the cursor is
+   */
   unsigned int positionLine() {return line;}
 
-  // get the cursorposition relative to the line in the paragraph
+  /**
+   * Returns the cursorposition relative to the line in the paragraph
+   */
   unsigned int positionInLine() {return inLine;} 
 
-  // set and get maximal position
+  /**
+   * Set the maximal position of the cursor.
+   */
   void setMaxPosition(unsigned int m) {objMaxPos = m;}
+
+  /**
+   * Returns the maximal position of the cursor.
+   */
   unsigned int maxPosition() {return objMaxPos;}
   
-  // calculate the position of the cursor
+  /**
+   * (Re)Calculate the cursor position. This is called, if something in the text changes.
+   */
   void calcPos();
 
-  // get minimum/maximum of two cursors
+  /**
+   * Returns the cursor, whos position is smaller 
+   */
   TxtCursor* minCursor(TxtCursor*);
+
+  /**
+   * Returns the cursor, whos position is bigger 
+   */
   TxtCursor* maxCursor(TxtCursor*);
+
+  /**
+   * Set the x-position of the cursor in pixels
+   */
+  void setXPos(int xpos) {_xpos = xpos;}
+  
+  /**
+   * Returns the x-position of the cursor in pixels
+   */
+  int xpos() {return _xpos;}
+
+  /**
+   * Set the y-position of the cursor in pixels
+   */
+  void setYPos(int ypos) {_ypos = ypos;}
+  
+  /**
+   * Returns the y-position of the cursor in pixels
+   */
+  int ypos() {return _ypos;}
+
+  /**
+   * Set the height of the cursor in pixels
+   */
+  void setHeight(unsigned int _height) {__height = _height;}
+  
+  /**
+   * Returns the height of the cursor in pixels
+   */
+  unsigned int height() {return __height;}
+
+  /**
+   * Set the KTextObject.
+   */
+  void setKTextObject(KTextObject* _txtObj) {txtObj = _txtObj;}
 
 protected:
 
   //*********** variables ***********
 
-  // absolute position of the cursor
   unsigned int absPos;
   
-  // paragraph, in which the cursor is, and the position in ths paragraph
   unsigned int paragraph;
   unsigned int inParagraph;
 
-  // line of the paragraph, in which the cursor is, and position in the line 
   unsigned int line;
   unsigned int inLine;
 
-  // maximal position
   unsigned int objMaxPos;
+  unsigned int _xpos,_ypos,__height;
 
-  // pointer to the textobject, in which this cursor is used
   KTextObject *txtObj;
 
-  // internal
   TxtParagraph *paragraphPtr;
   TxtLine *linePtr;
   TxtObj *objPtr;
@@ -135,67 +260,161 @@ protected:
 /******************************************************************/
 /* class TxtObj - Text Object                                     */
 /******************************************************************/
+
+/**
+ * The class TxtObj is a class for a single object in the KTextObject.<br>
+ * <b>You should <i>never</i> need to do anything with this class. It's the
+ * best, if you only access methodes of the KTextObject.</b> 
+ * @short Class for a single object in the KTextObject.
+ * @author Reginald Stadlbauer <reggie@kde.org>
+ * @version 0.0.1
+ */
+
 class TxtObj
 {
 public:
 
-  // type of the textobject
+  /**
+   * type of the textobject
+   */
   enum ObjType {TEXT,SEPARATOR};
   
-  // vertical alignment
+  /**
+   * vertical alignment
+   */
   enum VertAlign {SUBSCRIPT,NORMAL,SUPERSCRIPT};
 
-  // constructor - destructor
+  /**
+   * Default constructor.
+   */
   TxtObj();
+
+  /**
+   * Overloaded constructor. With this constructor you can init a textobject.
+   */
   TxtObj(const char* t,QFont f,QColor,VertAlign,ObjType ot=TEXT);
   ~TxtObj() {};
 
-  // set and get type, font, color and vertical alignment of the object
+  /**
+   * Set object type.
+   */
   void setType(ObjType ot) {objType = ot;}
+
+  /**
+   * Returns object type.
+   */
   ObjType type() {return objType;}
+
+  /**
+   * Set the font.
+   */
   void setFont(QFont f) {objFont = f;}
+
+  /**
+   * Returns the font.
+   */
   QFont font() {return objFont;}
+
+  /**
+   * Set the color.
+   */
   void setColor(QColor c) {objColor = c;}
+
+  /**
+   * Returns the color.
+   */
   QColor color() {return objColor;}
+
+  /**
+   * Set the vertical alignment.
+   */
   void setVertAlign(VertAlign va) {objVertAlign = va;}
+
+  /**
+   * Returns the vertical alignment.
+   */
   VertAlign vertAlign() {return objVertAlign;}
+
+  /**
+   * Set the original size (needed for zooming the KTextObject).
+   */
   void setOrigSize(int s) {_origSize = s;}
+
+  /**
+   * Returns the original size.
+   */
   int origSize() {return _origSize;}
 
-  // insert/append a char or string into the object
-  void insert(unsigned int index,const char* text) {objText.insert(index,qstrdup(text));}
-  void insert(unsigned int index,char c) {objText.insert(index,qstrdup(&c));}
-  void append(const char* text) {objText.append(qstrdup(text));}
-  void append(char c) {objText.append(qstrdup(&c));}
+  /**
+   * Inserts the string <i>text</i> at the position <i>index</i>.
+   */
+  void insert(unsigned int index,const char* text) {objText.insert(index,text);}
 
-  // delete c char
+  /**
+   * Inserts the char <i>c</i> at the position <i>index</i>.
+   */
+  void insert(unsigned int index,char c) {objText.insert(index,&c);}
+
+  /**
+   * Appends the string <i>text</i>.
+   */
+  void append(const char* text) {objText.append(text);}
+
+  /**
+   * Appends the char <i>c</i>.
+   */
+  void append(char c) {objText.append(&c);}
+
+  /**
+   * Delete the character at the position <i>i</i>.
+   */
   void deleteChar(unsigned int i) {objText.remove(i,1);}
 
-  // get text and length of text
+  /**
+   * Returns the text of the object.
+   */
   QString text() {return objText;}
+
+  /**
+   * Returns the length of the text.
+   */
   unsigned int textLength() {return objText.length();}
 
-  // returns width, height, ascent and descent of the object
+  /**
+   * Returns the width of the text.
+   */
   unsigned int width();
+  
+  /**
+   * Returns the height of the text.
+   */
   unsigned int height();
+
+  /**
+   * Returns the ascent of the text.
+   */
   unsigned int ascent();
+
+  /**
+   * Returns the descent of the text.
+   */
   unsigned int descent();
 
-  // get position in obj
-  int getPos(unsigned int); 
+  /**
+   * Returns the position (in chars) at which pos (in pixels) is.
+   */
+  int getPos(unsigned int pos); 
 
 protected:
 
   //*********** variables ***********
 
-  // type, font, color and vertical alignment of the object
   ObjType objType;
   QColor objColor;
   QFont objFont;
   VertAlign objVertAlign;
   int _origSize;
 
-  // text of the object
   QString objText;
 
 };
@@ -203,79 +422,187 @@ protected:
 /******************************************************************/
 /* class TxtLine - Text Line                                      */
 /******************************************************************/
+
+/**
+ * The class Txt Line offers everything for a text line. It consists of a list
+ * of text objects.<br>
+ * <b>You should <i>never</i> need to do anything with this class. It's the
+ * best, if you only access methodes of the KTextObject.</b> 
+ * @short Class for a text line in the KTextObject.
+ * @author Reginald Stadlbauer <reggie@kde.org>
+ * @version 0.0.1
+ */
+
 class TxtLine
 {
 public:
 
-  // constructor - destructor
+  /**
+   * Constructor. If init is <i>true</i>, an empty textobject is inserted.
+   */
   TxtLine(bool init = false);
-  ~TxtLine() {};
+  ~TxtLine() {objList.clear();};
 
-  // insert/append a char/string/TxtObj into the line
-  void insert(unsigned int,const char*,QFont,QColor,TxtObj::VertAlign);
-  void insert(unsigned int,char,QFont,QColor,TxtObj::VertAlign);
-  void insert(unsigned int i,TxtObj& to)
-    {objList.insert(i,new TxtObj(to));}
+  /**
+   * Insert a text (with attributes) at <i>pos</i>.
+   */
+  void insert(unsigned int pos,const char*,QFont,QColor,TxtObj::VertAlign);
+
+  /**
+   * Insert a character (with attributes) at <i>pos</i>.
+   */
+  void insert(unsigned int pos,char,QFont,QColor,TxtObj::VertAlign);
+
+  /**
+   * Insert a text object at <i>i</i>.
+   */
+  void insert(unsigned int i,TxtObj *to)
+    {objList.insert(i,to);}
+
+  /**
+   * Append a text (with attributes).
+   */
   void append(const char* t,QFont f,QColor c,TxtObj::VertAlign va)
     {objList.append(new TxtObj(t,f,c,va));}
+
+  /**
+   * Append a character (with attributes).
+   */
   void append(char t,QFont f,QColor c,TxtObj::VertAlign va)
     {objList.append(new TxtObj((char*)t,f,c,va));}
+
+  /**
+   * Append a text (with attributes).
+   */
   void append(const char* t,QFont f,QColor c,TxtObj::VertAlign va,TxtObj::ObjType ot)
     {objList.append(new TxtObj(t,f,c,va,ot));}
+
+  /**
+   * Append a character (with attributes).
+   */
   void append(char t,QFont f,QColor c,TxtObj::VertAlign va,TxtObj::ObjType ot)
     {objList.append(new TxtObj((char*)t,f,c,va,ot));}
-  void append(TxtObj &to)
-    {objList.append(new TxtObj(to));}
 
-  // delete a char or region in the line
-  void deleteChar(unsigned int);
-  void deleteFirstChar(unsigned int);
-  void backspaceChar(unsigned int);
-  void backspaceLastChar(unsigned int);
-  void deleteRegion(unsigned int,unsigned int);
+  /**
+   * Append a text object.
+   */
+  void append(TxtObj *to)
+    {objList.append(to);}
+
+  /**
+   * Delete the character at <i>pos</i>.
+   */
+  void deleteChar(unsigned int pos);
+
+  /**
+   * Delete the first character in the text object <i>obj</i>.
+   */
+  void deleteFirstChar(unsigned int obj);
+
+  /**
+   * Backspace the character at <i>pos</i>.
+   */
+  void backspaceChar(unsigned int pos);
+
+  /**
+   * Delete the last character in the text object <i>obj</i>.
+   */
+  void backspaceLastChar(unsigned int obj);
+
+  /**
+   * Delete the text between <i>from</i> and <i>to</i>.
+   */
+  void deleteRegion(unsigned int from,unsigned int to);
+
+  /**
+   * Delete the text object at the position <i>i</i>.
+   */
   void deleteItem(unsigned int i) {objList.remove(i);}
 
-  // change font, color and vertical alignment of a region 
-  void changeRegion(unsigned int,unsigned int,QFont,QColor,TxtObj::VertAlign);
+  /**
+   * change font, color and vertical alignment of a region.
+   */ 
+  void changeRegion(unsigned int from,unsigned int to,QFont,QColor,TxtObj::VertAlign);
 
-  // get the object at a certain position
+  /**
+   * Returns the text object at the position <i>i</i>.
+   */
   TxtObj *itemAt(unsigned int i) {return objList.at(i);}
 
-  // returns number of items
+  /**
+   * Returns number of text objects.
+   */
   unsigned int items() {return objList.count();}
 
-  // returns length of the line (chars)
+  /**
+   * Returns the length of the line (in chars).
+   */
   unsigned int lineLength();
 
-  // returns width, height, ascent and descent of the line
+  /**
+   * Returns the width of the line.
+   */
   unsigned int width();
+
+  /**
+   * Returns the height of the line.
+   */
   unsigned int height();
+
+  /**
+   * Returns the maximal ascent of the line.
+   */
   unsigned int ascent();
+
+  /**
+   * Returns the maximal descent of the line.
+   */
   unsigned int descent();
 
-  // assignment functions
+  /**
+   * Assigns a textline.
+   */
   TxtLine &operator=(TxtLine *l);
+
+  /**
+   * Adds a textline
+   */
   TxtLine &operator+=(TxtLine *l);
 
-  // clear
+  /**
+   * Clears the line.
+   */
   void clear() {objList.clear();}
 
-  // split an object in the line
-  void splitObj(unsigned int);
+  /**
+   * Split a text object in the line at <i>pos</i> in two objects.
+   */ 
+  void splitObj(unsigned int pos);
 
-  // get position in/before/after object
-  int getInObj(unsigned int);
-  int getBeforeObj(unsigned int);
-  int getAfterObj(unsigned int);
+  /**
+   * Returns the number of the text object, in which <i>pos</i> is. If <i>pos</i> is not in an text object,
+   * return -1.
+   */
+  int getInObj(unsigned int pos);
+
+  /**
+   * Returns the number of the text object, before which <i>pos</i> is. If <i>pos</i> is not before an text object,
+   * return -1.
+   */
+  int getBeforeObj(unsigned int pos);
+
+  /**
+   * Returns the number of the text object, after which <i>pos</i> is. If <i>pos</i> is not after an text object,
+   * return -1.
+   */
+  int getAfterObj(unsigned int pos);
 
 protected:
 
   //*********** variables ***********
 
-  // list of objects of the line
   QList<TxtObj> objList;
 
-  // pointer to a textobject
   TxtObj *objPtr;
 
 };
@@ -283,75 +610,153 @@ protected:
 /******************************************************************/
 /* class TxtParagraph - Text Paragraph                            */
 /******************************************************************/
+
+/**
+ * The class TxtParagraph offers everything for a paragraph in the KTextObject. It consists
+ * of a list of text lines.<br>
+ * <b>You should <i>never</i> need to do anything with this class. It's the
+ * best, if you only access methodes of the KTextObject.</b> 
+ * @short Class for a text paragraph in the KTextObject.
+ * @author Reginald Stadlbauer <reggie@kde.org>
+ * @version 0.0.1
+ */
+
 class TxtParagraph 
 {
 public:
 
-  // horizontal alignment of the paragraph
+  /**
+   * Horizontal alignment of the paragraph.
+   */
   enum HorzAlign {LEFT,CENTER,RIGHT,BLOCK};
   
-  // constructor - destructor
+  /**
+   * Constructor. If init is <i>true</i> an empty text line is inserted.
+   */
   TxtParagraph(bool init = false);
-  ~TxtParagraph() {};
+  ~TxtParagraph() {lineList.clear();};
 
-  // insert/append a char or string into the paragraph
+  /**
+   * Insert a string with attributes at a cursor position.
+   */
   void insert(TxtCursor,const char*,QFont,QColor,TxtObj::VertAlign);
+
+  /**
+   * Insert a character with attributes at a cursor position.
+   */
   void insert(TxtCursor,char,QFont,QColor,TxtObj::VertAlign);
+  
+  /**
+   * Append a string with attributes.
+   */
   void append(const char*,QFont,QColor,TxtObj::VertAlign);
+  
+  /**
+   * Append a character with attributes.
+   */
   void append(char,QFont,QColor,TxtObj::VertAlign);
 
-  // insert/append a line
+  /**
+   * Insert a text line at the position <i>i</i>.
+   */
   void insert(unsigned int i,TxtLine *l);
+
+  /**
+   * Append a text line.
+   */
   void append(TxtLine*);
 
-  // insert/append an object
+  /**
+   * Insert a text object at the position <i>i</i>.
+   */
   void insert(unsigned int i,TxtObj*);
+
+  /**
+   * Append a text object.
+   */
   void append(TxtObj*);
 
-  // delete a char or a region in the paragraph
+  /**
+   * Delete the character at the given cursor position.
+   */ 
   void deleteChar(TxtCursor);
+
+  /**
+   * Delete the region between the given cursor positions.
+   */
   void deleteRegion(TxtCursor,TxtCursor);
 
-  // change font, color and vertical alignment of a region 
+  /**
+   * Change the attributes for a region.
+   */
   void changeRegion(TxtCursor,TxtCursor,QFont,QColor,TxtObj::VertAlign);
 
-  // get certain line 
+  /**
+   * Returns the text line at the position <i>i</i>.
+   */
   TxtLine *lineAt(unsigned int i) {return lineList.at(i);}
 
-  // returns number of lines
+  /**
+   * Returns the number of text lines in the paragraph.
+   */
   unsigned int lines() {return lineList.count();}
 
-  // return textlength of the paragraph
+  /**
+   * Returns the length of the text of the paragraph (in chars).
+   */
   unsigned int paragraphLength();
 
-  // returns width and height of the paragraph
+  /**
+   * Returns the width of the paragraph.
+   */
   unsigned int width();
+
+  /**
+   * Returns the height of the paragraph.
+   */
   unsigned int height();
 
-  // set and get horizontal alignment of the paragraph
+  /**
+   * Set the horizontal alignment of the paragraph
+   */
   void setHorzAlign(HorzAlign ha) {objHorzAlign = ha;}
+
+  /**
+   * Returns the horizontal alignment of the paragraph
+   */
   HorzAlign horzAlign() {return objHorzAlign;}
 
-  // break lines in a certain width, returns needed needed rect
+  /**
+   * Breaks lines in a certain width (pixels). Returns the needed rect.<br>
+   */
   QRect breakLines(unsigned int);
 
-  // concate all lines and return the pointer to the resulting line
+  /**
+   * Breaks lines in a certain width (chars).<br>
+   */
+  void break_Lines(unsigned int);
+
+  /**
+   * Concate all lines of the paragraph and return the reference to the resulting line.
+   */
   TxtLine* toOneLine();
+
+  /**
+   * Used for composer mode of the KTextObject.
+   */
+  void doComposerMode(QColor,QFont,QColor,QFont);
 
 protected:
 
-  // get the width from an object to the next separator
   unsigned int widthToNextSep(unsigned int);
+  unsigned int charsToNextSep(unsigned int);
   
   //*********** variables ***********
 
-  // list of lines
   QList<TxtLine> lineList;
 
-  // horizontal alignment
   HorzAlign objHorzAlign;
 
-  // pointer to a line
   TxtLine *linePtr;
   TxtLine *lin;
   TxtLine *line;
@@ -361,13 +766,38 @@ protected:
 /******************************************************************/
 /* class KTextObject - KTextObject                                */
 /******************************************************************/
+
+/**
+ * The KTextObject is a widget for editing rich text. That means you can
+ * edit text with different colors, fonts, sizes, etc. This widget was mainly
+ * designed for editing a short text, but the speed should be ok for a few pages
+ * too.<br>
+ * If you need the text drawn transparent, you can get it using the function @ref #getPic.
+ * This function returns a QPicture, which you can draw transparent.<br>
+ * To set or get the current font, I'm using the signal/slot mechanism of Qt. To see, how
+ * this works for the KTextObject, look at the demo-application<br>
+ * To get the text of the KTextObject use @ref #toASCII or @ref #toHTML. To write it into a file
+ * use @ref #saveASCII or @ref #saveHTML.<br>
+ * To add a text use @ref #addText, to load an ASCII file use @ref #openASCII, and to "parse"
+ * and set a HTML text, use @ref #parseHTML.<br>
+ * You can use two types of linebreaking. Either dynamically linebreaking, which means that the
+ * width of the text is always <= the with of the widget. You can also maximal number of
+ * chars, which sould be displayed in a line. To set the linebreaking type use @ref #setLineBreak.
+ * Default is dynamically linebreaking.
+ * @short A widget for editing rich text.
+ * @author Reginald Stadlbauer <reggie@kde.org>
+ * @version 0.0.1
+ */
+
 class KTextObject : public QTableView
 {
   Q_OBJECT
 
 public:
 
-  // structur for type of unsorted lists
+  /** 
+   * structur for type of unsorted lists 
+   */
   struct UnsortListType
   {
     QFont font;
@@ -376,7 +806,9 @@ public:
     QFont ofont;
   };
 
-  // structure for enum list
+  /**
+   * structure for enum list
+   */
   const int NUMBER = 1;
   const int ALPHABETH = 2;
 
@@ -391,171 +823,424 @@ public:
     QFont ofont;
   };
 
-  // structure for cell width/height
+  /**
+   * structure for cell width/height
+   */
   struct CellWidthHeight
   {
     unsigned int wh;
   };
 
-  // type of the textobject
+  /**
+   * Type of the KTextObject. Default is PLAIN.
+   */
   enum ObjType {PLAIN,ENUM_LIST,UNSORT_LIST,TABLE};
  
-  // constructor - destructor
-  KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,unsigned int c=0,unsigned int r=0);
-  ~KTextObject() {};                                            
+  /**
+   * Constructor of the KTextObject.<br>
+   * <i>QWidget *parent:</i> Parent widget<br>
+   * <i>const char *name:</i> Name<br>
+   * <i>@ref #ObjType ot:</i> Object Type<br>
+   * <i>unsigned int c</i> and <i>unsigned int r</i> are not needed at the moment. They will be useful
+   * in the future for a new feature.<br>
+   * <i>_width</i>: Linebreak width. (< 1 means dynamically linebreak, >= 1 means max. _width chars in a line)<br>
+   */
+  KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,unsigned int c=0,unsigned int r=0,int __width=0);
+  ~KTextObject() {paragraphList.clear(); cellWidths.clear(); cellHeights.clear(); delete txtCursor;}
 
-  // set and get object type
+  /**
+   * Set the object type of the KTextObject.
+   */ 
   void setObjType(ObjType);
+
+  /**
+   * Returns the object type of the KTextObject.
+   */ 
   ObjType objType() {return obType;}
 
-  // set and get the type of an enumerated list
+  /**
+   * Set the type for enumerated lists.<br>
+   * The structure for the enumerated list types looks like that:
+   * <pre>const int NUMBER = 1;
+   * const int ALPHABETH = 2;
+   * 
+   * struct EnumListType
+   * {
+   *   int type; // NUMBER or ALPHABETH
+   *   QString before; // string before the counter
+   *   QString after; // string after the counter
+   *   int start; // start of the counter
+   *   QFont font; 
+   *   QColor color;
+   *   QFont ofont;
+   * };
+   * </pre>
+   */
   void setEnumListType(EnumListType t) {objEnumListType = t; repaint(true);}
+
+  /**
+   * Returns the type of enumerated lists.<br>
+   * The structure for the enumerated list types looks like that:
+   * <pre>const int NUMBER = 1;
+   * const int ALPHABETH = 2;
+   * 
+   * struct EnumListType
+   * {
+   *   int type; // NUMBER or ALPHABETH
+   *   QString before; // string before the counter
+   *   QString after; // string after the counter
+   *   int start; // start of the counter
+   *   QFont font; 
+   *   QColor color;
+   *   QFont ofont;
+   * };
+   * </pre>
+   */
   EnumListType enumListType() {return objEnumListType;}
 
-  // set and get font, char and color of an unsorted list
+  /**
+   * Set the type of unsorted lists.<br>
+   * The structure for the enumerated list types looks like that:
+   * <pre>struct UnsortListType
+   * {
+   *   QFont font;
+   *   QColor color;
+   *   int chr;
+   *   QFont ofont;
+   * };
+   * </pre>
+   */
   void setUnsortListType(UnsortListType t) {objUnsortListType = t; repaint(true);}
+
+  /**
+   * Returns the type of unsorted lists.<br>
+   * <pre>struct UnsortListType
+   * {
+   *   QFont font;
+   *   QColor color;
+   *   int chr;
+   *   QFont ofont;
+   * };
+   * </pre>
+   */
   UnsortListType unsortListType() {return objUnsortListType;}
 
-  // set and get row/column
+  /**
+   * This function does nothing at the moment
+   */
   void setRow(unsigned int r) {objRow = r;}
+
+  /**
+   * This function does nothing at the moment
+   */
   unsigned int row() {return objRow;}
+
+  /**
+   * This function does nothing at the moment
+   */
   void setCol(unsigned int c) {objCol = c;}
+
+  /**
+   * This function does nothing at the moment
+   */
   unsigned int col() {return objCol;}
 
-  // show or hide cursor
+  /**
+   * Show textcursor if s is <i>true</i>, else hide it.
+   */
   void setShowCursor(bool s) {sCursor = s;}
+
+  /**
+   * Returns <i>true</i> if the textcursor is shown, els it returns <i>false</i>.
+   */
   bool showCursor() {return sCursor;}
 
-  // get length of the text
+  /**
+   * Returns the length of the whole text.
+   */
   unsigned int textLength();
 
-  // get a certain paragraph
+  /**
+   * Returns the reference of a the paragraph number i. See @ref #TxtParagraph for more information.
+   */
   TxtParagraph *paragraphAt(unsigned int i) {return paragraphList.at(i);}
 
-  // get number of paragraphs
+  /**
+   * Returns the number of paragraphs, which ar in this text.
+   */
   unsigned int paragraphs() {return paragraphList.count();}
 
-  // set and get current font/color
+  /**
+   * Set the current font.
+   */
   void setFont(QFont f) {currFont = f;}
+
+  /**
+   * Returns the current font.
+   */
   QFont font() {return currFont;}
+
+  /**
+   * Set the current color.
+   */
   void setColor(QColor c) {currColor = c;}
+
+  /**
+   * Returns the current color.
+   */
   QColor color() {return currColor;}
 
-  // set and get horizontal alignment
+  /**
+   * Set the horizontal alignment of the current paragraph. The current paragraph is the
+   * paragraph, in which the cursor is. See @ref #TxtParagraph for more information.
+   */
   void setHorzAlign(TxtParagraph::HorzAlign,int p = -1);
   TxtParagraph::HorzAlign horzAlign(int p = -1);
 
-  // show scrollbar
-  void showScrollbar() {setTableFlags(Tbl_vScrollBar);}
+  /**
+   * Show a vertical and horizontal scrollbar.
+   */
+  void showScrollbar() {setTableFlags(Tbl_vScrollBar|Tbl_hScrollBar);}
 
-  // get QPicture of the object
-  QPicture* getPic(int,int,int,int,bool presMode=false,int from=-1,int to=-1);
+  /**
+   * Returns a QPicture of the text to draw it transparent.<br>
+   * The four integers give the size of the QPicture<br>
+   * If presMode is <i>true</i>, you can say that only the paragraphs between from and to are drawn. 
+   */
+  QPicture* getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1);
 
-  // resize
+  /** 
+   * Resize the KTextObject.
+   */
   void resize(int w,int h)
     {QTableView::resize(w,h); recalc();}
+
+  /** 
+   * Resize the KTextObject.
+   */
   void resize(QSize s)
     {resize(s.width(),s.height());}
 
-  // zoom text
-  void zoom(float);
+  /**
+   * Zoom the text by the faktor which is given as the float argument.
+   */
+  void zoom(float _fakt);
+  
+  /**
+   * Zoom the text back to it's original size.
+   */
   void zoomOrig();
 
-  // add paragraph
+  /**
+   * Add an empty paragraph and get the reference to it.
+   */
   TxtParagraph* addParagraph();
 
-  // clear
-  void clear();
+  /**
+   * Clear the KTextObject. If <i>init</i> is <i>true</i> a paragraph with one line is appended,
+   * else nothing is appended.
+   */ 
+  void clear(bool init=true);
+
+  /**
+   * Returns the text of the KTextObject as ASCII-Text in a string.
+   * If linebreak is <i>true</i> for each linebreak a \n is used.
+   */
+  QString toASCII(bool linebreak=true);
+
+  /**
+   * Returns the text of the KTextObject as HTML-Text in a string.
+   * If <i>clean</i> in <i>true</i> the fontsizes are calculated correctly as HTML, else
+   * the real fontsize is used. If you only want to save and load the text in the KTextObject,
+   * <i>clean</i> should be <i>false</i>, if you want to use the output for a HTML-Page, <i>clean</i> should
+   * be <i>true</i>. If <i>onlyBody</i> is <i>true</i>, only the stuff which is between the body-begin 
+   * and body-end flag is returned, else a whole, valide HTML-document is returned. 
+   */
+  QString toHTML(bool clean=false,bool onlyBody=false);
+
+  /**
+   * Saves the text of the KTextObject as ASCII-Text to the file
+   * <i>filename</i>.<br>
+   * If linebreak is <i>true</i> for each linebreak a \n is used.
+   */ 
+  void saveASCII(QString filename,bool linebreak=true); 
+  
+  /**
+   * Saves the text of the KTextObject in HTML-Text to the file
+   * <i>filename</i>.<br>
+   * If clean in <i>true</i> the fontsizes are calculated correctly as HTML, else
+   * the real fontsize is used. If you only want to save and load the text in the KTextObject,
+   * clean should be <i>false</i>, if you want to use the output for a HTML-Page, clean should
+   * be <i>true</i>.
+   */ 
+  void saveHTML(QString filename,bool clean=false); 
+
+  /**
+   * Adds the <i>text</i> in the given <i>color</i> and <i>font</i> to the KTextObject.
+   * If <i>newParagraph</i> is <i>true</i> the text is added into a new paragraph, and with
+   * <i>align</i> you can give the horizontal alignment of the paragraphs, which will be
+   * added (paragraphs are seperated by '\n'). If <i>_recalc</i> is <i>true</i>, everything is
+   * recalculated and redrawn, else no redraw/recalc is done. If <i>htmlMode</i> is true, nbsp's are
+   * coverted to spaces.
+   */
+  void addText(QString text,QFont font,QColor color,
+	       bool newParagraph=false,TxtParagraph::HorzAlign align=TxtParagraph::LEFT,
+	       bool _recalc=true,bool htmlMode=false);
+
+  /**
+   * Parses a HTML text and sets it into the KTextObject.
+   */
+  void parseHTML(QString text);
+
+  /**
+   * Opens an ASCII file for editing in the KTextObject.
+   */
+  void openASCII(QString filename);
+
+  /**
+   * Opens an HTML file for editing in the KTextObject.
+   */
+  void openHTML(QString filename);
+
+  /**
+   * Set the type of the linebreaking. A <i>_width</i> < 1 means dynamically linebreaking.
+   * If <i>_width</i> is >= 1, this argument sets the maximal number of chars of a line.
+   */
+  void setLineBreak(int _width);
+
+  /**
+   * With this function you can switch on a composer mode. If the composer-mode is
+   * on, all lines, which begin with a char out of '>:|' will be displayed in <i>quoted_color</i>
+   * and </i>quoted_font</i>. The rest is displayed in <i>normal_color<i> and <i>normal_font</i>. 
+   */
+  void enableComposerMode(QColor quoted_color,QFont quoted_font,QColor normal_color,QFont normal_font);
+
+  /**
+   * With this function you can switch off the composer mode.
+   */
+  void disableComposerMode() {composerMode = false;}
 
 signals:
 
-  // sent current effects
+  /**
+   * If the current font is changed, this signal is sent.
+   */
   void fontChanged(QFont*);
+
+  /**
+   * If the current color is changed, this signal is sent.
+   */
   void colorChanged(QColor*);
+
+  /**
+   * If the current horizontal alignment is changed, this signal is sent.
+   */
   void horzAlignChanged(TxtParagraph::HorzAlign);
 
 protected:
 
-  // paint the contents of a cell
+  //**************** types *****************
+  enum TagType {HTML,HEAD,BODY,FONT,BOLD,ITALIC,UNDERLINE,
+		PARAGRAPH,BREAK,UNSORTLIST,ENUMLIST,PLAIN_TEXT,UNKNOWN_TAG};
+  enum TagState {BEGIN,END,COMMENT};
+  enum AttribType {FACE,CHAR,START,BEFORE,AFTER,TYPE,SIZE,COLOR,ALIGN,B,I,U,UNKNOWN_ATTRIB};
+  enum Operators {PLUS,MINUS,ASSIGN};
+  enum ParseState {KEY,OPERATOR,VALUE};
+
+  struct Attrib
+  {
+    AttribType key;
+    Operators op;
+    QString value;
+  };
+  
+  typedef QList<Attrib> AttribList;
+
+  struct ParsedTag
+  {
+    TagType type;
+    TagState state;
+    AttribList attribs;
+    QString additional;
+  };
+
+  //***************** methodes ****************
+
   void paintCell(class QPainter*,int,int);
   void paintEvent(QPaintEvent *);
+  void focusInEvent(QFocusEvent*) {};
+  void focusOutEvent(QFocusEvent*) {};
   
-  // return width and height of a certain cell
   int cellWidth(int);
   int cellHeight(int);
 
-  // return total width and height of the table
   int totalWidth();
   int totalHeight();
   
-  // resize event
   void resizeEvent(QResizeEvent*);
 
-  // key press event
   void keyPressEvent(QKeyEvent*);
 
-  // mouse events
   void mousePressEvent(QMouseEvent*);
   void mouseReleaseEvent(QMouseEvent*);
   void mouseMoveEvent(QMouseEvent*);
 
-  // recalcualate everything
-  void recalc();
+  void recalc(bool breakAllLines=true);
 
-  // split and join paragraphs
   void splitParagraph();
   void joinParagraphs(unsigned int,unsigned int);
 
-  // backspace/delete
-  void kbackspace();
-  void kdelete();
+  bool kbackspace();
+  bool kdelete();
   
-  // insert charcter
-  void insertChar(char);
+  bool insertChar(char);
 
-  // check, if effects are equal
   bool sameEffects(TxtObj *to)
     { return (currFont.operator==(to->font()) && currColor.operator==(to->color())); }
 
   void makeCursorVisible();
   
-  TxtCursor* getCursorPos(int,int,bool set=false);
+  TxtCursor getCursorPos(int,int,bool set=false,bool redraw=false);
+
+  QString toHexString(QColor);
+
+  ParsedTag parseTag(QString);
+
+  QColor hexStringToQColor(QString);
+
+  bool isValid(QString);
+
+  QString simplify(QString);
+  
+  bool selectionInObj(int,int,int);
+  bool selectFull(int,int,int,int&,int&);
+  void redrawSelection(TxtCursor,TxtCursor);
 
   //*********** variables ***********
 
-  // text cursor and flag of it
   TxtCursor *txtCursor;
   bool sCursor;
   bool drawSelection;
 
-  // object Type
   ObjType obType;
 
-  // list types
   EnumListType objEnumListType;
   UnsortListType objUnsortListType;
 
-  // list of paragraphs
   QList<TxtParagraph> paragraphList;
 
-  // pointer to a paragraph
   TxtParagraph *paragraphPtr;
 
-  // list of the cell-widths and cell-heights
   QList<CellWidthHeight> cellWidths;
   QList<CellWidthHeight> cellHeights;
 
-  // pointer to cell width/height
   CellWidthHeight *cwhPtr;
 
-  // row and col
   unsigned int objRow,objCol;
 
-  // x position, where drawing should be started
   unsigned int xstart;
   unsigned int ystart;
   
-  // line/paragraph which should be drawn, -1 means: draw all lines 
   int drawLine;
   int drawParagraph;
   bool drawBelow;
@@ -563,11 +1248,9 @@ protected:
   bool mousePressed;
   bool drawPic;
 
-  // current font an color
   QFont currFont;
   QColor currColor;
 
-  // internal
   TxtParagraph *para1;
   TxtParagraph *para2;
   TxtParagraph *para3;
@@ -578,8 +1261,66 @@ protected:
   TxtLine *linePtr;
   TxtObj *objPtr;
   QPicture pic;
-  TxtCursor *startCursor,*stopCursor;
+  TxtCursor startCursor,stopCursor;
   QColor selectionColor;
+  bool doRepaints;
+
+  QList<int> changedParagraphs;
+
+  int linebreak_width;
+  int _width;
+
+  bool composerMode;
+  QColor _quoted_color,_normal_color;
+  QFont _quoted_font,_normal_font;
+
+  //**************** constants ******************
+  // HTML stuff
+  const char open_tag = '<';
+  const char close_tag = '>';
+  const char end_tag = '/';
+  const char comment_tag = '!';
+
+  const char operator_assign = '=';
+  const char operator_plus = '+';
+  const char operator_minus = '-';
+  const char space = ' ';
+
+  const char tag_html[] = "HTML";
+  const char tag_head[] = "HEAD";
+  const char tag_body[] = "BODY";
+  const char tag_font[] = "FONT";
+  const char tag_bold[] = "B";
+  const char tag_italic[] = "I";
+  const char tag_underline[] = "U";
+  const char tag_paragraph[] = "P";
+  const char tag_break[] = "BR";
+  const char tag_h1[] = "H1";
+  const char tag_h2[] = "H2";
+  const char tag_h3[] = "H3";
+  const char tag_h4[] = "H4";
+  const char tag_h5[] = "H5";
+  const char tag_h6[] = "H6";
+  const char tag_plain[] = "PLAIN";
+  const char tag_enumlist[] = "ENUM_LIST";
+  const char tag_unsortlist[] = "UNSORT_LIST";
+
+  const char attrib_face[] = "FACE";
+  const char attrib_char[] = "CHAR";
+  const char attrib_start[] = "START";
+  const char attrib_before[] = "BEFORE";
+  const char attrib_after[] = "AFTER";
+  const char attrib_type[] = "TYPE";
+  const char attrib_size[] = "SIZE";
+  const char attrib_color[] = "COLOR";
+  const char attrib_align[] = "ALIGN";
+  const char attrib_bold[] = "BOLD";
+  const char attrib_italic[] = "ITALIC";
+  const char attrib_underline[] = "UNDERLINE";
+
+  const char attrib_value_left[] = "LEFT";
+  const char attrib_value_center[] = "CENTER";
+  const char attrib_value_right[] = "RIGHT";
 
 };
 #endif //KTEXTOBJECT_H

@@ -743,7 +743,7 @@ void KPresenterView_impl::textEnumList()
       QString _after = page->kTxtObj()->enumListType().after;
       int _start = page->kTxtObj()->enumListType().start;
       
-      if (KEnumListDia::enumListDia(_type,_font,_color,_before,_after,_start))
+      if (KEnumListDia::enumListDia(_type,_font,_color,_before,_after,_start,fontList))
 	{
 	  KTextObject::EnumListType elt;
 	  elt.type = _type;
@@ -768,7 +768,7 @@ void KPresenterView_impl::textUnsortList()
       QColor _color = page->kTxtObj()->unsortListType().color;
       int _c = page->kTxtObj()->unsortListType().chr;
       
-      if (KCharSelectDia::selectChar(_font,_color,_c))
+      if (KCharSelectDia::selectChar(_font,_color,_c,fontList))
 	{
 	  KTextObject::UnsortListType ult;
 	  ult.font = _font;
@@ -2137,10 +2137,8 @@ void KPresenterView_impl::getFonts()
   
   kde_display = XOpenDisplay(0L);
 
-  // now try to load the KDE fonts
   bool have_installed = kapp->getKDEFonts(&fontList);
   
-  // if available we are done, the kde fonts are now in the family_combo
   if (have_installed)
     return;
 
@@ -2151,45 +2149,29 @@ void KPresenterView_impl::getFonts()
     
     if (**fontNames != '-')
       { 
-      // The font name doesn't start with a dash -- an alias
-      // so we ignore it. It is debatable whether this is the right
-      // behaviour so I leave the following snippet of code around.
-      // Just uncomment it if you want those aliases to be inserted as well.
-      
-      /*
-	qfontname = "";
-      qfontname = *fontNames;
-      if(fontlist.find(qfontname) == -1)
-          fontlist.inSort(qfontname);
-      */
-
-      fontNames ++;
+	fontNames ++;
       continue;
-    };
-      
+      };
+    
     qfontname = "";
     qfontname = *fontNames;
-    int dash = qfontname.find ('-', 1, TRUE); // find next dash
+    int dash = qfontname.find ('-', 1, TRUE);
 
-    if (dash == -1)  // No such next dash -- this shouldn't happen.
-                      // but what do I care -- lets skip it.
+    if (dash == -1) 
       {
 	fontNames ++;
 	continue;
       }
 
-    // the font name is between the second and third dash so:
-    // let's find the third dash:
     int dash_two = qfontname.find ('-', dash + 1 , TRUE); 
 
-    if (dash == -1)  // No such next dash -- this shouldn't happen.
-                      // But what do I care -- lets skip it.
+    if (dash == -1)
       {
 	fontNames ++;
 	continue;
       }
 
-    // fish the name of the font info string
+
     qfontname = qfontname.mid(dash +1, dash_two - dash -1);
 
     if( !qfontname.contains("open look", TRUE))

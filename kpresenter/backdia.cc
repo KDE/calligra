@@ -245,26 +245,6 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
 /*===================== destructor ===============================*/
 BackDia::~BackDia()
 {
-  delete color1Choose;
-  delete color2Choose;
-  delete radioColor;
-  delete picPreview;
-  delete picChoose;
-  delete radioPic;
-  delete vTiled;
-  delete vZoom;
-  delete vCenter;
-  delete lPicName;
-  delete radioClip;
-  delete clipChoose;
-  delete clipPreview;
-  delete cancelBut;
-  delete applyBut;
-  delete applyGlobalBut;
-  delete okBut;
-  delete grp2;
-  delete grp1;
-  delete grp3;
 }
 
 /*===================== get background type ======================*/
