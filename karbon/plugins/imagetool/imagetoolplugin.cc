@@ -73,13 +73,14 @@ void
 VImageTool::mouseButtonRelease()
 {
 	QString fname = KFileDialog::getOpenFileName( QString::null, "*.jpg *.gif *.png", view(), i18n( "Choose the image to add" ) );
-	kdDebug() << "Image name : " << fname.latin1() << endl;
+	if( !fname.isEmpty() )
+	{
+		VImage *image = new VImage( 0L, fname );
+		VInsertImageCmd *cmd = new VInsertImageCmd( &view()->part()->document(), i18n( "Insert Image" ), image, first() );
 
-	VImage *image = new VImage( 0L, fname );
-	VInsertImageCmd *cmd = new VInsertImageCmd( &view()->part()->document(), i18n( "Insert Image" ), image, first() );
-
-	view()->part()->addCommand( cmd, true );
-	//view()->selectionChanged();
+		view()->part()->addCommand( cmd, true );
+		//view()->selectionChanged();
+	}
 }
 
 VImageTool::VInsertImageCmd::VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, KoPoint pos )
