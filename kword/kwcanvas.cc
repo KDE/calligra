@@ -78,7 +78,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     connect( doc, SIGNAL( sig_newContentsSize( int, int ) ),
              this, SLOT( resizeContents( int, int ) ) );
-    resizeContents( doc->paperWidth(), doc->paperHeight() * doc->getPages() );
+    resizeContents( doc->paperWidth(), doc->pageTop( doc->getPages() ) );
 
     // Add an action for debugging
     (void) new KAction( "Print richtext debug info" , 0,
@@ -145,7 +145,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
         painter->save();
         int pgNum = i - 1;
-        int yOffset = pgNum * doc->paperHeight();
+        int yOffset = doc->pageTop( pgNum );
         kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
         QRect pageRect( 0, yOffset, doc->paperWidth(), doc->paperHeight() );
         painter->fillRect( pageRect, white );
@@ -330,42 +330,46 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
         painter->setPen( red );
         painter->setBrush( Qt::NoBrush );
 
-        QRegion pageContentsReg;
-
-        for ( int k = 0; k < doc->getPages(); k++ ) {
-            QRect pageRect( 0, ( k * doc->paperHeight() ),
-                            doc->paperWidth(), doc->paperHeight() );
+        for ( int k = 0; k < doc->getPages(); k++ )
+        {
+            int pageTop = doc->pageTop( k );
+            // using doc->paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
+            QRect pageRect( 0, pageTop, doc->paperWidth(), doc->pageTop( k+1 ) - pageTop );
             if ( crect.intersects( pageRect ) )
+            {
+                //kdDebug() << "KWCanvas::drawBorders drawing page rect " << DEBUGRECT( pageRect ) << endl;
                 painter->drawRect( pageRect );
-            // Exclude red border line
-            pageRect.rLeft() += 1;
-            pageRect.rTop() += 1;
-            pageRect.rRight() -= 1;
-            pageRect.rBottom() -= 1;
-            pageContentsReg += pageRect; // unite
-        }
+                if ( clearEmptySpace )
+                {
+                    // Clear empty space. This is also disabled when printing because
+                    // it is not needed (the blank space, well, remains blank )
+                    painter->save();
 
-        if ( clearEmptySpace ) {
-            // Clear empty space. This is also disabled when printing because
-            // 1 - it needs pageContentsReg,  2 - not needed, this is probably only
-            // needed when moving/resizing frames.
-            painter->save();
+                    // Exclude red border line, to get the page contents rect
+                    pageRect.rLeft() += 1;
+                    pageRect.rTop() += 1;
+                    pageRect.rRight() -= 1;
+                    pageRect.rBottom() -= 1;
+                    //kdDebug() << "KWCanvas::drawBorders page rect w/o borders : " << DEBUGRECT( pageRect ) << endl;
 
-            region &= pageContentsReg; // intersect
+                    // The empty space to clear up inside this page
+                    QRegion emptySpaceRegion = region.intersect( pageRect );
 
-            // Region, but in device coordinates
-            // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
-            QRegion devReg;
-            QArray<QRect>rs = region.rects();
-            rs.detach();
-            for ( uint i = 0 ; i < rs.size() ; ++i )
-                rs[i] = painter->xForm( rs[i] );
-            devReg.setRects( rs.data(), rs.size() );
-            painter->setClipRegion( devReg );
+                    // Translate emptySpaceRegion in device coordinates
+                    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
+                    QRegion devReg;
+                    QArray<QRect>rs = emptySpaceRegion.rects();
+                    rs.detach();
+                    for ( uint i = 0 ; i < rs.size() ; ++i )
+                        rs[i] = painter->xForm( rs[i] );
+                    devReg.setRects( rs.data(), rs.size() );
+                    painter->setClipRegion( devReg );
 
-            //kdDebug() << "KWCanvas::drawBorders clearEmptySpace in " << DEBUGRECT( region.boundingRect() ) << endl;
-            painter->fillRect( region.boundingRect(), colorGroup().brush( QColorGroup::Base ) );
-            painter->restore();
+                    //kdDebug() << "KWCanvas::drawBorders clearEmptySpace in " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
+                    painter->fillRect( emptySpaceRegion.boundingRect(), colorGroup().brush( QColorGroup::Base ) );
+                    painter->restore();
+                }
+            }
         }
     }
 
@@ -631,51 +635,35 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     int newBottom = frame->bottom();
 
     if (top && newTop != y) {
-        bool move=true;
-        if (fs->isAFooter())
-            move=false;
+        bool move = !fs->isAFooter();
         if (newBottom-y < (int)(minFrameHeight+5))
             y=newBottom-minFrameHeight-5;
-        if (y < static_cast<int>( frame->pageNum() * doc->ptPaperHeight()))
-            y = static_cast<int>( frame->pageNum() * doc->ptPaperHeight() );
-
-        if (move) newTop=y;
+        y = QMAX( y, (int)doc->ptPageTop( frame->pageNum() ) );
+        if (move)
+            newTop = y;
     } else if (bottom && newBottom != y) {
-        bool move=true;
-        if (fs->isAHeader())
-            move=false;
+        bool move = !fs->isAHeader();
         if (y-newTop < (int)(minFrameHeight+5))
             y=newTop+minFrameHeight+5;
-        if (y >= static_cast<int>((frame->pageNum()+1) * doc->ptPaperHeight()))
-        {
-            y = static_cast<int>((frame->pageNum()+1) * doc->ptPaperHeight());
-        }
-
-        if (move) newBottom=y;
+        y = QMIN( y, (int)doc->ptPageTop( frame->pageNum() + 1 ) );
+        if (move)
+            newBottom = y;
     }
 
     if (left && newLeft != x) {
-        bool move=true;
-        if (fs->isAHeader())
-            move=false;
-        if (fs->isAFooter())
-            move=false;
+        bool move = ( !fs->isAHeader() && !fs->isAFooter() );
         if (newRight-x < (int)minFrameWidth)
             x=newRight-minFrameWidth-5;
-        if (x <= 0)
-            x=0;
+        x = QMAX( x, 0 );
         if (move)
-            newLeft=x;
+            newLeft = x;
     } else if (right && newRight != x) {
-        bool move=true;
-        if (fs->isAHeader()) move=false;
-        if (fs->isAFooter()) move=false;
+        bool move = ( !fs->isAHeader() && !fs->isAFooter() );
         if (x-newLeft < (int)minFrameWidth)
             x=newLeft+minFrameWidth+5;
-        if (x > static_cast<int>(doc->ptPaperWidth()))
-            x = static_cast<int>(doc->ptPaperWidth());
-
-        if (move) newRight=x;
+        x = QMIN( x, static_cast<int>(doc->ptPaperWidth()) );
+        if (move)
+            newRight = x;
     }
 
     // Keep copy of old rectangle, for repaint()
@@ -1755,8 +1743,8 @@ int KWCanvas::getVertRulerPos(int y)
 {
     int pageNum=1;
     if( m_currentFrameSetEdit )
-        pageNum=m_currentFrameSetEdit->currentFrame()->pageNum() + 1;
-    return ( -(y==-1 ? contentsY() : y) + (pageNum - 1) * doc->paperHeight() );
+        pageNum = m_currentFrameSetEdit->currentFrame()->pageNum() + 1;
+    return ( -(y==-1 ? contentsY() : y) + doc->pageTop(pageNum - 1) );
 }
 
 /*================================================================*/

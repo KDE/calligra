@@ -315,8 +315,8 @@ void KWStyleManager::deleteStyle()
 /*================================================================*/
 bool KWStyleManager::apply()
 {
-    int f = 0;
 #if 0
+    int f = 0;
     // Not implemented for the moment
     if ( cFont->currentItem() == 1 )
         f = f | KWDocument::U_FONT_FAMILY_SAME_SIZE;

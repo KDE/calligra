@@ -1916,8 +1916,8 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 /*================================================================*/
 void KWDocument::updateAllViewportSizes()
 {
-    //kdDebug(32002) << "KWDocument::updateAllViewportSizespages=" << m_pages << " " << paperWidth() << "x" << paperHeight() * m_pages << endl;
-    emit sig_newContentsSize( paperWidth(), paperHeight() * m_pages );
+    //kdDebug(32002) << "KWDocument::updateAllViewportSizespages=" << m_pages << " " << paperWidth() << "x" << pageTop( m_pages ) << endl;
+    emit sig_newContentsSize( paperWidth(), pageTop( m_pages ) /*i.e. bottom of last one*/ );
 }
 
 /*================================================================*/

@@ -150,9 +150,11 @@ public:
     unsigned int bottomBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptBottom )); }
     unsigned int leftBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptLeft )); }
     unsigned int rightBorder() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptRight )); }
+    // WARNING: don't multiply this value by the number of the page, this leads to rounding problems. Use pageTop instead.
     unsigned int paperHeight() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptHeight )); }
     unsigned int paperWidth() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptWidth )); }
     unsigned int columnSpacing() const { return static_cast<unsigned int>(zoomItX( m_pageColumns.ptColumnSpacing )); }
+    unsigned int pageTop( int pgNum /*0-based*/ ) const { return static_cast<unsigned int>( zoomItY( pgNum * m_pageLayout.ptHeight ) ); }
 
     // Those distances are in _pt_, i.e. the real distances, stored in m_pageLayout
     double ptTopBorder() const { return m_pageLayout.ptTop; }
@@ -163,6 +165,7 @@ public:
     double ptPaperWidth() const { return m_pageLayout.ptWidth; }
     double ptColumnWidth() const;
     double ptColumnSpacing() const { return m_pageColumns.ptColumnSpacing; }
+    double ptPageTop( int pgNum /*0-based*/ ) const { return pgNum * m_pageLayout.ptHeight; }
 
     unsigned int getColumns() const { return m_pageColumns.columns; }
 
