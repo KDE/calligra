@@ -34,19 +34,12 @@ static const KCmdLineOptions options[]=
 	{0,0,0}
 };
 
-extern "C"
-{
-    void* init_libkpresenter();
-}
-
 int main( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, KPresenterFactory::aboutData());
     KCmdLineArgs::addCmdLineOptions( options );
-       
-    KoApplication app; 
-    init_libkpresenter();
-	
+
+    KoApplication app;
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "kpresenter" );
 

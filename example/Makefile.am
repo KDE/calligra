@@ -4,17 +4,17 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 ####### Files
 
 bin_PROGRAMS = example
-lib_LTLIBRARIES = example.la libexample.la
+lib_LTLIBRARIES = example.la libexamplepart.la
 
-libexample_la_SOURCES = example_shell.cc example_part.cc \
-                        example_view.cc example_factory.cc
-libexample_la_LDFLAGS = -module -avoid-version
-libexample_la_LIBADD = ../lib/kofficeui/libkofficeui.la
-libexample_la_METASOURCES = AUTO
+libexamplepart_la_SOURCES = example_shell.cc example_part.cc \
+                            example_view.cc example_factory.cc
+libexamplepart_la_LDFLAGS = -module -avoid-version
+libexamplepart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
+libexamplepart_la_METASOURCES = AUTO
 
 example_la_SOURCES = main.cc
 example_la_LDFLAGS = $(all_libraries) -module -avoid-version
-example_la_LIBADD = libexample.la
+example_la_LIBADD = libexamplepart.la
 
 example_SOURCES = dummy.cc
 example_LDFLAGS = $(all_libraries) $(KDE_RPATH)

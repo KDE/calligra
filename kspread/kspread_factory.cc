@@ -14,7 +14,7 @@ static const char* version="0.1";
 
 extern "C"
 {
-    void* init_libkspread()
+    void* init_libkspreadpart()
     {
 	return new KSpreadFactory;
     }

@@ -3,9 +3,9 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 ####### Files
 
 bin_PROGRAMS = kchart
-lib_LTLIBRARIES = kchart.la libkchart.la
+lib_LTLIBRARIES = kchart.la libkchartpart.la
 
-libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
+libkchartpart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
 	engine.cc \
 	enginehelper.cc \
@@ -42,12 +42,12 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	sheet.cc \
 	sheetdlg.cc \
 	table.cc
-libkchart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkchart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
+libkchartpart_la_LDFLAGS = -avoid-version -module -no-undefined
+libkchartpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 
 kchart_la_SOURCES = main.cc
 kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kchart_la_LIBADD = libkchart.la
+kchart_la_LIBADD = libkchartpart.la
 
 kchart_SOURCES = dummy.cc
 kchart_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -100,9 +100,9 @@ kdemimedir = $(kde_mimedir)/application
 # linktest - from dfaure
 
 check_PROGRAMS = linktest
-linktest_SOURCES = $(libkchart_la_SOURCES)
+linktest_SOURCES = $(libkchartpart_la_SOURCES)
 linktest_LDADD = $(lib_LTLIBRARIES)
-linktest_LDFLAGS = $(libkchart_LDFLAGS)
+linktest_LDFLAGS = $(libkchartpart_la_LDFLAGS)
 
 # SUBDIRS =  . plugins pics dtd toolbar
 SUBDIRS =  . toolbar pics

@@ -5,9 +5,9 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 ####### Files
 
 bin_PROGRAMS = kpresenter
-lib_LTLIBRARIES = kpresenter.la libkpresenter.la
+lib_LTLIBRARIES = kpresenter.la libkpresenterpart.la
 
-libkpresenter_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
+libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
 	page.cc ktextobject.cc styledia.cc \
 	qwmf.cc kenumlistdia.cc \
@@ -30,13 +30,13 @@ libkpresenter_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc
-libkpresenter_la_LDFLAGS = -avoid-version -module -no-undefined
-libkpresenter_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
-libkpresenter_la_METASOURCES = AUTO
+libkpresenterpart_la_LDFLAGS = -avoid-version -module -no-undefined
+libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
+libkpresenterpart_la_METASOURCES = AUTO
 
 kpresenter_la_SOURCES = main.cc
 kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kpresenter_la_LIBADD = libkpresenter.la
+kpresenter_la_LIBADD = libkpresenterpart.la
 
 kpresenter_SOURCES = dummy.cc
 kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)

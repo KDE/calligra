@@ -25,11 +25,6 @@
 
 #include "KIllustrator_factory.h"
 
-extern "C"
-{
-  void* init_libkillustrator ();
-}
-
 static const KCmdLineOptions options[]=
 {
 	{"+[file]", I18N_NOOP("File To Open"),0},
@@ -42,7 +37,6 @@ int main( int argc, char **argv )
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
-    init_libkillustrator ();
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "killustrator" );
 

@@ -33,19 +33,12 @@ static const KCmdLineOptions options[]=
 	{0,0,0}
 };
 
-extern "C"
-{
-    void* init_libkword();
-}
-
 int main( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, KWordFactory::aboutData());
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
-
-    init_libkword();
 
     app.start();
 

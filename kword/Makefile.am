@@ -5,9 +5,9 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 ####### Files
 
 bin_PROGRAMS = kword
-lib_LTLIBRARIES = kword.la libkword.la
+lib_LTLIBRARIES = kword.la libkwordpart.la
 
-libkword_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
+libkwordpart_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
                 kword_shell.cc fc.cc font.cc format.cc kword_page.cc parag.cc \
                 paraglayout.cc formatcollection.cc paragdia.cc \
                 imagecollection.cc image.cc kword_frame.cc framedia.cc \
@@ -16,13 +16,13 @@ libkword_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
                 kword_undo.cc clipbrd_dnd.cc footnote.cc footnotedia.cc \
 		autoformat.cc autoformatdia.cc variabledlgs.cc \
                 serialletter.cc contents.cc kword_factory.cc
-libkword_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module -no-undefined
-libkword_la_LIBADD = ../lib/kofficeui/libkofficeui.la -lkspell -lkformula
-libkword_la_METASOURCES = AUTO
+libkwordpart_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module -no-undefined
+libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la -lkspell -lkformula
+libkwordpart_la_METASOURCES = AUTO
 
 kword_la_SOURCES = main.cc
 kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kword_la_LIBADD = libkword.la
+kword_la_LIBADD = libkwordpart.la
 
 kword_SOURCES = dummy.cc
 kword_LDFLAGS = $(all_libraries) $(KDE_RPATH)

@@ -1,5 +1,5 @@
-#include "example_factory.h"
-#include "example_part.h"
+#include <example_factory.h>
+#include <example_part.h>
 #include <kaboutdata.h>
 #include <kinstance.h>
 #include <kiconloader.h>
@@ -8,7 +8,7 @@
 
 extern "C"
 {
-    void* init_libexample()
+    void* init_libexamplepart()
     {
 	return new ExampleFactory;
     }
@@ -75,4 +75,4 @@ KInstance* ExampleFactory::global()
     return s_global;
 }
 
-#include "example_factory.moc"
+#include <example_factory.moc>

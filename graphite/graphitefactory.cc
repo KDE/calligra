@@ -27,7 +27,7 @@
 #include <kdebug.h>
 
 extern "C" {
-    void* init_libgraphite() {
+    void* init_libgraphitepart() {
         return new GraphiteFactory;
     }
 };

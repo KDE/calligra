@@ -27,11 +27,17 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qheader.h>
+#include <qpopupmenu.h>
 
 #include <klineedit.h>
 #include <klistview.h>
 #include <klocale.h>
 #include <koTemplates.h>
+#include <kfiledialog.h>
+#include <kurl.h>
+#include <kmessagebox.h>
+#include <kimageio.h>
+#include <kdebug.h>
 
 
 class KoTemplateCreateDiaPrivate {
@@ -44,10 +50,13 @@ public:
 	m_custom=0L;
 	m_select=0L;
 	m_preview=0L;
-	m_customPixmapCached=false;
 	m_groups=0L;
+	m_popup=0L;
     }
-    ~KoTemplateCreateDiaPrivate() {}
+    ~KoTemplateCreateDiaPrivate() {
+	delete m_tree;
+	delete m_popup;
+    }
 
     KoTemplateTree *m_tree;
     KLineEdit *m_name;
@@ -56,8 +65,10 @@ public:
     QLabel *m_preview;
     QString m_customFile;
     QPixmap m_customPixmap;
-    bool m_customPixmapCached;
     KListView *m_groups;
+
+    QPopupMenu *m_popup;
+    QListViewItem *m_currentItem;
 };
 
 
@@ -84,6 +95,8 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
     QHBoxLayout *namefield=new QHBoxLayout(leftbox);
     namefield->addWidget(label);
     d->m_name=new KLineEdit(mainwidget);
+    connect(d->m_name, SIGNAL(textChanged(const QString &)),
+	    this, SLOT(slotNameChanged(const QString &)));
     namefield->addWidget(d->m_name);
 
     label=new QLabel(i18n("Group:"), mainwidget);
@@ -93,9 +106,11 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
     d->m_groups->addColumn("");
     d->m_groups->header()->hide();
     d->m_groups->setRootIsDecorated(true);
+    connect(d->m_groups, SIGNAL(rightButtonPressed(QListViewItem *, const QPoint &, int)),
+	    this, SLOT(slotPopup(QListViewItem *, const QPoint &, int)));
 
     d->m_tree=new KoTemplateTree(templateType, instance, true);
-    // fill group listview
+    fillGroupTree();
 
     QVBoxLayout *rightbox=new QVBoxLayout(mbox);
     QGroupBox *pixbox=new QGroupBox(i18n("Picture:"), mainwidget);
@@ -103,20 +118,31 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
     QVBoxLayout *pixlayout=new QVBoxLayout(pixbox, KDialogBase::marginHint(),
 					   KDialogBase::spacingHint());
     pixlayout->addSpacing(pixbox->fontMetrics().height()/2);
+    pixlayout->addStretch(1);
     d->m_default=new QRadioButton(i18n("Default"), pixbox);
     d->m_default->setChecked(true);
+    connect(d->m_default, SIGNAL(clicked()), this, SLOT(slotDefault()));
     pixlayout->addWidget(d->m_default);
     QHBoxLayout *custombox=new QHBoxLayout(pixlayout);
     d->m_custom=new QRadioButton(i18n("Custom"), pixbox);
     d->m_custom->setChecked(false);
+    connect(d->m_custom, SIGNAL(clicked()), this, SLOT(slotCustom()));
     custombox->addWidget(d->m_custom);
     d->m_select=new QPushButton(i18n("Select..."), pixbox);
-    custombox->addWidget(d->m_select);
+    connect(d->m_select, SIGNAL(clicked()), this, SLOT(slotSelect()));
+    custombox->addWidget(d->m_select, 1);
+    custombox->addStretch(1);
+    pixlayout->addStretch(1);
     label=new QLabel(i18n("Preview:"), pixbox);
     pixlayout->addWidget(label);
+    QHBoxLayout *previewbox=new QHBoxLayout(pixlayout);
+    previewbox->addStretch(10);
     d->m_preview=new QLabel(pixbox); // setPixmap() -> auto resize?
-    pixlayout->addWidget(d->m_preview);
+    previewbox->addWidget(d->m_preview);
+    previewbox->addStretch(10);
+    pixlayout->addStretch(8);
 
+    enableButtonOK(false);
     updatePixmap();
 }
 
@@ -128,12 +154,112 @@ void KoTemplateCreateDia::createTemplate( const QString &templateType, KInstance
     delete dia;
 }
 
-void KoTemplateCreateDia::updatePixmap() {
+void KoTemplateCreateDia::slotOk() {
 
-    if(d->m_default->isChecked())
-	d->m_preview->setPixmap(m_pixmap);
-    else {
-    }
+    // add the template to the tree and write the tree to the disk
+    KDialogBase::slotOk();
 }
 
+void KoTemplateCreateDia::slotDefault() {
+
+    d->m_default->setChecked(true);
+    d->m_custom->setChecked(false);
+    updatePixmap();
+}
+
+void KoTemplateCreateDia::slotCustom() {
+
+    d->m_default->setChecked(false);
+    d->m_custom->setChecked(true);
+    if(d->m_customFile.isNull() || d->m_customFile.isEmpty())
+	slotSelect();
+    else
+	updatePixmap();
+}
+
+void KoTemplateCreateDia::slotSelect() {
+
+    d->m_default->setChecked(false);
+    d->m_custom->setChecked(true);
+
+    KFileDialog fd(QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true);
+    fd.setCaption(i18n("Select a Picture"));
+    KURL url;
+    if (fd.exec()==QDialog::Accepted)
+	url=fd.selectedURL();
+
+    if(url.isEmpty()) {
+	if(d->m_customFile.isEmpty()) {
+	    d->m_default->setChecked(true);
+	    d->m_custom->setChecked(false);
+	}
+	return;
+    }
+
+    if(!url.isLocalFile()) {
+	KMessageBox::sorry(0L, i18n( "Only local files supported, yet."));
+	return;
+    }
+    d->m_customFile=url.path();
+    d->m_customPixmap=QPixmap();
+    updatePixmap();
+}
+
+void KoTemplateCreateDia::slotNameChanged(const QString &name) {
+
+    if(name.isEmpty() || name.isNull())
+	enableButtonOK(false);
+    else
+	enableButtonOK(true);
+}
+
+void KoTemplateCreateDia::slotPopup(QListViewItem *item, const QPoint &p, int) {
+
+    d->m_currentItem=item;
+
+    if(!d->m_popup) {
+	d->m_popup=new QPopupMenu(0, "create-template popup");
+	d->m_popup->insertItem(i18n("&New Group..."), this, SLOT(slotNewGroup()));
+	d->m_popup->insertItem(i18n("&Remove"), this, SLOT(slotRemove()));
+    }
+    d->m_popup->popup(p);
+}
+
+void KoTemplateCreateDia::slotNewGroup() {
+
+    //...
+    d->m_groups->clear();
+    fillGroupTree();
+}
+
+void KoTemplateCreateDia::slotRemove() {
+}
+
+void KoTemplateCreateDia::updatePixmap() {
+
+    if(d->m_default->isChecked() && !m_pixmap.isNull())
+	d->m_preview->setPixmap(m_pixmap);
+    else if(d->m_custom->isChecked() && !d->m_customFile.isNull()) {
+	if(d->m_customPixmap.isNull()) {
+	    // use the code in KoTemplate to load the image... hacky, I know :)
+	    KoTemplate t("foo", "bar", d->m_customFile);
+	    d->m_customPixmap=t.loadPicture();
+	}
+	if(!d->m_customPixmap.isNull())
+	    d->m_preview->setPixmap(d->m_customPixmap);
+	else
+	    d->m_preview->setText(i18n("Could not load picture."));
+    }
+    else
+	d->m_preview->setText(i18n("No picture available."));
+}
+
+void KoTemplateCreateDia::fillGroupTree() {
+
+    for(KoTemplateGroup *group=d->m_tree->first(); group!=0L; group=d->m_tree->next()) {
+	QListViewItem *groupItem=new QListViewItem(d->m_groups, group->name());
+	for(KoTemplate *t=group->first(); t!=0L; t=group->next())
+	    (void)new QListViewItem(groupItem, t->name());
+    }
+}
 #include <koTemplateCreateDia.moc>

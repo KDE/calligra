@@ -4,9 +4,9 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) \
 ####### Files
 
 bin_PROGRAMS = kspread
-lib_LTLIBRARIES = kspread.la libkspread.la
+lib_LTLIBRARIES = kspread.la libkspreadpart.la
 
-libkspread_la_SOURCES = kspread_canvas.cc \
+libkspreadpart_la_SOURCES = kspread_canvas.cc \
 	kspread_shell.cc kspread_doc.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_autofill.cc kspread_interpreter.cc \
@@ -27,13 +27,13 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc \
 	kspread_dlg_oszi.cc KSpreadViewIface.skel KSpreadViewIface.cc \
 	qtai_bar.cpp qtai_base.cpp qtai_meter.cpp qtai_plot.cpp qtai_strip.cpp
-libkspread_la_LDFLAGS = -avoid-version -module -no-undefined
-libkspread_la_LIBADD = $(all_libraries) ../kchart/libkchart.la ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
-libkspread_la_METASOURCES = AUTO
+libkspreadpart_la_LDFLAGS = -avoid-version -module -no-undefined
+libkspreadpart_la_LIBADD = $(all_libraries) ../kchart/libkchart.la ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
+libkspreadpart_la_METASOURCES = AUTO
 
 kspread_la_SOURCES = main.cc
 kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kspread_la_LIBADD = libkspread.la
+kspread_la_LIBADD = libkspreadpart.la
 
 kspread_SOURCES = dummy.cc
 kspread_LDFLAGS = $(all_libraries) $(KDE_RPATH)

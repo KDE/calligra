@@ -17,7 +17,7 @@ static const char* version="0.1";
 
 extern "C"
 {
-    void* init_libkchart()
+    void* init_libkchartpart()
     {
 	return new KChartFactory;
     }

@@ -47,11 +47,34 @@ public:
     static void createTemplate( const QString &templateType, KInstance *instance,
 				const QString &file, const QPixmap &pix, QWidget *parent=0L );
 
+protected:
+    void slotOk();
+
+private slots:
+    void slotDefault();
+    void slotCustom();
+    void slotSelect();
+    void slotNameChanged(const QString &name);
+
+    void slotPopup(QListViewItem *, const QPoint &, int);
+    void slotNewGroup();
+    void slotRemove();
+
 private:
     void updatePixmap();
+    void fillGroupTree();
 
     QString m_file;
     QPixmap m_pixmap;
     KoTemplateCreateDiaPrivate *d;
+};
+
+
+class KoNewGroupDia : public KDialogBase {
+
+    Q_OBJECT
+public:
+    KoNewGroupDia(QWidget *parent);
+    ~KoNewGroupDia() {}
 };
 #endif

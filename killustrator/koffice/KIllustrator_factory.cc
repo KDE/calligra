@@ -12,7 +12,7 @@ static const char* version="0.1";
 
 extern "C"
 {
-    void* init_libkillustrator()
+    void* init_libkillustratorpart()
     {
 	return new KIllustratorFactory;
     }
