@@ -183,7 +183,6 @@ void StyleClusterTester::run()
 
   
   if(style1->release()) {
-    kdDebug() << "DELETING STYLE in test runner" << endl;
     delete style1;
     style1 = 0;
     testCount++;

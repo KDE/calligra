@@ -72,7 +72,6 @@ KSpreadStyle *StyleClusterQuad::getStyle() {
 }
 void StyleClusterQuad::setStyle(KSpreadStyle * style) {
   if(m_style && m_style->release()) {
-    kdDebug() << "DELETING STYLE in getStyle()" << endl;
     delete m_style;
   }
   m_style = style;
@@ -95,7 +94,6 @@ StyleClusterQuad::~StyleClusterQuad()
 {
   if (m_style && m_style->release())
   {
-    kdDebug() << "DELETING STYLE in destructor" << endl;
     delete m_style;
     m_style = NULL;
   }
@@ -186,30 +184,25 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
     if( x - x_offset < quad_size ) {
       if( y - y_offset < quad_size ) {
         current_node = &((*current_node)->m_topLeft);
-	kdDebug() << "topLeft" << endl;
       }
       else {
         current_node = &((*current_node)->m_bottomLeft);
         y_offset += quad_size;
-	kdDebug() << "bottomLeft" << endl;
       }
     } else {
       if( y - y_offset < quad_size ) {
         current_node = &((*current_node)->m_topRight);
         x_offset += quad_size;
-	kdDebug() << "topRight" << endl;
       }
       else {
         current_node = &((*current_node)->m_bottomRight);
         y_offset += quad_size;
         x_offset += quad_size;
-	kdDebug() << "bottomRight" << endl;
       }
     }
     
     //quad_size is now the size (size of width, and size of height) of current_node
     
-    kdDebug() << "gone down one to size "<< quad_size << " offset " << x_offset << "," << y_offset << " looking for " << x << "," << y << endl;
     //Now we have gone down one step.  The parent is a quad, but the current node
     //may be null, in which case our style is the style of the parent, or it's Simple,
     //in which case we need to check whether we to subdivide, or it's a quad, in which case
@@ -233,13 +226,11 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
         Q_ASSERT(num_null_children_in_parent > 0);
 	if(num_null_children_in_parent == 1) {// We are the only one using the style info in parent, so just change the m_style in parent
 
-          kdDebug() << "Making a simple, and simplifying " << endl;
 	  last_node->setStyle(style);
 	  simplify(path);
 	} else {  //someone else in the parent is using the style info in parent, so we have to create our own child
           (*current_node) = new StyleClusterQuad(); //defaults to a Simple
           (*current_node)->setStyle(style);
-          kdDebug() << "Making a simple.  Num null children in parent is " << num_null_children_in_parent << ".  Style in parent is " << last_node->getStyle() << ", this style is " <<style << endl;
 	}
         return;
       }
@@ -250,11 +241,9 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
       //we will go into this next time round the loop
       // so make it a quad
       (*current_node)->m_type = StyleClusterQuad::Quad;
-      kdDebug() << "Making a quad at size " << quad_size <<  endl;
 
       if(last_node->numNullChildren() == 0) {
         last_node->setStyle(0); //nothing is using this anymore
-	kdDebug() << "Parent has no more null children.  Removing style" << endl;
       }
 
     } else if( (*current_node)->m_type == StyleClusterQuad::Simple ) { 
@@ -262,11 +251,9 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
         return;
       if(quad_size == 1) {
 	
-        kdDebug() << "Found simple cell to modify. style is different" << endl;
         //So we are a simple cell
 	//
         if( last_node->getStyle() == style) {
-          kdDebug() << "Parent style is the style we want. Deleting cell" << endl;
           delete (*current_node);  //style is released in the destructor
           *current_node = NULL;
           //Now it may be that there are no other children in the last_node, so the style is for all 4 of its children quads
@@ -293,7 +280,6 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
 }
 
 void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) { 
-  kdDebug() << "Simplifying" << endl;
   StyleClusterQuad** current_node;
   StyleClusterQuad* last_node = NULL;
 
@@ -326,7 +312,6 @@ void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) {
     (*current_node)->m_type = StyleClusterQuad::Simple;
 	  
     if(!last_node) {
-      kdDebug() << "At the top of simplification, and child has no children, and just made this Simple.  The tree is totally empty!" << endl;
       
       Q_ASSERT( m_topQuad == *current_node );
 
@@ -376,7 +361,6 @@ StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
   {
     last_node = current_node;
     quad_size /= 2;
-    kdDebug() << "Looking up size " << quad_size << endl;
     if( x - x_offset < quad_size ) {
       if( y - y_offset < quad_size ) {
         current_node = current_node->m_topLeft;
