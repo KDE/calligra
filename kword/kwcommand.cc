@@ -693,6 +693,7 @@ void KWFrameResizeCommand::execute()
     if(frame->isSelected())
         frame->updateResizeHandles();
 
+    doc->updateRulerFrameStartEnd();
     doc->frameChanged( frame );
 }
 
@@ -723,6 +724,7 @@ void KWFrameResizeCommand::unexecute()
         doc->recalcFrames();
     if(frame->isSelected())
         frame->updateResizeHandles();
+    doc->updateRulerFrameStartEnd();
     //update frames
     doc->frameChanged( frame );
 }
@@ -764,6 +766,7 @@ void KWFrameMoveCommand::execute()
         doc->updateAllFrames();
         if ( needRelayout )
             doc->layout();
+        doc->updateRulerFrameStartEnd();
         doc->repaintAllViews();
     }
 }
@@ -797,6 +800,7 @@ void KWFrameMoveCommand::unexecute()
         doc->updateAllFrames();
         if ( needRelayout )
             doc->layout();
+        doc->updateRulerFrameStartEnd();
         doc->repaintAllViews();
     }
 }
@@ -827,6 +831,7 @@ void KWFrameSetFloatingCommand::execute()
     }
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
+    m_pFrameSet->kWordDocument()->updateRulerFrameStartEnd();
     m_pFrameSet->kWordDocument()->updateResizeHandles();
 }
 
@@ -845,6 +850,7 @@ void KWFrameSetFloatingCommand::unexecute()
     }
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
+    m_pFrameSet->kWordDocument()->updateRulerFrameStartEnd();
     m_pFrameSet->kWordDocument()->updateResizeHandles();
 }
 
