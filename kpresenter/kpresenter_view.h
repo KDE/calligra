@@ -504,7 +504,7 @@ public:
     /**
      * Overloaded from View
      */
-    QWidget* canvas();
+    QWidget* canvas();          // don't add const!!!
     /**
      * Overloaded from View
      */
