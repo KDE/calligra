@@ -107,27 +107,11 @@ void KWTableFrameSet::updateFrames()
 
 void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
 {
-    Cell * cell = getCell( 0, 0 );
-    Q_ASSERT( cell );
-    if ( !cell ) return;
-    KoPoint currentPos = cell->getFrame( 0 )->topLeft();
-    KoPoint pos( position );
-    // position includes the border, we need to adjust accordingly
-    pos.rx() += cell->getFrame( 0 )->leftBorder().ptWidth;
-    pos.ry() += cell->getFrame( 0 )->topBorder().ptWidth;
-    if ( currentPos != pos )
-    {
-        kdDebug() << "KWTableFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
-        KoPoint offset = pos - currentPos;
-        moveBy( offset.x(), offset.y() );
-
-        // Recalc all "frames on top" everywhere
-        kWordDocument()->updateAllFrames();
-        // Don't call any drawing method from here.
-        // We are called from KWAnchor::draw, inside a paintevent, so
-        // we are not allowed to create a paint event ourselves.
-        // KWAnchor draws the table anyway!
-    }
+    double dx = position.x() - m_colPositions[0];
+    double dy = position.y() - m_rowPositions[0];
+    
+    moveBy( dx, dy);
+    kWordDocument()->updateAllFrames();
 }
 
 QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
@@ -140,8 +124,7 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
     QSize sz = outerRect.size();
     Q_ASSERT( m_anchorTextFs );
     // Need to convert back to internal coords (in case of page breaking)
-#warning TODO
-#if 0
+#if 0   TODO
     QPoint iPoint;
     if ( m_anchorTextFs->normalToInternal( outerRect.topLeft(), iPoint ) )
     {
@@ -158,18 +141,6 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
     }
 #endif
 
-    // TODO: in theory, we'd need to take the max of the borders of each cell
-    // on the outside rect, to find the global rect needed. Well, if we assume constant
-    // cell borders for now it's much simpler.
-    KWFrame * firstCell = m_cells.getFirst()->getFrame( 0 );
-    KWFrame * lastCell = m_cells.getLast()->getFrame( 0 );
-    if ( firstCell && lastCell )
-    {
-        sz.rwidth() += KoBorder::zoomWidthX( firstCell->leftBorder().ptWidth, m_doc, 1 )
-                       + KoBorder::zoomWidthX( lastCell->rightBorder().ptWidth, m_doc, 1 );
-        sz.rheight() += KoBorder::zoomWidthY( firstCell->topBorder().ptWidth, m_doc, 1 )
-                        + KoBorder::zoomWidthY( lastCell->bottomBorder().ptWidth, m_doc, 1 );
-    }
     return sz;
 }
 
@@ -185,13 +156,13 @@ KCommand * KWTableFrameSet::anchoredObjectDeleteCommand( int /*frameNum*/ )
 
 KWAnchor * KWTableFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
 {
-    kdDebug() << "KWTableFrameSet::createAnchor" << endl;
+    //kdDebug() << "KWTableFrameSet::createAnchor" << endl;
     return new KWAnchor( textdoc, this, frameNum );
 }
 
 void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
 {
-    kdDebug() << "KWTableFrameSet::createAnchors" << endl;
+    //kdDebug() << "KWTableFrameSet::createAnchors" << endl;
     // TODO make one rect per page, and create one anchor per page
     //if ( !m_anchor )
     {
@@ -222,33 +193,15 @@ void KWTableFrameSet::addCell( Cell *cell )
 
     // Find the insertion point in the list.
     for ( i = 0; i < m_cells.count() && m_cells.at( i )->isAboveOrLeftOf( cell->m_row, cell->m_col ); i++ ) ;
-    // cell->setName( m_name + ' ' + cell->m_col + ',' + cell->m_row ); // already done in constructor
     m_cells.insert( i, cell );
 
 }
 
-KoRect KWTableFrameSet::boundingRect()
-{
-    KWFrame *first = getCell( 0, 0 )->getFrame( 0 );
-    Q_ASSERT(first);
-    Q_ASSERT(getCell( m_rows - 1, m_cols - 1 ));
-    //laurent
-    //when you insert a column or row
-    //we test last cell but you resize anchor
-    //each time that you add a cell you execute this function
-    //but cell(m_rows - 1, m_cols - 1) doesn't exist
-    //the first time.
-    //So return koRect() to fix crash
-    if(!getCell( m_rows - 1, m_cols - 1 ))
-        return KoRect();
-
-    KWFrame *last = getCell( m_rows - 1, m_cols - 1 )->getFrame( 0 );
-    Q_ASSERT(last);
-    if (!first || !last)
-        return KoRect();
-
-    //kdDebug() << "KWTableFrameSet::boundingRect first=" << DEBUGRECT( *first ) << " last=" << DEBUGRECT( *last ) << endl;
-    return first->unite( *last );
+KoRect KWTableFrameSet::boundingRect() {
+    return KoRect(m_colPositions[0],    // left
+                m_rowPositions[0],      // right
+                m_colPositions.last()-m_colPositions[0], // width
+                m_rowPositions.last()-m_rowPositions[0]);// height
 }
 
 /* returns the cell that occupies row, col. */
@@ -527,8 +480,6 @@ void KWTableFrameSet::setBoundingRect( KoRect rect ) {
         m_rowPositions.append(rect.y() + rowHeight * i);
     }
 
-KoBorder border = KoBorder(QColor(), KoBorder::SOLID, 2);
-
     Cell *theCell;
     double oneMm = MM_TO_POINT( 1.0 );
     for(theCell=m_cells.first(); theCell; theCell=m_cells.next()) {
@@ -543,6 +494,7 @@ KoBorder border = KoBorder(QColor(), KoBorder::SOLID, 2);
 }
 
 void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
+    kdDebug() << "KWTableFrameSet::position" << endl;
     if(!theCell->getFrame(0)) { // sanity check.
         kdDebug(32002) << "screwy table cell!! row:" << theCell->m_row << ", col: " << theCell->m_col << endl;
         return;
@@ -565,6 +517,9 @@ void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
     if( setMinFrameHeight ) {
         frame->setMinFrameHeight(height);
     }
+
+    if(!theCell->isVisible())
+        theCell->setVisible(true);
 }
 
 double KWTableFrameSet::getPositionOfRow( unsigned int row, bool bottom ) {
@@ -595,35 +550,34 @@ bool KWTableFrameSet::hasSelectedFrame()
     return getFirstSelected(a,b);
 }
 
-void KWTableFrameSet::moveBy( double dx, double dy )
-{
-    if(dx==0 && dy==0)
-        return;
-    kdDebug() << "KWTableFrameSet::moveBy " << dx << "," << dy << endl;
-    for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
-        m_cells.at( i )->getFrame( 0 )->moveBy( dx, dy );
-        if(!m_cells.at( i )->isVisible())
-            m_cells.at( i )->setVisible(true);
+void KWTableFrameSet::moveBy( double dx, double dy ) {
+    bool redraw=false;
+//for(unsigned int i=0; i < m_rowPositions.count() ; kdDebug() << "row " << i << ": " << m_rowPositions[i++] << endl);
+    if(!(dy > -0.001 && dy < 0.001)) {
+        redraw=true;
+        QValueList<double>::iterator row = m_rowPositions.begin();
+        while(row != m_rowPositions.end()) {
+            (*row)= (*row)+dy;
+            row++;
+        }
     }
-    m_doc->updateAllFrames();
+    if(!(dx > -0.001 && dx < 0.001)) {
+        redraw=true;
+        QValueList<double>::iterator col = m_colPositions.begin();
+        while(col != m_colPositions.end()) {
+            (*col)= (*col)+dx;
+            col++;
+        }
+    }
 
-/* leads to resizing while formatting, for inline tables, which qrt doesn't support
-    recalcCols();
-    recalcRows();
-    */
+    if(redraw) {
+        Cell *cell;
+        for(cell=m_cells.first();cell;cell=m_cells.next())
+            position(cell);
+
+        m_doc->updateAllFrames();
+    }
 }
-
-/*void KWTableFrameSet::drawAllRects( QPainter &p, int xOffset, int yOffset )
-{
-    KWFrame *frame;
-
-    for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
-        frame = m_cells.at( i )->getFrame( 0 );
-        QRect tmpRect(frame->x() - xOffset,  frame->y() - yOffset, frame->width(), frame->height());
-        p.drawRect( m_doc->zoomRect(tmpRect) );
-    }
-}*/
-
 
 void KWTableFrameSet::deselectAll()
 {
@@ -997,18 +951,16 @@ void KWTableFrameSet::deleteCol( unsigned int col )
             if(cell->m_cols == 1) { // lets remove it
                 frames.remove( cell->getFrame(0) );
                 cell->delFrame( cell->getFrame(0));
-                //m_cells.remove(  i);
                 m_cells.take(i);
                 i--;
             } else { // make cell span colspan less cols
                 cell->m_cols -= colspan;
-                cell->getFrame(0)->setWidth(
-                        cell->getFrame(0)->width() - width - (colspan-1) * tableCellSpacing);
+                position(cell);
             }
         } else if ( cell->m_col > col ) {
             // move cells to the left
             cell->m_col -= colspan;
-            cell->getFrame(0)->moveBy( -width, 0);
+            position(cell);
         }
     }
     m_cols -= colspan;
@@ -1034,7 +986,6 @@ void KWTableFrameSet::group()
 }
 
 KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd) {
-    kdDebug()<<"colBegin :"<<colBegin<<" rowBegin :"<<rowBegin<<" colEnd :"<<colEnd<<" rowEnd :"<<rowEnd<<endl;
     Cell *firstCell = getCell(rowBegin, colBegin);
     if(colBegin==0 && rowBegin==0 && colEnd==0 && rowEnd==0)
     {
@@ -1099,11 +1050,11 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
 
     m_doc->updateAllFrames();
     m_doc->repaintAllViews();
+for(unsigned int i=0; i < m_colPositions.count() ; kdDebug() << "col " << i << ": " << m_colPositions[i++] << endl);
     return new KWJoinCellCommand( i18n("Join Cells"), this,colBegin,rowBegin, colEnd,rowEnd,listFrameSet,listCopyFrame);
 }
 
 KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row,QPtrList<KWFrameSet> listFrameSet, QPtrList<KWFrame>listFrame) {
-    //kdDebug()<<"intoRows :"<<intoRows<<" intoCols :"<< intoCols <<" _col :"<<_col<<" _row "<<_row<<" listFrameSet :"<<listFrameSet.count()<<" listFrame :"<<listFrame.count()<<endl;
     if(intoRows < 1 || intoCols < 1)
         return 0L;
 
@@ -1119,29 +1070,42 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             return 0L;
     }
 
-
     Cell *cell=getCell(row,col);
-    KWFrame *firstFrame = cell->getFrame(0);
-    // unselect frame.
-    firstFrame->setSelected(false);
-    firstFrame->removeResizeHandles();
-
-    double height = (firstFrame->height() -  tableCellSpacing * (intoRows-1)) / intoRows ;
-    double width = (firstFrame->width() -  tableCellSpacing * (intoCols-1))/ intoCols  ;
-    double extraHeight = 0;
-
-    // will it fit?
-    if(width < minFrameWidth) return 0L;
-    if(height < minFrameHeight) {
-        extraHeight = minFrameHeight * intoRows - firstFrame->height();
-        height = minFrameHeight;
-    }
-
-    firstFrame->setWidth(width);
-    firstFrame->setHeight(height);
-
     int rowsDiff = intoRows-cell->m_rows;
     int colsDiff = ((int) intoCols)-cell->m_cols;
+
+    if(rowsDiff >0) {
+        unsigned int adjustment=0;
+        QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+        while(pageBound != m_pageBoundaries.end() && (*pageBound) <= row) {
+            adjustment++;
+            pageBound++;
+        }
+        double height = (m_rowPositions[row+adjustment+1] - m_rowPositions[row+adjustment])/intoRows;
+
+        QValueList<double>::iterator iRow = m_rowPositions.at(adjustment+row);
+        for (int i=0; i < rowsDiff; i++) {
+            double newPos = *iRow + height;
+            iRow++;
+            iRow=m_rowPositions.insert(iRow, newPos);
+        }
+
+//for(unsigned int i=0; i < m_rowPositions.count() ; kdDebug() << "row " << i << ": " << m_rowPositions[i++] << endl);
+    }
+    if(colsDiff >0) {
+        double width = (m_colPositions[col+1] - m_colPositions[col])/intoCols;
+
+        QValueList<double>::iterator iCol = m_colPositions.at(col);
+        for (int i=0; i < colsDiff; i++) {
+            double newPos = *iCol + width;
+            iCol++;
+            iCol=m_colPositions.insert(iCol, newPos);
+        }
+
+//for(unsigned int i=0; i < m_colPositions.count() ; kdDebug() << "col " << i << ": " << m_colPositions[i++] << endl);
+    }
+
+    KWFrame *firstFrame = cell->getFrame(0);
 
     // adjust cellspan and rowspan on other cells.
     for (unsigned int i=0; i< m_cells.count() ; i++) {
@@ -1153,17 +1117,17 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
                 theCell->m_rows+=rowsDiff;
             if(theCell->m_row > row) {
                 theCell->m_row+=rowsDiff;
-                theCell->getFrame(0)->setTop(theCell->getFrame(0)->top()+extraHeight);
-        }
+            //    theCell->getFrame(0)->setTop(theCell->getFrame(0)->top()+extraHeight);
+            }
         }
         if(colsDiff>0) {
             if(col >= theCell->m_col && col < theCell->m_col + theCell->m_cols)
                 theCell->m_cols+=colsDiff;
             if(theCell->m_col > col) theCell->m_col+=colsDiff;
         }
-        if(extraHeight != 0 && theCell->m_row == row) {
+        /*if(extraHeight != 0 && theCell->m_row == row) {
             theCell->getFrame(0)->setHeight(theCell->getFrame(0)->height()+extraHeight);
-        }
+        } */
     }
 
     // set new row and col-span. Use intermediate ints otherwise we get strange results as the
@@ -1204,9 +1168,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             if(listFrame.isEmpty())
             {
                 frame=firstFrame->getCopy();
-                frame->setRect(firstFrame->left() + static_cast<double>((width+tableCellSpacing) * x),
-                               firstFrame->top() + static_cast<double>((height+tableCellSpacing) * y),
-                               width, height);
                 frame->setRunAround( KWFrame::RA_NO );
                 frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
                 frame->setNewFrameBehaviour(KWFrame::NoFollowup);
@@ -1221,8 +1182,14 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
                 lastFrameSet->m_rows -=rowsDiff;
             if(colsDiff <0 && x==0)
                 lastFrameSet->m_cols -=colsDiff;
+
+            position(lastFrameSet);
         }
     }
+
+    position(cell, true);
+    firstFrame->setSelected(true);
+    firstFrame->createResizeHandles();
 
     finalize();
 
