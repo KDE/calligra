@@ -130,7 +130,7 @@ public:
       _outline->setCurrentPage(pg);
       _thb->setCurrentPage(pg);
   };
-  void setOn( int pg, bool on ) { };
+  void setOn( int , bool ) { };
   //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
   void updateItem( int pagenr, bool sticky = false);
   void addItem( int pos );
