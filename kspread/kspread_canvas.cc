@@ -2687,7 +2687,7 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
 
     m_pEditor->setPalette( QPalette( g, p.disabled(), g ) );
     QFont tmpFont = cell->textFont( markerColumn(), markerRow() );
-    tmpFont.setPointSizeFloat( 0.01 * table->doc()->zoom() * tmpFont.pointSizeFloat() );
+    tmpFont.setPointSizeFloat( 0.01 * doc()->zoom() * tmpFont.pointSizeFloat() );
     m_pEditor->setFont( tmpFont );
 
     KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
