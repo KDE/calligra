@@ -2461,7 +2461,7 @@ void KWGroupManager::recalcRows()
         unsigned int i = 0;
         bool _addRow = false;
 
-        if ( doc->getProcessingType() == KWordDocument::DTP ) {
+        //if ( doc->getProcessingType() == KWordDocument::DTP ) {
             // will this row fit on the page?
             if ( j > 0 && y + getFrameSet( j, i )->getFrame( 0 )->height() >
                  ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) *
@@ -2470,18 +2470,18 @@ void KWGroupManager::recalcRows()
                     doc->getPTPaperHeight() + doc->getPTTopBorder();
                 _addRow = true;
             }
-        } else {
+        /*} else {
             // will this row fit on the page?
             if ( j > 0 && static_cast<int>( y + getFrameSet( j, i )->getFrame( 0 )->height() ) >
                  static_cast<int>( ( doc->getFrameSet( 0 )->getFrame( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) *
                      doc->getColumns() )->bottom() ) ) ) {
-                if ( doc->getPages() < getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 2 )
-                    doc->appendPage( doc->getPages() - 1 ); {
+                if ( doc->getPages() < getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 2 ) {
+                    doc->appendPage( doc->getPages() - 1 );
                     _addRow = true;
                     nextY = doc->getFrameSet( 0 )->getFrame( ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) * doc->getColumns() )->y();
                 }
             }
-        }
+        }*/
 
         if ( _addRow && showHeaderOnAllPages ) {
             hasTmpHeaders = true;
@@ -2521,7 +2521,7 @@ void KWGroupManager::recalcRows()
     for ( unsigned int f = 0; f < cells.count(); f++ ) {
         c = cells.at( f );
         if ( c->frameSet->getNumFrames() > 1 ) {
-            kdDebug () << "ERROR: found more than one frameset on a tablecel !! " << endl;
+            kdDebug () << "ERROR: found more than one frame on a tablecel !! " << endl;
             while ( true ) {
                 if ( c->frameSet->getNumFrames() > 1 )
                     c->frameSet->delFrame( 1 );

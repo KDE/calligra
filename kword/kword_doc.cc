@@ -3277,9 +3277,14 @@ void KWordDocument::appendPage( unsigned int /*_page*/, bool /*redrawBackgroundW
         unsigned int numFrames=frameSet->getNumFrames();
         for (unsigned int j =0; j < numFrames; j++) {
             frame = frameSet->getFrame(j);
-            // if frame is no last page && frame may be copied to next frame.
-            if((frame->getPageNum() == thisPageNum || frame->getPageNum() == thisPageNum && frame->getSheetSide() != AnySide)  && (
-                  frame->getNewFrameBehaviour() == Copy || frame->getNewFrameBehaviour() == Reconnect)) {
+            /* copy the frame if: - it is on this page or
+                                  - it is on the former page and the frame is set to double sided.
+                                  - the frame is set to be reconnected
+                                  -  */
+            if (frame->getPageNum() == thisPageNum ||
+              (frame->getPageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide) &&
+              frame->getNewFrameBehaviour()==Reconnect  ||
+              frame->getNewFrameBehaviour()==Copy ) {
                 // make a new frame.
                 KWFrame *frm = new KWFrame(frameSet, frame->x(), frame->y() + getPTPaperHeight(), frame->width(), frame->height(), frame->getRunAround(),
                 frame->getRunAroundGap() );
