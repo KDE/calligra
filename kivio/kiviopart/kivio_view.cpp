@@ -592,7 +592,8 @@ void KivioView::hidePage()
 void KivioView::showPage()
 {
   KivioPageShow* dlg = new KivioPageShow(this,"Page show");
-  dlg->show();
+  dlg->exec();
+  delete dlg;
 }
 
 int KivioView::leftBorder() const
