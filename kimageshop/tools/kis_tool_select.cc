@@ -108,8 +108,8 @@ void SelectTool::mouseRelease( QMouseEvent* event )
         m_dragging = false;
         m_drawn = true;
         
-        QPoint zStart = zoomed(m_dragStart);
-        QPoint zEnd   = zoomed(m_dragEnd);
+        QPoint zStart = zoomed(m_dragStart, false);
+        QPoint zEnd   = zoomed(m_dragEnd, false);
                 
         /* jwc - leave selection rectange boundary on screen
         it is only drawn to canvas, not to retained imagePixmap,
@@ -161,12 +161,16 @@ void SelectTool::drawRect( const QPoint& start, const QPoint& end )
     p.begin( m_canvas );
     p.setRasterOp( Qt::NotROP );
 
+    float zF = m_view->zoomFactor();
+    
     //p.drawRect( QRect( start, end ) );
     /* adjust for scroll ofset as this draws on the canvas, not on
     the image itself QRect(left, top, width, height) */
     
-    p.drawRect( QRect(start.x() + m_view->xPaintOffset() - m_view->xScrollOffset(),
-                      start.y() + m_view->yPaintOffset() - m_view->yScrollOffset(), 
+    p.drawRect( QRect(start.x() + m_view->xPaintOffset() 
+                                - (int)(zF * m_view->xScrollOffset()),
+                      start.y() + m_view->yPaintOffset() 
+                                - (int)(zF * m_view->yScrollOffset()), 
                       end.x() - start.x(), 
                       end.y() - start.y()) );
     p.end();

@@ -175,8 +175,8 @@ void BrushTool::mouseMove(QMouseEvent *e)
         int mouseY = e->y();
 
         pos = zoomed(pos);
-        mouseX = zoomed(mouseX);
-        mouseY = zoomed(mouseY);        
+        mouseX = zoomedX(mouseX);
+        mouseY = zoomedY(mouseY);        
 
         KisVector end(mouseX, mouseY);
         KisVector start(m_dragStart.x(), m_dragStart.y());

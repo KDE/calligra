@@ -60,8 +60,25 @@ int KisTool::zoomed(int n)
     return ((int)(n / m_pView->zoomFactor()));
 }
 
+// translate integer for zoom factor
+int KisTool::zoomedX(int n, bool zoomedImage)
+{
+    // current zoom factor for this view
+    float zF = m_pView->zoomFactor();
+    return ((int)(n/zF));
+}
+
+// translate integer for zoom factor
+int KisTool::zoomedY(int n, bool zoomedImage)
+{
+    // current zoom factor for this view
+    float zF = m_pView->zoomFactor();
+    return ((int)(n/zF));    
+}
+
+
 // translate point for zoom factor
-QPoint KisTool::zoomed(QPoint & point)
+QPoint KisTool::zoomed(QPoint & point, bool zoomedImage)
 {
     // current zoom factor for this view
     float zF = m_pView->zoomFactor();
@@ -72,8 +89,10 @@ QPoint KisTool::zoomed(QPoint & point)
     int startx = point.x();
     int starty = point.y();
     
-    return QPoint((int)(startx/zF), (int)(starty/zF));
+    // just dealing with canvas, no scroll accounting        
+    return QPoint((int)(startx/zF), (int)(starty/zF));    
 }
+
 
 void KisTool::mousePress(QMouseEvent*){}
 void KisTool::mouseMove(QMouseEvent*){}

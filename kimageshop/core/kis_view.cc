@@ -658,6 +658,11 @@ void KisView::resizeEvent(QResizeEvent*)
     int docH = docHeight();
     int docW = docWidth();
 
+    // adjust for zoom scaling - the higher the scaling,
+    // the larger the image in direct proportion
+    docH = (int)((zoomFactor()) * docH);
+    docW = (int)((zoomFactor()) * docW);
+    
     // scrollbar geometry
     if (docH <= drawH && docW <= drawW) // we need no scrollbars
     {
@@ -790,36 +795,35 @@ void KisView::slotDocUpdated(const QRect& rect)
 
 void KisView::canvasGotMousePressEvent( QMouseEvent *e )
 {
-  QMouseEvent ev( QEvent::MouseButtonPress
-		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
-			   e->pos().y() - yPaintOffset() + m_pVert->value())
-		  , e->globalPos(), e->button(), e->state() );
+    QMouseEvent ev( QEvent::MouseButtonPress,
+        QPoint( e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value()),
+		        e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value())), 
+        e->globalPos(), e->button(), e->state() );
 
-  emit canvasMousePressEvent( &ev );
+    emit canvasMousePressEvent( &ev );
 }
 
 
 void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
 {
-  int x = e->pos().x() - xPaintOffset() + m_pHorz->value();
-  int y = e->pos().y() - yPaintOffset() + m_pVert->value();
+    int x = e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value());
+    int y = e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value());
 
-  QMouseEvent ev( QEvent::MouseMove
-		  , QPoint(x, y)
-		  , e->globalPos(), e->button(), e->state() );
+    QMouseEvent ev( QEvent::MouseMove, QPoint(x, y), 
+        e->globalPos(), e->button(), e->state() );
 
-  emit canvasMouseMoveEvent( &ev );
+    emit canvasMouseMoveEvent( &ev );
 }
 
 
 void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
 {
-  QMouseEvent ev( QEvent::MouseButtonRelease
-		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
-			   e->pos().y() - yPaintOffset() + m_pVert->value())
-		  , e->globalPos(), e->button(), e->state() );
+    QMouseEvent ev( QEvent::MouseButtonRelease, 
+        QPoint(e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value()),
+			   e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value())),
+        e->globalPos(), e->button(), e->state() );
 
-  emit canvasMouseReleaseEvent( &ev );
+    emit canvasMouseReleaseEvent( &ev );
 }
 
 
