@@ -54,6 +54,7 @@ public:
     void save( QDomElement & element );
 
     bool operator==( const KoParagCounter & c2 ) const;
+    bool operator!=( const KoParagCounter & c2 ) const { return !(*this == c2); }
 
     enum Numbering
     {
