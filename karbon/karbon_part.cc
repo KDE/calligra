@@ -34,11 +34,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 KarbonPart::~KarbonPart()
 {
-	// delete all layers:
-	QPtrListIterator<VLayer> itr( m_layers );
-	for ( ; itr.current() ; ++itr )
-		delete( itr.current() );
-
 	// delete the command-history:
 	delete m_commandHistory;
 }
