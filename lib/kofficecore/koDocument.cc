@@ -983,17 +983,17 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         }
 
 
-        if ( store->open( "preview.png" ) )
+        if ( store->open( "Thumbnails/Thumbnail.png" ) )
         {
-            if ( !savePreview( store ) || !store->close() ) {
+            if ( !saveOasisPreview( store ) || !store->close() ) {
                 delete store;
                 return false;
             }
-            manifestWriter->addManifestEntry( "preview.png", "image/png" );
+            // No manifest entry!
         }
         else
         {
-            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "preview.png" );
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "Thumbnails/Thumbnail.png" );
             delete store;
             return false;
         }
@@ -1116,6 +1116,24 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
     kdDebug(30003) << "Saved document to store" << endl;
 
     return true;
+}
+
+bool KoDocument::saveOasisPreview( KoStore* store )
+{
+    QPixmap pix = generatePreview(QSize(128, 128));
+    QImageIO imageIO;
+    imageIO.setImage( pix.convertToImage().convertDepth(32) );
+
+    // NOTE: we cannot use QDataStream, as it is not 1:1
+    QByteArray imageData;
+    QBuffer buffer(imageData);
+    buffer.open(IO_WriteOnly);
+    imageIO.setIODevice(&buffer);
+    imageIO.setFormat("PNG");
+    imageIO.write();
+    buffer.close();
+
+    return store->write( imageData ) == (Q_LONG)imageData.size();
 }
 
 bool KoDocument::savePreview( KoStore* store )

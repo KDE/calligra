@@ -866,6 +866,7 @@ private:
     bool loadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );
     bool savePreview( KoStore* store );
+    bool saveOasisPreview( KoStore* store );
 
     class Private;
     Private *d;
