@@ -1,8 +1,9 @@
-koffice (2.1-20010106-1) unstable; urgency=low
+koffice (2.1-20010109-1) unstable; urgency=low
  
   * more upstream fixes
+  * Adding in new menu hint (Closes: #80033)
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 06 Jan 2001 20:58:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Tue, 09 Jan 200 10:30:00 -0700
 
 koffice (2.1-20010101-1) unstable; urgency=low
  

@@ -11,4 +11,5 @@ kivio: shlib-missing-in-control-file libkivioconnectortool usr/lib/libkivioconne
 kivio: unused-shlib-entry-in-control-file libkochart
 kivio: unstripped-binary-or-object ./usr/share/apps/kivio/autoloadStencils/straight_connector.ksp
 kivio: ldconfig-symlink-missing-for-shlib usr/share/apps/kivio/autoloadStencils/straight_connector.ksp libstraight_connector.so.1
+kivio: ldconfig-symlink-missing-for-shlib usr/share/apps/kivio/autoloadStencils/libstraight_connector.so.1 usr/share/apps/kivio/autoloadStencils/straight_connector.ksp libstraight_connector.so.1
 kivio: shlib-missing-in-control-file libstraight_connector usr/share/apps/kivio/autoloadStencils/straight_connector.ksp

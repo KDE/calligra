@@ -1,7 +1,7 @@
 ?package(kivio):\
 	needs=x11\
 	section=Apps/Tools\
-	hints="KDE"\
+	hints="KDE,Vector"\
 	title="Kivio"\
 	command=kivio
 
