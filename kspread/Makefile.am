@@ -63,4 +63,4 @@ kspread_part.cc: kspread_part.moc
 kspread_shell.cc: kspread_shell.moc
 kspread_tabbar.cc: kspread_tabbar.moc
 kspread_table.cc: kspread_table.moc
-kspread_view.cc: kspread_view.moc     
+kspread_view.cc: kspread_view.moc  kspread.h
