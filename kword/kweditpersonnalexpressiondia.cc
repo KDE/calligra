@@ -112,6 +112,7 @@ void KWEditPersonnalExpression::init(const QString& filename )
     if ( !file.open( IO_ReadOnly ) )
 	return;
 
+    kdDebug() << "KWEditPersonnalExpression::init parsing " << filename << endl;
     QDomDocument doc;
     doc.setContent( &file );
     file.close();
@@ -218,12 +219,13 @@ void KWEditPersonnalExpression::slotDelGroup()
         return;
     listExpression.remove( group );
     m_typeExpression->removeItem(m_typeExpression->currentItem());
-    m_typeExpression->setCurrentItem(0 );
+    bool hasItems = (m_typeExpression->count()>0);
+    if ( hasItems )
+        m_typeExpression->setCurrentItem( 0 );
     slotExpressionActivated( m_typeExpression->currentText() );
-    bool state=(m_typeExpression->count()>0);
-    m_addExpression->setEnabled(state);
-    m_delExpression->setEnabled(state);
-    m_delGroup->setEnabled(state);
+    m_addExpression->setEnabled(hasItems);
+    m_delExpression->setEnabled(hasItems);
+    m_delGroup->setEnabled(hasItems);
 
 }
 
@@ -256,7 +258,7 @@ void KWEditPersonnalExpression::saveFile()
     QCString s = doc.toCString();
 
     QFile file( locateLocal("data","kword/expression/perso.xml") );
-    if ( !file.open( IO_ReadWrite ) )
+    if ( !file.open( IO_WriteOnly ) )
     {
         kdDebug()<<"Error \n";
 	return;
