@@ -109,6 +109,7 @@ void KexiAlterTableDialog::init()
 
 	m_view = new KexiTableView(data, splitter, "tableview");
 	m_view->setNavigatorEnabled(false);
+	m_view->setSortingEnabled(false);//no, sorting is not good idea here
 	setFocusProxy(m_view);
 	
 
