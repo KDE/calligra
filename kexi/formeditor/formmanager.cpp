@@ -26,9 +26,14 @@
 #include <kiconloader.h>
 #include <kpopupmenu.h>
 #include <kstdaction.h>
-#include <kactioncollection.h>
+#include <kaction.h>
 #include <kxmlguiclient.h>
 #include <kmainwindow.h>
+
+#include <kdeversion.h> 
+#if KDE_IS_VERSION(3,1,9)
+# include <kactioncollection.h>
+#endif
 
 #include "kexipropertyeditor.h"
 #include "objpropbuffer.h"

@@ -43,13 +43,13 @@ class Form;
 class PropertyCommand : public KCommand
 {
 	public:
-		PropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value, const QString &property);
-		PropertyCommand(ObjectPropertyBuffer *buf, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QString &property);
+		PropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value, const QCString &property);
+		PropertyCommand(ObjectPropertyBuffer *buf, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QCString &property);
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
-		QString property() { return m_property; }
+		QCString property() { return m_property; }
 
 		void  setValue(const QVariant &value);
 
@@ -57,7 +57,7 @@ class PropertyCommand : public KCommand
 		ObjectPropertyBuffer *m_buffer;
 		QVariant   m_value;
 		QMap<QString, QVariant> m_oldvalues;
-		QString    m_property;
+		QCString    m_property;
 };
 
 class GeometryPropertyCommand : public KCommand

@@ -122,7 +122,7 @@ ObjectPropertyBuffer::slotResetProperty(KexiPropertyBuffer &buff, KexiProperty &
 	{
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
 		if(tree->modifProp()->contains(prop.name()))
-			w->setProperty(prop.name().latin1(), tree->modifProp()->find(prop.name()).data());
+			w->setProperty(prop.name(), tree->modifProp()->find(prop.name()).data());
 	}
 }
 
@@ -231,7 +231,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 
 	//luci, TODO change back: m_manager->editor()->clear();
 
-	QDictIterator<KexiProperty> it(*this);
+	QAsciiDictIterator<KexiProperty> it(*this);
 	for(; it.current(); ++it)
 	{
 		if(!showMultipleProperty(it.currentKey(), classn))
@@ -314,7 +314,7 @@ ObjectPropertyBuffer::checkModifiedProp()
 		if(treeIt)
 		{
 			QString name;
-			QDictIterator<KexiProperty> it(*this);
+			QAsciiDictIterator<KexiProperty> it(*this);
 			for(; it.current(); ++it)
 			{
 				name = it.current()->name();

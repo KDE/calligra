@@ -37,13 +37,13 @@ namespace KFormDesigner {
 
 // PropertyCommand
 
-PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QString &wname, const QVariant &oldValue, const QVariant &value, const QString &property)
+PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QString &wname, const QVariant &oldValue, const QVariant &value, const QCString &property)
   : KCommand(), m_buffer(buf), m_value(value), m_property(property)
 {
 	m_oldvalues.insert(wname, oldValue);
 }
 
-PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QString &property)
+PropertyCommand::PropertyCommand(ObjectPropertyBuffer *buf, const QMap<QString, QVariant> &oldvalues, const QVariant &value, const QCString &property)
   : KCommand(), m_buffer(buf), m_value(value), m_oldvalues(oldvalues), m_property(property)
 {}
 
@@ -97,7 +97,7 @@ PropertyCommand::unexecute()
 			QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key())->widget();
 			m_buffer->m_manager->activeForm()->addSelectedWidget(widg);
 			m_buffer->addWidget(widg);
-			widg->setProperty(m_property.latin1(), it.data());
+			widg->setProperty(m_property, it.data());
 		}
 	}
 }
