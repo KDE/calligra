@@ -7218,7 +7218,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
     QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
         KWFrameSet *frameSet = framesetIt.current();
-        if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() ) {
+        if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() ) {
             if ( selection && false )
                 paragraphs += frameSet->paragraphsSelected();
             else
@@ -7233,7 +7233,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection )
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
         KWFrameSet *frameSet = framesetIt.current();
         // Exclude headers and footers
-        if ( frameSet->frameSetInfo() == KWFrameSet::FI_BODY && frameSet->isVisible() ) {
+        if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() ) {
             if( ! frameSet->statistics( &progress, charsWithSpace, charsWithoutSpace,
                                         words, sentences, syllables, lines, selection ) ) {
                 // someone pressed "Cancel"
