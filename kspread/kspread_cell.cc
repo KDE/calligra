@@ -3978,7 +3978,8 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
 
       setFlag(Flag_LayoutDirty);
       setFlag(Flag_TextFormatDirty);
-      update();
+      if ( updateDepends )
+        update();
 
       return;
     }
