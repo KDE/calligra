@@ -21,21 +21,26 @@
 #include "propertyeditor.h"
 #include "property.h"
 
-Property::Property(int type, QString name, QString description, QString value):
-    m_type(type), m_name(name), m_description(description), m_value(value)
+Property::Property(int type, QString name, QString description, QString value,bool save):
+    m_type(type), m_name(name), m_description(description), m_value(value),m_save(save)
 {
 }
 
 Property::Property(QString name, std::map<QString, QString> v_correspList,
-    QString description, QString value):
+    QString description, QString value, bool save):
     m_type(ValueFromList), m_name(name), m_description(description), m_value(value),
-    correspList(v_correspList)
+    correspList(v_correspList),m_save(save)
 {
     
 }
 
 Property::~Property()
 {
+}
+
+bool Property::allowSaving()
+{
+   return m_save;
 }
 
 bool Property::operator<(const Property &prop) const

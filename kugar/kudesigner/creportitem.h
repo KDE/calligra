@@ -52,7 +52,7 @@ public:
     virtual void setSection(CanvasBand *section);
     virtual void setSectionUndestructive(CanvasBand *section);
 
-    virtual bool isInHolder(const QPoint p);
+    virtual int isInHolder(const QPoint p);
     virtual void drawHolders(QPainter &painter);
 
 protected:

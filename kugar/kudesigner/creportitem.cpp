@@ -97,6 +97,7 @@ QString CanvasReportItem::getXml()
     for (it = props.begin(); it != props.end(); ++it)
     {
         if (it->first.isNull()) continue;
+	if (!it->second->allowSaving()) continue;
         if (!(i%3)) result += "\n\t\t  ";
         result += " " + it->first + "=" + "\"" + it->second->value() + "\"";
         i++;
@@ -104,18 +105,18 @@ QString CanvasReportItem::getXml()
     return result;
 }
 
-bool CanvasReportItem::isInHolder(const QPoint p)
+int CanvasReportItem::isInHolder(const QPoint p)
 {
-    if (topLeftResizableRect().contains(p) ||
-        bottomLeftResizableRect().contains(p) ||
-        topRightResizableRect().contains(p) ||
-        bottomRightResizableRect().contains(p) ||
-        topMiddleResizableRect().contains(p) ||
-        bottomMiddleResizableRect().contains(p) ||
-        leftMiddleResizableRect().contains(p) ||
-        rightMiddleResizableRect().contains(p))
-        return true;
-    return false;
+    if (topLeftResizableRect().contains(p)) return (ResizeTop | ResizeLeft);
+    if (bottomLeftResizableRect().contains(p)) return (ResizeBottom | ResizeLeft);
+    if (leftMiddleResizableRect().contains(p)) return (ResizeLeft);
+    if (bottomMiddleResizableRect().contains(p)) return (ResizeBottom);
+    if (topMiddleResizableRect().contains(p)) return (ResizeTop);
+    if (topRightResizableRect().contains(p)) return (ResizeTop | ResizeRight);
+    if (bottomRightResizableRect().contains(p)) return (ResizeBottom | ResizeRight);
+    if (rightMiddleResizableRect().contains(p)) return (ResizeRight);
+
+    return ResizeNothing;
 }
 
 void CanvasReportItem::drawHolders(QPainter &painter)

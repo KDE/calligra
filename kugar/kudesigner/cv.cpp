@@ -245,8 +245,10 @@ void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
             moving_start = p;
             moving_offsetX=0;
 	    moving_offsetY=0;
-            if (item->bottomRightResizableRect().contains(e->pos()))
+            resizing_type=item->isInHolder(p);
+            if (resizing_type)
             {
+		kdDebug()<<"A Widget should be resized"<<endl;
                 moving = 0;
                 resizing = item;
                 return;
@@ -444,19 +446,66 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     if (resizing)
     {
         QCanvasRectangle *r = (QCanvasRectangle *)resizing;
-        double w = r->width() + p.x() - moving_start.x();
-        double h = r->height() + p.y() - moving_start.y();
+//        double w = r->width() + p.x() - moving_start.x();
+//        double h = r->height() + p.y() - moving_start.y();
+/*
 	if (resizing->rtti() !=KuDesignerRttiCanvasLine)
 	{
 		fixMinValues(h,10,moving_offsetY);
 		fixMinValues(w,10,moving_offsetX);
+	} */
+
+
+	double newXPos=r->x();
+	double newYPos=r->y();
+	double h=r->height();
+	double w=r->width();
+	kdDebug()<<"resizing"<<endl;
+
+//vertical resizing
+	if (resizing_type & CanvasBox::ResizeBottom)
+	{
+		kdDebug()<<"Resize bottom"<<endl;
+		h = h + p.y() - moving_start.y();
+		fixMaxValues(h,r->y(),resizing->parentSection->y()+resizing->parentSection->height(),moving_offsetY);
+		if(resizing->rtti() != KuDesignerRttiCanvasLine)
+			fixMinValues(h,10,moving_offsetY);
 	}
+	else
+		if (resizing_type & CanvasBox::ResizeTop)
+		{
+			kdDebug()<<"Resize top"<<endl;
+			newYPos=r->y()+p.y()-moving_start.y();
+			fixMinValues(newYPos,resizing->parentSection->y(),moving_offsetY);
+			if(resizing->rtti() != KuDesignerRttiCanvasLine)
+				fixMaxValues(newYPos,10,r->y()+r->height(),moving_offsetY);
+			h=h+(r->y()-newYPos);
+		}
 
-	fixMaxValues(h,resizing->y(),resizing->parentSection->y()+resizing->parentSection->height(),moving_offsetY);
-	fixMaxValues(w,resizing->x(),resizing->parentSection->x()+resizing->parentSection->width(),moving_offsetX);
 
-//        if (((w > 10) && (h > 10)) || (resizing->rtti() == KuDesignerRttiCanvasLine))
-            r->setSize(w, h);
+//horizontal resizing	
+	if (resizing_type & CanvasBox::ResizeRight)
+	{
+		kdDebug()<<"Resize right"<<endl;
+        	w = w + p.x() - moving_start.x();
+		fixMaxValues(w,r->x(),resizing->parentSection->x()+resizing->parentSection->width(),moving_offsetX);
+		if(resizing->rtti() != KuDesignerRttiCanvasLine)
+			fixMinValues(w,10,moving_offsetX);
+
+	}
+	else
+		if (resizing_type & CanvasBox::ResizeLeft)
+		{
+			kdDebug()<<"Resize left"<<endl;
+			newXPos=r->x()+p.x()-moving_start.x();
+			fixMinValues(newXPos,resizing->parentSection->x(),moving_offsetX);
+			if(resizing->rtti() != KuDesignerRttiCanvasLine)
+				fixMaxValues(newXPos,10,r->x()+r->width(),moving_offsetX);
+			w=w+(r->x()-newXPos);
+		}
+
+	r->move(newXPos,newYPos);            
+	r->setSize(w, h);
         moving_start = p;
         resizing->updateGeomProps();
         canvas()->update();

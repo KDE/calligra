@@ -72,9 +72,9 @@ enum PropertyType {
 class Property {
 public:
     Property() {}
-    Property(int type, QString name, QString description="", QString value=QString::null);
+    Property(int type, QString name, QString description="", QString value=QString::null, bool save=true);
     Property(QString name, std::map<QString, QString> v_correspList,
-        QString description="", QString value=QString::null);
+        QString description="", QString value=QString::null,bool save=true);
     virtual ~Property();
 
     bool operator<(const Property &prop) const;
@@ -92,12 +92,13 @@ public:
     std::map<QString, QString> correspList;    
     
     virtual QWidget *editorOfType(PropertyEditor *editor,const CanvasBox *item);
-
+    bool allowSaving();
 protected:
     int m_type;
     QString m_name;
     QString m_description;
     QString m_value;
+    bool m_save;
 };
 
 /** Master (accordind to Jeff Alger) pointer to Property */

@@ -46,7 +46,8 @@ public:
     void scale(int scale);
     virtual QString getXml() { return ""; }
 
-    virtual bool isInHolder(const QPoint ) {return true;}
+    enum ResizeEnum {ResizeNothing=0,ResizeLeft=1,ResizeTop=2,ResizeRight=4,ResizeBottom=8};
+    virtual int isInHolder(const QPoint ) {return ResizeNothing;}
     virtual void drawHolders(QPainter &) {}
 
     /**

@@ -80,6 +80,7 @@ private:
     QPoint moving_start;
     double moving_offsetY;
     double moving_offsetX;
+    int resizing_type;
     CanvasReportItem *resizing;
     bool selectionStarted;
     KuDesignerPlugin *m_plugin;

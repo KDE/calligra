@@ -259,6 +259,7 @@ QString CanvasKugarTemplate::getXml()
     for (std::map<QString, PropPtr >::const_iterator it = props.begin();
         it != props.end(); it++ )
     {
+	if (it->second->allowSaving())
         result += " " + it->first + "=" + "\"" + it->second->value() + "\"";
     }
     result += ">\n";
@@ -266,6 +267,7 @@ QString CanvasKugarTemplate::getXml()
     if (reportHeader)
         result += reportHeader->getXml();
     if (pageHeader)
+
         result += pageHeader->getXml();
 
     std::map<int, DetailBand>::const_iterator it;
@@ -359,6 +361,7 @@ QString CanvasBand::getXml()
     std::map<QString, PropPtr >::const_iterator it;
     for (it = props.begin(); it != props.end(); ++it)
     {
+	if (it->second->allowSaving())
         result += " " + it->first + "=" + "\"" + it->second->value() + "\"";
     }
     result += ">\n";
