@@ -19,6 +19,7 @@
 
 #include "workbook.h"
 #include "sheet.h"
+#include "excel.h"
 
 #include <iostream>
 #include <vector>
@@ -52,6 +53,19 @@ void Workbook::clear()
     delete s;
     }
   d->sheets.clear();
+}
+
+bool Workbook::load( const char* filename )
+{
+  ExcelReader* reader = new ExcelReader;
+  bool result = reader->load( this, filename );
+  delete reader;
+  return result;
+}
+
+bool Workbook::save( const char* filename )
+{
+  return true;
 }
 
 void Workbook::appendSheet( Sheet* sheet )

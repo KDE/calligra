@@ -26,9 +26,7 @@
 #endif
 
 
-
 #define USTRING_SIMPLIFIED
-
 
 #ifdef USTRING_SIMPLIFIED
 #include <string.h>
@@ -120,7 +118,7 @@ bool Swinder::isPosInf(double d)
 #endif
 
 #ifdef USTRING_SIMPLIFIED
-bool Swinder::isNegInf(double d) 
+bool Swinder::isNegInf(double)
 {
   return false;
 }

@@ -24,7 +24,6 @@
 #include <iostream>
 
 #include "swinder.h"
-#include "io.h"
 
 namespace Swinder
 {
@@ -297,6 +296,8 @@ private:
 };
 
 /**
+  \brief Backup upon save.
+  
   Class BackupRecord represents Backup record, which determines whether 
   Microsoft Excel makes a backup of the file while saving.
  */
@@ -350,6 +351,8 @@ private:
 
 
 /**
+  \brief Beginning of file/set of records.
+  
   Class BOFRecord represents BOF (Beginning of File) record, which
   is used to mark beginning of a set of records (following the BOF record).
   For each BOF record, there should also be one corresponding EOF record.
@@ -376,7 +379,7 @@ public:
   /**
     Supported BOF type.
   */
-  enum { UnknownType = 0, Workbook, Worksheet, Chart, VBModule };
+  enum { UnknownType = 0, Workbook, Worksheet, Chart, VBModule, MacroSheet, Workspace };
 
   /**
    * Creates a new BOF record.
@@ -427,6 +430,8 @@ private:
 };
 
 /**
+  \brief Blank cell.
+  
   Class BlankRecord represents a blank cell. It contains information
   about cell address and formatting.
  */
@@ -458,6 +463,8 @@ private:
 };
 
 /**
+  \brief Boolean value or error code.
+  
   Class BOFRecord represents BoolErr record, which
   is used to store boolean value or error code of a cell.
  */
@@ -537,8 +544,10 @@ private:
 };
 
 /**
-  Class BottomMarginRecord holds information about bottom margin.
+  \brief Bottom margin.
   
+  Class BottomMarginRecord holds information about bottom margin 
+  (in inches).
  */
 class BottomMarginRecord : public Record
 {
@@ -585,6 +594,8 @@ private:
 };
 
 /**
+  \brief Sheet information.
+  
   Class BoundSheetRecord represents BoundSheet record, which defines a sheet
   within the workbook. There must be exactly one BoundSheet record for 
   each sheet.
@@ -687,6 +698,8 @@ private:
 };
 
 /**
+  \brief Automatic recalculation mode.
+  
   Class CalcModeRecord represents CalcMode record, which specifies whether 
   to (re)calculate formulas manually or automatically.
  */
@@ -740,6 +753,8 @@ private:
 };
 
 /**
+  \brief Columns width and format.
+  
   Class ColInfoRecord represents ColInfo record, which provides information
   (such as column width and formatting) for a span of columns.
  */
@@ -855,6 +870,8 @@ private:
 };
 
 /**
+  \brief Date reference.
+  
   Class DateModeRecord represents DateMode record, which specifies
   reference date for displaying date value of given serial number.
   If base1904 is true, the reference date is 1st of January, 1904 (in which
@@ -914,8 +931,10 @@ private:
 };
 
 /**
-  Class EOFRecord represents Dimension record, which contains the range address 
-  of the used area in the current sheet.
+  \brief Range of used area.
+  
+  Class DimensionRecord represents Dimension record, which contains the 
+  range address of the used area in the current sheet.
  */
 class DimensionRecord : public Record
 {
@@ -1009,6 +1028,8 @@ private:
 };
 
 /**
+  \brief End of record set.
+  
   Class EOFRecord represents EOF record, which marks the end of records
   for a specific object. EOF record should be always in pair with BOF Record.
 
@@ -1048,6 +1069,8 @@ private:
 };
 
 /**
+  \brief Font information.
+  
   Class FontRecord represents Font record, which has the information
   about specific font used in the document. Several Font records creates
   a font table, whose index will be referred in XFormat records.
@@ -1098,8 +1121,8 @@ public:
     None = 0, 
     Single = 1, 
     Double = 2, 
-    SingleAccounting = 3, 
-    DoubleAccounting = 4 };
+    SingleAccounting = 0x21, 
+    DoubleAccounting = 0x22 };
   
   unsigned height() const;
   void setHeight( unsigned h );
@@ -1188,17 +1211,17 @@ public:
    * Returns Font::Superscript if superscript is set, or Font::Subscript
    * if subscript is set, or Font::Normal in other case.
    *
-   * \sa setScript
+   * \sa setEscapement
    */
-  unsigned script() const;
+  unsigned escapement() const;
   
   /**
    * Sets the superscript or subscript. If s is Font::Superscript, then
    * superscript is set. If s is Font::Subscript, then subscript is set.
    *
-   * \sa script
+   * \sa escapement
    */
-  void setScript( unsigned s );
+  void setEscapement( unsigned s );
   
   /**
    * Returns the underline style of the font. Possible values are
@@ -1230,7 +1253,9 @@ private:
 };
 
 /**
-  Class FooterRecord holds information about sheet header.
+  \brief Sheet footer.
+  
+  Class FooterRecord holds information about sheet footer.
   
  */
 class FooterRecord : public Record
@@ -1244,7 +1269,7 @@ public:
   }
 
   /**
-   * Creates a new Header record.
+   * Creates a new Footer record.
    */
   FooterRecord();
   
@@ -1279,6 +1304,8 @@ private:
 };
 
 /**
+  \brief Number formatting string.
+  
   Class FormatRecord contains information about a number format. 
   All Format records occur together in a sequential list.
   An XFRecord might refer to the specific Format record using
@@ -1352,12 +1379,16 @@ public:
   
   virtual void setData( unsigned size, const unsigned char* data );
 
+  virtual void dump( std::ostream& out ) const;
+
 private:
    class Private;
    Private *d;
 };
 
 /**
+  \brief Formula.
+  
   Class FormulaRecord holds Formula record.
   
  */
@@ -1372,7 +1403,7 @@ public:
   }
 
   /**
-   * Creates a new Header record.
+   * Creates a new formula record.
    */
   FormulaRecord();
   
@@ -1407,9 +1438,11 @@ private:
 };
 
 /**
-  Class HeaderRecord holds information about sheet header.
+  \brief Sheet header.
   
+  Class HeaderRecord holds information about sheet header.  
  */
+
 class HeaderRecord : public Record
 {
 public:
@@ -2805,16 +2838,17 @@ private:
 };
 
 
-class ExcelReader: public Reader
+class ExcelReader
 {
 public:
   ExcelReader();
   virtual ~ExcelReader();
-  virtual Workbook* load( const char* filename );
+  bool load( Workbook* workbook, const char* filename );
+  
+protected:  
   virtual void handleRecord( Record* record );
     
-private:
-  
+private:  
   void handleBoundSheet( BoundSheetRecord* record );
   void handleBOF( BOFRecord* record );
   void handleBoolErr( BoolErrRecord* record );

@@ -1,5 +1,5 @@
 /* Swinder - Portable library for spreadsheet
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "excel.h"
 
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <sstream>
 #include <string>
@@ -28,7 +29,6 @@
 
 #include "pole.h"
 #include "swinder.h"
-#include "io.h"
 
 using namespace Swinder;
 
@@ -48,32 +48,33 @@ static inline unsigned long readU32( const void* p )
 }
 
 typedef double& data_64;
-inline void convert_64 (data_64 convert){
-	register unsigned char temp;
-	register unsigned int u_int_temp;
-	temp = ((unsigned char*)&convert)[0];
-	((unsigned char*)&convert)[0] = ((unsigned char*)&convert)[3];
-	((unsigned char*)&convert)[3] = temp;
-	temp = ((unsigned char*)&convert)[1];
-	((unsigned char*)&convert)[1] = ((unsigned char*)&convert)[2];
-	((unsigned char*)&convert)[2] = temp;
-	temp = ((unsigned char*)&convert)[4];
-	((unsigned char*)&convert)[4] = ((unsigned char*)&convert)[7];
-	((unsigned char*)&convert)[7] = temp;
-	temp = ((unsigned char*)&convert)[5];
-	((unsigned char*)&convert)[5] = ((unsigned char*)&convert)[6];
-	((unsigned char*)&convert)[6] = temp;
-        
-        u_int_temp = ((unsigned int *)&convert)[0];
-	((unsigned int *)&convert)[0] = ((unsigned int *)&convert)[1];
-	((unsigned int *)&convert)[1] = u_int_temp;
+inline void convert_64 (data_64 convert)
+{
+  register unsigned char temp;
+  register unsigned int u_int_temp;
+  temp = ((unsigned char*)&convert)[0];
+  ((unsigned char*)&convert)[0] = ((unsigned char*)&convert)[3];
+  ((unsigned char*)&convert)[3] = temp;
+  temp = ((unsigned char*)&convert)[1];
+  ((unsigned char*)&convert)[1] = ((unsigned char*)&convert)[2];
+  ((unsigned char*)&convert)[2] = temp;
+  temp = ((unsigned char*)&convert)[4];
+  ((unsigned char*)&convert)[4] = ((unsigned char*)&convert)[7];
+  ((unsigned char*)&convert)[7] = temp;
+  temp = ((unsigned char*)&convert)[5];
+  ((unsigned char*)&convert)[5] = ((unsigned char*)&convert)[6];
+  ((unsigned char*)&convert)[6] = temp;
+       
+  u_int_temp = ((unsigned int *)&convert)[0];
+  ((unsigned int *)&convert)[0] = ((unsigned int *)&convert)[1];
+  ((unsigned int *)&convert)[1] = u_int_temp;
 }
 
 inline bool isLittleEndian(void)
 {
-        long i = 0x44332211;
-        unsigned char* a = (unsigned char*) &i;
-        return ( *a == 0x11 );
+  long i = 0x44332211;
+  unsigned char* a = (unsigned char*) &i;
+  return ( *a == 0x11 );
 };
 
 
@@ -83,10 +84,10 @@ static inline double readFloat64( const void*p )
   const double* ptr = (const double*) p;
   double num = 0.0;
   num = *ptr;
-  
+ 
   if( !isLittleEndian() )
     convert_64( num );
-  
+    
   return num;
 }
 
@@ -104,6 +105,7 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
   }
   else
   {
+    // FIXME litte vs big endian ?
     // TODO ensure double takes 8 bytes
     isInteger = false;
     unsigned char* s = (unsigned char*) &rkvalue;
@@ -113,13 +115,13 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
       r[0] = r[1] = r[2] = r[3] = 0;
       r[4] = s[0] & 0xfc;
       r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
-    }  
-    else 
-    {
+    }
+    else
+    {    
       r[0] = r[1] = r[2] = r[3] = 0;
       r[4] = s[0] & 0xfc;
       r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
-    }
+    }  
     memcpy( &f, r, 8 );
     f *= factor;
   }
@@ -637,8 +639,35 @@ void BackupRecord::setData( unsigned size, const unsigned char* data )
 void BackupRecord::dump( std::ostream& out ) const
 {
   out << "BACKUP" << std::endl;
-  out << " Backup on save : " << (backup() ? "Yes" : "No") << std::endl;
+  out << "     Backup on save : " << (backup() ? "Yes" : "No") << std::endl;
 }
+
+// ========== BLANK ========== 
+
+const unsigned int BlankRecord::id = 0x0201;
+
+BlankRecord::BlankRecord():
+  Record(), CellInfo()
+{
+}
+
+void BlankRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 6 ) return;
+
+  setRow( readU16( data ) );
+  setColumn( readU16( data+2 ) );
+  setXfIndex( readU16( data+4 ) );
+}
+
+void BlankRecord::dump( std::ostream& out ) const
+{
+  out << "BLANK" << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "             Column : " << column() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+}
+
 
 // ========== BOF ========== 
 
@@ -722,10 +751,12 @@ unsigned BOFRecord::type() const
   unsigned result = UnknownType;
   switch( d->type )
   {
-    case 0x05  : result = Workbook; break;
-    case 0x06  : result = VBModule; break;
-    case 0x10  : result = Worksheet; break;
-    case 0x20  : result = Chart; break;
+    case 0x005  : result = Workbook; break;
+    case 0x006  : result = VBModule; break;
+    case 0x010  : result = Worksheet; break;
+    case 0x020  : result = Chart; break;
+    case 0x040  : result = MacroSheet; break;
+    case 0x100  : result = Workspace; break;
     default: break;
   }
   return result;
@@ -736,10 +767,12 @@ const char* BOFRecord::typeAsString() const
   const char *result = "Unknown";
   switch( type() )
   {
-    case Workbook  : result = "Workbook"; break;
-    case Worksheet : result = "Worksheet"; break;
-    case Chart     : result = "Chart"; break;
-    case VBModule  : result = "Visual Basic Module"; break;
+    case Workbook   : result = "Workbook"; break;
+    case VBModule   : result = "Visual Basic Module"; break;
+    case Worksheet  : result = "Worksheet"; break;
+    case Chart      : result = "Chart"; break;
+    case MacroSheet : result = "Macro Sheet"; break;
+    case Workspace  : result = "Workspace File"; break;
     default: break;
   }
   return result;
@@ -748,38 +781,13 @@ const char* BOFRecord::typeAsString() const
 void BOFRecord::dump( std::ostream& out ) const
 {
   out << "BOF" << std::endl;
-  out << "  Version : " << std::hex << d->version << " (" << versionAsString() << ")" << std::endl;
-  out << "     Type : " << d->type << " (" << typeAsString() << ")" << std::endl;
-  out << "    Build : " << d->build << std::endl;
-  out << "     Year : " << d->year << std::endl;
-  out << "  History : " << d->history << std::endl;
-  out << " RVersion : " << d->rversion << std::endl;
-}
-
-// ========== BLANK ========== 
-
-const unsigned int BlankRecord::id = 0x0201;
-
-BlankRecord::BlankRecord():
-  Record(), CellInfo()
-{
-}
-
-void BlankRecord::setData( unsigned size, const unsigned char* data )
-{
-  if( size < 6 ) return;
-
-  setRow( readU16( data ) );
-  setColumn( readU16( data+2 ) );
-  setXfIndex( readU16( data+4 ) );
-}
-
-void BlankRecord::dump( std::ostream& out ) const
-{
-  out << "BLANK" << std::endl;
-  out << "      Row : " << row() << std::endl;
-  out << "   Column : " << column() << std::endl;
-  out << " XF Index : " << xfIndex() << std::endl;
+  out << "            Version : " << std::hex << d->version << " (0x" << versionAsString() << ")" << std::endl;
+  out << "               Type : 0x" << d->type << " (" << typeAsString() << ")" << std::endl;
+  out << "              Build : 0x" << d->build << std::endl;
+  out << "               Year : " << std::dec << d->year << std::endl;
+  out << "            History : 0x" << std::hex << d->history << std::endl;
+  out << "           RVersion : 0x" << d->rversion << std::endl;
+  out << std::dec;
 }
 
 // ========== BOOLERR ==========
@@ -886,19 +894,19 @@ const char* BoolErrRecord::errorCodeAsString() const
 void BoolErrRecord::dump( std::ostream& out ) const
 {
   out << "BOOLERR" << std::endl;
-  out << "   Column : " << column() << std::endl;
-  out << "      Row : " << row() << std::endl;
-  out << "  XFIndex : " << xfIndex() << std::endl;
+  out << "             Column : " << column() << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "            XFIndex : " << xfIndex() << std::endl;
   if( isBool() )
   {
-    out << "     Type : Bool" << std::endl;
+    out << "               Type : Bool" << std::endl;
     std::string val = value() ? "True" : "False";
-    out << "    Value : " << val << std::endl;
+    out << "              Value : " << val << std::endl;
   }
   if( isError() )
   {
-    out << "     Type : Error" << std::endl;
-    out << "ErrorCode : " << std::hex << d->errorCode << " ";
+    out << "               Type : Error" << std::endl;
+    out << "          ErrorCode : " << std::hex << d->errorCode << " ";
     out << errorCodeAsString() << std::endl;
   }
 }
@@ -944,7 +952,7 @@ void BottomMarginRecord::setData( unsigned size, const unsigned char* data )
 void BottomMarginRecord::dump( std::ostream& out ) const
 {
   out << "BOTTOMMARGIN" << std::endl;
-  out << "   Margin : " << bottomMargin() << std::endl;
+  out << "      Bottom Margin : " << bottomMargin() << " inches" << std::endl;
 }
 
 
@@ -1066,14 +1074,14 @@ void BoundSheetRecord::setData( unsigned size, const unsigned char* data )
 void BoundSheetRecord::dump( std::ostream& out ) const
 {
   out << "BOUNDSHEET" << std::endl;
-  out << "       Name : " << d->name.ascii() << std::endl;
-  out << "       Type : " << d->type << " (" << typeAsString() << ")" << std::endl;
-  out << " Visibility : " << d->visibility << " (";
+  out << "               Name : " << d->name.ascii() << std::endl;
+  out << "               Type : " << d->type << " (" << typeAsString() << ")" << std::endl;
+  out << "         Visibility : " << d->visibility << " (";
   if( visible() ) out << "Visible"; else out << "Hidden"; out << ")" << std::endl;
-  out << "    BOF pos : " << d->bofPosition << std::endl;
+  out << "            BOF pos : " << d->bofPosition << std::endl;
 }
 
-// ========== BACKUP ========== 
+// ========== CALCMODE ========== 
 
 const unsigned int CalcModeRecord::id = 0x000d;
 
@@ -1116,7 +1124,7 @@ void CalcModeRecord::setData( unsigned size, const unsigned char* data )
 void CalcModeRecord::dump( std::ostream& out ) const
 {
   out << "CALCMODE" << std::endl;
-  out << " Auto Calc : " << (autoCalc() ? "Yes" : "No") << std::endl;
+  out << "          Auto Calc : " << (autoCalc() ? "Yes" : "No") << std::endl;
 }
 
 // ========== COLINFO ==========
@@ -1218,13 +1226,13 @@ void ColInfoRecord::setData( unsigned size, const unsigned char* data )
 void ColInfoRecord::dump( std::ostream& out ) const
 {
   out << "COLINFO" << std::endl;
-  out << "  First Column : " << firstColumn() << std::endl;
-  out << "   Last Column : " << lastColumn() << std::endl;
-  out << "         Width : " << width() << std::endl;
-  out << "      XF Index : " << xfIndex() << std::endl;
-  out << "        Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
-  out << "     Collapsed : " << ( collapsed() ? "Yes" : "No" ) << std::endl;
-  out << " Outline Level : " << outlineLevel() << std::endl;  
+  out << "       First Column : " << firstColumn() << std::endl;
+  out << "        Last Column : " << lastColumn() << std::endl;
+  out << "              Width : " << width() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+  out << "             Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
+  out << "          Collapsed : " << ( collapsed() ? "Yes" : "No" ) << std::endl;
+  out << "      Outline Level : " << outlineLevel() << std::endl;  
 }
 
 // ========== DATEMODE ========== 
@@ -1270,7 +1278,7 @@ void DateModeRecord::setData( unsigned size, const unsigned char* data )
 void DateModeRecord::dump( std::ostream& out ) const
 {
   out << "DATEMODE" << std::endl;
-  out << " 1904 base : " << (base1904() ? "Yes" : "No") << std::endl;
+  out << "          1904 base : " << (base1904() ? "Yes" : "No") << std::endl;
 }
 
 
@@ -1355,10 +1363,10 @@ void DimensionRecord::setData( unsigned size, const unsigned char* data )
 void DimensionRecord::dump( std::ostream& out ) const
 {
   out << "DIMENSION" << std::endl;
-  out << "    First Row : " << firstRow() << std::endl;
-  out << "     Last Row : " << lastRow() << std::endl;
-  out << " First Column : " << firstColumn() << std::endl;
-  out << "  Last Column : " << lastColumn() << std::endl;
+  out << "          First Row : " << firstRow() << std::endl;
+  out << "           Last Row : " << lastRow() << std::endl;
+  out << "       First Column : " << firstColumn() << std::endl;
+  out << "        Last Column : " << lastColumn() << std::endl;
 }
 
 // ========== EOF ========== 
@@ -1374,7 +1382,7 @@ EOFRecord::~EOFRecord()
 {
 }
 
-void EOFRecord::setData( unsigned /* size */, const unsigned char* /* data */ )
+void EOFRecord::setData( unsigned,  const unsigned char* )
 {
   // no data associated with EOF record
 }
@@ -1399,7 +1407,7 @@ public:
   unsigned boldness;
   bool italic;
   bool strikeout;
-  unsigned script;
+  unsigned escapement;
   unsigned underline;
 };
 
@@ -1414,7 +1422,7 @@ FontRecord::FontRecord():  Record()
   d->boldness     = 400;
   d->italic       = false;
   d->strikeout    = false;
-  d->script       = Normal;
+  d->escapement   = Normal;
   d->underline    = None;
 }
 
@@ -1438,7 +1446,7 @@ FontRecord& FontRecord::operator=( const FontRecord& ef )
   d->boldness     = ef.boldness();
   d->italic       = ef.italic();
   d->strikeout    = ef.strikeout();
-  d->script       = ef.script();
+  d->escapement   = ef.escapement();
   d->underline    = ef.underline();
   d->colorIndex   = ef.colorIndex();
   return *this;
@@ -1524,14 +1532,14 @@ void FontRecord::setStrikeout( bool s )
   d->strikeout = s;
 }
 
-unsigned FontRecord::script() const
+unsigned FontRecord::escapement() const
 {
-  return d->script;
+  return d->escapement;
 }
 
-void FontRecord::setScript( unsigned s )
+void FontRecord::setEscapement( unsigned s )
 {
-  d->script = s;
+  d->escapement = s;
 }
 
 unsigned FontRecord::underline() const
@@ -1558,7 +1566,7 @@ void FontRecord::setData( unsigned size, const unsigned char* data )
   setColorIndex( readU16( data+4 ) );
   
   setBoldness( readU16( data+6 ) );
-  setScript( readU16( data+8 ) );
+  setEscapement( readU16( data+8 ) );
   setUnderline( data[10] );
   
   setFontFamily( data[11] );
@@ -1574,8 +1582,20 @@ void FontRecord::setData( unsigned size, const unsigned char* data )
 void FontRecord::dump( std::ostream& out ) const
 {
   out << "FONT" << std::endl;
-  out << "  Height : " << height() << std::endl;
-  out << " Font Name: " << fontName().ascii() << std::endl;
+  out << "             Height : " << height() << " twips" << std::endl;
+  out << "          Font Name : " << fontName().ascii() << std::endl;
+  out << "        Color Index : " << colorIndex() << std::endl;
+  out << "           Boldness : " << boldness() << std::endl;
+  out << "             Italic : " << (italic()?"Yes":"No") << std::endl;
+  out << "          Strikeout : " << (strikeout()?"Yes":"No") << std::endl;
+  out << "         Escapement : ";
+  switch( escapement() )
+  {
+    case Normal: out << "Normal" << std::endl; break;
+    case Subscript: out << "Subscript" << std::endl; break;
+    case Superscript: out << "Superscript" << std::endl; break;
+    default: out << "Unkown " << escapement() << std::endl; break;
+  };
 }
 
 // ========== FOOTER ==========
@@ -1622,7 +1642,7 @@ void FooterRecord::setData( unsigned size, const unsigned char* data )
 void FooterRecord::dump( std::ostream& out ) const
 {
   out << "FOOTER" << std::endl;
-  out << " footer: " << footer().ascii() << std::endl;
+  out << "             Footer : " << footer().ascii() << std::endl;
 }
 
 // ========== FORMAT ==========
@@ -1695,6 +1715,14 @@ void FormatRecord::setData( unsigned size, const unsigned char* data )
   setFormatString( fs );
 }
 
+void FormatRecord::dump( std::ostream& out ) const
+{
+  out << "FORMAT" << std::endl;
+  out << "             Index  : " << index() << std::endl;
+  out << "      Format String : " << formatString().ascii() << std::endl;
+}
+
+
 // ========== FORMULA ========== 
 
 const unsigned int FormulaRecord::id = 0x0006;
@@ -1733,7 +1761,6 @@ void FormulaRecord::setData( unsigned size, const unsigned char* data )
   setRow( readU16( data ) );
   setColumn( readU16( data+2 ) );
   setXfIndex( readU16( data+4 ) );
-  
 }
 
 void FormulaRecord::dump( std::ostream& out ) const
@@ -1790,10 +1817,10 @@ void LabelRecord::setData( unsigned size, const unsigned char* data )
 void LabelRecord::dump( std::ostream& out ) const
 {
   out << "LABEL" << std::endl;
-  out << "      Row : " << row() << std::endl;
-  out << "   Column : " << column() << std::endl;
-  out << " XF Index : " << xfIndex() << std::endl;
-  out << "    Label : " << label().ascii() << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "             Column : " << column() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+  out << "              Label : " << label().ascii() << std::endl;
 }
 
 // ========== HEADER ==========
@@ -1840,7 +1867,7 @@ void HeaderRecord::setData( unsigned size, const unsigned char* data )
 void HeaderRecord::dump( std::ostream& out ) const
 {
   out << "HEADER" << std::endl;
-  out << " header: " << header().ascii() << std::endl;
+  out << "              Header: " << header().ascii() << std::endl;
 }
 
 // ========== LABELSST ========== 
@@ -1884,10 +1911,10 @@ void LabelSSTRecord::setData( unsigned size, const unsigned char* data )
 void LabelSSTRecord::dump( std::ostream& out ) const
 {
   out << "LABELSST" << std::endl;
-  out << "      Row : " << row() << std::endl;
-  out << "   Column : " << column() << std::endl;
-  out << " XF Index : " << xfIndex() << std::endl;
-  out << "SST Index : " << d->sstIndex << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "             Column : " << column() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+  out << "          SST Index : " << d->sstIndex << std::endl;
 }
 
 // ========== LEFTMARGIN ========== 
@@ -1931,7 +1958,7 @@ void LeftMarginRecord::setData( unsigned size, const unsigned char* data )
 void LeftMarginRecord::dump( std::ostream& out ) const
 {
   out << "LEFTMARGIN" << std::endl;
-  out << "   Margin : " << leftMargin() << std::endl;
+  out << "        Left Margin : " << leftMargin() << " inches" << std::endl;
 }
 
 // ========== MERGEDCELLS ==========
@@ -2019,6 +2046,14 @@ void MergedCellsRecord::setData( unsigned size, const unsigned char* data )
 void MergedCellsRecord::dump( std::ostream& out ) const
 {
   out << "MERGEDCELLS" << std::endl;
+  out << "              Count : " << count() << std::endl;
+  for( unsigned c = 0; c < count(); c++ )
+  {
+    out << "     Merged Cell #" << c << " : ";
+    out << "Column " << firstColumn(c) << "-" << lastColumn(c);
+    out << "   Row " << firstRow(c) << "-" << lastRow(c);
+    out << std::endl;
+  }
 }
 
 // ========== MULBLANK ==========
@@ -2067,9 +2102,9 @@ unsigned MulBlankRecord::xfIndex( unsigned i ) const
 void MulBlankRecord::dump( std::ostream& out ) const
 {
   out << "MULBLANK" << std::endl;
-  out << "          Row : " << row() << std::endl;
-  out << " First Column : " << firstColumn() << std::endl;
-  out << "  Last Column : " << lastColumn() << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "       First Column : " << firstColumn() << std::endl;
+  out << "        Last Column : " << lastColumn() << std::endl;
 }
 
 // ========== MULRK ==========
@@ -2159,9 +2194,15 @@ void MulRKRecord::setData( unsigned size, const unsigned char* data )
 void MulRKRecord::dump( std::ostream& out ) const
 {
   out << "MULRK" << std::endl;
-  out << "          Row : " << row() << std::endl;
-  out << " First Column : " << firstColumn() << std::endl;
-  out << "  Last Column : " << lastColumn() << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "       First Column : " << firstColumn() << std::endl;
+  out << "        Last Column : " << lastColumn() << std::endl;
+  for( unsigned c = firstColumn(); c <= lastColumn(); c++ )
+  {
+    out << "          Column  " << c << " : " << asFloat( c-firstColumn() );
+    out << "  Encoded: " << std::hex << encodedRK( c-firstColumn() );
+    out << std::endl;
+  }
 }
 
 // ========== Number ========== 
@@ -2210,9 +2251,10 @@ void NumberRecord::setData( unsigned size, const unsigned char* data )
 void NumberRecord::dump( std::ostream& out ) const
 {
   out << "NUMBER" << std::endl;
-  out << "      Row : " << row() << std::endl;
-  out << " XF Index : " << xfIndex() << std::endl;
-  out << "    Value : " << number() << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "             Column : " << column() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+  out << "              Value : " << number() << std::endl;
 }
 
 // ========== PALETTE ========== 
@@ -2253,7 +2295,7 @@ void PaletteRecord::setData( unsigned size, const unsigned char* data )
   unsigned num = readU16( data );
   
   unsigned p = 2;
-  for( unsigned i = 0; i < num; i++ )
+  for( unsigned i = 0; i < num; i++, p+=3 )
   {
     unsigned red = data[ p ];
     unsigned green = data[ p+1 ];
@@ -2265,10 +2307,14 @@ void PaletteRecord::setData( unsigned size, const unsigned char* data )
 void PaletteRecord::dump( std::ostream& out ) const
 {
   out << "PALETTE" << std::endl;
+  out << "             Count : " << count() << std::endl;
   for( unsigned i = 0; i < count(); i++ )
   {
+    out << "         Color #" << std::setw(2) << i << " : ";
     Color c = color( i );
-    out << "RGB: " << c.red << " " << c.green << " " << c.blue << std::endl;
+    out << "R:" << std::setw(3) << c.red;
+    out << "   G:" << std::setw(3) << c.green;
+    out << "   B:" << std::setw(3) << c.blue << std::endl;
   }
 }
 
@@ -2313,7 +2359,7 @@ void RightMarginRecord::setData( unsigned size, const unsigned char* data )
 void RightMarginRecord::dump( std::ostream& out ) const
 {
   out << "RIGHTMARGIN" << std::endl;
-  out << "   Margin : " << rightMargin() << std::endl;
+  out << "       Right Margin : " << rightMargin() << " inches " << std::endl;
 }
 
 // ========== RK ==========
@@ -2409,10 +2455,12 @@ void RKRecord::setData( unsigned size, const unsigned char* data )
 void RKRecord::dump( std::ostream& out ) const
 {
   out << "RK" << std::endl;
-  out << "      Row : " << row() << std::endl;
-  out << "   Column : " << column() << std::endl;
-  out << " XF Index : " << xfIndex() << std::endl;
-  out << "    Value : " << asFloat() << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "             Column : " << column() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+  out << "              Value : " << asFloat() << std::endl;
+  out << "         Encoded RK : 0x" << std::hex << encodedRK() << std::endl;
+  out << std::dec;
 }
 
 // ========== Row ==========
@@ -2500,12 +2548,12 @@ void RowRecord::setData( unsigned size, const unsigned char* data )
 void RowRecord::dump( std::ostream& out ) const
 {
   out << "ROW" << std::endl;
-  out << "           Row : " << row() << std::endl;
-  out << "  First Column : " << firstColumn() << std::endl;
-  out << "   Last Column : " << lastColumn() << std::endl;
-  out << "        Height : " << height() << std::endl;
-  out << "      XF Index : " << xfIndex() << std::endl;
-  out << "        Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "       First Column : " << firstColumn() << std::endl;
+  out << "        Last Column : " << lastColumn() << std::endl;
+  out << "             Height : " << height() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+  out << "             Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
 }
 
 // ========== RSTRING ========== 
@@ -2559,10 +2607,10 @@ void RStringRecord::setData( unsigned size, const unsigned char* data )
 void RStringRecord::dump( std::ostream& out ) const
 {
   out << "RSTRING" << std::endl;
-  out << "      Row : " << row() << std::endl;
-  out << "   Column : " << column() << std::endl;
-  out << " XF Index : " << xfIndex() << std::endl;
-  out << "    Label : " << label().ascii() << std::endl;
+  out << "                Row : " << row() << std::endl;
+  out << "             Column : " << column() << std::endl;
+  out << "           XF Index : " << xfIndex() << std::endl;
+  out << "              Label : " << label().ascii() << std::endl;
 }
 
 // ========== SST ==========
@@ -2641,17 +2689,11 @@ UString SSTRecord::stringAt( unsigned index ) const
 void SSTRecord::dump( std::ostream& out ) const
 {
   out << "SST" << std::endl;
-  out << " Occurences : " << d->total << std::endl;
-  out << "      Count : " << count() << std::endl;
-  if( count() )
-  {
-    out << "    Strings : " << std::endl;
-    for( unsigned i = 0; i < count(); i++ )
-    {
-      out << "          " << i+1;
-      out << " : " << stringAt( i ).ascii() << std::endl;
-    }  
-  }
+  out << "         Occurences : " << d->total << std::endl;
+  out << "              Count : " << count() << std::endl;
+  for( unsigned i = 0; i < count(); i++ )
+    out << "         String #" << std::setw(2) << i << " : " << 
+    stringAt( i ).ascii() << std::endl;
 }
 
 // ========== TOPMARGIN ==========
@@ -2695,7 +2737,7 @@ void TopMarginRecord::setData( unsigned size, const unsigned char* data )
 void TopMarginRecord::dump( std::ostream& out ) const
 {
   out << "TOPMARGIN" << std::endl;
-  out << "   Margin : " << topMargin() << std::endl;
+  out << "         Top Margin : " << topMargin() << " inches " << std::endl;
 }
 
 // ========== XF ==========
@@ -3189,13 +3231,33 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
 void XFRecord::dump( std::ostream& out ) const
 {
   out << "XF" << std::endl;
-  out << "       Hor-Align : " << horizontalAlignmentAsString() << std::endl;
-  out << "       Ver-Align : " << verticalAlignmentAsString() << std::endl;
-  out << "       Text Wrap : " << ( textWrap() ? "yes" : "no" ) << std::endl;
-  out << "       Rotation  : " << rotationAngle() << std::endl;
-  out << " Stacked Letters : " << ( stackedLetters() ? "yes" : "no" ) << std::endl;
-  out << "   Indent Level  : " << indentLevel() << std::endl;
-  out << "  Shrink Content : " << ( shrinkContent() ? "yes" : "no" ) << std::endl;
+  out << "       Parent Style : " << parentStyle() << std::endl;
+  out << "         Font Index : " << fontIndex() << std::endl;
+  out << "       Format Index : " << formatIndex() << std::endl;
+  out << "             Locked : " << (locked()?"Yes":"No") << std::endl;
+  out << " Formula Visibility : " << (formulaHidden()?"Hidden":"Visible") << std::endl;
+  out << "   Horizontal Align : " << horizontalAlignmentAsString() << std::endl;
+  out << "     Vertical Align : " << verticalAlignmentAsString() << std::endl;
+  out << "          Text Wrap : " << ( textWrap() ? "yes" : "no" ) << std::endl;
+  out << "          Rotation  : " << rotationAngle() << std::endl;
+  out << "    Stacked Letters : " << ( stackedLetters() ? "yes" : "no" ) << std::endl;
+  out << "       Indent Level : " << indentLevel() << std::endl;
+  out << "      Shrink To Fit : " << ( shrinkContent() ? "yes" : "no" ) << std::endl;
+  out << "        Left Border : Style " << leftBorderStyle();
+  out << " Color: " << leftBorderColor() << std::endl;
+  out << "       Right Border : Style " << rightBorderStyle();
+  out << " Color: " << rightBorderColor() << std::endl;
+  out << "         Top Border : Style " << topBorderStyle();
+  out << " Color: " << topBorderColor() << std::endl;
+  out << "      Bottom Border : Style " << bottomBorderStyle();
+  out << " Color: " << bottomBorderColor() << std::endl;
+  out << "     Diagonal Lines : " ;
+  if ( diagonalTopLeft() ) out << "TopLeft ";
+  if ( diagonalBottomLeft() ) out << "BottomLeft ";
+  out << "Style " << diagonalStyle() << " Color: " << diagonalColor() << std::endl;
+  out << "       Fill Pattern : " << fillPattern() << std::endl;
+  out << "         Fill Color : Fore " << patternForeColor() << " Back: " 
+  << patternBackColor() << std::endl;
 }
 
 //=============================================
@@ -3234,10 +3296,9 @@ public:
   std::map<unsigned,FormatFont> fontCache;
 };
 
-ExcelReader::ExcelReader(): Reader()
+ExcelReader::ExcelReader()
 {
   d = new ExcelReader::Private();
-  d->workbook = 0;
 }
 
 ExcelReader::~ExcelReader()
@@ -3245,21 +3306,15 @@ ExcelReader::~ExcelReader()
   delete d;
 }
 
-Workbook* 
-ExcelReader::load(
-const char* filename )
+bool ExcelReader::load( Workbook* workbook, const char* filename )
 {
   POLE::Storage storage( filename );
   if( !storage.open() )
   {
     std::cerr << "Cannot open " << filename << std::endl;
-    //return Error::CannotOpen;    
-    setResult( CannotOpen );
-    return (Workbook*)0;
+    return false;
   }
   
-  // TODO check ole correctness
-
   unsigned version = Swinder::Excel97;
   POLE::Stream* stream;
   stream = new POLE::Stream( &storage, "/Workbook" );
@@ -3272,18 +3327,18 @@ const char* filename )
   
   if( stream->fail() )
   {
-    std::cerr << filename << " is not Excel doc" << std::endl;
-    setResult( CannotOpen );
+    std::cerr << filename << " is not Excel workbook" << std::endl;
     delete stream;
-    return (Workbook*)0;
+    return false;
   }
 
   unsigned long stream_size = stream->size();
   
   // FIXME
   unsigned char buffer[65536];
-  
-  d->workbook = new Workbook();
+
+  workbook->clear();  
+  d->workbook = workbook;
   
   // assume
 
@@ -3316,14 +3371,27 @@ const char* filename )
       handleRecord( record );
       
       // special handling to find Excel version
-      if ( record->rtti() == BOFRecord::id ){
-	      BOFRecord* bof = static_cast<BOFRecord*>(record);
-      if( bof ) if( bof->type() == BOFRecord::Workbook )
+      if ( record->rtti() == BOFRecord::id )
+      {
+        BOFRecord* bof = static_cast<BOFRecord*>(record);
+        if( bof ) if( bof->type() == BOFRecord::Workbook )
         version = bof->version();
       }
-      //record->dump( std::cout );
+
+#ifdef SWINDER_XLS2RAW
+      printf( "Record %04x ", record->rtti() );
+      record->dump( std::cout );
+      std::cout << std::endl;
+#endif
 
       delete record;
+    }
+    
+    if( !record )
+    {
+      printf( "Record %04x ", type );
+      std::cout << std::endl;
+      std::cout << std::endl;
     }
 
   }
@@ -3332,8 +3400,7 @@ const char* filename )
   
   storage.close();
   
-  setResult( Ok );
-  return d->workbook;
+  return false;
 }
 
 void ExcelReader::handleRecord( Record* record )
@@ -3919,8 +3986,8 @@ FormatFont ExcelReader::convertFont( unsigned fontIndex )
     font.setBold( fr.boldness() > 500 );
     font.setItalic( fr.italic() );
     font.setStrikeout( fr.strikeout() );    
-    font.setSubscript( fr.script() == FontRecord::Subscript );
-    font.setSuperscript( fr.script() == FontRecord::Superscript );
+    font.setSubscript( fr.escapement() == FontRecord::Subscript );
+    font.setSuperscript( fr.escapement() == FontRecord::Superscript );
     font.setUnderline( fr.underline() != FontRecord::None );
     
     // put in the cache for further use
@@ -4103,91 +4170,6 @@ void ExcelReader::handleXF( XFRecord* record )
 #include <iostream>
 #include <iomanip>
 
-class HookedReader: public Swinder::ExcelReader
-{
-public:
-  HookedReader();
-  virtual void handleRecord( Swinder::Record* );
-};
-
-using namespace Swinder;
-
-HookedReader::HookedReader(): ExcelReader() 
-{
-}
-
-const char* rttiAsString( int rtti )
-{
-  static char buf[10];
-  snprintf( buf, 9, "%04x", rtti );
-  return buf;
-}
-
-void HookedReader::handleRecord( Record* record )
-{
-  std::cout << "Record " << rttiAsString(record->rtti()) << " ";
-  
-  bool handled = false;
-  
-  if( record->rtti() == NumberRecord::id )
-  {
-    NumberRecord* r = (NumberRecord*) record;
-    handled = true;
-    std::cout << "NUMBER" << std::endl;
-    std::cout << "          Row  " << r->row() << std::endl;
-    std::cout << "       Column  " << r->column() << std::endl;
-    std::cout << "        Value  " << std::setprecision(13) << r->number() << std::endl;
-  }
-
-  if( record->rtti() == LabelSSTRecord::id )
-  {
-    LabelSSTRecord* r = (LabelSSTRecord*)( record );    
-    handled = true;
-    std::cout << "LabelSST" << std::endl;
-    std::cout << "           Row  " << r->row() << std::endl;
-    std::cout << "        Column  " << r->column() << std::endl;
-    std::cout << "  String Index  " << r->sstIndex() << std::endl;
-  }
-
-  if( record->rtti() == BOFRecord::id )
-  {
-    BOFRecord* r = (BOFRecord*) record;
-    handled = true;
-    std::cout << "BOF" << std::endl;
-    std::cout << "  Version  " << r->version() << " (" << r->versionAsString() << ")" << std::endl; 
-    std::cout << "     Type  " << r->type() << " (" << r->typeAsString() << ")" << std::endl; 
-  }
-
-  if( record->rtti() == SSTRecord::id )
-  {
-    SSTRecord* r =  (SSTRecord*) record;
-    handled = true;
-    std::cout << "SST" << std::endl;
-    std::cout << "  Count  " << r->count() << std::endl;
-    for( unsigned k = 0; k < r->count(); k++ )
-      std::cout << "  String #" << 
-      k << "  " << 
-      r->stringAt(k).ascii() << std::endl;
-  }
-
-  if( record->rtti() == RKRecord::id )
-  {
-    std::cout << "RK" << std::endl;
-    handled = true;
-    RKRecord* r = (RKRecord*) record ;
-    std::cout << "         Row  " << r->row() << std::endl;
-    std::cout << "      Column  " << r->column() << std::endl;
-    std::string str = r->isInteger() ? "Integer": "Float";
-    std::cout << "        Type  " << str << std::endl;
-    std::cout << "       Value  " << std::setprecision(13) << r->asFloat() << std::endl;
-    std::cout << "  Encoded RK  " << std::setbase(16) << r->encodedRK() << std::endl;
-    std::cout << std::setbase(10);
-  } 
-  
-  if( !handled )
-    std::cout << std::endl;
-}
-
 int main( int argc, char ** argv )
 {
   if( argc < 2 )
@@ -4198,247 +4180,14 @@ int main( int argc, char ** argv )
 
   char* filename = argv[1];
   std::cout << "Checking " << filename << std::endl;
-  HookedReader* reader = new HookedReader();
-  reader->load( filename );
+  
+  Workbook* workbook = new Workbook();
+  ExcelReader* reader = new ExcelReader();
+  reader->load( workbook, filename );
   delete reader;
+  delete workbook;
     
   return 0;
 }
 
 #endif  // XLS2RAW
-
-#ifdef SWINDER_CHECK_GUI
-
-#include <qapplication.h>
-#include <qlistview.h>
-#include <qstring.h>
-
-using namespace Swinder;
-
-
- 
-class RawViewer: public QListView
-{
-public:
-  RawViewer( QWidget* parent = 0, const char* name = 0 );
-  ~RawViewer(); 
-  void open( const QString& filename );
-};
-
-class HookedReader: public Swinder::ExcelReader
-{
-public:
-  HookedReader( QListView* view );
-  virtual void handleRecord( Swinder::Record* );
-private:
-  int index;
-  QListView* view;
-};
-
-class SimpleItem: public QListViewItem
-{
-public:
-  SimpleItem( QListView* parent, int pos, const QString& s1, 
-    const QString& s2 = QString::null );
-  SimpleItem( QListViewItem* parent, int pos, const QString& s1, 
-    const QString& s2 = QString::null );
-  virtual int compare( QListViewItem*, int, bool ) const;
-  int index;
-};
-
-SimpleItem::SimpleItem( QListView* parent, int pos, const QString& s1, const QString& s2 ):
-QListViewItem( parent, s1, s2 )
-{
-  index = pos;
-}
-
-SimpleItem::SimpleItem( QListViewItem* parent, int pos, const QString& s1, const QString& s2 ):
-QListViewItem( parent, s1, s2 )
-{
-  index = pos;
-}
-
-int SimpleItem::compare( QListViewItem* item, int, bool ) const
-{
-  SimpleItem* recordItem = dynamic_cast<SimpleItem*>( item );
-  if( !recordItem ) return -1;
-  if( index < recordItem->index ) return -1;
-  if( index > recordItem->index ) return 1;
-  return 0;  
-}
-
-using namespace Swinder;
-
-HookedReader::HookedReader( QListView* v )
-{
-  view = v;
-  index = 0;
-  view->clear();
-  view->setSorting( 0 );
-}
-
-QString columnLabel( unsigned column )
-{
-  QString str;
-  unsigned digits = 1;
-  unsigned offset = 0;
-  
-  column--;
-  for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
-    offset += limit;
-      
-  for( unsigned c = column - offset; digits; --digits, c/=26 )
-    str.prepend( QChar( 'A' + (c%26) ) );
-    
-  return str;
-}
-
-QString cellLabel( unsigned row, unsigned column )
-{
-  return QString("%1%2").arg( columnLabel( column+1 ) ).arg( row+1 );
-}
-
-void HookedReader::handleRecord( Swinder::Record* record )
-{
-  unsigned prev = index;
-  
-  QString recName = QString::fromLatin1( record->name() );
-  QString recId = QString::number( record->recordType(), 16 );
-  
-  if( record->recordType() == NumberRecord::id )
-  {
-    SimpleItem* item = new SimpleItem( view, index++, "NUMBER" );
-    item->setOpen( true );
-    NumberRecord* r = (NumberRecord*)( record );    
-    new SimpleItem( item, 1, "Cell", cellLabel( r->row(), r->column() ) );
-    new SimpleItem( item, 2, "Row", QString::number( r->row() ) );
-    new SimpleItem( item, 3, "Column", QString::number( r->column() ) );
-    new SimpleItem( item, 5, "Value", QString::number( r->number() ) );
-  }
-
-  if( record->recordType() == LabelSSTRecord::id )
-  {
-    SimpleItem* item = new SimpleItem( view, index++, "LabelSST" );
-    item->setOpen( true );
-    LabelSSTRecord* r = (LabelSSTRecord*)( record );    
-    new SimpleItem( item, 1, "Cell", cellLabel( r->row(), r->column() ) );
-    new SimpleItem( item, 2, "Row", QString::number( r->row() ) );
-    new SimpleItem( item, 3, "String Index", QString::number( r->sstIndex() ) );
-  }
-
-  if( dynamic_cast<BOFRecord*>( record ) )
-  {
-    SimpleItem* item = new SimpleItem( view, index++, recName + " Id=" + recId );
-    item->setOpen( true );
-    BOFRecord* r = dynamic_cast<BOFRecord*>( record );    
-    new QListViewItem( item, "Version", QString("%1 (%2)").arg(r->version()).arg(r->versionAsString() ) );
-    new QListViewItem( item, "Type", QString("%1 (%2)").arg(r->type()).arg(r->typeAsString() ) );    
-  }
-
-  if( dynamic_cast<SSTRecord*>( record ) )
-  {
-    SimpleItem* item = new SimpleItem( view, index++, "SST" );
-    item->setOpen( true );
-    SSTRecord* r = dynamic_cast<SSTRecord*>( record );
-    new SimpleItem( item, -1, QString("Count"), QString::number( r->count() ) );
-    for( unsigned k = 0; k < r->count(); k++ )
-      new SimpleItem( item, k, QString("String #%1").arg(k), 
-        QString("%1").arg(r->stringAt(k).ascii() ) );  
-  }
-
-  if( dynamic_cast<RKRecord*>( record ) )
-  {
-    SimpleItem* item = new SimpleItem( view, index++, "RK" );
-    item->setOpen( true );
-    RKRecord* r = dynamic_cast<RKRecord*>( record );
-    new SimpleItem( item, 1, "Cell", cellLabel( r->row(), r->column() ) );
-    new SimpleItem( item, 2, "Row", QString::number( r->row() ) );
-    new SimpleItem( item, 3, "Column", QString::number( r->column() ) );
-    new SimpleItem( item, 4, "Type", r->isInteger() ? "Integer": "Float" );
-    new SimpleItem( item, 5, "Value", QString::number( r->asFloat() ) );
-    new SimpleItem( item, 6, "Encoded RK", QString::number( r->encodedRK(), 16 ) );
-  }
-
-  if( dynamic_cast<RKRecord*>( record ) )
-  {
-    SimpleItem* item = new SimpleItem( view, index++, "RK" );
-    item->setOpen( true );
-    RKRecord* r = dynamic_cast<RKRecord*>( record );
-    new SimpleItem( item, 1, "Cell", cellLabel( r->row(), r->column() ) );
-    new SimpleItem( item, 2, "Row", QString::number( r->row() ) );
-    new SimpleItem( item, 3, "Column", QString::number( r->column() ) );
-    new SimpleItem( item, 4, "Type", r->isInteger() ? "Integer": "Float" );
-    new SimpleItem( item, 5, "Value", QString::number( r->asFloat() ) );
-    new SimpleItem( item, 6, "Encoded RK", QString::number( r->encodedRK(), 16 ) );
-  }
-
-  
-  
-  if( dynamic_cast<MulRKRecord*>( record ) )
-  {
-    SimpleItem* item = new SimpleItem( view, index++, "MULRK" );
-    item->setOpen( true );
-    MulRKRecord* r = dynamic_cast<MulRKRecord*>( record );
-    new SimpleItem( item, -1, "Row", QString::number( r->row() ) );
-    unsigned c1 = r->firstColumn();
-    unsigned c2 = r->lastColumn();
-    for( unsigned c = c1; c <= c2; c++ )
-    {
-      new SimpleItem( item, c*10, "Cell", cellLabel( r->row(), c ) );
-      new SimpleItem( item, c*10+1, "Column", QString::number( c ) );
-      new SimpleItem( item, c*10+2, "Value", QString::number( r->asFloat(c-c1) ) );
-      new SimpleItem( item, c*10+3, "Encoded RK", QString::number( r->encodedRK(c-c1), 16 ) );
-    }
-    
-  }
-
-  
-  if( index == prev )
-  {
-    SimpleItem* item = new SimpleItem( view, index++, QString("Unknown %1").arg(recId) );
-    item->setOpen( true );
-    new SimpleItem( item, 0, "Stream position", QString::number( record->position() ) );
-  }
-  
-}
- 
-RawViewer::RawViewer( QWidget* parent, const char* name ):
-QListView( parent, name )
-{
-  addColumn( "Key" );
-  addColumn( "Value" );
-  resize( 300, 450 );
-}
- 
-RawViewer::~ RawViewer()
-{
-}
- 
-void RawViewer::open( const QString& fname )
-{
-  clear();
-  HookedReader* reader = new HookedReader( this );
-  reader->load( fname );
-  delete reader;
-}
- 
-
-int main( int argc, char ** argv )
-{
-  if( argc < 2 )
-  {
-    std::cout << "Usage: swindercheck filename" << std::endl;
-    return 0;
-  }
-
-  char* filename = argv[1];
-    
-  QApplication a( argc, argv );
-  RawViewer * mw = new RawViewer();
-  mw->open( argv[1] );
-  mw->show();
-  a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
-  return a.exec();  
-}
-
-#endif // SWINDER_CHECK_GUI

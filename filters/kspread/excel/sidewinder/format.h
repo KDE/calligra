@@ -21,10 +21,64 @@
 #define SWINDER_FORMAT_H
 
 #include "ustring.h"
-#include "defs.h"
 
 namespace Swinder
 {
+
+/**
+ * @short Provides color based on RGB values.
+ *
+ * Class Color provides color based on  terms of RGB (red, green and blue) 
+ * components.
+ * 
+ */
+class Color
+{
+public:
+
+  unsigned red, green, blue;
+  
+  /**
+   * Constructs a default color with the RGB value (0, 0, 0), i.e black.
+   */   
+  Color(){ red = green = blue = 0; };
+  
+  /**
+   * Creates a copy of another color.
+   */   
+  Color( const Color& c )
+    { red = c.red; green = c.green; blue = c.blue; }   
+  
+  /**
+   * Creates a color based on given red, green and blue values.
+   */   
+  Color( unsigned r, unsigned g, unsigned b )
+    { red = r; green = g; blue = b; }
+};
+
+class Pen
+{
+public:
+
+  unsigned style;
+  
+  unsigned width;
+  
+  Color color;
+  
+  enum {
+    NoLine,         // no line at all
+    SolidLine,      // a simple solid line
+    DashLine,       // dashes separated by a few pixels
+    DotLine,        // dots separated by a few pixels
+    DashDotLine,    // alternate dots and dashes
+    DashDotDotLine  // one dash, two dots, one dash, two dots
+  };
+  
+  Pen(): style( SolidLine ), width( 0 ){}
+  
+};
+
 
 /**
  * Defines font information for cell format.
@@ -487,34 +541,6 @@ protected:
   class Private;
   Private* d; // can't never be 0
 
-};
-
-class FormatStorage
-{
-public:
-  FormatStorage();
-  
-  virtual ~FormatStorage();
-  
-  Format format( unsigned row, unsigned column );
-  
-  void setFormat( unsigned row, unsigned column, const Format& format );
-  
-  void columnInserted( unsigned column );
-
-  void columnDeleted( unsigned column );
-  
-  void rowInserted( unsigned row );
-
-  void rowDeleted( unsigned row );
-
-private:
-  // no copy or assign
-  FormatStorage( const FormatStorage& );
-  FormatStorage& operator=( const FormatStorage& );
-  
-  class Private;
-  Private* d;
 };
 
 
