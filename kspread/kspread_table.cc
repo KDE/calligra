@@ -4752,18 +4752,18 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
         RowLayout* rw =m_rows.first();
         for( ; rw; rw = rw->next() )
         {
-        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PIndent)))
-                {
+            if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PIndent)))
+            {
                 for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-                        {
-                        KSpreadCell *cell = cellAt( i,  rw->row());
-                        if ( cell == m_pDefaultCell )
-                                {
-                                cell = new KSpreadCell( this, i,  rw->row() );
-                                m_cells.insert( cell, i,  rw->row() );
-                                }
-                        }
+                {
+                    KSpreadCell *cell = cellAt( i,  rw->row());
+                    if ( cell == m_pDefaultCell )
+                    {
+                        cell = new KSpreadCell( this, i,  rw->row() );
+                        m_cells.insert( cell, i,  rw->row() );
+                    }
                 }
+            }
         }
     }
 
@@ -4777,82 +4777,82 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
 
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      KSpreadCell* c;
-      c=cellAt(_marker.x(), _marker.y());
-      int tmpIndent=c->getIndent(_marker.x(), _marker.y());
-      c= m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
-      {
-        int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-        &&!c->isObscuringForced())
+        KSpreadCell* c;
+        c=cellAt(_marker.x(), _marker.y());
+        int tmpIndent=c->getIndent(_marker.x(), _marker.y());
+        c= m_cells.firstCell();
+        for( ;c; c = c->nextCell() )
         {
-           c->clearProperty(KSpreadCell::PIndent);
-           c->clearNoFallBackProperties( KSpreadCell::PIndent );
+            int row = c->row();
+            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+                 &&!c->isObscuringForced())
+            {
+                c->clearProperty(KSpreadCell::PIndent);
+                c->clearNoFallBackProperties( KSpreadCell::PIndent );
+            }
         }
-      }
 
-      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
         {
-        RowLayout *rw=nonDefaultRowLayout(i);
-        if((tmpIndent-valIndent)>=0)
+            RowLayout *rw=nonDefaultRowLayout(i);
+            if((tmpIndent-valIndent)>=0)
                 rw->setIndent( tmpIndent-valIndent);
-          else
+            else
                 rw->setIndent( 0);
         }
 
-      emit sig_updateView( this );
-      return;
+        emit sig_updateView( this );
+        return;
     }
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      KSpreadCell* c;
-      c=cellAt(_marker.x(), _marker.y());
-      int tmpIndent=c->getIndent(_marker.x(), _marker.y());
-      c= m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
-      {
-        int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
-        &&!c->isObscuringForced())
+        KSpreadCell* c;
+        c=cellAt(_marker.x(), _marker.y());
+        int tmpIndent=c->getIndent(_marker.x(), _marker.y());
+        c= m_cells.firstCell();
+        for( ;c; c = c->nextCell() )
         {
-           c->clearProperty(KSpreadCell::PIndent);
-           c->clearNoFallBackProperties( KSpreadCell::PIndent );
+            int col = c->column();
+            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+                 &&!c->isObscuringForced())
+            {
+                c->clearProperty(KSpreadCell::PIndent);
+                c->clearNoFallBackProperties( KSpreadCell::PIndent );
+            }
         }
-      }
 
-      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-        ColumnLayout *cl=nonDefaultColumnLayout(i);
-        if((tmpIndent-valIndent)>=0)
+            ColumnLayout *cl=nonDefaultColumnLayout(i);
+            if((tmpIndent-valIndent)>=0)
                 cl->setIndent( tmpIndent-valIndent);
-          else
+            else
                 cl->setIndent( 0);
         }
 
         RowLayout* rw =m_rows.first();
         for( ; rw; rw = rw->next() )
         {
-        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PIndent)))
-                {
+            if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PIndent)))
+            {
                 for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-                        {
-                        KSpreadCell *cell = cellAt( i,  rw->row());
-                        if ( cell == m_pDefaultCell )
-                                {
-                                cell = new KSpreadCell( this, i,  rw->row() );
-                                m_cells.insert( cell, i,  rw->row() );
-                                }
-                        if((tmpIndent-valIndent)>=0)
-                                cell->setIndent( tmpIndent-valIndent);
-                        else
-                                cell->setIndent( 0);
-                        }
+                {
+                    KSpreadCell *cell = cellAt( i,  rw->row());
+                    if ( cell == m_pDefaultCell )
+                    {
+                        cell = new KSpreadCell( this, i,  rw->row() );
+                        m_cells.insert( cell, i,  rw->row() );
+                    }
+                    if((tmpIndent-valIndent)>=0)
+                        cell->setIndent( tmpIndent-valIndent);
+                    else
+                        cell->setIndent( 0);
                 }
+            }
         }
 
-      emit sig_updateView( this );
-      return;
+        emit sig_updateView( this );
+        return;
     }
     else
     {
@@ -4862,18 +4862,18 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
                 KSpreadCell *cell = cellAt( x, y );
                 if(!cell->isObscuringForced())
                 {
-                        if ( cell == m_pDefaultCell )
-                        {
-                                cell = new KSpreadCell( this, x, y );
-                                m_cells.insert( cell, x, y );
-                        }
+                    if ( cell == m_pDefaultCell )
+                    {
+                        cell = new KSpreadCell( this, x, y );
+                        m_cells.insert( cell, x, y );
+                    }
 
-                cell->setDisplayDirtyFlag();
-                if((cell->getIndent(x,y)-valIndent)>=0)
+                    cell->setDisplayDirtyFlag();
+                    if((cell->getIndent(x,y)-valIndent)>=0)
                         cell->setIndent( cell->getIndent(x,y)-valIndent);
-                else
+                    else
                         cell->setIndent( 0);
-                cell->clearDisplayDirtyFlag();
+                    cell->clearDisplayDirtyFlag();
                 }
             }
 

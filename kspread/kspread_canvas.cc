@@ -3590,7 +3590,8 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
       painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
 
     m_iResizePos = mouseX;
-    int twenty = (int)( 2.0 * m_pCanvas->zoom() );
+
+    //int twenty = (int)( 2.0 * m_pCanvas->zoom() );
     // Dont make the column have a width < 2 pixels.
     int x = table->columnPos( m_iResizedColumn, m_pCanvas );
     if ( m_iResizePos <= x /*+ twenty*/ )

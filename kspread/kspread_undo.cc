@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-// #include <qprinter.h>
-
 #include "kspread_undo.h"
 #include "kspread_table.h"
 #include "kspread_view.h"
@@ -113,19 +111,19 @@ void KSpreadUndo::redo()
     }
 }
 
-QString KSpreadUndo::getRedoTitle()
+QString KSpreadUndo::getRedoName()
 {
     if ( m_stckRedo.isEmpty() )
 	return QString("");
-    return  m_stckRedo.current()->text();
+    return  m_stckRedo.current()->getName();
 
 }
 
-QString KSpreadUndo::getUndoTitle()
+QString KSpreadUndo::getUndoName()
 {
     if ( m_stckUndo.isEmpty() )
 	return QString("");
-    return  m_stckUndo.current()->text();
+    return  m_stckUndo.current()->getName();
 }
 
 /****************************************************************************
@@ -137,7 +135,7 @@ QString KSpreadUndo::getUndoTitle()
 KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Remove column(s)");
+    name=i18n("Remove column(s)");
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
@@ -203,7 +201,7 @@ void KSpreadUndoRemoveColumn::redo()
 KSpreadUndoInsertColumn::KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Insert column(s)");
+    name=i18n("Insert column(s)");
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
@@ -244,7 +242,8 @@ void KSpreadUndoInsertColumn::redo()
 KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _nbRow) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Remove row(s)");
+    name=i18n("Remove row(s)");
+
     m_tableName = _table->tableName();
     m_iRow = _row;
     m_iNbRow=  _nbRow;
@@ -316,7 +315,7 @@ void KSpreadUndoRemoveRow::redo()
 KSpreadUndoInsertRow::KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _nbRow ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Insert row(s)");
+    name=i18n("Insert row(s)");
     m_tableName = _table->tableName();
     m_iRow = _row;
     m_iNbRow=_nbRow;
@@ -359,7 +358,7 @@ void KSpreadUndoInsertRow::redo()
 KSpreadUndoHideRow::KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow , QValueList<int>_listRow) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Hide row(s)");
+    name=i18n("Hide row(s)");
     m_tableName = _table->tableName();
     m_iRow= _row;
     m_iNbRow=_nbRow;
@@ -415,7 +414,8 @@ void KSpreadUndoHideRow::redo()
 KSpreadUndoHideColumn::KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol, QValueList<int>_listCol ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Hide column(s)");
+    name=i18n("Hide column(s)");
+
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
@@ -471,7 +471,8 @@ void KSpreadUndoHideColumn::redo()
 KSpreadUndoShowRow::KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow, QValueList<int>_listRow ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Show row(s)");
+    name=i18n("Show row(s)");
+
     m_tableName = _table->tableName();
     m_iRow= _row;
     m_iNbRow=_nbRow;
@@ -527,7 +528,8 @@ void KSpreadUndoShowRow::redo()
 KSpreadUndoShowColumn::KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol,QValueList<int>_listCol ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Show column(s)");
+    name=i18n("Show column(s)");
+
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
@@ -585,7 +587,8 @@ void KSpreadUndoShowColumn::redo()
 KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row,KSpreadCell::formatNumber _formatNumber ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Change text");
+    name=i18n("Change text");
+
     m_strText = _text;
     m_iColumn= _column;
     m_iRow = _row;
@@ -609,6 +612,7 @@ void KSpreadUndoSetText::undo()
     m_strRedoText = cell->text();
     m_eFormatNumberRedo=cell->getFormatNumber( m_iColumn, m_iRow );
     cell->setFormatNumber(m_eFormatNumber);
+
     if ( m_strText.isNull() )
 	cell->setCellText( "" );
     else
@@ -642,11 +646,12 @@ void KSpreadUndoSetText::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoSetTableName::KSpreadUndoSetTableName( KSpreadDoc *doc, KSpreadTable *table, const QString& name ) :
+KSpreadUndoSetTableName::KSpreadUndoSetTableName( KSpreadDoc *doc, KSpreadTable *table, const QString& _name ) :
     KSpreadUndoAction( doc )
 {
-    title=i18n("Change table name");
-    m_name = name;
+    name=i18n("Change table name");
+
+    m_name = _name;
     m_tableName = table->tableName();
 }
 
@@ -688,13 +693,14 @@ void KSpreadUndoSetTableName::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoCellLayout::KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection, QString &_title ) :
+KSpreadUndoCellLayout::KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection, QString &_name ) :
     KSpreadUndoAction( _doc )
 {
-  if( _title.isEmpty())
-        title=i18n("Change layout");
+  if( _name.isEmpty())
+        name=i18n("Change layout");
   else
-        title=_title;
+        name=_name;
+
   m_rctRect = _selection;
   m_tableName = _table->tableName();
   copyLayout( m_lstLayouts, m_lstColLayouts,m_lstRowLayouts,_table );
@@ -873,7 +879,7 @@ void KSpreadUndoCellLayout::redo()
 KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
     : KSpreadUndoAction( _doc )
 {
-    title=i18n("Delete");
+    name=i18n("Delete");
     m_tableName = table->tableName();
     m_selection = _selection;
     createListCell( m_data, m_lstColumn,m_lstRow,table );
@@ -1022,7 +1028,7 @@ void KSpreadUndoDelete::redo()
 KSpreadUndoResizeColRow::KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
     KSpreadUndoAction( _doc )
 {
-  title=i18n("Resize");
+  name=i18n("Resize");
   m_rctRect = _selection;
   m_tableName = _table->tableName();
 
@@ -1195,7 +1201,8 @@ void KSpreadUndoResizeColRow::redo()
 KSpreadUndoChangeAreaTextCell::KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
     KSpreadUndoAction( _doc )
 {
-  title=i18n("Change text");
+  name=i18n("Change text");
+
   m_rctRect = _selection;
   m_tableName = _table->tableName();
 
@@ -1324,7 +1331,8 @@ void KSpreadUndoChangeAreaTextCell::redo()
 KSpreadUndoMergedCell::KSpreadUndoMergedCell( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row , int _extraX,int _extraY) :
     KSpreadUndoAction( _doc )
 {
-  title=i18n("Merge cells");
+  name=i18n("Merge cells");
+
   m_tableName = _table->tableName();
   m_iRow=_row;
   m_iCol=_column;
@@ -1376,7 +1384,8 @@ void KSpreadUndoMergedCell::redo()
 KSpreadUndoAutofill::KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
     : KSpreadUndoAction( _doc )
 {
-    title=i18n("Autofill");
+    name=i18n("Autofill");
+
     m_tableName = table->tableName();
     m_selection = _selection;
     createListCell( m_data, table );
@@ -1447,7 +1456,8 @@ void KSpreadUndoAutofill::redo()
 KSpreadUndoInsertCellRow::KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect _rect ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Insert cell");
+    name=i18n("Insert cell");
+
     m_tableName = _table->tableName();
     m_rect=_rect;
 }
@@ -1488,7 +1498,8 @@ void KSpreadUndoInsertCellRow::redo()
 KSpreadUndoInsertCellCol::KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table,QRect _rect ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Insert cell");
+    name=i18n("Insert cell");
+
     m_tableName = _table->tableName();
     m_rect=_rect;
 }
@@ -1528,7 +1539,8 @@ void KSpreadUndoInsertCellCol::redo()
 KSpreadUndoRemoveCellRow::KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect rect ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Remove cell");
+    name=i18n("Remove cell");
+
     m_tableName = _table->tableName();
     m_rect=rect;
     QDomDocument doc = _table->saveCellRect( m_rect );
@@ -1584,7 +1596,8 @@ void KSpreadUndoRemoveCellRow::redo()
 KSpreadUndoRemoveCellCol::KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, QRect _rect ) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Remove cell");
+    name=i18n("Remove cell");
+
     m_tableName = _table->tableName();
     m_rect=_rect;
     QDomDocument doc = _table->saveCellRect( m_rect );
@@ -1640,7 +1653,8 @@ void KSpreadUndoRemoveCellCol::redo()
 KSpreadUndoConditional::KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
     : KSpreadUndoAction( _doc )
 {
-    title=i18n("Conditional cell attribut");
+    name=i18n("Conditional cell attribut");
+
     m_tableName = table->tableName();
     m_selection = _selection;
     createListCell( m_data, table );
@@ -1709,7 +1723,8 @@ void KSpreadUndoConditional::redo()
 KSpreadUndoHideTable::KSpreadUndoHideTable( KSpreadDoc *_doc, KSpreadTable *_table) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Hide table");
+    name=i18n("Hide table");
+
     m_tableName = _table->tableName();
 }
 
@@ -1749,7 +1764,8 @@ void KSpreadUndoHideTable::redo()
 KSpreadUndoShowTable::KSpreadUndoShowTable( KSpreadDoc *_doc, KSpreadTable *_table) :
     KSpreadUndoAction( _doc )
 {
-    title=i18n("Show table");
+    name=i18n("Show table");
+
     m_tableName = _table->tableName();
 }
 
@@ -1789,9 +1805,10 @@ KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* tabl
     : KSpreadUndoAction( _doc )
 {
     if(!insert)
-        title=i18n("Paste");
+        name=i18n("Paste");
     else
-        title=i18n("Paste and insert");
+        name=i18n("Paste and insert");
+
     m_tableName = table->tableName();
     m_selection = _selection;
     nbCol=_nbCol;
@@ -2049,7 +2066,8 @@ void KSpreadUndoCellPaste::redo()
 KSpreadUndoStyleCell::KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
     : KSpreadUndoAction( _doc )
 {
-    title=i18n("Style of cell");
+    name=i18n("Style of cell");
+
     m_tableName = table->tableName();
     m_selection = _selection;
     createListCell( m_lstStyleCell, table );

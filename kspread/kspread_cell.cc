@@ -376,7 +376,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 
     QPopupMenu *popup = new QPopupMenu(_canvas);
     SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-    
+
     int id = 0;
     QStringList::ConstIterator it = s->m_lstItems.begin();
     for( ; it != s->m_lstItems.end(); ++it )
@@ -407,7 +407,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   KSParseNode* code = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strAction, lst );
   // Did a syntax error occur ?
   if ( context.exception() && m_pTable->doc()->getShowMessageError())
-  {                       
+  {
     QString tmp(i18n("Error in cell %1\n\n"));
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
     tmp += context.exception()->toString( context );
@@ -419,7 +419,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   if ( !m_pTable->doc()->interpreter()->evaluate( context2, code, m_pTable ) )
       // Print out exception if any
       if ( context2.exception() &&m_pTable->doc()->getShowMessageError())
-      {                   
+      {
           QString tmp(i18n("Error in cell %1\n\n"));
           tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
           tmp += context2.exception()->toString( context2 );
@@ -1177,7 +1177,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if( verticalText( column(), row() ) ||getAngle(column(), row())!=0)
     {
        RowLayout *rl = m_pTable->rowLayout( row() );
- 
+
        if(m_iOutTextHeight>=rl->height())
 	 m_bCellTooShort=true;
     }
@@ -1922,7 +1922,7 @@ bool KSpreadCell::makeFormular()
     m_bLayoutDirtyFlag = true;
     DO_UPDATE;
     if(m_pTable->doc()->getShowMessageError())
-        {                     
+        {
         QString tmp(i18n("Error in cell %1\n\n"));
         tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
         tmp += context.exception()->toString( context );
@@ -2057,7 +2057,7 @@ bool KSpreadCell::calc( bool _makedepend )
       DO_UPDATE;
       // Print out exception if any
       if ( context.exception() && m_pTable->doc()->getShowMessageError())
-      {                       
+      {
         QString tmp(i18n("Error in cell %1\n\n"));
         tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
         tmp += context.exception()->toString( context );
@@ -2315,7 +2315,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                              int _col, int _row,
                              ColumnLayout *cl, RowLayout *rl,
                              QRect *_prect, bool override_obscured )
-{ 
+{
     // If this cell is obscured then draw the obscuring one instead.
     if ( m_pObscuringCell && !override_obscured )
     {
@@ -2326,7 +2326,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         m_bLayoutDirtyFlag = FALSE;
         return;
     }
-   
+
     // Need to recalculate ?
     if ( /*m_bCalcDirtyFlag*/calcDirtyFlag() && !override_obscured )
         calc();
@@ -2386,7 +2386,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     else
       {
         QColor bg = bgColor( _col, _row );
-	
+
         // if ( m_pObscuringCell )
         // bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
         // m_pObscuringCell->row() );
@@ -2395,7 +2395,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 if ( bg.isValid() )
 		  {
                         _painter.setBackgroundColor( bg );
-		   
+
 		  }
                 else
                         _painter.setBackgroundColor( defaultColorGroup.base() );
@@ -2758,7 +2758,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	//made an offset, otherwise ### is under red triangle
 	if( a==KSpreadCell::Right && !isEmpty() &&m_bCellTooShort )
 	  offsetCellTooShort=4;
-	 QFontMetrics fm2 = _painter.fontMetrics(); 
+	 QFontMetrics fm2 = _painter.fontMetrics();
 	 int offsetFont=0;
 	 if((alignY(column(),row())==KSpreadCell::Bottom)&& textFontUnderline(column(), row() ))
 	   {
@@ -2991,7 +2991,7 @@ if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue()
     for (int i=m_strOutText.length();i!=0;i--)
       {
 	tmp=m_strOutText.left(i);
-	
+
 	if((fm.width(tmp)+tmpIndent)<(len-4-1)) //4 equal lenght of red triangle +1 pixel
 	  {
 	    if( getAngle(column(), row())!=0)
@@ -3003,7 +3003,7 @@ if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue()
 		    for (int j=m_strOutText.length();j!=0;j--)
 		      {
 			tmp2=m_strOutText.left(j);
-			if(fm.width(tmp2)<(rl->height()-1)) 
+			if(fm.width(tmp2)<(rl->height()-1))
 			  {
 			    return m_strOutText.left(QMIN(tmp.length(),tmp2.length()));
 			  }
@@ -3011,7 +3011,7 @@ if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue()
 		  }
 		else
 		  return tmp;
-		  
+
 	      }
 	    else
 	      return tmp;
@@ -3037,7 +3037,7 @@ else if(verticalText( column(),row() ))
 
      for (int i=m_strOutText.length();i!=0;i--)
        {
-	if(((fm.ascent() + fm.descent())*i)<(rl->height()-1)) 
+	if(((fm.ascent() + fm.descent())*i)<(rl->height()-1))
 	  {
 	    return m_strOutText.left(i);
 	  }
@@ -3088,7 +3088,7 @@ if( isValue())
                                         }
                                 }
                         }
-                if(fm.width(localizedNumber)<w) 
+                if(fm.width(localizedNumber)<w)
                         return localizedNumber;
                 }
 	QString str("####");
@@ -3329,7 +3329,7 @@ const QColor& KSpreadCell::bgColor( int _col, int _row ) const
             return m_pObscuringCell->bgColor( m_pObscuringCell->column(), m_pObscuringCell->row() );
 	  }
 
-       
+
 	  //return m_pTable->emptyColor();
       }
 
@@ -3700,242 +3700,242 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 
 bool KSpreadCell::testValidity()
 {
-bool valid=false;
-if(m_Validity!=0)
-        {
+    bool valid=false;
+    if(m_Validity!=0)
+    {
         if(m_Validity->m_allow==Allow_Number)
+        {
+            if(isValue())
+            {
+                switch( m_Validity->m_cond)
                 {
-                if(isValue())
-                        {
-                        switch( m_Validity->m_cond)
-                                {
-                                case Equal:
-                                        if(m_dValue ==m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Superior:
-                                        if(m_dValue >m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Inferior:
-                                        if(m_dValue <m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case SuperiorEqual:
-                                        if(m_dValue >=m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case InferiorEqual:
-                                        if(m_dValue <=m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Between:
-                                        if(m_dValue >=m_Validity->valMin && m_dValue <=m_Validity->valMax)
-                                                valid=true;
-                                        break;
-                                case Different:
-                                        if(m_dValue <m_Validity->valMin || m_dValue >m_Validity->valMax)
-                                                valid=true;
-                                        break;
-                                default :
-                                        break;
-
-                                }
-
-                        }
+                    case Equal:
+                        if(m_dValue ==m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Superior:
+                        if(m_dValue >m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Inferior:
+                        if(m_dValue <m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case SuperiorEqual:
+                        if(m_dValue >=m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case InferiorEqual:
+                        if(m_dValue <=m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Between:
+                        if(m_dValue >=m_Validity->valMin && m_dValue <=m_Validity->valMax)
+                            valid=true;
+                        break;
+                    case Different:
+                        if(m_dValue <m_Validity->valMin || m_dValue >m_Validity->valMax)
+                            valid=true;
+                        break;
+                    default :
+                        break;
 
                 }
+
+            }
+
+        }
         if(m_Validity->m_allow==Allow_Integer)
+        {
+            if(isValue() && (m_dValue==ceil(m_dValue)) )
+            {
+                switch( m_Validity->m_cond)
                 {
-                if(isValue() && (m_dValue==ceil(m_dValue)) )
-                        {
-                        switch( m_Validity->m_cond)
-                                {
-                                case Equal:
-                                        if(m_dValue ==m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Superior:
-                                        if(m_dValue >m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Inferior:
-                                        if(m_dValue <m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case SuperiorEqual:
-                                        if(m_dValue >=m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case InferiorEqual:
-                                        if(m_dValue <=m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Between:
-                                        if(m_dValue >=m_Validity->valMin && m_dValue <=m_Validity->valMax)
-                                                valid=true;
-                                        break;
-                                case Different:
-                                        if(m_dValue <m_Validity->valMin || m_dValue >m_Validity->valMax)
-                                                valid=true;
-                                        break;
-                                default :
-                                        break;
-
-                                }
-
-                        }
+                    case Equal:
+                        if(m_dValue ==m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Superior:
+                        if(m_dValue >m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Inferior:
+                        if(m_dValue <m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case SuperiorEqual:
+                        if(m_dValue >=m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case InferiorEqual:
+                        if(m_dValue <=m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Between:
+                        if(m_dValue >=m_Validity->valMin && m_dValue <=m_Validity->valMax)
+                            valid=true;
+                        break;
+                    case Different:
+                        if(m_dValue <m_Validity->valMin || m_dValue >m_Validity->valMax)
+                            valid=true;
+                        break;
+                    default :
+                        break;
 
                 }
+
+            }
+
+        }
         else if(m_Validity->m_allow==Allow_Text)
-                {
-                 if(!isValue() && !isBool() && !isDate() && !isTime())
-                        valid=true;
-                }
+        {
+            if(!isValue() && !isBool() && !isDate() && !isTime())
+                valid=true;
+        }
         else if(m_Validity->m_allow==Allow_TextLength)
+        {
+            if(!isValue() && !isBool() && !isDate() && !isTime())
+            {
+                int len=m_strOutText.length();
+                switch( m_Validity->m_cond)
                 {
-                 if(!isValue() && !isBool() && !isDate() && !isTime())
-                        {
-                        int len=m_strOutText.length();
-                        switch( m_Validity->m_cond)
-                                {
-                                case Equal:
-                                        if(len ==m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Superior:
-                                        if(len >m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Inferior:
-                                        if(len <m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case SuperiorEqual:
-                                        if(len >=m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case InferiorEqual:
-                                        if(len <=m_Validity->valMin)
-                                                valid=true;
-                                        break;
-                                case Between:
-                                        if(len >=m_Validity->valMin && len <=m_Validity->valMax)
-                                                valid=true;
-                                        break;
-                                case Different:
-                                        if(len <m_Validity->valMin || len >m_Validity->valMax)
-                                                valid=true;
-                                        break;
-                                default :
-                                        break;
-                                }
-                        }
+                    case Equal:
+                        if(len ==m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Superior:
+                        if(len >m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Inferior:
+                        if(len <m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case SuperiorEqual:
+                        if(len >=m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case InferiorEqual:
+                        if(len <=m_Validity->valMin)
+                            valid=true;
+                        break;
+                    case Between:
+                        if(len >=m_Validity->valMin && len <=m_Validity->valMax)
+                            valid=true;
+                        break;
+                    case Different:
+                        if(len <m_Validity->valMin || len >m_Validity->valMax)
+                            valid=true;
+                        break;
+                    default :
+                        break;
                 }
+            }
+        }
 
         else if(m_Validity->m_allow==Allow_Time)
+        {
+            if(isTime())
+            {
+                switch( m_Validity->m_cond)
                 {
-                 if(isTime())
-                        {
-                        switch( m_Validity->m_cond)
-                                {
-                                case Equal:
-                                        if(m_Time ==m_Validity->timeMin)
-                                                valid=true;
-                                        break;
-                                case Superior:
-                                        if(m_Time >m_Validity->timeMin)
-                                                valid=true;
-                                        break;
-                                case Inferior:
-                                        if(m_Time <m_Validity->timeMin)
-                                                valid=true;
-                                        break;
-                                case SuperiorEqual:
-                                        if(m_Time >=m_Validity->timeMin)
-                                                valid=true;
-                                        break;
-                                case InferiorEqual:
-                                        if(m_Time <=m_Validity->timeMin)
-                                                valid=true;
-                                        break;
-                                case Between:
-                                        if(m_Time >=m_Validity->timeMin && m_Time <=m_Validity->timeMax)
-                                                valid=true;
-                                        break;
-                                case Different:
-                                        if(m_Time <m_Validity->timeMin || m_Time >m_Validity->timeMax)
-                                                valid=true;
-                                        break;
-                                default :
-                                        break;
+                    case Equal:
+                        if(m_Time ==m_Validity->timeMin)
+                            valid=true;
+                        break;
+                    case Superior:
+                        if(m_Time >m_Validity->timeMin)
+                            valid=true;
+                        break;
+                    case Inferior:
+                        if(m_Time <m_Validity->timeMin)
+                            valid=true;
+                        break;
+                    case SuperiorEqual:
+                        if(m_Time >=m_Validity->timeMin)
+                            valid=true;
+                        break;
+                    case InferiorEqual:
+                        if(m_Time <=m_Validity->timeMin)
+                            valid=true;
+                        break;
+                    case Between:
+                        if(m_Time >=m_Validity->timeMin && m_Time <=m_Validity->timeMax)
+                            valid=true;
+                        break;
+                    case Different:
+                        if(m_Time <m_Validity->timeMin || m_Time >m_Validity->timeMax)
+                            valid=true;
+                        break;
+                    default :
+                        break;
 
-                                }
-                        }
                 }
-        else if(m_Validity->m_allow==Allow_Date)
-                {
-                 if(isDate())
-                        {
-                        switch( m_Validity->m_cond)
-                                {
-                                case Equal:
-                                        if(m_Date ==m_Validity->dateMin)
-                                                valid=true;
-                                        break;
-                                case Superior:
-                                        if(m_Date >m_Validity->dateMin)
-                                                valid=true;
-                                        break;
-                                case Inferior:
-                                        if(m_Date <m_Validity->dateMin)
-                                                valid=true;
-                                        break;
-                                case SuperiorEqual:
-                                        if(m_Date>=m_Validity->dateMin)
-                                                valid=true;
-                                        break;
-                                case InferiorEqual:
-                                        if(m_Date <=m_Validity->dateMin)
-                                                valid=true;
-                                        break;
-                                case Between:
-                                        if(m_Date >=m_Validity->dateMin && m_Date <=m_Validity->dateMax)
-                                                valid=true;
-                                        break;
-                                case Different:
-                                        if(m_Date <m_Validity->dateMin || m_Date >m_Validity->dateMax)
-                                                valid=true;
-                                        break;
-                                default :
-                                        break;
-
-                                }
-                        }
-                }
-
+            }
         }
-else
+        else if(m_Validity->m_allow==Allow_Date)
+        {
+            if(isDate())
+            {
+                switch( m_Validity->m_cond)
+                {
+                    case Equal:
+                        if(m_Date ==m_Validity->dateMin)
+                            valid=true;
+                        break;
+                    case Superior:
+                        if(m_Date >m_Validity->dateMin)
+                            valid=true;
+                        break;
+                    case Inferior:
+                        if(m_Date <m_Validity->dateMin)
+                            valid=true;
+                        break;
+                    case SuperiorEqual:
+                        if(m_Date>=m_Validity->dateMin)
+                            valid=true;
+                        break;
+                    case InferiorEqual:
+                        if(m_Date <=m_Validity->dateMin)
+                            valid=true;
+                        break;
+                    case Between:
+                        if(m_Date >=m_Validity->dateMin && m_Date <=m_Validity->dateMax)
+                            valid=true;
+                        break;
+                    case Different:
+                        if(m_Date <m_Validity->dateMin || m_Date >m_Validity->dateMax)
+                            valid=true;
+                        break;
+                    default :
+                        break;
+
+                }
+            }
+        }
+
+    }
+    else
         valid= true;
 
-if(!valid &&m_Validity!=0 )
-        {
+    if(!valid &&m_Validity!=0 )
+    {
         switch (m_Validity->m_action)
-                {
-                case Stop:
-                        KMessageBox::error((QWidget*)0L , m_Validity->message,m_Validity->title);
-                        break;
-                case Warning:
-                        KMessageBox::warningYesNo((QWidget*)0L , m_Validity->message,m_Validity->title);
-                        break;
-                case Information:
-                        KMessageBox::information((QWidget*)0L , m_Validity->message,m_Validity->title);
-                        break;
-                }
+        {
+            case Stop:
+                KMessageBox::error((QWidget*)0L , m_Validity->message,m_Validity->title);
+                break;
+            case Warning:
+                KMessageBox::warningYesNo((QWidget*)0L , m_Validity->message,m_Validity->title);
+                break;
+            case Information:
+                KMessageBox::information((QWidget*)0L , m_Validity->message,m_Validity->title);
+                break;
         }
-if(!valid && m_Validity!=0 && m_Validity->m_action==Stop)
+    }
+    if(!valid && m_Validity!=0 && m_Validity->m_action==Stop)
         return false;
-else
+    else
         return true;
 }
 
@@ -4129,49 +4129,6 @@ void KSpreadCell::checkValue()
         }
     }
 
-/*
-    QString tmp;
-    QString tmpCurrency=locale()->currencySymbol();
-    int pos=0;
-    bool ok=false;
-    double val=0;
-    // TODO: why not use KLocale here too ?
-    if((pos=m_strText.find(tmpCurrency))!=-1)
-        {
-        if(pos==0) // example $ 154.545
-                {
-                tmp=m_strText.right(m_strText.length()-tmpCurrency.length());
-                tmp=tmp.simplifyWhiteSpace();
-                val=tmp.toDouble(&ok);
-                if(ok)
-                        {
-                        m_bValue=true;
-                        m_dValue=val;
-                        setFormatNumber(Money);
-                        m_strText=tmp.setNum(m_dValue);
-                        setFaktor(1.0);
-                        setPrecision(2);
-                        return;
-                        }
-                }
-        else if((unsigned int)pos==(m_strText.length()-tmpCurrency.length())) //example 125.55 F
-                {
-                tmp=m_strText.left(m_strText.length()-tmpCurrency.length());
-                tmp=tmp.simplifyWhiteSpace();
-                val=tmp.toDouble(&ok);
-                if(ok)
-                        {
-                        m_bValue=true;
-                        m_dValue=val;
-                        setFormatNumber(Money);
-                        m_strText=tmp.setNum(m_dValue);
-                        setFaktor(1.0);
-                        setPrecision(2);
-                        return;
-                        }
-                }
-        }
-        */
     double money = locale()->readMoney(m_strText, &m_bValue);
     if (m_bValue)
     {
@@ -4350,7 +4307,7 @@ QDomElement KSpreadCell::saveParameters( QDomDocument& doc ) const
         format.setAttribute( "indent", getIndent(m_iColumn,m_iRow ) );
     if( getDontprintText(m_iColumn,m_iRow)  )
 	format.setAttribute( "dontprinttext", "yes" );
-  
+
     format.appendChild( createElement( "font", textFont( m_iColumn,m_iRow ), doc ) );
     if ( textPen( m_iColumn,m_iRow).color().isValid())
         format.appendChild( createElement( "pen", textPen( m_iColumn,m_iRow), doc ) );

@@ -945,13 +945,13 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 void KSpreadView::enableUndo( bool _b )
 {
     m_undo->setEnabled( _b );
-    m_undo->setText(i18n("Undo: %1").arg(m_pDoc->undoBuffer()->getUndoTitle()));
+    m_undo->setText(i18n("Undo: %1").arg(m_pDoc->undoBuffer()->getUndoName()));
 }
 
 void KSpreadView::enableRedo( bool _b )
 {
     m_redo->setEnabled( _b );
-    m_redo->setText(i18n("Redo: %1") .arg(m_pDoc->undoBuffer()->getRedoTitle()));
+    m_redo->setText(i18n("Redo: %1").arg(m_pDoc->undoBuffer()->getRedoName()));
 }
 
 void KSpreadView::undo()
@@ -1159,26 +1159,6 @@ void KSpreadView::formulaSelection( const QString &_math )
 
     KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor",_math );
     dlg->show();
-
-    /* if ( !m_pCanvas->editor() )
-    {
-        m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
-        m_pCanvas->editor()->setText( "=" );
-    }
-
-    ASSERT( m_pCanvas->editor() && m_pCanvas->editor()->inherits("KSpreadTextEditor") );
-
-    QString function;
-    if( _math == "sum" )
-        function = _math + "(:)";
-    else
-        function = _math + "()";
-
-    int cursor = m_pCanvas->editor()->cursorPosition();
-    int pos = cursor + _math.length() + 1;
-    m_pCanvas->editor()->setText( m_pCanvas->editor()->text().insert( cursor, function ) );
-    m_pCanvas->editor()->setCursorPosition( pos );
-    m_pCanvas->editor()->setFocus(); */
 }
 
 void KSpreadView::fontSizeSelected( int _size )
@@ -1720,7 +1700,6 @@ void KSpreadView::replace()
 
 void KSpreadView::conditional()
 {
-//  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   QRect rect( activeTable()-> selectionRect() );
 
   if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
@@ -2100,6 +2079,7 @@ void KSpreadView::refreshView()
       }
 
     m_pToolWidget->show();
+
     // If this value (30) is changed then topBorder() needs to
     // be changed, too.
     m_pToolWidget->setGeometry( 0, 0, width(), /*30*/posFrame );
@@ -3069,25 +3049,26 @@ void KSpreadView::resultOfCalc()
             {
                 if(c->isValue())
                 {
+                    double val=c->valueDouble();
                     switch(tmpMethod)
                     {
                         case Sum:
-                            result+=c->valueDouble();
+                            result+=val;
                             break;
                         case Average:
-                            result+=c->valueDouble();
+                            result+=val;
                             break;
                         case Min:
                             if(result!=0)
-                                result=QMIN(c->valueDouble(),result);
+                                result=QMIN(val,result);
                             else
-                                result=c->valueDouble();
+                                result=val;
                             break;
                         case Max:
                             if(result!=0)
-                                result=QMAX(c->valueDouble(),result);
+                                result=QMAX(val,result);
                             else
-                                result=c->valueDouble();
+                                result=val;
                             break;
                         case Count:
                             break;
@@ -3110,25 +3091,26 @@ void KSpreadView::resultOfCalc()
             {
                 if(c->isValue())
                 {
+                    double val=c->valueDouble();
                     switch(tmpMethod )
                     {
                         case Sum:
-                            result+=c->valueDouble();
+                            result+=val;
                             break;
                         case Average:
-                            result+=c->valueDouble();
+                            result+=val;
                             break;
                         case Min:
                             if(result!=0)
-                                result=QMIN(c->valueDouble(),result);
+                                result=QMIN(val,result);
                             else
-                                result=c->valueDouble();
+                                result=val;
                             break;
                         case Max:
                             if(result!=0)
-                                result=QMAX(c->valueDouble(),result);
+                                result=QMAX(val,result);
                             else
-                                result=c->valueDouble();
+                                result=val;
                             break;
                         case Count:
                             break;
@@ -3148,25 +3130,26 @@ void KSpreadView::resultOfCalc()
                 KSpreadCell *cell = activeTable()->cellAt( i, j );
                 if(!cell->isDefault() && cell->isValue())
                 {
+                    double val= cell->valueDouble();
                     switch(tmpMethod )
                     {
                         case Sum:
-                            result+=cell->valueDouble();
+                            result+=val;
                             break;
                         case Average:
-                            result+=cell->valueDouble();
+                            result+=val;
                             break;
                         case Min:
                             if(result!=0)
-                                result=QMIN(cell->valueDouble(),result);
+                                result=QMIN(val,result);
                             else
-                                result=cell->valueDouble();
+                                result=val;
                             break;
                         case Max:
                             if(result!=0)
-                                result=QMAX(cell->valueDouble(),result);
+                                result=QMAX(val,result);
                             else
-                                result=cell->valueDouble();
+                                result=val;
                             break;
                         case Count:
                             break;
@@ -3177,6 +3160,7 @@ void KSpreadView::resultOfCalc()
                 }
             }
     }
+
     QString tmp;
     switch(tmpMethod )
     {
