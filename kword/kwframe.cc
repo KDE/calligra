@@ -43,6 +43,8 @@
 
 KWFrame::KWFrame(KWFrame * frame)
 {
+    kdDebug() << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
+    frame->copySettings( this );
 }
 
 KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra, double _gap )
@@ -136,13 +138,12 @@ QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor d
 
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
-    KWFrame *frm=new KWFrame(this);
-    copySettings(frm);
-    return frm;
+    return new KWFrame(this);
 }
 
 void KWFrame::copySettings(KWFrame *frm)
 {
+    kdDebug() << "KWFrame::copySettings this=" << this << " frm=" << frm << endl;
     //necessary to reapply these parameters
     frm->setFrameSet( getFrameSet() );
     frm->setRect(x(), y(), width(), height());
