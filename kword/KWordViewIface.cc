@@ -71,22 +71,22 @@ void KWordViewIface::configure()
     view->configure();
 }
 
-void KWordViewIface::extraSpelling()
+void KWordViewIface::spelling()
 {
     view->extraSpelling();
 }
 
-void KWordViewIface::extraAutoFormat()
+void KWordViewIface::autoFormat()
 {
     view->extraAutoFormat();
 }
 
-void KWordViewIface::extraStylist()
+void KWordViewIface::stylist()
 {
     view->extraStylist();
 }
 
-void KWordViewIface::extraCreateTemplate()
+void KWordViewIface::createTemplate()
 {
     view->extraCreateTemplate();
 }

@@ -41,10 +41,10 @@ k_dcop:
     virtual void viewPageMode();
     virtual void viewPreviewMode();
     virtual void configure();
-    virtual void extraSpelling();
-    virtual void extraAutoFormat();
-    virtual void extraStylist();
-    virtual void extraCreateTemplate();
+    virtual void spelling();
+    virtual void autoFormat();
+    virtual void stylist();
+    virtual void createTemplate();
 
     virtual void insertTable();
     virtual void tableInsertRow();
