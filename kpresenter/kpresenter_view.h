@@ -50,6 +50,7 @@ class SideBar;
 class NoteBar;
 
 class KAction;
+class KActionMenu;
 class KToggleAction;
 class TKSelectColorAction;
 class KoPartSelectAction;
@@ -184,6 +185,8 @@ public slots:
     void toolsRotate();
     void toolsZoom();
     void toolsLine();
+    void toolsLinePopup();
+    void toolsShapePopup();
     void toolsRectangle();
     void toolsCircleOrEllipse();
     void toolsPie();
@@ -198,6 +201,7 @@ public slots:
     void toolsQuadricBezierCurve();
     void toolsCubicBezierCurve();
     void toolsConvexOrConcavePolygon();
+    void toolsClosedLinePopup();
     void toolsClosedFreehand();
     void toolsClosedPolyline();
     void toolsClosedQuadricBezierCurve();
@@ -210,6 +214,7 @@ public slots:
     void extraRotate();
     void extraSendBackward();
     void extraBringForward();
+    void extraArrangePopup();
 
     void extraShadow();
     //    void extraAlignObj();
@@ -395,6 +400,7 @@ public slots:
     void alignVerticalTop();
     void alignVerticalBottom();
     void alignVerticalCenter();
+
 
     void saveClipart();
     void savePicture();
@@ -716,6 +722,7 @@ private:
 
     // right button popup menus
     QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend, *rb_pstyle, *rb_pwidth;
+    QPopupMenu *m_arrangeObjectsPopup;
     QPtrList<KAction> m_actionList; // for the kodatatools
     QPtrList<KAction> m_variableActionList;
 
@@ -837,6 +844,9 @@ private:
     KToggleAction *actionToolsClosedQuadricBezierCurve;
     KToggleAction *actionToolsClosedCubicBezierCurve;
     KoPartSelectAction *actionToolsObject;
+    KActionMenu *actionToolsLinePopup;
+    KActionMenu *actionToolsShapePopup;
+    KActionMenu *actionToolsClosedLinePopup;
 
     KAction *actionTextFont;
     KFontSizeAction *actionTextFontSize;
@@ -866,6 +876,7 @@ private:
 
     KAction *actionExtraBringForward;
     KAction *actionExtraSendBackward;
+    KAction *actionExtraArrangePopup;
 
     KAction *actionExtraRotate;
     KAction *actionExtraShadow;
@@ -1020,6 +1031,36 @@ private:
 
     KoCharSelectDia *m_specialCharDlg;
 
+    // store the currently selected line-tool
+    enum CurrentLineTool {
+        LtLine = 1,
+        LtFreehand = 2,
+        LtPolyline = 4,
+        LtQuadricBezier = 8,
+        LtCubicBezier = 16
+    };
+
+    CurrentLineTool m_currentLineTool;
+
+    // store the currently selected shape-tool
+    enum CurrentShapeTool {
+        StRectangle = 1,
+        StCircle = 2,
+        StPie = 4,
+        StPolygon = 8
+    };
+
+    CurrentShapeTool m_currentShapeTool;
+
+    // store the currently selected closed-line-tool
+    enum CurrentClosedLineTool {
+        CltFreehand = 1,
+        CltPolyline = 2,
+        CltQuadricBezier = 4,
+        CltCubicBezier = 8
+    };
+
+    CurrentClosedLineTool m_currentClosedLineTool;
 
     // Spell-checking
     struct {

@@ -269,6 +269,10 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     grayscal = false;
     bright = 0;
 
+    m_currentLineTool = LtLine;
+    m_currentShapeTool = StRectangle;
+    m_currentClosedLineTool = CltFreehand;
+
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
     m_findReplace = 0L;
@@ -398,6 +402,7 @@ KPresenterView::~KPresenterView()
     delete afChoose;
     delete m_fontDlg;
     delete m_paragDlg;
+    delete m_arrangeObjectsPopup;
 }
 
 /*=========================== file print =======================*/
@@ -798,6 +803,27 @@ void KPresenterView::toolsZoom()
         actionToolsZoom->setChecked(true);
 }
 
+void KPresenterView::toolsLinePopup()
+{
+    switch (m_currentLineTool)
+    {
+    case LtLine:
+        actionToolsLine->activate();
+        break;
+    case LtFreehand:
+        actionToolsFreehand->activate();
+        break;
+    case LtPolyline:
+        actionToolsPolyline->activate();
+        break;
+    case LtQuadricBezier:
+        actionToolsQuadricBezierCurve->activate();
+        break;
+    case LtCubicBezier:
+        actionToolsCubicBezierCurve->activate();
+        break;
+    }
+}
 
 /*=========================== insert line =======================*/
 void KPresenterView::toolsLine()
@@ -806,9 +832,30 @@ void KPresenterView::toolsLine()
     {
         m_canvas->setToolEditMode( INS_LINE, false );
         m_canvas->deSelectAllObj();
+        m_currentLineTool = LtLine;
+        actionToolsLinePopup->setIcon("line");
     }
     else
         actionToolsLine->setChecked(true);
+}
+
+void KPresenterView::toolsShapePopup()
+{
+    switch (m_currentShapeTool)
+    {
+    case StRectangle:
+        actionToolsRectangle->activate();
+        break;
+    case StCircle:
+        actionToolsCircleOrEllipse->activate();
+        break;
+    case StPie:
+        actionToolsPie->activate();
+        break;
+    case StPolygon:
+        actionToolsConvexOrConcavePolygon->activate();
+        break;
+    }
 }
 
 /*===================== insert rectangle ========================*/
@@ -818,6 +865,8 @@ void KPresenterView::toolsRectangle()
     {
         m_canvas->deSelectAllObj();
         m_canvas->setToolEditMode( INS_RECT, false );
+        m_currentShapeTool = StRectangle;
+        actionToolsShapePopup->setIcon("rectangle");
     }
     else
         actionToolsRectangle->setChecked(true);
@@ -830,6 +879,8 @@ void KPresenterView::toolsCircleOrEllipse()
     {
         m_canvas->deSelectAllObj();
         m_canvas->setToolEditMode( INS_ELLIPSE, false );
+        m_currentShapeTool = StCircle;
+        actionToolsShapePopup->setIcon("circle");
     }
     else
         actionToolsCircleOrEllipse->setChecked(true);
@@ -842,6 +893,8 @@ void KPresenterView::toolsPie()
     {
         m_canvas->deSelectAllObj();
         m_canvas->setToolEditMode( INS_PIE, false );
+        m_currentShapeTool = StPie;
+        actionToolsShapePopup->setIcon("pie");
     }
     else
         actionToolsPie->setChecked(true);
@@ -971,6 +1024,8 @@ void KPresenterView::toolsFreehand()
     if ( actionToolsFreehand->isChecked() ) {
         m_canvas->setToolEditMode( INS_FREEHAND, false );
         m_canvas->deSelectAllObj();
+        m_currentLineTool = LtFreehand;
+        actionToolsLinePopup->setIcon("freehand");
     }
     else
         actionToolsFreehand->setChecked(true);
@@ -982,6 +1037,8 @@ void KPresenterView::toolsPolyline()
     if ( actionToolsPolyline->isChecked() ) {
         m_canvas->setToolEditMode( INS_POLYLINE, false );
         m_canvas->deSelectAllObj();
+        m_currentLineTool = LtPolyline;
+        actionToolsLinePopup->setIcon("polyline");
     }
     else
         actionToolsPolyline->setChecked(true);
@@ -993,6 +1050,8 @@ void KPresenterView::toolsQuadricBezierCurve()
     if ( actionToolsQuadricBezierCurve->isChecked() ) {
         m_canvas->setToolEditMode( INS_QUADRICBEZIERCURVE, false );
         m_canvas->deSelectAllObj();
+        m_currentLineTool = LtQuadricBezier;
+        actionToolsLinePopup->setIcon("quadricbeziercurve");
     }
     else
         actionToolsQuadricBezierCurve->setChecked(true);
@@ -1004,6 +1063,8 @@ void KPresenterView::toolsCubicBezierCurve()
     if ( actionToolsCubicBezierCurve->isChecked() ) {
         m_canvas->setToolEditMode( INS_CUBICBEZIERCURVE, false );
         m_canvas->deSelectAllObj();
+        m_currentLineTool = LtCubicBezier;
+        actionToolsLinePopup->setIcon("cubicbeziercurve");
     }
     else
         actionToolsCubicBezierCurve->setChecked(true);
@@ -1015,9 +1076,30 @@ void KPresenterView::toolsConvexOrConcavePolygon()
     if ( actionToolsConvexOrConcavePolygon->isChecked() ) {
         m_canvas->setToolEditMode( INS_POLYGON, false );
         m_canvas->deSelectAllObj();
+        m_currentShapeTool = StPolygon;
+        actionToolsShapePopup->setIcon("polygon");
     }
     else
         actionToolsConvexOrConcavePolygon->setChecked(true);
+}
+
+void KPresenterView::toolsClosedLinePopup()
+{
+    switch (m_currentClosedLineTool)
+    {
+    case CltFreehand:
+        actionToolsClosedFreehand->activate();
+        break;
+    case CltPolyline:
+        actionToolsClosedPolyline->activate();
+        break;
+    case CltQuadricBezier:
+        actionToolsClosedQuadricBezierCurve->activate();
+        break;
+    case CltCubicBezier:
+        actionToolsClosedCubicBezierCurve->activate();
+        break;
+    }
 }
 
 /*==================== insert closed freehand line =====================*/
@@ -1026,6 +1108,8 @@ void KPresenterView::toolsClosedFreehand()
     if ( actionToolsClosedFreehand->isChecked() ) {
         m_canvas->setToolEditMode( INS_CLOSED_FREEHAND, false );
         m_canvas->deSelectAllObj();
+        m_currentClosedLineTool = CltFreehand;
+        actionToolsClosedLinePopup->setIcon("closed_freehand");
     }
     else
         actionToolsClosedFreehand->setChecked( true );
@@ -1037,6 +1121,8 @@ void KPresenterView::toolsClosedPolyline()
     if ( actionToolsClosedPolyline->isChecked() ) {
         m_canvas->setToolEditMode( INS_CLOSED_POLYLINE, false );
         m_canvas->deSelectAllObj();
+        m_currentClosedLineTool = CltPolyline;
+        actionToolsClosedLinePopup->setIcon("closed_polyline");
     }
     else
         actionToolsClosedPolyline->setChecked( true );
@@ -1048,6 +1134,8 @@ void KPresenterView::toolsClosedQuadricBezierCurve()
     if ( actionToolsClosedQuadricBezierCurve->isChecked() ) {
         m_canvas->setToolEditMode( INS_CLOSED_QUADRICBEZIERCURVE, false );
         m_canvas->deSelectAllObj();
+        m_currentClosedLineTool = CltQuadricBezier;
+        actionToolsClosedLinePopup->setIcon("closed_quadricbeziercurve");
     }
     else
         actionToolsClosedQuadricBezierCurve->setChecked( true );
@@ -1059,6 +1147,8 @@ void KPresenterView::toolsClosedCubicBezierCurve()
     if ( actionToolsClosedCubicBezierCurve->isChecked() ) {
         m_canvas->setToolEditMode( INS_CLOSED_CUBICBEZIERCURVE, false );
         m_canvas->deSelectAllObj();
+        m_currentClosedLineTool = CltCubicBezier;
+        actionToolsClosedLinePopup->setIcon("closed_cubicbeziercurve");
     }
     else
         actionToolsClosedCubicBezierCurve->setChecked( true );
@@ -2597,11 +2687,10 @@ void KPresenterView::setupActions()
 					   actionCollection(), "tools_zoom" );
     actionToolsZoom->setExclusiveGroup( "tools" );
 
-
-    actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", Key_F6,
-					 this, SLOT( toolsLine() ),
-					 actionCollection(), "tools_line" );
-    actionToolsLine->setExclusiveGroup( "tools" );
+    actionToolsShapePopup = new KActionMenu( i18n( "&Shape" ), "rectangle",
+                                             actionCollection(), "tools_shapepopup" );
+    actionToolsShapePopup->setDelayed(true);
+    connect(actionToolsShapePopup, SIGNAL(activated()), this, SLOT(toolsShapePopup()));
 
     actionToolsRectangle = new KToggleAction( i18n( "&Rectangle" ), "rectangle",
 					      Key_F7, this, SLOT( toolsRectangle() ),
@@ -2643,6 +2732,16 @@ void KPresenterView::setupActions()
                                                     this, SLOT( toolsObject() ),
                                                     actionCollection(), "tools_object" );
 
+    actionToolsLinePopup = new KActionMenu( i18n( "&Line" ), "line",
+                                            actionCollection(), "tools_linepopup" );
+    actionToolsLinePopup->setDelayed(true);
+    connect(actionToolsLinePopup, SIGNAL(activated()), this, SLOT(toolsLinePopup()));
+
+    actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", Key_F6,
+					 this, SLOT( toolsLine() ),
+					 actionCollection(), "tools_line" );
+    actionToolsLine->setExclusiveGroup( "tools" );
+
     actionToolsFreehand = new KToggleAction( i18n( "&Freehand" ), "freehand", 0,
                                              this, SLOT( toolsFreehand() ),
                                              actionCollection(), "tools_freehand" );
@@ -2668,6 +2767,11 @@ void KPresenterView::setupActions()
                                                            actionCollection(), "tools_polygon" );
     actionToolsConvexOrConcavePolygon->setExclusiveGroup( "tools" );
 
+
+    actionToolsClosedLinePopup = new KActionMenu( i18n( "&Closed Line" ), "closed_freehand",
+                                                  actionCollection(), "tools_closed_linepopup" );
+    actionToolsClosedLinePopup->setDelayed(true);
+    connect(actionToolsClosedLinePopup, SIGNAL(activated()), this, SLOT(toolsClosedLinePopup()));
 
     actionToolsClosedFreehand = new KToggleAction( i18n( "Closed &Freehand" ), "closed_freehand", 0,
                                                    this, SLOT( toolsClosedFreehand() ),
@@ -2805,6 +2909,9 @@ void KPresenterView::setupActions()
 				       this, SLOT( extraPenBrush() ),
 				       actionCollection(), "extra_properties" );
 
+    actionExtraArrangePopup = new KAction( i18n( "Arra&nge Object(s)" ), "arrange", 0,
+                                           this, SLOT(extraArrangePopup()),
+                                           actionCollection(), "extra_arrangepopup" );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise Object(s)" ), "raise",
 				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
@@ -2814,11 +2921,11 @@ void KPresenterView::setupActions()
 				    this, SLOT( extraLower() ),
 				    actionCollection(), "extra_lower" );
 
-    actionExtraBringForward= new KAction( i18n( "Bring Forward" ), "bring_forward",
+    actionExtraBringForward= new KAction( i18n( "Bring to Front" ), "bring_forward",
                                           0, this, SLOT( extraBringForward() ),
                                           actionCollection(), "extra_bring_forward" );
 
-    actionExtraSendBackward= new KAction( i18n( "Send Backward" ), "send_backward",
+    actionExtraSendBackward= new KAction( i18n( "Send to Back" ), "send_backward",
                                           0, this, SLOT( extraSendBackward() ),
                                           actionCollection(), "extra_send_backward" );
 
@@ -2966,11 +3073,11 @@ void KPresenterView::setupActions()
 				     this, SLOT( screenSkip() ),
 				     actionCollection(), "screen_skip" );
 
-    actionScreenPenColor = new KColorAction( i18n( "Pen Colo&r..." ), KColorAction::BackgroundColor, 0,
+    actionScreenPenColor = new KColorAction( i18n( "Presentation Pen Colo&r..." ), KColorAction::BackgroundColor, 0,
 					     this, SLOT( screenPenColor() ),
 					     actionCollection(), "screen_pencolor" );
 
-    actionScreenPenWidth = new KSelectAction( i18n( "Pen &Width" ), 0,
+    actionScreenPenWidth = new KSelectAction( i18n( "Presentation Pen &Width" ), 0,
 					     actionCollection(), "screen_penwidth" );
     QStringList lst;
     lst << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "10";
@@ -3343,6 +3450,7 @@ void KPresenterView::objectSelectedChanged()
     actionDuplicateObj->setEnabled(state && (nbobj>=1));
 
     state = state && (nbobj==1);
+    actionExtraArrangePopup->setEnabled(state);
     actionExtraRaise->setEnabled(state );
     actionExtraLower->setEnabled(state );
 
@@ -4188,6 +4296,38 @@ void KPresenterView::setupPopupMenus()
     rb_pwidth->insertItem( KPBarIcon( "pen_width10" ), this, SLOT( extraPenWidth10() ) );
     rb_pwidth->setMouseTracking( true );
     rb_pwidth->setCheckable( false );
+
+    // create arrange-objects popup
+    m_arrangeObjectsPopup = new QPopupMenu();
+    Q_CHECK_PTR(m_arrangeObjectsPopup);
+    m_arrangeObjectsPopup->insertItem(KPBarIcon("lower"), this, SLOT(extraLower()));
+    m_arrangeObjectsPopup->insertSeparator(-1);
+    m_arrangeObjectsPopup->insertItem(KPBarIcon("send_backward"), this, SLOT(extraSendBackward()));
+    m_arrangeObjectsPopup->insertSeparator(-1);
+    m_arrangeObjectsPopup->insertItem(KPBarIcon("bring_forward"), this, SLOT(extraBringForward()));
+    m_arrangeObjectsPopup->insertSeparator(-1);
+    m_arrangeObjectsPopup->insertItem(KPBarIcon("raise"), this, SLOT(extraRaise()));
+    m_arrangeObjectsPopup->setMouseTracking(true);
+    m_arrangeObjectsPopup->setCheckable(false);
+
+    // create insert-line popup
+    actionToolsLinePopup->insert(actionToolsLine);
+    actionToolsLinePopup->insert(actionToolsFreehand);
+    actionToolsLinePopup->insert(actionToolsPolyline);
+    actionToolsLinePopup->insert(actionToolsCubicBezierCurve);
+    actionToolsLinePopup->insert(actionToolsQuadricBezierCurve);
+
+    // create insert-shape popup
+    actionToolsShapePopup->insert(actionToolsRectangle);
+    actionToolsShapePopup->insert(actionToolsCircleOrEllipse);
+    actionToolsShapePopup->insert(actionToolsPie);
+    actionToolsShapePopup->insert(actionToolsConvexOrConcavePolygon);
+
+    // create insert-closed-line popup
+    actionToolsClosedLinePopup->insert(actionToolsClosedFreehand);
+    actionToolsClosedLinePopup->insert(actionToolsClosedPolyline);
+    actionToolsClosedLinePopup->insert(actionToolsClosedQuadricBezierCurve);
+    actionToolsClosedLinePopup->insert(actionToolsClosedCubicBezierCurve);
 }
 
 /*======================= setup scrollbars =====================*/
@@ -6642,6 +6782,12 @@ void KPresenterView::duplicateObj()
 
 }
 
+void KPresenterView::extraArrangePopup()
+{
+    m_canvas->setToolEditMode( TEM_MOUSE );
+    QPoint pnt( QCursor::pos() );
+    m_arrangeObjectsPopup->popup( pnt );
+}
 
 void KPresenterView::extraSendBackward()
 {

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="81">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="82">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -83,8 +83,12 @@
   <Action name="tools_rotate"/>
   <Action name="tools_zoom"/>
   <Separator/>
-  <Action name="extra_lower"/>
-  <Action name="extra_raise"/>
+  <Menu name="Align Objects"><text>Arra&amp;nge Objects</text>
+    <Action name="extra_lower"/>
+    <Action name="extra_send_backward"/>
+    <Action name="extra_bring_forward"/>
+    <Action name="extra_raise"/>
+  </Menu>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
    <Action name="extra_aligncenterh"/>
@@ -196,30 +200,15 @@
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
   <Separator/>
-  <Action name="tools_line"/>
-  <Action name="tools_freehand"/>
-  <Action name="tools_polyline"/>
-  <Action name="tools_quadricbeziercurve"/>
-  <Action name="tools_cubicbeziercurve"/>
-  <Action name="tools_rectangle"/>
-  <Action name="tools_circle"/>
-  <Action name="tools_pie"/>
-  <Action name="tools_polygon"/>
-  <Action name="tools_closed_freehand"/>
-  <Action name="tools_closed_polyline"/>
-  <Action name="tools_closed_quadricbeziercurve"/>
-  <Action name="tools_closed_cubicbeziercurve"/>
+  <Action name="tools_linepopup"/>
+  <Action name="tools_closed_linepopup"/>
+  <Action name="tools_shapepopup"/>
 </ToolBar>
 <ToolBar name="toolsToolBar" position="left" fullWidth="false"><Text>Tools</Text>
-  <Action name="tools_move"/>
-  <Action name="tools_mouse"/>
   <Action name="tools_rotate"/>
   <Action name="tools_zoom"/>
   <Separator/>
-  <Action name="extra_lower"/>
-  <Action name="extra_send_backward"/>
-  <Action name="extra_bring_forward"/>
-  <Action name="extra_raise"/>
+  <Action name="extra_arrangepopup"/>
   <Action name="extra_alignobjs"/>
 </ToolBar>
 <ToolBar name="extraToolBar" position="top" fullWidth="false"><Text>Format</Text>
@@ -277,8 +266,6 @@
   <Action name="screen_prev"/>
   <Action name="screen_next"/>
   <Action name="screen_last"/>
-  <Separator/>
-  <Action name="screen_pencolor"/>
 </ToolBar>
 <Menu name="menupage_popup">
   <Action name="extra_layout"/>
