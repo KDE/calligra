@@ -115,7 +115,7 @@ bool KprKword::filter(const QString &fileIn, const QString &fileOut,
     elem.setAttribute( "value", titleStyleName );
     elem = outdoc.createElement( "FOLLOWING" );
     style.appendChild( elem );
-    elem.setAttribute( "value", "Standard" ); // no i18n here!
+    elem.setAttribute( "name", "Standard" ); // no i18n here!
 
     QDomElement counter = outdoc.createElement( "COUNTER" );
     style.appendChild( counter );
