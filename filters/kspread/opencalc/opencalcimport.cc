@@ -35,7 +35,6 @@
 #include <koFilterChain.h>
 #include <koGlobal.h>
 #include <koUnit.h>
-#include <koStyleStack.h>
 
 #include <kspread_cell.h>
 #include <kspread_doc.h>
@@ -47,6 +46,8 @@
 #include <kspread_style_manager.h>
 #include <kspread_util.h>
 #include <kspread_value.h>
+
+#include <stylestack.h>
 
 #define SECSPERDAY (24 * 60 * 60)
 
@@ -1090,13 +1091,13 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
       kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
       if ( !masterLayoutStyle )
           return;
-      KoStyleStack styleStack;
+      StyleStack styleStack;
       styleStack.push( *masterLayoutStyle );
       loadOasisMasterLayoutPage( table, styleStack );
   }
 }
 
-void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStack &styleStack )
+void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,StyleStack &styleStack )
 {
     float left = 0.0;
     float right = 0.0;

@@ -30,7 +30,7 @@ class KSpreadCell;
 class KSpreadDoc;
 class KSpreadSheet;
 class KSpreadValidity;
-class KoStyleStack;
+class StyleStack;
 
 class OpenCalcImport : public KoFilter
 {
@@ -94,7 +94,7 @@ class OpenCalcImport : public KoFilter
   void loadOasisCellValidation( const QDomElement&body );
   void loadOasisValidation( KSpreadValidity* val, const QString& validationName );
   void loadOasisValidationCondition( KSpreadValidity* val,QString &valExpression );
-  void loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStack &styleStack );
+  void loadOasisMasterLayoutPage( KSpreadSheet * table,StyleStack &styleStack );
   QString translatePar( QString & par ) const;
   KoFilter::ConversionStatus openFile();
 };
