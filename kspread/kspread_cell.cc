@@ -141,7 +141,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
     setFaktor( o->faktor() );
     setMultiRow( o->multiRow() );
     setStyle( o->style() );
-    
+
     KSpreadConditional *tmpCondition;
     if( o->getFirstCondition(0) )
     {
@@ -310,11 +310,11 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
   // disable forcing ?
   if ( _x == 0 && _y == 0 )
   {
-    m_bForceExtraCells = FALSE;
-    m_iExtraXCells = 0;
-    m_iExtraYCells = 0;
-	return;
-    }
+      m_bForceExtraCells = FALSE;
+      m_iExtraXCells = 0;
+      m_iExtraYCells = 0;
+      return;
+  }
 
     m_bForceExtraCells = TRUE;
     m_iExtraXCells = _x;
@@ -1566,7 +1566,21 @@ bool KSpreadCell::makeFormular()
   // HACK (only handles decimal point)
   // ############# Torben: Incredible HACK. Separating parameters in a function call
   // will be horribly broken since "," -> "." :-((
+  // ### David: Ouch ! Argl.
+  //
   // ############# Torben: Do not replace stuff in strings.
+  //
+  // ###### David: we should use KLocale's conversion (there is a method there
+  // for understanding numbers typed the localised way) for each number the
+  // user enters, not once the full formula is set up, then ?
+  // I don't see how we can do that...
+  // Or do you see kscript parsing localized values ?
+  //
+  // Oh, Excel uses ';' to separate function arguments (at least when
+  // the decimal separator is ','), so that it can process a formula with numbers
+  // using ',' as a decimal separator...
+  // Sounds like kscript should have configurable argument separator...
+  //
   QString sDelocalizedText ( m_strText );
   int pos;
   while ( ( pos = sDelocalizedText.find( decimal_point, pos ) ) >= 0 )
@@ -3593,11 +3607,12 @@ KSpreadCell::~KSpreadCell()
     delete m_pVisualFormula;
 
   for( int x = 0; x <= m_iExtraXCells; ++x )
-    for( int y = 0; y <= m_iExtraYCells; ++y )
+      for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
+           y <= m_iExtraYCells; ++y )
     {
-      KSpreadCell* cell = m_pTable->cellAt( m_iColumn + x, m_iRow + y );
-      if ( cell && cell != this )
-      cell->unobscure();
+        KSpreadCell* cell = m_pTable->cellAt( m_iColumn + x, m_iRow + y );
+        if ( cell /*&& cell != this*/ )
+            cell->unobscure();
     }
 }
 
@@ -3648,7 +3663,7 @@ KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
     SelectPrivate* p = new SelectPrivate( cell );
     p->m_lstItems = m_lstItems;
     p->m_iIndex = m_iIndex;
-    
+
     return p;
 }
 
