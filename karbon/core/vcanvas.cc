@@ -233,6 +233,27 @@ VCanvas::repaintAll( bool drawVObjects )
 	//viewport()->repaint( erase );
 }
 
+/// repaints just a rect area (no scrolling)
+void
+VCanvas::repaintAll( const KoRect & )
+{
+	m_view->layersDocker()->updatePreviews();
+	VPainter *p = m_view->painterFactory()->painter();
+	QRect rect( rect().x(), rect().y(), rect().width(), rect().height() );
+	p->blit( rect );
+
+	// draw handle:
+	QPainter qpainter( p->device() );
+	// Y mirroring
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( -contentsX(), contentsY() - contentsHeight() );
+	qpainter.setWorldMatrix( mat );
+	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
+
+	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
+}
+
 void
 VCanvas::resizeEvent( QResizeEvent* event )
 {

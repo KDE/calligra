@@ -35,6 +35,7 @@ class VCanvas : public QScrollView
 public:
 	VCanvas( KarbonView* view, KarbonPart* part );
 
+	void repaintAll( const KoRect & );
 	void repaintAll( bool drawVObjects = true );
 	void setYMirroring( bool edit );
 	void toContents( int vx, int vy, int x, int y ) const;
