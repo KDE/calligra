@@ -2475,27 +2475,35 @@ void KWFormulaFrameSetEdit::moveEnd()
 
 void KWFormulaFrameSetEdit::exitLeft()
 {
-    int index = formulaFrameSet()->findAnchor(0)->index();
-    KoTextParag *parag = static_cast<KoTextParag*>( formulaFrameSet()->findAnchor( 0 )->paragraph() );
-    m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index );
+    if ( formulaFrameSet()->isFloating() ) {
+        KWAnchor* anchor = formulaFrameSet()->findAnchor( 0 );
+        int index = anchor->index();
+        KoTextParag *parag = static_cast<KoTextParag*>( anchor->paragraph() );
+        m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index );
+    }
 }
 
 void KWFormulaFrameSetEdit::exitRight()
 {
-    int index = formulaFrameSet()->findAnchor(0)->index();
-    KoTextParag *parag = static_cast<KoTextParag*>( formulaFrameSet()->findAnchor( 0 )->paragraph() );
-    m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index+1 );
+    if ( formulaFrameSet()->isFloating() ) {
+        KWAnchor* anchor = formulaFrameSet()->findAnchor( 0 );
+        int index = anchor->index();
+        KoTextParag *parag = static_cast<KoTextParag*>( anchor->paragraph() );
+        m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index+1 );
+    }
 }
 
 void KWFormulaFrameSetEdit::removeFormula()
 {
-    KWCanvas* canvas = m_canvas;
+    if ( formulaFrameSet()->isFloating() ) {
+        KWCanvas* canvas = m_canvas;
 
-    // This call will destroy us! We cannot use 'this' afterwards!
-    exitRight();
+        // This call will destroy us! We cannot use 'this' afterwards!
+        exitRight();
 
-    QKeyEvent keyEvent( QEvent::KeyPress, Key_Backspace, 0, 0 );
-    canvas->currentFrameSetEdit()->keyPressEvent( &keyEvent );
+        QKeyEvent keyEvent( QEvent::KeyPress, Key_Backspace, 0, 0 );
+        canvas->currentFrameSetEdit()->keyPressEvent( &keyEvent );
+    }
 }
 
 void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )

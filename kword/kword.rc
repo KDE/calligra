@@ -67,11 +67,25 @@
   <Action name="format_stylemenu"/>
   <Action name="format_footendnote"/>
   <Menu name="Formula"><text>Formula</text>
+    <Menu name="matrix"><text>Matrix</text>
+     <Action name="formula_insertcolumn"/>
+     <Action name="formula_appendcolumn"/>
+     <Action name="formula_removecolumn"/>
+     <Action name="formula_insertrow"/>
+     <Action name="formula_appendrow"/>
+     <Action name="formula_removerow"/>
+    </Menu>
     <Action name="formula_addupperindex"/>
     <Action name="formula_addlowerindex"/>
+    <Action name="formula_addnegthinspace"/>
+    <Action name="formula_addthinspace"/>
+    <Action name="formula_addmediumspace"/>
+    <Action name="formula_addthickspace"/>
+    <Action name="formula_addquadspace"/>
     <Action name="formula_removeenclosing"/>
     <Action name="formula_makegreek"/>
     <Action name="formula_insertsymbol"/>
+    <Separator/>
     <Action name="formula_syntaxhighlighting"/>
  </Menu>
   <Separator/>
@@ -243,6 +257,8 @@
   <Action name="formula_addsqrbra"/>
   <Action name="formula_addcurbra"/>
   <Action name="formula_addabsbra"/>
+  <Action name="formula_addoverline"/>
+  <Action name="formula_addunderline"/>
   <Action name="formula_addintegral"/>
   <Action name="formula_addsum"/>
   <Action name="formula_addproduct"/>
@@ -255,8 +271,14 @@
   <Action name="formula_typeright"/>
   <Separator/>
   <Action name="formula_symbolnames"/>
-  <Separator/>
   <Action name="formula_insertsymbol"/>
+  <Separator/>
+  <Action name="formula_insertcolumn"/>
+  <Action name="formula_appendcolumn"/>
+  <Action name="formula_removecolumn"/>
+  <Action name="formula_insertrow"/>
+  <Action name="formula_appendrow"/>
+  <Action name="formula_removerow"/>
 </ToolBar>
 <StatusBar/>
 <Menu name="text_popup">
