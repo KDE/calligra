@@ -1490,6 +1490,17 @@ QString KoMailMergeVariable::fieldCode()
     return i18n("Mail Merge");
 }
 
+void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+{
+    // TODO
+}
+
+void KoMailMergeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+        kdWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
+}
+
+
 
 void KoMailMergeVariable::saveVariable( QDomElement& parentElem )
 {
@@ -2070,6 +2081,17 @@ QString KoLinkVariable::fieldCode()
     return i18n("Link");
 }
 
+void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+{
+    // TODO
+}
+
+void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    kdWarning(32500) << "Not implemented: OASIS saving of links variables" << endl;
+
+}
+
 QString KoLinkVariable::text(bool realValue)
 {
     if (m_varColl->variableSetting()->displayFieldCode()&&!realValue)
@@ -2135,6 +2157,16 @@ KoNoteVariable::KoNoteVariable( KoTextDocument *textdoc, const QString & _note,K
 QString KoNoteVariable::fieldCode()
 {
     return i18n("Note");
+}
+
+void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+{
+    // TODO
+}
+
+void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    kdWarning(32500) << "Not implemented: OASIS saving of note variables" << endl;
 }
 
 void KoNoteVariable::saveVariable( QDomElement& parentElem )
@@ -2216,34 +2248,3 @@ void KoPgNumVariable::setSectionTitle( const QString& _title )
     m_varValue = QVariant( title );
 }
 
-void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
-{
-    // TODO
-}
-
-void KoMailMergeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
-{
-        kdWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
-}
-
-
-void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
-{
-    // TODO
-}
-
-void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
-{
-    kdWarning(32500) << "Not implemented: OASIS saving of links variables" << endl;
-
-}
-
-void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
-{
-    // TODO
-}
-
-void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
-{
-    kdWarning(32500) << "Not implemented: OASIS saving of note variables" << endl;
-}
