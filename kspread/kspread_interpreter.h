@@ -1,7 +1,7 @@
 #ifndef __kspread_interpreter_h__
 #define __kspread_interpreter_h__
 
-#include <kscript.h>
+#include <koscript.h>
 
 #include "kspread_global.h"
 

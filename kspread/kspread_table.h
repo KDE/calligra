@@ -41,8 +41,6 @@ class DCOPObject;
 #include <koDocument.h>
 #include <koDocumentChild.h>
 
-#include <kscript_context.h>
-
 #include <qpen.h>
 #include <qlist.h>
 #include <qintdict.h>
@@ -90,7 +88,7 @@ public:
     virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
 
     KSpreadTable* table() { return m_pTable; }
-    
+
 signals:
     void changed( KSpreadCell *_obj );
 
@@ -690,7 +688,7 @@ public:
     void emit_updateRow( RowLayout *_layout, int _row );
     void emit_updateColumn( ColumnLayout *_layout, int _column );
     void emit_polygonInvalidated( const QPointArray& );
-    
+
     /**
      * Needed for @ref KSpreadCell::leftBorderPen and friends, since we can not
      * have a static pen object.

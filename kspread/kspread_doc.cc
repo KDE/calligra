@@ -45,7 +45,7 @@
 #include <sys/stat.h>
 #include <pwd.h>
 
-#include <kscript_context.h>
+#include <koscript_context.h>
 #include <kstddirs.h>
 #include <kdebug.h>
 #include <kconfig.h>

@@ -46,7 +46,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <kscript_parsenode.h>
+#include <koscript_parsenode.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->updateCell( this, m_iColumn, m_iRow );

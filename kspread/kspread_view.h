@@ -156,7 +156,7 @@ public:
      * @reimp
      */
     KoDocument *hitTest( const QPoint &pos );
-    
+
 public slots:
     void initialPosition();
     /**
@@ -246,7 +246,7 @@ public slots:
     void borderRemove();
     void changeBorderColor();
     void tableFormat();
-    void oszilloscope();
+    // void oszilloscope();
     void autoSum();
     void resizeRow();
     void resizeColumn();
@@ -452,7 +452,7 @@ private:
     KAction* m_borderRemove;
     KSelectColorAction* m_borderColor;
     KAction* m_tableFormat;
-    KAction* m_oszi;
+    // KAction* m_oszi;
     KAction* m_autoSum;
     KToggleAction* m_showPageBorders;
     KActionMenu* m_scripts;

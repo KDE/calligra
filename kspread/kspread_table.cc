@@ -53,6 +53,8 @@
 
 #include <koStream.h>
 
+#include <koscript_context.h>
+
 #include <strstream.h>
 #include <kdebug.h>
 
@@ -4657,13 +4659,20 @@ bool ChartChild::load( const QDomElement& element )
     if ( !KSpreadChild::load( element ) )
 	return false;
 
-    QRect r;
-    r.setCoords( element.attribute( "left-cell" ).toInt(),
-		 element.attribute( "top-cell" ).toInt(),
-    		 element.attribute( "right-cell" ).toInt(),
-		 element.attribute( "bottom-cell" ).toInt() );
+    if ( element.hasAttribute( "left-cell" ) &&
+	 element.hasAttribute( "top-cell" ) &&
+	 element.hasAttribute( "right-cell" ) &&
+	 element.hasAttribute( "bottom-cell" ) )
+    {
+	QRect r;
+	r.setCoords( element.attribute( "left-cell" ).toInt(),
+		     element.attribute( "top-cell" ).toInt(),
+		     element.attribute( "right-cell" ).toInt(),
+		     element.attribute( "bottom-cell" ).toInt() );
 
-    setDataArea( r );
+	setDataArea( r );
+    }
+
     return true;
 }
 

@@ -43,13 +43,12 @@ class QDomDocument;
 #include <qrect.h>
 #include <qstring.h>
 #include <qpainter.h>
-// #include <qprinter.h>
 #include <qpen.h>
 #include <kcompletion.h>
 
 #include "kspread_interpreter.h"
 
-#include <kscript_context.h>
+#include <koscript_context.h>
 
 #define MIME_TYPE "application/x-kspread"
 

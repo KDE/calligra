@@ -71,7 +71,7 @@
 #include "kspread_events.h"
 #include "kspread_editors.h"
 #include "kspread_dlg_format.h"
-#include "kspread_dlg_oszi.h"
+// #include "kspread_dlg_oszi.h"
 #include "kspread_dlg_conditional.h"
 #include "kspread_dlg_series.h"
 #include "kspread_dlg_reference.h"
@@ -81,7 +81,6 @@
 #include "kspread_dlg_comment.h"
 #include "kspread_dlg_angle.h"
 #include "kspread_dlg_goto.h"
-#include <kscript_scriptmenu.h>
 
 #include "handler.h"
 #include "toolbox.h"
@@ -382,9 +381,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_borderColor = new KSelectColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
-    m_oszi = new KAction( i18n("Osciloscope..."),"oscilloscope", 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
-    m_scripts = new KScriptMenu( DCOPRef( kapp->dcopClient()->appId(), dcopObject()->objId() ), KSpreadFactory::global(),
-				 i18n("Scripts"), actionCollection(), "scripts" );
+    // m_oszi = new KAction( i18n("Osciloscope..."),"oscilloscope", 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
 
     connect( this, SIGNAL( childSelected( KoDocumentChild* ) ),
 	     this, SLOT( slotChildSelected( KoDocumentChild* ) ) );
@@ -523,7 +520,7 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_gotoCell->setEnabled( true );
   //  m_newView->setEnabled( true );
   //m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true ); // obsolete (Werner)
-  m_oszi->setEnabled( true );
+  // m_oszi->setEnabled( true );
 }
 
 void KSpreadView::formulaPower()
@@ -683,11 +680,13 @@ void KSpreadView::autoSum()
     }
 }
 
+/*
 void KSpreadView::oszilloscope()
 {
     QDialog* dlg = new KSpreadOsziDlg( this );
     dlg->show();
 }
+*/
 
 void KSpreadView::changeTextColor()
 {
@@ -1247,7 +1246,7 @@ void KSpreadView::changeTable( const QString& _name )
     setActiveTable( t );
 
     updateEditWidget();
-    
+
     //refresh toggle button
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
 }
@@ -1468,7 +1467,7 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 {
     if ( !m_pTable )
 	return;
-    
+
     // Transform the view coordinates to document coordinates
     QWMatrix m = matrix().invert();
     QPoint tl = m.map( _geometry.topLeft() );
@@ -1482,7 +1481,7 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 {
     if ( !m_pTable )
 	return;
-    
+
     // Transform the view coordinates to document coordinates
     QWMatrix m = matrix().invert();
     QPoint tl = m.map( _geometry.topLeft() );
@@ -1580,7 +1579,7 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
 {
     // Code copied from KoView::hitTest
     KoViewChild *viewChild;
-  
+
     KoDocumentChild *docChild = selectedChild();
     if ( docChild )
     {

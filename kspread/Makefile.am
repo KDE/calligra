@@ -1,5 +1,5 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
--I$(top_srcdir)/lib/kscript -I$(top_builddir)/lib/kscript -I$(top_srcdir)/lib/kformula $(all_includes)
+-I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript -I$(top_srcdir)/lib/kformula $(all_includes)
 
 ####### Files
 
@@ -25,11 +25,11 @@ libkspreadpart_la_SOURCES = kspread_canvas.cc \
 	KSpreadTableIface.skel KSpreadDocIface.cc KSpreadMapIface.cc \
 	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface.skel \
 	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc \
-	kspread_dlg_oszi.cc KSpreadViewIface.skel KSpreadViewIface.cc \
-	kspread_cluster.cc \
-	qtai_bar.cpp qtai_base.cpp qtai_meter.cpp qtai_plot.cpp qtai_strip.cpp
+	KSpreadViewIface.skel KSpreadViewIface.cc \
+	kspread_cluster.cc
+
 libkspreadpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkspreadpart_la_LIBADD = $(all_libraries) ../kchart/libkchartpart.la ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la
+libkspreadpart_la_LIBADD = $(all_libraries) ../kchart/libkchartpart.la ../lib/koscript/libkoscript.la ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la
 libkspreadpart_la_METASOURCES = AUTO
 
 kspread_la_SOURCES = main.cc
@@ -60,8 +60,7 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	kspread_events.h kspread_global.h  \
 	kspread_dlg_show.h kspread_dlg_insert.h KSpreadViewIface.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
-	KSpreadAppIface.h kspread_dlg_format.h kspread_dlg_oszi.h \
-	qtai_bar.h qtai_base.h qtai_meter.h qtai_plot.h qtai_strip.h
+	KSpreadAppIface.h kspread_dlg_format.h
 
 kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/Office

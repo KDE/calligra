@@ -5,19 +5,16 @@
 #include "kspread_cell.h"
 #include "kspread_table.h"
 
-#include <kscript_parser.h>
-#include <kscript_util.h>
-#include <kscript_func.h>
-#include <kscript_proxy.h>
-#include <kscript_synext.h>
+#include <koscript_parser.h>
+#include <koscript_util.h>
+#include <koscript_func.h>
+#include <koscript_synext.h>
 
 #include <math.h>
 #include <klocale.h>
 #include <kapp.h>
 #include <qdatetime.h>
 
-#include <dcopobject.h>
-#include <dcopclient.h>
 #include <kdebug.h>
 
 /***************************************************************
@@ -1960,40 +1957,6 @@ static bool kspreadfunc_select( KSContext& context )
   return b;
 }
 
-static bool kspreadfunc_app( KSContext& context )
-{
-    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), KSpreadFactory::dcopObject()->objId() ) ) );
-
-    return TRUE;
-}
-
-static bool kspreadfunc_doc( KSContext& context )
-{
-    KSpreadDoc* doc = ((KSpreadInterpreter*)context.interpreter())->document();
-
-    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), doc->dcopObject()->objId() ) ) );
-
-    return TRUE;
-}
-
-static bool kspreadfunc_map( KSContext& context )
-{
-    KSpreadMap* map = ((KSpreadInterpreter*)context.interpreter())->document()->map();
-
-    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), map->dcopObject()->objId() ) ) );
-
-    return TRUE;
-}
-
-static bool kspreadfunc_table( KSContext& context )
-{
-    KSpreadTable* table = ((KSpreadInterpreter*)context.interpreter())->table();
-
-    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), table->dcopObject()->objId() ) ) );
-
-    return TRUE;
-}
-
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kspread" );
@@ -2048,10 +2011,6 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ISNUM", new KSValue( new KSBuiltinFunction( module,"ISNUM",kspreadfunc_isnum) ) );
   module->addObject( "cell", new KSValue( new KSBuiltinFunction( module,"cell",kspreadfunc_cell) ) );
   module->addObject( "select", new KSValue( new KSBuiltinFunction( module,"select",kspreadfunc_select) ) );
-  module->addObject( "application", new KSValue( new KSBuiltinFunction( module, "application", kspreadfunc_app ) ) );
-  module->addObject( "document", new KSValue( new KSBuiltinFunction( module, "document", kspreadfunc_doc ) ) );
-  module->addObject( "map", new KSValue( new KSBuiltinFunction( module, "map", kspreadfunc_map ) ) );
-  module->addObject( "table", new KSValue( new KSBuiltinFunction( module, "table", kspreadfunc_table ) ) );
   module->addObject( "pow", new KSValue( new KSBuiltinFunction( module,"pow",kspreadfunc_pow) ) );
   module->addObject( "MOD", new KSValue( new KSBuiltinFunction( module,"MOD",kspreadfunc_mod) ) );
   module->addObject( "date", new KSValue( new KSBuiltinFunction( module,"date",kspreadfunc_date) ) );
@@ -2070,34 +2029,20 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "lower", new KSValue( new KSBuiltinFunction( module,"lower",kspreadfunc_lower) ) );
   module->addObject( "upper", new KSValue( new KSBuiltinFunction( module,"upper",kspreadfunc_upper) ) );
   module->addObject( "find", new KSValue( new KSBuiltinFunction( module,"find",kspreadfunc_find) ) );
-  module->addObject( "compound", new KSValue( new KSBuiltinFunction(
-module,"compound",kspreadfunc_compound) ) );
-  module->addObject( "continuous", new KSValue( new KSBuiltinFunction(
-module,"continuous",kspreadfunc_continuous) ) );
-  module->addObject( "effective", new KSValue( new KSBuiltinFunction(
-module,"effective",kspreadfunc_effective) ) );
-  module->addObject( "nominal", new KSValue( new KSBuiltinFunction(
-module,"nominal",kspreadfunc_nominal) ) );
-  module->addObject( "FV", new KSValue( new KSBuiltinFunction(
-module,"FV",kspreadfunc_fv) ) );
-  module->addObject( "PV_annuity", new KSValue( new KSBuiltinFunction(
-module,"PV_annuity",kspreadfunc_pv_annuity) ) );
-  module->addObject( "PV", new KSValue( new KSBuiltinFunction(
-module,"PV",kspreadfunc_pv) ) );
-  module->addObject( "FV_annuity", new KSValue( new KSBuiltinFunction(
-module,"FV_annuity",kspreadfunc_fv_annuity) ) );
-  module->addObject( "sign", new KSValue( new KSBuiltinFunction(
-module,"sign",kspreadfunc_sign) ) );
-  module->addObject( "atan2", new KSValue( new KSBuiltinFunction(
-module,"atan2",kspreadfunc_atan2) ) );
-  module->addObject( "INV", new KSValue( new KSBuiltinFunction(
-module,"INV",kspreadfunc_inv) ) );
-  module->addObject( "DECBIN", new KSValue( new KSBuiltinFunction(
-module,"DECBIN",kspreadfunc_decbin) ) );
-  module->addObject( "DECOCT", new KSValue( new KSBuiltinFunction(
-module,"DECOCT",kspreadfunc_decoct) ) );
-  module->addObject( "DECHEX", new KSValue( new KSBuiltinFunction(
-module,"DECHEX",kspreadfunc_dechex) ) );
+  module->addObject( "compound", new KSValue( new KSBuiltinFunction( module,"compound",kspreadfunc_compound) ) );
+  module->addObject( "continuous", new KSValue( new KSBuiltinFunction( module,"continuous",kspreadfunc_continuous) ) );
+  module->addObject( "effective", new KSValue( new KSBuiltinFunction( module,"effective",kspreadfunc_effective) ) );
+  module->addObject( "nominal", new KSValue( new KSBuiltinFunction( module,"nominal",kspreadfunc_nominal) ) );
+  module->addObject( "FV", new KSValue( new KSBuiltinFunction( module,"FV",kspreadfunc_fv) ) );
+  module->addObject( "PV_annuity", new KSValue( new KSBuiltinFunction( module,"PV_annuity",kspreadfunc_pv_annuity) ) );
+  module->addObject( "PV", new KSValue( new KSBuiltinFunction( module,"PV",kspreadfunc_pv) ) );
+  module->addObject( "FV_annuity", new KSValue( new KSBuiltinFunction( module,"FV_annuity",kspreadfunc_fv_annuity) ) );
+  module->addObject( "sign", new KSValue( new KSBuiltinFunction( module,"sign",kspreadfunc_sign) ) );
+  module->addObject( "atan2", new KSValue( new KSBuiltinFunction( module,"atan2",kspreadfunc_atan2) ) );
+  module->addObject( "INV", new KSValue( new KSBuiltinFunction( module,"INV",kspreadfunc_inv) ) );
+  module->addObject( "DECBIN", new KSValue( new KSBuiltinFunction( module,"DECBIN",kspreadfunc_decbin) ) );
+  module->addObject( "DECOCT", new KSValue( new KSBuiltinFunction( module,"DECOCT",kspreadfunc_decoct) ) );
+  module->addObject( "DECHEX", new KSValue( new KSBuiltinFunction( module,"DECHEX",kspreadfunc_dechex) ) );
   return module;
 }
 

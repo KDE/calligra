@@ -1,5 +1,5 @@
 INCLUDES  = -I$(srcdir)/../../../kspread $(KOFFICE_INCLUDES) $(all_includes) \
--I$(top_srcdir)/lib/kscript -I$(top_builddir)/lib/kscript
+-I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript
 
 libkspreadcalc_la_LDFLAGS = -avoid-version -module -no-undefined
 
