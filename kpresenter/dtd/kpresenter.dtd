@@ -44,7 +44,8 @@
                 ptWidth NMTOKEN #REQUIRED
                 ptHeight NMTOKEN #REQUIRED
                 unit NMTOKEN #REQUIRED
-                orientation NMTOKEN #REQUIRED>
+                orientation NMTOKEN #REQUIRED
+                tabStopValue NMTOKEN #REQUIRED>
 
 <!--	Describes the margins of the page.
 

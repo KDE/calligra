@@ -798,3 +798,13 @@ void KPresenterDocIface::setSnapToGrid( bool _b )
 {
     doc->setSnapToGrid( _b );
 }
+
+double KPresenterDocIface::ptTabStopValue() const
+{
+    return doc->tabStopValue();
+}
+
+void KPresenterDocIface::setPtTabStopValue ( double _tabStop )
+{
+    doc->setTabStopValue (_tabStop );
+}

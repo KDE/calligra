@@ -984,5 +984,21 @@ protected:
     VerticalAlignmentType m_newAlign;
 };
 
+
+class KPrChangeTabStopValueCommand : public KNamedCommand
+{
+public:
+    KPrChangeTabStopValueCommand( const QString &name, double _oldValue, double _newValue, KPresenterDoc *_doc);
+
+    ~KPrChangeTabStopValueCommand() {}
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    KPresenterDoc *m_doc;
+    double m_oldValue;
+    double m_newValue;
+};
+
 #endif
 

@@ -619,8 +619,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     new QLabel(i18n("Tab Stop: (%1)").arg(doc->getUnitName()), gbDocumentSettings);
     m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
     m_oldTabStopWidth = doc->tabStopValue();
-    kdDebug()<<" m_oldTabStopWidth :"<<m_oldTabStopWidth<<endl;
-    kdDebug()<<"KoUnit::ptToUnit( m_oldTabStopWidth, m_pView->kPresenterDoc()->getUnit() ) :"<<(KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ))<<endl;
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
 
 
@@ -655,7 +653,9 @@ void ConfigureDefaultDocPage::apply()
     double newTabStop = KoUnit::ptFromUnit( m_tabStopWidth->value(), doc->getUnit() );
     if ( newTabStop != m_oldTabStopWidth)
     {
-        doc->setTabStopValue( newTabStop );
+        KPrChangeTabStopValueCommand *cmd = new KPrChangeTabStopValueCommand( i18n("Change Tab Stop Value"), m_oldTabStopWidth, newTabStop, doc);
+        cmd->execute();
+        doc->addCommand( cmd );
         m_oldTabStopWidth = newTabStop;
     }
 }

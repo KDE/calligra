@@ -232,6 +232,8 @@ k_dcop:
 
     bool snapToGrid() const;
     void setSnapToGrid( bool _b );
+    double ptTabStopValue() const;
+    void setPtTabStopValue ( double _tabStop );
 
 private:
     KPresenterDoc *doc;

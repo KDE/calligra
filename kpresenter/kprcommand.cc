@@ -2443,3 +2443,22 @@ void KPrChangeVerticalAlignmentCommand::unexecute()
     m_obj->kPresenterDocument()->layout(m_obj);
     m_obj->kPresenterDocument()->repaint(m_obj);
 }
+
+
+KPrChangeTabStopValueCommand::KPrChangeTabStopValueCommand( const QString &name, double _oldValue, double _newValue, KPresenterDoc *_doc):
+    KNamedCommand(name),
+    m_doc( _doc ),
+    m_oldValue(_oldValue),
+    m_newValue(_newValue)
+{
+}
+
+void KPrChangeTabStopValueCommand::execute()
+{
+    m_doc->setTabStopValue ( m_newValue );
+}
+
+void KPrChangeTabStopValueCommand::unexecute()
+{
+    m_doc->setTabStopValue ( m_oldValue );
+}

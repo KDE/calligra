@@ -138,7 +138,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
-    m_tabStop = -1;//by default negative value
+    m_tabStop = MM_TO_POINT( 15.0 );
     m_styleColl=new KoStyleCollection();
 
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
@@ -486,6 +486,8 @@ QDomDocument KPresenterDoc::saveXML()
 
     paper.setAttribute("orientation", static_cast<int>( m_pageLayout.orientation ));
     paper.setAttribute("unit", m_unit );
+    paper.setAttribute("tabStopValue", m_tabStop );
+
     QDomElement paperBorders=doc.createElement("PAPERBORDERS");
 
     paperBorders.setAttribute("ptLeft", m_pageLayout.ptLeft);
@@ -1044,6 +1046,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 __pgLayout.ptHeight = MM_TO_POINT( elem.attribute("mmHeight").toDouble() );
             if(elem.hasAttribute("unit"))
                 m_unit = static_cast<KoUnit::Unit>(elem.attribute("unit").toInt());
+            if ( elem.hasAttribute("tabStopValue"))
+                m_tabStop = elem.attribute("tabStopValue").toDouble();
+
             if(elem.hasAttribute("width"))
                 __pgLayout.ptWidth = MM_TO_POINT( elem.attribute("width").toDouble() );
             if(elem.hasAttribute("height"))
