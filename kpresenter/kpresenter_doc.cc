@@ -1654,6 +1654,19 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
     // don't setModified(true) here, since this is called on startup
 }
 
+//when we change pagelayout we must re-position header/footer
+void KPresenterDoc::updateHeaderFooterPosition( )
+{
+    KoRect pageRect=m_stickyPage->getPageRect();
+    _header->setOrig(pageRect.topLeft ());
+    _header->setSize(pageRect.width(),_header->getSize().height());
+    repaint(_header);
+
+    _footer->setOrig(pageRect.left(),pageRect.bottom()-_footer->getSize().height());
+    _footer->setSize(pageRect.width(),_footer->getSize().height());
+    repaint(_footer);
+}
+
 bool KPresenterDoc::insertNewTemplate( bool clean )
 {
     QString _template;

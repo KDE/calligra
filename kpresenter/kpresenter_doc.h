@@ -116,7 +116,10 @@ public:
 
     // page layout
     void setPageLayout( KoPageLayout );
+
+    //header-footer
     void createHeaderFooter();
+    void updateHeaderFooterPosition();
 
     KoPageLayout pageLayout() const { return _pageLayout; }
 

@@ -1501,6 +1501,7 @@ void PgLayoutCmd::execute()
     KPresenterDoc *doc = view->kPresenterDoc();
     doc->setUnit( unit );
     doc->setPageLayout( layout );
+    doc->updateHeaderFooterPosition();
     view->getHRuler()->setPageLayout( layout );
     view->getHRuler()->setUnit( doc->getUnitName() );
     view->getVRuler()->setPageLayout( layout );
@@ -1516,6 +1517,7 @@ void PgLayoutCmd::unexecute()
     doc->setPageLayout( layout );
     doc->setUnit( oldUnit );
     doc->setPageLayout( oldLayout );
+    doc->updateHeaderFooterPosition();
     view->getHRuler()->setPageLayout( oldLayout );
     view->getHRuler()->setUnit( doc->getUnitName() );
     view->getVRuler()->setPageLayout( oldLayout );
