@@ -33,18 +33,18 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 			  "wizard", 0,
 			  this, SLOT( wizard() ),
 			  actionCollection(), "wizard");
-  m_edit = new KAction( i18n("&Edit Data"), "data", 0,
+  m_edit = new KAction( i18n("&Edit Data"), "edit", 0,
 			this, SLOT( edit() ),
 			actionCollection(), "edit");
-  m_config = new KAction( i18n( "&Config" ), "options", 0,
+  m_config = new KAction( i18n( "&Config" ), "configure", 0,
 			  this, SLOT( config() ),
 			  actionCollection(), "config" );
   m_loadconfig = new KAction( i18n("&Load Config"),
-			      "loadconfig", 0, this,
+			      "fileopen", 0, this,
 			      SLOT( loadConfig() ),
 			      actionCollection(), "loadconfig");
   m_saveconfig = new KAction( i18n("&Save Config"),
-			      "saveconfig",	0, this,
+			      "filesave",	0, this,
 			      SLOT( saveConfig() ),
 			      actionCollection(), "saveconfig");
   m_defaultconfig = new KAction( i18n("&Default Config"),
