@@ -19,13 +19,22 @@
 
 #include "kwformat.h"
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kcharsets.h>
+#include <klocale.h>
 
 KWTextFormatCollection::KWTextFormatCollection()
     : QTextFormatCollection(), m_cachedFormat( 0L )
 {
     delete defaultFormat();
-    setDefaultFormat( new KWTextFormat( QApplication::font(),
-                                        QApplication::palette().color( QPalette::Active, QColorGroup::Text ), this ) );
+
+    // Get default font from KDE
+    QFont font = KGlobalSettings::generalFont();
+    KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
+    QColor color = QApplication::palette().color( QPalette::Active, QColorGroup::Text );
+
+    setDefaultFormat( new KWTextFormat( font, color, this ) );
 
 }
 

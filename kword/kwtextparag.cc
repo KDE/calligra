@@ -412,8 +412,11 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat
 {
     QDomElement formatElem = doc.createElement( "FORMAT" );
     formatElem.setAttribute( "id", 1 ); // text format
-    formatElem.setAttribute( "pos", pos );
-    formatElem.setAttribute( "len", len );
+    if ( len ) // 0 when saving the format of a style
+    {
+        formatElem.setAttribute( "pos", pos );
+        formatElem.setAttribute( "len", len );
+    }
     QDomElement elem;
     if( !refFormat || curFormat->font().weight() != refFormat->font().weight() )
     {

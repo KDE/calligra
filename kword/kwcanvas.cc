@@ -360,13 +360,11 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         KWFrameSet * fs = frame->getFrameSet();
-        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+        KWTableFrameSet *table = fs->getGroupManager();
         // If one cell belongs to a table, we are in fact moving the whole table
         // We'll have to do better in the long run
-         if ( /*fs->getGroupManager()*/ table)
-        {
-            reg += /*fs->getGroupManager()*/table->boundingRect();
-        }
+         if ( table )
+            reg += table->boundingRect();
         else
             reg += *frame;
         FrameIndex *index=new FrameIndex;
