@@ -1158,7 +1158,7 @@ public:
     virtual int leftMargin() const;
     virtual int firstLineMargin() const;
     virtual int rightMargin() const;
-    virtual int lineSpacing() const;
+    virtual int lineSpacing( int line ) const;
 
     int numberOfSubParagraph() const;
     void registerFloatingItem( QTextCustomItem *i );

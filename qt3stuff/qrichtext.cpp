@@ -3525,7 +3525,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
     int startX = 0;
     int bw = 0;
     int cy = 0;
-    int curx = -1, cury = 0, curh = 0;
+    int curx = -1, cury = 0, curh = 0, curline = 0;
     bool lastDirection = chr->rightToLeft;
     QTextStringChar::Type lastType = chr->type;
     int tw = 0;
@@ -3599,6 +3599,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 		curx += cw;
 	    curh = h;
 	    cury = cy;
+            curline = line;
 	}
 
 	// first time - start again...
@@ -3725,7 +3726,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 
     // if we should draw a cursor, draw it now
     if ( curx != -1 && cursor ) {
-	painter.fillRect( QRect( curx, cury, 1, curh - lineSpacing() ), cg.color( QColorGroup::Text ) );
+	painter.fillRect( QRect( curx, cury, 1, curh - lineSpacing( curline ) ), cg.color( QColorGroup::Text ) );
 	painter.save();
 	if ( string()->isBidi() ) {
 	    const int d = 4;
@@ -4242,7 +4243,7 @@ int QTextParag::rightMargin() const
     return rm;
 }
 
-int QTextParag::lineSpacing() const
+int QTextParag::lineSpacing( int /*line*/ ) const
 {
     QStyleSheetItem *item = style();
     if ( !item )
@@ -4698,7 +4699,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int marg = left + initialRMargin;
     int minw = 0;
     int tminw = marg;
-    int ls = doc ? parag->lineSpacing() : 0;
+    int line = 0;
 
     int i = start;
     //qDebug( "Initial QTextParagLineStart at y=%d", y );
@@ -4745,16 +4746,18 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 
         // Custom item that forces a new line
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
-	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height() + ls, left, 4 ) : left;
-	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height() + ls, rm, 4 ) : 0 );
+	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height() /*+ ls*/, left, 4 ) : left;
+	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height() /*+ ls*/, rm, 4 ) : 0 );
 	    QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
 		fullWidth = FALSE;
 	    curLeft = x;
 	    if ( i == 0 || !isBreakable( string, i - 1 ) || string->at( i - 1 ).lineStart == 0 ) {
+                // Create a new line for this custom item
+                lineStart->h += doc ? parag->lineSpacing( line++ ) : 0;
 		y += QMAX( h, tmph );
-		tmph = c->height() + ls;
+		tmph = c->height();
 		h = tmph;
 		lineStart = lineStart2;
 		lineStart->y = y;
@@ -4762,7 +4765,8 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		c->lineStart = 1;
 		firstChar = c;
 	    } else {
-		tmph = c->height() + ls;
+                // No need for a new line, already at beginning of line
+		tmph = c->height();
 		h = tmph;
 		delete lineStart2;
 	    }
@@ -4790,16 +4794,20 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		minw = QMAX( minw, x + ww );
             // No breakable char found -> break at current char
 	    if ( lastBreak < 0 ) {
-		if ( lineStart ) {
+                ASSERT( lineStart );
+		//if ( lineStart ) {
                     // (combine lineStart and tmpBaseLine/tmph)
                     int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
                     lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
                     h = lineStart->baseLine + belowBaseLine;
 		    lineStart->h = h;
-		}
-		lineStart = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
-		y += h;
-		tmph = c->height() + ls;
+                //}
+		QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, c-1, align, w - x );
+                lineStart->h += doc ? parag->lineSpacing( line++ ) : 0;
+		y += lineStart->h;
+
+                lineStart = lineStart2;
+		tmph = c->height();
 		h = 0;
 		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), tmph, left, 4 ) : left;
                 initialHeight = tmph;
@@ -4828,9 +4836,11 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    } else {
                 // Breakable char was found
 		i = lastBreak;
-		lineStart = formatLine( parag, string, lineStart, firstChar, parag->at( lastBreak ), align, w - string->at( i ).x );
-		y += h;
-		tmph = c->height() + ls;
+		QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, parag->at( lastBreak ), align, w - string->at( i ).x );
+                lineStart->h += doc ? parag->lineSpacing( line++ ) : 0;
+		y += lineStart->h;
+		lineStart = lineStart2;
+		tmph = c->height();
 		h = tmph;
 		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), h, left, 4 ) : left;
                 initialHeight = h;
@@ -4865,7 +4875,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
                 //qDebug( " Breakable character (i=%d len=%d): combining %d/%d with %d/%d", i, len,
                 //        tmpBaseLine, tmph, c->ascent(), c->height()+ls );
                 // (combine tmpBaseLine/tmph and this character)
-                int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height()+ls - c->ascent() );
+                int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
                 tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
                 tmph = tmpBaseLine + belowBaseLine;
                 //qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
@@ -4888,7 +4898,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    tminw += ww;
             //qDebug( " Non-breakable character: combining %d/%d with %d/%d", tmpBaseLine, tmph, c->ascent(), c->height()+ls );
             // (combine tmpBaseLine/tmph and this character)
-            int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height()+ls - c->ascent() );
+            int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
             tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 	    tmph = tmpBaseLine + belowBaseLine;
             //qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
@@ -4912,8 +4922,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	// last line in a paragraph is not justified
 	if ( align == Qt3::AlignJustify )
 	    align = Qt3::AlignAuto;
-	lineStart = formatLine( parag, string, lineStart, firstChar, c, align, w - x );
-	delete lineStart;
+	QTextParagLineStart *lineStart2 = formatLine( parag, string, lineStart, firstChar, c, align, w - x );
+        h += doc ? parag->lineSpacing( line++ ) : 0;
+        lineStart->h = h;
+	delete lineStart2;
     }
 
     minw = QMAX( minw, tminw );
