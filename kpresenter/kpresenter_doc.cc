@@ -1625,8 +1625,8 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         QString name = o.tagName();
         kdDebug()<<" name :"<<name<<endl;
         context.styleStack().save();
-
-        if ( name == "draw:text-box" ) // textbox
+        //"draw:text-box"
+        if ( name == "draw:frame" ) // textbox
         {
             fillStyleStack( o, context );
 

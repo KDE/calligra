@@ -214,12 +214,16 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
 
 bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const
 {
-    xmlWriter.startElement( "draw:text-box" );
+    xmlWriter.startElement( "draw:frame" );
     // #### This should use KoGenStyle to share the style
     xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
+
+    xmlWriter.startElement( "draw:text-box" );
     m_textobj->saveOasisContent( xmlWriter, context );
+    xmlWriter.endElement();
+
     xmlWriter.endElement();
     return true;
 }
@@ -282,8 +286,8 @@ void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context
     }
     kdDebug()<<" vertical Alignment :"<< ( ( m_textVertAlign== KP_TOP ) ? "top" : ( m_textVertAlign==  KP_CENTER ) ? "center": "bottom" )<<endl;
     resizeTextDocument(); // this will to formatMore()
-
-    m_textobj->loadOasisContent( element, context, m_doc->styleCollection() );
+    QDomElement tmp = element.firstChild().toElement();
+    m_textobj->loadOasisContent( tmp, context, m_doc->styleCollection() );
 }
 
 
