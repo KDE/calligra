@@ -2,8 +2,7 @@
    Copyright (C) 1999-2004 Laurent Montel <montel@kde.org>
              (C) 2002-2004 Ariya Hidayat <ariya@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 1999-2004 Laurent Montel <montel@kde.org>
-             (C) 2002 John Dailey <dailey@vt.edu>
+	     (C) 2002 John Dailey <dailey@vt.edu>
              (C) 2002 Phillip Mueller <philipp.mueller@gmx.de>
              (C) 1999-2001 David Faure <faure@kde.org>
              (C) 2001 Werner Trobin <trobin@kde.org>
