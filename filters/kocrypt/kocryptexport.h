@@ -36,10 +36,8 @@ class KoCryptExport : public KoFilter {
 public:
     KoCryptExport(KoFilter *parent, const char *name);
     virtual ~KoCryptExport() {}
-    /** filtering :) */
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
+
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 public slots:
     void setPassword(QString x);
 

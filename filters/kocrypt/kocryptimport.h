@@ -36,9 +36,8 @@ public:
     KoCryptImport(KoFilter *parent, const char *name);
     KoCryptImport();
     virtual ~KoCryptImport() {}
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
+
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 public slots:
     void setPassword(QString p);

@@ -26,6 +26,7 @@
 
 #include <kocryptexport.h>
 #include <kocryptdefs.h>
+#include <koFilterChain.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include <qapplication.h>
@@ -49,11 +50,11 @@
               i18n("An error occurred reading the unencrypted data."),     \
               i18n("Encrypted Document Export"));                          \
          QApplication::restoreOverrideCursor();                            \
-         return false;                                                     \
+         return KoFilter::StupidError;                                     \
       }                                                                    \
       } while(0)
- 
- 
+
+
 #define WRITE_ERROR_CHECK(XX)  do {                                        \
       if (rc != XX) {                                                      \
          QApplication::setOverrideCursor(Qt::arrowCursor);                 \
@@ -61,7 +62,7 @@
               i18n("Disk write error - out of space?"),                    \
               i18n("Encrypted Document Export"));                          \
          QApplication::restoreOverrideCursor();                            \
-         return false;                                                     \
+         return KoFilter::StupidError;                                     \
       }                                                                    \
       } while(0)
 
@@ -73,7 +74,7 @@
               i18n("There was an internal error while encrypting the file."), \
               i18n("Encrypted Document Export"));                          \
          QApplication::restoreOverrideCursor();                            \
-         return false;                                                     \
+         return KoFilter::StupidError;                                     \
       }                                                                    \
       } while(0)
 
@@ -85,26 +86,22 @@
               i18n("There was an internal error securing the file."),      \
               i18n("Encrypted Document Export"));                          \
          QApplication::restoreOverrideCursor();                            \
-         return false;                                                     \
+         return KoFilter::StupidError;                                     \
       } while(0)
 
 
 
 
-KoCryptExport::KoCryptExport(KoFilter *parent, const char *name) :
-                             KoFilter(parent, name) {
+KoCryptExport::KoCryptExport(KoFilter *, const char *) :
+                             KoFilter() {
 }
 
 
-bool KoCryptExport::filter(const QString  &filenameIn,
-                           const QString  &filenameOut,
-                           const QString  &from,
-                           const QString  &to,
-                           const QString  &            )
+KoFilter::ConversionStatus KoCryptExport::convert( const QCString& from, const QCString& to )
 {
 int ftype = -1;
-QFile inf(filenameIn);
-QFile outf(filenameOut);
+QFile inf(m_chain->inputFile());
+QFile outf(m_chain->outputFile());
 int blocksize = 64;  // bytes
 int rc;
 
@@ -119,14 +116,14 @@ int rc;
     {
        ftype = APPID_KSPREAD;
     } else {
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     PasswordPrompt *pp = new PasswordPrompt(false);
     connect(pp, SIGNAL(setPassword(QString)), this, SLOT(setPassword(QString)));
     int dlgrc = pp->exec();
     delete pp;
-    if (dlgrc == QDialog::Rejected) return false;
+    if (dlgrc == QDialog::Rejected) return KoFilter::UserCancelled;
 
     BlowFish cipher;
     CipherBlockChain cbc(&cipher);
@@ -144,7 +141,7 @@ int rc;
     if (KeyUtil::strengthCheck(thekey, strlen(thekey)*8) < 25) {
         // FIXME: Report, make "25" configurable
     }
-    
+
     // this propagates to the cipher
     if (!cbc.setKey((void *)thekey, strlen(thekey)*8)) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
@@ -152,7 +149,7 @@ int rc;
                   i18n("There was an internal error preparing the passphrase."),
                   i18n("Encrypted Document Export"));
        QApplication::restoreOverrideCursor();
-       return false;
+       return KoFilter::StupidError;
     }
 
     if (cbc.blockSize() > 0) blocksize = cbc.blockSize();
@@ -167,7 +164,7 @@ int rc;
                   i18n("There was an internal error preparing the cipher."),
                   i18n("Encrypted Document Export"));
        QApplication::restoreOverrideCursor();
-       return false;
+       return KoFilter::StupidError;
     }
 
 
@@ -198,7 +195,7 @@ int rc;
        previous_rand = rand() % 0x10000;
 
     //kdDebug() << "++++++++++++++++++ Output blocksize: " << blocksize << endl;
-    //kdDebug() << "++++++++++++++++++ Output previous_rand: " 
+    //kdDebug() << "++++++++++++++++++ Output previous_rand: "
     //          << previous_rand%5120 << endl;
     for (char *t = p+2; t-p < (int)(previous_rand % 5120)+2; t += sizeof(int)) {
        *((int *)t) = rand();
@@ -262,7 +259,7 @@ int rc;
             i18n("Internal error writing file.  Please file a bug report."),
                                   i18n("Encrypted Document Export"));
          QApplication::restoreOverrideCursor();
-         return false;
+         return KoFilter::StupidError;
        }
 
        for (int i = 0; i < cursize/blocksize; i++) {
@@ -302,7 +299,7 @@ int rc;
     This is for debugging only.  It dumps out the hash.
 
     const unsigned char *res = sha1.getHash();
- 
+
     if (res) {
        for (int i = 0; i < 20; i++) {
           printf("%.2X", *res++);
@@ -312,7 +309,7 @@ int rc;
     }
     **************************************************/
 
-    return true;
+    return KoFilter::OK;
 }
 
 

@@ -30,6 +30,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <koFilterChain.h>
 #include <qapplication.h>
 
 #include "pwdprompt.h"
@@ -56,7 +57,7 @@
               i18n("Encrypted Document Import"));                          \
          QApplication::restoreOverrideCursor();                            \
          outf.remove();                                                    \
-         return false;                                                     \
+         return KoFilter::StupidError;                                     \
       }                                                                    \
       } while(0)
 
@@ -69,7 +70,7 @@
               i18n("Encrypted Document Import"));                          \
          QApplication::restoreOverrideCursor();                            \
          outf.remove();                                                    \
-         return false;                                                     \
+         return KoFilter::StupidError;                                     \
       }                                                                    \
       } while(0)
 
@@ -80,19 +81,18 @@
               i18n("There was an internal error verifying the file."),     \
               i18n("Encrypted Document Import"));                          \
          QApplication::restoreOverrideCursor();                            \
-         return false;                                                     \
+         return KoFilter::StupidError;                                     \
       } while(0)
 
 
 
-KoCryptImport::KoCryptImport(KoFilter *parent, const char *name) :
-                             KoFilter(parent, name) {
+KoCryptImport::KoCryptImport(KoFilter *, const char *) :
+                             KoFilter() {
 }
 
 
-bool KoCryptImport::filter(const QString &fileIn, const QString &fileOut,
-                           const QString& from, const QString& to,
-                           const QString& ) {
+KoFilter::ConversionStatus KoCryptImport::convert( const QCString& from, const QCString& to )
+{
 int ftype = -1;
 int blocksize = 64;
 int rc;
@@ -105,7 +105,7 @@ int rc;
     {
        ftype = APPID_KSPREAD;
     } else {
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     //kdDebug() << "Crypto Filter Parameters: " << config << endl;
@@ -116,8 +116,8 @@ int rc;
     // fine goto.  This is my code and I like the goto just the way it is.
     // Deal with it.
 start:
-QFile inf(fileIn);
-QFile outf(fileOut);
+QFile inf(m_chain->inputFile());
+QFile outf(m_chain->outputFile());
 
     PasswordPrompt *pp = new PasswordPrompt(true);
     connect(pp, SIGNAL(setPassword(QString)), this, SLOT(setPassword(QString)));
@@ -125,7 +125,7 @@ QFile outf(fileOut);
     delete pp;
     if (dlgrc == QDialog::Rejected) {
        outf.remove();  // incase it exists, lets not crash
-       return false;
+       return KoFilter::UserCancelled;
     }
 
     BlowFish cipher;
@@ -135,27 +135,27 @@ QFile outf(fileOut);
 
     strncpy(thekey, pass.latin1(), 56);
     thekey[56] = 0;
- 
+
     // propagates to the cipher
     if (!cbc.setKey((void *)thekey, strlen(thekey)*8)) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
-       KMessageBox::error(NULL, 
+       KMessageBox::error(NULL,
                   i18n("There was an internal error preparing the passphrase."),
                   i18n("Encrypted Document Import"));
        QApplication::restoreOverrideCursor();
-       return false;
+       return KoFilter::StupidError;
     }
- 
+
     if (cbc.blockSize() > 0) blocksize = cbc.blockSize();
 
     // This is bad.  We don't have a buffer big enough for this anyways.
     if (blocksize > 2048 || !sha1.readyToGo()) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
-       KMessageBox::error(NULL, 
+       KMessageBox::error(NULL,
                   i18n("There was an internal error in the cipher code."),
                   i18n("Encrypted Document Import"));
        QApplication::restoreOverrideCursor();
-       return false;
+       return KoFilter::StupidError;
     }
 
     inf.open(IO_ReadOnly);
@@ -169,12 +169,12 @@ QFile outf(fileOut);
     if (p[0] != FID_FIRST || p[1] != FID_SECOND || p[2] != FID_THIRD ||
         p[3] != ftype) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
-       KMessageBox::error(NULL, 
+       KMessageBox::error(NULL,
                   i18n("This is the wrong document type or the document is corrupt."),
                   i18n("Encrypted Document Import"));
        QApplication::restoreOverrideCursor();
        outf.remove();
-       return false;   // wrong file type!
+       return KoFilter::BadMimeType;   // wrong file type!
     }
 
     /*
@@ -183,12 +183,12 @@ QFile outf(fileOut);
      */
     if (p[4] != FID_FVER) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
-       KMessageBox::error(NULL, 
+       KMessageBox::error(NULL,
                   i18n("I don't understand this version of the file format."),
                   i18n("Encrypted Document Import"));
        QApplication::restoreOverrideCursor();
        outf.remove();
-       return false;   // right now there is only one fileversion to understand!
+       return KoFilter::StupidError;   // right now there is only one fileversion to understand!
     }
 
     /*
@@ -197,12 +197,12 @@ QFile outf(fileOut);
      */
     if (p[5] != 0 || p[6] != 0 || p[7] != 0 || p[8] != 0) {
        QApplication::setOverrideCursor(Qt::arrowCursor);
-       KMessageBox::error(NULL, 
+       KMessageBox::error(NULL,
                   i18n("I don't understand this version of the file format."),
                   i18n("Encrypted Document Import"));
        QApplication::restoreOverrideCursor();
        outf.remove();
-       return false;   // we only know one crypto algorithm too.
+       return KoFilter::StupidError;   // we only know one crypto algorithm too.
     }
 
     /*
@@ -224,7 +224,7 @@ QFile outf(fileOut);
 
     unsigned int remaining = 0;
     while (previous_rand > 0) {
-      rc = inf.readBlock(p, blocksize); 
+      rc = inf.readBlock(p, blocksize);
       READ_ERROR_CHECK(blocksize);
       rc = cbc.decrypt(p, blocksize);
       CRYPT_ERROR_CHECK();
@@ -318,11 +318,11 @@ QFile outf(fileOut);
             // fprintf(stderr, "ERROR: byte %d was %.2X but we computed %.2X\n",
             // cnt, (unsigned char)p[blocksize-remaining], res[cnt]);
              QApplication::setOverrideCursor(Qt::arrowCursor);
-             KMessageBox::error(NULL, 
+             KMessageBox::error(NULL,
                   i18n("This document is either corrupt or has been tampered with."),
                   i18n("Encrypted Document Import"));
              QApplication::restoreOverrideCursor();
-             return false;
+             return KoFilter::StupidError;
           }
           cnt++; remaining--;
        }
@@ -334,7 +334,7 @@ QFile outf(fileOut);
        remaining = rc;
     }
 
-    return true;
+    return KoFilter::OK;
 }
 
 
