@@ -44,7 +44,7 @@ namespace KFormEditor
 	                void mouseReleaseEvent(QMouseEvent *ev);
 	protected slots:
 		bool eventFilter(QObject *obj, QEvent *ev);
-		void updatePos();	
+		void updatePos();
 
 	private:
 		HandlePos m_pos;
@@ -60,7 +60,7 @@ namespace KFormEditor
 	public:
 		ResizeHandleSet(QWidget *modify);
 		~ResizeHandleSet();
-		QWidget *widget(){return m_widget;};
+		QWidget *widget()const{return m_widget;};
 	private:
 		QGuardedPtr<ResizeHandle> handles[8];
 		QGuardedPtr<QWidget> m_widget;

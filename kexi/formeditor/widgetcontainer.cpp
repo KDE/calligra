@@ -28,7 +28,6 @@
 #include <qsize.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qcolor.h>
 #include <qcursor.h>
 #include <qpixmap.h>
 #include <qcolor.h>
@@ -38,8 +37,6 @@
 #include <kurlrequester.h>
 
 #include <qobjectlist.h>
-
-#include <kdebug.h>
 
 #include "widgetcontainer.h"
 #include "resizehandle.h"
@@ -59,7 +56,7 @@ namespace KFormEditor {
 		resize( 250, 250 );
 
 		setBackgroundPixmap(m_dotBg);
-	
+
 		m_widgetRectRequested = false;
 		m_widgetRect = false;
 		m_activeWidget=0;
@@ -74,14 +71,14 @@ namespace KFormEditor {
 			m_topLevelContainer=tpc;
 		}
 	}
-                        
+
 	WidgetContainer *WidgetContainer::topLevelContainer()
 	{
 		return m_topLevelContainer;
 	}
 
 	int WidgetContainer::dotSpacing()
-	{ 
+	{
 		return 10;
 	}
 
@@ -130,7 +127,7 @@ namespace KFormEditor {
 		QPainter *p = new QPainter();
 		m_dotBg = QPixmap(size());
 		p->begin(&m_dotBg, this);
-	
+
 		QColor c = paletteBackgroundColor();
 		p->setPen(QPen(c));
 		QBrush bg(c);
@@ -140,7 +137,7 @@ namespace KFormEditor {
 		p->setPen(dots);
 		int cols = width() / m_dotSpacing;
 		int rows = height() / m_dotSpacing;
-	
+
 		for(int rowcursor = 1; rowcursor < rows; ++rowcursor)
 		{
 			for(int colcursor = 1; colcursor < cols; ++colcursor)
@@ -148,7 +145,7 @@ namespace KFormEditor {
 				p->drawPoint(colcursor * m_dotSpacing, rowcursor * m_dotSpacing);
 			}
 		}
-	
+
 		p->end();
 		setPaletteBackgroundPixmap(m_dotBg);
 	}

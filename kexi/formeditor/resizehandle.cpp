@@ -27,7 +27,6 @@
 #include <qsize.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qcolor.h>
 #include <qcursor.h>
 #include <qpixmap.h>
 #include <qcolor.h>
@@ -48,7 +47,7 @@ namespace KFormEditor {
 		setBackgroundColor(black);
 		setFixedWidth(6);
 		setFixedHeight(6);
-		m_pos=pos;	
+		m_pos=pos;
 		m_buddy=buddy;
 		buddy->installEventFilter(this);
 		updatePos();
@@ -84,7 +83,7 @@ namespace KFormEditor {
 					  	setCursor(QCursor(SizeFDiagCursor));
 						break;
 
-		}	
+		}
 
 	}
 

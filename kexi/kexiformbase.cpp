@@ -28,7 +28,6 @@
 #include <qsize.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qcolor.h>
 #include <qcursor.h>
 #include <qpixmap.h>
 #include <qcolor.h>
@@ -129,12 +128,12 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier
 	setMinimumHeight(50);
 
 //	initActions();
-	
+
 	setCaption(i18n("%1 [Edit Mode]").arg(identifier));
 
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));
-	
+
 	resize( 250, 250 );
 
 	QVBoxLayout *l=new QVBoxLayout(this);
@@ -152,7 +151,7 @@ KXMLGUIClient *KexiFormBase::guiClient()
 {
 	if (!m_editGUIClient)
 		m_editGUIClient=new EditGUIClient();
-	return m_editGUIClient;	
+	return m_editGUIClient;
 }
 
 void KexiFormBase::activateActions()
