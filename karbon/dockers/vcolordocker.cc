@@ -124,7 +124,7 @@ void VColorDocker::updateRGB()
 	float g = mGreenSlider->value() / 255.0;
 	float b = mBlueSlider->value() / 255.0;
 
-	m_Color->setColorSpace( VColor::rgb );
+	m_Color->setColorSpace( VColor::rgb, false );
 	m_Color->set( r, g, b );
 	updateCanvas();
 }
@@ -136,7 +136,7 @@ void VColorDocker::updateCMYK()
 	float y = mYellowSlider->value() / 100.0;
 	float k = mBlackSlider->value() / 100.0;
 
-	m_Color->setColorSpace( VColor::cmyk );
+	m_Color->setColorSpace( VColor::cmyk, false );
 	m_Color->set( c, m, y, k );
 	updateCanvas();
 }
