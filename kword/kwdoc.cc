@@ -208,6 +208,11 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     connect( &history, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     connect( &history, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+
+    // Some simple import filters don't define any style,
+    // so let's have a Standard style at least
+    KWStyle * standardStyle = new KWStyle( "Standard" ); // This gets translated later on
+    addStyleTemplate( standardStyle );
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews )
@@ -951,7 +956,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(15);
 
-    // Load all styles before the corresponding paragrpahs try to use them!
+    // Load all styles before the corresponding paragraphs try to use them!
     QDomElement stylesElem = word.namedItem( "STYLES" ).toElement();
     if ( !stylesElem.isNull() )
         loadStyleTemplates( stylesElem );

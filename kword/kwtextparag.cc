@@ -810,7 +810,8 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     {
         setParagLayout( parag->createParagLayout() );
         setFormat( parag->paragFormat() );
-        string()->setFormat( 0, parag->paragFormat(), true ); // prepare format for text insertion
+        // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
+        // for the chars in the new parag
     }
 
     // Note: we don't call QTextParag::copyParagData on purpose.
@@ -1035,16 +1036,19 @@ void KWTextParag::loadLayout( QDomElement & attributes )
 
         // Load default format from style.
         KWStyle *existingStyle = doc->findStyle( m_styleName );
-        ASSERT( existingStyle );
-        QTextFormat *defaultFormat = &existingStyle->format();
+        QTextFormat *defaultFormat = existingStyle ? &existingStyle->format() : 0L;
         QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
         {
-            // Modify default format and insert/find it in the collection
+            // Load paragraph format
             QTextFormat f = loadFormat( formatElem, defaultFormat );
-            defaultFormat = document()->formatCollection()->format( &f );
+            setFormat( document()->formatCollection()->format( &f ) );
         }
-        setFormat( defaultFormat );
+        else // No paragraph format
+        {
+            if ( defaultFormat ) // -> use the one from the style
+                setFormat( document()->formatCollection()->format( defaultFormat ) );
+        }
     }
     else
     {
