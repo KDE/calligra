@@ -34,7 +34,7 @@ KoApplication::KoApplication()
 {
     // Install some standard paths
     KGlobal::locale()->insertCatalogue("koffice");
-    KGlobal::dirs()->addResourceType("icons", KStandardDirs::kde_default("data") + "/koffice/icons/");
+    KGlobal::dirs()->addResourceType("icon", KStandardDirs::kde_default("data") + "/koffice/icons/");
 
     kimgioRegister();
 
