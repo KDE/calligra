@@ -1,10 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="2">
 <MenuBar>
- <Menu name="file"><text>File</text>
+ <Menu name="file"><text>&amp;File</text>
   <Action name="import"/>
   <Action name="export"/>
  </Menu>
- <Menu name="edit"><text>Edit</text>
+ <Menu name="edit"><text>&amp;Edit</text>
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
@@ -17,14 +17,14 @@
   <Separator/>
   <Action name="selectAll"/>
   <Separator/>
-  <Menu name="insert"><text>Insert</text>
+  <Menu name="insert"><text>&amp;Insert</text>
    <Action name="insertBitmap"/>
    <Action name="insertClipart"/>
   </Menu>
   <Separator/>
   <Action name="properties"/>
  </Menu>
- <Menu name="view"><text>View</text>
+ <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
   <Separator/>
@@ -38,7 +38,7 @@
   <Action name="showGrid"/>
   <Action name="showHelplines"/>
  </Menu>
- <Menu name="layout"><text>Layout</text>
+ <Menu name="layout"><text>&amp;Layout</text>
   <Action name="page"/>
   <Action name="grid"/>
   <Action name="helplines"/>
@@ -46,8 +46,8 @@
   <Action name="alignToGrid"/>
   <Action name="alignToHelplines"/>
  </Menu>
- <Menu name="arrange"><text>Arrange</text>
-  <Menu name="Transform"><text>Transform</text>
+ <Menu name="arrange"><text>&amp;Arrange</text>
+  <Menu name="Transform"><text>&amp;Transform</text>
    <Action name="transformPosition"/>
    <Action name="transformDimension"/>
    <Action name="transformRotation"/>
@@ -65,10 +65,10 @@
   <Action name="textAlongPath"/>
   <Action name="convertToCurve"/>
  </Menu>
- <Menu name="effects"><text>Effects</text>
+ <Menu name="effects"><text>Effe&amp;cts</text>
   <Action name="blend"/>
  </Menu>
- <Menu name="options"><text>Options</text>
+ <Menu name="options"><text>&amp;Options</text>
   <Action name="loadPalette"/>
   <Action name="options"/>
  </Menu>

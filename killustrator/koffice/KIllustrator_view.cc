@@ -93,6 +93,7 @@
 
 #include <koPartSelectDia.h>
 #include <kaction.h>
+#include <kstdaction.h>
 #include <kcoloractions.h>
 #include <kmessagebox.h>
 
@@ -136,75 +137,75 @@ void KIllustratorView::createGUI()
     setupCanvas ();
 
     // File menu
-    m_import = new KAction( i18n("Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
-    m_export = new KAction( i18n("Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
+    m_import = new KAction( i18n("&Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
+    m_export = new KAction( i18n("&Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
     //    m_docInfo = new KAction( i18n("Document Info..."), 0, this, SLOT( slotDocumentInfo() ), actionCollection(), "documentInfo" );
 	
     // Insert menu
-    m_insertBitmap = new KAction( i18n("Insert Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
-    m_insertClipart = new KAction( i18n("Insert Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
+    m_insertBitmap = new KAction( i18n("Insert &Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
+    m_insertClipart = new KAction( i18n("Insert &Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
 
     // Edit menu
-    m_copy = new KAction( i18n("Copy"), "editcopy", 0, this, SLOT( slotCopy() ), actionCollection(), "copy" );
-    m_paste = new KAction( i18n("Paste"), "editpaste", 0, this, SLOT( slotPaste() ), actionCollection(), "paste" );
-    m_cut = new KAction( i18n("Cut"), "editcut", 0, this, SLOT( slotCut() ), actionCollection(), "cut" );
-    m_undo = new KAction( i18n("Undo"), "undo", 0, this, SLOT( slotUndo() ), actionCollection(), "undo" );
-    m_redo = new KAction( i18n("Redo"), "redo", 0, this, SLOT( slotRedo() ), actionCollection(), "redo" );
-    m_duplicate = new KAction( i18n("Duplicate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
-    m_delete = new KAction( i18n("Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
-    m_selectAll = new KAction( i18n("Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
-    m_properties = new KAction( i18n("Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
+    m_copy = KStdAction::copy(this, SLOT( slotCopy() ), actionCollection(), "copy" );
+    m_paste = KStdAction::paste(this, SLOT( slotPaste() ), actionCollection(), "paste" );
+    m_cut = KStdAction::cut(this, SLOT( slotCut() ), actionCollection(), "cut" );
+    m_undo = KStdAction::undo(this, SLOT( slotUndo() ), actionCollection(), "undo" );
+    m_redo = KStdAction::redo(this, SLOT( slotRedo() ), actionCollection(), "redo" );
+    m_duplicate = new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
+    m_delete = new KAction( i18n("&Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
+    m_selectAll = new KAction( i18n("&Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
+    m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 	
     // View menu
-    m_outline = new KToggleAction( i18n("Outline"), 0, actionCollection(), "outline" );
+    m_outline = new KToggleAction( i18n("Ou&tline"), 0, actionCollection(), "outline" );
     m_outline->setExclusiveGroup( "Outline" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotOutline( bool ) ) );
-    m_normal = new KToggleAction( i18n("Normal"), 0, actionCollection(), "normal" );
+    m_normal = new KToggleAction( i18n("&Normal"), 0, actionCollection(), "normal" );
     m_normal->setExclusiveGroup( "Outline" );
     connect( m_normal, SIGNAL( toggled( bool ) ), this, SLOT( slotNormal( bool ) ) );
-    m_layers = new KAction( i18n("Layers ..."), 0, this, SLOT( slotLayers() ), actionCollection(), "layers" );
-    m_showRuler = new KToggleAction( i18n("Show Ruler"), 0, actionCollection(), "showRuler" );
+    m_layers = new KAction( i18n("&Layers ..."), 0, this, SLOT( slotLayers() ), actionCollection(), "layers" );
+    m_showRuler = new KToggleAction( i18n("Show &Ruler"), 0, actionCollection(), "showRuler" );
     connect( m_showRuler, SIGNAL( toggled( bool ) ), this, SLOT( slotShowRuler( bool ) ) );
-    m_showGrid = new KToggleAction( i18n("Show Grid"), 0, actionCollection(), "showGrid" );
+    m_showGrid = new KToggleAction( i18n("Show &Grid"), 0, actionCollection(), "showGrid" );
     connect( m_showGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotShowGrid( bool ) ) );
-    m_showHelplines = new KToggleAction( i18n("Show Helplines"), 0, actionCollection(), "showHelplines" );
+    m_showHelplines = new KToggleAction( i18n("Show &Helplines"), 0, actionCollection(), "showHelplines" );
     connect( m_showHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotShowHelplines( bool ) ) );
 
     // Layout menu
-    m_page = new KAction( i18n("Page ..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
-    m_grid = new KAction( i18n("Grid ..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
-    m_helplines = new KAction( i18n("Helplines ..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
-    m_alignToGrid = new KToggleAction( i18n("Align To Grid"), 0, actionCollection(), "alignToGrid" );
+    m_page = new KAction( i18n("&Page ..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
+    m_grid = new KAction( i18n("&Grid ..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
+    m_helplines = new KAction( i18n("&Helplines ..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
+    m_alignToGrid = new KToggleAction( i18n("&Align To Grid"), 0, actionCollection(), "alignToGrid" );
     connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
-    m_alignToHelplines = new KToggleAction( i18n("Align To Helplines"), 0, actionCollection(), "alignToHelplines" );
+    m_alignToHelplines = new KToggleAction( i18n("Align &To Helplines"), 0, actionCollection(), "alignToHelplines" );
     connect( m_alignToHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToHelplines( bool ) ) );
 	
     // Transform menu
-    m_transformPosition = new KAction( i18n("Position ..."), 0, this, SLOT( slotTransformPosition() ), actionCollection(), "transformPosition" );
-    m_transformDimension = new KAction( i18n("Dimension ..."), 0, this, SLOT( slotTransformDimension() ), actionCollection(), "transformDimension" );
-    m_transformRotation = new KAction( i18n("Rotation ..."), 0, this, SLOT( slotTransformRotation() ), actionCollection(), "transformRotation" );
-    m_transformMirror = new KAction( i18n("Mirror ..."), 0, this, SLOT( slotTransformMirror() ), actionCollection(), "transformMirror" );
+    m_transformPosition = new KAction( i18n("&Position ..."), 0, this, SLOT( slotTransformPosition() ), actionCollection(), "transformPosition" );
+    m_transformDimension = new KAction( i18n("&Dimension ..."), 0, this, SLOT( slotTransformDimension() ), actionCollection(), "transformDimension" );
+    m_transformRotation = new KAction( i18n("&Rotation ..."), 0, this, SLOT( slotTransformRotation() ), actionCollection(), "transformRotation" );
+    m_transformMirror = new KAction( i18n("&Mirror ..."), 0, this, SLOT( slotTransformMirror() ), actionCollection(), "transformMirror" );
 
     // Arrange menu
-    m_distribute = new KAction( i18n("Align/Distribute ..."), 0, this, SLOT( slotDistribute() ), actionCollection(), "distribute" );
-    m_toFront = new KAction( i18n("To Front"), 0, this, SLOT( slotToFront() ), actionCollection(), "toFront" );
-    m_toBack = new KAction( i18n("To Back"), 0, this, SLOT( slotToBack() ), actionCollection(), "toBack" );
-    m_forwardOne = new KAction( i18n("Forward One"), 0, this, SLOT( slotForwardOne() ), actionCollection(), "forwardOne" );
-    m_backOne = new KAction( i18n("Back One"), 0, this, SLOT( slotBackOne() ), actionCollection(), "backOne" );
-    m_group = new KAction( i18n("Group"), 0, this, SLOT( slotGroup() ), actionCollection(), "group" );
-    m_ungroup = new KAction( i18n("Ungroup"), 0, this, SLOT( slotUngroup() ), actionCollection(), "ungroup" );
-    m_textAlongPath = new KAction( i18n("Text Along Path"), 0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
-    m_convertToCurve = new KAction( i18n("Convert to Curve"), 0, this, SLOT( slotConvertToCurve() ), actionCollection(), "convertToCurve" );
+    m_distribute = new KAction( i18n("&Align/Distribute ..."), 0, this, SLOT( slotDistribute() ), actionCollection(), "distribute" );
+    m_toFront = new KAction( i18n("To &Front"), 0, this, SLOT( slotToFront() ), actionCollection(), "toFront" );
+    m_toBack = new KAction( i18n("To &Back"), 0, this, SLOT( slotToBack() ), actionCollection(), "toBack" );
+    m_forwardOne = new KAction( i18n("Forward &One"), 0, this, SLOT( slotForwardOne() ), actionCollection(), "forwardOne" );
+    m_backOne = new KAction( i18n("B&ack One"), 0, this, SLOT( slotBackOne() ), actionCollection(), "backOne" );
+    m_group = new KAction( i18n("&Group"), 0, this, SLOT( slotGroup() ), actionCollection(), "group" );
+    m_ungroup = new KAction( i18n("&Ungroup"), 0, this, SLOT( slotUngroup() ), actionCollection(), "ungroup" );
+    m_textAlongPath = new KAction( i18n("Text Along &Path"), 0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
+    m_convertToCurve = new KAction( i18n("&Convert to Curve"), 0, this, SLOT( slotConvertToCurve() ), actionCollection(), "convertToCurve" );
 
     // Effects menu
-    m_blend = new KAction( i18n("Blend ..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
+    m_blend = new KAction( i18n("&Blend ..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
 
     // Extras menu
-    m_loadPalette = new KAction( i18n("Load Palette ..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" );
-    m_options = new KAction( i18n("Options ..."), 0, this, SLOT( slotOptions() ), actionCollection(), "options" );
+    m_loadPalette = new KAction( i18n("&Load Palette ..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" );
+    m_options = new KAction( i18n("&Options ..."), 0, this, SLOT( slotOptions() ), actionCollection(), "options" );
 
     //
-    m_viewZoom = new KSelectAction (i18n ("Zoom"), 0, actionCollection (), 
+    m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (),
 				    "view_zoom");
     QStringList zooms;
     zooms << "50%";
@@ -217,9 +218,9 @@ void KIllustratorView::createGUI()
     zooms << "1000%";
 
     ((KSelectAction *) m_viewZoom)->setItems (zooms);
-    connect (((KSelectAction *) m_viewZoom), 
-	     SIGNAL(activated(const QString &)), 
-             this, SLOT(slotViewZoom(const QString &))); 
+    connect (((KSelectAction *) m_viewZoom),
+	     SIGNAL(activated(const QString &)),
+             this, SLOT(slotViewZoom(const QString &)));
     ((KSelectAction *) m_viewZoom)->setCurrentItem (2);
     // Colorbar action
 
@@ -229,7 +230,7 @@ void KIllustratorView::createGUI()
 	      << darkMagenta << darkYellow << white << lightGray
 	      << gray << darkGray << black;
 
-    m_colorBar = new KColorBarAction( i18n( "Colorbar" ), 0,
+    m_colorBar = new KColorBarAction( i18n( "&Colorbar" ), 0,
 				      this,
 				      SLOT( slotBrushChosen( const QColor & ) ),
 				      SLOT( slotPenChosen( const QColor & ) ),

@@ -127,7 +127,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
 
-    (void) new KAction( i18n( "Document Information..." ), "documentinfo", 0,
+    (void) new KAction( i18n( "&Document Information..." ), "documentinfo", 0,
 			this, SLOT( slotDocumentInfo() ),
 			actionCollection(), "file_documentinfo" );
 
@@ -145,23 +145,23 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     setView( d->m_splitter );
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    d->m_veryHackyActionList.append(new KAction(i18n("Close All Views"), 0, this,
+    d->m_veryHackyActionList.append(new KAction(i18n("&Close All Views"), 0, this,
 	SLOT(slotCloseAllViews()), actionCollection(), "view_closeallviews"));
     // set up the action list for the splitter stuff
-    d->m_splitViewActionList.append(new KAction(i18n("Split View"), 0,
+    d->m_splitViewActionList.append(new KAction(i18n("&Split View"), 0,
         this, SLOT(slotSplitView()),
         actionCollection(), "view_split"));
-    d->m_removeView=new KAction(i18n("Remove View"), 0,
+    d->m_removeView=new KAction(i18n("&Remove View"), 0,
         this, SLOT(slotRemoveView()),
         actionCollection(), "view_rm_splitter");
     d->m_splitViewActionList.append(d->m_removeView);
     d->m_removeView->setEnabled(false);
-    d->m_orientation=new KSelectAction(i18n("Splitter Orientation"), 0,
+    d->m_orientation=new KSelectAction(i18n("Splitter &Orientation"), 0,
         this, SLOT(slotSetOrientation()),
         actionCollection(), "view_splitter_orientation");
     QStringList items;
-    items << i18n("Vertical")
-	  << i18n("Horizontal");
+    items << i18n("&Vertical")
+	  << i18n("&Horizontal");
     d->m_orientation->setItems(items);
     d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
     d->m_splitViewActionList.append(d->m_orientation);
