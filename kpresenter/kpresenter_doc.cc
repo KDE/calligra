@@ -1010,7 +1010,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
              || context.styleStack().hasAttribute( "presentation:transition-style" ) )
         {
             kdDebug()<<" fill or presentation-style found \n";
-            m_pageList.at(pos)->background()->loadOasis( context.styleStack() );
+            m_pageList.at(pos)->background()->loadOasis( context );
         }
 
 
@@ -1126,6 +1126,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 #endif
     }
     delete m_loadingInfo;
+    m_loadingInfo=0L;
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return true;
 }
