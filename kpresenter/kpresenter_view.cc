@@ -1803,6 +1803,8 @@ void KPresenterView::createGUI()
     page = new Page( pageBase, "Page", ( KPresenterView* )this );
     QObject::connect( page, SIGNAL( fontChanged( const QFont & ) ),
 		      this, SLOT( fontChanged( const QFont & ) ) );
+    QObject::connect( page, SIGNAL( colorChanged( const QColor & ) ),
+		      this, SLOT( colorChanged( const QColor & ) ) );
     QObject::connect( page, SIGNAL( alignChanged( int ) ),
 		      this, SLOT( alignChanged( int ) ) );
     QObject::connect( page, SIGNAL( updateSideBarItem( int ) ),
@@ -2414,8 +2416,10 @@ void KPresenterView::styleOk()
 	gYFactor = styleDia->getGYFactor();
 	sticky = styleDia->isSticky();
     }
-    actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
-    actionPenColor->setCurrentColor( (styleDia->getPen()).color() );
+    else {
+        actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
+        actionPenColor->setCurrentColor( (styleDia->getPen()).color() );
+    }
 }
 
 /*=================== page configuration ok ======================*/
@@ -2607,6 +2611,14 @@ void KPresenterView::fontChanged( const QFont &font )
     ( (KToggleAction*) actionTextUnderline )->blockSignals( true );
     ( (KToggleAction*) actionTextUnderline )->setChecked( tbFont.underline() );
     ( (KToggleAction*) actionTextUnderline )->blockSignals( false );
+}
+
+/*====================== color changed ==========================*/
+void KPresenterView::colorChanged( const QColor &color )
+{
+    tbColor.setRgb( color.rgb() );
+    actionTextColor->setEnabled( true );
+    actionTextColor->setCurrentColor( tbColor );
 }
 
 /*====================== align changed ==========================*/
@@ -3395,6 +3407,18 @@ void KPresenterView::picViewOrig1600x1200()
 void KPresenterView::chPic()
 {
     page->chPic();
+}
+
+void KPresenterView::penColorChanged( const QPen & _pen )
+{
+    actionPenColor->setEnabled( true );
+    actionPenColor->setCurrentColor( _pen.color() );
+}
+
+void KPresenterView::brushColorChanged( const QBrush & _brush )
+{
+    actionBrushColor->setEnabled( true );
+    actionBrushColor->setCurrentColor( _brush.color() );
 }
 
 #include <kpresenter_view.moc>

@@ -331,6 +331,9 @@ public:
     void openPopupMenuSideBar(const QPoint & _point);
     void openPopupMenuPicObject(const QPoint & _point);
 
+    void penColorChanged( const QPen & _pen );
+    void brushColorChanged( const QBrush & _brush );
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -351,6 +354,7 @@ protected slots:
 
     // textobject
     void fontChanged( const QFont & );
+    void colorChanged( const QColor &color );
     void alignChanged( int );
 
     void extraLineBeginNormal();

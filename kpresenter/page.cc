@@ -905,6 +905,9 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.end();
 
 		mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
 	    } break;
 	    case INS_ELLIPSE: {
 		QPainter p( this );
@@ -919,6 +922,9 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.end();
 
 		mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
 	    } break;
 	    case INS_RECT: {
 		QPainter p( this );
@@ -933,6 +939,9 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.end();
 
 		mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
 	    } break;
 	    case INS_LINE: {
 		QPainter p( this );
@@ -947,6 +956,9 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.end();
 
 		mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
 	    } break;
 	    case INS_PIE: {
 		QPainter p( this );
@@ -990,6 +1002,9 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.end();
 
 		mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
 	    } break;
 	    }
 	}
@@ -1233,6 +1248,10 @@ void Page::selectObj( KPObject *kpobject )
         toColorChanged( c );
         toAlignChanged( kptextobject->getKTextObject()->alignment() );
     }
+
+    view->penColorChanged( view->kPresenterDoc()->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
+    view->brushColorChanged( view->kPresenterDoc()->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
+
     _repaint( kpobject );
     emit objectSelectedChanged();
 
