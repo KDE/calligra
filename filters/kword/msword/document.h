@@ -3,9 +3,7 @@
 
 #include <lldocument.h>
 #include <qstring.h>
-
-class QDomDocument;
-class QDomElement;
+#include <qdom.h>
 
 class Document : public wvWare::LLDocument
 {
@@ -15,7 +13,7 @@ public:
 
     virtual void paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap );
     virtual void paragraphEnd();
-    virtual void runOfText( const wvWare::UString& text );
+    virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
 
 private:
     void writeOutParagraph( const QString& name, const QString& text );
@@ -23,6 +21,8 @@ private:
     QString m_paragraph;
     QDomDocument& m_mainDocument;
     QDomElement& m_mainFramesetElement;
+    QDomElement m_formats;
+    int m_index;
     wvWare::SharedPtr<const wvWare::Word97::PAP> m_pap;
 };
 
