@@ -289,8 +289,10 @@ void Page::mousePressEvent( QMouseEvent *e )
         return;
 
     //disallow selecting objects outside the "page"
-    if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, view->getDiffX(), view->getDiffY(), _presFakt ).contains(e->pos()))
-        return;
+    if ( editMode ) {
+        if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, view->getDiffX(), view->getDiffY(), _presFakt ).contains(e->pos()))
+            return;
+    }
 
     if ( e->state() & ControlButton )
         keepRatio = true;
