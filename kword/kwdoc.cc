@@ -116,7 +116,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     setInstance( KWFactory::global(), false );
 
     m_gridX = m_gridY = 10;
-
+    m_indent.setMM(10.0);
     _viewFormattingChars = FALSE;
     _viewFrameBorders = TRUE;
     _viewTableGrid = TRUE;

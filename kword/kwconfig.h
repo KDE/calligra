@@ -24,6 +24,7 @@
 #include <kconfig.h>
 #include <kspell.h>
 #include <knuminput.h>
+//#include "kwunit.h"
 
 class KWView;
 
@@ -48,7 +49,8 @@ public:
   void slotDefault();
 private:
   KWView* m_pView;
-  KIntNumInput	*gridX,*gridY;
+  KIntNumInput *gridX,*gridY;
+  KIntNumInput *indent;
   KConfig* config;
 };
 

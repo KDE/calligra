@@ -18,9 +18,9 @@
 */
 
 #include <qgroupbox.h>
-
 #include "kwconfig.h"
 #include "kwview.h"
+#include "kwunit.h"
 #include "kwdoc.h"
 #include <kiconloader.h>
 #include <qlayout.h>
@@ -91,6 +91,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
 {
     m_pView=_view;
     config = KWFactory::global()->config();
+    m_pView->getGUI()->getDocument()->getUnit();
     QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
     box->setSpacing( 10 );
@@ -99,11 +100,16 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,15);
     int m_iGridX=10;
     int m_iGridY=10;
+    int m_iIndent=10;
+    KWUnit tmpIndent;
     if( config->hasGroup("Interface" ))
         {
             config->setGroup( "Interface" );
             m_iGridX=config->readNumEntry("GridX",10);
             m_iGridY=config->readNumEntry("GridY",10);
+            double val=config->readDoubleNumEntry("Indent",10.0);
+            tmpIndent.setPT(val);
+            m_iIndent=(int)tmpIndent.value( KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ) );
         }
 
     QLabel *text=new QLabel(tmpQGroupBox);
@@ -121,6 +127,27 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     gridY->setRange(1, 50, 1);
     grid1->addWidget(gridY,3,0);
 
+    QString unitText;
+    switch ( KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ) )
+      {
+      case U_MM:
+	unitText=i18n("in Millimeters (mm)");
+	break;
+      case U_INCH:
+	unitText=i18n("in Inches (inch)");
+	break;
+      case U_PT:
+      default:
+	unitText=i18n("in points ( pt )" );
+      }
+    text=new QLabel(tmpQGroupBox);
+    text->setText(i18n("Indent %1").arg(unitText));
+    grid1->addWidget(text,4,0);
+
+    indent=new KIntNumInput(m_iIndent, tmpQGroupBox , 10);
+    indent->setRange(1, 50, 1);
+    grid1->addWidget(indent,5,0);
+
     box->addWidget( tmpQGroupBox);
 }
 
@@ -128,6 +155,8 @@ void configureInterfacePage::apply()
 {
     int valX=gridX->value();
     int valY=gridY->value();
+
+    KWUnit tmpIndent = KWUnit::createUnit( (double)indent->value(), KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ));
     config->setGroup( "Interface" );
     if(valX!=m_pView->getGUI()->getDocument()->gridX())
         {
@@ -139,11 +168,21 @@ void configureInterfacePage::apply()
             config->writeEntry( "GridY",valY );
             m_pView->getGUI()->getDocument()->setGridY(valY);
         }
+    KWUnit _ind=m_pView->getGUI()->getDocument()->getIndentValue();
+    if(tmpIndent.pt()!=_ind.pt())
+        {
+            config->writeEntry( "Indent", tmpIndent.pt());
+            m_pView->getGUI()->getDocument()->setIndentValue( tmpIndent );
+        }
 }
 
 void configureInterfacePage::slotDefault()
 {
     gridX->setValue(10);
     gridY->setValue(10);
+    KWUnit tmpIndent;
+    tmpIndent.setMM(10);
+    int m_iIndent=(int)tmpIndent.value( KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ) );
+    indent->setValue(m_iIndent);
 }
 #include "kwconfig.moc"

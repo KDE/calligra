@@ -408,6 +408,8 @@ public:
     bool getViewTableGrid() { return _viewTableGrid; }
     void setViewTableGrid(bool _b) { _viewTableGrid=_b;}
 
+    KWUnit getIndentValue(  ) { return m_indent; }
+    void setIndentValue( KWUnit _ind ) { m_indent=_ind; }
 
     /**
      * @returns the document for the formulas
@@ -512,6 +514,8 @@ private:
 
     // The document that is used by all formulas
     KFormulaDocument* m_formulaDocument;
+
+    KWUnit m_indent;
 };
 
 

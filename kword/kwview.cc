@@ -169,6 +169,10 @@ void KWView::initConfig()
       config->setGroup( "Interface" );
       getGUI()->getDocument()->setGridY(config->readNumEntry("GridY",10));
       getGUI()->getDocument()->setGridX(config->readNumEntry("GridX",10));
+      KWUnit indent;
+      double val=config->readDoubleNumEntry("Indent",POINT_TO_MM(10.0));
+      indent.setPT(val);
+      getGUI()->getDocument()->setIndentValue(indent);
     }
 }
 
@@ -2171,7 +2175,8 @@ void KWView::textIncreaseIndent()
     if ( edit )
         {
             KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-            double val=(u.pt()+MM_TO_POINT(10));
+            KWUnit indent=getGUI()->getDocument()->getIndentValue();
+            double val=(u.pt()+indent.pt());
             if(val <=(doc->ptPaperWidth()-doc->ptRightBorder()-doc->ptLeftBorder()))
                 {
                     u.setPT( val );
@@ -2187,7 +2192,8 @@ void KWView::textDecreaseIndent()
     if ( edit )
         {
              KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-             double val=(u.pt()-MM_TO_POINT(10));
+             KWUnit indent=getGUI()->getDocument()->getIndentValue();
+             double val=(u.pt()-indent.pt());
              if(u.pt()!=0)
                  {
                      u.setPT( QMAX(val,0.0) );
