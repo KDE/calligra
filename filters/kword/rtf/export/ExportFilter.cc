@@ -1014,6 +1014,14 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         }
     }
 
+    // shadow support
+    // note shadow in KWord is more full-feature/sophisticated than RTF
+    // here we just treat KWord's shadow as simple \shad mark-up
+    if( layout.shadowDistance > 0 )
+    {
+       strLayout += "\\shad";
+    }
+
     // TODO: borders
 
     // This must remain last, as it adds a terminating space.
