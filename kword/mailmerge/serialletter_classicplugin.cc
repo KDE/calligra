@@ -22,6 +22,20 @@
 #include "serialletter_classicplugin.moc"
 #include "mailmerge.h"
 #include <klineeditdlg.h>
+#include <qlabel.h>
+#include <qhbox.h>
+#include <qvbox.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qvalidator.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
+#include <kiconloader.h>
+#include <qheader.h>
+#include "kwdoc.h"
+#include "defs.h"
 
 #define KWSLCPBarIcon( x ) BarIcon( x, db->KWInstance() )
 
@@ -323,7 +337,7 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
     l->setAutoAdd(true);
     l->setSpacing( 5 );
     l->setMargin( 5 );
-    
+
     QHBox *toolbar = new QHBox( back );
 
     first = new QToolButton( toolbar );

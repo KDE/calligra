@@ -23,27 +23,18 @@
 
 #include <qdom.h>
 #include <qlistview.h>
-#include <qlistbox.h>
-#include <qlabel.h>
-#include <qhbox.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qheader.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kdialogbase.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-
-#include "kwdoc.h"
 #include <koVariableDlgs.h>
-#include "defs.h"
 #include "mailmerge_interface.h"
+#include <qspinbox.h>
 
+class QHBox;
+class QVBox;
+class QPushButton;
+class QListBox;
+class QLabel;
+class QLineEdit;
+class QToolButton;
 
 /******************************************************************
  *

@@ -280,7 +280,7 @@ QDomElement KWMailMergeDataBase::save(QDomDocument &doc) const
 //	if (plugin) plugin->save(parentElem); // Not completely sure, perhaps the database itself has to save something too (JoWenn)
 }
 
-void KWMailMergeDataBase::load( QDomElement& parentElem )
+void KWMailMergeDataBase::load( const QDomElement& parentElem )
 {
 	QDomNode dn=parentElem.namedItem("PLUGIN");
 	if (dn.isNull()) return;

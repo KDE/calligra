@@ -67,7 +67,7 @@ public:
     int getNumRecords() const; //accesses the plugin
 
     QDomElement save(QDomDocument &doc) const; // save some global config + plugin config
-    void load( QDomElement& elem ); // save some global config + plugin config
+    void load( const QDomElement& elem ); // save some global config + plugin config
 
     KWMailMergeDataSource *loadPlugin(const QString& name);
     KWMailMergeDataSource *openPluginFor(int type);
