@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="46">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="47">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -252,10 +252,23 @@
  <Action name="edit_paste"/>
  <Separator/>
  <Action name="edit_customvars"/>
- <ActionList name="datatools"/>
+ <!--<ActionList name="datatools"/> Spell check doesn't work for variables (yet?)-->
 </Menu>
 <Menu name="variable_popup">
- <ActionList name="variable_action"/>
+ <Action name="text_default"/>
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Menu name="variable_list"><text>Change Variable To</text>
+  <ActionList name="variable_action"/>
+ </Menu>
+ <!--<ActionList name="datatools"/> Spell check doesn't work on variables (yet?)-->
 </Menu>
 <Menu name="text_popup_link">
  <Action name="text_default"/>
