@@ -33,7 +33,12 @@ typedef enum
     stateNormal,                        // Normal character
     stateLesser,                        // Character '<' found
     stateProcessingInstruction,         // Processing instruction: <?
-    stateSGML,                          // <!
+    stateSGML,                          // We are in <!
+    stateMayBeHTMLComment,              // We have already <!
+    stateMayBeHTMLCommentOneDash,       // We have already <!-
+    stateHTMLComment,                   // We are inside a HTML comment
+    stateHTMLCommentOneDash,            // We are inside a HTML comment and have found a dash ( - )
+    stateHTMLCommentTwoDashes,          // We are inside a HTML comment and have found two dashes ( -- )
     stateTagName,                       // We are reading the name of the tag
     stateBeforeAttributeName,           // We are before the name of next attribute
     stateXMLEmptyElement,               // We have found an / , we suppose that the tag will be closed now
@@ -130,10 +135,77 @@ bool WellFilter(QTextStream& streamIn, QTextStream& streamOut)
                 streamOut << ch;
                 break;
             }
+        case stateHTMLComment:
+            {
+                if (ch=='-')
+                {
+                    state=stateHTMLCommentOneDash;
+                }
+                streamOut << ch;
+                break;
+            }
+        case stateHTMLCommentOneDash:
+            {
+                if (ch=='-')
+                {
+                    state=stateHTMLCommentTwoDashes;
+                }
+                else
+                { // The dash was isolated, so we are in the HTML comment again!
+                    state=stateHTMLComment;
+                }
+                streamOut << ch;
+                break;
+            }
+        case stateHTMLCommentTwoDashes:
+            {
+                if (ch=='>')
+                {// End of HTML comment
+                    state=stateNormal;
+                }
+                else if (ch=='-')
+                {
+                    kdWarning(30503) << "More than two dashes found in HTML comment (File may be not SGML compatible!)" << endl;
+                }
+                else
+                { // We are in the HTML comment again but give a warning that this HTML file is not SGML compatible!
+                    kdWarning(30503) << "Two dashes found in HTML comment (File may be not SGML compatible!)" << endl;
+                    state=stateHTMLComment;
+                }
+                streamOut << ch;
+                break;
+            }
+        case stateMayBeHTMLComment:
+            {
+                // FIXME: we are not tracking < and > as in stateSGML
+                if (ch=='-')
+                {
+                    state=stateMayBeHTMLCommentOneDash;
+                }
+                else
+                {
+                    state=stateSGML;
+                }
+                streamOut << ch;
+                break;
+            }
+        case stateMayBeHTMLCommentOneDash:
+            {
+                // FIXME: we are not tracking < and > as in stateSGML
+                if (ch=='-')
+                {// we have now: <!--
+                    state=stateHTMLComment;
+                }
+                else
+                {
+                    state=stateSGML;
+                }
+                streamOut << ch;
+                break;
+            }
         case stateSGML:
             {
                 // TODO: do a more robust version (the characters < and > may be included in SGML comments.)
-                // TODO: HTML comments including -- (not valid SGML comments)
                 if (ch=='>')
                 {
                     depth--;
