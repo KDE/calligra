@@ -90,7 +90,18 @@ void KontourImport::convert()
 			int y = b.attribute( "y" ).toInt();
 			int width = b.attribute( "width" ).toInt();
 			int height = b.attribute( "height" ).toInt();
-			m_document.append( new VRectangle( 0L, KoPoint( x, y ) , width, height ) );
+			VObject *rect = new VRectangle( 0L, KoPoint( x, y ) , width, height );
+			QDomElement object = b.namedItem( "polyline" ).namedItem( "gobject" ).toElement();
+			if( !object.attribute( "fillcolor" ).isEmpty() )
+			{
+				VFill fill;
+				QColor c;
+				c.setNamedColor( object.attribute( "fillcolor" ) );
+				VColor color( c );
+				fill.setColor( color );
+				rect->setFill( fill );
+			}
+			m_document.append( rect );
 		}
 		else
 		if ( b.tagName() == "ellipse" )
