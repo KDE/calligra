@@ -36,6 +36,7 @@
 KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs )
     : QTextCommand( fs->textDocument() )
 {
+    firstTOC=true;
 }
 
 QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
@@ -78,7 +79,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         }
         p = static_cast<KWTextParag *>(p->next());
     }
-
+    int page=(firstTOC ? 0:1);
     // Now add the page numbers, and apply the style
     QMap<KWTextParag *, KWTextParag *>::Iterator mapIt = paragMap.begin();
     for ( ; mapIt != paragMap.end() ; ++mapIt )
@@ -92,7 +93,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         if ( frame ) // let's be safe
         {
             parag->append( "\t" );
-            parag->append( QString::number( frame->pageNum() ) );
+            parag->append( QString::number( frame->pageNum()+page ) );
         }
 
         // Apply style
@@ -112,13 +113,16 @@ QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * fs = textdoc->textFrameSet();
+
     removeTOC( fs, c, 0L );
+    firstTOC=false;
     fs->kWordDocument()->renameButtonTOC(i18n("Table of &Contents"));
     return c;
 }
 
-void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd )
+bool KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd )
 {
+    bool tocExist=false;
     KWTextDocument * textdoc = fs->textDocument();
     // Remove existing table of contents, based on the style
     QTextCursor start( textdoc );
@@ -131,6 +135,7 @@ void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMa
         if ( parag->style() && ( parag->style()->name().startsWith( "Contents Head" ) ||
             parag->style()->name() == "Contents Title" ) )
         {
+            tocExist=true;
             kdDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
             // This paragraph is part of the TOC -> remove
 
@@ -172,6 +177,7 @@ void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMa
         p = p->prev();
     }
     textdoc->invalidate();
+    return tocExist;
 }
 
 KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )

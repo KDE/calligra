@@ -2525,6 +2525,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
                              bool removeSelected, const QString & commandName,
                              CustomItemsMap customItemsMap )
 {
+    kdDebug()<<"checkNewLine :"<<checkNewLine<<endl;
     //kdDebug(32001) << "KWTextFrameSet::insert" << endl;
     QTextDocument *textdoc = textDocument();
     emit hideCursor();
@@ -2563,7 +2564,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     emit ensureCursorVisible();
     emit showCursor();
     undoRedoInfo.text += txt;
-
+    kdDebug()<<"text :"<<txt<<endl;
     for ( int i = 0; i < (int)txt.length(); ++i ) {
         if ( txt[ oldLen + i ] != '\n' )
             copyCharFormatting( c2.parag()->at( c2.index() ), oldLen + i, false );
@@ -2686,13 +2687,15 @@ void KWTextFrameSet::insertTOC( QTextCursor * cursor )
 
     // Remove old TOC
 
-    KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
+    bool exist=KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
 
     // Insert new TOC
 
     QTextCommand * cmd = new KWInsertTOCCommand( this );
     textdoc->addCommand( cmd );
     macroCmd->addCommand( new KWTextCommand( this, QString::null ) );
+
+    (static_cast<KWInsertTOCCommand *>(cmd))->setFirstToc(exist);
     *cursor = *( cmd->execute( cursor ) );
 
     setLastFormattedParag( textdoc->firstParag() );
