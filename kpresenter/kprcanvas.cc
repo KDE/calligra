@@ -1305,8 +1305,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 }
 #endif
 
-                m_view->penColorChanged( m_activePage->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
-                m_view->brushColorChanged( m_activePage->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
                 mouseSelectedObject = true;
                 _repaint( false );
                 emit objectSelectedChanged();
@@ -1731,9 +1729,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.end();
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             case INS_ELLIPSE: {
                 QPainter p( this );
@@ -1773,9 +1768,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.end();
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             case INS_RECT: {
                 QPainter p( this );
@@ -1814,9 +1806,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.end();
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             case INS_LINE: {
                 QPainter p( this );
@@ -1864,9 +1853,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.end();
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             case INS_PIE: {
                 QPainter p( this );
@@ -1904,9 +1890,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.end();
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
                 m_dragEndPoint = QPoint( e->x() , e->y() );
@@ -1927,9 +1910,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 m_dragStartPoint = m_dragEndPoint;
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             case INS_POLYLINE: case INS_CLOSED_POLYLINE: {
                 QPainter p( this );
@@ -1959,9 +1939,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.end();
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
             case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE:{
@@ -1971,9 +1948,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                                       tmp.y());
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             case INS_POLYGON: {
                 drawPolygon( m_view->zoomHandler()->unzoomPoint( m_dragStartPoint ),
@@ -1988,9 +1962,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                              m_view->zoomHandler()->unzoomPoint( m_dragEndPoint ) ); // draw new polygon
 
                 mouseSelectedObject = true;
-
-                m_view->penColorChanged( m_view->getPen() );
-                m_view->brushColorChanged( m_view->getBrush() );
             } break;
             default: break;
             }
@@ -2414,8 +2385,6 @@ KPObject * KPrCanvas::getObjectAt( const KoPoint &pos, bool withoutProtected )
 void KPrCanvas::selectObj( KPObject *kpobject )
 {
     kpobject->setSelected( true );
-    m_view->penColorChanged( m_activePage->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
-    m_view->brushColorChanged( m_activePage->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
     _repaint( kpobject );
     emit objectSelectedChanged();
 
@@ -2455,8 +2424,6 @@ void KPrCanvas::selectAllObj()
     }
 #endif
 
-    m_view->penColorChanged( m_activePage->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
-    m_view->brushColorChanged( m_activePage->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
     mouseSelectedObject = true;
     _repaint( false );
     emit objectSelectedChanged();
@@ -2484,10 +2451,6 @@ void KPrCanvas::deSelectAllObj()
 #if ! MASTERPAGE
     m_activePage->masterPage()->deSelectAllObj();
 #endif
-
-    // set current default pen color and brush color in tool bar
-    m_view->penColorChanged( m_view->getPen() );
-    m_view->brushColorChanged( m_view->getBrush() );
 
     //desactivate kptextview when we switch of page
     if(m_currentTextObjectView)

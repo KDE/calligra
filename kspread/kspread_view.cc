@@ -1438,18 +1438,6 @@ void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
 {
     toolbarLock = TRUE;
 
-    QColor color=cell->textColor( column, row );
-    if (!color.isValid())
-        color=QApplication::palette().active().text();
-    actions->textColor->setCurrentColor( color );
-
-    color=cell->bgColor(  column, row );
-
-    if ( !color.isValid() )
-        color = QApplication::palette().active().base();
-
-    actions->bgColor->setCurrentColor( color );
-
     actions->selectFontSize->setFontSize( cell->textFontSize( column, row ) );
     actions->selectFont->setFont( cell->textFontFamily( column,row ) );
     actions->bold->setChecked( cell->textFontBold( column, row ) );

@@ -1330,10 +1330,6 @@ void KivioView::updateToolBars()
 
         m_menuTextFormatAction->setEnabled( false );
         m_menuStencilConnectorsAction->setEnabled( false );
-
-        m_setFGColor->setCurrentColor(QColor(0, 0, 0));
-        m_setBGColor->setCurrentColor(QColor(255, 255, 255));
-        m_setTextColor->setCurrentColor(QColor(0, 0, 0));
     }
     else
     {
@@ -1347,10 +1343,6 @@ void KivioView::updateToolBars()
 
         m_lineWidthAction->setCurrentWidth(pStencil->lineWidth());
         m_lineStyleAction->setCurrentSelection(pStencil->linePattern());
-
-        m_setFGColor->setCurrentColor(pStencil->fgColor());
-        m_setBGColor->setCurrentColor(pStencil->bgColor());
-        m_setTextColor->setCurrentColor(pStencil->textColor());
 
         showAlign(pStencil->hTextAlign());
         showVAlign(pStencil->vTextAlign());

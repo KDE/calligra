@@ -1816,7 +1816,6 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
         actionBackgroundColor->setText(i18n("Frame Background Color..."));
     else
         actionBackgroundColor->setText(i18n("Text Background Color..."));
-    actionFormatColor->setCurrentColor( currentFormat.color() );
     switch(currentFormat.vAlign())
       {
       case KoTextFormat::AlignSuperScript:

@@ -4805,11 +4805,8 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
     actionTextUnderline->setChecked( currentFormat.underline());
     actionFormatStrikeOut->setChecked( currentFormat.strikeOut());
 
-    QColor col=currentFormat.textBackgroundColor();
     actionBrushColor->setEnabled(true);
-    actionBrushColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
     //actionBrushColor->setText(i18n("Text Background Color..."));
-    actionTextColor->setCurrentColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
     {

@@ -240,8 +240,7 @@ void TKSelectColorAction::selectColorDialog()
 void TKSelectColorAction::slotActivated()
 {
   //kdDebug() << "TKSelectColorAction::slotActivated" << endl;
-  // The goal is to select a color !
-  selectColorDialog();
+  activate();
 }
 
 void TKSelectColorAction::activate()
