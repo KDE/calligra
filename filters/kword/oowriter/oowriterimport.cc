@@ -52,11 +52,11 @@ OoWriterImport::~OoWriterImport()
 
 KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCString const & to )
 {
-    kdDebug() << "Entering Oowriter Import filter: " << from << " - " << to << endl;
+    kdDebug(30518) << "Entering Oowriter Import filter: " << from << " - " << to << endl;
 
     if ( from != "application/vnd.sun.xml.writer" || to != "application/x-kword" )
     {
-        kdWarning() << "Invalid mimetypes " << from << " " << to << endl;
+        kdWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -82,13 +82,13 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
 
     KoStoreDevice* out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
     if ( !out ) {
-        kdError(30502) << "Unable to open output file!" << endl;
+        kdError(30518) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
     else
     {
         QCString cstr = mainDocument.toCString();
-        kdDebug()<<" maindoc: " << cstr << endl;
+        kdDebug(30518)<<" maindoc: " << cstr << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( cstr, cstr.length() );
     }
@@ -101,13 +101,13 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     if( out )
     {
         QCString info = docinfo.toCString();
-        kdDebug()<<" info :"<<info<<endl;
+        kdDebug(30518)<<" info :"<<info<<endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( info , info.length() );
     }
 
 
-    kdDebug() << "######################## OoWriterImport::convert done ####################" << endl;
+    kdDebug(30518) << "######################## OoWriterImport::convert done ####################" << endl;
     return KoFilter::OK;
 }
 
@@ -139,7 +139,7 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
             e = parseList( doc, t );
         else
         {
-            kdDebug() << "Unsupported texttype '" << name << "'" << endl;
+            kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
             continue;
         }
 
@@ -211,18 +211,18 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
 {
     KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
 
-    kdDebug() << "Store created" << endl;
+    kdDebug(30518) << "Store created" << endl;
 
     if ( !store )
     {
-        kdWarning() << "Couldn't open the requested file." << endl;
+        kdWarning(30518) << "Couldn't open the requested file." << endl;
         return KoFilter::FileNotFound;
     }
 
-    kdDebug() << "Trying to open content.xml" << endl;
+    kdDebug(30518) << "Trying to open content.xml" << endl;
     if ( !store->open( "content.xml" ) )
     {
-        kdWarning() << "This file doesn't seem to be a valid OpenWrite file" << endl;
+        kdWarning(30518) << "This file doesn't seem to be a valid OpenWrite file" << endl;
         delete store;
         return KoFilter::WrongFormat;
     }
@@ -231,39 +231,39 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
     m_content.setContent( store->device() );
     store->close();
 
-    //kdDebug()<<" m_content.toCString() :"<<m_content.toCString()<<endl;
-    kdDebug() << "file content.xml loaded " << endl;
+    //kdDebug(30518)<<" m_content.toCString() :"<<m_content.toCString()<<endl;
+    kdDebug(30518) << "file content.xml loaded " << endl;
 
     if ( store->open( "styles.xml" ) )
     {
         styles.setContent( store->device() );
         store->close();
 
-        //kdDebug()<<" styles.toCString() :"<<styles.toCString()<<endl;
-        kdDebug() << "file containing styles loaded" << endl;
+        //kdDebug(30518)<<" styles.toCString() :"<<styles.toCString()<<endl;
+        kdDebug(30518) << "file containing styles loaded" << endl;
     }
     else
-        kdWarning() << "Style definitions do not exist!" << endl;
+        kdWarning(30518) << "Style definitions do not exist!" << endl;
 
     if ( store->open( "meta.xml" ) )
     {
         m_meta.setContent( store->device() );
         store->close();
 
-        kdDebug() << "File containing meta definitions loaded" << endl;
+        kdDebug(30518) << "File containing meta definitions loaded" << endl;
     }
     else
-        kdWarning() << "Meta definitions do not exist!" << endl;
+        kdWarning(30518) << "Meta definitions do not exist!" << endl;
 
     if ( store->open( "settings.xml" ) )
     {
         m_settings.setContent( store->device() );
         store->close();
 
-        kdDebug() << "File containing settings loaded" << endl;
+        kdDebug(30518) << "File containing settings loaded" << endl;
     }
     else
-        kdWarning() << "Settings do not exist!" << endl;
+        kdWarning(30518) << "Settings do not exist!" << endl;
 
     delete store;
 
@@ -316,7 +316,7 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 #endif
     docinfo.appendChild(doc);
 
-    //kdDebug()<<" meta-info :"<<m_meta.toCString()<<endl;
+    //kdDebug(30518)<<" meta-info :"<<m_meta.toCString()<<endl;
 }
 
 bool OoWriterImport::createStyleMap( const QDomDocument & styles )
@@ -331,7 +331,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
     if ( ok )
     {
-      kdDebug() << "OpenWriter version: " << d << endl;
+      kdDebug(30518) << "OpenWriter version: " << d << endl;
       if ( d > 1.0 )
       {
         QString message( i18n("This document was created with the OpenOffice.org version '%1'. This filter was written for version for 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
@@ -346,14 +346,14 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
   if ( !fontStyles.isNull() )
   {
-    kdDebug() << "Starting reading in font-decl..." << endl;
+    kdDebug(30518) << "Starting reading in font-decl..." << endl;
 
     insertStyles( fontStyles.toElement() );
   }
   else
-    kdDebug() << "No items found" << endl;
+    kdDebug(30518) << "No items found" << endl;
 
-  kdDebug() << "Starting reading in auto:styles" << endl;
+  kdDebug(30518) << "Starting reading in auto:styles" << endl;
 
   QDomNode autoStyles = content.namedItem( "office:automatic-styles" );
   if ( !autoStyles.isNull() )
@@ -361,26 +361,26 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
       insertStyles( autoStyles.toElement() );
   }
   else
-    kdDebug() << "No items found" << endl;
+    kdDebug(30518) << "No items found" << endl;
 
 
-  kdDebug() << "Reading in master styles" << endl;
+  kdDebug(30518) << "Reading in master styles" << endl;
 
   QDomNode masterStyles = content.namedItem( "office:master-styles" );
 
   if ( masterStyles.isNull() )
   {
-    kdDebug() << "Nothing found " << endl;
+    kdDebug(30518) << "Nothing found " << endl;
   }
 
   QDomElement master = masterStyles.namedItem( "style:master-page").toElement();
   if ( !master.isNull() )
   {
-    kdDebug() << master.attribute( "style:name" ) << endl;
+    kdDebug(30518) << master.attribute( "style:name" ) << endl;
 #if 0 // I don't understand this code
       QString name( "pm" );
     name += master.attribute( "style:name" );
-    kdDebug() << "Master style: '" << name << "' loaded " << endl;
+    kdDebug(30518) << "Master style: '" << name << "' loaded " << endl;
     m_styles.insert( name, new QDomElement( master ) );
 
     master = master.nextSibling().toElement();
@@ -390,17 +390,17 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   }
 
 
-  kdDebug() << "Starting reading in office:styles" << endl;
+  kdDebug(30518) << "Starting reading in office:styles" << endl;
 
   QDomNode fixedStyles = content.namedItem( "office:styles" );
 
-  kdDebug() << "Reading in default styles" << endl;
+  kdDebug(30518) << "Reading in default styles" << endl;
 
   QDomNode def = fixedStyles.namedItem( "style:default-style" );
   while ( !def.isNull() )
   {
     QDomElement e = def.toElement();
-    kdDebug() << "Style found " << e.nodeName() << ", tag: " << e.tagName() << endl;
+    kdDebug(30518) << "Style found " << e.nodeName() << ", tag: " << e.tagName() << endl;
 
     if ( e.nodeName() != "style:default-style" )
     {
@@ -410,7 +410,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
     if ( !e.isNull() )
     {
-      kdDebug() << "Default style " << e.attribute( "style:family" ) << "default" << " loaded " << endl;
+      kdDebug(30518) << "Default style " << e.attribute( "style:family" ) << "default" << " loaded " << endl;
 
       //m_defaultStyles.insert( e.attribute( "style:family" ) + "default", layout );
     }
@@ -438,7 +438,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   if ( !fixedStyles.isNull() )
     insertStyles( fixedStyles.toElement() );
 
-  kdDebug() << "Starting reading in automatic styles" << endl;
+  kdDebug(30518) << "Starting reading in automatic styles" << endl;
 
   content = m_content.documentElement();
   autoStyles = content.namedItem( "office:automatic-styles" );
@@ -452,11 +452,11 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
   if ( !fontStyles.isNull() )
   {
-    kdDebug() << "Starting reading in special font decl" << endl;
+    kdDebug(30518) << "Starting reading in special font decl" << endl;
     insertStyles( fontStyles.toElement() );
   }
 
-  kdDebug() << "Styles read in." << endl;
+  kdDebug(30518) << "Styles read in." << endl;
 
   return true;
 }
@@ -473,7 +473,7 @@ void OoWriterImport::insertStyles( const QDomElement& styles )
 
         QString name = e.attribute( "style:name" );
         m_styles.insert( name, new QDomElement( e ) );
-        //kdDebug() << "Style: '" << name << "' loaded " << endl;
+        //kdDebug(30518) << "Style: '" << name << "' loaded " << endl;
     }
 }
 
@@ -497,7 +497,7 @@ void OoWriterImport::addStyles( const QDomElement* style )
 // Exact copy of OoImpressImport::parseList
 QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list )
 {
-    //kdDebug() << k_funcinfo << "parsing list"<< endl;
+    //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
     bool isOrdered;
     if ( list.tagName() == "text:ordered-list" )
@@ -652,7 +652,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
         QDomElement text = doc.createElement( "TEXT" );
         text.appendChild( doc.createTextNode( textData ) );
 
-        //kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
+        //kdDebug(30518) << k_funcinfo << "Para text is: " << paragraph.text() << endl;
 
         // parse the text-properties
         if ( m_styleStack.hasAttribute( "fo:color" ) )
