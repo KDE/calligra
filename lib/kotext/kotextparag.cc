@@ -783,7 +783,11 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
     if ( dir != QPainter::RTL && start + len == length() ) // don't draw the last character (trailing space)
+    {
        len--;
+       if ( len <= 0 )
+           return;
+    }
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
         str = format->displayedString( str );
