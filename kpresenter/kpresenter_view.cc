@@ -2737,9 +2737,9 @@ void KPresenterView::setupActions()
     actionTextAlignBlock->setExclusiveGroup( "align" );
 
 
-    actionFormatNumber = new KActionMenu( i18n( "Number" ), "enum_list", actionCollection(), "format_number" );
+    actionFormatNumber = new KActionMenu( i18n( "Number" ), "enumList", actionCollection(), "format_number" );
     actionFormatNumber->setDelayed( false );
-    actionFormatBullet = new KActionMenu( i18n( "Bullet" ), "unsorted_list", actionCollection(), "format_bullet" );
+    actionFormatBullet = new KActionMenu( i18n( "Bullet" ), "unsortedList", actionCollection(), "format_bullet" );
     actionFormatBullet->setDelayed( false );
     QPtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
     KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
