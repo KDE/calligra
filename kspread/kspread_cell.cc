@@ -1557,7 +1557,7 @@ bool KSpreadCell::makeFormular()
     sDelocalizedText.replace( pos++, 1, "." );
   // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
   */
-  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/m_strText.utf8(), m_lstDepends );
+  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/m_strText, m_lstDepends );
   // Did a syntax error occur ?
   if ( context.exception() )
   {
