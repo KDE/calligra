@@ -54,6 +54,14 @@ public:
   // show enum list dialog
   static bool enumListDia(int&,QFont&,QColor&,QString&,QString&,int&);
 
+  // return values
+  int type() {return _type;}
+  QFont font() {return _font;}
+  QColor color() {return _color;}
+  QString before() {return _before;}
+  QString after() {return _after;}
+  int start() {return _start;}
+
 protected:
 
   void getFonts();
@@ -78,6 +86,19 @@ protected:
   int _start;
   
   QStrList fontList;
+
+protected slots:
+  void fontSelected(const char*);
+  void sizeSelected(int);
+  void colorChanged(const QColor&);
+  void boldChanged();
+  void italicChanged();
+  void underlChanged();
+  void beforeChanged(const char*);
+  void afterChanged(const char*);
+  void startChanged(const char*);
+  void numChanged();
+  void alphaChanged();
 
 };
 

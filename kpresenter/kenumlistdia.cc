@@ -103,7 +103,8 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   eBefore->setMaxLength(4);
   eBefore->setText((const char*)_before);
   grid->addWidget(eBefore,5,0);
-
+  connect(eBefore,SIGNAL(textChanged(const char*)),this,SLOT(beforeChanged(const char*)));
+  
   lAfter = new QLabel("After:",this);
   lAfter->resize(lAfter->sizeHint());
   grid->addWidget(lAfter,4,1);
@@ -113,6 +114,7 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   eAfter->setMaxLength(4);
   eAfter->setText((const char*)_after);
   grid->addWidget(eAfter,5,1);
+  connect(eAfter,SIGNAL(textChanged(const char*)),this,SLOT(afterChanged(const char*)));
 
   lStart = new QLabel("Start:",this);
   lStart->resize(lStart->sizeHint());
@@ -121,20 +123,24 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   eStart = new QLineEdit(this);
   eStart->resize(lStart->width(),eStart->sizeHint().height());
   eStart->setMaxLength(1);
-  if (_type == NUMBER)
+  if (_type == 1)
     sprintf(chr,"%d",_start);
   else
     sprintf(chr,"%c",_start);
   eStart->setText(chr);
   grid->addWidget(eStart,5,2);
+  connect(eStart,SIGNAL(textChanged(const char*)),this,SLOT(startChanged(const char*)));
+  _start = eStart->text()[0];
 
   number = new QRadioButton("Numeric",this);
   number->resize(number->sizeHint());
   grid->addWidget(number,4,4);
+  connect(number,SIGNAL(clicked()),this,SLOT(numChanged()));
 
   alphabeth = new QRadioButton("Alphabethic",this);
   alphabeth->resize(alphabeth->sizeHint());
   grid->addWidget(alphabeth,5,4);
+  connect(alphabeth,SIGNAL(clicked()),this,SLOT(alphaChanged()));
 
   if (_type == NUMBER)
     number->setChecked(true);
@@ -213,6 +219,13 @@ bool KEnumListDia::enumListDia(int& __type,QFont& __font,QColor& __color,
 
   if (dlg->exec() == QDialog::Accepted)
     {
+      __type = dlg->type();
+      __font = dlg->font();
+      __color = dlg->color();
+      __before = dlg->before();
+      __after = dlg->after();
+      __start = dlg->start();
+      if (__type == 1) __start -= 48;
       res = true;
     }
 
@@ -303,3 +316,74 @@ void KEnumListDia::getFonts()
   XFreeFontNames(fontNames_copy);
   XCloseDisplay(kde_display);
 }
+
+/*=========================== Font selected =====================*/
+void KEnumListDia::fontSelected(const char *_family)
+{
+  _font.setFamily(_family);
+}
+
+/*===================== size selected ===========================*/
+void KEnumListDia::sizeSelected(int i)
+{
+  _font.setPointSize(i+4);
+}
+
+/*===================== color selected ==========================*/
+void KEnumListDia::colorChanged(const QColor& __color)
+{
+ _color = __color;
+}
+
+/*====================== bold clicked ===========================*/
+void KEnumListDia::boldChanged()
+{
+  _font.setBold(bold->isChecked());
+}
+
+/*====================== italic clicked =========================*/
+void KEnumListDia::italicChanged()
+{
+  _font.setItalic(italic->isChecked());
+}
+
+/*====================== underline clicked ======================*/
+void KEnumListDia::underlChanged()
+{
+  _font.setUnderline(underl->isChecked());
+}
+
+/*======================= before changed ========================*/
+void KEnumListDia::beforeChanged(const char* str)
+{
+  _before.operator=(str);
+}
+
+/*======================= after changed =========================*/
+void KEnumListDia::afterChanged(const char* str)
+{
+  _after.operator=(str);
+}
+
+
+/*======================= start changed =========================*/
+void KEnumListDia::startChanged(const char* str)
+{
+  _start = str[0];
+}
+
+/*======================== rb number changed ====================*/
+void KEnumListDia::numChanged()
+{
+  _type = 1;
+  alphabeth->setChecked(false);
+}
+
+/*======================== rb alphabeth changed =================*/
+void KEnumListDia::alphaChanged()
+{
+  _type = 2;
+  number->setChecked(false);
+}
+
+

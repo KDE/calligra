@@ -951,9 +951,10 @@ void KTextObject::paintCell(class QPainter* p,int row,int)
   unsigned int i = 0,j = 0,chars = 0,len = 0;
   bool drawCursor = false;
   QPoint c1,c2;
-  unsigned int scrBar = 0;
+  unsigned int scrBar = 0,wid = 0,selX,selW;
   if (tableFlags() & Tbl_vScrollBar) scrBar = 16;
   char chr[11];
+  int selStart = -1,selStop = -1;
 
   // get pointer to the paragraph, which should be drwan
   paragraphPtr = paragraphList.at(row);
@@ -1026,22 +1027,85 @@ void KTextObject::paintCell(class QPainter* p,int row,int)
 		}
 
 	      // draw all objects of the line
-	      for (j = 0;j < linePtr->items();j++)
+	      wid = 0;
+	      for (j = 0;j < linePtr->items();wid += linePtr->itemAt(j)->textLength(),j++)
 		{
 		  objPtr = linePtr->itemAt(j);
 		  len = objPtr->textLength();
 		  p->setFont(objPtr->font());
 		  
 		  // check, if a selection should be drawn
-// 		  if ((mousePressed || drawSelection) && showCursor() &&
-// 		      startCursor->positionParagraph() == row && startCursor->positionLine() == i)
-// 		    {
-// 		      unsigned int inLine = startCursor->positionInLine();
-// 		      if (linePtr->getInObj(inLine) == j || linePtr->getBeforeObj(inLine) == j)
+// 		  selStart = -1;
+// 		  selStop = -1;
+//  		  if ((mousePressed || drawSelection) && showCursor())
+//  		    {
+		      
+// 		      // get start position
+//  		      if (startCursor->positionParagraph() == row)
 // 			{
-// 			  p->setPen(QPen(selectionColor));
-// 			  p->setBrush(QBrush(selectionColor));
-// 			  p->drawRect(x,y,objPtr->width(),linePtr->height());
+// 			  if (startCursor->positionLine() == i)
+// 			    {
+// 			      unsigned int inLine = startCursor->positionInLine();
+// 			      if (linePtr->getBeforeObj(inLine) == j || inLine <= wid)
+// 				selStart = 0;
+// 			      else if (linePtr->getInObj(inLine) == j)
+// 				selStart = inLine - wid;
+// 			      else selStart = -1;
+// 			    }
+// 			  else if (startCursor->positionLine() < i)
+// 			    {
+// 			      selStart = 0;
+// 			    }
+// 			  else selStart = -1;
+// 			}
+// 		      else if (startCursor->positionParagraph() < row)
+// 			selStart = 0;
+// 		      else selStart = -1;
+
+// 		      if (selStart != -1)
+// 			{
+// 			  // get end position
+// 			  if (stopCursor->positionParagraph() == row)
+// 			    {
+// 			      if (stopCursor->positionLine() == i)
+// 				{
+// 				  unsigned int inLine = stopCursor->positionInLine();
+// 				  if (linePtr->getAfterObj(inLine) == j || inLine >= wid + linePtr->itemAt(j)->textLength())
+// 				    selStop = wid + linePtr->itemAt(j)->textLength();
+// 				  else if (linePtr->getInObj(inLine) == j)
+// 				    selStop = inLine - wid;
+// 				  else selStop = -1;
+// 				}
+// 			      else if (startCursor->positionLine() > i)
+// 				{
+// 				  unsigned int inLine = stopCursor->positionInLine();
+// 				  selStop = inLine - wid;
+// 				}
+// 			      else selStop = -1;
+// 			    }
+// 			  else if (startCursor->positionParagraph() > row)
+// 			    {
+// 			      unsigned int inLine = stopCursor->positionInLine();
+// 			      selStop = inLine - wid;
+// 			    }
+// 			  else selStop = -1;
+			  
+// 			  // if selection should really be drawn
+// 			  if (selStop != -1 && selStart < selStop)
+// 			    {
+// 			      unsigned int inLine = stopCursor->positionInLine();
+// 			      selX = x;
+// 			      if (selStart > 0)
+// 				selX += p->fontMetrics().width(objPtr->text().left(selStart));
+// 			      if (selStop == inLine - wid)
+// 				selW = objPtr->width() - selX;
+// 			      else
+// 				selW = objPtr->width() - selX -
+// 				  p->fontMetrics().width(objPtr->text().right(objPtr->textLength() - selStop));
+// 			      p->setPen(QPen(selectionColor));
+// 			      p->setBrush(QBrush(selectionColor));
+// 			      p->drawRect(selX,y,selW,linePtr->height());
+// 			    }
 // 			}
 // 		    }
 
