@@ -23,17 +23,13 @@ public:
     void init();
     void apply();
 public slots:
-    void changeState( bool );
     void changeXaxisState( bool );
-    void changeFont();
 private:
     KChartParams* _params;
     QCheckBox *grid;
-    QCheckBox *border;
     QCheckBox *xaxis;
     QCheckBox *yaxis;
     QCheckBox *yaxis2;
-    QCheckBox *shelf;
     QCheckBox *xlabel;
     QCheckBox *lineMarker;
     QCheckBox *llabel;
@@ -44,11 +40,6 @@ private:
     QLineEdit *ytitle2;
     QLineEdit *ylabel2_fmt;
     QLineEdit *annotation;
-    //KIntNumInput *element;
-    QSpinBox *element;
-    KColorButton *color;
-    QPushButton *font;
-    QFont annotationFont;
 };
 
 #endif

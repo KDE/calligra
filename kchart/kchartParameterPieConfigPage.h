@@ -25,18 +25,9 @@ public:
     void init();
     void apply();
 
-public slots:
-    void changeState(bool );	
 private:
     KChartParams* _params;
-    QRadioButton *_typeNone;
-    QRadioButton *_typeAbove;
-    QRadioButton *_typeBelow;
-    QRadioButton *_typeRight;
-    QRadioButton *_typeLeft;
-    QCheckBox *lineLabel;
     QLineEdit *title;
-    QSpinBox *dist;  
 };
 
 #endif

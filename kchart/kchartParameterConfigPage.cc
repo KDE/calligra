@@ -32,32 +32,24 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
     grid1->addWidget(grid,0,0);
 
-    border = new QCheckBox( i18n( "Border" ), gb1 );
-    grid1->addWidget(border,1,0);
-
-    //laurent fix it for the moment kdchart doesn't support it
-    border->setEnabled(false);
 
     xaxis = new QCheckBox( i18n( "X-Axis" ), gb1 );
-    grid1->addWidget(xaxis,2,0);
+    grid1->addWidget(xaxis,1,0);
 
     yaxis = new QCheckBox( i18n( "Y-Axis" ), gb1);
-    grid1->addWidget(yaxis,3,0);
-
-    shelf = new QCheckBox( i18n( "Shelf grid" ), gb1 );
-    grid1->addWidget(shelf,4,0);
+    grid1->addWidget(yaxis,2,0);
 
     xlabel = new QCheckBox( i18n( "Has X-Label" ), gb1 );
-    grid1->addWidget(xlabel,5,0);
+    grid1->addWidget(xlabel,3,0);
 
     yaxis2 = new QCheckBox( i18n( "Y-Axis2" ), gb1 );
-    grid1->addWidget(yaxis2,6,0);
+    grid1->addWidget(yaxis2,4,0);
 
     lineMarker = new QCheckBox( i18n( "Line Marker" ), gb1 );
-    grid1->addWidget(lineMarker,7,0);
+    grid1->addWidget(lineMarker,5,0);
 
     llabel = new QCheckBox( i18n( "Legend" ), gb1 );
-    grid1->addWidget(llabel,8,0);
+    grid1->addWidget(llabel,6,0);
 
     QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
     QGridLayout *grid2 = new QGridLayout(gb2,8,2,15,8);
@@ -113,48 +105,11 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     ylabel2_fmt->setMaximumWidth(130);
     grid2->addWidget(ylabel2_fmt,5,1);
 
-    QButtonGroup* gb3 = new QButtonGroup( i18n("Annotation"), this );
-    QGridLayout *grid3 = new QGridLayout(gb3,8,1,15,8);
-
-    tmpLabel = new QLabel( i18n( "Annotation" ), gb3 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
-    grid3->addWidget(tmpLabel,0,0);
-
-    annotation=new QLineEdit(gb3);
-    annotation->setMaximumWidth(130);
-    grid3->addWidget(annotation,1,0);
-
-    tmpLabel = new QLabel( i18n( "Position" ), gb3 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
-    grid3->addWidget(tmpLabel,2,0);
-
-    //element = new KIntNumInput(1,gb3,10);
-    // PENDING(kalle) Reenable?
-    element=new QSpinBox(1,/*_params->xlbl.count()*/0 , 1, gb3);
-    element->setEnabled( false );
-    //element->setRange(1,3,1);//_params->xlbl.count());
-    //element->setLabel(i18n( "Element" ));
-    grid3->addWidget(element,3,0);
-
-    tmpLabel = new QLabel( i18n( "Color" ), gb3 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
-    grid3->addWidget(tmpLabel,4,0);
-
-    color=new KColorButton( gb3 );
-    grid3->addWidget( color, 5, 0 );
-
-    font = new QPushButton( gb3);
-    font->setText(i18n("Font"));
-    grid3->addWidget( font,6,0);
-    gb3->setEnabled(false);
     layout->addWidget(gb1,0,0);
     layout->addWidget(gb2,0,1);
-    layout->addWidget(gb3,0,2);
     grid1->activate();
     grid2->activate();
-    grid3->activate();
 
-    connect(font,SIGNAL(clicked()),this,SLOT(changeFont()));
     /*connect( grid, SIGNAL( toggled( bool ) ),
       this, SLOT( changeState( bool ) ) );*/
     /*connect( xaxis, SIGNAL( toggled( bool ) ),
@@ -170,28 +125,11 @@ void KChartParameterConfigPage::changeXaxisState(bool state)
 
 }
 
-void KChartParameterConfigPage::changeState(bool state)
-{
-    if(state)
-        shelf->setEnabled(true);
-    else
-        shelf->setEnabled(false);
-
-}
-
-void KChartParameterConfigPage::changeFont()
-{
-    if (KFontDialog::getFont( annotationFont,false,this ) == QDialog::Rejected )
-        return;
-}
-
 void KChartParameterConfigPage::init()
 {
     // PENDING(kalle) adapt these to KDChart
     //     grid->setChecked(_params->grid);
-    //     border->setChecked(_params->border);
     //     xlabel->setChecked(_params->hasxlabel);
-    //     shelf->setChecked(_params->shelf);
 
 
     xaxis->setChecked(_params->axisVisible(KDChartAxisParams::AxisPosBottom));
@@ -226,12 +164,6 @@ void KChartParameterConfigPage::init()
     	ylabel2_fmt->setEnabled(false);
     	ytitle2->setEnabled(false);
     }
-    // PENDING(kalle) Adapt this
-    //     if(_params->grid)
-    //     	shelf->setEnabled(true);
-    //     else
-    shelf->setEnabled(false);
-
 
     title->setText(_params->header1Text());
 
@@ -245,20 +177,6 @@ void KChartParameterConfigPage::init()
     //     	xlabel->setEnabled(true);
     //     else
     xlabel->setEnabled(false);
-
-    // PENDING(kalle) Adapt this
-    //     annotationFont=_params->annotationFont();
-    //     if(_params->annotation)
-    //         {
-    //         annotation->setText(_params->annotation->note);
-    //         color->setColor(_params->annotation->color);
-    //         element->setValue((int)_params->annotation->point+1);
-    //         }
-    //     else
-    //         {
-    color->setColor(Qt::black);
-    annotation->setText("");
-    element->setValue(1);
 }
 
 

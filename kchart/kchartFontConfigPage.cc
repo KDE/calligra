@@ -153,9 +153,6 @@ void KChartFontConfigPage::changeLabelFont()
   } else if(list->currentText()==i18n("Label")) {
     if (KFontDialog::getFont( label,false,this,true,&labelIsRelative ) == QDialog::Rejected)
       return;
-//  } else if(list->currentText()==i18n("Legend")) {
-//    if (KFontDialog::getFont( legend,false,this,true,&legendIsRelative ) == QDialog::Rejected)
-//      return;
   }
   else {
     kdDebug( 35001 ) << "Pb in listBox" << endl;
