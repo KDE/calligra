@@ -1,7 +1,7 @@
 #include "kivio_common.h"
 #include "kivio_text_style.h"
 
-
+#include <kglobalsettings.h>
 
 KivioTextStyle::KivioTextStyle()
 {
@@ -10,7 +10,8 @@ KivioTextStyle::KivioTextStyle()
     m_hTextAlign = Qt::AlignHCenter;
     m_vTextAlign = Qt::AlignVCenter;
     m_isHtml = false;
-    m_font = QFont("times",12);
+    //m_font = QFont("times",12);
+    m_font = KGlobalSettings::generalFont();
 }
 
 KivioTextStyle::~KivioTextStyle()

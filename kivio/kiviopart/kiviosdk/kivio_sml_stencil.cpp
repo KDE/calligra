@@ -38,6 +38,7 @@
 #include <qbrush.h>
 #include <qcolor.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 #include <math.h>
 
 /**
@@ -1555,7 +1556,8 @@ QFont KivioSMLStencil::textFont()
         pShape = m_pShapeList->next();
     }
 
-    return QFont("times",12);
+    //return QFont("times",12);
+    return KGlobalSettings::generalFont();
 }
 
 
