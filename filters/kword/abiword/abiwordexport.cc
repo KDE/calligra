@@ -1085,7 +1085,7 @@ QString AbiWordWorker::transformToTextDate(const QDateTime& dt)
 
         const QDate date(dt.date());
 
-        const char* dayName[7] = { "Mon", "Thu", "Wed", "Tue", "Fri", "Sat", "Sun" };
+        const char* dayName[7] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
         const int dow = date.dayOfWeek() - 1;
         if ((dow<0) || (dow>6))
             result += "Mon"; // Unknown day, rename it Monday.
@@ -1134,7 +1134,7 @@ QString AbiWordWorker::transformToTextDate(const QDateTime& dt)
     else
     {
         // Invalid, so give back 1970-01-01
-        return "Tue Jan 01 00:00:00 1970";
+        return "Thu Jan 01 00:00:00 1970";
     }
 }
 
