@@ -11,6 +11,7 @@ since 1.3
 - fix problem where hidden sheet is simply appended in the tab bar
   (when it is shown again).
 - fix bug #74091: wrong special paste from cell with formula
+- fix bug #76679: time shown with one second offset
 
 changes for 1.3.2
 ================= 
