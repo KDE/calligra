@@ -25,11 +25,13 @@ VMDlgStroke::VMDlgStroke( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_par
 	setCancelButton();
 	QGridLayout *mainLayout;
 
+	// HS Selector
 	mRGBWidget = new QWidget( this );
 	mainLayout = new QGridLayout( mRGBWidget, 3, 3 );
 	mColorSelector = new KHSSelector( mRGBWidget );
 	mColorSelector->setMinimumHeight( 165 );
 	mColorSelector->setMinimumWidth( 165 );
+	connect( mColorSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
 	mainLayout->addMultiCellWidget( mColorSelector, 0, 2, 0, 0 );
 
 	//Selector
@@ -37,7 +39,7 @@ VMDlgStroke::VMDlgStroke( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_par
 	mSelector->setColors( QColor( "white" ), QColor( "black" ) );
 	mSelector->setMinimumWidth( 12 );
 	//TODO: Make it autochange color if the stroked object is selected (also for QSpinBoxes)
-	connect( mSelector, SIGNAL( valueChanged( int ) ), this, SLOT( slotUpdate( int ) ) );
+	connect( mSelector, SIGNAL( valueChanged( int ) ), this, SLOT( slotVChanged( int ) ) );
 	mainLayout->addMultiCellWidget( mSelector, 0, 2, 1, 1 );
 
 	//Reference
@@ -120,6 +122,11 @@ void VMDlgStroke::slotUpdateFromRGBSpinBoxes( int newVal )
 	mSaturation->setValue( s );
 	mValue->setValue( v );
 
+	// update gradient selector
+	mSelector->blockSignals( true );
+	mSelector->setValue( ( float( mValue->value() ) / 255.0 ) * 99.0 );
+	mSelector->blockSignals( false );
+
 	mHue->blockSignals( false );
 	mSaturation->blockSignals( false );
 	mValue->blockSignals( false );
@@ -131,6 +138,11 @@ void VMDlgStroke::slotUpdateFromHSVSpinBoxes( int newVal )
 	QColor color( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv );
 	mColorPreview->setColor( color );
 	mColorPreview->update();
+
+	// update gradient selector
+	mSelector->blockSignals( true );
+	mSelector->setValue( ( float( mValue->value() ) / 255.0 ) * 99.0 );
+	mSelector->blockSignals( false );
 
 	// set RGB
 	mRed->blockSignals( true );
@@ -165,9 +177,20 @@ void VMDlgStroke::slotUpdate(QColor *color)
 	mBlue->setValue( color->blue() );*/
 }
 
-void VMDlgStroke::slotUpdate( int newVal )
+void VMDlgStroke::slotHSChanged( int h, int s )
 {
-	//kdDebug() << "In slotUpdate with val : " << newVal << endl;
+	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
+	mHue->setValue( h );
+	mSaturation->setValue( s );
+	QColor color1( h, s, 255, QColor::Hsv );
+	QColor color2( h, s, 0, QColor::Hsv );
+	mSelector->setColors( color1, color2 );
+}
+
+void VMDlgStroke::slotVChanged( int newVal )
+{
+	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
+	mValue->setValue( float( newVal ) / 99.0 * 255.0 );
 }
 
 #include "vmdlg_stroke.moc"
