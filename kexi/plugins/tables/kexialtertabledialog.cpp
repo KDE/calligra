@@ -214,9 +214,10 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiProper
 		changed = true;
 	}
 	prop = buf["length"];
-	visible = KexiDB::Field::isTextType(fieldType);
+	visible = (fieldType == KexiDB::Field::Text);
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
+		prop->setValue( visible ? KexiDB::Field::defaultTextLength() : 0, false );
 		changed = true;
 	}
 	prop = buf["precision"];
