@@ -646,10 +646,10 @@ KarbonView::solidFillClicked()
 	if( shell()->rootView() == this )
 	{
 		VFillDlg* dialog = new VFillDlg( m_part );
-		connect(dialog, SIGNAL( fillChanged() ), this, SLOT( selectionChanged() ) );
+		connect(dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 		dialog->exec();
 		delete dialog;
-		disconnect(dialog, SIGNAL( fillChanged() ), this, SLOT( selectionChanged() ) );
+		disconnect(dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 	}
 }
 
@@ -659,10 +659,10 @@ KarbonView::strokeClicked()
 	if( shell()->rootView() == this )
 	{
 		VStrokeDlg* dialog = new VStrokeDlg( m_part );
-		connect(dialog, SIGNAL( strokeChanged() ), this, SLOT( selectionChanged() ) );
+		connect(dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
 		dialog->exec();
 		delete dialog;
-		disconnect(dialog, SIGNAL( strokeChanged() ), this, SLOT( selectionChanged() ) );
+		disconnect(dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
 	}
 }
 

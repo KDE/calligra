@@ -50,8 +50,6 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			dialog->exec();
 			delete dialog;
 			disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
-			//update( *m_part->document().selection()->objects().getFirst()->stroke(),
-			//		*m_part->document().selection()->objects().getFirst()->fill() );
 		}
 		else if( e->x() >= 10 && e->x() <= 30 && e->y() >= 10 && e->y() <= 40 )
 		{
@@ -60,8 +58,6 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			dialog->exec();
 			delete dialog;
 			disconnect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SIGNAL( strokeChanged( const VStroke & ) ) );
-			//update( *m_part->document().selection()->objects().getFirst()->stroke(),
-			//		*m_part->document().selection()->objects().getFirst()->fill() );
 		}
 	}
 	return false;
