@@ -36,7 +36,7 @@ int main(int argc, char **argv)
                      KAboutData::License_LGPL, "(C) 2003-2004 Kexi Team", 0, 0);
     about.addAuthor( "Lucijan Busch", 0, "lucijan@kde.org" );
     about.addAuthor( "Cedric Pasteur", 0, "cedric.pasteur@free.fr");
-    about.addCredit( "Jaroslaw Staniek", "Win32 compile fix, some other little changes and lots of ideas", "js@iidea.pl", 0);
+    about.addCredit( "Jaroslaw Staniek", "Win32 version, some other little changes and lots of ideas", "js@iidea.pl", 0);
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
