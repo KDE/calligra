@@ -461,3 +461,4 @@ bool KexiKSpreadSource::kspreadNoContent(const QString& table, QRect area) {
 	return value;
 }
 
+#include "kexikspreadsource.moc"
