@@ -74,6 +74,8 @@ Todo:
 	-> picture effect (extend oasis format)
 	-> depth
 	-> mirror type (we must use rotate and draw:mirror element)
+-> save/load regular polygon (wait that it will defined into oo spec file)
+
 
 Bugs:
 -> load text layout format (bug into kpresenter)
