@@ -2,7 +2,7 @@
 <KSpreadFunctions>
 
   <Group>
-    <GroupName>Time and Date</GroupName>
+    <GroupName>Date and Time</GroupName>
 
     <Function>
       <Name>WEEKS</Name>

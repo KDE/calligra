@@ -2,7 +2,7 @@
 <KSpreadFunctions>
 
   <Group>
-    <GroupName>Statistic</GroupName>
+    <GroupName>Statistical</GroupName>
 
     <Function>
       <Name>BINO</Name>

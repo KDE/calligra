@@ -2,7 +2,7 @@
 <KSpreadFunctions>
 
   <Group>
-    <GroupName>Logic</GroupName>
+    <GroupName>Logical</GroupName>
 
     <Function>
       <Name>AND</Name>
