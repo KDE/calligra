@@ -324,12 +324,33 @@ void KoContextHelpPopup::mouseMoveEvent( QMouseEvent* e )
 
 void KoContextHelpPopup::resizeEvent( QResizeEvent* )
 {
-	QRegion mask(0, 0, width(), height());
-	mask -= QRegion( 0, 0, 2, 2 ) + QRegion( 0, 2, 1, 2 ) + QRegion( 2, 0, 2, 1 );
-	mask -= QRegion( width() - 2, 0, 2, 2 ) + QRegion( width() - 1, 2, 1, 2 ) + QRegion( width() - 4, 0, 2, 1 );
-	mask -= QRegion( 0, height() - 2, 2, 2 ) + QRegion( 0, height() - 4, 1, 2 ) + QRegion( 2, height() - 1, 2, 1 );
-	mask -= QRegion( width() - 2, height() - 2, 2, 2 ) + QRegion( width() - 1, height() - 4, 1, 2 ) + QRegion( width() - 4, height() - 1, 2, 1 );
-	setMask( mask );
+	QBitmap mask( width(), height() );
+	QPointArray a;
+	QPainter p( &mask );
+	p.fillRect( 0, 0, width(), height(), color1 );
+	p.setPen( color0 );
+	p.setBrush( color0 );
+	p.drawLine( 0, 0, 0, 3 );
+	p.drawLine( 0, 0, 3, 0 );
+	p.drawPoint( 1, 1 );
+	a.setPoints( 3, 0, height() - 5, 4, height() - 1, 0, height() - 1 );
+	p.drawPolygon( a );
+	a.setPoints( 3, width() - 5, 0, width() - 1, 4, width() - 1, 0 );
+	p.drawPolygon( a );
+	p.drawLine( width() - 1, height() - 1, width() - 4, height() - 1 );
+	p.drawLine( width() - 1, height() - 1, width() - 1, height() - 4 );
+	p.drawPoint( width() - 2, height() - 2 );
+	p.drawPoint( 0, height() - 6 );
+	p.drawPoint( width() - 6, 0 );
+	p.drawPoint( width() - 5, height() - 3 );
+	p.drawPoint( width() - 3, height() - 5 );
+	p.setPen( NoPen );
+	p.setBrush( QBrush( color0, Dense4Pattern ) );
+	p.drawRect( 0, height() - 2, width() - 1, height() - 1 );
+	p.drawRect( width() - 2, 0, width() - 1, height() - 1 );
+	p.drawRect( width() - 4, height() - 4, width() - 2, height() - 2 );
+	p.end();
+	setMask( QRegion( mask ) );
 } // KoContextHelpPopup::resizeEvent
 
 void KoContextHelpPopup::paintEvent( QPaintEvent* )
@@ -338,14 +359,16 @@ void KoContextHelpPopup::paintEvent( QPaintEvent* )
 	p.fillRect( 0, 0, width(), height(), colorGroup().light() );
 	p.setPen( black );
 	p.drawRect( 0, 0, width(), height() );
+	p.fillRect( width() - 3, 0, width() - 1, height() - 1, black );
+	p.fillRect( 0, height() - 3, width() - 1, height() - 1, black );
 	p.drawLine( 1, 2, 1, 3 );
 	p.drawLine( 2, 1, 3, 1 );
-	p.drawLine( width() - 2, 2, width() - 2, 3 );
-	p.drawLine( width() - 3, 1, width() - 4, 1 );
-	p.drawLine( 1, height() - 3, 1, height() - 4 );
-	p.drawLine( 2, height() - 2, 3, height() - 2 );
-	p.drawLine( width() - 2, height() - 3, width() - 2, height() - 4 );
-	p.drawLine( width() - 3, height() - 2, width() - 4, height() - 2 );
+	p.drawLine( width() - 4, 2, width() - 4, 3 );
+	p.drawLine( width() - 5, 1, width() - 6, 1 );
+	p.drawLine( 1, height() - 5, 1, height() - 6 );
+	p.drawLine( 2, height() - 4, 3, height() - 4 );
+	p.drawLine( width() - 4, height() - 5, width() - 4, height() - 6 );
+	p.drawLine( width() - 4, height() - 4, width() - 6, height() - 4 );
 } // KoContextHelpPopup::paintEvent
 
 void KoContextHelpPopup::windowActivationChange( bool )
