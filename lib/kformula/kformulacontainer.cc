@@ -350,7 +350,6 @@ void Container::addMatrix(int rows, int columns)
     execute(command);
 }
 
-
 void Container::addOneByTwoMatrix()
 {
     if ( !hasMightyCursor() )
@@ -371,6 +370,27 @@ void Container::addMatrix()
         addMatrix(rows, cols);
     }
     delete dialog;
+}
+
+void Container::changeMatrix()
+{
+    if ( !hasMightyCursor() )
+        return;
+    FormulaCursor* cursor = activeCursor();
+    MatrixElement* matrix = cursor->getActiveMatrixElement();
+    if ( matrix != 0 ) {
+        MatrixDialog* dialog = new MatrixDialog( 0, matrix->getColumns(), matrix->getRows() );
+        if ( dialog->exec() ) {
+            uint rows = dialog->h;
+            uint cols = dialog->w;
+            if ( ( rows != matrix->getRows() ) || ( cols != matrix->getColumns() ) ) {
+                // the dialog hides the normal cursor.
+                *( impl->internCursor ) = *cursor;
+                paste( matrix->resizedDom( rows, cols ), i18n( "Matrix size change" ) );
+            }
+        }
+        delete dialog;
+    }
 }
 
 void Container::addLowerLeftIndex()
@@ -591,21 +611,24 @@ void Container::paste()
         QByteArray data = source->encodedData("application/x-kformula");
         QDomDocument formula;
         formula.setContent(data);
+        paste( formula, i18n("Paste") );
+    }
+}
 
-        QPtrList<BasicElement> list;
-        list.setAutoDelete(true);
-
-        FormulaCursor* cursor = activeCursor();
-        if (cursor->buildElementsFromDom(formula, list)) {
-            uint count = list.count();
-            // You must not execute an add command that adds nothing.
-            if (count > 0) {
-                KFCReplace* command = new KFCReplace(i18n("Paste"), this);
-                for (uint i = 0; i < count; i++) {
-                    command->addElement(list.take(0));
-                }
-                execute(command);
+void Container::paste( QDomDocument document, QString desc )
+{
+    FormulaCursor* cursor = activeCursor();
+    QPtrList<BasicElement> list;
+    list.setAutoDelete( true );
+    if ( cursor->buildElementsFromDom( document, list ) ) {
+        uint count = list.count();
+        // You must not execute an add command that adds nothing.
+        if (count > 0) {
+            KFCReplace* command = new KFCReplace( desc, this );
+            for (uint i = 0; i < count; i++) {
+                command->addElement(list.take(0));
             }
+            execute(command);
         }
     }
 }

@@ -18,9 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream>
 #include <qmemarray.h>
 #include <qpainter.h>
+
+#include <kdebug.h>
 
 #include "formulaelement.h"
 #include "formulacursor.h"
@@ -436,6 +437,40 @@ bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column
 }
 
 
+QDomDocument MatrixElement::resizedDom( uint rows, uint cols )
+{
+    // This doubles a lot of information which is not a good thing.
+    QDomDocument doc("KFORMULA");
+    QDomElement de = doc.createElement("KFORMULACOPY");
+    doc.appendChild( de );
+    QDomElement matrix = doc.createElement( getTagName() );
+    matrix.setAttribute( "ROWS", rows );
+    matrix.setAttribute( "COLUMNS", cols );
+    de.appendChild( matrix );
+
+    uint currentRows = getRows();
+    uint currentCols = getColumns();
+
+    SequenceElement tmpSequence;
+
+    for ( uint r = 0; r < QMIN( rows, currentRows ); r++ ) {
+        for ( uint c = 0; c < cols; c++ ) {
+            if ( c < currentCols ) {
+                QDomElement tmp = getElement( r, c )->getElementDom( doc );
+                matrix.appendChild( tmp );
+            }
+            else {
+                matrix.appendChild( tmpSequence.getElementDom( doc ) );
+            }
+	}
+        matrix.appendChild( doc.createComment( "end of row" ) );
+    }
+
+    //QCString data = doc.toCString();
+    //kdDebug( 40000 ) << (const char *)data << endl;
+    return doc;
+}
+
 /**
  * Appends our attributes to the dom element.
  */
@@ -516,20 +551,22 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
     uint rows = getRows();
     uint cols = getColumns();
 
-    for (uint r = 0; r < rows; r++) {
-        for (uint c = 0; c < cols; c++) {
-            if (node.isElement()) {
-                SequenceElement* element = getElement(r,c);
-                QDomElement e = node.toElement();
-                if (!element->buildFromDom(e)) {
-                    return false;
-                }
+    uint r = 0;
+    uint c = 0;
+    while ( !node.isNull() && r < rows ) {
+        if ( node.isElement() ) {
+            SequenceElement* element = getElement( r, c );
+            QDomElement e = node.toElement();
+            if ( !element->buildFromDom( e ) ) {
+                return false;
             }
-            node = node.nextSibling();
-	}
-        if (node.isComment()) {
-            node = node.nextSibling();
+            c++;
+            if ( c == cols ) {
+                c = 0;
+                r++;
+            }
         }
+        node = node.nextSibling();
     }
     return true;
 }

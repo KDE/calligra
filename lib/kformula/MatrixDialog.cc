@@ -30,11 +30,11 @@ KFORMULA_NAMESPACE_BEGIN
 const int DEFAULT_SIZE = 3;
 const int MAX_SIZE = 200;
 
-
-MatrixDialog::MatrixDialog(QWidget *parent)
+MatrixDialog::MatrixDialog( QWidget *parent, int _width, int _height )
         : QDialog(parent, "Matrix Dialog", true)
 {
-    w = h = DEFAULT_SIZE;
+    w = _width;
+    h = _height;
 
     QPushButton *ok, *cancel;
     QLabel *rows, *columns;
@@ -51,12 +51,12 @@ MatrixDialog::MatrixDialog(QWidget *parent)
 
     height = new QSpinBox(1, MAX_SIZE, 1, this);
     grid->addWidget(height, 1, 0);
-    height->setValue(DEFAULT_SIZE);
+    height->setValue(h);
     connect(height, SIGNAL(valueChanged(int)), SLOT(setHeight(int)));
 
     width = new QSpinBox(1, MAX_SIZE, 1, this);
     grid->addWidget(width, 1, 1);
-    width->setValue(DEFAULT_SIZE);
+    width->setValue(w);
     connect(width, SIGNAL(valueChanged(int)), SLOT(setWidth(int)));
 
     ok = new QPushButton(i18n("OK"), this);

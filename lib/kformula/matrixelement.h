@@ -160,6 +160,14 @@ public:
      */
     virtual QString toLatex();
 
+    uint getRows() { return content.count(); }
+    uint getColumns() { return content.at(0)->count(); }
+
+    /**
+     * @returns a resized dom document. New elements are empty.
+     */
+    QDomDocument resizedDom( uint rows, uint cols );
+
 protected:
 
     //Save/load support
@@ -188,9 +196,6 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
 private:
-
-    uint getRows() { return content.count(); }
-    uint getColumns() { return content.at(0)->count(); }
 
     SequenceElement* getElement(uint row, uint column)
         { return content.at(row)->at(column); }

@@ -11,6 +11,7 @@
   <Action name="edit_select_all"/>
   <Action name="formula_removeenclosing"/>
   <Action name="formula_makegreek"/>
+  <Action name="formula_changematrix"/>
  </Menu>
  <Menu name="Element"><text>E&amp;lement</text>
   <Menu name="Add"><text>Add...</text>

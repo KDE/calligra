@@ -307,6 +307,11 @@ public:
     void addMatrix();
 
     /**
+     * Changes the selected matrixes size.
+     */
+    void changeMatrix();
+
+    /**
      * Adds the lower left index of the current IndexElement.
      * Creates and inserts an IndexElement if there is non.
      */
@@ -387,6 +392,11 @@ private:
      * Execute the command if it makes sense.
      */
     void execute(Command *command);
+
+    /**
+     * Insert data from the document.
+     */
+    void paste( QDomDocument document, QString desc );
 
     /**
      * @returns true if there is a cursor that is allowed to edit the formula.

@@ -58,6 +58,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_5: document->addFraction(); return;
             case Qt::Key_6: document->addMatrix(); return;
 	    case Qt::Key_7: document->addOneByTwoMatrix(); return;
+	    case Qt::Key_8: document->changeMatrix(); return;
             case Qt::Key_0: importOld("oldformula"); return;
             case Qt::Key_A: slotSelectAll(); return;
             case Qt::Key_C: document->copy(); return;

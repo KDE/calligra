@@ -30,9 +30,6 @@ KFORMULA_NAMESPACE_BEGIN
 
 /**
  * Dialog for entering matrix sizes.
- * @internal
- * @author Ilya Baran (ibaran@mit.edu)
- * @version $Id$
  */
 class MatrixDialog : public QDialog
 {
@@ -43,7 +40,7 @@ public:
     int w;
     int h;
 
-    MatrixDialog(QWidget *parent);
+    MatrixDialog( QWidget *parent, int width = 3, int height = 3 );
     ~MatrixDialog() {}
 
 protected slots:

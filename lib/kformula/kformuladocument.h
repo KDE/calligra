@@ -133,6 +133,7 @@ public:
     KAction* getAddProductAction();
     KAction* getAddIntegralAction();
     KAction* getAddMatrixAction();
+    KAction* getChangeMatrixAction();
     KAction* getAddOneByTwoMatrixAction();
     KAction* getAddUpperLeftAction();
     KAction* getAddLowerLeftAction();
@@ -168,6 +169,7 @@ public slots:
     void addProduct();
     void addSum();
     void addMatrix();
+    void changeMatrix();
     void addOneByTwoMatrix();
     void addLowerLeftIndex();
     void addUpperLeftIndex();

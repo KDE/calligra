@@ -23,6 +23,7 @@
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "indexelement.h"
+#include "matrixelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
 #include "symbolelement.h"
@@ -563,6 +564,22 @@ TextElement* FormulaCursor::getActiveTextElement()
     return dynamic_cast<TextElement*>(getSelectedChild());
 }
 
+
+MatrixElement* FormulaCursor::getActiveMatrixElement()
+{
+    MatrixElement* element = dynamic_cast<MatrixElement*>(getSelectedChild());
+
+    if ( ( element != 0 ) && !isSelection() ) {
+        normal()->selectChild( this, element );
+    }
+//     if ((element == 0) && !isSelection()) {
+//         element = dynamic_cast<MatrixElement*>(getElement()->getParent());
+//         if (!pointsAfterMainChild(element)) {
+//             return 0;
+//         }
+//     }
+    return element;
+}
 
 /**
  * The element is going to leave the formula with and all its children.

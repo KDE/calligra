@@ -30,6 +30,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 class FormulaElement;
 class IndexElement;
+class MatrixElement;
 class NameSequence;
 class RootElement;
 class SymbolElement;
@@ -274,6 +275,11 @@ public:
      * @returns the TextElement the cursor is on or 0.
      */
     TextElement* getActiveTextElement();
+
+    /**
+     * @returns the MatrixElement the cursor is on or 0.
+     */
+    MatrixElement* getActiveMatrixElement();
 
     /**
      * Selects the element the cursor points to (stands after)
