@@ -1,10 +1,9 @@
-/* This file is part of the MSWriteView project
-   Copyright (C) 2001, 2002 Clarence Dang <CTRL_CD@bigpond.com>
+/* This file is part of the KDE and MSWriteView projects
+   Copyright (C) 2001, 2002 Clarence Dang <dang@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   License Version 2 as published by the Free Software Foundation.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of

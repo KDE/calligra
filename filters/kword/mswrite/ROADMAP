@@ -7,13 +7,15 @@ Current "Roadmap" for MSWriteImport Development:
 	 
     <<< WE ARE HERE >>>
 	 
-0.4 Major REWRITE! Portability, bug fixes, more speed, initial OLE code, counters. Export filter work commences.
+0.4 Major REWRITE! Portability, bug fixes, more speed, initial OLE code.
+	 Export filter work commences.
 0.5 OLE
+
 0.9 Preparation for final release + full stress testing
 1.0 Final release (until bugs are found etc.)
 
-Last Updated: 2002-05-04
-Clarence Dang <CTRL_CD@bigpond.com>
+Last Updated: 2002-05-06
+Clarence Dang <dang@kde.org>
 
 
 --
