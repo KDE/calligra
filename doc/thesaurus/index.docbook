@@ -45,12 +45,12 @@ to &wordnet;. Only the English language is supported.
 <title>The Thesaurus Tab</title>
 
 <para>The <guilabel>Thesaurus</guilabel> tab offers a small thesaurus,
-built from a subset of &wordnet;. The results are listed in three
+built from a subset of <link linkend="frontend">&wordnet;</link>. The results are listed in three
 categories: <guilabel>Synonyms</guilabel>, <guilabel>More general
 words</guilabel> (hypernyms), <guilabel>More specific
 words</guilabel> (hyponyms). Synonyms are supposed to be words with
 the same meaning, but only with respect to a certain context. So you
-cannot always replace a word with any synomym.</para>
+cannot always replace a word with any synonym.</para>
 
 <para>You can doubleclick on a word to search for its synonyms etc.
 You can also type a word directly into the box at the top and press
@@ -59,7 +59,7 @@ search box is the one that will be used if you click on
 <guibutton>Replace</guibutton>.</para> <!-- TODO: "search" guilabel
 -->
 
-<para>We have to keep the list of words small so that it can be
+<para>We have to keep the data file small so that it can be
 included in &koffice; - this introduces several limitations 
 (compared to &wordnet;):</para>
 
@@ -77,7 +77,7 @@ and very few words specific to &kde;). Just like in &wordnet;, only the
 English language is supported.</para>
 
 <para>Please do <emphasis>not</emphasis> report bugs in the thesaurus
-to &wordnet;, but to &kde;.</para>
+to the &wordnet; project, but to &kde;.</para>
 
 </chapter>
 
@@ -86,10 +86,12 @@ to &wordnet;, but to &kde;.</para>
 <title>The &wordnet; frontend</title>
 
 <para>The <guilabel>&wordnet;</guilabel> tab provides a frontend 
-to a local installation of <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet;</ulink>
-1.7. &wordnet; is <quote>an online lexical reference
+to a local installation of <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet; 1.7</ulink>.
+&wordnet; is <quote>an online lexical reference
 system whose design is inspired by current psycholinguistic theories
-of human lexical memory.</quote>  The frontend offers nearly all options
+of human lexical memory.</quote> 
+<!-- TODO: explain more -->
+The frontend offers nearly all options
 which are available on the command line. It calls the <command>wn</command> binary,
 which has to be in your <envar>PATH</envar>.</para>
 
