@@ -404,6 +404,9 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
         // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
         int width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
         int height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+        // Apply reasonable limits
+        width = QMIN( width, m_doc->paperWidth() );
+        height = QMIN( height, m_doc->paperHeight() );
 
         QPoint nPoint( mx + width, my + height );
         QPoint vPoint = m_viewMode->normalToView( nPoint );
@@ -776,10 +779,12 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                     QRect newRect( frame->outerRect() );
 
                     QRect frameRect( m_viewMode->normalToView( newRect ) );
-                    ensureVisible( (frameRect.left()+frameRect.right()) / 2,  // point = center of the rect
+                    /*ensureVisible( (frameRect.left()+frameRect.right()) / 2,  // point = center of the rect
                                    (frameRect.top()+frameRect.bottom()) / 2,
                                    (frameRect.right()-frameRect.left()) / 2,  // margin = half-width of the rect
-                                   (frameRect.bottom()-frameRect.top()) / 2);
+                                   (frameRect.bottom()-frameRect.top()) / 2);*/
+                    // This ensureVisible doesn't work as it should.
+                    // With frames bigger than the viewport, we end scrolling up/down like nonsense.
 
                     // Repaint only the changed rects (oldRect U newRect)
                     repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
@@ -1748,7 +1753,7 @@ void KWCanvas::scrollToOffset( const KoPoint & d )
 QPoint KWCanvas::rulerPos(int x, int y)
 {
     int pageNum=1;
-    if( m_currentFrameSetEdit )
+    if( m_currentFrameSetEdit && m_currentFrameSetEdit->currentFrame() )
         pageNum = m_currentFrameSetEdit->currentFrame()->pageNum() + 1;
     QPoint nPoint( 0, m_doc->pageTop(pageNum - 1) + 1 );
     QPoint cPoint( m_viewMode->normalToView( nPoint ) );

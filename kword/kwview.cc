@@ -1484,6 +1484,10 @@ void KWView::insertPicture(const QString &filename)
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
             int width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
             int height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            // Apply reasonable limits
+            width = QMIN( width, m_doc->paperWidth() - m_doc->leftBorder() - m_doc->rightBorder() - m_doc->zoomItX( 10 ) );
+            height = QMIN( height, m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
+
             frameset->setFileName( filename, QSize( width, height ) );
             m_doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
             KWFrame *frame = new KWFrame(frameset, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );

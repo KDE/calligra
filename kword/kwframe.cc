@@ -277,6 +277,17 @@ void KWFrameSet::deleteAllFrames()
     }
 }
 
+void KWFrameSet::deleteAllCopies()
+{
+    if ( frames.count() > 1 )
+    {
+        KWFrame * firstFrame = frames.first()->getCopy();
+        frames.clear();
+        frames.append( firstFrame );
+        updateFrames();
+    }
+}
+
 void KWFrameSet::createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode )
 {
     QListIterator<KWFrame> frameIt = frameIterator();

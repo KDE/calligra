@@ -395,42 +395,42 @@ void KWDocument::recalcFrames()
                     firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     firstHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                        fs->getFrame( 0 )->height());
-                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case FI_EVEN_HEADER:
                 if ( isHeaderVisible() ) {
                     evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     evenHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                       fs->getFrame( 0 )->height());
-                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case FI_ODD_HEADER:
                 if ( isHeaderVisible() ) {
                     oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     oddHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                      fs->getFrame( 0 )->height());
-                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case FI_FIRST_FOOTER:
                 if ( isFooterVisible() ) {
                     firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     firstFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                        fs->getFrame( 0 )->height());
-                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case FI_EVEN_FOOTER:
                 if ( isFooterVisible() ) {
                     evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     evenFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                       fs->getFrame( 0 )->height());
-                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case FI_ODD_FOOTER:
                 if ( isFooterVisible() ) {
                     oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     oddFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                      fs->getFrame( 0 )->height());
-                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
+                } else { fs->setVisible( false ); fs->deleteAllCopies(); }
             default: break;
         }
     }
@@ -440,9 +440,9 @@ void KWDocument::recalcFrames()
             case HF_SAME:
                 evenHeader->setVisible( true );
                 oddHeader->setVisible( false );
-                oddHeader->deleteAllFrames();
+                oddHeader->deleteAllCopies();
                 firstHeader->setVisible( false );
-                firstHeader->deleteAllFrames();
+                firstHeader->deleteAllCopies();
 
                 oddHeader = evenHeader;
                 firstHeader = evenHeader;
@@ -452,7 +452,7 @@ void KWDocument::recalcFrames()
             case HF_FIRST_DIFF:
                 evenHeader->setVisible( true );
                 oddHeader->setVisible( false );
-                oddHeader->deleteAllFrames();
+                oddHeader->deleteAllCopies();
                 firstHeader->setVisible( true );
 
                 oddHeader = evenHeader;
@@ -462,7 +462,7 @@ void KWDocument::recalcFrames()
                 evenHeader->setVisible( true );
                 oddHeader->setVisible( true );
                 firstHeader->setVisible( false );
-                firstHeader->deleteAllFrames();
+                firstHeader->deleteAllCopies();
 
                 firstHeader = oddHeader;
                 firstHeadOffset = oddHeadOffset;
@@ -474,9 +474,9 @@ void KWDocument::recalcFrames()
             case HF_SAME:
                 evenFooter->setVisible( true );
                 oddFooter->setVisible( false );
-                oddFooter->deleteAllFrames();
+                oddFooter->deleteAllCopies();
                 firstFooter->setVisible( false );
-                firstFooter->deleteAllFrames();
+                firstFooter->deleteAllCopies();
 
                 oddFooter = evenFooter;
                 firstFooter = evenFooter;
@@ -486,7 +486,7 @@ void KWDocument::recalcFrames()
             case HF_FIRST_DIFF:
                 evenFooter->setVisible( true );
                 oddFooter->setVisible( false );
-                oddFooter->deleteAllFrames();
+                oddFooter->deleteAllCopies();
                 firstFooter->setVisible( true );
 
                 oddFooter = evenFooter;
@@ -496,7 +496,7 @@ void KWDocument::recalcFrames()
                 evenFooter->setVisible( true );
                 oddFooter->setVisible( true );
                 firstFooter->setVisible( false );
-                firstFooter->deleteAllFrames();
+                firstFooter->deleteAllCopies();
 
                 firstFooter = oddFooter;
                 firstFootOffset = oddFootOffset;
@@ -512,7 +512,7 @@ void KWDocument::recalcFrames()
 
         // Determine number of pages - first from the text frames
         m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
-        //kdDebug() << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << m_pages << endl;
+        kdDebug() << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << m_pages << endl;
         // Then from the other frames ( frameset-num > 0 )
         double maxBottom = 0;
         for (int m = getNumFrameSets() - 1; m > 0; m-- )
@@ -522,16 +522,16 @@ void KWDocument::recalcFrames()
             {
                 for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
                     //if ( n == fs->getNumFrames()-1 )
-                    //kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " " << fs->getName()
-                    //               << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
+                    kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " " << fs->getName()
+                                   << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
                     maxBottom = QMAX(maxBottom, fs->getFrame(n)->bottom());
                 }
             }
         }
         int pages2 = static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
-        /*kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2
+        kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2
                        << " (coming from maxBottom=" << maxBottom << " and ptPaperHeight=" << ptPaperHeight() << ")"
-                       << endl;*/
+                       << endl;
 
         m_pages = QMAX( pages2, m_pages );
         if ( m_pages != oldPages )
@@ -1635,11 +1635,22 @@ QDomDocument KWDocument::saveXML()
     QDomElement framesets = doc.createElement( "FRAMESETS" );
     kwdoc.appendChild( framesets );
 
-    KWFrameSet *frameSet = 0L;
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        frameSet = getFrameSet( i );
+    QStringList saveImages;
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet *frameSet = fit.current();
+        // Save non-part framesets ( part are saved further down )
         if ( frameSet->getFrameType() != FT_PART )
             frameSet->save( framesets );
+
+        // If picture frameset, make a note of the image it needs.
+        if ( !frameSet->isDeleted() && frameSet->getFrameType() == FT_PICTURE )
+        {
+            QString key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            if ( !saveImages.contains( key ) )
+                saveImages.append( key );
+        }
     }
 
     QDomElement styles = doc.createElement( "STYLES" );
@@ -1650,30 +1661,32 @@ QDomDocument KWDocument::saveXML()
     QDomElement pixmaps = doc.createElement( "PIXMAPS" );
     kwdoc.appendChild( pixmaps );
 
-    KWImageCollection::ConstIterator it = m_imageCollection.begin();
-    KWImageCollection::ConstIterator end = m_imageCollection.end();
-    QStringList images, keys;
+    //KWImageCollection::ConstIterator it = m_imageCollection.begin();
+    //KWImageCollection::ConstIterator end = m_imageCollection.end();
     int i = 0;
-    for ( ; it != end; ++it ) {
-        QString fileName = it.key();
-        if ( keys.contains( it.key() ) || images.contains( fileName ) )
-            continue;
-        QString format = QFileInfo( fileName ).extension().upper();
-        if ( format == "JPG" )
-            format = "JPEG";
-        if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
-            format = "BMP";
-        QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
-        if ( !isStoredExtern() )
-          pictureName.prepend( url().url() + "/" );
+    QStringList::Iterator it = saveImages.begin();
+    for ( ; it != saveImages.end(); ++it )
+    {
+        KWImage image = m_imageCollection.findImage( *it );
+        if ( image.isNull() )
+            kdWarning() << "Image " << *it << " not found in collection !" << endl;
+        else
+        {
+            QString fileName = *it; // currently same as the key
+            QString format = QFileInfo( fileName ).extension().upper();
+            if ( format == "JPG" )
+                format = "JPEG";
+            if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
+                format = "BMP";
+            QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
+            if ( !isStoredExtern() )
+                pictureName.prepend( url().url() + "/" );
 
-        QDomElement key = doc.createElement( "KEY" );
-        pixmaps.appendChild( key );
-        key.setAttribute( "key", fileName );
-        key.setAttribute( "name", pictureName );
-
-        keys.append( it.key() );
-        images.append( fileName );
+            QDomElement keyElem = doc.createElement( "KEY" );
+            pixmaps.appendChild( keyElem );
+            keyElem.setAttribute( "key", fileName );
+            keyElem.setAttribute( "name", pictureName );
+        }
     }
 
     // Not needed anymore
@@ -1731,38 +1744,51 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     QString u = KURL( url() ).path();
 
-    KWImageCollection::ConstIterator it = m_imageCollection.begin();
-    KWImageCollection::ConstIterator end = m_imageCollection.end();
-
-    QStringList images, keys;
-    int i = 0;
-
-    for( ; it != end; ++it ) {
-        QString fileName = it.key();
-        if ( keys.contains( it.key() ) || images.contains( fileName ) )
-            continue;
-
-        QString format = QFileInfo( fileName ).extension().upper();
-        if ( format == "JPG" )
-            format = "JPEG";
-        if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
-            format = "PNG";
-
-        QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
-        if ( !isStoredExtern() )
-          u2.prepend( url().url() + "/" );
-
-        if ( _store->open( u2 ) ) {
-            KoStoreDevice dev( _store );
-            QImageIO io;
-            io.setIODevice( &dev );
-            io.setImage( (*it).image() );
-            io.setFormat( QFile::encodeName(format) );
-            io.write();
-            _store->close();
+    //KWImageCollection::ConstIterator it = m_imageCollection.begin();
+    //KWImageCollection::ConstIterator end = m_imageCollection.end();
+    QStringList saveImages;
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet *frameSet = fit.current();
+        // If picture frameset, make a note of the image it needs.
+        if ( !frameSet->isDeleted() && frameSet->getFrameType() == FT_PICTURE )
+        {
+            QString key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            if ( !saveImages.contains( key ) )
+                saveImages.append( key );
         }
-        keys.append( it.key() );
-        images.append( fileName );
+    }
+    int i = 0;
+    QStringList::Iterator it = saveImages.begin();
+    for ( ; it != saveImages.end(); ++it )
+    {
+        KWImage image = m_imageCollection.findImage( *it );
+        if ( image.isNull() )
+            kdWarning() << "Image " << *it << " not found in collection !" << endl;
+        else
+        {
+            QString fileName = *it; // currently same as the key
+            QString format = QFileInfo( fileName ).extension().upper();
+            if ( format == "JPG" )
+                format = "JPEG";
+            if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
+                format = "PNG";
+
+            QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
+            if ( !isStoredExtern() )
+                u2.prepend( url().url() + "/" );
+
+            if ( _store->open( u2 ) ) {
+                KoStoreDevice dev( _store );
+                QImageIO io;
+                io.setIODevice( &dev );
+                io.setImage( image.image() );
+                io.setFormat( QFile::encodeName(format) );
+                io.write();
+                _store->close();
+            }
+        }
     }
 
     return TRUE;

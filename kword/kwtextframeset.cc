@@ -1442,6 +1442,11 @@ void KWTextFrameSet::formatMore()
             while ( lastPage > 0 && m_doc->canRemovePage( lastPage ) )
             {
                 m_doc->removePage( lastPage );
+                if ( lastPage <= m_doc->getPages() - 1 )
+                {
+                    kdWarning() << "Didn't manage to remove page " << lastPage << " (still having " << m_doc->getPages() << " pages ). Aborting" << endl;
+                    break;
+                }
                 lastPage = m_doc->getPages()-1;
             }
         }

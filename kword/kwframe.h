@@ -288,6 +288,7 @@ public:
     virtual void delFrame( unsigned int _num );
     virtual void delFrame( KWFrame *frm, bool remove = true );
     void deleteAllFrames();
+    void deleteAllCopies(); // for headers/footers only
 
     /** retrieve frame from x and y coords (unzoomed coords) */
     KWFrame *frameAtPos( double _x, double _y );
@@ -306,7 +307,10 @@ public:
     /* Get frame number */
     int getFrameFromPtr( KWFrame *frame );
     /* Get number of child frames */
-    unsigned int getNumFrames() { return frames.count(); }
+    unsigned int getNumFrames() const { return frames.count(); }
+
+    /** True if the frameset was deleted (but not destroyed, since it's in the undo/redo) */
+    bool isDeleted() const { return frames.isEmpty(); }
 
     /** Create a framesetedit object to edit this frameset in @p canvas */
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0L; }
