@@ -20,7 +20,7 @@
 */
 
 #include <kdebug.h>		/* for kdDebug stream */
-#include <qvaluevector.h>
+#include <qbitarray.h>
 #include "cell.h"
 #include "column.h"
 #include "row.h"
@@ -270,7 +270,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 {
 	
 	Cell* cell = 0;
-	QValueVector<bool> border;
+	QBitArray border( getMaxColumn() );
 	bool fullLine = true;
 	for(int index = 1; index <= getMaxColumn(); index++)
 	{
@@ -282,7 +282,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 			cell = new Cell(row, index);
 
 		/* If the element has a border display it here */
-		border.push_back( cell->hasTopBorder() );
+		border[ index ] = cell->hasTopBorder();
 		if( ! cell->hasTopBorder() )
 			fullLine = false;
 	}
@@ -303,7 +303,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 				int begin = index;
 				int end;
 				index = index + 1;
-				while(border[index] == true && index < getMaxColumn())
+				while(border[index] && index < getMaxColumn())
 				{
 					index = index + 1;
 				}
@@ -326,7 +326,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 void Table::generateBottomLineBorder(QTextStream& out, int row)
 {
 	Cell* cell = 0;
-	QValueVector<bool> border;
+	QBitArray border( getMaxColumn() );
 	bool fullLine = true;
 
 	for(int index = 1; index <= getMaxColumn(); index++)
@@ -338,7 +338,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 			cell = new Cell(row, index);
 
 		/* If the element has a border display it here */
-		border.push_back( cell->hasBottomBorder() );
+		border[ index ] = cell->hasBottomBorder();
 		if( ! cell->hasBottomBorder() )
 			fullLine = false;
 	}
@@ -359,7 +359,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 				int begin = index;
 				int end;
 				index = index + 1;
-				while(border[index] == true && index < getMaxColumn())
+				while(border[index] && index < getMaxColumn())
 				{
 					index = index + 1;
 				}
