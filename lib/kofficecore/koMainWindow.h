@@ -166,6 +166,12 @@ public slots:
     virtual void slotConfigureToolbars();
 
     /**
+     *  Post toolbar config.
+     * (Plug action lists back in, etc.)
+     */
+    void slotNewToolbarConfig(); // TODO make virtual (BCI)
+
+    /**
      *  Shows or hides a toolbar
      */
     virtual void slotToolbarToggled( bool toggle );
