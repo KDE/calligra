@@ -116,7 +116,7 @@ static const char *pageup_xpm[] = {
 };
 
 static const char *pagedown_xpm[] = {
-"    16    16        2            1",
+"    14    14        2            1",
 ". c #000000",
 "# c none",
 "##############",
