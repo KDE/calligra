@@ -1,7 +1,7 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
-	$(KOTEXT_INCLUDES) -I$(top_srcdir)/lib/kospell $(all_includes)
+	$(KOTEXT_INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = libkwordpart.la
 
