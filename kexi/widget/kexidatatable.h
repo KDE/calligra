@@ -35,13 +35,15 @@ class KexiDBUpdateRecord;
 class KexiView;
 class KexiTableView;
 class KexiDB;
+class KexiProjectHandlerItem;
 
 class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 {
 	Q_OBJECT
 
 	public:
-		KexiDataTable(KexiView *View,QWidget *parent, QString content, const char *name=0, bool embedd=false);
+		KexiDataTable(KexiView *view,QWidget *parent, KexiProjectHandlerItem *item, bool embedd=false);
+		KexiDataTable(KexiView *View,QWidget *parent, QString caption, QString identifier, bool embedd=false);
 		~KexiDataTable();
 
 		bool executeQuery(const QString &query);
@@ -55,6 +57,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 	public slots:
 		virtual void setFocus();
 	protected slots:
+		void init(QString caption, QString identifier, bool embedd);
 		void slotItemChanged(KexiTableItem *i, int col, QVariant oldValue);
 		void slotContextMenu(KexiTableItem *i, int col, const QPoint &pos);
 

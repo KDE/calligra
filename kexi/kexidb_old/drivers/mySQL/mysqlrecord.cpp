@@ -36,6 +36,8 @@ MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, const char *name, bool 
 //(js)	m_readOnly = findKey();
   //TODO(js): get readonly flag from the database
   findKey();
+  if (fieldCount()>0 && findKey()) 
+    m_table = MySqlResult::fieldInfo(0)->table();
   m_readOnly = false;
 
 	m_insertList.setAutoDelete(true);
@@ -48,8 +50,8 @@ MySqlRecord::findKey()
 	{
 		if(MySqlResult::fieldInfo(i)->primary_key() || MySqlResult::fieldInfo(i)->unique_key())
 		{
-			m_keyField = MySqlResult::fieldInfo(i)->name();
-			m_table = MySqlResult::fieldInfo(i)->table();
+			m_keyField = MySqlResult::fieldInfo(i)->name();//TODO(js): what is it?????
+			m_table = MySqlResult::fieldInfo(i)->table();//TODO(js): what is it?????
 			return false;
 		}
 	}

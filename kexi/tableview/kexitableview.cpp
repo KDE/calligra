@@ -203,6 +203,7 @@ void KexiTableView::remove(KexiTableItem *item, bool moveCursor/*=true*/)
 {
 	if(m_contents->removeRef(item))
 	{
+		m_pVerticalHeader->removeLabel(m_curRow);
 		m_numRows--;
 		if(moveCursor)
 			setCursor(m_curRow);
@@ -214,6 +215,7 @@ void KexiTableView::remove(KexiTableItem *item, bool moveCursor/*=true*/)
 void KexiTableView::removeRecord()
 {
 	emit itemRemoveRequest(m_pCurrentItem);
+	emit currentItemRemoveRequest();
 }
 
 void KexiTableView::addRecord()
@@ -400,7 +402,7 @@ void KexiTableView::slotUpdate()
 	resizeContents(s.width(), s.height());
 //	viewport()->setUpdatesEnabled(true);
 	updateContents(0, 0, viewport()->width(), contentsHeight());
-    updateGeometries();
+	updateGeometries();
 }
 
 int KexiTableView::sorting()
@@ -853,11 +855,31 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	// navigate in the header...
     switch (e->key())
     {
-    case Key_Left:
+	case Key_Delete: 
+		if (e->state()==Qt::ControlButton) {//remove current row
+			removeRecord();
+		}
+		else {//remove all chars in the current cell
+			if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
+				createEditor(m_curRow, m_curCol, QString::null, false);
+			if (m_pEditor && m_pEditor->isA("KexiInputTableEdit")) {
+				static_cast<KexiInputTableEdit*>(m_pEditor)->clear();
+			}
+		}
+		break;
+
+	case Key_Shift:
+	case Key_Alt:
+	case Key_Control:
+	case Key_Meta:
+		e->ignore();
+		break;
+
+	case Key_Left:
 		m_curCol = QMAX(0, m_curCol - 1);
 		break;
-    case Key_Right:
-    case Key_Tab:
+	case Key_Right:
+	case Key_Tab:
 		m_curCol = QMIN(cols() - 1, m_curCol + 1);
 		break;
     case Key_Up:
@@ -881,13 +903,6 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		m_curRow = m_numRows-1;
 		break;
 
-    case Key_Shift:
-    case Key_Alt:
-    case Key_Control:
-    case Key_Meta:
-    		e->ignore();
-        	break;
-
 #ifndef _WIN32
 	#warning this needs work!
 #endif
@@ -901,13 +916,6 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	case Key_Backspace:
 		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
 			createEditor(m_curRow, m_curCol, QString::null, true);
-		break;
-	case Key_Delete: //removes all chars
-		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
-			createEditor(m_curRow, m_curCol, QString::null, false);
-		if (m_pEditor && m_pEditor->isA("KexiInputTableEdit")) {
-			static_cast<KexiInputTableEdit*>(m_pEditor)->clear();
-		}
 		break;
 	case Key_Space:
 		if(columnType(m_curCol) == QVariant::Bool && columnEditable(m_curCol))
@@ -1097,8 +1105,9 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 			break;
 	}
 
-	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
 	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
+	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
+//	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
 	m_pEditor->show();
 	m_pEditor->setFocus();
 }

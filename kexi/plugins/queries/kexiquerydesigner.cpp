@@ -47,12 +47,12 @@
 #include "kexiparameterlisteditor.h"
 #include "kexidataprovider.h"
 
-KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name,
+KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent,
  KexiQueryPartItem *item, bool modeview)
- : KexiDialogBase(view,parent, name),m_item(item)
+ : KexiDialogBase(view,parent, item->identifier().latin1()),m_item(item)
 {
 	QVBoxLayout *l = new QVBoxLayout(this);
-	setCaption(i18n("%1 - Query").arg(name));
+	setCaption(i18n("%1 - Query").arg(item->title()));
 
 	m_tab = new QTabWidget(this);
 	m_tab->setTabPosition(QTabWidget::Bottom);

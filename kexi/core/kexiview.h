@@ -83,6 +83,7 @@ public:
 
     bool activateWindow(const QString &id);
     void registerDialog(KexiDialogBase *dlg, const QString &identifier);
+	KexiDialogBase *findWindow(const QString &id);
     void removeDialog(const QString &identifier);
 //public slots:
 //    void slotShowRelations();

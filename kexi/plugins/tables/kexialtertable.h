@@ -27,17 +27,21 @@ class KexiTableView;
 class KexiTableItem;
 class PropertyEditor;
 class PropertyEditorItem;
+class KexiProjectHandlerItem;
 
 class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 {
 	Q_OBJECT
 	public:
-		KexiAlterTable(KexiView *view, QWidget *parent, const QString &table,
-			bool create = false, const char *name=0);
+//		KexiAlterTable(KexiView *view, QWidget *parent, QString caption, QString identifier, bool create=false);
+		KexiAlterTable(KexiView *view, QWidget *parent, KexiProjectHandlerItem *item, bool create=false);
+//		KexiAlterTable(KexiView *view, QWidget *parent, const QString &table,
+//			bool create = false, const char *name=0);
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
 	protected:
+		void init(QString title, QString identifier);
 		void initView();
 		void getFields();
 

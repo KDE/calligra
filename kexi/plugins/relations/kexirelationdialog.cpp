@@ -22,7 +22,6 @@
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qdom.h>
-#include <qhbox.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -39,27 +38,28 @@
 
 KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const char *name, bool embedd)
  : KexiDialogBase(view,parent, name)
+	, m_db(kexiProject()->db())
 {
 	setCaption(i18n("Relations"));
 
-	m_db = kexiProject()->db();
+	QVBoxLayout *vlyr = new QVBoxLayout(this);
+	QHBoxLayout *hlyr = new QHBoxLayout(vlyr);
 
-	QHBox *hbox = new QHBox(this);
-
-	m_tableCombo = new QComboBox(hbox);
+	m_tableCombo = new QComboBox(this);
+	hlyr->addWidget(m_tableCombo);
 	m_tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
 	m_tableCombo->insertStringList(kexiProject()->db()->tableNames());
 	QStringList tmp=kexiProject()->db()->tableNames();
 	for (QStringList::iterator it=tmp.begin();it!=tmp.end();++it)
 		kdDebug()<<"KexiRelationDialog::KexiRelationDialog: Adding table: "<<(*it)<<endl;
-	m_tableCombo->show();
 
-	QPushButton *btnAdd = new QPushButton(i18n("&Add"), hbox);
-	btnAdd->show();
+	QPushButton *btnAdd = new QPushButton(i18n("&Add"), this);
+	hlyr->addWidget(btnAdd);
+	hlyr->addStretch(1);
 	connect(btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
 	m_view = new KexiRelationView(this, 0, kexiProject()->relationManager());
-	m_view->show();
+	vlyr->addWidget(m_view);
 	m_view->setFocus();
 	if(!embedd)
 		setFocusProxy(m_view);
@@ -76,13 +76,10 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 			m_view->addConnection((*it),true);
 		}
 	}
-	QVBoxLayout *g = new QVBoxLayout(this);
-	g->addWidget(hbox);
-	g->addWidget(m_view);
 
 	if(!embedd)
 	{
-		registerAs(DocumentWindow);
+		registerAs(DocumentWindow, "kexi/relations");
 		setContextHelp(i18n("Relations"), i18n("To create a relation simply drag the source field onto the targetfield.\
 		 An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relation."));
 	}

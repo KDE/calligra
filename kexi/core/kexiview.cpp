@@ -278,15 +278,6 @@ KexiView::slotSettings()
 {
 }
 
-/*
-void
-KexiView::slotShowRelations()
-{
-	KexiRelationDialog *r = new KexiRelationDialog(this,0, "relations");
-	r->show();
-}
-*/
-
 void KexiView::addQDockWindow(QDockWindow *w) {
 	m_dockWins.append(w);
 }
@@ -373,6 +364,12 @@ KexiView::removeDialog(const QString &identifier)
 {
 //	if(m_wins)
 	m_wins.remove(identifier);
+}
+
+KexiDialogBase *
+KexiView::findWindow(const QString &id)
+{
+	return m_wins[ id ];
 }
 
 #include "kexiview.moc"

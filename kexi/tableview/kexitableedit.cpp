@@ -53,3 +53,5 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 	
 	return QWidget::eventFilter(watched, e);
 }
+
+  

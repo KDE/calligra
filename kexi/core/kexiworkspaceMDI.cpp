@@ -112,7 +112,10 @@ KexiWorkspaceMDI::activateView(KexiDialogBase *kdb)
 		return;
 
 	slotWindowActivated(kdb);
-	kdb->showNormal();
+	if (kdb->isMaximized())
+		kdb->showMaximized();
+	else //normal or minimized
+		kdb->showNormal();
 	kdb->setFocus();
 }
 

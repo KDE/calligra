@@ -38,7 +38,11 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	kdDebug() << "KexiInputTableEdit: value.typeName()==" << value.typeName() << endl;
 	kdDebug() << "KexiInputTableEdit: type== " << m_type << endl;
 	m_value = value;
+
+	QHBoxLayout *lyr = new QHBoxLayout(this);
+	lyr->setAutoAdd(true);
 	m_cview = new KLineEdit(this, "tableLineEdit");
+
 	m_view = m_cview;
 	m_view->installEventFilter(this);
 	m_cview->setFrame(false);

@@ -71,8 +71,12 @@ KexiRelationHandlerProxy::executeItem(const QString&)
 void
 KexiRelationHandlerProxy::slotShowRelationEditor()
 {
-    KexiRelationDialog *krd = new KexiRelationDialog(kexiView(), 0);
-    krd->show();
+	m_part->debug();
+	if (m_view->activateWindow("kexi/relations"))
+		return;
+	KexiRelationDialog *krd = new KexiRelationDialog(kexiView(), 0, "relations");
+	krd->setIcon(part()->itemPixmap());
+	krd->show();
 }
 
 #include "kexirelationhandlerproxy.moc"

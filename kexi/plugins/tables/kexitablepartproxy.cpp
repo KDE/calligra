@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002,2003   Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003   Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,6 +38,8 @@
 //#include "tables/kexitablefiltermanager.h"
 //#include "tables/kexitableimportfilter.h"
 #include "core/filters/kexifiltermanager.h"
+
+#include "kexi_global.h"
 
 KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
  : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
@@ -87,9 +90,15 @@ KexiTablePartProxy::slotCreate()
 
 	if(ok && name.length() > 0)
 	{
-		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, true, "alterTable");
-		kat->show();
+		QString mime = "kexi/table";
+		if (list->find(mime + "/" + name)) {
+			KMessageBox::sorry( 0, i18n( "Table \"%1\" already exists" ).arg(name) );
+			return;
+		}
 		KexiProjectHandlerItem *new_item = new KexiProjectHandlerItem(part(), name, "kexi/table",  name);
+		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, new_item, false);
+//		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, true, "alterTable");
+		kat->show();
 		list->insert(new_item->fullIdentifier(), new_item);
 		emit m_tablePart->itemListChanged(part());
 	}
@@ -98,8 +107,29 @@ KexiTablePartProxy::slotCreate()
 void
 KexiTablePartProxy::slotOpen(const QString& identifier)
 {
-	if(kexiView()->activateWindow(identifier))
+	KexiDialogBase *w = m_view->findWindow(identifier);
+	KexiProjectHandlerItem *item = part()->items()->find(identifier);
+	if (!item)
 		return;
+	if (w) {
+		if (w->isA("KexiDataTable")) { //just activate data table window
+			m_view->activateWindow(identifier);
+			return;
+		}
+		else if (w->isA("KexiAlterTable")) {
+			m_view->activateWindow(identifier);
+			if (KMessageBox::questionYesNo( 0, i18n(
+				"Project of \"%1\" table is altered now.\n"
+				"Do you want to stop altering this table and display its data?" ).arg(item->title()) )==KMessageBox::No)
+			{
+				return;
+			}
+			//yes: close alter window and open in data mode
+			w->close(true);
+		}
+	else
+		return; //unknown window type
+	}
 
 	kdDebug() << "KexiTablePartProxy::slotOpen(): indentifier = " << identifier << endl;
 	kdDebug() << "KexiTablePartProxy::slotOpen(): kexiView = " << kexiView() << endl;
@@ -112,7 +142,9 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 		 return;
 	}
 
-	KexiDataTable *kt = new KexiDataTable(kexiView(), 0, identifier, "table");
+	KexiDataTable *kt = new KexiDataTable(kexiView(), 0, item);
+//	KexiDataTable *kt = new KexiDataTable(kexiView(), 0, item->title(), "table");
+	kt->setIcon( item->handler()->itemPixmap() );
 	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
 	kt->setDataSet(data);
 }
@@ -120,11 +152,33 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 void
 KexiTablePartProxy::slotAlter(const QString& identifier)
 {
-	KexiProjectHandler::ItemIterator it( *part()->items() );
-	for (;it.current();++it) {
-		kdDebug() << "KexiProjectHandlerItem: " << it.currentKey() << " -> " << it.current()->fullIdentifier() << endl;
+	m_part->debug();
+	KexiDialogBase *w = m_view->findWindow(identifier);
+	KexiProjectHandlerItem *item = part()->items()->find(identifier);
+	if (!item)
+		return;
+	if (w) {
+		if (w->isA("KexiAlterTable")) { //just activate alter window for this table
+			m_view->activateWindow(identifier);
+			return;
+		}
+		else if (w->isA("KexiDataTable")) {
+			m_view->activateWindow(identifier);
+			if (KMessageBox::questionYesNo( 0, i18n(
+				"\"%1\" table is opened for data editing or viewing.\n"
+				"Do you want to close and alter this table?" ).arg(item->title()) )==KMessageBox::No)
+			{
+				return;
+			}
+			//yes: close window and open in alter mode
+			w->close(true);
+		}
+	else
+		return; //unknown window type
 	}
-	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, part()->items()->find(identifier)->name(), false, "alterTable");
+	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, item, false);
+//	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, part()->items()->find(identifier)->identifier(), false, "alterTable");
+	kat->setIcon( part()->itemPixmap() );
 	kat->show();
 }
 
@@ -138,14 +192,19 @@ KexiTablePartProxy::slotDrop(const QString& identifier)
           KMessageBox::sorry( 0, i18n( "Table not found" ) );
           return;
         }
+	//close table window if exists
+	KexiDialogBase *w = m_view->findWindow(identifier);
+	if (w)
+		w->close(true);
 
-	QString rI = item->name();
+//	QString rI = item->title();
 	int ans = KMessageBox::questionYesNo(kexiView(),
-		i18n("Do you really want to delete %1?").arg(rI), i18n("Delete Table?"));
+		i18n("Do you want to delete \"%1\" table?").arg(item->title()), KEXI_APP_NAME);
 
 	if(ans == KMessageBox::Yes)
 	{
-		if(kexiView()->project()->db()->query("DROP TABLE " + rI))
+		kdDebug() << "DROP TABLE " << item->identifier() << endl;
+		if(kexiView()->project()->db()->query("DROP TABLE " + item->identifier()))
 		{
 			// FIXME: Please implement a less costly solution.
 			m_tablePart->getTables();

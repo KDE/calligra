@@ -84,6 +84,8 @@ class KEXICORE_EXPORT KexiProjectHandler : public QObject
 		static QString handlerNameFromGlobalIdentifier(const QString &globalIdentifier);
 		QString globalIdentifier(const QString &localIdentifier);
 
+		void debug();
+
 	signals:
 		void itemListChanged(KexiProjectHandler*);
 

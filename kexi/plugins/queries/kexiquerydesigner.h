@@ -35,8 +35,9 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesigner : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item,
-		 bool modeview=true);
+		KexiQueryDesigner(KexiView *view,QWidget *parent, KexiQueryPartItem *item, bool modeview=true);
+//		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item,
+//		 bool modeview=true);
 		~KexiQueryDesigner();
 
 		virtual	KXMLGUIClient *guiClient(){return new KXMLGUIClient();}

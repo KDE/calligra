@@ -82,11 +82,11 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		static QPtrList<KexiDialogBase> *s_ToolWindows;
 
 		class KDockWidget *myDock;
-	private:
-		class	KexiView *m_mainWindow;
-		class	KexiProject *m_project;
-		class	KexiView *m_view;
-		class	QDockWindow *w;
+//	private:
+		KexiView *m_mainWindow;
+		KexiProject *m_project;
+		KexiView *m_view;
+		QDockWindow *w;
 		bool	m_registered;
 		enum	WindowType m_wt;
 		bool	m_registering;

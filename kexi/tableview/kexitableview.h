@@ -219,6 +219,7 @@ signals:
 	void			itemChanged(KexiTableItem *, int);
 	void			itemChanged(KexiTableItem *, int,QVariant oldValue);
 	void			itemRemoveRequest(KexiTableItem *);
+	void			currentItemRemoveRequest();
 	void			addRecordRequest();
 	void			dropped(QDropEvent *);
 	void			contextMenuRequested(KexiTableItem *, int col, const QPoint &);

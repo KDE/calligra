@@ -23,6 +23,7 @@
 #include "formeditor/propertyeditor.h"
 #include "formeditor/propertyeditoritem.h"
 #include "kexiproject.h"
+#include "kexiprojecthandleritem.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -34,16 +35,35 @@
 #include <kdialog.h>
 #include <klistview.h>
 
-KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent,
-	const QString &table, bool create, const char *name)
-	: KexiDialogBase(view,parent, name)
+//KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent,
+//	const QString &table, bool create, const char *name)
+//	: KexiDialogBase(view,parent, name)
+
+/*KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, QString title, QString identifier, bool create)
+	: KexiDialogBase(view, parent, identifier.latin1())
+	, m_table(identifier)
+	, m_title(item->title())
+	, m_create(create)
 {
-	m_table = table;
-	m_create = create;
+	init(identifier);
+}
+*/
+KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, KexiProjectHandlerItem *item, bool create)
+	: KexiDialogBase(view, parent, item->fullIdentifier().latin1())
+	, m_table(item->identifier())
+//	, m_title(item->title())
+	, m_create(create)
+{
+	init(item->title(),item->fullIdentifier());
+}
+
+void
+KexiAlterTable::init(QString title, QString identifier)
+{
 	initView();
 	getFields();
-	setCaption(i18n("%1 - Table Editor").arg(m_table));
-	registerAs(DocumentWindow);
+	setCaption(i18n("%1 - Table Editor").arg(title));
+	registerAs(DocumentWindow, identifier);
 	m_tableFields.setAutoDelete(true);
 }
 

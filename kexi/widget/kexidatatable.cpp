@@ -46,31 +46,46 @@
 #include "kexitableview.h"
 #include "kexiproject.h"
 #include "kexiview.h"
+#include "kexiprojecthandleritem.h"
 
-KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, const char *name, bool embedd)
-	: KexiDialogBase(view,parent, name),m_record(0)
+KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, QString identifier, bool embedd)
+	: KexiDialogBase(view,parent, identifier.latin1())
 {
+	init(caption, identifier, embedd);
+}
+
+KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, KexiProjectHandlerItem *item, /*QString caption, const char *name,*/ bool embedd)
+	: KexiDialogBase(view,parent, item->fullIdentifier().latin1())
+{
+	init(item->title(), item->fullIdentifier(), embedd);
+}
+
+void 
+KexiDataTable::init(QString caption, QString identifier, bool embedd)
+{
+	m_record=0;
+	setCaption(i18n("%1 - Table").arg(caption));
+
 	QGridLayout *g = new QGridLayout(this);
 	m_tableView = new KexiTableView(this);
 	m_tableView->m_editOnDubleClick = true;
 	m_statusBar = new QStatusBar(this);
-
+#ifndef KEXI_NO_DATATABLE_SEARCH
 	QLabel *lSearch = new QLabel(i18n("Search:"), this);
 	m_search = new QLineEdit("", this);
 	connect(m_search, SIGNAL(textChanged(const QString &)), this, SLOT(slotSearchChanged(const QString &)));
-
-	setCaption(i18n("%1 - Table").arg(caption));
-
 	g->addWidget(lSearch,			0,	0);
 	g->addWidget(m_search,			0,	1);
+#endif
 	g->addMultiCellWidget(m_tableView,	1,	1,	0,	1);
 	g->addMultiCellWidget(m_statusBar,	2,	2,	0,	1);
 
 	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int,QVariant)), this, SLOT(slotItemChanged(KexiTableItem *, int,QVariant)));
 	connect(m_tableView, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
 	 SLOT(slotContextMenu(KexiTableItem *, int, const QPoint &)));
+	connect(m_tableView, SIGNAL(currentItemRemoveRequest()), this, SLOT(slotRemoveCurrentRecord()));
 
-	m_db = view->project()->db();
+	m_db = m_view->project()->db();
 	connect(m_db->watcher(), SIGNAL(updated(QObject *, const QString &, const QString &, uint, QVariant &)), this,
 	 SLOT(slotUpdated(QObject *, const QString &, const QString &, uint, QVariant &)));
 	connect(m_db->watcher(), SIGNAL(removed(QObject *, const QString &, uint)), this,
@@ -79,7 +94,7 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, co
 	m_first = true;
 
 	if(!embedd)
-		registerAs(DocumentWindow, caption);
+		registerAs(DocumentWindow, identifier);
 	else
 		m_statusBar->hide();
 
@@ -335,6 +350,8 @@ KexiDataTable::slotSearchChanged(const QString &findQuery)
 void
 KexiDataTable::slotContextMenu(KexiTableItem *i, int col, const QPoint &pos)
 {
+	if (i->isInsertItem()) //avoid delete not inserted item
+		return;
 	QPopupMenu context;
 	context.insertItem(i18n("Delete Record"), this, SLOT(slotRemoveCurrentRecord()));
 	context.exec(pos);

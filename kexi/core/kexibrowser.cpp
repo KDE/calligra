@@ -178,8 +178,9 @@ KexiBrowser::slotExecuteItem(QListViewItem *item)
 			else
 			{
 				it->item()->handler()->proxy(
-	                        static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
-        	                )->executeItem(it->identifier());
+					static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
+				)->executeItem(it->item()->fullIdentifier());
+//				)->executeItem(it->identifier());
 			}
 		}
 	}

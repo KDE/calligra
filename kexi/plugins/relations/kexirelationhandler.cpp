@@ -22,6 +22,7 @@
 #include <koApplication.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include "kexirelationdialog.h"
 #include "kexirelationhandler.h"
@@ -61,7 +62,7 @@ KexiRelationHandler::groupPixmap()
 QPixmap
 KexiRelationHandler::itemPixmap()
 {
-	return QPixmap();
+	return kapp->iconLoader()->loadIcon("relation", KIcon::Small);
 }
 
 void KexiRelationHandler::hookIntoView(KexiView *view)
@@ -74,6 +75,7 @@ QWidget *
 KexiRelationHandler::embeddReadOnly(QWidget *parent, KexiView *v)
 {
 	KexiRelationDialog *d = new KexiRelationDialog(v, parent, "embedded-redit", true);
+	d->setIcon(itemPixmap());
 	kdDebug() << "KexiRelationHandler::embeddReadOnly [" << d << "]" << endl;
 	return d;
 }

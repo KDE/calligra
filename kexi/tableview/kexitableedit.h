@@ -31,6 +31,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		virtual void resize(int w, int h);
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 	protected:
+//		virtual void paintEvent( QPaintEvent *pe );
 		QWidget* m_view;
 };
 

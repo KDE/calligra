@@ -111,4 +111,13 @@ QString KexiProjectHandler::handlerNameFromGlobalIdentifier(const QString &globa
 
 }
 
+void
+KexiProjectHandler::debug()
+{
+	ItemIterator it( *m_items );
+	for (;it.current();++it) {
+		kdDebug() << "KexiProjectHandlerItem: " << it.currentKey() << " -> (" << it.current()->fullIdentifier() <<", "<< it.current()->title() <<")"<< endl;
+	}
+}
+
 #include "kexiprojecthandler.moc"
