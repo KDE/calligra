@@ -460,7 +460,7 @@ namespace MSWrite
 	{
 		// OPT: inefficient, maybe an array of pointers because we can't delete fonts anyway
 		List <Font>::Iterator it = m_fontList.begin ();
-		for (int i = 0; i < int (fontCode) && it != m_fontList.end (); i++, it++)
+		for (int i = 0; i < int (fontCode) && it != m_fontList.end (); i++, ++it)
 			;
 		if (it == m_fontList.end ()) return NULL;
 		return &(*it);
@@ -471,7 +471,7 @@ namespace MSWrite
 		DWord code = 0;
 
 		List <Font>::Iterator it;
-		for (it = m_fontList.begin (); it != m_fontList.end (); it++)
+		for (it = m_fontList.begin (); it != m_fontList.end (); ++it)
 		{
 			if ((*it) == *want)
 				return code;
@@ -683,7 +683,7 @@ namespace MSWrite
 
 		int i = 0;
 		List <PagePointer>::Iterator it;
-		for (it = m_pagePointerList.begin (); it != m_pagePointerList.end (); it++, i++)
+		for (it = m_pagePointerList.begin (); it != m_pagePointerList.end (); ++it, i++)
 		{
 			PagePointer &pp = (*it);
 

@@ -174,7 +174,7 @@ namespace MSWrite
 		}
 
 		List <FormatInfoPage>::Iterator it;
-		for (it = m_formatInfoPageList.begin (); it != m_formatInfoPageList.end (); it++)
+		for (it = m_formatInfoPageList.begin (); it != m_formatInfoPageList.end (); ++it)
 		{
 			FormatInfoPage &fip = *it;
 
