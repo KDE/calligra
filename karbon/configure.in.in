@@ -1,0 +1,31 @@
+
+KDE_FIND_PATH(freetype-config, FREETYPE_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+  AC_MSG_WARN([Could not find libfreetype anywhere, check http://www.freetype.org/])
+])
+
+if test -n "$FREETYPE_CONFIG"; then
+  vers=`$FREETYPE_CONFIG --version 2>/dev/null | sed -e 's/libfreetype //' | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 5000000
+  then
+     LIBFREETYPE_LIBS="`$FREETYPE_CONFIG --libs`"
+     LIBFREETYPE_RPATH=
+     for args in $LIBFREETYPE_LIBS; do
+	  case $args in
+	    -L*)
+  	       LIBFREETYPE_RPATH="$LIBFREETYPE_RPATH $args"
+ 	       ;;
+          esac
+     done
+     LIBFREETYPE_RPATH=`echo $LIBFREETYPE_RPATH | sed -e "s/-L/-R/g"`
+     LIBFREETYPE_CFLAGS="`$FREETYPE_CONFIG --cflags`"
+     LIBFREETYPE_CFLAGS="$LIBFREETYPE_CFLAGS -DXFTFREETYPE"
+
+  else
+     AC_MSG_WARN([You need at least libfreetype 5.0])
+  fi
+fi
+
+
+AC_SUBST(LIBFREETYPE_LIBS)
+AC_SUBST(LIBFREETYPE_CFLAGS)
+AC_SUBST(LIBFREETYPE_RPATH)
