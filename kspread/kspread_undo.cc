@@ -225,7 +225,7 @@ void KSpreadUndoDeleteRow::undo()
     KSpreadCell *o;
     for ( o = m_lstCells.first(); o != 0L; o = m_lstCells.next() )
     {
-	KSpreadCell* cell = new KSpreadCell( m_pTable, cell->column(), m_iRow );
+	KSpreadCell* cell = new KSpreadCell( m_pTable, o->column(), m_iRow );
 	cell->copyAll( o );
 	m_pTable->insertCell( cell );
     }

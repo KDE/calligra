@@ -3119,11 +3119,11 @@ void KSpreadTable::insertColumn( unsigned long int _column )
 	{
 	  int key = list2[ k ]->column();
 	  m_dctColumns.remove( key );
-		
 	  list2[k]->setColumn( list2[ k ]->column() + 1 );
 		
 	  key = list2[k]->column();
 	  m_dctColumns.insert( key, list2[k] );
+
 	}
       }
     }
@@ -3480,17 +3480,17 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     if ( m_rctSelection.left() == 0 )
 	rct.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
     // Complete rows
-    else if ( m_rctSelection.right() == 0x7fff )
+    /*else if ( m_rctSelection.right() == 0x7fff )
     {
-	QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supported", i18n("OK"));
+	//QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supported", i18n("OK"));
 	return;
     }
     // Complete columns
     else if ( m_rctSelection.bottom() == 0x7fff )
     {
-	QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supported", i18n("OK"));
+	//QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supported", i18n("OK"));
 	return;
-    }
+    }*/
     else
 	rct = selectionRect();
 	

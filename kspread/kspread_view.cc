@@ -1504,16 +1504,34 @@ void KSpreadView::showTable()
 void KSpreadView::copySelection()
 {
   if ( m_pTable )
-    m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  	{
+  	QRect rect( activeTable()-> selectionRect() );
+  
+  	if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
+  		{
+  		QMessageBox::critical( this, "KSpread Error", "Not supported", i18n("OK"));
+		}
+  	else 
+   	 	m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+   	}
+    	
 }
 
 void KSpreadView::cutSelection()
 {
     if ( !m_pTable )
 	return;
-
-    m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    updateEditWidget();
+    QRect rect( activeTable()-> selectionRect() );
+  
+    if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
+  		{
+  		QMessageBox::critical( this, "KSpread Error", "Not supported", i18n("OK"));
+		}
+  	else 
+  		{
+    		m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    		updateEditWidget();
+    		}
 }
 
 void KSpreadView::paste()
