@@ -33,11 +33,12 @@
 KoListBox::KoListBox( QWidget *parent , const char *name , WFlags f)
     : QListBox( parent, name, f)
 {
+    setVScrollBarMode( AlwaysOn );
 }
 
 void KoListBox::contentsMouseMoveEvent ( QMouseEvent * e)
 {
-    QListBoxItem *item_p = itemAt( e->pos());
+    QListBoxItem *item_p = itemAt( contentsToViewport(e->pos()));
     if ( item_p )
     {
         int itemIndex = index( item_p );
