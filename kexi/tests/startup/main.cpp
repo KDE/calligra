@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 	KexiProjectData *prjdata;
 	prjdata = new KexiProjectData( *conndata, "bigdb", "Big DB" );
 	prjdata->setCaption("My Big Project");
-	prjdata->setHelpText("This is my first biger project started yesterday. Have fun!");
+	prjdata->setDescription("This is my first biger project started yesterday. Have fun!");
 	KexiProjectSet prj_set;
 	prj_set.addProjectData(prjdata);
 	
