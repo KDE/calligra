@@ -450,18 +450,6 @@ void KexiAlterTableDialog::removeCurrentPropertyBuffer()
 }
 */
 
-static KexiDB::Field::Type firstTypeForSelectedGroup( int typegroup )
-{
-	//take the 1st type for the group
-	KexiDB::TypeGroupList tlst = KexiDB::typesForGroup( (KexiDB::Field::TypeGroup)typegroup );
-	if (tlst.isEmpty()) {//this should not be!
-		kdWarning() << "KexiAlterTableDialog::slotRowUpdated(): no types for group " 
-		<< typegroup << endl;
-		return KexiDB::Field::InvalidType;
-	}
-	return static_cast<KexiDB::Field::Type>(tlst.first());
-}
-
 void KexiAlterTableDialog::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant newValue, KexiDB::ResultInfo* /*result*/)
 {
@@ -499,7 +487,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>(i_fieldTypeGroup);
 
 		//-get 1st type from this group, and update 'type' property
-		KexiDB::Field::Type fieldType = firstTypeForSelectedGroup( i_fieldTypeGroup );
+		KexiDB::Field::Type fieldType = KexiDB::defaultTypeForGroup( fieldTypeGroup );
 		if (fieldType==KexiDB::Field::InvalidType)
 			fieldType = KexiDB::Field::Text;
 		buf["type"] = (int)fieldType;
@@ -548,7 +536,8 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 	
 	} else if (buffer_allowed && !propertyBuffer()) {
 		//-- create a new field:
-		int fieldType = firstTypeForSelectedGroup( item->at(COLUMN_ID_TYPE).toInt()+1/*counting from 1*/ );
+		KexiDB::Field::TypeGroup fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>( item->at(COLUMN_ID_TYPE).toInt()+1/*counting from 1*/ );
+		int fieldType = KexiDB::defaultTypeForGroup( fieldTypeGroup );
 		if (fieldType==0)
 			return;
 

@@ -31,7 +31,7 @@ QMap< uint, TypeGroupList > tlist;
 QMap< uint, QStringList > nlist;
 QMap< uint, QStringList > slist;
 
-inline void initList()
+static void initList()
 {
 	if (!tlist.isEmpty())
 		return;
@@ -70,6 +70,27 @@ QStringList KexiDB::typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
 	initList();
 	return slist[ typeGroup ];
+}
+
+QMap< uint, Field::Type > def_tlist;
+
+static void initDefList()
+{
+	if (!def_tlist.isEmpty())
+		return;
+	def_tlist[ Field::InvalidGroup ] = Field::InvalidType;
+	def_tlist[ Field::TextGroup ] = Field::Text;
+	def_tlist[ Field::IntegerGroup ] = Field::Integer;
+	def_tlist[ Field::FloatGroup ] = Field::Float;
+	def_tlist[ Field::BooleanGroup ] = Field::Boolean;
+	def_tlist[ Field::DateTimeGroup ] = Field::Date;
+	def_tlist[ Field::BLOBGroup ] = Field::BLOB;
+}
+
+KexiDB::Field::Type KexiDB::defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup)
+{
+	initDefList();
+	return (typeGroup <= Field::LastTypeGroup) ?  def_tlist[ typeGroup ] : Field::InvalidType;
 }
 
 void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)

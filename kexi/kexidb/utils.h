@@ -78,14 +78,20 @@ namespace KexiDB
 
 	typedef QValueList<uint> TypeGroupList;
 
-	/*! \return list of types for a given \a typeGroup. */
+	/*! \return list of types for type group \a typeGroup. */
 	KEXI_DB_EXPORT const TypeGroupList typesForGroup(KexiDB::Field::TypeGroup typeGroup);
 
-	/*! \return list of i18n'd type names for a given \a typeGroup. */
+	/*! \return list of i18n'd type names for type group \a typeGroup. */
 	KEXI_DB_EXPORT QStringList typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup);
 
-	/*! \return list of (not-i18n'd) type names for a given \a typeGroup. */
+	/*! \return list of (not-i18n'd) type names for type group \a typeGroup. */
 	KEXI_DB_EXPORT QStringList typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup);
+
+	/*! \return default field type for type group \a typeGroup,
+	 for example, Field::Integer for Field::IntegerGroup.
+	 It is used e.g. in KexiAlterTableDialog, to properly fill 
+	 'type' property when user selects type group for a field. */
+	KEXI_DB_EXPORT KexiDB::Field::Type defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup);
 
 	/*! \return true if \a v represents an empty (but not null) value.
 	 Values of some types (as for strings) can be both empty and not null. */

@@ -314,6 +314,13 @@ KexiDB Drivers
 - move to SQLITE3 (later it will be harder to do)
 -....
 
+2004-08-23
+Table Designer
+- fixed code because of new column has been prepended
+KexiDB
+- KexiDB::Field::Type defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup)
+  added and used in Table Designer.
+
 2004-08-21
 Table View
 - Key_Left, Key_Right now by default behaves like Key_BackTab, Key_Tab
