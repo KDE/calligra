@@ -48,7 +48,7 @@ class KexiTableViewData;
  return ("name", "surname") list, so the cursor's query can be simplified 
  and thus more effective.
 */
-class KexiDataProvider
+class KexiDataProvider : public KexiDataItemChangesListener
 {
 	public:
 		KexiDataProvider();
@@ -66,6 +66,9 @@ class KexiDataProvider
 
 		/*! Fills data items with appropriate data fetched from \a cursor. */
 		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);
+
+		//! Reaction for change of \a item.
+		virtual void valueChanged(KexiDataItemInterface* item);
 
 	protected:
 		QWidget *m_mainWidget;

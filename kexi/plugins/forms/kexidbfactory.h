@@ -67,9 +67,13 @@ class KexiDBLineEdit : public KLineEdit, public KexiDataItemInterface
 
 		inline QString dataSource() const { return KexiDataItemInterface::dataSource(); }
 		inline void setDataSource(const QString &ds) { KexiDataItemInterface::setDataSource(ds); }
-		virtual void setValue(const QVariant& value);
+		virtual QVariant value();
+
+	protected slots:
+		void slotTextChanged(const QString&);
 
 	protected:
+		virtual void setValueInternal(const QVariant& value);
 };
 
 //! Kexi Factory (DB widgets + subform)

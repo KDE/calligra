@@ -41,7 +41,8 @@
 #define NO_DSWIZARD
 
 KexiDataProvider::KexiDataProvider()
- : m_mainWidget(0)
+ : KexiDataItemChangesListener()
+ , m_mainWidget(0)
 {
 }
 
@@ -69,6 +70,7 @@ void KexiDataProvider::setMainWidget(QWidget* mainWidget)
 			if (!dataSource.isEmpty()) {
 				kexipluginsdbg << obj->name() << endl;
 				m_dataItems.append( dynamic_cast<KexiDataItemInterface*>(obj) );
+				dynamic_cast<KexiDataItemInterface*>(obj)->installListener( this );
 				tmpSources.replace( dataSource, (char*)1 );
 			}
 		}
@@ -95,6 +97,10 @@ void KexiDataProvider::fillDataItems(KexiTableItem& row)//KexiDB::Cursor& cursor
 		it.key()->setValue( row.at(it.data()) );
 //		it.key()->setValue( cursor.value(it.data()) );
 	}
+}
+
+void KexiDataProvider::valueChanged(KexiDataItemInterface* item)
+{
 }
 
 //////////////////////////////////////////////////////////////////////

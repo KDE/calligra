@@ -40,8 +40,9 @@ class KexiDBForm : public QWidget, public KFormDesigner::FormWidget, public Kexi
 
 		inline QString dataSource() const { return KexiDataItemInterface::dataSource(); }
 		inline void setDataSource(const QString &ds) { KexiDataItemInterface::setDataSource(ds); }
+
 		//! no effect
-		virtual void setValue(const QVariant&) {};
+		QVariant value() { return QVariant(); }
 
 		virtual void drawRect(const QRect& r, int type);
 		virtual void drawRects(const QValueList<QRect> &list, int type);
@@ -52,9 +53,8 @@ class KexiDBForm : public QWidget, public KFormDesigner::FormWidget, public Kexi
 		virtual QSize sizeHint() const;
 
 	protected:
-		/*
-		bool m_nav;
-		KexiDB::Connection *m_conn;*/
+		//! no effect
+		virtual void setValueInternal(const QVariant&) {};
 
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle

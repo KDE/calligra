@@ -93,15 +93,26 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  : KLineEdit(parent, name)
  , KexiDataItemInterface()
 {
+	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
 {
 }
 
-void KexiDBLineEdit::setValue(const QVariant& value)
+void KexiDBLineEdit::setValueInternal(const QVariant& value)
 {
 	setText( value.toString() );
+}
+
+QVariant KexiDBLineEdit::value()
+{
+	return text();
+}
+
+void KexiDBLineEdit::slotTextChanged(const QString&)
+{
+	valueChanged();
 }
 
 //////////////////////////////////////////
