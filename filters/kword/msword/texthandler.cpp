@@ -779,9 +779,9 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
                 prefix = QString::null; // it's already the parent's suffix -> remove it
                 kdDebug() << "depth=" << depth << " parent suffix is " << prefix << " -> clearing" << endl;
             }
-            if ( isHeading )
-                numberingType = 1;
         }
+        if ( isHeading )
+            numberingType = 1;
         if ( depthFound )
         {
             // Word6 models "1." as nfc=5
