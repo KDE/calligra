@@ -436,17 +436,19 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     QLabel *lab=new QLabel(i18n("Resolution X: (%1)").arg(doc->getUnitName()),  tmpQGroupBox);
     grid->addWidget(lab ,0,0);
 
-    resolutionX = new KLineEdit(tmpQGroupBox);
-    resolutionX->setText( KoUnit::userValue( doc->getGridX(), doc->getUnit() ) );
-    resolutionX->setValidator( new KFloatValidator( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()) ,true, resolutionX ) );
+    resolutionX = new KDoubleNumInput(tmpQGroupBox);
+    resolutionX->setValue( KoUnit::ptToUnit( doc->getGridX(), doc->getUnit() ) );
+    resolutionX->setRange( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()), 1, false);
+
     grid->addWidget(resolutionX ,1,0);
 
     lab=new QLabel(i18n("Resolution Y: (%1)").arg(doc->getUnitName()), tmpQGroupBox);
     grid->addWidget(lab ,2,0);
 
-    resolutionY = new KLineEdit(tmpQGroupBox);
-    resolutionY->setText( KoUnit::userValue( doc->getGridY(), doc->getUnit() ) );
-    resolutionY->setValidator( new KFloatValidator( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()) ,true, resolutionY ) );
+    resolutionY = new KDoubleNumInput(tmpQGroupBox);
+    resolutionY->setValue( KoUnit::ptToUnit( doc->getGridY(), doc->getUnit() ) );
+    resolutionY->setRange( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()), 1, false);
+
     grid->addWidget(resolutionY , 3,0);
 }
 
@@ -485,8 +487,8 @@ void ConfigureMiscPage::apply()
         doc->recalcVariables( VT_NOTE );
     }
 
-    doc->setGridX( KoUnit::fromUserValue( resolutionX->text(), doc->getUnit() ));
-    doc->setGridY( KoUnit::fromUserValue( resolutionY->text(), doc->getUnit() ));
+    doc->setGridX( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ));
+    doc->setGridY( KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ));
     doc->repaint( false );
 }
 
@@ -497,8 +499,8 @@ void ConfigureMiscPage::slotDefault()
    m_displayComment->setChecked(true);
    KPresenterDoc* doc = m_pView->kPresenterDoc();
 
-   resolutionY->setText( KoUnit::userValue( MM_TO_POINT( 10.0), doc->getUnit() ) );
-   resolutionX->setText( KoUnit::userValue( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
+   resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
+   resolutionX->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
 
 }
 

@@ -29,6 +29,7 @@ class KConfig;
 class KSpellConfig;
 class QCheckBox;
 class KLineEdit;
+class KDoubleNumInput;
 
 class configureInterfacePage : public QWidget
 {
@@ -96,7 +97,9 @@ private:
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
     QCheckBox* m_displayLink, *m_displayComment;
-    KLineEdit * resolutionY, * resolutionX;
+    KDoubleNumInput * resolutionY, * resolutionX;
+    KDoubleNumInput *m_rotation;
+
 };
 
 class ConfigureDefaultDocPage : public QObject
