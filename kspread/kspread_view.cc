@@ -1748,6 +1748,7 @@ void KSpreadView::slotRemoveChild( KSpreadChild *_child )
 
     // Make shure that this child has no active embedded view -> activate ourselfs
     partManager()->setActivePart( koDocument(), this );
+    partManager()->setSelectedPart( 0 );
 }
 
 void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
