@@ -557,6 +557,7 @@
   <Action name="edit_duplicatepage"/>
   <Action name="edit_delpage"/>
   <Action name="rename_page"/>
+  <Action name="edit_copypage"/>
 </Menu>
 <Menu name="variable_popup">
  <ActionList name="variable_action"/>
