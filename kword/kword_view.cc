@@ -1452,7 +1452,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     widthlist[i-1] = CORBA::string_dup( buffer );
   }
   tmpBrd.ptWidth = 1;
-  m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, false, SIGNAL( activated( const char* ) ),
+  m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, true, SIGNAL( activated( const char* ) ),
 							   this, "textBorderWidth", true, i18n("Border Width"),
 							   60, -1, OpenPartsUI::AtBottom );
 
