@@ -180,9 +180,24 @@ class KEXICORE_EXPORT KexiProperty
 
 		void debug();
 	protected:
+		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue),
+		 but allows to skip updating values for children. */
+		void setValue(const QVariant &v, bool updateChildren, bool saveOldValue);
+
 		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue), 
 		 but \a v is set for the child named \a childName. */
-		void setValue(const QString& childName, const QVariant &v, bool saveOldValue = true);
+		void setValue(const QString& childName, const QVariant &v, 
+			bool saveOldValue);
+
+		/*! Internal: Updates this property value using \a v value coming from a child
+		 named \a childName. This methid is only called by a child of this property,
+		 in setValue(), to update parent's value. This method has no meaning 
+		 for childless (atomic) properties.
+		 Example: if Rect.x property is cahnged in the child,
+		 the child calls parent->updateValueForChild("x", value_of_x). 
+		*/
+		void updateValueForChild(const QString& childName, const QVariant &v, 
+			bool saveOldValue);
 
 	private:
 		void init(QVariant value);

@@ -33,20 +33,33 @@
 #include <kglobal.h>
 
 
-class spHelper
+class SPHelper
 {
 	public:
-	spHelper() {;}
-	~spHelper() {;}
+	SPHelper() {
+		list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding" 
+			<< "MinimumExpanding" << "Ignored";
 
-	static QStringList list();
-	static QString valueToKey(int key);
-	static QSizePolicy::SizeType keyToValue(const QString &key);
+	}
+	~SPHelper() {;}
+
+//	static QStringList list();
+	QString valueToKey(int value);
+	QSizePolicy::SizeType keyToValue(const QString &key);
+
+	QStringList list;
+//	QValueVector<QMap<Intm_v2key
 };
 
 QString
-spHelper::valueToKey(int key)
+SPHelper::valueToKey(int value)
 {
+	QStringList::iterator it = list.at(value);
+	if (it==list.end())
+		return QString::null;//err
+	return *it;
+}
+/*
 	switch(key)
 	{
 		case QSizePolicy::Fixed: return QString("Fixed");
@@ -58,16 +71,29 @@ spHelper::valueToKey(int key)
 		case QSizePolicy::Ignored: return QString("Ignored");
 		default: return QString();
 	}
+}*/
+
+QSizePolicy::SizeType
+SPHelper::keyToValue(const QString& key)
+{
+	int i = list.findIndex(key);
+	if (i<0 || i>QSizePolicy::Ignored)
+		i = QSizePolicy::Preferred;//deflt
+	return static_cast<QSizePolicy::SizeType>(i);
 }
 
-QStringList
+/*QStringList
 spHelper::list()
 {
 	QStringList list;
 	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding" 
 		<< "MinimumExpanding" << "Ignored";
 	return list;
-}
+}*/
+
+//singleton
+
+SPHelper spHelper;
 
 //===================================================
 
@@ -189,11 +215,11 @@ void KexiProperty::init(QVariant value)
 		{
 			QSizePolicy p = value.toSizePolicy();
 
-			addChild( new KexiProperty("horSizeType", spHelper::valueToKey(p.horData()), 
-				spHelper::list(), i18n("horSizeType")) );
+			addChild( new KexiProperty("horSizeType", spHelper.valueToKey(p.horData()), 
+				spHelper.list, i18n("horSizeType")) );
 
 			addChild( new KexiProperty("verSizeType", 
-				spHelper::valueToKey(p.verData()), spHelper::list(), i18n("verSizeType")) );
+				spHelper.valueToKey(p.verData()), spHelper.list, i18n("verSizeType")) );
 
 			addChild( new KexiProperty("hStretch", (int)p.horStretch(), i18n("hStretch") ) );
 			addChild( new KexiProperty("vStretch", (int)p.verStretch(), i18n("vStretch") ) );
@@ -205,7 +231,7 @@ void KexiProperty::init(QVariant value)
 		}
 	}
 
-	setValue( value, false );
+	setValue( value, false, false );
 }
 
 KexiProperty::KexiProperty(const KexiProperty &property)
@@ -277,7 +303,7 @@ KexiProperty::operator=(const KexiProperty &property)
 	return *this;
 }
 
-QVariant::Type  KexiProperty::type() const
+QVariant::Type KexiProperty::type() const
 {
 	if(m_list)
 		return QVariant::StringList;
@@ -285,25 +311,30 @@ QVariant::Type  KexiProperty::type() const
 		return m_value.type();
 }
 
-void KexiProperty::setValue(const QVariant &v, bool saveOldValue)
+void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOldValue)
 {
 	if (saveOldValue) {
 		if (m_value != v) {
 			if (!m_changed) {
 				m_oldValue = m_value; //store old
 			}
-			m_changed = true;
-			if (m_parent)
-				m_parent->setChanged( true ); //inform the parent
+//			m_changed = true;
+			setChanged(true);
 			m_value = v;
+			if (m_parent) {
+				m_parent->setChanged( true ); //inform the parent
+				m_parent->updateValueForChild(m_name, m_value, saveOldValue);
+			}
 		}
 	}
 	else {
 		m_oldValue = QVariant(); //clear old
-		m_changed = false;
+		setChanged(false);
 		m_value = v;
 	}
 
+	if (!updateChildren)
+		return;
 
 	//automatically update children's value if necessary
 	switch(m_value.type())
@@ -334,8 +365,8 @@ void KexiProperty::setValue(const QVariant &v, bool saveOldValue)
 		case QVariant::SizePolicy:
 		{
 			QSizePolicy p = m_value.toSizePolicy();
-			setValue("horSizeType",spHelper::valueToKey(p.horData()),saveOldValue);
-			setValue("verSizeType",spHelper::valueToKey(p.verData()),saveOldValue);
+			setValue("horSizeType",QVariant(spHelper.valueToKey(p.horData())),saveOldValue);
+			setValue("verSizeType",QVariant(spHelper.valueToKey(p.verData())),saveOldValue);
 			setValue("hStretch",(int)p.horStretch(),saveOldValue);
 			setValue("vStretch",(int)p.verStretch(),saveOldValue);
 			break;
@@ -343,6 +374,11 @@ void KexiProperty::setValue(const QVariant &v, bool saveOldValue)
 		default:
 			break;
 	}
+}
+
+void KexiProperty::setValue(const QVariant &v, bool saveOldValue)
+{
+	setValue(v, true, saveOldValue);
 }
 
 QVariant KexiProperty::value() const
@@ -373,6 +409,79 @@ void KexiProperty::setValue(const QString& childName, const QVariant &v, bool sa
 	prop->setValue(v, saveOldValue);
 }
 
+void KexiProperty::updateValueForChild(const QString& childName, 
+	const QVariant &v, bool saveOldValue)
+{
+	debug();
+
+	switch(m_value.type())
+	{
+		case QVariant::Size:
+		{
+			QSize s = m_value.toSize();
+			if (childName=="width")
+				s.setWidth(v.toInt());
+			else if (childName=="height")
+				s.setHeight(v.toInt());
+			else
+				break;
+			setValue(s, false, saveOldValue);
+			break;
+		}
+		case QVariant::Point:
+		{
+			QPoint p = m_value.toPoint();
+			if (childName=="x")
+				p.setX(v.toInt());
+			else if (childName=="y")
+				p.setY(v.toInt());
+			else
+				break;
+			setValue(p, false, saveOldValue);
+			break;
+		}
+		case QVariant::Rect:
+		{
+			QRect r = m_value.toRect();
+			if (childName=="x")
+				r.moveLeft(v.toInt());
+			else if (childName=="y")
+				r.moveTop(v.toInt());
+			else if (childName=="width")
+				r.setWidth(v.toInt());
+			else if (childName=="height")
+				r.setHeight(v.toInt());
+			else
+				break;
+			setValue(r, false, saveOldValue);
+			break;
+		}
+		case QVariant::SizePolicy:
+		{
+			QSizePolicy p = m_value.toSizePolicy();
+			setValue("horSizeType",QVariant(spHelper.valueToKey(p.horData())),saveOldValue);
+			setValue("verSizeType",QVariant(spHelper.valueToKey(p.verData())),saveOldValue);
+			setValue("hStretch",(int)p.horStretch(),saveOldValue);
+			setValue("vStretch",(int)p.verStretch(),saveOldValue);
+
+			if (childName=="horSizeType")
+				p.setHorData( spHelper.keyToValue(v.toString()) );
+			else if (childName=="verSizeType")
+				p.setVerData( spHelper.keyToValue(v.toString()) );
+			else if (childName=="hStretch")
+				p.setHorStretch( v.toInt() );
+			else if (childName=="vStretch")
+				p.setVerStretch( v.toInt() );
+			else
+				break;
+			setValue(p, false, saveOldValue);
+			break;
+		}
+		default:
+			break;
+	}
+}
+
 void KexiProperty::resetValue()
 {
 	setValue( oldValue(), false );
@@ -388,9 +497,20 @@ void KexiProperty::setChanged(bool set)
 	if (m_changed==set)
 		return;
 	m_changed=set;
-	if (!m_changed)
+	if (!m_changed) {
 		m_oldValue = QVariant();
-	else {
+		//if there's parent property, set it to unchanged if no child is changed
+		if (m_parent && m_parent->m_children_list) {
+			KexiProperty::ListIterator it(*m_parent->m_children_list);
+			for (;it.current();++it) {
+				if (it.current()->changed()) {
+					m_parent->setChanged(true);
+					return;
+				}
+			}
+			m_parent->setChanged(false);
+		}
+	}else {
 		m_oldValue = m_value; //store
 		if (m_parent)
 			m_parent->setChanged( true );
@@ -499,7 +619,7 @@ KexiProperty::format(const QVariant &v)
 		case QVariant::SizePolicy:
 		{
 			QSizePolicy p = v.toSizePolicy(); 
-			return QString(spHelper::valueToKey(p.horData()) + "/" + spHelper::valueToKey(p.verData()));
+			return QString(spHelper.valueToKey(p.horData()) + "/" + spHelper.valueToKey(p.verData()));
 		}
 		case QVariant::Cursor:
 		{
