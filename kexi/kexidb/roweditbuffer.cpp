@@ -42,19 +42,22 @@ RowEditBuffer::~RowEditBuffer()
 
 QVariant* RowEditBuffer::at( QueryFieldInfo& fi ) 
 { 
-	if (m_dbBuffer) {
-		*m_dbBufferIt = m_dbBuffer->find( &fi );
-		if (*m_dbBufferIt==m_dbBuffer->end())
-			return 0;
-		return &(*m_dbBufferIt).data();
+	if (!m_dbBuffer) {
+		KexiDBWarning << "RowEditBuffer::at(QueryFieldInfo&): not db-aware buffer!" << endl;
+		return 0;
 	}
-	return 0;
+	*m_dbBufferIt = m_dbBuffer->find( &fi );
+	if (*m_dbBufferIt==m_dbBuffer->end())
+		return 0;
+	return &(*m_dbBufferIt).data();
 }
 
 QVariant* RowEditBuffer::at( Field& f )
 {
-	if (!m_simpleBuffer)
+	if (!m_simpleBuffer) {
+		KexiDBWarning << "RowEditBuffer::at(Field&): this is db-aware buffer!" << endl;
 		return 0;
+	}
 	*m_simpleBufferIt = m_simpleBuffer->find( f.name() );
 	if (*m_simpleBufferIt==m_simpleBuffer->end())
 		return 0;
@@ -63,8 +66,10 @@ QVariant* RowEditBuffer::at( Field& f )
 
 QVariant* RowEditBuffer::at( const QString& fname )
 {
-	if (!m_simpleBuffer)
+	if (!m_simpleBuffer) {
+		KexiDBWarning << "RowEditBuffer::at(Field&): this is db-aware buffer!" << endl;
 		return 0;
+	}
 	*m_simpleBufferIt = m_simpleBuffer->find( fname );
 	if (*m_simpleBufferIt==m_simpleBuffer->end())
 		return 0;

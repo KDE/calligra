@@ -466,7 +466,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
 	for (;it_f.current() && it_r!=item.end();++it_f,++it_r,col++) {
 		KexiDB::Field *f = it_f.current()->field();
 		//get new value (of present in the buffer), or the old one, otherwise
-		QVariant *val = rowEditBuffer()->at( *f );
+		QVariant *val = dbaware ? rowEditBuffer()->at( *it_f.current()->fieldinfo ) : rowEditBuffer()->at( *f );
 		if (!val)
 			val = &(*it_r); //get old value
 		//check it

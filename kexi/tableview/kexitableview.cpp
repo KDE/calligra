@@ -3643,7 +3643,7 @@ QVariant* KexiTableView::bufferedValueAt(int col)
 		KexiTableViewColumn* tvcol = m_data->column(col);
 		if (tvcol->isDBAware) {
 //			QVariant *cv = m_data->rowEditBuffer()->at( *static_cast<KexiDBTableViewColumn*>(tvcol)->field );
-			QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->field() );
+			QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->fieldinfo );
 			if (cv)
 				return cv;
 
