@@ -91,6 +91,8 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view, QString identifier, QWidg
 
 	setXMLFile("kexirelationsview.rc");
 	view->insertChildClient(this);
+	
+	registerAs(DocumentWindow, identifier);
 
 
 #ifdef TESTING_KexiRelationDialog
