@@ -1292,12 +1292,11 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
     //	return;
 
     _pageLayout = pgLayout;
-    QRect r = getPageRect( 0, diffx, diffy );
 
 //FIXME remove QRect r used KPRPage ->:setPageLayout(KoPageLayout pgLayout)
 
-    //for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
-    //m_pageList.at( i )->background()->setBgSize( r.size() );
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+        m_pageList.at( i )->background()->setBgSize( m_pageList.at( i )->getZoomPageRect().size() );
 #if 0
     for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ )
         _backgroundList.at( i )->setBgSize( r.size() );

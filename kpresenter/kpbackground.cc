@@ -65,9 +65,9 @@ KPBackGround::KPBackGround( KPImageCollection *_imageCollection, KPGradientColle
     clipartCollection = _clipartCollection;
     gradient = 0L;
     m_page=_page;
-    //temporary
+
     if( m_page)
-        setBgSize( m_page->getZoomPageRect().size(),false);
+      setBgSize( m_page->getZoomPageRect().size(),false);
 }
 
 /*================================================================*/
