@@ -137,7 +137,7 @@ XfigImport::XfigImport () {
 XfigImport::~XfigImport () {
 }
 
-bool XfigImport::setup (GDocument* , const char* /*format*/) {
+bool XfigImport::setup (GDocument* doc, const char* /*format*/) {
   fig_resolution = 1200.0 / 72.0;
   coordinate_system = 2;
 
@@ -301,13 +301,13 @@ void XfigImport::parseColorObject (istream& fin) {
     colorTable.insert (number, new QColor (red, green, blue));
 }
 
-void XfigImport::parseArc (istream& fin, GDocument* ) {
+void XfigImport::parseArc (istream& fin, GDocument* doc) {
   int sub_type, line_style, thickness, pen_color, fill_color,
     depth, pen_style, area_fill, cap_style, direction,
     forward_arrow, backward_arrow, x1, y1, x2, y2, x3, y3;
   float center_x, center_y;
   float style_val;
-  GOval *obj = new GOval ();
+  GOval *obj = new GOval (doc);
 
   // first line
   fin >> sub_type >> line_style >> thickness >> pen_color >> fill_color
@@ -393,12 +393,12 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
   objList.append( GObjectListItem( depth, obj ) );
 }
 
-void XfigImport::parseEllipse (istream& fin, GDocument* ) {
+void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
   int sub_type, line_style, thickness, pen_color, fill_color,
     depth, pen_style, area_fill, direction, center_x, center_y,
     radius_x, radius_y, start_x, start_y, end_x, end_y;
   float style_val, angle;
-  GOval *obj = new GOval ();
+  GOval *obj = new GOval (doc);
 
   // first line
   fin >> sub_type >> line_style >> thickness >> pen_color >> fill_color
@@ -420,7 +420,7 @@ void XfigImport::parseEllipse (istream& fin, GDocument* ) {
   objList.append( GObjectListItem( depth, obj ) );
 }
 
-void XfigImport::parsePolyline (istream& fin, GDocument* ) {
+void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
   int sub_type, line_style, thickness, pen_color, fill_color,
     depth, pen_style, area_fill, join_style, cap_style, radius,
     forward_arrow, backward_arrow, npoints;
@@ -436,16 +436,16 @@ void XfigImport::parsePolyline (istream& fin, GDocument* ) {
 
   switch (sub_type) {
   case 1: // polyline
-    obj = new GPolyline ();
+    obj = new GPolyline (doc);
     break;
   case 2: // box
-    obj = new GPolygon ();
+    obj = new GPolygon (doc);
     break;
   case 3: // polygon
-    obj = new GPolygon ();
+    obj = new GPolygon (doc);
     break;
   case 4: // arc-box
-    obj = new GPolygon ();
+    obj = new GPolygon (doc);
     break;
   case 5: // imported picture
     return;
@@ -506,7 +506,8 @@ void XfigImport::parsePolyline (istream& fin, GDocument* ) {
   objList.append( GObjectListItem( depth, obj ) );
 }
 
-void XfigImport::parseSpline (istream& fin, GDocument* ) {
+void XfigImport::parseSpline (istream& fin, GDocument* doc)
+{
   int sub_type, line_style, thickness, pen_color, fill_color, depth,
     pen_style, area_fill, cap_style, forward_arrow, backward_arrow, npoints;
   float style_val;
@@ -517,9 +518,9 @@ void XfigImport::parseSpline (istream& fin, GDocument* ) {
       >>  depth >> pen_style >> area_fill >> style_val >> cap_style
       >> forward_arrow >> backward_arrow >> npoints;
   if (sub_type == 1 || sub_type == 3 || sub_type == 5)
-    obj = new GPolygon ();
+    obj = new GPolygon (doc);
   else
-    obj = new GPolyline ();
+    obj = new GPolyline (doc);
 
   int arrow_type, arrow_style;
   float arrow_thickness, arrow_width, arrow_height;
@@ -578,10 +579,11 @@ void XfigImport::parseSpline (istream& fin, GDocument* ) {
   objList.append( GObjectListItem( depth, obj ) );
 }
 
-void XfigImport::parseText (istream& fin, GDocument* ) {
+void XfigImport::parseText (istream& fin, GDocument* doc)
+{
   int sub_type, color, depth, pen_style, font, font_flags, x, y;
   float font_size, angle, height, length;
-  GText *obj = new GText ();
+  GText *obj = new GText (doc);
   char c;
   char ocode[4];
   bool finished = false;
@@ -682,7 +684,7 @@ void XfigImport::parseText (istream& fin, GDocument* ) {
   objList.append( GObjectListItem( depth, obj ) );
 }
 
-void XfigImport::parseCompoundObject (istream& fin, GDocument* ) {
+void XfigImport::parseCompoundObject (istream& fin, GDocument* doc) {
   int upperright_x, upperright_y, lowerleft_x, lowerleft_y;
 
   fin >> upperright_x >> upperright_y >> lowerleft_x >> lowerleft_y;
