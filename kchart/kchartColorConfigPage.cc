@@ -174,11 +174,6 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
         _backgroundCB->setEnabled(false);
 
 
-    //     _params->BGColor = _colorpage->backgroundColor();
-    //     _params->PlotColor = _colorpage->plotColor();
-    //_params->EdgeColor = _colorpage->edgeColor();
-    //     _params->VolColor = _colorpage->volColor();
-
 
 
     /*QLabel* edgeLA = new QLabel( i18n( "Edge color (pies only)" ), this );
