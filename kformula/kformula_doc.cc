@@ -45,6 +45,8 @@
 #include <kstdaction.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <koxmlwriter.h>
+#include <koStoreDevice.h>
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
@@ -76,6 +78,34 @@ KFormulaDoc::~KFormulaDoc()
 {
     delete history;
     delete wrapper;
+}
+
+
+bool KFormulaDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    if ( !store->open( "content.xml" ) )
+        return false;
+
+    KoStoreDevice dev( store );
+    KoXmlWriter contentWriter( &dev, "math:math" );
+
+
+    contentWriter.startElement( "math:semantics" );
+
+    //todo save content
+
+    contentWriter.endElement();
+
+    contentWriter.endElement();
+
+    if(!store->close())
+        return false;
+
+    manifestWriter->addManifestEntry("content.xml", "text/xml");
+
+    setModified( false );
+
+    return true;
 }
 
 

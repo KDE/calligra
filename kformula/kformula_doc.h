@@ -31,6 +31,7 @@
 
 #include "kformula_view.h"
 
+class KoXmlWriter;
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -64,6 +65,7 @@ public:
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QDomDocument saveXML();
+    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
     KFormula::Container* getFormula() const { return formula; }
     KFormula::Document* getDocument() const { return document; }
