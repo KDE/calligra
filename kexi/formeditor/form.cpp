@@ -96,7 +96,15 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const QString &
 Container*
 Form::activeContainer()
 {
-	ObjectTreeItem *it = m_topTree->lookup(m_selected.last()->name());
+	ObjectTreeItem *it;
+	if(m_selected.count() == 0)
+		return m_toplevel;
+
+	if(m_selected.count() == 1)
+		it = m_topTree->lookup(m_selected.last()->name());
+	else
+		it = commonParentContainer(&m_selected);
+
 	if (!it)
 		return 0;
 	if(it->container())
@@ -105,14 +113,53 @@ Form::activeContainer()
 		return it->parent()->container();
 }
 
+ObjectTreeItem*
+Form::commonParentContainer(QtWidgetList *wlist)
+{
+	ObjectTreeItem *item = 0;
+	QtWidgetList *list = new QtWidgetList();
+
+	for(QWidget *w = wlist->first(); w; w = wlist->next())
+	{
+		if(list->findRef(w->parentWidget()) == -1)
+			list->append(w->parentWidget());
+	}
+
+	for(QWidget *w = list->first(); w; w = list->next())
+	{
+		QWidget *widg;
+		for(widg = list->first(); widg; widg = list->next())
+		{
+			if((w != widg) && (w->child(widg->name())))
+			{
+				kdDebug() << "Removing the widget " << widg->name() << "which is a child of " << w->name() << endl;
+				list->remove(widg);
+			}
+		}
+
+		widg = list->first();
+		while(widg != w)
+			widg = list->next();
+	}
+
+	if(list->count() == 1)
+		item = m_topTree->lookup(list->first()->name());
+	else
+		item =  commonParentContainer(list);
+
+	delete list;
+	return item;
+}
+
 Container*
 Form::parentContainer(QWidget *w)
 {
 	ObjectTreeItem *it;
 	if(!w)
-		it = m_topTree->lookup(m_selected.last()->name());
-	else
-		it = m_topTree->lookup(w->name());
+		return 0;
+	//	it = m_topTree->lookup(m_selected.last()->name());
+	//else
+	it = m_topTree->lookup(w->name());
 
 	if(it->parent()->container())
 		return it->parent()->container();

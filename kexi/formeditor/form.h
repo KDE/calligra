@@ -244,6 +244,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void  fixNames(QDomElement el);
 
+		ObjectTreeItem*   commonParentContainer(QtWidgetList *wlist);
+
 	private:
 		FormManager		*m_manager;
 		QGuardedPtr<Container> m_toplevel;

@@ -359,13 +359,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_initialPos = QPoint();
 			}
 			// cancel copying as user released Ctrl before releasing mouse button
-			else if(m_state == CopyingWidget)
+			/*else if(m_state == CopyingWidget)
 			{
 				m_state = DoingNothing;
 				m_copyRect = QRect();
 				if(m_form->formWidget())
 					m_form->formWidget()->clearRect();
-			}
+			}*/
 
 			m_copyRect = QRect();
 			m_insertRect = QRect();
@@ -530,13 +530,13 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_state = MovingWidget;
 			}
 			// cancel copying as user released Ctrl
-			else if((m_state == CopyingWidget) && (mev->state() == Qt::LeftButton))
+			/*else if((m_state == CopyingWidget) && (mev->state() == Qt::LeftButton))
 			{
 				//m_state = DoingNothing;
 				m_copyRect = QRect();
 				if(m_form->formWidget())
 					m_form->formWidget()->clearRect();
-			}
+			}*/
 
 			return true; // eat
 		}
@@ -594,12 +594,27 @@ Container::eventFilter(QObject *s, QEvent *e)
 				else if(m_form->manager()->inserting())
 					m_form->manager()->stopInsert();
 				return true;
-
+			}
+			else if((kev->key() == Key_Control) && (m_state == MovingWidget))
+			{
+				// we simulate a mouse move event to update screen
+				QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, m_moving->mapFromGlobal(QCursor::pos()), NoButton,
+				LeftButton|ControlButton );
+				eventFilter(m_moving, mev);
+				delete mev;
 			}
 			return true;
 		}
 		case QEvent::KeyRelease:
 		{
+			QKeyEvent *kev = static_cast<QKeyEvent*>(e);
+			if((kev->key() == Key_Control) && (m_state == CopyingWidget))
+			{
+				// cancel copying
+				m_copyRect = QRect();
+				if(m_form->formWidget())
+					m_form->formWidget()->clearRect();
+			}
 			return true;
 		}
 		case QEvent::MouseButtonDblClick: // editing
