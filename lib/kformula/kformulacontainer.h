@@ -268,6 +268,8 @@ public:
      */
     void setFontSize( int pointSize, bool forPrint = false );
 
+    void setFontSizeDirect( int pointSize );
+
 signals:
 
     /**

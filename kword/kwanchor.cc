@@ -37,6 +37,11 @@ KWAnchor::~KWAnchor()
     kdDebug(32001) << "KWAnchor::~KWAnchor" << endl;
 }
 
+void KWAnchor::setFormat( KoTextFormat* format )
+{
+    m_frameset->setAnchorFormat( format, m_frameNum );
+}
+
 void KWAnchor::move( int x, int y )
 {
     if ( m_deleted )

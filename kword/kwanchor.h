@@ -44,6 +44,8 @@ public:
     KWAnchor( KoTextDocument *textdoc, KWFrameSet * frameset, int frameNum );
     ~KWAnchor();
 
+    virtual void setFormat( KoTextFormat* );
+
     /** The frameset that will provide the content to display in this anchor object */
     KWFrameSet * frameSet() const { return m_frameset; }
     /** The index the frameset needs to access which content is displayed in the anchor object */

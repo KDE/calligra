@@ -407,6 +407,11 @@ void Container::setFontSize( int pointSize, bool /*forPrint*/ )
     }
 }
 
+void Container::setFontSizeDirect( int pointSize )
+{
+    rootElement()->setBaseSize( pointSize );
+    recalc();
+}
 
 QDomDocument Container::domData()
 {

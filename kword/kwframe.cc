@@ -2142,6 +2142,13 @@ int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
     return -1;
 }
 
+void KWFormulaFrameSet::setAnchorFormat( KoTextFormat* format, int /*frameNum*/ )
+{
+    if ( !frames.isEmpty() ) {
+        formula->setFontSizeDirect( format->font().pointSize()/20 );
+    }
+}
+
 void KWFormulaFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )
 {
     QPopupMenu * popup = view->popupMenu("Formula");

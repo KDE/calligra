@@ -126,7 +126,7 @@ public:
     SheetSide sheetSide()const { return m_sheetSide; }
     void setSheetSide( SheetSide ss ) { m_sheetSide = ss; }
 
-    /** What happens on new page 
+    /** What happens on new page
      * (create a new frame and reconnect, no followup, make copy) */
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
     NewFrameBehavior newFrameBehavior()const { return m_newFrameBehavior; }
@@ -596,6 +596,8 @@ public:
     KWTextFrameSet * anchorFrameset() const { return m_anchorTextFs; }
     /** Return the anchor object for this frame number */
     KWAnchor * findAnchor( int frameNum );
+    /** Tell this frame the format of it's anchor */
+    virtual void setAnchorFormat( KoTextFormat* /*format*/, int /*frameNum*/ ) {}
 
     /** Create an anchor for the floating frame identified by frameNum */
     virtual KWAnchor * createAnchor( KoTextDocument *txt, int frameNum );
@@ -906,6 +908,8 @@ public:
     void setChanged() { m_changed = true; }
 
     virtual int floatingFrameBaseline( int /*frameNum*/ );
+
+    virtual void setAnchorFormat( KoTextFormat* format, int /*frameNum*/ );
 
     void showPopup( KWFrame *, KWView *view, const QPoint &point );
 
