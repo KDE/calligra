@@ -383,7 +383,7 @@ void KudesignerDoc::setReportItemAttributes(QDomNode *node, CanvasReportItem *it
     {
         QString propertyName=attributes.item(i).nodeName();
         QString propertyValue=attributes.item(i).nodeValue();
-        if (plugin) modifyItemPropertyOnLoad(item,propertyName,propertyValue);
+        if (m_plugin) m_plugin->modifyItemPropertyOnLoad(item,propertyName,propertyValue);
         item->props[propertyName]->setValue(propertyValue);
     }
 }
@@ -393,6 +393,8 @@ void KudesignerDoc::loadPlugin(const QString &name)
 	kdDebug()<<"Trying to load plugin: "<<name<<endl;
 	KuDesignerPlugin *plug=KParts::ComponentFactory::createInstanceFromLibrary<KuDesignerPlugin>(name.utf8(),this);
 	m_plugin=plug;
+	if (m_plugin) kdDebug()<<"plugin has been loaded"<<endl;
+	else kdDebug()<<"plugin couldn't be loaded :("<<endl;
 }
 
 KuDesignerPlugin *KudesignerDoc::plugin()

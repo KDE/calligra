@@ -332,10 +332,10 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 	    if ((!pe))
 	    {
         	pe = new PropertyEditor(QDockWindow::OutsideDock, shell(), "propedit");
-		if (((KudesignerDoc *)koDocument())->plugin()) {
+		if (m_doc->plugin()) {
 			connect(pe,SIGNAL(createPluggedInEditor(QWidget*&,PropertyEditor *,
 				Property*,CanvasBox *)),
-				((KudesignerDoc *)koDocument())->plugin(),
+				m_doc->plugin(),
 				SLOT(createPluggedInEditor(QWidget*&, PropertyEditor *,
                                 Property*,CanvasBox *)));
 
