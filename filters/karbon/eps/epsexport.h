@@ -5,18 +5,22 @@
 #ifndef __EPSEXPORT_H__
 #define __EPSEXPORT_H__
 
-#include <qobject.h>
-
 #include <koFilter.h>
 
 #include "vvisitor.h"
 
+
 class QTextStream;
+class VColor;
 class VDocument;
+class VFill;
 class VGroup;
 class VLayer;
 class VPath;
 class VSegmentList;
+class VStroke;
+class VText;
+
 
 class EpsExport : public KoFilter, private VVisitor
 {

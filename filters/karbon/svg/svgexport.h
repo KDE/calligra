@@ -7,10 +7,22 @@
 
 #include <koFilter.h>
 
-class QDomElement;
-class QTextStream;
+#include "vvisitor.h"
 
-class SvgExport : public KoFilter
+
+class QTextStream;
+class VColor;
+class VDocument;
+class VFill;
+class VGroup;
+class VLayer;
+class VPath;
+class VSegmentList;
+class VStroke;
+class VText;
+
+
+class SvgExport : public KoFilter, private VVisitor
 {
 	Q_OBJECT
 
@@ -21,15 +33,18 @@ public:
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
-	void exportDocument( QTextStream& s, const QDomElement& node );
-	void exportLayer( QTextStream& s, const QDomElement& node );
-	void exportPath( QTextStream& s, const QDomElement& node );
-	void exportSegments( QTextStream& s, const QDomElement& node );
-	void exportStroke( QTextStream& s, const QDomElement& node );
-	void exportFill( QTextStream& s, const QDomElement& node );
-	void getHexColor( QTextStream& s, const QDomElement& node );
-	void exportText( QTextStream& s, const QDomElement& node );
-	int fill_rule;
+	virtual void visitVDocument( VDocument& document );
+	virtual void visitVGroup( VGroup& group );
+	virtual void visitVLayer( VLayer& layer );
+	virtual void visitVPath( VPath& path );
+	virtual void visitVSegmentList( VSegmentList& segmentList );
+	virtual void visitVText( VText& text );
+
+	void getStroke( const VStroke& stroke );
+	void getFill( const VFill& fill  );
+	void getHexColor( const VColor& color  );
+
+	QTextStream* m_stream;
 };
 
 #endif

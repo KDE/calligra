@@ -14,6 +14,7 @@
 #include <koStore.h>
 
 #include "epsexport.h"
+#include "vcolor.h"
 #include "vdashpattern.h"
 #include "vdocument.h"
 #include "vfill.h"
@@ -42,7 +43,9 @@ protected:
 	}
 };
 
+
 K_EXPORT_COMPONENT_FACTORY( libkarbonepsexport, EpsExportFactory() );
+
 
 EpsExport::EpsExport( KoFilter*, const char*, const QStringList& )
 	: KoFilter()
@@ -57,24 +60,21 @@ EpsExport::convert( const QCString& from, const QCString& to )
 		return KoFilter::NotImplemented;
 	}
 
-	KoStore* storeIn = KoStore::createStore( m_chain->inputFile(), KoStore::Read );
-	if( !storeIn->open( "root" ) )
+	KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
+	if( !storeIn )
+		return KoFilter::StupidError;
+
+	QFile fileOut( m_chain->outputFile() );
+	if( !fileOut.open( IO_WriteOnly ) )
 	{
 		delete storeIn;
 		return KoFilter::StupidError;
 	}
 
-	QFile fileOut( m_chain->outputFile() );
-	if( !fileOut.open( IO_WriteOnly ) ) {
-		delete storeIn;
-		return KoFilter::StupidError;
-	}
-
-	QByteArray byteArrayIn = storeIn->read( storeIn->size() );
 	storeIn->close();
 
 	QDomDocument domIn;
-	domIn.setContent( byteArrayIn );
+	domIn.setContent( storeIn );
 	QDomElement docNode = domIn.documentElement();
 
 	m_stream = new QTextStream( &fileOut );

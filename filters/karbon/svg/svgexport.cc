@@ -2,19 +2,33 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qdom.h>
 #include <qcstring.h>
+#include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <qcolor.h>
+#include <qvaluelist.h>
 
 #include <kgenericfactory.h>
+#include <koFilter.h>
 #include <koFilterChain.h>
 #include <koStore.h>
 
+#include "svgexport.h"
+#include "vcolor.h"
+#include "vdashpattern.h"
+#include "vdocument.h"
+#include "vfill.h"
+#include "vgroup.h"
+#include "vlayer.h"
+#include "vpath.h"
+#include "vsegment.h"
+#include "vsegmentlist.h"
+#include "vselection.h"
+#include "vstroke.h"
+//#include "vtext.h"
+
 #include <kdebug.h>
 
-#include "svgexport.h"
 
 typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "karbonsvgexport" ) );
@@ -39,89 +53,99 @@ SvgExport::convert( const QCString& from, const QCString& to )
 
 	QFile fileOut( m_chain->outputFile() );
 	if( !fileOut.open( IO_WriteOnly ) )
+	{
+		delete storeIn;
 		return KoFilter::StupidError;
+	}
 
 	QDomDocument domIn;
 	domIn.setContent( storeIn );
 	QDomElement docNode = domIn.documentElement();
 
-	QTextStream s( &fileOut );
+	m_stream = new QTextStream( &fileOut );
 
 
-	// Standard header
-	s <<
-		"<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
-		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" <<
-	endl;
+	// load the document and export it:
+	VDocument doc;
+	doc.load( docNode );
+	doc.accept( *this );
 
-	// TODO: add width and height. Has to be supported by karbon first. For now use standard 600x800
-	s <<
-		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\">" <<
-	endl;
-
-	// parse dom-tree:
-	QDomNodeList list = domIn.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "DOC" )
-				exportDocument( s, e );
-		}
-	}
-
-	// end-tag
-	s << "</svg>" << endl;
 
 	fileOut.close();
+
+	delete m_stream;
+	delete storeIn;
+
 	return KoFilter::OK;
 }
 
 void
-SvgExport::exportDocument( QTextStream& s, const QDomElement& node )
+SvgExport::visitVDocument( VDocument& document )
 {
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
+	// select all objects:
+	document.select();
 
-			if( e.tagName() == "LAYER" )
-				exportLayer( s, e );
-		}
-	}
+	// get the bounding box of all selected objects:
+	const KoRect& rect = document.selection()->boundingBox();
+
+	// standard header:
+	*m_stream <<
+		"<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
+		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " <<
+		"\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
+	<< endl;
+
+	*m_stream <<
+		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
+		( rect.right() - rect.left() ) <<
+		"\" height=\"" <<
+		( rect.bottom() - rect.top() ) <<"\">"
+	<< endl;
+
+	// we dont need the selection anymore:
+	document.deselect();
+
+
+	// export layers:
+	VLayerListIterator itr( document.layers() );
+	for( ; itr.current(); ++itr )
+		itr.current()->accept( *this );
+
+
+	// end tag:
+	*m_stream << "</svg>" << endl;
 }
 
 void
-SvgExport::exportLayer( QTextStream& s, const QDomElement& node )
+SvgExport::visitVGroup( VGroup& group )
 {
-	QDomNodeList list = node.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "PATH" )
-				exportPath( s, e );
-			if( e.tagName() == "TEXT" )
-				exportText( s, e );
-		}
-	}
+	// export objects:
+	VObjectListIterator itr( group.objects() );
+	for( ; itr.current(); ++itr )
+		itr.current()->accept( *this );
 }
 
 void
-SvgExport::exportPath( QTextStream& s, const QDomElement& node )
+SvgExport::visitVLayer( VLayer& layer )
 {
+	// export objects:
+	VObjectListIterator itr( layer.objects() );
+	for( ; itr.current(); ++itr )
+		itr.current()->accept( *this );
+}
 
-	s << "<path";
+void
+SvgExport::visitVPath( VPath& path )
+{
+	*m_stream << "<path";
 
-	// has to be set here since fillRule is specified in the <PATH> tag.
-	fill_rule = node.attribute( "fillRule" ).toInt();
+	// export segmentlists:
+	VSegmentListListIterator itr( path.segmentLists() );
+	for( ; itr.current(); ++itr )
+		itr.current()->accept( *this );
 
+
+/*
 	QDomNodeList list = node.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
@@ -133,33 +157,91 @@ SvgExport::exportPath( QTextStream& s, const QDomElement& node )
 				exportSegments( s, e );
 			if( e.tagName() == "FILL" )
 			{
-				exportFill( s, e );
+				getFill( s, e );
 
 				// i think this is right?
 				if( fill_rule == 0 )
 				{
-					s << " fill-rule=\"evenodd\"";
+					*m_stream << " fill-rule=\"evenodd\"";
 				}
 				else
 				{
-					s << " fill-rule=\"nonzero\"";
+					*m_stream << " fill-rule=\"nonzero\"";
 				}
 			}
 			if( e.tagName() == "STROKE" )
-				exportStroke( s, e );
+				getStroke( s, e );
 		}
 	}
+*/
 
-	s << " />" << endl;
+
+	*m_stream << " />" << endl;
 
 }
 
 void
-SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
+SvgExport::visitVSegmentList( VSegmentList& segmentList )
 {
 
-	s << " d=\"";
+	*m_stream << " d=\"";
 
+	// export segments:
+	VSegmentListIterator itr( segmentList );
+	for( ; itr.current(); ++itr )
+	{
+		switch( itr.current()->type() )
+		{
+			case segment_curve:
+				*m_stream <<
+					itr.current()->ctrlPoint1().x() << " " <<
+					itr.current()->ctrlPoint1().y() << " " <<
+					itr.current()->ctrlPoint2().x() << " " <<
+					itr.current()->ctrlPoint2().y() << " " <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"c\n";
+			break;
+			case segment_curve1:
+				*m_stream <<
+					itr.current()->knot1().x() << " " <<
+					itr.current()->knot1().y() << " " <<
+					itr.current()->ctrlPoint2().x() << " " <<
+					itr.current()->ctrlPoint2().y() << " " <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"c\n";
+			break;
+			case segment_curve2:
+				*m_stream <<
+					itr.current()->ctrlPoint1().x() << " " <<
+					itr.current()->ctrlPoint1().y() << " " <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"c\n";
+			break;
+			case segment_line:
+				*m_stream <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"l\n";
+			break;
+			case segment_begin:
+				*m_stream <<
+					itr.current()->knot2().x() << " " <<
+					itr.current()->knot2().y() << " " <<
+					"m\n";
+			break;
+			case segment_end:
+			break;
+		}
+	}
+
+
+
+/*
 	QDomNodeList list = node.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
@@ -170,7 +252,7 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 			// convert the varoius karbon curves to svg "C" curves
 			if( e.tagName() == "CURVE" )
 			{
-			s <<
+			*m_stream <<
 				"C" <<
 				e.attribute( "x1" ) << "," <<
 				e.attribute( "y1" ) << " " <<
@@ -181,7 +263,7 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 			}
 			if( e.tagName() == "CURVE1" )
 			{
-			s <<
+			*m_stream <<
 				"C" <<
 				e.attribute( "x1" ) << "," <<
 				e.attribute( "y1" ) << " " <<
@@ -192,7 +274,7 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 			}
 			if( e.tagName() == "CURVE2" )
 			{
-			s <<
+			*m_stream <<
 				"C" <<
 				e.attribute( "x1" ) << "," <<
 				e.attribute( "y1" ) << " " <<
@@ -203,31 +285,32 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 			}
 			else if( e.tagName() == "LINE" )
 			{
-				s <<
+				*m_stream <<
 					"L" <<
 					e.attribute( "x" ) << " " <<
 					e.attribute( "y" ) << " ";
 			}
 			else if( e.tagName() == "MOVE" )
 			{
-				s <<
+				*m_stream <<
 					"M" <<
 					e.attribute( "x" ) << " " <<
 					e.attribute( "y" ) << " ";
 			}
 		}
 	}
+*/
 
-	if( node.attribute( "isClosed" ).toInt() == 1);
-		s << "Z";
+	if( segmentList.isClosed() )
+		*m_stream << "Z";
 
-	s << "\"";
+	*m_stream << "\"";
 }
 
 void
-SvgExport::exportFill( QTextStream& s, const QDomElement& node )
+SvgExport::getFill( const VFill& fill )
 {
-
+/*
 	QDomNodeList list = node.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
@@ -242,42 +325,43 @@ SvgExport::exportFill( QTextStream& s, const QDomElement& node )
 				// shouldn't be needed really
 				if( !e.attribute( "colorSpace" ).isNull() )
 				{
-					s << " fill=\"";
+					*m_stream << " fill=\"";
 					getHexColor( s, e );
-					s << "\"";
+					*m_stream << "\"";
 				}
 
 				if( !e.attribute( "opacity" ).isNull() )
 				{
-					s << " fill-opacity=\"" << e.attribute( "opacity" ) << "\"";
+					*m_stream << " fill-opacity=\"" << e.attribute( "opacity" ) << "\"";
 				}
 			}
 		}
 	}
-
+*/
 }
 
 void
-SvgExport::exportStroke( QTextStream& s, const QDomElement& node )
+SvgExport::getStroke( const VStroke& stroke )
 {
+/*
 	if( !node.attribute( "lineWidth" ).isNull() )
 	{
-		s << " stroke-width=\"" << node.attribute( "lineWidth" ) << "\"";
+		*m_stream << " stroke-width=\"" << node.attribute( "lineWidth" ) << "\"";
 	}
 
 	if( !node.attribute( "lineCap" ).isNull() )
 	{
 		if( node.attribute( "lineCap" ).toInt() == 0 )
 		{
-			s << " stroke-linecap=\"butt\"";
+			*m_stream << " stroke-linecap=\"butt\"";
 		}
 		else if( node.attribute( "lineCap" ).toInt() == 1 )
 		{
-			s << " stroke-linecap=\"round\"";
+			*m_stream << " stroke-linecap=\"round\"";
 		}
 		else if( node.attribute( "lineCap" ).toInt() == 2 )
 		{
-			s << " stroke-linecap=\"square\"";
+			*m_stream << " stroke-linecap=\"square\"";
 		}
 	}
 
@@ -285,21 +369,21 @@ SvgExport::exportStroke( QTextStream& s, const QDomElement& node )
 	{
 		if( node.attribute( "lineJoin" ).toInt() == 0 )
 		{
-			s << " stroke-linejoin=\"miter\"";
+			*m_stream << " stroke-linejoin=\"miter\"";
 		}
 		else if( node.attribute( "lineJoin" ).toInt() == 1 )
 		{
-			s << " stroke-linejoin=\"round\"";
+			*m_stream << " stroke-linejoin=\"round\"";
 		}
 		else if( node.attribute( "lineJoin" ).toInt() == 2 )
 		{
-			s << " stroke-linejoin=\"bevel\"";
+			*m_stream << " stroke-linejoin=\"bevel\"";
 		}
 	}
 
 	if( !node.attribute( "miterLimit" ).isNull() )
 	{
-		s << " stroke-miterlimit=\"" << node.attribute( "miterLimit" ) << "\"";
+		*m_stream << " stroke-miterlimit=\"" << node.attribute( "miterLimit" ) << "\"";
 	}
 
 	QDomNodeList list = node.childNodes();
@@ -316,41 +400,41 @@ SvgExport::exportStroke( QTextStream& s, const QDomElement& node )
 				// shouldn't be needed really
 				if( !e.attribute( "colorSpace" ).isNull() )
 				{
-					s << " stroke=\"";
+					*m_stream << " stroke=\"";
 					getHexColor( s, e );
-					s << "\"";
+					*m_stream << "\"";
 				}
 
 				if( !e.attribute( "opacity" ).isNull() )
 				{
-					s << " stroke-opacity=\"" << e.attribute( "opacity" ) << "\"";
+					*m_stream << " stroke-opacity=\"" << e.attribute( "opacity" ) << "\"";
 				}
 			}
 			else if( e.tagName() == "DASHPATTERN" )
 			{
-				s << " stroke-dashoffset=\"" << e.attribute( "offset" ) << "\"";
+				*m_stream << " stroke-dashoffset=\"" << e.attribute( "offset" ) << "\"";
 
 				QDomNodeList dashlist = e.childNodes();
-				s << " stroke-dasharray=\" ";
+				*m_stream << " stroke-dasharray=\" ";
 				for( uint j = 0; j < dashlist.count(); ++j )
 				{
 					QDomElement e = dashlist.item( j ).toElement();
 					if( e.tagName() == "DASH" )
 					{
-						s << e.attribute( "l", "0.0" ).toFloat() << " ";
+						*m_stream << e.attribute( "l", "0.0" ).toFloat() << " ";
 					}
 				}
-				s << "\"";
+				*m_stream << "\"";
 			}
 		}
 	}
-
+*/
 }
 
 void
-SvgExport::getHexColor( QTextStream& s, const QDomElement& node )
+SvgExport::getHexColor( const VColor& color )
 {
-
+/*
 	// Convert the various color-spaces to hex
 
 	QString Output;
@@ -387,36 +471,36 @@ SvgExport::getHexColor( QTextStream& s, const QDomElement& node )
 		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ) );
 	}
 
-	s << Output;
-
+	*m_stream << Output;
+*/
 }
 
 void
-SvgExport::exportText( QTextStream& s, const QDomElement& node )
+SvgExport::visitVText( VText& /*text*/ )
 {
-
+/*
 	// TODO: set placement once karbon supports it
 
-	s << "<text";
+	*m_stream << "<text";
 
 	if( !node.attribute( "size" ).isNull() )
 	{
-		s << " font-size=\"" << node.attribute( "size" ) << "\"";
+		*m_stream << " font-size=\"" << node.attribute( "size" ) << "\"";
 	}
 
 	if( !node.attribute( "family" ).isNull() )
 	{
-		s << " font-family=\"" << node.attribute( "family" ) << "\"";
+		*m_stream << " font-family=\"" << node.attribute( "family" ) << "\"";
 	}
 
 	if( !node.attribute( "bold" ).isNull() )
 	{
-		s << " font-weight=\"bold\"";
+		*m_stream << " font-weight=\"bold\"";
 	}
 
 	if( !node.attribute( "italic" ).isNull() )
 	{
-		s << " font-style=\"italic\"";
+		*m_stream << " font-style=\"italic\"";
 	}
 
 	QDomNodeList list = node.childNodes();
@@ -433,16 +517,16 @@ SvgExport::exportText( QTextStream& s, const QDomElement& node )
 		}
 	}
 
-	s << ">";
+	*m_stream << ">";
 
 
 	if( !node.attribute( "text" ).isNull() )
 	{
-		s << node.attribute( "text" );
+		*m_stream << node.attribute( "text" );
 	}
 
-	s << "</text>" << endl;
-
+	*m_stream << "</text>" << endl;
+*/
 }
 
 #include "svgexport.moc"
