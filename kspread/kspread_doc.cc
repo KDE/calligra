@@ -48,6 +48,8 @@
 #include <kscript_context.h>
 #include <kstddirs.h>
 #include <kdebug.h>
+#include <koTemplateChooseDia.h>
+#include <koFilterManager.h>
 
 using namespace std;
 
@@ -115,10 +117,30 @@ KSpreadDoc::KSpreadDoc( QObject* parent, const char* name, bool singleViewMode )
 
 bool KSpreadDoc::initDoc()
 {
-  KSpreadTable *t = createTable();
-  m_pMap->addTable( t );
+    QString f;
+    KoTemplateChooseDia::ReturnType ret;
 
-  return true;
+    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+                                                                "application/x-kspread",
+								"*.ksp", "KSpread",
+								false );
+
+    ret = KoTemplateChooseDia::choose(  KSpreadFactory::global(), f, filter,
+					KoTemplateChooseDia::NoTemplates );
+
+    if ( ret == KoTemplateChooseDia::File ) {
+        QString fileName(f);
+	KURL::encode( fileName );
+	bool ok = openURL( KURL( fileName ) );
+	resetURL();
+	return ok;
+    } else if ( ret == KoTemplateChooseDia::Empty ) {
+	KSpreadTable *t = createTable();
+	m_pMap->addTable( t );
+	resetURL();
+	return true;
+    } else
+	return false;
 }
 
 KoMainWindow* KSpreadDoc::createShell()
