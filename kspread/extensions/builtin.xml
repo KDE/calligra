@@ -434,7 +434,7 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The POLR() function returns the radius corresponding to the position of a point in a cartisien landmark.</Text>
+	<Text>The POLR() function returns the radius corresponding to the position of a point in a cartesian landmark.</Text>
 	<Syntax>POLR( X;Y )</Syntax>
 	<Example>POLR(12;12) returns 16.9705</Example>
 	<Example>POLR(12;0) returns 12</Example>
