@@ -532,3 +532,7 @@ Reggie, 20.12.1998:
 -------------------
 - Internals of headers and footers are working now - tomorrow the visible (and useable :-) part
   and saving/loading will follow
+
+Reggie, 21.12.1998:
+-------------------
+- Fixes with loading/saving docs

@@ -254,6 +254,12 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  return;
 	}
     }
+
+  for (unsigned int i = 0;i < text.size();i++)
+    {
+      if (!text.data()[i].attrib)
+	setFormat(i,1,paragLayout->getFormat());
+    }
 }
 
 void KWParag::applyStyle(QString _style)
