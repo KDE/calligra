@@ -626,7 +626,7 @@ void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPr
     KPWebPresentationWizard *dlg = new KPWebPresentationWizard( _config, _doc, _view );
 
     dlg->setCaption( i18n( "Create HTML Slideshow" ) );
-    dlg->resize( 640, 350 );
+    //dlg->resize( 640, 350 );
     dlg->show();
 }
 
@@ -649,7 +649,7 @@ void KPWebPresentationWizard::setupPage1()
         KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
-    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setAlignment( Qt::WordBreak | Qt::AlignTop| Qt::AlignLeft );
     helptext->setText( i18n( "Enter your name, email address and "
                              "the title of the web presentation. "
                              "Also enter the path into which the "
@@ -687,7 +687,8 @@ void KPWebPresentationWizard::setupPage1()
     path->lineEdit()->setText(webPres.getPath());
     layout->addWidget( path, 4, 1 );
 
-    QSpacerItem* spacer = new QSpacerItem( 1, 50 );
+    QSpacerItem* spacer = new QSpacerItem( 1, 10, 
+        QSizePolicy::Minimum, QSizePolicy::Expanding );
     layout->addMultiCell( spacer, 5, 5, 0, 1 );
 
     connect(path, SIGNAL(textChanged(const QString&)),
@@ -715,17 +716,27 @@ void KPWebPresentationWizard::setupPage2()
     sidebar->setFrameShadow( QFrame::Sunken );
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
-    QVBox *canvas = new QVBox( page2 );
+    QWidget* canvas = new QWidget( page2 );
+    QGridLayout *layout = new QGridLayout( canvas, 8, 2, 
+        KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
     QString help = i18n("Here you can configure the style "
                         "of the web pages (colors). You also "
-                        "need to specify the picture format "
-                        "which should be used for the slides.\n\n"
-                        "BMP is a picture format with a bad "
-                        "compression, but is supported by "
-                        "old web browsers.");
+                        "need to specify the image format "
+                        "which should be used for the slides.");
+
+    help += "\n";
+
+#if 0
+    if ( KImageIO::canWrite( "BMP" ) )
+    {
+        help += "\n";
+        help += i18n("BMP is an image format with a bad "
+                     "compression, but is supported by "
+                     "old web browsers.");
+    }
 
     if ( KImageIO::canWrite( "PNG" ) )
     {
@@ -738,55 +749,74 @@ void KPWebPresentationWizard::setupPage2()
     if ( KImageIO::canWrite( "JPEG" ) )
     {
         help += "\n";
-        help += i18n("JPEG is a picture format with quite a good "
+        help += i18n("JPEG is an image format with quite a good "
                      "compression and which is supported by "
                      "all web browsers.");
     }
+#endif
 
-    help += "\n\n";
+    help += "\n";
     help += i18n( "Finally you can also specify the zoom for the slides." );
     helptext->setText(help);
 
-    QHBox *row1 = new QHBox( canvas );
-    QHBox *row2 = new QHBox( canvas );
-    QHBox *row3 = new QHBox( canvas );
-    QHBox *row4 = new QHBox( canvas );
-    QHBox *row5 = new QHBox( canvas );
-    QHBox *row6 = new QHBox( canvas );
+    layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
 
-    QLabel *label1 = new QLabel( i18n("Text color:"), row1 );
-    label1->setAlignment( Qt::AlignVCenter );
-    QLabel *label2 = new QLabel( i18n("Title color:"), row2 );
-    label2->setAlignment( Qt::AlignVCenter );
-    QLabel *label3 = new QLabel( i18n("Background color:"), row3 );
-    label3->setAlignment( Qt::AlignVCenter );
-    QLabel *label4 = new QLabel( i18n("Picture format:"), row4 );
-    label4->setAlignment( Qt::AlignVCenter );
-    QLabel *label5 = new QLabel( i18n("Zoom:"), row5 );
-    label5->setAlignment( Qt::AlignVCenter );
-    QLabel *label6 = new QLabel( i18n( "Default encoding:" ), row6 );
-    label6->setAlignment( Qt::AlignVCenter );
+    QLabel *label1 = new QLabel( i18n("Text color:"), canvas );
+    label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label1, 1, 0 );
 
-    textColor = new KColorButton( webPres.getTextColor(), row1 );
-    titleColor = new KColorButton( webPres.getTitleColor(), row2 );
-    backColor = new KColorButton( webPres.getBackColor(), row3 );
-    format = new KComboBox( false, row4 );
+    QLabel *label2 = new QLabel( i18n("Title color:"), canvas );
+    label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label2, 2, 0 );
+
+    QLabel *label3 = new QLabel( i18n("Background color:"), canvas );
+    label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label3, 3, 0 );
+
+    QLabel *label4 = new QLabel( i18n("Image format:"), canvas );
+    label4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label4, 4, 0 );
+
+    QLabel *label5 = new QLabel( i18n("Zoom:"), canvas );
+    label5->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label5, 5, 0 );
+
+    QLabel *label6 = new QLabel( i18n( "Default encoding:" ), canvas );
+    label6->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label6, 6, 0 );
+
+    textColor = new KColorButton( webPres.getTextColor(), canvas );
+    layout->addWidget( textColor, 1, 1 );
+
+    titleColor = new KColorButton( webPres.getTitleColor(), canvas );
+    layout->addWidget( titleColor, 2, 1 );
+
+    backColor = new KColorButton( webPres.getBackColor(), canvas );
+    layout->addWidget( backColor, 3, 1 );
+
+    format = new KComboBox( false, canvas );
+    layout->addWidget( format, 4, 1 );
     format->insertItem( "BMP", -1 );
     format->insertItem( "PNG", -1 );
     if ( KImageIO::canWrite( "JPEG" ) )
         format->insertItem( "JPEG", -1 );
     format->setCurrentItem( static_cast<int>( webPres.getImageFormat() ) );
 
-    zoom = new KIntNumInput( webPres.getZoom(), row5 );
+    zoom = new KIntNumInput( webPres.getZoom(), canvas );
+    layout->addWidget( zoom, 5, 1 );
     zoom->setSuffix( " %" );
     zoom->setRange( 25, 1000, 5 );
 
-    encoding = new KComboBox( false, row6 );
+    encoding = new KComboBox( false, canvas );
+    layout->addWidget( encoding, 6, 1 );
     QStringList _strList = KGlobal::charsets()->availableEncodingNames();
     encoding->insertStringList( _strList );
     QString _name = webPres.getEncoding();
     encoding->setCurrentItem( _strList.findIndex( _name.lower() ) );
 
+    QSpacerItem* spacer = new QSpacerItem( 1, 10, 
+        QSizePolicy::Minimum, QSizePolicy::Expanding );
+    layout->addMultiCell( spacer, 7, 7, 0, 1 );
 
     addPage( page2, i18n( "Step 2: Choose Style" ) );
 
@@ -807,7 +837,9 @@ void KPWebPresentationWizard::setupPage3()
     sidebar->setFrameShadow( QFrame::Sunken );
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
-    QVBox *canvas = new QVBox( page3 );
+    QWidget* canvas = new QWidget( page3 );
+    QGridLayout *layout = new QGridLayout( canvas, 3, 2, 
+        KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
@@ -818,18 +850,19 @@ void KPWebPresentationWizard::setupPage3()
                              "click on a title, the KPresenter "
                              "mainview will scroll to this "
                              "slide, so it can be seen." ) );
+    layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
 
-    QHBox *row = new QHBox( canvas );
-    QLabel *label = new QLabel( i18n( "Slide title:" ), row );
-    label->setAlignment( Qt::AlignVCenter );
-    label->setMinimumWidth( label->sizeHint().width() );
-    label->setMaximumWidth( label->sizeHint().width() );
+    QLabel *label = new QLabel( i18n( "Slide title:" ), canvas );
+    label->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label, 1, 0 );
 
-    slideTitle = new KLineEdit( row );
+    slideTitle = new KLineEdit( canvas );
+    layout->addWidget( slideTitle, 1, 1 );
     connect( slideTitle, SIGNAL( textChanged( const QString & ) ), this,
              SLOT( slideTitleChanged( const QString & ) ) );
 
     slideTitles = new KListView( canvas );
+    layout->addMultiCellWidget( slideTitles, 2, 2, 0, 1 );
     slideTitles->addColumn( i18n( "Slide No." ) );
     slideTitles->addColumn( i18n( "Slide Title" ) );
     connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this,
