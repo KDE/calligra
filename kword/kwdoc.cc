@@ -4075,9 +4075,16 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     m_viewMode = newViewMode;
     m_lastViewMode = m_viewMode->type(); // remember for saving config
 
+    //necessary to switchmode view in all canvas in first.
+    //otherwise in multiview kword crash !
+    //perhaps it's not a good idea to store m_modeView into kwcanvas.
+    //but it's necessary for the futur when kword will support
+    //different view mode in different view.
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->getGUI()->canvasWidget()->switchViewMode( m_viewMode );
+
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->switchModeView();
-
     emit newContentsSize();
     updateResizeHandles();
 
