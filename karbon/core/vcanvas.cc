@@ -63,7 +63,7 @@ VCanvas::focusInEvent( QFocusEvent * )
 void
 VCanvas::toContents( int vx, int vy, int x, int y ) const
 {
-	x = vx;
+	x = vx + contentsX() * m_view->zoom();;
 	y = vy + contentsY();// - ( contentsHeight() / m_view->zoom() ) + y;
 	//QScrollView::viewportToContents( vx, vy, x, y );
 }
@@ -73,7 +73,13 @@ VCanvas::toContents( const QPoint &p ) const
 {
 	QPoint p2 = p;
 	//kdDebug() << p.y() << endl;
-	p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) * m_view->zoom() ) / m_view->zoom() );
+	p2.setX( p.x() + contentsX() );
+	//p2.setY( ( contentsHeight() / m_view->zoom() - ( p.y() + contentsY() / m_view->zoom() ) ) );
+	p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) ) );
+	//kdDebug() << "contentsHeight() : " << contentsHeight() << endl;
+	//kdDebug() << "p.y() : " << p.y() << endl;
+	//kdDebug() << "contentsY() : " << contentsY() << endl;
+	//p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) * m_view->zoom() ) ) / m_view->zoom() );
 	//kdDebug() << p2.y() << endl;
 	return p2;
 }
@@ -85,7 +91,7 @@ VCanvas::setYMirroring( bool edit )
 	QWMatrix mat;
 	mat.scale( 1, -1 );
 	kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
-	mat.translate( -contentsX(), contentsY() - ( contentsHeight() / m_view->zoom() ) );
+	mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	if( edit )
 	{
 		p = m_view->painterFactory()->editpainter();
