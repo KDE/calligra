@@ -1434,8 +1434,14 @@ void KivioView::slotChangeStencilSize(float newW, float newH)
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if ( pStencil )
     {
+        KivioRect oldPos(pStencil->rect());
         pStencil->setDimensions(newW, newH);
-        m_pDoc->updateView(m_pActivePage);
+        if ((oldPos.w() != pStencil->rect().w()) || (oldPos.h() != pStencil->rect().h()))
+        {
+            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Resize Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
+            m_pDoc->updateView(m_pActivePage);
+            m_pDoc->addCommand( cmd );
+        }
     }
 }
 
@@ -1444,8 +1450,14 @@ void KivioView::slotChangeStencilPosition(float newW, float newH)
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if ( pStencil )
     {
+        KivioRect oldPos(pStencil->rect());
         pStencil->setPosition(newW, newH);
-        m_pDoc->updateView(m_pActivePage);
+        if ((oldPos.x() != pStencil->rect().x()) || (oldPos.y() != pStencil->rect().y()))
+        {
+            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
+            m_pDoc->updateView(m_pActivePage);
+            m_pDoc->addCommand( cmd );
+        }
     }
 }
 
