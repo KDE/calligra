@@ -362,8 +362,56 @@ bool KHTMLReader::parse_br(DOM::Element e) {
 
 QColor parsecolor(QString colorstring) {
       QColor color;
-      color.setNamedColor(colorstring);
-      return color;
+      if (colorstring[0]=='#') {
+            color.setRgb(
+            colorstring.mid(1,2).toInt(0,16),
+            colorstring.mid(3,2).toInt(0,16),
+            colorstring.mid(5,2).toInt(0,16)
+            );
+      } else {
+            QString colorlower=colorstring.lower();
+            // Grays
+            if (colorlower=="black")
+                  color.setRgb(0,0,0);
+            else if (colorlower=="white")
+                  color.setRgb(255,255,255);
+            else if (colorlower=="silver")
+                  color.setRgb(0xc0,0xc0,0xc0);
+            else if (colorlower=="gray")
+                  color.setRgb(128,128,128);
+            // "full" colors
+            else if (colorlower=="red")
+                  color.setRgb(255,0,0);
+            else if (colorlower=="lime")
+                  color.setRgb(0,255,0);
+            else if (colorlower=="blue")
+                  color.setRgb(0,0,255);
+            else if (colorlower=="yellow")
+                  color.setRgb(255,255,0);
+            else if (colorlower=="fuchsia")
+                  color.setRgb(255,0,255);
+            else if (colorlower=="aqua")
+                  color.setRgb(0,255,255);
+            // "half" colors
+            else if (colorlower=="maroon")
+                  color.setRgb(128,0,0);
+            else if (colorlower=="green")
+                  color.setRgb(0,128,0);
+            else if (colorlower=="navy")
+                  color.setRgb(0,0,128);
+            else if (colorlower=="olive")
+                  color.setRgb(128,128,0);
+            else if (colorlower=="purple")
+                  color.setRgb(128,0,128);
+            else if (colorlower=="teal")
+                  color.setRgb(0,128,128);
+            else {
+                  // H'm, we have still not found the color!
+                  // Let us see if QT can do better!
+                  color.setNamedColor(colorstring);
+            }
+      }
+      return colorstring;
 }
 
 
