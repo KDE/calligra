@@ -97,10 +97,13 @@ KoGenStyle* KoGenStyles::styleForModification( const QString& name )
 
 ////
 
-void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement ) const
+void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
     writer->startElement( elementName );
-    writer->addAttribute( "style:name", name );
+    if ( !drawElement )
+        writer->addAttribute( "style:name", name );
+    else
+        writer->addAttribute( "draw:name", name );
     const KoGenStyle* parentStyle = 0;
     if ( !m_parentName.isEmpty() ) {
         writer->addAttribute( "style:parent-style-name", m_parentName );

@@ -199,9 +199,10 @@ public:
      *  @param propertiesElementName the name of the XML element with the style properties,
      *  e.g. "style:text-properties"
      *  @param closeElement set it to false to be able to add more child elements to the style element
+     *  @param drawElement set it to true to add "draw:name" (use for gradient/hatch style) otherwise add "style:name
      */
     void writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name,
-                     const char* propertiesElementName, bool closeElement = true ) const;
+                     const char* propertiesElementName, bool closeElement = true, bool drawElement = false ) const;
 
     /**
      *  QMap requires a complete sorting order.
