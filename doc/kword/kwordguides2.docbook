@@ -399,7 +399,7 @@ the toolbar.</para>
 <imagedata fileref="finddlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-
+<sect3><title>Basic Text Search</title>
 <para>The drop-down box labelled <guilabel>Text to Find</guilabel>,
 provides a place for you to enter the text of your search command. In
 the screenshot, that box is currently filled with
@@ -407,7 +407,11 @@ the screenshot, that box is currently filled with
 <guibutton>OK</guibutton>, then &kword; will search the document until it
 finds a match to your text.  If &kword; cannot find a match, a dialog
 box will appear that says <guilabel>No match found</guilabel>.  </para>
+<tip><para>If you want to repeat a recent search, simply select the arrow in the drop-down
+box and a list of your most recent searches will appear.  Simply select your search
+from the list and click <guibutton>OK</guibutton>.</para></tip>
 
+</sect3>
 <sect3>
 <title>Refining Your Search</title>
 
@@ -449,7 +453,7 @@ section entitled <link linkend="patterns">Pattern Matching</link></para>
 <title>Other Search options</title>
 
 <para>In addition to pattern matching, you can limit the search results
-with a few miscellaneous options.</para>
+with a few useful options.</para>
 
 <variablelist>
 <varlistentry>
@@ -457,11 +461,23 @@ with a few miscellaneous options.</para>
 <listitem>
 <para>When this option is selected, &kword; will not only search for the
 string of letters, but will verify that the case of the letters is the
-same.  For example.  Searching for:
-<emphasis>KDE</emphasis></para><para>will match:
+same.  For example.  Searching for:</para><para>
+<emphasis>KDE</emphasis></para><para>will match:</para><para>
 <emphasis>KDE</emphasis> and
-<emphasis>hiddenKDEinwords</emphasis> but not: <emphasis>Kde,
+<emphasis>hiddenKDEinwords</emphasis> but not: </para><para><emphasis>Kde,
 kde</emphasis> or <emphasis> hiddenkdeinwords</emphasis>.</para> 
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Find backwards</guilabel></term>
+<listitem>
+<para>This option changes the direction of the search.  This can be
+useful when you only want to search for a string of text before the
+current cursor position, not after.  This option is usually used in
+conjunction with <guilabel>From Cursor</guilabel>, but if that option is
+not specified, &kword; will start searching from the end of the document
+backwards.</para>
 </listitem>
 </varlistentry>
 
@@ -487,17 +503,6 @@ is, by default forward in the document, but can be changed with the
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guilabel>Find backwards</guilabel></term>
-<listitem>
-<para>This option changes the direction of the search.  This can be
-useful when you only want to search for a string of text before the
-current cursor position, not after.  This option is usually used in
-conjunction with <guilabel>From Cursor</guilabel>, but if that option is
-not specified, &kword; will start searching from the end of the document
-backwards.</para>
-</listitem>
-</varlistentry>
 
 <varlistentry>
 <term><guilabel>Selected Text</guilabel></term>
@@ -550,14 +555,11 @@ appears.</para>
 <imagedata fileref="repldlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-
+<sect3><title>Basic Search and Replace</title>
 <para>The drop-down box labeled <guilabel>Text to Find</guilabel>,
 provides a place for you to enter the text of your search command. In
 the screenshot, that box is currently filled with
 <emphasis>KDE</emphasis>)</para>
-
-<sect3>
-<title>Entering Replacement Text</title>
 
 <para>You can enter your replacement text in the text box labeled
 <guilabel>Replacement Text</guilabel>. You can now click
@@ -604,7 +606,7 @@ section entitled <link linkend="patterns">Pattern Matching</link></para>
 <title>Other Replace Options</title>
 
 <para>In addition to pattern matching, you can limit the search results
-with a few miscellaneous options.</para>
+with a few useful options.</para>
 
 <variablelist>
 <varlistentry>
@@ -621,28 +623,6 @@ hiddenkdeinwords</emphasis>.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Whole words only</guilabel></term>
-<listitem>
-<para>When this option is selected, &kword; will only return search
-items that are surrounded by spaces, paragraph marks or punctuation. For
-example.  Searching for:  <emphasis>KDE</emphasis></para><para>will
-match: <emphasis>KDE</emphasis></para><para> but not: <emphasis>
-hiddenKDEinwords</emphasis> or <emphasis>KDElike</emphasis>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>From Cursor</guilabel></term>
-<listitem>
-<para>By default, &kword; begins searching at the beginning of the
-document.  If this option is selected, &kword; begins its search from
-the current possition of the cursor. The direction that &kword; searches
-is, by default forward in the document, but can be changed with the
-<guilabel>Find Backwards</guilabel> option.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guilabel>Find backwards</guilabel></term>
 <listitem>
 <para>This option changes the direction of the search.  This can be
@@ -651,6 +631,17 @@ current cursor position, not after.  This option is usually used in
 conjunction with <guilabel>From Cursor</guilabel>, but if that option is
 not specified, &kword; will start searching from the end of the document
 backwards.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Whole words only</guilabel></term>
+<listitem>
+<para>When this option is selected, &kword; will only return search
+items that are surrounded by spaces, paragraph marks or punctuation. For
+example.  Searching for:  <emphasis>KDE</emphasis></para><para>will
+match: <emphasis>KDE</emphasis></para><para> but not: <emphasis>
+hiddenKDEinwords</emphasis> or <emphasis>KDElike</emphasis>.</para>
 </listitem>
 </varlistentry>
 
@@ -669,6 +660,27 @@ prior to selecting the <guilabel>Find</guilabel> command.</para>
 </note>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><guilabel>From Cursor</guilabel></term>
+<listitem>
+<para>By default, &kword; begins searching at the beginning of the
+document.  If this option is selected, &kword; begins its search from
+the current possition of the cursor. The direction that &kword; searches
+is, by default forward in the document, but can be changed with the
+<guilabel>Find Backwards</guilabel> option.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Prompt on Replace</guilabel></term>
+<listitem>
+<para>If this option is selected, &kword; will prompt the user 
+<emphasis>before</emphasis> each replacement.  This allows you to 
+approve or disapprove each replacement. </para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 
 </sect4>
@@ -677,18 +689,174 @@ prior to selecting the <guilabel>Find</guilabel> command.</para>
 
 <sect2 id="patterns">
 <title>Pattern Matching</title>
+<para>Sometimes, you want to find or replace text that is similar, but not exactly the same.</para>
+<para>&kword; allows you to search for words that are similar 
+in certain very well defined ways.
+This is done through <emphasis>pattern matching</emphasis>.</para>
+<para>Each pattern matching string is detailed below.  The true power of pattern matching is 
+combining multiple elements into a single search string.</para>
 
 <variablelist>
 <varlistentry>
-<term>Any Character</term>
+<term><guilabel>Any Character</guilabel></term>
 <listitem>
-<para>Will find any letter, number, punctuation or symbol.</para>
+<para>Will find any <emphasis>one</emphasis> letter, number,
+punctuation or symbol. Once selected, &kword; will insert a period (.) into your string.
+</para>
+<para>Thus:  <emphasis>KW.rd</emphasis> will find or replace <emphasis>KWord</emphasis>,
+<emphasis>KW2rd</emphasis>, <emphasis>KWOrd</emphasis> or <emphasis>KW*rd</emphasis>.</para>
+<para>It will not find or replace: <emphasis>KWoord</emphasis>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Start of Line</guilabel></term>
+<listitem>
+<para>Will find any instance where the start of the line is at this point in the search string. 
+Once selected, &kword; will insert a (^) into your string.
+</para>
+<para>Thus:  <emphasis>^KWord</emphasis> will find or replace any instance of
+<emphasis>KWord</emphasis> which begins a new line.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>End of Line</guilabel></term>
+<listitem>
+<para>Will find any instance where the end of the line is at this point in the search string.
+Once selected, &kword; will insert a dollar sign ($) into your string.
+</para>
+<para>Thus:  <emphasis>KWord$</emphasis> will find or replace any instance of <emphasis>KWord</emphasis>
+which occurs at the end of a line.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Set of characters</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a set of square brackets into your string. &kword; will
+match any characters contained within that set of brackets.
+</para>
+<para>Thus:  <emphasis>KW[ao]rd</emphasis> will find or replace any instance of <emphasis>KWord</emphasis>
+or <emphasis>KWard</emphasis>.</para>
+<para>It will not match:  <emphasis>KWaord</emphasis> or <emphasis>KWird</emphasis>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Repeats, zero or more times</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert an asterisk (*) into your string. &kword; will
+match any string of text that contains <emphasis>zero or more</emphasis> of the previous 
+characters behind the asterisk.</para>
+<para>Thus:  <emphasis>KWo*rd</emphasis> will find or replace any instance of <emphasis>KWrd</emphasis> (zero)
+or <emphasis>KWord</emphasis> (one), or <emphasis>KWoooooooooord</emphasis> (ten).</para>
+<para>It will not match:  <emphasis>KWaord</emphasis> or <emphasis>KWird</emphasis>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Repeats, one or more times</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a plus sign (+) into your string. &kword; will
+match any string of text that contains <emphasis>one or more</emphasis> of the previous 
+characters behind the asterisk.</para>
+<para>Thus:  <emphasis>KWo*rd</emphasis> will find or replace any instance of <emphasis>KWord</emphasis> (one), or <emphasis>KWoooooooooord</emphasis> (ten).</para>
+<para>It will not match:  <emphasis>KWrd</emphasis> (zero).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Optional</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a question mark (?) into your string. &kword; will match any instance
+of the string if the previous character exists <emphasis>and if it does not</emphasis></para>
+<para>Thus:  <emphasis>KWo?rd</emphasis> will find or replace any instance of <emphasis>KWord</emphasis>, 
+or <emphasis>KWrd</emphasis>.</para>
+<para>It will not match:  <emphasis>KWoord</emphasis>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Escape</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a back slash (\) into your string.
+This backward slash tells &kword; to not perform pattern matching with the next character.  
+This is useful when you want to search for a string of text using patterns, but you need to match one of the 
+reserved pattern matching characters.  </para>
+<para>For example:  <emphasis>KW\.rd</emphasis> will find or
+replace any instance of <emphasis>KW.rd</emphasis>.</para>
+<para>It will not match:  <emphasis>KWrd</emphasis>.</para>
+<tip><para>This character is obviously most useful when you 
+combine it with other pattern matching (not like the example above).</para>
+<para>Example:  <emphasis>KWord\.*</emphasis> which will match <emphasis>KWord</emphasis>,
+<emphasis>KWord.</emphasis> and <emphasis>KWord...</emphasis></para>
+<para>This string tells &kword; to look for any instance of <emphasis>KWord</emphasis> 
+with zero or more periods (.) at the end.</para>
+</tip>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Tab</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a back slash folllowed by a t (\t) into your string. &kword; will match any
+string of characters with a tab character (for use with tab stops) in that portion of the string.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>NL</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>n</emphasis> (\n) into your string.
+&kword; will match any string of characters with a newline  character in that portion of the string.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>CR</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>r</emphasis> (\r) into your string.
+&kword; will match any string of characters with a carrage return character in that portion of the string.</para>
+<note><para>A carrage return is the same thing as a new paragraph.  When you press the <keycap>Enter</keycap> key, 
+you are entering a carrage return.</para></note>
+<!-- Lauri, should that previous line be a <keycap>, <keysymbol>, or what?  -->
 </listitem>
 </varlistentry>
 </variablelist>
 
-</sect2>
+<varlistentry>
+<term><guilabel>Whitespace</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>s</emphasis> (\s) into your string.
+&kword; will match any string of characters with a whitespace character in that portion of the string.</para>
+<note><para>Whitespace characters is a group of characters that change the flow or move the text around.
+Examples of whitespace characters are spaces, tabs, and carrage returns.</para></note>
+</listitem>
+</varlistentry>
 
+<varlistentry>
+<term><guilabel>Digit</guilabel></term>
+<listitem>
+<para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>d</emphasis> (\d) into your string.
+&kword; will match any string of characters with a numerical digit (any number 0-9) in that portion of the string.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Unicode Point</guilabel></term>
+<listitem>
+<para>STUFF????</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>ASCII/Latin-1 character</guilabel></term>
+<listitem>
+<para>STUFF????</para>
+</listitem>
+</varlistentry>
+</sect2>
 </sect1>
 
 <sect1 id="spell-check">
@@ -722,11 +890,12 @@ box.</para>
 </screenshot>
 
 <para>In this example, the mispelled word &kword; found, was
-<emphasis>youve</emphasis>.  It has only one suggestion
-<emphasis>you've</emphasis>.</para>
+<emphasis>youve</emphasis>.  The currently suggested replacement word is listed in the text box labeled
+<guilabel>Replacment</guilabel>.  In the list box labeled <guilabel>Suggestion</guilabel> is a list of words
+the spelling program has determined as possible correct spellings.</para>
 
 <para>There is a progress bar below the list of suggestions which tells
-you how much of the document has been spell checked.</para>
+you how much of the document has been spell checked. In this example, that is 48 percent.</para>
 
 <para>From here you have eight options:</para>
 
@@ -734,7 +903,7 @@ you how much of the document has been spell checked.</para>
 <varlistentry>
 <term><guibutton>Replace</guibutton></term>
 <listitem>
-<para>Replaces the current word with the suggestion.  Only replaces this
+<para>Replaces the current word with the suggested word.  Only replaces this
 occurance.</para>
 </listitem>
 </varlistentry>
@@ -743,7 +912,7 @@ occurance.</para>
 <term><guibutton>Replace All</guibutton></term>
 <listitem>
 <para>Replaces all occurances of the current word with the
-suggestion.</para>
+suggested word.</para>
 </listitem>
 </varlistentry>
 
@@ -758,7 +927,7 @@ word appears again.</para>
 <varlistentry>
 <term><guibutton>Ignore All</guibutton></term>
 <listitem>
-<para>Do not make any changes to this or any other occurance.  Do not
+<para>Do not make any changes to this or any other occurance of this word.  Do not
 ask me about this word again.</para>
 </listitem>
 </varlistentry>
@@ -778,7 +947,7 @@ ask me about this word again.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guibutton>Close</guibutton></term>
+<term><guibutton>Cancel</guibutton></term>
 <listitem>
 <para>Stop spell checking.</para>
 </listitem>
@@ -803,6 +972,9 @@ then exit the spell check dialog box.  With short documents, you may
 miss the dialog box.  &kword; has spell checked the document!</para>
 </note>
 
+<para>There are several options for configuring your spelling application.  
+For more details, please see the section entitled
+<link linkend="opt-spell">Configure Spelling</link>.</para>
 
 </sect1>
 
