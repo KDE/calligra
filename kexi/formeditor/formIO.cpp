@@ -150,6 +150,8 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	uiElement.appendChild(layoutDefaults);
 
 	/// Save tab Stops
+	if(form->autoTabStops())
+		form->autoAssignTabStops();
 	QDomElement tabStops = domDoc.createElement("tabstops");
 	uiElement.appendChild(tabStops);
 	for(ObjectTreeItem *it = form->tabStops()->first(); it; it = form->tabStops()->next())

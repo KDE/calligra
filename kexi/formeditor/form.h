@@ -140,6 +140,9 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		ObjectTreeC*		tabStops() { return &m_tabstops; }
 		void			addWidgetToTabStops(ObjectTreeItem *c);
+		bool			autoTabStops() { return m_autoTabstops; }
+		void			setAutoTabStops(bool autoTab) { m_autoTabstops = autoTab;}
+		void			autoAssignTabStops();
 
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem
@@ -206,6 +209,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		KActionCollection	*m_collection;
 
 		ObjectTreeC		m_tabstops;
+		bool			m_autoTabstops;
 };
 
 }

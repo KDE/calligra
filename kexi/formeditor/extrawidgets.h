@@ -120,6 +120,7 @@ class KFORMEDITOR_EXPORT TabStopDialog : KDialogBase
 		void MoveItemUp();
 		void MoveItemDown();
 		void updateButtons(QListViewItem*);
+		void slotRadioClicked(bool isOn);
 
 	protected:
 		ObjectTreeView   *m_treeview;

@@ -49,6 +49,7 @@ Form::Form(FormManager *manager, const char *name)
 	m_resizeHandles.setAutoDelete(true);
 	m_inter = true;
 	m_design = true;
+	m_autoTabstops = false;
 	m_collection = new KActionCollection(this);
 	m_history = new KCommandHistory(m_collection, true);
 	m_tabstops.setAutoDelete(false);
@@ -224,6 +225,47 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 
 	if(m_tabstops.findRef(c) == -1)
 		m_tabstops.append(c);
+}
+
+void
+Form::autoAssignTabStops()
+{
+	VerWidgetList list;
+	HorWidgetList hlist;
+
+	for(ObjectTreeItem *tree = m_tabstops.first(); tree; tree = m_tabstops.next())
+	{
+		if(tree->widget())
+			list.append(tree->widget());
+	}
+
+	list.sort();
+	m_tabstops.clear();
+
+	/// We automatically sort widget from the top-left to bottom-right corner
+	//! \todo Handle RTL layout (ie form top-right to bottom-left)
+	for(QWidget *w = list.first(); w; w = list.next())
+	{
+		hlist.append(w);
+
+		QWidget *nextw = list.next();
+		while(nextw && (nextw->y() < (w->y() + 20)))
+		{
+			hlist.append(nextw);
+			nextw = list.next();
+		}
+		hlist.sort();
+
+		for(QWidget *widg = hlist.first(); widg; widg = hlist.next())
+		{
+			ObjectTreeItem *tree = m_topTree->lookup(widg->name());
+			if(tree)
+				m_tabstops.append(tree);
+		}
+
+		nextw = list.prev();
+		hlist.clear();
+	}
 }
 
 Container*
