@@ -226,6 +226,14 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
   saveBackground(out);
   out << etag << "</BACKGROUND>" << endl;
 
+  out << otag << "<HEADER show=\"" << static_cast<int>(hasHeader()) << "\">" << endl;
+  _header->save(out);
+  out << etag << "</HEADER>" << endl;
+  
+  out << otag << "<FOOTER show=\"" << static_cast<int>(hasFooter()) << "\">" << endl;
+  _footer->save(out);
+  out << etag << "</FOOTER>" << endl;
+
   out << otag << "<OBJECTS>" << endl;
   saveObjects(out);
   out << etag << "</OBJECTS>" << endl;
@@ -591,6 +599,30 @@ bool KPresenterDoc::loadXML(KOMLParser& parser,KOStore::Store_ptr _store)
 		cerr << "Unknown attrib BACKGROUND:'" << (*it).m_strName << "'" << endl;
 	    }
 	  loadBackground(parser,lst);
+	}
+
+      else if (name == "HEADER")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "show")
+		setHeader(static_cast<bool>(atoi((*it).m_strValue.c_str())));
+	    }
+	  _header->load(parser,lst);
+	}
+      
+      else if (name == "FOOTER")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "show")
+		setFooter(static_cast<bool>(atoi((*it).m_strValue.c_str())));
+	    }
+	  _footer->load(parser,lst);
 	}
 
       else if (name == "OBJECTS")

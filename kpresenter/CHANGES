@@ -165,3 +165,7 @@ Reggie, 8.5.1999:
 -----------------
 - More work and headers and footers
 
+Reggie, 9.5.1999:
+-----------------
+- Implemented loading/saving headers and footers
+- Headers/Footers are correctly drawn in screen presentations now

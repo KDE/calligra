@@ -76,9 +76,9 @@ public:
     { pageEffect = _pageEffect; }
 
   virtual void setSize(KSize _size)
-    { removeGradient(); ext = _size; }
+    { removeGradient(); ext = _size; footerHeight = 0; }
   virtual void setSize(int _width,int _height)
-    { removeGradient(); ext = KSize(_width,_height); }
+    { removeGradient(); ext = KSize(_width,_height); footerHeight = 0; }
 
   virtual BackType getBackType()
     { return backType; }

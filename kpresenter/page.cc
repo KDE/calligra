@@ -27,6 +27,8 @@
 #include <kurl.h>
 #include <klocale.h>
 
+#include "footer_header.h"
+
 /******************************************************************/
 /* class Page - Page                                              */
 /******************************************************************/
@@ -1655,6 +1657,11 @@ void Page::startScreenPresentation(bool zoom)
 	tmpObjs.append(kpobject);
     }
 
+  if (view->kPresenterDoc()->hasHeader() && view->kPresenterDoc()->header())
+    view->kPresenterDoc()->header()->zoom(_presFakt);
+  if (view->kPresenterDoc()->hasFooter() && view->kPresenterDoc()->footer())
+    view->kPresenterDoc()->footer()->zoom(_presFakt);
+  
   currPresPage = 1;
   editMode = false;
   drawMode = false;
@@ -1665,6 +1672,8 @@ void Page::startScreenPresentation(bool zoom)
   //setFocusPolicy(QWidget::StrongFocus);
   //setFocus();
   setCursor(blankCursor);
+
+  view->kPresenterDoc()->getHeaderFooterEdit()->updateSizes();
 }
 
 /*====================== stop screenpresentation =================*/
@@ -1690,6 +1699,11 @@ void Page::stopScreenPresentation()
       kpbackground->setSize(getPageSize(i).width(),getPageSize(i).height());
       kpbackground->restore();
     }
+
+  if (view->kPresenterDoc()->hasHeader() && view->kPresenterDoc()->header())
+    view->kPresenterDoc()->header()->zoomOrig();
+  if (view->kPresenterDoc()->hasFooter() && view->kPresenterDoc()->footer())
+    view->kPresenterDoc()->footer()->zoomOrig();
 
   goingBack = false;
   currPresPage = 1;

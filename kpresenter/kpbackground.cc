@@ -504,7 +504,7 @@ void KPBackGround::drawHeaderFooter(QPainter *_painter,const KPoint &_offset)
       QSize s(doc->footer()->getKTextObject()->size());
       QPoint pnt(doc->footer()->getKTextObject()->x(),doc->footer()->getKTextObject()->y()); 
       
-      if (doc->footer()->getKTextObject()->isModified())
+      if (doc->footer()->getKTextObject()->isModified() || footerHeight <= 0)
 	{
 	  doc->footer()->setSize(ext.width(),10);
 

@@ -40,6 +40,8 @@ public:
   void allowClose()
   { _allowClose = true; }
   
+  void updateSizes();
+  
 protected:
   void setupHeader();
   void setupFooter();

@@ -70,6 +70,12 @@ KPFooterHeaderEditor::~KPFooterHeaderEditor()
 }
 
 /*================================================================*/
+void KPFooterHeaderEditor::updateSizes()
+{
+  updateGeometry();
+}
+
+/*================================================================*/
 void KPFooterHeaderEditor::setupHeader()
 {
   QVBox *back = new QVBox(tabwidget);
