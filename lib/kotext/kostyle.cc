@@ -150,19 +150,19 @@ KoParagStyle* KoStyleCollection::findStyle( const QString & _name ) const
 KoParagStyle* KoStyleCollection::findTranslatedStyle( const QString & _name ) const
 {
     // Caching, to speed things up
-    if ( m_lastStyle && i18n( m_lastStyle->name().utf8() ) == _name )
+    if ( m_lastStyle && m_lastStyle->displayName() == _name )
         return m_lastStyle;
 
     QPtrListIterator<KoParagStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
-        if ( i18n( styleIt.current()->name().utf8() ) == _name ) {
+        if ( styleIt.current()->displayName() == _name ) {
             m_lastStyle = styleIt.current();
             return m_lastStyle;
         }
     }
 
-    if ( ( _name == "Standard" ) || ( _name == i18n( "Standard" ) ) )
+    if ( ( _name == "Standard" ) || ( _name == i18n( "Style name", "Standard" ) ) )
         return m_styleList.getFirst(); // fallback..
 
     return 0L;
