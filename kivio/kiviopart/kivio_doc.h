@@ -124,9 +124,6 @@ class KivioDoc : public KoDocument
 
     static QPtrList<KivioDoc>& documents();
 
-    KivioGroupStencil *clipboard();
-    void setClipboard( KivioGroupStencil * );
-
     KoUnit::Unit units()const { return m_units; }
 
     KivioGridData grid() { return gridData; }
@@ -224,8 +221,6 @@ class KivioDoc : public KoDocument
     * @see #isLoading
     */
     bool m_bLoading;
-
-    KivioGroupStencil *m_pClipboard;
 
     static QPtrList<KivioDoc>* s_docs;
     static int s_docId;

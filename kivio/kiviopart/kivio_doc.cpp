@@ -114,8 +114,6 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
     setName( tmp.latin1() );
   }
 
-  m_pClipboard = NULL;
-
   m_iPageId = 1;
   m_pMap = 0L;
   m_bLoading = false;
@@ -646,12 +644,7 @@ KivioDoc::~KivioDoc()
     delete m_pMap;
     delete dcop;
     delete m_commandHistory;
-    if( m_pClipboard )
-    {
-        delete m_pClipboard;
-        m_pClipboard = NULL;
-    }
-
+    
     if( m_pLstSpawnerSets )
     {
         delete m_pLstSpawnerSets;
@@ -729,23 +722,6 @@ void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStack
                 i18n("Cannot Delete Stencil Set"));
             return;
         }
-
-        // Now check the clipboard against this spawner
-        if( m_pClipboard )
-        {
-            if( checkGroupForSpawner( m_pClipboard, pSpawner )==true )
-            {
-                if( KMessageBox::questionYesNo(NULL, i18n("The clipboard contains stencils which belong to the set you are trying to remove.\nWould you like to delete what is on the clipboard?\n(Saying no will cause this stencil set to not be removed.)"),
-                    i18n("Clear the clipboard?"))==KMessageBox::Yes )
-                {
-                    delete m_pClipboard;
-                    m_pClipboard = NULL;
-                }
-                else    // abort because the user aborted
-                    return;
-            }
-        }
-
 
         pSpawner = pSet->spawners()->next();
     }
@@ -826,19 +802,6 @@ bool KivioDoc::checkGroupForSpawner( KivioStencil *pGroup, KivioStencilSpawner *
     }
 
     return false;
-}
-
-void KivioDoc::setClipboard( KivioGroupStencil *p )
-{
-    if( m_pClipboard )
-        delete m_pClipboard;
-
-    m_pClipboard = p;
-}
-
-KivioGroupStencil *KivioDoc::clipboard()
-{
-    return m_pClipboard;
 }
 
 void KivioDoc::slotSelectionChanged()

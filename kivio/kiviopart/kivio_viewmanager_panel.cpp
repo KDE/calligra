@@ -14,7 +14,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kozoomhandler.h>
 
 using namespace Kivio;
@@ -211,7 +211,8 @@ void KivioViewManagerPanel::renameItem()
     return;
 
   bool ok=false;
-  QString newName = KLineEditDlg::getText(i18n("Rename View Item"), i18n("View item name:"), i->data->name, &ok, this);
+  QString newName = KInputDialog::getText(i18n("Rename View Item"),
+    i18n("View item name:"), i->data->name, &ok, this);
 
   if (ok)
     i->data->name = newName;

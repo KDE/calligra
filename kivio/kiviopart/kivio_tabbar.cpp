@@ -30,7 +30,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <knotifyclient.h>
 #include <kdebug.h>
 
@@ -350,7 +350,7 @@ void KivioTabBar::slotRename()
 
     bool ok;
     QString activeName = page->pageName();
-    QString newName = KLineEditDlg::getText( i18n("Page Name"), i18n("Enter page name:"), activeName, &ok, this );
+    QString newName = KInputDialog::getText( i18n("Page Name"), i18n("Enter page name:"), activeName, &ok, this );
 
     // Have a different name ?
     if ( ok ) // User pushed an OK button.

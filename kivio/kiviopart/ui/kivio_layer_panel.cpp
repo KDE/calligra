@@ -14,7 +14,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 
 KivioLayerItem::KivioLayerItem(QListView* parent, KivioLayer* d, int id)
 : QListViewItem(parent), data(d)
@@ -133,7 +133,8 @@ void KivioLayerPanel::renameItem()
   QString oldText = layer->name();
 
   bool ok=false;
-  QString newName = KLineEditDlg::getText(i18n("Rename Layer"), i18n("Layer name:"), oldText, &ok, this);
+  QString newName = KInputDialog::getText(i18n("Rename Layer"),
+    i18n("Layer name:"), oldText, &ok, this);
 
   if (ok) {
     layer->setName(newName);
