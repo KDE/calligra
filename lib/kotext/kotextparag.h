@@ -175,7 +175,7 @@ protected:
                                       int, int, int, int, // startX, lastY, baseLine, h,
                                       int, int, int, int, int, // startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
                                       bool, KoTextFormat *, int, const QMemArray<int> &,
-                                      const QMemArray<int> &, const QColorGroup &, bool ) { }
+                                      const QMemArray<int> &, const QColorGroup &, bool, int ) { }
 protected:
     KoParagLayout m_layout;
     QMap<int, int> m_tabCache;

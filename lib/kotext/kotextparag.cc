@@ -713,7 +713,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                              startX_pix, lastY_pix, baseLine_pix, bw_pix, h_pix,
                              drawSelections,
                              format, start+len-1 /*TODO remove*/, selectionStarts,
-                             selectionEnds, cg, rightToLeft );
+                             selectionEnds, cg, rightToLeft, line );
     }
 }
 
