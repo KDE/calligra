@@ -104,9 +104,9 @@ bool SelectTool::processEvent( QEvent* e )
         showPopupMenu(m->globalPos());
       } else if( m->button() == LeftButton ) {
         if(m->state() & ControlButton) {
-          m_shiftKey = true;
+          m_controlKey = true;
         } else {
-          m_shiftKey = false;
+          m_controlKey = false;
         }
         
         mousePress( m->pos() );
@@ -244,8 +244,8 @@ void SelectTool::mousePress(const QPoint &pos)
 bool SelectTool::startRubberBanding(const QPoint &pos)
 {
   KivioCanvas* canvas = view()->canvasWidget();
-  // We didn't find a stencil, so unselect everything if we aren't holding the shift key down
-  if( !m_shiftKey )
+  // We didn't find a stencil, so unselect everything if we aren't holding the control key down
+  if( !m_controlKey )
     canvas->activePage()->unselectAllStencils();
 
   canvas->startRectDraw( pos, KivioCanvas::Rubber );
@@ -279,9 +279,9 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
 
   if( pStencil->isSelected() )
   {
-    // If we are clicking an already selected stencil, and the shift
+    // If we are clicking an already selected stencil, and the control
     // key down, then unselect this stencil
-    if( m_shiftKey==true ) {
+    if( m_controlKey==true ) {
       pPage->unselectStencil( pStencil );
     }
 
@@ -289,8 +289,8 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
   }
   else
   {
-    // Clicking a new stencil, and the shift key is not down
-    if( !m_shiftKey )
+    // Clicking a new stencil, and the control key is not down
+    if( !m_controlKey )
       pPage->unselectAllStencils();
 
     pPage->selectStencil( pStencil );
@@ -343,9 +343,9 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
 
   if( pStencil->isSelected() )
   {
-    // If we are clicking an already selected stencil, and the shift
+    // If we are clicking an already selected stencil, and the control
     // key down, then unselect this stencil
-    if( m_shiftKey==true )
+    if( m_controlKey==true )
     {
       m_pCustomDraggingStencil = NULL;
       pPage->unselectStencil( pStencil );
@@ -357,8 +357,8 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
   }
   else
   {
-    // Clicking a new stencil, and the shift key is not down
-    if( !m_shiftKey )
+    // Clicking a new stencil, and the control key is not down
+    if( !m_controlKey )
       pPage->unselectAllStencils();
 
     m_pCustomDraggingStencil = pStencil;

@@ -117,7 +117,7 @@ class SelectTool : public Kivio::MouseTool
     KivioStencil *m_pResizingStencil;
     KivioStencil *m_pCustomDraggingStencil;
     int m_resizeHandle;
-    bool m_shiftKey;
+    bool m_controlKey;
     int m_customDragID;
     QPtrList <KivioSelectDragData> m_lstOldGeometry;
     KoRect m_selectedRect;
