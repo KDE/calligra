@@ -42,6 +42,9 @@
 #include <kpbackground.h>
 #include <kpclipartobject.h>
 #include <kppixmapobject.h>
+#include <kpfreehandobject.h>
+#include <kpcubicbeziercurveobject.h>
+#include <kpquadricbeziercurveobject.h>
 #include <gotopage.h>
 #include <kptextobject.h>
 #include <kpresenter_sound_player.h>
@@ -978,8 +981,43 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         else
                             m_view->openPopupMenuFlipObject( pnt );
                     }
-                } else if ( kpobject->getType() == OT_LINE || kpobject->getType() == OT_CUBICBEZIERCURVE || kpobject->getType() == OT_QUADRICBEZIERCURVE || kpobject->getType() == OT_FREEHAND)
-                {
+                } else if ( kpobject->getType() == OT_CUBICBEZIERCURVE ) {
+                    if ( state )
+                        deSelectAllObj();
+                    selectObj( kpobject );
+                    KPCubicBezierCurveObject *tmpObj=dynamic_cast<KPCubicBezierCurveObject *>(kpobject);
+                    if ( tmpObj )
+                    {
+                        if (!tmpObj->isClosed())
+                            m_view->openPopupMenuCloseObject( pnt );
+                        else
+                            m_view->openPopupMenuFlipObject( pnt );
+                    }
+                } else if ( kpobject->getType() == OT_QUADRICBEZIERCURVE ) {
+                    if ( state )
+                        deSelectAllObj();
+                    selectObj( kpobject );
+                    KPQuadricBezierCurveObject *tmpObj=dynamic_cast<KPQuadricBezierCurveObject *>(kpobject);
+                    if ( tmpObj )
+                    {
+                        if (!tmpObj->isClosed())
+                            m_view->openPopupMenuCloseObject( pnt );
+                        else
+                            m_view->openPopupMenuFlipObject( pnt );
+                    }
+                } else if ( kpobject->getType() == OT_FREEHAND ) {
+                    if ( state )
+                        deSelectAllObj();
+                    selectObj( kpobject );
+                    KPFreehandObject *tmpObj=dynamic_cast<KPFreehandObject *>(kpobject);
+                    if ( tmpObj )
+                    {
+                        if (!tmpObj->isClosed())
+                            m_view->openPopupMenuCloseObject( pnt );
+                        else
+                            m_view->openPopupMenuFlipObject( pnt );
+                    }
+                } else if ( kpobject->getType() == OT_LINE ){
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
@@ -7018,7 +7056,7 @@ void KPrCanvas::flipObject( bool _horizontal )
     KMacroCommand *macro = new KMacroCommand( i18n("Flips Object"));
     QPtrListIterator<KPObject> it2( lst );
     for ( ; it2.current() ; ++it2 ) {
-        KCommand * cmd= new KPrFlipPolyLineCommand(i18n("Flip"), m_view->kPresenterDoc(),  _horizontal , it2.current());
+        KCommand * cmd= new KPrFlipObjectCommand(i18n("Flip"), m_view->kPresenterDoc(),  _horizontal , it2.current());
         macro->addCommand(cmd);
     }
     macro->execute();
@@ -7472,13 +7510,13 @@ void KPrCanvas::closeObject(bool /*close*/)
     QPtrList<KPObject> lst;
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE  ))
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE ||it.current()->getType() == OT_FREEHAND ||it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_CUBICBEZIERCURVE ))
             lst.append( it.current()  );
     }
     //get sticky obj
     it=m_view->kPresenterDoc()->stickyPage()->objectList();
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE ))
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE ||it.current()->getType() == OT_FREEHAND ||it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_CUBICBEZIERCURVE ))
             lst.append(  it.current() );
     }
     if ( lst.isEmpty())

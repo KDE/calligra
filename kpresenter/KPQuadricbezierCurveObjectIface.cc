@@ -65,3 +65,13 @@ void KPQuadricBezierCurveObjectIface::verticalFlips()
 {
     obj->flip( false );
 }
+
+void KPQuadricBezierCurveObjectIface::closeObject(bool close)
+{
+    obj->closeObject( close );
+}
+
+bool KPQuadricBezierCurveObjectIface::isClosed()const
+{
+    return obj->isClosed();
+}

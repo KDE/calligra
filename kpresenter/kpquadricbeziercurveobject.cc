@@ -385,3 +385,23 @@ void KPQuadricBezierCurveObject::flip(bool horizontal )
     }
     updatePoints( 1.0, 1.0 );
 }
+
+void KPQuadricBezierCurveObject::closeObject(bool _close)
+{
+    KoPointArray tmpPoints=origAllPoints;
+    if ( _close )
+    {
+        tmpPoints.putPoints( origAllPoints.count(), 1, origAllPoints.at(0).x(), origAllPoints.at(0).y());
+    }
+    else if ( isClosed())
+    {
+        tmpPoints.resize( origAllPoints.count() - 1);
+    }
+    origAllPoints = tmpPoints;
+    updatePoints( 1.0, 1.0 );
+}
+
+bool KPQuadricBezierCurveObject::isClosed()const
+{
+    return (origAllPoints.at(0)==origAllPoints.at(origAllPoints.count()-1));
+}

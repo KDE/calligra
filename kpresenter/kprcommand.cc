@@ -2059,7 +2059,7 @@ void KPrHideShowHeaderFooter::unexecute()
 }
 
 
-KPrFlipPolyLineCommand::KPrFlipPolyLineCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal , KPObject *_obj):
+KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal , KPObject *_obj):
     KNamedCommand(name),
     m_doc(_doc),
     m_object(_obj),
@@ -2067,66 +2067,17 @@ KPrFlipPolyLineCommand::KPrFlipPolyLineCommand( const QString &name, KPresenterD
 {
 }
 
-void KPrFlipPolyLineCommand::execute()
+void KPrFlipObjectCommand::execute()
 {
-    if ( m_object->getType() == OT_LINE)
-    {
-        KPLineObject *obj=dynamic_cast<KPLineObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal );
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( m_object->getType() == OT_POLYLINE)
-    {
-        KPPolylineObject *obj=dynamic_cast<KPPolylineObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-
-    }
-    else if ( m_object->getType() == OT_CUBICBEZIERCURVE)
-    {
-        KPCubicBezierCurveObject *obj=dynamic_cast<KPCubicBezierCurveObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( m_object->getType() == OT_QUADRICBEZIERCURVE)
-    {
-        KPQuadricBezierCurveObject *obj=dynamic_cast<KPQuadricBezierCurveObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( m_object->getType() == OT_FREEHAND )
-    {
-        KPFreehandObject *obj=dynamic_cast<KPFreehandObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( m_object->getType() == OT_PIE )
-    {
-        KPPieObject *obj=dynamic_cast<KPPieObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
+    flipObject();
 }
 
-void KPrFlipPolyLineCommand::unexecute()
+void KPrFlipObjectCommand::unexecute()
+{
+    flipObject();
+}
+
+void KPrFlipObjectCommand::flipObject()
 {
     if ( m_object->getType() == OT_LINE)
     {
@@ -2264,25 +2215,49 @@ KPrCloseObjectCommand::~KPrCloseObjectCommand()
 
 void KPrCloseObjectCommand::execute()
 {
-    if ( objects->getType()==OT_POLYLINE )
-    {
-        KPPolylineObject * obj = dynamic_cast<KPPolylineObject *>(objects);
-        if ( obj )
-        {
-            obj->closeObject( true);
-            doc->repaint( obj );
-        }
-    }
+    closeObject(true);
 }
 
 void KPrCloseObjectCommand::unexecute()
+{
+    closeObject(false);
+}
+
+void KPrCloseObjectCommand::closeObject(bool close)
 {
     if ( objects->getType()==OT_POLYLINE )
     {
         KPPolylineObject * obj = dynamic_cast<KPPolylineObject *>(objects);
         if ( obj )
         {
-            obj->closeObject( false );
+            obj->closeObject( close );
+            doc->repaint( obj );
+        }
+    }
+    else if ( objects->getType()==OT_FREEHAND )
+    {
+        KPFreehandObject * obj = dynamic_cast<KPFreehandObject *>(objects);
+        if ( obj )
+        {
+            obj->closeObject( close );
+            doc->repaint( obj );
+        }
+    }
+    else if ( objects->getType()==OT_QUADRICBEZIERCURVE )
+    {
+        KPQuadricBezierCurveObject * obj = dynamic_cast<KPQuadricBezierCurveObject *>(objects);
+        if ( obj )
+        {
+            obj->closeObject( close );
+            doc->repaint( obj );
+        }
+    }
+    else if ( objects->getType()==OT_CUBICBEZIERCURVE )
+    {
+        KPCubicBezierCurveObject * obj = dynamic_cast<KPCubicBezierCurveObject *>(objects);
+        if ( obj )
+        {
+            obj->closeObject( close );
             doc->repaint( obj );
         }
     }

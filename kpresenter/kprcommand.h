@@ -854,14 +854,15 @@ class KPrHideShowHeaderFooter : public KNamedCommand
     bool newValue;
 };
 
-class KPrFlipPolyLineCommand : public KNamedCommand
+class KPrFlipObjectCommand : public KNamedCommand
 {
 public:
-    KPrFlipPolyLineCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal ,KPObject *_obj);
-    ~KPrFlipPolyLineCommand() {};
+    KPrFlipObjectCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal ,KPObject *_obj);
+    ~KPrFlipObjectCommand() {};
     void execute();
     void unexecute();
 protected:
+    void flipObject();
     KPresenterDoc *m_doc;
     KPObject *m_object;
     bool horizontal;
@@ -910,6 +911,8 @@ public:
     virtual void unexecute();
 
 protected:
+    void closeObject(bool close);
+
     KPObject *objects;
     KPresenterDoc * doc;
 };

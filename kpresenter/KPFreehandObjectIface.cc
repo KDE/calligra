@@ -67,3 +67,13 @@ void KPFreehandObjectIface::verticalFlips()
     obj->flip( false );
 }
 
+void KPFreehandObjectIface::closeObject(bool close)
+{
+    obj->closeObject( close );
+}
+
+bool KPFreehandObjectIface::isClosed()const
+{
+    return obj->isClosed();
+}
+

@@ -42,6 +42,8 @@ k_dcop:
     QString lineEnd() const;
     void horizontalFlips();
     void verticalFlips();
+    void closeObject(bool close);
+    bool isClosed()const;
 
 private:
     KPCubicBezierCurveObject *obj;

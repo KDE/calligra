@@ -279,3 +279,23 @@ void KPFreehandObject::flip(bool horizontal )
     updatePoints( 1.0, 1.0 );
 
 }
+
+void KPFreehandObject::closeObject(bool _close)
+{
+    KoPointArray tmpPoints=origPoints;
+    if ( _close )
+    {
+        tmpPoints.putPoints( origPoints.count(), 1, origPoints.at(0).x(), origPoints.at(0).y());
+    }
+    else if ( isClosed())
+    {
+        tmpPoints.resize( origPoints.count() - 1);
+    }
+    origPoints = tmpPoints;
+    updatePoints( 1.0, 1.0 );
+}
+
+bool KPFreehandObject::isClosed()const
+{
+    return (origPoints.at(0)==origPoints.at(origPoints.count()-1));
+}
