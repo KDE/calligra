@@ -260,8 +260,7 @@ CORBA::Boolean KWordView::printDlg()
     KoKWHeaderFooter hf;
     m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
 
-    switch ( pgLayout.format )
-    {
+    switch ( pgLayout.format ) {
     case PG_DIN_A3: prt.setPageSize( QPrinter::A3 );
 	break;
     case PG_DIN_A4: prt.setPageSize( QPrinter::A4 );
@@ -276,21 +275,18 @@ CORBA::Boolean KWordView::printDlg()
 	break;
     case PG_DIN_B5: prt.setPageSize( QPrinter::B5 );
 	break;
-    case PG_SCREEN:
-    {
-	warning( i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) );
+    case PG_SCREEN: {
+	qWarning( i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) );
 	prt.setPageSize( QPrinter::A4 );
 	makeLandscape = TRUE;
     }	break;
-    default:
-    {
+    default: {
 	warning( i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) );
 	prt.setPageSize( QPrinter::A4 );
     } break;
     }
 
-    switch ( pgLayout.orientation )
-    {
+    switch ( pgLayout.orientation ) {
     case PG_PORTRAIT: prt.setOrientation( QPrinter::Portrait );
 	break;
     case PG_LANDSCAPE: prt.setOrientation( QPrinter::Landscape );
@@ -300,23 +296,49 @@ CORBA::Boolean KWordView::printDlg()
     float left_margin = 0.0;
     float top_margin = 0.0;
 
-    if ( makeLandscape )
-    {
+    if ( makeLandscape ) {
 	prt.setOrientation( QPrinter::Landscape );
 	left_margin = 28.5;
 	top_margin = 15.0;
     }
 
-    if ( prt.setup( this ) )
-    {
+    if ( prt.setup( this ) ) {
 	setCursor( waitCursor );
 	gui->getPaperWidget()->viewport()->setCursor( waitCursor );
 
-	QPainter painter;
-	painter.begin( &prt );
-	m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
-	painter.end();
-
+	QList<KWVariable> *vars = m_pKWordDoc->getVariables();
+	KWVariable *v = 0;
+	bool serialLetter = FALSE;
+	for ( v = vars->first(); v; v = vars->next() ) {
+	    if ( v->getType() == VT_SERIALLETTER ) {
+		serialLetter = TRUE;
+		break;
+	    }
+	}
+	
+	if ( !m_pKWordDoc->getSerialLetterDataBase() ||
+	     m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() == 0 )
+	    serialLetter = FALSE;
+	
+	if ( !serialLetter ) { 	
+	    QPainter painter;
+	    painter.begin( &prt );
+	    m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
+	    painter.end();
+	} else {
+	    QPainter painter;
+	    painter.begin( &prt );
+	    for ( int i = 0;i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
+		m_pKWordDoc->setSerialLetterRecord( i );
+		m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
+		if ( i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() - 1 )
+		    prt.newPage();
+	    }
+	    m_pKWordDoc->setSerialLetterRecord( -1 );
+	    painter.end();
+	}
+	
+	
 	setCursor( arrowCursor );
 	gui->getPaperWidget()->viewport()->setCursor( ibeamCursor );
     }

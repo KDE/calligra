@@ -47,17 +47,10 @@ QString KWSerialLetterDataBase::getValue( const QString &name, int record ) cons
     if ( num == -1 )
 	num = doc->getSerialLetterRecord();
 
-    if ( num == -1 )
+    if ( num == -1 || num > (int)db.count() )
 	return name;
 
-    if ( db.contains( name ) ) {
-	QStringList lst = db[ name ];
-	if ( num < (int)lst.count() )
-	    return lst[ num ];
-	return QString::null;
-    }
-
-    return QString::null;
+    return db[ num ][ name ];
 }
 
 /*================================================================*/
@@ -67,46 +60,35 @@ void KWSerialLetterDataBase::setValue( const QString &name, const QString &value
     if ( num == -1 )
 	num = doc->getSerialLetterRecord();
 
-    if ( num == -1 )
+    if ( num < 0 || num > (int)db.count() )
 	return;
-
-    if ( db.contains( name ) ) {
-	QStringList lst = db[ name ];
-	if ( num < (int)lst.count() ) {
-	    lst[ num ] = value;
-	    qDebug( "KWSerialLetterDataBase::setValue worked!" );
-	}
-    }
+    
+    db[ num ][ name ] = value;
 }
 
 /*================================================================*/
 void KWSerialLetterDataBase::appendRecord()
 {
-    QMap< QString, QStringList >::Iterator it = db.begin();
-    for ( ; it != db.end(); ++it )
-	( *it ) << i18n( "No Value" );
+    DbRecord record( sampleRecord );
+    db.append( record );
 }
 
 /*================================================================*/
 void KWSerialLetterDataBase::addEntry( const QString &name )
 {
-    if ( db.isEmpty() ) {
-	QStringList lst;
-	lst << i18n( "No Value" );
-	db[ name ] = lst;
-    } else {
-	int records = ( *db.begin() ).count();
-	QStringList lst;
-	for ( int i = 0; i < records; ++i )
-	    lst << i18n( "No Value" );
-	db[ name ] = lst;
-    }
+    sampleRecord[ name ] = i18n( "No Value" );
+    Db::Iterator it = db.begin();
+    for ( ; it != db.end(); ++it )
+	( *it )[ name ] = sampleRecord[ name ];
 }
 
 /*================================================================*/
 void KWSerialLetterDataBase::removeEntry( const QString &name )
 {
-    db.remove( name );
+    sampleRecord.remove( name );
+    Db::Iterator it = db.begin();
+    for ( ; it != db.end(); ++it )
+	( *it ).remove( name );
 }
 
 /******************************************************************
@@ -132,8 +114,8 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
     l->setMaximumHeight( l->sizeHint().height() );
     names = new QListBox( row1 );
 
-    QMap< QString, QStringList >::ConstIterator it = db->database().begin();
-    for ( ; it != db->database().end(); ++it )
+    QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
+    for ( ; it != db->getRecordEntries().end(); ++it )
 	names->insertItem( it.key(), -1 );
 
     KButtonBox *bb = new KButtonBox( back );

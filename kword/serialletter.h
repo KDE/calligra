@@ -45,13 +45,20 @@ public:
     void addEntry( const QString &name );
     void removeEntry( const QString &name );
 
-    const QMap< QString, QStringList > database() const {
-	return db;
+    const QMap< QString, QString > &getRecordEntries() const {
+	return sampleRecord;
     }
-
+    int getNumRecords() const {
+	return (int)db.count();
+    }
+    
 protected:
+    typedef QMap< QString, QString > DbRecord;
+    typedef QValueList< DbRecord > Db;
+    
     KWordDocument *doc;
-    QMap< QString, QStringList > db;
+    Db db;
+    DbRecord sampleRecord;
 
 };
 
@@ -126,10 +133,10 @@ protected slots:
 class KWSerialLetterEditor : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db );
-    
+
 protected:
     void resizeEvent( QResizeEvent *e );
 
@@ -138,7 +145,7 @@ protected:
     QLineEdit *record;
     KWSerialLetterEditorList *list;
     QVBox *back;
-    
+
 };
 
 #endif

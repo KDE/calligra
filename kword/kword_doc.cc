@@ -130,6 +130,12 @@ KWordDocument::KWordDocument()
     slDataBase->appendRecord();
     slDataBase->setValue( i18n( "First Name" ), "Reginald", 0 );
     slDataBase->setValue( i18n( "Last Name" ), "Stadlbauer", 0 );
+    slDataBase->appendRecord();
+    slDataBase->setValue( i18n( "First Name" ), "Tux", 1 );
+    slDataBase->setValue( i18n( "Last Name" ), "Linux", 1 );
+    slDataBase->appendRecord();
+    slDataBase->setValue( i18n( "First Name" ), "Konqi", 2 );
+    slDataBase->setValue( i18n( "Last Name" ), "KDE", 2 );
 
     QObject::connect( &history, SIGNAL( undoRedoChanged( QString, QString ) ), this,
 		      SLOT( slotUndoRedoChanged( QString, QString ) ) );
@@ -1353,7 +1359,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 {
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
-    out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" 
+    out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\""
 	<< "reggie@kde.org and weis@kde.org"
 	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;
     out << otag << "<PAPER format=\"" << static_cast<int>( pageLayout.format ) << "\" ptWidth=\"" << pageLayout.ptWidth
@@ -1363,16 +1369,16 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 	<< "\" orientation=\"" << static_cast<int>( pageLayout.orientation )
 	<< "\" columns=\"" << pageColumns.columns << "\" ptColumnspc=\"" << pageColumns.ptColumnSpacing
 	<< "\" mmColumnspc=\"" << pageColumns.mmColumnSpacing << "\" inchColumnspc=\"" << pageColumns.inchColumnSpacing
-	<< "\" hType=\"" << static_cast<int>( pageHeaderFooter.header ) << "\" fType=\"" 
+	<< "\" hType=\"" << static_cast<int>( pageHeaderFooter.header ) << "\" fType=\""
 	<< static_cast<int>( pageHeaderFooter.footer )
-	<< "\" ptHeadBody=\"" << pageHeaderFooter.ptHeaderBodySpacing << "\" ptFootBody=\"" 
+	<< "\" ptHeadBody=\"" << pageHeaderFooter.ptHeaderBodySpacing << "\" ptFootBody=\""
 	<< pageHeaderFooter.ptFooterBodySpacing
-	<< "\" mmHeadBody=\"" << pageHeaderFooter.mmHeaderBodySpacing << "\" mmFootBody=\"" 
+	<< "\" mmHeadBody=\"" << pageHeaderFooter.mmHeaderBodySpacing << "\" mmFootBody=\""
 	<< pageHeaderFooter.mmFooterBodySpacing
-	<< "\" inchHeadBody=\"" << pageHeaderFooter.inchHeaderBodySpacing << "\" inchFootBody=\"" 
+	<< "\" inchHeadBody=\"" << pageHeaderFooter.inchHeaderBodySpacing << "\" inchFootBody=\""
 	<< pageHeaderFooter.inchFooterBodySpacing
 	<< "\">" << endl;
-    out << indent << "<PAPERBORDERS mmLeft=\"" << pageLayout.mmLeft << "\" mmTop=\"" << pageLayout.mmTop 
+    out << indent << "<PAPERBORDERS mmLeft=\"" << pageLayout.mmLeft << "\" mmTop=\"" << pageLayout.mmTop
 	<< "\" mmRight=\""
 	<< pageLayout.mmRight << "\" mmBottom=\"" << pageLayout.mmBottom
 	<< "\" ptLeft=\"" << pageLayout.ptLeft << "\" ptTop=\"" << pageLayout.ptTop << "\" ptRight=\""
@@ -1424,7 +1430,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
         if ( !isStoredExtern() )
           pictureName.prepend( m_strURL + "/" );
 
-	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1() 
+	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1()
 	    << "\" name=\"" << pictureName.latin1()
 	    << "\"/>" << endl;
 	keys.append( it.currentKey() );
@@ -1453,7 +1459,7 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 
     QStringList keys, images;
     int i = 0;
-    
+
     for( ; it.current(); ++it ) {
 	if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
 	    continue;
@@ -1747,7 +1753,8 @@ KWParag* KWordDocument::findFirstParagOfPage( unsigned int _page, unsigned int _
     KWParag *p = dynamic_cast<KWTextFrameSet*>( frames.at( _frameset ) )->getFirstParag();
     while ( p )
     {
-	if ( p->getEndPage() == _page || p->getStartPage() == _page || ( p->getEndPage() > _page && p->getStartPage() < _page ) )
+	if ( p->getEndPage() == _page || p->getStartPage() == _page || ( p->getEndPage() > _page &&
+									 p->getStartPage() < _page ) )
 	    return p;
 	p = p->getNext();
     }
@@ -1766,9 +1773,11 @@ KWParag* KWordDocument::findFirstParagOfRect( unsigned int _ypos, unsigned int _
     KWParag *p = dynamic_cast<KWTextFrameSet*>( frames.at( _frameset ) )->getFirstParag();
     while ( p )
     {
-	if ( p->getPTYEnd() >= _ypos || p->getPTYStart() >= _ypos || ( p->getPTYEnd() >= _ypos && p->getPTYStart() <= _ypos )
+	if ( p->getPTYEnd() >= _ypos || p->getPTYStart() >= _ypos || ( p->getPTYEnd() >= _ypos &&
+								       p->getPTYStart() <= _ypos )
 	     || ( p->getPTYEnd() <= _ypos && p->getPTYStart() <= _ypos && p->getPTYStart() > p->getPTYEnd() &&
-		  ( p->getEndPage() == _page || p->getStartPage() == _page || ( p->getEndPage() > _page && p->getStartPage() < _page ) ) ) )
+		  ( p->getEndPage() == _page || p->getStartPage() == _page || ( p->getEndPage() > 
+										_page && p->getStartPage() < _page ) ) ) )
 	    return p;
 	p = p->getNext();
     }
@@ -1799,7 +1808,8 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 			  _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth +
 			  _fc.getParag()->getParagLayout()->getTopBorder().ptWidth );
 
-    if ( static_cast<int>( _fc.getPTY() + _fc.getLineHeight() ) > getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->bottom() )
+    if ( static_cast<int>( _fc.getPTY() + _fc.getLineHeight() ) > 
+	 getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->bottom() )
 	cr = QRegion( 0, 0, 0, 0 );
 
     QRegion visible( 0, 0, _w, _h );
@@ -3132,7 +3142,8 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 	kapp->processEvents();
 	QRect pageRect( 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
 	unsigned int minus = 0;
-	if ( i + 1 > static_cast<unsigned int>( printer->fromPage() ) ) printer->newPage();
+	if ( i + 1 > static_cast<unsigned int>( printer->fromPage() ) ) 
+	    printer->newPage();
 	printBorders( *painter, 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
 	for ( j = 0; j < frames.count(); j++ ) {
 	    if ( !getFrameSet( j )->isVisible() )
@@ -3279,7 +3290,8 @@ void KWordDocument::updateAllFrames()
 	    frame2 = _frames.at( j );
 	    if ( frame1->intersects( QRect( frame2->x(), frame2->y(), frame2->width(), frame2->height() ) ) ) {
 		QRect r = QRect( frame2->x(), frame2->y(), frame2->width(), frame2->height() );
-		if ( r.left() > frame1->left() || r.top() > frame1->top() || r.right() < frame1->right() || r.bottom() < frame1->bottom() ) {
+		if ( r.left() > frame1->left() || r.top() > frame1->top() || r.right() < frame1->right() ||
+		     r.bottom() < frame1->bottom() ) {
 		    if ( r.left() < frame1->left() ) r.setLeft( frame1->left() );
 		    if ( r.top() < frame1->top() ) r.setTop( frame1->top() );
 		    if ( r.right() > frame1->right() ) r.setRight( frame1->right() );
@@ -3698,4 +3710,10 @@ KWSerialLetterDataBase *KWordDocument::getSerialLetterDataBase() const
 int KWordDocument::getSerialLetterRecord() const
 {
     return slRecordNum;
+}
+
+/*================================================================*/
+void KWordDocument::setSerialLetterRecord( int r )
+{
+    slRecordNum = r;
 }

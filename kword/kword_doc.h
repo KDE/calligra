@@ -370,7 +370,8 @@ public:
 
     KWSerialLetterDataBase *getSerialLetterDataBase() const;
     int getSerialLetterRecord() const;
-
+    void setSerialLetterRecord( int r );
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -456,7 +457,7 @@ protected:
     QMap< QString, QString > varValues;
     KWSerialLetterDataBase *slDataBase;
     int slRecordNum;
-    
+
 };
 
 #endif
