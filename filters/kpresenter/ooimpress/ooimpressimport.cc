@@ -306,9 +306,9 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         // get multiplied with every new slide.
 
         if (properties.attribute("style:print-orientation")=="portrait")
-            paperElement.setAttribute("orientation", 1); // yes, it's swapped ;)
-        else if (properties.attribute("style:print-orientation")=="landscape")
             paperElement.setAttribute("orientation", 0);
+        else if (properties.attribute("style:print-orientation")=="landscape")
+            paperElement.setAttribute("orientation", 1);
 
         pageHeight = properties.attribute( "fo:page-height" ).remove( "cm" ).toDouble();
 
