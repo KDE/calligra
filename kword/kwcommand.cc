@@ -504,8 +504,17 @@ void KWFrameResizeCommand::execute()
 
     KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
     if (table) {
-        table->recalcCols();
-        table->recalcRows();
+        KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->getFrameSet());
+        if(cell)
+        {
+            table->recalcCols(cell->m_col,cell->m_row);
+            table->recalcRows(cell->m_col,cell->m_row);
+        }
+        else
+        {
+           table->recalcCols();
+           table->recalcRows();
+        }
         table->updateTempHeaders();
         table->refreshSelectedCell();
         //repaintTableHeaders( table );
@@ -527,8 +536,17 @@ void KWFrameResizeCommand::unexecute()
     frame->setCoords(m_FrameResize.sizeOfBegin.left(),m_FrameResize.sizeOfBegin.top(),m_FrameResize.sizeOfBegin.right(),m_FrameResize.sizeOfBegin.bottom());
     KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
     if (table) {
-        table->recalcCols();
-        table->recalcRows();
+        KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->getFrameSet());
+        if(cell)
+        {
+            table->recalcCols(cell->m_col,cell->m_row);
+            table->recalcRows(cell->m_col,cell->m_row);
+        }
+        else
+        {
+           table->recalcCols();
+           table->recalcRows();
+        }
         table->updateTempHeaders();
         table->refreshSelectedCell();
         //repaintTableHeaders( table );
