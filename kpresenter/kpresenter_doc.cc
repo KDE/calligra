@@ -1821,6 +1821,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
     //    m_pageList.at( i )->updateBackgroundSize();
 
     repaint( false );
+    layout();
     // don't setModified(true) here, since this is called on startup
 }
 
@@ -1936,6 +1937,14 @@ void KPresenterDoc::layout(KPObject *kpobject)
         obj->layout();
 }
 
+void KPresenterDoc::layout()
+{
+    QPtrListIterator<KoView> it( views() );
+    for( ; it.current(); ++it ) {
+	KPrCanvas* canvas = ((KPresenterView*)it.current())->getCanvas();
+	canvas->layout();
+    }
+}
 
 /*===================== repaint =================================*/
 void KPresenterDoc::repaint( KPObject *kpobject )
@@ -2615,7 +2624,10 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
     {
         QPtrListIterator<KoView> it( views() );
         for (; it.current(); ++it )
+        {
             static_cast<KPresenterView *>( it.current() )->getCanvas()->update();
+            static_cast<KPresenterView *>( it.current() )->getCanvas()->layout();
+        }
     }
 }
 

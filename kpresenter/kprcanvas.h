@@ -291,7 +291,7 @@ public:
     int getGYFactor( int _g )const;
     KCommand *setProtectContent( bool b );
     void closeObject(bool _close);
-
+    void layout();
 public slots:
     void exitEditMode();
 

@@ -7582,3 +7582,17 @@ void KPrCanvas::closeObject(bool /*close*/)
     macro->execute();
     m_view->kPresenterDoc()->addCommand(macro);
 }
+
+void KPrCanvas::layout()
+{
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->getType() == OT_TEXT )
+            m_view->kPresenterDoc()->layout( it.current());
+    }
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->getType() == OT_TEXT )
+            m_view->kPresenterDoc()->layout( it.current());
+    }
+}

@@ -402,6 +402,7 @@ public:
     void updateObjectStatusBarItem();
     void updateObjectSelected();
     void layout(KPObject *kpobject);
+    void layout();
 
 public slots:
     void movePage( int from, int to );
