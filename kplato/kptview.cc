@@ -678,7 +678,7 @@ void KPTView::slotAboutToShow(QWidget *widget) {
 	{
         //kdDebug()<<k_funcinfo<<"draw gantt"<<endl;
 	    //m_ganttview->hide();
-    	m_ganttview->draw(getPart()->getProject());
+        m_ganttview->drawChanges(getProject());
 	    m_ganttview->show();
 	}
 	else if (widget == m_pertview)
