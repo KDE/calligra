@@ -1187,7 +1187,8 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     actionFormatItalic->setChecked( currentFormat.font().italic() );
     actionFormatUnderline->setChecked( currentFormat.font().underline());
     actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
-
+    QColor col=currentFormat.textBackgroundColor();
+    actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
     actionFormatColor->setCurrentColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
@@ -3432,7 +3433,6 @@ void KWView::frameSelectedChanged()
             }
         }
     }
-    //actionBackgroundColor->setEnabled( frameDifferentOfPart );
     if ( frameDifferentOfPart ) {
         KWFrame *frame = m_doc->getFirstSelectedFrame();
 
