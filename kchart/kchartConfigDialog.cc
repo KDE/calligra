@@ -187,7 +187,6 @@ void KChartConfigDialog::apply()
         bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
         leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
         rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
-
         _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
         _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
         _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparams );

@@ -327,3 +327,13 @@ bool KChartParamsIface::polarRotateCircularLabels() const
 {
     return params->polarRotateCircularLabels();
 }
+
+QSize KChartParamsIface::polarMarkerSize() const
+{
+    return params->polarMarkerSize();
+}
+
+void KChartParamsIface::setPolarMarkerSize( QSize size  )
+{
+    params->setPolarMarkerSize(size);
+}

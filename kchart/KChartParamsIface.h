@@ -92,6 +92,8 @@ k_dcop:
     virtual int polarZeroDegreePos() const;
     virtual void setPolarRotateCircularLabels( bool rotateCircularLabels );
     virtual bool polarRotateCircularLabels() const;
+    virtual QSize polarMarkerSize() const;
+    virtual void setPolarMarkerSize( QSize size  );
 
     //legend
     virtual void hideLegend();
