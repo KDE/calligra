@@ -1236,8 +1236,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         case MT_MOVE: {
             if ( firstX != mx || firstY != my ) {
                 KMacroCommand *macro=0L;
-                int x=(mx - firstX);
-                int y=(my - firstY);
+
+                int x=(QMAX( 0, QMIN(mx,activePage()->getZoomPageRect().width())) - firstX);
+                int y=(QMAX( 0, QMIN(my,activePage()->getZoomPageRect().height())) - firstY);
                 KCommand *cmd=m_activePage->moveObject(m_view,x,y);
                 if(cmd)
                 {
