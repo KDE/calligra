@@ -57,9 +57,9 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 
 	m_stack = new QWidgetStack(this);
 
-        layout->addWidget(m_tabBar,     0,      0);
-        layout->addWidget(m_stack,      0,      1);
-        layout->setColStretch(1, 1);
+	layout->addWidget(m_tabBar,     0,      0);
+	layout->addWidget(m_stack,      0,      1);
+	layout->setColStretch(1, 1);
 //	box->show();
 	m_stack->show();
 	m_tabBar->show();
@@ -117,6 +117,11 @@ void
 KexiTabBrowser::generateView()
 {
 	kdDebug() << "KexiTabBrowser::generateView()" << endl;
+	m_db->clear();
+	m_tables->clear();
+	m_queries->clear();
+	m_forms->clear();
+	m_reports->clear();
 	
 	KexiBrowserItem* database = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, m_db, i18n("Database"));
 	m_dbTables = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, database, i18n("Tables"));

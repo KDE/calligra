@@ -58,6 +58,7 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, co
 	m_windowMode=winmode;
 	initActions();
 	dcop = 0;
+	m_browser = 0;
 	dcopObject(); // build it
 //	createGUI("kexiui.rc",false);
 	setXMLFile("kexiui.rc");
@@ -112,10 +113,6 @@ void KexiView::finalizeInit()
 			height());
 	}
 #endif
-
-	// Open file given as commandline argument
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
 }
 
 void KexiView::initMainDock()
