@@ -7,6 +7,7 @@ koffice (1:1.2.91-1) unstable; urgency=low
   * Moved import/export filters into app-specific packages where possible.
   * Build-Depends on new package libwv2-dev.
   * Build-Conflicts with python2.3-dev to ensure we build against python2.2.
+  * Debian menu pixmaps no longer use a restricted colour map.
   * Karbon no longer crashes with shift/ctrl dragging (closes: #189056).
   * Karbon fixed on big-endian machines (closes: #189735).
   * Kivio group/ungroup no longer loses connectedness (closes: #110009).
