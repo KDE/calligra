@@ -542,7 +542,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		double fx = cx; // TODO : fx, fy should be able to be different
 		double fy = cy;
 		double r = sqrt( pow( gradient.vector().x() - gradient.origin().x(), 2 ) +
-						 pow( gradient.vector().y() - gradient.origin().y(), 2 ) ) / sqrt( 2 );
+						 pow( gradient.vector().y() - gradient.origin().y(), 2 ) );
 		r *= m_zoomFactor;
 
 		radial->fx = (fx - cx) / r;
