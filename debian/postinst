@@ -1,4 +1,7 @@
-#!/bin/sh
+#! /bin/sh
+ldconfig
 
 #DEBHELPER#
 #KDEHELPER#
+
+exit 0

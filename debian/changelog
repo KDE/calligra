@@ -1,3 +1,11 @@
+koffice-cvs (2.0-19990620-1) experimental; urgency=low
+
+  * Seperated out the development libraries into their own package
+    to comply with Debian packaging
+  * more build cleanup.  
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 20 Jun 1999 08:30:29 -0400
+
 koffice-cvs (2.0-19990612-1) experimental; urgency=low
 
   * Initial release
