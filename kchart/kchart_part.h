@@ -25,7 +25,7 @@ class KChartPart : public KoChart::Part
 
   QStringList *axisLabelTextLong() { return &longLabels; }
   QStringList *axisLabelTextShort() { return &shortLabels; }
-  
+
   bool showWizard();
   void initLabelAndLegend();
   void loadConfig(KConfig *conf);
@@ -36,6 +36,8 @@ class KChartPart : public KoChart::Part
   // save and load
   virtual QDomDocument saveXML();
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles );
+
   bool m_bLoading; // Kalle: get rid of that one :)
   bool isLoading() {
     return m_bLoading;

@@ -129,7 +129,7 @@ void KChartPart::setData( const KoChart::Data& data )
 
     //Does the top/left cell contain a srting?
     bool isStringTopLeft = data.cell( 0, 0 ).isString();
-    
+
     //Does the first row (without first cell) contain only strings
     bool isStringFirstRow = TRUE;
     for( uint col = 1; isStringFirstRow && col < data.cols(); col++ )
@@ -154,7 +154,7 @@ void KChartPart::setData( const KoChart::Data& data )
     uint rowStart = 0;
     bool hasColHeader = FALSE;
     bool hasRowHeader = FALSE;
-    
+
     //Let's check if we have a full axis label text column
     if( isStringFirstCol && isStringTopLeft || isStringFirstCol && isStringFirstRow )
     {
@@ -179,7 +179,7 @@ void KChartPart::setData( const KoChart::Data& data )
     }
     else
         _params->setLegendSource( KDChartParams::LegendAutomatic );
-    
+
     if( hasRowHeader )
     {
         KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
@@ -198,7 +198,7 @@ void KChartPart::setData( const KoChart::Data& data )
         longLabels.clear();
         shortLabels.clear();
     }
-    
+
     if( hasColHeader || hasRowHeader )
     {
         KoChart::Data matrix( data.rows() - rowStart, data.cols() - colStart );
@@ -213,7 +213,7 @@ void KChartPart::setData( const KoChart::Data& data )
     }
     else
         currentData = data;
-    
+
     //  initLabelAndLegend();
     emit docChanged();
 }
@@ -479,6 +479,11 @@ QDomDocument KChartPart::saveXML()
     return doc;
 }
 
+bool KChartPart::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+{
+    //todo
+    return true;
+}
 
 bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
