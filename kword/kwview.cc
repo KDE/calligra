@@ -204,6 +204,8 @@ void KWView::initGui()
     for ( ; it.current() ; ++it )
         static_cast<QLabel *>(it.current())->show();
     delete l;
+    statusBar()->show();
+
     updatePageInfo();
 }
 
@@ -2492,7 +2494,7 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     }
     else
     {
-        //remove item when you desactivate gui
+        //remove item when GUI is deactivated
         statusBar()->removeItem(statusPage);
     }
     KoView::guiActivateEvent( ev );
