@@ -306,7 +306,12 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
 
         if (flag)
         {
-            if (lineHeight==1.5)
+            if ( lineHeight == 1.0 )
+            {
+                element.setAttribute( "value", "single" );
+                element.setAttribute( "type", "single" );
+            }
+            else if (lineHeight==1.5)
             {
                 element.setAttribute( "value", "oneandhalf" );
                 element.setAttribute( "type", "oneandhalf" );
