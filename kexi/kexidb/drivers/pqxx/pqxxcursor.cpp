@@ -11,11 +11,17 @@
 //
 #include "pqxxcursor.h"
 #include "pqxxconnection.h"
+
 #include <kexidb/error.h>
+#include <kexidb/global.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 
 using namespace KexiDB;
+
+
+unsigned int pqxxSqlCursor_trans_num=0; //!< debug helper
 
 //==================================================================================
 //Constructor based on query statement
@@ -60,19 +66,23 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 		setError(ERR_NO_CONNECTION,i18n("No connection for cursor open operation specified"));
 		return false;
 	}
-
+		
+	QCString cur_name;
 	//Set up a transaction
 	try
 	{
 		//m_tran = new pqxx::work(*my_conn, "cursor_open");
-		m_tran = new pqxx::nontransaction(*my_conn, "cursor_transaction");
+		cur_name.sprintf("cursor_transaction%d", pqxxSqlCursor_trans_num++);
+		
+		m_tran = new pqxx::nontransaction(*my_conn, (const char*)cur_name);
 
 		m_res = new pqxx::result(m_tran->exec(statement.utf8()));
 		m_tran->commit();
+		KexiDBDrvDbg << "pqxxSqlCursor::drv_open: trans. commited: " << cur_name <<endl;
 
 		//We should now be placed before the first row, if any
 		m_fieldCount = m_res->columns();
-		m_opened=true;
+//js		m_opened=true;
 		m_afterLast=false;
 		m_records_in_buf = m_res->size();
 		m_buffering_completed = true;
@@ -80,14 +90,16 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 	}
 	catch (const std::exception &e)
     	{
-		setError(ERR_DB_SPECIFIC,e.what());
-		KexiDBDrvDbg << "pqxxSqlCursor::drv_open:exception - " << e.what() << endl;
-        	return false;
+			setError(ERR_DB_SPECIFIC,e.what());
+			KexiDBDrvDbg << "pqxxSqlCursor::drv_open:exception - " << e.what() << endl;
     	}
 	catch(...)
     	{
     		setError();
     	}
+	delete m_tran;
+	m_tran = 0;
+	KexiDBDrvDbg << "pqxxSqlCursor::drv_open: trans. rolled back! - " << cur_name <<endl;
 	return false;
 }
 
@@ -95,7 +107,7 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 //Delete objects
 bool pqxxSqlCursor::drv_close()
 {
-	m_opened=false;
+//js	m_opened=false;
 	if(m_res != 0)
 		delete m_res;
 	if(m_tran != 0)
