@@ -47,9 +47,13 @@ static KCmdLineOptions options[] =
   { ":", I18N_NOOP("Options related to entire projects:"), 0 },
   { "createdb", I18N_NOOP(
 	"Create a new, blank project using specified\n"
-	"database driver and database name.\n"
+	"database driver and database name\n"
+	"and exit immediately.\n"
 	"You will be asked for confirmation\n"
 	"if overwriting is needed."), 0 },
+  { "create-opendb", I18N_NOOP(
+	"Like --createdb, but also open newly\n"
+	"created database.\n"), 0 },
   { "dropdb", I18N_NOOP(
 	"Drop (remove) a project using specified\n"
 	"database driver and database name.\n"
@@ -97,11 +101,11 @@ static KCmdLineOptions options[] =
 	"for connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
 	"is provided."), 0 },
-  { "password <password>", I18N_NOOP(
+/*  { "password <password>", I18N_NOOP(
 	"User password to be used\n"
 	"for connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
-	"is provided."), 0 },
+	"is provided."), 0 },*/
   { "h", 0, 0 },
   { "host <name>", I18N_NOOP(
 	"Server (host) name to be used\n"
