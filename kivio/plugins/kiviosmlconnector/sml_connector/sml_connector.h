@@ -42,9 +42,10 @@ class KivioSMLConnector : public Kivio1DStencil
 {
 private:
 	bool loadPath(const QString &file);
-    void drawOpenPath( KivioShape *, KivioIntraStencilData * );
-
+    //void drawOpenPath( KivioShape *, KivioIntraStencilData * );
     KivioShape *m_shape;
+    QPtrList<KivioConnectorPoint> m_PointList;
+
     QString m_name;
 protected:
 
