@@ -27,7 +27,7 @@
 #include <qstringlist.h>
 #include <qdict.h>
 #include <qvaluelist.h>
-#define private protected // for m_open access for the HACK
+#define private public // need protected for m_open access for the HACK, and public for setting KArchiveFile::m_size
 #include <karchive.h>
 #undef private
 #include <karchive.h>
@@ -68,7 +68,13 @@ public:
      */
     QString fileName() { return m_filename; }
 
-    //void setOrigFileName( const QCString & fileName );
+    enum Compression { NoCompression = 0, DeflateCompression = 1 };
+    /**
+     * Call this before writeFile or prepareWriting, to define whether the next
+     * files to be written should be compressed or not.
+     */
+    void setCompression( Compression c );
+    Compression compression() const;
 
     /**
      * If an archive is opened for writing then you can add a new file
@@ -80,6 +86,7 @@ public:
 
     /**
      * Alternative method: call prepareWriting, writeData in small chunks, doneWriting
+     * @param size unused
      */
     virtual bool prepareWriting( const QString& name, const QString& user, const QString& group, uint size );
     bool writeData( const char* data, uint size );

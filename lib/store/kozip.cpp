@@ -39,11 +39,12 @@ class KoZip::KoZipPrivate
 {
 public:
     KoZipPrivate()
-        : m_crc( 0 ), m_currentFile( 0L ), m_currentDev( 0L ) {}
+        : m_crc( 0 ), m_currentFile( 0L ), m_currentDev( 0L ), m_compression( 8 ) {}
     unsigned long m_crc;
     KoZipFileEntry* m_currentFile; // file currently being written
     QIODevice* m_currentDev; // filterdev used to write to the above file
     QPtrList<KoZipFileEntry> m_fileList; // flat list of all files, for the index (saves a recursive method ;)
+    int m_compression;
 };
 
 KoZip::KoZip( const QString& filename )
@@ -277,7 +278,7 @@ bool KoZip::closeArchiveHack()
     //write all central dir file entries
 
     // to be written at the end of the file...
-    char buffer[ 22 ]; // first used for 8, then for 22 at the end
+    char buffer[ 22 ]; // first used for 12, then for 22 at the end
     uLong crc = crc32(0L, Z_NULL, 0);
 
     Q_LONG centraldiroffset = device()->at();
@@ -293,18 +294,24 @@ bool KoZip::closeArchiveHack()
 //	    << " encoding: "<< (*it).encoding() << endl;
 
         uLong mycrc = it.current()->crc32();
-	buffer[ 0 ] = (uchar)(mycrc % 256); //crc checksum
+	buffer[ 0 ] = (uchar)(mycrc % 256); //crc checksum, at headerStart+14
         buffer[ 1 ] = (uchar)((mycrc / 256) % 256);
 	buffer[ 2 ] = (uchar)((mycrc / (256*256)) % 256);
         buffer[ 3 ] = (uchar)((mycrc / (256*256*256))% 256);
 
         int mysize1 = it.current()->compressedSize();
-	buffer[ 4 ] = (uchar)(mysize1 % 256); //compressed file size
+	buffer[ 4 ] = (uchar)(mysize1 % 256); //compressed file size, at headerStart+18
         buffer[ 5 ] = (uchar)((mysize1 / 256) % 256);
 	buffer[ 6 ] = (uchar)((mysize1 / (256*256)) % 256);
         buffer[ 7 ] = (uchar)((mysize1 / (256*256*256))% 256);
 
-	device()->writeBlock( buffer, 8 );
+        int myusize = it.current()->size();
+	buffer[ 8 ] = (uchar)(myusize % 256); //uncompressed file size, at headerStart+22
+        buffer[ 9 ] = (uchar)((myusize / 256) % 256);
+	buffer[ 10 ] = (uchar)((myusize / (256*256)) % 256);
+        buffer[ 11 ] = (uchar)((myusize / (256*256*256))% 256);
+
+	device()->writeBlock( buffer, 12 );
     }
     device()->at( atbackup);
 
@@ -474,8 +481,7 @@ bool KoZip::writeFile( const QString& name, const QString& user, const QString& 
     return true;
 }
 
-bool KoZip::prepareWriting( const QString& name, const QString& user,
-						const QString& group, uint size )
+bool KoZip::prepareWriting( const QString& name, const QString& user, const QString& group, uint /*size*/ )
 {
     kdDebug(7040) << "prepareWriting reached." << endl;
     if ( !isOpened() )
@@ -501,16 +507,10 @@ bool KoZip::prepareWriting( const QString& name, const QString& user,
         parentDir = findOrCreate( dir );
     }
 
-    // ## TODO pass a new arg, "int encoding", and define an enum for the values
-    // openoffice meta.xml is not compressed
-    // to allow indexing of the stored file,
-    // so we will do it too.
-    int encoding = ( name == "meta.xml") ? 0 /*stored*/ : 8 /*deflated*/;
-
     // construct a KoZipFileEntry and add it to list
     KoZipFileEntry * e = new KoZipFileEntry( this, fileName, 0777, time( 0 ), user, group, QString::null,
                                            name, device()->at() + 30 + name.length(), // start
-                                           size, encoding, 0 /*csize unknown yet*/ );
+                                           0 /*size unknown yet*/, d->m_compression, 0 /*csize unknown yet*/ );
     e->setHeaderStart( device()->at() );
     kdDebug(7040) << "wrote file start: " << e->position() << " name: " << name << endl;
     parentDir->addEntry( e );
@@ -553,11 +553,10 @@ bool KoZip::prepareWriting( const QString& name, const QString& user,
     buffer[ 20 ] = 'I';
     buffer[ 21 ] = 'Z';
 
-    int mysize = size;
-    buffer[ 22 ] = (uchar)(mysize % 256) ; //uncompressed file size
-    buffer[ 23 ] = (uchar)((mysize / 256) % 256);
-    buffer[ 24 ] = (uchar)((mysize / (256*256)) % 256);
-    buffer[ 25 ] = (uchar)((mysize / (256*256*256)) % 256);
+    buffer[ 22 ] = 'U'; //uncompressed file size
+    buffer[ 23 ] = 'S';
+    buffer[ 24 ] = 'I';
+    buffer[ 25 ] = 'Z';
 
     buffer[ 26 ] = (uchar)name.length(); //filename length
     buffer[ 27 ] = (uchar)((name.length() / 256) % 256);
@@ -579,7 +578,7 @@ bool KoZip::prepareWriting( const QString& name, const QString& user,
 
     // Prepare device for writing the data
     // Either device() if no compression, or a KoFilterDev to compress
-    if ( encoding == 0 ) {
+    if ( d->m_compression == 0 ) {
         d->m_currentDev = device();
         return true;
     }
@@ -602,7 +601,7 @@ void KoZip::close() { // HACK for misplaced closeArchive() call in KDE-3.0s KArc
     m_open = false;
 }
 
-bool KoZip::doneWriting( uint /*size*/ )
+bool KoZip::doneWriting( uint size )
 {
     if ( d->m_currentFile->encoding() == 8 ) {
         // Finish
@@ -616,6 +615,7 @@ bool KoZip::doneWriting( uint /*size*/ )
     kdDebug(7040) << "donewriting reached." << endl;
     kdDebug(7040) << "filename: " << d->m_currentFile->path() << endl;
     kdDebug(7040) << "getpos (at): " << device()->at() << endl;
+    d->m_currentFile->m_size = size;
     int csize = device()->at() -
         d->m_currentFile->headerStart() - 30 -
 	d->m_currentFile->path().length();
@@ -634,144 +634,6 @@ bool KoZip::doneWriting( uint /*size*/ )
 void KoZip::virtual_hook( int id, void* data )
 { KArchive::virtual_hook( id, data ); }
 
-#if 0
-Q_LONG KoZip::readBlock(char * c, long unsigned int i)
-{
-    int cmethod=0;
-    Q_LONG csize=0;
-    QIODevice* dev = device();
-    int pos=dev->at();
-	kdDebug(7040) << "readblock. pos: " << pos <<" size: " << i << endl;
-    KoZipFileList::iterator it;
-    for (it= list.begin(); it !=list.end(); ++it )
-    {
-	kdDebug(7040) << "kzipfilter123: offset: " << (*it).start()
-	    << " encoding: "<< (*it).encoding() << endl;
-	if (pos == (*it).start())
-	{
-	    cmethod=(*it).encoding();
-	    csize=(*it).csize();
-	    kdDebug(7040) << "cmethod: " << cmethod << endl;
-	    kdDebug(7040) << "csize: " << csize << endl;
-
-	}
-    }
-    if (cmethod == 8) //zip deflated
-    {
-        // Inflate contents!
-        QByteArray * dataBuffer = new QByteArray( csize );
-	dev->readBlock( dataBuffer->data(), csize);
-        z_stream d_stream;      /* decompression stream */
-
-        d_stream.zalloc = ( alloc_func ) 0;
-        d_stream.zfree = ( free_func ) 0;
-        d_stream.opaque = ( voidpf ) 0;
-
-        d_stream.next_in = ( unsigned char * ) dataBuffer->data();
-        d_stream.avail_in = csize;
-
-        inflateInit2( &d_stream, -MAX_WBITS );
-
-        int err;
-        for ( ;; ) {
-            d_stream.next_out =
-                reinterpret_cast <
-                unsigned char *>(c);
-            d_stream.avail_out = i ;
-            err = inflate( &d_stream, Z_FINISH );
-            if ( err == Z_STREAM_END )
-                break;
-            if ( err < 0 ) { // some error
-                kdWarning(7040) << "readBlock: zlib inflate returned error " << err << endl;
-                break;
-            }
-        }
-
-        delete dataBuffer;
-	return i;
-    }
-    else if (cmethod == 0)
-        return dev->readBlock(c, i);
-    else
-    {
-	kdError() << "This zip file contains files compressed with method "
-	    << cmethod <<", this method is currently not supported by KoZip,"
-	    <<" please use a command-line tool to handle this file." << endl;
-	return 0;
-    }
-}
-
-bool KoZip::writeData(const char * c, unsigned int i)
-{
-    Q_ASSERT( d->m_currentFile );
-    if (!d->m_currentFile)
-        return false;
-
-//    kdDebug(7040) << "filter:writeblock: m_pos before: " << m_pos << endl;
-
-    QIODevice* dev = device();
-    int cmethod = d->m_currentFile->encoding();
-    int pos = dev->at();
-    kdDebug(7040) << "writeblock. method: " << cmethod << " dev->at() : " << pos <<" size: " << i << endl;
-    // crc to be calculated over uncompressed stuff...
-    // and they didn't mention it in their docs...
-    d->m_crc = crc32(d->m_crc, (const Bytef *) c , i);
-
-    if (cmethod == 8) //zip deflate
-    {
-	    kdDebug(7040) << "compression part reached... " << endl;
-	    kdDebug(7040) << "crc : " << QString::number( d->m_crc , 16) << endl;
-        // Deflate contents!
-        QByteArray * dataBuffer = new QByteArray( i + 100 );
-        z_stream d_stream;      /* decompression stream */
-//	    kdDebug(7040) << "compression part 1 " << endl;
-
-        d_stream.zalloc = ( alloc_func ) 0;
-        d_stream.zfree = ( free_func ) 0;
-        d_stream.opaque = ( voidpf ) 0;
-//	    kdDebug(7040) << "compression part 2 " << endl;
-
-        d_stream.next_in = (unsigned char *)c;
-        d_stream.avail_in = i;
-//	    kdDebug(7040) << "compression part 3 " << endl;
-        int result = deflateInit2(&d_stream, Z_DEFAULT_COMPRESSION,
-		    Z_DEFLATED, -MAX_WBITS, 8, Z_DEFAULT_STRATEGY); // same here
-//	    kdDebug(7040) << "compression part 4 " << endl;
-
-        int err;
-        d_stream.next_out = (unsigned char *)dataBuffer->data();
-//	    kdDebug(7040) << "compression part 5 " << endl;
-
-        d_stream.avail_out = i + 100 ;
-        err = deflate( &d_stream, Z_FINISH );
-        if ( err == Z_STREAM_END )
-            kdDebug(7040) << "Z_STREAM_END " << endl;
-        else if ( err < 0 )
-            kdWarning(7040) << "writeBlock: zlib deflate returned error " << err << endl;
-
-        kdDebug(7040) << "compression part 6: total_out: " <<
-            d_stream.total_out << endl;
-        kdDebug(7040) << "crc after : " << QString::number( d->m_crc , 16) << endl;
-        Q_LONG l = dev->writeBlock((const char *)dataBuffer->data(),
-                                   d_stream.total_out);
-        kdDebug(7040) << "compressed written: " << l << endl;
-	delete dataBuffer;
-	return true;
-    }
-    else if (cmethod == 0)
-    {
-        Q_LONG l;
-//	    kdDebug(7040) << "crc uncompressed : " << QString::number( d->m_crc , 16) << endl;
-        l=dev->writeBlock(c, i);
-//        kdDebug(7040) << "uncompressed written: " << l << endl;
-//	    kdDebug(7040) << "crc uncompressed after: " << QString::number( d->m_crc , 16) << endl;
-        return true;
-
-    }
-    return false;
-}
-#endif
-
 bool KoZip::writeData(const char * c, unsigned int i)
 {
     Q_ASSERT( d->m_currentFile );
@@ -783,11 +645,23 @@ bool KoZip::writeData(const char * c, unsigned int i)
     // and they didn't mention it in their docs...
     d->m_crc = crc32(d->m_crc, (const Bytef *) c , i);
 
-    int written = d->m_currentDev->writeBlock( c, i );
+    Q_LONG written = d->m_currentDev->writeBlock( c, i );
     kdDebug(7040) << "KoZip::writeData wrote " << i << " bytes." << endl;
-    Q_ASSERT( written == i );
-    return written == i;
+    Q_ASSERT( written == (Q_LONG)i );
+    return written == (Q_LONG)i;
 }
+
+void KoZip::setCompression( Compression c )
+{ 
+    d->m_compression = ( c == NoCompression ) ? 0 : 8;
+}
+
+KoZip::Compression KoZip::compression() const
+{
+   return ( d->m_compression == 8 ) ? DeflateCompression : NoCompression;
+}
+
+///////////////
 
 QByteArray KoZipFileEntry::data() const
 {

@@ -114,7 +114,7 @@ public:
    * Write data into the currently opened file. You can also use the streams
    * for this.
    */
-  Q_LONG write( const char* _data, Q_ULONG _len );
+  virtual Q_LONG write( const char* _data, Q_ULONG _len );
 
   /**
    * @return the size of the currently opened file, -1 on error.

@@ -63,16 +63,17 @@ bool KoZipStore::init( Mode _mode )
     return true;
 }
 
-// When reading, m_stream comes directly from KArchiveFile::device()
-// When writing, m_stream buffers the data into m_byteArray
-
-bool KoZipStore::openWrite( const QString& /*name*/ )
+bool KoZipStore::openWrite( const QString& name )
 {
+#if 0
     // Prepare memory buffer for writing
     m_byteArray.resize( 0 );
     m_stream = new QBuffer( m_byteArray );
     m_stream->open( IO_WriteOnly );
     return true;
+#endif
+    m_stream = 0L; // Don't use!
+    return m_pZip->prepareWriting( name, "", "" /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0 );
 }
 
 bool KoZipStore::openRead( const QString& name )
@@ -91,23 +92,42 @@ bool KoZipStore::openRead( const QString& name )
         return false;
     }
     KArchiveFile * f = (KArchiveFile *) entry;
-    m_byteArray.resize( 0 );
     delete m_stream;
     m_stream = f->device();
     m_iSize = f->size();
     return true;
 }
 
+Q_LONG KoZipStore::write( const char* _data, Q_ULONG _len )
+{
+  if ( _len == 0L ) return 0;
+
+  if ( !m_bIsOpen )
+  {
+    kdError(s_area) << "KoStore: You must open before writing" << endl;
+    return 0L;
+  }
+  if ( m_mode != Write  )
+  {
+    kdError(s_area) << "KoStore: Can not write to store that is opened for reading" << endl;
+    return 0L;
+  }
+
+  m_iSize += _len;
+  return m_pZip->writeData( _data, _len );
+}
+
 bool KoZipStore::closeWrite()
 {
-    // write the whole bytearray at once into the zip file
-
-    kdDebug(s_area) << "Writing file " << m_sName << " into ZIP archive. size "
+    kdDebug(s_area) << "Wrote file " << m_sName << " into ZIP archive. size "
                     << m_iSize << endl;
+    return m_pZip->doneWriting( m_iSize );
+#if 0
     if ( !m_pZip->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() ) )
         kdWarning( s_area ) << "Failed to write " << m_sName << endl;
     m_byteArray.resize( 0 ); // save memory
     return true;
+#endif
 }
 
 bool KoZipStore::enterRelativeDirectory( const QString& dirName )

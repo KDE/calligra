@@ -31,6 +31,8 @@ public:
     KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
     KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
     ~KoZipStore();
+
+    virtual Q_LONG write( const char* _data, Q_ULONG _len );
 protected:
     virtual bool init( Mode _mode );
     virtual bool openWrite( const QString& name );
@@ -49,7 +51,7 @@ protected:
     const KArchiveDirectory* m_currentDir;
 
     // Buffer used when writing
-    QByteArray m_byteArray;
+    //QByteArray m_byteArray;
 
 };
 
