@@ -1045,6 +1045,7 @@ void KSpreadView::deleteColumn()
   if ( !m_pTable )
     return;
   m_pTable->deleteColumn( m_pCanvas->markerColumn() );
+
 }
 
 void KSpreadView::deleteRow()
@@ -1769,6 +1770,7 @@ void KSpreadView::slotInsertColumn()
 void KSpreadView::slotRemoveColumn()
 {
     m_pTable->deleteColumn( m_pHBorderWidget->markerColumn() );
+
 }
 
 void KSpreadView::PopupMenuRow(const QPoint & _point )
@@ -1813,6 +1815,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_pPopupMenu->insertItem( "Copy", this, SLOT( slotCopy() ) );
     m_pPopupMenu->insertItem( "Cut", this, SLOT( slotCut() ) );
     m_pPopupMenu->insertItem( "Paste", this, SLOT( slotPaste() ) );
+    m_pPopupMenu->insertItem( "Special Paste", this, SLOT( slotSpecialPaste() ) );
     m_pPopupMenu->insertItem( "Delete", this, SLOT( slotDelete() ) );
     m_pPopupMenu->insertSeparator();
     m_pPopupMenu->insertItem( "Layout", this, SLOT( slotLayoutDlg() ) );
@@ -1911,6 +1914,13 @@ void KSpreadView::slotPaste()
   assert( m_pTable );
 
   m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+}
+
+void KSpreadView::slotSpecialPaste()
+{
+assert( m_pTable );
+KSpreadspecial *dlg=new KSpreadspecial(this,"Special Paste");
+dlg->show();
 }
 
 void KSpreadView::slotDelete()

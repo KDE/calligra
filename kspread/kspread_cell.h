@@ -99,7 +99,7 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
-    enum Special_paste { ALL,FORMULA,Format,Wborder};
+    enum Special_paste { ALL,FORMULA,Format,Wborder,Link,ALL_trans,FORMULA_trans,Format_trans,Wborder_trans,Link_trans};
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 

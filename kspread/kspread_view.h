@@ -381,6 +381,10 @@ protected slots:
     /**
      * Popup menu
      */
+     void slotSpecialPaste();
+    /**
+     * Popup menu
+     */
     void slotDelete();
     /**
      * Popup menu

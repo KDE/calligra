@@ -2197,6 +2197,9 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
   out << otag << "<CELL row=\"" << m_iRow - _y_offset
       << "\" column=\"" << m_iColumn - _x_offset << "\">" << endl;
 
+
+  //l
+  out << indent << "<START row=\"" << m_iRow <<"\" column=\""<<m_iColumn<<"\"" <<"\"/>" <<endl;
   out << indent << "<FORMAT align=\"" << (unsigned int)m_eAlign << '"';
 
   if ( m_bgColor != Qt::white )
@@ -2251,11 +2254,25 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   {
     if ( (*it).m_strName == "row" )
     {
-      m_iRow = atoi( (*it).m_strValue.c_str() ) + _yshift;
+    	if(sp==ALL || sp==Format || sp==Wborder || sp==Link || sp==FORMULA)
+    		{
+    		m_iRow = atoi( (*it).m_strValue.c_str() ) + _yshift;
+    		}
+    	else	
+    		{
+      		m_iColumn = atoi( (*it).m_strValue.c_str() ) + _xshift;
+      		}
     }
     else if ( (*it).m_strName == "column" )
     {
-      m_iColumn = atoi( (*it).m_strValue.c_str() ) + _xshift;
+       if(sp==ALL || sp==Format || sp==Wborder || sp==Link || sp==FORMULA)
+       		{
+       		m_iColumn = atoi( (*it).m_strValue.c_str() ) + _xshift;
+       		}
+       else
+       		{
+      		m_iRow= atoi( (*it).m_strValue.c_str() ) + _yshift;
+      		}
     }
     else
       cerr << "Unknown attrib 'CELL:" << (*it).m_strName << "'" << endl;
@@ -2278,8 +2295,12 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   string name;
   tstring text;
   string tmp;
-
+  int irow,icolumn;
+  bool b1,b2;
+  b1=false;
+  b2=false;
   bool res;
+
   // FORMAT, LEFTBORDER, TOPBORDER, FONT, PEN
   do
   {
@@ -2290,7 +2311,7 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
     {
       KOMLParser::parseTag( tag.c_str(), name, lst );
 
-      if ( name == "FORMAT" &&(sp==ALL || sp==Format || sp==Wborder))
+      if ( name == "FORMAT" &&(sp==ALL || sp==Format || sp==Wborder || sp==ALL_trans || sp==Format_trans || sp==Wborder_trans))
         {
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for( ; it != lst.end(); it++ )
@@ -2402,15 +2423,51 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	      cerr << "Unknown attrib FORMAT:'" << (*it).m_strName << "'" << endl;
 	  }
 	}
-	else if ( name == "PEN" &&(sp==ALL ||sp==Format || sp==Wborder))
+	else if ( name == "PEN" &&(sp==ALL ||sp==Format || sp==Wborder ||sp==ALL_trans || sp==Format_trans || sp==Wborder_trans))
         {
 	  setTextPen( tagToPen( lst ) );
 	}
-	else if ( name == "FONT" &&(sp==ALL ||sp==Format || sp==Wborder) )
+	else if ( name == "FONT" &&(sp==ALL ||sp==Format || sp==Wborder || sp==ALL_trans || sp==Format_trans || sp==Wborder_trans) )
         {
 	  setTextFont( tagToFont( lst ) );
 	}
-	else if ( name == "LEFTBORDER" &&(sp==ALL ||sp==Format))
+	else if ( name == "START" && (sp==Link || sp==Link_trans) )
+        {
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "row" )
+	    {
+	      irow = atoi( (*it).m_strValue.c_str() );
+	      b1=true;
+	    }
+	    else if ( (*it).m_strName == "column" )
+	    {
+	      icolumn = atoi( (*it).m_strValue.c_str() );
+	      b2=true;
+	    }
+	  }
+	  if(b1==true && b2==true)
+	  	{
+	  	char buffer[ 20 ];
+	    	char *p2 = buffer;
+	    	QString buf="";
+		if ( icolumn > 26 )
+			*p2++ = 'A' + ( icolumn / 26 ) - 1;
+	    	*p2++ = 'A' + ( icolumn % 26 ) - 1;
+	    	*p2 = 0;
+	  	buf+="=";
+	  	buf+="$";
+	  	buf+=buffer;
+	  	buf+="$";
+	  	sprintf(buffer,"%i",irow);
+	  	buf+=buffer;
+	  	setText(buf);
+	  	}
+	  else
+	  	cout <<"Err in START \n";
+	}
+	else if ( name == "LEFTBORDER" &&(sp==ALL ||sp==Format || sp==ALL_trans ||sp==Format_trans))
         {
 	  // PEN
 	  while( parser.open( 0L, tag ) )
@@ -2431,7 +2488,7 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	    }
 	  }
 	}
-	else if ( name == "TOPBORDER" &&(sp==ALL ||sp==Format))
+	else if ( name == "TOPBORDER" &&(sp==ALL ||sp==Format ||sp==ALL_trans ||sp==Format_trans))
 	{
 	  // PEN
 	  while( parser.open( 0L, tag ) )
@@ -2469,7 +2526,7 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   // HACK: Once we have Unicode in KOML we dont need that
   t = QString::fromUtf8( text.c_str() );
   t = t.stripWhiteSpace();
-  if(sp==ALL || sp==Wborder ||sp==FORMULA)
+  if(sp==ALL || sp==Wborder ||sp==FORMULA || sp==ALL_trans || sp==Wborder_trans ||sp==FORMULA_trans)
   {
   if ( t[0] == '=' )
     t = decodeFormular( t, m_iColumn, m_iRow );

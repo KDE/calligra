@@ -23,9 +23,8 @@
 
 #include <qdialog.h>
 #include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qrect.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 
 
 class KSpreadView;
@@ -52,6 +51,8 @@ protected:
   QRadioButton *rb2;
   QRadioButton *rb3;
   QRadioButton *rb4;
+  QRadioButton *rb5;
+  QCheckBox *cb;
 };
 
 #endif

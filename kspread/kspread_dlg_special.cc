@@ -23,15 +23,12 @@
 #include "kspread_view.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
-#include "kspread_util.h"
-#include "kspread_tabbar.h"
 #include "kspread_table.h"
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
-
 
 KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
 	: QDialog( 0L, name )
@@ -47,12 +44,15 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
   grp->setRadioButtonExclusive( TRUE );
   grp->layout();
   lay1->addWidget(grp);
-  rb1 = new QRadioButton( "All", grp );
-  rb2 = new QRadioButton( "Formula", grp );
-  rb3 = new QRadioButton( "Format", grp );
-  rb4 = new QRadioButton( "All without border", grp );
+  rb1 = new QRadioButton( i18n("All"), grp );
+  rb2 = new QRadioButton( i18n("Formula"), grp );
+  rb3 = new QRadioButton( i18n("Format"), grp );
+  rb4 = new QRadioButton( i18n("All without border"), grp );
+  rb5 = new QRadioButton( i18n("Create link"), grp );
   rb1->setChecked(true);
-
+  cb=new QCheckBox(i18n("Transpose"),this);
+  cb->layout();
+  lay1->addWidget(cb);
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
@@ -75,23 +75,58 @@ void KSpreadspecial::slotOk()
  KSpreadTable::Special_paste sp;
 if(rb1->isChecked())
 	{
-	cout <<"All\n";
-	sp=KSpreadTable::ALL;
+	if(cb->isChecked())
+		{
+		sp=KSpreadTable::ALL_trans;
+		}
+	else
+		{
+		sp=KSpreadTable::ALL;
+		}
 	}
 if(rb2->isChecked())
 	{
-	cout<<"formula\n";
-	sp=KSpreadTable::Formula;
+	if(cb->isChecked())
+		{
+		sp=KSpreadTable::Formula_trans;
+		}
+	else
+		{
+		sp=KSpreadTable::Formula;
+		}
 	}
 if(rb3->isChecked())
 	{
-      	cout <<"format\n";
-	sp=KSpreadTable::Format;
+	if(cb->isChecked())
+		{
+		sp=KSpreadTable::Format_trans;
+		}
+	else
+		{
+		sp=KSpreadTable::Format;
+		}
 	}
 if(rb4->isChecked())
 	{
-	cout <<"without border\n";
-	sp=KSpreadTable::Wborder;
+	if(cb->isChecked())
+		{
+		sp=KSpreadTable::Wborder_trans;
+		}
+	else
+		{
+		sp=KSpreadTable::Wborder;
+		}
+	}
+if(rb5->isChecked())
+	{
+	if(cb->isChecked())
+		{
+		sp=KSpreadTable::Link_trans;
+		}
+	else
+		{
+		sp=KSpreadTable::Link;
+		}
 	}
 m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),  m_pView->canvasWidget()->markerRow() ) ,sp);
 accept();

@@ -1804,6 +1804,7 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
 
 void KSpreadTable::paste( const QPoint &_marker,Special_paste sp)
 {
+
   string data = QApplication::clipboard()->text().ascii();
   if ( data.empty() )
   {
@@ -1841,6 +1842,24 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Specia
   		break;
   	case Wborder:
   		sp_cell= KSpreadCell::Wborder;
+  		break;
+  	case Link:
+  		sp_cell= KSpreadCell::Link;
+  		break;
+  	case ALL_trans:
+  		sp_cell=KSpreadCell::ALL_trans;
+  		break;
+  	case Formula_trans:
+  		sp_cell=KSpreadCell::FORMULA_trans;
+  		break;
+  	case Format_trans:
+  		sp_cell= KSpreadCell::Format_trans;
+  		break;
+  	case Wborder_trans:
+  		sp_cell= KSpreadCell::Wborder_trans;
+  		break;
+  	case Link_trans:
+  		sp_cell= KSpreadCell::Link_trans;
   		break;
   	default:
   		sp_cell=KSpreadCell::ALL;

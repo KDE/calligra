@@ -365,7 +365,7 @@ public:
     void deleteSelection( const QPoint &_marker );
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
-    enum Special_paste { ALL,Formula,Format,Wborder};
+    enum Special_paste { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans};
     void paste( const QPoint &_marker,Special_paste=ALL );
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
