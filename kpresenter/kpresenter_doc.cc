@@ -1293,14 +1293,8 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 
     _pageLayout = pgLayout;
 
-//FIXME remove QRect r used KPRPage ->:setPageLayout(KoPageLayout pgLayout)
-
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         m_pageList.at( i )->background()->setBgSize( m_pageList.at( i )->getZoomPageRect().size() );
-#if 0
-    for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ )
-        _backgroundList.at( i )->setBgSize( r.size() );
-#endif
     setUnit(  _pageLayout.unit );
 
     repaint( false );
@@ -1311,9 +1305,8 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore )
 {
     if ( _restore ) {
-	QRect r = getPageRect( 0, diffx, diffy );
+	QRect r = m_pageList.last()->getZoomPageRect();
         m_pageList.last()->background()->setBgSize(r.size());
-        kdDebug()<<"r.height :"<<r.height()<<" r.width() :"<<r.width()<<endl;
 	repaint( false );
     }
 
@@ -1335,10 +1328,6 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
 	_clean = clean;
-        /* FIXME
-	objStartY = getPageRect( _backgroundList.count() - 1, 0, 0 ).y() + getPageRect( _backgroundList.count() - 1,
-											0, 0 ).height();
-        */
 	bool ok = loadNativeFormat( fileName );
 	objStartY = 0;
 	_clean = true;
@@ -1519,8 +1508,6 @@ int KPresenterDoc::getBottomBorder()
 void KPresenterDoc::deletePage( int _page )
 {
     kdDebug(33001) << "KPresenterDoc::deletePage " << _page << endl;
-    KPObject *kpobject = 0;
-    int _h = getPageRect( 0, 0, 0 ).height();
 
     deSelectAllObj();
     m_pageList.at(_page)->deletePage();
@@ -1560,8 +1547,6 @@ void KPresenterDoc::deletePage( int _page )
 int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
 {
     kdDebug(33001) << "KPresenterDoc::insertPage " << _page << endl;
-    KPObject *kpobject = 0;
-    int _h = getPageRect( 0, 0, 0 ).height();
 
     QString _template, fileName;
     if ( !chooseTemplate ) {
@@ -1589,7 +1574,7 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     if ( _page == 0 )
         objStartY = -1;
     else
-        objStartY = getPageRect( _page - 1, 0, 0 ).y() + getPageRect( _page - 1, 0, 0 ).height();
+        objStartY = 0;
 
     loadNativeFormat( fileName );
     objStartY = 0;
