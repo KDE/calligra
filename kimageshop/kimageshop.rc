@@ -60,7 +60,7 @@
   <Action name="dialog_gradient"/>
   <Action name="dialog_gradienteditor"/>
 </ToolBar>
-<ToolBar name="tools" position="left"><Text>Tools</Text>
+<ToolBar name="tools" position="top"><Text>Tools</Text>
   <Action name="tool_select_rect"/>
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>
@@ -70,5 +70,6 @@
   <Action name="tool_airbrush"/>
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
+  <Action name="tool_fill"/>  
 </ToolBar>
 </kpartgui>
