@@ -624,7 +624,7 @@ bool KisDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
     QDomElement images = doc.documentElement();
 
-    if ( images.attribute( "mime" ) != "application/x-krayon" )
+    if ( images.attribute( "mime" ) != "application/x-krayon" && images.attribute( "mime" ) != "application/vnd.kde.krayon" )
     {
         kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;
         return false;
