@@ -150,7 +150,7 @@ bool KSpreadDoc::initDoc()
 	url.setPath(f);
 	return openURL( url );
     }
-    
+
     if ( ret == KoTemplateChooseDia::Empty )
     {
 	KConfig *config = KSpreadFactory::global()->config();
@@ -166,13 +166,13 @@ bool KSpreadDoc::initDoc()
 		KSpreadTable *t = createTable();
 		m_pMap->addTable( t );
 	}
-	
+
 	resetURL();
 	setEmpty();
 	initConfig();
 	return true;
     }
-    
+
     return false;
 }
 
@@ -413,8 +413,8 @@ KSpreadTable* KSpreadDoc::createTable()
   QString s( i18n("Table%1") );
   s = s.arg( m_iTableId++ );
   //KSpreadTable *t = new KSpreadTable( m_pMap, s.latin1() );
-  KSpreadTable *t = new KSpreadTable( m_pMap, s.local8Bit() );
-  t->setTableName( s, TRUE );
+  KSpreadTable *t = new KSpreadTable( m_pMap, s );
+  t->setTableName( s, TRUE ); // huh? (Werner)
   return t;
 }
 
@@ -575,7 +575,7 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
 
     if(full_name.isEmpty())
  	full_name=p->pw_gecos;
-      
+
     if( email_addr.isEmpty())
 	email_addr = QString("%1@%2").arg(p->pw_name).arg(hostname);
 
