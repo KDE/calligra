@@ -145,7 +145,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		childClosed(KMdiChildView *dlg);
 
-		bool executeObject(KexiPart::Item &item);
+		bool executeObject(KexiPart::Item item);
 
 		//! for convenience
 		bool executeObject(const QString& mime, const QString& name);

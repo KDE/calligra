@@ -836,7 +836,7 @@ KexiMainWindow::executeObject(const QString& mime, const QString& name)
 }
 
 bool
-KexiMainWindow::executeObject(KexiPart::Item &item)
+KexiMainWindow::executeObject(KexiPart::Item item)
 {
 	if (activateWindow(item.identifier()))
 		return true;
