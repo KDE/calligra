@@ -1,7 +1,7 @@
 Tips for developers
 ===================
 
-KWord has a few hidden keys (aka easter-eggs :) that help debugging it,
+KSpread has a few hidden keys (aka easter-eggs :) that help debugging it,
 without the need for menuitems to be removed before releasing.
 
 The current debug keys are:
