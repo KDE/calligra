@@ -40,7 +40,7 @@
 
 #include <kdebug.h>
 
-#define DEBUG_FLOW
+//#define DEBUG_FLOW
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     : KWFrameSet( _doc ), undoRedoInfo( this )
@@ -611,15 +611,17 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
 
     QPoint cPoint;
     QRect r = parag->rect();
+    QPoint iPoint = r.bottomLeft();
+    iPoint.ry()++; // go under the paragraph
     //kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << endl;
-    KWFrame * frame = internalToContents( r.bottomLeft(), cPoint );
+    KWFrame * frame = internalToContents( iPoint, cPoint );
     int frameBottom = kWordDocument()->zoomItY( frame->bottom() );
     ASSERT( cPoint.y() <= frameBottom );
     //kdDebug(32002) << " parag bottom=" << cPoint.y()
     //               << " frameBottom=" << frameBottom
     //               << " height of fillRect: " << frameBottom - cPoint.y() << endl;
 
-    p->fillRect( r.x(), r.bottom(),
+    p->fillRect( iPoint.x(), iPoint.y(),
                  kWordDocument()->zoomItX( frame->width() ) /*r.width()*/, // erase the whole width of the frame
                  frameBottom - cPoint.y(),
                  /*Qt::blue*/ cg.brush( QColorGroup::Base ) );
