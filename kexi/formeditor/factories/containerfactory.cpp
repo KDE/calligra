@@ -182,7 +182,7 @@ InsertPageCommand::unexecute()
 	QWidget *page = m_form->objectTree()->lookup(m_name)->widget();
 	QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
 
-	WidgetList list;
+	KFormDesigner::WidgetList list;
 	list.append(page);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
 
@@ -623,7 +623,7 @@ void ContainerFactory::removeTabPage()
 	QTabWidget *tab = (QTabWidget *)m_widget;
 	QWidget *w = tab->currentPage();
 
-	WidgetList list;
+	KFormDesigner::WidgetList list;
 	list.append(w);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
 	tab->removePage(w);
@@ -676,7 +676,7 @@ void ContainerFactory::removeStackPage()
 	QWidgetStack *stack = (QWidgetStack*)m_widget;
 	QWidget *page = stack->visibleWidget();
 
-	WidgetList list;
+	KFormDesigner::WidgetList list;
 	list.append(page);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
 
