@@ -28,7 +28,7 @@ class KPushButton;
 class QResizeEvent;
 class KexiProperty;
 
-class KFORMEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEditor
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEditor
 {
 	Q_OBJECT
 
@@ -53,7 +53,7 @@ class KFORMEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEditor
 };
 
 
-class KFORMEDITOR_EXPORT PropertyEditorPixmap : public PropertyEditorFile
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorPixmap : public PropertyEditorFile
 {
 	Q_OBJECT
 

@@ -29,7 +29,7 @@ class KexiPropertyBuffer;
 class KexiPropertyEditorItem;
 class KexiPropertySubEditor;
 
-class KFORMEDITOR_EXPORT KexiPropertyEditor : public KListView
+class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 {
 	Q_OBJECT
 

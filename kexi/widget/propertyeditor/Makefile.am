@@ -2,9 +2,11 @@ include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexipropertyeditor.la
 
-libkexipropertyeditor_la_SOURCES = kexipropertyeditor.cpp kexipropertyeditoritem.cpp \
+libkexipropertyeditor_la_SOURCES = kexiproperty.cpp kexipropertybuffer.cpp \
+	kexipropertyeditor.cpp kexipropertyeditoritem.cpp \
 	kexipropertysubeditor.cpp propertyeditorfile.cpp \
 	propertyeditorfont.cpp propertyeditorinput.cpp propertyeditorlist.cpp
+
 libkexipropertyeditor_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexipropertyeditor_la_LIBADD = $(LIB_KIO) ../../core/libkexicore.la
 

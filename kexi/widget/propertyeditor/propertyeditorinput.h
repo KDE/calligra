@@ -27,7 +27,7 @@ class KDoubleSpinBox;
 class KIntSpinBox;
 class KexiProperty;
 
-class KFORMEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEditor
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEditor
 {
 	Q_OBJECT
 
@@ -46,7 +46,7 @@ class KFORMEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEditor
 
 //INT
 
-class KFORMEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEditor
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEditor
 {
 	Q_OBJECT
 
@@ -63,7 +63,7 @@ class KFORMEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEditor
 
 //DOUBLE
 
-class KFORMEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEditor
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEditor
 {
 	Q_OBJECT
 

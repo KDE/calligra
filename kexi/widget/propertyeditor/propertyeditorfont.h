@@ -28,7 +28,7 @@ class QResizeEvent;
 class KexiProperty;
 class KColorButton;
 
-class KFORMEDITOR_EXPORT PropertyEditorFont : public KexiPropertySubEditor
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFont : public KexiPropertySubEditor
 {
 	Q_OBJECT
 
@@ -50,7 +50,7 @@ class KFORMEDITOR_EXPORT PropertyEditorFont : public KexiPropertySubEditor
 };
 
 
-class KFORMEDITOR_EXPORT PropertyEditorColor : public KexiPropertySubEditor
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorColor : public KexiPropertySubEditor
 {
 	Q_OBJECT
 

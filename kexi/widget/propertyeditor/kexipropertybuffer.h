@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003   Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,35 +17,30 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIPROPERTY_H
-#define KEXIPROPERTY_H
+#ifndef PROPERTYBUFFER_H
+#define PROPERTYBUFFER_H
 
-#include <qvariant.h>
+#include <qobject.h>
+#include "kexiproperty.h"
 
-class QObject;
-class QString;
-class QStringList;
+//class PropertyBufferItem;
 
-class KFORMEDITOR_EXPORT KexiProperty
+typedef QMap<QString, KexiProperty> PropertyBuffer;
+
+class KEXIPROPERTYEDITOR_EXPORT KexiPropertyBuffer : public QObject, public PropertyBuffer
 {
+	Q_OBJECT
+
 	public:
-		KexiProperty(const QString &name, QVariant value);
-		KexiProperty(const QString &name, QVariant value, const QStringList &list);
-		//KexiProperty(const QString &name, QVariant value, QStringList *list);
-		KexiProperty() { m_name=""; m_value=QVariant(0);}
-		~KexiProperty();
+		KexiPropertyBuffer(QObject *parent, const char *name=0);
+		~KexiPropertyBuffer();
+		
+		void add(KexiProperty &property);
 
-		QString		name() { return m_name; }
-		QVariant	value() { return m_value; }
-		QVariant::Type  type();
-		const QStringList&	list() { return *m_list;}
+		void	changeProperty(const char *property, const QVariant &value);
 
-		void setValue(const QVariant &v) { m_value = v; }
-
-	private:
-		QString		m_name;
-		QVariant	m_value;
-		QStringList	*m_list;
+	signals:
+		void	propertyChanged(const char *property, const QVariant &value);
 };
 
 #endif

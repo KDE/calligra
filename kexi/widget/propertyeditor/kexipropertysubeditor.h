@@ -24,7 +24,7 @@
 
 class KexiProperty;
 
-class KFORMEDITOR_EXPORT KexiPropertySubEditor : public QWidget
+class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 {
 	Q_OBJECT
 

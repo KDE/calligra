@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Cedric Pasteur <cedric.pasteur@free.fr>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,42 +18,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIPROPERTYEDITORITEM_H
-#define KEXIPROPERTYEDITORITEM_H
+#ifndef KEXIPROPERTY_H
+#define KEXIPROPERTY_H
 
-#include <klistview.h>
-#include <qptrlist.h>
+#include <qvariant.h>
 
-#include "kexipropertyeditor.h"
-#include "kexiproperty.h"
-
+class QObject;
+class QString;
 class QStringList;
 
-class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
+class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 {
 	public:
-		KexiPropertyEditorItem(KListView *parent, KexiProperty *property);
-		KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property);
-		~KexiPropertyEditorItem();
+		KexiProperty(const QString &name, QVariant value);
+		KexiProperty(const QString &name, QVariant value, const QStringList &list);
+		//KexiProperty(const QString &name, QVariant value, QStringList *list);
+		KexiProperty() { m_name=""; m_value=QVariant(0);}
+		~KexiProperty();
 
-		const QString	name() { return m_property->name(); }
-		QVariant::Type	type() { return m_property->type(); }
+		QString		name() { return m_name; }
 		QVariant	value() { return m_value; }
-		QStringList	list() { return m_list; }
-		KexiProperty*	property() { return m_property;}
+		QVariant::Type  type();
+		const QStringList&	list() { return *m_list;}
 
-		void		setValue(QVariant value);
-
-		static QString	format(const QVariant &s);
-
-	protected:
-		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+		void setValue(const QVariant &v) { m_value = v; }
 
 	private:
+		QString		m_name;
 		QVariant	m_value;
-		QStringList 	m_list;
-		KexiProperty	*m_property;
-		QPtrList<KexiProperty>	childprop;
+		QStringList	*m_list;
 };
 
 #endif

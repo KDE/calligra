@@ -161,11 +161,14 @@ KexiBrowser::slotContextMenu(KListView *list, QListViewItem *item, const QPoint 
 	KPopupMenu *pm;
 	if (bit->item()) {
 		pm = m_itemPopup;
+		//update popup title
 		QString title_text = bit->text(0);
 		KexiBrowserItem *par_it = static_cast<KexiBrowserItem*>(bit->parent());
 		KexiPart::Part* par_part = 0;
-		if (par_it && par_it->info() && ((par_part = Kexi::partManager().part(par_it->info()))) && !par_part->instanceName().isEmpty())
+		if (par_it && par_it->info() && ((par_part = Kexi::partManager().part(par_it->info()))) && !par_part->instanceName().isEmpty()) {
+			//add part type name
 			title_text +=  (" : " + par_part->instanceName());
+		}
 		pm->changeTitle(m_itemPopupTitle_id, *bit->pixmap(0), title_text);
 	}
 	else {

@@ -30,7 +30,7 @@ class QComboBox;
 class QStringList;
 class KexiProperty;
 
-class KFORMEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEditor
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEditor
 {
 	Q_OBJECT
 
@@ -49,7 +49,7 @@ class KFORMEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEditor
 		QComboBox		*m_combo;
 };
 
-class KFORMEDITOR_EXPORT PropertyEditorBool : public PropertyEditorList
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorBool : public PropertyEditorList
 {
 	Q_OBJECT
 

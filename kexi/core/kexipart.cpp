@@ -80,7 +80,8 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &it
 //- displaying the same as above in tabCaption (or not)
 	dlg->setCaption( QString("%1 : %2").arg(item.name()).arg(instanceName()) );
 	dlg->setTabCaption( dlg->caption() );
-	dlg->setIcon( SmallIcon( info()->itemIcon() ) );
+//	dlg->setIcon( SmallIcon( info()->itemIcon() ) );
+	dlg->setIcon( SmallIcon( dlg->itemIcon() ) );
 	dlg->setDocID(item.identifier());
 	dlg->registerDialog();
 	return dlg;
