@@ -1043,11 +1043,20 @@ void KOISpell::dialog2 (int result)
       ignorelist.prepend(dlgorigword.lower());
       break;
     case KOS_REPLACEALL:
+    {
       replacelist.append (dlgorigword);
       QString _replacement = replacement();
       replacelist.append (_replacement);
       emit replaceall( dlgorigword ,  _replacement );
-      break;
+    }
+    break;
+    case KOS_ADDAUTOCORRECT:
+    {
+        //todo add new word ????
+        QString _replacement = replacement();
+        emit addAutoCorrect (dlgorigword , _replacement);
+        break;
+    }
     }
 
   connect (this, SIGNAL (dialog3()), this, dialog3slot.ascii());
