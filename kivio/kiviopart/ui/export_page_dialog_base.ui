@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>296</width>
-            <height>236</height>
+            <width>290</width>
+            <height>224</height>
         </rect>
     </property>
     <property name="baseSize">
@@ -57,38 +57,17 @@
             <property name="name">
                 <cstring>ButtonGroup1</cstring>
             </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
             <property name="title">
                 <string>Export</string>
             </property>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>m_radioFullPage</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>246</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&amp;All stencils</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-                <property name="buttonGroupId">
-                    <number>1</number>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Export all stencils on the current page</string>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>&lt;b&gt;All Stencils&lt;/b&gt;&lt;br&gt;
-This will cause the entire page to be exported to the file. This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported.</string>
-                </property>
-            </widget>
             <widget class="QCheckBox">
                 <property name="name">
                     <cstring>m_checkCrop</cstring>
@@ -136,6 +115,35 @@ This will eliminate all blank portions of the drawing. The picture will only be 
                 <property name="whatsThis" stdset="0">
                     <string>&lt;b&gt;Selected Stencils&lt;/b&gt;&lt;br&gt;
 Export only the selected stencils to file.</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>m_radioFullPage</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>246</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;All stencils</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="buttonGroupId">
+                    <number>1</number>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Export all stencils on the current page</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>&lt;b&gt;All Stencils&lt;/b&gt;&lt;br&gt;
+This will cause the entire page to be exported to the file. This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported.</string>
                 </property>
             </widget>
         </widget>

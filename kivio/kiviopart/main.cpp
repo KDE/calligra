@@ -62,7 +62,7 @@ int main( int argc, char **argv )
       splash->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
       splash->setPixmap(BarIcon(icon));
       splash->adjustSize();
-      splash->setCaption( "Kivio by theKompany.com");
+      splash->setCaption( i18n("Kivio by theKompany.com") );
       QRect r = QApplication::desktop()->geometry();
       splash->move( r.center() - splash->rect().center() );
       splash->show();

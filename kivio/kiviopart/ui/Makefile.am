@@ -22,8 +22,6 @@ libui_la_SOURCES = \
 		aligndialog.ui\
 		kiviooptionsdialogbase.ui\
 		kiviooptionsdialog.cpp\
-		enternamedialogbase.ui\
-		viewitemrenamedialog.cpp\
 		kivio_birdeye_panel.cpp\
 		kivio_birdeye_panel_base.ui\
 		kivio_layer_panel_base.ui\
@@ -55,9 +53,6 @@ EXTRA_DIST = \
 		kiviooptionsdialogbase.ui\
 		kiviooptionsdialog.cpp\
 		kiviooptionsdialog.h\
-		enternamedialogbase.ui\
-		viewitemrenamedialog.cpp\
-		viewitemrenamedialog.h\
 		kivio_birdeye_panel.cpp\
 		kivio_birdeye_panel.h\
 		kivio_birdeye_panel_base.ui\

@@ -7,8 +7,6 @@
 #include "kivio_factory.h"
 #include "kivio_command.h"
 
-#include "viewitemrenamedialog.h"
-
 #include <qheader.h>
 #include <qlayout.h>
 
@@ -16,6 +14,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
+#include <klineeditdlg.h>
 
 KivioLayerItem::KivioLayerItem(QListView* parent, KivioLayer* d, int id)
 : QListViewItem(parent), data(d)
@@ -130,20 +129,18 @@ void KivioLayerPanel::renameItem()
   if (!i)
     return;
 
-  ViewItemRenameDialog* dlg = new ViewItemRenameDialog(i18n("Rename Layer"), i18n("Layer name:"), this);
-
   KivioLayer* layer = i->data;
   QString oldText = layer->name();
-  dlg->setText(oldText);
 
-  if( dlg->exec() == QDialog::Accepted )
-  {
-      QString newName = dlg->text();
+  bool ok=false;
+  QString newName = KLineEditDlg::getText(i18n("Rename Layer"), i18n("Layer name:"), oldText, &ok, this);
+
+  if (ok) {
     layer->setName(newName);
     KivioRenameLayerCommand *cmd = new KivioRenameLayerCommand( i18n("Rename Layer"), layer, oldText, newName);
     m_pView->doc()->addCommand( cmd );
   }
-  delete dlg;
+
   i->update();
 }
 

@@ -6,8 +6,6 @@
 #include "kivio_common.h"
 #include "kivio_factory.h"
 
-#include "viewitemrenamedialog.h"
-
 #include <qheader.h>
 #include <qlayout.h>
 #include <qdom.h>
@@ -16,6 +14,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
+#include <klineeditdlg.h>
 
 using namespace Kivio;
 
@@ -210,14 +209,11 @@ void KivioViewManagerPanel::renameItem()
   if (!i)
     return;
 
-  ViewItemRenameDialog* dlg = new ViewItemRenameDialog(i18n("Rename View Item"), i18n("View item name:"), this);
-  dlg->setText(i->data->name);
+  bool ok=false;
+  QString newName = KLineEditDlg::getText(i18n("Rename View Item"), i18n("View item name:"), i->data->name, &ok, this);
 
-  if( dlg->exec() == QDialog::Accepted )
-  {
-    i->data->name = dlg->text();
-  }
-  delete dlg;
+  if (ok)
+    i->data->name = newName;
 
   viewItems->update(i->data);
 }
