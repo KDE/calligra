@@ -35,6 +35,7 @@ private:
 	double m_s1;
 	double m_s2;
 	KoPoint m_sp;
+	KoPoint m_current;
 
 	VHandleNode m_activeNode;
 };

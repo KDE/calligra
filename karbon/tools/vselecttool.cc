@@ -48,9 +48,23 @@ VSelectTool::activate()
 void
 VSelectTool::draw()
 {
-/*
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
+
+	if( m_state == normal )
+	{
+		painter->setPen( Qt::DotLine );
+		painter->newPath();
+		painter->moveTo( KoPoint( first().x(), first().y() ) );
+		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
+		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
+		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
+		painter->lineTo( KoPoint( first().x(), first().y() ) );
+		painter->strokePath();
+
+		m_state = normal;
+	}
+/*
 
 	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
@@ -149,18 +163,6 @@ VSelectTool::draw()
 		painter->setZoomFactor( 1.0 );
 	}
 	else
-	{
-		painter->setPen( Qt::DotLine );
-		painter->newPath();
-		painter->moveTo( KoPoint( m_fp.x(), m_fp.y() ) );
-		painter->lineTo( KoPoint( m_lp.x(), m_fp.y() ) );
-		painter->lineTo( KoPoint( m_lp.x(), m_lp.y() ) );
-		painter->lineTo( KoPoint( m_fp.x(), m_lp.y() ) );
-		painter->lineTo( KoPoint( m_fp.x(), m_fp.y() ) );
-		painter->strokePath();
-
-		m_state = normal;
-	}
 
 	view()->painterFactory()->painter()->end();
 */
@@ -202,6 +204,7 @@ VSelectTool::setCursor( const KoPoint& current ) const
 void
 VSelectTool::mouseButtonPress( const KoPoint& current )
 {
+	m_current = current;
 /*
 	m_fp.setX( mouse_event->pos().x() );
 	m_fp.setY( mouse_event->pos().y() );
@@ -218,6 +221,12 @@ VSelectTool::mouseButtonPress( const KoPoint& current )
 void
 VSelectTool::mouseDrag( const KoPoint& current )
 {
+	draw();
+
+	m_current = last();
+
+	draw();
+
 /*
 	if( m_lock == lockx )
 		m_lp.setX( m_fp.x() );
@@ -231,6 +240,16 @@ VSelectTool::mouseDrag( const KoPoint& current )
 void
 VSelectTool::mouseDragRelease( const KoPoint& current )
 {
+	if( m_state == normal )
+	{
+		view()->part()->document().selection()->clear();
+		view()->part()->document().selection()->append(
+			KoRect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() ).normalize() );
+
+		view()->selectionChanged();
+		view()->part()->repaintAllViews( true );
+	}
+
 /*
 	view()->part()->document().selection()->setState( VObject::selected );
 
@@ -272,12 +291,6 @@ VSelectTool::mouseDragRelease( const KoPoint& current )
 		// erase old object:
 		drawTemporaryObject();
 
-		view()->part()->document().selection()->clear();
-		view()->part()->document().selection()->append(
-			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
-
-		view()->selectionChanged();
-		view()->part()->repaintAllViews( true );
 	}
 */
 }
