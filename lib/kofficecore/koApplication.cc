@@ -34,6 +34,12 @@
 
 void qt_generate_epsf( bool b );
 
+static const KCmdLineOptions options[]=
+{
+	{"print", I18N_NOOP("Only print and exit"),0},
+	{0,0,0}
+};
+
 KoApplication::KoApplication()
         : KApplication()
 {
@@ -44,13 +50,18 @@ KoApplication::KoApplication()
 
     // Tell KStandardDirs about the koffice prefix
     KGlobal::dirs()->addPrefix(PREFIX);
-    
+
     // Tell the iconloader about share/apps/koffice/icons
     KGlobal::iconLoader()->addAppDir("koffice");
 
     // Prepare a DCOP interface
     m_appIface=new KoApplicationIface();  // avoid the leak
     dcopClient()->setDefaultObject( m_appIface->objId() );
+}
+
+void KoApplication::addCmdLineOptions()
+{
+    KCmdLineArgs::addCmdLineOptions( options, I18N_NOOP("KOffice"), "koffice", "kde" );
 }
 
 bool KoApplication::start()
@@ -94,6 +105,10 @@ bool KoApplication::start()
             return false;
         QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
+        KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
+        bool print = koargs->isSet("print");
+        koargs->clear();
+
         // Loop through arguments
 
         short int n=0;
@@ -105,10 +120,19 @@ bool KoApplication::start()
             {
                 // show a shell asap
                 KoMainWindow *shell = new KoMainWindow( doc->instance() );
-                shell->show();
+                if (!print)
+                    shell->show();
                 // now try to load
                 if ( shell->openDocument( doc, args->url(i) ) ) {
-                    n++;
+                    if ( print ) {
+                        shell->print(false /*we want to get the dialog*/);
+                        delete shell;
+                    }
+                    else
+                    {
+                        // Normal case, success
+                        n++;
+                    }
                 } else {
                     // .... if failed
                     delete shell;

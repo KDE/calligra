@@ -49,6 +49,14 @@ class KoApplication : public KApplication
 public:
 
     /**
+     * Adds command line options specific for KoApplication.
+     *
+     * Should be called before calling KoApplication constructor
+     * and start().
+     */
+    static void addCmdLineOptions();
+
+    /**
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
      */
