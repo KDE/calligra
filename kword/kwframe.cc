@@ -356,7 +356,7 @@ void KWFrame::save( QDomElement &frameElem )
 
 void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion )
 {
-    m_runAround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_BOUNDINGRECT ) );
+    m_runAround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_NO ) );
     m_runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
                           ? frameElem.attribute( "runaroundGap" ).toDouble()
                           : frameElem.attribute( "runaGapPT" ).toDouble();
