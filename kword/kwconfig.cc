@@ -505,6 +505,7 @@ ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
 
 KCommand *ConfigureMiscPage::apply()
 {
+    KWDocument * doc = m_pView->kWordDocument();
     config->setGroup( "Misc" );
     if(m_oldUnit!=m_unit->currentItem())
     {
@@ -513,18 +514,20 @@ KCommand *ConfigureMiscPage::apply()
         {
             case 0:
                 unitName=KoUnit::unitName(KoUnit::U_MM  );
+                doc->setUnit( KoUnit::U_MM );
                 break;
             case 1:
                 unitName=KoUnit::unitName(KoUnit::U_INCH  );
+                doc->setUnit( KoUnit::U_INCH );
                 break;
             case 2:
             default:
+                doc->setUnit( KoUnit::U_PT );
                 unitName=KoUnit::unitName(KoUnit::U_PT );
         }
 
         config->writeEntry("Units",unitName);
     }
-    KWDocument * doc = m_pView->kWordDocument();
     int newUndo=m_undoRedoLimit->value();
     if(newUndo!=m_oldNbRedo)
     {
