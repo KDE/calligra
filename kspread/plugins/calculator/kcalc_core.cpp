@@ -37,6 +37,7 @@
 #include <signal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <knotifyclient.h>
 
 #include "kcalc.h"
 
@@ -405,7 +406,7 @@ void QtCalculator::EnterDecimal()
 {
 
   if(eestate){
-    QApplication::beep();
+    KNotifyClient::beep();
     return;
   }
 
@@ -1683,7 +1684,7 @@ void QtCalculator::UpdateDisplay()
           display_error = 1;
           strcpy(display_str,"Error");
           if(kcalcdefaults.beep)
-            QApplication::beep();
+            KNotifyClient::beep();
         }
         calc_display->setText(display_str);
 

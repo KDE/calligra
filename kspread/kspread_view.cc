@@ -43,6 +43,7 @@
 #include <kstdaction.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
+#include <knotifyclient.h>
 #include <kformulaedit.h>
 #include <kcoloractions.h>
 #include <kaction.h>
@@ -447,7 +448,7 @@ void KSpreadView::RecalcWorkBook(){
 
     KSpreadTable *tbl;
 
-    for ( tbl = m_pDoc->map()->firstTable(); 
+    for ( tbl = m_pDoc->map()->firstTable();
 	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
       tbl->recalc(true);
     }
@@ -1461,7 +1462,7 @@ void KSpreadView::replace()
 }
 
 void KSpreadView::conditional()
-{  
+{
 //  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   QRect rect( activeTable()-> selectionRect() );
 
@@ -1688,7 +1689,7 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 
     if ( _ev->state() & ( Qt::ControlButton ) ){
 
-      // Universally reserved spreadsheet bavigators known to all professional 
+      // Universally reserved spreadsheet bavigators known to all professional
       // spreadsheet users around the world -- Bernd
 
       switch( _ev->key() ){
@@ -1710,7 +1711,7 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
   }
   else
     QApplication::sendEvent( m_pCanvas, _ev );
-  
+
 }
 
 KoDocument* KSpreadView::hitTest( const QPoint &pos )
@@ -2454,11 +2455,11 @@ void KSpreadView::removeTable()
 {
    if ( doc()->map()->count() <= 1 )
     {
-        QApplication::beep();
+        KNotifyClient::beep();
         KMessageBox::sorry( this, i18n("You cannot delete the only table of the map."), i18n("Remove table") ); // FIXME bad english? no english!
         return;
     }
-    QApplication::beep();
+    KNotifyClient::beep();
     int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active table.\nDo you want to continue?"),i18n("Remove table"));
 
     if ( ret == 3 )

@@ -30,6 +30,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <knotifyclient.h>
 #include <qlayout.h>
 
 KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QString& _tableName )
@@ -69,7 +70,7 @@ void KSpreadTableName::slotOk()
    QString txt = (m_pTableName->text()).stripWhiteSpace();
    if ( txt.isEmpty() )
    {
-      QApplication::beep();
+      KNotifyClient::beep();
       KMessageBox::information( this, i18n("Table name cannot be empty."), i18n("Change table name"));
       return;
    }
@@ -77,7 +78,7 @@ void KSpreadTableName::slotOk()
    {
       if ( tbl != m_pView->activeTable() )
       {
-         QApplication::beep();
+         KNotifyClient::beep();
          KMessageBox::information( this, i18n("A table with this name already exists."), i18n("Change table name") );
          return;
       }

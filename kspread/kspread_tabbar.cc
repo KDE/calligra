@@ -27,6 +27,7 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <knotifyclient.h>
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_view.h"
@@ -220,11 +221,11 @@ void KSpreadTabBar::slotRemove( )
 {
     if ( (m_pView->doc()->map()->count() <= 1 )||(tabsList.count()<=1) )
     {
-        QApplication::beep();
+        KNotifyClient::beep();
         KMessageBox::error( this,i18n("You cannot delete the only table of the map."), i18n("Remove table") ); // FIXME bad english? no english!
         return;
     }
-    QApplication::beep();
+    KNotifyClient::beep();
     int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Remove table"));
     if ( ret == 3 )
     {
