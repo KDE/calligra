@@ -87,13 +87,13 @@ Coordinate systems
 This is fun; brace yourself
 
 Document:
-    All objects have an position on the page which is described in the typographic units
+    All objects have a position on the page which is described in the typographic units
     named points.
     There are 72 points to the inch, and these absolute coordinates simply place your 
     objects on the page. 
     An example; a frame is positioned on paper some 35mm from the left border of the paper and
     some 35mm from the top of the first page. the absolute position of that frame is 100, 100
-    since 100pt equals 35mm
+    since 100pt equals 35mm.
     Note that positioning is done from page1, so when a frame is moved from page 1 to page 2 it
     simply gets a higher Y coordinate.
 
@@ -101,9 +101,9 @@ Zoomed: (aka Normal)
     Every object on screen has a size, and at different zoom levels we use a different amount
     of pixels to display the same object.
     Our object above has a top-left position of document:(100,100). To determine where
-    this is on screen we call KWDocument::zoomItX(xPos) and KWDocument::zoomItY(yPos) to
+    this is on screen we call KoZoomHander::zoomItX(xPos) and KoZoomHander::zoomItY(yPos) to
     retrieve the pixel positioning on screen at the current zoom level. The zoom level
-    is stored only in the document (an instance of KWDocument)
+    is stored only in the zoomhandler, which is in KWord the document (an instance of KWDocument).
     Since we are using pixel values all these values are stored in integers, they should not
     be used to move something around, the absolute coordinate system has to be used for that.
 
@@ -111,9 +111,7 @@ Internal:
     The former two were mostly for objects like frames etc, not for text. Text (the individual
     words and characters) are positioned with the layout coordinates. Layout is similar to the
     Zoomed system, but always uses the same resolution. This resolution is sufficiently high to
-    do the layout in integers, and not really loose info.
-    Internal coordinates can therefor be converted to Document coordinates with
-    KWTextFrameSet::internalToDocument().
+    do the layout in integers, and not really lose info.
 
     This is the high-resolution unit in which the text layout is done,
     currently set to 1440 DPI. Everything known the QRT classes will be in
@@ -124,16 +122,24 @@ Internal:
     offers methods for converting between layout units and zoom-dependent points 
     and pixels.
    
+    Note that the Internal coordinate system starts at the topleft corner of
+    the first text frame, (whereas the other coordinate systems start at the
+    topleft corner of the first page).
+    Also, Internal coordinates only exists within the text frames.
+    Internal coordinates can be converted to Document coordinates with
+    KWTextFrameSet::internalToDocument(), and the other way round with documentToInternal().
+
 View:
     The same as the zoomed coordinate system, but this one can use multiple pages next to each
-    other. So 3 pages horizontal in preview mode is no problem. A frame on page 3 then has a 
-    higher coordinate then the same frame on page 1. When converting to Zoomed the 
-    coordinates are equals.
+    other. So 3 pages horizontal in preview mode is no problem. A frame on page 3
+    then has a higher X coordinate then the same frame on page 1 (and e.g. the same Y).
+    When converting to Zoomed the X coordinates are equals, but the Y of the frame on page
+    3 is higher than the Y of the frame on page 1.
 
 
 Document (pt values, in double, KoPoint, KoRect.)
  |               |
- |               |--KWDocument::zoomIt[XY]   and unzoomIt[XY]
+ |               |--KoZoomHander::zoomIt[XY]   and unzoomIt[XY]
  |               |
  |               V
  |    Zoomed coordinates (pixel values, in int, QPoint, QRect) 
