@@ -116,7 +116,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x7f]);
     f.appendChild(pen);
    
-    if ((xfs[xf]->borderStyle & 0x0f) != 0) {    
+    if ((xfs[xf]->borderStyle & 0x0f) != 0) {
     border = root->createElement("left-border");
     pen = root->createElement("pen");
     penStyle = xfs[xf]->borderStyle & 0x0f;
@@ -471,7 +471,7 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
     case 0xB3: //date february-00
       format.setAttribute("format", "207");
 	  break;
-    case 0xB4: //date 2 february 2000 
+    case 0xB4: //date 2 february 2000
 	  format.setAttribute("format", "216");
 	  break;
     case 0xB5:  //date 2/2/00 12:00 AM :doesn't exist in kspread
@@ -1580,12 +1580,17 @@ bool XMLTree::_row(Q_UINT16, QDataStream& body)
   body >> rowNr >> skip >> skip >> height >>flags>>flags>>flags>>flags2;
 
   xf = flags2 & 0xffff;
+  if (!xfs[xf])
+  {
+    kdError(s_area) << "Missing format definition: " << xf << " in row: " << rowNr << endl;
+    xf = 0;
+  }
   QDomElement row = root->createElement("row");
   row.setAttribute("row", (int) rowNr + 1);
   row.setAttribute("height", (int) height / 40);
   if (flags & 0x30)
     row.setAttribute("hide",true);
-  if (flags & 0x80) 
+  if (flags & 0x80)
     row.appendChild(getFormat(xf));
   table->appendChild(row);
 

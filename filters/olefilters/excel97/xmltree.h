@@ -113,6 +113,10 @@ public:
   bool _xf(Q_UINT16 size, QDataStream& body);
 
 private:
+  // Debug support.
+
+  static const int s_area = 30511;
+  
   const QString getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rgce);
   const QDomElement getFormat(Q_UINT16 xf);
   void getFont(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid);
