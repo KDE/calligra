@@ -27,6 +27,7 @@ KivioOptionsDialog::~KivioOptionsDialog()
 
 void KivioOptionsDialog::apply()
 {
+  emit sig_apply(stack->visibleWidget());
 }
 
 void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
@@ -35,9 +36,7 @@ void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
   QWidget* page = 0;
 
   page = (QWidget*)stack->child(pname.ascii());
-  if (page) {
-    stack->raiseWidget(page);
-  } else {
+  if (!page) {
 
     if (pname == "_page_") {
       page = new GuidesSetupDialog(m_pView, page, pname.ascii());
@@ -48,8 +47,7 @@ void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
     }
 
     if (pname == "_pagegrid_") {
-      page = new GridSetupDialog(page, pname.ascii());
-//      page = new GridSetupDialog(m_pView, page, pname);
+      page = new GridSetupDialog(m_pView, page, pname.ascii());
     }
 
     if (pname == "_guides_") {
@@ -68,8 +66,14 @@ void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
       page = new GuidesOnePositionPage(Vertical, m_pView, page, pname.ascii());
     }
 
-    if (page)
+    if (pname == "_stencilsbar_") {
+//      page = new GuidesOnePositionPage(Vertical, m_pView, page, pname.ascii());
+    }
+
+    if (page) {
+      connect(this, SIGNAL(sig_apply(QWidget*)), page, SLOT(apply(QWidget*)));
       stack->addWidget(page,0);
+    }
   }
 
   if (page) {

@@ -48,4 +48,9 @@ GuidesSetupDialog::GuidesSetupDialog(KivioView* view, QWidget* parent, const cha
 GuidesSetupDialog::~GuidesSetupDialog()
 {
 }
+
+void GuidesSetupDialog::apply(QWidget*)
+{
+}
+
 #include "guidessetupdialog.moc"

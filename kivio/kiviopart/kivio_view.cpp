@@ -602,13 +602,13 @@ void KivioView::slotAddPage( KivioPage* page )
 
 void KivioView::slotUpdateView( KivioPage* page )
 {
+  if (page && page != m_pActivePage)
+    return;
+
   if (!page) {
     // global view updates (toolbar, statusbar.... actions...)
-    return;
+    updateToolBars();
   }
-
-  if (page != m_pActivePage)
-    return;
 
   m_pCanvas->update();
 }

@@ -19,7 +19,8 @@ libui_la_SOURCES = \
 		guides1page.cpp\
 		guides2page.cpp\
 		aligndialog.ui\
-		gridsetupdialog.ui\
+		gridsetupdialogbase.ui\
+		gridsetupdialog.cpp\
 		kiviooptionsdialogbase.ui\
 		kiviooptionsdialog.cpp\
 		enternamedialogbase.ui\

@@ -17,6 +17,9 @@ protected slots:
   void slotCurrentChanged(QListViewItem*);
   void slotOk();
 
+signals:
+  void sig_apply(QWidget*);
+
 private:
   KivioView* m_pView;
 };

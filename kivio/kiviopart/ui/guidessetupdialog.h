@@ -28,6 +28,9 @@ class GuidesSetupDialog : public GuidesSetupDialogBase
 public:
   GuidesSetupDialog(KivioView* view, QWidget* parent=0, const char* name=0);
   ~GuidesSetupDialog();
+
+public slots:
+  void apply(QWidget*);
 };
 
 #endif

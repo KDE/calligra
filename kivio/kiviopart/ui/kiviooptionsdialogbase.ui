@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
+            <width>596</width>
             <height>480</height>
         </rect>
     </property>
@@ -61,13 +61,6 @@
                     <property stdset="1">
                         <name>sizeType</name>
                         <enum>Expanding</enum>
-                    </property>
-                    <property>
-                        <name>sizeHint</name>
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                     <property>
                         <name>sizeHint</name>
@@ -352,6 +345,32 @@
                     </property>
                 </item>
             </item>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>StencilsBar</string>
+            </property>
+            <property>
+                <name>text</name>
+                <string>_stencilsbar_</string>
+            </property>
+            <property>
+                <name>text</name>
+                <string>Stencils Bar Visual</string>
+            </property>
+            <property>
+                <name>pixmap</name>
+                <pixmap></pixmap>
+            </property>
+            <property>
+                <name>pixmap</name>
+                <pixmap></pixmap>
+            </property>
+            <property>
+                <name>pixmap</name>
+                <pixmap></pixmap>
+            </property>
         </item>
             <property stdset="1">
                 <name>name</name>

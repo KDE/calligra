@@ -17,12 +17,15 @@ public:
 
   bool eventFilter(QObject*, QEvent*);
 
+public slots:
+  void apply(QWidget*);
+
 protected:
   void setCurrent(KivioGuideLineData*);
   void updateListViewColumn();
   void updateListView(bool);
 
-public slots:
+protected slots:
   void slotUnitChanged(int);
   void selectionChanged();
 

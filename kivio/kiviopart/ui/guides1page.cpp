@@ -21,6 +21,8 @@
 GuidesOnePositionPage::GuidesOnePositionPage(Orientation o, KivioView* view, QWidget* parent, const char* name)
 : GuidesOnePositionPageBase(parent, name)
 {
+  installEventFilter(this);
+
   m_pCanvas = view->canvasWidget();
   m_pPage = view->activePage();
   orientation = o;
@@ -199,6 +201,10 @@ void GuidesOnePositionPage::slotCurrentChanged(QListViewItem* i)
 
 bool GuidesOnePositionPage::eventFilter(QObject* o, QEvent* ev)
 {
+  if (o == this && ev->type() == QEvent::Show) {
+    updateListView(true);
+  }
+
   if (o == listView->clipper() && (ev->type() == QEvent::LayoutHint || ev->type() == QEvent::Resize)) {
     updateListViewColumn();
   }
@@ -242,4 +248,9 @@ void GuidesOnePositionPage::slotSelectAllButton()
   m_pCanvas->updateGuides();
   updateListView(false);
 }
+
+void GuidesOnePositionPage::apply(QWidget*)
+{
+}
+
 #include "guides1page.moc"

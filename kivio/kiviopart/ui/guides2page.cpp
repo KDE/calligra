@@ -198,9 +198,10 @@ void GuidesTwoPositionPage::setCurrent(KivioGuideLineData* data)
 
 bool GuidesTwoPositionPage::eventFilter(QObject* o, QEvent* ev)
 {
-  if (o == this) {
-   kdDebug() << ev->type() << endl;
+  if (o == this && ev->type() == QEvent::Show) {
+    updateListView(true);
   }
+
   if (o == listView->clipper() && (ev->type() == QEvent::LayoutHint || ev->type() == QEvent::Resize)) {
     updateListViewColumn();
   }
@@ -238,4 +239,9 @@ void GuidesTwoPositionPage::slotSelectAllButton()
   m_pCanvas->updateGuides();
   updateListView(false);
 }
+
+void GuidesTwoPositionPage::apply(QWidget*)
+{
+}
+
 #include "guides2page.moc"

@@ -1,18 +1,17 @@
 <!DOCTYPE UI><UI>
-<class>GridSetupDialog</class>
-<include location="global">kcolorbutton.h</include>
+<class>GridSetupDialogBase</class>
 <widget>
     <class>QWidget</class>
     <property stdset="1">
         <name>name</name>
-        <cstring>GridSetupDialog</cstring>
+        <cstring>GridSetupDialogBase</cstring>
     </property>
     <property stdset="1">
         <name>geometry</name>
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>275</width>
+            <width>259</width>
             <height>305</height>
         </rect>
     </property>
@@ -41,13 +40,6 @@
             <property stdset="1">
                 <name>sizeType</name>
                 <enum>Expanding</enum>
-            </property>
-            <property>
-                <name>sizeHint</name>
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
             <property>
                 <name>sizeHint</name>
@@ -259,13 +251,6 @@
                             <height>20</height>
                         </size>
                     </property>
-                    <property>
-                        <name>sizeHint</name>
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
                 </spacer>
                 <widget row="3"  column="0"  rowspan="1"  colspan="3" >
                     <class>QCheckBox</class>
@@ -311,13 +296,6 @@
                     <height>20</height>
                 </size>
             </property>
-            <property>
-                <name>sizeHint</name>
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
         </spacer>
     </grid>
 </widget>
@@ -335,18 +313,17 @@
             <verdata>0</verdata>
         </sizepolicy>
         <pixmap>image0</pixmap>
-        <signal>valueChanged(double)</signal>
+        <signal>valueChanged(float)</signal>
         <slot access="public">setUnit(int)</slot>
         <slot access="public">setDecimals( int )</slot>
         <slot access="public">setWrapping( bool )</slot>
-        <slot access="public">setValue( double )</slot>
-        <slot access="public">setMinValue( double )</slot>
-        <slot access="public">setMaxValue( double )</slot>
-        <slot access="public">setLineStep( double )</slot>
         <slot access="public">setPrefix( const QString &amp;text )</slot>
         <slot access="public">setSuffix( const QString &amp;text )</slot>
         <slot access="public">stepUp()</slot>
         <slot access="public">stepDown()</slot>
+        <slot access="public">setMaxValue(float)</slot>
+        <slot access="public">setValue( float )</slot>
+        <slot access="public">setMinValue( float )</slot>
     </customwidget>
     <customwidget>
         <class>KColorButton</class>
@@ -406,18 +383,6 @@
 </images>
 <connections>
     <connection>
-        <sender>freqX</sender>
-        <signal>valueChanged(double)</signal>
-        <receiver>distX</receiver>
-        <slot>setMaxValue( double )</slot>
-    </connection>
-    <connection>
-        <sender>freqY</sender>
-        <signal>valueChanged(double)</signal>
-        <receiver>distY</receiver>
-        <slot>setMaxValue( double )</slot>
-    </connection>
-    <connection>
         <sender>unitBox</sender>
         <signal>activated(int)</signal>
         <receiver>TKUnitsLabel1</receiver>
@@ -434,6 +399,42 @@
         <signal>activated(int)</signal>
         <receiver>TKUnitsLabel3</receiver>
         <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>unitBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>freqX</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>unitBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>freqY</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>unitBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>distX</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>unitBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>distY</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>freqX</sender>
+        <signal>valueChanged(float)</signal>
+        <receiver>distX</receiver>
+        <slot>setMaxValue(float)</slot>
+    </connection>
+    <connection>
+        <sender>freqY</sender>
+        <signal>valueChanged(float)</signal>
+        <receiver>distY</receiver>
+        <slot>setMaxValue(float)</slot>
     </connection>
 </connections>
 </UI>
