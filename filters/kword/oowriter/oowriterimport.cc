@@ -281,10 +281,11 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
     e = office.namedItem( "dc:title" ).toElement();
     if ( !e.isNull() && !e.text().isEmpty() )
     {
+        QDomElement about = doc.createElement( "about" );
         QDomElement title = doc.createElement( "title" );
+        about.appendChild( title );
         title.appendChild( doc.createTextNode( e.text() ) );
-        elementDocInfo.appendChild( title);
-
+        elementDocInfo.appendChild( about );
     }
 #if 0
     e = office.namedItem( "dc:description" ).toElement();
