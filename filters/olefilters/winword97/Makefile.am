@@ -1,11 +1,11 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) -I$(srcdir)/../lib $(all_includes)
-LDFLAGS	= $(all_libraries) -version-info 1:0:0
+LDFLAGS	= $(all_libraries)
 
 ####### Files
 
-lib_LTLIBRARIES = libwinword97.la
+noinst_LTLIBRARIES = libwinword97.la
 
 libwinword97_la_SOURCES = wordfilter.cc winworddoc.cc \
 paragraph.cc picture.cc style.cc stylesheet.cc misc.cc \

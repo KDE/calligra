@@ -1,11 +1,11 @@
 ####### General stuff
 
 INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
-LDFLAGS	= $(all_libraries) -version-info 1:0:0
+LDFLAGS	= $(all_libraries)
 
 ####### Files
 
-lib_LTLIBRARIES = libfilterbase.la libklaola.la
+noinst_LTLIBRARIES = libfilterbase.la libklaola.la
 
 libfilterbase_la_SOURCES = filterbase.cc
 libfilterbase_la_METASOURCES = filterbase.moc

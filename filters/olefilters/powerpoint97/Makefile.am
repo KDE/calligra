@@ -1,11 +1,11 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) -I$(srcdir)/../lib $(all_includes)
-LDFLAGS	= $(all_libraries) -version-info 1:0:0
+LDFLAGS	= $(all_libraries)
 
 ####### Files
 
-lib_LTLIBRARIES = libpowerpoint97.la
+noinst_LTLIBRARIES = libpowerpoint97.la
 
 libpowerpoint97_la_SOURCES = powerpointfilter.cc
 
