@@ -708,8 +708,9 @@ void Page::selectObj(int num)
 	  if (i == (unsigned int)num)
 	    {
 	      objPtr->isSelected = true;
+	      drawBack = true;
 	      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-		      objPtr->ow,objPtr->oh,true);
+		      objPtr->ow,objPtr->oh,false);
 	      return;
 	    }
 	}
@@ -740,8 +741,9 @@ void Page::deSelectObj(int num)
 	  if (i == (unsigned int)num)
 	    {
 	      objPtr->isSelected = false;
+	      drawBack = true;
 	      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-		      objPtr->ow,objPtr->oh,true);
+		      objPtr->ow,objPtr->oh,false);
 	      return;
 	    }
 	}
