@@ -91,7 +91,7 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
     }
     else if(viewModeType=="ModePreview")
     {
-        return new KWViewModePreview( doc, doc->getNbPagePerRow() );
+        return new KWViewModePreview( doc, doc->nbPagePerRow() );
     }
     else if(viewModeType=="ModeText")
     {

@@ -1819,7 +1819,7 @@ void KWView::viewPreviewMode()
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview, false );
         slotUpdateRuler();
-        m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_doc, m_doc->getNbPagePerRow() ) );
+        m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_doc, m_doc->nbPagePerRow() ) );
         m_doc->setChangeLastModeView(m_gui->canvasWidget()->viewMode()->type());
     }
     else
@@ -3112,7 +3112,7 @@ void KWView::textIncreaseIndent()
     if ( edit )
     {
         double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-        double indent = m_doc->getIndentValue();
+        double indent = m_doc->indentValue();
         double newVal = leftMargin + indent;
         // Test commented out. This breaks with the DTP case... The user can put
         // a frame anywhere, even closer to the edges than left/right border allows (DF).
@@ -3133,7 +3133,7 @@ void KWView::textDecreaseIndent()
         double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
         if ( leftMargin > 0 )
         {
-            double indent = m_doc->getIndentValue();
+            double indent = m_doc->indentValue();
             double newVal = leftMargin - indent;
             KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
             if(cmd)

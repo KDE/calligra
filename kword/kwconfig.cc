@@ -298,7 +298,7 @@ void ConfigureInterfacePage::apply()
     }
 
     double newIndent = KoUnit::ptFromUnit( indent->value(), doc->getUnit() );
-    if( newIndent != doc->getIndentValue() )
+    if( newIndent != doc->indentValue() )
     {
         config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setIndentValue( newIndent );
@@ -323,7 +323,7 @@ void ConfigureInterfacePage::apply()
         oldAutoSaveValue=autoSaveVal;
     }
     int nbPageByRow=m_nbPagePerRow->value();
-    if(nbPageByRow!=doc->getNbPagePerRow())
+    if(nbPageByRow!=doc->nbPagePerRow())
     {
         config->writeEntry("nbPagePerRow",nbPageByRow);
         m_pView->getGUI()->canvasWidget()->viewMode()->setPagesPerRow(nbPageByRow);

@@ -430,10 +430,10 @@ public:
     void setShowDocStruct(bool _b){m_bShowDocStruct=_b;}
 
     // in pt
-    double getIndentValue() { return m_indent; }
+    double indentValue() { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
 
-    int getNbPagePerRow() { return m_iNbPagePerRow; }
+    int nbPagePerRow() { return m_iNbPagePerRow; }
     void setNbPagePerRow(int _nb) { m_iNbPagePerRow=_nb; }
 
     int maxRecentFiles() const { return m_maxRecentFiles; }

@@ -134,7 +134,7 @@ QString KWordDocIface::unitName()
 
 double KWordDocIface::indentValue()
 {
-    return doc->getIndentValue();
+    return doc->indentValue();
 }
 
 void KWordDocIface::setIndentValue(double _ind)
@@ -144,7 +144,7 @@ void KWordDocIface::setIndentValue(double _ind)
 
 int KWordDocIface::nbPagePerRow()
 {
-    return doc->getNbPagePerRow();
+    return doc->nbPagePerRow();
 }
 
 void KWordDocIface::setNbPagePerRow(int _nb)
