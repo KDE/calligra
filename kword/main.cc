@@ -18,11 +18,10 @@
 */
 
 #include <koApplication.h>
-#include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <dcopclient.h>
 #include "kwaboutdata.h"
-#include <qfile.h>
 
 static const KCmdLineOptions options[]=
 {
@@ -37,17 +36,11 @@ int main( int argc, char **argv )
 
     KoApplication app;
 
-    // #### this has to disappear
-/*    if ( QFile::exists( "bidi.txt" ) ) {
-	QFont fnt( app.font() );
-	fnt.setCharSet( QFont::Unicode );
-	app.setFont( fnt );
-    }*/
+    app.dcopClient()->attach();
+    app.dcopClient()->registerAs("kword");
 
-    if (!app.start()) {
+    if (!app.start())
 	return 1;
-    }
-
     app.exec();
 
     return 0;
