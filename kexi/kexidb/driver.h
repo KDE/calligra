@@ -87,7 +87,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		Connection *createConnection( ConnectionData &conn_data );
 
 		/*! \return list of created connections. */
-		const QPtrList<Connection> connectionsList();
+		const QPtrList<Connection> connectionsList() const;
 
 //		/*! \return a name equal to the service name (X-Kexi-DriverName) 
 //		 stored in given service .desktop file. */
@@ -98,40 +98,48 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 (equal X-Kexi-FileDBDriverMime service property)
 		 otherwise returns null string. \sa isFileDriver()
 		*/
-		QString fileDBDriverMime() { return m_fileDBDriverMime; }
+		QString fileDBDriverMime() const { return m_fileDBDriverMime; }
 
 		/*! Info about the driver as a service. */
-		const KService* service() { return m_service; }
+		const KService* service() const { return m_service; }
 
 		/*! \return true if this driver is file-based */
-		bool isFileDriver() { return m_isFileDriver; }
+		bool isFileDriver() const { return m_isFileDriver; }
 
-		/*! \return true if \a n is a system object name, 
-		 eg. name of build-in system tables that cannot be used by user,
-		 and in most cases user even shouldn't see these. The list is specific for 
-		 a given driver implementation. By default returns true is \a n starts with "kexi__".
-		 Note for driver developers: Also call this method from your reimplementation.
+		/*! \return true if \a n is a system object's name, 
+		 eg. name of build-in system table that cannot be used or created by a user,
+		 and in most cases user even shouldn't see this. The list is specific for 
+		 a given driver implementation. By default returns true if \a n starts with "kexi__".
+		 Note for driver developers: Also call Driver::isSystemObjectName()
+		 from your reimplementation.
 		 \sa isSystemFieldName().
 		*/
-		virtual bool isSystemObjectName( const QString& n );
+		virtual bool isSystemObjectName( const QString& n ) const;
 
-		/*! \return true if \a n is a system field names, build-in system 
-		 fields that cannot be used by user,
-		 and in most cases user even shouldn't see these. The list is specific for 
-		 a given driver implementation. By default always returns false. 
-		 Note for driver developers: Also call this method from your reimplementation.
+		/*! \return true if \a n is a system database's name, 
+		 eg. name of build-in, system database that cannot be used or created by a user,
+		 and in most cases user even shouldn't see this. The list is specific for 
+		 a given driver implementation. For implemenation.
 		 \sa isSystemObjectName().
 		*/
-		virtual bool isSystemFieldName( const QString& n );
+		virtual bool isSystemDatabaseName( const QString& n ) const = 0;
+
+		/*! \return true if \a n is a system field's name, build-in system 
+		 field that cannot be used or created by a user,
+		 and in most cases user even shouldn't see this. The list is specific for 
+		 a given driver implementation. For implemenation.
+		 \sa isSystemObjectName().
+		*/
+		virtual bool isSystemFieldName( const QString& n ) const = 0;
 
 		//! \return driver's features that are combination of Driver::Features enum.
-		int features() { return m_features; }
+		int features() const { return m_features; }
 
 		//! \return true if transaction are supported (single or multiple)
 		bool transactionsSupported() const { return m_features & (SingleTransactions | MultipleTransactions); }
 		
 		/*! SQL-implementation-dependent name of given type */
-		QString sqlTypeName(int id_t) { return m_typeNames[id_t]; }
+		QString sqlTypeName(int id_t) const { return m_typeNames[id_t]; }
 
 		/*! used when we do not have Driver instance yet */
 		static QString defaultSQLTypeName(int id_t);

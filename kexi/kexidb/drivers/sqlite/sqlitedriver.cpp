@@ -86,15 +86,17 @@ SQLiteDriver::drv_createConnection( ConnectionData &conn_data )
 	return new SQLiteConnection( this, conn_data );
 }
 
-bool SQLiteDriver::isSystemObjectName( const QString& n )
+bool SQLiteDriver::isSystemObjectName( const QString& n ) const
 {
 	return Driver::isSystemObjectName(n) || n.lower().startsWith("sqlite_");
 }
 
-bool SQLiteDriver::isSystemFieldName( const QString& n )
+bool SQLiteDriver::isSystemFieldName( const QString& n ) const
 {
-	return Driver::isSystemFieldName(n) || n.lower()=="_rowid_";
+	return n.lower()=="_rowid_"
+		|| n.lower()=="rowid"
+		|| n.lower()=="oid";
 }
 
-
 #include "sqlitedriver.moc"
+

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003 Adam Pigg <piggz@defiant.piggz.co.uk>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -75,15 +75,17 @@ pqxxSqlDriver::drv_createConnection( ConnectionData &conn_data )
 
 bool pqxxSqlDriver::isSystemObjectName( const QString& n ) const
 {
-	return false;
-	//return n.lower().startsWith("sqlite_");
+	return Driver::isSystemObjectName(n);
 }
 
 bool pqxxSqlDriver::isSystemFieldName( const QString& n ) const
 {
-	return false;
-	//return n.lower()=="_rowid_";
+	return n.lower()=="oid";
 }
 
+bool pqxxSqlDriver::isSystemDatabaseName( const QString& n ) const
+{
+	return n.lower()=="template1" || n.lower()=="template0";
+}
 
 #include "pqxxdriver.moc"

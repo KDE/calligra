@@ -83,8 +83,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 if you'd like to save your changes. */
 		bool disconnect();
 
-		/*! \return list of database names for opened connection. */
-		QStringList databaseNames();
+		/*! \return list of database names for opened connection.
+		 If \a also_system_db is true, system database's names are also returned. */
+		QStringList databaseNames(bool also_system_db = false);
 
 		/*! \return true if database \a dbName exists.
 		 If \a ignoreErrors if true, error flag of connection 

@@ -55,6 +55,7 @@ class ConnectionPrivate
 		in the context of this transaction. */
 		Transaction m_default_trans;
 		QValueList<Transaction> m_transactions;
+		
 		//! true if rollbackTransaction() and commitTransaction() shouldn't remove 
 		//! the transaction object from m_transactions list; used by closeDatabase()
 		bool m_dont_remove_transactions : 1; 
@@ -178,8 +179,9 @@ bool Connection::checkIsDatabaseUsed()
 	return false;
 }
 
-QStringList Connection::databaseNames()
+QStringList Connection::databaseNames(bool also_system_db)
 {
+	KexiDBDbg << "Connection::databaseNames("<<also_system_db<<")"<< endl;
 	if (!checkConnected())
 		return QStringList();
 
@@ -188,8 +190,8 @@ QStringList Connection::databaseNames()
 	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
 		return QStringList();
 		
-	QStringList list;
-
+	QStringList list, non_system_list;
+	
 	bool ret = drv_getDatabasesList( list );
 	
 	if (!tmpdbName.isEmpty()) {
@@ -200,7 +202,18 @@ QStringList Connection::databaseNames()
 	
 	if (!ret)
 		return QStringList();
-	return list;
+	
+	if (also_system_db)
+		return list;
+	//filter system databases:
+	for (QStringList::Iterator it = list.begin(); it!=list.end(); ++it) {
+		KexiDBDbg << "Connection::databaseNames(): " << *it << endl;
+		if (!m_driver->isSystemDatabaseName(*it)) {
+			KexiDBDbg << "add " << endl;
+			non_system_list << (*it);
+		}
+	}
+	return non_system_list;
 }
 
 bool Connection::drv_getDatabasesList( QStringList &list )
@@ -211,7 +224,7 @@ bool Connection::drv_getDatabasesList( QStringList &list )
 
 bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 {
-	QStringList list = databaseNames();
+	QStringList list = databaseNames(true);//also system
 	if (error()) {
 		return false;
 	}

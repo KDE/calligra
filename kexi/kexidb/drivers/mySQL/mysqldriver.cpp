@@ -67,12 +67,18 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 	m_typeNames[Field::BLOB]="BLOB"; 
 }
 
+MySqlDriver::~MySqlDriver()
+{
+}
+
 KexiDB::Connection*
 MySqlDriver::drv_createConnection( ConnectionData &conn_data )
 {
         return new MySqlConnection( this, conn_data );
 }
 
-
-MySqlDriver::~MySqlDriver() {
+bool MySqlDriver::isSystemDatabaseName(QString &n) const
+{
+	return n.lower()=="mysql";
 }
+

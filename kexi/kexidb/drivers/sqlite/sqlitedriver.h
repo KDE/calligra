@@ -51,13 +51,16 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 			for this driver any object with name prefixed with "sqlite_" 
 			is considered as system object.
 		*/
-		virtual bool isSystemObjectName( const QString& n );
+		virtual bool isSystemObjectName( const QString& n ) const;
 
 		/*! \return true if \a n is a system field name; 
 			for this driver fields with name equal "_ROWID_" 
 			is considered as system field.
 		*/
-		virtual bool isSystemFieldName( const QString& n );
+		virtual bool isSystemFieldName( const QString& n ) const;
+
+		/*! \return false for this driver. */
+		virtual bool isSystemDatabaseName( const QString& ) const { return false; }
 
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );

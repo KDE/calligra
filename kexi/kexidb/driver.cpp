@@ -93,7 +93,7 @@ bool Driver::isValid()
 	return true;
 }
 
-const QPtrList<Connection> Driver::connectionsList() 
+const QPtrList<Connection> Driver::connectionsList() const
 {
 	QPtrList<Connection> clist;
 	QPtrDictIterator<Connection> it( m_connections );
@@ -145,12 +145,8 @@ QString Driver::defaultSQLTypeName(int id_t)
 	return dflt_typeNames[id_t];
 }
 
-bool Driver::isSystemObjectName( const QString& n )
+bool Driver::isSystemObjectName( const QString& n ) const
 {
 	return n.startsWith("kexi__");
 }
 
-bool Driver::isSystemFieldName( const QString& /*n*/ )
-{
-	return false;
-}
