@@ -30,10 +30,12 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include "kpresenter_doc.h"
+
 #include "customslideshowdia.h"
 
 
-CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, const char* name )
+CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, const char* name )
     : KDialogBase( parent, name, true, i18n("Custom Slide Show"), Ok|Cancel )
 {
   QWidget* page = new QWidget( this );
@@ -65,6 +67,7 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, const char* name )
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   connect( list, SIGNAL(clicked ( QListBoxItem * )),this,SLOT(slotTextClicked(QListBoxItem * )));
 
+  init();
   m_pModify->setEnabled(false);
   if(list->count()<=0)
     m_pRemove->setEnabled(false);
@@ -72,22 +75,43 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, const char* name )
   m_bChanged=false;
 }
 
+void CustomSlideShowDia::init()
+{
+    //todo
+    //init qmap
+}
 
 void CustomSlideShowDia::slotTextClicked(QListBoxItem*)
 {
-    slotModify();
+    //todo update button
 }
 
 void CustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
 {
+    slotModify();
 }
 
 void CustomSlideShowDia::slotAdd()
 {
+    //todo fix list
+    QStringList lst;
+    DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, lst );
+    if ( dlg->exec() )
+    {
+        //insert new element
+        m_customListMap.insert( dlg->customSlideShowName(), dlg->customListSlideShow() );
+    }
+    delete dlg;
+
 }
 
 void CustomSlideShowDia::slotRemove()
 {
+    if (list->selectedItem() )
+    {
+        m_customListMap.remove( list->selectedItem()->text() );
+        list->removeItem( list->currentItem() );
+    }
 }
 
 void CustomSlideShowDia::slotOk()
@@ -98,7 +122,21 @@ void CustomSlideShowDia::slotOk()
 
 void CustomSlideShowDia::slotModify()
 {
-//todo
+    QListBoxItem *item = list->selectedItem();
+    if ( item )
+    {
+        QStringList lst;
+        DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, item->text(), lst, m_customListMap[item->text()]);
+        if ( dlg->exec() )
+        {
+            //insert new element
+            m_customListMap.remove( list->selectedItem()->text() );
+            m_customListMap.insert( dlg->customSlideShowName(), dlg->customListSlideShow() );
+            list->changeItem( dlg->customSlideShowName(), list->currentItem() );
+        }
+        delete dlg;
+    }
+
 }
 
 void CustomSlideShowDia::slotCopy()
@@ -107,8 +145,23 @@ void CustomSlideShowDia::slotCopy()
 }
 
 
-DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const char* name )
+DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, QStringList & _listPage, const char* name )
     : KDialogBase( parent, name, true, i18n("Define Slide Show Custom"), Ok|Cancel )
+{
+    init();
+    listSlide->insertStringList( _listPage );
+}
+
+DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList& _listPage, QStringList &_customListPage, const char* name )
+    : KDialogBase( parent, name, true, i18n("Define Slide Show Custom"), Ok|Cancel )
+{
+    init();
+    m_name->setText( _customName );
+    listSlide->insertStringList( _listPage );
+    listSlideShow->insertStringList( _customListPage );
+}
+
+void DefineCustomSlideShow::init()
 {
   QWidget* page = new QWidget( this );
   setMainWidget( page );
@@ -151,5 +204,17 @@ void DefineCustomSlideShow::slotMoveRemoveSlide()
 void DefineCustomSlideShow::slotMoveInsertSlide()
 {
 }
+
+QStringList DefineCustomSlideShow::customListSlideShow()
+{
+    //todo
+    return QStringList();
+}
+
+QString DefineCustomSlideShow::customSlideShowName() const
+{
+    return m_name->text();
+}
+
 
 #include "customslideshowdia.moc"

@@ -3122,7 +3122,7 @@ void KPresenterView::setupActions()
 
 void KPresenterView::customSlideShow()
 {
-    CustomSlideShowDia *dlg = new CustomSlideShowDia( this, "custom slide show" );
+    CustomSlideShowDia *dlg = new CustomSlideShowDia( this, m_pKPresenterDoc, "custom slide show" );
     if ( dlg->exec() )
     {
         //todo

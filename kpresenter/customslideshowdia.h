@@ -27,37 +27,47 @@ class QListBoxItem;
 class QLineEdit;
 class QMultiLineEdit;
 class QPushButton;
+class KPresenterDoc;
 
 class CustomSlideShowDia : public KDialogBase
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  CustomSlideShowDia( QWidget* parent, const char* name );
+    CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, const char* name );
 
 public slots:
-  virtual void slotOk();
-  void slotDoubleClicked(QListBoxItem *);
-  void slotTextClicked(QListBoxItem*);
-  void slotRemove();
-  void slotAdd();
-  void slotModify();
-  void slotCopy();
+    virtual void slotOk();
+    void slotDoubleClicked(QListBoxItem *);
+    void slotTextClicked(QListBoxItem*);
+    void slotRemove();
+    void slotAdd();
+    void slotModify();
+    void slotCopy();
 
 protected:
-  QListBox * list;
-  QPushButton* m_pRemove;
-  QPushButton* m_pAdd;
-  QPushButton* m_pModify;
-  QPushButton* m_pCopy;
-  bool m_bChanged;
+    void init();
+
+    QListBox * list;
+    QPushButton* m_pRemove;
+    QPushButton* m_pAdd;
+    QPushButton* m_pModify;
+    QPushButton* m_pCopy;
+    bool m_bChanged;
+    KPresenterDoc *m_doc;
+    typedef QMap<QString, QStringList> CustomListMap;
+    CustomListMap m_customListMap;
 };
 
 class DefineCustomSlideShow : public KDialogBase
 {
     Q_OBJECT
 public:
-    DefineCustomSlideShow( QWidget* parent, const char *name );
+    DefineCustomSlideShow( QWidget* parent, QStringList & _listPage, const char *name = 0L);
+    DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList& _listPage, QStringList &_customListPage, const char* name = 0L );
+
+    QString customSlideShowName() const;
+    QStringList customListSlideShow();
 
 protected slots:
 void slotMoveUpSlide();
@@ -67,6 +77,8 @@ void slotMoveUpSlide();
 
 
 protected:
+    void init();
+
     QListBox *listSlide;
     QListBox *listSlideShow;
     QPushButton *m_insertSlide;
