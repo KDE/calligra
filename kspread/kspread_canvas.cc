@@ -1549,8 +1549,8 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
   KSpreadTable *table = activeTable();
   if ( !table )
     return;
-
-  QRect param( _rect );
+  QRect param(_rect);
+  param=table-> refreshArea(param);
   if ( param.left() <= 0 && param.top() <= 0 && param.right() <= 0 && param.bottom() <= 0 )
     return;
 

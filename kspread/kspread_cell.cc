@@ -944,13 +944,12 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
     {
       ColumnLayout *cl = m_pTable->columnLayout( x );
-      w += cl->width() - 1;
+      w += cl->width() ;
     }
-
     for ( int y = _row + 1; y <= _row + m_iExtraYCells; y++ )
     {
       RowLayout *rl = m_pTable->rowLayout( y );
-      h += rl->height() - 1;
+      h += rl->height() ;
     }
   }
   m_iExtraWidth = w;

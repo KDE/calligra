@@ -448,7 +448,11 @@ public:
 
     void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
 
+    void mergeCell( const QPoint &_marker);
 
+    void dissociateCell( const QPoint &_marker);
+
+    QRect refreshArea(const QRect &_rect);
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).

@@ -732,4 +732,10 @@ it works.
 ----------------------------------------------------
 -bug fix
 -Improved kspread_dlg_angle
--Now when you press middle button you can paste fix bug #?????
+-Now when you press middle button you can paste fix bug #5009
+
+2000-07-07-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now you can Merge cell and Dissociate cell (when they merged)
+but there are against a lot of bug.
+ 

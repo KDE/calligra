@@ -290,6 +290,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_conditional = new KAction( i18n("Relational cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
+    m_mergeCell = new KAction( i18n("Merge cells"),"mergecell" ,0, this, SLOT( mergeCell() ), actionCollection(), "mergecell" );
+    m_dissociateCell = new KAction( i18n("Dissociate cells"),"dissociatecell" ,0, this, SLOT( dissociateCell() ), actionCollection(), "dissociatecell" );
 
     m_multiRow = new KToggleAction( i18n("Multi Row"), "multirow", 0, actionCollection(), "multiRow" );
     connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
@@ -1668,6 +1670,20 @@ void KSpreadView::changeAngle()
         if( r.right() !=0x7FFF && r.bottom() !=0x7FFF)
                 adjust();
         }
+}
+
+void KSpreadView::mergeCell()
+{
+if ( !m_pTable )
+        return;
+m_pTable->mergeCell(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+}
+
+void KSpreadView::dissociateCell()
+{
+if ( !m_pTable )
+        return;
+m_pTable->dissociateCell(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
 }
 
 void KSpreadView::consolidate()
