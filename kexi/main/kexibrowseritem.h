@@ -30,7 +30,6 @@ namespace KexiPart
 	class Info;
 };
 
-class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 class KEXIMAIN_EXPORT KexiBrowserItem : public KListViewItem
 {
 	public:
