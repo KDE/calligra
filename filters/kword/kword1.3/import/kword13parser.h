@@ -30,6 +30,8 @@ class KWord13Document;
 class KWordFrameset;
 class KWord13Layout;
 
+// ### TODO: stackItem and friends should be renamed to become unique (see AbiWord import filter), as Doxygen cannot handle multiple classes with the same name.
+
 /**
  * Type of element
  *
@@ -68,11 +70,11 @@ public:
         ~StackItemStack(void) { }
 };
 
-class KWordParser : public QXmlDefaultHandler
+class KWord13Parser : public QXmlDefaultHandler
 {
 public:
-    KWordParser( KWord13Document* kwordDocument );
-    virtual ~KWordParser( void );
+    KWord13Parser( KWord13Document* kwordDocument );
+    virtual ~KWord13Parser( void );
 public:
     /// Process opening tag
     virtual bool startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);

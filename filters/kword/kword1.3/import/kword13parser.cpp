@@ -32,7 +32,7 @@ StackItem::~StackItem()
 {
 }
 
-KWordParser::KWordParser( KWord13Document* kwordDocument ) 
+KWord13Parser::KWord13Parser( KWord13Document* kwordDocument ) 
     : m_kwordDocument(kwordDocument), m_currentParagraph( 0 ), m_currentLayout( 0 )
 {
     parserStack.setAutoDelete( true );
@@ -41,14 +41,14 @@ KWordParser::KWordParser( KWord13Document* kwordDocument )
     parserStack.push( bottom ); //Security item (not to empty the stack)
 }
 
-KWordParser::~KWordParser( void )
+KWord13Parser::~KWord13Parser( void )
 {
     parserStack.clear();
     delete m_currentParagraph;
     delete m_currentLayout;
 }
 
-bool KWordParser::startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
 {
     if ( stackItem->elementType != ElementTypeLayout )
     {
@@ -66,7 +66,7 @@ bool KWordParser::startElementName( const QString&, const QXmlAttributes& attrib
     return  true;
 }
 
-bool KWordParser::startElementLayout( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
 {
     // ##TODO: check parent?
     if ( stackItem->elementType == ElementTypeIgnore )
@@ -88,7 +88,7 @@ bool KWordParser::startElementLayout( const QString&, const QXmlAttributes& attr
     return true;    
 }
 
-bool KWordParser::startElementParagraph( const QString&, const QXmlAttributes&, StackItem *stackItem )
+bool KWord13Parser::startElementParagraph( const QString&, const QXmlAttributes&, StackItem *stackItem )
 {
     if ( stackItem->elementType == ElementTypeUnknownFrameset )
     {
@@ -110,7 +110,7 @@ bool KWordParser::startElementParagraph( const QString&, const QXmlAttributes&, 
     return true;
 }
 
-bool KWordParser::startElementFrame( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem )
 {
     if ( stackItem->elementType == ElementTypeFrameset )
     {
@@ -146,7 +146,7 @@ bool KWordParser::startElementFrame( const QString& name, const QXmlAttributes& 
     return true;
 }
 
-bool KWordParser::startElementFrameset( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem )
 {
     const QString frameTypeStr( attributes.value( "frameType" ) );
     const QString frameInfoStr( attributes.value( "frameInfo" ) );
@@ -214,7 +214,7 @@ bool KWordParser::startElementFrameset( const QString& name, const QXmlAttribute
 }
 
 
-bool KWordParser::startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem,
+bool KWord13Parser::startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem,
      const StackItemElementType& allowedParentType, const StackItemElementType& newType )
 {
     if ( parserStack.current()->elementType == allowedParentType )
@@ -237,7 +237,7 @@ bool KWordParser::startElementDocumentAttributes( const QString& name, const QXm
     }
 }
 
-bool KWordParser::startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes )
+bool KWord13Parser::startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes )
 {
     qDebug("%s<%s>", indent.latin1(), name.latin1() );
     indent += "*"; //DEBUG
@@ -335,7 +335,7 @@ bool KWordParser::startElement( const QString&, const QString&, const QString& n
     return success;
 }
 
-bool KWordParser :: endElement( const QString&, const QString& , const QString& name)
+bool KWord13Parser :: endElement( const QString&, const QString& , const QString& name)
 {
     indent.remove( 0, 1 ); // DEBUG
     //qDebug("%s</%s>", indent.latin1(), name.latin1() );
@@ -408,7 +408,7 @@ bool KWordParser :: endElement( const QString&, const QString& , const QString& 
     return success;
 }
 
-bool KWordParser :: characters ( const QString & ch )
+bool KWord13Parser :: characters ( const QString & ch )
 {
 #if 0
     // DEBUG start

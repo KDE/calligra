@@ -20,7 +20,7 @@ int tempmain( int argc, char **argv )
 
     KWord13Document kwordDocument;
     
-    KWordParser handler( &kwordDocument );
+    KWord13Parser handler( &kwordDocument );
 
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );

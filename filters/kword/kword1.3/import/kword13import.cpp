@@ -43,7 +43,7 @@ KWord13Import::KWord13Import(KoFilter */*parent*/, const char */*name*/, const Q
 
 bool KWord13Import::parseRoot( QIODevice* io, KWord13Document& kwordDocument )
 {
-    KWordParser handler( &kwordDocument );
+    KWord13Parser handler( &kwordDocument );
 
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
