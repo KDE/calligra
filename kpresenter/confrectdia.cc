@@ -78,6 +78,9 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
 
+    QVBoxLayout *left = new QVBoxLayout(hbox);
+    left->setSpacing(5);
+
     // ------------------------ settings
     gSettings = new QGroupBox( 4, Qt::Vertical, i18n( "Rounding" ), this );
 
@@ -96,7 +99,10 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
 
     connect( eRndY, SIGNAL( valueChanged( int ) ), this, SLOT( rndYChanged( int ) ) );
 
-    hbox->addWidget( gSettings );
+    left->addWidget( gSettings );
+
+    QSpacerItem *spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    left->addItem(spacer);
 
     // ------------------------ preview
     rectPreview = new RectPreview( this, "preview" );

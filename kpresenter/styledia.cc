@@ -183,10 +183,12 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     connect( choosePWidth, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( slotWidthChanged() ) );
 
-    l = new QLabel( i18n( "Line begin:" ), right );
+    QGroupBox *grp = new QGroupBox(2, Qt::Horizontal, i18n("Line ends:"), right);
+
+    l = new QLabel( i18n( "Begin:" ), grp );
     l->setFixedHeight( l->sizeHint().height() );
 
-    clineBegin = new KComboBox( false, right, "lineBegin" );
+    clineBegin = new KComboBox( false, grp, "lineBegin" );
     clineBegin->insertItem( i18n("Normal") );
     clineBegin->insertItem( i18n("Arrow") );
     clineBegin->insertItem( i18n("Square") );
@@ -199,10 +201,10 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     connect( clineBegin, SIGNAL( activated( int ) ),
 	     this, SLOT( slotLineBeginChanged() ) );
 
-    l = new QLabel( i18n( "Line end:" ), right );
+    l = new QLabel( i18n( "End:" ), grp );
     l->setFixedHeight( l->sizeHint().height() );
 
-    clineEnd = new KComboBox( false, right, "lineEnd" );
+    clineEnd = new KComboBox( false, grp, "lineEnd" );
     clineEnd->insertItem( i18n("Normal") );
     clineEnd->insertItem( i18n("Arrow") );
     clineEnd->insertItem( i18n("Square") );
@@ -216,8 +218,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
 
     if ( !(m_flags & StyleDia::SdEndBeginLine) )
     {
-        clineEnd->setEnabled( false);
-        clineBegin->setEnabled(false);
+        grp->setEnabled(false);
     }
 
     //hack for better layout
@@ -841,11 +842,6 @@ StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool
     if (flags & SdBrush)
         setupTabBrush();
 
-    if (stickyObj)
-        setupTabGeneral();
-
-    setupTabGeometry();
-
     if (flags & SdPie && !(flags & (SdPolygon | SdPicture | SdRectangle | SdOther)))
         setupTabPie();
 
@@ -858,16 +854,19 @@ StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool
     if (flags & SdRectangle && !(flags & (SdPie | SdPolygon | SdPicture | SdOther)))
         setupTabRectangle();
 
+    setupTabGeometry();
+
+    if (stickyObj)
+        setupTabGeneral();
+
     lockUpdate = false;
 
-    setCancelButton( i18n( "&Close" ) );
+    setCancelButton( i18n( "&Cancel" ) );
     setOkButton( i18n( "&OK" ) );
     setApplyButton( i18n( "&Apply" ) );
-    setDefaultButton ( i18n("&Reset") );
     slotReset();
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( styleDone() ) );
     connect( this, SIGNAL( cancelButtonPressed() ), this, SLOT( reject() ) );
-    connect( this, SIGNAL( defaultButtonPressed () ), this, SLOT( slotReset() ) );
 }
 
 void StyleDia::slotReset()
@@ -903,7 +902,6 @@ void StyleDia::setupTabPen()
     m_confPenDia->setLineEnd(m_canvas->getLineEnd(m_doc->getKPresenterView()->getLineEnd()));
     m_confPenDia->resetConfigChangedValues();
 
-    connect( this, SIGNAL( defaultButtonPressed () ), m_confPenDia, SLOT( slotReset() ) );
     addTab( m_confPenDia, i18n( "&Pen" ) );
 }
 
@@ -920,7 +918,6 @@ void StyleDia::setupTabBrush()
                                 m_canvas->getGYFactor(m_doc->getKPresenterView()->getGYFactor()));
     m_confBrushDia->resetConfigChangedValues();
 
-    connect( this, SIGNAL( defaultButtonPressed () ), m_confBrushDia, SLOT( slotReset() ) );
     addTab( m_confBrushDia, i18n( "&Brush" ) );
 }
 
@@ -1044,6 +1041,9 @@ void StyleDia::setupTabGeometry()
     mGrid->addMultiCellWidget( synchronize, 5, 5, 0, 1 );
     layout->addWidget( synchronize );
 
+    QSpacerItem *spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    layout->addItem(spacer);
+
     connect( smb, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
     connect( sml, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
     connect( smr, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
@@ -1063,7 +1063,7 @@ void StyleDia::setupTabGeometry()
         sml->setEnabled( !state );
         synchronize->setEnabled( !state );
     }
-    addTab( tab, i18n( "&Geometry" ) );
+    addTab( tab, i18n( "Geo&metry" ) );
 }
 
 void StyleDia::setupTabPie()
@@ -1076,7 +1076,6 @@ void StyleDia::setupTabPie()
                               m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
     m_confPieDia->resetConfigChangedValues();
 
-    connect( this, SIGNAL( defaultButtonPressed () ), m_confPieDia, SLOT( slotReset() ) );
     addTab( m_confPieDia, i18n( "P&ie" ) );
 }
 
@@ -1090,7 +1089,6 @@ void StyleDia::setupTabPolygon()
                                   m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
     m_confPolygonDia->resetConfigChangedValues();
 
-    connect( this, SIGNAL( defaultButtonPressed () ), m_confPolygonDia, SLOT( slotReset() ) );
     addTab( m_confPolygonDia, i18n( "P&olygon" ) );
 }
 
@@ -1104,7 +1102,6 @@ void StyleDia::setupTabPicture()
     m_confPictureDia->setPictureBright(m_canvas->getPictureBright(m_doc->getKPresenterView()->getPictureBright()));
     m_confPictureDia->setPicturePixmap(m_canvas->getPicturePixmap());
 
-    connect( this, SIGNAL( defaultButtonPressed () ), m_confPictureDia, SLOT( slotReset() ) );
     addTab( m_confPictureDia, i18n( "Pi&cture" ) );
 }
 
@@ -1117,7 +1114,6 @@ void StyleDia::setupTabRectangle()
                                m_canvas->getBrush(m_doc->getKPresenterView()->getBrush()));
     m_confRectDia->resetConfigChangedValues();
 
-    connect( this, SIGNAL( defaultButtonPressed () ), m_confRectDia, SLOT( slotReset() ) );
     addTab( m_confRectDia, i18n( "&Rectangle" ) );
 }
 
