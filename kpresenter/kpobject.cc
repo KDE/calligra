@@ -600,9 +600,6 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         appearStep = tmp->order;
         kdDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
 
-        //kpresenter have three state (medium/slow/fast)
-        //not implemented into kpresenter
-        //add it.
         if ( speed =="medium" )
         {
             m_appearSpeed = ES_MEDIUM;
@@ -1893,16 +1890,28 @@ QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles ) const
     //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into kpresenter
     switch( brush.style() )
     {
-#if 0 //transparency
-        Qt::Dense1Pattern,
-        Qt::Dense2Pattern,
-        Qt::Dense3Pattern,
-        Qt::Dense4Pattern,
-        Qt::Dense5Pattern,
-        Qt::Dense6Pattern,
-        Qt::Dense7Pattern,
-#endif
-
+        //transparency
+    case Qt::Dense1Pattern:
+        hatchStyle.addAttribute( "draw:transparency", "94%" );
+        break;
+    case Qt::Dense2Pattern:
+        hatchStyle.addAttribute( "draw:transparency", "88%" );
+        break;
+    case Qt::Dense3Pattern:
+        hatchStyle.addAttribute( "draw:transparency", "63%" );
+        break;
+    case Qt::Dense4Pattern:
+        hatchStyle.addAttribute( "draw:transparency", "50%" );
+        break;
+    case Qt::Dense5Pattern:
+        hatchStyle.addAttribute( "draw:transparency", "37%" );
+        break;
+    case Qt::Dense6Pattern:
+        hatchStyle.addAttribute( "draw:transparency", "12%" );
+        break;
+    case Qt::Dense7Pattern:
+        hatchStyle.addAttribute( "draw:transparency", "6%" );
+        break;
     case Qt::HorPattern:
         hatchStyle.addAttribute( "draw:style", "single" );
         hatchStyle.addAttribute( "draw:rotation", 0);
@@ -2119,6 +2128,45 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
                 if( draw->hasAttribute("draw:display-name"))
                 {
                     //todo implement it into kpresenter
+                }
+                if ( draw->hasAttribute( "draw:transparency" ) )
+                {
+                    QString transparency = draw->attribute( "draw:transparency" );
+                    if ( transparency == "94%" )
+                    {
+                        tmpBrush.setStyle(Qt::Dense1Pattern);
+                    }
+                    else if ( transparency == "88%" )
+                    {
+                        tmpBrush.setStyle(Qt::Dense2Pattern);
+                    }
+                    else if ( transparency == "63%" )
+                    {
+                        tmpBrush.setStyle(Qt::Dense3Pattern);
+
+                    }
+                    else if ( transparency == "50%" )
+                    {
+                        tmpBrush.setStyle(Qt::Dense4Pattern);
+
+                    }
+                    else if ( transparency == "37%" )
+                    {
+                        tmpBrush.setStyle(Qt::Dense5Pattern);
+
+                    }
+                    else if ( transparency == "12%" )
+                    {
+                        tmpBrush.setStyle(Qt::Dense6Pattern);
+
+                    }
+                    else if ( transparency == "6%" )
+                    {
+                        tmpBrush.setStyle(Qt::Dense7Pattern);
+
+                    }
+                    else
+                        kdDebug()<<" transparency is not defined into kpresenter :"<<transparency<<endl;
                 }
                 if( draw->hasAttribute( "draw:style" ))
                 {
