@@ -428,14 +428,28 @@ void ConfigureMiscPage::apply()
         doc->setUndoRedoLimit(newUndo);
     }
     int newStartingPage=m_variableNumberOffset->text().toInt();
+    KMacroCommand * macroCmd=0L;
     if(newStartingPage!=m_oldStartingPage)
     {
-        KWChangeVariableSettingCommand *cmd = new KWChangeVariableSettingCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
+        macroCmd=new KMacroCommand(i18n("Change starting page number"));
+        KWChangeStartingPageCommand *cmd = new KWChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
         cmd->execute();
-        doc->addCommand(cmd);
+        macroCmd->addCommand(cmd);
     }
-    doc->getVariableCollection()->variableSetting()->setDisplayLink(m_displayLink->isChecked());
-    doc->recalcVariables( VT_LINK );
+    bool b=m_displayLink->isChecked();
+    if(doc->getVariableCollection()->variableSetting()->displayLink()!=b)
+    {
+        if(!macroCmd)
+        {
+            macroCmd=new KMacroCommand(i18n("Change display link command"));
+        }
+
+        KWChangeDisplayLinkCommand *cmd=new KWChangeDisplayLinkCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b);
+        cmd->execute();
+        macroCmd->addCommand(cmd);
+    }
+    if(macroCmd)
+        doc->addCommand(macroCmd);
 }
 
 void ConfigureMiscPage::slotDefault()

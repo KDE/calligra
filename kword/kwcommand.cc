@@ -1171,7 +1171,7 @@ void KWJoinCellCommand::unexecute()
 }
 
 
-KWChangeVariableSettingCommand::KWChangeVariableSettingCommand( const QString &name, KWDocument *_doc, int _oldStartingPage, int _newStartingPage):
+KWChangeStartingPageCommand::KWChangeStartingPageCommand( const QString &name, KWDocument *_doc, int _oldStartingPage, int _newStartingPage):
     KCommand(name),
     m_doc(_doc),
     oldStartingPage(_oldStartingPage),
@@ -1179,18 +1179,37 @@ KWChangeVariableSettingCommand::KWChangeVariableSettingCommand( const QString &n
 {
 }
 
-void KWChangeVariableSettingCommand::execute()
+void KWChangeStartingPageCommand::execute()
 {
     m_doc->getVariableCollection()->variableSetting()->setStartingPage(newStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 
-void KWChangeVariableSettingCommand::unexecute()
+void KWChangeStartingPageCommand::unexecute()
 {
     m_doc->getVariableCollection()->variableSetting()->setStartingPage(oldStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 
+KWChangeDisplayLinkCommand::KWChangeDisplayLinkCommand( const QString &name, KWDocument *_doc, bool _oldDisplay,bool _newDisplay):
+    KCommand(name),
+    m_doc(_doc),
+    m_bOldDisplay(_oldDisplay),
+    m_bNewDisplay(_newDisplay)
+{
+}
+
+void KWChangeDisplayLinkCommand::execute()
+{
+    m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bNewDisplay);
+    m_doc->recalcVariables( VT_LINK );
+}
+
+void KWChangeDisplayLinkCommand::unexecute()
+{
+    m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bOldDisplay);
+    m_doc->recalcVariables( VT_LINK );
+}
 
 KWChangeCustomVariableValue::KWChangeCustomVariableValue( const QString &name, KWDocument *_doc,const QString & _oldValue, const QString & _newValue,KoCustomVariable *var):
     KCommand(name),

@@ -438,13 +438,13 @@ protected:
 };
 
 /**
- * Command to change variable setting
+ * Command to starting page setting
  */
-class KWChangeVariableSettingCommand : public KCommand
+class KWChangeStartingPageCommand : public KCommand
 {
 public:
-    KWChangeVariableSettingCommand( const QString &name, KWDocument *_doc, int _oldStartingPage, int _newStartingPage);
-    ~KWChangeVariableSettingCommand(){}
+    KWChangeStartingPageCommand( const QString &name, KWDocument *_doc, int _oldStartingPage, int _newStartingPage);
+    ~KWChangeStartingPageCommand(){}
 
     void execute();
     void unexecute();
@@ -454,6 +454,22 @@ protected:
     int newStartingPage;
 };
 
+/**
+ * Command to display link setting
+ */
+class KWChangeDisplayLinkCommand : public KCommand
+{
+public:
+    KWChangeDisplayLinkCommand( const QString &name, KWDocument *_doc, bool _oldDisplay, bool _newDisplay);
+    ~KWChangeDisplayLinkCommand(){}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_doc;
+    bool m_bOldDisplay;
+    bool m_bNewDisplay;
+};
 
 class KWChangeCustomVariableValue : public KCommand
 {
