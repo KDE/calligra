@@ -1,13 +1,13 @@
 Source: koffice
 Build-Depends: automake, autoconf, debhelper, libqt2.2-dev, kdelibs3-dev, jade, sgml-base, docboook, libc6-dev, libpng2-dev, zlib1g-dev, libtiff3g-dev, gettext
-Section: non-US/main
+Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
 Standards-Version: 3.1.1
 
 Package: koffice
 Architecture: any
-Section: non-US/main
+Section: x11
 Depends: ${shlibs:Depends}
 Suggests: kdebase
 Replaces: koffice-cvs
@@ -17,7 +17,7 @@ Description: KDE Office Suite
 
 Package: koffice-dev
 Architecture: any
-Section: non-US/main
+Section: devel
 Depends: koffice (= ${Source-Version}), kdelibs3-dev, kdebase-dev
 Replaces: koffice-dev-cvs
 Conflicts: koffice-dev-cvs
