@@ -28,6 +28,7 @@ class KoChild::KoChildPrivate
 public:
   KoChildPrivate()
   {
+      m_contentsX = m_contentsY = 0;
   }
   ~KoChildPrivate()
   {
@@ -45,6 +46,8 @@ public:
   bool m_lock;
   QPointArray m_old;
   bool m_transparent;
+  int m_contentsX;
+  int m_contentsY;
 };
 
 KoChild::KoChild( QObject *parent, const char *name )
@@ -214,9 +217,15 @@ void KoChild::transform( QPainter &painter )
     painter.setWorldMatrix( m );
 }
 
+void KoChild::setContentsPos( int x, int y )
+{
+    d->m_contentsX = x;
+    d->m_contentsY = y;
+}
+
 QRect KoChild::contentRect() const
 {
-  return QRect( 0, 0, int(d->m_geometry.width() / d->m_scaleX),
+  return QRect( d->m_contentsX, d->m_contentsY, int(d->m_geometry.width() / d->m_scaleX),
                 int(d->m_geometry.height() / d->m_scaleY) );
 }
 

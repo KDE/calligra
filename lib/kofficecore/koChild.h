@@ -134,6 +134,9 @@ public:
    */
   virtual void transform( QPainter& painter );
 
+  // ### make virtual
+  void setContentsPos( int x, int y );
+
   /**
    * @return the contents rectangle that is visible.
    *         This value depends on the scaling and the

@@ -495,7 +495,11 @@ void KoView::slotChildActivated( bool a )
   QGuardedPtr<KoDocumentChild> docChild = ch->documentChild();
   QGuardedPtr<KoFrame> chFrame = ch->frame();
   if ( docChild && chFrame && chFrame->view() )
+  {
+    docChild->setContentsPos( chFrame->view()->canvasXOffset(),
+                              chFrame->view()->canvasYOffset() );
     docChild->document()->setViewBuildDocument( chFrame->view(), chFrame->view()->xmlguiBuildDocument() );
+  }
 
   d->m_children.remove( ch );
 
