@@ -632,20 +632,35 @@ public:
         int bright;
     };
 
+    enum PictureConfigChange {
+        MirrorType = 1,
+        Depth = 2,
+        SwapRGB = 4,
+        Grayscal = 8,
+        Bright = 16,
+        All = MirrorType | Depth | SwapRGB | Grayscal | Bright
+    };
+
+    PictureSettingCmd( const QString &name, PictureSettings newSettings,
+                       QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                       KPrPage *page, int flags = All );
     PictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
                        PictureSettings _newSettings, QPtrList<KPObject> &_objects,
-                       KPresenterDoc *_doc );
+                       KPresenterDoc *_doc, int flags = All );
     ~PictureSettingCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    KPresenterDoc *doc;
-    QPtrList<PictureSettings> oldSettings;
-    QPtrList<KPObject> objects;
-    PictureSettings newSettings;
+    void addObjects( const QPtrList<KPObject> &_objects );
+
+    KPresenterDoc *m_doc;
+    QPtrList<PictureSettings> m_oldValues;
+    QPtrList<KPObject> m_objects;
+    PictureSettings m_newSettings;
     KPrPage *m_page;
+    int m_flags;
 };
 
 class ImageEffectCmd : public KNamedCommand

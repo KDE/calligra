@@ -1452,65 +1452,121 @@ void PolygonSettingCmd::unexecute()
 }
 
 
+PictureSettingCmd::PictureSettingCmd( const QString &name, PictureSettings newSettings,
+                                      QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                                      KPrPage *page, int flags )
+: KNamedCommand( name )
+, m_doc( doc )
+, m_newSettings( newSettings )
+, m_page( page )
+, m_flags( flags )
+{
+    m_objects.setAutoDelete( false );
+    m_oldValues.setAutoDelete( false );
+
+    addObjects( objects );
+}
+
 PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
                                       PictureSettings _newSettings, QPtrList<KPObject> &_objects,
-                                      KPresenterDoc *_doc )
-    : KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
+                                      KPresenterDoc *_doc, int flags )
+    : KNamedCommand( _name ), m_oldValues( _oldSettings ), m_objects( _objects ), m_flags( flags )
 {
-    objects.setAutoDelete( false );
-    oldSettings.setAutoDelete( false );
-    doc = _doc;
-    newSettings = _newSettings;
+    m_objects.setAutoDelete( false );
+    m_oldValues.setAutoDelete( false );
+    m_doc = _doc;
+    m_newSettings = _newSettings;
 
-    m_page = doc->findPage( objects );
+    m_page = m_doc->findPage( m_objects );
 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 PictureSettingCmd::~PictureSettingCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
-    oldSettings.setAutoDelete( true );
-    oldSettings.clear();
+    m_oldValues.setAutoDelete( true );
+    m_oldValues.clear();
+}
+
+void PictureSettingCmd::addObjects( const QPtrList<KPObject> &objects )
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current(); ++it )
+    {
+        if ( it.current()->getType() == OT_GROUP )
+        {
+            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            if ( obj )
+            {
+                addObjects( obj->objectList() );
+            }
+        }
+        else
+        {
+            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            if( obj )
+            {
+                m_objects.append( obj );
+                obj->incCmdRef();
+
+                PictureSettings * pictureSettings = new PictureSettings;
+
+                pictureSettings->mirrorType = obj->getPictureMirrorType();
+                pictureSettings->depth = obj->getPictureDepth();
+                pictureSettings->swapRGB = obj->getPictureSwapRGB();
+                pictureSettings->grayscal = obj->getPictureGrayscal();
+                pictureSettings->bright = obj->getPictureBright();
+
+                m_oldValues.append( pictureSettings );
+            }
+        }
+    }
 }
 
 void PictureSettingCmd::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it ) {
         KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
         if ( obj ) {
-            obj->setPictureMirrorType(newSettings.mirrorType);
-            obj->setPictureDepth(newSettings.depth);
-            obj->setPictureSwapRGB(newSettings.swapRGB);
-            obj->setPictureGrayscal(newSettings.grayscal);
-            obj->setPictureBright(newSettings.bright);
+            if ( m_flags & MirrorType )
+                obj->setPictureMirrorType( m_newSettings.mirrorType );
+            if ( m_flags & Depth )
+                obj->setPictureDepth( m_newSettings.depth );
+            if ( m_flags & SwapRGB )
+                obj->setPictureSwapRGB( m_newSettings.swapRGB );
+            if ( m_flags & Grayscal )
+                obj->setPictureGrayscal( m_newSettings.grayscal );
+            if ( m_flags & Bright )
+                obj->setPictureBright( m_newSettings.bright );
         }
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void PictureSettingCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); ++i ) {
-        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
+    for ( unsigned int i = 0; i < m_objects.count(); ++i ) {
+        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( m_objects.at(i) );
         if ( obj ) {
-            obj->setPictureMirrorType(oldSettings.at( i )->mirrorType);
-            obj->setPictureDepth(oldSettings.at( i )->depth);
-            obj->setPictureSwapRGB(oldSettings.at( i )->swapRGB);
-            obj->setPictureGrayscal(oldSettings.at( i )->grayscal);
-            obj->setPictureBright(oldSettings.at( i )->bright);
+            PictureSettings *pictureSettings = m_oldValues.at( i );
+            obj->setPictureMirrorType( pictureSettings->mirrorType );
+            obj->setPictureDepth( pictureSettings->depth );
+            obj->setPictureSwapRGB( pictureSettings->swapRGB );
+            obj->setPictureGrayscal( pictureSettings->grayscal );
+            obj->setPictureBright( pictureSettings->bright );
         }
     }
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 
@@ -2656,4 +2712,3 @@ void KPrChangeVariableNoteText::unexecute()
     Q_ASSERT(m_var);
     m_var->setNote(oldValue);
 }
-
