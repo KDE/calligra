@@ -893,7 +893,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                 gradient.setAttribute( "color2", draw->attribute( "draw:end-color" ) );
 
                 QString type = draw->attribute( "draw:style" );
-                kdDebug()<<" type !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<type<<endl;
+                //kdDebug()<<" type !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<type<<endl;
                 if ( type == "linear" )
                 {
                     int angle = draw->attribute( "draw:angle" ).toInt() / 10;
@@ -1007,7 +1007,16 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
 
     QDomElement settings = doc.createElement( "PICTURESETTINGS" );
     settings.setAttribute( "grayscal", 0 );
-    settings.setAttribute( "bright", 0 );
+
+    if ( m_styleStack.hasAttribute( "draw:luminance" ) )
+    {
+        QString str( m_styleStack.attribute( "draw:luminance" ) );
+        str = str.remove( "%" );
+        settings.setAttribute( "bright", str );
+    }
+    else
+        settings.setAttribute( "bright", 0 );
+
     settings.setAttribute( "mirrorType", 0 );
     settings.setAttribute( "swapRGB", 0 );
     settings.setAttribute( "depth", 0 );

@@ -390,7 +390,6 @@ QString OoImpressExport::pictureKey( QDomElement &elem )
 void OoImpressExport::createPictureList( QDomNode &pictures )
 {
     pictures = pictures.firstChild();
-    kdDebug()<<"void OoImpressExport::createPictureList( QDomNode &pictures ) :"<<pictures.isNull()<<endl;
     for( ; !pictures.isNull(); pictures = pictures.nextSibling() )
     {
         if ( pictures.isElement() )
@@ -398,14 +397,13 @@ void OoImpressExport::createPictureList( QDomNode &pictures )
             QDomElement element = pictures.toElement();
             if ( element.tagName() ==  "KEY" )
             {
-                kdDebug()<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
+                //kdDebug()<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
                 m_kpresenterPictureLst.insert( pictureKey( element ), element.attribute( "name" ) );
             }
             else
                 kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
         }
     }
-    kdDebug()<<" void OoImpressExport::createPictureList( QDomNode &pictures ) \n";
 }
 
 void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body )
