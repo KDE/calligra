@@ -585,7 +585,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           if ( type == "currency" )
           {
             cell->setCurrency( 1, e.attribute( "table:currency" ) );
-            cell->setFormatType( KSpreadFormat::Money );
+            cell->setFormatType( Money_format );
           }
         }
       }
@@ -599,7 +599,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
               cell->setValue( dv );
             cell->setFactor( 100 );
             // TODO: replace with custom...
-            cell->setFormatType( KSpreadFormat::Percentage );
+            cell->setFormatType( Percentage_format );
           }
         }
         else if ( type == "boolean" )
@@ -613,7 +613,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           else
             cell->setValue( false );
           ok = true;
-          cell->setFormatType( KSpreadFormat::Custom );
+          cell->setFormatType( Custom_format );
         }
         else if ( type == "date" )
         {
@@ -693,7 +693,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
             // cell->setValue( kval );
             cell->setValue( QTime( hours % 24, minutes, seconds ) );
-            cell->setFormatType( KSpreadFormat::Custom );
+            cell->setFormatType( Custom_format );
           }
         }
 
@@ -1659,7 +1659,7 @@ void OpenCalcImport::loadOasisCellValidation( const QDomElement&body )
 
 
 QString * OpenCalcImport::loadFormat( QDomElement * element,
-                                      KSpreadFormat::FormatType & formatType,
+                                      FormatType & formatType,
                                       QString name )
 {
   if ( !element )
@@ -1676,17 +1676,17 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   bool negRed = false;
 
   if ( element->tagName() == "number:time-style" )
-    formatType = KSpreadFormat::Custom;
+    formatType = Custom_format;
   else if ( element->tagName() == "number:date-style" )
-    formatType = KSpreadFormat::Custom;
+    formatType = Custom_format;
   else if ( element->tagName() == "number:percentage-style" )
-    formatType = KSpreadFormat::Custom;
+    formatType = Custom_format;
   else if ( element->tagName() == "number:number-style" )
-    formatType = KSpreadFormat::Custom;
+    formatType = Custom_format;
   else if ( element->tagName() == "number:currency-style" )
-    formatType = KSpreadFormat::Custom;
+    formatType = Custom_format;
   else if ( element->tagName() == "number:boolean-style" )
-    formatType = KSpreadFormat::Custom;
+    formatType = Custom_format;
 
   if ( !e.isNull() )
     format = new QString();
@@ -1908,7 +1908,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       for ( i = 0; i < exp; ++i )
         format->append( '0' );
 
-      formatType = KSpreadFormat::Custom;
+      formatType = Custom_format;
     }
     else
     if ( e.tagName() == "number:fraction" )
@@ -2248,7 +2248,7 @@ void OpenCalcImport::readInStyle( KSpreadFormat * layout, QDomElement const & st
     if ( style.hasAttribute( "style:data-style-name" ) )
     {
       QString * format = m_formats[ style.attribute( "style:data-style-name" ) ];
-      KSpreadFormat::FormatType formatType;
+      FormatType formatType;
 
       if ( !format )
       {

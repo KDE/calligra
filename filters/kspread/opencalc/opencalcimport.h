@@ -90,7 +90,7 @@ class OpenCalcImport : public KoFilter
   void loadBorder( KSpreadFormat * layout, QString const & borderDef, bPos pos ) const;
   void loadTableMasterStyle( KSpreadSheet * table, QString const & stylename );
   QString * loadFormat( QDomElement * element,
-                        KSpreadFormat::FormatType & formatType,
+                        FormatType & formatType,
                         QString name );
   void checkForNamedAreas( QString & formula ) const;
   void loadOasisCellValidation( const QDomElement&body );
