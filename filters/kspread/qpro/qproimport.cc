@@ -169,13 +169,13 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
 
          if( table == 0 )
          {
-            table=ksdoc->createTable();
+            table=ksdoc->createSheet();
             // set up a default name for the table
-            table->setTableName( lTableNames.name(lPageIdx)
+            table->setSheetName( lTableNames.name(lPageIdx)
                                , TRUE
                                );
             lTableNames.table(lPageIdx, table);
-            ksdoc->addTable(table);
+            ksdoc->addSheet(table);
          }
          break;
 
@@ -206,14 +206,14 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
                // we're about to reference a table that hasn't been created yet.
                // setText gets upset about this, so create a blank table
 
-               KSpreadSheet* lNewTable=ksdoc->createTable();
+               KSpreadSheet* lNewTable=ksdoc->createSheet();
 
                // set up a default name for the table
-               lNewTable->setTableName( lTableNames.name(lIdx)
+               lNewTable->setSheetName( lTableNames.name(lIdx)
                                       , TRUE
                                       );
                lTableNames.table(lIdx, lNewTable);
-               ksdoc->addTable(lNewTable);
+               ksdoc->addSheet(lNewTable);
             }
          }
 
@@ -238,7 +238,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
 
          if( lTableNames.allocated(lPageIdx) && lTableNames.table(lPageIdx) )
          {
-            lTableNames.table(lPageIdx)->setTableName( lRecPageName->pageName()
+            lTableNames.table(lPageIdx)->setSheetName( lRecPageName->pageName()
 //                                                     , TRUE
                                                      );
             lTableNames.name(lPageIdx, lRecPageName->pageName());
