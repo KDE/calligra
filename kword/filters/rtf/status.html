@@ -2,7 +2,7 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <title>KOffice filters status: WinWord97 FILTER</title>
+   <title>KOffice filters status: RTF FILTER</title>
 </head>
 <body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
 <A NAME="START">&nbsp;</A>
@@ -10,7 +10,7 @@
 <BR>
 <center>
  <h1>
-  KOffice filters status: &nbsp;&nbsp;<i>WinWord97 FILTER</i>
+  KOffice filters status: &nbsp;&nbsp;<i>RTF FILTER</i>
  </h1>
 </center>
 
@@ -35,7 +35,7 @@
      <td COLSPAN="2">
       <center><b><i><font size=+1>
        <BR>
-        Import WinWord97 for kword<BR>
+        Import RTF for kword<BR>
        <BR>
       </font></i></b></center>
      </td>
@@ -43,63 +43,83 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>3 jan 2001</td>
+     <td>2 jan 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td>
-       Can import:<br>
-       - numbered headings<br>
-       - lists (bulleted, numbered, lettered)<br>
-       - body text with some formatting (bold, italic, underline, superscript,
-         subscript)<br>
-       - tables
-     </td>
+     <td>The beginning of the code is there, but not functioning</td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
-      <td>
-        - Embedded objects, see below<br>
-        - Header and footer support.
-      </td>
+     <td>The code needs to be sorted and made functioning</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>
-      KDE 2.1...<BR>
-      KDE 2.0 shipped supports the features listed above.
-     </td>
+     <td>02 jan 2001: the available code has been examined by Michael Johnson</td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Authors&nbsp;</font></b></td>
-     <td><a href="mailto:shaheedhaque_nospam@hotmail.com">shaheed</a></td>
+     <td><A HREF="mailto:mikej@xnet.com">Michael Johnson</A></td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
-     <td>
-      <a href="http://www.btinternet.com/~shaheedhaque/">Fileformat discription</a><BR>
-      The documentation is part of the MSDN library, except that rumor has it
-       that it disappeared from MSDN after 1997.
-      </td>
+     <td><A HREF="http://---">Fileformat discription</A></td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
      <td>
-      <p>Work is also well advanced on embedded objects (Excel via kspread, 
-         Powerpoint via kpresenter, WMF and MSOD pictures via killustrator). 
-         But I am struggling to understand how the embedded objects are to be 
-         located. In general, I plan to use the concept of an anchored frame, 
-         as per anchored tables but this does not yet exist (I hope to put this 
-         in the new RichText kword).</p>
-      <p>In other cases, it is extremely unobvious how the anchors are to be doen
-         (e.g. CLIENTANCHOR in MSOD pictures).</p>
-      <p><B>All help appreciated!</B><p>
+      <h2>Code examination report by Michael Johnson at January 2, 2001</h2>
+
+      <p>The set of files consisting of the list below is an unfinished
+       attempt to create an RTF markup parsing capability. It would
+       be the first step in making a RTF import filter. The code is not
+       a functioning set as far as I could tell. The code compiles
+       but does not seem to process the sample RTF file in this directory.
+       It gives an error message instead. I did not try a different RTF
+       file from a word processor. My observation is the test shell
+       main() is flawed. It has two input files and no output file.
+       I don't know if the other code functions but it is clearly
+       incomplete. Here is the results of my very brief investigation
+       of the code.
+      </p>
+
+      <p><b>KRTFDocumentParser.cpp</b>: <BR>
+       This file contains code that is a
+       beginning of a RTF markup command interpreter. It is merely
+       an outline of the process and does not recognize any RTF markup.
+      </p>
+
+      <p><b>KRTFFileParser.cpp</b>: <BR>
+       Appears to be a basic check that the input
+       file is in RTF format. It was probably intended as the top
+       level function that starts the parsing process.
+      </p>
+
+      <p><b>KRTFHeaderParser.cpp</b>: <BR>
+       Contains code to examine the RTF header.
+       It can only recognize the general syntax of the header and
+       determine where the document body begins. It cannot process
+       any header group.
+      </p>
+
+      <p><b>KRTFParser.cpp</b>: <BR>
+       Functions to delimit a single RTF command group.
+      </p>
+
+      <p><b>KRTFTokenizer.cpp</b>: <BR>
+       Contains functions to break down a RTF
+       command into tokens.
+      </p>
+
+      <p><b>main.cpp</b>: <BR>
+       A test shell for the above files. The code is flawed.
+      </p>
      </td>
     </tr>
    </table>
@@ -128,7 +148,7 @@
     <tr BGCOLOR="#FFDDDD">
      <td COLSPAN="2">
       <center><b><i><font size=+1>
-       <BR>Export kword to WinWord97<BR><BR>
+       <BR>Export kword to RTF<BR><BR>
       </font></i></b></center>
      </td>
     </tr>
