@@ -108,7 +108,7 @@ void WMFImport::gotPolygon(
 	kdDebug(s_area) << "WMFImport::gotPolygon" << endl;
 	kdDebug(s_area) << QString::number(dc.m_penWidth, 16) << endl;
 	kdDebug(s_area) << dc.m_penStyle << endl;
-    m_text += "<PATH>\n";
+    m_text += "<COMPOSITE>\n";
 	if( dc.m_penWidth > 0 )
 	{
     	m_text += "<STROKE lineWidth=\"1\">\n";// + QString::number(dc.m_penWidth, 16) + "\">\n";
@@ -125,10 +125,10 @@ void WMFImport::gotPolygon(
 	m_text += "<COLOR v1=\"" + QString::number(r) + "\" v2=\"" + QString::number(g) + "\"  v3=\"" + QString::number(b) + "\" opacity=\"1\" colorSpace=\"0\"  />\n";
 	m_text += "</FILL>\n";
 
-    m_text += "<SEGMENTS isClosed=\"1\" >\n";
+    m_text += "<PATH isClosed=\"1\" >\n";
     pointArray(points);
-    m_text += "</SEGMENTS>\n";
     m_text += "</PATH>\n";
+    m_text += "</COMPOSITE>\n";
 }
 
 
@@ -138,13 +138,13 @@ void WMFImport::gotPolyline(
 {
 	kdDebug(s_area) << "WMFImport::gotPolyline" << endl;
 	return;
-    m_text += "<PATH>\n";
+    m_text += "<COMPOSITE>\n";
     m_text += "<STROKE lineWidth=\"" + QString::number(dc.m_penWidth) + "\">\n";
     m_text += "</STROKE>\n";
-    m_text += "<SEGMENTS isClosed=\"1\" >\n";
+    m_text += "<PATH isClosed=\"1\" >\n";
     pointArray(points);
-    m_text += "</SEGMENTS>\n";
     m_text += "</PATH>\n";
+    m_text += "</COMPOSITE>\n";
 }
 
 void WMFImport::gotRectangle(
