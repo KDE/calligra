@@ -31,6 +31,7 @@ class QMouseEvent;
 class QCanvasItemList;
 class CanvasBox;
 class KuDesignerPlugin;
+class MyCanvas;
 
 class SelectionRect: public QCanvasRectangle{
 public:
@@ -44,7 +45,7 @@ class ReportCanvas: public QCanvasView{
     Q_OBJECT
 public:
     ReportCanvas(QCanvas * canvas, QWidget * parent = 0, const char * name = 0, WFlags f = 0);
-    
+
     CanvasReportItem *itemToInsert;
 
     enum RequestType {RequestNone = 0, RequestProps, RequestDelete};
@@ -64,6 +65,7 @@ protected:
 //    void contentsDropEvent ( QDropEvent * );
 
     void startMoveOrResizeOrSelectItem(QCanvasItemList &l, QMouseEvent *e, QPoint &p);
+    bool startResizing(QMouseEvent *e, QPoint &p);
     void placeItem(QCanvasItemList &l, QMouseEvent *e);
     void editItem(QCanvasItemList &l);
     void deleteItem(QCanvasItemList &l);
@@ -91,7 +93,7 @@ private:
 
     RequestType request;
 
-    QPtrList<CanvasBox> selected;
+   MyCanvas *m_canvas;
 
     void fixMinValues(double &pos,double minv,double &offset);
     void fixMaxValues(double &pos,double size,double maxv,double &offset);

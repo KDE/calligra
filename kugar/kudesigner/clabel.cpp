@@ -185,8 +185,8 @@ void CanvasLabel::draw(QPainter &painter)
         props["Text"]->value());
 
     //draw resizable region
-    if (isSelected())
-        drawHolders(painter);
+//    if (isSelected())
+//        drawHolders(painter);
 //    CanvasReportItem::draw(painter);
 }
 

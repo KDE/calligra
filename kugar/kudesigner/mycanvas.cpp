@@ -15,13 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 #include <qstringlist.h>
+#include <kdebug.h>
 #include "mycanvas.h"
 #include "canvbox.h"
 
 void MyCanvas::scaleCanvas(int scale)
 {
     resize(width()*scale, height()*scale);
-    
+
     //scale all child items if they are textbox's
     QCanvasItemList l=this->allItems();
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
@@ -33,3 +34,13 @@ void MyCanvas::scaleCanvas(int scale)
 	}
     }
 }
+
+void MyCanvas::drawForeground ( QPainter & painter, const QRect & clip )
+{
+	kdDebug()<<"MyCanvas::drawForeGround"<<endl;
+	for (CanvasBox *b=selected.first();b;b=selected.next())
+	{
+		b->drawHolders(painter);
+	}
+}
+

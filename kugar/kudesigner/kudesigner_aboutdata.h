@@ -39,7 +39,7 @@ KAboutData * newKudesignerAboutData()
         I18N_NOOP("Maintainer, Report Designer, Kugar library enhancements"), "cloudtemple@mksat.net",
         "http://www.cloudtemple.mksat.net");
     aboutData->addAuthor("Joseph Wenninger",
-        I18N_NOOP("smaller fixes and kexi integration"), "jowenn@kde.org",
+        I18N_NOOP("major bugfixes, additional features and kexi integration"), "jowenn@kde.org",
         "");
     aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
     return aboutData;

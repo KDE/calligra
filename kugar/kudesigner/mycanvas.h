@@ -25,6 +25,7 @@ class MyCanvas: public QCanvas{
 public:
     MyCanvas(int w, int h,KudesignerDoc *doc): QCanvas(w, h),m_doc(doc)
     {
+        selected.setAutoDelete(false);
 	templ = 0;
     }
     ~MyCanvas()
@@ -36,9 +37,12 @@ public:
 	    delete (*it);
 	}*/
     }
-    
+
     KudesignerDoc *document(){return m_doc;}
     CanvasKugarTemplate *templ;
+    QPtrList<CanvasBox> selected;
+protected:
+   virtual void drawForeground ( QPainter & painter, const QRect & clip );
 private:
     KudesignerDoc *m_doc;
     void scaleCanvas(int scale);

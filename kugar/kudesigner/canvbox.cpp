@@ -58,7 +58,6 @@ void CanvasBox::draw(QPainter &painter)
 void CanvasSection::draw(QPainter &painter)
 {
     CanvasBox::draw(painter);
-    if (isSelected()) drawHolders(painter);
 }
 
 

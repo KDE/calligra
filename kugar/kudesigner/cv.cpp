@@ -84,11 +84,11 @@ void SelectionRect::draw(QPainter & painter)
 ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name, WFlags f):
 	QCanvasView(canvas, parent, name, f),m_plugin(0)
 {
+    m_canvas=(MyCanvas*)canvas;
     itemToInsert = 0;
     moving = 0;
     resizing = 0;
     selectionStarted = 0;
-    selected.setAutoDelete(false);
     request = RequestNone;
     selectionRect = new SelectionRect(0, 0, 0, 0, canvas);
 }
@@ -176,7 +176,7 @@ void ReportCanvas::selectItemFromList(QCanvasItemList &l)
         if ((*it)->rtti() >= 1800 ) //include bands and the template itself
         {
             CanvasBox *b = (CanvasBox*)(*it);
-            if (!selected.containsRef(b))
+            if (!m_canvas->selected.containsRef(b))
             {
                 unselectAll();
                 selectItem(b, false);
@@ -185,9 +185,9 @@ void ReportCanvas::selectItemFromList(QCanvasItemList &l)
 //                selected->drawHolders();
                 return;
             }
-            if (selected.containsRef(b))
+            if (m_canvas->selected.containsRef(b))
             {
-                if (selected.count() > 1)
+                if (m_canvas->selected.count() > 1)
                 {
                     unselectAll();
                     selectItem(b, false);
@@ -228,6 +228,63 @@ void ReportCanvas::placeItem(QCanvasItemList &l, QMouseEvent *e)
     emit selectedActionProcessed();
 }
 
+
+bool ReportCanvas::startResizing(QMouseEvent *e, QPoint &p)
+{
+	if (m_canvas->selected.count()==0) return false;
+	for (CanvasBox *cbx=m_canvas->selected.first();
+		cbx;cbx=m_canvas->selected.next())
+	{
+		resizing_type=cbx->isInHolder(p);
+		if (resizing_type)
+		{
+			selectItem(cbx,false);
+			kdDebug()<<"A Widget should be resized"<<endl;
+        	        moving = 0;
+                	resizing = cbx;
+			moving_start = p;
+			moving_offsetX=0;
+			moving_offsetY=0;
+
+			if (cbx->rtti()>2001)
+			{
+        	                CanvasReportItem *item = (CanvasReportItem *)(cbx);
+				resizing_constraint.setX(item->section()->x());
+				resizing_constraint.setY(item->section()->y());
+				resizing_constraint.setWidth(item->section()->width());
+				resizing_constraint.setHeight(
+					item->section()->height());
+				if (cbx->rtti()!=KuDesignerRttiCanvasLine)
+				{
+					resizing_minSize.setWidth(10);
+					resizing_minSize.setHeight(10);
+				}
+				else
+				{
+					resizing_minSize.setWidth(0);
+					resizing_minSize.setHeight(0);
+				}
+			}
+			else
+				if (cbx->rtti()>=KuDesignerRttiReportHeader)
+				{
+					resizing_constraint=QRect(0,0,1000,1000);
+					resizing_minSize.setWidth(0);
+					resizing_minSize.setHeight(
+						((CanvasBand*)cbx)->minHeight());
+				}
+				else
+				{
+					resizing_constraint=QRect(0,0,1000,1000);
+					resizing_minSize.setWidth(0);
+					resizing_minSize.setHeight(10);
+				}
+                	return true;
+		}
+	}
+	return false;
+}
+
 void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
     QMouseEvent *e, QPoint &p)
 {
@@ -241,56 +298,13 @@ void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
             moving_offsetX=0;
 	    moving_offsetY=0;
             resizing_type=cb->isInHolder(p);
-            if (resizing_type)
-            {
-		kdDebug()<<"A Widget should be resized"<<endl;
-                moving = 0;
-                resizing = cb;
-		if (cb->rtti()>2001)
-		{
-                        CanvasReportItem *item = (CanvasReportItem *)(*it);
-			resizing_constraint.setX(item->section()->x());
-			resizing_constraint.setY(item->section()->y());
-			resizing_constraint.setWidth(item->section()->width());
-			resizing_constraint.setHeight(item->section()->height());
-			if (cb->rtti()!=KuDesignerRttiCanvasLine)
-			{
-				resizing_minSize.setWidth(10);
-				resizing_minSize.setHeight(10);
-			}
-			else
-			{
-				resizing_minSize.setWidth(0);
-				resizing_minSize.setHeight(0);
-			}
-		}
-		else
-			if (cb->rtti()>=KuDesignerRttiReportHeader)
-			{
-				resizing_constraint=QRect(0,0,1000,1000);
-				resizing_minSize.setWidth(0);
-				resizing_minSize.setHeight(
-					((CanvasBand*)cb)->minHeight());
-			}
-			else
-			{
-				resizing_constraint=QRect(0,0,1000,1000);
-				resizing_minSize.setWidth(0);
-				resizing_minSize.setHeight(10);
-			}
-                return;
-            }
-            else
-            {
-		if ((*it)->rtti() >2001)
-		{
+	    if ((*it)->rtti() >2001)
+	    {
                         CanvasReportItem *item = (CanvasReportItem *)(*it);
 	                moving = item;
 	                resizing = 0;
 	                return;
-		}
-
-            }
+	    }
         }
     }
     moving = 0;
@@ -337,7 +351,7 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
     for (b = selected.first(); b; b = selected.next())
         qWarning("%s", b->props["Text"].first.latin1());
 
-  */  
+  */
     switch (e->button())
     {
         case LeftButton:
@@ -350,8 +364,11 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
             else
             {
 //                qWarning("starting move or resize");
-                selectItemFromList(l);
-                startMoveOrResizeOrSelectItem(l, e, p);
+		if (!startResizing(e,p))
+		{
+	                selectItemFromList(l);
+	                startMoveOrResizeOrSelectItem(l, e, p);
+		}
             }
             break;
         default:
@@ -616,13 +633,13 @@ void ReportCanvas::unselectAll()
 {
     CanvasBox *b;
 
-    for (b = selected.first(); b; b = selected.next())
+    for (b = m_canvas->selected.first(); b; b = m_canvas->selected.next())
     {
         b->setSelected(false);
         canvas()->setChanged(b->rect());
     }
 
-    selected.clear();
+    m_canvas->selected.clear();
     canvas()->update();
 }
 
@@ -638,10 +655,10 @@ void ReportCanvas::selectAll()
 }
 
 void ReportCanvas::selectItem(CanvasBox *it, bool addToSelection)
-{  
+{
     if (!addToSelection)
         unselectAll();
-    selected.append(it);
+    m_canvas->selected.append(it);
     it->setSelected(true);
 
     if (!selectionStarted)
@@ -650,14 +667,14 @@ void ReportCanvas::selectItem(CanvasBox *it, bool addToSelection)
 
 void ReportCanvas::unselectItem(CanvasBox *it)
 {
-    selected.remove(it);
+    m_canvas->selected.remove(it);
     it->setSelected(false);
 }
 
 void ReportCanvas::updateProperty(QString name, QString value)
 {
     CanvasBox *b;
-    for (b = selected.first(); b; b = selected.next())
+    for (b = m_canvas->selected.first(); b; b = m_canvas->selected.next())
     {
         b->props[name]->setValue(value);
         b->hide();
@@ -671,14 +688,14 @@ void ReportCanvas::finishSelection()
 {
     selectionStarted = false;
 
-    if (!selected.isEmpty())
-        if (selected.count() > 1)
+    if (!m_canvas->selected.isEmpty())
+        if (m_canvas->selected.count() > 1)
         {
-            // handling multiple selection 
-            std::map<QString, PropPtr > curr = selected.first()->props;
+            // handling multiple selection
+            std::map<QString, PropPtr > curr = m_canvas->selected.first()->props;
 
-            CanvasBox *b = selected.first();
-            b = selected.next();
+            CanvasBox *b = m_canvas->selected.first();
+            b = m_canvas->selected.next();
             while (b)
             {
                 std::map<QString, PropPtr > selProps;
@@ -693,7 +710,7 @@ void ReportCanvas::finishSelection()
                     qWarning("   %s = %s", i->first.latin1(), i->second->value().latin1());
                 }*/
 
-                b = selected.next();
+                b = m_canvas->selected.next();
             }
 
 /*            qWarning("Multiple selection property list:");
@@ -706,7 +723,8 @@ void ReportCanvas::finishSelection()
             emit selectionMade(x,0);
         }
         else
-            emit selectionMade(&(selected.first()->props),selected.first());
+            emit selectionMade(&(m_canvas->selected.first()->props),
+	    	m_canvas->selected.first());
 
 /*  CanvasBox *b;
     for (b = selected.first(); b; b = selected.next())
