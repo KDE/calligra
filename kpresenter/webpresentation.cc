@@ -745,7 +745,7 @@ void KPWebPresentationWizard::setupPage2()
                                    "the size of the slide image." ) );
     layout->addWidget( label1, 2, 0 );
 
-    QLabel *label2 = new QLabel( i18n( "Default encoding:" ), canvas );
+    QLabel *label2 = new QLabel( i18n( "Encoding:" ), canvas );
     label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     layout->addWidget( label2, 3, 0 );
@@ -763,10 +763,24 @@ void KPWebPresentationWizard::setupPage2()
 
     encoding = new KComboBox( false, canvas );
     layout->addWidget( encoding, 3, 1 );
-    QStringList _strList = KGlobal::charsets()->availableEncodingNames();
-    encoding->insertStringList( _strList );
-    QString _name = webPres.getEncoding();
-    encoding->setCurrentItem( _strList.findIndex( _name.lower() ) );
+
+    // Fill encoding combo
+    // Stolen from kdelibs/kate/part/katedialogs.cpp
+    QStringList encodings(KGlobal::charsets()->descriptiveEncodingNames());
+    int idx = 0;
+    for (uint i = 0; i < encodings.count(); i++)
+    {
+      bool found = false;
+      QTextCodec *codecForEnc = KGlobal::charsets()->codecForName(KGlobal::charsets()->encodingForName(encodings[i]), found);
+      if (found)
+      {
+        encoding->insertItem(encodings[i]);
+
+        if ( codecForEnc->name() == webPres.getEncoding() )
+          encoding->setCurrentItem(idx);
+        idx++;
+      }
+    }
 
     doctype = new KComboBox( false, canvas );
     layout->addWidget( doctype, 4, 1 );
@@ -925,7 +939,7 @@ void KPWebPresentationWizard::finish()
     webPres.setPath( path->lineEdit()->text() );
     webPres.setZoom( zoom->value() );
     webPres.setXML( doctype->currentItem() != 0 );
-    webPres.setEncoding( encoding->currentText() );
+    webPres.setEncoding( KGlobal::charsets()->encodingForName( encoding->currentText() ) );
 
     close();
     KPWebPresentationCreateDialog::createWebPresentation( doc, view, webPres );
