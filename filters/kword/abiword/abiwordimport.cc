@@ -83,9 +83,9 @@ public:
     virtual bool characters ( const QString & ch );
 protected:
     bool clearStackUntilParagraph(StackItemStack& auxilaryStack);
-    bool complexForcedBreak(StackItem* stackItem, const bool pageBreak);
+    bool complexForcedPageBreak(StackItem* stackItem);
 private:
-    // The method that would need too much parameters are private insted of being static
+    // The methods that would need too much parameters are private instead of being static outside the class
     bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
         const QXmlAttributes& attributes);
     bool EndElementD (StackItem* stackItem);
@@ -355,7 +355,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
     {
         QString strType=attributes.value("type").stripWhiteSpace();
         kdDebug(30506)<<"<field> type:"<<strType<<endl;
-        
+
         AbiPropsMap abiPropsMap;
         PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
 
@@ -697,18 +697,46 @@ bool StructureParser::EndElementD (StackItem* stackItem)
 
 
 // <br> (forced line break)
+static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
+    QDomDocument& mainDocument)
+{
+    // <br> elements are mostly in <c> but can also be in <p>
+    if ((stackCurrent->elementType==ElementTypeParagraph)
+        || (stackCurrent->elementType==ElementTypeContent))
+    {
+        stackItem->elementType=ElementTypeEmpty;
+
+        // Now work on stackCurrent
+
+        if  (stackCurrent->elementType==ElementTypeContent)
+        {
+            // Child <c>, so we have to add formating of <c>
+            QDomElement formatElement=mainDocument.createElement("FORMAT");
+            formatElement.setAttribute("id",1); // Normal text!
+            formatElement.setAttribute("pos",stackCurrent->pos); // Start position
+            formatElement.setAttribute("len",1);
+            AddFormat(formatElement, stackCurrent, mainDocument); // Add the format of the parent <c>
+            stackCurrent->stackElementFormatsPlural.appendChild(formatElement); //Append to <FORMATS>
+        }
+
+        stackCurrent->stackElementText.appendChild(mainDocument.createTextNode(QChar(10))); // Add a LINE FEED
+        stackCurrent->pos++; // Adjust position
+
+    }
+    else
+    {//we are not nested correctly, so consider it a parse error!
+        kdError(30506) << "parse error <br> tag not nested in <p> or <c> but in "
+            << stackCurrent->itemName << endl;
+        return false;
+    }
+    return true;
+}
+
 // <cbr> (forced column break, not supported)
 // <pbr> (forced page break)
-static bool StartElementBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
-                           QDomDocument& mainDocument,
-                           QDomElement& mainFramesetElement, const bool pageBreak)
-// pageBreak:
-//  true, if we should make a forced page break,
-//  false, if we should make a forced line break
+static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
+    QDomDocument& mainDocument, QDomElement& mainFramesetElement)
 {
-    // We are simulating a line break by starting a new paragraph!
-    // TODO: when KWord would have learnt what line breaks are, change to them.
-
     // We are sure to be the child of a <p> element
 
     // The following code is similar to the one in StartElementP
@@ -726,7 +754,7 @@ static bool StartElementBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
 
     if (!nodeList.count())
     {
-        kdError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementBR)" <<endl;
+        kdError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
         return false;
     }
 
@@ -734,28 +762,25 @@ static bool StartElementBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
     QDomNode newNode=nodeList.item(0).cloneNode(true); // We make a deep cloning of the first element/node
     if (newNode.isNull())
     {
-        kdError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementBR)" <<endl;
+        kdError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
         return false;
     }
     paragraphElementOut.appendChild(newNode);
 
-    if (pageBreak)
+    // We need a page break!
+    QDomElement oldLayoutElement=nodeList.item(0).toElement();
+    if (oldLayoutElement.isNull())
     {
-        // We need a page break!
-        QDomElement oldLayoutElement=nodeList.item(0).toElement();
-        if (oldLayoutElement.isNull())
-        {
-            kdError(30506) << "Cannot find old <LAYOUT> element! Aborting! (in StartElementBR)" <<endl;
-            return false;
-        }
-        // We have now to add a element <PAGEBREAKING>
-        // TODO/FIXME: what if there is already one?
-        QDomElement pagebreakingElement=mainDocument.createElement("PAGEBREAKING");
-        pagebreakingElement.setAttribute("linesTogether","false");
-        pagebreakingElement.setAttribute("hardFrameBreak","false");
-        pagebreakingElement.setAttribute("hardFrameBreakAfter","true");
-        oldLayoutElement.appendChild(pagebreakingElement);
+        kdError(30506) << "Cannot find old <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        return false;
     }
+    // We have now to add a element <PAGEBREAKING>
+    // TODO/FIXME: what if there is already one?
+    QDomElement pagebreakingElement=mainDocument.createElement("PAGEBREAKING");
+    pagebreakingElement.setAttribute("linesTogether","false");
+    pagebreakingElement.setAttribute("hardFrameBreak","false");
+    pagebreakingElement.setAttribute("hardFrameBreakAfter","true");
+    oldLayoutElement.appendChild(pagebreakingElement);
 
     // Now that we have done with the old paragraph,
     //  we can write stackCurrent with the data of the new one!
@@ -764,7 +789,7 @@ static bool StartElementBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
     stackCurrent->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
     stackCurrent->stackElementText=textElementOut; // <TEXT>
     stackCurrent->stackElementFormatsPlural=formatsPluralElementOut; // <FORMATS>
-    stackCurrent->pos=0; // No text characters yet
+    stackCurrent->pos=0; // No text character yet
 
     return true;
 }
@@ -884,9 +909,9 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
 }
 
 
-bool StructureParser::complexForcedBreak(StackItem* stackItem, const bool pageBreak)
+bool StructureParser::complexForcedPageBreak(StackItem* stackItem)
 {
-    // We are not a child of a <p> element, so we cannot use StartElementBR directly
+    // We are not a child of a <p> element, so we cannot use StartElementPBR directly
 
     StackItemStack auxilaryStack;
 
@@ -895,7 +920,7 @@ bool StructureParser::complexForcedBreak(StackItem* stackItem, const bool pageBr
 
     // Now we are a child of a <p> element!
 
-    bool success=StartElementBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement,pageBreak);
+    bool success=StartElementPBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
 
     // Now restore the stack
 
@@ -966,22 +991,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     else if (name=="br") // NOTE: Not sure if it only exists in lower case!
     {
         // We have a forced line break
-        stackItem->elementType=ElementTypeEmpty;
         StackItem* stackCurrent=structureStack.current();
-        if (stackCurrent->elementType==ElementTypeContent)
-        {
-            success=complexForcedBreak(stackItem,false);
-        }
-        else if (stackCurrent->elementType==ElementTypeParagraph)
-        {
-            success=StartElementBR(stackItem,stackCurrent,mainDocument,mainFramesetElement,false);
-        }
-        else
-        {
-            kdError(30506) << "Forced line break found out of turn! Aborting! Parent: "
-                << stackCurrent->itemName <<endl;
-            success=false;
-        }
+        success=StartElementBR(stackItem,stackCurrent,mainDocument);
     }
     else if (name=="cbr") // NOTE: Not sure if it only exists in lower case!
     {
@@ -991,12 +1002,12 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         if (stackCurrent->elementType==ElementTypeContent)
         {
             kdWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
-            success=complexForcedBreak(stackItem,true);
+            success=complexForcedPageBreak(stackItem);
         }
         else if (stackCurrent->elementType==ElementTypeParagraph)
         {
             kdWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
-            success=StartElementBR(stackItem,stackCurrent,mainDocument,mainFramesetElement,true);
+            success=StartElementPBR(stackItem,stackCurrent,mainDocument,mainFramesetElement);
         }
         else
         {
@@ -1012,11 +1023,11 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         StackItem* stackCurrent=structureStack.current();
         if (stackCurrent->elementType==ElementTypeContent)
         {
-            success=complexForcedBreak(stackItem,true);
+            success=complexForcedPageBreak(stackItem);
         }
         else if (stackCurrent->elementType==ElementTypeParagraph)
         {
-            success=StartElementBR(stackItem,stackCurrent,mainDocument,mainFramesetElement,true);
+            success=StartElementPBR(stackItem,stackCurrent,mainDocument,mainFramesetElement);
         }
         else
         {
