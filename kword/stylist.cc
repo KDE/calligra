@@ -125,7 +125,7 @@ void KWStyleManager::setupWidget()
     m_stylesList = new QListBox( frame1, "stylesList" );
     for ( ; style.current() ; ++style )
     {
-        m_stylesList->insertItem( i18n("KWord style", style.current()->name().utf8() ) );
+        m_stylesList->insertItem( style.current()->translatedName() );
         m_origStyles.append( style.current() );
         m_changedStyles.append( style.current() );
     }
@@ -249,11 +249,11 @@ void KWStyleManager::updateGUI() {
         it.current()->update();
     }
 
-    m_nameString->setText(m_currentStyle->name());
+    m_nameString->setText(m_currentStyle->translatedName());
 
     kdDebug() << "KWStyleManager::updateGUI updating combo to " << m_currentStyle->followingStyle()->name() << endl;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
-        if ( m_styleCombo->text( i ) == i18n( "KWord style", m_currentStyle->followingStyle()->name().utf8() ) ) {
+        if ( m_styleCombo->text( i ) == m_currentStyle->followingStyle()->translatedName() ) {
             m_styleCombo->setCurrentItem( i );
             kdDebug() << "found at " << i << endl;
             break;
