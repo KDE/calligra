@@ -88,6 +88,7 @@ void KWEditPersonnalExpression::slotExpressionActivated(const QString &_text )
     QStringList lst(it.data());
     m_listOfExpression->clear();
     m_listOfExpression->insertStringList(lst);
+    m_delExpression->setEnabled(lst.count()>0);
 }
 
 
@@ -173,6 +174,7 @@ void KWEditPersonnalExpression::slotAddExpression()
 
         m_listOfExpression->clear();
         m_listOfExpression->insertStringList(lst);
+        m_delExpression->setEnabled(true);
     }
 }
 
@@ -188,6 +190,7 @@ void KWEditPersonnalExpression::slotDelExpression()
 
         m_listOfExpression->clear();
         m_listOfExpression->insertStringList(lst);
+        m_delExpression->setEnabled(lst.count()>0);
     }
 }
 
@@ -204,7 +207,7 @@ void KWEditPersonnalExpression::slotAddGroup()
         m_typeExpression->setCurrentItem(m_typeExpression->listBox()->index(m_typeExpression->listBox()->findItem ( expr )));
         m_listOfExpression->clear();
         m_addExpression->setEnabled(true);
-        m_delExpression->setEnabled(true);
+        m_delExpression->setEnabled(false);
         m_delGroup->setEnabled(true);
 
     }
