@@ -44,6 +44,7 @@ public:
     KoTextParag    *parag;
     bool            dialog;
     bool            needsIncrement;
+    KoTextDocument *lastTxtDocument;
 };
 
 static QString paragToText( KoTextParag *parag )
@@ -69,6 +70,7 @@ KoSpell::KoSpell( const Broker::Ptr& broker,  QObject *parent,
     d->itr = 0;
     d->dialog = false;
     d->needsIncrement = false;
+    d->lastTxtDocument = 0;
 }
 
 KoSpell::~KoSpell()
@@ -82,7 +84,9 @@ bool KoSpell::check( KoTextIterator *itr, bool dialog )
 
     if ( !itr )
         return ret;
+
     d->itr = itr;
+    d->lastTxtDocument = d->itr->currentTextObject()->textDocument();
     d->needsIncrement = false;
     ret = !d->itr->atEnd();
     d->dialog = dialog;
@@ -96,6 +100,7 @@ bool KoSpell::check( KoTextParag *parag )
         return false;
 
     d->parag = parag;
+    d->lastTxtDocument = d->parag->textDocument();
 
     start();
 
@@ -111,6 +116,7 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
     }
 
     d->parag = parag;
+    d->lastTxtDocument = d->parag->textDocument();
     QString str = paragToText( parag );
     Filter filter;
     filter.setBuffer( str );
@@ -133,8 +139,11 @@ QString KoSpell::getMoreText()
              << endl;
 #endif
 
-    if ( d->needsIncrement && d->itr && !d->itr->atEnd() )
+    if ( d->needsIncrement && d->itr && !d->itr->atEnd() ) {
         ++( *d->itr );
+        if ( !d->itr->atEnd() )
+            d->lastTxtDocument = d->itr->currentTextObject()->textDocument();
+    }
 
     bool iteratorAtEnd = d->itr && d->itr->atEnd();
 
@@ -165,9 +174,10 @@ QString KoSpell::getMoreText()
             return QString::null;
         }
         d->parag = d->itr->currentParag();
+        d->lastTxtDocument = d->parag->textDocument();
         text = d->itr->currentText();
     }
-    //kdDebug()<<"here 3"<<endl;
+
     d->parag->string()->setNeedsSpellCheck( false );
 
     return text;
@@ -213,6 +223,11 @@ bool KoSpell::checking() const
             return true;
     } else
         return filter()->atEnd();
+}
+
+KoTextDocument * KoSpell::textDocument() const
+{
+    return d->lastTxtDocument;
 }
 
 #include "kospell.moc"

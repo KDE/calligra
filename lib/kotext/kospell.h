@@ -34,6 +34,7 @@
 class KoTextIterator;
 class KoTextParag;
 class KoTextObject;
+class KoTextDocument;
 
 /**
  * KOffice spell checking object
@@ -74,6 +75,8 @@ public:
     KoTextParag  *currentParag() const;
     KoTextObject *currentTextObject() const;
     int currentStartIndex() const;
+
+    KoTextDocument *textDocument() const;
 
 signals:
     /**

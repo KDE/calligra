@@ -5419,9 +5419,7 @@ void KWView::spellCheckerDone( const QString & )
 {
 #ifdef HAVE_LIBKSPELL2
     //kdDebug(32001) << "KWView::spellCheckerDone" << endl;
-    KoTextObject* textobj = m_spell.kospell->currentTextObject();
-    Q_ASSERT( textobj );
-    KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
+    KWTextDocument *textdoc=static_cast<KWTextDocument *>( m_spell.kospell->textDocument() );
     Q_ASSERT( textdoc );
     if ( textdoc )
         textdoc->textFrameSet()->removeHighlight();
@@ -5434,10 +5432,6 @@ void KWView::clearSpellChecker(bool cancelSpellCheck)
 {
 #ifdef HAVE_LIBKSPELL2
     kdDebug(32001) << "KWView::clearSpellChecker" << endl;
-    delete m_spell.kospell;
-    m_spell.kospell=0;
-    delete m_spell.dlg;
-    m_spell.dlg = 0L;
 
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
