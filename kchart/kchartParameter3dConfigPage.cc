@@ -6,6 +6,7 @@
 #include "kchartParameter3dConfigPage.moc"
 
 #include <kapplication.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -18,10 +19,12 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  QGridLayout* layout = new QGridLayout(this, 2, 2,15,7 );
+  QGridLayout* layout = new QGridLayout(this, 2, 2,KDialog::marginHint(),KDialog::spacingHint());
 
-  QButtonGroup* gb = new QButtonGroup( i18n("3D Parameters"), this );
-  QGridLayout *grid1 = new QGridLayout(gb,3,2,15,7);
+  QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("3D Parameters"), this );
+  gb->layout()->setSpacing(KDialog::spacingHint());
+  gb->layout()->setMargin(KDialog::marginHint());
+  QGridLayout *grid1 = new QGridLayout(gb->layout(),3,2);
   layout->addWidget(gb,0,0);
 
   bar3d=new QCheckBox(i18n("3D bar"),gb);

@@ -6,6 +6,7 @@
 #include "kchartColorConfigPage.moc"
 
 #include <kapplication.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <kcolorbutton.h>
 #include <qlayout.h>
@@ -22,10 +23,12 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
                                  "different color." ) );
 
     QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
-    QButtonGroup* gb = new QButtonGroup( i18n("Colors"), this );
+    QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("Colors"), this );
+    gb->layout()->setSpacing(KDialog::spacingHint());
+    gb->layout()->setMargin(KDialog::marginHint());
     toplevel->addWidget( gb);
     QString wtstr;
-    QGridLayout* grid = new QGridLayout( gb,7, 4, 15,7);
+    QGridLayout* grid = new QGridLayout( gb->layout(),7, 4 );
 
     QLabel* gridLA = new QLabel( i18n( "&Grid color:" ), gb );
     gridLA->setAlignment( AlignRight | AlignVCenter );

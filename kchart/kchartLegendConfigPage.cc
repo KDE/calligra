@@ -29,10 +29,12 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   QGridLayout* layout = new QGridLayout( this, 2, 2, 15, 7 );
 
   //1. Block: Legend position
-  QButtonGroup* gb = new QButtonGroup( i18n("Legend Position"), this );
+  QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );
+  gb->layout()->setSpacing(KDialog::spacingHint());
+  gb->layout()->setMargin(KDialog::marginHint());
   gb->setExclusive( true );
 
-  QGridLayout *grid1 = new QGridLayout( gb, 3, 3, 15, 7 );
+  QGridLayout *grid1 = new QGridLayout( gb->layout(), 3, 3 );
 
   lTopLeft  = addButton( grid1, gb, i18n("Top-left"),  "chart_legend_topleft",  0, 0 );
   lTop      = addButton( grid1, gb, i18n("Top"),       "chart_legend_top",      0, 1 );
@@ -41,20 +43,22 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   lLeft    = addButton( grid1, gb, i18n("Left"),      "chart_legend_left",     1, 0 );
   noLegend = addButton( grid1, gb, i18n("No legend"), "chart_legend_nolegend", 1, 1 );
   lRight   = addButton( grid1, gb, i18n("Right"),     "chart_legend_right",    1, 2 );
-  
+
   lBottomLeft  = addButton( grid1, gb, i18n("Bottom-left"),  "chart_legend_bottomleft",  2, 0 );
   lBottom      = addButton( grid1, gb, i18n("Bottom"),       "chart_legend_bottom",      2, 1 );
   lBottomRight = addButton( grid1, gb, i18n("Bottom-right"), "chart_legend_bottomright", 2, 2 );
-  
+
   gb->setAlignment( Qt::AlignLeft );
   layout->addWidget( gb, 0, 0 );
 
 
   //2. Block: Title text
-  gb = new QButtonGroup( i18n("Title"), this );
+  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Title"), this );
+  gb->layout()->setSpacing(KDialog::spacingHint());
+  gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 1, 0 );
 
-  QGridLayout *grid2 = new QGridLayout( gb, 4, 2, 15, 7 );
+  QGridLayout *grid2 = new QGridLayout( gb->layout(), 4, 2 );
 
   QLabel* lab = new QLabel( i18n("Legend title:"), gb );
   grid2->addWidget( lab, 0, 0 );
@@ -63,10 +67,12 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   grid2->addWidget( title, 1, 0 );
 
   //3. Block: Text Colors
-  gb = new QButtonGroup( i18n("Color"), this );
+  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Color"), this );
+  gb->layout()->setSpacing(KDialog::spacingHint());
+  gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 0, 1 );
 
-  QGridLayout *grid3 = new QGridLayout( gb, 4, 2, 15, 7 );
+  QGridLayout *grid3 = new QGridLayout( gb->layout(), 4, 2 );
 
   lab = new QLabel( i18n("Legend title color:"), gb );
   grid3->addWidget( lab, 0, 0 );
@@ -83,10 +89,12 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   grid3->addWidget( legendTextColor, 3, 0 );
 
   //4. Block: Font
-  gb = new QButtonGroup( i18n("Font"), this );
+  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Font"), this );
+  gb->layout()->setSpacing(KDialog::spacingHint());
+  gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 1, 1 );
 
-  QGridLayout *grid4 = new QGridLayout( gb, 4, 2, 15, 7 );
+  QGridLayout *grid4 = new QGridLayout( gb->layout(), 4, 2 );
   titleLegendFontButton = new QPushButton( gb );
 
   lab = new QLabel( i18n("Legend title font:"), gb );

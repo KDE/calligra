@@ -26,8 +26,10 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     QGridLayout* layout = new QGridLayout( 1, 3 );
     toplevel->addLayout( layout );
 
-    QButtonGroup* gb1 = new QButtonGroup( i18n("Parameters"), this );
-    QGridLayout *grid1 = new QGridLayout(gb1,9,1,15,8);
+    QButtonGroup* gb1 = new QButtonGroup( 0, Qt::Vertical, i18n("Parameters"), this );
+    gb1->layout()->setSpacing(KDialog::spacingHint());
+    gb1->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *grid1 = new QGridLayout(gb1->layout(),9,1);
 
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
     grid1->addWidget(grid,0,0);
@@ -51,8 +53,10 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     llabel = new QCheckBox( i18n( "Legend" ), gb1 );
     grid1->addWidget(llabel,6,0);
 
-    QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
-    QGridLayout *grid2 = new QGridLayout(gb2,8,2,15,8);
+    QButtonGroup* gb2 = new QButtonGroup( 0, Qt::Vertical, i18n("Title"), this );
+    gb2->layout()->setSpacing(KDialog::spacingHint());
+    gb2->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,2);
 
     QLabel *tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
     grid2->addWidget(tmpLabel,2,0);
