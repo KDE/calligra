@@ -18,6 +18,9 @@ Small Feature Wishes
 * [Tab] should circle to the next object (maybe config: next object in this
   layer in all layers), presently it jumps to the zoom combobox and stays there.
 
+* Make UnitBoxes etc i18n (i.e. comma or \cdot instead of dot as decimal
+  seperator; maybe: output '.', except ',' and '·' as '.')
+
 --------------------------------
 Bugs and features from the bug and wish website
 * [optional] Cross cursors [Torsten Rahn supas121@astrophysik.uni-kiel.de].  

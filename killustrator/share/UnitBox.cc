@@ -92,6 +92,7 @@ void UnitBox::unitChanged (int id) {
   MeasurementUnit newUnit = (MeasurementUnit) id;
   float ptValue = getValue ();
   unit = newUnit;
+  valueBox->setRange (cvtPtToUnit (unit, ptMinVal), cvtPtToUnit (unit, ptMaxVal));
   setValue (ptValue);
 }
 
