@@ -37,10 +37,6 @@
 #include <koStoreStream.h>
 #include <kio/netaccess.h>
 
-#include <komlWriter.h>
-#include <komlMime.h>
-#include <komlStreamFeed.h>
-
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kapp.h>
