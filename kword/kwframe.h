@@ -307,11 +307,12 @@ public:
     /**
      * Paint the borders for one frame of this frameset.
      * @param painter The painter in which to draw the contents of the frameset
-     * @param frame The frame
+     * @param frame The frame to be drawn
+     * @param settingsFrame The frame from which we take the settings (usually @p frame, but not with Copy behaviour)
      * @param crect The rectangle (in "contents coordinates") to be painted
      * @param viewMode The current view mode ( for coord transformation )
      */
-    virtual void drawFrameBorder( QPainter *painter, KWFrame *frame, const QRect &crect, KWViewMode *viewMode );
+    virtual void drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode );
 
     /**
      * Paint this frameset

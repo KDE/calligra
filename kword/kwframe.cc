@@ -285,7 +285,7 @@ void KWFrameSet::createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode 
     }
 }
 
-void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, const QRect &crect, KWViewMode *viewMode )
+void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
     //kdDebug(32002) << "KWFrameSet::drawFrameBorder frameRect: " << DEBUGRECT( frameRect ) << endl;
@@ -299,12 +299,8 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, const QRect
 
     QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
 
-    // Header/Footer : set background color and borders from the main frameset (why?)
-    if ( isAHeader() || isAFooter() )
-        frame = getFrame( 0 );
-
     painter->save();
-    QBrush bgBrush( frame->getBackgroundColor() );
+    QBrush bgBrush( settingsFrame->getBackgroundColor() );
     bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
     painter->setBrush( bgBrush );
 
@@ -321,8 +317,8 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, const QRect
     // otherwise the frames will erase the border when painting themselves.
 
     Border::drawBorders( *painter, m_doc, frameRect,
-                         frame->getLeftBorder(), frame->getRightBorder(),
-                         frame->getTopBorder(), frame->getBottomBorder(),
+                         settingsFrame->getLeftBorder(), settingsFrame->getRightBorder(),
+                         settingsFrame->getTopBorder(), settingsFrame->getBottomBorder(),
                          1, viewSetting );
     painter->restore();
 }
@@ -607,7 +603,10 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->setClipRegion( reg );
                 p->translate( r.x() - icrect.x(), r.y() - icrect.y() ); // This assume that viewToNormal() is only a translation
 
-                QBrush bgBrush( frame->getBackgroundColor() );
+                // The settings come from this frame
+                KWFrame * settingsFrame = copyFrame ? copyFrame : frame;
+
+                QBrush bgBrush( settingsFrame->getBackgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
                 cg.setBrush( QColorGroup::Base, bgBrush );
 
@@ -616,7 +615,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->restore();
 
                 // Now draw the frame border
-                drawFrameBorder( p, frame, crect, viewMode );
+                drawFrameBorder( p, frame, settingsFrame, crect, viewMode );
             }
         }
         if ( frame->getNewFrameBehaviour() != Copy )
