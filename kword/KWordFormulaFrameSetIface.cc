@@ -35,6 +35,8 @@ KWordFormulaFrameSetIface::KWordFormulaFrameSetIface( KWFormulaFrameSet *_frame 
 
 DCOPRef KWordFormulaFrameSetIface::startEditing()
 {
+    if ( m_formulaFrame->isDeleted() )
+        return DCOPRef();
     KWDocument *doc=m_formulaFrame->kWordDocument();
     QPtrList <KWView> lst=doc->getAllViews();
     lst.at(0)->getGUI()->canvasWidget()->editFrameSet(m_formulaFrame );

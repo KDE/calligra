@@ -39,6 +39,8 @@ KWordTextFrameSetIface::KWordTextFrameSetIface( KWTextFrameSet *_frame )
 
 DCOPRef KWordTextFrameSetIface::startEditing()
 {
+    if ( m_frametext->isDeleted() )
+        return DCOPRef();
     KWDocument *doc=m_frametext->kWordDocument();
     QPtrList <KWView> lst=doc->getAllViews();
     lst.at(0)->getGUI()->canvasWidget()->editFrameSet(m_frametext, true);

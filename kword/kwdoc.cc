@@ -3776,7 +3776,7 @@ KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
         KWFrameSet *frm=0L;
         for ( frm=m_lstFrameSet.at(pos); frm != 0; frm=m_lstFrameSet.next() ){
             KWTextFrameSet *newFrm = frm->nextTextObject( obj );
-            if(newFrm && !newFrm->isDeleted() && newFrm->textObject()->needSpellCheck())
+            if(newFrm && !newFrm->isDeleted()  && newFrm->textObject()->needSpellCheck())
             {
                 bgFrameSpellChecked = frm;
                 return newFrm;
