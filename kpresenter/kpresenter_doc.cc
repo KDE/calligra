@@ -247,6 +247,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
     if ( name )
 	dcopObject();
+
 }
 
 void KPresenterDoc::refreshMenuCustomVariable()
@@ -2800,13 +2801,39 @@ void KPresenterDoc::updateHelpLineButton()
 
 void KPresenterDoc::loadHelpLines( const QDomElement &element )
 {
-    //todo
+    QDomElement helplines=element.firstChild().toElement();
+    int i=0;
+    while ( !helplines.isNull() ) {
+        if ( helplines.tagName()=="Vertical" )
+        {
+            m_vertHelplines.append(helplines.attribute("value").toDouble());
+        }
+        else if ( helplines.tagName()=="Horizontal" )
+        {
+            m_horizHelplines.append(helplines.attribute("value").toDouble());
+        }
+        helplines=helplines.nextSibling().toElement();
+    }
+
 }
 
 QDomElement KPresenterDoc::saveHelpLines( QDomDocument &doc )
 {
-    //todo
-    return QDomElement();
+    QDomElement helplines=doc.createElement("HELPLINES");
+    for(QValueList<double>::Iterator it = m_vertHelplines.begin(); it != m_vertHelplines.end(); ++it)
+    {
+        QDomElement lines=doc.createElement("Vertical");
+        lines.setAttribute("value", *it);
+        helplines.appendChild( lines );
+    }
+
+    for(QValueList<double>::Iterator it = m_horizHelplines.begin(); it != m_horizHelplines.end(); ++it)
+    {
+        QDomElement lines=doc.createElement("Horizontal");
+        lines.setAttribute("value", *it);
+        helplines.appendChild( lines );
+    }
+    return helplines;
 }
 
 
