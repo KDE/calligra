@@ -610,9 +610,70 @@ void KWPictureFrameSet::setSize(KSize _imgSize)
 /*================================================================*/
 void KWPictureFrameSet::save(ostream &out)
 {
+  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) << "\">" << endl;
+
+  KWFrameSet::save(out);
+
+  out << otag << "<IMAGE>" << endl;
+  image->save(out);
+  out << etag << "</IMAGE>" << endl;
+
+  out << etag << "</FRAMESET>" << endl;
 }
 
 /*================================================================*/
 void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
+  string tag;
+  string name;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+
+      if (name == "IMAGE")
+	{    
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  
+	  KWImage *_image = new KWImage();
+	  _image->load(parser,lst,doc);
+	  setFileName(_image->getFilename());
+	  delete _image;
+	}
+      else if (name == "FRAME")
+	{
+	  KWFrame rect;
+
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "left")
+		rect.setLeft(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "top")
+		rect.setTop(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "right")
+		rect.setRight(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bottom")
+		rect.setBottom(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "runaround")
+		rect.setRunAround(static_cast<RunAround>(atoi((*it).m_strValue.c_str())));
+	      else if ((*it).m_strName == "runaroundGap")
+		rect.setRunAroundGap(atoi((*it).m_strValue.c_str()));
+	    }
+	  frames.append(new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap()));
+	}
+      else
+	cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
 }

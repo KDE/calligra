@@ -330,3 +330,8 @@ Reggie, 6.11.1998:
 - Replaced all QRect, QSize and QPoint with KRect, KSize, KPoint. This fixes
   lots of calculation bugs with long documents.
 - Fixed another bug with resizing frames
+
+Reggie, 7.11.1998:
+------------------
+- Implemented saving/loading picture frames (currently it only saves filenames)
+- Fixed many, many bugs

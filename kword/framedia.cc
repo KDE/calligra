@@ -272,6 +272,7 @@ void KWFrameDia::applyChanges()
     {
       unsigned int _num = static_cast<unsigned int>(lFrameSList->currentItem());
       if (doc->getProcessingType() == KWordDocument::WP) _num++;
+
       if (static_cast<unsigned int>(_num) < doc->getNumFrameSets())
 	doc->getFrameSet(_num)->addFrame(frame);
       else
@@ -289,7 +290,15 @@ void KWFrameDia::connectListSelected(int _num)
   if (doc->getProcessingType() == KWordDocument::WP) _num++;
 
   if (static_cast<unsigned int>(_num) < doc->getNumFrameSets())
-    page->setHilitFrameSet(_num);
+    {
+      if (doc->getFrameSet(_num)->getFrameType() != FT_TEXT)
+	{
+	  lFrameSList->setCurrentItem(lFrameSList->count() - 1);
+	  page->setHilitFrameSet(-1);
+	}
+      else
+	page->setHilitFrameSet(_num);
+    }
   else
     page->setHilitFrameSet(-1);
 }

@@ -189,17 +189,34 @@ void KWordDocument::recalcFrames()
 {
   pages = 1;
   KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet*>(frames.at(0));
- 
+
   unsigned int frms = frameset->getNumFrames();
 
   ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (pageColumns.columns - 1)) 
     / pageColumns.columns;
  
-  for (int i = 0;i < pageColumns.columns;i++)
-    frameset->addFrame(KWFrame(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),getPTTopBorder(),
-			       ptColumnWidth,getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder()));
-  for (unsigned int j = 0;j < frms;j++)
-    frameset->delFrame(0);
+  for (unsigned int j = 0;j < (frms / pageColumns.columns) + 1;j++)
+    {
+      for (int i = 0;i < pageColumns.columns;i++)
+	{
+	  if (j * pageColumns.columns + i < frameset->getNumFrames())
+	    {
+	      frameset->getFrame(j * pageColumns.columns + i)->setRect(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),
+								       j * getPTPaperHeight() + getPTTopBorder(),ptColumnWidth,
+								       getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder());
+	    }
+	  else
+	    {
+	      frameset->addFrame(new KWFrame(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),
+					     j * getPTPaperHeight() + getPTTopBorder(),
+					     ptColumnWidth,getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder()));
+	    }
+	}
+    }
+
+  pages = (frms / pageColumns.columns) + 1;
+  recalcWholeText();
+  updateAllRanges();
 }
 
 /*================================================================*/
@@ -426,6 +443,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     }
 
   setPageLayout(__pgLayout,__columns);
+  pages = 2;
 
   return true;
 }
@@ -464,6 +482,12 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		KWTextFrameSet *frame = new KWTextFrameSet(this);
 		frame->load(parser,lst);
 		frame->setAutoCreateNewFrame(autoCreateNewFrame);
+		frames.append(frame);
+	      } break;
+	    case FT_PICTURE:
+	      {
+		KWPictureFrameSet *frame = new KWPictureFrameSet(this);
+		frame->load(parser,lst);
 		frames.append(frame);
 	      } break;
 	    default: break;
@@ -1688,5 +1712,17 @@ void KWordDocument::updateAllFrames()
 		}
 	    }
 	}
+    }
+}
+
+/*================================================================*/
+void KWordDocument::recalcWholeText()
+{
+  KWordView *viewPtr;
+
+  if (!m_lstViews.isEmpty())
+    {
+      viewPtr = m_lstViews.first();
+      viewPtr->getGUI()->getPaperWidget()->recalcWholeText();
     }
 }

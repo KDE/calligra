@@ -197,7 +197,7 @@ void KPClipartObject::draw(QPainter *_painter,int _diffx,int _diffy)
     _painter->drawPicture(*clipart.getPic());
   else
     {
-      KRect br = QRect(0,0,ow,oh);
+      KRect br = KRect(0,0,ow,oh);
       int pw = br.width();
       int ph = br.height();
       int yPos = -br.y();

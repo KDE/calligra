@@ -349,7 +349,7 @@ void KPEllipseObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	{
 	  _painter->setViewport(ox,oy,r.width(),r.height());
 
-	  KRect br = QRect(0,0,ow,oh);
+	  KRect br = KRect(0,0,ow,oh);
 	  int pw = br.width();
 	  int ph = br.height();
 	  KRect rr = br;
@@ -388,7 +388,7 @@ void KPEllipseObject::draw(QPainter *_painter,int _diffx,int _diffy)
     paint(_painter);
   else
     {
-      KRect br = QRect(0,0,ow,oh);
+      KRect br = KRect(0,0,ow,oh);
       int pw = br.width();
       int ph = br.height();
       KRect rr = br;

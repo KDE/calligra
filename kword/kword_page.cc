@@ -908,7 +908,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 	      picFS->setSize(_size);
 
 	    painter.drawImage(frame->x() - xOffset,frame->y() - yOffset,*picFS->getImage());
-	    if (frame->isSelected())
+	    if (frame->isSelected() && mouseMode == MM_EDIT_FRAME)
 	      drawFrameSelection(painter,frame);
 	  } break;
 	case FT_TEXT:
@@ -1292,7 +1292,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	paintfc = *fc;
 	bool bend = false;
 
-	KRect currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
+	KRect currFrame = KRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
 				frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
 				frameSet->getFrame(paintfc.getFrame() - 1)->width(),
 				frameSet->getFrame(paintfc.getFrame() - 1)->height());
@@ -1425,7 +1425,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	paintfc = *fc;
 	bool bend = false;
 
-	KRect currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
+	KRect currFrame = KRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
 				frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
 				frameSet->getFrame(paintfc.getFrame() - 1)->width(),
 				frameSet->getFrame(paintfc.getFrame() - 1)->height());
@@ -1535,7 +1535,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    paintfc = *fc;
 	    bool bend = false;
 	    
-	    KRect currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
+	    KRect currFrame = KRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
 				    frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
 				    frameSet->getFrame(paintfc.getFrame() - 1)->width(),
 				    frameSet->getFrame(paintfc.getFrame() - 1)->height());
@@ -1864,7 +1864,7 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 
   for (int k = 0;k < doc->getPages();k++)
     {
-      KRect tmp2 = QRect(-xOffset,(k * doc->getPTPaperHeight()) - yOffset,doc->getPTPaperWidth(),doc->getPTPaperHeight());
+      KRect tmp2 = KRect(-xOffset,(k * doc->getPTPaperHeight()) - yOffset,doc->getPTPaperWidth(),doc->getPTPaperHeight());
       if (v_area.intersects(tmp2))
 	_painter.drawRect(tmp2);
     }

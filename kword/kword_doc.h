@@ -152,7 +152,7 @@ public:
   unsigned int getNumFrameSets()
     { return frames.count(); }
   void addFrameSet(KWFrameSet *f)
-    { frames.append(f); updateAllRanges(); updateAllFrames(); updateAllViews(0L); }
+    { frames.append(f); updateAllRanges(); updateAllFrames(); /*updateAllViews(0L);*/ }
 
 
   /**
@@ -248,6 +248,7 @@ public:
   void updateAllRanges();
   void updateAllCursors();
   void drawAllBorders(QPainter *_painter = 0);
+  void recalcWholeText();
 
   int getPages() { return pages; }
 
