@@ -10,8 +10,47 @@
 #include "vgradient.h"
 #include "vstrokecmd.h"
 
+VStrokeLineWidthCmd::VStrokeLineWidthCmd( VDocument *doc, double width )
+    : VCommand( doc, i18n( "Stroke Objects" ) ), m_width( width )
+{
+	m_selection = m_doc->selection()->clone();
+}
+
+VStrokeLineWidthCmd::~VStrokeLineWidthCmd()
+{
+	delete( m_selection );
+}
+
+void
+VStrokeLineWidthCmd::execute()
+{
+	VObjectListIterator itr( m_selection->objects() );
+	for ( ; itr.current() ; ++itr )
+	{
+		VStroke stroke = *itr.current()->stroke();
+		stroke.setParent( itr.current() );
+		stroke.setLineWidth( m_width );
+		itr.current()->setStroke( stroke );
+		m_oldwidths.push_back( itr.current()->stroke()->lineWidth() );
+	}
+}
+
+void
+VStrokeLineWidthCmd::unexecute()
+{
+	VObjectListIterator itr( m_selection->objects() );
+	int i = 0;
+	for ( ; itr.current() ; ++itr )
+	{
+		VStroke stroke = *itr.current()->stroke();
+		stroke.setParent( itr.current() );
+		stroke.setLineWidth( m_oldwidths[ i++ ] );
+		itr.current()->setStroke( stroke );
+	}
+}
+
 VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke )
-    : VCommand( doc, i18n( "Stroke Objects" ) ), m_stroke(stroke)
+    : VCommand( doc, i18n( "Stroke Objects" ) ), m_stroke( stroke )
 {
 	m_selection = m_doc->selection()->clone();
 	m_gradient = 0L;

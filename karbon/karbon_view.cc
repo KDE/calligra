@@ -750,20 +750,9 @@ KarbonView::setLineWidth()
 void
 KarbonView::setLineWidth( double val)
 {
-	// TODO : maybe this can become a command
-	VObjectListIterator itr( m_part->document().selection()->objects() );
-	for ( ; itr.current() ; ++itr )
-	{
-		VStroke stroke( *( itr.current()->stroke() ) );
-		stroke.setParent( itr.current() );
-		stroke.setLineWidth( val );
-		itr.current()->setStroke( stroke );
-	}
-
-	m_part->repaintAllViews();
+	m_part->addCommand( new VStrokeLineWidthCmd( &m_part->document(), val ), true );
+	return;
 }
-
-
 
 void
 KarbonView::viewColorManager()

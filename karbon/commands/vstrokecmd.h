@@ -19,6 +19,21 @@ class VSelection;
 class VStroke;
 class VGradient;
 
+class VStrokeLineWidthCmd : public VCommand
+{
+public:
+	VStrokeLineWidthCmd( VDocument *doc, double );
+	virtual ~VStrokeLineWidthCmd();
+
+	virtual void execute();
+	virtual void unexecute();
+
+private:
+	VSelection* m_selection;
+	double m_width;
+	QValueVector<double> m_oldwidths;
+};
+
 class VStrokeCmd : public VCommand
 {
 public:
