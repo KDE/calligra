@@ -59,12 +59,12 @@ void KPresenterShell::slotFilePrint()
 
 void KPresenterShell::slotHelpAbout()
 {
-    KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtImageLeft | KAboutDialog::AbtProduct | KAboutDialog::AbtTitle,
+    KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtImageOnly | KAboutDialog::AbtProduct | KAboutDialog::AbtTitle,
 					  kapp->caption(),
 					  KDialogBase::Ok, KDialogBase::Ok, this, 0, TRUE );
-    dia->setTitle( "KOffice - the KDE Office Suite" );
-    dia->setProduct( "KPresenter", KPRESENTER_VERSION, "Reginald Stadlbauer <reggie@kde.org>", "1998-1999" );
-    dia->setImage( locate( "toolbar", "koffice-logo", KPresenterFactory::global() ) );
+    dia->setTitle( "KPresenter" );
+    dia->setProduct( "", KPRESENTER_VERSION, "Reginald Stadlbauer <reggie@kde.org>", "1998-1999" );
+    dia->setImage( locate( "data", "koffice/pics/koffice-logo.png", KPresenterFactory::global() ) );
     dia->exec();
     delete dia;
 }

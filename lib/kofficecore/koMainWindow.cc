@@ -305,11 +305,12 @@ void KoMainWindow::slotFileQuit()
 
 void KoMainWindow::slotHelpAbout()
 {
-    KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtProduct | KAboutDialog::AbtTitle,
+    KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtProduct | KAboutDialog::AbtTitle | KAboutDialog::AbtImageOnly,
 					  kapp->caption(),
 					  KDialogBase::Ok, KDialogBase::Ok, this, 0, TRUE );
-    dia->setTitle( "KOffice - the KDE Office Suite" );
-    dia->setProduct( kapp->caption(), "Alpha Version", "Unknown", "1999" );
+    dia->setTitle( kapp->caption() );
+    dia->setProduct( "", "pre-Beta1", "the KOffice Team", "1998-1999" );
+    dia->setImage( locate( "data", "koffice/pics/koffice-logo.png" ) );
     dia->exec();
     delete dia;
 }
