@@ -67,18 +67,6 @@ void ZoomTool::processEvent(QEvent *e)
       p1.setY(me->y());
       state = S_Rubberband;
     }
-//    float xpos = me->x (), ypos = me->y ();
-//    canvas->snapPositionToGrid (xpos, ypos);
-
-/*    bool flag = me->state () & Qt::ControlButton;
-    rect = new GPolygon (doc, flag ? GPolygon::PK_Square : GPolygon::PK_Rectangle);
-
-    rect->addPoint (0, Coord (xpos, ypos));
-    rect->addPoint (1, Coord (xpos, ypos));
-    rect->addPoint (2, Coord (xpos, ypos));
-    rect->addPoint (3, Coord (xpos, ypos));
-    doc->activePage()->insertObject (rect);
-    m_toolController->emitModeSelected(m_id,flag?i18n("Create Square"):i18n("Create Rectangle"));*/
   }
   else if(e->type() == QEvent::MouseMove)
   {
@@ -110,34 +98,6 @@ void ZoomTool::processEvent(QEvent *e)
       p.setPen(QPen(blue, 1, Qt::DotLine));
       p.drawRect(r);
     }
-/*      if (rect == 0L)
-         return;
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      canvas->snapPositionToGrid (xpos, ypos);
-      rect->setEndPoint (Coord (xpos, ypos));
-      bool flag = me->state () & Qt::ControlButton;
-
-      Rect r = rect->boundingBox ();
-      MeasurementUnit unit =
-         PStateManager::instance ()->defaultMeasurementUnit ();
-      QString u = unitToString (unit);
-      float xval, yval, wval, hval;
-      xval = cvtPtToUnit (unit, r.x ());
-      yval = cvtPtToUnit (unit, r.y ());
-      wval = cvtPtToUnit (unit, r.width ());
-      hval = cvtPtToUnit (unit, r.height ());
-
-      msgbuf=flag ? i18n("Create Square") : i18n("Create Rectangle");
-      msgbuf+=" ["+QString::number(xval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(yval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(wval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(hval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString("]");
-      m_toolController->emitModeSelected (m_id,msgbuf);*/
   }
   else if(e->type() == QEvent::MouseButtonRelease)
   {
@@ -145,34 +105,9 @@ void ZoomTool::processEvent(QEvent *e)
     {
       state = S_Init;
     }
-/*      if (rect == 0L)
-         return;
-
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
-      canvas->snapPositionToGrid (xpos, ypos);
-      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
-      rect->setEndPoint (Coord (xpos, ypos));
-      if (! rect->isValid ())
-      {
-         doc->activePage()->deleteObject (rect);
-      }
-      else
-      {
-         CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
-         history->addCommand (cmd);
-
-         doc->activePage()->unselectAllObjects ();
-         doc->activePage()->setLastObject (rect);
-      }
-      rect = 0L;*/
   }
   else if(e->type() == QEvent::KeyPress)
   {
-/*      QKeyEvent *ke = (QKeyEvent *) e;
-      if (ke->key () == Qt::Key_Escape)
-         m_toolController->emitOperationDone (m_id);*/
   }
 }
 

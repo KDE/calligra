@@ -74,7 +74,12 @@ void GDocument::zoomFactor(double factor)
 {
   if(factor == mZoomFactor)
     return;
-  
+
+  if(factor > Kontour::maxZoomFactor)
+    factor = Kontour::maxZoomFactor;
+  if(factor < Kontour::minZoomFactor)
+    factor = Kontour::minZoomFactor;
+
   /* Change grid distance. */
   mXGridZ = mXGrid * factor;
   while(mXGridZ < MIN_GRID_DIST)

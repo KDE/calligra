@@ -43,6 +43,7 @@
 #include <kconfig.h>
 #include <kparts/event.h>
 
+#include "kontour_global.h"
 #include "kontour_doc.h"
 #include "kontour_factory.h"
 #include "GDocument.h"
@@ -512,10 +513,11 @@ void KontourView::changeBrushColor(KoColor c)
 
 void KontourView::slotZoomFactorChanged()
 {
-//  vRuler->setZoomFactor(factor,mCanvas->visibleArea().left(),mCanvas->visibleArea().top());
-//  hRuler->setZoomFactor(factor,mCanvas->visibleArea().left(),mCanvas->visibleArea().top());
+  double zoom = activeDocument()->zoomFactor();
+  vRuler->zoomFactor(canvas()->xOffset(), canvas()->yOffset());
+  hRuler->zoomFactor(canvas()->xOffset(), canvas()->yOffset());
   QStringList list = m_viewZoom->items();
-  QString f = QString::number(qRound(activeDocument()->zoomFactor() * 100.0));
+  QString f = QString::number(qRound(zoom * 100.0));
   int i = 0;
   for(QValueList<QString>::Iterator it = list.begin(); it != list.end(); ++it, ++i)
     if((*it).left((*it).length() - 1) == f)
@@ -523,10 +525,12 @@ void KontourView::slotZoomFactorChanged()
       m_viewZoom->setCurrentItem(i);
       return;
     }
-   //current zoom value not found in list
-   f += '%';
-   m_viewZoom->changeItem(8, f);
-   m_viewZoom->setCurrentItem(8);
+  /* current zoom value not found in list */
+  f += '%';
+  m_viewZoom->changeItem(8, f);
+  m_viewZoom->setCurrentItem(8);
+  m_zoomIn->setEnabled(zoom != Kontour::maxZoomFactor);
+  m_zoomOut->setEnabled(zoom != Kontour::minZoomFactor);
 }
 
 /*******************[Actions]*******************/
@@ -569,17 +573,16 @@ void KontourView::slotSelectAll()
 
 void KontourView::slotZoomIn()
 {
-//   mZoomTool->zoomIn(getCanvas());
-//   bool state=mCanvas->getZoomFactor()!=100;
-//   m_zoomIn->setEnabled(state);
-//   m_zoomOut->setEnabled(true);
+  double zoom = activeDocument()->zoomFactor();
+  zoom *= 1.25;
+  activeDocument()->zoomFactor(zoom);
 }
 
 void KontourView::slotZoomOut()
 {
-//   mZoomTool->zoomOut(getCanvas());
-//   m_zoomOut->setEnabled(mCanvas->getZoomFactor()>=0.06);
-//   m_zoomIn->setEnabled(true);
+  double zoom = activeDocument()->zoomFactor();
+  zoom *= 0.8;
+  activeDocument()->zoomFactor(zoom);
 }
 
 void KontourView::slotViewZoom(const QString &s)
@@ -589,8 +592,6 @@ void KontourView::slotViewZoom(const QString &s)
   z = z.simplifyWhiteSpace();
   double zoom = z.toDouble() / 100.0;
   activeDocument()->zoomFactor(zoom);
-//   m_zoomIn->setEnabled(zoom!=100);
-//   m_zoomOut->setEnabled(zoom>=0.06);
 }
 
 void KontourView::slotOutline()
@@ -623,8 +624,6 @@ void KontourView::slotShowRuler(bool b)
     hRuler->hide();
     vRuler->hide();
   }
-  // recalculate layout
-//  resizeEvent(0L);
 }
 
 void KontourView::slotShowGrid(bool b)

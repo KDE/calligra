@@ -62,6 +62,8 @@ public:
    */
   void center(int x = 0, int y = 0);
 
+  void zoomToPoint(double scale, int x, int y);
+
   void snapPositionToGrid(double &x, double &y);
   KoRect snapTranslatedBoxToGrid(const KoRect &r);
   KoRect snapScaledBoxToGrid(const KoRect &r, int hmask);

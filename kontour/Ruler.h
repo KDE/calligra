@@ -44,7 +44,7 @@ public:
   MeasurementUnit unit() const {return mUnit; }
   void unit(MeasurementUnit mu);
 
-  void setZoomFactor(double zf, int xpos, int ypos);
+  void zoomFactor(int xpos, int ypos);
 
 public slots:
   void updatePointer(int x, int y);

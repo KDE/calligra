@@ -59,11 +59,13 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
   mXOffset = (width() - mGDoc->xCanvas()) / 2;
   mYOffset = (height() - mGDoc->yCanvas()) / 2;
 
-  mWidthH = width() / 2;
-  mHeightH = height() / 2;
+  mWidthH = width() >> 1;
+  mHeightH = height() >> 1;
 
   mOutlineMode = false;
 
+  kdDebug(38000) << "Double canvas width=" << 2*mGDoc->xCanvas() << endl;
+  kdDebug(38000) << "Double canvas height=" << 2*mGDoc->yCanvas() << endl;
   hBar->setRange(-mGDoc->xCanvas(), mGDoc->xCanvas());
   vBar->setRange(-mGDoc->yCanvas(), mGDoc->yCanvas());
 
@@ -104,7 +106,7 @@ void Canvas::updateBuf()
 
 void Canvas::updateBuf(const QRect &rect)
 {
-  // TODO Kill that
+  // TODO Optimize that
   int w = mGDoc->xCanvas();
   int h = mGDoc->yCanvas();
 
@@ -159,6 +161,11 @@ void Canvas::center(int x, int y)
 {
   hBar->setValue(x);
   vBar->setValue(y);
+}
+
+void Canvas::zoomToPoint(double scale, int x, int y)
+{
+
 }
 
 void Canvas::snapPositionToGrid(double &x, double &y)
@@ -333,12 +340,18 @@ bool Canvas::eventFilter(QObject *o, QEvent *e)
 void Canvas::resizeEvent(QResizeEvent *)
 {
   buffer->resize(size());
+
+  kdDebug(38000) << "Width=" << width() << endl;
+  kdDebug(38000) << "Height=" << height() << endl;
+
   hBar->setPageStep(width());
   vBar->setPageStep(height());
-  
-  mXOffset = width() / 2 - mWidthH + mXOffset;
-  mYOffset = height() / 2 - mHeightH + mYOffset;
-  
+
+  mXOffset = (width() / 2) - mWidthH + mXOffset;
+  mYOffset = (height() / 2) - mHeightH + mYOffset;
+  emit offsetXChanged(mXOffset);
+  emit offsetYChanged(mYOffset);
+
   mXCenter = (width() - mGDoc->xCanvas()) / 2;
   mYCenter = (height() - mGDoc->yCanvas()) / 2;
   hBar->setValue(mXCenter - mXOffset);
@@ -397,8 +410,20 @@ void Canvas::changePage()
 
 void Canvas::changeZoomFactor(double scale)
 {
+  kdDebug(38000) << "Double canvas width=" << 2*mGDoc->xCanvas() << endl;
+  kdDebug(38000) << "Double canvas height=" << 2*mGDoc->yCanvas() << endl;
+  kdDebug(38000) << "mXOffset(old)=" << mXOffset << endl;
+  kdDebug(38000) << "mYOffset(old)=" << mYOffset << endl;
   mXOffset = mWidthH - static_cast<int>(scale * (mWidthH - mXOffset));
   mYOffset = mHeightH - static_cast<int>(scale * (mHeightH - mYOffset));
+  kdDebug(38000) << "mXOffset(new)=" << mXOffset << endl;
+  kdDebug(38000) << "mYOffset(new)=" << mYOffset << endl;
+  hBar->setRange(-mGDoc->xCanvas(), mGDoc->xCanvas());
+  vBar->setRange(-mGDoc->yCanvas(), mGDoc->yCanvas());
+  mXCenter = (width() - mGDoc->xCanvas()) / 2;
+  mYCenter = (height() - mGDoc->yCanvas()) / 2;
+  hBar->setValue(mXCenter - mXOffset);
+  vBar->setValue(mYCenter - mYOffset);
   repaint();
 }
 

@@ -94,17 +94,15 @@ void Ruler::unit(MeasurementUnit mu)
   repaint();
 }
 
-void Ruler::setZoomFactor(double zf, int xpos, int ypos)
+void Ruler::zoomFactor(int xpos, int ypos)
 {
   zoom = mDoc->document()->zoomFactor();
-/* 
   if(mOrientation == Horizontal)
-    zeroPoint = xpos;
+    zeroPoint = -xpos;
   else
-    zeroPoint = ypos;
+    zeroPoint = -ypos;
   drawRuler();
-  updatePointer(currentPosition, currentPosition);
-  repaint();*/
+  repaint();
 }
 
 void Ruler::updatePointer(int x, int y)
@@ -192,7 +190,7 @@ void Ruler::paintEvent(QPaintEvent *e)
 
 void Ruler::resizeEvent(QResizeEvent *e)
 {
-  recalculateSize (e);
+  recalculateSize(e);
 }
 
 void Ruler::mousePressEvent(QMouseEvent *e)

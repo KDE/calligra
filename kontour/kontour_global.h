@@ -28,6 +28,8 @@
 namespace Kontour
 {
   const double nearDistance = 4.0;
+  const double minZoomFactor = 0.06;
+  const double maxZoomFactor = 100.0;
   const double pi = 3.14159265358979323846;
 }
 
