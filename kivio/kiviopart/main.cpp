@@ -77,7 +77,6 @@ int main( int argc, char **argv )
       delete splash;
       return 1;
     }
-    sleep(3);
     delete splash;
     app.exec();
     return 0;
