@@ -15,6 +15,7 @@
  ***************************************************************************/
 
 #include "clstbldesigner.h"
+#include "clstbldesigner.moc"
 
 clsTblDesigner::clsTblDesigner(QWidget *parent, const char *name ) : clsTableDesigner(parent,name) {
 }

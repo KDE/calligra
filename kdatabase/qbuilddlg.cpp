@@ -15,6 +15,7 @@
  ***************************************************************************/
 
 #include "qbuilddlg.h"
+#include "qbuilddlg.moc"
 #include "kdatabase_qbuilder.h"
 
 QBuildDlg::QBuildDlg(QWidget *parent, const char *name ) : clsQBuilder(parent,name) {
