@@ -1,7 +1,7 @@
 kde_module_LTLIBRARIES = libkarbonaiimport.la
 
 libkarbonaiimport_la_LIBADD = \
-	$(top_builddir)/lib/kofficeui/libkofficeui.la \
+	$(LIB_KOFFICEUI) \
 	../../../karbon/libkarbonpart.la
 
 libkarbonaiimport_la_LDFLAGS = \
@@ -10,7 +10,7 @@ libkarbonaiimport_la_LDFLAGS = \
 	-version-info 1:0:0 -no-undefined
 
 INCLUDES = \
-        $(KOFFICE_INCLUDES) \
+	$(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/karbon \
 	-I$(top_srcdir)/karbon/visitors \
 	$(all_includes)
