@@ -58,18 +58,17 @@ class TagProcessing
         {}
 
         TagProcessing (QString  n,
-                       void     (*p)(QDomNode, void *, QString &, KWEFKWordLeader*),
+                       void     (*p)(QDomNode, void *, KWEFKWordLeader*),
                        void    *d) : name (n), processor (p), data (d)
         {}
 
         QString  name;
-        void     (*processor)(QDomNode, void *, QString &, KWEFKWordLeader*);
+        void     (*processor)(QDomNode, void *, KWEFKWordLeader*);
         void    *data;
 };
 
 void ProcessSubtags     ( QDomNode                   parentNode,
                           QValueList<TagProcessing>  &tagProcessingList,
-                          QString                    &outputText,
                           KWEFKWordLeader            *leader);
 
 void AllowNoSubtags ( QDomNode  myNode );

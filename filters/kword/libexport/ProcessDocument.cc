@@ -52,7 +52,6 @@
 
 static void ProcessAboutTag ( QDomNode         myNode,
                               void            *tagData,
-                              QString         &outputText,
                               KWEFKWordLeader *leader )
 {
     KWEFDocumentInfo *docInfo = (KWEFDocumentInfo *) tagData;
@@ -62,13 +61,12 @@ static void ProcessAboutTag ( QDomNode         myNode,
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "title",    ProcessTextTag, (void *) &(*docInfo).title    ) );
     tagProcessingList.append ( TagProcessing ( "abstract", ProcessTextTag, (void *) &(*docInfo).abstract ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 
 static void ProcessAuthorTag ( QDomNode         myNode,
                                void            *tagData,
-                               QString         &outputText,
                                KWEFKWordLeader *leader )
 {
     KWEFDocumentInfo *docInfo = (KWEFDocumentInfo *) tagData;
@@ -86,13 +84,12 @@ static void ProcessAuthorTag ( QDomNode         myNode,
     tagProcessingList.append ( TagProcessing ( "postal-code", ProcessTextTag, (void *) &(*docInfo).postalCode ) );
     tagProcessingList.append ( TagProcessing ( "city",        ProcessTextTag, (void *) &(*docInfo).city       ) );
     tagProcessingList.append ( TagProcessing ( "street",      ProcessTextTag, (void *) &(*docInfo).street     ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 
 void ProcessDocumentInfoTag ( QDomNode         myNode,
                               void            *,
-                              QString         &outputText,
                               KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
@@ -103,7 +100,7 @@ void ProcessDocumentInfoTag ( QDomNode         myNode,
     tagProcessingList.append ( TagProcessing ( "log",    NULL,             NULL              ) );
     tagProcessingList.append ( TagProcessing ( "author", ProcessAuthorTag, (void *) &docInfo ) );
     tagProcessingList.append ( TagProcessing ( "about",  ProcessAboutTag,  (void *) &docInfo ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 
     leader->doFullDocumentInfo (docInfo);
 }
@@ -151,7 +148,7 @@ static void ProcessOneAttrTag ( QDomNode  myNode,
 }
 
 
-static void ProcessColorAttrTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader * )
+static void ProcessColorAttrTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
 {
     QColor *attrValue = (QColor *) tagData;
 
@@ -200,31 +197,30 @@ static void ProcessBoolIntAttrTag ( QDomNode  myNode,
 // --------------------------------------------------------------------------------
 
 
-static void ProcessIntValueTag (QDomNode myNode, void *tagData, QString &, KWEFKWordLeader *)
+static void ProcessIntValueTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
     ProcessOneAttrTag (myNode, "value", "int", tagData);
 }
 
 
-static void ProcessBoolIntValueTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader * )
+static void ProcessBoolIntValueTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
 {
     ProcessBoolIntAttrTag (myNode, "value", tagData);
 }
 
 
-static void ProcessStringValueTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader * )
+static void ProcessStringValueTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
 {
     ProcessOneAttrTag (myNode, "value", "QString", tagData);
 }
 
-
-static void ProcessStringAlignTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader * )
+static void ProcessStringAlignTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
 {
     ProcessOneAttrTag (myNode, "align", "QString", tagData);
 }
 
 
-static void ProcessStringNameTag (QDomNode myNode, void *tagData, QString &, KWEFKWordLeader *)
+static void ProcessStringNameTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
     ProcessOneAttrTag (myNode, "name", "QString", tagData);
 }
@@ -235,7 +231,6 @@ static void ProcessStringNameTag (QDomNode myNode, void *tagData, QString &, KWE
 
 void ProcessAnchorTag ( QDomNode       myNode,
                         void          *tagData,
-                        QString       &,
                         KWEFKWordLeader *         )
 {
     QString *instance = (QString *) tagData;
@@ -268,7 +263,7 @@ struct LinkData
 };
 
 
-static void ProcessLinkTag (QDomNode myNode, void *tagData, QString &, KWEFKWordLeader *)
+static void ProcessLinkTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
     LinkData *linkData = (LinkData *) tagData;
 
@@ -284,7 +279,7 @@ static void ProcessLinkTag (QDomNode myNode, void *tagData, QString &, KWEFKWord
 }
 
 
-static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *leader)
+static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
@@ -326,7 +321,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputTex
                                   << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     (void *) &verticalAlignment )
                                   << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    (void *) &bgColor           )
                                   << TagProcessing ( "LINK",                ProcessLinkTag,         (void *) &linkData          );
-                ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+                ProcessSubtags (myNode, tagProcessingList, leader);
 
                 (*formatDataList) << FormatData ( formatPos, formatLen,
                                                   TextFormatting ( fontName, italic, underline, strikeout,
@@ -353,7 +348,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputTex
                //       FONT is just the first that we've come across so far
                tagProcessingList << TagProcessing ( "FONT",   NULL,             NULL               )
                                  << TagProcessing ( "ANCHOR", ProcessAnchorTag, (void *) &instance );
-               ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+               ProcessSubtags (myNode, tagProcessingList, leader);
 
 #if 0
                kdError (30508) << "DEBUG: Adding frame anchor " << instance << endl;
@@ -379,7 +374,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &outputTex
 }
 
 
-void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *leader )
+void ProcessFormatsTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
@@ -388,14 +383,14 @@ void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KW
     (*formatDataList).clear ();
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FORMAT", ProcessFormatTag, (void *) formatDataList );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 
 // --------------------------------------------------------------------------------
 
 
-static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader * )
+static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
 {
     CounterData *counter = (CounterData *) tagData;
 
@@ -414,7 +409,7 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, KWEFK
 }
 
 
-static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader *)
+static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
     // WARNING: This is exactly the format AbiWord needs for defining its tabulators
     // TODO: make this function independant of the AbiWord export filter
@@ -454,7 +449,7 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, QString 
 }
 
 
-static void ProcessIndentsTag (QDomNode myNode, void *tagData , QString&, KWEFKWordLeader *)
+static void ProcessIndentsTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -468,7 +463,7 @@ static void ProcessIndentsTag (QDomNode myNode, void *tagData , QString&, KWEFKW
 }
 
 
-static void ProcessLayoutOffsetTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader * )
+static void ProcessLayoutOffsetTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -481,7 +476,7 @@ static void ProcessLayoutOffsetTag ( QDomNode myNode, void *tagData, QString &, 
 }
 
 
-static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader *)
+static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -500,7 +495,7 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString &, 
 }
 
 
-void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader *leader )
+void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
     LayoutData *layout = (LayoutData *) tagData;
@@ -525,7 +520,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWE
     tagProcessingList << TagProcessing ( "RIGHTBORDER",  NULL,                        NULL                         );
     tagProcessingList << TagProcessing ( "TOPBORDER",    NULL,                        NULL                         );
     tagProcessingList << TagProcessing ( "BOTTOMBORDER", NULL,                        NULL                         );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 
 
     if ( formatDataList.count () )
@@ -581,7 +576,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWE
 // --------------------------------------------------------------------------------
 
 
-void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader * )
+void ProcessTextTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
 {
     QString *tagText = (QString *) tagData;
     

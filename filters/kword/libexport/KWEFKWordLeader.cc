@@ -77,7 +77,6 @@ static FrameAnchor *findAnchor ( QString              &name,
 
 static void ProcessParagraphTag ( QDomNode         myNode,
                                   void            *tagData,
-                                  QString         &outputText,
                                   KWEFKWordLeader *leader )
 {
 #if 0
@@ -94,7 +93,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     tagProcessingList << TagProcessing ( "TEXT",    ProcessTextTag,    (void *) &paraData.text           )
                       << TagProcessing ( "FORMATS", ProcessFormatsTag, (void *) &paraData.formattingList )
                       << TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &paraData.layout         );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 
     CreateMissingFormatData (paraData.text, paraData.formattingList);
 
@@ -122,7 +121,6 @@ static void ProcessParagraphTag ( QDomNode         myNode,
 
 static void ProcessImageKeyTag ( QDomNode         myNode,
                                  void            *tagData,
-                                 QString         &,
                                  KWEFKWordLeader *leader )
 {
     QString *key = (QString *) tagData;   // the name where the picture came from used as the identifier
@@ -144,7 +142,6 @@ static void ProcessImageKeyTag ( QDomNode         myNode,
 
 static void ProcessImageTag ( QDomNode         myNode,
                               void            *tagData,
-                              QString         &outputText,
                               KWEFKWordLeader *leader )
 {
     QValueList<AttrProcessing> attrProcessingList;
@@ -153,13 +150,12 @@ static void ProcessImageTag ( QDomNode         myNode,
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "KEY", ProcessImageKeyTag, tagData );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 
 static void ProcessFramesetTag ( QDomNode        myNode,
                                 void            *tagData,
-                                QString         &outputText,
                                 KWEFKWordLeader *leader )
 {
 #if 0
@@ -198,7 +194,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 QValueList<TagProcessing> tagProcessingList;
                 tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL              )
                                   << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) paraList );
-                ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+                ProcessSubtags (myNode, tagProcessingList, leader);
             }
             else
             {
@@ -222,7 +218,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                             QValueList<TagProcessing> tagProcessingList;
                             tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL                   )
                                               << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &cellParaList );
-                            ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+                            ProcessSubtags (myNode, tagProcessingList, leader);
 
                             frameAnchor->table.addCell (col, row, cellParaList);
                         }
@@ -262,7 +258,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 QValueList<TagProcessing> tagProcessingList;
                 tagProcessingList << TagProcessing ( "FRAME", NULL,            NULL                                  )
                                   << TagProcessing ( "IMAGE", ProcessImageTag, (void *) &frameAnchor->picture.key );
-                ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+                ProcessSubtags (myNode, tagProcessingList, leader);
 
 #if 0
                 kdError (30508) << "DEBUG: FRAMESET IMAGE KEY filename of picture is " << frameAnchor->picture.key << endl;
@@ -290,30 +286,29 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 
 static void ProcessFramesetsTag ( QDomNode        myNode,
                                   void            *tagData,
-                                  QString         &outputText,
                                   KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FRAMESET", ProcessFramesetTag, tagData );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 
-static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader *leader )
+static void ProcessStyleTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
     LayoutData layout;
 
-    ProcessLayoutTag (myNode, &layout, outputText, leader);
+    ProcessLayoutTag (myNode, &layout, leader);
 
     leader->doFullDefineStyle (layout);
 }
 
 
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader *leader )
+static void ProcessStylesPluralTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
@@ -321,13 +316,13 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "STYLE", ProcessStyleTag, NULL );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
     
     leader->doCloseStyles ();
 }
 
 
-static void ProcessPaperTag (QDomNode myNode, void *, QString &, KWEFKWordLeader *leader)
+static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 {
 
     int format      = -1;
@@ -356,7 +351,6 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString &, KWEFKWordLeader
 
 static void ProcessPixmapsKeyTag ( QDomNode         myNode,
                                    void            *tagData,
-                                   QString         &,
                                    KWEFKWordLeader *leader )
 {
     QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
@@ -399,14 +393,13 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
 
 static void ProcessPixmapsTag ( QDomNode         myNode,
                                 void            *tagData,
-                                QString         &outputText,
                                 KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "KEY", ProcessPixmapsKeyTag, tagData );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 
@@ -448,7 +441,6 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
 
 static void ProcessDocTag ( QDomNode         myNode,
                             void             *tagData,
-                            QString          &outputText,
                             KWEFKWordLeader  *leader )
 {
 #if 0
@@ -476,7 +468,7 @@ static void ProcessDocTag ( QDomNode         myNode,
                       << TagProcessing ( "CLIPARTS",    NULL,                   NULL               )
                       << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      (void *) &paraList )
                       << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    (void *) &paraList );
-    ProcessSubtags (myNode, tagProcessingList, outputText, leader);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 
     leader->doFullDocument (paraList, filterData->storeFileName, filterData->exportFileName);
 
@@ -577,7 +569,7 @@ bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 
 
 static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
-                               void            (*processor) (QDomNode, void *, QString &, KWEFKWordLeader *),
+                               void            (*processor) (QDomNode, void *, KWEFKWordLeader *),
                                FilterData       &filterData,
                                KWEFKWordLeader  *leader )
 {
@@ -585,7 +577,7 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
 
     QDomDocument qDomDocumentIn;
 
-    if ( !qDomDocumentIn.setContent (stringBufIn) )
+    if ( !qDomDocumentIn.setContent (byteArrayIn) )
     {
         kdError (30508) << "ProcessStoreFile (): Parsing Error!" << endl;
 
@@ -599,8 +591,7 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
 
     QDomNode docNode = qDomDocumentIn.documentElement ();
 
-    QString stringBufOut; // Dummy!  TODO: should be removed
-    processor (docNode, &filterData, stringBufOut, leader);
+    processor (docNode, &filterData, leader);
 
     return true;
 }

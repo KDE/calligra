@@ -50,7 +50,6 @@
 
 void ProcessSubtags ( QDomNode                   parentNode,
                       QValueList<TagProcessing>  &tagProcessingList,
-                      QString                    &outputText,
                       KWEFKWordLeader            *leader)
 {
     QDomNode childNode;
@@ -74,7 +73,7 @@ void ProcessSubtags ( QDomNode                   parentNode,
 
                     if ( (*tagProcessingIt).processor != NULL )
                     {
-                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, outputText, leader );
+                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, leader );
                     }
                     else
                     {
