@@ -3209,7 +3209,7 @@ void KWDocument::updateAllFrames()
     updateFramesOnTopOrBelow();
 }
 
-void KWDocument::updateFramesOnTopOrBelow( int pageNum /* -1 == all */ )
+void KWDocument::updateFramesOnTopOrBelow( int _pageNum /* -1 == all */ )
 {
     if ( viewMode() && !viewMode()->hasFrames() )
         return;
@@ -3221,9 +3221,9 @@ void KWDocument::updateFramesOnTopOrBelow( int pageNum /* -1 == all */ )
     int numberAdded = 0;
 #endif
 
-    // Look at all pages if pageNum == -1, otherwise look at pageNum only.
-    int fromPage = pageNum == -1 ? 0 : pageNum;
-    int toPage = pageNum == -1 ? m_pages - 1 : pageNum;
+    // Look at all pages if _pageNum == -1, otherwise look at _pageNum only.
+    int fromPage = _pageNum == -1 ? 0 : _pageNum;
+    int toPage = _pageNum == -1 ? m_pages - 1 : _pageNum;
     for ( int pageNum = fromPage ; pageNum <= toPage ; ++pageNum )
     {
         // For all frames in that page: clear ontop/below lists.
@@ -3278,6 +3278,10 @@ void KWDocument::updateFramesOnTopOrBelow( int pageNum /* -1 == all */ )
                 // ## might need a for loop for the case of inline-inside-inline,
                 // or maybe calling isPaintedBy instead [depending on what should happen for tables]
                 if ( isInline && frameSet == parentFrameset )
+                    continue;
+                // Floating frames are not "on top", they are "inside".
+                // They are not "below" anything either - the parent frameset is.
+                if ( frameSet->isFloating() )
                     continue;
 
                 //kdDebug(32001) << "        comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
@@ -3336,7 +3340,7 @@ void KWDocument::updateFramesOnTopOrBelow( int pageNum /* -1 == all */ )
     } // for (pages)
 
 #ifdef DEBUG_SPEED
-    kdDebug(32001) << "updateFramesOnTopOrBelow("<<pageNum<<") took " << (float)(dt.elapsed()) / 1000 << " seconds, added " << numberAdded << " frames" << endl;
+    kdDebug(32001) << "updateFramesOnTopOrBelow("<<_pageNum<<") took " << (float)(dt.elapsed()) / 1000 << " seconds, added " << numberAdded << " frames" << endl;
 #endif
 }
 
