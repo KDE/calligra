@@ -851,6 +851,13 @@ void KOISpell::check2 (KProcIO *)
   int e, tempe;
   QString word;
   QString line;
+  static bool recursive = false;
+  if (recursive &&
+      (!ksdlg || ksdlg->isHidden()))
+  {
+    return;
+  }
+  recursive = true;
 
   do
     {
@@ -902,6 +909,7 @@ void KOISpell::check2 (KProcIO *)
                       dlgresult = KOS_IGNORE;
                       check3();
                   }
+                  recursive = false;
 		  return;
 		}
 	    }
@@ -912,10 +920,12 @@ void KOISpell::check2 (KProcIO *)
 
     } while (tempe>0);
 
+  proc->ackRead();
 
-
-  if (tempe==-1) //we were called, but no data seems to be ready...
+  if (tempe==-1) {//we were called, but no data seems to be ready...
+    recursive = false;
     return;
+  }
 
   proc->ackRead();
   //If there is more to check, then send another line to ISpell.
@@ -931,6 +941,7 @@ void KOISpell::check2 (KProcIO *)
       qs=origbuffer.mid (lastline, i-lastline);
       cleanFputs (qs,false);
       lastline=i;
+      recursive = false;
       return;
     }
   else
@@ -942,6 +953,7 @@ void KOISpell::check2 (KProcIO *)
       emitProgress();
       emit done (newbuffer);
     }
+  recursive = false;
 }
 
 void KOISpell::check3 ()
