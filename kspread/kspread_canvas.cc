@@ -53,8 +53,12 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 		{
 		    if((*it).ref_name==text())
 			{
-			m_pView->canvasWidget()->gotoLocation( KSpreadRange(util_rangeName((*it).rect )));
-			return;
+			    QString tmp;
+			    tmp=(*it).table_name;
+			    tmp+="!";
+			    tmp+=util_rangeName((*it).rect);
+			    m_pView->canvasWidget()->gotoLocation( KSpreadRange(tmp, m_pView->doc()->map()));
+			    return;
 			}
 		}
 
