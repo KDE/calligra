@@ -31,7 +31,7 @@
 #include <knuminput.h>
 
 typedef KGenericFactory<InsertKnotsPlugin, KarbonViewBase> InsertKnotsPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_insertknotsplugin, InsertKnotsPluginFactory( "karboninsertknotsplugin" ) );
+K_EXPORT_COMPONENT_FACTORY( karbon_insertknotsplugin, InsertKnotsPluginFactory( "karboninsertknotsplugin" ) )
 
 InsertKnotsPlugin::InsertKnotsPlugin( KarbonViewBase *parent, const char* name, const QStringList & ) : Plugin( parent, name )
 {

@@ -36,7 +36,7 @@
 #include <knuminput.h>
 
 typedef KGenericFactory<WhirlPinchPlugin, KarbonViewBase> WhirlPinchPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_whirlpinchplugin, WhirlPinchPluginFactory( "karbonwhirlpinchplugin" ) );
+K_EXPORT_COMPONENT_FACTORY( karbon_whirlpinchplugin, WhirlPinchPluginFactory( "karbonwhirlpinchplugin" ) )
 
 WhirlPinchPlugin::WhirlPinchPlugin( KarbonViewBase *parent, const char* name, const QStringList & ) : Plugin( parent, name )
 {

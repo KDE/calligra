@@ -33,7 +33,7 @@
 #include <kgenericfactory.h>
 
 typedef KGenericFactory<VImageTool, KarbonViewBase> ImageToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_imagetoolplugin, ImageToolPluginFactory( "karbonimagetoolplugin" ) );
+K_EXPORT_COMPONENT_FACTORY( karbon_imagetoolplugin, ImageToolPluginFactory( "karbonimagetoolplugin" ) )
 
 VImageTool::VImageTool( KarbonViewBase* view, const char *name, const QStringList & )
 	: VTool( (KarbonPart *)view->part(), name ), VKarbonPlugin( view, name )

@@ -35,7 +35,7 @@
 #include "vshadowdecorator.h"
 
 typedef KGenericFactory<ShadowEffectPlugin, KarbonViewBase> ShadowEffectPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_shadoweffectplugin, ShadowEffectPluginFactory( "karbonshadoweffectplugin" ) );
+K_EXPORT_COMPONENT_FACTORY( karbon_shadoweffectplugin, ShadowEffectPluginFactory( "karbonshadoweffectplugin" ) )
 
 ShadowEffectPlugin::ShadowEffectPlugin( KarbonViewBase *parent, const char* name, const QStringList & )
 : Plugin( parent, name )

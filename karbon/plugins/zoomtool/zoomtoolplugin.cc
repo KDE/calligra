@@ -86,7 +86,7 @@ static const char* const cplus[] = {
 };
 
 typedef KGenericFactory<VZoomTool, KarbonViewBase> ZoomToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_zoomtoolplugin, ZoomToolPluginFactory( "karbonzoomtoolplugin" ) );
+K_EXPORT_COMPONENT_FACTORY( karbon_zoomtoolplugin, ZoomToolPluginFactory( "karbonzoomtoolplugin" ) )
 
 VZoomTool::VZoomTool( KarbonViewBase* view, const char *name, const QStringList & )
 	: VTool( (KarbonPart *)view->part(), name ), VKarbonPlugin( view, name )

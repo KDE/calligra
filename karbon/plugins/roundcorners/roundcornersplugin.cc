@@ -30,7 +30,7 @@
 #include <knuminput.h>
 
 typedef KGenericFactory<VRoundCornersPlugin, KarbonViewBase> VRoundCornersPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_roundcornersplugin, VRoundCornersPluginFactory( "karbonroundcornersplugin" ) );
+K_EXPORT_COMPONENT_FACTORY( karbon_roundcornersplugin, VRoundCornersPluginFactory( "karbonroundcornersplugin" ) )
 
 VRoundCornersPlugin::VRoundCornersPlugin( KarbonViewBase *parent, const char* name, const QStringList & ) : Plugin( parent, name )
 {
