@@ -3698,7 +3698,7 @@ void KPresenterView::getFonts( QStringList &lst )
 
     kde_display = kapp->getDisplay();
 
-    bool have_installed = kapp->KDEFonts( lst );
+    bool have_installed = kapp->kdeFonts( lst );
 
     if ( have_installed )
 	return;
