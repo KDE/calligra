@@ -144,7 +144,10 @@ const char *palette[65] = {
 const int ndays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 const int ldays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-	XMLTree::XMLTree() : QObject(),table(0L), fontCount(0), footerCount(0),
+/* KLocale needs a catalog for Konstruktion, but the ole filters don't
+   have their own.  This m_locale here is anyway a hack, so we simply
+   take one, which exists with high probability.  */
+	XMLTree::XMLTree() : QObject(),m_locale("koffice") ,table(0L), fontCount(0), footerCount(0),
 headerCount(0), xfCount(0)
 {
 	biff = 0;
