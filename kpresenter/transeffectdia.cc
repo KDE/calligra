@@ -17,16 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <transeffectdia.h>
+#include "transeffectdia.h"
 
-#include <global.h>
-#include <kpbackground.h>
-#include <kpobject.h>
-#include <kptextobject.h>
-#include <kpresenter_view.h>
-#include <kprcanvas.h>
-#include <kppageeffects.h>
-#include <kpresenter_sound_player.h>
+#include "global.h"
+#include "kpbackground.h"
+#include "kpobject.h"
+#include "kptextobject.h"
+#include "kpresenter_view.h"
+#include "kprcanvas.h"
+#include "kppageeffects.h"
+#include "kpresenter_sound_player.h"
 
 #include <qsplitter.h>
 #include <qheader.h>

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <pgconfdia.h>
-#include <kpresenter_doc.h>
+#include "pgconfdia.h"
+#include "kpresenter_doc.h"
 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>

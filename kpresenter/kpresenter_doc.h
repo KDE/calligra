@@ -57,11 +57,11 @@ class KOSpellConfig;
 
 #include <koPageLayoutDia.h>
 
-#include <kpobject.h>
-#include <global.h>
+#include "kpobject.h"
+#include "global.h"
 
 #include <koPictureCollection.h>
-#include <kpgradientcollection.h>
+#include "kpgradientcollection.h"
 #include <koUnit.h>
 #include <kozoomhandler.h>
 #include <kostyle.h>

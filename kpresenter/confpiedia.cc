@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <confpiedia.h>
+#include "confpiedia.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -29,12 +29,12 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <knuminput.h>
-#include <kprcommand.h>
+#include "kprcommand.h"
 
 #include <qpen.h>
 #include <qbrush.h>
 #include <qcombobox.h>
-#include <global.h>
+#include "global.h"
 
 #include <stdlib.h>
 

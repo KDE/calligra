@@ -22,7 +22,7 @@
 #ifndef PGCONFDIA_H
 #define PGCONFDIA_H
 
-#include <global.h>
+#include "global.h"
 
 #include <qmap.h>
 #include <qpen.h>

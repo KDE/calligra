@@ -21,8 +21,8 @@
 #ifndef kpellipseobject_h
 #define kpellipseobject_h
 
-#include <kpobject.h>
-#include <global.h>
+#include "kpobject.h"
+#include "global.h"
 
 class KPGradient;
 class QPainter;

@@ -21,7 +21,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <confpolygondia.h>
+#include "confpolygondia.h"
 
 #include <qbuttongroup.h>
 #include <qvbuttongroup.h>
@@ -32,7 +32,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-#include <kprcommand.h>
+#include "kprcommand.h"
 
 #include <stdlib.h>
 #include <math.h>

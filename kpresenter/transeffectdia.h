@@ -26,7 +26,7 @@
 #include <kdialogbase.h>
 #include <klistview.h>
 #include <qlabel.h>
-#include <global.h>
+#include "global.h"
 
 class KPresenterDoc;
 class KPresenterView;

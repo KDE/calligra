@@ -18,9 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpresenter_factory.h>
-#include <kpresenter_doc.h>
-#include <kpresenter_aboutdata.h>
+#include "kpresenter_factory.h"
+#include "kpresenter_doc.h"
+#include "kpresenter_aboutdata.h"
 
 #include <kstandarddirs.h>
 #include <kinstance.h>

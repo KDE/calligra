@@ -18,9 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpquadricbeziercurveobject.h>
+#include "kpquadricbeziercurveobject.h"
 #include "KPQuadricbezierCurveObjectIface.h"
-#include <kpresenter_utils.h>
+#include "kpresenter_utils.h"
 
 #include <qpainter.h>
 #include <qwmatrix.h>

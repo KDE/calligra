@@ -23,7 +23,7 @@
 
 class KPresenterDoc;
 
-#include <kpobject.h>
+#include "kpobject.h"
 
 class KPGroupObject : public KPObject
 {

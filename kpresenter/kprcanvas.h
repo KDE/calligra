@@ -30,8 +30,8 @@
 
 #include <koRuler.h>
 #include <koQueryTrader.h>
-#include <koPointArray.h>
-#include <global.h>
+#include "koPointArray.h"
+#include "global.h"
 #include <koRect.h>
 #include <qrichtext_p.h>
 

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 #include "KPresenterObject2DIface.h"
-#include <kpellipseobject.h>
-#include <kpgradient.h>
+#include "kpellipseobject.h"
+#include "kpgradient.h"
 
 #include <kdebug.h>
 #include <qbitmap.h>

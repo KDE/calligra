@@ -22,7 +22,7 @@
 #define confpiedia_h
 
 #include <qframe.h>
-#include <global.h>
+#include "global.h"
 #include <qcombobox.h>
 #include <qpen.h>
 #include <knuminput.h>

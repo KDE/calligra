@@ -19,9 +19,9 @@
 */
 
 #include <koPictureFilePreview.h>
-#include <backdia.h>
-#include <kpbackground.h>
-#include <kpresenter_doc.h>
+#include "backdia.h"
+#include "kpbackground.h"
+#include "kpresenter_doc.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>

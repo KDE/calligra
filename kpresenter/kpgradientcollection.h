@@ -22,7 +22,7 @@
 #define kpgradientcollection_h
 
 #include <qptrlist.h>
-#include <global.h>
+#include "global.h"
 
 class QPixmap;
 class KPGradient;

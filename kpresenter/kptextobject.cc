@@ -18,9 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kptextobject.h>
-#include <kpgradient.h>
-#include <kprcommand.h>
+#include "kptextobject.h"
+#include "kpgradient.h"
+#include "kprcommand.h"
 
 #include <qwidget.h>
 #include <qpicture.h>
@@ -33,8 +33,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <kpresenter_view.h>
-#include <kpresenter_doc.h>
+#include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 
 #include <qrichtext_p.h>
 #include <kotextobject.h>

@@ -20,7 +20,7 @@
 
 #include "kpcubicbeziercurveobject.h"
 #include "KPCubicbeziercurveObjectIface.h"
-#include <kpresenter_utils.h>
+#include "kpresenter_utils.h"
 #include <kozoomhandler.h>
 #include <qpainter.h>
 #include <qwmatrix.h>

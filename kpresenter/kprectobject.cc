@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kprectobject.h>
-#include <kpgradient.h>
+#include "kprectobject.h"
+#include "kpgradient.h"
 #include "KPRectObjectIface.h"
 
 #include <kdebug.h>

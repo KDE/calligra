@@ -18,10 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpautoformobject.h>
+#include "kpautoformobject.h"
 #include "KPAutoFormObjectIface.h"
-#include <kpresenter_utils.h>
-#include <kpgradient.h>
+#include "kpresenter_utils.h"
+#include "kpgradient.h"
 
 #include <qbitmap.h>
 #include <qpointarray.h>

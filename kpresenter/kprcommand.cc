@@ -18,30 +18,30 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpresenter_doc.h>
-#include <kprcommand.h>
-#include <kpbackground.h>
-#include <kpgroupobject.h>
+#include "kpresenter_doc.h"
+#include "kprcommand.h"
+#include "kpbackground.h"
+#include "kpgroupobject.h"
 
 
-#include <kplineobject.h>
-#include <kpellipseobject.h>
-#include <kpautoformobject.h>
-#include <kpfreehandobject.h>
-#include <kppolylineobject.h>
-#include <kpquadricbeziercurveobject.h>
-#include <kpcubicbeziercurveobject.h>
-#include <kppolygonobject.h>
-#include <kpclosedlineobject.h>
+#include "kplineobject.h"
+#include "kpellipseobject.h"
+#include "kpautoformobject.h"
+#include "kpfreehandobject.h"
+#include "kppolylineobject.h"
+#include "kpquadricbeziercurveobject.h"
+#include "kpcubicbeziercurveobject.h"
+#include "kppolygonobject.h"
+#include "kpclosedlineobject.h"
 
-#include <kptextobject.h>
-#include <kppixmapobject.h>
+#include "kptextobject.h"
+#include "kppixmapobject.h"
 
-#include <kppartobject.h>
+#include "kppartobject.h"
 #include <koRuler.h>
-#include <kppieobject.h>
-#include <kprectobject.h>
-#include <kpresenter_view.h>
+#include "kppieobject.h"
+#include "kprectobject.h"
+#include "kpresenter_view.h"
 #include <kotextobject.h>
 #include "kprtextdocument.h"
 #include <koVariable.h>

@@ -18,10 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kppartobject.h>
-#include <kpresenter_doc.h>
-#include <kpresenter_view.h>
-#include <kpgradient.h>
+#include "kppartobject.h"
+#include "kpresenter_doc.h"
+#include "kpresenter_view.h"
+#include "kpgradient.h"
 #include <kparts/partmanager.h>
 
 #include <qpainter.h>

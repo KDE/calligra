@@ -18,22 +18,22 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpgroupobject.h>
+#include "kpgroupobject.h"
 
-#include <kpresenter_doc.h>
-#include <kplineobject.h>
-#include <kprectobject.h>
-#include <kpellipseobject.h>
-#include <kpautoformobject.h>
-#include <kptextobject.h>
-#include <kppixmapobject.h>
-#include <kppieobject.h>
-#include <kpfreehandobject.h>
-#include <kppolylineobject.h>
-#include <kpquadricbeziercurveobject.h>
-#include <kpcubicbeziercurveobject.h>
-#include <kppolygonobject.h>
-#include <kpclosedlineobject.h>
+#include "kpresenter_doc.h"
+#include "kplineobject.h"
+#include "kprectobject.h"
+#include "kpellipseobject.h"
+#include "kpautoformobject.h"
+#include "kptextobject.h"
+#include "kppixmapobject.h"
+#include "kppieobject.h"
+#include "kpfreehandobject.h"
+#include "kppolylineobject.h"
+#include "kpquadricbeziercurveobject.h"
+#include "kpcubicbeziercurveobject.h"
+#include "kppolygonobject.h"
+#include "kpclosedlineobject.h"
 #include <kdebug.h>
 
 #include <qpainter.h>

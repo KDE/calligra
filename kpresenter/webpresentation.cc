@@ -20,9 +20,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <webpresentation.h>
+#include "webpresentation.h"
 
-#include <kpresenter_view.h>
+#include "kpresenter_view.h"
 #include "kprcanvas.h"
 
 #include <kstandarddirs.h>

@@ -18,12 +18,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <styledia.h>
+#include "styledia.h"
 #include <generalconfig.h>
-#include <confpiedia.h>
-#include <confrectdia.h>
-#include <confpolygondia.h>
-#include <confpicturedia.h>
+#include "confpiedia.h"
+#include "confrectdia.h"
+#include "confpolygondia.h"
+#include "confpicturedia.h"
 
 #include <klocale.h>
 #include <kcolordialog.h>
@@ -41,14 +41,14 @@
 #include <qcheckbox.h>
 
 #include <kozoomhandler.h>
-#include <kpresenter_utils.h>
-#include <kpgradient.h>
+#include "kpresenter_utils.h"
+#include "kpgradient.h"
 #include <qgroupbox.h>
-#include <kpresenter_doc.h>
-#include <kpresenter_view.h>
+#include "kpresenter_doc.h"
+#include "kpresenter_view.h"
 #include <koUnit.h>
-#include <kprcanvas.h>
-#include <kprcommand.h>
+#include "kprcanvas.h"
+#include "kprcommand.h"
 #include <kdeversion.h>
 
 PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )

@@ -29,9 +29,9 @@
 #include <kdebug.h>
 #include <ktextedit.h>
 
-#include <notebar.h>
-#include <kpresenter_view.h>
-#include <kpresenter_doc.h>
+#include "notebar.h"
+#include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 #include "kprpage.h"
 
 

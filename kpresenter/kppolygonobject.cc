@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kppolygonobject.h>
-#include <kpgradient.h>
+#include "kppolygonobject.h"
+#include "kpgradient.h"
 #include <kozoomhandler.h>
 #include <kdebug.h>
 #include <qbitmap.h>

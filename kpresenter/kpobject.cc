@@ -18,9 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <KPresenterObjectIface.h>
+#include "KPresenterObjectIface.h"
 
-#include <kpobject.h>
+#include "kpobject.h"
 
 #include <qpainter.h>
 #include <qwmatrix.h>

@@ -25,14 +25,14 @@
 #include <qbrush.h>
 #include <qcursor.h>
 
-#include <global.h>
+#include "global.h"
 
-#include <kpgradient.h>
+#include "kpgradient.h"
 #include <klocale.h>
 #include <koPoint.h>
 #include <koSize.h>
 #include <koRect.h>
-#include <kpobject.h>
+#include "kpobject.h"
 class QPainter;
 class DCOPObject;
 class QDomDocumentFragment;

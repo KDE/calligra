@@ -21,7 +21,7 @@
 #ifndef kplineobject_h
 #define kplineobject_h
 
-#include <kpobject.h>
+#include "kpobject.h"
 
 class QPainter;
 class DCOPObject;

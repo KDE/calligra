@@ -24,7 +24,7 @@
 #include <qdatetime.h>
 #include <qvariant.h>
 
-#include <kpobject.h>
+#include "kpobject.h"
 #include <koPictureCollection.h>
 #include <koSize.h>
 

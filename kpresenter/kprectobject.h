@@ -21,7 +21,7 @@
 #ifndef kprectobject_h
 #define kprectobject_h
 
-#include <kpobject.h>
+#include "kpobject.h"
 
 class KPGradient;
 class DCOPObject;

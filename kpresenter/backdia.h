@@ -25,7 +25,7 @@
 #include <qframe.h>
 #include <qdatetime.h>
 
-#include <global.h>
+#include "global.h"
 
 #include <koPicture.h>
 

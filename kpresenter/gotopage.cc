@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <gotopage.h>
+#include "gotopage.h"
 
 #include <qlabel.h>
 #include <qlistbox.h>
@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-#include <kpresenter_doc.h>
+#include "kpresenter_doc.h"
 
 KPGotoPage::KPGotoPage( const KPresenterDoc *doc,
                         const QValueList<int> &slides, int start,

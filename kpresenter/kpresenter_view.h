@@ -28,8 +28,8 @@
 #include <qtimer.h>
 
 #include <koView.h>
-#include <kpresenter_doc.h>
-#include <global.h>
+#include "kpresenter_doc.h"
+#include "global.h"
 #include <koRuler.h>
 
 class QPopupMenu;

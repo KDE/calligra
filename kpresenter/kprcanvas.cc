@@ -39,17 +39,17 @@
 #include "kprcanvas.h"
 #include "kprcanvas.moc"
 
-#include <kpresenter_view.h>
-#include <kpbackground.h>
-#include <kppixmapobject.h>
-#include <kpfreehandobject.h>
-#include <kpcubicbeziercurveobject.h>
-#include <kpquadricbeziercurveobject.h>
-#include <gotopage.h>
-#include <kptextobject.h>
-#include <kpresenter_sound_player.h>
-#include <notebar.h>
-#include <kppartobject.h>
+#include "kpresenter_view.h"
+#include "kpbackground.h"
+#include "kppixmapobject.h"
+#include "kpfreehandobject.h"
+#include "kpcubicbeziercurveobject.h"
+#include "kpquadricbeziercurveobject.h"
+#include "gotopage.h"
+#include "kptextobject.h"
+#include "kpresenter_sound_player.h"
+#include "notebar.h"
+#include "kppartobject.h"
 #include "kpresenter_utils.h"
 #include "kppageeffects.h"
 #include <koparagcounter.h>
@@ -62,7 +62,7 @@
 #include <kglobalsettings.h>
 #include <ktempfile.h>
 #include <kdebug.h>
-#include <kprcommand.h>
+#include "kprcommand.h"
 #include <kcursor.h>
 #include <koPoint.h>
 #include <kozoomhandler.h>
@@ -73,8 +73,8 @@
 #include "kprpage.h"
 #include <kmessagebox.h>
 #include <math.h>
-#include <kprvariable.h>
-#include <kpgroupobject.h>
+#include "kprvariable.h"
+#include "kpgroupobject.h"
 
 #include <koStore.h>
 #include <koStoreDrag.h>
@@ -5930,7 +5930,6 @@ unsigned int KPrCanvas::objNums() const
     return (m_activePage->objNums() + stickyPage()->objNums());
 }
 
-
 void KPrCanvas::moveHelpLine( const QPoint & pos)
 {
     QRect rect = m_activePage->getZoomPageRect();
@@ -5943,13 +5942,13 @@ void KPrCanvas::moveHelpLine( const QPoint & pos)
         if( pos.y() + diffy() <= 0)
             removeHelpLine();
         else
-            m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline , m_view->zoomHandler()->unzoomItY(pos.y()+diffy()));
+            m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline, m_view->zoomHandler()->unzoomItY(pos.y()+diffy()));
     }
     else if ( m_tmpVertHelpline != -1 )
     {
         double vi = m_view->kPresenterDoc()->vertHelplines()[m_tmpVertHelpline];
 
-        m_view->kPresenterDoc()->repaint(QRect( m_view->zoomHandler()->zoomItX(vi) -4,
+        m_view->kPresenterDoc()->repaint(QRect( m_view->zoomHandler()->zoomItX(vi) - 4,
                                                 rect.top(), m_view->zoomHandler()->zoomItX(vi) + 4 , rect.bottom()));
         if( pos.x() + diffx() <= 0)
             removeHelpLine();

@@ -21,8 +21,8 @@
 #ifndef _kpresenter_utils_h__
 #define _kpresenter_utils_h__
 
-#include <global.h>
-#include <koPointArray.h>
+#include "global.h"
+#include "koPointArray.h"
 #include <qcursor.h>
 class QPoint;
 class QColor;

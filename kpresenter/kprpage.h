@@ -23,7 +23,7 @@
 
 #include <qwidget.h>
 #include <qptrlist.h>
-#include <global.h>
+#include "global.h"
 #include <koPoint.h>
 #include "kpbackground.h"
 #include <koRect.h>

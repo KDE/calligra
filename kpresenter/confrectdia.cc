@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <confrectdia.h>
+#include "confrectdia.h"
 
 #include <qlabel.h>
 #include <qgroupbox.h>
@@ -28,7 +28,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-#include <kprcommand.h>
+#include "kprcommand.h"
 
 #include <stdlib.h>
 

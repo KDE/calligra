@@ -23,7 +23,7 @@
 
 #include <qpointarray.h>
 #include "koPointArray.h"
-#include <kpobject.h>
+#include "kpobject.h"
 
 #define RAD_FACTOR 180.0 / M_PI
 

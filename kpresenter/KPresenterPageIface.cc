@@ -26,11 +26,11 @@
 #include "kpbackground.h"
 #include <kapplication.h>
 #include <dcopclient.h>
-#include <kpresenter_doc.h>
+#include "kpresenter_doc.h"
 #include "kprcanvas.h"
 #include <kdebug.h>
 #include <kcommand.h>
-#include <kprcommand.h>
+#include "kprcommand.h"
 
 KPresenterPageIface::KPresenterPageIface( KPrPage *_page )
     : DCOPObject()

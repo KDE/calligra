@@ -20,26 +20,26 @@
 
 #include <kurl.h>
 
-#include <kprpage.h>
-#include <kpresenter_view.h>
+#include "kprpage.h"
+#include "kpresenter_view.h"
 #include "KPresenterPageIface.h"
 
-#include <kplineobject.h>
-#include <kprectobject.h>
-#include <kpellipseobject.h>
-#include <kpautoformobject.h>
-#include <kptextobject.h>
-#include <kppixmapobject.h>
-#include <kppieobject.h>
-#include <kppartobject.h>
-#include <kpgroupobject.h>
-#include <kprcommand.h>
-#include <kpfreehandobject.h>
-#include <kppolylineobject.h>
-#include <kpquadricbeziercurveobject.h>
-#include <kpcubicbeziercurveobject.h>
-#include <kppolygonobject.h>
-#include <kpclosedlineobject.h>
+#include "kplineobject.h"
+#include "kprectobject.h"
+#include "kpellipseobject.h"
+#include "kpautoformobject.h"
+#include "kptextobject.h"
+#include "kppixmapobject.h"
+#include "kppieobject.h"
+#include "kppartobject.h"
+#include "kpgroupobject.h"
+#include "kprcommand.h"
+#include "kpfreehandobject.h"
+#include "kppolylineobject.h"
+#include "kpquadricbeziercurveobject.h"
+#include "kpcubicbeziercurveobject.h"
+#include "kppolygonobject.h"
+#include "kpclosedlineobject.h"
 #include <kdebug.h>
 #include <koQueryTrader.h>
 #include "kpresenter_doc.h"
@@ -121,14 +121,14 @@ bool KPrPage::objectNameExists( KPObject *object, QPtrList<KPObject> &list ) {
 
 /*
  * Create a uniq name for a object.
- * if the name allready exists append ' (x)'. 
+ * if the name allready exists append ' (x)'.
  */
 void KPrPage::unifyObjectName( KPObject *object ) {
     if ( object->getObjectName().isEmpty() ) {
         object->setObjectName( object->getTypeString() );
     }
     QString objectName( object->getObjectName() );
-    
+
     QPtrList<KPObject> list( m_objectList );
 
     int count = 1;
@@ -3074,7 +3074,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
         moveByCmd = new MoveByCmd( i18n( "Move Objects" ),
                                    KoPoint( _view->zoomHandler()->unzoomItX (diffx),_view->zoomHandler()->unzoomItY( diffy) ),
                                    _objects, m_doc,this );
-        
+
         int pos=m_doc->pageList().findRef(this);
         m_doc->updateSideBarItem(pos, ( this == m_doc->stickyPage()) ? true: false );
     }

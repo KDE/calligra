@@ -21,9 +21,9 @@
 #ifndef kpfreehandobject_h
 #define kpfreehandobject_h
 
-#include <koPointArray.h>
+#include "koPointArray.h"
 
-#include <kpobject.h>
+#include "kpobject.h"
 
 class QPainter;
 class DCOPObject;

@@ -25,7 +25,7 @@ Boston, MA 02111-1307, USA.
 #include <qframe.h>
 #include <qlabel.h>
 
-#include <global.h>
+#include "global.h"
 
 class QPainter;
 class QLabel;

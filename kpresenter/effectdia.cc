@@ -18,10 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpresenter_view.h>
-#include <effectdia.h>
-#include <kprcommand.h>
-#include <kpresenter_sound_player.h>
+#include "kpresenter_view.h"
+#include "effectdia.h"
+#include "kprcommand.h"
+#include "kpresenter_sound_player.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>

@@ -23,7 +23,7 @@
 
 #include <qcolor.h>
 #include <kpixmap.h>
-#include <global.h>
+#include "global.h"
 
 class QPainter;
 class KoZoomHandler;

@@ -21,7 +21,7 @@
 #ifndef kptextobject_h
 #define kptextobject_h
 
-#include <kpobject.h>
+#include "kpobject.h"
 #include "qrichtext_p.h"
 #include <kotextview.h>
 #include <kostyle.h>

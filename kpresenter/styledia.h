@@ -21,7 +21,7 @@
 #ifndef STYLEDIA_H
 #define STYLEDIA_H
 
-#include <global.h>
+#include "global.h"
 
 #include <qtabdialog.h>
 #include <qframe.h>

@@ -24,8 +24,8 @@
 #include <kiconloader.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
-#include <kprvariable.h>
-#include <kprcanvas.h>
+#include "kprvariable.h"
+#include "kprcanvas.h"
 #include <tkcoloractions.h>
 
 #include <qgroupbox.h>
@@ -35,22 +35,22 @@
 #include <qcheckbox.h>
 #include <qtabwidget.h>
 
-#include <styledia.h>
-#include <confpiedia.h>
-#include <confrectdia.h>
-#include <confpolygondia.h>
-#include <confpicturedia.h>
+#include "styledia.h"
+#include "confpiedia.h"
+#include "confrectdia.h"
+#include "confpolygondia.h"
+#include "confpicturedia.h"
 
-#include <kpresenter_dlg_config.h>
-#include <kpresenter_view.h>
-#include <kpresenter_doc.h>
+#include "kpresenter_dlg_config.h"
+#include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 #include <koUnit.h>
 
 #include <float.h>
 #include <kspell.h>
 #include <knumvalidator.h>
 #include <qlineedit.h>
-#include <kprcommand.h>
+#include "kprcommand.h"
 #include <qvgroupbox.h>
 #include <kfontdialog.h>
 #include <klineedit.h>

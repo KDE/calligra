@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kppolylineobject.h>
-#include <kpresenter_utils.h>
+#include "kppolylineobject.h"
+#include "kpresenter_utils.h"
 #include "KPPolyLineObjectIface.h"
 
 #include <qpainter.h>

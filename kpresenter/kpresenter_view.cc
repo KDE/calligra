@@ -35,27 +35,27 @@
 #include <qdragobject.h>
 #include <qfile.h>
 
-#include <backdia.h>
-#include <autoformEdit/afchoose.h>
-#include <styledia.h>
-#include <pgconfdia.h>
-#include <effectdia.h>
-#include <rotationdialogimpl.h>
+#include "backdia.h"
+#include "autoformEdit/afchoose.h"
+#include "styledia.h"
+#include "pgconfdia.h"
+#include "effectdia.h"
+#include "rotationdialogimpl.h"
 #include "shadowdialogimpl.h"
 #include "imageEffectDia.h"
 
 #include <koAutoFormat.h>
 
-#include <transeffectdia.h>
+#include "transeffectdia.h"
 
-#include <confpiedia.h>
-#include <confrectdia.h>
-#include <confpolygondia.h>
-#include <confpicturedia.h>
-#include <presdurationdia.h>
-#include <kppartobject.h>
-#include <sidebar.h>
-#include <notebar.h>
+#include "confpiedia.h"
+#include "confrectdia.h"
+#include "confpolygondia.h"
+#include "confpicturedia.h"
+#include "presdurationdia.h"
+#include "kppartobject.h"
+#include "sidebar.h"
+#include "notebar.h"
 #include <insertpagedia.h>
 #include <koPictureFilePreview.h>
 #include <koCreateStyleDia.h>
@@ -68,9 +68,9 @@
 #include <kspelldlg.h>
 #include <kio/netaccess.h>
 
-#include <kpresenter_view.h>
-#include <webpresentation.h>
-#include <kptextobject.h>
+#include "kpresenter_view.h"
+#include "webpresentation.h"
+#include "kptextobject.h"
 
 #include <klocale.h>
 #include <kcolordialog.h>
@@ -102,12 +102,12 @@
 
 #include <kstandarddirs.h>
 
-#include <KPresenterViewIface.h>
-#include <kpresenter_dlg_config.h>
+#include "KPresenterViewIface.h"
+#include "kpresenter_dlg_config.h"
 
 #include <qrichtext_p.h>
 #include <kotextobject.h>
-#include <kprcommand.h>
+#include "kprcommand.h"
 #include <koFontDia.h>
 #include <koCharSelectDia.h>
 #include <koInsertLink.h>

@@ -17,28 +17,28 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpresenter_doc.h>
-#include <kpresenter_view.h>
+#include "kpresenter_doc.h"
+#include "kpresenter_view.h"
 #include "kprcanvas.h"
-#include <kplineobject.h>
-#include <kprectobject.h>
-#include <kpellipseobject.h>
-#include <kpautoformobject.h>
-#include <kptextobject.h>
-#include <kprtextdocument.h>
-#include <kppixmapobject.h>
-#include <kppieobject.h>
-#include <kppartobject.h>
-#include <kpgroupobject.h>
-#include <kprcommand.h>
-#include <styledia.h>
+#include "kplineobject.h"
+#include "kprectobject.h"
+#include "kpellipseobject.h"
+#include "kpautoformobject.h"
+#include "kptextobject.h"
+#include "kprtextdocument.h"
+#include "kppixmapobject.h"
+#include "kppieobject.h"
+#include "kppartobject.h"
+#include "kpgroupobject.h"
+#include "kprcommand.h"
+#include "styledia.h"
 #include <insertpagedia.h>
-#include <kpfreehandobject.h>
-#include <kppolylineobject.h>
-#include <kpquadricbeziercurveobject.h>
-#include <kpcubicbeziercurveobject.h>
-#include <kppolygonobject.h>
-#include <kpclosedlineobject.h>
+#include "kpfreehandobject.h"
+#include "kppolylineobject.h"
+#include "kpquadricbeziercurveobject.h"
+#include "kpcubicbeziercurveobject.h"
+#include "kppolygonobject.h"
+#include "kpclosedlineobject.h"
 
 #include <qpopupmenu.h>
 #include <qclipboard.h>
@@ -78,7 +78,7 @@
 #include <kozoomhandler.h>
 #include <kostyle.h>
 #include <kcommand.h>
-#include <KPresenterDocIface.h>
+#include "KPresenterDocIface.h"
 #include <kspell.h>
 
 #include <koVariable.h>

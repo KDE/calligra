@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 #include "KPFreehandObjectIface.h"
-#include <kpfreehandobject.h>
-#include <kpresenter_utils.h>
+#include "kpfreehandobject.h"
+#include "kpresenter_utils.h"
 #include <kozoomhandler.h>
 #include <qpainter.h>
 #include <qwmatrix.h>

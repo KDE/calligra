@@ -23,7 +23,7 @@
 
 #include <qpointarray.h>
 #include "koPointArray.h"
-#include <kpobject.h>
+#include "kpobject.h"
 #include <koSize.h>
 
 class QPainter;

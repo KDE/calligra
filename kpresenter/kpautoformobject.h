@@ -23,9 +23,9 @@
 
 #include <qpixmap.h>
 
-#include <kpobject.h>
-#include <global.h>
-#include <autoformEdit/atfinterpreter.h>
+#include "kpobject.h"
+#include "global.h"
+#include "autoformEdit/atfinterpreter.h"
 
 class KPGradient;
 class DCOPObject;

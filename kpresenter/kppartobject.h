@@ -22,7 +22,7 @@
 
 #include <koChild.h>
 
-#include <kpobject.h>
+#include "kpobject.h"
 
 class KPresenterChild;
 

@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <atfinterpreter.h>
+#include "atfinterpreter.h"
 
 #include <qvaluestack.h>
 #include <qfile.h>

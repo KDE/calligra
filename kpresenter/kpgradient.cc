@@ -18,11 +18,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpgradient.h>
+#include "kpgradient.h"
 #include <qpainter.h>
 #include <kpixmapeffect.h>
 #include <kdebug.h>
-#include <kdebugclasses.h>
 #include <kozoomhandler.h>
 
 KPGradient::KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
