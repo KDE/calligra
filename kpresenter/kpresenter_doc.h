@@ -293,9 +293,6 @@ public:
 
     void reorganizeGUI();
 
-    // Get KPresenterView
-    KPresenterView *getKPresenterView() const { return m_kpresenterView; }
-
     int undoRedoLimit() const;
     void setUndoRedoLimit(int _val);
 
@@ -309,6 +306,8 @@ public:
     void terminateEditing( KPTextObject * textObj )
     { emit sig_terminateEditing( textObj ); }
     KPrPage * initialActivePage() const;
+
+    KPresenterView *firstView() const;
 
     void displayActivePage(KPrPage * _page);
 
@@ -584,7 +583,6 @@ private:
     double oldGridX;
     double oldGridY;
     int m_insertFilePage;
-    KPresenterView *m_kpresenterView;
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
     KPrPage *m_stickyPage;

@@ -182,7 +182,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bgSpellCheck = new KPrBgSpellCheck(this);
 
     dcop = 0;
-    m_kpresenterView = 0;
     m_initialActivePage=0;
     m_bShowStatusBar = true;
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection);
@@ -808,9 +807,8 @@ QDomElement KPresenterDoc::saveAttribute( QDomDocument &doc )
     QDomElement attributes=doc.createElement("ATTRIBUTES");
     //store first view parameter.
     int activePage=0;
-    if ( m_kpresenterView && m_kpresenterView->getCanvas() && m_kpresenterView->getCanvas()->activePage() )
-        activePage=m_pageList.findRef(m_kpresenterView->getCanvas()->activePage());
-    else if ( m_initialActivePage )
+
+    if ( m_initialActivePage )
         activePage=m_pageList.findRef(m_initialActivePage);
     activePage = QMAX( activePage, 0);
     attributes.setAttribute("activePage",activePage );
@@ -2397,46 +2395,31 @@ void KPresenterDoc::makeUsedSoundFileList()
 /*================================================================*/
 KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 {
-    m_kpresenterView = new KPresenterView( this, parent, name );
     //the page numbers have to be recalced for the sticky objects
     //as it could not be done during the constructor of KPresenterView
     recalcPageNum();
-    return (KoView *)m_kpresenterView;
+    return new KPresenterView( this, parent, name );
 }
 
 /*================================================================*/
 void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double zoomX, double zoomY )
 {
-    kdDebug()<<"  void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double zoomX, double zoomY )****************************\n";
-    kdDebug()<<" m_zoomHandler :"<<m_zoomHandler<<endl;
     m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
-    kdDebug()<<"d1111111111111111111111111111111\n";
     if ( zoomHandler()->zoomedResolutionX() != zoomX || zoomHandler()->zoomedResolutionY() != zoomY )
     {
-            kdDebug()<<"d111111111111111111111111111111122222222222222222\n";
         zoomHandler()->setResolution( zoomX, zoomY );
-            kdDebug()<<"d1111111111111111111111111111111222222222233333333333\n";
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
-            kdDebug()<<"d111111111111111111111111111111144444444444444444\n";
         newZoomAndResolution( false, forPrint );
     }
-        kdDebug()<<"d1111111111111111111111111111111555555555555555\n";
     KPrPage *page=m_pageList.first();
-        kdDebug()<<"d1111111111111111111111111111111666666666666666666\n";
-    if(m_kpresenterView && m_kpresenterView->getCanvas() && m_kpresenterView->getCanvas()->activePage())
-        page=m_kpresenterView->getCanvas()->activePage();
-    else if( m_initialActivePage )
+    if( m_initialActivePage )
         page=m_initialActivePage;
-    kdDebug()<<" page :"<<page<<endl;
     //draw background
-    kdDebug()<<" page->background() :"<<page->background()<<endl;
     page->background()->draw( &painter, zoomHandler(), rect, false );
     //for the moment draw first page.
     QPtrListIterator<KPObject> it( page->objectList() );
     for ( ; it.current() ; ++it )
-    {
         it.current()->draw( &painter, zoomHandler(), SM_NONE );
-    }
     it= m_stickyPage->objectList();
     //draw sticky obj
     for ( ; it.current() ; ++it )
@@ -2445,7 +2428,6 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
             continue;
         it.current()->draw( &painter, zoomHandler(), SM_NONE );
     }
-    kdDebug()<<" out-************--***************\n";
 }
 
 QPixmap KPresenterDoc::generatePreview( const QSize& size )
@@ -2723,26 +2705,11 @@ void KPresenterDoc::recalcPageNum()
     for(page=pageList().first(); page; page=pageList().next())
         page->recalcPageNum();
     m_stickyPage->recalcPageNum();
-#if 0
-    //specific sticky page recalc
-    QPtrListIterator<KPObject> it( m_stickyPage->objectList() );
-    //test for load file, activepage doesn't exist during loading
-    if(m_kpresenterView && m_kpresenterView->getCanvas() && m_kpresenterView->getCanvas()->activePage())
-    {
-        for ( ; it.current() ; ++it )
-        {
-            if ( it.current()->getType() == OT_TEXT )
-                ( (KPTextObject*)it.current() )->recalcPageNum( this, m_kpresenterView->getCanvas()->activePage() );
-        }
-    }
-#endif
 }
 
 KPrPage * KPresenterDoc::activePage()const
 {
-    if ( m_kpresenterView && m_kpresenterView->getCanvas())
-        return m_kpresenterView->getCanvas()->activePage();
-    return 0L;
+    return m_initialActivePage;
 }
 
 void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
@@ -2968,9 +2935,11 @@ bool KPresenterDoc::backgroundSpellCheckEnabled() const
 void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)
 {
     QPtrListIterator<KPrPage> it( m_pageList );
-    KPrPage *activePage=0L;
+#if 0
     if(m_kpresenterView && m_kpresenterView->getCanvas())
         activePage=m_kpresenterView->getCanvas()->activePage();
+#endif
+    KPrPage *activePage=m_initialActivePage;
     for ( ; it.current(); ++it )
     {
         if( it.current()!=activePage)
@@ -2984,9 +2953,9 @@ void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)
 
 KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
 {
-    if(m_kpresenterView && m_kpresenterView->getCanvas())
+    if(m_initialActivePage)
     {
-        bool findObject = m_kpresenterView->getCanvas()->activePage()->findTextObject( bgObjSpellChecked );
+        bool findObject = m_initialActivePage->findTextObject( bgObjSpellChecked );
         if ( !findObject )
         {
             findObject = m_stickyPage->findTextObject( bgObjSpellChecked );
@@ -2999,7 +2968,7 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
                     return 0L;
             }
         }
-        bgObjSpellChecked = m_kpresenterView->getCanvas()->activePage()->nextTextObject( obj );
+        bgObjSpellChecked = m_initialActivePage->nextTextObject( obj );
         if ( bgObjSpellChecked )
             return bgObjSpellChecked->nextTextObject();
         else
@@ -3393,5 +3362,12 @@ void KPresenterDoc::setInsertDirectCursor(bool _b)
     updateDirectCursorButton();
 }
 
+KPresenterView *KPresenterDoc::firstView() const
+{
+    if ( views().count()>0)
+        return static_cast<KPresenterView*>(views().getFirst());
+    else
+        return 0L;
+}
 
 #include <kpresenter_doc.moc>

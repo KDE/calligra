@@ -351,7 +351,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     // And now draw the border for text objects.
     // When they are drawn outside of the object, this can be moved to the standard paint() method,
     // so that we don't have to do it while editing the object, maybe.
-    if ( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas()->getEditMode() && !drawingShadow && getDrawEditRect() && getPen().style() == Qt::NoPen )
+    if ( m_doc->firstView() && m_doc->firstView()->getCanvas()->getEditMode() && !drawingShadow && getDrawEditRect() && getPen().style() == Qt::NoPen )
     {
         _painter->save();
 
@@ -379,8 +379,8 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
 
     QRect r = zoomHandler->zoomRect( KoRect( 0, 0, innerWidth(), innerHeight() ) );
     bool editMode = false;
-    if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
-        editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
+    if( m_doc->firstView() && m_doc->firstView()->getCanvas())
+        editMode = m_doc->firstView()->getCanvas()->getEditMode();
 
     uint drawingFlags = KoTextDocument::DrawSelections;
     if ( m_doc->backgroundSpellCheckEnabled() && editMode )
@@ -1175,8 +1175,8 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
     Q_ASSERT( from <= to );
     int i = 0;
     bool editMode=false;
-    if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
-        editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
+    if( m_doc->firstView() && m_doc->firstView()->getCanvas())
+        editMode = m_doc->firstView()->getCanvas()->getEditMode();
 
     QRect r = zoomHandler->zoomRect( KoRect( 0, 0, innerWidth(), innerHeight() ) );
     KoTextParag *parag = textDocument()->firstParag();
@@ -1370,8 +1370,8 @@ void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,c
 
 void KPTextObject::slotFormatChanged(const KoTextFormat &_format)
 {
-    if(m_doc && m_doc->getKPresenterView())
-        m_doc->getKPresenterView()->showFormat( _format );
+    if(m_doc && m_doc->firstView())
+        m_doc->firstView()->showFormat( _format );
 }
 
 void KPTextObject::applyStyleChange( StyleChangeDefMap changed )

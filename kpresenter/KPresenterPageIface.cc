@@ -515,35 +515,49 @@ void KPresenterPageIface::changePicture( const QString & filename )
 //create a rectangle and return a dcop reference!
 DCOPRef KPresenterPageIface::insertRectangle(int x,int y, int h, int w)
 {
-  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  KPresenterView *view=m_page->kPresenterDoc()->firstView();
+  if ( !view  )
+      return DCOPRef();
   view->getCanvas()->insertRect( QRect(x,y,h,w) );
   return selectedObject();
 }
 
 DCOPRef KPresenterPageIface::insertEllipse( int x,int y, int h, int w )
 {
-  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  KPresenterView *view=m_page->kPresenterDoc()->firstView();
+  if ( !view  )
+      return DCOPRef();
+
   view->getCanvas()->insertEllipse(QRect(x,y,h,w) );
   return selectedObject();
 }
 
 DCOPRef KPresenterPageIface::insertPie( int x,int y, int h, int w )
 {
-  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  KPresenterView *view=m_page->kPresenterDoc()->firstView();
+  if ( !view  )
+      return DCOPRef();
+
   view->getCanvas()->insertPie( QRect(x,y,h,w) );
   return selectedObject();
 }
 
 DCOPRef KPresenterPageIface::insertLineH( int x,int y, int h, int w, bool rev )
 {
-  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  KPresenterView *view=m_page->kPresenterDoc()->firstView();
+  if ( !view  )
+      return DCOPRef();
+
   view->getCanvas()->insertLineH( QRect(x,y,h,w), rev );
   return selectedObject();
 }
 
 DCOPRef KPresenterPageIface::insertLineV( int x,int y, int h, int w, bool rev )
 {
-  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  KPresenterView *view=m_page->kPresenterDoc()->firstView();
+  if ( !view  )
+      return DCOPRef();
+
   view->getCanvas()->insertLineV( QRect(x,y,h,w), rev );
   return selectedObject();
 
@@ -551,21 +565,30 @@ DCOPRef KPresenterPageIface::insertLineV( int x,int y, int h, int w, bool rev )
 
 DCOPRef KPresenterPageIface::insertLineD1( int x,int y, int h, int w, bool rev )
 {
-  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  KPresenterView *view=m_page->kPresenterDoc()->firstView();
+  if ( !view  )
+      return DCOPRef();
+
   view->getCanvas()->insertLineD1( QRect(x,y,h,w), rev );
   return selectedObject();
 }
 
 DCOPRef KPresenterPageIface::insertLineD2( int x,int y, int h, int w, bool rev )
 {
-  KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+  KPresenterView *view=m_page->kPresenterDoc()->firstView();
+  if ( !view  )
+      return DCOPRef();
+
   view->getCanvas()->insertLineD2( QRect(x,y,h,w), rev );
   return selectedObject();
 }
 
 DCOPRef KPresenterPageIface::insertTextObject( int x,int y, int h, int w )
 {
-    KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+    KPresenterView *view=m_page->kPresenterDoc()->firstView();
+    if ( !view  )
+      return DCOPRef();
+
     view->getCanvas()->insertTextObject( QRect(x,y,h,w));
     return selectedObject();
 
@@ -574,7 +597,10 @@ DCOPRef KPresenterPageIface::insertTextObject( int x,int y, int h, int w )
 DCOPRef KPresenterPageIface::insertPicture( const QString & file,int x,int y, int h, int w )
 {
     m_page->setInsPictureFile(file);
-    KPresenterView *view=m_page->kPresenterDoc()->getKPresenterView();
+    KPresenterView *view=m_page->kPresenterDoc()->firstView();
+    if ( !view  )
+      return DCOPRef();
+
     view->getCanvas()->insertPicture( QRect(x,y,h,w));
     return selectedObject();
 }
@@ -677,7 +703,7 @@ void KPresenterPageIface::stickyAllObjSelected(bool sticky)
 
 void KPresenterPageIface::moveAllObjectSelected( int diffx,int diffy)
 {
-    KPresenterView *_view=m_page->kPresenterDoc()->getKPresenterView();
+    KPresenterView *_view=m_page->kPresenterDoc()->firstView();
     if(_view)
     {
         KCommand *cmd=m_page->moveObject(_view, diffx,diffy);
