@@ -11,7 +11,7 @@
 #include "BasicElement.h" 
 #include "DecorationElement.h" 
 #include "formuladef.h"
-#include "kformula_doc.h"
+#include "formula_container.h"
 
 DecorationElement::DecorationElement(KFormulaDoc *Formula,
 			 BasicElement *Prev,

@@ -23,7 +23,7 @@ class TextElement : public BasicElement
    /*
     * Normal constructor, Get font from prev element
     */
-     TextElement(KFormulaDoc *Formula,
+     TextElement(KFormulaContainer *Formula,
 		 BasicElement *Prev=0,
 		 int Relation=-1,
 		 BasicElement *Next=0,
@@ -56,7 +56,7 @@ class TextElement : public BasicElement
     * "prev" is responsable for x,y
     * 
     */
-   virtual void draw(QPoint drawPoint, int resolution=72);
+   virtual void draw(QPoint drawPoint, int resolution);
 
    /*
     * each derived class must implement its own CheckSize()

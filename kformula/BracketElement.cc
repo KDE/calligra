@@ -11,9 +11,9 @@
 #include "BasicElement.h"
 #include "BracketElement.h"
 #include "formuladef.h"
-#include "kformula_doc.h"
+#include "formula_container.h"
 
-BracketElement::BracketElement(KFormulaDoc *Formula,
+BracketElement::BracketElement(KFormulaContainer *Formula,
 			       BasicElement *Prev,
 			       int Relation,
 			       BasicElement *Next,

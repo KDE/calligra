@@ -12,9 +12,9 @@
 #include "BasicElement.h"
 #include "MatrixElement.h"
 #include "formuladef.h"
-#include "kformula_doc.h"
+#include "formula_container.h"
 
-MatrixElement::MatrixElement(KFormulaDoc *Formula,
+MatrixElement::MatrixElement(KFormulaContainer *Formula,
 			     BasicElement *Prev,
 			     int Relation,
 			     BasicElement *Next,

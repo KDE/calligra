@@ -23,21 +23,21 @@ class DecorationElement : public BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    DecorationElement(KFormulaDoc *Formula,BasicElement *Prev=NULL,
-		int Relation=-1,BasicElement *Next=NULL,
-		QString Content="");
+    DecorationElement(KFormulaDoc *Formula, BasicElement *Prev=0,
+		int Relation = -1, BasicElement *Next=0,
+		QString Content = "");
        
     /*
      * Link Next & Prev removing itself
      */
-    virtual   ~DecorationElement();
+    virtual  ~DecorationElement();
      
     /*
      * each derived class must implement its own Draw()
      * "prev" is responsable for x,y
      * 
      */
-    virtual void draw(QPoint drawPoint,int resolution=72);
+    virtual void draw(QPoint drawPoint,int resolution);
 
     /*
      * each derived class must implement its own CheckSize()

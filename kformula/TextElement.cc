@@ -12,9 +12,9 @@
 #include "BasicElement.h"
 #include "TextElement.h"
 #include "formuladef.h"
-#include "kformula_doc.h"
+#include "formula_container.h"
 
-TextElement::TextElement(KFormulaDoc *Formula,
+TextElement::TextElement(KFormulaContainer *Formula,
 			 BasicElement *Prev,
 			 int Relation,
 			 BasicElement *Next,
@@ -154,18 +154,18 @@ void TextElement::setNumericFont(int value)
 
 void TextElement::split(int pos)
 {
- if(pos==-1)
-  pos=position;
- TextElement *FirstHalf = new TextElement(formula);
- insertElement(FirstHalf);
- FirstHalf->setContent(content.left(pos));
- FirstHalf->setNumericFont(numericFont);
- if (font !=0L)
-  FirstHalf->changeFontFamily(font->family());
+    if(pos==-1)
+	pos=position;
+    TextElement *FirstHalf = new TextElement(formula);
+    insertElement(FirstHalf);
+    FirstHalf->setContent(content.left(pos));
+    FirstHalf->setNumericFont(numericFont);
+    if (font !=0L)
+	FirstHalf->changeFontFamily(font->family());
 
- setContent(content.right(content.length()-pos));
- warning(content);
- position=content.length();
+    setContent(content.right(content.length()-pos));
+    warning(content);
+    position=content.length();
 
 }
 
@@ -174,75 +174,64 @@ QRect TextElement::getCursor(int atPos)
     QPoint dp = myArea.topLeft()-globalSize.topLeft();
     
     if(atPos>0)
-    {
-     atPos--;
-	QFont formulaFont;
-	if(font!=0L)
-	    formulaFont=(*font);
-	else
-	    {
-		formulaFont=formula->generalFont();
-		formulaFont.setPointSize(numericFont);
-	    }
+	{
+	    atPos--;
+	    QFont formulaFont;
+	    if(font!=0L)
+		formulaFont=(*font);
+	    else
+		{
+		    formulaFont=formula->generalFont();
+		    formulaFont.setPointSize(numericFont);
+		}
 
 	    QFontMetrics fm(formulaFont);
 	    return (QRect(dp.x()+familySize.x()+fm.width(content,atPos),
-				     dp.y()+familySize.top()-1,
-				     5,familySize.height()+2));
+			  dp.y()+familySize.top()-1,
+			  5,familySize.height()+2));
 
-     } 
-      else 
-     {
-      if(atPos==0)
-        return (QRect(dp.x()+familySize.x()-3,dp.y()-7,5,14));
-       else
-        return (QRect(dp.x()+localSize.width()+2,dp.y()-8,5,16));	
-     }
+	} 
+    else 
+	{
+	    if(atPos==0)
+		return (QRect(dp.x()+familySize.x()-3,dp.y()-7,5,14));
+	    else
+		return (QRect(dp.x()+localSize.width()+2,dp.y()-8,5,16));	
+	}
  
 
-return QRect(0,0,0,0);
+    return QRect(0,0,0,0);
 }
 
-void TextElement::makeList(bool active=0) 
+void TextElement::makeList(bool active) 
 {
-PosType *p;
-p = new PosType;
-p->element=this;
-p->pos=0;
-formula->eList.append(p);
+    formula->addElement(this, 0);
+    warning("append");
+    beActive=0;
+    
+    for(int i=0;i<2;i++)
+	if(index[i]!=0) {
+	    warning("call for index%d %p",i,index[i]);
+	    index[i]->makeList(active);
+	}
+    warning("index OK");
+    
+    for(unsigned int i=1;i<=content.length()+1;i++)
+	formula->addElement(this, i);
 
+    for(int i=2;i<4;i++)
+	if(index[i]!=0) {
+	    warning("call for index%d %p",i,index[i]);
+	    index[i]->makeList(active);
+	}
 
-warning("append");
-beActive=0;
-
-for(int i=0;i<2;i++)
- if(index[i]!=0) {
-  warning("call for index%d %p",i,index[i]);
- index[i]->makeList(active);
-  }
-warning("index OK");
-
-for(unsigned int i=1;i<=content.length()+1;i++)
-  {
-   p = new PosType; 
-   p->element=this;
-   p->pos=i;
-   formula->eList.append(p);
-  }
-
-
-for(int i=2;i<4;i++)
- if(index[i]!=0) {
-  warning("call for index%d %p",i,index[i]);
- index[i]->makeList(active);
-  }
-
-/*p = new PosType;
-p->element=this;
-p->pos=-1;
-formula->eList.append(p);
-*/if(next!=0)
- next->makeList(active);
-
+    /*p = new PosType;
+      p->element=this;
+      p->pos=-1;
+      formula->eList.append(p);
+    */
+    if(next!=0)
+	next->makeList(active);
+    
 }
 

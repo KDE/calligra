@@ -1,26 +1,30 @@
 # $Id$
 
-SUBDIRS = pics
+SUBDIRS = . pics
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
-LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+LDFLAGS	= $(all_libraries) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la 
 
 ####### Files
 
 bin_PROGRAMS = kformula.bin
 
+AM_CXXFLAGS = -ansi -pedantic
+
 kformula_bin_SOURCES =  kformula_view.cc matrixwidget.cc kformula_main.cc \
 	kformula_doc.cc \
 	kformula.cc kformula_shell.cc BasicElement.cc RootElement.cc \
 	TextElement.cc BracketElement.cc FractionElement.cc\
-	MatrixElement.cc PrefixedElement.cc 
+	MatrixElement.cc PrefixedElement.cc formula_container.cc
+
 noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h formuladef.h \
 	kformula.h kformula_shell.h BasicElement.h RootElement.h TextElement.h\
 	BracketElement.h FractionElement.h MatrixElement.h PrefixedElement.h \
-	matrixwidget.h
+	matrixwidget.h formula_container.h
+
 METASOURCES = kformula_main.moc kformula_view.moc kformula_doc.moc \
-	kformula_shell.moc matrixwidget.moc
+	kformula_shell.moc matrixwidget.moc formula_container.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 

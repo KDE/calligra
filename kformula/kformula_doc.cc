@@ -32,7 +32,7 @@
 
 KFormulaDoc::KFormulaDoc()
 {
-//    setFocusPolicy( ClickFocus );
+    //    setFocusPolicy( ClickFocus );
     eList.clear();
     eList.setAutoDelete(TRUE);
     thePosition=0;
@@ -44,7 +44,7 @@ KFormulaDoc::KFormulaDoc()
     theFont.setItalic( false );
     theColor=black;
     warning("General Font OK");
-//    theActiveElement = 0;
+    //    theActiveElement = 0;
 
     // Use CORBA mechanism for deleting views
     m_lstViews.setAutoDelete( false );
@@ -114,16 +114,16 @@ bool KFormulaDoc::save( ostream& out, const char* /* format */ )
 
 KOffice::MainWindow_ptr KFormulaDoc::createMainWindow()
 {
-  KFormulaShell* shell = new KFormulaShell;
-  shell->show();
-  shell->setDocument( this );
+    KFormulaShell* shell = new KFormulaShell;
+    shell->show();
+    shell->setDocument( this );
 
-  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+    return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
 int KFormulaDoc::viewCount()
 {
-  return m_lstViews.count();
+    return m_lstViews.count();
 }
 
 void KFormulaDoc::viewList( OpenParts::Document::ViewList*& _list )
@@ -152,34 +152,34 @@ void KFormulaDoc::removeView( KFormulaView *_view )
 
 KFormulaView* KFormulaDoc::createFormulaView()
 {
-  KFormulaView *p = new KFormulaView( 0L, 0L, this );
-  //p->QWidget::show();
-  m_lstViews.append( p );
+    KFormulaView *p = new KFormulaView( 0L, 0L, this );
+    //p->QWidget::show();
+    m_lstViews.append( p );
 
-  return p;
+    return p;
 }
 
 OpenParts::View_ptr KFormulaDoc::createView()
 {
-  return OpenParts::View::_duplicate( createFormulaView() );
+    return OpenParts::View::_duplicate( createFormulaView() );
 }
 
 void KFormulaDoc::emitModified()
 {
-  m_bModified = true;
-  m_bEmpty = false;
-  eList.clear();
-  theFirstElement->makeList();  
-  eList.at(thePosition);
-  emit sig_changeType( eList.current()->element );
-  emit sig_modified();
+    m_bModified = true;
+    m_bEmpty = false;
+    eList.clear();
+    theFirstElement->makeList();  
+    eList.at(thePosition);
+    emit sig_changeType( eList.current()->element );
+    emit sig_modified();
 }
 
 void KFormulaDoc::addRootElement()
 {
     BasicElement *newElement;
-     if(eList.current()->element==0L)
-     setActiveElement(theFirstElement);
+    if(eList.current()->element==0L)
+	setActiveElement(theFirstElement);
 
     if (typeid(*eList.current()->element) == typeid(BasicElement)) {
 	warning("substitueted");
@@ -193,15 +193,15 @@ void KFormulaDoc::addRootElement()
 	if(nextElement!=0L){       //If there's a next insert root before next
 	    nextElement->insertElement(newElement=new RootElement(this));
 	} else  //If there isn't a next append only.
-	eList.current()->element->setNext(newElement=new RootElement(this,eList.current()->element));
+	    eList.current()->element->setNext(newElement=new RootElement(this,eList.current()->element));
     }
-     newElement->check();
-//    warning("Set activeelement...");
+    newElement->check();
+    //    warning("Set activeelement...");
     setActiveElement(newElement);
-//    warning("done");
+    //    warning("done");
     //RootElement need a child[0] i.e. root content
-//    newElement = new BasicElement(this,eList.current()->element,4);
-//    eList.current()->element->setChild(newElement,0);
+    //    newElement = new BasicElement(this,eList.current()->element,4);
+    //    eList.current()->element->setChild(newElement,0);
     
     setActiveElement(newElement->getChild(0)); //I prefere to AutoActivate RootContent
     
@@ -211,8 +211,8 @@ void KFormulaDoc::addRootElement()
 void KFormulaDoc::addPrefixedElement(QString cont)
 {
     BasicElement *newElement;
-//     if(eList.at()==-1)
-//         eList.first();
+    //     if(eList.at()==-1)
+    //         eList.first();
     if(eList.current()->element==0L)
 	setActiveElement(theFirstElement);
 
@@ -319,7 +319,7 @@ void KFormulaDoc::addBracketElement(QString cont)
 	{					//It change it into a Bracket
 	    eList.current()->element->substituteElement(newElement = new BracketElement(this));
 	    delete eList.current()->element;
-                eList.current()->element=0;
+	    eList.current()->element=0;
 	}
     else
 	{
@@ -354,7 +354,7 @@ BasicElement * KFormulaDoc::addIndex(int index)
     oldIndexElement=eList.current()->element->getIndex(index);
     if(oldIndexElement==0L)
 	eList.current()->element->setIndex(newElement =
-				   new BasicElement(this,eList.current()->element,index),index);
+					   new BasicElement(this,eList.current()->element,index),index);
     else
 	{
 	    oldIndexElement->insertElement(newElement = new BasicElement(this));
@@ -374,7 +374,7 @@ BasicElement * KFormulaDoc::addChild(int child)
     oldChildElement=eList.current()->element->getChild(child);
     if(oldChildElement==0L)
 	eList.current()->element->setChild(newElement =
-				   new BasicElement(this,eList.current()->element,child+4),child);
+					   new BasicElement(this,eList.current()->element,child+4),child);
     else
 	{
 	    oldChildElement->insertElement(newElement = new BasicElement(this));
@@ -383,7 +383,7 @@ BasicElement * KFormulaDoc::addChild(int child)
     emitModified();
     return(newElement);
 }
-void KFormulaDoc::addTextElement(QString cont="")
+void KFormulaDoc::addTextElement(QString cont)
 {
     BasicElement *nextElement;
     BasicElement *newElement;
@@ -394,7 +394,7 @@ void KFormulaDoc::addTextElement(QString cont="")
 	{
 	    eList.current()->element->substituteElement(newElement = new TextElement(this));
 	    delete eList.current()->element;
-	        eList.current()->element=0;
+	    eList.current()->element=0;
 	}
     else
 	{
@@ -413,9 +413,9 @@ void KFormulaDoc::mousePressEvent( QMouseEvent *a,QWidget *wid)
 {
 
     setActiveElement(theFirstElement->isInside(a->pos()));
-/*    if(eList.current()->element!=0)
-     eList.current()->element->setPosition(-2);
-*/    emitModified();
+    /*    if(eList.current()->element!=0)
+	  eList.current()->element->setPosition(-2);
+    */    emitModified();
     if(a->button()==RightButton){
 	QPopupMenu *mousepopup = new QPopupMenu;
 	QPopupMenu *convert = new QPopupMenu;
@@ -441,137 +441,137 @@ void KFormulaDoc::mousePressEvent( QMouseEvent *a,QWidget *wid)
 
 void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 {
-cerr << " key received , " << k->ascii() << endl;
-warning("Key pressed %i, ascii:%i",k->key(),k->ascii());
+    cerr << " key received , " << k->ascii() << endl;
+    warning("Key pressed %i, ascii:%i",k->key(),k->ascii());
 
     int elReturn=0;
 
     if((k->ascii()>=32)&&(k->ascii()<127))
 	{
-	 switch(k->ascii())
-	    {
-	      case '[':
-		addBracketElement("[]");
-              break;
-	      case '(':
-		addBracketElement(DEFAULT_DELIMITER);
-              break;
-	      case '|':
-		addBracketElement("||");
-              break;
-	      case '/':
-		addFractionElement(DEFAULT_FRACTION);
-              break;
-	      case '@':
-		addRootElement();
-              break;
-	      case '^':
-		addIndex(IN_TOPRIGHT);
-              break;
-	      case '_':
-		addIndex(IN_BOTTOMRIGHT);
-              break;	      
-	     default:
-	     {
+	    switch(k->ascii())
+		{
+		case '[':
+		    addBracketElement("[]");
+		    break;
+		case '(':
+		    addBracketElement(DEFAULT_DELIMITER);
+		    break;
+		case '|':
+		    addBracketElement("||");
+		    break;
+		case '/':
+		    addFractionElement(DEFAULT_FRACTION);
+		    break;
+		case '@':
+		    addRootElement();
+		    break;
+		case '^':
+		    addIndex(IN_TOPRIGHT);
+		    break;
+		case '_':
+		    addIndex(IN_BOTTOMRIGHT);
+		    break;	      
+		default:
+		    {
 
-	       if (eList.current()->element!=0L)
-	         {
-	          int po=eList.current()->pos;
-	           if (po>0)
-	           {
-		    QString text;
-		    po--;
-		    warning("Internal Text Position %d",po);
-		    text=eList.current()->element->getContent().copy();
-		    text.insert(po,k->ascii());
-		    eList.current()->element->setContent(text);
-		    thePosition=eList.at();
-	    	    warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
-		    eList.clear();
-            	    theFirstElement->makeList();
-		    thePosition++;              
-		    eList.at(thePosition);		
-	    	    warning("the New Position %d int:%d",thePosition,eList.current()->pos);
-	           }
-		   else
-		    elReturn=FCOM_ADDTEXT;
-	         }
-	     } //default
-	}  //Switch
-      }	 //if
+			if (eList.current()->element!=0L)
+			    {
+				int po=eList.current()->pos;
+				if (po>0)
+				    {
+					QString text;
+					po--;
+					warning("Internal Text Position %d",po);
+					text=eList.current()->element->getContent().copy();
+					text.insert(po,k->ascii());
+					eList.current()->element->setContent(text);
+					thePosition=eList.at();
+					warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
+					eList.clear();
+					theFirstElement->makeList();
+					thePosition++;              
+					eList.at(thePosition);		
+					warning("the New Position %d int:%d",thePosition,eList.current()->pos);
+				    }
+				else
+				    elReturn=FCOM_ADDTEXT;
+			    }
+		    } //default
+		}  //Switch
+	}	 //if
     else   //Not ascii
 	{
 	    int action=k->key();
-	       if (eList.current()->element!=0L)
-	         {
-	          int po=eList.current()->pos;
-	           if (po>0)
-	           {
+	    if (eList.current()->element!=0L)
+		{
+		    int po=eList.current()->pos;
+		    if (po>0)
+			{
         
 
-	    	   }
-		  }
+			}
+		}
 
-if(action==Qt::Key_BackSpace)
-{
- if(eList.prev()->element!=0)
-  action=Qt::Key_Delete;
- else
-   eList.next(); 
-}  
+	    if(action==Qt::Key_BackSpace)
+		{
+		    if(eList.prev()->element!=0)
+			action=Qt::Key_Delete;
+		    else
+			eList.next(); 
+		}  
 
-if(action==Qt::Key_Delete)
- {
-    warning("Key Delete");
-   if(eList.current()->pos>=0)
-    {
-    QString text;
-    text=eList.current()->element->getContent().copy();
-    text.remove(eList.current()->pos-1,1);
-    eList.current()->element->setContent(text);
-    thePosition=eList.at();
-    eList.clear();
-    theFirstElement->makeList();
-    eList.at(thePosition);		
-   }
+	    if(action==Qt::Key_Delete)
+		{
+		    warning("Key Delete");
+		    if(eList.current()->pos>=0)
+			{
+			    QString text;
+			    text=eList.current()->element->getContent().copy();
+			    text.remove(eList.current()->pos-1,1);
+			    eList.current()->element->setContent(text);
+			    thePosition=eList.at();
+			    eList.clear();
+			    theFirstElement->makeList();
+			    eList.at(thePosition);		
+			}
 
     
-    else {
-    if(eList.current()->pos==0)
-     elReturn=FCOM_DELETEME;
-    else 
-     if(eList.next()->element!=0)
-      elReturn=FCOM_DELETEME;       	    
-    else
-    eList.prev();
-   } 
- }
+		    else {
+			if(eList.current()->pos==0)
+			    elReturn=FCOM_DELETEME;
+			else 
+			    if(eList.next()->element!=0)
+				elReturn=FCOM_DELETEME;       	    
+			    else
+				eList.prev();
+		    } 
+		}
 
 
-if(action==Qt::Key_Left)
- {
+	    if(action==Qt::Key_Left)
+		{
 
-/*   if(eList.current()->pos==0) 
-   {
-    if(eList.prev()->pos==-1)
-       eList.prev();
-   }
-    else*/
-       eList.prev();
+		    /*   if(eList.current()->pos==0) 
+			 {
+			 if(eList.prev()->pos==-1)
+			 eList.prev();
+			 }
+			 else*/
+		    eList.prev();
 
- }
-if(action==Qt::Key_Right)
- {/*
-   if(eList.current()->pos==-1) 
-   {
-    if(eList.next()->pos==0)
-       eList.next();
+		}
+	    if(action==Qt::Key_Right)
+		{/*
+		   if(eList.current()->pos==-1) 
+		   {
+		   if(eList.next()->pos==0)
+		   eList.next();
   
-   }
-    else
-    */   eList.next();
+		   }
+		   else
+		 */   eList.next();
 
-  }
+		}
 
 
 
@@ -579,22 +579,22 @@ if(action==Qt::Key_Right)
 	    thePosition=eList.at();
 	}	
         
-	if (elReturn==FCOM_ADDTEXT) 
- 	    { 
-	     if(eList.current()->pos==0)
-	      {
-	          BasicElement *newElement;
-	         eList.current()->element->insertElement(newElement=new TextElement(this));
+    if (elReturn==FCOM_ADDTEXT) 
+	{ 
+	    if(eList.current()->pos==0)
+		{
+		    BasicElement *newElement;
+		    eList.current()->element->insertElement(newElement=new TextElement(this));
 	          
-		  setActiveElement(newElement); 
-	      } else  addTextElement();
+		    setActiveElement(newElement); 
+		} else  addTextElement();
 	     
-	     if((k->ascii()>32)&&(k->ascii()<127))
-	    {
-	       QString text;
+	    if((k->ascii()>32)&&(k->ascii()<127))
+		{
+		    QString text;
 		    int po=0;
 	       
-	       warning("Internal Text Position %d",po);
+		    warning("Internal Text Position %d",po);
 		    text=eList.current()->element->getContent().copy();
 		    text.insert(po,k->ascii());
 		    eList.current()->element->setContent(text);
@@ -606,22 +606,22 @@ if(action==Qt::Key_Right)
 		    eList.at(thePosition);		
 	    	    warning("the New Position %d int:%d",thePosition,eList.current()->pos);
 	           
-	    }
+		}
 
-	    }
-	if (elReturn==FCOM_DELETEME)
-	    {
+	}
+    if (elReturn==FCOM_DELETEME)
+	{
 
-		 BasicElement *newActive;
-		 BasicElement *prev;
-	         newActive=eList.current()->element->getNext();
-		 prev=eList.current()->element->getPrev();
-		 eList.current()->element->deleteElement();
-		 if(prev!=0)
-		   prev->check();
-		 setActiveElement(newActive);
+	    BasicElement *newActive;
+	    BasicElement *prev;
+	    newActive=eList.current()->element->getNext();
+	    prev=eList.current()->element->getPrev();
+	    eList.current()->element->deleteElement();
+	    if(prev!=0)
+		prev->check();
+	    setActiveElement(newActive);
 
-	    }
+	}
 
     emitModified();
 }
@@ -629,29 +629,29 @@ if(action==Qt::Key_Right)
 
 void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
 {
-/*		    //paintGround->size()    
-    QPixmap pm(100,100);  //double buffer
-    pm.fill();
-    QPainter q;
-    thePainter=&q;
-*/
+    /*		    //paintGround->size()    
+		    QPixmap pm(100,100);  //double buffer
+		    pm.fill();
+		    QPainter q;
+		    thePainter=&q;
+    */
     thePainter->begin(paintGround);
     thePainter->setPen( black );
     theFirstElement->checkSize();
     if(eList.current()->element!=0L)
-      eList.current()->element->setActive(true);
+	eList.current()->element->setActive(true);
     theFirstElement->draw(QPoint(5,5)-theFirstElement->getSize().topLeft());
-//    if(eList.current()->element && typeid(*eList.current()->element) == typeid(TextElement))
-//	{
-	 //thePainter->drawWinFocusRect(theCursor);
-	 theCursor=eList.current()->element->getCursor(eList.current()->pos);
-	 thePainter->drawLine(theCursor.topLeft()+QPoint(0,1),theCursor.topRight()+QPoint(0,1));
-	 thePainter->drawLine(theCursor.bottomLeft()-QPoint(0,1),theCursor.bottomRight()-QPoint(0,1));
-	 thePainter->drawLine(theCursor.topLeft()+QPoint(theCursor.width()/2,1),
-	                     theCursor.bottomLeft()+QPoint(theCursor.width()/2,-1));	 
-//	}
+    //    if(eList.current()->element && typeid(*eList.current()->element) == typeid(TextElement))
+    //	{
+    //thePainter->drawWinFocusRect(theCursor);
+    theCursor=eList.current()->element->getCursor(eList.current()->pos);
+    thePainter->drawLine(theCursor.topLeft()+QPoint(0,1),theCursor.topRight()+QPoint(0,1));
+    thePainter->drawLine(theCursor.bottomLeft()-QPoint(0,1),theCursor.bottomRight()-QPoint(0,1));
+    thePainter->drawLine(theCursor.topLeft()+QPoint(theCursor.width()/2,1),
+			 theCursor.bottomLeft()+QPoint(theCursor.width()/2,-1));	 
+    //	}
     thePainter->end();
-//    bitBlt(paintGround,0,0,&pm,0,0,-1,-1);
+    //    bitBlt(paintGround,0,0,&pm,0,0,-1,-1);
 }
 
 void KFormulaDoc::print( QPrinter *thePrt)
@@ -672,30 +672,23 @@ void KFormulaDoc::setActiveElement(BasicElement* c)
     thePosition=-1;
     theFirstElement->makeList();
     for(eList.first();eList.current()!=0;eList.next())
-     if(eList.current()->element==c)
-       thePosition=eList.at();
+	if(eList.current()->element==c)
+	    thePosition=eList.at();
     eList.at(thePosition);
     
-/*    if(eList.current()->element)
-	eList.current()->element->setActive(false);
-    if (c!=0)
-	c->setActive(true);
-    eList.clear();
-    warning("clear list");
-    thePosition=-1;
-    theFirstElement->makeList(1); 
-    eList.at(thePosition);*/	
-warning("New Active Element  %p",c);
+    /*    if(eList.current()->element)
+	  eList.current()->element->setActive(false);
+	  if (c!=0)
+	  c->setActive(true);
+	  eList.clear();
+	  warning("clear list");
+	  thePosition=-1;
+	  theFirstElement->makeList(1); 
+	  eList.at(thePosition);*/	
+    warning("New Active Element  %p",c);
 }
 
-void KFormulaDoc::setFirstElement(BasicElement* c)
-{
 
-    if (c)
-	theFirstElement = c;
-    else
-	warning("Try to set first element to 0L");
-}
 
 
 #include "kformula_doc.moc"

@@ -11,9 +11,9 @@
 #include "BasicElement.h"
 #include "RootElement.h"
 #include "formuladef.h"
-#include "kformula_doc.h"
+#include "formula_container.h"
 
-RootElement::RootElement(KFormulaDoc *Formula,
+RootElement::RootElement(KFormulaContainer *Formula,
 			 BasicElement *Prev,
 			 int Relation,
 			 BasicElement *Next,
@@ -187,7 +187,7 @@ void RootElement::drawIndexes(QPainter *,int resolution)
 {
     /*
       Index[0] is in draw() must be lower...
-  */
+    */
     QPoint dp = myArea.topLeft() - globalSize.topLeft();
     if(index[1]!=0L)
 	index[1]->draw(dp+familySize.bottomLeft() -

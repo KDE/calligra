@@ -23,10 +23,10 @@ class BracketElement : public BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    BracketElement(KFormulaDoc *Formula,
-		   BasicElement *Prev=NULL,
+    BracketElement(KFormulaContainer *Formula,
+		   BasicElement *Prev=0,
 		   int Relation=-1,
-		   BasicElement *Next=NULL,
+		   BasicElement *Next=0,
 		   QString Content="");
        
     /*
@@ -39,7 +39,7 @@ class BracketElement : public BasicElement
      * "prev" is responsable for x,y
      * 
      */
-    virtual void draw(QPoint drawPoint,int resolution=72);
+    virtual void draw(QPoint drawPoint,int resolution);
 
     /*
      * each derived class must implement its own CheckSize()

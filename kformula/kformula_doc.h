@@ -20,15 +20,11 @@ class KFormulaDoc;
 #include <qstring.h>
 #include <qpainter.h>
 
-#define MIME_TYPE "application/x-kformula"
-class BasicElement;
-struct PosType
- {
-  BasicElement *element;
-  int pos;
- };
+#include "formula_container.h"
 
-class KFormulaDoc : public QObject,
+#define MIME_TYPE "application/x-kformula"
+
+class KFormulaDoc : public KFormulaContainer, 
 		    virtual public KoDocument,
 		    virtual public KFormula::Document_skel
 {
@@ -114,22 +110,16 @@ class KFormulaDoc : public QObject,
     /*
       void addSymbolElement();
       void addDecorationElement();
-    */    void addBracketElement(QString cont);
+    */    
+    void addBracketElement(QString cont);
 
-
-    void setPainter(QPainter* p) { thePainter=p; }
     void setActiveElement(BasicElement* c); 
     void setCursor(const QRect& r) { theCursor=r; }
-    void setFont(const QFont& f) { theFont=f;}
-    void setColor(const QColor& c) { theColor=c;}
-    void setFirstElement(BasicElement* c);
-    QList<PosType> eList;
+
     int thePosition;
-    QPainter * painter() const { return thePainter; } 
+    
     BasicElement *activeElement() const { return theActiveElement; } 
     QRect cursor() const { return theCursor; }
-    QFont generalFont() const { return theFont; }
-    QColor generalColor() const { return theColor; }
     
  signals:
     void sig_modified();
@@ -146,12 +136,11 @@ class KFormulaDoc : public QObject,
     // QTimer *cursorTimer;
     bool showIt;
 
-    QPainter *thePainter;
+    
     BasicElement *theActiveElement;
-    BasicElement *theFirstElement;
+    
     QRect theCursor;
-    QFont theFont;
-    QColor theColor;
+
 };
 
 #endif

@@ -11,9 +11,9 @@
 #include <qrect.h>
 #include "BasicElement.h"
 #include "formuladef.h"
-#include "kformula_doc.h"
+#include "formula_container.h"
 
-BasicElement::BasicElement(KFormulaDoc *Formula,
+BasicElement::BasicElement(KFormulaContainer *Formula,
 			   BasicElement *Prev,
 			   int Relation,
 			   BasicElement *Next,
@@ -147,11 +147,11 @@ void BasicElement::checkSize()
 
 void BasicElement::check()
 {
-  int i=0; 
-  for(i=0;i<childrenNumber;i++)
-      if (child[i]==0L)
-         if (i<minChildren)
-	     child[i]=new BasicElement(formula,this,i+4);
+    int i=0; 
+    for(i=0;i<childrenNumber;i++)
+	if (child[i]==0L)
+	    if (i<minChildren)
+		child[i]=new BasicElement(formula,this,i+4);
 
 }
 void BasicElement::checkIndexesSize()
@@ -309,10 +309,10 @@ void  BasicElement::deleteElement()
 {
     warning("deleteElement of -> %p   prev %p    next %p",this,prev,next);
     if(next!=0L)
-     {
-     next->setPrev(prev);
-     next->setRelation(relation);
-     }
+	{
+	    next->setPrev(prev);
+	    next->setRelation(relation);
+	}
     if(prev!=0L)
      	{
 	    if(relation<4)
@@ -327,31 +327,31 @@ void  BasicElement::deleteElement()
 	}
     
     else //I'm the first element.
-     if(next!=0L)
-      formula->setFirstElement(next);    
-     else
-      formula->setFirstElement(new BasicElement(formula));    
+	if(next!=0L)
+	    formula->setFirstElement(next);    
+	else
+	    formula->setFirstElement(new BasicElement(formula));    
 
       
-   int nc=0;     
-   while (nc<childrenNumber)
-      { 
-       if (child[nc]!=0L)
-       {
-       	warning("I'm %p, I delete my child[%d]=%p i.e. %d of %d",this,nc,child[nc],nc+1,childrenNumber);    
-        child[nc]->deleteElement();
-       }
-        else 
-	 nc++;
-      }
-   while (nc<4)
-      { 
-       if (index[nc]!=0L)
-         index[nc]->deleteElement();
-        else 
-	 nc++;
-      }
-  delete this;  // It is a good call ?
+    int nc=0;     
+    while (nc<childrenNumber)
+	{ 
+	    if (child[nc]!=0L)
+		{
+		    warning("I'm %p, I delete my child[%d]=%p i.e. %d of %d",this,nc,child[nc],nc+1,childrenNumber);    
+		    child[nc]->deleteElement();
+		}
+	    else 
+		nc++;
+	}
+    while (nc<4)
+	{ 
+	    if (index[nc]!=0L)
+		index[nc]->deleteElement();
+	    else 
+		nc++;
+	}
+    delete this;  // It is a good call ?
  
 
 }
@@ -359,106 +359,90 @@ void  BasicElement::deleteElement()
 
 void  BasicElement::save(ostream& out)
 {
-out << "TYPE=" << -1 << " "
-    << "CONTENT=" << (const char *) content << " "
-    << "NUMERICFONT=" << numericFont << " "
-    << " >" << endl;
+    out << "TYPE=" << -1 << " "
+	<< "CONTENT=" << (const char *) content << " "
+	<< "NUMERICFONT=" << numericFont << " "
+	<< " >" << endl;
 
-for(int i=0;i<4;i++)
- if(index[i]!=0L)
-    {
-     out << " <ELEM INDEX=" << i << " ";
-     index[i]->save(out);     
-    } 
+    for(int i=0;i<4;i++)
+	if(index[i]!=0L)
+	    {
+		out << " <ELEM INDEX=" << i << " ";
+		index[i]->save(out);     
+	    } 
     
-for(int i=0;i<childrenNumber;i++)
- if(child[i]!=0L)
-    {
-     out << " <ELEM CHILD=" << i << " ";
-     child[i]->save(out);     
-    } 
-if(next!=0)
-    {
-     out << " <ELEM NEXT ";
-     next->save(out);     
-    }         
-out << "</ELEM>" << endl;
+    for(int i=0;i<childrenNumber;i++)
+	if(child[i]!=0L)
+	    {
+		out << " <ELEM CHILD=" << i << " ";
+		child[i]->save(out);     
+	    } 
+    if(next!=0)
+	{
+	    out << " <ELEM NEXT ";
+	    next->save(out);     
+	}         
+    out << "</ELEM>" << endl;
 }
 
 void  BasicElement::load(int)
 {
 }
 
-void BasicElement::makeList(bool active=0) 
+void BasicElement::makeList(bool active) 
 {
-warning("make list %p " ,this);
-bool basic;
-PosType *p; 
-basic=(typeid(*this) == typeid(BasicElement));
-if(!basic) {
-    p = new PosType;
-    p->element=this;
-    p->pos=0;
-    formula->eList.append(p);
-}
-warning("append");
+    warning("make list %p " ,this);
+    bool basic;
+    basic=(typeid(*this) == typeid(BasicElement));
+    if(!basic)
+	formula->addElement(this, 0);
+    warning("append");
 
-beActive=0;
+    beActive=0;
 
-for(int i=0;i<2;i++)
- if(index[i]!=0) {
-  warning("call for index%d %p",i,index[i]);
- index[i]->makeList(active);
-  }
-warning("index OK");
+    for(int i=0;i<2;i++)
+	if(index[i]!=0) {
+	    warning("call for index%d %p",i,index[i]);
+	    index[i]->makeList(active);
+	}
+    warning("index OK");
 
-for(int i=0;i<childrenNumber;i++)
- if(child[i]!=0)
-  {
-   warning("call for child%d %p",i,child[i]);
-   child[i]->makeList(active);
-  }
-if(basic) 
-  {
-      p = new PosType;
-      p->element=this;
-      p->pos=-1;
-      formula->eList.append(p);
-  }
-  
+    for(int i=0;i<childrenNumber;i++)
+	if(child[i]!=0)
+	    {
+		warning("call for child%d %p",i,child[i]);
+		child[i]->makeList(active);
+	    }
+    if(basic) 
+	formula->addElement(this);
 
-warning("children done");
+    warning("children done");
 
-for(int i=2;i<4;i++)
- if(index[i]!=0) {
-  warning("call for index%d %p",i,index[i]);
- index[i]->makeList(active);
-  }
+    for(int i=2;i<4;i++)
+	if(index[i]!=0) {
+	    warning("call for index%d %p",i,index[i]);
+	    index[i]->makeList(active);
+	}
 
-if(next!=0)
- next->makeList(active);
-else if(!basic)
-{
-  p = new PosType;
-  p->element=this;
-  p->pos=-1;
-  formula->eList.append(p);
- }
+    if(next!=0)
+	next->makeList(active);
+    else if(!basic)
+	formula->addElement(this);
 }
 
 QRect BasicElement::getCursor(int atPos) 
 {
     QPoint dp = myArea.topLeft()-globalSize.topLeft();
- if (typeid(*this) == typeid(BasicElement))
-     return (QRect(dp.x()+familySize.x()+3,dp.y()-8,5,16));	
+    if (typeid(*this) == typeid(BasicElement))
+	return (QRect(dp.x()+familySize.x()+3,dp.y()-8,5,16));	
     else 
-    {
-      if(atPos==0)
-        return (QRect(dp.x()+localSize.x(),dp.y()-7,5,14));
-     else
-       return (QRect(dp.x()+localSize.right(),dp.y()-8,5,16));	
-    }
+	{
+	    if(atPos==0)
+		return (QRect(dp.x()+localSize.x(),dp.y()-7,5,14));
+	    else
+		return (QRect(dp.x()+localSize.right(),dp.y()-8,5,16));	
+	}
 
 
-return QRect(0,0,0,0);
+    return QRect(0,0,0,0);
 }

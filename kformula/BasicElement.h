@@ -9,7 +9,7 @@
  Author: Andrea Rizzi <rizzi@kde.org>
  License:GPL
 */
-#include <koStream.h>
+// #include <koStream.h>
 
 #include <qpoint.h>
 #include <qstring.h>
@@ -19,13 +19,21 @@
 #include <qfont.h>
 #include "formuladef.h"
 #include <typeinfo>
+#include <iostream>
+
+class BasicElement;
+struct PosType
+{
+    BasicElement *element;
+    int pos;
+};
 
 /*
  * BasicElement is the mother of all XxxxElement
  * It show a simple SQUARE 
  *
  */
-class KFormulaDoc;
+class KFormulaContainer;
 
 class BasicElement 
 {
@@ -33,10 +41,10 @@ class BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    BasicElement(KFormulaDoc *Formula,
-		 BasicElement *Prev=NULL,
+    BasicElement(KFormulaContainer *Formula,
+		 BasicElement *Prev=0,
 		 int Relation=-1,
-		 BasicElement *Next=NULL,
+		 BasicElement *Next=0,
 		 QString Content="");
   
     /*
@@ -49,13 +57,13 @@ class BasicElement
      * "prev" is responsable for x,y
      * 
      */
-    virtual void draw(QPoint drawPoint,int resolution=72);
+    virtual void draw(QPoint drawPoint,int resolution = 72);
   
     /*
      * Must be called by draw() 
      * RootElement may need to rewrite it.
      */ 
-    virtual void drawIndexes(QPainter *pen,int resolution=72);
+    virtual void drawIndexes(QPainter *pen,int resolution);
   
     /*
      * each derived class must implement its own CheckSize()
@@ -192,7 +200,7 @@ class BasicElement
     /*
      * I know nothing about the future of this member
      */
-    KFormulaDoc *formula;
+    KFormulaContainer *formula;
   
     /*
      * realtionship with prev
@@ -277,7 +285,7 @@ class BasicElement
   
     /*
      * When editing defaultColor may be overiden
-     * if defaultColor is NULL it use  formula->defaultColor
+     * if defaultColor is 0 it use  formula->defaultColor
      */
     QColor *defaultColor;
   

@@ -29,28 +29,20 @@ class MatrixSetupWidget  : public QDialog
 
 public:
 
-    MatrixSetupWidget(QWidget* parent = NULL,const char* name = NULL);
+    MatrixSetupWidget(QWidget* parent = 0,const char* name = 0);
 
     virtual ~MatrixSetupWidget();
     void setString(QString str);
     
-public slots:
-   
-
 protected slots:
 
     virtual void valueChanged();
     virtual void CancelPressed();
     virtual void OkPressed();
-/*    virtual void getValue1(bool);
-    virtual void getValue3(bool);
-    virtual void getValue2(bool);
-    virtual void getValue4(bool);
-*/
+
 protected:
     QComboBox* co[7];
     QRadioButton* cb[6];
-//    QCheckBox* fcb[5];
     KNumericSpinBox* spb[5];
 signals:	 
    void  returnString(QString);

@@ -23,8 +23,8 @@ class RootElement : public BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    RootElement(KFormulaDoc *Formula,BasicElement *Prev=NULL,
-		int Relation=-1,BasicElement *Next=NULL,
+    RootElement(KFormulaContainer *Formula,BasicElement *Prev=0,
+		int Relation=-1,BasicElement *Next=0,
 		QString Content="");
        
     /*
@@ -37,7 +37,7 @@ class RootElement : public BasicElement
      * "prev" is responsable for x,y
      * 
      */
-    virtual void draw(QPoint drawPoint,int resolution=72);
+    virtual void draw(QPoint drawPoint,int resolution);
 
     /*
      * each derived class must implement its own CheckSize()
@@ -80,7 +80,7 @@ class RootElement : public BasicElement
      * Defaut drawIndexes() draw index[0] in (oldp)
      * this drawIndexes() draw index[0] in (here)
      */
-    virtual void drawIndexes(QPainter *pen,int resolution=72);    
+    virtual void drawIndexes(QPainter *pen,int resolution);    
 
     /*
      * Again, in  the future....
