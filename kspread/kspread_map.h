@@ -60,16 +60,6 @@ public:
   bool saveChildren( KoStore* _store );
 
   /**
-   * @param _table becomes added to the map.
-   */
-  void addTable( KSpreadTable *_table );
-
-  /**
-   * @param _tables becomes removed from the map. This won't delete the table.
-   */
-  void removeTable( KSpreadTable *_table );
-
-  /**
    * The table named @param _from is being moved to the table @param _to.
    * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
    */
@@ -82,6 +72,8 @@ public:
   KSpreadTable* initialActiveTable()const { return m_initialActiveTable; }
   int initialMarkerColumn()const { return m_initialMarkerColumn; }
   int initialMarkerRow()const { return m_initialMarkerRow; }
+
+    void addTable( KSpreadTable *_table );
 
   /**
    * Use the @ref #nextTable function to get all the other tables.
@@ -134,6 +126,7 @@ private:
    * List of all tables in this map. The list has autodelete turned on.
    */
   QPtrList<KSpreadTable> m_lstTables;
+  QPtrList<KSpreadTable> m_lstDeletedTables;
 
   /**
    * Pointer to the part which holds this map.

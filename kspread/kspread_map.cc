@@ -49,13 +49,6 @@ void KSpreadMap::addTable( KSpreadTable *_table )
   m_lstTables.append( _table );
 }
 
-void KSpreadMap::removeTable( KSpreadTable *_table )
-{
-  m_lstTables.setAutoDelete( false );
-  m_lstTables.removeRef( _table );
-  m_lstTables.setAutoDelete( true );
-}
-
 void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _before )
 {
   KSpreadTable* tablefrom = findTable( _from );
@@ -234,10 +227,13 @@ void KSpreadMap::takeTable( KSpreadTable* table )
 {
     int pos=m_lstTables.findRef(table);
     m_lstTables.take( pos );
-
+    m_lstDeletedTables.append( table );
 }
 
 void KSpreadMap::insertTable( KSpreadTable* table )
 {
+    int pos=m_lstDeletedTables.findRef(table);
+    if ( pos != -1 )
+        m_lstDeletedTables.take( pos);
     m_lstTables.append(table);
 }

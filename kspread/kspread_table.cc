@@ -6988,6 +6988,7 @@ bool KSpreadTable::saveChildren( KoStore* _store, const QString &_path )
 
 KSpreadTable::~KSpreadTable()
 {
+    kdDebug()<<" KSpreadTable::~KSpreadTable() :"<<this<<endl;
     s_mapTables->remove( m_id );
 
     //when you remove all table (close file)
