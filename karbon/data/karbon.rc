@@ -69,6 +69,7 @@
 		<Action name="edit_cut"/>
 		<Action name="edit_copy"/>
 		<Action name="edit_paste"/>
+		<Action name="edit_delete"/>
 	</ToolBar>
 	<ToolBar name="view_toolbar" fullWidth="false">
 		<Text>View</Text>
