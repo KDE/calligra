@@ -158,34 +158,34 @@ void KIllustratorView::createMyGUI()
     new KAction( i18n("Insert &Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
 
     // Tools
-    m_selectTool = new KToggleAction( i18n("Mouse"), "selecttool", 0, actionCollection(), "mouse" );
+    m_selectTool = new KToggleAction( i18n("Mouse"), "selecttool", CTRL+Key_1, actionCollection(), "mouse" );
     m_selectTool->setExclusiveGroup( "Tools" );
     connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
-    KToggleAction *m_pointTool = new KToggleAction( i18n("Point"), "pointtool", 0, actionCollection(), "point" );
+    KToggleAction *m_pointTool = new KToggleAction( i18n("Point"), "pointtool", CTRL+Key_2, actionCollection(), "point" );
     m_pointTool->setExclusiveGroup( "Tools" );
     connect( m_pointTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPointTool( bool ) ) );
-    KToggleAction *m_freehandTool = new KToggleAction( i18n("Freehand"), "freehandtool", 0, actionCollection(), "freehand" );
+    KToggleAction *m_freehandTool = new KToggleAction( i18n("Freehand"), "freehandtool", CTRL+Key_3, actionCollection(), "freehand" );
     m_freehandTool->setExclusiveGroup( "Tools" );
     connect( m_freehandTool, SIGNAL( toggled( bool ) ), this, SLOT( slotFreehandTool( bool ) ) );
-    KToggleAction *m_lineTool = new KToggleAction( i18n("Line"), "linetool", 0, actionCollection(), "line" );
+    KToggleAction *m_lineTool = new KToggleAction( i18n("Line"), "linetool", CTRL+Key_4, actionCollection(), "line" );
     m_lineTool->setExclusiveGroup( "Tools" );
     connect( m_lineTool, SIGNAL( toggled( bool ) ), this, SLOT( slotLineTool( bool ) ) );
-    KToggleAction *m_bezierTool = new KToggleAction( i18n("Bezier"), "beziertool", 0, actionCollection(), "bezier" );
+    KToggleAction *m_bezierTool = new KToggleAction( i18n("Bezier"), "beziertool", CTRL+Key_5, actionCollection(), "bezier" );
     m_bezierTool->setExclusiveGroup( "Tools" );
     connect( m_bezierTool, SIGNAL( toggled( bool ) ), this, SLOT( slotBezierTool( bool ) ) );
-    KToggleAction *m_rectTool = new KToggleAction( i18n("Rectangle"), "recttool", 0, actionCollection(), "rectangle" );
+    KToggleAction *m_rectTool = new KToggleAction( i18n("Rectangle"), "recttool", CTRL+Key_6, actionCollection(), "rectangle" );
     m_rectTool->setExclusiveGroup( "Tools" );
     connect( m_rectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotRectTool( bool ) ) );
-    KToggleAction *m_polygonTool = new KToggleAction( i18n("Polygon"), "polygontool", 0, actionCollection(), "polygon" );
+    KToggleAction *m_polygonTool = new KToggleAction( i18n("Polygon"), "polygontool", CTRL+Key_7, actionCollection(), "polygon" );
     m_polygonTool->setExclusiveGroup( "Tools" );
     connect( m_polygonTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPolygonTool( bool ) ) );
-    KToggleAction *m_ellipseTool = new KToggleAction( i18n("Ellipse"), "ellipsetool", 0, actionCollection(), "ellipse" );
+    KToggleAction *m_ellipseTool = new KToggleAction( i18n("Ellipse"), "ellipsetool", CTRL+Key_8, actionCollection(), "ellipse" );
     m_ellipseTool->setExclusiveGroup( "Tools" );
     connect( m_ellipseTool, SIGNAL( toggled( bool ) ), this, SLOT( slotEllipseTool( bool ) ) );
-    KToggleAction *m_textTool = new KToggleAction( i18n("Text"), "texttool", 0, actionCollection(), "text" );
+    KToggleAction *m_textTool = new KToggleAction( i18n("Text"), "texttool", CTRL+Key_9, actionCollection(), "text" );
     m_textTool->setExclusiveGroup( "Tools" );
     connect( m_textTool, SIGNAL( toggled( bool ) ), this, SLOT( slotTextTool( bool ) ) );
-    KToggleAction *m_zoomTool = new KToggleAction( i18n("Zoom"), "zoomtool", 0, actionCollection(), "zoom" );
+    KToggleAction *m_zoomTool = new KToggleAction( i18n("Zoom"), "zoomtool", CTRL+Key_0, actionCollection(), "zoom" );
     m_zoomTool->setExclusiveGroup( "Tools" );
     connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
 
