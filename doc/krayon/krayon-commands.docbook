@@ -1,0 +1,1192 @@
+<!-- If you want to work on or validate this document separately, -->
+<!-- uncomment this prolog:
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+-->
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<para>TODO: put in intro paragraph to commands</para>
+
+<sect1 id="file-menu">
+<title>The <guimenu>File</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>N</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="filenew.png" format="PNG"/></imageobject>
+<textobject><phrase>New Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Allows you to create a new &krayon; image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>O</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="fileopen.png" format="PNG"/></imageobject>
+<textobject><phrase>Open Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Opens an existing &krayon; image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Opens a recently used &krayon; image. A submenu will open
+displaying recent &krayon; images that you have used.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>S</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="filesave.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Save Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Saves the current &krayon; image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Saves the &krayon; image under a new name.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>P</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="fileprint.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Print Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Prints the current &krayon; image. This will open the
+<guilabel>Setup Printer</guilabel> dialog, to set the printing
+parameters and print the image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information...</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="documentinfo.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Info Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>This opens the <guilabel>Document Information</guilabel>
+dialog. This lets you enter information about current &krayon;
+image. This information will be saved with the image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>W</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="fileclose.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Close Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Closes the current &krayon; image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="exit.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Quit Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>>Quits &krayon;. This will only quit the current &krayon;
+window if more than one is open.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="edit-menu">
+<title>The <guimenu>Edit</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>C</keycap>
+</keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Cut</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="editcut.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Cut Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Removes the selection from the image and places it in the
+clipboard.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>X</keycap>
+</keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Copy</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="editcopy.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Copy Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Copies the selection to the clipboard. This is different from the
+<guimenuitem>Cut</guimenuitem> in that it does not remove the
+selection from the image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>V</keycap>
+</keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="editpaste.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Paste Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Inserts the selection from the clipboard into the image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Crop</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Crops the &krayon; image to the selection. The image will be
+resized to the size of the selection rectangle, and all parts of
+the image outside of the selection rectangle will be removed.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>A</keycap>
+</keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Select All</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>TODO: How will this work on an image? Find out...</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Unselect All</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Removes all selections from the image. This is the opposite
+of <guimenuitem>Select All</guimenuitem></para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="view-menu">
+<title>The <guimenu>View</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>New View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Open up a new view window for the current &krayon; image.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Close All Views</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Close all open view windows.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Split View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Split the current view into two. This does not open a
+separate &krayon; window, but splits the current window into two.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Remove View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Closes the current &krayon; split view.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Splitter Orientation</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Change the orientation of the split views. You may choose to
+split the view horizontally or vertically.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Zoom in</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="viewmag+.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Zoom In Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Zoom in on the current view. This <quote>magnifies</quote>
+your view of the image, making it easier to work on image
+details.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Zoom out</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="viewmag-.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Zoom Out Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Zoom out from the current view. This is the opposite of the
+<guimenuitem>Zoom in</guimenuitem> command.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<!-- TODO: reference the tools section for more info -->
+
+<!-- TODO: make a comment up top about left and right mouse buttons -->
+
+<sect1 id="tools-menu">
+<title>The <guimenu>Tools</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Rectangular select</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Rectangular select</guimenuitem>
+tool. You use this tool to select rectangular regions of the
+&krayon; image. These regions can then be copied, moved, or
+removed.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Move tool</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Move</guimenuitem> tool. You use
+this to move selected regions of the &krayon; image.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Zoom tool</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Zoom</guimenuitem> tool. You use
+this to zoom in or out of the image view. Clicking with the left
+mouse button magnifies the image while clicking with the right
+mouse button demagnifies the image. These behave identical to the
+<guimenuitem>Zoom in</guimenuitem> and <guimenuitem>Zoom
+out</guimenuitem> commands on the<guimenuitem>View</guimenuitem>
+menu.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Color picker</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Color picker</guimenuitem>
+tool. You use this to select a color from a &krayon; image. Using
+the <guimenuitem>Color picker</guimenuitem> is often easier than
+editing the color values on the <guilabel>Sidebar</guilabel>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Pen tool</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Pen</guimenuitem> tool. You use
+this to draw basic lines on the &krayon; image. Lines drawn with
+the <guimenuitem>Pen</guimenuitem> have sharp edges.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Brush tool</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Brush</guimenuitem> tool. You use
+this to draw basic lines on the &krayon; image. Unlike the
+<guimenuitem>Pen</guimenuitem> tool, the
+<guimenuitem>Brush</guimenuitem> draws lines with
+<quote>fuzzy</quote> edges.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Airbrush tool</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Airbrush</guimenuitem> tool. This
+is similar to the <guimenuitem>Brush</guimenuitem> tool, but draws
+lines in an airbrushed style.</para>
+<!-- TODO: figure out exactly what Airbrush does. Is it pressure sensitive? -->
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Gradient tool</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Gradient</guimenuitem> tool. This
+fills in areas of the &krayon; image with the currently selected
+gradient.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Eraser tool</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Eraser</guimenuitem> tool. This removes
+color from the image. It can be helpful to think of the
+<guimenuitem>Eraser</guimenuitem> as a
+<guimenuitem>Pen</guimenuitem> that draws in an
+<quote>erasing</quote> color.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Filler tool</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Chooses the <guimenuitem>Filler</guimenuitem> tool. This
+fills in regions of the &krayon; image with a color or pattern.</para>
+<!-- TODO: how to define fill boundary -->
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="image-menu">
+<title>The <guimenu>Image</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Import Image</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="wizard.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Import Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Import an image into &krayon;. Besides the default
+<filename>KRA</filename> format, &krayon; can load images stored
+in a variety of formats, including <filename>PNG</filename>,
+<filename>XPM</filename>, <filename>BMP</filename>, and
+<filename>JPEG</filename> formats.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Export Image</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="wizard.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Export Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</term>
+<listitem>
+<para>Export an image to another format. This saves the &krayon;
+image to another image format. See the <guimenuitem>Import
+Image</guimenuitem> paragraph above for the kinds of formats that
+&krayon; recognizes.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Add new image tab</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>You can have more than one image open in &krayon; at a
+time. By selecting this item, &krayon; creates a new image, and
+adds a tab at the bottom of the image view. By selecting between
+these tabs, you can switch between the different images.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Remove current image tab</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Removes the current image and image tab.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Merge all layers</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Merges all of the current image layers into a single
+layer. This is useful if you have created multiple layers to work
+on different parts of the image, and want to combine them all.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Merge all visible layers</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Merge all of the visible image layers into one. This is like
+the <guimenuitem>Merge all layers</guimenuitem> command, but only
+operates on the visible layers.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Merge all linked layers</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Merge all ofthe linked image layers into one. This is like
+the <guimenuitem>Merge all layers</guimenuitem> command, but only
+operates on the linked layers.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="layer-menu">
+<title>The <guimenu>Layer</guimenu> Menu</title>
+<para>TODO: should put general discussion of layers here, and
+reference the concepts above.</para>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Insert layer...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Creates and inserts a new layer in the image. A useful way
+to think of layers is to imagine them as sheets of glass stacked
+atop each other. You can see through all the layers, but any
+drawing you perform only changes the current layer. Some layers
+are opaque and others are transparent.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Insert image as layer...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Inserts an image as a new layer. &krayon; will open an image
+of any supported format and use it as a new drawing layer.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Save layer as standard image...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>This command will save the current drawing layer as an image
+file. Layers can be saved in any supported image format.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Rotate 90</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Rotates the current drawing layer 90 degrees clockwise.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Rotate 180</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Rotates the current drawing layer 180 degrees clockwise.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Rotate 270</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Rotates the current drawing layer 270 degrees clockwise.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Mirror X</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Mirrors the drawing layer about the X axis. This flips the
+layer vertically.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Mirror Y</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Mirrors the drawing layer about the Y axis. This flips the
+layer horizontally.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="color-menu">
+<title>The <guimenu>Color</guimenu> Menu</title>
+<para>TODO: Nothing here yet...
+</para>
+</sect1>
+
+<sect1 id="brush-menu">
+<title>The <guimenu>Brush</guimenu> Menu</title>
+<para>TODO: Nothing here yet...
+</para>
+</sect1>
+
+<sect1 id="pattern-menu">
+<title>The <guimenu>Pattern</guimenu> Menu</title>
+<para>TODO: Nothing here yet...
+</para>
+</sect1>
+
+<sect1 id="effects-menu">
+<title>The <guimenu>Effects</guimenu> Menu</title>
+<para>TODO: Nothing here yet...
+</para>
+</sect1>
+
+<sect1 id="history-menu">
+<title>The <guimenu>History</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>Z</keycap>
+</keycombo></shortcut>
+<guimenu>History</guimenu>
+<guimenuitem>Undo</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="undo.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Undo Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>.
+</term>
+<listitem>
+<para>Reverses the last action you performed. Not all actions can
+be reversed. If you are unable to Undo the last action, the
+<quote>Undo</quote> option will be replaced with <quote>No Undo
+Possible</quote>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>Shift</keycap><keycap>Z</keycap>
+</keycombo></shortcut>
+<guimenu>History</guimenu>
+<guimenuitem>Redo</guimenuitem>
+</menuchoice>
+<guiicon>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="redo.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Redo Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>.
+</term>
+<listitem>
+<para>Reverses the last Undo performed. If the Redo option is
+unavailable, the <quote>Redo</quote> options will be replaced with
+<quote>No Redo Possible</quote>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="settings-menu">
+<title>The <guimenu>Settings</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Tool Settings</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>This displays a submenu where you can configure the settings
+for each of the &krayon; tools.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Menubar</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>Shows the main menu, or hides it. The menubar is at the top
+of the &krayon; window.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Toolbar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Shows the main toolbar, or hides it.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Statusbar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Shows the statusbar, or hides it. The statusbar is at the
+bottom of the &krayon; window.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Sidebar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Shows the sidebar, or hides it. The sidebar is at the left
+of the &krayon; window. It contains color, brush, pattern and
+other controls.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Krayon Preferences...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Opens the Preferences dialog. You use this dialog to set
+your user and work settings for &krayon;.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Save Options</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Save the current settings and options for &krayon;. This
+will save all settings made in the Settings menu and its dialogs.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show File Toolbar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Shows the file toolbar or hides it. This toolbar contains
+icons to create, open, save or print the current image.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Selection Toolbar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Shows the selection toolbar, or hides it. This toolbar
+contains icons to copy, cut, remove or paste the image selection.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show KrayonBox Toolbar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Shows the KrayonBox toolbar, or hides it. This toolbar
+contains icons to open the colors, krayons, brushes, patterns,
+layers and channels dialogs.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Settings Toolbar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Shows the Settings toolbar, or hides it. This toolbar
+contains icons to show or hide the sidebar, or open various
+settings dialogs.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Tools Toolbar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Shows the Tools toolbar, or hides it. This toolbar contains
+icons for the drawing tools. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure key bindings...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Opens the <guilabel>Configure Key Bindings</guilabel>
+dialog. This dialog is used to change what keystrokes are
+associated with an action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Opens the <guilabel>Configure Toolbars</guilabel>
+dialog. This dialog is used to customize the toolbar layouts and
+actions.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="help-menu">
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F1</keycap></shortcut>
+<guimenu>Help</guimenu>
+<guimenuitem>Contents</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Opens up the &krayon; Handbook in the &kde; Help Center.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>F1</keycap>
+</keycombo></shortcut>
+<guimenu>Help</guimenu>
+<guimenuitem>What's This?</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Changes the cursor to a <guilabel>What's This?</guilabel>
+cursor. When this cursor is clicked on an item, icon or other
+control, a quick help panel is displayed.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>Report Bug...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Opens up the <guilabel>Submit a Bug Report</guilabel>
+dialog. If you find a defect in &krayon; use this dialog to report
+it to the &krayon; developers.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>About Krayon...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Displays copyright and other information for &krayon;.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Help</guimenu>
+<guimenuitem>About KDE...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Displays copyright and other information for the K Desktop
+Environment.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<!-- TODO All of the toolbar entries should eventually be in a menu
+somewhere. Document them there, along with an inline icon -->
+
+</chapter>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:nil
+sgml-parent-document:("index.docbook" "book" "chapter")
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->

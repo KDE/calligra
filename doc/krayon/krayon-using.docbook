@@ -1,0 +1,557 @@
+<!-- if you want to edit or validate this file separately, uncomment 
+ this prologue
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+]>
+-->
+
+<chapter id="using">
+<title>Using &krayon;</title>
+
+<sect1 id="basics">
+<title>&krayon; Basics</title>
+
+<para>To get you started right away using &krayon;, this tutorial will
+guide you step by step in making a finished image. Beneath each step
+in this tutorial is a note. This note will explain what the previous
+step in the tutorial accomplished.</para>
+
+<para>A red rectangle will outline on each screenshot the object you
+will need to push, change, click, etc. for the given step.</para>
+
+<sect2 id="basics_new">
+<title>Creating a New Image</title>
+
+<para>When you first start &krayon; (or start a new document after
+&krayon; is running), it displays a <guilabel>Choose</guilabel>
+dialog. You can choose to create a new image from scratch or from a
+template, or open an existing image.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>Choose Dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<note>
+<para>This dialog box is used to:
+<orderedlist>
+<listitem>
+<para>To select the initial template for your new document</para>
+</listitem>
+<listitem>
+<para>Open a &krayon; image saved to your hard drive or network.</para>
+</listitem>
+<listitem>
+<para>Start &krayon; with a new image.</para>
+</listitem>
+</orderedlist>
+</para>
+</note>
+
+<para>Step 1: Click on the <quote><guibutton>Start with an empty
+document</guibutton></quote> radio button. Then click on the
+<guibutton>OK</guibutton> button.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>New Image Dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<note>
+<para>This dialog box is used to select the size, color mode and
+default background color of a new image</para>
+</note>
+
+<para>Step 2: All of the defaults in the <guilabel>New
+Image</guilabel> dialog are sufficient for our needs. Click on the
+<guibutton>OK</guibutton> button.</para>
+
+</sect2>
+
+<sect2 id="basic_next">
+<title>Next Steps</title>
+
+<!-- TODO -->
+
+<para>&krayon; isn't quite ready for the bigtime yet. When it gets a
+bit more complete, this tutorial will proceed to use at least one
+tool/function from each general category.</para>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="concepts">
+<title>&krayon; Concepts</title>
+
+<para>Image processing programs are centered around some concepts that
+might not be immediately obvious to the new user. These concepts are
+central to understanding &krayon; as well as image processing in
+general. This section will explain these concepts.</para>
+
+<sect2 id="colors">
+<title>Colors</title>
+
+<para>Computers <quote>see</quote> colors differently than the human
+eye does. To a computer, everything is a number. When using a computer
+to manipulate colors the human user must model colors in a way that
+the computer can understand. There are several color models common to
+image processing.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>Indexed Color</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>The most common color model is the <quote>indexed</quote>
+color. Indexed, or mapped, colors have an index from one color
+representation to another. As an example, on the X Window System, the
+word <quote>HotPink</quote> is mapped to the color value
+<quote>#FF69B4</quote>. In a similar way, an <literal
+role="extension">XPM</literal> image uses a discrete number of colors
+mapped onto the full range of the system colors.</para>
+
+<!-- TODO: Krayon does not currently have indexed color mode -->
+
+<para>Indexed colors are useful when dealing with a small number of
+colors. They become unwieldly when dealing with a large number of colors
+however. Modern display hardware is capable of displaying 16 million
+different colors.</para>
+
+<!-- TODO: use DocBook acronym (or appropriate) for these color mode names -->
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>RGB Color</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>The <quote>RGB</quote> color mode can easily represent the full
+range of colors on a computer monitor. RGB stands for
+<quote>red</quote>, <quote>green</quote>, <quote>blue</quote>. RGB is an
+additive color model,since the values for the red, green and blue
+component values are added together to derive the final color. Each of
+these components can have 256 different values. This results in 16
+million different colors representable by the RGB model.</para>
+
+<para>Color that comes from light behaves differently from color that
+comes from pigments. When you mix red and blue paint, you get purple
+paint. But when you mix red and blue light, which is what your computer
+monitor is doing, you get the color magenta.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>CYMK Color</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Printers and publishers do not use RGB or other additive color
+models, since they are using pigments instead of light. They use
+subtractive color models instead. If you were to break open an ink
+cartridge for a color printer (please don't do this, it's messy), you
+will find four different colors, cyan, magenta, and yellow. The
+<quote>CYMK</quote> color model uses these three colors, plus black (the
+<quote>K</quote> stands for black), to represent the same colors as the
+RGB model.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>HSB Color</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>The <quote>HSB</quote> color model stands for hue, saturation and
+brightness. Sometimes this model is called HSV for hue, saturation and
+value. <quote>Hue</quote> describes the color on the spectrum, from red
+to indigo. <quote>Saturation</quote> describes how intense the color
+is. The lower the saturation value is, the duller the
+hue. <quote>Brightness</quote> and value describes how bright the color
+is. A color with zero brightness would be black, while one with the
+maximum brightness would be very light. If saturation is zero and the
+brightness set to maximum, the resulting color would be white.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>Grey Color</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>&krayon; also includes a <quote>Grey</quote> color mode. Grey
+color ranges from black to white in shades of pure gray.</para>
+
+</sect2>
+
+<sect2 id="brushes">
+<title>Brushes, Patterns and Krayons</title>
+
+<para>Just as color modes are analogous to a painter's palette in
+&krayon;, brushes, patterns and krayons are analogous to a painter's
+brushes and palette knives. The give the <quote>shape</quote> to the
+colors you paint.</para>
+
+<para>A brush in &krayon; is the <quote>shape</quote> of the drawing
+tool being used. The painting tools include the
+<guilabel>Pen</guilabel>, <guilabel>Brush</guilabel>,
+<guilabel>Airbrush</guilabel>, and <guilabel>Eraser</guilabel>
+tools. There is a clear distinction between the
+<guilabel>Brush</guilabel> tool and the selected brush.</para>
+
+<para>Just as <quote>real life</quote> bristle brushes can be round,
+flat, pointed or feathered, the brushes in &krayon; can have different
+shapes. These shapes are represented by gray scale images which you can
+select on the <guilabel>Sidebar</guilabel>. When you choose a round
+brush with a fuzzy edge from the <guilabel>Sidebar</guilabel>, then the
+lines and strokes you draw in &krayon; will be rounded with fuzzy
+edges.</para>
+
+<para>Patterns are used with the <guilabel>Stamp</guilabel> tool to
+<quote>stamp</quote> patterns onto the image. Patterns come in a variety
+of shapes and sizes, and they can have colors, unlike brushes which are
+only grayscale.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>Brushes</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+</sect2>
+
+<sect2 id="layers">
+<title>Layers</title>
+
+<para>Layers are a very useful concept in &krayon;. Newly created images
+only have one layer, but you can create more.</para>
+
+<para>You can think of them as a stack of glass sheets. When you paint
+onto the top sheet of glass, none of the lower sheets are affected, yet
+when you look down on the stack, you perceive only one image. Layers
+work in the same way. If you create a new transparent layer on top of
+your image, you can paint on that layer without worrying about it
+affecting the underlying image. You can also move areas of a layer
+around while the other layers are untouched.</para>
+
+<para>You control the layers of your image through the
+<guilabel>Layer</guilabel> menu and the
+<guilabel>Sidebar</guilabel>. Layers can have different levels of
+opacity, or transparency. You can rearrange and hide them. You can link
+layers so that they can be manipulated together. And you can give your
+layers names to help keep track of them. The first layer of a new image
+is called <quote>background</quote> by default.</para>
+
+<para>An especially useful layer operation is to merge layers. This
+combines two or more layers into one layer. You can merge all layers,
+just the visible layers, or just the linked layers. As an example, you
+could do some photo touchups on a layer, and when you were satisfied
+merge the layer into the original image.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>Layers</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+</sect2>
+
+<sect2 id="channels">
+<title>Channels</title>
+
+<para>TODO: When channels is working better, play around with it to see
+exactly how it works</para> <para>TODO: also explain the concept of
+alpha channel</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="unfinished.png" format="PNG"/></imageobject>
+<textobject><phrase>Channels</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+</sect2>
+
+<sect2 id="effects">
+<title>Effects</title>
+
+<para>TODO: No effects yet...</para>
+
+</sect2>
+
+<sect2 id="filters">
+<title>Filters</title>
+
+<para>TODO: no filters yet... Assuming that there will be some...</para>
+
+</sect2>
+
+<sect2 id="file-formats">
+<title>File Formats</title>
+
+<para>&krayon; uses the <literal role="extension">KRA</literal> image
+file format (which stands for &krayon;) as its native file format. Most
+image formats only store a <quote>flat</quote> image, meaning that only
+one layer of data is saved. <literal role="extension">KRA</literal>
+images are not <quote>flat</quote>, and the image layers and channels
+are stored in the <literal role="extension">KRA</literal> file. It is a
+good idea to save your images to the <literal
+role="extension">KRA</literal> format if you plan to edit or modify them
+later with &krayon;.</para>
+
+<para>&krayon; can import from, or export to, other image file
+formats. These formats include <literal role="extension">GIF</literal>,
+<literal role="extension">JPEG</literal>, <literal
+role="exension">PNG</literal>, <literal role="extension">PNM</literal>,
+<literal role="extension">TIFF</literal>, <literal
+role="extension">XPM</literal>, X Window System bitmaps, &Microsoft;
+&Windows; bitmaps, encapsulated &PostScript;, and g3 fax images. The
+precise list of formats that &krayon; will support depends on the &kde;
+and &Qt; libraries. For example, some distributions of the &Qt; library
+are not compiled to support the <literal role="exension">GIF</literal>
+file format. If this is the case for you, then you would need to compile
+<literal role="extension">GIF</literal> support into &Qt; in order for
+&krayon; to be able to use <literal role="extension">GIF</literal>
+images.</para>
+
+<para>TODO: discussion on the various formats and how they differ from
+each other.</para>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="tools">
+<title>&krayon; Tools</title>
+
+<para>Tools are the controls you use to manipulate the working
+image. They include the items on the tool bars and on the sidebar. Menus
+are also tools, but they will be covered in TODO: section
+Commands.</para>
+
+<sect2 id="paint-tools">
+<title>Paint Tools</title>
+
+<para>The paint tools are used to draw on the image. You can think of
+them as your collection of paint brushes. You can use them to touch up
+parts of an image, or to draw a new image from scratch. The differences
+between the paint tools is best seen by simply using them. Drawing the
+same simple figure with each of the paint tools using the same color and
+brush with readily demonstrate their differences.</para>
+
+<para>The pen tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="pencil.png" format="PNG"/></imageobject>
+<textobject><phrase>Pen Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+draws sharp edged strokes. It is similar to drawing with a pen or
+pencil. The pen tool will only draw with the selected color. It will not
+draw in shades of the selected color. If you choose a brush with
+<quote>fuzzy</quote> edges, it will still draw with sharp edges.</para>
+
+<para>The brush tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="paintbrush.png" format="PNG"/></imageobject>
+<textobject><phrase>Brush Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+draws strokes just like the pen tool, but it has <quote>fuzzy</quote>
+edges. You can think of it as analogous to a a paintbrush. Although the
+pen tool uses the selected color to draw with, it also uses the alpha
+channel of the brush, so that it will appear to be drawing in shades of
+the selected color.</para>
+
+<para>The airbrush tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="airbrush.png" format="PNG"/></imageobject>
+<textobject><phrase>Airbrush Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+draws with the selected brush but with a <quote>spray</quote> effect. It
+is very similar to drawing with a real airbrush. If you click the mouse
+once with the airbrush, you will get a few scattered dots. If you click
+some more in the same spot, or hold the mouse button down, more dots
+appear, until the shape of the brush becomes apparent. If you keep
+holding the mouse button down you will eventually get a stroke identical
+to the brush tool.</para>
+
+<para>The eraser tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="eraser.png" format="PNG"/></imageobject>
+<textobject><phrase>Eraser Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+works just like the brush tool, but instead of drawing onto the image
+with the selected color, it erases any color on the image it
+<quote>draws</quote> over. Like the brush tool, the alpha channel of the
+brush is preserved.</para>
+
+<para>The pen, brush, airbrush and eraser tools all draw using the brush
+and spacing selected from the sidebar.</para>
+
+<para>The gradient tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="gradient.png" format="PNG"/></imageobject>
+<textobject><phrase>Gradient Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+allows you to fill areas with a gradient. The gradients used can be
+selected and edited from the sidebar.</para>
+
+<para>TODO: Gradient isn't working fully now, so finish this up when it
+is</para>
+
+<para>The filler tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="fill.png" format="PNG"/></imageobject>
+<textobject><phrase>Filler Icon</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+fills an area with the selected color, pattern or gradient. All
+contiguous areas of the same color will be filled. For example, you can
+draw a blue circle with the pen tool, then use the filler tool to fill
+the inside of the circle with red.</para>
+
+</sect2>
+
+<sect2 id="selection-tools">
+<title>Selection Tools</title>
+
+<para>The selection tools allow you to define regions in the
+image. These regions, or selections, can then be moved, cut or
+copied. There are different tools for selection, and each is suitable
+for a different kind of region.</para>
+
+<para>The rectangular select tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="generictool.png" format="PNG"/></imageobject>
+<textobject><phrase>Rectangular Select</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+creates rectangular regions. You click the tool on one corner of the
+desired region and drag to the opposite corner, to create a
+rectangle.</para>
+
+<para>The elliptical select tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="generictool.png" format="PNG"/></imageobject>
+<textobject><phrase>Elliptical Select</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+creates oval or circular regions. Click on the image and drag the mouse
+to create an elliptic area. If it is hard for you to get a region in the
+right place, imagine a rectangular box surounding your desired oval,
+then click in one corner that that rectangle and drag to the opposite
+corner.</para>
+
+<para>The polygonal select tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="generictool.png" format="PNG"/></imageobject>
+<textobject><phrase>Polygonal Select</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+lets you draw irregularly shaped regions. Click the mouse with the left
+button anywhere along your desired region. Move the mouse a ways along
+the perimeter of the region and click the left button again. A line will
+be formed joining the two points. Keeping clicking the left button
+around the perimeter of your desired region. To finish you polygonal
+region, click the right mouse button and the last point will be
+automatically connected to the first point.</para>
+
+<para>The contiguous select tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="generictool.png" format="PNG"/></imageobject>
+<textobject><phrase>Contiguous Select</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+is not working.</para>
+
+<para>TODO: I'm not quite sure what this tool will do. I assume that it
+will be similar to the <quote>magic</quote> select used by many paint
+programs. But exactly how it will work is unknown. I'm leaving this
+section undone for now.</para>
+
+</sect2>
+
+<sect2 id="misc-tools">
+<title>Miscellaneous Tools</title>
+
+<para>The move tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="move.png" format="PNG"/></imageobject>
+<textobject><phrase>Move Tool</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+moves the individual layers of the image. If your drawing on the top
+layer is not quite aligned with the drawings on lower layers, then the
+move tool can be used to adjust the top layer.</para>
+
+<para>The zoom tool
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="viewmag.png" format="PNG"/></imageobject>
+<textobject><phrase>Zoom Tool</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</para>
+
+<para>The color picker
+<guiicon>
+<inlinemediaobject>
+<imageobject><imagedata fileref="colorpicker.png" format="PNG"/></imageobject>
+<textobject><phrase>Color Picker</phrase></textobject>
+</inlinemediaobject>
+</guiicon>
+</para>
+
+</sect2>
+
+<sect2 id="sidebar">
+<title>The Sidebar</title>
+
+<para>Elements of the sidebar</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:0
+sgml-indent-data:nil
+sgml-parent-document:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+sgml-parent-document:("index.docbook" "book" "chapter")
+sgml-default-dtd-file:($KDEDIR/share/apps/ksgmltools2/customization/dtd/kdex.dtd)
+End:
+-->
