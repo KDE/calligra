@@ -781,7 +781,7 @@ void KPTGanttView::print(KPrinter &prt) {
     //kdDebug()<<"Date r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
     hei++;
     p.drawLine(0,hei,metrics.width(),hei);
-    hei +=2; // Problem: results differ dependent on portrait/landscape ?
+    hei += 3;
     // compute the scale
     float dx = (float) (metrics.width()-2)  / (float)size.width();
     float dy  = (float)(metrics.height()-hei) / (float)size.height();
@@ -792,8 +792,8 @@ void KPTGanttView::print(KPrinter &prt) {
     else
         scale = dy;
     // set the scale
-    p.scale( scale, scale );
     p.translate(1,hei);
+    p.scale( scale, scale );
     m_gantt->drawContents(&p);
     // the drawContents() has the side effect, that the painter translation is
     // after drawContents() set to the bottom of the painted stuff
