@@ -306,12 +306,17 @@ VColor::load( const QDomElement& element )
 QColor
 VColor::toQColor() const
 {
+	QColor color;
 	switch ( m_colorSpace ) {
 	case rgb:
 		return QColor( int( 255 * m_value[0] ), int( 255 * m_value[1] ), int( 255 * m_value[2] ));
 		break;
 	case cmyk:
 		return QColor( int( 255 * ( 1.0 - m_value[0] - m_value[3] ) ), int( 255 * ( 1.0 - m_value[1] - m_value[3] ) ), int( 255 * ( 1.0 - m_value[2] - m_value[3] ) ) );
+		break;
+	case hsb:
+		color.setHsv( int( 359 * m_value[0] ), int( 255 * m_value[1] ), int( 255 * m_value[2] ) );
+		return color;
 		break;
 	default:
 		return QColor();
