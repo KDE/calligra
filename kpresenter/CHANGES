@@ -61,3 +61,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Add import text style support
 - Add save page background image on disk
 - Add display field code (for variable)
+- We can change autoformat language
