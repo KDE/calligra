@@ -337,7 +337,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
   if (type != POT_Leave)
   {
     if ((type != POT_Filled) && (type != POT_Stroked) && (type != POT_FilledStroked)) return;
-    if ((type == POT_Filled) || (type != POT_FilledStroked))
+    if ((type == POT_Filled) || (type == POT_FilledStroked))
     {
 /*      VFill fill;
       fill.setColor (toKarbonColor (m_fillColor));
@@ -345,7 +345,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
       m_curKarbonPath->setFill(m_fill);
     }
 
-    if ((type == POT_Stroked) || (type != POT_FilledStroked))
+    if ((type == POT_Stroked) || (type == POT_FilledStroked))
     {
 /*      VStroke stroke;
       stroke.setColor (toKarbonColor (m_strokeColor));
