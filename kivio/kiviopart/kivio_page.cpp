@@ -508,22 +508,20 @@ void KivioPage::printSelected( KivioPainter& painter, int xdpi, int ydpi )
 
 bool KivioPage::addStencil( KivioStencil *pStencil )
 {
-    if( !pStencil )
-    {
-       kdDebug(43000) << "KivioPage::addStencil() - Null stencil passed" << endl;
-        return false;
-    }
+  if(!pStencil) {
+    kdDebug(43000) << "KivioPage::addStencil() - Null stencil passed" << endl;
+    return false;
+  }
 
-    if( !m_pCurLayer )
-    {
-       kdDebug(43000) << "KivioPage::addStencil() - NULL current layer" << endl;
-        return false;
-    }
+  if(!m_pCurLayer) {
+    kdDebug(43000) << "KivioPage::addStencil() - NULL current layer" << endl;
+    return false;
+  }
 
-    KivioAddStencilCommand *cmd = new KivioAddStencilCommand(i18n("Add Stencil"), this, m_pCurLayer, pStencil );
-    m_pDoc->addCommand(cmd);
+  KivioAddStencilCommand *cmd = new KivioAddStencilCommand(i18n("Add Stencil"), this, m_pCurLayer, pStencil );
+  m_pDoc->addCommand(cmd);
 
-    return m_pCurLayer->addStencil( pStencil );
+  return m_pCurLayer->addStencil( pStencil );
 }
 
 void KivioPage::selectStencils( double x, double y, double w, double h )
@@ -531,11 +529,9 @@ void KivioPage::selectStencils( double x, double y, double w, double h )
   // Iterate through all stencils of this layer
   KivioStencil *pStencil = m_pCurLayer->stencilList()->first();
 
-  while( pStencil )
-  {
+  while(pStencil) {
     // Is it in the rectangle?
-    if(pStencil->isInRect(KoRect(x, y, w, h)))
-    {
+    if(pStencil->isInRect(KoRect(x, y, w, h))) {
       selectStencil( pStencil );
     }
 
@@ -547,19 +543,19 @@ void KivioPage::selectStencils( double x, double y, double w, double h )
 
 void KivioPage::selectStencil( KivioStencil *pStencil )
 {
-  if( !pStencil )
-  {
+  if(!pStencil) {
     kdDebug(43000) << "KivioPage::selectStencil - AHHHH! NULL STENCIL!" << endl;
     return;
   }
 
   // Don't allow reselection
-  if( m_lstSelection.findRef( pStencil ) != -1 )
+  if(m_lstSelection.findRef(pStencil) != -1) {
     return;
+  }
 
   kdDebug(43000) <<"KivioPage::selectStencil - Selecting stencil" << endl;
   pStencil->select();
-  m_lstSelection.append( pStencil );
+  m_lstSelection.append(pStencil);
   m_pDoc->slotSelectionChanged();
 }
 
@@ -572,16 +568,14 @@ bool KivioPage::unselectStencil( KivioStencil *pStencil )
 
 void KivioPage::selectAllStencils()
 {
-    unselectAllStencils();
+  unselectAllStencils();
+  KivioStencil* pStencil = m_pCurLayer->stencilList()->first();
 
-    KivioStencil* pStencil = m_pCurLayer->stencilList()->first();
-    while( pStencil )
-    {
-        pStencil->select();
-        m_lstSelection.append(pStencil);
-
-        pStencil = m_pCurLayer->stencilList()->next();
-    }
+  while(pStencil) {
+    pStencil->select();
+    m_lstSelection.append(pStencil);
+    pStencil = m_pCurLayer->stencilList()->next();
+  }
 
 
     /*
@@ -607,29 +601,26 @@ void KivioPage::selectAllStencils()
         pLayer = m_lstLayers.next();
     }
 */
-    m_pDoc->slotSelectionChanged();
+  m_pDoc->slotSelectionChanged();
 }
 
 void KivioPage::unselectAllStencils()
 {
-    KivioStencil *pStencil;
+  KivioStencil* pStencil = m_lstSelection.first();
 
-    pStencil = m_lstSelection.first();
-    while( pStencil )
-    {
-        pStencil->unselect();
+  while(pStencil)
+  {
+    pStencil->unselect();
+    pStencil = m_lstSelection.next();
+  }
 
-        pStencil = m_lstSelection.next();
-    }
-
-    m_lstSelection.clear();
-
-    m_pDoc->slotSelectionChanged();
+  m_lstSelection.clear();
+  m_pDoc->slotSelectionChanged();
 }
 
-bool KivioPage::isStencilSelected( KivioStencil *pStencil )
+bool KivioPage::isStencilSelected(KivioStencil *pStencil)
 {
-    return m_lstSelection.findRef( pStencil )==-1 ? false : true;
+  return m_lstSelection.findRef( pStencil ) == -1;
 }
 
 /**
@@ -681,90 +672,84 @@ KivioStencil *KivioPage::checkForStencil( KoPoint *pPoint, int *collisionType, d
 
 void KivioPage::deleteSelectedStencils()
 {
-    KivioStencil *pStencil;
+  // Make sure none of them have deletion protection
+  KivioStencil* pStencil = m_lstSelection.first();
 
-    // Make sure none of them have deletion protection
-    pStencil = m_lstSelection.first();
-    while( pStencil )
-    {
-       if( pStencil->protection()->at(kpDeletion)==true )
-       {
-	  KMessageBox::information(NULL, i18n("One of the selected stencils has protection from deletion and cannot be deleted."),
-				   i18n("Protection From Deletion") );
-	  return;
-       }
-
-       pStencil = m_lstSelection.next();
+  while(pStencil) {
+    if(pStencil->protection()->at(kpDeletion)) {
+      KMessageBox::information(NULL, i18n("One of the selected stencils has protection from deletion and cannot be deleted."),
+                                i18n("Protection From Deletion") );
+      return;
     }
 
-    // Iterate through all items in the selection list
-    m_lstSelection.first();
+    pStencil = m_lstSelection.next();
+  }
+
+  // Iterate through all items in the selection list
+  m_lstSelection.first();
+  pStencil = m_lstSelection.take();
+  KMacroCommand *macro = new KMacroCommand( i18n("Remove Stencil"));
+  bool createMacro = false;
+
+  while(pStencil) {
+    KivioRemoveStencilCommand *cmd =new KivioRemoveStencilCommand(i18n("Remove Stencil"), this,  m_pCurLayer , pStencil );
+    createMacro = true;
+    macro->addCommand(cmd);
+
+    if(pStencil->type() == kstConnector) {
+      static_cast<Kivio1DStencil*>(pStencil)->disconnectFromTargets();
+    }
+
     pStencil = m_lstSelection.take();
-    KMacroCommand *macro = new KMacroCommand( i18n("Remove Stencil"));
-    bool createMacro = false;
-    while( pStencil )
-    {
-        KivioRemoveStencilCommand *cmd =new KivioRemoveStencilCommand(i18n("Remove Stencil"), this,  m_pCurLayer , pStencil );
-        createMacro = true;
-        macro->addCommand( cmd);
+  }
 
-        if(pStencil->type() == kstConnector) {
-            static_cast<Kivio1DStencil*>(pStencil)->disconnectFromTargets();
-        }
-
-        pStencil = m_lstSelection.take();
-    }
-    if ( createMacro )
-    {
-        macro->execute();
-        m_pDoc->addCommand( macro );
-    }
-    else
-        delete macro;
+  if (createMacro) {
+    macro->execute();
+    m_pDoc->addCommand( macro );
+  } else {
+    delete macro;
+  }
 }
 
 void KivioPage::groupSelectedStencils()
 {
-    KivioGroupStencil *pGroup;
-    KivioStencil *pTake;
-    KivioStencil *pStencil;
+  // Can't group 0 or 1 stencils
+  if(!m_pCurLayer || (m_lstSelection.count() <= 1)) {
+    return;
+  }
 
+  KivioGroupStencil* pGroup = new KivioGroupStencil();
 
-    // Can't group 0 or 1 stencils
-    if( m_lstSelection.count() <= 1 )
-        return;
+  // Iterate through all items in the selection list, taking them from the layer, then adding
+  // them to the group
 
-    pGroup = new KivioGroupStencil();
+  KivioStencil* pStencil = m_pCurLayer->firstStencil();
+  KivioStencil* pTake = 0;
 
-    // Iterate through all items in the selection list, taking them from the layer, then adding
-    // them to the group
+  while(pStencil) {
+    if(pStencil->isSelected()) {
+      // Take the stencil out of it's layer
+      pTake = m_pCurLayer->takeStencil(pStencil);
 
-    pStencil = m_lstSelection.first();
-    while( pStencil )
-    {
-        // Take the stencil out of it's layer
-        pTake = m_pCurLayer->takeStencil( pStencil );
-        if( !pTake )
-        {
-	   kdDebug(43000) << "KivioPage::groupSelectedStencil() - Failed to take() one of the selected stencils. CRAP!" << endl;
-        }
-        else
-        {
-            // Add it to the group
-            pGroup->addToGroup( pTake );
-        }
-
-        pStencil = m_lstSelection.next();
+      if(!pTake) {
+        kdDebug(43000) << "KivioPage::groupSelectedStencil() - Failed to take() one of the selected stencils. CRAP!" << endl;
+      } else {
+        // Add it to the group
+        pGroup->addToGroup(pTake);
+        pStencil = m_pCurLayer->currentStencil();
+      }
+    } else {
+      pStencil = m_pCurLayer->nextStencil();
     }
+  }
 
-    // Unselect the old ones
-    unselectAllStencils();
+  // Unselect the old ones
+  unselectAllStencils();
 
+  // Add the group as the selected stencil
+  m_pCurLayer->addStencil(pGroup);
 
-    // Add the group as the selected stencil
-    m_pCurLayer->addStencil( pGroup );
-
-    selectStencil( pGroup );
+  selectStencil(pGroup);
 }
 
 // The following is the old implementation of groupSelectedStencils.  It did
