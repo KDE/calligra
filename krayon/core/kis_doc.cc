@@ -1295,4 +1295,15 @@ QRect KisDoc::getImageRect()
     return imageRect;
 }
 
+void KisDoc::setImage( QString imageName )
+{
+    KisImage *img;
+    for ( img = m_Images.first(); img != 0; img = m_Images.next() ) {
+        if ( img->name() == imageName ) {
+            m_pCurrent = img;
+            return;
+        }
+    }
+}
+
 #include "kis_doc.moc"

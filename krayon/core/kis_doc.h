@@ -200,6 +200,8 @@ public:
 
     QRect getImageRect();
 
+    void setImage( QString imageName ); // for print, save file and load file.
+
 public slots:
     void slotImageUpdated();
     void slotImageUpdated( const QRect& rect);

@@ -3032,9 +3032,18 @@ void KisView::setupPrinter( KPrinter &printer )
 {
 #ifdef HAVE_KDEPRINT
     printer.setPageSelection( KPrinter::ApplicationSide );
-    printer.setCurrentPage( 1 );
+    
+    int count = 0;
+    QStringList imageList = m_pDoc->images();
+    for ( QStringList::Iterator it = imageList.begin(); it != imageList.end(); ++it ) {
+        if ( *it == m_pDoc->current()->name() )
+            break;
+        ++count;
+    }
+
+    printer.setCurrentPage( 1 + count );
 #endif
-    printer.setMinMax( 1, 1 );
+    printer.setMinMax( 1, m_pDoc->images().count() );
     printer.setPageSize( KPrinter::A4 );
     printer.setOrientation( KPrinter::Portrait );
 }
@@ -3059,15 +3068,19 @@ void KisView::print( KPrinter &printer )
 #else
     imageList = printer.pageList();
 #endif
+    QString tmp_currentImageName = m_pDoc->currentImage();
     QValueList<int>::Iterator it = imageList.begin();
     for ( ; it != imageList.end(); ++it )
     {
+        int imageNumber = *it - 1;
         if ( it != imageList.begin() )
             printer.newPage();
 
+        m_pDoc->setImage( *m_pDoc->images().at( imageNumber ) );
         m_pDoc->paintContent( paint, m_pDoc->getImageRect() );
     }
     paint.end ();
+    m_pDoc->setImage( tmp_currentImageName );
 }
 
 #include "kis_view.moc"
