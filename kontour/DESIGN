@@ -13,8 +13,9 @@ Tools:
 * Select
 * EditPoint
 * Zoom
-* Freehand
+* Curve
 * Rect
 * Oval
 * Polygon
 * InsertImage
+* Text
