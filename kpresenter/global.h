@@ -306,4 +306,6 @@ enum VerticalAlignmentType {
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 
+typedef QMap<QString, QStringList> CustomListMap;
+
 #endif //GLOBAL_H

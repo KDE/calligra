@@ -60,7 +60,7 @@ class QFile;
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qdatetime.h>
-
+#include <qdict.h>
 #include <koPageLayoutDia.h>
 
 #include "global.h"
@@ -585,6 +585,10 @@ protected:
     bool _hasHeader, _hasFooter;
 
     QMap<KoPictureKey, QString> m_pictureMap;
+
+    typedef QMap<QString, QDict<KPrPage> > ListCustomSlideShow;
+    ListCustomSlideShow m_customListSlideShow;
+
 
     KoPageLayout __pgLayout;
     int lastObj;

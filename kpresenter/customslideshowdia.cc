@@ -82,6 +82,7 @@ void CustomSlideShowDia::init()
 {
     //todo
     //init qmap
+    //m_customListMap
 }
 
 void CustomSlideShowDia::updateButton()

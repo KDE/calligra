@@ -21,6 +21,7 @@
 #define __CUSTOM_SLIDE_SHOW__
 
 #include <kdialogbase.h>
+#include "global.h"
 
 class QListBox;
 class QListBoxItem;
@@ -58,7 +59,6 @@ protected:
     QPushButton* m_pCopy;
     bool m_bChanged;
     KPresenterDoc *m_doc;
-    typedef QMap<QString, QStringList> CustomListMap;
     CustomListMap m_customListMap;
 };
 

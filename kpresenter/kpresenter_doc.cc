@@ -1209,12 +1209,19 @@ void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter
 
 void KPresenterDoc::saveOasisPresentationCustionSlideShow( KoXmlWriter &contentTmpWriter )
 {
+    if ( m_customListSlideShow.isEmpty() )
+        return;
+
+    ListCustomSlideShow::Iterator it;
+    for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
+    {
+        contentTmpWriter.startElement( "presentation:show" );
+        contentTmpWriter.addAttribute( "presentation:name", it.key() );
+        //contentTmpWriter.addAttribute( "presentation:pages", "" );
+        contentTmpWriter.endElement();
+    }
     //todo
     //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
-    //contentTmpWriter.startElement( "presentation:show" );
-    //contentTmpWriter.addAttribute( "presentation:name", "" );
-    //contentTmpWriter.addAttribute( "presentation:pages", "" );
-    //contentTmpWriter.endElement();
 }
 
 void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* tmpStyckyFile ) const
