@@ -205,7 +205,7 @@ VSelectTool::draw()
 }
 
 void
-VSelectTool::setCursor( const KoPoint& current ) const
+VSelectTool::setCursor() const
 {
 /*
 	switch( view()->part()->document().selection()->handleNode( p ) )
@@ -238,7 +238,7 @@ VSelectTool::setCursor( const KoPoint& current ) const
 }
 
 void
-VSelectTool::mouseButtonPress( const KoPoint& current )
+VSelectTool::mouseButtonPress()
 {
 	m_current = first();
 /*
@@ -255,7 +255,7 @@ VSelectTool::mouseButtonPress( const KoPoint& current )
 }
 
 void
-VSelectTool::mouseDrag( const KoPoint& current )
+VSelectTool::mouseDrag()
 {
 	draw();
 
@@ -274,7 +274,7 @@ VSelectTool::mouseDrag( const KoPoint& current )
 }
 
 void
-VSelectTool::mouseButtonRelease( const KoPoint& current )
+VSelectTool::mouseButtonRelease()
 {
 	if( m_state == normal )
 	{
@@ -298,7 +298,7 @@ VSelectTool::mouseButtonRelease( const KoPoint& current )
 }
 
 void
-VSelectTool::mouseDragRelease( const KoPoint& current )
+VSelectTool::mouseDragRelease()
 {
 	if( m_state == normal )
 	{
@@ -364,13 +364,13 @@ VSelectTool::mouseDragRelease( const KoPoint& current )
 }
 
 void
-VSelectTool::mouseDragCtrlPressed( const KoPoint& current )
+VSelectTool::mouseDragCtrlPressed()
 {
 	m_lock = lockx;
 }
 
 void
-VSelectTool::mouseDragCtrlReleased( const KoPoint& current )
+VSelectTool::mouseDragCtrlReleased()
 {
 	m_lock = none;
 }

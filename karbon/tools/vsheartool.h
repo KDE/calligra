@@ -36,10 +36,10 @@ public:
 protected:
 	virtual void draw();
 
-	virtual void setCursor( const KoPoint& current ) const;
-	virtual void mouseButtonPress( const KoPoint& current );
-	virtual void mouseDrag( const KoPoint& current );
-	virtual void mouseDragRelease( const KoPoint& current );
+	virtual void setCursor() const;
+	virtual void mouseButtonPress();
+	virtual void mouseDrag();
+	virtual void mouseDragRelease();
 
 private:
 	void recalc();

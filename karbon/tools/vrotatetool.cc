@@ -135,7 +135,7 @@ VRotateTool::draw()
 }
 
 void
-VRotateTool::setCursor( const KoPoint& /*current*/ ) const
+VRotateTool::setCursor() const
 {
 /*
 	switch( view()->part()->document().selection()->handleNode( current ) )
@@ -168,7 +168,7 @@ VRotateTool::setCursor( const KoPoint& /*current*/ ) const
 }
 
 void
-VRotateTool::mouseButtonPress( const KoPoint& /*current*/ )
+VRotateTool::mouseButtonPress()
 {
 	view()->painterFactory()->painter()->end();
 //	m_activeNode = view()->part()->document().selection()->handleNode( current ) );
@@ -179,7 +179,7 @@ VRotateTool::mouseButtonPress( const KoPoint& /*current*/ )
 }
 
 void
-VRotateTool::mouseDrag( const KoPoint& /*current*/ )
+VRotateTool::mouseDrag()
 {
 	// Erase old object:
 	draw();
@@ -191,7 +191,7 @@ VRotateTool::mouseDrag( const KoPoint& /*current*/ )
 }
 
 void
-VRotateTool::mouseDragRelease( const KoPoint& /*current*/ )
+VRotateTool::mouseDragRelease()
 {
 	view()->part()->addCommand(
 		new VRotateCmd(

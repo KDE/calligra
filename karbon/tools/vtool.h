@@ -34,7 +34,7 @@ public:
 	VTool( KarbonView* view );
 
 	/**
-	 * Activate the tool. The tools is supposed to set a mouse cursor and/or
+	 * Activate the tool. A tool is supposed to set a mouse cursor and/or
 	 * the statusbar properly here.
 	 */
 	virtual void activate() {}
@@ -54,52 +54,52 @@ public:
 protected:
 	virtual void draw(/* VPainter* painter*/ ) {}
 
-	virtual void setCursor( const KoPoint& /*current*/ ) const {}
+	virtual void setCursor() const {}
 
 	/**
 	 * Mouse button press.
 	 */
-	virtual void mouseButtonPress( const KoPoint& /*current*/ ) {}
+	virtual void mouseButtonPress() {}
 
 	/**
-	 * Mouse button releas. The mouse wasn't moved.
+	 * Mouse button release. The mouse wasn't moved.
 	 */
-	virtual void mouseButtonRelease( const KoPoint& /*current*/ ) {}
+	virtual void mouseButtonRelease() {}
 
 	/**
 	 * Mouse move. No mouse button is pressed.
 	 */
-	virtual void mouseMove( const KoPoint& /*current*/ ) {}
+	virtual void mouseMove() {}
 
 	/**
 	 * Mouse drag.
 	 */
-	virtual void mouseDrag( const KoPoint& /*current*/ ) {}
+	virtual void mouseDrag() {}
 
 	/**
 	 * Mouse button release. The mouse was moved before.
 	 */
-	virtual void mouseDragRelease( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragRelease() {}
 
 	/**
 	 * Mouse drag with "Shift" key pressed at the same time.
 	 */
-	virtual void mouseDragShiftPressed( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragShiftPressed() {}
 
 	/**
 	 * Mouse drag with "Ctrl" key pressed at the same time.
 	 */
-	virtual void mouseDragCtrlPressed( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragCtrlPressed() {}
 
 	/**
 	 * "Shift" key released while mouse drag.
 	 */
-	virtual void mouseDragShiftReleased( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragShiftReleased() {}
 
 	/**
 	 * "Ctrl" key released while mouse drag.
 	 */
-	virtual void mouseDragCtrlReleased( const KoPoint& /*current*/ ) {}
+	virtual void mouseDragCtrlReleased() {}
 
 	/**
 	 * Cancels all tool operations. This event is invoked when ESC is pressed.
@@ -114,8 +114,8 @@ protected:
 	/**
 	 * Most tools need to know the first mouse coordinate.
 	 */
-	const KoPoint& first( bool raw = false ) const { return raw ? m_firstPointRaw : m_firstPoint; }
-	const KoPoint& last( bool raw = false ) const { return raw ? m_lastPointRaw : m_lastPoint; }
+	const KoPoint& first() const { return m_firstPoint; }
+	const KoPoint& last() const { return m_lastPoint; }
 
 private:
 	/**
@@ -127,13 +127,11 @@ private:
 	 * First input mouse coordinate.
 	 */
 	KoPoint m_firstPoint;
-	KoPoint m_firstPointRaw;
 
 	/**
 	 * Last input mouse coordinate.
 	 */
 	KoPoint m_lastPoint;
-	KoPoint m_lastPointRaw;
 
 	/**
 	 * A tool state.

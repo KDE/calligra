@@ -141,7 +141,7 @@ VSelectNodesTool::draw()
 }
 
 void
-VSelectNodesTool::setCursor( const KoPoint& current ) const
+VSelectNodesTool::setCursor() const
 {
 /*
 	if( !m_isDragging ) return;
@@ -164,7 +164,7 @@ VSelectNodesTool::setCursor( const KoPoint& current ) const
 }
 
 void
-VSelectNodesTool::mouseDragRelease( const KoPoint& current )
+VSelectNodesTool::mouseDragRelease()
 {
 /*
 	if( m_state == moving )

@@ -35,21 +35,28 @@ VTool::VTool( KarbonView* view )
 bool
 VTool::eventFilter( QEvent* event )
 {
+	if( !view()->part()->isReadWrite() )
+		return false;
+
+
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
-	setCursor( view()->canvasWidget()->toContents( mouseEvent->pos() ) );
+
+	QPoint canvasCoordinate = view()->canvasWidget()->toContents(
+		mouseEvent->pos() );
+
+	m_lastPoint.setX( canvasCoordinate.x() );
+	m_lastPoint.setY( canvasCoordinate.y() );
+
+	setCursor();
+
 
 	// Mouse events:
 	if( event->type() == QEvent::MouseButtonPress )
 	{
-		QPoint canvasCoordinate = view()->canvasWidget()->toContents(
-			mouseEvent->pos() );
-
-		m_firstPointRaw.setX( mouseEvent->pos().x() );
-		m_firstPointRaw.setY( mouseEvent->pos().y() );
 		m_firstPoint.setX( canvasCoordinate.x() );
 		m_firstPoint.setY( canvasCoordinate.y() );
 
-		mouseButtonPress( m_firstPoint );
+		mouseButtonPress();
 
 		m_mouseButtonIsDown = true;
 
@@ -58,52 +65,34 @@ VTool::eventFilter( QEvent* event )
 
 	if( event->type() == QEvent::MouseMove )
 	{
-            if ( !view()->part()->isReadWrite())
-                return false;
-
-		QPoint canvasCoordinate = view()->canvasWidget()->toContents(
-			mouseEvent->pos() );
-
-		m_lastPointRaw.setX( mouseEvent->pos().x() );
-		m_lastPointRaw.setY( mouseEvent->pos().y() );
-		m_lastPoint.setX( canvasCoordinate.x() );
-		m_lastPoint.setY( canvasCoordinate.y() );
-
 		if( m_mouseButtonIsDown )
 		{
-			mouseDrag( KoPoint( mouseEvent->pos() ) );
+			mouseDrag();
 
 			m_isDragging = true;
 		}
 		else
-			mouseMove( m_lastPoint );
+			mouseMove();
 
 		return true;
 	}
 
 	if( event->type() == QEvent::MouseButtonRelease )
 	{
-		QPoint canvasCoordinate = view()->canvasWidget()->toContents(
-			mouseEvent->pos() );
-
-		m_lastPointRaw.setX( mouseEvent->pos().x() );
-		m_lastPointRaw.setY( mouseEvent->pos().y() );
-		m_lastPoint.setX( canvasCoordinate.x() );
-		m_lastPoint.setY( canvasCoordinate.y() );
-
 		if( m_isDragging )
 		{
-			mouseDragRelease( m_lastPoint );
+			mouseDragRelease();
 
 			m_isDragging = false;
 		}
 		else if( m_mouseButtonIsDown )	// False if canceled.
-			mouseButtonRelease( m_lastPoint );
+			mouseButtonRelease();
 
 		m_mouseButtonIsDown = false;
 
 		return true;
 	}
+
 
 	// Key press events:
 	if( event->type() == QEvent::KeyPress )
@@ -124,7 +113,7 @@ VTool::eventFilter( QEvent* event )
 		// If SHIFT is pressed, some tools create a "square" object while dragging:
 		if( keyEvent->key() == Qt::Key_Shift && m_isDragging )
 		{
-			mouseDragShiftPressed( m_lastPoint );
+			mouseDragShiftPressed();
 
 			return true;
 		}
@@ -132,7 +121,7 @@ VTool::eventFilter( QEvent* event )
 		// If Ctrl is pressed, some tools create a "centered" object while dragging:
 		if ( keyEvent->key() == Qt::Key_Control && m_isDragging )
 		{
-			mouseDragCtrlPressed( m_lastPoint );
+			mouseDragCtrlPressed();
 
 			return true;
 		}
@@ -145,14 +134,14 @@ VTool::eventFilter( QEvent* event )
 
 		if( keyEvent->key() == Qt::Key_Shift && m_isDragging )
 		{
-			mouseDragShiftReleased( m_lastPoint );
+			mouseDragShiftReleased();
 
 			return true;
 		}
 
 		if( keyEvent->key() == Qt::Key_Control && m_isDragging )
 		{
-			mouseDragCtrlReleased( m_lastPoint );
+			mouseDragCtrlReleased();
 
 			return true;
 		}

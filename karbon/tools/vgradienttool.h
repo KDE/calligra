@@ -40,10 +40,10 @@ public:
 protected:
 	virtual void draw();
 
-	virtual void mouseButtonRelease( const KoPoint& current );
-	virtual void mouseButtonPress( const KoPoint& current );
-	virtual void mouseDragRelease( const KoPoint& current );
-	virtual void mouseDrag( const KoPoint& current );
+	virtual void mouseButtonRelease();
+	virtual void mouseButtonPress();
+	virtual void mouseDragRelease();
+	virtual void mouseDrag();
 
 private:
 	VGradientDlg* m_dialog;

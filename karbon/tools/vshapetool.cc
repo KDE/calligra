@@ -61,7 +61,7 @@ VShapeTool::draw()
 }
 
 void
-VShapeTool::mouseButtonPress( const KoPoint& /*current*/ )
+VShapeTool::mouseButtonPress()
 {
 	recalc();
 
@@ -70,7 +70,7 @@ VShapeTool::mouseButtonPress( const KoPoint& /*current*/ )
 }
 
 void
-VShapeTool::mouseButtonRelease( const KoPoint& /*current*/ )
+VShapeTool::mouseButtonRelease()
 {
 	recalc();
 
@@ -92,7 +92,7 @@ VShapeTool::mouseButtonRelease( const KoPoint& /*current*/ )
 }
 
 void
-VShapeTool::mouseDrag( const KoPoint& /*current*/ )
+VShapeTool::mouseDrag()
 {
 	// Erase old object:
 	draw();
@@ -104,7 +104,7 @@ VShapeTool::mouseDrag( const KoPoint& /*current*/ )
 }
 
 void
-VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
+VShapeTool::mouseDragRelease()
 {
 	recalc();
 
@@ -121,7 +121,7 @@ VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
 }
 
 void
-VShapeTool::mouseDragShiftPressed( const KoPoint& current )
+VShapeTool::mouseDragShiftPressed()
 {
 	// Erase old object:
 	draw();
@@ -134,7 +134,7 @@ VShapeTool::mouseDragShiftPressed( const KoPoint& current )
 }
 
 void
-VShapeTool::mouseDragCtrlPressed( const KoPoint& current )
+VShapeTool::mouseDragCtrlPressed()
 {
 	// Erase old object:
 	draw();
@@ -147,7 +147,7 @@ VShapeTool::mouseDragCtrlPressed( const KoPoint& current )
 }
 
 void
-VShapeTool::mouseDragShiftReleased( const KoPoint& current )
+VShapeTool::mouseDragShiftReleased()
 {
 	// Erase old object:
 	draw();
@@ -160,7 +160,7 @@ VShapeTool::mouseDragShiftReleased( const KoPoint& current )
 }
 
 void
-VShapeTool::mouseDragCtrlReleased( const KoPoint& current )
+VShapeTool::mouseDragCtrlReleased()
 {
 	// Erase old object:
 	draw();

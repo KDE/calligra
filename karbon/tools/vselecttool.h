@@ -35,14 +35,14 @@ public:
 protected:
 	virtual void draw();
 
-	virtual void setCursor( const KoPoint& current ) const;
+	virtual void setCursor() const;
 
-	virtual void mouseButtonPress( const KoPoint& current );
-	virtual void mouseButtonRelease( const KoPoint& current );
-	virtual void mouseDrag( const KoPoint& current );
-	virtual void mouseDragRelease( const KoPoint& current );
-	virtual void mouseDragCtrlPressed( const KoPoint& current );
-	virtual void mouseDragCtrlReleased( const KoPoint& current );
+	virtual void mouseButtonPress();
+	virtual void mouseButtonRelease();
+	virtual void mouseDrag();
+	virtual void mouseDragRelease();
+	virtual void mouseDragCtrlPressed();
+	virtual void mouseDragCtrlReleased();
 
 private:
 	enum { normal, moving, scaling, rotating } m_state;

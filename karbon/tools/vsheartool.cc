@@ -136,7 +136,7 @@ VShearTool::draw()
 }
 
 void
-VShearTool::setCursor( const KoPoint& current ) const
+VShearTool::setCursor() const
 {
 /*
 	switch( view()->part()->document().selection()->handleNode( p ) )
@@ -169,7 +169,7 @@ VShearTool::setCursor( const KoPoint& current ) const
 }
 
 void
-VShearTool::mouseButtonPress( const KoPoint& current )
+VShearTool::mouseButtonPress()
 {
 	view()->painterFactory()->painter()->end();
 //	m_activeNode = view()->part()->document().selection()->handleNode( mouse_event->pos() );
@@ -180,7 +180,7 @@ VShearTool::mouseButtonPress( const KoPoint& current )
 }
 
 void
-VShearTool::mouseDrag( const KoPoint& /*current*/ )
+VShearTool::mouseDrag( )
 {
 	// Erase old object:
 	draw();
@@ -193,10 +193,10 @@ VShearTool::mouseDrag( const KoPoint& /*current*/ )
 
 
 void
-VShearTool::mouseDragRelease( const KoPoint& current )
+VShearTool::mouseDragRelease()
 {
 	view()->part()->addCommand(
-		new VShearCmd( &view()->part()->document(), current, m_s1, m_s2 ),
+		new VShearCmd( &view()->part()->document(), last(), m_s1, m_s2 ),
 		true );
 }
 

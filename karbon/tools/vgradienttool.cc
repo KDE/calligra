@@ -70,7 +70,7 @@ VGradientTool::draw()
 }
 
 void
-VGradientTool::mouseDrag( const KoPoint& current )
+VGradientTool::mouseDrag()
 {
 	// undo old line
 	draw();
@@ -81,13 +81,13 @@ VGradientTool::mouseDrag( const KoPoint& current )
 }
 
 void
-VGradientTool::mouseButtonPress( const KoPoint& current )
+VGradientTool::mouseButtonPress()
 {
 	m_current = first();
 }
 
 void
-VGradientTool::mouseButtonRelease( const KoPoint& current )
+VGradientTool::mouseButtonRelease()
 {
 	VGradient gradient;
 	gradient.clearStops();
@@ -119,7 +119,7 @@ VGradientTool::mouseButtonRelease( const KoPoint& current )
 }
 
 void
-VGradientTool::mouseDragRelease( const KoPoint& current )
+VGradientTool::mouseDragRelease()
 {
 	// Y mirroring
 	KoPoint fp = first();

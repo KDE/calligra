@@ -45,14 +45,14 @@ protected:
 
 	virtual void draw();
 
-	virtual void mouseButtonPress( const KoPoint& current );
-	virtual void mouseButtonRelease( const KoPoint& current );
-	virtual void mouseDrag( const KoPoint& current );
-	virtual void mouseDragRelease( const KoPoint& current );
-	virtual void mouseDragShiftPressed( const KoPoint& current );
-	virtual void mouseDragCtrlPressed( const KoPoint& current );
-	virtual void mouseDragShiftReleased( const KoPoint& current );
-	virtual void mouseDragCtrlReleased( const KoPoint& current );
+	virtual void mouseButtonPress();
+	virtual void mouseButtonRelease();
+	virtual void mouseDrag();
+	virtual void mouseDragRelease();
+	virtual void mouseDragShiftPressed();
+	virtual void mouseDragCtrlPressed();
+	virtual void mouseDragShiftReleased();
+	virtual void mouseDragCtrlReleased();
 
 	virtual void cancel();
 
