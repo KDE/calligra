@@ -9,7 +9,7 @@ libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexidatatableview.cpp \
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la ../tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor
 
-SUBDIRS = utils . propertyeditor relations
+SUBDIRS = utils tableview . propertyeditor relations
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.

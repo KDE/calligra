@@ -8,8 +8,7 @@ kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kexi_la_LIBADD = ./core/libkexicore.la \
 	./main/libkeximain.la
 
-#SUBDIRS= 3rdparty kexidb core tableview . data widget plugins tests
-SUBDIRS= 3rdparty kexidb core tableview widget formeditor \
+SUBDIRS= 3rdparty kexidb core widget formeditor \
 data pics main migration plugins . tests
 
 #(will be reenabled after main/startup move)  
