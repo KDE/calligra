@@ -965,8 +965,8 @@ void KPresenterView::extraPenBrush()
             canHaveStickyObj = false;
         }
     }
-
-    styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, canHaveStickyObj, state );
+    bool txtObj = (m_canvas->selectedTextObjs().count()> 0 );
+    styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, canHaveStickyObj, state,txtObj && state );
 
     if ( state )
     {
@@ -3289,6 +3289,12 @@ void KPresenterView::styleOk()
         cmd->execute();
         macro->addCommand(cmd);
         createMacro=true;
+        if ( styleDia->isAllTextObject() )
+        {
+            cmd = m_canvas->setProtectContent( styleDia->isProtectContent() );
+            if (cmd )
+                macro->addCommand(cmd);
+        }
     }
 
     bool bSticky=styleDia->isSticky();

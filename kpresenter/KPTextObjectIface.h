@@ -71,6 +71,8 @@ k_dcop:
 
     void extendTextContentsToHeight();
     void extendTextObjectToContents();
+    void setProtectContent ( bool _protect );
+    bool isProtectContent() const;
 
 private:
     KPTextObject *m_textobject;

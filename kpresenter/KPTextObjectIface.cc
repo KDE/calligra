@@ -228,3 +228,13 @@ void KPTextObjectIface::extendTextObjectToContents()
     KCommand *cmd= m_textobject->textObjectToContents();
     delete cmd;
 }
+
+void KPTextObjectIface::setProtectContent ( bool _protect )
+{
+    m_textobject->setProtectContent( _protect );
+}
+
+bool KPTextObjectIface::isProtectContent() const
+{
+    return m_textobject->isProtectContent();
+}

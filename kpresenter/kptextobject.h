@@ -122,6 +122,8 @@ public:
 
     KCommand *textContentsToHeight();
     KCommand *textObjectToContents();
+    void setProtectContent ( bool _protect ) { protectContent= _protect;}
+    bool isProtectContent() const { return protectContent;}
 
 signals:
     void repaintChanged( KPTextObject* );
@@ -156,9 +158,11 @@ private:
     /** The contained text object */
     KoTextObject *m_textobj;
     KPresenterDoc *m_doc;
-    bool drawEditRect, drawEmpty;
     KoParagLayout m_paragLayout;
+
+    bool drawEditRect, drawEmpty;
     bool editingTextObj;
+    bool protectContent;
 };
 
 

@@ -110,7 +110,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     drawEditRect = true;
     drawEmpty = true;
     editingTextObj = false;
-
+    protectContent = false;
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),

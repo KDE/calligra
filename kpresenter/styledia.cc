@@ -643,9 +643,9 @@ void ConfBrushDia::updateBrushConfiguration()
 /* class StyleDia						  */
 /******************************************************************/
 
-StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool _stickyObj, bool _oneObject )
+StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool _stickyObj, bool _oneObject, bool _alltextobj )
     : QTabDialog( parent, name, true ), m_doc(_doc), m_confPenDia(0), m_confPieDia(0), m_confRectDia(0),
-      m_confBrushDia(0), m_confPolygonDia(0), m_confPictureDia(0), stickyObj(_stickyObj), oneObject(_oneObject)
+      m_confBrushDia(0), m_confPolygonDia(0), m_confPictureDia(0), stickyObj(_stickyObj), oneObject(_oneObject), allTextObj(_alltextobj)
 {
     lockUpdate = true;
     m_canvas = m_doc->getKPresenterView()->getCanvas();
@@ -747,6 +747,12 @@ void StyleDia::setupTabGeometry()
 
     keepRatio= new QCheckBox( i18n("Keep ratio"), tab);
     layout->addWidget(keepRatio);
+
+    if ( allTextObj )
+    {
+        protectContent = new QCheckBox( i18n("Protect Content"), tab);
+        layout->addWidget(protectContent);
+    }
 
     QGroupBox *grp1 = new QGroupBox( i18n("Position in %1").arg(m_doc->getUnitName()), tab );
     layout->addWidget( grp1 );
@@ -938,5 +944,23 @@ void StyleDia::setSize(const KoRect & _rect)
     m_lineWidth->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.width()), m_doc->getUnit() ));
     m_lineHeight->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.height()), m_doc->getUnit() ));
 }
+
+void StyleDia::setProtectContent( bool p )
+{
+    if ( isAllTextObject() &&protectContent )
+    {
+        protectContent->setChecked(p);
+    }
+}
+
+bool StyleDia::isProtectContent()const
+{
+    if ( isAllTextObject()&& protectContent)
+    {
+        return protectContent->isChecked();
+    }
+    return false;
+}
+
 
 #include <styledia.moc>

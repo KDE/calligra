@@ -281,7 +281,7 @@ public:
     bool getGUnbalanced( bool _g )const;
     int getGXFactor( int _g )const;
     int getGYFactor( int _g )const;
-
+    KCommand *setProtectContent( bool b );
 public slots:
     void exitEditMode();
 
@@ -463,7 +463,6 @@ private:
 
     KPTextObject* textUnderMouse( const QPoint & point );
     bool checkCurrentTextEdit( KPTextObject * textObj );
-
 
     void rectSymetricalObjet();
 private slots:

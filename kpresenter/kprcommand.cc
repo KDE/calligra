@@ -2225,3 +2225,26 @@ void KPrGeometryPropertiesCommand::unexecute()
         obj->setKeepRatio( *ratio.at(i) );
     }
 }
+
+
+KPrProtectContentCommand::KPrProtectContentCommand( const QString &_name, bool _protectContent, KPTextObject *_obj, KPresenterDoc *_doc )
+    : KNamedCommand( _name ),
+      protectContent( _protectContent ),
+      objects( _obj ),
+      doc(_doc)
+{
+}
+
+KPrProtectContentCommand::~KPrProtectContentCommand()
+{
+}
+
+void KPrProtectContentCommand::execute()
+{
+    objects->setProtectContent( protectContent );
+}
+
+void KPrProtectContentCommand::unexecute()
+{
+    objects->setProtectContent( !protectContent );
+}

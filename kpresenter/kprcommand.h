@@ -885,6 +885,20 @@ protected:
     KPresenterDoc *doc;
 };
 
+class KPrProtectContentCommand : public KNamedCommand
+{
+public:
+    KPrProtectContentCommand( const QString &_name, bool _protectContent, KPTextObject *_obj, KPresenterDoc *_doc );
+
+    ~KPrProtectContentCommand();
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    bool protectContent;
+    KPTextObject *objects;
+    KPresenterDoc * doc;
+};
 
 #endif
 

@@ -67,6 +67,7 @@
 #include <krandomsequence.h>
 #include "kppolylineobject.h"
 #include "kprpage.h"
+#include <kmessagebox.h>
 #include <math.h>
 
 /******************************************************************/
@@ -2096,7 +2097,10 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 	}
         else if ( m_currentTextObjectView )
         {
-            m_currentTextObjectView->keyPressEvent( e );
+            if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
+                m_currentTextObjectView->keyPressEvent( e );
+            else
+                KMessageBox::information(this, i18n("Readonly content cannot be changed. No modifications will be accepted"));
         }
     } else if ( mouseSelectedObject ) {
         m_hotSpot = KoPoint(0,0);
@@ -2816,13 +2820,21 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
         QPtrListIterator<KPObject> it(getObjectList());
         for ( ; it.current(); ++it ) {
             if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
-                lst.append( static_cast<KPTextObject*>( it.current() )->textObject() );
+            {
+                KPTextObject * obj = static_cast<KPTextObject*>( it.current() );
+                if ( !obj->isProtectContent() )
+                    lst.append( obj->textObject() );
+            }
         }
         //get sticky obj
         it=m_view->kPresenterDoc()->stickyPage()->objectList();
         for ( ; it.current(); ++it ) {
             if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
-                lst.append( static_cast<KPTextObject*>( it.current() )->textObject() );
+            {
+                KPTextObject * obj = static_cast<KPTextObject*>( it.current() );
+                if ( !obj->isProtectContent() )
+                    lst.append( obj->textObject() );
+            }
         }
     }
     return lst;
@@ -7398,4 +7410,37 @@ int KPrCanvas::getGYFactor( int _g )const
     if ( type != _g )
         return type;
     return stickyPage()->getGYFactor( _g);
+}
+
+KCommand *KPrCanvas::setProtectContent( bool b )
+{
+    KMacroCommand *macro = new KMacroCommand( i18n("Protect Content"));
+    bool createMacro = false;
+    QPtrList<KPTextObject> list;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && it.current()->getType()==OT_TEXT)
+        {
+            KPrProtectContentCommand * cmd = new KPrProtectContentCommand( i18n("Protect Content"), b, static_cast<KPTextObject *>(it.current()), m_view->kPresenterDoc() );
+            cmd->execute();
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && it.current()->getType()==OT_TEXT)
+        {
+            KPrProtectContentCommand * cmd = new KPrProtectContentCommand( i18n("Protect Content"), b, static_cast<KPTextObject *>(it.current()), m_view->kPresenterDoc() );
+            cmd->execute();
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
+    }
+    if ( createMacro )
+        return macro;
+    else
+        delete macro;
+    return 0L;
 }

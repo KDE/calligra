@@ -189,13 +189,13 @@ public:
     };
 
     StyleDia( QWidget* parent = 0, const char* name = 0, KPresenterDoc *_doc = 0,
-              bool _noStickyObj = true, bool _oneObject=true );
+              bool _noStickyObj = true, bool _oneObject=true, bool _alltextobj=false );
     ~StyleDia();
 
     void setSticky( bool s );
     bool isSticky()const;
 
-    bool isOneObject() {return oneObject;}
+    bool isOneObject()const {return oneObject;}
     void setProtected( bool p );
     bool isProtected()const;
 
@@ -205,12 +205,17 @@ public:
     KoRect getNewSize() const;
     void setSize(const KoRect &);
 
-    ConfPenDia* getConfPenDia() { return m_confPenDia; }
-    ConfPieDia* getConfPieDia() { return m_confPieDia; }
-    ConfBrushDia* getConfBrushDia() { return m_confBrushDia; }
-    ConfRectDia* getConfRectangleDia() { return m_confRectDia; }
-    ConfPolygonDia* getConfPolygonDia() { return m_confPolygonDia; }
-    ConfPictureDia* getConfPictureDia() { return m_confPictureDia; }
+    bool isAllTextObject()const {return allTextObj;}
+    void setProtectContent( bool p );
+    bool isProtectContent()const;
+
+
+    ConfPenDia* getConfPenDia()const { return m_confPenDia; }
+    ConfPieDia* getConfPieDia()const { return m_confPieDia; }
+    ConfBrushDia* getConfBrushDia()const { return m_confBrushDia; }
+    ConfRectDia* getConfRectangleDia()const { return m_confRectDia; }
+    ConfPolygonDia* getConfPolygonDia()const { return m_confPolygonDia; }
+    ConfPictureDia* getConfPictureDia()const { return m_confPictureDia; }
 
 private:
     void setupTabPen();
@@ -223,7 +228,7 @@ private:
     void setupTabRectangle();
 
     KoRect oldRect;
-    QCheckBox *sticky, *protect, *keepRatio;
+    QCheckBox *sticky, *protect, *keepRatio, *protectContent;
     KDoubleNumInput *m_lineTop, *m_lineLeft, *m_lineWidth, *m_lineHeight;
 
     KPresenterDoc *m_doc;
@@ -237,8 +242,9 @@ private:
 
     int flags;
     bool lockUpdate, stickyObj, oneObject;
+    bool allTextObj;
     bool oldSticky,  oldProtect, oldKeepRatio;
-
+    bool oldProtectContent;
 private slots:
     void slotReset();
     void styleDone() { emit styleOk(); }
