@@ -2022,7 +2022,6 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( KoTextCursor * cursor, int pa
 
     if ( !textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         KWTextParag *parag = static_cast<KWTextParag *>( cursor->parag() );
-        if(parag->prev()) parag=static_cast<KWTextParag *> (parag->prev());
         parag->setPageBreaking( pageBreaking );
         m_textobj->setLastFormattedParag( cursor->parag() );
     }
@@ -2064,10 +2063,8 @@ KCommand * KWTextFrameSet::pasteKWord( KoTextCursor * cursor, const QCString & d
     if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
     m_textobj->emitHideCursor();
-    // correct but useless due to unzoom/zoom
-    // (which invalidates everything and sets lastformatted to firstparag)
-    //setLastFormattedParag( cursor->parag()->prev() ?
-    //                       cursor->parag()->prev() : cursor->parag() );
+    m_textobj->setLastFormattedParag( cursor->parag()->prev() ?
+                           cursor->parag()->prev() : cursor->parag() );
 
     // We have our own command for this.
     // Using insert() wouldn't help storing the parag stuff for redo
@@ -2119,6 +2116,11 @@ void KWTextFrameSet::insertFrameBreak( KoTextCursor *cursor )
     KMacroCommand* macroCmd = new KMacroCommand( i18n( "Insert Break After Paragraph" ) );
     macroCmd->addCommand( m_textobj->insertParagraphCommand( cursor ) );
     KWTextParag *parag = static_cast<KWTextParag *>( cursor->parag() );
+    if(parag->prev()) {
+        parag=static_cast<KWTextParag *> (parag->prev());
+        cursor->setParag( parag );
+        cursor->setIndex( parag->length() - 1 );
+    }
     macroCmd->addCommand( setPageBreakingCommand( cursor, parag->pageBreaking() | KoParagLayout::HardFrameBreakAfter ) );
     m_doc->addCommand( macroCmd );
 
