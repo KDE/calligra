@@ -55,7 +55,13 @@ public:
     void setUnbalanced( bool b ) { unbalanced = b; m_bDirty = true; }
     void setXFactor( int i ) { xFactor = i; m_bDirty = true; }
     void setYFactor( int i ) { yFactor = i; m_bDirty = true; }
-    void setSize( const QSize& _size );
+    void setSize( const QSize& _size )
+    {
+        if ( size() != _size ) {
+            m_pixmap.resize( _size );
+            m_bDirty = true;
+        }
+    }
     
     // Sets all of the above at once. Used when loading.
     void setParameters(const QColor &c1, const QColor &c2, BCType _type,
