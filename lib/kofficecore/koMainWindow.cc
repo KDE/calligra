@@ -949,7 +949,7 @@ void KoMainWindow::saveWindowSettings()
     {
         // Save window size into the config file of our instance
         instance()->config()->setGroup( "MainWindow" );
-        kdDebug(30003) << "KoMainWindow::saveWindowSettings" << endl;
+        //kdDebug(30003) << "KoMainWindow::saveWindowSettings" << endl;
         saveWindowSize( instance()->config() );
         d->m_windowSizeDirty = false;
         // Save toolbar position into the config file of the app, under the doc's instance name
