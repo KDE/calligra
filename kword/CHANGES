@@ -1182,3 +1182,4 @@ Reggie, 12.5.1999:
 ------------------
 - Fixed and improved Drag'n'Drop
 - Fixed a problem with blinking cursor
+- Implemented configuration class for advanced autocorrection

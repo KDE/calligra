@@ -35,15 +35,52 @@ class KWAutoFormatEntry
 public:
   KWAutoFormatEntry();
 
+  void setFind(const QString &str);
+  void setReplace(const QString &str);
+  void setCheckFamily(bool b);
+  void setCheckColor(bool b);
+  void setCheckSize(bool b);
+  void setCheckBold(bool b);
+  void setCheckItalic(bool b);
+  void setCheckUnderline(bool b);
+  void setCheckVertAlign(bool b);
+  void setFamily(const QString &str);
+  void setColor(const QColor &c);
+  void setSize(int size);
+  void setBold(bool b);
+  void setItalic(bool b);
+  void setUnderline(bool b);
+  void setVertAlign(KWFormat::VertAlign va);
+  
+  
+  QString getFind();
+  QString getReplace();
+  bool getCheckFamily();
+  bool getCheckColor();
+  bool getCheckSize();
+  bool getCheckBold();
+  bool getCheckItalic();
+  bool getCheckUnderline();
+  bool getCheckVertAlign();
+  QString getFamily();
+  QColor getColor();
+  int getSize();
+  bool getBold();
+  bool getItalic();
+  bool getUnderline();
+  bool getVertAlign();
+
+  bool isValid()
+  { return !find.isEmpty() && !replace.isEmpty(); }
+  
 protected:
-  QString expr;
+  QString find,replace;
   bool checkFamily,checkColor,checkSize,checkBold,checkItalic,checkUnderline,checkVertAlign;
   QString family;
   QColor color;
   int size;
   bool bold,italic,underline;
   KWFormat::VertAlign vertAlign;
-  bool caseSensitive,regexp,wildcard;
 
 };
 
@@ -64,13 +101,13 @@ public:
   };
 
   enum AutoformatType {AT_TypographicQuotes,AT_UpperCase,AT_UpperUpper};
-  
+
   struct AutoformatInfo
   {
     QChar c;
     AutoformatType type;
   };
-  
+
   KWAutoFormat(KWordDocument *_doc);
 
   void startAutoFormat(KWParag *parag,KWFormatContext *fc);

@@ -28,15 +28,204 @@
 KWAutoFormatEntry::KWAutoFormatEntry()
 {
   checkFamily = checkColor = checkSize = checkBold = checkItalic = checkUnderline = checkVertAlign = false;
-  expr = "";
+  find = replace = QString::null;
   family = "times";
   color = Qt::black;
   size = 12;
   bold = italic = underline = false;
   vertAlign = KWFormat::VA_NORMAL;
-  caseSensitive = false;
-  regexp = false;
-  wildcard = false;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setFind(const QString &str)
+{
+  find = str;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setReplace(const QString &str)
+{
+  replace = str;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setCheckFamily(bool b)
+{
+  checkFamily = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setCheckColor(bool b)
+{
+  checkColor = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setCheckSize(bool b)
+{
+  checkSize = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setCheckBold(bool b)
+{
+  checkBold = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setCheckItalic(bool b)
+{
+  checkItalic = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setCheckUnderline(bool b)
+{
+  checkUnderline = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setCheckVertAlign(bool b)
+{
+  checkVertAlign = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setFamily(const QString &str)
+{
+  family = str;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setColor(const QColor &c)
+{
+  color = c;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setSize(int s)
+{
+  size = s;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setBold(bool b)
+{
+  bold = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setItalic(bool b)
+{
+  italic = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setUnderline(bool b)
+{
+  underline = b;
+}
+
+/*================================================================*/
+void KWAutoFormatEntry::setVertAlign(KWFormat::VertAlign va)
+{
+  vertAlign = va;
+}
+  
+/*================================================================*/
+QString KWAutoFormatEntry::getFind()
+{
+  return find;
+}
+
+/*================================================================*/
+QString KWAutoFormatEntry::getReplace()
+{
+  return replace;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getCheckFamily()
+{
+  return checkFamily;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getCheckColor()
+{
+  return checkColor;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getCheckSize()
+{
+  return checkSize;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getCheckBold()
+{
+  return checkBold;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getCheckItalic()
+{
+  return checkItalic;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getCheckUnderline()
+{
+  return checkUnderline;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getCheckVertAlign()
+{
+  return checkVertAlign;
+}
+
+/*================================================================*/
+QString KWAutoFormatEntry::getFamily()
+{
+  return family;
+}
+
+/*================================================================*/
+QColor KWAutoFormatEntry::getColor()
+{
+  return color;
+}
+
+/*================================================================*/
+int KWAutoFormatEntry::getSize()
+{
+  return size;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getBold()
+{
+  return bold;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getItalic()
+{
+  return italic;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getUnderline()
+{
+  return underline;
+}
+
+/*================================================================*/
+bool KWAutoFormatEntry::getVertAlign()
+{
+  return vertAlign;
 }
 
 /******************************************************************/
@@ -83,7 +272,7 @@ bool KWAutoFormat::doAutoFormat(KWParag *parag,KWFormatContext *fc)
       parag->setFormat(fc->getTextPos() - 2,3,format);
       tmpBuffer->clear();
     }
-      
+
   return false;
 }
 
