@@ -415,45 +415,41 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
 
     if(!doc->isReadWrite())
         return;
-    if( editMode && doc->showGrid())
+    KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
+    QPen _pen = QPen( Qt::black, 6, Qt::DotLine );
+    painter->save();
+    painter->setPen( _pen );
+    QRect pageRect=activePage()->getZoomPageRect();
+    KoRect unZoomPageRect=activePage()->getPageRect();
+    int offset = m_view->zoomHandler()->zoomItX( doc->getGridX() );
+    int nbRow = QMAX( 1, (int )( unZoomPageRect.width()/doc->getGridX()));
+    int nbCol = QMAX( 1, (int )( unZoomPageRect.height()/doc->getGridY()));
+
+    for( int i = 0 ; i <= nbRow; i++)
     {
-        KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
-        QPen _pen = QPen( Qt::black, 6, Qt::DotLine );
-        painter->save();
-        painter->setPen( _pen );
-        QRect pageRect=activePage()->getZoomPageRect();
-        KoRect unZoomPageRect=activePage()->getPageRect();
-        int offset = m_view->zoomHandler()->zoomItX( doc->getGridX() );
-        int nbRow = QMAX( 1, (int )( unZoomPageRect.width()/doc->getGridX()));
-        int nbCol = QMAX( 1, (int )( unZoomPageRect.height()/doc->getGridY()));
-
-        for( int i = 0 ; i <= nbRow; i++)
+        if( rect.intersects( KoRect( i * doc->getGridX() , rect.top(), 1 , rect.height())))
         {
-            if( rect.intersects( KoRect( i * doc->getGridX() , rect.top(), 1 , rect.height())))
+            for ( int j = pageRect.top() ; j< pageRect.height();)
             {
-                for ( int j = pageRect.top() ; j< pageRect.height();)
-                {
-                    painter->drawPoint( i * offset , j );
-                    j+=offset;
-                }
+                painter->drawPoint( i * offset , j );
+                j+=offset;
             }
         }
-
-        offset = m_view->zoomHandler()->zoomItY( doc->getGridY() );
-        for( int i = 0 ; i <= nbCol ; i++)
-        {
-            if( rect.intersects( KoRect( rect.left() , i * doc->getGridY(), pageRect.width(), 1)))
-            {
-                for ( int j = pageRect.left() ; j< pageRect.width();)
-                {
-                    painter->drawPoint( j, i * offset );
-                    j+=offset;
-                }
-            }
-        }
-        painter->restore();
-
     }
+
+    offset = m_view->zoomHandler()->zoomItY( doc->getGridY() );
+    for( int i = 0 ; i <= nbCol ; i++)
+    {
+        if( rect.intersects( KoRect( rect.left() , i * doc->getGridY(), pageRect.width(), 1)))
+        {
+            for ( int j = pageRect.left() ; j< pageRect.width();)
+            {
+                painter->drawPoint( j, i * offset );
+                j+=offset;
+            }
+        }
+    }
+    painter->restore();
 }
 
 
@@ -463,30 +459,27 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
 
     if(!doc->isReadWrite())
         return;
-    if( editMode && doc->showHelplines())
+    KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
+    QValueList<double>::Iterator i;
+    QPen _pen = QPen( Qt::black, 1, Qt::DotLine );
+    painter->save();
+    painter->setPen( _pen );
+    QRect pageRect=activePage()->getZoomPageRect();
+    for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
     {
-        KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
-        QValueList<double>::Iterator i;
-        QPen _pen = QPen( Qt::black, 1, Qt::DotLine );
-        painter->save();
-        painter->setPen( _pen );
-        QRect pageRect=activePage()->getZoomPageRect();
-        for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
-        {
-            double vi = *i ;
-            if( rect.contains(rect.x(), vi) )
-                painter->drawLine(pageRect.left(), m_view->zoomHandler()->zoomItY(vi), pageRect.right(), m_view->zoomHandler()->zoomItY(vi));
+        double vi = *i ;
+        if( rect.contains(rect.x(), vi) )
+            painter->drawLine(pageRect.left(), m_view->zoomHandler()->zoomItY(vi), pageRect.right(), m_view->zoomHandler()->zoomItY(vi));
 
-        }
-
-        for(i = doc->vertHelplines().begin(); i != doc->vertHelplines().end(); ++i)
-        {
-            double vi = *i ;
-            if( rect.contains(vi, rect.y()) )
-                painter->drawLine(m_view->zoomHandler()->zoomItX(vi), pageRect.top(), m_view->zoomHandler()->zoomItX(vi), pageRect.bottom());
-        }
-        painter->restore();
     }
+
+    for(i = doc->vertHelplines().begin(); i != doc->vertHelplines().end(); ++i)
+    {
+        double vi = *i ;
+        if( rect.contains(vi, rect.y()) )
+            painter->drawLine(m_view->zoomHandler()->zoomItX(vi), pageRect.top(), m_view->zoomHandler()->zoomItX(vi), pageRect.bottom());
+    }
+    painter->restore();
 }
 
 

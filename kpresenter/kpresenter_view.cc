@@ -5790,6 +5790,7 @@ void KPresenterView::viewHelpLines()
 void KPresenterView::viewGrid()
 {
     m_pKPresenterDoc->setShowGrid( actionViewShowGrid->isChecked() );
+    m_pKPresenterDoc->setModified( true );
     m_canvas->repaint(false);
 }
 

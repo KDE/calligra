@@ -185,6 +185,13 @@ k_dcop:
     bool showGrid() const;
     void setShowGrid ( bool _grid );
 
+    double gridX() const;
+    void setGridX(double _x);
+
+    double gridY() const;
+    void setGridY(double _y);
+
+
 private:
     KPresenterDoc *doc;
 

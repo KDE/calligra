@@ -637,3 +637,27 @@ void KPresenterDocIface::setShowGrid ( bool _grid )
     doc->updateGridButton();
     doc->repaint( false );
 }
+
+double KPresenterDocIface::gridX() const
+{
+    return doc->getGridX();
+}
+
+void KPresenterDocIface::setGridX(double _x)
+{
+    doc->setGridX( _x );
+    if( showGrid() )
+        doc->repaint( false );
+}
+
+double KPresenterDocIface::gridY() const
+{
+    return doc->getGridY();
+}
+
+void KPresenterDocIface::setGridY(double _y)
+{
+    doc->setGridY( _y );
+    if( showGrid() )
+        doc->repaint( false );
+}
