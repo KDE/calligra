@@ -412,7 +412,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
     if(!m_view->koDocument()->isReadWrite())
         return;
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
@@ -543,7 +543,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             kpobject = objectList().at( i );
                             KoSize s = kpobject->getSize();
                             KoPoint pnt = kpobject->getOrig();
-                            KoRect rect(pnt.x() - m_view->zoomHandler()->unzoomItX( diffx()), pnt.y() - m_view->zoomHandler()->unzoomItY( diffy()), s.width(), s.height() );
+                            KoRect rect(pnt.x() /*- m_view->zoomHandler()->unzoomItX( diffx())*/, pnt.y() /*- m_view->zoomHandler()->unzoomItY( diffy())*/, s.width(), s.height() );
                             QRect rect2=m_view->zoomHandler()->zoomRect(rect);
                             if ( rect.contains( docPoint ) ) {
                                 overObject = true;
@@ -778,7 +778,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 /*=================== handle mouse released ======================*/
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
@@ -848,6 +848,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 drawRubber = false;
 
                 rubber = rubber.normalize();
+                rubber.moveBy(diffx(),diffy());
                 KPObject *kpobject = 0;
                 if ( (int)objectList().count() - 1 >= 0 ) {
                     for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
@@ -1093,7 +1094,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 /*==================== handle mouse moved ========================*/
 void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos() );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
@@ -1122,7 +1123,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		    kpobject = objectList().at( i );
 		    KoSize s = kpobject->getSize();
 		    KoPoint pnt = kpobject->getOrig();
-                    KoRect rect(pnt.x() - m_view->zoomHandler()->unzoomItX(diffx()), pnt.y() - m_view->zoomHandler()->unzoomItY( diffy()), s.width(), s.height() );
+                    KoRect rect(pnt.x() /*- m_view->zoomHandler()->unzoomItX(diffx())*/, pnt.y() /*- m_view->zoomHandler()->unzoomItY( diffy())*/, s.width(), s.height() );
                     if ( rect.contains( docPoint ) ) {
                         if ( kpobject->isSelected() ) {
 			    setCursor( kpobject->getCursor( /*QPoint( e->x(), e->y() )*/m_view->zoomHandler()->unzoomPoint(e->pos()) , modType ) );
