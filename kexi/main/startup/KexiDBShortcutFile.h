@@ -20,6 +20,8 @@
 #ifndef KEXIDBSHORTCUTFILE_H
 #define KEXIDBSHORTCUTFILE_H
 
+#include <qstring.h>
+
 class KexiProjectData;
 
 /*! Loads and saved "shortcut" information
