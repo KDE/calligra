@@ -232,7 +232,7 @@ KFormDesignerPart::open()
 	m_openingFile = true;
 	KURL url = KFileDialog::getOpenURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), m_workspace->topLevelWidget());
 	if(!url.isEmpty())
-		KParts::ReadWritePart::openURL(url);
+		ReadWritePart::openURL(url);
 	m_openingFile = false;
 }
 
@@ -269,7 +269,7 @@ KFormDesignerPart::saveAs()
 	if(url.isEmpty())
 		return;
 	else
-		KParts::ReadWritePart::saveAs(url);
+		ReadWritePart::saveAs(url);
 }
 
 bool
