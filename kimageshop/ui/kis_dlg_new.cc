@@ -33,11 +33,12 @@ const int INITIALHEIGHT = 512;
 #include <qlabel.h>
 #include <qspinbox.h>
 
+#include <klocale.h>
 
 NewDialog::NewDialog( QWidget *parent, const char *name )
     : QDialog( parent, name, TRUE )
 {
-    setCaption( "New Image" );
+    setCaption( i18n("New Image") );
 
     QVBoxLayout* layout = new QVBoxLayout( this, 3 );
 
@@ -45,52 +46,52 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
 
     iwidth = new QSpinBox( 1, MAXIMAGEWIDTH, 10, this );
     iwidth->setValue( INITIALWIDTH );
-    QLabel* wlabel = new QLabel( iwidth, "W&idth", this );
+    QLabel* wlabel = new QLabel( iwidth, i18n("W&idth"), this );
 
     grid->addWidget( wlabel, 0, 0 );
     grid->addWidget( iwidth, 0, 1 );
 
     iheight = new QSpinBox( 1, MAXIMAGEHEIGHT, 10, this );
     iheight->setValue( INITIALHEIGHT );
-    QLabel* hlabel = new QLabel( iheight, "&Height", this );
+    QLabel* hlabel = new QLabel( iheight, i18n("&Height"), this );
 
     grid->addWidget( hlabel, 1, 0 );
     grid->addWidget( iheight, 1, 1 );
 
     // Create an exclusive button group
-    QButtonGroup *cmodeg = new QButtonGroup( 1, QGroupBox::Horizontal, "Color Mode", this);
+    QButtonGroup *cmodeg = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Color Mode"), this);
     cmodeg->setExclusive( TRUE );
 
     // insert radiobuttons
-	cmode[cm_Indexed] = new QRadioButton( "&Indexed", cmodeg );
+	cmode[cm_Indexed] = new QRadioButton( i18n("&Indexed"), cmodeg );
 	cmode[cm_Indexed]->setEnabled(false);
 
-	cmode[cm_Greyscale] = new QRadioButton( "&Greyscale", cmodeg );
+	cmode[cm_Greyscale] = new QRadioButton( i18n("&Greyscale"), cmodeg );
     cmode[cm_Greyscale]->setEnabled(false);
 
-    cmode[cm_RGB] = new QRadioButton( "&RGB", cmodeg );
+    cmode[cm_RGB] = new QRadioButton( i18n("&RGB"), cmodeg );
 
-	cmode[cm_RGBA] = new QRadioButton( "RGB + &alpha channel", cmodeg );
+	cmode[cm_RGBA] = new QRadioButton( i18n("RGB + &alpha channel"), cmodeg );
 	cmode[cm_RGBA]->setChecked( true );
 
-	cmode[cm_CMYK] = new QRadioButton( "&CMYK", cmodeg );
+	cmode[cm_CMYK] = new QRadioButton( i18n("&CMYK"), cmodeg );
     cmode[cm_CMYK]->setEnabled(false);
 
-	cmode[cm_CMYKA] = new QRadioButton( "CMY&K + alpha channel", cmodeg );
+	cmode[cm_CMYKA] = new QRadioButton( i18n("CMY&K + alpha channel"), cmodeg );
     cmode[cm_CMYKA]->setEnabled(false);
 
     layout->addWidget( cmodeg );
 
     // Create an exclusive button group
-    QButtonGroup *ground = new QButtonGroup( 1, QGroupBox::Horizontal, "Background", this);
+    QButtonGroup *ground = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Background"), this);
     ground->setExclusive( TRUE );
 
     // insert radiobuttons
-    bground[bm_BackgroundColor] = new QRadioButton( "&Background Color", ground );
-    bground[bm_ForegroundColor] = new QRadioButton( "&Foreground Color", ground );
-    bground[bm_White] = new QRadioButton( "&White", ground );
+    bground[bm_BackgroundColor] = new QRadioButton( i18n("&Background Color"), ground );
+    bground[bm_ForegroundColor] = new QRadioButton( i18n("&Foreground Color"), ground );
+    bground[bm_White] = new QRadioButton( i18n("&White"), ground );
     bground[bm_White]->setChecked( true );
-    bground[bm_Transparent] = new QRadioButton( "&Transparent", ground );
+    bground[bm_Transparent] = new QRadioButton( i18n("&Transparent"), ground );
 
     layout->addWidget( ground );
 
@@ -99,13 +100,13 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
     buttons->addStretch( 3 );
 
     QPushButton *ok, *cancel;
-    ok = new QPushButton( "&OK", this );
+    ok = new QPushButton( i18n("&OK"), this );
     ok->setDefault( true );
     ok->setMinimumSize( ok->sizeHint() );
     connect( ok, SIGNAL(clicked()), SLOT(accept()) );
     buttons->addWidget( ok );
 
-    cancel = new QPushButton( "&Cancel", this );
+    cancel = new QPushButton( i18n("&Cancel"), this );
     cancel->setMinimumSize( cancel->sizeHint() );
     connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
     buttons->addWidget( cancel );

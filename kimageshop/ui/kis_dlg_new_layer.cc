@@ -37,7 +37,7 @@ const int INITIALHEIGHT = 512;
 NewLayerDialog::NewLayerDialog( QWidget *parent, const char *name )
     : KDialog( parent, name, true )
 {
-    setCaption( "New Image" );
+    setCaption( i18n("New Image") );
 
     QVBoxLayout* layout = new QVBoxLayout( this, 3 );
 
@@ -45,14 +45,14 @@ NewLayerDialog::NewLayerDialog( QWidget *parent, const char *name )
 
     m_width = new QSpinBox( 1, MAXIMAGEWIDTH, 10, this );
     m_width->setValue( INITIALWIDTH );
-    QLabel* wlabel = new QLabel( m_width, "W&idth", this );
+    QLabel* wlabel = new QLabel( m_width, i18n("W&idth"), this );
 
     grid->addWidget( wlabel, 0, 0 );
     grid->addWidget( m_width, 0, 1 );
 
     m_height = new QSpinBox( 1, MAXIMAGEHEIGHT, 10, this );
     m_height->setValue( INITIALHEIGHT );
-    QLabel* hlabel = new QLabel( m_height, "&Height", this );
+    QLabel* hlabel = new QLabel( m_height, i18n("&Height"), this );
 
     grid->addWidget( hlabel, 1, 0 );
     grid->addWidget( m_height, 1, 1 );
@@ -62,13 +62,13 @@ NewLayerDialog::NewLayerDialog( QWidget *parent, const char *name )
     buttons->addStretch( 1 );
 
     QPushButton *ok, *cancel;
-    ok = new QPushButton( "&OK", this );
+    ok = new QPushButton( i18n("&OK"), this );
     ok->setDefault( true );
     ok->setMinimumSize( ok->sizeHint() );
     connect( ok, SIGNAL(clicked()), SLOT(accept()) );
     buttons->addWidget( ok );
 
-    cancel = new QPushButton( "&Cancel", this );
+    cancel = new QPushButton( i18n("&Cancel"), this );
     cancel->setMinimumSize( cancel->sizeHint() );
     connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
     buttons->addWidget( cancel );
