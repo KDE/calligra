@@ -119,6 +119,8 @@ public:
 	// manage tools
 	virtual void registerTool( VTool * );
 
+	virtual void setZoom( double zoom );
+
 public slots:
 	// editing:
 	void editCut();

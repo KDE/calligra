@@ -52,6 +52,7 @@ public:
 	KoRect boundingBox() const;
 
 	void setViewport( double centerX, double centerY );
+	void setContentsRect( const KoRect & );
 
 protected:
 	virtual void focusInEvent( QFocusEvent * );

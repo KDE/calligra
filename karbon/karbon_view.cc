@@ -596,6 +596,19 @@ KarbonView::viewModeChanged()
 }
 
 void
+KarbonView::setZoom( double zoom )
+{
+	KoView::setZoom( zoom );
+	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
+	QStringList stl = m_zoomAction->items();
+	stl.prepend( i18n( zoomText.latin1() ) );
+
+	m_zoomAction->setItems( stl );
+	m_zoomAction->setCurrentItem( 0 );
+	zoomChanged();
+}
+
+void
 KarbonView::zoomChanged()
 {
 	double centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
@@ -610,7 +623,7 @@ KarbonView::zoomChanged()
 		m_zoomAction->changeItem( m_zoomAction->currentItem(), " 2000%" );
 	}
 
-	setZoom( zoomFactor );
+	KoView::setZoom( zoomFactor );
 	// TODO : I guess we should define a document size member at this point...
 	//kdDebug() << "part()->pageLayout().ptWidth :" << part()->pageLayout().ptWidth << endl;
 	//kdDebug() << "part()->pageLayout().ptHeight :" << part()->pageLayout().ptHeight << endl;
@@ -858,13 +871,13 @@ KarbonView::initActions()
 
 	QStringList stl;
 	stl
-	<< i18n( "   25%" )
-	<< i18n( "   50%" )
-	<< i18n( "  100%" )
-	<< i18n( "  200%" )
-	<< i18n( "  300%" )
-	<< i18n( "  400%" )
-	<< i18n( "  800%" );
+	<< i18n( "    25%" )
+	<< i18n( "    50%" )
+	<< i18n( "   100%" )
+	<< i18n( "   200%" )
+	<< i18n( "   300%" )
+	<< i18n( "   400%" )
+	<< i18n( "   800%" );
 
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
