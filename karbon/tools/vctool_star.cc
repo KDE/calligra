@@ -61,14 +61,14 @@ VCToolStar::drawTemporaryObject(
 }
 
 VCommand*
-VCToolStar::createCmd( const QPoint& p, double d1, double d2 )
+VCToolStar::createCmd( double x, double y, double d1, double d2 )
 {
 	if( d1 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
 				new VCCmdStar( part(),
-					p.x(), p.y(),
+					x, y,
 					m_dialog->valueOuterR(),
 					m_dialog->valueInnerR(),
 					m_dialog->valueEdges() );
@@ -78,7 +78,7 @@ VCToolStar::createCmd( const QPoint& p, double d1, double d2 )
 	else
 		return
 			new VCCmdStar( part(),
-				p.x(), p.y(),
+				x, y,
 				d1,
 				m_dialog->valueInnerR() * d1 / m_dialog->valueOuterR(),
 				m_dialog->valueEdges(),

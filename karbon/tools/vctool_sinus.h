@@ -18,7 +18,7 @@ public:
 	virtual ~VCToolSinus();
 	static VCToolSinus* instance( KarbonPart* part );
 
-	virtual VCommand* createCmd( const QPoint& p, double d1, double d2 );
+	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
 	virtual void drawTemporaryObject(
 		KarbonView* view, const QPoint& p, double d1, double d2 );

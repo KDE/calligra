@@ -82,7 +82,7 @@ VMToolSelect::drawTemporaryObject(
 }
 
 VCommand*
-VMToolSelect::createCmd( const QPoint& p, double d1, double d2 )
+VMToolSelect::createCmd( double x, double y, double d1, double d2 )
 {
 	if( m_TransformState == Moving )
 	{
@@ -97,7 +97,7 @@ VMToolSelect::createCmd( const QPoint& p, double d1, double d2 )
 	{
 		// we dont want select to be undoable
 		part()->unselectObjects();
-		VMCmdSelect cmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
+		VMCmdSelect cmd( part(), x, y, x + d1, y + d2 );
 		cmd.execute();
 		return 0L;
 	}

@@ -5,6 +5,7 @@
 #include <qevent.h>
 
 #include "karbon_part.h"
+#include "karbon_view.h"
 #include "vmtool.h"
 
 VMTool::VMTool( KarbonPart* part, bool polar )
@@ -40,7 +41,9 @@ VMTool::eventFilter( KarbonView* view, QEvent* event )
 
 		recalcCoords();
 
-		VCommand* cmd = createCmd( m_p, m_d1, m_d2 );
+		VCommand* cmd = createCmd(
+			m_p.x() / view->zoomFactor(),
+			m_p.y() / view->zoomFactor(), m_d1, m_d2 );
 
 		if( cmd )
 			m_part->addCommand( cmd );

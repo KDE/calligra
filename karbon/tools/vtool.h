@@ -24,7 +24,7 @@ public:
 
 	// derived tools implement specialised commands. d1, d2 are either
 	// width, height or radius, angle.
-	virtual VCommand* createCmd( const QPoint& p, double d1, double d2 ) = 0;
+	virtual VCommand* createCmd( double x, double y, double d1, double d2 ) = 0;
 
 	// draw the object while it is edited:
 	virtual void drawTemporaryObject(

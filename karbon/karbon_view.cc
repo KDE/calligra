@@ -230,7 +230,8 @@ KarbonView::initActions()
 		<< i18n( "25%" )
 		<< i18n( "50%" )
 		<< i18n( "100%" )
-		<< i18n( "200%" );
+		<< i18n( "200%" )
+		<< i18n( "400%" );
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setCurrentItem( 2 );
 	m_zoomAction->setEditable( true );

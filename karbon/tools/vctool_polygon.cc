@@ -59,14 +59,14 @@ VCToolPolygon::drawTemporaryObject(
 }
 
 VCommand*
-VCToolPolygon::createCmd( const QPoint& p, double d1, double d2 )
+VCToolPolygon::createCmd( double x, double y, double d1, double d2 )
 {
 	if( d1 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
 				new VCCmdPolygon( part(),
-					p.x(), p.y(),
+					x, y,
 					m_dialog->valueRadius(),
 					m_dialog->valueEdges() );
 		else
@@ -75,7 +75,7 @@ VCToolPolygon::createCmd( const QPoint& p, double d1, double d2 )
 	else
 		return
 			new VCCmdPolygon( part(),
-				p.x(), p.y(),
+				x, y,
 				d1,
 				m_dialog->valueEdges(),
 				d2 );

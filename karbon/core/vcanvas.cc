@@ -33,7 +33,6 @@ void
 VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 	int clipw, int cliph  )
 {
-	painter->scale( m_zoomFactor, m_zoomFactor );
 	drawDocument( painter, QRect( clipx, clipy, clipw, cliph ) );
 	m_part->drawHandle( *painter );
 }

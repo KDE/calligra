@@ -587,7 +587,7 @@ VPath::~VPath()
 
 void
 VPath::draw( QPainter& painter, const QRect& rect,
-	const double /*zoomFactor*/ )
+	const double zoomFactor )
 {
 	if( state() == deleted )
 		return;
@@ -608,30 +608,48 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	for( ; itr.current(); ++itr )
 	{
 		if( VClosePath* seg = dynamic_cast<VClosePath*>( itr.current() ) )
-			painter.moveTo( seg->p3()->x(), seg->p3()->y() );
+			painter.moveTo(
+				qRound( zoomFactor * seg->p3()->x() ),
+				qRound( zoomFactor * seg->p3()->y() ) );
 		else
 		if( VMoveTo* seg = dynamic_cast<VMoveTo*>( itr.current() ) )
-			painter.moveTo( seg->p3()->x(), seg->p3()->y() );
+			painter.moveTo(
+				qRound( zoomFactor * seg->p3()->x() ),
+				qRound( zoomFactor * seg->p3()->y() ) );
 		else
 		if( VLineTo* seg = dynamic_cast<VLineTo*>( itr.current() ) )
-			painter.lineTo( seg->p3()->x(), seg->p3()->y() );
+			painter.lineTo(
+				qRound( zoomFactor * seg->p3()->x() ),
+				qRound( zoomFactor * seg->p3()->y() ) );
 		else
 		if( VCurveTo* seg = dynamic_cast<VCurveTo*>( itr.current() ) )
 		{
 			if( seg->p0() )
 			{
 				QPointArray seg_qpa( 4 );
-				seg_qpa.setPoint( 0, seg->p0()->x(), seg->p0()->y() );
-				seg_qpa.setPoint( 1, seg->p1()->x(), seg->p1()->y() );
-				seg_qpa.setPoint( 2, seg->p2()->x(), seg->p2()->y() );
-				seg_qpa.setPoint( 3, seg->p3()->x(), seg->p3()->y() );
+				seg_qpa.setPoint( 0,
+					qRound( zoomFactor * seg->p0()->x() ),
+					qRound( zoomFactor * seg->p0()->y() ) );
+				seg_qpa.setPoint( 1,
+					qRound( zoomFactor * seg->p1()->x() ),
+					qRound( zoomFactor * seg->p1()->y() ) );
+				seg_qpa.setPoint( 2,
+					qRound( zoomFactor * seg->p2()->x() ),
+					qRound( zoomFactor * seg->p2()->y() ) );
+				seg_qpa.setPoint( 3,
+					qRound( zoomFactor * seg->p3()->x() ),
+					qRound( zoomFactor * seg->p3()->y() ) );
 
 				painter.drawPolyline( seg_qpa.cubicBezier() );
 			}
 			else
-				painter.lineTo( seg->p3()->x(), seg->p3()->y() );
+				painter.lineTo(
+					qRound( zoomFactor * seg->p3()->x() ),
+					qRound( zoomFactor * seg->p3()->y() ) );
 
-			painter.moveTo( seg->p3()->x(), seg->p3()->y() );
+			painter.moveTo(
+				qRound( zoomFactor * seg->p3()->x() ),
+				qRound( zoomFactor * seg->p3()->y() ) );
 		}
 	}
 
@@ -643,7 +661,9 @@ VPath::draw( QPainter& painter, const QRect& rect,
 			// draw boxes:
 			painter.setPen( Qt::NoPen );
 			painter.setBrush( Qt::blue.light() );
-			drawBox( painter, itr.current()->p3()->x(), itr.current()->p3()->y(), 1 );
+			drawBox( painter,
+				qRound( zoomFactor * itr.current()->p3()->x() ),
+				qRound( zoomFactor * itr.current()->p3()->y() ), 3 );
 		}
 
 	}
@@ -655,7 +675,9 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		{
 			// draw boxes:
 			painter.setPen( Qt::black );
-			drawBox( painter, itr.current()->p3()->x(), itr.current()->p3()->y() );
+			drawBox( painter,
+				qRound( zoomFactor * itr.current()->p3()->x() ),
+				qRound( zoomFactor * itr.current()->p3()->y() ) );
 		}
 	}
 

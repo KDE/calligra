@@ -57,16 +57,16 @@ VCToolSinus::drawTemporaryObject(
 }
 
 VCommand*
-VCToolSinus::createCmd( const QPoint& p, double d1, double d2 )
+VCToolSinus::createCmd( double x, double y, double d1, double d2 )
 {
 	if( d1 <= 1.0 && d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
 				new VCCmdSinus( part(),
-					p.x(), p.y(),
-					p.x() + m_dialog->valueWidth(),
-					p.y() + m_dialog->valueHeight(),
+					x, y,
+					x + m_dialog->valueWidth(),
+					y + m_dialog->valueHeight(),
 					m_dialog->valuePeriods() );
 		else
 			return 0L;
@@ -74,9 +74,9 @@ VCToolSinus::createCmd( const QPoint& p, double d1, double d2 )
 	else
 		return
 			new VCCmdSinus( part(),
-				p.x(), p.y(),
-				p.x() + d1,
-				p.y() + d2,
+				x, y,
+				x + d1,
+				y + d2,
 				m_dialog->valuePeriods() );
 }
 

@@ -55,23 +55,23 @@ VCToolEllipse::drawTemporaryObject(
 }
 
 VCommand*
-VCToolEllipse::createCmd( const QPoint& p, double d1, double d2 )
+VCToolEllipse::createCmd( double x, double y, double d1, double d2 )
 {
 	if( d1 <= 1.0 && d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
 				new VCCmdEllipse( part(),
-					p.x(), p.y(),
-					p.x() + m_dialog->valueWidth(),
-					p.y() + m_dialog->valueHeight() );
+					x, y,
+					x + m_dialog->valueWidth(),
+					y + m_dialog->valueHeight() );
 		else
 			return 0L;
 	}
 	else
 		return
 			new VCCmdEllipse( part(),
-				p.x(), p.y(),
-				p.x() + d1,
-				p.y() + d2 );
+				x, y,
+				x + d1,
+				y + d2 );
 }
