@@ -7,8 +7,13 @@ It was downloaded via CVS from cvs.kde.org.
 
 Upstream authors:
 
+  Note that KOffice has many contributers beyond those listed below.
+
+  Karbon: Rob Buis <buis@kde.org>, Lennart Kudling <kudling@kde.org> and
+          Tomislav Lukman <tomislav.lukman@ck.tel.hr>
   KChart: Kalle Dalheimer <kalle@kde.org>,
-          Laurent Montel <montell@club-internet.fr> and
+          Laurent Montel <lmontel@mandrakesoft.com>,
+          Karl-Heinz Zimmer <khz@kde.org> and
           Reginald Stadlbauer <reggie@kde.org>
   KFormula: Andrea Rizzi <rizzi@kde.org>, Stephan Kulow <coolo@kde.org> and
             Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -19,34 +24,33 @@ Upstream authors:
            Alexander Neundorf <neundorf@kde.org>,
            Rob Buis <rwlbuis@wanadoo.nl> and
            Laurent Montel <lmontel@mandrakesoft.com>
-  KOShell: Torben Weis <weis@kde.org>, Simon Hausmann <hausmann@kde.org> and
-           David Faure <faure@kde.org>
+  KOShell: Torben Weis <weis@kde.org>, Simon Hausmann <hausmann@kde.org>,
+           David Faure <faure@kde.org> and Sven Lüppken <sven@kde.org>
   KPresenter: Reginald Stadlbauer <reggie@kde.org>,
               Werner Trobin <trobin@kde.org>, David Faure <dfaure@kde.org>,
-              Toshitaka Fujioka <fujioka@kde.org> and
-              Lukáš Tinkl <lukas@kde.org>
+              Toshitaka Fujioka <fujioka@kde.org>,
+              Lukáš Tinkl <lukas@kde.org> and
+              Laurent Montel <lmontel@mandrakesoft.com>
   KSpread: Torben Weis <weis@kde.org>,
            Laurent Montel <montell@club-internet.fr>,
-           David Faure <faure@kde.org> and others
-  Kugar: Mutiny Bay Software <info@mutinybaysoftware.com> and
-         Phil Thompson <phil@river-bank.demon.co.uk>
+           David Faure <faure@kde.org> and many others
+  Kugar: Mutiny Bay Software <info@mutinybaysoftware.com>,
+         Phil Thompson <phil@river-bank.demon.co.uk> and
+         Alexander Dymo <cloudtemple@mksat.net>
   KWord: Reginald Stadlbauer <reggie@kde.org>, Torben Weis <weis@kde.org>,
          David Faure <dfaure@kde.org>, Thomas Zander <zander@kde.org>,
          Shaheed Haque <srhaque@iee.org>,
-         Laurent Montel <lmontel@mandrakesoft.com> and
-         Sven Lüppken <sven@kde.org>
+         Laurent Montel <lmontel@mandrakesoft.com>,
+         Sven Lüppken <sven@kde.org> and many others
 
 Copyright:
- 
-All programs in this package are released under either the GPL (GNU
-General Public License) or the AL (Artistic License) which is less
-restrictive than the GPL.  See http://www.koffice.org/ for details
-regarding which applications are released under which licenses.
+
+All programs in this package are released under the GPL (GNU General
+Public License).
 
 The basic flowcharting stencils provided with Kivio are released under the
 BSD license.
 
 On Debian GNU/Linux systems, the complete texts of these licenses can be
-found in `/usr/share/common-licenses/GPL' (GNU General Public License),
-`/usr/share/common-licenses/Artistic' (Artistic License) and
-`/usr/share/common-licenses/BSD' (BSD License).
+found in `/usr/share/common-licenses/GPL' (GNU General Public License)
+and `/usr/share/common-licenses/BSD' (BSD License).
