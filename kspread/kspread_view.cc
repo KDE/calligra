@@ -4861,6 +4861,10 @@ void KSpreadView::refreshView()
   }
 
   d->toolWidget->show();
+  if( table->isRightToLeft() )
+    d->formulaBarLayout->setDirection( QBoxLayout::RightToLeft );
+  else
+    d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
 
   // If this value (30) is changed then topBorder() needs to
   // be changed, too.
