@@ -85,7 +85,7 @@ public:
     int numTextObject() const;
     KPTextObject *textFrameSet ( unsigned int _num);
 
-    void deleteObjs( bool _add=true );
+    KCommand * deleteObjs( bool _add=true );
     int numSelected() const;
     void pasteObjs( const QByteArray & data );
     KCommand * replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);

@@ -433,11 +433,8 @@ void KPresenterView::editCut()
 {
     if ( !m_canvas->currentTextObjectView() ) {
 	m_canvas->setToolEditMode( TEM_MOUSE );
-	m_canvas->activePage()->copyObjs();
-	m_canvas->activePage()->deleteObjs();
-        stickyPage()->copyObjs();
-	stickyPage()->deleteObjs();
-
+        m_canvas->copyObjs();
+	m_canvas->deleteObjs();
     } else {
 	m_canvas->currentTextObjectView()->cut();
     }
@@ -448,8 +445,7 @@ void KPresenterView::editCopy()
 {
     if ( !m_canvas->currentTextObjectView() ) {
 	m_canvas->setToolEditMode( TEM_MOUSE );
-	m_canvas->activePage()->copyObjs();
-        stickyPage()->copyObjs();
+	m_canvas->copyObjs();
     } else {
 	m_canvas->currentTextObjectView()->copy();
     }
@@ -504,7 +500,7 @@ void KPresenterView::editPaste()
 void KPresenterView::editDelete()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->deleteObjs();
+    m_canvas->deleteObjs();
 }
 
 /*===============================================================*/

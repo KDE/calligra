@@ -214,6 +214,8 @@ public slots:
     void clipCopy();
     void clipPaste();
     void deleteObjs();
+    void copyObjs();
+
     void rotateObjs();
     void shadowObjs();
 

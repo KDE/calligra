@@ -4392,10 +4392,34 @@ KPTextObject* KPrCanvas::kpTxtObj()
     // ### return m_currentTextObjectView->kpTextObject()
 }
 
+void KPrCanvas::copyObjs()
+{
+    m_activePage->copyObjs();
+    m_view->kPresenterDoc()->stickyPage()->copyObjs();
+}
+
 /*================================================================*/
 void KPrCanvas::deleteObjs()
 {
-    m_activePage->deleteObjs();
+    KMacroCommand *macro=new KMacroCommand(i18n( "Delete object(s)" ));
+    bool macroCreate=false;
+    KCommand *cmd=m_activePage->deleteObjs();
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        macroCreate=true;
+    }
+    cmd=m_view->kPresenterDoc()->stickyPage()->deleteObjs();
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        macroCreate=true;
+    }
+
+    if(macroCreate)
+        m_view->kPresenterDoc()->addCommand(macro);
+    else
+        delete macro;
     setToolEditMode( toolEditMode );
 }
 
