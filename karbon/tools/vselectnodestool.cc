@@ -115,7 +115,7 @@ VSelectNodesTool::draw()
 void
 VSelectNodesTool::setCursor() const
 {
-	//if( !m_isDragging ) return;
+	if( m_state == moving ) return;
 
 	double tolerance = 1.0 / view()->zoom();
 
