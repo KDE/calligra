@@ -33,6 +33,9 @@
 #include <qmessagebox.h>
 #include <klocale.h>
 
+#include <koQueryTypes.h>
+#include <koDocument.h>
+
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu,
 				      const QRect& rect,
 				      KOffice::Document_ptr doc)
@@ -144,7 +147,7 @@ bool KIllustratorDocument::hasToWriteMultipart () {
 
 void KIllustratorDocument::insertPart (const QRect& rect,
 				       KoDocumentEntry& e) {
-  KOffice::Document_var doc = imr_createDoc (e);
+  KOffice::Document_var doc = e.createDoc();
   if (CORBA::is_nil (doc))
     return;
 
