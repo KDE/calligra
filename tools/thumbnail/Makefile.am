@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 LDFLAGS = $(all_libraries) $(KDE_RPATH)
 METASOURCES = AUTO
 
