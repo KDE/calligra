@@ -147,8 +147,8 @@ public:
     void removeAllTables();
     void setActiveTable( KSpreadSheet *_t,bool updateTable=true );
 
-    const KSpreadSheet* activeTable() const { return m_pTable; }
-    KSpreadSheet* activeTable() { return m_pTable; }
+    const KSpreadSheet* activeTable() const;
+    KSpreadSheet* activeTable();
 
     void openPopupMenu( const QPoint &_global );
     void popupRowMenu(const QPoint & _point ) ;
@@ -563,47 +563,6 @@ private:
 
     bool spellSwitchToOtherTable();
     void spellCleanup();
-
-    /**
-     * Pointer to the last popup menu.
-     * Since only one popup menu can be opened at once, its pointer is stored here.
-     * Delete the old one before you store a pointer to anotheron here.
-     * May be 0L.
-     */
-    QPopupMenu *m_pPopupMenu;
-    int m_popupMenuFirstToolId;
-
-    QPopupMenu *m_pPopupRow;
-    QPopupMenu *m_pPopupColumn;
-
-    /**
-     * Used for embedded children.
-     */
-    QPopupMenu* m_popupChild;
-
-    /**
-     * used for list of choose
-     */
-    QPopupMenu* m_popupListChoose;
-
-    /**
-     * Holds a pointer of the child for which the popup menu has been opened.
-     */
-    KSpreadChild* m_popupChildObject;
-
-    /**
-     * The active KSpreadSheet. This table has the input focus. It may be 0L, too.
-     */
-    KSpreadSheet* m_pTable;
-
-
-
-   struct ToolEntry
-   {
-     QString command;
-     KDataToolInfo info;
-   };
-   QPtrList<ToolEntry> m_lstTools;
 
 
   /* helper functions */
