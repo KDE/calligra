@@ -18,6 +18,7 @@ public:
     }
 
     void speedTest();
+    void oneLineTest();
     void noHeightTest();
     void noWidthEverTest();
 
@@ -105,18 +106,36 @@ void KoTextFormatterTest::noWidthEverTest()
     KoTextParag* parag = doc->firstParag();
     parag->append( "abcdefghi" );
     parag->format();
-    assert( parag->lines() == 1 );
-    assert( parag->isValid() );
+    // The resulting paragraph is NOT marked as formatted. See kotextformatter.cc -r1.79
+    assert( !parag->isValid() );
     doc->clear(false);
     doc->setFlow( new KoTextFlow ); // default
 }
 
+void KoTextFormatterTest::oneLineTest()
+{
+    kdDebug() << k_funcinfo << endl;
+    // Normal case, only one line
+    // Expected: the parag is as wide as the doc
+    doc->setFlow( new TextFlow( 2000, 200 ) );
+    doc->clear(true);
+    KoTextParag* parag = doc->firstParag();
+    parag->append( "abcdefghi" );
+    parag->format();
+    assert( parag->lines() == 1 );
+    assert( parag->isValid() );
+    assert( parag->rect().width() == 2000 );
+    assert( parag->widthUsed() < 2000 );
+    doc->clear(false);
+    doc->setFlow( new KoTextFlow ); // default
+}
 int main (int argc, char ** argv)
 {
     KApplication app(argc, argv, "KoTextFormatter test");
 
     KoTextFormatterTest test;
     //test.speedTest();
+    test.oneLineTest();
     test.noHeightTest();
     test.noWidthEverTest();
 
