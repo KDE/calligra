@@ -23,10 +23,10 @@
 #include <koFilter.h>
 #include <qdom.h>
 #include <qptrstack.h>
-#include <core/vpath.h>
 #include <core/vdocument.h>
 
 class VGroup;
+class VComposite;
 
 class SvgImport : public KoFilter
 {
@@ -52,11 +52,13 @@ protected:
 		QWMatrix	matrix;
 	};
 
+	void parsePath( VComposite *, const QDomElement & );
 	void parseGroup( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
+	const char *getCoord( const char *, double & );
 
 private:
 	VDocument m_document;

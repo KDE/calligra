@@ -252,10 +252,10 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		if( b.tagName() == "g" )
 		{
 			VGroup *group;
-                        if ( grp )
-                            group = new VGroup( grp );
-                        else
-                            group = new VGroup( &m_document );
+			if ( grp )
+				group = new VGroup( grp );
+			else
+				group = new VGroup( &m_document );
 
 			parseStyle( group, b );
 			parseGroup( group, b );
@@ -325,12 +325,273 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			if( b.tagName() == "polygon" ) path->close();
 			obj = path;
 		}
+		else if( b.tagName() == "path" )
+		{
+			VComposite *path = new VComposite( &m_document );
+			parsePath( path, b );
+			obj = path;
+		}
 		parseStyle( obj, b );
 		if( grp )
 			grp->append( obj );
 		else
 			m_document.append( obj );
 		m_gc.pop();
+	}
+}
+
+// parses the coord into number and forwards to the next token
+const char *
+SvgImport::getCoord( const char *ptr, double &number )
+{
+	int integer, exponent;
+	double decimal, frac;
+	int sign, expsign;
+
+	exponent = 0;
+	integer = 0;
+	frac = 1.0;
+	decimal = 0;
+	sign = 1;
+	expsign = 1;
+	
+	// read the sign
+	if(*ptr == '+')
+		ptr++;
+	else if(*ptr == '-')
+	{
+		ptr++;
+		sign = -1;
+	}
+	
+	// read the integer part
+	while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+		integer = (integer * 10) + *(ptr++) - '0';
+	if(*ptr == '.') // read the decimals
+    {
+		ptr++;
+		while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+			decimal += (*(ptr++) - '0') * (frac *= 0.1);
+    }
+	
+	if(*ptr == 'e' || *ptr == 'E') // read the exponent part
+	{
+		ptr++;
+		
+		// read the sign of the exponent
+		if(*ptr == '+')
+			ptr++;
+		else if(*ptr == '-')
+		{
+			ptr++;
+			expsign = -1;
+		}
+		
+		exponent = 0;
+		while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+		{
+			exponent *= 10;
+			exponent += *ptr - '0';
+			ptr++;
+		}
+    }
+	number = integer + decimal;
+	number *= sign * pow(10, expsign * exponent);
+
+	// skip the following space
+	if(*ptr == ' ')
+		ptr++;
+	
+	return ptr;
+}
+
+void
+SvgImport::parsePath( VComposite *path, const QDomElement &e )
+{
+	QString d = e.attribute( "d" );
+
+	if( !d.isEmpty() )
+	{
+		d = d.simplifyWhiteSpace();
+
+		const char *ptr = d.latin1();
+		const char *end = d.latin1() + d.length() + 1;
+
+		double curx, cury, tox, toy, x1, y1, x2, y2, rx, ry, angle;
+		bool largeArc, sweep, relative;
+		char command = *(ptr++);
+
+		curx = cury = 0.0;
+		while( ptr < end )
+		{
+			if( *ptr == ' ' )
+				ptr++;
+
+			relative = false;
+
+			switch( command )
+			{
+				case 'm':
+					relative = true;
+				case 'M':
+				{
+					ptr = getCoord( ptr, tox );
+					ptr = getCoord( ptr, toy );
+
+					curx = relative ? curx + tox : tox;
+					cury = relative ? cury + toy : toy;
+
+					path->moveTo( KoPoint( curx, cury ) );
+					break;
+				}
+				case 'l':
+					relative = true;
+				case 'L':
+				{
+					ptr = getCoord( ptr, tox );
+					ptr = getCoord( ptr, toy );
+
+					curx = relative ? curx + tox : tox;
+					cury = relative ? cury + toy : toy;
+
+					path->lineTo( KoPoint( curx, cury ) );
+					break;
+				}
+				case 'h':
+				{
+					ptr = getCoord( ptr, tox );
+					curx += tox;
+					path->lineTo( KoPoint( curx, cury ) );
+					break;
+				}
+				case 'H':
+				{
+					ptr = getCoord( ptr, tox );
+					curx = tox;
+					path->lineTo( KoPoint( curx, cury ) );
+					break;
+				}
+				case 'v':
+				{
+					ptr = getCoord( ptr, toy );
+					cury += toy;
+					path->lineTo( KoPoint( curx, cury ) );
+					break;
+				}
+				case 'V':
+				{
+					ptr = getCoord( ptr, toy );
+					cury = toy;
+					path->lineTo( KoPoint( curx, cury ) );
+					break;
+				}
+				case 'z':
+				case 'Z':
+				{
+					path->close();
+					break;
+				}
+				case 'c':
+					relative = true;
+				case 'C':
+				{
+					ptr = getCoord( ptr, x1 );
+					ptr = getCoord( ptr, y1 );
+					ptr = getCoord( ptr, x2 );
+					ptr = getCoord( ptr, y2 );
+					ptr = getCoord( ptr, tox );
+					ptr = getCoord( ptr, toy );
+
+					if(relative)
+						path->curveTo( KoPoint( curx + x1, cury + y1 ), KoPoint( curx + x2, cury + y2 ),
+									   KoPoint( curx + tox, cury + toy ) );
+					else
+						path->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( tox, toy ) );
+					curx = relative ? curx + tox : tox;
+					cury = relative ? cury + toy : toy;
+
+					break;
+				}
+				/*case 's':
+					relative = true;
+				case 'S':
+				{
+					ptr = getCoord(ptr, x2);
+					ptr = getCoord(ptr, y2);
+					ptr = getCoord(ptr, tox);
+					ptr = getCoord(ptr, toy);
+
+					if(relative)
+						pathSegList()->appendItem(createSVGPathSegCurvetoCubicSmoothRel(tox, toy, x2, y2));
+					else
+						pathSegList()->appendItem(createSVGPathSegCurvetoCubicSmoothAbs(tox, toy, x2, y2));
+					break;
+				}
+				case 'q':
+					relative = true;
+				case 'Q':
+				{
+					ptr = getCoord(ptr, x1);
+					ptr = getCoord(ptr, y1);
+					ptr = getCoord(ptr, tox);
+					ptr = getCoord(ptr, toy);
+
+					if(relative)
+						pathSegList()->appendItem(createSVGPathSegCurvetoQuadraticRel(tox, toy, x1, y1));
+					else
+						pathSegList()->appendItem(createSVGPathSegCurvetoQuadraticAbs(tox, toy, x1, y1));
+					break;
+				}
+				case 't':
+					relative = true;
+				case 'T':
+				{
+					ptr = getCoord(ptr, tox);
+					ptr = getCoord(ptr, toy);
+
+					if(relative)
+						pathSegList()->appendItem(createSVGPathSegCurvetoQuadraticSmoothRel(tox, toy));
+					else
+						pathSegList()->appendItem(createSVGPathSegCurvetoQuadraticSmoothAbs(tox, toy));
+					break;
+				}
+				case 'a':
+					relative = true;
+				case 'A':
+				{
+					ptr = getCoord(ptr, rx);
+					ptr = getCoord(ptr, ry);
+					ptr = getCoord(ptr, angle);
+					ptr = getCoord(ptr, tox);
+
+					largeArc = tox == 1;
+
+					ptr = getCoord(ptr, tox);
+
+					sweep = tox == 1;
+
+					ptr = getCoord(ptr, tox);
+					ptr = getCoord(ptr, toy);
+
+					if(relative)
+						pathSegList()->appendItem(createSVGPathSegArcRel(tox, toy, rx, ry, angle, largeArc, sweep));
+					else
+						pathSegList()->appendItem(createSVGPathSegArcAbs(tox, toy, rx, ry, angle, largeArc, sweep));
+					break;
+				}*/
+			}
+
+			if(*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9'))
+			{
+				// there are still coords in this command
+				if(command == 'M')
+					command = 'L';
+				else if(command == 'm')
+					command = 'l';
+			}
+			else
+				command = *(ptr++);
+		}
 	}
 }
 
