@@ -543,10 +543,9 @@ static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescriptio
 
 void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 {
-    refresh_result = false;
     if ( !item )
 	return;
-
+    refresh_result = false;
     if ( !m_desc )
     {
 	m_browser->setText( "" );
