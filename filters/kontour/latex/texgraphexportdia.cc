@@ -111,7 +111,7 @@ void TEXGRAPHExportDia::createDialog()
 	newDocRBtn = new QRadioButton(i18n("New document"), docBox);
 	docLayout->addWidget(newDocRBtn);
 
-	embededRBtn = new QRadioButton(i18n("Embeded document"), docBox);
+	embededRBtn = new QRadioButton(i18n("Embedded document"), docBox);
 	docLayout->addWidget(embededRBtn);
 
 	docBox->setExclusive(true);
