@@ -6,8 +6,6 @@
 noinst_LTLIBRARIES =libtklib.la
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
-CXXFLAGS = -O2 -Wall 
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libtklib_la_METASOURCES = AUTO
 libtklib_la_SOURCES = \
 		tk2floatspinboxaction.cpp\
