@@ -71,15 +71,13 @@ void KPGroupObject::setSize( double _width, double _height )
     double fx = (double)ext.width() / (double)origSizeInGroup.width();
     double fy = (double)ext.height() / (double)origSizeInGroup.height();
 
-    kdDebug() << "fx: " << fx << "  fy: " << fy << endl;
-
     updateSizes( fx, fy );
 }
 
 /*================================================================*/
-void KPGroupObject::setOrig( KoPoint _point )
+void KPGroupObject::setOrig( const KoPoint &_point )
 {
-    setOrig(_point.x(), _point.y());
+    setOrig( _point.x(), _point.y() );
 }
 
 /*================================================================*/
@@ -99,9 +97,9 @@ void KPGroupObject::setOrig( double _x, double _y )
 }
 
 /*================================================================*/
-void KPGroupObject::moveBy( KoPoint _point )
+void KPGroupObject::moveBy( const KoPoint &_point )
 {
-    moveBy(_point.x(), _point.y());
+    moveBy( _point.x(), _point.y() );
 }
 
 /*================================================================*/
@@ -112,9 +110,9 @@ void KPGroupObject::moveBy( double _dx, double _dy )
 }
 
 /*================================================================*/
-void KPGroupObject::resizeBy( KoSize _size )
+void KPGroupObject::resizeBy( const KoSize &_size )
 {
-    resizeBy(_size.width(), _size.height());
+    resizeBy( _size.width(), _size.height() );
 }
 
 /*================================================================*/
@@ -286,7 +284,7 @@ void KPGroupObject::updateCoords( double dx, double dy )
 {
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects);
+    QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->moveBy( dx, dy );
 }
@@ -298,7 +296,7 @@ void KPGroupObject::rotate( float _angle )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects);
+    QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->rotate( _angle );
 }
@@ -310,7 +308,7 @@ void KPGroupObject::setShadowDistance( int _distance )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects);
+    QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowDistance( _distance );
 }

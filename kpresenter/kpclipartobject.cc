@@ -166,16 +166,7 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool
         QWMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
-
-        QPixmap pm( pw, ph );
-        pm.fill( Qt::white );
-        QPainter pnt;
-        pnt.begin( &pm );
-        QRect brect = m_clipart.picture()->boundingRect();
-        if ( brect.width() && brect.height() )
-            pnt.scale( (double)(pw) / (double)brect.width(), (double)(ph) / (double)brect.height() );
-        pnt.drawPicture( *m_clipart.picture() );
-        pnt.end();
+        m.translate( rr.left() + pixXPos, rr.top() + pixYPos );
 
         _painter->setWorldMatrix( m, true /* always keep previous transformations */ );
 
@@ -183,19 +174,26 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool
         _painter->setBrush( brush );
 
         if ( fillType == FT_BRUSH || !gradient )
-            _painter->drawRect( _zoomHandler->zoomItX( rr.left() + pixXPos + penw),
-                                _zoomHandler->zoomItY( rr.top() + pixYPos + penw), _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
+            _painter->drawRect( _zoomHandler->zoomItX( penw ), _zoomHandler->zoomItY( penw ),
+                                _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
         else {
             gradient->setSize( size );
-            _painter->drawPixmap( _zoomHandler->zoomItX( rr.left() + pixXPos + penw), _zoomHandler->zoomItY( rr.top() + pixYPos + penw),
+            _painter->drawPixmap( _zoomHandler->zoomItX( penw ), _zoomHandler->zoomItY( penw ),
                                   gradient->pixmap(), 0, 0, _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
         }
 
-        _painter->drawPixmap( br.left() + pixXPos, br.top() + pixYPos, pm );
+        _painter->save();
+        QRect _boundingRect = m_clipart.picture()->boundingRect();
+        if ( _boundingRect.width() && _boundingRect.height() )
+            _painter->scale( (double)( _zoomHandler->zoomItX( ext.width() ) ) / (double) _boundingRect.width(),
+                             (double)(_zoomHandler->zoomItY( ext.height() ) ) / (double) _boundingRect.height() );
+        _painter->drawPicture( *m_clipart.picture() );
+        _painter->restore();
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( _zoomHandler->zoomItX( rr.left() + pixXPos + penw), _zoomHandler->zoomItY( rr.top() + pixYPos + penw), _zoomHandler->zoomItX( ow - 2 * penw), _zoomHandler->zoomItY( oh - 2 * penw) );
+        _painter->drawRect( _zoomHandler->zoomItX( penw ), _zoomHandler->zoomItY( penw ),
+                            _zoomHandler->zoomItX( ow - 2 * penw), _zoomHandler->zoomItY( oh - 2 * penw) );
 
     }
 

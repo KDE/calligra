@@ -86,14 +86,14 @@ void KPSlidePreview::setPage( QListViewItem *item )
  ******************************************************************/
 
 /*================================================================*/
-KPPresStructObjectItem::KPPresStructObjectItem( QListView *parent )
-    : QListViewItem( parent ), page( 0 ), object( 0 )
+KPPresStructObjectItem::KPPresStructObjectItem( KListView *parent )
+    : KListViewItem( parent ), page( 0 ), object( 0 )
 {
 }
 
 /*================================================================*/
-KPPresStructObjectItem::KPPresStructObjectItem( QListViewItem *parent )
-    : QListViewItem( parent ), page( 0 ), object( 0 )
+KPPresStructObjectItem::KPPresStructObjectItem( KListViewItem *parent )
+    : KListViewItem( parent ), page( 0 ), object( 0 )
 {
 }
 
@@ -212,7 +212,7 @@ KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
 /*================================================================*/
 void KPPresStructView::setupSlideList()
 {
-    slides = new QListView( hsplit );
+    slides = new KListView( hsplit );
     slides->addColumn( i18n( "Slide No." ) );
     slides->addColumn( i18n( "Slide Title" ) );
     slides->header()->setMovingEnabled( false );

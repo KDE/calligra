@@ -3111,6 +3111,12 @@ void KPrPage::deSelectAllObj()
         if(sIt.current()->isSelected())
             deSelectObj(sIt.current() );
     }
+
+    // set current default pen color and brush color in tool bar
+    QPen _pen = kPresenterDoc()->getKPresenterView()->getPen();
+    QBrush _brush = kPresenterDoc()->getKPresenterView()->getBrush();
+    kPresenterDoc()->getKPresenterView()->penColorChanged( _pen );
+    kPresenterDoc()->getKPresenterView()->brushColorChanged( _brush );
 }
 
 void KPrPage::deSelectObj( KPObject *kpobject )

@@ -21,7 +21,7 @@
 #define presstructview_h
 
 #include <kdialogbase.h>
-#include <qlistview.h>
+#include <klistview.h>
 #include <qlabel.h>
 
 class KPresenterDoc;
@@ -61,11 +61,11 @@ protected:
  *
  ******************************************************************/
 
-class KPPresStructObjectItem : public QListViewItem
+class KPPresStructObjectItem : public KListViewItem
 {
 public:
-    KPPresStructObjectItem( QListView *parent );
-    KPPresStructObjectItem( QListViewItem *parent );
+    KPPresStructObjectItem( KListView *parent );
+    KPPresStructObjectItem( KListViewItem *parent );
 
     void setPage( KPBackGround *p, int pgnum );
     void setObject( KPObject *o, int num );
@@ -103,15 +103,15 @@ protected:
 
     KPresenterDoc *doc;
     KPresenterView *view;
-    QListView *slides;
+    KListView *slides;
     QSplitter *hsplit;
     QCheckBox *showPreview;
     KPSlidePreview *slidePreview;
 
 protected slots:
     void makeStuffVisible( QListViewItem *item );
- void slotCloseDialog() { emit  presStructViewClosed();}
-    
+    void slotCloseDialog() { emit  presStructViewClosed(); }
+
 signals:
     void presStructViewClosed();
 

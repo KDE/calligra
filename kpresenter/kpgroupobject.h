@@ -38,11 +38,11 @@ public:
     KPGroupObject &operator=( const KPGroupObject & );
 
     virtual void setSize( double _width, double _height );
-    virtual void setOrig( KoPoint _point );
+    virtual void setOrig( const KoPoint &_point );
     virtual void setOrig( double _x, double _y );
-    virtual void moveBy( KoPoint _point );
+    virtual void moveBy( const KoPoint &_point );
     virtual void moveBy( double _dx, double _dy );
-    virtual void resizeBy( KoSize _size );
+    virtual void resizeBy( const KoSize &_size );
     virtual void resizeBy( double _dx, double _dy );
 
     virtual void rotate( float _angle );

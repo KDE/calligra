@@ -2160,6 +2160,9 @@ void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
         kPresenterDoc()->addCommand(macro);
     else
         delete macro;
+
+    if ( !createMacro )
+        pen = e_pen;
 }
 
 /*===============================================================*/
@@ -2260,6 +2263,9 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
         kPresenterDoc()->addCommand(macro);
     else
         delete macro;
+
+    if ( !createMacro )
+        pen = e_pen;
 }
 
 /*===============================================================*/
@@ -2991,6 +2997,7 @@ void KPresenterView::objectSelectedChanged()
     bool state=m_canvas->isOneObjectSelected();
     actionScreenAssignEffect->setEnabled(state);
     actionExtraRotate->setEnabled(state);
+    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj());
     actionExtraAlignObjs->setEnabled(state);
     actionExtraGroup->setEnabled(state && m_canvas->activePage()->numSelected()>1);
     actionExtraUnGroup->setEnabled(state);
@@ -3004,7 +3011,7 @@ void KPresenterView::objectSelectedChanged()
     actionExtraRaise->setEnabled(state && m_canvas->activePage()->numSelected()==1);
     actionExtraLower->setEnabled(state && m_canvas->activePage()->numSelected()==1);
     //actionBrushColor->setEnabled(state);
-    actionPenColor->setEnabled(state);
+    //actionPenColor->setEnabled(state);
     //actionExtraPenStyle->setEnabled(state);
     //actionExtraPenWidth->setEnabled(state);
 
@@ -3072,8 +3079,6 @@ void KPresenterView::objectSelectedChanged()
         actionEditCut->setEnabled(state);
         actionChangeCase->setEnabled( val);
     }
-
-    actionExtraShadow->setEnabled(!m_canvas->haveASelectedPictureObj());
 
     state=m_canvas->oneObjectTextExist();
     actionEditSearch->setEnabled(state);
@@ -3188,6 +3193,8 @@ void KPresenterView::styleOk()
 	gXFactor = styleDia->getGXFactor();
 	gYFactor = styleDia->getGYFactor();
 	sticky = bSticky;
+        actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
+        actionPenColor->setCurrentColor( (styleDia->getPen()).color() );
     }
     else {
         actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
@@ -4307,13 +4314,13 @@ void KPresenterView::chPic()
 
 void KPresenterView::penColorChanged( const QPen & _pen )
 {
-    actionPenColor->setEnabled( true );
+    //actionPenColor->setEnabled( true );
     actionPenColor->setCurrentColor( _pen.color() );
 }
 
 void KPresenterView::brushColorChanged( const QBrush & _brush )
 {
-    actionBrushColor->setEnabled( true );
+    //actionBrushColor->setEnabled( true );
     actionBrushColor->setCurrentColor(_brush.style ()==Qt::NoBrush ? Qt::white : _brush.color() );
 }
 
