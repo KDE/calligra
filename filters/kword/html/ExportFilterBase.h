@@ -20,6 +20,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef EXPORTFILTERBASE_H
+#define EXPORTFILTERBASE_H
+
 #include <qvaluelist.h>
 #include <qstring.h>
 #include <qdom.h>
@@ -161,3 +164,5 @@ class ClassExportFilterBase
     protected:
         QDomDocument qDomDocumentIn;
 };
+
+#endif

@@ -33,6 +33,9 @@
    License version 2.
 */
 
+#ifndef EXPORTTAGPROCESSING_H
+#define EXPORTTAGPROCESSING_H
+
 #include <kdebug.h>
 #include <qdom.h>
 
@@ -99,3 +102,5 @@ void ProcessAttributes ( QDomNode                     myNode,
                          QValueList<AttrProcessing>  &attrProcessingList );
 
 void AllowNoAttributes ( QDomNode  myNode );
+
+#endif
