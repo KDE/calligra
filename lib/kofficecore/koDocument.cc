@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #include <koDocument.h>
+#include <koDocument_p.h>
 #include <KoDocumentIface.h>
 #include <koDocumentChild.h>
 #include <koView.h>
@@ -35,7 +36,6 @@
 
 #include <koStore.h>
 #include <kio/netaccess.h>
-#include <kparts/browserextension.h>
 
 #include <klocale.h>
 #include <kmimetype.h>
@@ -1067,4 +1067,6 @@ DCOPObject * KoDocument::dcopObject()
 }
 
 #include "koDocument.moc"
+#include "koDocument_p.moc"
+
 

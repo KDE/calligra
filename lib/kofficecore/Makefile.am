@@ -33,6 +33,8 @@ include_HEADERS = koFilter.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h \
 	koImage.h koImageCollection.h koprinter.h
 
+noinst_HEADERS = koDocument_p.h
+
 #libkofficecore_la_METASOURCES = AUTO
 
 libkodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
