@@ -181,14 +181,14 @@ ShadowDia::ShadowDia( QWidget* parent, const char* name )
     lb->move( lu->x(), b->y() );
     l->move( lu->x(), r->y() );
 
-    lu->setPixmap( KPBarIcon( "shadowLU" ) );
-    u->setPixmap( KPBarIcon( "shadowU" ) );
-    ru->setPixmap( KPBarIcon( "shadowRU" ) );
-    r->setPixmap( KPBarIcon( "shadowR" ) );
-    rb->setPixmap( KPBarIcon( "shadowRB" ) );
-    b->setPixmap( KPBarIcon( "shadowB" ) );
-    lb->setPixmap( KPBarIcon( "shadowLB" ) );
-    l->setPixmap( KPBarIcon( "shadowL" ) );
+    lu->setPixmap( BarIcon( "shadowLU" ) );
+    u->setPixmap( BarIcon( "shadowU" ) );
+    ru->setPixmap( BarIcon( "shadowRU" ) );
+    r->setPixmap( BarIcon( "shadowR" ) );
+    rb->setPixmap( BarIcon( "shadowRB" ) );
+    b->setPixmap( BarIcon( "shadowB" ) );
+    lb->setPixmap( BarIcon( "shadowLB" ) );
+    l->setPixmap( BarIcon( "shadowL" ) );
 
     connect( lu, SIGNAL( clicked() ), this, SLOT( luChanged() ) );
     connect( u, SIGNAL( clicked() ), this, SLOT( uChanged() ) );
