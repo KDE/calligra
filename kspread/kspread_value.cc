@@ -103,24 +103,30 @@ class KSpreadValueData
 {
   public:
 
-    KSpreadValue::Type type;
+    KSpreadValue::Type type:4;
 
     // reference count, at least one when object exists
-    unsigned count;
+    unsigned count:12;
     
-    // someday move to use union to reduce memory consumption
-    bool b;
-    long i;
-    double f;
-    QString s;
-    ValueArray a;
-
+    union
+    {
+      bool b;
+      long i;
+      double f;
+      QString* ps;
+      ValueArray* pa;
+    };
+    
     // create empty data
     KSpreadValueData(): type( KSpreadValue::Empty ),
-      count( 1 ), b( false ), i( 0 ), f( 0.0 ) { };
+      count( 1 ), ps( 0 ) { };
 
     // destroys data
-    ~KSpreadValueData(){ if( this == s_null ){ s_null = 0; } }
+    ~KSpreadValueData(){ if( this == s_null ) s_null = 0;
+       if( type == KSpreadValue::Array ) delete pa;
+       if( type == KSpreadValue::String ) delete ps;
+       if( type == KSpreadValue::Error ) delete ps;
+     }
 
     // static empty data to be shared
     static KSpreadValueData* null()
@@ -247,7 +253,8 @@ KSpreadValue::KSpreadValue( unsigned columns, unsigned rows )
 {
   d = new KSpreadValueData;
   d->type = Array;
-  d->a.init( columns, rows );
+  d->pa = new ValueArray;
+  d->pa->init( columns, rows );
 }
 
 // assign value from other
@@ -347,7 +354,7 @@ void KSpreadValue::setValue( const QString& s )
 {
   detach();
   d->type = String;
-  d->s = s;
+  d->ps = new QString( s );
 }
 
 // get the value as string
@@ -356,7 +363,8 @@ QString KSpreadValue::asString() const
   QString result;
 
   if( type() == KSpreadValue::String )
-    result = d->s;
+  if( d->ps )
+    result = QString( *d->ps );
 
   return result;
 }
@@ -366,7 +374,7 @@ void KSpreadValue::setError( const QString& msg )
 {
   detach();
   d->type = Error;
-  d->s = msg;
+  d->ps = new QString( msg );
 }
 
 // get error message
@@ -375,7 +383,8 @@ QString KSpreadValue::errorMessage() const
   QString result;
 
   if( type() == KSpreadValue::Error )
-    result = d->s;
+  if( d->ps )
+    result = QString( *d->ps );
 
   return result;
 }
@@ -444,27 +453,31 @@ QTime KSpreadValue::asTime() const
 KSpreadValue KSpreadValue::element( unsigned column, unsigned row ) const
 {
   if( d->type != Array ) return empty();
-  KSpreadValue* v = d->a.at( column, row );
+  if( !d->pa ) return empty();
+  KSpreadValue* v = d->pa->at( column, row );
   return v ? KSpreadValue( *v ) : empty();
 }
 
 void KSpreadValue::setElement( unsigned column, unsigned row, const KSpreadValue& v )
 {
   if( d->type != Array ) return;
+  if( !d->pa ) return;
   detach();
-  d->a.set( column, row, new KSpreadValue( v ) );
+  d->pa->set( column, row, new KSpreadValue( v ) );
 }
 
 unsigned KSpreadValue::columns() const
 {
   if( d->type != Array ) return 0;
-  return d->a.columns;
+  if( !d->pa ) return 0;
+  return d->pa->columns;
 }
 
 unsigned KSpreadValue::rows() const
 {
   if( d->type != Array ) return 0;
-  return d->a.rows;
+  if( !d->pa ) return 0;
+  return d->pa->rows;
 }
 
 // reference to empty value
@@ -544,9 +557,9 @@ void KSpreadValue::detach()
     case Boolean: n->b = d->b; break;
     case Integer: n->i = d->i; break;
     case Float:   n->f = d->f; break;
-    case String:  n->s = d->s; break;
-    case Array:   n->a = d->a; break;
-    case Error:   n->s = d->s; break;
+    case String:  n->ps = new QString( *d->ps ); break;
+    case Array:   n->pa = new ValueArray; *n->pa = (*d->pa); break;
+    case Error:   n->ps = new QString( *d->ps ); break;
     default: break;
     }
 
