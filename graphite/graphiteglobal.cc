@@ -25,8 +25,7 @@
 const bool operator==(const Gradient &lhs, const Gradient &rhs) {
 
     return lhs.ca==rhs.ca && lhs.cb==rhs.cb && lhs.type==rhs.type &&
-	   lhs.xfactor==rhs.xfactor && lhs.yfactor==rhs.yfactor &&
-	   lhs.ncols==rhs.ncols;
+           lhs.xfactor==rhs.xfactor && lhs.yfactor==rhs.yfactor;
 }
 
 const bool operator!=(const Gradient &lhs, const Gradient &rhs) {
@@ -40,7 +39,6 @@ Gradient &Gradient::operator=(const Gradient &rhs) {
     type=rhs.type;
     xfactor=rhs.xfactor;
     yfactor=rhs.yfactor;
-    ncols=rhs.ncols;
     return *this;
 }
 

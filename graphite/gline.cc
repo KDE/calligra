@@ -259,8 +259,9 @@ const QRect &GLine::boundingRect() const {
     return m_boundingRect;				
 }
 
-GObjectM9r *GLine::createM9r(GraphitePart *part, const GObjectM9r::Mode &mode) {
-    return new GLineM9r(this, mode, part, i18n("Line"));
+GObjectM9r *GLine::createM9r(GraphitePart *part, GraphiteView *view,
+			     const GObjectM9r::Mode &mode) {
+    return new GLineM9r(this, mode, part, view, i18n("Line"));
 }
 
 void GLine::setOrigin(const QPoint &origin) {
@@ -315,8 +316,8 @@ void GLine::resize(const QRect &boundingRect) {
 
 
 GLineM9r::GLineM9r(GLine *line, const Mode &mode, GraphitePart *part,
-		   const QString &type) : G1DObjectM9r(line, mode, part, type),
-					  m_line(line) {
+		   GraphiteView *view, const QString &type) :
+    G1DObjectM9r(line, mode, part, view, type), m_line(line) {
     m_line->setState(GObject::Handles);
 }
 
@@ -329,38 +330,32 @@ void GLineM9r::draw(QPainter &p) {
     m_line->drawHandles(p, m_handles);
 }
 
-const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
-				    QRect &/*dirty*/) {
+const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
-				     QRect &/*dirty*/) {
+const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
-				       QRect &/*dirty*/) {
+const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
-					   QRect &/*dirty*/) {
+const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
-				   QRect &/*dirty*/) {
+const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
-				     QRect &/*dirty*/) {
+const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // We don't need that one for lines... hmmm ...
     return false;
 }

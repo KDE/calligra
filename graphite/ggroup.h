@@ -60,7 +60,8 @@ public:
     virtual const bool intersects(const QRect &r) const;
     virtual const QRect &boundingRect() const;
 
-    virtual GObjectM9r *createM9r(GraphitePart *part, const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
+    virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
+				  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
 
     virtual const QPoint origin() const;
     virtual void setOrigin(const QPoint &origin);
@@ -92,24 +93,19 @@ class GGroupM9r : public G2DObjectM9r {
 
     Q_OBJECT
 public:
-    GGroupM9r(GGroup *group, const Mode &mode, GraphitePart *part, const QString &type);
+    GGroupM9r(GGroup *group, const Mode &mode, GraphitePart *part,
+	      GraphiteView *view, const QString &type);
     virtual ~GGroupM9r();
 
     virtual void draw(QPainter &p);
 
-    virtual const bool mouseMoveEvent(QMouseEvent *e, GraphiteView *view,
-				      QRect &dirty);
-    virtual const bool mousePressEvent(QMouseEvent *e, GraphiteView *view,
-				       QRect &dirty);
-    virtual const bool mouseReleaseEvent(QMouseEvent *e, GraphiteView *view,
-					 QRect &dirty);
-    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, GraphiteView *view,
-					     QRect &dirty);
+    virtual const bool mouseMoveEvent(QMouseEvent *e, QRect &dirty);
+    virtual const bool mousePressEvent(QMouseEvent *e, QRect &dirty);
+    virtual const bool mouseReleaseEvent(QMouseEvent *e, QRect &dirty);
+    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
 
-    virtual const bool keyPressEvent(QKeyEvent *e, GraphiteView *view,
-				     QRect &dirty);
-    virtual const bool keyReleaseEvent(QKeyEvent *e, GraphiteView *view,
-				       QRect &dirty);
+    virtual const bool keyPressEvent(QKeyEvent *e, QRect &dirty);
+    virtual const bool keyReleaseEvent(QKeyEvent *e, QRect &dirty);
 
     virtual GObject *gobject() { return m_group; }
 

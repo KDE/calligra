@@ -20,12 +20,14 @@
 #ifndef gobject_h
 #define gobject_h
 
-#include <qobject.h>
 #include <qlist.h>
 #include <qbrush.h>
 #include <qpen.h>
 #include <qrect.h>
 #include <qpoint.h>
+#include <qwidget.h>
+
+#include <kdialogbase.h>
 
 #include <math.h>
 
@@ -45,6 +47,7 @@ class QVButtonGroup;
 class QWidgetStack;
 class QCheckBox;
 class QSlider;
+class QSizePolicy;
 
 class KDialogBase;
 class KColorButton;
@@ -52,6 +55,7 @@ class KColorButton;
 class GObject;
 class GraphiteView;
 class GraphitePart;
+class PWidget;
 
 
 // This is the manipulator class for GObject. Manipulators (M9r's)
@@ -70,7 +74,7 @@ class GraphitePart;
 // set (i.e. something different to (0, 0, 0, 0)).
 // Some of the M9rs can be in two different "modes": Create and Manipulate
 // General rule: simple M9rs support Create, complex ones do not :)
-class GObjectM9r : public QObject {
+class GObjectM9r : public KDialogBase {
 
     Q_OBJECT
 public:
@@ -80,41 +84,36 @@ public:
 
     const Mode &mode() const { return m_mode; }
     void setMode(const Mode &mode) { m_mode=mode; }
+    
+    const GraphiteView *view() const { return m_view; }
 
     // call drawHandles
     virtual void draw(QPainter &p) = 0;
 
-    virtual const bool mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
-				      QRect &/*dirty*/) { return false; }
-    virtual const bool mousePressEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
-				       QRect &/*dirty*/) { return false; }
-    virtual const bool mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
-					 QRect &/*dirty*/) { return false; }
-    virtual const bool mouseDoubleClickEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
-					     QRect &/*dirty*/) { return false; }
+    virtual const bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
 
-    virtual const bool keyPressEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
-				     QRect &/*dirty*/) { return false; }
-    virtual const bool keyReleaseEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
-				       QRect &/*dirty*/) { return false; }
+    virtual const bool keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
 
     virtual GObject *gobject() = 0;
 
 protected slots:
-    // Make sure to call the parent's implementation first!
-    virtual void ok();
-    virtual void apply();
-    virtual void cancel();
-
     // All these slots just tell us that something has been changed
     // Yes, I know that this is an ugly hack :(
     virtual void slotChanged(const QString &);
     virtual void slotChanged(int);
     virtual void slotChanged(const QColor &);
 
+    virtual void slotOk();
+    virtual void slotApply();
+    virtual void slotCancel();
+
 protected:
     GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
-	       const QString &type);
+	       GraphiteView *view, const QString &type);
 
     // This menthod returns a property dialog for an object. It
     // creates an empty KDialogBase (IconList mode!) or returns the
@@ -126,19 +125,20 @@ protected:
     // user is able to change the properties and see the result after
     // pressing 'Apply'.
     // This dialog will be destroyed whenever the M9r gets deleted.
-    
+
     // Note: We might have to store the parent and do a
     // "reparent" if the constructed dia is called for another view.
     // Is this possible? (TODO)
-    virtual KDialogBase *createPropertyDialog(QWidget *parent);
+    virtual void createPropertyDialog();
 
     GObject *m_object;
     Mode m_mode;
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
-    KDialogBase *m_dialog;
     GraphitePart *m_part;  // we need that for the history
+    GraphiteView *m_view;
     QList<QRect> *m_handles;  // contains all the handle rects
     bool m_changed;      // true, if the Apply btn is active
+    bool m_created;      // dia created?
 
 private:
     QString m_type;        // Type of object
@@ -154,13 +154,13 @@ public:
     virtual ~G1DObjectM9r() {}
 
 protected slots:
-    virtual void apply();
-    virtual void cancel();
+    virtual void slotApply() {}
 
 protected:
     G1DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
-		 const QString &type) : GObjectM9r(object, mode, part, type) {}
-    virtual KDialogBase *createPropertyDialog(QWidget *parent);
+		 GraphiteView *view, const QString &type) :
+	GObjectM9r(object, mode, part, view, type) {}
+    virtual void createPropertyDialog();
 
 private:
     QSpinBox *m_width;
@@ -177,26 +177,25 @@ public:
     virtual ~G2DObjectM9r() {}
 
 protected slots:
-    virtual void apply();
-    virtual void cancel();
-
     virtual void slotChanged(int x);
     virtual void slotChanged(const QColor &x);
+    virtual void slotApply() {}
 
 protected:
     G2DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
-		 const QString &type) : G1DObjectM9r(object, mode, part, type) {}
-    virtual KDialogBase *createPropertyDialog(QWidget *parent);
+		 GraphiteView *view, const QString &type) :
+	G1DObjectM9r(object, mode, part, view, type) {}
+    virtual void createPropertyDialog();
 
 private slots:
     void slotBalance();
 
 private:
     void updatePage();
-    void updatePreview();
+    void updatePreview(int btn);
 
     QVButtonGroup *m_style;
-    QWidget *m_preview;
+    PWidget *m_preview;
     QWidgetStack *m_stack;
     KColorButton *m_brushColor;
     QComboBox *m_brushStyle;
@@ -270,7 +269,8 @@ public:
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
 
-    virtual GObjectM9r *createM9r(GraphitePart *part, const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
+    virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
+				  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
 
     const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
@@ -481,4 +481,12 @@ inline const int GObject::double2Int(const double &value) const {
     else
 	return static_cast<int>(value);
 }
+
+
+class PWidget : public QWidget {
+
+public:
+    PWidget(QWidget *w) : QWidget(w) {}
+    virtual QSizePolicy sizePolicy() const;
+};
 #endif

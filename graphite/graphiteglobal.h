@@ -30,7 +30,6 @@ struct Gradient {
     KImageEffect::GradientType type;
     short xfactor;
     short yfactor;
-    short ncols;
 
     Gradient &operator=(const Gradient &rhs);
 };
@@ -57,7 +56,7 @@ public:
     // size (diameter) of the "rot-handles"
     const int &rotHandleSize() const { return m_rotHandleSize; }
     void setRotHandleSize(const int &rotHandleSize) { m_rotHandleSize=rotHandleSize; }
-    
+
     const int &thirdHandleTrigger() const { return m_thirdHandleTrigger; }
     void setThirdHandleTrigger(const int &thirdHandleTrigger) { m_thirdHandleTrigger=thirdHandleTrigger; }
 
