@@ -110,10 +110,10 @@ void KoPicture::draw(QPainter& painter, int x, int y, int width, int height, int
         m_sharedData->draw(painter, x, y, width, height, sx, sy, sw, sh, fastMode);
     else
     {
-        // Draw a red box (easier DEBUG)
-        kdWarning(30003) << "Drawing blue rectangle! (KoPicture::draw)" << endl;
+        // Draw a white box
+        kdWarning(30003) << "Drawing white rectangle! (KoPicture::draw)" << endl;
         painter.save();
-        painter.setBrush(QColor(0,0,255));
+        painter.setBrush(QColor(255, 255, 255));
         painter.drawRect(x,y,width,height);
         painter.restore();
     }
