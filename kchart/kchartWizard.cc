@@ -63,7 +63,6 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
     connect( this ,SIGNAL( finished() ), _selectchartsubtypepage,SLOT( apply()));
     connect( _selectcharttypepage, SIGNAL( chartChange( int ) ),
              this, SLOT( subType( int ) ) );
-    //resize( 620, 380 );
     adjustSize();
 
     subType( _chart->params()->chartType() );

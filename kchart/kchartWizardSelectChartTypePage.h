@@ -1,6 +1,8 @@
 #ifndef _kchartWIZARDSELECTCHARTTYPEPAGE_H
 #define _kchartWIZARDSELECTCHARTTYPEPAGE_H
 
+#include <qlayout.h>
+#include <qvbox.h>
 #include <qwidget.h>
 
 #include "kchart_params.h"
@@ -13,6 +15,19 @@ namespace KChart
 {
 
 class KChartPart;
+
+// Contains a button with a text label below it
+class KChartButton : public QVBox
+{
+  Q_OBJECT
+  public:
+    KChartButton(QWidget* parent, const QString &, QPixmap *);
+    ~KChartButton();
+    
+    QPushButton *button() const { return m_button;}
+  private:
+    QPushButton *m_button;
+};
 
 class KChartWizardSelectChartTypePage : public QWidget
 {
@@ -30,15 +45,11 @@ signals:
 private:
   KChartPart* _chart;
   QButtonGroup* _typeBG;
-  int pos1, pos2;
-  int xsize;
-  int ysize;
-  int ylabelsize;
-  int xstep;
-  int ystep;
+  int c_pos, r_pos; //column and row position (used by KChartWizardSelectChartTypePage::addButton to know where to put the new button)
   KDChartParams::ChartType _type;
 
   void addButton(const QString &name, const QString &icon_name, int type);
+  QGridLayout *_layout;
 };
 
 }  //namespace KChart

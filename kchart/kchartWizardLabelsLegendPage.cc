@@ -186,7 +186,6 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     connect(legendTextColor,SIGNAL(changed( const QColor & )),
             this,SLOT(changeLegendTextColor(const QColor &)));
 
-    resize( 600, 300 );
 }
 
 
