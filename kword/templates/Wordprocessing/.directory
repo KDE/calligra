@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Text oriented
+Name[az]=İstiqamətləndirilmiş Mətn
 Name[cs]=Textové dokumenty
 Name[da]=Tekst orienteret
 Name[de]=Textorientiert
@@ -8,9 +9,11 @@ Name[es]=Orientado al texto
 Name[fi]=Tekstipohjainen
 Name[he]=טסקטל םאתומ
 Name[hu]=Szövegorientált
+Name[ja]=テキスト方向
 Name[lv]=Teksta orientēts
 Name[nl]=Tekstgeoriënteerd
 Name[no_NY]=Tekstorientert
+Name[pl]=Dokument tekstowy
 Name[pt]=Orientado para texto
 Name[pt_BR]=Orientado para texto
 Name[ro]=Orientare text

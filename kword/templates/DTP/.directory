@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Page layout
+Name[az]=Səhifə Düzülüşü
 Name[da]=Sideopsætning
 Name[de]=Seitenlayout
 Name[eo]=Paĝaranĝo
@@ -7,9 +8,11 @@ Name[es]=Diseño de página
 Name[fi]=Sivun ulkonäkö
 Name[he]=דומע תורדגה
 Name[hu]=Oldalelrendezés
+Name[ja]=ページレイアウト
 Name[lv]=Lapas Izkārtojums
 Name[nl]=Paginaopmaak
 Name[no_NY]=Sideoppsett
+Name[pl]=Układ strony
 Name[pt]=Formato da página
 Name[pt_BR]=Formato da página
 Name[ro]=Format pagină
