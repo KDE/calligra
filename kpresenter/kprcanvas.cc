@@ -6791,7 +6791,7 @@ void KPrCanvas::removeHelpLine()
     tmpHelpLinePosX = -1;
     tmpHelpLinePosY = -1;
     m_view->kPresenterDoc()->setModified(true);
-    repaint(false);
+    m_view->kPresenterDoc()->repaint(false);
 }
 
 void KPrCanvas::changeHelpLinePosition( double newPos )
@@ -6815,7 +6815,7 @@ void KPrCanvas::changeHelpLinePosition( double newPos )
     tmpHelpLinePosX = -1;
     tmpHelpLinePosY = -1;
     m_view->kPresenterDoc()->setModified(true);
-    repaint(false);
+    m_view->kPresenterDoc()->repaint(false);
 }
 
 void KPrCanvas::changeHelpPointPosition( KoPoint newPos)
@@ -6825,7 +6825,7 @@ void KPrCanvas::changeHelpPointPosition( KoPoint newPos)
     m_tmpHelpPoint = -1;
     tmpHelpPointPos = KoPoint( -1, -1 );
     m_view->kPresenterDoc()->setModified(true);
-    repaint(false);
+    m_view->kPresenterDoc()->repaint(false);
 }
 
 void KPrCanvas::removeHelpPoint()
@@ -6835,7 +6835,7 @@ void KPrCanvas::removeHelpPoint()
     m_tmpHelpPoint = -1;
     tmpHelpPointPos = KoPoint( -1, -1 );
     m_view->kPresenterDoc()->setModified(true);
-    repaint(false);
+    m_view->kPresenterDoc()->repaint(false);
 }
 
 void KPrCanvas::tmpDrawMoveHelpPoint( const QPoint & newPos )

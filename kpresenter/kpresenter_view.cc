@@ -1477,7 +1477,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         if ( !kPresenterDoc()->spManualSwitch() && pgNum == -1 ) {
             continuePres = true;
             exitPres = false;
-            m_canvas->repaint( false );
+            m_pKPresenterDoc->repaint( false );
 
             if ( automaticScreenPresFirstTimer ) {
                 connect( &automaticScreenPresTimer, SIGNAL( timeout() ), SLOT( doAutomaticScreenPres() ) );
@@ -4149,7 +4149,7 @@ void KPresenterView::skipToPage( int num )
     //(Laurent) deselect object when we change page.
     //otherwise you can change object properties on other page
     m_canvas->deSelectAllObj();
-    m_canvas->repaint( FALSE );
+    m_pKPresenterDoc->repaint( FALSE );
     updatePageParameter();
 }
 //update color gradient etc... when we skip page
@@ -6030,7 +6030,7 @@ void KPresenterView::viewHelpLines()
     m_pKPresenterDoc->setShowHelplines( state );
     m_canvas->deSelectAllObj();
     refreshRuler( state );
-    m_canvas->repaint(false);
+    m_pKPresenterDoc->repaint(false);
 }
 
 
@@ -6038,21 +6038,21 @@ void KPresenterView::viewGrid()
 {
     m_pKPresenterDoc->setShowGrid( actionViewShowGrid->isChecked() );
     m_pKPresenterDoc->setModified( true );
-    m_canvas->repaint(false);
+    m_pKPresenterDoc->repaint(false);
 }
 
 void KPresenterView::viewGridToFront()
 {
     m_pKPresenterDoc->setGridToFront( actionViewGridToFront->isChecked() );
     m_pKPresenterDoc->setModified( true );
-    m_canvas->repaint(false);
+    m_pKPresenterDoc->repaint(false);
 }
 
 void KPresenterView::viewHelpLineToFront()
 {
     m_pKPresenterDoc->setHelpLineToFront( actionViewHelpLineToFront->isChecked() );
     m_pKPresenterDoc->setModified( true );
-    m_canvas->repaint(false);
+    m_pKPresenterDoc->repaint(false);
 }
 
 void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
@@ -6070,7 +6070,7 @@ void KPresenterView::addHelpline(const QPoint & pos, bool _horizontal)
     m_canvas->setTmpHelpLinePosX( -1.0 );
     m_canvas->setTmpHelpLinePosY( -1.0 );
 
-    m_canvas->repaint(false);
+    m_pKPresenterDoc->repaint(false);
 }
 
 void KPresenterView::updateHelpLineButton()
@@ -6189,7 +6189,7 @@ void KPresenterView::addHelpLine()
     }
     delete dlg;
     m_pKPresenterDoc->setModified( true );
-    m_canvas->repaint( false );
+    m_pKPresenterDoc->repaint( false );
 }
 
 void KPresenterView::removeComment()
@@ -6247,7 +6247,7 @@ void KPresenterView::addHelpPoint()
     }
     delete dlg;
     m_pKPresenterDoc->setModified( true );
-    m_canvas->repaint( false );
+    m_pKPresenterDoc->repaint( false );
 }
 
 
