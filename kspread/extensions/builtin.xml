@@ -250,10 +250,10 @@
         <Type>String</Type>
       </Parameter>
       <Help>
-        <Text>The CharToAscii() function returns the ascii code for the given character.</Text>
+        <Text>The CharToAscii() function returns the ASCII code for the given character.</Text>
         <Syntax>CharToAscii(value)</Syntax>
         <Example>CharToAscii("v") returns 118</Example>
-        <Example>CharToAscii(r) is an error.  The character must be in quotes.</Example>
+        <Example>CharToAscii(r) is an error. The character must be in quotes.</Example>
       </Help>
     </Function>
 
@@ -261,7 +261,7 @@
       <Name>AsciiToChar</Name>
       <Type>String</Type>
       <Parameter>
-        <Comment>The Ascii value(s) to convert</Comment>
+        <Comment>The ASCII value(s) to convert</Comment>
         <Type>Int</Type>
       </Parameter>
       <Help>
@@ -2422,7 +2422,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The median() function calculates the median of all the values given as parameters.  You can calculate the median of a range like median(A1:B5) or a list of values like median(12; 5; 12.5).  Blank cells will be considered as a zero, and cells with text will be ignored</Text>
+	<Text>The median() function calculates the median of all the values given as parameters. You can calculate the median of a range like median(A1:B5) or a list of values like median(12; 5; 12.5). Blank cells will be considered as a zero, and cells with text will be ignored</Text>
 	<Syntax>median(value;value;...)</Syntax>
 	<Example>median(12; 5; 5.5) equals 5.5</Example>
 	<Example>median(12; 7; 8;2) equals 7.5</Example>
@@ -3043,7 +3043,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The compound() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time.  For example: $5000 at 12% interest compounded quarterly for 5 years will become compound(5000;0.12;4;5) or $9030.56.</Text>
+	<Text>The compound() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time. For example: $5000 at 12% interest compounded quarterly for 5 years will become compound(5000;0.12;4;5) or $9030.56.</Text>
 	<Syntax>compound(initial;interest;periods;periods_per_year)</Syntax>
 	<Example>compound(5000;0.12;4;5) equals 9030.56</Example>
       </Help>
