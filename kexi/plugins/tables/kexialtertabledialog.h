@@ -80,6 +80,10 @@ class KexiAlterTableDialog : public KexiDataTable
 
 		QString messageForSavingChanges(bool &emptyTable);
 
+		/*! Helper, used for slotTogglePrimaryKey() and slotPropertyChanged().
+		 Sets primary key icon and value for buffer, and deselects it from previous pkey's row. */
+		void setPrimaryKey(KexiPropertyBuffer &buf, bool set);
+
 	protected slots:
 		/*! Equivalent to updateActions(false). Called on row insert/delete 
 		 in a KexiTableViewPropertyBuffer. */
