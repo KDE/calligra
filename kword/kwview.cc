@@ -702,6 +702,7 @@ void KWView::setupPrinter( QPrinter &prt )
 
 void KWView::print( QPrinter &prt )
 {
+    prt.setFullPage( true );
     setCursor( waitCursor );
     gui->canvasWidget()->viewport()->setCursor( waitCursor );
     bool serialLetter = FALSE;
