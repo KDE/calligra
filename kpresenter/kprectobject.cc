@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -158,8 +159,7 @@ void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
 
-        _painter->drawRoundRect( 0, 0, ow, oh,
-                                 _zoomHandler->zoomItX( xRnd ),_zoomHandler->zoomItY( yRnd) );
+        _painter->drawRoundRect( 0, 0, ow, oh, xRnd, yRnd );
         return;
     }
 
@@ -178,9 +178,8 @@ void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 
         QPixmap pix( ow - pw + 1, oh - pw + 1);
 
-        QPointArray arr = boundingRegion( 0, 0, ow - pw + 1, oh - pw + 1,
-                                          _zoomHandler->zoomItX(xRnd),
-                                          _zoomHandler->zoomItY(yRnd) );
+        QPointArray arr = boundingRegion( 0, 0, ow - pw + 1, oh - pw + 1, xRnd, yRnd );
+
         QRegion clipregion(arr);
 
         pix.resize ( ow, oh );
@@ -198,6 +197,5 @@ void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         _painter->setBrush( Qt::NoBrush );
     }
 
-    _painter->drawRoundRect( pw / 2, pw / 2, ow - pw + 1, oh - pw + 1,
-                             _zoomHandler->zoomItX( xRnd ),_zoomHandler->zoomItY( yRnd) );
+    _painter->drawRoundRect( pw / 2, pw / 2, ow - pw + 1, oh - pw + 1, xRnd, yRnd );
 }
