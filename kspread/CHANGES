@@ -1044,3 +1044,7 @@ Bug fix
 ----------------------------------------------------
 Add some financial functions, patch given by  Jonathan Singer <jsinger@genome.wi.mit.edu>
 thanks
+
+2000-11-03-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Now you can apply parameters at a entire column/row

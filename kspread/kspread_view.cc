@@ -1087,60 +1087,29 @@ void KSpreadView::borderBottom()
 {
   if ( m_pTable != 0L )
   {
-    QRect selection( m_pTable->selectionRect() );
-    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-    {
-      KMessageBox::error( this, i18n("Area too large!") );
-    }
-    else
-    {
       m_pTable->borderBottom( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
-    }
   }
 }
 void KSpreadView::borderRight()
 {
   if ( m_pTable != 0L )
   {
-    QRect selection( m_pTable->selectionRect() );
-    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-    {
-      KMessageBox::error( this, i18n("Area too large!") );
-    }
-    else
-    {
       m_pTable->borderRight( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
-    }
   }
 }
 void KSpreadView::borderLeft()
 {
   if ( m_pTable != 0L )
   {
-    QRect selection( m_pTable->selectionRect() );
-    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-    {
-      KMessageBox::error( this, i18n("Area too large!") );
-    }
-    else
-    {
       m_pTable->borderLeft( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
-    }
   }
 }
 void KSpreadView::borderTop()
 {
   if ( m_pTable != 0L )
   {
-    QRect selection( m_pTable->selectionRect() );
-    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-    {
-      KMessageBox::error( this, i18n("Area too large!") );
-    }
-    else
-    {
+
       m_pTable->borderTop( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
-    }
   }
 }
 void KSpreadView::borderOutline()

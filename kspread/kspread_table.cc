@@ -1224,15 +1224,17 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-                c->setDisplayDirtyFlag();
-                c->setAngle(_value);
-                c->setVerticalText(false);
-                c->setMultiRow( false );
-                c->clearDisplayDirtyFlag();
+                c->clearProperty( KSpreadCell::PAngle );
+                c->clearNoFallBackProperties( KSpreadCell::PAngle );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        rw->setAngle(_value);
+        }
+      emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
@@ -1245,16 +1247,16 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-                c->setDisplayDirtyFlag();
-                c->setAngle(_value);
-                c->setVerticalText(false);
-                c->setMultiRow( false );
-                c->clearDisplayDirtyFlag();
-
+                c->clearProperty( KSpreadCell::PAngle );
+                c->clearNoFallBackProperties( KSpreadCell::PAngle );
         }
       }
-
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        cl->setAngle(_value);
+        }
+      emit sig_updateView( this );
       return;
     }
     else
@@ -1458,7 +1460,8 @@ void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    // Complete rows selected ?
+
+        // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
       KSpreadCell* c = m_cells.firstCell();
@@ -1468,13 +1471,18 @@ void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setBgColor(bg_Color);
-          c->clearDisplayDirtyFlag();
+          c->clearProperty( KSpreadCell::PBackgroundColor );
+          c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        rw->setBgColor( bg_Color );
+        }
+
+      emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
@@ -1487,14 +1495,18 @@ void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setBgColor(bg_Color);
-
-          c->clearDisplayDirtyFlag();
+          c->clearProperty( KSpreadCell::PBackgroundColor );
+          c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        cl->setBgColor( bg_Color );
+        }
+
+      emit sig_updateView( this );
       return;
     }
     else
@@ -1510,7 +1522,6 @@ void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
                 }
-
                 cell->setDisplayDirtyFlag();
                 cell-> setBgColor(bg_Color);
                 cell->clearDisplayDirtyFlag();
@@ -1747,7 +1758,7 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    // Complete rows selected ?
+        // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
       KSpreadCell* c = m_cells.firstCell();
@@ -1757,25 +1768,35 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          if(!b)
-                {
-                c->setFaktor( 1.0 );
-                c->setPrecision( 0 );
-                c->setFormatNumber(KSpreadCell::Number);
-                }
-          else
-                {
-                c->setFaktor( 100.0 );
-                c->setPrecision( 0 );
-                c->setFormatNumber(KSpreadCell::Percentage);
-                }
+           c->clearProperty(KSpreadCell::PFaktor);
+           c->clearNoFallBackProperties( KSpreadCell::PFaktor );
 
-          c->clearDisplayDirtyFlag();
+           c->clearProperty(KSpreadCell::PPrecision);
+           c->clearNoFallBackProperties( KSpreadCell::PPrecision );
+
+          c->clearProperty(KSpreadCell::PFormatNumber);
+          c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        if(!b)
+                {
+                rw->setFaktor( 1.0 );
+                rw->setPrecision( 0 );
+                rw->setFormatNumber(KSpreadCell::Number);
+                }
+        else
+                {
+                rw->setFaktor( 100.0 );
+                rw->setPrecision( 0 );
+                rw->setFormatNumber(KSpreadCell::Percentage);
+                }
+        }
+
+      emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
@@ -1788,24 +1809,36 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          if(!b)
-                {
-                c->setFaktor( 1.0 );
-                c->setPrecision( 0 );
-                c->setFormatNumber(KSpreadCell::Number);
-                }
-          else
-                {
-                c->setFaktor( 100.0 );
-                c->setPrecision( 0 );
-                c->setFormatNumber(KSpreadCell::Percentage);
-                }
-          c->clearDisplayDirtyFlag();
+           c->clearProperty(KSpreadCell::PFaktor);
+           c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+
+           c->clearProperty(KSpreadCell::PPrecision);
+           c->clearNoFallBackProperties( KSpreadCell::PPrecision );
+
+          c->clearProperty(KSpreadCell::PFormatNumber);
+          c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        if(!b)
+                {
+
+                cl->setFaktor( 1.0 );
+                cl->setPrecision( 0 );
+                cl->setFormatNumber(KSpreadCell::Number);
+                }
+        else
+                {
+                cl->setFaktor( 100.0 );
+                cl->setPrecision( 0 );
+                cl->setFormatNumber(KSpreadCell::Percentage);
+                }
+        }
+
+      emit sig_updateView( this );
       return;
     }
     else
@@ -2427,6 +2460,7 @@ QString KSpreadTable::replaceText(QString _cellText,QString _find,QString _repla
 
 void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
 {
+    bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -2436,27 +2470,76 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
             KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
-    for ( int x = r.left(); x <= r.right(); x++ )
+
+        // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-        int y = r.bottom();
-        KSpreadCell *cell = cellAt( x, y );
-        if(!cell->isObscuringForced())
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
-        if ( cell == m_pDefaultCell )
+          c->clearProperty( KSpreadCell::PBottomBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
+        }
+      }
+
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
         {
-            cell = new KSpreadCell( this, x, y );
-            m_cells.insert( cell, x, y );
+        RowLayout *rw=nonDefaultRowLayout(i);
+        QPen pen( _color,2,SolidLine);
+        rw->setBottomBorderPen(pen);
         }
-        cell->setBottomBorderStyle( SolidLine );
-        cell->setBottomBorderColor( _color );
-        cell->setBottomBorderWidth( 2 );
-        }
+
+      emit sig_updateView( this );
+      return;
     }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
+        {
+          c->clearProperty( KSpreadCell::PBottomBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
+        }
+      }
+
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        QPen pen( _color,2,SolidLine);
+        cl->setBottomBorderPen(pen);
+        }
+
+      emit sig_updateView( this );
+      return;
+    }
+    else
+    {
+        for ( int x = r.left(); x <= r.right(); x++ )
+                {
+                int y = r.bottom();
+                KSpreadCell *cell = nonDefaultCell( x, y );
+                if(!cell->isObscuringForced())
+                        {
+                        QPen pen( _color,2,SolidLine);
+                        cell->setBottomBorderPen(pen);
+                        }
+                }
     emit sig_updateView( this, r );
+    }
 }
 
 void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 {
+    bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( m_rctSelection.left() == 0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -2467,23 +2550,75 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    for ( int y = r.top(); y <= r.bottom(); y++ )
+        // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-        int x = r.right();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
-        cell->setRightBorderStyle( SolidLine );
-        cell->setRightBorderColor( _color );
-        cell->setRightBorderWidth( 2 );
+          c->clearProperty( KSpreadCell::PRightBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
         }
-    }
+      }
 
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        QPen pen( _color,2,SolidLine);
+        rw->setRightBorderPen(pen);
+        }
+
+      emit sig_updateView( this );
+      return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
+        {
+          c->clearProperty( KSpreadCell::PRightBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
+        }
+      }
+
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        QPen pen( _color,2,SolidLine);
+        cl->setRightBorderPen(pen);
+        }
+
+      emit sig_updateView( this );
+      return;
+    }
+    else
+    {
+        for ( int y = r.top(); y <= r.bottom(); y++ )
+                {
+                int x = r.right();
+                KSpreadCell *cell = nonDefaultCell( x, y );
+                if(!cell->isObscuringForced())
+                        {
+                        QPen pen( _color,2,SolidLine);
+                        cell->setRightBorderPen(pen);
+                        }
+                }
     emit sig_updateView( this, r );
+    }
 }
 
 void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
 {
+    bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -2493,22 +2628,75 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
-    for ( int y = r.top(); y <= r.bottom(); y++ )
+        // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-        int x = r.left();
-        KSpreadCell *cell = nonDefaultCell( x, y );
-        if(!cell->isObscuringForced())
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
-        cell->setLeftBorderStyle( SolidLine );
-        cell->setLeftBorderColor( _color );
-        cell->setLeftBorderWidth( 2 );
+          c->clearProperty( KSpreadCell::PLeftBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
         }
+      }
+
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        QPen pen( _color,2,SolidLine);
+        rw->setLeftBorderPen(pen);
+        }
+
+      emit sig_updateView( this );
+      return;
     }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
+        {
+          c->clearProperty( KSpreadCell::PLeftBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+        }
+      }
+
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        QPen pen( _color,2,SolidLine);
+        cl->setLeftBorderPen(pen);
+        }
+
+      emit sig_updateView( this );
+      return;
+    }
+    else
+    {
+        for ( int y = r.top(); y <= r.bottom(); y++ )
+                {
+                int x = r.left();
+                KSpreadCell *cell = nonDefaultCell( x, y );
+                if(!cell->isObscuringForced())
+                        {
+                        QPen pen( _color,2,SolidLine);
+                        cell->setLeftBorderPen(pen);
+                        }
+                }
     emit sig_updateView( this, r );
+    }
 }
 
 void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
 {
+    bool selected = ( m_rctSelection.left() != 0 );
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -2518,23 +2706,71 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
             KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
-    for ( int x = r.left(); x <= r.right(); x++ )
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-        int y = r.top();
-        KSpreadCell *cell = cellAt( x, y );
-        if(!cell->isObscuringForced())
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
-        if ( cell == m_pDefaultCell )
+          c->clearProperty( KSpreadCell::PTopBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+        }
+      }
+
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
         {
-            cell = new KSpreadCell( this, x, y );
-            m_cells.insert( cell, x, y );
+        RowLayout *rw=nonDefaultRowLayout(i);
+        QPen pen( _color,2,SolidLine);
+        rw->setTopBorderPen(pen);
         }
-        cell->setTopBorderStyle( SolidLine );
-        cell->setTopBorderColor( _color );
-        cell->setTopBorderWidth( 2 );
-        }
+
+      emit sig_updateView( this );
+      return;
     }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
+        {
+          c->clearProperty( KSpreadCell::PTopBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+        }
+      }
+
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        QPen pen( _color,2,SolidLine);
+        cl->setTopBorderPen(pen);
+        }
+
+      emit sig_updateView( this );
+      return;
+    }
+    else
+    {
+        for ( int x = r.left(); x <= r.right(); x++ )
+                {
+                int y = r.top();
+                KSpreadCell *cell = nonDefaultCell( x, y );
+                if(!cell->isObscuringForced())
+                        {
+                        QPen pen( _color,2,SolidLine);
+                        cell->setTopBorderPen(pen);
+                        }
+                }
     emit sig_updateView( this, r );
+    }
 }
 
 void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
@@ -3079,6 +3315,7 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
+
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
@@ -3089,13 +3326,18 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setAlign( _align );
-          c->clearDisplayDirtyFlag();
+          c->clearProperty( KSpreadCell::PAlign );
+          c->clearNoFallBackProperties( KSpreadCell::PAlign );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        rw->setAlign( _align );
+        }
+
+      emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
@@ -3108,13 +3350,18 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setAlign( _align );
-          c->clearDisplayDirtyFlag();
+          c->clearProperty( KSpreadCell::PAlign );
+          c->clearNoFallBackProperties( KSpreadCell::PAlign );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        cl->setAlign( _align );
+        }
+
+      emit sig_updateView( this );
       return;
     }
     else
@@ -3167,13 +3414,18 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setAlignY( _alignY );
-          c->clearDisplayDirtyFlag();
+          c->clearProperty( KSpreadCell::PAlignY );
+          c->clearNoFallBackProperties( KSpreadCell::PAlignY );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        cl->setAlignY( _alignY );
+        }
+
+      emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
@@ -3186,13 +3438,18 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setAlignY( _alignY );
-          c->clearDisplayDirtyFlag();
+          c->clearProperty( KSpreadCell::PAlignY );
+          c->clearNoFallBackProperties( KSpreadCell::PAlignY );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        cl->setAlignY( _alignY );
+        }
+
+      emit sig_updateView( this );
       return;
     }
     else
@@ -3325,6 +3582,8 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
+
+            // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
       KSpreadCell* c = m_cells.firstCell();
@@ -3334,24 +3593,35 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          if(b)
-                {
-                c->setFormatNumber(KSpreadCell::Money);
-                c->setFaktor( 1.0 );
-                c->setPrecision( KGlobal::locale()->fracDigits() );
-                }
-          else
-                {
-                c->setFormatNumber(KSpreadCell::Number);
-                c->setFaktor( 1.0 );
-                c->setPrecision( 0 );
-                }
-          c->clearDisplayDirtyFlag();
+           c->clearProperty(KSpreadCell::PFaktor);
+           c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+
+           c->clearProperty(KSpreadCell::PPrecision);
+           c->clearNoFallBackProperties( KSpreadCell::PPrecision );
+
+          c->clearProperty(KSpreadCell::PFormatNumber);
+          c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        if(b)
+                {
+                rw->setFormatNumber(KSpreadCell::Money);
+                rw->setFaktor( 1.0 );
+                rw->setPrecision( KGlobal::locale()->fracDigits() );
+                }
+        else
+                {
+                rw->setFormatNumber(KSpreadCell::Number);
+                rw->setFaktor( 1.0 );
+                rw->setPrecision( 0 );
+                }
+        }
+
+      emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
@@ -3364,24 +3634,35 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          if(b)
-                {
-                c->setFormatNumber(KSpreadCell::Money);
-                c->setFaktor( 1.0 );
-                c->setPrecision( KGlobal::locale()->fracDigits() );
-                }
-          else
-                {
-                c->setFormatNumber(KSpreadCell::Number);
-                c->setFaktor( 1.0 );
-                c->setPrecision( 0 );
-                }
-          c->clearDisplayDirtyFlag();
+           c->clearProperty(KSpreadCell::PFaktor);
+           c->clearNoFallBackProperties( KSpreadCell::PFaktor );
+
+           c->clearProperty(KSpreadCell::PPrecision);
+           c->clearNoFallBackProperties( KSpreadCell::PPrecision );
+
+          c->clearProperty(KSpreadCell::PFormatNumber);
+          c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        if(b)
+                {
+                cl->setFormatNumber(KSpreadCell::Money);
+                cl->setFaktor( 1.0 );
+                cl->setPrecision( KGlobal::locale()->fracDigits() );
+                }
+        else
+                {
+                cl->setFormatNumber(KSpreadCell::Number);
+                cl->setFaktor( 1.0 );
+                cl->setPrecision( 0 );
+                }
+        }
+
+      emit sig_updateView( this );
       return;
     }
     else
@@ -3437,42 +3718,57 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      KSpreadCell* c = m_cells.firstCell();
+      KSpreadCell* c;
+      c=cellAt(_marker.x(), _marker.y());
+      int tmpIndent=c->getIndent(_marker.x(), _marker.y());
+      c= m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setIndent( c->getIndent(c->column(),c->row())+10);
-          c->clearDisplayDirtyFlag();
+           c->clearProperty(KSpreadCell::PIndent);
+           c->clearNoFallBackProperties( KSpreadCell::PIndent );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        rw->setIndent( tmpIndent+10);
+        }
+
+      emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      KSpreadCell* c = m_cells.firstCell();
+      KSpreadCell* c;
+      c=cellAt(_marker.x(), _marker.y());
+      int tmpIndent=c->getIndent(_marker.x(), _marker.y());
+      c= m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setIndent( c->getIndent(c->column(),c->row())+10);
-          c->clearDisplayDirtyFlag();
+           c->clearProperty(KSpreadCell::PIndent);
+           c->clearNoFallBackProperties( KSpreadCell::PIndent );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        cl->setIndent( tmpIndent+10);
+        }
+
+      emit sig_updateView( this );
       return;
     }
     else
@@ -3515,48 +3811,63 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    // Complete rows selected ?
+
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      KSpreadCell* c = m_cells.firstCell();
+      KSpreadCell* c;
+      c=cellAt(_marker.x(), _marker.y());
+      int tmpIndent=c->getIndent(_marker.x(), _marker.y());
+      c= m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          if((c->getIndent(c->column(),c->row())-10)>=0)
-                c->setIndent( c->getIndent(c->column(),c->row())-10);
-          else
-                c->setIndent(0);
-          c->clearDisplayDirtyFlag();
+           c->clearProperty(KSpreadCell::PIndent);
+           c->clearNoFallBackProperties( KSpreadCell::PIndent );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        if((tmpIndent-10)>=0)
+                rw->setIndent( tmpIndent-10);
+          else
+                rw->setIndent( 0);
+        }
+
+      emit sig_updateView( this );
       return;
     }
-    // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      KSpreadCell* c = m_cells.firstCell();
+      KSpreadCell* c;
+      c=cellAt(_marker.x(), _marker.y());
+      int tmpIndent=c->getIndent(_marker.x(), _marker.y());
+      c= m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          if((c->getIndent(c->column(),c->row())-10)>=0)
-                c->setIndent( c->getIndent(c->column(),c->row())-10);
-          else
-                c->setIndent(0);
-          c->clearDisplayDirtyFlag();
+           c->clearProperty(KSpreadCell::PIndent);
+           c->clearNoFallBackProperties( KSpreadCell::PIndent );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        if((tmpIndent-10)>=0)
+                cl->setIndent( tmpIndent-10);
+          else
+                cl->setIndent( 0);
+        }
+
+      emit sig_updateView( this );
       return;
     }
     else
@@ -3567,11 +3878,11 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
                 KSpreadCell *cell = cellAt( x, y );
                 if(!cell->isObscuringForced())
                 {
-                if ( cell == m_pDefaultCell )
-                {
-                    cell = new KSpreadCell( this, x, y );
-                    m_cells.insert( cell, x, y );
-                }
+                        if ( cell == m_pDefaultCell )
+                        {
+                                cell = new KSpreadCell( this, x, y );
+                                m_cells.insert( cell, x, y );
+                        }
 
                 cell->setDisplayDirtyFlag();
                 if((cell->getIndent(x,y)-10)>=0)

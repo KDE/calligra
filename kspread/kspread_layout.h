@@ -102,6 +102,11 @@ public:
     void clearProperties();
     void clearProperty( Properties p );
 
+    void clearNoFallBackProperties(  ) ;
+    void clearNoFallBackProperties( Properties p ) ;
+    void setNoFallBackProperties(Properties p);
+    bool hasNoFallBackProperties( Properties p ) const ;
+
     ////////////////////////////////
     //
     // Methods for setting layout stuff.
@@ -284,6 +289,9 @@ public:
 
     virtual bool hasProperty( Properties p ) const;
 
+
+
+
 protected:
     virtual const QPen& rightBorderPen() const;
     virtual const QPen& bottomBorderPen() const;
@@ -407,6 +415,12 @@ protected:
     KSpreadTable *m_pTable;
 
     uint m_mask;
+
+    /**
+    * used  m_bNoFallBack when you put default value in a cell and
+    * not used column/row parameters
+    */
+    uint m_bNoFallBack;
 
     formatNumber m_eFormatNumber;
 
