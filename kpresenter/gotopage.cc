@@ -17,19 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "gotopage.h"
-#include "gotopage.moc"
+#include <gotopage.h>
 
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qvalidator.h>
-#include <qevent.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
 
-
-#include <kapp.h>
 #include <klocale.h>
 
-#include "kpresenter_doc.h"
+#include <kpresenter_doc.h>
 
 /******************************************************************/
 /* class KPGotoPage						  */
@@ -38,98 +35,61 @@
 /*================================================================*/
 KPGotoPage::KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &slides, int start,
 			QWidget *parent, const char *name, WFlags f )
-    : QHBox( parent, name, f ), _default( start ), page( start )
+    : QDialog( parent, name, f ), p(parent), oldPage(start)
 {
-    setMargin( 5 );
-    setSpacing( 2 );
+    setCaption(i18n("Goto Page..."));
 
+    QGridLayout *ml=new QGridLayout(this, 2, 2, 5, 5);
     label = new QLabel( i18n( "Goto Page:" ), this );
-
+    ml->addWidget(label, 0,0);
     spinbox = new QComboBox( false, this );
+    ml->addWidget(spinbox, 0,1);
+
+    QHBoxLayout *box=new QHBoxLayout(ml);
+    QPushButton *button=new QPushButton(i18n("OK"), this);
+    connect(button, SIGNAL(clicked()), this, SLOT(accept()));
+    box->addWidget(button);
+    button=new QPushButton(i18n("Cancel"), this);
+    connect(button, SIGNAL(clicked()), this, SLOT(reject()));
+    box->addWidget(button);
+    ml->addMultiCellLayout(box, 1, 1, 0, 1);
 
     QValueList<int>::ConstIterator it = slides.begin();
     unsigned int i = 0;
     for ( unsigned int j = 0; it != slides.end(); ++it, ++j ) {
-	QString t;
-	t = doc->getPageTitle( *it - 1, i18n( "Slide %1" ).arg( *it ), fakt );
-	spinbox->insertItem( QString( "%1 - %2" ).arg( *it ).arg( t ), -1 );
-	if ( *it == start )
-	    i = j;
+        QString t;
+        t = doc->getPageTitle( *it - 1, i18n( "Slide %1" ).arg( *it ), fakt );
+        spinbox->insertItem( QString( "%1 - %2" ).arg( *it ).arg( t ), -1 );
+        if ( *it == start )
+            i = j;
     }
     spinbox->setCurrentItem( i );
 
-    spinbox->installEventFilter( this );
-    label->installEventFilter( this );
-
-    setFrameStyle( QFrame::WinPanel | QFrame:: Raised );
-
-    spinbox->grabMouse();
-    spinbox->grabKeyboard();
     setFocusProxy( spinbox );
     setFocusPolicy( QWidget::StrongFocus );
     spinbox->setFocus();
 
-    show();
-    QApplication::sendPostedEvents();
-
-    move( ( kapp->desktop()->width() - width() ) / 2,
-	  ( kapp->desktop()->height() - height() ) / 2 );
+    if(p)
+        p->setCursor(Qt::forbiddenCursor);
 }
 
 /*================================================================*/
 int KPGotoPage::gotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &slides, int start, QWidget *parent)
 {
     KPGotoPage dia( doc, fakt, slides, start,parent, 0L,
-		    Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
-
-    kapp->enter_loop();
-
-    int page = dia.getPage();
-
-    return page;
+                    Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
+    dia.exec();
+    dia.resetCursor();
+    return dia.getPage();
 }
 
-/*================================================================*/
-bool KPGotoPage::eventFilter( QObject * /*obj*/, QEvent *e )
-{
-#undef KeyPress
-
-    if ( e->type() == QEvent::KeyPress ) {
-	QKeyEvent *ke = dynamic_cast<QKeyEvent*>( e );
-	if ( ke->key() == Key_Enter || ke->key() == Key_Return ) {
-	    page = spinbox->currentText().left( spinbox->currentText().find( "-" ) - 1 ).toInt();
-
-	    spinbox->releaseMouse();
-	    spinbox->releaseKeyboard();
-
-	    kapp->exit_loop();
-	    hide();
-
-	    return true;
-	} else if ( ke->key() == Key_Escape ) {
-	    page = _default;
-
-	    spinbox->releaseMouse();
-	    spinbox->releaseKeyboard();
-
-	    kapp->exit_loop();
-	    hide();
-
-	    return true;
-	} else if ( ke->key() == Key_Down ) {
-	    if ( spinbox->currentItem() < spinbox->count() ) {
-		spinbox->setCurrentItem( spinbox->currentItem() + 1 );
-		page = spinbox->currentText().toInt();
-	    }
-	    return true;
-	} else if ( ke->key() == Key_Up ) {
-	    if ( spinbox->currentItem() > 0 ) {
-		spinbox->setCurrentItem( spinbox->currentItem() - 1 );
-		page = spinbox->currentText().toInt();
-	    }
-	    return true;
-	}
-    }
-    return false;
+int KPGotoPage::getPage() {
+    if(result()==QDialog::Accepted)
+        return spinbox->currentItem()+1;
+    return oldPage;
 }
 
+void KPGotoPage::resetCursor() {
+    if(p)
+        p->setCursor(Qt::blankCursor);
+}

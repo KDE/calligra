@@ -202,9 +202,11 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->insertSeparator();
 
     h_pgnum = 8;
+#if 0 // note: Don't forget to add the functionality before enabling again :)
     htool2->insertButton( KPBarIcon( "pgnum" ), h_pgnum,
                           SIGNAL( clicked() ), this,
                           SLOT( headerInsertPageNum() ), true, i18n( "Insert Page Number" ) );
+#endif
 
     htool2->setMaximumHeight(tool1->maximumHeight());
     htool2->setMinimumHeight(tool1->maximumHeight());
@@ -325,9 +327,11 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->insertSeparator();
 
     f_pgnum = 8;
+#if 0 // note: Don't forget to add the functionality before enabling again :)
     ftool2->insertButton( KPBarIcon( "pgnum" ), f_pgnum,
                           SIGNAL( clicked() ), this,
                           SLOT( footerInsertPageNum() ), true, i18n( "Insert Page Number" ) );
+#endif
 
     ftool2->setMaximumHeight(tool1->maximumHeight());
     ftool2->setMinimumHeight(tool1->maximumHeight());

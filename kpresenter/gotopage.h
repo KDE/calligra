@@ -20,7 +20,7 @@
 #ifndef gotopage_h
 #define gotopage_h
 
-#include <qhbox.h>
+#include <qdialog.h>
 #include <qvaluelist.h>
 
 class QWidget;
@@ -35,27 +35,23 @@ class KPresenterDoc;
 /* class KPGotoPage                                               */
 /******************************************************************/
 
-class KPGotoPage : public QHBox
-{
-    Q_OBJECT
+class KPGotoPage : public QDialog {
 
 public:
     KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &slides, int start,
 		QWidget *parent = 0L, const char *name = 0L, WFlags f = 0 );
 
-    bool eventFilter( QObject *obj, QEvent *e );
-
-    int getPage() { return page; }
-
     static int gotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &slides, int start, QWidget *parent = 0L );
 
-protected:
+    int getPage();
+
+private:
+    void resetCursor();
+
     QComboBox *spinbox;
     QLabel *label;
-
-    int _default, page;
-
+    QWidget *p;
+    int oldPage;
 };
-
 
 #endif

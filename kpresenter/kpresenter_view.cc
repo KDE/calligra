@@ -1278,7 +1278,7 @@ void KPresenterView::textBold()
 /*===============================================================*/
 void KPresenterView::textInsertPageNum()
 {
-#if 0
+#if 0 // note: also the action is disabled now (Werner)
     if ( page->kTxtObj() )
 	page->kTxtObj()->insertPageNum();
 #endif
@@ -1914,9 +1914,11 @@ void KPresenterView::setupActions()
 					    this, SLOT( textObjectToContents() ),
 					    actionCollection(), "text_obj2cont" );
 
+#if 0 // note: Don't forget to add the functionality before enabling again :)
     actionTextInsertPageNum = new KAction( i18n( "&Insert Page Number" ), "pgnum", 0,
 					   this, SLOT( textInsertPageNum() ),
 					   actionCollection(), "text_inspgnum" );
+#endif
 
     // ----------------- extra actions
 
