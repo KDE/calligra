@@ -24,11 +24,12 @@
 #include "kspread_view.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
-#include "kspread_undo.h"
+#include "commands.h"
 #include <qlayout.h>
 #include <klocale.h>
 #include <qlistbox.h>
 #include <qlabel.h>
+#include <kcommand.h>
 
 KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
 	: KDialogBase( parent, name,TRUE,i18n("Show Sheet"),Ok|Cancel )
@@ -88,19 +89,15 @@ void KSpreadshow::slotOk()
         return;
 
     KSpreadSheet *table;
-    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( m_pView->doc(),i18n("Show Table"));
+    KMacroCommand *macroUndo=new KMacroCommand( i18n("Show Table") );
     for ( QStringList::Iterator it = listTable.begin(); it != listTable.end(); ++it )
     {
         table=m_pView->doc()->map()->findTable( *it );
-        if ( !m_pView->doc()->undoLocked() )
-        {
-            KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( m_pView->doc(), table );
-            macroUndo->addCommand( undo );
-        }
-        table->hideTable(false);
+        KCommand* command = new ShowSheetCommand( table );
+        macroUndo->addCommand( command );
     }
     m_pView->doc()->addCommand( macroUndo );
-
+    macroUndo->execute();
     m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
 }
