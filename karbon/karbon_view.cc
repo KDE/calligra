@@ -38,6 +38,7 @@
 #include <koRuler.h>
 
 // Commands.
+#include "valigncmd.h"
 #include "vcleanupcmd.h"
 #include "vdeletecmd.h"
 #include "vfillcmd.h"
@@ -455,6 +456,47 @@ KarbonView::editPurgeHistory()
 }
 
 void
+KarbonView::selectionAlignHorizontalLeft()
+{
+	part()->addCommand(
+		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_LEFT ), true );
+}
+void
+KarbonView::selectionAlignHorizontalCenter()
+{
+	part()->addCommand(
+		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_CENTER ), true );
+}
+
+void
+KarbonView::selectionAlignHorizontalRight()
+{
+	part()->addCommand(
+		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_RIGHT ), true );
+}
+
+void
+KarbonView::selectionAlignVerticalTop()
+{
+	part()->addCommand(
+		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_TOP ), true );
+}
+
+void
+KarbonView::selectionAlignVerticalCenter()
+{
+	part()->addCommand(
+		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_CENTER ), true );
+}
+
+void
+KarbonView::selectionAlignVerticalBottom()
+{
+	part()->addCommand(
+		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_BOTTOM ), true );
+}
+
+void
 KarbonView::selectionBringToFront()
 {
 	part()->addCommand(
@@ -753,6 +795,26 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "Send to &Back" ), 0, QKeySequence( "Shift+PgDown" ), this,
 		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
+
+	new KAction(
+		i18n( "Align left" ), 0, 0, this,
+		SLOT( selectionAlignHorizontalLeft() ), actionCollection(), "object_align_horizontal_left" );
+	new KAction(
+		i18n( "Align center" ), 0, 0, this,
+		SLOT( selectionAlignHorizontalCenter() ), actionCollection(), "object_align_horizontal_center" );
+	new KAction(
+		i18n( "Align right" ), 0, 0, this,
+		SLOT( selectionAlignHorizontalRight() ), actionCollection(), "object_align_horizontal_right" );
+	new KAction(
+		i18n( "Align top" ), 0, 0, this,
+		SLOT( selectionAlignVerticalTop() ), actionCollection(), "object_align_vertical_top" );
+	new KAction(
+		i18n( "Align center" ), 0, 0, this,
+		SLOT( selectionAlignVerticalCenter() ), actionCollection(), "object_align_vertical_center" );
+	new KAction(
+		i18n( "Align bottom" ), 0, 0, this,
+		SLOT( selectionAlignVerticalBottom() ), actionCollection(), "object_align_vertical_bottom" );
+
 	m_groupObjects = new KAction(
 						 i18n( "&Group Objects" ), "14_group", QKeySequence( "Ctrl+G" ), this,
 						 SLOT( groupSelection() ), actionCollection(), "selection_group" );

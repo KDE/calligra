@@ -23,7 +23,7 @@
 
 #include "vcommand.h"
 
-class VTransformCmd;
+class VTranslateCmd;
 
 // Align objects...
 
@@ -32,15 +32,12 @@ class VAlignCmd : public VCommand
 public:
 	enum Align
 	{
-		ALIGN_TOPLEFT,
-		ALIGN_TOPCENTER,
-		ALIGN_TOPRIGHT,
-		ALIGN_BOTTOMLEFT,
-		ALIGN_BOTTOMCENTER,
-		ALIGN_BOTTOMRIGHT,
-		ALIGN_CENTERLEFT,
-		ALIGN_CENTER,
-		ALIGN_CENTERRIGHT
+		ALIGN_HORIZONTAL_LEFT,
+		ALIGN_HORIZONTAL_CENTER,
+		ALIGN_HORIZONTAL_RIGHT,
+		ALIGN_VERTICAL_BOTTOM,
+		ALIGN_VERTICAL_CENTER,
+		ALIGN_VERTICAL_TOP
 	};
 	VAlignCmd( VDocument *doc, Align align );
 	virtual ~VAlignCmd();
@@ -49,8 +46,8 @@ public:
 	virtual void unexecute();
 
 protected:
-	Align			m_align;
-	VTransformCmd	*m_trafoCmd;
+	Align					m_align;
+	QPtrList<VTranslateCmd>	m_trafoCmds;
 };
 
 #endif

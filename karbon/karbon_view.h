@@ -132,6 +132,12 @@ public slots:
 	void selectionSendToBack();
 	void selectionMoveUp();
 	void selectionMoveDown();
+	void selectionAlignHorizontalLeft();
+	void selectionAlignHorizontalCenter();
+	void selectionAlignHorizontalRight();
+	void selectionAlignVerticalTop();
+	void selectionAlignVerticalCenter();
+	void selectionAlignVerticalBottom();
 
 	void groupSelection();
 	void ungroupSelection();

@@ -30,47 +30,54 @@
 VAlignCmd::VAlignCmd( VDocument *doc, Align align )
 	: VCommand( doc, i18n( "Align Objects" ) ), m_align( align )
 {
-	m_trafoCmd = 0L;
+	m_trafoCmds.setAutoDelete( true );
 }
 
 VAlignCmd::~VAlignCmd()
 {
-	delete( m_trafoCmd );
 }
 
 void
 VAlignCmd::execute()
 {
+	if( document()->selection()->objects().count() < 2 )
+		return;
 	double dx, dy;
+	KoRect bbox;
 	KoRect r = document()->selection()->boundingBox();
-	double docWidth = document()->width();
-	double docHeight= document()->height();
-	double rectCenterX = r.center().x();
-	double rectCenterY = r.center().y();
-	switch( m_align )
+	VObjectList objs = document()->selection()->objects();
+	VObjectListIterator itr( objs );
+	VTranslateCmd *trafoCmd = 0L;
+	for( ; itr.current() ; ++itr )
 	{
-		case ALIGN_TOPLEFT		:	dx = - r.topLeft().x(); dy = ( docHeight ) - rectCenterY; break;
-		case ALIGN_TOPCENTER	:	dx = ( docWidth / 2.0 ) - rectCenterX; dy = ( docHeight ) - rectCenterY; break;
-		case ALIGN_TOPRIGHT		:	dx = docWidth - r.topRight().x(); dy = ( docHeight ) - rectCenterY; break;
-		case ALIGN_BOTTOMLEFT	:	break;
-		case ALIGN_BOTTOMCENTER	:	dx = ( docWidth / 2.0 ) - rectCenterX; break;
-		case ALIGN_BOTTOMRIGHT	:	break;
-		case ALIGN_CENTERLEFT	:	dy = ( docHeight / 2.0 )  - rectCenterY; break;
-		case ALIGN_CENTERRIGHT	:	dy = ( docHeight / 2.0 )  - rectCenterY; break;
-		default:
-			dx = ( docWidth / 2.0 )  - rectCenterX;
-			dy = ( docHeight / 2.0 ) - rectCenterY;
-	};
-	m_trafoCmd = new VTranslateCmd( document(), dx, dy );
-	kdDebug() << dx << ", " << dy << endl;
-	m_trafoCmd->execute();
+		document()->selection()->clear();
+		bbox = itr.current()->boundingBox();
+		switch( m_align )
+		{
+			case ALIGN_HORIZONTAL_LEFT	:	dx = r.topLeft().x() - bbox.topLeft().x(); dy = 0; break;
+			case ALIGN_HORIZONTAL_CENTER:	dx = r.center().x() - bbox.center().x(); dy = 0; break;
+			case ALIGN_HORIZONTAL_RIGHT	:	dx = r.topRight().x() - bbox.topRight().x(); dy = 0; break;
+			case ALIGN_VERTICAL_TOP		:	dx = 0; dy = r.bottomRight().y() - bbox.bottomRight().y(); break;
+			case ALIGN_VERTICAL_CENTER	:	dx = 0; dy = r.center().y() - bbox.center().y(); break;
+			case ALIGN_VERTICAL_BOTTOM	:	dx = 0; dy = r.topLeft().y() - bbox.topLeft().y(); break;
+		};
+		document()->selection()->append( itr.current() );
+		trafoCmd = new VTranslateCmd( document(), dx, dy );
+		m_trafoCmds.append( trafoCmd );
+		trafoCmd->execute();
+	}
+	itr.toFirst();
+	for( ; itr.current() ; ++itr )
+		document()->selection()->append( itr.current() );
 	setSuccess( true );
 }
 
 void
 VAlignCmd::unexecute()
 {
-	m_trafoCmd->unexecute();
+	QPtrListIterator<VTranslateCmd> itr( m_trafoCmds );
+	for( ; itr.current() ; ++itr )
+		itr.current()->unexecute();
 	setSuccess( false );
 }
 
