@@ -149,10 +149,10 @@ void KWmf::handleDelete(int idx)
 
 void KWmf::invokeHandler(
     S16 opcode,
-    U32 wordOperands,
+    U32 words,
     QDataStream &operands)
 {
-    typedef void (KWmf::*method)(U32 wordOperands, QDataStream &operands);
+    typedef void (KWmf::*method)(U32 words, QDataStream &operands);
 
     typedef struct
     {
@@ -254,15 +254,15 @@ void KWmf::invokeHandler(
         if (funcTab[i].name)
             kdError(s_area) << "invokeHandler: unsupported opcode: " <<
                 funcTab[i].name <<
-                " operands: " << wordOperands << endl;
+                " operands: " << words << endl;
         else
             kdError(s_area) << "invokeHandler: unsupported opcode: 0x" <<
                 QString::number(opcode, 16) <<
-                " operands: " << wordOperands << endl;
+                " operands: " << words << endl;
 
         // Skip data we cannot use.
 
-        for (i = 0; i < wordOperands; i++)
+        for (i = 0; i < words; i++)
         {
             S16 discard;
 
@@ -272,8 +272,8 @@ void KWmf::invokeHandler(
     else
     {
         kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
-            " operands: " << wordOperands << endl;
-        (this->*result)(wordOperands, operands);
+            " operands: " << words << endl;
+        (this->*result)(words, operands);
     }
 }
 
@@ -519,14 +519,14 @@ bool KWmf::parse(
 }
 
 void KWmf::opArc(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     genericArc("arc", operands);
 }
 
 void KWmf::opBrushCreateIndirect(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     static Qt::BrushStyle hatchedStyleTab[] =
@@ -586,7 +586,7 @@ void KWmf::opBrushCreateIndirect(
 }
 
 void KWmf::opEllipse(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     QPoint topLeft;
@@ -601,7 +601,7 @@ void KWmf::opEllipse(
 }
 
 void KWmf::opLineTo(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     QPoint lineTo;
@@ -618,22 +618,22 @@ void KWmf::opLineTo(
 }
 
 void KWmf::opMoveTo(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     m_lineFrom = normalisePoint(operands);
 }
 
 void KWmf::opNoop(
-    U32 wordOperands,
+    U32 words,
     QDataStream &operands)
 {
-    skip(wordOperands, operands);
+    skip(words, operands);
 }
 
 //-----------------------------------------------------------------------------
 void KWmf::opObjectDelete(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     S16 idx;
@@ -644,7 +644,7 @@ void KWmf::opObjectDelete(
 
 //-----------------------------------------------------------------------------
 void KWmf::opObjectSelect(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     S16 idx;
@@ -659,7 +659,7 @@ void KWmf::opObjectSelect(
 //
 
 void KWmf::opPenCreateIndirect(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     static Qt::PenStyle styleTab[] =
@@ -695,14 +695,14 @@ void KWmf::opPenCreateIndirect(
 }
 
 void KWmf::opPie(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     genericArc("pie", operands);
 }
 
 void KWmf::opPolygonSetFillMode(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     S16 tmp;
@@ -712,7 +712,7 @@ void KWmf::opPolygonSetFillMode(
 }
 
 void KWmf::opPolygon(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     S16 tmp;
@@ -728,7 +728,7 @@ void KWmf::opPolygon(
 }
 
 void KWmf::opPolyline(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     S16 tmp;
@@ -744,7 +744,7 @@ void KWmf::opPolyline(
 }
 
 void KWmf::opRectangle(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     QPoint topLeft;
@@ -763,7 +763,7 @@ void KWmf::opRectangle(
 }
 
 void KWmf::opRestoreDc(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     S16 pop;
@@ -777,7 +777,7 @@ void KWmf::opRestoreDc(
 }
 
 void KWmf::opSaveDc(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &/*operands*/)
 {
     m_savedDcs.push(m_dc);
@@ -786,7 +786,7 @@ void KWmf::opSaveDc(
 }
 
 void KWmf::opWindowSetOrg(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     S16 top;
@@ -798,7 +798,7 @@ void KWmf::opWindowSetOrg(
 }
 
 void KWmf::opWindowSetExt(
-    U32 /*wordOperands*/,
+    U32 /*words*/,
     QDataStream &operands)
 {
     S16 height;
@@ -826,21 +826,21 @@ void KWmf::penSet(
 }
 
 void KWmf::skip(
-    U32 wordOperands,
+    U32 words,
     QDataStream &operands)
 {
-    if ((int)wordOperands < 0)
+    if ((int)words < 0)
     {
-        kdError(s_area) << "skip: " << (int)wordOperands << endl;
+        kdError(s_area) << "skip: " << (int)words << endl;
         return;
     }
-    if (wordOperands)
+    if (words)
     {
         U32 i;
         S16 discard;
 
-        kdDebug(s_area) << "skip: " << wordOperands << endl;
-        for (i = 0; i < wordOperands; i++)
+        kdDebug(s_area) << "skip: " << words << endl;
+        for (i = 0; i < words; i++)
         {
             operands >> discard;
         }
@@ -848,8 +848,8 @@ void KWmf::skip(
 }
 
 void KWmf::walk(
-    U32 wordOperands,
-    QDataStream &stream)
+    U32 words,
+    QDataStream &operands)
 {
     // Read bits:
     //
@@ -871,16 +871,16 @@ void KWmf::walk(
     S16 opcode;
     U32 length = 0;
 
-    while (length < wordOperands)
+    while (length < words)
     {
-        stream >> wordCount;
-        stream >> opcode;
+        operands >> wordCount;
+        operands >> opcode;
         if (opcode == 0)
             break;
 
         // Package the arguments...
 
-        invokeHandler(opcode, wordCount - 3, stream);
+        invokeHandler(opcode, wordCount - 3, operands);
         length += wordCount;
     }
 }

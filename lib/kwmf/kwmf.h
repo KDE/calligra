@@ -160,60 +160,60 @@ private:
     // Opcode handling and painter methods.
 
     void walk(
-        U32 wordOperands,
+        U32 words,
         QDataStream &stream);
     void skip(
-        U32 wordOperands,
+        U32 words,
         QDataStream &operands);
     void invokeHandler(
         S16 opcode,
-        U32 wordOperands,
+        U32 words,
         QDataStream &operands);
 /*
     // draw multiple polygons
-    void opPolypolygon(U32 wordOperands, QDataStream &operands);
+    void opPolypolygon(U32 words, QDataStream &operands);
 */
-    void opArc(U32 wordOperands, QDataStream &operands);
+    void opArc(U32 words, QDataStream &operands);
     // create a logical brush
-    void opBrushCreateIndirect(U32 wordOperands, QDataStream &operands);
-    void opEllipse(U32 wordOperands, QDataStream &operands);
+    void opBrushCreateIndirect(U32 words, QDataStream &operands);
+    void opEllipse(U32 words, QDataStream &operands);
     // draw line to coord
-    void opLineTo(U32 wordOperands, QDataStream &operands);
+    void opLineTo(U32 words, QDataStream &operands);
     // move pen to coord
-    void opMoveTo(U32 wordOperands, QDataStream &operands);
+    void opMoveTo(U32 words, QDataStream &operands);
     // do nothing
-    void opNoop(U32 wordOperands, QDataStream &operands);
+    void opNoop(U32 words, QDataStream &operands);
     // Free object handle
-    void opObjectDelete(U32 wordOperands, QDataStream &operands);
+    void opObjectDelete(U32 words, QDataStream &operands);
     // Activate object handle
-    void opObjectSelect(U32 wordOperands, QDataStream &operands);
+    void opObjectSelect(U32 words, QDataStream &operands);
     // create a logical pen
-    void opPenCreateIndirect(U32 wordOperands, QDataStream &operands);
-    void opPie(U32 wordOperands, QDataStream &operands);
+    void opPenCreateIndirect(U32 words, QDataStream &operands);
+    void opPie(U32 words, QDataStream &operands);
     // draw polygon
-    void opPolygon(U32 wordOperands, QDataStream &operands);
+    void opPolygon(U32 words, QDataStream &operands);
     // set polygon fill mode
-    void opPolygonSetFillMode(U32 wordOperands, QDataStream &operands);
+    void opPolygonSetFillMode(U32 words, QDataStream &operands);
     // draw series of lines
-    void opPolyline(U32 wordOperands, QDataStream &operands);
-    void opRectangle(U32 wordOperands, QDataStream &operands);
+    void opPolyline(U32 words, QDataStream &operands);
+    void opRectangle(U32 words, QDataStream &operands);
     // restore drawing context
-    void opRestoreDc(U32 wordOperands, QDataStream &operands);
+    void opRestoreDc(U32 words, QDataStream &operands);
     // save drawing context
-    void opSaveDc(U32 wordOperands, QDataStream &operands);
+    void opSaveDc(U32 words, QDataStream &operands);
     // set window origin
-    void opWindowSetOrg(U32 wordOperands, QDataStream &operands);
+    void opWindowSetOrg(U32 words, QDataStream &operands);
     // set window extents
-    void opWindowSetExt(U32 wordOperands, QDataStream &operands);
+    void opWindowSetExt(U32 words, QDataStream &operands);
 /*
     // set background pen color
-    void opsetBkColor(U32 wordOperands, QDataStream &operands);
+    void opsetBkColor(U32 words, QDataStream &operands);
     // set background pen mode
-    void opsetBkMode(U32 wordOperands, QDataStream &operands);
+    void opsetBkMode(U32 words, QDataStream &operands);
     // Set raster operation mode
-    void opsetRop(U32 wordOperands, QDataStream &operands);
+    void opsetRop(U32 words, QDataStream &operands);
     // Escape (enhanced command set)
-    void opescape(U32 wordOperands, QDataStream &operands);
+    void opescape(U32 words, QDataStream &operands);
 */
 };
 
