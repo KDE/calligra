@@ -2412,7 +2412,7 @@ void KWTextFrameSetEdit::setStrikeOut( bool on ) {
     QFont _font=currentFormat->font();
     _font.setStrikeOut(on);
     format.setFont( _font );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Font );
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Format );
 }
 
 QColor KWTextFrameSetEdit::textColor() const {
