@@ -43,6 +43,8 @@ KexiDialogBase::KexiDialogBase(KexiView* view,QWidget *parent, const char *name)
 	m_registering=false;
 	m_view=view;
 	m_project=view->project();
+	m_contextTitle = QString::null;
+	m_contextMessage = QString::null;
 #if 0
 	if (s_DocumentWindows==0) s_DocumentWindows=new QPtrList<KexiDialogBase>();
 	if (s_ToolWindows==0) s_ToolWindows=new QPtrList<KexiDialogBase>();
@@ -68,6 +70,8 @@ void
 KexiDialogBase::setContextHelp(const QString &title, const QString &message)
 {
 	m_view->help()->setContextHelp(title, message);
+
+
 }
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)

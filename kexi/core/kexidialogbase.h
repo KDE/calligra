@@ -55,7 +55,7 @@ class KexiDialogBase : public QWidget
 
 	signals:
 		void closing(KexiDialogBase *);
-	
+
 	protected:
 		virtual void focusInEvent ( QFocusEvent *);
 		enum WindowType {ToolWindow, DocumentWindow};
@@ -69,13 +69,15 @@ class KexiDialogBase : public QWidget
 
 		class KDockWidget *myDock;
 	private:
-		class KexiView *m_mainWindow;
-		class KexiProject *m_project;
-		class KexiView *m_view;
-		class QDockWindow *w;
-		bool m_registered;
-		enum WindowType m_wt;
-		bool m_registering;
+		class	KexiView *m_mainWindow;
+		class	KexiProject *m_project;
+		class	KexiView *m_view;
+		class	QDockWindow *w;
+		bool	m_registered;
+		enum	WindowType m_wt;
+		bool	m_registering;
+		QString	m_contextTitle;
+		QString	m_contextMessage;
 };
 
 #endif

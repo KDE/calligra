@@ -17,46 +17,30 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNER_H
-#define KEXIQUERYDESIGNER_H
+#ifndef KEXIQUERYDESIGNERSQLEDITOR_H
+#define KEXIQUERYDESIGNERSQLEDITOR_H
 
-#include "kexidialogbase.h"
+#include <qwidget.h>
 
-class QTabWidget;
-class KexiView;
-class KexiQueryPartItem;
-class KexiQueryDesignerGuiEditor;
-class KexiQueryDesignerSQL;
-class KexiDataTable;
+namespace KTextEditor
+{
+	class Document;
+	class View;
+}
 
-class KexiQueryDesigner : public KexiDialogBase
+class KexiQueryDesignerSQLEditor : public QWidget
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item);
-		~KexiQueryDesigner();
+		KexiQueryDesignerSQLEditor(QWidget *parent, const char *name = 0);
+		~KexiQueryDesignerSQLEditor();
 
-		virtual	KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
-
-	public slots:
-		void	query();
-
-	signals:
-		void	queryExecuted(QString statement, bool succeed);
-
-	protected slots:
-		void	viewChanged(QWidget *);
+		QString		getText();
 
 	private:
-		QTabWidget			*m_tab;
-
-		int				m_currentView;
-		QString				m_statement;
-
-		KexiQueryDesignerGuiEditor	*m_editor;
-		KexiQueryDesignerSQL		*m_sql;
-		KexiDataTable			*m_view;
+		KTextEditor::Document	*m_doc;
+		KTextEditor::View	*m_view;
 };
 
 #endif

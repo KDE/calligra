@@ -17,46 +17,38 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNER_H
-#define KEXIQUERYDESIGNER_H
+#include <qsplitter.h>
+#include <qlayout.h>
 
-#include "kexidialogbase.h"
 
-class QTabWidget;
-class KexiView;
-class KexiQueryPartItem;
-class KexiQueryDesignerGuiEditor;
-class KexiQueryDesignerSQL;
-class KexiDataTable;
+#include "kexiquerydesigner.h"
+#include "kexiquerydesignersqleditor.h"
+#include "kexiquerydesignersqlhistory.h"
+#include "kexiquerydesignersql.h"
 
-class KexiQueryDesigner : public KexiDialogBase
+KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiQueryDesigner *parent)
+ : QWidget(parent)
 {
-	Q_OBJECT
+	QSplitter *l = new QSplitter(this);
+	l->setOrientation(Vertical);
 
-	public:
-		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item);
-		~KexiQueryDesigner();
+	m_history = new KexiQueryDesignerSQLHistory(l, "sqlh");
+	m_editor = new KexiQueryDesignerSQLEditor(l, "sqle");
 
-		virtual	KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
+	QHBoxLayout *b = new QHBoxLayout(this);
+	b->addWidget(l);
 
-	public slots:
-		void	query();
+	connect(parent, SIGNAL(queryExecuted(QString, bool)), m_history, SLOT(addEvent(QString, bool)));
+}
 
-	signals:
-		void	queryExecuted(QString statement, bool succeed);
+QString
+KexiQueryDesignerSQL::getQuery()
+{
+	return m_editor->getText();
+}
 
-	protected slots:
-		void	viewChanged(QWidget *);
+KexiQueryDesignerSQL::~KexiQueryDesignerSQL()
+{
+}
 
-	private:
-		QTabWidget			*m_tab;
-
-		int				m_currentView;
-		QString				m_statement;
-
-		KexiQueryDesignerGuiEditor	*m_editor;
-		KexiQueryDesignerSQL		*m_sql;
-		KexiDataTable			*m_view;
-};
-
-#endif
+#include "kexiquerydesignersql.moc"

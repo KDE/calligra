@@ -30,7 +30,6 @@ KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
 		const QString& identifier)
 	:KexiProjectHandlerItem(parent,name,mime,identifier)
 {
-	m_designer = 0;
 }
 
 KexiQueryPartItem::~KexiQueryPartItem() {
@@ -70,14 +69,8 @@ void KexiQueryPartItem::store(KoStore* store) {
 	QDomElement sqlElement = domDoc.createElement("sql");
 	QDomText attrSql;
 
-	if(!m_designer)
-	{
-		attrSql = domDoc.createTextNode("");
-	}
-	else
-	{
-		attrSql = domDoc.createTextNode(m_designer->getSQL());
-	}
+	attrSql = domDoc.createTextNode("");
+	sqlElement.appendChild(attrSql);
 
 	docElement.appendChild(sqlElement);
 
@@ -167,11 +160,6 @@ void KexiQueryPartItem::load(KoStore* store) {
 	}
 }
 
-void
-KexiQueryPartItem::asignView(KexiQueryDesigner *v)
-{
-	m_designer = v;
-}
 
 #include "kexiquerypartitem.moc"
 

@@ -90,7 +90,6 @@ KexiQueryPartProxy::slotCreateQuery()
                 KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it);
                 emit m_queryPart->itemListChanged(part());
                 kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
-		it->asignView(kqd);
 		kqd->show();
                 kexiView()->project()->setModified(true);
         }

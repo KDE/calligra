@@ -6,7 +6,8 @@ kexihandler_table_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatab
 		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la ../formeditor/libkformeditor.la
 
 kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquerypartitem.cpp kexiquerypartproxy.cpp \
-				kexiquerydesignerguieditor.cpp kexiparameterlisteditor.ui kexiaddparamwidget.ui \
+				kexiquerydesignerguieditor.cpp kexiquerydesignersql.cpp kexiquerydesignersqleditor.cpp \
+				kexiquerydesignersqlhistory.cpp kexiparameterlisteditor.ui kexiaddparamwidget.ui \
 				kexiaddparamdialog.cpp
 
 kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module

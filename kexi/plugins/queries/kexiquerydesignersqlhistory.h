@@ -17,46 +17,51 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNER_H
-#define KEXIQUERYDESIGNER_H
+#ifndef KEXIQUERYDESIGNERSQLHISTORY_H
+#define KEXIQUERYDESIGNERSQLHISTORY_H
 
-#include "kexidialogbase.h"
+#include <qscrollview.h>
+#include <qdatetime.h>
+#include <qptrlist.h>
 
-class QTabWidget;
-class KexiView;
-class KexiQueryPartItem;
-class KexiQueryDesignerGuiEditor;
-class KexiQueryDesignerSQL;
-class KexiDataTable;
+class HistoryEntry
+{
+	public:
+		HistoryEntry(bool, const QTime &, const QString &);
+		~HistoryEntry();
 
-class KexiQueryDesigner : public KexiDialogBase
+
+		QRect	geometry(int y, int width, QFontMetrics f);
+		void	drawItem(QPainter *p, int width);
+
+	private:
+		bool	m_succeed;
+		QTime	m_execTime;
+		QString	m_statement;
+};
+
+typedef QPtrList<HistoryEntry> History;
+
+class KexiQueryDesignerSQLHistory : public QScrollView
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item);
-		~KexiQueryDesigner();
+		KexiQueryDesignerSQLHistory(QWidget *parent, const char *name=0);
+		~KexiQueryDesignerSQLHistory();
 
-		virtual	KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
+		void		addEntry(HistoryEntry *e);
 
 	public slots:
-		void	query();
+		void		addEvent(QString q, bool s);
 
-	signals:
-		void	queryExecuted(QString statement, bool succeed);
+//		HistoryItem	itemAt(int y);
 
-	protected slots:
-		void	viewChanged(QWidget *);
+	protected:
+		void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 
 	private:
-		QTabWidget			*m_tab;
-
-		int				m_currentView;
-		QString				m_statement;
-
-		KexiQueryDesignerGuiEditor	*m_editor;
-		KexiQueryDesignerSQL		*m_sql;
-		KexiDataTable			*m_view;
+		History	m_history;
 };
 
 #endif

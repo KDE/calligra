@@ -83,10 +83,10 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, co
 	m_first = true;
 
 	if(!embedd)
-	{
 		registerAs(DocumentWindow);
-//		showMaximized();
-	}
+	else
+		m_statusBar->hide();
+
 }
 
 void KexiDataTable::setDataSet(KexiDBRecord *rec)

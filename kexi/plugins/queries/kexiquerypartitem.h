@@ -28,7 +28,7 @@ class QString;
 class KexiProjectHandler;
 class KexiQueryDesigner;
 
-class KexiQueryPartItem: public KexiProjectHandlerItem 
+class KexiQueryPartItem: public KexiProjectHandlerItem
 {
 	Q_OBJECT
 public:
@@ -37,7 +37,7 @@ public:
 	{
 	public:
 		QueryEntry(){;}
-		QueryEntry(const QString& source_, const QString& field_, 
+		QueryEntry(const QString& source_, const QString& field_,
 			bool show_, const QString& orC_, const QString& andC_): source(source_),
 				field(field_),show(show_),orC(orC_),andC(andC_){;}
 		QString source;
@@ -46,10 +46,10 @@ public:
 		QString orC;
 		QString andC;
 	};
-	
+
 	typedef QValueList<QueryEntry> QueryEntryList;
-	
-	KexiQueryPartItem(KexiProjectHandler *parent, const QString& name, const QString& mime, 
+
+	KexiQueryPartItem(KexiProjectHandler *parent, const QString& name, const QString& mime,
 			const QString& identifier);
 	virtual ~KexiQueryPartItem();
 	const QueryEntryList &getQueryData();
@@ -60,8 +60,6 @@ public:
 	void store(KoStore*);
 	void load(KoStore*);
 
-	void asignView(KexiQueryDesigner *v);
-
 protected:
 	friend class KexiQueryDesigner;
 	friend class KexiQueryDesigerGuiEditor;
@@ -69,7 +67,6 @@ protected:
 private:
 	QueryEntryList m_queryEntryList;
 	KexiDataProvider::ParameterList m_params;
-	KexiQueryDesigner	*m_designer;
 };
 
 #endif

@@ -380,7 +380,7 @@ KexiQueryDesignerGuiEditor::getParam(const QString &name, bool escape)
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor() {
-	m_parent->saveBack();
+//	m_parent->saveBack();
 }
 
 void
