@@ -247,7 +247,10 @@ public:
     KPObject * getEditObj(const KoPoint & pos);
     KPObject* getObjectAt( const KoPoint&pos );
     KPPixmapObject * picViewOrigHelper();
-    void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    void applyStyleChange( KoStyle *changedStyle, int paragLayoutChanged, int formatChanged );
+
+    void reactivateBgSpellChecking();
+
 protected:
 
 private:

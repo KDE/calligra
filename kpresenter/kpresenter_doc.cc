@@ -2635,21 +2635,8 @@ void KPresenterDoc::reactivateBgSpellChecking()
 
     QPtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
-    {
-        QPtrListIterator<KPObject> oIt(it.current()->objectList() )  ;
-        for ( ; oIt.current() ; ++oIt )
-        {
-            if(oIt.current()->getType()==OT_TEXT)
-                static_cast<KPTextObject*>( oIt.current() )->textObject()->setBeedSpellCheck(true);
-        }
-    }
-    QPtrListIterator<KPObject> oIt(m_stickyPage->objectList() )  ;
-    for ( ; oIt.current() ; ++oIt )
-    {
-        if(oIt.current()->getType()==OT_TEXT)
-            static_cast<KPTextObject*>( oIt.current() )->textObject()->setBeedSpellCheck(true);
-    }
-
+        it.current()->reactivateBgSpellChecking();
+    m_stickyPage->reactivateBgSpellChecking();
     startBackgroundSpellCheck();
 }
 

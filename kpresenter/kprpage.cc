@@ -3445,3 +3445,13 @@ void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, 
           obj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
   }
 }
+
+void KPrPage::reactivateBgSpellChecking()
+{
+    QPtrListIterator<KPObject> oIt(m_objectList )  ;
+    for ( ; oIt.current() ; ++oIt )
+    {
+        if(oIt.current()->getType()==OT_TEXT)
+            static_cast<KPTextObject*>( oIt.current() )->textObject()->setBeedSpellCheck(true);
+    }
+}
