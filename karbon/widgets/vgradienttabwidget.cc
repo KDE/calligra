@@ -118,7 +118,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
 	VGradient gradient( **m_lpgradient );
-	if( gradient.type() == VGradient::radial )
+	if( gradient.type() == VGradient::radial || gradient.type() == VGradient::conic )
 	{
 		gradient.setOrigin( KoPoint( width() / 2, height() / 2 ) );
 		gradient.setFocalPoint( KoPoint( width() / 2, height() / 2 ) );
