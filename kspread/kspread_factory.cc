@@ -27,6 +27,8 @@ KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
     kdDebug(36001) << "KSpreadFactory::KSpreadFactory()" << endl;
+    // Create our instance, so that it becomes KGlobal::instance if the
+    // main app is KSpread.
     (void)global();
     (void)dcopObject();
 }
@@ -38,9 +40,10 @@ KSpreadFactory::~KSpreadFactory()
   {
     delete s_global->aboutData();
     delete s_global;
+    s_global = 0L;
   }
-  if( s_dcopObject )
-    delete s_dcopObject;
+  delete s_dcopObject;
+  s_dcopObject = 0L;
 }
 
 KParts::Part* KSpreadFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )

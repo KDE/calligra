@@ -52,6 +52,7 @@ KivioFactory::~KivioFactory()
   {
     delete s_global->aboutData();
     delete s_global;
+    s_global = 0L;
   }
 
   // FIXME: Is this the right place to do this?
@@ -79,10 +80,10 @@ KAboutData* KivioFactory::aboutData()
   KAboutData * aboutData = new KAboutData( "kivio", I18N_NOOP("Kivio"),
         version, description, KAboutData::License_GPL,
         "theKompany.com - Kivio",0,"www.thekompany.com");
-  
+
   aboutData->addAuthor("Dave Marotti","Main author and the original author of Queesio, from which this source is based","landshark@ameritech.net");
   aboutData->addAuthor("Max Judin","GUI widgets","max@thekompany.com");
-  
+
   return aboutData;
 }
 

@@ -71,9 +71,13 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 KisFactory::~KisFactory()
 {
     delete s_pserver;
+    s_pserver = 0L;
     delete s_rserver;
+    s_rserver = 0L;
     delete s_aboutData;
+    s_aboutData = 0L;
     delete s_global;
+    s_global = 0L;
 }
 
 /*
@@ -122,7 +126,7 @@ KInstance* KisFactory::global()
 
 	s_global->dirs()->addResourceType("toolbars",
 	    KStandardDirs::kde_default("data") + "koffice/toolbar/");
-                                          
+
 	// Tell the iconloader about share/apps/koffice/icons
 	s_global->iconLoader()->addAppDir("koffice");
     }

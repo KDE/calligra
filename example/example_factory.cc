@@ -50,6 +50,7 @@ ExampleFactory::~ExampleFactory()
     {
       delete s_global->aboutData();
       delete s_global;
+      s_global = 0L;
     }
 }
 
