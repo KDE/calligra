@@ -52,10 +52,12 @@ private:
 
 		double width() const;
 		double height() const;
-		double round() const;
+		double roundx() const;
+		double roundy() const;
 		void setWidth( double value );
 		void setHeight( double value );
-		void setRound( double value );
+		void setRoundX( double value );
+		void setRoundY( double value );
 		void refreshUnit ();
 
 	private:
@@ -63,7 +65,8 @@ private:
 
 		KoUnitDoubleSpinBox* m_width;
 		KoUnitDoubleSpinBox* m_height;
-		KoUnitDoubleSpinBox* m_round;
+		KoUnitDoubleSpinBox* m_roundx;
+		KoUnitDoubleSpinBox* m_roundy;
 		QLabel* m_heightLabel;
 		QLabel* m_widthLabel;
 	};

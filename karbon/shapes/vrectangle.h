@@ -27,7 +27,7 @@ class VRectangle : public VComposite
 public:
 	VRectangle( VObject* parent, VState state = edit );
 	VRectangle( VObject* parent,
-		const KoPoint& topLeft, double width, double height, double edgeRadius = 0.0 );
+		const KoPoint& topLeft, double width, double height, double rx = 0.0, double ry = 0.0 );
 
 	virtual QString name() const;
 
@@ -41,7 +41,8 @@ private:
 	KoPoint m_topLeft;
 	double m_width;
 	double m_height;
-	double m_edgeRadius;
+	double m_rx;
+	double m_ry;
 };
 
 #endif
