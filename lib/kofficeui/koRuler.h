@@ -27,6 +27,7 @@
 #include <qframe.h>
 #include <qpixmap.h>
 
+#include <kdemacros.h>
 #include <kofficemacros.h>
 #include <koGlobal.h>
 #include <koTabChooser.h>
@@ -121,7 +122,7 @@ public:
      * example "mm", "pt" or "inch".
      * @deprecated You should use the KoUnit::Unit variant instead.
      */
-    KDE_DEPRECATED void setUnit( const QString& unit );
+    void setUnit( const QString& unit ) KDE_DEPRECATED ;
     /**
      * Set the unit to be used.
      */
