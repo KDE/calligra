@@ -592,6 +592,9 @@ void KIllustratorView::setupCanvas () {
   QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
 	   this, SLOT(popupForSelection (int, int)));
 
+  widget ()->setFocusPolicy (QWidget::StrongFocus);
+  widget ()->setFocusProxy (canvas);
+
   grid->addWidget (viewport, 1, 1);
   grid->setRowStretch (1, 20);
   grid->setColStretch (1, 20);
