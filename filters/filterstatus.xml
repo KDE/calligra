@@ -338,6 +338,19 @@
                 <title xml:lang="en_us">PNG</title>
                 <stat import="none" export="onestar"/>
             </filter>
+            <filter id="karbon_applixgraphics">
+                <title xml:lang="en_us">Applix Graphics</title>
+                <stat import="planned" export="none"/>
+            </filter>
+            <filter id="karbon_msod">
+                <title xml:lang="en_us">MSOD</title>
+                <note xml:lang="en_us">Microsoft Office Drawing</note>
+                <stat import="planned" export="none"/>
+            </filter>
+            <filter id="karbon_xfig">
+                <title xml:lang="en_us">Xfig</title>
+                <stat import="planned" export="none"/>
+            </filter>
         </application>
 
         <application id="krita">
@@ -350,37 +363,10 @@
 
         <application id="kontour" released="no">
             <title xml:lang="en_us">Kontour</title>
-            <filter id="kontour_illustrator">
-                <title xml:lang="en_us">Adobe Illustrator</title>
-                <contact href="mailto:dirk.schoenberger@sz-online.de">Dirk Schönberger</contact>
-                <stat import="abandoned" export="none"/>
-            </filter>
-            <filter id="kontour_applix">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/applixgraphics"/>
-                <title xml:lang="en_us">Applix Graphics</title>
-                <stat import="abandoned" export="none"/>
-            </filter>
             <filter id="kontour_latex">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/latex"/>
                 <title xml:lang="en_us">LaTeX</title>
                 <stat import="none" export="abandoned"/>
-            </filter>
-            <filter id="kontour_msod">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/msod"/>
-                <title xml:lang="en_us">MSOD</title>
-                <note xml:lang="en_us">Microsoft Office Drawing</note>
-                <stat import="abandoned" export="none"/>
-            </filter>
-            <filter id="kontour_windraw">
-                <title xml:lang="en_us">WinDraw 3.1</title>
-                <note xml:lang="en_us">Micrografx Windraw 3.1</note>
-                <contact href="mailto:ebartels@nwn.de">Enno Bartels</contact>
-                <stat import="abandoned" export="none"/>
-            </filter>
-            <filter id="kontour_xfig">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/xfig"/>
-                <title xml:lang="en_us">Xfig</title>
-                <stat import="abandoned" export="none"/>
             </filter>
             <filter id="kontour_rtf">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kontour/rtf"/>
