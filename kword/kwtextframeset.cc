@@ -1747,6 +1747,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
                 paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
             if ( cursor->remove() )
             {
+                m_lastFormatted = cursor->parag();
                 undoRedoInfo.text += "\n";
                 undoRedoInfo.oldParagLayouts << paragLayout;
             }
