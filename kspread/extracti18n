@@ -1,0 +1,66 @@
+#! /usr/bin/perl
+
+$linenr = 0;
+$filename = "";
+@filenames = ();
+
+sub writeoutstring($)
+{
+   print STDOUT "// xgettext:no-c-format\ni18n(\"@_[0]\");\n";
+}
+
+while (defined ($ARGV[0]))
+{
+   $_ = shift; 
+   $filename = $_; # maybe check for options
+
+if (! $filename) {
+   print STDERR "no file to open\n";
+   exit 1;
+}
+
+$string = "";
+$intext = 0;
+
+open(FILE, $filename);
+while ( <FILE> ) {
+   $linenr++;
+
+   $string .= $_;   
+   chomp($string);
+ 
+   $textstring = '(Example|GroupName|Text|Comment|Syntax|TypeName)>';
+
+   if ($intext == 0) {
+     if ($string =~ /<$textstring/) {
+       $string =~ s/^.*<$textstring//;
+       $intext = 1;
+	   $starting_linenr = $linenr;
+     } else {
+       $string = "";
+     }
+   }
+   
+   if (($intext == 1) && ($string =~ /<\/$textstring/)) {
+     my $text = $string;
+     $text =~ s/<\/$textstring.*$//;
+	 $text =~ s/&lt;/</g;
+     $text =~ s/&gt;/>/g;
+     $text =~ s/&amp;/&/g; 
+	 $text =~ s/\"/\\"/g;
+     writeoutstring($text); 
+     $string =~ s/^.*<\/$textstring//;
+     $intext = 0;
+	 if ($linenr != $starting_linenr) {
+		print STDERR "there is <text> floating\n";
+     }
+   }
+
+}
+
+if ($intext == 1) {
+ print STDERR "parsing error in $filename $linenr\n";
+ exit 1;
+}
+
+}
