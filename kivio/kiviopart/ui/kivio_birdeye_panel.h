@@ -9,6 +9,7 @@ class KivioCanvas;
 class KivioDoc;
 class KivioPage;
 class KAction;
+class KoZoomHandler;
 
 class KivioBirdEyePanel : public KivioBirdEyePanelBase
 { Q_OBJECT
@@ -30,7 +31,6 @@ protected slots:
   void canvasZoomChanged();
   void slotUpdateView(KivioPage*);
   void togglePageBorder(bool);
-  void togglePageOnly(bool);
   void doAutoResizeMin();
   void doAutoResizeMax();
 
@@ -49,16 +49,15 @@ private:
   KAction* zoomOut;
   QPixmap* m_buffer;
   bool m_bShowPageBorders;
-  bool m_bPageOnly;
 
   QSize cMinSize;
   QSize cMaxSize;
 
-  float zoom;
   QRect varea;
   AlignmentFlags apos;
   bool handlePress;
   QPoint lastPos;
+  KoZoomHandler* m_zoomHandler;
 };
 
 #endif
