@@ -1,5 +1,5 @@
 #############################################################################
-# Makefile for building: sqlite
+# Makefile for building: sqlite2
 #############################################################################
 
 ####### Compiler, tools and options
@@ -14,16 +14,10 @@ CXXFLAGS	=	-nologo -Zm200 /GR /GX /GZ /TP -W3 -MDd -Z7 -GX -GR  -DUNICODE
 LEXFLAGS	=
 YACCFLAGS	=-d
 INCPATH	=	 -Isrc
-#-I"$(QKW)" -I"$(QKW)\include" -I"$(QKW)\cygwin" -I"$(QTDIR)\include" -I"d:\oo\kw\kdebase\ktip" -I"moc\\" -I"D:\qt312\mkspecs\win32-msvc"
 LINK	=	link
 LFLAGS	=	/NOLOGO /FORCE:MULTIPLE /DEBUG /SUBSYSTEM:console /DEF:kexisql.def /DLL
 VERSION=2.8.2
-#/LIBPATH:"$(QTDIR)\lib"
-#LIBS	=	 "qt-mt312.lib" "qtmain.lib" "kernel32.lib" "user32.lib" "gdi32.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "imm32.lib" "winmm.lib" "wsock32.lib" "winspool.lib" "$(KDEDIR)\lib\kdecore_d$(KDE_VER).lib" "$(KDEDIR)\lib\kdeui_d$(KDE_VER).lib" "$(KDEDIR)\lib\kdefx_d$(KDE_VER).lib" "$(KDEDIR)\lib\kdewin32_d$(KDE_VER).lib" "$(KDEDIR)\lib\ltdl_d$(KDE_VER).lib" "$(QKW)\files\resources\ktip.res"
 LIBS	=	 "kernel32.lib" "user32.lib" "gdi32.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "imm32.lib" "winmm.lib" "wsock32.lib" "winspool.lib" 
-MOC		=	$(QTDIR)\bin\moc.exe
-UIC		=	$(QTDIR)\bin\uic.exe
-QMAKE		=	qmake
 IDC		=	$(QTDIR)\bin\idc.exe
 IDL		=	midl
 ZIP		=	zip -r -9
@@ -45,6 +39,7 @@ src/btree.c \
 src/btree_rb.c \
 src/build.c \
 src/copy.c \
+src/date.c \
 src/delete.c \
 src/expr.c \
 src/func.c \
@@ -64,9 +59,11 @@ src/update.c \
 src/util.c \
 src/vacuum.c \
 src/vdbe.c \
+src/vdbeaux.c \
 src/where.c \
 src/opcodes.c \
-src/parse.c
+src/parse.c \
+src/shell.c
 
 OBJECTS =	\
 obj/attach.obj \
@@ -75,6 +72,7 @@ obj/btree.obj \
 obj/btree_rb.obj \
 obj/build.obj \
 obj/copy.obj \
+obj/date.obj \
 obj/delete.obj \
 obj/expr.obj \
 obj/func.obj \
@@ -94,9 +92,11 @@ obj/update.obj \
 obj/util.obj \
 obj/vacuum.obj \
 obj/vdbe.obj \
+obj/vdbeaux.obj \
 obj/where.obj \
 obj/opcodes.obj \
-obj/parse.obj
+obj/parse.obj \
+obj/shell.obj
 
 FORMS =	
 UICDECLS =	
@@ -104,36 +104,11 @@ UICIMPLS =
 SRCMOC	=	
 OBJMOC	=	
 DIST	=	
-TARGET	=	$(KDEDIR)/lib/kexisql.dll
+TARGET	=	$(KDEDIR)/lib/kexisql2.dll
 
 ####### Implicit rules
 
 .SUFFIXES: .c .cpp .cc .cxx .C
-
-{moc\}.cpp{obj\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
-
-{moc\}.cc{obj\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
-
-{moc\}.cxx{obj\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
-
-{moc\}.C{obj\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
-
-{moc\}.c{obj\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
 
 {.}.cpp{obj\}.obj::
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
@@ -174,33 +149,18 @@ $(TARGET):  $(UICDECLS) $(OBJECTS) $(OBJMOC)
 	  $(OBJECTS) $(OBJMOC) $(LIBS)
 <<
 
+sqlite:	obj/shell.obj $(KDEDIR)/lib/kexisql2.lib
+	link $(READLINE_FLAGS) $(LIBPTHREAD) \
+		/OUT:$(KDEDIR)/bin/ksqlite2.exe obj/shell.obj $(KDEDIR)/lib/kexisql2.lib $(LIBREADLINE)
 
 mocables: $(SRCMOC)
 uicables: $(UICIMPLS) $(UICDECLS)
 
-Makefile: ktip.pro  D:\qt312\mkspecs\win32-msvc\qmake.conf ..\..\kwcommon.pro \
-		..\common.pro
-	$(QMAKE) -o Makefile ktip.pro
-qmake: 
-	@$(QMAKE) -o Makefile ktip.pro
-
-dist:
-	$(ZIP) ktip.zip $(SOURCES) $(HEADERS) $(DIST) $(FORMS) d:/oo/kw/kdebase/ktip/ktip.pro ..\..\kwcommon.pro ..\common.pro  
-
-uiclean:
-mocclean:
 clean: 
 	-del obj\*.obj
-	-del sqlite.pdb
 
 distclean: clean
 	-del $(TARGET)
-
-####### Compile
-
-obj\ktipwindow.obj: ktipwindow.cpp 
-
-####### Install
 
 install: all 
 
