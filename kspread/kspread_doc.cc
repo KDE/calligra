@@ -591,6 +591,16 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     xmlWriter.endDocument();
     if ( !store->close() )
         return false;
+
+    //add manifest line for content.xml
+    manifestWriter->startElement( "manifest:file-entry" );
+    manifestWriter->addAttribute( "manifest:media-type", "text/xml" );
+    manifestWriter->addAttribute( "manifest:full-path", "content.xml" );
+    manifestWriter->endElement();
+
+    //todo add manifest line for style.xml
+
+
     kdError() << "KSpreadDoc::saveOasis not implemented (for the moment :) )" << endl;
     return true;
 }
