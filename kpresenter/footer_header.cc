@@ -86,16 +86,16 @@ void KPFooterHeaderEditor::setupHeader()
   QHBox *tool1 = new QHBox(back);
   tool1->setMargin(5);
   tool1->setSpacing(5);
-  
+
   showHeader = new QCheckBox(i18n("Show Header"),tool1);
   connect(showHeader,SIGNAL(clicked()),this,SLOT(slotShowHeader()));
 
   penBrush1 = new QPushButton(i18n("Configure Frame and Background..."),tool1);
   connect(penBrush1,SIGNAL(clicked()),this,SLOT(slotHeaderPenBrush()));
   penBrush1->setEnabled(false);
-  
+
   tool1->setMaximumHeight(penBrush1->sizeHint().height() + 10);
-  
+
   QVBox *txtFrame = new QVBox(back);
   txtFrame->setMargin(2);
   txtFrame->setBackgroundColor(Qt::white);
@@ -170,7 +170,7 @@ void KPFooterHeaderEditor::slotCloseDia()
 void KPFooterHeaderEditor::slotHeaderPenBrush()
 {
   KPTextObject *header = doc->header();
-  
+
   StyleDia *styleDia = new StyleDia(0,"StyleDia",SD_PEN | SD_BRUSH);
   styleDia->setMaximumSize(styleDia->width(),styleDia->height());
   styleDia->setMinimumSize(styleDia->width(),styleDia->height());
@@ -193,7 +193,7 @@ void KPFooterHeaderEditor::slotHeaderPenBrush()
       header->setGColor2(styleDia->getGColor1());
       header->setGType(styleDia->getGType());
     }
-  
+
   delete styleDia;
   slotUpdatePage();
 }
@@ -202,7 +202,7 @@ void KPFooterHeaderEditor::slotHeaderPenBrush()
 void KPFooterHeaderEditor::slotFooterPenBrush()
 {
   KPTextObject *footer = doc->footer();
-  
+
   StyleDia *styleDia = new StyleDia(0,"StyleDia",SD_PEN | SD_BRUSH);
   styleDia->setMaximumSize(styleDia->width(),styleDia->height());
   styleDia->setMinimumSize(styleDia->width(),styleDia->height());
@@ -225,7 +225,7 @@ void KPFooterHeaderEditor::slotFooterPenBrush()
       footer->setGColor2(styleDia->getGColor1());
       footer->setGType(styleDia->getGType());
     }
-  
+
   delete styleDia;
   slotUpdatePage();
 }

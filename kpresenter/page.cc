@@ -3227,7 +3227,7 @@ void Page::dropEvent(QDropEvent *e)
     }
   else
     e->ignore();
-  
+
 //   else if (QUrlDrag::canDecode(e))
 //     {
 //       setToolEditMode(TEM_MOUSE);

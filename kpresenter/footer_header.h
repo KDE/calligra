@@ -70,7 +70,7 @@ protected slots:
   void slotCloseDia();
   void slotHeaderPenBrush();
   void slotFooterPenBrush();
-  
+
 };
 
 #endif
