@@ -39,7 +39,7 @@ void
 VSegmentList::close()
 {
 	// move end-segment if one already exists:
-	if( getLast()->type() == VSegment::end )
+	if( getLast()->type() == segment_end )
 	{
 		getLast()->
 			setPoint( 3, getFirst()->point( 3 ) );
@@ -48,7 +48,7 @@ VSegmentList::close()
 	else if( getLast()->point( 3 ) != getFirst()->point( 3 ) )
 	{
 		VSegment* s = new VSegment();
-		s->setType( VSegment::end );
+		s->setType( segment_end );
 		s->setPoint( 3, getFirst()->point( 3 ) );
 		append( s );
 	}

@@ -14,8 +14,6 @@
 
 #include "vpath.h"
 #include "vpath_bounding.h"
-#include "vpath_fill.h"
-#include "vpath_stroke.h"
 
 #include <kdebug.h>
 
@@ -57,26 +55,84 @@ VPath::draw( VPainter *painter, const QRect& rect,
 
 	painter->save();
 	painter->setZoomFactor( zoomFactor );
-	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 
-	VPathFill pathfill( fill() );
-	VPathStroke pathstrk( stroke() );
+	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 
 	if( state() != state_edit )
 	{
 		// paint fill:
-		pathfill.begin_draw( painter, zoomFactor );
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			pathfill.draw( *( itr.current() ) );
+			VSegmentListIterator jtr( *( itr.current() ) );
+			for( ; jtr.current(); ++jtr )
+			{
+				if( jtr.current()->type() == segment_curve  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 2 ),
+						jtr.current()->point( 3 ) );
+				else if( jtr.current()->type() == segment_curve1  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 3 ) );
+				else if( jtr.current()->type() == segment_curve2  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 3 ),
+						jtr.current()->point( 3 ) );
+				else if(
+					jtr.current()->type() == segment_line ||
+					jtr.current()->type() == segment_end  )
+				{
+					painter->lineTo( jtr.current()->point( 3 ) );
+				}
+				else
+					painter->moveTo( jtr.current()->point( 3 ) );
+			}
 		}
-		pathfill.end_draw();
+
+		painter->setRasterOp( Qt::CopyROP );
+		painter->setPen( Qt::NoPen );
+		painter->setBrush( fill() );
+		painter->fillPath();
 
 		// draw stroke:
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			pathstrk.draw( painter, zoomFactor, *( itr.current() ) );
+			VSegmentListIterator jtr( *( itr.current() ) );
+			for( ; jtr.current(); ++jtr )
+			{
+				if( jtr.current()->type() == segment_curve  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 2 ),
+						jtr.current()->point( 3 ) );
+				else if( jtr.current()->type() == segment_curve1  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 3 ) );
+				else if( jtr.current()->type() == segment_curve2  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 3 ),
+						jtr.current()->point( 3 ) );
+				else if(
+					jtr.current()->type() == segment_line ||
+					jtr.current()->type() == segment_end  )
+				{
+					painter->lineTo( jtr.current()->point( 3 ) );
+				}
+				else
+					painter->moveTo( jtr.current()->point( 3 ) );
+			}
 		}
+
+		painter->setRasterOp( Qt::CopyROP );
+		painter->setPen( stroke() );
+		painter->setBrush( Qt::NoBrush );
+		painter->strokePath();
 	}
 
 	// draw simplistic contour:
@@ -84,8 +140,39 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			pathstrk.draw( painter, zoomFactor, *( itr.current() ), true );
+			VSegmentListIterator jtr( *( itr.current() ) );
+			for( ; jtr.current(); ++jtr )
+			{
+				if( jtr.current()->type() == segment_curve  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 2 ),
+						jtr.current()->point( 3 ) );
+				else if( jtr.current()->type() == segment_curve1  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 3 ) );
+				else if( jtr.current()->type() == segment_curve2  )
+					painter->curveTo(
+						jtr.current()->point( 1 ),
+						jtr.current()->point( 3 ),
+						jtr.current()->point( 3 ) );
+				else if(
+					jtr.current()->type() == segment_line ||
+					jtr.current()->type() == segment_end  )
+				{
+					painter->lineTo( jtr.current()->point( 3 ) );
+				}
+				else
+					painter->moveTo( jtr.current()->point( 3 ) );
+			}
 		}
+
+		painter->setRasterOp( Qt::XorROP );
+		painter->setPen( Qt::yellow );
+		painter->setBrush( Qt::NoBrush );
+		painter->strokePath();
 	}
 
 
@@ -144,7 +231,7 @@ VPath::moveTo( const double& x, const double& y )
 	if( isClosed() ) return *this;
 
 	// move "begin" when path is still empty:
-	if( m_segmentLists.getLast()->getLast()->type() == VSegment::begin )
+	if( m_segmentLists.getLast()->getLast()->type() == segment_begin )
 		m_segmentLists.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
 	// otherwise create a new subpath:
 	else
@@ -165,7 +252,7 @@ VPath::lineTo( const double& x, const double& y )
 	if( isClosed() ) return *this;
 
 	VSegment* s = new VSegment();
-	s->setType( VSegment::line );
+	s->setType( segment_line );
 	s->setPoint( 3, KoPoint( x, y ) );
 	m_segmentLists.getLast()->append( s );
 
@@ -181,7 +268,7 @@ VPath::curveTo(
 	if( isClosed() ) return *this;
 
 	VSegment* s = new VSegment();
-	s->setType( VSegment::curve );
+	s->setType( segment_curve );
 	s->setPoint( 1, KoPoint( x1, y1 ) );
 	s->setPoint( 2, KoPoint( x2, y2 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
@@ -199,7 +286,7 @@ VPath::curve1To(
 	if( isClosed() ) return *this;
 
 	VSegment* s = new VSegment();
-	s->setType( VSegment::curve1 );
+	s->setType( segment_curve1 );
 	s->setPoint( 2, KoPoint( x2, y2 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
 
@@ -216,7 +303,7 @@ VPath::curve2To(
 	if( isClosed() ) return *this;
 
 	VSegment* s = new VSegment();
-	s->setType( VSegment::curve2 );
+	s->setType( segment_curve2 );
 	s->setPoint( 1, KoPoint( x1, y1 ) );
 	s->setPoint( 3, KoPoint( x3, y3 ) );
 

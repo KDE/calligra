@@ -46,22 +46,22 @@ private:
 // this leads to a waste of KoPoints for e.g. line-segments. otoh memory is cheap
 // and human resources are expensive. ;)
 
+// segment types:
+enum VSegmentType{
+	segment_begin,		// initial moveto
+	segment_curve,		// curveto (bezier)
+	segment_curve1,		// + first ctrl-point is identical to first knot.
+	segment_curve2,		// + last ctrl-point is identical to last knot.
+	segment_line,		// lineto
+	segment_end
+};
+
 class VSegment
 {
 public:
 	VSegment();
 	VSegment( const VSegment &other );
 
-	// segment types:
-	enum VSegmentType{
-		begin,			// initial moveto
-		curve,			// curveto (bezier)
-		curve1,			// + first ctrl-point is identical to first knot.
-		curve2,			// + last ctrl-point is identical to last knot.
-		line,			// lineto
-		end
-	};
-	
 	VSegmentType type() const { return m_type; }
 	void setType( VSegmentType t ) { m_type = t; }
 

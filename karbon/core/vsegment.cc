@@ -19,7 +19,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 	VSegmentListIterator itr( list );
 	for( ; itr.current(); ++itr )
 	{
-		if( itr.current()->type() == VSegment::curve )
+		if( itr.current()->type() == segment_curve )
 		{
 			if( !curveTo(
 				itr.current()->point( 1 ),
@@ -29,7 +29,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 				return false;
 			}
 		}
-		else if( itr.current()->type() == VSegment::line )
+		else if( itr.current()->type() == segment_line )
 		{
 			if( !lineTo(
 				itr.current()->point( 3 ) ) )
@@ -37,7 +37,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 				return false;
 			}
 		}
-		else if( itr.current()->type() == VSegment::curve1 )
+		else if( itr.current()->type() == segment_curve1 )
 		{
 			if( !curve1To(
 				itr.current()->point( 2 ),
@@ -46,7 +46,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 				return false;
 			}
 		}
-		else if( itr.current()->type() == VSegment::curve2 )
+		else if( itr.current()->type() == segment_curve2 )
 		{
 			if( !curve2To(
 				itr.current()->point( 1 ),
@@ -55,7 +55,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 				return false;
 			}
 		}
-		else if( itr.current()->type() == VSegment::begin )
+		else if( itr.current()->type() == segment_begin )
 		{
 			if( !begin(
 				itr.current()->point( 3 ) ) )
@@ -63,7 +63,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 				return false;
 			}
 		}
-		else if( itr.current()->type() == VSegment::end )
+		else if( itr.current()->type() == segment_end )
 		{
 			if( !end(
 				itr.current()->point( 3 ) ) )
@@ -87,7 +87,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 
 
 VSegment::VSegment()
-	: m_type( begin )
+	: m_type( segment_begin )
 {
 }
 
@@ -104,7 +104,7 @@ VSegment::save( QDomElement& element ) const
 {
 	QDomElement me;
 
-	if( type() == curve )
+	if( type() == segment_curve )
 	{
 		me = element.ownerDocument().createElement( "CURVE" );
 		me.setAttribute( "x1", m_point[0].x() );
@@ -114,7 +114,7 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
-	else if( type() == curve1 )
+	else if( type() == segment_curve1 )
 	{
 		me = element.ownerDocument().createElement( "CURVE1" );
 		me.setAttribute( "x2", m_point[1].x() );
@@ -122,7 +122,7 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
-	else if( type() == curve2 )
+	else if( type() == segment_curve2 )
 	{
 		me = element.ownerDocument().createElement( "CURVE2" );
 		me.setAttribute( "x1", m_point[0].x() );
@@ -130,13 +130,13 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
-	else if( type() == line )
+	else if( type() == segment_line )
 	{
 		me = element.ownerDocument().createElement( "LINE" );
 		me.setAttribute( "x", m_point[2].x() );
 		me.setAttribute( "y", m_point[2].y() );
 	}
-	else if( type() == begin )
+	else if( type() == segment_begin )
 	{
 		me = element.ownerDocument().createElement( "MOVE" );
 		me.setAttribute( "x", m_point[2].x() );
@@ -154,7 +154,7 @@ VSegment::load( const QDomElement& element )
 {
 	if( element.tagName() == "CURVE" )
 	{
-		m_type = curve;
+		m_type = segment_curve;
 		m_point[0].setX( element.attribute( "x1" ).toDouble() );
 		m_point[0].setY( element.attribute( "y1" ).toDouble() );
 		m_point[1].setX( element.attribute( "x2" ).toDouble() );
@@ -164,7 +164,7 @@ VSegment::load( const QDomElement& element )
 	}
 	else if( element.tagName() == "CURVE1" )
 	{
-		m_type = curve1;
+		m_type = segment_curve1;
 		m_point[1].setX( element.attribute( "x2" ).toDouble() );
 		m_point[1].setY( element.attribute( "y2" ).toDouble() );
 		m_point[2].setX( element.attribute( "x3" ).toDouble() );
@@ -172,7 +172,7 @@ VSegment::load( const QDomElement& element )
 	}
 	else if( element.tagName() == "CURVE2" )
 	{
-		m_type = curve2;
+		m_type = segment_curve2;
 		m_point[0].setX( element.attribute( "x1" ).toDouble() );
 		m_point[0].setY( element.attribute( "y1" ).toDouble() );
 		m_point[2].setX( element.attribute( "x3" ).toDouble() );
@@ -180,13 +180,13 @@ VSegment::load( const QDomElement& element )
 	}
 	else if( element.tagName() == "LINE" )
 	{
-		m_type = line;
+		m_type = segment_line;
 		m_point[2].setX( element.attribute( "x" ).toDouble() );
 		m_point[2].setY( element.attribute( "y" ).toDouble() );
 	}
 	else if( element.tagName() == "MOVE" )
 	{
-		m_type = begin;
+		m_type = segment_begin;
 		m_point[2].setX( element.attribute( "x" ).toDouble() );
 		m_point[2].setY( element.attribute( "y" ).toDouble() );
 	}
