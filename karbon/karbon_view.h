@@ -107,6 +107,14 @@ public slots:
 	void setLineWidth();
 	void selectionChanged();
 
+	// path:
+	void pathInsertKnots();
+	void pathFlatten();
+	void pathRoundCorners();
+	void pathWhirlPinch();
+
+
+
 protected slots:
 	// object related operations:
 	void objectTrafoTranslate();
@@ -127,12 +135,6 @@ protected slots:
 	void starTool();
 	void textTool();
 	void gradTool();
-
-	// path:
-	void pathInsertKnots();
-	void pathFlatten();
-	void pathRoundCorners();
-	void pathWhirlPinch();
 
 	// view:
 	void viewModeChanged();

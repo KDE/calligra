@@ -28,34 +28,40 @@ class KarbonView;
 
 class KarbonViewIface : public KoViewIface
 {
-	K_DCOP
+    K_DCOP
 public:
-	KarbonViewIface( KarbonView *view_ );
+    KarbonViewIface( KarbonView *view_ );
 k_dcop:
-	void editCut();
-	void editCopy();
-	void editPaste();
-	void editSelectAll();
-	void editDeselectAll();
-	void editDeleteSelection();
-	void editPurgeHistory();
+    void editCut();
+    void editCopy();
+    void editPaste();
+    void editSelectAll();
+    void editDeselectAll();
+    void editDeleteSelection();
+    void editPurgeHistory();
 
-	void objectMoveToTop();
-	void objectMoveToBottom();
-	void objectMoveUp();
-	void objectMoveDown();
+    void objectMoveToTop();
+    void objectMoveToBottom();
+    void objectMoveUp();
+    void objectMoveDown();
 
-	double zoomFactor() const;
+    double zoomFactor() const;
 
-	// TODO: remove this someday:
-	void dummyForTesting();
+    // TODO: remove this someday:
+    void dummyForTesting();
 
     void groupSelection();
     void ungroupSelection();
     void configure();
     void setLineWidth( double val);
+
+    void insertKnots();
+    void pathFlatten();
+    void pathRoundCorners();
+    void pathWhirlPinch();
+
 private:
-	KarbonView *m_view;
+    KarbonView *m_view;
 };
 
 #endif

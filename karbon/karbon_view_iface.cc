@@ -128,3 +128,24 @@ void KarbonViewIface::setLineWidth( double val)
     m_view->setLineWidth( val );
 }
 
+
+void KarbonViewIface::insertKnots()
+{
+    m_view->pathInsertKnots();
+}
+
+void KarbonViewIface::pathFlatten()
+{
+    m_view->pathFlatten();
+}
+
+void KarbonViewIface::pathRoundCorners()
+{
+    m_view->pathRoundCorners();
+}
+
+void KarbonViewIface::pathWhirlPinch()
+{
+    m_view->pathWhirlPinch();
+}
+
