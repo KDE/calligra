@@ -7,21 +7,22 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kstaticdeleter.h>
 #include <kinstance.h>
 
 // these are defined in kspread_function_*.cc
-void KSpreadRegisterConversionFunctions();  
+void KSpreadRegisterConversionFunctions();
 void KSpreadRegisterDatabaseFunctions();
-void KSpreadRegisterDateTimeFunctions();    
-void KSpreadRegisterEngineeringFunctions(); 
-void KSpreadRegisterFinancialFunctions();   
-void KSpreadRegisterInformationFunctions();   
-void KSpreadRegisterLogicFunctions();       
-void KSpreadRegisterMathFunctions();        
+void KSpreadRegisterDateTimeFunctions();
+void KSpreadRegisterEngineeringFunctions();
+void KSpreadRegisterFinancialFunctions();
+void KSpreadRegisterInformationFunctions();
+void KSpreadRegisterLogicFunctions();
+void KSpreadRegisterMathFunctions();
 void KSpreadRegisterReferenceFunctions();
-void KSpreadRegisterStatisticalFunctions();        
-void KSpreadRegisterTextFunctions();        
-void KSpreadRegisterTrigFunctions();        
+void KSpreadRegisterStatisticalFunctions();
+void KSpreadRegisterTextFunctions();
+void KSpreadRegisterTrigFunctions();
 
 static KSpreadParameterType toType( const QString& type )
 {
@@ -249,16 +250,17 @@ QString KSpreadFunctionDescription::toQML() const
     return text;
 }
 
+static KStaticDeleter<KSpreadFunctionRepository> sd;
 KSpreadFunctionRepository* KSpreadFunctionRepository::s_self = 0;
 
 KSpreadFunctionRepository* KSpreadFunctionRepository::self()
 {
     if( !s_self )
     {
-        s_self = new KSpreadFunctionRepository();
+        sd.setObject( s_self, new KSpreadFunctionRepository() );
 
         // register all built-in functions
-        KSpreadRegisterConversionFunctions();  
+        KSpreadRegisterConversionFunctions();
         KSpreadRegisterDatabaseFunctions();
         KSpreadRegisterDateTimeFunctions();    
         KSpreadRegisterEngineeringFunctions(); 
@@ -267,7 +269,7 @@ KSpreadFunctionRepository* KSpreadFunctionRepository::self()
         KSpreadRegisterLogicFunctions();       
         KSpreadRegisterMathFunctions();        
         KSpreadRegisterReferenceFunctions();
-        KSpreadRegisterStatisticalFunctions();        
+        KSpreadRegisterStatisticalFunctions();
         KSpreadRegisterTextFunctions();        
         KSpreadRegisterTrigFunctions();   
 
@@ -312,7 +314,7 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
 		group = i18n( e.namedItem( "GroupName" ).toElement().text().utf8() );
 		m_groups.append( group );
 		m_groups.sort();
-		
+
 		QDomNode n2 = e.firstChild();
 		for( ; !n2.isNull(); n2 = n2.nextSibling() )
 		{
