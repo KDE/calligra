@@ -23,6 +23,7 @@
 #include <shell.h>
 
 class KoDocument;
+class KToolBar;
 
 /**
  * This class is used to represent a main window
@@ -55,9 +56,11 @@ public:
      * your component, for example "KSpread" or "KWord".
      */
     virtual QString nativeFormatName() const = 0;
-    
+
     static KoMainWindow* firstMainWindow();
     static KoMainWindow* nextMainWindow();
+
+    KToolBar *fileToolBar() { return fileTools; }
     
 public slots:
     virtual void slotFileNew();
@@ -68,7 +71,7 @@ public slots:
     virtual void slotFileClose();
     virtual void slotFileQuit();
     virtual void slotHelpAbout();
-    
+
 protected:
     virtual bool closeAllDocuments();
     virtual bool closeDocument();
@@ -102,6 +105,8 @@ protected:
 
 private:
     static QList<KoMainWindow>* s_lstMainWindows;
+    KToolBar* fileTools;
+
 };
 
 #endif

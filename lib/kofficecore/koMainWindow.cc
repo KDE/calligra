@@ -73,7 +73,7 @@ KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
     KAction* helpAbout = new KAction( i18n("About..."), 0, this, SLOT( slotHelpAbout() ),
 			  actionCollection(), "about" );
 
-    KToolBar* fileTools = new KToolBar( this, "file operations" );
+    fileTools = new KToolBar( this, "file operations" );
     fileTools->setFullWidth( FALSE );
     fnew->plug( fileTools );
     open->plug( fileTools );
