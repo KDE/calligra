@@ -291,6 +291,8 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
       m_bForceExtraCells = FALSE;
       m_iExtraXCells = 0;
       m_iExtraYCells = 0;
+      m_iExtraWidth = 0;
+      m_iExtraHeight = 0;
       return;
   }
 

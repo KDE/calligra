@@ -879,3 +879,9 @@ For example in cell A1 : =cos(12)
 =>call kspread_dlg_formula => =cos(12)+
 cell A1 : 10
 =>call : =10+
+
+2000-08-11-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+Bug Fix : 
+Now when you dissociate cells, extrawidth=0
+extraheight=0.
