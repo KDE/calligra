@@ -57,6 +57,9 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		 */
 		void    checkModifiedProp();
 
+		void addPropertyDescription(const char *property, const QString &desc);
+		void addValueDescription(const char *value, const QString &desc);
+
 	public slots:
 		/*! Sets the buffer's object to \a widget. The properties are created automatically, and the list view is updated.
 		  checkModifiedProp() is called before doing this.
@@ -106,11 +109,11 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		/*! Saves the "layout" property and changes the Container 's layout (using Container::setLayout() ). ( called by changeProperty() )*/
 		void    saveLayoutProperty(const QString &value);
 		/*! \return The i18n'ed name of the property whose name is \a name, that will be displayed in PropertyEditor. */
-		static QString      descFromName(const QString &name);
+		QString      descFromName(const QString &name);
 		/*! \return The i18n'ed name of the property's vale whose name is \a name. */
-		static QString      descFromValue(const QString &name);
+		QString      descFromValue(const QString &name);
 		/*! \return The i18n'ed list of values, that will be shown by Property Editor (using descFromValue()).*/
-		static QStringList  descList(const QStringList &list);
+		QStringList  descList(const QStringList &list);
 
 	private:
 		QObject		*m_object;
@@ -122,6 +125,10 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		PropertyCommand	*m_lastcom;
 		GeometryPropertyCommand *m_lastgeocom;
 		bool		m_undoing;
+
+		// i18n stuff
+		QMap<QString, QString> propDesc;
+		QMap<QString, QString> valueDesc;
 
 		friend class PropertyCommand;
 		friend class LayoutPropertyCommand;

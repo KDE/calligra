@@ -357,14 +357,20 @@ ObjectPropertyBuffer::checkModifiedProp()
 QString
 ObjectPropertyBuffer::descFromName(const QString &name)
 {
-	if(name == "name") return i18n("Name");
-	if(name == "paletteBackgroundPixmap")  return i18n("Background Pixmap");
-	if(name == "enabled") return i18n("Enabled");
-	if(name == "geometry") return i18n("Geometry");
-	if(name == "font") return i18n("Font");
-	if(name == "cursor") return i18n("Cursor");
+	if(propDesc.isEmpty())
+	{
+		propDesc["name"] = i18n("Name");
+		propDesc["paletteBackgroundPixmap"] = i18n("Background Pixmap");
+		propDesc["enabled"] = i18n("Enabled");
+		propDesc["geometry"] = i18n("Geometry");
+		propDesc["font"] = i18n("Font");
+		propDesc["cursor"] = i18n("Cursor");
+	}
 
-	return name;
+	if(propDesc.contains(name))
+		return propDesc[name];
+	else
+		return name;
 }
 
 QStringList
@@ -383,12 +389,33 @@ ObjectPropertyBuffer::descList(const QStringList &strlist)
 QString
 ObjectPropertyBuffer::descFromValue(const QString &name)
 {
-	if(name == "NoBackground") return i18n("No Background");
-	if(name == "PaletteForeground") return i18n("Palette Foreground");
-	if(name == "AutoText") return i18n("Auto");
+	if(valueDesc.isEmpty())
+	{
+		valueDesc["NoBackground"] = i18n("No Background");
+		valueDesc["PaletteForeground"] = i18n("Palette Foreground");
+		valueDesc["AutoText"] = i18n("Auto");
+	}
 
-	return name;
+	if(valueDesc.contains(name))
+		return valueDesc[name];
+	else
+		return name;
 }
+
+void
+ObjectPropertyBuffer::addPropertyDescription(const char *property, const QString &desc)
+{
+	if(!propDesc.contains(property))
+		propDesc[property] = desc;
+}
+
+void
+ObjectPropertyBuffer::addValueDescription(const char *value, const QString &desc)
+{
+	if(!valueDesc.contains(value))
+		valueDesc[value] = desc;
+}
+
 
 // Alignment-related functions /////////////////////////////
 

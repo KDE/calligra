@@ -110,6 +110,20 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Container
 	(*buff)[name]->setValue(value, true);
 }
 
+void
+WidgetFactory::addPropertyDescription(Container *container, const char *prop, const QString &desc)
+{
+	ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
+	buff->addPropertyDescription(prop, desc);
+}
+
+void
+WidgetFactory::addValueDescription(Container *container, const char *value, const QString &desc)
+{
+	ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
+	buff->addValueDescription(value, desc);
+}
+
 WidgetFactory::~WidgetFactory()
 {
 }

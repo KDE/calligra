@@ -84,7 +84,7 @@ class KFORMEDITOR_EXPORT MySpinBox : public KIntSpinBox
 		QObject   *m_container;
 };
 
-// THe factory itself
+// The factory itself
 
 StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)

@@ -141,6 +141,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! This function destroys the editor. */
 		virtual bool  eventFilter(QObject *obj, QEvent *ev);
 		virtual void  changeProperty(const char *name, const QVariant &value, Container *container);
+		virtual void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
+		virtual void  addValueDescription(Container *container, const char *value, const QString &desc);
 
 	protected slots:
 		/*! You have to implement this function for editing inside the Form to work. This slot is called when the line edit text changes,

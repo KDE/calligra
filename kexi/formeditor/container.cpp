@@ -451,7 +451,8 @@ Container::createGridLayout()
 		hlist->append( tree->widget());
 	hlist->sort();
 
-	// First we need to make sure that two widgets won't be in the same row, ie that no widget overlap another one
+	// First we need to make sure that two widgets won't be in the same row,
+	// ie that no widget overlap another one
 	for(QWidget *w = vlist->first(); w; w = vlist->next())
 	{
 		QWidget *nextw = vlist->next();
@@ -459,7 +460,8 @@ Container::createGridLayout()
 			break;
 		while((w->y() <= nextw->y()) && (nextw->y() <= w->geometry().bottom()))
 		{
-			// If the geometries of the two widgets intersect each other, we move one of the widget to the rght or bottom of the other
+			// If the geometries of the two widgets intersect each other,
+			// we move one of the widget to the rght or bottom of the other
 			if(w->geometry().intersects(nextw->geometry()))
 			{
 				if((nextw->y() - w->y()) > abs(nextw->x() - w->x()))
@@ -491,7 +493,8 @@ Container::createGridLayout()
 			end = w->geometry().bottom();
 			rows.append(w->y());
 		}
-		// If same == true, it means we are in the same row as prev widget (so no need to create a new column, and we use)
+		// If same == true, it means we are in the same row as prev widget
+		// (so no need to create a new column, and we use)
 
 		QWidget *nextw = vlist->next();
 		if(!nextw)
@@ -583,7 +586,8 @@ Container::createGridLayout()
 			}
 			i++;
 		}
-		//kdDebug() << "the widget " << w->name() << " wil be in the row " << wrow <<  " and will go to the row " << endrow << endl;
+		//kdDebug() << "the widget " << w->name() << " wil be in the row " << wrow <<
+		   //" and will go to the row " << endrow << endl;
 
 		// .. and column(s)
 		i = 0;
@@ -609,7 +613,8 @@ Container::createGridLayout()
 			}
 			i++;
 		}
-		//kdDebug() << "the widget " << w->name() << " wil be in the col " << wcol <<  " and will go to the col " << endcol << endl;
+		//kdDebug() << "the widget " << w->name() << " wil be in the col " << wcol <<
+		 // " and will go to the col " << endcol << endl;
 
 		if(!endrow && !endcol)
 			layout->addWidget(w, wrow, wcol);
