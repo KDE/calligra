@@ -1509,9 +1509,12 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
       }
       else if ( kpobject->getType() == OT_PART )
 	{
-	  KPPartObject * obj=static_cast<KPPartObject *>(kpobject);
-	  obj->activate( m_view );
-	  editNum = obj;
+	  KPPartObject * obj=dynamic_cast<KPPartObject *>(kpobject);
+          if(obj)
+          {
+              obj->activate( m_view );
+              editNum = obj;
+          }
 	}
     }
 }
@@ -1746,7 +1749,6 @@ KPObject* KPrCanvas::getObjectAt( const KoPoint&pos )
 void KPrCanvas::selectObj( KPObject *kpobject )
 {
     kpobject->setSelected( true );
-    //FIXME
     m_view->penColorChanged( m_activePage->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
     m_view->brushColorChanged( m_activePage->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
     _repaint( kpobject );
