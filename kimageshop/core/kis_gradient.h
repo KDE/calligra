@@ -22,6 +22,7 @@
 #define __kis_gradient_h__
 
 #include <qimage.h>
+#include <qcolor.h>
 #include <kimageeffect.h>
 #include "kis_color.h"
 
@@ -68,6 +69,14 @@ public:
     
     KImageEffect::GradientType gradientType() { return mEffect; }
         
+    QImage gradient(const QSize &size, const QColor &ca,
+	    const QColor &cb, KImageEffect::GradientType eff, int ncols);
+        
+    QImage& dither(QImage &img, const QColor *palette, int size);
+    
+    int nearestColor( int r, int g, int b, const QColor *palette, int size );
+    
+
 private:
     
     QArray <uint> gradArray;

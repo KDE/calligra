@@ -591,7 +591,7 @@ void KisFrameBuffer::setPattern(KisPattern *pattern)
 */
 
 void KisFrameBuffer::setPatternToPixel(KisLayer *lay, 
-    int x, int y, uint /*value*/)
+    int _x, int _y, uint /*value*/)
 {
     if(!pPenPattern) 
         return;
@@ -602,7 +602,16 @@ void KisFrameBuffer::setPatternToPixel(KisLayer *lay,
     int xTiles = lay->imageExtents().width() / pPenPattern->width();
     int yTiles = lay->imageExtents().height() / pPenPattern->height();
     
+    int xOffset = lay->imageExtents().x();
+    int yOffset = lay->imageExtents().y();
+
+    int x = _x - xOffset;
+    int y = _y - yOffset;
+
     // pixel value in pattern image scanline at x offset to right
+    // not that we must take into account offset of layer to start
+    // at topleft of pattern image
+    
     uint *p = (uint *)
         pPenPattern->image()->scanLine(y / (yTiles * pPenPattern->height()) 
             +  y % pPenPattern->height()) 
@@ -640,11 +649,11 @@ void KisFrameBuffer::setGradientToPixel(KisLayer *lay,
     
     uint u32Color = 0;
     
+    int xOffset = lay->imageExtents().x();
+    int yOffset = lay->imageExtents().y();
+    
     // pixel value in gradient array
-    if(false)
-        u32Color = mGradient.arrayPixelValue(x, y);
-    else    
-        u32Color = mGradient.imagePixelValue(x, y);
+    u32Color = mGradient.imagePixelValue(x - xOffset, y - yOffset);
     
     lay->setPixel(0, x, y, qRed(u32Color));
     lay->setPixel(1, x, y, qGreen(u32Color));
