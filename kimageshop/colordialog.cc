@@ -22,11 +22,13 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qpainter.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 
 #include "kdualcolorbtn.h"
+#include "colorslider.h"
 #include "colordialog.h"
 
 ColorDialog::ColorDialog(QWidget *parent) : KFloatingDialog(parent)
@@ -47,8 +49,7 @@ ColorDialog::~ColorDialog()
 ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
 {
   m_pRGBWidget = new RGBWidget(this);
-  m_pRGBWidget->setBackgroundColor(blue);
-  m_pGradient = new GradientFrame(this);
+  m_pColorFrame = new ColorFrame(this);
   m_pColorButton = new KDualColorButton(this);
   
   m_pGrayButton = new QPushButton("Gray", this);
@@ -60,12 +61,22 @@ ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
   m_fg = KColor(255,255,255);;
   m_bg = KColor(0,0,0);
 
-  QObject::connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), m_pGradient, SLOT(slotSetColor1(const QColor &)));
-  QObject::connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), m_pGradient, SLOT(slotSetColor2(const QColor &)));
-  QObject::connect(m_pGradient, SIGNAL(colorSelected(const QColor &)), m_pColorButton, SLOT(slotSetForeground(const QColor &)));
+  connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), m_pColorFrame, SLOT(slotSetColor1(const QColor &)));
+  connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), m_pColorFrame, SLOT(slotSetColor2(const QColor &)));
+  connect(m_pColorFrame, SIGNAL(colorSelected(const QColor &)), m_pColorButton, SLOT(slotSetForeground(const QColor &)));
 }
 
-ColorChooserWidget::~ColorChooserWidget() {}
+ColorChooserWidget::~ColorChooserWidget()
+{
+  delete m_pRGBWidget;
+  delete m_pColorFrame;
+  delete m_pColorButton;
+  delete m_pGrayButton;
+  delete m_pRGBButton;
+  delete m_pHSBButton;
+  delete m_pCMYKButton;
+  delete m_pLABButton;
+}
 
 void ColorChooserWidget::resizeEvent(QResizeEvent *e)
 {
@@ -79,79 +90,32 @@ void ColorChooserWidget::resizeEvent(QResizeEvent *e)
   m_pGrayButton->setGeometry(w-162, 1, 30, 18);
   
   m_pColorButton->setGeometry(2, 5, 40, 40);
-  m_pGradient->setGeometry(2, h-24, w-4, 22);
+  m_pColorFrame->setGeometry(2, h-24, w-4, 22);
   m_pRGBWidget->setGeometry(44,22,w-46,h-48);
 }
 
-GradientFrame::GradientFrame(QWidget *parent) : QFrame(parent)
+RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
 {
-  setFrameStyle(Panel | Sunken);
-  setBackgroundMode(NoBackground);
+  m_pRSlider = new ColorSlider(this);
+  m_pGSlider = new ColorSlider(this);
+  m_pBSlider = new ColorSlider(this);
 
-  m_c1 = QColor(255,255,255);
-  m_c2 = QColor(0,0,0);
+  m_pRSlider->setMaximumHeight(30);
+  m_pGSlider->setMaximumHeight(30);
+  m_pBSlider->setMaximumHeight(30);
 
-  m_colorChanged = false;
+  m_pVLayout = new QVBoxLayout(this, 2);
+  m_pVLayout->addWidget(m_pRSlider);
+  m_pVLayout->addWidget(m_pGSlider);
+  m_pVLayout->addWidget(m_pBSlider);
+
 }
-GradientFrame::~GradientFrame() {}
-
-void GradientFrame::slotSetColor1(const QColor& c)
+RGBWidget::~RGBWidget()
 {
-  m_c1 = c;
-  m_colorChanged = true;
-  m_pixChanged = true;
-  repaint();
+  delete m_pRSlider;
+  delete m_pGSlider;
+  delete m_pBSlider;
+  delete m_pVLayout;
 }
-
-void GradientFrame::slotSetColor2(const QColor& c)
-{
-  m_c2 = c;
-  m_colorChanged = true;
-  repaint();
-}
-
-void GradientFrame::drawContents(QPainter *p)
-{
-  QRect r = contentsRect();
-
-  if ((m_pm.size() != r.size()) || m_colorChanged)
-	{
-	  m_pm.resize(r.width(), r.height());
-	  KPixmapEffect::gradient(m_pm, m_c1, m_c2, KPixmapEffect::HorizontalGradient);
-	  m_colorChanged = false;
-	  m_pixChanged = true;
-	}
-  
-  p->drawPixmap(r.left(), r.top(), m_pm);
-}
-
-void GradientFrame::mousePressEvent (QMouseEvent *e)
-{
-  if (e->button() & LeftButton)
-    {
-      QColor c = colorAt(QPoint(e->pos().x() - contentsRect().left(), e->pos().y() - contentsRect().top()));
-	  kdebug(KDEBUG_INFO, 0, "GradientFrame -> emit colorSelected()");
-	  emit colorSelected(c);
-	}
-  else
-	QFrame::mousePressEvent(e);
-}
-
-const QColor GradientFrame::colorAt (const QPoint& p)
-{
-  if (!contentsRect().contains(p))
-	return QColor(255,255,255);
-
-  if (m_pixChanged)
-	{
-	  m_pmImage = m_pm.convertToImage();
-	  m_pixChanged = false;
-	}
-
-  return QColor(m_pmImage.pixel(p.x(), p.y()));
-}
-
-RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent) {}
-RGBWidget::~RGBWidget() {}
 
 #include "colordialog.moc"

@@ -31,8 +31,10 @@ class QPushButton;
 class QFrame;
 class QSpinBox;
 class RGBWidget;
-class GradientFrame;
+class ColorFrame;
+class ColorSlider;
 class ColorChooserWidget;
+class QVBoxLayout;
 
 class ColorDialog : public KFloatingDialog
 {
@@ -57,9 +59,9 @@ class ColorChooserWidget : public QWidget
  protected:
   virtual void resizeEvent(QResizeEvent *);
 
- private:
+ protected:
   QPushButton      *m_pGrayButton, *m_pRGBButton, *m_pHSBButton, *m_pCMYKButton, *m_pLABButton;
-  GradientFrame    *m_pGradient;
+  ColorFrame       *m_pColorFrame;
   RGBWidget        *m_pRGBWidget;
   KDualColorButton *m_pColorButton;
   KColor            m_fg, m_bg;
@@ -74,35 +76,11 @@ class RGBWidget : public QWidget
   RGBWidget(QWidget *parent = 0L);
   ~RGBWidget();
 
-};
-
-class GradientFrame : public QFrame
-{
-  Q_OBJECT
- 
- public:
-  GradientFrame(QWidget *parent = 0L);
-  virtual ~GradientFrame();
-
-  const QColor colorAt(const QPoint&);
-
  protected:
-  virtual void drawContents (QPainter *);
-  virtual void mousePressEvent (QMouseEvent *);
-  
- public slots:
-  void slotSetColor1(const QColor&);
-  void slotSetColor2(const QColor&);
-
- signals:
-  void  colorSelected(const QColor&);
-
- protected:
-  QColor    m_c1, m_c2;
-  KPixmap   m_pm;
-  QImage    m_pmImage;
-  bool      m_colorChanged;
-  bool      m_pixChanged;
+  ColorSlider *m_pRSlider;
+  ColorSlider *m_pGSlider;
+  ColorSlider *m_pBSlider;
+  QVBoxLayout *m_pVLayout;
 };
 
 #endif

@@ -18,7 +18,7 @@ kimageshop_SOURCES = integerwidget.cc kimageshop.idl kimageshop_main.cc \
 	brusheswidget.cc brushdialog.cc \
 	iconchooser.cc kfloatingdialogowner.cc preferencesdlg.cc \
 	gradientdlg.cc gradienteditordlg.cc gradientview.cc \
-	newdialog.cc
+	newdialog.cc colorframe.cc colorslider.cc
 
 noinst_HEADERS = kimageshop_main.h kimageshop_shell.h \
 	kimageshop_doc.h kimageshop_view.h kimageshop_undo.h kimageshop_config.h \
@@ -29,7 +29,7 @@ noinst_HEADERS = kimageshop_main.h kimageshop_shell.h \
 	integerwidget.h brusheswidget.h brushdialog.h \
 	iconchooser.h kfloatingdialogowner.h preferencesdlg.h \
 	gradientdlg.h gradienteditordlg.h gradientview.h \
-	newdialog.h
+	newdialog.h colorframe.h colorslider.h
 
 METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 	kimageshop_doc.moc kimageshop_view.moc kimageshop_config.moc \
@@ -39,7 +39,7 @@ METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 	kfloatingtabdialog.moc brusheswidget.moc brushdialog.moc \
 	iconchooser.moc integerwidget.moc preferencesdlg.moc \
 	gradientdlg.moc gradienteditordlg.moc gradientview.moc \
-	newdialog.moc
+	newdialog.moc colorframe.moc colorslider.moc
 
 idl_DATA = kimageshop.idl
 
