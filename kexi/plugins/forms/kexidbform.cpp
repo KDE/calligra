@@ -64,6 +64,8 @@ KexiDBForm::KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *pa
 		plugSharedAction("edit_cut", formPart()->manager(), SLOT(cutWidget()));
 		plugSharedAction("edit_paste", formPart()->manager(), SLOT(pasteWidget()));
 		plugSharedAction("edit_delete", formPart()->manager(), SLOT(deleteWidget()));
+		plugSharedAction("edit_undo", formPart()->manager(), SLOT(undo()));
+		plugSharedAction("edit_redo", formPart()->manager(), SLOT(redo()));
 	}
 
 	initForm();
@@ -304,9 +306,10 @@ void
 KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 {
 	QPoint fromPoint, toPoint;
-	fromPoint = mapFrom(from->parentWidget(), from->pos());
-	if(to)
-		toPoint = mapFrom(to->parentWidget(), to->pos());
+	if(from && from->parentWidget() && (from != this))
+		fromPoint = from->parentWidget()->mapTo(this, from->pos());
+	if(to && to->parentWidget() && (to != this))
+		toPoint = to->parentWidget()->mapTo(this, to->pos());
 
 	QPainter p;
 	p.begin(this, true);
@@ -330,7 +333,8 @@ KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 		else if(to == this)
 			p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), point);
 		else*/
-		p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), mapFrom(to->parentWidget(), to->geometry().center()) );
+		if((from != this) && (to != this))
+			p.drawLine( from->parentWidget()->mapTo(this, from->geometry().center()), to->parentWidget()->mapTo(this, to->geometry().center()) );
 
 		p.drawPixmap(fromPoint.x(), fromPoint.y(), pix1);
 		p.drawPixmap(toPoint.x(), toPoint.y(), pix2);
@@ -352,8 +356,8 @@ KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 	{
 		prev_rect.setX( (fromPoint.x() < toPoint.x()) ? (fromPoint.x() - 5) : (toPoint.x() - 5) );
 		prev_rect.setY( (fromPoint.y() < toPoint.y()) ? (fromPoint.y() - 5) : (toPoint.y() - 5) );
-		prev_rect.setRight( (fromPoint.x() < toPoint.x()) ? (toPoint.x() + to->width() + 5) : (fromPoint.x() + from->width() + 5) );
-		prev_rect.setBottom( (fromPoint.y() < toPoint.y()) ? (toPoint.y() + to->height() + 5) : (fromPoint.y() + from->height() + 5) ) ;
+		prev_rect.setRight( (fromPoint.x() < toPoint.x()) ? (toPoint.x() + to->width() + 10) : (fromPoint.x() + from->width() + 10) );
+		prev_rect.setBottom( (fromPoint.y() < toPoint.y()) ? (toPoint.y() + to->height() + 10) : (fromPoint.y() + from->height() + 10) ) ;
 	}
 	else
 		prev_rect = QRect(fromPoint.x()- 5,  fromPoint.y() -5, from->width() + 10, from->height() + 10);
@@ -361,6 +365,18 @@ KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 	if (!unclipped)
 		clearWFlags( WPaintUnclipped );
 	p.end();
+}
+
+void
+KexiDBForm::setUndoEnabled(bool enabled)
+{
+	setAvailable("edit_undo", enabled);
+}
+
+void
+KexiDBForm::setRedoEnabled(bool enabled)
+{
+	setAvailable("edit_redo", enabled);
 }
 
 QSize

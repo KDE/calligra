@@ -77,10 +77,7 @@ void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 
 void KexiFormPart::initActions()
 {
-//	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()),
-//		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
-
-	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode), 0);
+	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode));
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
 	createSharedAction(Kexi::DesignViewMode, i18n("Adjust Size"), "viewmagfit", 0, "formpart_adjust_size");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");

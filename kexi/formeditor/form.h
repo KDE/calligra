@@ -58,6 +58,9 @@ class KFORMEDITOR_EXPORT FormWidget
 		virtual void initRect() = 0;
 		virtual void clearRect() = 0;
 		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;//, const QPoint &p) = 0;
+
+		virtual void setUndoEnabled(bool enabled) = 0;
+		virtual void setRedoEnabled(bool enabled) = 0;
 };
 
 //! Helper: this widget is used to create form's surface
@@ -66,8 +69,8 @@ class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public FormWidget
 	Q_OBJECT
 
 	public:
-		FormWidgetBase(QWidget *parent = 0, const char *name = 0, int WFlags = WDestructiveClose)
-		: QWidget(parent, name, WFlags)  {}
+		FormWidgetBase(KActionCollection *collection, QWidget *parent = 0, const char *name = 0, int WFlags = WDestructiveClose)
+		: QWidget(parent, name, WFlags) , m_collection(collection) {}
 		~FormWidgetBase() {;}
 
 		void drawRect(const QRect& r, int type);
@@ -75,9 +78,13 @@ class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public FormWidget
 		void clearRect();
 		void highlightWidgets(QWidget *from, QWidget *to);//, const QPoint &p);
 
+		void setUndoEnabled(bool enabled);
+		void setRedoEnabled(bool enabled);
+
 	private:
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle
+		KActionCollection  *m_collection;
 };
 
 
@@ -173,7 +180,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void			setFilename(const QString &file) { m_filename = file; }
 
 		KCommandHistory*	commandHistory() { return m_history; }
-		KActionCollection*	actionCollection() { return m_collection; }
+		//KActionCollection*	actionCollection() { return m_collection; }
 		ConnectionBuffer*	connectionBuffer() { return m_connBuffer; }
 		PixmapCollection*	pixmapCollection() { return m_pixcollection; }
 
@@ -210,6 +217,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		  at the same time.
 		 */
 		void			formDeleted();
+		void			slotUndoActionActivated(bool);
+		void			slotRedoActionActivated(bool);
 
 	signals:
 		/*! This signal is emitted when user selects a new widget, to update both Property Editor and ObjectTreeView.

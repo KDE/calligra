@@ -100,6 +100,7 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 	setInstance(KFDFactory::instance());
 	instance()->iconLoader()->addAppDir("kexi");
 	instance()->iconLoader()->addAppDir("kformdesigner");
+	setReadWrite(!readOnly);
 
 	QHBox *container = new QHBox(parent, "kfd_container_widget");
 
@@ -152,6 +153,8 @@ KFormDesignerPart::setupActions()
 	KStdAction::cut(m_manager, SLOT(cutWidget()), actionCollection());
 	KStdAction::copy(m_manager, SLOT(copyWidget()), actionCollection());
 	KStdAction::paste(m_manager, SLOT(pasteWidget()), actionCollection());
+	KStdAction::undo(m_manager, SLOT(undo()), actionCollection());
+	KStdAction::redo(m_manager, SLOT(redo()), actionCollection());
 	new KAction(i18n("Preview Form"), "filequickprint", KShortcut(0), m_manager, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
 	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), m_manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
@@ -284,6 +287,9 @@ KFormDesignerPart::slotNoFormSelected()
 
 	// Disable paste action
 	ENABLE_ACTION("edit_paste", false);
+
+	ENABLE_ACTION("edit_undo", false);
+	ENABLE_ACTION("edit_redo", false);
 
 	// Disable 'Tools' actions
 	ENABLE_ACTION("pixmap_collection", false);

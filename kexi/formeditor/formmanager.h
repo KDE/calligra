@@ -66,7 +66,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  These actions are automatically connected to insertWidget() slot.
 		  \return a QPtrList of the created actions.
 		 */
-		Actions createActions(KActionCollection *parent/*, KMainWindow *client*/);
+		Actions createActions(KActionCollection *parent);
 
 		/*! Sets the external editors used by FormDesigner (as they may be docked). This function also connects
 		  appropriate signals and slots to ensure sync with the current Form.
@@ -160,6 +160,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  indicate the new position of the widget, or at the position of the contextual menu if there is one.
 		 */
 		void pasteWidget();
+
+		void undo();
+		void redo();
 
 		/*! Displays a dialog where the user can modify the tab order of the active Form, by drag-n-drop or using up/down buttons. */
 		void editTabOrder();
@@ -273,9 +276,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		// Actions
 		KActionCollection	*m_collection;
-#ifdef ENABLE_UNDO_ACTIONS
-		KMainWindow 		*m_client;
-#endif
 		KToggleAction		*m_pointer, *m_dragConnection, *m_snapToGrid;
 
 		//! Used to delayed widgets deletion

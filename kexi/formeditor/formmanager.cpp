@@ -117,12 +117,9 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 }
 
 Actions
-FormManager::createActions(KActionCollection *parent/*, KMainWindow *client*/)
+FormManager::createActions(KActionCollection *parent)
 {
 	m_collection = parent;
-#ifdef ENABLE_UNDO_ACTIONS
-	m_client = client;
-#endif
 
 	Actions actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
 
@@ -172,6 +169,24 @@ bool
 FormManager::isPasteEnabled()
 {
 	return m_domDoc.namedItem("UI").hasChildNodes();
+}
+
+void
+FormManager::undo()
+{
+	if(!activeForm())
+		return;
+
+	activeForm()->commandHistory()->undo();
+}
+
+void
+FormManager::redo()
+{
+	if(!activeForm())
+		return;
+
+	activeForm()->commandHistory()->redo();
 }
 
 void
@@ -347,16 +362,6 @@ FormManager::windowChanged(QWidget *w)
 		return;
 	}
 
-#ifdef ENABLE_UNDO_ACTIONS
-	if(m_forms.count() >= 1)
-	{
-		if(m_collection && m_collection->action( KStdAction::name(KStdAction::Undo)))
-			m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
-		if(m_collection && m_collection->action( KStdAction::name(KStdAction::Redo)))
-			m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );
-	}
-#endif
-
 	Form *previousActive = m_active;
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
@@ -369,12 +374,10 @@ FormManager::windowChanged(QWidget *w)
 				m_buffer->setCollection(form->pixmapCollection());
 
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
-#ifdef ENABLE_UNDO_ACTIONS
-			if(m_collection)
-				m_collection->addDocCollection(form->actionCollection());
-#endif
+
 			if(m_collection)
 			{
+				// update the 'style' action
 				KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
 				const QString currentStyle = form->toplevelContainer()->widget()->style().name();
 				const QStringList styles = m_style->items();
@@ -399,15 +402,10 @@ FormManager::windowChanged(QWidget *w)
 				emit noFormSelected();
 			else
 				m_active->emitActionSignals();
-#ifdef ENABLE_UNDO_ACTIONS
-			if(m_client)
-				m_client->createGUI(m_client->xmlFile());
-#endif
 			return;
 		}
 	}
 	//m_active = 0;
-
 }
 
 Form*
@@ -456,7 +454,7 @@ FormManager::createBlankForm(const QString &classname, const char *name, QWidget
 	QString n;
 
 	n = i18n("Form") + QString::number(m_count + 1);
-	FormWidgetBase *w = new FormWidgetBase(parent, n.latin1(), Qt::WDestructiveClose);
+	FormWidgetBase *w = new FormWidgetBase(m_collection, parent, n.latin1(), Qt::WDestructiveClose);
 
 	form->createToplevel(w, w, classname);
 	w->setCaption(n);
@@ -498,7 +496,7 @@ FormManager::loadForm(bool preview, const QString &filename)
 //	QString n = "Form" + QString::number(m_count + 1);
 	Form *form = new Form(this);//, n.latin1());
 	//QWidget *w = new QWidget(m_parent, 0, Qt::WDestructiveClose);
-	FormWidgetBase *w = new FormWidgetBase(m_parent, 0, Qt::WDestructiveClose);
+	FormWidgetBase *w = new FormWidgetBase(m_collection, m_parent, 0, Qt::WDestructiveClose);
 	form->createToplevel(w, w);
 	if(!FormIO::loadForm(form, w, filename))
 	{

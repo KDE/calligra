@@ -65,6 +65,9 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 		void clearRect();
 		void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
 
+		void setUndoEnabled(bool enabled);
+		void setRedoEnabled(bool enabled);
+
 		virtual QSize sizeHint() const;
 
 	protected slots:

@@ -54,17 +54,22 @@ Form::Form(FormManager *manager, const char *name)
 {
 	m_toplevel = 0;
 	m_topTree = 0;
-	m_collection = 0;
 	m_cursors = 0;
 	m_manager = manager;
 	m_resizeHandles.setAutoDelete(true);
 	m_inter = true;
 	m_design = true;
 	m_autoTabstops = false;
-	m_collection = new KActionCollection(this);
-	m_history = new KCommandHistory(m_collection, true);
 	m_tabstops.setAutoDelete(false);
 	m_connBuffer = new ConnectionBuffer();
+
+	// Init actions
+	m_collection = new KActionCollection(0, this);
+	m_history = new KCommandHistory(m_collection, true);
+	KAction *m_undoAction = m_collection->action("edit_undo");
+	KAction *m_redoAction = m_collection->action("edit_redo");
+	connect(m_undoAction, SIGNAL(enabled(bool)), this, SLOT(slotUndoActionActivated(bool)) );
+	connect(m_redoAction, SIGNAL(enabled(bool)), this, SLOT(slotRedoActionActivated(bool)) );
 }
 
 
@@ -265,6 +270,14 @@ Form::emitActionSignals()
 		emit m_manager->widgetSelected(this, false);
 	else
 		emit m_manager->formWidgetSelected(this);
+
+	KAction *undoAction = m_collection->action("edit_undo");
+	if(undoAction && m_formWidget)
+		m_formWidget->setUndoEnabled(undoAction->isEnabled());
+
+	KAction *redoAction = m_collection->action("edit_redo");
+	if(redoAction && m_formWidget)
+		m_formWidget->setRedoEnabled(redoAction->isEnabled());
 }
 
 ///////////////////////////  Various slots and signals /////////////////////
@@ -318,6 +331,20 @@ Form::addCommand(KCommand *command, bool execute)
 {
 	emit m_manager->dirty(this);
 	m_history->addCommand(command, execute);
+}
+
+void
+Form::slotUndoActionActivated(bool enabled)
+{
+	if(m_formWidget)
+		m_formWidget->setUndoEnabled(enabled);
+}
+
+void
+Form::slotRedoActionActivated(bool enabled)
+{
+	if(m_formWidget)
+		m_formWidget->setRedoEnabled(enabled);
 }
 
 ///////////////////////////  Tab stops ////////////////////////
@@ -664,6 +691,28 @@ FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &po
 	if (!unclipped)
 		clearWFlags( WPaintUnclipped );
 	p.end();
+}
+
+void
+FormWidgetBase::setUndoEnabled(bool enabled)
+{
+	if(m_collection)
+	{
+		KAction *undoAction = m_collection->action("edit_undo");
+		if(undoAction)
+			undoAction->setEnabled(enabled);
+	}
+}
+
+void
+FormWidgetBase::setRedoEnabled(bool enabled)
+{
+	if(m_collection)
+	{
+		KAction *redoAction = m_collection->action("edit_redo");
+		if(redoAction)
+			redoAction->setEnabled(enabled);
+	}
 }
 
 #include "form.moc"
