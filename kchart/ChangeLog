@@ -1,5 +1,12 @@
 2005-03-23  Inge Wallin  <inge@lysator.liu.se>
 
+	Start with some simple support for templates.
+	* templates: new directory
+	* templates/Makefile.am: new file
+	* templates/BarChart.chrt: new file, example chart template.
+	
+	----------------------------------------------------------------
+
 	Bug fix.
 	* kchartDataEditor.cc (setCols): Set width for all new columns.
 	(misc): Code cleaning
