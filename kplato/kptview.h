@@ -87,6 +87,8 @@ public slots:
     void slotViewGanttTaskLinks();
     void slotViewGanttProgress();
     void slotViewGanttFloat();
+    void slotViewGanttCriticalTasks();
+    void slotViewGanttCriticalPath();
     void slotViewPert();
     void slotViewResources();
     void slotViewResourceUse();
@@ -166,6 +168,8 @@ private:
     KToggleAction *actionViewGanttTaskLinks;
     KToggleAction *actionViewGanttProgress;
     KToggleAction *actionViewGanttFloat;
+    KToggleAction *actionViewGanttCriticalTasks;
+    KToggleAction *actionViewGanttCriticalPath;
     KAction *actionViewPert;
     KAction *actionViewResources;
     KAction *actionViewResourceUse;

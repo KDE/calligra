@@ -59,6 +59,8 @@ public:
      */
     void calculate(KPTEffort::Use use=KPTEffort::Use_Expected);
      
+    virtual bool calcCriticalPath();
+    
     ///Returns the duration calculated as latestFinish - earliestStart.
     KPTDuration *getExpectedDuration();
 

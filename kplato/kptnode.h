@@ -402,6 +402,11 @@ public:
     virtual const KPTDateTime &workEndTime() const { return m_workEndTime; }
     void setWorkEndTime(const KPTDateTime &dt) { m_workEndTime = dt; }
 
+    
+    virtual bool isCritical() { return false; }
+    virtual bool inCriticalPath() { return m_inCriticalPath; }
+    virtual bool calcCriticalPath();
+    
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
@@ -412,10 +417,6 @@ protected:
     QString m_name;        // Name of this node
     QString m_leader;      // Person or group responsible for this node
     QString m_description; // Description of this node
-
-    // Both of these are entered during the project, not at the initial
-    // calculation.
-    KPTDateTime m_actualStartTime, m_actualEndTime;
 
     KPTEffort* m_effort;
     
@@ -489,6 +490,8 @@ protected:
     KPTDateTime m_workStartTime;
     KPTDateTime m_workEndTime;
 
+    bool m_inCriticalPath;
+    
 private:
     void init();
         

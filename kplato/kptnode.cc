@@ -87,6 +87,7 @@ void KPTNode::init() {
     m_notScheduled = true;
     m_visitedForward = false;
     m_visitedBackward = false;
+    m_inCriticalPath = false;
     
     m_dateOnlyStartDate = m_dateOnlyEndDate = QDate::currentDate();
     m_dateOnlyDuration.addDays(1);
@@ -471,6 +472,7 @@ void KPTNode::initiateCalculation() {
     m_resourceError = false;
     m_resourceOverbooked = false;
     m_schedulingError = false;
+    m_inCriticalPath = false;
     clearProxyRelations();
     QPtrListIterator<KPTNode> it = m_nodes;
     for (; it.current(); ++it) {
@@ -643,6 +645,25 @@ void KPTNode::takeAppointment(KPTAppointment *appointment) {
         m_appointments.take(i);
         appointment->resource()->takeAppointment(appointment);
     }
+}
+
+
+bool KPTNode::calcCriticalPath() {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (!isCritical()) {
+        return false;
+    }
+    if (isStartNode()) {
+        m_inCriticalPath = true;
+        return true;
+    }
+    QPtrListIterator<KPTRelation> pit(m_dependParentNodes);
+    for (; pit.current(); ++pit) {
+        if (pit.current()->parent()->calcCriticalPath()) {
+            m_inCriticalPath = true;
+        }
+    }
+    return m_inCriticalPath;
 }
 
 

@@ -87,6 +87,8 @@ public slots:
     void setShowTaskLinks(bool on) { m_showTaskLinks = on; }
     void setShowProgress(bool on) { m_showProgress = on; }
     void setShowPositiveFloat(bool on) { m_showPositiveFloat = on; }
+    void setShowCriticalTasks(bool on) { m_showCriticalTasks = on; }
+    void setShowCriticalPath(bool on) { m_showCriticalPath = on; }
 
 private slots:
     void currentItemChanged(KDGanttViewItem *);
@@ -152,6 +154,8 @@ private:
     bool m_showTaskLinks;
     bool m_showProgress;
     bool m_showPositiveFloat;
+    bool m_showCriticalTasks;
+    bool m_showCriticalPath;
     bool m_firstTime;
     QPtrList<KDGanttViewTaskLink> m_taskLinks;
 };

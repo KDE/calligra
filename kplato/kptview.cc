@@ -150,6 +150,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     actionViewGanttTaskLinks = new KToggleAction(i18n("Task Links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");
     actionViewGanttProgress = new KToggleAction(i18n("Progress"), 0, 0, this, SLOT(slotViewGanttProgress()), actionCollection(), "view_gantt_showProgress");
     actionViewGanttFloat = new KToggleAction(i18n("Float"), 0, 0, this, SLOT(slotViewGanttFloat()), actionCollection(), "view_gantt_showFloat");
+    actionViewGanttCriticalTasks = new KToggleAction(i18n("Critical Tasks"), 0, 0, this, SLOT(slotViewGanttCriticalTasks()), actionCollection(), "view_gantt_showCriticalTasks");
+    actionViewGanttCriticalPath = new KToggleAction(i18n("Critical Path"), 0, 0, this, SLOT(slotViewGanttCriticalPath()), actionCollection(), "view_gantt_showCriticalPath");
     
     actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
     
@@ -312,6 +314,20 @@ void KPTView::slotViewGanttProgress() {
 void KPTView::slotViewGanttFloat() {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowPositiveFloat(actionViewGanttFloat->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
+}
+
+void KPTView::slotViewGanttCriticalTasks() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setShowCriticalTasks(actionViewGanttCriticalTasks->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
+}
+
+void KPTView::slotViewGanttCriticalPath() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setShowCriticalPath(actionViewGanttCriticalPath->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }

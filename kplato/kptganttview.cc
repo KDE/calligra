@@ -78,6 +78,8 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_showTaskLinks = false; // FIXME
     m_showProgress = false; //FIXME
     m_showPositiveFloat = false; //FIXME
+    m_showCriticalTasks = false; //FIXME
+    m_showCriticalPath = false; //FIXME
     m_gantt->setHeaderVisible(true);
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
@@ -433,6 +435,12 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         w += "\n"; w += "Progress (%): " + QString().setNum(task->progress().percentFinished);
     }
     w += "\n"; w += "Float: " + task->positiveFloat().toString(KPTDuration::Format_Hour);
+    
+    if (task->inCriticalPath()) {
+        w += "\n"; w += "Critical path";
+    } else if (task->isCritical()) {
+        w += "\n"; w += "Critical";
+    }
 
     QString sts;
     bool ok = true;
@@ -464,6 +472,13 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         QColor c(yellow);
         item->setColors(c,c,c);
     }
+    item->setHighlight(false);
+    if (m_showCriticalTasks) {
+        item->setHighlight(task->isCritical());
+    } else if (m_showCriticalPath) {
+        item->setHighlight(task->inCriticalPath());
+    }
+    
     item->setTooltipText(w);
     setDrawn(item, true);
 }
@@ -479,7 +494,8 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
     //item->setOpen(true);
     item->setText(task->name());
     if (m_showPositiveFloat) {
-        KPTDateTime t = task->endTime() + task->positiveFloat();
+        KPTDateTime t = task->startTime() + task->positiveFloat();
+        kdDebug()<<k_funcinfo<<task->name()<<" float: "<<t.toString()<<endl;
         if (t.isValid() && t > task->startTime()) {
             item->setFloatEndTime(t);
         } else {
@@ -497,13 +513,13 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
     } else {
         w += task->startTime().toString();
     }
-    w += "\n"; w += "Float: ";
-    if (task->getEarliestStart() != task->startTime())
-        w += QString("%1h").arg((double)(task->getEarliestStart().secsTo(task->startTime()))/(double(2600)), 0, 'f', 1);
-    else if (task->getLatestFinish() != task->endTime())
-        w += QString("%1h").arg((double)(task->endTime().secsTo(task->getLatestFinish()))/(double(2600)), 0, 'f', 1);
-    else
-        w+= "0h";
+    w += "\n"; w += "Float: " + task->positiveFloat().toString(KPTDuration::Format_Hour);
+
+    if (task->inCriticalPath()) {
+        w += "\n"; w += "Critical path";
+    } else if (task->isCritical()) {
+        w += "\n"; w += "Critical";
+    }
 
     bool ok = true;
     if (task->notScheduled()) {
@@ -521,6 +537,13 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
         QColor c(yellow);
         item->setColors(c,c,c);
     }
+    item->setHighlight(false);
+    if (m_showCriticalTasks) {
+        item->setHighlight(task->isCritical());
+    } else if (m_showCriticalPath) {
+        item->setHighlight(task->inCriticalPath());
+    }
+    
     item->setTooltipText(w);
     setDrawn(item, true);
 }

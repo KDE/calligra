@@ -113,6 +113,7 @@ void KPTProject::calculate(KPTEffort::Use use) {
             calculateForward(use);
             scheduleBackward(m_endTime, use);
         }
+        calcCriticalPath();
         makeAppointments();
         calcResourceOverbooked();
     } else if (type() == Type_Subproject) {
@@ -120,6 +121,15 @@ void KPTProject::calculate(KPTEffort::Use use) {
     } else {
         kdError()<<k_funcinfo<<"Illegal project type: "<<type()<<endl;
     }
+}
+
+bool KPTProject::calcCriticalPath() {
+    kdDebug()<<k_funcinfo<<endl;
+    QPtrListIterator<KPTNode> endnodes = m_endNodes;
+    for (; endnodes.current(); ++endnodes) {
+        endnodes.current()->calcCriticalPath();
+    }
+    return false;
 }
 
 KPTDuration *KPTProject::getExpectedDuration() {

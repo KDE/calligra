@@ -202,6 +202,8 @@ bool KPTTask::load(QDomElement &element) {
     m_constraintStartTime = KPTDateTime::fromString(element.attribute("constraint-starttime"));
     m_constraintEndTime = KPTDateTime::fromString(element.attribute("constraint-endtime"));
 
+    m_inCriticalPath = element.attribute("in-critical-path", "0").toInt();
+    
     m_resourceError = element.attribute("resource-error", "0").toInt();
     m_resourceOverbooked = element.attribute("resource-overbooked", "0").toInt();
     m_schedulingError = element.attribute("scheduling-conflict", "0").toInt();
@@ -285,6 +287,8 @@ void KPTTask::save(QDomElement &element)  {
     me.setAttribute("scheduling",constraintToString());
     me.setAttribute("constraint-starttime",m_constraintStartTime.toString());
     me.setAttribute("constraint-endtime",m_constraintEndTime.toString());
+    
+    me.setAttribute("in-critical-path",m_inCriticalPath);
     
     me.setAttribute("resource-error",m_resourceError);
     me.setAttribute("resource-overbooked",m_resourceOverbooked);
@@ -1248,9 +1252,40 @@ KPTDateTime KPTTask::workFinishBefore(const KPTDateTime &dt) {
 
 KPTDuration KPTTask::positiveFloat() {
     KPTDateTime t = workFinishBefore(latestFinish);
-    if (t < m_endTime)
+    if (t <= (type() == KPTNode::Type_Milestone ? m_startTime : m_endTime))
         return KPTDuration::zeroDuration;
     return t - m_endTime;
+}
+
+bool KPTTask::isCritical() {
+    return positiveFloat() == KPTDuration::zeroDuration;
+}
+
+bool KPTTask::calcCriticalPath() {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    if (m_inCriticalPath) {
+        return true; // path allready calculated
+    }
+    if (!isCritical()) {
+        return false;
+    }
+    if (isStartNode()) {
+        m_inCriticalPath = true;
+        return true;
+    }
+    QPtrListIterator<KPTRelation> it(m_parentProxyRelations);
+    for (; it.current(); ++it) {
+        if (it.current()->parent()->calcCriticalPath()) {
+            m_inCriticalPath = true;
+        }
+    }
+    QPtrListIterator<KPTRelation> pit(m_dependParentNodes);
+    for (; pit.current(); ++pit) {
+        if (pit.current()->parent()->calcCriticalPath()) {
+            m_inCriticalPath = true;
+        }
+    }
+    return m_inCriticalPath;
 }
 
 #ifndef NDEBUG

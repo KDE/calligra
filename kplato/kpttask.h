@@ -212,6 +212,11 @@ public:
      */
     KPTDuration finishFloat() { return KPTDuration(); }
     
+    /// A task is critical if there is no positive float
+    virtual bool isCritical();
+    /// Calculate critical path
+    virtual bool calcCriticalPath();
+    
     struct Progress {
         Progress() { started = finished = false; percentFinished = 0; }
         bool operator==(struct Progress &p) {
