@@ -126,6 +126,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 [ \t]			;
 [\n]			idl_line_no++;
 "//"[^\n]*		;
+"#!"[^\n]*		;
 "#pragma"[^\n]*\n       {
 			  yylval._str = new QString( yytext );
                           idl_line_no++;

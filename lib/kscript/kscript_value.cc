@@ -482,7 +482,7 @@ bool KSValue::cast( Type _typ )
     case Empty:
       return false;
     case IntType:
-      if ( _typ == DoubleType )
+      /* if ( _typ == DoubleType )
       {
 	KScript::Double d = (KScript::Double)val.i;
 	val.d = d;
@@ -490,7 +490,8 @@ bool KSValue::cast( Type _typ )
       // TODO: ->string
       else
 	return false;
-      break;
+	break; */
+      return false;
     case BoolType:
       if ( _typ == StringType )
       {
@@ -504,6 +505,7 @@ bool KSValue::cast( Type _typ )
 	return false;
       break;      
     case DoubleType:
+      /*
       if ( _typ == IntType )
       {
 	KScript::Long i = (KScript::Long)val.d;
@@ -513,6 +515,8 @@ bool KSValue::cast( Type _typ )
       else
 	return false;
       break;
+      */
+      return false;
     case StringType:
       // TODO: ->int ->double
       return false;

@@ -156,7 +156,6 @@ void yyerror( const char *s )
 %type <node>   new_expr
 %type <node>   loops
 %type <node>   incr_expr
-%type <node>   for
 %type <node>   while
 %type <node>   else
 %type <node>   main
@@ -172,6 +171,7 @@ void yyerror( const char *s )
 %type <node>   qualified_name
 %type <node>   catches
 %type <node>   single_catch
+%type <node>   loop_body
 
 %%
 
@@ -625,11 +625,13 @@ incr_expr
 	  }
 	| match_expr T_INCR
 	  {
-	    $$ = new KSParseNode( t_incr, $1 );
+	    /* Setting $1 twice indicates that this is a postfix operator */
+	    $$ = new KSParseNode( t_incr, $1, $1 );
 	  }
 	| match_expr T_DECR
 	  {
-	    $$ = new KSParseNode( t_decr, $1 );
+	    /* Setting $1 twice indicates that this is a postfix operator */
+	    $$ = new KSParseNode( t_decr, $1, $1 );
 	  }
 	| match_expr
 	  {
@@ -1113,25 +1115,33 @@ const_dcl
 	;
 
 loops
-	: while T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET
+	: while loop_body
 	  {
-	    $$ = new KSParseNode( t_while, $1, $3 );
+	    $$ = new KSParseNode( t_while, $1, $2 );
 	  }
-	| T_FOR for T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET
+	| T_FOR T_LEFT_PARANTHESIS assign_expr T_SEMICOLON assign_expr T_SEMICOLON assign_expr T_RIGHT_PARANTHESIS loop_body
 	  {
-	    $$ = new KSParseNode( t_for, $2, $4 );
+	    $$ = new KSParseNode( t_for, $3, $5, $7, $9 );
 	  }
-	| T_DO T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET while T_SEMICOLON
+	| T_DO loop_body while T_SEMICOLON
 	  {
-	    $$ = new KSParseNode( t_do, $3, $5 );
+	    $$ = new KSParseNode( t_do, $2, $3 );
 	  }
-	| T_IF T_LEFT_PARANTHESIS assign_expr T_RIGHT_PARANTHESIS T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET else
+	| T_IF T_LEFT_PARANTHESIS assign_expr T_RIGHT_PARANTHESIS loop_body else
 	  {
-	    $$ = new KSParseNode( t_if, $3, $6, $8 );
+	    $$ = new KSParseNode( t_if, $3, $5, $6 );
 	  }
-	| T_FOREACH T_LEFT_PARANTHESIS assign_expr T_COMMA assign_expr T_RIGHT_PARANTHESIS T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET
+	| T_FOREACH T_LEFT_PARANTHESIS T_IDENTIFIER T_COMMA assign_expr T_RIGHT_PARANTHESIS loop_body
 	  {
-	    $$ = new KSParseNode( t_foreach, $3, $5, $8 );
+	    $$ = new KSParseNode( t_foreach, $5, $7 );
+	    $$->setIdent( $3 );
+	  }
+	| T_FOREACH T_LEFT_PARANTHESIS T_IDENTIFIER T_COMMA T_IDENTIFIER T_COMMA assign_expr T_RIGHT_PARANTHESIS loop_body
+	  {
+	    /* We set $9 twice to indicate thet this is the foreach for maps */
+	    $$ = new KSParseNode( t_foreach, $7, $9, $9 );
+	    $$->setIdent( $3 );
+	    $$->setStringLiteral( $5 );
 	  }
 	;
 
@@ -1140,9 +1150,13 @@ else
           {
 	    $$ = NULL;
 	  }
-	| T_ELSE T_IF T_LEFT_PARANTHESIS assign_expr T_RIGHT_PARANTHESIS T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET else
+	| T_ELSE T_IF T_LEFT_PARANTHESIS assign_expr T_RIGHT_PARANTHESIS loop_body else
 	  {
-	    $$ = new KSParseNode( t_else, $4, $7, $9 );
+	    $$ = new KSParseNode( t_if, $4, $6, $7 );
+	  }
+	| T_ELSE loop_body
+	  {
+	    $$ = $2;
 	  }
 	;
 
@@ -1153,10 +1167,10 @@ while
 	  }
 	;
 
-for
-	: T_LEFT_PARANTHESIS assign_expr T_SEMICOLON assign_expr T_SEMICOLON assign_expr T_RIGHT_PARANTHESIS
+loop_body
+	: T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET
 	  {
-	    $$ = new KSParseNode( t_for_head, $2, $4, $6 );
+	    $$ = new KSParseNode( t_scope, $2 );
 	  }
 	;
 %%
