@@ -282,6 +282,13 @@ bool OpenCalcExport::exportContent( KoStore * store, const KSpreadDoc * ksdoc )
   return true;
 }
 
+ // e.g.: Sheet4.A1:Sheet4.E28
+QString convertRangeToRef( const QString & tableName, const QRect & _area )
+{
+    return tableName + "." + KSpreadCell::name( _area.left(), _area.top() ) + ":" + tableName + "."+ KSpreadCell::name( _area.right(), _area.bottom() );
+}
+
+
 QString convertRefToBase( QString const & table, QRect const & rect )
 {
   QPoint bottomRight( rect.bottomRight() );
@@ -359,6 +366,8 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     }
   }
 
+
+
   QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
 
   for( it.toFirst(); it.current(); ++it )
@@ -385,6 +394,15 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
         tabElem.setAttribute( "table:protection-key", QString( str.data() ) );
       }
     }
+
+    QRect _printRange = sheet->print()->printRange();
+    if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
+    {
+        QString range= convertRangeToRef( sheet->tableName(), _printRange );
+        //kdDebug()<<" range : "<<range<<endl;
+        tabElem.setAttribute( "table:print-ranges", range );
+    }
+
 
     QString name( sheet->tableName() );
 
