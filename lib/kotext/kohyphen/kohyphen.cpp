@@ -84,7 +84,7 @@ KoHyphenator::~KoHyphenator()
 
 char *KoHyphenator::hyphens(const QString& str, const QString& lang) const
 {
-    char *x = new char(str.length()+1);
+    char *x = new char[str.length()+1];
     try
     {
         QTextCodec *codec = QTextCodec::codecForName(encodingForLang(lang));
@@ -104,7 +104,7 @@ char *KoHyphenator::hyphens(const QString& str, const QString& lang) const
 
 QString KoHyphenator::hyphenate(const QString& str, const QString& lang) const
 {
-    char* x = new char(str.length());
+    char* x = new char[str.length()];
     QString res = str;
     try
     {
