@@ -1812,21 +1812,27 @@ KService::Ptr KoDocument::readNativeService( KInstance *instance )
 {
     QString instname = instance ? instance->instanceName() : kapp->instanceName();
 
-    // ###### TODO after 1.3: replace all this with
-    // instname.prepend( "kde-");
-    // KService::serviceByStorageId( instname );
-    // as advised by Waldo. (KDE-3.2 API for the XDG .desktop files)
+    // The new way is: we look for a foopart.desktop in the kde_services dir.
+    QString servicepartname = instname + "part.desktop";
+    KService::Ptr service = KService::serviceByDesktopPath( servicepartname );
+    if ( service )
+        kdDebug(30003) << servicepartname << " found." << endl;
+    if ( !service )
+    {
+        // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
 
-    // Try by path first, so that we find the global one (which has the native mimetype)
-    // even if the user created a kword.desktop in ~/.kde/share/applnk or any subdir of it.
-    // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
-    KService::Ptr service = KService::serviceByDesktopPath( QString::fromLatin1("Office/%1.desktop").arg(instname) );
+        // Try by path first, so that we find the global one (which has the native mimetype)
+        // even if the user created a kword.desktop in ~/.kde/share/applnk or any subdir of it.
+        // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
+        service = KService::serviceByDesktopPath( QString::fromLatin1("Office/%1.desktop").arg(instname) );
+    }
     if ( !service )
         service = KService::serviceByDesktopName( instname );
 
     if ( !service )
-        return service;
+        return service; // not found
 
+    // found, check that it's good
     if ( service->property( "X-KDE-NativeMimeType" ).toString().isEmpty() )
     {
         // It may be that the servicetype "KOfficePart" is missing, which leads to this property not being known

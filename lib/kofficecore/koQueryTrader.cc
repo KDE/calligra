@@ -112,20 +112,27 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QStr
 {
 
   QValueList<KoDocumentEntry> lst;
+  QString constr;
+  if ( !_constr.isEmpty() ) {
+      constr = "(";
+      constr += _constr;
+      constr += ") and ";
+  }
+  constr += " exist Library";
 
   // Query the trader
   KTrader::OfferList offers = KTrader::self()->query( "KOfficePart", _constr );
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  if ( max > 1 && !_constr.isEmpty() )
-    kdWarning(30003) << "KoDocumentEntry::query " << _constr << " got " << max << " offers!" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
     //kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
     //               << "   library=" << (*it)->library() << endl;
     // Parse the service
-    if ((!_onlyDocEmb) || ((*it)->property("X-KDE-NOTKoDocumentEmbeddable").toString()!="1"))
+    if ( ((!_onlyDocEmb) || ((*it)->property("X-KDE-NOTKoDocumentEmbeddable").toString()!="1"))
+          // Workaround for "exist" bug in kdelibs < 3.2 (fixed in kservice.cpp:1.153)
+          && ( !(*it)->property( "Library" ).toString().isEmpty() ) )
     {
       KoDocumentEntry d( *it );
       // Append converted offer
@@ -134,6 +141,9 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QStr
     }
     ++it;
   }
+
+  if ( lst.count() > 1 && !_constr.isEmpty() )
+    kdWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!" << endl;
 
   return lst;
 }
