@@ -196,17 +196,14 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
             *m_streamOut << "</tr>\n<tr>\n";
         }
 
-        *m_streamOut << "<td>";
-
-        QValueList<ParaData>::ConstIterator itPara;
-        for (itPara=(*itCell).paraList->begin(); itPara!=(*itCell).paraList->end(); itPara++)
-        {
-            // TODO: formatting/layout (take it from the first paragraph)
-            // For now, just show the text.
-            *m_streamOut << escapeHtmlText((*itPara).text);
+        *m_streamOut << "<td>\n";
+        
+        if (!doFullAllParagraphs(*(*itCell).paraList))
+        {   
+            return false;
         }
 
-        *m_streamOut << "</td>";
+        *m_streamOut << "</td>\n";
     }
 
     *m_streamOut << "</tr>\n";
@@ -835,24 +832,18 @@ bool HtmlWorker::doOpenStyles(void)
         *m_streamOut << "<!--\n";
     }
     // TODO: does KWord gives a paper colour?
-    *m_streamOut << "BODY\n{\n background-color: #FFFFFF\n}\n";
+    *m_streamOut << "BODY\n{\n  background-color: #FFFFFF\n}\n";
 
     return true;
 }
 
 bool HtmlWorker::doFullDefineStyle(LayoutData& layout)
 {
-    kdDebug(30503) << "Style: " << layout.styleName << endl;
-
-    if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
-        && (layout.counter.depth<6) )
-    {   // H1 ... H6
-        *m_streamOut << "H" << QString::number(layout.counter.depth+1,10);
-    }
+    // We do not limit (anymore) any style to <h1> ... <h6>, because
+    //   the style could be forced on <p> by the layout.
 
     *m_streamOut << "." << escapeCssIdentifier(layout.styleName);
-    kdDebug(30503) << "Class: " << escapeCssIdentifier(layout.styleName) << endl;
-    *m_streamOut << "\n{\n " << layoutToCss(layout) << "\n}\n";
+    *m_streamOut << "\n{\n  " << layoutToCss(layout) << "\n}\n";
 
     return true;
 }
