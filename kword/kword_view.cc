@@ -308,7 +308,7 @@ void KWordView::setupActions()
     actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
                                            this, SLOT( insertFootNoteEndNote() ),
                                            actionCollection(), "insert_footendnote" );
-    actionInsertContents = new KAction( i18n( "&Table Of Contents..." ), 0,
+    actionInsertContents = new KAction( i18n( "&Table of Contents" ), 0,
                                         this, SLOT( insertContents() ),
                                         actionCollection(), "insert_contents" );
     actionInsertVarDateFix = new KAction( i18n( "Date (&fix)" ), 0,
