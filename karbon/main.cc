@@ -22,11 +22,8 @@
 #include <dcopclient.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <koApplication.h>
-#include <koDocument.h>
-#include <koMainWindow.h>
 
 #include "karbon_factory.h"
 
