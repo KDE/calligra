@@ -38,6 +38,8 @@ public:
   std::map<unsigned,Cell*> cells;
   unsigned maxRow;
   unsigned maxColumn;
+  std::map<unsigned,Column*> columns;
+  std::map<unsigned,Row*> rows;
   
   bool visible;
   bool protect;
@@ -66,7 +68,7 @@ Sheet::Sheet( Workbook* wb )
 
 Sheet::~Sheet()
 {
-  // TODO delete all cells;
+  // TODO delete all cells, columns, rows
   delete d;
 }
 
@@ -101,6 +103,30 @@ Cell* Sheet::cell( unsigned column, unsigned row, bool autoCreate )
   }
   
   return c;
+}
+
+Column* Sheet::column( unsigned index, bool autoCreate )
+{
+  Column* c = d->columns[ index ];
+  
+  // create column if necessary
+  if( !c && autoCreate )
+  {
+    c = new Column( this, index );
+    d->columns[ index ] = c;
+  }
+}
+
+Row* Sheet::row( unsigned index, bool autoCreate )
+{
+  Row* r = d->rows[ index ];
+  
+  // create row if necessary
+  if( !r && autoCreate )
+  {
+    r = new Row( this, index );
+    d->rows[ index ] = r;
+  }
 }
 
 unsigned Sheet::maxRow() const

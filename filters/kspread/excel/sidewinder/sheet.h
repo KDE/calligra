@@ -28,6 +28,8 @@ namespace Sidewinder
 
 class Workbook;
 class Cell;
+class Column;
+class Row;
 
 class Sheet
 {
@@ -48,6 +50,10 @@ public:
   // automatically create the cell if previously there is no cell there
   // return NULL if no cell there _and_ autoCreate is false
   Cell* cell( unsigned column, unsigned row, bool autoCreate = true );
+  
+  Column* column( unsigned index, bool autoCreate = true );
+  
+  Row* row( unsigned index, bool autoCreate = true );
 
   bool visible() const;
   void setVisible( bool v );
