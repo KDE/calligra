@@ -147,9 +147,8 @@ public:
     /** draw underline and double underline. Static because it's used
      *  for draw double/simple in variable.
      */
-     static void drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y,  int h );
+     static void drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y, int h, QChar firstChar );
 
-     static void drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h, int startText, int len, KoTextParag *_parag );
     /** a bit more clever than KoTextString::toString, e.g. with numbered lists */
     QString toString( int from = 0, int length = 0xffffffff ) const;
 

@@ -225,7 +225,7 @@ public:
     bool underline() const { return (m_underlineLine==U_SIMPLE ); }
     bool strikeOut() const { return (m_strikeOutLine==S_SIMPLE ); }
     bool doubleStrikeOut() const { return (m_strikeOutLine==S_DOUBLE ); }
-    bool isStrikeUnderline() const { return ((m_underlineLine != U_NONE) ||(m_strikeOutLine!=S_NONE));}
+    bool isStrikedOrUnderlined() const { return ((m_underlineLine != U_NONE) ||(m_strikeOutLine!=S_NONE));}
 
     /**
      * @return the reference point size, i.e. the size specified by the user.
