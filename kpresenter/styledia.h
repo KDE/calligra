@@ -56,9 +56,9 @@ class PBPreview : public QFrame
 
 public:
     enum PaintType {
-	Pen,
-	Brush,
-	Gradient
+        Pen,
+        Brush,
+        Gradient
     };
 
     PBPreview( QWidget* parent, const char* name, PaintType _paintType );
@@ -68,7 +68,7 @@ public:
     void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint( true ); }
     void setLineEnd( LineEnd le ) { lineEnd = le; repaint( true ); }
     void setGradient( KPGradient *g ) { gradient = g; }
-    void setPaintType( PaintType pt ) { paintType = pt; }
+    void setPaintType( PaintType pt ) { paintType = pt; repaint(true);}
 
 protected:
     void drawContents( QPainter *p );
