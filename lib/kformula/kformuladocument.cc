@@ -433,7 +433,7 @@ void Document::createActions(KActionCollection* collection)
                                     this, SLOT(addSquareBracket()),
                                     collection,"formula_addsqrbra");
     impl->addCBracketAction = new KAction(i18n("Add Curly Bracket"),
-                                    "brace",
+                                    "math_brace",
                                     0,
                                     this, SLOT(addCurlyBracket()),
                                     collection,"formula_addcurbra");
