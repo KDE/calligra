@@ -159,6 +159,8 @@ void Conversion::setBorderAttributes( QDomElement& borderElement, const wvWare::
         style = "4";
         break;
     case 3: // double
+        style = "5";
+        break;
     case 1: // single
     default:
         // if a fancy unsupported border is specified -> better a normal border than none
