@@ -127,6 +127,7 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name, KoAutoForma
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
       oBegin( autoFormat->getConfigTypographicQuotes().begin ),
       oEnd( autoFormat->getConfigTypographicQuotes().end ),
+      bulletStyle( autoFormat->getConfigBulletStyle()),
       m_autoFormat( *autoFormat ),
       m_docAutoFormat( autoFormat )
 {
@@ -220,6 +221,24 @@ void KoAutoFormatDia::setupTab1()
     cbUseBulletStyle->resize( cbUseBulletStyle->sizeHint() );
     cbUseBulletStyle->setChecked( m_autoFormat.getConfigUseBulletSyle());
     ( void )new QWidget( tab1 );
+
+    quotes = new QHBox( tab1 );
+    quotes->setSpacing( 5 );
+    pbBulletStyle = new QPushButton( quotes );
+
+    pbBulletStyle->setText( bulletStyle );
+
+    pbBulletStyle->resize( pbBulletStyle->sizeHint() );
+
+    pbDefaultBulletStyle = new QPushButton( quotes );
+
+    pbDefaultBulletStyle->setText(i18n("Default"));
+
+    pbDefaultBulletStyle->resize( pbDefaultBulletStyle->sizeHint() );
+    ( void )new QWidget( quotes );
+
+    connect( pbBulletStyle, SIGNAL( clicked() ), this, SLOT( chooseBulletStyle() ) );
+    connect( pbDefaultBulletStyle, SIGNAL( clicked()), this, SLOT( defaultBulletStyle() ) );
 
     slotChangeState(state);
 }
@@ -444,6 +463,8 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configRemoveSpaceBeginEndLine( cbRemoveSpaceBeginEndLine->isChecked());
     m_docAutoFormat->configUseBulletStyle(cbUseBulletStyle->isChecked());
 
+    m_docAutoFormat->configBulletStyle(pbBulletStyle->text()[ 0 ]);
+
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
@@ -489,6 +510,21 @@ void KoAutoFormatDia::defaultQuote()
 {
     pbQuote1->setText("«");
     pbQuote2->setText("»");
+}
+
+void KoAutoFormatDia::chooseBulletStyle()
+{
+    QString f = font().family();
+    QChar c = oBegin;
+    if ( KoCharSelectDia::selectChar( f, c, false ) )
+    {
+        pbBulletStyle->setText( c );
+    }
+}
+
+void KoAutoFormatDia::defaultBulletStyle()
+{
+    pbBulletStyle->setText( "" );
 }
 
 void KoAutoFormatDia::slotChangeState(bool b)

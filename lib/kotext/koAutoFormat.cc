@@ -71,6 +71,9 @@ void KoAutoFormat::readConfig()
     m_removeSpaceBeginEndLine = config.readBoolEntry("RemoveSpaceBeginEndLine",false);
 
     m_useBulletStyle = config.readBoolEntry("UseBulletStyle",false);
+    QString tmp = config.readEntry( "BulletStyle", "" );
+    bulletStyle = tmp[0];
+
 
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicQuotes.begin = begin[0];
@@ -155,6 +158,7 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "RemoveSpaceBeginEndLine",m_removeSpaceBeginEndLine );
 
     config.writeEntry( "UseBulletStyle", m_useBulletStyle);
+    config.writeEntry( "BulletStyle", QString(bulletStyle));
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -496,8 +500,17 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
         txtObj->removeSelectedText( &cursor, KoTextObject::HighlightSelection,QString::null, false  );
 
         KoParagCounter c;
-        c.setNumbering( KoParagCounter::NUM_LIST );
-        c.setStyle( KoParagCounter::STYLE_DISCBULLET );
+        if( bulletStyle.isNull())
+        {
+            c.setNumbering( KoParagCounter::NUM_LIST );
+            c.setStyle( KoParagCounter::STYLE_DISCBULLET );
+        }
+        else
+        {
+            c.setNumbering( KoParagCounter::NUM_LIST );
+            c.setStyle( KoParagCounter::STYLE_CUSTOMBULLET );
+            c.setCustomBulletCharacter( bulletStyle );
+        }
         parag->setCounter(c);
         static_cast<KoTextParag*>(parag->next())->setCounter(c);
     }
@@ -598,6 +611,12 @@ void KoAutoFormat::configUseBulletStyle( bool _ubs)
 {
     m_useBulletStyle=_ubs;
 }
+
+void KoAutoFormat::configBulletStyle( QChar b )
+{
+    bulletStyle = b;
+}
+
 
 bool KoAutoFormat::isUpper( const QChar &c )
 {

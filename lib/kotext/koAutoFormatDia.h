@@ -102,13 +102,13 @@ protected:
     QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper, *cbDetectUrl,
         *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle;
     QPushButton *pbQuote1, *pbQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDefault,
-                *pbSpecialChar1, *pbSpecialChar2;
+                *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
     KCharSelect *charselect;
     KoAutoFormatLineEdit *m_find, *m_replace;
     KListView *m_pListView;
 
     QChar oBegin, oEnd;
-
+    QChar bulletStyle;
     KoAutoFormat m_autoFormat; // The copy we're working on
     KoAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
 
@@ -129,7 +129,8 @@ protected slots:
     void defaultQuote();
     void slotChangeState(bool);
     void slotAddEntry();
-
+    void chooseBulletStyle();
+    void defaultBulletStyle();
 };
 #endif
 

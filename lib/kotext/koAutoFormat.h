@@ -100,6 +100,8 @@ public:
     void configRemoveSpaceBeginEndLine( bool _space);
     void configUseBulletStyle( bool _ubs);
 
+    void configBulletStyle( QChar b );
+
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
     bool getConfigUpperCase() const
@@ -119,6 +121,9 @@ public:
 
     bool getConfigUseBulletSyle() const
     { return m_useBulletStyle;}
+
+    QChar getConfigBulletStyle() const
+    { return bulletStyle; }
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -182,6 +187,9 @@ private:
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
     bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;
     bool m_useBulletStyle;
+
+    QChar bulletStyle;
+
     TypographicQuotes m_typographicQuotes;
 
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
