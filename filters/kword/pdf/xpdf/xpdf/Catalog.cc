@@ -13,6 +13,7 @@
 #endif
 
 #include <stddef.h>
+#include <limits.h>
 #include "gmem.h"
 #include "Object.h"
 #include "XRef.h"
