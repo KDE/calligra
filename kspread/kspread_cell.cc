@@ -1071,13 +1071,16 @@ void KSpreadCell::freeAllObscuredCells()
   if (!d->hasExtra())
     return;
 
-  for ( int x = d->column + d->extra()->mergedXCells; x <= d->column + d->extra()->extraXCells; ++x )
-    for ( int y = d->row + d->extra()->mergedYCells; y <= d->row + d->extra()->extraYCells; ++y )
-      if ( x != d->column || y != d->row )
-      {
+  for ( int x = d->column + d->extra()->mergedXCells; 
+	x <= d->column + d->extra()->extraXCells; ++x ) {
+    for ( int y = d->row + d->extra()->mergedYCells; 
+	  y <= d->row + d->extra()->extraYCells; ++y ) {
+      if ( x != d->column || y != d->row ) {
         KSpreadCell *cell = m_pTable->cellAt( x, y );
         cell->unobscure(this);
       }
+    }
+  }
 
   d->extra()->extraXCells = d->extra()->mergedXCells;
   d->extra()->extraYCells = d->extra()->mergedYCells;
@@ -1742,6 +1745,11 @@ void KSpreadCell::calculateTextParameters( QPainter &_paint, int _col, int _row 
     offsetAlign( _col, _row );
 }
 
+
+// ----------------------------------------------------------------
+//                          Formula handling
+
+
 bool KSpreadCell::makeFormula()
 {
   clearFormula();
@@ -1908,183 +1916,217 @@ bool KSpreadCell::calc(bool delay)
   return true;
 }
 
-void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
-                             KSpreadView * view, const KoPoint & coordinate,
-                             const QPoint &cellRef, bool paintBorderRight,
-                             bool paintBorderBottom, bool paintBorderLeft,
-                             bool paintBorderTop, QPen & rightPen,
-                             QPen & bottomPen, QPen & leftPen,
-                             QPen & topPen, bool drawCursor )
+
+// ================================================================
+//                            Painting
+
+
+// Paint the cell.  This is the main function that calls a lot of
+// other helper functions.
+//
+void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
+                             KSpreadView    *view, 
+			     const KoPoint  &coordinate,
+                             const QPoint   &cellRef, 
+			     bool paintBorderRight, bool paintBorderBottom,
+			     bool paintBorderLeft,  bool paintBorderTop,
+			     QPen & rightPen, QPen & bottomPen,
+			     QPen & leftPen,  QPen & topPen,
+			     bool drawCursor )
 {
+  // If we are already painting this cell, then return immediately.
+  // This avoids infinite recursion.
   if ( testFlag( Flag_PaintingCell ) )
     return;
 
+  // Indicate that we are painting this cell now.
   setFlag( Flag_PaintingCell );
 
-  static int paintingObscured = 0;
-  /* this flag indicates that we are working on drawing the cells that a cell
-     is obscuring.  The value is the number of levels down we are currently
-     working -- i.e. a cell obscured by a cell which is obscured by a cell.
-  */
+  // This flag indicates that we are working on drawing the cells that
+  // another cell is obscuring.  The value is the number of levels down we
+  // are currently working -- i.e. a cell obscured by a cell which is
+  // obscured by a cell.
+  static int  paintingObscured = 0;
 
-  /* if we're working on drawing an obscured cell, that means this cell
-     should have a cell that obscured it. */
+  // Sanity check: If we're working on drawing an obscured cell, that
+  // means this cell should have a cell that obscured it.
   Q_ASSERT(!(paintingObscured > 0 && d->extra()->obscuringCells.isEmpty()));
 
-  /* the cellref passed in should be this cell -- except if this is the default
-     cell */
-
-  Q_ASSERT(!(((cellRef.x() != d->column) || (cellRef.y() != d->row)) && !isDefault()));
+  // The parameter cellref should be *this, unless this is the default cell.
+  Q_ASSERT(isDefault() 
+	   || (((cellRef.x() == d->column) && (cellRef.y() == d->row))));
 
   double left = coordinate.x();
 
   ColumnFormat * colFormat = m_pTable->columnFormat( cellRef.x() );
   RowFormat    * rowFormat = m_pTable->rowFormat( cellRef.y() );
 
-  double width, height;
-  if (d->hasExtra())
-  {
-    width  = d->extra()->extraXCells ? d->extra()->extraWidth  :
-      colFormat->dblWidth();
-    height = d->extra()->extraYCells ? d->extra()->extraHeight :
-      rowFormat->dblHeight();
-  }
-  else
-  {
-    width = colFormat->dblWidth();
-    height = rowFormat->dblHeight();
+  // Set width, height to the total width and height that this cell covers, 
+  // including obscured cells.
+  double  width  = colFormat->dblWidth();
+  double  height = rowFormat->dblHeight();
+  if (d->hasExtra()) {
+    width  += d->extra()->extraXCells ? d->extra()->extraWidth  : 0;
+    height += d->extra()->extraYCells ? d->extra()->extraHeight : 0;
   }
 
-  if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft && view && view->canvasWidget() )
+  // Handle right-to-left layout.
+  // FIXME (comment): But what does it actually do?
+  if ( m_pTable->layoutDirection() == KSpreadSheet::RightToLeft
+       && view && view->canvasWidget() )
   {
     double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
     left = dwidth - coordinate.x() - width;
   }
 
-  const KoRect cellRect( left, coordinate.y(), width, height );
-  bool selected = false;
-
-  if ( view != NULL )
-  {
+  // Check if the cell is "selected", i.e. it should be drawn with the
+  // color that indicates selection (dark blue).  If more than one
+  // square is selected, the last one uses the ordinary colors.  In
+  // that case, "selected" will be set to false even though it really
+  // is selected.
+  bool  selected = false;
+  if ( view != NULL ) {
     selected = view->selection().contains( cellRef );
 
-    /* but the cell doesn't look selected if this is the marker cell */
-    KSpreadCell * cell = m_pTable->cellAt( view->marker() );
-    QPoint bottomRight( view->marker().x() + cell->extraXCells(),
-                        view->marker().y() + cell->extraYCells() );
-    QRect markerArea( view->marker(), bottomRight );
+    // But the cell doesn't look selected if this is the marker cell.
+    KSpreadCell  *cell = m_pTable->cellAt( view->marker() );
+    QPoint        bottomRight( view->marker().x() + cell->extraXCells(),
+			       view->marker().y() + cell->extraYCells() );
+    QRect         markerArea( view->marker(), bottomRight );
     selected = selected && !( markerArea.contains( cellRef ) );
 
-    // Dont draw any selection when printing.
+    // Dont draw any selection at all when printing.
     if ( painter.device()->isExtDev() || !drawCursor )
       selected = false;
   }
 
   // Need to make a new layout ?
-
-  /* TODO - this needs to be taken out eventually - it is done in canvas::paintUpdates */
+  //
+  // FIXME: This needs to be taken out eventually - it is done in
+  //        canvas::paintUpdates().
   if ( testFlag( Flag_LayoutDirty ) )
     makeLayout( painter, cellRef.x(), cellRef.y() );
 
-  if ( !cellRect.intersects( rect ) )
-  {
+  // ----------------  Start the actual painting.  ----------------
+
+  // If the rect of this cell doesn't intersect the rect that should
+  // be painted, we can skip the rest and return.
+  const KoRect  cellRect( left, coordinate.y(), width, height );
+  if ( !cellRect.intersects( rect ) ) {
     clearFlag( Flag_PaintingCell );
     return;
   }
 
+  // Get the background color.
+  // If the background color is specified for this cell, use that one,
+  // otherwise get a standard background.
   QColor backgroundColor;
   if ( d->hasExtra() && d->extra()->conditions
-       &&d->extra()->conditions->matchedStyle()
+       && d->extra()->conditions->matchedStyle()
        && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundColor, true ) )
     backgroundColor = d->extra()->conditions->matchedStyle()->bgColor();
   else
     backgroundColor = bgColor( cellRef.x(), cellRef.y() );
 
+  // Paint the background.
   if ( !isObscuringForced() )
     paintBackground( painter, cellRect, cellRef, selected, backgroundColor );
-  if( painter.device()->devType() != QInternal::Printer )
-    paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorderRight, paintBorderBottom,
-                         paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
 
-  /* paint all the cells that this one obscures */
+  // Paint the default borders unless we are painting on a printer.
+  if ( painter.device()->devType() != QInternal::Printer )
+    paintDefaultBorders( painter, rect, cellRect, cellRef, 
+			 paintBorderRight, paintBorderBottom,
+                         paintBorderLeft,  paintBorderTop, 
+			 rightPen, bottomPen, leftPen, topPen );
+
+  /* Paint all the cells that this one obscures. */
   paintingObscured++;
-  paintObscuredCells( rect, painter, view, cellRect, cellRef, paintBorderRight, paintBorderBottom,
-                      paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
+  paintObscuredCells( rect, painter, view, cellRect, cellRef, 
+		      paintBorderRight, paintBorderBottom,
+                      paintBorderLeft,  paintBorderTop, 
+		      rightPen, bottomPen, leftPen, topPen );
   paintingObscured--;
 
-  //If we print pages then we disable clipping otherwise borders are cut in the middle at the page borders
+  // If we print pages, then we disable clipping, otherwise borders are
+  // cut in the middle at the page borders.
   if ( painter.device()->isExtDev() )
     painter.setClipping( false );
 
   if ( !isObscuringForced() )
-    paintCellBorders( painter, rect, cellRect, cellRef, paintBorderRight, paintBorderBottom,
-                      paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
+    paintCellBorders( painter, rect, cellRect, cellRef, 
+		      paintBorderRight, paintBorderBottom,
+                      paintBorderLeft,  paintBorderTop, 
+		      rightPen, bottomPen, leftPen, topPen );
 
   if ( painter.device()->isExtDev() )
     painter.setClipping( true );
 
+  // Paint diagonal lines and page borders..
   paintCellDiagonalLines( painter, cellRect, cellRef );
+  paintPageBorders( painter, cellRect, cellRef, 
+		    paintBorderRight, paintBorderBottom );
 
-  paintPageBorders( painter, cellRect, cellRef, paintBorderRight, paintBorderBottom );
+  // Now print the content, if this cell isn't obscured.
+  if ( !isObscured() ) {
 
-  /* now print content, if this cell isn't obscured */
-  if ( !isObscured() )
-    /* don't paint content if this cell is obscured */
-  {
-    if ( !painter.device()->isExtDev() || m_pTable->print()->printCommentIndicator() )
+    // Paint possible comment indicator.
+    if ( !painter.device()->isExtDev()
+	 || m_pTable->print()->printCommentIndicator() )
       paintCommentIndicator( painter, cellRect, cellRef, backgroundColor );
-    if ( !painter.device()->isExtDev() || m_pTable->print()->printFormulaIndicator() )
+
+    // Paint possible formula indicator.
+    if ( !painter.device()->isExtDev()
+	 || m_pTable->print()->printFormulaIndicator() )
       paintFormulaIndicator( painter, cellRect, backgroundColor );
 
+    // Paint possible indicator for clipped text.
     paintMoreTextIndicator( painter, cellRect, backgroundColor );
 
+    // Paint the text in the cell unless:
+    //  a) it is empty
+    //  b) something indicates that the text should not be painted
+    //  c) the table is protected and the cell is hidden.
     if ( !d->strOutText.isEmpty()
-              && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
-              && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
+	 && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), 
+								  cellRef.y() ) )
+	 && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
       paintText( painter, cellRect, cellRef );
     }
   }
 
-  if ( isObscured() && paintingObscured == 0 )
-  {
-    /* print the cells obscuring this one */
+  // If this cell is obscured and we are not already painting obscured
+  // cells, then paint the obscuring cell(s).  Otherwise don't do
+  // anything so that we don't cause an infinite loop.
+  if ( isObscured() && paintingObscured == 0 ) {
 
-    /* if paintingObscured is > 0, that means drawing this cell was triggered
-       while already drawing the obscuring cell -- don't want to cause an
-       infinite loop
-    */
-
-    /*
-      Store the obscuringCells list in a list of QPoint(column, row)
-      This avoids crashes during the iteration through obscuringCells,
-      when the cells may get non valid or the list itself gets changed
-      during a call of obscuringCell->paintCell (this happens e.g. when
-      there is an updateDepend)
-    */
-    if (d->hasExtra())
-    {
-      QValueList<QPoint> listPoints;
-      QValueList<KSpreadCell*>::iterator it = d->extra()->obscuringCells.begin();
-      QValueList<KSpreadCell*>::iterator end = d->extra()->obscuringCells.end();
-      for ( ; it != end; ++it )
-      {
+    // Store the obscuringCells list in a list of QPoint(column, row)
+    // This avoids crashes during the iteration through
+    // obscuringCells, when the cells may get non valid or the list
+    // itself gets changed during a call of obscuringCell->paintCell
+    // (this happens e.g. when there is an updateDepend)
+    if (d->hasExtra()) {
+      QValueList<QPoint>                  listPoints;
+      QValueList<KSpreadCell*>::iterator  it = d->extra()->obscuringCells.begin();
+      QValueList<KSpreadCell*>::iterator  end = d->extra()->obscuringCells.end();
+      for ( ; it != end; ++it ) {
         KSpreadCell *obscuringCell = *it;
-        listPoints.append( QPoint( obscuringCell->column(), obscuringCell->row() ) );
+
+        listPoints.append( QPoint( obscuringCell->column(), 
+				   obscuringCell->row() ) );
       }
 
-      QValueList<QPoint>::iterator it1 = listPoints.begin();
-      QValueList<QPoint>::iterator end1 = listPoints.end();
-      for ( ; it1 != end1; ++it1 )
-      {
+      QValueList<QPoint>::iterator  it1  = listPoints.begin();
+      QValueList<QPoint>::iterator  end1 = listPoints.end();
+      for ( ; it1 != end1; ++it1 ) {
         QPoint obscuringCellRef = *it1;
-        KSpreadCell *obscuringCell = m_pTable->cellAt( obscuringCellRef.x(), obscuringCellRef.y() );
-        if( obscuringCell != 0 )
-        {
+        KSpreadCell *obscuringCell = m_pTable->cellAt( obscuringCellRef.x(), 
+						       obscuringCellRef.y() );
+
+        if ( obscuringCell != 0 ) {
           double x = m_pTable->dblColumnPos( obscuringCellRef.x() );
           double y = m_pTable->dblRowPos( obscuringCellRef.y() );
-          if( view != 0 )
-          {
+          if ( view != 0 ) {
             x -= view->canvasWidget()->xOffset();
             y -= view->canvasWidget()->yOffset();
           }
@@ -2092,29 +2134,38 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
           KoPoint corner( x, y );
           painter.save();
 
-          QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(), obscuringCellRef.y() ) );
-          QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(), obscuringCellRef.y() ) );
-          QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(), obscuringCellRef.y() ) );
-          QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(), obscuringCellRef.y() ) );
+          QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(), 
+						     obscuringCellRef.y() ) );
+          QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(), 
+						      obscuringCellRef.y() ) );
+          QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(), 
+						    obscuringCellRef.y() ) );
+          QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(), 
+						   obscuringCellRef.y() ) );
 
           obscuringCell->paintCell( rect, painter, view,
-                                    corner, obscuringCellRef, true, true, true, true, rp, bp, lp, tp );
+                                    corner, obscuringCellRef, 
+				    true, true, true, true,  // borders
+				    rp, bp, lp, tp );        // new pens
           painter.restore();
         }
       }
     }
   }
 
+  // We are done with the painting, so remove the flag on the cell.
   clearFlag( Flag_PaintingCell );
 }
-/* the following code was commented out in the above function.  I'll leave
-   it here in case this functionality is ever re-implemented and someone
-   wants some code to start from */
+
+// The following code was commented out in the above function.  I'll
+// leave it here in case this functionality is ever re-implemented and
+// someone wants some code to start from.
+//
+#if 0
 
   /**
      * Modification for drawing the button
      */
-/*
   if ( d->style == KSpreadCell::ST_Button )
   {
 
@@ -2124,21 +2175,21 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   defaultColorGroup ); //, selected, &fill );
 
     }
-*/
+
     /**
      * Modification for drawing the combo box
      */
-/*
   else if ( d->style == KSpreadCell::ST_Select )
     {
       QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
                                                 w2 - 1, h2 - 1,
             defaultColorGroup, selected );
     }
-*/
+#endif
 
 
-
+// Paint all the cells that this cell obscures.
+//
 void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                                      KSpreadView* view,
                                      const KoRect &cellRect,
@@ -2147,44 +2198,44 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                                      bool paintBorderBottom,
                                      bool paintBorderLeft, bool paintBorderTop,
                                      QPen & rightPen, QPen & bottomPen,
-                                     QPen & leftPen, QPen & topPen )
+                                     QPen & leftPen,  QPen & topPen )
 {
-  // This cell is obscuring other ones? Then we redraw their
-  // background and borders before we paint our content there.
-  if ( extraXCells() || extraYCells() )
-  {
-    double ypos = cellRect.y();
-    int maxY = extraYCells();
-    int maxX = extraXCells();
-    for( int y = 0; y <= maxY; ++y )
-    {
-      double xpos = cellRect.x();
-      RowFormat* rl = m_pTable->rowFormat( cellRef.y() + y );
+  if ( !extraXCells() && !extraYCells() )
+    return;
 
-      for( int x = 0; x <= maxX; ++ x )
-      {
-        ColumnFormat * cl = m_pTable->columnFormat( cellRef.x() + x );
-        if ( y != 0 || x != 0 )
-        {
-          KSpreadCell * cell = m_pTable->cellAt( cellRef.x() + x,
-                                                 cellRef.y() + y );
+  double  ypos = cellRect.y();
+  int     maxY = extraYCells();
+  int     maxX = extraXCells();
 
-          KoPoint corner( xpos, ypos );
-          cell->paintCell( rect, painter, view,
-                           corner,
-                           QPoint( cellRef.x() + x, cellRef.y() + y ),
-                           paintBorderRight, paintBorderBottom, paintBorderLeft, paintBorderTop,
-                           rightPen, bottomPen, leftPen, topPen );
-        }
-        xpos += cl->dblWidth();
+  // Loop through the rectangle of squares that we obscure and paint them.
+  for ( int y = 0; y <= maxY; ++y ) {
+    double xpos = cellRect.x();
+    RowFormat* rl = m_pTable->rowFormat( cellRef.y() + y );
+
+    for( int x = 0; x <= maxX; ++ x ) {
+      ColumnFormat * cl = m_pTable->columnFormat( cellRef.x() + x );
+      if ( y != 0 || x != 0 ) {
+	KSpreadCell * cell = m_pTable->cellAt( cellRef.x() + x,
+					       cellRef.y() + y );
+
+	KoPoint corner( xpos, ypos );
+	cell->paintCell( rect, painter, view,
+			 corner,
+			 QPoint( cellRef.x() + x, cellRef.y() + y ),
+			 paintBorderRight, paintBorderBottom, 
+			 paintBorderLeft,  paintBorderTop,
+			 rightPen, bottomPen, leftPen, topPen );
       }
-
-      ypos += rl->dblHeight();
+      xpos += cl->dblWidth();
     }
+
+    ypos += rl->dblHeight();
   }
 }
 
 
+// Paint the background of this cell.
+//
 void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
                                    const QPoint &cellRef, bool selected,
                                    QColor &backgroundColor )
@@ -3339,6 +3390,11 @@ void KSpreadCell::paintCellDiagonalLines( QPainter& painter,
     }
   }
 }
+
+
+# End of painting
+# ================================================================
+#
 
 
 int KSpreadCell::defineAlignX()
