@@ -52,6 +52,7 @@
 #include <qscrollbar.h>
 #include <qevent.h>
 #include <qbutton.h>
+#include <qstringlist.h>
 
 KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char* name )
   : ContainerView( doc, parent, name )
@@ -128,9 +129,25 @@ void KImageShopView::setupTabBar()
 {
   // tabbar
   m_pTabBar = new KImageShopTabBar(this, m_pDoc);
-  m_pTabBar->addTab("image 1");
-  m_pTabBar->setActiveTab("image 1");
 
+  QStringList images = m_pDoc->images();
+  if (!images.isEmpty())
+    {
+      QStringList::Iterator it;
+
+      for ( it = images.begin(); it != images.end(); ++it )
+	  m_pTabBar->addTab(*it);
+
+      m_pTabBar->setActiveTab(*images.begin());
+    }
+
+  QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ),
+		    this, SLOT( slotTabSelected( const QString& ) ) );
+
+  QObject::connect( m_pDoc, SIGNAL( imageAdded( const QString& ) ),
+		    this, SLOT( slotImageAdded( const QString& ) ) );
+
+ 
   // tabbar control buttons
   m_pTabFirst = new QPushButton( this );
   m_pTabFirst->setPixmap( QPixmap( KImageShopBarIcon( "tab_first" ) ) );
@@ -300,6 +317,17 @@ void KImageShopView::setupActions()
   // misc actions
   m_preferences = new KAction( i18n("&Preferences"), 0, this,
 			       SLOT( preferences() ),actionCollection(), "preferences");
+}
+
+void KImageShopView::slotTabSelected(const QString& name)
+{
+  m_pDoc->setCurrentImage(name);
+}
+
+void KImageShopView::slotImageAdded(const QString& name)
+{
+  m_pTabBar->addTab(name);
+  m_pTabBar->setActiveTab(name);
 }
 
 void KImageShopView::resizeEvent(QResizeEvent*)

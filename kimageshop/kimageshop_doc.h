@@ -25,12 +25,15 @@
 #include <koDocument.h>
 #include <koUndo.h>
 
+#include <qstring.h>
 #include <qlist.h>
+#include <qstringlist.h>
 
 #include "layer.h"
 #include "kimageshop_image.h"
 
 class Brush;
+
 
 class KImageShopDoc : public KoDocument
 {
@@ -96,8 +99,12 @@ public:
     void saveImage( const QString& file, KImageShopImage *img );
     void loadImage( const QString& file );
 
+    QString currentImage();
+
     void setCurrentImage(KImageShopImage *img);
     void setCurrentImage(const QString& _name);
+
+    QStringList images();
     
 public slots:
   void slotUndoRedoChanged( QString _undo, QString _redo );

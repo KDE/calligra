@@ -89,6 +89,7 @@ void KImageShopDoc::setCurrentImage(KImageShopImage *img)
 
 void KImageShopDoc::setCurrentImage(const QString& _name)
 {
+  qDebug("KImageShopDoc::setCurrentImage: %s", _name.latin1());
   KImageShopImage *img = m_Images.first();
   
   while (img)
@@ -98,7 +99,29 @@ void KImageShopDoc::setCurrentImage(const QString& _name)
 	  setCurrentImage(img);
 	  return;
 	}
+      img = m_Images.next();
     }
+}
+
+QStringList KImageShopDoc::images()
+{
+  QStringList lst;
+  
+  KImageShopImage *img = m_Images.first();
+  
+  while (img)
+    {
+      lst.append(img->name());
+      img = m_Images.next();
+    }
+  return lst;  
+}
+
+QString KImageShopDoc::currentImage()
+{
+  if (m_pCurrent)
+    return m_pCurrent->name();
+  return QString("");
 }
 
 KImageShopDoc::~KImageShopDoc()
@@ -142,10 +165,14 @@ QSize KImageShopDoc::size()
 
 KImageShopImage* KImageShopDoc::newImage()
 {
-  KImageShopImage *img = new KImageShopImage( QString("image ") + m_Images.count(), 512, 512 );
+  QString name;
+  name.sprintf("image %d", m_Images.count()+1);
+  
+  KImageShopImage *img = new KImageShopImage( name, 512, 512 );
   m_Images.append(img);
   setCurrentImage(img);
   emit imageAdded(img->name());
+  return img;
 }
 
 void KImageShopDoc::saveImage( const QString& file, KImageShopImage *img )

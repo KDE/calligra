@@ -76,6 +76,9 @@ class KImageShopView : public ContainerView
   void slotScrollToRightTab();
   void slotScrollToLastTab();
 
+  void slotTabSelected(const QString& name);
+  void slotImageAdded(const QString& name);
+
  signals:
   void canvasMousePressEvent( QMouseEvent * );
   void canvasMouseMoveEvent( QMouseEvent * );
