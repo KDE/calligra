@@ -113,15 +113,18 @@ drawPage( VPainter *p )
 #define BOTTOM 20
 #define TOP    830
 
-	p->setPen( Qt::NoPen );
+	p->setPen( Qt::black );
 	p->setBrush( Qt::white );
 	p->newPath();
 	p->moveTo( KoPoint( LEFT,  BOTTOM ) );
 	p->lineTo( KoPoint( RIGHT, BOTTOM ) );
 	p->lineTo( KoPoint( RIGHT, TOP ) );
 	p->lineTo( KoPoint( LEFT,  TOP ) );
+	p->lineTo( KoPoint( LEFT,  BOTTOM ) );
 	p->fillPath();
+	p->strokePath();
 
+	p->setPen( Qt::NoPen );
 	p->setBrush( Qt::black );
 	p->newPath();
 	p->moveTo( KoPoint( RIGHT,     BOTTOM - 2 ) );
@@ -144,12 +147,12 @@ drawPage( VPainter *p )
 	p->lineTo( KoPoint( RIGHT, TOP ) );
 	p->fillPath();
 
-	p->newPath();
+	/*p->newPath();
 	p->moveTo( KoPoint( LEFT,     BOTTOM - 2 ) );
 	p->lineTo( KoPoint( LEFT + 1, BOTTOM - 2 ) );
 	p->lineTo( KoPoint( LEFT + 1, TOP ) );
 	p->lineTo( KoPoint( LEFT,     TOP ) );
-	p->fillPath();
+	p->fillPath();*/
 }
 
 void
