@@ -1907,7 +1907,6 @@ KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd l
     {
         if(it.current()->isSelected())
         {
-            kdDebug() << "KPrPage::setPenBrush entre !!!!!!!!!!!!!" << endl;
             kpobject=it.current();
             ptmp = new PenBrushCmd::Pen;
             btmp = new PenBrushCmd::Brush;
@@ -2115,12 +2114,10 @@ KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd l
                 KPGroupObject *obj=dynamic_cast<KPGroupObject*>( kpobject );
                 if(obj)
                 {
-                    kdDebug() << "KPrPage::setPenBrush" << endl;
                     obj->selectAllObj();
                     KCommand *cmd2=setPenBrush(pen, brush, lb, le, ft, g1, g2,
                                                gt,unbalanced, xfactor,yfactor, obj->objectList() );
                     obj->deSelectAllObj();
-                    kdDebug()<<"cmd2 :"<<cmd<<endl;
                     if(cmd2)
                     {
                         cmd->addCommand(cmd2);
