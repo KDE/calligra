@@ -6,9 +6,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la -lkformula $(LIBPYTHON)
 
 bin_PROGRAMS = kspread.bin
 
-kspread_bin_SOURCES = kspread_canvas.cc kmetaedit.cc kspread_emacs.cc kspread_main.cc \
+kspread_bin_SOURCES = kspread.cc kspread_canvas.cc kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_shell.cc kspread_doc.cc \
-	kspread.cc kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
+	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_python.cc kspread_autofill.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \

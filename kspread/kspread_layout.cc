@@ -389,4 +389,7 @@ bool ColumnLayout::load( KorbSession *korb, OBJECT o_cl )
 */
 
 
+#undef UPDATE_BEGIN
+#undef UPDATE_END
+
 

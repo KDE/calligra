@@ -2,6 +2,10 @@
 #include "kspread_util.h"
 #include "kspread_map.h"
 
+#ifdef expr
+#undef expr
+#endif
+
 KSpread::Cell util_parseCell( const QString& _str )
 {
   KSpreadPoint c( _str );

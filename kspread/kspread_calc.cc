@@ -384,7 +384,7 @@ double cellValue( void *_table, int _x, int _y )
 
   // setError( ERR_NOT_A_NUMERIC_VALUE, "" );
   
-  cerr << "No value at " << t->name() << " (" << _x << "|" << _y << ")" << endl;
+  cerr << "No value at " << t->name().ascii() << " (" << _x << "|" << _y << ")" << endl;
   
   return 0.0;
 }
