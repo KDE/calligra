@@ -479,5 +479,4 @@ void CustomItemsMap::deleteAll( KMacroCommand *macroCmd )
         item->setDeleted( true );
     }
 }
-
-#include "kotextdocument.moc"
+//#include "kotextdocument.moc"
