@@ -21,7 +21,8 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koView.cc koFrame.cc handler.cpp koDocumentChild.cc \
 	koDocumentInfoDlg.cc koFactory.cc koChild.cc \
 	KoApplicationIface.cc KoApplicationIface.skel \
-	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel
+	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel \
+	koImage.cc koImageCollection.cc
 
 libkofficecore_la_LDFLAGS = $(KDE_LDFLAGS)  -version-info 1:0:0 -no-undefined
 
@@ -33,7 +34,8 @@ include_HEADERS = koFilter.h \
 	koDataTool.h koDocumentInfo.h \
 	koFilterDialog.h koView.h koFrame.h handler.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
-	KoApplicationIface.h KoDocumentIface.h KoViewIface.h
+	KoApplicationIface.h KoDocumentIface.h KoViewIface.h \
+	koImage.h koImageCollection.h
 
 #libkofficecore_la_METASOURCES = AUTO
 
