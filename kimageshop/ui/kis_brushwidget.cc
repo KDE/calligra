@@ -1,5 +1,5 @@
 /*
- *  kis_brushwidget.cc - part of KImageShop
+ *  kis_brushwidget.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *

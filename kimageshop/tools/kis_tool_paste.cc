@@ -111,27 +111,22 @@ void PasteTool::mousePress(QMouseEvent *e)
     if (e->button() != QMouseEvent::LeftButton)
         return;
 
-    if(!m_pDoc->current())
-        return;
+    KisImage *img = m_pDoc->current();
+    if (!img)  return;    
 
-    if(!m_pDoc->current()->getCurrentLayer()->visible() )
-        return;
+    if(!img->getCurrentLayer()->visible()) return;
 
     m_dragging = true;
 
     QPoint pos = e->pos();
-    pos = zoomed(pos);
     
     m_dragStart = pos;
     m_dragdist = 0;
 
-    pasteColor(pos);
-    
-    m_pDoc->current()->markDirty(QRect(0, 0, 
-        m_pDoc->current()->width(), m_pDoc->current()->height()));      
-
-    /* m_pDoc->current()->markDirty(QRect(e->pos() - mHotSpot, 
-         m_pBrush->size())); */ 
+    if(pasteColor(zoomed(pos)))
+    {
+        img->markDirty(QRect(zoomed(pos) - mHotSpot, mClipSize));
+    }
 }
 
 
@@ -241,15 +236,23 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
+    float zF = m_pView->zoomFactor();
+
+    int pX = pos.x();
+    int pY = pos.y();  
+    pX = (int)(pX / zF); 
+    pY = (int)(pY / zF);
+    pos = QPoint(pX, pY);
+
     QPainter p;
     p.begin(m_pCanvas);
-    p.scale( m_pView->zoomFactor(), m_pView->zoomFactor() );
+    p.scale( zF, zF );
 
     QRect ur(pos.x(), pos.y(), clipPix.width(), clipPix.height());
     
+    // check image bounds.  The image extends are a rectangle 
+    // containing all the layers that contribute to it
     ur = ur.intersect(img->imageExtents());
-    ur.setBottom(ur.bottom()+1);
-    ur.setRight(ur.right()+1);
 
     if (ur.top() - mHotSpotY > img->height()
     || ur.left() - mHotSpotX > img->width()
@@ -270,6 +273,18 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     }
     ur = ur.intersect(lay->layerExtents());
 
+    int startX = 0;
+    int startY = 0;
+
+    if(((pos.x() > 0 - mHotSpotX) && (pos.x() < mHotSpotX))) 
+        startX += (mHotSpotX - pos.x());    
+    if(startX > ur.width())
+        startX = ur.width();
+    if(((pos.y() > 0 - mHotSpotY) && (pos.y() < mHotSpotY))) 
+        startY += (mHotSpotY - pos.y());    
+    if(startY > ur.height())
+        startY = ur.height();
+
     int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
     int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
 
@@ -277,7 +292,7 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
     p.drawPixmap( ur.left(), ur.top(), 
                   clipPix, 
-                  0, 0, ur.width(), ur.height() );
+                  startX, startY, ur.width(), ur.height() );
     p.end();
     
     return true;
@@ -291,98 +306,90 @@ void PasteTool::mouseMove(QMouseEvent *e)
 
     int spacing = 10;
     
-    if(true)
-    {
-        if( !img->getCurrentLayer()->visible() )
-	        return;
+    float zF = m_pView->zoomFactor();
 
-        QPoint pos = e->pos();      
-        int mouseX = e->x();
-        int mouseY = e->y();
+    QPoint pos = e->pos();      
+    int mouseX = e->x();
+    int mouseY = e->y();
 
-        pos = zoomed(pos);
-        mouseX = zoomedX(mouseX);
-        mouseY = zoomedY(mouseY);        
-	  
-        KisVector end(mouseX, mouseY);
-        KisVector start(m_dragStart.x(), m_dragStart.y());
+    KisVector end(mouseX, mouseY);
+    KisVector start(m_dragStart.x(), m_dragStart.y());
             
-        KisVector dragVec = end - start;
-        float saved_dist = m_dragdist;
-        float new_dist = dragVec.length();
-        float dist = saved_dist + new_dist;
+    KisVector dragVec = end - start;
+    float saved_dist = m_dragdist;
+    float new_dist = dragVec.length();
+    float dist = saved_dist + new_dist;
 	  
-        if ((int)dist < spacing)
+    if ((int)dist < spacing)
+	{
+	    m_dragdist += new_dist; 
+	    m_dragStart = pos;
+	    return;
+	}
+    else
+    {
+	    m_dragdist = 0; 
+	}
+          
+    dragVec.normalize();
+    KisVector step = start;
+
+    while (dist >= spacing)
+	{
+	    if (saved_dist > 0)
 	    {
-	        m_dragdist += new_dist; 
-	        m_dragStart = pos;
-	        return;
+	        step += dragVec * (spacing-saved_dist);
+		    saved_dist -= spacing;
 	    }
+	    else
+		    step += dragVec * spacing;
+		  
+	    QPoint p(step.x(), step.y());
+            
+	    if(m_dragging)
+        {
+            /* mouse button is down. Actually draw the 
+            image into the layer so long as spacing is 
+            less than distance moved */
+
+            if (pasteColor(zoomed(p) - mHotSpot))
+            {
+		        img->markDirty(QRect(zoomed(p) - mHotSpot, clipPix.size()));
+            }    
+        }
         else
         {
-	        m_dragdist = 0; 
-	    }
-          
-        dragVec.normalize();
-        KisVector step = start;
-
-        while (dist >= spacing)
-	    {
-	        if (saved_dist > 0)
-	        {
-		        step += dragVec * (spacing-saved_dist);
-		        saved_dist -= spacing;
-	        }
-	        else
-		        step += dragVec * spacing;
-		  
-	        QPoint p(step.x(), step.y());
-            
-	        if(m_dragging)
-            {
-                /* mouse button is down. Actually draw the 
-                image into the layer so long as spacing is 
-                less than distance moved */
-
-                if (pasteColor(p - mHotSpot))
-                {
-		            img->markDirty(QRect(p - mHotSpot, clipPix.size()));
-                }    
-            }
-            else
-            {
-                /* Button is not down. Refresh canvas from the layer
-                and then blit the image to the canvas without affecting 
-                the layer at all ! No need for double buffer!!!    
-                Refresh first - markDirty relies on timer, 
-                so we need force by directly updating the canvas. */
+            /* Button is not down. Refresh canvas from the layer
+            and then blit the image to the canvas without affecting 
+            the layer at all ! No need for double buffer!!!    
+            Refresh first - markDirty relies on timer, 
+            so we need force by directly updating the canvas. */
                 
-                QRect ur(oldp.x() - mHotSpotX - m_pView->xScrollOffset() -2, 
-                         oldp.y() - mHotSpotY - m_pView->yScrollOffset() -2, 
-                         clipPix.width()  + 2, 
-                         clipPix.height() + 2);
+            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_pView->xScrollOffset(), 
+                     zoomed(oldp.y()) - mHotSpotY - m_pView->yScrollOffset(), 
+                     (int)(clipPix.width() * (zF > 1.0 ? zF : 1.0)), 
+                     (int)(clipPix.height() * (zF > 1.0 ? zF : 1.0)));
                          
-                m_pView->updateCanvas(ur);
+            m_pView->updateCanvas(ur);
                 
-                // after old spot is refreshed, stamp image into canvas
-                // at current location. This may be slow or messy as updates
-                // rely on a timer - need threads and semaphores here to let
-                // us know when old marking has been replaced with image
-                // if timer is used, but it's not used for this.
+            /* after old spot is refreshed, stamp image into canvas
+            at current location. This may be slow or messy as updates
+            rely on a timer - need threads and semaphores here to let
+            us know when old marking has been replaced with image
+            if timer is used, but it's not used for this. */
                 
-                if(!pasteToCanvas(p - mHotSpot))
-                {
-                    kdDebug(0) << "canvas error!" << endl;                
-                }            
-            }
+            if(!pasteToCanvas(p /*- mHotSpot*/))
+            {
+                //kdDebug(0) << "off canvas" << endl;                
+            }            
+        }
             
-	        oldp = p; 
-            dist -= spacing; 
-	    }
-	  
-        if (dist > 0) m_dragdist = dist; 
-        m_dragStart = pos;
+	    oldp = p; 
+        dist -= spacing; 
     }
+	  
+    if (dist > 0) m_dragdist = dist; 
+    m_dragStart = pos;
 }
 
 

@@ -32,7 +32,7 @@
 #include "kis_util.h"
 #include "kapp.h"
 
-#define TEST_OPT_BRUSH
+//#define TEST_OPT_BRUSH
 
 BrushTool::BrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
   : KisTool(doc, view)

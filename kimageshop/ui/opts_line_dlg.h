@@ -23,6 +23,7 @@
 
 #include <qspinbox.h>
 #include <qlineedit.h>
+#include <qcheckbox.h>
 
 #include <kdialog.h>
 
@@ -32,17 +33,24 @@ class LineOptionsDialog : public KDialog
 
 public:
 
-  LineOptionsDialog( int _thickness = 1, int _opacity = 255,
-    QWidget *parent = 0, const char *name = 0 );
+    LineOptionsDialog( bool _solid = false, 
+        int _thickness = 1, int _opacity = 255,
+        QWidget *parent = 0, const char *name = 0 );
 
-  int thickness() { return m_thickness->value(); };
-  int opacity() { return m_opacity->value(); };
-
+    int thickness() { return m_thickness->value(); };
+    int opacity() { return m_opacity->value(); };
+    bool solid() { return m_solid->isChecked(); };
+    bool pattern() { return m_pattern->isChecked(); };
+    bool gradient() { return m_gradient->isChecked(); };
+    
 private:
 
-  QSpinBox  *m_thickness;
-  QSpinBox  *m_opacity;
-
+    QSpinBox  *m_thickness;
+    QSpinBox  *m_opacity;
+    
+    QCheckBox *m_solid;
+    QCheckBox *m_pattern;
+    QCheckBox *m_gradient;
 };
 
 #endif // __lineoptionsdialog.h__

@@ -65,8 +65,11 @@ void LineTool::mouseMove( QMouseEvent* event )
 
     if( m_dragging )
     {
+        // erase old line
         drawLine( m_dragStart, m_dragEnd );
+        // get current position
         m_dragEnd = event->pos();
+        // draw line to current position
         drawLine( m_dragStart, m_dragEnd );
     }
 }
@@ -80,9 +83,9 @@ void LineTool::mouseRelease( QMouseEvent* event )
     if(( m_dragging) 
     && ( event->state() == LeftButton))
     {
+        // erase old line
         drawLine( m_dragStart, m_dragEnd );
         m_dragging = false;
-        drawLine( m_dragStart, m_dragEnd );
     }
     
     KisPainter *p = m_pView->kisPainter();

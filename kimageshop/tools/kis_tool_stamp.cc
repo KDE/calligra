@@ -191,10 +191,8 @@ bool StampTool::stampToCanvas(QPoint pos)
     if(startY > ur.height())
         startY = ur.height();
 
-    int xt = m_pView->xPaintOffset() 
-        - (int)(m_pView->xScrollOffset());
-    int yt = m_pView->yPaintOffset() 
-        - (int)(m_pView->yScrollOffset());
+    int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
+    int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
         
     p.translate(xt, yt);
 
@@ -402,16 +400,7 @@ void StampTool::mouseMove(QMouseEvent *e)
             the layer at all ! No need for double buffer!!!    
             Refresh first - markDirty relies on timer, 
             so we need force by directly updating the canvas. */
-#if 0
-            if(oldp.x() < mHotSpotX) 
-                oldp.setX(mHotSpotX);
-            if(oldp.x() > lay->imageExtents().right() - mHotSpotX) 
-                oldp.setX(lay->imageExtents().right() - mHotSpotX);
-            if(oldp.y() < mHotSpotY)     
-                oldp.setY(mHotSpotY);
-            if(oldp.y() > lay->imageExtents().bottom() - mHotSpotY) 
-                oldp.setY(lay->imageExtents().bottom() - mHotSpotY);
-#endif                
+
             QRect ur(zoomed(oldp.x()) - mHotSpotX - m_pView->xScrollOffset(), 
                 zoomed(oldp.y()) - mHotSpotY - m_pView->yScrollOffset(), 
                 (int)(patternWidth  * (zF > 1.0 ? zF : 1.0)), 

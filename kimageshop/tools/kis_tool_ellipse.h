@@ -52,7 +52,8 @@ protected:
 
     int     lineThickness;
     int     lineOpacity;
-    
+    bool    fillSolid;
+           
     QPoint       m_dragStart;
     QPoint       m_dragEnd;
 

@@ -133,6 +133,8 @@ KisTimer::start();
  
         // list of images - mdi document 
         setCurrentImage(img);
+        
+        // signal to tabbar for iages
         emit imageListUpdated();
         
         setModified (true);
@@ -150,12 +152,12 @@ KisTimer::start();
     {
         // NewDialog for entering parameters
         ok = slotNewImage();        
+        // signal to tabbar for images
         if(ok) emit imageListUpdated();
     } 
 
 KisTimer::stop("initDoc()");
     
-    currentShell();
     return ok;    
 }
 
@@ -508,8 +510,11 @@ void KisDoc::setCurrentImage(KisImage *img)
 		    this, SLOT( slotLayersUpdated() ) );
     }
     
+    // signal to tabbar for images - kis_view.cc
     emit imageListUpdated();
+    // signal to current image - kis_image.cc
     emit layersUpdated();
+    // signal to view to update contents - kis_view.cc
     emit docUpdated();
 }
 
@@ -620,26 +625,51 @@ KisImage* KisDoc::current()
     return m_pCurrent;
 }
 
-
 /*
-    currentShell - pointer to current main window for doc
-    this seems the only way to access the status bar which
-    belongs to the KoMainWindow, not the view .  However, this
-    doesn't work.  Like so much else in koffice, it is perpetually
-    being redesigned and doesn't work, but uses lots of memory.
+    resetShells - touch all shells for this document to
+    force a fake resize and show scrollbars in the view(s)
+    This is necessary when a new current image is established
+    which may have a different size from the former one.
+    resetShells() is invoked by the docUpdated() signal sent to the
+    view, from the view's docUpdated(), as a result of the current 
+    image changing.  See the method setCurrentImage() in this class.  
+    What a roundabout way to do the simplest thing!
 */
-KoMainWindow * KisDoc::currentShell()
+void KisDoc::resetShells()
 {
     int shellCount = 0;
     KoMainWindow * tmpKo = firstShell();
-    
+   
     for ( ; tmpKo ; tmpKo = nextShell() )
     {
         shellCount++;
-        tmpKo->statusBarLabel()->setText(
-            i18n(" KisShell Number : %1").arg(shellCount));
+        
+        kdDebug() << "KisShell Number: " << shellCount << endl;        
+
+        int shellWidth  = tmpKo->width();
+        int shellHeight = tmpKo->height();
+
+        tmpKo->resize(shellWidth - 1, shellHeight - 1);
+
+        //kdDebug() << "KisShell width  - 1: "  << shellWidth  << endl;        
+        //kdDebug() << "KisShell height - 1: "  << shellHeight << endl;        
+
+        tmpKo->resize(shellWidth, shellHeight); 
+
+        //kdDebug() << "KisShell width: "  << shellWidth  << endl;        
+        //kdDebug() << "KisShell height: " << shellHeight << endl; 
     }
-    
+}
+
+/*
+    currentShell - pointer to current main window for doc
+    Right now it just returns a ptr to the first shell for
+    this doc until it can be determined which shell contains
+    the active view (and which view is active!).
+*/
+KoMainWindow * KisDoc::currentShell()
+{
+    KoMainWindow * tmpKo = firstShell();
     return tmpKo;
 }
 
@@ -1233,7 +1263,8 @@ void KisDoc::paintPixmap(QPainter *p, QRect area)
 */
 void KisDoc::slotImageUpdated()
 {
-    // emit docUpdated();
+    // signal to view to update contents - kis_view.cc
+    emit docUpdated();
 }
 
 /*
@@ -1242,12 +1273,14 @@ void KisDoc::slotImageUpdated()
 
 void KisDoc::slotImageUpdated( const QRect& rect )
 {
+    // signal to view to update contents - kis_view.cc
     emit docUpdated(rect);
 }
 
 
 void KisDoc::slotLayersUpdated()
 {
+    // signal to image - kis_image.cc
     emit layersUpdated();
 }
 

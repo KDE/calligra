@@ -24,19 +24,20 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qcheckbox.h>
 
 #include <klocale.h>
 
 #include "opts_line_dlg.h"
 
-LineOptionsDialog::LineOptionsDialog( int _thickness, int _opacity, 
-    QWidget *parent, const char *name ) 
+LineOptionsDialog::LineOptionsDialog( bool _solid,
+    int _thickness, int _opacity, QWidget *parent, const char *name )
     : KDialog( parent, name, true )
 {
     setCaption( i18n("Current Tool Options") );
 
-    QVBoxLayout* layout = new QVBoxLayout( this, 3 );
-    QGridLayout* grid = new QGridLayout( layout, 2, 2);
+    QVBoxLayout* layout = new QVBoxLayout( this, 4 );
+    QGridLayout* grid = new QGridLayout( layout, 2, 3);
 
     m_thickness = new QSpinBox( 1, 16, 10, this );
     m_thickness->setValue( _thickness );
@@ -51,6 +52,13 @@ LineOptionsDialog::LineOptionsDialog( int _thickness, int _opacity,
 
     grid->addWidget( olabel, 1, 0 );
     grid->addWidget( m_opacity, 1, 1 );
+
+    m_solid = new QCheckBox( this );
+    m_solid->setChecked( _solid );
+    QLabel* slabel = new QLabel( m_solid, i18n("Fill Solid"), this );
+
+    grid->addWidget( slabel, 2, 0 );
+    grid->addWidget( m_solid, 2, 1 );
 
     QHBoxLayout* buttons = new QHBoxLayout( layout, 3 );
     buttons->addStretch( 3 );

@@ -123,15 +123,13 @@
 
 <Menu name="settings"><text>Settings</text>
   <Action name="current_tool_properties"/>  
-  <Action name="dialog_gradienteditor"/>      
-  <Action name="dialog_gradient"/>      
   <Action name="preferences"/>    
   <Action name="save_options"/>
   <Separator/>
   <Action name="show_sidebar"/>  
   <Action name="float_sidebar"/>
   <Action name="left_sidebar"/>
-  <Separator/>    
+  <Separator/>          
   <Action name="toggle_paint_offset"/>
   <Separator/>    
   <Action name="configure"/>

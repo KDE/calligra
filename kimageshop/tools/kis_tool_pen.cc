@@ -1,5 +1,5 @@
 /*
- *  kis_tool_pen.cc - part of KImageShop
+ *  kis_tool_pen.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *                2001 John Califf 
@@ -22,12 +22,12 @@
 #include <qpainter.h>
 #include <qbitmap.h>
 
-#include "kis_tool_pen.h"
 #include "kis_brush.h"
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_vec.h"
 #include "kis_cursor.h"
+#include "kis_tool_pen.h"
 #include "opts_pen_dlg.h"
 
 PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *_brush)

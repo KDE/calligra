@@ -1,5 +1,5 @@
 /*
- *  kis_log.cc - part of KImageShop
+ *  kis_log.cc - part of Krayon
  *
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *
@@ -32,21 +32,21 @@ char    *KisLog::m_logfile = 0;
 
 void KisLog::setLogFile(const char *file)
 {
-  // remove old logfile
-  ::unlink(file);
+    // remove old logfile
+    ::unlink(file);
 
-  // delete old output stream
-  if (m_logfile)
-      delete m_output;
+    // delete old output stream
+    if (m_logfile)
+        delete m_output;
 
-  // open new output
-  m_output = new ofstream(file, ofstream::app);
-  m_logfile = strdup(file);
+    // open new output
+    m_output = new ofstream(file, ofstream::app);
+    m_logfile = strdup(file);
   
-  // fall back to cerr
-  if (!m_output)
+    // fall back to cerr
+    if (!m_output)
     {
-      m_output = &cerr;
-      m_logfile = 0;
+        m_output = &cerr;
+        m_logfile = 0;
     }
 }

@@ -23,41 +23,38 @@
 
 #include <koMainWindow.h>
 
-class KStatusBar;
-
-#define ID_STATUSBAR_INFOTEXT 1
-
 class KisShell : public KoMainWindow
 {
   Q_OBJECT
 
 public:
 
-  KisShell( const char* name = 0 );
-  ~KisShell();
+    KisShell( const char* name = 0 );
+    ~KisShell();
 
-  QString nativeFormatPattern() const { return "*.kis"; }
-  QString nativeFormatName() const;
+    QString nativeFormatPattern() const { return "*.kis"; }
+    QString nativeFormatName() const;
 
 public slots:
 
-  virtual void slotFileNew();
-  virtual void slotFileNewDocument();
-  virtual void slotFileAddNewImage();
-  virtual void slotFileRemoveCurrentImage();
+    virtual void slotFileNew();
+    
+    //virtual void slotFileNewDocument();
+    //virtual void slotFileAddNewImage();
+    //virtual void slotFileRemoveCurrentImage();
 
-  virtual void slotFilePrint();
-  virtual void slotFileClose();
+    virtual void slotFilePrint();
+    virtual void slotFileClose();
 
-  virtual void statusMsg( const QString& );
+    virtual void statusMsg( const QString& );
 
 protected:
 
-  virtual bool openDocument( const KURL & url );
+    virtual bool openDocument( const KURL & url );
 
 private:
 
-  KStatusBar *m_pStatusBar;
+    QLabel *m_pMessageLabel;
 };
 
 #endif // __kimageshop_shell_h__

@@ -36,6 +36,7 @@ EllipseTool::EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
 {
     lineThickness = 4;
     lineOpacity = 255;
+    fillSolid = false;
 }
 
 EllipseTool::~EllipseTool()
@@ -64,8 +65,11 @@ void EllipseTool::mouseMove( QMouseEvent* event )
 
     if( m_dragging )
     {
+        // erase old ellipse on canvas
         drawEllipse( m_dragStart, m_dragEnd );
+        // get current mouse position
         m_dragEnd = event->pos();
+        // draw new ellipse on canvas
         drawEllipse( m_dragStart, m_dragEnd );
     }
 }
@@ -79,10 +83,11 @@ void EllipseTool::mouseRelease( QMouseEvent* event )
     if(( m_dragging) 
     && ( event->state() == LeftButton))
     {
+        // erase old ellipse on canvas
         drawEllipse( m_dragStart, m_dragEnd );
         m_dragging = false;
-        drawEllipse( m_dragStart, m_dragEnd );
-    
+
+        // draw final ellipse onto layer    
         QRect rect(zoomed(m_dragStart), zoomed(m_dragEnd));
         KisPainter *p = m_pView->kisPainter();
         p->drawEllipse( rect );
@@ -114,17 +119,19 @@ void EllipseTool::drawEllipse( const QPoint & start, const QPoint &end )
 void EllipseTool::optionsDialog()
 {
     LineOptionsDialog *pOptsDialog 
-        = new LineOptionsDialog(lineThickness, lineOpacity);
+        = new LineOptionsDialog(fillSolid, lineThickness, lineOpacity);
     pOptsDialog->exec();
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
     lineThickness = pOptsDialog->thickness();
     lineOpacity   = pOptsDialog->opacity();
+    fillSolid     = pOptsDialog->solid();
     
     KisPainter *p = m_pView->kisPainter();
     p->setLineThickness(lineThickness);
     p->setLineOpacity(lineOpacity);
+    p->setFilledEllipse(fillSolid);    
 }
 
 

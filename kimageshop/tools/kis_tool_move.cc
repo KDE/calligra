@@ -115,6 +115,8 @@ void MoveTool::mouseMove( QMouseEvent *e )
 
         m_layerPosition = img->getCurrentLayer()->imageExtents().topLeft();
         m_dragStart = e->pos();
+        
+        m_pView->slotRefreshPainter();
     }
 }
 

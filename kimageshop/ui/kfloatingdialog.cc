@@ -61,6 +61,11 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name)
         m_dockedPos = QPoint(0,0);
     }
 
+    m_pCloseButton = 0L;
+    m_pMinButton  = 0L;
+    m_pDockButton  = 0L;
+
+#if 0    
     // setup title buttons
     m_pCloseButton = new QPushButton(this);
     QPixmap close_pm( locate("kis_pics", "close.png", KisFactory::global()));
@@ -82,14 +87,15 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name)
 
     // read config
     readSettings();
+#endif    
 }
 
 
 KFloatingDialog::~KFloatingDialog()
 {
-    delete m_pCloseButton;
-    delete m_pDockButton;
-    delete m_pMinButton;
+    if (m_pCloseButton)  delete m_pCloseButton;
+    if (m_pDockButton)   delete m_pDockButton;
+    if (m_pMinButton)    delete m_pMinButton;
 }
 
 
@@ -99,6 +105,7 @@ KFloatingDialog::~KFloatingDialog()
 
 void KFloatingDialog::readSettings()
 {
+#if 0
     // query kwmrc for the titlebar look
     KConfig* config = new KConfig("kwmrc", true);
 
@@ -149,6 +156,7 @@ void KFloatingDialog::readSettings()
         if (m_pActivePm->size() == QSize(0,0))
 		    m_titleLook = plain;
     }
+#endif    
 }
 
 
@@ -176,8 +184,7 @@ void KFloatingDialog::slotDock()
 
 void KFloatingDialog::slotMinimize()
 {
-    if (!m_docked)
-        showMinimized();
+    if (!m_docked) showMinimized();
 }
 
 
@@ -190,8 +197,8 @@ void KFloatingDialog::setShaded(bool value)
 
     if (m_shaded)
     {
-      m_unshadedHeight = height();
-      resize(width(), TITLE_HEIGHT);
+        m_unshadedHeight = height();
+        resize(width(), TITLE_HEIGHT);
     }
     else
         resize(width(), m_unshadedHeight);
@@ -205,7 +212,7 @@ void KFloatingDialog::setDocked(bool value)
 
     m_docked = value;
 
-    // docked
+    // set docked - back to original parent
     if (m_docked) 
     {
         if (!m_pParent)
@@ -215,11 +222,11 @@ void KFloatingDialog::setDocked(bool value)
 		}
         reparent(m_pParent, 0, m_dockedPos, true);
     }
-    // free float
+    // set free floating - keep on top of parent window
     else 
     {
         m_dockedPos = pos();
-        reparent(0, 0, mapToGlobal(QPoint(0,0)), true);
+        reparent(0, WStyle_StaysOnTop, mapToGlobal(QPoint(0,0)), true);
         setActiveWindow();
     }
 }
@@ -242,6 +249,8 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
 {
     if (!isVisible())
         return;
+
+#if 0
 
     QRect r(FRAMEBORDER, FRAMEBORDER, _width(), GRADIENT_HEIGHT);
     QPainter p;
@@ -297,8 +306,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
 
     // paint caption
     p.setPen(hasFocus() ? 
-        KGlobalSettings::activeTextColor() : 
-            KGlobalSettings::inactiveTextColor());
+        KGlobalSettings::activeTextColor() : KGlobalSettings::inactiveTextColor());
 
     /* FIXME: we need a global KIS config class that provides 
     for example a KIS-global small font p.setFont(tinyFont); */
@@ -314,11 +322,15 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
 
     p.setClipping(false);
     p.end();
+    
+#endif
+
     QFrame::paintEvent(e);
 }
 
 void KFloatingDialog::mouseDoubleClickEvent (QMouseEvent *e)
 {
+#if 0
     if (e->button() & LeftButton)
     {
         QRect title(0,0, width(), TITLE_HEIGHT);
@@ -332,6 +344,9 @@ void KFloatingDialog::mouseDoubleClickEvent (QMouseEvent *e)
     }
     else
         QFrame::mouseDoubleClickEvent (e);
+#endif        
+
+    QFrame::mouseDoubleClickEvent (e);
 }
 
 
@@ -339,9 +354,9 @@ void KFloatingDialog::mousePressEvent(QMouseEvent *e)
 {
     raise();
 
-    if(!m_docked)
-        setActiveWindow();
+    if(!m_docked)  setActiveWindow();
 
+#if 0
     if (e->button() & LeftButton)
     {
         QPoint pos = e->pos();
@@ -349,18 +364,18 @@ void KFloatingDialog::mousePressEvent(QMouseEvent *e)
 
         if(bottomRect().contains(pos))
 		{
-		  m_resizing = true;
-		  m_resizeMode = vertical;
+		    m_resizing = true;
+		    m_resizeMode = vertical;
 		}
         else if(rightRect().contains(pos))
 		{
-		  m_resizing = true;
-		  m_resizeMode = horizontal;
+		    m_resizing = true;
+		    m_resizeMode = horizontal;
 		}
         else if(lowerRightRect().contains(pos))
 		{
-		  m_resizing = true;
-		  m_resizeMode = diagonal;
+		    m_resizing = true;
+		    m_resizeMode = diagonal;
 		}
         else if(title.contains(pos))
 		    m_dragging = true;
@@ -373,47 +388,51 @@ void KFloatingDialog::mousePressEvent(QMouseEvent *e)
     }
     else
         QFrame::mousePressEvent(e);
+#endif
+
+        QFrame::mousePressEvent(e);
 }
 
 void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
 {
+#if 0
     if (bottomRect().contains(e->pos()) && !m_shaded)
     {
-      if (!QApplication::overrideCursor() 
-      || QApplication::overrideCursor()->shape() != SizeVerCursor)
+        if (!QApplication::overrideCursor() 
+        || QApplication::overrideCursor()->shape() != SizeVerCursor)
 		{
-		  if (m_cursor)
-			QApplication::restoreOverrideCursor();
-		  QApplication::setOverrideCursor(sizeVerCursor);
+		    if (m_cursor)
+			    QApplication::restoreOverrideCursor();
+		    QApplication::setOverrideCursor(sizeVerCursor);
 		}
-      m_cursor = true;
+        m_cursor = true;
     }
     else if (rightRect().contains(e->pos()))
     {
-      if (!QApplication::overrideCursor() 
-      || QApplication::overrideCursor()->shape() != SizeHorCursor)
+        if (!QApplication::overrideCursor() 
+        || QApplication::overrideCursor()->shape() != SizeHorCursor)
 		{
-		  if (m_cursor)
-			QApplication::restoreOverrideCursor();
-		  QApplication::setOverrideCursor(sizeHorCursor);
+		    if (m_cursor)
+			    QApplication::restoreOverrideCursor();
+		    QApplication::setOverrideCursor(sizeHorCursor);
 		}
-      m_cursor = true;
+        m_cursor = true;
     }
     else if (lowerRightRect().contains(e->pos()) && !m_shaded)
     {
-      if (!QApplication::overrideCursor() 
-      || QApplication::overrideCursor()->shape() != SizeFDiagCursor)
+        if (!QApplication::overrideCursor() 
+        || QApplication::overrideCursor()->shape() != SizeFDiagCursor)
 		{
-		  if (m_cursor)
-			QApplication::restoreOverrideCursor();
-		  QApplication::setOverrideCursor(sizeFDiagCursor);
+		    if (m_cursor)
+			    QApplication::restoreOverrideCursor();
+		    QApplication::setOverrideCursor(sizeFDiagCursor);
 		}
-      m_cursor = true;
+        m_cursor = true;
     }
     else if (m_cursor)
     {
-      QApplication::restoreOverrideCursor();
-      m_cursor = false;
+        QApplication::restoreOverrideCursor();
+        m_cursor = false;
     }
 
     if (m_dragging)
@@ -421,10 +440,8 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
         if(m_pParent && m_docked)
 		{
 		    QPoint newPos = m_pParent->mapFromGlobal(QCursor::pos()) - m_pos;
-		    if (newPos.x() < 0)
-			    newPos.setX(0);
-		    if (newPos.y() < 0)
-			    newPos.setY(0);
+		    if (newPos.x() < 0) newPos.setX(0);
+		    if (newPos.y() < 0) newPos.setY(0);
 		    move(newPos);
 		    qDebug("move to x %d y %d", newPos.x(), newPos.y());
 		}
@@ -478,35 +495,46 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
     }
     else
         QFrame::mouseMoveEvent(e);
+#endif
+        
+        QFrame::mouseMoveEvent(e);        
 }
+
 
 void KFloatingDialog::mouseReleaseEvent(QMouseEvent *e)
 {
+#if 0
     if (e->button() & LeftButton)
     {
-      m_dragging = false;
-      m_resizing = false;
+        m_dragging = false;
+        m_resizing = false;
     }
     else
         QFrame::mouseReleaseEvent(e);
+#endif        
+
+    QFrame::mouseReleaseEvent(e);
 }
+
 
 void KFloatingDialog::resizeEvent(QResizeEvent *)
 {
+#if 0
     m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
     m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
     m_pDockButton->setGeometry(width()-FRAMEBORDER-39, FRAMEBORDER+1, 12, 12);
 
     if (m_pBase)
         m_pBase->setGeometry(_left(), _top(), _width(), _height());
+#endif
 }
 
 void  KFloatingDialog::leaveEvent(QEvent *)
 {
     if (m_cursor)
     {
-      m_cursor = false;
-      QApplication::restoreOverrideCursor();
+        m_cursor = false;
+        QApplication::restoreOverrideCursor();
     }
 }
 

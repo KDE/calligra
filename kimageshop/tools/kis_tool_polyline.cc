@@ -67,10 +67,11 @@ void PolyLineTool::mousePress( QMouseEvent* event )
     {
         if( m_dragging )
         {
+            // erase old line on canvas
             drawLine( m_dragStart, m_dragEnd );
             m_dragEnd = event->pos();
-            drawLine( m_dragStart, m_dragEnd );
  
+            // draw final line into layer
             KisPainter *p = m_pView->kisPainter();
             p->drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()),
                 zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));

@@ -28,23 +28,24 @@ class KisCanvas : public QWidget
   Q_OBJECT
 
  public:
-  KisCanvas( QWidget* parent = 0, const char* name = 0 );
-
+    KisCanvas( QWidget* parent = 0, const char* name = 0 );
+    void showScrollBars();
+    
  signals:
-  void mousePressed( QMouseEvent * );
-  void mouseMoved( QMouseEvent * );
-  void mouseReleased( QMouseEvent * );
-  void gotPaintEvent( QPaintEvent* );
-  void gotEnterEvent( QEvent* );
-  void gotLeaveEvent( QEvent* );  
+    void mousePressed( QMouseEvent * );
+    void mouseMoved( QMouseEvent * );
+    void mouseReleased( QMouseEvent * );
+    void gotPaintEvent( QPaintEvent* );
+    void gotEnterEvent( QEvent* );
+    void gotLeaveEvent( QEvent* );  
   
  protected:
-  virtual void paintEvent( QPaintEvent* );
-  virtual void mousePressEvent ( QMouseEvent * );
-  virtual void mouseReleaseEvent ( QMouseEvent * );
-  virtual void mouseMoveEvent ( QMouseEvent * );
-  virtual void enterEvent( QEvent* );
-  virtual void leaveEvent( QEvent* );
+    virtual void paintEvent( QPaintEvent* );
+    virtual void mousePressEvent ( QMouseEvent * );
+    virtual void mouseReleaseEvent ( QMouseEvent * );
+    virtual void mouseMoveEvent ( QMouseEvent * );
+    virtual void enterEvent( QEvent* );
+    virtual void leaveEvent( QEvent* );
 };
 
 #endif

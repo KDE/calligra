@@ -29,6 +29,15 @@ KisCanvas::KisCanvas( QWidget* parent, const char* name )
     setMouseTracking( true );
 }
 
+void KisCanvas::showScrollBars()
+{
+    int w = width();
+    int h = height();
+
+    resize(w - 1, h - 1);
+    resize(w, h);
+}
+
 void KisCanvas::paintEvent( QPaintEvent* e )
 {
     emit gotPaintEvent(e);

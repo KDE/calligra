@@ -27,7 +27,8 @@
 
 #include <qlist.h>
 #include <qwidget.h>
-
+#include <qframe.h>
+#include "kfloatingdialog.h"
 #include "kis_brush.h"
 
 class QHBox;
@@ -35,7 +36,7 @@ class QLabel;
 class IconChooser;
 class IntegerWidget;
 
-class KisBrushChooser : public QWidget
+class KisBrushChooser : public KFloatingDialog
 {
   Q_OBJECT
 

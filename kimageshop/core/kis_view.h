@@ -96,8 +96,8 @@ class KisView : public KoView
     KisCanvas*  kisCanvas() { return m_pCanvas; }
     KisPainter* kisPainter() { return m_pPainter; }
     
-    void updateCanvas(  QRect & ur );
-    void showScrollBars( );
+    void updateCanvas(QRect & ur);
+    void showScrollBars();
     void layerScale(bool smooth);
         
  signals:
@@ -105,12 +105,15 @@ class KisView : public KoView
     void canvasMousePressEvent( QMouseEvent * );
     void canvasMouseMoveEvent( QMouseEvent * );
     void canvasMouseReleaseEvent( QMouseEvent * );
-
+    void canvasEnterEvent( QEvent * );
+    void canvasLeaveEvent( QEvent * );
+    
     void bgColorChanged(const KisColor & );
     void fgColorChanged(const KisColor & );     
 
  public slots:
  
+    void slotRefreshPainter();
     void slotUpdateImage();
     void slotDocUpdated();
     void slotDocUpdated(const QRect&);
@@ -229,7 +232,8 @@ class KisView : public KoView
     void canvasGotMouseMoveEvent ( QMouseEvent * );
     void canvasGotMouseReleaseEvent ( QMouseEvent * );
     void canvasGotPaintEvent( QPaintEvent* );
-
+    void canvasGotEnterEvent( QEvent * );
+    void canvasGotLeaveEvent( QEvent * );
     void slotUndoRedoChanged( QString _undo, QString _redo );
     void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
 

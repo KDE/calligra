@@ -128,6 +128,7 @@ class ColorChooserFrame : public QFrame
     KisColorChooser   *m_pColorChooser;
 };
 
+
 class ControlFrame : public QFrame
 {
     Q_OBJECT
@@ -166,6 +167,7 @@ class ControlFrame : public QFrame
     KisPreviewWidget  *m_pPreviewWidget;  
 };
 
+
 class DockFrame : public QFrame
 {
   Q_OBJECT
@@ -198,7 +200,8 @@ class KisSideBar : public KFloatingDialog
 
     void plug (QWidget* w) { m_pDockFrame->plug(w); }
     void unplug (QWidget* w) { m_pDockFrame->unplug(w); }
-
+    DockFrame *dockFrame() { return m_pDockFrame; }
+    
  public slots:
     void slotSetFGColor(const KisColor&);
     void slotSetBGColor(const KisColor&);
@@ -216,7 +219,8 @@ class KisSideBar : public KFloatingDialog
 
  protected:
     virtual void resizeEvent ( QResizeEvent * );
-
+    virtual void closeEvent ( QCloseEvent * );
+    
  protected slots:
     void slotColorChooserColorSelected(const KisColor&);
     void slotControlFGColorSelected(const KisColor&);

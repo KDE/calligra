@@ -76,6 +76,12 @@ public:
 	 *  Current shell or frame window for this doc.
 	 */
     KoMainWindow* currentShell();
+ 
+	/*
+	 *  Force a redraw of scrollbars and other widgets in all
+     *  shell windows for this document.
+	 */
+    void resetShells();
 
 	/*
 	 * KOffice undo/redo.

@@ -34,7 +34,6 @@
 #include "kis_resourceserver.h"
 #include "iconchooser.h"
 #include "integerwidget.h"
-
 #include "kis_brushchooser.h"
 
 // X11 headers
@@ -42,7 +41,7 @@
 #undef Above
 
 KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
-  : QWidget( parent, name )
+  : KFloatingDialog( parent, name )
 {
     lbSpacing = new QLabel( i18n("Spacing:"), this );
     slSpacing = new IntegerWidget( 1, 100, this, "int widget" );

@@ -36,6 +36,7 @@ RectangleTool::RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
 {
     lineThickness = 4;
     lineOpacity = 255;
+    fillSolid = false;
 }
 
 RectangleTool::~RectangleTool()
@@ -64,8 +65,11 @@ void RectangleTool::mouseMove( QMouseEvent* event )
 
     if( m_dragging )
     {
+        // erase old lines on canvas
         drawRectangle( m_dragStart, m_dragEnd );
+        // get current mouse position
         m_dragEnd = event->pos();
+        // draw new lines on canvas
         drawRectangle( m_dragStart, m_dragEnd );
     }
 }
@@ -79,11 +83,12 @@ void RectangleTool::mouseRelease( QMouseEvent* event )
     if(( m_dragging) 
     && ( event->state() == LeftButton))
     {
+        // erase old lines on canvas
         drawRectangle( m_dragStart, m_dragEnd );
         m_dragging = false;
-        drawRectangle( m_dragStart, m_dragEnd );
     }
     
+    // draw final lines onto layer
     KisPainter *p = m_pView->kisPainter();
     QRect rect(zoomed(m_dragStart), zoomed(m_dragEnd)) ;
     p->drawRectangle( rect );
@@ -112,15 +117,17 @@ void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
 void RectangleTool::optionsDialog()
 {
     LineOptionsDialog *pOptsDialog 
-        = new LineOptionsDialog(lineThickness, lineOpacity);
+        = new LineOptionsDialog(fillSolid, lineThickness, lineOpacity);
     pOptsDialog->exec();
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
     lineThickness = pOptsDialog->thickness();
     lineOpacity   = pOptsDialog->opacity();
-    
+    fillSolid     = pOptsDialog->solid();
+        
     KisPainter *p = m_pView->kisPainter();
     p->setLineThickness(lineThickness);
     p->setLineOpacity(lineOpacity);
+    p->setFilledRectangle(fillSolid);
 }

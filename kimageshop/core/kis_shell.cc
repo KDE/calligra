@@ -37,16 +37,12 @@
 KisShell::KisShell( const char* name )
     : KoMainWindow( KisFactory::global(), name )
 {
-#if 0
-    m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
+    statusBar()->removeWidget(statusBarLabel());
+    m_pMessageLabel = new QLabel(statusBar());
+    statusBar()->addWidget(m_pMessageLabel, true);
+    m_pMessageLabel->setText("Krayon Status Bar");     
 
-    m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), 
-        ID_STATUSBAR_INFOTEXT );
-
-#endif
-    
-    statusBarLabel()->setText(i18n("Krayon Status Bar"));
-
+    //statusBarLabel()->setText(i18n("Krayon Status Bar"));
 }
 
 
@@ -59,7 +55,6 @@ QString KisShell::nativeFormatName() const
 {
     return i18n("Krayon");
 }
-
 
 
 void KisShell::slotFileNew()
@@ -81,11 +76,12 @@ void KisShell::slotFileNew()
     else
     {
         if(!doc->slotNewImage())
-            kdDebug(0) << "KisShell::slotFileNew() can't create new image" << endl;        
+            kdDebug(0) 
+                << "KisShell::slotFileNew() can't create image" << endl;        
     }
 }
 
-
+#if 0
 void KisShell::slotFileNewDocument()
 {
     KisDoc* doc = (KisDoc*)rootDocument();
@@ -95,6 +91,7 @@ void KisShell::slotFileNewDocument()
             kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;                
     }
 }
+
 
 
 void KisShell::slotFileAddNewImage()
@@ -118,6 +115,8 @@ void KisShell::slotFileRemoveCurrentImage()
         doc->slotRemoveImage(doc->currentImage());
     }
 }
+#endif
+
 
 bool KisShell::openDocument( const KURL & url )
 {
@@ -153,7 +152,7 @@ void KisShell::slotFileClose()
 
 void KisShell::statusMsg( const QString& text )
 {
-    m_pStatusBar->changeItem( text, ID_STATUSBAR_INFOTEXT );
+    m_pMessageLabel->setText( text );
 }
 
 #include "kis_shell.moc"

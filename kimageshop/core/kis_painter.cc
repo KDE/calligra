@@ -102,6 +102,8 @@ bool KisPainter::toLayer(QRect paintRect)
     if (!lay) return false;
     
     QImage *qimg = &painterImage;
+    kdDebug(0) << "qimg "  << " width " << qimg->width() 
+    << " height " << qimg->height() << endl;    
     
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
     {
@@ -120,12 +122,37 @@ bool KisPainter::toLayer(QRect paintRect)
     bool averageAlpha = false;
     
     QRect clipRect(paintRect);
+    kdDebug(0) << "clipRect " << " left " << clipRect.left() 
+    << " top " << clipRect.top() << " width " << clipRect.width() 
+    << " height " << clipRect.height() << endl;
 
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
   
     clipRect = clipRect.intersect(lay->imageExtents());
 
+    kdDebug(0) << "clipRect.intersect(lay->imageExtents()" << " left " << clipRect.left() 
+    << " top " << clipRect.top() << " width " << clipRect.width() 
+    << " height " << clipRect.height() << endl;
+
+    if (!clipRect.intersects(lay->layerExtents()))
+        return false;
+  
+    clipRect = clipRect.intersect(lay->layerExtents());
+
+    kdDebug(0) << "clipRect.intersect(lay->layerExtents()" << " left " << clipRect.left() 
+    << " top " << clipRect.top() << " width " << clipRect.width() 
+    << " height " << clipRect.height() << endl;
+
+    if(!clipRect.intersects(img->imageExtents()))
+        return false;
+        
+    clipRect = clipRect.intersect(img->imageExtents());
+    
+    kdDebug(0) << "clipRect.intersect(img->imageExtents()" << " left " << clipRect.left() 
+    << " top " << clipRect.top() << " width " << clipRect.width() 
+    << " height " << clipRect.height() << endl;
+    
     int sx = clipRect.left();
     int sy = clipRect.top();
     int ex = clipRect.right();
@@ -142,6 +169,8 @@ bool KisPainter::toLayer(QRect paintRect)
 
     for (int y = sy; y <= ey; y++)
     {
+        //if(y >= qimg->height() + sy) break; 
+         
         for (int x = sx; x <= ex; x++)
 	    {
             // destination binary values by channel
@@ -154,7 +183,7 @@ bool KisPainter::toLayer(QRect paintRect)
                 a = lay->pixel(3, x, y);
             }    
             // pixel value in scanline at x offset to right
-            // in terms of the layer
+            // in terms of the image
             uint *p = (uint *)qimg->scanLine(y) + x;
 
             // ignore the white background filler, 
@@ -245,8 +274,19 @@ void KisPainter::drawLine(int x1, int y1, int x2, int y2)
 void KisPainter::drawRectangle(QRect & rect)
 {
     QPainter p(&painterPixmap);
+
+    // constructs a pen with the given line thickness
+    // color is always black - it is changed by krayon
+    // to the current fgColor when drawn to layer
     QPen pen(Qt::black, lineThickness);
     p.setPen(pen);
+    
+    // constructs a brush with a solid pattern if
+    // we want to fill the rectangle
+    QBrush brush(Qt::black);
+    if(filledRectangle)
+        p.setBrush(brush);
+            
     p.drawRect(rect);
     
     // account for line thickness in update rectangle
@@ -264,10 +304,20 @@ void KisPainter::drawRectangle(QRect & rect)
 void KisPainter::drawRectangle(int x, int y, int w, int h)
 {
     QPainter p(&painterPixmap);
+    
+    // constructs a pen with the given line thickness
+    // color is always black - it is changed by krayon
+    // to the current fgColor when drawn to layer
     QPen pen(Qt::black, lineThickness);
     p.setPen(pen);
     p.drawRect(x, y, w, h);
    
+    // constructs a brush with a solid pattern if
+    // we want to fill the rectangle
+    QBrush brush(Qt::black);
+    if(filledRectangle)
+        p.setBrush(brush);
+
     QRect rect(x, y, w, h);
     
     // account for line thickness in update rectangle
@@ -287,8 +337,19 @@ void KisPainter::drawRectangle(int x, int y, int w, int h)
 void KisPainter::drawEllipse(QRect & rect)
 {
     QPainter p(&painterPixmap);
+    
+    // constructs a pen with the given line thickness
+    // color is always black - it is changed by krayon
+    // to the current fgColor when drawn to layer
     QPen pen(Qt::black, lineThickness);
     p.setPen(pen);
+    
+    // constructs a brush with a solid pattern if
+    // we want to fill the ellipse
+    QBrush brush(Qt::black);
+    if(filledEllipse)
+        p.setBrush(brush);
+    
     p.drawEllipse(rect);
 
     // account for line thickness in update rectangle
@@ -308,8 +369,19 @@ void KisPainter::drawEllipse(QRect & rect)
 void KisPainter::drawEllipse(int x, int y, int w, int h)
 {
     QPainter p(&painterPixmap);
+
+    // constructs a pen with the given line thickness
+    // color is always black - it is changed by krayon
+    // to the current fgColor when drawn to layer
     QPen pen(Qt::black, lineThickness);
     p.setPen(pen);
+
+    // constructs a brush with a solid pattern if
+    // we want to fill the ellipse
+    QBrush brush(Qt::black);
+    if(filledEllipse)
+        p.setBrush(brush);
+
     p.drawEllipse(x, y, w, h);
 
     QRect rect(x - w/2, y - h/2, w, h);

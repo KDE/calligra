@@ -112,6 +112,11 @@ void KisSideBar::resizeEvent ( QResizeEvent * )
     m_pDockFrame->setGeometry( 0, total, width(), height() - total);
 }
 
+void KisSideBar::closeEvent ( QCloseEvent * )
+{
+    setDocked(true);
+}
+
 void KisSideBar::slotSetFGColor(const KisColor& c)
 {
     m_pColorChooserFrame->slotSetFGColor( c );
@@ -569,19 +574,31 @@ void DockFrame::unplug (QWidget* w)
 {
     if(!w) return;
 
+#if 0
     KisFrameButton *b;
   
     for ( b = m_blst.first(); b != 0; b = m_blst.next() )
     {
 	    if (b->text() == w->caption())
 		{
+            QObject::disconnect( b, SIGNAL(clicked(const QString&)),
+	            this, SLOT(slotActivateTab(const QString&)));
+
 		    m_blst.remove(b);
+            delete b;
 		    break;
 		}
 	}		
 
     m_wlst.remove(w);
-    w->reparent ( 0L, QPoint(0, 0), false );
+    //w->reparent ( 0L, QPoint(0, 0), false );
+#endif
+
+    kdDebug() << "unplug: reparenting widget" << endl;
+
+    w->reparent(0, WStyle_StaysOnTop, mapToGlobal(QPoint(0,0)), true);
+    w->setActiveWindow();
+    
 }
 
 
