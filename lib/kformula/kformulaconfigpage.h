@@ -73,6 +73,7 @@ protected slots:
     void selectNewOperatorFont();
 
     void baseSizeChanged( int value );
+    void slotChanged();
 
 private:
 
@@ -109,6 +110,8 @@ private:
     QRadioButton* symbolStyle;
     QRadioButton* esstixStyle;
     QRadioButton* cmStyle;
+
+    bool m_changed;
 };
 
 

@@ -54,7 +54,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 
 ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name )
-    : QObject( box->parent(), name ), m_document( document ), m_view( view ), m_config( config )
+    : QObject( box->parent(), name ), m_document( document ), m_view( view ), m_config( config ), m_changed( false )
 {
     const ContextStyle& contextStyle = document->getContextStyle( true );
 
@@ -178,6 +178,12 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     grid->addWidget( symbolStyle, 0, 0 );
     grid->addWidget( esstixStyle, 1, 0 );
     grid->addWidget( cmStyle, 2, 0 );
+
+    connect( styleBox, SIGNAL( clicked( int ) ), this, SLOT( slotChanged() ) );
+    connect( syntaxHighlighting, SIGNAL( clicked() ), this, SLOT( slotChanged() ) );
+    connect( sizeSpin, SIGNAL( valueChanged( int ) ), this, SLOT( slotChanged() ) );
+
+    Q_ASSERT( !m_changed );
 }
 
 
@@ -212,7 +218,7 @@ static bool fontAvailable( QString fontName )
         return true;
     }
     else {
-        kdWarning() << "Font '" << fontName << "' not found but '" << f.rawName() << "'." << endl;
+        kdWarning(39001) << "Font '" << fontName << "' not found but '" << f.rawName() << "'." << endl;
         return false;
     }
 }
@@ -226,6 +232,8 @@ inline void testFont( QStringList& missing, const QString& fontName ) {
 
 void ConfigurePage::apply()
 {
+    if ( !m_changed )
+        return;
     QString fontStyle;
     if ( esstixStyle->isChecked() ) {
         fontStyle = "esstix";
@@ -334,6 +342,7 @@ void ConfigurePage::apply()
 
     // notify!!!
     m_document->updateConfig();
+    m_changed = false;
 }
 
 void ConfigurePage::slotDefault()
@@ -360,6 +369,7 @@ void ConfigurePage::slotDefault()
 //     operatorColorBtn->setColor( Qt::darkGreen );
 //     emptyColorBtn->setColor( Qt::blue );
 //     errorColorBtn->setColor( Qt::darkRed );
+    slotChanged();
 }
 
 void ConfigurePage::syntaxHighlightingClicked()
@@ -404,6 +414,7 @@ bool ConfigurePage::selectFont( QFont & font )
     int result = dlg.exec();
     if (  KDialog::Accepted == result ) {
         font = dlg.font();
+        slotChanged();
         return true;
     }
 
@@ -420,6 +431,10 @@ void ConfigurePage::updateFontLabel( QFont font, QLabel* label )
     label->setFont( font );
 }
 
+void ConfigurePage::slotChanged()
+{
+    m_changed = true;
+}
 
 // class UsedFontItem : public KListViewItem {
 // public:
