@@ -52,7 +52,7 @@ public:
             m_size = picture.getOriginalSize();
             m_picture = picture;
             resizeContents( m_size.width(), m_size.height() );
-            repaint( false );
+            repaintContents();
             return true;
         }
         else
