@@ -68,4 +68,6 @@ MAKE IT NICE:
 -	pass all dialogs a parent
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
 -	why represent opacity as float, not as short?
+-	introduce our own "Color drag" class, since we have in addition to rgb also opacity,
+	and maybe also gradient info could be dragged later.
 
