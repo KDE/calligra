@@ -31,6 +31,8 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kstddirs.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 #include <stdlib.h>
 
@@ -95,12 +97,21 @@ void KoTemplateGroup::setHidden(const bool &hidden) const {
     m_touched=true;
 }
 
-void KoTemplateGroup::add(KoTemplate *t, bool touch) {
+const bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch) {
 
-    if(find(t->name())==0L) {
+    KoTemplate *myTemplate=find(t->name());
+    if(myTemplate==0L) {
 	m_templates.append(t);
 	m_touched=touch;
+	return true;
     }
+    else if(myTemplate && force) {
+	m_templates.removeRef(myTemplate);
+	m_templates.append(t);
+	m_touched=touch;
+	return true;
+    }
+    return false;
 }
 
 KoTemplate *KoTemplateGroup::find(const QString &name) const {
@@ -295,8 +306,9 @@ void KoTemplateTree::readTemplates() {
 		    // That's the way it's always been done. Then the app replaces the extension...
 		}
 		KoTemplate *t=new KoTemplate(text, templatePath, icon, hidden);
-		groupIt.current()->add(t, false); // false -> don't "touch" the group to avoid useless
-		                                  // creation of dirs in .kde/blah/...
+		groupIt.current()->add(t, false, false); // false -> we aren't a "user", false -> don't
+		                                         // "touch" the group to avoid useless
+    		                                         // creation of dirs in .kde/blah/...
 	    }
 	}
     }

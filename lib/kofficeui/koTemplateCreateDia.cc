@@ -54,11 +54,11 @@ public:
 	m_select=0L;
 	m_preview=0L;
 	m_groups=0L;
-	m_popup=0L;
+	m_add=0L;
+	m_remove=0L;
     }
     ~KoTemplateCreateDiaPrivate() {
 	delete m_tree;
-	delete m_popup;
     }
 
     KoTemplateTree *m_tree;
@@ -69,10 +69,8 @@ public:
     QString m_customFile;
     QPixmap m_customPixmap;
     KListView *m_groups;
+    QPushButton *m_add, *m_remove;
     bool m_changed;
-
-    QPopupMenu *m_popup;
-    QListViewItem *m_currentItem;
 };
 
 
@@ -112,12 +110,18 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QString &templateType, KInstance
     d->m_groups->header()->hide();
     d->m_groups->setRootIsDecorated(true);
     d->m_groups->setSorting(0);
-    connect(d->m_groups, SIGNAL(rightButtonPressed(QListViewItem *, const QPoint &, int)),
-	    this, SLOT(slotPopup(QListViewItem *, const QPoint &, int)));
 
     d->m_tree=new KoTemplateTree(templateType, instance, true);
     fillGroupTree();
     d->m_groups->sort();
+
+    QHBoxLayout *bbox=new QHBoxLayout(leftbox);
+    d->m_add=new QPushButton(i18n("Add Group..."), mainwidget);
+    connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
+    bbox->addWidget(d->m_add);
+    d->m_remove=new QPushButton(i18n("Remove"), mainwidget);
+    connect(d->m_remove, SIGNAL(clicked()), this, SLOT(slotRemove()));
+    bbox->addWidget(d->m_remove);
 
     QVBoxLayout *rightbox=new QVBoxLayout(mbox);
     QGroupBox *pixbox=new QGroupBox(i18n("Picture:"), mainwidget);
@@ -165,24 +169,24 @@ void KoTemplateCreateDia::createTemplate( const QString &templateType, KInstance
 void KoTemplateCreateDia::slotOk() {
 
     // get the current item, if there is one...
-    d->m_currentItem=d->m_groups->currentItem();
-    if(!d->m_currentItem)
-	d->m_currentItem=d->m_groups->firstChild();
-    if(!d->m_currentItem) {    // save :)
+    QListViewItem *item=d->m_groups->currentItem();
+    if(!item)
+	item=d->m_groups->firstChild();
+    if(!item) {    // save :)
 	d->m_tree->writeTemplateTree();
 	KDialogBase::slotCancel();
 	return;
     }
     // is it a group or a template? anyway - get the group :)
-    if(d->m_currentItem->depth()!=0)
-	d->m_currentItem=d->m_currentItem->parent();
-    if(!d->m_currentItem) {    // *very* save :P
+    if(item->depth()!=0)
+	item=item->parent();
+    if(!item) {    // *very* save :P
 	d->m_tree->writeTemplateTree();
 	KDialogBase::slotCancel();
 	return;
     }
 
-    KoTemplateGroup *group=d->m_tree->find(d->m_currentItem->text(0));
+    KoTemplateGroup *group=d->m_tree->find(item->text(0));
     if(!group) {    // even saver
 	d->m_tree->writeTemplateTree();
 	KDialogBase::slotCancel();
@@ -200,13 +204,10 @@ void KoTemplateCreateDia::slotOk() {
     dir+=KoTemplates::stripWhiteSpace(group->name());
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
-    if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
-	d->m_tree->writeTemplateTree();
-	KDialogBase::slotCancel();
-	return;
-    }
+
     QString file=KoTemplates::stripWhiteSpace(d->m_name->text());
     QString icon=iconDir+file;
+    icon+=".png";
 
     // try to find the extension for the template file :P
     unsigned int k=0;
@@ -217,6 +218,34 @@ void KoTemplateCreateDia::slotOk() {
     if(k<foo)
 	file+=m_file.right(k);
 
+    bool dontLeave=false;
+    KoTemplate *t=new KoTemplate(d->m_name->text(), templateDir+file, icon, false, true);
+    if(!group->add(t)) {
+	KoTemplate *existingTemplate=group->find(t->name());
+	// if the original template is hidden, we simply force the update >:->
+	if(existingTemplate && existingTemplate->isHidden())
+	    group->add(t, true);
+	// Otherwise ask the user
+	else if(existingTemplate && !existingTemplate->isHidden()) {
+	    if(KMessageBox::warningYesNo(this, i18n("Do you really want to overwrite"
+						    " the existing '%1' template?").
+					 arg(existingTemplate->name()))==KMessageBox::Yes)
+		group->add(t, true);
+	    else
+		dontLeave=true;
+	}
+    }
+
+    if(dontLeave)
+	return;
+
+    if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
+	d->m_tree->writeTemplateTree();
+	KDialogBase::slotCancel();
+	return;
+    }
+
+    // gereate the command to copy the template
     QString command="cp ";
     command+=m_file;
     command+=" ";
@@ -225,7 +254,6 @@ void KoTemplateCreateDia::slotOk() {
     system(command.local8Bit());
 
     // save the picture
-    icon+=".png";
     if(d->m_default->isChecked() && !m_pixmap.isNull())
 	m_pixmap.save(icon, "PNG");
     else if(!d->m_customPixmap.isNull())
@@ -233,8 +261,6 @@ void KoTemplateCreateDia::slotOk() {
     else
 	kdWarning(30004) << "Could not save the preview picture!" << endl;
 
-    KoTemplate *t=new KoTemplate(d->m_name->text(), templateDir+file, icon, false, true);
-    group->add(t);
     d->m_tree->writeTemplateTree();
     KDialogBase::slotOk();
 }
@@ -292,19 +318,7 @@ void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 	enableButtonOK(true);
 }
 
-void KoTemplateCreateDia::slotPopup(QListViewItem *item, const QPoint &p, int) {
-
-    d->m_currentItem=item;
-
-    if(!d->m_popup) {
-	d->m_popup=new QPopupMenu(0, "create-template popup");
-	d->m_popup->insertItem(i18n("&New Group..."), this, SLOT(slotNewGroup()));
-	d->m_popup->insertItem(i18n("&Remove"), this, SLOT(slotRemove()));
-    }
-    d->m_popup->popup(p);
-}
-
-void KoTemplateCreateDia::slotNewGroup() {
+void KoTemplateCreateDia::slotAddGroup() {
 
     QString name=KoNewGroupDia::newGroupName(this);
     if(name.isEmpty())
@@ -314,34 +328,46 @@ void KoTemplateCreateDia::slotNewGroup() {
     dir+=name;
     KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, true);
     d->m_tree->add(newGroup);
-    (void)new QListViewItem(d->m_groups, name);
+    QListViewItem *item=new QListViewItem(d->m_groups, name);
+    d->m_groups->setCurrentItem(item);
     d->m_groups->sort();
+    d->m_name->setFocus();
     enableButtonOK(true);
     d->m_changed=true;
 }
 
 void KoTemplateCreateDia::slotRemove() {
 
-    if(!d->m_currentItem)
+    QListViewItem *item=d->m_groups->currentItem();
+    if(!item)
 	return;
-    if(d->m_currentItem->depth()==0) {
-	KoTemplateGroup *group=d->m_tree->find(d->m_currentItem->text(0));
+
+    QString what=item->depth()==0 ? i18n("group") : i18n("template");
+    if(KMessageBox::warningYesNo(this, i18n("Do you really want to remove that %1?").arg(what),
+				 i18n("Remove %1?").arg(what))==KMessageBox::No) {
+	d->m_name->setFocus();
+	return;
+    }
+
+    if(item->depth()==0) {
+	KoTemplateGroup *group=d->m_tree->find(item->text(0));
 	if(group)
 	    group->setHidden(true);
     }
     else {
 	bool done=false;
 	for(KoTemplateGroup *g=d->m_tree->first(); g!=0L && !done; g=d->m_tree->next()) {
-	    KoTemplate *t=g->find(d->m_currentItem->text(0));
+	    KoTemplate *t=g->find(item->text(0));
 	    if(t) {
 		t->setHidden(true);
 		done=true;
 	    }
 	}
     }
-    delete d->m_currentItem;
-    d->m_currentItem=0L;
+    delete item;
+    item=0L;
     enableButtonOK(true);
+    d->m_name->setFocus();
     d->m_changed=true;
 }
 

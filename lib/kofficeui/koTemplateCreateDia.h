@@ -57,8 +57,7 @@ private slots:
     void slotSelect();
     void slotNameChanged(const QString &name);
 
-    void slotPopup(QListViewItem *, const QPoint &, int);
-    void slotNewGroup();
+    void slotAddGroup();
     void slotRemove();
 
 private:

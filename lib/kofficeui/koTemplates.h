@@ -80,7 +80,7 @@ public:
     KoTemplate *prev() { return m_templates.prev(); }
     KoTemplate *current() { return m_templates.current(); }
 
-    void add(KoTemplate *t, bool touch=true);
+    const bool add(KoTemplate *t, bool force=false, bool touch=true);
     KoTemplate *find(const QString &name) const;
 
     const bool &touched() const { return m_touched; }
