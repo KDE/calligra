@@ -71,6 +71,13 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		*/
 		void		addModProperty(const QString &property, const QVariant &value);
 
+		int gridRow() { return m_row; }
+		int gridCol() { return m_col; }
+		int gridRowSpan() { return m_rowspan; }
+		int gridColSpan() { return m_colspan; }
+		bool spanMultipleCells() { return m_span; }
+		void setGridPos(int row, int col, int rowspan, int colspan);
+
 	protected:
 		QString		m_className;
 		QString		m_name;
@@ -79,6 +86,9 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QMap<QString, QVariant> m_props;
 		ObjectTreeItem* m_parent;
 		QWidget*	m_widget;
+
+		int m_row, m_col, m_rowspan, m_colspan;
+		bool m_span;
 };
 
 //! A class representing all the objects in a Form

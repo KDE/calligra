@@ -195,9 +195,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(m_move)
 			{
-				LayoutType type = layoutType();
-				setLayout(NoLayout);
-				setLayout(type);
+				reloadLayout();
 				m_move = false;
 			}
 			return true; // eat
@@ -276,6 +274,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 				}
 			}
 			return false;
+		}
+		case QEvent::Resize:
+		{
+			if(!m_form->interactiveMode())
+				reloadLayout();
+			break;
 		}
 		case QEvent::MouseButtonDblClick:
 		{
@@ -411,6 +415,14 @@ Container::setLayout(LayoutType type)
 			return;
 		}
 	}
+}
+
+void
+Container::reloadLayout()
+{
+	LayoutType type = m_layType;
+	setLayout(NoLayout);
+	setLayout(type);
 }
 
 void
@@ -616,10 +628,19 @@ Container::createGridLayout()
 		//kdDebug() << "the widget " << w->name() << " wil be in the col " << wcol <<
 		 // " and will go to the col " << endcol << endl;
 
+		ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
 		if(!endrow && !endcol)
+		{
+			item->setGridPos(wrow, wcol, 0, 0);
 			layout->addWidget(w, wrow, wcol);
+		}
 		else
-			layout->addMultiCellWidget(w, wrow, endrow ? endrow : wrow, wcol, endcol ? endcol : wcol);
+		{
+			if(!endcol)  endcol = wcol;
+			if(!endrow)  endrow = wrow;
+			layout->addMultiCellWidget(w, wrow, endrow, wcol, endcol);
+			item->setGridPos(wrow, wcol, endrow-wrow+1, endcol-wcol+1);
+		}
 	}
 	layout->activate();
 }

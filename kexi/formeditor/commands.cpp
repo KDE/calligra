@@ -235,9 +235,7 @@ InsertWidgetCommand::execute()
 	if (!m_container->form()->objectTree()->lookup(m_name))
 		m_container->form()->objectTree()->addChild(m_container->m_tree, new ObjectTreeItem(m_container->form()->manager()->lib()->displayName(m_class), m_name, w));
 
-	Container::LayoutType type = m_container->layoutType();
-	m_container->setLayout(Container::NoLayout);
-	m_container->setLayout(type);
+	m_container->reloadLayout();
 
 	m_container->setSelectedWidget(w, false);
 	m_form->manager()->lib()->startEditing(w->className(), w, m_container);

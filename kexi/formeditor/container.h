@@ -97,6 +97,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandles are removed. */
 		void		unSelectWidget(QWidget *w);
+		void		reloadLayout();
 
 	protected slots:
 		/*! This slot is called when the watched widget is deleted. Deletes the Container too. */
@@ -139,6 +140,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		friend class InsertWidgetCommand;
 		friend class PasteWidgetCommand;
 		friend class DeleteWidgetCommand;
+		friend class FormIO;
 };
 
 }

@@ -36,6 +36,7 @@ namespace KFormDesigner
 
 
 ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget, Container *container)
+ : m_row(-1), m_col(-1), m_rowspan(-1), m_colspan(-1), m_span(false)
 {
 	m_className = classn;
 	m_name = name;
@@ -88,14 +89,25 @@ ObjectTreeItem::debug(int ident)
 void
 ObjectTreeItem::addModProperty(const QString &property, const QVariant &oldValue)
 {
-	kdDebug() << "wanting to add the property" << property << endl;
+	kdDebug() << "ObjectTree::adModProperty()   wanting to add the property" << property << endl;
 	if(!m_props.contains(property))
 	{
 		m_props.insert(property, oldValue);
-		kdDebug() << "ObjectTree:: added the property in my list" << property << endl;
+		kdDebug() << "ObjectTree::adModProperty() added the property in my list" << property << endl;
 	}
 }
 
+void
+ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
+{
+	m_row = row;  m_col = col;
+	m_rowspan = rowspan;
+	m_colspan = colspan;
+	if(colspan || rowspan)
+		m_span = true;
+	else
+		m_span = false;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ///                      ObjectTree                                             /////////

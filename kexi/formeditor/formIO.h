@@ -85,13 +85,13 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    itself to save child widgets.\n
 		    This is used to copy/paste widgets.
 		*/
-		static void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
+		static void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout=false);
 		/*! Loads the widget associated to the QDomElement \a el into the Container \a container,
 		    with \a parent as parent widget. \a lib is the WidgetLibrary to use to create the widget.
 		    If parent = 0, the Container::widget() is used as parent widget.
 		    This is used to copy/paste widgets.
 		*/
-		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0);
+		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0, bool insideGrid=false);
 
 	protected:
 		/*! Write an object property in the DOM doc.
@@ -131,7 +131,8 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		static QPixmap      loadImage(QDomDocument domDoc, QString name);
 		/*! Loads the layout (ie calls Container::setLayout() ) which type is \a name,
 		   and belonging to the widget represented by the ObjectTreeItem \a tree. */
-		static void         loadLayout(const QString &name, ObjectTreeItem *tree);
+		static void         loadLayout(const QDomElement &el, ObjectTreeItem *tree);
+		static void         readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w);
 
 	friend class Spacer;
 };

@@ -125,7 +125,6 @@ FormManager::windowChanged(QWidget *w)
 	if(m_collection->action( KStdAction::name(KStdAction::Undo)))
 	{
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
-		kdDebug() << "kkkkkkkkkkkkkkkkkkkkkkkkchanging the undo action" << endl;
 	}
 	if(m_collection->action( KStdAction::name(KStdAction::Redo)))
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );
@@ -137,7 +136,7 @@ FormManager::windowChanged(QWidget *w)
 		{
 			m_active = form;
 			m_treeview->setForm(form);
-			kdDebug() << "***************active form is " << form->objectTree()->name() << endl;
+			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
 			if(m_collection)
 			m_collection->addDocCollection(form->actionCollection());
 

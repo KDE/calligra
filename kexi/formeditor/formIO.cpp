@@ -583,7 +583,7 @@ FormIO::readAttribute(QDomNode node, QObject *obj, const QString &name)
 }
 
 void
-FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc)
+FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout)
 {
 	bool savedAlignment = false;
 	if(item->className() == "Spacer")
@@ -593,6 +593,16 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	}
 
 	QDomElement tclass = domDoc.createElement("widget");
+	if(insideGridLayout)
+	{
+		tclass.setAttribute("row", item->gridRow());
+		tclass.setAttribute("column", item->gridCol());
+		if(item->spanMultipleCells())
+		{
+			tclass.setAttribute("rowspan", item->gridRowSpan());
+			tclass.setAttribute("colspan", item->gridColSpan());
+		}
+	}
 	tclass.setAttribute("class", item->widget()->className());
 	tclass.appendChild(prop(domDoc, "name", item->widget()->property("name"), item->widget()));
 	tclass.appendChild(prop(domDoc, "geometry", item->widget()->property("geometry"), item->widget()));
@@ -615,9 +625,10 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
 	// Saving container 's layout if there is one
 	QDomElement layout;
-	if(item->container() && item->modifProp()->contains("layout"))
+	if(item->container() && item->container()->layoutType() != Container::NoLayout)
 	{
 		QString nodeName;
+		kdDebug() << "the type of the container layout is " << item->container()->layout() << endl;
 		switch(item->container()->layoutType())
 		{
 			case Container::HBox:
@@ -651,6 +662,11 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		for(ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
 			saveWidget(objIt, tclass, domDoc);
 	}
+	else if((!item->children()->isEmpty()) && (layout.tagName() == "grid"))
+	{
+		for(ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
+			saveWidget(objIt, layout, domDoc, true);
+	}
 	else if(!item->children()->isEmpty())
 	{
 		WidgetList *list;
@@ -673,7 +689,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 }
 
 void
-FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent)
+FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent, bool insideGrid)
 {
 	QString wname;
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -705,69 +721,20 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	else
 		tree = container->form()->objectTree()->lookup(wname);
 
-	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	if(insideGrid)
 	{
-		if(n.toElement().tagName() == "property")
-		{
-			QString name = n.toElement().attribute("name");
-
-			QVariant val = readProp(n.toElement().firstChild(), w, name);
-			w->setProperty(name.latin1(), val);
-			tree->addModProperty(name, val);
-		}
-		if(n.toElement().tagName() == "attribute")
-		{
-			QString name = n.toElement().attribute("name");
-			readAttribute(n.toElement().firstChild(), w, name);
-		}
-		if(n.toElement().tagName() == "widget")
-		{
-			if(tree->container())
-				loadWidget(tree->container(), lib, n.toElement());
-			else
-				loadWidget(container, lib, n.toElement(), w);
-		}
-		if(n.toElement().tagName() == "spacer")
-		{
-			loadWidget(container, lib, n.toElement(), w);
-		}
-		if((n.toElement().tagName() == "vbox") || (n.toElement().tagName() == "hbox") || (n.toElement().tagName() == "grid"))
-		{
-			loadLayout(n.toElement().tagName(), tree);
-			for(QDomNode m = n.toElement().firstChild(); !m.isNull(); m = m.nextSibling())
-			{
-				if(m.toElement().tagName() == "property")
-				{
-					QString name = m.toElement().attribute("name");
-					if(name == "name")
-						continue;
-
-					QVariant val = readProp(m.toElement().firstChild(), w, name);
-					w->setProperty(name.latin1(), val);
-					tree->addModProperty(name, val);
-				}
-				if(m.toElement().tagName() == "attribute")
-				{
-					QString name = m.toElement().attribute("name");
-					readAttribute(m.toElement().firstChild(), w, name);
-				}
-				if(m.toElement().tagName() == "widget")
-				{
-					if(tree->container())
-						loadWidget(tree->container(), lib, m.toElement());
-					else
-						loadWidget(container, lib, m.toElement(), w);
-				}
-				if(m.toElement().tagName() == "spacer")
-				{
-					loadWidget(tree->container(), lib, m.toElement(), w);
-				}
-			}
-
-			if(tree->container())
-				tree->container()->setLayout(tree->container()->layoutType());
-		}
+		kdDebug() << "FormIO:: we are inside a grid " << endl;
+		QGridLayout *layout = (QGridLayout*)container->layout();
+		if(!layout)
+			kdDebug() << "FormIO::ERROR:: the layout == 0" << endl;
+		if(el.hasAttribute("rowspan"))
+			layout->addMultiCellWidget(w, el.attribute("row").toInt(), el.attribute("row").toInt() + el.attribute("rowspan").toInt()-1,
+			 el.attribute("column").toInt(),  el.attribute("column").toInt() + el.attribute("colspan").toInt()-1);
+		else
+			layout->addWidget(w, el.attribute("row").toInt(), el.attribute("column").toInt());
 	}
+
+	readChildNodes(tree, container, lib, el, w);
 
 	w->show();
 }
@@ -793,29 +760,63 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 	form->objectTree()->rename(form->objectTree()->name(), wname);
 	form->setInteractiveMode(false);
 
-	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		if(n.toElement().tagName() == "property")
-		{
-			QString name = n.toElement().attribute("name");
+	readChildNodes(form->objectTree(), form->toplevelContainer(), form->manager()->lib(), el, container);
 
-			QVariant val = readProp(n.toElement().toElement().firstChild(), container, name);
-			container->setProperty(name.latin1(), val);
-			form->objectTree()->addModProperty(name, val);
-		}
-		if(n.toElement().tagName() == "widget")
-			loadWidget(form->toplevelContainer(), form->manager()->lib(), n.toElement());
-	}
 	//w->show();
 	form->setInteractiveMode(true);
 }
 
 void
-FormIO::loadLayout(const QString &name, ObjectTreeItem *tree)
+FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w)
+{
+	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		if(n.toElement().tagName() == "property")
+		{
+			QString name = n.toElement().attribute("name");
+			if( ((el.tagName() == "grid") || (el.tagName() == "hbox") || (el.tagName() == "vbox")) &&
+			      (name == "name"))
+				continue;
+
+			QVariant val = readProp(n.toElement().firstChild(), w, name);
+			w->setProperty(name.latin1(), val);
+			tree->addModProperty(name, val);
+		}
+		if(n.toElement().tagName() == "attribute")
+		{
+			QString name = n.toElement().attribute("name");
+			readAttribute(n.toElement().firstChild(), w, name);
+		}
+		if(n.toElement().tagName() == "widget")
+		{
+			bool insideGrid = (el.tagName() == "grid");
+			if(tree->container())
+				loadWidget(tree->container(), lib, n.toElement(), 0, insideGrid);
+			else
+				loadWidget(container, lib, n.toElement(), w, insideGrid);
+		}
+		if(n.toElement().tagName() == "spacer")
+		{
+			bool insideGrid = (el.tagName() == "grid");
+			loadWidget(container, lib, n.toElement(), w, insideGrid);
+		}
+		if((n.toElement().tagName() == "vbox") || (n.toElement().tagName() == "hbox") || (n.toElement().tagName() == "grid"))
+		{
+			loadLayout(n.toElement(), tree);
+			readChildNodes(tree, container, lib, n.toElement(), w);
+			if(n.toElement().tagName() != "grid")
+				container->reloadLayout();
+		}
+	}
+}
+
+void
+FormIO::loadLayout(const QDomElement &el, ObjectTreeItem *tree)
 {
 	if(!tree->container())
 		return;
 
+	QString name = el.tagName();
 	if(name == "hbox")
 	{
 		tree->container()->setLayout(Container::HBox);
@@ -826,7 +827,24 @@ FormIO::loadLayout(const QString &name, ObjectTreeItem *tree)
 	}
 	else if(name == "grid")
 	{
-		tree->container()->setLayout(Container::Grid);
+		tree->container()->m_layType = Container::Grid;
+		int nrow = 1, ncol = 1;
+		for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+		{
+			if(n.toElement().tagName() == "widget")
+			{
+				int wrow = n.toElement().attribute("row").toInt() + 1;
+				if(wrow > nrow)
+					nrow = wrow;
+
+				int wcol = n.toElement().attribute("column").toInt() + 1;
+				if(wcol > ncol)
+					ncol = wcol;
+			}
+		}
+		kdDebug() << "FormIO:: the loaded grid will have " << nrow << " rows and " << ncol << " cols." << endl;
+		QGridLayout *layout = new QGridLayout(tree->widget(), nrow, ncol, 10, 2, "grid");
+		tree->container()->m_layout = (QLayout*)layout;
 	}
 }
 
