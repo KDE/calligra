@@ -13,8 +13,15 @@
 class QDomElement;
 class QWMatrix;
 
-class VSegmentList : public QPtrList<VSegment>
+
+// The general list stuff is stolen from Qt.
+
+class VSegmentListIteratorList;
+
+class VSegmentList
 {
+friend class VSegmentListIterator;
+
 public:
 	VSegmentList();
 	VSegmentList( const VSegmentList& list );
@@ -41,11 +48,56 @@ public:
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
+	// general list stuff:
+	VSegmentList& operator=( const VSegmentList& list );
+	void append( const VSegment* segment );
+	void clear();
+
+	uint count() const { return m_number; }
+
+	VSegment* current() const { return m_current; }
+	VSegment* getFirst() const { return m_first; }
+	VSegment* getLast() const { return m_last; }
+	VSegment* first();
+	VSegment* last();
+	VSegment* prev();
+	VSegment* next();
+
 private:
 	bool m_isClosed;
+
+	VSegment* m_first;
+	VSegment* m_last;
+	VSegment* m_current;
+	int m_currentIndex;
+	uint m_number;
+
+	VSegmentListIteratorList* m_iteratorList;
 };
 
-typedef QPtrListIterator<VSegment> VSegmentListIterator;
+
+class VSegmentListIterator
+{
+friend class VSegmentListIteratorList;
+
+public:
+	VSegmentListIterator( const VSegmentList& list );
+	VSegmentListIterator( const VSegmentListIterator& itr );
+	~VSegmentListIterator();
+
+	VSegmentListIterator& operator=( const VSegmentListIterator& itr );
+
+	VSegment* current() const { return m_current; }
+	VSegment* operator()();
+	VSegment* operator++();
+	VSegment* operator+=( uint i );
+	VSegment* operator--();
+	VSegment* operator-=( uint i );
+
+private:
+	VSegmentList* m_list;
+	VSegment* m_current;
+};
 
 #endif
 

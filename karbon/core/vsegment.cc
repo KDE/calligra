@@ -10,6 +10,8 @@
 #include "vsegment.h"
 #include "vsegmentlist.h"
 
+#include <kdebug.h>
+
 VSegmentListTraverser::VSegmentListTraverser()
 	:  m_previousPoint( 0.0, 0.0 )
 {
@@ -89,16 +91,20 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 
 
 VSegment::VSegment()
-	: m_type( segment_begin )
+	: m_prev( 0L ), m_next( 0L )
 {
+	m_type = segment_begin;
+	m_smooth = false;
 }
 
 VSegment::VSegment( const VSegment& segment )
+	: m_prev( 0L ), m_next( 0L )
 {
 	m_point[0] = segment.m_point[0];
 	m_point[1] = segment.m_point[1];
 	m_point[2] = segment.m_point[2];
 	m_type = segment.m_type;
+	m_smooth = segment.m_smooth;
 }
 
 double
@@ -130,9 +136,10 @@ VSegment::height(
 }
 
 bool
-VSegment::isFlat( const KoPoint& p0 ) const
+VSegment::isFlat() const
 {
 	if(
+		m_prev == 0L ||
 		type() == segment_begin ||
 		type() == segment_line ||
 		type() == segment_end )
@@ -142,17 +149,17 @@ VSegment::isFlat( const KoPoint& p0 ) const
 
 	if( type() == segment_curve )
 		return
-			height( p0, m_point[1], m_point[3] )
+			height( m_prev->m_point[2], m_point[0], m_point[2] )
 				< VGlobal::flatnessTolerance &&
-			height( p0, m_point[2], m_point[3] )
+			height( m_prev->m_point[2], m_point[1], m_point[2] )
 				< VGlobal::flatnessTolerance;
 	else if( type() == segment_curve1 )
 		return
-			height( p0, m_point[2], m_point[3] )
+			height( m_prev->m_point[2], m_point[1], m_point[2] )
 				< VGlobal::flatnessTolerance;
 	else if( type() == segment_curve2 )
 		return
-			height( p0, m_point[1], m_point[3] )
+			height( m_prev->m_point[2], m_point[0], m_point[2] )
 				< VGlobal::flatnessTolerance;
 
 	return false;

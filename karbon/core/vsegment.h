@@ -58,6 +58,9 @@ enum VSegmentType{
 
 class VSegment
 {
+friend class VSegmentList;
+friend class VSegmentListIterator;
+
 public:
 	VSegment();
 	VSegment( const VSegment& segment );
@@ -82,16 +85,17 @@ public:
 		const KoPoint& p,
 		const KoPoint& b );
 
-	bool isFlat( const KoPoint& p0 ) const;
+	bool isFlat() const;
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
 private:
+	VSegment* m_prev;
+	VSegment* m_next;
+
 	VSegmentType m_type;
-
 	bool m_smooth;			// first ctrl-point is "smooth".
-
 	KoPoint m_point[3];
 };
 

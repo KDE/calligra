@@ -5,16 +5,112 @@
 #include <math.h>
 
 #include <qdom.h>
+#include <qvaluelist.h>
 #include <qwmatrix.h>
 
 #include "vsegmentlist.h"
 
 #include <kdebug.h>
 
-VSegmentList::VSegmentList()
-	: m_isClosed( false )
+
+class VSegmentListIteratorList
 {
-	setAutoDelete( true );
+public:
+	VSegmentListIteratorList() : m_list( 0L ), m_iterator( 0L ) {}
+	~VSegmentListIteratorList()
+	{
+		notifyClear( true );
+		delete m_list;
+	}
+
+	void add( VSegmentListIterator* itr )
+	{
+		if ( !m_iterator )
+			m_iterator = itr;
+		else if ( m_list )
+			m_list->push_front( itr );
+		else
+		{
+			m_list = new QValueList<VSegmentListIterator*>;
+			m_list->push_front( itr );
+		}
+	}
+
+	void remove( VSegmentListIterator* itr ) {
+		if ( m_iterator == itr )
+			m_iterator = 0L;
+		else if ( m_list )
+		{
+			m_list->remove( itr );
+
+			if ( m_list->isEmpty() )
+			{
+				delete m_list;
+				m_list = 0L;
+			}
+		}
+	}
+
+	void notifyClear( bool zeroList )
+	{
+		if ( m_iterator )
+		{
+			if ( zeroList )
+				m_iterator->m_list = 0L;
+
+			m_iterator->m_current = 0L;
+		}
+
+		if ( m_list )
+		{
+			for(
+				QValueList<VSegmentListIterator*>::Iterator itr = m_list->begin();
+				itr != m_list->end();
+				++itr )
+			{
+				if ( zeroList )
+					( *itr )->m_list = 0L;
+
+				( *itr )->m_current = 0L;
+			}
+		}
+	}
+
+	void notifyRemove( VSegment* segment, VSegment* current )
+	{
+		if ( m_iterator )
+		{
+			if ( m_iterator->m_current == segment )
+				m_iterator->m_current = current;
+		}
+
+		if ( m_list )
+		{
+			for(
+				QValueList<VSegmentListIterator*>::Iterator itr = m_list->begin();
+				itr != m_list->end();
+				++itr )
+			{
+			if ( ( *itr )->m_current == segment )
+				( *itr )->m_current = current;
+			}
+		}
+	}
+
+private:
+	QValueList<VSegmentListIterator*>* m_list;
+	VSegmentListIterator* m_iterator;
+};
+
+
+VSegmentList::VSegmentList()
+{
+	m_isClosed = false;
+
+	m_first = m_last = m_current = 0L;
+	m_number = 0;
+	m_currentIndex = -1;
+	m_iteratorList = 0L;
 
 	// add an initial ("begin") segment:
 	append( new VSegment() );
@@ -22,20 +118,25 @@ VSegmentList::VSegmentList()
 
 VSegmentList::VSegmentList( const VSegmentList& list )
 {
-	setAutoDelete( true );
-
 	m_isClosed = list.m_isClosed;
 
-	VSegmentListIterator itr( list );
-	for( ; itr.current() ; ++itr )
-	{
-		append( new VSegment( *( itr.current() ) ) );
-	}
+	m_first = m_last = m_current = 0L;
+	m_number = 0;
+	m_currentIndex = -1;
+	m_iteratorList = 0L;
 
+	VSegment* segment = list.m_first;
+	while( segment )
+	{
+		append( segment );
+		segment = segment->m_next;
+	}
 }
 
 VSegmentList::~VSegmentList()
 {
+	clear();
+	delete m_iteratorList;
 }
 
 const KoPoint&
@@ -187,7 +288,6 @@ VSegmentList::arcTo(
 	return true;
 }
 
-
 void
 VSegmentList::close()
 {
@@ -205,7 +305,7 @@ VSegmentList::close()
 		s->setPoint( 3, getFirst()->point( 3 ) );
 		append( s );
 	}
-	
+
 
 	m_isClosed = true;
 }
@@ -213,6 +313,7 @@ VSegmentList::close()
 void
 VSegmentList::transform( const QWMatrix& m )
 {
+// TODO: optimize this since we have direct access now:
 	VSegmentListIterator itr( *this );
 	for( ; itr.current() ; ++itr )
 	{
@@ -231,6 +332,7 @@ VSegmentList::save( QDomElement& element ) const
 	if( m_isClosed )
 		me.setAttribute( "isClosed", m_isClosed );
 
+// TODO: optimize this since we have direct access now:
 	// save segments:
 	VSegmentListIterator itr( *this );
 	for( ; itr.current() ; ++itr )
@@ -264,3 +366,216 @@ VSegmentList::load( const QDomElement& element )
 		close();
 }
 
+VSegmentList&
+VSegmentList::operator=( const VSegmentList& list )
+{
+	if ( &list == this )
+		return *this;
+
+	clear();
+	if ( list.count() > 0 )
+	{
+		VSegment* segment = list.m_first;
+		while ( segment )
+		{
+			append( segment );
+			segment = segment->m_next;
+		}
+
+		m_current = m_first;
+		m_currentIndex = 0;
+	}
+
+	return *this;
+}
+
+void
+VSegmentList::append( const VSegment* segment )
+{
+	VSegment* s = const_cast<VSegment*>( segment );
+
+	s->m_next = 0L;
+
+	if( s->m_prev = m_last )
+		m_last->m_next = s;
+	else
+		m_first = s;
+
+	m_last = m_current = s;
+
+	m_currentIndex = m_number;
+	++m_number;
+}
+
+void
+VSegmentList::clear()
+{
+	VSegment* current = m_first;
+
+	m_first = m_last = m_current = 0L;
+	m_number = 0;
+	m_currentIndex = -1;
+
+	if( m_iteratorList )
+		m_iteratorList->notifyClear( false );
+
+	VSegment* prev;
+
+	while( current )
+	{
+		prev = current;
+		current = current->m_next;
+		delete prev;
+	}
+}
+
+VSegment*
+VSegmentList::first()
+{
+	if ( m_first )
+	{
+		m_currentIndex = 0;
+		return m_current = m_first;
+	}
+
+	return 0L;
+}
+
+VSegment*
+VSegmentList::last()
+{
+	if ( m_last )
+	{
+		m_currentIndex = m_number - 1;
+		return m_current = m_last;
+	}
+
+	return 0L;
+}
+
+VSegment*
+VSegmentList::prev()
+{
+	if ( m_current )
+	{
+		if( m_current->m_prev )
+		{
+			--m_currentIndex;
+			return m_current = m_current->m_prev;
+		}
+
+		m_currentIndex = -1;
+		m_current = 0L;
+	}
+
+	return 0L;
+}
+
+VSegment*
+VSegmentList::next()
+{
+	if ( m_current )
+	{
+		if( m_current->m_next )
+		{
+			++m_currentIndex;
+			return m_current = m_current->m_next;
+		}
+
+		m_currentIndex = -1;
+		m_current = 0L;
+	}
+
+	return 0L;
+}
+
+
+VSegmentListIterator::VSegmentListIterator( const VSegmentList& list )
+{
+	m_list = const_cast<VSegmentList*>( &list );
+	m_current = m_list->m_first;
+
+	if ( !m_list->m_iteratorList )
+		m_list->m_iteratorList = new VSegmentListIteratorList();
+
+	m_list->m_iteratorList->add( this );
+}
+
+VSegmentListIterator::VSegmentListIterator( const VSegmentListIterator& itr )
+{
+	m_list = itr.m_list;
+	m_current = itr.m_current;
+
+	if ( m_list )
+		m_list->m_iteratorList->add( this );
+}
+
+VSegmentListIterator::~VSegmentListIterator()
+{
+	if ( m_list )
+		m_list->m_iteratorList->remove( this );
+}
+
+VSegmentListIterator&
+VSegmentListIterator::operator=( const VSegmentListIterator& itr )
+{
+	if ( m_list )
+		m_list->m_iteratorList->remove( this );
+
+	m_list = itr.m_list;
+	m_current = itr.m_current;
+
+	if ( m_list )
+		m_list->m_iteratorList->add( this );
+
+	return *this;
+}
+
+VSegment*
+VSegmentListIterator::operator()()
+{
+	if ( m_current )
+	{
+		VSegment* const old = m_current;
+		m_current = m_current->m_next;
+		return old;
+	}
+
+	return 0L;
+}
+
+VSegment*
+VSegmentListIterator::operator++()
+{
+	if ( m_current )
+		return m_current = m_current->m_next;
+
+	return 0L;
+}
+
+VSegment*
+VSegmentListIterator::operator+=( uint i )
+{
+	while ( m_current && i-- )
+		m_current = m_current->m_next;
+
+	return m_current;
+}
+
+VSegment*
+VSegmentListIterator::operator--()
+{
+	if ( m_current )
+		return m_current = m_current->m_prev;
+
+	return 0L;
+}
+
+VSegment*
+VSegmentListIterator::operator-=( uint i )
+{
+	while ( m_current && i-- )
+		m_current = m_current->m_prev;
+
+	return m_current;
+}
