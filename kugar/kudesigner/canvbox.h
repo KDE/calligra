@@ -44,7 +44,7 @@ public:
     void scale(int scale);
     virtual QString getXml() { return ""; }
 
-    virtual bool isInHolder(const QPoint p) {}
+    virtual bool isInHolder(const QPoint p) {return true;}
     virtual void drawHolders(QPainter &painter) {}
 
     /**
@@ -95,7 +95,7 @@ public:
     void updatePaperProps();
 
     QString fileName() const { return reportFileName; }
-    void setFileName(QString fName) { reportFileName = fName; }
+    void setFileName(const QString &fName) { reportFileName = fName; }
 
     virtual QString getXml();
 
