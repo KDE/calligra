@@ -27,6 +27,7 @@
 
 #include <qfile.h>
 #include <qlayout.h>
+#include <qobjectlist.h>
 
 KexiKugarWrapper::KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* item,const QString& path,
                                 QWidget *parent, const char *name)
@@ -39,7 +40,7 @@ KexiKugarWrapper::KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* item,co
 
 	(new QVBoxLayout(this))->setAutoAdd(true);
 	m_part=KParts::ComponentFactory::createPartInstanceFromLibrary<KParts::ReadOnlyPart>(QFile::encodeName("libkugarpart"),
-			this,0,this,0,QStringList("template=/usr/src/kde3/koffice/kugar/samples/sample2.kut"));
+			this,"embeddedKugarView",this,0,QStringList("template=/usr/src/kde3/koffice/kugar/samples/sample2.kut"));
 	
 	m_part->openURL(path);
 //	part->widget()->show();
@@ -66,6 +67,32 @@ void KexiKugarWrapper::activateActions()
 void KexiKugarWrapper::deactivateActions()
 {
 }
+
+void KexiKugarWrapper::setupPrinter(KPrinter &printer) {
+
+	QObject *c=0;
+	QObjectList *l=queryList("KoView");
+	QObjectListIt it(*l);
+	if (it.current()!=0) {
+		c=it.current();
+	}
+	delete l;
+	if (!c) return;
+	(static_cast<KoView*>(c->qt_cast("KoView")))->setupPrinter(printer);
+}
+
+void KexiKugarWrapper::print(KPrinter &printer) {
+	QObject *c=0;
+	QObjectList *l=queryList("KoView");
+	QObjectListIt it(*l);
+	if (it.current()!=0) {
+		c=it.current();
+	}
+	delete l;
+	if (!c) return;
+	(static_cast<KoView*>(c->qt_cast("KoView")))->print(printer);
+
+} // if (m_part!=0) m_part->print(printer); }
 
 
 #include "kexikugarwrapper.moc"

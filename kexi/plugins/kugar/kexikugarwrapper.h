@@ -48,6 +48,8 @@ class KexiKugarWrapper : public KexiDialogBase
 		virtual void activateActions();
 		virtual void deactivateActions();
 
+		virtual void setupPrinter(KPrinter &printer);
+		virtual void print(KPrinter &printer);
 	private:
 		KParts::ReadOnlyPart *m_part;
 };

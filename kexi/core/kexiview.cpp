@@ -319,19 +319,23 @@ KexiView::setupPrinter(KPrinter &printer)
 	printer.setMinMax(1, 1);
 	printer.setPageSize(KPrinter::A4);
 	printer.setOrientation(KPrinter::Portrait);
+
+	KexiDialogBase  *active = dynamic_cast<KexiWorkspace*>(m_workspace)->activeDocumentView();
+	if (active)
+		active->setupPrinter(printer);
 }
 
 void
 KexiView::print(KPrinter &printer)
 {
-	//FIXME: IT IS GETTING REALLY; REALLY HACKY!!!!
-	//kill me. lucijan
 
-	KexiDialogBase *active = static_cast<KexiWorkspaceMDI *>(m_workspace)->activeDocumentView();
+	KexiDialogBase *active = dynamic_cast<KexiWorkspace*>(m_workspace)->activeDocumentView();
 	kdDebug() << "KexiView::print: " << active << endl;
 
 	if(active)
 		active->print(printer);
+
+
 /*	QPainter p(&printer);
 	p.drawLine(60,60,120,120);
 	p.end();

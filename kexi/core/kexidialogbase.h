@@ -54,6 +54,7 @@ class KexiDialogBase : public QWidget
 
 		void	setContextHelp(const QString &title, const QString &message);
 
+		virtual void setupPrinter(KPrinter &printer){;}
 		virtual void print(KPrinter &printer) {; }
 
 		void aboutToShow();
