@@ -223,7 +223,10 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
     {
         element = parentElem.namedItem( "LINESPACE" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
+        {
+            layout.lineSpacingType = KoParagLayout::LS_CUSTOM;
             layout.lineSpacing = KoStyle::getAttribute( element, "pt", 0.0 );
+        }
     }
 
     element = parentElem.namedItem( "LINESPACING" ).toElement(); // KWord-1.0 DTD
