@@ -59,7 +59,7 @@ KWordShell::KWordShell()
 
     if ( !previewHandlerRegistered )
     {
-        QStringList list = kimgio_types();
+      QStringList list = KImageIO::types(KImageIO::Reading);
         QStringList::ConstIterator it;
         for (it = list.begin(); it != list.end(); it++)
             KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );

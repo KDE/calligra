@@ -893,7 +893,7 @@ void KWordView::viewEndNotes()
 void KWordView::insertPicture()
 {
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							kimgio_patterns(), 0);
+							KImageIO::pattern(KImageIO::Reading), 0);
 
     if ( !file.isEmpty() ) m_pKWordDoc->insertPicture( file, gui->getPaperWidget() );
 
@@ -1162,7 +1162,7 @@ void KWordView::toolsCreatePix()
 {
     gui->getPaperWidget()->mmEdit();
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							kimgio_patterns(), 0);
+							KImageIO::pattern(KImageIO::Reading), 0);
 
     if ( !file.isEmpty() )
     {
