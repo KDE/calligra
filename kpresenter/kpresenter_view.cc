@@ -5782,7 +5782,7 @@ void KPresenterView::openLink()
         edit->openLink();
 }
 
-void KPresenterView::showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin )
+void KPresenterView::showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl )
 {
   KoRuler * hRuler = getHRuler();
   if ( hRuler )
@@ -5790,6 +5790,7 @@ void KPresenterView::showRulerIndent( double _leftMargin, double _firstLine, dou
       hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine + _leftMargin, m_pKPresenterDoc->getUnit() ) );
       hRuler->setLeftIndent( KoUnit::ptToUnit( _leftMargin, m_pKPresenterDoc->getUnit() ) );
       hRuler->setRightIndent( KoUnit::ptToUnit( _rightMargin, m_pKPresenterDoc->getUnit() ) );
+      hRuler->setDirection( rtl );
       actionTextDepthMinus->setEnabled( _leftMargin>0);
   }
 }

@@ -2865,7 +2865,7 @@ void KPrCanvas::setTextDepthPlus()
     if(!lst.isEmpty())
     {
         const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
-        m_view->showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine], layout->margins[QStyleSheetItem::MarginRight]);
+        m_view->showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine], layout->margins[QStyleSheetItem::MarginRight], lst.first()->currentParag()->string()->isRightToLeft());
     }
 }
 
@@ -2894,7 +2894,7 @@ void KPrCanvas::setTextDepthMinus()
     if(!lst.isEmpty())
     {
         const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
-        m_view->showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine], layout->margins[QStyleSheetItem::MarginRight]);
+        m_view->showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine], layout->margins[QStyleSheetItem::MarginRight], lst.first()->currentParag()->string()->isRightToLeft());
     }
 }
 

@@ -539,7 +539,7 @@ public:
 
     QPopupMenu * popupMenu( const QString& name );
 
-    void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin );
+    void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl );
 
     void reorganize();
 
