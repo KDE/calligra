@@ -2670,7 +2670,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
     //kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
-    m_canvas->gui()->getHorzRuler()->changeFlags(0);
+    //m_canvas->gui()->getHorzRuler()->changeFlags(0);
 }
 
 KoTextViewIface* KWTextFrameSetEdit::dcopObject()

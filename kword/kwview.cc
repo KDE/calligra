@@ -4805,12 +4805,22 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
 {
     if(!m_doc->isReadWrite())
         return;
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if (!edit)
-        return;
-    KCommand *cmd=edit->setTabListCommand( tabList );
-    if(cmd)
-        m_doc->addCommand(cmd);
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = 0L;
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setTabListCommand( tabList );
+        if (cmd)
+        {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand(i18n("Change Tabulator") );
+            macroCmd->addCommand(cmd);
+        }
+    }
+    if(macroCmd)
+        m_doc->addCommand(macroCmd);
 }
 
 void KWView::newPageLayout( KoPageLayout _layout )
@@ -4858,35 +4868,64 @@ void KWView::slotPageLayoutChanged( const KoPageLayout& layout )
 
 void KWView::newFirstIndent( double _firstIndent )
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if (edit)
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = 0L;
+    for ( ; it.current() ; ++it )
     {
-        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, _firstIndent );
-        if(cmd)
-            m_doc->addCommand(cmd);
+        KCommand *cmd = it.current()->setMarginCommand( QStyleSheetItem::MarginFirstLine, _firstIndent );
+        if (cmd)
+        {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand(i18n("Change First Line Indent"));
+            macroCmd->addCommand(cmd);
+        }
     }
+    if(macroCmd)
+        m_doc->addCommand(macroCmd);
 }
 
 void KWView::newLeftIndent( double _leftIndent )
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if (edit)
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = 0L;
+    for ( ; it.current() ; ++it )
     {
-        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, _leftIndent );
-        if(cmd)
-            m_doc->addCommand(cmd);
+        KCommand *cmd = it.current()->setMarginCommand( QStyleSheetItem::MarginLeft, _leftIndent );
+        if (cmd)
+        {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand(i18n("Change Indent") );
+            macroCmd->addCommand(cmd);
+        }
     }
+    if(macroCmd)
+        m_doc->addCommand(macroCmd);
+
 }
 
 void KWView::newRightIndent( double _rightIndent)
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if (edit)
+
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = 0L;
+    for ( ; it.current() ; ++it )
     {
-        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, _rightIndent );
-        if(cmd)
-            m_doc->addCommand(cmd);
+        KCommand *cmd = it.current()->setMarginCommand( QStyleSheetItem::MarginRight, _rightIndent );
+        if (cmd)
+        {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand(i18n("Change Indent") );
+            macroCmd->addCommand(cmd);
+        }
     }
+    if(macroCmd)
+        m_doc->addCommand(macroCmd);
 }
 
 QPopupMenu * KWView::popupMenu( const QString& name )
