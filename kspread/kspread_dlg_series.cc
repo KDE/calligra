@@ -80,16 +80,19 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   new QLabel( i18n( "Start value:" ), params );
   start=new KDoubleNumInput(params);
   start->setMinValue(-9999);
+  start->setMaxValue(9999);
   start->setValue( 0.0);
 
   new QLabel( i18n( "Stop value:" ), params );
   end=new KDoubleNumInput(params);
   end->setMinValue(-9999);
+  end->setMaxValue(9999);
   end->setValue( 0.0 );
 
   new QLabel( i18n( "Step value:" ), params );
   step=new KDoubleNumInput(params);
   step->setMinValue(-9999);
+  step->setMaxValue(9999);
   step->setValue( 0.0 );
 
   grid1->addWidget(gb);
