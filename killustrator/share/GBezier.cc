@@ -576,3 +576,8 @@ void GBezier::updateGradientShape (QPainter& p) {
   // and create a new gradient pixmap
   gShape.updatePixmap ();
 }
+
+void GBezier::getPath (QPointArray& path) {
+  path = tMatrix.map (ppoints);
+}
+

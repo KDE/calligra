@@ -25,6 +25,7 @@
 #include "Ruler.h"
 #include "Ruler.moc"
 
+#include <kapp.h>
 #include <qpainter.h>
 #include <qglobal.h>
 #include "Painter.h"
@@ -71,14 +72,14 @@ void Ruler::initMarker (int w, int h) {
   p.begin (marker);
   p.setPen (black);
   p.setBrush (black);
-  p.setBackgroundColor (this->backgroundColor ());
+  p.setBackgroundColor (kapp->backgroundColor);
   p.eraseRect (0, 0, w, h);
   p.drawPolygon (pts);
   p.end ();
 
   bg = new QPixmap (w, h);
   p.begin (bg);
-  p.setBackgroundColor (this->backgroundColor ());
+  p.setBackgroundColor (kapp->backgroundColor);
   p.eraseRect (0, 0, w, h);
   p.end ();
 }
@@ -215,7 +216,8 @@ void Ruler::drawRuler () {
   }
 
   p.begin (buffer);
-  p.setBackgroundColor (lightGray);
+  //  p.setBackgroundColor (lightGray);
+  p.setBackgroundColor (kapp->backgroundColor);
   p.setPen (black);
   p.setFont (QFont ("times", 10));
   buffer->fill (backgroundColor ());

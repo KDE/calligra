@@ -42,6 +42,7 @@ KIllustratorChild::~KIllustratorChild () {
 KIllustratorDocument::KIllustratorDocument () {
   m_lstViews.setAutoDelete (true);
   m_lstChildren.setAutoDelete (true);
+  m_bEmpty = true;
 }
 
 KIllustratorDocument::~KIllustratorDocument () {
@@ -109,6 +110,12 @@ void KIllustratorDocument::viewList (OpenParts::Document::ViewList*& list_ptr) {
 
 CORBA::Boolean KIllustratorDocument::isModified () {
   return GDocument::isModified ();
+}
+
+void KIllustratorDocument::setModified (bool f) {
+  GDocument::setModified (f);
+  if (f)
+    m_bEmpty = false;
 }
 
 void KIllustratorDocument::draw (QPaintDevice* dev, 

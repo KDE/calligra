@@ -54,6 +54,7 @@ GText::GText () {
   cursorActive = false;
   text.setAutoDelete (true);
   text.append (new QString (""));
+  pathObj = 0L;
 }
 
 GText::GText (const list<XmlAttribute>& attribs) : GObject (attribs) {
@@ -65,6 +66,7 @@ GText::GText (const list<XmlAttribute>& attribs) : GObject (attribs) {
   cursorActive = false;
   text.setAutoDelete (true);
   text.append (new QString (""));
+  pathObj = 0L;
 
   list<XmlAttribute>::const_iterator first = attribs.begin ();
 	
@@ -92,7 +94,15 @@ GText::GText (const GText& obj) : GObject (obj) {
   QListIterator<QString> it (obj.text);
   for (; it.current (); ++it) 
     text.append (new QString (it.current ()->copy ()));
+  pathObj = obj.pathObj;
+  if (pathObj)
+    pathObj->ref ();
   calcBoundingBox ();
+}
+
+GText::~GText () {
+  if (pathObj)
+    pathObj->unref ();
 }
 
 void GText::setTextInfo (const TextInfo& tinfo) {
@@ -143,12 +153,13 @@ void GText::draw (Painter& p, bool, bool) {
     const char* s = *(text.at (cursy));
     x1 = 0;
     for (int i = 0; i < cursx; i++) 
-      x1 += fm->width (s[i]);
+	x1 += fm->width (s[i]);
     x1 += opos.x ();
     x2 = x1;
     p.setPen (black);
     p.drawLine (x1, y1, x2, y2);
   }
+
   p.restore ();
 }
 
@@ -187,6 +198,7 @@ void GText::setText (const QString& s) {
       text.append (new QString (sub));
     }
   } while (pos2 != -1);
+  updateMatricesForPath ();
   updateRegion ();
 }
 
@@ -204,7 +216,7 @@ QString GText::getText () const {
 }
 
 void GText::deleteChar () {
-  printf ("del\n");
+  //  printf ("del\n");
   QString& s = *(text.at (cursy));
   if (cursx == (int) s.length ()) {
     // end of line
@@ -215,6 +227,7 @@ void GText::deleteChar () {
   }
   else
     s.remove (cursx, 1);
+  updateMatricesForPath ();
   updateRegion ();
 }
 
@@ -237,6 +250,7 @@ void GText::deleteBackward () {
     cursy--;
     cursx = oldpos;
   }
+  updateMatricesForPath ();
   updateRegion ();
 }
 
@@ -253,6 +267,7 @@ void GText::insertChar (char c) {
     s.insert (cursx, c);
     cursx++;
   }
+  updateMatricesForPath ();
   updateRegion ();
 }
 
@@ -366,4 +381,26 @@ void GText::writeToXml (XmlWriter& xml) {
 
   xml.endTag ();
   xml.endTag ();
+}
+
+void GText::updateMatricesForPath () {
+  if (pathObj) {
+    cout << "compute character matrices" << endl;
+    emit changed ();
+  }
+}
+
+void GText::setPathObject (GObject* obj) {
+  if (pathObj != 0L) {
+    pathObj->unref ();
+    disconnect (obj, SIGNAL(changed(const Rect&)), 
+		this, SLOT(updateMatricesForPath ()));
+  }
+  pathObj = obj;
+  if (pathObj != 0L) {
+    pathObj->ref ();
+    connect (obj, SIGNAL(changed(const Rect&)), 
+	     this, SLOT(updateMatricesForPath ()));
+    updateMatricesForPath ();
+  }
 }

@@ -51,6 +51,7 @@ public:
 
 signals:
   void modeSelected (const char* msg);
+  void operationDone ();
 
 protected:
  CommandHistory* history;

@@ -36,7 +36,6 @@
 #include "GBezier.h"
 #include "Gradient.h"
 
-QDict<GObject> GObject::prototypes;
 GObject::OutlineInfo GObject::defaultOutlineInfo;
 GObject::FillInfo GObject::defaultFillInfo;
 

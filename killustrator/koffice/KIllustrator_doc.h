@@ -88,13 +88,17 @@ public:
 
   // ask, if document is modified
   virtual CORBA::Boolean isModified ();
+  virtual void setModified (bool f);
 
   virtual void draw (QPaintDevice* dev, CORBA::Long w, CORBA::Long h);
 
   virtual int viewCount ();
   virtual KIllustratorView* createKIllustratorView ();
 
+  virtual bool isEmpty () { return m_bEmpty; }
+ 
 protected:
+  bool m_bEmpty;
   QList<KIllustratorView> m_lstViews;
   QList<KIllustratorChild> m_lstChildren;
   KIllustratorView *viewPtr;

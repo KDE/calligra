@@ -38,9 +38,19 @@ module KIllustrator {
     oneway void setupGrid ();
     oneway void alignToGrid ();
 
-    oneway void configureTool (in long id);
-    oneway void activateTool (in long id);
+    oneway void toolSelection ();
+    oneway void toolEditPoint ();
+    oneway void toolFreehandLine ();
+    oneway void toolPolyline ();
+    oneway void toolBezier ();
+    oneway void toolRectangle ();
+    oneway void toolPolygon ();
+    oneway void toolEllipse ();
+    oneway void toolText ();
+    oneway void toolZoom ();
 
+    oneway  void configPolygonTool ();
+	
     oneway void setPenColor (in long id);
     oneway void setFillColor (in long id);
   };

@@ -40,6 +40,18 @@
 #include "MainView.h"
 #include "CommandHistory.h"
 
+#define ID_TOOL_SELECT        1001
+#define ID_TOOL_EDITPOINT     1002
+#define ID_TOOL_FREEHAND      1003
+#define ID_TOOL_LINE          1004
+#define ID_TOOL_BEZIER        1005
+#define ID_TOOL_RECTANGLE     1006
+#define ID_TOOL_POLYGON       1007
+#define ID_TOOL_ELLIPSE       1008
+#define ID_TOOL_TEXT          1009
+#define ID_TOOL_ZOOM          1010
+#define ID_TOOL_PATHTEXT      1011
+
 class KIlustratorView;
 class KIllustratorDocument;
 class Canvas;
@@ -115,11 +127,21 @@ public:
 
   void editLayers ();
 
-  void configureTool (CORBA::Long id);
-  void activateTool (CORBA::Long id);
-
   void setPenColor (CORBA::Long id);
   void setFillColor (CORBA::Long id);
+
+  void toolSelection ();
+  void toolEditPoint ();
+  void toolFreehandLine ();
+  void toolPolyline ();
+  void toolBezier ();
+  void toolRectangle ();
+  void toolPolygon ();
+  void toolEllipse ();
+  void toolText ();
+  void toolZoom ();
+
+  void configPolygonTool ();
 
 protected:
   void init ();
@@ -127,11 +149,9 @@ protected:
   bool mappingCreateMenubar (OpenPartsUI::MenuBar_ptr menubar);
   bool mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr factory);
 
-  CORBA::Long addToolButton (const char* pictname, const char* tooltip);
   void showTransformationDialog (int id);
 
   void setupColorToolbar ();
-  void setupToolsToolbar ();
   void setupCanvas ();
   void resizeEvent (QResizeEvent*);
 

@@ -97,6 +97,7 @@ void GLayer::deleteObject (GObject* obj) {
   list<GObject*>::iterator i = find (contents.begin (), contents.end (),
 				     obj);
   if (i != contents.end ()) {
+    (*i)->setLayer (0L);
     (*i)->unref ();
     contents.erase (i);
   }

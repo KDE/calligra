@@ -67,6 +67,8 @@ public:
   void setWorkingSegment (int seg);
   void setClosed (bool flag);
 
+  virtual void getPath (QPointArray& path);
+
 protected:
   void calcBoundingBox ();
 

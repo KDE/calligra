@@ -37,6 +37,8 @@
 #include "Coord.h"
 #include "GObject.h"
 
+#include <vector>
+
 class GTextState;
 
 class GText : public GObject {
@@ -58,7 +60,7 @@ public:
   GText ();
   GText (const list<XmlAttribute>& attribs);
   GText (const GText& obj);
-  ~GText () {}
+  ~GText ();
   
   virtual void draw (Painter& p, bool withBasePoints = false,
 		     bool outline = false);
@@ -87,6 +89,8 @@ public:
   const QFont& getFont () const { return textInfo.font; }
   void setFont (const QFont& f);
 
+  void setPathObject (GObject* obj);
+
   virtual const char* typeName ();
 
   virtual GOState* saveState ();
@@ -95,11 +99,17 @@ public:
   virtual GObject* copy ();
 
   virtual void writeToXml (XmlWriter&);
+
+public slots:
+  void updateMatricesForPath ();
   
 protected:
   void calcBoundingBox ();
 
   void initState (GOState* state);
+
+  void drawOnPath (Painter& p);
+  void drawStraight (Painter& p);
 
 private:
   Coord opos;
@@ -109,6 +119,8 @@ private:
   QFontMetrics *fm;
   bool cursorActive;
   int max_width;
+  GObject* pathObj;
+  vector<QWMatrix> cmatrices;
 
   static TextInfo defaultTextInfo;
 };

@@ -48,9 +48,11 @@ void ToolController::delegateEvent (QEvent *e, GDocument *doc,
     activeTool->processEvent (e, doc, canvas);
 }
 
+/*
 void ToolController::reset () {
   toolSelected (0);
 }
+*/
 
 void ToolController::toolSelected (int id) {
   if (activeTool)

@@ -62,7 +62,7 @@ public:
   int getPaperWidth () const;
   int getPaperHeight () const;
 
-  void setModified (bool flag = true);
+  virtual void setModified (bool flag = true);
   bool isModified () const { return modifyFlag; }
 
   void drawContents (Painter& p, bool withBasePoints = false, 

@@ -42,6 +42,12 @@
 #include "xmlutils/XmlWriter.h"
 #include "xmlutils/XmlElement.h"
 
+#ifndef M_PI // not ANSI C++, so it maybe...
+#define M_PI            3.14159265358979323846  /* pi */
+#endif
+
+#define RAD_FACTOR 180.0 / M_PI
+
 class GOState;
 class GLayer;
 
@@ -334,6 +340,8 @@ public:
   virtual void printInfo ();
   virtual void calcBoundingBox () = 0;
 
+  virtual void getPath (QPointArray& path) {}
+
   bool workInProgress () const { return inWork; }
   void setWorkInProgress (bool flag) { inWork = flag; }
 
@@ -366,8 +374,6 @@ protected:
   GradientShape gShape;    // the shape (clipped pixmap) for gradient fill
   bool inWork;             // the object is currently manipulated,
                            // so don't fill it now
-
-  static QDict<GObject> prototypes;
 
   // default value
   static OutlineInfo defaultOutlineInfo;

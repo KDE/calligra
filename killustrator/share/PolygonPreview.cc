@@ -24,16 +24,13 @@
 
 #include "PolygonPreview.h"
 #include "PolygonPreview.moc"
+#include "GObject.h"
 #include <qpainter.h>
 #include <qpntarry.h>
 #include <math.h>
 
 #define WIDTH 160
 #define HEIGHT 160
-
-#ifndef M_PI // not ANSI C++, so it maybe...
-#define M_PI            3.14159265358979323846  /* pi */
-#endif
 
 PolygonPreview::PolygonPreview (QWidget* parent, const char* name) :
   QWidget (parent, name) {

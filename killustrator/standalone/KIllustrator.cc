@@ -43,6 +43,7 @@
 #include "EditPointTool.h"
 #include "BezierTool.h"
 #include "ZoomTool.h"
+#include "PathTextTool.h"
 #include "PropertyEditor.h"
 #include "AlignmentDialog.h"
 #include "GridDialog.h"
@@ -111,7 +112,6 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   canvas = 0L;
   scriptDialog = 0L;
   layerDialog = 0L;
-  tgroup = new ToolGroup ();
   initMenu ();
   initStatusBar ();
   
@@ -162,7 +162,6 @@ KIllustrator::~KIllustrator () {
   windows.removeRef (this);
 //  delete toolbar;
 //  delete menubar;
-  delete tgroup;
 }
 
 void KIllustrator::closeEvent (QCloseEvent*) {
@@ -210,8 +209,6 @@ void KIllustrator::setupMainView () {
   connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
 	   this, SLOT(popupForSelection (int, int)));
 
-  void rightButtonAtSelectionClicked ();
-
   gridLayout->addWidget (viewport, 1, 1);
   gridLayout->setRowStretch (1, 20);
   gridLayout->setColStretch (1, 20);
@@ -220,37 +217,51 @@ void KIllustrator::setupMainView () {
   
   tcontroller = new ToolController (this);
   Tool* tool;
-  tcontroller->registerTool (0, tool = new SelectionTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_SELECT, 
+			     tool = new SelectionTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (1, tool = new EditPointTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_EDITPOINT, 
+			     tool = new EditPointTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (2, tool = new FreeHandTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_FREEHAND, 
+			     tool = new FreeHandTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (3, tool = new PolylineTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_LINE, 
+			     tool = new PolylineTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (4, tool = new BezierTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_BEZIER, 
+			     tool = new BezierTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (5, tool = new RectangleTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_RECTANGLE, 
+			     tool = new RectangleTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (6, tool = new PolygonTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_POLYGON, 
+			     tool = new PolygonTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (7, tool = new OvalTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_ELLIPSE, 
+			     tool = new OvalTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (8, tool = new TextTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_TEXT, 
+			     tool = new TextTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (9, tool = new ZoomTool (&cmdHistory));
+  tcontroller->registerTool (ID_TOOL_ZOOM, 
+			     tool = new ZoomTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->toolSelected (0);
+
+  tcontroller->registerTool (ID_TOOL_PATHTEXT, 
+			     tool = new PathTextTool (&cmdHistory));
+  connect (tool, SIGNAL(operationDone ()), 
+  	   this, SLOT (resetTools ()));
 
   canvas->setToolController (tcontroller);
 
@@ -266,37 +277,22 @@ void KIllustrator::initToolBars () {
   /* main toolbar */
   toolbar = new KToolBar (this);
   
-  pixmap = loader->loadIcon ("filenew2.xpm");
-  toolbar->insertButton (pixmap, ID_FILE_NEW, true,
+  toolbar->insertButton (loader->loadIcon ("filenew2.xpm"), ID_FILE_NEW, true,
 			 i18n ("New Document"));
-  
-  pixmap = loader->loadIcon ("fileopen.xpm");
-  toolbar->insertButton (pixmap, ID_FILE_OPEN, true,
+  toolbar->insertButton (loader->loadIcon ("fileopen.xpm"), ID_FILE_OPEN, true,
 			 i18n ("Open Document"));
-  
-  pixmap = loader->loadIcon ("filefloppy.xpm");
-  toolbar->insertButton (pixmap, ID_FILE_SAVE, true,
-			 i18n ("Save Document"));
-  
+  toolbar->insertButton (loader->loadIcon ("filefloppy.xpm"), ID_FILE_SAVE, 
+			 true, i18n ("Save Document"));
   toolbar->insertSeparator ();
-  
-  pixmap = loader->loadIcon ("fileprint.xpm");
-  toolbar->insertButton (pixmap, ID_FILE_PRINT, true,
-			 i18n ("Print Document"));
+  toolbar->insertButton (loader->loadIcon ("fileprint.xpm"), ID_FILE_PRINT, 
+			 true, i18n ("Print Document"));
   toolbar->insertSeparator ();
-  
-  pixmap = loader->loadIcon ("editcopy.xpm");
-  toolbar->insertButton (pixmap, ID_EDIT_COPY, true,
+  toolbar->insertButton (loader->loadIcon ("editcopy.xpm"), ID_EDIT_COPY, true,
 			 i18n ("Copy"));
-  
-  pixmap = loader->loadIcon ("editpaste.xpm");
-  toolbar->insertButton (pixmap, ID_EDIT_PASTE, true,
-			 i18n ("Paste"));
-  
-  pixmap = loader->loadIcon ("editcut.xpm");
-  toolbar->insertButton (pixmap, ID_EDIT_CUT, true,
+  toolbar->insertButton (loader->loadIcon ("editpaste.xpm"), ID_EDIT_PASTE, 
+			 true, i18n ("Paste"));
+  toolbar->insertButton (loader->loadIcon ("editcut.xpm"), ID_EDIT_CUT, true,
 			 i18n ("Cut"));
-
   toolbar->insertSeparator ();
 
   QStrList zoomStrList;
@@ -324,73 +320,66 @@ void KIllustrator::initToolBars () {
 
   /* the "tool" toolbar */
   toolPalette = new KToolBar (this);
-  ToolButton* toolButton;
+  KRadioGroup* toolGroup = new KRadioGroup (toolPalette);
 
-  toolButton = new ToolButton (loader->loadIcon ("selecttool.xpm"), 
-			       toolPalette,
-                               i18n ("Selection Mode"));
-  toolPalette->insertWidget (0, toolButton->width (), toolButton);
-  tgroup->insertButton (0, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("selecttool.xpm"), 
+			     ID_TOOL_SELECT, true, i18n ("Selection Mode"));
+  toolPalette->setToggle (ID_TOOL_SELECT);
+  toolGroup->addButton (ID_TOOL_SELECT);
 
-  toolButton = new ToolButton (loader->loadIcon ("pointtool.xpm"), 
-			       toolPalette,
-                               i18n ("Edit Point"));
-  toolPalette->insertWidget (1, toolButton->width (), toolButton);
-  tgroup->insertButton (1, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("pointtool.xpm"), 
+			     ID_TOOL_EDITPOINT, true, i18n ("Edit Point"));
+  toolPalette->setToggle (ID_TOOL_EDITPOINT);
+  toolGroup->addButton (ID_TOOL_EDITPOINT);
 
-  toolButton = new ToolButton (loader->loadIcon ("freehandtool.xpm"), 
-			       toolPalette,
-                               i18n ("Create FreeHand Line"));
-  toolPalette->insertWidget (2, toolButton->width (), toolButton);
-  tgroup->insertButton (2, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("freehandtool.xpm"), 
+			     ID_TOOL_FREEHAND, true, 
+			     i18n ("Create Freehand Line"));
+  toolPalette->setToggle (ID_TOOL_FREEHAND);
+  toolGroup->addButton (ID_TOOL_FREEHAND);
 
-  toolButton = new ToolButton (loader->loadIcon ("linetool.xpm"), 
-			       toolPalette,
-                               i18n ("Create Polyline"));
-  toolPalette->insertWidget (3, toolButton->width (), toolButton);
-  tgroup->insertButton (3, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("linetool.xpm"), 
+			     ID_TOOL_LINE, true, i18n ("Create Polyline"));
+  toolPalette->setToggle (ID_TOOL_LINE);
+  toolGroup->addButton (ID_TOOL_LINE);
 
-  toolButton = new ToolButton (loader->loadIcon ("beziertool.xpm"), 
-			       toolPalette,
-                               i18n ("Create Bezier Curve"));
-  toolPalette->insertWidget (4, toolButton->width (), toolButton);
-  tgroup->insertButton (4, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("beziertool.xpm"), 
+			     ID_TOOL_BEZIER, true, 
+			     i18n ("Create Bezier Curve"));
+  toolPalette->setToggle (ID_TOOL_BEZIER);
+  toolGroup->addButton (ID_TOOL_BEZIER);
 
-  toolButton = new ToolButton (loader->loadIcon ("recttool.xpm"), 
-			       toolPalette,
-                               i18n ("Create Rectangle"));
-  toolPalette->insertWidget (5, toolButton->width (), toolButton);
-  tgroup->insertButton (5, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("recttool.xpm"), 
+			     ID_TOOL_RECTANGLE, true, 
+			     i18n ("Create Rectangle"));
+  toolPalette->setToggle (ID_TOOL_RECTANGLE);
+  toolGroup->addButton (ID_TOOL_RECTANGLE);
 
-  toolButton = new ToolButton (loader->loadIcon ("polygontool.xpm"), 
-			       toolPalette,
-                               i18n ("Create Polygon"));
-  toolPalette->insertWidget (6, toolButton->width (), toolButton);
-  tgroup->insertButton (6, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("polygontool.xpm"), 
+			     ID_TOOL_POLYGON, true, i18n ("Create Polygon"));
+  toolPalette->setToggle (ID_TOOL_POLYGON);
+  toolGroup->addButton (ID_TOOL_POLYGON);
 
-  toolButton = new ToolButton (loader->loadIcon ("ellipsetool.xpm"), 
-			       toolPalette,
-                               i18n ("Create Ellipse"));
-  toolPalette->insertWidget (7, toolButton->width (), toolButton);
-  tgroup->insertButton (7, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("ellipsetool.xpm"), 
+			     ID_TOOL_ELLIPSE, true, i18n ("Create Ellipse"));
+  toolPalette->setToggle (ID_TOOL_ELLIPSE);
+  toolGroup->addButton (ID_TOOL_ELLIPSE);
 
-  toolButton = new ToolButton (loader->loadIcon ("texttool.xpm"), 
-			       toolPalette,
-                               i18n ("Create Text"));
-  toolPalette->insertWidget (8, toolButton->width (), toolButton);
-  tgroup->insertButton (8, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("texttool.xpm"), 
+			     ID_TOOL_TEXT, true, i18n ("Create Text"));
+  toolPalette->setToggle (ID_TOOL_TEXT);
+  toolGroup->addButton (ID_TOOL_TEXT);
 
-  toolButton = new ToolButton (loader->loadIcon ("zoomtool.xpm"), 
-			       toolPalette,
-                               i18n ("Zoom In"));
-  toolPalette->insertWidget (9, toolButton->width (), toolButton);
-  tgroup->insertButton (9, toolButton);
+  toolPalette->insertButton (loader->loadIcon ("zoomtool.xpm"), 
+			     ID_TOOL_ZOOM, true, i18n ("Zoom In"));
+  toolPalette->setToggle (ID_TOOL_ZOOM);
+  toolGroup->addButton (ID_TOOL_ZOOM);
 
-  connect (tgroup, SIGNAL (toolSelected (int)), tcontroller,
+  connect (toolPalette, SIGNAL (clicked (int)), tcontroller,
   	   SLOT(toolSelected (int)));
-  connect (tgroup, SIGNAL (toolConfigActivated (int)), tcontroller,
+  connect (toolPalette, SIGNAL (doubleClicked (int)), tcontroller,
 	   SLOT(configureTool (int)));
-
+  resetTools ();
   toolPalette->setBarPos (KToolBar::Left);
   addToolBar (toolPalette);
 
@@ -419,6 +408,7 @@ void KIllustrator::initMenu () {
   layout = new QPopupMenu ();
   view = new QPopupMenu ();
   arrangement = new QPopupMenu ();
+  effects = new QPopupMenu ();
   extras = new QPopupMenu ();
   help = new QPopupMenu ();
   openRecent = new QPopupMenu ();
@@ -523,6 +513,10 @@ void KIllustrator::initMenu () {
   connect (transformations, SIGNAL (activated (int)), 
 	   SLOT (menuCallback (int)));
 
+  effects->insertItem (i18n ("Text along Path"), ID_EFFECTS_PATHTEXT);
+  connect (effects, SIGNAL (activated (int)), 
+	   SLOT (menuCallback (int)));
+
   arrangement->insertItem (i18n ("Transform"), transformations);
   arrangement->insertItem (i18n ("Align"), ID_ARRANGE_ALIGN);
   arrangement->setAccel (CTRL + Key_A, ID_ARRANGE_ALIGN);
@@ -564,6 +558,7 @@ void KIllustrator::initMenu () {
   menubar->insertItem (i18n ("&View"), view);
   menubar->insertItem (i18n ("&Layout"), layout);
   menubar->insertItem (i18n ("&Arrange"), arrangement);
+  menubar->insertItem (i18n ("E&ffects"), effects);
   menubar->insertItem (i18n ("Ex&tras"), extras);
   menubar->insertItem (i18n ("&Help"), help);
   
@@ -628,7 +623,7 @@ void KIllustrator::menuCallback (int item) {
       document->initialize ();
       cmdHistory.reset ();
       setFileCaption (UNNAMED_FILE);
-      tcontroller->toolSelected (0);
+      resetTools ();
     }
     break;
   case ID_FILE_OPEN: 
@@ -641,7 +636,7 @@ void KIllustrator::menuCallback (int item) {
 	  document->initialize ();
 	  openURL ((const char *)fname);
 	  cmdHistory.reset ();
-	  tcontroller->toolSelected (0);
+	  resetTools ();
 	}
       }
       break;
@@ -656,7 +651,6 @@ void KIllustrator::menuCallback (int item) {
     closeWindow (this);
     break;
   case ID_FILE_PRINT:
-    //    canvas->printPSDocument ();
     canvas->printDocument ();
     break;
   case ID_FILE_INFO:
@@ -673,13 +667,11 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_EDIT_UNDO:
     cmdHistory.undo ();
-//    tcontroller->toolSelected (0);
-    tgroup->selectTool (0);
+    resetTools ();
     break;
   case ID_EDIT_REDO:
     cmdHistory.redo ();
-//    tcontroller->toolSelected (0);
-    tgroup->selectTool (0);
+    resetTools ();
     break;
   case ID_EDIT_CUT:
     cmdHistory.addCommand (new CutCmd (document), true);
@@ -789,6 +781,9 @@ void KIllustrator::menuCallback (int item) {
   case ID_TRANSFORM_MIRROR:
     showTransformationDialog (item - ID_TRANSFORM_POSITION);
     break;
+  case ID_EFFECTS_PATHTEXT:
+    tcontroller->toolSelected (ID_TOOL_PATHTEXT);
+    break;
   case ID_EXTRAS_OPTIONS:
     OptionDialog::setup ();
     break;
@@ -815,11 +810,11 @@ void KIllustrator::menuCallback (int item) {
       break;
   default:
     if (item > ID_IMPORT && item < ID_IMPORT + 100) {
-      tcontroller->reset ();
+      resetTools ();
       importFromFile (item - ID_IMPORT);
     }
     if (item > ID_EXPORT && item < ID_EXPORT + 100) {
-      tcontroller->reset ();
+      resetTools ();
       exportToFile (item - ID_EXPORT);
     }
     else if (item > ID_FILE_OPEN_RECENT && item < ID_FILE_OPEN_RECENT + 10) {
@@ -1154,3 +1149,8 @@ void KIllustrator::popupForSelection (int x, int y) {
 void KIllustrator::popupForObject (int x, int y, GObject* obj) {
 }
 
+void KIllustrator::resetTools () {
+  if (! toolPalette->isButtonOn (ID_TOOL_SELECT))
+    toolPalette->toggleButton (ID_TOOL_SELECT);
+  tcontroller->toolSelected (ID_TOOL_SELECT);
+}

@@ -22,38 +22,28 @@
 
 */
 
-#ifndef ToolController_h_
-#define ToolController_h_
+#ifndef PathTextTool_h_
+#define PathTextTool_h_
 
-#include <qintdict.h>
+#include <qobject.h>
 #include <qevent.h>
+#include <qcursor.h>
+
 #include "Tool.h"
-#include "MainView.h"
+#include "GText.h"
 
-class GDocument;
-class Canvas;
-
-class ToolController : public QObject {
+class PathTextTool : public Tool {
   Q_OBJECT
 public:
-  ToolController (MainView* view);
-  ~ToolController ();
-  
-  void registerTool (int id, Tool* tool);
-  Tool* getActiveTool ();
-  
-  void delegateEvent (QEvent *e, GDocument* doc, Canvas* canvas);
-  
-public slots:
-  void toolSelected (int id);
-  void configureTool (int id);
+  PathTextTool (CommandHistory* history);
 
-  //  void reset ();
+  virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
+  virtual void activate (GDocument* doc, Canvas* canvas);
+  virtual void deactivate (GDocument*, Canvas*);
 
 private:
-  QIntDict<Tool> tools;
-  Tool* activeTool;
-  MainView* mainView;
+  QCursor cursor, oldCursor;
+  GText *textObj;
 };
 
 #endif

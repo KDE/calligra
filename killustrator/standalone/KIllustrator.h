@@ -36,9 +36,6 @@
 #include <drag.h>
 
 #include <qlist.h>
-#include "ToolPalette.h"
-#include "ToolGroup.h"
-// #include "ColorSelectionPalette.h"
 #include "ToolController.h"
 #include "Ruler.h"
 #include "GObject.h"
@@ -97,13 +94,27 @@ class LayerDialog;
 #define ID_TRANSFORM_ROTATION  602
 #define ID_TRANSFORM_MIRROR    603
 
-#define ID_EXTRAS_OPTIONS      700
-#define ID_EXTRAS_CLIPART      701
-#define ID_EXTRAS_SCRIPTS      702
+#define ID_EFFECTS_PATHTEXT    700
 
-#define ID_HELP_HELP           800
-#define ID_HELP_ABOUT_APP      801
-#define ID_HELP_ABOUT_KDE      802
+#define ID_EXTRAS_OPTIONS      800
+#define ID_EXTRAS_CLIPART      801
+#define ID_EXTRAS_SCRIPTS      802
+
+#define ID_HELP_HELP           900
+#define ID_HELP_ABOUT_APP      901
+#define ID_HELP_ABOUT_KDE      902
+
+#define ID_TOOL_SELECT        1001
+#define ID_TOOL_EDITPOINT     1002
+#define ID_TOOL_FREEHAND      1003
+#define ID_TOOL_LINE          1004
+#define ID_TOOL_BEZIER        1005
+#define ID_TOOL_RECTANGLE     1006
+#define ID_TOOL_POLYGON       1007
+#define ID_TOOL_ELLIPSE       1008
+#define ID_TOOL_TEXT          1009
+#define ID_TOOL_ZOOM          1010
+#define ID_TOOL_PATHTEXT      1011
 
 class KIllustrator : public KTopLevelWidget, public MainView {
   Q_OBJECT
@@ -146,6 +157,8 @@ protected slots:
   void popupForSelection (int x, int y);
   void popupForObject (int x, int y, GObject* obj);
 
+  void resetTools ();
+
 private:
   static bool closeWindow (KIllustrator* win);
   static void quit ();
@@ -176,10 +189,9 @@ private:
   
   QGridLayout *gridLayout;
 
-  QPopupMenu *file, *edit, *view, *layout, *effects, 
-    *arrangement, *extras, *help, *popupMenu;
+  QPopupMenu *file, *edit, *view, *layout,
+    *arrangement, *effects, *extras, *help, *popupMenu;
   QPopupMenu *openRecent;
-  ToolGroup *tgroup;
   ToolController *tcontroller;
   QwViewport *viewport;
   GDocument *document;

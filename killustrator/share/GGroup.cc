@@ -81,13 +81,13 @@ void GGroup::addObject (GObject* obj) {
   updateRegion ();
 }
 
-void GGroup::draw (Painter& p, bool withBasePoints) {
+void GGroup::draw (Painter& p, bool withBasePoints, bool outline) {
   p.save ();
   p.setWorldMatrix (tmpMatrix, true);
 
     list<GObject*>::iterator i = members.begin ();
     for (; i != members.end (); i++)
-	(*i)->draw (p);
+	(*i)->draw (p, false, outline);
 
   p.restore ();
 }

@@ -31,12 +31,6 @@
 #include <klocale.h>
 #include <kapp.h>
 
-#ifndef M_PI // not ANSI C++, so it maybe...
-#define M_PI            3.14159265358979323846  /* pi */
-#endif
-
-#define RAD_FACTOR 180.0 / M_PI
-
 GPolyline::GPolyline () {
   connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this, 
            SLOT(updateProperties (GObject::Property, int)));
@@ -421,3 +415,11 @@ Rect GPolyline::calcEnvelope () {
   return r;
 }
 
+void GPolyline::getPath (QPointArray& path) {
+  unsigned int num = points.count ();
+  path.resize (num);
+  for (unsigned int i = 0; i < num; i++) {
+    const Coord& pi = *points.at (i);
+    path.setPoint (i, tMatrix.map (QPoint (pi.x (), pi.y ())));
+  }
+}

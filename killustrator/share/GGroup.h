@@ -46,7 +46,8 @@ public:
 
   void addObject (GObject* obj);
 
-  virtual void draw (Painter& p, bool withBasePoints = false);
+  virtual void draw (Painter& p, bool withBasePoints = false,
+		     bool outline = false);
   virtual bool contains (const Coord& p);
 
   virtual const char* typeName ();

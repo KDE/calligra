@@ -123,23 +123,28 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
   if (fmt == 0L || *fmt == '\0')
     fmt = "application/x-killustrator";
   
-  if (m_pDoc && m_pDoc->objectCount () == 0)
-    releaseDocument ();
-  else if (m_pDoc && m_pDoc->objectCount  ()> 0) {
+  if (m_pDoc && m_pDoc->isEmpty ()) {
+    cout << "release document" << endl;
+    //    releaseDocument ();
+  }
+  else if (m_pDoc && ! m_pDoc->isEmpty ()) {
     KIllustratorShell *shell = new KIllustratorShell ();
     shell->show ();
     return shell->openDocument (url, fmt);
   }
   
+  cout << "create new document" << endl;
   m_pDoc = new KIllustratorDocument ();
   if (! m_pDoc->loadFromURL (url, fmt))
     return false;
 
+  cout << "create new view" << endl;
   m_pView = m_pDoc->createKIllustratorView ();
   m_pView->incRef ();
   m_pView->setMode (KOffice::View::RootMode);
   m_pView->setMainWindow (interface ());
 
+  cout << "set active part" << endl;
   setRootPart (m_pView->id());
   interface ()->setActivePart (m_pView->id ());
   
@@ -153,7 +158,8 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
   //  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
   //  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
   m_pDoc->setURL (url);
-  
+
+  cout << "loading done !" << endl;
   return true;
 }
 
@@ -300,6 +306,7 @@ void KIllustratorShell::releaseDocument () {
   int views = 0;
   if (m_pDoc)
     views = m_pDoc->viewCount();
+  /*
   setRootPart (0);
   interface ()->setActivePart (0);
   if (m_pView)
@@ -310,4 +317,5 @@ void KIllustratorShell::releaseDocument () {
     CORBA::release (m_pDoc);
   m_pView = 0L;
   m_pDoc = 0L;
+  */
 }
