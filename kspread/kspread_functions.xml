@@ -1461,7 +1461,7 @@
       <Help>
 	<Text>The compound() function calculates how much money you will have on your account after a certain amount of years. We assume that you have some initial cash and a certain interest. This interest is due every year. There are multiple periods per year. Lets give an example: You have $1000 and 8% interest every month. Then compound( 1000, 0.08, 12, 2 ) tells you that after 2 years you will own $1172.89</Text>
 	<Syntax>compound( initial, interest, periods, periods_per_year )</Syntax>
-	<Example>compoun(</Example>
+	<Example>compound( 1000, 0.08, 12, 2 ) equals 1172.89</Example>
       </Help>
     </Function>
 
