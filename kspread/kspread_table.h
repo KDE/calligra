@@ -222,6 +222,8 @@ public:
     virtual void cutSelection();
     virtual void pasteSelection( const KSpread::Cell& cell );
     virtual CORBA::Boolean isEmpty( CORBA::ULong x, CORBA::ULong y );
+  
+    char* tableName() { return CORBA::string_dup( m_strName.data() ); }
 
     // C++
     virtual bool save( ostream& );

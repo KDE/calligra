@@ -294,6 +294,9 @@ public:
     KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc *_doc );
     ~KSpreadView();
 
+    // IDL
+    virtual KSpread::Book_ptr book();
+  
     // C++
     KSpreadCanvas* canvasWidget() { return m_pCanvasWidget; }
     QWidget* hBorderWidget() { return m_pHBorderWidget; }    
@@ -653,8 +656,9 @@ protected:
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
     virtual bool mappingToolDone( DataTools::Answer& _answer );
-    virtual bool mappingEventSetText( KSpread::typeSetText& _event );
-    virtual bool mappingEventKeyPressed( KSpread::typeKeyPressed& _event );
+    virtual bool mappingEventSetText( KSpread::EventSetText& _event );
+    virtual bool mappingEventKeyPressed( KSpread::EventKeyPressed& _event );
+    virtual bool mappingEventChartInserted( KSpread::EventChartInserted& _event );
   
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );

@@ -7,46 +7,6 @@
 
 module KSpread
 {
-	interface View : KOffice::View
-	{
-		slot void undo();
-		slot void redo();
-		slot void cutSelection();
-		slot void copySelection();
-		slot void paste();
-		slot void editCell();
-		slot void paperLayoutDlg();
-		slot void togglePageBorders();
-		slot void newView();
-		slot void insertNewTable();
-		slot void autoFill();
-		slot void editGlobalScripts();
-		slot void editLocalScripts();
-		slot void reloadScripts();
-		slot void helpUsing();
-		slot void deleteRow();
-		slot void deleteColumn();
-		slot void insertRow();
-		slot void insertColumn();
-		slot void bold();
-		slot void italic();
-		slot void moneyFormat();
-		slot void percent();
-		slot void alignLeft();
-		slot void alignCenter();
-		slot void alignRight();
-		slot void multiRow();
-		slot void precisionMinus();
-		slot void precisionPlus();
-		slot void insertChart();
-		slot void insertTable();
-		slot void insertImage();
-		slot void insertObject();
-		slot void fontSizeSelected( in string size );
-		slot void fontSelected( in string font );
-		slot void consolidate();
-	};
-
 	interface Table;
 	typedef sequence<Table> TableSeq;
 
@@ -91,6 +51,57 @@ module KSpread
 	{
 	};
 
+	interface Book;
+	interface Document;
+
+	interface View : KOffice::View
+	{
+		slot void undo();
+		slot void redo();
+		slot void cutSelection();
+		slot void copySelection();
+		slot void paste();
+		slot void editCell();
+		slot void paperLayoutDlg();
+		slot void togglePageBorders();
+		slot void newView();
+		slot void insertNewTable();
+		slot void autoFill();
+		slot void editGlobalScripts();
+		slot void editLocalScripts();
+		slot void reloadScripts();
+		slot void helpUsing();
+		slot void deleteRow();
+		slot void deleteColumn();
+		slot void insertRow();
+		slot void insertColumn();
+		slot void bold();
+		slot void italic();
+		slot void moneyFormat();
+		slot void percent();
+		slot void alignLeft();
+		slot void alignCenter();
+		slot void alignRight();
+		slot void multiRow();
+		slot void precisionMinus();
+		slot void precisionPlus();
+		slot void insertChart();
+		slot void insertTable();
+		slot void insertImage();
+		slot void insertObject();
+		slot void fontSizeSelected( in string size );
+		slot void fontSelected( in string font );
+		slot void consolidate();
+
+		Book book();
+
+		struct EventSelectionChanged
+		{
+			Range range;
+		};
+		const string eventSelectionChanged = "KSpread/View/SelectionChanged";
+	};
+
 	interface Book
 	{
 		TableSeq tables();
@@ -100,6 +111,8 @@ module KSpread
 	interface Table
 	{		
 		Book book();
+
+		string tableName();
 
 		Range range( in unsigned long left, in unsigned long top,
 			     in unsigned long right, in unsigned long bottom );
@@ -155,7 +168,6 @@ module KSpread
 		string text;
 	};
 	const string eventSetText = "UserEvent/KSpread/SetText";
-	typedef EventSetText typeSetText;
 
 	struct EventKeyPressed
 	{
@@ -164,7 +176,15 @@ module KSpread
 		long ascii;
 	};
 	const string eventKeyPressed = "UserEvent/KSpread/KeyPressed";
-	typedef EventKeyPressed typeKeyPressed;
+
+	struct EventChartInserted
+	{
+		long dx;
+		long dy;
+		long width;
+		long height;
+	};
+	const string eventChartInserted = "UserEvent/KSpread/ChartInserted";
 };
 
 #endif

@@ -237,7 +237,10 @@ void KSpreadView::cleanUp()
   cerr << "2) VIEW void KOMBase::refcnt() = " << _refcnt() << endl;
 }
 
-// #define MAPPING( event, type, func ) if ( __ev == event ) { type __t; if ( __v >>= __t ) return func( __t ); }
+KSpread::Book_ptr KSpreadView::book()
+{
+  return m_pDoc->book();
+}
 
 bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
 {
@@ -245,18 +248,48 @@ bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
   
   EVENT_MAPPER( _event, _value );
 
-  MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
-  MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
+  MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var,
+	   mappingCreateMenubar );
+  MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var,
+	   mappingCreateToolbar );
   MAPPING( DataTools::eventDone, DataTools::typeDone, mappingToolDone );
-  MAPPING( KSpread::eventSetText, KSpread::typeSetText, mappingEventSetText );
-  MAPPING( KSpread::eventKeyPressed, KSpread::typeKeyPressed, mappingEventKeyPressed );
+  MAPPING( KSpread::eventSetText, KSpread::EventSetText, mappingEventSetText );
+  MAPPING( KSpread::eventKeyPressed, KSpread::EventKeyPressed, mappingEventKeyPressed );
+  MAPPING( KSpread::eventChartInserted, KSpread::EventChartInserted,
+	   mappingEventChartInserted );
 
   END_EVENT_MAPPER;
   
   return false;
 }
 
-bool KSpreadView::mappingEventKeyPressed( KSpread::typeKeyPressed& _event )
+bool KSpreadView::mappingEventChartInserted( KSpread::EventChartInserted& _event )
+{
+  if ( m_pTable == 0L )
+    return true;
+
+  int xpos, ypos;
+  xpos = m_pTable->columnPos( markerColumn(), this );
+  ypos = m_pTable->rowPos( markerRow(), this );
+  
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoID", 1 );
+  if ( vec.size() == 0 )
+  {    
+    cout << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    return true;
+  }
+
+  QRect r( xpos + _event.dx, ypos + _event.dy, _event.width, _event.height );
+  
+  cerr << "USING component " << vec[0].name << endl;
+  
+  m_pTable->insertChart( r, vec[0], m_pTable->selectionRect() );
+
+  return true;
+}
+
+bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
 {
   if ( m_pTable == 0L )
     return true;
@@ -468,7 +501,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::typeKeyPressed& _event )
   return true;
 }
 
-bool KSpreadView::mappingEventSetText( KSpread::typeSetText& _event )
+bool KSpreadView::mappingEventSetText( KSpread::EventSetText& _event )
 {
   cerr << "GOT EventSetText ´" << _event.text.in() << "´" << endl;
   
@@ -548,7 +581,8 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   tmp += "/kspread/pics/colin.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
   m_idButtonEdit_InsCol = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "insertColumn", true, i18n( "Insert Column"  ), -1 );
-  
+
+  m_vToolBarEdit->setFullWidth(false);  
   m_vToolBarEdit->enable( OpenPartsUI::Show );
   
   m_vToolBarLayout = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
@@ -647,6 +681,11 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_vToolBarLayout->enable( OpenPartsUI::Show );
 
   m_pluginManager.fillToolBar( _factory );
+
+  /* m_vToolBarLayout->enable( OpenPartsUI::Hide );
+  m_vToolBarLayout->setBarPos(OpenPartsUI::Floating);
+  m_vToolBarLayout->setBarPos(OpenPartsUI::Top);
+  m_vToolBarLayout->enable( OpenPartsUI::Show ); */
   
   return true;
 }
@@ -1130,17 +1169,17 @@ void KSpreadView::markChildPicture( KSpreadChildPicture *_pic )
 
 void KSpreadView::insertChart( const QRect& _geometry )
 {
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoID", 1 );
-  if ( vec.size() == 0 )
-  {    
-    cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
-    return;
-  }
+  int xpos, ypos;
+  xpos = m_pTable->columnPos( markerColumn(), this );
+  ypos = m_pTable->rowPos( markerRow(), this );
 
-  cerr << "USING component " << vec[0].name << endl;
+  KSpread::EventChartInserted event;
+  event.dx = _geometry.left() - xpos;
+  event.dy = _geometry.top() - ypos;
+  event.width = _geometry.width();
+  event.height = _geometry.height();
   
-  m_pTable->insertChart( _geometry, vec[0], m_pTable->selectionRect() );
+  EMIT_EVENT( this, KSpread::eventChartInserted, event );
 }
 
 void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
@@ -1184,6 +1223,11 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
     kv->setMode( KOffice::View::ChildMode );
     assert( !CORBA::is_nil( kv ) );
     p->attachView( kv );
+
+    KOffice::View::EventNewPart event;
+    event.view = KOffice::View::_duplicate( kv );
+    cerr << "------------------ newPart -----------" << endl;
+    EMIT_EVENT( this, KOffice::View::eventNewPart, event );
   }
   
   QObject::connect( p, SIGNAL( sig_geometryEnd( KoFrame* ) ),
@@ -1791,11 +1835,9 @@ void KSpreadView::setText( const char *_text )
   if ( m_pTable == 0L )
     return;
   
-  KSpread::typeSetText event;
+  KSpread::EventSetText event;
   event.text = CORBA::string_dup( _text );
-  CORBA::Any any;
-  any <<= event;
-  receive( KSpread::eventSetText, any );
+  EMIT_EVENT( this, KSpread::eventSetText, event );
   
   // m_pTable->setText( m_iMarkerRow, m_iMarkerColumn, _text );
 }
@@ -2069,9 +2111,19 @@ void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )
 void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new )
 {
   // printf("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QRect &_new %i %i|%i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_new.left(),_new.top(),_new.right(),_new.bottom());
-  
+
+  // Emit a signal for internal use
   emit sig_selectionChanged( _table, _new );
   
+  // Send some event around
+  KSpread::View::EventSelectionChanged ev;
+  ev.range.top = _new.top();
+  ev.range.left = _new.left();
+  ev.range.right = _new.right();
+  ev.range.bottom = _new.bottom();
+  ev.range.table = CORBA::string_dup( activeTable()->name() );
+  EMIT_EVENT( this, KSpread::View::eventSelectionChanged, ev );
+
   // Do we display this table ?
   if ( _table != m_pTable )
     return;
@@ -2830,13 +2882,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
    */
   _ev->accept();
 
-  KSpread::typeKeyPressed event;
+  KSpread::EventKeyPressed event;
   event.key = _ev->key();
   event.state = _ev->state();
   event.ascii = _ev->ascii();
-  CORBA::Any any;
-  any <<= event;
-  m_pView->receive( KSpread::eventKeyPressed, any );
+  EMIT_EVENT( m_pView, KSpread::eventKeyPressed, event );
 }
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
@@ -3389,3 +3439,4 @@ KSpreadChildPicture::~KSpreadChildPicture()
 #endif
 
 #include "kspread_view.moc"
+
