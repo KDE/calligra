@@ -77,4 +77,9 @@ KexiProjectHandler::items()
 	return m_items;
 }
 
+void KexiProjectHandler::saveXML(QDomDocument&){;}
+void KexiProjectHandler::loadXML(const QDomDocument&){;}
+void KexiProjectHandler::store (KoStore*){;}
+void KexiProjectHandler::load (KoStore*){;}
+
 #include "kexiprojecthandler.moc"

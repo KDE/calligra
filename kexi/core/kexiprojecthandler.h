@@ -67,8 +67,10 @@ class KexiProjectHandler : public QObject
 		virtual QPixmap			groupPixmap() = 0;
 		virtual QPixmap			itemPixmap() = 0;
 
-		virtual void store (KoStore*)=0;
-		virtual void load (KoStore*)=0;
+		virtual void saveXML(QDomDocument&);
+		virtual void loadXML(const QDomDocument&);
+		virtual void store (KoStore*);
+		virtual void load (KoStore*);
 		virtual ItemList		*items();
 		
 		KexiProject *kexiProject();

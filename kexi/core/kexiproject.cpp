@@ -87,7 +87,7 @@ bool KexiProject::completeLoading( KoStore* store )
 bool KexiProject::initDoc()
 {
 	QString filename;
-	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(KexiFactory::global(),filename,"application/x-vnd.kde-kexi","*.kex",
+	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(KexiFactory::global(),filename,"application/x-vnd.kde.kexi","*.kexi",
 		i18n("Kexi"),KoTemplateChooseDia::Everything,"kexi_template");
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {
@@ -204,7 +204,8 @@ QDomDocument KexiProject::saveXML()
 	QDomDocument domDoc=createDomDocument( "KexiProject", "1.0" );
 	saveConnectionSettings(domDoc);
 	saveReferences(domDoc);
-
+	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
+		hand->saveXML(domDoc);
 	setModified(false);
 	return domDoc;
 }
@@ -295,6 +296,8 @@ bool KexiProject::loadXML( QIODevice *, const QDomDocument &domDoc )
 		if (tagname=="connectionSettings") loadConnectionSettings(el);
 		else if (tagname=="references") loadReferences(el);
 	}
+	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
+		hand->loadXML(domDoc);
 	return true;
 }
 
