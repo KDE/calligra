@@ -75,7 +75,7 @@ KWFrame::KWFrame()
     brd_bottom.style = KWParagLayout::SOLID;
     brd_bottom.ptWidth = 1;
 
-    frameBehaviour=AutoExtendFrame;
+    frameBehaviour= AutoExtendFrame;
     newFrameBehaviour = Reconnect;
     sheetSide = AnySide;
 }
@@ -274,7 +274,7 @@ int KWFrame::getLeftIndent( int _y, int _h )
     if ( _left > 0 && runAround == RA_SKIP )
 	_left = width();
 
-    return _left;
+    return QMAX( 0, _left );
 }
 
 /*================================================================*/
@@ -291,15 +291,18 @@ int KWFrame::getRightIndent( int _y, int _h )
     QRegion reg = line.subtract( emptyRegion );
     _right = 0;
     for ( unsigned int i = 0; i < reg.rects().size(); ++i ) {
-	if ( reg.rects()[ i ].right() == right() )
+	if ( reg.rects()[ i ].right() == right() ) {
+	    if ( reg.rects()[ i ].width() == width() && reg.rects()[ i ].x() == x() )
+		continue;
 	    _right = QMAX( _right, reg.rects()[ i ].width() );
+	}	    
     }
     if ( _right > 0 )
 	_right += static_cast<int>(runAroundGap.pt());
     if ( _right > 0 && runAround == RA_SKIP )
 	_right = width();
 
-    return _right;
+    return QMIN( width(), _right );
 }
 
 /*================================================================*/
@@ -414,14 +417,14 @@ QString KWFrame::bottomBrd2String()
     return str;
 }
 
-FrameInfo KWFrame::getFrameInfo() 
+FrameInfo KWFrame::getFrameInfo()
 {
     if(frameSet)
 	return frameSet->getFrameInfo();
     return (FrameInfo) -1;
 }
 
-FrameType KWFrame::getFrameType() 
+FrameType KWFrame::getFrameType()
 {
     if(frameSet)
 	return frameSet->getFrameType();
@@ -499,7 +502,7 @@ void KWFrameSet::addFrame( KWFrame *_frame )
 /*================================================================*/
 void KWFrameSet::delFrame( unsigned int _num )
 {
-    KWFrame *frm = frames.at( _num ), *f;
+    KWFrame *frm = frames.at( _num );
     delFrame(frm,true);
 }
 
@@ -998,7 +1001,7 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	} else if ( name == "FRAME" ) {
 	    KWFrame rect;
             NewFrameBehaviour newFrameBehaviour = Reconnect;
-            FrameBehaviour autoCreateNewValue = AutoExtendFrame;
+            FrameBehaviour autoCreateNewValue = AutoCreateNewFrame;
             SheetSide sheetSide = AnySide;
 	    KWParagLayout::Border l, r, t, b;
 	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
@@ -1245,7 +1248,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
     newFS->assign(this);
     return newFS;
 }
-            
+
 
 /******************************************************************/
 /* Class: KWPictureFrameSet					  */
@@ -2068,7 +2071,7 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
 //kdDebug() << getCell(i)->frameSet << endl;
 //kdDebug() << dynamic_cast<KWTextFrameSet*>(getCell(i)->frameSet) << endl;
             getCell(i)->frameSet= dynamic_cast<KWTextFrameSet*>(getCell(i)->frameSet)->getCopy();
-            
+
             if ( anchored ) {
                 getCell(i)->frameSet->getFrame( 0 )->moveBy( origin.x(), origin.y() );
             }
@@ -2845,7 +2848,7 @@ QString KWGroupManager::anchorInstance()
 }
 
 /*================================================================*/
-void KWGroupManager::viewFormatting( QPainter &painter, int zoom )
+void KWGroupManager::viewFormatting( QPainter &painter, int )
 {
     KWFrame *topLeftFrame;
 

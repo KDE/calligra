@@ -1049,9 +1049,10 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 	apply( parag->getParagLayout()->getFormat() );
 
 	indent = static_cast<int>(parag->getParagLayout()->getFirstLineLeftIndent().pt());
-    } else
+    } else {
 	indent = static_cast<int>(parag->getParagLayout()->getLeftIndent().pt());
-
+    }
+    
     indent += _left;
 
     // Calculate the shift for the first visible character. This may be the counter, too
@@ -1359,9 +1360,9 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 		    outOfFrame = TRUE;
 		    return FALSE;
 		}
-	    } else if ( parag->hasHardBreak() || 
-			( !(pFrame->getFrameSet()->getGroupManager()) && 
-			  pFrame->getFrameBehaviour() == AutoCreateNewFrame && 
+	    } else if ( parag->hasHardBreak() ||
+			( !(pFrame->getFrameSet()->getGroupManager()) &&
+			  pFrame->getFrameBehaviour() == AutoCreateNewFrame &&
 			  pFrame->getNewFrameBehaviour()==Reconnect ) ) { // Append page
 		doc->appendPage( page - 1, redrawBackgroundWhenAppendPage );
 		page++;

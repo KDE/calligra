@@ -4895,11 +4895,13 @@ void KWPage::repaintScreen( int currFS, bool erase )
 }
 
 /*================================================================*/
-void KWPage::contentsWillMove( int x, int y )
+void KWPage::contentsWillMove( int , int )
 {
     calcVisiblePages();
-    gui->getVertRuler()->setOffset( 0, y );
-    gui->getHorzRuler()->setOffset( x, 0 );
+    gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
+    gui->getHorzRuler()->setOffset( -
+				    
+				    getHorzRulerPos(), 0 );
     _scrolled = TRUE;
 }
 

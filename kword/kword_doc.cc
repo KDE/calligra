@@ -1306,7 +1306,7 @@ bool KWordDocument::loadXML( const QDomDocument & doc )
 	    KWFrame *frame = new KWFrame(fs, getPTLeftBorder(),
                 i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
 	        getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
-            frame->setFrameBehaviour(AutoExtendFrame);
+	    frame->setFrameBehaviour(AutoExtendFrame);
 	    fs->addFrame( frame );
 	}
 	frames.append( fs );
