@@ -11,6 +11,7 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qlineedit.h>
 #include "kdchart/KDChartParams.h"
 
 KChartLegendConfigPage::KChartLegendConfigPage( KDChartParams* params,
@@ -52,6 +53,19 @@ KChartLegendConfigPage::KChartLegendConfigPage( KDChartParams* params,
   grid1->addWidget(lBottomLeft,2,2);
 
   gb->setAlignment(Qt::AlignLeft);
+
+
+  gb = new QButtonGroup( i18n("Title:"), this );
+  layout->addWidget(gb,1,0);
+
+  QGridLayout *grid2 = new QGridLayout(gb,4,2,15,7);
+
+  QLabel * lab=new QLabel(i18n("Legend title:"),gb);
+  grid2->addWidget(lab,0,0);
+
+  title=new QLineEdit(gb);
+  grid2->addWidget(title,1,0);
+
   //it's not good but I don't know how
   //to reduce space
   layout->addColSpacing(1,300);
@@ -92,6 +106,7 @@ void KChartLegendConfigPage::init()
         lRight->setChecked(true);
         break;
     }
+    title->setText(_params->legendTitleText());
 }
 
 void KChartLegendConfigPage::apply()
@@ -117,4 +132,5 @@ void KChartLegendConfigPage::apply()
     else
         _params->setLegendPosition(KDChartParams::LegendRight);
 
+    _params->setLegendTitleText(title->text());
 }

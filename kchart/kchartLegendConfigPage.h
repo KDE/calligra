@@ -9,6 +9,7 @@
 
 class KDChartParams;
 class QRadioButton;
+class QLineEdit;
 
 class KChartLegendConfigPage : public QWidget
 {
@@ -23,6 +24,7 @@ public:
 private:
     KDChartParams* _params;
     QRadioButton *noLegend,*lTop,*lBottom,*lLeft,*lRight,*lTopLeft,*lTopRight,*lBottomRight,*lBottomLeft;
+    QLineEdit *title;
 };
 
 #endif
