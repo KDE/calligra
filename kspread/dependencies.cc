@@ -56,7 +56,12 @@ class DependencyList {
   void processDependencies (const KSpreadRange &range);
   /** update cells dependending on a given range-list */
   void processDependencies (const RangeList &rangeList);
- 
+
+  /** get dependencies of a cell */
+  RangeList getDependencies (const KSpreadPoint &cell);
+  /** get cells depending on this cell, either through normal or range dependency */
+  QValueList<KSpreadPoint> getDependants (const KSpreadPoint &cell);
+
  protected:
   /** update structures: cell 1 depends on cell 2 */
   void addDependency (const KSpreadPoint &cell1, const KSpreadPoint &cell2);
@@ -140,11 +145,64 @@ void DependencyManager::rangeListChanged (const RangeList &rangeList)
   deps->processDependencies (rangeList);
 }
 
+RangeList DependencyManager::getDependencies (const KSpreadPoint &cell)
+{
+  return deps->getDependencies (cell);
+}
+
+QValueList<KSpreadPoint> DependencyManager::getDependants (const KSpreadPoint &cell)
+{
+  return deps->getDependants (cell);
+}
+
 void DependencyList::reset ()
 {
   dependencies.clear();
   cellDeps.clear();
   rangeDeps.clear();
+}
+
+RangeList DependencyList::getDependencies (const KSpreadPoint &cell)
+{
+  RangeList rl;
+  //look if the cell has any dependencies
+  if (!dependencies.contains (cell))
+    return rl;  //it doesn't - return an empty list
+  
+  //the cell does have dependencies - return them!
+  return dependencies[cell];
+}
+
+QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell)
+{
+  QValueList<KSpreadPoint> list;
+  
+  //cell dependencies go first
+  if (cellDeps.contains (cell))
+    list = cellDeps[cell];
+  
+  //next, append range dependencies
+  KSpreadPoint leading = leadingCell (cell);
+  QValueList<RangeDependency>::iterator it;
+  if (!rangeDeps.count (leading))
+    return list;  //no range dependencies in this cell chunk -> nothing more to do
+  
+  for (it = rangeDeps[leading].begin();
+      it != rangeDeps[leading].end(); ++it)
+  {
+    //process all range dependencies, and for each range including the questioned cell,
+    //add the depending cell to the list
+    if ((*it).range.contains (cell))
+    {
+      KSpreadPoint c;
+      c.setRow ((*it).cellrow);
+      c.setColumn ((*it).cellcolumn);
+      c.table = sheet;
+      list.push_back (c);
+    }
+  }
+  
+  return list;
 }
 
 void DependencyList::addDependency (const KSpreadPoint &cell1,

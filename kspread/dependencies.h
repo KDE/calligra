@@ -63,6 +63,10 @@ class DependencyManager {
   /** handle the fact that a range list has been changed */
   void rangeListChanged (const RangeList &rangeList);
 
+  /** get dependencies of a cell */
+  RangeList getDependencies (const KSpreadPoint &cell);
+  /** get cells depending on this cell, either through normal or range dependency */
+  QValueList<KSpreadPoint> getDependants (const KSpreadPoint &cell);
 protected:
   
   /** local d-pointer */
