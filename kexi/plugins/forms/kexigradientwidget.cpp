@@ -44,15 +44,29 @@ KexiGradientWidget::~KexiGradientWidget()
 {
 }
 
+bool KexiGradientWidget::isValidChildWidget( QObject* child ) {
+	const QWidget* wgt = dynamic_cast<QWidget*>( child );
+
+	if ( wgt == 0L )
+		return false;
+
+	if ( wgt->inherits( "QScrollView" ) )
+		return false;
+	if ( wgt->inherits( "QComboBox" ) )
+		return false;
+	if ( wgt->inherits( "QLineEdit" ) )
+		return false;
+	if ( wgt->inherits( "KexiDBForm" ) )
+		return false;
+
+	return true;
+}
+
 void KexiGradientWidget::buildChildrenList( WidgetList& list, QWidget* p ) {
 	QObjectList* objects = p->queryList( "QWidget", 0, false, false );
 
 	for ( QObjectList::Iterator it = objects->begin(); it != objects->end(); ++it ) {
-		if ( ( *it )->inherits( "QScrollView" ) )
-			continue;
-		if ( ( *it )->inherits( "QComboBox" ) )
-			continue;
-		if ( ( *it )->inherits( "QLineEdit" ) )
+		if ( isValidChildWidget( ( *it ) ) == false )
 			continue;
 		list.append( dynamic_cast<QWidget*>( ( *it ) ) );
 		buildChildrenList( list, dynamic_cast<QWidget*>( ( *it ) ) );
@@ -200,7 +214,7 @@ bool KexiGradientWidget::eventFilter( QObject* object, QEvent* event ) {
 	if ( object == this ) {
 		if ( event->type() == QEvent::ChildInserted ) {
 			child = dynamic_cast<QWidget*>( dynamic_cast<QChildEvent*>( event )->child() );
-			if ( child == 0 ) {
+			if ( isValidChildWidget( child ) == false ) {
 				return false;
 			}
 			/**

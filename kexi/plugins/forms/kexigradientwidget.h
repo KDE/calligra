@@ -184,6 +184,11 @@ class KexiGradientWidget : public QWidget {
 		have been found and stored in the list.
 		*/
 		static void buildChildrenList( WidgetList& list, QWidget* p );
+		/*!
+		\a return if the \a child is a widget that should
+		get a background set.
+		*/
+		static bool isValidChildWidget( QObject* child );
 
 		/*!
 		Rebuilds the cache completely.
