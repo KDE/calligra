@@ -27,6 +27,15 @@
 #define MAX_UNDO_REDO 100
 
 // types
+enum AlignType {
+    AT_LEFT = 0,
+    AT_TOP,
+    AT_RIGHT,
+    AT_BOTTOM,
+    AT_HCENTER,
+    AT_VCENTER
+};
+
 enum BackType {
     BT_COLOR = 0,
     BT_PICTURE = 1,

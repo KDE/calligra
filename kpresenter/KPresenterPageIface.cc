@@ -145,42 +145,6 @@ void KPresenterPageIface::copyObjs()
     //m_page->copyObjs();
 }
 
-void KPresenterPageIface::alignObjsLeft()
-{
-    KCommand *cmd=m_page->alignObjsLeft();
-    delete cmd;
-}
-
-void KPresenterPageIface::alignObjsCenterH()
-{
-    KCommand *cmd=m_page->alignObjsCenterH();
-    delete cmd;
-}
-
-void KPresenterPageIface::alignObjsRight()
-{
-    KCommand *cmd=m_page->alignObjsRight();
-    delete cmd;
-}
-
-void KPresenterPageIface::alignObjsTop()
-{
-    KCommand *cmd=m_page->alignObjsTop();
-    delete cmd;
-}
-
-void KPresenterPageIface::alignObjsCenterV()
-{
-    KCommand *cmd=m_page->alignObjsCenterV();
-    delete cmd;
-}
-
-void KPresenterPageIface::alignObjsBottom()
-{
-    KCommand *cmd=m_page->alignObjsBottom();
-    delete cmd;
-}
-
 void KPresenterPageIface::slotRepaintVariable()
 {
     m_page->slotRepaintVariable();

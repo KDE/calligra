@@ -763,28 +763,62 @@ void MoveByCmd::unexecute()
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
 
-MoveByCmd2::MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs,
-                        QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage * _page)
-    : KNamedCommand( _name ), diffs( _diffs ), objects( _objects )
+AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPresenterDoc *_doc )
+    : KNamedCommand( _name ), doc(_doc)
 {
     objects.setAutoDelete( false );
     diffs.setAutoDelete( true );
-    doc = _doc;
-    m_page = _page;
-    QPtrListIterator<KPObject> it( objects );
+    m_page = doc->findSideBarPage( _objects );
+    
+    QPtrListIterator<KPObject> it( _objects );
+    KoRect boundingRect;
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->getType() == OT_TEXT )
+        boundingRect |= it.current()->getRealRect();
+    }
+    
+    if ( _objects.count() == 1 )
+        boundingRect = m_page->getPageRect();
+    
+    it.toFirst();
+    for ( ; it.current() ; ++it )
+    {
+        KoPoint * diff = NULL;
+        switch ( _at )
         {
-            if(it.current()->isSelected())
-                doc->updateRuler();
-            doc->repaint( it.current() );
+            case AT_LEFT:
+              diff = new KoPoint( boundingRect.x() - it.current()->getRealOrig().x(), 0 );
+              break;
+            case AT_TOP:
+              diff = new KoPoint( 0, boundingRect.y() - it.current()->getRealOrig().y() );
+              break;
+            case AT_RIGHT:
+              diff = new KoPoint( boundingRect.x() + boundingRect.width() - 
+                                  it.current()->getRealOrig().x() - it.current()->getRealSize().width(), 0 );
+              break;
+            case AT_BOTTOM:
+              diff = new KoPoint( 0, boundingRect.y() + boundingRect.height() - 
+                                  it.current()->getRealOrig().y() - it.current()->getRealSize().height() );
+              break;
+            case AT_HCENTER:
+              diff = new KoPoint( ( boundingRect.width() - it.current()->getRealSize().width() ) / 2 - 
+                                  it.current()->getRealOrig().x() + boundingRect.x(), 0 );
+              break;
+            case AT_VCENTER:
+              diff = new KoPoint( 0, ( boundingRect.height() - it.current()->getRealSize().height() ) / 2 - 
+                                  it.current()->getRealOrig().y() + boundingRect.y() );
+              break;
         }
-        it.current()->incCmdRef();
+        if ( diff )
+        {
+            objects.append( it.current() );
+            diffs.append( diff );
+            it.current()->incCmdRef();
+        }
     }
 }
 
-MoveByCmd2::~MoveByCmd2()
+AlignCmd::~AlignCmd()
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -793,7 +827,7 @@ MoveByCmd2::~MoveByCmd2()
     diffs.clear();
 }
 
-void MoveByCmd2::execute()
+void AlignCmd::execute()
 {
     QRect oldRect;
 
@@ -814,7 +848,7 @@ void MoveByCmd2::execute()
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
 
-void MoveByCmd2::unexecute()
+void AlignCmd::unexecute()
 {
     QRect oldRect;
 

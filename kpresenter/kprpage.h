@@ -189,13 +189,6 @@ public:
                            FillType ft,const QColor &g1, const QColor &g2,
                            BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode );
 
-    KCommand *alignObjsLeft(const KoRect &rect = KoRect());
-    KCommand *alignObjsCenterH(const KoRect &rect= KoRect());
-    KCommand *alignObjsRight(const KoRect &rect= KoRect());
-    KCommand *alignObjsTop(const KoRect &rect= KoRect());
-    KCommand *alignObjsCenterV(const KoRect &rect= KoRect());
-    KCommand *alignObjsBottom(const KoRect &rect= KoRect());
-
     int getPenBrushFlags( QPtrList<KPObject>list ) const;
     KCommand* setPieSettings( PieType pieType, int angle, int len, int flags );
     KCommand* setRectSettings( int _rx, int _ry, int flags );

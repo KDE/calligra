@@ -340,18 +340,19 @@ protected:
     KPrPage *m_page;
 };
 
-class MoveByCmd2 : public KNamedCommand
+/**
+ * Command to align objects
+ */
+class AlignCmd : public KNamedCommand
 {
 public:
-    MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs, QPtrList<KPObject> &_objects,
-                KPresenterDoc *_doc, KPrPage *_page );
-    ~MoveByCmd2();
+    AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPresenterDoc *_doc );
+    ~AlignCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-
     QPtrList<KoPoint> diffs;
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;

@@ -257,12 +257,11 @@ public:
     int textObjectNum( KPTextObject * obj ) const;
     KPTextObject * textObjectByPos( int pos ) const;
 
-    void alignObjLeft();
-    void alignObjCenterH();
-    void alignObjRight();
-    void alignObjTop();
-    void alignObjCenterV();
-    void alignObjBottom();
+    /*
+     * Align all selected and not protected objects on the 
+     * active and on the sticky page according to the AlignType
+     */
+    void alignObjects( AlignType at );
 
     bool canMoveOneObject()const;
     QPtrList<KPTextObject> listOfTextObjs() const;

@@ -58,13 +58,6 @@ k_dcop:
     virtual void lowerObjs();
     virtual void copyObjs();
 
-    virtual void alignObjsLeft();
-    virtual void alignObjsCenterH();
-    virtual void alignObjsRight();
-    virtual void alignObjsTop();
-    virtual void alignObjsCenterV();
-    virtual void alignObjsBottom();
-
     virtual void slotRepaintVariable();
     virtual void recalcPageNum();
 

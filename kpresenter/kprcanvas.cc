@@ -6419,156 +6419,56 @@ bool KPrCanvas::checkCurrentTextEdit( KPTextObject * textObj )
     return emitChanged;
 }
 
-void KPrCanvas::alignObjLeft()
+void KPrCanvas::alignObjects( AlignType at )
 {
-    KMacroCommand *macro= 0L;
-    KCommand *cmd=0L;
-    KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
-    cmd=activePage()->alignObjsLeft(rect);
-    if(cmd)
+    KPresenterDoc * doc = m_view->kPresenterDoc();
+
+    QString name;
+
+    switch ( at )
     {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Left" ));
-        macro->addCommand(cmd);
+        case AT_LEFT:
+            name = i18n( "Align Objects Left" );
+            break;
+        case AT_TOP:
+            name = i18n( "Align Objects Top" );
+            break;
+        case AT_RIGHT:
+            name = i18n( "Align Objects Right" );
+            break;
+        case AT_BOTTOM:
+            name = i18n( "Align Objects Bottom" );
+            break;
+        case AT_HCENTER:
+            name = i18n( "Align Objects Centered (horizontal)" );
+            break;
+        case AT_VCENTER:
+            name = i18n( "Align Objects Center/Vertical" );
+            break;
     }
-    cmd=stickyPage()->alignObjsLeft(rect);
-    if(cmd)
+    
+    QPtrList<KPObject> objects;
+    for ( int i = 0; i < 2; ++i )
     {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Left" ));
+        QPtrListIterator<KPObject> it( i == 0 ? activePage()->objectList() : stickyPage()->objectList() );
+        for ( ; it.current() ; ++it )
+        {
+            if ( it.current() == m_view->kPresenterDoc()->header() ||
+                 it.current() == m_view->kPresenterDoc()->footer() )
+                continue;
 
-        macro->addCommand(cmd);
+            if( it.current()->isSelected() && !it.current()->isProtect() ) {
+                objects.append( it.current() );
+            }
+        }
     }
-    if(macro)
-        doc->addCommand(macro);
-}
-
-void KPrCanvas::alignObjCenterH()
-{
-    KMacroCommand *macro= 0L;
-    KCommand *cmd=0L;
-    KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
-    cmd=activePage()->alignObjsCenterH(rect);
-    if(cmd)
+    
+    if ( objects.count() )
     {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Centered (horizontal)"));
-        macro->addCommand(cmd);
+        KCommand * cmd = new AlignCmd( name, objects, at, doc );
+        cmd->execute();
+        doc->addCommand( cmd );
     }
-    cmd=doc->stickyPage()->alignObjsCenterH(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Centered (horizontal)"));
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        doc->addCommand(macro);
-}
-
-void KPrCanvas::alignObjRight()
-{
-    KMacroCommand *macro= 0L;
-    KCommand *cmd=0L;
-    KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
-
-    cmd=activePage()->alignObjsRight(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Right" ));
-
-        macro->addCommand(cmd);
-    }
-    cmd=doc->stickyPage()->alignObjsRight(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Right" ));
-
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        doc->addCommand(macro);
-}
-
-void KPrCanvas::alignObjTop()
-{
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align Objects Top" ));
-    KCommand *cmd=0L;
-    KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
-
-    cmd=activePage()->alignObjsTop(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Top" ));
-        macro->addCommand(cmd);
-    }
-    cmd=doc->stickyPage()->alignObjsTop(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Top" ));
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        doc->addCommand(macro);
-}
-
-void KPrCanvas::alignObjCenterV()
-{
-    KMacroCommand *macro= 0L;
-    KCommand *cmd=0L;
-    KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
-
-    cmd=activePage()->alignObjsCenterV(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Center/Vertical" ));
-        macro->addCommand(cmd);
-    }
-    cmd=doc->stickyPage()->alignObjsCenterV(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Center/Vertical" ));
-
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        doc->addCommand(macro);
-}
-
-void KPrCanvas::alignObjBottom()
-{
-    KMacroCommand *macro=0L;
-    KCommand *cmd=0L;
-    KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
-
-    cmd=activePage()->alignObjsBottom(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Bottom" ));
-        macro->addCommand(cmd);
-    }
-    cmd=doc->stickyPage()->alignObjsBottom(rect);
-    if(cmd)
-    {
-        if ( !macro )
-            macro= new KMacroCommand(i18n( "Align Objects Bottom" ));
-        macro->addCommand(cmd);
-    }
-    if(macro)
-        doc->addCommand(macro);
 }
 
 bool KPrCanvas::canMoveOneObject() const

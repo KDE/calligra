@@ -1936,32 +1936,32 @@ void KPresenterView::brushChosen()
 
 void KPresenterView::extraAlignObjLeft()
 {
-    m_canvas->alignObjLeft();
+    m_canvas->alignObjects( AT_LEFT );
 }
 
 void KPresenterView::extraAlignObjCenterH()
 {
-    m_canvas->alignObjCenterH();
+    m_canvas->alignObjects( AT_HCENTER );
 }
 
 void KPresenterView::extraAlignObjRight()
 {
-    m_canvas->alignObjRight();
+    m_canvas->alignObjects( AT_RIGHT );
 }
 
 void KPresenterView::extraAlignObjTop()
 {
-    m_canvas->alignObjTop();
+    m_canvas->alignObjects( AT_TOP );
 }
 
 void KPresenterView::extraAlignObjCenterV()
 {
-    m_canvas->alignObjCenterV();
+    m_canvas->alignObjects( AT_VCENTER );
 }
 
 void KPresenterView::extraAlignObjBottom()
 {
-    m_canvas->alignObjBottom();
+    m_canvas->alignObjects( AT_BOTTOM );
 }
 
 void KPresenterView::extraLineBeginNormal()
