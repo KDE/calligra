@@ -67,7 +67,6 @@ namespace Qt3 { class QTextParag; }
 #include <koDocumentChild.h>
 #include <koPictureCollection.h>
 #include <kozoomhandler.h>
-#include "kwimage.h"
 #include "kwanchorpos.h"
 #include <koUnit.h>
 #include "defs.h"
