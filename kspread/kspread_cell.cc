@@ -3904,7 +3904,7 @@ bool KSpreadCell::tryParseDate( const QString& str )
 
 	QString fmt = locale()->dateFormatShort();
 	if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
-		tmpDate.addYears( -2000 );
+		tmpDate = tmpDate.addYears( -2000 );
 		
     }
     if (valid)
