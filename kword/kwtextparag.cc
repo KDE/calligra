@@ -269,6 +269,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
 
             QDomElement formatElem = saveFormat( doc, newFormat, paragraphFormat(), index, 1 );
             formatsElem.appendChild( formatElem );
+            formatElem.setAttribute( "id", static_cast<KoTextCustomItem *>( ch.customItem() )->typeId() );
             static_cast<KoTextCustomItem *>( ch.customItem() )->save( formatElem );
             startPos = -1;
             curFormat = paragraphFormat();

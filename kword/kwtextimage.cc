@@ -82,20 +82,19 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int
     }
 }
 
-void KWTextImage::save( QDomElement & formatElem )
+void KWTextImage::save( QDomElement & parentElem )
 {
-    formatElem.setAttribute( "id", 2 ); // code for a picture
-    QDomElement imageElem = formatElem.ownerDocument().createElement( "IMAGE" );
-    formatElem.appendChild( imageElem );
-    QDomElement elem = formatElem.ownerDocument().createElement( "FILENAME" );
+    QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
+    parentElem.appendChild( imageElem );
+    QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
     imageElem.appendChild( elem );
     elem.setAttribute( "value", image().key().filename() );
 }
 
-void KWTextImage::load( QDomElement & formatElem )
+void KWTextImage::load( QDomElement & parentElem )
 {
     // <IMAGE>
-    QDomElement image = formatElem.namedItem( "IMAGE" ).toElement();
+    QDomElement image = parentElem.namedItem( "IMAGE" ).toElement();
     if ( !image.isNull() ) {
         // <FILENAME>
         QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();

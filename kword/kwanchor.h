@@ -34,10 +34,10 @@ class KWFrameSet;
 class KWAnchor : public KoTextCustomItem
 {
 public:
-    /** 
+    /**
      * Constructor.
      * @param textdoc the document this ancher will be one character of.
-     * @param frameset The frameset that is anchored. This frameset contains the content we are 
+     * @param frameset The frameset that is anchored. This frameset contains the content we are
               displaying.
      * @param frameNum  Which frame of the frameset (previos argument) is used for displaying.
      */
@@ -71,6 +71,7 @@ public:
     virtual KCommand * deleteCommand();
     virtual void setDeleted( bool b );
     virtual void save( QDomElement &formatElem );
+    virtual int typeId() const { return 6; }
 
 private:
     KWFrameSet * m_frameset; // the frameset that implements the content for this special char.

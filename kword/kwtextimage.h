@@ -53,6 +53,8 @@ public:
 
     // Save to XML
     virtual void save( QDomElement & formatElem );
+    virtual int typeId() const { return 2; }
+
     void load( QDomElement & formatElem );
 
 private:

@@ -254,11 +254,10 @@ void KWAnchor::setDeleted( bool b )
     KoTextCustomItem::setDeleted( b );
 }
 
-void KWAnchor::save( QDomElement &formatElem )
+void KWAnchor::save( QDomElement &parentElem )
 {
-    formatElem.setAttribute( "id", 6 ); // code for an anchor
-    QDomElement anchorElem = formatElem.ownerDocument().createElement( "ANCHOR" );
-    formatElem.appendChild( anchorElem );
+    QDomElement anchorElem = parentElem.ownerDocument().createElement( "ANCHOR" );
+    parentElem.appendChild( anchorElem );
     anchorElem.setAttribute( "type", "frameset" ); // the only possible value currently
     //KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
     // ## TODO save the frame number as well ? Only the first frame ? to be determined
