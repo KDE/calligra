@@ -226,7 +226,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       int i = 1;
 
       QString emptyLines;
-      for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow, ++i )
+      for ( int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow, ++i )
       {
         if ( i > step )
         {
@@ -237,7 +237,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
           
         QString separators;
         QString line;
-        for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
+        for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
         {
           exportCell( sheet, currentcolumn, currentrow, separators, line, csvDelimiter, textQuote );
         }
