@@ -90,8 +90,8 @@ KarbonPart::initDoc()
 
 	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, "application/x-karbon",
 										"*.karbon", i18n("Karbon14"), KoTemplateChooseDia::Everything, "karbon_template");
-	m_pageLayout.ptWidth = KoUnit::ptFromUnit( PG_A4_WIDTH, KoUnit::U_MM );
-	m_pageLayout.ptHeight = KoUnit::ptFromUnit( PG_A4_HEIGHT, KoUnit::U_MM );
+	m_doc.setWidth( KoUnit::ptFromUnit( PG_A4_WIDTH, KoUnit::U_MM ) );
+	m_doc.setHeight( KoUnit::ptFromUnit( PG_A4_HEIGHT, KoUnit::U_MM ) );
 	if( result == KoTemplateChooseDia::Template )
 	{
 		QFileInfo fileInfo( file );
@@ -156,14 +156,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 QDomDocument
 KarbonPart::saveXML()
 {
-//TODO help me!
-//	QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
-//	QDomElement me = doc.documentElement();
-
-
-	m_doc.save( me );
-
-	return doc;
+	return m_doc.saveXML();
 }
 
 void
