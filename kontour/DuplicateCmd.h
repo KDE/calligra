@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,28 +23,29 @@
 
 */
 
-#ifndef DuplicateCmd_h_
-#define DuplicateCmd_h_
+#ifndef __DuplicateCmd_h__
+#define __DuplicateCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
 class GDocument;
 class GObject;
 
-class DuplicateCmd : public Command {
+class DuplicateCmd : public Command
+{
 public:
-  DuplicateCmd (GDocument* doc);
-  ~DuplicateCmd ();
+  DuplicateCmd(GDocument* doc);
+  ~DuplicateCmd();
 
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
-  static void resetRepetition ();
-  static void setRepetitionOffset (float dx, float dy);
+  static void resetRepetition();
+  static void setRepetitionOffset(float dx, float dy);
 
 private:
-  GDocument* document;
-  QPtrList<GObject> objects, new_objects;
+  QPtrList<GObject> objects;
+  QPtrList<GObject> new_objects;
 
   static bool repeatCmd; // repeat command with given offsets
   static float repOffX, repOffY; // offset for repetition

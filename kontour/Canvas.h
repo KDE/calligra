@@ -50,7 +50,6 @@ public:
   int yOffset() const {return mYOffset; }
 
   void outlineMode(bool flag);
-  void paintFlag(bool flag);
 
   void updateBuf();
   void updateBuf(const QRect &rect);
@@ -97,6 +96,7 @@ private slots:
   void updateScrollBars();
   void scrollX(int v);
   void scrollY(int v);
+  void updateRegion(const KoRect &r);
 
 private:
   void propagateMouseEvent(QMouseEvent *e);
@@ -124,7 +124,6 @@ private:
   int mWidthH;
   int mHeightH;
 
-  bool mPaintFlag:1;
   bool mOutlineMode:1;
 
   double tmpHorizHelpline;

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,21 +23,20 @@
 
 */
 
-#include <DuplicateCmd.h>
+#include "DuplicateCmd.h"
 
 #include <klocale.h>
 
 #include <GDocument.h>
 #include "GPage.h"
 #include <GObject.h>
-#include <PStateManager.h>
 
 bool DuplicateCmd::repeatCmd = false;
 float DuplicateCmd::repOffX = 0.0;
 float DuplicateCmd::repOffY = 0.0;
 
-DuplicateCmd::DuplicateCmd (GDocument* doc)
-  : Command(i18n("Duplicate"))
+DuplicateCmd::DuplicateCmd(GDocument* doc):
+Command(i18n("Duplicate"))
 {
   document = doc;
   for (QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
@@ -44,7 +44,7 @@ DuplicateCmd::DuplicateCmd (GDocument* doc)
     GObject* o = *it;
     if(o->isA("GPart"))
       continue;
-    o->ref ();
+    o->ref();
     objects.append(o);
   }
 }

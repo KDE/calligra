@@ -1,8 +1,9 @@
 /* -*- C++ -*-
 
   $Id$
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -21,38 +22,25 @@
 
 */
 
-#include <GGroup.h>
+#include "GGroup.h"
+
 #include <qdom.h>
 #include <qpainter.h>
+
 #include <klocale.h>
 #include <kdebug.h>
-#include <iostream.h>
+
 #include "GDocument.h"
 
-void GGroup::restoreState (GOState* state) {
-  tMatrix = state->matrix;
-  iMatrix = tMatrix.invert ();
-  tmpMatrix = tMatrix;
-  //setFillInfo (state->fInfo);
-  //setOutlineInfo (state->oInfo);
-
-  updateRegion ();
+GGroup::GGroup():
+GObject()
+{
 }
 
-GGroup::GGroup (GDocument *doc)
-:GObject(doc)
+GGroup::GGroup(const QDomElement &element):
+GObject(element.namedItem("go").toElement())
 {
-   //connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(propagateProperties (GObject::Property, int)));
-}
-
-GGroup::GGroup (GDocument *doc, const QDomElement &element)
-:GObject(doc, element.namedItem("gobject").toElement())
-{
-
-   kdDebug(38000)<<"********** GGroup::GGroup()"<<endl;
-   //connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,SLOT(propagateProperties (GObject::Property, int)));
-
-    QDomElement child=element.firstChild().toElement();
+  QDomElement child = element.firstChild().toElement();
     for( ; !child.isNull(); child = child.nextSibling().toElement() ) {
         if(child.tagName()=="gobject")
             continue;
@@ -72,12 +60,13 @@ GGroup::GGroup (GDocument *doc, const QDomElement &element)
     }
 }
 
-GGroup::GGroup (const GGroup& obj) : GObject (obj)
+GGroup::GGroup(const GGroup &obj):
+GObject(obj)
 {
-    QPtrList<GObject> tmp=obj.getMembers();
-    for (GObject *o=tmp.first(); o!=0L; o=tmp.next())
+  QPtrList<GObject> tmp = obj.getMembers();
+  for(GObject *o=tmp.first(); o!=0L; o=tmp.next())
         members.append(o->copy());
-    calcBoundingBox ();
+  calcBoundingBox();
 }
 
 GGroup::~GGroup () {
@@ -177,6 +166,15 @@ QDomElement GGroup::writeToXml (QDomDocument &document) {
     for (GObject *o=members.first(); o!=0L; o=members.next())
         element.appendChild(o->writeToXml (document));
     return element;
+}
+void GGroup::restoreState (GOState* state) {
+  tMatrix = state->matrix;
+  iMatrix = tMatrix.invert ();
+  tmpMatrix = tMatrix;
+  //setFillInfo (state->fInfo);
+  //setOutlineInfo (state->oInfo);
+
+  updateRegion ();
 }
 
 #include "GGroup.moc"

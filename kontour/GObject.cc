@@ -26,9 +26,14 @@
 #include "GObject.h"
 
 #include <qdom.h>
+#include <kdebug.h>
+
+#include "GOval.h"
+#include "GRect.h"
 
 GObject::GObject()
 { 
+  rcount = 0;
   mLayer = 0L;
   sflag = false;
   inWork = false;
@@ -36,6 +41,7 @@ GObject::GObject()
 
 GObject::GObject(const QDomElement &element)
 {
+  rcount = 0;
   mLayer = 0L;
   sflag = false;
   inWork = false;
@@ -44,6 +50,7 @@ GObject::GObject(const QDomElement &element)
 
 GObject::GObject(const GObject& obj)
 {
+  rcount = 0;
   mLayer = obj.mLayer;
   sflag = false;
   inWork = false;
@@ -55,6 +62,20 @@ GObject::GObject(const GObject& obj)
 
 GObject::~GObject()
 {
+  kdDebug(38000) << "GObject::~GObject()" << endl;
+}
+
+void GObject::ref()
+{
+  rcount++;
+  kdDebug(38000) << "REF: " << rcount << endl;
+}
+
+void GObject::unref()
+{
+  if(--rcount == 0)
+    delete this;
+  kdDebug(38000) << "UNREF: " << rcount << endl;
 }
 
 void GObject::layer(GLayer *l)
@@ -116,12 +137,23 @@ void GObject::ttransform(const QWMatrix &m, bool update = false)
   
 bool GObject::contains(const KoPoint &p)
 {
+  kdDebug() << "GObject::contains" << endl;
   return box.contains(p);
 }
 
 bool GObject::intersects(const KoRect &r)
 {
   return r.intersects(box);
+}
+
+static GObject *objectFactory(const QDomElement &element)
+{
+  if(element.tagName() == "oval")
+    return new GOval(element);
+  else if(element.tagName() == "rect")
+    return new GRect(element);
+  else
+    return 0L;
 }
 
 QDomElement GObject::createMatrixElement(const QWMatrix &matrix, QDomDocument &document)
@@ -212,32 +244,6 @@ void GObject::invalidateClipRegion()
 }
 
 /*---------------
-GObject *GObject::objectFactory(const QDomElement &element, KIllustratorDocument *doc)
-{
-  if(element.tagName() == "polyline")
-    return new GPolyline(doc->gdoc(), element);
-  else if(element.tagName() == "ellipse")
-    return new GOval(doc->gdoc(), element);
-  else if(element.tagName() == "bezier")
-    return new GBezier(doc->gdoc(), element);
-  else if(element.tagName() == "rectangle")
-    return new GPolygon(doc->gdoc(), element, GPolygon::PK_Rectangle);
-  else if(element.tagName() == "polygon")
-    return new GPolygon(doc->gdoc(), element);
-  else if(element.tagName() == "clipart")
-    return new GClipart(doc->gdoc(), element);
-  else if(element.tagName() == "pixmap")
-    return new GPixmap(doc->gdoc(), element);
-  else if(element.tagName() == "path")
-    return new GCurve(doc->gdoc(), element);
-  else if(element.tagName() == "text")
-    return new GText(doc->gdoc(), element);
-  else if(element.tagName() == "group")
-    return new GGroup(doc->gdoc(), element);
-  else if(element.tagName() == "object")
-    return new GPart(doc->gdoc(), doc, element);
-  return 0L;
-}
 
 void GObject::invalidateClipRegion  () {
   if (gradientFill ())

@@ -32,24 +32,15 @@
 #include <kdebug.h>
 
 #include "kontour_global.h"
+#include "GDocument.h"
 #include "GObject.h"
 #include "GLayer.h"
 #include "units.h"
-
-/*#if defined(__FreeBSD__) || defined(__NetBSD__)
-#include <math.h>
-#else
-#include <values.h>
-#endif*/
 
 GPage::GPage(GDocument *aGDoc):
 mHandle(this)
 {
   mGDoc = aGDoc;
-//  connect(this, SIGNAL(wasModified(bool)),doc, SLOT(setModified(bool)));
-//  connect(this, SIGNAL(changed(const KoRect&)),doc, SLOT(emitChanged(const KoRect&)));
-//  connect(this, SIGNAL(changed()),doc, SLOT(emitChanged()));
-//  connect(this, SIGNAL(handleChanged()),doc, SLOT(emitHandleChanged()));
   mPageLayout.format = PG_DIN_A4;
   mPageLayout.orientation = PG_PORTRAIT;
   mPageLayout.mmWidth = PG_A4_WIDTH;
@@ -79,8 +70,6 @@ mHandle(this)
   active_layer->setEditable(true);
 
   selBoxIsValid = false;
-//  autoUpdate = true;
-//  emit changed ();
 }
 
 GPage::~GPage()
@@ -127,20 +116,20 @@ void GPage::pageLayout(const KoPageLayout &layout)
 //  emit sizeChanged ();
 }
 
-QDomElement GPage::saveToXml(QDomDocument &document)
+QDomElement GPage::saveToXml(QDomDocument &doc)
 {
   // Many formats missing. Switching to KoPageFormat::formatString/formatFromString
   // would be the best thing to do, but this would require some conversion code... (DF)
 /*  static const char* formats[] = {
     "a3", "a4", "a5", "us_letter", "us_legal", "screen", "custom"};
   static const char* orientations[] = {"portrait", "landscape"};
-
-  QDomElement page = document.createElement("page");
+*/
+  QDomElement page = doc.createElement("page");
 
   page.setAttribute("id", name());
-  page.setAttribute ("bgcolor", mBGColor.name());  //TODO
+//  page.setAttribute("bgcolor", mBGColor.name());  //TODO
 
-  QDomElement layout = document.createElement("layout");
+/*  QDomElement layout = document.createElement("layout");
   layout.setAttribute ("format", formats[mPageLayout.format]);
   layout.setAttribute ("orientation", orientations[mPageLayout.orientation]);
   layout.setAttribute ("width", mPageLayout.mmWidth);
@@ -149,21 +138,13 @@ QDomElement GPage::saveToXml(QDomDocument &document)
   layout.setAttribute ("tmargin", mPageLayout.mmTop);
   layout.setAttribute ("rmargin", mPageLayout.mmRight);
   layout.setAttribute ("bmargin", mPageLayout.mmBottom);
-  page.appendChild(layout);
+  page.appendChild(layout);*/
 
-  for (QPtrListIterator<GLayer> li(layers); li.current(); ++li)
+  for(QPtrListIterator<GLayer> li(layers); li.current(); ++li)
   {
     GLayer *l=(*li);
-
-    QDomElement layer;
-    layer=document.createElement("layer");
-    const QPtrList<GObject>& contents = l->objects ();
-    for (QPtrListIterator<GObject> oi(contents);oi.current(); ++oi)
-      layer.appendChild((*oi)->writeToXml (document));
-    page.appendChild(layer);
+    page.appendChild(l->saveToXml(doc));
   }
-  setModified (false);*/
-  QDomElement page = document.createElement("page");
   return page;
 }
 
@@ -276,7 +257,7 @@ unsigned int GPage::objectCount() const
 
 void GPage::insertObject(GObject *obj)
 {
-//  obj->ref ();
+  obj->ref();
   active_layer->insertObject(obj);
 //  connect(obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
 //  connect (obj, SIGNAL(changed(const KoRect&)), this, SLOT(objectChanged(const KoRect&)));
@@ -295,10 +276,9 @@ void GPage::deleteObject(GObject *obj)
     selected = obj->isSelected();
     if(selected)
       selection.removeRef(obj);
-    //setModified();
-    disconnect(obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-    disconnect(obj, SIGNAL(changed(const KoRect&)), this, SLOT(objectChanged(const KoRect&)));
     layer->deleteObject(obj);
+    obj->unref();
+    mGDoc->emitChanged(obj->boundingBox());
     if(selected)
     {
       selBoxIsValid = false;
@@ -313,21 +293,16 @@ void GPage::deleteObject(GObject *obj)
 
 unsigned int GPage::findIndexOfObject(GObject *obj)
 {
-//  assert(obj->layer() != 0L);
   return obj->layer()->findIndexOfObject(obj);
 }
 
 void GPage::insertObjectAtIndex(GObject *obj, unsigned int idx)
 {
-//  obj->ref();
+  obj->ref();
   GLayer *layer = obj->layer();
   if(layer == 0L)
     layer = active_layer;
   layer->insertObjectAtIndex (obj, idx);
-  connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-  connect (obj, SIGNAL(changed(const KoRect&)),
-           this, SLOT(objectChanged (const KoRect&)));
-//  setModified ();
   if (autoUpdate)
   {
     emit changed ();

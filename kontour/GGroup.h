@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,28 +23,27 @@
 
 */
 
-#ifndef GGroup_h_
-#define GGroup_h_
+#ifndef __GGroup_h__
+#define __GGroup_h__
 
-#include <GObject.h>
+#include "GObject.h"
 class GOState;
 class Coord;
 
 class GGroup : public GObject
 {
-   Q_OBJECT
+  Q_OBJECT
 public:
-  GGroup (GDocument* parent);
-  GGroup (GDocument* parent, const QDomElement &element);
-  GGroup (const GGroup& obj);
-  ~GGroup ();
+  GGroup();
+  GGroup(const QDomElement &element);
+  GGroup(const GGroup &obj);
+  ~GGroup();
+
+  void addObject(GObject *obj);
 
   virtual void restoreState (GOState* state);
 
-  void addObject (GObject* obj);
-
-  virtual void draw (QPainter& p, bool withBasePoints = false,
-                     bool outline = false, bool withEditMarks=true);
+  virtual void draw (QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks=true);
   virtual bool contains (const Coord& p);
 
   virtual QString typeName () const;

@@ -77,6 +77,9 @@ public:
    *
    */
   virtual ~GObject();
+
+  void ref();
+  void unref();
   
   /**
    *
@@ -208,6 +211,8 @@ public:
    */
   virtual GPath *convertToPath() const = 0;
 
+  static GObject *objectFactory(const QDomElement &element);
+
 signals:
   void deleted();
   void changed();
@@ -222,6 +227,8 @@ protected:
   void updateRegion(bool recalcBBox = true);
   
 protected:
+  unsigned int rcount;       // the reference counter
+
   GLayer *mLayer;            // the layer containing this object
   
   bool sflag:1;              // object is selected

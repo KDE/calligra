@@ -56,6 +56,7 @@ libkontourpart_la_SOURCES = \
 	ZoomTool.cc \
 	Handle.cc \
 	Command.cc \
+	DeleteCmd.cc \
 	CreateOvalCmd.cc \
 	CreateRectCmd.cc \
 	OptionsDialog.cc \

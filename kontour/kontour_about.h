@@ -40,8 +40,8 @@ KAboutData *newKontourAboutData()
                                          KAboutData::License_GPL,
                                          "(c) 1998-2001, The Kontour Team", 0,
 					 "http://www.koffice.org/kontour/");
-  aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
-  aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
+  aboutData->addAuthor("Kai-Uwe Sattler", "original author", "kus@iti.cs.uni-magdeburg.de");
+  aboutData->addAuthor("Igor Janssen", "current maintainer", "rm@linux.ru.net");
   aboutData->addAuthor("Alexander Neundorf", 0, "neundorf@kde.org");
   aboutData->addAuthor("Rob Buis", 0, "rwlbuis@wanadoo.nl");
   aboutData->addAuthor("Montel Laurent", 0, "lmontel@mandrakesoft.com");

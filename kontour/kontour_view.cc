@@ -55,7 +55,7 @@
 #include "ZoomTool.h"
 #include "LayerPanel.h"
 #include "koColorChooser.h"
-//#include "PluginManager.h"
+#include "DeleteCmd.h"
 
 KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc)
 :KoView(doc, parent, name)
@@ -74,8 +74,6 @@ KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc
   setupCanvas();
   setupPanels();
   readConfigAfter();
-
-  mCanvas->paintFlag(true);
 }
 
 KontourView::~KontourView()
@@ -559,6 +557,8 @@ void KontourView::slotDuplicate()
 
 void KontourView::slotDelete()
 {
+  DeleteCmd *cmd = new DeleteCmd(activeDocument());
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotSelectAll()

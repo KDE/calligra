@@ -36,7 +36,7 @@ class KontourDocument;
 class GPage;
 class QDomDocument;
 class QDomElement;
-
+class KoRect;
 
 class GDocument : public QObject
 {
@@ -130,6 +130,8 @@ public:
 
   // find page with name
   GPage *findPage(QString name);
+  
+  void emitChanged(const KoRect &r);
 
 public slots:
   void setModified(bool flag = true);
@@ -140,6 +142,7 @@ signals:
   void helplinesChanged();
   void pageChanged();                    // active page was changed
   void updateLayerView();
+  void changed(const KoRect &r);
 
 private slots:
   void changeCanvas();

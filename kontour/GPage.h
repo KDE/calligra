@@ -62,7 +62,7 @@ public:
 
   Handle &handle() {return mHandle; }
 
-  QDomElement saveToXml(QDomDocument &document);
+  QDomElement saveToXml(QDomDocument &doc);
   bool readFromXml(const QDomElement &page);
 
   /**

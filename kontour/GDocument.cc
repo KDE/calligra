@@ -192,50 +192,50 @@ QDomDocument GDocument::saveToXml()
 {
   QDomDocument document("kontour");
   document.appendChild(document.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-/*  QDomElement kontour = document.createElement("kontour");
+  QDomElement kontour = document.createElement("kontour");
   kontour.setAttribute("editor", "kontour 2.0");
-  kontour.setAttribute("mime", );
+  kontour.setAttribute("mime", "");
   kontour.setAttribute("version", "1");
   document.appendChild(kontour);
 
   QDomElement head = document.createElement("head");
-  head.setAttribute("currentpagenum", curPageNum);
+  head.setAttribute("cpn", mCurPageNum);
   kontour.appendChild(head);
 
   QDomElement grid = document.createElement("grid");
-  grid.setAttribute("dx", gridx);
-  grid.setAttribute("dy", gridy);
-  grid.setAttribute ("align", gridSnapIsOn ? 1 : 0);
-  grid.setAttribute ("show", gridIsOn ? 1 : 0);
-  grid.setAttribute ("color", mGridColor.name());
+  grid.setAttribute("dx", mXGrid);
+  grid.setAttribute("dy", mYGrid);
+  grid.setAttribute("align", mSnapToGrid ? 1 : 0);
+  grid.setAttribute("show", mShowGrid ? 1 : 0);
+  grid.setAttribute("color", mGridColor.name());
   head.appendChild(grid);
 
-  QDomElement helplines=document.createElement("helplines");
-  helplines.setAttribute ("align", helplinesSnapIsOn ? 1 : 0);
-  helplines.setAttribute ("show", helplinesAreOn ? 1 : 0);
+  QDomElement helplines = document.createElement("helplines");
+  helplines.setAttribute("align", mSnapToHelplines ? 1 : 0);
+  helplines.setAttribute("show", mShowHelplines ? 1 : 0);
   QValueList<double>::Iterator hi;
-  for(hi = hHelplines.begin(); hi != hHelplines.end(); ++hi)
+  for(hi = mHorizHelplines.begin(); hi != mHorizHelplines.end(); ++hi)
   {
-    QDomElement hl=document.createElement("hl");
-    hl.setAttribute ("pos", (*hi));
+    QDomElement hl = document.createElement("hl");
+    hl.setAttribute("pos", (*hi));
     helplines.appendChild(hl);
   }
-  for(hi = vHelplines.begin(); hi != vHelplines.end(); ++hi)
+  for(hi = mVertHelplines.begin(); hi != mVertHelplines.end(); ++hi)
   {
-    QDomElement vl=document.createElement("vl");
-    vl.setAttribute ("pos", (*hi));
+    QDomElement vl = document.createElement("vl");
+    vl.setAttribute("pos", (*hi));
     helplines.appendChild(vl);
   }
   grid.appendChild(helplines);
 
-  for (QPtrListIterator<GPage> pi(pages); pi.current(); ++pi)
+  for(QPtrListIterator<GPage> pi(pages); pi.current(); ++pi)
   {
     GPage *p = (*pi);
     QDomElement page;
     page = p->saveToXml(document);
-    killustrator.appendChild(page);
-  }*/
-  setModified(false);  //TODO need?
+    kontour.appendChild(page);
+  }
+  setModified(false);
   return document;
 }
 
@@ -378,6 +378,11 @@ GPage *GDocument::findPage(QString name)
     if(((GPage *)it)->name() == name)
       return (GPage *)it;
   return 0L;
+}
+
+void GDocument::emitChanged(const KoRect &r)
+{
+  emit changed(r);
 }
 
 void GDocument::setModified(bool flag)

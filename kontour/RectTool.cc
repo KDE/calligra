@@ -73,13 +73,11 @@ Tool(aId, tc)
 
 void RectTool::activate()
 {
-  kdDebug(38000) << "RectTool::activate()" << endl;
   state = S_Init;
 }
 
 void RectTool::deactivate()
 {
-  kdDebug(38000) << "RectTool::deactivate()" << endl;
 }
 
 void RectTool::processEvent(QEvent *e)

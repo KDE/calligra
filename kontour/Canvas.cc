@@ -53,12 +53,6 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
   vBar->setLineStep(30);
   hBar->setLineStep(30);
 
-//  vBar->setPageStep(50);
-//  hBar->setPageStep(50);
-
-//  mXCenter = (width() - mGDoc->xCanvas()) / 2;
-//  mYCenter = (height() - mGDoc->yCanvas()) / 2;
-
   mXOffset = (width() - mGDoc->xCanvas()) / 2;
   mYOffset = (height() - mGDoc->yCanvas()) / 2;
 
@@ -66,7 +60,6 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
   mHeightH = height() / 2;
 
   mOutlineMode = false;
-  mPaintFlag = false;
 
   tmpHorizHelpline = -1.0;
   tmpVertHelpline = -1.0;
@@ -74,12 +67,10 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
   hBar->setRange(-mGDoc->xCanvas(), mGDoc->xCanvas());
   vBar->setRange(-mGDoc->yCanvas(), mGDoc->yCanvas());
 
-  //these connections shall only work when caused by the user
   connect(hBar, SIGNAL(valueChanged(int)), SLOT(scrollX(int)));
   connect(vBar, SIGNAL(valueChanged(int)), SLOT(scrollY(int)));
 
-//  connect(document, SIGNAL(changed()), this, SLOT(repaint()));
-//  connect(document, SIGNAL(changed(const KoRect&)), this, SLOT(updateRegion(const KoRect&)));
+  connect(mGDoc, SIGNAL(changed(const KoRect &)), this, SLOT(updateRegion(const KoRect &)));
 
 //  connect(mGDoc, SIGNAL (sizeChanged ()), this, SLOT (docSizeChanged()));
   connect(mGDoc, SIGNAL(pageChanged()), this, SLOT(changePage()));
@@ -104,11 +95,6 @@ void Canvas::outlineMode(bool flag)
     mOutlineMode = flag;
     repaint();
   }
-}
-
-void Canvas::paintFlag(bool flag)
-{
-  mPaintFlag = flag;
 }
 
 void Canvas::updateBuf()
@@ -309,12 +295,6 @@ void Canvas::addHelpline(int x, int y, bool horizH)
 
 bool Canvas::eventFilter(QObject *o, QEvent *e)
 {
-  if(e->type() == QEvent::Paint)
-  {
-    if(mPaintFlag)
-      paintEvent((QPaintEvent *)e);
-    return true;
-  }
   if(e->type() == QEvent::KeyPress)
   {
     QKeyEvent *ke = (QKeyEvent *)e;
@@ -339,7 +319,6 @@ bool Canvas::eventFilter(QObject *o, QEvent *e)
 
 void Canvas::resizeEvent(QResizeEvent *)
 {
-  kdDebug() << "RESIZE EVENT" << endl;
   buffer->resize(size());
   hBar->setPageStep(width());
   vBar->setPageStep(height());
@@ -357,7 +336,6 @@ void Canvas::resizeEvent(QResizeEvent *)
 
 void Canvas::paintEvent(QPaintEvent *e)
 {
-//  kdDebug() << "PAINT EVENT" << endl;
   const QRect &rect = e->rect();
   updateBuf(rect);
   bitBlt(this, rect.x(), rect.y(), buffer, rect.x(), rect.y(), rect.width(), rect.height());
@@ -389,8 +367,8 @@ void Canvas::mouseMoveEvent(QMouseEvent *e)
 
 void Canvas::keyPressEvent(QKeyEvent* e)
 {
-//   if (toolController)
-//      toolController->delegateEvent (e, mGDoc, this);
+  if(mView->toolController())
+    mView->toolController()->delegateEvent(e);
 }
 
 void Canvas::changePage()
@@ -404,7 +382,6 @@ void Canvas::changePage()
 
 void Canvas::changeZoomFactor(double scale)
 {
-  kdDebug() << "change zoom factor: scale=" << scale << endl;
   mXOffset = mWidthH - static_cast<int>(scale * (mWidthH - mXOffset));
   mYOffset = mHeightH - static_cast<int>(scale * (mHeightH - mYOffset));
   repaint();
@@ -432,6 +409,18 @@ void Canvas::scrollY(int v)
   repaint();
 }
 
+void Canvas::updateRegion(const KoRect &r)
+{
+  int x = static_cast<int>(r.x() + mXOffset);
+  int y = static_cast<int>(r.y() + mYOffset);
+  int w = static_cast<int>(r.width() * zoomFactor());
+  int h = static_cast<int>(r.height() * zoomFactor());
+  kdDebug(38000) << "update: x=" << x << " y=" << y << " w=" << w << " h=" << h <<endl;
+  QRect rr(x, y, w, h);
+  updateBuf(rr);
+  repaint(rr);
+}
+
 void Canvas::propagateMouseEvent(QMouseEvent *e)
 {
   emit mousePositionChanged(e->x(), e->y());
@@ -448,13 +437,13 @@ void Canvas::propagateMouseEvent(QMouseEvent *e)
     }
     else
     {
-      // pop up menu for the current selection
+      /* pop up menu for the current selection */
       emit rightButtonAtSelectionClicked(e->x(), e->y());
     }
     return;
   }
   if(mView->toolController())
-    //the tool controller processes the event
+    /* the tool controller processes the event */
     mView->toolController()->delegateEvent(e);
 }
 
@@ -524,7 +513,7 @@ void Canvas::drawHelplines(QPainter &p, const QRect &rect)
   p.restore ();
 }
 
-double Canvas::snapXPositionToGrid (double pos)
+double Canvas::snapXPositionToGrid(double pos)
 {
 /*  bool snap = false;
 

@@ -29,7 +29,6 @@
 
 #include <ktoolbar.h>
 #include <ktoolbarbutton.h>
-#include <kdebug.h>
 
 #include "ToolController.h"
 
@@ -44,7 +43,6 @@ ToolSelectAction::ToolSelectAction(QObject* parent, const char* name)
 
 void ToolSelectAction::insert( KAction* a, int index )
 {
-  kdDebug() << "INSERT! i=" << index << endl;
   m_count++;
   KActionMenu::insert(a,index);
   if (!m_init) {
@@ -90,34 +88,36 @@ void ToolSelectAction::slotActivated()
 {
   emit activated();
 
-  if (m_def) {
+  if(m_def)
+  {
     m_actSelf = true;
-    if ( m_def->inherits("KToggleAction") ) {
-      KToggleAction* ta = (KToggleAction*)m_def;
+    if( m_def->inherits("KToggleAction"))
+    {
+      KToggleAction *ta = (KToggleAction*)m_def;
       ta->setChecked(false);
       ta->activate();
       ta->setChecked(true);
-    } else {
-      m_def->activate();
     }
+    else
+      m_def->activate();
     m_actSelf = false;
   }
 }
 
 void ToolSelectAction::childActivated()
 {
-  kdDebug() << "CHILD ACTIVATED!" << endl;
   setDefaultAction((KAction*)sender());
-  if (!m_actSelf)
+  if(!m_actSelf)
     activate();
 }
 
 void ToolSelectAction::setToggleState( bool state )
 {
   int len = containerCount();
-  for( int id = 0; id < len; ++id ) {
-    KToolBar* w = (KToolBar*)container( id );
-    KToolBarButton* b = w->getButton(itemId(id));
+  for(int id = 0; id < len; ++id)
+  {
+    KToolBar *w = (KToolBar*)container(id);
+    KToolBarButton *b = w->getButton(itemId(id));
     b->on(state);
   }
 }

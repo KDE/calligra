@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,48 +23,52 @@
 
 */
 
-#include <DeleteCmd.h>
+#include "DeleteCmd.h"
 
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GObject.h>
+#include "GDocument.h"
 #include "GPage.h"
+#include "GObject.h"
 
-DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
-  document = doc;
+DeleteCmd::DeleteCmd(GDocument *aGDoc):
+Command(aGDoc, i18n("Delete"))
+{
   objects.setAutoDelete(true);
-  for(QPtrListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
-      MyPair *p=new MyPair;
-      p->o=*it;
-      p->o->ref ();
-      // store the old position of the object
-      p->pos = doc->activePage()->findIndexOfObject (p->o);
-      objects.append(p);
+  for(QPtrListIterator<GObject> it(document()->activePage()->getSelection()); it.current(); ++it)
+  {
+    MyPair *p = new MyPair;
+    p->o=*it;
+    p->o->ref();
+    /* store the old position of the object */
+    p->pos = document()->activePage()->findIndexOfObject(p->o);
+    objects.append(p);
   }
 }
 
-DeleteCmd::~DeleteCmd () {
-    for (MyPair *p=objects.first(); p!=0; p=objects.next())
-        p->o->unref ();
+DeleteCmd::~DeleteCmd()
+{
+  for(MyPair *p = objects.first(); p != 0; p = objects.next())
+    p->o->unref();
 }
 
-void DeleteCmd::execute () {
-    document->setAutoUpdate (false);
-    for (MyPair *p=objects.first(); p!=0L; p=objects.next())
-        document->activePage()->deleteObject (p->o);
-    document->setAutoUpdate (true);
+void DeleteCmd::execute()
+{
+//  document()->setAutoUpdate(false);
+  for(MyPair *p = objects.first(); p != 0L; p = objects.next())
+    document()->activePage()->deleteObject(p->o);
+//  document()->setAutoUpdate(true);
 }
 
-void DeleteCmd::unexecute () {
-  document->setAutoUpdate (false);
-  document->activePage()->unselectAllObjects ();
-  for (MyPair *p=objects.first(); p!=0L; p=objects.next()) {
-    // insert the object at the old position
-    p->o->ref ();
-    document->activePage()->insertObjectAtIndex (p->o, p->pos);
-    document->activePage()->selectObject (p->o);
+void DeleteCmd::unexecute()
+{
+//  document()->setAutoUpdate(false);
+  document()->activePage()->unselectAllObjects();
+  for(MyPair *p = objects.first(); p != 0L; p = objects.next())
+  {
+    /* insert the object at the old position */
+    document()->activePage()->insertObjectAtIndex(p->o, p->pos);
+    document()->activePage()->selectObject(p->o);
   }
-  document->setAutoUpdate (true);
+//  document()->setAutoUpdate(true);
 }
-

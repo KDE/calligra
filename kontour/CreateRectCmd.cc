@@ -35,13 +35,13 @@ CreateRectCmd::CreateRectCmd(GDocument *aGDoc, GRect *obj):
 Command(aGDoc, i18n("Create Rectangle"))
 {
   object = obj;
-//  object->ref();
+  object->ref();
 }
 
 CreateRectCmd::~CreateRectCmd()
 {
-//  if(object)
-//    object->unref();
+  if(object)
+    object->unref();
 }
 
 void CreateRectCmd::execute()
