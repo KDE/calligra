@@ -401,6 +401,7 @@ void KexiProperty::addChild(KexiProperty *prop)
 	}
 	m_children_dict->insert(prop->name(), prop);
 	m_children_list->append( prop );
+	prop->m_parent = this;
 }
 
 bool KexiProperty::isVisible() const

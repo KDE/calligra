@@ -91,7 +91,7 @@ class KEXICORE_EXPORT KexiProperty
 		 "Rectangle" has 4 subproperties: x, y, width, height. 
 		 Any change made to any subproperty is transferred to its parent property (if present),
 		 So both property and its parent becomes changed. */
-		KexiProperty *parent() const;
+		KexiProperty *parent() const { return m_parent; }
 
 		/*! \return a map of all children for this property, or NULL of there 
 		 is no children for this property */
