@@ -21,9 +21,9 @@ KPythonModule::KPythonModule( const char *_name )
   PyDict_SetItemString( m_pDict, "__builtins__", PyEval_GetBuiltins() );
 }
 
-int KPythonModule::runCodeStr( StringModes mode, char *code, char *resfmt, void *cresult )
+int KPythonModule::runCodeStr( StringModes mode, const char *code, char *resfmt, void *cresult )
 {
-    PyObject *presult = PyRun_String( code, ( mode == PY_EXPRESSION ? eval_input : file_input ),
+    PyObject *presult = PyRun_String( const_cast<char*>(code), ( mode == PY_EXPRESSION ? eval_input : file_input ),
 				      m_pDict, m_pDict );
     
     if ( mode == PY_STATEMENT )

@@ -264,7 +264,7 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
 
     QString erg = "";
 
-    char *p = m_strText.data();
+    const char *p = m_strText.data();
     if ( p == 0L )
 	return QString();
 
@@ -324,7 +324,7 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
 		}
 		if ( isdigit( *p ) )
 		{
-		    char *p3 = p;
+		    const char *p3 = p;
 		    int row = atoi( p );
 		    while ( *p != 0 && isdigit( *p ) ) p++;
 		    // Is it a table

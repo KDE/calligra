@@ -40,8 +40,8 @@ public:
     KPythonModule( const char *_name );
     ~KPythonModule() { }
     
-    int runCodeStr( StringModes mode, char *code, char *resfmt = NULL, void *cresult = NULL );
-    int convertResult( PyObject *presult, char *resFormat, void *resTarget );
+    int runCodeStr( StringModes mode, const char *code, char *resfmt = NULL, void *cresult = NULL );
+    int convertResult( PyObject *presult, const char *resFormat, void *resTarget );
     int runFile( const char *_filename );
     void registerMethods( struct PyMethodDef* _methods );
 
