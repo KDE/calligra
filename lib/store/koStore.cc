@@ -200,7 +200,8 @@ void KoStore::close()
 
     kdDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
 		   << m_iSize << endl;
-    m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() );
+    if ( !m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() ) )
+        kdWarning( s_area ) << "Failed to write " << m_sName << endl;
     m_byteArray.resize( 0 ); // save memory
   }
 
