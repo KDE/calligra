@@ -13,7 +13,7 @@
     <entry key="245" number="" name="" class="ORDINARY"/>
     <entry key="244" number="" name="" class="ORDINARY"/>
     <entry key="243" number="" name="" class="ORDINARY"/>
-    <entry key="242" number="" name="" class="ORDINARY"/>
+    <entry key="242" number="0x222B" name="\int" class="ORDINARY"/>
     <entry key="241" number="" name="" class="ORDINARY"/>
     <entry key="240" number="" name="" class="ORDINARY"/>
     <entry key="239" number="" name="" class="ORDINARY"/>
@@ -31,7 +31,7 @@
     <entry key="227" number="" name="" class="ORDINARY"/>
     <entry key="226" number="" name="" class="ORDINARY"/>
     <entry key="225" number="" name="" class="ORDINARY"/>
-    <entry key="224" number="" name="\Diamond" class="ORDINARY"/>
+    <entry key="224" number="0x2662" name="\Diamond" class="ORDINARY"/>
     <entry key="223" number="0x21D3" name="\Downarrow" class="ORDINARY"/>
     <entry key="222" number="0x21D2" name="\Rightarrow" class="ORDINARY"/>
     <entry key="221" number="0x21D1" name="\Uparrow" class="ORDINARY"/>
@@ -144,7 +144,7 @@
     <entry key="114" number="0x03C1" name="\rho" class="ORDINARY"/>
     <entry key="113" number="0x03B8" name="\theta" class="ORDINARY"/>
     <entry key="112" number="0x03C0" name="\pi" class="ORDINARY"/>
-    <entry key="111" number="0x03BF" name="o" class="ORDINARY"/>
+    <entry key="111" number="0x03BF" name="" class="ORDINARY"/>
     <entry key="110" number="0x03BD" name="\nu" class="ORDINARY"/>
     <entry key="109" number="0x03BC" name="\mu" class="ORDINARY"/>
     <entry key="108" number="0x03BB" name="\lambda" class="ORDINARY"/>
@@ -185,7 +185,7 @@
     <entry key="73" number="0x0399" name="" class="ORDINARY"/>
     <entry key="72" number="0x0397" name="" class="ORDINARY"/>
     <entry key="71" number="0x0393" name="\Gamma" class="ORDINARY"/>
-    <entry key="70" number="0x03A6" name="" class="ORDINARY"/>
+    <entry key="70" number="0x03A6" name="\Phi" class="ORDINARY"/>
     <entry key="69" number="0x0395" name="" class="ORDINARY"/>
     <entry key="68" number="0x0394" name="\Delta" class="ORDINARY"/>
     <entry key="67" number="0x03A7" name="" class="ORDINARY"/>
@@ -218,7 +218,7 @@
     <entry key="40" number="" name="" class="ORDINARY"/>
     <entry key="39" number="0x220B" name="\ni" class="RELATION"/>
     <entry key="38" number="" name="" class="ORDINARY"/>
-    <entry key="37" number="" name="%" class="ORDINARY"/>
+    <entry key="37" number="" name="" class="ORDINARY"/>
     <entry key="36" number="0x2203" name="\exists" class="ORDINARY"/>
     <entry key="35" number="" name="\sharp" class="ORDINARY"/>
     <entry key="34" number="0x2200" name="\forall" class="ORDINARY"/>

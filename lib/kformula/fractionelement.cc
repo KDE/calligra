@@ -411,16 +411,12 @@ bool FractionElement::readContentFromDom(QDomNode& node)
 
 QString FractionElement::toLatex()
 {
-    QString num,den,fra;
-    den=denominator->toLatex();
-    num=numerator->toLatex();
     if ( withLine ) {
-        fra="\\frac{"+num+"}{"+den+"}";
+        return "\\frac" + numerator->toLatex() + denominator->toLatex();
     }
     else {
-        fra = "{" + num + "\\atop " + den + "}";
+        return "{" + numerator->toLatex() + "\\atop " + denominator->toLatex() + "}";
     }
-    return fra;
 }
 
 KFORMULA_NAMESPACE_END

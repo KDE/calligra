@@ -1,5 +1,5 @@
 //
-// Created: Fri Jun  8 19:00:18 2001
+// Created: Sun Jun 10 12:03:04 2001
 //      by: gensymbolfontmap.py
 //    from: symbol.xml
 //
@@ -9,6 +9,7 @@ char symbolFontMap_varpi[] = "\\varpi";
 char symbolFontMap_phi[] = "\\phi";
 char symbolFontMap_Upsilon[] = "\\Upsilon";
 char symbolFontMap_vartheta[] = "\\vartheta";
+char symbolFontMap_int[] = "\\int";
 char symbolFontMap_cup[] = "\\cup";
 char symbolFontMap_Gamma[] = "\\Gamma";
 char symbolFontMap_Delta[] = "\\Delta";
@@ -21,6 +22,7 @@ char symbolFontMap_Omega[] = "\\Omega";
 char symbolFontMap_Psi[] = "\\Psi";
 char symbolFontMap_Pi[] = "\\Pi";
 char symbolFontMap_Sigma[] = "\\Sigma";
+char symbolFontMap_Phi[] = "\\Phi";
 char symbolFontMap_times[] = "\\times";
 char symbolFontMap_Lambda[] = "\\Lambda";
 char symbolFontMap_Xi[] = "\\Xi";
@@ -58,6 +60,7 @@ char symbolFontMap_sum[] = "\\sum";
 char symbolFontMap_approx[] = "\\approx";
 char symbolFontMap_cdot[] = "\\cdot";
 char symbolFontMap_clubsuit[] = "\\clubsuit";
+char symbolFontMap_Diamond[] = "\\Diamond";
 char symbolFontMap_prod[] = "\\prod";
 char symbolFontMap_diamondsuit[] = "\\diamondsuit";
 char symbolFontMap_heartsuit[] = "\\heartsuit";
@@ -90,7 +93,6 @@ char symbolFontMap_lambda[] = "\\lambda";
 char symbolFontMap_mu[] = "\\mu";
 char symbolFontMap_nu[] = "\\nu";
 char symbolFontMap_xi[] = "\\xi";
-char symbolFontMap_o[] = "o";
 char symbolFontMap_supseteq[] = "\\supseteq";
 char symbolFontMap_subseteq[] = "\\subseteq";
 char symbolFontMap_kappa[] = "\\kappa";
@@ -103,6 +105,7 @@ struct { int unicode; uchar pos; CharClass cl; char* latexName; } symbolFontMap[
     { 0x03D2, 161, ORDINARY, symbolFontMap_Upsilon },
     { 0x03D1, 74, ORDINARY, symbolFontMap_vartheta },
     { 0x0399, 73, ORDINARY, 0 },
+    { 0x222B, 242, ORDINARY, symbolFontMap_int },
     { 0x222A, 200, BINOP, symbolFontMap_cup },
     { 0x0391, 65, ORDINARY, 0 },
     { 0x21B5, 191, ORDINARY, 0 },
@@ -124,7 +127,7 @@ struct { int unicode; uchar pos; CharClass cl; char* latexName; } symbolFontMap[
     { 0x03A5, 85, ORDINARY, 0 },
     { 0x03A4, 84, ORDINARY, 0 },
     { 0x03A7, 67, ORDINARY, 0 },
-    { 0x03A6, 70, ORDINARY, 0 },
+    { 0x03A6, 70, ORDINARY, symbolFontMap_Phi },
     { 0x039A, 75, ORDINARY, 0 },
     { 0x00D7, 180, BINOP, symbolFontMap_times },
     { 0x039C, 77, ORDINARY, 0 },
@@ -168,6 +171,7 @@ struct { int unicode; uchar pos; CharClass cl; char* latexName; } symbolFontMap[
     { 0x2248, 187, RELATION, symbolFontMap_approx },
     { 0x2219, 215, BINOP, symbolFontMap_cdot },
     { 0x2663, 167, ORDINARY, symbolFontMap_clubsuit },
+    { 0x2662, 224, ORDINARY, symbolFontMap_Diamond },
     { 0x220F, 213, ORDINARY, symbolFontMap_prod },
     { 0x2666, 168, ORDINARY, symbolFontMap_diamondsuit },
     { 0x2665, 169, ORDINARY, symbolFontMap_heartsuit },
@@ -203,7 +207,7 @@ struct { int unicode; uchar pos; CharClass cl; char* latexName; } symbolFontMap[
     { 0x03BC, 109, ORDINARY, symbolFontMap_mu },
     { 0x03BD, 110, ORDINARY, symbolFontMap_nu },
     { 0x03BE, 120, ORDINARY, symbolFontMap_xi },
-    { 0x03BF, 111, ORDINARY, symbolFontMap_o },
+    { 0x03BF, 111, ORDINARY, 0 },
     { 0x2284, 203, RELATION, 0 },
     { 0x2287, 202, RELATION, symbolFontMap_supseteq },
     { 0x2286, 205, RELATION, symbolFontMap_subseteq },

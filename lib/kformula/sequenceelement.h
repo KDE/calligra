@@ -308,6 +308,11 @@ private:
     void parse();
 
     /**
+     * @returns whether the child is the first element of its token.
+     */
+    bool isFirstOfToken( BasicElement* child );
+
+    /**
      * Removes the children at pos and appends it to the list.
      */
     void removeChild(QList<BasicElement>& removedChildren, int pos);

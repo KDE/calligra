@@ -243,8 +243,8 @@ bool TextElement::readContentFromDom(QDomNode& node)
 
 QString TextElement::toLatex()
 {
-    if (isSymbol()) {
-        return getSymbolTable().name(character);
+    if ( isSymbol() ) {
+        return getSymbolTable().name( character ) + " ";
     }
     else {
         return character;

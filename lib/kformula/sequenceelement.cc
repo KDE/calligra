@@ -148,10 +148,8 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
             BasicElement* child = it.current();
 
             double spaceBefore = 0;
-            if ( child->getElementType() != 0 ) {
-                if ( isChildNumber( child->getElementType()->start(), child ) ) {
-                    spaceBefore = child->getElementType()->getSpaceBefore( context, tstyle );
-                }
+            if ( isFirstOfToken( child ) ) {
+                spaceBefore = child->getElementType()->getSpaceBefore( context, tstyle );
             }
 
             if ( !child->isInvisible() ) {
@@ -917,20 +915,26 @@ void SequenceElement::parse()
     //parseTree->output();
 }
 
+
+bool SequenceElement::isFirstOfToken( BasicElement* child )
+{
+    return ( child->getElementType() != 0 ) && isChildNumber( child->getElementType()->start(), child );
+}
+
+
 QString SequenceElement::toLatex()
 {
     QString content;
-    if (!isEmpty()) {
-
-        uint count = children.count();
-	if(count > 1) content+="{";
-        for (uint i = 0; i < count; i++) {
-            BasicElement* child = children.at(i);
-            content+=child->toLatex();
-	}
-    	if(count > 1) content+="}";
-
+    content += "{";
+    uint count = children.count();
+    for ( uint i = 0; i < count; i++ ) {
+        BasicElement* child = children.at( i );
+        if ( isFirstOfToken( child ) ) {
+            content += " ";
+        }
+        content += child->toLatex();
     }
+    content += "}";
     return content;
 }
 
