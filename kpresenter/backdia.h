@@ -90,8 +90,7 @@ public:
 
 protected:
     void showEvent( QShowEvent *e );
-    /// Common code for @ref BackDia::selectPic and @ref BackDia::selectClip
-    QString selectPicture( const QString& pattern );
+    QString selectPicture( const QStringList& mimetypes );
 private:
     QLabel *lPicName, *picPreview;
     QCheckBox *unbalanced;

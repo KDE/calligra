@@ -65,12 +65,9 @@ public:
     void setBackYFactor( int _yfactor )
     { removeGradient(); yfactor = _yfactor; }
     void setBackPixmap( const QString &_filename, const QDateTime &_lastModified );
-    /// set the back pixmap to a new KoPicture
-    void setBackPicture( const KoPicture& pixmap );
-    inline void setBackPicture ( const KoPictureKey& key )
-    {
-        setBackPixmap(key.filename(), key.lastModified());
-    }
+    /// set the back picture to a new KoPicture
+    void setBackPicture( const KoPicture& picture );
+    void setBackPicture ( const KoPictureKey& key );
     void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
     void setPageTimer( int _pageTimer )

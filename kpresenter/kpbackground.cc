@@ -65,27 +65,20 @@ void KPBackGround::setBackPixmap( const QString &_filename, const QDateTime &_la
     if ( backType != BT_PICTURE )
         return;
     backPicture = getPictureCollection()->findOrLoad( _filename, _lastModified );
-#if 0
-    switch ( backView )
-    {
-    case BV_ZOOM: pixSize = QSize( ext.width(), ext.height() );
-        break;
-    case BV_TILED: case BV_CENTER: pixSize = orig_size.toQSize();
-        break;
-    }
-
-    if ( pixSize == orig_size.toQSize() )
-        pixSize = backPicture.size();
-
-    backPicture = backPicture.scale( pixSize );
-#endif
 }
 
-void KPBackGround::setBackPicture( const KoPicture& pixmap )
+void KPBackGround::setBackPicture( const KoPicture& picture )
 {
     if ( backType != BT_PICTURE )
         return;
-    backPicture = getPictureCollection()->insertPicture(pixmap);
+    backPicture = getPictureCollection()->insertPicture(picture);
+}
+
+void KPBackGround::setBackPicture ( const KoPictureKey& key )
+{
+    if ( backType != BT_PICTURE )
+        return;
+    backPicture = getPictureCollection()->findOrLoad(key.filename(), key.lastModified() );
 }
 
 void KPBackGround::draw( QPainter *_painter, const KoZoomHandler* zoomHandler,
@@ -110,36 +103,15 @@ void KPBackGround::draw( QPainter *_painter, const QSize& ext, const QRect& crec
     case BT_CLIPART:
     case BT_PICTURE:
     {
-        if ( backPicture.isClipartAsKOffice1Dot1() )
-        {
+        if ( backView == BV_CENTER )
             drawBackColor( _painter, ext, crect );
-            if ( !backPicture.isNull() )
-            {
-#if 1
-                // TODO: verify!
-                backPicture.draw(*_painter, 0, 0, ext.width(), ext.height(), 0, 0, 0, 0);
-#else
-                _painter->save();
-                QRect br = backPicture.picture()->boundingRect();
-                if ( br.width() && br.height() )
-                    _painter->scale( (double)ext.width() / (double)br.width(), (double)ext.height() / (double)br.height() );
-                _painter->drawPicture( *backPicture.picture() );
-                _painter->restore();
-#endif
-            }
-        }
-        else
-        {
-            if ( backView == BV_CENTER )
-                drawBackColor( _painter, ext, crect );
-            drawBackPix( _painter, ext, crect );
-        }
+        drawBackPix( _painter, ext, crect );
         break;
     }
     default:
         break;
     }
-    
+
     if ( _drawBorders )
         drawBorders( _painter, ext, crect );
 
@@ -435,8 +407,8 @@ void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QR
         //kdDebug(33001) << "KPBackGround::drawBackColor (filling " << DEBUGRECT(crect) << ")" << endl;
         _painter->fillRect( crect, QBrush( getBackColor1() ) );
     }
-    else if ( backType == BT_COLOR || backType == BT_CLIPART ||
-              backType == BT_PICTURE && backView == BV_CENTER ) {
+    else if ( backType == BT_COLOR || ( backType == BT_CLIPART ||
+              backType == BT_PICTURE ) && backView == BV_CENTER ) {
         // Draw gradient
         if ( !gradientPixmap || gradientPixmap->size() != ext )
             generateGradient( ext );

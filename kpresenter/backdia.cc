@@ -378,18 +378,19 @@ int BackDia::getBackYFactor() const
 
 
 /*=============================================================*/
-QString BackDia::selectPicture( const QString& pattern )
+QString BackDia::selectPicture( const QStringList& mimetypes )
 {
     KURL url;
 
-    KFileDialog fd( QString::null, pattern, 0, 0, true );
+    KFileDialog fd( QString::null, QString::null, 0, 0, true );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
+    fd.setMimeFilter( mimetypes );
 
     if ( fd.exec() == QDialog::Accepted )
     {
         KURL url = fd.selectedURL();
         QString strTemp = QString::null;
-        // ### FIXME: Problem: for a remote file, we have no typical image/clipart extension for the temp file name.
+        // ### FIXME: Problem: for a remote file, we have not any typical picture extension for the temp file name.
         if (!KIO::NetAccess::download( url, strTemp ))
             return QString::null;
         lPicName->setText( url.prettyURL() );
@@ -402,15 +403,18 @@ QString BackDia::selectPicture( const QString& pattern )
 /*=============================================================*/
 void BackDia::selectPic()
 {
-    QString strResult=selectPicture(
-        KImageIO::pattern( KImageIO::Reading ) +  KoPictureFilePreview::clipartPattern() );
+    QStringList mimetypes;
+    mimetypes += KoPictureFilePreview::clipartMimeTypes();
+    mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
+
+    QString strResult=selectPicture( mimetypes );
     if ( strResult.isEmpty() )
         return;
 
     backCombo->setCurrentItem( 1 );
     chosenPic=strResult;
     picChanged = true;
-    picLastModified = QDateTime();
+    picLastModified = QDateTime(QDate(1970,1,1));
     updateConfiguration();
 }
 
