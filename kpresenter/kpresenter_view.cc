@@ -1944,147 +1944,37 @@ void KPresenterView::brushChosen()
 /*======================= align object left =====================*/
 void KPresenterView::extraAlignObjLeft()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) left" ));
-    bool createMacro=false;
-    KCommand *cmd=0L;
-    cmd=m_canvas->activePage()->alignObjsLeft();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->alignObjsLeft();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        m_pKPresenterDoc->addCommand(macro);
-    else
-        delete macro;
+    m_canvas->alignObjLeft();
 }
 
 /*======================= align object center h =================*/
 void KPresenterView::extraAlignObjCenterH()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) centered (horizontal)"));
-    bool createMacro=false;
-    KCommand *cmd=0L;
-    cmd=m_canvas->activePage()->alignObjsCenterH();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->alignObjsCenterH();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        m_pKPresenterDoc->addCommand(macro);
-    else
-        delete macro;
-
+    m_canvas->alignObjCenterH();
 }
 
 /*======================= align object right ====================*/
 void KPresenterView::extraAlignObjRight()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) right" ));
-    bool createMacro=false;
-    KCommand *cmd=0L;
-    cmd=m_canvas->activePage()->alignObjsRight();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->alignObjsRight();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        m_pKPresenterDoc->addCommand(macro);
-    else
-        delete macro;
+    m_canvas->alignObjRight();
 }
 
 /*======================= align object top ======================*/
 void KPresenterView::extraAlignObjTop()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) top" ));
-    bool createMacro=false;
-    KCommand *cmd=0L;
-    cmd=m_canvas->activePage()->alignObjsTop();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->alignObjsTop();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        m_pKPresenterDoc->addCommand(macro);
-    else
-        delete macro;
+    m_canvas->alignObjTop();
 }
 
 /*======================= align object center v =================*/
 void KPresenterView::extraAlignObjCenterV()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) center / vertical" ));
-    bool createMacro=false;
-    KCommand *cmd=0L;
-    cmd=m_canvas->activePage()->alignObjsCenterV();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->alignObjsCenterV();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        m_pKPresenterDoc->addCommand(macro);
-    else
-        delete macro;
-
+    m_canvas->alignObjCenterV();
 }
 
 /*======================= align object bottom ===================*/
 void KPresenterView::extraAlignObjBottom()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) bottom" ));
-    bool createMacro=false;
-    KCommand *cmd=0L;
-    cmd=m_canvas->activePage()->alignObjsBottom();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->alignObjsBottom();
-    if(cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        m_pKPresenterDoc->addCommand(macro);
-    else
-        delete macro;
+    m_canvas->alignObjBottom();
 }
 
 /*===============================================================*/

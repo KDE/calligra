@@ -25,7 +25,7 @@
 #include <global.h>
 #include <koPoint.h>
 #include "kpbackground.h"
-
+#include <koRect.h>
 class KPTextView;
 class KPObject;
 class KPresenterDoc;
@@ -157,12 +157,12 @@ public:
     void insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
 
-    KCommand *alignObjsLeft();
-    KCommand *alignObjsCenterH();
-    KCommand *alignObjsRight();
-    KCommand *alignObjsTop();
-    KCommand *alignObjsCenterV();
-    KCommand *alignObjsBottom();
+    KCommand *alignObjsLeft(const KoRect &rect = KoRect());
+    KCommand *alignObjsCenterH(const KoRect &rect= KoRect());
+    KCommand *alignObjsRight(const KoRect &rect= KoRect());
+    KCommand *alignObjsTop(const KoRect &rect= KoRect());
+    KCommand *alignObjsCenterV(const KoRect &rect= KoRect());
+    KCommand *alignObjsBottom(const KoRect &rect= KoRect());
 
     int getPenBrushFlags(QPtrList<KPObject>list );
     KCommand* setPieSettings( PieType pieType, int angle, int len );

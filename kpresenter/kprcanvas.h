@@ -257,6 +257,13 @@ public:
     int textObjectNum( KPTextObject * obj ) const;
     KPTextObject * textObjectByPos( int pos );
 
+    void alignObjLeft();
+    void alignObjCenterH();
+    void alignObjRight();
+    void alignObjTop();
+    void alignObjCenterV();
+    void alignObjBottom();
+
 public slots:
     void exitEditMode();
 

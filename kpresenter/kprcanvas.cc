@@ -7104,3 +7104,157 @@ bool KPrCanvas::checkCurrentTextEdit( KPTextObject * textObj )
     }
     return emitChanged;
 }
+
+void KPrCanvas::alignObjLeft()
+{
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) left" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    KPresenterDoc *doc =m_view->kPresenterDoc();
+    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+    cmd=activePage()->alignObjsLeft(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->alignObjsLeft(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        doc->addCommand(macro);
+    else
+        delete macro;
+}
+
+void KPrCanvas::alignObjCenterH()
+{
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) centered (horizontal)"));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    KPresenterDoc *doc =m_view->kPresenterDoc();
+    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+    cmd=activePage()->alignObjsCenterH(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=doc->stickyPage()->alignObjsCenterH(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        doc->addCommand(macro);
+    else
+        delete macro;
+}
+
+void KPrCanvas::alignObjRight()
+{
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) right" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    KPresenterDoc *doc =m_view->kPresenterDoc();
+    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+
+    cmd=activePage()->alignObjsRight(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=doc->stickyPage()->alignObjsRight(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        doc->addCommand(macro);
+    else
+        delete macro;
+}
+
+void KPrCanvas::alignObjTop()
+{
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) top" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    KPresenterDoc *doc =m_view->kPresenterDoc();
+    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+
+    cmd=activePage()->alignObjsTop(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=doc->stickyPage()->alignObjsTop(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        doc->addCommand(macro);
+    else
+        delete macro;
+}
+
+void KPrCanvas::alignObjCenterV()
+{
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) center / vertical" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    KPresenterDoc *doc =m_view->kPresenterDoc();
+    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+
+    cmd=activePage()->alignObjsCenterV(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=doc->stickyPage()->alignObjsCenterV(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        doc->addCommand(macro);
+    else
+        delete macro;
+}
+
+void KPrCanvas::alignObjBottom()
+{
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) bottom" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    KPresenterDoc *doc =m_view->kPresenterDoc();
+    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+
+    cmd=activePage()->alignObjsBottom(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=doc->stickyPage()->alignObjsBottom(rect);
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        doc->addCommand(macro);
+    else
+        delete macro;
+}

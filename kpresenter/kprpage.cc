@@ -1119,7 +1119,7 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
 }
 
 /*======================== align objects left ===================*/
-KCommand * KPrPage::alignObjsLeft()
+KCommand * KPrPage::alignObjsLeft(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1127,7 +1127,13 @@ KCommand * KPrPage::alignObjsLeft()
     QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    double _x =  getPageRect().x();
+
+    KoRect area(rect);
+    if ( !area.isValid () )
+        area = getPageRect( );
+
+    double _x =  area.x();
+
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -1159,7 +1165,7 @@ KCommand * KPrPage::alignObjsLeft()
 }
 
 /*==================== align objects center h ===================*/
-KCommand * KPrPage::alignObjsCenterH()
+KCommand * KPrPage::alignObjsCenterH(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1167,8 +1173,13 @@ KCommand * KPrPage::alignObjsCenterH()
     QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    double _x = getPageRect().x();
-    double _w = getPageRect( ).width();
+    KoRect area(rect);
+    if ( !area.isValid () )
+        area = getPageRect( );
+
+
+    double _x = area.x();
+    double _w = area.width();
 
 
     QPtrListIterator<KPObject> it( m_objectList );
@@ -1201,7 +1212,7 @@ KCommand * KPrPage::alignObjsCenterH()
 }
 
 /*==================== align objects right ======================*/
-KCommand * KPrPage::alignObjsRight()
+KCommand * KPrPage::alignObjsRight(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1209,7 +1220,11 @@ KCommand * KPrPage::alignObjsRight()
     QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    double _w = getPageRect().x() + getPageRect( ).width();
+    KoRect area(rect);
+    if ( !area.isValid () )
+        area = getPageRect( );
+
+    double _w = area.x() + area.width();
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -1239,7 +1254,7 @@ KCommand * KPrPage::alignObjsRight()
 }
 
 /*==================== align objects top ========================*/
-KCommand *KPrPage::alignObjsTop()
+KCommand *KPrPage::alignObjsTop(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1248,6 +1263,10 @@ KCommand *KPrPage::alignObjsTop()
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     double  _y;
+
+    KoRect area(rect);
+    if ( !area.isValid () )
+        area = getPageRect( );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -1258,7 +1277,7 @@ KCommand *KPrPage::alignObjsTop()
 
         if(it.current()->isSelected()&& !it.current()->isProtect())
         {
-            _y = getPageRect( ).y();
+            _y = area.y();
             _objects.append( it.current() );
             if(!newPosition && (_y != it.current()->getOrig().y()))
                 newPosition=true;
@@ -1280,7 +1299,7 @@ KCommand *KPrPage::alignObjsTop()
 }
 
 /*==================== align objects center v ===================*/
-KCommand * KPrPage::alignObjsCenterV()
+KCommand * KPrPage::alignObjsCenterV(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1289,6 +1308,9 @@ KCommand * KPrPage::alignObjsCenterV()
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     double  _y, _h;
+    KoRect area(rect);
+    if ( !area.isValid () )
+        area = getPageRect( );
 
 
     QPtrListIterator<KPObject> it( m_objectList );
@@ -1300,8 +1322,8 @@ KCommand * KPrPage::alignObjsCenterV()
 
         if(it.current()->isSelected()&& !it.current()->isProtect())
         {
-            _y = getPageRect( ).y();
-            _h = getPageRect( ).height();
+            _y = area.y();
+            _h = area.height();
             _objects.append( it.current() );
             if(!newPosition &&(( _h - it.current()->getSize().height() ) / 2 - it.current()->getOrig().y() + _y )!=0)
                 newPosition=true;
@@ -1322,7 +1344,7 @@ KCommand * KPrPage::alignObjsCenterV()
     return moveByCmd2;
 }
 
-KCommand * KPrPage::alignObjsBottom()
+KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1331,7 +1353,9 @@ KCommand * KPrPage::alignObjsBottom()
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     double  _h;
-
+    KoRect area(rect);
+    if ( !area.isValid () )
+        area = getPageRect( );
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -1341,7 +1365,7 @@ KCommand * KPrPage::alignObjsBottom()
 
         if(it.current()->isSelected()&& !it.current()->isProtect())
         {
-            _h = getPageRect( ).y() + getPageRect().height();
+            _h = area.y() + area.height();
             _objects.append( it.current() );
             if(!newPosition && _h != (it.current()->getSize().height() + it.current()->getOrig().y()))
                 newPosition=true;
