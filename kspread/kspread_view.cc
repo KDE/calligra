@@ -1252,7 +1252,7 @@ void ViewPrivate::initActions()
   // -- special action, only for developers --
 
   actions->internalTests = new KAction( i18n("Run Internal Tests..."), "internalTests", 
-		  0, view, SLOT( runInternalTests() ), ac, "internalTests" );
+      Qt::CTRL+ Qt::SHIFT + Qt::Key_T, view, SLOT( runInternalTests() ), ac, "internalTests" );
 }
 
 void ViewPrivate::adjustActions( bool mode )
