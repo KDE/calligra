@@ -1014,6 +1014,12 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
+    styles = mainStyles.styles( STYLE_HATCH );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:hatch", (*it).name, "style:graphic-properties" );
+    }
+
     stylesWriter.endElement(); // office:styles
 //todo add other style
 

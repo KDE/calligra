@@ -1275,14 +1275,25 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
         //todo FIXME when text object doesn't have a background
         if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
         {
-            styleobjectauto.addProperty( "draw:fill","solid" );
-            styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            if ( brush.style() == Qt::SolidPattern )
+            {
+                styleobjectauto.addProperty( "draw:fill","solid" );
+                styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+            }
+            else //otherstyle
+            {
+                styleobjectauto.addProperty( "draw:fill","hatch" );
+                styleobjectauto.addProperty( "draw:fill-hatch-name", saveOasisHatchStyle( mainStyles ) );
+            }
         }
         else
+        {
             styleobjectauto.addProperty( "draw:fill","none" );
-
+        }
         break;
     case FT_GRADIENT:
+        styleobjectauto.addProperty( "draw:fill","gradient" );
+        styleobjectauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
         //todo
         break;
     }
@@ -1290,6 +1301,62 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
     return mainStyles.lookup( styleobjectauto, "gr" );
 
 }
+
+QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles )
+{
+    KoGenStyle hatchStyle( KPresenterDoc::STYLE_HATCH /*no family name*/);
+    hatchStyle.addAttribute( "draw:color", brush.color().name() );
+    //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into kpresenter
+    switch( brush.style() )
+    {
+#if 0 //transparency
+        Qt::Dense1Pattern,
+        Qt::Dense2Pattern,
+        Qt::Dense3Pattern,
+        Qt::Dense4Pattern,
+        Qt::Dense5Pattern,
+        Qt::Dense6Pattern,
+        Qt::Dense7Pattern,
+#endif
+
+    case Qt::HorPattern:
+        hatchStyle.addAttribute( "draw:style", "single" );
+        hatchStyle.addAttribute( "draw:rotation", 0);
+        break;
+    case Qt::BDiagPattern:
+        hatchStyle.addAttribute( "draw:style", "single" );
+        hatchStyle.addAttribute( "draw:rotation", 450);
+        break;
+    case Qt::VerPattern:
+        hatchStyle.addAttribute( "draw:style", "single" );
+        hatchStyle.addAttribute( "draw:rotation", 900);
+        break;
+    case Qt::FDiagPattern:
+        hatchStyle.addAttribute( "draw:style", "single" );
+        hatchStyle.addAttribute( "draw:rotation", 1350);
+        break;
+    case Qt::CrossPattern:
+        hatchStyle.addAttribute( "draw:style", "double" );
+        hatchStyle.addAttribute( "draw:rotation", 0);
+        break;
+    case Qt::DiagCrossPattern:
+        hatchStyle.addAttribute( "draw:style", "double" );
+        hatchStyle.addAttribute( "draw:rotation", 450);
+        break;
+    default:
+        break;
+    }
+
+    return mainStyles.lookup( hatchStyle, "hatch" );
+}
+
+
+QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles )
+{
+    //todo
+    return "";
+}
+
 
 void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
@@ -1350,19 +1417,19 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
                                         {
                                         case 0:
                                         case 180:
-                                            tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 9 ) );
+                                            tmpBrush.setStyle(Qt::HorPattern );
                                             break;
                                         case 45:
                                         case 225:
-                                            tmpBrush.setStyle(static_cast<Qt::BrushStyle>(12 ) );
+                                            tmpBrush.setStyle(Qt::BDiagPattern );
                                             break;
                                         case 90:
                                         case 270:
-                                            tmpBrush.setStyle(static_cast<Qt::BrushStyle>(10 ) );
+                                            tmpBrush.setStyle(Qt::VerPattern );
                                             break;
                                         case 135:
                                         case 315:
-                                            tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 13 ) );
+                                            tmpBrush.setStyle(Qt::FDiagPattern );
                                             break;
                                         default:
                                             //todo fixme when we will have a kopaint
