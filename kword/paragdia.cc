@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Paragraph Dialog                                       */
+/* Module: Paragraph Dialog					  */
 /******************************************************************/
 
 #include "paragdia.h"
@@ -35,11 +35,12 @@
 #include <qlineedit.h>
 #include <qlistbox.h>
 #include <qspinbox.h>
+#include <qlineedit.h>
+#include <qvalidator.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
-#include <krestrictedline.h>
 #include <kbuttonbox.h>
 #include <kcolorbtn.h>
 #include <kglobal.h>
@@ -49,7 +50,7 @@
 #include <stdlib.h>
 
 /******************************************************************/
-/* class KWPagePreview                                            */
+/* class KWPagePreview						  */
 /******************************************************************/
 
 /*================================================================*/
@@ -92,24 +93,26 @@ void KWPagePreview::drawContents( QPainter* p )
     p->setBrush( QBrush( lightGray ) );
 
     for ( int i = 1; i <= 4; i++ )
-        p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
+	p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
 
     p->setBrush( QBrush( darkGray ) );
 
     for ( int i = 5; i <= 8; i++ )
-        p->drawRect( ( i == 5 ? df : dl ) + _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + ( i - 5 ) * spc + static_cast<int>( before / 2 ),
-                     wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ) - ( ( i == 12 ? 0 : dr ) + ( i == 5 ? df : dl ) ), 6 );
+	p->drawRect( ( i == 5 ? df : dl ) + _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + ( i - 5 ) * spc + 
+		     static_cast<int>( before / 2 ),
+		     wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ) - ( ( i == 12 ? 0 : dr ) + ( i == 5 ? df : dl ) ), 6 );
 
     p->setBrush( QBrush( lightGray ) );
 
     for ( int i = 9; i <= 12; i++ )
-        p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + 3 * spc + static_cast<int>( before / 2 ) + static_cast<int>( after / 2 ),
-                     wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
+	p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + 3 * spc + 
+		     static_cast<int>( before / 2 ) + static_cast<int>( after / 2 ),
+		     wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
 
 }
 
 /******************************************************************/
-/* class KWPagePreview2                                           */
+/* class KWPagePreview2						  */
 /******************************************************************/
 
 /*================================================================*/
@@ -141,55 +144,52 @@ void KWPagePreview2::drawContents( QPainter* p )
     p->setBrush( QBrush( lightGray ) );
 
     for ( int i = 1; i <= 4; i++ )
-        p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
+	p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
 
     p->setBrush( QBrush( darkGray ) );
 
     int __x = 0, __w = 0;
-    for ( int i = 5; i <= 8; i++ )
-    {
-        switch ( i )
-        {
-        case 5: __w = wid - 12;
-            break;
-        case 6: __w = wid - 52;
-            break;
-        case 7: __w = wid - 33;
-            break;
-        case 8: __w = wid - 62;
-        default: break;
-        }
+    for ( int i = 5; i <= 8; i++ ) {
+	switch ( i ) {
+	case 5: __w = wid - 12;
+	    break;
+	case 6: __w = wid - 52;
+	    break;
+	case 7: __w = wid - 33;
+	    break;
+	case 8: __w = wid - 62;
+	default: break;
+	}
 
-        switch ( flow )
-        {
-        case KWParagLayout::LEFT:
-            __x = _x + 6;
-            break;
-        case KWParagLayout::CENTER:
-            __x = _x + ( wid - __w ) / 2;
-            break;
-        case KWParagLayout::RIGHT:
-            __x = _x + ( wid - __w ) - 6;
-            break;
-        case KWParagLayout::BLOCK:
-        {
-            if ( i < 8 ) __w = wid - 12;
-            __x = _x + 6;
-        } break;
-        }
+	switch ( flow ) {
+	case KWParagLayout::LEFT:
+	    __x = _x + 6;
+	    break;
+	case KWParagLayout::CENTER:
+	    __x = _x + ( wid - __w ) / 2;
+	    break;
+	case KWParagLayout::RIGHT:
+	    __x = _x + ( wid - __w ) - 6;
+	    break;
+	case KWParagLayout::BLOCK:
+	{
+	    if ( i < 8 ) __w = wid - 12;
+	    __x = _x + 6;
+	} break;
+	}
 
-        p->drawRect( __x, _y + 6 + ( i - 1 ) * 12 + 2 + ( i - 5 ), __w, 6 );
+	p->drawRect( __x, _y + 6 + ( i - 1 ) * 12 + 2 + ( i - 5 ), __w, 6 );
     }
 
     p->setBrush( QBrush( lightGray ) );
 
     for ( int i = 9; i <= 12; i++ )
-        p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + 3, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
+	p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + 3, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
 
 }
 
 /******************************************************************/
-/* class KWBorderPreview                                          */
+/* class KWBorderPreview					  */
 /******************************************************************/
 
 /*================================================================*/
@@ -204,31 +204,29 @@ void KWBorderPreview::drawContents( QPainter* painter )
     QRect r = contentsRect();
     QFontMetrics fm( font() );
 
-    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height(), white );
-    painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
+    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ), 
+		       r.height() - 2 * fm.height(), white );
+    painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), r.width() - 2 * fm.width( 'W' ), 
+			  r.height() - 2 * fm.height() );
 
-    if ( topBorder.ptWidth > 0 )
-    {
-        painter->setPen( setBorderPen( topBorder ) );
-        painter->drawLine( r.x() + 20, r.y() + 20, r.right() - 20, r.y() + 20 );
+    if ( topBorder.ptWidth > 0 ) {
+	painter->setPen( setBorderPen( topBorder ) );
+	painter->drawLine( r.x() + 20, r.y() + 20, r.right() - 20, r.y() + 20 );
     }
 
-    if ( bottomBorder.ptWidth > 0 )
-    {
-        painter->setPen( setBorderPen( bottomBorder ) );
-        painter->drawLine( r.x() + 20, r.bottom() - 20, r.right() - 20, r.bottom() - 20 );
+    if ( bottomBorder.ptWidth > 0 ) {
+	painter->setPen( setBorderPen( bottomBorder ) );
+	painter->drawLine( r.x() + 20, r.bottom() - 20, r.right() - 20, r.bottom() - 20 );
     }
 
-    if ( leftBorder.ptWidth > 0 )
-    {
-        painter->setPen( setBorderPen( leftBorder ) );
-        painter->drawLine( r.x() + 20, r.y() + 20, r.x() + 20, r.bottom() - 20 );
+    if ( leftBorder.ptWidth > 0 ) {
+	painter->setPen( setBorderPen( leftBorder ) );
+	painter->drawLine( r.x() + 20, r.y() + 20, r.x() + 20, r.bottom() - 20 );
     }
 
-    if ( rightBorder.ptWidth > 0 )
-    {
-        painter->setPen( setBorderPen( rightBorder ) );
-        painter->drawLine( r.right() - 20, r.y() + 20, r.right() - 20, r.bottom() - 20 );
+    if ( rightBorder.ptWidth > 0 ) {
+	painter->setPen( setBorderPen( rightBorder ) );
+	painter->drawLine( r.right() - 20, r.y() + 20, r.right() - 20, r.bottom() - 20 );
     }
 }
 
@@ -240,30 +238,29 @@ QPen KWBorderPreview::setBorderPen( KWParagLayout::Border _brd )
     pen.setWidth( _brd.ptWidth );
     pen.setColor( _brd.color );
 
-    switch ( _brd.style )
-    {
+    switch ( _brd.style ) {
     case KWParagLayout::SOLID:
-        pen.setStyle( SolidLine );
-        break;
+	pen.setStyle( SolidLine );
+	break;
     case KWParagLayout::DASH:
-        pen.setStyle( DashLine );
-        break;
+	pen.setStyle( DashLine );
+	break;
     case KWParagLayout::DOT:
-        pen.setStyle( DotLine );
-        break;
+	pen.setStyle( DotLine );
+	break;
     case KWParagLayout::DASH_DOT:
-        pen.setStyle( DashDotLine );
-        break;
+	pen.setStyle( DashDotLine );
+	break;
     case KWParagLayout::DASH_DOT_DOT:
-        pen.setStyle( DashDotDotLine );
-        break;
+	pen.setStyle( DashDotDotLine );
+	break;
     }
 
     return QPen( pen );
 }
 
 /******************************************************************/
-/* class KWNumPreview                                             */
+/* class KWNumPreview						  */
 /******************************************************************/
 
 /*================================================================*/
@@ -278,12 +275,12 @@ void KWNumPreview::drawContents( QPainter* )
 }
 
 /******************************************************************/
-/* Class: KWParagDia                                              */
+/* Class: KWParagDia						  */
 /******************************************************************/
 
 /*================================================================*/
 KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList,
-                        int _flags, KWordDocument *_doc )
+			int _flags, KWordDocument *_doc )
     : QTabDialog( parent, name, true )
 {
     flags = _flags;
@@ -291,15 +288,15 @@ KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList
     doc = _doc;
 
     if ( _flags & PD_SPACING )
-        setupTab1();
+	setupTab1();
     if ( _flags & PD_FLOW )
-        setupTab2();
+	setupTab2();
     if ( _flags & PD_BORDERS )
-        setupTab3();
+	setupTab3();
     if ( _flags & PD_NUMBERING )
-        setupTab4();
+	setupTab4();
     if ( _flags & PD_TABS )
-        setupTab5();
+	setupTab5();
 
     setCancelButton( i18n( "Cancel" ) );
     setOkButton( i18n( "OK" ) );
@@ -316,14 +313,13 @@ KWParagDia::~KWParagDia()
 void KWParagDia::setLeftIndent( KWUnit _left )
 {
     QString str;
-    switch ( KWUnit::unitType( doc->getUnit() ) )
-    {
+    switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: str.sprintf( "%g", _left.mm() );
-        break;
+	break;
     case U_INCH: str.sprintf( "%g", _left.inch() );
-        break;
+	break;
     case U_PT: str.sprintf( "%d", _left.pt() );
-        break;
+	break;
     }
 
     eLeft->setText( str );
@@ -334,14 +330,13 @@ void KWParagDia::setLeftIndent( KWUnit _left )
 void KWParagDia::setFirstLineIndent( KWUnit _first )
 {
     QString str;
-    switch ( KWUnit::unitType( doc->getUnit() ) )
-    {
+    switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: str.sprintf( "%g", _first.mm() );
-        break;
+	break;
     case U_INCH: str.sprintf( "%g", _first.inch() );
-        break;
+	break;
     case U_PT: str.sprintf( "%d", _first.pt() );
-        break;
+	break;
     }
 
     eFirstLine->setText( str );
@@ -352,14 +347,13 @@ void KWParagDia::setFirstLineIndent( KWUnit _first )
 void KWParagDia::setSpaceBeforeParag( KWUnit _before )
 {
     QString str;
-    switch ( KWUnit::unitType( doc->getUnit() ) )
-    {
+    switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: str.sprintf( "%g", _before.mm() );
-        break;
+	break;
     case U_INCH: str.sprintf( "%g", _before.inch() );
-        break;
+	break;
     case U_PT: str.sprintf( "%d", _before.pt() );
-        break;
+	break;
     }
 
     eBefore->setText( str );
@@ -370,14 +364,13 @@ void KWParagDia::setSpaceBeforeParag( KWUnit _before )
 void KWParagDia::setSpaceAfterParag( KWUnit _after )
 {
     QString str;
-    switch ( KWUnit::unitType( doc->getUnit() ) )
-    {
+    switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: str.sprintf( "%g", _after.mm() );
-        break;
+	break;
     case U_INCH: str.sprintf( "%g", _after.inch() );
-        break;
+	break;
     case U_PT: str.sprintf( "%d", _after.pt() );
-        break;
+	break;
     }
 
     eAfter->setText( str );
@@ -398,20 +391,19 @@ void KWParagDia::setFlow( KWParagLayout::Flow _flow )
     prev2->setFlow( _flow );
 
     clearFlows();
-    switch ( _flow )
-    {
+    switch ( _flow ) {
     case KWParagLayout::LEFT:
-        rLeft->setChecked( true );
-        break;
+	rLeft->setChecked( true );
+	break;
     case KWParagLayout::CENTER:
-        rCenter->setChecked( true );
-        break;
+	rCenter->setChecked( true );
+	break;
     case KWParagLayout::RIGHT:
-        rRight->setChecked( true );
-        break;
+	rRight->setChecked( true );
+	break;
     case KWParagLayout::BLOCK:
-        rBlock->setChecked( true );
-        break;
+	rBlock->setChecked( true );
+	break;
     }
 }
 
@@ -442,7 +434,11 @@ void KWParagDia::setupTab1()
     lLeft->setAlignment( AlignRight );
     indentGrid->addWidget( lLeft, 1, 0 );
 
-    eLeft = new KRestrictedLine( indentFrame, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    eLeft = new QLineEdit( indentFrame );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	eLeft->setValidator( new QIntValidator( eLeft ) );
+    else
+	eLeft->setValidator( new QDoubleValidator( eLeft ) );
     eLeft->setText( "0.00" );
     eLeft->setMaxLength( 5 );
     eLeft->setEchoMode( QLineEdit::Normal );
@@ -456,7 +452,11 @@ void KWParagDia::setupTab1()
     lRight->setAlignment( AlignRight );
     indentGrid->addWidget( lRight, 2, 0 );
 
-    eRight = new KRestrictedLine( indentFrame, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    eRight = new QLineEdit( indentFrame );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	eRight->setValidator( new QIntValidator( eRight ) );
+    else
+	eRight->setValidator( new QDoubleValidator( eRight ) );
     eRight->setText( "0.00" );
     eRight->setMaxLength( 5 );
     eRight->setEchoMode( QLineEdit::Normal );
@@ -471,7 +471,11 @@ void KWParagDia::setupTab1()
     lFirstLine->setAlignment( AlignRight );
     indentGrid->addWidget( lFirstLine, 3, 0 );
 
-    eFirstLine = new KRestrictedLine( indentFrame, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    eFirstLine = new QLineEdit( indentFrame );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	eFirstLine->setValidator( new QIntValidator( eFirstLine ) );
+    else
+	eFirstLine->setValidator( new QDoubleValidator( eFirstLine ) );
     eFirstLine->setText( "0.00" );
     eFirstLine->setMaxLength( 5 );
     eFirstLine->setEchoMode( QLineEdit::Normal );
@@ -511,7 +515,11 @@ void KWParagDia::setupTab1()
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
-    eSpacing = new KRestrictedLine( spacingFrame, "", "1234567890" );
+    eSpacing = new QLineEdit( spacingFrame );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	eSpacing->setValidator( new QIntValidator( eSpacing ) );
+    else
+	eSpacing->setValidator( new QDoubleValidator( eSpacing ) );
     eSpacing->setText( "0" );
     eSpacing->setMaxLength( 2 );
     eSpacing->setEchoMode( QLineEdit::Normal );
@@ -547,7 +555,11 @@ void KWParagDia::setupTab1()
     lBefore->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lBefore, 1, 0 );
 
-    eBefore = new KRestrictedLine( pSpaceFrame, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    eBefore = new QLineEdit( pSpaceFrame );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	eBefore->setValidator( new QIntValidator( eBefore ) );
+    else
+	eBefore->setValidator( new QDoubleValidator( eBefore ) );
     eBefore->setText( "0.00" );
     eBefore->setMaxLength( 5 );
     eBefore->setEchoMode( QLineEdit::Normal );
@@ -561,7 +573,11 @@ void KWParagDia::setupTab1()
     lAfter->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lAfter, 2, 0 );
 
-    eAfter = new KRestrictedLine( pSpaceFrame, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    eAfter = new QLineEdit( pSpaceFrame );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	eAfter->setValidator( new QIntValidator( eAfter ) );
+    else
+	eAfter->setValidator( new QDoubleValidator( eAfter ) );
     eAfter->setText( "0.00" );
     eAfter->setMaxLength( 5 );
     eAfter->setEchoMode( QLineEdit::Normal );
@@ -695,9 +711,9 @@ void KWParagDia::setupTab3()
     cWidth = new QComboBox( false, tab3 );
     for( unsigned int i = 1; i <= 10; i++ )
     {
-        char buffer[ 10 ];
-        sprintf( buffer, "%i", i );
-        cWidth->insertItem( buffer );
+	char buffer[ 10 ];
+	sprintf( buffer, "%i", i );
+	cWidth->insertItem( buffer );
     }
     grid3->addWidget( cWidth, 3, 0 );
     cWidth->resize( cStyle->size() );
@@ -998,7 +1014,11 @@ void KWParagDia::setupTab5()
     lTab->resize( lTab->sizeHint() );
     grid5->addWidget( lTab, 0, 0 );
 
-    eTabPos = new KRestrictedLine( tab5, "", "1234567890." );
+    eTabPos = new QLineEdit( tab5 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	eTabPos->setValidator( new QIntValidator( eTabPos ) );
+    else
+	eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
     eTabPos->resize( eTabPos->sizeHint() );
     grid5->addWidget( eTabPos, 1, 0 );
 
@@ -1094,24 +1114,24 @@ void KWParagDia::clearFlows()
 void KWParagDia::updateBorders()
 {
     if ( leftBorder.ptWidth == 0 )
-        bLeft->setOn( false );
+	bLeft->setOn( false );
     else
-        bLeft->setOn( true );
+	bLeft->setOn( true );
 
     if ( rightBorder.ptWidth == 0 )
-        bRight->setOn( false );
+	bRight->setOn( false );
     else
-        bRight->setOn( true );
+	bRight->setOn( true );
 
     if ( topBorder.ptWidth == 0 )
-        bTop->setOn( false );
+	bTop->setOn( false );
     else
-        bTop->setOn( true );
+	bTop->setOn( true );
 
     if ( bottomBorder.ptWidth == 0 )
-        bBottom->setOn( false );
+	bBottom->setOn( false );
     else
-        bBottom->setOn( true );
+	bBottom->setOn( true );
 
     prev3->setLeftBorder( leftBorder );
     prev3->setRightBorder( rightBorder );
@@ -1140,26 +1160,22 @@ void KWParagDia::firstChanged( const QString & _text )
 /*================================================================*/
 void KWParagDia::spacingActivated( int _index )
 {
-    if ( _index == 4 )
-    {
-        eSpacing->setEnabled( true );
-        eSpacing->setText( "12.0" );
-        eSpacing->setFocus();
-    }
-    else
-    {
-        eSpacing->setEnabled( false );
-        switch ( _index )
-        {
-        case 0: eSpacing->setText( "14.0" );
-            break;
-        case 1: eSpacing->setText( "28.0" );
-            break;
-        case 2: eSpacing->setText( "42.0" );
-            break;
-        case 3: eSpacing->setText( "56.0" );
-            break;
-        }
+    if ( _index == 4 ) {
+	eSpacing->setEnabled( true );
+	eSpacing->setText( "12.0" );
+	eSpacing->setFocus();
+    } else {
+	eSpacing->setEnabled( false );
+	switch ( _index ) {
+	case 0: eSpacing->setText( "14.0" );
+	    break;
+	case 1: eSpacing->setText( "28.0" );
+	    break;
+	case 2: eSpacing->setText( "42.0" );
+	    break;
+	case 3: eSpacing->setText( "56.0" );
+	    break;
+	}
     }
     prev1->setSpacing( atof( eSpacing->text() ) );
 }
@@ -1218,23 +1234,22 @@ void KWParagDia::flowBlock()
 void KWParagDia::brdLeftToggled( bool _on )
 {
     if ( !_on )
-        leftBorder.ptWidth = 0;
-    else
-    {
-        leftBorder.ptWidth = atoi( cWidth->currentText() );
-        leftBorder.color = QColor( bColor->color() );
-        QString stl( cStyle->currentText() );
+	leftBorder.ptWidth = 0;
+    else {
+	leftBorder.ptWidth = atoi( cWidth->currentText() );
+	leftBorder.color = QColor( bColor->color() );
+	QString stl( cStyle->currentText() );
 
-        if ( stl == i18n( "solid line" ) )
-            leftBorder.style = KWParagLayout::SOLID;
-        else if ( stl == i18n( "dash line ( ---- )" ) )
-            leftBorder.style = KWParagLayout::DASH;
-        else if ( stl == i18n( "dot line ( **** )" ) )
-            leftBorder.style = KWParagLayout::DOT;
-        else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-            leftBorder.style = KWParagLayout::DASH_DOT;
-        else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-            leftBorder.style = KWParagLayout::DASH_DOT_DOT;
+	if ( stl == i18n( "solid line" ) )
+	    leftBorder.style = KWParagLayout::SOLID;
+	else if ( stl == i18n( "dash line ( ---- )" ) )
+	    leftBorder.style = KWParagLayout::DASH;
+	else if ( stl == i18n( "dot line ( **** )" ) )
+	    leftBorder.style = KWParagLayout::DOT;
+	else if ( stl == i18n( "dash dot line ( -*-* )" ) )
+	    leftBorder.style = KWParagLayout::DASH_DOT;
+	else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
+	    leftBorder.style = KWParagLayout::DASH_DOT_DOT;
     }
     prev3->setLeftBorder( leftBorder );
 }
@@ -1243,23 +1258,22 @@ void KWParagDia::brdLeftToggled( bool _on )
 void KWParagDia::brdRightToggled( bool _on )
 {
     if ( !_on )
-        rightBorder.ptWidth = 0;
-    else
-    {
-        rightBorder.ptWidth = atoi( cWidth->currentText() );
-        rightBorder.color = QColor( bColor->color() );
-        QString stl( cStyle->currentText() );
+	rightBorder.ptWidth = 0;
+    else {
+	rightBorder.ptWidth = atoi( cWidth->currentText() );
+	rightBorder.color = QColor( bColor->color() );
+	QString stl( cStyle->currentText() );
 
-        if ( stl == i18n( "solid line" ) )
-            rightBorder.style = KWParagLayout::SOLID;
-        else if ( stl == i18n( "dash line ( ---- )" ) )
-            rightBorder.style = KWParagLayout::DASH;
-        else if ( stl == i18n( "dot line ( **** )" ) )
-            rightBorder.style = KWParagLayout::DOT;
-        else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-            rightBorder.style = KWParagLayout::DASH_DOT;
-        else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-            rightBorder.style = KWParagLayout::DASH_DOT_DOT;
+	if ( stl == i18n( "solid line" ) )
+	    rightBorder.style = KWParagLayout::SOLID;
+	else if ( stl == i18n( "dash line ( ---- )" ) )
+	    rightBorder.style = KWParagLayout::DASH;
+	else if ( stl == i18n( "dot line ( **** )" ) )
+	    rightBorder.style = KWParagLayout::DOT;
+	else if ( stl == i18n( "dash dot line ( -*-* )" ) )
+	    rightBorder.style = KWParagLayout::DASH_DOT;
+	else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
+	    rightBorder.style = KWParagLayout::DASH_DOT_DOT;
     }
     prev3->setRightBorder( rightBorder );
 }
@@ -1268,23 +1282,22 @@ void KWParagDia::brdRightToggled( bool _on )
 void KWParagDia::brdTopToggled( bool _on )
 {
     if ( !_on )
-        topBorder.ptWidth = 0;
-    else
-    {
-        topBorder.ptWidth = atoi( cWidth->currentText() );
-        topBorder.color = QColor( bColor->color() );
-        QString stl( cStyle->currentText() );
+	topBorder.ptWidth = 0;
+    else {
+	topBorder.ptWidth = atoi( cWidth->currentText() );
+	topBorder.color = QColor( bColor->color() );
+	QString stl( cStyle->currentText() );
 
-        if ( stl == i18n( "solid line" ) )
-            topBorder.style = KWParagLayout::SOLID;
-        else if ( stl == i18n( "dash line ( ---- )" ) )
-            topBorder.style = KWParagLayout::DASH;
-        else if ( stl == i18n( "dot line ( **** )" ) )
-            topBorder.style = KWParagLayout::DOT;
-        else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-            topBorder.style = KWParagLayout::DASH_DOT;
-        else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-            topBorder.style = KWParagLayout::DASH_DOT_DOT;
+	if ( stl == i18n( "solid line" ) )
+	    topBorder.style = KWParagLayout::SOLID;
+	else if ( stl == i18n( "dash line ( ---- )" ) )
+	    topBorder.style = KWParagLayout::DASH;
+	else if ( stl == i18n( "dot line ( **** )" ) )
+	    topBorder.style = KWParagLayout::DOT;
+	else if ( stl == i18n( "dash dot line ( -*-* )" ) )
+	    topBorder.style = KWParagLayout::DASH_DOT;
+	else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
+	    topBorder.style = KWParagLayout::DASH_DOT_DOT;
     }
     prev3->setTopBorder( topBorder );
 }
@@ -1293,23 +1306,22 @@ void KWParagDia::brdTopToggled( bool _on )
 void KWParagDia::brdBottomToggled( bool _on )
 {
     if ( !_on )
-        bottomBorder.ptWidth = 0;
-    else
-    {
-        bottomBorder.ptWidth = atoi( cWidth->currentText() );
-        bottomBorder.color = QColor( bColor->color() );
-        QString stl( cStyle->currentText() );
+	bottomBorder.ptWidth = 0;
+    else {
+	bottomBorder.ptWidth = atoi( cWidth->currentText() );
+	bottomBorder.color = QColor( bColor->color() );
+	QString stl( cStyle->currentText() );
 
-        if ( stl == i18n( "solid line" ) )
-            bottomBorder.style = KWParagLayout::SOLID;
-        else if ( stl == i18n( "dash line ( ---- )" ) )
-            bottomBorder.style = KWParagLayout::DASH;
-        else if ( stl == i18n( "dot line ( **** )" ) )
-            bottomBorder.style = KWParagLayout::DOT;
-        else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-            bottomBorder.style = KWParagLayout::DASH_DOT;
-        else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-            bottomBorder.style = KWParagLayout::DASH_DOT_DOT;
+	if ( stl == i18n( "solid line" ) )
+	    bottomBorder.style = KWParagLayout::SOLID;
+	else if ( stl == i18n( "dash line ( ---- )" ) )
+	    bottomBorder.style = KWParagLayout::DASH;
+	else if ( stl == i18n( "dot line ( **** )" ) )
+	    bottomBorder.style = KWParagLayout::DOT;
+	else if ( stl == i18n( "dash dot line ( -*-* )" ) )
+	    bottomBorder.style = KWParagLayout::DASH_DOT;
+	else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
+	    bottomBorder.style = KWParagLayout::DASH_DOT_DOT;
     }
     prev3->setBottomBorder( bottomBorder );
 }
@@ -1335,13 +1347,12 @@ void KWParagDia::changeBullet()
     QString f = counter.bulletFont;
     QChar c = counter.counterBullet;
 
-    if ( KCharSelectDia::selectChar( f, c ) )
-    {
-        counter.bulletFont = f;
-        counter.counterBullet = c;
-        bBullets->setText( c );
-        bBullets->setFont( QFont( counter.bulletFont ) );
-        prev4->setCounter( counter );
+    if ( KCharSelectDia::selectChar( f, c ) ) {
+	counter.bulletFont = f;
+	counter.counterBullet = c;
+	bBullets->setText( c );
+	bBullets->setFont( QFont( counter.bulletFont ) );
+	prev4->setCounter( counter );
     }
 }
 
@@ -1387,30 +1398,28 @@ void KWParagDia::setCounter( KWParagLayout::Counter _counter )
     prev4->setCounter( _counter );
     counter = _counter;
 
-    switch ( counter.counterType )
-    {
+    switch ( counter.counterType ) {
     case KWParagLayout::CT_NONE: rNone->setChecked( true );
-        break;
+	break;
     case KWParagLayout::CT_NUM: rANums->setChecked( true );
-        break;
+	break;
     case KWParagLayout::CT_ALPHAB_L: rLAlph->setChecked( true );
-        break;
+	break;
     case KWParagLayout::CT_ALPHAB_U: rUAlph->setChecked( true );
-        break;
+	break;
     case KWParagLayout::CT_ROM_NUM_L: rLRNums->setChecked( true );
-        break;
+	break;
     case KWParagLayout::CT_ROM_NUM_U: rURNums->setChecked( true );
-        break;
+	break;
     case KWParagLayout::CT_BULLET: rBullets->setChecked( true );
-        break;
+	break;
     }
 
-    switch ( counter.numberingType )
-    {
+    switch ( counter.numberingType ) {
     case KWParagLayout::NT_LIST: rList->setChecked( true );
-        break;
+	break;
     case KWParagLayout::NT_CHAPTER: rChapter->setChecked( true );
-        break;
+	break;
     }
 
     bBullets->setText( counter.counterBullet );
@@ -1430,10 +1439,9 @@ void KWParagDia::setTabList( const QList<KoTabulator> *tabList )
     QString str;
 
     QListIterator<KoTabulator> it(*tabList);
-    for ( it.toFirst(); !it.atLast(); ++it )
-    {
-        str.sprintf( "%d", tabList->current()->ptPos );
-        lTabs->insertItem( str );
+    for ( it.toFirst(); !it.atLast(); ++it ) {
+	str.sprintf( "%d", tabList->current()->ptPos );
+	lTabs->insertItem( str );
     }
 }
 
@@ -1441,14 +1449,13 @@ void KWParagDia::setTabList( const QList<KoTabulator> *tabList )
 KWUnit KWParagDia::getLeftIndent()
 {
     KWUnit u;
-    switch ( KWUnit::unitType( doc->getUnit() ) )
-    {
+    switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: u.setMM( atof( eLeft->text() ) );
-        break;
+	break;
     case U_INCH: u.setINCH( atof( eLeft->text() ) );
-        break;
+	break;
     case U_PT: u.setPT( atoi( eLeft->text() ) );
-        break;
+	break;
     }
 
     return u;
@@ -1458,14 +1465,13 @@ KWUnit KWParagDia::getLeftIndent()
 KWUnit KWParagDia::getFirstLineIndent()
 {
     KWUnit u;
-    switch ( KWUnit::unitType( doc->getUnit() ) )
-    {
+    switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: u.setMM( atof( eFirstLine->text() ) );
-        break;
+	break;
     case U_INCH: u.setINCH( atof( eFirstLine->text() ) );
-        break;
+	break;
     case U_PT: u.setPT( atoi( eFirstLine->text() ) );
-        break;
+	break;
     }
 
     return u;
@@ -1475,14 +1481,13 @@ KWUnit KWParagDia::getFirstLineIndent()
 KWUnit KWParagDia::getSpaceBeforeParag()
 {
     KWUnit u;
-    switch ( KWUnit::unitType( doc->getUnit() ) )
-    {
+    switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: u.setMM( atof( eBefore->text() ) );
-        break;
+	break;
     case U_INCH: u.setINCH( atof( eBefore->text() ) );
-        break;
+	break;
     case U_PT: u.setPT( atoi( eBefore->text() ) );
-        break;
+	break;
     }
 
     return u;
@@ -1492,14 +1497,13 @@ KWUnit KWParagDia::getSpaceBeforeParag()
 KWUnit KWParagDia::getSpaceAfterParag()
 {
     KWUnit u;
-    switch ( KWUnit::unitType( doc->getUnit() ) )
-    {
+    switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: u.setMM( atof( eAfter->text() ) );
-        break;
+	break;
     case U_INCH: u.setINCH( atof( eAfter->text() ) );
-        break;
+	break;
     case U_PT: u.setPT( atoi( eAfter->text() ) );
-        break;
+	break;
     }
 
     return u;

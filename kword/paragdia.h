@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Paragraph Dialog (header)                              */
+/* Module: Paragraph Dialog (header)				  */
 /******************************************************************/
 
 #ifndef paragdia_h
@@ -25,7 +25,6 @@
 class KWordDocument;
 class QWidget;
 class QGridLayout;
-class KRestrictedLine;
 class QLabel;
 class QGroupBox;
 class QComboBox;
@@ -37,9 +36,10 @@ class KColorButton;
 class QSpinBox;
 class QButtonGroup;
 class QListBox;
+class QLineEdit;
 
 /******************************************************************/
-/* class KWPagePreview                                            */
+/* class KWPagePreview						  */
 /******************************************************************/
 
 class KWPagePreview : public QGroupBox
@@ -71,7 +71,7 @@ protected:
 };
 
 /******************************************************************/
-/* class KWPagePreview2                                           */
+/* class KWPagePreview2						  */
 /******************************************************************/
 
 class KWPagePreview2 : public QGroupBox
@@ -93,7 +93,7 @@ protected:
 };
 
 /******************************************************************/
-/* class KWBorderPreview                                          */
+/* class KWBorderPreview					  */
 /******************************************************************/
 
 class KWBorderPreview : public QGroupBox
@@ -122,7 +122,7 @@ protected:
 };
 
 /******************************************************************/
-/* class KWNumPreview                                             */
+/* class KWNumPreview						  */
 /******************************************************************/
 
 class KWNumPreview : public QGroupBox
@@ -143,7 +143,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWParagDia                                              */
+/* Class: KWParagDia						  */
 /******************************************************************/
 
 class KWParagDia : public QTabDialog
@@ -202,12 +202,14 @@ protected:
     void updateBorders();
 
     QWidget *tab1, *tab2, *tab3, *tab4, *tab5;
-    QGridLayout *grid1, *grid2, *grid3, *grid4, *grid5, *indentGrid, *spacingGrid, *pSpaceGrid, *tgrid, *txtgrid, *ogrid, *tabGrid;
-    KRestrictedLine *eLeft, *eRight, *eFirstLine, *eSpacing, *eBefore, *eAfter, *eTabPos;
+    QGridLayout *grid1, *grid2, *grid3, *grid4, *grid5, *indentGrid, *spacingGrid, 
+	*pSpaceGrid, *tgrid, *txtgrid, *ogrid, *tabGrid;
+    QLineEdit *eLeft, *eRight, *eFirstLine, *eSpacing, *eBefore, *eAfter, *eTabPos;
     QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lFlow, *lStyle, *lWidth, *lColor, *lDepth, *lcLeft, *lcRight, *lStart;
     QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gType, *gText, *gOther;
     QComboBox *cSpacing, *cStyle, *cWidth;
-    QRadioButton *rLeft, *rCenter, *rRight, *rBlock, *rANums, *rLRNums, *rURNums, *rLAlph, *rUAlph, *rBullets, *rList, *rChapter, *rNone;
+    QRadioButton *rLeft, *rCenter, *rRight, *rBlock, *rANums, *rLRNums, 
+	*rURNums, *rLAlph, *rUAlph, *rBullets, *rList, *rChapter, *rNone;
     KWPagePreview *prev1;
     KWPagePreview2 *prev2;
     KButtonBox *bb, *bbTabs;

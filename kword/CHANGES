@@ -1599,3 +1599,7 @@ Reggie, 26.10.1999:
   are working as expected
 - Frame borders with a width > 1 are drawn correctly again
 - Fixed some crashing code
+
+Reggie, 30.10.1999:
+-----------------
+- KRestrictedLine -> QLineEdit + QValidator
