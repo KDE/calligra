@@ -126,18 +126,18 @@ class KWBookMark
 {
 public:
     KWBookMark(const QString &_name);
-    KWBookMark(const QString &_name, KWTextParag *_startParag, KWTextParag *_endParag, KWFrameSet *_frameSet, int _start, int _end);
+    KWBookMark(const QString &_name, KoTextParag *_startParag, KoTextParag *_endParag, KWFrameSet *_frameSet, int _start, int _end);
     ~KWBookMark();
     QString bookMarkName()const { return m_name;}
     void setBookMarkName( const QString & _name ) { m_name = _name;}
     KWFrameSet * frameSet()const{ return m_frameSet;}
     void setFrameSet(KWFrameSet * _frame) { m_frameSet = _frame;}
 
-    KWTextParag *startParag() const { return m_startParag;}
-    void setStartParag( KWTextParag *_parag ) { m_startParag = _parag;}
+    KoTextParag *startParag() const { return m_startParag;}
+    void setStartParag( KoTextParag *_parag ) { m_startParag = _parag;}
 
-    KWTextParag *endParag() const { return m_endParag;}
-    void setEndParag( KWTextParag *_parag ) { m_endParag = _parag;}
+    KoTextParag *endParag() const { return m_endParag;}
+    void setEndParag( KoTextParag *_parag ) { m_endParag = _parag;}
 
     void setBookmarkStartIndex( int _pos ) { m_startIndex = _pos;}
     int bookmarkStartIndex() const  { return m_startIndex ; }
@@ -147,8 +147,8 @@ public:
 
 private:
     QString m_name;
-    KWTextParag *m_startParag;
-    KWTextParag *m_endParag;
+    KoTextParag *m_startParag;
+    KoTextParag *m_endParag;
     KWFrameSet *m_frameSet;
     int m_startIndex;
     int m_endIndex;
