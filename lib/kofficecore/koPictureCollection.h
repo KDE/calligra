@@ -28,6 +28,8 @@
 
 #include "koPicture.h"
 
+class KURL;
+
 class KoStore;
 
 
@@ -64,6 +66,13 @@ public:
      * Same as above, but takes the key from the @p picture
      */
     KoPicture insertPicture( const KoPicture& picture );
+
+    /**
+     * Download a possibily remote file
+     * If this file is really remote, it is always downloaded
+     * If the file is local, it act as loadPicture.
+     */
+    KoPicture downloadPicture(const KURL& url);
 
     /**
      * Load a clipart from a file (and insert into the collection).

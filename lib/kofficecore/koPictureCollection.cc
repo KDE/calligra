@@ -23,6 +23,8 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <kurl.h>
+
 #include <koStoreDevice.h>
 
 #include "koPicture.h"
@@ -59,6 +61,30 @@ KoPicture KoPictureCollection::insertPicture(const KoPictureKey& key, const KoPi
 KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
 {
     return insertPicture(picture.getKey(), picture);
+}
+
+KoPicture KoPictureCollection::downloadPicture(const KURL& url)
+{
+    kdDebug(30003) << "KoPictureCollection::downloadPicture " << url.ref() << endl;
+    
+
+    // If it is a local file, we can check the last modification date, so we should better use loadPicture
+    if (url.isLocalFile())
+        return loadPicture(url.path());
+
+
+    // We have really a remote file, so we cannot check the last modification date
+    // Therefore we have to always download the file
+    
+    KoPicture pic;
+    kdDebug(30003) << "Trying to download picture from file " << url.ref() << endl;
+  
+    if (pic.download(url))
+        insertPicture(pic.getKey(), pic);
+    else
+        kdWarning(30003) << "Could not download KoPicture from " << url.ref() << endl;
+    
+    return pic;
 }
 
 KoPicture KoPictureCollection::loadPicture(const QString& fileName)
