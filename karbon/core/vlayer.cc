@@ -80,9 +80,9 @@ VLayer::downwards( const VObject& object )
 {
 	if( m_objects.getFirst() == &object ) return;
 
-//	int index = m_objects.find( object );
+	int index = m_objects.find( &object );
 	bool bLast = m_objects.getLast() == &object;
-	m_objects.remove( &object );
+	m_objects.remove( index );
 
 	if( !bLast ) m_objects.prev();
 

@@ -94,9 +94,9 @@ VOrderSelectionCmd::execute()
 				for ( ; itr3.current(); ++itr3 )
 				{
 					if( m_state == up )
-						litr.current()->upwards( itr3.current() );
+						litr.current()->upwards( *itr3.current() );
 					else
-						litr.current()->downwards( itr3.current() );
+						litr.current()->downwards( *itr3.current() );
 				}
 			}
 		}
