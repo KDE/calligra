@@ -39,7 +39,7 @@ class QLabel;
 class KoZoomHandler;
 class QLineEdit;
 class KPresenterDoc;
-
+class KDoubleNumInput;
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
@@ -150,7 +150,7 @@ private:
     bool lockUpdate, stickyObj;
     int flags;
 
-    QLineEdit *m_lineTop, *m_lineLeft, *m_lineWidth, *m_lineHeight;
+    KDoubleNumInput *m_lineTop, *m_lineLeft, *m_lineWidth, *m_lineHeight;
     KPresenterDoc *m_doc;
 
     QPen oldPen;

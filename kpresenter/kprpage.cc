@@ -3189,7 +3189,7 @@ void KPrPage::deSelectObj( KPObject *kpobject )
     m_doc->repaint( kpobject );
 }
 
-QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage )
+QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* /*zoomHandler*/, int saveOnlyPage )
 {
     QPtrListIterator<KPObject> oIt(m_objectList);
     for (; oIt.current(); ++oIt )

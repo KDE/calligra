@@ -41,7 +41,7 @@
 #include <qgroupbox.h>
 #include "kpresenter_doc.h"
 #include <koUnit.h>
-#include <knumvalidator.h>
+#include <knuminput.h>
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
@@ -436,36 +436,36 @@ void StyleDia::setupTab4()
     lab->resize( lab->sizeHint() );
     pGrid->addWidget( lab, 1, 0 );
 
-    m_lineLeft=new QLineEdit( grp1);
-    pGrid->addWidget( m_lineLeft, 2, 0 );
+    m_lineLeft= new KDoubleNumInput( grp1 );
 
-    m_lineLeft->setValidator( new KFloatValidator( 0,9999,true,m_lineLeft ) );
+    pGrid->addWidget( m_lineLeft, 2, 0 );
+    m_lineLeft->setRange ( 0, 9999, 1, false);
 
     lab = new QLabel( i18n( "Width:" ), grp1 );
     lab->resize( lab->sizeHint() );
     pGrid->addWidget( lab, 3, 0 );
 
-    m_lineWidth=new QLineEdit( grp1);
-    pGrid->addWidget( m_lineWidth, 4, 0 );
-    m_lineWidth->setValidator( new KFloatValidator( 0,9999,true,m_lineWidth ) );
+    m_lineWidth= new KDoubleNumInput( grp1 );
+    m_lineWidth->setRange ( 0, 9999, 1, false);
 
+    pGrid->addWidget( m_lineWidth, 4, 0 );
 
     lab = new QLabel( i18n( "Top:" ), grp1 );
     lab->resize( lab->sizeHint() );
     pGrid->addWidget( lab, 1, 1 );
 
-    m_lineTop=new QLineEdit( grp1);
-    pGrid->addWidget( m_lineTop, 2, 1 );
-    m_lineTop->setValidator( new KFloatValidator( 0,9999,true,m_lineTop ) );
+    m_lineTop= new KDoubleNumInput( grp1 );
+    m_lineTop->setRange ( 0, 9999, 1, false);
 
+    pGrid->addWidget( m_lineTop, 2, 1 );
 
     lab = new QLabel( i18n( "Height:" ), grp1 );
     lab->resize( lab->sizeHint() );
     pGrid->addWidget( lab, 3, 1 );
 
-    m_lineHeight=new QLineEdit( grp1);
+    m_lineHeight= new KDoubleNumInput( grp1 );
+    m_lineHeight->setRange ( 0, 9999, 1, false);
     pGrid->addWidget( m_lineHeight, 4, 1 );
-    m_lineHeight->setValidator( new KFloatValidator( 0,9999,true,m_lineHeight ) );
 
 
     addTab( tab, i18n( "&Geometry" ) );
@@ -814,10 +814,10 @@ bool StyleDia::isKeepRatio()const
 
 KoRect StyleDia::getNewSize() const
 {
-    double top=QMAX(0, KoUnit::fromUserValue( m_lineTop->text(), m_doc->getUnit() ));
-    double left=QMAX(0, KoUnit::fromUserValue( m_lineLeft->text(), m_doc->getUnit() ));
-    double width=QMAX(0, KoUnit::fromUserValue( m_lineWidth->text(), m_doc->getUnit() ));
-    double height=QMAX(0, KoUnit::fromUserValue( m_lineHeight->text(), m_doc->getUnit() ));
+    double top=QMAX(0, KoUnit::ptFromUnit( m_lineTop->value(), m_doc->getUnit() ));
+    double left=QMAX(0, KoUnit::ptFromUnit( m_lineLeft->value(), m_doc->getUnit() ));
+    double width=QMAX(0, KoUnit::ptFromUnit( m_lineWidth->value(), m_doc->getUnit() ));
+    double height=QMAX(0, KoUnit::ptFromUnit( m_lineHeight->value(), m_doc->getUnit() ));
 
     KoRect newRect = KoRect( left, top, width, height);
     return newRect;
@@ -826,10 +826,10 @@ KoRect StyleDia::getNewSize() const
 void StyleDia::setSize(const KoRect & _rect)
 {
     oldRect = _rect;
-    m_lineTop->setText(KoUnit::userValue( QMAX(0.00, _rect.top()), m_doc->getUnit() ));
-    m_lineLeft->setText(KoUnit::userValue( QMAX(0.00, _rect.left()), m_doc->getUnit() ));
-    m_lineWidth->setText(KoUnit::userValue( QMAX(0.00, _rect.width()), m_doc->getUnit() ));
-    m_lineHeight->setText(KoUnit::userValue( QMAX(0.00, _rect.height()), m_doc->getUnit() ));
+    m_lineTop->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.top()), m_doc->getUnit() ));
+    m_lineLeft->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.left()), m_doc->getUnit() ));
+    m_lineWidth->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.width()), m_doc->getUnit() ));
+    m_lineHeight->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.height()), m_doc->getUnit() ));
 }
 
 
