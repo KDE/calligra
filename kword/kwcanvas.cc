@@ -421,7 +421,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             if ( frame )
             {
                 setMouseMode( MM_EDIT_FRAME );
-                selectFrame( frame, true );
+                mpEditFrame( e, normalPoint );
             }
             else
             {
