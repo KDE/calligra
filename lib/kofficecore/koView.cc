@@ -328,7 +328,11 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
       {
         KoViewChild *viewChild = new KoViewChild( child, this );
         d->m_children.append( viewChild );
+
+        QApplication::setOverrideCursor(waitCursor);
+        // This is the long operation (due to toolbar layout stuff)
         d->m_manager->setActivePart( child->document(), viewChild->frame()->view() );
+        QApplication::restoreOverrideCursor();
       }
       else
       {
@@ -515,6 +519,7 @@ void KoView::slotChildActivated( bool a )
 
 
   d->m_tempActiveWidget = activeWidget;
+  QApplication::setOverrideCursor(waitCursor);
   d->m_manager->setActivePart( 0L );
 
   QGuardedPtr<KoDocumentChild> docChild = ch->documentChild();
@@ -529,6 +534,8 @@ void KoView::slotChildActivated( bool a )
   d->m_children.remove( ch );
 
   d->m_manager->addPart( docChild->document(), false ); // the destruction of the view removed the part from the partmanager. re-add it :)
+
+  QApplication::restoreOverrideCursor();
 
   // #### HACK
   // We want to delete as many views as possible and this
