@@ -352,7 +352,7 @@ protected slots:
     void updateFilling(int selected);
     void updateWidth();
 
-protected:
+private:
 
     void sortLists();
     QString tabToString(const KoTabulator &tab);
