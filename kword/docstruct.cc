@@ -155,37 +155,30 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWordDocument *_do
     type = _type;
     gui = __parent;
 
-    switch ( type )
-    {
-    case Arrangement:
-    {
+    switch ( type ) {
+    case Arrangement: {
         setText( 0, i18n( "Arrangement" ) );
-        setPixmap( 0, ICON( "tree_arrange.xpm" ) );
+        setPixmap( 0, BarIcon( "tree_arrange" ) );
     } break;
-    case TextFrames:
-    {
+    case TextFrames: {
         setText( 0, i18n( "Text Frames/Frame Sets" ) );
-        setPixmap( 0, ICON( "tree_textframes.xpm" ) );
+        setPixmap( 0, BarIcon( "tree_textframes" ) );
     } break;
-    case Tables:
-    {
+    case Tables: {
         setText( 0, i18n( "Tables" ) );
-        setPixmap( 0, ICON( "tree_table.xpm" ) );
+        setPixmap( 0, BarIcon( "tree_table" ) );
     } break;
-    case Pictures:
-    {
+    case Pictures: {
         setText( 0, i18n( "Pictures" ) );
-        setPixmap( 0, ICON( "tree_picture.xpm" ) );
+        setPixmap( 0, BarIcon( "tree_picture" ) );
     } break;
-    case Cliparts:
-    {
+    case Cliparts: {
         setText( 0, i18n( "Cliparts" ) );
-        setPixmap( 0, ICON( "tree_clipart.xpm" ) );
+        setPixmap( 0, BarIcon( "tree_clipart" ) );
     } break;
-    case Embedded:
-    {
+    case Embedded: {
         setText( 0, i18n( "Embedded Objects" ) );
-        setPixmap( 0, ICON( "tree_embedded.xpm" ) );
+        setPixmap( 0, BarIcon( "tree_embedded" ) );
     } break;
     }
 }
