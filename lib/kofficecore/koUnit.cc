@@ -209,11 +209,7 @@ QString KoUnit::unitName( Unit _unit )
 
 void KoUnit::saveOasis(KoXmlWriter* settingsWriter, Unit _unit)
 {
-    settingsWriter->startElement("config:config-item");
-    settingsWriter->addAttribute("config:name", "unit");
-    settingsWriter->addAttribute("config:type", "string");
-    settingsWriter->addTextNode(unitName(_unit));
-    settingsWriter->endElement(); // config:config-item
+    settingsWriter->addConfigItem( "unit", unitName(_unit) );
 }
 
 KoUnit::Unit KoUnit::loadOasis(const QDomElement& e)
