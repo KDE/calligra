@@ -13,7 +13,7 @@ libopencalcexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.l
 
 libopencalcimport_la_SOURCES = opencalcimport.cc
 libopencalcimport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-libopencalcimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
+libopencalcimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la ../../liboofilter/liboofilter.la
 
 METASOURCES = AUTO
 
