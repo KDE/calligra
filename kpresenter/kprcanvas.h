@@ -178,6 +178,9 @@ public:
 
     QPtrList<KPObject> objectList();
 
+    // get - set data
+    const QPtrList<KPObject> & getObjectList() const;
+
     void stopSound();
 
     //for KPTextView
@@ -256,8 +259,6 @@ protected:
     // setup popupmenus
     void setupMenus();
 
-    // get - set data
-    const QPtrList<KPObject> & getObjectList() const;
     unsigned int objNums() const;
     unsigned int currPgNum() const;
     unsigned int rastX() const;

@@ -2907,7 +2907,6 @@ void KPresenterView::effectOk()
 void KPresenterView::rotateOk()
 {
     bool newAngle=false;
-    KPObject *kpobject = 0;
     QPtrList<KPObject> _objects;
     QPtrList<RotateCmd::RotateValues> _oldRotate;
     float _newAngle;
@@ -2917,18 +2916,19 @@ void KPresenterView::rotateOk()
     _oldRotate.setAutoDelete( false );
 
     _newAngle = rotateDia->getAngle();
-    QPtrList<KPObject> list=m_canvas->activePage()->objectList();
-    for ( int i = 0; i < static_cast<int>(list.count() ); i++ ) {
-	kpobject = list.at( i );
-	if ( kpobject->isSelected() ) {
+
+    QPtrListIterator<KPObject> it( m_canvas->getObjectList() );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() ) {
 	    tmp = new RotateCmd::RotateValues;
-	    tmp->angle = kpobject->getAngle();
+	    tmp->angle =it.current()->getAngle();
 
             if(!newAngle &&tmp->angle!= _newAngle)
                 newAngle=true;
 
 	    _oldRotate.append( tmp );
-	    _objects.append( kpobject );
+	    _objects.append( it.current() );
 	}
     }
 
@@ -2947,7 +2947,6 @@ void KPresenterView::rotateOk()
 void KPresenterView::shadowOk()
 {
     bool newShadow=false;
-    KPObject *kpobject = 0;
     QPtrList<KPObject> _objects;
     QPtrList<ShadowCmd::ShadowValues> _oldShadow;
     ShadowCmd::ShadowValues _newShadow, *tmp;
@@ -2959,14 +2958,14 @@ void KPresenterView::shadowOk()
     _newShadow.shadowDistance = shadowDia->getShadowDistance();
     _newShadow.shadowColor = shadowDia->getShadowColor();
 
-    QPtrList<KPObject> list=m_canvas->activePage()->objectList();
-    for ( int i = 0; i < static_cast<int>( list.count() ); i++ ) {
-	kpobject = list.at( i );
-	if ( kpobject->isSelected() ) {
+    QPtrListIterator<KPObject> it( m_canvas->getObjectList() );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() ) {
 	    tmp = new ShadowCmd::ShadowValues;
-	    tmp->shadowDirection = kpobject->getShadowDirection();
-	    tmp->shadowDistance = kpobject->getShadowDistance();
-	    tmp->shadowColor = kpobject->getShadowColor();
+	    tmp->shadowDirection = it.current()->getShadowDirection();
+	    tmp->shadowDistance =it.current()->getShadowDistance();
+	    tmp->shadowColor = it.current()->getShadowColor();
 
             if(!newShadow &&( tmp->shadowDirection!=_newShadow.shadowDirection
                || tmp->shadowDistance!=_newShadow.shadowDistance
@@ -2974,7 +2973,7 @@ void KPresenterView::shadowOk()
                 newShadow=true;
 
 	    _oldShadow.append( tmp );
-	    _objects.append( kpobject );
+	    _objects.append( it.current() );
 	}
     }
 
@@ -4092,10 +4091,11 @@ void KPresenterView::extraSpelling()
     m_spell.spellCurrTextObjNum = -1;
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textObject.clear();
-    QPtrList<KPObject> listObj(m_canvas->objectList());
-    for ( unsigned int i = 0; i < listObj.count(); i++ ) {
-        if(listObj.at( i )->getType() == OT_TEXT)
-            m_spell.textObject.append(dynamic_cast<KPTextObject*>( listObj.at( i ) ));
+    QPtrListIterator<KPObject> it( m_canvas->getObjectList() );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->getType()==OT_TEXT)
+            m_spell.textObject.append(dynamic_cast<KPTextObject*>( it.current() ));
     }
     startKSpell();
 }
