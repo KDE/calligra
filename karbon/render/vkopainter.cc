@@ -632,7 +632,7 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 
 	VPattern pat = fill ? m_fill->pattern() : m_stroke->pattern();
 
-	ArtPattern *pattern = new ArtPattern;
+	ArtPattern *pattern = art_new( ArtPattern, 1 );
 
 	double dx = ( pat.vector().x() - pat.origin().x() ) * m_zoomFactor;
 	double dy = ( pat.vector().y() - pat.origin().y() ) * m_zoomFactor;
@@ -668,7 +668,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 	if( gradient.type() == VGradient::linear )
 	{
-		ArtGradientLinear *linear = new ArtGradientLinear();
+		ArtGradientLinear *linear = art_new( ArtGradientLinear, 1 );
 
 		// TODO : make variable
 		if( gradient.repeatMethod() == VGradient::none )
@@ -713,7 +713,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 	}
 	else if( gradient.type() == VGradient::radial )
 	{
-		ArtGradientRadial *radial = new ArtGradientRadial();
+		ArtGradientRadial *radial = art_new( ArtGradientRadial, 1 );
 
 		// TODO : make variable
 		if( gradient.repeatMethod() == VGradient::none )
@@ -767,7 +767,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 	}
 	else if( gradient.type() == VGradient::conic )
 	{
-		ArtGradientConical *conical = new ArtGradientConical();
+		ArtGradientConical *conical = art_new( ArtGradientConical, 1 );
 
 		// TODO : make variable
 		if( gradient.repeatMethod() == VGradient::none )
