@@ -21,7 +21,6 @@
 
 #include <qtextstream.h>
 #include <qwmatrix.h>
-#include <komlParser.h>
 #include <koChild.h>
 
 class QDomDocument;
@@ -30,6 +29,8 @@ class KURL;
 class KoStore;
 class KoDocument;
 class KoDocumentChildPrivate;
+class KOMLParser;
+class KOMLAttrib;
 
 /**
  * Holds an embedded object.
@@ -91,7 +92,7 @@ public:
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
    *  to actually load the embedded documents.
    *
-   *  What you hsould have in mind is that this method is called from within
+   *  What you should have in mind is that this method is called from within
    *  @ref KoDocument::loadXML while @ref #loadDocument is called from within
    *  @ref KoDocument::loadChildren, respectively from your implementation
    *  of these methods.
@@ -108,15 +109,11 @@ public:
 
 protected:
   // #### Torben: Is that still needed ?
-  /**
-   * Called if @ref #load finds a tag that it does not understand.
-   *
-   * @return TRUE if the tag could be handled. The default implementation
-   *         returns FALSE.
-   */
-  virtual bool loadTag( KOMLParser& parser, const QString& tag, QValueList<KOMLAttrib>& lst2 );
+  // David: No, but it's virtual so we can't remove it :}
+  virtual bool loadTag( KOMLParser&, const QString&, QValueList<KOMLAttrib>&);
 
-protected: // TODO private: when KOML is dead
+protected: // Should be protected, but KWord needs access to the variables
+    // because it reimplements load/save (for uppercase tags)
 
   /**
    *  Holds the source of this object, for example "file:/home/weis/image.gif"
@@ -140,6 +137,7 @@ protected: // TODO private: when KOML is dead
    */
   QString m_tmpMimeType;
 
+private:
   KoDocumentChildPrivate *d;
 };
 

@@ -28,8 +28,6 @@ using namespace std;
 #include <kurl.h>
 #include <kservice.h>
 
-#include <komlParser.h>
-
 class QDomElement;
 class QDomDocument;
 

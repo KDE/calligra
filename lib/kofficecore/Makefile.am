@@ -2,16 +2,18 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) $(all_includes)
+# TODO: get rid of libkoml. But this breaks binary compatibility even if the
+# apps doesn't use it ! So we have to keep it - even when we make it empty.
 libkofficecore_la_LIBADD  = \
-	$(top_builddir)/lib/koml/libkoml.la \
-	$(top_builddir)/lib/store/libkstore.la -lkparts $(LIB_KFILE)
+        $(top_builddir)/lib/koml/libkoml.la \
+	$(top_builddir)/lib/store/libkstore.la $(LIB_KPARTS)
 
 ####### Files
 
 lib_LTLIBRARIES = libkofficecore.la libkodocinfopropspage.la
 
 libkofficecore_la_SOURCES = koDocument.cc \
-	koStream.cc koFilterManager.cc \
+	koFilterManager.cc \
 	koMainWindow.cc koPrintPreview.cc \
 	koApplication.cc koQueryTrader.cc \
 	koDataTool.cc koFilter.cc \
@@ -24,7 +26,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 libkofficecore_la_LDFLAGS = $(KDE_LDFLAGS)  -version-info 1:0:0 -no-undefined
 
 include_HEADERS = koFilter.h \
-	koStream.h koDocument.h \
+	koDocument.h \
 	koMainWindow.h koPrintPreview.h \
 	koApplication.h koQueryTrader.h \
 	koFilterManager.h \
