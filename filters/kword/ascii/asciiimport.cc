@@ -83,7 +83,7 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
     QCString cstr=QCString(str.utf8());
 
     KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
-    if(!out.open("root", "")) {
+    if(!out.open("root")) {
         kdError(30502) << "Unable to open output file!" << endl;
         in.close();
         out.close();
