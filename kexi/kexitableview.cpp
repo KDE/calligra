@@ -85,6 +85,9 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 
 	m_contents.setAutoDelete(true);
 
+	m_scrollTimer = new QTimer(this);
+	connect(m_scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
+
 	// Connect header, table and scrollbars
 	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), m_pTopHeader, SLOT(setOffset(int)));
 	connect(verticalScrollBar(), SIGNAL(valueChanged(int)),	m_pRecordMarker, SLOT(setOffset(int)));
@@ -95,7 +98,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 }
 
 
-void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, int width=100)
+void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, int width/*=100*/)
 {
 	m_numCols++;
 	m_pColumnTypes->resize(m_numCols);
@@ -118,7 +121,7 @@ void KexiTableView::setFont(const QFont &f)
 	m_pRecordMarker->setCellHeight(m_rowHeight);
 }
 
-void KexiTableView::remove(KexiTableItem *item, bool moveCursor=true)
+void KexiTableView::remove(KexiTableItem *item, bool moveCursor/*=true*/)
 {
 	if(m_contents.removeRef(item))
 	{
@@ -291,7 +294,7 @@ void KexiTableView::setColumn(int col, QString name, ColumnType type, bool chang
 	(m_pColumnModes->at(col)) = changeable;
 }
 */
-void KexiTableView::setSorting(int col, bool ascending=true)
+void KexiTableView::setSorting(int col, bool ascending/*=true*/)
 {
 	m_sortOrder = ascending;
 	m_sortedColumn = col;
@@ -355,7 +358,7 @@ QSize KexiTableView::sizeHint() const
 
 QSize KexiTableView::minimumSizeHint() const
 {
-	return QSize(tableSize().width()/3, m_rowHeight*2);
+	return QSize(columnWidth(1), m_rowHeight*2);
 }
 
 void KexiTableView::createBuffer(int width, int height)
@@ -561,11 +564,48 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 {
 	// do the same as in mouse press
-	contentsMousePressEvent(e);
+	int x,y;
+	contentsToViewport(e->x(), e->y(), x, y);
+	qDebug("%4d %4d, %4d %4d, %4d, %4d", e->x(), e->y(), x, y, visibleWidth(), visibleHeight());
+
+	if(y > visibleHeight())
+	{
+		m_needAutoScroll = true;
+		m_scrollTimer->start(70, false);
+		m_scrollDirection = ScrollDown;
+	}
+	else if(y < 0)
+	{
+		m_needAutoScroll = true;
+		m_scrollTimer->start(70, false);
+		m_scrollDirection = ScrollUp;
+	}
+	else if(x > visibleWidth())
+	{
+		m_needAutoScroll = true;
+		m_scrollTimer->start(70, false);
+		m_scrollDirection = ScrollRight;
+	}
+	else if(x < 0)
+	{
+		m_needAutoScroll = true;
+		m_scrollTimer->start(70, false);
+		m_scrollDirection = ScrollLeft;
+	}
+	else
+	{
+		m_needAutoScroll = false;
+		m_scrollTimer->stop();
+		contentsMousePressEvent(e);
+	}
 }
 
 void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
+	if(m_needAutoScroll)
+	{
+		m_scrollTimer->stop();
+	}
 }
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
@@ -706,7 +746,7 @@ void KexiTableView::selectPrev()
 	}
 }
 
-void KexiTableView::createEditor(int row, int col, QString addText = QString::null, bool backspace = false)
+void KexiTableView::createEditor(int row, int col, QString addText/* = QString::null*/, bool backspace/* = false*/)
 {
 	QString val;
 	switch(columnType(col))
@@ -879,7 +919,7 @@ int KexiTableView::cols() const
     return m_pTopHeader->count();
 }
 
-void KexiTableView::setCursor(int row, int col=-1)
+void KexiTableView::setCursor(int row, int col/*=-1*/)
 {
 	// get rid of editor
 	if (m_pEditor)
@@ -970,6 +1010,34 @@ void KexiTableView::updateContextMenu()
 			m_pContextMenu->insertItem(tr("&neuer datensatz"), this, SLOT(addRecord()), ALT+Key_Insert);
 		if(m_deletionPolicy != NoDelete)
 			m_pContextMenu->insertItem(tr("datensatz &löschen"), this, SLOT(removeRecord()), ALT+Key_Delete);
+	}
+}
+
+void KexiTableView::slotAutoScroll()
+{
+	if(m_needAutoScroll)
+	{
+		switch(m_scrollDirection)
+		{
+			case ScrollDown:
+//				if(m_curRow + 1 <= m_numRows)
+					setCursor(m_curRow + 1, m_curCol);
+				break;
+
+			case ScrollUp:
+//				if(m_curRow - 1 >= 0)
+					setCursor(m_curRow - 1, m_curCol);
+				break;
+			case ScrollLeft:
+//				if(m_curCol - 1 <= m_numCols)
+					setCursor(m_curRow, m_curCol - 1);
+				break;
+
+			case ScrollRight:
+//				if(m_curCol - 1 >= m_numRows)
+					setCursor(m_curRow, m_curCol + 1);
+				break;
+		}
 	}
 }
 

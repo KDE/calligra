@@ -130,6 +130,7 @@ protected:
 	void	contentsMousePressEvent(QMouseEvent*);
 	void	contentsMouseMoveEvent(QMouseEvent*);
 	void	contentsMouseDoubleClickEvent(QMouseEvent *e);
+	void	contentsMouseReleaseEvent(QMouseEvent *e);
 	void	keyPressEvent(QKeyEvent*);
 	void	focusInEvent(QFocusEvent*);
 	void	focusOutEvent(QFocusEvent*);
@@ -148,6 +149,8 @@ protected slots:
 	virtual void		editorOk();
 	virtual void		boolToggled();
 	void			slotUpdate();
+
+	void			slotAutoScroll();
 
 public slots:
 	void			sort();
@@ -193,6 +196,20 @@ protected:
 	KexiTableList		m_contents;
 	QMemArray<QVariant::Type>	*m_pColumnTypes;
 	QMemArray<bool>		*m_pColumnModes;
+
+	bool			m_needAutoScroll;
+	QTimer			*m_scrollTimer;
+
+	enum ScrollDirection
+	{
+		ScrollUp,
+		ScrollDown,
+		ScrollLeft,
+		ScrollRight
+	};
+
+	ScrollDirection		m_scrollDirection;
+
 };
 
 inline KexiTableItem *KexiTableView::itemAt(int row)
