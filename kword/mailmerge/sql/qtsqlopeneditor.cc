@@ -26,6 +26,10 @@
 #include <kconfig.h>
 #include <kpushbutton.h>
 #include <klineeditdlg.h>
+#include <kiconloader.h>
+#include <qsqldatabase.h>
+#include <qguardedptr.h>
+#include <klocale.h>
 
 /******************************************************************
  *

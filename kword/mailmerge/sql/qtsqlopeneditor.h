@@ -21,11 +21,7 @@
 #define _SERIALLETTER_QTSQL_OPEN_EDITOR_H_
 
 #include <qdom.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kdialogbase.h>
-#include <qsqldatabase.h>
-#include <qguardedptr.h>
 #include <qwidget.h>
 
 #include "mailmerge_interface.h"
@@ -47,7 +43,7 @@ public:
 private:
  KWQTSQLSerialDataSourceBase *db;
  KWQTSQLOpenWidget *widget;
- 
+
  void fillSavedProperties();
 
 private slots:

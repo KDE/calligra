@@ -21,7 +21,7 @@
 #include "serialletter_qtsqlplugin.moc"
 #include "mailmerge_qtsqlplugin_easyfilter.h"
 
-
+#include <klocale.h>
 #include <qlayout.h>
 #include <qsqlcursor.h>
 #include <qdatatable.h>
@@ -46,7 +46,7 @@ KWQTSQLSerialDataSource::KWQTSQLSerialDataSource(KInstance *inst,QObject *parent
 
 KWQTSQLSerialDataSource::~KWQTSQLSerialDataSource()
 {
-        if (myquery) delete myquery;
+        delete myquery;
         QSqlDatabase::removeDatabase("KWQTSQLPOWER");
 }
 
@@ -147,7 +147,7 @@ void KWQTSQLSerialDataSource::refresh(bool force)
 		myquery->select(filter);
         }
         kdDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
-	
+
 }
 
 
@@ -172,7 +172,7 @@ KWQTSQLDataSourceEditor::KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerial
 	connect(widget->tableCombo,SIGNAL(activated(int)),this,SLOT(tableChanged(int)));
 	connect(widget->editFilter,SIGNAL(clicked()),this,SLOT(editFilter()));
 	updateTableCombo();
-	
+
 //        connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
 }
 
@@ -185,7 +185,7 @@ void KWQTSQLDataSourceEditor::tableChanged(int item)
 	if (widget->filterCheckBox->isChecked()) tmpCursor->select(filter);
 
 	widget->DataTable->setSqlCursor(tmpCursor,true,true);
-	widget->DataTable->refresh(QDataTable::RefreshAll);	
+	widget->DataTable->refresh(QDataTable::RefreshAll);
 }
 
 void KWQTSQLDataSourceEditor::updateTableCombo()

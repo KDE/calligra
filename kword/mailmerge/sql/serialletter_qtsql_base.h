@@ -21,8 +21,6 @@
 #define _SERIALLETTER_QTSQL_BASE_H_
 
 #include <qdom.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kdialogbase.h>
 #include <qsqldatabase.h>
 #include <qguardedptr.h>
@@ -55,7 +53,7 @@ class KWQTSQLSerialDataSourceBase: public KWMailMergeDataSource
 	QString port;
 	QString databasename;
 	QGuardedPtr<QSqlDatabase> database;
-	QString DataBaseConnection; 
+	QString DataBaseConnection;
         static int connectionId;
    k_dcop:
      bool openDatabase();

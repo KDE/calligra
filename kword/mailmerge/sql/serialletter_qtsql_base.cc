@@ -32,6 +32,8 @@
 #include <qsqlcursor.h>
 #include <qdatatable.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kiconloader.h>
 
 
 
