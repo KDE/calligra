@@ -45,6 +45,8 @@ class MoveTool;
 class BrushTool;
 class ZoomTool;
 class Brush;
+class GradientDialog;
+class GradientEditorDialog;
 class ColorDialog;
 class BrushDialog;
 class BrushesWidget;
@@ -128,6 +130,8 @@ public slots:
   virtual void viewLayerDialog();
   virtual void viewColorDialog();
   virtual void viewBrushDialog();
+  virtual void viewGradientDialog();
+  virtual void viewGradientEditorDialog();
   virtual void viewPreferences();
 
   virtual void slotActivateMoveTool();
@@ -170,6 +174,8 @@ protected:
   CORBA::Long m_idMenuView_LayerDialog;
   CORBA::Long m_idMenuView_ColorDialog;
   CORBA::Long m_idMenuView_BrushDialog;
+  CORBA::Long m_idMenuView_GradientDialog;
+  CORBA::Long m_idMenuView_GradientEditorDialog;
   CORBA::Long m_idMenuView_Preferences;
 
   OpenPartsUI::Menu_var m_vMenuImage;
@@ -181,22 +187,26 @@ private:
   enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL, TBEDIT_UNDO, TBEDIT_REDO,
 	 TBEDIT_COPY, TBEDIT_CUT, TBEDIT_PASTE };
 
-  KImageShopDoc *m_pDoc;
-  LayerDialog   *m_pLayerDialog;
-  QScrollBar    *m_pHorz, *m_pVert;
-  KRuler        *m_pHRuler, *m_pVRuler;
+  KImageShopDoc        *m_pDoc;
+  LayerDialog          *m_pLayerDialog;
+  QScrollBar           *m_pHorz, *m_pVert;
+  KRuler               *m_pHRuler, *m_pVRuler;
 
-  CanvasView    *m_pCanvasView;
-  Tool          *m_pTool; // currently active tool
-  MoveTool      *m_pMoveTool;
-  BrushTool     *m_pBrushTool;
-  ZoomTool      *m_pZoomTool;
-  const Brush   *m_pBrush; // current brush
-  BrushDialog 	*m_pBrushDialog;
-  const BrushesWidget *m_pBrushChooser;
-  ColorDialog   *m_pColorDialog;
-  KColor        m_fg, m_bg;
-  float         m_ZoomFactor;
+  CanvasView           *m_pCanvasView;
+  Tool                 *m_pTool; // currently active tool
+  MoveTool             *m_pMoveTool;
+  BrushTool            *m_pBrushTool;
+  ZoomTool             *m_pZoomTool;
+  const Brush          *m_pBrush; // current brush
+  BrushDialog          *m_pBrushDialog;
+  const BrushesWidget  *m_pBrushChooser;
+  GradientDialog       *m_pGradientDialog;
+  GradientEditorDialog *m_pGradientEditorDialog;
+  ColorDialog          *m_pColorDialog;
+  KColor               m_fg, m_bg;
+  float                m_ZoomFactor;
 };
 
 #endif
+
+

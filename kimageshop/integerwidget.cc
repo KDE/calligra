@@ -122,3 +122,5 @@ void IntegerWidget::setSliderValue( int value )
 
 
 #include "integerwidget.moc"
+
+

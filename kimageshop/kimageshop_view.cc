@@ -46,6 +46,8 @@
 #include "brush.h"
 #include "layerdlg.h"
 #include "colordialog.h"
+#include "gradientdlg.h"
+#include "gradienteditordlg.h"
 #include "brushdialog.h"
 #include "brusheswidget.h"
 #include "tool.h"
@@ -67,6 +69,7 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
   m_pCanvasView = 0L;
   m_pLayerDialog = 0L;
   m_pBrushDialog = 0L;
+  m_pGradientDialog = 0L;
   m_pColorDialog = 0L;
   m_pHorz = 0L;
   m_pVert = 0L;
@@ -310,6 +313,12 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   text = Q2C( i18n( "&Brushes dialog" ) );
   m_idMenuView_BrushDialog = m_vMenuView->insertItem( text, this, "viewBrushDialog", 0 );
 
+  text = Q2C( i18n( "&Gradient dialog" ) );
+  m_idMenuView_GradientDialog = m_vMenuView->insertItem( text, this, "viewGradientDialog", 0 );
+
+  text = Q2C( i18n( "Gradient &editor dialog" ) );
+  m_idMenuView_GradientEditorDialog = m_vMenuView->insertItem( text, this, "viewGradientEditorDialog", 0 );
+
   m_vMenuView->insertSeparator( -1 );
 
   text = Q2C( i18n( "&Preferences" ) );
@@ -372,12 +381,24 @@ void KImageShopView::createGUI()
   // create zoom tool
   m_pZoomTool = new ZoomTool(this);
 
-  // layer dialog
-  m_pLayerDialog = new LayerDialog(m_pDoc, this);
-  m_pLayerDialog->resize(205,267);
-  m_pLayerDialog->move(200,20);
+  // create layer dialog
+  m_pLayerDialog = new LayerDialog( m_pDoc, this );
+  m_pLayerDialog->resize( 205, 267 );
+  m_pLayerDialog->move( 200, 20 );
   m_pLayerDialog->show();
   addDialog(m_pLayerDialog);
+
+  // create gradient dialog
+  m_pGradientDialog = new GradientDialog( m_pDoc, this );
+  m_pGradientDialog->resize( 206, 185 );
+  m_pGradientDialog->move( 200, 290 );
+  m_pGradientDialog->show();
+
+  // create gradient editor dialog
+  m_pGradientEditorDialog = new GradientEditorDialog( m_pDoc, this );
+  m_pGradientEditorDialog->resize( 400, 200 );
+  m_pGradientEditorDialog->move( 100, 190 );
+  m_pGradientEditorDialog->show();
 
   // color dialog
   //m_pColorDialog = new ColorDialog(m_pCanvasView);
@@ -867,6 +888,33 @@ void KImageShopView::viewBrushDialog()
   }
 }
 
+void KImageShopView::viewGradientDialog()
+{
+  if( m_pGradientDialog )
+  {
+    if( m_pGradientDialog->isVisible() )
+      m_pGradientDialog->hide();
+    else
+      m_pGradientDialog->show();
+
+    // TODO: make this working
+    m_vMenuView->setItemChecked( m_idMenuView_GradientDialog, true );
+  }
+}
+
+void KImageShopView::viewGradientEditorDialog()
+{
+  if( m_pGradientEditorDialog )
+  {
+    if( m_pGradientEditorDialog->isVisible() )
+      m_pGradientEditorDialog->hide();
+    else
+      m_pGradientEditorDialog->show();
+
+    // TODO: make this working
+    m_vMenuView->setItemChecked( m_idMenuView_GradientEditorDialog, true );
+  }
+}
 
 void KImageShopView::viewColorDialog()
 {
@@ -943,3 +991,9 @@ void  KImageShopView::slotSetBGColor(const KColor& c)
 }
 
 #include "kimageshop_view.moc"
+
+
+
+
+
+
