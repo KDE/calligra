@@ -519,6 +519,7 @@ MarkerStyle::MarkerStyle( int style )
         m_d = "m0 0h278 278 280v36 36 38h-278-278-280v-36-36z";
         break;
     case 6:
+    case 7:
         m_name = "Double Arrow";
         m_viewBox = "0 0 1131 1918";
         m_d = "m737 1131h394l-564-1131-567 1131h398l-398 787h1131z";

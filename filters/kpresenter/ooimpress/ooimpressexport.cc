@@ -618,7 +618,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
         }
         else
             target.setAttribute( "draw:kind", "section");//by default
-	QDomElement pieAngle = source.namedItem( "PIEANGLE").toElement();   
+	QDomElement pieAngle = source.namedItem( "PIEANGLE").toElement();
 	int startangle = 45;
 	if( !pieAngle.isNull() )
 	  {
@@ -630,7 +630,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
 	    //default value take it into kppieobject
 	    target.setAttribute( "draw:start-angle", 45 );
 	  }
-	QDomElement pieLength = source.namedItem( "PIELENGTH").toElement();   
+	QDomElement pieLength = source.namedItem( "PIELENGTH").toElement();
 	if( !pieLength.isNull() )
 	  {
 	    int value = pieLength.attribute("value").toInt();
@@ -679,7 +679,6 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
     QString nameStr = name.attribute("objectName");
     if( !nameStr.isEmpty() )
       target.setAttribute( "draw:name", nameStr );
-
 }
 
 #include "ooimpressexport.moc"
