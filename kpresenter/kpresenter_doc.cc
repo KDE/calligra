@@ -1248,8 +1248,7 @@ void KPresenterDocument_impl::repaint(QRect rect)
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	{
 	  r = rect;
-	  r.setX(r.x() - viewPtr->getDiffX());
-	  r.setY(r.y() - viewPtr->getDiffY());
+	  r.moveTopLeft(QPoint(r.x() - viewPtr->getDiffX(),r.y() - viewPtr->getDiffY()));
 					
 	  viewPtr->repaint(r,false);
 	}
@@ -1266,8 +1265,7 @@ void KPresenterDocument_impl::repaint(KPObject *kpobject)
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	{
 	  r = kpobject->getBoundingRect(0,0);
-	  r.setX(r.x() - viewPtr->getDiffX());
-	  r.setY(r.y() - viewPtr->getDiffY());
+	  r.moveTopLeft(QPoint(r.x() - viewPtr->getDiffX(),r.y() - viewPtr->getDiffY()));
 					
 	  viewPtr->repaint(r,false);
 	}

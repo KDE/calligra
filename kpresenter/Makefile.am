@@ -25,7 +25,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kppixmapobject.cc \
 	kpbackground.cc kppixmap.cc kpclipart.cc kpgradient.cc\
 	kppixmapcollection.cc kpgradientcollection.cc \
-	command.cc movecmd.cc \
+	command.cc movecmd.cc resizecmd.cc \
 	commandhistory.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
@@ -41,7 +41,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kppixmapobject.h \
 		kpbackground.h kppixmap.h kpclipart.h kpgradient.h \
 		kppixmapcollection.h kpgradientcollection.h \
-		command.h movecmd.h \
+		command.h movecmd.h resizecmd.h \
 		commandhistory.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
@@ -56,7 +56,7 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kppixmapobject.moc
 		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
 		kppixmapcollection.moc kpgradientcollection.moc \
-		command.moc movecmd.moc \
+		command.moc movecmd.moc resizecmd.moc \
 		commandhistory.moc
 
 idl_DATA =	kpresenter.idl
@@ -124,4 +124,5 @@ kpgradientcollection.cc: kpgradientcollection.moc
 
 command.cc: command.moc
 movecmd.cc: movecmd.moc
+resizecmd.cc: resizecmd.moc
 commandhistory.cc: commandhistory.moc

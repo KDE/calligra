@@ -46,6 +46,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       goingBack = false;
       drawMode = false;
       fillBlack = true;
+      drawRubber = false;
     }
   else 
     {
@@ -140,6 +141,7 @@ void Page::drawObjects(QPainter *painter,QRect rect)
 	      kpobject->setSubPresStep(subPresStep);
 	      kpobject->doSpecificEffects(true);
 	    }
+
 	  kpobject->draw(painter,diffx(),diffy());
 	  kpobject->setSubPresStep(0);
 	  kpobject->doSpecificEffects(false);
@@ -210,7 +212,13 @@ void Page::mousePressEvent(QMouseEvent *e)
 	      modType = MT_NONE;
 	    }
 	  else
-	    deSelectAllObj();
+	    {
+	      modType = MT_NONE;
+	      if (!(e->state() & ShiftButton) && !(e->state() & ControlButton))
+		deSelectAllObj();
+	      drawRubber = true;
+	      rubber = QRect(e->x(),e->y(),0,0);
+	    }
 
 	}
       if (e->button() == RightButton)
@@ -239,6 +247,8 @@ void Page::mousePressEvent(QMouseEvent *e)
 		}
 	      else if (kpobject->getType() == OT_TEXT)
 		{
+		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton))
+		    deSelectAllObj();
 		  selectObj(kpobject);
 		  QPoint pnt = QCursor::pos();
 		  txtMenu->popup(pnt);
@@ -247,6 +257,8 @@ void Page::mousePressEvent(QMouseEvent *e)
 		}
 	      else
 		{
+		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton))
+		    deSelectAllObj();
 		  selectObj(kpobject);
 		  QPoint pnt = QCursor::pos();
 		  graphMenu->popup(pnt);
@@ -291,21 +303,44 @@ void Page::mousePressEvent(QMouseEvent *e)
 /*=================== handle mouse released ======================*/
 void Page::mouseReleaseEvent(QMouseEvent *e)
 {
+  int mx = e->x();
+  int my = e->y();
+  mx = (mx / rastX()) * rastX();
+  my = (my / rastY()) * rastY();
+  firstX = (firstX / rastX()) * rastX();
+  firstY = (firstY / rastY()) * rastY();
+  QList<KPObject> _objects;
+  _objects.setAutoDelete(false);
+  KPObject *kpobject = 0;
+
   switch (modType)
     {
+    case MT_NONE:
+      {
+	if (drawRubber)
+	  {
+	    QPainter p;
+	    p.begin(this);
+	    p.setRasterOp(NotROP);
+	    p.setPen(QPen(black,0,DotLine));
+	    p.drawRect(rubber);
+	    p.end();
+	    drawRubber = false;
+
+	    rubber = rubber.normalize();
+	    KPObject *kpobject = 0;
+	    for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	      {
+		kpobject = objectList()->at(i);
+		if (rubber.intersects(kpobject->getBoundingRect(diffx(),diffy())))
+		  selectObj(kpobject);
+	      }
+	  }
+      } break;
     case MT_MOVE:
       {
 	if (firstX != e->x() || firstY != e->y())
 	  {
-	    int mx = e->x();
-	    int my = e->y();
-	    mx = (mx / rastX()) * rastX();
-	    my = (my / rastY()) * rastY();
-	    firstX = (firstX / rastX()) * rastX();
-	    firstY = (firstY / rastY()) * rastY();
-	    QList<KPObject> _objects;
-	    _objects.setAutoDelete(false);
-	    KPObject *kpobject = 0;
 	    
 	    for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 	      {
@@ -318,7 +353,86 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    view->KPresenterDoc()->commands()->addCommand(moveByCmd);
 	  }
       } break;
-    default: break;
+    case MT_RESIZE_UP:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    kpobject = objectList()->at(resizeObjNum);
+	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object up"),QPoint(0,my - firstY),QSize(0,firstY - my),
+						 kpobject,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	  }
+      } break;
+    case MT_RESIZE_DN:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    kpobject = objectList()->at(resizeObjNum);
+	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object down"),QPoint(0,0),QSize(0,my - firstY),
+						 kpobject,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	  }
+      } break;
+    case MT_RESIZE_LF:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    kpobject = objectList()->at(resizeObjNum);
+	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left"),QPoint(mx - firstX,0),QSize(firstX - mx,0),
+						 kpobject,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	  }
+      } break;
+    case MT_RESIZE_RT:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    kpobject = objectList()->at(resizeObjNum);
+	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right"),QPoint(0,0),QSize(mx - firstX,0),
+						 kpobject,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	  }
+      } break;
+    case MT_RESIZE_LU:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    kpobject = objectList()->at(resizeObjNum);
+	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left up"),QPoint(mx - firstX,my - firstY),
+						 QSize(firstX - mx,firstY - my),kpobject,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	  }
+      } break;
+    case MT_RESIZE_LD:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    kpobject = objectList()->at(resizeObjNum);
+	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left down"),QPoint(mx - firstX,0),
+						 QSize(firstX - mx,my - firstY),kpobject,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	  }
+      } break;
+    case MT_RESIZE_RU:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    kpobject = objectList()->at(resizeObjNum);
+	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right up"),QPoint(0,my - firstY),
+						 QSize(mx - firstX,firstY - my),kpobject,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	  }
+      } break;
+    case MT_RESIZE_RD:
+      {
+	if (firstX != e->x() || firstY != e->y())
+	  {
+	    kpobject = objectList()->at(resizeObjNum);
+	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right down"),QPoint(0,0),QSize(mx - firstX,my - firstY),
+						 kpobject,view->KPresenterDoc());
+	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	  }
+      } break;
     }
 
   mousePressed = false;
@@ -334,7 +448,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
     {
       KPObject *kpobject;
       
-      if (!mousePressed || modType == MT_NONE)
+      if (!mousePressed || (!drawRubber && modType == MT_NONE))
 	{
 	  setCursor(arrowCursor);
 	  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
@@ -357,7 +471,22 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 	  oldMx = (oldMx / rastX()) * rastX();
 	  oldMy = (oldMy / rastY()) * rastY();
 
-	  if (modType == MT_MOVE)
+	  if (modType == MT_NONE)
+	    {
+	      if (drawRubber)
+		{
+		  QPainter p;
+		  p.begin(this);
+		  p.setRasterOp(NotROP);
+		  p.setPen(QPen(black,0,DotLine));
+		  p.drawRect(rubber);
+		  rubber.setRight(e->x());
+		  rubber.setBottom(e->y());
+		  p.drawRect(rubber);
+		  p.end();
+		}
+	    }
+	  else if (modType == MT_MOVE)
 	    {
 	      QList<KPObject> _objects;
 	      _objects.setAutoDelete(false);
@@ -367,7 +496,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		  if (kpobject->isSelected()) 
 		    _objects.append(kpobject);
 		}
-	      MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object"),QPoint(mx - oldMx,my - oldMy),
+	      MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object(s)"),QPoint(mx - oldMx,my - oldMy),
 						   _objects,view->KPresenterDoc());
 	      moveByCmd->execute();
 	      delete moveByCmd;
@@ -382,57 +511,59 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		{
 		case MT_RESIZE_LU:
 		  {
-		    kpobject->resizeBy(oldMx - mx,oldMy - my);
-		    kpobject->moveBy(oldRect.width() - kpobject->getBoundingRect(0,0).width(),
-				     oldRect.height() - kpobject->getBoundingRect(0,0).height());
-		    _repaint(oldRect);
-		    _repaint(kpobject);
+		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left up"),QPoint(mx - oldMx,my - oldMy),
+							 QSize(oldMx - mx,oldMy - my),kpobject,view->KPresenterDoc());
+		    resizeCmd->execute();
+		    delete resizeCmd;
 		  } break;
 		case MT_RESIZE_LF:
 		  {
-		    kpobject->resizeBy(oldMx - mx,0);
-		    kpobject->moveBy(oldRect.width() - kpobject->getBoundingRect(0,0).width(),0);
-		    _repaint(oldRect);
-		    _repaint(kpobject);
+		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left"),QPoint(mx - oldMx,0),QSize(oldMx - mx,0),
+							 kpobject,view->KPresenterDoc());
+		    resizeCmd->execute();
+		    delete resizeCmd;
 		  } break;
 		case MT_RESIZE_LD:
 		  {
-		    kpobject->resizeBy(oldMx - mx,my - oldMy);
-		    kpobject->moveBy(oldRect.width() - kpobject->getBoundingRect(0,0).width(),0);
-		    _repaint(oldRect);
-		    _repaint(kpobject);
+		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left down"),QPoint(mx - oldMx,0),
+							 QSize(oldMx - mx,my - oldMy),kpobject,view->KPresenterDoc());
+		    resizeCmd->execute();
+		    delete resizeCmd;
 		  } break;
 		case MT_RESIZE_RU:
 		  {
-		    kpobject->resizeBy(mx - oldMx,oldMy - my);
-		    kpobject->moveBy(0,oldRect.height() - kpobject->getBoundingRect(0,0).height());
-		    _repaint(oldRect);
-		    _repaint(kpobject);
+		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right up"),QPoint(0,my - oldMy),
+							 QSize(mx - oldMx,oldMy - my),kpobject,view->KPresenterDoc());
+		    resizeCmd->execute();
+		    delete resizeCmd;
 		  } break;
 		case MT_RESIZE_RT:
 		  {
-		    kpobject->resizeBy(mx - oldMx,0);
-		    _repaint(oldRect);
-		    _repaint(kpobject);
+		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right"),QPoint(0,0),QSize(mx - oldMx,0),
+							 kpobject,view->KPresenterDoc());
+		    resizeCmd->execute();
+		    delete resizeCmd;
 		  } break;
 		case MT_RESIZE_RD:
 		  {
-		    kpobject->resizeBy(mx - oldMx,my - oldMy);
-		    _repaint(oldRect);
-		    _repaint(kpobject);
+		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right down"),QPoint(0,0),QSize(mx - oldMx,my - oldMy),
+							 kpobject,view->KPresenterDoc());
+		    resizeCmd->execute();
+		    delete resizeCmd;
 		  } break;
 		case MT_RESIZE_UP:
 		  {
-		    kpobject->resizeBy(0,oldMy - my);
-		    kpobject->moveBy(0,oldRect.height() - kpobject->getBoundingRect(0,0).height());
-		    _repaint(oldRect);
-		    _repaint(kpobject);
+		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object up"),QPoint(0,my - oldMy),QSize(0,oldMy - my),
+							 kpobject,view->KPresenterDoc());
+		    resizeCmd->execute();
+		    delete resizeCmd;
 		  } break;
 		case MT_RESIZE_DN:
 		  {
-		    kpobject->resizeBy(0,my - oldMy);
-		    _repaint(oldRect);
-		    _repaint(kpobject);
+		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object down"),QPoint(0,0),QSize(0,my - oldMy),
+							 kpobject,view->KPresenterDoc());
+		    resizeCmd->execute();
+		    delete resizeCmd;
 		  } break;
 		default: break;
 		}

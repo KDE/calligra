@@ -36,31 +36,37 @@ CommandHistory::~CommandHistory()
 /*====================== add command =============================*/
 void CommandHistory::addCommand(Command *_command)
 {
-  // remove commands which are after present in the history
-  if (present < commands.count())
-    {
-      for (unsigned int i = present;i < commands.count();i++)
-	commands.remove(i);
+  QList<Command> _commands;
+  _commands.setAutoDelete(false);
+
+  for (int i = 0;i < present;i++)
+    {    
+      _commands.insert(i,commands.at(0));
+      commands.take(0);
     }
 
-  commands.insert(present++,_command);
-  emit undoRedoChanged(getUndoName(),getRedoName());
+  _commands.append(_command);
+  commands.clear();
+  commands = _commands;
+  commands.setAutoDelete(true);
+
   if (commands.count() > MAX_UNDO_REDO)
-    {
-      commands.remove(static_cast<unsigned int>(0));
-      present--;
-    }
+    commands.removeFirst();
+  else
+    present++;
+
+  emit undoRedoChanged(getUndoName(),getRedoName());
 }
 
 /*======================= undo ===================================*/
 void CommandHistory::undo()
 {
-  if (--present > -1)
+  if (present > 0)
     {
-      commands.at(present)->unexecute();
+      commands.at(present - 1)->unexecute();
+      present--;
       emit undoRedoChanged(getUndoName(),getRedoName());
     }
-  else present++;
 }
 
 /*======================= redo ===================================*/
@@ -68,7 +74,8 @@ void CommandHistory::redo()
 {
   if (present < static_cast<int>(commands.count()))
     {
-      commands.at(present++)->execute();
+      commands.at(present)->execute();
+      present++;
       emit undoRedoChanged(getUndoName(),getRedoName());
     }
 }
@@ -76,7 +83,7 @@ void CommandHistory::redo()
 /*======================== get undo name ========================*/
 QString CommandHistory::getUndoName()
 {
-  if (present - 1 > -1)
+  if (present > 0)
     return commands.at(present - 1)->getName();
   else
     return QString();

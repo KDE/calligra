@@ -49,6 +49,7 @@
 #include "kppixmapobject.h"
 
 #include "movecmd.h"
+#include "resizecmd.h"
 
 class KPresenterView_impl;
 class KPresenterDocument_impl;
@@ -182,6 +183,8 @@ protected:
   QList<int> presStepList;
   int PM_DM,PM_SM;
   int firstX,firstY;
+  bool drawRubber;
+  QRect rubber;
 
 private slots:
 
