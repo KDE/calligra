@@ -469,8 +469,7 @@ bool AbiWordWorker::doCloseDocument(void)
         for (it=m_mapPictureData.begin(); it!=m_mapPictureData.end(); it++)
         {
             // Warning: do not mix up KWord's key and the iterator's key!
-            writeImageData(it.key(),it.data().filename());
-            writeClipartData(it.key(),it.data().filename());
+            writePictureData(it.key(),it.data().filename());
         }
 
         *m_streamOut << "</data>\n";
