@@ -37,6 +37,8 @@ KChartPart::KChartPart( KoDocument* parent, const char* name )
   m_bLoading = false;
   cerr << "Contstructor started!\n";
   initDoc();
+  // hack 
+  setModified(true);
 }
 
 KChartPart::~KChartPart()
@@ -294,6 +296,11 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.9  1999/11/21 17:43:29  boloni
+ * -save and load works but the New and Load mechanisms from KoMainWindow hangs
+ * it. Use loading from the command line.
+ * -there is something wrong with that mechanism, because KWord is not working in multiple document mode either - it just overwrites the old one for New or Load.
+ *
  * Revision 1.8  1999/11/21 16:40:13  boloni
  * save-load works
  * data files can be specified at the command line
