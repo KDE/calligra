@@ -3049,7 +3049,7 @@ QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
 
 void KWTextFrameSetEdit::slotToolActivated( const KoDataToolInfo & info, const QString & command )
 {
-    KoDataTool* tool = info.createTool( frameSet()->kWordDocument()->instance() );
+    KoDataTool* tool = info.createTool();
     if ( !tool )
     {
         kdWarning() << "Could not create Tool !" << endl;
