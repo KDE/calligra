@@ -24,6 +24,11 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <klocale.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qradiobutton.h>
+#include <qvbuttongroup.h>
+#include <qlineedit.h>
 
 
 #include <ImportDialogUI.h>

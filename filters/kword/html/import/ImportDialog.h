@@ -24,12 +24,6 @@
 #define IMPORT_DIALOG_H
 
 #include <qwidget.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qvbuttongroup.h>
-#include <qlineedit.h>
-
 #include <kdialogbase.h>
 
 class ImportDialogUI;

@@ -27,6 +27,11 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kapplication.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qradiobutton.h>
+#include <qvbuttongroup.h>
+#include <qcombobox.h>
 
 #include <ExportDialogUI.h>
 #include <ExportDialog.h>

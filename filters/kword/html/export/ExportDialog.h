@@ -24,12 +24,6 @@
 #define EXPORT_DIALOG_H
 
 #include <qwidget.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qvbuttongroup.h>
-#include <qcombobox.h>
-
 #include <kdialogbase.h>
 
 class ExportDialogUI;
