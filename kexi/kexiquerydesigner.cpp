@@ -21,11 +21,14 @@
 
 #include <klocale.h>
 #include <kaction.h>
+#include <kdebug.h>
 
 #include <ktexteditor/editorchooser.h>
 #include <ktexteditor/highlightinginterface.h>
+#include <ktexteditor/editinterface.h>
 
 #include "kexiquerydesignerguieditor.h"
+#include "kexidatatable.h"
 #include "kexiquerydesigner.h"
 
 class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
@@ -72,6 +75,8 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, const char *name)
 	m_sqlDoc = KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
 	m_sqlView = m_sqlDoc->createView(this, 0L);
 
+	m_view = new KexiDataTable(this, "query", "query-result", true);
+
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(m_sqlDoc);
 	for(uint i=0; i < hl->hlModeCount(); i++)
 	{
@@ -85,12 +90,14 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, const char *name)
 
 	m_editor->show();
 	m_sqlView->hide();
+	m_view->hide();
 
 //	activateActions();
 
 	QGridLayout *g = new QGridLayout(this);
-	g->addWidget(m_editor,	0, 0);
-	g->addWidget(m_sqlView,	0, 0);
+	g->addWidget(m_editor,	0,	0);
+	g->addWidget(m_sqlView,	0,	0);
+	g->addWidget(m_view,	0,	0);
 }
 
 KXMLGUIClient *KexiQueryDesigner::guiClient()
@@ -111,15 +118,27 @@ void KexiQueryDesigner::deactivateActions()
         m_editGUIClient->deactivate(this);
 }
 
+void
+KexiQueryDesigner::setCurrentQuery(QString query)
+{
+	if(query != m_query)
+	{
+		m_query = query;
+		emit queryChanged();
+	}
+}
 
 void
 KexiQueryDesigner::slotEditState()
 {
-	m_editor->show();
-	m_sqlView->hide();
-
 	m_editGUIClient->m_actionView->setChecked(false);
 	m_editGUIClient->m_actionSQL->setChecked(false);
+
+	m_editor->show();
+	m_sqlView->hide();
+	m_view->hide();
+
+	m_currentPart = EditorPart;
 }
 
 void
@@ -130,6 +149,9 @@ KexiQueryDesigner::slotSQLState()
 
 	m_editor->hide();
 	m_sqlView->show();
+	m_view->hide();
+	
+	m_currentPart = SqlPart;
 }
 
 void
@@ -137,6 +159,36 @@ KexiQueryDesigner::slotViewState()
 {
 	m_editGUIClient->m_actionEdit->setChecked(false);
 	m_editGUIClient->m_actionSQL->setChecked(false);
+
+	m_editor->hide();
+	
+	m_sqlView->hide();
+	m_view->show();
+
+	switch(m_currentPart)
+	{
+		case EditorPart:
+			if(m_editor->getQuery() == "")
+				break;
+			
+			m_view->executeQuery(m_editor->getQuery());
+			break;
+			
+		case SqlPart:
+			KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_sqlDoc);
+			kdDebug() << "KexiQueryDesigner::slotViewState() sql-edit: " << eIface->text() << endl;
+
+			/*
+			 * here we should grep for ; and new lines and split all parts into new
+			 * queries if needed
+			 */
+			if(eIface->text() != "")
+				m_view->executeQuery(eIface->text());
+
+			break;
+	}
+
+//	m_currentPart = ViewPart;
 }
 
 KexiQueryDesigner::~KexiQueryDesigner()

@@ -21,6 +21,8 @@
 #define KEXIQUERYDESIGNERGUIEDITOR_H
 
 #include <qwidget.h>
+#include <qvaluelist.h>
+#include <qmap.h>
 
 #include "kexiquerydesigner.h"
 
@@ -31,7 +33,25 @@ class QPushButton;
 class KexiDB;
 class KexiTableView;
 class KexiTableItem;
-class KexiRelationView;
+class KexiRelation;
+
+struct InvolvedTable
+{
+	QString		table;
+	QStringList	relationList;
+	int		involveCount;
+};
+
+struct JoinField
+{
+	QString		sourceField;
+//	QString		targetField;
+	QString		eqLeft;
+	QString		eqRight;
+};
+
+typedef QMap<QString, InvolvedTable> InvolvedTables;
+typedef QValueList<JoinField> JoinFields;
 
 class KexiQueryDesignerGuiEditor : public QWidget
 {
@@ -41,21 +61,23 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent, const char *name=0);
 		~KexiQueryDesignerGuiEditor();
 
+		QString			getQuery();
+
 	protected slots:
-		void			slotAddTable();
 		void			slotDropped(QDropEvent *ev);
 
 	private:
 		KexiDB			*m_db;
 
-		KexiRelationView	*m_tables;
+		KexiRelation		*m_tables;
 		KexiTableView		*m_designTable;
 
-		QComboBox		*m_tableCombo;
-		QPushButton		*m_addButton;
+		KexiQueryDesigner	*m_parent;
 
 		KexiTableItem		*m_insertItem;
 		QStringList		m_sourceList;
+
+		InvolvedTables		m_involvedTables;
 };
 
 #endif

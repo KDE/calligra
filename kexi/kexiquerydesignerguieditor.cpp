@@ -31,24 +31,20 @@
 #include "kexitableview.h"
 #include "kexitableitem.h"
 #include "kexiquerydesignerguieditor.h"
-#include "kexirelationview.h"
+#include "kexirelation.h"
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent, const char *name)
  : QWidget(parent, name)
 {
 	m_db = kexi->project()->db();
+	m_parent = parent;
 
-	m_tables = new KexiRelationView(this);
-
-	m_tableCombo = new QComboBox(this);
-	m_tableCombo->insertStringList(kexi->project()->db()->tables());
-
-	m_addButton = new QPushButton(i18n("&add"), this);
-	connect(m_addButton, SIGNAL(clicked()), this, SLOT(slotAddTable()));
+	m_tables = new KexiRelation(this, "querytables", true);
 
 	m_designTable = new KexiTableView(this);
 	m_designTable->m_editOnDubleClick = true;
 	connect(m_designTable, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
+	connect(m_designTable, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
 
 	m_designTable->viewport()->setAcceptDrops(true);
 	m_designTable->addDropFilter("kexi/field");
@@ -67,10 +63,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent
 	m_insertItem->setInsertItem(true);
 
 	QGridLayout *g = new QGridLayout(this);
-	g->addWidget(m_tableCombo,		0,	0);
-	g->addWidget(m_addButton,		0,	1);
-	g->addMultiCellWidget(m_tables,		1,	1,	0,	1);
-	g->addMultiCellWidget(m_designTable,	2,	2,	0,	1);
+	g->addWidget(m_tables,		0,	0);
+	g->addWidget(m_designTable,	1,	0);
 }
 
 void
@@ -98,27 +92,147 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 
 	m_insertItem->setValue(0, i);
 	m_insertItem->setValue(1, srcField);
+	m_insertItem->setValue(2, true);
 	m_insertItem->setInsertItem(false);
 
 	KexiTableItem *newInsert = new KexiTableItem(m_designTable);
 	newInsert->setValue(0, 0);
+	newInsert->setValue(2, true);
 	newInsert->setInsertItem(true);
 	m_insertItem = newInsert;
 }
 
-void
-KexiQueryDesignerGuiEditor::slotAddTable()
+QString
+KexiQueryDesignerGuiEditor::getQuery()
 {
-	KexiDBRecord *r = m_db->queryRecord("select * from " + m_tableCombo->currentText() + " limit 1");
-	QStringList fields;
-	for(uint i=0; i < r->fieldCount(); i++)
+	//yo, let's get ugly :)
+
+	if(m_designTable->rows() == 1)
+		return "";
+
+	QString	 mainTable;
+
+	QString query = "SELECT ";
+
+	QMap<QString, QString> involvedFields;
+
+	int mI = 0;
+	for(int i=0; i < m_designTable->rows(); i++)
 	{
-		fields.append(r->fieldInfo(i)->name());
+		KexiTableItem *cItem = m_designTable->itemAt(i);
+		if(!cItem->isInsertItem())
+		{
+			//retriving table & field
+			int tableID = cItem->getValue(0).toInt();
+			QString field = cItem->getValue(1).toString();
+			QString table = (*m_sourceList.at(tableID));
+
+			query += table + "." + field;
+
+			//use the 1st item as main table
+			//not good since it could be i18n("[no table]") or not the main talbe
+			//but as i don't got any idea how to get the right table (by now we will leafe
+			//that
+
+//			if(mI == 0 && table != i18n("[no table]"))
+//				mainTable = table;
+
+			int iCount;
+			if(m_involvedTables.contains(table))
+			{
+				iCount = m_involvedTables[table].involveCount;
+			}
+			else
+			{
+				iCount = 0;
+			}
+
+			InvolvedTable ivTable;
+			ivTable.involveCount = iCount + 1;
+			m_involvedTables.insert(table, ivTable, true);
+
+			
+			involvedFields.insert(table, field);
+
+			if(mI != m_designTable->rows() - 2)
+				query += ", ";
+
+			mI++;
+		}
 	}
-	m_tables->addTable(m_tableCombo->currentText(), fields);
-	
-	delete r;
-	m_tableCombo->removeItem(m_tableCombo->currentItem());
+
+	JoinFields joinFields;
+
+	RelationList relations = m_tables->view()->getConnections();
+
+	QString maxTable;
+	int maxCount = 0;
+	bool isSrcTable = false;
+	for(InvolvedTables::Iterator it = m_involvedTables.begin(); it != m_involvedTables.end(); it++)
+	{
+//		if(it.data().involveCount > maxCount)
+//		{
+			for(RelationList::Iterator itRel = relations.begin(); itRel != relations.end(); itRel++)
+			{
+				if((*itRel).srcTable == it.key())
+				{
+					kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): " << it.key() << " inherits" << endl;
+					for(QMap<QString,QString>::Iterator itS = involvedFields.begin(); itS != involvedFields.end(); itS++)
+					{
+						if(itS.key() == it.key())
+						{
+							isSrcTable = true;
+						
+							maxTable = it.key();
+							maxCount = it.data().involveCount;
+						}
+					}
+				}
+				else if((*itRel).rcvTable == it.key())
+				{
+					kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): " << it.key() << " is inherited" << endl;
+					for(QMap<QString,QString>::Iterator itS = involvedFields.begin(); itS != involvedFields.end(); itS++)
+					{
+						if(itS.key() == it.key())
+						{
+							isSrcTable = false;
+							
+							JoinField jf;
+							jf.sourceField = (*itRel).srcField;
+							jf.eqLeft = (*itRel).srcTable + "." + (*itRel).srcField;
+							jf.eqRight = (*itRel).rcvTable + "." + (*itRel).rcvField;
+							joinFields.append(jf);
+						}
+						
+						if(maxCount < 0)
+						{
+							maxTable = it.key();
+							maxCount = it.data().involveCount;
+						}
+					}
+				}
+			}
+
+	}
+
+	//get "forign" tables
+
+	query += " FROM ";
+	query += maxTable;
+
+	for(JoinFields::Iterator itJ = joinFields.begin(); itJ != joinFields.end(); itJ++)
+	{
+		query += " LEFT JOIN ";
+		query += (*itJ).sourceField;
+		query += " ON ";
+		query += (*itJ).eqLeft;
+		query += " = ";
+		query += (*itJ).eqRight;
+	}
+
+	kdDebug() << "KexiQueryDesignerGuiEditor::getQuery() query: " << query << endl;
+
+	return query;
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()

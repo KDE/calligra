@@ -37,7 +37,7 @@ class KexiRelation : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiRelation(QWidget *parent, const char *name="relations");
+		KexiRelation(QWidget *parent, const char *name="relations", bool embedd=false);
 		~KexiRelation();
 	
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
@@ -45,6 +45,7 @@ class KexiRelation : public KexiDialogBase
 		static RelationList *	projectRelations();
 		static bool		storeRelations(RelationList relations, KoStore *store);
 
+		KexiRelationView	*view() { return m_view; }
 	public slots:
 		void			slotAddTable();
 		void			slotSave(KoStore *store);

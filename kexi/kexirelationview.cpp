@@ -125,22 +125,12 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 
 	int srcY = mapFromGlobal(QPoint(0, (tSrc->globalY((*conn).srcField)))).y();
 	int rcvY = mapFromGlobal(QPoint(0, (tRcv->globalY((*conn).rcvField)))).y();
-	
-	kdDebug() << "KexiRelationView::drawConnection(): unmaped rcvY = " << tRcv->globalY((*conn).rcvField) << endl;
-
-
-//	p->drawLine(0, srcY, 0, rcvY);
 
 	int srcX = m_tables[(*conn).srcTable].geometry.x();
 	int srcW = m_tables[(*conn).srcTable].geometry.width();
 
 	int rcvX = m_tables[(*conn).rcvTable].geometry.x();
 	int rcvW = m_tables[(*conn).rcvTable].geometry.width();
-
-	kdDebug() << "KexiRelationView::drawConnection(): srcX = " << srcX << endl;
-	kdDebug() << "KexiRelationView::drawConnection(): rcvX = " << rcvX << endl;
-	kdDebug() << "KexiRelationView::drawConnection(): srcY = " << srcY << endl;
-	kdDebug() << "KexiRelationView::drawConnection(): rcvY = " << rcvY << endl;
 
 	if(paint)
 		p->setPen(black);
@@ -320,7 +310,6 @@ KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString t
 int
 KexiRelationViewTable::globalY(QString item)
 {
-	kdDebug() << "KexiRelationViewTable::globalY() looking up " << item << endl;
 	QListViewItem *i = findItem(item, 1);
 	if(i)
 	{
@@ -413,7 +402,6 @@ KexiFieldMetaDrag::decode( QDropEvent* e, QString& str )
 	if(payload.size())
 	{
 		e->accept();
-//		str = payload[0];
 		for(uint i=0; i < payload.size(); i++)
 		{
 			str += payload[i];

@@ -27,18 +27,31 @@
 
 class KAction;
 class KexiQueryDesignerGuiEditor;
+class KexiDataTable;
 
 class KexiQueryDesigner : public KexiDialogBase
 {
 	Q_OBJECT
 	
 	public:
+	
+	enum ActivePart
+	{
+		EditorPart,
+		SqlPart,
+		ViewPart
+	};
+	
+	
 		KexiQueryDesigner(QWidget *parent, const char *name=0);
 		~KexiQueryDesigner();
 		
 		virtual KXMLGUIClient	*guiClient();
 		virtual void		deactivateActions();
 		virtual void		activateActions();
+
+		void			setCurrentQuery(QString query);
+
 	private:
 		class			EditGUIClient;
 		friend class		EditGUIClient;
@@ -47,6 +60,14 @@ class KexiQueryDesigner : public KexiDialogBase
 		KexiQueryDesignerGuiEditor *m_editor;
 		KTextEditor::Document	*m_sqlDoc;
 		KTextEditor::View	*m_sqlView;
+		KexiDataTable		*m_view;
+
+		QString			m_query;
+		
+		ActivePart		m_currentPart;
+
+	signals:
+		void			queryChanged();
 
 	protected slots:
 		void			slotEditState();

@@ -35,11 +35,13 @@
 #include "kexirelationview.h"
 #include "kexirelation.h"
 
-KexiRelation::KexiRelation(QWidget *parent, const char *name)
+KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
  : KexiDialogBase(parent, name)
 {
 	setCaption(i18n("Relations"));
-	registerAs(DocumentWindow);
+
+	if(!embedd)
+		registerAs(DocumentWindow);
 
 	m_db = kexi->project()->db();
 

@@ -36,7 +36,7 @@ class KexiDataTable : public KexiDialogBase
 	Q_OBJECT
 	
 	public:
-		KexiDataTable(QWidget *parent, QString content, const char *name=0);
+		KexiDataTable(QWidget *parent, QString content, const char *name=0, bool embedd=false);
 		~KexiDataTable();
 		
 		bool executeQuery(QString query);

@@ -45,7 +45,7 @@
 
 #include "kexidatatable.h" 
  
-KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
+KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name, bool embedd)
 	: KexiDialogBase(parent, name)
 {
 	QGridLayout *g = new QGridLayout(this);
@@ -65,7 +65,9 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
 	g->addMultiCellWidget(m_statusBar,	2,	2,	0,	1);
 
 	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
-	registerAs(DocumentWindow);
+
+	if(!embedd)
+		registerAs(DocumentWindow);
 }
 
 bool
