@@ -15,4 +15,4 @@ templateicons_DATA = A0.png  A4.png  A8.png  B10.png  B5.png  B9.png       Execu
 A1.png  A5.png  A9.png  B2.png   B6.png  C5E.png      Folio.png      NPageSize.png \
 A2.png  A6.png  B0.png  B3.png   B7.png  Comm10E.png  Ledger.png     Tabloid.png \
 A3.png  A7.png  B1.png  B4.png   B8.png  DLE.png      Legal.png
-templateiconsdir = $(kde_datadir)/kword/templates/General/.icon
+templateiconsdir = $(kde_datadir)/kudesigner/templates/General/.icon
