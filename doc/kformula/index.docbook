@@ -799,7 +799,7 @@ now produces a thick space.
 <title>Configuring Toolbars</title>
 <para>The <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
-Is used to add additional buttons to the toolbars.</para>
+is used to add additional buttons to the toolbars.</para>
 
 <screenshot>
 <screeninfo>Picture of toolbars dialog</screeninfo>
@@ -1106,8 +1106,8 @@ action="simul">&Ctrl;<keycap>U</keycap></keycombo>. Here is the correct
 <title>Mathematical Fonts</title>
 
 <para>
-In order to print postscript files from &kformula;, you need to get
-the esstix fonts. These fonts can be obtained from 
+In order to print &PostScript; files from &kformula;, you need to get
+the Esstix fonts. These fonts can be obtained from 
 <ulink url="ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip">
 ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</ulink>
 </para>
@@ -1209,7 +1209,7 @@ should be unchecked:</para>
 <para>Return to the <menuchoice><guimenu>Fonts</guimenu></menuchoice>
 tab. Click on the <guibutton>Install</guibutton> button. The fonts
 will install. After this you must click on the
-<guibutton>Apply</guibutton> button. the following splash will
+<guibutton>Apply</guibutton> button. The following dialog will
 appear:</para>
 
 <screenshot>
@@ -1224,7 +1224,7 @@ fonts</phrase></textobject>
 </screenshot>
 
 <para>Answer <guibutton>Yes</guibutton> to the <guilabel>Apply system
-changes now</guilabel> dialog. You are done installing the esstix fonts.
+changes now</guilabel> dialog. Installation of the Esstix fonts is complete.
 </para>
 
 </sect1>
@@ -1233,7 +1233,7 @@ changes now</guilabel> dialog. You are done installing the esstix fonts.
 <title>Additional Math Fonts</title>
 <para>Additional math fonts can be installed with <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure
-Kformula...</guimenuitem></menuchoice><guilabel> Math Fonts </guilabel>
+&kformula;...</guimenuitem></menuchoice><guilabel> Math Fonts </guilabel>
 </para>
 <screenshot>
 <screeninfo>Add math fonts;</screeninfo>
