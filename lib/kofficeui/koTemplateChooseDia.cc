@@ -38,6 +38,7 @@
 #include <kfiledialog.h>
 #include <kinstance.h>
 #include <kstddirs.h>
+#include <koFilterManager.h>
 
 #include "koTemplateChooseDia.h"
 
@@ -45,9 +46,11 @@
 class KoTemplateChooseDiaPrivate {
 public:
     KoTemplateChooseDiaPrivate(const QString& templateType, KInstance* global,
-			       const QString &importFilter,
+			       const char *format, const char *nativePattern,
+			       const char *nativeName,
 			       const KoTemplateChooseDia::DialogType &dialogType) :
-	m_templateType(templateType), m_global(global), m_strImportFilter(importFilter),
+	m_templateType(templateType), m_global(global), m_format(format),
+	m_nativePattern(nativePattern), m_nativeName(nativeName),
 	m_dialogType(dialogType), m_firstTime(true) {
     }
     ~KoTemplateChooseDiaPrivate() {}
@@ -62,7 +65,7 @@ public:
 
     QString m_templateType;
     KInstance* m_global;
-    QString m_strImportFilter;
+    const char *m_format, *m_nativePattern, *m_nativeName;
     KoTemplateChooseDia::DialogType m_dialogType;
     bool m_firstTime;
 
@@ -87,11 +90,13 @@ public:
 
 /*================================================================*/
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-					 const QString &importFilter, const DialogType &dialogType,
+					 const char *format, const char *nativePattern,
+					 const char *nativeName, const DialogType &dialogType,
 					 const QString& templateType, bool hasCancel) :
     KDialog(parent, name, true) {
 
-    d=new KoTemplateChooseDiaPrivate(templateType, global, importFilter, dialogType);
+    d=new KoTemplateChooseDiaPrivate(templateType, global, format, nativePattern, 
+				     nativeName, dialogType);
 
     d->m_groupList.setAutoDelete(true);
     if(!templateType.isNull() && !templateType.isEmpty() && dialogType!=NoTemplates)
@@ -123,12 +128,13 @@ KoTemplateChooseDia::~KoTemplateChooseDia() {
 
 /*================================================================*/
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, QString &file,
-							    const QString &importFilter,
+							    const char *format, const char *nativePattern,
+							    const char *nativeName,
 							    const KoTemplateChooseDia::DialogType &dialogType,
 							    const QString& templateType, bool hasCancel) {
     bool res = false;
-    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", global, importFilter,
-							dialogType, templateType, hasCancel);
+    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", global, format, nativePattern,
+							nativeName, dialogType, templateType, hasCancel);
     if(dialogType!=NoTemplates)
 	dlg->resize( 500, 400 );
     else
@@ -350,7 +356,18 @@ void KoTemplateChooseDia::chooseFile()
     if ( QFile::exists( d->m_file ) )
 	dir = QFileInfo( d->m_file ).absFilePath();
 
-    KURL u = KFileDialog::getOpenURL( dir, d->m_strImportFilter );
+    KFileDialog *dialog=new KFileDialog(dir, QString::null, 0L, "file dialog", true);
+    dialog->setCaption( i18n("Open document") );
+    KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import, d->m_format,
+					   d->m_nativePattern, d->m_nativeName, true);
+    KURL u;
+
+    if(dialog->exec()==QDialog::Accepted)
+	u=dialog->selectedURL();
+    
+    KoFilterManager::self()->cleanUp();
+    delete dialog;
+    
     QString filename = u.path();
     QString url = u.url();
     bool local = u.isLocalFile();

@@ -120,13 +120,8 @@ bool KSpreadDoc::initDoc()
     QString f;
     KoTemplateChooseDia::ReturnType ret;
 
-    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-                                                                "application/x-kspread",
-								"*.ksp", "KSpread",
-								false );
-
-    ret = KoTemplateChooseDia::choose(  KSpreadFactory::global(), f, filter,
-					KoTemplateChooseDia::NoTemplates );
+    ret = KoTemplateChooseDia::choose(  KSpreadFactory::global(), f, "application/x-kspread",
+					"*.ksp", "KSpread", KoTemplateChooseDia::NoTemplates );
 
     if ( ret == KoTemplateChooseDia::File ) {
         QString fileName(f);

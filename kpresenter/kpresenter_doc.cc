@@ -1361,13 +1361,9 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
 
-    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-                                                                "application/x-kpresenter",
-								"*.kpr", "KPresenter",
-								FALSE );
-
     ret = KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
-				        filter, KoTemplateChooseDia::Everything,
+					"application/x-kpresenter", "*.kpr",
+					"KPresenter", KoTemplateChooseDia::Everything,
 					"kpresenter_template", true );
 
     if ( ret == KoTemplateChooseDia::Template ) {
@@ -3280,8 +3276,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
     QString _template;
 
     if ( KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
-				       QString::null,
-				       KoTemplateChooseDia::OnlyTemplates,
+				       0L, 0L, 0L, KoTemplateChooseDia::OnlyTemplates,
 				       "kpresenter_template") != KoTemplateChooseDia::Cancel ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );

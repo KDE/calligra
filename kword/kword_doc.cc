@@ -166,15 +166,10 @@ bool KWordDocument::initDoc()
 
     QString _template;
 
-    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-                                                                "application/x-kword",
-								"*.kwd", "KWord",
-								FALSE );
-
     bool ok = FALSE;
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-	KWordFactory::global(), _template, filter, KoTemplateChooseDia::Everything,
-	"kword_template");
+	KWordFactory::global(), _template, "application/x-kword", "*.kwd", "KWord",
+	KoTemplateChooseDia::Everything, "kword_template");
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
