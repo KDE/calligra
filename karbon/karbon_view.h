@@ -49,18 +49,17 @@ public:
 
 	const double& zoomFactor() { return m_canvas->zoomFactor(); }
 
-	VPainterFactory *painterFactory() { return m_painterFactory; }
+	VPainterFactory* painterFactory() { return m_painterFactory; }
 
 	// printing support, override from KoView
 	virtual void setupPrinter( KPrinter &printer );
-    virtual void print( KPrinter &printer );
+	virtual void print( KPrinter& printer );
 
-	KarbonPart* part() {
-            return m_part;
-        }
+	KarbonPart* part() { return m_part; }
 
-    void reorganizeGUI();
-    void changeNbOfRecentFiles( int _nb );
+	void reorganizeGUI();
+	void changeNbOfRecentFiles( int _nb );
+
 public slots:
 	// editing:
 	void editCut();
@@ -107,6 +106,9 @@ protected slots:
 
 	// handle-tool:
 	void handleTool();
+
+	// path:
+	void pathInsertKnots();
 
 	// view:
 	void viewModeChanged();

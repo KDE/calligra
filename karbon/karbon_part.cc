@@ -356,7 +356,7 @@ KarbonPart::deselectAllObjects()
 }
 
 void
-KarbonPart::addCommand( VCommand* cmd, bool repaint  )
+KarbonPart::addCommand( VCommand* cmd, bool repaint )
 {
 	m_commandHistory->addCommand( cmd );
 	setModified( true );

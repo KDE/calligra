@@ -15,6 +15,7 @@
 #include <kstatusbar.h>
 #include <kstdaction.h>
 
+#include "karbon_dlg_config.h"
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -30,19 +31,20 @@
 #include "vmcmd_delete.h"
 #include "vmcmd_fill.h"
 #include "vmcmd_group.h"
+#include "vmcmd_insertknots.h"
 #include "vmcmd_stroke.h"
+#include "vmdlg_insertknots.h"
 #include "vmdlg_solidfill.h"
 #include "vmdlg_stroke.h"
 #include "vmpanel_color.h"
 #include "vmtool_handle.h"
-#include "vmtool_select.h"
 #include "vmtool_rotate.h"
 #include "vmtool_scale.h"
+#include "vmtool_select.h"
 #include "vmtool_shear.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
-#include "karbon_dlg_config.h"
 
 //#include "vtext.h"
 #include "vtoolcontainer.h"
@@ -443,6 +445,20 @@ KarbonView::handleTool()
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 }
 
+
+void
+KarbonView::pathInsertKnots()
+{
+	VMDlgInsertKnots* dialog = new VMDlgInsertKnots();
+
+	if( dialog->exec() )
+		m_part->addCommand( new VMCmdInsertKnots(
+			m_part, m_part->selection(), dialog->valueKnots() ), true );
+
+	delete( dialog );
+}
+
+
 void
 KarbonView::viewModeChanged()
 {
@@ -518,8 +534,8 @@ KarbonView::slotFillColorChanged( const QColor &c )
 void
 KarbonView::viewColorManager()
 {
-	VColorPanel* m_ColorPanel = new VColorPanel ( this );
-	m_ColorPanel->show();
+	VColorPanel* colorPanel = new VColorPanel ( this );
+	colorPanel->show();
 }
 
 void
@@ -635,22 +651,39 @@ KarbonView::initActions()
 	m_textToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
 
-	// text
-
-	m_setFontFamily = new KFontAction( i18n( "Set Font Family" ), 0, actionCollection(), "setFontFamily" );
+	// text ----->
+	m_setFontFamily = new KFontAction(
+		i18n( "Set Font Family" ), 0, actionCollection(), "setFontFamily" );
 	m_setFontFamily->setCurrentItem( 0 );
 
-	//connect( m_setFontFamily, SIGNAL(activated(const QString&)), SLOT(setFontFamily(const QString&)) );
+	//connect( m_setFontFamily,
+	//	SIGNAL( activated( const QString& ) ),
+	//	SLOT( setFontFamily( const QString& ) ) );
 
-	m_setFontSize = new KFontSizeAction( i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
+	m_setFontSize = new KFontSizeAction(
+		i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
 	m_setFontSize->setCurrentItem( 0 );
-	//connect( m_setFontSize, SIGNAL(activated(const QString&)), SLOT(setFontSize(const QString&)) );
+	
+	//connect( m_setFontSize,
+	//	SIGNAL( activated( const QString& ) ),
+	//	SLOT( setFontSize( const QString& ) ) );
 
-	m_setFontItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", 0, actionCollection(), "setFontItalic" );
-	m_setFontBold = new KToggleAction(	i18n( "&Bold" ), "text_bold", 0, actionCollection(), "setFontBold" );
+	m_setFontItalic = new KToggleAction(
+		i18n( "&Italic" ), "text_italic", 0, actionCollection(), "setFontItalic" );
+	m_setFontBold = new KToggleAction(
+		i18n( "&Bold" ), "text_bold", 0, actionCollection(), "setFontBold" );
 
-	//m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
-	//connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
+	//m_setTextColor = new TKSelectColorAction(
+	//	i18n("Set Text Color"), TKSelectColorAction::TextColor,
+	//	actionCollection(), "setTextColor" );
+	//connect( m_setTextColor, SIGNAL( activated() ), SLOT( setTextColor() ) );
+	// text <-----
+
+	// path ----->
+	new KAction(
+		i18n( "&Insert Knots" ), 0, 0, this,
+		SLOT( pathInsertKnots() ), actionCollection(), "path_insert_knots" );
+	// path <-----
 
 	// view ----->
 	m_viewAction = new KSelectAction(
@@ -739,25 +772,25 @@ KarbonView::eventFilter( QObject* object, QEvent* event )
 
 void KarbonView::reorganizeGUI()
 {
-    if( statusBar())
-    {
-        if(m_part->showStatusBar())
-            statusBar()->show();
-        else
-            statusBar()->hide();
-    }
+	if( statusBar())
+	{
+		if(m_part->showStatusBar())
+			statusBar()->show();
+		else
+			statusBar()->hide();
+	}
 }
 
-void KarbonView::changeNbOfRecentFiles(int _nb)
+void KarbonView::changeNbOfRecentFiles( int _nb )
 {
-    if ( shell() ) // 0 when embedded into konq !
-        shell()->setMaxRecentItems( _nb );
+	if ( shell() ) // 0 when embedded into konq !
+		shell()->setMaxRecentItems( _nb );
 }
 
 void KarbonView::configure()
 {
-    KarbonConfig configDia( this );
-    configDia.exec();
+	KarbonConfig configDia( this );
+	configDia.exec();
 }
 
 

@@ -17,10 +17,11 @@ noinst_HEADERS = \
 	vcdlg_spiral.h \
 	vcdlg_star.h \
 	vcolorslider.h \
+	vmdlg_insertknots.h \
 	vmdlg_solidfill.h \
 	vmdlg_stroke.h \
-	vtoolcontainer.h \
-	vmpanel_color.h
+	vmpanel_color.h \
+	vtoolcontainer.h
 
 libkarbonui_la_SOURCES = \
 	dummy.cc \
@@ -32,10 +33,11 @@ libkarbonui_la_SOURCES = \
 	vcdlg_spiral.cc \
 	vcdlg_star.cc \
 	vcolorslider.cc \
+	vmdlg_insertknots.cc \
 	vmdlg_solidfill.cc \
 	vmdlg_stroke.cc \
-	vtoolcontainer.cc \
-	vmpanel_color.cc
+	vmpanel_color.cc \
+	vtoolcontainer.cc
 
 libkarbonui_la_METASOURCES = \
 	AUTO

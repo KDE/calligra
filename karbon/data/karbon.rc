@@ -27,6 +27,7 @@
 			<Action name="object_trafo_rotate"/>
 			<Action name="object_trafo_shear"/>
 		</Menu>
+		<Separator/>
 		<Menu name="object_arrange">
 			<text>&amp;Order</text>
 			<Action name="object_move_totop"/>
@@ -52,6 +53,10 @@
 	<Menu name="text">
 		<text>&amp;Text</text>
 	<Separator/>
+	</Menu>
+	<Menu name="path">
+		<text>&amp;Path</text>
+		<Action name="path_insert_knots"/>
 	</Menu>
 	<Menu name="view">
 		<text>&amp;View</text>
