@@ -195,7 +195,8 @@ bool
 VSelectTool::eventFilter( QEvent* event )
 {
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	setCursor( mouse_event->pos() );
+	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
+	setCursor( lp );
 
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
@@ -296,7 +297,7 @@ VSelectTool::eventFilter( QEvent* event )
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		m_activeNode = view()->part()->document().selection()->node( mouse_event->pos() );
+		m_activeNode = view()->part()->document().selection()->node( lp );
 
 		// draw initial object:
 		drawTemporaryObject();
