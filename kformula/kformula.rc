@@ -139,7 +139,6 @@
 -->
  <ToolBar name="Symbol"><Text>Symbol</Text>
   <Action name="formula_symbolnames"/>
-  <Separator/>
   <Action name="formula_insertsymbol"/>
  </ToolBar>
  <ToolBar name="Matrix"><Text>Matrix</Text>
