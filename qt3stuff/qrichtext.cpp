@@ -57,11 +57,11 @@
 
 #include <stdlib.h>
 
-using namespace Qt3;
-
 //#define PARSER_DEBUG
 //#define DEBUG_COLLECTION
 //#define DEBUG_TABLE_RENDERING
+
+using namespace Qt3;
 
 static QTextFormatCollection *qFormatCollection = 0;
 
@@ -554,22 +554,22 @@ void QTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<QText
 	QStringList::Iterator it = lst.begin();
 	int y = string->rect().y() + string->rect().height();
 	int lastIndex = 0;
-        QTextFormat *lastFormat = 0;
-        for ( ; it != lst.end(); ) {
+	QTextFormat *lastFormat = 0;
+	for ( ; it != lst.end(); ) {
 	    if ( it != lst.begin() ) {
 		splitAndInsertEmptyParag( FALSE, TRUE );
 		string->setEndState( -1 );
 		string->prev()->format( -1, FALSE );
-                if ( lastFormat && formatting && string->prev() ) {
-                   lastFormat->addRef();
-                   string->prev()->string()->setFormat( string->prev()->length() - 1, lastFormat, TRUE );
-               }
-            }
-            lastFormat = 0;
+		if ( lastFormat && formatting && string->prev() ) {
+		   lastFormat->addRef();
+		   string->prev()->string()->setFormat( string->prev()->length() - 1, lastFormat, TRUE );
+	       }
+	    }
+	    lastFormat = 0;
 	    QString s = *it;
-            ++it;
+	    ++it;
 	    if ( !s.isEmpty() )
-                string->insert( idx, s );
+		string->insert( idx, s );
 	    if ( formatting ) {
 		int len = s.length();
 		for ( int i = 0; i < len; ++i ) {
@@ -578,9 +578,9 @@ void QTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<QText
 			string->string()->setFormat( i + idx, formatting->at( i + lastIndex ).format(), TRUE );
 		    }
 		}
-                if ( it != lst.end() )
-                    lastFormat = formatting->at( len + lastIndex ).format();
-                ++len;
+		if ( it != lst.end() )
+		    lastFormat = formatting->at( len + lastIndex ).format();
+		++len;
 		lastIndex += len;
 	    }
 
@@ -1926,6 +1926,30 @@ void QTextDocument::addSelection( int id )
     nSelections = QMAX( nSelections, id + 1 );
 }
 
+static void setSelectionEndHelper( int id, QTextDocumentSelection &sel, QTextCursor &start, QTextCursor &end )
+{
+    QTextCursor c1 = start;
+    QTextCursor c2 = end;
+    if ( sel.swapped ) {
+	c1 = end;
+	c2 = start;
+    }
+
+    c1.parag()->removeSelection( id );
+    c2.parag()->removeSelection( id );
+    if ( c1.parag() != c2.parag() ) {
+	c1.parag()->setSelection( id, c1.index(), c1.parag()->length() - 1 );
+	c2.parag()->setSelection( id, 0, c2.index() );
+    } else {
+	c1.parag()->setSelection( id, QMIN( c1.index(), c2.index() ), QMAX( c1.index(), c2.index() ) );
+    }
+
+    sel.startCursor = start;
+    sel.endCursor = end;
+    if ( sel.startCursor.parag() == sel.endCursor.parag() )
+	sel.swapped = sel.startCursor.index() > sel.endCursor.index();
+}
+
 bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
 {
     QMap<int, QTextDocumentSelection>::Iterator it = selections.find( id );
@@ -1944,27 +1968,7 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
     }
 
     if ( sel.endCursor.parag() == end.parag() ) {
-	QTextCursor c1 = start;
-	QTextCursor c2 = end;
-	if ( sel.swapped ) {
-	    c1 = end;
-	    c2 = start;
-	}
-
-	c1.parag()->removeSelection( id );
-	c2.parag()->removeSelection( id );
-	if ( c1.parag() != c2.parag() ) {
-	    c1.parag()->setSelection( id, c1.index(), c1.parag()->length() - 1 );
-	    c2.parag()->setSelection( id, 0, c2.index() );
-	} else {
-	    c1.parag()->setSelection( id, QMIN( c1.index(), c2.index() ), QMAX( c1.index(), c2.index() ) );
-	}
-
-	sel.startCursor = start;
-	sel.endCursor = end;
-	if ( sel.startCursor.parag() == sel.endCursor.parag() )
-	    sel.swapped = sel.startCursor.index() > sel.endCursor.index();
-
+        setSelectionEndHelper( id, sel, start, end );
 	return TRUE;
     }
 
@@ -2057,6 +2061,8 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
     sel.endCursor = end;
     if ( sel.startCursor.parag() == sel.endCursor.parag() )
 	sel.swapped = sel.startCursor.index() > sel.endCursor.index();
+
+    setSelectionEndHelper( id, sel, start, end );
 
     return TRUE;
 }
@@ -2268,7 +2274,7 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
     if (  c1.index() == 0 )
     {
 	cursor->gotoLeft();
-        didGoLeft = TRUE;
+	didGoLeft = TRUE;
     }
 
     c1.parag()->remove( c1.index(), c1.parag()->length() - 1 - c1.index() );
@@ -2632,12 +2638,12 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 
     // Space above first parag
     if ( parag && cy <= parag->rect().y() && parag->rect().y() > 0 ) {
-        QRect r( 0, 0,
-                 parag->document()->x() + parag->document()->width(),
-                 parag->rect().y() );
-        r &= crect;
-        if ( !r.isEmpty() )
-            p->fillRect( r, cg.brush( QColorGroup::Base ) );
+	QRect r( 0, 0,
+		 parag->document()->x() + parag->document()->width(),
+		 parag->rect().y() );
+	r &= crect;
+	if ( !r.isEmpty() )
+	    p->fillRect( r, cg.brush( QColorGroup::Base ) );
     }
 
     while ( parag ) {
@@ -3038,7 +3044,7 @@ void QTextString::basicDirection() const
 {
     int pos = 0;
     ((QTextString *)this)->rightToLeft = FALSE;
-    while( pos < length() ) {
+    while ( pos < length() ) {
 	switch( at(pos).c.direction() )
 	{
 	case QChar::DirL:
@@ -3307,8 +3313,8 @@ void QTextParag::invalidate( int chr )
     else
 	invalid = QMIN( invalid, chr );
     for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() )
-        if ( i->placement() != QTextCustomItem::PlaceInline )
-            i->move( 0, -1 );
+	if ( i->placement() != QTextCustomItem::PlaceInline )
+	    i->move( 0, -1 );
     lm = rm = bm = tm = flm = -1;
 }
 
@@ -3448,7 +3454,7 @@ void QTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
-    //qDebug("QTextParag::format id=%d invalid, formatting", paragId());
+    qDebug("QTextParag::format id=%d invalid, formatting", paragId());
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
     if ( p )
@@ -3461,8 +3467,8 @@ void QTextParag::format( int start, bool doMove )
 		i->move( r.x() + r.width() - i->width, r.y() );
 	    else if ( i->placement() == QTextCustomItem::PlaceLeft )
 		i->move( 0, r.y() );
-            if ( i->placement() != QTextCustomItem::PlaceInline )
-                doc->flow()->updateHeight( i );
+	    if ( i->placement() != QTextCustomItem::PlaceInline )
+		doc->flow()->updateHeight( i );
 	}
     }
     QMap<int, QTextParagLineStart*> oldLineStarts = lineStarts;
@@ -3772,9 +3778,9 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	if ( cursor && this == cursor->parag() && i == cursor->index() ) {
 	    curx = chr->x;
 	    if ( !chr->rightToLeft &&
-	         chr->c.isSpace() &&
-	         i > 0 &&
-	         ( alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify )
+		 chr->c.isSpace() &&
+		 i > 0 &&
+		 ( alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify )
 		curx = at( i - 1 )->x + str->width( i - 1 );
 	    if ( chr->rightToLeft )
 		curx += cw;
@@ -4883,6 +4889,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int len = parag->length();
 
     int initialHeight = h + c->height(); // remember what adjustLMargin was called with
+    qDebug( "QTextFormatterBreakWords::format initialHeight = %d", initialHeight );
     if ( doc )
 	x = doc->flow()->adjustLMargin( y + parag->rect().y(), h + c->height(), x, 4 );
     int initialLMargin = x;	      // and remember the resulting adjustement we got
@@ -4984,9 +4991,9 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	//qDebug("c='%c' i=%d/%d x=%d ww=%d w=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,w,lastBreak,isBreakable(string,i));
 	// Wrapping at end of line
 	if ( wrapEnabled
-             // Allow '  ' but not more
-             && ( !isBreakable( string, i ) || ( i > 1 && lastBreak == i-1 && isBreakable( string, i-2 ) )
-                                            || lastBreak == -2 )
+	     // Allow '  ' but not more
+	     && ( !isBreakable( string, i ) || ( i > 1 && lastBreak == i-1 && isBreakable( string, i-2 ) )
+					    || lastBreak == -2 )
 	     && ( lastBreak != -1 || allowBreakInWords() ) &&
 	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
 	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
@@ -5091,14 +5098,14 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    // format this line again
 	    if ( doc && h > initialHeight )
 	    {
-                int lm = left + ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0;
+		int lm = left + ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0;
 		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, lm, 4 );
 		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4 );
 		initialHeight = h;
-		//qDebug("new height: %d => newLMargin=%d newRMargin=%d", h, newLMargin, newRMargin);
+		qDebug("new height: %d => newLMargin=%d newRMargin=%d", h, newLMargin, newRMargin);
 		if ( newLMargin != initialLMargin || newRMargin != initialRMargin )
 		{
-		    //qDebug("formatting again");
+		    qDebug("formatting again");
 		    i = (firstChar - &string->at(0));
 		    x = newLMargin;
 		    w = dw - newRMargin;
@@ -5113,7 +5120,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		    curLeft = x;
 		    lastBreak = -1;
 		    col = 0;
-		    //qDebug("Restarting with i=%d x=%d y=%d h=%d initialHeight=%d initialLMargin=%d initialRMargin=%d y=%d",i,x,y,h,initialHeight,initialLMargin,initialRMargin,y);
+		    qDebug("Restarting with i=%d x=%d y=%d h=%d initialHeight=%d initialLMargin=%d initialRMargin=%d y=%d",i,x,y,h,initialHeight,initialLMargin,initialRMargin,y);
 		    if ( c->c.unicode() >= 32 || c->isCustom() )
 			ww = string->width( i );
 		    else if ( parag->isNewLinesAllowed() && firstChar->c == '\t' ) {
