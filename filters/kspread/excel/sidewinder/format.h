@@ -89,6 +89,16 @@ public:
   void setFontSize( double fs );
   
   /**
+   * Returns the color of the font.
+   */
+  Color color() const;
+  
+  /**
+   * Sets the color of the font.
+   */
+  void setColor( const Color& color );
+  
+  /**
    * Returns true if bold has been set.
    */
   bool bold() const;

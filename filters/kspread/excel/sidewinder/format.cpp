@@ -36,6 +36,7 @@ public:
   bool superscript : 1;
   UString fontFamily;
   double fontSize;
+  Color color;
 };
 
 FormatFont::FormatFont()
@@ -73,6 +74,7 @@ FormatFont& FormatFont::assign( const FormatFont& f )
   d->null        = f.isNull();
   d->fontFamily  = f.fontFamily();
   d->fontSize    = f.fontSize();
+  d->color       = f.color();
   d->bold        = f.bold();
   d->italic      = f.italic();
   d->underline   = f.underline();
@@ -107,6 +109,17 @@ double FormatFont::fontSize() const
 void FormatFont::setFontSize( double fs )
 {
   d->fontSize = fs;
+  d->null = false;
+}
+
+Color FormatFont::color() const
+{
+  return d->color;
+}
+
+void FormatFont::setColor( const Color& c )
+{
+  d->color = c;
   d->null = false;
 }
 
