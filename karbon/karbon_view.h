@@ -44,6 +44,7 @@ class KoContextHelpAction;
 
 class KoUnitDoubleSpinComboBox;
 class KoRect;
+class KoRuler;
 
 class VColorDocker;
 class VDocumentDocker;
@@ -184,6 +185,9 @@ private:
 	void initActions();
 
 	VCanvas					*m_canvas;
+	QWidget					*left;
+	KoRuler					*m_horizRuler;
+	KoRuler					*m_vertRuler;
 
 	VPainterFactory			*m_painterFactory;
 	VStrokeFillPreview		*m_strokeFillPreview;

@@ -36,8 +36,8 @@
 #define PAGE_OFFSETX	20
 #define PAGE_OFFSETY	20
 
-VCanvas::VCanvas( KarbonViewBase* view, KarbonPartBase* part )
-    : QScrollView( view, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
+VCanvas::VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part )
+    : QScrollView( parent, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
 	  WRepaintNoErase ), m_part( part ), m_view( view )
 {
 	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );

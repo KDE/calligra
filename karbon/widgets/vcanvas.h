@@ -36,7 +36,7 @@ class VCanvas : public QScrollView
 {
 	Q_OBJECT
 public:
-	VCanvas( KarbonViewBase* view, KarbonPartBase* part );
+	VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part );
 	virtual ~VCanvas();
 
 	void repaintAll( const KoRect & );
