@@ -1,1 +1,1 @@
-SUBDIRS = wmf
+SUBDIRS = msod wmf
