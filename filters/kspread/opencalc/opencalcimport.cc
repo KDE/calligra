@@ -1147,6 +1147,73 @@ void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStac
         kdDebug()<<" num-format :"<<styleStack.attribute("style:num-format" )<<endl;
         //todo fixme
     }
+    if ( styleStack.hasAttribute( "fo:background-color" ) )
+    {
+        //todo
+        kdDebug()<<" fo:background-color :"<<styleStack.attribute( "fo:background-color" )<<endl;
+    }
+    if ( styleStack.hasAttribute( "style:print" ) )
+    {
+        //todo parsing
+        QString str = styleStack.attribute( "style:print" );
+        kdDebug()<<" style:print :"<<str<<endl;
+
+        if (str.contains( "headers" ) )
+        {
+            //todo implement it into kspread
+        }
+        if ( str.contains( "grid" ) )
+        {
+            table->print()->setPrintGrid( true );
+        }
+        if ( str.contains( "annotations" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "objects" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "charts" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "drawings" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "formulas" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "zero-values" ) )
+        {
+            //todo it's not implemented
+        }
+    }
+    if ( styleStack.hasAttribute( "style:table-centering" ) )
+    {
+        QString str = styleStack.attribute( "style:table-centering" );
+        //not implemented into kspread
+        kdDebug()<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
+#if 0
+        if ( str == "horizontal" )
+        {
+        }
+        else if ( str == "vertical" )
+        {
+        }
+        else if ( str == "both" )
+        {
+        }
+        else if ( str == "none" )
+        {
+        }
+        else
+            kdDebug()<<" table-centering unknown :"<<str<<endl;
+#endif
+    }
+
     format = QString( "%1x%2" ).arg( width ).arg( height );
     kdDebug()<<" format : "<<format<<endl;
     table->print()->setPaperLayout( left, top, right, bottom, format, orientation );
