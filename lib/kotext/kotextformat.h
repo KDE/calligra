@@ -35,6 +35,7 @@ class KoTextFormatCollection;
 class KoZoomHandler;
 class KoTextStringChar;
 class KoTextParag;
+class KoOasisContext;
 
 /**
  * Each character (KoTextStringChar) points to a KoTextFormat that defines the
@@ -235,7 +236,7 @@ public:
     bool hyphenation() const { return d->m_bHyphenation; }
 
     // This settings is a bit different - it's cached into the KoTextFormat,
-    // but it's not directly settable by the user.
+    // but it's not directly settable by the user, nor loaded/saved.
     void setUnderLineWidth( double ulw );
     double underLineWidth() const { return d->m_underLineWidth; }
 
@@ -348,6 +349,9 @@ public:
     static QStringList fontAttributeList();
     static QStringList underlineStyleList();
     static QStringList strikeOutStyleList();
+
+    /// Load a text format from OASIS XML
+    void load( KoOasisContext& context );
 
 #ifndef NDEBUG
     void printDebug();

@@ -256,7 +256,7 @@ void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     // Load name
     m_name = styleElem.attribute( "style:name" );
 
-    // TODO load format
+    m_format.load( context );
 
     // ### In KWord the style says "I'm part of the outline" (TOC)
     // ### In OOo the paragraph says that (text:h)

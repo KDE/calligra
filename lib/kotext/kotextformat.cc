@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <assert.h>
 #include "kostyle.h"
+#include "kooasiscontext.h"
+#include <qregexp.h>
 
 void KoTextFormat::KoTextFormatPrivate::clearCache()
 {
@@ -223,6 +225,229 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     ////
     addRef();
     return *this;
+}
+
+// Helper for load
+static void importTextPosition( const QString& text_position, KoTextFormat::VerticalAlignment& value, double& relativetextsize )
+{
+    //OO: <vertical position (% or sub or super)> [<size as %>]
+    //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
+    // TODO in kword: vertical positions other than sub/super
+    QStringList lst = QStringList::split( ' ', text_position );
+    if ( !lst.isEmpty() )
+    {
+        QString textPos = lst.front().stripWhiteSpace();
+        QString textSize;
+        lst.pop_front();
+        if ( !lst.isEmpty() )
+            textSize = lst.front().stripWhiteSpace();
+        Q_ASSERT( lst.isEmpty() );
+        bool super = textPos == "super";
+        bool sub = textPos == "sub";
+        if ( textPos.endsWith("%") )
+        {
+            textPos.truncate( textPos.length() - 1 );
+            // This is where we interpret the text position into kotext's simpler
+            // "super" or "sub".
+            double val = textPos.toDouble();
+            if ( val > 0 )
+                super = true;
+            else if ( val < 0 )
+                sub = true;
+        }
+        if ( super )
+            value = KoTextFormat::AlignSuperScript;
+        else if ( sub )
+            value = KoTextFormat::AlignSubScript;
+        else
+            value = KoTextFormat::AlignNormal;
+        if ( !textSize.isEmpty() && textSize.endsWith("%") )
+        {
+            textSize.truncate( textSize.length() - 1 );
+            relativetextsize = textSize.toDouble() / 100; // e.g. 0.58
+        }
+    }
+    else
+        value = KoTextFormat::AlignNormal;
+}
+
+// Helper for load
+static void importUnderline( const QString& in,
+                             KoTextFormat::UnderlineType& underline,
+                             KoTextFormat::UnderlineStyle& styleline )
+{
+    underline = KoTextFormat::U_SIMPLE;
+    styleline = KoTextFormat::U_SOLID;
+    if ( in == "none" )
+        underline = KoTextFormat::U_NONE;
+    else if ( in == "single" )
+        styleline = KoTextFormat::U_SOLID;
+    else if ( in == "double" ) {
+        underline = KoTextFormat::U_DOUBLE;
+    }
+    else if ( in == "dotted" || in == "bold-dotted" ) // bold-dotted not in libkotext
+        styleline = KoTextFormat::U_DOT;
+    else if ( in == "dash"
+              // those are not in libkotext:
+              || in == "long-dash"
+              || in == "bold-dash"
+              || in == "bold-long-dash" )
+        styleline = KoTextFormat::U_DASH;
+    else if ( in == "dot-dash"
+              || in == "bold-dot-dash") // not in libkotext
+        styleline = KoTextFormat::U_DASH_DOT; // tricky ;)
+    else if ( in == "dot-dot-dash"
+              || in == "bold-dot-dot-dash") // not in libkotext
+        styleline = KoTextFormat::U_DASH_DOT_DOT; // this is getting fun...
+    else if ( in == "wave"
+              || in == "bold-wave" // not in libkotext
+              || in == "double-wave" // not in libkotext
+              || in == "small-wave" ) { // not in libkotext
+        underline = KoTextFormat::U_WAVE;
+    } else if( in == "bold" ) {
+        underline = KoTextFormat::U_SIMPLE_BOLD;
+    } else
+        kdWarning() << k_funcinfo << " unsupported text-underline value: " << in << endl;
+}
+
+void KoTextFormat::load( KoOasisContext& context )
+{
+    KoStyleStack& styleStack = context.styleStack();
+    if ( styleStack.hasAttribute( "fo:color" ) ) { // 3.10.3
+        col.setNamedColor( styleStack.attribute( "fo:color" ) ); // #rrggbb format
+    }
+    if ( styleStack.hasAttribute( "fo:font-family" )  // 3.10.9
+         || styleStack.hasAttribute("style:font-name") ) { // 3.10.8
+        // Hmm, the remove "'" could break it's in the middle of the fontname...
+        QString fontName = styleStack.attribute( "fo:font-family" ).remove( "'" );
+        if (fontName.isEmpty()) {
+            // ##### TODO. This is wrong. style:font-name refers to a font-decl entry.
+            // We have to look it up there, and retrieve _all_ font attributes from it, not just the name.
+            fontName = styleStack.attribute( "style:font-name" ).remove( "'" );
+        }
+        // 'Thorndale' is not known outside OpenOffice so we substitute it
+        // with 'Times New Roman' that looks nearly the same.
+        if ( fontName == "Thorndale" )
+            fontName = "Times New Roman";
+
+        fontName.remove(QRegExp("\\sCE$")); // Arial CE -> Arial
+        fn.setFamily( fontName );
+    }
+    if ( styleStack.hasAttribute( "fo:font-size" ) ) { // 3.10.14
+        double pointSize = styleStack.fontSize();
+        fn.setPointSizeFloat( pointSize );
+    }
+    if ( styleStack.hasAttribute( "fo:font-weight" ) ) { // 3.10.24
+        QString fontWeight = styleStack.attribute( "fo:font-weight" );
+        int boldness = fontWeight.toInt();
+        if ( fontWeight == "bold" )
+            boldness = 75;
+        else if ( boldness == 0 )
+            boldness = 50;
+        // TODO: check if OO supports more?
+        fn.setWeight( boldness );
+    }
+    if ( styleStack.hasAttribute( "fo:font-style" ) ) // 3.10.19
+        if ( styleStack.attribute( "fo:font-style" ) == "italic" ||
+             styleStack.attribute( "fo:font-style" ) == "oblique" ) { // no difference in kotext
+            fn.setItalic( true );
+        }
+
+    d->m_bWordByWord = (styleStack.hasAttribute("fo:score-spaces")) // 3.10.25
+                      && (styleStack.attribute("fo:score-spaces") == "false");
+    m_strikeOutType = S_NONE;
+    m_strikeOutStyle = S_SOLID;
+    if( styleStack.hasAttribute("style:text-crossing-out" )) { // 3.10.6
+        QString strikeOutType = styleStack.attribute( "style:text-crossing-out" );
+        if( strikeOutType =="double-line")
+            m_strikeOutType = S_DOUBLE;
+        else if( strikeOutType =="single-line")
+            m_strikeOutType = S_SIMPLE;
+        else if( strikeOutType =="thick-line")
+            m_strikeOutType = S_SIMPLE_BOLD;
+        // not supported by KWord: "slash" and "X"
+        // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
+    }
+    va = AlignNormal;
+    d->m_relativeTextSize = 0.58;
+    if( styleStack.hasAttribute("style:text-position")) { // 3.10.7
+        double relativetextsize = 0;
+        importTextPosition( styleStack.attribute("style:text-position"), va, relativetextsize );
+        if ( relativetextsize != 0 )
+            d->m_relativeTextSize = relativetextsize;
+    }
+    if ( styleStack.hasAttribute( "style:text-underline" ) ) { // 3.10.22
+        importUnderline( styleStack.attribute( "style:text-underline" ),
+                                  m_underlineType, m_underlineStyle );
+
+        QString underLineColor = styleStack.attribute( "style:text-underline-color" ); // 3.10.23
+        if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
+            m_textUnderlineColor.setNamedColor( underLineColor );
+    }
+    // Small caps, lowercase, uppercase
+    m_attributeFont = ATT_NONE;
+    if ( styleStack.hasAttribute( "fo:font-variant" ) // 3.10.1
+         || styleStack.hasAttribute( "fo:text-transform" ) ) { // 3.10.2
+        bool smallCaps = styleStack.attribute( "fo:font-variant" ) == "small-caps";
+        if ( smallCaps ) {
+            m_attributeFont = ATT_SMALL_CAPS;
+        } else {
+            QString textTransform = styleStack.attribute( "fo:text-transform" );
+            if ( textTransform == "uppercase" )
+                m_attributeFont = ATT_UPPER;
+            else if ( textTransform == "lowercase" )
+                m_attributeFont = ATT_LOWER;
+            // TODO in KWord: "capitalize".
+        }
+    }
+    if ( styleStack.hasAttribute("fo:language") ) { // 3.10.17
+        m_language = styleStack.attribute("fo:language");
+        if ( m_language == "en" )
+            m_language = "en_US";
+    }
+    if ( styleStack.hasAttribute("style:text-background-color") ) { // 3.10.28
+        QString tmp = styleStack.attribute("style:text-background-color");
+        if (tmp != "transparent")
+            m_textBackColor.setNamedColor( tmp );
+    }
+    if ( styleStack.hasAttribute("fo:text-shadow") ) { // 3.10.21
+        parseShadowFromCss( styleStack.attribute("fo:text-shadow") );
+    }
+
+    /// ######## TODO finish
+    // ######### TODO - it seems OO has it as a paragraph property... (what about msword?)
+    //d->m_bHyphenation = false;
+
+    d->m_offsetFromBaseLine= 0; // ### TODO (seems to be "vertical alignment" in OO, but it's not only for subscript/superscript, it's more general)
+
+    /*
+      Missing properties:
+      style:use-window-font-color, 3.10.4 - this is what KWord uses by default (fg color from the color style)
+         OO also switches to another color when necessary to avoid dark-on-dark and light-on-light cases.
+         (that is TODO in KWord)
+      style:text-outline, 3.10.5 - not implemented in kotext
+      style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
+      style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
+      style:font-pitch, 3.10.12 - fixed or variable -> map to a font?
+      style:font-charset, 3.10.14 - not necessary with Qt
+      style:font-size-rel, 3.10.15 - TODO in StyleStack::fontSize()
+      fo:letter-spacing, 3.10.16 - not implemented in kotext
+      style:text-relief, 3.10.20 - not implemented in kotext
+      style:letter-kerning, 3.10.20 - not implemented in kotext
+      style:text-blinking, 3.10.27 - not implemented in kotext IIRC
+      style:text-combine, 3.10.29/30 - not implemented, see http://www.w3.org/TR/WD-i18n-format/
+      style:text-emphasis, 3.10.31 - not implemented in kotext
+      style:text-scale, 3.10.33 - not implemented in kotext
+      style:text-rotation-angle, 3.10.34 - not implemented in kotext (kpr rotates whole objects)
+      style:text-rotation-scale, 3.10.35 - not implemented in kotext (kpr rotates whole objects)
+      style:punctuation-wrap, 3.10.36 - not implemented in kotext
+    */
+
+    d->m_underLineWidth = 1.0;
+    ////
+    generateKey();
+    addRef();
+
 }
 
 void KoTextFormat::update()
@@ -1015,7 +1240,6 @@ void KoTextFormat::parseShadowFromCss( const QString& _css )
         }
         // We ignore whatever else is in the string (e.g. blur radius, other shadows)
     }
-    update();
 }
 
 QColor KoTextFormat::shadowColor() const
