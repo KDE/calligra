@@ -78,7 +78,7 @@ VSelectTool::mousePressed( QMouseEvent *mouse_event )
 	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
 	m_activeNode = view()->part()->document().selection()->handleNode( lp );
 	view()->part()->document().selection()->setState( VObject::edit );
-	view()->part()->repaintAllViews();
+	view()->part()->repaintAllViews( true );
 
 	// draw initial object:
 	drawTemporaryObject();
@@ -299,7 +299,7 @@ VSelectTool::mouseReleased( QMouseEvent *mouse_event )
 			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 
 		view()->selectionChanged();
-		view()->part()->repaintAllViews();
+		view()->part()->repaintAllViews( true );
 	}
 
 	m_isDragging = false;

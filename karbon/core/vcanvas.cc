@@ -68,12 +68,12 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->blit( rect );
 	}
 
-	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
-
 	// draw handle:
 	QPainter qpainter( viewport() );
 	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
+
+	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
 }
 
 void
@@ -85,21 +85,22 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 }
 
 void
-VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
+VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjects )
 {
 	//kdDebug() << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 	VPainter* p = m_view->painterFactory()->painter();
-	p->begin();
-	p->setZoomFactor( m_view->zoom() );
-	QWMatrix mat;
-	mat.translate( -contentsX(), -contentsY() );
-	p->setWorldMatrix( mat );
-	//VPainter *p = m_view->painterFactory()->painter( this, visibleWidth(), visibleHeight() );
-	//erase( rect );
+	if( drawVObjects )
+	{
+		p->begin();
+		p->setZoomFactor( m_view->zoom() );
+		QWMatrix mat;
+		mat.translate( -contentsX(), -contentsY() );
+		p->setWorldMatrix( mat );
 
-	m_part->document().draw( p, KoRect::fromQRect( rect ) );
+		m_part->document().draw( p, KoRect::fromQRect( rect ) );
 
-	p->end();
+		p->end();
+	}
 
 	// draw handle:
 	QPainter qpainter( p->device() );
@@ -110,9 +111,10 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 }
 
 void
-VCanvas::repaintAll( bool /*erase*/ )
+VCanvas::repaintAll( bool drawVObjects )
 {
-	drawContents( 0, 0, 0, width(), height() );
+	//drawContents( 0, 0, 0, width(), height() );
+	drawDocument( 0, QRect( 0, 0, width(), height() ), drawVObjects );
 	//viewport()->repaint( erase );
 }
 

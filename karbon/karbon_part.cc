@@ -172,13 +172,13 @@ KarbonPart::purgeHistory()
 }
 
 void
-KarbonPart::repaintAllViews( bool /*erase*/ )
+KarbonPart::repaintAllViews( bool erase )
 {
 	QPtrListIterator<KoView> itr( views() );
 	for( ; itr.current() ; ++itr )
 	{
  		static_cast<KarbonView*>( itr.current() )->
-			canvasWidget()->repaintAll( true );
+			canvasWidget()->repaintAll( !erase );
 	}
 }
 

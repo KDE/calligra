@@ -10,6 +10,7 @@
 
 class KarbonPart;
 class KarbonView;
+class KoRect;
 
 // The canvas is a QScrollView.
 
@@ -19,7 +20,7 @@ class VCanvas : public QScrollView
 public:
 	VCanvas( KarbonView* view, KarbonPart* part );
 
-	void repaintAll( bool erase = false );
+	void repaintAll( bool drawVObjects = true );
 
 	QPixmap *pixmap() { return m_pixmap; }
 
@@ -28,7 +29,7 @@ protected:
 	virtual void viewportPaintEvent( QPaintEvent* );
 	virtual void drawContents( QPainter* painter, int clipx, int clipy,
 		int clipw, int cliph  );
-	void drawDocument( QPainter* painter, const QRect& rect );
+	void drawDocument( QPainter* painter, const QRect& rect, bool drawVObjects = true );
 
 	virtual void resizeEvent( QResizeEvent* event );
 
