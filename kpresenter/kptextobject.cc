@@ -1002,13 +1002,18 @@ KCommand * KPTextObject::pasteKPresenter( QTextCursor * cursor, const QCString &
 void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color)
 {
     //todo apply to all parag
+
+    //don't apply shadow to obj but at paragraph.
+    //In text obj shadow is a paragraph propertie.
+#if 0
     shadowDistance = _distance;
     shadowDirection = _direction;
     shadowColor = _color;
+#endif
     Qt3::QTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         // The double->int conversion for shadowDistance assumes pt=pixel. Bah.
-        static_cast<KoTextParag *>(parag)->setShadow( (int)shadowDistance, shadowDirection, shadowColor );
+        static_cast<KoTextParag *>(parag)->setShadow( (int)_distance, _direction, _color );
         parag = parag->next();
     }
 }
