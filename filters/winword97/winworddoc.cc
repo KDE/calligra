@@ -16,8 +16,6 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
 
 WinWordDoc::~WinWordDoc() {
 
-    kdebug(KDEBUG_INFO, 31000, "WinWordDoc - DTOR - Anfang");
-
     if(main.data) {
         delete [] main.data;
         main.data=0L;
@@ -34,8 +32,6 @@ WinWordDoc::~WinWordDoc() {
         delete [] data.data;
         data.data=0L;
     }
-
-    kdebug(KDEBUG_INFO, 31000, "WinWordDoc - DTOR - Ende");
 }
 
 void WinWordDoc::slotFilterError() {

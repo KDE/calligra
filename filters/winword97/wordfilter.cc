@@ -18,8 +18,6 @@ WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
 
 WordFilter::~WordFilter() {
 
-    kdebug(KDEBUG_INFO, 31000, "WordFilter - DTOR - Anfang");
-
     if(myDoc) {
         delete myDoc;
         myDoc=0L;
@@ -28,6 +26,4 @@ WordFilter::~WordFilter() {
         delete myKwd;
         myKwd=0L;
     }
-
-    kdebug(KDEBUG_INFO, 31000, "WordFilter - DTOR - Ende");
 }

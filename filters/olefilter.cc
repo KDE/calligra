@@ -204,8 +204,8 @@ void OLEFilter::convert(const QString &dirname) {
             // I'll have to read some additional OLE-Streams
             // and look for information in them as the names
             // are not unique!
-
-            node=list.next();
+            else
+                node=list.next();
         } while(myFilter==0L && node!=0);
 
         if(myFilter==0L) {
@@ -222,10 +222,7 @@ void OLEFilter::convert(const QString &dirname) {
         slotPart(dirname, myFilter->extension(), &tmp);
         fileOut->writeFile(tmp, "", "", file.length(), (const char*)file.utf8());
         delete [] tmp;
-        kdebug(KDEBUG_INFO, 31000, "tmp tot");
         delete myFilter;
-
-        kdebug(KDEBUG_INFO, 31000, "nachher");
     }
 }
 

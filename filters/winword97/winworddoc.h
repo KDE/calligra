@@ -3,7 +3,6 @@
 
 #include <string.h>
 #include <qobject.h>
-#include <kdebug.h>
 #include "klaola.h"
 #include "myfile.h"
 #include "fib.h"

@@ -16,7 +16,6 @@
 #ifndef WORDFILTER_H
 #define WORDFILTER_H
 
-#include <kdebug.h>
 #include "filterbase.h"
 #include "winworddoc.h"
 #include "kworddoc.h"

@@ -3,7 +3,6 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <kdebug.h>
 
 class KWordDoc : public QObject {
 

@@ -256,9 +256,6 @@ void KLaola::testIt() {
             foo+=QString::number(info.size);
             kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(foo));
         }
-        // myFile test=stream(2);
-        // kdebug(KDEBUG_INFO, 31000, (const char*)QString::number(test.length));
-        // delete [] test.data;
     }
 }
 

@@ -2,6 +2,9 @@
 #include "filterbase.moc"
 
 
+FilterBase::FilterBase() : QObject() {
+}
+
 const QString FilterBase::part() {
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
         "<DOC author=\"Werner Trobin\" email=\"wtrobin@carinthia.com\" editor=\"OLEFilter\" mime=\"application/x-kword\" url=\"error.kwd\">\n"
