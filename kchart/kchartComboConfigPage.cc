@@ -12,7 +12,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
-
+#include <iostream.h>
 
 KChartComboPage::KChartComboPage(KChartParameters* params,QWidget* parent ) :
     QWidget( parent ),_params( params )

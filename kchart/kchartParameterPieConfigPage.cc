@@ -10,7 +10,7 @@
 
 #include <kapp.h>
 #include <klocale.h>
-
+#include <iostream.h>
 
 #include <qlayout.h>
 #include <qlabel.h>

@@ -9,6 +9,7 @@
 #include <qlabel.h>
 #include <qcollection.h>
 #include <qobjectlist.h>
+#include <iostream.h>
 
 #include <kiconloader.h>
 #include <kglobal.h>
