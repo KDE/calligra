@@ -3112,7 +3112,7 @@ void KPresenterView::setupActions()
     actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
                                                    this, SLOT( addWordToDictionary() ),
                                                    actionCollection(), "add_word_to_dictionary" );
-    actionCustomSlideShow = new KAction( i18n( "Custom Side Show..." ), 0,
+    actionCustomSlideShow = new KAction( i18n( "Custom Slide Show..." ), 0,
                                          this, SLOT( customSlideShow() ),
                                          actionCollection(), "custom_slide_show" );
 }
