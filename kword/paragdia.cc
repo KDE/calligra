@@ -724,24 +724,29 @@ void KWParagDia::setupTab4()
     tmp = new QRadioButton( i18n( "&Disc Bullet" ), gStyle );
     tgrid->addMultiCellWidget( tmp, 6, 6, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_DISCBULLET );
+    rDisc = tmp;
 
     tmp = new QRadioButton( i18n( "&Square Bullet" ), gStyle );
     tgrid->addMultiCellWidget( tmp, 7, 7, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_SQUAREBULLET );
+    rSquare = tmp;
 
     tmp = new QRadioButton( i18n( "&Circle Bullet" ), gStyle );
     tgrid->addMultiCellWidget( tmp, 8, 8, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_CIRCLEBULLET );
+    rCircle = tmp;
 
     tmp = new QRadioButton( i18n( "Custom Bullet" ), gStyle );
     tgrid->addWidget( tmp, 9, 0 );
     gStyle->insert( tmp, Counter::STYLE_CUSTOMBULLET );
+    rCustom = tmp;
 
     bBullets = new QPushButton( gStyle );
     tgrid->addWidget( bBullets, 9, 1 );
     connect( bBullets, SIGNAL( clicked() ), this, SLOT( numChangeBullet() ) );
-    connect( gStyle, SIGNAL( clicked( int ) ), this, SLOT( numStyleChanged( int ) ) );
+
     grid->addWidget( gStyle, 1, 0 );
+    connect( gStyle, SIGNAL( clicked( int ) ), this, SLOT( numStyleChanged( int ) ) );
 
     // Miscellaneous stuff.
     gText = new QGroupBox( i18n("Other Settings"), tab );
@@ -771,7 +776,7 @@ void KWParagDia::setupTab4()
     txtgrid->addWidget( eStart, 2, 1 );
     connect( eStart, SIGNAL( textChanged( const QString & ) ), this, SLOT( numStartChanged( const QString & ) ) );
 
-    lDepth = new QLabel( i18n( "Depth:" ), gText );
+    QLabel *lDepth = new QLabel( i18n( "Depth:" ), gText );
     lDepth->setAlignment( AlignRight | AlignVCenter );
     txtgrid->addWidget( lDepth, 3, 0 );
 
@@ -1365,18 +1370,18 @@ void KWParagDia::numChangeBullet()
 {
     gStyle->setButton( Counter::STYLE_CUSTOMBULLET );
     numStyleChanged( Counter::STYLE_CUSTOMBULLET );
-    QString f = m_counter.m_customBullet.font;
+    QString f = m_counter.customBulletFont();
     if ( f.isEmpty() )
         f = "symbol";
-    QChar c = m_counter.m_customBullet.character;
+    QChar c = m_counter.customBulletCharacter();
 
     if ( KCharSelectDia::selectChar( f, c ) )
     {
-        m_counter.m_customBullet.font = f;
-        m_counter.m_customBullet.character = c;
+        m_counter.setCustomBulletFont( f );
+        m_counter.setCustomBulletCharacter( c );
         bBullets->setText( c );
         if ( !f.isEmpty() )
-            bBullets->setFont( QFont( m_counter.m_customBullet.font ) );
+            bBullets->setFont( QFont( m_counter.customBulletFont() ) );
         prev4->setCounter( m_counter );
     }
 }
@@ -1384,48 +1389,66 @@ void KWParagDia::numChangeBullet()
 /*================================================================*/
 void KWParagDia::numStyleChanged( int _type )
 {
-    m_counter.m_style = static_cast<Counter::Style>( _type );
+    m_counter.setStyle( static_cast<Counter::Style>( _type ) );
+
+    // Disable start at for bullet styles.
+    bool hasStart = !m_counter.isBullet();
+    lStart->setEnabled( hasStart );
+    eStart->setEnabled( hasStart );
 }
 
 /*================================================================*/
 void KWParagDia::numCounterDefChanged( const QString& _cd )
 {
-    m_counter.m_custom = _cd;
+    m_counter.setCustom( _cd );
 }
-
 
 /*================================================================*/
 void KWParagDia::numTypeChanged( int _ntype )
 {
-    m_counter.m_numbering = static_cast<Counter::Numbering>( _ntype );
-    gText->setEnabled( m_counter.m_numbering != Counter::NUM_NONE );
-    gStyle->setEnabled( m_counter.m_numbering != Counter::NUM_NONE );
-    lDepth->setEnabled( m_counter.m_numbering == Counter::NUM_LIST );
-    sDepth->setEnabled( m_counter.m_numbering == Counter::NUM_LIST );
+    m_counter.setNumbering( static_cast<Counter::Numbering>( _ntype ) );
+
+    // Disable all options for NUM_NONE.
+    gText->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
+    gStyle->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
+
+    // Disable bullet styles for NUM_CHAPTER.
+    bool isList = m_counter.numbering() == Counter::NUM_LIST;
+    rDisc->setEnabled( isList );
+    rSquare->setEnabled( isList );
+    rCircle->setEnabled( isList );
+    rCustom->setEnabled( isList );
+    bBullets->setEnabled( isList );
+    if ( !isList )
+    {
+        // Reset style if required by the internal logic of Counter.
+        gStyle->setButton( m_counter.style() );
+        numStyleChanged( m_counter.style() );
+    }
 }
 
 /*================================================================*/
 void KWParagDia::numLeftTextChanged( const QString & _c )
 {
-    m_counter.m_prefix = _c;
+    m_counter.setPrefix( _c );
 }
 
 /*================================================================*/
 void KWParagDia::numRightTextChanged( const QString & _c )
 {
-    m_counter.m_suffix = _c;
+    m_counter.setSuffix( _c );
 }
 
 /*================================================================*/
 void KWParagDia::numStartChanged( const QString & _c )
 {
-    m_counter.m_startNumber = _c.toInt(); // HACK
+    m_counter.setStartNumber( _c.toInt() ); // HACK
 }
 
 /*================================================================*/
 void KWParagDia::numDepthChanged( int _val )
 {
-    m_counter.m_depth = _val;
+    m_counter.setDepth( _val );
 }
 
 /*================================================================*/
@@ -1434,23 +1457,25 @@ void KWParagDia::setCounter( Counter _counter )
     prev4->setCounter( _counter );
     m_counter = _counter;
 
-    gNumbering->setButton( m_counter.m_numbering );
-    numTypeChanged(m_counter.m_numbering  );
-    gStyle->setButton( m_counter.m_style );
+    gNumbering->setButton( m_counter.numbering() );
+    numTypeChanged( m_counter.numbering() );
 
-    eCustomNum->setText( m_counter.m_custom );
+    gStyle->setButton( m_counter.style() );
+    numStyleChanged( m_counter.style() );
 
-    bBullets->setText( m_counter.m_customBullet.character );
-    if ( !m_counter.m_customBullet.font.isEmpty() )
-        bBullets->setFont( QFont( m_counter.m_customBullet.font ) );
+    eCustomNum->setText( m_counter.custom() );
 
-    ecLeft->setText( m_counter.m_prefix );
-    ecRight->setText( m_counter.m_suffix );
+    bBullets->setText( m_counter.customBulletCharacter() );
+    if ( !m_counter.customBulletFont().isEmpty() )
+        bBullets->setFont( QFont( m_counter.customBulletFont() ) );
 
-    sDepth->setValue( m_counter.m_depth );
+    ecLeft->setText( m_counter.prefix() );
+    ecRight->setText( m_counter.suffix() );
+
+    sDepth->setValue( m_counter.depth() );
     // What we really need is a combobox filled with values depending on
     // the type of numbering - or a spinbox. (DF)
-    eStart->setText( QString::number( m_counter.m_startNumber ) ); // HACK
+    eStart->setText( QString::number( m_counter.startNumber() ) ); // HACK
 }
 
 /*================================================================*/

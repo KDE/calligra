@@ -243,20 +243,22 @@ protected:
     QLineEdit *eCustomNum;
     QLineEdit *ecLeft, *ecRight, *eStart;
     QLabel *lStart;
+    QRadioButton *rDisc, *rSquare, *rCircle, *rCustom;
+    QPushButton *bBullets;
+    QSpinBox *sDepth;
 
     QGridLayout *indentGrid, *spacingGrid,
         *pSpaceGrid, *tabGrid;
     QLineEdit *eLeft, *eRight, *eFirstLine, *eSpacing, *eBefore, *eAfter, *eTabPos;
-    QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lAlign, *lStyle, *lWidth, *lColor, *lDepth;
+    QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lAlign, *lStyle, *lWidth, *lColor;
     QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gText;
     QComboBox *cSpacing, *cStyle, *cWidth;
     QRadioButton *rLeft, *rCenter, *rRight, *rJustify;
     KWPagePreview *prev1;
     KWPagePreview2 *prev2;
-    QPushButton *bLeft, *bRight, *bTop, *bBottom, *bBullets, *bFont, *bAdd, *bDel, *bModify;
+    QPushButton *bLeft, *bRight, *bTop, *bBottom, *bFont, *bAdd, *bDel, *bModify;
     KWBorderPreview *prev3;
     KColorButton *bColor;
-    QSpinBox *sDepth;
     QButtonGroup *g2, *g3;
     KWNumPreview *prev4;
     QListBox *lTabs;

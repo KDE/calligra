@@ -2169,13 +2169,13 @@ void KWTextFrameSetEdit::updateUI()
         m_canvas->gui()->getView()->showAlign( m_paragLayout.alignment );
     }
 
-    Counter::Style ctype = m_paragLayout.counter.m_style;
+    Counter::Style ctype = m_paragLayout.counter.style();
     if ( parag->counter() )
         m_paragLayout.counter = *parag->counter();
     else
-        m_paragLayout.counter.m_style = Counter::STYLE_NONE;
-    if ( m_paragLayout.counter.m_style != ctype )
-        m_canvas->gui()->getView()->showCounterStyle( m_paragLayout.counter.m_style );
+        m_paragLayout.counter.setStyle( Counter::STYLE_NONE );
+    if ( m_paragLayout.counter.style() != ctype )
+        m_canvas->gui()->getView()->showCounterStyle( m_paragLayout.counter.style() );
 
     if(m_paragLayout.leftBorder!=parag->leftBorder() ||
        m_paragLayout.rightBorder!=parag->rightBorder() ||

@@ -102,7 +102,7 @@ void KWContents::createContents()
         // This way, we don't rely on a particular name (breaks when renaming)
         // nor on whether the user used styles or not.
         // It even lets a user create two styles for the same level of chapter.
-        if ( p->counter() && p->counter()->m_numbering == Counter::NUM_CHAPTER )
+        if ( p->counter() && p->counter()->numbering() == Counter::NUM_CHAPTER )
         {
             parag = static_cast<KWTextParag *>(textdoc->createParag( textdoc, prevTOCParag /*prev*/, body /*next*/, true ));
             //parag->setInfo( KWParag::PI_CONTENTS );
@@ -133,7 +133,7 @@ void KWContents::createContents()
         parag->append( QString::number( pgNum ) );
 
         // Apply style
-        int depth = p->counter()->m_depth;    // we checked for p->counter() before putting in the map
+        int depth = p->counter()->depth();    // we checked for p->counter() before putting in the map
         KWStyle * tocStyle = findOrCreateTOCStyle( depth );
         parag->setParagLayout( tocStyle->paragLayout() );
         parag->setFormat( 0, parag->string()->length(), &tocStyle->format() );

@@ -33,10 +33,12 @@ do \
     struc inch##attribute = POINT_TO_INCH( struc pt##attribute ); \
 } while (0)
 
+static KWTextParag * const INVALID_PARAG = (KWTextParag *)-1;
+
 Counter::Counter()
 {
     m_numbering = NUM_NONE;
-    m_style = STYLE_NONE;
+    m_style = STYLE_NUM;
     m_depth = 0;
     m_startNumber = 1;
     m_prefix = QString::null;
@@ -45,7 +47,6 @@ Counter::Counter()
     m_customBullet.font = QString::null;
     invalidate();
 }
-
 
 bool Counter::operator==( const Counter & c2 ) const
 {
@@ -61,12 +62,70 @@ bool Counter::operator==( const Counter & c2 ) const
 
 }
 
+QString Counter::custom() const
+{
+    return m_custom;
+}
+
+QChar Counter::customBulletCharacter() const
+{
+    return m_customBullet.character;
+}
+
+QString Counter::customBulletFont() const
+{
+    return m_customBullet.font;
+}
+
+unsigned int Counter::depth() const
+{
+    return m_depth;
+}
+
 void Counter::invalidate()
 {
     m_cache.number = -1;
     m_cache.text = QString::null;
     m_cache.width = -1;
-    m_cache.parent = (KWTextParag *)-1;
+    m_cache.parent = INVALID_PARAG;
+}
+
+bool Counter::isBullet() const
+{
+    switch ( style() )
+    {
+    case STYLE_DISCBULLET:
+    case STYLE_SQUAREBULLET:
+    case STYLE_CIRCLEBULLET:
+    case STYLE_CUSTOMBULLET:
+        return true;
+    default:
+        return false;
+    }
+}
+
+void Counter::load( QDomElement & element )
+{
+    m_numbering = static_cast<Numbering>( element.attribute("numberingtype").toInt() );
+    m_style = static_cast<Style>( element.attribute("type").toInt() );
+    // Catch old usage, and convert into new usage.
+    if ( m_style == STYLE_NONE )
+    {
+        m_numbering = NUM_NONE;
+        m_style = STYLE_NUM;
+    }
+    m_depth = element.attribute("depth").toInt();
+    m_customBullet.character = QChar( element.attribute("bullet").toInt() );
+    m_prefix = correctQString( element.attribute("lefttext") );
+    m_suffix = correctQString( element.attribute("righttext") );
+    QString s = element.attribute("start");
+    if ( s[0].isDigit() )
+        m_startNumber = s.toInt();
+    else // support for very-old files
+        m_startNumber = s.lower()[0].latin1() - 'a' + 1;
+    m_customBullet.font = correctQString( element.attribute("m_customBullet.font") );
+    m_custom = correctQString( element.attribute("customdef") );
+    invalidate();
 }
 
 int Counter::number( const KWTextParag *paragraph )
@@ -147,11 +206,16 @@ int Counter::number( const KWTextParag *paragraph )
     return m_cache.number;
 }
 
+Counter::Numbering Counter::numbering() const
+{
+    return m_numbering;
+}
+
 // Go looking for another paragraph at a higher level.
 KWTextParag *Counter::parent( const KWTextParag *paragraph )
 {
     // Return cached value if possible.
-    if ( m_cache.parent && ( m_cache.parent != (KWTextParag *)-1 ) )
+    if ( m_cache.parent != INVALID_PARAG )
         return m_cache.parent;
 
     KWTextParag *otherParagraph = static_cast<KWTextParag *>( paragraph->prev() );
@@ -204,21 +268,9 @@ KWTextParag *Counter::parent( const KWTextParag *paragraph )
     return m_cache.parent;
 }
 
-void Counter::load( QDomElement & element )
+QString Counter::prefix() const
 {
-    m_style = static_cast<Counter::Style>( element.attribute("type").toInt() );
-    m_depth = element.attribute("depth").toInt();
-    m_customBullet.character = QChar( element.attribute("bullet").toInt() );
-    m_prefix = correctQString( element.attribute("lefttext") );
-    m_suffix = correctQString( element.attribute("righttext") );
-    QString s = element.attribute("start");
-    if ( s[0].isDigit() )
-        m_startNumber = s.toInt();
-    else // support for very-old files
-        m_startNumber = s.lower()[0].latin1() - 'a' + 1;
-    m_numbering = static_cast<Numbering>( element.attribute("numberingtype").toInt() );
-    m_customBullet.font = correctQString( element.attribute("m_customBullet.font") );
-    m_custom = correctQString( element.attribute("customdef") );
+    return m_prefix;
 }
 
 void Counter::save( QDomElement & element )
@@ -234,17 +286,107 @@ void Counter::save( QDomElement & element )
     element.setAttribute( "customdef", m_custom );
 }
 
+void Counter::setCustom( QString c )
+{
+    m_custom = c;
+    invalidate();
+}
+
+void Counter::setCustomBulletCharacter( QChar c )
+{
+    m_customBullet.character = c;
+    invalidate();
+}
+
+void Counter::setCustomBulletFont( QString f )
+{
+    m_customBullet.font = f;
+    invalidate();
+}
+
+void Counter::setDepth( unsigned int d )
+{
+    m_depth = d;
+    invalidate();
+}
+
+void Counter::setNumbering( Numbering n )
+{
+    m_numbering = n;
+    invalidate();
+}
+
+void Counter::setPrefix( QString p )
+{
+    m_prefix = p;
+    invalidate();
+}
+void Counter::setStartNumber( int s )
+{
+    m_startNumber = s;
+    invalidate();
+}
+
+void Counter::setStyle( Style s )
+{
+    m_style = s;
+    invalidate();
+}
+
+void Counter::setSuffix( QString s )
+{
+    m_suffix = s;
+    invalidate();
+}
+
+int Counter::startNumber() const
+{
+    return m_startNumber;
+}
+
+Counter::Style Counter::style() const
+{
+    switch ( m_style )
+    {
+    case STYLE_NONE:
+        return STYLE_NUM;
+        break;
+    case STYLE_DISCBULLET:
+    case STYLE_SQUAREBULLET:
+    case STYLE_CIRCLEBULLET:
+    case STYLE_CUSTOMBULLET:
+        if ( m_numbering == NUM_CHAPTER )
+        {
+            // Shome mishtake surely!
+            return STYLE_NUM;
+        }
+        break;
+    default:
+        break;
+    }
+    return m_style;
+}
+
+QString Counter::suffix() const
+{
+    return m_suffix;
+}
+
 QString Counter::text( const KWTextParag *paragraph )
 {
     // Return cached value if possible.
     if ( m_cache.text != QString::null )
         return m_cache.text;
 
-    // Recurse to find the text of the preceeding bullet.
-    parent( paragraph );
-    if ( m_cache.parent && ( m_cache.parent != (KWTextParag *)-1 ) )
+    // Recurse to find the text of the preceeding level.
+    if ( parent( paragraph ) )
     {
         m_cache.text = m_cache.parent->counter()->text( m_cache.parent );
+
+        // If the preceeding level is a bullet, replace it with blanks.
+        if ( m_cache.parent->counter()->isBullet() )
+            for ( unsigned i = 0; i < m_cache.text.length(); i++ )
+                m_cache.text.at( i ) = ' ';
     }
 
     // Ensure paragraph number is valid.
@@ -254,9 +396,10 @@ QString Counter::text( const KWTextParag *paragraph )
     QString tmp;
     int n;
     char bottomDigit;
-    switch ( m_style )
+    switch ( style() )
     {
     case STYLE_NONE:
+        // Should not happen.
         break;
     case STYLE_NUM:
         tmp.setNum( m_cache.number );
@@ -296,16 +439,15 @@ QString Counter::text( const KWTextParag *paragraph )
     case Counter::STYLE_CIRCLEBULLET:
     case Counter::STYLE_CUSTOMBULLET:
         // Allow space for bullet!
-        tmp = " ";
+        tmp = ' ';
         break;
     }
-    tmp.prepend( m_prefix );
-    tmp.append( m_suffix );
+    tmp.prepend( prefix() );
+    tmp.append( suffix() );
 
     // Find the number of missing parents, and add dummy text for them.
     int missingParents;
-    parent( paragraph );
-    if ( m_cache.parent && ( m_cache.parent != (KWTextParag *)-1 ) )
+    if ( parent( paragraph ) )
     {
         missingParents = m_depth - m_cache.parent->counter()->m_depth - 1;
     }
@@ -381,7 +523,7 @@ Counter *KWTextParag::counter()
         return m_counter;
 
     // Garbage collect unnneeded counters.
-    if ( m_counter->m_numbering == Counter::NUM_NONE )
+    if ( m_counter->numbering() == Counter::NUM_NONE )
         setNoCounter();
     return m_counter;
 }
@@ -446,8 +588,8 @@ void KWTextParag::setNoCounter()
 
 void KWTextParag::setCounter( const Counter & counter )
 {
-    //kdDebug() << "KWTextParag::setCounter " << counter.m_style << endl;
-    if ( counter.m_style == Counter::STYLE_NONE )
+    // Garbage collect unnneeded counters.
+    if ( counter.numbering() == Counter::NUM_NONE )
     {
         setNoCounter();
     }
@@ -505,23 +647,19 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     // ### Problem is, the paragFormat never changes. It should probably
     // change when we change the format of the whole paragraph ?
     p->setFont( newFont );
-    p->drawText( x - size, y - h + base, m_counter->text( this ) );
 
     // Now draw any bullet that is required over the space left for it.
-    if ( ( m_counter->m_style == Counter::STYLE_DISCBULLET ) ||
-         ( m_counter->m_style == Counter::STYLE_SQUAREBULLET ) ||
-         ( m_counter->m_style == Counter::STYLE_CIRCLEBULLET ) ||
-         ( m_counter->m_style == Counter::STYLE_CUSTOMBULLET ) )
+    if ( m_counter->isBullet() )
     {
         // Modify x offset.
-        for ( unsigned int i = 0; i < m_counter->m_suffix.length(); i++ )
-            x -= format->width( m_counter->m_suffix, i );
+        for ( unsigned int i = 0; i < m_counter->suffix().length(); i++ )
+            x -= format->width( m_counter->suffix(), i );
         int width = format->width( ' ' );
         int height = format->height();
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
 
         // Draw the bullet.
-        switch ( m_counter->m_style )
+        switch ( m_counter->style() )
         {
             case Counter::STYLE_DISCBULLET:
                 p->setBrush( cg.brush( QColorGroup::Foreground ) );
@@ -537,16 +675,22 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             case Counter::STYLE_CUSTOMBULLET:
                 // The user has selected a symbol from a special font. Override the paragraph
                 // font with the given family. This conserves the right size etc.
-                if ( !m_counter->m_customBullet.font.isEmpty() )
+                if ( !m_counter->customBulletFont().isEmpty() )
                 {
-                    newFont.setFamily( m_counter->m_customBullet.font );
+                    newFont.setFamily( m_counter->customBulletFont() );
                     p->setFont( newFont );
                 }
-                p->drawText( x - width, y - h + base, m_counter->m_customBullet.character );
+                p->drawText( x - width, y - h + base, m_counter->customBulletCharacter() );
                 break;
             default:
                 break;
         }
+    }
+    else
+    {
+        // There are no bullets...any parent bullets have already been suppressed.
+        // Just draw the text!
+        p->drawText( x - size, y - h + base, m_counter->text( this ) );
     }
     p->setFont( oldFont );
 }
@@ -1090,7 +1234,7 @@ void KWParagLayout::save( QDomElement & parentElem )
         parentElem.appendChild( element );
         bottomBorder.save( element );
     }
-    if ( counter.m_numbering != Counter::NUM_NONE )
+    if ( counter.numbering() != Counter::NUM_NONE )
     {
         element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );

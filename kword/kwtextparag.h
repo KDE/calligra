@@ -75,36 +75,60 @@ public:
         STYLE_DISCBULLET = 10
     };
 
-    Numbering m_numbering;
-    Style m_style;
+    // Numbering type and style.
+    Numbering numbering() const;
+    void setNumbering( Numbering n );
+
+    Style style() const;
+    void setStyle( Style s );
+
+    // Does this counter have a bullet style?
+    bool isBullet() const;
 
     // The level of the numbering.
     // Depth of 0 means the major numbering. (1, 2, 3...)
     // Depth of 1 is 1.1, 1.2, 1.3 etc.
-    unsigned int m_depth;
+    unsigned int depth() const;
+    void setDepth( unsigned int d );
 
     // Starting number.
-    int m_startNumber;
+    int startNumber() const;
+    void setStartNumber( int s );
 
     // Prefix and suffix strings.
-    QString m_prefix;
-    QString m_suffix;
+    QString prefix() const;
+    void setPrefix( QString p );
+    QString suffix() const;
+    void setSuffix( QString s );
 
     // The character and font for STYLE_CUSTOMBULLET.
-    struct
-    {
-        QChar character;
-        QString font;
-    } m_customBullet;
+    QChar customBulletCharacter() const;
+    void setCustomBulletCharacter( QChar c );
+    QString customBulletFont() const;
+    void setCustomBulletFont( QString f );
 
     // The string STYLE_CUSTOM.
-    QString m_custom;
+    QString custom() const;
+    void setCustom( QString c );
 
 private:
 
     // Return our parent paragraph, if there is such a thing. For a paragraph "1.1.",
     // the parent is the paragraph numbered "1.".
     KWTextParag *parent( const KWTextParag *paragraph );
+
+    Numbering m_numbering;
+    Style m_style;
+    unsigned int m_depth;
+    int m_startNumber;
+    QString m_prefix;
+    QString m_suffix;
+    struct
+    {
+        QChar character;
+        QString font;
+    } m_customBullet;
+    QString m_custom;
 
     // The cached, calculated values for this counter:
     //
@@ -146,7 +170,7 @@ struct KWParagLayout
     Border leftBorder, rightBorder, topBorder, bottomBorder;
     Counter counter;
     QString styleName;
-    
+
     QList<KoTabulator> m_tabList;
 };
 

@@ -1979,9 +1979,9 @@ void KWView::textEnumList()
 {
     Counter c;
     if(actionFormatEnumList->isChecked())
-        c.m_style = Counter::STYLE_NUM;
+        c.setStyle( Counter::STYLE_NUM );
     else
-        c.m_style = Counter::STYLE_NONE;
+        c.setStyle( Counter::STYLE_NONE );
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setCounter( c );
@@ -1992,9 +1992,9 @@ void KWView::textUnsortList()
 {
     Counter c;
     if(actionFormatUnsortList->isChecked())
-        c.m_style = Counter::STYLE_DISCBULLET;
+        c.setStyle( Counter::STYLE_DISCBULLET );
     else
-        c.m_style = Counter::STYLE_NONE;
+        c.setStyle( Counter::STYLE_NONE );
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setCounter( c );
