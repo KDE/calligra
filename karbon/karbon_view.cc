@@ -271,7 +271,7 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	int space = 20;
 	m_horizRuler->setGeometry( space, 0, width() - space, space );
 	m_vertRuler->setGeometry( 0, space, space, height() - space );
-	m_canvas->resize( width(), height() );
+	m_canvas->setGeometry( space, space, width() - space, height() - space );
 	reorganizeGUI();
 }
 
@@ -626,12 +626,8 @@ KarbonView::zoomChanged( const KoPoint &p )
 
 	m_canvas->viewport()->setUpdatesEnabled( false );
 
-	// TODO : the default shouldnt be necessary?
-	if( int( part()->pageLayout().ptWidth ) == 0 || int( part()->pageLayout().ptHeight ) == 0 )
-		m_canvas->resizeContents( int( 640 * zoomFactor ), int( 900 * zoomFactor ) );
-	else
-		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoomFactor ),
-								  int( ( part()->pageLayout().ptHeight + 80 ) * zoomFactor ) );
+	m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoomFactor ),
+							  int( ( part()->pageLayout().ptHeight + 80 ) * zoomFactor ) );
 
 	VPainter *painter = painterFactory()->editpainter();
 	painter->setZoomFactor( zoomFactor );
@@ -874,12 +870,8 @@ KarbonView::pageLayout()
 	if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS, unit ) )
 	{
 		part()->setPageLayout( layout, unit );
-		// TODO : the default shouldnt be necessary?
-		if( int( part()->pageLayout().ptWidth ) == 0 || int( part()->pageLayout().ptHeight ) == 0 )
-			m_canvas->resizeContents( int( 640 * zoom() ), int( 900 * zoom() ) );
-		else
-			m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoom() ),
-									  int( ( part()->pageLayout().ptHeight + 80 ) * zoom() ) );
+		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoom() ),
+								  int( ( part()->pageLayout().ptHeight + 80 ) * zoom() ) );
 		part()->repaintAllViews();
 	}
 
