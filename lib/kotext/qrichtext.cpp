@@ -1904,27 +1904,6 @@ QString KoTextDocument::plainText( KoTextParag *p ) const
     }
 }
 
-static QString align_to_string( const QString &tag, int a )
-{
-    if ( tag == "p" || tag == "li" || ( tag[0] == 'h' && tag[1].isDigit() ) ) {
-	if ( a & Qt::AlignRight )
-	    return " align=\"right\"";
-	if ( a & Qt::AlignCenter )
-	    return " align=\"center\"";
-	if ( a & Qt::AlignJustify )
-	    return " align=\"justify\"";
-    }
-    return "";
-}
-
-static QString direction_to_string( const QString &tag, int d )
-{
-    if ( d != QChar::DirON &&
-	 ( tag == "p" || tag == "div" || tag == "li" || ( tag[0] == 'h' && tag[1].isDigit() ) ) )
-	return ( d == QChar::DirL? " dir=\"ltr\"" : " dir=\"rtl\"" );
-    return "";
-}
-
 QString KoTextDocument::richText( KoTextParag * ) const
 {
     QString s;
@@ -3476,6 +3455,19 @@ QMemArray<KoTextStringChar> KoTextString::subString( int start, int len ) const
     return a;
 }
 
+QString KoTextString::mid( int start, int len ) const
+{
+    if ( len == 0xFFFFFF )
+	len = data.size();
+    QString res;
+    res.setLength( len );
+    for ( int i = 0; i < len; ++i ) {
+	KoTextStringChar *c = &data[ i + start ];
+	res[ i ] = c->c;
+    }
+    return res;
+}
+
 KoTextStringChar *KoTextStringChar::clone() const
 {
     KoTextStringChar *chr = new KoTextStringChar;
@@ -3498,9 +3490,9 @@ KoTextStringChar *KoTextStringChar::clone() const
 
 KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )
     : invalid( 0 ), p( pr ), n( nx ), doc( d ), align( 0 ), mSelections( 0 ),
+      mFloatingItems( 0 ),
       lstyle( QStyleSheetItem::ListDisc ),
       tm( -1 ), bm( -1 ), lm( -1 ), rm( -1 ), flm( -1 ),
-      mFloatingItems( 0 ),
 #ifdef QTEXTTABLE_AVAILABLE
       tc( 0 ),
 #endif

@@ -22,18 +22,20 @@
 
 #include "qrichtext_p.h"
 class KoZoomHandler;
+class KoHyphenator;
 
 /**
  * We implement our own text formatter to implement WYSIWYG:
  * It is heavily based on KoTextFormatterBaseBreakWords, but stores the x position
  * of characters (and their width) in pixels, whereas all the rest is in L.U.
- * Having our own text formatter will also enable implementing word-breaking later.
+ * It also implements hyphenation.
+ * @author David Faure <faure@kde.org>
  */
 class KoTextFormatter : public KoTextFormatterBase
 {
 public:
-    KoTextFormatter() {}
-    virtual ~KoTextFormatter() {}
+    KoTextFormatter();
+    virtual ~KoTextFormatter();
 
     virtual int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts );
 
@@ -50,6 +52,10 @@ protected:
 
     void moveChar( KoTextStringChar& chr, KoZoomHandler *zh,
                    int deltaX, int deltaPixelX );
+
+private:
+    KoHyphenator* m_hyphenator;
+
 };
 
 #endif

@@ -1,5 +1,7 @@
 SUBDIRS = kohyphen
 INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(all_includes)
+## Needed for kohyphen...
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 lib_LTLIBRARIES = libkotext.la
 libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
@@ -16,7 +18,7 @@ libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
 
 libkotext_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 # We use kofficeui for koRect :)
-libkotext_la_LIBADD = $(LIB_KOFFICEUI) -lkspell -lkutils
+libkotext_la_LIBADD = $(LIB_KOFFICEUI) kohyphen/libkohyphen.la -lkspell -lkutils
 
 METASOURCES = AUTO
 

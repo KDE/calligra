@@ -19,12 +19,28 @@
 
 #include "kotextformatter.h"
 #include "kozoomhandler.h"
+#include "kohyphen/kohyphen.h"
 
 #include <kdebug.h>
 //#define DEBUG_FORMATTER
 
 /////// keep in sync with kotextformat.cc !
 //#define REF_IS_LU
+
+KoTextFormatter::KoTextFormatter()
+{
+    try {
+        m_hyphenator = KoHyphenator::self();
+    } catch ( KoHyphenatorException& e )
+    {
+        m_hyphenator = 0L;
+    }
+}
+
+KoTextFormatter::~KoTextFormatter()
+{
+    delete m_hyphenator;
+}
 
 // Originally based on QTextFormatterBreakWords::format()
 int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
@@ -221,6 +237,40 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #endif
 	    if ( wrapAtColumn() != -1 )
 		minw = QMAX( minw, x + ww );
+
+            // Hyphenation: check if we can break somewhere between lastBreak and i
+            if ( m_hyphenator )
+            {
+                int wordStart = QMAX(0, lastBreak+1);
+                int maxlen = i - wordStart + 1; // we can't accept to break after maxlen
+                QString word = string->mid( wordStart, maxlen );
+                int wordEnd = i + 1;
+                // but we need to compose the entire word, to hyphenate it
+                while ( wordEnd < len && !isBreakable( string, wordEnd ) ) {
+                    word += string->at(wordEnd).c;
+                    wordEnd++;
+                }
+                QString lang = string->at(wordStart).format()->language();
+                char * hyphens = m_hyphenator->hyphens( word, lang );
+//#ifdef DEBUG_FORMATTER
+                kdDebug(32500) << "Hyphenation: word=" << word << " lang=" << lang << " hyphens=" << hyphens << endl;
+//#endif
+                int hylen = strlen(hyphens);
+                Q_ASSERT( maxlen <= hylen );
+                for ( int hypos = maxlen-1 ; hypos >= 0 ; --hypos )
+                    if ( hyphens[hypos] % 2 ) // odd number -> can break there
+                    {
+                        // TODO insert a soft hyphen?
+                        // Or mark the LineStart object as "hyphenated", and check that flag when painting
+                        lastBreak = hypos + wordStart;
+//#ifdef DEBUG_FORMATTER
+                        qDebug( "Hyphenation: will break at %d", lastBreak );
+//#endif
+                        break;
+                    }
+                delete[] hyphens;
+            }
+
 	    // No breakable char found -> break at current char
 	    if ( lastBreak < 0 ) {
 		Q_ASSERT( lineStart );

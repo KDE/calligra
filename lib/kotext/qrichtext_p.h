@@ -207,6 +207,7 @@ public:
     bool needsSpellCheck() const { return bNeedsSpellCheck; }
 
     QMemArray<KoTextStringChar> subString( int start = 0, int len = 0xFFFFFF ) const;
+    QString mid( int start = 0, int len = 0xFFFFFF ) const; // kotext addition
     QMemArray<KoTextStringChar> rawData() const { return data; }
 
     void operator=( const QString &s ) { clear(); insert( 0, s, 0 ); }
