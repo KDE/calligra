@@ -45,7 +45,7 @@ kdemimedir = $(kde_mimedir)/application
 py_DATA = KSpread.py KOffice.py KOStore.py OpenPartsUI.py OpenParts.py KOM.py
 pydir = $(kde_includes)/python
 
-SUBDIRS =  pics scripts dtd filters
+SUBDIRS =  pics scripts dtd filters toolbar
 
 ####### Implicit rules
 
