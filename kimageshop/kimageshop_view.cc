@@ -349,6 +349,7 @@ void KImageShopView::setRanges()
   if(docHeight <= height() - 20)
     {
       m_pVert->hide();
+      m_pVert->setValue(0);
     }
   else
     {
@@ -359,6 +360,7 @@ void KImageShopView::setRanges()
   if(docWidth <= width() - 20)
     {
       m_pHorz->hide();
+      m_pHorz->setValue(0);
     }
   else
     {
@@ -367,14 +369,16 @@ void KImageShopView::setRanges()
     }
 }
 
-void KImageShopView::scrollH(int _value)
+void KImageShopView::scrollH(int )
 {
-  // m_pCanvasView->scroll( _value, 0 );
+  kdebug( KDEBUG_INFO, 0, "scrollH");
+  m_pDoc->paintPixmap(m_pCanvasView,QRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height()),QPoint(m_pHorz->value(), m_pVert->value()));
 }
 
-void KImageShopView::scrollV(int _value)
+void KImageShopView::scrollV(int )
 {
-  // m_pCanvasView->scroll( 0, _value );
+  kdebug( KDEBUG_INFO, 0, "scrollV");
+  m_pDoc->paintPixmap(m_pCanvasView,QRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height()),QPoint(m_pHorz->value(), m_pVert->value()));
 }
 
 void KImageShopView::newView()
@@ -515,12 +519,22 @@ void KImageShopView::slotActivateBrushTool()
 
 void KImageShopView::slotUpdateView(const QRect &area)
 {
-  m_pDoc->paintPixmap(m_pCanvasView,area);
+  QRect viewRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height());
+
+  if (!area.intersects(viewRect))
+    return;
+  
+  // FIXME: optimise me, don't repaint the whole viewRect
+  QPoint offset(m_pHorz->value(), m_pVert->value());
+  m_pDoc->paintPixmap(m_pCanvasView, viewRect, offset);
 }
 
-void KImageShopView::slotCVPaint(QPaintEvent *e)
+void KImageShopView::slotCVPaint(QPaintEvent *)
 {
-  m_pDoc->paintPixmap(m_pCanvasView,e->rect());
+  QRect viewRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height());
+  QPoint offset(m_pHorz->value(), m_pVert->value());
+  
+  m_pDoc->paintPixmap(m_pCanvasView, viewRect, offset);
 }
 
 void KImageShopView::slotCVMousePress(QMouseEvent *e)
@@ -529,8 +543,8 @@ void KImageShopView::slotCVMousePress(QMouseEvent *e)
     return;
 
   KImageShop::MouseEvent mouseEvent;
-  mouseEvent.posX = e->x();
-  mouseEvent.posY = e->y();
+  mouseEvent.posX = e->x() + m_pHorz->value() ;
+  mouseEvent.posY = e->y() + m_pVert->value();
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -551,8 +565,8 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
     return;
 
   KImageShop::MouseEvent mouseEvent;
-  mouseEvent.posX = e->x();
-  mouseEvent.posY = e->y();
+  mouseEvent.posX = e->x() + m_pHorz->value() ;
+  mouseEvent.posY = e->y() + m_pVert->value();
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -576,8 +590,8 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
     return;
 
   KImageShop::MouseEvent mouseEvent;
-  mouseEvent.posX = e->x();
-  mouseEvent.posY = e->y();
+  mouseEvent.posX = e->x() + m_pHorz->value() ;
+  mouseEvent.posY = e->y() + m_pVert->value();
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -590,11 +604,6 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
   mouseEvent.altButton = (e->state() & AltButton) ? true : false;
 
   m_pTool->mouseRelease(mouseEvent);
-}
-
-void KImageShopView::paintEvent( QPaintEvent * )
-{
-  // FIME: do we need this? The child widgets handle the paintevent.
 }
 
 void KImageShopView::viewLayerDialog()

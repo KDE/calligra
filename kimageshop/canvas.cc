@@ -109,7 +109,38 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, int zoomFactor)
 	    {
 	      if (!tiles[y*xTiles+x]->isNull())
 		{
-		  p.drawPixmap(x*TILE_SIZE,y*TILE_SIZE,*tiles[y*xTiles+x]);
+		  if (offset.isNull())
+		    {
+		      p.drawPixmap(x*TILE_SIZE,y*TILE_SIZE,*tiles[y*xTiles+x]);
+		      continue;
+		    }
+		    
+		  int startX, startY, pixX, pixY;
+
+		  if (x*TILE_SIZE < offset.x())
+		    {
+		      startX = 0;
+		      pixX = offset.x() - x*TILE_SIZE;
+		    }
+		  else
+		    {
+		      startX = x*TILE_SIZE - offset.x();
+		      pixX = 0;
+		    }
+
+		  if (y*TILE_SIZE < offset.y())
+		    {
+		      startY = 0;
+		      pixY = offset.y() - y*TILE_SIZE;
+		    }
+		  else
+		    {
+		      startY = y*TILE_SIZE - offset.y();
+		      pixY = 0;
+		    }
+		    
+		  p.drawPixmap(startX, startY, *tiles[y*xTiles+x], pixX, pixY);
+		 
 		}
 	      else
 		puts("Null: not rendering");
@@ -129,7 +160,7 @@ void Canvas::setUpVisual()
   
   // change the false to true to test the faster image converters
   visual=unknown;
-  if (false && trueColour) { // do they have a worthy display
+  if (true && trueColour) { // do they have a worthy display
     uint red_mask  =(uint)vis->red_mask;
     uint green_mask=(uint)vis->green_mask;
     uint blue_mask =(uint)vis->blue_mask;

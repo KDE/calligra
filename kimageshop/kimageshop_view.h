@@ -71,15 +71,15 @@ public slots:
   virtual void slotActivateMoveTool();
   virtual void slotActivateBrushTool();
 
+  void scrollH( int );
+  void scrollV( int );
+
 protected:
   virtual void init();
 
   void setupScrollbars();
   void setupRulers();
   void setRanges();
-
-  void scrollH( int );
-  void scrollV( int );
 
   virtual bool event( const char* _event, const CORBA::Any& _value );
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
@@ -89,7 +89,6 @@ protected:
   virtual void helpUsing();
 
   virtual void resizeEvent( QResizeEvent* _ev );
-  virtual void paintEvent( QPaintEvent* _ev );
 
   void viewLayerDialog();
 
