@@ -207,6 +207,26 @@ void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &st
 {
     KP2DObject::loadOasis(element);
     //todo other attribute
+    if( styleStack.hasAttribute( "fo:padding-top" ) )
+        btop = KoUnit::parseValue( styleStack.attribute( "fo:padding-top" ) );
+    if( styleStack.hasAttribute( "fo:padding-bottom" ) )
+        bbottom = KoUnit::parseValue( styleStack.attribute( "fo:padding-bottom" ) );
+    if( styleStack.hasAttribute( "fo:padding-left" ) )
+        bleft = KoUnit::parseValue( styleStack.attribute( "fo:padding-left" ) );
+    if( styleStack.hasAttribute( "fo:padding-right" ) )
+        bright = KoUnit::parseValue( styleStack.attribute( "fo:padding-right" ) );
+    // vertical alignment
+    if ( styleStack.hasAttribute( "draw:textarea-vertical-align" ) )
+    {
+        QString alignment = styleStack.attribute( "draw:textarea-vertical-align" );
+        if ( alignment == "top" )
+            m_textVertAlign= KP_TOP;
+        else if ( alignment == "middle" )
+            m_textVertAlign= KP_CENTER;
+        else if ( alignment == "bottom" )
+            m_textVertAlign= KP_BOTTOM;
+    }
+
 }
 
 double KPTextObject::load(const QDomElement &element)
