@@ -94,6 +94,11 @@ int TabStopDialog::exec(Form *form)
 
 	m_check->setChecked(form->autoTabStops());
 
+	if (m_treeview->firstChild()) {
+		m_treeview->setCurrentItem(m_treeview->firstChild());
+		m_treeview->setSelected(m_treeview->firstChild(), true);
+	}
+
 	int r = KDialogBase::exec();
 	if( r == QDialog::Accepted)
 	{
