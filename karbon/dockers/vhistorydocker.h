@@ -31,7 +31,7 @@ class VHistoryItem : public QListBoxItem
 {
 	public:
 		VHistoryItem( QListBox* parent, VCommand* command );
-		~VHistoryItem() {}
+		~VHistoryItem();
 
 		VCommand* command() { return m_command; }
 

@@ -33,6 +33,10 @@ VHistoryItem::VHistoryItem( QListBox* parent, VCommand* command )
 	setCustomHighlighting( true );
 } // VHistoryItem::VHistoryItem
 
+VHistoryItem::~VHistoryItem()
+{
+	m_command = 0L;
+}
 
 int VHistoryItem::width( const QListBox* lb ) const
 {
@@ -41,6 +45,8 @@ int VHistoryItem::width( const QListBox* lb ) const
 
 void VHistoryItem::paint( QPainter* painter )
 {
+	if( !m_command )
+		return;
 	KIconLoader il;
 	painter->save();
 	painter->setRasterOp( Qt::CopyROP );
