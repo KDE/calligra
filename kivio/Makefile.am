@@ -2,7 +2,7 @@
 ####   Makefile.am generated automatically by KDEStudio   ####
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
-SUBDIRS = kiviopart plugins contrib
+SUBDIRS = kiviopart plugins
 EXTRA_DIST = kivio.studio res.cpp
 ##############################################################
 ####                  END KDEStudio part                  ####
