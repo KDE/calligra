@@ -362,7 +362,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     // config
     KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
     int templateNum = grp.readEntry( "TemplateTab" ).toInt();
-    QString templateName = grp.readEntry( "TemplateName" );
+    QString templateName = grp.readPathEntry( "TemplateName" );
 
     // item which will be selected initially
     QIconViewItem * itemtoselect = 0;
@@ -456,7 +456,7 @@ void KoTemplateChooseDia::setupDialog()
 		return;
 
 	    // start with the default template
-	    d->m_templateName = grp.readEntry( "TemplateName" );
+	    d->m_templateName = grp.readPathEntry( "TemplateName" );
 	    d->m_fullTemplateName = grp.readPathEntry( "FullTemplateName" );
 
 	    // be paranoid : invalid template means empty template
@@ -579,10 +579,11 @@ void KoTemplateChooseDia::slotOk()
 	    if (d->m_returnType == Template)
 	    {
 		grp.writeEntry( "TemplateTab", d->m_jwidget->activePageIndex() );
-		grp.writeEntry( "TemplateName", d->m_templateName );
 #if KDE_IS_VERSION(3,1,3)
+		grp.writePathEntry( "TemplateName", d->m_templateName );
 		grp.writePathEntry( "FullTemplateName", d->m_fullTemplateName);
 #else
+		grp.writeEntry( "TemplateName", d->m_templateName );
 		grp.writeEntry( "FullTemplateName", d->m_fullTemplateName);
 #endif
 	    }
