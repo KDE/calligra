@@ -316,7 +316,25 @@ KexiDB Drivers
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
-2004-09-15
+2004-09-17
+KexiDB 
+- Connection::selectStatement(): alias is used insetead of table name, 
+  if available
+- QuerySchema: 'index' term replaced by 'position' ; insertField(), addField() 
+   overloads added allowing tables binding by position; addTable() now allows 
+	 to specify table alias; tablePositionForAlias(), tablePositions() added;
+	 many docs and examples added
+SQL Parser
+- many improvements and checks:
+	-- ERR: there's no "persons" table in this query (alias "p" covers it)
+	select persons.id from persons p;
+	-- alias "p" for table "persons" is used
+	select p.id from persons p;
+	-- multiple aliases for the same table
+	select persons.id from persons, persons p, persons p2
+
+
+2004-09-15..16
 SQL Parser
 - select statements are now parser in more functional way, instead
   of using global pointers. This enables nested statements in the future.
