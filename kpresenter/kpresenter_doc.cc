@@ -3558,7 +3558,7 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     emit pageNumChanged();
 }
 
-// TOGO remove SideBar from the name, it's a general helper (object->page)
+// TODO remove SideBar from the name, it's a general helper (object->page)
 KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
 {
     if ( object->isSticky() ) {
@@ -3577,7 +3577,7 @@ KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
     return 0L;
 }
 
-// TOGO remove SideBar from the name, it's a general helper (object->page)
+// TODO remove SideBar from the name, it's a general helper (object->page)
 KPrPage * KPresenterDoc::findSideBarPage(QPtrList<KPObject> &objects)
 {
     KPObject *object;
