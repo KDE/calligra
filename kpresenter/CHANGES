@@ -380,3 +380,8 @@ Reggie, 17.8.1999:
 - Fixed cut/copy/paste for textobjs
 - Fixed deleting regions in the textobject
 - Fixed saving/loading gradients (esp. unbalanced)
+
+Reggie, 20.8.1999:
+------------------
+- Improved speed of inserting new pages/slides
+- Improved speed of pixmap handling

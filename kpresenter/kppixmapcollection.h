@@ -18,7 +18,6 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qdatetime.h>
-#include <qimage.h>
 #include <qpixmap.h>
 #include <qcstring.h>
 
@@ -77,25 +76,25 @@ public:
     {}
     ~KPPixmapDataCollection();
 
-    QImage *findPixmapData( const Key &key );
-    QImage *insertPixmapData( const Key &key, const QImage &img );
+    QPixmap *findPixmapData( const Key &key );
+    QPixmap *insertPixmapData( const Key &key, const QPixmap &img );
 
     void setPixmapOldVersion( const Key &key, const char *_data );
     void setPixmapOldVersion( const Key &key );
-    
+
     void addRef( const Key &key );
     void removeRef( const Key &key );
 
-    QMap< Key, QImage >::Iterator begin() { return data.begin(); }
-    QMap< Key, QImage >::Iterator end() { return data.end(); }
+    QMap< Key, QPixmap >::Iterator begin() { return data.begin(); }
+    QMap< Key, QPixmap >::Iterator end() { return data.end(); }
 
     int references( const Key &key ) { return refs.contains( key ) ? refs.find( key ).data() : -1; }
-    
+
     void setAllowChangeRef( bool b )
     { allowChangeRef = b ; }
 
 protected:
-    QMap< Key, QImage > data;
+    QMap< Key, QPixmap > data;
     QMap< Key, int > refs;
 
     bool allowChangeRef;
@@ -163,12 +162,12 @@ public:
 
     QDate tmpDate() { return date; }
     QTime tmpTime() { return time; }
-    
+
     void setAllowChangeRef( bool b )
     { allowChangeRef = b ; }
-    
+
 protected:
-    QPixmap *loadPixmap( const QImage &image, const Key &key, bool insert );
+    QPixmap *loadPixmap( const QPixmap &image, const Key &key, bool insert );
 
     QMap< Key, QPixmap > pixmaps;
     QMap< Key, int > refs;
@@ -176,9 +175,9 @@ protected:
 
     QDate date;
     QTime time;
-    
+
     bool allowChangeRef;
-    
+
 };
 
 ostream& operator<<( ostream &out, KPPixmapDataCollection::Key &key );
