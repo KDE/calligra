@@ -115,8 +115,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   // Make us scriptable if the document has a name
   if ( name )
       dcopObject();
-
-  //m_newView = new KAction( i18n("New View"), 0, this, SLOT( newView() ), actionCollection(), "newView" );
 }
 
 bool KSpreadDoc::initDoc()
@@ -370,8 +368,8 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
   emit sig_addTable( _table );
 }
 
-void KSpreadDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
-                               const char *_footl, const char *_footm, const char *_footr )
+void KSpreadDoc::setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
+                               const QString &_footl, const QString &_footm, const QString &_footr )
 {
   m_headLeft = _headl;
   m_headRight = _headr;
@@ -530,11 +528,10 @@ const char* KSpreadDoc::orientationString()
     return 0;
 }
 
-QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_table )
+QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QString &_table )
 {
-    QString page;
-    page.sprintf( "%i", _page );
-    QString f = m_strFileURL;
+    QString page=QString::number(_page);
+    QString f = m_strFileURL; // huh!?!
     if ( f.isNull() )
         f = "";
     QString n = "";
@@ -546,7 +543,7 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
     QString t = QTime::currentTime().toString().copy();
     QString d = QDate::currentDate().toString().copy();
     QString ta = "";
-    if ( _table )
+    if ( !_table.isEmpty() )
         ta = _table;
 
     // Read user specific informations....

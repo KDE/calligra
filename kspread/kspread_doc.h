@@ -154,28 +154,28 @@ public:
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
                        const char* _paper, const char* _orientation );
 
-  QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return "";
-  return completeHeading( m_headLeft.latin1(), _p, _t ); }
-  QString headMid( int _p, const char *_t ) { if ( m_headMid.isNull() ) return "";
-  return completeHeading( m_headMid.latin1(), _p, _t ); }
-  QString headRight( int _p, const char *_t ) { if ( m_headRight.isNull() ) return "";
-  return completeHeading( m_headRight.latin1(), _p, _t ); }
-  QString footLeft( int _p, const char *_t ) { if ( m_footLeft.isNull() ) return "";
-  return completeHeading( m_footLeft.latin1(), _p, _t ); }
-  QString footMid( int _p, const char *_t ) { if ( m_footMid.isNull() ) return "";
-  return completeHeading( m_footMid.latin1(), _p, _t ); }
-  QString footRight( int _p, const char *_t ) { if ( m_footRight.isNull() ) return "";
-  return completeHeading( m_footRight.latin1(), _p, _t ); }
+  QString headLeft( int _p, const QString &_t  ) { if ( m_headLeft.isNull() ) return "";
+  return completeHeading( m_headLeft, _p, _t ); }
+  QString headMid( int _p, const QString &_t ) { if ( m_headMid.isNull() ) return "";
+  return completeHeading( m_headMid, _p, _t ); }
+  QString headRight( int _p, const QString &_t ) { if ( m_headRight.isNull() ) return "";
+  return completeHeading( m_headRight, _p, _t ); }
+  QString footLeft( int _p, const QString &_t ) { if ( m_footLeft.isNull() ) return "";
+  return completeHeading( m_footLeft, _p, _t ); }
+  QString footMid( int _p, const QString &_t ) { if ( m_footMid.isNull() ) return "";
+  return completeHeading( m_footMid, _p, _t ); }
+  QString footRight( int _p, const QString &_t ) { if ( m_footRight.isNull() ) return "";
+  return completeHeading( m_footRight, _p, _t ); }
 
-  QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft.latin1(); }
-  QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid.latin1(); }
-  QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight.latin1(); }
-  QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft.latin1(); }
-  QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid.latin1(); }
-  QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.latin1(); }
+  QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft; }
+  QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid; }
+  QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight; }
+  QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft; }
+  QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid; }
+  QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight; }
 
-  void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
-                        const char *_footl, const char *_footm, const char *_footr );
+  void setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
+                        const QString &_footl, const QString &_footm, const QString &_footr );
 
   /**
    * @return the KScript Interpreter used by this document.
@@ -309,7 +309,7 @@ protected:
    * @param _page is the page number for which the heading is produced.
    * @param _KSpreadTable is the name of the KSpreadTable for which we generate the headings.
    */
-  QString completeHeading( const char *_data, int _page, const char *_KSpreadTable );
+  QString completeHeading( const QString &_data, int _page, const QString &_table );
 
   /**
    * Pointer to the map that holds all the tables.
