@@ -1084,8 +1084,14 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getLeftBorder();
         tmp->m_EFrameType= FBLeft;
+
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+
+        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1134,7 +1140,11 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
         tmp->m_OldBorder=frame->getRightBorder();
         tmp->m_EFrameType= FBRight;
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1185,7 +1195,11 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
         tmp->m_OldBorder=frame->getTopBorder();
         tmp->m_EFrameType= FBTop;
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1234,7 +1248,11 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
         tmp->m_OldBorder=frame->getBottomBorder();
         tmp->m_EFrameType= FBBottom;
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1289,7 +1307,11 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         tmp->m_OldBorder=frame->getBottomBorder();
         tmp->m_EFrameType= FBBottom;
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
         tmpBorderListBottom.append(tmp);
         frameindexListBottom.append(index);
 
@@ -1298,7 +1320,10 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         tmp->m_OldBorder=frame->getTopBorder();
         tmp->m_EFrameType= FBTop;
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
         tmpBorderListTop.append(tmp);
         frameindexListTop.append(index);
 
@@ -1307,7 +1332,11 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         tmp->m_OldBorder=frame->getRightBorder();
         tmp->m_EFrameType= FBRight;
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
         tmpBorderListRight.append(tmp);
         frameindexListRight.append(index);
 
@@ -1316,7 +1345,12 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         tmp->m_OldBorder=frame->getLeftBorder();
         tmp->m_EFrameType= FBLeft;
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+
         tmpBorderListLeft.append(tmp);
         frameindexListLeft.append(index);
 
@@ -1371,7 +1405,13 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     {
         FrameIndex *index=new FrameIndex;
         index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+
+        KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+        if(table)
+            index->m_iFrameSetIndex=doc->getFrameSetNum(table);
+        else
+            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+
         QBrush *_color=new QBrush(frame->getBackgroundColor());
         frameindexList.append(index);
         oldColor.append(_color);
