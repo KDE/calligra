@@ -25,7 +25,7 @@
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
 
-#include <k2url.h>
+#include <kurl.h>
 
 #include <qmsgbox.h>
 #include <qcolor.h>
@@ -146,7 +146,7 @@ CORBA::Boolean KWordDocument::init()
 /*================================================================*/
 bool KWordDocument::loadTemplate(const char *_url)
 {
-  K2URL u(_url);
+  KURL u(_url);
   if (u.isMalformed())
     return false;
 
