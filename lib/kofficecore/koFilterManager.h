@@ -116,10 +116,10 @@ public:
      */
     void cleanUp();
 
-    
+
     // Get the ID of the QWidget in the Stack which matches this
     // extension. (internal)
-    long findWidget(const QString &ext);
+    long findWidget(const QString &ext) const;
 
     /**
      * Import a file by applying a filter
@@ -156,7 +156,7 @@ private:
     QString native_format;
     bool prepare;
     PreviewStack *ps;
-    QMap<QString, long> dialogMap;
+    mutable QMap<QString, long> dialogMap;
 };
 
 
@@ -172,6 +172,6 @@ public slots:
     void showPreview(const KURL &url);
 
 private:
-    KoFilterManager *mgr;
+    const KoFilterManager * const mgr;
 };
 #endif

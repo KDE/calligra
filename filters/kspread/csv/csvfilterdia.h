@@ -21,7 +21,8 @@
 #define CSVFILTERDIA_H
 
 #include <koFilterDialog.h>
-
+#include <qwidget.h>
+#include <qlabel.h>
 
 class CSVFilterDia : public KoFilterDialog {
 

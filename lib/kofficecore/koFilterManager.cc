@@ -258,16 +258,26 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
             ++id;
         }
     }
-    if(!dialogMap.isEmpty())
+    if(!dialogMap.isEmpty()) {
+        kdebug(KDEBUG_INFO, 31000, "----------------------------- setPreviewWidget");
+        ps->raiseWidget(0);
         dialog->setPreviewWidget(ps);
-
+    }
     return true;
 }
 
 void KoFilterManager::cleanUp() {
+
+    if(!dialogMap.isEmpty()) {
+        QWidget *tmp=ps->visibleWidget();
+        if(tmp!=ps->widget(0)) {
+            KoFilterDialog *dia=dynamic_cast<KoFilterDialog*>(tmp);
+            kdebug(KDEBUG_INFO, 31000, dia->status());
+        }
+    }
 }
 
-long KoFilterManager::findWidget(const QString &ext) {
+long KoFilterManager::findWidget(const QString &ext) const {
 
     QMap<QString, long>::Iterator it;
     it=dialogMap.find(ext);
@@ -415,12 +425,22 @@ void PreviewStack::showPreview(const KURL &url) {
     QString tmp=url.url();
     QString extension;
     unsigned short k=0;
+    unsigned long foo=tmp.length();
 
-    while(tmp[tmp.length()-k]!=QChar('.')) {
+    kdebug(KDEBUG_INFO, 31000, "vorher --------- showPreview");
+
+    while(tmp[foo-k]!=QChar('.') && k<=foo) {
         ++k;
     }
-    extension=tmp.right(k);
-    kdebug(KDEBUG_INFO, 31000, extension);
+    kdebug(KDEBUG_INFO, 31000, "vor if --------- showPreview");
+    if(tmp[foo-k]==QChar('.')) {
+        extension=tmp.right(k);
+        kdebug(KDEBUG_INFO, 31000, extension);
+        raiseWidget(mgr->findWidget(extension));
+        kdebug(KDEBUG_INFO, 31000, "im if --------- showPreview");
+    }
+    else
+        raiseWidget(0);
 
-    raiseWidget(mgr->findWidget(extension));
+    kdebug(KDEBUG_INFO, 31000, "ende --------- showPreview");
 }
