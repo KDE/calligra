@@ -36,6 +36,7 @@
 #include "kis_util.h"
 #include "kis_doc.h"
 #include "kis_channelview.h"
+#include "kis_framebutton.h"
 
 KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )
@@ -48,20 +49,20 @@ KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_nam
   QHBox *buttons = new QHBox( this );
   layout->addWidget( buttons );
   
-  QPushButton* pbAddChannel = new QPushButton( buttons, "addchannel" );
-  pbAddChannel->setPixmap( BarIcon( "newchannel" ) );
+  KisFrameButton* pbAddChannel = new KisFrameButton( buttons );
+  pbAddChannel->setPixmap( BarIcon( "newlayer" ) );
   connect( pbAddChannel, SIGNAL( clicked() ), channeltable, SLOT( slotAddChannel() ) );
   
-  QPushButton* pbRemoveChannel = new QPushButton( buttons, "removechannel" );
-  pbRemoveChannel->setPixmap( BarIcon( "deletechannel" ) );
+  KisFrameButton* pbRemoveChannel = new KisFrameButton( buttons );
+  pbRemoveChannel->setPixmap( BarIcon( "deletelayer" ) );
   connect( pbRemoveChannel, SIGNAL( clicked() ), channeltable, SLOT( slotRemoveChannel() ) );
   
-  QPushButton* pbUp = new QPushButton( buttons, "up" );
-  pbUp->setPixmap( BarIcon( "raisechannel" ) );
+  KisFrameButton* pbUp = new KisFrameButton( buttons );
+  pbUp->setPixmap( BarIcon( "raiselayer" ) );
   connect( pbUp, SIGNAL( clicked() ), channeltable, SLOT( slotRaiseChannel() ) );
 
-  QPushButton* pbDown = new QPushButton( buttons, "down" );
-  pbDown->setPixmap( BarIcon( "lowerchannel" ) );
+  KisFrameButton* pbDown = new KisFrameButton( buttons );
+  pbDown->setPixmap( BarIcon( "lowerlayer" ) );
   connect( pbDown, SIGNAL( clicked() ), channeltable, SLOT( slotLowerChannel() ) );
 }
 

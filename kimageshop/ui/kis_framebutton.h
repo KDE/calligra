@@ -40,16 +40,21 @@ class KisFrameButton : public QLabel
   void setOn(bool);
   void setToggleButton(bool);
 
+  QString text() { return m_text; }
+  virtual void setText ( const QString& );
+
  signals:
   void clicked();
+  void clicked(const QString&);
 
  protected:
   void mousePressEvent( QMouseEvent * );
   void mouseReleaseEvent( QMouseEvent * );
 
  private:
-  bool m_active;
-  bool m_toggle;
+  bool     m_active;
+  bool     m_toggle;
+  QString  m_text;
 };
 
 #endif // _kis_framebutton_h__

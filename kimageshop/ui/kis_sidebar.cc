@@ -248,27 +248,98 @@ DockFrame::DockFrame( QWidget* parent, const char* name ) : QFrame( parent, name
 {
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
-  m_lst.setAutoDelete(true);
+  m_wlst.setAutoDelete(true);
+  m_blst.setAutoDelete(true);
 }
 
 void DockFrame::plug (QWidget* w)
 {
-  m_lst.append(w);
+  if (!w)
+	return;
+
+  QString name = w->caption();
+
+  m_wlst.append(w);
   w->reparent ( this, QPoint(0, 0), true );
+
+  KisFrameButton* btn = new KisFrameButton(this);
+  btn->setToggleButton(true);
+
+  QFont font = KGlobal::generalFont();
+  font.setPointSize( 8 );
+
+  btn->setFont(font);
+  btn->setText(name);
+  btn->setGeometry(0, 0, btn->width(), 18);
+
+  // connect button
+  connect(btn, SIGNAL(clicked(const QString&)), this,
+		  SLOT(slotActivateTab(const QString&)));
+
+  m_blst.append(btn);
+  slotActivateTab(name);
 }
 
 void DockFrame::unplug (QWidget* w)
 {
-  m_lst.remove(w);
+  if (!w)
+	return;
+
+  KisFrameButton *b;
+  
+  for ( b = m_blst.first(); b != 0; b = m_blst.next() )
+	{
+	  if (b->text() == w->caption())
+		{
+		  m_blst.remove(b);
+		  break;
+		}
+	}		
+
+  m_wlst.remove(w);
   w->reparent ( 0L, QPoint(0, 0), false );
+}
+
+void DockFrame::slotActivateTab(const QString& tab)
+{
+  QWidget *w;
+  for ( w = m_wlst.first(); w != 0; w = m_wlst.next() )
+	{
+	  if (w->caption() == tab)
+		w->show();
+	  else
+		w->hide();
+	}
+  
+  KisFrameButton *b;
+  for ( b = m_blst.first(); b != 0; b = m_blst.next() )
+	b->setOn(b->text() == tab);
 }
 
 void DockFrame::resizeEvent ( QResizeEvent * )
 {
-  QWidget *w;
+  int bw = 0;
+  int row = 0;
+
+  KisFrameButton *b;
   
-  for ( w = m_lst.first(); w != 0; w = m_lst.next() )
-	w->setGeometry(0,0, width(), height());
+  for ( b = m_blst.first(); b != 0; b = m_blst.next() )
+	{
+	  if (bw >= width())
+		{
+		  bw = 0;
+		  row++;
+		}
+	  b->move(bw, row*18);
+	  bw += b->width();
+	}
+ 
+  QWidget *w;
+
+  int xw = 18+ row*18;
+  
+  for ( w = m_wlst.first(); w != 0; w = m_wlst.next() )
+	w->setGeometry(2, xw, width()-4, height()- xw-2);
 }
 
 ChooserFrame::ChooserFrame( QWidget* parent, const char* name ) : QFrame( parent, name )

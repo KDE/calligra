@@ -117,15 +117,21 @@ void KisView::setupSideBar()
   QObject::connect(m_pBrushChooser, SIGNAL(selected(const KisBrush *)),
 				   this, SLOT(slotSetBrush(const KisBrush*)));
  
+  m_pBrushChooser->setCaption("Brushes");
   m_pSideBar->plug(m_pBrushChooser);
-
-  // channel view
-  m_pChannelView = new KisChannelView(m_pDoc, this);
-  m_pSideBar->plug(m_pChannelView);
 
   // layer view
   m_pLayerView = new KisLayerView(m_pDoc, this);
+  m_pLayerView->setCaption("Layers");
   m_pSideBar->plug(m_pLayerView);
+
+  // channel view
+  m_pChannelView = new KisChannelView(m_pDoc, this);
+  m_pChannelView->setCaption("Channels");
+  m_pSideBar->plug(m_pChannelView);
+
+  // activate brushes tab
+  m_pSideBar->slotActivateTab("Brushes");
   
   // init sidebar
   m_pSideBar->slotSetBrush(*m_pBrush);

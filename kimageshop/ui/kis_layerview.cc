@@ -29,8 +29,8 @@
 #include <qpainter.h>
 #include <qlineedit.h>
 #include <qpopupmenu.h>
-#include <qpushbutton.h>
 #include <qmessagebox.h>
+#include <qpushbutton.h>
 
 #include <kstddirs.h>
 #include <iostream>
@@ -41,6 +41,7 @@
 #include "kis_util.h"
 #include "kis_layerview.h"
 #include "kis_factory.h"
+#include "kis_framebutton.h"
 #include "integerwidget.h"
 
 using namespace std;
@@ -56,19 +57,19 @@ KisLayerView::KisLayerView( KisDoc *_doc, QWidget *_parent, const char *_name )
   QHBox *buttons = new QHBox( this );
   layout->addWidget( buttons );
   
-  QPushButton* pbAddLayer = new QPushButton( buttons, "addlayer" );
+  KisFrameButton* pbAddLayer = new KisFrameButton( buttons );
   pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
   connect( pbAddLayer, SIGNAL( clicked() ), layertable, SLOT( slotAddLayer() ) );
   
-  QPushButton* pbRemoveLayer = new QPushButton( buttons, "removelayer" );
+  KisFrameButton* pbRemoveLayer = new KisFrameButton( buttons );
   pbRemoveLayer->setPixmap( BarIcon( "deletelayer" ) );
   connect( pbRemoveLayer, SIGNAL( clicked() ), layertable, SLOT( slotRemoveLayer() ) );
   
-  QPushButton* pbUp = new QPushButton( buttons, "up" );
+  KisFrameButton* pbUp = new KisFrameButton( buttons );
   pbUp->setPixmap( BarIcon( "raiselayer" ) );
   connect( pbUp, SIGNAL( clicked() ), layertable, SLOT( slotRaiseLayer() ) );
 
-  QPushButton* pbDown = new QPushButton( buttons, "down" );
+  KisFrameButton* pbDown = new KisFrameButton( buttons );
   pbDown->setPixmap( BarIcon( "lowerlayer" ) );
   connect( pbDown, SIGNAL( clicked() ), layertable, SLOT( slotLowerLayer() ) );
 }

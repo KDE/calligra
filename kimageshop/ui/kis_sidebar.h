@@ -26,10 +26,10 @@
 
 #include <kdualcolorbtn.h>
 
+#include "kis_framebutton.h"
 #include "kis_color.h"
 #include "kis_util.h"
 
-class KisFrameButton;
 class KDualColorButton;
 class KisBrushWidget;
 class KisPatternWidget;
@@ -149,11 +149,15 @@ class DockFrame : public QFrame
   void plug (QWidget* w);
   void unplug (QWidget* w);
 
+ public slots:
+  void slotActivateTab(const QString& tab);
+
  protected:
   virtual void resizeEvent ( QResizeEvent * );
 
  private:
-  QList<QWidget> m_lst;
+  QList<QWidget>         m_wlst;
+  QList<KisFrameButton>  m_blst;
 };
 
 class KisSideBar : public QWidget
@@ -171,6 +175,8 @@ class KisSideBar : public QWidget
   void slotSetBGColor(const KisColor&);
 
   void slotSetBrush(const KisBrush&);
+
+  void slotActivateTab(const QString& tab) { m_pDockFrame->slotActivateTab(tab); }
 
  signals:
   void fgColorChanged(const KisColor&);

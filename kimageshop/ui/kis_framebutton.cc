@@ -23,6 +23,7 @@
 KisFrameButton::KisFrameButton(QWidget *parent, const char *name )
   : QLabel( parent, name )
 {
+  setAutoResize(true);
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
   m_active = false;
@@ -69,6 +70,7 @@ void KisFrameButton::mouseReleaseEvent( QMouseEvent * )
 	setFrameStyle(Panel | Raised);
 
   emit clicked();
+  emit clicked(m_text);
 }
 
 void KisFrameButton::setOn(bool v)
@@ -88,6 +90,12 @@ void KisFrameButton::setOn(bool v)
 void KisFrameButton::setToggleButton(bool v)
 {
   m_toggle = v;
+}
+
+void KisFrameButton::setText( const QString &t )
+{
+  m_text = t;
+  QLabel::setText(t);
 }
 
 #include "kis_framebutton.moc"
