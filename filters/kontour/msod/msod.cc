@@ -440,7 +440,32 @@ void Msod::invokeHandler(
     {
         kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
             " operands: " << bytes << endl;
-        (this->*result)(op, bytes, operands);
+
+        // We don't invoke the handler directly on the incoming operands, but
+        // via a temporary datastream. This adds overhead, but eliminates the
+        // need for the individual handlers to read *exactly* the right amount
+        // of data (thus speeding development, and possibly adding some
+        // future-proofing).
+
+        if (bytes)
+        {
+            QByteArray *record = new QByteArray(bytes);
+            QDataStream *body;
+
+            operands.readRawBytes(record->data(), bytes);
+            body = new QDataStream(*record, IO_ReadOnly);
+            body->setByteOrder(QDataStream::LittleEndian);
+            (this->*result)(op, bytes, *body);
+            delete body;
+            delete record;
+        }
+        else
+        {
+            QDataStream *body = new QDataStream();
+
+            (this->*result)(op, bytes, *body);
+            delete body;
+        }
     }
 }
 
