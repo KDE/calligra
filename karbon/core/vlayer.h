@@ -9,14 +9,18 @@
 #include <qptrlist.h>
 #include <qstring.h>
 
-#include "vobject.h"
 #include "vobjectlist.h"
 
 class QDomElement;
+class VObject;
 
-// all vobjects exist inside a layer.
-
-class VLayer : VObjectBase
+/**
+ * VLayer manages a set of vobjects. It keeps the objects from bottom to top
+ * in a list, ie. objects higher in the list are drawn above lower objects.
+ * Objects in a layer can be manipulated and worked on independant of objects
+ * in other layers.
+ */
+class VLayer : public VObjectBase
 {
 public:
 	VLayer();
@@ -24,15 +28,31 @@ public:
 
 	void draw( VPainter *painter, const KoRect& rect );
 
-	void insertObject( VObject* object );
-	void prependObject( const VObject* object );
+	/// appends the object relative to the current position in the object list
+	void appendObject( VObject* object );
+
+	/// prepends the object relative to the current position in the object list
+	void prependObject( VObject* object );
+
+	/// removes the reference to the object, not the object itself
 	void removeRef( const VObject* object );
+
+
+	/// moves the object one step down the list.
+	/// When the object is at the bottom this method has no effect.
 	void moveObjectDown( const VObject* object );
+
+	/// moves the object one step up the list.
+	/// When the object is at the top this method has no effect.
 	void moveObjectUp( const VObject* object );
 
+
+	/// selects all objects that intersect with rect.
 	VObjectList objectsWithinRect( const KoRect& rect ) const;
 
-	// clean up object list:
+	/// clean up object list.
+	/// All objects with state deleted are removed from the layer
+	/// and destroyed.
 	void removeDeletedObjects();
 
 	bool visible() const { return m_visible; }
@@ -48,10 +68,10 @@ public:
 	void load( const QDomElement& element );
 
 private:
-	VObjectList m_objects;
-	QString m_name;
-	bool m_visible;
-	bool m_readOnly;
+	VObjectList m_objects;	/// all objects in this layer
+	QString m_name;			/// id for the layer
+	bool m_visible;			/// can we see the layer
+	bool m_readOnly;		/// is the layer locked
 };
 
 typedef QPtrList<VLayer> VLayerList;

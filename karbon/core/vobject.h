@@ -56,7 +56,7 @@ public:
 		m_state = state;
 		m_boundingBoxIsInvalid = true;
 	}
-	VObject( const VObject &obj )
+	VObject( const VObject &obj ) : VObjectBase()
 	{
 		m_fill   = obj.m_fill;
 		m_stroke = obj.m_stroke;

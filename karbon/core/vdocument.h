@@ -60,7 +60,7 @@ public:
 	/// all newly created shapes in this document get the default color by using this method
 	void applyDefaultColors( VObject & ) const;
 
-	void insertObject( VObject* object ); // insert a new vobject
+	void appendObject( VObject* object ); // insert a new vobject
 
 	VLayer* activeLayer() const { return m_activeLayer; }   // active layer.
 

@@ -18,7 +18,7 @@ VShapeCmd::execute()
 
 		m_doc->applyDefaultColors( *m_object );
 		// add path:
-		m_doc->insertObject( m_object );
+		m_doc->appendObject( m_object );
 		m_doc->selectObject( *m_object, true );
 	}
 }

@@ -68,10 +68,7 @@ VGroup::ungroup()
 	// inform all objects in this group their new parent
 	VObjectListIterator itr = m_objects;
 	for ( ; itr.current() ; ++itr )
-	{
-		layer->insertObject( itr.current() );
-		itr.current()->setParent( ( VObjectBase * )layer );
-	}
+		layer->appendObject( itr.current() );
 	// done
 	m_objects.clear();
 }

@@ -83,7 +83,7 @@ KarbonPart::insertObject( VObject* object )
 {
 	// don't repaint here explicitely. some commands might want to insert many
 	// objects.
-	m_doc.insertObject( object );
+	m_doc.appendObject( object );
 	setModified( true );
 }
 

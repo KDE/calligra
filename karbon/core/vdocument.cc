@@ -34,9 +34,9 @@ VDocument::insertLayer( VLayer* layer )
 }
 
 void
-VDocument::insertObject( VObject* object )
+VDocument::appendObject( VObject* object )
 {
-	m_activeLayer->insertObject( object );
+	m_activeLayer->appendObject( object );
 }
 
 void
@@ -284,7 +284,7 @@ VDocument::moveSelectionToTop()
 				{
 					litr.current()->removeRef( itr2.current() );
 					// add to new top layer
-					topLayer->insertObject( itr.current() );
+					topLayer->appendObject( itr.current() );
 					break;
 				}
 		}

@@ -12,6 +12,7 @@
 #include "vobject.h"
 #include "vpath.h"
 #include "vgroup.h"
+#include "vobject.h"
 //#include "vtext.h"
 
 #include <kdebug.h>
@@ -39,7 +40,7 @@ VLayer::draw( VPainter *painter, const KoRect& rect )
 }
 
 void
-VLayer::insertObject( VObject* object )
+VLayer::appendObject( VObject* object )
 {
 	// put new objects "on top" by appending them:
 	m_objects.append( object );
@@ -47,10 +48,11 @@ VLayer::insertObject( VObject* object )
 }
 
 void
-VLayer::prependObject( const VObject* object )
+VLayer::prependObject( VObject* object )
 {
 	// prepend object
 	m_objects.prepend( object );
+	object->setParent( this );
 }
 
 void
@@ -155,19 +157,19 @@ VLayer::load( const QDomElement& element )
 			{
 				VPath* path = new VPath();
 				path->load( e );
-				insertObject( path );
+				appendObject( path );
 			}
 			else if( e.tagName() == "GROUP" )
 			{
 				VGroup* grp = new VGroup();
 				grp->load( e );
-				insertObject( grp );
+				appendObject( grp );
 			}
 			else if( e.tagName() == "TEXT" )
 			{
 				/*VText* text = new VText();
 				text->load( e );
-				insertObject( text );*/
+				appendObject( text );*/
 			}
 		}
 	}
