@@ -277,11 +277,12 @@ class FormatData
         {}
 
         FormatData ( int p,
-                     int l  ) : pos (p), len (l)
+                     int l  ) : pos (p), len (l), realLen (l)
         {}
 
         int pos;
         int len;
+        int realLen; //Real length of text (in case "len" is not the truth!)
 };
 
 
@@ -310,6 +311,16 @@ void ProcessFormatTag ( QDomNode   myNode,
         formatData.len = 0;
 
         kdError(30502) << "Missing formatting!" << endl;
+    }
+
+    if ( 6 == formatId )
+    {// <FORMAT id=6> have no length but has one character in <TEXT>
+        //TODO: verifiy that KWord 0.9 still does it!
+        formatData.realLen=1;
+    }
+    else
+    {
+        formatData.realLen=formatData.len;
     }
 
     (*formatDataList).append (formatData);
@@ -362,6 +373,31 @@ void ProcessTextTag ( QDomNode    myNode,
 }
 
 
+static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
+{
+    QValueList<FormatData>::Iterator  paraFormatDataIt;
+    int lastPos=0; // last position
+
+    paraFormatDataIt = paraFormatDataList.begin ();
+    while (paraFormatDataIt != paraFormatDataList.end ())
+    {
+        if ((*paraFormatDataIt).pos>lastPos)
+        {
+            //We must add a FormatData
+            FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos);
+            paraFormatDataList.insert(paraFormatDataIt,formatData);
+        }
+        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).realLen;
+        paraFormatDataIt++; // To the next one, please!
+    }
+    // Add the last one if needed
+    if (paraText.length()>lastPos)
+    {
+        FormatData formatData(lastPos,paraText.length()-lastPos);
+        paraFormatDataList.append(formatData);
+    }
+}
+
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
@@ -370,12 +406,10 @@ void ProcessParagraphData ( QString                 &paraText,
                             QValueList<FormatData>  &paraFormatDataList,
                             QString                 &outputText          )
 {
-    if (paraFormatDataList.isEmpty())
+    if ( paraText.length () > 0 )
     {
-        outputText+=paraText;
-    }
-    else if ( paraText.length () > 0 )
-    {
+        CreateMissingFormatData(paraText,paraFormatDataList);
+
         QValueList<FormatData>::Iterator  paraFormatDataIt;
 
         for ( paraFormatDataIt = paraFormatDataList.begin ();
