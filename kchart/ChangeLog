@@ -1,4 +1,4 @@
-2005-03-05  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+2005-03-05  Inge Wallin  <inge@lysator.liu.se>
 
 	Ego stroking:
 	* kchart_aboutdata.h (newKChartAboutData): Add Inge Wallin as an
@@ -29,36 +29,41 @@
 
 2005-02-25  Inge Wallin  <inge@lysator.liu.se>
 
-	Fix bug 99998:
+	Fix bug 99998: KChart: 3d Depth parameter has ludicrous max value
 	* kchartParameter3dConfigPage.cc (KChartParameter3dConfigPage):
 	Make the depth parameter go from 0 to 2.0 instead of 0 to 40.
 
 2005-02-24  Inge Wallin  <inge@lysator.liu.se>
 
-	Fix bug 99390:
+	Fix bug 99390: The background settings in the config dialog don't
+	work.
 	* kchartBackgroundPixmapConfigPage.{h,cc}: Remove the big unused
 	list to the left of the page.
 
-	Fix bug 99999:
+	Fix bug 99999: KChart: The wizard has settings for non-existent
+	parameters.
 	* kchartWizardLabelsLegendPage.{h,cc}: Remove everything that has
 	to do with second Y axis.
 	* kchartWizardSetupAxesPage.{h,cc}: Remove everything that has to
 	do with second Y axis.
 
-	Fix part of 99997:
+	Fix part of 99997: KChart: Configuration dialog have settings for
+	things that don't exist.
 	* kchartColorConfigPage.{h,cc]: Remove everything that has to do
 	with the second Y Axis.
 
 2005-02-23  Inge Wallin  <inge@lysator.liu.se>
 
-	Fix bug 99715
+	Fix bug 99715: Chart subtypes are named differently in different
+	places.
 	* kchartSubTypeChartPage.h (KChartBarSubTypeChartPage): Rename
 	layer -> stacked and beside -> normal, and change the strings
 	accordingly. 
 
 2005-02-22  Inge Wallin  <inge@lysator.liu.se>
 
-	Fix bug 99765:
+	Fix bug 99765: "Chart Subtype" config page is missing for Pie,
+	Ring, Box&Whisker chart types.
 	* kchartConfigDialog.cc (initSubtypePage): Don't create a
 	configuration page for subtype if the type doesn't have a
 	subtype.  Applicable to Pie, Ring and Box&Whiskers.
