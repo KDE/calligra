@@ -1,5 +1,11 @@
 /* GDCHART 0.94b  GDC_PIE.C  12 Nov 1998 */
 
+/**
+ * $Id:$
+ *
+ * Ported to Qt instead of libgd by Kalle Dalheimer, kalle@kde.org
+ */
+
 #include <stdio.h>
 #include <values.h>
 #include <math.h>
@@ -13,20 +19,47 @@
 
 extern struct	GDC_FONT_T	GDC_fontc[];
 
-#define SET_RECT( gdp, x1, x2, y1, y2 )	gdp[0].x = gdp[3].x = x1,	\
-										gdp[0].y = gdp[1].y = y1,	\
-										gdp[1].x = gdp[2].x = x2,	\
-										gdp[2].y = gdp[3].y = y2
+inline static void setrect( gdp, x1, x2, y1, y2 )
+{
+	gdp[0].setX( x1 );
+	gdp[3].setX( x1 );
+	gdp[0].setY( y1 );
+	gdp[1].setY( y1 );
+	gdp[1].setX( x2 );
+	gdp[2].setX( x2 );
+	gdp[2].setY( y2 ); 
+	gdp[3].setY( y2 );
+}
 
-#define PX( x )				( cx + (int)( ((float)rad)*sin(pscl*(double)(x)) ) )		/* expects a val */
-#define PY( x )				( cy - (int)( ((float)rad)*cos(pscl*(double)(x)) ) )		/* expects a val */
 
-#define CX( i,d )		( cx                +	\
-						  (d? xdepth_3D: 0) +	\
-						  (int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * sin((double)(slice_angle[0][i])) ) )
-#define CY( i,d )		( cy                -	\
-						  (d? ydepth_3D: 0) -	\
-						  (int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * cos((double)(slice_angle[0][i])) ) )
+inline static double func_px( int x )
+{
+	return( cx + (int)( ((float)rad)*sin(pscl*(double)(x)) ) );
+}
+
+
+inline static double func_py( int x )
+{
+	return( cy - (int)( ((float)rad)*cos(pscl*(double)(x)) ) );
+}
+
+
+inline static double func_cx( int i, int d )
+{
+	return( cx + (d? xdepth_3D: 0) + 
+			(int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * 
+				   sin((double)(slice_angle[0][i])) ) );
+}
+
+
+inline static double func_cy( int i, int d )
+{
+	return( cy - (d? ydepth_3D: 0) - 
+			(int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * 
+				   cos((double)(slice_angle[0][i])) ) );
+}
+
+
 /* expect slice number:     i (index into slice_angle array) *\ 
  *   and position on slice: f (0: slice middle,              *
  *                             1: leading (clockwise),       *
@@ -34,19 +67,48 @@ extern struct	GDC_FONT_T	GDC_fontc[];
  *   and 3D depth:          d (0: do depth,                  *
  *                             1: no depth adjustment)       *
 \* adjusts for explosion                                     */
-#define IX( i,f,d )		( CX(i,d) + (int)( (double)rad * sin((double)(slice_angle[f][i])) ) )
-#define IY( i,f,d )		( CY(i,d) - (int)( (double)rad * cos((double)(slice_angle[f][i])) ) )
+inline static double func_ix( int i, int f, int d )
+{
+	return( func_cx(i,d) + (int)( (double)rad * sin((double)(slice_angle[f][i])) ) );
+}
+inline static double func_iy( int i, int f, int d )
+{
+	return( func_cy(i,d) - (int)( (double)rad * cos((double)(slice_angle[f][i])) ) );
+}
 /* same as above except o is angle */
-#define OX( i,o,d )		( CX(i,d) + (int)( (double)rad * sin((double)(o)) ) )
-#define OY( i,o,d )		( CY(i,d) - (int)( (double)rad * cos((double)(o)) ) )
-
-#define TO_INT_DEG(o)		(int)rint( (double)((o)/(2.0*M_PI)*360.0) )
-#define TO_INT_DEG_FLOOR(o)	(int)floor( (double)((o)/(2.0*M_PI)*360.0) )
-#define TO_INT_DEG_CEIL(o)	(int)ceil( (double)((o)/(2.0*M_PI)*360.0) )
-#define TO_RAD(o)			( (o)/360.0*(2.0*M_PI) )
+inline static double func_ox( int i, int o, int d )
+{
+	return( func_cx(i,d) + (int)( (double)rad * sin((double)(o)) ) );
+}
+inline static double func_oy( int i, int o, int d )
+{
+	return( func_cy(i,d) - (int)( (double)rad * cos((double)(o)) ) );
+}
+inline static int func_to_int_deg( double o )
+{
+	return (int)rint( (double)((o)/(2.0*M_PI)*360.0) );
+}
+inline static int func_to_int_deg_floor( double o )
+{
+	return (int)floor( (double)((o)/(2.0*M_PI)*360.0) );
+}
+inline static int func_to_int_deg_ceil( double o )
+{
+	return (int)ceil( (double)((o)/(2.0*M_PI)*360.0) );
+}
+inline static double func_to_rad( double o )
+{
+	return ( (o)/360.0*(2.0*M_PI) );
+}
 																					/* assume !> 4*PI */
-#define MOD_2PI(o)			( (o)>=(2.0*M_PI)? ((o)-(2.0*M_PI)): (((o)<0)? ((o)+(2.0*M_PI)): (o)) )
-#define MOD_360(o)			( (o)>=360? (o)-360: (o) )								/* assume !> 720 */ 
+inline static double func_mod_2pi( double o )
+{
+	return ( (o)>=(2.0*M_PI)? ((o)-(2.0*M_PI)): (((o)<0)? ((o)+(2.0*M_PI)): (o)) );
+}
+inline static double func_mod_360( double o )
+{
+	return ( (o)>=360? (o)-360: (o) );								/* assume !> 720 */ 
+}
 
 struct tmp_slice_t { int	i;					// original index
 					 char	hidden;				// 'behind' top [3D] pie
@@ -56,8 +118,15 @@ static float				pie_3D_rad;			// user requested 3D angle in radians
 
 // degrees (radians) between angle a, and depth angle
 // 1&2, so comparisons can be done.
-#define RAD_DIST1( a )		( (dist_foo1=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo1>M_PI)? ABS(dist_foo1-2.0*M_PI): dist_foo1) )
-#define RAD_DIST2( a )		( (dist_foo2=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo2>M_PI)? ABS(dist_foo2-2.0*M_PI): dist_foo2) )
+inline static double func_rad_dist1( double a )
+{
+	return ( (dist_foo1=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo1>M_PI)? ABS(dist_foo1-2.0*M_PI): dist_foo1) );
+}
+inline static double func_rad_dist2( double a )
+{
+	return ( (dist_foo2=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo2>M_PI)? ABS(dist_foo2-2.0*M_PI): dist_foo2) );
+}
+
 static float				dist_foo1, dist_foo2;
 
 /* ------------------------------------------------------- *\ 
@@ -121,8 +190,8 @@ pie_gif( short			GIFWIDTH,
 	float		rad = 0.0;					// radius
 	float		tot_val = 0.0;
 	float		pscl;
-	int			cx,							// affects PX()
-				cy;							// affects PY()
+	int			cx,							// affects func_px()
+				cy;							// affects func_py()
 								/* ~ 1% for a size of 100 pixs */
 								/* label sizes will more dictate this */
 	float		min_grphable = ( GDCPIE_other_threshold < 0?
@@ -135,8 +204,8 @@ pie_gif( short			GIFWIDTH,
 	float		slice_angle[3][num_points];	// must be used with others[]
 	char		threeD = ( type == GDC_3DPIE );
 
-	int			xdepth_3D      = 0,			// affects PX()
-				ydepth_3D      = 0;			// affects PY()
+	int			xdepth_3D      = 0,			// affects func_px()
+				ydepth_3D      = 0;			// affects func_py()
 	int			do3Dx = 0,					// reserved for macro use
 				do3Dy = 0;
 
@@ -281,13 +350,13 @@ pie_gif( short			GIFWIDTH,
 
 					for( j=0; j<3; ++j )
 						{
-						this_y_explode_pos = IY(i,j,1);
+						this_y_explode_pos = func_iy(i,j,1);
 						if( this_y_explode_pos < cy-cheight )
 							rad -= (float)ABS( (double)((cy-cheight)-this_y_explode_pos)/cos((double)slice_angle[j][i]) );
 						if( this_y_explode_pos > cy+cheight )
 							rad -= (float)ABS( (double)(1+this_y_explode_pos-(cy+cheight))/cos((double)slice_angle[j][i]) );
 
-						this_x_explode_pos = IX(i,j,1);
+						this_x_explode_pos = func_ix(i,j,1);
 						if( this_x_explode_pos < cx-cwidth )
 							rad -= (float)ABS( (double)((cx-cwidth)-this_x_explode_pos)/sin((double)slice_angle[j][i]) );
 						if( this_x_explode_pos > cx+cwidth )
@@ -359,23 +428,23 @@ pie_gif( short			GIFWIDTH,
 				{
 				float	rad = rad1;
 
-				gdImageLine( im, CX(i,1), CY(i,1), IX(i,1,1), IY(i,1,1), SliceColorShd[i] );
-				gdImageLine( im, CX(i,1), CY(i,1), IX(i,2,1), IY(i,2,1), SliceColorShd[i] );
+				gdImageLine( im, func_cx(i,1), func_cy(i,1), func_ix(i,1,1), func_iy(i,1,1), SliceColorShd[i] );
+				gdImageLine( im, func_cx(i,1), func_cy(i,1), func_ix(i,2,1), func_iy(i,2,1), SliceColorShd[i] );
 
-				gdImageArc( im, CX(i,1), CY(i,1),
+				gdImageArc( im, func_cx(i,1), func_cy(i,1),
 								rad*2, rad*2,
 								TO_INT_DEG_FLOOR(slice_angle[1][i])+270,
 								TO_INT_DEG_CEIL(slice_angle[2][i])+270,
 								SliceColorShd[i] );
 				rad1 = rad;
 				rad *= 3.0/4.0;
-				gdImageFillToBorder( im, IX(i,0,1), IY(i,0,1), SliceColorShd[i], SliceColorShd[i] );
+				gdImageFillToBorder( im, func_ix(i,0,1), func_iy(i,0,1), SliceColorShd[i], SliceColorShd[i] );
 				rad = rad1;
 				if( GDCPIE_EdgeColor != GDC_NOCOLOR )
 					{
-					gdImageLine( im, CX(i,1), CY(i,1), IX(i,1,1), IY(i,1,1), EdgeColorShd );
-					gdImageLine( im, CX(i,1), CY(i,1), IX(i,2,1), IY(i,2,1), EdgeColorShd );
-					gdImageArc( im, CX(i,1), CY(i,1), 
+					gdImageLine( im, func_cx(i,1), func_cy(i,1), func_ix(i,1,1), func_iy(i,1,1), EdgeColorShd );
+					gdImageLine( im, func_cx(i,1), func_cy(i,1), func_ix(i,2,1), func_iy(i,2,1), EdgeColorShd );
+					gdImageArc( im, func_cx(i,1), func_cy(i,1), 
 									rad*2, rad*2,
 									TO_INT_DEG(slice_angle[1][i])+270, TO_INT_DEG(slice_angle[2][i])+270,
 									EdgeColorShd);
@@ -430,8 +499,8 @@ pie_gif( short			GIFWIDTH,
 
 			i = tmp_slice[t].i;
 
-			gdp[0].x  = CX(i,0);					gdp[0].y = CY(i,0);
-			gdp[1].x  = CX(i,1);					gdp[1].y = CY(i,1);
+			gdp[0].x  = func_cx(i,0);					gdp[0].y = func_cy(i,0);
+			gdp[1].x  = func_cx(i,1);					gdp[1].y = func_cy(i,1);
 			gdp[2].x  = OX(i,tmp_slice[t].angle,1);	gdp[2].y = OY(i,tmp_slice[t].angle,1);
 			gdp[3].x  = OX(i,tmp_slice[t].angle,0);	gdp[3].y = OY(i,tmp_slice[t].angle,0);
 
@@ -454,7 +523,7 @@ pie_gif( short			GIFWIDTH,
 
 			if( GDCPIE_EdgeColor != GDC_NOCOLOR )
 				{
-				gdImageLine( im, CX(i,0), CY(i,0), CX(i,1), CY(i,1), EdgeColorShd );
+				gdImageLine( im, func_cx(i,0), func_cy(i,0), func_cx(i,1), func_cy(i,1), EdgeColorShd );
 				gdImageLine( im, OX(i,tmp_slice[t].angle,0), OY(i,tmp_slice[t].angle,0),
 								 OX(i,tmp_slice[t].angle,1), OY(i,tmp_slice[t].angle,1),
 							 EdgeColorShd );
@@ -475,27 +544,27 @@ pie_gif( short			GIFWIDTH,
 			float	rad = rad1;
 
 			// last += val[i];
-			// EXPLODE_CX_CY( slice_angle[0][i], i );
-			gdImageLine( im, CX(i,0), CY(i,0), IX(i,1,0), IY(i,1,0), SliceColor[i] );
-			gdImageLine( im, CX(i,0), CY(i,0), IX(i,2,0), IY(i,2,0), SliceColor[i] );
+			// EXPLODE_func_cx_func_cy( slice_angle[0][i], i );
+			gdImageLine( im, func_cx(i,0), func_cy(i,0), func_ix(i,1,0), func_iy(i,1,0), SliceColor[i] );
+			gdImageLine( im, func_cx(i,0), func_cy(i,0), func_ix(i,2,0), func_iy(i,2,0), SliceColor[i] );
 
-			gdImageArc( im, CX(i,0), CY(i,0), 
+			gdImageArc( im, func_cx(i,0), func_cy(i,0), 
 							(int)rad*2, (int)rad*2,
 							TO_INT_DEG_FLOOR(slice_angle[1][i])+270,
 							TO_INT_DEG_CEIL(slice_angle[2][i])+270,
 							SliceColor[i] );
 			rad1 = rad;
 			rad *= 3.0/4.0;
-			gdImageFillToBorder( im, IX(i,0,0), IY(i,0,0), SliceColor[i], SliceColor[i] );
+			gdImageFillToBorder( im, func_ix(i,0,0), func_iy(i,0,0), SliceColor[i], SliceColor[i] );
 			/* catch missed pixels on narrow slices */
-			gdImageLine( im, CX(i,0), CY(i,0), IX(i,0,0), IY(i,0,0), SliceColor[i] );
+			gdImageLine( im, func_cx(i,0), func_cy(i,0), func_ix(i,0,0), func_iy(i,0,0), SliceColor[i] );
 			rad = rad1;
 			if( GDCPIE_EdgeColor != GDC_NOCOLOR )
 				{
-				gdImageLine( im, CX(i,0), CY(i,0), IX(i,1,0), IY(i,1,0), EdgeColor );
-				gdImageLine( im, CX(i,0), CY(i,0), IX(i,2,0), IY(i,2,0), EdgeColor );
+				gdImageLine( im, func_cx(i,0), func_cy(i,0), func_ix(i,1,0), func_iy(i,1,0), EdgeColor );
+				gdImageLine( im, func_cx(i,0), func_cy(i,0), func_ix(i,2,0), func_iy(i,2,0), EdgeColor );
 
-				gdImageArc( im, CX(i,0), CY(i,0), 
+				gdImageArc( im, func_cx(i,0), func_cy(i,0), 
 								rad*2, rad*2,
 								TO_INT_DEG(slice_angle[1][i])+270, TO_INT_DEG(slice_angle[2][i])+270,
 								EdgeColor );
@@ -547,8 +616,8 @@ pie_gif( short			GIFWIDTH,
 							0:
 							strlen(pct_str) * GDC_fontc[GDCPIE_label_size].w;
 
-				lbly = (liney = IY(i,0,0))-( num_nl * (1+GDC_fontc[GDCPIE_label_size].h) ) / 2;
-				lblx = pctx = linex = IX(i,0,0);
+				lbly = (liney = func_iy(i,0,0))-( num_nl * (1+GDC_fontc[GDCPIE_label_size].h) ) / 2;
+				lblx = pctx = linex = func_ix(i,0,0);
 
 				if( slice_angle[0][i] > M_PI )								/* which semicircle */
 					{
@@ -565,13 +634,13 @@ pie_gif( short			GIFWIDTH,
 												pctx -= lbl_wdth-1;
 											else
 												lblx += pct_wdth+1;
-											pcty = IY(i,0,0) - ( 1+GDC_fontc[GDCPIE_label_size].h ) / 2;
+											pcty = func_iy(i,0,0) - ( 1+GDC_fontc[GDCPIE_label_size].h ) / 2;
 											break;
 					case GDCPIE_PCT_RIGHT:	if( slice_angle[0][i] > M_PI )
 												lblx -= pct_wdth-1;
 											else
 												pctx += lbl_wdth+1;
-											pcty = IY(i,0,0) - ( 1+GDC_fontc[GDCPIE_label_size].h ) / 2;
+											pcty = func_iy(i,0,0) - ( 1+GDC_fontc[GDCPIE_label_size].h ) / 2;
 											break;
 					case GDCPIE_PCT_ABOVE:	lbly += (1+GDC_fontc[GDCPIE_label_size].h) / 2;
 											pcty = lbly - (GDC_fontc[GDCPIE_label_size].h);
@@ -603,7 +672,7 @@ pie_gif( short			GIFWIDTH,
 				if( GDCPIE_label_line )
 					{
 					float	rad = liner;
-					gdImageLine( im, linex, liney, IX(i,0,0), IY(i,0,0), LineColor );
+					gdImageLine( im, linex, liney, func_ix(i,0,0), func_iy(i,0,0), LineColor );
 					}
 				}
 			}
