@@ -282,11 +282,10 @@ Format& Format::operator=( const Format& f )
 }
 
 // assign from another format
-// this is shallow copy, e.g only copy the data pointer
 Format& Format::assign( const Format& f )
 {
-  d->font.assign( f.font() );
-  d->alignment= f.alignment();
+  d->font = f.font();
+  d->alignment = f.alignment();
   return *this;
 }
 
