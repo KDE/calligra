@@ -126,12 +126,16 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
 
 QString KoSpell::getMoreText()
 {
+#ifdef DEBUG_SPELL
     kdDebug()<<"here 1 dialog = " << d->dialog << ", itr = "
              << d->itr << ", atEnd = "
              << ( ( d->itr ) ? d->itr->atEnd() : true )
              << endl;
+#endif
 
-    if ( d->needsIncrement ) {
+    bool iteratorAtEnd = d->itr && d->itr->atEnd();
+
+    if ( d->needsIncrement && !iteratorAtEnd ) {
         ++( *d->itr );
     }
 
@@ -142,7 +146,7 @@ QString KoSpell::getMoreText()
         return str;
     }
 
-    if ( d->itr && d->itr->atEnd() )
+    if ( iteratorAtEnd )
         return QString::null;
 
     d->needsIncrement = true;
@@ -200,13 +204,13 @@ bool KoSpell::checking() const
     kdDebug()<< d->itr << ", "
              << ( ( d->itr ) ? d->itr->atEnd() : false ) << ", "
              << filter()->atEnd()
-             <<endl;
+             << endl;
 #endif
     if ( d->itr ) {
         if ( d->itr->atEnd() &&
              filter()->atEnd() )
             return false;
-            else
+        else
             return true;
     } else
         return filter()->atEnd();

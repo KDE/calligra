@@ -76,9 +76,9 @@ public:
     int currentStartIndex() const;
 
 signals:
-	/**
+    /**
      * Emitted after a paragraph has been checked.
-	*/
+     */
     void paragraphChecked( KoTextParag* );
 
     void aboutToFeedText();
