@@ -101,7 +101,7 @@ void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & contex
     else
         lineType=LT_LD_RU;
     QString attr = (x1 < x2) ?  "draw:marker-start" : "draw:marker-end";
-    KoStyleStack styleStack = context.styleStack();
+    KoStyleStack &styleStack = context.styleStack();
     if ( styleStack.hasAttribute( attr ) )
     {
         QString type = styleStack.attribute( attr );

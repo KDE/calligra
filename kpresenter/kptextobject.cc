@@ -210,7 +210,7 @@ void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context
 {
     KP2DObject::loadOasis(element, context, animation);
     //todo other attribute
-    KoStyleStack styleStack = context.styleStack();
+    KoStyleStack &styleStack = context.styleStack();
     if( styleStack.hasAttribute( "fo:padding-top" ) )
         btop = KoUnit::parseValue( styleStack.attribute( "fo:padding-top" ) );
     if( styleStack.hasAttribute( "fo:padding-bottom" ) )

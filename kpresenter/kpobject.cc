@@ -197,7 +197,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
     ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
     ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
     kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
-    const KoStyleStack styleStack = context.styleStack();
+    const KoStyleStack &styleStack = context.styleStack();
     if( element.hasAttribute( "draw:transform" ))
         {
             kdDebug()<<" object transform \n";
@@ -1073,7 +1073,7 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
 {
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
     KPObject::loadOasis(element, context, animation);
-    KoStyleStack styleStack = context.styleStack();
+    KoStyleStack &styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:stroke" ))
     {
         if ( styleStack.attribute( "draw:stroke" ) == "none" )
@@ -1232,7 +1232,7 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
     kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
 
     KPShadowObject::loadOasis(element, context, animation);
-    KoStyleStack styleStack = context.styleStack();
+    KoStyleStack &styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:fill" ) )
     {
         const QString fill = styleStack.attribute( "draw:fill" );

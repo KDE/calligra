@@ -117,7 +117,7 @@ void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & cont
         points.putPoints( index, 1, KoUnit::parseValue(pt_x),KoUnit::parseValue(pt_y) );
         ++index;
     }
-    KoStyleStack styleStack = context.styleStack();
+    KoStyleStack &styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:marker-start" ) )
     {
         QString type = styleStack.attribute( "draw:marker-start" );
