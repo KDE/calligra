@@ -51,9 +51,9 @@ uninstall-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kohtml.pot
 
+kohtml.cc: kohtml.h
 kohtml.h: kohtml.idl $(micodir)/include/CORBA.h
 	rm -f kohtml.h
 	$(IDL) --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kohtml.idl
 
-BUILT_SOURCES = kohtml.h
 
