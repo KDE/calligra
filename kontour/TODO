@@ -9,10 +9,18 @@
 * Layers panel
 * Parts embeding
 * Insert/Delete Layer/Page command
-* KoPainter
+* KoPainter:
     * Patterns
     * Gradients
-    * Dash
+    * Dashes
     * Arrows
     * More speed
-* Filters
+    * upgrade KoColor
+    * end GUI elements
+* Filters:
+    * SVG
+    * AI
+    * CMX
+    * XFig
+    * Image
+    * EPS

@@ -47,6 +47,7 @@ libkontourpart_la_SOURCES = \
 	GGroup.cc \
 	GStyle.cc \
 	GStyleList.cc \
+	DashList.cc \
 	LayerPanel.cc \
 	StylePanel.cc \
 	TransformPanel.cc \
@@ -85,6 +86,7 @@ libkontourpart_la_SOURCES = \
 	AlignCmd.cc \
 	DistributeCmd.cc \
 	OptionsDialog.cc \
+	DashEditDialog.cc \
 	UnitBox.cc \
 	units.cc \
 	kontour_view_iface.skel \
