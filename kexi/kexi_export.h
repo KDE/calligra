@@ -21,6 +21,12 @@
 #define _KEXI_EXPORT_H_
 
 #include <kdeversion.h> /* this will also include <kdelibs_export.h>, if available */
+
+/* workaround for KDElibs < 3.4 on !win32*/
+#ifndef KDE_EXPORT
+# define KDE_EXPORT
+#endif
+
 /* TODO: #include <koffice_export.h> */
 
 #ifdef MAKE_KEXICORE_LIB
