@@ -81,20 +81,6 @@ static FrameAnchor *findAnchor ( const KoPictureKey& key,
     return NULL;
 }
 
-static ParaData createTableMgr( const QString& grpMgr )
-{
-    ParaData  pData;
-    LayoutData lData;
-    FormatData fData;
-    fData.id = 6;
-    fData.frameAnchor.key  = KoPictureKey( grpMgr );
-    fData.frameAnchor.type = 6;
-    lData.formatData = fData;
-    pData.layout = lData;
-    pData.formattingList << fData;
-    return pData;
-}
-
 static void ProcessHardBrkTag ( QDomNode myNode, void* tagData, KWEFKWordLeader* )
 {
     // <HARDBRK>
@@ -345,6 +331,20 @@ static void ProcessPictureAnchor( QDomNode myNode, KWEFKWordLeader *leader, Fram
     frameAnchor->key = frameAnchor->picture.key;
 }
 
+static void ProcessTableAnchor( QDomNode myNode, KWEFKWordLeader *leader, FrameAnchor* frameAnchor,
+    const int col, const int row, const int cols, const int rows )
+{
+    frameAnchor->type = 6; // Table
+
+    QValueList<ParaData> cellParaList;
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "FRAME",     ProcessFrameTag,     frameAnchor   )
+                        << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    frameAnchor->table.addCell (col, row, cols, rows, cellParaList, frameAnchor->frame);
+}
+
 static void ProcessFramesetTag ( QDomNode        myNode,
                                 void            *tagData,
                                 KWEFKWordLeader *leader )
@@ -474,21 +474,39 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                                         << col << ", " << row << ", Mgr = "<< grpMgr << endl;
 #endif
                         FrameAnchor *frameAnchor = findAnchor (grpMgr, *paraList);
-                        if ( !frameAnchor ) {
-                            *paraList << createTableMgr( grpMgr );
-                            frameAnchor = &paraList->last().formattingList.first().frameAnchor;
-                            leader->m_unanchoredFramesets.append( grpMgr );
+                        if ( frameAnchor )
+                        {
+                            ProcessTableAnchor( myNode, leader, frameAnchor, col, row, cols, rows );
                         }
-
-                        frameAnchor->type = 6;
-
-                        QValueList<ParaData> cellParaList;
-                        QValueList<TagProcessing> tagProcessingList;
-                        tagProcessingList << TagProcessing ( "FRAME",     ProcessFrameTag,     frameAnchor   )
-                                          << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
-                        ProcessSubtags (myNode, tagProcessingList, leader);
-
-                        frameAnchor->table.addCell (col, row, cols, rows, cellParaList, frameAnchor->frame);
+                        else
+                        {
+                            bool found = false;
+                            KoPictureKey key( grpMgr );
+                            QValueList<FrameAnchor>::Iterator it;
+                            for ( it = leader->m_nonInlinedTableAnchors.begin(); it !=  leader->m_nonInlinedTableAnchors.end(); ++it )
+                            {
+                                if ( (*it).key == key )
+                                {
+                                    kdDebug(30520) << "Found pseudo-anchor for table: " << (*it).key.toString() << endl;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            
+                            if ( found )
+                            {
+                                ProcessTableAnchor( myNode, leader, &(*it), col, row, cols, rows );
+                            }
+                            else                            
+                            {
+                                kdWarning(30520) << "Table anchor not found: " << grpMgr << endl;
+                                FrameAnchor anchor;
+                                ProcessTableAnchor( myNode, leader, &anchor, col, row, cols, rows );
+                                anchor.key = key; // Needed, so that the pseudo-anchor can be found again
+                                leader->m_nonInlinedTableAnchors << anchor;                      
+                                leader->m_unanchoredFramesets.append( grpMgr );
+                            }
+                        }
                     }
                     else
                     {
@@ -502,6 +520,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     kdWarning (30508) << "Unset value for one of, or all FRAMESET attributes col, row: "
                                     << col << ", " << row << "!" << endl;
                     AllowNoSubtags (myNode, leader);
+                    leader->m_unanchoredFramesets.append( leader->m_currentFramesetName );
                 }
             }
             break;

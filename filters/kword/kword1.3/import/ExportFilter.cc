@@ -628,9 +628,10 @@ bool OOWriterWorker::doCloseDocument(void)
 
 bool OOWriterWorker::doOpenBody(void)
 {
+    QValueList<FrameAnchor>::Iterator it;
+    
     // We have to process all non-inline pictures
     kdDebug(30520) << "=== Processing non-inlined pictures ===" << endl;
-    QValueList<FrameAnchor>::Iterator it;
     for ( it = m_nonInlinedPictureAnchors.begin(); it != m_nonInlinedPictureAnchors.end(); ++it )
     {
         *m_streamOut << "  ";
@@ -639,6 +640,16 @@ bool OOWriterWorker::doOpenBody(void)
     }
     kdDebug(30520) << "=== Non-inlined pictures processed ===" << endl;
 
+    // We have to process all non-inline tables
+    kdDebug(30520) << "=== Processing non-inlined tables ===" << endl;
+    for ( it = m_nonInlinedTableAnchors.begin(); it != m_nonInlinedTableAnchors.end(); ++it )
+    {
+        *m_streamOut << "  ";
+        makeTable( *it ); // ### PROVISORY as as-char anchor
+        *m_streamOut << "\n";
+    }
+    kdDebug(30520) << "=== Non-inlined tables processed ===" << endl;
+    
     return true;
 }
 
