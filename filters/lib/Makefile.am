@@ -1,6 +1,7 @@
 ####### General stuff
 
-INCLUDES=	-I$(srcdir) $(all_includes) $(MICO_INCLUDES)
+INCLUDES=	-I$(srcdir) $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
+$(KOFFICEUI_INCLUDES) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	=	$(all_libraries) -version-info 1:0:0
 
 ####### Files

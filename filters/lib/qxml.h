@@ -25,7 +25,7 @@
 #ifndef QXML_H
 #define QXML_H
 
-#include "qstring.h"
+#include <qstring.h>
 
 class QXMLConsumer
 {
