@@ -3447,6 +3447,11 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
         m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
         m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
         m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
+        if ( m_rtl != parag->string()->isRightToLeft() && parag->counter() )
+        {
+            parag->counter()->invalidate();
+            parag->setChanged( true ); // repaint
+        }
         m_rtl = parag->string()->isRightToLeft();
         m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight], m_rtl );
     }
