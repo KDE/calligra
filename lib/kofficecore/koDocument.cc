@@ -1011,7 +1011,7 @@ void KoDocument::removeShell( KoMainWindow *shell )
   d->m_shells.removeRef( shell );
 }
 
-QList<KoMainWindow> KoDocument::shells() const
+const QList<KoMainWindow>& KoDocument::shells() const
 {
     return d->m_shells;
 }

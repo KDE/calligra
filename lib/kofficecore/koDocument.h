@@ -400,7 +400,7 @@ public:
    */
   virtual void removeShell( KoMainWindow *shell );
 
-  QList<KoMainWindow> shells() const;
+  const QList<KoMainWindow>& shells() const;
 
   int shellCount() const;
 
