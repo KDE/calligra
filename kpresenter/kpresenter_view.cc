@@ -5267,13 +5267,20 @@ void KPresenterView::slotUpdateRuler()
             getVRuler()->setFrameStartEnd( r.top()/*+ m_canvas->diffy()*//*- pc.y()*/, r.bottom()/*+m_canvas->diffy()*//*- pc.y()*/ );
             if( getHRuler())
             {
-                getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
-                getHRuler()->repaint();
+                int flags = (KoRuler::F_INDENTS | KoRuler::F_TABS);
+                if( getHRuler()->flags()!= flags )
+                {
+                    getHRuler()->changeFlags(flags);
+                    getHRuler()->repaint();
+                }
             }
             if( getVRuler())
             {
-                getVRuler()->changeFlags(0);
-                getVRuler()->repaint();
+                if( getVRuler()->flags() != 0 )
+                {
+                    getVRuler()->changeFlags(0);
+                    getVRuler()->repaint();
+                }
             }
         }
     }
@@ -5874,19 +5881,41 @@ void KPresenterView::refreshRuler( bool state )
     {
 
         if( state )
-            getHRuler()->changeFlags(KoRuler::F_HELPLINES);
+        {
+            if( getHRuler()->flags() != KoRuler::F_HELPLINES )
+            {
+                getHRuler()->changeFlags(KoRuler::F_HELPLINES);
+                getHRuler()->repaint();
+            }
+        }
         else
-            getHRuler()->changeFlags( 0 );
-        getHRuler()->repaint();
+        {
+            if( getHRuler()->flags() != 0 )
+            {
+                getHRuler()->changeFlags( 0 );
+                getHRuler()->repaint();
+            }
+        }
     }
 
     if( getVRuler())
     {
         if( state )
-            getVRuler()->changeFlags(KoRuler::F_HELPLINES);
+        {
+            if( getVRuler()->flags() != KoRuler::F_HELPLINES )
+            {
+                getVRuler()->changeFlags(KoRuler::F_HELPLINES);
+                getVRuler()->repaint();
+            }
+        }
         else
-            getVRuler()->changeFlags(0);
-        getVRuler()->repaint();
+        {
+            if( getVRuler()->flags()!= 0)
+            {
+                getVRuler()->changeFlags(0);
+                getVRuler()->repaint();
+            }
+        }
     }
 
 }
