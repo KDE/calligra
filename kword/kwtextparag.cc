@@ -588,7 +588,9 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         setParagLayout( paragLayout );
 
         // Load default format from style.
-        KWStyle *existingStyle = doc->findStyle( m_layout.styleName() );
+        KWStyle *existingStyle = doc->findStyle( m_layout.styleName(), true );
+        if ( !existingStyle )
+            kdDebug() << "KWTextParag::loadLayout no style named " << m_layout.styleName() << " found!" << endl;
         QTextFormat *defaultFormat = existingStyle ? &existingStyle->format() : 0L;
         QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
@@ -719,16 +721,18 @@ void KWTextParag::printRTDebug()
         kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
     }*/
     kdDebug() << "  Style: " << styleName() << endl;
-    kdDebug() << "  Text: " << string()->toString() << endl;
+    kdDebug() << "  Text: '" << string()->toString() << "'" << endl;
     if ( counter() )
         kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << " text=" << m_layout.counter->text( this ) << " width=" << m_layout.counter->width( this ) << endl;
 
+    kdDebug() << "  Paragraph format=" << paragFormat() << "  fontsize:" << dynamic_cast<KWTextFormat *>(paragFormat())->pointSizeFloat() << endl;
     /*
-    kdDebug() << "  Paragraph format=" << paragFormat() << "  size:" << dynamic_cast<KWTextFormat *>(paragFormat())->pointSizeFloat() << endl;
     QTextString * s = string();
     for ( int i = 0 ; i < s->length() ; ++i )
-        kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format() << " size:" << dynamic_cast<KWTextFormat *>(s->at(i).format())->pointSizeFloat() << endl;
-        */
+        kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format()
+                  << " " << s->at(i).format()->key()
+            //<< " fontsize:" << dynamic_cast<KWTextFormat *>(s->at(i).format())->pointSizeFloat()
+                  << endl;*/
 }
 
 

@@ -41,7 +41,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent, "canvas", WNorthWestGravity | WResizeNoErase ), doc( d )
 {
     m_gui = lGui;
-    m_currentFrameSetEdit = doc->getFrameSet( 0 )->createFrameSetEdit( this );
+    m_currentFrameSetEdit = 0L;
     mousePressed = false;
     setMouseMode( MM_EDIT );
 
@@ -82,6 +82,9 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     (void) new KAction( "Print richtext debug info" , 0,
                         this, SLOT( printRTDebug() ),
                         m_gui->getView()->actionCollection(), "printrtdebug" );
+
+    // Create the current frameset-edit last, to have everything ready for it
+    m_currentFrameSetEdit = doc->getFrameSet( 0 )->createFrameSetEdit( this );
 }
 
 KWCanvas::~KWCanvas()

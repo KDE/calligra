@@ -27,6 +27,7 @@
 class KWStyle;
 class KWDrag;
 class KWTextFrameSet;
+class KWTextFormat;
 
 /**
  * Class: KWTextFrameSet
@@ -82,8 +83,8 @@ public:
     // The @p format must be part of the format collection.
     int docFontSize( QTextFormat * format ) const;
 
-    int docFontSize( int zoomedFontSize ) const; // zoomed -> doc [warning, rounding problems]
-    int zoomedFontSize( int docFontSize ) const; // doc -> zoomed
+    //int docFontSize( float zoomedFontSize ) const; // zoomed -> doc
+    float zoomedFontSize( int docFontSize ) const; // doc -> zoomed
 
     /** returns a deep copy of self (and all it contains) */
     KWTextFrameSet *getCopy();
@@ -101,19 +102,19 @@ public:
 
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible );
 
-    void insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &text,
+    void insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName );
     void removeSelectedText( QTextCursor * cursor );
     void undo();
     void redo();
     void clearUndoRedoInfo();
     void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
-    void pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat, bool removeSelected );
+    void pasteText( QTextCursor * cursor, const QString & text, KWTextFormat * currentFormat, bool removeSelected );
     void selectAll( bool select );
     void selectionChanged() { emit repaintChanged( this ); }
 
     /** Set format changes on selection or current cursor */
-    void setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags, bool zoomFont = false );
+    void setFormat( QTextCursor * cursor, KWTextFormat * & currentFormat, KWTextFormat *format, int flags, bool zoomFont = false );
 
     enum KeyboardActionPrivate { // keep in sync with QTextEdit
 	ActionBackspace,
@@ -166,7 +167,7 @@ protected:
     void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
     void copyCharFormatting( QTextStringChar * ch, int index /*in text*/, bool moveCustomItems );
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts = false, bool moveCustomItems = false );
-    void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
+    void setLastFormattedParag( QTextParag *parag );
     QTextFormat * zoomFormatFont( const QTextFormat * f );
     bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
 
@@ -341,7 +342,7 @@ private:
     QPoint mousePos;
     KWParagLayout m_paragLayout;
     QTextCursor *cursor;
-    QTextFormat *currentFormat;
+    KWTextFormat *currentFormat;
     QTimer *blinkTimer, *dragStartTimer;
     bool cursorVisible;
     bool blinkCursorVisible;
