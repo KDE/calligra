@@ -182,7 +182,7 @@ void ChannelTable::init( KisDoc* doc )
     setCellWidth( CELLWIDTH );
     setCellHeight( CELLHEIGHT );
 
-    m_selected = m_doc->current()->getCurrentLayer()->numChannels() - 1;
+    m_selected = (m_doc->current() ? m_doc->current()->getCurrentLayer()->numChannels() : 0) - 1;
 
     updateAllCells();
 

@@ -180,7 +180,7 @@ void LayerTable::init( KisDoc* doc)
 
     setCellWidth( CELLWIDTH );
     setCellHeight( iheight );
-    m_selected = m_doc->current()->layerList().count() - 1;
+    m_selected = (m_doc -> current() ? m_doc -> current()->layerList().count() : 0) - 1;
 
     QPopupMenu *submenu = new QPopupMenu();
 
