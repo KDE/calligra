@@ -2168,7 +2168,7 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
             QDomElement* draw = context.oasisStyles().drawStyles()[style];
             if ( draw)
             {
-                kdDebug()<<"We have a style";
+                kdDebug()<<"We have a style\n";
                 int angle = 0;
                 if( draw->hasAttribute( "draw:rotation" ))
                 {
