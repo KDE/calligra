@@ -19,6 +19,7 @@
 */
 
 #include <qwidget.h>
+#include <qobjectlist.h>
 #include <qtabwidget.h>
 
 #include <kdebug.h>
@@ -33,6 +34,7 @@
 #include "formIO.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
+#include "spacer.h"
 
 #include "form.h"
 
@@ -76,6 +78,17 @@ Form::setDesignMode(bool design)
 	m_design = design;
 	if(!design)
 	{
+		// disable all spacers in this form
+		QObjectList *list = m_toplevel->widget()->queryList("Spacer");
+		QObjectListIt it(*list);
+		QObject *obj;
+		while ((obj = it.current()) != 0)
+		{
+			++it;
+			((Spacer*)obj)->setPreviewMode();
+		}
+
+		delete list;
 		delete m_topTree;
 		m_topTree = 0;
 		delete m_toplevel;

@@ -209,6 +209,8 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 		if(tree->modifProp()->contains(meta->name()))
 		{
 			blockSignals(true);
+			if(!(*this)[meta->name()])
+				continue;
 			QVariant v = (*this)[meta->name()]->value();
 			(*this)[meta->name()]->setValue( tree->modifProp()->find(meta->name()).data() , false);
 			(*this)[meta->name()]->setValue(v, true);

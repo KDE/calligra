@@ -100,8 +100,6 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   \param name   the name of the property being saved
 		*/
 		static QVariant     readProp(QDomNode node, QObject *obj, const QString &name);
-
-	protected:
 		/*! Write an object property in the DOM doc.
 		   \param parent the DOM document to write to
 		   \param name   the name of the property being saved
@@ -109,14 +107,9 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   \param w       the widget whose property is being saved
 		*/
 		static void   prop(QDomElement &parentNode, QDomDocument &parent, const char *name, const QVariant &value, QWidget *w, WidgetLibrary *lib=0);
-		static void   writeVariant(QDomDocument &parent, QDomElement &type, QDomText &valueE, QVariant value);
 
-		/*! Read an object attibute in the DOM doc (eg the title of a tab page)
-		   \param node   the QDomNode of the attribute
-		   \param obj    the widget whose attribute is being read
-		   \param name   the name of the attribute being saved
-		*/
-		//static void         readAttribute(QDomNode node, QObject *obj, const QString &name);
+	protected:
+		static void   writeVariant(QDomDocument &parent, QDomElement &type, QDomText &valueE, QVariant value);
 
 		/*! Creates a toplevel widget from the QDomElement \a element in the Form \a form, with \a parent as parent widget.
 		  It calls readProp() and loadWidget() to load child widgets.
@@ -137,8 +130,6 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   and belonging to the widget represented by the ObjectTreeItem \a tree. */
 		static void         loadLayout(const QDomElement &el, ObjectTreeItem *tree);
 		static void         readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w);
-
-	friend class Spacer;
 };
 
 }

@@ -66,10 +66,10 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_popup = new KPopupMenu();
-	m_copyid = m_popup->insertItem(i18n("Copy"), this, SLOT(copyWidget()));
-	m_cutid = m_popup->insertItem(i18n("Cut"), this, SLOT(cutWidget()));
-	m_popup->insertItem(i18n("Paste"), this, SLOT(pasteWidget()));
-	m_deleteid = m_popup->insertItem(i18n("Remove Item"), this, SLOT(deleteWidget()));
+	m_copyid = m_popup->insertItem( SmallIconSet("editcopy"), i18n("&Copy"), this, SLOT(copyWidget()));
+	m_cutid = m_popup->insertItem( SmallIconSet("editcut"), i18n("Cu&t"), this, SLOT(cutWidget()));
+	m_popup->insertItem( SmallIconSet("editpaste"), i18n("&Paste"), this, SLOT(pasteWidget()));
+	m_deleteid = m_popup->insertItem( SmallIconSet("editdelete"), i18n("&Remove Item"), this, SLOT(deleteWidget()));
 	m_treeview = 0;
 	m_editor = 0;
 
@@ -416,11 +416,11 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 	bool ok = m_lib->createMenuActions(w->className(), w, p, container);
 	if(!ok)
 	{
-		id = m_popup->insertItem(n);
+		id = m_popup->insertItem(SmallIconSet(m_lib->icon(w->className())), n);
 		m_popup->setItemEnabled(id, false);
 	}
 	else
-		id = m_popup->insertItem(n, p);
+		id = m_popup->insertItem(SmallIconSet(m_lib->icon(w->className())), n, p);
 
 	m_popup->setItemEnabled(m_deleteid, enableRemove);
 	m_popup->setItemEnabled(m_cutid, enableRemove);

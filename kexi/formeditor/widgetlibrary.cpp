@@ -129,7 +129,7 @@ QWidget*
 WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name, Container *c)
 {
 	Widget *wfactory = m_widgets[w];
-	kdDebug() << "WidgetLibrary::createWidget(): " << name << endl;
+	kdDebug() << "WidgetLibrary::createWidget(): " << w << "  " << name << endl;
 	if(!wfactory)
 		return 0;
 	kdDebug() << "WidgetLibrary::createWidget(): factory: '" << wfactory->factory()->name() << "' ok." << endl;

@@ -219,6 +219,7 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, co
 	kdDebug() << "FormIO::prop()  saving the property " << name << endl;
 	if(w->metaObject()->findProperty(name, true) == -1)
 	{
+		kdDebug() << "the object doesn't have this property" << endl;
 		if(lib)
 			lib->saveSpecialProperty(w->className(), name, value, w, parentNode, parent);
 		return;
@@ -245,10 +246,12 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, co
 		else
 		{
 			QString s = meta->valueToKey(value.toInt());
+			kdDebug() << "the property is enum type " << s << endl;
 			type = parent.createElement("enum");
 			valueE = parent.createTextNode(s);
 			type.appendChild(valueE);
 		}
+		propertyE.appendChild(type);
 		parentNode.appendChild(propertyE);
 		return;
 	}
@@ -682,7 +685,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	bool savedAlignment = false;
 	if(item->className() == "Spacer")
 	{
-		Spacer::saveSpacer(item, parent, domDoc);
+		Spacer::saveSpacer(item, parent, domDoc, insideGridLayout);
 		return;
 	}
 
@@ -800,24 +803,27 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			wname = n.toElement().text();
 			break;
 		}
-
 	}
 
-	if(el.tagName() == "spacer")
-		Spacer::loadSpacer(wname, container, lib, el, parent);
-
 	QWidget *w;
-	if(!parent)
-		w = lib->createWidget(el.attribute("class"), container->widget(), wname.latin1(), container);
+	QString classname;
+
+	if(el.tagName() == "spacer")
+		classname = "Spacer";
 	else
-		w = lib->createWidget(el.attribute("class"), parent, wname.latin1(), container);
+		classname = el.attribute("class");
+
+	if(!parent)
+		w = lib->createWidget(classname, container->widget(), wname.latin1(), container);
+	else
+		w = lib->createWidget(classname, parent, wname.latin1(), container);
 
 	if(!w)  return;
 
 	ObjectTreeItem *tree;
 	if (!container->form()->objectTree()->lookup(wname))
 	{
-		tree =  new ObjectTreeItem(lib->displayName(el.attribute("class")), wname, w);
+		tree =  new ObjectTreeItem(lib->displayName(classname), wname, w);
 		if(parent)
 		{
 			ObjectTreeItem *pItem = container->form()->objectTree()->lookup(parent->name());
@@ -846,6 +852,8 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	readChildNodes(tree, container, lib, el, w);
 
+	if(el.tagName() == "spacer")
+		Spacer::loadSpacer(w, el);
 	w->show();
 }
 
@@ -918,7 +926,7 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			loadLayout(node, tree);
 			readChildNodes(tree, container, lib, node, w);
 			if(tag != "grid")
-				container->reloadLayout();
+				tree->container()->reloadLayout();
 		}
 		else
 			lib->readSpecialProperty(w->className(), node, w, tree);

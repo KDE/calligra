@@ -94,9 +94,6 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	if(toplevel)
 	{
-
-		connect(toplevel, SIGNAL(modeChanged(bool)), this, SLOT(setEditingMode(bool)));
-
 		Container *pc = static_cast<Container *>(parent);
 
 		m_form = toplevel->form();
@@ -421,7 +418,7 @@ Container::setLayout(LayoutType type)
 		case Grid:
 		{
 			createGridLayout();
-			return;
+			break;
 		}
 		default:
 		{

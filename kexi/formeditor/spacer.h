@@ -31,23 +31,44 @@ class ObjectTreeItem;
 class Container;
 class WidgetLibrary;
 
+}
+
 class KFORMEDITOR_EXPORT Spacer : public QWidget
 {
 	Q_OBJECT
+	Q_ENUMS(SizeType)
+	Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation)
+	Q_PROPERTY(SizeType sizeType READ sizeType WRITE setSizeType)
+
+	private:
+		enum {HSize = 6, HMask = 0x3f, VMask = HMask << HSize, MayGrow = 1, ExpMask = 2, MayShrink = 4 };
+	public:
+		enum SizeType {Fixed = 0, Minimum = MayGrow, Maximum = MayShrink, Preferred = MayGrow|MayShrink , MinimumExpanding = Minimum|ExpMask,
+		    Expanding = MinimumExpanding|MayShrink };
 
 	public:
 		Spacer(QWidget *parent, const char *name);
 		~Spacer() {;}
 
 		static bool showProperty(const QString &name);
-		static void saveSpacer(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
-		static void loadSpacer(const QString &wname, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent);
+		static void saveSpacer(KFormDesigner::ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
+		static void loadSpacer(QWidget *w, const QDomElement &el);
+
+		void setOrientation(Orientation orient);
+		Orientation orientation() const { return m_orient;}
+		void setSizeType(SizeType size);
+		SizeType sizeType() const;
+
+		void  setPreviewMode() { m_edit = false; }
 
 	private:
 		void paintEvent(QPaintEvent *ev);
+
+	private:
+		Orientation   m_orient;
+		bool          m_edit;
 };
 
-}
 
 #endif
 

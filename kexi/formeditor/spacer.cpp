@@ -32,18 +32,46 @@
 
 #include "spacer.h"
 
-
-namespace KFormDesigner {
-
 Spacer::Spacer(QWidget *parent, const char *name)
   : QWidget(parent, name)
 {
-	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	m_edit = true;
+	m_orient = Horizontal;
+	setSizeType((SizeType)QSizePolicy::Expanding);
+}
+
+void
+Spacer::setOrientation(Orientation orient)
+{
+	SizeType type = sizeType();
+	m_orient = orient;
+	setSizeType(type);
+}
+
+Spacer::SizeType
+Spacer::sizeType() const
+{
+	if(m_orient == Vertical)
+		return (SizeType)sizePolicy().verData();
+	else
+		return (SizeType)sizePolicy().horData();
+}
+
+void
+Spacer::setSizeType(SizeType size)
+{
+	if(m_orient == Vertical)
+		setSizePolicy(QSizePolicy::Minimum, (QSizePolicy::SizeType)size);
+	else
+		setSizePolicy( (QSizePolicy::SizeType)size, QSizePolicy::Minimum);
 }
 
 void
 Spacer::paintEvent(QPaintEvent *ev)
 {
+	if(!m_edit)
+		return;
+
 	QPainter p(this);
 	p.eraseRect(0,0,width(), height());
 	p.drawLine(0, 0, width()-1, height()-1);
@@ -53,64 +81,78 @@ Spacer::paintEvent(QPaintEvent *ev)
 bool
 Spacer::showProperty(const QString &name)
 {
-	kdDebug() << "Spacer::showProperty() " << endl;
-	if((name == "name") || (name == "geometry") || (name == "sizePolicy"))
+	if((name == "name") || (name == "sizeType") || (name == "orientation") || (name == "geometry"))
 		return true;
 	else
 		return false;
 }
 
+
 void
-Spacer::saveSpacer(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc)
+Spacer::saveSpacer(KFormDesigner::ObjectTreeItem *item, QDomElement &parentNode, QDomDocument &domDoc, bool insideGridLayout)
 {
 	QDomElement tclass = domDoc.createElement("spacer");
-	parent.appendChild(tclass);
-	FormIO::prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
-	FormIO::prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
+	parentNode.appendChild(tclass);
 
-	// Saving spacer orientation
-	QDomElement propertyE = domDoc.createElement("property");
-	propertyE.setAttribute("name", "orientation");
+	if(insideGridLayout)
+	{
+		tclass.setAttribute("row", item->gridRow());
+		tclass.setAttribute("column", item->gridCol());
+		if(item->spanMultipleCells())
+		{
+			tclass.setAttribute("rowspan", item->gridRowSpan());
+			tclass.setAttribute("colspan", item->gridColSpan());
+		}
+	}
 
-	QString orient;
-	if(item->parent()->container()->layoutType() == Container::HBox)
-		orient = "Horizontal";
-	else if(item->parent()->container()->layoutType() == Container::VBox)
-		orient = "Vertical";
+	KFormDesigner::FormIO::prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
+
+	if(parentNode.tagName() == "widget")
+		KFormDesigner::FormIO::prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
+
+	if(!item->widget()->sizeHint().isValid())
+		KFormDesigner::FormIO::prop(tclass, domDoc, "sizeHint", item->widget()->property("size"), item->widget());
 	else
-		orient = "Horizontal";
+		KFormDesigner::FormIO::prop(tclass, domDoc, "sizeHint", item->widget()->property("sizeHint"), item->widget());
 
-	QDomElement type = domDoc.createElement("enum");
-	QDomText valueE = domDoc.createTextNode(orient);
-	type.appendChild(valueE);
-	propertyE.appendChild(type);
-	tclass.appendChild(propertyE);
+	KFormDesigner::FormIO::prop(tclass, domDoc, "orientation", item->widget()->property("orientation"), item->widget());
+	KFormDesigner::FormIO::prop(tclass, domDoc, "sizeType", item->widget()->property("sizeType"), item->widget());
 }
 
 void
-Spacer::loadSpacer(const QString &wname, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent)
+Spacer::loadSpacer(QWidget *w, const QDomElement &el)
 {
-	QWidget *w = lib->createWidget("Spacer", parent, wname.latin1(), container);
-	ObjectTreeItem *tree =  new ObjectTreeItem("Spacer", wname, w);
-	container->form()->objectTree()->addChild(container->tree(), tree);
-
-	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	QString parentTag = el.parentNode().toElement().tagName();
+	if(parentTag == "hbox")
 	{
-		if(n.toElement().tagName() == "property")
+		QRect r;
+		QDomElement node = el.previousSibling().toElement();
+		for(QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling())
 		{
-			QString name = n.toElement().attribute("name");
-			if((name != "geometry") && (name != "name"))
-				continue;
-
-			QVariant val = FormIO::readProp(n.toElement().firstChild(), w, name);
-			w->setProperty(name.latin1(), val);
-			tree->addModProperty(name, val);
+			if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+			{
+				r = KFormDesigner::FormIO::readProp(n.firstChild().toElement(), w, "geometry").toRect();
+				break;
+			}
 		}
+		w->move(r.x() + r.width() +1, 0);
 	}
-	w->show();
+	else if(parentTag == "vbox")
+	{
+		QRect r;
+		QDomElement node = el.previousSibling().toElement();
+		for(QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling())
+		{
+			if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+			{
+				r = KFormDesigner::FormIO::readProp(n.firstChild().toElement(), w, "geometry").toRect();
+				break;
+			}
+		}
+		w->move(0, r.y() + r.height() +1);
+	}
 }
 
-}
 
 #include "spacer.moc"
 

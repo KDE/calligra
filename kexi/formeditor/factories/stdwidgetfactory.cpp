@@ -471,7 +471,7 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		w= new Line(Line::Horizontal, p, n);
 
 	else if(c == "Spacer")
-		w = new KFormDesigner::Spacer(p, n);
+		w = new Spacer(p, n);
 
 	if(w)
 	{
@@ -702,7 +702,7 @@ StdWidgetFactory::showProperty(const QString &classname, QWidget *w, const QStri
 {
 	if(classname == "Spacer")
 	{
-		return KFormDesigner::Spacer::showProperty(property);
+		return Spacer::showProperty(property);
 	}
 	else if(classname == "MyPicLabel")
 	{
@@ -741,6 +741,12 @@ StdWidgetFactory::autoSaveProperties(const QString &classname)
 		return QStringList("date");
 	else if(classname == "KDateTimeWidget")
 		return QStringList("dateTime");
+	else if(classname == "Spacer")
+	{
+		QStringList l;
+		l << "sizeType" << "orientation";
+		return l;
+	}
 
 	return QStringList();
 }

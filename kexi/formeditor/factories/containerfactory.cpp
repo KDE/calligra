@@ -312,9 +312,9 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 
 	if(classname == "KTabWidget")
 	{
-		menu->insertItem(i18n("Add Page"), this, SLOT(AddTabPage()) );
-		menu->insertItem(i18n("Rename Page"), this, SLOT(renameTabPage()));
-		int id = menu->insertItem(i18n("Remove Page"), this, SLOT(removeTabPage()));
+		menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
+		menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
+		int id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
 		if( ((KTabWidget*)w)->count() == 1)
 			menu->setItemEnabled(id, false);
 		return true;
@@ -323,9 +323,9 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	{
 		m_widget = w->parentWidget()->parentWidget();
 		m_container = m_container->toplevel();
-		menu->insertItem(i18n("Add Page"), this, SLOT(AddTabPage()) );
-		menu->insertItem(i18n("Rename Page"), this, SLOT(renameTabPage()));
-		int id = menu->insertItem(i18n("Remove Page"), this, SLOT(removeTabPage()));
+		menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
+		menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
+		int id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
 		if( ((KTabWidget*)m_widget)->count() == 1)
 			menu->setItemEnabled(id, false);
 		return true;
@@ -335,18 +335,18 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		m_widget = w->parentWidget();
 		QWidgetStack *stack = (QWidgetStack*)m_widget;
 		m_container = container->form()->objectTree()->lookup(m_widget->name())->parent()->container();
-		menu->insertItem(i18n("Add Page"), this, SLOT(AddStackPage()) );
+		menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddStackPage()) );
 
-		int id = menu->insertItem(i18n("Remove Page"), this, SLOT(removeStackPage()) );
+		int id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeStackPage()) );
 		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
 			menu->setItemEnabled(id, false);
 
-		id = menu->insertItem(i18n("Jump to next page"), this, SLOT(nextStackPage()));
+		id = menu->insertItem(SmallIconSet("next"), i18n("Jump to next page"), this, SLOT(nextStackPage()));
 		if(!stack->widget(stack->id(stack->visibleWidget())+1))
 			menu->setItemEnabled(id, false);
 
-		id = menu->insertItem(i18n("Jump to previous page"), this, SLOT(prevStackPage()));
-		if(stack->id(stack->visibleWidget()) == 0)
+		id = menu->insertItem(SmallIconSet("previous"), i18n("Jump to previous page"), this, SLOT(prevStackPage()));
+		if(!stack->widget(stack->id(stack->visibleWidget()) -1) )
 			menu->setItemEnabled(id, false);
 		return true;
 	}
