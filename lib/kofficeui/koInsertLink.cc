@@ -215,6 +215,8 @@ internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
 
   lay2->addWidget(m_hrefName);
 
+  lay2->addStretch( 1 );
+  
   m_linkName->setFocus();
 
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
@@ -287,6 +289,8 @@ bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char *name  )
 
   lay2->addWidget(m_hrefName);
 
+  lay2->addStretch( 1 );
+  
   m_linkName->setFocus();
 
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
@@ -367,6 +371,8 @@ mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
   m_hrefName = new QLineEdit( this );
 
   lay2->addWidget(m_hrefName);
+  lay2->addStretch( 1 );
+  
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
@@ -466,6 +472,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   m_hrefName = new KURLRequester( this );
 
   lay2->addWidget(m_hrefName);
+  lay2->addStretch( 1 );
 
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
