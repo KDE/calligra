@@ -172,44 +172,12 @@ public:
      */
     int chooseTextLen() const { return length_namecell; }
 
-    /**
-     * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
-     * This method does not scroll the canvas so that the cell is visible. In this case you may
-     * want to use @ref #gotoLocation
-     */
-    void setMarker( const QPoint& marker );
-    QPoint marker() const { return QPoint( m_iMarkerColumn, m_iMarkerRow ); }
-    bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
-    int markerColumn() { return m_iMarkerColumn; }
-    int markerRow() { return m_iMarkerRow; }
-    /**
-     * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
-     * This method does not scroll the canvas so that the cell is visible. In this case you may
-     * want to use @ref #gotoLocation
-     *
-     * @see #setMarker
-     */
-    void setMarkerColumn( int _c );
-    /**
-     * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
-     * This method does not scroll the canvas so that the cell is visible. In this case you may
-     * want to use @ref #gotoLocation
-     *
-     * @see #setMarker
-     */
-    void setMarkerRow( int _r );
-    /**
-     * Hides the marker. Hiding it multiple times means that it has to be shown ( using @ref #showMarker ) multiple times
-     * to become visible again.
-     */
-    void hideMarker() { if ( m_iMarkerVisible == 1 ) drawMarker(); m_iMarkerVisible--; }
-    /**
-     * @ref #hideMarker
-     */
-    void showMarker() { if ( m_iMarkerVisible == 1 ) return; m_iMarkerVisible++; if ( m_iMarkerVisible == 1 ) drawMarker(); }
+    QPoint marker() const;
+    int markerColumn() const;
+    int markerRow() const;
 
     void updateCellRect( const QRect &_rect );
-    void updateSelection( const QRect& _old, const QRect& _new );
+    void updateSelection( const QRect& _old, const QPoint& _old_marker );
     
     const QPen& defaultGridPen() { return m_defaultGridPen; }
 
@@ -218,6 +186,7 @@ public:
     int xOffset() { return m_iXOffset; }
     int yOffset() { return m_iYOffset; }
 
+    const KSpreadTable* activeTable() const;
     KSpreadTable* activeTable();
     KSpreadTable* findTable( const QString& _name );
 
@@ -334,10 +303,10 @@ private:
      * Hides the marker. Hiding it multiple times means that it has to be shown ( using @ref #showMarker ) multiple times
      * to become visible again. This function is optimized since it does not create a new painter.
      */
-    void hideMarker( QPainter& );
-    void showMarker( QPainter& );
+    // void hideMarker( QPainter& );
+    // void showMarker( QPainter& );
 
-    void drawMarker( QPainter * _painter = 0L );
+    // void drawMarker( QPainter * _painter = 0L );
 
     bool choose_visible;
     int  length_namecell;
@@ -423,8 +392,8 @@ private:
      */
     QPen m_defaultGridPen;
 
-    int m_iMarkerColumn;
-    int m_iMarkerRow;
+    // int m_iMarkerColumn;
+    // int m_iMarkerRow;
     /**
      * A value of 1 means that it is visible, every lower value means it is
      * made invisible multiple times.
@@ -432,7 +401,7 @@ private:
      * @see #hideMarker
      * @see #showMarker
      */
-    int m_iMarkerVisible;
+    // int m_iMarkerVisible;
 
     int m_i_chooseMarkerRow;
     int m_i_chooseMarkerColumn;

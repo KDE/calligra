@@ -118,13 +118,9 @@ void KSpreadreference::slotOk()
         if(m_pView->activeTable()->tableName()!=area[ index ].table_name)
                 m_pView->changeTable(area[ index ].table_name);
 
-        m_pView->canvasWidget()->hideMarker();
-
         m_pView->canvasWidget()->gotoLocation(KSpreadPoint( m_pView->activeTable()->tableName()
                 +"!"+util_cellName(area[ index ].rect.left() ,area[ index ].rect.top()  ), m_pView->doc()->map() ) );
-        m_pView->canvasWidget()->showMarker();
         m_pView->activeTable()->setSelection(area[ index ].rect , m_pView->canvasWidget() );
-        m_pView->canvasWidget()->showMarker();
         }
   accept();
 }

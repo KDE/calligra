@@ -228,8 +228,7 @@ void KSpreadDlgFormula::slotOk()
         m_pView->changeTable( m_tableName );
 
     // Revert the marker to its original position
-    m_pView->canvasWidget()->setMarkerColumn( m_column );
-    m_pView->canvasWidget()->setMarkerRow( m_row );
+    m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );
 
     if( m_pView->canvasWidget()->editor()!=0)
         {
@@ -255,8 +254,7 @@ void KSpreadDlgFormula::slotClose()
 	m_pView->changeTable( m_tableName );
 
     // Revert the marker to its original position
-    m_pView->canvasWidget()->setMarkerColumn( m_column );
-    m_pView->canvasWidget()->setMarkerRow( m_row );
+    m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );
 
     reject();
 }

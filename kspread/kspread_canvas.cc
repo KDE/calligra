@@ -211,10 +211,6 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_pEditor = 0;
   m_bChoose = FALSE;
 
-  m_iMarkerColumn = 1;
-  m_iMarkerRow = 1;
-  m_iMarkerVisible = 1;
-
   QWidget::setFocusPolicy( QWidget::StrongFocus );
 
   m_defaultGridPen.setColor( lightGray );
@@ -244,6 +240,21 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   setFocus();
 
   (void)new KSpreadToolTip( this );
+}
+
+QPoint KSpreadCanvas::marker() const
+{
+    return activeTable()->marker();
+}
+
+int KSpreadCanvas::markerColumn() const
+{
+    return marker().x();
+}
+
+int KSpreadCanvas::markerRow() const
+{
+    return marker().y();
 }
 
 void KSpreadCanvas::startChoose()
@@ -314,6 +325,11 @@ KSpreadTable* KSpreadCanvas::findTable( const QString& _name )
 void KSpreadCanvas::insertFormulaChar(int c)
 {
   m_pEditor->insertFormulaChar(c);
+}
+
+const KSpreadTable* KSpreadCanvas::activeTable() const
+{
+  return m_pView->activeTable();
 }
 
 KSpreadTable* KSpreadCanvas::activeTable()
@@ -415,9 +431,9 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
 
   if ( !make_select )
   {
-    if ( selection.left() != 0 && !move_into_area)
-      activeTable()->unselect();
-    setMarker( QPoint( x, y ) );
+      // if ( selection.left() != 0 && !move_into_area)
+      // activeTable()->unselect();
+    activeTable()->setMarker( QPoint( x, y ) );
   }
   else
   {
@@ -434,9 +450,10 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
     else
       selection.setBottom( y );
     selection = selection.normalize();
-    m_iMarkerColumn = x;
-    m_iMarkerRow = y;
-    activeTable()->setSelection( selection );
+
+    // m_iMarkerColumn = x;
+    // m_iMarkerRow = y;
+    activeTable()->setSelection( selection, QPoint( x, y ) );
   }
 
   // Perhaps the user is entering a value in the cell.
@@ -509,8 +526,6 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 
   activeTable()->enableScrollBarUpdates( false );
 
-  hideMarker();
-
   // Relative movement
   int dx = m_iXOffset - _value;
   // New absolute position
@@ -519,12 +534,6 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   scroll( dx, 0 );
 
   hBorderWidget()->scroll( dx, 0 );
-  /* if(isgotohorz()==true)
-     {
-       setgotohorz(false);
-       m_pView->horzScrollBar()->setValue(_value);
-     } */
-  showMarker();
 
   activeTable()->enableScrollBarUpdates( true );
 }
@@ -539,21 +548,12 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
   activeTable()->enableScrollBarUpdates( false );
 
-  hideMarker();
-
   // Relative movement
   int dy = m_iYOffset - _value;
   // New absolute position
   m_iYOffset = _value;
   scroll( 0, dy );
   vBorderWidget()->scroll( 0, dy );
-
-  /* if(isgotovert()==true)
-     {
-       setgotovert(false);
-       m_pView->vertScrollBar()->setValue(_value);
-     } */
-  showMarker();
 
   activeTable()->enableScrollBarUpdates( true );
 }
@@ -627,6 +627,9 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 	corner = QRect( x + w - 2, y + h -1, 5, 5 );
     }
 
+    //
+    // Now set the cursor correctly.
+    //
     if ( corner.contains( _ev->pos() ) )
       setCursor( sizeFDiagCursor );
     else if ( !m_strAnchor.isEmpty() )
@@ -658,10 +661,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( selection == table->selectionRect() )
 	return;
 
-    hideMarker();
-
     // Set the new selection
-    table->setSelection( selection, this );
+    table->setSelection( selection, QPoint( col, row ), this );
 
     // Scroll the table if necessary
     if ( _ev->pos().x() < 0 )
@@ -684,8 +685,6 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     // Show where we are now.
     updatePosWidget();
 
-    showMarker();
-
     m_bMouseMadeSelection = true;
 }
 
@@ -702,8 +701,6 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   KSpreadTable *table = activeTable();
   if ( !table )
     return;
-
-  hideMarker();
 
   QRect selection( table->selectionRect() );
 
@@ -745,11 +742,8 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   }
 
   m_eMouseAction = NoAction;
-  // if ( m_bMouseMadeSelection )
-  // drawVisibleCells();
-  m_bMouseMadeSelection = FALSE;
 
-  showMarker();
+  m_bMouseMadeSelection = FALSE;
 }
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
@@ -853,8 +847,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	}
     }
 
-    hideMarker();
-
     // In which cell did the user click ?
     int xpos, ypos;
     int row = table->topRow( _ev->pos().y(), ypos, this );
@@ -899,22 +891,20 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	    table->setSelection( selection, this );
 	    //always put Marker in top and left
 	    //otherwise all functions don't work
-	    setMarkerColumn( old_column );
-	    setMarkerRow( old_row );
-	    showMarker();
+	    activeTable()->setMarker( QPoint( old_column, old_row ) );
+
 	    return;
 	}
     }
 
-    setMarkerColumn( col );
-    setMarkerRow( row );
+    activeTable()->setMarker( QPoint( col, row ) );
+
     KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
 
     // Go to the upper left corner of the obscuring object
     if ( cell->isObscured() )
     {
-	setMarkerRow( cell->obscuringCellsRow() );
-	setMarkerColumn( cell->obscuringCellsColumn() );
+	activeTable()->setMarker( QPoint( cell->obscuringCellsColumn(), cell->obscuringCellsRow() ) );
 	cell = table->cellAt( markerColumn(), markerRow() );
     }
 
@@ -951,8 +941,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     }
 
     updatePosWidget();
-    showMarker();
-
 
     // Context menu ?
     if ( _ev->button() == RightButton )
@@ -1126,13 +1114,6 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 			
   // printf("PAINT EVENT %i %i %i %i\n", rect.x(), rect.y(), rect.width(), rect.height() );
 
-  /*
-  kdDebug(36001) << "------------PAINT EVENT " << _ev->rect().x() << ", " << _ev->rect().y()
-		 << " " << _ev->rect().width() << "|" << _ev->rect().height() << " widget "
-		 << width() << ":" << height() << endl;
-  */
-  hideMarker();
-
   QPainter painter;
   painter.begin( this );
 
@@ -1182,8 +1163,6 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   }
 
   painter.end();
-
-  showMarker();
 
   if( choose_visible )
     drawChooseMarker( );
@@ -1510,8 +1489,8 @@ void KSpreadCanvas::createEditor( EditorType ed )
     }
 
     int w, h;
-    int min_w = cell->width( m_iMarkerColumn, this );
-    int min_h = cell->height( m_iMarkerRow, this );
+    int min_w = cell->width( markerColumn(), this );
+    int min_h = cell->height( markerRow(), this );
     if ( cell->isDefault() )
     {
       w = min_w;
@@ -1549,81 +1528,54 @@ void KSpreadCanvas::createEditor( EditorType ed )
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
 {
-    updateSelection( _rect, QRect() );
+    updateSelection( _rect, activeTable()->marker() );
 }
-/*
 
-  KSpreadTable *table = activeTable();
-  if ( !table )
-    return;
-  QRect param(_rect);
-  param=table-> refreshArea(param);
-  if ( param.left() <= 0 && param.top() <= 0 && param.right() <= 0 && param.bottom() <= 0 )
-    return;
-
-  // We want to repaint the border too => enlarge the rect
-  if ( param.left() > 1 )
-    param.setLeft( param.left() - 1 );
-  if ( param.right() < 0x7fff )
-    param.setRight( param.right() + 1 );
-  if ( param.top() > 1 )
-    param.setTop( param.top() - 1 );
-  if ( param.bottom() < 0x7fff )
-    param.setBottom( param.bottom() + 1 );
-
-  if ( param.left() <= 0 )
-    param.setLeft( 1 );
-  if ( param.top() <= 0 )
-    param.setTop( 1 );
-
-  if ( param.right() < param.left() )
-    return;
-  if ( param.bottom() < param.top() )
-    return;
-
-  int bottom, right;
-  int left = table->columnPos( param.left() );
-  int top = table->rowPos( param.top() );
-  if ( param.right() < 0x7fff )
-    right = table->columnPos( param.right() + 1 );
-  else
-    right = int( (double)width() / m_pView->zoom() );
-  if ( param.bottom() < 0x7fff )
-    bottom = table->rowPos( param.bottom() + 1 );
-  else
-    bottom = int( (double)height() / m_pView->zoom() );
-
-  QPoint tl( left, top );
-  QPoint br( right, bottom );
-  QWMatrix m = m_pView->matrix();
-  tl = m.map( tl );
-  br = m.map( br );
-
-  QPaintEvent event( QRect( tl, br ) );
-  paintEvent( &event );
-}
-*/
-
-void KSpreadCanvas::updateSelection( const QRect &_old, const QRect& _new )
+void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_marker )
 {
     KSpreadTable *table = activeTable();
     if ( !table )
 	return;
 
-    QRect uni;
-    // Old selection was empty -> update the entire new one
-    if ( _old.left() == 0 && _old.right() == 0 )
-	uni = _new;
-    // New selection was empty -> update the entire old one
-    else if ( _new.left() == 0 && _new.right() == 0 )
-	uni = _old;
-    else
-	uni = _old.unite( _new );
+    // Calculate some value which are needed later
+    QRect new_sel = table->selectionRect();
+    QPoint new_marker = table->marker();
+    // QRect new_marker_rect = table->markerRect();
+    
+    QRect old_sel = _old_sel;
+    QRect old_marker_outer;
+    old_marker_outer.setCoords( QMAX( 1, old_marker.x() - 1 ), QMAX( 1, old_marker.y() - 1 ),
+				old_marker.x() + 1, old_marker.y() + 1 );
+    // QRect old_marker_rect = _old_sel;
+    // if ( old_marker_rect.left() == 0 )
+    // old_marker_rect =  QRect( m_marker, m_marker );
+
+    // Old selection was empty -> Just use the marker
+    if ( old_sel.left() == 0 )
+	old_sel = QRect( old_marker, old_marker );
+    // New selection was empty -> Just use the marker
+    if ( new_sel.left() == 0 )
+	new_sel = QRect( new_marker, new_marker );
+
+    // Which cells were not marked, but were located next to some
+    // selection? They may need repainting, too.
+    QRect old_outer;
+    old_outer.setCoords( QMAX( 1, old_sel.left() - 1 ), QMAX( 1, old_sel.top() - 1 ),
+			 old_sel.right() + 1, old_sel.bottom() + 1 );
+
+    // Which cells are located next to the new selection ?
+    // QRect new_outer;
+    // outer.setCoords( new_sel.left() - 1, new_sel.top() - 1, new_sel.right() + 1, new_sel.bottom() + 1 );
+
+    // Determine which area might be subject of repainting.
+    QRect uni = old_sel.unite( new_sel ).unite( old_outer );
 
     // Limit the number of cells
     uni.rBottom() = QMIN( 9999, uni.bottom() );
     uni.rRight() = QMIN( 9999, uni.right() );
 	
+    // qDebug("UNI %i/%i %i/%i", uni.left(), uni.top(), uni.right(), uni.bottom() );
+
     // Determine the position of "uni" rect on the screen.
     int left = table->columnPos( uni.left() );
     int top = table->rowPos( uni.top() );
@@ -1637,9 +1589,10 @@ void KSpreadCanvas::updateSelection( const QRect &_old, const QRect& _new )
     QWMatrix m = m_pView->matrix();
     painter.setWorldMatrix( m );
 
-    hideMarker( painter );
-
-    // Which part of the document is visible ?
+    // Which part of the document is visible ? To determine this
+    // just transform the viewport rectangle with the inverse
+    // matrix, since this matrix usually transforms from document
+    // coordinates to view coordinates.
     m = m.invert();
     QPoint tl = m.map( QPoint( 0, 0 ) );
     QPoint br = m.map( QPoint( width(), height() ) );
@@ -1665,11 +1618,160 @@ void KSpreadCanvas::updateSelection( const QRect &_old, const QRect& _new )
 	for ( int x = left_col; x <= right_col && xpos <= view.right(); x++ )
         {
 	    ColumnLayout *col_lay = table->columnLayout( x );
-	
+	    KSpreadCell *cell = table->cellAt( x, y, TRUE );
+
 	    QPoint p( x, y );
-	    if ( _new.contains( p ) ^ _old.contains( p ) )
+		    
+	    //
+	    // Determine which parts of the marker this cell used to
+	    // display.
+	    //
+	    // Parts of this code are copied from KSpreadCell::paintCell.
+	    //
+	    QRect larger;
+	    larger.setCoords( old_sel.left() - 1, old_sel.top() - 1,
+			      old_sel.right() + 1, old_sel.bottom() + 1 );
+	    
+	    QPoint lr = old_sel.bottomRight();
+	    
+	    int old_border = 0;
+	    
+	    if ( old_sel.left() == x && old_sel.right() == x &&
+		 old_sel.top() == y && old_sel.bottom() == y &&
+		 ( cell->extraXCells() || cell->extraYCells() ) )
+		old_border = 1 | 2 | 4 | 8;
+	    else if ( old_sel.contains( x, y ) )
 	    {
-		KSpreadCell *cell = table->cellAt( x, y, TRUE );
+		// Upper border ?
+		if ( y == old_sel.top() )
+		    old_border |= 1;
+		// Left border ?
+		if ( x == old_sel.left() )
+		    old_border |= 2;
+		// Lower border ?
+		if ( y == old_sel.bottom() )
+		    old_border |= 4;
+		// Right border ?
+		if ( x == old_sel.right() )
+		    old_border |= 8;
+		// The little rect in the lower right corner ?
+		if ( p == lr )
+		    old_border |= 256;
+	    }
+	    else if ( larger.contains( x, y ) )
+	    {
+		// Upper border ?
+		if ( x >= old_sel.left() && x <= old_sel.right() && y - 1 == old_sel.bottom() )
+		    old_border |= 1;
+		// Left border ?
+		if ( y >= old_sel.top() && y <= old_sel.bottom() && x - 1 == old_sel.right() )
+		    old_border |= 2;
+		// Lower border ?
+		if ( x >= old_sel.left() && x <= old_sel.right() && y + 1 == old_sel.top() )
+		    old_border |= 4;
+		// Right border ?
+		if ( y >= old_sel.top() && y <= old_sel.bottom() && x + 1 == old_sel.left() )
+		    old_border |= 8;
+		// Upper left corner ?
+		if ( p == larger.topLeft() )
+		    old_border |= 16;
+		// Lower left corner ?
+		if ( p == larger.bottomLeft() )
+		    old_border |= 32;
+		// Lower right corner ?
+		if ( p == larger.bottomRight() )
+		    old_border |= 64;
+		// Upper right corner ?
+		if ( p == larger.topRight() )
+		    old_border |= 128;
+		// The little rect in the upper left corner ?
+		if ( p == larger.bottomRight() )
+		    old_border |= 512;
+		// The little rect in the upper right corner ?
+		if ( x == lr.x() && y == lr.y() + 1 )
+		    old_border |= 1024;
+		// The little rect in the upper left corner ?
+		if ( x == lr.x() + 1 && y == lr.y() )
+		    old_border |= 2048;
+	    }
+
+	    //
+	    // Determine which parts of the marker this cell displays now.
+	    //
+	    // Parts of this code are copied from KSpreadCell::paintCell.
+	    //
+	    larger.setCoords( new_sel.left() - 1, new_sel.top() - 1,
+			      new_sel.right() + 1, new_sel.bottom() + 1 );
+	    lr = new_sel.bottomRight();
+	    
+	    int new_border = 0;
+	    
+	    if ( new_sel.left() == x && new_sel.right() == x &&
+		 new_sel.top() == y && new_sel.bottom() == y &&
+		 ( cell->extraXCells() || cell->extraYCells() ) )
+		new_border = 1 | 2 | 4 | 8;
+	    else if ( new_sel.contains( x, y ) )
+	    {
+		// Upper border ?
+		if ( y == new_sel.top() )
+		    new_border |= 1;
+		// Left border ?
+		if ( x == new_sel.left() )
+		    new_border |= 2;
+		// Lower border ?
+		if ( y == new_sel.bottom() )
+		    new_border |= 4;
+		// Right border ?
+		if ( x == new_sel.right() )
+		    new_border |= 8;
+		// The little rect in the lower right corner ?
+		if ( p == lr )
+		    old_border |= 256;
+	    }
+	    else if ( larger.contains( x, y ) )
+	    {
+		// Upper border ?
+		if ( x >= new_sel.left() && x <= new_sel.right() && y - 1 == new_sel.bottom() )
+		    new_border |= 1;
+		// Left border ?
+		if ( y >= new_sel.top() && y <= new_sel.bottom() && x - 1 == new_sel.right() )
+		    new_border |= 2;
+		// Lower border ?
+		if ( x >= new_sel.left() && x <= new_sel.right() && y + 1 == new_sel.top() )
+		    new_border |= 4;
+		// Right border ?
+		if ( y >= new_sel.top() && y <= new_sel.bottom() && x + 1 == new_sel.left() )
+		    new_border |= 8;
+		// Upper left corner ?
+		if ( p == larger.topLeft() )
+		    new_border |= 16;
+		// Lower left corner ?
+		if ( p == larger.bottomLeft() )
+		    new_border |= 32;
+		// Lower right corner ?
+		if ( p == larger.bottomRight() )
+		    new_border |= 64;
+		// Upper right corner ?
+		if ( p == larger.topRight() )
+		    new_border |= 128;
+		// The little rect in the upper left corner ?
+		if ( p == larger.bottomRight() )
+		    old_border |= 512;
+		// The little rect in the upper right corner ?
+		if ( x == lr.x() && y == lr.y() + 1 )
+		    old_border |= 1024;
+		// The little rect in the upper left corner ?
+		if ( x == lr.x() + 1 && y == lr.y() )
+		    old_border |= 2048;
+	    }
+	    
+	    // Draw if the cell
+	    // a) was part of the selection, but is no longer.
+	    // b) the exact opposite of a)
+	    // c) One of its edges used to show the marker but does no longer
+	    if ( ( new_sel.contains( p ) ^ old_sel.contains( p ) ) ||   // a) and b)
+		 ( ( old_border & new_border ) != old_border ) )        // c)
+	    {
 		cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
 	    }
 	
@@ -1679,73 +1781,14 @@ void KSpreadCanvas::updateSelection( const QRect &_old, const QRect& _new )
 	ypos += row_lay->height();
     }
 
-    showMarker( painter );
-
     painter.end();
 }
 
-void KSpreadCanvas::drawMarker( QPainter * _painter )
-{
-  bool own_painter = FALSE;
-
-  if ( _painter == 0L )
-  {
-    _painter = new QPainter();
-    _painter->begin( this );
-    own_painter = TRUE;
-  }
-
-  int xpos;
-  int ypos;
-  int w, h;
-  QRect selection( activeTable()->selectionRect() );
-  // kdDebug(36001) << "selection: " << selection.left() << " " << selection.right()
-  //                << " " << selection.bottom() << endl;
-
-  if ( selection.left() == 0 || selection.right() == 0x7fff || selection.bottom() == 0x7fff )
-  {
-    xpos = activeTable()->columnPos( m_iMarkerColumn, this );
-    ypos = activeTable()->rowPos( m_iMarkerRow, this );
-    KSpreadCell *cell = activeTable()->cellAt( m_iMarkerColumn, m_iMarkerRow );
-    w = cell->width( m_iMarkerColumn, this );
-    h = cell->height( m_iMarkerRow, this );
-  }
-  else
-  {
-    xpos = activeTable()->columnPos( selection.left(), this );
-    ypos = activeTable()->rowPos( selection.top(), this );
-    int x = activeTable()->columnPos( selection.right(), this );
-    KSpreadCell *cell = activeTable()->cellAt( selection.right(), selection.top() );
-    int tw = cell->width( selection.right(), this );
-    w = ( x - xpos ) + tw;
-    cell = activeTable()->cellAt( selection.left(), selection.bottom() );
-    int y = activeTable()->rowPos( selection.bottom(), this );
-    int th = cell->height( selection.bottom(), this );
-    h = ( y - ypos ) + th;
-  }
-
-  RasterOp rop = _painter->rasterOp();
-
-  _painter->setRasterOp( NotROP );
-  QPen pen;
-  pen.setWidth( 3 );
-  _painter->setPen( pen );
-
-  // _painter->drawRect( xpos - 1, ypos - 1, w + 2, h + 2 );
-  _painter->drawLine( xpos - 2, ypos - 1, xpos + w + 2, ypos - 1 );
-  _painter->drawLine( xpos - 1, ypos + 1, xpos - 1, ypos + h + 3 );
-  _painter->drawLine( xpos + 1, ypos + h + 1, xpos + w - 3, ypos + h + 1 );
-  _painter->drawLine( xpos + w, ypos + 1, xpos + w, ypos + h - 2 );
-  _painter->fillRect( xpos + w - 2, ypos + h - 1, 5, 5, colorGroup().text() );
-  _painter->setRasterOp( rop );
-
-  if ( own_painter )
-  {
-    _painter->end();
-    delete _painter;
-  }
-
-}
+//---------------------------------------------
+//
+// Choose Marker
+//
+//---------------------------------------------
 
 void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
 {
@@ -1807,23 +1850,22 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
 
 void KSpreadCanvas::updatePosWidget()
 {
-  QRect selection = m_pView->activeTable()->selectionRect();
-  QString buffer;
-  QString tmp;
-  if ( (selection.left() == selection.right() ) && (selection.top() ==
- 	selection.bottom() ))
-  	{
+    QRect selection = m_pView->activeTable()->selectionRect();
+    QString buffer;
+    QString tmp;
+    if ( selection.left() == 0 )
+    {
   	if(activeTable()->getLcMode())
-  		{
-  		buffer="L"+tmp.setNum(m_iMarkerRow);
-	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);
-  		}
+        {
+	    buffer="L"+tmp.setNum( markerRow() );
+	    buffer+="C"+tmp.setNum( markerColumn() );
+	}
   	else
-  		{
-  		buffer=util_columnLabel( m_iMarkerColumn );
-  		buffer+=tmp.setNum(m_iMarkerRow);
-  		}
-  	}
+        {
+	    buffer=util_columnLabel( markerColumn() );
+	    buffer+=tmp.setNum( markerRow() );
+	}
+    }
   /*else if(selection.right() != 0x7fff && selection.bottom() != 0x7fff )
   	{
  	if(activeTable()->getLcMode())
@@ -1841,17 +1883,17 @@ void KSpreadCanvas::updatePosWidget()
   		}
   	}*/
   else
-  	{
+  {
   	if(activeTable()->getLcMode())
-  		{
-                buffer=tmp.setNum( (selection.bottom()-selection.top()+1) )+"Lx";
-                if(selection.right()==0x7FFF)
-                        buffer+=tmp.setNum((26*26-selection.left()+1))+"C";
-                else
-                        buffer+=tmp.setNum((selection.right()-selection.left()+1))+"C";
-  		}
+        {
+	    buffer=tmp.setNum( (selection.bottom()-selection.top()+1) )+"Lx";
+	    if(selection.right()==0x7FFF)
+		buffer+=tmp.setNum((26*26-selection.left()+1))+"C";
+	    else
+		buffer+=tmp.setNum((selection.right()-selection.left()+1))+"C";
+	}
   	else
-  		{
+        {
 	  	//Problem columnLabel return @@@@ when column >26*26
  	 	//=> it's not a good display
   		//=> for the moment I display pos of marker
@@ -1862,8 +1904,8 @@ void KSpreadCanvas::updatePosWidget()
   		buffer+=tmp.setNum(selection.bottom());
   		//buffer=activeTable()->columnLabel( m_iMarkerColumn );
   		//buffer+=tmp.setNum(m_iMarkerRow);
-  		}
-  	}
+	}
+  }
 
   m_pPosWidget->setText(buffer);
 }
@@ -1936,66 +1978,6 @@ void KSpreadCanvas::setChooseMarker( const QPoint& p )
   m_i_chooseMarkerColumn = p.x();
   // This will trigger a redraw
   activeTable()->setChooseRect( QRect( p.x(), p.y(), 1, 1 ) );
-}
-
-void KSpreadCanvas::setMarker( const QPoint& p )
-{
-  if ( p.x() == m_iMarkerColumn && p.y() == m_iMarkerRow )
-    return;
-
-  if ( m_iMarkerVisible < 1 )
-  {
-    m_iMarkerRow = p.y();
-    m_iMarkerColumn = p.x();
-    return;
-  }
-
-  hideMarker();
-  m_iMarkerRow = p.y();
-  m_iMarkerColumn = p.x();
-  showMarker();
-}
-
-void KSpreadCanvas::setMarkerColumn( int _c )
-{
-  if ( !m_iMarkerVisible < 1 )
-  {
-    m_iMarkerColumn = _c;
-    return;
-  }
-
-  hideMarker();
-  m_iMarkerColumn = _c;
-  showMarker();
-}
-
-void KSpreadCanvas::setMarkerRow( int _r )
-{
-  if ( !m_iMarkerVisible < 1 )
-  {
-    m_iMarkerRow = _r;
-    return;
-  }
-
-  hideMarker();
-  m_iMarkerRow = _r;
-  showMarker();
-}
-
-void KSpreadCanvas::hideMarker( QPainter& _painter )
-{
-  if ( m_iMarkerVisible == 1 )
-    drawMarker( &_painter );
-  m_iMarkerVisible--;
-}
-
-void KSpreadCanvas::showMarker( QPainter& _painter)
-{
-  if ( m_iMarkerVisible == 1 )
-    return;
-  m_iMarkerVisible++;
-  if ( m_iMarkerVisible == 1 )
-    drawMarker( &_painter );
 }
 
 void KSpreadCanvas::adjustArea()
@@ -2128,8 +2110,6 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   }
   else
   {
-    m_pCanvas->hideMarker();
-
     m_bSelection = TRUE;
 
     int tmp;
@@ -2147,8 +2127,6 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
       m_pView->popupRowMenu( p );
       m_bSelection=FALSE;
     }
-
-    m_pCanvas->showMarker();
   }
 
 }
@@ -2502,8 +2480,6 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   }
   else
   {
-      m_pCanvas->hideMarker();
-      
     m_bSelection = TRUE;
 
     table->unselect();
@@ -2519,8 +2495,6 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
       m_pView->popupColumnMenu( p );
       m_bSelection=FALSE;
     }
-    
-    m_pCanvas->showMarker();
   }
 }
 

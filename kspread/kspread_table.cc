@@ -197,6 +197,8 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
 
   m_defaultLayout = new KSpreadLayout( this );
 
+  m_marker = QPoint( 1, 1 );
+
   m_pMap = _map;
   m_pDoc = _map->doc();
   m_dcop = 0;
@@ -572,9 +574,41 @@ void KSpreadTable::unselect()
     emit sig_unselect( this, r );
 }
 
+void KSpreadTable::setMarker( const QPoint& _point, KSpreadCanvas *_canvas )
+{
+    setSelection( QRect(), _point, _canvas );
+}
+
+QRect KSpreadTable::markerRect() const
+{
+    if ( m_rctSelection.left() == 0 )
+	return QRect( m_marker, m_marker );
+    
+    return m_rctSelection;
+}
+
+QPoint KSpreadTable::marker() const
+{
+    return m_marker;
+}
+
 void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
 {
-  if ( _sel == m_rctSelection )
+    if ( _sel.left() == 0 )
+	setSelection( _sel, m_marker, _canvas );
+    else
+    {
+	if ( m_marker != _sel.topLeft() && m_marker != _sel.topRight() &&
+	     m_marker != _sel.bottomLeft() && m_marker != _sel.bottomRight() )
+	    setSelection( _sel, _sel.topLeft(), _canvas );
+	else
+	    setSelection( _sel, m_marker, _canvas );
+    }
+}
+
+void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanvas *_canvas )
+{
+  if ( _sel == m_rctSelection && m == m_marker )
     return;
 
   // We want to see whether a single cell was clicked like a button.
@@ -590,10 +624,12 @@ void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
       cell->clicked( _canvas );
   }
 
+  QPoint old_marker = m_marker;
   QRect old( m_rctSelection );
   m_rctSelection = _sel;
+  m_marker = m;
 
-  emit sig_changeSelection( this, old, m_rctSelection );
+  emit sig_changeSelection( this, old, old_marker );
 }
 
 void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, int _size,

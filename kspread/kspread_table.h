@@ -339,9 +339,14 @@ public:
      */
     void setChooseRect( const QRect& rect );
 
+    QRect markerRect() const;
+    QPoint marker() const;
     QRect selectionRect() const { return m_rctSelection; }
+    
     void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
-
+    void setSelection( const QRect &_rect, const QPoint& marker, KSpreadCanvas *_canvas = 0L );
+    void setMarker( const QPoint& _point, KSpreadCanvas *_canvas = 0L );
+    
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
 			   signed char _bold = -1, signed char _italic = -1, signed char _underline = -1,
                            signed char _strike = -1 );
@@ -677,7 +682,7 @@ signals:
     void sig_unselect( KSpreadTable *_table, const QRect& );
     void sig_updateHBorder( KSpreadTable *_table );
     void sig_updateVBorder( KSpreadTable *_table );
-    void sig_changeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
+    void sig_changeSelection( KSpreadTable *_table, const QRect &_old, const QPoint &_old_marker );
     void sig_changeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_removeChild( KSpreadChild *_child );
@@ -738,7 +743,8 @@ protected:
      * If complete rows are selected, then selection.right() == 0x7FFF.
      */
     QRect m_rctSelection;
-
+    QPoint m_marker;
+    
     /**
      * Contains the selection of a choose. If @ref QRect::left() returns 0, then
      * there is no selection.

@@ -1878,6 +1878,81 @@ QString KSpreadCell::valueString() const
   return m_strText;
 }
 
+/**
+ * @param pos describes what to draw. The value for edges are:
+ *            top = 1, right = 2, bottom = 3, left = 4.
+ *            The values for corners are:
+ *            top left = 11, top_right = 12, bottom_right = 13, bottom_left = 14.
+ */
+static void paintCellHelper( QPainter& _painter, int _tx, int _ty, int col, int row,
+			     int w, int h, int pos, const QRect& marker )
+{
+    QPoint p = marker.bottomRight();
+		       
+    switch( pos )
+    {
+    // top
+    case 1:
+	if ( p.x() == col && p.y() == row - 1 )
+        {
+	    _painter.drawLine( _tx, _ty, _tx + w - 3, _ty );
+	    _painter.fillRect( _tx + w - 2, _ty - 1, 5, 5, _painter.pen().color() );
+	}
+	else
+	    _painter.drawLine( _tx, _ty, _tx + w, _ty );
+	break;
+    // bottom
+    case 3:
+	if ( p.x() == col && p.y() == row )
+        {
+	    _painter.drawLine( _tx, _ty + h, _tx + w - 3, _ty + h );
+	    _painter.fillRect( _tx + w - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
+	}
+	else
+	    _painter.drawLine( _tx, _ty + h, _tx + w, _ty + h );
+	break;
+    // left
+    case 4:
+	if ( p.x() == col - 1 && p.y() == row )
+        {
+	    _painter.drawLine( _tx, _ty - 1, _tx, _ty + h - 3 );
+	    _painter.fillRect( _tx - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
+	}
+	else
+	    _painter.drawLine( _tx, _ty - 1, _tx, _ty + h + 2 );
+	break;
+    // right
+    case 2:
+	if ( p.x() == col && p.y() == row )
+        {
+	    _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + h - 3 );
+	    _painter.fillRect( _tx + w - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
+	}
+	else
+	    _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + h + 2 );
+	break;
+    // top left
+    case 11:
+	if ( p.x() == col - 1 && p.y() == row - 1 )
+	    _painter.fillRect( _tx - 2, _ty - 1, 5, 5, _painter.pen().color() );
+	else
+	    _painter.drawLine( _tx, _ty, _tx, _ty + 1 );
+	break;
+    // top right
+    case 12:
+	_painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + 1 );
+	break;
+    // bottom right
+    case 13:
+	_painter.drawLine( _tx + w, _ty + h - 1, _tx + w, _ty + h + 1 );
+	break;
+    // bottom left
+    case 14:
+	_painter.drawLine( _tx, _ty + h - 1, _tx, _ty + h + 1 );
+	break;
+    }
+}
+
 // Used by m_pObscuringCell->paintCell, in the next method
 void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 			      int _col, int _row, QRect *_prect )
@@ -1936,8 +2011,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
     QColorGroup defaultColorGroup = QApplication::palette().active();
 
+    QPoint m = m_pTable->marker();
     // Determine the correct background color
-    if ( selected )
+    if ( selected && ( _col != m.x() || _row != m.y() )  )
 	_painter.setBackgroundColor( defaultColorGroup.highlight() );
     else
     {
@@ -2310,6 +2386,79 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    _painter.setPen( Qt::red );
 	    _painter.drawLine( _tx, _ty, _tx, _ty + h );
 	}
+    }
+
+    //
+    // Draw the marker
+    //
+    // Some of this code is duplicated in KSpreadCanvas::updateSelection
+    //
+    QRect marker = m_pTable->markerRect();
+    QRect larger;
+    larger.setCoords( marker.left() - 1, marker.top() - 1, marker.right() + 1, marker.bottom() + 1 );
+
+    QPen pen;
+    pen.setColor( Qt::black );
+    pen.setWidth( 3 );
+    _painter.setPen( pen );
+
+    // The marker is exactly this cell ?
+    if ( marker.left() == _col && marker.right() == _col &&
+	 marker.top() == _row && marker.bottom() == _row )
+    {
+	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
+	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
+	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
+	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
+    }
+    else if ( marker.contains( _col, _row ) )
+    {
+	int w = cl->width();
+	int h = rl->height();
+	    
+	// Upper border ?
+	if ( _row == marker.top() )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
+	// Left border ?
+	if ( _col == marker.left() )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
+	// Lower border ?
+	if ( _row == marker.bottom() )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
+	// Right border ?
+	if ( _col == marker.right() )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
+    }
+    // Dont obeye extra cells
+    else if ( larger.contains( _col, _row ) )
+    {
+	int w = cl->width();
+	int h = rl->height();
+
+	// Upper border ?
+	if ( _col >= marker.left() && _col <= marker.right() && _row - 1 == marker.bottom() )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
+	// Left border ?
+	if ( _row >= marker.top() && _row <= marker.bottom() && _col - 1 == marker.right() )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
+	// Lower border ?
+	if ( _col >= marker.left() && _col <= marker.right() && _row + 1 == marker.top() )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
+	// Right border ?
+	if ( _row >= marker.top() && _row <= marker.bottom() && _col + 1 == marker.left() )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
+	// Top left corner ?
+	if ( _row == marker.bottom() + 1 && _col == marker.right() + 1 )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 11, marker );
+	// Top right corner ?
+	if ( _row == marker.bottom() + 1 && _col == marker.left() - 1 )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 12, marker );
+	// Bottom right corner ?
+	if ( _row == marker.top() - 1 && _col == marker.left() - 1 )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 13, marker );
+	// Bottom left corner ?
+	if ( _row == marker.top() - 1 && _col == marker.right() + 1 )
+	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 14, marker );
     }
 }
 

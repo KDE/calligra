@@ -1162,8 +1162,8 @@ void KSpreadView::addTable( KSpreadTable *_t )
 		      SLOT( slotUpdateHBorder( KSpreadTable * ) ) );
     QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadTable * ) ),
 		      SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
-    QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QRect & ) ),
-		      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
+    QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QPoint & ) ),
+		      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QPoint & ) ) );
     QObject::connect( _t, SIGNAL( sig_changeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ),
 		      SLOT( slotChangeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
@@ -2254,31 +2254,35 @@ void KSpreadView::slotChangeChooseSelection( KSpreadTable *_table, const QRect &
     emit sig_chooseSelectionChanged( _table, _new );
 }
 
-void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new )
+void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QPoint& _old_marker )
 {
-    printf ("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QRect &_new %i %i|%i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_new.left(),_new.top(),_new.right(),_new.bottom());
+    QRect n = _table->selectionRect();
+    QPoint m = _table->marker();
+
+    // printf ("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QPoint &m %i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_old_marker.x(),_old_marker.y() );
+    // printf ("      const QRect &_new %i %i|%i %i, const QPoint &m %i %i )\n",n.left(),n.top(),n.right(),n.bottom(),m.x(),m.y() );
 
     // Emit a signal for internal use
-    emit sig_selectionChanged( _table, _new );
+    emit sig_selectionChanged( _table, n );
 
     // Empty selection ?
     // Activate or deactivate some actions. This code is duplicated
     // in KSpreadView::slotUnselect
-    if ( _new.left() == 0 && _new.right() == 0 )
+    if ( n.left() == 0 && n.right() == 0 )
 	m_tableFormat->setEnabled( FALSE );
     else
 	m_tableFormat->setEnabled( TRUE );
 
     // Send some event around. This is read for example
     // by the calculator plugin.
-    KSpreadSelectionChanged ev( _new, activeTable()->name() );
+    KSpreadSelectionChanged ev( n, activeTable()->name() );
     QApplication::sendEvent( this, &ev );
 
     // Do we display this table ?
     if ( _table != m_pTable )
 	return;
 
-    m_pCanvas->updateSelection( _old, _new );
+    m_pCanvas->updateSelection( _old, _old_marker );
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
 }
@@ -2293,7 +2297,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
     // with mutiple cells.
     m_tableFormat->setEnabled( FALSE );
 
-    m_pCanvas->updateSelection( _old, QRect() );
+    m_pCanvas->updateSelection( _old, _table->marker() );
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
 }

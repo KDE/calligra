@@ -69,16 +69,11 @@ void KSpreadGotoDlg::slotOk()
     if(!name_cell->text().isEmpty())
         {
         tmp_upper=name_cell->text().upper();
-        //QString tmp = m_pView->activeTable()->tableName() + "!" + tmp_upper;
-        m_pView->canvasWidget()->hideMarker();
-        // m_pView->canvasWidget()->setgotohorz(true);
-        // m_pView->canvasWidget()->setgotovert(true);
+
         if ( tmp_upper.contains( ':' ) ) //Selection entered in location widget
                 m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp_upper, m_pView->doc()->map() ) );
         else //Location entered in location widget
                 m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
-        //m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ) );
-        m_pView->canvasWidget()->showMarker();
         accept();
         }
     else

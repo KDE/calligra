@@ -93,6 +93,7 @@ public:
     void removeAllTables();
     void setActiveTable( KSpreadTable *_t );
 
+    const KSpreadTable* activeTable() const { return m_pTable; }
     KSpreadTable* activeTable() { return m_pTable; }
     KSpreadTabBar* tabBar() { return  m_pTabBar;}
 
@@ -318,7 +319,7 @@ public slots:
     void slotUpdateView( KSpreadTable *_table, const QRect& );
     void slotUpdateHBorder( KSpreadTable *_table );
     void slotUpdateVBorder( KSpreadTable *_table );
-    void slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
+    void slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QPoint &_old_marker );
     void slotChangeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void slotAddTable( KSpreadTable *_table );
     void slotRemoveChild( KSpreadChild *_child );
