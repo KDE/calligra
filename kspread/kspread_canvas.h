@@ -543,6 +543,7 @@ protected:
     virtual void mouseMoveEvent( QMouseEvent* _ev );
     virtual void wheelEvent( QWheelEvent* );
     virtual void focusOutEvent( QFocusEvent* ev );
+    virtual void resizeEvent( QResizeEvent * _ev );
     void paintSizeIndicator( int mouseX, bool firstTime );
 
 private:

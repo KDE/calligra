@@ -1447,6 +1447,20 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
     double ev_Width = doc()->unzoomItX( _ev->size().width() );
     double ev_Height = doc()->unzoomItY( _ev->size().height() );
 
+    // workaround to allow horizontal resizing and zoom changing when sheet
+    // direction and interface direction don't match (e.g. an RTL sheet on an
+    // LTR interface)
+    if ( activeTable() && activeTable()->layoutDirection()==KSpreadSheet::RightToLeft && !QApplication::reverseLayout() )
+    {
+        int dx = _ev->size().width() - _ev->oldSize().width(); 
+        scroll(dx, 0);
+    }
+    else if ( activeTable() && activeTable()->layoutDirection()==KSpreadSheet::LeftToRight && QApplication::reverseLayout() )
+    {
+        int dx = _ev->size().width() - _ev->oldSize().width();
+        scroll(-dx, 0);
+    }
+
     // If we rise horizontally, then check if we are still within the valid area (KS_colMax)
     if ( _ev->size().width() > _ev->oldSize().width() )
     {
@@ -4872,6 +4886,22 @@ void KSpreadHBorder::wheelEvent( QWheelEvent* _ev )
     QApplication::sendEvent( m_pCanvas->horzScrollBar(), _ev );
 }
 
+void KSpreadHBorder::resizeEvent( QResizeEvent* _ev )
+{
+  // workaround to allow horizontal resizing and zoom changing when sheet
+  // direction and interface direction don't match (e.g. an RTL sheet on an
+  // LTR interface)
+  if ( m_pCanvas->activeTable() && m_pCanvas->activeTable()->layoutDirection()==KSpreadSheet::RightToLeft && !QApplication::reverseLayout() )
+  {
+    int dx = _ev->size().width() - _ev->oldSize().width();
+    scroll(dx, 0);
+  }
+  else if ( m_pCanvas->activeTable() && m_pCanvas->activeTable()->layoutDirection()==KSpreadSheet::LeftToRight && QApplication::reverseLayout() )
+  {
+    int dx = _ev->size().width() - _ev->oldSize().width();
+    scroll(-dx, 0);
+  }
+}
 
 void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
 {
