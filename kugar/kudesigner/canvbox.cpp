@@ -63,7 +63,7 @@ CanvasKugarTemplate::CanvasKugarTemplate(int x, int y, int width, int height, QC
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasKugarTemplate", "Page size");
+    propValues.second << i18n("Page size");
     propValues.second << "int_from_list";
     propValues.second << "0 - A4" << "1 - B5" << "2 - Letter"
 	    << "3 - Legal" << "4 - Executive" << "5 - A0"
@@ -78,33 +78,33 @@ CanvasKugarTemplate::CanvasKugarTemplate(int x, int y, int width, int height, QC
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasKugarTemplate", "Page orientation");
+    propValues.second << i18n("Page orientation");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasKugarTemplate", "0 - Portrait");
-    propValues.second << i18n("CanvasKugarTemplate", "1 - Landscape");
+    propValues.second << i18n("0 - Portrait");
+    propValues.second << i18n("1 - Landscape");
     props["PageOrientation"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasKugarTemplate", "Top margin");
+    propValues.second << i18n("Top margin");
     propValues.second << "int";
     props["TopMargin"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasKugarTemplate", "Bottom margin");
+    propValues.second << i18n("Bottom margin");
     propValues.second << "int";
     props["BottomMargin"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasKugarTemplate", "Left margin");
+    propValues.second << i18n("Left margin");
     propValues.second << "int";
     props["LeftMargin"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasKugarTemplate", "Right margin");
+    propValues.second << i18n("Right margin");
     propValues.second << "int";
     props["RightMargin"] = propValues;
     propValues.second.clear();
@@ -281,7 +281,6 @@ void CanvasKugarTemplate::removeSection(CanvasBand *section,
 	    *footer = i->second.first.second;
 	    i->second.first.second = 0;
 	    detailsCount--;
-	    detailsCount < 0 ? detailsCount = 0 : detailsCount=detailsCount; // ATTENTION: Always false (unsigned!)
 	}
 	if (i->second.first.first == section)
 	    i->second.first.first = 0;
@@ -351,7 +350,7 @@ CanvasReportHeader::CanvasReportHeader(int x, int y, int width, int height, QCan
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "50";
-    propValues.second = "Report header's height";
+    propValues.second = i18n("Report header's height");
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
@@ -360,7 +359,7 @@ CanvasReportHeader::CanvasReportHeader(int x, int y, int width, int height, QCan
 void CanvasReportHeader::draw(QPainter &painter)
 {
     painter.drawText(rect(), AlignVCenter | AlignLeft,
-		     i18n("CanvasReportHeader", "Report Header"));
+		     i18n("Report Header"));
     CanvasBand::draw(painter);
 }
 
@@ -378,7 +377,7 @@ CanvasReportFooter::CanvasReportFooter(int x, int y, int width, int height, QCan
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "50";
-    propValues.second = "Report footer's height";
+    propValues.second = i18n("Report footer's height");
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
@@ -387,7 +386,7 @@ CanvasReportFooter::CanvasReportFooter(int x, int y, int width, int height, QCan
 void CanvasReportFooter::draw(QPainter &painter)
 {
     painter.drawText(rect(), AlignVCenter | AlignLeft,
-		     i18n("CanvasReportFooter", "Report Footer"));
+		     i18n("Report Footer"));
     CanvasBand::draw(painter);
 }
 
@@ -405,7 +404,7 @@ CanvasPageHeader::CanvasPageHeader(int x, int y, int width, int height, QCanvas 
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "50";
-    propValues.second = "Page header's height";
+    propValues.second = i18n("Page header's height");
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
@@ -414,7 +413,7 @@ CanvasPageHeader::CanvasPageHeader(int x, int y, int width, int height, QCanvas 
 void CanvasPageHeader::draw(QPainter &painter)
 {
     painter.drawText(rect(), AlignVCenter | AlignLeft,
-		     i18n("CanvasPageHeader", "Page Header"));
+		     i18n("Page Header"));
     CanvasBand::draw(painter);
 }
 
@@ -432,7 +431,7 @@ CanvasPageFooter::CanvasPageFooter(int x, int y, int width, int height, QCanvas 
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "50";
-    propValues.second = "Page footer's height";
+    propValues.second = i18n("Page footer's height");
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
@@ -441,7 +440,7 @@ CanvasPageFooter::CanvasPageFooter(int x, int y, int width, int height, QCanvas 
 void CanvasPageFooter::draw(QPainter &painter)
 {
     painter.drawText(rect(), AlignVCenter | AlignLeft,
-		     i18n("CanvasPageFooter", "Page Footer"));
+		     i18n("Page Footer"));
     CanvasBand::draw(painter);
 }
 
@@ -459,13 +458,13 @@ CanvasDetailHeader::CanvasDetailHeader(int x, int y, int width, int height, QCan
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "50";
-    propValues.second = "Detail header's height";
+    propValues.second = i18n("Detail header's height");
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second = "Detail header's level";
+    propValues.second = i18n("Detail header's level");
     propValues.second << "int";
     props["Level"] = propValues;
     propValues.second.clear();
@@ -474,9 +473,8 @@ CanvasDetailHeader::CanvasDetailHeader(int x, int y, int width, int height, QCan
 
 void CanvasDetailHeader::draw(QPainter &painter)
 {
-    QString str = QString("Detail Header %1").arg(props["Level"].first.toInt());
+    QString str = QString("%1 %2").arg(i18n("Detail header")).arg(props["Level"].first.toInt());
     painter.drawText(rect(), AlignVCenter | AlignLeft, str);
-//		     i18n("CanvasDetailHeader", "Detail Header"));
     CanvasBand::draw(painter);
 }
 
@@ -494,13 +492,13 @@ CanvasDetail::CanvasDetail(int x, int y, int width, int height, QCanvas * canvas
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "50";
-    propValues.second = "Detail height";
+    propValues.second = i18n("Detail height");
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second = "Detail level";
+    propValues.second = i18n("Detail level");
     propValues.second << "int";
     props["Level"] = propValues;
     propValues.second.clear();
@@ -508,9 +506,8 @@ CanvasDetail::CanvasDetail(int x, int y, int width, int height, QCanvas * canvas
 
 void CanvasDetail::draw(QPainter &painter)
 {
-    QString str = QString("Detail %1").arg(props["Level"].first.toInt());
+    QString str = QString("%1 %2").arg(i18n("Detail")).arg(props["Level"].first.toInt());
     painter.drawText(rect(), AlignVCenter | AlignLeft, str);
-//		     i18n("CanvasDetail", "Detail"));
     CanvasBand::draw(painter);
 }
 
@@ -528,13 +525,13 @@ CanvasDetailFooter::CanvasDetailFooter(int x, int y, int width, int height, QCan
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "50";
-    propValues.second = "Detail footer's height";
+    propValues.second = i18n("Detail footer's height");
     propValues.second << "int";
     props["Height"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second = "Detail footer's level";
+    propValues.second = i18n("Detail footer's level");
     propValues.second << "int";
     props["Level"] = propValues;
     propValues.second.clear();
@@ -542,9 +539,8 @@ CanvasDetailFooter::CanvasDetailFooter(int x, int y, int width, int height, QCan
 
 void CanvasDetailFooter::draw(QPainter &painter)
 {
-    QString str = QString("Detail footer %1").arg(props["Level"].first.toInt());
+    QString str = QString("%1 %2").arg(i18n("Detail footer")).arg(props["Level"].first.toInt());
     painter.drawText(rect(), AlignVCenter | AlignLeft, str);
-//		     i18n("CanvasDetailFooter", "Detail Footer"));
     CanvasBand::draw(painter);
 }
 

@@ -22,66 +22,66 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
 {
     std::pair<QString, QStringList> propValues;
 
-    propValues.first = i18n("CanvasField", "Field");
-    propValues.second << i18n("CanvasField", "Field to display");
+    propValues.first = i18n("Field");
+    propValues.second << i18n("Field to display");
     propValues.second << "string";
     props["Field"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasField", "Data type");
+    propValues.second << i18n("Data type");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasField", "0 - String")
-	    << i18n("CanvasField", "1 - Integer")
-	    << i18n("CanvasField", "2 - Float")
-	    << i18n("CanvasField", "3 - Date")
-	    << i18n("CanvasField", "4 - Currency");
+    propValues.second << i18n("0 - String")
+	    << i18n("1 - Integer")
+	    << i18n("2 - Float")
+	    << i18n("3 - Date")
+	    << i18n("4 - Currency");
     props["DataType"] = propValues;
     propValues.second.clear();
 
     propValues.first = "11";
-    propValues.second << i18n("CanvasField", "Date format");
+    propValues.second << i18n("Date format");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasField", "0 - m/d/y")
-	    << i18n("CanvasField", "1 - m-d-y")
-	    << i18n("CanvasField", "2 - mm/dd/y")
-	    << i18n("CanvasField", "3 - mm-dd-y")
-	    << i18n("CanvasField", "4 - m/d/yyyy")
-	    << i18n("CanvasField", "5 - m-d-yyyy")
-	    << i18n("CanvasField", "6 - mm/dd/yyyy")
-	    << i18n("CanvasField", "7 - mm-dd-yyyy")
-	    << i18n("CanvasField", "8 - yyyy/m/d")
-	    << i18n("CanvasField", "9 - yyyy-m-d")
-	    << i18n("CanvasField", "10 - dd.mm.yy")
-	    << i18n("CanvasField", "11 - dd.mm.yyyy");
+    propValues.second << i18n("0 - m/d/y")
+	    << i18n("1 - m-d-y")
+	    << i18n("2 - mm/dd/y")
+	    << i18n("3 - mm-dd-y")
+	    << i18n("4 - m/d/yyyy")
+	    << i18n("5 - m-d-yyyy")
+	    << i18n("6 - mm/dd/yyyy")
+	    << i18n("7 - mm-dd-yyyy")
+	    << i18n("8 - yyyy/m/d")
+	    << i18n("9 - yyyy-m-d")
+	    << i18n("10 - dd.mm.yy")
+	    << i18n("11 - dd.mm.yyyy");
     props["DateFormat"] = propValues;
     propValues.second.clear();
 
     propValues.first = "2";
-    propValues.second << i18n("CanvasField", "Number of digits after comma");
+    propValues.second << i18n("Number of digits after comma");
     propValues.second << "int";
     props["Precision"] = propValues;
     propValues.second.clear();
 
     propValues.first = "32";
-    propValues.second << i18n("CanvasField", "Currency symbol");
+    propValues.second << i18n("Currency symbol");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasField", "20 - ' '")
-	    << i18n("CanvasField", "36 - '$'");
+    propValues.second << i18n("20 - ' '")
+	    << i18n("36 - '$'");
     props["Currency"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0,0,0";
-    propValues.second << i18n("CanvasField", "Negative value color");
+    propValues.second << i18n("Negative value color");
     propValues.second << "color";
     props["NegValueColor"] = propValues;
     propValues.second.clear();
 
     propValues.first = "44";
-    propValues.second << i18n("CanvasField", "Comma separator");
+    propValues.second << i18n("Comma separator");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasField", "44 - ','")
-	    << i18n("CanvasField", "46 - '.'");
+    propValues.second << i18n("44 - ','")
+	    << i18n("46 - '.'");
     props["CommaSeparator"] = propValues;
     propValues.second.clear();
 }

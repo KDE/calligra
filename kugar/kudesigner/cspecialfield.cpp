@@ -22,29 +22,29 @@ CanvasSpecialField::CanvasSpecialField(int x, int y, int width, int height, QCan
 {
     std::pair<QString, QStringList> propValues;
 
-    propValues.first = i18n("CanvasSpecialField", "0");
-    propValues.second << i18n("CanvasSpecialField", "Field type to display");
+    propValues.first = "0";
+    propValues.second << i18n("Field type to display");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasSpecialField", "0 - Date")
-	    << i18n("CanvasSpecialField", "1 - PageNumber");
+    propValues.second << i18n("0 - Date")
+	    << i18n("1 - PageNumber");
     props["Type"] = propValues;
     propValues.second.clear();
 
     propValues.first = "11";
-    propValues.second << i18n("CanvasSpecialField", "Date format");
+    propValues.second << i18n("Date format");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasSpecialField", "0 - m/d/y")
-	    << i18n("CanvasSpecialField", "1 - m-d-y")
-	    << i18n("CanvasSpecialField", "2 - mm/dd/y")
-	    << i18n("CanvasSpecialField", "3 - mm-dd-y")
-	    << i18n("CanvasSpecialField", "4 - m/d/yyyy")
-	    << i18n("CanvasSpecialField", "5 - m-d-yyyy")
-	    << i18n("CanvasSpecialField", "6 - mm/dd/yyyy")
-	    << i18n("CanvasSpecialField", "7 - mm-dd-yyyy")
-	    << i18n("CanvasSpecialField", "8 - yyyy/m/d")
-	    << i18n("CanvasSpecialField", "9 - yyyy-m-d")
-	    << i18n("CanvasSpecialField", "10 - dd.mm.yy")
-	    << i18n("CanvasSpecialField", "11 - dd.mm.yyyy");
+    propValues.second << i18n("0 - m/d/y")
+	    << i18n("1 - m-d-y")
+	    << i18n("2 - mm/dd/y")
+	    << i18n("3 - mm-dd-y")
+	    << i18n("4 - m/d/yyyy")
+	    << i18n("5 - m-d-yyyy")
+	    << i18n("6 - mm/dd/yyyy")
+	    << i18n("7 - mm-dd-yyyy")
+	    << i18n("8 - yyyy/m/d")
+	    << i18n("9 - yyyy-m-d")
+	    << i18n("10 - dd.mm.yy")
+	    << i18n("11 - dd.mm.yyyy");
     props["DataType"] = propValues;
     propValues.second.clear();
 }
@@ -52,7 +52,7 @@ CanvasSpecialField::CanvasSpecialField(int x, int y, int width, int height, QCan
 void CanvasSpecialField::draw(QPainter &painter)
 {
     props["Text"].first = "[" +
-			  QString(props["Type"].first.toInt()?"PageNo":"Date")
+			  QString(props["Type"].first.toInt()?i18n("PageNo"):i18n("Date"))
 			  + "]";
     CanvasLabel::draw(painter);
 }

@@ -23,125 +23,125 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
 {
     std::pair<QString, QStringList> propValues;
 
-    propValues.first = i18n("CanvasLabel", "Text");
-    propValues.second << i18n("CanvasLabel", "Text to display");
+    propValues.first = i18n("Text");
+    propValues.second << i18n("Text to display");
     propValues.second << "string";
     props["Text"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(x);
-    propValues.second << i18n("CanvasLabel", "X coordinate concerning to section");
+    propValues.second << i18n("X coordinate concerning to section");
     propValues.second << "int";
     props["X"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(y);
-    propValues.second << i18n("CanvasLabel", "Y coordinate concerning to section");
+    propValues.second << i18n("Y coordinate concerning to section");
     propValues.second << "int";
     props["Y"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(width);
-    propValues.second << i18n("CanvasLabel", "Width");
+    propValues.second << i18n("Width");
     propValues.second << "int";
     props["Width"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(height);
-    propValues.second << i18n("CanvasLabel", "Height");
+    propValues.second << i18n("Height");
     propValues.second << "int";
     props["Height"] = propValues;
 
     propValues.first = "255,255,255";
-    propValues.second << i18n("CanvasLabel", "Background color");
+    propValues.second << i18n("Background color");
     propValues.second << "color";
     props["BackgroundColor"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0,0,0";
-    propValues.second << i18n("CanvasLabel", "Text color");
+    propValues.second << i18n("Text color");
     propValues.second << "color";
     props["ForegroundColor"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0,0,0";
-    propValues.second << i18n("CanvasLabel", "Border color");
+    propValues.second << i18n("Border color");
     propValues.second << "color";
     props["BorderColor"] = propValues;
     propValues.second.clear();
 
     propValues.first = "1";
-    propValues.second << i18n("CanvasLabel", "Border width");
+    propValues.second << i18n("Border width");
     propValues.second << "int";
     props["BorderWidth"] = propValues;
     propValues.second.clear();
 
     propValues.first = "1";
-    propValues.second << i18n("CanvasLabel", "Border style");
+    propValues.second << i18n("Border style");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasLabel", "0 - No pen")
-	    << i18n("CanvasLabel", "1 - Solid line")
-	    << i18n("CanvasLabel", "2 - Dash line")
-	    << i18n("CanvasLabel", "3 - Dot line")
-	    << i18n("CanvasLabel", "4 - Dash dot line")
-	    << i18n("CanvasLabel", "5 - Dash dot dot line");
+    propValues.second << i18n("0 - No pen")
+	    << i18n("1 - Solid line")
+	    << i18n("2 - Dash line")
+	    << i18n("3 - Dot line")
+	    << i18n("4 - Dash dot line")
+	    << i18n("5 - Dash dot dot line");
     props["BorderStyle"] = propValues;
     propValues.second.clear();
 
     propValues.first = "Times New Roman";
-    propValues.second << i18n("CanvasLabel", "Font family");
+    propValues.second << i18n("Font family");
     propValues.second << "font";
     props["FontFamily"] = propValues;
     propValues.second.clear();
 
     propValues.first = "12";
-    propValues.second << i18n("CanvasLabel", "Font size");
+    propValues.second << i18n("Font size");
     propValues.second << "int";
     props["FontSize"] = propValues;
     propValues.second.clear();
 
     propValues.first = "50";
-    propValues.second << i18n("CanvasLabel", "Font weight");
+    propValues.second << i18n("Font weight");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasLabel", "25 - Light")
-	    << i18n("CanvasLabel", "50 - Normal")
-	    << i18n("CanvasLabel", "63 - DemiBold")
-	    << i18n("CanvasLabel", "75 - Bold")
-	    << i18n("CanvasLabel", "87 - Black");
+    propValues.second << i18n("25 - Light")
+	    << i18n("50 - Normal")
+	    << i18n("63 - DemiBold")
+	    << i18n("75 - Bold")
+	    << i18n("87 - Black");
     props["FontWeight"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasLabel", "Italic font");
+    propValues.second << i18n("Italic font");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasLabel", "0 - False")
-	    << i18n("CanvasLabel", "1 - True");
+    propValues.second << i18n("0 - False")
+	    << i18n("1 - True");
     props["FontItalic"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasLabel", "Text horizontal alignment");
+    propValues.second << i18n("Text horizontal alignment");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasLabel", "0 - Left")
-	    << i18n("CanvasLabel", "1 - Center")
-	    << i18n("CanvasLabel", "2 - Right");
+    propValues.second << i18n("0 - Left")
+	    << i18n("1 - Center")
+	    << i18n("2 - Right");
     props["HAlignment"] = propValues;
     propValues.second.clear();
 
     propValues.first = "1";
-    propValues.second << i18n("CanvasLabel", "Text vertical alignment");
+    propValues.second << i18n("Text vertical alignment");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasLabel", "0 - Top")
-	    << i18n("CanvasLabel", "1 - Middle")
-	    << i18n("CanvasLabel", "2 - Bottom");
+    propValues.second << i18n("0 - Top")
+	    << i18n("1 - Middle")
+	    << i18n("2 - Bottom");
     props["VAlignment"] = propValues;
     propValues.second.clear();
 
     propValues.first = "0";
-    propValues.second << i18n("CanvasLabel", "Word wrap");
+    propValues.second << i18n("Word wrap");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasLabel", "0 - False")
-	    << i18n("CanvasLabel", "1 - True");
+    propValues.second << i18n("0 - False")
+	    << i18n("1 - True");
     props["WordWrap"] = propValues;
     propValues.second.clear();
 }

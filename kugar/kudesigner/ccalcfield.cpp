@@ -23,13 +23,13 @@ CanvasCalculatedField::CanvasCalculatedField(int x, int y, int width, int height
     std::pair<QString, QStringList> propValues;
 
     propValues.first = "1";
-    propValues.second << i18n("CanvasCalculatedField", "");
+    propValues.second << i18n("Calculation type");
     propValues.second << "int_from_list";
-    propValues.second << i18n("CanvasCalculatedField", "0 - Count")
-	    << i18n("CanvasCalculatedField", "1 - Sum")
-	    << i18n("CanvasCalculatedField", "2 - Average")
-	    << i18n("CanvasCalculatedField", "3 - Variance")
-	    << i18n("CanvasCalculatedField", "4 - StandardDeviation");
+    propValues.second << i18n("0 - Count")
+	    << i18n("1 - Sum")
+	    << i18n("2 - Average")
+	    << i18n("3 - Variance")
+	    << i18n("4 - StandardDeviation");
     props["CalculationType"] = propValues;
     propValues.second.clear();
 }

@@ -23,30 +23,30 @@ CanvasLine::CanvasLine(int x, int y, int width, int height, QCanvas * canvas):
     std::pair<QString, QStringList> propValues;
 
     propValues.first = QString("%1").arg(x);
-    propValues.second << i18n("CanvasLabel", "X1 coordinate concerning to section");
+    propValues.second << i18n("X1 coordinate concerning to section");
     propValues.second << "int";
     props["X"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(y);
-    propValues.second << i18n("CanvasLabel", "Y1 coordinate");
+    propValues.second << i18n("Y1 coordinate");
     propValues.second << "int";
     props["Y"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(x + width);
-    propValues.second << i18n("CanvasLabel", "X2 coordinate");
+    propValues.second << i18n("X2 coordinate");
     propValues.second << "int";
     props["X2"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(y + height);
-    propValues.second << i18n("CanvasLabel", "Y2 coordinate");
+    propValues.second << i18n("Y2 coordinate");
     propValues.second << "int";
     props["Y2"] = propValues;
 
     propValues.first = "255,255,255";
-    propValues.second << i18n("CanvasLabel", "Color");
+    propValues.second << i18n("Color");
     propValues.second << "color";
     props["BackgroundColor"] = propValues;
     propValues.second.clear();
@@ -55,11 +55,11 @@ CanvasLine::CanvasLine(int x, int y, int width, int height, QCanvas * canvas):
     propValues.second << i18n("CanvasLine", "Line style");
     propValues.second << "int_from_list";
     propValues.second << i18n("CanvasLine", "0 - No pen")
-	    << i18n("CanvasLabel", "1 - Solid line")
-	    << i18n("CanvasLabel", "2 - Dash line")
-	    << i18n("CanvasLabel", "3 - Dot line")
-	    << i18n("CanvasLabel", "4 - Dash dot line")
-	    << i18n("CanvasLabel", "5 - Dash dot dot line");
+	    << i18n("1 - Solid line")
+	    << i18n("2 - Dash line")
+	    << i18n("3 - Dot line")
+	    << i18n("4 - Dash dot line")
+	    << i18n("5 - Dash dot dot line");
     props["Style"] = propValues;
     propValues.second.clear();
 }
