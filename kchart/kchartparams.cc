@@ -193,6 +193,7 @@ void KChartParameters::saveConfig(KConfig *conf) {
   conf->writeEntry( "backgroundPixmapIsDirty", backgroundPixmapIsDirty );
   conf->writeEntry( "backgroundPixmapScaled", backgroundPixmapScaled );
   conf->writeEntry( "backgroundPixmapCentered", backgroundPixmapCentered );
+  conf->writeEntry( "backgroundPixmapIntensity", backgroundPixmapIntensity );
 }
 
 void KChartParameters::loadConfig(KConfig *conf) {
@@ -275,6 +276,7 @@ void KChartParameters::loadConfig(KConfig *conf) {
 	backgroundPixmapIsDirty = false;
   backgroundPixmapScaled = conf->readBoolEntry( "backgroundPixmapScaled", true );
   backgroundPixmapCentered = conf->readBoolEntry( "backgroundPixmapCentered", true );
+  backgroundPixmapIntensity = conf->readDoubleNumEntry( "backgroundPixmapIntensity", 0.25 );
 }
 
 void KChartParameters::defaultConfig()
@@ -320,26 +322,33 @@ void KChartParameters::defaultConfig()
 	bar_width = 75;
 	hlc_style = KCHARTHLCSTYLE_CLOSECONNECTED;
 	hlc_cap_width = 25;
-	if(annotation)
+	if( annotation )
 	  delete annotation;
 	annotation = 0;
 	num_scatter_pts = 0;
+	if( scatter )
+	  delete scatter;
 	scatter = 0;
 	thumbnail = false;
 	thumbval = -MAXFLOAT;
 	border = true;
 	transparent_bg = false;
+	hasxlabel = true;
 	hard_size = false;
 	hard_graphheight = 0;
 	hard_graphwidth = 0;
 	hard_xorig = 0;
 	hard_yorig = 0;
+	percent_labels = KCHARTPCTTYPE_ABOVE;
+	type = KCHARTTYPE_3DBAR;
+	other_threshold = 0;
+	colPie = 0;
+	offsetCol = 0;
 
 	// background pixmap stuff
 	backgroundPixmapName = QString::null;
 	backgroundPixmapIsDirty = false; // not dirty until pixmap loaded
 	backgroundPixmapScaled = true;
 	backgroundPixmapCentered = false;
-	// PENDING(kalle) remove
-	backgroundPixmap.load( "/home/kalle/kde-cvs/kdebase-src/khelpcenter/kwelcome/welcome.png" );
+	backgroundPixmapIntensity = 0.25;
 }

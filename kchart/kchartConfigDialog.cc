@@ -35,7 +35,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     // PENDING(kalle) _xstep only for axes charts
     //_geompage = new KChartGeometryConfigPage( this );
     //addTab( _geompage, i18n( "&Geometry" ) );
-    setCaption(i18n( "Chart config dialog" ));
+    setCaption( i18n( "Chart config dialog" ) );
 	// Color page
     _colorpage = new KChartColorConfigPage( this );
     addTab( _colorpage, i18n( "&Colors" ) );
@@ -58,7 +58,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 	_backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
 	addTab( _backgroundpixpage, i18n( "&Background pixmap" ) );
 
-    if(!_params->isPie()&&_params->threeD()) {
+    if( !_params->isPie()&&_params->threeD() ) {
         _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
         addTab( _parameter3dpage,i18n("3D Parameters"));
 	}
@@ -78,11 +78,10 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 	  ; // do nothing
 	};
 
-    if(_params->has_hlc_sets())
-        {
-        _hlcChart=new KChartComboPage(_params,this);
-        addTab( _hlcChart, i18n( "HLC Chart" ) );
-        }
+    if( _params->has_hlc_sets() ) {
+	  _hlcChart=new KChartComboPage(_params,this);
+	  addTab( _hlcChart, i18n( "HLC Chart" ) );
+	}
 
     //init
     defaults();
@@ -116,26 +115,25 @@ void KChartConfigDialog::apply()
     _params->YLabel2Color = _colorpage->yLabel2Color();
     //_params->EdgeColor = _colorpage->edgeColor();
 
-    if(!_params->isPie())
-        {
-        _parameterpage->apply();
-        if(_params->threeD())
-		  _parameter3dpage->apply();
-
-        }
-    else
-    	{
-    	_parameterpiepage->apply();
-    	_piepage->apply();
-    	}
-
+    if( !_params->isPie() ) {
+	  _parameterpage->apply();
+	  if( _params->threeD() )
+		_parameter3dpage->apply();
+	} else {
+	  _parameterpiepage->apply();
+	  _piepage->apply();
+	}
+	
     _parameterfontpage->apply();
 
 	if( _subTypePage )
 	  _subTypePage->apply();
 
-    if(_params->has_hlc_sets())
+    if( _params->has_hlc_sets() )
 	  _hlcChart->apply();
+	
+	_backgroundpixpage->apply();
+
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
 }
@@ -160,18 +158,14 @@ void KChartConfigDialog::defaults()
     _colorpage->setYLabel2Color( _params->YLabel2Color );
     //_colorpage->setEdgeColor( _params->EdgeColor );
 
-    if(!_params->isPie())
-        {
-    	_parameterpage->init();
-        if(_params->threeD())
-                _parameter3dpage->init();
-
-        }
-    else
-    	{
-    	_parameterpiepage->init();
-    	_piepage->init();
-    	}
+    if( !_params->isPie() ) {
+	  _parameterpage->init();
+	  if(_params->threeD())
+		_parameter3dpage->init();
+	} else {
+	  _parameterpiepage->init();
+	  _piepage->init();
+	}
 
     _parameterfontpage->init();
 
@@ -181,6 +175,8 @@ void KChartConfigDialog::defaults()
     if(_params->has_hlc_sets()) {
 	  _hlcChart->init();
 	}
+
+	_backgroundpixpage->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
 }

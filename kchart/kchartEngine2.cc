@@ -183,20 +183,24 @@ void KChartEngine::drawBackgroundImage()
 {
   static KPixmap backpix;
 
-  if( params->backgroundPixmap.isNull() )
+  if( params->backgroundPixmap.isNull() ) {
 	return;
+  }
 
   if( params->backgroundPixmapIsDirty ) {
-	
 	// scale loaded pixmap if necessary
 	if( params->backgroundPixmapScaled ) {
-	  QImage img = backpix.convertToImage();
-	  img.smoothScale( imagewidth, imageheight );
-	  backpix.convertFromImage( img );
-	}
+	  QImage img = params->backgroundPixmap.convertToImage();
+	  QImage imgscaled = img.smoothScale( imagewidth, imageheight );
+	  backpix.convertFromImage( imgscaled );
+	} else
+	  backpix = params->backgroundPixmap;
 	  
 	// tone lighter
 	KPixmapEffect::intensity( backpix, params->backgroundPixmapIntensity );
+
+	// only need to recompute when the user changes settings
+	params->backgroundPixmapIsDirty = false;
   }
 
   // Now draw, either NW or centered

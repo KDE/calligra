@@ -24,6 +24,7 @@
 #include <qvgroupbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+#include <qwhatsthis.h>
 
 KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParameters* params, QWidget * parent )
   : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
@@ -34,6 +35,12 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
   toplevel->addLayout( left, 2 );
   
   wallCB = new QComboBox( false, this, "wallCombo" );
+  QWhatsThis::add( wallCB, i18n( "You can select a a background image from "
+								 "this list. Initially, the installed KDE "
+								 "wallpapers will be offered. If you do not "
+								 "find what you are looking for here, you can "
+								 "select any image file by clicking on the "
+								 "<i>Browse</i> button below." ) );
   left->addWidget( wallCB );
   wallCB->insertItem( i18n("None") );
 
@@ -45,24 +52,53 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
 						*it );
 
   QPushButton* browsePB = new QPushButton( i18n("&Browse..."), this );
+  QWhatsThis::add( browsePB, i18n( "Click this button to select a background "
+								   "image not yet present in the list above. " ) );
   left->addWidget( browsePB );
   connect( browsePB, SIGNAL( clicked() ), SLOT( slotBrowse() ) );
 
   wallWidget = new QWidget( this );
+  QWhatsThis::add( wallWidget, i18n( "This area will always display the "
+									 "currently selected background image. "
+									 "Note that the image will be scaled and "
+									 "might thus have a different ratio than "
+									 "it originally has." ) );
   left->addWidget( wallWidget, 2 );
 
   connect( wallCB, SIGNAL( activated( int ) ), 
 		   this, SLOT( slotWallPaperChanged( int ) ) );
 
-  QVGroupBox* right = new QVGroupBox( this );
+  QVGroupBox* right = new QVGroupBox( i18n( "Configuration" ), this );
+  QWhatsThis::add( right, i18n( "In this box, you can set various settings "
+								"that control how the background image is "
+								"displayed." ) );
   toplevel->addWidget( right );
   
   QHBox* intensityHB = new QHBox( right );
-  new QLabel( i18n( "Intensity in %d" ), intensityHB );
+  intensityHB->setSpacing( 10 );
+  QLabel* intensityLA = new QLabel( i18n( "&Intensity in %" ), intensityHB );
   intensitySB = new QSpinBox( 1, 100, 1, intensityHB );
-  
-  scaledCB = new QCheckBox( right );
-  centeredCB = new QCheckBox( scaledCB );
+  intensityLA->setBuddy( intensitySB );
+  QString ttstr = i18n( "Here you can select how much the image should be "
+						"brightened up so that it does not disturb the "
+						"chart itself too much.<br> Different images require "
+						"different settings, but 25% is a good value to start "
+						"with." );
+  QWhatsThis::add( intensityLA, ttstr );
+  QWhatsThis::add( intensitySB, ttstr );
+
+  scaledCB = new QCheckBox( i18n( "Scaled" ), right );
+  QWhatsThis::add( scaledCB, i18n( "If you check this box, the selected image "
+								   "will be scaled to fit the total chart "
+								   "size." ) );
+  centeredCB = new QCheckBox( i18n( "Centered" ), right );
+  QWhatsThis::add( centeredCB, i18n( "If you check this box, the selected "
+									 "image will be centered over the chart. "
+									 "If the image is larger then the chart, "
+									 "you will only see the middle part of "
+									 "it.<br> This setting is only available, "
+									 "if the <i>Scaled</i> checkbox is not "
+									 "checked." ) );
   connect( scaledCB, SIGNAL( toggled( bool ) ),
 		   this, SLOT( setScaledToggled( bool ) ) );
 }
@@ -72,7 +108,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
 void KChartBackgroundPixmapConfigPage::init()
 {
   showSettings( _params->backgroundPixmapName );
-  intensitySB->setValue( _params->backgroundPixmapIntensity * 100 );
+  intensitySB->setValue( (int)(_params->backgroundPixmapIntensity * 100.0) );
   scaledCB->setChecked( _params->backgroundPixmapScaled );
   centeredCB->setChecked( _params->backgroundPixmapCentered );
   if( scaledCB )
@@ -84,12 +120,24 @@ void KChartBackgroundPixmapConfigPage::apply()
 {
   if( wallCB->currentText() != _params->backgroundPixmapName ) {
 	_params->backgroundPixmapName = wallCB->currentText();
-	_params->backgroundPixmap.load( _params->backgroundPixmapName );
+	_params->backgroundPixmap.load( locate( "wallpaper", _params->backgroundPixmapName ) );
 	_params->backgroundPixmapIsDirty = true;
   }
-  _params->backgroundPixmapIntensity = (float)(intensitySB->value()) / 100.0;
-  _params->backgroundPixmapScaled = scaledCB->isChecked();
-  _params->backgroundPixmapCentered = centeredCB->isChecked();
+  if( (int)(_params->backgroundPixmapIntensity * 100.0) !=
+	  intensitySB->value() ) {
+	_params->backgroundPixmapIntensity = (float)(intensitySB->value()) / 100.0;
+	_params->backgroundPixmapIsDirty = true;
+  }
+  if( _params->backgroundPixmapScaled !=
+	  scaledCB->isChecked() ) {
+	_params->backgroundPixmapScaled = scaledCB->isChecked();
+	_params->backgroundPixmapIsDirty = true;
+  }
+  if( _params->backgroundPixmapCentered !=
+	  centeredCB->isChecked() ) {
+	_params->backgroundPixmapCentered = centeredCB->isChecked();
+	_params->backgroundPixmapIsDirty = true;
+  }
 }
 
 
