@@ -29,6 +29,9 @@
 class KoTemplateTree;
 class KoTemplateGroup;
 
+/**
+ * Our reimplementation of KIconCanvas used within the template-chooser dialog.
+ */
 class MyIconCanvas : public KIconCanvas
 {
     Q_OBJECT
@@ -40,26 +43,12 @@ public:
     void load(KoTemplateGroup *group);
 
 protected:
-    void viewportMousePressEvent( QMouseEvent *e ) {
-        KIconCanvas::viewportMousePressEvent( e );
-        if ( isCurrentValid() ) {
-            QString s = getCurrent();
-            emit currentChanged( s );
-        } else {
-            QString s = "";
-            emit currentChanged( s );
-        }
-    }
- 
     virtual void keyPressEvent( QKeyEvent *e ) {
         if ( e->key() == Key_Return || e->key() == Key_Enter )
             e->ignore();
         else
             KIconCanvas::keyPressEvent( e );
     }
-
-signals:
-    void currentChanged( const QString & );
 };
 
 
@@ -157,16 +146,22 @@ public:
      */
     DialogType getDialogType();
 
+protected slots:
+    /**
+     * Activated when the Ok button has been clicked.
+     */
+    virtual void slotOk();
+
 private:
     KoTemplateChooseDiaPrivate *d;
 
     void setupDialog();
     void enableOK(bool enable=true);
+    void collectInfo();
 
 private slots:
     void chosen(QIconViewItem *);
     void currentChanged( QIconViewItem * );
-    void ok();
     void slotResult(KIO::Job *j);
 
     void openTemplate();

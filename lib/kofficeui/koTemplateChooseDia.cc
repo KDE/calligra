@@ -38,8 +38,8 @@
 #include <krecentdocument.h>
 #include <kstringhandler.h>
 
-#include <koTemplateChooseDia.h>
-
+#include "koTemplateChooseDia.h"
+#include <kdebug.h>
 
 class KoTemplateChooseDiaPrivate {
 public:
@@ -110,8 +110,6 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KIns
     d->m_templateName = "";
     d->m_fullTemplateName = "";
     d->m_returnType = Cancel;
-
-    connect(this, SIGNAL(okClicked()), SLOT(ok()));
 }
 
 KoTemplateChooseDia::~KoTemplateChooseDia() {
@@ -171,6 +169,7 @@ void KoTemplateChooseDia::setupDialog()
     QGridLayout *grid=new QGridLayout( d->m_mainwidget, 10, 1, KDialogBase::marginHint(),
                                        KDialogBase::spacingHint() );
     KSeparator *line;
+    KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
 
     if ( d->m_dialogType==Everything ) {
         line = new KSeparator( QFrame::HLine, d->m_mainwidget );
@@ -212,9 +211,33 @@ void KoTemplateChooseDia::setupDialog()
         for(QStringList::ConstIterator it=tabNames.begin(); it!=tabNames.end(); ++it)
             d->m_tabs->addTab( tabDict[(*it)], (*it) );
 
-        KoTemplateGroup *defaultGroup=d->tree->defaultGroup();
-        if(defaultGroup)
-            d->m_tabs->showPage(tabDict[defaultGroup->name()]);
+        // Set the initially shown page (possibly from the last usage of the dialog)
+        // (First time: uses tree->defaultGroup)
+        KoTemplateGroup *defaultGroup = 0L;
+        QString groupName = grp.readEntry( "TemplateTab" );
+        if ( groupName.isEmpty() ) { // Nothing in config file, use default group
+            defaultGroup = d->tree->defaultGroup();
+            groupName = defaultGroup->name();
+        }
+        else                       // Found name in config file, lookup the group
+            defaultGroup = d->tree->find( groupName );
+
+        if ( defaultGroup && !groupName.isEmpty() )
+        {
+            d->m_tabs->showPage( tabDict[groupName] ); // showPage is 0L-safe
+
+            MyIconCanvas *canvas=d->canvasDict.find(groupName);
+            // Select last selected template
+            QString templateName = grp.readEntry( "TemplateName" );
+            if ( !templateName.isEmpty() && canvas )
+            {
+                QIconViewItem* item = canvas->findItem( templateName, Qt::ExactMatch );
+                if ( item ) {
+                    canvas->setCurrentItem( item );
+                    canvas->setSelected( item, true );
+                }
+            }
+        }
 
         connect( d->m_tabs, SIGNAL( selected( const QString & ) ), this, SLOT( tabsChanged( const QString & ) ) );
         grid->addWidget( d->m_tabs, 2, 0 );
@@ -291,7 +314,14 @@ void KoTemplateChooseDia::setupDialog()
 
         line = new KSeparator( QFrame::HLine, d->m_mainwidget );
         grid->addWidget( line, 9, 0 );
-        openEmpty();
+
+        // Set the initial state (possibly from the last usage of the dialog)
+        QString lastReturnType = grp.readEntry( "LastReturnType", "Empty" );
+        if ( lastReturnType == "Template" && d->m_dialogType != NoTemplates )
+            openTemplate();
+        // For "File" we go to "Empty" too.
+        else
+            openEmpty();
     }
 }
 
@@ -316,6 +346,7 @@ void KoTemplateChooseDia::chosen(QIconViewItem *)
     slotOk();
 }
 
+// Result of the "stat job to see if recently opened file is still there"
 void KoTemplateChooseDia::slotResult(KIO::Job *j) {
     if(j->error())
         enableButtonOK( false );
@@ -358,6 +389,7 @@ void KoTemplateChooseDia::openRecent()
     d->m_rbEmpty->setChecked( false );
     d->m_file = d->recentFilesMap[d->m_recent->currentText()];
     enableOK();
+    // Let's see if the file still exists
     d->m_job=KIO::stat(d->m_file, false);
     connect(d->m_job, SIGNAL(result(KIO::Job*)), this, SLOT(slotResult(KIO::Job*)));
 }
@@ -429,8 +461,31 @@ void KoTemplateChooseDia::tabsChanged( const QString & ) {
     d->m_firstTime = false;
 }
 
-void KoTemplateChooseDia::ok() {
+void KoTemplateChooseDia::slotOk()
+{
+    // Collect info from the dialog into d->m_returnType and d->m_templateName etc.
+    collectInfo();
 
+    // Save it for the next time
+    KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
+    static const char* const s_returnTypes[] = { 0 /*Cancel ;)*/, "Template", "File", "Empty" };
+    if ( d->m_returnType <= Empty ) {
+        grp.writeEntry( "LastReturnType", QString::fromLatin1(s_returnTypes[d->m_returnType]) );
+        QString groupName=d->m_tabs->tabLabel(d->m_tabs->currentPage());
+        grp.writeEntry( "TemplateTab", groupName );
+        grp.writeEntry( "TemplateName", d->m_templateName );
+    }
+    else {
+        kdWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
+        grp.writeEntry( "LastReturnType", QString::null );
+    }
+
+    // Close dialog (calls accept())
+    KDialogBase::slotOk();
+}
+
+void KoTemplateChooseDia::collectInfo()
+{
     if ( d->m_dialogType==OnlyTemplates || d->m_dialogType==Everything && d->m_rbTemplates->isChecked() ) {
         d->m_returnType = Template;
         QString groupName=d->m_tabs->tabLabel(d->m_tabs->currentPage());
@@ -476,4 +531,4 @@ void MyIconCanvas::load( KoTemplateGroup *group )
     }
 }
 
-#include <koTemplateChooseDia.moc>
+#include "koTemplateChooseDia.moc"
