@@ -1,0 +1,9 @@
+<!DOCTYPE DCOP-IDL><DCOP-IDL>
+<CLASS name="KPresenterDocIface">
+<SUPER name="DCOPObject"/>
+<FUNC name="url" qual=""><RET type="QString"/></FUNC>
+</CLASS>
+<INCLUDE file="qstring.h"/>
+<INCLUDE file="dcopref.h"/>
+<INCLUDE file="dcopobject.h"/>
+</DCOP-IDL>
