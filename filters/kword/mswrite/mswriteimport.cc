@@ -723,7 +723,7 @@ public:
 			// indicate anchored image in formatting
 			//
 			kdDebug (30509) << "\tIndicating anchored image in formatting" << endl;
-			writeTextInternal ("#");
+			if (!writeTextInternal ("#")) return false;
 
 			m_formatOutput += "<FORMAT id=\"6\" pos=\"0\" len=\"1\">";
 				m_formatOutput += "<ANCHOR type=\"frameset\" instance=\"";
@@ -1019,12 +1019,10 @@ public:
 
 				output += "<TABULATOR";
 
-				output += " type=\"";
 				if (tab->getIsDecimal ())
-					output += "3";
+					output += " type=\"3\" alignchar=\".\"";
 				else
-					output += "0";
-				output += "\"";
+					output += " type=\"0\"";
 
 				output += " ptpos=\"" + QString::number (Twip2Point (double (tab->getIndent ()))) + "\"/>";
 
