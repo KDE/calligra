@@ -14,13 +14,7 @@
 #include <kiconloader.h>
 
 
-extern "C"
-{
-    void* init_libkchartpart()
-    {
-	return new KChartFactory;
-    }
-}
+K_EXPORT_COMPONENT_FACTORY( libkchartpart, KChartFactory )
 
 
 KInstance   *KChartFactory::s_global    = 0;

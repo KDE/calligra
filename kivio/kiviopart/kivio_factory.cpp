@@ -25,13 +25,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
-extern "C"
-{
-  void* init_libkiviopart()
-  {
-    return new KivioFactory;
-  }
-}
+K_EXPORT_COMPONENT_FACTORY( libkiviopart, KivioFactory )
 
 KInstance* KivioFactory::s_global = 0;
 KAboutData* KivioFactory::s_aboutData = 0;

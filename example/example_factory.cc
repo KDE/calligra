@@ -25,13 +25,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-extern "C"
-{
-    void* init_libexamplepart()
-    {
-        return new ExampleFactory;
-    }
-};
+K_EXPORT_COMPONENT_FACTORY( libexamplepart, ExampleFactory )
 
 KInstance* ExampleFactory::s_global = 0L;
 KAboutData* ExampleFactory::s_aboutData = 0L;

@@ -25,13 +25,7 @@
 #include <kstandarddirs.h>
 #include <kinstance.h>
 
-extern "C"
-{
-    void* init_libkpresenterpart()
-    {
-        return new KPresenterFactory;
-    }
-}
+K_EXPORT_COMPONENT_FACTORY( libkpresenterpart, KPresenterFactory )
 
 
 KInstance* KPresenterFactory::s_global = 0;

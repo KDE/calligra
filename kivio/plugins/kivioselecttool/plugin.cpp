@@ -27,13 +27,7 @@
 /***************************************************
  * Factory
  ***************************************************/
-extern "C"
-{
-  void* init_libkivioselecttool()
-  {
-    return new SelectToolFactory;
-  }
-}
+K_EXPORT_COMPONENT_FACTORY( libkivioselecttool, SelectToolFactory )
 
 KInstance* SelectToolFactory::s_global = 0;
 

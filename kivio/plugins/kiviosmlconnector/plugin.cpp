@@ -27,13 +27,7 @@
 /***************************************************
  * Factory
  ***************************************************/
-extern "C"
-{
-  void* init_libkiviosmlconnector()
-  {
-    return new SMLConnectorFactory;
-  }
-};
+K_EXPORT_COMPONENT_FACTORY( libkiviosmlconnector, SMLConnectorFactory )
 
 KInstance* SMLConnectorFactory::s_global = 0;
 

@@ -27,13 +27,7 @@
 /***************************************************
  * Factory
  ***************************************************/
-extern "C"
-{
-  void* init_libkiviotexttool()
-  {
-    return new TextToolFactory;
-  }
-}
+K_EXPORT_COMPONENT_FACTORY( libkiviotexttool, TextToolFactory )
 
 KInstance* TextToolFactory::s_global = 0;
 

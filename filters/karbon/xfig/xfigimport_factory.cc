@@ -28,13 +28,7 @@ DESCRIPTION
 #include <kinstance.h>
 #include <kdebug.h>
 
-extern "C"
-{
-    void *init_libxfigimport()
-    {
-        return new XFIGImportFactory;
-    }
-};
+K_EXPORT_COMPONENT_FACTORY( libxfigimport, XFIGImportFactory )
 
 KInstance *XFIGImportFactory::s_global = 0;
 

@@ -12,13 +12,7 @@
 
 #include <qstringlist.h>
 
-extern "C"
-{
-    void* init_libkformulapart()
-    {
-	return new KFormulaFactory;
-    }
-}
+K_EXPORT_COMPONENT_FACTORY( libkformulapart, KFormulaFactory )
 
 KInstance* KFormulaFactory::s_global = 0;
 KAboutData* KFormulaFactory::s_aboutData = 0;

@@ -27,13 +27,7 @@
 /***************************************************
  * Factory
  ***************************************************/
-extern "C"
-{
-  void* init_libkivioconnectortool()
-  {
-    return new ConnectorToolFactory;
-  }
-}
+K_EXPORT_COMPONENT_FACTORY( libkivioconnectortool, ConnectorToolFactory )
 
 KInstance* ConnectorToolFactory::s_global = 0;
 

@@ -236,10 +236,6 @@ KexiCreateProject::~KexiCreateProject()
 {
 }
 
-/*extern "C" {
-	void * init_kexiprojectwizard() {return new KexiCreateProjectFactory();}
-}*/
-
 K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KexiCreateProjectFactory )
 
 /*

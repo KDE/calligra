@@ -27,13 +27,7 @@
 /***************************************************
  * Factory
  ***************************************************/
-extern "C"
-{
-  void* init_libkiviozoomtool()
-  {
-    return new ZoomToolFactory;
-  }
-}
+K_EXPORT_COMPONENT_FACTORY( libkiviozoomtool, ZoomToolFactory )
 
 KInstance* ZoomToolFactory::s_global = 0;
 

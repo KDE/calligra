@@ -20,13 +20,7 @@
 
 #include "kiviotargettool.h"
 
-extern "C"
-{
-  void* init_libkiviotargettool()
-  {
-    return new KivioTargetToolFactory;
-  }
-}
+K_EXPORT_COMPONENT_FACTORY( libkiviotargettool, KivioTargetToolFactory )
 
 KInstance* KivioTargetToolFactory::s_global = 0;
 

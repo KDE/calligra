@@ -125,13 +125,7 @@ void KoUnavailView::paintEvent( QPaintEvent* ev )
     painter.end();
 }
 
-extern "C"
-{
-    void* init_libkounavailpart()
-    {
-        return new KoUnavailFactory;
-    }
-}
+K_EXPORT_COMPONENT_FACTORY( libkounavailpart, KoUnavailFactory )
 
 KInstance* KoUnavailFactory::s_global = 0L;
 KAboutData* KoUnavailFactory::s_aboutData = 0L;

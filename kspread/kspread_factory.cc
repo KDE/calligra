@@ -24,13 +24,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-extern "C"
-{
-    void* init_libkspread()
-    {
-	return new KSpreadFactory;
-    }
-}
+K_EXPORT_COMPONENT_FACTORY( libkspread, KSpreadFactory )
 
 KInstance* KSpreadFactory::s_global = 0;
 DCOPObject* KSpreadFactory::s_dcopObject = 0;

@@ -37,13 +37,7 @@
  *
  ***************************************************/
 
-extern "C"
-{
-    void* init_libkspreadcalc()
-    {
-        return new CalcFactory;
-    }
-}
+K_EXPORT_COMPONENT_FACTORY( libkspreadcalc, CalcFactory )
 
 KInstance* CalcFactory::s_global = 0;
 
@@ -87,7 +81,7 @@ Calculator::Calculator( KSpreadView* parent, const char* name )
     m_calc = 0;
     m_view = parent;
 
-    KGlobal::locale()->insertCatalogue("kspreadcalc_calc"); 
+    KGlobal::locale()->insertCatalogue("kspreadcalc_calc");
     parent->installEventFilter( this );
 
     (void)new KAction( i18n("Calculator"), SmallIcon("kcalc", CalcFactory::global()),

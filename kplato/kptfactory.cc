@@ -28,13 +28,7 @@
 
 using namespace KPlato;
 
-extern "C"
-{
-    void* init_libkplatopart()
-    {
-        return new KPTFactory;
-    }
-};
+K_EXPORT_COMPONENT_FACTORY( libkplatopart, KPTFactory )
 
 KInstance* KPTFactory::s_global = 0L;
 KAboutData* KPTFactory::s_aboutData = 0L;

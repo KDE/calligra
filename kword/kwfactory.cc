@@ -25,13 +25,7 @@
 
 #include <kiconloader.h>
 
-extern "C"
-{
-    void* init_libkwordpart()
-    {
-	return new KWFactory;
-    }
-}
+K_EXPORT_COMPONENT_FACTORY( libkwordpart, KWFactory )
 
 
 KInstance* KWFactory::s_global = 0;
