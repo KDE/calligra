@@ -561,7 +561,7 @@ OutlineSlideItem::OutlineSlideItem( KListView* parent, KPrPage* _page, bool _mas
 {
     setDragEnabled(true);
     setPage( _page );
-    setPixmap( 0, KPBarIcon( "newslide" ) );
+    setPixmap( 0, KPBarIcon( "slide" ) );
 }
 
 OutlineSlideItem::OutlineSlideItem( KListView* parent, OutlineSlideItem * after, KPrPage* _page, bool _masterPage )
@@ -569,7 +569,7 @@ OutlineSlideItem::OutlineSlideItem( KListView* parent, OutlineSlideItem * after,
 {
     setDragEnabled(true);
     setPage( _page );
-    setPixmap( 0, KPBarIcon( "newslide" ) );
+    setPixmap( 0, KPBarIcon( "slide" ) );
 }
 
 void OutlineSlideItem::setPage( KPrPage* p )

@@ -70,7 +70,7 @@ void KPPresDurationDia::setupSlideList( QWidget *_page )
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         if ( doc->pageList().at( i )->isSlideSelected() ) {
             KListViewItem *item = new KListViewItem( slides );
-            item->setPixmap( 0, KPBarIcon( "newslide" ) );
+            item->setPixmap( 0, KPBarIcon( "slide" ) );
             item->setText( 0, QString( "%1" ).arg( i + 1 ) );
             item->setText( 1, *m_durationListString.at( i ) );
             item->setText( 2, doc->pageList().at( i )->pageTitle() );
