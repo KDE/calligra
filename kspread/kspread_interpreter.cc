@@ -2712,6 +2712,33 @@ static bool kspreadfunc_tdist( KSContext& context ) {
   return true;
 }
 
+static bool kspreadfunc_fdist( KSContext& context ) {
+  //returns the f-distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "FDIST", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+
+  double fF = args[0]->doubleValue();
+  double fF1 = args[1]->intValue();
+  double fF2 = args[2]->intValue();
+
+  if (fF < 0.0 || fF1 < 1 || fF2 < 1 || fF1 >= 1.0E10 || fF2 >= 1.0E10) {
+    return false;
+  }
+  
+  context.setValue( new KSValue(GetFDist(fF, fF1, fF2)));
+
+  return true;
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
@@ -5220,6 +5247,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "POISSON", new KSValue( new KSBuiltinFunction( module, "POISSON", kspreadfunc_poisson) ) );
   module->addObject( "CONFIDENCE", new KSValue( new KSBuiltinFunction( module, "CONFIDENCE", kspreadfunc_confidence) ) );
   module->addObject( "TDIST", new KSValue( new KSBuiltinFunction( module, "TDIST", kspreadfunc_tdist) ) );
+  module->addObject( "FDIST", new KSValue( new KSBuiltinFunction( module, "FDIST", kspreadfunc_fdist) ) );
 
   return module;
 }

@@ -2856,6 +2856,30 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>FDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>degrees of freedom 1</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>degrees of freedom 2</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the f-distribution.
+        </Text>
+        <Syntax>FDIST(number;degrees_freedom_1;degrees_freedom_2)</Syntax>
+        <Example>FDIST(0.8;8;12) yields 0.61</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>
