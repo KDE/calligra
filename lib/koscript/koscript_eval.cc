@@ -276,6 +276,11 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
       return TRUE;
   }
 
+  // allows addition of boolean value, such as True+False
+  if ( r.value()->type() == KSValue::BoolType )
+  {
+      r.value()->cast( KSValue::IntType );
+  }
 
   if ( l.value()->type() == KSValue::TimeType )
   {
@@ -297,6 +302,13 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
       context.value()->setValue( d );
       return TRUE;
   }
+
+  // allows addition of boolean value, such as True+False
+  if ( l.value()->type() == KSValue::BoolType )
+  {
+      l.value()->cast( KSValue::IntType );
+  }
+
   // If we have double and int, then always convert to double
   else if ( l.value()->type() == KSValue::DoubleType )
   {

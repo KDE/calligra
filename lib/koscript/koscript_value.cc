@@ -430,6 +430,12 @@ bool KSValue::cast( Type _typ )
 	typ = _typ;
 	return true;
       }
+      else if ( _typ == IntType )
+      {
+        KScript::Boolean b = val.b;
+        setValue( b ? 1 : 0 );
+        typ = _typ;
+      }
       return false;
       break;
     case DoubleType:
