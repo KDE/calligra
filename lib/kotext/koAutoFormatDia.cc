@@ -442,6 +442,7 @@ bool KoAutoFormatDia::applyConfig()
 
     m_docAutoFormat->configIgnoreDoubleSpace( cbIgnoreDoubleSpace->isChecked());
     m_docAutoFormat->configRemoveSpaceBeginEndLine( cbRemoveSpaceBeginEndLine->isChecked());
+    m_docAutoFormat->configUseBulletStyle(cbUseBulletStyle->isChecked());
 
 
     // Second tab
