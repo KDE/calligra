@@ -40,14 +40,11 @@ bool Border::operator!=( const Border _brd ) const {
     return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
 }
 
-QPen Border::borderPen( const Border & _brd, int width, bool printing )
+QPen Border::borderPen( const Border & _brd, int width, QColor defaultColor )
 {
     QPen pen( _brd.color, width );
     if ( !_brd.color.isValid() )
-        if ( printing )
-            pen.setColor( Qt::black );
-        else
-            pen.setColor( QApplication::palette().color( QPalette::Active, QColorGroup::Base ) );
+        pen.setColor( defaultColor );
 
     switch ( _brd.style ) {
     case Border::SOLID:
@@ -152,14 +149,15 @@ void Border::drawBorders( QPainter& painter, KWDocument * doc, QRect rect, Borde
     int leftBorderWidth = zoomWidthX( leftBorder.ptWidth, doc, minborder );
     int rightBorderWidth = zoomWidthX( rightBorder.ptWidth, doc, minborder );
 
-    bool printing = painter.device()->devType() == QInternal::Printer;
     //kdDebug() << "Border::drawBorders top=" << topBorderWidth << " bottom=" << bottomBorderWidth
     //          << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
+
+    QColor defaultColor = KWDocument::defaultTextColor( &painter );
 
     if ( topBorderWidth > 0 )
     {
         if ( topBorder.ptWidth > 0 )
-            painter.setPen( Border::borderPen( topBorder, topBorderWidth, printing ) );
+            painter.setPen( Border::borderPen( topBorder, topBorderWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
         int y = rect.top() - topBorderWidth + topBorderWidth/2;
@@ -168,7 +166,7 @@ void Border::drawBorders( QPainter& painter, KWDocument * doc, QRect rect, Borde
     if ( bottomBorderWidth > 0 )
     {
         if ( bottomBorder.ptWidth > 0 )
-            painter.setPen( Border::borderPen( bottomBorder, bottomBorderWidth, printing ) );
+            painter.setPen( Border::borderPen( bottomBorder, bottomBorderWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
         int y = rect.bottom() + bottomBorderWidth - bottomBorderWidth/2;
@@ -177,7 +175,7 @@ void Border::drawBorders( QPainter& painter, KWDocument * doc, QRect rect, Borde
     if ( leftBorderWidth > 0 )
     {
         if ( leftBorder.ptWidth > 0 )
-            painter.setPen( Border::borderPen( leftBorder, leftBorderWidth, printing ) );
+            painter.setPen( Border::borderPen( leftBorder, leftBorderWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
         int x = rect.left() - leftBorderWidth + leftBorderWidth/2;
@@ -186,7 +184,7 @@ void Border::drawBorders( QPainter& painter, KWDocument * doc, QRect rect, Borde
     if ( rightBorderWidth > 0 )
     {
         if ( rightBorder.ptWidth > 0 )
-            painter.setPen( Border::borderPen( rightBorder, rightBorderWidth, printing ) );
+            painter.setPen( Border::borderPen( rightBorder, rightBorderWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
         int x = rect.right() + rightBorderWidth - rightBorderWidth/2;

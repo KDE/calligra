@@ -319,7 +319,8 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         r.setTop( lineY( 0 ) );
         r.setBottom( static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing ) - 1 );
 
-        Border::drawBorders( painter, doc, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder, 0, QPen() );
+        Border::drawBorders( painter, doc, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
+                             0, QPen() );
     }
 }
 
