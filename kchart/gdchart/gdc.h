@@ -41,13 +41,14 @@ static unsigned long		_gdccfoo2;
 #define _gdcntrst(bg)		( ((bg)&0x800000?0x000000:0xFF0000)|	\
 							  ((bg)&0x008000?0x000000:0x00FF00)|	\
 							  ((bg)&0x000080?0x000000:0x0000FF) )
-#define _clrallocate( im, rawclr, bgc )														\
-							( (_gdccfoo2=rawclr==GDC_DFLTCOLOR? _gdcntrst(bgc): rawclr),	\
-							  (_gdccfoo1=gdImageColorExact(im,l2gdcal(_gdccfoo2))) != -1?	\
-								_gdccfoo1:													\
-								gdImageColorsTotal(im) == gdMaxColors?						\
-								   gdImageColorClosest(im,l2gdcal(_gdccfoo2)):				\
-								   gdImageColorAllocate(im,l2gdcal(_gdccfoo2)) )
+#define _clrallocate( im, rawclr, bgc )								   \
+	( (_gdccfoo2=rawclr==GDC_DFLTCOLOR? _gdcntrst(bgc): rawclr),	\
+     (_gdccfoo1=gdImageColorExact(im,l2gdcal(_gdccfoo2))) != -1?	\
+	_gdccfoo1:													\
+	gdImageColorsTotal(im) == gdMaxColors?						\
+   gdImageColorClosest(im,l2gdcal(_gdccfoo2)):				\
+   gdImageColorAllocate(im,l2gdcal(_gdccfoo2)) )
+
 #define _clrshdallocate( im, rawclr, bgc )													\
 							( (_gdccfoo2=rawclr==GDC_DFLTCOLOR? _gdcntrst(bgc): rawclr),	\
 							  (_gdccfoo1=gdImageColorExact(im,l2gdshd(_gdccfoo2))) != -1?	\
