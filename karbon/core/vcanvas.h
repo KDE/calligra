@@ -49,6 +49,7 @@ public:
 	void setPos( const KoPoint& p );
 
 	KoPoint toContents( const KoPoint & ) const;
+	KoRect boundingBox() const;
 
 protected:
 	virtual void focusInEvent( QFocusEvent * );

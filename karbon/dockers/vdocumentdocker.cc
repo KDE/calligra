@@ -83,12 +83,7 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		scaleFactor = ( height() - 4 ) / m_document->height();
 		xoffset = ( ( width() - 4 ) / scaleFactor - m_document->width() ) / 2;
 	}
-	KoPoint p1( 0, 0 );
-	p1 = m_view->canvasWidget()->toContents( p1 );
-	KoPoint p2( m_view->canvasWidget()->width(), m_view->canvasWidget()->height() );
-	p2 = m_view->canvasWidget()->toContents( p2 );
-	KoRect rect( p1, p2 );
-	rect = rect.normalize();
+	KoRect rect = m_view->canvasWidget()->boundingBox();
 
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 	if( event->type() == QEvent::MouseButtonPress )

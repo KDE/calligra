@@ -105,6 +105,16 @@ VCanvas::toContents( const KoPoint &p ) const
 	return p2;
 }
 
+KoRect
+VCanvas::boundingBox() const
+{
+	KoPoint p1( 0, 0 );
+    p1 = toContents( p1 );
+    KoPoint p2( width(), height() );
+    p2 = toContents( p2 );
+    return KoRect( p1, p2 ).normalize();
+}
+
 void
 VCanvas::setYMirroring( VPainter *p )
 {
