@@ -48,13 +48,13 @@ class KexiKugarDesignerWrapper : public KexiDialogBase
                 virtual KXMLGUIClient *guiClient();
 		virtual void activateActions();
 		virtual void deactivateActions();
-
+		bool initFailed();
 	public slots:
                 void getPath(QString &path);
 	private:
-		KoDocument *m_doc; //kuDoc
 		KoView *m_view;
 		KexiKugarHandlerItem *m_item;
+		bool m_initFailed;
 };
 
 #endif

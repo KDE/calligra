@@ -175,10 +175,12 @@ QString KuKexiFieldComboBox::value() const {
 
 
 KuKexi::KuKexi(QObject *parent, const char* name, const QStringList& args):KuDesignerPlugin(parent,name,args) {
-	m_kugar=(KudesignerDoc*)parent;
-	m_dialog=((KexiDialogBase*)parent->parent());
-	m_kexi=(KexiProject*)m_dialog->kexiProject();
-
+//	m_kugar=(KudesignerDoc*)parent;
+//	m_dialog=((KexiDialogBase*)parent->parent());
+//	m_kexi=(KexiProject*)m_dialog->kexiProject();
+//	m_kexi=(KexiProject*)(((KexiProjectHandlerItem*)parent->parent())->projectPart()->kexiProject());	
+	KexiProjectHandlerItem *it=static_cast<KexiProjectHandlerItem*>(parent->parent()->qt_cast("KexiProjectHandlerItem"));
+	m_kexi=(KexiProject*)(it->projectPart()->kexiProject());
 	updateSourceList();
 }
 

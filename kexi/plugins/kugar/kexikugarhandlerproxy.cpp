@@ -88,7 +88,7 @@ KexiKugarHandlerProxy::executeItem(const QString& identifier)
 void
 KexiKugarHandlerProxy::slotEdit(const QString& identifier)
 {
-
+	m_kugarManager->editReport(kexiView(),identifier);
 }
 
 void

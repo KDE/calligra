@@ -25,6 +25,9 @@ class KexiTempDir;
 
 #include "kexiprojecthandler.h"
 
+class QDomDocument;
+class QDomElement;
+
 class KexiKugarHandler : public KexiProjectHandler
 {
 	Q_OBJECT
@@ -40,14 +43,18 @@ class KexiKugarHandler : public KexiProjectHandler
 
                 virtual void hookIntoView(KexiView *view);
 
-                virtual void store (KoStore *){;}
-                virtual void load  (KoStore *){;}
+		virtual void loadXML(const QDomDocument &, const QDomElement&);
+		virtual void saveXML(QDomDocument&);
+
+                virtual void store (KoStore *);
+                virtual void load  (KoStore *);
 
 
 		virtual QPixmap				groupPixmap();
 		virtual QPixmap				itemPixmap();
 
 		void createReport(KexiView*);
+		void editReport(KexiView*,const QString &identifier);
 		void view(KexiView*,const QString &identifier);	
 		QString tempPath();
 	private:

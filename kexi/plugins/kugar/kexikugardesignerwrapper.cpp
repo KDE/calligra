@@ -34,7 +34,7 @@
 #include <kexiview.h>
 
 KexiKugarDesignerWrapper::KexiKugarDesignerWrapper(KexiView *view, QWidget *parent, const char *name, KexiKugarHandlerItem *item,bool newrep)
-	: KexiDialogBase(view,parent,name),m_doc(0),m_view(0),m_item(item)
+	: KexiDialogBase(view,parent,name),m_view(0),m_item(item),m_initFailed(false)
 {
 	setCaption(i18n("Edit Report %1").arg(m_item->identifier()));
 
@@ -42,12 +42,6 @@ KexiKugarDesignerWrapper::KexiKugarDesignerWrapper(KexiView *view, QWidget *pare
 	setIcon(iloader->loadIcon("form", KIcon::Small));
 
 	(new QVBoxLayout(this))->setAutoAdd(true);
-	QStringList config;
-	config<<"plugin=kudesigner_kexiplugin";
-	config<<"forcePropertyEditorPosition=left";
-	m_doc=KParts::ComponentFactory::createPartInstanceFromLibrary<KoDocument>(QFile::encodeName("libkudesignerpart"),
-			this,0,this,0,config);
-	if(newrep) m_doc->initDoc();
 //	m_part->openURL("/usr/src/kde3/koffice/kugar/samples/sample1.kud");
 //	part->widget()->show();
 	setMinimumWidth(50);
@@ -57,6 +51,10 @@ KexiKugarDesignerWrapper::KexiKugarDesignerWrapper(KexiView *view, QWidget *pare
 
 KexiKugarDesignerWrapper::~KexiKugarDesignerWrapper(){}
 
+
+bool KexiKugarDesignerWrapper::initFailed() {
+	return m_initFailed;
+}
 
 void KexiKugarDesignerWrapper::getPath(QString &path) {
 	KexiKugarHandler *kkh=dynamic_cast<KexiKugarHandler*>(m_item->projectPart());
@@ -73,10 +71,10 @@ KXMLGUIClient *KexiKugarDesignerWrapper::guiClient()
 	kdDebug()<<"Shell window does NOT exist"<<endl;
 	if (!m_view) {
 		 kdDebug()<<"Creating KuDesigner VIEW *******"<<endl;
-		 m_view=m_doc->createView(this,"");
+		 m_view=m_item->designer()->createView(this,"");
 		 m_view->show();
 		 KParts::GUIActivateEvent ev(true);
-		 QApplication::sendEvent(m_doc,&ev);
+		 QApplication::sendEvent(m_item->designer(),&ev);
 		 QApplication::sendEvent(m_view,&ev);
 	}
 	//if (m_view==0) kdDebug()<<"That shouldn't happen"<<endl;
