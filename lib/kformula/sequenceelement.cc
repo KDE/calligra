@@ -253,7 +253,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 void SequenceElement::drawEmptyRect( QPainter& painter, const ContextStyle& context,
                                      const LuPixelPoint& upperLeft )
 {
-    if ( painter.device()->devType() != QInternal::Printer ) {
+    if ( context.edit() ) {
         painter.setBrush(Qt::NoBrush);
         painter.setPen( QPen( context.getEmptyColor(),
                               context.layoutUnitToPixelX( context.getLineWidth() ) ) );

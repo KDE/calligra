@@ -37,7 +37,7 @@ KFORMULA_NAMESPACE_BEGIN
 struct View::View_Impl {
 
     View_Impl(Container* doc, View* view)
-            : smallCursor(false), cursorVisible(false), cursorHasChanged(true),
+            : smallCursor(false), cursorHasChanged(true),
               document(doc)
     {
         connect(document, SIGNAL(elementWillVanish(BasicElement*)),
@@ -59,12 +59,6 @@ struct View::View_Impl {
      * If set the cursor will never be bigger that the formula.
      */
     bool smallCursor;
-
-    /**
-     * Whether you can see the cursor. This has to be kept
-     * in sync with reality.
-     */
-    bool cursorVisible;
 
     /**
      * Whether the cursor changed since the last time
@@ -91,7 +85,6 @@ struct View::View_Impl {
 
 FormulaCursor* View::cursor() const        { return impl->cursor; }
 bool& View::cursorHasChanged()             { return impl->cursorHasChanged; }
-bool& View::cursorVisible()                { return impl->cursorVisible; }
 bool& View::smallCursor()                  { return impl->smallCursor; }
 Container* View::container() const { return impl->document; }
 
@@ -125,7 +118,7 @@ void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 {
 //     kdDebug( DEBUGID ) << "View::draw: " << rect.x() << " " << rect.y() << " "
 //                      << rect.width() << " " << rect.height() << endl;
-    container()->draw( painter, rect, cg );
+    container()->draw( painter, rect, cg, true );
     if ( cursorVisible() ) {
         cursor()->draw( painter, contextStyle(), smallCursor() );
     }
@@ -139,20 +132,12 @@ void View::keyPressEvent( QKeyEvent* event )
 
 void View::focusInEvent(QFocusEvent*)
 {
-    //cerr << "void View::focusInEvent(QFocusEvent*): " << cursorVisible() << " " << hasFocus() << endl;
     container()->setActiveCursor(cursor());
-    cursorHasChanged() = true;
-    cursorVisible() = true;
-    emitCursorChanged();
 }
 
 void View::focusOutEvent(QFocusEvent*)
 {
-    //cerr << "void View::focusOutEvent(QFocusEvent*): " << cursorVisible() << " " << hasFocus() << endl;
-    container()->setActiveCursor(0);
-    cursorHasChanged() = true;
-    cursorVisible() = false;
-    emitCursorChanged();
+    //container()->setActiveCursor(0);
 }
 
 void View::mousePressEvent( QMouseEvent* event )
@@ -317,6 +302,11 @@ void View::emitCursorChanged()
 const ContextStyle& View::contextStyle() const
 {
     return container()->document()->getContextStyle();
+}
+
+bool View::cursorVisible()
+{
+    return !cursor()->isReadOnly() || cursor()->isSelection();
 }
 
 KFORMULA_NAMESPACE_END

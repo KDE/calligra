@@ -89,7 +89,7 @@ public:
     /**
      * Draws the whole thing.
      */
-    void draw( QPainter& painter, const QRect& r, ContextStyle& context );
+    void draw( QPainter& painter, const LuPixelRect& r, ContextStyle& context );
 
     /**
      * This is called by the container to get a command depending on

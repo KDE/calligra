@@ -81,7 +81,7 @@ void FormulaElement::calcSizes( ContextStyle& context )
 /**
  * Draws the whole thing.
  */
-void FormulaElement::draw( QPainter& painter, const QRect& r,
+void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
                            ContextStyle& context )
 {
     //kdDebug( DEBUGID ) << "FormulaElement::draw" << endl;

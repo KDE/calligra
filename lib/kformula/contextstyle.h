@@ -77,14 +77,17 @@ public:
 
     void readConfig( KConfig* config );
 
+    bool edit() const { return m_edit; }
+    void setEdit( bool e ) { m_edit = e; }
+
     /**
      * Sets the zoom by hand. This is to be used in <code>paintContent</code>.
      * @returns whether there was any change.
      */
     bool setZoom( double zoomX, double zoomY, bool updateViews, bool forPrint );
 
-    bool getSyntaxHighlighting() { return syntaxHighlighting; }
-    void setSyntaxHighlighting(bool highlight) { syntaxHighlighting = highlight; }
+    bool syntaxHighlighting() const { return m_syntaxHighlighting; }
+    void setSyntaxHighlighting( bool highlight ) { m_syntaxHighlighting = highlight; }
 
     QColor getDefaultColor()  const { return defaultColor; }
     QColor getNumberColor()   const;
@@ -251,7 +254,12 @@ private:
     /**
      * Whether we want coloured formulae.
      */
-    bool syntaxHighlighting;
+    bool m_syntaxHighlighting;
+
+    /**
+     * Whether we are in edit mode.
+     */
+    bool m_edit;
 };
 
 KFORMULA_NAMESPACE_END

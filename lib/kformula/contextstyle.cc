@@ -61,7 +61,7 @@ ContextStyle::ContextStyle()
     linearMovement = false;
 
     centerSymbol = false;
-    syntaxHighlighting = true;
+    m_syntaxHighlighting = true;
 
     setup();
 }
@@ -74,6 +74,8 @@ void ContextStyle::readConfig( KConfig* config )
     operatorColor = config->readColorEntry( "operatorColor", &operatorColor );
     emptyColor    = config->readColorEntry( "emptyColor",    &emptyColor );
     errorColor    = config->readColorEntry( "errorColor",    &errorColor );
+    m_syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting",
+                                                  m_syntaxHighlighting );
 }
 
 bool ContextStyle::setZoom( double zoomX, double zoomY, bool, bool )
@@ -87,7 +89,7 @@ bool ContextStyle::setZoom( double zoomX, double zoomY, bool, bool )
 
 QColor ContextStyle::getNumberColor()   const
 {
-    if (syntaxHighlighting) {
+    if ( edit() ) {
         return numberColor;
     }
     return getDefaultColor();
@@ -95,7 +97,7 @@ QColor ContextStyle::getNumberColor()   const
 
 QColor ContextStyle::getOperatorColor() const
 {
-    if (syntaxHighlighting) {
+    if ( edit() ) {
         return operatorColor;
     }
     return getDefaultColor();
@@ -103,7 +105,7 @@ QColor ContextStyle::getOperatorColor() const
 
 QColor ContextStyle::getErrorColor()    const
 {
-    if (syntaxHighlighting) {
+    if ( edit() ) {
         return errorColor;
     }
     return getDefaultColor();
@@ -111,7 +113,7 @@ QColor ContextStyle::getErrorColor()    const
 
 QColor ContextStyle::getEmptyColor()    const
 {
-    if (syntaxHighlighting) {
+    if ( edit() ) {
         return emptyColor;
     }
     return getDefaultColor();

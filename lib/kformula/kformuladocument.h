@@ -66,7 +66,7 @@ public:
     /**
      * @returns the documents context style.
      */
-    ContextStyle& getContextStyle( bool forPrinting = false );
+    ContextStyle& getContextStyle( bool edit=false );
 
     /**
      * Change the zoom factor to @p z (e.g. 150 for 150%)

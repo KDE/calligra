@@ -238,16 +238,17 @@ const SymbolTable& Container::getSymbolTable() const
 }
 
 
-void Container::draw(QPainter& painter, const QRect& r, const QColorGroup& cg)
+void Container::draw( QPainter& painter, const QRect& r, const QColorGroup& cg, bool edit )
 {
     painter.fillRect( r, cg.base() );
-    draw( painter, r );
+    draw( painter, r, edit );
 }
 
 
-void Container::draw(QPainter& painter, const QRect& r)
+void Container::draw( QPainter& painter, const QRect& r, bool edit )
 {
-    ContextStyle& context = document()->getContextStyle( painter.device()->devType() == QInternal::Printer );
+    //ContextStyle& context = document()->getContextStyle( painter.device()->devType() == QInternal::Printer );
+    ContextStyle& context = document()->getContextStyle( edit );
     rootElement()->draw( painter, context.pixelToLayoutUnit( r ), context );
 }
 
@@ -496,7 +497,11 @@ void Container::print(KPrinter& printer)
     //printer.setFullPage(true);
     QPainter painter;
     if (painter.begin(&printer)) {
-        rootElement()->draw(painter, boundingRect(), document()->getContextStyle(true));
+        rootElement()->draw( painter, LuPixelRect( rootElement()->getX(),
+                                                   rootElement()->getY(),
+                                                   rootElement()->getWidth(),
+                                                   rootElement()->getHeight() ),
+                             document()->getContextStyle( false ) );
     }
 }
 

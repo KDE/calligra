@@ -151,7 +151,7 @@ private:
 
     FormulaCursor* cursor() const;
     bool& cursorHasChanged();
-    bool& cursorVisible();
+    bool cursorVisible();
     bool& smallCursor();
     Container* container() const;
     const ContextStyle& contextStyle() const;

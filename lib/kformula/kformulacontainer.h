@@ -118,12 +118,12 @@ public:
     /**
      * Draws the whole thing.
      */
-    void draw(QPainter& painter, const QRect& r, const QColorGroup& cg);
+    void draw( QPainter& painter, const QRect& r, const QColorGroup& cg, bool edit=false );
 
     /**
      * Draws the whole thing.
      */
-    void draw(QPainter& painter, const QRect& r);
+    void draw( QPainter& painter, const QRect& r, bool edit=false );
 
     /**
      * This function return all the data contained in

@@ -64,7 +64,7 @@ void SpaceElement::draw( QPainter& painter, const LuPixelRect& r,
     if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
-    if ( painter.device()->devType() != QInternal::Printer ) {
+    if ( style.edit() ) {
         painter.setPen( style.getEmptyColor() );
         painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
                           style.layoutUnitToPixelY( myPos.y()+getHeight() ),

@@ -37,8 +37,7 @@ KFORMULA_NAMESPACE_BEGIN
 struct Document::Document_Impl {
 
     Document_Impl( KConfig* config )
-            : leftBracketChar('('), rightBracketChar(')'),
-              syntaxHighlighting(true), formula(0)
+            : leftBracketChar('('), rightBracketChar(')'), formula(0)
     {
         formulae.setAutoDelete( false );
         readConfig( config );
@@ -53,10 +52,6 @@ struct Document::Document_Impl {
     }
 
     void readConfig( KConfig* config ) {
-        config->setGroup( "kformula Color" );
-        syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting",
-                                                    syntaxHighlighting );
-
         contextStyle.readConfig( config );
     }
 
@@ -103,11 +98,6 @@ struct Document::Document_Impl {
     char leftBracketChar;
     char rightBracketChar;
     QString selectedName;
-
-    /**
-     * Whether we want coloured formulae.
-     */
-    bool syntaxHighlighting;
 
     /**
      * The active formula.
@@ -203,7 +193,7 @@ Document::Document( KConfig* config,
 
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
-    impl->syntaxHighlightingAction->setChecked(impl->syntaxHighlighting);
+    impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
 
     if (his == 0) {
         impl->history = new KCommandHistory(collection);
@@ -236,12 +226,13 @@ Document::~Document()
 }
 
 
-ContextStyle& Document::getContextStyle( bool forPrinting )
+ContextStyle& Document::getContextStyle( bool edit )
 {
     // Make sure not to change anything depending on `forPrinting' that
     // would require a new calculation of the formula.
     //kdDebug( DEBUGID ) << "Document::activate: forPrinting=" << forPrinting << endl;
-    impl->contextStyle.setSyntaxHighlighting( forPrinting ? false : impl->syntaxHighlighting );
+    //impl->contextStyle.setSyntaxHighlighting( forPrinting ? false : impl->syntaxHighlighting );
+    impl->contextStyle.setEdit( edit );
     return impl->contextStyle;
 }
 
@@ -760,9 +751,9 @@ void Document::removeRow()
 
 void Document::toggleSyntaxHighlighting()
 {
-    impl->syntaxHighlighting = impl->syntaxHighlightingAction->isChecked();
+    impl->contextStyle.setSyntaxHighlighting( impl->syntaxHighlightingAction->isChecked() );
     // Only to notify all views. We don't expect to get new values.
-    recalc();
+    //recalc();
 }
 
 void Document::delimiterLeft()
