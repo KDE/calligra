@@ -1317,8 +1317,11 @@ void KWView::viewZoom( const QString &s )
         gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
 
         doc->updateResizeHandles( );
+        gui->canvasWidget()->repaintAll();
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit )
+            edit->ensureCursorVisible();
     }
-    gui->canvasWidget()->repaintAll();
     gui->canvasWidget()->setFocus();
 
 }

@@ -923,7 +923,7 @@ void KWTextFrameSet::zoom()
     }
     m_lastFormatted = textdoc->firstParag();
     m_availableHeight = -1; // to be recalculated
-    emit ensureCursorVisible();
+    //emit ensureCursorVisible(); // not here. We don't want this when saving.
     KWFrameSet::zoom();
 }
 
@@ -1177,6 +1177,16 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
     emit ensureCursorVisible();
     emit showCursor();
     emit updateUI();
+}
+
+void KWTextFrameSet::ensureFormatted( QTextParag * parag )
+{
+    while ( !parag->isValid() )
+    {
+        if ( !m_lastFormatted || !isVisible() || m_availableHeight == -1 )
+            return; // formatMore will do nothing -> give up
+        formatMore();
+    }
 }
 
 void KWTextFrameSet::formatMore()
@@ -1679,13 +1689,19 @@ void KWTextFrameSet::setCounter( QTextCursor * cursor, const Counter & counter )
     emit hideCursor();
     storeParagUndoRedoInfo( cursor );
     undoRedoInfo.type = UndoRedoInfo::Counter;
-    undoRedoInfo.name = i18n("Change list type"); // Is that name correct ?
+    undoRedoInfo.name = i18n("Change list type");
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
 	static_cast<KWTextParag*>(cursor->parag())->setCounter( counter );
 	emit repaintChanged( this );
     } else {
 	QTextParag *start = textdoc->selectionStart( QTextDocument::Standard );
 	QTextParag *end = textdoc->selectionEnd( QTextDocument::Standard );
+        // Special hack for BR25742, don't apply bullet to last empty parag of the selection
+        if ( start != end && end->length() <= 1 )
+        {
+            end = end->prev();
+            undoRedoInfo.eid = end->paragId();
+        }
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag*>(start)->setCounter( counter );
@@ -2685,8 +2701,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
 {
     //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor->parag()->paragId() << endl;
     QTextParag * parag = cursor->parag();
-    if ( !parag->isValid() )
-        parag->format();
+    textFrameSet()->ensureFormatted( parag );
     QTextStringChar *chr = parag->at( cursor->index() );
     int h = parag->lineHeightOfChar( cursor->index() );
     int x = parag->rect().x() + chr->x + cursor->offsetX();

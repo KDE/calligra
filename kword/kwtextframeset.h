@@ -161,8 +161,10 @@ public:
     void printRTDebug( int );
 #endif
 
+    // Invalidate all paragraphs (causes a re-flow of the text upon next redraw)
     virtual void layout();
 
+    // Calculate statistics for this frameset
     virtual void statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences );
 
     // reimplemented from QTextFlow
@@ -171,6 +173,12 @@ public:
     virtual void adjustFlow( int &yp, int w, int h, QTextParag *parag, bool pages = TRUE );
     virtual void draw( QPainter *p, int cx, int cy, int cw, int ch );
     virtual void eraseAfter( QTextParag *parag, QPainter *p, const QColorGroup & cg );
+
+    // Make sure this paragraph is formatted
+    void ensureFormatted( QTextParag * parag );
+
+public slots:
+    void formatMore();
 
 signals:
     void hideCursor();
@@ -187,8 +195,6 @@ signals:
     // Tell the views that the selection changed (for cut/copy...)
     void selectionChanged( bool hasSelection );
 
-public slots:
-    void formatMore();
 private slots:
     void doChangeInterval();
 
@@ -342,6 +348,7 @@ public:
 
 public slots:
     void updateUI();
+    void ensureCursorVisible();
 
 protected:
     void placeCursor( const QPoint &pos /* in internal coordinates */ );
@@ -355,7 +362,6 @@ private slots:
     void hideCursor() { drawCursor( false ); }
     void showCursor() { drawCursor( true ); }
     void setCursor( QTextCursor * _cursor ) { *cursor = *_cursor; }
-    void ensureCursorVisible();
     void showCurrentFormat();
 
 private:

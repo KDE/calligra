@@ -130,7 +130,7 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
     KWTextParag *p = static_cast<KWTextParag *>(doc->paragAt( firstParag ));
     if ( !p )
     {
-        kdDebug() << "KWTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
+        kdWarning() << "KWTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
         return c;
     }
     while ( p ) {
@@ -163,7 +163,7 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
                 p->setLinesTogether( m_newParagLayout.linesTogether );
                 break;
             default:
-                kdDebug() << "Houston we have a problem" << endl;
+                kdWarning() << "Houston we have a problem" << endl;
                 break;
         }
         if ( p->paragId() == lastParag )
@@ -171,6 +171,9 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
         p = static_cast<KWTextParag *>(p->next());
     }
     //kdDebug() << "KWTextParagCommand::execute done" << endl;
+    // Set cursor to end of selection. Like in QTextFormatCommand::[un]execute...
+    c->setParag( p );
+    c->setIndex( p->length()-1 );
     return c;
 }
 
@@ -226,6 +229,9 @@ QTextCursor * KWTextParagCommand::unexecute( QTextCursor *c )
         p = static_cast<KWTextParag *>(p->next());
         ++lit;
     }
+    // Set cursor to end of selection. Like in QTextFormatCommand::[un]execute...
+    c->setParag( p );
+    c->setIndex( p->length()-1 );
     return c;
 }
 
