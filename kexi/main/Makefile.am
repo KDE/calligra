@@ -19,7 +19,8 @@ libkeximain_la_LIBADD = $(LIB_KEXI_KMDI) \
 	../kexidb/libkexidb.la \
 	../core/libkexicore.la \
 	./startup/libkeximainstartup.la \
-	../widget/propertyeditor/libkexipropertyeditor.la
+	../widget/propertyeditor/libkexipropertyeditor.la \
+	../migration/libkeximigrate.la
 
 INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/lib/kofficeui \
