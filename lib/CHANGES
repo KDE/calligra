@@ -2,6 +2,8 @@ Changes between KOffice-1.3.2 and KOffice-1.3.3
 ===============================================
 KOfficeCore:
 - Support MS-DOS EPS files directly without stripping them internally.
+- Display errors when the part can't be loaded - e.g. due to an undefined symbol.
+This fixes the long-standing "program exits with error code 1 and no warning" problem.
 
 KOfficeUI:
 - 

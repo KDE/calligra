@@ -52,8 +52,10 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name ) c
 {
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
-    if( !factory )
+    if( !factory ) {
+        kdWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
         return 0;
+    }
 
     QObject* obj;
     if ( factory->inherits( "KParts::Factory" ) )
