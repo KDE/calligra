@@ -748,16 +748,16 @@ void configureLayoutPage::slotDefault()
 
 void configureLayoutPage::initCombo()
 {
-  paper=0;
+  paper=1;
   orientation=0;
   unit=0;
-  if( config->hasGroup("Parameters" ))
-        {
-        config->setGroup( "Parameters" );
-	paper=config->readNumEntry( "Default size page" ,0);
-	orientation=config->readNumEntry( "Default orientation page" ,0);
-	unit=config->readNumEntry( "Default unit page" ,0);
-	}
+  if( config->hasGroup("KSpread Page Layout" ))
+    {
+      config->setGroup( "KSpread Page Layout" );
+      paper=config->readNumEntry( "Default size page" ,1);
+      orientation=config->readNumEntry( "Default orientation page" ,0);
+      unit=config->readNumEntry( "Default unit page" ,0);
+    }
   defaultSizePage->setCurrentItem(paper);
   defaultOrientationPage->setCurrentItem(orientation);
   defaultUnit->setCurrentItem(unit);
@@ -766,7 +766,7 @@ void configureLayoutPage::initCombo()
 
 void configureLayoutPage::apply()
 {
-  config->setGroup( "Parameters" );
+  config->setGroup( "KSpread Page Layout" );
 
  if(paper!=defaultSizePage->currentItem())
    {
