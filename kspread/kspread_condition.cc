@@ -258,6 +258,8 @@ void KSpreadConditions::saveOasisConditions( KoGenStyle &currentCellStyle )
 
 QString KSpreadConditions::saveOasisConditionValue( KSpreadConditional &condition)
 {
+    //we can also compare text value.
+    //todo adapt it.
     QString value;
     switch( condition.cond )
     {
@@ -265,40 +267,78 @@ QString KSpreadConditions::saveOasisConditionValue( KSpreadConditional &conditio
         break;
     case Equal:
         value="cell-content()=";
-        value+=QString::number( condition.val1 );
+        if ( condition.strVal1 )
+            value+=*condition.strVal1;
+        else
+            value+=QString::number( condition.val1 );
         break;
     case Superior:
         value="cell-content()>";
-        value+=QString::number( condition.val1 );
+        if ( condition.strVal1 )
+            value+=*condition.strVal1;
+        else
+            value+=QString::number( condition.val1 );
         break;
     case Inferior:
         value="cell-content()<";
-        value+=QString::number( condition.val1 );
+        if ( condition.strVal1 )
+            value+=*condition.strVal1;
+        else
+            value+=QString::number( condition.val1 );
         break;
     case SuperiorEqual:
         value="cell-content()>=";
-        value+=QString::number( condition.val1 );
+        if ( condition.strVal1 )
+            value+=*condition.strVal1;
+        else
+            value+=QString::number( condition.val1 );
         break;
     case InferiorEqual:
         value="cell-content()<=";
-        value+=QString::number( condition.val1 );
+        if ( condition.strVal1 )
+            value+=*condition.strVal1;
+        else
+            value+=QString::number( condition.val1 );
         break;
     case Between:
         value="cell-content-is-between(";
-        value+=QString::number( condition.val1 );
-        value+=",";
-        value+=QString::number( condition.val2 );
+        if ( condition.strVal1 )
+        {
+            value+=*condition.strVal1;
+            value+=",";
+            if ( condition.strVal2 )
+                value+=*condition.strVal2;
+        }
+        else
+        {
+            value+=QString::number( condition.val1 );
+            value+=",";
+            value+=QString::number( condition.val2 );
+        }
         value+=")";
         break;
     case DifferentTo:
         value="cell-content()!="; //FIXME not good here !
-        value+=QString::number( condition.val1 );
+        if ( condition.strVal1 )
+            value+=*condition.strVal1;
+        else
+            value+=QString::number( condition.val1 );
         break;
     case Different:
         value="cell-content-is-not-between(";
-        value+=QString::number( condition.val1 );
-        value+=",";
-        value+=QString::number( condition.val2 );
+        if ( condition.strVal1 )
+        {
+            value+=*condition.strVal1;
+            value+=",";
+            if ( condition.strVal2 )
+                value+=*condition.strVal2;
+        }
+        else
+        {
+            value+=QString::number( condition.val1 );
+            value+=",";
+            value+=QString::number( condition.val2 );
+        }
         value+=")";
         break;
     }
@@ -475,7 +515,10 @@ void KSpreadConditions::loadOasisCondition( QString &valExpression, KSpreadCondi
     {
         newCondition.val1 = value.toInt(&ok);
         if ( !ok )
+        {
+            newCondition.strVal1 = new QString( value );
             kdDebug()<<" Try to parse this value :"<<value<<endl;
+        }
 
     }
 }
@@ -491,7 +534,10 @@ void KSpreadConditions::loadOasisValidationValue( const QStringList &listVal, KS
     {
         newCondition.val1 = listVal[0].toInt(&ok);
         if ( !ok )
+        {
+            newCondition.strVal1 = new QString( listVal[0] );
             kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+        }
     }
     ok=false;
     newCondition.val2 = listVal[1].toDouble(&ok);
@@ -499,8 +545,10 @@ void KSpreadConditions::loadOasisValidationValue( const QStringList &listVal, KS
     {
         newCondition.val2 = listVal[1].toInt(&ok);
         if ( !ok )
+        {
+            newCondition.strVal2 = new QString( listVal[1] );
             kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
-
+        }
     }
 }
 
