@@ -370,7 +370,11 @@ void ProcessParagraphData ( QString                 &paraText,
                             QValueList<FormatData>  &paraFormatDataList,
                             QString                 &outputText          )
 {
-    if ( paraText.length () > 0 )
+    if (paraFormatDataList.isEmpty())
+    {
+        outputText+=paraText;
+    }
+    else if ( paraText.length () > 0 )
     {
         QValueList<FormatData>::Iterator  paraFormatDataIt;
 

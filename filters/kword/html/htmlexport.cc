@@ -572,7 +572,20 @@ class ClassExportFilterBase
 static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText,
                                                  ClassExportFilterBase* exportFilter)
 {
-    if (! paraText.isEmpty() )
+    if (paraFormatDataList.isEmpty())
+    {
+        // No <FORMAT> tags were found, it is just normal text!
+        if ((paraText==" ") || (paraText.isEmpty()))
+        {//Just a space as text. Therefore we must use a non-breaking space.
+            outputText += "&nbsp;";
+        }
+        else
+        {
+            //Code all possible predefined HTML entities
+            outputText += exportFilter->escapeText(paraText);
+        }
+    }
+    else if (! paraText.isEmpty() )
     {
 
         QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
@@ -691,7 +704,20 @@ static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<For
 static void ProcessParagraphDataStyle ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText,
                                                  ClassExportFilterBase* exportFilter)
 {
-    if (! paraText.isEmpty() )
+    if (paraFormatDataList.isEmpty())
+    {
+        // No <FORMAT> tags were found, it is just normal text!
+        if ((paraText==" ") || (paraText.isEmpty()))
+        {//Just a space as text. Therefore we must use a non-breaking space.
+            outputText += "&nbsp;";
+        }
+        else
+        {
+            //Code all possible predefined HTML entities
+            outputText += exportFilter->escapeText(paraText);
+        }
+    }
+    else if (! paraText.isEmpty() )
     {
 
         QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!

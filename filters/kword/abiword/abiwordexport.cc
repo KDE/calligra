@@ -353,20 +353,35 @@ static void ProcessHardBreakTag ( QDomNode myNode, void *tagData, QString &)
 
 static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText )
 {
-    if ( paraText.length () > 0 )
+    const QString strAmp ("&amp;");
+    const QString strLt  ("&lt;");
+    const QString strGt  ("&gt;");
+    const QString strApos("&apos;");
+    const QString strQuot("&quot;");
+
+    const QRegExp regExpAmp ("&");
+    const QRegExp regExpLt  ("<");
+    const QRegExp regExpGt  (">");
+    const QRegExp regExpApos("'");
+    const QRegExp regExpQuot("\"");
+
+    if (paraFormatDataList.isEmpty())
     {
-        const QString strAmp ("&amp;");
-        const QString strLt  ("&lt;");
-        const QString strGt  ("&gt;");
-        const QString strApos("&apos;");
-        const QString strQuot("&quot;");
-
-        const QRegExp regExpAmp ("&");
-        const QRegExp regExpLt  ("<");
-        const QRegExp regExpGt  (">");
-        const QRegExp regExpApos("'");
-        const QRegExp regExpQuot("\"");
-
+        // No <FORMAT> tags were found, it is just normal text!
+        if (!paraText.isEmpty())
+        {
+            QString str=paraText;
+            //Code all possible predefined XML entities
+            str.replace (regExpAmp , strAmp); //Must be the first!!
+            str.replace (regExpLt  , strLt);
+            str.replace (regExpGt  , strGt);
+            str.replace (regExpApos, strApos);
+            str.replace (regExpQuot, strQuot);
+            outputText += str;
+        }
+    }
+    else if ( paraText.length () > 0 )
+    {
         QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
         QString partialText;
