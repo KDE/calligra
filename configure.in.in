@@ -20,8 +20,12 @@ KDE_FIND_PATH(Magick-config, MAGICK_CONFIG, [${prefix}/bin ${exec_prefix}/bin /u
 
 if test -n "$MAGICK_CONFIG"; then
   vers=`$MAGICK_CONFIG --version 2>/dev/null | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
-  if test -n "$vers" && test "$vers" -ge 5005002
+  if test -n "$vers" && test "$vers" -ge 5005002 
   then
+     if test "$vers" -ge 6000003
+     then
+        AC_DEFINE(HAVE_MAGICK6, 1, [ImageMagick Version 6])
+     fi
      LIBMAGICK_LIBS="`$MAGICK_CONFIG --libs`"
      LIBMAGICK_LDFLAGS="`$MAGICK_CONFIG --ldflags`"
      LIBMAGICK_RPATH=
