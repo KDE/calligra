@@ -341,6 +341,13 @@ public:
 	//! Initializes standard editor cell editor factories. This is called internally, once.
 	static void initCellEditorFactories();
 
+	/*! Deletes \a item. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting, 
+	 to double-check if deleting is allowed. \return true on success. */
+	bool deleteItem(KexiTableItem *item);//, bool moveCursor=true);
+
+	/*! Inserts newItem at \a row. -1 means current row. Used by insertEmptyRow(). */
+	void insertItem(KexiTableItem *newItem, int row = -1);
+
 public slots:
 	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
 	//! this will dont work if sorting is disabled with setSortingEnabled()
@@ -416,8 +423,9 @@ public slots:
 	 This method does nothing if:
 	 -inserting flag is disabled (see isInsertingEnabled())
 	 -read-only flag is set (see isReadOnly())
+	 \ return inserted row's data
 	*/
-	void insertEmptyRow(int row = -1);
+	KexiTableItem *insertEmptyRow(int row = -1);
 
 	//! used when Return key is pressed on cell or "+" nav. button is clicked
 	void startEditCurrentCell();
@@ -632,13 +640,6 @@ protected:
 	inline void paintRow(KexiTableItem *item,
 		QPainter *pb, int r, int rowp, int cx, int cy, 
 		int colfirst, int collast, int maxwc);
-
-	/*! Deletes \a item. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting, 
-	 to double-check if deleting is allowed. \return true on success. */
-	bool deleteItem(KexiTableItem *item);//, bool moveCursor=true);
-
-	/*! Inserts newItem at \a row. -1 means current row. Used by insertEmptyRow(). */
-	void insertItem(KexiTableItem *newItem, int row = -1);
 
 	/*! For reimplementation: called by deleteItem(). If returns false, deleting is aborted.
 	 Default implementation just returns true. */

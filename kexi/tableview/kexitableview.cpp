@@ -607,14 +607,15 @@ void KexiTableView::deleteCurrentRow()
 	}
 }
 
-void KexiTableView::insertEmptyRow(int row)
+KexiTableItem *KexiTableView::insertEmptyRow(int row)
 {
 	if ( !acceptRowEdit() || !isEmptyRowInsertingEnabled() 
 		|| (row!=-1 && row >= (rows()+isInsertingEnabled()?1:0) ) )
-		return;
+		return 0;
 
 	KexiTableItem *newItem = new KexiTableItem(columns());
 	insertItem(newItem, row);
+	return newItem;
 }
 
 void KexiTableView::insertItem(KexiTableItem *newItem, int row)
@@ -624,6 +625,9 @@ void KexiTableView::insertItem(KexiTableItem *newItem, int row)
 		row = (d->curRow >= 0 ? d->curRow : 0);
 		d->pCurrentItem = newItem;
 		d->curRow = row;
+	}
+	else if (d->curRow >= row) {
+		d->curRow++;
 	}
 	m_data->insertRow(*newItem, row);
 
@@ -641,6 +645,11 @@ void KexiTableView::insertItem(KexiTableItem *newItem, int row)
 
 	//update navigator's data
 	setNavRowCount(rows());
+
+	if (d->curRow >= row) {
+		//update
+		editorShowFocus( d->curRow, d->curCol );
+	}
 }
 
 void KexiTableView::clearData(bool repaint)
