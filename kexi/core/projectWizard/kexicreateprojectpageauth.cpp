@@ -43,7 +43,7 @@ KexiCreateProjectPageAuth::KexiCreateProjectPageAuth(KexiCreateProject *parent, 
 	m_passwordEdit = new KLineEdit(m_contents);
 	m_passwordEdit->setEchoMode(QLineEdit::Password);
 
-	m_savePassChk = new QCheckBox(i18n("Save password"), this);
+	m_savePassChk = new QCheckBox(i18n("Save password"), m_contents);
 	m_savePassChk->setChecked(true);
 #ifdef KEXI_NO_UNFINISHED
 	m_savePassChk->hide();
@@ -52,11 +52,11 @@ KexiCreateProjectPageAuth::KexiCreateProjectPageAuth(KexiCreateProject *parent, 
 
 	//layout
 	QGridLayout *g = new QGridLayout(m_contents);
-	g->addWidget(lUser,             0,      0);
-	g->addWidget(lPassword,         1,      0);
-	g->addWidget(m_userEdit,            0,      1);
-	g->addWidget(m_passwordEdit,        1,      1);
-	g->addWidget(m_savePassChk,        2,      1);
+	g->addWidget(lUser,		0,      0);
+	g->addWidget(lPassword,		1,      0);
+	g->addWidget(m_userEdit,	0,      1);
+	g->addWidget(m_passwordEdit,	1,      1);
+	g->addWidget(m_savePassChk,	2,	1);
 	g->setSpacing(KDialog::spacingHint());
 	g->setRowStretch(3, 1);
 	g->setColStretch(2, 1);
