@@ -20,12 +20,11 @@
 #include <qpainter.h>
 #include <qevent.h>
 
-//#include <kaction.h>
+#include <kaction.h>
 #include <kstdaction.h>
 #include <kdebug.h>
 
 #include <graphiteview.h>
-#include <graphiteshell.h>
 #include <graphitefactory.h>
 #include <graphitepart.h>
 #include <gcommand.h>

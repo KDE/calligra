@@ -26,7 +26,6 @@
 #include <graphitepart.h>
 #include <graphitefactory.h>
 #include <graphiteview.h>
-#include <graphiteshell.h>
 
 
 GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,

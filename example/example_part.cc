@@ -19,7 +19,6 @@
 
 #include "example_part.h"
 #include "example_view.h"
-#include "example_shell.h"
 
 #include <qpainter.h>
 
