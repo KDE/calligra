@@ -1,0 +1,3 @@
+
+- 3 November 2002
+Implements table, cell, ... classes, the parser, and the kspread filter itself.
