@@ -62,6 +62,8 @@ public:
 
     void updateStyleListOrder( const QStringList &list );
 
+    void loadOasisStyleTemplates( KoOasisContext& context );
+
 private:
     QPtrList<KoStyle> m_styleList;
     QPtrList<KoStyle> m_deletedStyles;

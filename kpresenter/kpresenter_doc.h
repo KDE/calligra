@@ -500,7 +500,6 @@ protected slots:
     void slotDocumentInfoModifed();
 
 protected:
-    void loadOasisStyleTemplates( KoOasisContext& context );
     KoView* createViewInstance( QWidget* parent, const char* name );
     void testAndCloseAllTextObjectProtectedContent();
     // ************ functions ************

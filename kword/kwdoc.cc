@@ -1143,7 +1143,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
-    loadOasisStyleTemplates( context );
+    m_styleColl->loadOasisStyleTemplates( context );
 
     // TODO framestyles and tablestyles
 
@@ -1662,54 +1662,6 @@ void KWDocument::loadEmbedded( const QDomElement &embedded )
         kdError(32001) << "No <OBJECT> tag in EMBEDDED" << endl;
 }
 
-void KWDocument::loadOasisStyleTemplates( KoOasisContext& context )
-{
-    QValueList<QString> followingStyles;
-    uint nStyles = context.oasisStyles().userStyles().count();
-    if( nStyles ) { // we are going to import at least one style.
-        KoStyle *s = m_styleColl->findStyle("Standard");
-        //kdDebug(32001) << "KWDocument::loadOasisStyleTemplates looking for Standard, to delete it. Found " << s << endl;
-        if(s) // delete the standard style.
-            m_styleColl->removeStyleTemplate(s);
-    }
-    for (unsigned int item = 0; item < nStyles; item++) {
-        QDomElement styleElem = context.oasisStyles().userStyles()[item];
-        // TODO check style:family/style:class (for other styles than paragraph styles)
-
-        KoStyle *sty = new KoStyle( QString::null );
-        // Load the style
-        sty->loadStyle( styleElem, context );
-        // the real value of followingStyle is set below after loading all styles
-        sty->setFollowingStyle( sty );
-        // Style created, now let's try to add it
-        sty = m_styleColl->addStyleTemplate( sty );
-
-        kdDebug(32001) << "KWDocument: Loaded style " << sty->name() << endl;
-
-        if(m_styleColl->styleList().count() > followingStyles.count() )
-        {
-            QString following = styleElem.attribute( "style:next-style-name" );
-            followingStyles.append( following );
-        }
-        else
-            kdWarning(32001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
-    }
-
-    if( followingStyles.count() != m_styleColl->styleList().count() ) {
-        kdDebug(32001) << "Ouch, " << followingStyles.count() << " following-styles, but "
-                       << m_styleColl->styleList().count() << " styles in styleList" << endl;
-    }
-
-    unsigned int i=0;
-    for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
-        KoStyle * style = m_styleColl->findStyle(*it);
-        m_styleColl->styleAt(i++)->setFollowingStyle( style );
-    }
-
-    // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
-
-    Q_ASSERT( m_styleColl->findStyle( "Standard" ) );
-}
 
 void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
 {

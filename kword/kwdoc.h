@@ -824,7 +824,6 @@ protected:
     virtual bool completeSaving( KoStore *_store );
 
     void loadFrameSets( const QDomElement &framesets );
-    void loadOasisStyleTemplates( KoOasisContext& context );
     void loadStyleTemplates( const QDomElement &styles );
     void saveStyle( KWStyle *sty, QDomElement parentElem );
     void saveFrameStyle( KWFrameStyle *sty, QDomElement parentElem );

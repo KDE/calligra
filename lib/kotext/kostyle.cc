@@ -20,6 +20,7 @@
 #include "kostyle.h"
 #include "kooasiscontext.h"
 #include "koparagcounter.h"
+#include <koOasisStyles.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
@@ -40,6 +41,57 @@ KoStyleCollection::~KoStyleCollection()
     m_styleList.clear();
     m_deletedStyles.clear();
 }
+
+void KoStyleCollection::loadOasisStyleTemplates( KoOasisContext& context )
+{
+    QValueList<QString> followingStyles;
+    uint nStyles = context.oasisStyles().userStyles().count();
+    if( nStyles ) { // we are going to import at least one style.
+        KoStyle *s = findStyle("Standard");
+        //kdDebug() << "loadOasisStyleTemplates looking for Standard, to delete it. Found " << s << endl;
+        if(s) // delete the standard style.
+            removeStyleTemplate(s);
+    }
+    for (unsigned int item = 0; item < nStyles; item++) {
+        QDomElement styleElem = context.oasisStyles().userStyles()[item];
+        // TODO check style:family/style:class (for other styles than paragraph styles)
+
+        KoStyle *sty = new KoStyle( QString::null );
+        // Load the style
+        sty->loadStyle( styleElem, context );
+        // the real value of followingStyle is set below after loading all styles
+        sty->setFollowingStyle( sty );
+        // Style created, now let's try to add it
+        sty = addStyleTemplate( sty );
+
+        kdDebug() << " Loaded style " << sty->name() << endl;
+
+        if(styleList().count() > followingStyles.count() )
+        {
+            QString following = styleElem.attribute( "style:next-style-name" );
+            followingStyles.append( following );
+        }
+        else
+            kdWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+    }
+
+    if( followingStyles.count() != styleList().count() ) {
+        kdDebug() << "Ouch, " << followingStyles.count() << " following-styles, but "
+                       << styleList().count() << " styles in styleList" << endl;
+    }
+
+    unsigned int i=0;
+    for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+        KoStyle * style = findStyle(*it);
+        styleAt(i++)->setFollowingStyle( style );
+    }
+
+    // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
+
+    Q_ASSERT( findStyle( "Standard" ) );
+}
+
+
 
 KoStyle* KoStyleCollection::findStyle( const QString & _name )
 {
