@@ -64,6 +64,7 @@ public slots:
   void slotCapPressed(int);
 
 signals:
+  void colorChanged(const KoColor &);
   void changeOutlineColor(const KoColor &);
   void changeStroked(bool);
   void changeLinewidth(unsigned int);

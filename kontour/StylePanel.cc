@@ -72,8 +72,11 @@ QTabWidget(parent, name)
 void PaintPanel::slotStyleChanged(const GStyle &style)
 {
   mFilled->setChecked(style.filled());
+  // TODO : I fear the color chooser will send a signal back
+  //        blocking doesnt work, disconnect maybe ?
+  //mPaintPanel->blockSignals(true);
   emit colorChanged(style.fillColor());
-  //mPaintPanel->slotChangeColor(style.fillColor());
+  //mPaintPanel->blockSignals(false);
 }
 
 OutlinePanel::OutlinePanel(QWidget *parent, const char *name):
@@ -85,6 +88,7 @@ QTabWidget(parent, name)
   connect(mStroked, SIGNAL(toggled(bool)), this, SIGNAL(changeStroked(bool)));
   mOutlinePanel = new KoColorChooser(outlineColor);
   connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changeOutlineColor(const KoColor &)));
+  connect(this, SIGNAL(colorChanged(const KoColor &)), mOutlinePanel, SLOT(slotChangeColor(const KoColor &)));
 
   /* Style tab */
   QVGroupBox *outlineStyle = new QVGroupBox(this);
@@ -182,6 +186,9 @@ void OutlinePanel::slotStyleChanged(const GStyle &style)
   mlwidthBox->blockSignals(true);
   mlwidthBox->setValue(style.outlineWidth());
   mlwidthBox->blockSignals(false);
+  //mOutlinePanel->blockSignals(true);
+  emit colorChanged(style.outlineColor());
+  //mOutlinePanel->blockSignals(false);
   switch(style.joinStyle())
   {
     case Qt::RoundJoin: mJoinBox->setButton(0); break;
