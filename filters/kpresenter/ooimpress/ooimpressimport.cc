@@ -2155,7 +2155,7 @@ QDomNode OoImpressImport::findAnimationByObjectID(const QString & id,  int & ord
     //kdDebug()<<"QDomElement *animation = m_animations[id]; :"<<animation<<endl;
     if ( !animation )
         return QDomNode();
-    for (QDomNode node = *animation; !node.isNull(); node = node.nextSibling())
+    for (QDomNode node = *( animation->element ); !node.isNull(); node = node.nextSibling())
     {
         QDomElement e = node.toElement();
         //kdDebug()<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attribute("draw:shape-id")<<endl;
