@@ -32,11 +32,14 @@ class KWFrameSet;
 class KWAnchor : public KWTextCustomItem
 {
 public:
-    KWAnchor( KWTextDocument *textdoc, KWFrame * m_frame );
+    // We store the frame as frameset+framenum for undo/redo purposes
+    // and as an abstract way to represent a frame so that it doesn't have
+    // to be an actual KWFrame for tables.
+    KWAnchor( KWTextDocument *textdoc, KWFrameSet * frameset, int frameNum );
     ~KWAnchor();
 
     // The frame related to this anchor.
-    KWFrame * frame() const;
+    //KWFrame * frame() const;
 
     // The text document in which this anchor is
     KWTextDocument * textDocument() const;

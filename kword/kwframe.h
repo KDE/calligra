@@ -25,15 +25,14 @@
 #include "kwanchorpos.h"
 
 #include <koRect.h>
-#include <qpicture.h>
 #include <qbrush.h>
 #include <qlist.h>
 
 #include "border.h"
-//#include <koMainWindow.h>
 
 class KFormulaContainer;
 class KFormulaView;
+class KMacroCommand;
 class KWAnchor;
 class KWCanvas;
 class KWChild;
@@ -413,6 +412,16 @@ public:
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
     bool isFloating() { return m_anchorPos.parag && m_anchorPos.textfs; }
+
+    /** Move the frame frameNum to the given position - this is called when
+        the frame is anchored and the anchor moves (see KWAnchor). */
+    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
+    /** Get the size of the "floating frame" identified by frameNum.
+        By default a real frame but not for tables. */
+    virtual KoPoint floatingFrameSize( int frameNum );
+    /** Called by KWAnchor when it gets deleted - not sure how we want to handle
+        this for tables... */
+    virtual void addDeleteAnchorCommand( int frameNum, KMacroCommand * macroCmd );
 
     /** make this frameset part of a groupmanager
      * @see KWTableFrameSet

@@ -25,25 +25,16 @@
 #include <kdebug.h>
 #include <qdom.h>
 
-KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrame * frame )
+KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrameSet * frameset, int frameNum )
     : KWTextCustomItem( textdoc ),
-      // We store the frame as frameset+framenum for undo/redo purposes
-      m_frameset( frame->getFrameSet() ),
-      m_frameNum( m_frameset->getFrameFromPtr( frame ) )
+      m_frameset( frameset ),
+      m_frameNum( frameNum )
 {
 }
 
 KWAnchor::~KWAnchor()
 {
     kdDebug() << "KWAnchor::~KWAnchor" << endl;
-}
-
-KWFrame * KWAnchor::frame() const
-{
-    ASSERT( !m_deleted );
-    if ( m_deleted )
-        return 0L;
-    return m_frameset->getFrame( m_frameNum );
 }
 
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
@@ -70,7 +61,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     {
         //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
         // Move the frame to position x,y.
-        frame()->moveTopLeft( KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
+        m_frameset->moveFloatingFrame( m_frameNum, KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
     }
 
     // 2 - draw
@@ -96,9 +87,8 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 QSize KWAnchor::size() const
 {
     KWDocument * doc = m_frameset->kWordDocument();
-    KWFrame * f = frame();
-    ASSERT( f );
-    return QSize( doc->zoomItX( f->width() ), doc->zoomItY( f->height() ) );
+    KoPoint p = m_frameset->floatingFrameSize( m_frameNum );
+    return QSize( doc->zoomItX( p.x() ), doc->zoomItY( p.y() ) );
 }
 
 void KWAnchor::resize()
@@ -119,9 +109,7 @@ KWTextDocument * KWAnchor::textDocument() const
 void KWAnchor::addDeleteCommand( KMacroCommand * macroCmd )
 {
     kdDebug() << "KWAnchor::addDeleteCommand" << endl;
-    KWDeleteFrameCommand * cmd = new KWDeleteFrameCommand( QString::null, m_frameset->kWordDocument(), frame() );
-    macroCmd->addCommand( cmd );
-    cmd->execute(); // deletes the frame
+    m_frameset->addDeleteAnchorCommand( m_frameNum, macroCmd );
 }
 
 void KWAnchor::save( QDomElement &formatElem )
@@ -133,7 +121,7 @@ void KWAnchor::save( QDomElement &formatElem )
     KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
     // ## TODO save the frame number as well ? Only the first frame ? to be determined
     // ## or maybe use len=<number of frames>. Difficult :}
-    int num = doc->getFrameSetNum( frame()->getFrameSet() );
+    int num = doc->getFrameSetNum( m_frameset );
     anchorElem.setAttribute( "instance", num );
     return;
 }

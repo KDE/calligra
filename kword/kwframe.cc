@@ -20,6 +20,7 @@
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwcanvas.h"
+#include "kwcommand.h"
 #include "kwframe.h"
 #include "defs.h"
 #include "kwutils.h"
@@ -479,7 +480,9 @@ void KWFrameSet::updateAnchors( bool placeHolderExists /*= false */ /*only used 
         if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
-            KWAnchor * anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), frameIt.current() );
+            KWFrameSet * fs = frameIt.current()->getFrameSet();
+            KWAnchor * anchor = new KWAnchor( m_anchorPos.textfs->textDocument(), fs,
+                                              fs->getFrameFromPtr( frameIt.current() ) );
             if ( !placeHolderExists )
                 m_anchorPos.parag->insert( index, QChar('@') /*whatever*/ );
             m_anchorPos.parag->setCustomItem( index, anchor, 0 );
@@ -518,6 +521,29 @@ void KWFrameSet::findFirstAnchor()
         kdDebug() << "KWFrameSet::findFirstAnchor no anchor !" << endl;
         m_anchorPos.parag = 0L;
     }
+}
+
+void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
+{
+    KWFrame * frame = frames.at( frameNum );
+    ASSERT( frame );
+    frame->moveTopLeft( position );
+}
+
+KoPoint KWFrameSet::floatingFrameSize( int frameNum )
+{
+    KWFrame * frame = frames.at( frameNum );
+    ASSERT( frame );
+    return KoPoint( frame->width(), frame->height() ); // well maybe we should have a KoSize after all :)
+}
+
+void KWFrameSet::addDeleteAnchorCommand( int frameNum, KMacroCommand * macroCmd )
+{
+    KWFrame * frame = frames.at( frameNum );
+    ASSERT( frame );
+    KWDeleteFrameCommand * cmd = new KWDeleteFrameCommand( QString::null, kWordDocument(), frame );
+    macroCmd->addCommand( cmd );
+    cmd->execute(); // deletes the frame
 }
 
 KWFrame * KWFrameSet::getFrame( double _x, double _y )
