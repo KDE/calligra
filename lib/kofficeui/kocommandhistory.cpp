@@ -30,8 +30,6 @@
 #include <kshortcutlist.h>
 #include <qlabel.h>
 
-#include <typeinfo>
-
 KoListBox::KoListBox( QWidget *parent , const char *name , WFlags f)
     : QListBox( parent, name, f)
 {
@@ -70,8 +68,7 @@ public:
 ////////////
 
 KoCommandHistory::KoCommandHistory() :
-/// m_undoLimit was 50
-    m_undo(0), m_redo(0), m_undoLimit(10), m_redoLimit(30), m_first(false)
+    m_undo(0), m_redo(0), m_undoLimit(50), m_redoLimit(30), m_first(false)
 {
     d=new KoCommandHistoryPrivate();
     m_commands.setAutoDelete(true);
@@ -79,8 +76,7 @@ KoCommandHistory::KoCommandHistory() :
 }
 
 KoCommandHistory::KoCommandHistory(KActionCollection * actionCollection, bool withMenus) :
-/// m_undoLimit was 50
-    m_undoLimit(10), m_redoLimit(30), m_first(false)
+    m_undoLimit(50), m_redoLimit(30), m_first(false)
 {
     d=new KoCommandHistoryPrivate();
     if (withMenus)
@@ -318,7 +314,6 @@ void KoCommandHistory::clipCommands() {
     int index=m_commands.findRef(d->m_present);
     if(index>=m_undoLimit) {
         for(int i=0; i<=(index-m_undoLimit); ++i) {
-            kdDebug() << k_funcinfo << "deleting command " << m_commands.first() << " " << typeid(  *m_commands.first() ).name() << " " << m_commands.first()->name() << endl;
             m_commands.removeFirst();
             --d->m_savedAt;
             if(d->m_savedAt==-1)
