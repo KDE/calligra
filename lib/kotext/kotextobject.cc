@@ -537,18 +537,19 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
 void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
                              const QString &txt, bool checkNewLine,
                              bool removeSelected, const QString & commandName,
-                             CustomItemsMap customItemsMap,int selectionId )
+                             CustomItemsMap customItemsMap, int selectionId, bool repaint )
 {
     if ( protectContent() )
         return;
     //kdDebug(32001) << "KoTextObject::insert txt=" << txt << endl;
     KoTextDocument *textdoc = textDocument();
-    emit hideCursor();
+    if ( repaint )
+        emit hideCursor();
     if ( textdoc->hasSelection( selectionId ) && removeSelected  ) {
         //removeSelectedText( cursor );
         if( customItemsMap.isEmpty())
         {
-            emitNewCommand(replaceSelectionCommand( cursor, txt,selectionId, commandName));
+            emitNewCommand(replaceSelectionCommand( cursor, txt, selectionId, commandName, repaint ));
             return;
         }
         else
@@ -584,6 +585,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     textdoc->setFormat( KoTextDocument::Temp, currentFormat, KoTextFormat::Format );
     textdoc->removeSelection( KoTextDocument::Temp );
 
+
     // Speed optimization: if we only type a char, and it doesn't
     // invalidate the next parag, only format the current one
     KoTextParag *parag = cursor->parag();
@@ -593,11 +595,15 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         m_lastFormatted = m_lastFormatted->next();
     } else
     {
-        formatMore();
+        // Too slow, e.g. when called from a search-n-replace.
+        // doKeyboardAction seems to do it anyway, for the interactive case.
+        //formatMore();
     }
-    emit repaintChanged( this );
-    emit ensureCursorVisible();
-    emit showCursor();
+    if ( repaint ) {
+        emit repaintChanged( this );
+        emit ensureCursorVisible();
+        emit showCursor();
+    }
     undoRedoInfo.text += txt;
     for ( int i = 0; i < (int)txt.length(); ++i ) {
         if ( txt[ oldLen + i ] != '\n' )
@@ -608,11 +614,8 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     if ( !removeSelected ) {
         // ## not sure why we do this. I'd prefer leaving the selection unchanged...
         // but then it'd need adjustements in the offsets etc.
-        if ( textdoc->removeSelection( KoTextDocument::Standard ) )
-        {
-            selectionChangedNotify();
-            emit repaintChanged( this );
-        }
+        if ( textdoc->removeSelection( selectionId ) && repaint )
+            selectionChangedNotify(); // does the repaint
     }
     if ( !customItemsMap.isEmpty() )
         clearUndoRedoInfo();
@@ -1312,7 +1315,7 @@ void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, c
         undoRedoInfo.clear();
 }
 
-KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int selectionId )
+KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int selectionId, bool repaint )
 {
     if ( protectContent() )
         return 0L;
@@ -1339,16 +1342,18 @@ KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int s
 
     undoRedoInfo.type = UndoRedoInfo::Invalid; // we don't want clear() to create a command
     undoRedoInfo.clear();
-    selectionChangedNotify();
+    if ( repaint )
+        selectionChangedNotify();
     return macroCmd;
 }
 
 KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
-                                                   int selectionId, const QString & cmdName)
+                                                 int selectionId, const QString & cmdName, bool repaint )
 {
     if ( protectContent() )
         return 0L;
-    emit hideCursor();
+    if ( repaint )
+        emit hideCursor();
     KMacroCommand * macroCmd = new KMacroCommand( cmdName );
 
     // Remember formatting
@@ -1357,11 +1362,12 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
     format->addRef();
 
     // Remove selected text
-    macroCmd->addCommand( removeSelectedTextCommand( cursor, selectionId ) );
+    macroCmd->addCommand( removeSelectedTextCommand( cursor, selectionId, repaint ) );
 
     // Insert replacement
     insert( cursor, format,
-            replacement, true, false, QString::null /* no place holder command */ );
+            replacement, true, false, QString::null /* no place holder command */,
+            CustomItemsMap(), selectionId, repaint );
 
     KoTextDocCommand * cmd = new KoTextInsertCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
                                                   undoRedoInfo.text.rawData(),
@@ -1374,15 +1380,17 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
 
     format->removeRef();
 
-
     setLastFormattedParag( c1.parag() );
-    formatMore();
-    emit repaintChanged( this );
-    emit ensureCursorVisible();
-    emit updateUI( true );
-    emit showCursor();
-    if(selectionId==KoTextDocument::Standard)
-        selectionChangedNotify();
+    if ( repaint ) // false during search/replace
+    {
+        formatMore();
+        emit repaintChanged( this );
+        emit ensureCursorVisible();
+        emit updateUI( true );
+        emit showCursor();
+        if(selectionId==KoTextDocument::Standard)
+            selectionChangedNotify();
+    }
     return macroCmd;
 }
 
@@ -1393,7 +1401,7 @@ KCommand * KoTextObject::insertParagraphCommand( KoTextCursor *cursor )
     return replaceSelectionCommand( cursor, "\n", KoTextDocument::Standard, QString::null );
 }
 
-void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length )
+void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length, bool repaint )
 {
     if ( !m_highlightSelectionAdded )
     {
@@ -1404,18 +1412,20 @@ void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length 
          m_highlightSelectionAdded = true;
     }
 
-    removeHighlight(); // remove previous highlighted selection
+    removeHighlight(repaint); // remove previous highlighted selection
     KoTextCursor cursor( textdoc );
     cursor.setParag( parag );
     cursor.setIndex( index );
     textdoc->setSelectionStart( HighlightSelection, &cursor );
     cursor.setIndex( index + length );
     textdoc->setSelectionEnd( HighlightSelection, &cursor );
-    parag->setChanged( true );
-    emit repaintChanged( this );
+    if ( repaint ) {
+        parag->setChanged( true );
+        emit repaintChanged( this );
+    }
 }
 
-void KoTextObject::removeHighlight()
+void KoTextObject::removeHighlight(bool repaint)
 {
     if ( textdoc->hasSelection( HighlightSelection ) )
     {
@@ -1423,7 +1433,8 @@ void KoTextObject::removeHighlight()
         oldParag->setChanged( true );
         textdoc->removeSelection( HighlightSelection );
     }
-    emit repaintChanged( this );
+    if ( repaint )
+        emit repaintChanged( this );
 }
 
 void KoTextObject::selectAll( bool select )

@@ -125,7 +125,7 @@ private:
 };
 
 //
-// This class is the KWord replace dialog.
+// This class is the kotext replace dialog.
 //
 class KoReplaceDia:
     public KoReplaceDialog
@@ -169,6 +169,8 @@ public:
         return m_currentParag;
     }
 
+    bool isReplace() const { return m_replace != 0L; }
+
     /** Do the complete loop for find or replace. When it exits, we're done */
     void proceed();
 
@@ -179,14 +181,19 @@ public:
     void abort();
     bool aborted() const { return m_destroying; }
 
-    virtual void emitNewCommand(KCommand *)=0;
-    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc)=0;
+    int options() const { return m_options; }
+
+    virtual void emitNewCommand(KCommand *) = 0;
+    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc) = 0;
+
     void changeListObject(const QPtrList<KoTextObject> & lstObject);
+
 protected:
     bool findInFrameSet( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
                          KoTextParag * lastParag, int lastIndex );
     bool process( const QString &_text );
     void replaceWithAttribut( KoTextCursor * cursor, int index );
+
 protected slots:
     void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect & );
     void replace( const QString &text, int replacementIndex, int replacedLength,int searchLength, const QRect & );

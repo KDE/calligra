@@ -200,7 +200,9 @@ public:
      */
     void insert( KoTextCursor * cursor, KoTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,
-                 CustomItemsMap customItemsMap = CustomItemsMap(),int selectionId=KoTextDocument::Standard );
+                 CustomItemsMap customItemsMap = CustomItemsMap(),
+                 int selectionId = KoTextDocument::Standard,
+                 bool repaint = true );
     /**
      * Remove the text currently selected, including undo/redo creation/update.
      * @param cursor the caret position
@@ -211,8 +213,8 @@ public:
                              const QString & cmdName = QString::null, bool createUndoRedo=true  );
 
     KCommand * replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
-                                        int selectionId, const QString & cmdName );
-    KCommand * removeSelectedTextCommand( KoTextCursor * cursor, int selectionId );
+                                        int selectionId, const QString & cmdName, bool repaint = true );
+    KCommand * removeSelectedTextCommand( KoTextCursor * cursor, int selectionId, bool repaint = true );
     KCommand* insertParagraphCommand( KoTextCursor * cursor );
 
     void pasteText( KoTextCursor * cursor, const QString & text, KoTextFormat * currentFormat, bool removeSelected );
@@ -221,8 +223,8 @@ public:
     /** Highlighting support (for search/replace, spellchecking etc.).
      * Don't forget to ensure the paragraph is visible.
      */
-    void highlightPortion( KoTextParag * parag, int index, int length );
-    void removeHighlight();
+    void highlightPortion( KoTextParag * parag, int index, int length, bool repaint );
+    void removeHighlight( bool repaint );
 
     /** Implementation of setFormatCommand from KoTextFormatInterface - apply change to the whole document */
     KCommand *setFormatCommand( KoTextFormat *format, int flags, bool zoomFont = false );

@@ -204,12 +204,13 @@ void KoFindReplace::proceed()
             firstIndex = c1.index();
         }
         KoTextCursor c2 = firstTextObj->textDocument()->selectionEndCursor( KoTextDocument::Standard );
+        //firstTextObj->emitHideCursor();
         // Find in the selection
         findInFrameSet( firstTextObj, firstParag, firstIndex, c2.parag(), c2.index() );
-        //todo fix it
-        //before we used kwframeset->removeHighlight()
-        if ( !m_destroying )
-            firstTextObj->removeHighlight();
+        if ( !m_destroying ) {
+            //firstTextObj->emitShowCursor();
+            firstTextObj->removeHighlight(true);
+        }
     }
     else // Not 'find in selection', need to iterate over the framesets
     {
@@ -217,11 +218,11 @@ void KoFindReplace::proceed()
         QPtrListIterator<KoTextObject> fit(m_lstObject);
         for ( ; fit.current() ; ++fit )
         {
-            // Only interested in text framesets
             KoTextObject * fs = fit.current();
             if ( fs /*&& fs->isVisible()*/ )
             {
                 KoTextParag * lastParag = fs->textDocument()->lastParag();
+                //fs->emitHideCursor();
                 bool ret = true;
                 if (!firstFrameSetFound && firstTextObj == fs && firstParag)  // first frameset
                 {
@@ -232,8 +233,10 @@ void KoFindReplace::proceed()
                 {
                     ret = findInFrameSet( fs, fs->textDocument()->firstParag(), 0, lastParag, lastParag->length()-1 );
                 }
-                if ( !m_destroying )
-                    fs->removeHighlight();  // we're done with this frameset
+                if ( !m_destroying ) {
+                    //fs->emitShowCursor();
+                    fs->removeHighlight(true);  // we're done with this frameset
+                }
                 if (!ret) break;      // stop here if the user cancelled
             }
         }
@@ -241,14 +244,11 @@ void KoFindReplace::proceed()
     if(!m_destroying && m_macroCmd)
         emitNewCommand(m_macroCmd);
     m_macroCmd= 0L;
-    kdDebug() << "KWFindReplace::findInFrameSet done" << endl;
 }
 
 bool KoFindReplace::findInFrameSet( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
                                     KoTextParag * lastParag, int lastIndex )
 {
-    // TODO formatting options are not implemented !
-    // We need to reimplement what KoFind::find does, and add that.
     m_currentTextObj = textObj;
     // TODO port to KWParagVisitor
     m_currentParag = firstParag;
@@ -312,6 +312,7 @@ bool KoFindReplace::process( const QString &_text )
     }
 }
 
+// slot connected to the 'highlight' signal
 void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingLength, const QRect & )
 {
     //kdDebug() << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
@@ -324,10 +325,12 @@ void KoFindReplace::replace( const QString &text, int matchingIndex,
 {
     if(!m_macroCmd)
         m_macroCmd=new KMacroCommand(i18n("Insert Replacement"));
-    //kdDebug() << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << endl;
+    //kdDebug() << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " m_options=" << m_options << endl;
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)
-    highlightPortion(m_currentParag, index, matchedLength, m_currentTextObj->textDocument());
+    if ( (m_options & KoReplaceDialog::PromptOnReplace) == 0 ) {
+        highlightPortion(m_currentParag, index, matchedLength, m_currentTextObj->textDocument());
+    }
 
     KoTextDocument * textdoc = m_currentTextObj->textDocument();
     KoTextCursor cursor( textdoc );
@@ -340,9 +343,12 @@ void KoFindReplace::replace( const QString &text, int matchingIndex,
     {
         replaceWithAttribut( &cursor, index );
     }
+    // Don't repaint if we're doing batch changes
+    bool repaint = m_options & KoReplaceDialog::PromptOnReplace;
+
     // Grab replacement string
     QString rep = text.mid( matchingIndex, replacementLength );
-    KCommand *cmd=m_currentTextObj->replaceSelectionCommand(&cursor, rep, KoTextObject::HighlightSelection, QString::null );
+    KCommand *cmd = m_currentTextObj->replaceSelectionCommand(&cursor, rep, KoTextObject::HighlightSelection, QString::null, repaint );
     if( cmd )
         m_macroCmd->addCommand(cmd);
 }
