@@ -117,7 +117,7 @@ KSpreadStyle::~KSpreadStyle()
 {
 }
 
-void KSpreadStyle::loadOasisStyle( const QDomElement & element )
+void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element )
 {
     kdDebug()<<"void KSpreadStyle::loadOasisStyle( const QDomElement & element )**************: name :"<<endl;
     KoStyleStack styleStack;
@@ -1994,7 +1994,7 @@ void KSpreadCustomStyle::saveOasis( KoGenStyles &mainStyles )
     mainStyles.lookup( gs, "custom-style" );
 }
 
-void KSpreadCustomStyle::loadOasis( const QDomElement & style, const QString & name )
+void KSpreadCustomStyle::loadOasis( KoOasisStyles& oasisStyles, const QDomElement & style, const QString & name )
 {
     m_name = name;
     if ( style.hasAttribute( "style:parent-style-name" ) )
@@ -2003,7 +2003,7 @@ void KSpreadCustomStyle::loadOasis( const QDomElement & style, const QString & n
 
     m_type = CUSTOM;
 
-    KSpreadStyle::loadOasisStyle( style );
+    KSpreadStyle::loadOasisStyle( oasisStyles, style );
 }
 
 void KSpreadCustomStyle::save( QDomDocument & doc, QDomElement & styles )

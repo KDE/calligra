@@ -82,7 +82,7 @@ void KSpreadStyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
 
         if ( name == "Default" )
         {
-            m_defaultStyle->loadOasis( styleElem,name );
+            m_defaultStyle->loadOasis( oasisStyles, styleElem,name );
             m_defaultStyle->setType( KSpreadStyle::BUILTIN );
         }
         else if ( !name.isEmpty() )
@@ -94,7 +94,7 @@ void KSpreadStyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
                 style = new KSpreadCustomStyle( name, 0 );
 
             //fixme test return;
-            style->loadOasis( styleElem,name );
+            style->loadOasis( oasisStyles, styleElem,name );
             style->setType( KSpreadStyle::CUSTOM );
             m_styles[name] = style;
             kdDebug() << "Style " << name << ": " << style << endl;
