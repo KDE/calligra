@@ -1271,6 +1271,9 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
             pix = m_doc->doubleBufferPixmap( crect.size() );
             doubleBufPainter = new QPainter;
             doubleBufPainter->begin( pix );
+            // Initialize the pixmap to the page background color
+            // (if the frame is over the page margins, no underlying frame will paint anything there)
+            doubleBufPainter->fillRect( 0, 0, crect.width(), crect.height(), QApplication::palette().active().brush( QColorGroup::Base ) );
         }
 
         // Transparency handling
