@@ -41,7 +41,6 @@ KWTableStyleCollection::KWTableStyleCollection()
 
 KWTableStyleCollection::~KWTableStyleCollection()
 {
-   kdDebug() << "KWTableStyleCollection::destructor" << endl;
     m_styleList.setAutoDelete( true );
     m_styleList.clear();
     m_deletedStyles.clear();
