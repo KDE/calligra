@@ -715,7 +715,7 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s )
 	chr = s->at(i);
 	int cpos = x + chr->x;
 	cw = s->string()->width( i );
-	if ( chr->isCustom() ) {
+	if ( chr->isCustom() && chr->customItem()->isNested() ) {
 	    if ( pos.x() >= cpos && pos.x() <= cpos + cw &&
 		 pos.y() >= y + cy && pos.y() <= y + cy + chr->height() ) {
 		inCustom = TRUE;
