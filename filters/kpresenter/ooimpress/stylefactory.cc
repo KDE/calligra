@@ -20,7 +20,7 @@
 #include "stylefactory.h"
 
 #include <qcolor.h>
-
+#include <qdatetime.h>
 #include <koUnit.h>
 #include <kdebug.h>
 
@@ -691,6 +691,23 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
     {
         // picture
     }
+
+    QDomElement pageDuration = e.namedItem( "PGTIMER" ).toElement();
+    if ( !pageDuration.isNull() )
+    {
+
+        QTime time;
+        time = time.addSecs( pageDuration.attribute("timer").toInt() );
+        QString hours( QString::number( time.hour() ).rightJustify( 2, '0' ) );
+        QString ms( QString::number( time.minute() ).rightJustify( 2, '0' ) );
+        QString sec( QString::number( time.second() ).rightJustify( 2, '0' ) );
+
+
+        //ISO8601 chapter 5.5.3.2
+        //QDate doesn't encode it as this format.
+        m_page_duration = QString( "PT%1H%2M%3S" ).arg( hours ).arg( ms ).arg( sec );
+    }
+
     QDomElement pageEffect = e.namedItem( "PGEFFECT" ).toElement();
     if ( !pageEffect.isNull() )
     {
@@ -840,6 +857,11 @@ void PageStyle::toXML( QDomDocument & doc, QDomElement & e ) const
     properties.setAttribute( "presentation:background-visible", m_bg_visible );
     properties.setAttribute( "presentation:background-objects-visible",
                              m_bg_objects_visible );
+    if ( !m_page_duration.isEmpty() )
+    {
+        properties.setAttribute( "presentation:duration", m_page_duration );
+        properties.setAttribute( "presentation:transition-type", "automatic" );
+    }
     if ( !m_page_effect.isEmpty() )
         properties.setAttribute( "presentation:transition-style",
                                  m_page_effect );
@@ -876,7 +898,8 @@ bool PageStyle::operator==( const PageStyle & pageStyle ) const
              m_fill_image_ref_point == pageStyle.m_fill_image_ref_point &&
              m_fill_gradient_name == pageStyle.m_fill_gradient_name &&
              m_repeat == pageStyle.m_repeat &&
-        m_page_effect == pageStyle.m_page_effect);
+        m_page_effect == pageStyle.m_page_effect &&
+        m_page_duration == pageStyle.m_page_duration );
 }
 
 TextStyle::TextStyle( QDomElement & e, const uint index )
