@@ -34,6 +34,7 @@ class KGraphPart : public KoDocument {
 
 public:
     KGraphPart(QObject *parent=0, const char *name=0, bool singleViewMode=false);
+    virtual ~KGraphPart();
 
     virtual KoView *createView(QWidget *parent=0, const char *name=0);
     virtual KoMainWindow *createShell();
@@ -48,6 +49,12 @@ public:
     // ObjectPool from XML (=loading)
 
 protected slots:
-    void a_editcut();   // a_ ... Action
+    void edit_cut();
+
+private:
+    KGraphPart &operator=(const KGraphPart &rhs);
+
+    KGObjectPool *objectPool;
+    KGGroupPool *groupPool;
 };
 #endif

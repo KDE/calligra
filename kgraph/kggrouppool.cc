@@ -19,13 +19,8 @@
 
 #include <kggrouppool.h>
 
-KGGroupPool *KGGroupPool::m_self=0L;
 
-KGGroupPool *KGGroupPool::self() {
-
-    if(m_self==0L)
-        m_self=new KGGroupPool;
-    return m_self;
+KGGroupPool::KGGroupPool() : KGGenericPool<KGGroup>() {
 }
 
 KGGroup *KGGroupPool::find(const int &id) {
@@ -35,9 +30,6 @@ KGGroup *KGGroupPool::find(const int &id) {
 	    return tmp;
     }
     return 0L;
-}
-
-KGGroupPool::KGGroupPool() : KGGenericPool<KGGroup>() {
 }
 
 const bool KGGroupPool::remove(const unsigned int &index) {

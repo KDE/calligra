@@ -32,11 +32,22 @@
 KGraphPart::KGraphPart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
 
-    KStdAction::cut(this, SLOT( a_editcut() ), actionCollection(), "edit_cut" );
+    objectPool=new KGObjectPool(this);
+    groupPool=new KGGroupPool();
+    
+    KStdAction::cut(this, SLOT( edit_cut() ), actionCollection(), "edit_cut" );
+}
+
+KGraphPart::~KGraphPart() {
+    
+    delete objectPool;
+    objectPool=0L;
+    delete groupPool;
+    groupPool=0L;
 }
 
 bool KGraphPart::initDoc() {
-    // If nothing is loaded, do initialize here
+    // If nothing is loaded, do initialize here (TODO)
     return true;
 }
 
@@ -46,7 +57,7 @@ QCString KGraphPart::mimeType() const {
 
 KoView *KGraphPart::createView(QWidget *parent, const char *name) {
 
-    KGraphView *view = new KGraphView(this, parent, name);
+    KGraphView *view = new KGraphView(this, objectPool, parent, name);
     addView(view);
     return view;
 }
@@ -77,7 +88,7 @@ void KGraphPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool
     */
 }
 
-void KGraphPart::a_editcut() {
-    kdDebug(37001) << "KGraphPart: a_editcut called" << endl;
+void KGraphPart::edit_cut() {
+    kdDebug(37001) << "KGraphPart: edit_cut called" << endl;
 }
 #include <kgraph_part.moc>

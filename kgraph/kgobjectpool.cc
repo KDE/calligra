@@ -19,25 +19,15 @@
 
 #include <kgobjectpool.h>
 
-KGObjectPool *KGObjectPool::m_self=0L;
 
-KGObjectPool *KGObjectPool::self() {
-    if(m_self==0L)
-        m_self=new KGObjectPool;
-    return m_self;
-}
-
-KGObjectPool::KGObjectPool() : KGGenericPool<KGObject>() {
+KGObjectPool::KGObjectPool(const KGraphPart * const part) :
+    KGGenericPool<KGObject>(), m_part(part) {
 }
 
 const bool KGObjectPool::remove(const unsigned int &index) {
-    // if the object is member of a group, tell the
-    // group to remove it (TODO)
     return pool.remove(index);
 }
 
 const bool KGObjectPool::remove(const KGObject *object) {
-    // if the object is member of a group, tell the
-    // group to remove it (TODO)
     return pool.removeRef(object);
 }

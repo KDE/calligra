@@ -23,13 +23,28 @@
 #define kgcanvas_h
 
 #include <qscrollview.h>
+#include <kdebug.h>
+
+class KGObjectPool;
 
 
 class KGCanvas : public QScrollView {
 
     Q_OBJECT
 public:
-    KGCanvas(QWidget *parent=0L, const char *name=0L);
-    ~KGCanvas();
+    KGCanvas(QWidget *parent, const KGObjectPool * const objectPool,
+	     const char *name=0L);
+    virtual ~KGCanvas();
+
+protected:
+    // virtual void viewportPaintEvent(QPaintEvent *e);
+    // virtual void viewportResizeEvent(QResizeEvent *e);
+    // virtual void viewportMousePressEvent(QMouseEvent *e);
+    // virtual void viewportMouseReleaseEvent(QMouseEvent *e);
+    // virtual void viewportMouseDoubleClickEvent(QMouseEvent *e);
+    // virtual void viewportMouseMoveEvent(QMouseEvent *e);
+
+private:
+    const KGObjectPool * const m_objectPool;
 };
 #endif // kgcanvas_h

@@ -20,8 +20,9 @@
 #include <kgcanvas.h>
 
 
-KGCanvas::KGCanvas(QWidget *parent, const char *name) :
-                   QScrollView(parent, name, WNorthWestGravity) {
+KGCanvas::KGCanvas(QWidget *parent, const KGObjectPool * const objectPool,
+		   const char *name) : QScrollView(parent, name, WNorthWestGravity),
+		   m_objectPool(objectPool) {
 
     setFocusPolicy(QWidget::StrongFocus);
     viewport()->setFocusProxy(this);
@@ -29,10 +30,8 @@ KGCanvas::KGCanvas(QWidget *parent, const char *name) :
     viewport()->setMouseTracking(true);
     setFocus();
     setBackgroundMode(NoBackground);
-    //resizeContents(480, 300);
 }
 
 KGCanvas::~KGCanvas() {
 }
-
 #include <kgcanvas.moc>

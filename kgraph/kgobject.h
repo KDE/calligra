@@ -34,8 +34,8 @@ class QPoint;
 class QRect;
 class QPainter;
 class KActionCollection;
-
 class KGGroup;
+class KGraphPart;
 
 class KGObject : public QObject {
 
@@ -53,6 +53,7 @@ class KGObject : public QObject {
 
 public:
     virtual KGObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
+    const KGraphPart * const part() const { return m_part; }
 
     virtual ~KGObject();
 
@@ -101,9 +102,11 @@ signals:
     void requestRepaint(const QRect &);        // request a repaint for this rect
 
 protected:
-    KGObject(const QString &name=QString::null);
+    KGObject(const KGraphPart * const part, const QString &name=QString::null);
     KGObject(const KGObject &rhs);
-    KGObject(const QDomElement &element);        // create an object from xml (loading)
+    KGObject(const KGraphPart * const part, const QDomElement &element); // create an object from xml (loading)
+
+    const KGraphPart * const m_part;
 
     STATE m_state;                               // are there handles to draw or not?
     KGGroup *tmpGroup;

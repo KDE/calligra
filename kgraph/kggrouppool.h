@@ -21,7 +21,8 @@
 // groups.
 // It simply stores all the groups in a list and
 // deletes every group in the list if it gets destroyed.
-// Every group has got an unique ID.
+// Every group has got a unique ID (ensured by the group's
+// CTOR!).
 
 #ifndef kggrouppool_h
 #define kggrouppool_h
@@ -35,21 +36,18 @@
 class KGGroupPool : public KGGenericPool<KGGroup> {
 
 public:
-    static KGGroupPool *self();   // allow only one group pool!
+    KGGroupPool();
+    virtual ~KGGroupPool() {}    
 
     KGGroup *find(const int &id);  // find the group via its ID
 
     void add(const KGGroup *group);
     virtual const bool remove(const unsigned int &index);
     virtual const bool remove(const KGGroup *group);
-    
-    const KGGroup *createGroup(const QDomElement &element);
-    
-protected:
-    KGGroupPool();
-    virtual ~KGGroupPool() {}
 
-private:    
-    static KGGroupPool *m_self;
+    const KGGroup *createGroup(const QDomElement &element);    
+
+private:
+    KGGroupPool &operator=(const KGGroupPool &rhs);
 };
 #endif // kggrouppool_h

@@ -20,8 +20,6 @@
 #include <qpainter.h>
 #include <qevent.h>
 
-//#include <kaction.h>
-//#include <kstdaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -30,13 +28,19 @@
 #include <kgraph_view.h>
 
 
-KGraphView::KGraphView(KGraphPart *part, QWidget *parent, const char *name)
-    : KoView(part, parent, name) {
+KGraphView::KGraphView(KGraphPart *part, const KGObjectPool * const objectPool,
+		       QWidget *parent, const char *name) : KoView(part, parent, name) {
 
     setInstance(KGraphFactory::global());
     setXMLFile("kgraph.rc");
 
-    m_canvas=new KGCanvas(this, "canvas");
+    m_canvas=new KGCanvas(this, objectPool, "canvas");
+}
+
+KGraphView::~KGraphView() {
+
+    delete m_canvas;
+    m_canvas=0L;
 }
 
 /*void KGraphView::paintEvent(QPaintEvent *ev) {

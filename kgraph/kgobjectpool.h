@@ -31,11 +31,15 @@
 #include <kgobject.h>
 #include <kggenericpool.h>
 
+class QRect;
+class KGraphPart;
+
 
 class KGObjectPool : public KGGenericPool<KGObject> {
 
 public:
-    static KGObjectPool *self();   // allow only one object pool!
+    KGObjectPool(const KGraphPart * const part);
+    virtual ~KGObjectPool() {}
 
     virtual const bool remove(const unsigned int &index);
     virtual const bool remove(const KGObject *object);
@@ -52,11 +56,31 @@ public:
     //KGLine *createLine(const QDomElement &e);   // used to "load" a line object
     //KGLine *createLine(const QPoint &a, const QPoint &b);
 
-protected:
-    KGObjectPool();
-    virtual ~KGObjectPool() {}
-
+public slots:
+    void requestRepaint(const QRect &r);
+    void requestRepaint();
+    
 private:
-    static KGObjectPool *m_self;
+    KGObjectPool &operator=(const KGObjectPool &rhs);
+
+    const KGraphPart * const m_part;  // a ptr to our part (b/c of SLOTs)
+
+    // This list stores the active objects or objects which
+    // are created at the moment. These objects need serious
+    // repainting and if the "conditions" are OK we only have
+    // to bitBlt the old double buffer and draw a few objects.
+    // This should generally be faster than drawing everything.
+    // The "conditions": No object from the pool requested
+    // a repaint (partly (=region) or fully) and we don't have
+    // to draw a transparent view.
+    // Whenever an object from the pool is removed and inserted
+    // here I have to make sure that setAutoDelete is set to
+    // false and set back to true after the removal!!!
+    // (TODO): Check out the double buffer stuff with the
+    // Canvas :)
+    QList<KGObject> activeObject;
+    
+    bool m_dirty;       // a repaint was requested
+    QRect rect;         // for this region (0, 0, 0, 0) -> total repaint
 };
 #endif // kgobjectpool_h

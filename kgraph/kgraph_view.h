@@ -23,11 +23,9 @@
 #include <koView.h>
 #include <kgcanvas.h>
 
-//class QPaintEvent;
 class QResizeEvent;
-
-//class KAction;
 class KGraphPart;
+class KGObjectPool;
 
 
 class KGraphView : public KoView {
@@ -35,13 +33,11 @@ class KGraphView : public KoView {
     Q_OBJECT
 
 public:
-    KGraphView(KGraphPart *part, QWidget *parent=0, const char *name=0);
-    ~KGraphView() {}
+    KGraphView(KGraphPart *part, const KGObjectPool * const objectPool,
+	       QWidget *parent=0, const char *name=0);
+    virtual ~KGraphView();
 
     virtual QWidget *canvas() { return m_canvas; }
-
-//protected slots:
-    //void a_editcut();
 
 protected:
     //void paintEvent(QPaintEvent *ev);
@@ -50,7 +46,6 @@ protected:
     virtual void updateReadWrite(bool readwrite);
 
 private:
-    //KAction *editcut;
     KGCanvas *m_canvas;
 };
 #endif
