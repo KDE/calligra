@@ -97,7 +97,7 @@ void Document::processStyles()
                 styleElem.appendChild( element );
             }
 
-            writeLayout( styleElem, &style->pap(), 0L /*all of it, no ref pap*/ );
+            writeLayout( styleElem, &style->pap() );
 
             writeFormat( styleElem, &style->chp(), 0L /*all of it, no ref chp*/, 0, 0 );
         }
@@ -349,24 +349,24 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
 
     if ( m_pap )
     {
-        writeLayout( layoutElement, m_pap, 0L /*TODO*/ );
+        // Write out the properties of the paragraph
+        writeLayout( layoutElement, m_pap );
     }
 
     textElement.appendChild(m_mainDocument.createTextNode(text));
-    //textElement.normalize(); // Put text together (not sure if needed)
-    // DF: I don't think so, you created only one text node ;)
 
     m_paragraph = QString( "" );
     m_index = 0;
     m_oldLayout = layoutElement; // Keep a reference to the old layout for some hacks
 }
 
-void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PAP* pap, const wvWare::Word97::PAP* /*refPap TODO*/ )
+void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PAP* pap )
 {
+    // Always write out the alignment, it's required
     QDomElement flowElement = m_mainDocument.createElement("FLOW");
     QString alignment = Conversion::alignment( pap->jc );
-    flowElement.setAttribute("align",alignment);
-    parentElement.appendChild(flowElement);
+    flowElement.setAttribute( "align", alignment );
+    parentElement.appendChild( flowElement );
 
     //kdDebug() << k_funcinfo << " dxaLeft1=" << pap->dxaLeft1 << " dxaLeft=" << pap->dxaLeft << " dxaRight=" << pap->dxaRight << " dyaBefore=" << pap->dyaBefore << " dyaAfter=" << pap->dyaAfter << " lspd=" << pap->lspd.dyaLine << "/" << pap->lspd.fMultLinespace << endl;
 
@@ -389,7 +389,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
 
     // Linespacing
     QString lineSpacing = Conversion::lineSpacing( pap->lspd );
-    if ( lineSpacing != "0" ) // ##
+    if ( lineSpacing != "0" )
     {
         QDomElement lineSpacingElem = m_mainDocument.createElement( "LINESPACING" );
         lineSpacingElem.setAttribute("value", lineSpacing );
@@ -399,9 +399,12 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
     if ( pap->fKeep || pap->fKeepFollow || pap->fPageBreakBefore )
     {
         QDomElement pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
-        pageBreak.setAttribute("linesTogether", pap->fKeep ? "true" : "false");
-        pageBreak.setAttribute("hardFrameBreak", pap->fPageBreakBefore ? "true" : "false");
-        pageBreak.setAttribute("keepWithNext", pap->fKeepFollow ? "true" : "false");
+        if ( pap->fKeep )
+            pageBreak.setAttribute("linesTogether", "true");
+        if ( pap->fPageBreakBefore )
+            pageBreak.setAttribute("hardFrameBreak", "true" );
+        if ( pap->fKeepFollow )
+            pageBreak.setAttribute("keepWithNext", "true" );
         parentElement.appendChild( pageBreak );
     }
 
@@ -431,7 +434,6 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
         parentElement.appendChild( borderElement );
     }
 
-#if 0 // needs rgtbd to be a TBD in wv2
     // Tabulators
     if ( pap->itbdMac )
     {
@@ -461,7 +463,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
             parentElement.appendChild( tabElement );
         }
     }
-#endif
+
     // TODO: COUNTER
     // TODO? FORMAT - unless it all comes from the style, or is all specified for all chars
     // TODO? SHADOW [it comes from the text runs...]
