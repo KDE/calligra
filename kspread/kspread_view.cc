@@ -1396,6 +1396,7 @@ void KSpreadView::deleteColumn()
         m_pTable->removeColumn( r.left(),(r.right()-r.left()) );
 
     updateEditWidget();
+    m_pTable->setSelection(m_pTable->marker());
 }
 
 void KSpreadView::deleteRow()
@@ -1409,6 +1410,7 @@ void KSpreadView::deleteRow()
         m_pTable->removeRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
+    m_pTable->setSelection(m_pTable->marker());
 }
 
 void KSpreadView::insertColumn()
@@ -1456,6 +1458,15 @@ void KSpreadView::showSelColumns()
 
     for ( i = rect.left(); i <= rect.right(); ++i )
     {
+      if (i == 2) // "B"
+      {
+        col = activeTable()->columnLayout( 1 );
+        if ( col->isHide() )
+        {
+          hiddenCols.append( 1 );
+        }
+      }
+
       col = m_pTable->columnLayout( i );
       if ( col->isHide() )
       {
@@ -1511,6 +1522,15 @@ void KSpreadView::showSelRows()
 
     for ( i = rect.top(); i <= rect.bottom(); ++i )
     {
+      if (i == 2)
+      {
+        row = activeTable()->rowLayout( 1 );
+        if ( row->isHide() )
+        {
+          hiddenRows.append(1);
+        }
+      }
+
       row = m_pTable->rowLayout( i );
       if ( row->isHide() )
       {
@@ -2707,10 +2727,24 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_showSelColumns->setEnabled(false);
 
     int i;
+    ColumnLayout * col;
     QRect rect = activeTable()->selectionRect();
+    kdDebug() << "Column: L: " << rect.left() << endl;
     for ( i = rect.left(); i <= rect.right(); ++i )
     {
-      ColumnLayout * col = activeTable()->columnLayout( i );
+      if (i == 2) // "B"
+      {
+        col = activeTable()->columnLayout( 1 );
+        if ( col->isHide() )
+        {
+          m_showSelColumns->setEnabled(true);
+          m_showSelColumns->plug( m_pPopupColumn );
+          break;
+        }
+      }
+
+      col = activeTable()->columnLayout( i );
+
       if ( col->isHide() )
       {
         m_showSelColumns->setEnabled(true);
@@ -2768,10 +2802,23 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_showSelColumns->setEnabled(false);
 
     int i;
+    RowLayout * row;
     QRect rect = activeTable()->selectionRect();
     for ( i = rect.top(); i <= rect.bottom(); ++i )
     {
-      RowLayout * row = activeTable()->rowLayout( i );
+      kdDebug() << "popupRow: " << rect.top() << endl;
+      if (i == 2)
+      {
+        row = activeTable()->rowLayout( 1 );
+        if ( row->isHide() )
+        {
+          m_showSelRows->setEnabled(true);
+          m_showSelRows->plug( m_pPopupRow );
+          break;
+        }
+      }
+
+      row = activeTable()->rowLayout( i );
       if ( row->isHide() )
       {
         m_showSelRows->setEnabled(true);
