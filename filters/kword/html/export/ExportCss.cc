@@ -42,7 +42,16 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
 
     // NOTE: we do not guarantee anymore that the style name is unique! (### FIXME)
 
+
     QString strReturn;
+    // Taken in a restrictive way, an identifier can only start with a letter.
+    const QChar qch0(strText[0]);
+    if ((qch0<'a' || qch0>'z') && (qch0<'A' || qch0>'Z'))
+    {
+        // Not a letter, so we have to put a prefix to be a valid identifier
+        strReturn+="kWoRd_"; // The curious spelling is for allowing a HTML import to identfy it and to remove it.
+    }
+
     bool lastEscaped=false; // Was the last character escaped?
 
     for (uint i=0; i<strText.length(); i++)
@@ -62,20 +71,10 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
             lastEscaped=true;
         }
         else if (((ch>='a') && (ch<='z'))
-            || ((ch>='A') && (ch<='Z')))
-        {
-            strReturn+=qch;
-            lastEscaped=false;
-        }
-        else if (((ch>='0') && (ch<='9'))
+            || ((ch>='A') && (ch<='Z'))
+            || ((ch>='0') && (ch<='9'))
             || (ch=='-') || (ch=='_')) // The underscore is allowed by the CSS2 errata
         {
-            if (!i)
-            {
-                // A digit, a dash or a hyphen are not allowed as first character of an identifier.
-                // Therefore we need to put something valid before this character.
-                strReturn+="kWoRd_"; // The curious spelling is for allowing a HTML import to identfy it and to remove it.
-            }
             strReturn+=qch;
             lastEscaped=false;
         }
