@@ -811,21 +811,62 @@ static bool kspread_convert_energy( const QString& fromUnit,
   // first-time initialization
   if( energyMap.isEmpty() )
   {
-    energyMap[ "J" ]   = 1.0;
-    energyMap[ "e" ]   = 1.0e7;
-    energyMap[ "c" ]   = 0.239006249473467;
-    energyMap[ "cal" ] = 0.238846190642017;
-    energyMap[ "eV" ]  = 6.241457e+18;
-    energyMap[ "HPh" ] = 3.72506111e-7;
-    energyMap[ "Wh" ]  = 0.000277778;
+    energyMap[ "J" ]   = 1.0; // Joule (the reference)
+    energyMap[ "e" ]   = 1.0e7; //erg
+    energyMap[ "c" ]   = 0.239006249473467; // thermodynamical calorie
+    energyMap[ "cal" ] = 0.238846190642017; // calorie
+    energyMap[ "eV" ]  = 6.241457e+18; // electronvold
+    energyMap[ "HPh" ] = 3.72506111e-7; // horsepower-hour
+    energyMap[ "Wh" ]  = 0.000277778; // watt-hour
     energyMap[ "flb" ] = 23.73042222;
-    energyMap[ "BTU" ] = 9.47815067349015e-4;
+    energyMap[ "BTU" ] = 9.47815067349015e-4; // British Thermal Unit
   }
 
   if( !energyMap.contains( fromUnit ) ) return false;
   if( !energyMap.contains( toUnit ) ) return false;
 
   result = value * energyMap[ toUnit ] / energyMap[ fromUnit ];
+
+  return true;
+}
+
+static bool kspread_convert_power( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> powerMap;
+
+  // first-time initialization
+  if( powerMap.isEmpty() )
+  {
+    powerMap[ "W" ]   = 1.0; // Watt (the reference)
+    powerMap[ "HP" ]  = 1.341022e-3; // Horsepower
+    powerMap[ "PS" ]  = 1.359622e-3; // Pferdestärke (German)
+  }
+
+  if( !powerMap.contains( fromUnit ) ) return false;
+  if( !powerMap.contains( toUnit ) ) return false;
+
+  result = value * powerMap[ toUnit ] / powerMap[ fromUnit ];
+
+  return true;
+}
+
+static bool kspread_convert_magnetism( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> magnetismMap;
+
+  // first-time initialization
+  if( magnetismMap.isEmpty() )
+  {
+    magnetismMap[ "T" ]   = 1.0; // Tesla (the reference)
+    magnetismMap[ "ga" ]   = 1.0e4; // Gauss
+  }
+
+  if( !magnetismMap.contains( fromUnit ) ) return false;
+  if( !magnetismMap.contains( toUnit ) ) return false;
+
+  result = value * magnetismMap[ toUnit ] / magnetismMap[ fromUnit ];
 
   return true;
 }
@@ -855,6 +896,88 @@ static bool kspread_convert_temperature( const QString& fromUnit,
   return true;
 }
 
+static bool kspread_convert_volume( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> volumeMap;
+
+  // first-time initialization
+  if( volumeMap.isEmpty() )
+  {
+    volumeMap[ "l" ]      = 1.0; // Liter (the reference)
+    volumeMap[ "tsp" ]    = 202.84; // teaspoon
+    volumeMap[ "tbs" ]    = 67.6133333333333; // tablespoon
+    volumeMap[ "oz" ]     = 33.8066666666667; // ounce liquid
+    volumeMap[ "cup" ]    = 4.22583333333333; // cup
+    volumeMap[ "pt" ]     = 2.11291666666667; // pint
+    volumeMap[ "qt" ]     = 1.05645833333333; // quart
+    volumeMap[ "gal" ]    = 0.26411458333333; // gallone
+    volumeMap[ "m3" ]     = 1.0e-3; // cubic meter
+    volumeMap[ "mi3" ]    = 2.3991275857892772e-13; // cubic mile
+    volumeMap[ "Nmi3" ]   = 1.5742621468581148e-13; // cubic Nautical mile
+    volumeMap[ "in3" ]    = 6.1023744094732284e1; // cubic inch
+    volumeMap[ "ft3" ]    = 3.5314666721488590e-2; // cubic foot
+    volumeMap[ "yd3" ]    = 1.3079506193143922; // cubic yard
+    volumeMap[ "barrel" ] = 6.289811E-03; // barrel
+  }
+
+  if( !volumeMap.contains( fromUnit ) ) return false;
+  if( !volumeMap.contains( toUnit ) ) return false;
+
+  result = value * volumeMap[ toUnit ] / volumeMap[ fromUnit ];
+
+  return true;
+}
+
+static bool kspread_convert_area( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> areaMap;
+
+  // first-time initialization
+  if( areaMap.isEmpty() )
+  {
+    areaMap[ "m2" ]   = 1.0; // square meter (the reference)
+    areaMap[ "mi2" ]  = 3.8610215854244585e-7; // square mile
+    areaMap[ "Nmi2" ] = 2.9155334959812286e-7; // square Nautical mile
+    areaMap[ "in2" ]  = 1.5500031000062000e3; // square inch
+    areaMap[ "ft2" ]  = 1.0763910416709722e1; // square foot
+    areaMap[ "yd2" ]  = 1.0936132983377078; // square yard
+    areaMap[ "acre" ] = 4.046856e3; // acre
+    areaMap[ "ha" ]   = 1.0e4; // hectare
+  }
+
+  if( !areaMap.contains( fromUnit ) ) return false;
+  if( !areaMap.contains( toUnit ) ) return false;
+
+  result = value * areaMap[ toUnit ] / areaMap[ fromUnit ];
+
+  return true;
+}
+
+static bool kspread_convert_speed( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> speedMap;
+
+  // first-time initialization
+  if( speedMap.isEmpty() )
+  {
+    speedMap[ "m/s" ] = 1.0; // meters per second (the reference)
+    speedMap[ "m/h" ] = 3.6e3; // meters per hour
+    speedMap[ "mph" ] = 2.2369362920544023; // miles per hour
+    speedMap[ "kn" ]  = 1.9438444924406048; // knot
+  }
+
+  if( !speedMap.contains( fromUnit ) ) return false;
+  if( !speedMap.contains( toUnit ) ) return false;
+
+  result = value * speedMap[ toUnit ] / speedMap[ fromUnit ];
+
+  return true;
+}
+
+
 // Function: CONVERT
 bool kspreadfunc_convert( KSContext& context )
 {
@@ -880,11 +1003,16 @@ bool kspreadfunc_convert( KSContext& context )
 
   if( !kspread_convert_mass( fromUnit, toUnit, value, result ) )
     if( !kspread_convert_distance( fromUnit, toUnit, value, result ) )
-      if( !kspread_convert_temperature( fromUnit, toUnit, value, result ) )
-        if( !kspread_convert_pressure( fromUnit, toUnit, value, result ) )
-          if( !kspread_convert_force( fromUnit, toUnit, value, result ) )
-            if( !kspread_convert_energy( fromUnit, toUnit, value, result ) )
-            return false;
+      if( !kspread_convert_pressure( fromUnit, toUnit, value, result ) )
+        if( !kspread_convert_force( fromUnit, toUnit, value, result ) )
+          if( !kspread_convert_energy( fromUnit, toUnit, value, result ) )
+            if( !kspread_convert_power( fromUnit, toUnit, value, result ) )
+              if( !kspread_convert_magnetism( fromUnit, toUnit, value, result ) )
+                if( !kspread_convert_temperature( fromUnit, toUnit, value, result ) )
+                  if( !kspread_convert_volume( fromUnit, toUnit, value, result ) )
+                    if( !kspread_convert_area( fromUnit, toUnit, value, result ) )
+                      if( !kspread_convert_speed( fromUnit, toUnit, value, result ) )
+                        return false;
 
   context.setValue( new KSValue( result ) );
 
