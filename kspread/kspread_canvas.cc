@@ -158,10 +158,13 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     case Key_Up:
     case Key_Return:
     case Key_Enter:
-      // Send to the canvas, which will handle it.
       cellEditor->setText( text());
-      QApplication::sendEvent( m_pCanvas, _ev );
-
+      // Don't allow to start a chooser when pressing the arrow keys
+      // in this widget, since only up and down would work anyway.
+      // This is why we call slotDoneEdit now, instead of sending
+      // to the canvas.
+      //QApplication::sendEvent( m_pCanvas, _ev );
+      slotDoneEdit();
       _ev->accept();
       break;
     case Key_F2:
