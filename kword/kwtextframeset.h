@@ -94,7 +94,8 @@ public:
 
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible );
 
-    void insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &text, bool checkNewLine, bool removeSelected = true );
+    void insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &text,
+                 bool checkNewLine, bool removeSelected, const QString & commandName );
     void removeSelectedText( QTextCursor * cursor );
     void undo();
     void redo();

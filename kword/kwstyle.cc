@@ -19,6 +19,7 @@
 
 #include "kwstyle.h"
 #include <qdom.h>
+#include <kdebug.h>
 
 KWStyle::KWStyle( const QString & name )
 {
@@ -40,6 +41,8 @@ KWStyle::KWStyle( QDomElement & styleElem )
     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
     if ( !formatElem.isNull() )
         m_format = KWTextParag::loadFormat( formatElem, 0L );
+    else
+        kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 }
 
 void KWStyle::save( QDomElement parentElem )

@@ -1077,6 +1077,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Apply style %1").arg(newStyle->name()) );
 
     // 1
+    kdDebug(32001) << "KWTextFrameSet::applyStyle setParagLayout" << endl;
     storeParagUndoRedoInfo( cursor, selectionId );
     undoRedoInfo.type = UndoRedoInfo::Invalid; // tricky, we don't want clear() to create a command
     if ( !textdoc->hasSelection( selectionId ) ) {
@@ -1088,12 +1089,14 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
             static_cast<KWTextParag*>(start)->setParagLayout( newStyle->paragLayout() );
     }
 
+    //kdDebug(32001) << "KWTextFrameSet::applyStyle KWTextParagCommand" << endl;
     QTextCommand * cmd = new KWTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid, undoRedoInfo.oldParagLayouts,
                                                  newStyle->paragLayout(), KWTextParagCommand::All );
     textdoc->addCommand( cmd );
     macroCmd->addCommand( new KWTextCommand( this, /*cmd, */QString::null ) );
 
     // 2
+    //kdDebug(32001) << "KWTextFrameSet::applyStyle gathering text and formatting" << endl;
     QValueList<QTextFormat *> lstFormats;
     QTextParag * firstParag;
     QTextParag * lastParag;
@@ -1111,7 +1114,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     QString str;
     for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
     {
-        str += parag->string()->toString();
+        str += parag->string()->toString(); // ## do we need to add a '\n' here ?
         lstFormats.append( parag->paragFormat() );
     }
 
@@ -1143,7 +1146,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     // apply '2' and '3' (format)
     for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
     {
-        kdDebug(32001) << "KWTextFrameSet::applyStyle " << parag->string()->length() << endl;
+        //kdDebug(32001) << "KWTextFrameSet::applyStyle " << parag->string()->length() << endl;
         parag->setFormat( 0, parag->string()->length(), newFormat, true );
         parag->setFormat( newFormat ); // set default format (for counter)
     }
@@ -1421,6 +1424,7 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     if ( !undoRedoInfo.valid() ) {
 	textdoc->selectionStart( QTextDocument::Standard, undoRedoInfo.id, undoRedoInfo.index );
 	undoRedoInfo.text = QString::null;
+        undoRedoInfo.name = i18n("Remove Selected Text");
     }
     int oldLen = undoRedoInfo.text.length();
     undoRedoInfo.text = textdoc->selectedText( QTextDocument::Standard );
@@ -1437,7 +1441,7 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     undoRedoInfo.clear();
 }
 
-void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &txt, bool checkNewLine, bool removeSelected )
+void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &txt, bool checkNewLine, bool removeSelected, const QString & commandName )
 {
     kdDebug(32001) << "KWTextFrameSet::insert" << endl;
     QTextDocument *textdoc = textDocument();
@@ -1458,7 +1462,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, 
 	undoRedoInfo.id = cursor->parag()->paragId();
 	undoRedoInfo.index = cursor->index();
 	undoRedoInfo.text = QString::null;
-        undoRedoInfo.name = i18n("Insert text");
+        undoRedoInfo.name = commandName;
     }
     int oldLen = undoRedoInfo.text.length();
     m_lastFormatted = checkNewLine && cursor->parag()->prev() ?
@@ -1555,7 +1559,7 @@ void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, QTex
             t[ i ] = ' ';
     }
     if ( !t.isEmpty() )
-        insert( cursor, currentFormat, t, true /*checkNewLine*/, removeSelected );
+        insert( cursor, currentFormat, t, true /*checkNewLine*/, removeSelected, i18n("Paste Text") );
 }
 
 void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected )
@@ -1571,7 +1575,7 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
     // Using insert() wouldn't help storing the parag stuff for redo
     KWPasteCommand * cmd = new KWPasteCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
-    doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste text") ) ); // the wrapper KCommand
+    doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
     doc->setModified(true);
     *cursor = *( cmd->execute( cursor ) );
 
@@ -1779,7 +1783,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 		     cursor->index() == 0 && ( e->text() == "-" || e->text() == "*" ) ) {
 		    setParagType( QStyleSheetItem::DisplayListItem, QStyleSheetItem::ListDisc );
 		} else {*/
-		    textFrameSet()->insert( cursor, currentFormat, e->text(), false );
+		    textFrameSet()->insert( cursor, currentFormat, e->text(), false, true, i18n("Insert Text") );
 		//}
 		break;
 	    }
@@ -2358,7 +2362,7 @@ void KWTextFrameSetEdit::setTextSuperScript(bool on)
 /*===============================================================*/
 void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 {
-    textFrameSet()->insert( cursor, currentFormat, _c, false /* no newline */ );
+    textFrameSet()->insert( cursor, currentFormat, _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
 
 /*===============================================================*/

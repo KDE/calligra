@@ -1033,7 +1033,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
             int index = formatElem.attribute( "pos" ).toInt() + offset;
             int len = formatElem.attribute( "len" ).toInt();
 
-            kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
+            //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
             setFormat( index, len, &f );
         }
     }

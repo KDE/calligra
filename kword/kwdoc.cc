@@ -2094,7 +2094,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
 
     if ( isHeaderVisible() || isFooterVisible() )
         recalcFrames( false );  // Get headers and footers on the new page
-    setModified(TRUE);
+    // setModified(TRUE); This is called by formatMore, possibly on loading -> don't set modified
 }
 
 bool KWDocument::canRemovePage( int num, KWFrame *f )
