@@ -575,7 +575,6 @@ public:
     QPixmap* formatRedNeverSignedPixmap;
     QPixmap* formatAlwaysSignedPixmap;
     QPixmap* formatRedAlwaysSignedPixmap;
-    QPixmap* undefinedPixmap;
 
     int textRotation;
     bool bTextRotation;

@@ -107,13 +107,11 @@ void KSpreadPatternSelect::slotSelect()
 CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _left, int _top,
                               int _right, int _bottom ) : QObject()
 {
-    undefinedPixmap = 0L;
     formatOnlyNegSignedPixmap = 0L;
     formatRedOnlyNegSignedPixmap = 0L;
     formatRedNeverSignedPixmap = 0L;
     formatAlwaysSignedPixmap = 0L;
     formatRedAlwaysSignedPixmap = 0L;
-    undefinedPixmap = 0L;
     table = _table;
     left = _left;
     top = _top;
@@ -551,7 +549,6 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 
 CellLayoutDlg::~CellLayoutDlg()
 {
-  delete undefinedPixmap;
   delete formatOnlyNegSignedPixmap;
   delete formatRedOnlyNegSignedPixmap;
   delete formatRedNeverSignedPixmap;
@@ -682,15 +679,6 @@ void CellLayoutDlg::init()
         formatRedNeverSignedPixmap = paintFormatPixmap( "123.456", black, "123.456", Qt::red );
         formatAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", black );
         formatRedAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", Qt::red );
-
-        // Make the undefined pixmap
-        undefinedPixmap = new QPixmap( 100, 12 );
-        QPainter painter;
-        painter.begin( undefinedPixmap );
-        painter.setBackgroundColor( colorGroup.base() );
-        painter.setPen( colorGroup.text() );
-        painter.fillRect( 0, 0, 100, 12, BDiagPattern );
-        painter.end();
     }
 
     tab = new QTabDialog( (QWidget*)m_pView, 0L, TRUE );
@@ -984,7 +972,6 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     format->insertItem( *_dlg->formatRedNeverSignedPixmap, 2 );
     format->insertItem( *_dlg->formatAlwaysSignedPixmap, 3 );
     format->insertItem( *_dlg->formatRedAlwaysSignedPixmap, 4 );
-    format->insertItem( *_dlg->undefinedPixmap, 5 );
 
     tmpQLabel = new QLabel( box, "Label_4" );
     grid->addWidget(tmpQLabel,0,2);

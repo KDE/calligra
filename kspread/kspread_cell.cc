@@ -2453,71 +2453,87 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
    }
 
  ColumnLayout *cl = m_pTable->columnLayout( column() );
- int w;
- if(  m_iExtraWidth==0)
-     w = cl->width();
- else
-     w = m_iExtraWidth;
+ int w = (  m_iExtraWidth == 0 ) ? cl->width() : m_iExtraWidth;
 
  if( isNumeric())
-        {
-        if( formatType()!=Scientific)
-                {
-                int p = (precision(column(),row())  == -1) ? 8 : precision(column(),row());
-                double value =valueDouble() * factor(column(),row());
-                int pos=0;
-                QString localizedNumber= QString::number( (value), 'E', p);
-                if((pos=localizedNumber.find('.'))!=-1)
-                        localizedNumber=localizedNumber.replace(pos,1,decimal_point);
-                if( floatFormat( column(), row() ) == KSpreadCell::AlwaysSigned && value >= 0 )
-                        {
-                        if(locale()->positiveSign().isEmpty())
-                                localizedNumber='+'+localizedNumber;
-                        }
-                if ( precision(column(),row()) == -1 && localizedNumber.find(decimal_point) >= 0 )
-                        {
-                        //duplicate code it's not good I know I will fix it
-                        int start=0;
-                        if((start=localizedNumber.find('E'))!=-1)
-                                start=localizedNumber.length()-start;
-                        int i = localizedNumber.length()-start;
-                        bool bFinished = FALSE;
-
-                        while ( !bFinished && i > 0 )
-                                {
-                                QChar ch = localizedNumber[ i - 1 ];
-                                if ( ch == '0' )
-                                        localizedNumber.remove(--i,1);
-                                else
-                                        {
-                                        bFinished = TRUE;
-                                        if ( ch == decimal_point )
-                                                localizedNumber.remove(--i,1);
-                                        }
-                                }
-                        }
-                if(fm.width(localizedNumber)<w)
-                        return localizedNumber;
-                }
-	QString str("####");
-	int i;
-	for(i=4;i!=0;i--)
-	  {
-	    if(fm.width(str.right(i))<(w-4-1))
-	      break;
-	  }
-        return str.right(i);//QString("###");
-        }
+ {
+   if( formatType()!=Scientific)
+   {
+     int p = (precision(column(),row())  == -1) ? 8 : 
+       precision(column(),row());
+     double value =valueDouble() * factor(column(),row());
+     int pos=0;
+     QString localizedNumber= QString::number( (value), 'E', p);
+     if((pos=localizedNumber.find('.'))!=-1)
+     {
+       localizedNumber=localizedNumber.replace(pos,1,decimal_point);
+     }
+     if( floatFormat( column(), row() ) == 
+	 KSpreadCell::AlwaysSigned && value >= 0 )
+       
+     {
+       if(locale()->positiveSign().isEmpty())
+       {
+	 localizedNumber='+'+localizedNumber;
+       }
+     }
+     if ( precision(column(),row()) == -1 && 
+	  localizedNumber.find(decimal_point) >= 0 )
+     {
+       //duplicate code it's not good I know I will fix it
+       int start=0;
+       if((start=localizedNumber.find('E'))!=-1)
+       {
+	 start=localizedNumber.length()-start;
+       }
+       int i = localizedNumber.length()-start;
+       bool bFinished = FALSE;
+       
+       while ( !bFinished && i > 0 )
+       {
+	 QChar ch = localizedNumber[ i - 1 ];
+	 if ( ch == '0' )
+	 {
+	   localizedNumber.remove(--i,1);
+	 }
+	 else
+	 {
+	   bFinished = TRUE;
+	   if ( ch == decimal_point )
+	   {
+	     localizedNumber.remove(--i,1);
+	   }
+	 }
+       }
+     }
+     if(fm.width(localizedNumber)<w)
+     {
+       return localizedNumber;
+     }
+   }
+   QString str("####");
+   int i;
+   for(i=4;i!=0;i--)
+   {
+     if(fm.width(str.right(i))<(w-4-1))
+     {
+       break;
+     }
+   }
+   return str.right(i);//QString("###");
+ }
  else
-        {
-        QString tmp;
-        for (int i=m_strOutText.length();i!=0;i--)
-                {
-                tmp=m_strOutText.left(i);
-                if(fm.width(tmp)<(w-4-1)) //4 equals lenght of red triangle +1 pixel
-                        return tmp;
-                }
-        }
+ {
+   QString tmp;
+   for (int i=m_strOutText.length();i!=0;i--)
+   {
+     tmp=m_strOutText.left(i);
+     if(fm.width(tmp)<(w-4-1)) //4 equals lenght of red triangle +1 pixel
+     {
+       return tmp;
+     }
+   }
+ }
  return  QString::null;
 }
 
