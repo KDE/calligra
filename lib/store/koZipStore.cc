@@ -55,11 +55,11 @@ bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
         good = m_pZip->directory() != 0;
     else if ( good && _mode == Write )
     {
-        //kdDebug() << "KoZipStore::init writing typeid " << appIdentification << endl;
+        //kdDebug() << "KoZipStore::init writing mimetype " << appIdentification << endl;
 
         m_pZip->setCompression( KoZip::NoCompression );
         // Write identification
-        (void)m_pZip->writeFile( "typeid", "", "", appIdentification.length(), appIdentification.data() );
+        (void)m_pZip->writeFile( "mimetype", "", "", appIdentification.length(), appIdentification.data() );
         m_pZip->setCompression( KoZip::DeflateCompression );
     }
     return true;
