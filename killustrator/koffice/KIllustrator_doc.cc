@@ -195,7 +195,7 @@ bool KIllustratorDocument::insertNewTemplate (int, int, bool) {
   ret = KoTemplateChooseDia::choose (KIllustratorFactory::global(),
                                      templ,
                                      "application/x-killustrator", "*.kil",
-                                     "KIllustrator",
+                                     i18n("KIllustrator"),
                                      KoTemplateChooseDia::Everything,
                                      "killustrator_template");
   if (ret == KoTemplateChooseDia::Template) {

@@ -22,7 +22,7 @@
 const QDomDocument * const PowerPointFilter::part() {
 
     m_part=QDomDocument("DOC");
-    m_part.setContent(QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    m_part.setContent(QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >"
                               "<DOC author=\"Reginald Stadlbauer\" email=\"reggie@kde.org\" editor=\"KPresenter\" mime=\"application/x-kpresenter\" syntaxVersion=\"2\">"
                               "<PAPER format=\"5\" ptWidth=\"680\" ptHeight=\"510\" mmWidth =\"240\" mmHeight=\"180\" inchWidth =\"9.44882\" inchHeight=\"7.08661\" orientation=\"0\" unit=\"0\">"
                               "<PAPERBORDERS mmLeft=\"0\" mmTop=\"0\" mmRight=\"0\" mmBottom=\"0\" ptLeft=\"0\" ptTop=\"0\" ptRight=\"0\" ptBottom=\"0\" inchLeft=\"0\" inchTop=\"0\" inchRight=\"0\" inchBottom=\"0\"/>"

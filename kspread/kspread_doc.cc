@@ -123,7 +123,7 @@ bool KSpreadDoc::initDoc()
     KoTemplateChooseDia::ReturnType ret;
 
     ret = KoTemplateChooseDia::choose(  KSpreadFactory::global(), f, "application/x-kspread",
-                                        "*.ksp", "KSpread", KoTemplateChooseDia::NoTemplates );
+                                        "*.ksp", i18n("KSpread"), KoTemplateChooseDia::NoTemplates );
 
     if ( ret == KoTemplateChooseDia::File ) {
         KURL url;

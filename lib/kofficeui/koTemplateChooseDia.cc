@@ -47,8 +47,8 @@
 
 class KoTemplateChooseDiaPrivate {
 public:
-    KoTemplateChooseDiaPrivate(const QString& templateType, KInstance* global,
-                               const char *format, const QString &nativePattern,
+    KoTemplateChooseDiaPrivate(const QCString& templateType, KInstance* global,
+                               const QCString &format, const QCString &nativePattern,
                                const QString &nativeName,
                                const KoTemplateChooseDia::DialogType &dialogType) :
         m_templateType(templateType), m_global(global), m_format(format),
@@ -58,10 +58,11 @@ public:
     }
     ~KoTemplateChooseDiaPrivate() {}
 
-    QString m_templateType;
+    QCString m_templateType;
     KInstance* m_global;
-    const char *m_format;
-    QString m_nativePattern, m_nativeName;
+    QCString m_format;
+    QCString m_nativePattern;
+    QString m_nativeName;
     KoTemplateChooseDia::DialogType m_dialogType;
     bool m_firstTime;
     KoTemplateTree *tree;
@@ -88,7 +89,7 @@ public:
 
 /*================================================================*/
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-                                         const char *format, const QString &nativePattern,
+                                         const QCString &format, const QCString &nativePattern,
                                          const QString &nativeName, const DialogType &dialogType,
                                          const QCString& templateType) :
     KDialogBase(parent, name, true, i18n("Choose"), KDialogBase::Ok | KDialogBase::Cancel,
@@ -119,7 +120,7 @@ KoTemplateChooseDia::~KoTemplateChooseDia() {
 
 /*================================================================*/
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, QString &file,
-                                                            const char *format, const QString &nativePattern,
+                                                            const QCString &format, const QCString &nativePattern,
                                                             const QString &nativeName,
                                                             const KoTemplateChooseDia::DialogType &dialogType,
                                                             const QCString& templateType) {

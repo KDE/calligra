@@ -248,7 +248,7 @@ bool KWordDocument::initDoc()
 
     bool ok = FALSE;
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-        KWordFactory::global(), _template, "application/x-kword", "*.kwd", "KWord",
+        KWordFactory::global(), _template, "application/x-kword", "*.kwd", i18n("KWord"),
         KoTemplateChooseDia::Everything, "kword_template");
     if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );

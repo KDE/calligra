@@ -34,21 +34,21 @@ class MyIconCanvas : public KIconCanvas
     Q_OBJECT
 public:
     MyIconCanvas( QWidget *parent = 0, const char *name = 0L )
-	: KIconCanvas( parent, name ) {}
+        : KIconCanvas( parent, name ) {}
 
     bool isCurrentValid() { return currentItem(); }
     void load(KoTemplateGroup *group);
 
 protected:
     void viewportMousePressEvent( QMouseEvent *e ) {
-	KIconCanvas::viewportMousePressEvent( e );
-	if ( isCurrentValid() ) {
-	    QString s = getCurrent();
-	    emit currentChanged( s );
-	} else {
-	    QString s = "";
-	    emit currentChanged( s );
-	}
+        KIconCanvas::viewportMousePressEvent( e );
+        if ( isCurrentValid() ) {
+            QString s = getCurrent();
+            emit currentChanged( s );
+        } else {
+            QString s = "";
+            emit currentChanged( s );
+        }
     }
 
 signals:
@@ -105,11 +105,11 @@ public:
      * @return The return type (see above)
      */
     KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-			const char *format=0L,
-			const QString &nativePattern=QString::null,
-			const QString &nativeName=QString::null,
-			const DialogType &dialogType=Everything,
-			const QCString& templateType="");
+                        const QCString &format="",
+                        const QCString &nativePattern="",
+                        const QString &nativeName=QString::null,
+                        const DialogType &dialogType=Everything,
+                        const QCString& templateType="");
     ~KoTemplateChooseDia();
 
     /**
@@ -127,11 +127,11 @@ public:
      * @return The return type (see above)
      */
     static ReturnType choose(KInstance* global, QString &file,
-			     const char *format=0L,
-			     const QString &nativePattern=QString::null,
-			     const QString &nativeName=QString::null,
-			     const DialogType &dialogType=Everything,
-			     const QCString& templateType="");
+                             const QCString &format="",
+                             const QCString &nativePattern="",
+                             const QString &nativeName=QString::null,
+                             const DialogType &dialogType=Everything,
+                             const QCString& templateType="");
 
     /**
      * Method to get the current template

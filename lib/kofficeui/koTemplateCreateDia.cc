@@ -158,6 +158,10 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     updatePixmap();
 }
 
+KoTemplateCreateDia::~KoTemplateCreateDia() {
+    delete d;
+}
+
 void KoTemplateCreateDia::createTemplate( const QCString &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) {
 
@@ -172,7 +176,7 @@ void KoTemplateCreateDia::slotOk() {
     QListViewItem *item=d->m_groups->currentItem();
     if(!item)
         item=d->m_groups->firstChild();
-    if(!item) {    // save :)
+    if(!item) {    // safe :)
         d->m_tree->writeTemplateTree();
         KDialogBase::slotCancel();
         return;
@@ -180,14 +184,14 @@ void KoTemplateCreateDia::slotOk() {
     // is it a group or a template? anyway - get the group :)
     if(item->depth()!=0)
         item=item->parent();
-    if(!item) {    // *very* save :P
+    if(!item) {    // *very* safe :P
         d->m_tree->writeTemplateTree();
         KDialogBase::slotCancel();
         return;
     }
 
     KoTemplateGroup *group=d->m_tree->find(item->text(0));
-    if(!group) {    // even saver
+    if(!group) {    // even safer
         d->m_tree->writeTemplateTree();
         KDialogBase::slotCancel();
         return;
