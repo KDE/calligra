@@ -189,7 +189,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		m_strokeDocker = new VStrokeDocker( part(), this );
 
 		m_TransformDlg = new VTransformDlg( part(), this );
-	
+
 		//create toolbars
 		m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
 		mainWindow()->addToolBar( m_selectToolBar );
@@ -459,9 +459,12 @@ void
 KarbonView::editDeleteSelection()
 {
 kdDebug() << "*********" << endl;
-	part()->addCommand(
-		new VDeleteCmd( &part()->document() ),
-		true );
+ if ( part()->document().selection()->objects().count()>0)
+ {
+     part()->addCommand(
+         new VDeleteCmd( &part()->document() ),
+         true );
+ }
 }
 
 void
@@ -975,7 +978,7 @@ KarbonView::viewColorManager()
 	}
 }
 
-void 
+void
 KarbonView::viewLayersDocker()
 {
 	if( m_layersDocker->isVisible() == false )
@@ -985,7 +988,7 @@ KarbonView::viewLayersDocker()
 	}
 }
 
-void 
+void
 KarbonView::viewToolOptions()
 {
 	if( m_toolOptionsDocker->isVisible() == false )
@@ -1004,7 +1007,7 @@ KarbonView::viewStrokeDocker()
 	}
 }
 
-void 
+void
 KarbonView::viewContextHelp()
 {
 	if( m_contextHelpDocker->isVisible() == false )
@@ -1014,7 +1017,7 @@ KarbonView::viewContextHelp()
 	}
 }
 
-void 
+void
 KarbonView::viewHistory()
 {
 	if( m_historyDocker->isVisible() == false )
