@@ -57,6 +57,9 @@ QImage *KPPixmapDataCollection::insertPixmapData( const Key &key, const QImage &
 {
     //printf("	KPPixmapDataCollection::insertPixmapData( key = %s, img = %d )\n", key.toString().latin1(), !img.isNull() );
 
+    QImage *tmp = findPixmapData( key );
+    if ( tmp )
+	return tmp;
     QImage *image = new QImage( img );
 
     image->detach();
@@ -242,7 +245,7 @@ QPixmap *KPPixmapCollection::loadPixmap( const QImage &image, const Key &key, bo
 	    *pixmap = pixmap->xForm( m );
 	}
     }
-    
+
     if ( insert ) {
 	pixmaps.insert( Key( key ), *pixmap );
 	int ref = 1;
