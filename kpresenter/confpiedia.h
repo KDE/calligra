@@ -25,8 +25,9 @@
 #include <qpen.h>
 #include <qbrush.h>
 #include <qcombobox.h>
-#include <qlineedit.h>
 #include <global.h>
+
+#include <knuminput.h>
 
 class QLabel;
 class QGroupBox;
@@ -77,9 +78,9 @@ public:
     ~ConfPieDia();
 
     void setAngle( int _angle )
-    { angle = _angle; QString str; str.sprintf( "%d", _angle ); eAngle->setText( str ); piePreview->setAngle( angle ); }
+    { angle = _angle; eAngle->setValue( angle ); piePreview->setAngle( angle ); }
     void setLength( int _len )
-    { len = _len; QString str; str.sprintf( "%d", _len ); eLen->setText( str ); piePreview->setLength( len ); }
+    { len = _len; eLen->setValue( len ); piePreview->setLength( len ); }
     void setType( PieType _type )
     { type = _type; cType->setCurrentItem( _type ); piePreview->setType( type ); }
     void setPenBrush( QPen _pen, QBrush _brush )
@@ -94,8 +95,8 @@ public:
 
 protected:
     QLabel *lType, *lAngle, *lLen;
-    QLineEdit *eAngle, *eLen;
-    QGroupBox *gSettings, *gPreview;
+    KIntNumInput *eAngle, *eLen;
+    QGroupBox *gSettings;
     PiePreview *piePreview;
     QPushButton *okBut, *applyBut, *cancelBut;
     QComboBox *cType;
@@ -106,8 +107,8 @@ protected:
     QBrush brush;
 
 protected slots:
-    void lengthChanged( const QString & );
-    void angleChanged( const QString & );
+    void lengthChanged( int );
+    void angleChanged( int );
     void typeChanged( int );
     void Apply() { emit confPieDiaOk(); }
 

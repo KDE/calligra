@@ -23,9 +23,11 @@
 #include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qpainter.h>
-#include <qvalidator.h>
+#include <qlayout.h>
 
 #include <klocale.h>
+#include <knuminput.h>
+#include <kbuttonbox.h>
 
 #include <stdlib.h>
 
@@ -39,11 +41,13 @@ PiePreview::PiePreview( QWidget* parent, const char* name )
 {
     setFrameStyle( WinPanel | Sunken );
     setBackgroundColor( white );
-    angle = 45 * 16;
-    len = 90 * 16;
+    angle = 720; //45 * 16
+    len = 1440; //90 * 16
     pen = QPen( black );
     brush = QBrush( white );
     type = PT_PIE;
+
+    setMinimumSize( 200, 100 );
 }
 
 /*====================== draw contents ===========================*/
@@ -79,85 +83,65 @@ void PiePreview::drawContents( QPainter* painter )
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
     : QDialog( parent, name, true )
 {
-    gSettings = new QGroupBox( i18n( "Settings" ), this );
-    gSettings->move( 20, 20 );
+  // ------------------------ layout
+  QVBoxLayout *layout = new QVBoxLayout( this );
+  layout->setMargin( 5 );
+  layout->setSpacing( 5 );
+  QHBoxLayout *hbox = new QHBoxLayout( layout );
+  hbox->setSpacing( 5 );
+  
+  // ------------------------ settings
+  gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), this );
 
-    lType = new QLabel( i18n( "Type:" ), gSettings );
-    lType->resize( lType->sizeHint() );
-    lType->move( 20, 25 );
+  lType = new QLabel( i18n( "Type:" ), gSettings );
 
-    cType = new QComboBox( false, gSettings );
-    cType->insertItem( i18n( "Pie" ), -1 );
-    cType->insertItem( i18n( "Arc" ), -1 );
-    cType->insertItem( i18n( "Chord" ), -1 );
-    cType->resize( cType->sizeHint() );
-    cType->move( lType->x() + lType->width() + 10, lType->y() );
-    connect( cType, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
+  cType = new QComboBox( false, gSettings );
+  cType->insertItem( i18n( "Pie" ) );
+  cType->insertItem( i18n( "Arc" ) );
+  cType->insertItem( i18n( "Chord" ) );
 
-    lType->move( lType->x(), lType->y() + ( cType->height() - lType->height() ) / 2 );
+  connect( cType, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
+  
+  lAngle = new QLabel( i18n( "Angle:" ), gSettings );
 
-    lAngle = new QLabel( i18n( "Angle ( 0 .. 5760 = ( 0 * 16 ) .. ( 360 * 16 ) ):" ), gSettings );
-    lAngle->resize( lAngle->sizeHint() );
-    lAngle->move( lType->x(), cType->y() + cType->height() + 20 );
+  eAngle = new KIntNumInput( gSettings );
+  eAngle->setRange(0, 5760);
+  connect( eAngle, SIGNAL( valueChanged( int ) ), this, SLOT( angleChanged( int ) ) );
 
-    eAngle = new QLineEdit( gSettings );
-    eAngle->setValidator( new QIntValidator( eAngle ) );
-    eAngle->resize( eAngle->sizeHint() );
-    eAngle->move( lAngle->x(), lAngle->y() + lAngle->height() + 5 );
-    connect( eAngle, SIGNAL( textChanged( const QString & ) ), this, SLOT( angleChanged( const QString & ) ) );
+  lLen = new QLabel( i18n( "Length:" ), gSettings );
 
-    lLen = new QLabel( i18n( "Length ( 0 .. 5760 = ( 0 * 16 ) .. ( 360 * 16 ) ):" ), gSettings );
-    lLen->resize( lLen->sizeHint() );
-    lLen->move( eAngle->x(), eAngle->y() + eAngle->height() + 20 );
+  eLen = new KIntNumInput( gSettings );
+  eLen->setRange(0, 5760);
+  connect( eLen, SIGNAL( valueChanged( int ) ), this, SLOT( lengthChanged( int ) ) );
 
-    eLen = new QLineEdit( gSettings );
-    eLen->setValidator( new QIntValidator( eLen ) );
-    eLen->resize( eLen->sizeHint() );
-    eLen->move( lLen->x(), lLen->y() + lLen->height() + 5 );
-    connect( eLen, SIGNAL( textChanged( const QString & ) ), this, SLOT( lengthChanged( const QString & ) ) );
+  hbox->addWidget( gSettings );
 
-    gSettings->resize(QMAX(QMAX(QMAX(QMAX(cType->x() + cType->width(),lAngle->x() + lAngle->width()),eAngle->x() + eAngle->width()),
-                              lLen->x() + lLen->width() ), eLen->x() + eLen->width() ) + 20,
-                      eLen->y() + eLen->height() + 20 );
+  // ------------------------ preview
+  piePreview = new PiePreview( this, "preview" );
 
-    gPreview = new QGroupBox( i18n( "Preview" ), this );
-    gPreview->move( gSettings->x() + gSettings->width() + 20, 20 );
-    gPreview->resize( gSettings->size() );
+  hbox->addWidget( piePreview );
 
-    piePreview = new PiePreview( gPreview, "preview" );
-    piePreview->setGeometry( 10, 20, gPreview->width() - 20, gPreview->height() - 30 );
+  // ------------------------ buttons
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
 
-    cancelBut = new QPushButton( this, "BCancel" );
-    cancelBut->setText( i18n( "Cancel" ) );
+  okBut = bb->addButton( i18n( "OK" ) );
+  okBut->setAutoRepeat( false );
+  okBut->setAutoDefault( true );
+  okBut->setDefault( true );
+  applyBut = bb->addButton( i18n( "Apply" ) );
+  cancelBut = bb->addButton( i18n( "Cancel" ) );
 
-    applyBut = new QPushButton( this, "BApply" );
-    applyBut->setText( i18n( "Apply" ) );
+  connect( okBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
+  connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
+  connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
+  connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-    okBut = new QPushButton( this, "BOK" );
-    okBut->setText( i18n( "OK" ) );
-    okBut->setAutoRepeat( false );
-    okBut->setAutoResize( false );
-    okBut->setAutoDefault( true );
-    okBut->setDefault( true );
+  bb->layout();
 
-    int butW = QMAX(cancelBut->sizeHint().width(),
-                   QMAX(applyBut->sizeHint().width(),okBut->sizeHint().width()));
-    int butH = cancelBut->sizeHint().height();
+  bb->setMaximumHeight( okBut->sizeHint().height() + 5 );
 
-    cancelBut->resize( butW, butH );
-    applyBut->resize( butW, butH );
-    okBut->resize( butW, butH );
-
-    cancelBut->move( gPreview->x() + gPreview->width() - butW, gPreview->y() + gPreview->height() + 25 );
-    applyBut->move( cancelBut->x() - 5 - applyBut->width(), cancelBut->y() );
-    okBut->move( applyBut->x() - 10 - okBut->width(), cancelBut->y() );
-
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    resize( gPreview->x() + gPreview->width() + 20, gPreview->y() + gPreview->height() + 20 + butH + 20 );
+  layout->addWidget( bb );  
 }
 
 /*===================== destructor ===============================*/
@@ -166,16 +150,16 @@ ConfPieDia::~ConfPieDia()
 }
 
 /*================================================================*/
-void ConfPieDia::lengthChanged( const QString & _len )
+void ConfPieDia::lengthChanged( int _len )
 {
-    len = _len.toInt();
+    len = _len;
     piePreview->setLength( len );
 }
 
 /*================================================================*/
-void ConfPieDia::angleChanged( const QString & _angle )
+void ConfPieDia::angleChanged( int _angle )
 {
-    angle = _angle.toInt();
+    angle = _angle;
     piePreview->setAngle( angle );
 }
 

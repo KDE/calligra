@@ -36,8 +36,8 @@ KPPieObject::KPPieObject()
     : KP2DObject()
 {
     pieType = PT_PIE;
-    p_angle = 45 * 16;
-    p_len = 90 * 16;
+    p_angle = 720; //45 * 16
+    p_len = 1440; //90 * 16
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
 }
@@ -66,13 +66,18 @@ KPPieObject &KPPieObject::operator=( const KPPieObject & )
 /*========================= save =================================*/
 QDomDocumentFragment KPPieObject::save( QDomDocument& doc )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc);
+  QDomDocumentFragment fragment=KP2DObject::save(doc);
+  if (lineBegin!=L_NORMAL)
     fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
+  if (lineEnd!=L_NORMAL)
     fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+  if (p_angle!=720)
     fragment.appendChild(KPObject::createValueElement("PIEANGLE", p_angle, doc));
+  if (p_len!=1440)
     fragment.appendChild(KPObject::createValueElement("PIELENGTH", p_len, doc));
+  if (pieType!=PT_PIE)
     fragment.appendChild(KPObject::createValueElement("PIETYPE", static_cast<int>(pieType), doc));
-    return fragment;
+  return fragment;
 }
 
 /*========================== load ================================*/
