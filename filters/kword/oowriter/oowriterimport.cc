@@ -365,28 +365,30 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
 
 
         // Header/Footer
+        QDomElement headerStyle = style->namedItem( "style:header-style" ).toElement();
+        QDomElement footerStyle = style->namedItem( "style:footer-style" ).toElement();
         QDomElement headerLeftElem = masterPage->namedItem( "style:header-left" ).toElement();
         if ( !headerLeftElem.isNull() ) {
             kdDebug() << "Found header-left" << endl;
             hasEvenOddHeader = true;
-            importHeaderFooter( mainDocument, headerLeftElem, hasEvenOddHeader );
+            importHeaderFooter( mainDocument, headerLeftElem, hasEvenOddHeader, headerStyle );
         }
         QDomElement headerElem = masterPage->namedItem( "style:header" ).toElement();
         if ( !headerElem.isNull() ) {
             kdDebug() << "Found header" << endl;
-            importHeaderFooter( mainDocument, headerElem, hasEvenOddHeader );
+            importHeaderFooter( mainDocument, headerElem, hasEvenOddHeader, headerStyle );
         }
         QDomElement footerLeftElem = masterPage->namedItem( "style:footer-left" ).toElement();
         if ( !footerLeftElem.isNull() ) {
             kdDebug() << "Found footer-left" << endl;
-            importHeaderFooter( mainDocument, footerLeftElem, hasEvenOddFooter );
+            importHeaderFooter( mainDocument, footerLeftElem, hasEvenOddFooter, footerStyle );
         }
         QDomElement footerElem = masterPage->namedItem( "style:footer" ).toElement();
         if ( !footerElem.isNull() ) {
             kdDebug() << "Found footer" << endl;
-            importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter );
+            importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
         }
-
+        m_styleStack.pop();
     }
     else
     {
@@ -1574,26 +1576,6 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
         }
     }
 
-    // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
-    double paddingLeft = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "left" ) );
-    double paddingRight = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "right" ) );
-    double paddingTop = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "top" ) );
-    double paddingBottom = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "bottom" ) );
-
-    // background color (3.11.25)
-    bool transparent = false;
-    QColor bgColor;
-    if ( m_styleStack.hasAttribute( "fo:background-color" ) ) {
-        QString color = m_styleStack.attribute( "fo:background-color" );
-        if ( color == "transparent" )
-            transparent = true;
-        else
-            bgColor.setNamedColor( color );
-    }
-
-
-    // TODO more refined border spec for double borders (3.11.28)
-
     // draw:textarea-vertical-align, draw:textarea-horizontal-align
 
     // Not supported in KWord: fo:max-height  fo:max-width
@@ -1631,6 +1613,17 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     // TODO copy: ditto
     // TODO sheetSide (not implemented in KWord, but in its DTD)
 
+    importCommonFrameProperties( frameElementOut );
+}
+
+void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
+{
+    // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
+    double paddingLeft = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "left" ) );
+    double paddingRight = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "right" ) );
+    double paddingTop = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "top" ) );
+    double paddingBottom = KoUnit::parseValue( m_styleStack.attribute( "fo:padding", "bottom" ) );
+
     if ( paddingLeft != 0 )
         frameElementOut.setAttribute( "bleftpt", paddingLeft );
     if ( paddingRight != 0 )
@@ -1640,7 +1633,16 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     if ( paddingBottom != 0 )
         frameElementOut.setAttribute( "bbottompt", paddingBottom );
 
-    // background color
+    // background color (3.11.25)
+    bool transparent = false;
+    QColor bgColor;
+    if ( m_styleStack.hasAttribute( "fo:background-color" ) ) {
+        QString color = m_styleStack.attribute( "fo:background-color" );
+        if ( color == "transparent" )
+            transparent = true;
+        else
+            bgColor.setNamedColor( color );
+    }
     if ( transparent )
         frameElementOut.setAttribute( "bkStyle", 0 );
     else if ( bgColor.isValid() ) {
@@ -1700,6 +1702,7 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
             frameElementOut.setAttribute( "bStyle", style );
         }
     }
+    // TODO more refined border spec for double borders (3.11.28)
 }
 
 QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& object)
@@ -1767,6 +1770,7 @@ void OoWriterImport::importFootnote( QDomDocument& doc, const QDomElement& objec
     QDomElement framesetsPluralElement (doc.documentElement().namedItem("FRAMESETS").toElement());
     framesetsPluralElement.appendChild(framesetElement);
     createInitialFrame( framesetElement, 29, 798, 567, 567+41, true, NoFollowup );
+    // TODO importCommonFrameProperties ?
 
     // The text inside the frameset
     QDomElement bodyElem = object.namedItem( tagName + "-body" ).toElement();
@@ -2246,6 +2250,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
             frameElementOut.setAttribute("runaround",1);
             frameElementOut.setAttribute("autoCreateNewFrame",0); // Very important for cell growing!
             // ### TODO: a few attributes are missing
+            // TODO: check if importCommonFrameProperties would work for borders and background
             framesetElement.appendChild(frameElementOut);
 
             parseBodyOrSimilar( doc, t, framesetElement); // We change the frameset!
@@ -2393,7 +2398,7 @@ QString OoWriterImport::kWordStyleName( const QString& ooStyleName )
 }
 
 // OOo SPEC: 2.3.3 p59
-void OoWriterImport::importHeaderFooter( QDomDocument& doc, const QDomElement& headerFooter, bool hasEvenOdd )
+void OoWriterImport::importHeaderFooter( QDomDocument& doc, const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style )
 {
     const QString tagName = headerFooter.tagName();
     QDomElement framesetElement = doc.createElement("FRAMESET");
@@ -2408,7 +2413,12 @@ void OoWriterImport::importHeaderFooter( QDomDocument& doc, const QDomElement& h
         m_hasHeader = true;
     else
         m_hasFooter = true;
-    createInitialFrame( framesetElement, 29, 798, isHeader?0:567, isHeader?41:567+41, true, Copy );
+    QDomElement frameElementOut = createInitialFrame( framesetElement, 29, 798, isHeader?0:567, isHeader?41:567+41, true, Copy );
+    if ( !style.isNull() )
+        m_styleStack.push( style );
+    importCommonFrameProperties( frameElementOut );
+    if ( !style.isNull() )
+        m_styleStack.pop(); // don't let it be active when parsing the text
 
     parseBodyOrSimilar( doc, headerFooter, framesetElement );
 }
