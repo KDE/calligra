@@ -58,6 +58,7 @@ protected:
 	void parseGroup( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
 	void parseGradient( const QDomElement & );
+	void parseColorStops( VGradient *, const QDomElement & );
 	VColor parseColor( const QString & );
 	QDomDocument inpdoc;
 	QDomDocument outdoc;

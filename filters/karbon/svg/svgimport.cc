@@ -167,9 +167,42 @@ SvgImport::parseColor( const QString &s )
 }
 
 void
+SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
+{
+	VColor c;
+	for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
+	{
+		QDomElement stop = n.toElement();
+		if( stop.tagName() == "stop" )
+		{
+			float offset = stop.attribute( "offset" ).toFloat();
+			if( !stop.attribute( "stop-color" ).isEmpty() )
+				c = parseColor( "stop-color" );
+			else
+			{
+				// try style attr
+				QString style = stop.attribute( "style" ).simplifyWhiteSpace();
+				QStringList substyles = QStringList::split( ';', style );
+			    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
+				{
+					QStringList substyle = QStringList::split( ':', (*it) );
+					QString command	= substyle[0].stripWhiteSpace();
+					QString params	= substyle[1].stripWhiteSpace();
+					if( command == "stop-color" )
+						c = parseColor( params );
+				}
+
+			}
+			gradient->addStop( c, offset, 0.5 );
+		}
+	}
+}
+
+void
 SvgImport::parseGradient( const QDomElement &e )
 {
 	VGradient gradient;
+	gradient.clearStops();
 	if( e.tagName() == "linearGradient" )
 	{
 		gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
@@ -179,7 +212,7 @@ SvgImport::parseGradient( const QDomElement &e )
 	{
 		gradient.setType( VGradient::radial );
 	}
-
+	parseColorStops( &gradient, e );
 	m_gradients.insert( e.attribute( "id" ), gradient );
 }
 
