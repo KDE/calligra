@@ -112,7 +112,7 @@ void KSpreadreference::slotRemove()
 {
   if(list->currentItem()==-1)
     return;
-  int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this area name?"));
+  int ret = KMessageBox::warningYesNo( this, i18n("Do you really want to remove this area name?"));
   if(ret==4) // reponse = No
     return;
 

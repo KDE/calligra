@@ -43,7 +43,7 @@
       <Help>
 	<Text>The tan() function returns the tangent of x, where x is given in radians.</Text>
 	<Syntax>tan(Float)</Syntax>
-	<Example>tan(0.7) equals 0.84228838.</Example>
+	<Example>tan(0.7) equals 0.84228838</Example>
 	<Example>tan(0) equals 0</Example>
       </Help>
     </Function>
@@ -116,7 +116,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The sinh() function returns the hyperboic sine of x, which is defined mathematically as (exp(x) - exp(-x)) / 2.</Text>
+	<Text>The sinh() function returns the hyperbolic sine of x, which is defined mathematically as (exp(x) - exp(-x)) / 2.</Text>
 	<Syntax>sinh(Float)</Syntax>
 	<Example>sinh(0.8) equals 0.88810598</Example>
 	<Example>sinh(0) equals 0</Example>
@@ -1239,7 +1239,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The max() function returns the biggest value given in the parameters.</Text>
+	<Text>The max() function returns the largest value given in the parameters.</Text>
 	<Syntax>max( values; values; ... )</Syntax>
 	<Example>max(12;5;7) returns 12</Example>
 	<Example>max(12.5;2) returns 12.5</Example>
@@ -2174,7 +2174,7 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The BINO function returns the binomial distribution. The first parameter is the number of trials, the second parameter is the number of successes, and the third is the probability of success. The number of trials should be bigger than the number of successes and the probability should be smaller or equal to 1.</Text>
+	<Text>The BINO function returns the binomial distribution. The first parameter is the number of trials, the second parameter is the number of successes, and the third is the probability of success. The number of trials should be greater than the number of successes and the probability should be smaller or equal to 1.</Text>
 	<Syntax>BINO( trials; success; prob_of_success )</Syntax>
 	<Example>BINO(12;9;0.8) returns 0.236223201</Example>
       </Help>

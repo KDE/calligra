@@ -200,7 +200,7 @@ void KSpreadList::slotRemove()
   //don't remove the two first line
   if(list->currentItem()<2)
       return;
-  int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this list?"));
+  int ret = KMessageBox::warningYesNo( this, i18n("Do you really want to remove this list?"));
   if(ret==4) // reponse = No
     return;
   list->removeItem(list->currentItem ());
@@ -214,7 +214,7 @@ void KSpreadList::slotOk()
 {
   if(!entryList->text().isEmpty())
     {
-      int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want continue?"));
+      int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want to continue?"));
       if(ret==4) // reponse = No
 	return;
     }
