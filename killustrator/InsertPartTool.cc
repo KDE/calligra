@@ -110,6 +110,8 @@ void InsertPartTool::processMouseMoveEvent (QMouseEvent* e)
     QPen pen(Qt::red, 1, Qt::DotLine);
     painter.begin(canvas);
     painter.setPen(pen);
+    painter.translate(canvas->relativePaperArea().left(), canvas->relativePaperArea().top());
+    painter.setPen(pen);
     float sfactor = canvas->scaleFactor();
     painter.scale(sfactor, sfactor);
     Rect selRect(selPoint[0], selPoint[1]);
