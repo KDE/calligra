@@ -299,7 +299,7 @@ bool KOSpell::addPersonal (const QString & word)
 
 bool KOSpell::writePersonalDictionary ()
 {
-    if( speller)
+    if( !speller)
         return false;
     aspell_speller_save_all_word_lists(speller);
     kdDebug()<<"aspell_speller_error_message(speller) :"<<aspell_speller_error_message(speller)<<endl;
@@ -630,6 +630,11 @@ void KOSpell::spellCheckReplaceWord( const QString & _word)
 
 KOSpell::~KOSpell ()
 {
+    if( speller )
+    {
+        delete_aspell_speller(speller);
+        speller = 0;
+    }
     delete d;
     delete ksconfig;
     delete ksdlg;
@@ -682,7 +687,7 @@ void KOSpell::changeSpellLanguage( int index )
 {
 
     AspellConfig * spell_config2 = aspell_config_clone(config);
-
+    kdDebug()<<" KOSpellConfig::listOfLanguageFileName()[index].latin1() :"<<KOSpellConfig::listOfLanguageFileName()[index].latin1()<<endl;
     aspell_config_replace(spell_config2, "lang",KOSpellConfig::listOfLanguageFileName()[index].latin1());
 
     /*possible_err =*/ new_aspell_speller(spell_config2);
