@@ -253,6 +253,8 @@ public:
         { if (selected || force ) lst.append( this );}
     virtual QPen getPen() const;
 
+    bool haveAnimation() const;
+
 protected:
     /**
      * Helper function to caluclate the size and the orig of a point object

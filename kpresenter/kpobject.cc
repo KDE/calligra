@@ -356,10 +356,16 @@ void KPObject::saveOasisObjectStyle( KoGenStyle &styleobjectauto )
     }
 }
 
-bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId )
+bool KPObject::haveAnimation() const
 {
     if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty() && ( appearTimer!=1 ) && ( disappearTimer!=1 ))
         return false;
+    else
+        return true;
+}
+
+bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId )
+{
     if ( effect != EF_NONE || !a_fileName.isEmpty() )
     {
         animation.startElement( "presentation:show-shape" );

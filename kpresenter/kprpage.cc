@@ -64,6 +64,14 @@
 #include <qregexp.h>
 #include <qfile.h>
 
+struct listAnimation {
+    KPObject *obj;
+    int objIndex;
+};
+
+typedef QMap<int, QPtrList<listAnimation> > lstMap;
+
+
 KPrPage::KPrPage(KPresenterDoc *_doc )
 {
     kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;
@@ -117,23 +125,69 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     animationTmpFile.setAutoDelete( true );
     QFile* tmpFile = animationTmpFile.file();
     KoXmlWriter animationTmpWriter( tmpFile );
-    bool haveAnimation = false;
-    animationTmpWriter.startElement( "presentation:animations" );
+    lstMap listObjectAnimation;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         it.current()->saveOasis( xmlWriter, context, indexObj );
-        if ( it.current()->saveOasisObjectStyleAnimation( animationTmpWriter, indexObj ) )
-            haveAnimation = true;
+        if ( it.current()->haveAnimation() )
+        {
+            kdDebug()<<" it.current()->haveAnimation() \n";
+            listAnimation lst;
+            lst.obj = it.current();
+            lst.objIndex = indexObj;
+            kdDebug()<<" indexObj :"<<indexObj<<endl;
+            lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getAppearStep() );
+            if ( tmp!= listObjectAnimation.end() )
+            {
+                tmp.data().append( &lst );
+            }
+            else
+            {
+                QPtrList<listAnimation> tmp2;
+                tmp2.append( &lst );
+                listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
+            }
+        }
         ++indexObj;
     }
-    animationTmpWriter.endElement();//close "presentation:animations"
-    tmpFile->close();
 
-    if ( haveAnimation )
+    if ( !listObjectAnimation.isEmpty() )
     {
+        kdDebug()<<"! listObjectAnimation.isEmpty() \n";
+        animationTmpWriter.startElement( "presentation:animations" );
+        lstMap::Iterator it = listObjectAnimation.begin();
+        lstMap::Iterator end = listObjectAnimation.end();
+        for (; it != end; ++it )
+        {
+            if ( it.data().count() == 1 )
+            {
+                kdDebug()<<" add unique element \n";
+                it.data().at( 0 )->obj->saveOasisObjectStyleAnimation( animationTmpWriter, it.data().at( 0 )->objIndex );
+            }
+            else if ( it.data().count() > 1 )
+            {
+                QPtrList<listAnimation> list = it.data();
+                animationTmpWriter.startElement( "presentation:animation-group" );
+                for ( uint i = 0; i < list.count(); ++i )
+                {
+                    if ( list.at(i) )
+                    {
+                        kdDebug()<<" add group element : "<<i<<endl;
+                        list.at(i)->obj->saveOasisObjectStyleAnimation( animationTmpWriter, list.at(i)->objIndex );
+                    }
+                }
+                animationTmpWriter.endElement();
+            }
+
+        }
+        animationTmpWriter.endElement();//close "presentation:animations"
+        tmpFile->close();
         xmlWriter.addCompleteElement( tmpFile );
+
     }
+    else
+        tmpFile->close();
     animationTmpFile.close();
 
     saveOasisNote( xmlWriter );
