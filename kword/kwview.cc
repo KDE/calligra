@@ -1222,8 +1222,8 @@ void KWView::editReconnectFrame()
 void KWView::editCustomVars()
 {
     KWCustomVariablesDia dia( this, doc->getVariables() );
-    dia.exec();
-    doc->recalcVariables( VT_CUSTOM );
+    if(dia.exec())
+        doc->recalcVariables( VT_CUSTOM );
 }
 
 void KWView::editSerialLetterDataBase()

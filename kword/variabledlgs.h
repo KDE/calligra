@@ -115,10 +115,12 @@ class KWCustomVariablesDia : public QDialog
 
 public:
     KWCustomVariablesDia( QWidget *parent, const QList<KWVariable> &variables );
+protected slots:
+    void slotOk();
 
 protected:
     void resizeEvent( QResizeEvent *e );
-    void closeEvent( QCloseEvent *e );
+    //void closeEvent( QCloseEvent *e );
 
     QVBox *back;
     KWCustomVariablesList *list;

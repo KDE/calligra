@@ -242,6 +242,19 @@ KWCustomVariablesDia::KWCustomVariablesDia( QWidget *parent, const QList<KWVaria
         }
     }
 
+    KButtonBox *bb = new KButtonBox( back );
+    bb->addStretch();
+    QPushButton *ok = bb->addButton( i18n( "&OK"  ) );
+    ok->setDefault( TRUE );
+    QPushButton *cancel = bb->addButton( i18n( "&Cancel"  ) );
+    bb->layout();
+
+    connect( ok, SIGNAL( clicked() ),
+             this, SLOT( slotOk() ) );
+    connect( cancel, SIGNAL( clicked() ),
+             this, SLOT( reject() ) );
+    ok->setEnabled(lst.count()>0);
+
     resize( 600, 400 );
     list->updateItems();
 }
@@ -254,8 +267,8 @@ void KWCustomVariablesDia::resizeEvent( QResizeEvent *e )
 }
 
 /*================================================================*/
-void KWCustomVariablesDia::closeEvent( QCloseEvent *e )
+void KWCustomVariablesDia::slotOk()
 {
     list->setValues();
-    QDialog::closeEvent( e );
+    accept();
 }
