@@ -289,16 +289,18 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
     if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
     {
         QKeyEvent* k = (QKeyEvent*)e;
-        if ( k->key() == Key_Right || k->key() == Key_Left || k->key() == Key_Up ||
-             k->key() == Key_Down || k->key() == Key_Next ||
-             k->key() == Key_Prior || k->key() == Key_Escape ||
-             k->key() == Key_Tab )
+        if ( !( k->state() & Qt::ShiftButton ))
         {
-            // Send directly to canvas
-            QApplication::sendEvent( parent(), e );
-            return TRUE;
+            if ( k->key() == Key_Right  || k->key() == Key_Left || k->key() == Key_Up ||
+                 k->key() == Key_Down || k->key() == Key_Next ||
+                 k->key() == Key_Prior || k->key() == Key_Escape ||
+                 k->key() == Key_Tab )
+            {
+                // Send directly to canvas
+                QApplication::sendEvent( parent(), e );
+                return TRUE;
+            }
         }
-
         // End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
         if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
