@@ -6927,7 +6927,7 @@ QString KSpreadSheet::translateOpenCalcPoint( const QString & str )
     return range;
 }
 
-bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter )
+bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles )
 {
     return true;
 }

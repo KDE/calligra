@@ -37,6 +37,7 @@ class KSpreadDoc;
 class KSpreadUndoInsertRemoveAction;
 class KoDocumentEntry;
 class KoStyleStack;
+class KoGenStyles;
 
 class QStingList;
 class QWidget;
@@ -282,7 +283,7 @@ public:
 
     virtual bool loadOasis( const QDomElement& table, const KoOasisStyles& oasisStyles );
 
-    virtual bool saveOasis( KoXmlWriter & xmlWriter );
+    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles );
 
     /**
      * Saves a children

@@ -25,7 +25,7 @@
 #include "KSpreadMapIface.h"
 
 #include <kmdcodec.h>
-
+#include <koGenStyles.h>
 #include <time.h>
 #include <stdlib.h>
 
@@ -85,12 +85,12 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
 }
 
 
-bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter )
+bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
 {
     QPtrListIterator<KSpreadSheet> it( m_lstTables );
     for( ; it.current(); ++it )
     {
-        it.current()->saveOasis( xmlWriter );
+        it.current()->saveOasis( xmlWriter, mainStyles );
     }
     return true;
 }

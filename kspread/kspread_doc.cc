@@ -599,7 +599,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //todo fixme just add a element for testing saving content.xml
     contentTmpWriter.startElement( "office:body" );
 
-    d->workbook->saveOasis( contentTmpWriter );
+    d->workbook->saveOasis( contentTmpWriter, mainStyles );
     saveOasisAreaName( contentTmpWriter );
     contentTmpWriter.endElement(); ////office:body
 
