@@ -73,7 +73,7 @@ VQPainter::moveTo( const KoPoint &p )
 	if( m_pa.size() <= m_index )
 		m_pa.resize( m_index + 10 );
 
-	m_pa.setPoint( m_index, p.x() * m_zoomFactor, p.y() * m_zoomFactor );
+	m_pa.setPoint( m_index, static_cast<int>(p.x() * m_zoomFactor), static_cast<int>(p.y() * m_zoomFactor) );
 
 	m_index++;
 }
@@ -84,7 +84,7 @@ VQPainter::lineTo( const KoPoint &p )
 	if( m_pa.size() <= m_index )
 		m_pa.resize( m_index + 10 );
 
-	m_pa.setPoint( m_index, p.x() * m_zoomFactor, p.y() * m_zoomFactor );
+	m_pa.setPoint( m_index, static_cast<int>(p.x() * m_zoomFactor), static_cast<int>(p.y() * m_zoomFactor) );
 
 	m_index++;
 }
@@ -95,9 +95,9 @@ VQPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 	// calculate cubic bezier using a temp QPointArray
 	QPointArray pa( 4 );
 	pa.setPoint( 0, m_pa.point( m_index - 1 ).x(), m_pa.point( m_index - 1 ).y() );
-	pa.setPoint( 1, p1.x() * m_zoomFactor, p1.y() * m_zoomFactor );
-	pa.setPoint( 2, p2.x() * m_zoomFactor, p2.y() * m_zoomFactor );
-	pa.setPoint( 3, p3.x() * m_zoomFactor, p3.y() * m_zoomFactor );
+	pa.setPoint( 1, static_cast<int>(p1.x() * m_zoomFactor), static_cast<int>(p1.y() * m_zoomFactor) );
+	pa.setPoint( 2, static_cast<int>(p2.x() * m_zoomFactor), static_cast<int>(p2.y() * m_zoomFactor) );
+	pa.setPoint( 3, static_cast<int>(p3.x() * m_zoomFactor), static_cast<int>(p3.y() * m_zoomFactor) );
 
 	QPointArray pa2( pa.cubicBezier() );
 
@@ -133,7 +133,7 @@ VQPainter::setPen( const VStroke &stroke )
 
 	stroke.color().pseudoValues( r, g, b );
 	pen.setColor( QColor( r, g, b ) );
-	pen.setWidth( stroke.lineWidth() );
+	pen.setWidth( static_cast<int>(stroke.lineWidth()) );
 
 	// caps
 	if( stroke.lineCap() == cap_butt )
