@@ -299,8 +299,8 @@ void KSpreadPaperLayout::slotOk()
     {
       KSpreadSheetPrint *print = sheet->print();
 
-      KoPageLayout pl = getLayout();
-      KoHeadFoot hf = getHeadFoot();
+      KoPageLayout pl = layout();
+      KoHeadFoot hf = headFoot();
       KoUnit::Unit unit = sheet->doc()->getUnit();
       print->setPrintGrid( pPrintGrid->isChecked() );
       print->setPrintCommentIndicator( pPrintCommentIndicator->isChecked() );
