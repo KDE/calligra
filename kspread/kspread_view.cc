@@ -3775,23 +3775,20 @@ void KSpreadView::mergeCell()
 {
   if ( !d->activeSheet )
     return;
-
+    
   if ( ( util_isRowSelected( selection() ) )
        || ( util_isColumnSelected( selection() ) ) )
   {
     KMessageBox::error( this, i18n( "Area too large!" ) );
+    return;
   }
-  else
-  {
-    d->doc->emitBeginOperation( false );
-
-    d->activeSheet->mergeCells( selection() );
-    //  d->canvas->gotoLocation( selection().topLeft() );
-    d->selectionInfo->setSelection( selection().topLeft(), selection().topLeft(), d->activeSheet );
-
-    d->doc->decreaseNumOperation();
-    //    endOperation( QRect( selection().topLeft(), selection().topLeft() ) );
-  }
+  
+  QPoint topLeft = selection().topLeft();
+  KSpreadCell *cell = d->activeSheet->nonDefaultCell( topLeft );
+  KCommand* command = new MergeCellCommand( cell, selection().width() - 1, 
+      selection().height() - 1); 
+  d->doc->addCommand( command );
+  command->execute();
 }
 
 void KSpreadView::dissociateCell()
@@ -4640,6 +4637,11 @@ void KSpreadView::showTabBar( bool b )
 void KSpreadView::showCommentIndicator( bool b )
 {
   d->doc->setShowCommentIndicator( b );
+  
+  d->adjustActions( !d->activeSheet->isProtected() );
+  
+  d->doc->emitBeginOperation( false );
+  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   refreshView();
 }
 
@@ -4849,6 +4851,7 @@ int KSpreadView::bottomBorder() const
 void KSpreadView::refreshView()
 {
   KSpreadSheet * table = activeTable();
+  
 
   bool active = table->getShowFormula();
 
@@ -4864,6 +4867,8 @@ void KSpreadView::refreshView()
   QString zoomStr( i18n("%1%").arg( d->doc->zoom() ) );
   d->actions->viewZoom->setCurrentItem( d->actions->viewZoom->items().findIndex( zoomStr ) );
 
+  d->adjustActions( !table->isProtected() );
+  
   int posFrame = 30;
   if ( active )
     posWidget()->show();

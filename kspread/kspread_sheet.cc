@@ -5900,7 +5900,7 @@ void KSpreadSheet::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int 
    mergeCells(rect);
 }
 
-void KSpreadSheet::mergeCells( const QRect &area, bool makeUndo)
+void KSpreadSheet::mergeCells( const QRect &area )
 {
   if( area.width() == 1 && area.height() == 1)
     return;
@@ -5908,15 +5908,6 @@ void KSpreadSheet::mergeCells( const QRect &area, bool makeUndo)
   QPoint topLeft = area.topLeft();
 
   KSpreadCell *cell = nonDefaultCell( topLeft );
-
-  if ( !m_pDoc->undoLocked() && makeUndo)
-  {
-    KSpreadUndoMergedCell *undo =
-      new KSpreadUndoMergedCell( m_pDoc, this, topLeft.x() ,topLeft.y(),
-                                 cell->extraXCells(), cell->extraYCells());
-    m_pDoc->addCommand( undo );
-  }
-
   cell->forceExtraCells( topLeft.x(), topLeft.y(),
                          area.width() - 1, area.height() - 1);
 

@@ -700,7 +700,7 @@ public:
 
     void setFirstLetterUpper(bool _firstUpper) {m_bFirstLetterUpper=_firstUpper;}
 
-    void mergeCells( const QRect &area, bool makeUndo=true );
+    void mergeCells( const QRect &area );
     void dissociateCell( const QPoint &cellRef, bool makeUndo=true );
     void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
 

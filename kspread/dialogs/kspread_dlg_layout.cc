@@ -989,7 +989,7 @@ void CellFormatDlg::slotApply()
       macroUndo->addCommand( undo );
 
       //merge cell doesn't create undo
-      m_table->mergeCells( m_pView->selection(), false );
+      m_table->mergeCells( m_pView->selection() );
       right  = left;
       bottom = top;
     }
