@@ -12,20 +12,22 @@
 
 class KoPoint;
 
+// This is a place for algorithms which are helpfull in various places.
+
 namespace VSegmentTools
 {
+	/// Returns true if lines A0A1 and B0B1 intersect.
 	bool linesIntersect(
 		const KoPoint& a0,
 		const KoPoint& a1,
 		const KoPoint& b0,
 		const KoPoint& b1 );
 
-/*	KoRect boundingBox( const KoPoint& previous, const VSegment& segment );
-
-	void findIntersections( const double t0, const double t1,
-	const VSegment* segB, const double u0, const double u1,
-	QValueList<double>& paramsA, QValueList<double>& paramsB ) const;
-*/
+	/// Calculate height of p above line AB.
+	double height(
+		const KoPoint& a,
+		const KoPoint& p,
+		const KoPoint& b );
 }
 
 #endif

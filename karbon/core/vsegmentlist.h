@@ -69,6 +69,7 @@ private:
 	VSegment* m_first;
 	VSegment* m_last;
 	VSegment* m_current;
+
 	int m_currentIndex;
 	uint m_number;
 

@@ -79,12 +79,6 @@ public:
 	void setPoint( uint i, const KoPoint& p )
 		{ if( i > 0 && i < 4 ) m_point[--i] = p; }
 
-	/// Calculate height of p above line AB.
-	static double height(
-		const KoPoint& a,
-		const KoPoint& p,
-		const KoPoint& b );
-
 	bool isFlat() const;
 
 	void save( QDomElement& element ) const;

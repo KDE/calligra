@@ -4,7 +4,7 @@
 */
 
 #include "vpath_bounding.h"
-#include "vsegment_tools.h"
+#include "vsegmenttools.h"
 
 #include <kdebug.h>
 
