@@ -45,6 +45,11 @@ VFill::save( QDomElement& element ) const
 		// save gradient:
 		m_gradient.save( me );
 	}
+	else if( m_type == patt )
+	{
+		// save pattern:
+		m_pattern.save( me );
+	}
 
 	// save fill rule if necessary:
 	if( m_fillRule != evenOdd )
@@ -74,6 +79,11 @@ VFill::load( const QDomElement& element )
 				m_type = grad;
 				m_gradient.load( e );
 			}
+			else if( e.tagName() == "PATTERN" )
+			{
+				m_type = patt;
+				m_pattern.load( e );
+			}
 		}
 	}
 }
@@ -87,6 +97,7 @@ VFill::operator=( const VFill& fill )
 		m_type = fill.m_type;
 		m_color = fill.m_color;
 		m_gradient = fill.m_gradient;
+		m_pattern = fill.m_pattern;
 	}
 
 	return *this;

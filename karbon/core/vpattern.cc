@@ -6,8 +6,19 @@
 
 #include "vpattern.h"
 
+VPattern::VPattern()
+{
+}
+
 VPattern::VPattern( const QString &tilename )
 {
+	load( tilename );
+}
+
+void
+VPattern::load( const QString &tilename )
+{
+	m_tilename = tilename;
 	m_image.load( tilename );
 }
 
@@ -39,6 +50,8 @@ VPattern::save( QDomElement& element ) const
 	me.setAttribute( "vectorX", m_vector.x() );
 	me.setAttribute( "vectorY", m_vector.y() );
 
+	me.setAttribute( "tilename", m_tilename );
+
 	element.appendChild( me );
 }
 
@@ -49,6 +62,9 @@ VPattern::load( const QDomElement& element )
 	m_origin.setY( element.attribute( "originY", "0.0" ).toDouble() );
 	m_vector.setX( element.attribute( "vectorX", "0.0" ).toDouble() );
 	m_vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
+
+	m_tilename = element.attribute( "tilename" );
+	load( m_tilename );
 }
 
 void

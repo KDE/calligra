@@ -380,7 +380,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	int a = 0;
 	art_u32 fillColor = 0;
     // filling
-	if( m_fill && ( m_fill->type() == VFill::solid || m_fill->type() == VFill::grad ) )
+	if( m_fill && m_fill->type() != VFill::none )
 	{
 		m_fill->color().pseudoValues( r, g, b );
 		a = qRound( 255 * m_fill->color().opacity() );
@@ -468,6 +468,8 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	{
 		if( m_fill && m_fill->type() == VFill::grad )
 			applyGradient( fillSvp, true );
+		else if( m_fill && m_fill->type() == VFill::patt )
+			applyPattern( fillSvp, true );
 		else
 		{
 			clampToViewport( *fillSvp, x0, y0, x1, y1 );
@@ -486,6 +488,37 @@ VKoPainter::drawVPath( ArtVpath *vec )
 }
 
 void
+VKoPainter::applyPattern( ArtSVP *svp, bool fill )
+{
+	int x0, y0, x1, y1;
+	clampToViewport( *svp, x0, y0, x1, y1 );
+
+	ArtRender *render = 0L;
+
+	VPattern pat = m_fill->pattern();// : m_stroke->pattern();
+
+	ArtPattern *pattern = new ArtPattern;
+
+	double dx = ( pat.vector().x() - pat.origin().x() ) * m_zoomFactor;
+	double dy = ( pat.vector().y() - pat.origin().y() ) * m_zoomFactor;
+
+	pattern->twidth = pat.tileWidth();
+	pattern->theight = pat.tileHeight();
+	pattern->buffer = pat.pixels();
+	pattern->angle = atan2( dy, dx );
+
+	if( x0 != x1 && y0 != y1 )
+	{
+		render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+		art_render_svp( render, svp );
+		art_render_pattern( render, pattern, ART_FILTER_HYPER );
+	}
+
+	if( render )
+		art_render_invoke( render );
+}
+
+void
 VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 {
 	int x0, y0, x1, y1;
@@ -497,18 +530,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 	if( gradient.type() == VGradient::linear )
 	{
-		VPattern pat("pics/hi22-action-14_star.png");
-		ArtPattern *pattern = new ArtPattern;
-
-		double dx = ( gradient.vector().x() - gradient.origin().x() ) * m_zoomFactor;
-		double dy = ( gradient.vector().y() - gradient.origin().y() ) * m_zoomFactor;
-
-		pattern->twidth = pat.tileWidth();
-		pattern->theight = pat.tileHeight();
-		pattern->buffer = pat.pixels();
-		pattern->angle = atan2( dy, dx );
-
-		/*ArtGradientLinear *linear = new ArtGradientLinear();
+		ArtGradientLinear *linear = new ArtGradientLinear();
 
 		// TODO : make variable
 		if( gradient.repeatMethod() == VGradient::none )
@@ -520,6 +542,8 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
 		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
+		double dx = ( gradient.vector().x() - gradient.origin().x() ) * m_zoomFactor;
+		double dy = ( gradient.vector().y() - gradient.origin().y() ) * m_zoomFactor;
 		double scale = 1.0 / ( dx * dx + dy * dy );
 
 		linear->a = dx * scale;
@@ -533,14 +557,13 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		// get stop array
 		int offsets = -1;
 		linear->stops = buildStopArray( gradient, offsets );
-		linear->n_stops = offsets;*/
+		linear->n_stops = offsets;
 
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
 			art_render_svp( render, svp );
-			//art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
-			art_render_pattern( render, pattern, ART_FILTER_HYPER );
+			art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
 		}
 	}
 	else if( gradient.type() == VGradient::radial )

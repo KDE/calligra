@@ -8,6 +8,7 @@
 
 #include "vcolor.h"
 #include "vgradient.h"
+#include "vpattern.h"
 
 
 class QDomElement;
@@ -36,7 +37,8 @@ public:
 		none     = 0,	/// no fill at all
 		solid    = 1,	/// solid fill
 		grad     = 2,	/// gradient fill
-		unknown  = 3
+		patt 	 = 3,	/// pattern fill
+		unknown  = 4
 	};
 
 	VFill();
@@ -48,6 +50,9 @@ public:
 
 	VGradient& gradient() { return m_gradient; }
 	const VGradient& gradient() const { return m_gradient; }
+
+	VPattern& pattern() { return m_pattern; }
+	const VPattern& pattern() const { return m_pattern; }
 
 	VFillType type() const { return m_type; }
 	void setType( VFillType type ) { m_type = type; }
@@ -63,6 +68,7 @@ public:
 private:
 	VColor m_color;
 	VGradient m_gradient;
+	VPattern m_pattern;
 
 	VFillType m_type;
 	VFillRule m_fillRule;

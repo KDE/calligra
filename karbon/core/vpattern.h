@@ -14,6 +14,7 @@ class QDomElement;
 class VPattern
 {
 public:
+	VPattern();
 	VPattern( const QString &tilename );
 
 	unsigned char *pixels();
@@ -26,6 +27,8 @@ public:
 	KoPoint vector() const { return m_vector; }
 	void setVector( const KoPoint &vector ) { m_vector = vector; }
 
+	void load( const QString &tilename );
+
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
@@ -36,6 +39,7 @@ private:
 	KoPoint m_origin;
 	KoPoint m_vector;
 	QImage m_image;
+	QString m_tilename;
 };
 
 #endif
