@@ -131,6 +131,8 @@ don't put a </?xml...> at the end of the file!).
 
             spFootBody:     distance (in pt) between footers and the text body (only in
                             wordprocessing mode).
+
+            zoom:           zoom factor (default is 100)
 -->
 <!ELEMENT PAPER
     (PAPERBORDERS?)>
@@ -144,7 +146,8 @@ don't put a </?xml...> at the end of the file!).
     hType CDATA #IMPLIED
     fType CDATA #IMPLIED
     spHeadBody CDATA #IMPLIED
-    spFootBody CDATA #IMPLIED>
+    spFootBody CDATA #IMPLIED
+    zoom CDATA #REQUIRED>
 
 
 <!--    Describes the margins of the page.
