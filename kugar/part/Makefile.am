@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/../lib $(all_includes)
+INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkugarpart.la
 libkugarpart_la_SOURCES = kugar_part.cpp
