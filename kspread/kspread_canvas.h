@@ -40,6 +40,7 @@
 #include <koRect.h>
 
 #include "kspread_util.h"
+#include <koffice_export.h>
 
 class KSpreadEditWidget;
 class KSpreadCanvas;
@@ -74,7 +75,7 @@ class QScrollBar;
  * That means that this class knows what to do when a key is pressed
  * or if the mouse button was clicked.
  */
-class KSpreadCanvas : public QWidget
+class KSPREAD_EXPORT KSpreadCanvas : public QWidget
 {
     friend class KSpreadHBorder;
     friend class KSpreadVBorder;

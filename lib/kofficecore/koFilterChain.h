@@ -27,6 +27,7 @@
 #include <koFilter.h>
 #include <koQueryTrader.h>
 #include <koStoreDevice.h>
+#include <koffice_export.h>
 
 class KTempFile;
 class KoFilterManager;
@@ -46,7 +47,7 @@ namespace KOffice {
  * @author Werner Trobin <trobin@kde.org>
  * @todo the class has no constructor and therefore cannot initialize its private class
  */
-class KoFilterChain : public KShared
+class KOFFICECORE_EXPORT KoFilterChain : public KShared
 {
     // Only KOffice::Graph is allowed to construct instances and
     // add chain links.

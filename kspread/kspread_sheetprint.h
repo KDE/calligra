@@ -28,8 +28,9 @@ class KoGenStyles;
 
 #include <qobject.h>
 #include <koUnit.h>
+#include <koffice_export.h>
 
-class KSpreadSheetPrint : public QObject
+class KSPREAD_EXPORT KSpreadSheetPrint : public QObject
 {
     Q_OBJECT
 

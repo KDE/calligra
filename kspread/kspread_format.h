@@ -36,7 +36,7 @@ class KoOasisStyles;
 #include <qfont.h>
 
 #include "kspread_global.h"
-
+#include <koffice_export.h>
 class KLocale;
 class KSpreadCurrency;
 class KSpreadStyle;
@@ -45,7 +45,7 @@ class KoGenStyle;
 
 /**
  */
-class KSpreadFormat
+class KSPREAD_EXPORT KSpreadFormat
 {
 public:
     enum Align { Left = 1, Center = 2, Right = 3, Undefined = 4 };
@@ -429,7 +429,7 @@ private:
 
 /**
  */
-class RowFormat : public KSpreadFormat
+class KSPREAD_EXPORT RowFormat : public KSpreadFormat
 {
 public:
     RowFormat( KSpreadSheet * _sheet, int _row );
@@ -568,7 +568,7 @@ protected:
 
 /**
  */
-class ColumnFormat : public KSpreadFormat
+class KSPREAD_EXPORT ColumnFormat : public KSpreadFormat
 {
 public:
     ColumnFormat( KSpreadSheet *_table, int _column );
@@ -706,7 +706,7 @@ protected:
     DCOPObject*m_dcop;
 };
 
-class KSpreadCurrency
+class KSPREAD_EXPORT KSpreadCurrency
 {
  public:
 

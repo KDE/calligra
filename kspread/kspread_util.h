@@ -26,7 +26,7 @@
 
 #include "kspread_global.h"
 #include "kspread_value.h"
-
+#include <koffice_export.h>
 class KSpreadCell;
 class KSpreadMap;
 class KSpreadSheet;
@@ -37,7 +37,7 @@ class QPen;
 class QDomElement;
 class QDomDocument;
 
-struct KSpreadPoint
+struct KSPREAD_EXPORT KSpreadPoint
 {
 public:
   KSpreadPoint() { pos.setX( -1 ); table = 0; columnFixed = false; rowFixed = false; }
@@ -83,7 +83,7 @@ private:
   void init( const QString& );
 };
 
-struct KSpreadRange
+struct KSPREAD_EXPORT KSpreadRange
 {
   KSpreadRange() { table = 0; range.setLeft( -1 ); }
   KSpreadRange( const QString& );

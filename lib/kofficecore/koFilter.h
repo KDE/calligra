@@ -23,7 +23,7 @@
 #include <qobject.h>
 #include <qmap.h>
 #include <qptrstack.h>
-
+#include <koffice_export.h>
 class QIODevice;
 class KoFilterChain;
 
@@ -45,7 +45,7 @@ class KoFilterChain;
  * @author Werner Trobin <trobin@kde.org>
  * @todo the class has no constructor and therefore cannot initialize its private class
  */
-class KoFilter : public QObject
+class KOFFICECORE_EXPORT KoFilter : public QObject
 {
     Q_OBJECT
 

@@ -26,7 +26,7 @@
 
 #include <qvaluelist.h>
 #include <qdom.h>
-
+#include <koffice_export.h>
 class KSpreadCell;
 class KSpreadStyle;
 class KoGenStyle;
@@ -39,7 +39,7 @@ class QString;
  * Structure to indicate the condition we're testing on a cell and the special
  * font and color that will be applied if it's true
  */
-class KSpreadConditional
+class KSPREAD_EXPORT KSpreadConditional
 {
 public:
   double         val1;

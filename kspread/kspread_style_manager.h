@@ -22,7 +22,7 @@
 #define __kspread_style_manager__
 
 #include <qmap.h>
-
+#include <koffice_export.h>
 class KSpreadCustomStyle;
 class KSpreadStyleDlg;
 class KSpreadView;
@@ -34,7 +34,7 @@ class QStringList;
 class KoGenStyles;
 class KoOasisStyles;
 
-class KSpreadStyleManager
+class KSPREAD_EXPORT KSpreadStyleManager
 {
  public:
   KSpreadStyleManager();
