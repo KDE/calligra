@@ -126,8 +126,6 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
         filePixmap.load(file);
         QImage fileImage = filePixmap.convertToImage();
 
-        m_pThumbPixmap = new QPixmap;
-
         int xsize = THUMB_SIZE;
         int ysize = THUMB_SIZE;
         int picW  = fileImage.width();
@@ -138,26 +136,30 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
             float yFactor = (float)((float)(float)picH/(float)picW);
             ysize = (int)(yFactor * (float)THUMB_SIZE);
             //kdDebug() << "ysize is " << ysize << endl;
-            if(ysize > 30) ysize = 30;
+            if (ysize > THUMB_SIZE) 
+		    ysize = THUMB_SIZE;
         }
         else if(picW < picH)
         {
             float xFactor = (float)((float)picW/(float)picH);
             xsize = (int)(xFactor * (float)THUMB_SIZE);
             //kdDebug() << "xsize is " << xsize << endl;
-            if(xsize > 30) xsize = 30;
+            if(xsize > THUMB_SIZE) 
+		    xsize = THUMB_SIZE;
         }
 
         QImage thumbImg = fileImage.smoothScale(xsize, ysize);
 
-        if(!thumbImg.isNull())
-        {
-            m_pThumbPixmap->convertFromImage(thumbImg);
-            if(!m_pThumbPixmap->isNull())
-            {
-                validThumb = true;
-            }
-        }
+	if (!thumbImg.isNull()) {
+		m_pThumbPixmap = new QPixmap();
+		m_pThumbPixmap -> convertFromImage(thumbImg);
+		validThumb = !m_pThumbPixmap -> isNull();
+		
+		if(!validThumb) {
+			delete m_pThumbPixmap;
+			m_pThumbPixmap = 0;
+		}
+	}
     }
 
     img = img.convertDepth(32);
