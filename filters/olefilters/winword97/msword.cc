@@ -255,15 +255,6 @@ void MsWord::decodeParagraph(
         S32 lfoCount;
         int i;
 
-        // TBD: discretion is the better part of valour! Our list logic below
-        // will give up if we don't do this!
-
-        if (m_fib.nFib > s_maxWord7Version)
-        {
-            gotListParagraph(text, properties.m_pap, chpxs);
-            return;
-        }
-
         // Find the number of LFOs.
 
         ptr += MsWordGenerated::read(ptr, &lfoCount);
