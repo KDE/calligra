@@ -36,6 +36,8 @@ public:
   bool hasValidThumb() {return validThumb; }
   bool validThumb;
 
+  virtual int spacing() {return 0; }
+  virtual void setSpacing(int) {}
   virtual QPixmap &pixmap() const = 0;
   virtual QPixmap &thumbPixmap() const = 0;
 };
