@@ -4,33 +4,6 @@ Goal: C++ library to access spreadsheet documents, especially Microsoft
 Excel workbook.
 
 
-Apply the following patch to configure.in.in
-
-*** configure.in.in.old	2003-08-10 11:19:26.000000000 +0200
---- configure.in.in	2003-08-10 15:23:04.000000000 +0200
-*************** AC_SUBST(LIBMAGICK_RPATH)
-*** 51,56 ****
---- 51,69 ----
-
-  # End of ImageMagick check
-
-+ # These are for Sidewinder::UString (taken from KJS::UString)
-+ AC_CHECK_HEADERS(strings.h string.h math.h float.h ieeefp.h errno.h)
-+ AC_CHECK_LIB(m, isnan, [
-+ 			  AC_DEFINE_UNQUOTED(HAVE_FUNC_ISNAN, 1, [Define if you have isnan])
-+ 			  ])
-+ AC_CHECK_LIB(m, finite, [
-+ 			   AC_DEFINE_UNQUOTED(HAVE_FUNC_FINITE, 1, [Define if you have finite])
-+ 			   ])
-+ AC_CHECK_LIB(m, _finite, [
-+ 			    AC_DEFINE_UNQUOTED(HAVE_FUNC__FINITE, 1, [Define if you have _finite])
-+ 			    ])
-+
-+
-  ##########################################################################
-  # This last check is copied from kdenonbeta/gsf/configure.in.in
-  ##########################################################################
-
 The experimental Excel import filter based on Sidewinder resides in
 koffice/filters/kspread/excel/import. If you compile it, here's a step to
 resolve conflict with the current Excel import filter: put the following
