@@ -19,6 +19,7 @@
 
 #include "kwtablestylemanager.h"
 #include "kwtablestylemanager.moc"
+#include "kwimportstyledia.h"
 
 #include <kwdoc.h>
 #include <koparagcounter.h>
@@ -175,7 +176,7 @@ void KWTableStyleListItem::apply()
 KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWTableStyle> & style)
     : KDialogBase( _parent, "Tablestylist", true,
                    i18n("Tablestylist"),
-                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
+                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply | KDialogBase::User1 )
 {
     m_doc = _doc;
 
@@ -195,6 +196,9 @@ KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc, co
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 450, 450 ) );
+    setButtonText( KDialogBase::User1, i18n("Import From File") );
+    connect(this, SIGNAL(user1Clicked()), this, SLOT(importFromFile()));
+
 }
 
 void KWTableStyleManager::setupWidget(const QPtrList<KWTableStyle> & styleList)
@@ -400,6 +404,38 @@ void KWTableStyleManager::addStyle()
 
     updateGUI();
 }
+
+void KWTableStyleManager::importFromFile()
+{
+    QStringList lst;
+    for ( int i = 0; i<m_stylesList->count();i++)
+    {
+        lst << m_stylesList->text(i );
+    }
+
+    KWImportStyleDia dia( m_doc, lst, KWImportStyleDia::TableStyle, this, 0 );
+    if ( dia.exec() ) {
+        QPtrList<KWTableStyle> list = dia.listOfTableStyleImported();
+        addStyle( list);
+    }
+}
+
+void KWTableStyleManager::addStyle(const QPtrList<KWTableStyle> &listStyle )
+{
+    save();
+
+    QPtrListIterator<KWTableStyle> style( listStyle );
+    for ( ; style.current() ; ++style )
+    {
+        noSignals=true;
+        m_stylesList->insertItem( style.current()->translatedName() );
+        m_tableStyles.append( new KWTableStyleListItem( 0L,new KWTableStyle(*style.current())) );
+        noSignals=false;
+
+    }
+    updateGUI();
+}
+
 
 void KWTableStyleManager::deleteStyle()
 {

@@ -32,11 +32,12 @@
 #include <kdebug.h>
 #include <qlabel.h>
 
-KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, const QStringList &_list, QWidget *parent, const char *name )
+KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, const QStringList &_list, StyleType _type, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
     setCaption( i18n("Import Style") );
     m_doc=_doc;
+    m_typeStyle = _type;
     m_list =_list;
     QVBox *page = makeVBoxMainWidget();
     QLabel *lab = new QLabel(i18n("Select Style to import:"), page);
@@ -48,7 +49,8 @@ KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, const QStringList &_list, 
 
 KWImportStyleDia::~KWImportStyleDia()
 {
-    m_styleList.clear();
+    m_frameStyleList.clear();
+    m_tableStyleList.clear();
 }
 
 QString KWImportStyleDia::generateStyleName( const QString & templateName )
@@ -88,18 +90,38 @@ void KWImportStyleDia::loadFile()
         QDomDocument doc;
         doc.setContent( store->device() );
         QDomElement word = doc.documentElement();
+        if ( m_typeStyle ==frameStyle )
+        {
+            QDomNodeList listStyles = word.elementsByTagName( "FRAMESTYLE" );
+            for (unsigned int item = 0; item < listStyles.count(); item++) {
+                QDomElement styleElem = listStyles.item( item ).toElement();
 
-        QDomNodeList listStyles = word.elementsByTagName( "FRAMESTYLE" );
-        for (unsigned int item = 0; item < listStyles.count(); item++) {
-            QDomElement styleElem = listStyles.item( item ).toElement();
-
-            KWFrameStyle *sty = new KWFrameStyle( styleElem );
-            QString name =sty->name();
-            if ( m_list.findIndex( name )!=-1 )
-                sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
-            m_styleList.append( sty);
+                KWFrameStyle *sty = new KWFrameStyle( styleElem );
+                QString name =sty->name();
+                if ( m_list.findIndex( name )!=-1 )
+                    sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+                m_frameStyleList.append( sty);
+            }
+        }
+        else
+        {
+            QDomNodeList listStyles = word.elementsByTagName( "TABLESTYLE" );
+            for (unsigned int item = 0; item < listStyles.count(); item++) {
+                QDomElement styleElem = listStyles.item( item ).toElement();
+                KWTableStyle *sty = new KWTableStyle( styleElem,m_doc,2 );
+                QString name =sty->name();
+                if ( m_list.findIndex( name )!=-1 )
+                    sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+                m_tableStyleList.append( sty);
+            }
         }
         initList();
+    }
+    else
+    {
+        KMessageBox::error( this,
+                            i18n("File is not a kword file"),
+                            i18n("Import Style"));
     }
     store->close();
     delete store;
@@ -108,9 +130,19 @@ void KWImportStyleDia::loadFile()
 void KWImportStyleDia::initList()
 {
     QStringList lst;
-    for ( KWFrameStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    if ( m_typeStyle ==frameStyle )
     {
-        lst<<p->translatedName();
+        for ( KWFrameStyle * p = m_frameStyleList.first(); p != 0L; p = m_frameStyleList.next() )
+        {
+            lst<<p->translatedName();
+        }
+    }
+    else
+    {
+        for ( KWTableStyle * p = m_tableStyleList.first(); p != 0L; p = m_tableStyleList.next() )
+        {
+            lst<<p->translatedName();
+        }
     }
     m_listStyleName->insertStringList(lst);
 }
@@ -121,13 +153,28 @@ void KWImportStyleDia::slotOk()
     {
         if ( !m_listStyleName->isSelected( i ))
         {
-            //remove this style from list
-            QPtrListIterator<KWFrameStyle> styleIt( m_styleList );
-            for ( ; styleIt.current(); ++styleIt )
+            if ( m_typeStyle ==frameStyle )
             {
-                if ( styleIt.current()->name() == m_listStyleName->text(i ) ) {
-                    kdDebug()<<" remove m_listStyleName->text(i ) :"<<m_listStyleName->text(i )<<" styleIt.current() :!"<<styleIt.current()<<endl;
-                    m_styleList.remove(styleIt.current());
+                //remove this style from list
+                QPtrListIterator<KWFrameStyle> styleIt( m_frameStyleList );
+                for ( ; styleIt.current(); ++styleIt )
+                {
+                    if ( styleIt.current()->name() == m_listStyleName->text(i ) )
+                    {
+                        m_frameStyleList.remove(styleIt.current());
+                    }
+                }
+            }
+            else
+            {
+                //remove this style from list
+                QPtrListIterator<KWTableStyle> styleIt( m_tableStyleList );
+                for ( ; styleIt.current(); ++styleIt )
+                {
+                    if ( styleIt.current()->name() == m_listStyleName->text(i ) )
+                    {
+                        m_tableStyleList.remove(styleIt.current());
+                    }
                 }
             }
         }

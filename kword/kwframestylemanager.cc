@@ -330,12 +330,11 @@ void KWFrameStyleManager::importFromFile()
         lst << m_stylesList->text(i );
     }
 
-    KWImportStyleDia dia( m_doc, lst, this, 0 );
+    KWImportStyleDia dia( m_doc, lst, KWImportStyleDia::frameStyle, this, 0 );
     if ( dia.exec() ) {
-        QPtrList<KWFrameStyle> list = dia.listOfStyleImported();
+        QPtrList<KWFrameStyle> list = dia.listOfFrameStyleImported();
         addStyle( list);
     }
-
 }
 
 void KWFrameStyleManager::addStyle(const QPtrList<KWFrameStyle> &listStyle )

@@ -81,7 +81,7 @@ class KWTableStyleListItem
     void switchStyle();
     void deleteStyle( KWTableStyle *current );
     void apply();
-    
+
   protected:
     KWTableStyle *m_origTableStyle;
     KWTableStyle *m_changedTableStyle;
@@ -110,7 +110,7 @@ protected:
     void updatePreview();
     void save();
     int tableStyleIndex( int pos );
-
+    void addStyle(const QPtrList<KWTableStyle> &listStyle );
     QListBox *m_stylesList;
     QLineEdit *m_nameString;
     QPushButton *m_deleteButton;
@@ -151,6 +151,7 @@ protected slots:
     void moveDownStyle();
     void renameStyle(const QString &);
     void setupMain();
+    void importFromFile();
 };
 
 #endif
