@@ -67,19 +67,19 @@ void KoBgSpellCheck::addIgnoreWordAll( const QString & word)
     if( m_spellListIgnoreAll.findIndex( word )==-1)
         m_spellListIgnoreAll.append( word );
     m_spellListIgnoreAll.clear();
-    m_pKSpellConfig->setIgnoreList( m_spellListIgnoreAll );
+    spellConfig()->setIgnoreList( m_spellListIgnoreAll );
 }
 
 void KoBgSpellCheck::addIgnoreWordAllList( const QStringList & list)
 {
     m_spellListIgnoreAll.clear();
-    m_pKSpellConfig->setIgnoreList( list );
+    spellConfig()->setIgnoreList( list );
 }
 
 void KoBgSpellCheck::clearIgnoreWordAll( )
 {
     m_spellListIgnoreAll.clear();
-    m_pKSpellConfig->setIgnoreList( m_spellListIgnoreAll );
+    spellConfig()->setIgnoreList( m_spellListIgnoreAll );
 }
 
 void KoBgSpellCheck::startBackgroundSpellCheck()
@@ -260,11 +260,16 @@ void KoBgSpellCheck::spellCheckerFinished()
     // Normal death - nothing to do
 }
 
+KSpellConfig* KoBgSpellCheck::spellConfig()
+{
+  if ( !m_pKSpellConfig )
+    m_pKSpellConfig = new KSpellConfig();
+  return m_pKSpellConfig;
+}
+
 void KoBgSpellCheck::setKSpellConfig(KSpellConfig _kspell)
 {
-  if(m_pKSpellConfig==0)
-    m_pKSpellConfig=new KSpellConfig();
-
+  (void)spellConfig();
   m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
   m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
   m_pKSpellConfig->setDictionary(_kspell.dictionary ());

@@ -64,6 +64,7 @@ protected slots:
     void spellCheckNextParagraph();
 
 protected:
+    KSpellConfig* spellConfig();
     void nextParagraphNeedingCheck();
 
     // Structure holding the background spellcheck data
