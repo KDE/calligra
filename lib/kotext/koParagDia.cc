@@ -44,6 +44,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     :QWidget( parent, name ),
     stylesList()
 {
+    noSignals = true;
     QVBoxLayout *vbox = new QVBoxLayout( this,KDialog::marginHint(), KDialog::spacingHint() );
     gStyle = new QGroupBox( this, "styleLayout" );
     gStyle->setTitle( i18n( "Style" ) );
@@ -107,6 +108,27 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     connect( sPrefix, SIGNAL( textChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
     connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
     connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
+    noSignals = false;
+}
+
+void KoCounterStyleWidget::setCounter (KoParagCounter counter )
+{
+    noSignals = true;
+    m_counter = counter;
+    KoParagCounter::Style st = counter.style();
+    m_counter.setStyle( st );
+    changeKWSpinboxType( st);
+    unsigned int i;
+    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != st; i++);
+    lstStyle->setCurrentItem(i);
+    bCustom->setText( m_counter.customBulletCharacter() );
+    if ( !m_counter.customBulletFont().isEmpty() )
+        bCustom->setFont( QFont( m_counter.customBulletFont() ) );
+    sPrefix->setText( m_counter.prefix() );
+    sSuffix->setText( m_counter.suffix() );
+
+    spnDepth->setValue( m_counter.depth() );
+    spnStart->setValue( m_counter.startNumber() );
     noSignals = false;
 }
 
@@ -177,7 +199,6 @@ void KoCounterStyleWidget::display( const KoParagLayout & lay ) {
     {
         m_counter = KoParagCounter();
     }
-
     styleBuffer = 999;
 
     numTypeChanged( m_counter.numbering() );
@@ -195,6 +216,7 @@ void KoCounterStyleWidget::display( const KoParagLayout & lay ) {
 
     spnDepth->setValue( m_counter.depth() );
     spnStart->setValue( m_counter.startNumber() );
+
 }
 
 
@@ -257,6 +279,8 @@ void KoCounterStyleWidget::selectCustomBullet() {
 }
 
 void KoCounterStyleWidget::numStyleChanged() {
+    if ( noSignals )
+        return;
     // We selected another style from the list box.
     styleBuffer = 999;
     StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());

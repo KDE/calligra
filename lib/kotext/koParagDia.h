@@ -226,8 +226,11 @@ public:
     void display( const KoParagLayout & lay );
     void changeKWSpinboxType(KoParagCounter::Style st);
     const KoParagCounter & counter() const { return m_counter; }
+    void setCounter (KoParagCounter counter );
+
 public slots:
     void numTypeChanged( int nType );
+
 signals:
     void sig_startChanged( int );
     void sig_depthChanged(int);
@@ -244,6 +247,7 @@ protected slots:
 
     void numStyleChanged();
     void selectCustomBullet();
+
 private:
     QGroupBox *gStyle;
     QPtrList <StyleRepresenter> stylesList;
