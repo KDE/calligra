@@ -143,6 +143,7 @@ VPath::currentPoint() const
 void
 VPath::moveTo( const double& x, const double& y )
 {
+// TODO: should it affect last point of a primitive or not ?
 	if ( isClosed() ) return;
 
 	m_segments.getLast()->p3->moveTo( x, y );

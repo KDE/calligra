@@ -7,12 +7,8 @@
 
 class VPoint;
 
-/**
-* VPaths are the most common high-level objects. They consist of lines and
-* beziers.
-*/
-
-// TODO: refine moveto-behaviour (should it affect last point of a primitive or not ?)
+// VPaths are the most common high-level objects. They consist of lines and
+// bezier-curves.
 
 class VPath : public VObject {
 public:

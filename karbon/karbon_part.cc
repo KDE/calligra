@@ -42,9 +42,9 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	x1 = 300.0; y1 = 100.0;
 	x2 = 300.0; y2 = 200.0;
 	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 300.0; y1 = 300.0;
-	x2 = 400.0; y2 = 200.0;
-	path->arcTo(x1,y1,x2,y2,50.0);
+	x1 = 300.0; y1 = 400.0;
+	x2 = 400.0; y2 = 350.0;
+	path->arcTo(x1,y1,x2,y2,150.0);
 /*	x1 = 100.0; y1 = 300.0;
 	x2 = 100.0; y2 = 200.0;
 	path->arcTo(x1,y1,x2,y2,100.0);

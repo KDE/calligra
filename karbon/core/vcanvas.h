@@ -6,6 +6,8 @@
 class KarbonPart;
 class KarbonView;
 
+// The karbon canvas is a QScrollView.
+
 class VCanvas : public QScrollView {
 	Q_OBJECT
 public:

@@ -3,15 +3,18 @@ INCLUDES  = -I./core/ $(all_includes)
 SUBDIRS = core . data pics
 
 bin_PROGRAMS = karbon
-lib_LTLIBRARIES = karbon.la libkarbonpart.la
+lib_LTLIBRARIES = \
+	karbon.la \
+	libkarbonpart.la
 
 libkarbonpart_la_SOURCES = \
-    karbon_part.cc \
-    karbon_view.cc karbon_factory.cc
+	karbon_part.cc \
+	karbon_view.cc \
+	karbon_factory.cc
 libkarbonpart_la_LDFLAGS = -module -avoid-version -no-undefined
 libkarbonpart_la_LIBADD = \
-    ../../koffice/lib/kofficeui/libkofficeui.la \
-    ./core/libkarboncore.la
+	../../koffice/lib/kofficeui/libkofficeui.la \
+	./core/libkarboncore.la
 libkarbonpart_la_METASOURCES = AUTO
 
 karbon_la_SOURCES = main.cc
@@ -25,5 +28,7 @@ karbon_LDADD = karbon.la
 dummy.cc:
 	echo > dummy.cc
 
-noinst_HEADERS =  karbon_part.h \
-		  karbon_view.h karbon_factory.h
+noinst_HEADERS = \
+	karbon_part.h \
+	karbon_view.h \
+	karbon_factory.h
