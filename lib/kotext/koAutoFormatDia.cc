@@ -535,7 +535,7 @@ void KoAutoFormatDia::setupTab3()
              SLOT(slotEditEntry()) );
 
     pbRemove = new QPushButton( i18n( "Remove" ), tab3 );
-    grid->addWidget( pbRemove, 2, 6, Qt::AlignTop );
+    grid->addWidget( pbRemove, 3, 6, Qt::AlignTop );
 
     connect(pbRemove,SIGNAL(clicked()), SLOT(slotRemoveEntry()));
 
