@@ -423,12 +423,11 @@ void KPresenterView::editHeaderFooter()
 /*========================= view new view =======================*/
 void KPresenterView::newView()
 {
-    // ############ TODO Torben
-    /* assert( ( m_pKPresenterDoc != 0L ) );
+    assert( m_pKPresenterDoc );
 
-    KPresenterShell *shell = new KPresenterShell;
+    KoMainWindow *shell = new KPresenterShell;
     shell->show();
-    shell->setDocument( m_pKPresenterDoc ); */
+    shell->setRootDocument( m_pKPresenterDoc );
 }
 
 /*====================== insert a new page ======================*/

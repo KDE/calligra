@@ -35,7 +35,6 @@
 #include "kword_view.h"
 #include "kword_doc.h"
 #include "kword_view.moc"
-#include "kword_shell.h"
 #include "kword_frame.h"
 #include "clipbrd_dnd.h"
 #include "defs.h"
@@ -1202,7 +1201,7 @@ void KWordView::newView()
 {
     assert( ( m_pKWordDoc != 0L ) );
 
-    KWordShell* shell = new KWordShell;
+    KoMainWindow* shell = m_pKWordDoc->createShell();
     shell->show();
     shell->setRootDocument( m_pKWordDoc );
 }

@@ -219,7 +219,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_alignRight = new KToggleAction( i18n("Align right"), "right", 0, actionCollection(), "right");
     connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
     m_alignRight->setExclusiveGroup( "Align" );
-    
+
     m_alignTop = new KToggleAction( i18n("Align top"), "top", 0, actionCollection(), "top");
     connect( m_alignTop, SIGNAL( toggled( bool ) ), this, SLOT( alignTop( bool ) ) );
     m_alignTop->setExclusiveGroup( "Pos" );
@@ -229,7 +229,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_alignBottom = new KToggleAction( i18n("Align bottom"), "bottom", 0, actionCollection(), "bottom");
     connect( m_alignBottom, SIGNAL( toggled( bool ) ), this, SLOT( alignBottom( bool ) ) );
     m_alignBottom->setExclusiveGroup( "Pos" );
-    
+
     m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this, SLOT( transformPart() ),
 			       actionCollection(), "transform" );
     m_transform->setEnabled( FALSE );
@@ -383,7 +383,7 @@ void KSpreadView::initialPosition()
     int row = m_pDoc->map()->initialMarkerRow();
     if ( row <= 0 ) row = 1;
     m_pCanvas->gotoLocation( col, row );
-    
+
     //init toggle button
     m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
@@ -697,7 +697,7 @@ void KSpreadView::updateEditWidget()
 	m_alignRight->setChecked( FALSE );
 	m_alignCenter->setChecked( FALSE );
     }
-    
+
     if ( cell->alignY() == KSpreadLayout::Top )
 	m_alignTop->setChecked( TRUE );
     else if ( cell->alignY() == KSpreadLayout::Middle )
@@ -1108,7 +1108,7 @@ void KSpreadView::formulaSelection( const QString &_math )
 
     KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor",_math );
     dlg->show();
-  
+
     /* if ( !m_pCanvas->editor() )
     {
 	m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
@@ -1423,7 +1423,7 @@ void KSpreadView::removeTable( KSpreadTable *_t )
   	//remove Area Name when table target is removed
   	if((*it).table_name==m_tableName)
  	   	doc()->removeArea((*it).ref_name);
-  }  
+  }
 
 }
 
@@ -1527,12 +1527,12 @@ void KSpreadView::copySelection()
   if ( m_pTable )
   	{
   	QRect rect( activeTable()-> selectionRect() );
-  
+
   	if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
   		{
   		QMessageBox::critical( this, "KSpread Error", "Not supported", i18n("OK"));
 		}
-  	else 
+  	else
    	 	m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
    	}
     	
@@ -1543,12 +1543,12 @@ void KSpreadView::cutSelection()
     if ( !m_pTable )
 	return;
     QRect rect( activeTable()-> selectionRect() );
-  
+
     if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
   		{
   		QMessageBox::critical( this, "KSpread Error", "Not supported", i18n("OK"));
 		}
-  	else 
+  	else
   		{
     		m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
     		updateEditWidget();
@@ -1599,14 +1599,14 @@ void KSpreadView::conditional()
 {
 
 //  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  
+
   QRect rect( activeTable()-> selectionRect() );
-  
+
   if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
   	{
   	KMessageBox::error( this, i18n("Area too large!"));
 	}
-  else 
+  else
   	{
   	if ( rect.left() == 0 || rect.top() == 0 ||
 	 rect.right() == 0 || rect.bottom() == 0 )
@@ -1614,7 +1614,7 @@ void KSpreadView::conditional()
      		rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
 
     	   }
-    
+
   	 KSpreadconditional *dlg=new KSpreadconditional(this,"conditional",rect);
   	 dlg->show();
   	 }
@@ -1656,6 +1656,7 @@ void KSpreadView::createAnchor()
 void KSpreadView::newView()
 {
     KoMainWindow* shell = m_pDoc->createShell();
+    shell->setRootDocument( m_pDoc );
     shell->show();
 }
 
