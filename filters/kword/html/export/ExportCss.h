@@ -23,8 +23,17 @@
 #ifndef EXPORTCSS_H
 #define EXPORTCSS_H
 
+#include <qmap.h>
+
 #include <KWEFBaseWorker.h>
 #include "ExportFilter.h"
+
+class StyleMap : public QMap<QString,LayoutData>
+{
+public:
+    StyleMap(void) {}
+    ~StyleMap(void) {}
+};
 
 class HtmlCssWorker : public HtmlWorker
 {
@@ -41,14 +50,17 @@ protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag, const LayoutData& layout);
     virtual void closeParagraph(const QString& strTag, const LayoutData& layout);
-    virtual void openSpan(const FormatData& format);
-    virtual void closeSpan(const FormatData& format);
+    virtual void openSpan(const FormatData& formatOrigin, const FormatData& format);
+    virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format);
 private:
-    QString layoutToCss(const LayoutData& layout) const;
+    QString layoutToCss(const LayoutData& layoutOrigin,const LayoutData& layout,
+        const bool force) const;
     QString escapeCssIdentifier(const QString& strText) const;
-    QString textFormatToCss(const TextFormatting& formatData) const;
+    QString textFormatToCss(const TextFormatting& formatOrigin,
+        const TextFormatting& formatData, const bool force) const;
 private:
     QString m_strPageSize;
+    StyleMap m_styleMap;
 };
 
 #endif /* EXPORTCSS_H */

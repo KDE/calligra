@@ -46,10 +46,12 @@ public:
     virtual bool doCloseBody(void); // HTML's </body>
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
-    virtual void openParagraph(const QString& strTag, const LayoutData& layout)=0;
-    virtual void closeParagraph(const QString& strTag, const LayoutData& layout)=0;
-    virtual void openSpan(const FormatData& format)=0;
-    virtual void closeSpan(const FormatData& format)=0;
+    virtual void openParagraph(const QString& strTag,
+        const LayoutData& layout)=0;
+    virtual void closeParagraph(const QString& strTag,
+        const LayoutData& layout)=0;
+    virtual void openSpan(const FormatData& formatOrigin, const FormatData& format)=0;
+    virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format)=0;
     virtual void writeDocType(void);
 public:
     inline bool isXML  (void) const { return m_xml; }
@@ -61,7 +63,8 @@ protected:
 private:
     void ProcessParagraphData ( const QString& strTag, const QString &paraText,
         const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
-    void formatTextParagraph(const QString& strText, const FormatData& format);
+    void formatTextParagraph(const QString& strText,
+        const FormatData& formatOrigin, const FormatData& format);
     bool makeTable(const FrameAnchor& anchor);
     bool makeImage(const FrameAnchor& anchor);
 protected:

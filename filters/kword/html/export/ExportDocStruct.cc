@@ -118,24 +118,26 @@ void HtmlDocStructWorker::closeFormatData(const FormatData& format)
     }
 }
 
-void HtmlDocStructWorker::openParagraph(const QString& strTag, const LayoutData& layout)
+void HtmlDocStructWorker::openParagraph(const QString& strTag, 
+    const LayoutData& layout)
 {
     *m_streamOut << '<' << strTag << ">";
     openFormatData(layout.formatData);
 }
 
-void HtmlDocStructWorker::closeParagraph(const QString& strTag, const LayoutData& layout)
+void HtmlDocStructWorker::closeParagraph(const QString& strTag,
+    const LayoutData& layout)
 {
     closeFormatData(layout.formatData);
     *m_streamOut << "</" << strTag << ">\n";
 }
 
-void HtmlDocStructWorker::openSpan(const FormatData& format)
+void HtmlDocStructWorker::openSpan(const FormatData&, const FormatData& format)
 {
     openFormatData(format);
 }
 
-void HtmlDocStructWorker::closeSpan(const FormatData& format)
+void HtmlDocStructWorker::closeSpan(const FormatData&, const FormatData& format)
 {
     closeFormatData(format);
 }

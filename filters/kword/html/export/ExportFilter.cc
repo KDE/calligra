@@ -121,7 +121,8 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
     return true;
 }
 
-void HtmlWorker::formatTextParagraph(const QString& strText, const FormatData& format)
+void HtmlWorker::formatTextParagraph(const QString& strText,
+ const FormatData& formatOrigin, const FormatData& format)
 {
     if (format.text.missing)
     {
@@ -142,7 +143,7 @@ void HtmlWorker::formatTextParagraph(const QString& strText, const FormatData& f
         // TODO: first and last characters of partialText should not be a space (white space problems!)
         // TODO: replace multiples spaces by non-breaking spaces!
         // Opening elements
-        openSpan(format);
+        openSpan(formatOrigin,format);
 
         // The text
         if (strText==" ")
@@ -155,7 +156,7 @@ void HtmlWorker::formatTextParagraph(const QString& strText, const FormatData& f
         }
 
         // Closing elements
-        closeSpan(format);
+        closeSpan(formatOrigin,format);
     }
 }
 
@@ -177,7 +178,7 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
             {
                 //Retrieve text
                 partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-                formatTextParagraph(partialText,*paraFormatDataIt);
+                formatTextParagraph(partialText,layout.formatData,*paraFormatDataIt);
             }
             else if (4==(*paraFormatDataIt).id)
             {

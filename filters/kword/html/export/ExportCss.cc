@@ -82,7 +82,8 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
     return strReturn;
 }
 
-QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatData) const
+QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
+    const TextFormatting& formatData, const bool force) const
 {
     // TODO: as this method comes from the AbiWord filter,
     // TODO:   verify that it is working for HTML
@@ -92,75 +93,97 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatData) const
 
     // Font name
     QString fontName = formatData.fontName;
-    if ( !fontName.isEmpty() )
+    if (!fontName.isEmpty()
+        && (force || (formatOrigin.fontName!=formatData.fontName)))
     {
         strElement+="font-family: ";
         strElement+=fontName; // TODO: add alternative font names
         strElement+="; ";
     }
 
-    // Font style
-    strElement+="font-style: ";
-    if ( formatData.italic )
+    if (force || (formatOrigin.italic!=formatData.italic))
     {
-        strElement+="italic";
-    }
-    else
-    {
-        strElement+="normal";
-    }
-    strElement+="; ";
-
-    strElement+="font-weight: ";
-    if ( formatData.weight >= 75 )
-    {
-        strElement+="bold";
-    }
-    else
-    {
-        strElement+="normal";
-    }
-    strElement+="; ";
-
-    const int size=formatData.fontSize;
-    if (size>0)
-    {
-        // We use absolute font sizes.
-        strElement+="font-size: ";
-        strElement+=QString::number(size,10);
-        strElement+="pt; ";
-    }
-
-    if ( formatData.fgColor.isValid() )
-    {
-        // Give colour
-        strElement+="color: ";
-        strElement+=formatData.fgColor.name();
-        strElement+="; ";
-    }
-    if ( formatData.bgColor.isValid() )
-    {
-        // Give background colour
-        strElement+="bgcolor: ";
-        strElement+=formatData.bgColor.name();
+        // Font style
+        strElement+="font-style: ";
+        if ( formatData.italic )
+        {
+            strElement+="italic";
+        }
+        else
+        {
+            strElement+="normal";
+        }
         strElement+="; ";
     }
 
-    strElement+="text-decoration: ";
-    if ( formatData.underline )
+    if (force || ((formatOrigin.weight>=75)!=(formatData.weight>=75)))
     {
-        strElement+="underline";
+        strElement+="font-weight: ";
+        if ( formatData.weight >= 75 )
+        {
+            strElement+="bold";
+        }
+        else
+        {
+            strElement+="normal";
+        }
+        strElement+="; ";
     }
-    else if ( formatData.strikeout )
+
+    if (force || (formatOrigin.fontSize!=formatData.fontSize))
     {
-        strElement+="line-through";
+        const int size=formatData.fontSize;
+        if (size>0)
+        {
+            // We use absolute font sizes.
+            strElement+="font-size: ";
+            strElement+=QString::number(size,10);
+            strElement+="pt; ";
+        }
     }
-    else
+
+    if (force || (formatOrigin.fgColor!=formatData.fgColor))
     {
-        strElement+="none";
+        if ( formatData.fgColor.isValid() )
+        {
+            // Give colour
+            strElement+="color: ";
+            strElement+=formatData.fgColor.name();
+            strElement+="; ";
+        }
     }
-    // As this is the last property, do not put a semi-colon
-    //strElement+="; ";
+
+    if (force || (formatOrigin.bgColor!=formatData.bgColor))
+    {
+        if ( formatData.bgColor.isValid() )
+        {
+            // Give background colour
+            strElement+="bgcolor: ";
+            strElement+=formatData.bgColor.name();
+            strElement+="; ";
+        }
+    }
+
+    if (force || (formatOrigin.underline!=formatData.underline)
+        || (formatOrigin.strikeout!=formatData.strikeout))
+    {
+        strElement+="text-decoration: ";
+        if ( formatData.underline )
+        {
+            strElement+="underline";
+        }
+        else if ( formatData.strikeout )
+        {
+            strElement+="line-through";
+        }
+        else
+        {
+            strElement+="none";
+        }
+        strElement+="; ";
+    }
+
+    // TODO: As this is the last property, do not put a semi-colon
 
     return strElement;
 }
@@ -242,44 +265,61 @@ QString HtmlCssWorker::getStartOfListOpeningTag(const CounterData::Style typeLis
     return strResult;
 }
 
-QString HtmlCssWorker::layoutToCss(const LayoutData& layout) const
+QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
+    const LayoutData& layout, const bool force) const
 {
     QString strLayout;
 
-    if ( (layout.alignment=="left") || (layout.alignment== "right")
-        || (layout.alignment=="center") || (layout.alignment=="justify"))
+    if (force || (layoutOrigin.alignment!=layout.alignment))
     {
-        strLayout += QString("text-align:%1; ").arg(layout.alignment);
-    }
-    else
-    {
-        kdWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
-    }
-
-    if ( layout.indentLeft>=0.0 )
-    {
-        strLayout += QString("margin-left:%1pt; ").arg(layout.indentLeft);
+        if ( (layout.alignment=="left") || (layout.alignment== "right")
+            || (layout.alignment=="center") || (layout.alignment=="justify"))
+        {
+            strLayout += QString("text-align:%1; ").arg(layout.alignment);
+        }
+        else
+        {
+            kdWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
+        }
     }
 
-    if ( layout.indentRight>=0.0 )
+    if ((layout.indentLeft>=0.0)
+        && (force || (layoutOrigin.indentLeft!=layout.indentLeft)))
+    {
+            strLayout += QString("margin-left:%1pt; ").arg(layout.indentLeft);
+    }
+
+    if ((layout.indentRight>=0.0)
+        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
         strLayout += QString("margin-right:%1pt; ").arg(layout.indentRight);
     }
 
-    strLayout += QString("text-indent:%1pt; ").arg(layout.indentFirst);
+    if (force || (layoutOrigin.indentLeft!=layout.indentLeft))
+    {
+        strLayout += QString("text-indent:%1pt; ").arg(layout.indentFirst);
+    }
 
-    if( layout.marginBottom>=0.0)
+    if ((layout.marginBottom>=0.0)
+        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
        strLayout += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
     }
 
-    if( layout.marginTop>=0.0  )
+    if ((layout.marginTop>=0.0)
+        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
        strLayout += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
 
     // TODO: Konqueror/KHTML does not support "line-height"
-    if ( !layout.lineSpacingType )
+    if (!force
+        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
+        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+    {
+        // Do nothing!
+    }
+    else if ( !layout.lineSpacingType )
     {
         // We have a custom line spacing (in points)
         strLayout += QString("line-height:%1pt; ").arg(layout.lineSpacing);
@@ -298,9 +338,15 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layout) const
     }
 
     // TODO: Konqueror/KHTML does not support "text-shadow"
-    strLayout += "text-shadow:";
-    if ((!layout.shadowDirection) || (!layout.shadowDistance))
+    if (!force
+        && (layoutOrigin.shadowDirection==layoutOrigin.shadowDirection)
+        && (layoutOrigin.shadowDistance==layoutOrigin.shadowDistance))
     {
+        // Do nothing!
+    }
+    else if ((!layout.shadowDirection) || (!layout.shadowDistance))
+    {
+        strLayout += "text-shadow:";
         strLayout+="none; ";
     }
     else
@@ -366,10 +412,12 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layout) const
         }
         if ( (!xDistance) && (!yDistance) )
         {
+            strLayout += "text-shadow:";
             strLayout+="none; ";
         }
         else
         {
+            strLayout += "text-shadow:";
             strLayout+=QString("%1 %2pt %3pt; ").arg(layout.shadowColor.name())
                 .arg(xDistance,0,'f',0).arg(yDistance,0,'f',0);
                 // We do not want any scientific notation or any decimal
@@ -379,18 +427,30 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layout) const
     // TODO: borders
 
     // This must remain last, as the last property does not have a semi-colon
-    strLayout+=textFormatToCss(layout.formatData.text);
+    strLayout+=textFormatToCss(layoutOrigin.formatData.text,
+        layout.formatData.text,force);
 
     return strLayout;
 }
 
-void HtmlCssWorker::openParagraph(const QString& strTag, const LayoutData& layout)
+void HtmlCssWorker::openParagraph(const QString& strTag,
+    const LayoutData& layout)
 {
+    const LayoutData& styleLayout=m_styleMap[layout.styleName];
+
     *m_streamOut << '<' << strTag;
 
     // Opening elements
     *m_streamOut << " class=\"" << escapeCssIdentifier(layout.styleName);
-    *m_streamOut << "\" style=\"" << layoutToCss(layout) << "\">";
+    *m_streamOut << "\"";
+
+    QString strStyle=layoutToCss(styleLayout,layout,false);
+    if (!strStyle.isEmpty())
+    {
+        *m_streamOut << " style=\"" << strStyle << "\"";
+    }
+    
+    *m_streamOut << ">";
 
     if ( 1==layout.formatData.text.verticalAlignment )
     {
@@ -402,7 +462,8 @@ void HtmlCssWorker::openParagraph(const QString& strTag, const LayoutData& layou
     }
 }
 
-void HtmlCssWorker::closeParagraph(const QString& strTag, const LayoutData& layout)
+void HtmlCssWorker::closeParagraph(const QString& strTag,
+    const LayoutData& layout)
 {
     if ( 2==layout.formatData.text.verticalAlignment )
     {
@@ -416,10 +477,10 @@ void HtmlCssWorker::closeParagraph(const QString& strTag, const LayoutData& layo
     *m_streamOut << "</" << strTag << ">\n";
 }
 
-void HtmlCssWorker::openSpan(const FormatData& format)
+void HtmlCssWorker::openSpan(const FormatData& formatOrigin, const FormatData& format)
 {
     *m_streamOut << "<span style=\"";
-    *m_streamOut << textFormatToCss(format.text);
+    *m_streamOut << textFormatToCss(formatOrigin.text,format.text,false);
     *m_streamOut << "\">"; // close span opening tag
 
     if ( 1==format.text.verticalAlignment )
@@ -432,7 +493,7 @@ void HtmlCssWorker::openSpan(const FormatData& format)
     }
 }
 
-void HtmlCssWorker::closeSpan(const FormatData& format)
+void HtmlCssWorker::closeSpan(const FormatData& formatOrigin, const FormatData& format)
 {
     if ( 2==format.text.verticalAlignment )
     {
@@ -494,11 +555,14 @@ bool HtmlCssWorker::doOpenStyles(void)
 
 bool HtmlCssWorker::doFullDefineStyle(LayoutData& layout)
 {
+    //Register style in the style map
+    m_styleMap[layout.styleName]=layout;
+    
     // We do not limit (anymore) any style to <h1> ... <h6>, because
     //   the style could be forced on <p> by the layout.
 
     *m_streamOut << "." << escapeCssIdentifier(layout.styleName);
-    *m_streamOut << "\n{\n  " << layoutToCss(layout) << "\n}\n";
+    *m_streamOut << "\n{\n  " << layoutToCss(layout,layout,true) << "\n}\n";
 
     return true;
 }

@@ -217,7 +217,8 @@ void HtmlBasicWorker::closeFormatData(const FormatData& format, const bool allow
     }
 }
 
-void HtmlBasicWorker::openParagraph(const QString& strTag, const LayoutData& layout)
+void HtmlBasicWorker::openParagraph(const QString& strTag, 
+    const LayoutData& layout)
 {
     *m_streamOut << '<' << strTag;
 
@@ -236,19 +237,20 @@ void HtmlBasicWorker::openParagraph(const QString& strTag, const LayoutData& lay
     openFormatData(layout.formatData,(strTag[0]!='h')); // Allow bold only if tag is not a heading!
 }
 
-void HtmlBasicWorker::closeParagraph(const QString& strTag, const LayoutData& layout)
+void HtmlBasicWorker::closeParagraph(const QString& strTag,
+    const LayoutData& layout)
 {
     closeFormatData(layout.formatData,(strTag[0]!='h')); // Allow bold only if tag is not a heading!
 
     *m_streamOut << "</" << strTag << ">\n";
 }
 
-void HtmlBasicWorker::openSpan(const FormatData& format)
+void HtmlBasicWorker::openSpan(const FormatData&, const FormatData& format)
 {
     openFormatData(format, true);
 }
 
-void HtmlBasicWorker::closeSpan(const FormatData& format)
+void HtmlBasicWorker::closeSpan(const FormatData&, const FormatData& format)
 {
     closeFormatData(format, true);
 }
