@@ -53,7 +53,8 @@
 #include "kwutils.h"
 #include "kwstyle.h"
 #include "autoformat.h"
-//#include "serialletter.h"
+#include "variable.h"
+#include "serialletter.h"
 #include "contents.h"
 #include "kwview.h"
 #include "kwfactory.h"
@@ -139,10 +140,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_lastStyle = 0L;
     frames.setAutoDelete( TRUE );
- //   variables.setAutoDelete( FALSE );
 
-//    slDataBase = new KWSerialLetterDataBase( this );
-//    slRecordNum = -1;
+    slDataBase = new KWSerialLetterDataBase( this );
+    slRecordNum = -1;
 
     spellCheck = FALSE;
     contents = new KWContents( this );
@@ -770,19 +770,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
     m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
-#if 0
-    if ( TRUE /*no variable formats were loaded*/) {
-        varFormats.clear();
-        varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );
-        varFormats.insert( VT_DATE_VAR, new KWVariableDateFormat() );
-        varFormats.insert( VT_TIME_FIX, new KWVariableTimeFormat() );
-        varFormats.insert( VT_TIME_VAR, new KWVariableTimeFormat() );
-        varFormats.insert( VT_PGNUM, new KWVariablePgNumFormat() );
-        varFormats.insert( VT_CUSTOM, new KWVariableCustomFormat() );
-        varFormats.insert( VT_SERIALLETTER, new KWVariableSerialLetterFormat() );
-        // ... and so on ...
-    }
-#endif
+    m_mapVariableFormats.clear();
 
     m_pages = 1;
 
@@ -2245,7 +2233,49 @@ void KWDocument::addImageRequest( const QString &filename, KWPictureFrameSet *fs
     imageRequests2.insert( filename, fs );
 }
 
-#if 0
+KWVariableFormat * KWDocument::variableFormat( int type )
+{
+    // Those can share the same format object
+    // A more flexible solution would be a conversion to VariableFormatType (currently unused)
+    if ( type == VT_DATE_FIX ) type = VT_DATE_VAR;
+    if ( type == VT_TIME_FIX ) type = VT_TIME_VAR;
+    // Look into the map
+    QMap<int,KWVariableFormat*>::Iterator it = m_mapVariableFormats.find( type );
+    if ( it != m_mapVariableFormats.end() )
+    {
+        return it.data();
+    }
+    else
+    {
+        KWVariableFormat * format = 0L;
+        // The formats are created on demand.
+        // TODO save those that have settings (e.g. pre/post for pgnum)
+        switch( type )
+        {
+            case VT_DATE_VAR:
+                format = new KWVariableDateFormat();
+                break;
+            case VT_TIME_VAR:
+                format = new KWVariableTimeFormat();
+                break;
+            case VT_PGNUM:
+                format = new KWVariablePgNumFormat();
+                break;
+            case VT_CUSTOM:
+                format = new KWVariableCustomFormat();
+                break;
+            case VT_SERIALLETTER:
+                format = new KWVariableSerialLetterFormat();
+                break;
+            default:
+                break;
+        }
+        if ( format )
+            m_mapVariableFormats.insert( (int)type, format );
+        return format;
+    }
+}
+
 /*================================================================*/
 void KWDocument::registerVariable( KWVariable *var )
 {
@@ -2294,7 +2324,6 @@ void KWDocument::setSerialLetterRecord( int r )
 {
     slRecordNum = r;
 }
-#endif
 
 /*================================================================*/
 void KWDocument::createContents()

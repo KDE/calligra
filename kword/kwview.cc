@@ -315,31 +315,24 @@ void KWView::setupActions()
     actionInsertVarDateFix = new KAction( i18n( "Date (&fix)" ), 0,
                                           this, SLOT( insertVariableDateFix() ),
                                           actionCollection(), "insert_var_datefix" );
-    actionInsertVarDateFix->setEnabled( false );
     actionInsertVarDate = new KAction( i18n( "&Date (variable)" ), 0,
                                        this, SLOT( insertVariableDateVar() ),
                                        actionCollection(), "insert_var_datevar" );
-    actionInsertVarDate->setEnabled( false );
     actionInsertVarTimeFix = new KAction( i18n( "Time (&fix)" ), 0,
                                           this, SLOT( insertVariableTimeFix() ),
                                           actionCollection(), "insert_var_timefix" );
-    actionInsertVarTimeFix->setEnabled( false );
     actionInsertVarTime = new KAction( i18n( "&Time (variable)" ), 0,
                                        this, SLOT( insertVariableTimeVar() ),
                                        actionCollection(), "insert_var_timevar" );
-    actionInsertVarTime->setEnabled( false );
     actionInsertVarPgNum = new KAction( i18n( "&Page Number" ), 0,
                                         this, SLOT( insertVariablePageNum() ),
                                         actionCollection(), "insert_var_pgnum" );
-    actionInsertVarPgNum->setEnabled( false );
     actionInsertVarCustom = new KAction( i18n( "&Custom..." ), 0,
                                          this, SLOT( insertVariableCustom() ),
                                          actionCollection(), "insert_var_custom" );
-    actionInsertVarCustom->setEnabled( false );
     actionInsertVarSerialLetter = new KAction( i18n( "&Serial Letter..." ), 0,
                                                this, SLOT( insertVariableSerialLetter() ),
                                                actionCollection(), "insert_var_serialletter" );
-    actionInsertVarSerialLetter->setEnabled( false );
 
     // ---------------- Tools actions
     actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
@@ -1191,13 +1184,10 @@ void KWView::editReconnectFrame()
 /*===============================================================*/
 void KWView::editCustomVars()
 {
-#if 0
-    KWVariableValueDia *dia = new KWVariableValueDia( this, doc->getVariables() );
-    dia->exec();
-    gui->canvasWidget()->recalcWholeText();
-    gui->canvasWidget()->repaintScreen( FALSE );
-    delete dia;
-#endif
+    KWCustomVariablesDia dia( this, doc->getVariables() );
+    dia.exec();
+    doc->layout();
+    doc->repaintAllViews();
 }
 
 /*===============================================================*/
@@ -1361,7 +1351,6 @@ void KWView::insertPicture(const QString &filename)
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertPicture( filename );
-
 }
 
 /*===============================================================*/
@@ -1396,10 +1385,9 @@ void KWView::insertFrameBreak()
 #if 0
     if ( gui->canvasWidget()->getTable() )
 	return;
-#endif
 
+    // boy what a hack
     QKeyEvent e(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,0,ControlButton);
-#if 0
     gui->canvasWidget()->keyPressEvent( &e );
 #endif
 }
@@ -1407,57 +1395,57 @@ void KWView::insertFrameBreak()
 /*===============================================================*/
 void KWView::insertVariableDateFix()
 {
-#if 0
-    gui->canvasWidget()->insertVariable( VT_DATE_FIX );
-#endif
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_DATE_FIX );
 }
 
 /*===============================================================*/
 void KWView::insertVariableDateVar()
 {
-#if 0
-    gui->canvasWidget()->insertVariable( VT_DATE_VAR );
-#endif
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_DATE_VAR );
 }
 
 /*===============================================================*/
 void KWView::insertVariableTimeFix()
 {
-#if 0
-    gui->canvasWidget()->insertVariable( VT_TIME_FIX );
-#endif
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_TIME_FIX );
 }
 
 /*===============================================================*/
 void KWView::insertVariableTimeVar()
 {
-#if 0
-    gui->canvasWidget()->insertVariable( VT_TIME_VAR );
-#endif
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_TIME_VAR );
 }
 
 /*===============================================================*/
 void KWView::insertVariablePageNum()
 {
-#if 0
-    gui->canvasWidget()->insertVariable( VT_PGNUM );
-#endif
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_PGNUM );
 }
 
 /*===============================================================*/
 void KWView::insertVariableCustom()
 {
-#if 0
-    gui->canvasWidget()->insertVariable( VT_CUSTOM );
-#endif
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_CUSTOM );
 }
 
 /*===============================================================*/
 void KWView::insertVariableSerialLetter()
 {
-#if 0
-    gui->canvasWidget()->insertVariable( VT_SERIALLETTER );
-#endif
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_SERIALLETTER );
 }
 
 /*===============================================================*/

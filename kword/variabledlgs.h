@@ -44,28 +44,30 @@ class KWVariableNameDia : public QDialog
     Q_OBJECT
 
 public:
-    KWVariableNameDia( QWidget *parent, QList<KWVariable> *vars );
+    // For KWSerialLetterVariableInsertDia
+    KWVariableNameDia( QWidget *parent );
+    // For kwview
+    KWVariableNameDia( QWidget *parent, const QList<KWVariable> &vars );
     QString getName() const;
 
 protected:
+    void init();
     void resizeEvent( QResizeEvent *e );
 
-    QList<KWVariable> *variables;
     QComboBox *names;
     QVBox *back;
 
 };
 
 /******************************************************************
- *
- * Class: KWVariableValueListItem
- *
+ * Class: KWCustomVariablesListItem
+ * Used by KWCustomVariablesDia
  ******************************************************************/
 
-class KWVariableValueListItem : public QListViewItem
+class KWCustomVariablesListItem : public QListViewItem
 {
 public:
-    KWVariableValueListItem( QListView *parent );
+    KWCustomVariablesListItem( QListView *parent );
 
     void setVariable( KWCustomVariable *v );
     KWCustomVariable *getVariable() const;
@@ -82,17 +84,16 @@ protected:
 };
 
 /******************************************************************
- *
- * Class: KWVariableValueList
- *
+ * Class: KWCustomVariablesList
+ * Used by KWCustomVariablesDia
  ******************************************************************/
 
-class KWVariableValueList : public QListView
+class KWCustomVariablesList : public QListView
 {
     Q_OBJECT
 
 public:
-    KWVariableValueList( QWidget *parent );
+    KWCustomVariablesList( QWidget *parent );
 
     void setValues();
     void updateItems();
@@ -104,25 +105,23 @@ protected slots:
 };
 
 /******************************************************************
- *
- * Class: KWVariableValueDia
- *
+ * Class: KWCustomVariablesDia
+ * This dialog allows to set the value of the custom variables.
  ******************************************************************/
 
-class KWVariableValueDia : public QDialog
+class KWCustomVariablesDia : public QDialog
 {
     Q_OBJECT
 
 public:
-    KWVariableValueDia( QWidget *parent, QList<KWVariable> *vars );
+    KWCustomVariablesDia( QWidget *parent, const QList<KWVariable> &variables );
 
 protected:
     void resizeEvent( QResizeEvent *e );
     void closeEvent( QCloseEvent *e );
 
-    QList<KWVariable> *variables;
     QVBox *back;
-    KWVariableValueList *list;
+    KWCustomVariablesList *list;
 
 };
 

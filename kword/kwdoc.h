@@ -39,6 +39,8 @@ class KWAutoFormat;
 class KFormulaDocument;
 class KCommand;
 class KCommandHistory;
+class KWVariable;
+class KWVariableFormat;
 
 #include <koDocument.h>
 #include <koGlobal.h>
@@ -262,35 +264,45 @@ public:
 
     void addCommand( KCommand * cmd );
 
-    //QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
-
 //    KWFootNoteManager &getFootNoteManager() { return footNoteManager; }
 //    void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
 //    KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }
 
     KWAutoFormat * getAutoFormat() { return m_autoFormat; }
 
-    //void setPageLayoutChanged( bool c ) { pglChanged = c; }
-
-    //bool getPageLayoutChanged() const { return pglChanged; }
-
+    // For KWTextImage
     void addImageRequest( const QString &filename, KWTextImage *img );
+    // For KWPictureFrameSet
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
 
-#if 0
+    /**
+     * Find or create a format for this type of variable
+     * (date, time etc.)
+     */
+    KWVariableFormat * variableFormat( int type );
+    /**
+     * A custom variable (i.e. value set by the user)
+     * was inserted into the text -> register it
+     */
     void registerVariable( KWVariable *var );
+    /**
+     * A variable was deleted -> unregister it
+     */
     void unregisterVariable( KWVariable *var );
-    QList<KWVariable> *getVariables() {
-        return &variables;
+    /**
+     * Returns the list of all variables. Used by the dialog.
+     */
+    const QList<KWVariable>& getVariables() const {
+        return variables;
     }
 
+    // For custom variables
     void setVariableValue( const QString &name, const QString &value );
     QString getVariableValue( const QString &name ) const;
 
     KWSerialLetterDataBase *getSerialLetterDataBase() const;
     int getSerialLetterRecord() const;
     void setSerialLetterRecord( int r );
-#endif
 
     bool onLineSpellCheck() const {
         return spellCheck;
@@ -443,8 +455,6 @@ protected:
     void loadFrameSets( QDomElement framesets );
     void loadStyleTemplates( QDomElement styles );
 
-    //void addStyleTemplate( KWStyle *style );
-
 private:
     QList<KWView> m_lstViews;
     QList<KWChild> m_lstChildren;
@@ -478,17 +488,17 @@ private:
     QString unit;
 
     KCommandHistory * m_commandHistory;
- //   QIntDict<KWVariableFormat> varFormats;
 //    KWFootNoteManager footNoteManager;
     KWAutoFormat * m_autoFormat;
 
     QString urlIntern;
-    //bool pglChanged;
 
     QStringList pixmapKeys, pixmapNames;
     QMap<QString, KWTextImage *> imageRequests;
     QMap<QString, KWPictureFrameSet *> imageRequests2;
- //   QList<KWVariable> variables;
+
+    QMap<int, KWVariableFormat*> m_mapVariableFormats;
+    QList<KWVariable> variables;
     QMap< QString, QString > varValues;
     KWSerialLetterDataBase *slDataBase;
     int slRecordNum;

@@ -37,6 +37,7 @@
 #include "serialletter.moc"
 #include "variabledlgs.h"
 #include "kwutils.h"
+#include "defs.h"
 
 /******************************************************************
  *
@@ -537,7 +538,7 @@ void KWSerialLetterEditor::changeRecord( int i )
 void KWSerialLetterEditor::addEntry()
 {
     KWVariableNameDia
-        *dia = new KWVariableNameDia( this, 0 );
+        *dia = new KWVariableNameDia( this );
     if ( dia->exec() == QDialog::Accepted ) {
         if ( db->getNumRecords() == 0 ) {
             first->setEnabled(true);

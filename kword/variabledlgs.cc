@@ -39,14 +39,32 @@
  ******************************************************************/
 
 /*================================================================*/
-KWVariableNameDia::KWVariableNameDia( QWidget *parent, QList<KWVariable> *vars )
-    : QDialog( parent, "", TRUE ), variables( vars )
+KWVariableNameDia::KWVariableNameDia( QWidget *parent )
+    : QDialog( parent, "", TRUE )
 {
-    if ( variables )
-        setCaption( i18n( "Variable Name" ) );
-    else
-        setCaption( i18n( "Entry Name" ) );
+    setCaption( i18n( "Entry Name" ) );
 
+    init();
+}
+
+
+KWVariableNameDia::KWVariableNameDia( QWidget *parent, const QList<KWVariable>& vars )
+    : QDialog( parent, "", TRUE )
+{
+    setCaption( i18n( "Variable Name" ) );
+
+    init();
+
+    QListIterator<KWVariable> it( vars );
+     for ( ; it.current() ; ++it ) {
+        KWVariable *var = it.current();
+        if ( var->getType() == VT_CUSTOM )
+            names->insertItem( ( (KWCustomVariable*) var )->getName(), -1 );
+    }
+}
+
+void KWVariableNameDia::init()
+{
     back = new QVBox( this );
     back->setSpacing( 5 );
     back->setMargin( 5 );
@@ -58,14 +76,6 @@ KWVariableNameDia::KWVariableNameDia( QWidget *parent, QList<KWVariable> *vars )
     l->setFixedSize( l->sizeHint() );
     names = new QComboBox( TRUE, row1 );
     names->setFocus();
-
-    if ( variables ) {
-        KWVariable *var = 0;
-        for ( var = variables->first(); var; var = variables->next() ) {
-            if ( var->getType() == VT_CUSTOM )
-                names->insertItem( ( (KWCustomVariable*) var )->getName(), -1 );
-        }
-    }
 
     KButtonBox *bb = new KButtonBox( back );
     bb->addStretch();
@@ -97,12 +107,12 @@ void KWVariableNameDia::resizeEvent( QResizeEvent *e )
 
 /******************************************************************
  *
- * Class: KWVariableValueListItem
+ * Class: KWCustomVariablesListItem
  *
  ******************************************************************/
 
 /*================================================================*/
-KWVariableValueListItem::KWVariableValueListItem( QListView *parent )
+KWCustomVariablesListItem::KWCustomVariablesListItem( QListView *parent )
     : QListViewItem( parent )
 {
     editWidget = new QLineEdit( listView()->viewport() );
@@ -110,7 +120,7 @@ KWVariableValueListItem::KWVariableValueListItem( QListView *parent )
 }
 
 /*================================================================*/
-void KWVariableValueListItem::setup()
+void KWCustomVariablesListItem::setup()
 {
     setHeight( QMAX( listView()->fontMetrics().height(),
                      editWidget->sizeHint().height() ) );
@@ -119,7 +129,7 @@ void KWVariableValueListItem::setup()
 }
 
 /*================================================================*/
-void KWVariableValueListItem::update()
+void KWCustomVariablesListItem::update()
 {
     editWidget->resize( listView()->header()->cellSize( 1 ), height() );
     listView()->moveChild( editWidget, listView()->header()->cellPos( 1 ),
@@ -128,7 +138,7 @@ void KWVariableValueListItem::update()
 }
 
 /*================================================================*/
-void KWVariableValueListItem::setVariable( KWCustomVariable *v )
+void KWCustomVariablesListItem::setVariable( KWCustomVariable *v )
 {
     var = v;
     editWidget->setText( var->getValue() );
@@ -136,26 +146,26 @@ void KWVariableValueListItem::setVariable( KWCustomVariable *v )
 }
 
 /*================================================================*/
-KWCustomVariable *KWVariableValueListItem::getVariable() const
+KWCustomVariable *KWCustomVariablesListItem::getVariable() const
 {
     return var;
 
 }
 
 /*================================================================*/
-void KWVariableValueListItem::applyValue()
+void KWCustomVariablesListItem::applyValue()
 {
     var->setValue( editWidget->text() );
 }
 
 /******************************************************************
  *
- * Class: KWVariableValueList
+ * Class: KWCustomVariablesList
  *
  ******************************************************************/
 
 /*================================================================*/
-KWVariableValueList::KWVariableValueList( QWidget *parent )
+KWCustomVariablesList::KWCustomVariablesList( QWidget *parent )
     : QListView( parent )
 {
     header()->setMovingEnabled( FALSE );
@@ -172,43 +182,43 @@ KWVariableValueList::KWVariableValueList( QWidget *parent )
 }
 
 /*================================================================*/
-void KWVariableValueList::setValues()
+void KWCustomVariablesList::setValues()
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
-        ( (KWVariableValueListItem *)it.current() )->applyValue();
+        ( (KWCustomVariablesListItem *)it.current() )->applyValue();
 }
 
 /*================================================================*/
-void KWVariableValueList::columnSizeChange( int c, int, int )
+void KWCustomVariablesList::columnSizeChange( int c, int, int )
 {
     if ( c == 0 || c == 1 )
         updateItems();
 }
 
 /*================================================================*/
-void KWVariableValueList::sectionClicked( int )
+void KWCustomVariablesList::sectionClicked( int )
 {
     updateItems();
 }
 
 /*================================================================*/
-void KWVariableValueList::updateItems()
+void KWCustomVariablesList::updateItems()
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
-        ( (KWVariableValueListItem*)it.current() )->update();
+        ( (KWCustomVariablesListItem*)it.current() )->update();
 }
 
 /******************************************************************
  *
- * Class: KWVariableValueDia
+ * Class: KWCustomVariablesDia
  *
  ******************************************************************/
 
 /*================================================================*/
-KWVariableValueDia::KWVariableValueDia( QWidget *parent, QList<KWVariable> *vars )
-    : QDialog( parent, "", TRUE ), variables( vars )
+KWCustomVariablesDia::KWCustomVariablesDia( QWidget *parent, const QList<KWVariable> &variables )
+    : QDialog( parent, "", TRUE )
 {
     setCaption( i18n( "Variable Value Editor" ) );
 
@@ -216,16 +226,17 @@ KWVariableValueDia::KWVariableValueDia( QWidget *parent, QList<KWVariable> *vars
     back->setSpacing( 5 );
     back->setMargin( 5 );
 
-    list = new KWVariableValueList( back );
+    list = new KWCustomVariablesList( back );
 
     QStringList lst;
-    KWVariable *var = 0;
-    for ( var = variables->first(); var; var = variables->next() ) {
+    QListIterator<KWVariable> it( variables );
+    for ( ; it.current() ; ++it ) {
+        KWVariable *var = it.current();
         if ( var->getType() == VT_CUSTOM ) {
             KWCustomVariable *v = (KWCustomVariable*)var;
             if ( !lst.contains( v->getName() ) ) {
                 lst.append( v->getName() );
-                KWVariableValueListItem *item = new KWVariableValueListItem( list );
+                KWCustomVariablesListItem *item = new KWCustomVariablesListItem( list );
                 item->setVariable( v );
             }
         }
@@ -233,18 +244,17 @@ KWVariableValueDia::KWVariableValueDia( QWidget *parent, QList<KWVariable> *vars
 
     resize( 600, 400 );
     list->updateItems();
-    list->updateItems();
 }
 
 /*================================================================*/
-void KWVariableValueDia::resizeEvent( QResizeEvent *e )
+void KWCustomVariablesDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );
 }
 
 /*================================================================*/
-void KWVariableValueDia::closeEvent( QCloseEvent *e )
+void KWCustomVariablesDia::closeEvent( QCloseEvent *e )
 {
     list->setValues();
     QDialog::closeEvent( e );

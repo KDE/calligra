@@ -30,6 +30,9 @@
 #include "kwstyle.h"
 #include "kwformat.h"
 #include "counter.h"
+#include "variable.h"
+#include "variabledlgs.h"
+#include "serialletter.h"
 #include <qclipboard.h>
 #include <qdragobject.h>
 #include <klocale.h>
@@ -2839,6 +2842,57 @@ void KWTextFrameSetEdit::insertPicture( const QString & file )
     cursor->parag()->insert( cursor->index(), QChar('@') /*whatever*/ );
     static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), custom, currentFormat );
     // TODO undo/redo support
+}
+
+void KWTextFrameSetEdit::insertVariable( int type )
+{
+    kdDebug() << "KWTextFrameSetEdit::insertVariable " << type << endl;
+    KWDocument * doc = frameSet()->kWordDocument();
+    KWVariableFormat * varFormat = doc->variableFormat( type );
+    if ( !varFormat )
+    {
+        kdWarning() << "No variable format found for type " << (int)type << endl;
+        return;
+    }
+    KWVariable * var = 0L;
+    switch ( type ) {
+        case VT_DATE_FIX: {
+            var = new KWDateVariable( textFrameSet(), TRUE, QDate::currentDate(), varFormat );
+        } break;
+        case VT_DATE_VAR: {
+            var = new KWDateVariable( textFrameSet(), FALSE, QDate::currentDate(), varFormat );
+        } break;
+        case VT_TIME_FIX: {
+            var = new KWTimeVariable( textFrameSet(), TRUE, QTime::currentTime(), varFormat );
+        } break;
+        case VT_TIME_VAR: {
+            var = new KWTimeVariable( textFrameSet(), FALSE, QTime::currentTime(), varFormat );
+        } break;
+        case VT_PGNUM: {
+            var = new KWPgNumVariable( textFrameSet(), varFormat );
+        } break;
+        case VT_CUSTOM: {
+            // Choose an existing variable
+            KWVariableNameDia dia( m_canvas, doc->getVariables() );
+            if ( dia.exec() == QDialog::Accepted )
+                var = new KWCustomVariable( textFrameSet(), dia.getName(), varFormat );
+            else
+                var = 0L;
+        } break;
+        case VT_SERIALLETTER: {
+            KWSerialLetterVariableInsertDia dia( m_canvas, doc->getSerialLetterDataBase() );
+            if ( dia.exec() == QDialog::Accepted )
+                var = new KWSerialLetterVariable( textFrameSet(), dia.getName(), varFormat );
+        } break;
+        default: break;
+    }
+    if ( var )
+    {
+        kdDebug() << "KWTextFrameSetEdit::insertVariable inserting into paragraph" << endl;
+        // TODO undo/redo support
+        cursor->parag()->insert( cursor->index(), QChar('&') /*whatever*/ );
+        static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), var, currentFormat );
+    }
 }
 
 // Update the GUI toolbar button etc. to reflect the current cursor position.

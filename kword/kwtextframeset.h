@@ -125,8 +125,7 @@ public:
 
     /** Selections ids */
     enum SelectionIds {
-        HighlightSelection = 1, // used to highlight during search/replace
-        VarsSelectionBegin = 20000  // 20000-32000 used for variables
+        HighlightSelection = 1 // used to highlight during search/replace
     };
 
     enum KeyboardActionPrivate { // keep in sync with QTextEdit
@@ -291,8 +290,9 @@ public:
     virtual void selectAll() { selectAll( true ); }
 
     void drawCursor( bool b );
-    void insertPicture( const QString & file );
 
+    void insertPicture( const QString & file );
+    void insertVariable( int type );
     void insertSpecialChar(QChar _c);
 
     void setBold(bool on);
