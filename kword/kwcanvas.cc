@@ -517,6 +517,8 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     // if a header/footer etc. Dont show the popup.
                     if((frame->getFrameSet() && frame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY))
                     {
+                        // ####### TODO show a popup that has "Configure Headers/Footers" in it,
+                        // which opens KoPageLayoutDia on the 3rd page ######
                         m_mousePressed = false;
                         return;
                     }
