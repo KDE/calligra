@@ -87,9 +87,13 @@ KWConfig::KWConfig( KWView* parent )
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
 
+#ifdef HAVE_LIBKSPELL2
   QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                         loadIcon("spellcheck") );
-  m_spellPage=new ConfigureSpellPage(parent, page);
+  m_spellPage = new ConfigureSpellPage(parent, page);
+#else
+  m_spellPage = 0;
+#endif
 
   QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
                               loadIcon("kformula") );
@@ -142,7 +146,7 @@ void KWConfig::openPage(int flags)
 void KWConfig::slotApply()
 {
     KMacroCommand *macro = 0L;
-    m_spellPage->apply();
+    if (m_spellPage) m_spellPage->apply();
     m_interfacePage->apply();
     m_pathPage->apply();
     KCommand * cmd = m_miscPage->apply();
@@ -178,7 +182,7 @@ void KWConfig::slotDefault()
         m_defaultDocPage->slotDefault();
         break;
     case 2:
-        m_spellPage->slotDefault();
+        if (m_spellPage) m_spellPage->slotDefault();
         break;
     case 3:
         m_formulaPage->slotDefault();
@@ -201,12 +205,15 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
 {
     m_pView=_view;
     config = KWFactory::global()->config();
+#ifdef HAVE_LIBKSPELL2
     m_spellConfigWidget = new ConfigWidget( _view->broker(), box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
+#endif
 }
 
 void ConfigureSpellPage::apply()
 {
+#ifdef HAVE_LIBKSPELL2
   KWDocument* doc = m_pView->kWordDocument();
 
   m_spellConfigWidget->save();
@@ -216,6 +223,7 @@ void ConfigureSpellPage::apply()
   //FIXME reactivate just if there are changes.
   doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );
   doc->reactivateBgSpellChecking();
+#endif
 }
 
 void ConfigureSpellPage::slotDefault()

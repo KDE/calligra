@@ -7265,10 +7265,12 @@ void KWView::slotChildActivated( bool a )
   KoView::slotChildActivated( a );
 }
 
+#ifdef HAVE_LIBKSPELL2
 Broker *KWView::broker() const
 {
     return m_broker;
 }
+#endif
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

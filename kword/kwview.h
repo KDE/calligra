@@ -121,10 +121,12 @@ public:
     bool viewFrameBorders() const { return m_viewFrameBorders; }
     void setViewFrameBorders(bool b);
 
+#ifdef HAVE_LIBKSPELL2
     /**
      * Returns the KWord global KSpell2 Broker object.
      */
     KSpell2::Broker *broker() const;
+#endif
 
     // Currently unused
     //bool viewTableGrid() const { return m_viewTableGrid; }
