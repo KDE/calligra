@@ -23,6 +23,7 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
+#include <qdrawutil.h>
 #include <qstyle.h>
 
 #include <kapplication.h>
@@ -88,7 +89,7 @@ public:
 TKToolBarButton::TKToolBarButton( const QString& icon, const QString& txt,
                                         QWidget* parent, const char* name,
                                         KInstance *instance )
-: QButton(parent,name)
+: QToolButton(parent,name)
 {
   d = new TKToolBarButtonPrivate;
   d->m_text = txt;
@@ -107,7 +108,7 @@ TKToolBarButton::TKToolBarButton( const QString& icon, const QString& txt,
 }
 
 TKToolBarButton::TKToolBarButton( const QPixmap& pixmap, const QString& txt, QWidget* parent, const char* name )
-: QButton(parent,name )
+: QToolButton(parent,name )
 {
   d = new TKToolBarButtonPrivate;
   d->m_text = txt;
@@ -172,8 +173,8 @@ void TKToolBarButton::setEnabled( bool enabled )
   if (isEnabled()==enabled)
     return;
 
-  QButton::setPixmap( (enabled ? defaultPixmap : disabledPixmap) );
-  QButton::setEnabled( enabled );
+  QToolButton::setPixmap( (enabled ? defaultPixmap : disabledPixmap) );
+  QToolButton::setEnabled( enabled );
 }
 
 void TKToolBarButton::setText( const QString& text)
@@ -233,19 +234,19 @@ void TKToolBarButton::setPixmap( const QPixmap &pixmap, bool generate )
       disabledPixmap = activePixmap;
   }
 
-  QButton::setPixmap( isEnabled() ? defaultPixmap : disabledPixmap );
+  QToolButton::setPixmap( isEnabled() ? defaultPixmap : disabledPixmap );
 }
 
 void TKToolBarButton::setDefaultPixmap( const QPixmap &pixmap )
 {
   defaultPixmap = pixmap;
-  QButton::setPixmap( isEnabled() ? defaultPixmap : disabledPixmap );
+  QToolButton::setPixmap( isEnabled() ? defaultPixmap : disabledPixmap );
 }
 
 void TKToolBarButton::setDisabledPixmap( const QPixmap &pixmap )
 {
   disabledPixmap = pixmap;
-  QButton::setPixmap( isEnabled() ? defaultPixmap : disabledPixmap );
+  QToolButton::setPixmap( isEnabled() ? defaultPixmap : disabledPixmap );
 }
 
 void TKToolBarButton::setPopup(QPopupMenu *p)
@@ -289,7 +290,7 @@ void TKToolBarButton::setAutoRaised(bool f)
 void TKToolBarButton::leaveEvent(QEvent *)
 {
   if (!d->m_isToggle && !(d->m_popup && d->m_popup->isVisible()) ) {
-    QButton::setPixmap(isEnabled() ? defaultPixmap : disabledPixmap);
+    QToolButton::setPixmap(isEnabled() ? defaultPixmap : disabledPixmap);
     if (d->m_autoRaised)
       setRaised(false);
   }
@@ -299,11 +300,11 @@ void TKToolBarButton::enterEvent(QEvent *)
 {
   if (!d->m_isToggle) {
     if (isEnabled()) {
-      QButton::setPixmap(activePixmap);
+      QToolButton::setPixmap(activePixmap);
       if (d->m_autoRaised)
         setRaised(true);
     } else {
-      QButton::setPixmap(disabledPixmap);
+      QToolButton::setPixmap(disabledPixmap);
     }
     repaint(false);
   }
@@ -375,9 +376,17 @@ void TKToolBarButton::drawButton( QPainter* p )
     {
         if (d->m_isPopup)
         {
-            style().drawControl( QStyle::CE_PushButton, p, this, QRect( 0, 0, width()-12, height() ), isEnabled() ? colorGroup() : palette().disabled() );
-            style().drawControl( QStyle::CE_PushButton, p, this, QRect( width()-13, 0, 13, height() ), isEnabled() ? colorGroup() : palette().disabled() );
+            QStyle::SFlags flags   = QStyle::Style_Default;
+            if (isEnabled()) 	flags |= QStyle::Style_Enabled;
+            if (isOn()) 		flags |= QStyle::Style_On;
+            if (d->m_isRaised)	flags |= QStyle::Style_Raised;
+            if (hasFocus())	flags |= QStyle::Style_HasFocus;
+
+            style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( 0, 0, width()-12, height() ), colorGroup(), flags, QStyle::SC_ToolButton );
+            style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( width()-13, 0, 13, height() ), colorGroup(), flags, QStyle::SC_ToolButton );
             style().drawItem( p, QRect( width()-13, 0, 13, height() ), AlignCenter, colorGroup(), isEnabled(), &arrow_pix, QString::null );
+            if ( d->m_isRaised )
+                qDrawShadeLine( p, width()-12, 0, width()-12, height(), colorGroup(), true );
             DRAW_PIXMAP_AND_TEXT
         } else {
             style().drawControl( QStyle::CE_PushButton, p, this, QRect( 0, 0, width(), height() ), isEnabled() ? colorGroup() : palette().disabled(), f );
@@ -395,9 +404,9 @@ void TKToolBarButton::paletteChange(const QPalette &)
 {
   makeDisabledPixmap();
   if ( !isEnabled() )
-    QButton::setPixmap( disabledPixmap );
+    QToolButton::setPixmap( disabledPixmap );
   else
-    QButton::setPixmap( defaultPixmap );
+    QToolButton::setPixmap( defaultPixmap );
   repaint(false);
 }
 
@@ -417,6 +426,16 @@ void TKToolBarButton::makeDisabledPixmap()
 
   KIconEffect effect;
   disabledPixmap = effect.apply(activePixmap, KIcon::Toolbar, KIcon::DisabledState);
+}
+
+QSize TKToolBarButton::sizeHint() const
+{
+    return minimumSize();
+}
+
+QSize TKToolBarButton::minimumSizeHint() const
+{
+    return minimumSize();
 }
 
 void TKToolBarButton::showMenu()

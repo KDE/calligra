@@ -22,7 +22,7 @@
 #include <tkaction.h>
 
 #include <qpixmap.h>
-#include <qbutton.h>
+#include <qtoolbutton.h>
 #include <kglobal.h>
 
 class KToolBar;
@@ -30,7 +30,7 @@ class KInstance;
 class QPopupMenu;
 class QPainter;
 
-class TKToolBarButton : public QButton
+class TKToolBarButton : public QToolButton
 { Q_OBJECT
 public:
   TKToolBarButton(const QString& icon, const QString& txt,
@@ -177,6 +177,9 @@ public:
   void setDelayedPopup(QPopupMenu *p, bool toggle = false);
 
   QPixmap getActivePixmap() const;
+
+  virtual QSize sizeHint() const;
+  virtual QSize minimumSizeHint() const;
 
 signals:
   void buttonClicked();
