@@ -116,10 +116,6 @@
                                     <name>text</name>
                                     <string>Center</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget row="1"  column="4"  rowspan="1"  colspan="2" >
                                 <class>QCheckBox</class>
@@ -131,10 +127,6 @@
                                     <name>text</name>
                                     <string>Right</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget row="1"  column="0"  rowspan="1"  colspan="2" >
                                 <class>QCheckBox</class>
@@ -145,10 +137,6 @@
                                 <property stdset="1">
                                     <name>text</name>
                                     <string>Left</string>
-                                </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget row="0"  column="2" >
@@ -274,10 +262,6 @@
                                     <name>text</name>
                                     <string>Top</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget row="0"  column="0" >
                                 <class>QLabel</class>
@@ -307,10 +291,6 @@
                                     <name>text</name>
                                     <string>Bottom</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget row="3"  column="0"  rowspan="2"  colspan="1" >
                                 <class>QLabel</class>
@@ -339,10 +319,6 @@
                                 <property stdset="1">
                                     <name>text</name>
                                     <string>Center</string>
-                                </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget row="2"  column="0" >
@@ -496,10 +472,6 @@
                                     <name>text</name>
                                     <string>Left</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget row="1"  column="1" >
                                 <class>QCheckBox</class>
@@ -510,10 +482,6 @@
                                 <property stdset="1">
                                     <name>text</name>
                                     <string>Center</string>
-                                </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget row="0"  column="0" >
@@ -548,10 +516,6 @@
                                     <name>text</name>
                                     <string>Spacing</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget row="0"  column="3" >
                                 <class>QLabel</class>
@@ -573,10 +537,6 @@
                                 <property stdset="1">
                                     <name>text</name>
                                     <string>Right</string>
-                                </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
                                 </property>
                             </widget>
                         </grid>
@@ -681,10 +641,6 @@
                                     <name>text</name>
                                     <string>Center</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget row="1"  column="0" >
                                 <class>QLabel</class>
@@ -706,10 +662,6 @@
                                 <property stdset="1">
                                     <name>text</name>
                                     <string>Top</string>
-                                </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget row="2"  column="0" >
@@ -744,10 +696,6 @@
                                     <name>text</name>
                                     <string>Bottom</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
-                                </property>
                             </widget>
                             <widget row="2"  column="1" >
                                 <class>QCheckBox</class>
@@ -758,10 +706,6 @@
                                 <property stdset="1">
                                     <name>text</name>
                                     <string>Spacing</string>
-                                </property>
-                                <property stdset="1">
-                                    <name>autoResize</name>
-                                    <bool>true</bool>
                                 </property>
                             </widget>
                         </grid>
