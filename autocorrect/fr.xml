@@ -104,6 +104,7 @@
   <item find="ajourd'hui" replace="aujourd'hui" />
   <item find="algérie" replace="Algérie" />
   <item find="allemagne" replace="Allemagne" />
+  <item find="aller de paire" replace="aller de pair" />
   <item find="aller entrain" replace="aller en train" />
   <item find="allieurs" replace="ailleurs" />
   <item find="allo" replace="allô" />
@@ -174,6 +175,9 @@
   <item find="au dessus" replace="au-dessus" />
   <item find="au devant" replace="au-devant" />
   <item find="au dépens" replace="aux dépens" />
+  <item find="au grès de" replace="au gré de" />
+  <item find="au grès des" replace="au gré des" />
+  <item find="au grès du" replace="au gré du" />
   <item find="au moment ou" replace="au moment où" />
   <item find="au-dela" replace="au-delà" />
   <item find="aucunes" replace="aucune" />
@@ -253,6 +257,9 @@
   <item find="bétises" replace="bêtises" />
   <item find="c'est a vous" replace="c'est à vous" />
   <item find="c'est à dire" replace="c'est-à-dire" />
+  <item find="c'est à-dire" replace="c'est-à-dire" />
+  <item find="c'est-a-dire" replace="c'est-à-dire" />
+  <item find="c'est-à dire" replace="c'est-à-dire" />
   <item find="c'st" replace="c'est" />
   <item find="c.à.d." replace="c.-à-d." />
   <item find="cable" replace="câble" />
@@ -377,6 +384,8 @@
   <item find="des on dit" replace="des on-dit" />
   <item find="dexu" replace="deux" />
   <item find="deça" replace="deçà" />
+  <item find="différend de" replace="différent de" />
+  <item find="différend du" replace="différent du" />
   <item find="dilemne" replace="dilemme" />
   <item find="diner" replace="dîner" />
   <item find="diplome" replace="diplôme" />
@@ -443,6 +452,7 @@
   <item find="est choisit" replace="est choisi" />
   <item find="est conçut" replace="est conçu" />
   <item find="est définit" replace="est défini" />
+  <item find="est faut" replace="est faux" />
   <item find="est fournit" replace="est fourni" />
   <item find="est suffisent" replace="est suffisant" />
   <item find="est-ce-que" replace="est-ce que" />
@@ -931,8 +941,11 @@
   <item find="quand à" replace="quant à" />
   <item find="quand-même" replace="quand même" />
   <item find="quatres" replace="quatre" />
+  <item find="que que soie" replace="quel que soit" />
   <item find="que un" replace="qu'un" />
   <item find="que une" replace="qu'une" />
+  <item find="quel que soie" replace="quel que soit" />
+  <item find="quelle que soie" replace="quelle que soit" />
   <item find="quelque soit" replace="quel que soit" />
   <item find="quitance" replace="quittance" />
   <item find="quitances" replace="quittances" />
@@ -1082,6 +1095,7 @@
   <item find="toujour" replace="toujours" />
   <item find="tout a fait" replace="tout à fait" />
   <item find="tout puissant" replace="tout-puissant" />
+  <item find="tout à fais" replace="tout à fait" />
   <item find="traine" replace="traîne" />
   <item find="trainer" replace="traîner" />
   <item find="trainé" replace="traîné" />
@@ -1151,6 +1165,7 @@
   <item find="utilsateurs" replace="utilisateurs" />
   <item find="utilser" replace="utiliser" />
   <item find="utliser" replace="utiliser" />
+  <item find="va de paire" replace="va de pair" />
   <item find="va et vient" replace="va-et-vient" />
   <item find="va nu pieds" replace="va-nu-pieds" />
   <item find="valloir" replace="valoir" />
@@ -1175,6 +1190,7 @@
   <item find="À pirori" replace="A priori" />
   <item find="À posteriori" replace="A posteriori" />
   <item find="À priori" replace="A priori" />
+  <item find="à coté" replace="à côté" />
   <item find="à peu pré" replace="à peu près" />
   <item find="à peu prés" replace="à peu près" />
   <item find="à peu prêt" replace="à peu près" />
@@ -1262,8 +1278,8 @@
   <word exception="MT" />
  </TwoUpperLetterExceptions>
  <SuperScript>
-  <superscript find="1ier" super="ier" />
-  <superscript find="2ième" super="ième" />
+  <superscript super="ier" find="1ier" />
+  <superscript super="ième" find="2ième" />
  </SuperScript>
  <DoubleQuote>
   <doublequote begin="«" end="»" />
