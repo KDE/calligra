@@ -172,8 +172,8 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     QPainter *painter = 0;
     // Those three rects are in pixels, in the document coordinates (0,0 == topleft of first parag)
     QRect rect = parag->pixelRect( zoomHandler ); // the parag rect
-    rect.rRight() += sx;
-    rect.rBottom() += sy;
+    rect.rRight() += QABS( sx );
+    rect.rBottom() += QABS( sy);
 
     int offsetY = 0;
     // Start painting from a given line number. Don't know how to make that work

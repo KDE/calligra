@@ -202,12 +202,18 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
             if ( rtl )
                 prefix.prepend( ' ' /*the space before the bullet in RTL mode*/ );
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height );
+            int posY =y + base - format->offsetFromBaseLine();
+            //we must move to bottom text because we create
+            //shadow to 'top'.
+            if ( shadowY( zh ) < 0)
+                posY -=shadowY( zh );
 
-            p->drawText( xLeft, y + base - format->offsetFromBaseLine(), prefix );
+            p->drawText( xLeft, posY, prefix );
         }
 
         QRect er( xBullet + (rtl ? width : 0), y + height / 2 - width / 2, width, width );
         // Draw the bullet.
+        int posY = 0;
         switch ( m_layout.counter->style() )
         {
             case KoParagCounter::STYLE_DISCBULLET:
@@ -235,7 +241,13 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
                 }
                 KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y, height );
 
-                p->drawText( xBullet, y + base- format->offsetFromBaseLine(), m_layout.counter->customBulletCharacter() );
+                posY =y + base- format->offsetFromBaseLine();
+                //we must move to bottom text because we create
+                //shadow to 'top'.
+                if ( shadowY( zh ) < 0)
+                    posY -=shadowY( zh );
+
+                p->drawText( xBullet, posY, m_layout.counter->customBulletCharacter() );
                 break;
             default:
                 break;
@@ -249,7 +261,13 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height );
 
-            p->drawText( xBullet + width, y + base- format->offsetFromBaseLine(), suffix, -1 );
+            int posY =y + base- format->offsetFromBaseLine();
+            //we must move to bottom text because we create
+            //shadow to 'top'.
+            if ( shadowY( zh ) < 0)
+                posY -=shadowY( zh );
+
+            p->drawText( xBullet + width, posY, suffix, -1 );
         }
     }
     else
@@ -264,7 +282,13 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         {
             counterText += ' ' /*the space after the bullet (before in RTL mode)*/;
 
-            p->drawText( xLeft, y + base- format->offsetFromBaseLine(), counterText, -1 );
+            int posY =y + base - format->offsetFromBaseLine();
+            //we must move to bottom text because we create
+            //shadow to 'top'.
+            if ( shadowY( zh ) < 0)
+                posY -=shadowY( zh );
+
+            p->drawText( xLeft, posY , counterText, -1 );
         }
     }
     p->restore();
@@ -328,7 +352,7 @@ int KoTextParag::lineSpacing( int line ) const
         while ( line-- > 0 )
             ++it;
         int height = ( *it )->h;
-        //kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
+        kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
 
         if ( m_layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
         {
@@ -546,7 +570,12 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
 	if ( lastFormat->vAlign() == KoTextFormat::AlignNormal ) {
-	    painter.drawText( startX, lastY + baseLine - lastFormat->offsetFromBaseLine(), str, start, len, dir );
+            int posY =lastY + baseLine - lastFormat->offsetFromBaseLine();
+            //we must move to bottom text because we create
+            //shadow to 'top'.
+            if ( shadowY( zh ) < 0)
+                posY -=shadowY( zh );
+	    painter.drawText( startX, posY, str, start, len, dir );
 #ifdef BIDI_DEBUG
 	    painter.save();
 	    painter.setPen ( Qt::red );
@@ -562,9 +591,19 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.restore();
 #endif
 	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSuperScript ) {
-	    painter.drawText( startX, lastY + baseLine - ( painter.fontMetrics().height() / 2 )-lastFormat->offsetFromBaseLine(), str, start, len, dir );
+            int posY =baseLine - ( painter.fontMetrics().height() / 2 )-lastFormat->offsetFromBaseLine();
+            //we must move to bottom text because we create
+            //shadow to 'top'.
+            if ( shadowY( zh ) < 0)
+                posY -=shadowY( zh );
+	    painter.drawText( startX, posY, str, start, len, dir );
 	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSubScript ) {
-	    painter.drawText( startX, lastY + baseLine + ( painter.fontMetrics().height() / 6 )-lastFormat->offsetFromBaseLine(), str, start, len, dir );
+            int posY =lastY + baseLine + ( painter.fontMetrics().height() / 6 )-lastFormat->offsetFromBaseLine();
+            //we must move to bottom text because we create
+            //shadow to 'top'.
+            if ( shadowY( zh ) < 0)
+                posY -=shadowY( zh );
+	    painter.drawText( startX, posY, str, start, len, dir );
 	}
     }
     if ( str[ start ] == '\t' && m_tabCache.contains( start ) ) {
