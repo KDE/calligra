@@ -200,6 +200,13 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     delete oldRootView;
 }
 
+void KoMainWindow::setRootDocumentDirect( KoDocument *doc )
+{
+  d->m_rootDoc = doc;
+  // maybe we want to add the KoView as parameter and set it into
+  // d->m_rootView but it doesn't seem used at all ?!? (David)
+}
+
 void KoMainWindow::updateCaption()
 {
   kdDebug(30003) << "KoMainWindow::updateCaption()" << endl;

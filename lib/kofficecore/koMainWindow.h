@@ -59,6 +59,10 @@ public:
      */
     ~KoMainWindow();
 
+    /**
+     * Called when a document is assigned to this mainwindow.
+     * This creates a view for this document, makes it the active part, etc.
+     */
     virtual void setRootDocument( KoDocument *doc );
 
     /**
@@ -163,6 +167,13 @@ public slots:
     virtual void slotHelpAbout();
 
 protected:
+
+    /**
+     * An alternative to @ref setRootDocument, which simply
+     * store the root document but does nothing to it - don't
+     * use this, it's special for KoShell.
+     */
+    void setRootDocumentDirect( KoDocument *doc );
 
     /**
      *  Closes all documents.
