@@ -35,7 +35,6 @@
 #include <qtextstream.h>
 
 #include <assert.h>
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -297,9 +296,9 @@ void KoFilterManager::export( const char *_tmpFile, const char* _url, const char
     fread( p, 1, size, f );
     fclose( f );
 
-    
+
     data.length( size );
-    for( CORBA::ULong l = 0; l < size; l++ ) 
+    for( CORBA::ULong l = 0; l < size; l++ )
     {
         // HACK....
         if ( p[ l ] == 0 )
@@ -309,7 +308,7 @@ void KoFilterManager::export( const char *_tmpFile, const char* _url, const char
 
 
     delete []p;
-    
+
     KOffice::FilterFactory_var factory;
     factory = KOffice::FilterFactory::_narrow( vec[0].reference );
     assert( !CORBA::is_nil( factory ) );

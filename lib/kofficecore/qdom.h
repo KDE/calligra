@@ -404,12 +404,12 @@ class QDomCharacterData;
     QPen toPen() const;
     QSize toSize() const;
     QPoint toPoint() const;
-    QWidget* toWidget( QWidget* parent = 0 ) const;
-    QLayout* toLayout( QWidget* parent ) const;
-    QLayout* toLayout( QLayout* parent, QWidget* mainwidget = 0 ) const;
+//     QWidget* toWidget( QWidget* parent = 0 ) const;
+//     QLayout* toLayout( QWidget* parent ) const;
+//     QLayout* toLayout( QLayout* parent, QWidget* mainwidget = 0 ) const;
 
-    QVariant property( const QString& name, QVariant::Type ) const;
-    void setProperty( const QString& name, const QVariant& prop );
+//     QVariant property( const QString& name, QVariant::Type ) const;
+//     void setProperty( const QString& name, const QVariant& prop );
 
     QString text() const;
 
@@ -456,7 +456,7 @@ class QDomCharacterData;
     // virtual QDomNode cloneNode( bool deep) const;
     virtual bool isComment() const;
 
-  private:    
+  private:
     QDomComment( QDOM_CommentPrivate* );
 
     friend class QDomDocument;
