@@ -5,5 +5,20 @@ if test -z "$LIBART_LIBS"; then
   echo "http://svg.kde.org/download.html"
   echo ""
   all_tests=bad
-fi
+else
+  if test -z "$FONTCONFIG_LIBS"; then
+    echo ""
+    echo "You're missing fontconfig 1.0.1 or newer. karbon will not have text support."
+    echo "You can download fontconfig from http://fontconfig.org/"
+    echo ""
+    all_tests=bad
+  fi
 
+  if test -z "$LIBFREETYPE_LIBS"; then
+    echo ""
+    echo "You're missing libfreetype 5.0 or newer. karbon will not have text support."
+    echo "You can download libfreetype from http://www.freetype.org/"
+    echo ""
+    all_tests=bad
+  fi
+fi
