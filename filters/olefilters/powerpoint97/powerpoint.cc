@@ -1043,11 +1043,19 @@ void Powerpoint::walk(Q_UINT32 bytes, QDataStream &operands)
     {
         operands >> op.opcode.info >> op.type >> op.length;
 
+        // If we get some duff data, protect ourselves.
+        if (length + op.length + 8 > bytes)
+        {
+            op.length = bytes - length - 8;
+        }
+        length += op.length + 8;
+
         // Package the arguments...
 
         invokeHandler(op, op.length, operands);
-        length += op.length + 8;
     }
+
+    // Eat unexpected data that the caller may expect us to consume.
     skip(bytes - length, operands);
 }
 

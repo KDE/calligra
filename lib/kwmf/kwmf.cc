@@ -916,14 +916,26 @@ void KWmf::walk(
     {
         operands >> wordCount;
         operands >> opcode;
+
+        // If we get some duff data, protect ourselves.
+        if (length + wordCount > words)
+        {
+            wordCount = words - length;
+        }
+        length += wordCount;
         if (opcode == 0)
+        {
+            // This appears to be an EOF marker.
             break;
+        }
 
         // Package the arguments...
 
         invokeHandler(opcode, wordCount - 3, operands);
-        length += wordCount;
     }
+
+    // Eat unexpected data that the caller may expect us to consume.
+    skip(words - length, operands);
 }
 
 KWmf::DrawContext::DrawContext()
