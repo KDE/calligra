@@ -27,7 +27,7 @@
 #include "koshell_shell.h"
 
 static const char* description=I18N_NOOP("KOffice Workspace");
-static const char* version="1.2 Beta2";
+static const char* version="1.2 RC1";
 
 int main( int argc, char **argv )
 {
@@ -42,9 +42,9 @@ int main( int argc, char **argv )
   //KCmdLineArgs::addCmdLineOptions( options );
 
   KoApplication app;
-  
+
   KoShellWindow *shell = new KoShellWindow;
-  
+
   shell->show();
 
   return app.exec();
