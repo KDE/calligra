@@ -63,6 +63,8 @@ public:
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
+	void transform( const QWMatrix& m );
+
 private:
 	VGradientType m_type;
 	VGradientSpreadMethod m_spreadMethod;

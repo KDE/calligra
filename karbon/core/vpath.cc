@@ -353,6 +353,10 @@ VPath::transform( const QWMatrix& m )
 	{
 		itr.current()->transform( m );
 	}
+	if( m_stroke->type() == stroke_gradient )
+		m_stroke->gradient().transform( m );
+	if( m_fill->type() == fill_gradient )
+		m_fill->gradient().transform( m );
 }
 
 const KoRect&

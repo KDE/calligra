@@ -79,3 +79,11 @@ VGradient::load( const QDomElement& element )
 	}
 }
 
+void
+VGradient::transform( const QWMatrix &m )
+{
+	m_origin = m_origin.transform( m );	
+	m_vector = m_vector.transform( m );	
+}
+
+
