@@ -192,20 +192,8 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         m_currentFrameSetEdit->focusOutEvent();
     m_printing = true;
     KWViewMode *viewMode = new KWViewModePrint( m_doc );
-    //use page specify in kdeprint dialogbox
-    QValueList<int> pageList=printer->pageList();
-    int from = printer->fromPage();
-    int to = printer->toPage();
-    kdDebug(32001) << "KWCanvas::print from=" << from << " to=" << to << endl;
-    /*
-    if ( !from && !to ) // 0, 0 means everything
-    {
-        from = printer->minPage();
-        to = printer->maxPage();
-    }
-    for ( int i = from; i <= to; i++ )
-        pageList.append( i );
-    */
+    // Use page list specified in kdeprint dialogbox
+    QValueList<int> pageList = printer->pageList();
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               pageList.count() + 1, this );
     int j = 0;
@@ -1551,19 +1539,27 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
         return;
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-    m_mousePressed = true; // needed for the dbl-click + move feature.
     switch ( m_mouseMode ) {
         case MM_EDIT:
             if ( m_currentFrameSetEdit )
-                m_currentFrameSetEdit->mouseDoubleClickEvent( e, normalPoint, docPoint );
-/* disable it otherwise we can edit embedded object
-  else
             {
-                editFrameProperties();
+                m_mousePressed = true; // needed for the dbl-click + move feature.
+                m_scrollTimer->start( 50 );
+                m_currentFrameSetEdit->mouseDoubleClickEvent( e, normalPoint, docPoint );
+            }
+            else
+            {
+                // Double-click on an embedded object should edit it, not pop up the frame dialog
+                // So we have to test for that.
+                QPtrList<KWFrame> frames = m_doc->getSelectedFrames();
+                bool isPartFrameSet = frames.count() == 1 && frames.first()->frameSet()->type() == FT_PART;
+
+                if ( !isPartFrameSet )
+                    editFrameProperties();
+                // KWChild::hitTest and KWView::slotChildActivated take care of embedded objects
                 m_mousePressed = false;
             }
             break;
-*/
         default:
             break;
     }
@@ -2098,6 +2094,7 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
     //active header/footer when it's possible
+    // DF: what is this code doing here?
     if ( fs->isAHeader() && !m_doc->isHeaderVisible() && !(viewMode()->type()=="ModeText"))
         m_doc->setHeaderVisible( true );
     if ( fs->isAFooter() && !m_doc->isFooterVisible() && !(viewMode()->type()=="ModeText"))
@@ -2449,9 +2446,6 @@ void KWCanvas::updateRulerOffsets( int cx, int cy )
 
 bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 {
-    if ( !o || !e )
-        return TRUE;
-
     if ( o == this || o == viewport() ) {
 
         if(m_currentFrameSetEdit && o == this )
@@ -2465,7 +2459,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 		//  kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
-                return TRUE;
+                break;
             case QEvent::FocusOut:
 		//  kdDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
@@ -2473,7 +2467,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 if ( m_scrollTimer->isActive() )
                     m_scrollTimer->stop();
                 m_mousePressed = false;
-                return TRUE;
+                break;
             case QEvent::AccelOverride: // was part of KeyPress - changed due to kdelibs BUG!
             {
 		//  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
@@ -2575,8 +2569,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 }
             }
             break;
-            default:
-                break;
+        default:
+            break;
         }
     }
     return QScrollView::eventFilter( o, e );
@@ -2605,7 +2599,7 @@ void KWCanvas::printRTDebug( int info )
 {
     KWTextFrameSet * textfs = 0L;
     if ( m_currentFrameSetEdit )
-        textfs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
+        textfs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->currentTextEdit()->frameSet());
     if ( !textfs )
         textfs = dynamic_cast<KWTextFrameSet *>(m_doc->frameSet( 0 ));
     if ( textfs )
