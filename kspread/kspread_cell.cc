@@ -303,10 +303,6 @@ void KSpreadCell::unobscure()
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 {
-
-  kdDebug(36001) << "clicked" << util_cellName(m_iColumn, m_iRow) << " and = "
-                 << m_strOutText << endl;
-
   if ( m_style == KSpreadCell::ST_Normal )
     return;
   else if ( m_style == KSpreadCell::ST_Select )
@@ -2442,8 +2438,8 @@ void KSpreadCell::paintCellBorders(QPainter& painter, QPoint corner,
     paintBottom = m_pObscuringCell->extraYCells() == yDiff;
   }
 
-  paintRight = paintRight && extraXCells() == 0;
-  paintBottom = paintBottom && extraYCells() == 0;
+  paintRight = paintRight && (extraXCells() == 0);
+  paintBottom = paintBottom && (extraYCells() == 0);
 
 
   int top_offset = 0;
@@ -2489,7 +2485,7 @@ void KSpreadCell::paintCellBorders(QPainter& painter, QPoint corner,
 
     top_offset = top_pen.width() - ( top_pen.width() / 2 );
   }
-  if ( bottom_pen.style() != Qt::NoPen &&paintBottom )
+  if ( bottom_pen.style() != Qt::NoPen && paintBottom )
   {
     painter.setPen( bottom_pen );
     painter.drawLine( corner.x(), height + corner.y(), corner.x() + width,
@@ -2967,26 +2963,6 @@ void KSpreadCell::setBottomBorderPen( const QPen& p )
 
 const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
 {
-    if ( m_pObscuringCell )
-    {
-        // Is this cell at the right border of the "big" joined cell ?
-        // If not then there is no right border.
-        if ( _col != (m_pObscuringCell->column() + m_pObscuringCell->extraXCells()) )
-            return m_pTable->emptyPen();
-
-        // Ask the obscuring cell for a rigth border
-        if ( m_pObscuringCell->hasProperty( PRightBorder ) )
-            return m_pObscuringCell->rightBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
-
-        // Ask the cell on the right
-        if ( _col < KS_colMax ) {
-            KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
-            if ( cell->hasProperty( PLeftBorder ) )
-                return cell->leftBorderPen( _col + 1, _row );
-        }
-
-        return m_pTable->emptyPen();
-    }
 
     if ( !hasProperty( PRightBorder ) && ( _col < KS_colMax ) )
     {
@@ -3000,25 +2976,6 @@ const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
 
 const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
 {
-    if ( m_pObscuringCell )
-    {
-        // Is this cell at the left border of the "big" joined cell ?
-        // If not then there is no left border.
-        if ( _col != m_pObscuringCell->column() )
-            return m_pTable->emptyPen();
-
-        // Ask the obscuring cell for a left border
-        if ( m_pObscuringCell->hasProperty( PLeftBorder ) )
-            return m_pObscuringCell->leftBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
-
-        // Ask the cell on the left
-        KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
-        if ( cell->hasProperty( PRightBorder ) )
-            return cell->rightBorderPen( _col - 1, _row );
-
-        return m_pTable->emptyPen();
-    }
-
     if ( !hasProperty( PLeftBorder ) )
     {
         KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
@@ -3031,27 +2988,6 @@ const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
 
 const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
 {
-    if ( m_pObscuringCell )
-    {
-        // Is this cell at the bottom border of the "big" joined cell ?
-        // If not then there is no bottom border.
-        if ( _row != m_pObscuringCell->row() + m_pObscuringCell->extraYCells() )
-            return m_pTable->emptyPen();
-
-        // Ask the obscuring cell for a bottom border
-        if ( m_pObscuringCell->hasProperty( PBottomBorder ) )
-            return m_pObscuringCell->bottomBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
-
-        // Ask the cell below
-        if ( _row < KS_rowMax ) {
-            KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
-            if ( cell->hasProperty( PTopBorder ) )
-                return cell->topBorderPen( _col, _row + 1 );
-        }
-
-        return m_pTable->emptyPen();
-    }
-
     if ( !hasProperty( PBottomBorder ) && ( _row < KS_rowMax ) )
     {
         KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
@@ -3064,24 +3000,6 @@ const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
 
 const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
 {
-    if ( m_pObscuringCell )
-    {
-        // Is this cell at the top border of the "big" joined cell ?
-        // If not then there is no top border.
-        if ( _row != m_pObscuringCell->row() )
-            return m_pTable->emptyPen();
-
-        // Ask the obscuring cell for a top border
-        if ( m_pObscuringCell->hasProperty( PTopBorder ) )
-            return m_pObscuringCell->topBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
-
-        // Ask the cell above
-        KSpreadCell * cell = m_pTable->cellAt( _col, _row - 1 );
-        if ( cell->hasProperty( PBottomBorder ) )
-            return cell->bottomBorderPen( _col, _row - 1 );
-
-        return m_pTable->emptyPen();
-    }
 
     if ( !hasProperty( PTopBorder ) )
     {
