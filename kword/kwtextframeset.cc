@@ -178,7 +178,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
                 QTextParag * lastFormatted = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor, resetChanged );
                 QTextParag * lastDrawn = lastFormatted->prev(); // tricky, see QTextDocument::draw
-                if ( onlyChanged && resetChanged && lastDrawn->rect().bottom() > r.bottom() )
+                if ( onlyChanged && resetChanged && lastDrawn && lastDrawn->rect().bottom() > r.bottom() )
                 {
                   lastDrawn->setChanged( true ); // This paragraph has a bit in the next frame too !
                 }
