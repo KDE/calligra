@@ -51,9 +51,9 @@
   <superscript find="othernb" super="o" />
  </SuperScript>
  <DoubleQuote>
-  <doublequote begin="&#201C;" end="&#201D;" />
+  <doublequote begin="&#8220;" end="&#8221;" />
  </DoubleQuote>
  <SimpleQuote>
-  <simplequote begin="&#2018;" end="&#2019;" />
+  <simplequote begin="&#8216;" end="&#8217;" />
  </SimpleQuote>
 </Word>
