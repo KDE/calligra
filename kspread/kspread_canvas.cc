@@ -535,6 +535,8 @@ void KSpreadCanvas::scrollToCell(QPoint location)
      but I suppose that's ok for now.
   */
   KSpreadCell* cell = table->cellAt(location.x(), location.y(), true);
+  Q_UNUSED(cell);
+
   int xpos = table->columnPos( location.x(), this );
   int ypos = table->rowPos( location.y(), this );
 
@@ -2356,14 +2358,14 @@ void KSpreadCanvas::updateChooseRect(QPoint newMarker, QPoint newAnchor)
 
     if( m_chooseStartTable != table )
     {
-      if ( m_chooseMarker != m_chooseAnchor )
+      if ( newMarker == newAnchor )
         name_cell = util_cellName( table, newChooseRect.left(), newChooseRect.top() );
       else
         name_cell = util_rangeName( table, newChooseRect );
     }
     else
     {
-      if ( m_chooseMarker != m_chooseAnchor )
+      if ( newMarker == newAnchor )
         name_cell = util_cellName( newChooseRect.left(), newChooseRect.top() );
       else
         name_cell = util_rangeName( newChooseRect );

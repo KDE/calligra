@@ -410,10 +410,6 @@ private:
      */
     KSpreadTable* m_chooseStartTable;
 
-    QPoint m_chooseMarker;
-    QPoint m_chooseAnchor;
-    QPoint m_chooseCursor;
-
     /**
      * @see #setLastEditorWithFocus
      * @see #lastEditorWithFocus
