@@ -36,7 +36,9 @@
 VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
 	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
 {
-	m_selection = document() ? document()->selection()->clone() : 0L;
+	m_selection = ( document() && document()->selection() )
+		? document()->selection()->clone()
+		: new VSelection();
 
 	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Transform Object" ) );
@@ -46,18 +48,23 @@ VTransformCmd::VTransformCmd( VDocument *doc, const QString& name, const QString
 		: VCommand( doc, name, icon )
 {
 	m_selection = ( document() && document()->selection() )
-		? new VSelection( *document()->selection() )
+		? document()->selection()->clone()
 		: new VSelection();
 }
 
 VTransformCmd::~VTransformCmd()
 {
 	delete( m_selection );
+	m_selection = 0L;
 }
 
 void
 VTransformCmd::execute()
 {
+	if( !m_selection )
+		m_selection = ( document() && document()->selection() )
+			? document()->selection()->clone()
+			: new VSelection();
 	VObjectListIterator itr( m_selection->objects() );
 
 	for( ; itr.current() ; ++itr )
@@ -81,6 +88,10 @@ VTransformCmd::unexecute()
 		visit( *itr.current() );
 	}
 
+	// reset
+	m_mat = m_mat.invert();
+	delete( m_selection );
+	m_selection = 0L;
 	setSuccess( false );
 }
 
