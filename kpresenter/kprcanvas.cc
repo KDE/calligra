@@ -430,40 +430,30 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
 
     if(!doc->isReadWrite())
         return;
-    KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
     QPen _pen = QPen( Qt::black, 6, Qt::DotLine );
     painter->save();
     painter->setPen( _pen );
     QRect pageRect=activePage()->getZoomPageRect();
-    KoRect unZoomPageRect=activePage()->getPageRect();
-    int offset = m_view->zoomHandler()->zoomItX( doc->getGridX() );
-    int nbRow = QMAX( 1, (int )( unZoomPageRect.width()/doc->getGridX()));
-    int nbCol = QMAX( 1, (int )( unZoomPageRect.height()/doc->getGridY()));
+    int offsetX = m_view->zoomHandler()->zoomItX( doc->getGridX() );
+    int offsetY = m_view->zoomHandler()->zoomItY( doc->getGridY() );
 
-    for( int i = 0 ; i <= nbRow; i++)
+    int i = offsetX;
+    int j = offsetY;
+    do
     {
-        if( rect.intersects( KoRect( i * doc->getGridX() , rect.top(), 1 , rect.height())))
+        do
         {
-            for ( int j = pageRect.top() ; j< pageRect.height();)
-            {
-                painter->drawPoint( i * offset , j );
-                j+=offset;
-            }
+            if( rect2.contains(  i, j ))
+                painter->drawPoint( i , j );
+            j+=offsetY;
         }
+        while ( j < pageRect.height() );
+        i+= offsetX;
+        j = offsetY;
     }
+    while( i < pageRect.width() );
 
-    offset = m_view->zoomHandler()->zoomItY( doc->getGridY() );
-    for( int i = 0 ; i <= nbCol ; i++)
-    {
-        if( rect.intersects( KoRect( rect.left() , i * doc->getGridY(), pageRect.width(), 1)))
-        {
-            for ( int j = pageRect.left() ; j< pageRect.width();)
-            {
-                painter->drawPoint( j, i * offset );
-                j+=offset;
-            }
-        }
-    }
+
     painter->restore();
 }
 
