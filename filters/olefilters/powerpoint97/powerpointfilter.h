@@ -31,7 +31,8 @@ class PowerPointFilter:
 public:
     PowerPointFilter(
         const myFile &mainStream,
-        const myFile &currentUser);
+        const myFile &currentUser,
+        const myFile &pictures);
     virtual ~PowerPointFilter();
     virtual bool filter();
     virtual const QDomDocument * const part();

@@ -392,7 +392,7 @@ void OLEFilter::convert( const QCString& mimeTypeHint )
         else if ( mimeType == "application/x-kpresenter" ) {
             // Powerpoint.
 
-            myFile main, currentUser, summary, documentSummary;
+            myFile main, currentUser, pictures, summary, documentSummary;
             KLaola::NodeList tmp;
 
             tmp=docfile->find("PowerPoint Document", true);
@@ -403,6 +403,10 @@ void OLEFilter::convert( const QCString& mimeTypeHint )
             if(tmp.count()==1)
                 currentUser=docfile->stream(tmp.at(0));
 
+            tmp=docfile->find("Pictures", true);
+            if(tmp.count()==1)
+                pictures=docfile->stream(tmp.at(0));
+
             tmp=docfile->find("SummaryInformation", true);
             if(tmp.count()==1)
                 summary=docfile->stream(tmp.at(0));
@@ -411,7 +415,7 @@ void OLEFilter::convert( const QCString& mimeTypeHint )
             if(tmp.count()==1)
                 documentSummary=docfile->stream(tmp.at(0));
 
-            myFilter=new PowerPointFilter(main, currentUser);
+            myFilter=new PowerPointFilter(main, currentUser, pictures);
         }
         else if ( mimeType == "application/x-hancomword" ) {
             // HancomWord 6

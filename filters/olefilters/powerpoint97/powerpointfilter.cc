@@ -22,10 +22,11 @@
 
 PowerPointFilter::PowerPointFilter(
     const myFile &mainStream,
-    const myFile &currentUser):
+    const myFile &currentUser,
+    const myFile &pictures):
         FilterBase()
 {
-    m_tree = new PptXml(mainStream, currentUser);
+    m_tree = new PptXml(mainStream, currentUser, pictures);
 
     // Hook up the embedded object support.
 

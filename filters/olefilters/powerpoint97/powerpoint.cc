@@ -287,11 +287,13 @@ void Powerpoint::invokeHandler(
 
 bool Powerpoint::parse(
     myFile &mainStream,
-    myFile &currentUser)
+    myFile &currentUser,
+    myFile &pictures)
 {
     unsigned i;
 
     m_mainStream = mainStream;
+    m_pictures = pictures;
     m_documentRef = 0;
     m_documentRefFound = false;
     m_persistentReferences.clear();
@@ -1048,17 +1050,17 @@ void Powerpoint::opTextHeaderAtom(
 {
     struct
     {
-        Q_UINT32 txType; // Type of text:
-                    //
-                    // 0 Title
-                    // 1 Body
-                    // 2 Notes
-                    // 3 Not Used
-                    // 4 Other (Text in a shape)
-                    // 5 Center body (subtitle in title slide)
-                    // 6 Center title (title in title slide)
-                    // 7 Half body (body in two-column slide)
-                    // 8 Quarter body (body in four-body slide)
+        Q_UINT32 txType;    // Type of text:
+                            //
+                            // 0 Title
+                            // 1 Body
+                            // 2 Notes
+                            // 3 Not Used
+                            // 4 Other (Text in a shape)
+                            // 5 Center body (subtitle in title slide)
+                            // 6 Center title (title in title slide)
+                            // 7 Half body (body in two-column slide)
+                            // 8 Quarter body (body in four-body slide)
      } data;
 
     operands >> data.txType;

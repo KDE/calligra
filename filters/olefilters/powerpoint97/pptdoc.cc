@@ -30,11 +30,13 @@ const int PptDoc::s_area = 30512;
 
 PptDoc::PptDoc(
     const myFile &mainStream,
-    const myFile &currentUser) :
+    const myFile &currentUser,
+    const myFile &pictures) :
         Powerpoint()
 {
     m_mainStream = mainStream;
     m_currentUser = currentUser;
+    m_pictures = pictures;
 }
 
 PptDoc::~PptDoc()
@@ -44,7 +46,7 @@ PptDoc::~PptDoc()
 void PptDoc::gotSlide(
     PptSlide &slide)
 {
- /*   Slide ourSlide;
+    Slide ourSlide;
     unsigned i;
 
     for (i = 0; i < slide.text.count(); i++)
@@ -81,5 +83,5 @@ void PptDoc::gotSlide(
 
 bool PptDoc::parse()
 {
-    return Powerpoint::parse(m_mainStream, m_currentUser);
+    return Powerpoint::parse(m_mainStream, m_currentUser, m_pictures);
 }

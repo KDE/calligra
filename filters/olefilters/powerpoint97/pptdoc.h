@@ -42,7 +42,8 @@ protected:
 
     PptDoc(
         const myFile &mainStream,
-        const myFile &currentUser);
+        const myFile &currentUser,
+        const myFile &pictures);
     virtual ~PptDoc();
 
     // Metadata.
@@ -71,6 +72,7 @@ private:
 
     myFile m_mainStream;
     myFile m_currentUser;
+    myFile m_pictures;
 
     // Override the base class functions.
 

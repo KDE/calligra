@@ -45,7 +45,8 @@ class PptXml:
 public:
     PptXml(
         const myFile &mainStream,
-        const myFile &currentUser);
+        const myFile &currentUser,
+        const myFile &pictures);
     ~PptXml();
 
     bool convert();
@@ -106,4 +107,3 @@ private:
     void setPlaceholder(PptSlide &slide);
 };
 #endif
-

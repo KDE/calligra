@@ -30,10 +30,12 @@ const int PptXml::s_area = 30512;
 
 PptXml::PptXml(
     const myFile &mainStream,
-    const myFile &currentUser):
+    const myFile &currentUser,
+    const myFile &pictures):
         PptDoc(
             mainStream,
-            currentUser)
+            currentUser,
+            pictures)
 {
     m_isConverted = false;
     m_success = false;

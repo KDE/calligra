@@ -61,10 +61,8 @@ public:
 
     bool parse(
         myFile &mainStream,
-        myFile &currentUser);
-    bool parse(
-        QDataStream &mainStream,
-        QDataStream &currentUser);
+        myFile &currentUser,
+        myFile &pictures);
 
     typedef struct
     {
@@ -98,10 +96,10 @@ public:
     static const int s_area;
 
 private:
-
-    myFile 		m_mainStream;
-    unsigned 	m_documentRef;
-    bool 		m_documentRefFound;
+    myFile m_mainStream;
+    myFile m_pictures;
+    unsigned m_documentRef;
+    bool m_documentRefFound;
     QMap<unsigned, unsigned> m_persistentReferences;
     unsigned 	m_editDepth;
     enum
