@@ -1,4 +1,4 @@
-// 
+//
 
 /*
    This file is part of the KDE project
@@ -363,8 +363,8 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
 
     // TODO: Konqueror/KHTML does not support "line-height"
     if (!force
-        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
-        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+        && ( layoutOrigin.lineSpacingType == layout.lineSpacingType )
+        && ( layoutOrigin.lineSpacing == layout.lineSpacing ) )
     {
         // Do nothing!
     }
@@ -383,13 +383,13 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
     else if ( layout.lineSpacingType!=10  )
     {
-        kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+        kdWarning(30503) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
     // TODO: Konqueror/KHTML does not support "text-shadow"
     if (!force
-        && (layoutOrigin.shadowDirection==layoutOrigin.shadowDirection)
-        && (layoutOrigin.shadowDistance==layoutOrigin.shadowDistance))
+        && ( layoutOrigin.shadowDirection == layout.shadowDirection )
+        && ( layoutOrigin.shadowDistance == layout.shadowDistance ) )
     {
         // Do nothing!
     }

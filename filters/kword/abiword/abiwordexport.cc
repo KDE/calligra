@@ -823,8 +823,8 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
 
     if (!force
-        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
-        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+        && ( layoutOrigin.lineSpacingType == layout.lineSpacingType )
+        && ( layoutOrigin.lineSpacing == layout.lineSpacing ) )
     {
         // Do nothing!
     }
@@ -843,7 +843,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
     else if ( layout.lineSpacingType!=10  )
     {
-        kdWarning(30506) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+        kdWarning(30506) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element

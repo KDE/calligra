@@ -1,10 +1,10 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copuright 2001 Michael Johnson <mikej@xnet.com>
-   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
-   Copyright 2002 Ariya Hidayat <ariya@kde.org>
+   Copuright (C) 2001 Michael Johnson <mikej@xnet.com>
+   Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1493,8 +1493,8 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
 #endif
 
     if (force
-        || (layoutOrigin.lineSpacingType!=layoutOrigin.lineSpacingType)
-        || (layoutOrigin.lineSpacing!=layoutOrigin.lineSpacing))
+        || ( layoutOrigin.lineSpacingType != layout.lineSpacingType )
+        || ( layoutOrigin.lineSpacing != layout.lineSpacing ) )
     {
         if ( layout.lineSpacingType==LayoutData::LS_SINGLE  )
            ;// do nothing, single linespace is default in RTF
@@ -1516,7 +1516,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
         else
-            kdWarning(30515) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+            kdWarning(30515) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
     if (!layout.tabulatorList.isEmpty()
