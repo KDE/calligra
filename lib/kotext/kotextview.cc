@@ -392,10 +392,9 @@ void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
     }
 }
 
-void KoTextView::handleImStartEvent( QIMEvent * e )
+void KoTextView::handleImStartEvent( QIMEvent * )
 {
     // nothing to do
-    ;
 }
 
 void KoTextView::handleImComposeEvent( QIMEvent * e )
