@@ -48,7 +48,7 @@ class OpenCalcExport : public KoFilter
   enum files { metaXML = 0x01, contentXML = 0x02, stylesXML = 0x04, settingsXML = 0x08 };
   OpenCalcStyles m_styles;
 
-  bool writeFile( KSpreadDoc const * const ksdoc );
+  bool writeFile( const KSpreadDoc * const ksdoc );
 
   bool exportDocInfo( KoStore * store, const KSpreadDoc * ksdoc );
   bool exportStyles ( KoStore * store, const KSpreadDoc * ksdoc );

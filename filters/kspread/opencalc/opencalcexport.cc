@@ -126,7 +126,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
   return KoFilter::OK;
 }
 
-bool OpenCalcExport::writeFile( const KSpreadDoc * ksdoc )
+bool OpenCalcExport::writeFile( const KSpreadDoc * const ksdoc )
 {
   KoStore * store = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "", KoStore::Zip );
 
