@@ -101,7 +101,7 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
 
     QDomElement elementDoc;
     elementDoc=mainDocument.createElement("DOC");
-    elementDoc.setAttribute("editor","KWord's MS Word Import Filter");
+    elementDoc.setAttribute("editor","KWord's OOWriter Import Filter");
     elementDoc.setAttribute("mime","application/x-kword");
     elementDoc.setAttribute("syntaxVersion",2);
     mainDocument.appendChild(elementDoc);
@@ -316,7 +316,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
 
     if ( ok )
     {
-      kdDebug() << "OpenCalc version: " << d << endl;
+      kdDebug() << "OpenWriter version: " << d << endl;
       if ( d > 1.0 )
       {
         QString message( i18n("This document was created with the OpenOffice.org version '%1'. This filter was written for version for 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
