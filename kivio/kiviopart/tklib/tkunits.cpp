@@ -38,7 +38,7 @@ const char* unitLongNames[] = {
   I18N_NOOP("millimeter"),
   I18N_NOOP("inch"),
   I18N_NOOP("pica"),
-  I18N_NOOP("cantimeter"),
+  I18N_NOOP("centimeter"),
   I18N_NOOP("didot"),
   I18N_NOOP("cicero")
 };
