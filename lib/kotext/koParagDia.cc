@@ -1939,7 +1939,7 @@ KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
     grid2->addWidget(color,1,0);
     connect( color, SIGNAL( changed( const QColor& ) ), this, SLOT( colorChanged( const QColor& ) ) );
 
-    QLabel *ldistance = new QLabel( i18n( "Distance:" ), shadow );
+    QLabel *ldistance = new QLabel( i18n( "Distance(pt):" ), shadow );
     grid2->addWidget(ldistance,2,0);
 
     distance = new QSpinBox( 0, 20, 1, shadow );
