@@ -58,7 +58,6 @@ public:
     virtual DCOPObject* dcopObject();
 
     virtual void setSize( double _width, double _height );
-    virtual void resizeBy( double _dx, double _dy );
 
     virtual void setDrawEditRect( bool b )
     { drawEditRect = b; }
@@ -153,7 +152,7 @@ public:
     KoRect innerRect() const;
     double innerWidth() const;
     double innerHeight() const;
-    void resizeTextDocument();
+    void resizeTextDocument( bool widthChanged = true, bool heightChanged = true );
 
     VerticalAlignmentType verticalAlignment() const { return m_textVertAlign; }
     void setVerticalAligment( VerticalAlignmentType _type) ;

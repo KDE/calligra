@@ -218,21 +218,6 @@ void KPQuadricBezierCurveObject::setSize( double _width, double _height )
     updatePoints( fx, fy );
 }
 
-void KPQuadricBezierCurveObject::resizeBy( const KoSize &_size )
-{
-    resizeBy( _size.width(), _size.height() );
-}
-
-void KPQuadricBezierCurveObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    double fx = ext.width() / origSize.width();
-    double fy = ext.height() / origSize.height();
-
-    updatePoints( fx, fy );
-}
-
 void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;

@@ -61,7 +61,7 @@ public:
     virtual void setSize( const KoSize & _size )
     { setSize( _size.width(), _size.height() ); }
     virtual void setSize(double _width, double _height )
-    { ext = KoSize( _width > 20 ? _width : 20, _height > 20 ? _height : 20 ); }
+    { ext = KoSize( QMAX( 20, _width ), QMAX( 20, _height ) ); } // no object is smaller than 20x20
     virtual void setOrig( const KoPoint & _point )
     { orig = _point; }
     virtual void setOrig( double _x, double _y )
@@ -73,7 +73,7 @@ public:
     virtual void resizeBy( const KoSize & _size )
     { resizeBy( _size.width(), _size.height() ); }
     virtual void resizeBy( double _dx,double _dy )
-    { ext = ext + KoSize( _dx + ext.width() > 20 ? _dx : 0, _dy + ext.height() > 20 ? _dy : 0 ); }
+    { setSize( ext.width() + _dx, ext.height() + _dy ); } // call (possibly reimplemented) setSize
 
     virtual void setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color)
     {

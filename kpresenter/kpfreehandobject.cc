@@ -211,21 +211,6 @@ void KPFreehandObject::setSize( double _width, double _height )
     updatePoints( fx, fy );
 }
 
-void KPFreehandObject::resizeBy( const KoSize &_size )
-{
-    resizeBy( _size.width(), _size.height() );
-}
-
-void KPFreehandObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    double fx = ext.width() / origSize.width();
-    double fy = ext.height() / origSize.height();
-
-    updatePoints( fx, fy );
-}
-
 void KPFreehandObject::updatePoints( double _fx, double _fy )
 {
     unsigned int index = 0;

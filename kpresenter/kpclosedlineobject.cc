@@ -152,22 +152,6 @@ void KPClosedLineObject::setSize( double _width, double _height )
     updatePoints( fx, fy );
 }
 
-void KPClosedLineObject::resizeBy( const KoSize &_size )
-{
-    resizeBy( _size.width(), _size.height() );
-}
-
-/*================================================================*/
-void KPClosedLineObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    double fx = ext.width() / origSize.width();
-    double fy = ext.height() / origSize.height();
-
-    updatePoints( fx, fy );
-}
-
 void KPClosedLineObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;

@@ -59,8 +59,6 @@ public:
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
     { setSize( _size.width(), _size.height() ); }
-    virtual void resizeBy( const KoSize &_size );
-    virtual void resizeBy( double _dx, double _dy );
 
     virtual void flip(bool horizontal );
     void closeObject(bool _close);

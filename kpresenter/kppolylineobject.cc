@@ -211,21 +211,6 @@ void KPPolylineObject::setSize( double _width, double _height )
     updatePoints( fx, fy );
 }
 
-void KPPolylineObject::resizeBy( const KoSize &_size )
-{
-    resizeBy( _size.width(), _size.height() );
-}
-
-void KPPolylineObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
-
-    updatePoints( fx, fy );
-}
-
 void KPPolylineObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;

@@ -42,8 +42,6 @@ public:
     virtual void setOrig( double _x, double _y );
     virtual void moveBy( const KoPoint &_point );
     virtual void moveBy( double _dx, double _dy );
-    virtual void resizeBy( const KoSize &_size );
-    virtual void resizeBy( double _dx, double _dy );
 
     virtual void rotate( float _angle );
     virtual void setShadowDistance( int _distance );

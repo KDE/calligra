@@ -168,32 +168,35 @@ QBrush KPTextObject::getBrush() const
     return tmpBrush;
 }
 
-void KPTextObject::resizeTextDocument()
+void KPTextObject::resizeTextDocument( bool widthChanged, bool heightChanged )
 {
-    textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( innerWidth() ) );
-    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-    slotAvailableHeightNeeded();
-    m_textobj->formatMore();
-
+    if ( heightChanged )
+    {
+        // Recalc available height
+        slotAvailableHeightNeeded();
+        // Recalc the vertical centering, if enabled
+        recalcVerticalAlignment();
+    }
+    if ( widthChanged )
+    {
+        // not when simply changing the height, otherwise the auto-resize code
+        // prevents making a textobject less high than it currently is.
+        textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( innerWidth() ) );
+        m_textobj->setLastFormattedParag( textDocument()->firstParag() );
+        m_textobj->formatMore();
+    }
 }
 
 /*======================= set size ===============================*/
 void KPTextObject::setSize( double _width, double _height )
 {
-    if ( _width != ext.width() || _height != ext.height() )
+    bool widthModified = KABS( _width - ext.width() ) > 1e-5; // floating-point equality test
+    bool heightModified = KABS( _height - ext.height() ) > 1e-5;
+    if ( widthModified || heightModified )
     {
         KPObject::setSize( _width, _height );
-        resizeTextDocument();
-        recalcVerticalAlignment();
+        resizeTextDocument( widthModified, heightModified ); // will call formatMore() if widthModified
     }
-}
-
-/*======================= set size ===============================*/
-void KPTextObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-    resizeTextDocument();
-    recalcVerticalAlignment();
 }
 
 /*========================= save =================================*/
@@ -264,7 +267,6 @@ double KPTextObject::load(const QDomElement &element)
 
     shadowCompatibility();
 
-    m_textobj->formatMore();
     resizeTextDocument(); // this will to formatMore()
     return offset;
 }
@@ -1349,6 +1351,17 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
         {
             difference += lastFormatted->rect().height();
         }
+#if 0
+        if(lastFormatted)
+            kdDebug(33001) << "slotAfterFormatting We need more space in " << this
+                           << " bottom=" << bottom + lastFormatted->rect().height()
+                           << " availHeight=" << availHeight
+                           << " ->difference=" << difference << endl;
+        else
+            kdDebug(33001) << "slotAfterFormatting We need more space in " << this
+                           << " bottom2=" << bottom << " availHeight=" << availHeight
+                           << " ->difference=" << difference << endl;
+#endif
         // We only auto-grow. We don't auto-shrink.
         if(difference > 0)
         {
@@ -1357,12 +1370,17 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
             double pageBottom = p.ptHeight - p.ptBottom;
             double newBottom = QMIN( wantedPosition, pageBottom ); // don't grow bigger than the page
             newBottom = QMAX( newBottom, getRect().top() ); // avoid negative heights
+            //kdDebug() << k_funcinfo << " current bottom=" << getRect().bottom() << " newBottom=" << newBottom << endl;
             if ( getRect().bottom() != newBottom )
             {
-                setSize( getRect().width(), newBottom - getRect().top() );
-                //m_textobj->setLastFormattedParag( lastFormatted->prev() );
+                // We resize the text object, but skipping the KPTextObject::setSize code
+                // (which invalidates everything etc.)
+                KPObject::setSize( getRect().width(), newBottom - getRect().top() );
+                // Do recalculate the new available height though
+                slotAvailableHeightNeeded();
                 m_doc->updateRuler();
-                *abort = true;
+                m_doc->repaint( true );
+                *abort = false;
             }
         }
     }
@@ -1394,10 +1412,11 @@ KCommand * KPTextObject::textContentsToHeight()
     double lineSpacing = ( innerHeight() - textHeight ) /  numLines; // this gives the linespacing diff to apply, in pt
     //kdDebug() << k_funcinfo << "lineSpacing=" << lineSpacing << endl;
 
-    if ( innerHeight() - textHeight < 1e-5 ) // floating-point equality test
+    if ( KABS( innerHeight() - textHeight ) < 1e-5 ) // floating-point equality test
         return 0L; // nothing to do
     if ( lineSpacing < 0 ) // text object is too small
-        return 0L; // abort
+        lineSpacing = 0; // we can't do smaller linespacing than that, but we do need to apply it
+                         // (in case there's some bigger linespacing in use)
 
     // Apply the new linespacing to the whole object
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
@@ -1469,7 +1488,7 @@ void KPTextObject::setVerticalAligment( VerticalAlignmentType _type)
 void KPTextObject::recalcVerticalAlignment()
 {
     KoTextParag * parag = m_textobj->textDocument()->lastParag();
-    double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ))+btop+bbottom;
+    double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( m_textobj->textDocument()->height() )+btop+bbottom;
     double diffy = getRect().height() - txtHeight;
     if ( diffy <= 0.0 )
         return;

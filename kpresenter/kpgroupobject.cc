@@ -129,23 +129,6 @@ void KPGroupObject::moveBy( double _dx, double _dy )
 }
 
 /*================================================================*/
-void KPGroupObject::resizeBy( const KoSize &_size )
-{
-    resizeBy( _size.width(), _size.height() );
-}
-
-/*================================================================*/
-void KPGroupObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    double fx = ext.width() / origSizeInGroup.width();
-    double fy = ext.height() / origSizeInGroup.height();
-
-    updateSizes( fx, fy );
-}
-
-/*================================================================*/
 QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPObject::save(doc, offset);

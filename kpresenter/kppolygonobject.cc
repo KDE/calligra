@@ -170,22 +170,6 @@ void KPPolygonObject::setSize( double _width, double _height )
     updatePoints( fx, fy );
 }
 
-void KPPolygonObject::resizeBy( const KoSize &_size )
-{
-    resizeBy( _size.width(), _size.height() );
-}
-
-/*================================================================*/
-void KPPolygonObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    double fx = ext.width() / origSize.width();
-    double fy = ext.height() / origSize.height();
-
-    updatePoints( fx, fy );
-}
-
 void KPPolygonObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;
