@@ -3396,7 +3396,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRea
         if ( oldDisplayFieldValue )
         {
             m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
-            m_view->kPresenterDoc()->recalcVariables(  VT_ALL );
+            m_view->kPresenterDoc()->recalcVariables( VT_ALL );
         }
     }
 
@@ -3454,6 +3454,8 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRea
 void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
 {
     //kdDebug(33001) << "Page::drawCurrentPageInPix" << endl;
+
+    _pix.fill(Qt::black);      // avoid garbage on "weird" DPIs
 
     QPainter p;
     p.begin( &_pix );
