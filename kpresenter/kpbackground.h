@@ -60,7 +60,10 @@ public:
     virtual void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
     virtual void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
-
+    virtual KPPixmapDataCollection::Key getKey()
+    { return key.dataKey; }
+    
+    
     virtual void setSize( QSize _size )
     { removeGradient(); ext = _size; footerHeight = 0; }
     virtual void setSize( int _width, int _height )

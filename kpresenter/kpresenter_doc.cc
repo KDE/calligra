@@ -299,13 +299,13 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl;
     out << indent << "<PRESSPEED value=\"" << static_cast<int>( presSpeed ) << "\"/>" << endl;
     out << indent << "<PRESSLIDES value=\"" << static_cast<int>( presentSlides ) << "\"/>" << endl;
-    
+
     out << otag << "<SELSLIDES>" << endl;
     QMap<int,bool>::Iterator sit = selectedSlides.begin();
     for ( ; sit != selectedSlides.end(); ++sit )
         out << indent << "<SLIDE nr=\"" << sit.key() << "\" show=\"" << ( *sit ) << "\"/>" << endl;
     out << etag << "</SELSLIDES>" << endl;
-    
+
     // Write "OBJECT" tag for every child
     QListIterator<KPresenterChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
@@ -326,14 +326,19 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
         out << etag << "</EMBEDDED>" << endl;
     }
 
+    makeUsedPixmapList();
+    
     out << otag << "<PIXMAPS>" << endl;
 
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
-    for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
-    {
-        KPPixmapDataCollection::Key key = it.key();
-        out << indent << "<KEY " << key << " />" << endl;
+    for ( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
+    {   
+        if ( usedPixmaps.contains( it.key() ) ) 
+        {
+            KPPixmapDataCollection::Key key = it.key();
+            out << indent << "<KEY " << key << " />" << endl;
+        }
     }
 
     out << etag << "</PIXMAPS>" << endl;
@@ -412,7 +417,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
     for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
     {
         if ( _pixmapCollection.getPixmapDataCollection().references( it.key() ) > 0 &&
-             !it.key().filename.isEmpty() )
+             !it.key().filename.isEmpty() && usedPixmaps.contains( it.key() ) )
         {
             QString u2 = u.in();
             u2 += "/";
@@ -3768,6 +3773,23 @@ QValueList<int> KPresenterDoc::getSlides( int currPgNum )
                 lst.append( it.key() + 1 );
         break;
     }
-    
+
     return lst;
-}   
+}
+
+/*================================================================*/
+void KPresenterDoc::makeUsedPixmapList()
+{
+    usedPixmaps.clear();
+
+    KPObject *kpobject = 0L;
+    for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
+        if ( kpobject->getType() == OT_PICTURE )
+            usedPixmaps.append( dynamic_cast<KPPixmapObject*>( kpobject )->getKey() );
+    
+    KPBackGround *kpbackground = 0;
+    for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next() )
+        if ( kpbackground->getBackType() == BT_PICTURE )
+            usedPixmaps.append( kpbackground->getKey() );
+                 
+}

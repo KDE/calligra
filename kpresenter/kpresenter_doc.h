@@ -327,7 +327,7 @@ public:
     void setSelectedSlides( const QMap<int,bool> &ss ) { selectedSlides = QMap<int,bool>( ss ); }
 
     QValueList<int> getSlides( int currPgNum );
-    
+
 signals:
 
     // document modified
@@ -369,7 +369,8 @@ protected:
     void loadBackground( KOMLParser&, vector<KOMLAttrib>& );
     void loadObjects( KOMLParser&, vector<KOMLAttrib>&, bool _paste = false );
     virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
-
+    void makeUsedPixmapList();
+    
     // ************ variables ************
 
     struct PixCache
@@ -433,6 +434,7 @@ protected:
 
     PresentSlides presentSlides;
     QMap<int,bool> selectedSlides;
+    QValueList<KPPixmapDataCollection::Key> usedPixmaps;
     
 };
 

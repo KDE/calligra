@@ -298,3 +298,8 @@ Reggie, 6.6.1999:
   The second point (only current slide) is also convinient, when you are just creating/editing
   a presentation to view only the slide on which you currently are working for testing :-)
 
+Reggie, 11.6.1999:
+------------------
+- Fixed saving pixmap collection (pixmaps which are
+  only in the undo-buffer but not really used anymore
+  are not saved)
