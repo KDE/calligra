@@ -25,33 +25,33 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 
+#include <klocale.h>
+
 #include "opts_fill_dlg.h"
-
-
 
 FillOptionsDialog::FillOptionsDialog( QWidget *parent, const char *name )
     : KDialog( parent, name, true )
 {
-    setCaption( "Fill Options" );
+    setCaption( i18n("Fill Options") );
 
     QVBoxLayout* layout = new QVBoxLayout( this, 4 );
     QGridLayout* grid = new QGridLayout( layout, 2, 4);
 
     mpOpacity = new QSpinBox( 0, 255, 10, this );
     mpOpacity->setValue( 255 );
-    QLabel* olabel = new QLabel( mpOpacity, "Opacity", this );
+    QLabel* olabel = new QLabel( mpOpacity, i18n("Opacity"), this );
 
     mpToleranceRed = new QSpinBox( 0, 255, 10, this );
     mpToleranceRed->setValue( 0 );
-    QLabel* rlabel = new QLabel( mpToleranceRed, "Red Tolerance", this );
+    QLabel* rlabel = new QLabel( mpToleranceRed, i18n("Red Tolerance"), this );
 
     mpToleranceGreen = new QSpinBox( 0, 255, 10, this );
     mpToleranceGreen->setValue( 0 );
-    QLabel* glabel = new QLabel( mpToleranceGreen, "Green Tolerance", this );
+    QLabel* glabel = new QLabel( mpToleranceGreen, i18n("Green Tolerance"), this );
 
     mpToleranceBlue = new QSpinBox( 0, 255, 10, this );
     mpToleranceBlue->setValue( 0 );
-    QLabel* blabel = new QLabel( mpToleranceBlue, "Blue Tolerance", this );
+    QLabel* blabel = new QLabel( mpToleranceBlue, i18n("Blue Tolerance"), this );
 
     grid->addWidget( olabel, 0, 0 );
     grid->addWidget( mpOpacity, 0, 1 );
@@ -69,18 +69,18 @@ FillOptionsDialog::FillOptionsDialog( QWidget *parent, const char *name )
     buttons->addStretch( 3 );
 
     QPushButton *ok, *cancel, *save;
-    ok = new QPushButton( "&OK", this );
+    ok = new QPushButton( i18n("&OK"), this );
     ok->setDefault( true );
     ok->setMinimumSize( ok->sizeHint() );
     connect( ok, SIGNAL(clicked()), SLOT(accept()) );
     buttons->addWidget( ok );
 
-    cancel = new QPushButton( "&Cancel", this );
+    cancel = new QPushButton( i18n("&Cancel"), this );
     cancel->setMinimumSize( cancel->sizeHint() );
     connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
     buttons->addWidget( cancel );
 
-    save = new QPushButton( "&Save", this );
+    save = new QPushButton( i18n("&Save"), this );
     save->setMinimumSize( save->sizeHint() );
     //connect( save, SIGNAL(clicked()), SLOT(reject()) );
     buttons->addWidget( save );
