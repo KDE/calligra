@@ -318,7 +318,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
                 int integer = 0;
                 int numerator = 1;
                 int denominator = 1;
-
+                int denominatorValue=0;
                 if ( e.hasAttributeNS( KoXmlNS::number, "min-integer-digits" ) )
                 {
                     int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString::null ).toInt( &ok );
@@ -337,6 +337,12 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
                     if ( ok )
                         denominator = d;
                 }
+                if ( e.hasAttributeNS( KoXmlNS::number, "denominator-value" ) )
+                {
+                    int d = e.attributeNS( KoXmlNS::number, "denominator-value", QString::null ).toInt( &ok );
+                    if ( ok )
+                        denominatorValue = d;
+                }
 
                 for ( i = 0; i <= integer; ++i )
                     format+='#';
@@ -350,6 +356,8 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
 
                 for ( i = 0; i <= denominator; ++i )
                     format+='?';
+                if ( denominatorValue != -1 )
+                    format+=QString::number( denominatorValue );
             }
         // Not needed:
         //  <style:map style:condition="value()&gt;=0" style:apply-style-name="N106P0"/>
