@@ -40,7 +40,7 @@ class KTextEditFormatCollection;
 #include "global.h"
 #include "kpbackground.h"
 
-#include "kppixmapcollection.h"
+#include "kpimage.h"
 #include "kpgradientcollection.h"
 #include "kpclipartcollection.h"
 #include "commandhistory.h"
@@ -252,7 +252,7 @@ public:
 
     void deSelectAllObj();
 
-    KPPixmapCollection *getPixmapCollection() { return &_pixmapCollection; }
+    KPImageCollection *getImageCollection() { return &_imageCollection; }
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
     KPClipartCollection *getClipartCollection() { return &_clipartCollection; }
 
@@ -389,7 +389,7 @@ protected:
 
     QPen _presPen;
 
-    KPPixmapCollection _pixmapCollection;
+    KPImageCollection _imageCollection;
     KPGradientCollection _gradientCollection;
     KPClipartCollection _clipartCollection;
 
@@ -401,7 +401,7 @@ protected:
     bool _hasHeader, _hasFooter;
     KPFooterHeaderEditor *headerFooterEdit;
 
-    QValueList<KPPixmapDataCollection::Key> pixmapCollectionKeys;
+    QValueList<KPImageKey> pixmapCollectionKeys;
     QValueList<KPClipartCollection::Key> clipartCollectionKeys;
     QStringList pixmapCollectionNames, clipartCollectionNames;
     KoPageLayout __pgLayout;
@@ -409,7 +409,7 @@ protected:
 
     QString urlIntern;
 
-    QValueList<KPPixmapDataCollection::Key> usedPixmaps;
+    QValueList<KPImageKey> usedPixmaps;
     DCOPObject *dcop;
 
     int saveOnlyPage;

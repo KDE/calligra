@@ -23,7 +23,7 @@
 #include <qdatetime.h>
 
 #include "kpobject.h"
-#include "kppixmapcollection.h"
+#include "kpimage.h"
 #include "kpgradient.h"
 
 class QPixmap;
@@ -37,8 +37,10 @@ class KPPixmapObject : public KPObject
     friend class Page;
 
 public:
-    KPPixmapObject( KPPixmapCollection *_pixmapCollection );
-    KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, QDateTime _lastModified );
+    KPPixmapObject( KPImageCollection *_imageCollection );
+    KPPixmapObject( KPImageCollection *_imageCollection,
+                    const QString &_filename,
+                    QDateTime _lastModified );
     virtual ~KPPixmapObject();
 
     KPPixmapObject &operator=( const KPPixmapObject & );
@@ -60,9 +62,9 @@ public:
     virtual void setGType( BCType _gType )
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
     virtual QString getFileName() const
-    { return key.dataKey.filename; }
-    virtual KPPixmapDataCollection::Key getKey() const
-    { return key.dataKey; }
+    { return image.key().filename; }
+    virtual KPImageKey getKey() const
+    { return image.key(); }
     virtual void setGUnbalanced( bool b )
     { if ( gradient ) gradient->setUnbalanced( b ); unbalanced = b; }
     virtual void setGXFactor( int f )
@@ -74,7 +76,7 @@ public:
     { setPixmap( _filename, _lastModified, orig_size ); }
     void setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &_size );
     void reload()
-    { setPixmap( key.dataKey.filename, key.dataKey.lastModified, key.size ); }
+    { setPixmap( image.key().filename, image.key().lastModified, ext ); }
 
     virtual ObjType getType() const
     { return OT_PICTURE; }
@@ -106,9 +108,8 @@ protected:
     KPPixmapObject()
     {; }
 
-    KPPixmapCollection *pixmapCollection;
-    QPixmap *pixmap;
-    KPPixmapCollection::Key key;
+    KPImageCollection *imageCollection;
+    KPImage image;
     KPGradient *gradient;
 
     QPen pen;

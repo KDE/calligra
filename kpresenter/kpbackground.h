@@ -26,7 +26,7 @@
 #include <qsize.h>
 
 #include "global.h"
-#include "kppixmapcollection.h"
+#include "kpimage.h"
 #include "kpclipartcollection.h"
 
 #include <koStream.h>
@@ -48,7 +48,7 @@ class DCOPObject;
 class KPBackGround
 {
 public:
-    KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCollection *_gradientCollection,
+    KPBackGround( KPImageCollection *_imageCollection, KPGradientCollection *_gradientCollection,
                   KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
     ~KPBackGround()
     {; }
@@ -75,8 +75,8 @@ public:
     void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
     void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
-    KPPixmapDataCollection::Key getKey() const
-    { return key.dataKey; }
+    KPImageKey getKey() const
+    { return backImage.key(); }
 
 
     void setBgSize( QSize _size, bool visible = true );
@@ -95,7 +95,7 @@ public:
     BCType getBackColorType() const
     { return bcType; }
     QString getBackPixFilename() const
-    { return key.dataKey.filename; }
+    { return backImage.key().filename; }
     QString getBackClipFilename() const
     { return clipKey.filename; }
     PageEffect getPageEffect() const
@@ -134,9 +134,11 @@ protected:
     bool unbalanced;
     int xfactor, yfactor;
 
-    QPixmap *backPix;
-    KPPixmapCollection::Key key;
-    KPPixmapCollection *pixmapCollection;
+//    QPixmap *backPix;
+//    KPPixmapCollection::Key key;
+//    KPPixmapCollection *pixmapCollection;
+    KPImage backImage;
+    KPImageCollection *imageCollection;
     KPGradientCollection *gradientCollection;
     KPClipartCollection *clipartCollection;
     QPixmap *gradient;

@@ -16,7 +16,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
 	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
 	kpbackground.cc kpclipartcollection.cc kpgradient.cc \
-	kppixmapcollection.cc kpgradientcollection.cc \
+	kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc textcmd.cc \
@@ -28,7 +28,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
 	textdialog.cc sidebar.cc koStream.cc \
-	insertpagedia.ui generalconfig.ui
+	insertpagedia.ui generalconfig.ui kpimage.cc
 
 libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la ../lib/koml/libkoml.la
@@ -58,7 +58,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
 		kpbackground.h kpclipartcollection.h kpgradient.h \
-		kppixmapcollection.h kpgradientcollection.h \
+		kpimage.h kpgradientcollection.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \

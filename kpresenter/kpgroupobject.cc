@@ -236,7 +236,7 @@ void KPGroupObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst,
                         objects.append( kptextobject );
                     } break;
                     case OT_PICTURE: {
-                        KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getPixmapCollection() );
+                        KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getImageCollection() );
                         kppixmapobject->load( parser, lst );
 
                         objects.append( kppixmapobject );

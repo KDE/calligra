@@ -58,7 +58,7 @@ BackPreview::BackPreview( QWidget *parent, KPresenterDoc *doc )
     : QFrame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
-    back = new KPBackGround( doc->getPixmapCollection(),
+    back = new KPBackGround( doc->getImageCollection(),
                              doc->getGradientCollection(),
                              doc->getClipartCollection(),
                              doc );

@@ -3982,11 +3982,20 @@ QSize Page::getPixmapOrigSize( KPPixmapObject *&obj )
         kpobject = objectList()->at( i );
         if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE ) {
             KPPixmapObject *o = (KPPixmapObject*)kpobject;
+            /*
             QImage *img = view->kPresenterDoc()->getPixmapCollection()->
                           getPixmapDataCollection().findPixmapData( o->key.dataKey );
             if ( img ) {
                 obj = o;
                 return img->size();
+            }
+            */
+            KPImage img = view->kPresenterDoc()->getImageCollection()->
+                          findImage( o->getKey() );
+            if ( !img.isNull() )
+            {
+                obj = o;
+                return img.size();
             }
         }
     }

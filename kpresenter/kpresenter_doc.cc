@@ -214,7 +214,7 @@ bool KPresenterChild::save( QTextStream& out )
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      _pixmapCollection(), _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
+      _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
       _hasFooter( false ), urlIntern()
 {
     fCollection = new KTextEditFormatCollection;
@@ -442,12 +442,13 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     out << otag << "<PIXMAPS>" << endl;
 
     int i = 0;
-    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    KPImageCollection::ConstIterator it = _imageCollection.begin();
+    KPImageCollection::ConstIterator end = _imageCollection.end();
 
-    for ( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
+    for ( ; it != end; ++it ) {
 	if ( usedPixmaps.contains( it.key() ) ) {
-	    KPPixmapDataCollection::Key key = it.key();
-	    QString format = QFileInfo( it.key().filename ).extension().upper();
+	    KPImageKey key = it.key();
+	    QString format = QFileInfo( key.filename ).extension().upper();
 	    if ( format == "JPG" )
 		format = "JPEG";
 	    if ( QImage::outputFormats().find( format.latin1() ) == -1 )
@@ -544,12 +545,12 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
     if ( !_store )
 	return true;
 
-    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    KPImageCollection::ConstIterator it = _imageCollection.begin();
+    KPImageCollection::ConstIterator end = _imageCollection.end();
 
     int i = 0;
-    for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
-	if ( _pixmapCollection.getPixmapDataCollection().references( it.key() ) > 0 &&
-	     !it.key().filename.isEmpty() && usedPixmaps.contains( it.key() ) ) {
+    for( ; it != end; ++it ) {
+	if ( !it.key().filename.isEmpty() && usedPixmaps.contains( it.key() ) ) {
 
 	    QString format = QFileInfo( it.key().filename ).extension().upper();
 	    if ( format == "JPG" )
@@ -566,7 +567,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 		KoStoreDevice dev( _store );
 		QImageIO io;
 		io.setIODevice( &dev );
-		io.setImage( it.data() );
+		io.setImage( it.data().image() );
 		io.setFormat( format.latin1() );
 		io.write();
 		_store->close();
@@ -981,7 +982,7 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 	    }
 
 	    while ( parser.open( QString::null, tag ) ) {
-		KPPixmapDataCollection::Key key;
+                KPImageKey key;
 		int year(0), month(0), day(0), hour(0), minute(0), second(0), msec(0);
 		QString n;
 
@@ -1231,7 +1232,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, QValueList<KOMLAttrib>& lst
 		    _objectList->append( kptextobject );
 	    } break;
 	    case OT_PICTURE: {
-		KPPixmapObject *kppixmapobject = new KPPixmapObject( &_pixmapCollection );
+		KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection );
 		kppixmapobject->load( parser, lst );
 
 		if ( _paste ) {
@@ -1281,7 +1282,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
     if ( _store ) {
 	QString str = urlIntern.isEmpty() ? url().path() : urlIntern;
 
-	QValueListIterator<KPPixmapDataCollection::Key> it = pixmapCollectionKeys.begin();
+	QValueListIterator<KPImageKey> it = pixmapCollectionKeys.begin();
 	QStringList::Iterator nit = pixmapCollectionNames.begin();
 
 	for ( ; it != pixmapCollectionKeys.end(); ++it, ++nit ) {
@@ -1320,7 +1321,8 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 		}
 	    }
 
-	    _pixmapCollection.getPixmapDataCollection().insertPixmapData( it.node->data, img );
+            _imageCollection.insertImage( *it, img );
+//	    _pixmapCollection.getPixmapDataCollection().insertPixmapData( it.node->data, img );
 	}
 
 	QValueListIterator<KPClipartCollection::Key> it2 = clipartCollectionKeys.begin();
@@ -1363,8 +1365,8 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	    _clipartCollection.insertClipart( it2.node->data, pic );
 	}
 
-	_pixmapCollection.setAllowChangeRef( true );
-	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
+//	_pixmapCollection.setAllowChangeRef( true );
+//	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
 	if ( _clean )
 	    setPageLayout( __pgLayout, 0, 0 );
@@ -1391,8 +1393,8 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	    setPageLayout( _pageLayout, 0, 0 );
     }
 
-    _pixmapCollection.setAllowChangeRef( true );
-    _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
+//    _pixmapCollection.setAllowChangeRef( true );
+//    _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
     return true;
 }
@@ -1490,7 +1492,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore )
 {
 
-    KPBackGround *kpbackground = new KPBackGround( &_pixmapCollection, &_gradientCollection,
+    KPBackGround *kpbackground = new KPBackGround( &_imageCollection, &_gradientCollection,
 						   &_clipartCollection, this );
     _backgroundList.append( kpbackground );
 
@@ -1580,11 +1582,12 @@ void KPresenterDoc::setBackColor( unsigned int pageNum, QColor backColor1, QColo
 /*==================== set background picture ====================*/
 void KPresenterDoc::setBackPixFilename( unsigned int pageNum, QString backPix )
 {
-    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+//    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    KPImageCollection::Iterator it = _imageCollection.begin();
     QDateTime dt;
 
     if ( !QFileInfo( backPix ).exists() ) {
-	for ( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
+	for ( ; it != _imageCollection.end(); ++it ) {
 	    if ( it.key().filename == backPix ) {
 		dt = it.key().lastModified;
 		break;
@@ -2979,11 +2982,12 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
 /*=================== insert a picture ==========================*/
 void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _x , int _y )
 {
-    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+//    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    KPImageCollection::Iterator it = _imageCollection.begin();
     QDateTime dt;
 
     if ( !QFileInfo( filename ).exists() ) {
-	for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
+	for( ; it != _imageCollection.end(); ++it ) {
 	    if ( it.key().filename == filename ) {
 		dt = it.key().lastModified;
 		break;
@@ -2991,7 +2995,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 	}
     }
 
-    KPPixmapObject *kppixmapobject = new KPPixmapObject( &_pixmapCollection, filename, dt );
+    KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection, filename, dt );
     kppixmapobject->setOrig( ( ( diffx + _x ) / _rastX ) * _rastX, ( ( diffy + _y ) / _rastY ) * _rastY );
     kppixmapobject->setSelected( true );
 
@@ -3048,11 +3052,12 @@ void KPresenterDoc::changePicture( QString filename, int /*diffx*/, int /*diffy*
 {
     KPObject *kpobject = 0;
 
-    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+//    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    KPImageCollection::Iterator it = _imageCollection.begin();
     QDateTime dt;
 
     if ( !QFileInfo( filename ).exists() ) {
-	for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
+	for( ; it != _imageCollection.end(); ++it ) {
 	    if ( it.key().filename == filename ) {
 		dt = it.key().lastModified;
 		break;
@@ -3063,7 +3068,7 @@ void KPresenterDoc::changePicture( QString filename, int /*diffx*/, int /*diffy*
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
 	if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE ) {
-	    KPPixmapObject *pix = new KPPixmapObject( &_pixmapCollection, filename, QDateTime() );
+	    KPPixmapObject *pix = new KPPixmapObject( &_imageCollection, filename, QDateTime() );
 
 	    ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change pixmap" ), dynamic_cast<KPPixmapObject*>( kpobject ),
 						  pix, this );
