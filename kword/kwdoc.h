@@ -668,6 +668,9 @@ public:
     void updateFooterButton();
 
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
+    void addIgnoreWordAllList( const QStringList & _lst)
+        { m_spellListIgnoreAll = _lst;}
+
     void addIgnoreWordAll( const QString & );
     void clearIgnoreWordAll( );
     void updateTextFrameSetEdit();

@@ -290,3 +290,4 @@ Changes after KWord-1.2
 - Add double click on frame => open frame dialogbox
 - Add autocorrection : "Capitalize name of days"
 - Add new font attribute : small caps
+- Now we can edit "ignore all list" 

@@ -33,6 +33,7 @@
 #include <qwhatsthis.h>
 #include <qvgroupbox.h>
 #include <qpushbutton.h>
+#include <qlistbox.h>
 
 #include "kwconfig.h"
 #include "kwview.h"
@@ -55,6 +56,8 @@
 #include <kglobalsettings.h>
 #include <kurlrequesterdlg.h>
 #include <kfiledialog.h>
+#include <qtabwidget.h>
+#include <keditlistbox.h>
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)
 static inline QPixmap loadIcon( const char * name ) {
@@ -173,7 +176,12 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
+
+    QTabWidget *tab = new QTabWidget(box);
+    box->setMargin( KDialog::marginHint() );
+    box->setSpacing( KDialog::spacingHint() );
+
+    QGroupBox* tmpQGroupBox = new QGroupBox( tab, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Spelling"));
 
     QGridLayout *grid1 = new QGridLayout(tmpQGroupBox, 6, 1, KDialog::marginHint(), KDialog::spacingHint());
@@ -194,9 +202,19 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     cbBackgroundSpellCheck->setChecked( m_pView->kWordDocument()->backgroundSpellCheckEnabled() );
     grid1->addWidget(cbBackgroundSpellCheck,4,0);
 
-    clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History..."),tmpQGroupBox);
-    grid1->addMultiCellWidget(clearIgnoreAllHistory,5,5,0,1);
+    tab->addTab(tmpQGroupBox, i18n("General"));
+
+    QVGroupBox* tmpQGroupBox2 = new QVGroupBox( i18n("IgnoreAllList"), tab, "GroupBox2" );
+    m_listpath =  new KEditListBox( i18n("Word:"),
+                                    tmpQGroupBox2, "list_ignoreall" , false,
+                                    KEditListBox::Add|KEditListBox::Remove );
+
+    clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History..."),tmpQGroupBox2);
     connect( clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
+
+    tab->addTab(tmpQGroupBox2, i18n("IgnoreAll"));
+
+    m_listpath->listBox()->insertStringList( m_pView->kWordDocument()->spellListIgnoreAll());
 
     if( config->hasGroup("KSpell kword") )
     {
@@ -231,6 +249,11 @@ void ConfigureSpellPage::apply()
   state=cbBackgroundSpellCheck->isChecked();
   config->writeEntry( "SpellCheck", (int)state );
 
+  QStringList lst;
+  for (int i = 0; i< m_listpath->listBox()->count() ; i++)
+      lst << m_listpath->listBox()->text( i );
+  m_pView->kWordDocument()->addIgnoreWordAllList( lst );
+
   //FIXME reactivate just if there is a changes.
   doc->enableBackgroundSpellCheck( state );
   doc->reactivateBgSpellChecking();
@@ -238,10 +261,8 @@ void ConfigureSpellPage::apply()
 
 void ConfigureSpellPage::slotClearIgnoreAllHistory()
 {
-    int ret = KMessageBox::warningContinueCancel(0L,
-                                                 i18n("Warning! You are about to erase the entire Ignore word history."));
-    if (ret == KMessageBox::Continue)
-        m_pView->kWordDocument()->clearIgnoreWordAll();
+
+    m_listpath->listBox()->clear();
 }
 
 
@@ -256,6 +277,7 @@ void ConfigureSpellPage::slotDefault()
     _dontCheckUpperWord->setChecked(false);
     _dontCheckTitleCase->setChecked(false);
     cbBackgroundSpellCheck->setChecked(false);
+    m_listpath->listBox()->clear();
 }
 
 ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char *name )

@@ -37,6 +37,7 @@ class KIntNumInput;
 class KCommand;
 class KWDocument;
 class KListView;
+class KEditListBox;
 
 class ConfigureSpellPage : public QObject
 {
@@ -55,6 +56,7 @@ private:
     QCheckBox *cbBackgroundSpellCheck;
     QPushButton *clearIgnoreAllHistory;
     KConfig* config;
+    KEditListBox *m_listpath;
 };
 
 class ConfigureInterfacePage : public QObject
