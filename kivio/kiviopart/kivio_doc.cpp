@@ -157,6 +157,7 @@ bool KivioDoc::initDoc()
       KivioPage *t = createPage();
       m_pMap->addPage( t );
       resetURL();
+      initConfig();
       return true;
   }
   else
@@ -542,6 +543,7 @@ KivioStencilSpawnerSet *KivioDoc::addSpawnerSetDuringLoad( QString dirName )
 
 KivioDoc::~KivioDoc()
 {
+    saveConfig();
     // ***MUST*** Delete the pages first because they may
     // contain plugins which will be unloaded soon.  The stencils which are
     // spawned by plugins NEED the plugins still loaded when their destructor
@@ -563,6 +565,27 @@ KivioDoc::~KivioDoc()
     s_docs->removeRef(this);
 
     delete m_options;
+}
+
+void KivioDoc::saveConfig()
+{
+    // Only save the config that is manipulated by the UI directly.
+    // The config from the config dialog is saved by the dialog itself.
+    KConfig *config = KivioFactory::global()->config();
+    config->setGroup( "Interface" );
+    config->writeEntry( "ShowGrid", grid().isShow );
+}
+
+void KivioDoc::initConfig()
+{
+    KConfig *config = KivioFactory::global()->config();
+    if( config->hasGroup("Interface" ) )
+    {
+        config->setGroup( "Interface" );
+        KivioGridData d = grid();
+        d.isShow = config->readBoolEntry( "ShowGrid", true );
+        setGrid(d);
+    }
 }
 
 bool KivioDoc::removeSpawnerSet( KivioStencilSpawnerSet *pSet )

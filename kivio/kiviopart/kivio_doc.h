@@ -123,6 +123,9 @@ public:
 
   ViewItemList* viewItems() { return viewItemList; }
 
+  void initConfig();
+  void saveConfig();
+
 public slots:
   void updateView(KivioPage*, bool modified=true);
 
