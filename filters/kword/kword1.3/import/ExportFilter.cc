@@ -1571,7 +1571,7 @@ bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
     m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">\n"; // ### TODO: what if Graphics is a normal style
-    m_styles += "   <style:properties/>\n";
+    m_styles += "   <style:properties text:anchor-type=\"paragraph\" style:wrap=\"none\"/>\n";
     m_styles += "  </style:style>\n";
     return true;
 }
