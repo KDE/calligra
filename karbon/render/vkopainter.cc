@@ -507,8 +507,8 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		linear->a = dx * scale;
 		linear->b = dy * scale;
-		linear->c = -( ( gradient.origin().x() * m_zoomFactor ) * linear->a +
-					   ( gradient.origin().y() * m_zoomFactor ) * linear->b );
+		linear->c = -( ( gradient.origin().x() * m_zoomFactor + m_matrix.dx() ) * linear->a +
+					   ( gradient.origin().y() * m_zoomFactor + m_matrix.dy() ) * linear->b );
 		//kdDebug() << "linear->a" << linear->a << endl;
 		//kdDebug() << "linear->b" << linear->b << endl;
 		//kdDebug() << "linear->c" << linear->c << endl;

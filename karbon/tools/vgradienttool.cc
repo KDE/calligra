@@ -18,8 +18,8 @@ VGradientTool::VGradientTool( KarbonPart* part )
 	: VTool( part ), m_isDragging( false )
 {
 	m_dialog = new VGradientDlg();
-	m_dialog->setGradientRepeat( 0 );
-	m_dialog->setGradientType( 0 );
+	m_dialog->setGradientRepeat( gradient_repeat_none );
+	m_dialog->setGradientType( gradient_linear );
 }
 
 VGradientTool::~VGradientTool()
@@ -42,7 +42,6 @@ VGradientTool::instance( KarbonPart* part )
 void
 VGradientTool::drawTemporaryObject( KarbonView* view )
 {
-	kdDebug() << "VGradientTool::drawTemporaryObject" << endl;
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
@@ -81,12 +80,13 @@ VGradientTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 		VFill fill;
 		fill.gradient().addStop( VColor( qRgba( 255, 0, 0, 255 ) ), 0.0, 0.5 );
 		fill.gradient().addStop( VColor( qRgba( 255, 255, 0, 255 ) ), 1.0, 0.5 );
-		fill.gradient().setOrigin( m_fp );
-		fill.gradient().setVector( m_lp );
+		fill.gradient().setOrigin( fp * ( 1.0 / view->zoom() ) );
+		fill.gradient().setVector( lp * ( 1.0 / view->zoom() ) );
 		fill.setType( fill_gradient );
 		fill.gradient().setType( (VGradientType)m_dialog->gradientType() );
 		fill.gradient().setRepeatMethod( (VGradientRepeatMethod)m_dialog->gradientRepeat() );
