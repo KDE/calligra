@@ -4870,7 +4870,7 @@ void KPresenterView::extraSpelling()
 #endif
 
     m_pKPresenterDoc->setReadWrite(false); // prevent editing text
-    m_initSwitchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());;
+    m_initSwitchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_switchPage = m_initSwitchPage;
 
     spellAddTextObject();
@@ -6431,7 +6431,7 @@ void KPresenterView::slotObjectEditChanged()
 
     KPTextView *edit=m_canvas->currentTextObjectView();
 
-    bool val=(edit!=0) && isText;
+    bool val=(edit!=0) && isText && !edit->kpTextObject()->isProtectContent();
     actionInsertSpecialChar->setEnabled(val);
     actionInsertComment->setEnabled( val );
 

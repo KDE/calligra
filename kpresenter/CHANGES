@@ -36,3 +36,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Add new type of begin/end line (line arrow, Dimension line... )
 - Add support for find/replace with format
 - Now we can create directly a style from a selection
+- Add support for protect content of text object
