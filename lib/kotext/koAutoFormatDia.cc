@@ -174,35 +174,35 @@ void KoAutoFormatDia::setupTab1()
     cbUpperUpper = new QCheckBox( tab1 );
     cbUpperUpper->setText( i18n( "Convert two uppercase characters to one uppercase and one lowercase character.\n"
                                  "(e.g. PErfect to Perfect)" ) );
-    QWhatsThis::add( cbUpperUpper, i18n("All words are checked for the common mistake to hold the shift key a bit too long. If some words have to have two uppercase characters then those exceptions should be added in the %1 tab.").arg(i18n("Exceptions")));
+    QWhatsThis::add( cbUpperUpper, i18n("All words are checked for the common mistake to hold the shift key down a bit too long. If some words must have two uppercase characters, then those exceptions should be added in the %1 tab.").arg(i18n("Exceptions")));
     cbUpperUpper->resize( cbUpperUpper->sizeHint() );
     cbUpperUpper->setChecked( m_autoFormat.getConfigUpperUpper() );
     ( void )new QWidget( tab1 );
 
     cbDetectUrl=new QCheckBox( tab1 );
     cbDetectUrl->setText( i18n( "Auto format &URLs" ) );
-    QWhatsThis::add( cbDetectUrl, i18n("Detect when a URL (Universal Remote Location) is typed and provide formatting that matches the way an internet browser would show a URL."));
+    QWhatsThis::add( cbDetectUrl, i18n("Detect when a URL (Universal Remote Location) is typed and provide formatting that matches the way an Internet browser would show a URL."));
     cbDetectUrl->resize( cbDetectUrl->sizeHint() );
     cbDetectUrl->setChecked( m_autoFormat.getConfigAutoDetectUrl());
     ( void )new QWidget( tab1 );
 
     cbIgnoreDoubleSpace=new QCheckBox( tab1 );
     cbIgnoreDoubleSpace->setText( i18n( "&Suppress double &spaces" ) );
-    QWhatsThis::add( cbIgnoreDoubleSpace, i18n("Make sure that more then one space can not be typed as this is a common mistake which is quite hard to find in formatted text."));
+    QWhatsThis::add( cbIgnoreDoubleSpace, i18n("Make sure that more than one space cannot be typed, as this is a common mistake which is quite hard to find in formatted text."));
     cbIgnoreDoubleSpace->resize( cbIgnoreDoubleSpace->sizeHint() );
     cbIgnoreDoubleSpace->setChecked( m_autoFormat.getConfigIgnoreDoubleSpace());
     ( void )new QWidget( tab1 );
 
     cbRemoveSpaceBeginEndLine=new QCheckBox( tab1 );
-    cbRemoveSpaceBeginEndLine->setText( i18n( "&Remove spaces at the beginning and the end of paragraphs" ) );
-    QWhatsThis::add( cbRemoveSpaceBeginEndLine, i18n("Keep correct formatting and indenting of sentences by automatically removing spaces typed at beginning and end of a paragraph."));
+    cbRemoveSpaceBeginEndLine->setText( i18n( "&Remove spaces at the beginning and end of paragraphs" ) );
+    QWhatsThis::add( cbRemoveSpaceBeginEndLine, i18n("Keep correct formatting and indenting of sentences by automatically removing spaces typed at the beginning and end of a paragraph."));
     cbRemoveSpaceBeginEndLine->resize( cbRemoveSpaceBeginEndLine->sizeHint() );
     cbRemoveSpaceBeginEndLine->setChecked( m_autoFormat.getConfigRemoveSpaceBeginEndLine());
     ( void )new QWidget( tab1 );
 
     cbAutoChangeFormat=new QCheckBox( tab1 );
     cbAutoChangeFormat->setText( i18n( "Automatically do &bold and underline formatting") );
-    QWhatsThis::add( cbAutoChangeFormat, i18n("When you use _underline_ or *bolding* then the words in between the underscores or stars will be converted to have an underline or a bold formatting") );
+    QWhatsThis::add( cbAutoChangeFormat, i18n("When you use _underline_ or *bold*, the text between the underscores or asterisks will be converted to underlined or bold text.") );
     cbAutoChangeFormat->resize( cbAutoChangeFormat->sizeHint() );
     cbAutoChangeFormat->setChecked( m_autoFormat.getConfigAutoChangeFormat());
     ( void )new QWidget( tab1 );
@@ -216,7 +216,7 @@ void KoAutoFormatDia::setupTab1()
 
     cbUseNumberStyle=new QCheckBox( tab1 );
     cbUseNumberStyle->setText( i18n( "Use auto-numbering for numbered paragraphs" ) );
-    QWhatsThis::add( cbUseNumberStyle, i18n("When typing '1)' or similar in front of a paragraph, automatically convert the paragraph to use that numbering style. This has the advantage that next paragraphs will also be numbered and spacing is done correctly.") );
+    QWhatsThis::add( cbUseNumberStyle, i18n("When typing '1)' or similar in front of a paragraph, automatically convert the paragraph to use that numbering style. This has the advantage that further paragraphs will also be numbered and the spacing is done correctly.") );
     cbUseNumberStyle->resize( cbUseNumberStyle->sizeHint() );
     cbUseNumberStyle->setChecked( m_autoFormat.getConfigAutoNumberStyle());
     ( void )new QWidget( tab1 );
@@ -255,7 +255,7 @@ void KoAutoFormatDia::setupTab2()
     grid->setAutoAdd( true );
 
     cbTypographicDoubleQuotes = new QCheckBox( tab2 );
-    cbTypographicDoubleQuotes->setText( i18n( "Replace Double &Quotes by Typographical Quotes:" ) );
+    cbTypographicDoubleQuotes->setText( i18n( "Replace Double &Quotes with Typographical Quotes:" ) );
     cbTypographicDoubleQuotes->resize( cbTypographicDoubleQuotes->sizeHint() );
 
     bool state=m_autoFormat.getConfigTypographicDoubleQuotes().replace;
@@ -297,7 +297,7 @@ void KoAutoFormatDia::setupTab2()
 
 
     cbTypographicSimpleQuotes = new QCheckBox( tab2 );
-    cbTypographicSimpleQuotes->setText( i18n( "Replace Simple &Quotes by Typographical Quotes:" ) );
+    cbTypographicSimpleQuotes->setText( i18n( "Replace Simple &Quotes with Typographical Quotes:" ) );
     cbTypographicSimpleQuotes->resize( cbTypographicSimpleQuotes->sizeHint() );
 
     state=m_autoFormat.getConfigTypographicSimpleQuotes().replace;
@@ -420,7 +420,7 @@ void KoAutoFormatDia::setupTab5()
     grid->setAutoAdd( true );
 
     cbAllowAutoCompletion = new QCheckBox( tab5 );
-    cbAllowAutoCompletion->setText( i18n( "Autocompletion" ) );
+    cbAllowAutoCompletion->setText( i18n( "Auto Completion" ) );
     cbAllowAutoCompletion->resize( cbAllowAutoCompletion->sizeHint() );
     cbAllowAutoCompletion->setChecked( m_autoFormat.getConfigAutoCompletion());
 
@@ -454,7 +454,7 @@ void KoAutoFormatDia::setupTab5()
     m_minWordLength->resize( m_minWordLength->sizeHint() );
 
 
-    lab=new QLabel( i18n("Max. number of completion word:"), tab5);
+    lab=new QLabel( i18n("Max. number of completion words:"), tab5);
     lab->resize( lab->sizeHint() );
 
     m_maxNbWordCompletion = new KIntNumInput( tab5);
