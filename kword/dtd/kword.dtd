@@ -273,7 +273,8 @@ don't put a </?xml...> at the end of the file!).
     lefttext CDATA #IMPLIED
     righttext CDATA #IMPLIED
     bulletfont CDATA #IMPLIED
-    customdef CDATA #IMPLIED>
+    customdef CDATA #IMPLIED
+    restart CDATA #IMPLIED>
 
 <!--    Contains general attributes for endnote.
 
@@ -291,7 +292,8 @@ don't put a </?xml...> at the end of the file!).
     lefttext CDATA #IMPLIED
     righttext CDATA #IMPLIED
     bulletfont CDATA #IMPLIED
-    customdef CDATA #IMPLIED>
+    customdef CDATA #IMPLIED
+    restart CDATA #IMPLIED>
 
 
 <!--    Container that has a number of FRAMESET children.
@@ -785,6 +787,9 @@ don't put a </?xml...> at the end of the file!).
                 The font to use for the custom bullet can be found in (use "symbol" if in doubt)
         customdef
                 Definition of a custom counter - not supported yet
+        restart
+                If "true" or "1", this paragraph is numbered as specified by start.
+                Otherwise (default) it will extend the current list (with equal type and depth).
 -->
 <!ELEMENT COUNTER
     EMPTY>
@@ -797,7 +802,8 @@ don't put a </?xml...> at the end of the file!).
     lefttext CDATA #IMPLIED
     righttext CDATA #IMPLIED
     bulletfont CDATA #IMPLIED
-    customdef CDATA #IMPLIED>
+    customdef CDATA #IMPLIED
+    restart CDATA #IMPLIED>
 
 <!--
         The space to be added between two consecutive lines in a given paragraph.
