@@ -68,8 +68,8 @@ void KoVerticalLabel::paintEvent( QPaintEvent* )
 	ap.drawPixmap( 0, 0, pm );
 } // KoVerticalLabel::paintEvent
 
-static unsigned char upbits[]   = { 0xc, 0x1e, 0x3f, 0xff };
-static unsigned char downbits[] = { 0xff, 0x3f, 0x1e, 0xc };
+static unsigned char upbits[]   = { 0xc, 0x1e, 0x3f, 0x3f };
+static unsigned char downbits[] = { 0x3f, 0x3f, 0x1e, 0xc };
 
 KoHelpNavButton::KoHelpNavButton( NavDirection d, QWidget* parent )
 		: QWidget( parent )
@@ -77,7 +77,7 @@ KoHelpNavButton::KoHelpNavButton( NavDirection d, QWidget* parent )
 	m_pressed = false;
 	m_bitmap = QBitmap( 8, 4, ( d == Up ? upbits : downbits ), true );
 	m_bitmap.setMask( m_bitmap );
-	setFixedSize( 8, 4 );
+	setFixedSize( 8, 6 );
 	setBackgroundMode( PaletteLight );
 } // KoHelpNavButton::KoHelpNavButton
 
@@ -87,10 +87,10 @@ void KoHelpNavButton::paintEvent( QPaintEvent* )
 	if ( isEnabled() )
 	{
 		if ( m_pressed )
-			p.setPen( Qt::black );
-		else
 			p.setPen( colorGroup().highlight() );
-		p.drawPixmap( 0, 0, m_bitmap );
+		else
+			p.setPen( colorGroup().text() );
+		p.drawPixmap( 1, 1, m_bitmap );
 	}
 } // KoHelpNavButton::paintEvent
 
@@ -139,9 +139,9 @@ void KoTinyButton::paintEvent( QPaintEvent* )
 	if ( isEnabled() )
 	{
 		if ( m_pressed )
-			p.setPen( Qt::black );
-		else
 			p.setPen( colorGroup().highlight() );
+		else
+			p.setPen( colorGroup().text() );
 		p.drawPixmap( width() / 2 - 2, 1, m_bitmap );
 	}
 }; // KoTinyButton::paintEvent
@@ -180,6 +180,7 @@ KoHelpView::KoHelpView( QWidget* parent )
 		: QWidget( parent )
 {
 	currentText = 0L;
+	setBackgroundMode( PaletteLight );
 	parent->installEventFilter( this );
 }; // KoHelpView::KoHelpView
 
@@ -235,7 +236,7 @@ bool KoHelpView::eventFilter( QObject*, QEvent* e )
 void KoHelpView::paintEvent( QPaintEvent* )
 {
 	QPainter p( this );
-	currentText->draw( &p, 0, 0, QRect(), QColorGroup() );
+	currentText->draw( &p, 0, 0, QRect(), colorGroup() );
 }; // KoHelpView::paintEvent
 
 KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
@@ -251,7 +252,6 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 	layout->setColStretch( 1, 1 );
 
 	m_helpView = new KoHelpView( m_helpViewport );
-	m_helpView->setBackgroundMode( PaletteLight );
 	m_helpViewport->setBackgroundMode( PaletteLight );
 	setText( help );
 
@@ -267,7 +267,7 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 void KoHelpWidget::updateButtons()
 {
 	m_upButton->setEnabled( m_ypos < 0 );
-	m_downButton->setEnabled( m_helpViewport->height() - m_helpView->height() - m_ypos < 0 );
+	m_downButton->setEnabled( m_helpViewport->height() - m_ypos < m_helpView->height() );
 } // KoHelpWidget::updateButtons
 
 void KoHelpWidget::setText( QString text )
@@ -277,6 +277,11 @@ void KoHelpWidget::setText( QString text )
 	m_ypos = 0;
 	updateButtons();
 } // KoHelpWidget::setText
+
+void KoHelpWidget::resizeEvent( QResizeEvent* )
+{
+	updateButtons();
+} // KoHelpWidget::resizeEvent
 
 void KoHelpWidget::startScrollingUp()
 {
@@ -340,8 +345,8 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	QHBoxLayout* buttonLayout;
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
-        buttonLayout = new QHBoxLayout( layout );
-        //layout->addLayout( buttonLayout, 2, 0 );
+	buttonLayout = new QHBoxLayout( layout );
+	//layout->addLayout( buttonLayout, 2, 0 );
 	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 2, 1, 1 );
 	buttonLayout->add( m_close = new KoTinyButton( KoTinyButton::Close, this ) );
 	buttonLayout->add( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
@@ -513,6 +518,7 @@ KoContextHelpWidget::KoContextHelpWidget( QWidget* parent, const char* name )
 	this->setMinimumSize( 180, 120 );
 	this->show();
 	setContextHelp( i18n( "Context Help" ), i18n( "Here will be shown help according to your actions" ), 0 );
+	connect( m_helpViewer, SIGNAL( linkClicked( const QString& ) ), this, SIGNAL( linkClicked( const QString& ) ) );
 } // KoContextHelpWidget::KoContextHelpWidget
 
 KoContextHelpWidget::~KoContextHelpWidget()

@@ -147,6 +147,9 @@ class KoHelpWidget : public QWidget
 		void startScrollingDown();
 		void stopScrolling();
 
+	protected:
+		void resizeEvent( QResizeEvent* );
+
 	private:
 		int              m_ypos;
 		bool             m_scrollDown;
@@ -236,6 +239,12 @@ class KoContextHelpWidget : public QWidget
 
 	public slots:
 		void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
+
+	signals:
+		/**
+		 * Connect to this signal to receive the href value of the links clicked.
+		 */
+		void linkClicked( const QString& link );
 
 	private:
 		KoHelpWidget*    m_helpViewer;
