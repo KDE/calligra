@@ -333,7 +333,7 @@ void KSpreadConditionalDlg::init()
             found = false;
           if ( !(*it1).strVal1 && (*it2).strVal1 )
             found = false;
-          if ( (*it1).strVal1 && (*it2).strVal1 
+          if ( (*it1).strVal1 && (*it2).strVal1
                && ( *(*it1).strVal1 != *(*it2).strVal1 ) )
             found = false;
           if ( !found )
@@ -343,7 +343,7 @@ void KSpreadConditionalDlg::init()
             found = false;
           if ( !(*it1).strVal2 && (*it2).strVal2 )
             found = false;
-          if ( (*it1).strVal2 && (*it2).strVal2 
+          if ( (*it1).strVal2 && (*it2).strVal2
                && ( *(*it1).strVal2 != *(*it2).strVal2 ) )
             found = false;
           if ( !found )
@@ -353,7 +353,7 @@ void KSpreadConditionalDlg::init()
             found = false;
           if ( !(*it1).colorcond && (*it2).colorcond )
             found = false;
-          if ( (*it1).colorcond && (*it2).colorcond 
+          if ( (*it1).colorcond && (*it2).colorcond
                && ( *(*it1).colorcond != *(*it2).colorcond ) )
             found = false;
           if ( !found )
@@ -363,7 +363,7 @@ void KSpreadConditionalDlg::init()
             found = false;
           if ( !(*it1).fontcond && (*it2).fontcond )
             found = false;
-          if ( (*it1).fontcond && (*it2).fontcond 
+          if ( (*it1).fontcond && (*it2).fontcond
                && ( *(*it1).fontcond != *(*it2).fontcond ) )
             found = false;
           if ( !found )
@@ -373,7 +373,7 @@ void KSpreadConditionalDlg::init()
             found = false;
           if ( !(*it1).styleName && (*it2).styleName )
             found = false;
-          if ( (*it1).styleName && (*it2).styleName 
+          if ( (*it1).styleName && (*it2).styleName
                && ( *(*it1).styleName != *(*it2).styleName ) )
             found = false;
 	}
@@ -648,11 +648,11 @@ void KSpreadConditionalDlg::slotOk()
     newList.append( newCondition );
 
   if ( getCondition( newCondition, m_dlg->m_condition_2, m_dlg->m_firstValue_2,
-                     m_dlg->m_secondValue_2, m_dlg->m_style_2, manager->style( m_dlg->m_style_1->currentText() ) ) )
+                     m_dlg->m_secondValue_2, m_dlg->m_style_2, manager->style( m_dlg->m_style_2->currentText() ) ) )
     newList.append( newCondition );
 
   if ( getCondition( newCondition, m_dlg->m_condition_3, m_dlg->m_firstValue_3,
-                     m_dlg->m_secondValue_3, m_dlg->m_style_3, manager->style( m_dlg->m_style_1->currentText() ) ) )
+                     m_dlg->m_secondValue_3, m_dlg->m_style_3, manager->style( m_dlg->m_style_3->currentText() ) ) )
     newList.append( newCondition );
 
   kdDebug() << "Setting conditional list" << endl;
