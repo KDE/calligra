@@ -29,7 +29,7 @@ namespace KFormDesigner {
 class Form;
 class FormManager;
 
-class KEXIPROPERTYEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
+class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 {
 	Q_OBJECT
 

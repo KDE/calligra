@@ -43,7 +43,7 @@ class WidgetLibrary;
     properties, and pixmaps(pixmap-related code was taken from Qt Designer).
  **/
  //! A class to save/load forms from .ui files
-class KEXIPROPERTYEDITOR_EXPORT FormIO : public QObject
+class KFORMEDITOR_EXPORT FormIO : public QObject
 {
 	Q_OBJECT
 	
