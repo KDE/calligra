@@ -1334,6 +1334,10 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
         setGoUpDiagonalPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" ) ) );
     }
 
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    {
+        kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+    }
     return true;
 }
 

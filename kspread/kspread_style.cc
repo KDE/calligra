@@ -367,6 +367,12 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         m_goUpDiagonalPen = convertOasisStringToPen( str );
         m_featuresSet |= SGoUpDiagonal;
     }
+
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    {
+        kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+    }
+
 #if 0
     bool ok;
     if ( format.hasAttribute( "type" ) )
