@@ -99,7 +99,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     kdDebug(30004) << "Split:" << number << ":" << unitName << ":" << endl;
 
     bool ok = false;
-    const double value = m_base->toDouble( number, &ok );
+    const double value = KoUnitDoubleBase::toDouble( number, &ok );
     double newVal = 0.0;
     if( ok )
     {
@@ -134,7 +134,7 @@ QString KoUnitDoubleBase::getVisibleText( double value ) const
     return num;
 }
 
-double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
+double KoUnitDoubleBase::toDouble( const QString& str, bool* ok )
 {
     QString str2( str );
     /* KLocale::readNumber wants the thousand separator exactly at 1000.
@@ -190,7 +190,7 @@ void
 KoUnitDoubleLineEdit::changeValue( double value )
 {
 	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
-	setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( m_value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+        setText( getVisibleText( m_value ) );
 }
 
 void
@@ -209,7 +209,7 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
 	{
 		bool ok;
-		double value = text().replace( ',', "." ).toDouble( &ok );
+                const double value = KoUnitDoubleBase::toDouble( text(), &ok );
 		changeValue( value );
 		return false;
 	}
@@ -242,13 +242,13 @@ void
 KoUnitDoubleComboBox::updateValue( double value )
 {
 	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
-	lineEdit()->setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( m_value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+        lineEdit()->setText( getVisibleText( m_value ) );
 }
 
 void
 KoUnitDoubleComboBox::insertItem( double value, int index )
 {
-	KComboBox::insertItem( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ), index );
+	KComboBox::insertItem( getVisibleText( value ), index );
 }
 
 void
@@ -256,7 +256,7 @@ KoUnitDoubleComboBox::slotActivated( int index )
 {
 	double oldvalue = m_value;
 	bool ok;
-	double value = text( index ).replace( ',', "." ).toDouble( &ok );
+        const double value = KoUnitDoubleBase::toDouble( text( index ), &ok );
 	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
 	if( m_value != oldvalue )
 		emit valueChanged( m_value );
@@ -269,7 +269,7 @@ KoUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 	m_unit = unit;
 	m_lower = KoUnit::ptToUnit( KoUnit::ptFromUnit( m_lower, old ), unit );
 	m_upper = KoUnit::ptToUnit( KoUnit::ptFromUnit( m_upper, old ), unit );
-	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
+	changeValue( KoUnit::ptToUnit( getUserValue( m_value, old ), unit ) );
 }
 
 bool
@@ -278,7 +278,7 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
 	{
 		bool ok;
-		double value = lineEdit()->text().replace( ',', "." ).toDouble( &ok );
+                const double value = KoUnitDoubleBase::toDouble( lineEdit()->text(), &ok );
 		changeValue( value );
 		return false;
 	}

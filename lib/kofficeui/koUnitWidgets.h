@@ -71,7 +71,7 @@ protected:
         * @param ok true, if the conversion was succesful
         * @return the value as double
         */
-        double toDouble( const QString& str, bool* ok ) const;
+        static double toDouble( const QString& str, bool* ok );
 
         KoUnitDoubleValidator	*m_validator;
 	KoUnit::Unit			m_unit;
