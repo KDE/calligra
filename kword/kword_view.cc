@@ -798,11 +798,13 @@ void KWordView::insertVariableDateVar()
 /*===============================================================*/
 void KWordView::insertVariableTimeFix()
 {
+  gui->getPaperWidget()->insertVariable(VT_TIME_FIX);
 }
 
 /*===============================================================*/
 void KWordView::insertVariableTimeVar()
 {
+  gui->getPaperWidget()->insertVariable(VT_TIME_VAR);
 }
 
 /*===============================================================*/

@@ -6,6 +6,5 @@ TODO-List:
 - Preview widget for style templates editor
 - Make recalculation of frames (after resizing frames) and calculation of text running around frames much FASTER. Espacially the
   recalculation of the whole text in these cases is very slow in long docs
-- When painting text the background has to be restored and not just deleted
 
 Reginald Stadlbauer <reggie@kde.org>

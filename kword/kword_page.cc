@@ -28,7 +28,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   : QWidget(parent,""), buffer(width(),height()), format(_doc)
 {
   setFocusPolicy(QWidget::StrongFocus);
-  
+
   editNum = -1;
   recalcingText = false;
 
@@ -1128,8 +1128,12 @@ void KWPage::recalcText()
   bool bend = false;
 
   while (!bend)
-    bend = !_fc.makeNextLineLayout(painter);
-
+    {
+      bend = !_fc.makeNextLineLayout(painter);
+      if (doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > yOffset + height() + 20)
+	bend = true;
+    }
+  
   painter.end();
 }
 
@@ -1153,7 +1157,11 @@ void KWPage::recalcWholeText(bool _cursor = false,bool _fast = false)
       bool bend = false;
 
       while (!bend)
-	bend = !_fc.makeNextLineLayout(painter);
+	{
+	  bend = !_fc.makeNextLineLayout(painter);
+	  if (/*_fast &&*/ doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > yOffset + height() + 20)
+	    bend = true;
+	}
     }
 
   painter.end();
@@ -3920,6 +3928,20 @@ void KWPage::insertVariable(VariableType type)
     case VT_DATE_VAR:
       {
 	KWDateVariable *var = new KWDateVariable(doc,false,QDate::currentDate());
+	var->setVariableFormat(doc->getVarFormats().find(static_cast<int>(type)));
+	fc->getParag()->insertVariable(fc->getTextPos(),var);
+	fc->getParag()->setFormat(fc->getTextPos(),1,format);
+      } break;
+    case VT_TIME_FIX:
+      {
+	KWTimeVariable *var = new KWTimeVariable(doc,true,QTime::currentTime());
+	var->setVariableFormat(doc->getVarFormats().find(static_cast<int>(type)));
+	fc->getParag()->insertVariable(fc->getTextPos(),var);
+	fc->getParag()->setFormat(fc->getTextPos(),1,format);
+      } break;
+    case VT_TIME_VAR:
+      {
+	KWTimeVariable *var = new KWTimeVariable(doc,false,QTime::currentTime());
 	var->setVariableFormat(doc->getVarFormats().find(static_cast<int>(type)));
 	fc->getParag()->insertVariable(fc->getTextPos(),var);
 	fc->getParag()->setFormat(fc->getTextPos(),1,format);

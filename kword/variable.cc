@@ -65,6 +65,29 @@ QString KWVariableDateFormat::convert(KWVariable *_var)
 }
 
 /******************************************************************/
+/* Class: KWVariableTimeFormat                                    */
+/******************************************************************/
+
+/*================================================================*/
+void KWVariableTimeFormat::setFormat(QString _format)
+{
+  KWVariableFormat::setFormat(_format);
+}
+
+/*================================================================*/
+QString KWVariableTimeFormat::convert(KWVariable *_var)
+{
+  if (_var->getType() != VT_TIME_FIX && _var->getType() != VT_TIME_VAR)
+    {
+      warning("Can't convert variable of type %d to a time!!!",_var->getType());
+      return QString();
+    }
+
+  // for now...
+  return dynamic_cast<KWTimeVariable*>(_var)->getTime().toString();
+}
+
+/******************************************************************/
 /* Class: KWDateVariable                                          */
 /******************************************************************/
 
@@ -82,5 +105,26 @@ KWDateVariable::KWDateVariable(KWordDocument *_doc,bool _fix,QDate _date)
 
 /*================================================================*/
 void KWDateVariable::recalc()
+{
+}
+
+/******************************************************************/
+/* Class: KWTimeVariable                                          */
+/******************************************************************/
+
+/*================================================================*/
+KWTimeVariable::KWTimeVariable(KWordDocument *_doc,bool _fix,QTime _time)
+  : KWVariable(_doc), fix(_fix)
+{
+  if (!fix)
+    time = QTime::currentTime();
+  else
+    time = _time;
+
+  recalc();
+}
+
+/*================================================================*/
+void KWTimeVariable::recalc()
 {
 }

@@ -335,6 +335,8 @@ void KWFormatContext::cursorGotoLeft( QPainter &_painter )
 
 void KWFormatContext::cursorGotoUp( QPainter &_painter )
 {
+  int frm = frame;
+  
     if (!during_vertical_cursor_movement){
 	WantedPtPos = ptPos;
     }
@@ -358,6 +360,10 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 		lineStartPos = lineEndPos;
 	    }
 	} while( ret );
+	
+	if (frm != frame)
+	  WantedPtPos = ptStartPos; //doc->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left();
+		
 	cursorGotoLineStart( _painter );
 	while (ptPos < WantedPtPos && textPos < lineEndPos && !isCursorAtLineEnd()){
 	  cursorGotoRight( _painter);
@@ -376,6 +382,9 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 	    }
 	} while(lineEndPos < tmpPos);
 
+	if (frm != frame)
+	  WantedPtPos = ptStartPos; //doc->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left();
+
 	cursorGotoLineStart( _painter );
 	while (ptPos < WantedPtPos && textPos < lineEndPos - 1 && !isCursorAtLineEnd()){
 	  cursorGotoRight( _painter);
@@ -385,6 +394,7 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 
 void KWFormatContext::cursorGotoDown( QPainter &_painter )
 {
+  int frm = frame;
     // Save the position where we started going down
     if ( !during_vertical_cursor_movement)
     {
@@ -406,7 +416,10 @@ void KWFormatContext::cursorGotoDown( QPainter &_painter )
 	ptY += getLineHeight();
 	makeLineLayout( _painter );
     }
-
+    
+    if (frm != frame)
+      WantedPtPos = ptStartPos; //doc->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left();
+    
     cursorGotoLineStart( _painter );
     while (ptPos < WantedPtPos &&
 	   !isCursorAtLineEnd() ){

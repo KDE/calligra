@@ -1121,6 +1121,8 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     {
       varFormats.insert(VT_DATE_FIX,new KWVariableDateFormat());
       varFormats.insert(VT_DATE_VAR,new KWVariableDateFormat());
+      varFormats.insert(VT_TIME_FIX,new KWVariableTimeFormat());
+      varFormats.insert(VT_TIME_VAR,new KWVariableTimeFormat());
       varFormats.insert(VT_PGNUM,new KWVariablePgNumFormat());
       // ... and so on ...
     }
@@ -3353,9 +3355,9 @@ long int KWordDocument::getPageNum(int bottom)
     {
       if (bottom < (num + 1) * getPTPaperHeight())
 	return num;
- 
+
       num++;
     }
-  
+
   return num;
 }

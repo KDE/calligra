@@ -889,3 +889,10 @@ Reggie, 7.3.1999:
 - Some fixes with events and key compression
 - Implemented inserting variable date vars and page num vars
 - Lots of fixes in variables
+
+Reggie, 8.3.1999:
+-----------------
+- Improved speed when the whole doc has to be recalculated
+  (there may be some redraw problems now, but I couldn't find some)
+- Fixes in cursor navigation
+- Implemented inserting variable and fix time variables
