@@ -40,7 +40,7 @@ public:
 
     // constructor - destructor
     KPRPage(KPresenterDoc *_doc);
-    ~KPRPage();
+    virtual ~KPRPage();
 
     KPresenterDoc * kPresenterDoc() const {return m_doc; } 
 
