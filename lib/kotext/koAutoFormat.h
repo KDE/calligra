@@ -113,6 +113,7 @@ public:
 
     void configAutoReplaceNumber( bool b );
 
+    void configAutoNumberStyle( bool b );
 
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
@@ -142,6 +143,9 @@ public:
 
     bool getConfigAutoReplaceNumber() const
     { return m_autoReplaceNumber; }
+
+    bool getConfigAutoNumberStyle() const
+    { return m_useAutoNumberStyle; }
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -200,6 +204,8 @@ protected:
 
     void doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
 
+    void doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj );
+
 private:
     void detectStartOfLink(const QString &word);
 
@@ -211,6 +217,7 @@ private:
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
     bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;
     bool m_useBulletStyle, m_autoChangeFormat, m_autoReplaceNumber;
+    bool m_useAutoNumberStyle;
 
     QChar bulletStyle;
 

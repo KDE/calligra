@@ -228,11 +228,19 @@ void KoAutoFormatDia::setupTab1()
     cbAutoReplaceNumber->setChecked( m_autoFormat.getConfigAutoReplaceNumber());
     ( void )new QWidget( tab1 );
 
+    cbUseNumberStyle=new QCheckBox( tab1 );
+    cbUseNumberStyle->setText( i18n( "Use number style" ) );
+    cbUseNumberStyle->resize( cbUseNumberStyle->sizeHint() );
+    cbUseNumberStyle->setChecked( m_autoFormat.getConfigAutoNumberStyle());
+    ( void )new QWidget( tab1 );
+
+
     cbUseBulletStyle=new QCheckBox( tab1 );
     cbUseBulletStyle->setText( i18n( "Use bullet style - * " ) );
     cbUseBulletStyle->resize( cbUseBulletStyle->sizeHint() );
     cbUseBulletStyle->setChecked( m_autoFormat.getConfigUseBulletSyle());
     ( void )new QWidget( tab1 );
+
 
     quotes = new QHBox( tab1 );
     quotes->setSpacing( 5 );
@@ -480,7 +488,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configAutoChangeFormat( cbAutoChangeFormat->isChecked());
 
     m_docAutoFormat->configAutoReplaceNumber( cbAutoReplaceNumber->isChecked());
-
+    m_docAutoFormat->configAutoNumberStyle(cbUseNumberStyle->isChecked());
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );

@@ -81,6 +81,8 @@ void KoAutoFormat::readConfig()
 
     m_autoReplaceNumber = config.readBoolEntry( "AutoReplaceNumber", false );
 
+    m_useAutoNumberStyle = config.readBoolEntry( "AutoNumberStyle", false );
+
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicQuotes.begin = begin[0];
     QString end = config.readEntry( "TypographicQuotesEnd", "»" );
@@ -169,6 +171,8 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "AutoChangeFormat", m_autoChangeFormat);
 
     config.writeEntry( "AutoReplaceNumber", m_autoReplaceNumber);
+
+    config.writeEntry( "AutoNumberStyle", m_useAutoNumberStyle );
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -292,6 +296,8 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
             doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj );
         if( m_useBulletStyle  && index > 3)
             doUseBulletStyle(textEditCursor, parag, txtObj );
+        if( m_useAutoNumberStyle && index > 3 )
+            doUseNumberStyle(textEditCursor, parag, txtObj );
     }
 
     //kdDebug() << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
@@ -662,6 +668,68 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor * /*textEditCursor*/, KoTextPara
 
 }
 
+void KoAutoFormat::doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj )
+{
+    KoTextDocument * textdoc = parag->textDocument();
+    QTextCursor cursor( parag->document() );
+    KoTextString *s = parag->string();
+    QString word;
+    for ( int i = 0 ; i < s->length() - 1; i++ )
+    {
+        QChar ch = s->at( i ).c;
+        if ( ch.isSpace() )
+            break;
+        word.append( ch );
+    }
+    QChar punct=word[word.length()-1];
+    if( punct.isPunct() )
+    {
+        QString number=word.mid(0,word.length()-1);
+        bool ok;
+        uint val=number.toUInt(&ok);
+        if( ok )
+        {
+            KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (use number style)"));
+            cursor.setParag( parag );
+            cursor.setIndex( 0 );
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            cursor.setParag( parag );
+            cursor.setIndex( word.length()+1 );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextObject::HighlightSelection  );
+            if(cmd)
+                macroCmd->addCommand(cmd);
+
+            cursor.setParag( parag );
+            cursor.setIndex( 0 );
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+
+            cursor.setIndex( 2 );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+
+            KoParagCounter c;
+            c.setNumbering( KoParagCounter::NUM_LIST );
+            c.setStyle( KoParagCounter::STYLE_NUM );
+            c.setSuffix(QString( punct ));
+            c.setStartNumber( (int)val);
+            cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
+            if( cmd)
+                macroCmd->addCommand(cmd);
+            cursor.setParag( static_cast<KoTextParag*>(parag->next()) );
+            cursor.setIndex( 0 );
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            cursor.setIndex( 0 );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
+            if(cmd)
+                macroCmd->addCommand(cmd);
+            txtObj->emitNewCommand(macroCmd);
+        }
+
+    }
+}
+
+
 void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
 {
     KoTextString *s = parag->string();
@@ -796,6 +864,11 @@ void KoAutoFormat::configAutoChangeFormat( bool b)
 void KoAutoFormat::configAutoReplaceNumber( bool b )
 {
     m_autoReplaceNumber = b;
+}
+
+void KoAutoFormat::configAutoNumberStyle( bool b )
+{
+    m_useAutoNumberStyle = b;
 }
 
 bool KoAutoFormat::isUpper( const QChar &c )
