@@ -188,7 +188,8 @@ public:
     virtual QCursor getMouseCursor( unsigned int mx, unsigned int my );
 
     virtual QDomElement save( QDomDocument &doc );
-
+    virtual bool load( QDomElement& element );
+    
     int getNext( QRect _rect );
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
 

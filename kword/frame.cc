@@ -547,6 +547,129 @@ QDomElement KWFrameSet::save( QDomDocument &doc )
 }
 
 /*================================================================*/
+bool KWFrameSet::load( QDomElement& element )
+{
+     init();
+
+     KWParag *last = 0L;
+
+     QDomElement f = element.firstChild().toElement();
+     for( ; !f.isNull(); f = f.nextSibling().toElement() ) {
+	 KWFrame rect;
+	 KWParagLayout::Border l, r, t, b;
+	 float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
+	 unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
+	 
+	 l.color = Qt::white;
+	 l.style = KWParagLayout::SOLID;
+	 l.ptWidth = 1;
+	 r.color = Qt::white;
+	 r.style = KWParagLayout::SOLID;
+	 r.ptWidth = 1;
+	 t.color = Qt::white;
+	 t.style = KWParagLayout::SOLID;
+	 t.ptWidth = 1;
+	 b.color = Qt::white;
+	 b.style = KWParagLayout::SOLID;
+	 b.ptWidth = 1;
+	 QColor c( Qt::white );
+
+	 if ( f.hasAttribute( "left" ) )
+	     rect.setLeft( f.attribute( "left" ).toInt() );
+	 if ( f.hasAttribute( "right" ) )
+	     rect.setRight( f.attribute( "right" ).toInt() );
+	 if ( f.hasAttribute( "top" ) )
+	     rect.setTop( f.attribute( "top" ).toInt() );
+	 if ( f.hasAttribute( "bottom" ) )
+	     rect.setBottom( f.attribute( "bottom" ).toInt() );
+
+	 if ( f.hasAttribute( "run-around" ) )
+	     rect.setRunAround( (RunAround)f.attribute( "run-around" ).toInt() );
+	 if ( f.hasAttribute( "run-around-gap-mm" ) )
+	     ramm = f.attribute( "run-around-gap-mm" ).toInt();
+	 if ( f.hasAttribute( "run-around-gap-pt" ) )
+	     rapt = f.attribute( "run-around-gap-pt" ).toInt();
+	 if ( f.hasAttribute( "run-around-gap-inch" ) )
+	     rainch = f.attribute( "run-around-gap-inch" ).toInt();
+
+	 if ( f.hasAttribute( "lWidth" ) )
+	     l.ptWidth = f.attribute( "lWidth" ).toInt();
+	 if ( f.hasAttribute( "lColor" ) )
+	     l.color = QColor( f.attribute( "lColor" ) );
+	 if ( f.hasAttribute( "lStyle" ) )
+	     l.style = (KWParagLayout::BorderStyle) f.attribute( "lStyle" ).toInt();
+
+	 if ( f.hasAttribute( "rWidth" ) )
+	     r.ptWidth = f.attribute( "rWidth" ).toInt();
+	 if ( f.hasAttribute( "rColor" ) )
+	     r.color = QColor( f.attribute( "rColor" ) );
+	 if ( f.hasAttribute( "rStyle" ) )
+	     r.style = (KWParagLayout::BorderStyle) f.attribute( "rStyle" ).toInt();
+	    
+	 if ( f.hasAttribute( "bWidth" ) )
+	     b.ptWidth = f.attribute( "bWidth" ).toInt();
+	 if ( f.hasAttribute( "bColor" ) )
+	     b.color = QColor( f.attribute( "bColor" ) );
+	 if ( f.hasAttribute( "bStyle" ) )
+	     b.style = (KWParagLayout::BorderStyle) f.attribute( "bStyle" ).toInt();
+
+	 if ( f.hasAttribute( "tWidth" ) )
+	     t.ptWidth = f.attribute( "tWidth" ).toInt();
+	 if ( f.hasAttribute( "tColor" ) )
+	     t.color = QColor( f.attribute( "tColor" ) );
+	 if ( f.hasAttribute( "tStyle" ) )
+	     t.style = (KWParagLayout::BorderStyle) f.attribute( "tStyle" ).toInt();
+	    
+	 if ( f.hasAttribute( "background-color" ) )	    
+	     c = f.attribute( "background-color" );
+
+	 if ( f.hasAttribute( "border-left-mm" ) )
+	     lmm = f.attribute( "border-left-mm" ).toInt();
+	 if ( f.hasAttribute( "border-left-pt" ) )
+	     lpt = f.attribute( "border-left-pt" ).toInt();
+	 if ( f.hasAttribute( "border-left-inch" ) )
+	     linch = f.attribute( "border-left-inch" ).toInt();
+
+	 if ( f.hasAttribute( "border-right-mm" ) )
+	     rmm = f.attribute( "border-right-mm" ).toInt();
+	 if ( f.hasAttribute( "border-right-pt" ) )
+	     rpt = f.attribute( "border-right-pt" ).toInt();
+	 if ( f.hasAttribute( "border-right-inch" ) )
+	     rinch = f.attribute( "border-right-inch" ).toInt();
+
+	 if ( f.hasAttribute( "border-top-mm" ) )
+	     tmm = f.attribute( "border-top-mm" ).toInt();
+	 if ( f.hasAttribute( "border-top-pt" ) )
+	     tpt = f.attribute( "border-top-pt" ).toInt();
+	 if ( f.hasAttribute( "border-top-inch" ) )
+	     tinch = f.attribute( "border-top-inch" ).toInt();
+
+	 if ( f.hasAttribute( "border-bottom-mm" ) )
+	     bmm = f.attribute( "border-bottom-mm" ).toInt();
+	 if ( f.hasAttribute( "border-bottom-pt" ) )
+	     bpt = f.attribute( "border-bottom-pt" ).toInt();
+	 if ( f.hasAttribute( "border-bottom-inch" ) )
+	     binch = f.attribute( "border-bottom-inch" ).toInt();
+     }
+     KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
+				    rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
+     _frame->setLeftBorder( l );
+     _frame->setRightBorder( r );
+     _frame->setTopBorder( t );
+     _frame->setBottomBorder( b );
+     _frame->setBackgroundColor( QBrush( c ) );
+     _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
+     _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
+     _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
+     _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+     frames.append( _frame );
+     
+     updateCounters();
+     
+     return true;
+}
+
+/*================================================================*/
 int KWFrameSet::getNext( QRect _rect )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ )
@@ -896,6 +1019,9 @@ QDomElement KWTextFrameSet::save( QDomDocument &doc )
 }
 
 /*================================================================*/
+bool KWTextFrameSet::load( QDomElement& element )
+{
+    
 // #### todo
 // void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 // {
