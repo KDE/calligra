@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kspread_global.h"
 #include "kspread_canvas.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
@@ -1771,7 +1772,7 @@ bool RowLayout::load( const QDomElement& row, int yshift, PasteMode sp)
 	kdDebug(36001) << "Value height=" << m_fHeight << " out of range" << endl;
 	return false;
     }
-    if ( m_iRow < 1 || m_iRow >= 0x7FFF )
+    if ( m_iRow < 1 || m_iRow >= KS_rowMax )
     {
 	kdDebug(36001) << "Value row=" << m_iRow << " out of range" << endl;
 	return false;
@@ -1957,7 +1958,7 @@ bool ColumnLayout::load( const QDomElement& col, int xshift,PasteMode sp )
 	kdDebug(36001) << "Value width=" << m_fWidth << " out of range" << endl;
 	return false;
     }
-    if ( m_iColumn < 1 || m_iColumn >= 0x7FFF )
+    if ( m_iColumn < 1 || m_iColumn >= KS_colMax )
     {
 	kdDebug(36001) << "Value col=" << m_iColumn << " out of range" << endl;
 	return false;

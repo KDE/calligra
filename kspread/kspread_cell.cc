@@ -26,6 +26,7 @@
 #include <qsimplerichtext.h>
 #include <qpopupmenu.h>
 
+#include "kspread_global.h"
 #include "kspread_canvas.h"
 #include "kspread_map.h"
 #include "kspread_doc.h"
@@ -534,7 +535,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
                 row += _row;
             // Skip '#' or '$'
             ++pos;
-            if ( row <= 0 || col <= 0 || row > 0x7FFF || col > 26*26 )
+            if ( row <= 0 || col <= 0 || row > KS_rowMax || col > KS_colMax )
             {
                 kdError(36001) << "KSpreadCell::decodeFormula: row or column out of range" << endl;
                 return _text;
@@ -3817,12 +3818,12 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         setAction( cell.attribute("action") );
 
     // Validation
-    if ( m_iRow < 1 || m_iRow > 0x7FFF )
+    if ( m_iRow < 1 || m_iRow > KS_rowMax )
     {
         kdDebug(36001) << "KSpreadCell::load: Value out of Range Cell:row=" << m_iRow << endl;
         return false;
     }
-    if ( m_iColumn < 1 || m_iColumn > 0x7FFF )
+    if ( m_iColumn < 1 || m_iColumn > KS_colMax )
     {
         kdDebug(36001) << "KSpreadCell::load: Value out of Range Cell:column=" << m_iColumn << endl;
         return false;
@@ -3843,7 +3844,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             int i = f.attribute("colspan").toInt( &ok );
             if ( !ok ) return false;
             // Validation
-            if ( i < 0 || i > 0xFFF )
+            if ( i < 0 || i > KS_spanMax )
             {
                 kdDebug(36001) << "Value out of range Cell::colspan=" << i << endl;
                 return false;
@@ -3858,7 +3859,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             int i = f.attribute("rowspan").toInt( &ok );
             if ( !ok ) return false;
             // Validation
-            if ( i < 0 || i > 0xFFF )
+            if ( i < 0 || i > KS_spanMax )
             {
                 kdDebug(36001) << "Value out of range Cell::rowspan=" << i << endl;
                 return false;

@@ -945,8 +945,8 @@ protected:
      * If all 4 coordinates are 0 then no selection is made at all.
      * But testing only selection.left() == 0 will tell you whether a selection
      * is currently active or not.
-     * If complete columns are selected, then selection.bottom() == 0x7FFF and selection.top()=1.
-     * If complete rows are selected, then selection.right() == 0x7FFF and selection.left()=1.
+     * If complete columns are selected, then selection.bottom() == KS_rowMax and selection.top()=1.
+     * If complete rows are selected, then selection.right() == KS_colMax and selection.left()=1.
      */
     QRect m_rctSelection;
     QRect m_marker;

@@ -29,6 +29,7 @@
 #include <koReplace.h>
 #include <kprinter.h>
 
+#include "kspread_global.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"
 #include "kspread_doc.h"
@@ -2872,7 +2873,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
     // Are entire rows selected ?
     if ( isRowSelected() )
     {
-        r.setLeft( 0x7fff );
+        r.setLeft( KS_colMax );
         r.setRight( 0 );
 
         // Determine a correct left and right.
@@ -2970,7 +2971,7 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
     // Are entire columns selected ?
     if ( isColumnSelected() )
     {
-        r.setTop( 0x7fff );
+        r.setTop( KS_rowMax );
         r.setBottom( 0 );
 
         // Determine a correct top and bottom.
@@ -3651,8 +3652,8 @@ bool KSpreadTable::isRowSelected (){
 
 
 bool KSpreadTable::isRowSelected (const QRect &_rect){
-//If a row is selected, then it must have a selection area from left 1 to right 0x7FFF
-    if ( (_rect.left() == 1) && (_rect.right() == 0x7FFF) ){
+//If a row is selected, then it must have a selection area from left 1 to right KS_colMax
+    if ( (_rect.left() == 1) && (_rect.right() == KS_colMax) ){
 	return TRUE;
     }
     return FALSE;
@@ -3669,8 +3670,8 @@ bool KSpreadTable::isColumnSelected (){
 
 
 bool KSpreadTable::isColumnSelected (const QRect &_rect){
-//If a column is selected, then it must have a selection area from top 1 to bottom 0x7FFF
-    if ( (_rect.top() == 1) && (_rect.bottom() == 0x7FFF) ){
+//If a column is selected, then it must have a selection area from top 1 to bottom KS_rowMax
+    if ( (_rect.top() == 1) && (_rect.bottom() == KS_rowMax) ){
 	return TRUE;
     }
     return FALSE;

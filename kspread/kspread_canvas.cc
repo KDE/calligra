@@ -461,10 +461,10 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
     extraCell.setCoords(moveX,moveY,moveX+cell->extraXCells(),moveY+cell->extraYCells());
     if( (x-markerColumn())!=0 && extraCell.contains(QPoint(markerColumn(),markerRow())))
         {
-        extraArea.setCoords(markerColumn(),1,cell->extraXCells()+x-1,0x7FFF);
+        extraArea.setCoords( markerColumn(), 1, cell->extraXCells()+x-1, KS_rowMax );
         if(keyPress)
                 {
-                tmpArea.setCoords(1,markerRow(),0x7FFF,cell->extraYCells()+markerRow());
+                tmpArea.setCoords( 1, markerRow(), KS_colMax, cell->extraYCells()+markerRow() );
                 if(!extraArea.contains(table->getOldPos().x(),1)&& tmpArea.contains(1,table->getOldPos().y()))
                         y=table->getOldPos().y();
                 else if( extraArea.contains(table->getOldPos().x(),1)&& table->getOldPos().y()==(cell->extraYCells()+y+1))
@@ -474,9 +474,9 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
         }
     else if((y-markerRow())!=0 && extraCell.contains(QPoint(markerColumn(),markerRow())))
         {
-        extraArea.setCoords(1,markerRow(),0x7FFF,cell->extraYCells()+y-1);
+        extraArea.setCoords( 1, markerRow(), KS_colMax, cell->extraYCells()+y-1 );
 
-        tmpArea.setCoords(markerColumn(),1,cell->extraXCells()+markerColumn(),0x7FFF);
+        tmpArea.setCoords( markerColumn(), 1, cell->extraXCells()+markerColumn(), KS_rowMax );
         if(keyPress)
                 {
                 if( !extraArea.contains(1,table->getOldPos().y())&&tmpArea.contains(table->getOldPos().x(),1))
@@ -499,8 +499,8 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
         {
         if(keyPress && (x-markerColumn())!=0)
                 {
-                extraArea.setCoords(markerColumn(),1,cell->extraXCells()+markerColumn(),0x7FFF);
-                tmpArea.setCoords(1,markerRow(),0x7FFF,cell->extraYCells()+markerRow());
+                extraArea.setCoords( markerColumn(), 1, cell->extraXCells()+markerColumn(), KS_rowMax );
+                tmpArea.setCoords( 1, markerRow(), KS_colMax, cell->extraYCells()+markerRow() );
                 if( !extraArea.contains(QPoint(table->getOldPos().x(),1))&& tmpArea.contains(1,table->getOldPos().y()))
                         y=table->getOldPos().y();
                 else if( extraArea.contains(table->getOldPos().x(),1)&& table->getOldPos().y()==(cell->extraYCells()+markerRow()+1))
@@ -508,8 +508,8 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
                 }
         else if(keyPress && (y-markerRow())!=0 )
                 {
-                tmpArea.setCoords(markerColumn(),1,cell->extraXCells()+markerColumn(),0x7FFF);
-                extraArea.setCoords(1,markerRow(),0x7FFF,cell->extraYCells()+markerRow());
+                tmpArea.setCoords( markerColumn(), 1, cell->extraXCells()+markerColumn(), KS_rowMax );
+                extraArea.setCoords( 1, markerRow(), KS_colMax, cell->extraYCells()+markerRow() );
                 if( !extraArea.contains(QPoint(1,table->getOldPos().y()))&&tmpArea.contains(table->getOldPos().x(),1))
                         x=table->getOldPos().x();
                 else if( /*extraArea.contains(QPoint(1,table->getOldPos().y()))&&*/ table->getOldPos().x()==(cell->extraXCells()+markerColumn()+1))
@@ -761,8 +761,10 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-    if(col>26*26 || row >0x7FFF)
-      return;
+    if( col > KS_colMax || row > KS_rowMax ) {
+	kdDebug(36001) << "KSpreadCanvas::mouseMoveEvent: col or row is out of range: col: " << col << " row: " << row << endl;
+	return;
+    }
 
     // Find out where the little "corner" (in lower right direction) is.
     QRect corner;
@@ -1046,16 +1048,17 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-    //you can move marker when col >26*26 or row >0x7fff
-    if(col>26*26 || row>0x7FFF)
+    //you can move marker when col >KS_colMax or row >KS_rowMax
+    if( col > KS_colMax || row > KS_rowMax){
+	kdDebug(36001) << "KSpreadCanvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
 	return;
-
+    }
     // Unselect a selection ?
     if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
         table->unselect();
 
     // Extending an existing selection with the shift button ?
-    if ( m_pView->koDocument()->isReadWrite() && selection.right() != 0x7fff && selection.bottom() != 0x7fff && _ev->state() & ShiftButton )
+    if ( m_pView->koDocument()->isReadWrite() && selection.right() != KS_colMax && selection.bottom() != KS_rowMax && _ev->state() & ShiftButton )
     {
         if( col != old_column || row != old_row )
         {
@@ -1186,8 +1189,10 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
     col = m_iMouseStartColumn;
   if ( row < m_iMouseStartRow )
     row = m_iMouseStartRow;*/
-  if(col>26*26 || row >0x7FFF)
-      return;
+  if( col > KS_colMax || row > KS_rowMax ) {
+    kdDebug(36001) << "KSpreadCanvas::chooseMouseMoveEvent: col or row is out of range: col: " << col << " row: " << row << endl;
+    return;
+  }
 
   // Noting changed ?
   QRect selection( table->chooseRect() );
@@ -1252,10 +1257,12 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
- if(col>26*26 || row >0x7FFF)
-      return;
+  if( col > KS_colMax || row > KS_rowMax ) {
+    kdDebug(36001) << "KSpreadCanvas::chooseMousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
+    return;
+  }
 
-  if ( (selection.right() != 0x7fff && selection.bottom() != 0x7fff) &&
+  if ( ( (!table->isColumnSelected()) && (!table->isRowSelected())) &&
       ( _ev->state() & ShiftButton ) )
   {
     if ( col != m_iMouseStartColumn || row != m_iMouseStartRow )
@@ -1492,28 +1499,28 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      {
 	      case KSpread::Bottom :
 		  {
-		      if ( !m_bChoose && markerRow() == 0x7FFF )
+		      if ( !m_bChoose && markerRow() == KS_rowMax )
 			  return;
-		      if ( m_bChoose && chooseMarkerRow() == 0x7FFF )
+		      if ( m_bChoose && chooseMarkerRow() == KS_rowMax )
 			  return;
 
 		      if ( m_bChoose )
-			  chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
+			  chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
 		      else
 			  {
 		              QRect selection = activeTable()->selectionRect();
 			      if( selection.left() == 0 )
-				  gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,false,true  );
+				  gotoLocation( markerColumn(), QMIN( KS_rowMax, markerRow() + 1 ), 0, make_select,false,true  );
 			      else
 				  {
-				      if(markerColumn()<selection.right()&&markerRow()<selection.bottom() )
-					  gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true ,true);
-				      else if( markerRow()==selection.bottom() && markerColumn()<selection.right())
-					  gotoLocation( markerColumn()+1, QMIN( 0x7FFF, selection.top() ), 0, make_select,true, true );
+				      if( markerColumn()<selection.right() && markerRow()<selection.bottom() )
+					  gotoLocation( markerColumn(), QMIN( KS_rowMax, markerRow() + 1 ), 0, make_select,true ,true);
+				      else if( markerRow()==selection.bottom() && markerColumn()<selection.right() )
+					  gotoLocation( markerColumn()+1, QMIN( KS_rowMax, selection.top() ), 0, make_select,true, true );
 				      else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
-					  gotoLocation( selection.left(), QMIN( 0x7FFF, selection.top() ), 0, make_select,true,true );
+					  gotoLocation( selection.left(), QMIN( KS_rowMax, selection.top() ), 0, make_select,true,true );
 				      else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
-					  gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true,true );
+					  gotoLocation( markerColumn(), QMIN( KS_rowMax, markerRow() + 1 ), 0, make_select,true,true );
 				  }
 			  }
 		      return;
@@ -1525,7 +1532,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      if ( m_bChoose && chooseMarkerRow() ==1 )
 			  return;
 		      if ( m_bChoose )
-			  chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
+			  chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
 		      else
 			  {
 		              QRect selection = activeTable()->selectionRect();
@@ -1579,29 +1586,29 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  }
 	      case KSpread::Right :
 		  {
-		      /*if ( !m_bChoose && markerColumn() == 26*26)
+		      /*if ( !m_bChoose && markerColumn() == KS_colMax)
 			return;*/
-		      if ( m_bChoose && chooseMarkerColumn() == 26*26 )
+		      if ( m_bChoose && chooseMarkerColumn() == KS_colMax )
 			  return;
 		      if ( m_bChoose )
-			  chooseGotoLocation( QMIN(  26*26,chooseMarkerColumn()+1),chooseMarkerRow() , 0, make_select );
+			  chooseGotoLocation( QMIN( KS_colMax, chooseMarkerColumn()+1 ),chooseMarkerRow() , 0, make_select );
 		      else
 			  {
 		              QRect selection = activeTable()->selectionRect();
 			      if( selection.left() == 0 )
-				  gotoLocation( QMIN(  26*26,markerColumn()+1),  markerRow() , 0, make_select,false,true  );
+				  gotoLocation( QMIN( KS_colMax, markerColumn()+1 ),  markerRow() , 0, make_select,false,true );
 			      else
 				  {
 				      if( markerRow()==selection.top() && markerColumn()==selection.left() && markerColumn()!=selection.right())
-					  gotoLocation( QMIN(markerColumn()+1,26*26), markerRow(), 0, make_select,true,true );
+					  gotoLocation( QMIN(markerColumn()+1, KS_colMax), markerRow(), 0, make_select,true,true );
 				      else if( markerRow()==selection.top() && markerColumn()==selection.left() && markerColumn()==selection.right())
-					  gotoLocation( markerColumn(), QMIN(markerRow()+1,0x7FFF), 0, make_select,true,true );
+					  gotoLocation( markerColumn(), QMIN(markerRow()+1, KS_rowMax), 0, make_select,true,true );
 				      else if(markerColumn()<selection.right() && markerRow()<=selection.bottom())
-					  gotoLocation(QMIN(markerColumn()+1,26*26),  markerRow() , 0, make_select,true,true );
-				      else if(markerColumn()==selection.right()&&markerRow()==selection.bottom() )
+					  gotoLocation(QMIN(markerColumn()+1, KS_colMax),  markerRow() , 0, make_select,true,true );
+				      else if(markerColumn()==selection.right() && markerRow()==selection.bottom() )
 					  gotoLocation( selection.left(), selection.top(), 0, make_select,true ,true);
 				      else if( markerColumn()==selection.right() && markerRow()<=selection.bottom())
-					  gotoLocation( selection.left(), QMIN( 0x7FFF, markerRow()+1 ), 0, make_select,true, true );
+					  gotoLocation( selection.left(), QMIN( KS_rowMax, markerRow()+1 ), 0, make_select,true, true );
 				  }
 			  }
 		      return;
@@ -1610,9 +1617,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      }
       case Key_Down:
 
-	  if ( !m_bChoose && markerRow() == 0x7FFF )
+	  if ( !m_bChoose && markerRow() == KS_rowMax )
 	      return;
-	  if ( m_bChoose && chooseMarkerRow() == 0x7FFF )
+	  if ( m_bChoose && chooseMarkerRow() == KS_rowMax )
 	      return;
 
                    if(m_bChoose)
@@ -1627,9 +1634,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
                    while( rl->isHide());
 
 	  if ( m_bChoose )
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, /*chooseMarkerRow() + 1*/moveHide ), 0, make_select);
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, /*chooseMarkerRow() + 1*/moveHide ), 0, make_select);
 	  else
-	      gotoLocation( markerColumn(), QMIN( 0x7FFF, /*markerRow() + 1*/ moveHide), 0, make_select,false,true  );
+	      gotoLocation( markerColumn(), QMIN( KS_rowMax, /*markerRow() + 1*/ moveHide), 0, make_select,false,true  );
 
 	  return;
 
@@ -1661,9 +1668,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
       case Key_Right:
       case Key_Tab:
-	  if ( !m_bChoose && markerColumn() >= 26*26)//0x7FFF )
+	  if ( !m_bChoose && markerColumn() >= KS_colMax )
 	      return;
-	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0x7FFF )
+	  if ( m_bChoose && chooseMarkerColumn() >= KS_colMax )
 	      return;
                    if(m_bChoose)
                         moveHide=chooseMarkerColumn();
@@ -1677,9 +1684,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
                    while( cl->isHide() );
 
 	  if ( m_bChoose )
-	      chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, /*chooseMarkerColumn() + 1*/moveHide ), chooseMarkerRow(), 0, make_select );
+	      chooseGotoLocation( QMIN( KS_colMax, /*chooseMarkerColumn() + 1*/moveHide ), chooseMarkerRow(), 0, make_select );
 	  else
-	      gotoLocation( QMIN( /*26*26*/0x7FFF, /*markerColumn() + 1*/moveHide ), markerRow(), 0, make_select,false,true );
+	      gotoLocation( QMIN( KS_colMax, /*markerColumn() + 1*/moveHide ), markerRow(), 0, make_select,false,true );
 
 	  return;
 
@@ -1757,15 +1764,15 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
       case Key_Next:
 
-	  if( !m_bChoose && markerRow() == 0x7FFF )
+	  if( !m_bChoose && markerRow() == KS_rowMax )
 	      return;
-	  if( m_bChoose && chooseMarkerRow() == 0x7FFF )
+	  if( m_bChoose && chooseMarkerRow() == KS_rowMax )
 	      return;
 
 	  if ( m_bChoose )
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 10 ), 0, make_select );
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 10 ), 0, make_select );
 	  else
-	      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 10 ), 0, make_select,false,true );
+	      gotoLocation( markerColumn(), QMIN( KS_rowMax, markerRow() + 10 ), 0, make_select,false,true );
 
 	  return;
 
@@ -1844,52 +1851,52 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
 
       case Key_Down:
-	  if ( !m_bChoose && markerRow() == 0x7FFF )
+	  if ( !m_bChoose && markerRow() == KS_rowMax )
 	      return;
-	  if ( m_bChoose && chooseMarkerRow() == 0x7FFF )
+	  if ( m_bChoose && chooseMarkerRow() == KS_rowMax )
 	      return;
 
 	  if ( m_bChoose )
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select);
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select);
 	  else{
 	      x = x0 =  markerColumn();
 	      y = y0 =  markerRow();
 
               // HELP! This is by far to slow and inefficent!
-	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMAX(y+1,0x7FFF))->isEmpty())
+	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMAX(y+1,KS_rowMax))->isEmpty())
 		  {
-		  gotoLocation( markerColumn(), QMIN(0x7FFF,y+1  ), 0, make_select,true,true  );
+		  gotoLocation( markerColumn(), QMIN(KS_rowMax,y+1), 0, make_select,true,true  );
 		  }
 	      else
 		  {
-		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF)))->isEmpty())
+		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, KS_rowMax)))->isEmpty())
 		      {
-		      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF  )
+		      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= KS_rowMax )
 			  {
 			      y ++;
 			  }
-		      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
+		      gotoLocation( markerColumn(), QMIN( KS_rowMax,y  ), 0, make_select,true,true  );
 		      }
 		  else
 		      {
-		      if(! (activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF))->isEmpty()))
+		      if(! (activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x,QMIN(y + 1, KS_rowMax))->isEmpty()))
 			  {
-			  while ( !(activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF )
+			  while ( !(activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= KS_rowMax )
 			      {
 				  y ++;
 			      }
-                          gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
+                          gotoLocation( markerColumn(), QMIN( KS_rowMax,y  ), 0, make_select,true,true  );
 			  }
 		      else
 			  {
-			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF))->isEmpty()))
+			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, KS_rowMax))->isEmpty()))
 			      {
-			      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF )
+			      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= KS_rowMax )
 				  {
 				      y ++;
 				  }
 
-                              if ( y < 0x7FFF ) // Only if found a non-empty cell
+                              if ( y < KS_rowMax ) // Only if found a non-empty cell
                                   gotoLocation( markerColumn(), y, 0, make_select,true,true  );
 
 			      }
@@ -1902,13 +1909,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
 
       case Key_Right:
-	  if ( !m_bChoose && markerColumn() >= 26*26)//0x7FFF )
+	  if ( !m_bChoose && markerColumn() >= KS_colMax )
 	      return;
-	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0x7FFF )
+	  if ( m_bChoose && chooseMarkerColumn() >= KS_colMax )
 	      return;
 
 	  if ( m_bChoose )
-	      chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
+	      chooseGotoLocation( QMIN( KS_colMax, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
 	  else
 	      {
 
@@ -1925,7 +1932,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      {
               // HELP! This is by far to slow and inefficent!
 
-		      while (( activeTable()->cellAt( x +1 ,y ))->isEmpty() && x <26*26  )
+		      while ( (activeTable()->cellAt(x+1,y))->isEmpty() && x < KS_colMax  )
 			  {
 			  x ++;
 			  }
@@ -1935,7 +1942,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      {
 			  if(!(activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x + 1,y)->isEmpty()))
 			      {
-				  while ( !(activeTable()->cellAt( x + 1 ,y ))->isEmpty() && x < 26*26)
+				  while ( !(activeTable()->cellAt(x+1,y))->isEmpty() && x < KS_colMax )
 				      {
 					  x ++;
 				      }
@@ -1946,7 +1953,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 				  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y)->isEmpty()))
 				      {
 
-					  while (( activeTable()->cellAt( x +1,y ))->isEmpty() && x < 26*26 )
+					  while ( (activeTable()->cellAt(x+1,y))->isEmpty() && x < KS_colMax )
 					      {
 
 						  x ++;
@@ -2239,8 +2246,8 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     QRect uni = old_sel.unite( new_sel ).unite( old_outer ).unite( old_marker ).unite( new_marker );
 
     // Limit the number of cells
-    uni.rBottom() = QMIN( 0x7FFF, uni.bottom() );
-    uni.rRight() = QMIN( 0x7FFF, uni.right() );
+    uni.rBottom() = QMIN( KS_colMax, uni.bottom() );
+    uni.rRight() = QMIN( KS_rowMax, uni.right() );
 
     //qDebug("UNI left/top :%i/%i right/bottom :%i/%i", uni.left(), uni.top(), uni.right(), uni.bottom() );
 
@@ -2568,7 +2575,7 @@ void KSpreadCanvas::updatePosWidget()
     extraCell.setCoords(markerColumn(),markerRow(),
     markerColumn()+cell->extraXCells(),markerRow()+cell->extraYCells());
     // No selection, or only one cell merged selected
-    if ( selection.left() == 0||extraCell==selection)
+    if ( selection.left() == 0 || extraCell==selection )
     {
         if(activeTable()->getLcMode())
         {
@@ -2581,7 +2588,7 @@ void KSpreadCanvas::updatePosWidget()
             buffer+=tmp.setNum( markerRow() );
         }
     }
-  /*else if(selection.right() != 0x7fff && selection.bottom() != 0x7fff )
+  /*else if((!activeTable->isRowSelected( selection.) && (!activeTable->isColumnSelected( selection.))
         {
         if(activeTable()->getLcMode())
                 {
@@ -2602,20 +2609,20 @@ void KSpreadCanvas::updatePosWidget()
         if(activeTable()->getLcMode())
         {
             buffer=tmp.setNum( (selection.bottom()-selection.top()+1) )+"Lx";
-            if(selection.right()==0x7FFF)
-                buffer+=tmp.setNum((26*26-selection.left()+1))+"C";
+            if( activeTable()->isRowSelected( selection ) )
+                buffer+=tmp.setNum((KS_colMax-selection.left()+1))+"C";
             else
                 buffer+=tmp.setNum((selection.right()-selection.left()+1))+"C";
         }
         else
         {
-                //Problem columnLabel return @@@@ when column >26*26
+                //encodeColumnLabelText return @@@@ when column >KS_colMax
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
                 buffer=util_encodeColumnLabelText( selection.left() );
                 buffer+=tmp.setNum(selection.top());
                 buffer+=":";
-                buffer+=util_encodeColumnLabelText( QMIN(26*26,selection.right()) );
+                buffer+=util_encodeColumnLabelText( QMIN( KS_colMax, selection.right() ) );
                 buffer+=tmp.setNum(selection.bottom());
                 //buffer=activeTable()->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
@@ -2850,16 +2857,17 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
     int tmp;
     int hit_row = table->topRow( _ev->pos().y(), tmp, m_pCanvas );
-    if(hit_row>0x7FFF)
+    if(hit_row > KS_rowMax)
 	return;
 
     m_iSelectionAnchor = hit_row;
 
     QRect rect = m_pCanvas->activeTable()->selectionRect();
     QRect selection;
-    if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton) || (rect.right()!=0x7FFF))
+    if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton) 
+                || (!m_pCanvas->activeTable()->isRowSelected()) )
         {
-        selection.setCoords( 1, hit_row, 0x7FFF, hit_row );
+        selection.setCoords( 1, hit_row, KS_colMax, hit_row );
         table->setSelection( selection, m_pCanvas );
         }
 
@@ -2894,7 +2902,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         int end = m_iResizedRow;
         QRect selection = m_pCanvas->activeTable()->selectionRect();
         QRect rect;
-        rect.setCoords( 1,m_iResizedRow,0x7FFF,m_iResizedRow);
+        rect.setCoords( 1, m_iResizedRow, KS_colMax, m_iResizedRow );
         if( m_pCanvas->activeTable()->isRowSelected() )
         {
             if( selection.contains( QPoint( 1, m_iResizedRow ) ) )
@@ -2969,7 +2977,7 @@ void KSpreadVBorder::adjustRow(int _row,bool makeUndo)
     if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
     {
         QRect rect;
-        rect.setCoords(1,select,0x7FFF,select);
+        rect.setCoords( 1, select, KS_colMax, select);
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
@@ -3008,7 +3016,7 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
     if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
     {
         QRect rect;
-        rect.setCoords(1,m_iSelectionAnchor,0x7FFF,m_iSelectionAnchor);
+        rect.setCoords( 1, m_iSelectionAnchor, KS_colMax, m_iSelectionAnchor );
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
@@ -3025,7 +3033,7 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
       if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
       {
         QRect rect;
-        rect.setCoords(1,m_pCanvas->markerRow(),0x7FFF,m_pCanvas->markerRow());
+        rect.setCoords( 1, m_pCanvas->markerRow(), KS_colMax, m_pCanvas->markerRow() );
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
       }
@@ -3068,7 +3076,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int y = 0;
     int row = table->topRow( _ev->pos().y(), y, m_pCanvas );
-    if(row>0x7FFF)
+    if( row > KS_rowMax )
 	return;
     QRect selection = table->selectionRect();
 
@@ -3225,7 +3233,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   for ( int y = top_row; y <= bottom_row; y++ )
   {
     bool highlighted = (area && y >= selection.top() && y <= selection.bottom() );
-    bool selected = ( highlighted && selection.right() == 0x7FFF );
+    bool selected = ( highlighted && (table->isRowSelected()) );
 
     RowLayout *row_lay = table->rowLayout( y );
 
@@ -3336,15 +3344,16 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
     int tmp;
     int hit_col = table->leftColumn( _ev->pos().x(), tmp, m_pCanvas );
-    if(hit_col>26*26)
+    if( hit_col > KS_colMax)
 	return;
     m_iSelectionAnchor = hit_col;
 
-    QRect rect = m_pCanvas->activeTable()->selectionRect();
+    QRect rect = table->selectionRect();
     QRect r;
-    if(!rect.contains( QPoint(hit_col,1)) || !(_ev->button() == RightButton) || (rect.bottom()!=0x7FFF))
+    if(!rect.contains( QPoint(hit_col,1)) || !(_ev->button() == RightButton)
+                                          || !(table->isRowSelected()) )
         {
-        r.setCoords( hit_col, 1, hit_col, 0x7FFF );
+        r.setCoords( hit_col, 1, hit_col, KS_rowMax );
         table->setSelection( r, m_pCanvas );
         }
 
@@ -3378,7 +3387,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         int end=m_iResizedColumn;
         QRect selection = m_pCanvas->activeTable()->selectionRect();
         QRect rect;
-        rect.setCoords(m_iResizedColumn,1,m_iResizedColumn,0x7FFF);
+        rect.setCoords( m_iResizedColumn, 1, m_iResizedColumn, KS_rowMax );
         if( m_pCanvas->activeTable()->isColumnSelected() )
         {
             if(selection.contains(QPoint(m_iResizedColumn,1)))
@@ -3457,7 +3466,7 @@ void KSpreadHBorder::adjustColumn(int _col, bool makeUndo)
     if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
     {
         QRect rect;
-        rect.setCoords(select,1,select,0x7FFF);
+        rect.setCoords( select, 1, select, KS_rowMax );
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
@@ -3499,7 +3508,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
     if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
     {
         QRect rect;
-        rect.setCoords(m_iSelectionAnchor,1,m_iSelectionAnchor,0x7FFF);
+        rect.setCoords( m_iSelectionAnchor, 1, m_iSelectionAnchor, KS_rowMax );
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
@@ -3516,7 +3525,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
       if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
       {
         QRect rect;
-        rect.setCoords(m_iSelectionAnchor,1,m_iSelectionAnchor,0x7FFF);
+        rect.setCoords( m_iSelectionAnchor, 1, m_iSelectionAnchor, KS_rowMax );
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
       }
@@ -3569,7 +3578,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int x = 0;
     int col = table->leftColumn( _ev->pos().x(), x, m_pCanvas );
-    if(col>26*26)
+    if( col > KS_colMax )
 	return;
     QRect r = table->selectionRect();
 
@@ -3714,7 +3723,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   for ( int x = left_col; x <= right_col; x++ )
   {
     bool highlighted = ( area && x >= selection.left() && x <= selection.right());
-    bool selected = ( highlighted && table->isColumnSelected() && (selection.right()!=0x7FFF) );
+    bool selected = ( highlighted && table->isColumnSelected() && (!table->isRowSelected()) );
 
     ColumnLayout *col_lay = table->columnLayout( x );
 

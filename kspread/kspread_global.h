@@ -9,6 +9,14 @@
 #define colWidth 60.0
 #define heightOfRow 20.0
 
+/* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
+#define KS_rowMax 0x7FFF
+/* Definition of maximal supported columns - please check kspread_util (columnName) and kspread_cluster also */
+#define KS_colMax 0x7FFF
+
+/* Definition of maximal supported columns/rows, which can be merged */
+#define KS_spanMax 0xFFF
+
 enum PasteMode { Normal, Text, Format, NoBorder, Comment, NormalAndTranspose, TextAndTranspoase,
 		 FormatAndTranspose, NoBorderAndTranspose };
 enum Operation { OverWrite, Add, Mul, Sub, Div };

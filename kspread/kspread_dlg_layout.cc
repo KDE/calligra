@@ -3551,7 +3551,8 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 if ( dlg->top <= row && dlg->bottom >= row
                                 && !c->isObscuringForced()
 /* Dunno if this is necessary, isn't used for columns either (Philipp)
-   therefore I commented it out  && c->column()==0x7FFF*/)
+   therefore I commented it out:*/
+                             /* && c->column()==KS_colMax*/)
                         {
                         c->clearProperty(KSpreadCell::PRightBorder);
                         c->clearNoFallBackProperties( KSpreadCell::PRightBorder );

@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kspread_global.h"
 #include "kspread_undo.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
@@ -171,7 +172,7 @@ KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable
     m_iColumn= _column;
     m_iNbCol=_nbCol;
     QRect selection;
-    selection.setCoords( _column, 0, _column+m_iNbCol, 0x7fff );
+    selection.setCoords( _column, 0, _column+m_iNbCol, KS_rowMax );
     QDomDocument doc = _table->saveCellRect( selection );
 
     // Save to buffer
@@ -279,7 +280,7 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_tab
     m_iRow = _row;
     m_iNbRow=  _nbRow;
     QRect selection;
-    selection.setCoords( 0, _row, 0x7fff, _row+m_iNbRow );
+    selection.setCoords( 0, _row, KS_colMax, _row+m_iNbRow );
     QDomDocument doc = _table->saveCellRect( selection );
 
     // Save to buffer
@@ -1866,7 +1867,7 @@ void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnS
     {
         //save all cells
         QRect rect;
-        rect.setCoords(xshift,1,xshift+nbCol,0x7FFF);
+        rect.setCoords( xshift, 1, xshift+nbCol, KS_rowMax );
         QDomDocument doc = table->saveCellRect( rect);
         // Save to buffer
         QString buffer;
@@ -1901,7 +1902,7 @@ void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnS
     {
         //save all cells
         QRect rect;
-        rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
+        rect.setCoords( 1, yshift, KS_colMax, yshift+nbRow );
         QDomDocument doc = table->saveCellRect( rect);
         // Save to buffer
         QString buffer;
@@ -1969,7 +1970,7 @@ void KSpreadUndoCellPaste::undo()
         if(!b_insert)
                 {
                 QRect rect;
-                rect.setCoords(xshift,1,xshift+nbCol,0x7FFF);
+                rect.setCoords( xshift, 1, xshift+nbCol, KS_rowMax );
                 table->deleteCells( rect );
                 table->paste( m_data, QPoint(xshift,1) );
                 QValueList<columnSize>::Iterator it2;
@@ -1989,7 +1990,7 @@ void KSpreadUndoCellPaste::undo()
         if(!b_insert)
                 {
                 QRect rect;
-                rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
+                rect.setCoords( 1, yshift, KS_colMax, yshift+nbRow );
                 table->deleteCells( rect );
                 table->paste( m_data, QPoint(1,yshift) );
                 QValueList<rowSize>::Iterator it2;
@@ -2039,7 +2040,7 @@ void KSpreadUndoCellPaste::redo()
                 table->insertColumn(  xshift+1,nbCol-1,false);
                 }
         QRect rect;
-        rect.setCoords(xshift,1,xshift+nbCol,0x7FFF);
+        rect.setCoords( xshift, 1, xshift+nbCol, KS_rowMax );
         table->deleteCells( rect );
         table->paste( m_dataRedo, QPoint(xshift,1) );
         QValueList<columnSize>::Iterator it2;
@@ -2058,7 +2059,7 @@ void KSpreadUndoCellPaste::redo()
                 }
 
         QRect rect;
-        rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
+        rect.setCoords( 1, yshift, KS_colMax, yshift+nbRow );
         table->deleteCells( rect );
         table->paste( m_dataRedo, QPoint(1,yshift) );
         QValueList<rowSize>::Iterator it2;
@@ -2111,7 +2112,7 @@ KSpreadUndoStyleCell::~KSpreadUndoStyleCell()
 
 void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpreadTable* table )
 {
-  if(m_selection.bottom()==0x7FFF)
+  if( table->isColumnSelected( m_selection ) )
     {
 
       KSpreadCell* c = table->firstCell();
@@ -2130,7 +2131,7 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
         }
       }
     }
-  else if(m_selection.right()==0x7FFF)
+  else if( table->isRowSelected( m_selection ) )
     {
      KSpreadCell* c = table->firstCell();
       for( ;c; c = c->nextCell() )

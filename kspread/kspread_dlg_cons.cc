@@ -23,6 +23,7 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_table.h"
+#include "kspread_global.h"
 
 #include <kmessagebox.h>
 #include <qlayout.h>
@@ -168,7 +169,7 @@ void KSpreadConsolidate::slotOk()
     return;
   }
 
-  if( (*it).range.bottom()==0x7FFF || (*it).range.right()== 26*26)
+  if( (*it).range.bottom()==KS_rowMax || (*it).range.right()== KS_colMax )
   {
     KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( *( r.begin() ) ));
     return;
@@ -180,7 +181,7 @@ void KSpreadConsolidate::slotOk()
   {
     int w2 = (*it).range.right() - (*it).range.left() + 1;
     int h2 = (*it).range.bottom() - (*it).range.top() + 1;
-    if((*it).range.bottom()==0x7FFF || (*it).range.right()== 26*26)
+    if((*it).range.bottom()==KS_rowMax || (*it).range.right()== KS_colMax)
     {
       KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( r[i]));
       return;

@@ -19,6 +19,7 @@
 
 
 #include "kspread_dlg_resize2.h"
+#include "kspread_global.h"
 #include "kspread_canvas.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
@@ -129,10 +130,10 @@ void KSpreadresize2::slotOk()
 	switch(type)
 	  {
 	  case resize_row:
-	    rect.setCoords(1,m_pView->canvasWidget()->markerRow(),0x7FFF,m_pView->canvasWidget()->markerRow());
+	    rect.setCoords( 1, m_pView->canvasWidget()->markerRow(), KS_colMax, m_pView->canvasWidget()->markerRow() );
 	    break;
 	  case resize_column:
-	    rect.setCoords(m_pView->canvasWidget()->markerColumn(),1,m_pView->canvasWidget()->markerColumn(),0x7FFF);
+	    rect.setCoords( m_pView->canvasWidget()->markerColumn(), 1, m_pView->canvasWidget()->markerColumn(), KS_rowMax );
 	    break;
 	  }
       }
