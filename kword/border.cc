@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include <qdom.h>
 #include <qpainter.h>
+#include <kdebug.h>
 #include <kwdoc.h>
 
 Border::Border()
@@ -37,7 +38,6 @@ bool Border::operator!=( const Border _brd ) const {
     return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
 }
 
-/*================================================================*/
 QPen Border::borderPen( const Border & _brd, int width )
 {
     QPen pen( _brd.color, width );

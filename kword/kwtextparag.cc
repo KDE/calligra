@@ -315,9 +315,9 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
 
         QRect r;
         r.setLeft( leftMargin() );
-        r.setRight( rect().width() - rightMargin() ); /*documentWidth()-1 requires many fixes in QRT*/
+        r.setRight( rect().width() - rightMargin() - 1 ); /*documentWidth()-1 requires many fixes in QRT*/
         r.setTop( lineY( 0 ) );
-        r.setBottom( static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing ) );
+        r.setBottom( static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing ) - 1 );
 
         Border::drawBorders( painter, doc, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder, 0, QPen() );
     }
