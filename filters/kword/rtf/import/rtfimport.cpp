@@ -44,6 +44,7 @@ RTFProperty propertyTable[] =
 	PROP(	"@rtf",		"@colortbl",	parseColorTable,	0L, true ),
 	MEMBER(	"@info",	"@company",	parsePlainText,		company, false ),
 	MEMBER(	"@info",	"@doccomm",	parsePlainText,		doccomm, false ),
+	PROP(	0L,		"@fldinst",	parseFldinst,		0L, true ),
 	PROP(	"@rtf",		"@fonttbl",	parseFontTable,		0L, true ),
 	MEMBER(	"@rtf",		"@footer",	parseRichText,		evenPagesFooter, true ),
 	PROP(	"@rtf",		"@footnote",	parseFootNote,		0L, true ),
@@ -1234,6 +1235,92 @@ void RTFImport::parsePicture( RTFProperty * )
     }
 }
 
+void RTFImport::parseFldinst( RTFProperty * )
+{
+    static QCString str;
+    static bool formatInserted;
+    if (token.type == RTFTokenizer::OpenGroup)
+    {
+	str="";
+	formatInserted=false;
+    }
+    else if (token.type == RTFTokenizer::PlainText)
+    {
+	str+=token.text;
+	if(!formatInserted)
+	{
+	    kwFormat.fmt = state.format;
+	    kwFormat.id  = 1;
+	    kwFormat.pos = textState->length;
+	    kwFormat.len = 1;
+	    textState->formats << kwFormat;
+	    formatInserted=true;
+	}
+    }
+    else if (token.type == RTFTokenizer::CloseGroup)
+    {
+	DomNode node;
+	node.clear(7);
+	QCString key;
+	int type=-1;
+	str=str.upper();
+	if(str.find("AUTHOR")!=-1)
+	{
+	    key="STRING";
+	    type=8;
+	    node.addNode("FIELD");
+	    node.setAttribute("subtype", 2);
+	    node.setAttribute("value", "NO AUTHOR");
+	    node.closeNode("FIELD");
+	}
+	if(type!=-1)
+	{
+	    addVariable(node, type, key);
+	    //Now add entry to properties table so that fldrslt group will be skipped    
+	    RTFProperty* fldrslt=new RTFProperty;//={0L, "@fldrslt", &RTFImport::skipGroup, 0L, true}; //uncommenting this causes internal compiler error  (but the code should be OK)
+		fldrslt->onlyValidIn=0L;
+		fldrslt->name="@fldrslt";
+		fldrslt->cwproc=&RTFImport::skipGroup;
+		fldrslt->offset=0L;
+		fldrslt->value=true;
+	    
+	    if(!properties.find("@fldrslt"))
+		properties.insert("@fldrslt", fldrslt);
+	}
+	else
+	{
+	    textState->formats.pop_back();
+
+	    //Now remove entry from properties table so that fldrslt will be ignored and its contents read
+	    if(properties.find("@fldrslt"))
+		properties.remove("@fldrslt");
+	}
+    }
+}
+
+void RTFImport::addVariable(DomNode& spec, int type, QCString key)
+{
+    DomNode node;
+
+    node.clear( 6 );
+    node.addNode( "VARIABLE" );
+    node.closeTag(true);
+        node.addNode("TYPE");
+        node.setAttribute( "type", type );
+        node.setAttribute( "key", key );
+        node.setAttribute( "text", 1 );
+        node.closeNode("TYPE");
+	
+	node.appendNode(spec);
+    node.closeNode( "VARIABLE" );
+    kwFormat.xmldata = node.data();
+    kwFormat.id  = 4;
+    kwFormat.pos = textState->length++;
+    kwFormat.len = 1;
+    textState->text.putch( '#' );
+    textState->formats << kwFormat;
+}
+
 /**
  * This function parses footnotes TODO: endnotes
  */
@@ -1252,27 +1339,13 @@ void RTFImport::parseFootNote( RTFProperty * property)
 
         DomNode node;
 
-        node.clear( 6 );
-        node.addNode( "VARIABLE" );
-        node.closeTag(true);
-            node.addNode("TYPE");
-            node.setAttribute( "type", 11 );
-            node.setAttribute( "key", "STRING" );
-            node.setAttribute( "text", 1 );
-            node.closeNode("TYPE");
-
+        node.clear( 7 );
             node.addNode("FOOTNOTE");
             node.setAttribute("numberingtype", "auto");
             node.setAttribute("notetype", "footnote");
             node.setAttribute("frameset", str);
             node.closeNode("FOOTNOTE");
-        node.closeNode( "VARIABLE" );
-        kwFormat.xmldata = node.data();
-        kwFormat.id  = 4;
-        kwFormat.pos = textState->length++;
-        kwFormat.len = 1;
-        textState->text.putch( '#' );
-        textState->formats << kwFormat;
+	addVariable(node, 11, "STRING");
     }
     parseRichText(property);
 }
