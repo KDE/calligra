@@ -1094,8 +1094,6 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 
     lineStartFormat = *this;
 
-    // This is always true if the cell with happens to be small enough..
-    // Causing an endless loop TODO
     if ( static_cast<int>( ptWidth ) < doc->getRastX() ) {
         int newptY = pFrame->getNextFreeYPos( ptY, getLineHeight() );
         if(ptY != newptY) {
@@ -1367,19 +1365,40 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
             } else if ( parag->hasHardBreak() ||
                         ( !(pFrame->getFrameSet()->getGroupManager()) &&
                           pFrame->getFrameBehaviour() == AutoCreateNewFrame &&
-                          pFrame->getNewFrameBehaviour()==Reconnect ) ) { // Append page
-                doc->appendPage( page - 1, redrawBackgroundWhenAppendPage );
+                          pFrame->getNewFrameBehaviour()==Reconnect) ) {
+                if(pFrame->getPageNum()+1==doc->getPages())  { // Append page
+                    doc->appendPage( page - 1, redrawBackgroundWhenAppendPage );
+                }
+                else {
+                    // make a new frame.
+                    KWFrame *frm = new KWFrame(pFrame->getFrameSet(), pFrame->x(), pFrame->y() + doc->getPTPaperHeight(),
+                                               pFrame->width(), pFrame->height(), pFrame->getRunAround(), pFrame->getRunAroundGap() );
+                    frm->setLeftBorder( pFrame->getLeftBorder2() );
+                    frm->setRightBorder( pFrame->getRightBorder2() );
+                    frm->setTopBorder( pFrame->getTopBorder2() );
+                    frm->setBottomBorder( pFrame->getBottomBorder2() );
+                    frm->setBLeft( pFrame->getBLeft() );
+                    frm->setBRight( pFrame->getBRight() );
+                    frm->setBTop( pFrame->getBTop() );
+                    frm->setBBottom( pFrame->getBBottom() );
+                    frm->setBackgroundColor( QBrush( pFrame->getBackgroundColor() ) );
+                    frm->setPageNum( pFrame->getPageNum()+1 );
+                    frm->setNewFrameBehaviour(pFrame->getNewFrameBehaviour());
+                    frm->setFrameBehaviour(pFrame->getFrameBehaviour());
+                    frm->setSheetSide(pFrame->getSheetSide());
+                    pFrame->getFrameSet()->addFrame( frm );
+                    doc->updateAllFrames();
+                }
                 page++;
                 setFrame( frame + 1 );
                 parag->setEndPage( page );
                 parag->setEndFrame( frame );
                 ptY = static_cast<int>(pFrame->top() +
-                      pFrame->getBTop().pt());
+                                       pFrame->getBTop().pt());
                 return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
             }
         }
     }
-
 
     compare_formats = TRUE;
     // If we are in the last line, return FALSE
