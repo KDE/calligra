@@ -464,10 +464,10 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     return;
   }
 
-  KParts::XMLGUIFactory *factory = guiFactory();
+  KXMLGUIFactory *factory = guiFactory();
 
-  QValueList<XMLGUIServant *> plugins;
-  QValueList<XMLGUIServant *>::ConstIterator pIt, pBegin, pEnd;
+  QValueList<KXMLGUIServant *> plugins;
+  QValueList<KXMLGUIServant *>::ConstIterator pIt, pBegin, pEnd;
 
   setUpdatesEnabled( false );
 
@@ -485,7 +485,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     if ( pIt != plugins.end() )
       factory->removeServant( *pIt );
 
-    factory->removeServant( (XMLGUIServant *)d->m_activeView );
+    factory->removeServant( (KXMLGUIServant *)d->m_activeView );
   }
 
   if ( !d->bMainWindowGUIBuilt )
@@ -509,7 +509,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     d->m_activeView = (KoView *)d->m_manager->activeWidget();
     d->m_activePart = newPart;
 
-    factory->addServant( (KParts::XMLGUIServant *)d->m_activeView );
+    factory->addServant( (KXMLGUIServant *)d->m_activeView );
 
     plugins = KParts::Plugin::pluginServants( d->m_activeView );
     pIt = plugins.begin();
