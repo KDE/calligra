@@ -61,12 +61,7 @@ libkontourpart_la_SOURCES = \
 	CreateRectCmd.cc \
 	OptionsDialog.cc \
 	UnitBox.cc \
-	units.cc \
-	koFrameButton.cc \
-	koColorChooser.cc \
-	colorframe.cc \
-	colorslider.cc
-
+	units.cc
 
 libkontourpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkontourpart_la_LIBADD = $(top_builddir)/lib/kofficeui/libkofficeui.la $(LIB_KOPAINTER)
