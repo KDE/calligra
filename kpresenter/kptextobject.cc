@@ -34,6 +34,7 @@ KPTextObject::KPTextObject()
   pen = QPen(black,1,NoPen);
   gColor1 = red;
   gColor2 = green;
+  drawEditRect = true;
 }
 
 /*======================= set size ===============================*/
@@ -568,7 +569,7 @@ void KPTextObject::saveKTextObject(ostream& out)
 	  << ktextobject.unsortListType().font->at(i)->italic()
 	  << "\" underline=\"" << ktextobject.unsortListType().font->at(i)->underline() << "\" red=\""
 	  << ktextobject.unsortListType().color->at(i)->red() << "\" green=\"" << ktextobject.unsortListType().color->at(i)->green()
-	  << "\" blue=\"" << ktextobject.unsortListType().color->at(i)->blue() << "\" chr=\"" 
+	  << "\" blue=\"" << ktextobject.unsortListType().color->at(i)->blue() << "\" chr=\""
 	  << static_cast<unsigned short>(ktextobject.unsortListType().chr->at(i)->unicode())
 	  << "\"/>" << endl;
     }

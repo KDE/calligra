@@ -15,6 +15,7 @@
 
 #include "kpobject.h"
 #include "kpobject.moc"
+#include "kptextobject.h"
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -64,10 +65,10 @@ KRect KPObject::getBoundingRect(int _diffx,int _diffy)
       QWMatrix mtx;
       mtx.rotate(angle);
       KRect rr = mtx.map(r);
-      
+
       int diffw = abs(rr.width() - r.width());
       int diffh = abs(rr.height() - r.height());
-      
+
       return KRect(r.x() - diffw,r.y() - diffh,
 		   r.width() + diffw * 2,r.height() + diffh * 2);
     }
@@ -190,7 +191,7 @@ void KPObject::draw(QPainter *_painter,int _diffx,int _diffy)
     {
       _painter->save();
       KRect r = _painter->viewport();
-      
+
       _painter->setViewport(orig.x() - _diffx,orig.y() - _diffy,r.width(),r.height());
       paintSelection(_painter);
 
@@ -258,8 +259,8 @@ void KPObject::paintSelection(QPainter *_painter)
   RasterOp rop = _painter->rasterOp();
 
   _painter->setRasterOp(NotROP);
-  
-  if (getType() == OT_TEXT)
+
+  if (getType() == OT_TEXT && dynamic_cast<KPTextObject*>(this)->getDrawEditRect())
     {
       _painter->save();
 
@@ -272,13 +273,13 @@ void KPObject::paintSelection(QPainter *_painter)
 	  int yPos = -rr.y();
 	  int xPos = -rr.x();
 	  rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
-      
+
 	  QWMatrix m,mtx,m2;
 	  mtx.rotate(angle);
 	  m.translate(pw / 2,ph / 2);
 	  m2.translate(rr.left() + xPos,rr.top() + yPos);
 	  m = m2 * mtx * m;
-      
+
 	  _painter->setWorldMatrix(m);
 	}
 

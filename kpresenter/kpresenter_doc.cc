@@ -102,8 +102,10 @@ KPresenterDoc::KPresenterDoc()
   pasteXOffset = pasteYOffset = 0;
 
   _header = new KPTextObject;
+  _header->setDrawEditRect(false);
   _footer = new KPTextObject;
-
+  _footer->setDrawEditRect(false);
+  
   headerFooterEdit = new KPFooterHeaderEditor(this);
   headerFooterEdit->setCaption(i18n("KPresenter - Header/Footer Editor"));
   headerFooterEdit->hide();
