@@ -24,8 +24,8 @@ noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
 
 ## The part
 kde_module_LTLIBRARIES = libkplatopart.la
-libkplatopart_la_LDFLAGS = kdgantt/libkptgantt.la $(KDE_PLUGIN)
-libkplatopart_la_LIBADD = $(LIB_KOFFICEUI)
+libkplatopart_la_LDFLAGS = $(KDE_PLUGIN)
+libkplatopart_la_LIBADD = kdgantt/libkptgantt.la $(LIB_KOFFICEUI)
 libkplatopart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
