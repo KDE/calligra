@@ -189,7 +189,7 @@ public:
 
     virtual QDomElement save( QDomDocument &doc );
     virtual bool load( QDomElement& element );
-    
+
     int getNext( QRect _rect );
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
 
@@ -267,7 +267,7 @@ public:
     void splitParag( KWParag *_parag, unsigned int _pos );
 
     virtual QDomElement save( QDomDocument &doc );
-    virtual bool load( const QDomElement& element );
+    virtual bool load( QDomElement& element );
 
     bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
     void setAutoCreateNewFrame( bool _auto ) { autoCreateNewFrame = _auto; }
@@ -314,7 +314,7 @@ public:
     QString getFileName() { return filename; }
 
     virtual QDomElement save( QDomDocument &doc );
-    virtual bool load( const QDomElement& element );
+    virtual bool load( QDomElement& element );
 
 protected:
     KWImage *image;

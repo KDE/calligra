@@ -1035,7 +1035,7 @@ bool KWTextFrameSet::load( QDomElement& element )
     if ( !ps.isNull() ) {
 	QDomElement p = ps.firstChild().toElement();
 	
-	for( ; !p.isNull(); p = p->nextSibling().toElement() ) {	
+	for( ; !p.isNull(); p = p.nextSibling().toElement() ) {	
  	    if ( !last )
  	    {
  		delete parags;
@@ -1285,15 +1285,15 @@ QDomElement KWPictureFrameSet::save( QDomDocument &doc )
 }
 
 /*================================================================*/
-bool KWPictureFrameSet::load( const QDomElement& element )
+bool KWPictureFrameSet::load( QDomElement& element )
 {
     if ( !KWFrameSet::load( element ) )
 	return false;
 
-    QDomElement img = element.namedItem( "IMAGE" );
-    if ( !img.isNull() ) {
-	doc->addImageRequest( img.attribute( "filename" ) );
-    }
+    QDomElement img = element.namedItem( "IMAGE" ).toElement();
+//     if ( !img.isNull() ) {
+// 	doc->addImageRequest( img.attribute( "filename" ) );
+//     }
 
     // 	    KWImage *_image = new KWImage();
     // 	    _image->load( parser, lst, doc );
