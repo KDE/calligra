@@ -355,7 +355,7 @@ protected slots:
 protected:
 
     void sortLists();
-    QString tabToString(const KoTabulator *tab);
+    QString tabToString(const KoTabulator &tab);
 
     QVBoxLayout* editLayout;
 
