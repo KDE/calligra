@@ -1,7 +1,6 @@
-<!-- 
-<?xml version="1.0" ?>
-<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
- 
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd">
+	  
 To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
 
@@ -166,16 +165,6 @@ The &kpresenter; menus are discussed in the following sections.
 <sect1 id="file-menu">
 <title><guimenu>File</guimenu> Menu</title>
 
-<screenshot>
-<screeninfo>The <guimenu>File</guimenu> Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="menufile.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>File</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
-
 <variablelist>
 <varlistentry>
 <term><menuchoice>
@@ -189,7 +178,7 @@ Menu</phrase></textobject>
 <listitem>
 <para>
 <action>Begins a new presentation.</action>  The
-<guilabel>Choose</guilabel> dialog will open, allowing you to choose a
+<guilabel>Create Document</guilabel> dialog will open, allowing you to choose a
 template for your presentation. 
 </para>
 </listitem>
@@ -202,7 +191,7 @@ template for your presentation.
 <keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Open</guimenuitem>
+<guimenuitem>Open...</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -264,6 +253,39 @@ previously saved the presentation, it will be resaved with the same name.
 <term>
 <menuchoice>
 <guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>FIXME: What does this do?</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Import a presentation that was previously created in
+one of several common formats.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>Export the currently open presentation to one of several common
+formats for use in another application, or for exchange with someone
+who does not have access to kpresenter.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
 <guimenuitem>Create HTML Slideshow...</guimenuitem>
 </menuchoice>
 </term>
@@ -275,6 +297,14 @@ section <xref linkend="html-wizard"/>.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice><guimenu>Template
+Manager</guimenu></menuchoice></term>
+<listitem><para>FIXME: Figure out how this works.</para></listitem>
+</varlistentry>
+<!-- 
+FIXME: Did this turn into 'Template Manager' ? It seems so, based on -->
+<!-- the description below 
 <varlistentry>
 <term>
 <menuchoice>
@@ -291,7 +321,7 @@ linkend="creating-templates"/>.
 </para>
 </listitem>
 </varlistentry>
-
+ --> 
 <varlistentry>
 <term>
 <menuchoice>
@@ -359,6 +389,14 @@ documents contents.
 </varlistentry>
 
 <varlistentry>
+<term><menuchoice><guimenu>File</guimenu><guimenuitem>Send
+File...</guimenuitem></menuchoice></term>
+<listitem>
+<para>FIXME: This doesn't seem to do anything when tested.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
 <shortcut><keycombo action="simul">
@@ -398,16 +436,6 @@ to save all changes in all open presentations first.
 <sect1 id="edit-menu">
 <title><guimenu>Edit</guimenu> Menu</title>
 
-<screenshot>
-<screeninfo>The <guimenu>Edit</guimenu> Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="menuedit.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>Edit</guimenu>
-Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
-
 <variablelist>
 
 <varlistentry>
@@ -440,8 +468,7 @@ task</replaceable></guimenuitem>
 <para>
 <action>Redo the last action you undid.</action>  If you have not undone
 any actions, or the last undo action is not reversible, this menu item
-will instead read <guimenuitem>No Redo Possible</guimenuitem> and is
-disabled.
+is disabled.
 </para>
 </listitem>
 </varlistentry>
@@ -501,7 +528,7 @@ presentation.</action>
 <term>
 <menuchoice>
 <shortcut><keycombo action="simul">
-&Ctrl;<keycap>Del</keycap>
+&Ctrl;<keycap>Delete</keycap>
 </keycombo></shortcut>
 <guimenu>Edit</guimenu>
 <guimenuitem>Delete</guimenuitem>
@@ -531,44 +558,11 @@ presentation.</action>
 </varlistentry>
 
 <varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Copy Page</guimenuitem>
-</menuchoice></term>
-<listitem>
-<para>
-<action>Copy the current slide to the clipboard.</action>
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Duplicate Page</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-<action>Insert an exact copy of the current slide.</action>  
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Delete Page...</guimenuitem>
-</menuchoice></term>
-<listitem>
-<para>
-<action>Delete the current page from the presentation.</action>  You
-will be asked to confirm this action.
-</para>
-</listitem>
+<term><menuchoice><shortcut><keycombo action="simul">
+&Ctrl;&Shift;<keycap>A</keycap></keycombo></shortcut><guimenu>Edit</guimenu>
+<guimenuitem>Deselect</guimenuitem></menuchoice></term>
+<listitem><para>Deselect any currently selected
+objects.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -588,18 +582,95 @@ will be asked to confirm this action.
 </varlistentry>
 
 <varlistentry>
+<term><menuchoice><shortcut><keycap>F3</keycap></shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Find
+Next</guimenuitem></menuchoice></term>
+<listitem><para>Find the next occurrence of a piece of text within
+a presentation.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo action="simul">&Shift;<keycap>F3</keycap>
+</keycombo></shortcut><guimenu>Edit</guimenu><guimenuitem>Find
+Previous</guimenuitem></menuchoice></term>
+<listitem><para>Find the previous occurrence of a piece of text within
+a presentation.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Replace...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Replace one or more occurrences of a piece of text in
+your presentation with a different piece of text.</para></listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Header/Footer...</guimenuitem>
+<guimenuitem>Copy Slide</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
-<action>Insert a header and/or footer into the presentation.</action>
-This will display on every <!-- printed? --> page.
+<action>Copy the current slide to the clipboard.</action>
 </para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Duplicate Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Insert an exact copy of the current slide.</action>  
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete Slide</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Delete the current page from the presentation.</action>  You
+will be asked to confirm this action.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Duplicate
+Object...</guimenuitem></menuchoice></term>
+<listitem><para>
+Create a duplicate of the currently selected object.  A dialog will
+display allowing you to set some options for the duplicate, &eg; if it
+should be rotated, or scaled, or offset to a new position on the
+slide.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Enable
+Autocorrection</guimenuitem></menuchoice></term>
+<listitem><para>FIXME: Confirm what this does:</para>
+<para>If this is enabled, common spelling errors will be corrected as
+you type.  &eg; if you type <userinput>Teh</userinput> it will be
+corrected to <userinput>The</userinput> automatically.</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 
 </sect1>

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY package "koffice">
   <!ENTITY kappname "&kpresenter;">
   <!ENTITY % addindex "IGNORE">
@@ -130,7 +130,26 @@ Write the <link linkend="options">&kpresenter; Options</link> chapter.
 Write the tool bars/menu items chapter.
 </para>
 </listitem>
+
+<listitem>
+<para>Describe Opening Screen</para>
+</listitem>
+
+<listitem>
+<para>Write a quick start guide for those familiar with presentation
+software and who just need an orientation of &kpresenter;'s
+interface</para>
+<para>If possible, do similar for some other common presentation
+softwares</para>
+</listitem>
+
+<listitem>
+<para>Write about the export to HTML function</para>
+</listitem>
+
 </itemizedlist>
+
+
 
 </chapter>
 
