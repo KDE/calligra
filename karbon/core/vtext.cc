@@ -31,6 +31,7 @@
 #include "vsegment.h"
 #include "vgroup.h"
 #include "vpainter.h"
+#include "commands/vtransformcmd.h"
 
 #ifdef HAVE_KARBONTEXT
 
@@ -505,6 +506,8 @@ VText::traceText()
 		// Step 1: place (0, 0) to the rotation center of the glyph.
 		dx = *glyphXAdvance.at( i ) / 2;
 		x += dx;
+		VTransformCmd trafo( 0L, QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
+		trafo.visit( *composite );
 //		composite->transform( QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
 
 		// Step 2: find the position where to draw.
@@ -542,6 +545,8 @@ VText::traceText()
 		// Step 3: transform glyph and append it. That's it, we've got
 		// text following a path. Really easy, isn't it ;) ?
 //		composite->transform( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
+		trafo.setMatrix( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
+		trafo.visit( *composite );
 		composite->setState( state() );
 
 		//kdDebug() << "Glyph: " << (QString)character << " [String pos: " << x << ", " << y << " / Canvas pos: " << point.x() << ", " << point.y() << "]" << endl;
