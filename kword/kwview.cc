@@ -2812,6 +2812,7 @@ void KWView::toolsCreateText()
 void KWView::insertTable()
 {
     KWCanvas * canvas = m_gui->canvasWidget();
+    canvas->setMouseMode( KWCanvas::MM_EDIT );
     KWTableDia *tableDia = new KWTableDia( this, 0, canvas, m_doc,
                                            canvas->tableRows(),
                                            canvas->tableCols(),
