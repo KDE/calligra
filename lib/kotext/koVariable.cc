@@ -1062,6 +1062,12 @@ void KoFieldVariable::recalc()
         case VST_AUTHORNAME:
         case VST_EMAIL:
         case VST_COMPANYNAME:
+        case VST_TELEPHONE:
+        case VST_FAX:
+        case VST_COUNTRY:
+        case VST_POSTAL_CODE:
+        case VST_CITY:
+        case VST_STREET:
         {
             KoDocumentInfo * info = m_doc->documentInfo();
             KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
@@ -1075,6 +1081,18 @@ void KoFieldVariable::recalc()
                     m_value = authorPage->email();
                 else if ( m_subtype == VST_COMPANYNAME )
                     m_value = authorPage->company();
+                else if ( m_subtype == VST_TELEPHONE )
+                    m_value = authorPage->telephone();
+                else if ( m_subtype == VST_FAX )
+                    m_value = authorPage->fax();
+                else if ( m_subtype == VST_COUNTRY )
+                    m_value = authorPage->country();
+                else if ( m_subtype == VST_POSTAL_CODE )
+                    m_value = authorPage->postalCode();
+                else if ( m_subtype == VST_CITY )
+                    m_value = authorPage->city();
+                else if ( m_subtype == VST_STREET )
+                    m_value = authorPage->street();
             }
         }
         break;
@@ -1111,11 +1129,14 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "Company Name" ); // is "Name" necessary ?
     lst << i18n( "Directory and File Name" );
     lst << i18n( "File Name without extension" );
-    lst << QString::null; //7
-    lst << QString::null; //8
-    lst << QString::null; //9
+    lst << i18n( "Telephone");
+    lst << i18n( "Fax");
+    lst << i18n( "Country");
     lst << i18n( "Document Title" );
     lst << i18n( "Document Abstract" );
+    lst << i18n( "Postal code" );
+    lst << i18n( "City" );
+    lst << i18n( "Street" );
     return lst;
 }
 
