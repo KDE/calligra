@@ -38,6 +38,8 @@
 #include <kexidb/fieldlist.h>
 #include <kexidb/connection.h>
 
+#include <kexirecordnavigator.h>
+
 #include "kexidbform.h"
 #include "kexiformview.h"
 
@@ -53,6 +55,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  , m_form(0)
  , m_helpFont(font())
  , m_preview(preview)
+ , m_navPanel(0)
 {
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
@@ -77,8 +80,13 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 
 	connect(&m_delayedResize, SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
 	m_smodeSet = false;
-	if (m_preview)
+	if (m_preview) {
 		refreshContentsSizeLater(true, true);
+//! @todo allow to hide navigator
+		updateScrollBars();
+		m_navPanel = new KexiRecordNavigator(this, leftMargin(), "nav");
+		m_navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+	}
 }
 
 KexiFormScrollView::~KexiFormScrollView()
@@ -139,6 +147,13 @@ KexiFormScrollView::refreshContentsSize()
 		if(m_widget->height() + 200 > contentsHeight())
 			resizeContents(contentsWidth(), m_widget->height() + 300);
 	}
+}
+
+void
+KexiFormScrollView::updateNavPanelGeometry()
+{
+	if (m_navPanel)
+		m_navPanel->updateGeometry(leftMargin());
 }
 
 void
@@ -303,6 +318,18 @@ void KexiFormScrollView::leaveEvent( QEvent *e )
 {
 	QWidget::leaveEvent(e);
 	m_widget->update(); //update form elements on too fast mouse move
+}
+
+void KexiFormScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
+{
+/*todo*/
+	kdDebug(44021)<<"KexiTableView::setHBarGeometry"<<endl;
+	if (m_navPanel && m_navPanel->isVisible()) {
+		m_navPanel->setHBarGeometry( hbar, x, y, w, h );
+	}
+	else {
+		hbar.setGeometry( x, y, w, h );
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -715,6 +742,7 @@ KexiFormView::resizeEvent( QResizeEvent *e )
 		);
 	}
 	KexiViewBase::resizeEvent(e);
+	m_scrollView->updateNavPanelGeometry();
 }
 
 #include "kexiformview.moc"

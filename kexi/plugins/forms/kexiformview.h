@@ -53,6 +53,8 @@ class KexiFormScrollView : public QScrollView
 
 		void refreshContentsSizeLater(bool horizontal, bool vertical);
 
+		void updateNavPanelGeometry();
+
 	public slots:
 		/*! Make sure there is a 300px margin around the form contents to allow resizing. */
 		void refreshContentsSize();
@@ -66,8 +68,8 @@ class KexiFormScrollView : public QScrollView
 		virtual void contentsMouseMoveEvent(QMouseEvent * ev);
 		virtual void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
 		virtual void leaveEvent( QEvent *e );
+		virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 
-	private:
 		bool m_resizing;
 		bool m_enableResizing;
 		QWidget *m_widget;
@@ -82,10 +84,15 @@ class KexiFormScrollView : public QScrollView
 		bool m_snapToGrid : 1;
 		bool m_preview : 1;
 		bool m_smodeSet : 1;
+		KexiRecordNavigator* m_navPanel;
 };
 
 //! The FormPart's view
-/*! This class takes care of saving/loading form, of enabling actions when needed. */
+/*! This class presents a siungle view used inside KexiDialogBase.
+ It takes care of saving/loading form, of enabling actions when needed. 
+ One KexiFormView object is instantiated for data view mode (preview == true in constructor),
+ and second KexiFormView object is instantiated for design view mode 
+ (preview == false in constructor). */
 class KexiFormView : public KexiViewBase
 {
 	Q_OBJECT
@@ -146,7 +153,6 @@ class KexiFormView : public KexiViewBase
 		KexiPropertyBuffer *m_buffer;
 		KexiDB::Connection *m_conn;
 		int m_resizeMode;
-		KexiRecordNavigator* m_navPanel;
 };
 
 #endif

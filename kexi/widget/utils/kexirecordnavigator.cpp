@@ -95,6 +95,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	m_navRecordCount->setLineWidth(0);
 	m_navRecordCount->setFocusPolicy(NoFocus);
 	m_navRecordCount->setAlignment(AlignLeft | AlignVCenter);
+	QToolTip::add(m_navRecordCount, i18n("Number of rows"));
 
 	lbl_of->setFont(f);
 	m_navRecordNumber->setFont(f);
@@ -228,17 +229,26 @@ void KexiRecordNavigator::setCurrentRecordNumber(uint r)
 
 	m_navRecordNumber->setText(n);
 	m_navRecordCount->deselect();
+	updateButtons(recCnt);
+}
+
+void KexiRecordNavigator::updateButtons(uint recCnt)
+{
+	const uint r = currentRecordNumber();
 	if (isEnabled()) {
 		m_navBtnPrev->setEnabled(r > 1);
 		m_navBtnFirst->setEnabled(r > 1);
-		m_navBtnNext->setEnabled(r < (recCnt +(m_isInsertingEnabled?1:0)));
-		m_navBtnLast->setEnabled(r!=recCnt && (m_isInsertingEnabled || recCnt>0));
+		m_navBtnNext->setEnabled(r > 0 && r < (recCnt +(m_isInsertingEnabled?1:0)));
+		m_navBtnLast->setEnabled(r!=(recCnt+(m_isInsertingEnabled?1:0)) && (m_isInsertingEnabled || recCnt>0));
 	}
 }
 
 void KexiRecordNavigator::setRecordCount(uint count)
 {
 	const QString & n = QString::number(count);
+	if (m_isInsertingEnabled && currentRecordNumber()==0) {
+		setCurrentRecordNumber(1);
+	}
 	if (m_navRecordCount->text().length() != n.length()) {//resize
 		m_navRecordCount->setFixedWidth(m_nav1DigitWidth*n.length()+6);
 		
@@ -257,6 +267,7 @@ void KexiRecordNavigator::setRecordCount(uint count)
 	m_navRecordCount->deselect();
 	if (m_view)
 		m_view->updateScrollBars();
+	updateButtons(recordCount());
 }
 
 uint KexiRecordNavigator::currentRecordNumber() const
@@ -303,6 +314,11 @@ void KexiRecordNavigator::updateGeometry(int leftMargin)
 
 		m_view->updateScrollBars();
 	}
+}
+
+void KexiRecordNavigator::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
+{
+	hbar.setGeometry( x + width(), y, w - width(), h );
 }
 
 #include "kexirecordnavigator.moc"

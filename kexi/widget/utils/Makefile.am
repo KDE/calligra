@@ -9,7 +9,7 @@ libkexiguiutils_la_LIBADD = $(LIB_KDEUI)
 SUBDIRS = .
 
 # set the include path for X, qt and KDE - all_includes must remain last!
-INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/widget/utils $(all_includes)
 
 METASOURCES = AUTO
 

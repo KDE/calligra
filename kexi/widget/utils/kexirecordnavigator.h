@@ -28,6 +28,7 @@ class QIntValidator;
 class QScrollView;
 class KLineEdit;
 class KexiRecordNavigatorPrivate;
+class QScrollBar;
 
 //! \brief KexiRecordNavigator class provides a record navigator.
 /*! Record navigator is usually used for data tables (e.g. KexiTableView)
@@ -52,6 +53,13 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 
 		/*! \return record count displayed for this navigator. */
 		uint recordCount() const;
+
+		/*! Sets horizontal bar's \a hbar (at the bottom) geometry so this record navigator
+		 is properly positioned together with horizontal scroll bar. This method is used 
+		 in QScrollView::setHBarGeometry() implementations:
+		 see KexiTableView::setHBarGeometry() and KexiFormScrollView::setHBarGeometry()
+		 for usage examples. */
+		void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 
 		/*! @internal used for keyboard handling. */
 		virtual bool eventFilter( QObject *o, QEvent *e );
@@ -87,6 +95,8 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 		//void slotRecordNumberReturnPressed(const QString& text);
 
 	protected:
+		void updateButtons(uint recCnt);
+
 		QToolButton *m_navBtnFirst;
 		QToolButton *m_navBtnPrev;
 		QToolButton *m_navBtnNext;
