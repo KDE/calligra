@@ -90,12 +90,14 @@ int Canvas::width()
   return w;
 }
 
-void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, int zoomFactor)
+void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffset, int zoomFactor)
 {
   if (!w)
     return;
+
+ int startX, startY, pixX, pixY = 0;
   
-  QPainter p(w);
+ QPainter p(w);
   
   // XXX clip it correctly
   // XXX paint only what is needed
@@ -109,14 +111,6 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, int zoomFactor)
 	    {
 	      if (!tiles[y*xTiles+x]->isNull())
 		{
-		  if (offset.isNull())
-		    {
-		      p.drawPixmap(x*TILE_SIZE,y*TILE_SIZE,*tiles[y*xTiles+x]);
-		      continue;
-		    }
-		    
-		  int startX, startY, pixX, pixY;
-
 		  if (x*TILE_SIZE < offset.x())
 		    {
 		      startX = 0;
@@ -135,12 +129,13 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, int zoomFactor)
 		    }
 		  else
 		    {
-		      startY = y*TILE_SIZE - offset.y();
+		      startY = y*TILE_SIZE - offset.y();;
 		      pixY = 0;
 		    }
-		    
+		  
+		  startX+=paintOffset.x();
+		  startY+=paintOffset.y();
 		  p.drawPixmap(startX, startY, *tiles[y*xTiles+x], pixX, pixY);
-		 
 		}
 	      else
 		puts("Null: not rendering");

@@ -371,14 +371,12 @@ void KImageShopView::setRanges()
 
 void KImageShopView::scrollH(int )
 {
-  kdebug( KDEBUG_INFO, 0, "scrollH");
-  m_pDoc->paintPixmap(m_pCanvasView,QRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height()),QPoint(m_pHorz->value(), m_pVert->value()));
+  slotCVPaint(0L);
 }
 
 void KImageShopView::scrollV(int )
 {
-  kdebug( KDEBUG_INFO, 0, "scrollV");
-  m_pDoc->paintPixmap(m_pCanvasView,QRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height()),QPoint(m_pHorz->value(), m_pVert->value()));
+  slotCVPaint(0L);
 }
 
 void KImageShopView::newView()
@@ -517,24 +515,32 @@ void KImageShopView::slotActivateBrushTool()
     m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
 }
 
-void KImageShopView::slotUpdateView(const QRect &area)
+void KImageShopView::slotUpdateView(const QRect &_area) // _area in canvas coordiantes
 {
+  // viewrect in canvas coordinates
   QRect viewRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height());
 
-  if (!area.intersects(viewRect))
-    return;
-  
-  // FIXME: optimise me, don't repaint the whole viewRect
+  // does the area intersect the viewrect?
+  if (!_area.intersects(viewRect)) return;
+
+  // repaint only the visible part
+  QRect area = viewRect & _area;
+
+  // offset
   QPoint offset(m_pHorz->value(), m_pVert->value());
-  m_pDoc->paintPixmap(m_pCanvasView, viewRect, offset);
+
+  // paint offset
+  int x = (m_pCanvasView->width() > m_pDoc->width()) ? ((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height()) ? ((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+  
+  // repaint
+  m_pDoc->paintPixmap(m_pCanvasView, area, offset, QPoint(x,y));
 }
 
 void KImageShopView::slotCVPaint(QPaintEvent *)
 {
-  QRect viewRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height());
-  QPoint offset(m_pHorz->value(), m_pVert->value());
-  
-  m_pDoc->paintPixmap(m_pCanvasView, viewRect, offset);
+  // repaint the whole canvasview
+  slotUpdateView(QRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height()));
 }
 
 void KImageShopView::slotCVMousePress(QMouseEvent *e)
@@ -542,9 +548,14 @@ void KImageShopView::slotCVMousePress(QMouseEvent *e)
   if(!m_pTool)
     return;
 
+  // paint offset
+  int x = (m_pCanvasView->width() > m_pDoc->width()) ? ((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height()) ? ((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+ 
   KImageShop::MouseEvent mouseEvent;
-  mouseEvent.posX = e->x() + m_pHorz->value() ;
-  mouseEvent.posY = e->y() + m_pVert->value();
+  // postion in canvas coordinates
+  mouseEvent.posX = e->x() + m_pHorz->value() - x;
+  mouseEvent.posY = e->y() + m_pVert->value() - y;
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -564,9 +575,14 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
   if(!m_pTool)
     return;
 
+  // paint offset
+  int x = (m_pCanvasView->width() > m_pDoc->width()) ? ((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height()) ? ((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+ 
   KImageShop::MouseEvent mouseEvent;
-  mouseEvent.posX = e->x() + m_pHorz->value() ;
-  mouseEvent.posY = e->y() + m_pVert->value();
+  // postion in canvas coordinates
+  mouseEvent.posX = e->x() + m_pHorz->value() - x;
+  mouseEvent.posY = e->y() + m_pVert->value() - y;
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -589,9 +605,14 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
   if(!m_pTool)
     return;
 
+  // paint offset
+  int x = (m_pCanvasView->width() > m_pDoc->width()) ? ((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height()) ? ((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+ 
   KImageShop::MouseEvent mouseEvent;
-  mouseEvent.posX = e->x() + m_pHorz->value() ;
-  mouseEvent.posY = e->y() + m_pVert->value();
+  // postion in canvas coordinates
+  mouseEvent.posX = e->x() + m_pHorz->value() - x;
+  mouseEvent.posY = e->y() + m_pVert->value() - y;
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -618,8 +639,7 @@ void KImageShopView::viewLayerDialog()
     {
       m_pLayerDialog->show();
     }
-//  m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, m_pLayerDialog->isVisible() );
-    m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, TRUE );
+    m_vMenuView->setItemChecked(m_idMenuView_LayerDialog, true);
   }
 }
 
