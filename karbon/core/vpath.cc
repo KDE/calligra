@@ -431,6 +431,8 @@ VPath::counterClockwise() const
 void
 VPath::revert()
 {
+	if(!m_last)
+		return;
 	VPath list( parent() );
 	list.moveTo( m_last->knot() );
 

@@ -229,6 +229,8 @@ VKoPainter::newPath()
 void
 VKoPainter::fillPath()
 {
+	if( m_index == 0 ) return;
+
 	// find begin of last subpath
     int find = -1;
     for( int i = m_index - 1; i >= 0; i-- )
@@ -269,6 +271,8 @@ VKoPainter::fillPath()
 void
 VKoPainter::strokePath()
 {
+	if( m_index == 0 ) return;
+
 	if( m_stroke && m_stroke->lineWidth() == 0 )
 		return;
 	if( m_path[ m_index ].code != ART_END)
