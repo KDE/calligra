@@ -13,14 +13,14 @@ The filter is a 4 pass filter.
     1a parsing documentinfo,xml (done classicaly with QDom)
     1b parsing maindoc.xml (class KWord13Parser, done with Qt's SAX parser: QXml)
 2. Postprocessing of parsing (class KWord13PostParsing)
-    * loading of pictures (current not done)
-    * grouping tables cells (current not done)
-    * placing bookmarks (current not done)
+    * loading of pictures
+    * grouping tables cells (currently not done)
+    * placing bookmarks (currently not done)
 3. Preparing the OASIS document (function KWord13OasisGenerator::prepare)
     * creating automatical styles
 4. Generating the OASIS document (function KWord13OasisGenerator::generate)
     4a creating the files content.xml, styles.xml, meta.xml
-    4b writing pictures (current not done)
+    4b writing pictures
     4c writing manifest file 
 
 === Syntax Versions ===
