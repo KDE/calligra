@@ -61,7 +61,7 @@ KFormulaDoc::KFormulaDoc()
 	    sizeof(TextElement),sizeof(RootElement));
 }
 
-CORBA::Boolean KFormulaDoc::init()
+CORBA::Boolean KFormulaDoc::initDoc()
 {
     return true;
 }
