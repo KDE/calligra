@@ -4,21 +4,25 @@
 #
 # -Taj (Apr 1999)
 
-kde_MODULES = koml store kofficecore kofficeui
+kde_MODULES = koml store kofficecore kofficeui kscript
 
-#koml_FILES = *.idl *.h
 koml_FILES = *.h
-koml_LIBS = -lkom -lpartsui -lparts -lqt
+#koml_FILES = *.idl *.h
+koml_LIBS = -lparts -lpartsui -lkom -lqt
 
-#store_FILES = *.idl *.h
 store_FILES = *.h
-store_LIBS = -lkom -lpartsui -lparts -lqt
+#store_FILES = *.idl *.h
+store_LIBS = -lparts -lpartsui -lkom -lqt
 
-#kofficecore_FILES = *.idl *.h
 kofficecore_FILES = *.h
-kofficecore_LIBS = -lkom -lpartsui -lparts -lqt
+#kofficecore_FILES = *.idl *.h
+kofficecore_LIBS = -lparts -lpartsui -lkom -lqt
 
-#kofficeui_FILES = *.idl *.h
 kofficeui_FILES = *.h
-kofficeui_LIBS = -lkom -lpartsui -lparts -lqt
+#kofficeui_FILES = *.idl *.h
+kofficeui_LIBS = -lkofficecore -lparts -lpartsui -lkom -lqt
+
+kscript_FILES = *.h
+#kscript_FILES = *.idl *.h
+kscript_LIBS = -lkofficeui -lkofficecore -lparts -lpartsui -lkom -lqt
 
