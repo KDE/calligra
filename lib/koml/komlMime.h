@@ -38,7 +38,14 @@ public:
   int decode( char *_dest, unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4 );
 };
 
+#include <config.h>
+#ifdef HAVE_STREAMBUF
 #include <streambuf>
+#elif HAVE_STREAMBUF_H
+#include <streambuf.h>
+#else
+#error neither streambuf or streambuf.h defined
+#endif
 
 class Base64EncodeBuffer : public std::streambuf, protected Base64
 {

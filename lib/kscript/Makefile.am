@@ -18,9 +18,9 @@ libkscript_la_SOURCES = kscript_proxy.cc kscript_eval.cc kscript_object.cc kscri
 
 libkscript_la_METASOURCES = kscript_ext_qt.moc kscript_scriptmenu.moc
 
-libkscript_la_LDFLAGS = -version-info 1:0:0
+libkscript_la_LDFLAGS = -version-info 1:0:0 -no-undefined
 
-libkscript_la_LIBADD = $(LIB_KDECORE) $(LIB_KDEUI)
+libkscript_la_LIBADD = $(LIB_KDEUI)
 
 bin_PROGRAMS = kscript
 

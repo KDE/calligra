@@ -1,7 +1,6 @@
 
 KDE_CXXFLAGS = $(USE_RTTI) 
 lib_LTLIBRARIES = libkoml.la
-LDFLAGS = -version-info 1:0:0 $(all_libraries)
 INCLUDES = $(all_includes)
 
 ####### Files
@@ -13,3 +12,4 @@ include_HEADERS = komlParser.h komlFeed.h komlFileFeed.h \
 	komlWriter.h torben.h komlStreamFeed.h komlMime.h
 
 libkoml_la_LIBADD = $(LIB_KDECORE)
+libkoml_la_LDFLAGS = -version-info 1:0:0 $(all_libraries) -no-undefined
