@@ -43,6 +43,7 @@ k_dcop:
     virtual void configureColor();
     virtual void configureLegend();
     virtual void configSubTypeChart();
+    virtual void configHeaderFooter();
 
     virtual void updateGuiTypeOfChart();
 

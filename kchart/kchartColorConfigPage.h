@@ -53,7 +53,6 @@ private:
     KColorButton* _lineCB;
     KColorButton* _plotCB;
     KColorButton* _volCB;
-    KColorButton* _titleCB;
     KColorButton* _xtitleCB;
     KColorButton* _ytitleCB;
     KColorButton* _ytitle2CB;
@@ -123,19 +122,6 @@ inline QColor KChartColorConfigPage::volColor() const
 {
     return _volCB->color();
 }
-
-
-inline void KChartColorConfigPage::setTitleColor( QColor color )
-{
-    _titleCB->setColor( color );
-}
-
-
-inline QColor KChartColorConfigPage::titleColor() const
-{
-    return _titleCB->color();
-}
-
 
 inline void KChartColorConfigPage::setXTitleColor( QColor color )
 {

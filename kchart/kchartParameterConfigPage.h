@@ -33,7 +33,6 @@ private:
     QCheckBox *xlabel;
     QCheckBox *lineMarker;
     QCheckBox *llabel;
-    QLineEdit *title;
     QLineEdit *xtitle;
     QLineEdit *ytitle;
     QLineEdit *ylabel_fmt;

@@ -48,6 +48,7 @@ public slots:
       void slotConfigFont();
       void slotConfigColor();
       void slotConfigLegend();
+      void slotConfigHeaderFooterChart();
       void slotConfigSubTypeChart();
 protected:
     void paintEvent( QPaintEvent* );
@@ -70,6 +71,7 @@ private:
     KAction* m_backConfig;
     KAction* m_legendConfig;
     KAction* m_subTypeChartConfig;
+    KAction* m_headerFooterConfig;
     KToggleAction* m_chartpie;
     KToggleAction* m_chartareas;
     KToggleAction* m_chartbars;

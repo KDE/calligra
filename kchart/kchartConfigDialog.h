@@ -17,6 +17,7 @@ class KChartPieConfigPage;
 class KChartSubTypeChartPage;
 class KChartComboPage;
 class KChartBackgroundPixmapConfigPage;
+class KChartHeaderFooterConfigPage;
 class KChartLegendConfigPage;
 
 class KChartConfigDialog : public QTabDialog
@@ -24,7 +25,7 @@ class KChartConfigDialog : public QTabDialog
     Q_OBJECT
 
 public:
-    enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4, KC_LEGEND=8, KC_SUBTYPE=16,KC_ALL=256 };
+    enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4, KC_LEGEND=8, KC_SUBTYPE=16,KC_HEADERFOOTER=32,KC_ALL=256 };
     KChartConfigDialog( KChartParams* params,
                         QWidget* parent, int flags,KoChart::Data *dat );
 
@@ -45,6 +46,7 @@ protected:
     KChartBackgroundPixmapConfigPage* _backgroundpixpage;
     //KChartComboPage *_hlcChart;
     KChartLegendConfigPage *_parameterLegend;
+    KChartHeaderFooterConfigPage *_headerfooterpage;
 protected slots:
     virtual void apply();
     virtual void defaults();

@@ -110,6 +110,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_subTypeChartConfig= new KAction( i18n( "&Configure sub type chart" ), 0,
                             this, SLOT( slotConfigSubTypeChart() ),
                             actionCollection(), "legend_subtype" );
+    m_headerFooterConfig= new KAction( i18n( "&Configure header footer" ), 0,
+                            this, SLOT( slotConfigHeaderFooterChart() ),
+                            actionCollection(), "headerfooter_subtype" );
     // initialize the configuration
     //    loadConfig();
 
@@ -442,6 +445,11 @@ void KChartView::slotConfigLegend()
 void KChartView::slotConfigSubTypeChart()
 {
     config(KChartConfigDialog::KC_SUBTYPE);
+}
+
+void KChartView::slotConfigHeaderFooterChart()
+{
+    config(KChartConfigDialog::KC_HEADERFOOTER);
 }
 
 void KChartView::updateButton()

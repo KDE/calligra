@@ -37,14 +37,12 @@ private:
     QListBox *listColor;
     QPushButton *fontButton;
     KColorButton *colorButton;
-    QFont title;
     QFont xTitle;
     QFont yTitle;
     QFont label;
     QFont yAxis;
     QFont xAxis;
     QFont legend;
-    QButton::ToggleState titleIsRelative;
     QButton::ToggleState xTitleIsRelative;
     QButton::ToggleState yTitleIsRelative;
     QButton::ToggleState labelIsRelative;

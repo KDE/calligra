@@ -53,16 +53,8 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
 
     QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
     QGridLayout *grid2 = new QGridLayout(gb2,8,2,15,8);
-    QLabel *tmpLabel = new QLabel( i18n( "Title" ), gb2 );
-    tmpLabel->setAlignment(Qt::AlignCenter);
-    grid2->addWidget(tmpLabel,0,0);
 
-    title= new QLineEdit( gb2 );
-    title->setMaximumWidth(130);
-    grid2->addWidget(title,1,0);
-
-
-    tmpLabel = new QLabel( i18n( "Y-Title" ), gb2 );
+    QLabel *tmpLabel = new QLabel( i18n( "Y-Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
     grid2->addWidget(tmpLabel,2,0);
 
@@ -165,7 +157,6 @@ void KChartParameterConfigPage::init()
     	ytitle2->setEnabled(false);
     }
 
-    title->setText(_params->header1Text());
 
     // PENDING(kalle) Adapt this
     //     xtitle->setText(_params->xtitle);
@@ -204,7 +195,6 @@ void KChartParameterConfigPage::apply()
     //     	_params->ytitle2=ytitle2->text();
     //     	}
 
-    _params->setHeader1Text(title->text());
 
     // PENDING(kalle) Adapt this
     //     if(grid->isChecked())

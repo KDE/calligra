@@ -17,6 +17,7 @@
 #include "kchartPieConfigPage.h"
 #include "kchartParameter3dConfigPage.h"
 #include "kchartLegendConfigPage.h"
+#include "kchartHeaderFooterConfigPage.h"
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -38,7 +39,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     _piepage(0),
     _subTypePage(0),
     _backgroundpixpage(0),
-    _parameterLegend(0)
+    _parameterLegend(0),
+    _headerfooterpage(0)
 {
     // Geometry page
     //_geompage = new KChartGeometryConfigPage( this );
@@ -69,6 +71,11 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     else if(flags & KC_SUBTYPE)
     {
         init3dPage();
+    }
+    else if(flags & KC_HEADERFOOTER)
+    {
+        _headerfooterpage=new KChartHeaderFooterConfigPage(_params,this);
+        addTab( _headerfooterpage,i18n("Header/Footer"));
     }
     else if( flags & KC_ALL )
     {
@@ -108,6 +115,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             //         _hlcChart=new KChartComboPage(_params,this);
 //         addTab( _hlcChart, i18n( "HLC Chart" ) );
         }
+        _headerfooterpage=new KChartHeaderFooterConfigPage(_params,this);
+        addTab( _headerfooterpage,i18n("Header/Footer"));
     }
 
     //init
@@ -175,22 +184,21 @@ void KChartConfigDialog::apply()
         if( _colorpage->xTitleColor().isValid() )
             bottomparams.setAxisLineColor( _colorpage->xTitleColor() );
         else
-            bottomparams.setAxisLineColor( _colorpage->titleColor() );
+            bottomparams.setAxisLineColor( QColor() );
         if( _colorpage->yTitleColor().isValid() )
             leftparams.setAxisLineColor( _colorpage->yTitleColor() );
         else
-            leftparams.setAxisLineColor( _colorpage->titleColor() );
+            leftparams.setAxisLineColor( QColor() );
         if( _colorpage->yTitle2Color().isValid() )
             rightparams.setAxisLineColor( _colorpage->yTitle2Color() );
         else
-            rightparams.setAxisLineColor( _colorpage->titleColor() );
+            rightparams.setAxisLineColor( QColor() );
         bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
         leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
         rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
         _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
         _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
         _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparams );
-        _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader,_colorpage-> titleColor());
     }
     if((_piepage&& _parameterpiepage) ||  _parameterpage )
     {
@@ -231,6 +239,9 @@ void KChartConfigDialog::apply()
     // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
     if(_parameterLegend)
         _parameterLegend->apply();
+
+    if(_headerfooterpage)
+        _headerfooterpage->apply();
 }
 
 void KChartConfigDialog::defaults()
@@ -262,7 +273,6 @@ void KChartConfigDialog::defaults()
         KDChartAxisParams rightparams( _params->axisParams( KDChartAxisParams::AxisPosRight ) );
         KDChartAxisParams bottomparams( _params->axisParams( KDChartAxisParams::AxisPosBottom ) );
         _colorpage->setGridColor( leftparams.axisGridColor() );
-        _colorpage->setTitleColor( /*QColor()*/_params->headerFooterColor( KDChartParams::HdFtPosHeader ) );
         _colorpage->setXTitleColor( bottomparams.axisLineColor() );
         _colorpage->setYTitleColor( leftparams.axisLineColor() );
         _colorpage->setYTitle2Color( rightparams.axisLineColor() );
@@ -312,6 +322,9 @@ void KChartConfigDialog::defaults()
         _parameterLegend->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 //      	_colorpage->setDataColor( i, _params->dataColor( i ) );
+
+    if(_headerfooterpage)
+        _headerfooterpage->init();
 }
 
 

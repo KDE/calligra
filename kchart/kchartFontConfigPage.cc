@@ -60,7 +60,6 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
 
 void KChartFontConfigPage::initList()
 {
-  list->insertItem(i18n("Title"));
   if( _params->chartType() != KDChartParams::Pie &&
       _params->chartType() != KDChartParams::Ring ) {
     list->insertItem(i18n("X-Title"));
@@ -139,10 +138,7 @@ void KChartFontConfigPage::changeLabelFont()
   QFont *font = 0;
   QButton::ToggleState *state = 0;
   bool diffAxes = false;
-  if(list->currentText()==i18n("Title")) {
-    font  = &title;
-    state = &titleIsRelative;
-  } else if(list->currentText()==i18n("X-Title")) {
+  if(list->currentText()==i18n("X-Title")) {
     font  = &xTitle;
     state = &xTitleIsRelative;
   } else if(list->currentText()==i18n("Y-Title")) {
@@ -234,11 +230,6 @@ void KChartFontConfigPage::init()
       yAxis.setPointSize( leftparms.axisLabelsFontRelSize() );
     // PENDING(khz) Add support for the other 6 possible axes
 
-    title = _params->headerFooterFont( KDChartParams::HdFtPosHeader );
-    titleIsRelative = _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosHeader )
-                    ? QButton::On : QButton::Off;
-    if( QButton::On == titleIsRelative )
-      title.setPointSize( _params->headerFooterFontRelSize( KDChartParams::HdFtPosHeader ) );
     // PENDING(khz) Add support for the other 16 possible hd/ft areas
 
 
@@ -281,21 +272,9 @@ void KChartFontConfigPage::apply()
     _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
-    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader,
-                                  title,
-                                  QButton::On == titleIsRelative,
-                                  title.pointSize() );
     // PENDING(khz) change hd2 and ft handling
     // use header settings for header 2 and footer as well
     //   (this must be changed, khz 14.12.2001)
-    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader2,
-                                  title,
-                                  QButton::On == titleIsRelative,
-                                  title.pointSize() );
-    _params->setHeaderFooterFont( KDChartParams::HdFtPosFooter,
-                                  title,
-                                  QButton::On == titleIsRelative,
-                                  title.pointSize() );
     // PENDING(khz) Add support for the other 16 possible hd/ft areas
 
 //     _params->setXTitleFont(xtitle);

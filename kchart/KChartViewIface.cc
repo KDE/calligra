@@ -88,3 +88,8 @@ void KChartViewIface::configSubTypeChart()
 {
     view->slotConfigSubTypeChart();
 }
+
+void KChartViewIface::configHeaderFooter()
+{
+    view->slotConfigHeaderFooterChart();
+}
