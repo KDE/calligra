@@ -1,10 +1,10 @@
 [Desktop Entry]
 Name=Karbon
+Name[eo]=Karbono
+Name[fr]=Karbone
+Name[ko]=K카본
 Exec=karbon
 X-KDE-Library=libkarbonpart
-X-KDE-LibraryMajor=1
-X-KDE-LibraryMinor=0
-X-KDE-LibraryDependencies=
 MimeType=application/x-karbon
 Type=Application
 Icon=karbon
