@@ -63,9 +63,6 @@ binary-arch: build install
 		rm $$i ;\
 		ln -s ../common $$i ;\
 	done
-	for i in `find debian/tmp/usr/bin | sed -e 's#^debian/tmp/usr/bin/##'  | grep -v "debian/tmp"`; do \
-		echo "$$i.1" >> debian/undocumented ;\
-	done
 	for i in `cat debian/undocumented.in | grep -v "#"`; do \
 		echo "$$i.1" >> debian/undocumented ; \
 	done
