@@ -1110,6 +1110,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
   : KoView( doc, _parent, _name )
 {
     ElapsedTime et( "KSpreadView constructor" );
+    kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
 
     d = new ViewPrivate;
     d->view = this;
@@ -1117,35 +1118,55 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     d->doc  = doc;
     d->map  = doc->map();
 
-    d->popupMenuFirstToolId = 0;
-    kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
-    setInstance( KSpreadFactory::global() );
-    if ( doc->isReadWrite() )
-      setXMLFile( "kspread.rc" );
-    else
-      setXMLFile( "kspread_readonly.rc" );
+    d->activeSheet = 0;
 
-    d->activeSheet       = NULL;
-    d->toolbarLock  = FALSE;
-    d->calcLabel  = 0;
+    d->toolbarLock = false;
+    d->loading = false;
+
+    d->selectionInfo = new KSpreadSelection( this );
+
+    d->findOptions = 0;
+    d->findLeftColumn = 0;
+    d->findRightColumn = 0;
+    d->find = 0;
+    d->replace = 0;
+
+    d->popupMenuFirstToolId = 0;
     d->popupMenu   = 0;
     d->popupColumn = 0;
     d->popupRow    = 0;
     d->popupChild   = 0;
     d->popupListChoose = 0;
-    d->spell.kspell    = 0;
-    // a few words to ignore when spell checking
+    d->popupChildObject = 0;
 
-    dcopObject(); // build it
-    d->loading = false;
+    // spell-check context
+    d->spell.kspell = 0;
+    d->spell.macroCmdSpellCheck = 0;
+    d->spell.firstSpellTable = 0;
+    d->spell.currentSpellTable = 0;
+    d->spell.currentCell = 0;
+    d->spell.spellStartCellX = 0;
+    d->spell.spellStartCellY = 0;
+    d->spell.spellEndCellX   = 0;
+    d->spell.spellEndCellY   = 0;
+    d->spell.spellCheckSelection = false;
 
     d->insertHandler = 0L;
-
     d->specialCharDlg = 0;
 
-    d->selectionInfo = new KSpreadSelection( this );
+    if ( doc->isReadWrite() )
+      setXMLFile( "kspread.rc" );
+    else
+      setXMLFile( "kspread_readonly.rc" );
+    setInstance( KSpreadFactory::global() );
+
+    // build the DCOP object
+    dcopObject();
+
+    // GUI Initializations
 
     // Vert. Scroll Bar
+    d->calcLabel  = 0;
     d->vertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     d->vertScrollBar->setRange( 0, 4096 );
     d->vertScrollBar->setOrientation( QScrollBar::Vertical );
@@ -1226,9 +1247,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 
     QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
-    d->findOptions = 0;
-    d->find = 0L;
-    d->replace = 0L;
 
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
