@@ -75,11 +75,44 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     loadListOfWordCompletion();
 }
 
+KoAutoFormat::KoAutoFormat( const KoAutoFormat & autoFormat )
+{
+    m_listCompletion=new KCompletion();
+    m_listCompletion->setItems( autoFormat.listCompletion() );
+
+    m_typographicSimpleQuotes = autoFormat.getConfigTypographicSimpleQuotes();
+    m_typographicDoubleQuotes = autoFormat.getConfigTypographicDoubleQuotes();
+    m_convertUpperCase= autoFormat.getConfigUpperCase();
+    m_convertUpperUpper = autoFormat.getConfigUpperUpper();
+    m_advancedAutoCorrect = autoFormat.getConfigAdvancedAutoCorrect();
+    m_autoDetectUrl = autoFormat.getConfigAutoDetectUrl();
+    m_ignoreDoubleSpace = autoFormat.getConfigIgnoreDoubleSpace();
+    m_removeSpaceBeginEndLine = autoFormat.getConfigRemoveSpaceBeginEndLine();
+    m_useBulletStyle = autoFormat.getConfigUseBulletSyle();
+    m_bulletStyle = autoFormat.getConfigBulletStyle();
+    m_autoChangeFormat = autoFormat.getConfigAutoChangeFormat();
+    m_autoReplaceNumber = autoFormat.getConfigAutoReplaceNumber();
+    m_useAutoNumberStyle = autoFormat.getConfigAutoNumberStyle();
+    m_autoCompletion = autoFormat.getConfigAutoCompletion();
+    m_completionAppendSpace = autoFormat.getConfigAppendSpace();
+    m_minCompletionWordLength = autoFormat.getConfigMinWordLength();
+    m_nbMaxCompletionWord = autoFormat.getConfigNbMaxCompletionWord();
+    m_addCompletionWord = autoFormat.getConfigAddCompletionWord();
+    m_includeTwoUpperLetterException = autoFormat.getConfigIncludeTwoUpperUpperLetterException();
+    m_includeAbbreviation = autoFormat.getConfigIncludeAbbreviation();
+    m_upperCaseExceptions = autoFormat.listException();
+    m_twoUpperLetterException = autoFormat.listTwoUpperLetterException();
+    copyAutoFormatEntries( autoFormat );
+
+}
+
+
 KoAutoFormat::~KoAutoFormat()
 {
     kdDebug() << "KoAutoFormat::~KoAutoFormat " << this << " deleting m_listCompletion: " << m_listCompletion << endl;
     delete m_listCompletion;
 }
+
 
 void KoAutoFormat::loadListOfWordCompletion()
 {
@@ -426,6 +459,7 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     if ( ( ch.isSpace() || ch.isPunct() ) && index > 0 )
     {
         QString lastWord = getLastWord(parag, index);
+        //kdDebug()<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
         if( m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord
             && lastWord.length()>= m_minCompletionWordLength )
             m_listCompletion->addItem( lastWord.lower() );
