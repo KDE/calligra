@@ -126,6 +126,10 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     effectCombo->insertItem( i18n( "Cover Right-Bottom" ) );
     effectCombo->insertItem( i18n( "Uncover Right-Bottom" ) );
     effectCombo->insertItem( i18n( "Dissolve" ) );
+    effectCombo->insertItem( i18n( "Strips Left-Up" ) );
+    effectCombo->insertItem( i18n( "Strips Left-Down" ) );
+    effectCombo->insertItem( i18n( "Strips Right-Up" ) );
+    effectCombo->insertItem( i18n( "Strips Right-Down" ) );
     effectCombo->insertItem( i18n( "Random Transition" ) );
     effectCombo->setCurrentItem( static_cast<int>( pageEffect ) );
     grid->addWidget( effectCombo, 1, 1 );

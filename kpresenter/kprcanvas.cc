@@ -4377,6 +4377,144 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 
     } break;
 
+    // Strips Left-Up
+    case PEF_STRIPS_LEFT_UP:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        unsigned blocks = _steps / 2;
+        unsigned blockSize = kapp->desktop()->height() / blocks;
+
+        _time.start();
+
+        unsigned x, y;
+
+        for ( ; _step < _steps;  ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+
+                for( x = 0; x <= _step; ++x )
+                {
+                    y = _step - x;
+
+                    bitBlt( this, dwidth - x * blockSize, dheight - y * blockSize, &_pix2,
+                        dwidth - x * blockSize, dheight - y * blockSize, 
+                        x * blockSize, blockSize );
+                }
+
+                _step++;
+                _time.restart();
+            }
+        }
+
+    } break;
+
+    // Strips Left-Down
+    case PEF_STRIPS_LEFT_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        unsigned blocks = _steps / 2;
+        unsigned blockSize = kapp->desktop()->height() / blocks;
+
+        _time.start();
+
+        unsigned x, y;
+
+        for ( ; _step < _steps;  ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                for( x = 0; x <= _step; ++x )
+                {
+                    y = _step - x;
+
+                    bitBlt( this, dwidth - x * blockSize, y * blockSize, &_pix2,
+                        dwidth - x * blockSize, y * blockSize, x*blockSize, blockSize );
+                }
+
+                _step++;
+                _time.restart();
+            }
+        }
+
+    } break;
+
+    // Strips Right-Up
+    case PEF_STRIPS_RIGHT_UP:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        unsigned blocks = _steps / 2;
+        unsigned blockSize = kapp->desktop()->height() / blocks;
+
+        _time.start();
+
+        unsigned x, y;
+
+        for ( ; _step < _steps;  ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                for( x = 0; x <= _step; ++x )
+                {
+                    y = _step - x;
+
+                    bitBlt( this, 0, dheight - y * blockSize, &_pix2,
+                        0, dheight - y * blockSize, x*blockSize, blockSize );
+                }
+
+                _step++;
+                _time.restart();
+            }
+        }
+
+    } break;
+
+    // Strips Right-Down
+    case PEF_STRIPS_RIGHT_DOWN:
+    {
+        _steps = static_cast<int>( static_cast<float>( kapp->desktop()->width() ) / pageSpeedFakt() );
+        int dheight = _pix2.height();
+        int dwidth = _pix2.width();
+
+        unsigned blocks = _steps / 2;
+        unsigned blockSize = kapp->desktop()->height() / blocks;
+
+        _time.start();
+
+        unsigned x, y;
+
+        for ( ; _step < _steps;  ) 
+        {
+            kapp->processEvents();
+            if ( _time.elapsed() >= 1 )
+            {
+                for( x = 0; x <= _step; ++x )
+                {
+                    y = _step - x;
+
+                    bitBlt( this, 0, y * blockSize, &_pix2,
+                        0, y * blockSize, x*blockSize, blockSize );
+                }
+
+                _step++;
+                _time.restart();
+            }
+        }
+
+    } break;
+
     // Random (just pick up one of the above effect)
     case PEF_RANDOM:
     {
