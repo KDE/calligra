@@ -33,10 +33,5 @@ messages:
 	(cd po && $(MAKE) -f Makefile.am merge)
 
 dist-hook:
-	cd $(top_distdir) 
-	if test -f $(top_srcdir)/admin/automoc; then
-	  perl $(top_srcdir)/admin/automoc -padmin 
-	else
-	  perl $(top_srcdir)/automoc -p.
-	fi
- 
+	cd $(top_distdir) && perl $(top_srcdir)/admin/automoc -padmin 
+
