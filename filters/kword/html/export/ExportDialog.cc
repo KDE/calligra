@@ -75,18 +75,21 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
     kdDebug(30503) << "Encoding: " << strCodec << endl;
 
+    bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
 
-    // Qt has not found a valid encoding, so try with kdelibs.
-    if ( !codec )
+    // If QTextCodec has not found a valid encoding, so try with KCharsets.
+    if ( codec )
     {
-        // We do not use QTextCodec::codecForName here
-        //   because we fear subtle problems
-        codec = KGlobal::charsets()->codecForName( strCodec );
+        ok = true;
+    }
+    else
+    {
+        codec = KGlobal::charsets()->codecForName( strCodec, ok );
     }
 
     // Still nothing?
-    if ( !codec )
+    if ( !codec || !ok )
     {
         // Default: UTF-8
         kdWarning(30503) << "Cannot find encoding:" << strCodec << endl;
