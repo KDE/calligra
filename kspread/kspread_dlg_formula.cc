@@ -26,8 +26,8 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <qstringlist.h>
-
-
+#include <qlayout.h>
+#include <kbuttonbox.h>
 
 
 KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
@@ -35,28 +35,40 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
 {
   m_pView = parent;
 
-  setCaption( i18n("Formula") );
-  setFixedSize(310,250);
-  m_pOk = new QPushButton( i18n("Ok"), this );
-  m_pOk->setGeometry( 30, 200, 60, 30 );
-
-  m_pClose = new QPushButton( i18n("Cancel"), this );
-  m_pClose->setGeometry( 220,200, 60, 30 );
+  
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  lay1->setMargin( 5 );
+  lay1->setSpacing( 10 );
+  QHBoxLayout *lay2 = new QHBoxLayout( lay1 );
+  lay2->setSpacing( 5 );
+  
   type_formula=new QListBox(this);
-  type_formula->setGeometry(20,20,120,90);
+  lay2->addWidget( type_formula );
+  formula=new QListBox(this);
+  lay2->addWidget( formula );
+  
+  setCaption( i18n("Formula") );
 
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk->setDefault( TRUE );
+  m_pClose = bb->addButton( i18n( "Close" ) );
+  bb->layout();
+  lay1->addWidget( bb );
+  
   type_formula->insertItem(i18n("All"));
   type_formula->insertItem(i18n("Statistic"));
   type_formula->insertItem(i18n("Trigonometric"));
   type_formula->insertItem(i18n("Analytic"));
 
-  formula=new QListBox(this);
-  formula->setGeometry(170,20,120,90);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   QObject::connect( type_formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
   QObject::connect( formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected_formula(const QString &) ) );
 
+  resize( 350, 300 );
+  
 }
 
 
