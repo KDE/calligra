@@ -104,6 +104,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_thirdCondition = 0;
   m_conditionIsTrue=false;
   m_numberOfCond=-1;
+  m_nbLines=0;
 }
 
 void KSpreadCell::copyLayout( int _column, int _row )
@@ -594,6 +595,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
   m_fallDiagonalPen.setWidth( fallDiagonalWidth( _col, _row) );
   m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
+  m_nbLines=0;
   /**
    * RichText
    */
@@ -1001,12 +1003,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
   // Do we need to break the line into multiple lines and are we allowed to
   // do so?
+  int lines = 1;
   if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
        rightBorderWidth( _col, _row ) && m_bMultiRow )
   {
   // copy of m_strOutText
     QString o = m_strOutText;
-    int lines = 1;
+
     if(o.find(' ')!=-1)
         {
 
@@ -1040,6 +1043,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         while(o.find(' ',pos)!=-1);
         }
         m_iOutTextHeight *= lines;
+    if(lines!=1)
+        m_nbLines=lines-1;
+    else
+        m_nbLines=lines;
     m_iTextX = 0;
     // Calculate the maximum width
     QString t;
@@ -1063,35 +1070,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     while ( i != -1 );
   }
 
+  offsetAlign(_col,_row);
 
-  switch( m_eAlignY )
-  {
-        case KSpreadCell::Top:
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE+ fm.ascent();
-                break;
-        case KSpreadCell::Bottom:
-                if(!m_bVerticalText)
-                        m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-                else
-                        //if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-                        if((h - m_iOutTextHeight)>0)
-                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
-                        else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                break;
-        case KSpreadCell::Middle:
-                if(!m_bVerticalText)
-                        m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-                else
-                        if(( h - m_iOutTextHeight )>0)
-                                m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-                        else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-                break;
-  }
-
-  // Vertical alignment
-  //m_iTextY = ( h - m_iOutTextHeight ) / 2 + fm.ascent();
   m_fmAscent=fm.ascent();
 
   // Do we have to occupy additional cells right hand ?
@@ -1274,8 +1254,15 @@ switch( m_eAlignY )
                 m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
                 break;
         case KSpreadCell::Bottom:
-                if(!m_bVerticalText)
+                if(!m_bVerticalText && !m_bMultiRow)
                         m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+                else if(m_bMultiRow)
+                        {
+                        if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
+                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row );
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                        }
                 else
                         if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
                                 m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
@@ -1283,8 +1270,13 @@ switch( m_eAlignY )
                                 m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
                 break;
         case KSpreadCell::Middle:
-                if(!m_bVerticalText)
+                if(!m_bVerticalText && !m_bMultiRow)
                         m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+                else if(m_bMultiRow)
+                        if(( h - m_iOutTextHeight*m_nbLines )>0)
+                                m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
                 else
                         if(( h - m_iOutTextHeight )>0)
                                 m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;

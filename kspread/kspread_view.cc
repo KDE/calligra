@@ -349,7 +349,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // Insert menu
     (void) new KAction( i18n("Formula..."), "sum", 0, this, SLOT( insertFormula() ),
                         actionCollection(), "insertFormula" );
-    (void) new KAction( i18n("Series..."), 0, this, SLOT( series() ), actionCollection(), "series" );
+    (void) new KAction( i18n("Series..."),"series", 0, this, SLOT( series() ), actionCollection(), "series" );
     (void) new KAction( i18n("Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
     (void) new KAction( i18n("Object..."), "parts", 0, this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");

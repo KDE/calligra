@@ -899,6 +899,12 @@ protected:
      * applies and undefined otherwise.
      */
     int m_numberOfCond;
+
+    /**
+    * Store the number of line when you used multirow
+    * default is 0
+    */
+    int m_nbLines;
 };
 
 #endif

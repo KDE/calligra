@@ -655,3 +655,9 @@ example A5:B5
 there is a bug in new qdom because when I try to load a comment
 qdom remove all '\n'
 =>showComment doesn't work and blocks kspread
+
+2000-06-19-Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now multirow work when you choose "Middle","Bottom"
+-Add new icon lo16-action-series.png created by j.martin
+<jpmartin@iroise.com> thanks
