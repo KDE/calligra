@@ -998,6 +998,8 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
    kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
+  emit sig_refreshView();
+  
   return true;
 }
 
