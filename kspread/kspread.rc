@@ -141,7 +141,6 @@
  <Action name="middle"/>
  <Action name="bottom"/>
  <Action name="multiRow"/>
- <Action name="verticaltext"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="mathToolBar"><text>Math</text>
  <Action name="autoSum"/>
