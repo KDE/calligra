@@ -653,7 +653,6 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
     QString group = "";
 
     parentMenu->popupMenu()->insertSeparator();
-
     QDomNode n = doc.documentElement().firstChild();
     for( ; !n.isNull(); n = n.nextSibling() )
         {
@@ -749,8 +748,8 @@ void KWView::refreshCustomMenu()
             }
         }
     }
-
-    actionInsertCustom->popupMenu()->insertSeparator();
+    if(!lst.isEmpty())
+        actionInsertCustom->popupMenu()->insertSeparator();
 
     act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), "custom-action" );
     actionInsertCustom->insert( act );
