@@ -215,7 +215,7 @@ VCanvas::setViewportRect( const KoRect &r )
 	resizeContents( ( zoom / m_view->zoom() ) * contentsWidth(),
 					( zoom / m_view->zoom() ) * contentsHeight() );
 	setViewport( centerX, 1.0 - centerY );
-	m_view->setZoom( zoom );
+	m_view->setZoomAt( zoom );
 	viewport()->setUpdatesEnabled( true );
 }
 

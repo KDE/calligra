@@ -26,12 +26,13 @@
 #endif
 
 #include <koView.h>
+#include <koPoint.h>
 
 class KarbonPartBase;
 class VPainterFactory;
 class VCanvas;
 class VTool;
-class KoPoint;
+class KoRect;
 
 class KarbonViewBase : public KoView
 {
@@ -49,6 +50,9 @@ public:
 
 	virtual bool mouseEvent( QMouseEvent* , const KoPoint & ) = 0;
 	virtual bool keyEvent( QEvent* ) = 0;
+
+	virtual void setViewportRect( const KoRect &rect ) = 0;
+	virtual void setZoomAt( double zoom, const KoPoint & = KoPoint() ) = 0;
 
 protected:
 	KarbonPartBase* m_part;

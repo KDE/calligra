@@ -43,7 +43,6 @@ class KToggleAction;
 class KoContextHelpAction;
 
 class KoUnitDoubleSpinComboBox;
-class KoPoint;
 class KoRect;
 
 class VColorDocker;
@@ -108,14 +107,15 @@ public:
 	// manage tools
 	virtual void registerTool( VTool * );
 
-	virtual void setZoom( double zoom );
-
 	void setCursor( const QCursor & );
 
 	void repaintAll( const KoRect & );
 	void repaintAll( bool = true );
 
 	void setPos( const KoPoint& p );
+
+	void setViewportRect( const KoRect &rect );
+	virtual void setZoomAt( double zoom, const KoPoint & = KoPoint() );
 
 public slots:
 	// editing:
@@ -154,7 +154,7 @@ protected slots:
 
 	// View.
 	void viewModeChanged();
-	void zoomChanged();
+	void zoomChanged( const KoPoint & = KoPoint() );
 	void viewColorManager();
 	void viewToolOptions();
 	void viewStrokeDocker();

@@ -556,7 +556,7 @@ KarbonView::viewModeChanged()
 }
 
 void
-KarbonView::setZoom( double zoom )
+KarbonView::setZoomAt( double zoom, const KoPoint &p )
 {
 	KoView::setZoom( zoom );
 	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
@@ -572,14 +572,24 @@ KarbonView::setZoom( double zoom )
 		m_zoomAction->setCurrentItem( 0 );
 		m_zoomAction->changeItem( m_zoomAction->currentItem(), zoomText.latin1() );
 	}
-	zoomChanged();
+	zoomChanged( p );
 }
 
 void
-KarbonView::zoomChanged()
+KarbonView::zoomChanged( const KoPoint &p )
 {
-	double centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
-	double centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
+	double centerX;
+	double centerY;
+	if( !p.isNull() )
+	{
+		centerX = p.x() / double( m_canvas->contentsWidth() );
+		centerY = p.y() / double( m_canvas->contentsHeight() );
+	}
+	else
+	{
+		centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
+		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
+	}
 	bool bOK;
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 
@@ -900,6 +910,12 @@ void
 KarbonView::setPos( const KoPoint& p )
 {
 	m_canvas->setPos( p );
+}
+
+void
+KarbonView::setViewportRect( const KoRect &rect )
+{
+	m_canvas->setViewportRect( rect );
 }
 
 void
