@@ -160,7 +160,7 @@ void KoStyleManager::addGeneralTab() {
 
     preview = new KoStylePreview( i18n( "Preview" ), i18n( "KWord, KOffice's Word Processor" ), tab, "stylepreview" );
 
-    tabLayout->addMultiCellWidget( preview, 2, 2, 0, 1 );
+    tabLayout->addMultiCellWidget( preview, 3, 3, 0, 1 );
 
     m_nameString = new QLineEdit( tab );
     m_nameString->resize(m_nameString->sizeHint() );
@@ -177,17 +177,30 @@ void KoStyleManager::addGeneralTab() {
 
     m_styleCombo = new QComboBox( FALSE, tab, "styleCombo" );
 
-    for ( unsigned int i = 0; i < m_stylesList->count(); i++ ) {
-        m_styleCombo->insertItem( m_stylesList->text(i));
-    }
-
     tabLayout->addWidget( m_styleCombo, 1, 1 );
 
     QLabel *nextStyleLabel = new QLabel( tab );
     nextStyleLabel->setText( i18n( "Next style:" ) );
 
     tabLayout->addWidget( nextStyleLabel, 1, 0 );
+
+    m_inheritCombo = new QComboBox( FALSE, tab, "inheritCombo" );
+    tabLayout->addWidget( m_inheritCombo, 2, 1 );
+
+    QLabel *inheritStyleLabel = new QLabel( tab );
+    inheritStyleLabel->setText( i18n( "Inherit style:" ) );
+
+    tabLayout->addWidget( inheritStyleLabel, 2, 0 );
+
     m_tabs->insertTab( tab, i18n( "General" ) );
+
+    m_inheritCombo->insertItem( i18n("<None>"));
+
+    for ( unsigned int i = 0; i < m_stylesList->count(); i++ ) {
+        m_styleCombo->insertItem( m_stylesList->text(i));
+        m_inheritCombo->insertItem( m_stylesList->text(i));
+    }
+
 }
 
 void KoStyleManager::switchStyle() {

@@ -78,7 +78,7 @@ protected:
     QPushButton *m_newButton;
     QPushButton *m_moveUpButton;
     QPushButton *m_moveDownButton;
-
+    QComboBox *m_inheritCombo;
     KoStylePreview *preview;
 
     KoStyle *m_currentStyle;
