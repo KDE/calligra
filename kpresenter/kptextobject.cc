@@ -1322,7 +1322,6 @@ void KPTextView::selectAll()
 
 void KPTextView::drawCursor( bool b )
 {
-    kdDebug()<<" KPTextView::drawCursor( bool b ) :"<<endl;
     KoTextView::drawCursor( b );
     if ( !cursor()->parag() )
         return;
