@@ -3136,6 +3136,7 @@ void KWView::tableInsertCol()
     Q_ASSERT(table);
     if (!table)
         return;
+/*
     // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
     if ( table->boundingRect().right() + 62 > static_cast<int>( m_doc->ptPaperWidth() ) )
     {
@@ -3149,7 +3150,10 @@ void KWView::tableInsertCol()
         KWInsertDia dia( this, "", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
         dia.setCaption( i18n( "Insert Column" ) );
         dia.exec();
-    }
+    } */
+    KWInsertDia dia( this, "", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
+    dia.setCaption( i18n( "Insert Column" ) );
+    dia.exec();
 }
 
 void KWView::tableDeleteRow()

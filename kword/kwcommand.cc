@@ -889,10 +889,12 @@ void KWDeleteTableCommand::unexecute()
 }
 
 
-KWInsertColumnCommand::KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _col ):
+KWInsertColumnCommand::KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _col, double _maxRight ):
     KNamedCommand(name),
     m_pTable(_table),
-    m_colPos(_col)
+    m_colPos(_col),
+    m_maxRight(_maxRight),
+    m_oldWidth(0)
 {
     Q_ASSERT(m_pTable);
     m_ListFrameSet.clear();
@@ -902,7 +904,23 @@ void KWInsertColumnCommand::execute()
 {
     kdDebug() << "KWInsertColumnCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    m_pTable->insertCol( m_colPos,m_ListFrameSet);
+    // a insert column = KWTableFrameSet::m_sDefaultColWidth, see kwtableframeset.cc
+    if (m_pTable->boundingRect().right() + KWTableFrameSet::m_sDefaultColWidth >= static_cast<int>(m_maxRight))
+    {   // must create space (resize the table)
+        m_oldWidth = m_pTable->boundingRect().width();
+        // here we calculate the new table size for a table that would take the
+        // entire width of the page, which what the user wants 99% of the time.
+        double newTableWidth =m_maxRight - m_pTable->boundingRect().left();
+        uint newColSize = newTableWidth / (m_pTable->getCols()+1);
+        double resizeTableWidth = m_maxRight - m_pTable->boundingRect().left();
+        m_pTable->resizeWidth(resizeTableWidth - newColSize);
+        m_pTable->insertCol(m_colPos, m_ListFrameSet, QPtrList<KWFrame>(), newColSize);
+    }
+    else
+    {   // simply insert the column without asking for a specific size :
+        m_pTable->insertCol(m_colPos, m_ListFrameSet);
+    }
+    Q_ASSERT(m_pTable->boundingRect().right() <= m_maxRight);
     doc->updateAllFrames();
     doc->layout();
     doc->updateResizeHandles( );
@@ -924,6 +942,11 @@ void KWInsertColumnCommand::unexecute()
     doc->terminateEditing(m_pTable);
     doc->frameSelectedChanged();
     m_pTable->deleteCol( m_colPos);
+    // now undo the resize of the table if necessary:
+    if (m_oldWidth) {
+        // yes, the table was resized, let's undo that :
+        m_pTable->resizeWidth(m_oldWidth);
+    }
     doc->updateAllFrames();
     doc->layout();
     doc->updateResizeHandles( );

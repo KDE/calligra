@@ -337,7 +337,8 @@ public:
 class KWInsertColumnCommand : public KNamedCommand
 {
 public:
-    KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _pos);
+    /* for the last parameter, _maxRight, you should pass the maximum offset that the table can use at its right (normally m_maxRight - m_pTable->boundingRect().left())*/
+    KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _pos, double _maxRight);
     ~KWInsertColumnCommand() {}
 
     void execute();
@@ -346,6 +347,8 @@ protected:
     KWTableFrameSet *m_pTable;
     QPtrList<KWFrameSet> m_ListFrameSet;
     unsigned int m_colPos;
+    double m_maxRight; // this is the maximum x of the right part of the table (used so that the table does no go off the page)
+    double m_oldWidth; // will be 0 after execute() if the width of the table was not changed by the operation
 };
 
 

@@ -124,7 +124,17 @@ bool KWInsertDia::doInsert()
     }
     else
     {
-        KWInsertColumnCommand *cmd = new KWInsertColumnCommand( i18n("Insert column"), table, insert);
+        // we pass as last parameter the maximum offset that the table can use.
+        // this offset is the max right offset of the containing frame in the case of
+        // an inline (floating) table, the size of the page for other tables.
+        double maxRightOffset;
+        if (table->isFloating())
+            // inline table: max offset of containing frame
+            maxRightOffset = table->anchorFrameset()->frame(0)->right();
+        else
+            // non inline table: max offset of the page
+            maxRightOffset = doc->ptPaperWidth() - doc->ptRightBorder();
+        KWInsertColumnCommand *cmd = new KWInsertColumnCommand( i18n("Insert column"), table, insert,  maxRightOffset);
         cmd->execute();
         doc->addCommand(cmd);
     }

@@ -65,7 +65,7 @@ KWTableFrameSet::~KWTableFrameSet()
 KWordFrameSetIface* KWTableFrameSet::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KWordTableFrameSetIface( this );
+    m_dcop = new KWordTableFrameSetIface( this );
 
     return m_dcop;
 }
@@ -179,7 +179,7 @@ void KWTableFrameSet::addCell( Cell *cell )
 
 KoRect KWTableFrameSet::boundingRect() {
     return KoRect(m_colPositions[0],    // left
-                m_rowPositions[0],      // right
+                m_rowPositions[0],      // top
                 m_colPositions.last()-m_colPositions[0], // width
                 m_rowPositions.last()-m_rowPositions[0]);// height
 }
@@ -499,7 +499,7 @@ kdDebug() << "j--";
             double topOfPage = m_doc->ptPaperHeight() * pageNumber + m_doc->ptTopBorder();
             QValueList<double>::iterator tmp = m_rowPositions.at(breakRow);
             diff += topOfPage - (*tmp); // diff between bottom of last row on page and top of new page
-kdDebug() << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
+//kdDebug() << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
             lineNumber++;
             m_rowPositions.insert(j, topOfPage);
 
@@ -600,6 +600,25 @@ kdDebug() << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << top
     }
     redrawFromCol=getCols();
     kdDebug(32004) << "KWTableFrameSet::recalcRows done" << endl;
+}
+
+void KWTableFrameSet::resizeWidth( double width ) {
+    Q_ASSERT(width != 0);
+    Q_ASSERT(boundingRect().width() != 0);
+    kdDebug() << "bounding width before resize " << boundingRect().width() << endl;
+    double growth = width / boundingRect().width();
+
+    // since we move all the columns, we also move the 1st one,
+    // depending where it is on the page.
+    // just compensate by substracting that offset.
+    double moveOffset = m_colPositions[0] * growth - m_colPositions[0];
+
+    for (uint i=0; i<m_colPositions.count(); i++) {
+        m_colPositions[i] = m_colPositions[i] * growth - moveOffset;
+    }
+    finalize();
+    kdDebug() << "bounding width after resize" << boundingRect().width() << endl;
+    Q_ASSERT(boundingRect().width() - width < 0.01);
 }
 
 void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize heightMode ) {
@@ -891,6 +910,9 @@ kdDebug(32004) << "adjusting " << rowPos << " -> " << rowPos + height << endl;
             theFrame=new KWFrame(0L, 1, 1, 100, 20, KWFrame::RA_NO); // use dummy values here...
             theFrame->setFrameBehavior(KWFrame::AutoExtendFrame);
             theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
+            // copying the zorder of the neighbouring cell in the table :
+            theFrame->setZOrder(getCell(newRowNumber+(newRowNumber==0?1:-1), i)->frame(0)->zOrder());
+            theFrame->setMinFrameHeight(theFrame->height());
         }
         else
         {
@@ -933,8 +955,9 @@ kdDebug(32004) << "adjusting " << rowPos << " -> " << rowPos + height << endl;
         finalize();
 }
 
-void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> redoFrameset, QPtrList<KWFrame>redoFrame ) {
-    double width=60;
+void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> redoFrameset, QPtrList<KWFrame>redoFrame, double width /* =KWTableFrameSet::ms_defaultWidth.*/ ) {
+    width=QMAX(width,minFrameWidth);
+
     if(! redoFrame.isEmpty()) {
         KWFrame *f=redoFrameset.at(0)->frame(0);
         width=f->width() + f->leftBorder().width() + f->rightBorder().width();
@@ -951,7 +974,7 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
 
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         Cell *cell = m_cells.at(i);
-        if ( cell->m_col >= newColNumber) { // move all cells beneath the new row.
+        if ( cell->m_col >= newColNumber) { // move all cells right of the new col.
             cell->m_col++;
             position(cell);
         }
@@ -994,6 +1017,10 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
         {
             theFrame=new KWFrame(newCell, 1, 1, width, 20, KWFrame::RA_NO ); // dummy values..
             theFrame->setFrameBehavior(KWFrame::AutoExtendFrame);
+            theFrame->setNewFrameBehavior(KWFrame::NoFollowup);
+            // copying the zorder of the neighbouring cell in the table :
+            theFrame->setZOrder(getCell(i, newColNumber+(newColNumber==0?1:-1))->frame(0)->zOrder());
+            theFrame->setMinFrameHeight(theFrame->height());
         }
         else
         {

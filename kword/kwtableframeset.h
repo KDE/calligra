@@ -52,7 +52,6 @@ class KWordFrameSetIface;
  * can be used to describe the same thing: one table-cell
  */
 
-
 class KWTableFrameSet : public KWFrameSet
 {
     Q_OBJECT
@@ -140,6 +139,12 @@ public:
      */
     void setBoundingRect( KoRect rect, CellSize widthMode, CellSize heightMode );
 
+    /**
+     *  change the width of the table, keeping the proportions of the cells
+     * (if one is wider than the others, it is still wider after resize)
+     */
+    void resizeWidth( double width );
+
     /** resize and position all cells */
     void recalcCols(int _col=-1,int _row=-1);
     void recalcRows(int _col=-1,int _row=-1);
@@ -183,7 +188,7 @@ public:
     /** insert a row of new cells, use the getCols() call to decide how many cells are created */
     void insertRow( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),QPtrList<KWFrame>listFrame=QPtrList<KWFrame>(), bool _recalc = true, bool _removeable = false );
     /** insert a column of new cells use the getRows() call to decide how many cells are created */
-    void insertCol( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(), QPtrList<KWFrame> listFrame=QPtrList<KWFrame>());
+    void insertCol( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(), QPtrList<KWFrame> listFrame=QPtrList<KWFrame>(), double width = KWTableFrameSet::m_sDefaultColWidth);
 
     /** remove all the cells in a certain row */
     void deleteRow( unsigned int _idx, bool _recalc = true );
@@ -287,6 +292,7 @@ public:
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();
 #endif
+	static const uint m_sDefaultColWidth = 60;
 protected:
     /* Overloaded methods, look for docu in kwframe.h */
     virtual void deleteAnchors();
