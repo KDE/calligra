@@ -25,8 +25,6 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
-#include <kstartparams.h>
-
 #include <dcopclient.h>
 #include "kspread_factory.h"
 
