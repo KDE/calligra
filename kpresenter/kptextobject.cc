@@ -27,6 +27,7 @@
 #include <qwmatrix.h>
 #include <qdom.h>
 #include <qapplication.h>
+#include <qfontdatabase.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -655,7 +656,12 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
 
     if ( !n.isNull() )
     {
-        fn.setFamily( n.attribute( attrFamily ) );
+        QFontDatabase fdb;
+        QStringList families = fdb.families();
+        if ( families.findIndex( n.attribute( attrFamily ) ) != -1 )
+            fn.setFamily( n.attribute( attrFamily ) );
+        else
+            fn = defaultFont;
     }
     else if ( !refFormat )
     {   // No reference format and no FONT tag -> use default font
@@ -664,6 +670,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
 
 
     int size = n.attribute( attrPointSize ).toInt();
+    kdDebug() << "Size: " << size << endl;
     bool bold=false;
     if(n.hasAttribute(attrBold))
         bold = (bool)n.attribute( attrBold ).toInt();
@@ -691,7 +698,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     fn.setItalic( italic );
     fn.setUnderline( underline );
     fn.setStrikeOut( strikeOut );
-    //kdDebug() << "KPTextObject::loadFormat: family=" << family << " size=" << fn.pointSize() << endl;
+    //kdDebug() << "KPTextObject::loadFormat: family=" << fn.family() << " size=" << fn.pointSize() << endl;
     QColor col( color );
 
     format.setFont( fn );
