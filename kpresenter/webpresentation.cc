@@ -255,14 +255,14 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
     QString cmd;
     int p;
     KURL str(  path + "/html"  );
-    KIO::NetAccess::mkdir( str,( QWidget* )0L  );
+    KIO::NetAccess::mkdir( str  );
 
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
     str = path + "/pics";
-    KIO::NetAccess::mkdir( str,( QWidget* )0L );
+    KIO::NetAccess::mkdir( str );
 
 
     p = progressBar->progress();
@@ -910,7 +910,7 @@ void KPWebPresentationWizard::pageChanged()
         QString pathname = path->lineEdit()->text();
 
         // path doesn't exist. ask user if it should be created.
-        if ( !KIO::NetAccess::exists( pathname, true/*write*/,this ) )
+        if ( !KIO::NetAccess::exists( pathname, true/*write*/ ) )
 	{
             QString msg = i18n( "<qt>The directory <b>%1</b> does not exist.<br>"
                                 "Do you want create it?</qt>" );
@@ -918,7 +918,7 @@ void KPWebPresentationWizard::pageChanged()
                                             i18n( "Directory Not Found" ) )
                 == KMessageBox::Yes)
             {
-                bool ok = KIO::NetAccess::mkdir( pathname, this );
+                bool ok = KIO::NetAccess::mkdir( pathname );
                 if( !ok )
                 {
                     KMessageBox::sorry( this,
