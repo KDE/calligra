@@ -363,6 +363,19 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& buf,KexiPrope
 	//TODO
 }
 
+int typeForSelectedGroup( int typegroup )
+{
+	typegroup++; /*counting from 1*/
+	//take the 1st type for the group
+	KexiDB::TypeGroupList tlst = KexiDB::typesForGroup( (KexiDB::Field::TypeGroup)typegroup );
+	if (tlst.isEmpty()) {//this should not be!
+		kdWarning() << "KexiAlterTableDialog::slotRowUpdated(): no types for group " 
+		<< typegroup << endl;
+		return 0;
+	}
+	return tlst.first();
+}
+
 void KexiAlterTableDialog::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant newValue, KexiDB::ResultInfo* result)
 {
@@ -385,6 +398,18 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		if (newValue.isNull()) {
 			//col 1 will be cleared: clear row 0 as well
 			m_view->data()->updateRowEditBuffer(item, 0, QVariant(QString::null));
+		}
+		else {
+			if (propertyBuffer()) {
+				int fieldTypeGroup = newValue.toInt();
+				if (fieldTypeGroup < 0 || fieldTypeGroup > (int)KexiDB::Field::LastTypeGroup)
+					return;
+				(*propertyBuffer())["type"]->setValue(fieldTypeGroup);
+				int fieldType = typeForSelectedGroup( fieldTypeGroup );
+				if (fieldType==0)
+					fieldType = KexiDB::Field::Text;
+				(*propertyBuffer())["subType"]->setValue(fieldType);
+			}
 		}
 	}
 }
@@ -409,16 +434,9 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 	
 	} else if (buffer_allowed && !propertyBuffer()) {
 		//-- create a new field:
-
-		//take the 1st type for the group
-		int typegroup = item->at(1).toInt() +1 /*counting from 1*/;
-		KexiDB::TypeGroupList tlst = KexiDB::typesForGroup( (KexiDB::Field::TypeGroup)typegroup );
-		if (tlst.isEmpty()) {//this should not be!
-			kdWarning() << "KexiAlterTableDialog::slotRowUpdated(): no types for group " 
-			<< typegroup << endl;
+		int fieldType = typeForSelectedGroup( item->at(1).toInt() );
+		if (fieldType==0)
 			return;
-		}
-		int fieldType = tlst.first();
 
 		QString description = item->at(2).toString();
 
@@ -509,6 +527,9 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 			options |= KexiDB::Field::Unsigned;
 			
 		int type = buf["type"]->value().toInt();
+		if (type < 0 || type > (int)KexiDB::Field::LastType)
+			type = KexiDB::Field::Text;
+		int subType = buf["subType"]->value().toInt();
 
 		KexiDB::Field *f = new KexiDB::Field( 
 			buf["name"]->value().toString(),
@@ -525,9 +546,8 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 		ts->addField(f);
 	}
 
-return 0;
-
 	//todo
+
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 
 	//FINALLY: create table:
@@ -536,6 +556,7 @@ return 0;
 		delete ts;
 		ts = 0;
 	}
+	setDirty(false);
 	return ts;
 }
 
@@ -546,6 +567,7 @@ bool KexiAlterTableDialog::storeData()
 	if (!ts || !mainWin()->project()->dbConnection()->alterTable(ts))
 		return 0;
 */
+	setDirty(false);
 	return true;
 }
 
