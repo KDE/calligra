@@ -93,8 +93,6 @@ k_dcop:
     virtual DCOPRef header();
     virtual DCOPRef footer();
 
-    virtual bool backgroundSpellCheckEnabled() const;
-    virtual void enableBackgroundSpellCheck( bool b );
 
     virtual void startBackgroundSpellCheck();
     virtual void reactivateBgSpellChecking();
@@ -221,23 +219,12 @@ k_dcop:
     QColor txtBackCol() const;
     void setTxtBackCol( const QColor &c );
 
-    bool snapToGrid() const;
-    void setSnapToGrid( bool _b );
-    double ptTabStopValue() const;
-    void setPtTabStopValue ( double _tabStop );
-
-
-    void setRefreshSideBar( bool _b );
-    bool refreshSideBar()const;
     bool displayFieldCode()const;
     void setDisplayFieldCode( bool b);
     QString configAutoFormatLanguage( )const;
 
     bool configCapitalizeNameOfDays() const;
     void setConfigCapitalizeNameOfDays( bool b);
-
-    QString globalLanguage()const;
-    void setGlobalLanguage( const QString & _lang );
 
 private:
     KPresenterDoc *doc;

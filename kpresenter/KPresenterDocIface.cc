@@ -293,16 +293,6 @@ DCOPRef KPresenterDocIface::footer()
         return DCOPRef();
 }
 
-bool KPresenterDocIface::backgroundSpellCheckEnabled() const
-{
-    return doc->backgroundSpellCheckEnabled();
-}
-
-void KPresenterDocIface::enableBackgroundSpellCheck( bool b )
-{
-    doc->enableBackgroundSpellCheck(b);
-}
-
 void KPresenterDocIface::startBackgroundSpellCheck()
 {
     doc->startBackgroundSpellCheck();
@@ -756,36 +746,6 @@ void KPresenterDocIface::setTxtBackCol( const QColor &c )
     doc->setTxtBackCol( c );
 }
 
-bool KPresenterDocIface::snapToGrid() const
-{
-    return doc->snapToGrid();
-}
-
-void KPresenterDocIface::setSnapToGrid( bool _b )
-{
-    doc->setSnapToGrid( _b );
-}
-
-double KPresenterDocIface::ptTabStopValue() const
-{
-    return doc->tabStopValue();
-}
-
-void KPresenterDocIface::setPtTabStopValue ( double _tabStop )
-{
-    doc->setTabStopValue (_tabStop );
-}
-
-void KPresenterDocIface::setRefreshSideBar( bool _b )
-{
-    doc->setRefreshSideBar( _b );
-}
-
-bool KPresenterDocIface::refreshSideBar()const
-{
-    return doc->refreshSideBar();
-}
-
 bool KPresenterDocIface::displayFieldCode()const
 {
     return doc->getVariableCollection()->variableSetting()->displayFiedCode();
@@ -811,14 +771,4 @@ bool KPresenterDocIface::configCapitalizeNameOfDays() const
 void KPresenterDocIface::setConfigCapitalizeNameOfDays( bool b)
 {
     doc->getAutoFormat()->configCapitalizeNameOfDays( b );
-}
-
-QString KPresenterDocIface::globalLanguage()const
-{
-    return doc->globalLanguage();
-}
-
-void KPresenterDocIface::setGlobalLanguage( const QString & _lang )
-{
-    doc->setGlobalLanguage( _lang );
 }

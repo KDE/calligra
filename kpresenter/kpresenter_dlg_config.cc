@@ -446,7 +446,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     m_oldNbRedo=30;
-    m_oldRefreshSideBar = false;
+    m_oldRefreshSideBar = true;
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );

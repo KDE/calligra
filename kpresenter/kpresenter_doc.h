@@ -104,6 +104,11 @@ class KPresenterDoc : public KoDocument
     Q_PROPERTY( bool cursorInProtectedArea READ cursorInProtectedArea WRITE setCursorInProtectedArea )
     Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
     Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
+    Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
+    Q_PROPERTY( bool refreshSideBar READ refreshSideBar WRITE setRefreshSideBar )
+    Q_PROPERTY( double tabStopValue READ tabStopValue WRITE setTabStopValue )
+    Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
+    Q_PROPERTY( bool backgroundSpellCheckEnabled READ backgroundSpellCheckEnabled WRITE enableBackgroundSpellCheck )
 
 public:
 
