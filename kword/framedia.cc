@@ -29,12 +29,10 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 
-#include <qwidget.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qframe.h>
 #include <qgroupbox.h>
 #include <qpixmap.h>
 #include <qradiobutton.h>
@@ -114,6 +112,7 @@ void KWFrameDia::init() {
         }
         else if(frameType == FT_TEXT)
         {
+#if 0
             if(! (frame->getFrameSet() &&
                   frame->getFrameSet()->getGroupManager()))
             { // not a table
@@ -128,6 +127,13 @@ void KWFrameDia::init() {
                 grp1->setEnabled(false);
             }
             else if(! frame->getFrameSet()) // first creation
+                showPage(2);
+#endif
+            setupTab1();
+            setupTab2();
+            setupTab3();
+            setupTab4();
+            if(! frame->getFrameSet()) // first creation
                 showPage(2);
         }
         else if(frameType == FT_PICTURE)
@@ -148,6 +154,11 @@ void KWFrameDia::init() {
             setupTab2();
             setupTab4();
             showPage(1); // while options are not implemented..
+        }
+        else if(frameType == FT_TABLE)
+        {
+             setupTab4();
+             grp1->setEnabled(false);
         }
     }
     else
@@ -576,10 +587,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->addWidget( lx, 1, 0 );
 
     sx = new QLineEdit( grp1 );
-    if ( frameUnits == U_PT )
-        sx->setValidator( new QIntValidator( sx ) );
-    else
-        sx->setValidator( new QDoubleValidator( sx ) );
+
     sx->setText( "0.00" );
     sx->setMaxLength( 16 );
     sx->setEchoMode( QLineEdit::Normal );
@@ -592,10 +600,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->addWidget( ly, 1, 1 );
 
     sy = new QLineEdit( grp1 );
-    if ( frameUnits == U_PT )
-        sy->setValidator( new QIntValidator( sy ) );
-    else
-        sy->setValidator( new QDoubleValidator( sy ) );
+
     sy->setText( "0.00" );
     sy->setMaxLength( 16 );
     sy->setEchoMode( QLineEdit::Normal );
@@ -608,10 +613,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->addWidget( lw, 3, 0 );
 
     sw = new QLineEdit( grp1 );
-    if ( frameUnits == U_PT )
-        sw->setValidator( new QIntValidator( sw ) );
-    else
-        sw->setValidator( new QDoubleValidator( sw ) );
+
     sw->setText( "0.00" );
     sw->setMaxLength( 16 );
     sw->setEchoMode( QLineEdit::Normal );
@@ -624,10 +626,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->addWidget( lh, 3, 1 );
 
     sh = new QLineEdit( grp1 );
-    if ( frameUnits == U_PT )
-        sh->setValidator( new QIntValidator( sh ) );
-    else
-        sh->setValidator( new QDoubleValidator( sh ) );
+
     sh->setText( "0.00" );
     sh->setMaxLength( 16 );
     sh->setEchoMode( QLineEdit::Normal );
@@ -673,10 +672,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( lml, 1, 0 );
 
     sml = new QLineEdit( grp2 );
-    if ( frameUnits== U_PT )
-        sml->setValidator( new QIntValidator( sml ) );
-    else
-        sml->setValidator( new QDoubleValidator( sml ) );
+
     sml->setText( "0.00" );
     sml->setMaxLength( 5 );
     sml->setEchoMode( QLineEdit::Normal );
@@ -689,10 +685,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( lmr, 1, 1 );
 
     smr = new QLineEdit( grp2 );
-    if ( frameUnits == U_PT )
-        smr->setValidator( new QIntValidator( smr ) );
-    else
-        smr->setValidator( new QDoubleValidator( smr ) );
+
     smr->setText( "0.00" );
     smr->setMaxLength( 5 );
     smr->setEchoMode( QLineEdit::Normal );
@@ -705,10 +698,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( lmt, 3, 0 );
 
     smt = new QLineEdit( grp2 );
-    if ( frameUnits == U_PT )
-        smt->setValidator( new QIntValidator( smt ) );
-    else
-        smt->setValidator( new QDoubleValidator( smt ) );
+
     smt->setText( "0.00" );
     smt->setMaxLength( 5 );
     smt->setEchoMode( QLineEdit::Normal );
@@ -721,10 +711,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( lmb, 3, 1 );
 
     smb = new QLineEdit( grp2 );
-    if ( frameUnits == U_PT )
-        smb->setValidator( new QIntValidator( smb ) );
-    else
-        smb->setValidator( new QDoubleValidator( smb ) );
+
     smb->setText( "0.00" );
     smb->setMaxLength( 5 );
     smb->setEchoMode( QLineEdit::Normal );
@@ -780,29 +767,30 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     smr->setText( QString().setNum( r.value(frameUnits)));
     smt->setText( QString().setNum( t.value(frameUnits)));
     smb->setText( QString().setNum( b.value(frameUnits)));
-#if 0
 
-    switch ( frameUnits ) {
-    case U_MM:
-        sml->setText( QString().setNum( l.mm() ) );
-        smr->setText( QString().setNum( r.mm() ) );
-        smt->setText( QString().setNum( t.mm() ) );
-        smb->setText( QString().setNum( b.mm() ) );
-        break;
-    case U_INCH:
-        sml->setText( QString().setNum( l.inch() ) );
-        smr->setText( QString().setNum( r.inch() ) );
-        smt->setText( QString().setNum( t.inch() ) );
-        smb->setText( QString().setNum( b.inch() ) );
-        break;
-    case U_PT:
-        sml->setText( QString().setNum( l.pt() ) );
-        smr->setText( QString().setNum( r.pt() ) );
-        smt->setText( QString().setNum( t.pt() ) );
-        smb->setText( QString().setNum( b.pt() ) );
-        break;
+    if ( frameUnits == U_PT )
+    {
+        sx->setValidator( new QIntValidator( sx ) );
+        sy->setValidator( new QIntValidator( sy ) );
+        smb->setValidator( new QIntValidator( smb ) );
+        sml->setValidator( new QIntValidator( sml ) );
+        smr->setValidator( new QIntValidator( smr ) );
+        smt->setValidator( new QIntValidator( smt ) );
+        sh->setValidator( new QIntValidator( sh ) );
+        sw->setValidator( new QIntValidator( sw ) );
     }
-#endif
+    else
+    {
+        sx->setValidator( new QDoubleValidator( sx ) );
+        sy->setValidator( new QDoubleValidator( sy ) );
+        smb->setValidator( new QDoubleValidator( smb ) );
+        sml->setValidator( new QDoubleValidator( sml ) );
+        smr->setValidator( new QDoubleValidator( smr ) );
+        smt->setValidator( new QDoubleValidator( smt ) );
+        sh->setValidator( new QDoubleValidator( sh ) );
+        sw->setValidator( new QDoubleValidator( sw ) );
+    }
+
 
     if (doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                            ( doc->processingType() == KWDocument::WP &&
@@ -813,24 +801,24 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         QString _x, _y, _w, _h;
 
         switch ( frameUnits ) {
-        case U_MM:
-            _x.sprintf( "%.2f", POINT_TO_MM( x ) );
-            _y.sprintf( "%.2f", POINT_TO_MM( y ) );
-            _w.sprintf( "%.2f", POINT_TO_MM( w ) );
-            _h.sprintf( "%.2f", POINT_TO_MM( h ) );
-            break;
-        case U_INCH:
-            _x.sprintf( "%.2f", POINT_TO_INCH( x ) );
-            _y.sprintf( "%.2f", POINT_TO_INCH( y ) );
-            _w.sprintf( "%.2f", POINT_TO_INCH( w ) );
-            _h.sprintf( "%.2f", POINT_TO_INCH( h ) );
-            break;
-        case U_PT:
-            _x.sprintf( "%d", x );
-            _y.sprintf( "%d", y );
-            _w.sprintf( "%d", w );
-            _h.sprintf( "%d", h );
-            break;
+            case U_MM:
+                _x.sprintf( "%.2f", POINT_TO_MM( x ) );
+                _y.sprintf( "%.2f", POINT_TO_MM( y ) );
+                _w.sprintf( "%.2f", POINT_TO_MM( w ) );
+                _h.sprintf( "%.2f", POINT_TO_MM( h ) );
+                break;
+            case U_INCH:
+                _x.sprintf( "%.2f", POINT_TO_INCH( x ) );
+                _y.sprintf( "%.2f", POINT_TO_INCH( y ) );
+                _w.sprintf( "%.2f", POINT_TO_INCH( w ) );
+                _h.sprintf( "%.2f", POINT_TO_INCH( h ) );
+                break;
+            case U_PT:
+                _x.sprintf( "%d", x );
+                _y.sprintf( "%d", y );
+                _w.sprintf( "%d", w );
+                _h.sprintf( "%d", h );
+                break;
         }
 
         oldX = _x.toFloat();
@@ -1034,18 +1022,6 @@ bool KWFrameDia::applyChanges()
                 frame->setRunAround( RA_SKIP );
 
             KWUnit u=KWUnit::createUnit( eRGap->text().toDouble(),frameUnits  );
-
-#if 0
-            switch ( frameUnits )
-            {
-                case U_MM: u.setMM( eRGap->text().toDouble() );
-                    break;
-                case U_INCH: u.setINCH( eRGap->text().toDouble() );
-                    break;
-                case U_PT: u.setPT( eRGap->text().toDouble() );
-                    break;
-            }
-#endif
             frame->setRunAroundGap( u );
         }
 
@@ -1087,29 +1063,6 @@ bool KWFrameDia::applyChanges()
         u2=KWUnit::createUnit(QMAX(smr->text().toDouble(),0),frameUnits );
         u3=KWUnit::createUnit(QMAX(smt->text().toDouble(),0),frameUnits );
         u4=KWUnit::createUnit(QMAX(smb->text().toDouble(),0),frameUnits );
-#if 0
-        switch ( frameUnits )
-        {
-            case U_MM:
-                u1.setMM( QMAX(sml->text().toDouble(),0) );
-                u2.setMM( QMAX(smr->text().toDouble(),0) );
-                u3.setMM( QMAX(smt->text().toDouble(),0) );
-                u4.setMM( QMAX(smb->text().toDouble(),0) );
-                break;
-            case U_INCH:
-                u1.setINCH( QMAX(sml->text().toDouble(),0) );
-                u2.setINCH( QMAX(smr->text().toDouble(),0) );
-                u3.setINCH( QMAX(smt->text().toDouble(),0) );
-                u4.setINCH( QMAX(smb->text().toDouble(),0) );
-                break;
-            case U_PT:
-                u1.setPT( QMAX(sml->text().toInt(),0) );
-                u2.setPT( QMAX(smr->text().toInt(),0) );
-                u3.setPT( QMAX(smt->text().toInt(),0) );
-                u4.setPT( QMAX(smb->text().toInt(),0) );
-                break;
-        }
-#endif
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
