@@ -581,9 +581,6 @@ void KWView::createKWGUI()
 /*================================================================*/
 void KWView::showFormulaToolbar( bool show )
 {
-  if ( !factory() )
-    return;
-
   // This might not be exactly the right place. But these actions
   // must be enabled when a formula is active...
   doc->getFormulaDocument()->getMakeGreekAction()->setEnabled( show );
@@ -591,14 +588,7 @@ void KWView::showFormulaToolbar( bool show )
   doc->getFormulaDocument()->getAddGenericLowerAction()->setEnabled( show );
   doc->getFormulaDocument()->getRemoveEnclosingAction()->setEnabled( show );
 
-  QWidget *tb = factory()->container( "formula_toolbar", this );
-  if( !tb )
-    return;
-
-  if ( show )
-    tb->show();
-  else
-    tb->hide();
+  shell()->showToolbar( "formula_toolbar", show );
 }
 
 void KWView::updatePageInfo()
