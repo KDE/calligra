@@ -86,7 +86,7 @@ PngExport::convert( const QCString& from, const QCString& to )
 
 	// paint shapes over image
     for ( ; itr.current(); ++itr )
-		itr.current()->draw( &p, rect );
+		itr.current()->draw( &p, &rect );
 
 	QImage image = img.swapRGB();
 	// save png
