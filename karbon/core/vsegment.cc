@@ -546,14 +546,16 @@ VSegment::selectNode( const KoPoint &p )
 	{
 		m_isSelected[ 0 ] = true;
 		m_isSelected[ 1 ] = false;
-		m_isSelected[ 2 ] = true;
+		m_isSelected[ 2 ] = false;
+		//if( m_prev )
+		//	m_prev->m_isSelected[ 2 ] = true;
 		return true;
 	}
 	if( m_point[ 1 ].isNear( p, 2) )
 	{
 		m_isSelected[ 1 ] = true;
 		m_isSelected[ 0 ] = false;
-		m_isSelected[ 2 ] = true;
+		m_isSelected[ 2 ] = false;
 		return true;
 	}
 	if( m_point[ 2 ].isNear( p, 2) )
