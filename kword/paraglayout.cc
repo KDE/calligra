@@ -117,7 +117,7 @@ void KWParagLayout::setFormat( const KWFormat &_f )
     if ( format )
 	format->decRef();
     format = 0;
-    format = doc->getFormatCollection()->getFormat( f );
+    format = document->getFormatCollection()->getFormat( f );
 }
 
 /*================================================================*/
