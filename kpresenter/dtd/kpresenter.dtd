@@ -83,7 +83,7 @@
                         9... part
                         10.. group
 -->
-<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR)*>
+<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR|APPEARSOUNDEFFECT)*>
 <!ATTLIST OBJECT  type	NMTOKEN #REQUIRED>
 
 <!--	The position of an object in the document.
@@ -143,6 +143,17 @@
 		effect	NMTOKEN #REQUIRED
 		effect2 NMTOKEN #REQUIRED>
 
+<!--    The effect to play sound
+                Attributes:
+                appearSoundFileName      sound name
+                appearSoundEffect        ?????
+-->
+
+
+<!ELEMENT APPEARSOUNDEFFECT EMPTY>
+<!ATTLIST APPEARSOUNDEFFECT
+                appearSoundFileName #REQUIRED
+                appearSoundEffect   #REQUIRED>
 
 <!--	The "step" number in which the object appears, while showing the presentation.
         This is relative to the current page.
