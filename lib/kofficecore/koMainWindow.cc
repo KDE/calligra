@@ -251,6 +251,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( doc )
   {
     doc->setSelectable( false );
+    d->m_manager->addPart( doc, false );
     d->m_rootViews.append( doc->createView( d->m_splitter ) );
     d->m_rootViews.current()->setPartManager( d->m_manager );
 

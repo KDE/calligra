@@ -69,7 +69,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
   setMouseTracking( true );
 
   connect( d->m_doc, SIGNAL( childChanged( KoDocumentChild * ) ),
-	   this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
+           this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
 
   setupGlobalActions();
   QValueList<KAction*> docActions = document->actionCollection()->actions();
@@ -138,7 +138,7 @@ KoDocument *KoView::hitTest( const QPoint &pos )
 */
 
   KoViewChild *viewChild;
-  
+
   KoDocumentChild *docChild = selectedChild();
   if ( docChild )
   {
@@ -166,7 +166,7 @@ KoDocument *KoView::hitTest( const QPoint &pos )
   }
 
   return koDocument()->hitTest( QPoint( pos.x() / zoom(),
-				        pos.y() / zoom() ) );
+                                        pos.y() / zoom() ) );
 }
 
 int KoView::leftBorder() const
@@ -235,39 +235,39 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
       if ( child->isRectangle() && !child->isTransparent() )
       {
         KoFrame *frame = new KoFrame( canvas() );
-	KoView *view = child->document()->createView( frame );
-	view->setXMLGUIBuildDocument( child->document()->viewBuildDocument( view ) );
-	
-	view->setPartManager( partManager() );
-	
-	// hack? (Werner)
-	view->setZoom( zoom() * QMAX(child->xScaling(), child->yScaling()) );
-	
-	QRect geom = child->geometry();
-	frame->setGeometry( geom.x() * zoom(), geom.y() * zoom(),
-			    geom.width() * zoom(), geom.height() * zoom() );
-	frame->setView( view );
-	frame->show();
-	frame->raise();
-	KoViewChild *viewChild = new KoViewChild( child, frame );
-	/*	
-	geom = frame->geometry();
-	viewChild->setGeometry( geom );*/
-	/*
-	viewChild->setGeometry( QRect( geom.x() - view->leftBorder(),
-				       geom.y() - view->topBorder(),
-				       geom.width() + view->rightBorder(),
-				       geom.height() + view->bottomBorder() ) );
-	*/
-	d->m_children.append( viewChild );
-	connect( view, SIGNAL( activated( bool ) ), this, SLOT( slotChildActivated( bool ) ) );
-	
-	d->m_manager->setActivePart( child->document(), view );
+        KoView *view = child->document()->createView( frame );
+        view->setXMLGUIBuildDocument( child->document()->viewBuildDocument( view ) );
+
+        view->setPartManager( partManager() );
+
+        // hack? (Werner)
+        view->setZoom( zoom() * QMAX(child->xScaling(), child->yScaling()) );
+
+        QRect geom = child->geometry();
+        frame->setGeometry( geom.x() * zoom(), geom.y() * zoom(),
+                            geom.width() * zoom(), geom.height() * zoom() );
+        frame->setView( view );
+        frame->show();
+        frame->raise();
+        KoViewChild *viewChild = new KoViewChild( child, frame );
+        /*
+        geom = frame->geometry();
+        viewChild->setGeometry( geom );*/
+        /*
+        viewChild->setGeometry( QRect( geom.x() - view->leftBorder(),
+                                       geom.y() - view->topBorder(),
+                                       geom.width() + view->rightBorder(),
+                                       geom.height() + view->bottomBorder() ) );
+        */
+        d->m_children.append( viewChild );
+        connect( view, SIGNAL( activated( bool ) ), this, SLOT( slotChildActivated( bool ) ) );
+
+        d->m_manager->setActivePart( child->document(), view );
       }
       else
       {
         emit regionInvalidated( child->frameRegion( matrix() ), true );
-	emit childActivated( child );
+        emit childActivated( child );
       }
     }
     else if ( child )
@@ -287,7 +287,7 @@ void KoView::partSelectEvent( KParts::PartSelectEvent *event )
   if ( event->part() != (KParts::Part *)koDocument() )
   {
     assert( event->part()->inherits( "KoDocument" ) );
-	
+
     KoDocumentChild *child = koDocument()->child( (KoDocument *)event->part() );
 
     if ( child && event->selected() )
@@ -406,6 +406,8 @@ void KoView::slotChildActivated( bool a )
 
   d->m_children.remove( ch );
 
+  d->m_manager->addPart( docChild->document(), false ); // the destruction of the view removed the part from the partmanager. re-add it :)
+
   // #### HACK
   // We want to delete as many views as possible and this
   // trick is used to go upwards in the view-tree.
@@ -454,9 +456,9 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoFrame *frame )
   m_frame = frame;
   slotFrameGeometryChanged();
   connect( m_frame, SIGNAL( geometryChanged() ),
-	   this, SLOT( slotFrameGeometryChanged() ) );
+           this, SLOT( slotFrameGeometryChanged() ) );
   connect( m_child, SIGNAL( changed( KoChild * ) ),
-	   this, SLOT( slotDocGeometryChanged() ) );
+           this, SLOT( slotDocGeometryChanged() ) );
 }
 
 KoViewChild::~KoViewChild()
@@ -474,13 +476,13 @@ void KoViewChild::slotFrameGeometryChanged()
   QRect geom = m_frame->geometry();
   int b = m_frame->border();
   QRect borderRect( geom.x() + b,
-		    geom.y() + b,
-		    geom.width() - b * 2,
-		    geom.height() - b * 2 );
+                    geom.y() + b,
+                    geom.width() - b * 2,
+                    geom.height() - b * 2 );
   QRect borderLessRect( geom.x() + m_frame->leftBorder(),
-			geom.y() + m_frame->topBorder(),
-			geom.width() - m_frame->leftBorder() - m_frame->rightBorder(),
-			geom.height() - m_frame->topBorder() - m_frame->bottomBorder() );
+                        geom.y() + m_frame->topBorder(),
+                        geom.width() - m_frame->leftBorder() - m_frame->rightBorder(),
+                        geom.height() - m_frame->topBorder() - m_frame->bottomBorder() );
   setGeometry( borderRect );
   if(m_child)
       m_child->setGeometry( borderLessRect );
@@ -490,9 +492,9 @@ void KoViewChild::slotDocGeometryChanged()
 {
   QRect geom = m_child->geometry();
   QRect borderRect( geom.x() - m_frame->leftBorder(),
-		    geom.y() - m_frame->topBorder(),
-		    geom.width() + m_frame->leftBorder() + m_frame->rightBorder(),
-		    geom.height() + m_frame->topBorder() + m_frame->bottomBorder() );
+                    geom.y() - m_frame->topBorder(),
+                    geom.width() + m_frame->leftBorder() + m_frame->rightBorder(),
+                    geom.height() + m_frame->topBorder() + m_frame->bottomBorder() );
   m_frame->setGeometry( borderRect );
 }
 

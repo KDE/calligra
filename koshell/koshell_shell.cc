@@ -58,7 +58,7 @@ KoShellWindow::KoShellWindow()
       int id = m_pKoolBar->insertItem( m_grpFile,
                                        DesktopIcon((*it).service()->icon()),
                                        (*it).name(),
-				       this, SLOT( slotKoolBar( int, int ) ) );
+                                       this, SLOT( slotKoolBar( int, int ) ) );
       m_mapComponents[ id ] = *it;
 
       // Build list of patterns for all supported KOffice documents...
@@ -119,7 +119,7 @@ bool KoShellWindow::openDocument( const KURL & url )
     return false;
 
   m_recent->addURL( url );
-	
+
   KoDocument* newdoc = m_documentEntry.createDoc();
   bool ret;
   QObject::connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -128,6 +128,7 @@ bool KoShellWindow::openDocument( const KURL & url )
       delete newdoc;
       ret = false;
   } else {
+      partManager()->addPart( newdoc, false );
       setRootDocument( newdoc );
       ret = true;
   }
@@ -209,7 +210,7 @@ void KoShellWindow::updateCaption()
           m_pKoolBar->renameItem( m_grpDocuments, (*it).m_id, name );
         }
 
-	return;
+        return;
       }
     }
 }
@@ -227,7 +228,10 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
     if (doc)
     {
         if ( doc->initDoc() )
+        {
+            partManager()->addPart( doc, false );
             setRootDocument( doc );
+        }
         else
             delete doc;
     }
@@ -245,7 +249,7 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
       if ( (*it).m_id == _item )
       {
         switchToPage( it );
-	return;
+        return;
       }
       ++it;
     }
@@ -284,6 +288,7 @@ void KoShellWindow::slotFileNew()
       return;
     }
 
+    partManager()->addPart( newdoc, false );
     setRootDocument( newdoc );
 }
 

@@ -151,7 +151,7 @@ KoDocument::~KoDocument()
   QListIterator<KoDocumentChild> childIt( d->m_children );
   for (; childIt.current(); ++childIt )
     disconnect( childIt.current(), SIGNAL( destroyed() ),
-		this, SLOT( slotChildDestroyed() ) );
+                this, SLOT( slotChildDestroyed() ) );
 
   d->m_children.setAutoDelete( true );
   d->m_children.clear();
@@ -200,7 +200,7 @@ bool KoDocument::saveFile()
   QApplication::setOverrideCursor( waitCursor );
 
   if ( KIO::NetAccess::exists( m_url ) ) { // this file exists => backup
-	// TODO : make this configurable ?
+        // TODO : make this configurable ?
         KURL backup( m_url );
         backup.setPath( backup.path() + QString::fromLatin1("~") );
         (void) KIO::NetAccess::del( backup );
@@ -221,11 +221,11 @@ bool KoDocument::saveFile()
     kdDebug(30003) << "Temp native file " << nativeFile << endl;
 
     if(d->m_changed==false && nativeFile!=m_file) {
-	ret = saveNativeFormat( nativeFile );
-	if ( !ret )
-	    kdError(30003) << "Couldn't save in native format!" << endl;
-	else
-	    ret = KoFilterManager::self()->export_();
+        ret = saveNativeFormat( nativeFile );
+        if ( !ret )
+            kdError(30003) << "Couldn't save in native format!" << endl;
+        else
+            ret = KoFilterManager::self()->export_();
     } else {
       // How can this happen ? m_changed = true ?
       // No -> nativeFile==m_file :) (Werner)
@@ -259,6 +259,12 @@ void KoDocument::setManager( KParts::PartManager *manager )
   KParts::ReadWritePart::setManager( manager );
   if ( d->m_bSingleViewMode && d->m_views.count() == 1 )
     d->m_views.getFirst()->setPartManager( manager );
+
+  QListIterator<KoDocumentChild> it( d->m_children );
+  for (; it.current(); ++it )
+      if ( it.current()->document() )
+          manager->addPart( it.current()->document(), false );
+
 }
 
 void KoDocument::setReadWrite( bool readwrite )
@@ -311,9 +317,12 @@ void KoDocument::insertChild( const KoDocumentChild *child )
   d->m_children.append( child );
 
   connect( child, SIGNAL( changed( KoChild * ) ),
-	   this, SLOT( slotChildChanged( KoChild * ) ) );
+           this, SLOT( slotChildChanged( KoChild * ) ) );
   connect( child, SIGNAL( destroyed() ),
-	   this, SLOT( slotChildDestroyed() ) );
+           this, SLOT( slotChildDestroyed() ) );
+
+  if ( manager() )
+    manager()->addPart( child->document(), false );
 }
 
 void KoDocument::slotChildChanged( KoChild *c )
@@ -457,42 +466,42 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
     int w = int( (double)child->contentRect().width() * child->xScaling() );
     int h = int( (double)child->contentRect().height() * child->yScaling() );
     if ( ( manager->selectedPart() == (KParts::Part *)child->document() &&
-	   manager->selectedWidget() == (QWidget *)view ) ||
-	 ( manager->activePart() == (KParts::Part *)child->document() &&
-	   manager->activeWidget() == (QWidget *)view ) )
+           manager->selectedWidget() == (QWidget *)view ) ||
+         ( manager->activePart() == (KParts::Part *)child->document() &&
+           manager->activeWidget() == (QWidget *)view ) )
         {
-	    // painter.setClipRegion( rgn );
-	  painter.setClipping( FALSE );
-	
-	  painter.setPen( black );
-	  painter.fillRect( -5, -5, w + 10, 5, white );
-	  painter.fillRect( -5, h, w + 10, 5, white );
-	  painter.fillRect( -5, -5, 5, h + 10, white );
-	  painter.fillRect( w, -5, 5, h + 10, white );
-	  painter.fillRect( -5, -5, w + 10, 5, BDiagPattern );
-	  painter.fillRect( -5, h, w + 10, 5, BDiagPattern );		
-	  painter.fillRect( -5, -5, 5, h + 10, BDiagPattern );
-	  painter.fillRect( w, -5, 5, h + 10, BDiagPattern );
-	
-	  if ( manager->selectedPart() == (KParts::Part *)child->document() &&
-	       manager->selectedWidget() == (QWidget *)view )
-	  {
-	    QColor color;
-	    if ( view->koDocument() == this )
-	      color = black;
-	    else
-	      color = gray;
-	    painter.fillRect( -5, -5, 5, 5, color );
-	    painter.fillRect( -5, h, 5, 5, color );
-	    painter.fillRect( w, h, 5, 5, color );
-	    painter.fillRect( w, -5, 5, 5, color );
-	    painter.fillRect( w / 2 - 3, -5, 5, 5, color );
-	    painter.fillRect( w / 2 - 3, h, 5, 5, color );
-	    painter.fillRect( -5, h / 2 - 3, 5, 5, color );
-	    painter.fillRect( w, h / 2 - 3, 5, 5, color );
-	  }
-	
-	  painter.setClipping( TRUE );
+            // painter.setClipRegion( rgn );
+          painter.setClipping( FALSE );
+
+          painter.setPen( black );
+          painter.fillRect( -5, -5, w + 10, 5, white );
+          painter.fillRect( -5, h, w + 10, 5, white );
+          painter.fillRect( -5, -5, 5, h + 10, white );
+          painter.fillRect( w, -5, 5, h + 10, white );
+          painter.fillRect( -5, -5, w + 10, 5, BDiagPattern );
+          painter.fillRect( -5, h, w + 10, 5, BDiagPattern );
+          painter.fillRect( -5, -5, 5, h + 10, BDiagPattern );
+          painter.fillRect( w, -5, 5, h + 10, BDiagPattern );
+
+          if ( manager->selectedPart() == (KParts::Part *)child->document() &&
+               manager->selectedWidget() == (QWidget *)view )
+          {
+            QColor color;
+            if ( view->koDocument() == this )
+              color = black;
+            else
+              color = gray;
+            painter.fillRect( -5, -5, 5, 5, color );
+            painter.fillRect( -5, h, 5, 5, color );
+            painter.fillRect( w, h, 5, 5, color );
+            painter.fillRect( w, -5, 5, 5, color );
+            painter.fillRect( w / 2 - 3, -5, 5, 5, color );
+            painter.fillRect( w / 2 - 3, h, 5, 5, color );
+            painter.fillRect( -5, h / 2 - 3, 5, 5, color );
+            painter.fillRect( w, h / 2 - 3, 5, 5, color );
+          }
+
+          painter.setClipping( TRUE );
       }
   }
 }
@@ -726,7 +735,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     }
 
     if ( !loadChildren( store ) )
-    {	
+    {
       kdError(30003) << "ERROR: Could not load children" << endl;
       delete store;
       QApplication::restoreOverrideCursor();
@@ -785,13 +794,13 @@ bool KoDocument::isStoredExtern()
 void KoDocument::setModified( bool mod )
 {
     if ( mod == isModified() )
-	return;
+        return;
 
     kdDebug(30003) << "KoDocument::setModified( " << (mod ? "true" : "false") << ")" << endl;
     KParts::ReadWritePart::setModified( mod );
 
     if ( mod )
-	m_bEmpty = FALSE;
+        m_bEmpty = FALSE;
 
     // This influences the title
     setTitleModified();
