@@ -85,6 +85,11 @@ KarbonFactory::aboutData()
 			I18N_NOOP( "Idea, current maintainer" ),
 			"kudling@kde.org",
 			0 );
+		s_aboutData->addAuthor(
+			"Rob Buis",
+			I18N_NOOP( "" ),
+			"buis@kde.org",
+			0 );
 // TODO: add the names of some helpfull souls
 	}
 	return s_aboutData;
