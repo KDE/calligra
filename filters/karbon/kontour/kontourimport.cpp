@@ -185,10 +185,10 @@ KontourImport::convert()
 		{
 			QDomElement point = b.namedItem( "polyline" ).firstChild().toElement();
 			VComposite *path = new VComposite( &m_document );
-			double firstx, firsty, x, y;
-			firstx = point.attribute( "x" ).toDouble();
-			firsty = point.attribute( "y" ).toDouble();
-			path->moveTo( KoPoint( firstx, firsty ) );
+			double x, y;
+			x = point.attribute( "x" ).toDouble();
+			y = point.attribute( "y" ).toDouble();
+			path->moveTo( KoPoint( x, y ) );
 			point = point.nextSibling().toElement();
 			for( ; point.tagName() != "gobject"; point = point.nextSibling().toElement() )
 			{
@@ -196,7 +196,7 @@ KontourImport::convert()
 				y = point.attribute( "y" ).toDouble();
 				path->lineTo( KoPoint( x, y ) );
 			}
-			path->lineTo( KoPoint( firstx, firsty ) );
+			path->close();
 			// back to first point
 			parseGObject( path, point );
 			m_document.append( path );	
