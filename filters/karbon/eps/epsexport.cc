@@ -2,7 +2,9 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qapplication.h>
 #include <qcstring.h>
+#include <qdatetime.h>	// For creation date/time.
 #include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
@@ -29,6 +31,21 @@
 #include "vstroke.h"
 
 #include <kdebug.h>
+
+
+//Define level1 operators:
+static char l1_newpath		= 'N';
+static char l1_closepath	= 'C';
+static char l1_moveto		= 'm';
+static char l1_curveto		= 'c';
+static char l1_lineto		= 'l';
+static char l1_stroke		= 's';
+static char l1_fill			= 'f';
+static char l1_setlinewidth	= 'w';
+static char l1_setdash		= 'd';
+static char l1_setrgbcolor	= 'r';
+static char l1_gsave		= 'S';
+static char l1_grestore		= 'R';
 
 
 class EpsExportFactory : KGenericFactory<EpsExport, KoFilter>
@@ -66,18 +83,26 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	if( !storeIn )
 		return KoFilter::StupidError;
 
-	// Ask questions about ps level etc:
+	KoFilter::ConversionStatus status = KoFilter::OK;
+
+
+	// Ask questions about PS level etc:
 	EpsExportDlg* dialog = new EpsExportDlg();
+
+	QApplication::setOverrideCursor( Qt::arrowCursor );
 
 	if( dialog->exec() )
 	{
-		// Which postscript level to support?
+		// Which PostScript level to support?
 		m_psLevel = dialog->psLevel();
 
 		QFile fileOut( m_chain->outputFile() );
 		if( !fileOut.open( IO_WriteOnly ) )
 		{
-			delete storeIn;
+			QApplication::restoreOverrideCursor();
+			delete( dialog );
+			storeIn->close();
+
 			return KoFilter::StupidError;
 		}
 
@@ -95,12 +120,17 @@ EpsExport::convert( const QCString& from, const QCString& to )
 		delete m_stream;
 		fileOut.close();
 	}
+	else
+	{
+		// Dialog cancelled:
+		status = KoFilter::UserCancelled;
+	}
 
+	QApplication::restoreOverrideCursor();
 	delete( dialog );
-
 	storeIn->close();
 
-	return KoFilter::OK;
+	return status;
 }
 
 void
@@ -150,30 +180,32 @@ EpsExport::visitVDocument( VDocument& document )
 		KoDocumentInfoAuthor* authorPage =
 			static_cast<KoDocumentInfoAuthor*>( docInfo.page( "author" ) );
 
+		// Get creation date/time aka "now":
+		QDateTime now( QDateTime::currentDateTime() );
+
 		*m_stream <<
-		// TODO:
-			"%%CreationDate: (12/24/01) (12:34 PM)\n"
+			"%%CreationDate: (" << now.toString( Qt::LocalDate ) << ")\n"
 			"%%For: (" << authorPage->fullName() << ") (" << authorPage->company() << ")\n"
 			"%%Title: (" << docInfo.title() << ")"
 		<< endl;
 	}
 
 
-	// Print some definitions:
+	// Print operator definitions:
 	*m_stream <<
 		"\n"
-		"/N {newpath} def\n"
-		"/C {closepath} def\n"
-		"/m {moveto} def\n"
-		"/c {curveto} def\n"
-		"/l {lineto} def\n"
-		"/s {stroke} def\n"
-		"/f {fill} def\n"
-		"/w {setlinewidth} def\n"
-		"/d {setdash} def\n"
-		"/r {setrgbcolor} def\n"
-		"/S {gsave} def\n"
-		"/R {grestore} def\n"
+		"/" << l1_newpath		<< " {newpath} def\n"
+		"/" << l1_closepath		<< " {closepath} def\n"
+		"/" << l1_moveto		<< " {moveto} def\n"
+		"/" << l1_curveto		<< " {curveto} def\n"
+		"/" << l1_lineto		<< " {lineto} def\n"
+		"/" << l1_stroke		<< " {stroke} def\n"
+		"/" << l1_fill			<< " {fill} def\n"
+		"/" << l1_setlinewidth	<< " {setlinewidth} def\n"
+		"/" << l1_setdash		<< " {setdash} def\n"
+		"/" << l1_setrgbcolor	<< " {setrgbcolor} def\n"
+		"/" << l1_gsave			<< " {gsave} def\n"
+		"/" << l1_grestore		<< " {grestore} def\n"
 	<< endl;
 
 	// Export layers:
@@ -199,7 +231,7 @@ EpsExport::visitVPath( VPath& path )
 void
 EpsExport::visitVSegmentList( VSegmentList& segmentList )
 {
-	*m_stream << "N\n";
+	*m_stream << l1_newpath << "\n";
 
 	// Export segments:
 	VSegmentListIterator itr( segmentList );
@@ -215,19 +247,19 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 					itr.current()->ctrlPoint2().y() << " " <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y() << " " <<
-					"c\n";
+					l1_curveto << "\n";
 			break;
 			case VSegment::line:
 				*m_stream <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y() << " " <<
-					"l\n";
+					l1_lineto << "\n";
 			break;
 			case VSegment::begin:
 				*m_stream <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y() << " " <<
-					"m\n";
+					l1_moveto << "\n";
 			break;
 			default:
 			break;
@@ -235,7 +267,7 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 	}
 
 	if( segmentList.isClosed() )
-		*m_stream << "C\n";
+		*m_stream << l1_closepath << "\n";
 }
 
 void
@@ -244,7 +276,7 @@ EpsExport::getStroke( const VStroke& stroke )
 	if( stroke.type() != VStroke::none )
 	{
 		// gsave:
-		*m_stream << "S ";
+		*m_stream << l1_gsave << " ";
 
 		// dash pattern:
 		*m_stream << "[";
@@ -256,13 +288,17 @@ EpsExport::getStroke( const VStroke& stroke )
 		for( ; itr != array.end(); ++itr )
 			 *m_stream << *itr << " ";
 
-		*m_stream << "] " << stroke.dashPattern().offset()
-			<< " d ";
+		*m_stream << "] " << stroke.dashPattern().offset() <<
+			" " << l1_setdash << " ";
 
 		getColor( stroke.color() );
 
 		// setlinewidth, stroke, grestore:
-		*m_stream << " " << stroke.lineWidth() << " w s R\n";
+		*m_stream <<
+			" " << stroke.lineWidth() <<
+			" " << l1_setlinewidth <<
+			" " << l1_stroke <<
+			" " << l1_grestore << "\n";
 	}
 }
 
@@ -272,13 +308,15 @@ EpsExport::getFill( const VFill& fill )
 	if( fill.type() != VFill::none )
 	{
 		// gsave:
-		*m_stream << "S ";
+		*m_stream << l1_gsave << " ";
 
 		// setrgbcolor:
 		getColor( fill.color() );
 
 		// fill, grestore:
-		*m_stream << " f R\n";
+		*m_stream <<
+			" " << l1_fill <<
+			" " << l1_grestore << "\n";
 	}
 }
 
@@ -291,7 +329,7 @@ EpsExport::getColor( const VColor& color )
 	*m_stream <<
 		copy.value( 0 ) << " " <<
 		copy.value( 1 ) << " " <<
-		copy.value( 2 ) << " r";
+		copy.value( 2 ) << " " << l1_setrgbcolor;
 }
 
 #include "epsexport.moc"
