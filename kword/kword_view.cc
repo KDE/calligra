@@ -286,10 +286,16 @@ CORBA::Boolean KWordView::printDlg()
 
   if (prt.setup(this))
     {    
+      setCursor(waitCursor);
+      gui->getPaperWidget()->setCursor(waitCursor);
+
       QPainter painter;
       painter.begin(&prt);
       m_pKWordDoc->print(&painter,&prt,left_margin,top_margin);
       painter.end();
+
+      setCursor(arrowCursor);
+      gui->getPaperWidget()->setCursor(ibeamCursor);
     }
   return true;
 }

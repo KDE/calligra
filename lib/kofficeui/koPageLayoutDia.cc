@@ -223,8 +223,8 @@ KoPageLayout KoPageLayoutDia::standardLayout()
   _layout.ptRight = MM_TO_POINT(20);
   _layout.ptTop = MM_TO_POINT(20);
   _layout.ptBottom = MM_TO_POINT(20);
-  _layout.inchWidth = MM_TO_INCH(PG_A4_WIDTH);
-  _layout.inchHeight = MM_TO_INCH(PG_A4_HEIGHT);
+  _layout.inchWidth = PG_A4_WIDTH_I;
+  _layout.inchHeight = PG_A4_HEIGHT_I;
   _layout.inchLeft = MM_TO_INCH(20);
   _layout.inchRight = MM_TO_INCH(20);
   _layout.inchTop = MM_TO_INCH(20);
@@ -1160,6 +1160,7 @@ void KoPageLayoutDia::formatChanged(int _format)
     {
       bool enable = true;
       float w = 0,h = 0,dtmp = 0;
+      float wi = 0,hi = 0,dtmpi = 0;
       
       layout.format = (KoFormat)_format;
       if ((KoFormat)_format != PG_CUSTOM) enable = false;
@@ -1172,41 +1173,57 @@ void KoPageLayoutDia::formatChanged(int _format)
 	  {
 	    w = PG_A4_WIDTH;
 	    h = PG_A4_HEIGHT;
+	    wi = PG_A4_WIDTH_I;
+	    hi = PG_A4_HEIGHT_I;
 	  } break;
 	case PG_DIN_A3:
 	  {
 	    w = PG_A3_WIDTH;
 	    h = PG_A3_HEIGHT;
+	    wi = PG_A3_WIDTH_I;
+	    hi = PG_A3_HEIGHT_I;
 	  } break;
 	case PG_DIN_A5:
 	  {
 	    w = PG_A5_WIDTH;
 	    h = PG_A5_HEIGHT;
+	    wi = PG_A5_WIDTH_I;
+	    hi = PG_A5_HEIGHT_I;
 	  } break;
 	case PG_US_LETTER:
 	  {
 	    w = PG_US_LETTER_WIDTH;
 	    h = PG_US_LETTER_HEIGHT;
+	    wi = PG_US_LETTER_WIDTH_I;
+	    hi = PG_US_LETTER_HEIGHT_I;
 	  } break;
 	case PG_US_LEGAL:
 	  {
 	    w = PG_US_LEGAL_WIDTH;
 	    h = PG_US_LEGAL_HEIGHT;
+	    wi = PG_US_LEGAL_WIDTH_I;
+	    hi = PG_US_LEGAL_HEIGHT_I;
 	  } break;
 	case PG_SCREEN:
 	  {
 	    w = PG_SCREEN_WIDTH;
 	    h = PG_SCREEN_HEIGHT;
+	    wi = PG_SCREEN_WIDTH_I;
+	    hi = PG_SCREEN_HEIGHT_I;
 	  } break;
 	case PG_DIN_B5:
 	  {
 	    w = PG_B5_WIDTH;
 	    h = PG_B5_HEIGHT;
+	    wi = PG_B5_WIDTH_I;
+	    hi = PG_B5_HEIGHT_I;
 	  } break;
 	case PG_US_EXECUTIVE:
 	  {
 	    w = PG_US_EXECUTIVE_WIDTH;
 	    h = PG_US_EXECUTIVE_HEIGHT;
+	    wi = PG_US_EXECUTIVE_WIDTH_I;
+	    hi = PG_US_EXECUTIVE_HEIGHT_I;
 	  } break;
 	}
       if (layout.orientation == PG_LANDSCAPE)
@@ -1214,15 +1231,17 @@ void KoPageLayoutDia::formatChanged(int _format)
 	  dtmp = w;
 	  w = h;
 	  h = dtmp;
+	  dtmpi = wi;
+	  wi = hi;
+	  hi = dtmpi;
 	}
-      
+	  
       layout.width = layout.mmWidth = w;
       layout.height = layout.mmHeight = h;
       layout.ptWidth = MM_TO_POINT(w);
       layout.ptHeight = MM_TO_POINT(h);
-      layout.inchWidth = MM_TO_INCH(w);
-      layout.inchHeight = MM_TO_INCH(h);
-      
+      layout.inchWidth = wi;
+      layout.inchHeight = hi;
 
       char tmp1[10];
       char tmp2[10];

@@ -53,6 +53,24 @@
 #define PG_SCREEN_WIDTH         240.0
 #define PG_SCREEN_HEIGHT        180.0
 
+// paper formats (inch)
+#define PG_A3_WIDTH_I             11.69
+#define PG_A3_HEIGHT_I            16.54
+#define PG_A4_WIDTH_I             8.26
+#define PG_A4_HEIGHT_I            11.7
+#define PG_A5_WIDTH_I             5.83
+#define PG_A5_HEIGHT_I            8.27
+#define PG_B5_WIDTH_I             7.17
+#define PG_B5_HEIGHT_I            10.13
+#define PG_US_LETTER_WIDTH_I      8.5
+#define PG_US_LETTER_HEIGHT_I     11.0
+#define PG_US_LEGAL_WIDTH_I       8.5
+#define PG_US_LEGAL_HEIGHT_I      14.0
+#define PG_US_EXECUTIVE_WIDTH_I   7.5
+#define PG_US_EXECUTIVE_HEIGHT_I  10.0
+#define PG_SCREEN_WIDTH_I         9.45
+#define PG_SCREEN_HEIGHT_I        7.09
+
 // enums
 const int FORMAT_AND_BORDERS = 1;
 const int HEADER_AND_FOOTER = 2;
