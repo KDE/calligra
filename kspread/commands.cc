@@ -528,4 +528,41 @@ QString PaperLayoutCommand::name() const
     return i18n("Set Page Layout");
 }
 
+LinkCommand::LinkCommand( KSpreadCell* c, const QString& text, 
+ const QString& link )
+{
+  cell = c;
+  oldText = cell->text();
+  oldLink = cell->link();
+  newText = text;
+  newLink = link;
+  
+  KSpreadSheet* s = cell->sheet();
+  if( s ) doc = s->doc();
+}
+
+void LinkCommand::execute()
+{
+  if( !cell ) return;
+  
+  cell->setCellText( newText );
+  cell->setLink( newLink );
+  
+  doc->addDamage( new CellDamage( cell ) );
+}
+
+void LinkCommand::unexecute()
+{
+  if( !cell ) return;
+  
+  cell->setCellText( oldText );
+  cell->setLink( oldLink );
+  
+  doc->addDamage( new CellDamage( cell ) );
+}
+
+QString LinkCommand::name() const
+{
+  return i18n("Set Link");
+}
 

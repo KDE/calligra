@@ -331,5 +331,23 @@ protected:
 
 };
 
+class LinkCommand : public KCommand
+{
+public:
+  LinkCommand( KSpreadCell* cell, const QString& text, const QString& link );
+  
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+
+protected:
+  KSpreadCell* cell;
+  KSpreadDoc* doc;
+  QString oldText;
+  QString oldLink;  
+  QString newText;
+  QString newLink;
+};
+
 
 #endif /* KSPREAD_COMMANDS */
