@@ -1059,7 +1059,7 @@ void KWPage::vmrCreateText()
 	}
 
 	frameDia = new KWFrameDia( this, frame,doc,FT_TEXT);
-        frameDia->setPage(this);
+        //frameDia->setPage(this);
 	connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
         frameDia->setCaption(i18n("Connect frame"));
 	frameDia->show();
@@ -1138,7 +1138,7 @@ void KWPage::vmrCreateTable()
 		    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 		    KWFrame *frame = new KWFrame(_frameSet, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
 		    _frameSet->addFrame( frame );
-            _frameSet->setFrameBehaviour(AutoExtendFrame);
+            frame->setFrameBehaviour(AutoExtendFrame);
 		    _frameSet->setGroupManager( grpMgr );
 		    grpMgr->addFrameSet( _frameSet, i, j );
 		}
@@ -1601,7 +1601,7 @@ void KWPage::editReconnectFrame()
     }
 
     frameDia = new KWFrameDia( this,  frame,doc,frame->getFrameType());
-    frameDia->setPage(this);
+    //frameDia->setPage(this);
 
     connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
     frameDia->setCaption( i18n( "Reconnect Frame" ) );
@@ -3534,7 +3534,7 @@ void KWPage::femProps()
     }
     KWFrame *frame=0L;
 
-    repaintScreen( FALSE );
+    //repaintScreen( FALSE );
     int iFrameset;
     for ( iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
         for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
@@ -3545,11 +3545,11 @@ void KWPage::femProps()
         }
     }
     frameDia = new KWFrameDia( this, frame);
-    frameDia->setPage(this);
+    //frameDia->setPage(this);
     connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
     frameDia->setCaption(i18n("Frame Properties"));
     frameDia->show();
-    repaintScreen(iFrameset,true);
+    //repaintScreen(iFrameset,true);
 }
 
 /*================================================================*/
@@ -3600,6 +3600,7 @@ void KWPage::frameDiaClosed()
     recalcText();
     recalcCursor();
     recalcAll = FALSE;
+    repaintScreen (true);
 }
 
 /*================================================================*/

@@ -48,7 +48,7 @@ public:
     KWFrameDia( QWidget *parent, KWFrame *_frame);
     //KWFrameDia( QWidget *parent, KWPage *_page);
 
-    void setPage(KWPage *_page) {page =_page;}
+    //void setPage(KWPage *_page) {page =_page;}
 
 protected:
     void init();
@@ -64,9 +64,9 @@ protected:
     QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
     QGroupBox *endOfFrame, *onNewPage, *sideHeads;
     QCheckBox *autofit, *aspectRatio, *floating;
-    QRadioButton *rResizeFrame, *rAppendFrame, *rNoShow, *reconnect, *noFollowup, *limitRadio;
+    QRadioButton *rResizeFrame, *rAppendFrame, *rNoShow, *reconnect, *noFollowup, *copyRadio;
     QLabel *sideTitle1, *sideTitle2;
-    QLineEdit *limitNumber, *sideWidth, *sideGap;
+    QLineEdit *sideWidth, *sideGap;
     QComboBox *sideAlign;
 
     // TAB 2:
@@ -94,10 +94,12 @@ protected:
 
     KWFrame *frame;
     KWordDocument *doc;
-    KWPage *page;
+    //KWPage *page;
     FrameType frameType;
 
     float oldX, oldY, oldW, oldH;
+
+    FrameBehaviour frameBehaviour;
 
 signals:
     void changed();
@@ -108,6 +110,8 @@ protected slots:
     void runConturClicked();
     virtual void slotOk();
     void connectListSelected( QListViewItem * );
+    void setFrameBehaviourInputOn();
+    void setFrameBehaviourInputOff();
 };
 
 #endif

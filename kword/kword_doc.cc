@@ -62,6 +62,7 @@
 #include "serialletter.h"
 #include "contents.h"
 #include "kword_factory.h"
+#include <kdebug.h>
 
 /******************************************************************/
 /* Class: KWordChild						  */
@@ -1158,64 +1159,69 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	if ( getFrameSet( k )->getFrameInfo() == FI_FOOTNOTE ) _footnotes = TRUE;
     }
 
+    // create defaults if they ware not in the input file.
+
     if ( !_first_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_HEADER );
 	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	    getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+        frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_even_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_HEADER );
 	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	    getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+        frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_odd_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_HEADER );
 	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTTopBorder(),
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	    getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+        frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_first_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_FOOTER );
-	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - 
+            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() - 
+            getPTRightBorder(), 20 );
+        frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_even_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_FOOTER );
-	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - 
+            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() - 
+            getPTRightBorder(), 20 );
+        frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_odd_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_FOOTER );
-	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
-				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - 
+            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() - 
+            getPTRightBorder(), 20 );
+        frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_footnotes ) {
@@ -1225,12 +1231,12 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 
 	for ( int i = 0; i < pages; i++ ) {
 	    KWFrame *frame = new KWFrame(fs, getPTLeftBorder(),
-					  i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
-					  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+                i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
+	        getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+            frame->setFrameBehaviour(AutoExtendFrame);
 	    fs->addFrame( frame );
 	}
 	frames.append( fs );
-    fs->setFrameBehaviour(AutoCreateNewFrame);
 	fs->setVisible( FALSE );
     }
 
@@ -1322,7 +1328,6 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string tag;
     string name;
 
-    FrameBehaviour frameBehaviour=AutoCreateNewFrame;
     FrameInfo frameInfo = FI_BODY;
     QString _name = "";
     int _row = 0, _col = 0, _rows = 1, _cols = 1;
@@ -1345,8 +1350,6 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "frameType" )
 		    frameType = static_cast<FrameType>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "autoCreateNewFrame" )
-		    frameBehaviour = static_cast<FrameBehaviour>(atoi( ( *it ).m_strValue.c_str() ) );
 		if ( ( *it ).m_strName == "frameInfo" )
 		    frameInfo = static_cast<FrameInfo>( atoi( ( *it ).m_strValue.c_str() ) );
 		if ( ( *it ).m_strName == "grpMgr" )
@@ -1376,7 +1379,6 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		frame->setVisible( _visible );
 		frame->setName( fsname );
 		frame->load( parser, lst );
-                frame->setFrameBehaviour( frameBehaviour );
 		frame->setFrameInfo( frameInfo );
 		frame->setIsRemoveableHeader( removeable );
 
@@ -3123,52 +3125,45 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 /*================================================================*/
 void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenAppendPage*/ )
 {
-    pages++;
     QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
+    kdDebug() <<"KWordDocument::appendPage" << endl;
+    pages++;
 
-    QList<KWFrame> frameList;
-    frameList.setAutoDelete( FALSE );
-
+    int thisPageNum  = pages-2;
     KWFrameSet *frameSet = 0L;
     KWFrame *frame;
 
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-	if ( getFrameSet( i )->getFrameType() != FT_TEXT || getFrameSet( i )->getFrameInfo() != FI_BODY ) continue;
-
-	// don't add tables! A table cell ( frameset ) _must_ not have more than one frame!
-        if ( getFrameSet( i )->getGroupManager() || !dynamic_cast<KWTextFrameSet*>(
-getFrameSet( i ) )->getFrameBehaviour() == AutoCreateNewFrame ) continue;
-
-	frameSet = getFrameSet( i );
-
-	for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ ) {
-	    frame = frameSet->getFrame( j );
-	    if ( frame->intersects( pageRect ) ) {
-		KWFrame *frm = new KWFrame(frameSet, frame->x(), frame->y() + getPTPaperHeight(), frame->width(), frame->height(), frame->getRunAround(),
-					    frame->getRunAroundGap() );
-		frm->setLeftBorder( frame->getLeftBorder2() );
-		frm->setRightBorder( frame->getRightBorder2() );
-		frm->setTopBorder( frame->getTopBorder2() );
-		frm->setBottomBorder( frame->getBottomBorder2() );
-		frm->setBLeft( frame->getBLeft() );
-		frm->setBRight( frame->getBRight() );
-		frm->setBTop( frame->getBTop() );
-		frm->setBBottom( frame->getBBottom() );
-		frm->setBackgroundColor( QBrush( frame->getBackgroundColor() ) );
-		frameList.append( frm );
-	    }
-	}
-
-	if ( !frameList.isEmpty() ) {
-	    for ( unsigned int k = 0; k < frameList.count(); k++ )
-		frameSet->addFrame( frameList.at( k ) );
-	}
-
-	frameList.clear();
+        frameSet = getFrameSet( i );
+        // don't add tables! A table cell ( frameset ) _must_ not have more than one frame!
+        if ( frameSet->getGroupManager()) continue;
+    
+        unsigned int numFrames=frameSet->getNumFrames();
+        for (unsigned int j =0; j < numFrames; j++) {
+            frame = frameSet->getFrame(j);
+            // if frame is no last page && frame may be copied to next frame.
+            if((frame->getPageNum() == thisPageNum || frame->getPageNum() == thisPageNum && frame->getSheetSide() != AnySheet)  && (
+                  frame->getNewFrameBehaviour() == Copy || frame->getNewFrameBehaviour() == Reconnect)) {
+                // make a new frame.
+                KWFrame *frm = new KWFrame(frameSet, frame->x(), frame->y() + getPTPaperHeight(), frame->width(), frame->height(), frame->getRunAround(),
+                frame->getRunAroundGap() );
+                frm->setLeftBorder( frame->getLeftBorder2() );
+                frm->setRightBorder( frame->getRightBorder2() );
+                frm->setTopBorder( frame->getTopBorder2() );
+                frm->setBottomBorder( frame->getBottomBorder2() );
+                frm->setBLeft( frame->getBLeft() );
+                frm->setBRight( frame->getBRight() );
+                frm->setBTop( frame->getBTop() );
+                frm->setBBottom( frame->getBBottom() );
+                frm->setBackgroundColor( QBrush( frame->getBackgroundColor() ) );
+                frm->setPageNum( pages+1);
+                frameSet->addFrame( frm );
+            }
+        }
     }
 
 //     if ( redrawBackgroundWhenAppendPage )
-// 	drawAllBorders();
+ 	drawAllBorders();
     updateAllFrames();
     updateAllViewportSizes();
 
@@ -3693,19 +3688,6 @@ bool KWordDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, i
     return FALSE;
 }
 
-/*============== FrameBehaviour      =============================*/
-/* Sets and gets this frames behaviour. This is used when the text
-   gets to long to fit in this frame. The possible behaviours are
-   defined in kword_frame.h with enum FrameBehaviour.
-*/
-FrameBehaviour KWordDocument::getFrameBehaviour() {
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        if ( getFrameSet( i )->hasSelectedFrame() && getFrameSet( i )->getFrameType() == FT_TEXT )
-            return dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->getFrameBehaviour();
-    }
-    return AutoCreateNewFrame;
-}
-
 /*================================================================*/
 RunAround KWordDocument::getRunAround()
 {
@@ -3778,7 +3760,6 @@ bool KWordDocument::isOnlyOneFrameSelected()
 	if ( getFrameSet( i )->hasSelectedFrame() ) {
 	    for ( unsigned int j = 0; j < getFrameSet( i )->getNumFrames(); j++ ) {
 		if ( getFrameSet( i )->getFrame( j )->isSelected() ) {
-		    qDebug( "selted frame found: %d, %d",i,j);
 		    _selected++;
                 }
 	    }
@@ -4034,7 +4015,7 @@ void KWordDocument::checkNumberOfPages( KWFormatContext *fc )
 	    f = fs->getFrame( i );
 	    if ( f && f->getPageNum() > num ) {
 		if ( canRemovePage( f->getPageNum(), f ) ) {
-		    qDebug( "remove page > %d, frame; %d", f->getPageNum(), i );
+		    kdDebug() << "remove page > " <<f->getPageNum() <<", frame; "<<i<< endl;
 		    fs->delFrame( i );
 		    changed = TRUE;
 		    del++;

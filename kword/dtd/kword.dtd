@@ -1,222 +1,232 @@
-<!--	$Id$
+<!--    $Id$
 
-		This is an XML document type definition (DTD) for the KWord document format.
-		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from 
-		KWord's author Reginald Stadlbauer <reggie@kde.org>.
+                This is an XML document type definition (DTD) for the KWord document format.
+                Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from 
+                KWord's author Reginald Stadlbauer <reggie@kde.org>.
 
-		Please report all bugs to Kalle and Reginald at the above addresses.
+                Please report all bugs to Kalle and Reginald at the above addresses.
 -->
-		
+                
 
 
-<!--	A KWord document consists of a paper description, a number of
-		attributes and the framesets which contain the actual data. It 
-		can also define a number of styles.
+<!--    A KWord document consists of a paper description, a number of
+                attributes and the framesets which contain the actual data. It 
+                can also define a number of styles.
 
-		Attributes:
+                Attributes:
 
-		author:		The document's author
-		email:		The document's author's email address
-		editor:		The program this file was written with
-		mime:		The MIME type (must always have the value application/x-kword
+                author:         The document's author
+                email:          The document's author's email address
+                editor:         The program this file was written with
+                mime:           The MIME type (must always have the value application/x-kword
 -->
 <!ELEMENT DOC (PAPER, ATTRIBUTES, FRAMESETS, STYLES)>
-<!ATTLIST DOC	author CDATA #IMPLIED
-				email CDATA #IMPLIED
-				editor CDATA #IMPLIED
-				mime CDATA "application/x-kword">
+<!ATTLIST DOC   author CDATA #IMPLIED
+                email CDATA #IMPLIED
+                editor CDATA #IMPLIED
+                mime CDATA "application/x-kword">
 
-<!--	Describes the page format. Can have no or one PAPERBORDERS child that 
-		describes the margins.
+<!--    Describes the page format. Can have no or one PAPERBORDERS child that 
+                describes the margins.
 
-		Attributes:
+                Attributes:
 
-		format:			integer value for the page format
-		width:			width in millimeters
-		height:			height in millimeters
-		orientation:	0 for landscape, 1 for portrait
-		columns:		the number of columns (only in wordprocessing mode)
-		columnspacing:	the gap between the columns (only in wordprocessing mode)
-		hType: 0 for same headers on all pages, 1 for different headers on first and other pages
-			2, for different headers on even and odd pages
-		fType: 0 for same footers on all pages, 1 for different footers on first and other pages
-			2, for different footers on even and odd pages
-		spHeadBody: distance (in pt) between headers and the text body (only in wordprocessing mode)
-		spFootBody: distance (in pt) between footers and the text body (only in wordprocessing mode)
+                format:                 integer value for the page format
+                width:                  width in millimeters
+                height:                 height in millimeters
+                orientation:    0 for landscape, 1 for portrait
+                columns:                the number of columns (only in wordprocessing mode)
+                columnspacing:  the gap between the columns (only in wordprocessing mode)
+                hType: 0 for same headers on all pages, 1 for different headers on first 
+                  and other pages 2, for different headers on even and odd pages
+                fType: 0 for same footers on all pages, 1 for different footers on first 
+                  and other pages 2, for different footers on even and odd pages
+                spHeadBody: distance (in pt) between headers and the text body (only in 
+                  wordprocessing mode)
+                spFootBody: distance (in pt) between footers and the text body (only in 
+                  wordprocessing mode)
 -->
 <!ELEMENT PAPER (PAPERBORDERS?)>
-<!ATTLIST PAPER	format CDATA #REQUIRED
-				width CDATA #REQUIRED
-				height CDATA #REQUIRED
-				orientation CDATA #REQUIRED
-				columns CDATA #REQUIRED
-				columnspacing CDATA #REQUIRED
-				hType CDATA #IMPLIED
-				fType CDATA #IMPLIED
-				spHeadBody CDATA #IMPLIED
-				spFootBody CDATA #IMPLIED>
+<!ATTLIST PAPER format CDATA #REQUIRED
+                width CDATA #REQUIRED
+                height CDATA #REQUIRED
+                orientation CDATA #REQUIRED
+                columns CDATA #REQUIRED
+                columnspacing CDATA #REQUIRED
+                hType CDATA #IMPLIED
+                fType CDATA #IMPLIED
+                spHeadBody CDATA #IMPLIED
+                spFootBody CDATA #IMPLIED>
 
 
-<!--	Describes the margins of the page.
+<!--    Describes the margins of the page.
 
-		Attributes:
-		
-		left:			left margin in pixels
-		right:			right margin in pixels
-		top:			top margin in pixels
-		bottom:			bottom margin in pixels
+                Attributes:
+                
+                left:                   left margin in pixels
+                right:                  right margin in pixels
+                top:                    top margin in pixels
+                bottom:                 bottom margin in pixels
 -->
 <!ELEMENT PAPERBORDERS EMPTY>
-<!ATTLIST PAPERBORDERS	left CDATA #REQUIRED
-						right CDATA #REQUIRED
-						top	CDATA #REQUIRED
-						bottom CDATA #REQUIRED>
+<!ATTLIST PAPERBORDERS  left   CDATA #REQUIRED
+                        right  CDATA #REQUIRED
+                        top    CDATA #REQUIRED
+                        bottom CDATA #REQUIRED>
 
 
-<!--	Contains general attributes of the document. Has no children.
+<!--    Contains general attributes of the document. Has no children.
 
-		Attributes:
+                Attributes:
 
-		processing:	0 for word processing, 1 for DTP
-		standardpage:	currently ignored
-		hasHeader:	0 if the document has no headers, 1 if the document has headers
-		hasFooter:	0 if the document has no footers, 1 if the document has footers
+                processing:     0 for word processing, 1 for DTP
+                standardpage:   currently ignored
+                hasHeader:      0 if the document has no headers, 1 if the 
+                                document has headers
+                hasFooter:      0 if the document has no footers, 1 if the 
+                                document has footers
 -->
 <!ELEMENT ATTRIBUTES EMPTY>
-<!ATTLIST ATTRIBUTES	processing CDATA #REQUIRED
-			standardpage CDATA #IMPLIED
-			hasHeader CDATA #IMPLIED
-			hasFooter CDATA #IMPLIED>
+<!ATTLIST ATTRIBUTES processing CDATA #REQUIRED
+                     standardpage CDATA #IMPLIED
+                     hasHeader CDATA #IMPLIED
+                     hasFooter CDATA #IMPLIED>
 
 
-<!--	Container that has a number of FRAMESET children.
+<!--    Container that has a number of FRAMESET children.
 -->
 <!ELEMENT FRAMESETS (FRAMESET+)>
 
 
-<!--	One frameset that bundles a number of FRAME elements.
+<!--    One frameset that bundles a number of FRAME elements.
 
-		Attributes:
+        Attributes:
 
-		frametype:		1 for text, 2 for graphics
+        frametype:  1 for text, 2 for graphics, 3 for a koffice PART, 4 = Formula
+
 -->
 <!ELEMENT FRAMESET (FRAME|PARAGRAPH)*>
-<!ATTLIST FRAMESET name CDATA>
+<!ATTLIST FRAMESET name CDATA
+                   frameType CDATA #REQUIRED>
 
-<!ELEMENT FRAME	EMPTY>
+<!ELEMENT FRAME EMPTY>
 
 <!--
-	Describes a frame of a frameset
+        Describes a frame of a frameset
 
-	Attributes:	
+        Attributes:     
 
-	right, leftm, top, bottom: absolute coordinates in pt
-	runaround: 1 if text should run around overalpping frames, 
+        right, leftm, top, bottom: absolute coordinates in pt
+        runaround: 1 if text should run around overalpping frames, 
          2 if text should not run around overlapping frames (only for text frames)
-	runaroundGap: when runaround is 1 specify here the distance between overlapping 
+        runaroundGap: when runaround is 1 specify here the distance between overlapping 
          frames and runaround text
-	frameInfo: 1 = normal text, 2 = header for first page, 3 = header for odd pages,
+        frameInfo: 1 = normal text, 2 = header for first page, 3 = header for odd pages,
          4 = header for even pages, 5 = footer for first pages, 6 = footer for odd pages,
          7 footer for even pages
         autocreatenewframe:   0 = AutoExtendFrame, 1 = AutoCreateNewFrame, 2 = Ignore 
          extra text
+        newFrameBehaviour:   0 = on new page creation; Reconnect frame to current frameset
+         1 = don't create a followup frame on the new page. 2 = This frame will be shown
+         on the new page as well (with the same content)
+
 -->
-<!ATTLIST FRAME	left CDATA #REQUIRED
-				right CDATA #REQUIRED
-				top CDATA #REQUIRED
-				bottom CDATA #REQUIRED
-				runaround CDATA #IMPLIED
-				runaroundGap CDATA #IMPLIED
-                frameType CDATA #REQUIRED
-				autoCreateNewFrame CDATA #REQUIRED
-				frameInfo CDATA #IMPLIED>
+<!ATTLIST FRAME left CDATA #REQUIRED
+                right CDATA #REQUIRED
+                top CDATA #REQUIRED
+                bottom CDATA #REQUIRED
+                runaround CDATA #IMPLIED
+                runaroundGap CDATA #IMPLIED
+                autoCreateNewFrame CDATA #REQUIRED
+                newFrameBehaviour CDATA #REQUIRED
+                frameInfo CDATA #IMPLIED>
+
 <!ELEMENT PARAGRAPH (TEXT|FORMATS|LAYOUT)*>
 <!ELEMENT TEXT EMPTY>
-<!ATTLIST TEXT	value CDATA #IMPLIED>
+<!ATTLIST TEXT  value CDATA #IMPLIED>
 <!ELEMENT FORMATS (FORMAT*)>
 <!ELEMENT FORMAT (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|VERTALIGN)*>
 <!-- A format tag describes the format of one ore more characters in the text
-		
-		Attributes:
+                
+                Attributes:
 
-		id: 0 invalid, 1 text format, 2 picture, 3 tabulator
-		pos: position where the format starts
-		len: number of characters after pos for which the format is used
+                id: 0 invalid, 1 text format, 2 picture, 3 tabulator
+                pos: position where the format starts
+                len: number of characters after pos for which the format is used
 -->
-<!ATTLIST FORMAT		id CDATA #IMPLIED
-						pos CDATA #IMPLIED
-						len CDATA #IMPLIED>
+<!ATTLIST FORMAT id CDATA #IMPLIED
+                 pos CDATA #IMPLIED
+                 len CDATA #IMPLIED>
 <!ELEMENT COLOR EMPTY>
-<!ATTLIST COLOR	red CDATA #REQUIRED
-				green CDATA #REQUIRED
-				blue CDATA #REQUIRED>
+<!ATTLIST COLOR red CDATA #REQUIRED
+                green CDATA #REQUIRED
+                blue CDATA #REQUIRED>
 <!ELEMENT FONT EMPTY>
-<!ATTLIST FONT	name CDATA #REQUIRED>
+<!ATTLIST FONT  name CDATA #REQUIRED>
 <!ELEMENT SIZE EMPTY>
-<!ATTLIST SIZE	value CDATA #REQUIRED>
+<!ATTLIST SIZE  value CDATA #REQUIRED>
 <!ELEMENT WEIGHT EMPTY>
-<!ATTLIST WEIGHT	value CDATA #REQUIRED>
+<!ATTLIST WEIGHT        value CDATA #REQUIRED>
 <!ELEMENT ITALIC EMPTY>
-<!ATTLIST ITALIC	value CDATA #REQUIRED>
+<!ATTLIST ITALIC        value CDATA #REQUIRED>
 <!ELEMENT UNDERLINE EMPTY>
-<!ATTLIST UNDERLINE	value CDATA #REQUIRED>
+<!ATTLIST UNDERLINE     value CDATA #REQUIRED>
 <!ELEMENT VERTALIGN EMPTY>
-<!ATTLIST VERTALIGN	value CDATA #REQUIRED>
-<!ELEMENT LAYOUT	   (NAME|FOLLOWING|FLOW|OFFSETS|INDENTS|COUNTER|LINESPACING|LEFTBORDER|
-						RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT|TABULATOR)*>
+<!ATTLIST VERTALIGN     value CDATA #REQUIRED>
+<!ELEMENT LAYOUT    (NAME|FOLLOWING|FLOW|OFFSETS|INDENTS|COUNTER|LINESPACING|LEFTBORDER|
+                    RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT|TABULATOR)*>
 <!ELEMENT NAME EMPTY>
-<!ATTLIST NAME	value CDATA #REQUIRED>
+<!ATTLIST NAME  value CDATA #REQUIRED>
 <!ELEMENT FOLLOWING EMPTY>
-<!ATTLIST FOLLOWING	name CDATA #REQUIRED>
+<!ATTLIST FOLLOWING name CDATA #REQUIRED>
 <!ELEMENT FLOW EMPTY>
-<!ATTLIST FLOW	value CDATA #REQUIRED>
+<!ATTLIST FLOW  value CDATA #REQUIRED>
 <!ELEMENT OFFSETS EMPTY>
-<!ATTLIST OFFSETS		head CDATA #REQUIRED
-						foot CDATA #REQUIRED>
+<!ATTLIST OFFSETS head CDATA #REQUIRED
+                  foot CDATA #REQUIRED>
 <!ELEMENT INDENTS EMPTY>
-<!ATTLIST INDENTS		first CDATA #REQUIRED
-						left CDATA #REQUIRED>
+<!ATTLIST INDENTS first CDATA #REQUIRED
+                  left CDATA #REQUIRED>
 <!ELEMENT COUNTER EMPTY>
-<!ATTLIST COUNTER		type CDATA #REQUIRED
-						depth CDATA #REQUIRED
-						bullet CDATA #REQUIRED
-						start CDATA #REQUIRED
-						numberingtype CDATA #REQUIRED
-						lefttext CDATA #IMPLIED
-						righttext CDATA #IMPLIED
-						bulletfont CDATA #REQUIRED>
+<!ATTLIST COUNTER type CDATA #REQUIRED
+                  depth CDATA #REQUIRED
+                  bullet CDATA #REQUIRED
+                  start CDATA #REQUIRED
+                  numberingtype CDATA #REQUIRED
+                  lefttext CDATA #IMPLIED
+                  righttext CDATA #IMPLIED
+                  bulletfont CDATA #REQUIRED>
 <!ELEMENT LINESPACING EMPTY>
-<!ATTLIST LINESPACING	value CDATA #REQUIRED>
+<!ATTLIST LINESPACING value CDATA #REQUIRED>
 <!ELEMENT LEFTBORDER EMPTY>
-<!ATTLIST LEFTBORDER	red CDATA #REQUIRED
-						green CDATA #REQUIRED
-						blue CDATA #REQUIRED
-						style CDATA #REQUIRED
-						width CDATA #REQUIRED>
+<!ATTLIST LEFTBORDER red CDATA #REQUIRED
+                     green CDATA #REQUIRED
+                     blue CDATA #REQUIRED
+                     style CDATA #REQUIRED
+                     width CDATA #REQUIRED>
 <!ELEMENT RIGHTBORDER EMPTY>
-<!ATTLIST RIGHTBORDER	red CDATA #REQUIRED
-						green CDATA #REQUIRED
-						blue CDATA #REQUIRED
-						style CDATA #REQUIRED
-						width CDATA #REQUIRED>
+<!ATTLIST RIGHTBORDER red CDATA #REQUIRED
+                      green CDATA #REQUIRED
+                      blue CDATA #REQUIRED
+                      style CDATA #REQUIRED
+                      width CDATA #REQUIRED>
 <!ELEMENT TOPBORDER EMPTY>
-<!ATTLIST TOPBORDER	red CDATA #REQUIRED
-						green CDATA #REQUIRED
-						blue CDATA #REQUIRED
-						style CDATA #REQUIRED
-						width CDATA #REQUIRED>
+<!ATTLIST TOPBORDER red CDATA #REQUIRED
+                    green CDATA #REQUIRED
+                    blue CDATA #REQUIRED
+                    style CDATA #REQUIRED
+                    width CDATA #REQUIRED>
 <!ELEMENT BOTTOMBORDER EMPTY>
-<!ATTLIST BOTTOMBORDER	red CDATA #REQUIRED
-						green CDATA #REQUIRED
-						blue CDATA #REQUIRED
-						style CDATA #REQUIRED
-						width CDATA #REQUIRED>
+<!ATTLIST BOTTOMBORDER red CDATA #REQUIRED
+                       green CDATA #REQUIRED
+                       blue CDATA #REQUIRED
+                       style CDATA #REQUIRED
+                       width CDATA #REQUIRED>
 <!ELEMENT TABULATOR EMPTY>
-<!ATTLIST TABULATOR		mmpos CDATA #REQUIRED
-						ptpos CDATA #REQUIRED
-						type CDATA #REQUIRED>
+<!ATTLIST TABULATOR mmpos CDATA #REQUIRED
+                    ptpos CDATA #REQUIRED
+                    type CDATA #REQUIRED>
 <!ELEMENT STYLES (STYLE*)>
-<!ELEMENT STYLE (NAME|FOLLOWING|FLOW|OFFSETS|INDENTS|COUNTER|LINESPACING|LEFTBORDER|RIGHTBORDER|
-				 TOPBORDER|BOTTOMBORDER|FORMAT)*>
-
-						
+<!ELEMENT STYLE (NAME|FOLLOWING|FLOW|OFFSETS|INDENTS|COUNTER|LINESPACING|LEFTBORDER|
+                RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT)*>
+                                                

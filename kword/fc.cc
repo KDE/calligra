@@ -26,6 +26,7 @@
 #include "char.h"
 #include "autoformat.h"
 #include "font.h"
+#include <kdebug.h>
 
 /******************************************************************/
 /* Class: KWFormatContext					  */
@@ -1324,7 +1325,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 	    ptY = pFrame->top() + pFrame->getBTop().pt();
 	    return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
 	} else { // append a page or resize frame
-            if ( static_cast<KWTextFrameSet*>( pFrameSet )->getFrameBehaviour() == AutoExtendFrame) { // Resize frame
+            if ( pFrame->getFrameBehaviour() == AutoExtendFrame) { // Resize frame
 		int diff = ( ptY + getLineHeight() ) - ( pFrame->bottom() -
 							 pFrame->getBBottom().pt() );
 
@@ -1347,7 +1348,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 		    outOfFrame = TRUE;
 		    return FALSE;
 		}
-	    } else if ( static_cast<KWTextFrameSet*>( pFrameSet )->getFrameBehaviour() == AutoCreateNewFrame) { // Append page
+	    } else if (pFrame->getFrameBehaviour() == AutoCreateNewFrame && pFrame->getNewFrameBehaviour()==Reconnect) { // Append page
 		doc->appendPage( page - 1, redrawBackgroundWhenAppendPage );
 		page++;
 		setFrame( frame + 1 );

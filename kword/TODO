@@ -28,12 +28,6 @@ Bugs to fix:
 Reginald Stadlbauer <reggie@kde.org>
 
 
-Fix the frame/frameset classes so references and data are localized 
- - Add name tag in frameset DTD, check this is used in
-   - loading
-   - saving
-
-
 Add lots of functions to the framedia.cc as a placeholder for future extentions.
 
 Look into:
@@ -53,17 +47,17 @@ Find out if this is done correctly:
 
   copy/past of a picture frame copies only reference
   delete of second picture doesn't delete file
-  frame names are saved in xml
-
-At the moment that a document is loaded (at the end of loadXML there should be a
-sanity check. Check if the least needed frames are there. And if they are not
-we might consider creating them.   
 
 Add getSelectedFrame() to kword_page and replace lots of code with that function.
 
-Page Preview image forgets about orientation when changing page size.
+Page Preview image forgets about orientation when changing page size. (always shows
+portraid)
 
 New frameset suggests "Frameset 9" and higher. Think of a nice way to start with 1
+
+Features:
+  - split frame
+  - only show frame on [odd|even] pages
 
 Thomas Zander <zander@earthling.net>
 

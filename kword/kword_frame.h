@@ -54,7 +54,8 @@ enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HE
 		 FI_FOOTNOTE = 7 };
 enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
-enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Limit=2 };
+enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
+enum SheetSide { AnySheet=0, EvenSheets=1, OddSheets=2 };
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -92,8 +93,12 @@ public:
 
     KWUnit getRunAroundGap() { return runAroundGap; }
     void setRunAroundGap( KWUnit gap ) { runAroundGap = gap; }
+    SheetSide getSheetSide() { return sheetSide; }
+    void setSheetSide( SheetSide ss ) { sheetSide = ss; }
     FrameBehaviour getFrameBehaviour() { return frameBehaviour; }
     void setFrameBehaviour( FrameBehaviour fb ) { frameBehaviour = fb; }
+    NewFrameBehaviour getNewFrameBehaviour() { return newFrameBehaviour; }
+    void setNewFrameBehaviour( NewFrameBehaviour nfb ) { newFrameBehaviour = nfb; }
     FrameInfo getFrameInfo();
     FrameType getFrameType();
     KWFrameSet *getFrameSet() { return frameSet; }
@@ -141,8 +146,10 @@ public:
     KWUnit getBBottom() { return bbottom; }
 
 protected:
+    SheetSide sheetSide;
     RunAround runAround;
     FrameBehaviour frameBehaviour;
+    NewFrameBehaviour newFrameBehaviour;
     bool selected;
     KWUnit runAroundGap;
     bool mostRight;
@@ -288,14 +295,9 @@ public:
     void joinParag( KWParag *_parag1, KWParag *_parag2 );
     void insertParag( KWParag *_parag, InsertPos _pos );
     void splitParag( KWParag *_parag, unsigned int _pos );
-    NewFrameBehaviour getNewFrameBehaviour() { return newFrameBehaviour; }
-    void setNewFrameBehaviour( NewFrameBehaviour nfb ) { newFrameBehaviour = nfb; }
 
     virtual void save( ostream &out );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
-
-    FrameBehaviour getFrameBehaviour();
-    void setFrameBehaviour(FrameBehaviour);
 
     void updateCounters();
     void updateAllStyles();
@@ -308,8 +310,6 @@ protected:
 
     // pointer to the first parag of the list of parags
     KWParag *parags;
-    FrameBehaviour m_behaviour;
-    NewFrameBehaviour newFrameBehaviour;
 };
 
 /******************************************************************/

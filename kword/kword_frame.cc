@@ -75,6 +75,8 @@ KWFrame::KWFrame()
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoExtendFrame;
+    newFrameBehaviour = Reconnect;
+    sheetSide = AnySheet;
 }
 
 /*================================================================*/
@@ -104,6 +106,8 @@ KWFrame::KWFrame(KWFrameSet *fs, const QPoint &topleft, const QPoint &bottomrigh
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoCreateNewFrame;
+    newFrameBehaviour = Reconnect;
+    sheetSide = AnySheet;
 }
 
 /*================================================================*/
@@ -133,6 +137,8 @@ KWFrame::KWFrame( KWFrameSet *fs,const QPoint &topleft, const QSize &size )
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoCreateNewFrame;
+    newFrameBehaviour = Reconnect;
+    sheetSide = AnySheet;
 }
 
 /*================================================================*/
@@ -161,7 +167,9 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height )
     brd_bottom.style = KWParagLayout::SOLID;
     brd_bottom.ptWidth = 1;
 
+    newFrameBehaviour = Reconnect;
     frameBehaviour=AutoCreateNewFrame;
+    sheetSide = AnySheet;
 }
 
 /*================================================================*/
@@ -191,6 +199,8 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoCreateNewFrame;
+    newFrameBehaviour = Reconnect;
+    sheetSide = AnySheet;
 }
 
 /*================================================================*/
@@ -220,6 +230,8 @@ KWFrame::KWFrame(KWFrameSet *fs, const QRect &_rect )
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoCreateNewFrame;
+    newFrameBehaviour = Reconnect;
+    sheetSide = AnySheet;
 }
 
 /*================================================================*/
@@ -606,6 +618,7 @@ void KWFrameSet::save( ostream &out )
 	    << "\" bbottompt=\"" << frame->getBBottom().pt() << "\" bbottommm=\"" << frame->getBBottom().mm()
 	    << "\" bbottominch=\"" << frame->getBBottom().inch()
             << "\" autoCreateNewFrame=\"" << static_cast<int>( frame->getFrameBehaviour())
+            << "\" newFrameBehaviour=\"" << static_cast<int>( frame->getNewFrameBehaviour())
             << "\"/>" << endl;
     }
 }
@@ -641,30 +654,12 @@ void KWTextFrameSet::init()
 {
     parags = 0L;
 
-    m_behaviour = AutoCreateNewFrame;
-
     parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
     KWFormat *format = new KWFormat( doc );
     format->setDefaults( doc );
 
     updateCounters();
 }
-
-/*============== FrameBehaviour      =============================*/
-/* Sets and gets this frames behaviour. This is used when the text
-   gets to long to fit in this frame. The possible behaviours are
-   defined in kword_frame.h with enum FrameBehaviour.
-   Written by zander@earhtling.net
-*/
- 
-FrameBehaviour KWTextFrameSet::getFrameBehaviour() {
-    return m_behaviour;
-}
- 
-void KWTextFrameSet::setFrameBehaviour(FrameBehaviour l_behaviour){
-    m_behaviour = l_behaviour;
-}
- 
 
 /*================================================================*/
 void KWTextFrameSet::assign( KWTextFrameSet *fs )
@@ -931,7 +926,6 @@ void KWTextFrameSet::save( ostream &out )
     }
 
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
-	<< "\" autoCreateNewFrame=\"" << static_cast<int>( m_behaviour )
 	<< "\" frameInfo=\""
 	<< static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\""
 	<< static_cast<int>( removeableHeader )
@@ -959,7 +953,6 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string tag;
     string name;
     // when a frame doesn not have a framebehaviour set use the default from the frameset.
-    FrameBehaviour frameBehaviour = getFrameBehaviour();
     KWParag *last = 0L;
 
     while ( parser.open( 0L, tag ) ) {
@@ -1009,9 +1002,7 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
-        if ( ( *it ).m_strName == "autoCreateNewFrame" )
-            frameBehaviour = static_cast<FrameBehaviour>(atoi( ( *it ).m_strValue.c_str() ) );
-        else if ( ( *it ).m_strName == "left" )
+        if ( ( *it ).m_strName == "left" )
 		    rect.setLeft( atoi( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "top" )
 		    rect.setTop( atoi( ( *it ).m_strValue.c_str() ) );
@@ -1110,7 +1101,6 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
 	    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
 	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
-        _frame->setFrameBehaviour(frameBehaviour);
 	    frames.append( _frame );
 	} else
 	    cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
@@ -2425,12 +2415,12 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
     int ww = 0;
     for ( i = 0; i < getCols(); i++ ) {
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-        _frameSet->setFrameBehaviour(AutoExtendFrame);
 	_frameSet->setGroupManager( this );
 	_frameSet->setIsRemoveableHeader( _removeable );
 	addFrameSet( _frameSet, _idx, i );
 
 	KWFrame *frame = new KWFrame(_frameSet, r.x() + ww, r.y(), *w.at( i ), doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
+        frame->setFrameBehaviour(AutoExtendFrame);
 	_frameSet->addFrame( frame );
 	nCells.append( _frameSet );
 	ww += *w.at( i ) + 2;
@@ -2474,11 +2464,11 @@ void KWGroupManager::insertCol( unsigned int _idx )
     int hh = 0;
     for ( i = 0; i < getRows(); i++ ) {
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-        _frameSet->setFrameBehaviour(AutoExtendFrame);
 	_frameSet->setGroupManager( this );
 	addFrameSet( _frameSet, i, _idx );
 
 	KWFrame *frame = new KWFrame(_frameSet, r.x(), r.y() + hh, 60, *h.at( i ) );
+        frame->setFrameBehaviour(AutoExtendFrame);
 	_frameSet->addFrame( frame );
 	nCells.append( _frameSet );
 	hh += *h.at( i ) + 2;
