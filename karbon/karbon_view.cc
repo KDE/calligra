@@ -218,7 +218,8 @@ KarbonView::dropEvent ( QDropEvent *e )
 		float r = color.red() / 255.0, g = color.green() / 255.0, b = color.blue() / 255.0;
 		realcolor.setValues( &r, &g, &b, 0L );
 		if( m_part )
-		m_part->addCommand( new VFillCmd( &m_part->document(), realcolor ), true );
+			m_part->addCommand( new VFillCmd( &m_part->document(), realcolor ), true );
+		selectionChanged();
 	}
 }
 
@@ -719,7 +720,6 @@ void
 KarbonView::setLineWidth( double val)
 {
 	// TODO : maybe this can become a command
-	kdDebug() << "KarbonView::setLineWidth" << endl;
 	VObjectListIterator itr( m_part->document().selection()->objects() );
 	for ( ; itr.current() ; ++itr )
 	{

@@ -45,7 +45,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->setPen( Qt::NoPen );
 	if( s.type() != stroke_none )
 	{
-		m_painter->setBrush( s.color().toQColor() );
+		m_painter->setBrush( s.color() );
 
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( 10.0, 10.0 ) );
@@ -58,7 +58,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 
 	if( f.type() != fill_none )
 	{
-		m_painter->setBrush( f.color().toQColor() );
+		m_painter->setBrush( f.color() );
 
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( 20.0, 20.0 ) );
