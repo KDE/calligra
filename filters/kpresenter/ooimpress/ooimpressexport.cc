@@ -422,7 +422,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
                 appendTextbox( doccontent, o, drawPage );
                 break;
             case 8: // pie, chord, arc
-                appendEllipse( doccontent, o, drawPage );
+                appendEllipse( doccontent, o, drawPage, true );
                 break;
             case 12: // polyline
                 break;
@@ -560,7 +560,7 @@ void OoImpressExport::appendRectangle( QDomDocument & doc, QDomElement & source,
     target.appendChild( rectangle );
 }
 
-void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target )
+void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target, bool pieObject )
 {
     QDomElement size = source.namedItem( "SIZE" ).toElement();
 
@@ -574,12 +574,12 @@ void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, Q
     ellipse.setAttribute( "draw:style-name", gs );
 
     // set the geometry
-    set2DGeometry( source, ellipse );
+    set2DGeometry( source, ellipse, pieObject );
 
     target.appendChild( ellipse );
 }
 
-void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target )
+void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject )
 {
     QDomElement orig = source.namedItem( "ORIG" ).toElement();
     QDomElement size = source.namedItem( "SIZE" ).toElement();
@@ -593,28 +593,32 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target 
     target.setAttribute( "svg:height", StyleFactory::toCM( size.attribute( "height" ) ) );
     QString nameStr = name.attribute("objectName");
     if( !nameStr.isEmpty() )
-      target.setAttribute( "draw:name", nameStr );
-    QDomElement pie = source.namedItem( "PIETYPE").toElement();
-    if( !pie.isNull() )
-      {
-	int typePie = pie.attribute("value").toInt();
-	switch( typePie )
-	  {
-	  case 0:
-	    target.setAttribute( "draw:kind", "section");
-	    break;
-	  case 1:
-	    target.setAttribute( "draw:kind", "arc");
-	    break;
-	  case 2:
-	    target.setAttribute( "draw:kind", "cut");
-	    break;
-	  default:
-	    kdDebug()<<" type unknown : "<<typePie<<endl;
-	    break;
-	  }
-      }
-
+        target.setAttribute( "draw:name", nameStr );
+    if ( pieObject )
+    {
+        QDomElement pie = source.namedItem( "PIETYPE").toElement();
+        if( !pie.isNull() )
+        {
+            int typePie = pie.attribute("value").toInt();
+            switch( typePie )
+            {
+            case 0:
+                target.setAttribute( "draw:kind", "section");
+                break;
+            case 1:
+                target.setAttribute( "draw:kind", "arc");
+                break;
+            case 2:
+                target.setAttribute( "draw:kind", "cut");
+                break;
+            default:
+                kdDebug()<<" type unknown : "<<typePie<<endl;
+                break;
+            }
+        }
+        else
+            target.setAttribute( "draw:kind", "section");//by default
+    }
 }
 
 void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & target )
