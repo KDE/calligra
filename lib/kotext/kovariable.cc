@@ -1257,7 +1257,6 @@ void KoDateVariable::load( QDomElement& elem )
 
 void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    //TODO use "style:data-style-name" for date style
     switch( m_subtype )
     {
     case VST_DATE_FIX:
@@ -1536,7 +1535,7 @@ void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
         klocaleFormat = true;
     }
     writer.addAttribute( "style:data-style-name", KoOasisStyles::saveOasisTimeStyle(context.mainStyles(), m_varFormat->formatProperties(), klocaleFormat ) );
-
+    //writer.addTextNode( /*value*/ value displayed as texte );
     //TODO save text value
     //<text:time style:data-style-name="N43" text:time-value="2004-11-11T14:42:19" text:fixed="true">02:42:19 PM</text:time>
     writer.endElement();
