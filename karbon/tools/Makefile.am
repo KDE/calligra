@@ -31,6 +31,7 @@ noinst_HEADERS = \
 	vmtool_select.h \
 	vmtool_rotate.h \
 	vmtool_scale.h \
+	vmtool_shear.h \
 	vtool.h \
 	vshapetool.h 
 
@@ -57,6 +58,7 @@ libkarbontools_la_SOURCES = \
 	vmtool_select.cc \
 	vmtool_rotate.cc \
 	vmtool_scale.cc \
+	vmtool_shear.cc \
 	vtool.cc \
 	vshapetool.cc 
 

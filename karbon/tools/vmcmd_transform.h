@@ -41,6 +41,12 @@ public:
 	VMCmdScale( KarbonPart* part, const VObjectList& objects, const QPoint &p, double s1, double s2 );
 };
 
+class VMCmdShear : public VMCmdTransform
+{
+public:
+	VMCmdShear( KarbonPart* part, const VObjectList& objects, const QPoint &p, double s1, double s2 );
+};
+
 class VMCmdRotate : public VMCmdTransform
 {
 public:

@@ -27,7 +27,7 @@
 #include "vmtool_select.h"
 #include "vmtool_rotate.h"
 #include "vmtool_scale.h"
-//#include "vmtool_shear.h"
+#include "vmtool_shear.h"
 #include "vmcmd_delete.h"
 #include "vtoolcontainer.h"
 #include "vpainterfactory.h"
@@ -226,6 +226,7 @@ KarbonView::rotateTool()
 void
 KarbonView::scaleTool()
 {
+	kdDebug() << "KarbonView::scaleTool()" << endl;
 	s_currentTool = VMToolScale::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 	m_scaleToolAction->setChecked( true );
@@ -234,9 +235,10 @@ KarbonView::scaleTool()
 void
 KarbonView::shearTool()
 {
-	/*s_currentTool = VMToolShear::instance( m_part );
+	kdDebug() << "KarbonView::shearTool()" << endl;
+	s_currentTool = VMToolShear::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
-	m_shearToolAction->setChecked( true );*/
+	m_shearToolAction->setChecked( true );
 }
 
 void

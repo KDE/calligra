@@ -33,6 +33,7 @@ signals:
 	void selectToolActivated();
 	void rotateToolActivated();
 	void scaleToolActivated();
+	void shearToolActivated();
 	void sinusToolActivated();
 	void spiralToolActivated();
 	void starToolActivated();
