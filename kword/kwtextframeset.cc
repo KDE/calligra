@@ -1400,8 +1400,10 @@ void KWTextFrameSet::UndoRedoInfo::clear()
                         KWTextCustomItem * item = it.data();
                         KCommand * itemCmd = item->deleteCommand();
                         if ( itemCmd )
+                        {
                             macroCmd->addCommand( itemCmd );
-                        itemCmd->execute(); // the item-specific delete stuff hasn't been done
+                            itemCmd->execute(); // the item-specific delete stuff hasn't been done
+                        }
                         item->setDeleted( true );
                     }
                     textfs->kWordDocument()->addCommand( macroCmd );
