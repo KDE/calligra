@@ -1845,8 +1845,8 @@ void KPresenterView::createGUI()
 
     if ( sidebar )
     {
-        sidebar->setCurrentItem( sidebar->firstChild() );
-        sidebar->setSelected( sidebar->firstChild(), TRUE );
+        sidebar->outline()->setCurrentItem( sidebar->outline()->firstChild() );
+        sidebar->outline()->setSelected( sidebar->outline()->firstChild(), TRUE );
         KConfig *config=KGlobal::config();
         config->setGroup("Global");
         if(!config->readBoolEntry("Sidebar", true)) {
@@ -3301,7 +3301,8 @@ void KPresenterView::updateSideBar()
     if ( sidebar )
     {
         sidebar->blockSignals( TRUE );
-        sidebar->rebuildItems();
+	sidebar->thumbBar()->uptodate = false;
+        sidebar->outline()->rebuildItems();
         sidebar->blockSignals( FALSE );
     }
 }

@@ -17,30 +17,155 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <sidebar.h>
-#include <kpresenter_view.h>
-#include <kmessagebox.h>
-#include <klineeditdlg.h>
-#include <knotifyclient.h>
 #include <qheader.h>
 #include <qtimer.h>
 #include <qpopupmenu.h>
+#include <qimage.h>
+#include <qtabwidget.h>
+
+#include <kmessagebox.h>
+#include <klineeditdlg.h>
+#include <knotifyclient.h>
+#include <kiconview.h>
 #include <kdebug.h>
 
-class SideBarItem : public QCheckListItem
+#include "sidebar.h"
+#include "kpresenter_view.h"
+#include "page.h"
+
+class OutlineItem: public QCheckListItem
 {
 public:
-    SideBarItem( QListView * parent )
+    OutlineItem( QListView * parent )
      : QCheckListItem( parent, QString::null, QCheckListItem::CheckBox )
      {}
 
     virtual void stateChange(bool b)
     {
-        static_cast<SideBar*>(listView())->itemStateChange( this, b );
+        static_cast<Outline*>(listView())->itemStateChange( this, b );
     }
 };
 
-SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
+SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
+  :QTabWidget(parent), doc(d), view(v)
+{
+  setTabPosition(QTabWidget::Top);
+  setTabShape(QTabWidget::Triangular);
+
+  _outline = new Outline(this, doc, view);
+  addTab(_outline, i18n("Outline"));
+
+  _thb = new ThumbBar(this, doc, view);
+  addTab(_thb,i18n("Thumbs"));
+  
+
+  //TODO find a better way
+  connect(_outline, SIGNAL(showPage(int)),
+          this, SIGNAL(showPage(int)));
+
+  connect(_thb, SIGNAL(showPage(int)),
+          this, SIGNAL(showPage(int)));
+  
+  connect(_outline, SIGNAL(movePage(int,int)),
+          this, SIGNAL(movePage(int,int)));
+
+  connect(_outline, SIGNAL(selectPage(int,bool)),
+          this, SIGNAL(selectPage(int,bool)));
+
+  connect(this, SIGNAL(currentChanged(QWidget *)),
+          this, SLOT(currentChanged(QWidget *)));
+                     
+}
+
+void SideBar::currentChanged(QWidget *tab)
+{
+  if (tab == _thb) {
+    if (!_thb->uptodate)
+      _thb->rebuildItems();
+    else
+      _thb->arrangeItemsInGrid(QSize(130, 120), true);
+    //TODO set position to current slide
+  }
+}
+
+ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
+  :KIconView(parent), doc(d), view(v)
+{
+  uptodate = false;
+
+  setArrangement(QIconView::TopToBottom);
+  setAutoArrange(false);
+  setSorting(false);
+  setItemsMovable(false);
+
+  connect(this, SIGNAL(currentChanged(QIconViewItem *)),
+          this, SLOT(itemClicked(QIconViewItem *)));
+}
+
+void ThumbBar::rebuildItems()
+{
+  kdDebug(33001) << "ThumbBar::rebuildItems" << endl;
+
+  QApplication::setOverrideCursor( Qt::waitCursor );
+  
+  clear();
+  for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
+    QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
+    item->setDragEnabled(false);  //no dragging for now
+  }
+
+  arrangeItemsInGrid(QSize(130, 120), true);
+
+  uptodate = true;
+
+  QApplication::restoreOverrideCursor();
+}
+
+QPixmap ThumbBar::getSlideThumb(int slideNr)
+{
+  //kdDebug(33001) << "ThumbBar::getSlideThumb: " << slideNr << endl;
+    
+  QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
+  pix.fill( Qt::white );
+
+  view->getPage()->drawPageInPix2( pix, slideNr * doc->getPageRect( 0, 0, 0 ).height(), slideNr);
+
+  int extent = 120;
+
+  int w = doc->getPageRect( 0, 0, 0 ).width();
+  int h = doc->getPageRect( 0, 0, 0 ).height();
+
+  if(w > extent || h > extent) {
+    if(w > h) {
+      h = (int)( (double)( h * extent ) / w );
+      if ( h == 0 ) h = 1;
+      w = extent;
+      Q_ASSERT( h <= extent );
+    }
+    else {
+      w = (int)( (double)( w * extent ) / h );
+      if ( w == 0 ) w = 1;
+      h = extent;
+      Q_ASSERT( w <= extent );
+    }
+  }
+
+  //kdDebug(33001) << "w: " << w << "h: " << h << endl;
+
+  const QImage img(pix.convertToImage().smoothScale( w, h, QImage::ScaleMin ));
+  pix.convertFromImage(img);
+
+  return pix;
+}
+
+void ThumbBar::itemClicked(QIconViewItem *i)
+{
+  if ( !i )
+    return;
+  emit showPage( i->index() );
+}
+
+Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     : KListView( parent ), doc( d ), view( v )
 {
     rebuildItems();
@@ -64,21 +189,21 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
 
 }
 
-void SideBar::rebuildItems()
+void Outline::rebuildItems()
 {
     clear();
     // Rebuild all the items
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-        QCheckListItem *item = new SideBarItem( this );
+        QCheckListItem *item = new OutlineItem( this );
         QString title = doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) );
-        //kdDebug(33001) << "SideBar::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
+        //kdDebug(33001) << "Outline::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
         item->setOn( doc->isSlideSelected( i ) ); // calls itemStateChange !
         item->setText( 1, QString::number( i + 1 ) ); // page number
         item->setText( 0, title );
     }
 }
 
-void SideBar::updateItem( int pagenr /* 0-based */)
+void Outline::updateItem( int pagenr /* 0-based */)
 {
     // Find item
     QListViewItemIterator it( this );
@@ -89,7 +214,7 @@ void SideBar::updateItem( int pagenr /* 0-based */)
             QString title = doc->getPageTitle( pagenr, i18n( "Slide %1" ).arg( pagenr + 1 ) );
             it.current()->setText( 0, title );
             it.current()->setText( 1, QString::null ); // hack, to make itemStateChange do nothing
-            static_cast<SideBarItem*>(it.current())->setOn( doc->isSlideSelected( pagenr ) );
+            static_cast<OutlineItem*>(it.current())->setOn( doc->isSlideSelected( pagenr ) );
             it.current()->setText( 1, QString::number( pagenr + 1 ) ); // page number
             return;
         }
@@ -97,14 +222,14 @@ void SideBar::updateItem( int pagenr /* 0-based */)
     kdWarning() << "Item for page " << pagenr << " not found" << endl;
 }
 
-void SideBar::itemStateChange( SideBarItem * item, bool state )
+void Outline::itemStateChange( OutlineItem * item, bool state )
 {
     QString text = item->text( 1 );
     if ( !text.isEmpty() ) // empty if we are called from rebuildItems
         emit selectPage( text.toInt() - 1, state );
 }
 
-void SideBar::itemClicked( QListViewItem *i )
+void Outline::itemClicked( QListViewItem *i )
 {
     if ( !i )
         return;
@@ -112,7 +237,7 @@ void SideBar::itemClicked( QListViewItem *i )
 }
 
 
-void SideBar::setCurrentPage( int pg )
+void Outline::setCurrentPage( int pg )
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it ) {
@@ -123,7 +248,7 @@ void SideBar::setCurrentPage( int pg )
     }
 }
 
-void SideBar::setOn( int pg, bool on )
+void Outline::setOn( int pg, bool on )
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it ) {
@@ -134,14 +259,14 @@ void SideBar::setOn( int pg, bool on )
     }
 }
 
-void SideBar::contentsDropEvent( QDropEvent *e )
+void Outline::contentsDropEvent( QDropEvent *e )
 {
     disconnect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
     KListView::contentsDropEvent( e );
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
 }
 
-void SideBar::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
+void Outline::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
 {
     movedItem = i;
     movedAfter = newAfter;
@@ -149,7 +274,7 @@ void SideBar::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newA
 
 }
 
-void SideBar::doMoveItems()
+void Outline::doMoveItems()
 {
     int num = movedItem->text( 1 ).toInt() - 1;
     int numNow;
@@ -163,14 +288,14 @@ void SideBar::doMoveItems()
     emit movePage( num, numNow );
 }
 
-void SideBar::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
+void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 {
     if ( !selectedItem() || !doc->isReadWrite())
         return;
     view->openPopupMenuSideBar(pnt);
 }
 
-void SideBar::renamePageTitle()
+void Outline::renamePageTitle()
 {
     int pageNumber = QListView::selectedItem()->text( 1 ).toInt() - 1;
     bool ok;

@@ -20,6 +20,9 @@
 #ifndef SIDEBAR_H
 #define SIDEBAR_H
 
+#include <qtabwidget.h>
+
+#include <kiconview.h>
 #include <klistview.h>
 
 class QListViewItem;
@@ -27,20 +30,49 @@ class KPresenterDoc;
 class KPresenterView;
 class QDropEvent;
 class QPopupMenu;
-class SideBarItem;
+class Outline;
+class OutlineItem;
+class ThumbBar;
 
-class SideBar : public KListView
+
+class ThumbBar : public KIconView
+{
+  Q_OBJECT
+
+public:
+  ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
+  bool uptodate;
+
+signals:
+  void showPage( int i );
+
+public slots:
+  void rebuildItems();
+
+private slots:
+  void itemClicked(QIconViewItem *i);
+
+private:
+  QPixmap getSlideThumb(int slideNr);
+  
+  KPresenterDoc *doc;
+  KPresenterView *view;
+};
+
+
+
+class Outline: public KListView
 {
     Q_OBJECT
 
 public:
-    SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v );
+    Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v );
     void setCurrentPage( int pg );
     void setOn( int pg, bool on );
-    QSize sizeHint() const { return QSize( 120, KListView::sizeHint().height() ); }
+    QSize sizeHint() const { return QSize( 145, KListView::sizeHint().height() ); }
     void updateItem( int pagenr );
-    // Called by SideBarItem
-    void itemStateChange( SideBarItem * item, bool state );
+    // Called by OutlineItem
+    void itemStateChange( OutlineItem * item, bool state );
 
 protected:
     void contentsDropEvent( QDropEvent *e );
@@ -52,7 +84,8 @@ signals: // all page numbers 0-based
 
 public slots:
     void rebuildItems();
-    void renamePageTitle();	
+    void renamePageTitle();
+
 private slots:
     void itemClicked( QListViewItem *i );
     void rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c );
@@ -64,6 +97,40 @@ private:
     KPresenterDoc *doc;
     KPresenterView *view;
     QListViewItem *movedItem, *movedAfter;
+};
+
+
+
+class SideBar: public QTabWidget
+{
+  Q_OBJECT
+
+public:
+  SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
+  void setCurrentPage( int pg ) { _outline->setCurrentPage(pg); };
+  void setOn( int pg, bool on ) { _outline->setOn(pg, on); };
+  //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
+  void updateItem( int pagenr ) { _outline->updateItem(pagenr); };
+
+  Outline *outline() { return _outline; };
+  ThumbBar *thumbBar() { return _thb; };
+
+signals: // all page numbers 0-based
+  void showPage( int i );
+  void movePage( int from, int to );
+  void selectPage( int i, bool );
+
+public slots:
+  //void rebuildItems() { _outline->rebuildItems(); _thb->rebuildItems();};
+  void renamePageTitle() { _outline->renamePageTitle(); };
+  void currentChanged(QWidget *tab);
+
+private:
+  Outline *_outline;
+  ThumbBar *_thb;
+
+  KPresenterDoc *doc;
+  KPresenterView *view;
 };
 
 #endif
