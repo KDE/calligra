@@ -15,7 +15,7 @@ public:
     virtual ~KarbonPart();
 
     virtual void paintContent( QPainter& painter, const QRect& rect,
-	bool transparent = false );
+	bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
     virtual bool initDoc();
 

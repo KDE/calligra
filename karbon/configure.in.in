@@ -1,6 +1,3 @@
-dnl You dont want to compile karbon, do you ?
-DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
-
 dnl only use kdeprint if kprinter.h was found (recent kdelibs)
 AC_MSG_CHECKING([for kprinter.h (kdelibs>2.1)])
 AC_FIND_FILE(kprinter.h, $kde_includes, ac_kprinter_includes)

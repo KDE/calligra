@@ -174,7 +174,7 @@ VPath::arcTo( const double& x1, const double& y1,
 	double by0 = y1+dy10*d1t0;
 
 	// if (x0,y0) deviates from current point, add a line to it:
-	// TODO: decide via radius<1e-8 or sthg?
+	// TODO: decide via radius<XXX or sthg?
 	if ( bx0!=m_segments.getLast()->p3->x() || by0!=m_segments.getLast()->p3->y() )
 	    lineTo( bx0, by0 );
 	    	
@@ -183,13 +183,14 @@ VPath::arcTo( const double& x1, const double& y1,
 
 	// the two bezier-control points are located on the tangents at a fraction
 	// of the distance [tangent points<->tangent intersection].
-	double fract;
+	double distsq = ;
 	double rsq = r*r;
+	double fract;
 // TODO: make this better:
-	if (dist >= rsq * 1.0e8) // r almost 0
+	if ( distsq >= rsq * VPoint::s_fractScale ) // r is very small
     	    fract = 0.0; // dist==r==0
 	else
-    	    fract = ( 4.0/3.0 ) / ( 1+sqrt( 1+dist/rsq ) );
+    	    fract = ( 4.0/3.0 ) / ( 1+sqrt( 1+distsq/rsq ) );
 
 	double bx1 = bx0 + (x1 - bx0) * fract;
 	double by1 = by0 + (y1 - by0) * fract;
