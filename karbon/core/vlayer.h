@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,9 +19,6 @@
 
 #ifndef __VLAYER_H__
 #define __VLAYER_H__
-
-#include <qptrlist.h>
-#include <qstring.h>
 
 #include "vgroup.h"
 
@@ -68,14 +64,8 @@ public:
 
 	void sendToBack( const VObject& object );
 
-	void setName( const QString& name ) { m_name = name; }
-	const QString& name() { return m_name; }
-
 	void setSelected( bool state ) { setState( state ? VObject::selected : VObject::normal ); }
 	bool selected() { return state() == VObject::selected; }
-
-private:
-	QString m_name;     /// id for the layer
 };
 
 #endif

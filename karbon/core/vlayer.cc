@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,10 +32,18 @@
 #include "vlayer_iface.h"
 #include <kdebug.h>
 #include "vclipgroup.h"
+#include "vfill.h"
+#include "vstroke.h"
 
 VLayer::VLayer( VObject* parent, VState state )
-	: VGroup( parent, state ), m_name( i18n( "Layer" ) )
+	: VGroup( parent, state )
 {
+	setName( "Layer" );
+	// HACK : vlayer just shouldnt have fill/stroke at all
+	delete m_fill;
+	m_fill = 0L;
+	delete m_stroke;
+	m_stroke = 0L;
 }
 
 VLayer::VLayer( const VLayer& layer )
@@ -129,8 +136,6 @@ VLayer::save( QDomElement& element ) const
 	QDomElement me = element.ownerDocument().createElement( "LAYER" );
 	element.appendChild( me );
 
-	me.setAttribute( "name", m_name );
-
 	if( state() == normal || state() == normal_locked )
 		me.setAttribute( "visible", 1 );
 
@@ -138,12 +143,13 @@ VLayer::save( QDomElement& element ) const
 	VObjectListIterator itr = m_objects;
 	for ( ; itr.current(); ++itr )
 		itr.current()->save( me );
+
+	VObject::save( me );
 }
 
 void
 VLayer::load( const QDomElement& element )
 {
-	m_name = element.attribute( "name" );
 	setState( element.attribute( "visible" ) == 0 ? hidden : normal );
 	VGroup::load( element );
 }
