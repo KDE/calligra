@@ -50,9 +50,9 @@ public:
     /**
      *  Constructor.
      *
-     *  Initializes a window with a file toolbar.
+     *  Initializes a KOffice Main-Window (with its basic GUI etc.).
      */
-    KoMainWindow( KInstance *instance = 0, const char *_name = 0 );
+    KoMainWindow( KInstance *instance, const char *_name = 0 );
 
     /**
      *  Destructor.
@@ -215,7 +215,8 @@ protected:
      */
     virtual bool saveDocument( bool _saveas = false );
 
-    virtual void closeEvent(QCloseEvent *e);
+    virtual void closeEvent( QCloseEvent * e );
+    virtual void resizeEvent( QResizeEvent * e );
     virtual bool queryClose();
 
     virtual bool eventFilter(QObject *obj, QEvent *ev);

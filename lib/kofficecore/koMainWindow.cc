@@ -141,6 +141,7 @@ public:
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     : KParts::MainWindow( name )
 {
+    ASSERT(instance);
     d = new KoMainWindowPrivate;
 
     d->m_manager = new KoPartManager( this );
@@ -213,7 +214,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     // Load list of recent files
     KConfig * config = instance ? instance->config() : KGlobal::config();
     m_recent->loadEntries( config );
-    config->sync();
 
     createShellGUI();
     d->bMainWindowGUIBuilt = true;
@@ -222,12 +222,21 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->statusBarLabel = new QLabel( statusBar() );
     statusBar()->addWidget( d->statusBarLabel, 1, true );
 
-    if (QApplication::desktop()->width() > 1100) // very big desktop ?
-        resize( 900, 800 );
-    if (QApplication::desktop()->width() > 850) // big desktop ?
-        resize( 700, 600 );
-    else // small (800x600, 640x480) desktop
-        resize( 600, 400 );
+    if ( !initialGeometrySet() )
+    {
+        // Default size
+        if (QApplication::desktop()->width() > 1100) // very big desktop ?
+            resize( 900, 800 );
+        if (QApplication::desktop()->width() > 850) // big desktop ?
+            resize( 700, 600 );
+        else // small (800x600, 640x480) desktop
+            resize( 600, 400 );
+    }
+
+    // Saved size
+    config->setGroup( "MainWindow" );
+    kdDebug(30003) << "KoMainWindow::restoreWindowSize" << endl;
+    restoreWindowSize( config );
 }
 
 KoMainWindow::~KoMainWindow()
@@ -487,6 +496,12 @@ void KoMainWindow::closeEvent(QCloseEvent *e) {
     if(queryClose()) {
         if (settingsDirty() && rootDocument())
         {
+            // Save window size into the config file of our instance
+            instance()->config()->setGroup( "MainWindow" );
+            kdDebug(30003) << "KoMainWindow::closeEvent -> saveWindowSize" << endl;
+            saveWindowSize( instance()->config() );
+            // Save toolbar position into the config file of the app, under the doc's instance name
+            kdDebug() << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
             saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
             KGlobal::config()->sync();
             resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
@@ -494,6 +509,12 @@ void KoMainWindow::closeEvent(QCloseEvent *e) {
         setRootDocument(0L);
         KParts::MainWindow::closeEvent(e);
     }
+}
+
+void KoMainWindow::resizeEvent( QResizeEvent * e )
+{
+    setSettingsDirty();
+    KParts::MainWindow::resizeEvent( e );
 }
 
 bool KoMainWindow::queryClose()
