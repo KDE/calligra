@@ -1066,8 +1066,6 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
     QString xpos1 = StyleFactory::toCM( orig.attribute( "x" ) );
     QString xpos2 = QString( "%1cm" ).arg( KoUnit::toCM( x2 ) );
 
-    target.setAttribute( "svg:x1", StyleFactory::toCM( orig.attribute( "x" ) ) );
-    target.setAttribute( "svg:x2", QString( "%1cm" ).arg( KoUnit::toCM( x2 ) ) );
     if ( type == 0 )
     {
         target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y2/2.0 ) ) );
