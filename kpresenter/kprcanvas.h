@@ -426,7 +426,6 @@ protected:
     void _repaint( KPObject *o );
 
     void printPage( QPainter*, int pageNum );
-    void changePages( QPixmap, QPixmap, PageEffect );
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
@@ -579,4 +578,4 @@ private:
     bool m_drawSymetricObject;
 };
 
-#endif //PAGE_H
+#endif // __KPRCANVAS__

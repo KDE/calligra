@@ -34,7 +34,6 @@ class QPixmap;
 
 class KPPixmapObject : public KP2DObject
 {
-    friend class KPrCanvas;
 
 public:
     KPPixmapObject( KoPictureCollection *_imageCollection );
