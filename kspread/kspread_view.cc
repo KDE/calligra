@@ -419,7 +419,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     (void) new KAction( i18n("&Hyperlink..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
     (void) new KAction( i18n("&Object..."), "parts", 0, this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
-    (void) new KAction( i18n("&Chart"), "chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
+    (void) new KAction( i18n("&Chart"), "frame_chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
     m_autoSum = new KAction( i18n("AutoSum"), "black_sum", 0, this, SLOT( autoSum() ),
                              actionCollection(), "autoSum" );
