@@ -1695,8 +1695,9 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
   /* the cellref passed in should be this cell -- except if this is the default
      cell */
-  Q_ASSERT(!((cellRef.x() != m_iColumn) || (cellRef.y() != m_iRow)) &&
-           !isDefault());
+
+  Q_ASSERT(!(((cellRef.x() != m_iColumn) || (cellRef.y() != m_iRow)) &&
+           !isDefault()));
 
 
 
