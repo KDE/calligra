@@ -1,0 +1,28 @@
+/* XPM */
+static const char *magick[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 6 1",
+"  c Gray0",
+". c #000080",
+"X c Yellow",
+"o c #808080",
+"O c #c0c0c0",
+"+ c None",
+/* pixels */
+"+++++o..o+++++++",
+"+++++.++.o++++++",
+"+++++.+ . o+++++",
+"+++++. O.o o++++",
+"+++++ O .Oo...++",
+"++++ O  . O....+",
+"+++ O  O OOo...+",
+"++ O  OOOOoo...+",
+"+++  OOOOoo +..+",
+"++++ OOOoo ++.o+",
+"+++++ ooo +++o++",
+"++++++ o +++++++",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX"
+};
