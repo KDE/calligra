@@ -20,20 +20,13 @@
 // This file has to be included, or kimageeffect will fail to compile!?!
 #include <qimage.h>
 #include <qdom.h>
+
 #include <kdebug.h>
+#include <kglobal.h>
 
 #include <gobject.h>
 #include <graphiteglobal.h>
 
-
-QString GraphiteGlobal::attrPenColor=QString::fromLatin1("color");
-QString GraphiteGlobal::attrPenStyle=QString::fromLatin1("style");
-QString GraphiteGlobal::attrWidth=QString::fromLatin1("width");
-QString GraphiteGlobal::attrPenJoinStyle=QString::fromLatin1("joinstyle");
-QString GraphiteGlobal::attrPenCapStyle=QString::fromLatin1("capstyle");
-QString GraphiteGlobal::attrX=QString::fromLatin1("x");
-QString GraphiteGlobal::attrY=QString::fromLatin1("y");
-QString GraphiteGlobal::attrHeight=QString::fromLatin1("height");
 
 const bool operator==(const Gradient &lhs, const Gradient &rhs) {
 
@@ -95,6 +88,12 @@ void GraphiteGlobal::setResoltuion(const int &resolution) {
 
 QDomElement GraphiteGlobal::createElement(const QString &tagName, const QPen &pen, QDomDocument &doc) const {
 
+    static const QString &attrPenColor=KGlobal::staticQString("color");
+    static const QString &attrPenStyle=KGlobal::staticQString("style");
+    static const QString &attrWidth=KGlobal::staticQString("width");
+    static const QString &attrPenJoinStyle=KGlobal::staticQString("joinstyle");
+    static const QString &attrPenCapStyle=KGlobal::staticQString("capstyle");
+
     QDomElement e=doc.createElement(tagName);
     e.setAttribute(attrPenColor, pen.color().name());
     e.setAttribute(attrPenStyle, static_cast<int>(pen.style()));
@@ -107,6 +106,13 @@ QDomElement GraphiteGlobal::createElement(const QString &tagName, const QPen &pe
 QPen GraphiteGlobal::toPen(const QDomElement &element) const {
 
     QPen pen;
+
+    static const QString &attrPenColor=KGlobal::staticQString("color");
+    static const QString &attrPenStyle=KGlobal::staticQString("style");
+    static const QString &attrWidth=KGlobal::staticQString("width");
+    static const QString &attrPenJoinStyle=KGlobal::staticQString("joinstyle");
+    static const QString &attrPenCapStyle=KGlobal::staticQString("capstyle");
+
     if(element.hasAttribute(attrPenColor))
 	pen.setColor(QColor(element.attribute(attrPenColor)));
     if(element.hasAttribute(attrPenStyle))
@@ -122,6 +128,11 @@ QPen GraphiteGlobal::toPen(const QDomElement &element) const {
 
 QDomElement GraphiteGlobal::createElement(const QString &tagName, const QRect &rect, QDomDocument &doc) const {
 
+    static const QString &attrX=KGlobal::staticQString("x");
+    static const QString &attrY=KGlobal::staticQString("y");
+    static const QString &attrWidth=KGlobal::staticQString("width");
+    static const QString &attrHeight=KGlobal::staticQString("height");
+
     QDomElement e=doc.createElement(tagName);
     e.setAttribute(attrX, rect.left());
     e.setAttribute(attrY, rect.top());
@@ -133,6 +144,12 @@ QDomElement GraphiteGlobal::createElement(const QString &tagName, const QRect &r
 QRect GraphiteGlobal::toRect(const QDomElement &element) const {
 
     QRect rect;
+
+    static const QString &attrX=KGlobal::staticQString("x");
+    static const QString &attrY=KGlobal::staticQString("y");
+    static const QString &attrWidth=KGlobal::staticQString("width");
+    static const QString &attrHeight=KGlobal::staticQString("height");
+
     if(element.hasAttribute(attrX))
 	rect.setTop(element.attribute(attrX).toInt());
     if(element.hasAttribute(attrY))

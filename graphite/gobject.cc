@@ -515,23 +515,23 @@ void G2DObjectM9r::updatePreview(int btn) {
 }
 
 
-QString GObject::tagObject=QString::fromLatin1("gobject");
-QString GObject::attrName=QString::fromLatin1("name");
-QString GObject::attrState=QString::fromLatin1("state");
-QString GObject::attrAngle=QString::fromLatin1("angle");
-QString GObject::tagFormat=QString::fromLatin1("format");
-QString GObject::attrFillStyle=QString::fromLatin1("fillStyle");
-QString GObject::attrBrushStyle=QString::fromLatin1("brushStyle");
-QString GObject::attrBrushColor=QString::fromLatin1("brushColor");
-QString GObject::tagGradient=QString::fromLatin1("gradient");
-QString GObject::attrColorA=QString::fromLatin1("colorA");
-QString GObject::attrColorB=QString::fromLatin1("colorB");
-QString GObject::attrType=QString::fromLatin1("type");
-QString GObject::attrXFactor=QString::fromLatin1("xfactor");
-QString GObject::attrYFactor=QString::fromLatin1("yfactor");
-QString GObject::tagPen=QString::fromLatin1("pen");
-
 QDomElement GObject::save(QDomDocument &doc) const {
+
+    static const QString &tagObject=KGlobal::staticQString("gobject");
+    static const QString &attrName=KGlobal::staticQString("name");
+    static const QString &attrState=KGlobal::staticQString("state");
+    static const QString &attrAngle=KGlobal::staticQString("angle");
+    static const QString &tagFormat=KGlobal::staticQString("format");
+    static const QString &attrFillStyle=KGlobal::staticQString("fillStyle");
+    static const QString &attrBrushStyle=KGlobal::staticQString("brushStyle");
+    static const QString &attrBrushColor=KGlobal::staticQString("brushColor");
+    static const QString &tagGradient=KGlobal::staticQString("gradient");
+    static const QString &attrColorA=KGlobal::staticQString("colorA");
+    static const QString &attrColorB=KGlobal::staticQString("colorB");
+    static const QString &attrType=KGlobal::staticQString("type");
+    static const QString &attrXFactor=KGlobal::staticQString("xfactor");
+    static const QString &attrYFactor=KGlobal::staticQString("yfactor");
+    static const QString &tagPen=KGlobal::staticQString("pen");
 
     // A GObject is saved to a node which is stored inside
     // its parent. That way the "tree" can be built up on
@@ -684,7 +684,23 @@ GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
 GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty(true),
 					       m_ok(false) {
 
-    if(element.tagName()!=QString::fromLatin1("gobject"))
+    static const QString &tagObject=KGlobal::staticQString("gobject");
+    static const QString &attrName=KGlobal::staticQString("name");
+    static const QString &attrState=KGlobal::staticQString("state");
+    static const QString &attrAngle=KGlobal::staticQString("angle");
+    static const QString &tagFormat=KGlobal::staticQString("format");
+    static const QString &attrFillStyle=KGlobal::staticQString("fillStyle");
+    static const QString &attrBrushStyle=KGlobal::staticQString("brushStyle");
+    static const QString &attrBrushColor=KGlobal::staticQString("brushColor");
+    static const QString &tagGradient=KGlobal::staticQString("gradient");
+    static const QString &attrColorA=KGlobal::staticQString("colorA");
+    static const QString &attrColorB=KGlobal::staticQString("colorB");
+    static const QString &attrType=KGlobal::staticQString("type");
+    static const QString &attrXFactor=KGlobal::staticQString("xfactor");
+    static const QString &attrYFactor=KGlobal::staticQString("yfactor");
+    static const QString &tagPen=KGlobal::staticQString("pen");
+
+    if(element.tagName()!=tagObject )
 	return;
 
     bool ok;

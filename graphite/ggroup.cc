@@ -18,7 +18,9 @@
 */
 
 #include <qdom.h>
+
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <ggroup.h>
 #include <gobjectfactory.h>
@@ -28,9 +30,6 @@
 #include <kdialogbase.h>
 #include <kdebug.h>
 
-
-QString GGroup::tagChildren=QString::fromLatin1("children");
-QString GGroup::tagGGroup=QString::fromLatin1("ggroup");
 
 GGroup::GGroup(const QString &name) : GObject(name), m_iterator(0L) {
     m_iterator=new QListIterator<GObject>(m_members);
@@ -59,6 +58,8 @@ GGroup::GGroup(const QDomElement &element) :
 
     if(!m_ok)
 	return;
+
+    static const QString &tagChildren=KGlobal::staticQString("children");
 
     m_iterator=new QListIterator<GObject>(m_members);
 
@@ -168,6 +169,9 @@ const GObject *GGroup::current() const {
 }
 
 QDomElement GGroup::save(QDomDocument &doc) const {
+
+    static const QString &tagChildren=KGlobal::staticQString("children");
+    static const QString &tagGGroup=KGlobal::staticQString("ggroup");
 
     QDomElement element=doc.createElement(tagGGroup);
     QDomElement children=doc.createElement(tagChildren);

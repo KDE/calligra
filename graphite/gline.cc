@@ -21,15 +21,10 @@
 #include <qapp.h>
 #include <qpainter.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <gline.h>
 
-
-QString GLine::tagGLine=QString::fromLatin1("gline");
-QString GLine::tagStart=QString::fromLatin1("start");
-QString GLine::tagEnd=QString::fromLatin1("end");
-QString GLine::attrX=QString::fromLatin1("x");
-QString GLine::attrY=QString::fromLatin1("y");
 
 GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(name),
 								      m_a(a), m_b(b) {
@@ -48,6 +43,11 @@ GLine::GLine(const QDomElement &element) :
 	return;
 
     bool ok;
+    static const QString &tagGLine=KGlobal::staticQString("gline");
+    static const QString &tagStart=KGlobal::staticQString("start");
+    static const QString &tagEnd=KGlobal::staticQString("end");
+    static const QString &attrX=KGlobal::staticQString("x");
+    static const QString &attrY=KGlobal::staticQString("y");
 
     if(element.tagName()!=tagGLine) {
 	m_ok=false;
@@ -94,6 +94,12 @@ GLine *GLine::instantiate(const QDomElement &element) const {
 }
 
 QDomElement GLine::save(QDomDocument &doc) const {
+
+    static const QString &tagGLine=KGlobal::staticQString("gline");
+    static const QString &tagStart=KGlobal::staticQString("start");
+    static const QString &tagEnd=KGlobal::staticQString("end");
+    static const QString &attrX=KGlobal::staticQString("x");
+    static const QString &attrY=KGlobal::staticQString("y");
 
     QDomElement e=doc.createElement(tagGLine);
     QDomElement point=doc.createElement(tagStart);

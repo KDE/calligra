@@ -27,8 +27,8 @@
 // compound objects
 #include <ggroup.h>
 
-GObjectFactory *GObjectFactory::m_self=0L;
 
+GObjectFactory *GObjectFactory::m_self=0L;
 
 GObjectFactory *GObjectFactory::self() {
 
@@ -76,7 +76,7 @@ GObjectFactory::GObjectFactory() : m_registry(17, false) {
     // TODO: Change the size of the Hash Table to fit the
     // number of objects better
     m_registry.setAutoDelete(true);
-    
+
     // primitives
     registerPrototype(QString::fromLatin1("gline"),
 		      new GLine(QString::fromLatin1("line")));

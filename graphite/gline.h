@@ -70,12 +70,6 @@ public:
 private:
     GLine &operator=(const GLine &rhs);    // don't assign the objects, clone them
     QPoint m_a, m_b;
-
-    static QString tagGLine;
-    static QString tagStart;
-    static QString tagEnd;
-    static QString attrX;
-    static QString attrY;
 };
 
 

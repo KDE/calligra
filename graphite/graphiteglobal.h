@@ -106,15 +106,6 @@ private:
     QString m_unitString;
     double m_zoom;
     double m_resolution;
-
-    static QString attrPenColor;
-    static QString attrPenStyle;
-    static QString attrWidth;
-    static QString attrPenJoinStyle;
-    static QString attrPenCapStyle;
-    static QString attrX;
-    static QString attrY;
-    static QString attrHeight;
 };
 
 

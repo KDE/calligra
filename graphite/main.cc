@@ -42,5 +42,5 @@ int main(int argc, char **argv) {
     // Register DCOP interface, TODO
 
     app.start(); // parses command line args, create initial docs and shells
-    app.exec();
+    return app.exec();
 }
