@@ -1,10 +1,10 @@
-		KIllustrator - Release 0.6
-		==========================
+		KIllustrator - Release 0.6.3
+		============================
 
 1. Introduction
 ---------------
 
-Welcome to release 0.6 of KIllustrator - the vector
+Welcome to release 0.6.3 of KIllustrator - the vector
 drawing program for the K Desktop Environment. The aim of the
 KIllustrator project is the development of a freely available
 vector-based drawing application similiar to Corel Draw or Adobe
@@ -22,9 +22,9 @@ package for yourself. But the configuration and compilation conforms
 to the usual GNU autoconf procedure.
 
 After downloading the archive, unpack the distribution with
-	gunzip -c killustrator-0.6.tar.gz | tar xvof -
+	gunzip -c killustrator-0.6.3.tar.gz | tar xvof -
 Next, change into the distribution directory 
-	cd killustrator-0.6
+	cd killustrator-0.6.3
 and invoke
 	./configure
 
@@ -76,20 +76,16 @@ Here is a short description of currently implemented features:
 - Alignment of text
 - XML-based file format
 - Support for different measurement units: inches, millimeter, points
-- A rudimentary Xfig import filter:
-  * Support for 3.1 and 3.2 files
-  * Splines not implemented
-
-New in this release:
-- Shearing implemented.
-- Bitmap objects (GIF, JPEG, XPM, XBM, PNG).
 - Alignment of text to path. Supported pathes are polylines, bezier curves,
   polygons and ellipses.
 - An outline mode.
 - Configuring of tools by double click.
 - Inserting and deleting of points in polylines and curves.
 - KDE session management.
-- Bugfixes.
+- Help lines.
+- A rudimentary Xfig import filter:
+  * Support for 3.1 and 3.2 files
+  * Splines not implemented
 
 The handling follows the Corel Draw(tm) user interface. That means:
 - Holding down the control key during object creation
@@ -117,6 +113,10 @@ The handling follows the Corel Draw(tm) user interface. That means:
   * Polylines and bezier curves are closed by SHIFT+Right button.
   * You can cancel selection or line adding with ESC.
 
+Look at the KIllustrator web site 
+	http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator.html
+for more information.
+
 4. Contributions
 ----------------
 
@@ -129,14 +129,8 @@ work.
 5. Bugs
 -------
 
-Of course the current snapshot contains a lot of bugs. Here is a list
-of known bugs and limitations:
-- session management isn't implemented
-- export to raster image consumes a lot of memory
-- the drawing code is slow
-- no help available
-- poorly documented code ;-)
-- undo/redo for layer operations not implemented
+Of course the current release contains some bugs. Look at
+	http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
 
 6. Download
 -----------
@@ -148,21 +142,7 @@ In addition, the sourrce code should available from the KDE ftp site
 and it's mirrors:
         ftp://ftp.kde.org
 
-7. Contributors
----------------
-
-8. History
-----------
-
-12/??/98: release 0.6
-11/06/98: release 0.5
-08/28/98: release 0.4.1
-08/10/98: release 0.4
-06/02/98: release 0.3
-04/21/98: second snapshot released
-03/25/98: first preview version released
-
-9. Contact 
+7. Contact 
 ----------
 
 I am interested to know if you find KIllustrator useful. If you would

@@ -451,7 +451,7 @@ void GObject::invalidateClipRegion  () {
 
 const char* GObject::getId () {
   if (! hasId ())
-    id.sprintf ("%ld", (long) time ((time_t) 0L));
+    id.sprintf ("id%ld", (long) time ((time_t) 0L));
   return (const char *) id;
 }
 

@@ -114,10 +114,19 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     float xoff = xpos - firstpos.x ();
     float yoff = ypos - firstpos.y ();
     if (me->state () & ControlButton) {
-      if (xoff > yoff)
+      bool wasNegative;
+      if (fabs (xoff) > fabs (yoff)) {
+	wasNegative = yoff < 0.0;
 	yoff = xoff;
-      else
+	if ((yoff > 0 && wasNegative) || (yoff < 0 && !wasNegative)) 
+	  yoff = -yoff;
+      }
+      else {
+	wasNegative = xoff < 0.0;
 	xoff = yoff;
+	if ((xoff > 0 && wasNegative) || (xoff < 0 && !wasNegative)) 
+	  xoff = -xoff;
+      }
     }
     scale (doc, oldmask, xoff, yoff, true);
   }
@@ -298,10 +307,19 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 	    canvas->setCursor (crossCursor);
 	  }
 	  if (me->state () & ControlButton) {
-	    if (xoff > yoff)
+	    bool wasNegative;
+	    if (fabs (xoff) > fabs (yoff)) {
+	      wasNegative = yoff < 0.0;
 	      yoff = xoff;
-	    else
+	      if ((yoff > 0 && wasNegative) || (yoff < 0 && !wasNegative)) 
+		yoff = -yoff;
+	    }
+	    else {
+	      wasNegative = xoff < 0.0;
 	      xoff = yoff;
+	      if ((xoff > 0 && wasNegative) || (xoff < 0 && !wasNegative)) 
+		xoff = -xoff;
+	    }
 	  }
 	  scale (doc, oldmask, xoff, yoff);
 	  break;

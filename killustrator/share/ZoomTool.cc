@@ -38,7 +38,10 @@ void ZoomTool::processEvent (QEvent* e, GDocument *doc,
 				  Canvas* canvas) {
   if (e->type () == Event_MouseButtonRelease) {
     QMouseEvent *me = (QMouseEvent *) e;
-    canvas->zoomIn (me->x (), me->y ());
+    if (me->button () == LeftButton)
+      canvas->zoomIn (me->x (), me->y ());
+    else if (me->button () == RightButton)
+      canvas->zoomOut ();
     emit operationDone ();
   }
 }

@@ -14,12 +14,9 @@
           strokestyle CDATA   #IMPLIED
           linewidth   CDATA   "1"
           fillcolor   CDATA   "white"
-          fill        (0 | 1) "1"'
->
-
-<!ENTITY % font_attributes
-         'font      CDATA #IMPLIED
-          textsize  CDATA #IMPLIED'
+          fill        (0 | 1) "1"
+          id          ID   
+          ref         IDREF'
 >
 
 <!-- ============================================================= -->
@@ -32,8 +29,8 @@
 >
 
 <!ELEMENT doc (head, %base_content_model;) >
-<!ATTLIST doc editor "KIllustrator"
-              mime   "application/x-killustrator"
+<!ATTLIST doc editor CDATA "KIllustrator"
+              mime   CDATA "application/x-killustrator"
 >
 
 <!ELEMENT head (layout, info?) >
@@ -134,11 +131,16 @@
 <!--
      text element
 -->
-<!ELEMENT text (#PCDATA) >
+<!ELEMENT text (font)* >
 <!ATTLIST text %base_content_attributes;
-               %font_attributes;
                x CDATA #IMPLIED
                y CDATA #IMPLIED
+>
+
+<!ELEMENT font (#PCDATA | br)* >
+<!ATTLIST font face       CDATA #REQUIRED
+               point-size CDATA #REQUIRED
+               weight     CDATA #REQUIRED
 >
 
 <!--
