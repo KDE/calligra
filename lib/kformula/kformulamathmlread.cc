@@ -1445,11 +1445,48 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
             impl->msubsup( element, docnode );
 	}
 
-        // content markup (not yet usable)
+        // content markup (not yet complete)
         else if ( tag == ( oasisFormat ? "math:apply" : "apply" )) {
             type = CONTENT;
             QDomNode n = element.firstChild();
             QDomElement op = n.toElement();
+                uint count = element.childNodes().count();
+		//adding explicit brackets to replace "apply"s implicit ones
+		QDomElement brackets = doc.createElement("BRACKET");
+		brackets.setAttribute("RIGHT", "41");
+		brackets.setAttribute("LEFT", "40");
+		QDomElement content = doc.createElement("CONTENT");
+		brackets.appendChild(content);
+		QDomElement base = doc.createElement("SEQUENCE");
+		content.appendChild(base);
+		docnode.appendChild(brackets);
+		//Arithmetic, Algebra and Logic operators status
+		// quotient	X
+		// factorial	O
+		// divide	O
+		// max, min	X
+		// minus	O
+		// plus		O
+		// power	O
+		// rem		X
+		// times	O
+		// root		X
+		// gcd		X
+		// and		O
+		// or		O
+		// xor		O
+		// not		O
+		// implies	O
+		// forall	X
+		// exists	X
+		// abs		O
+		// conjugate	X
+		// arg		X
+		// real		X
+		// imaginary	X
+		// lcm		X
+		// floor	X
+		// ceiling	X
 
             // n-ary
             if ( op.tagName() == "plus" || op.tagName() == "times" ||
@@ -1474,14 +1511,14 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
                             else if ( op.tagName() == "or" )
                                 value = "|";
                             else if ( op.tagName() == "xor" )
-                                value = "#"; // ???
+                                value = "^"; // ???
 
-                            text.setAttribute( "CHAR", value );
-                            docnode.appendChild( text );
+                            text.setAttribute( "CHAR", value );	//switch to createTextElements?
+                            base.appendChild( text );
                         }
                         first = false;
                         QDomElement e = n.toElement();
-                        processElement( e, doc, docnode );
+                        processElement( e, doc, base );
                     }
                     n = n.nextSibling();
                 }
@@ -1490,27 +1527,81 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
             else if ( op.tagName() == "factorial" ) {
                 QDomElement e = n.nextSibling().toElement();
                 processElement( e, doc, docnode );
-                impl->createTextElements( "!", docnode );
+                impl->createTextElements( "!", base );
             }
             else if ( op.tagName() == "minus" ) {
-                uint count = op.childNodes().count();
                 n = n.nextSibling();
                 if ( count == 2 ) { // unary
-                    impl->createTextElements( "-", docnode );
+                    impl->createTextElements( "-", base );
                     QDomElement e = n.toElement();
-                    processElement( e, doc, docnode );
+                    processElement( e, doc, base );
                 }
                 else if ( count == 3 ) { // binary
-                    n = n.nextSibling();
                     QDomElement e = n.toElement();
-                    processElement( e, doc, docnode );
-                    impl->createTextElements( "-", docnode );
+                    processElement( e, doc, base );
+                    impl->createTextElements( "-", base );
                     n = n.nextSibling();
                     e = n.toElement();
-                    processElement( e, doc, docnode );
+                    processElement( e, doc, base );
                 }
             }
 
+		else if ( op.tagName() == "divide" && count == 3 ) {
+			n = n.nextSibling();
+        	        QDomElement e = n.toElement();
+			processElement( e, doc, base );
+			impl->createTextElements("/", base);
+			n = n.nextSibling();
+			e = n.toElement();
+			processElement( e, doc, base );
+		}
+		else if ( op.tagName() == "power" && count == 3 ) {
+			//code duplication of msub_sup(), but I can't find a way to cleanly call it
+			n = n.nextSibling();
+        	        QDomElement e = n.toElement();
+			QDomElement index = doc.createElement("INDEX");
+			base.appendChild(index);
+			QDomElement content = doc.createElement("CONTENT");
+			index.appendChild(content);
+			QDomElement sequence = doc.createElement("SEQUENCE");
+			content.appendChild(sequence);
+			processElement(e, doc, sequence);
+			QDomElement upper = doc.createElement("UPPERRIGHT");
+			index.appendChild(upper);
+			sequence = doc.createElement("SEQUENCE");
+			upper.appendChild(sequence);
+			n = n.nextSibling();
+        	        e = n.toElement();
+			processElement(e, doc, sequence);
+		}
+		else if ( op.tagName() == "abs" && count == 2) {
+			n = n.nextSibling();
+        	        QDomElement e = n.toElement();
+			QDomElement bracket = doc.createElement("BRACKET");
+			bracket.setAttribute("RIGHT", "257");
+			bracket.setAttribute("LEFT", "256");
+			base.appendChild(bracket);
+			QDomElement content = doc.createElement("CONTENT");
+			bracket.appendChild(content);
+			QDomElement sequence = doc.createElement("SEQUENCE");
+			content.appendChild(sequence);
+			processElement(e, doc, sequence);
+		}
+		else if ( op.tagName() == "not" && count == 2) {
+			n = n.nextSibling();
+        	        QDomElement e = n.toElement();
+			impl->createTextElements(QString(QChar(0xAC)), base);
+			processElement(e, doc, base);
+		}
+		else if ( op.tagName() == "implies" && count == 3 ) {
+			n = n.nextSibling();
+        	        QDomElement e = n.toElement();
+			processElement( e, doc, base );
+			impl->createTextElements(QString(QChar(0x21D2)), base);
+			n = n.nextSibling();
+			e = n.toElement();
+			processElement( e, doc, base );
+		}
             // many, many more...
 
         }
