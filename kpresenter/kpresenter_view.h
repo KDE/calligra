@@ -144,6 +144,9 @@ public slots:
     void viewShowNoteBar();
     void viewZoom( const QString &s );
 
+    void viewFooter();
+    void viewHeader();
+
     // insert menu
     void insertPage();
     void insertPicture();
@@ -777,6 +780,9 @@ private:
 
     KToggleAction *actionFormatSuper;
     KToggleAction *actionFormatSub;
+
+    KToggleAction *actionViewHeader;
+    KToggleAction *actionViewFooter;
 
     KAction* actionInsertSpecialChar;
     KAction *actionInsertLink;

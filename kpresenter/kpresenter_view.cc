@@ -2441,6 +2441,14 @@ void KPresenterView::setupActions()
         actionViewShowNoteBar->setChecked(true);
     }
 
+    actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
+                                          this, SLOT( viewHeader() ),
+                                          actionCollection(), "view_header" );
+    actionViewFooter = new KToggleAction( i18n( "Foo&ter" ), 0,
+                                          this, SLOT( viewFooter() ),
+                                          actionCollection(), "view_footer" );
+
+
     // ---------------- insert actions
 
     actionInsertPage = new KAction( i18n( "&Page..." ), "newslide", Key_F2,
@@ -5440,6 +5448,16 @@ QString KPresenterView::presentationDurationDataFormatChange( int _time )
 KPrPage * KPresenterView::stickyPage()
 {
     return m_pKPresenterDoc->stickyPage();
+}
+
+void KPresenterView::viewFooter()
+{
+    m_pKPresenterDoc->setFooter( actionViewFooter->isChecked() );
+}
+
+void KPresenterView::viewHeader()
+{
+    m_pKPresenterDoc->setHeader( actionViewHeader->isChecked());
 }
 
 #include <kpresenter_view.moc>

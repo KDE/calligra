@@ -1849,12 +1849,20 @@ void KPresenterDoc::deSelectAllObj()
 void KPresenterDoc::setHeader( bool b )
 {
     _hasHeader = b;
+    _header->setDrawEditRect( b );
+    _header->setDrawEmpty( b );
+
+    repaint(_hasHeader);
 }
 
 /*================================================================*/
 void KPresenterDoc::setFooter( bool b )
 {
     _hasFooter = b;
+    _footer->setDrawEditRect( b );
+    _footer->setDrawEmpty( b );
+
+    repaint(_footer);
 }
 
 /*================================================================*/
