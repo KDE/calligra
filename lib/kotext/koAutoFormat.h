@@ -26,7 +26,7 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
-#include <qvector.h>
+#include <qptrvector.h>
 
 class KoDocument;
 class KoTextParag;
