@@ -592,7 +592,7 @@ void KivioTabBar::hidePage()
 {
     if ( tabsList.count() ==  1)
     {
-        KMessageBox::error( this, i18n("You cannot hide the last page visible.") );
+        KMessageBox::error( this, i18n("You cannot hide the last visible page.") );
         return;
     }
     else
