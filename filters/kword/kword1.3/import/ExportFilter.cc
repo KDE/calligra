@@ -126,21 +126,13 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         if (ch!=' ')
         {
             // The next character is not a space anymore
-            if ( spaceNumber > 0 )
+            if (spaceNumber>1)
             {
                 strReturn+="<text:s text:c=\"";
                 strReturn+=QString::number(spaceNumber);
                 strReturn+="\"/>";
             }
             spaceNumber=-1;
-        }
-        else ( !i )
-        {
-            // We have a space at first position
-            // That is bad, if the next character is a space too.
-            // (The problem is something like <text:span> <text:s/> , as the space in between will be eaten (XML feature.))
-            // So start counting the space (but do not generate a space now!)
-            spaceNumber = 1;
         }
 
         // ### TODO: would be switch/case or if/elseif the best?
@@ -217,17 +209,12 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         }
     }
 
-    if ( spaceNumber > 0 )
+    if (spaceNumber>1)
     {
         // The last characters were spaces
         strReturn+="<text:s text:c=\"";
         strReturn+=QString::number(spaceNumber);
         strReturn+="\"/>";
-    }
-    else if ( ch == ' ' )
-    {
-        // The last character was a space, but it was not part of a space sequence
-        // ###TODO
     }
 
     return strReturn;
