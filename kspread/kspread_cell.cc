@@ -3546,7 +3546,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
  if ( d->hasExtra() && (d->extra()->extraWidth != 0.0) )
    w = d->extra()->extraWidth;
 
- 
+
   QString tmp;
   for ( int i = d->strOutText.length(); i != 0; i-- )
   {
@@ -4407,7 +4407,7 @@ void KSpreadCell::convertToDouble ()
 {
   if (isDefault())
     return;
-    
+
   setValue (getDouble ());
 }
 
@@ -4415,7 +4415,7 @@ void KSpreadCell::convertToPercent ()
 {
   if (isDefault())
     return;
-    
+
   setValue (getDouble ());
   d->value.setFormat (KSpreadValue::fmt_Percent);
 }
@@ -4424,7 +4424,7 @@ void KSpreadCell::convertToMoney ()
 {
   if (isDefault())
     return;
-    
+
   setValue (getDouble ());
   d->value.setFormat (KSpreadValue::fmt_Money);
   setPrecision (locale()->fracDigits());
@@ -4438,7 +4438,7 @@ void KSpreadCell::convertToTime ()
 
   if (isDefault() || isEmpty())
     return;
-    
+
   setValue (getDouble ());
   QTime time = value().asDateTime().time();
   int msec = (int) ( (value().asFloat() - (int) value().asFloat()) * 1000 );
@@ -4454,7 +4454,7 @@ void KSpreadCell::convertToDate ()
 
   if (isDefault() || isEmpty())
     return;
-    
+
   setValue (getDouble ());
 
   //TODO: why did we call setValue(), when we override it here?
@@ -4755,9 +4755,9 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     }
 
     saveOasisAnnotation( xmlwriter );
-    
+
     saveOasisValue (xmlwriter);
-    
+
     if (d->hasExtra() && d->extra()->validity)
     {
         KSpreadGenValidationStyle styleVal(d->extra()->validity);
@@ -5165,7 +5165,6 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     }
     if ( colSpan > 1 || rowSpan > 1 )
         forceExtraCells( d->column, d->row, colSpan - 1, rowSpan - 1 );
-
     // cell comment/annotation
     QDomElement annotationElement = KoDom::namedItemNS( element, KoXmlNS::office, "annotation" );
     if ( !annotationElement.isNull() )
@@ -5176,7 +5175,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         {
             QDomElement commentElement = node.toElement();
             if( !commentElement.isNull() )
-                if( commentElement.tagName() == "text:p" )
+                if( commentElement.tagName() == "p" && commentElement.namespaceURI() == KoXmlNS::text )
                 {
                     if( !comment.isEmpty() ) comment.append( '\n' );
                     comment.append( commentElement.text() );
@@ -5769,7 +5768,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
 bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 {
   //TODO: use ValueConverter::self()->asString() to generate strText
-  
+
   QString t = text.text();
   t = t.stripWhiteSpace();
 
