@@ -57,7 +57,9 @@ void KoPrintPreview::preview(QWidget* parent, const char* name, const QString & 
 	      
 	      m_pPartPreview->openURL( tmpFile );
 	      dialog.setMainWidget(m_pPartPreview->widget());
+	      dialog.resize(500,300);
 	      dialog.exec();
+	      
               unlink( QFile::encodeName(tmpFile) );
 	      return;
 	    }
