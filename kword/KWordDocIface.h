@@ -35,6 +35,34 @@ public:
 
 k_dcop:
     virtual int getNumPages();
+    virtual int getNumFrameSets();
+    virtual unsigned int getColumns();
+
+    //paper
+    virtual double ptTopBorder();
+    virtual double ptBottomBorder();
+    virtual double ptLeftBorder();
+    virtual double ptRightBorder();
+    virtual double ptPaperHeight();
+    virtual double ptPaperWidth();
+    virtual double ptColumnWidth();
+    virtual double ptColumnSpacing();
+    virtual double ptPageTop( int pgNum );
+
+    //configure
+    virtual double gridX();
+    virtual double gridY();
+    virtual void setGridX(double _gridx);
+    virtual void setGridY(double _gridy);
+    virtual QString getUnitName();
+    virtual double getIndentValue();
+    virtual void setIndentValue(double _ind);
+
+    virtual int getNbPagePerRow();
+    virtual void setNbPagePerRow(int _nb);
+    virtual int defaultColumnSpacing();
+    virtual void setDefaultColumnSpacing(int _val);
+    virtual int maxRecentFiles();
 
 private:
     KWDocument *doc;

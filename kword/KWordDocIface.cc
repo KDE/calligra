@@ -34,6 +34,121 @@ KWordDocIface::KWordDocIface( KWDocument *doc_ )
 
 int KWordDocIface::getNumPages()
 {
-    //todo
     return doc->getPages();
 }
+
+int KWordDocIface::getNumFrameSets()
+{
+    return doc->getNumFrameSets();
+}
+
+unsigned int KWordDocIface::getColumns()
+{
+    return doc->getColumns();
+}
+
+double KWordDocIface::ptTopBorder()
+{
+    return doc->ptTopBorder();
+}
+
+double KWordDocIface::ptBottomBorder()
+{
+    return doc->ptBottomBorder();
+}
+
+double KWordDocIface::ptLeftBorder()
+{
+    return doc->ptLeftBorder();
+}
+
+double KWordDocIface::ptRightBorder()
+{
+    return doc->ptRightBorder();
+}
+
+double KWordDocIface::ptPaperHeight()
+{
+    return doc->ptPaperHeight();
+}
+
+double KWordDocIface::ptPaperWidth()
+{
+    return doc->ptPaperWidth();
+}
+
+double KWordDocIface::ptColumnWidth()
+{
+    return doc->ptColumnWidth();
+}
+
+double KWordDocIface::ptColumnSpacing()
+{
+    return doc->ptColumnSpacing();
+}
+
+double KWordDocIface::ptPageTop( int pgNum )
+{
+    return doc->ptPageTop(pgNum);
+}
+
+double KWordDocIface::gridX()
+{
+    return doc->gridX();
+}
+
+double KWordDocIface::gridY()
+{
+    return doc->gridY();
+}
+
+void KWordDocIface::setGridX(double _gridx)
+{
+    doc->setGridX(_gridx);
+}
+
+void KWordDocIface::setGridY(double _gridy)
+{
+    doc->setGridY(_gridy);
+}
+
+QString KWordDocIface::getUnitName()
+{
+    return doc->getUnitName();
+}
+
+double KWordDocIface::getIndentValue()
+{
+    return doc->getIndentValue();
+}
+
+void KWordDocIface::setIndentValue(double _ind)
+{
+    doc->setIndentValue(_ind);
+}
+
+int KWordDocIface::getNbPagePerRow()
+{
+    return doc->getNbPagePerRow();
+}
+
+void KWordDocIface::setNbPagePerRow(int _nb)
+{
+    doc->setNbPagePerRow(_nb);
+}
+
+int KWordDocIface::defaultColumnSpacing()
+{
+    return doc->defaultColumnSpacing();
+}
+
+void KWordDocIface::setDefaultColumnSpacing(int _val)
+{
+    doc->setDefaultColumnSpacing(_val);
+}
+
+int KWordDocIface::maxRecentFiles()
+{
+    return doc->maxRecentFiles();
+}
+
