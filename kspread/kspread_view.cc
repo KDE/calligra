@@ -409,7 +409,7 @@ void KSpreadView::initialPosition()
 
     //init toggle button
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
-
+    m_tableFormat->setEnabled(false);
     /*recalc all dependent after loading*/
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )

@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstddirs.h>
+#include <knumvalidator.h>
 
 KSpreadPatternSelect::KSpreadPatternSelect( QWidget *parent, const char * ) : QFrame( parent )
 {
@@ -1432,19 +1433,21 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     grid->addMultiCellWidget(tmpQGroupBox,0,1,1,1);
 
 
-    tmpQGroupBox = new QGroupBox( this, "GroupBox_4" );
+    tmpQGroupBox = new QGroupBox(this, "GroupBox_4" );
     tmpQGroupBox->setFrameStyle( 49 );
     tmpQGroupBox->setTitle( i18n("Customize") );
     tmpQGroupBox->setAlignment( 1 );
 
     grid2 = new QGridLayout(tmpQGroupBox,2,2,15,7);
 
-    size=new QComboBox(tmpQGroupBox);
+    size=new QComboBox(true,tmpQGroupBox);
+
     grid2->addWidget(size,0,0);
+    size->setValidator(new KIntValidator( size ));
     QString tmp;
-    for(int i=0;i<4;i++)
+    for(int i=1;i<5;i++)
     	{
-    	tmp=tmp.setNum(i+1);
+    	tmp=tmp.setNum(i);
     	size->insertItem(tmp);
     	}
 
@@ -1684,7 +1687,8 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 void CellLayoutPageBorder::slotChangeStyle(int)
 {
   int index =style->currentItem();
-  int penSize=size->currentItem();
+  QString tmp;
+  int penSize=size->currentText().toInt();
   switch(index)
 	{
 	case 0:

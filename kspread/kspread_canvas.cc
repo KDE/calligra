@@ -2020,9 +2020,9 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
     RowLayout *rl = table->nonDefaultRowLayout( m_iResizedRow );
     int y = table->rowPos( m_iResizedRow, m_pCanvas );
-    if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < 20.0 )
+    if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < (20.0* m_pCanvas->zoom()) )
       //_ev->pos().y() < 20 )
-      rl->setHeight( 20, m_pCanvas );
+      rl->setHeight( 20* m_pCanvas->zoom(), m_pCanvas );
     else
       rl->setHeight( _ev->pos().y() - y, m_pCanvas );
     delete m_lSize;
@@ -2053,7 +2053,7 @@ void KSpreadVBorder::adjustRow(int _row)
     KSpreadTable *table = m_pCanvas->activeTable();
     assert( table );
     RowLayout *rl = table->nonDefaultRowLayout( select );
-    adjust=QMAX(20,adjust);
+    adjust=QMAX((int)(20* m_pCanvas->zoom()),adjust);
     rl->setHeight(adjust,m_pCanvas);
     m_pView->koDocument()->setModified(true);
   }
@@ -2067,7 +2067,7 @@ void KSpreadVBorder::resizeRow(int resize,int nb  )
   if(nb==-1)
   {
     RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
-    resize = QMAX( 20, resize );
+    resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
     rl->setHeight( resize, m_pCanvas );
   }
   else
@@ -2077,7 +2077,7 @@ void KSpreadVBorder::resizeRow(int resize,int nb  )
        || selection.right()==0)
     {
       RowLayout *rl = table->nonDefaultRowLayout( m_pCanvas->markerRow() );
-      resize=QMAX(20, resize);
+      resize=QMAX((int)(20* m_pCanvas->zoom()), resize);
       rl->setHeight( resize, m_pCanvas );
     }
     else
@@ -2086,7 +2086,7 @@ void KSpreadVBorder::resizeRow(int resize,int nb  )
       for (int i=selection.top();i<=selection.bottom();i++)
       {
         rl= table->nonDefaultRowLayout( i );
-        resize=QMAX(20, resize);
+        resize=QMAX((int)(20* m_pCanvas->zoom()), resize);
         rl->setHeight( resize, m_pCanvas );
       }
     }
@@ -2179,7 +2179,7 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
     painter.end();
 
-    QString tmpSize=i18n("Height: %1").arg(m_iResizePos-y);
+    QString tmpSize=i18n("Height: %1").arg((int)((m_iResizePos-y)/m_pCanvas->zoom()));
     painter.begin(this);
     int len = painter.fontMetrics().width(tmpSize );
     int hei = painter.fontMetrics().height( );
@@ -2347,8 +2347,8 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
     ColumnLayout *cl = table->nonDefaultColumnLayout( m_iResizedColumn );
     int x = table->columnPos( m_iResizedColumn, m_pCanvas );
-    if ( ( m_pCanvas->zoom() * (float)( _ev->pos().x() - x ) ) < 20.0 )
-      cl->setWidth( 20, m_pCanvas );
+    if ( ( m_pCanvas->zoom() * (float)( _ev->pos().x() - x ) ) < (20.0* m_pCanvas->zoom()) )
+      cl->setWidth( 20.0* m_pCanvas->zoom(), m_pCanvas );
     else
       cl->setWidth( _ev->pos().x() - x, m_pCanvas );
     delete m_lSize;
@@ -2381,7 +2381,7 @@ void KSpreadHBorder::adjustColumn(int _col)
     assert( table );
     ColumnLayout *cl = table->nonDefaultColumnLayout( select );
 
-    adjust = QMAX( 20, adjust );
+    adjust = QMAX( (int)(20 * m_pCanvas->zoom()), adjust );
     cl->setWidth( adjust, m_pCanvas );
     m_pView->koDocument()->setModified(true);
   }
@@ -2395,7 +2395,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb  )
   if( nb == -1 )
   {
     ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
-    resize = QMAX( 20, resize );
+    resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
     cl->setWidth( resize, m_pCanvas );
   }
   else
@@ -2406,7 +2406,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb  )
     {
       ColumnLayout *cl = table->nonDefaultColumnLayout( m_pCanvas->markerColumn() );
 
-      resize = QMAX( 20, resize );
+      resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
       cl->setWidth( resize, m_pCanvas );
     }
     else
@@ -2416,7 +2416,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb  )
       {
         cl= table->nonDefaultColumnLayout( i );
 
-        resize = QMAX( 20, resize );
+        resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
         cl->setWidth( resize, m_pCanvas );
       }
     }
@@ -2535,7 +2535,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
     painter.end();
 
-    QString tmpSize=i18n("Width : %1").arg(m_iResizePos-x);
+    QString tmpSize=i18n("Width : %1").arg((int)((m_iResizePos-x)/m_pCanvas->zoom()));
     painter.begin(this);
     int len = painter.fontMetrics().width(tmpSize );
     int hei = painter.fontMetrics().height( );
