@@ -159,8 +159,7 @@ void KivioOptionsDialog::initPage()
 
 void KivioOptionsDialog::initGrid()
 {
-  QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"),
-    kapp->iconLoader()->loadIcon("grid", KIcon::Toolbar, 32));
+  QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"), BarIcon( "grid", KIcon::SizeMedium ));
   m_gridIndex = pageIndex(page);
 
   KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->units();
