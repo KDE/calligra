@@ -15,9 +15,9 @@ SOPATCH =	0
 
 ####### Files
 
-SOURCES =	koIMR.cc koScanParts.cc
-HEADERS =	koIMR.h koScanParts.h
-OBJECTS =	koIMR.o koScanParts.o
+SOURCES =	koIMR.cc koScanParts.cc koStream.cc
+HEADERS =	koIMR.h koScanParts.h koStream.h
+OBJECTS =	koIMR.o koScanParts.o koStream.o
 SRCMETA =	
 TARGET	=	libkofficecore.so.$(SOMAJOR).$(SOMINOR)
 IDL	=	
@@ -177,3 +177,17 @@ koScanParts.o: /usr/include/dirent.h /usr/include/gnu/types.h
 koScanParts.o: /usr/include/linux/limits.h /usr/include/linux/dirent.h
 koScanParts.o: /usr/include/posix1_lim.h /usr/include/sys/stat.h
 koScanParts.o: /usr/include/linux/stat.h /opt/kde/include/ksimpleconfig.h
+koStream.o: koStream.h /opt/kde/include/komlParser.h /usr/include/string.h
+koStream.o: /usr/include/features.h /usr/include/sys/cdefs.h
+koStream.o: /usr/lib/gcc-lib/i486-linux/2.7.2.1/include/stddef.h
+koStream.o: /opt/kde/include/torben.h /opt/kde/include/komlFeed.h
+koStream.o: /opt/kde/include/komlWriter.h /usr/lib/qt/include/qrect.h
+koStream.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
+koStream.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
+koStream.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qcolor.h
+koStream.o: /usr/lib/qt/include/qpen.h /usr/lib/qt/include/qshared.h
+koStream.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qstring.h
+koStream.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
+koStream.o: /usr/lib/qt/include/qgeneric.h /usr/include/stdlib.h
+koStream.o: /usr/include/errno.h /usr/include/linux/errno.h
+koStream.o: /usr/include/asm/errno.h /usr/include/alloca.h
