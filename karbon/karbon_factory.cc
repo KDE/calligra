@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -91,7 +90,7 @@ KarbonFactory::aboutData()
 		s_aboutData = new KAboutData(
 						  "karbon",
 						  I18N_NOOP( "Karbon14" ),
-						  "0.0.1",
+						  "0.1",
 						  I18N_NOOP( "Yet another vector graphics application." ),
 						  KAboutData::License_GPL,
 						  I18N_NOOP( "(c) 2001, 2002 The Karbon Developers" ),
