@@ -52,7 +52,7 @@ bool KivioPluginStencilSpawner::load( const QString &f )
 {
     const char *error;
 
-    if( strstr( f.ascii(), ".ksp" )==NULL )
+    if ( !( f.right(4) == ".ksp" ) )
     {
        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " is not a KSP file" << endl;
         return false;

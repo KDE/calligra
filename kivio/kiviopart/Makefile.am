@@ -2,7 +2,7 @@
 ####   Makefile.am generated automatically by KDEStudio   ####
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
-SUBDIRS = ui kiviosdk tklib tools pics tiles stencils 
+SUBDIRS = ui kiviosdk tklib tools pics tiles stencils .
 
 kde_module_LTLIBRARIES = libkiviopart.la
 libkiviopart_la_LDFLAGS = -version-info 

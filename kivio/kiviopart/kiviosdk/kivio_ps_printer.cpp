@@ -98,8 +98,8 @@ bool KivioPSPrinter::start( const QString &_f, int numPages )
 			"%%%%PageOrder: Ascend\n"
 			"%%%%BoundingBox: 0 0 596 842\n"
 			"%%%%EndComments\n",
-			QFile::encodeName(m_fileName), numPages );
-			
+			QFile::encodeName(m_fileName).data(), numPages );
+
 	fprintf(m_fp,
 			"%%BeginProlog\n"
 			"/cp {closepath} bind def\n"
@@ -127,7 +127,7 @@ bool KivioPSPrinter::start( const QString &_f, int numPages )
 			"/tr {translate} bind def\n"
 			"/sp {showpage} bind def\n"
 			"%%EndProlog\n" );
-			
+
 	return true;
 }
 
@@ -148,7 +148,7 @@ void KivioPSPrinter::drawLine( float x1, float y1, float x2, float y2 )
 
 	fprintf( m_fp, "%f %s\n", m_pLineStyle->width(), PS_SETLINEWIDTH );
 	dumpColor( m_pLineStyle->color() );
-	
+
 
 	fprintf(m_fp, "%f %f %s\n", x1, y1, PS_MOVETO );
 	fprintf(m_fp, "%f %f %s\n", x2, y2, PS_LINETO );
@@ -179,7 +179,7 @@ void KivioPSPrinter::fillRect( float x, float y, float w, float h )
 
 	dumpColor( m_pFillStyle->color() );
 	fprintf(m_fp, "%f %f %f %f %s\n", x,y,w,h, PS_RECTFILL );
-	
+
 	dumpColor( m_pLineStyle->color() );
 	fprintf(m_fp, "%f %f %f %f %s\n", x, y, w, h, PS_RECTSTROKE );
 }
@@ -187,7 +187,7 @@ void KivioPSPrinter::fillRect( float x, float y, float w, float h )
 void KivioPSPrinter::drawBezier( QPointArray &pArray )
 {
     PS_CHECK_FP("drawBezier");
-    	
+
 	QPoint p1, p2, p3, p4;
 	p1 = pArray.point(0);
 	p2 = pArray.point(1);
@@ -196,7 +196,7 @@ void KivioPSPrinter::drawBezier( QPointArray &pArray )
 
 	fprintf( m_fp, "%f %s\n", m_pLineStyle->width(), PS_SETLINEWIDTH );
 	dumpColor( m_pLineStyle->color() );
-	
+
 	fprintf( m_fp, "%d %d %s\n", p1.x(), p1.y(), PS_MOVETO );
 	fprintf( m_fp, "%d %d %d %d %d %d %s\n", p2.x(), p2.y(), p3.x(), p3.y(), p4.x(), p4.y(), PS_CURVETO );
 	fprintf( m_fp, "%s\n", PS_STROKE );
@@ -213,11 +213,11 @@ void KivioPSPrinter::fillEllipse( float x, float y, float w, float h )
 		case KivioFillStyle::kcsNone: // hollow
 		   kdDebug() << "KivioPSPrinter::fillEllipse() - Cannot draw a hollow-filled-ellipse. Shape aborted." << endl;
 		   return;
-			
+
 		case KivioFillStyle::kcsSolid: // filled
 		   dumpColor( m_pFillStyle->color() );
 		   break;
-			
+
 		case KivioFillStyle::kcsGradient:
 		default:
 		   kdDebug() << "KivioPrinter::fillEllipse() - Gradient unsupported. Shape aborted.\n" << endl;
@@ -260,7 +260,7 @@ void KivioPSPrinter::drawLineArray( QList< KivioPoint > *pList )
 
 	fprintf( m_fp, "%f %s\n", m_pLineStyle->width(), PS_SETLINEWIDTH );
 	dumpColor( m_pLineStyle->color() );
-	
+
 	sPoint = pList->first();
 	while( sPoint )
 	{
@@ -270,11 +270,11 @@ void KivioPSPrinter::drawLineArray( QList< KivioPoint > *pList )
 		   kdDebug() << "KivioPSPrinter::drawLines() - sPoint without ePoint (shape aborted)\n" << endl;
 			return;
 		}
-		
+
 		fprintf( m_fp, "%f %f %s\n", sPoint->x(), sPoint->y(), PS_MOVETO );
 		fprintf( m_fp, "%f %f %s\n", ePoint->x(), ePoint->y(), PS_LINETO );
 		fprintf( m_fp, "%s\n", PS_STROKE );
-		
+
 		sPoint = pList->next();
 	}
 }
@@ -294,10 +294,10 @@ void KivioPSPrinter::drawPolyline( QList<KivioPoint> *pList )
 	while( pPoint )
 	{
 		fprintf(m_fp,  "%f %f %s\n", pPoint->x(), pPoint->y(), PS_MOVETO );
-		
+
 		pPoint = pList->next();
 	}
-	
+
 	fprintf( m_fp, "%s\n", PS_STROKE );
 }
 
@@ -309,42 +309,42 @@ void KivioPSPrinter::drawPolygon( QList< KivioPoint> *pList )
 	QColor bgColor = m_pFillStyle->color();
 
 	fprintf( m_fp, "%f %s\n", m_pLineStyle->width(), PS_SETLINEWIDTH );
-	
+
 	switch( m_pFillStyle->colorStyle() )
 	{
 		case KivioFillStyle::kcsNone: // hollow
 			dumpColor( m_pLineStyle->color() );
 			break;
-			
+
 		case KivioFillStyle::kcsSolid: // filled
 			dumpColor( bgColor );
 			break;
-			
+
 		case KivioFillStyle::kcsGradient:
 		default:
 		   kdDebug() << "KivioPrinter::drawPolygon() - Gradient unsupported\n" << endl;
 			break;
 	}
-	
+
 	pPoint = pList->first();
 	fprintf(m_fp,  "%f %f %s\n", pPoint->x(), pPoint->y(), PS_MOVETO );
 	pPoint = pList->next();
 	while( pPoint )
 	{
 		fprintf(m_fp,  "%f %f %s\n", pPoint->x(), pPoint->y(), PS_LINETO );
-		
+
 		pPoint = pList->next();
 	}
-	
+
 	fprintf( m_fp, "%s\n", PS_CLOSEPATH );
 
-		
+
 	switch( m_pFillStyle->colorStyle() )
 	{
 		case KivioFillStyle::kcsNone: // hollow
 			fprintf( m_fp, "%s\n", PS_STROKE );
 			break;
-			
+
 		case KivioFillStyle::kcsSolid: // filled
 			fprintf( m_fp, "%s\n", PS_GSAVE );
 			fprintf( m_fp, "%s\n", PS_FILL );
@@ -352,7 +352,7 @@ void KivioPSPrinter::drawPolygon( QList< KivioPoint> *pList )
 			fprintf( m_fp, "%s\n", PS_GRESTORE );
 			fprintf( m_fp, "%s\n", PS_STROKE );
 			break;
-			
+
 		case KivioFillStyle::kcsGradient:
 		default:
 		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n" << endl;
@@ -368,16 +368,16 @@ void KivioPSPrinter::drawLineArray( QPointArray &pArray  )
 
 	fprintf( m_fp, "%f %s\n", m_pLineStyle->width(), PS_SETLINEWIDTH );
 	dumpColor( m_pLineStyle->color() );
-	
+
 	for( int i=0; i<(int)(pArray.count()/2); i++ )
 	{
 		sPoint = pArray[i<<1];
 		ePoint = pArray[(i<<1)+1];
-		
+
 		fprintf( m_fp, "%d %d %s\n", sPoint.x(), sPoint.y(), PS_MOVETO );
 		fprintf( m_fp, "%d %d %s\n", ePoint.x(), ePoint.y(), PS_MOVETO );
 		fprintf( m_fp, "%s\n", PS_STROKE );
-	}	
+	}
 }
 
 void KivioPSPrinter::drawPolyline( QPointArray &pArray )
@@ -396,10 +396,10 @@ void KivioPSPrinter::drawPolyline( QPointArray &pArray )
 	for( ; i<(int)pArray.count(); i++ )
 	{
 		pPoint = pArray[i];
-		
+
 		fprintf(m_fp,  "%d %d %s\n", pPoint.x(), pPoint.y(), PS_LINETO );
 	}
-	
+
 	fprintf( m_fp, "%s\n", PS_STROKE );
 }
 
@@ -413,24 +413,24 @@ void KivioPSPrinter::drawPolygon( QPointArray &pArray )
 	int i;
 
 	fprintf( m_fp, "%f %s\n", m_pLineStyle->width(), PS_SETLINEWIDTH );
-	
+
 	switch( m_pFillStyle->colorStyle() )
 	{
 		case KivioFillStyle::kcsNone: // hollow
 			dumpColor( m_pLineStyle->color() );
 			break;
-			
+
 		case KivioFillStyle::kcsSolid: // filled
 			dumpColor( bgColor );
 			break;
-			
+
 		case KivioFillStyle::kcsGradient:
 		default:
 		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n" << endl;
 		   break;
 	}
 
-	i=0;	
+	i=0;
 	pPoint = pArray[i++];
 	fprintf(m_fp,  "%d %d %s\n", pPoint.x(), pPoint.y(), PS_MOVETO );
 
@@ -439,15 +439,15 @@ void KivioPSPrinter::drawPolygon( QPointArray &pArray )
 		pPoint = pArray[i];
 		fprintf(m_fp,  "%d %d %s\n", pPoint.x(), pPoint.y(), PS_LINETO );
 	}
-	
+
 	fprintf( m_fp, "%s\n", PS_CLOSEPATH );
-	
+
 	switch( m_pFillStyle->colorStyle() )
 	{
 		case KivioFillStyle::kcsNone: // hollow
 			fprintf( m_fp, "%s\n", PS_STROKE );
 			break;
-			
+
 		case KivioFillStyle::kcsSolid: // filled
 			fprintf( m_fp, "%s\n", PS_GSAVE );
 			fprintf( m_fp, "%s\n", PS_FILL );
@@ -456,7 +456,7 @@ void KivioPSPrinter::drawPolygon( QPointArray &pArray )
 			fprintf( m_fp, "%s\n", PS_STROKE );
 
 			break;
-			
+
 		case KivioFillStyle::kcsGradient:
 		default:
 		   kdDebug() << "KivioPSPrinter::drawPolygon() - Gradient unsupported\n" << endl;
@@ -469,10 +469,10 @@ void KivioPSPrinter::drawOpenPath( QList< KivioPoint > * pList )
     PS_CHECK_FP("drawOpenPath");
 
 	KivioPoint *pPoint, *pLastPoint, *p2, *p3, *p4;
-	
+
 	dumpColor( m_pLineStyle->color() );
 	fprintf(m_fp, "%f %s\n", m_pLineStyle->width(), PS_SETLINEWIDTH );
-	
+
 	pPoint = pList->first();
 	pLastPoint = NULL;
 	while( pPoint )
@@ -490,12 +490,12 @@ void KivioPSPrinter::drawOpenPath( QList< KivioPoint > * pList )
 					fprintf( m_fp, "%f %f %s\n", pPoint->x(), pPoint->y(), PS_LINETO );
 				}
 				break;
-				
+
 			case KivioPoint::kptBezier:
 				p2 = pList->next();
 				p3 = pList->next();
 				p4 = pList->next();
-				
+
 				if( !pLastPoint )
 				{
 					pLastPoint = p4;
@@ -505,20 +505,20 @@ void KivioPSPrinter::drawOpenPath( QList< KivioPoint > * pList )
 				{
 					fprintf( m_fp, "%f %f %s\n", pPoint->x(), pPoint->y(), PS_LINETO );
 				}
-				
+
 				fprintf( m_fp, "%f %f %f %f %f %f %s\n", p2->x(), p2->y(), p3->x(), p3->y(),
 						p4->x(), p4->y(), PS_CURVETO );
 				break;
-				
+
 			case KivioPoint::kptArc:
 			case KivioPoint::kptNone:
 			case KivioPoint::kptLast:
 				break;
 		}
-		
+
 		pPoint = pList->next();
 	}
-	
+
 	fprintf(m_fp, "%s\n", PS_STROKE );
 }
 
@@ -527,8 +527,8 @@ void KivioPSPrinter::drawClosedPath( QList< KivioPoint > * pList )
     PS_CHECK_FP("drawClosedPath");
 
 	KivioPoint *pPoint, *pLastPoint, *p2, *p3, *p4;
-	
-	
+
+
 	pPoint = pList->first();
 	pLastPoint = NULL;
 	while( pPoint )
@@ -546,12 +546,12 @@ void KivioPSPrinter::drawClosedPath( QList< KivioPoint > * pList )
 					fprintf( m_fp, "%f %f %s\n", pPoint->x(), pPoint->y(), PS_LINETO );
 				}
 				break;
-				
+
 			case KivioPoint::kptBezier:
 				p2 = pList->next();
 				p3 = pList->next();
 				p4 = pList->next();
-				
+
 				if( !pLastPoint )
 				{
 					pLastPoint = p4;
@@ -561,30 +561,30 @@ void KivioPSPrinter::drawClosedPath( QList< KivioPoint > * pList )
 				{
 					fprintf( m_fp, "%f %f %s\n", pPoint->x(), pPoint->y(), PS_LINETO );
 				}
-				
+
 				fprintf( m_fp, "%f %f %f %f %f %f %s\n", p2->x(), p2->y(), p3->x(), p3->y(),
 						p4->x(), p4->y(), PS_CURVETO );
 				break;
-				
+
 			case KivioPoint::kptArc:
 			case KivioPoint::kptNone:
 			case KivioPoint::kptLast:
 				break;
 		}
-		
+
 		pPoint = pList->next();
 	}
-	
+
 	fprintf(m_fp, "%s\n", PS_CLOSEPATH );
 	fprintf(m_fp, "%f %s\n", m_pLineStyle->width(), PS_SETLINEWIDTH );
-	
+
 	switch( m_pFillStyle->colorStyle() )
 	{
 		case KivioFillStyle::kcsNone:
 		    dumpColor( m_pLineStyle->color() );
 			fprintf( m_fp, "%s\n", PS_STROKE );
 			break;
-			
+
 		case KivioFillStyle::kcsSolid:
 		    dumpColor( m_pFillStyle->color() );
 			fprintf( m_fp, "%s\n", PS_GSAVE );
@@ -593,7 +593,7 @@ void KivioPSPrinter::drawClosedPath( QList< KivioPoint > * pList )
 			dumpColor( m_pLineStyle->color() );
 			fprintf( m_fp, "%s\n", PS_STROKE );
 			break;
-			
+
 		case KivioFillStyle::kcsGradient:
 		default:
 			break;
