@@ -56,6 +56,7 @@ void KoAutoFormat::readConfig()
     KConfigGroupSaver cgs( &config, "AutoFormat" );
     m_convertUpperCase = config.readBoolEntry( "ConvertUpperCase", false );
     m_convertUpperUpper = config.readBoolEntry( "ConvertUpperUpper", false );
+    m_advancedAutoCorrect= config.readBoolEntry( "AdvancedAutocorrect", true);
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicQuotes.begin = begin[0];
     QString end = config.readEntry( "TypographicQuotesEnd", "»" );
@@ -132,6 +133,7 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "TypographicQuotesBegin", QString( m_typographicQuotes.begin ) );
     config.writeEntry( "TypographicQuotesEnd", QString( m_typographicQuotes.end ) );
     config.writeEntry( "TypographicQuotesEnabled", m_typographicQuotes.replace );
+    config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect);
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
 
@@ -238,6 +240,8 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
 bool KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
 {
+    if(!m_advancedAutoCorrect)
+        return false;
     // Prepare an array with words of different lengths, all terminating at "index".
     // Obviously only full words are put into the array
     // But this allows 'find strings' with spaces and punctuation in them.
@@ -437,6 +441,11 @@ void KoAutoFormat::configUpperCase( bool _uc )
 void KoAutoFormat::configUpperUpper( bool _uu )
 {
     m_convertUpperUpper = _uu;
+}
+
+void KoAutoFormat::configAdvancedAutocorrect( bool _aa)
+{
+    m_advancedAutoCorrect = _aa;
 }
 
 bool KoAutoFormat::isUpper( const QChar &c )

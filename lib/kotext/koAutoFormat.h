@@ -92,6 +92,7 @@ public:
     void configTypographicQuotes( TypographicQuotes _tq );
     void configUpperCase( bool _uc );
     void configUpperUpper( bool _uu );
+    void configAdvancedAutocorrect( bool _aa);
 
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
@@ -99,6 +100,10 @@ public:
     { return m_convertUpperCase; }
     bool getConfigUpperUpper() const
     { return m_convertUpperUpper; }
+
+    bool getConfigAdvancedAutoCorrect() const
+    { return m_advancedAutoCorrect;}
+
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -156,7 +161,7 @@ private:
 
     //bool m_enabled;
     bool m_configRead;
-    bool m_convertUpperCase, m_convertUpperUpper;
+    bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
     TypographicQuotes m_typographicQuotes;
 
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;

@@ -99,7 +99,7 @@ protected:
     QWidget *tab1;
     QWidget *tab2;
     QWidget *tab3;
-    QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper;
+    QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper, *cbAdvancedAutoCorrection;
     QPushButton *pbQuote1, *pbQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDefault,
                 *pbSpecialChar1, *pbSpecialChar2;
     KCharSelect *charselect;
@@ -129,7 +129,7 @@ protected slots:
     void slotChangeState(bool);
     void slotAddEntry();
 
-};	
+};
 #endif
 
 

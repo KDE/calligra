@@ -208,6 +208,8 @@ void KoAutoFormatDia::setupTab2()
     grid->setAutoAdd( true );
 
     QVBox *right = new QVBox( tab2 );
+    cbAdvancedAutoCorrection=new QCheckBox(i18n("Active autocorrection"),right);
+    cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
     QHBox *text = new QHBox( right );
     text->setSpacing( 3 );
     text->setMargin( 3 );
@@ -418,6 +420,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
     m_docAutoFormat->copyListException(abbreviation->getListException());
     m_docAutoFormat->copyListTwoUpperCaseException(twoUpperLetter->getListException());
+    m_docAutoFormat->configAdvancedAutocorrect( cbAdvancedAutoCorrection->isChecked());
     // Save to config file
     m_docAutoFormat->saveConfig();
 
