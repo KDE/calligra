@@ -943,6 +943,8 @@ void KSpreadTable::setSelectionVerticalText( const QPoint &_marker,bool _b)
 	{
 	  	it.current()->setDisplayDirtyFlag();
                 it.current()->setVerticalText(_b);
+                it.current()->setMultiRow( false );
+                it.current()->setAngle(0);
 	  	it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -962,6 +964,8 @@ void KSpreadTable::setSelectionVerticalText( const QPoint &_marker,bool _b)
 	{
 	        it.current()->setDisplayDirtyFlag();
                 it.current()->setVerticalText(_b);
+                it.current()->setMultiRow( false );
+                it.current()->setAngle(0);
                 it.current()->clearDisplayDirtyFlag();
 
 	}
@@ -995,6 +999,8 @@ void KSpreadTable::setSelectionVerticalText( const QPoint &_marker,bool _b)
 	        }
 	       cell->setDisplayDirtyFlag();
                cell->setVerticalText(_b);
+               cell->setMultiRow( false );
+               cell->setAngle(0);
 	       cell->clearDisplayDirtyFlag();
 
 	    }
@@ -1099,6 +1105,8 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
 	{
 	  	it.current()->setDisplayDirtyFlag();
                 it.current()->setAngle(_value);
+                it.current()->setVerticalText(false);
+                it.current()->setMultiRow( false );
 	  	it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -1118,6 +1126,8 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
 	{
 	        it.current()->setDisplayDirtyFlag();
                 it.current()->setAngle(_value);
+                it.current()->setVerticalText(false);
+                it.current()->setMultiRow( false );
                 it.current()->clearDisplayDirtyFlag();
 
 	}
@@ -1151,6 +1161,8 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
 	        }
 	       cell->setDisplayDirtyFlag();
                cell->setAngle(_value);
+               cell->setVerticalText(false);
+               cell->setMultiRow( false );
 	       cell->clearDisplayDirtyFlag();
 	    }
 	emit sig_updateView( this, r );
@@ -2655,6 +2667,8 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
 	{
 	  it.current()->setDisplayDirtyFlag();
           it.current()->setMultiRow( enable );
+          it.current()->setVerticalText( false );
+          it.current()->setAngle(0);
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -2674,6 +2688,8 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
 	{
 	  it.current()->setDisplayDirtyFlag();
           it.current()->setMultiRow( enable );
+          it.current()->setVerticalText( false );
+          it.current()->setAngle(0);
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -2708,6 +2724,8 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
 
 		cell->setDisplayDirtyFlag();
                 cell->setMultiRow( enable );
+                cell->setVerticalText( false );
+                cell->setAngle(0);
 		cell->clearDisplayDirtyFlag();
 	    }
 
@@ -4220,7 +4238,7 @@ QRect KSpreadTable::refreshArea( const QRect &_rect )
     bool selected = ( area.left() != 0 );
 
     // Complete rows selected ?
-    if (  area.right() >= 0x7FFF )
+    if (  area.right() >= 0x7FFF && selected)
     {
       QIntDictIterator<KSpreadCell> it( m_dctCells );
       for ( ; it.current(); ++it )
@@ -4239,7 +4257,7 @@ QRect KSpreadTable::refreshArea( const QRect &_rect )
       return  area;
     }
     // Complete columns selected ?
-    else if (  area.bottom() >= 0x7FFF )
+    else if (  area.bottom() >= 0x7FFF && selected )
     {
       QIntDictIterator<KSpreadCell> it( m_dctCells );
       for ( ; it.current(); ++it )

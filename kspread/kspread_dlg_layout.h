@@ -236,7 +236,8 @@ protected:
     QRadioButton *left;
     QRadioButton *right;
     QRadioButton *center;
-    QCheckBox *multi;
+    QRadioButton *multi;
+    QRadioButton *vertical;
     KIntNumInput *width;
     KIntNumInput *height;
     CellLayoutDlg *dlg;
@@ -507,6 +508,7 @@ public:
     KSpreadCell::AlignY alignY;
 
     bool bMultiRow;
+    bool bVerticalText;
 
     int heigthSize;
     int widthSize;

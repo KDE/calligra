@@ -2125,7 +2125,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if(angle>0)
         x=_tx + m_iTextX + dx;
     else
-        x=static_cast<int>(_tx + m_iTextX + dx-fm.descent() + fm.ascent())*sin(angle*M_PI/180);
+        x=static_cast<int>(_tx + m_iTextX + dx-(fm.descent() + fm.ascent())*sin(angle*M_PI/180));
     int y;
     if(angle>0)
         y=_ty + m_iTextY + dy;
@@ -3084,8 +3084,8 @@ void KSpreadCell::checkValue()
 	m_dValue = atof( ptext );
         return;
         }
-    bool ok;
-    double val=m_strText.toDouble(&ok);
+    //bool ok;
+    //double val=m_strText.toDouble(&ok);
     QString tmp;
     //test for scientific format
     //don't work for the moment.

@@ -17,19 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-//#include <qprinter.h>
-
 #include "kspread_dlg_angle.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
-//#include "kspread_util.h"
-//#include "kspread_layout.h"
 #include "kspread_table.h"
 #include <qlayout.h>
-//#include <kapp.h>
+
 #include <klocale.h>
 #include <kbuttonbox.h>
-//#include <iostream.h>
 #include <kdebug.h>
 
 KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &_marker)
@@ -47,6 +42,7 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
   m_pSize2=new KIntNumInput(size, this, 10);
   m_pSize2->setRange(-90, 90, 1);
   m_pSize2->setLabel(i18n("Angle"));
+  m_pSize2->setSuffix(" °");
   lay1->addWidget(m_pSize2);
   m_pDefault=new QCheckBox(i18n("Default (0°)"),this);
   lay1->addWidget(m_pDefault);

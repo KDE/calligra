@@ -114,7 +114,7 @@ void KSpreadPoint::init( const QString& _str )
                 return;
         }
   int offset='a'-'A';
-  int x;
+  int x=-1;
   if(_str[p] >= 'A' && _str[p] <= 'Z')
          x= _str[p++] - 'A' + 1;
   else if(_str[p] >= 'a' && _str[p] <= 'z')

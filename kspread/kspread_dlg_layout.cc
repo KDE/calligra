@@ -189,6 +189,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     brushStyle = obj->backGroundBrushStyle(_left,_top);
 
     bMultiRow = obj->multiRow();
+    bVerticalText=obj->verticalText();
 
     textRotation = obj->getAngle();
     formatNumber = obj->getFormatNumber();
@@ -523,7 +524,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
     QGroupBox *box = new QGroupBox( this, "Box");
 
-    QGridLayout *grid = new QGridLayout(box,3,4,15,7);
+    QGridLayout *grid = new QGridLayout(box,3,4,7,7);
 
 
     postfix = new QLineEdit( box, "LineEdit_1" );
@@ -534,7 +535,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     grid->addWidget(prefix,2,1);
 
     format = new QComboBox( box, "ListBox_1" );
-    grid->addWidget(format,3,1);
+    grid->addWidget(format,0,3);
 
     QLabel* tmpQLabel;
     tmpQLabel = new QLabel( box, "Label_1" );
@@ -572,7 +573,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     else
 	prefix->setText( dlg->prefix.data() );
 
-    grid->addWidget(format,0,3);
+
 
     format->insertItem( *CellLayoutDlg::formatOnlyNegSignedPixmap, 0 );
     format->insertItem( *CellLayoutDlg::formatRedOnlyNegSignedPixmap, 1 );
@@ -1311,13 +1312,17 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     else if(dlg->alignY==KSpreadCell::Bottom)
         bottom->setChecked(true);
 
-    grp = new QButtonGroup( i18n("Multi Row"),this);
-
-    grid2 = new QGridLayout(grp,1,1,15,7);
-    multi = new QCheckBox( i18n("Goto line automatically"), grp );
+    grp = new QButtonGroup( i18n("Text option"),this);
+    grp->setRadioButtonExclusive( TRUE );
+    grid2 = new QGridLayout(grp,2,1,15,7);
+    multi = new QRadioButton( i18n("Goto line automatically"), grp );
 
     grid2->addWidget(multi,0,0);
     multi->setChecked(dlg->bMultiRow);
+
+    vertical = new QRadioButton( i18n("Vertical text"), grp );
+    grid2->addWidget(vertical,1,0);
+    vertical->setChecked(dlg->bVerticalText);
 
     grid3->addWidget(grp,1,0);
 
@@ -1327,6 +1332,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     angleRotation=new KIntNumInput(dlg->textRotation, grp, 10);
     angleRotation->setLabel(i18n("Angle :"));
     angleRotation->setRange(-90, 90, 1);
+    angleRotation->setSuffix(" °");
 
     grid2->addWidget(angleRotation,0,0);
     grid3->addWidget(grp,1,1);
@@ -1376,9 +1382,15 @@ void CellLayoutPagePosition::slotChangeHeightState()
 void CellLayoutPagePosition::slotChangeAngle(int _angle)
 {
 if(_angle==0)
+    {
     multi->setEnabled(true);
+    vertical->setEnabled(true);
+    }
 else
+    {
     multi->setEnabled(false);
+    vertical->setEnabled(false);
+    }
 }
 
 void CellLayoutPagePosition::apply( KSpreadCell *_obj )
@@ -1400,6 +1412,12 @@ void CellLayoutPagePosition::apply( KSpreadCell *_obj )
         _obj->setMultiRow(multi->isChecked());
   else
         _obj->setMultiRow(false);
+
+  if(vertical->isEnabled())
+        _obj->setVerticalText(vertical->isChecked());
+  else
+        _obj->setVerticalText(false);
+
   _obj->setAngle(angleRotation->value());
 }
 
