@@ -607,7 +607,7 @@ KarbonView::setZoom( double zoom )
 	QStringList stl = m_zoomAction->items();
 	if( stl.first() == "    25%" )
 	{
-		stl.prepend( i18n( zoomText.latin1() ) );
+		stl.prepend( zoomText.latin1() );
 		m_zoomAction->setItems( stl );
 		m_zoomAction->setCurrentItem( 0 );
 	}
