@@ -533,6 +533,23 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
 }
 
 
+static void SubProcessFormatThreeTag(QDomNode myNode,
+    ValueListFormatData *formatDataList, int formatPos, int /*formatLen*/,
+    KWEFKWordLeader *leader)
+{
+    if ( (formatPos == -1) ) // formatLen is never there but is 1.
+    {
+        // We have no position and no length defined
+        kdWarning(30508) << "Missing variable formatting!" << endl;
+        return;
+    }
+    AllowNoSubtags (myNode, leader);
+
+    const FormatData formatData(3, formatPos, 1);
+    (*formatDataList) << formatData;
+}
+
+
 static void SubProcessFormatFourTag(QDomNode myNode,
     ValueListFormatData *formatDataList, int formatPos, int formatLen,
     KWEFKWordLeader *leader)
@@ -611,6 +628,11 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
             SubProcessFormatTwoTag(myNode, formatDataList, formatPos, formatLen, leader);
             break;
         }
+    case 3: // KWord 0.8 tabulator
+        {
+            SubProcessFormatThreeTag(myNode, formatDataList, formatPos, formatLen, leader);
+            break;
+        }
     case 4: // variables
         {
             SubProcessFormatFourTag(myNode, formatDataList, formatPos, formatLen, leader);
@@ -627,7 +649,6 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
             AllowNoSubtags (myNode, leader);
             break;
         }
-    case 3: // KWord 0.8 tabulator
     case 5: // KWord 0.8 footnote
     default:
             kdWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << endl;

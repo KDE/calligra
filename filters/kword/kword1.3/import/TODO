@@ -7,6 +7,7 @@ Generate Manifest file
 <style:wrap> with "none" for pictures?
 converting from raw XML KWord document (in KoStore?)
 Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?)
+Tables
 ...
 
 === Old OOWriter To-Do List ===
@@ -27,11 +28,10 @@ Cursor position
 === KWord 0.8 ===
 Document settings
 <FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
-<FORMAT id="3"> (tabulator)
 <FORMAT id="5"> (footnote)
 <LINESPACE>
 <HARDBRK> (forced page break)
-Attachement #4318 of bug #16430 (tabulators...)
+Attachement #4318 of bug #16430 (tables...)
 ...
 
 === Low Priority ===

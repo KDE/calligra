@@ -982,6 +982,11 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
             {
                 processTextImage(paraText, formatLayout, (*paraFormatDataIt));
             }
+            else if ( 3 == (*paraFormatDataIt).id )
+            {
+                // Just a (KWord 0.8) tab stop, nothing else to do!
+                *m_streamOut << "<text:tab-stop/>";
+            }
             else if (4==(*paraFormatDataIt).id)
             {
                 processVariable(paraText, formatLayout, (*paraFormatDataIt));
