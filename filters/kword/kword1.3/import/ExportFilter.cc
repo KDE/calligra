@@ -629,7 +629,8 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
     key += ',';
 
-    if ( force || ( formatOrigin.underline != formatData.underline ) )
+    if ( force || ( formatOrigin.underline != formatData.underline )
+        || ( formatOrigin.underlineColor != formatData.underlineColor ) )
     {
         strElement+="style:text-underline=\"";
         if ( formatData.underline )
@@ -642,7 +643,16 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             strElement+="none";
             key += 'N';
         }
-        strElement+="\" ";
+        strElement += "\" ";
+
+        if ( formatData.underlineColor.isValid() )
+        {
+            const QString colorName( formatData.underlineColor.name() );
+            strElement += "style:text-underline-color=\"";
+            strElement += colorName;
+            strElement += "\" ";
+            key += colorName;
+        }
     }
 
     key += ',';
@@ -1395,8 +1405,9 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
     m_styles += ">\n";
     m_styles += "   <style:properties ";
 
-    QString dummyKey; // Not needed
-    m_styles += layoutToParagraphStyle(layout,layout,true,dummyKey);
+    QString debugKey; // Not needed
+    m_styles += layoutToParagraphStyle(layout,layout,true,debugKey);
+    kdDebug(30520) << "Defining style: " << debugKey << endl;
 
     m_styles += "</style:properties>\n";
     m_styles += "  </style:style>\n";
