@@ -463,7 +463,12 @@ KoTextParagLineStart *KoTextFormatter::formatLineKo(
 	    string->at( j ).x += space;
     } else if ( align & Qt::AlignJustify ) {
 	int numSpaces = 0;
-	for ( int j = start; j < last; ++j ) {
+	for ( int j = last; j >= start; --j ) {
+            //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
+            if ( string->at( j ).c == '\t' ) {
+                start = j+1;
+                break;
+            }
 	    if( isBreakable( string, j ) ) {
 		numSpaces++;
 	    }
