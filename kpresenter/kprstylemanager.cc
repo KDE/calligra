@@ -39,7 +39,7 @@ KoStyle* KPrStyleManager::addStyleTemplate(KoStyle *style)
     return m_doc->styleCollection()->addStyleTemplate(style);
 }
 
-void KPrStyleManager::applyStyleChange( StyleChangeDefMap changed )
+void KPrStyleManager::applyStyleChange( KoStyleChangeDefMap changed )
 {
     m_doc->applyStyleChange( changed );
 }

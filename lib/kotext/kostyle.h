@@ -28,19 +28,19 @@
 class KoStyle;
 class KoOasisContext;
 
-struct StyleChangeDef {
-    StyleChangeDef() {
+struct KoStyleChangeDef {
+    KoStyleChangeDef() {
         paragLayoutChanged = -1;
         formatChanged = -1;
     }
-    StyleChangeDef( int parag, int format) {
+    KoStyleChangeDef( int parag, int format) {
         paragLayoutChanged = parag;
         formatChanged = format;
     };
     int paragLayoutChanged;
     int formatChanged;
 };
-typedef QMap<KoStyle *, StyleChangeDef> StyleChangeDefMap;
+typedef QMap<KoStyle *, KoStyleChangeDef> KoStyleChangeDefMap;
 
 class KoStyleCollection
 {

@@ -33,6 +33,7 @@ class KWMailMergeDataBase;
 class KWFrameSet;
 class KWTableFrameSet;
 class KWPartFrameSet;
+class KoStyleCollection;
 class KoStyle;
 class KWFrameStyle;
 class KWTableStyle;
@@ -61,6 +62,8 @@ class KWTableTemplateCollection;
 class KWFootNoteVariable;
 class DCOPObject;
 class KWLoadingInfo;
+class KoPictureCollection;
+class KWChild;
 
 class QFont;
 class QStringList;
@@ -76,45 +79,24 @@ namespace KFormula {
 class KoTextParag;
 class KoOasisContext;
 
+#include "kwanchorpos.h" // legacy loading stuff
+//#include "kwbookmark.h"
+class KWBookMark;
+#include "defs.h" // for MouseMeaning
+
 #include <koDocument.h>
-#include <koGlobal.h>
-#include <koDocumentChild.h>
-#include <koPictureCollection.h>
+//#include <koGlobal.h>
 #include <kozoomhandler.h>
 #include <koUnit.h>
-#include "kwanchorpos.h"
-#include "kwbookmark.h"
-#include "defs.h"
+#include <koPictureKey.h>
+#include <kostyle.h> // for KoStyleChangeDefMap
 
 #include <qmap.h>
 #include <qptrlist.h>
 #include <qfont.h>
 #include <qvaluevector.h>
-#include <kostyle.h>
-#include <kocommandhistory.h>
+
 class KWPartFrameSet;
-/******************************************************************/
-/* Class: KWChild                                              */
-/******************************************************************/
-class KWChild : public KoDocumentChild
-{
-public:
-    KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc );
-    KWChild( KWDocument *_wdoc );
-    ~KWChild();
-
-    KWDocument* parent()const
-    { return m_pKWordDoc; }
-
-    void setPartFrameSet( KWPartFrameSet* fs ) { m_partFrameSet = fs; }
-    KWPartFrameSet * partFrameSet() const { return m_partFrameSet; }
-    virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
-
-protected:
-    KWDocument *m_pKWordDoc;
-    KWPartFrameSet *m_partFrameSet;
-};
-
 /******************************************************************/
 /* Class: KWDocument                                           */
 /******************************************************************/
@@ -161,25 +143,10 @@ public:
     ~KWDocument();
 
     enum ProcessingType {WP = 0, DTP = 1};
-    /*
-    static const int U_FONT_FAMILY_SAME_SIZE;
-    static const int U_FONT_ALL_SAME_SIZE;
-    static const int U_COLOR;
-    static const int U_INDENT;
-    static const int U_BORDER;
-    static const int U_ALIGN;
-    static const int U_NUMBERING;
-    static const int U_FONT_FAMILY_ALL_SIZE;
-    static const int U_FONT_ALL_ALL_SIZE;
-    static const int U_TABS;
-    static const int U_SMART;
-    */
 
     /** when in position to select rows/cols from a table (slightly on the left/top of the table),
         * where exactly is the table? if it's NONE, we are not in position to select rows/cols */
     enum TableToSelectPosition {TABLE_POSITION_NONE = 0, TABLE_POSITION_RIGHT = 1, TABLE_POSITION_BOTTOM = 2};
-
-    static const int DISTANCE_TABLE_SELECT_ROWCOL = 5;
 
     static const int CURRENT_SYNTAX_VERSION;
 
@@ -363,7 +330,7 @@ public:
 
     int numPages() const { return m_pages; }
 
-    KoPictureCollection *pictureCollection() { return &m_pictureCollection; }
+    KoPictureCollection *pictureCollection() { return m_pictureCollection; }
     KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }
 
     QPtrList <KWView> getAllViews() { return m_lstViews; }
@@ -420,7 +387,7 @@ public:
     void lowerMainFrames( int pageNum );
     void lowerMainFrames( int pageNum, int lowestZOrder );
 
-    // Those three method consider _all_ text framesets, even table cells
+    // Those three methods consider _all_ text framesets, even table cells
     QPtrList<KWTextFrameSet> allTextFramesets( bool onlyReadWrite ) const;
     int numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite );
     KWFrameSet * textFrameSetFromIndex( unsigned int _num, bool onlyReadWrite );
@@ -457,7 +424,7 @@ public:
     // paragLayoutChanged is a set of flags for the parag layout - see the enum in KWParagLayout
     // formatChanged is a set of flags from KoTextFormat
     // If both are -1, it means the style has been deleted.
-    void applyStyleChange( StyleChangeDefMap changed );
+    void applyStyleChange( KoStyleChangeDefMap changed );
     void updateAllStyleLists();
     void updateStyleListOrder( const QStringList &list );
 
@@ -804,7 +771,7 @@ public:
     void addWordToDictionary( const QString & );
 
     bool globalHyphenation() const { return m_bGlobalHyphenation; }
-    void setGlobalHyphenation ( bool _hyphen ) { m_bGlobalHyphenation = _hyphen; }
+    void setGlobalHyphenation ( bool _hyphen );
 
     KWLoadingInfo* loadingInfo() const { return m_loadingInfo; }
 
@@ -891,7 +858,7 @@ private:
     KoColumns m_pageColumns;
     KoKWHeaderFooter m_pageHeaderFooter;
 
-    KoPictureCollection m_pictureCollection;
+    KoPictureCollection* m_pictureCollection;
 
     QPtrList<KWFrameSet> m_lstFrameSet;
 

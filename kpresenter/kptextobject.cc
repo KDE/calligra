@@ -101,7 +101,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     m_doc=doc;
     m_textVertAlign = KP_TOP;
     // Default color should be QColor() ... but kpresenter isn't fully color-scheme-aware yet
-    KoTextFormatCollection* fc = new KoTextFormatCollection( doc->defaultFont(), Qt::black, doc->globalLanguage(), doc->globalHyphenation(), 1.0 );
+    KoTextFormatCollection* fc = new KoTextFormatCollection( doc->defaultFont(), Qt::black, doc->globalLanguage(), doc->globalHyphenation() );
     KPrTextDocument * textdoc = new KPrTextDocument( this, fc );
     if ( m_doc->tabStopValue() != -1 )
         textdoc->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPixX( m_doc->tabStopValue() ));
@@ -1482,7 +1482,7 @@ void KPTextObject::slotFormatChanged(const KoTextFormat &_format)
         m_doc->firstView()->showFormat( _format );
 }
 
-void KPTextObject::applyStyleChange( StyleChangeDefMap changed )
+void KPTextObject::applyStyleChange( KoStyleChangeDefMap changed )
 {
     m_textobj->applyStyleChange( changed );
 }
@@ -2348,7 +2348,7 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
         paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
     else
         paragraph.appendChild(saveHelper(tmpText, parag->string()->at(0).format(), doc));
-    
+
     parentElem.appendChild(paragraph);
 }
 

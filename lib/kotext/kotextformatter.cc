@@ -33,6 +33,9 @@
 // Line and paragraph width
 //#define DEBUG_FORMATTER_WIDTH
 
+// Hyphenation
+//#define DEBUG_HYPHENATION
+
 /////// keep in sync with kotextformat.cc !
 //#define REF_IS_LU
 
@@ -346,7 +349,7 @@ bool KoTextFormatterCore::format()
                 {
                     QString lang = string->at(wordStart).format()->language();
                     char * hyphens = settings->hyphenator()->hyphens( word, lang );
-#ifdef DEBUG_FORMATTER
+#if defined(DEBUG_FORMATTER) || defined(DEBUG_HYPHENATION)
                     kdDebug(32500) << "Hyphenation: word=" << word << " lang=" << lang << " hyphens=" << hyphens << " maxlen=" << maxlen << endl;
                     kdDebug(32500) << "Parag indexes: wordStart=" << wordStart << " lastBreak=" << lastBreak << " i=" << i << endl;
 #endif
@@ -364,7 +367,7 @@ bool KoTextFormatterCore::format()
                             lineStart->hyphenated = true;
                             lastBreak = hypos + wordStart;
                             hyphenated = true;
-#if defined(DEBUG_FORMATTER) || defined(DEBUG_FORMATTER_WIDTH)
+#if defined(DEBUG_FORMATTER) || defined(DEBUG_FORMATTER_WIDTH) || defined(DEBUG_HYPHENATION)
                             kdDebug(32500) << "Hyphenation: will break at " << lastBreak << " using tempworddata at position " << hypos << "/" << tempWordData.size() << endl;
 #endif
                             if ( hypos < (int)tempWordData.size() )

@@ -24,7 +24,7 @@
 #include "kpobject.h"
 #include "korichtext.h"
 #include <kotextview.h>
-#include <kostyle.h>
+#include <kostyle.h> // for KoStyleChangeDefMap
 
 class KPresenterView;
 class KPresenterDoc;
@@ -103,7 +103,7 @@ public:
     KPresenterDoc* kPresenterDocument() const { return m_doc; }
 
     KPTextView * createKPTextView( KPrCanvas * );
-    void applyStyleChange( StyleChangeDefMap changed );
+    void applyStyleChange( KoStyleChangeDefMap changed );
 
     void removeHighlight();
     void highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas *canvas, bool repaint, KDialogBase* dialog = 0 );

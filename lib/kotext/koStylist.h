@@ -56,7 +56,7 @@ public:
 
     virtual KoStyle* addStyleTemplate(KoStyle *style)=0;
     //virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;
-    virtual void applyStyleChange( StyleChangeDefMap changed )=0;
+    virtual void applyStyleChange( KoStyleChangeDefMap changed )=0;
 
     virtual void removeStyleTemplate( KoStyle *style )=0;
     virtual void updateAllStyleLists()=0;

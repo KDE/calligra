@@ -2426,7 +2426,7 @@ KPPixmapObject * KPrPage::picViewOrigHelper() const
     return obj;
 }
 
-void KPrPage::applyStyleChange( StyleChangeDefMap changed )
+void KPrPage::applyStyleChange( KoStyleChangeDefMap changed )
 {
     QPtrList<KPObject> lst;
     getAllObjectSelectedList(lst,true /*force*/ );

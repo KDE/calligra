@@ -70,7 +70,7 @@ KoTextFormat::KoTextFormat()
 //#endif
 }
 
-KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, double ulw, KoTextFormatCollection *parent )
+KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, KoTextFormatCollection *parent )
     : fn( f ), col( c ) /*fm( QFontMetrics( f ) ),*/ //linkColor( TRUE )
 {
 #ifdef DEBUG_COLLECTION
@@ -108,7 +108,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
     d->m_bWordByWord = false;
     d->m_charStyle = 0L;
     d->m_bHyphenation = hyphenation;
-    d->m_underLineWidth = ulw;
+    d->m_underLineWidth = 1.0;
     m_attributeFont = ATT_NONE;
     ////
     generateKey();
@@ -420,7 +420,7 @@ void KoTextFormat::load( KoOasisContext& context )
     }
 
     // ######### TODO - it seems OO has it as a paragraph property... (what about msword?)
-    //d->m_bHyphenation = false;
+    d->m_bHyphenation = true;
 
     /*
       Missing properties:
@@ -1473,20 +1473,20 @@ KoTextFormatCollection::KoTextFormatCollection()
 #ifdef DEBUG_COLLECTION
     kdDebug(32500) << "KoTextFormatCollection::KoTextFormatCollection " << this << endl;
 #endif
-    defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language(), false, 1.0 ); //// kotext: need to use default QColor here
+    defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language(), false );
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
     cachedFormat = 0;
 }
 
-KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen, double ulw )
-    : cKey( 307 )//, sheet( 0 )
+KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool defaultHyphenation )
+    : cKey( 307 )
 {
 #ifdef DEBUG_COLLECTION
     kdDebug(32500) << "KoTextFormatCollection::KoTextFormatCollection " << this << endl;
 #endif
-    defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage, hyphen, ulw );
+    defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage, defaultHyphenation );
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
@@ -1597,7 +1597,8 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *of, const KoTe
     return cres;
 }
 
-KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, const QString & language, bool hyphen, double ulw )
+#if 0
+KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, const QString & language, bool hyphen )
 {
     if ( cachedFormat && cfont == f && ccol == c ) {
 #ifdef DEBUG_COLLECTION
@@ -1623,7 +1624,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
     if ( key == defFormat->key() )
 	return defFormat;
 
-    cachedFormat = createFormat( f, c,language, hyphen, ulw );
+    cachedFormat = createFormat( f, c, language, hyphen );
     cachedFormat->collection = this;
     cKey.insert( cachedFormat->key(), cachedFormat );
     if ( cachedFormat->key() != key )
@@ -1633,6 +1634,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
 #endif
     return cachedFormat;
 }
+#endif
 
 void KoTextFormatCollection::remove( KoTextFormat *f )
 {

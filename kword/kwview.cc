@@ -21,43 +21,49 @@
 #undef Unsorted
 
 #include "kwview.h"
-#include "kwcanvas.h"
+
+#include "KWordViewIface.h"
+#include "configfootnotedia.h"
 #include "defs.h"
 #include "deldia.h"
 #include "docstruct.h"
 #include "footnotedia.h"
 #include "insdia.h"
-#include "resizetabledia.h"
+#include "kwanchor.h"
+#include "kwbookmark.h"
+#include "kwcanvas.h"
 #include "kwcommand.h"
 #include "kwconfig.h"
+#include "kwcreatebookmarkdia.h"
 #include "kwdoc.h"
 #include "kwdrag.h"
 #include "kweditpersonnalexpressiondia.h"
+#include "kwformulaframe.h"
+#include "kwframe.h"
+#include "kwframestyle.h"
+#include "kwframestylemanager.h"
+#include "kwimportstyledia.h"
+#include "kwinserthorizontallinedia.h"
+#include "kwinsertpagedia.h"
 #include "kwinsertpicdia.h"
-#include "kwtableframeset.h"
 #include "kwpartframeset.h"
+#include "kwstylemanager.h"
+#include "kwtableframeset.h"
+#include "kwtablestyle.h"
+#include "kwtablestylemanager.h"
+#include "kwtextdocument.h"
+#include "kwvariable.h"
 #include "kwviewmode.h"
-#include "searchdia.h"
 #include "mailmerge.h"
 #include "mailmerge_actions.h"
+#include "resizetabledia.h"
+#include "searchdia.h"
+#include "sortdia.h"
 #include "splitcellsdia.h"
 #include "tabledia.h"
-#include "kwstylemanager.h"
-#include "kwformulaframe.h"
-#include "kwframestylemanager.h"
-#include "kwframestyle.h"
-#include "kwtablestylemanager.h"
-#include "kwtablestyle.h"
-#include "kwvariable.h"
-#include "KWordViewIface.h"
-#include "sortdia.h"
-#include "configfootnotedia.h"
-#include "kwtextdocument.h"
-#include "kwcreatebookmarkdia.h"
-#include "kwimportstyledia.h"
-#include "kwframe.h"
-#include "kwanchor.h"
-#include "kwinserthorizontallinedia.h"
+
+#include <kformuladocument.h>
+#include <kformulamimesource.h>
 
 #include <korichtext.h>
 #include <koAutoFormat.h>
@@ -81,6 +87,7 @@
 #include <kovariable.h>
 #include <koVariableDlgs.h>
 #include <kotextobject.h>
+#include <tkcoloractions.h>
 
 #include <kaccel.h>
 #include <kaccelgen.h>
@@ -109,18 +116,10 @@
 #include <qtimer.h>
 #include <qvbox.h>
 
-#undef Bool
-#include <kspell.h>
-#include <kspelldlg.h>
-#include <tkcoloractions.h>
-#include <kformuladocument.h>
-#include <kformulamimesource.h>
-
 #include <stdlib.h>
+
 #include <koSpell.h>
-
-#include "kwinsertpagedia.h"
-
+#include <kspelldlg.h> // for KS_* (hmm)
 
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )

@@ -26,7 +26,7 @@
 #include "global.h"
 #include <koPoint.h>
 #include <koRect.h>
-#include <kostyle.h>
+#include <kostyle.h> // for KoStyleChangeDefMap
 #include <qvariant.h>
 #include <koDocumentChild.h>
 #include <koPictureCollection.h>
@@ -44,7 +44,6 @@ class DCOPObject;
 class KPTextObject;
 class KoTextObject;
 class KPPixmapObject;
-class KoStyle;
 class KPPartObject;
 class KPBackGround;
 
@@ -280,7 +279,7 @@ public:
 
     KPObject* getObjectAt( const KoPoint &pos, bool withoutProtected = false ) const;
     KPPixmapObject * picViewOrigHelper() const;
-    void applyStyleChange( StyleChangeDefMap changed );
+    void applyStyleChange( KoStyleChangeDefMap changed );
 
     void reactivateBgSpellChecking(bool refreshTextObj);
 

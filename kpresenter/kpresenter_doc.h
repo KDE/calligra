@@ -62,7 +62,7 @@ class KOSpellConfig;
 #include "kpgradientcollection.h"
 #include <koUnit.h>
 #include <kozoomhandler.h>
-#include <kostyle.h>
+#include <kostyle.h> // for KoStyleChangeDefMap
 #include <kocommandhistory.h>
 class KoDocumentEntry;
 class KPTextObject;
@@ -271,7 +271,7 @@ class KPresenterDoc : public KoDocument
 
 
     void updateAllStyleLists();
-    void applyStyleChange( StyleChangeDefMap changed );
+    void applyStyleChange( KoStyleChangeDefMap changed );
     void updateStyleListOrder( const QStringList &list );
 
     void addCommand( KCommand * cmd );

@@ -40,7 +40,7 @@ KoStyle* KWStyleManager::addStyleTemplate(KoStyle *style)
     return m_doc->styleCollection()->addStyleTemplate(style);
 }
 
-void KWStyleManager::applyStyleChange( StyleChangeDefMap changed )
+void KWStyleManager::applyStyleChange( KoStyleChangeDefMap changed )
 {
     m_doc->applyStyleChange( changed );
 }

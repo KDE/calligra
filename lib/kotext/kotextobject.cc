@@ -43,13 +43,15 @@ public:
     bool abortFormatting;
 };
 
-KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, bool hyphenation, double ulw, KoStyle* defaultStyle, int _tabStopWidth,
+KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont,
+                            const QString &defaultLanguage, bool hyphenation,
+                            KoStyle* defaultStyle, int tabStopWidth,
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
-    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage, hyphenation, ulw ) );
-    if ( _tabStopWidth != -1 )
-        textdoc->setTabStops( _tabStopWidth );
+    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage, hyphenation ) );
+    if ( tabStopWidth != -1 )
+        textdoc->setTabStops( tabStopWidth );
     init();
 }
 
@@ -96,8 +98,6 @@ void KoTextObject::init()
              this, SLOT(slotParagraphModified(KoTextParag *, int, int , int)));
     connect( this, SIGNAL(paragraphCreated( KoTextParag* )),
              this, SLOT(slotParagraphCreated(KoTextParag *)));
-
-
 }
 
 KoTextObject::~KoTextObject()
@@ -843,7 +843,7 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoStyle 
     return macroCmd;
 }
 
-void KoTextObject::applyStyleChange( StyleChangeDefMap changed )
+void KoTextObject::applyStyleChange( KoStyleChangeDefMap changed )
 {
     /*kdDebug(32500) << "KoTextObject::applyStyleChange " << changedStyle->name()
                      << " paragLayoutChanged=" << paragLayoutChanged
@@ -852,7 +852,7 @@ void KoTextObject::applyStyleChange( StyleChangeDefMap changed )
 
     KoTextParag *p = textdoc->firstParag();
     while ( p ) {
-        StyleChangeDefMap::Iterator it = changed.find( p->style() );
+        KoStyleChangeDefMap::Iterator it = changed.find( p->style() );
         if ( it != changed.end() )
         {
             if ( (*it).paragLayoutChanged == -1 || (*it).formatChanged == -1 ) // Style has been deleted

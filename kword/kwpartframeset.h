@@ -20,7 +20,7 @@
 #define KWPARTFRAMESET_H
 
 #include "kwframe.h"
-
+class KWChild;
 /**
  * @short A frameset that contains an embedded object (a KWChild)
  */
@@ -129,5 +129,30 @@ private:
     DCOPObject *m_dcop;
 };
 #endif
+
+#include <koDocumentChild.h>
+class KWDocument;
+
+/******************************************************************/
+/* Class: KWChild                                              */
+/******************************************************************/
+class KWChild : public KoDocumentChild
+{
+public:
+    KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc );
+    KWChild( KWDocument *_wdoc );
+    ~KWChild();
+
+    KWDocument* parent()const
+    { return m_pKWordDoc; }
+
+    void setPartFrameSet( KWPartFrameSet* fs ) { m_partFrameSet = fs; }
+    KWPartFrameSet * partFrameSet() const { return m_partFrameSet; }
+    virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
+
+protected:
+    KWDocument *m_pKWordDoc;
+    KWPartFrameSet *m_partFrameSet;
+};
 
 #endif // KWPARTFRAMESET_H

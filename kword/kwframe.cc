@@ -23,13 +23,21 @@
 #include "kwcanvas.h"
 #include "kwcommand.h"
 #include "kwframe.h"
-#include "defs.h"
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include "kwanchor.h"
 #include "resizehandles.h"
+#include "KWordFrameSetIface.h"
+#include "KWordTextFrameSetEditIface.h"
+#include "KWordFormulaFrameSetIface.h"
+#include "KWordFormulaFrameSetEditIface.h"
+#include "KWordPictureFrameSetIface.h"
+#include "KWordHorizontalLineFrameSetIface.h"
+
+#include <koStoreDevice.h>
+#include <kooasiscontext.h>
+#include <koPictureCollection.h>
 #include <kotextobject.h> // for customItemChar!
-#include <qpopupmenu.h>
 
 #include <kcursor.h>
 #include <klocale.h>
@@ -37,20 +45,12 @@
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-#if ! KDE_IS_VERSION(3,1,90)
-#include <kdebugclasses.h>
-#endif
-#include <float.h>
-#include "KWordFrameSetIface.h"
 #include <dcopobject.h>
-#include "qdrawutil.h"
-#include "KWordTextFrameSetEditIface.h"
-#include "KWordFormulaFrameSetIface.h"
-#include "KWordFormulaFrameSetEditIface.h"
-#include "KWordPictureFrameSetIface.h"
-#include "KWordHorizontalLineFrameSetIface.h"
-#include <koStoreDevice.h>
-#include <kooasiscontext.h>
+
+#include <qpopupmenu.h>
+#include <qdrawutil.h>
+
+#include <float.h>
 
 //#define DEBUG_DRAW
 

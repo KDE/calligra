@@ -508,7 +508,7 @@ void KoStyleManager::slotApply() {
 
 void KoStyleManager::apply() {
     noSignals=true;
-    StyleChangeDefMap styleChanged;
+    KoStyleChangeDefMap styleChanged;
     QPtrList<KoStyle> removeStyle;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0L && m_changedStyles.at(i)!=0L) {           // newly added style
@@ -520,7 +520,7 @@ void KoStyleManager::apply() {
 
             KoStyle *orig = m_origStyles.at(i);
             //applyStyleChange( orig, -1, -1 );
-            StyleChangeDef tmp( -1,-1);
+            KoStyleChangeDef tmp( -1,-1);
             styleChanged.insert( orig, tmp);
 
             removeStyle.append( orig );
@@ -542,7 +542,7 @@ void KoStyleManager::apply() {
 
             // Apply the change selectively - i.e. only what changed
             //applyStyleChange( orig, paragLayoutChanged, formatChanged );
-            StyleChangeDef tmp(paragLayoutChanged, formatChanged);
+            KoStyleChangeDef tmp(paragLayoutChanged, formatChanged);
             styleChanged.insert( orig, tmp);
 
 

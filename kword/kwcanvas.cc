@@ -28,6 +28,7 @@
 #include "framedia.h"
 #include "kwcommand.h"
 #include "kwtabletemplate.h"
+#include "kwtextdocument.h"
 
 #include <qbuffer.h>
 #include <qtimer.h>
@@ -37,15 +38,17 @@
 
 #include <koStore.h>
 #include <koStoreDrag.h>
+#include <koPictureCollection.h>
+
 #include <ktempfile.h>
 #include <klocale.h>
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <assert.h>
-#include "kwtextdocument.h"
 #include <kmultipledrag.h>
+
+#include <assert.h>
 
 KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent, "canvas", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ), m_doc( d )

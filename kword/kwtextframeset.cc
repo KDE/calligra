@@ -124,8 +124,9 @@ void KWTextFrameSet::init()
     m_lastTextDocHeight = 0;
     // Create the text document to set in the text object
     KWTextDocument* textdoc = new KWTextDocument( this,
-        new KoTextFormatCollection( m_doc->defaultFont(), QColor(), m_doc->globalLanguage(),
-                                    m_doc->globalHyphenation(), 1.0 ),
+        new KoTextFormatCollection( m_doc->defaultFont(), QColor(),
+                                    m_doc->globalLanguage(),
+                                    m_doc->globalHyphenation() ),
         new KWTextFormatter( this ) );
     textdoc->setFlow( this );
     textdoc->setPageBreakEnabled( true );              // get verticalBreak to be called
@@ -2947,7 +2948,7 @@ void KWTextFrameSet::clearUndoRedoInfo()
     m_textobj->clearUndoRedoInfo();
 }
 
-void KWTextFrameSet::applyStyleChange( StyleChangeDefMap changed )
+void KWTextFrameSet::applyStyleChange( KoStyleChangeDefMap changed )
 {
     m_textobj->applyStyleChange( changed );
 }

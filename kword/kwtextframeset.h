@@ -198,7 +198,7 @@ public:
      *  @param paragLayoutChanged paragraph flags
      *  @param formatChanged format flags
      */
-    void applyStyleChange( StyleChangeDefMap changed );
+    void applyStyleChange( KoStyleChangeDefMap changed );
 
     /** set the visibility of the frameset. */
     virtual void setVisible( bool v );

@@ -133,10 +133,10 @@ public:
     KoTextFormat();
     ~KoTextFormat();
 
-    /// A simple text format
-    // (I think hyphenation and ulw are wrong here)
+    /// A simple text format with some default settings
+    /// Only used for the default format
     KoTextFormat( const QFont &f, const QColor &c, const QString &_language,
-                  bool hyphenation, double ulw, KoTextFormatCollection *parent = 0 );
+                  bool hyphenation, KoTextFormatCollection *parent = 0 );
 
     /// A complete text format (used by KoFontDia)
     KoTextFormat( const QFont &_font,
@@ -391,24 +391,32 @@ template class Q_EXPORT QDict<KoTextFormat>;
 // MOC_SKIP_END
 #endif
 
-class Q_EXPORT KoTextFormatCollection
+class KoTextFormatCollection
 {
     friend class KoTextDocument;
     friend class KoTextFormat;
 
 public:
     KoTextFormatCollection();
-    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor, const QString & defaultLanguage, bool hyphen, double ulw ); //// kotext addition
-    virtual ~KoTextFormatCollection();
+    /** Constructor.
+     * @param defaultFont the font to use for the default format
+     * @param defaultLanguage the language to use for the default format
+     * @param defaultHyphenation the hyphenation setting for the default format
+     */
+    KoTextFormatCollection( const QFont& defaultFont, const QColor& defaultColor,
+                            const QString & defaultLanguage, bool defaultHyphenation );
+    /*virtual*/ ~KoTextFormatCollection();
 
     void setDefaultFormat( KoTextFormat *f );
     KoTextFormat *defaultFormat() const;
-    virtual KoTextFormat *format( const KoTextFormat *f );
-    virtual KoTextFormat *format( const KoTextFormat *of, const KoTextFormat *nf, int flags );
-    virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language, bool hyphen, double ulw );
-    virtual void remove( KoTextFormat *f );
-    virtual KoTextFormat *createFormat( const KoTextFormat &f ) { return new KoTextFormat( f ); }
-    virtual KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language, bool hyphen, double ulw) { return new KoTextFormat( f, c, _language, hyphen, ulw, this ); }
+    /*virtual*/ KoTextFormat *format( const KoTextFormat *f );
+    /*virtual*/ KoTextFormat *format( const KoTextFormat *of, const KoTextFormat *nf, int flags );
+    // Only used for the default format
+//    /*virtual*/ KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language, bool hyphen );
+    /*virtual*/ void remove( KoTextFormat *f );
+    /*virtual*/ KoTextFormat *createFormat( const KoTextFormat &f ) { return new KoTextFormat( f ); }
+    // Only used for the default format
+//    /*virtual*/ KoTextFormat *createFormat( const QFont &f, const QColor &c, const QString & _language, bool hyphen ) { return new KoTextFormat( f, c, _language, hyphen, this ); }
     void debug();
 
     //void setPainter( QPainter *p );

@@ -2932,7 +2932,7 @@ void KPresenterDoc::updateAllStyleLists()
         ((KPresenterView*)it.current())->updateStyleList();
 }
 
-void KPresenterDoc::applyStyleChange( StyleChangeDefMap changed )
+void KPresenterDoc::applyStyleChange( KoStyleChangeDefMap changed )
 {
     QPtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )

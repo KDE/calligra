@@ -38,7 +38,7 @@ public:
                      const QPtrList<KoStyle> & style, const QString & activeStyleName );
 
     virtual KoStyle* addStyleTemplate(KoStyle *style);
-    virtual void applyStyleChange( StyleChangeDefMap changed  );
+    virtual void applyStyleChange( KoStyleChangeDefMap changed  );
     virtual void removeStyleTemplate( KoStyle *style );
     virtual void updateAllStyleLists();
     virtual void updateStyleListOrder( const QStringList & list);

@@ -25,6 +25,7 @@
 //#include "KWordPartFrameSetEditIface.h"
 
 #include <klocale.h>
+#include <kapplication.h>
 
 KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name )
     : KWFrameSet( _doc ), m_protectContent( false )
@@ -281,6 +282,44 @@ void KWPartFrameSet::storeInternal()
     }
 
     kdDebug()<<k_funcinfo<<"url: "<<getChild()->url().url()<<" store internal="<<getChild()->document()->storeInternal()<<endl;
+}
+
+
+/******************************************************************/
+/* Class: KWChild                                              */
+/******************************************************************/
+
+KWChild::KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc )
+    : KoDocumentChild( _wdoc, _doc, _rect ), m_partFrameSet( 0L )
+{
+}
+
+KWChild::KWChild( KWDocument *_wdoc )
+    : KoDocumentChild( _wdoc ), m_partFrameSet( 0L )
+{
+}
+
+KWChild::~KWChild()
+{
+}
+
+KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
+{
+    Q_ASSERT( m_partFrameSet );
+    if ( isDeleted() ) {
+        //kdDebug() << k_funcinfo << "is deleted!" << endl;
+        return 0L;
+    }
+    // Only activate when it's already selected.
+    if ( !m_partFrameSet->frame(0)->isSelected() ) {
+        //kdDebug() << k_funcinfo << " is not selected" << endl;
+        return 0L;
+    }
+    // And only if CTRL isn't pressed.
+    if ( kapp->keyboardModifiers() & KApplication::ControlModifier )
+        return 0;
+
+    return KoDocumentChild::hitTest( p, _matrix );
 }
 
 #include "kwpartframeset.moc"

@@ -18,41 +18,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qfileinfo.h>
-#include <qregexp.h>
-#include <qtimer.h>
-
-#include <kapplication.h> // for KDE_VERSION
-#include <kdebug.h>
-#if ! KDE_IS_VERSION(3,1,90)
-#include <kdebugclasses.h>
-#endif
-#include <klibloader.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kmessagebox.h>
-#include <kspell.h>
-#include <kcursor.h>
-
-#include <koTemplateChooseDia.h>
-#include <koMainWindow.h>
-#include <koDocumentInfo.h>
-#include <koGlobal.h>
-#include <koparagcounter.h>
-#include <kotextobject.h>
-#include <koAutoFormat.h>
-#include <kovariable.h>
-#include <kformuladocument.h>
-#include <koOasisStyles.h>
-#include <unistd.h>
-#include <math.h>
+#include "kwdoc.h"
 
 #include "KWordDocIface.h"
-#include "defs.h"
 #include "kwbgspellcheck.h"
+#include "kwbookmark.h"
 #include "kwcanvas.h"
 #include "kwcommand.h"
-#include "kwdoc.h"
 #include "kwformulaframe.h"
 #include "kwframelayout.h"
 #include "kwpartframeset.h"
@@ -64,67 +36,46 @@
 #include "kwview.h"
 #include "kwviewmode.h"
 #include "mailmerge.h"
+#include "kwloadinginfo.h"
 
-#include <X11/Xlib.h>
-#include <kglobalsettings.h>
-#include "kocommandhistory.h"
+#include <qfileinfo.h>
+#include <qregexp.h>
+#include <qtimer.h>
 
 #include <koSconfig.h>
 
-#include "koApplication.h"
-#include "kwloadinginfo.h"
+#include <koPictureCollection.h>
+#include <koTemplateChooseDia.h>
+#include <koMainWindow.h>
+#include <koDocumentInfo.h>
+#include <koGlobal.h>
+#include <koparagcounter.h>
+#include <kotextobject.h>
+#include <koAutoFormat.h>
+#include <kovariable.h>
+#include <kformuladocument.h>
+#include <koOasisStyles.h>
+#include <koApplication.h>
 #include <kooasiscontext.h>
+#include <kocommandhistory.h>
+
+#include <kcursor.h>
+#include <kdebug.h>
+#include <kglobalsettings.h>
+#include <klibloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kspell.h>
+#include <kstandarddirs.h>
+
+#include <unistd.h>
+#include <math.h>
 
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
-
-/******************************************************************/
-/* Class: KWChild                                              */
-/******************************************************************/
-
-KWChild::KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc )
-    : KoDocumentChild( _wdoc, _doc, _rect ), m_partFrameSet( 0L )
-{
-}
-
-KWChild::KWChild( KWDocument *_wdoc )
-    : KoDocumentChild( _wdoc ), m_partFrameSet( 0L )
-{
-}
-
-KWChild::~KWChild()
-{
-}
-
-KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
-{
-    Q_ASSERT( m_partFrameSet );
-    if ( isDeleted() ) {
-        //kdDebug() << k_funcinfo << "is deleted!" << endl;
-        return 0L;
-    }
-    // Only activate when it's already selected.
-    if ( !m_partFrameSet->frame(0)->isSelected() ) {
-        //kdDebug() << k_funcinfo << " is not selected" << endl;
-        return 0L;
-    }
-    // And only if CTRL isn't pressed.
-
-    Window root;
-    Window child;
-    int root_x, root_y, win_x, win_y;
-    uint keybstate;
-    XQueryPointer( qt_xdisplay(), qt_xrootwin(), &root, &child,
-                   &root_x, &root_y, &win_x, &win_y, &keybstate );
-    if ( keybstate & ControlMask )
-        return 0L;
-
-    return KoDocumentChild::hitTest( p, _matrix );
-}
-
 
 /******************************************************************/
 /* Class: KWCommandHistory                                        */
@@ -202,6 +153,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_frameStyleColl = new KWFrameStyleCollection();
     m_tableStyleColl = new KWTableStyleCollection();
     m_tableTemplateColl = new KWTableTemplateCollection();
+    m_pictureCollection = new KoPictureCollection();
 
     m_personalExpressionPath = KWFactory::global()->dirs()->resourceDirs("expression");
     m_picturePath= KGlobalSettings::documentPath();
@@ -369,6 +321,7 @@ KWDocument::~KWDocument()
     delete m_pKOSpellConfig;
     delete m_viewMode;
     delete m_bufPixmap;
+    delete m_pictureCollection;
 }
 
 void KWDocument::initConfig()
@@ -1048,21 +1001,21 @@ void KWDocument::loadPictureMap ( QDomElement& domElement )
     QDomElement picturesElem = domElement.namedItem( "PICTURES" ).toElement();
     if ( !picturesElem.isNull() )
     {
-       m_pictureCollection.readXML( picturesElem, m_pictureMap );
+       m_pictureCollection->readXML( picturesElem, m_pictureMap );
     }
 
     // <PIXMAPS>
     QDomElement pixmapsElem = domElement.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )
     {
-       m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
+       m_pictureCollection->readXML( pixmapsElem, m_pictureMap );
     }
 
     // <CLIPARTS>
     QDomElement clipartsElem = domElement.namedItem( "CLIPARTS" ).toElement();
     if ( !clipartsElem.isNull() )
     {
-       m_pictureCollection.readXML( pixmapsElem, m_pictureMap );
+       m_pictureCollection->readXML( pixmapsElem, m_pictureMap );
     }
 }
 
@@ -2169,7 +2122,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
 void KWDocument::loadImagesFromStore( KoStore *_store )
 {
     if ( _store ) {
-        m_pictureCollection.readFromStore( _store, m_pictureMap );
+        m_pictureCollection->readFromStore( _store, m_pictureMap );
         m_pictureMap.clear(); // Release memory
     }
 }
@@ -2225,14 +2178,14 @@ void KWDocument::processPictureRequests()
     QPtrListIterator<KWTextImage> it2 ( m_textImageRequests );
     for ( ; it2.current() ; ++it2 )
     {
-        it2.current()->setImage( m_pictureCollection );
+        it2.current()->setImage( *m_pictureCollection );
     }
     m_textImageRequests.clear();
 
     kdDebug() << k_funcinfo << m_pictureRequests.count() << " picture requests." << endl;
     QPtrListIterator<KWPictureFrameSet> it3( m_pictureRequests );
     for ( ; it3.current() ; ++it3 )
-        it3.current()->setPicture( m_pictureCollection.findPicture( it3.current()->key() ) );
+        it3.current()->setPicture( m_pictureCollection->findPicture( it3.current()->key() ) );
     m_pictureRequests.clear();
 }
 
@@ -2680,11 +2633,11 @@ QDomDocument KWDocument::saveXML()
 
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        m_pictureCollection.saveXMLAsKOffice1Dot1( doc, kwdoc, savePictures );
+        m_pictureCollection->saveXMLAsKOffice1Dot1( doc, kwdoc, savePictures );
     }
     else
     {
-        QDomElement pictures = m_pictureCollection.saveXML( KoPictureCollection::CollectionPicture, doc, savePictures );
+        QDomElement pictures = m_pictureCollection->saveXML( KoPictureCollection::CollectionPicture, doc, savePictures );
         kwdoc.appendChild( pictures );
     }
     // Not needed anymore
@@ -2812,11 +2765,11 @@ bool KWDocument::completeSaving( KoStore *_store )
     }
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        return m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
+        return m_pictureCollection->saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
     }
     else
     {
-        return m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
+        return m_pictureCollection->saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
     }
 }
 
@@ -3022,7 +2975,7 @@ void KWDocument::updateStyleListOrder( const QStringList &list )
     styleCollection()->updateStyleListOrder( list );
 }
 
-void KWDocument::applyStyleChange( StyleChangeDefMap changed )
+void KWDocument::applyStyleChange( KoStyleChangeDefMap changed )
 {
     QPtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
@@ -3523,6 +3476,9 @@ QString KWDocument::generateFramesetName( const QString & templateName )
 /** if we are close on the left or the top of a table,
  * the user can select rows/cols */
 KWDocument::TableToSelectPosition KWDocument::positionToSelectRowcolTable(const QPoint& nPoint, KWTableFrameSet **ppTable /*=0L*/) {
+
+    static const int DISTANCE_TABLE_SELECT_ROWCOL = 5;
+
     KWFrame *frameundermouse, *frameclosetomouseright, *frameclosetomouseunder;
 
     TableToSelectPosition result = TABLE_POSITION_NONE;
@@ -3534,11 +3490,11 @@ KWDocument::TableToSelectPosition KWDocument::positionToSelectRowcolTable(const 
     // now get a frame close to the mouse pointer
     // slightly on the right (could it be that it is a table?)
     QPoint pointTestTableSelect = nPoint;
-    pointTestTableSelect.rx() += KWDocument::DISTANCE_TABLE_SELECT_ROWCOL;
+    pointTestTableSelect.rx() += DISTANCE_TABLE_SELECT_ROWCOL;
     frameclosetomouseright = frameUnderMouse(pointTestTableSelect, &border);
 
     pointTestTableSelect = nPoint;
-    pointTestTableSelect.ry() += KWDocument::DISTANCE_TABLE_SELECT_ROWCOL;
+    pointTestTableSelect.ry() += DISTANCE_TABLE_SELECT_ROWCOL;
     frameclosetomouseunder = frameUnderMouse(pointTestTableSelect, &border);
 
     KWFrame *frameclosetomouse; // the frame that we are going to test to know whether it is a table
@@ -4865,6 +4821,13 @@ void KWDocument::setTabStopValue ( double _tabStop )
         frm->layout();
     }
     repaintAllViews();
+}
+
+void KWDocument::setGlobalHyphenation( bool _hyphen )
+{
+    m_bGlobalHyphenation = _hyphen;
+    // This is only used as a default setting for the default format in new documents;
+    // In existing documents the hyphenation comes from the existing formats.
 }
 
 void KWDocument::switchViewMode( KWViewMode * newViewMode )

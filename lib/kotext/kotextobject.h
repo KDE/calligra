@@ -171,11 +171,16 @@ class KoTextObject : public QObject, public KoTextFormatInterface
 public:
     /** Constructor.
      * @param the zoom handler (to be passed to the KoTextDocument ctor)
-     * @param defaultFont the font to use by default (@see KoTextFormatCollection)
+     * @param defaultFont the font to use by default (see KoTextFormatCollection)
+     * @param defaultLanguage the language to use by default (see KoTextFormatCollection)
+     * @param defaultHyphenation the default setting for hyphenation (see KoTextFormatCollection)
      * @param defaultStyle the style to use by default (initial pararaph, and when deleting a used style)
+     * @param tabStopWidth the global value for the tabstop width
+     *
      * This constructor creates the contained KoTextDocument automatically.
      */
-    KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, bool hyphen, double ulw, KoStyle* defaultStyle,int _tabStopWidth = -1,
+    KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage,
+                  bool defaultHyphenation, KoStyle* defaultStyle, int tabStopWidth = -1,
                   QObject* parent = 0, const char *name = 0 );
 
     /** Alternative constructor.
@@ -318,7 +323,7 @@ public:
      *  @param paragLayoutChanged paragraph flags
      *  @param formatChanged format flags
      */
-    void applyStyleChange( StyleChangeDefMap changed );
+    void applyStyleChange( KoStyleChangeDefMap changed );
     /** Set format changes on selection or current cursor.
         Creates a command if the format was applied to a selection */
     void setFormat( KoTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false );
