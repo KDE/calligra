@@ -691,6 +691,140 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
     {
         // picture
     }
+    QDomElement pageEffect = e.namedItem( "PGEFFECT" ).toElement();
+    if ( !pageEffect.isNull() )
+    {
+        int tmp=0;
+        if(pageEffect.hasAttribute("value"))
+            tmp=pageEffect.attribute("value").toInt();
+        kdDebug()<<" tmp :"<<tmp<<endl;
+        switch( tmp )
+        {
+        case 1:
+            m_page_effect = "close-vertical";
+            break;
+        case 2:
+            m_page_effect = "close-horizontal";
+            break;
+        case 3:
+            m_page_effect = "fade-to-center";
+            break;
+        case 4:
+            m_page_effect = "open-vertical";
+            break;
+        case 5:
+            m_page_effect = "open-horizontal";
+            break;
+        case 6:
+            m_page_effect = "fade-from-center";
+            break;
+        case 7:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 8:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 9:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 10:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 11:
+            m_page_effect = "spiralin-left";
+            break;
+        case 12:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 13:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 14:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 15:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 16:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 17:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 18:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 19:
+            m_page_effect = "fade-from-top";
+            break;
+        case 20:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 21:
+            m_page_effect = "fade-from-bottom";
+            break;
+        case 22:
+            m_page_effect = "roll-from-bottom";
+            break;
+        case 23:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 24:
+            m_page_effect = "roll-from-right";
+            break;
+        case 25:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 26:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 27:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 28:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 29:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 30:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 31:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 32:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 33:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 34:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        case 35:
+            m_page_effect = "dissolve";
+            break;
+        case 36:
+            m_page_effect = "fade-from-lowerright";
+            break;
+        case 37:
+            m_page_effect = "fade-from-upperright";
+            break;
+        case 38:
+            m_page_effect = "fade-from-lowerleft";
+            break;
+        case 39:
+            m_page_effect = "fade-from-upperleft";
+            break;
+        case 40:
+            kdDebug()<<" this style is not defined :"<<tmp<<endl;
+            break;
+        default:
+            kdDebug()<<" style page effect not define : "<<tmp<<endl;
+            break;
+        }
+    }
 }
 
 void PageStyle::toXML( QDomDocument & doc, QDomElement & e ) const
@@ -703,6 +837,8 @@ void PageStyle::toXML( QDomDocument & doc, QDomElement & e ) const
     properties.setAttribute( "presentation:background-visible", m_bg_visible );
     properties.setAttribute( "presentation:background-objects-visible",
                              m_bg_objects_visible );
+    properties.setAttribute( "presentation:transition-style",
+                             m_page_effect );
     if ( m_fill != QString::null )
         properties.setAttribute( "draw:fill", m_fill );
     if ( m_fill_color != QString::null )
@@ -735,7 +871,8 @@ bool PageStyle::operator==( const PageStyle & pageStyle ) const
              m_fill_image_height == pageStyle.m_fill_image_height &&
              m_fill_image_ref_point == pageStyle.m_fill_image_ref_point &&
              m_fill_gradient_name == pageStyle.m_fill_gradient_name &&
-             m_repeat == pageStyle.m_repeat );
+             m_repeat == pageStyle.m_repeat &&
+        m_page_effect == pageStyle.m_page_effect);
 }
 
 TextStyle::TextStyle( QDomElement & e, const uint index )
