@@ -27,7 +27,7 @@ MISSING FEATURES / TODO:
 - Make option for txt obj to be abe to set a few colors and automatically use
   them in this order for the paragraphs (like always one in black and one in blue and
   again and again)
-
+- Synchronize object background and page background => object can't load picture and page can't use different brush type.
 
 KOffice in general:
 =======================
