@@ -22,10 +22,12 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qdatetime.h>
+#include <qwmatrix.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
 
+#include <koVectorPath.h>
 #include <koPainter.h>
 #include <koOutline.h>
 #include <koColor.h>
@@ -35,7 +37,10 @@ QWidget( widget, name )
 {
   setFixedSize(800,600);
   p = new KoPainter(800, 600);
+  QTime t;
+  t.start();
   p->fillAreaRGB(QRect(0,0,800,600), KoColor::white());
+  kdDebug() << "Fill time = " << t.elapsed() << endl;
   p->fillAreaRGB(QRect(200,100,300,400), KoColor(20,200,180));
   p->drawRectRGB(QRect(199,99,302,402), KoColor::black());
   p->drawHorizLineRGB(200,502,501,KoColor::gray());
@@ -59,6 +64,34 @@ QWidget( widget, name )
   o->width(3.0);
   o->color(KoColor::red());
   p->drawRect(100,120,200,200,20,30);
+  KoVectorPath *vv = KoVectorPath::rectangle(530,320,200,200,0,0);
+  QWMatrix m1,m2,m3;
+  m1 = m1.translate(-630, -420);
+  m2 = m2.rotate(40);
+  m3 = m3.translate(630, 420);
+  vv->transform(m1*m2*m3);
+  p->drawVectorPath(vv);
+  KoVectorPath *v = new KoVectorPath;
+  v->moveTo(200, 40);
+  v->lineTo(100, 70);
+  v->lineTo(400, 100);
+  v->lineTo(600, 590);
+  v->bezierTo(670, 120, 400,200, 400, 200);
+  v->lineTo(700, 100);
+  v->end();
+  o->dashResize(4);
+  o->setDash(0,5.0);
+  o->setDash(1,5.0);
+  o->setDash(2,15.0);
+  o->setDash(3,5.0);
+  o->color(KoColor::green());
+  o->opacity(255);
+  p->drawVectorPath(v);
+//  o->dashResize(0);
+//  o->width(1);
+//  o->color(KoColor::cyan());
+//  p->drawLine(600,590, 200,200);
+//  p->drawLine(670,120, 400,200);
 }
 
 KoPainterTest::~KoPainterTest()
@@ -69,7 +102,10 @@ KoPainterTest::~KoPainterTest()
 void KoPainterTest::paintEvent(QPaintEvent *)
 {
 //  p->blit(this);
+  QTime t;
+  t.start();
   bitBlt((QPaintDevice *)this, 0, 0, p->image(), 0, 0, 800, 600);
+  kdDebug() << "Blit time = " << t.elapsed() << endl;
 }
 
 int main(int argc, char **argv)

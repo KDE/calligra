@@ -25,6 +25,7 @@
 #include <koColor.h>
 #include <support/art_vpath.h>
 
+class KoVectorPath;
 class KoOutline;
 class KoFill;
 
@@ -39,7 +40,8 @@ public:
   void outline(KoOutline *aOutline);
   void fill(KoFill *aFill);
 
-  void resize(int w, int h);
+  void resize(const int w, const int h);
+  void resize(const QSize &size);
 
   void fillAreaRGB(const QRect &r, const KoColor &c);
   void drawRectRGB(const QRect &r, const KoColor &c);
@@ -48,6 +50,7 @@ public:
 
   void drawLine(double x1, double y1, double x2, double y2);
   void drawRect(double x, double y, double w, double h, double rx, double ry);
+  void drawVectorPath(KoVectorPath *vp);
 
   void blit(QWidget *w);
 

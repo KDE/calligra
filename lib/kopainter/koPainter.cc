@@ -30,6 +30,7 @@
 
 #include <kdebug.h>
 
+#include "koVectorPath.h"
 #include "koOutline.h"
 
 KoPainter::KoPainter(int w, int h)
@@ -56,17 +57,23 @@ void KoPainter::fill(KoFill *aFill)
   mFill = aFill;
 }
 
-void KoPainter::resize(int w, int h)
+void KoPainter::resize(const int w, const int h)
 {
+  mBuffer->create(w, h, 32);
+}
+
+void KoPainter::resize(const QSize &size)
+{
+  mBuffer->create(size, 32);
 }
 
 void KoPainter::fillAreaRGB(const QRect &r, const KoColor &c)
 {
   QRgb a = c.color().rgb();
-  for(int y = r.top(); y <= r.bottom(); y++)
+  for(int y = r.bottom(); y >= r.top(); y--)
   {
     QRgb *ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
-    for(int x = r.left(); x <= r.right(); x++)
+    for(int x = r.right(); x >= r.left(); x--)
       *(ptr + x) = a;
   }
 }
@@ -259,6 +266,11 @@ void KoPainter::drawRect(double x, double y, double w, double h, double rx, doub
 	}
 }
 
+void KoPainter::drawVectorPath(KoVectorPath *vp)
+{
+  drawVPath(vp->data());
+}
+
 void KoPainter::blit(QWidget *w)
 {
   bitBlt((QPaintDevice *)w, 0, 0, mBuffer, 0, 0, 800, 600);
@@ -271,17 +283,6 @@ void KoPainter::memset(QRgb *p, int n, QRgb c)
 void KoPainter::drawVPath(ArtVpath *vec)
 {
   ArtSVP *svp;
-
-/*	double affine[6];
-	affine[0] = m_matrix->a();
-	affine[1] = m_matrix->b();
-	affine[2] = m_matrix->c();
-	affine[3] = m_matrix->d();
-	affine[4] = m_matrix->e();
-	affine[5] = m_matrix->f();
-	vec = art_vpath_affine_transform(vec, affine);
-*/
-
 /*  bool sameURI = false;
 
 		if(m_drawShape->getFillColor()->paintType() == SVG_PAINTTYPE_URI && m_drawShape->getOutlineColor()->paintType() == SVG_PAINTTYPE_URI)

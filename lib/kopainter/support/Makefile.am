@@ -3,7 +3,6 @@ noinst_LTLIBRARIES  = libsupport.la
 libsupport_la_SOURCES = \
 	art_affine.c \
 	art_alphagamma.c \
-	art_bpath.c \
 	art_gray_svp.c \
 	art_misc.c \
 	art_pixbuf.c \
@@ -38,7 +37,6 @@ libsupport_la_SOURCES = \
 	art_uta_vpath.c \
 	art_uta_svp.c \
 	art_vpath.c \
-	art_vpath_bpath.c \
 	art_vpath_dash.c \
 	art_vpath_svp.c
 
