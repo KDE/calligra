@@ -114,9 +114,12 @@ void
 KexiTabBrowser::generateView()
 {
 	kdDebug() << "KexiTabBrowser::generateView()" << endl;
-	m_db->generateView();
+	if(kexiProject()->dbIsAvaible())
+	{
+		m_db->generateView();
 
-	generateTables();
+		generateTables();
+	}
 }
 
 void

@@ -71,7 +71,10 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, co
 	m_first = true;
 
 	if(!embedd)
+	{
 		registerAs(DocumentWindow);
+		showMaximized();
+	}
 }
 
 bool
