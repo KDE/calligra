@@ -51,7 +51,7 @@ public:
 using namespace KSpread;
 
 
-TestRunner::TestRunner(KLocale *locale):
+TestRunner::TestRunner(KLocale *locale, KSpreadSheet *sheet):
   KDialogBase( KDialogBase::Plain, "Internal Tests", KDialogBase::Close, 
   KDialogBase::Close )
 {
@@ -81,7 +81,7 @@ TestRunner::TestRunner(KLocale *locale):
   
   // add all tests here !!
   addTester( new ValueTester() );
-  addTester( new StyleClusterTester() );
+  addTester( new StyleClusterTester(sheet) );
   addTester( new FormulaParserTester(locale) );
   addTester( new FormulaEvalTester(locale) );
 }

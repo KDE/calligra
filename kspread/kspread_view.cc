@@ -6676,7 +6676,7 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
 void KSpreadView::runInternalTests()
 {
     // run various tests, only for developers
-    KSpread::TestRunner* runner = new KSpread::TestRunner(d->doc->locale());
+    KSpread::TestRunner* runner = new KSpread::TestRunner(d->doc->locale(), d->activeSheet);
     runner->exec();
     delete runner;
 }
@@ -6684,6 +6684,7 @@ void KSpreadView::runInternalTests()
 void KSpreadView::runInspector()
 {
     // useful to inspect objects
+    if(!d->activeSheet) return;
     KSpreadCell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
     KSpread::Inspector* ins = new KSpread::Inspector( cell );
     ins->exec();

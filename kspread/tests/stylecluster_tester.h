@@ -26,6 +26,7 @@
 
 #include <kspread_value.h>
 
+class KSpreadSheet;
 
 namespace KSpread
 {
@@ -33,10 +34,11 @@ namespace KSpread
 class StyleClusterTester: public Tester
 {
 public:
-  StyleClusterTester();
+  StyleClusterTester(KSpreadSheet *sheet);
   virtual QString name();
   virtual void run();
 private:
+  KSpreadSheet *m_sheet;
 };
 
 

@@ -19,8 +19,10 @@
 
 #include "tester.h"
 #include "stylecluster_tester.h"
-
+#include "stylecluster.h"
+#include "kspread_sheet.h"
 #include <kspread_value.h>
+
 
 
 #define CHECK_PARSE(x,y)  checkParse(__FILE__,__LINE__,#x,x,y,t_locale)
@@ -28,19 +30,22 @@
 
 using namespace KSpread;
 
-StyleClusterTester::StyleClusterTester(): Tester()
+StyleClusterTester::StyleClusterTester(KSpreadSheet *sheet): Tester()
 {
+  m_sheet = sheet;
 }
 
 QString StyleClusterTester::name()
 {
-  return QString("Stylecluster");
+  return QString("Test Cell Styles");
 }
 
 void StyleClusterTester::run()
 {
   testCount = 0;
   errorList.clear();
+
+  StyleCluster stylecluster(m_sheet);
 
   // simple, single-token formulas
 //  CHECK_PARSE( "True", "b" );

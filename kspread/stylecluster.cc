@@ -91,6 +91,7 @@ StyleClusterQuad::~StyleClusterQuad()
 StyleCluster::StyleCluster(KSpreadSheet* sheet)
 : m_sheet(sheet)
 {
+  Q_ASSERT(sheet); if(!sheet) return;
   // create quad tree
   // don't use KSpreadFormat, it seems to be deprecated anyway...
   m_topQuad = new StyleClusterQuad();
