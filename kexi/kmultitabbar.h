@@ -59,6 +59,8 @@ public:
 	QPtrList<class KMultiTabBarButton> buttons;
 	void setPosition(KMultiTabBarPosition pos);
         QPtrList<KMultiTabBarTab>* tabs();
+	void showActiveTabTexts(bool show=true);
+
 private:
 	class KMultiTabBarInternal *internal;
 	QBoxLayout *l;
@@ -75,14 +77,17 @@ public:
 	~KMultiTabBarButton(){;}
 	int id(){return m_id;}
 	void setPosition(KMultiTabBar::KMultiTabBarPosition);
+	void setText(const QString &);
+	
 protected:
 	KMultiTabBar::KMultiTabBarPosition position;
+	QString m_text;
 private:
 	int m_id;
 signals:
 	void clicked(int);
-private slots:
-	void slotClicked();
+protected slots:
+	virtual void slotClicked();
 };
 
 
@@ -93,8 +98,15 @@ public:
 	KMultiTabBarTab(const QPixmap& pic,const QString&,int id,QWidget *parent,
 		KMultiTabBar::KMultiTabBarPosition pos);
 	~KMultiTabBarTab(){;}
+	void setState(bool);
+	void showActiveTabText(bool show);
+private:
+	bool m_showActiveTabText;
 protected:
+	void updateState();
 	virtual void drawButton(QPainter *);
+protected slots:
+	virtual void slotClicked();
 };
 
 class KMultiTabBarInternal: public QScrollView
@@ -106,11 +118,13 @@ public:
 	KMultiTabBarTab *getTab(int);
 	void removeTab(int);
 	void setPosition(enum KMultiTabBar::KMultiTabBarPosition pos);
+	void showActiveTabTexts(bool show);
 	QPtrList<KMultiTabBarTab>* tabs(){return &m_tabs;}
 private:
 	QHBox *box;
 	QPtrList<KMultiTabBarTab> m_tabs;
 	enum KMultiTabBar::KMultiTabBarPosition position;
+	bool m_showActiveTabTexts;
 protected:
 	virtual void drawContents ( QPainter *, int, int, int, int);
 

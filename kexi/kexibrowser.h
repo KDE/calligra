@@ -75,6 +75,7 @@ protected slots:
 	void		slotEdit();
 	
 	void		slotCreateTable();
+	void		slotCreateNewForm();
 };
 
 #endif

@@ -113,6 +113,16 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 				break;
 			}
 			
+			case KexiBrowserItem::Form:
+			{
+				m->insertItem(i18n("Create Form"), this, SLOT(slotCreateNewForm()));
+				if (r->type()==KexiBrowserItem::Child)
+				{
+					m->insertItem(i18n("Delete Form"), this, SLOT(slotDelete()));
+					m->insertItem(i18n("Edit Form"), this, SLOT(slotEdit()));			
+				}
+				break;
+			}
 			default:
 			{
 				m->insertItem(i18n("Create Form"), this, SLOT(slotCreate()));
@@ -133,9 +143,12 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 	{
 		case KexiBrowserItem::Form:
 		{
-			KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form");
-			kexi->mainWindow()->workspace()->addItem(fb);
-			fb->show();
+			if ( r->type() == KexiBrowserItem::Child)
+			{
+    			    KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form",r->identifier());
+			    kexi->mainWindow()->workspace()->addItem(fb);
+			    fb->show();
+			}
 			break;
 		}
 
@@ -161,6 +174,14 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 	}	
 }
 
+
+void KexiBrowser::slotCreateNewForm()
+{
+	KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Form, m_forms, i18n("New Form"));
+	slotCreate(item);	
+	item->setPixmap(0, iconLoader->loadIcon("form", KIcon::Small));
+	
+}
 
 void KexiBrowser::slotDelete()
 {

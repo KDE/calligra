@@ -80,7 +80,7 @@ class KexiFormBase : public KexiDialogBase
 		
 		void setActions(QPtrList<KAction> *actions);
 		void unregisterActions(QPtrList<KAction> *actions);
-
+		static int dotSpacing();
 	protected:
 		void initActions();
 		void registerAction(KAction *action);
@@ -94,6 +94,7 @@ class KexiFormBase : public KexiDialogBase
 		void installEventFilterRecursive(QObject *obj);
 
 		void setResizeHandles(QWidget *m_activeWidget);
+		void activateWidget(QWidget *widget);
 		
 		QWidget	*m_pendingWidget;
 		

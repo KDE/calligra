@@ -108,7 +108,7 @@ void KexiFormBaseResizeHandle::mousePressEvent(QMouseEvent *ev)
 
 void KexiFormBaseResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 {
-	int m_dotSpacing=10;
+	int m_dotSpacing=KexiFormBase::dotSpacing();
 	if (!m_dragging) return;
 
 	int tmpx=m_buddy->x();
@@ -198,6 +198,7 @@ KexiFormBaseResizeHandleSet::~KexiFormBaseResizeHandleSet()
 }
 
 
+
 KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource)
 	: KexiDialogBase(parent,name)
 {
@@ -210,7 +211,7 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));
 	
-	m_dotSpacing = 10;
+	m_dotSpacing = dotSpacing();
 
 	resize( 250, 250 );
 
@@ -221,6 +222,11 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource
 	m_activeWidget=0;
 	m_activeMoveWidget=0;
 	m_resizeHandleSet=0;
+}
+
+int KexiFormBase::dotSpacing()
+{ 
+	return 10;
 }
 
 void KexiFormBase::initActions()
@@ -363,6 +369,7 @@ void KexiFormBase::paintEvent(QPaintEvent *ev)
 void KexiFormBase::installEventFilterRecursive(QObject *obj)
 {
 	obj->installEventFilter(this);
+	static_cast<QWidget*>(obj)->setCursor(QCursor(SizeAllCursor));
 	if ( obj->children() )
 	{
 		QObjectListIt it( *obj->children() );
@@ -403,6 +410,7 @@ void KexiFormBase::insertWidget(QWidget *widget, int x, int y, int w, int h)
 	widget->resize(w, h);
 	widget->show();
 	widget->setFocusPolicy(QWidget::NoFocus);
+	activateWidget(widget);
 //	widget->repaint();
 //	grabMouse();
 //	grabKeyboard();
@@ -423,6 +431,15 @@ void KexiFormBase::setResizeHandles(QWidget *m_activeWidget)
 
 }
 
+void KexiFormBase::activateWidget(QWidget *widget)
+{
+	m_activeWidget=widget;
+	while (!(m_activeWidget->parentWidget(true)==this))
+		m_activeWidget=m_activeWidget->parentWidget();
+	setResizeHandles(m_activeWidget);
+
+}
+
 bool KexiFormBase::eventFilter(QObject *obj, QEvent *ev)
 {
 	kdDebug() << "event!" << endl;
@@ -430,13 +447,10 @@ bool KexiFormBase::eventFilter(QObject *obj, QEvent *ev)
 	switch (ev->type())
 	{
 		case QEvent::MouseButtonPress:
-			m_activeWidget=static_cast<QWidget*>(obj);
-			while (!(m_activeWidget->parentWidget(true)==this))
-				m_activeWidget=m_activeWidget->parentWidget();
+			activateWidget(static_cast<QWidget*>(obj));
 			m_activeMoveWidget=m_activeWidget;
 			m_moveBX=static_cast<QMouseEvent*>(ev)->x();
 			m_moveBY=static_cast<QMouseEvent*>(ev)->y();
-			setResizeHandles(m_activeWidget);
 			return true;
 			break;
 		case QEvent::MouseButtonRelease:

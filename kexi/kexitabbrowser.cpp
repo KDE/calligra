@@ -21,6 +21,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <klistview.h>
+#include <klocale.h>
 #include "kmultitabbar.h"
 
 #include <qtabwidget.h>
@@ -39,6 +40,7 @@ KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 
 	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);
 	m_tabBar->setPosition(KMultiTabBar::Left);
+	m_tabBar->showActiveTabTexts(true);
 
 	m_stack = new QWidgetStack(this);
 
@@ -50,11 +52,11 @@ KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 	m_queries = new KexiBrowser(this, KexiBrowser::SectionQuery);
 	m_reports = new KexiBrowser(this, KexiBrowser::SectionReport);
 
-	addBrowser(m_db, "db");
-	addBrowser(m_tables, "tables");
-	addBrowser(m_forms, "forms");
-	addBrowser(m_queries, "queries");
-	addBrowser(m_reports, "reports");
+	addBrowser(m_db, "db",i18n("Database project"));
+	addBrowser(m_tables, "tables",i18n("Tables"));
+	addBrowser(m_forms, "forms",i18n("Forms"));
+	addBrowser(m_queries, "queries",i18n("Queries"));
+	addBrowser(m_reports, "reports",i18n("Reports"));
 
 	layout->addWidget(m_tabBar,	0,	0);
 	layout->addWidget(m_stack,	0,	1);
@@ -62,10 +64,10 @@ KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 }
 
 void
-KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon)
+KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon,QString text)
 {
 	m_tabs++;
-	m_tabBar->insertTab(kexi->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs);
+	m_tabBar->insertTab(kexi->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
 
 	connect(m_tabBar->getTab(m_tabs), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
 	m_stack->addWidget(browser);

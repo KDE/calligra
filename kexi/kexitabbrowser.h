@@ -42,7 +42,7 @@ class KexiTabBrowser : public QWidget
 		void			generateView();
 
 	protected:
-		void			addBrowser(KexiBrowser *browser, QString icon);
+		void			addBrowser(KexiBrowser *browser, QString icon,QString text);
 
 		void			generateTables();
 
