@@ -1,7 +1,9 @@
 Register a kdebug area (as soon as KDE 3.3 is open)
 KFormula (frameType==4)
-
-(probably more...)
+<COUNTER>
+<PAPER>, <PAPERBORDERS>
+<ATTRIBUTES>
+...
 
 === Old OOWriter To-Do List ===
 Paragraph direction
@@ -20,5 +22,12 @@ Cursor position
 
 === KWord 0.8 ===
 Document settings
+<FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
+<FORMAT id="3"> (tabulator)
+<FORMAT id="5"> (footnote)
+...
+
+=== Low Priority ===
+<SERIALL>, <SAMPLE>, <DB>
 ...
 
