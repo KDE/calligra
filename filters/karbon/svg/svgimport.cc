@@ -219,9 +219,9 @@ SvgImport::parseGradient( const QDomElement &e )
 	QString spreadMethod = e.attribute( "spreadMethod" );
 	if( !spreadMethod.isEmpty() )
 	{
-		if( spreadMethod == "reflect" )	
+		if( spreadMethod == "reflect" )
 			gradient.setRepeatMethod( VGradient::reflect );
-		else if( spreadMethod == "repeat" )	
+		else if( spreadMethod == "repeat" )
 			gradient.setRepeatMethod( VGradient::repeat );
 	}
 	parseColorStops( &gradient, e );
@@ -485,7 +485,7 @@ SvgImport::getCoord( const char *ptr, double &number )
 	decimal = 0;
 	sign = 1;
 	expsign = 1;
-	
+
 	// read the sign
 	if(*ptr == '+')
 		ptr++;
@@ -494,7 +494,7 @@ SvgImport::getCoord( const char *ptr, double &number )
 		ptr++;
 		sign = -1;
 	}
-	
+
 	// read the integer part
 	while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
 		integer = (integer * 10) + *(ptr++) - '0';
@@ -504,11 +504,11 @@ SvgImport::getCoord( const char *ptr, double &number )
 		while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
 			decimal += (*(ptr++) - '0') * (frac *= 0.1);
     }
-	
+
 	if(*ptr == 'e' || *ptr == 'E') // read the exponent part
 	{
 		ptr++;
-		
+
 		// read the sign of the exponent
 		if(*ptr == '+')
 			ptr++;
@@ -517,7 +517,7 @@ SvgImport::getCoord( const char *ptr, double &number )
 			ptr++;
 			expsign = -1;
 		}
-		
+
 		exponent = 0;
 		while(*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
 		{
@@ -532,7 +532,7 @@ SvgImport::getCoord( const char *ptr, double &number )
 	// skip the following space
 	if(*ptr == ' ')
 		ptr++;
-	
+
 	return ptr;
 }
 
@@ -561,7 +561,7 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 
 			relative = false;
 
-			cout << "Command : " << command << endl;
+			std::cout << "Command : " << command << std::endl;
 			switch( command )
 			{
 				case 'm':
