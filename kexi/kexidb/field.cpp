@@ -20,8 +20,6 @@
  */
 
 #include "field.h"
-
-#include <kexidb/table.h>
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
 
@@ -63,13 +61,10 @@ Field::Field(Table *table)
 Field::Field(const QString& name, enum Type ctype,
 	int cconst,int length, int precision, int options,
 	QVariant defaultValue)
-	: m_table(0)
-	,m_name(name)
-	,m_type(ctype)
-	,m_options(options)
-	,m_length(length)
-	,m_precision(precision)
-	,m_defaultValue(defaultValue)
+	: m_name(name),m_type(ctype),
+	m_options(options),
+	m_length(length),m_precision(precision),
+	m_defaultValue(defaultValue)
 {
 	setConstraints(cconst);
 	if (m_length==0) {//0 means default length:
@@ -346,18 +341,23 @@ Field::setDefaultValue(const QCString& def)
 			break;
 		}case Integer: {//4 bytes
 			long v = def.toLong(&ok);
-			if (!ok || (!(m_options & Unsigned) && (-v > 0x080000000 || v > (0x080000000-1))) || ((m_options & Unsigned) && (v < 0 || v > 0x100000000)))
+			if (!ok || (!(m_options & Unsigned) && (-v > 0x080000000 || v > (0x080000000-1))))
 				m_defaultValue = QVariant();
 			else
-				m_defaultValue = QVariant(v);
+				m_defaultValue = QVariant((Q_LLONG)v);
 			break;
 		}case BigInteger: {//8 bytes
-			long v = def.toLong(&ok);
+#warning fixme
+/*
+			Q_LLONG long v = def.toLongLong(&ok);
 //TODO: 2-part decoding
-			if (!ok || (!(m_options & Unsigned) && (-v > 0x080000000 || v > (0x080000000-1))) || ((m_options & Unsigned) && (v < 0 || v > 0x100000000)))
+			if (!ok || (!(m_options & Unsigned) && (-v > 0x080000000 || v > (0x080000000-1))))
 				m_defaultValue = QVariant();
 			else
-				m_defaultValue = QVariant(v);
+				if (m_options & Unsigned)
+					m_defaultValue=QVariant((Q_ULLONG) v);
+				else
+					m_defaultValue = QVariant((Q_LLONG)v);*/
 			break;
 		}case Boolean: {
 			unsigned short v = def.toUShort(&ok);
@@ -491,26 +491,27 @@ Field::setNotNull(bool n)
 	}
 }
 
+
 QString Field::debugString() const
 {
-	KexiDB::Connection *conn = m_table ? m_table->connection() : 0;
-	QString dbg = m_name + " ";
-	if (m_options & Field::Unsigned)
-		dbg += " UNSIGNED ";
-	dbg += conn ? conn->driver()->sqlTypeName(m_type) : Driver::defaultSQLTypeName(m_type);
-	if (m_length > 0)
-		dbg += "(" + QString::number(m_length) + ")";
-	if (m_precision > 0)
-		dbg += " PRECISION(" + QString::number(m_precision) + ")";
-	if (m_constraints & Field::AutoInc)
-		dbg += " AUTOINC";
-	if (m_constraints & Field::Unique)
-		dbg += " UNIQUE";
-	if (m_constraints & Field::PrimaryKey)
-		dbg += " PKEY";
-	if (m_constraints & Field::ForeignKey)
-		dbg += " FKEY";
-	if (m_constraints & Field::NotNull)
-		dbg += " NOTNULL";
-	return dbg;
+        KexiDB::Connection *conn = m_table ? m_table->connection() : 0;
+        QString dbg = m_name + " ";
+        if (m_options & Field::Unsigned)
+                dbg += " UNSIGNED ";
+        dbg += conn ? conn->driver()->sqlTypeName(m_type) : Driver::defaultSQLTypeName(m_type);
+        if (m_length > 0)
+                dbg += "(" + QString::number(m_length) + ")";
+        if (m_precision > 0)
+                dbg += " PRECISION(" + QString::number(m_precision) + ")";
+        if (m_constraints & Field::AutoInc)
+                dbg += " AUTOINC";
+        if (m_constraints & Field::Unique)
+                dbg += " UNIQUE";
+        if (m_constraints & Field::PrimaryKey)
+                dbg += " PKEY";
+        if (m_constraints & Field::ForeignKey)
+                dbg += " FKEY";
+        if (m_constraints & Field::NotNull)
+                dbg += " NOTNULL";
+        return dbg;
 }

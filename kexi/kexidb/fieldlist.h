@@ -46,7 +46,7 @@ class KEXI_DB_EXPORT FieldList
 //		void debug();
 	protected:
 		FieldList();
-		~FieldList();
+		virtual ~FieldList();
 
 	//js	QStringList m_primaryKeys;
 		Field::List m_fields;

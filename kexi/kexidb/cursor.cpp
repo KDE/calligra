@@ -43,7 +43,7 @@ Cursor::Cursor(Connection* conn, const QString& statement)
 
 Cursor::~Cursor()
 {
-	qDebug("Cursor::~Cursor() '%s'",(const char *)m_statement);
+	qDebug("Cursor::~Cursor() '%s'",m_statement.latin1());
 	m_conn->m_cursors.take(this);
 //	close();
 }
