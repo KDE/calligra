@@ -78,6 +78,8 @@ class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
 			p_rebuildDelayTimer.start( REBUILD_DELAY, true );
 		}
 
+		virtual const QColor& paletteBackgroundColor() const;
+
 		/*!
 		Set the displaymode \a mode.
 		The widget will be updated automatically.
@@ -153,6 +155,9 @@ class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
 
 		double blendOpacity() const { return p_opacity; }
 
+	public slots:
+		virtual void setPaletteBackgroundColor( const QColor& color );
+
 	protected:
 		virtual bool eventFilter( QObject* object, QEvent* event );
 		virtual void enabledChange( bool enabled ) {
@@ -220,6 +225,8 @@ class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
 		QWidget* p_currentChild;
 		double p_opacity;
 		bool p_cacheDirty;
+
+		QColor p_backgroundColor;
 
 	public slots:
 		/*!

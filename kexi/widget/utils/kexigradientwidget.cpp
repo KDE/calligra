@@ -38,6 +38,8 @@ KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, WFlag
 	p_customBackgroundWidgets.setAutoDelete( false );
 	p_knownWidgets.setAutoDelete( false );
 
+	p_backgroundColor = QWidget::paletteBackgroundColor();
+
 	connect ( &p_rebuildDelayTimer, SIGNAL( timeout() ), this, SLOT( setCacheDirty() ) );
 
 	installEventFilter( this );
@@ -86,11 +88,12 @@ void KexiGradientWidget::rebuildCache( void ) {
 	Disable the effect and behave like a normal QWidget.
 	*/
 	if ( p_displayMode == NoGradient ) {
-		if ( p_backgroundPixmap.isNull() ) {
-			unsetPalette();
-		} else {
+//		if ( p_backgroundPixmap.isNull() ) {
+			//unsetPalette();
+		//} else {
 			QWidget::setPaletteBackgroundPixmap( p_backgroundPixmap );
-		}
+		//}
+		QWidget::setPaletteBackgroundColor( p_backgroundColor );
 
 		for ( WidgetList::Iterator it = childWidgetList.begin();
 			it != childWidgetList.end(); ++it ) {
@@ -335,6 +338,19 @@ void KexiGradientWidget::updateChildBackground( QWidget* childWidget )
 
 	p_currentChild = childWidget;
 	childWidget->setPaletteBackgroundPixmap( partPixmap );
+}
+
+void KexiGradientWidget::setPaletteBackgroundColor( const QColor& color )
+{
+	p_backgroundColor = color;
+	if ( p_displayMode == NoGradient ) {
+		QWidget::setPaletteBackgroundColor( p_backgroundColor );
+	}
+}
+
+const QColor& KexiGradientWidget::paletteBackgroundColor() const
+{
+	return p_backgroundColor;
 }
 
 #include "kexigradientwidget.moc"
