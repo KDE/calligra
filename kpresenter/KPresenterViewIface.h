@@ -20,14 +20,13 @@
 #ifndef KPRESENTER_VIEW_IFACE_H
 #define KPRESENTER_VIEW_IFACE_H
 
-#include <dcopobject.h>
-#include <dcopref.h>
+#include <KoViewIface.h>
 
 #include <qstring.h>
 
 class KPresenterView;
 
-class KPresenterViewIface : virtual public DCOPObject
+class KPresenterViewIface : public KoViewIface
 {
     K_DCOP
 public:

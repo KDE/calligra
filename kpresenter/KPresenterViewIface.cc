@@ -25,7 +25,7 @@
 #include <dcopclient.h>
 
 KPresenterViewIface::KPresenterViewIface( KPresenterView *view_ )
-    : DCOPObject( view_ )
+    : KoViewIface( view_ )
 {
     view = view_;
 }
