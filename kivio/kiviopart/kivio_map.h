@@ -90,7 +90,7 @@ public:
   /**
    * @return amount of pages in this map.
    */
-  int count();
+  int count()const;
 
   void update();
 

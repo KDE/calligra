@@ -161,7 +161,7 @@ KivioPage* KivioMap::nextPage()
   return m_lstPages.next();
 }
 
-int KivioMap::count()
+int KivioMap::count() const
 {
   return m_lstPages.count();
 }
