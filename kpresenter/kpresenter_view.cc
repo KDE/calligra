@@ -2497,10 +2497,10 @@ void KPresenterView::setupActions()
         actionViewShowNoteBar->setChecked(true);
     }
 
-    actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
+    actionViewHeader = new KToggleAction( i18n( "Show &Header" ), 0,
                                           this, SLOT( viewHeader() ),
                                           actionCollection(), "view_header" );
-    actionViewFooter = new KToggleAction( i18n( "Foo&ter" ), 0,
+    actionViewFooter = new KToggleAction( i18n( "Show Foo&ter" ), 0,
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "view_footer" );
 
@@ -2767,7 +2767,7 @@ void KPresenterView::setupActions()
 
     // ----------------- format actions
 
-    actionExtraPenBrush = new KAction( i18n( "&Properties..." ), "penbrush", 0,
+    actionExtraPenBrush = new KAction( i18n( "&Properties" ), "penbrush", 0,
                                        this, SLOT( extraPenBrush() ),
                                        actionCollection(), "extra_properties" );
 
@@ -2889,12 +2889,12 @@ void KPresenterView::setupActions()
                                            this, SLOT( screenConfigPages() ),
                                            actionCollection(), "screen_configpages" );
 
-    actionScreenAssignEffect = new KAction( i18n( "Edit &Object Effect..." ),
+    actionScreenAssignEffect = new KAction( i18n( "Edit &Object Effect" ),
                                             "effect", 0,
                                             this, SLOT( screenAssignEffect() ),
                                             actionCollection(), "screen_assigneffect");
 
-    actionScreenTransEffect = new KAction( i18n( "Slide &Transition..." ),
+    actionScreenTransEffect = new KAction( i18n( "Edit Slide &Transition" ),
                                            "effect", 0,
                                            this, SLOT( screenTransEffect() ),
                                            actionCollection(), "screen_transeffect");
