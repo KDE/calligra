@@ -410,8 +410,6 @@ public:
      */
     int textWidth() {return m_iOutTextWidth; }
     int textHeight() {return m_iOutTextHeight; }
-    int richTextWidth() {return m_richWidth; }
-    int richTextHeight() {return m_richHeight;}
 
     /**
      * Like @ref updateDepending, but the cells content will be refreshed
@@ -464,7 +462,7 @@ public:
      */
     void setCalcDirtyFlag();
 
-    bool calcDirtyFlag() { if ( m_content == Formula ) return false; return m_bCalcDirtyFlag; }
+    bool calcDirtyFlag();
 
     /**
      * Test to see if this cell depends on the given cell
@@ -494,10 +492,10 @@ public:
      * some cell specific layout value like font or text change.
      */
     virtual void setLayoutDirtyFlag();
-    bool layoutDirtyFlag() const { return m_bLayoutDirtyFlag; }
+    bool layoutDirtyFlag() const;
 
-    void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
-    void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true ; }
+    void clearDisplayDirtyFlag();
+    void setDisplayDirtyFlag();
 
     /**
      * Print the cell.
@@ -565,7 +563,7 @@ public:
     /**
      * @return TRUE if the cell is forced to obscure other cells.
      */
-    bool isForceExtraCells() const { return m_bForceExtraCells; }
+    bool isForceExtraCells() const;
 
     /**
      * @return the amount of obscured cells in the horizontal direction
@@ -598,7 +596,7 @@ public:
      * @return TRUE if the cell contains a formula that could not
      *         be evaluated. These cells usually appear with "####" on the screen.
      */
-    bool hasError() const { return m_bError; }
+    bool hasError() const;
 
     /**
      * Calculates the layout of the cell, i,e, determines what should be shown
@@ -774,52 +772,13 @@ private:
      */
     int m_fmAscent;
 
-    /**
-     * True if the cell is calculated and there was an error during calculation
-     * In that case the cell usually displays "#####"
-     */
-    bool m_bError;
 
-    /**
-     * Flag showing whether the current layout is OK.
-     * If you change for example the fonts point size, set this flag. When the cell
-     * must draw itself on the screen it will first recalculate its layout.
-     */
-    bool m_bLayoutDirtyFlag;
+    /* a bit-mask variable for various boolean flags used in the cell
+       See the description of flags near the top of kspread_cell.cc
+    */
+    Q_INT8 m_flagsMask;
 
-    /**
-     * Shows whether recalculation is necessary.
-     * If this cell must be recalculated for some reason, for example the user entered
-     * a new formula, then this flag is set. If @ref #bFormula is FALSE nothing will happen
-     * at all.
-     */
-    bool m_bCalcDirtyFlag;
-
-    /**
-     * Tells whether this cell it currently under calculation.
-     * If a cell thats 'progressFlag' is set is told to calculate we
-     * have detected a circular reference and we must stop calulating.
-     */
-    bool m_bProgressFlag;
-
-    /**
-     * Tells whether we've already calculated the reverse dependancies for this cell.  Similar to
-     * @ref m_bProgressFlag but it's for when we are calculating in the reverse direction.
-     * @see updateDependancies()
-     */
-    bool m_bUpdatingDeps;
-    /**
-     * If this flag is set, then it is known that this cell has to be updated
-     * on the display. This means that somewhere in the calling stack there is a
-     * function which will call @ref KSpreadTable::updateCell once it retains
-     * the control. If a function changes the contents/layout of this cell and this
-     * flag is not set, then the function must set it at once. After the changes are
-     * done the function must call <tt>m_pTable->updateCell(...).
-     * The flag is cleared by the function m_pTable->updateCell.
-     */
-    bool m_bDisplayDirtyFlag;
-
-    /**
+  /**
      * The amount of additional cells horizontal
      *
      * @persistent
@@ -842,14 +801,6 @@ private:
      * This value does not mean anything unless @ref m_iExtraYCells is different from 0.
      */
     int m_iExtraHeight;
-
-    /**
-     * Tells whether the cell is forced to exceed its size.
-     * Cells may occupy other cells space on demand. But you may force
-     * a cell to do so by setting this flag. Forcing the cell to have
-     * no extra size will disable this flag!
-     */
-    bool m_bForceExtraCells;
 
     /**
      * The @ref KSpreadCell that obscures this one.
@@ -919,26 +870,10 @@ private:
     QSimpleRichText *m_pQML; // Set when the cell contains QML
 
     /**
-     * Width of richText
-     */
-    int m_richWidth;
-    /**
-     * Height of richText
-     */
-    int m_richHeight;
-
-
-    /**
      * The parse tree of the real formula (e.g: "=A1*A2").
      */
     KSParseNode* m_pCode;
 
-    /**
-     * When it's True displays **
-     * it's true when text size is bigger that cell size
-     * and when Align is center or left
-     */
-    bool m_bCellTooShort;
 
     KSpreadConditions conditions;
 
