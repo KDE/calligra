@@ -122,7 +122,7 @@ public:
    * Read data from the currently opened file. You can also use the streams
    * for this.
    */
-  QByteArray read( long unsigned int max );
+  QByteArray read( unsigned long int max );
 
   /**
    * Write data into the currently opened file. You can also use the streams
