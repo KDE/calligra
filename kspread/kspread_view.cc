@@ -5030,7 +5030,8 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
     m_sort->setEnabled( !simpleSelection );
     m_mergeCell->setEnabled( !simpleSelection );
     m_insertChartFrame->setEnabled( !simpleSelection );
-
+    m_sortDec->setEnabled( !simpleSelection );
+    m_sortInc->setEnabled( !simpleSelection);
     resultOfCalc();
     // Send some event around. This is read for example
     // by the calculator plugin.
