@@ -834,42 +834,81 @@ BCType KPrPage::getGType( BCType gt )const
 /*================================================================*/
 bool KPrPage::getGUnbalanced( bool  unbalanced )
 {
-    KPObject *kpobject = 0;
-
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
         {
-            kpobject=it.current();
-    	    switch ( kpobject->getType() ) {
+    	    switch ( it.current()->getType() ) {
 	    case OT_RECT:
-		return dynamic_cast<KPRectObject*>( kpobject )->getGUnbalanced();
-		break;
+            {
+                KPRectObject* obj=dynamic_cast<KPRectObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+            break;
 	    case OT_ELLIPSE:
-		return dynamic_cast<KPEllipseObject*>( kpobject )->getGUnbalanced();
-		break;
+            {
+                KPEllipseObject* obj=dynamic_cast<KPEllipseObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+
+            break;
 	    case OT_AUTOFORM:
-		return dynamic_cast<KPAutoformObject*>( kpobject )->getGUnbalanced();
-		break;
+            {
+                KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+
+            break;
 	    case OT_PIE:
-		return dynamic_cast<KPPieObject*>( kpobject )->getGUnbalanced();
-		break;
+            {
+                KPPieObject* obj=dynamic_cast<KPPieObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+            break;
 	    case OT_PART:
-		return dynamic_cast<KPPartObject*>( kpobject )->getGUnbalanced();
-		break;
+            {
+                KPPartObject* obj=dynamic_cast<KPPartObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+
+            break;
 	    case OT_PICTURE:
-		return dynamic_cast<KPPixmapObject*>( kpobject )->getGUnbalanced();
-		break;
+            {
+                KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+
+            break;
 	    case OT_CLIPART:
-		return dynamic_cast<KPClipartObject*>( kpobject )->getGUnbalanced();
-		break;
+            {
+                KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+
+            break;
 	    case OT_TEXT:
-		return dynamic_cast<KPTextObject*>( kpobject )->getGUnbalanced();
-		break;
+            {
+                KPTextObject* obj=dynamic_cast<KPTextObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+
+            break;
             case OT_POLYGON:
-                return dynamic_cast<KPPolygonObject*>( kpobject )->getGUnbalanced();
-                break;
+            {
+                KPPolygonObject* obj=dynamic_cast<KPPolygonObject*>( it.current() );
+                if(obj)
+                    return obj->getGUnbalanced();
+            }
+            break;
 	    default: break;
 	    }
 	}
@@ -881,42 +920,82 @@ bool KPrPage::getGUnbalanced( bool  unbalanced )
 /*================================================================*/
 int KPrPage::getGXFactor( int xfactor )const
 {
-    KPObject *kpobject = 0;
-
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
         {
-            kpobject=it.current();
-            switch ( kpobject->getType() ) {
+            switch ( it.current()->getType() ) {
 	    case OT_RECT:
-		return dynamic_cast<KPRectObject*>( kpobject )->getGXFactor();
-		break;
+            {
+                KPRectObject* obj=dynamic_cast<KPRectObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+            break;
 	    case OT_ELLIPSE:
-		return dynamic_cast<KPEllipseObject*>( kpobject )->getGXFactor();
-		break;
+            {
+                KPEllipseObject* obj=dynamic_cast<KPEllipseObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+
+            break;
 	    case OT_AUTOFORM:
-		return dynamic_cast<KPAutoformObject*>( kpobject )->getGXFactor();
-		break;
+            {
+                KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+
+            break;
 	    case OT_PIE:
-		return dynamic_cast<KPPieObject*>( kpobject )->getGXFactor();
-		break;
+            {
+                KPPieObject* obj=dynamic_cast<KPPieObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+
+            break;
 	    case OT_PART:
-		return dynamic_cast<KPPartObject*>( kpobject )->getGXFactor();
-		break;
+            {
+                KPPartObject* obj=dynamic_cast<KPPartObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+            break;
 	    case OT_PICTURE:
-		return dynamic_cast<KPPixmapObject*>( kpobject )->getGXFactor();
-		break;
+            {
+                KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+
+            break;
 	    case OT_CLIPART:
-		return dynamic_cast<KPClipartObject*>( kpobject )->getGXFactor();
-		break;
+            {
+                KPClipartObject* obj=dynamic_cast<KPClipartObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+
+            break;
 	    case OT_TEXT:
-		return dynamic_cast<KPTextObject*>( kpobject )->getGXFactor();
-		break;
+            {
+                KPTextObject* obj=dynamic_cast<KPTextObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+
+            break;
             case OT_POLYGON:
-                return dynamic_cast<KPPolygonObject*>( kpobject )->getGXFactor();
-                break;
+            {
+                KPPolygonObject* obj=dynamic_cast<KPPolygonObject*>(it.current() );
+                if(obj)
+                    return obj->getGXFactor();
+            }
+
+            break;
 	    default: break;
 	    }
 	}

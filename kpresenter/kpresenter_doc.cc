@@ -2475,11 +2475,10 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
         if ( !nameElem.isNull() )
         {
             sty->setName( nameElem.attribute("value") );
-            //kdDebug() << "KWStyle created " << this << " name=" << m_name << endl;
+            //kdDebug() << "KoStyle created " << this << " name=" << m_name << endl;
         } else
             kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
-        // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
         sty->setFollowingStyle( sty );
 
 #if 0 //FIXME
