@@ -347,10 +347,10 @@ void KoAutoFormat::readConfig(bool force)
             if ( !childItem.isNull() )
             {
                 QString attr = childItem.attribute( "begin" );
-                if ( !attr.isEmpty() )
+                if ( !attr.isEmpty() && attr[0] != 0 )
                     m_typographicDefaultDoubleQuotes.begin = attr[0];
                 attr = childItem.attribute( "end" );
-                if ( !attr.isEmpty() )
+                if ( !attr.isEmpty() && attr[0] != 0 )
                     m_typographicDefaultDoubleQuotes.end = attr[0];
             }
         }
