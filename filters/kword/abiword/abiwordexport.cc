@@ -97,6 +97,8 @@ QString AbiWordWorker::escapeAbiWordText(const QString& strText) const
 
 bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
 {
+    kdDebug(30506) << "AbiWordWorker::doOpenFile with file: "
+        << filenameOut << endl;
     //Find the last extension
     QString strExt;
     const int result=filenameOut.findRev('.');
