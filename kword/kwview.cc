@@ -4837,7 +4837,7 @@ void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
 
 void KWView::openPopupMenuChangeAction( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     QPopupMenu* popup = static_cast<QPopupMenu *>(factory()->container("action_popup",this));
     if ( popup )
