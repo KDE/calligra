@@ -3386,6 +3386,9 @@ void KPresenterView::setupActions()
                                                  this, SLOT( autoSpellCheck() ),
                                                  actionCollection(), "tool_auto_spellcheck" );
 
+    actionInsertFile= new KAction( i18n( "Insert File..." ), 0,
+                                   this, SLOT( insertFile() ),
+                                   actionCollection(), "insert_file" );
 }
 
 void KPresenterView::textSubScript()
@@ -6981,5 +6984,9 @@ void KPresenterView::autoSpellCheck()
     m_pKPresenterDoc->changeBgSpellCheckingState( actionAllowBgSpellCheck->isChecked() );
 }
 
+void KPresenterView::insertFile()
+{
+    m_pKPresenterDoc->insertFile(QString::null);
+}
 
 #include <kpresenter_view.moc>

@@ -406,6 +406,8 @@ public slots:
     void savePicture();
     void autoSpellCheck();
 
+    void insertFile();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -1012,6 +1014,8 @@ private:
 
     KAction *actionSaveClipart;
     KAction *actionSavePicture;
+
+    KAction *actionInsertFile;
 
     KToggleAction *actionAlignVerticalTop;
     KToggleAction *actionAlignVerticalBottom;

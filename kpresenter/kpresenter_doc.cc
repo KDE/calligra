@@ -955,7 +955,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     m_clipartMap = NULL;
     lastObj = -1;
     bool allSlides = false;
-    m_spellListIgnoreAll.clear();
     // clean
     if ( _clean ) {
         //KoPageLayout __pgLayout;
@@ -969,7 +968,8 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         //_txtBackCol = white;
         urlIntern = url().path();
     }
-
+    else
+        m_spellListIgnoreAll.clear();
     emit sigProgress( 5 );
 
     QDomElement document=doc.documentElement();
@@ -3154,6 +3154,17 @@ bool KPresenterDoc::cursorInProtectedArea()const
 void KPresenterDoc::setCursorInProtectedArea( bool b )
 {
     m_cursorInProtectectedArea=b;
+}
+
+void KPresenterDoc::insertFile(const QString & file )
+{
+    objStartY = 0;
+    _clean = true;
+    KURL url;
+    url.setPath( QString("/home/test/toto.kpr") );
+    bool ok = loadNativeFormat(QString("/home/test/toto.kpr") );
+    kdDebug()<<" ok "<<ok<<endl;
+    //return ok;
 }
 
 #include <kpresenter_doc.moc>

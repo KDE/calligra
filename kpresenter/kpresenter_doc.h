@@ -402,6 +402,8 @@ public:
     bool cursorInProtectedArea()const;
     void setCursorInProtectedArea( bool b );
 
+    void insertFile(const QString & file );
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
