@@ -3587,10 +3587,12 @@ bool KPrPage::canMoveOneObject() const
 KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
 {
     KMacroCommand *macro = 0L;
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst );
+    QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected() && it.current()->getType()==OT_TEXT)
+        if(it.current()->getType()==OT_TEXT)
         {
             KPTextObject *obj = dynamic_cast<KPTextObject *>(it.current());
             if ( obj  && !obj->isProtectContent())
@@ -3608,7 +3610,9 @@ KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
 
 void KPrPage::changeTabStopValue ( double _tabStop )
 {
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst );
+    QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
