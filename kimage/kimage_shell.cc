@@ -43,7 +43,7 @@ KImageShell::KImageShell()
 
 KImageShell::~KImageShell()
 { 
-  cerr << "KImageShell::~KImageShell()" << endl;
+  debug( "KImageShell::~KImageShell()" );
   
   cleanUp();
   
@@ -119,14 +119,14 @@ bool KImageShell::newDocument()
   m_pDoc = new KImageDoc;
   if ( !m_pDoc->init() )
   {
-    cerr << "ERROR: Could not initialize document" << endl;
+    debug( "ERROR: Could not initialize document" );
     return false;
   }
   
   m_pView = m_pDoc->createImageView();
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
-  cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  debug( "*1) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   m_pView->setMainWindow( interface() );
   
   setRootPart( m_pView->id() );
@@ -143,7 +143,7 @@ bool KImageShell::newDocument()
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
 
-  cerr << "*2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  debug( "*2) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
 
   return true;
 }
@@ -162,7 +162,7 @@ bool KImageShell::openDocument( const char *_url, const char *_format )
     return s->openDocument( _url, _format );
   }
   
-  cerr << "Creating new document" << endl;
+  debug( "Creating new document" );
   
   m_pDoc = new KImageDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
@@ -265,17 +265,17 @@ void KImageShell::releaseDocument()
   int views = 0;
   if ( m_pDoc )
     views = m_pDoc->viewCount();
-  cerr << "############## VIEWS=" << views << " #####################" << endl;
+  debug( "############## VIEWS=%i #####################", views );
   
-  cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  debug( "-1) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
 
   setRootPart( 0 );
 
-  cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  debug( "-2) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
 
   interface()->setActivePart( 0 );
 
-  // cerr << "-3) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  // debug( "-3) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   
   if ( m_pView )
     m_pView->decRef();
@@ -283,16 +283,16 @@ void KImageShell::releaseDocument()
   /* if ( m_pView )
     m_pView->cleanUp(); */
 
-  // cerr << "-4) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  // debug( "-4) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   if ( m_pDoc && views <= 1 )
     m_pDoc->cleanUp();
-  // cerr << "-5) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  // debug( "-5) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   // if ( m_pView )
   // CORBA::release( m_pView );
-  // cerr << "-6) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  // debug( "-6) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   if ( m_pDoc )
     CORBA::release( m_pDoc );
-  // cerr << "-7) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  // debug( "-7) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   m_pView = 0L;
   m_pDoc = 0L;
 }
@@ -371,12 +371,12 @@ void KImageShell::slotFilePrint()
 
 void KImageShell::slotFileQuit()
 {
-  cerr << "EXIT 1" << endl;
+  debug( "EXIT 1" );
 
   if ( !closeAllDocuments() )
     return;
 
-  cerr << "EXIT 2" << endl;
+  debug( "EXIT 2" );
   
   delete this;
   kapp->exit();

@@ -77,7 +77,7 @@ CORBA::Boolean KImageDoc::init()
 
 void KImageDoc::cleanUp()
 {
-  cerr << "CLeanUp KImageDoc" << endl;
+  debug( "CLeanUp KImageDoc" );
 
   if ( m_bIsClean )
     return;
@@ -173,7 +173,7 @@ bool KImageDoc::completeSaving( KOStore::Store_ptr _store )
 
 bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
-  cerr << "------------------------ LOADING --------------------" << endl;
+  debug( "------------------------ LOADING --------------------" );
 
   string tag;
   vector<KOMLAttrib> lst;
@@ -182,7 +182,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   // DOC
   if ( !parser.open( "DOC", tag ) )
   {
-    cerr << "Missing DOC" << endl;
+    debug( "Missing DOC" );
     return false;
   }
 
@@ -194,7 +194,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     {
       if ( (*it).m_strValue != "application/x-kimage" )
       {
-	cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	cerr << "Unknown mime type " << (*it).m_strValue;
 	return false;
       }
     }
@@ -225,7 +225,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	  orientation = (*it).m_strValue.c_str();
 	}
 	else
-	  cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
+	  cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'";
       }
 
       // PAPERBORDERS, HEAD, FOOT
@@ -256,7 +256,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	      bottom = atof( (*it).m_strValue.c_str() );
 	    }
 	    else
-	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
+	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'";
 	  }
 	}
       	else if ( name == "HEAD" )
@@ -278,7 +278,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	      hr = (*it).m_strValue.c_str();
 	    }
 	    else
-	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'" << endl;
+	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'";
 	  }
 	}
       	else if ( name == "FOOT" )
@@ -300,25 +300,25 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	      fr = (*it).m_strValue.c_str();
 	    }
 	    else
-	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'" << endl;
+	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'";
 	  }
 	}
 	else
-	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
+	  cerr << "Unknown tag '" << tag << "' in PAPER";
 	
 	if ( !parser.close( tag ) )
         {
-	  cerr << "ERR: Closing PAPER" << endl;
+	  debug( "ERR: Closing PAPER" );
 	  return false;
 	}
       }
     }
     else
-      cerr << "Unknown tag '" << tag << "' in DOC" << endl;
+      cerr << "Unknown tag '" << tag << "' in DOC";
 
     if ( !parser.close( tag ) )
     {
-      cerr << "ERR: Closing DOC" << endl;
+      debug( "ERR: Closing DOC" );
       return false;
     }
   }
@@ -328,14 +328,14 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   setPaperLayout( left, top, right, bottom, format, orientation );
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
 
-  cerr << "------------------------ LOADING DONE --------------------" << endl;
+  debug( "------------------------ LOADING DONE --------------------" );
 
   return true;
 }
 
 bool KImageDoc::completeLoading( KOStore::Store_ptr _store )
 {
-  cerr << "------------------------ COMPLETION DONE --------------------" << endl;
+  debug( "------------------------ COMPLETION DONE --------------------" );
 
   CORBA::String_var str = url();
   QString u = str.in();
@@ -415,7 +415,7 @@ void KImageDoc::print( QPaintDevice* _dev )
 void KImageDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
 		      CORBA::Float _scale )
 {
-  cerr << "DRAWING w=" << _width << " h=" << _height << endl;
+  debug( "DRAWING w=%li h=%li", _width, _height );
 
   QPainter painter;
   painter.begin( _dev );

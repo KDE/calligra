@@ -93,7 +93,7 @@ int main( int argc, char **argv )
   
   app.exec();
 
-  cerr << "============ BACK from event loop ===========" << endl;
+  debug( "============ BACK from event loop ===========" );
 
   return 0;
 }

@@ -77,6 +77,10 @@ public:
      * MenuBar
      */
     void exportImage();
+    /**
+     * MenuBar
+     */
+    void infoImage();
   
     virtual void cleanUp();
 
@@ -108,13 +112,19 @@ protected:
   CORBA::Long m_idButtonEdit_Cakes;
 
   OpenPartsUI::Menu_var m_vMenuEdit;
-  CORBA::Long m_idMenuEdit_FitToView;
-  CORBA::Long m_idMenuEdit_FitWithProps;
-  CORBA::Long m_idMenuEdit_Original;
   CORBA::Long m_idMenuEdit_Edit;
   CORBA::Long m_idMenuEdit_Import;
   CORBA::Long m_idMenuEdit_Export;
   CORBA::Long m_idMenuEdit_Page;
+  OpenPartsUI::Menu_var m_vMenuView;
+  CORBA::Long m_idMenuEdit_Center;
+  OpenPartsUI::Menu_var m_vMenuZoom;
+  CORBA::Long m_idMenuZoom_FitToView;
+  CORBA::Long m_idMenuZoom_FitWithProps;
+  CORBA::Long m_idMenuZoom_Original;
+  OpenPartsUI::Menu_var m_vMenuTransform;
+  OpenPartsUI::Menu_var m_vMenuFilter;
+  OpenPartsUI::Menu_var m_vMenuPlugIns;
   OpenPartsUI::Menu_var m_vMenuHelp;
   CORBA::Long m_idMenuHelp_About;
   CORBA::Long m_idMenuHelp_Using;

@@ -41,7 +41,6 @@ class KImageDoc;
 
 #include <koPageLayoutDia.h>
 
-
 #define MIME_TYPE "application/x-kimage"
 #define EDITOR "IDL:KImage/Document:1.0"
 

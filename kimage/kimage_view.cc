@@ -67,13 +67,13 @@ void KImageView::init()
    * Menu
    ******************************************************/
 
-  cerr << "Registering menu as " << id() << endl;
+  debug( "Registering menu as %li", id() );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->registerClient( id(), this );
   else
-    cerr << "Did not get a menu bar manager" << endl;
+    debug( "Did not get a menu bar manager" );
 
   /******************************************************
    * Toolbar
@@ -83,24 +83,24 @@ void KImageView::init()
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->registerClient( id(), this );
   else
-    cerr << "Did not get a tool bar manager" << endl;
+    debug( "Did not get a tool bar manager" );
 }
 
 KImageView::~KImageView()
 {
-  cerr << "KImageView::~KImageView() " << _refcnt() << endl;
+  debug( "KImageView::~KImageView() %li", _refcnt() );
 
   cleanUp();
 }
 
 void KImageView::cleanUp()
 {
-  cerr << "void KImageView::cleanUp() " << endl;
+  debug( "void KImageView::cleanUp() " );
 
   if ( m_bIsClean )
     return;
 
-  cerr << "1b) Unregistering menu and toolbar" << endl;
+  debug( "1b) Unregistering menu and toolbar" );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
@@ -129,13 +129,13 @@ bool KImageView::event( const char* _event, const CORBA::Any& _value )
 
 bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
-  cerr << "bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
+  debug( "bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" );
 
   if ( CORBA::is_nil( _factory ) )
   {
-    cerr << "Setting to nil" << endl;
+    debug( "Setting to nil" );
     m_vToolBarEdit = 0L;
-    cerr << "niled" << endl;
+    debug( "niled" );
     return true;
   }
 
@@ -173,6 +173,14 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
+  // Folgendes muss mit der zuletzt eingefuegten ToolBar gemacht werden.
+  // Wahrscheinlich ein Bug in den OpenPart
+
+  m_vToolBarEdit->enable(OpenPartsUI::Hide);
+  m_vToolBarEdit->setBarPos(OpenPartsUI::Floating);
+  m_vToolBarEdit->setBarPos(OpenPartsUI::Top);
+  m_vToolBarEdit->enable(OpenPartsUI::Show);                                         
+
   return true;
 }
 
@@ -181,6 +189,8 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   if ( CORBA::is_nil( _menubar ) )
   {
     m_vMenuEdit = 0L;
+    m_vMenuZoom = 0L;
+    m_vMenuTransform = 0L;
     return true;
   }
 
@@ -190,27 +200,6 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   QString path = kapp->kde_icondir().copy();
   path += "/mini/unknown.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_FitToView = m_vMenuEdit->insertItem6( pix, i18n("Fit to &view"), this,
-						     "fitToView", CTRL + Key_V, -1, -1 );
-
-  path = kapp->kde_icondir().copy();
-  path += "/mini/unknown.xpm";
-  pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_FitWithProps = m_vMenuEdit->insertItem6( pix, i18n("Fit and keep &proportions"),
-							this, "fitWithProportions",
-							CTRL + Key_P, -1, -1 );
-
-  path = kapp->kde_icondir().copy();
-  path += "/mini/unknown.xpm";
-  pix = OPUIUtils::loadPixmap( path );
-  m_idMenuEdit_Original = m_vMenuEdit->insertItem6( pix, i18n("&Original size"), this,
-						    "originalSize", CTRL + Key_O, -1, -1 );
-
-  m_vMenuEdit->insertSeparator( -1 );
-
-  path = kapp->kde_icondir().copy();
-  path += "/mini/unknown.xpm";
-  pix = OPUIUtils::loadPixmap( path );
   m_idMenuEdit_Edit = m_vMenuEdit->insertItem6( pix, i18n("&Edit image"), this, "editImage", CTRL + Key_E, -1, -1 );
   m_idMenuEdit_Import = m_vMenuEdit->insertItem( i18n("&Import image"), this, "importImage", CTRL + Key_I );
   m_idMenuEdit_Export = m_vMenuEdit->insertItem( i18n("E&xport image"), this, "exportImage", CTRL + Key_X );
@@ -218,6 +207,43 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuEdit->insertSeparator( -1 );
 
   m_idMenuEdit_Page = m_vMenuEdit->insertItem( i18n("&Page Layout"), this, "pageLayout", CTRL + Key_L );
+  m_idMenuEdit_Page = m_vMenuEdit->insertItem( i18n("I&nfomations"), this, "infoImage", CTRL + Key_N );
+
+  // View
+  _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
+
+  m_idMenuEdit_Center = m_vMenuView->insertItem( i18n("&Centered"), this, "centered", CTRL + Key_C );
+
+  // Zoom
+  _menubar->insertMenu( i18n( "&Zoom" ), m_vMenuZoom, -1, -1 );
+
+  path = kapp->kde_icondir().copy();
+  path += "/mini/unknown.xpm";
+  pix = OPUIUtils::loadPixmap( path );
+  m_idMenuZoom_FitToView = m_vMenuZoom->insertItem6( pix, i18n("Fit to &view"), this,
+						     "fitToView", CTRL + Key_V, -1, -1 );
+
+  path = kapp->kde_icondir().copy();
+  path += "/mini/unknown.xpm";
+  pix = OPUIUtils::loadPixmap( path );
+  m_idMenuZoom_FitWithProps = m_vMenuZoom->insertItem6( pix, i18n("Fit and keep &proportions"),
+							this, "fitWithProportions",
+							CTRL + Key_P, -1, -1 );
+
+  path = kapp->kde_icondir().copy();
+  path += "/mini/unknown.xpm";
+  pix = OPUIUtils::loadPixmap( path );
+  m_idMenuZoom_Original = m_vMenuZoom->insertItem6( pix, i18n("&Original size"), this,
+						    "originalSize", CTRL + Key_O, -1, -1 );
+
+  // Transform
+  _menubar->insertMenu( i18n( "&Transform" ), m_vMenuTransform, -1, -1 );
+
+  // Filter
+  _menubar->insertMenu( i18n( "F&ilter" ), m_vMenuFilter, -1, -1 );
+
+  // PlugIns
+  _menubar->insertMenu( i18n( "&Plug-Ins" ), m_vMenuPlugIns, -1, -1 );
 
   return true;
 }
@@ -264,29 +290,56 @@ void KImageView::slotUpdateView()
 
 void KImageView::fitToView()
 {
+  if ( m_pDoc->image().isNull() )
+    return;
+
+  debug( "  Mach was !!!" );
+
+  QWidget::update();
 }
 
 void KImageView::fitWithProportions()
 {
+  if ( m_pDoc->image().isNull() )
+    return;
+
+  debug( "  Mach was !!!" );
+
+  QWidget::update();
 }
 
 void KImageView::originalSize()
 {
+  if ( m_pDoc->image().isNull() )
+    return;
+
+  debug( "  Mach was !!!" );
+
+  QWidget::update();
 }
 
 void KImageView::editImage()
 {
+  if ( m_pDoc->image().isNull() )
+    return;
+
+  debug( "  Mach was !!!" );
+
+  QWidget::update();
 }
 
 void KImageView::importImage()
 {
-  cerr << "import this=" << (int)this << endl;
+  debug( "import this=%i", (int)this );
 
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
+  {
+  	debug( "nix" );
     return;
-
+  }
+  
   if ( !m_pDoc->openDocument( file, 0L ) )
   {
     QString tmp;
@@ -315,6 +368,16 @@ void KImageView::exportImage()
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+  }
+}
+
+void KImageView::infoImage()
+{
+  if ( m_pDoc->isEmpty() )
+  {
+    QString tmp;
+    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nNo information available."), i18n( "OK" ) );
+    return;
   }
 }
 

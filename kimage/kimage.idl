@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kdiagramm_idl__
-#define __kdiagramm_idl__
+#ifndef __kimage_idl__
+#define __kimage_idl__
 
 #include <openparts.idl>
 #include <koffice.idl>
