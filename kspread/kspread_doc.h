@@ -38,6 +38,7 @@ class KSpreadSheet;
 class KSpreadStyleManager;
 class KSpreadUndoAction;
 class KSPLoadingInfo;
+class KSPRSavingInfo;
 
 class KoStore;
 class KoCommandHistory;
@@ -647,6 +648,7 @@ public:
     void setDisplayTable(KSpreadSheet *_Table );
     KSpreadSheet * displayTable() const;
     KSPLoadingInfo * loadingInfo() const;
+    KSPRSavingInfo * savingInfo() const;
   void increaseNumOperation();
   void decreaseNumOperation();
 public slots:

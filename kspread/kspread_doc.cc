@@ -60,6 +60,7 @@
 #include "kspread_view.h"
 #include "commands.h"
 #include "ksploadinginfo.h"
+#include "ksprsavinginfo.h"
 
 #include "KSpreadDocIface.h"
 
@@ -79,6 +80,7 @@ public:
   KSpreadStyleManager* styleManager;
   KSpreadSheet *activeSheet;
     KSPLoadingInfo *m_loadingInfo;
+    KSPRSavingInfo *m_savingInfo;
   static QValueList<KSpreadDoc*> s_docs;
   static int s_docId;
 
@@ -161,6 +163,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 {
   d = new DocPrivate;
   d->m_loadingInfo = 0L;
+  d->m_savingInfo = 0L;
   d->workbook = new KSpreadMap( this, "Map" );
   d->styleManager = new KSpreadStyleManager();
   d->activeSheet= 0;
@@ -599,6 +602,8 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //todo fixme just add a element for testing saving content.xml
     contentTmpWriter.startElement( "office:body" );
 
+    d->m_savingInfo = new KSPRSavingInfo;
+
     d->workbook->saveOasis( contentTmpWriter, mainStyles );
     saveOasisAreaName( contentTmpWriter );
     contentTmpWriter.endElement(); ////office:body
@@ -641,23 +646,33 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
    // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
     contentWriter.addCompleteElement( tmpFile );
-contentTmpFile.close();
+    contentTmpFile.close();
 
 
     contentWriter.endElement(); // root element
     contentWriter.endDocument();
     if ( !store->close() )
+    {
+        delete d->m_savingInfo;
+        d->m_savingInfo = 0L;
         return false;
-
+    }
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml",  "text/xml" );
 
     //todo add manifest line for style.xml
     if ( !store->open( "styles.xml" ) )
+    {
+        delete d->m_savingInfo;
+        d->m_savingInfo = 0L;
         return false;
+    }
 
     manifestWriter->addManifestEntry( "style.xml",  "text/xml" );
     saveOasisDocumentStyles( store, mainStyles );
+    delete d->m_savingInfo;
+    d->m_savingInfo = 0L;
+
     if ( !store->close() ) // done with styles.xml
         return false;
 
@@ -2232,6 +2247,11 @@ void KSpreadDoc::clearIgnoreWordAll( )
 void KSpreadDoc::setDisplayTable(KSpreadSheet *_table )
 {
     d->activeSheet = _table;
+}
+
+KSPRSavingInfo * KSpreadDoc::savingInfo() const
+{
+    return d->m_savingInfo;
 }
 
 KSPLoadingInfo * KSpreadDoc::loadingInfo() const
