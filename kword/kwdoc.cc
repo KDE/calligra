@@ -2552,7 +2552,8 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     KoGenStyles mainStyles;
 
-    // TODO saveUserStyles. Must be done first so that auto-names don't clash with user names.
+    // Save user styles as KoGenStyles
+    m_styleColl->saveOasis( mainStyles, STYLE_USER );
 
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
@@ -2573,7 +2574,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_AUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
     contentWriter.endElement(); // office:automatic-styles
 
@@ -2631,7 +2632,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
     stylesWriter.endElement(); // office:styles
 
@@ -2640,7 +2641,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
         //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
         // which only works as long as we have only one page master
         stylesWriter.endElement();
