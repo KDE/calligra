@@ -1199,6 +1199,7 @@ private:
 
     void FillSequenceWithCopy (QPtrList<KSpreadCell>& _srcList,
 			       QPtrList<KSpreadCell>& _destList);
+  void convertObscuringBorders();
 
 };
 

@@ -195,7 +195,8 @@
                  firstletterupper   CDATA #REQUIRED
                  grid               CDATA #REQUIRED
                  formular           CDATA #REQUIRED
-                 lcmode             CDATA #REQUIRED>
+                 lcmode             CDATA #REQUIRED
+		 borders1.2         CDATA #REQUIRED>
 
 
 <!--	Describes one cell including contents.

@@ -4941,6 +4941,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
     table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
     table.setAttribute( "hidezero", (int)m_bHideZero);
     table.setAttribute( "firstletterupper", (int)m_bFirstLetterUpper);
+    table.setAttribute( "borders1.2", 1);
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -5095,9 +5096,14 @@ bool KSpreadTable::loadXML( const QDomElement& table )
         }
 
     n = n.nextSibling();
-  }
+    }
 
-  return true;
+    if( !table.hasAttribute( "borders1.2" ) )
+    {
+      convertObscuringBorders();
+    }
+
+    return true;
 }
 
 
@@ -5565,6 +5571,52 @@ bool KSpreadTable::isCellSelected(int column, int row)
   return selected;
 }
 
+void KSpreadTable::convertObscuringBorders()
+{
+  /* a word of explanation here:
+     beginning with KSpread 1.2 (actually, cvs of Mar 28, 2002), border information
+     is stored differently.  Previously, for a cell obscuring a region, the entire
+     region's border's data would be stored in the obscuring cell.  This caused
+     some data loss in certain situations.  After that date, each cell stores
+     its own border data, and prints it even if it is an obscured cell (as long
+     as that border isn't across an obscuring border).
+     Anyway, this function is used when loading a file that was stored with the
+     old way of borders.  All new files have the table attribute "borders1.2" so
+     if that isn't in the file, all the border data will be converted here.
+     It's a bit of a hack but I can't think of a better way and it's not *that*
+     bad of a hack.:-)
+  */
+  KSpreadCell* c = m_cells.firstCell();
+  QPen topPen, bottomPen, leftPen, rightPen;
+  for( ;c; c = c->nextCell() )
+  {
+    if (c->extraXCells() > 0 || c->extraYCells() > 0)
+    {
+      topPen = c->topBorderPen(c->column(), c->row());
+      leftPen = c->leftBorderPen(c->column(), c->row());
+      rightPen = c->rightBorderPen(c->column(), c->row());
+      bottomPen = c->bottomBorderPen(c->column(), c->row());
+
+      c->setTopBorderStyle(Qt::NoPen);
+      c->setLeftBorderStyle(Qt::NoPen);
+      c->setRightBorderStyle(Qt::NoPen);
+      c->setBottomBorderStyle(Qt::NoPen);
+
+      for (int x = c->column(); x < c->column() + c->extraXCells(); x++)
+      {
+        nonDefaultCell(x, c->row())->setTopBorderPen(topPen);
+        nonDefaultCell(x, c->row() + c->extraYCells())->
+          setBottomBorderPen(bottomPen);
+      }
+      for (int y = c->row(); y < c->row() + c->extraYCells(); y++)
+      {
+        nonDefaultCell(c->column(), y)->setLeftBorderPen(leftPen);
+        nonDefaultCell(c->column() + c->extraXCells(), y)->
+          setRightBorderPen(rightPen);
+      }
+    }
+  }
+}
 #ifndef NDEBUG
 void KSpreadTable::printDebug()
 {
