@@ -2840,17 +2840,20 @@ void KPresenterView::showParts()
 /*========================= change undo =========================*/
 void KPresenterView::changeUndo(QString _text,bool _enable)
 {
+  CORBA::WString_var text;
   if (_enable)
     {
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,true);
       QString str;
       str.sprintf(i18n("Undo: %s"),_text.data());
-      m_vMenuEdit->changeItemText(str,m_idMenuEdit_Undo);
+      text = Q2C( str );
+      m_vMenuEdit->changeItemText(text,m_idMenuEdit_Undo);
       m_vToolBarEdit->setItemEnabled(ID_UNDO,true);
     }
   else
     {
-      m_vMenuEdit->changeItemText(i18n("No Undo possible"),m_idMenuEdit_Undo);
+      text = Q2C( i18n("No Undo possible") );
+      m_vMenuEdit->changeItemText(text,m_idMenuEdit_Undo);
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,false);
       m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
     }
@@ -2859,17 +2862,20 @@ void KPresenterView::changeUndo(QString _text,bool _enable)
 /*========================= change redo =========================*/
 void KPresenterView::changeRedo(QString _text,bool _enable)
 {
+  CORBA::WString_var text;
   if (_enable)
     {
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Redo,true);
       QString str;
       str.sprintf(i18n("Redo: %s"),_text.data());
-      m_vMenuEdit->changeItemText(str,m_idMenuEdit_Redo);
+      text = Q2C( str );
+      m_vMenuEdit->changeItemText(text,m_idMenuEdit_Redo);
       m_vToolBarEdit->setItemEnabled(ID_REDO,true);
     }
   else
     {
-      m_vMenuEdit->changeItemText(i18n("No Redo possible"),m_idMenuEdit_Redo);
+      text = Q2C( i18n("No Redo possible") );
+      m_vMenuEdit->changeItemText(text,m_idMenuEdit_Redo);
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Redo,false);
       m_vToolBarEdit->setItemEnabled(ID_REDO,false);
     }
@@ -2914,219 +2920,287 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
     return true;
   }
 
+  CORBA::WString_var text;
+  
   // MENU Edit
-  _menubar->insertMenu(i18n("&Edit"),m_vMenuEdit,-1,-1);
+  text = Q2C( i18n("&Edit") );
+  _menubar->insertMenu(text,m_vMenuEdit,-1,-1);
 
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6(pix,i18n("No Undo possible"),this,"editUndo",CTRL + Key_Z,-1,-1);
+  text = Q2C( i18n("No Undo possible") );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6(pix,text,this,"editUndo",CTRL + Key_Z,-1,-1);
   m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,false);
 
   pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6(pix,i18n("No Redo possible"),this,"editRedo",0,-1,-1);
+  text = Q2C( i18n("No Redo possible") );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6(pix,text,this,"editRedo",0,-1,-1);
   m_vMenuEdit->setItemEnabled(m_idMenuEdit_Redo,false);
   m_vMenuEdit->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6(pix,i18n("&Cut"),this,"editCut",CTRL + Key_X,-1,-1);
+  text = Q2C( i18n("&Cut") );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6(pix,text,this,"editCut",CTRL + Key_X,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6(pix,i18n("&Copy"),this,"editCopy",CTRL + Key_C,-1,-1);
+  text = Q2C( i18n("&Copy") );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6(pix,text,this,"editCopy",CTRL + Key_C,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6(pix,i18n("&Paste"),this,"editPaste",CTRL + Key_V,-1,-1);
+  text = Q2C( i18n("&Paste") );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6(pix,text,this,"editPaste",CTRL + Key_V,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("delete.xpm"));
-  m_idMenuEdit_Delete = m_vMenuEdit->insertItem6(pix,i18n("&Delete"),this,"editDelete",Key_Delete,-1,-1);
+  text = Q2C( i18n("&Delete") );
+  m_idMenuEdit_Delete = m_vMenuEdit->insertItem6(pix,text,this,"editDelete",Key_Delete,-1,-1);
 
   m_vMenuEdit->insertSeparator(-1);
 
-  m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem(i18n("&Select all"),this,"editSelectAll",CTRL + Key_A);
+  text = Q2C( i18n("&Select all") );
+  m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem(text,this,"editSelectAll",CTRL + Key_A);
 
   m_vMenuEdit->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("delslide.xpm"));
-  m_idMenuEdit_DelPage = m_vMenuEdit->insertItem6(pix,i18n("&Delete Page..."),this,"editDelPage",0,-1,-1);
+  text = Q2C( i18n("&Delete Page...") );
+  m_idMenuEdit_DelPage = m_vMenuEdit->insertItem6(pix,text,this,"editDelPage",0,-1,-1);
 
   m_vMenuEdit->insertSeparator(-1);
 
-  m_idMenuEdit_Find = m_vMenuEdit->insertItem(i18n("&Find..."),this,"editFind",CTRL + Key_F);
+  text = Q2C( i18n("&Find...") );
+  m_idMenuEdit_Find = m_vMenuEdit->insertItem(text,this,"editFind",CTRL + Key_F);
 
-  m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem(i18n("&Replace..."),this,"editFindReplace",CTRL + Key_R);
+  text = Q2C( i18n("&Replace...") );
+  m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem(text,this,"editFindReplace",CTRL + Key_R);
 
   // MENU View
-  _menubar->insertMenu(i18n("&View"),m_vMenuView,-1,-1);
+  text = Q2C( i18n("&View") );
+  _menubar->insertMenu(text,m_vMenuView,-1,-1);
 
-  m_idMenuView_NewView = m_vMenuView->insertItem(i18n("&New View"),this,"newView",0);
+  text = Q2C( i18n("&New View") );
+  m_idMenuView_NewView = m_vMenuView->insertItem(text,this,"newView",0);
 
   // MENU Insert
-  _menubar->insertMenu(i18n("&Insert"),m_vMenuInsert,-1,-1);
+  text = Q2C( i18n("&Insert") );
+  _menubar->insertMenu(text,m_vMenuInsert,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("newslide.xpm"));
-  m_idMenuInsert_Page = m_vMenuInsert->insertItem6(pix,i18n("Pa&ge..."),this,"insertPage",0,-1,-1);
+  text = Q2C( i18n("Pa&ge...") );
+  m_idMenuInsert_Page = m_vMenuInsert->insertItem6(pix,text,this,"insertPage",0,-1,-1);
   m_vMenuInsert->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
-  m_idMenuInsert_Picture = m_vMenuInsert->insertItem6(pix,i18n("&Picture..."),this,"insertPicture",Key_F2,-1,-1);
+  text = Q2C( i18n("&Picture...") );
+  m_idMenuInsert_Picture = m_vMenuInsert->insertItem6(pix,text,this,"insertPicture",Key_F2,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
-  m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6(pix,i18n("&Clipart..."),this,"insertClipart",Key_F3,-1,-1);
+  text = Q2C( i18n("&Clipart...") );
+  m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6(pix,text,this,"insertClipart",Key_F3,-1,-1);
 
   m_vMenuInsert->setCheckable(true);
 
   // MENU Tools
-  _menubar->insertMenu(i18n("&Tools"),m_vMenuTools,-1,-1);
+  text = Q2C( i18n("&Tools") );
+  _menubar->insertMenu(text,m_vMenuTools,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("mouse.xpm"));
-  m_idMenuTools_Mouse = m_vMenuTools->insertItem6(pix,i18n("&Mouse"),this,"toolsMouse",Key_F4,-1,-1);
+  text = Q2C( i18n("&Mouse") );
+  m_idMenuTools_Mouse = m_vMenuTools->insertItem6(pix,text,this,"toolsMouse",Key_F4,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("line.xpm"));
-  m_idMenuTools_Line = m_vMenuTools->insertItem6(pix,i18n("&Line"),this,"toolsLine",Key_F5,-1,-1);
+  text = Q2C( i18n("&Line") );
+  m_idMenuTools_Line = m_vMenuTools->insertItem6(pix,text,this,"toolsLine",Key_F5,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("rectangle.xpm"));
-  m_idMenuTools_Rectangle = m_vMenuTools->insertItem6(pix,i18n("&Rectangle"),this,"toolsRectangle",Key_F6,-1,-1);
+  text = Q2C( i18n("&Rectangle") );
+  m_idMenuTools_Rectangle = m_vMenuTools->insertItem6(pix,text,this,"toolsRectangle",Key_F6,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("circle.xpm"));
-  m_idMenuTools_Circle = m_vMenuTools->insertItem6(pix,i18n("C&ircle or Ellipse"),this,"toolsCircleOrEllipse",Key_F7,-1,-1);
+  text = Q2C( i18n("C&ircle or Ellipse") );
+  m_idMenuTools_Circle = m_vMenuTools->insertItem6(pix,text,this,"toolsCircleOrEllipse",Key_F7,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("pie.xpm"));
-  m_idMenuTools_Pie = m_vMenuTools->insertItem6(pix,i18n("Pie/&Arc/Chord"),this,"toolsPie",Key_F8,-1,-1);
+  text = Q2C( i18n("Pie/&Arc/Chord") );
+  m_idMenuTools_Pie = m_vMenuTools->insertItem6(pix,text,this,"toolsPie",Key_F8,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("text.xpm"));
-  m_idMenuTools_Text = m_vMenuTools->insertItem6(pix,i18n("&Text"),this,"toolsText",Key_F9,-1,-1);
+  text = Q2C( i18n("&Text") );
+  m_idMenuTools_Text = m_vMenuTools->insertItem6(pix,text,this,"toolsText",Key_F9,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
-  m_idMenuTools_Autoform = m_vMenuTools->insertItem6(pix,i18n("&Autoform..."),this,"toolsAutoform",Key_F10,-1,-1);
+  text = Q2C( i18n("&Autoform...") );
+  m_idMenuTools_Autoform = m_vMenuTools->insertItem6(pix,text,this,"toolsAutoform",Key_F10,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("chart.xpm"));
-  m_idMenuTools_Diagramm = m_vMenuTools->insertItem6(pix,i18n("&Diagramm"),this,"toolsDiagramm",Key_F11,-1,-1);
+  text = Q2C( i18n("&Diagramm") );
+  m_idMenuTools_Diagramm = m_vMenuTools->insertItem6(pix,text,this,"toolsDiagramm",Key_F11,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
-  m_idMenuTools_Table = m_vMenuTools->insertItem6(pix,i18n("&Table"),this,"toolsTable",Key_F12,-1,-1);
+  text = Q2C( i18n("&Table") );
+  m_idMenuTools_Table = m_vMenuTools->insertItem6(pix,text,this,"toolsTable",Key_F12,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
-  m_idMenuTools_Formula = m_vMenuTools->insertItem6(pix,i18n("&Formula"),this,"toolsFormula",ALT + Key_F1,-1,-1);
+  text = Q2C( i18n("&Formula") );
+  m_idMenuTools_Formula = m_vMenuTools->insertItem6(pix,text,this,"toolsFormula",ALT + Key_F1,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix,i18n("&Object..."),this,"toolsObject",ALT + Key_F2,-1,-1);
+  text = Q2C( i18n("&Object...") );
+  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix,text,this,"toolsObject",ALT + Key_F2,-1,-1);
 
   m_vMenuTools->setCheckable(true);
 
   // MENU Text
-  _menubar->insertMenu(i18n("T&ext"),m_vMenuText,-1,-1);
+  text = Q2C( i18n("T&ext") );
+  _menubar->insertMenu(text,m_vMenuText,-1,-1);
 
-  m_idMenuText_TFont = m_vMenuText->insertItem(i18n("&Font..."),this,"mtextFont",0);
+  text = Q2C( i18n("&Font...") );
+  m_idMenuText_TFont = m_vMenuText->insertItem(text,this,"mtextFont",0);
 
-  m_idMenuText_TColor = m_vMenuText->insertItem(i18n("Text &Color..."),this,"textColor",0);
+  text = Q2C( i18n("Text &Color...") );
+  m_idMenuText_TColor = m_vMenuText->insertItem(text,this,"textColor",0);
 
-  m_vMenuText->insertItem8(i18n("Text &Alignment"),m_vMenuText_TAlign,-1,-1);
+  text = Q2C( i18n("Text &Alignment") );
+  m_vMenuText->insertItem8(text,m_vMenuText_TAlign,-1,-1);
   m_vMenuText_TAlign->setCheckable(true);
 
   pix = OPUIUtils::convertPixmap(ICON("alignLeft.xpm"));
-  m_idMenuText_TAlign_Left = m_vMenuText_TAlign->insertItem6(pix,i18n("Align &Left"),this,"mtextAlignLeft",0,-1,-1);
+  text = Q2C( i18n("Align &Left") );
+  m_idMenuText_TAlign_Left = m_vMenuText_TAlign->insertItem6(pix,text,this,"mtextAlignLeft",0,-1,-1);
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Left,true);
 
   pix = OPUIUtils::convertPixmap(ICON("alignCenter.xpm"));
-  m_idMenuText_TAlign_Center = m_vMenuText_TAlign->insertItem6(pix,i18n("Align &Center"),this,"mtextAlignCenter",0,-1,-1);
+  text = Q2C( i18n("Align &Center") );
+  m_idMenuText_TAlign_Center = m_vMenuText_TAlign->insertItem6(pix,text,this,"mtextAlignCenter",0,-1,-1);
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Center,true);
 
   pix = OPUIUtils::convertPixmap(ICON("alignRight.xpm"));
-  m_idMenuText_TAlign_Right = m_vMenuText_TAlign->insertItem6(pix,i18n("Align &Right"),this,"mtextAlignRight",0,-1,-1);
+  text = Q2C( i18n("Align &Right") );
+  m_idMenuText_TAlign_Right = m_vMenuText_TAlign->insertItem6(pix,text,this,"mtextAlignRight",0,-1,-1);
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Right,true);
 
-  m_vMenuText->insertItem8(i18n("Text &Type"),m_vMenuText_TType,-1,-1);
+  text = Q2C( i18n("Text &Type") );
+  m_vMenuText->insertItem8(text,m_vMenuText_TType,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("enumList.xpm"));
-  m_idMenuText_TType_EnumList = m_vMenuText_TType->insertItem6(pix,i18n("&Enumerated List"),this,"textEnumList",0,-1,-1);
+  text = Q2C( i18n("&Enumerated List") );
+  m_idMenuText_TType_EnumList = m_vMenuText_TType->insertItem6(pix,text,this,"textEnumList",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("unsortedList.xpm"));
-  m_idMenuText_TType_UnsortList = m_vMenuText_TType->insertItem6(pix,i18n("&Unsorted List"),this,"textUnsortList",0,-1,-1);
+  text = Q2C( i18n("&Unsorted List") );
+  m_idMenuText_TType_UnsortList = m_vMenuText_TType->insertItem6(pix,text,this,"textUnsortList",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("normalText.xpm"));
-  m_idMenuText_TType_NormalText = m_vMenuText_TType->insertItem6(pix,i18n("&Normal Text"),this,"textNormalText",0,-1,-1);
+  text = Q2C( i18n("&Normal Text") );
+  m_idMenuText_TType_NormalText = m_vMenuText_TType->insertItem6(pix,text,this,"textNormalText",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("depth+.xpm"));
-  m_idMenuText_TDepthPlus = m_vMenuText->insertItem6(pix,i18n("&Increase Depth"),this,"textDepthPlus",0,-1,-1);
+  text = Q2C( i18n("&Increase Depth") );
+  m_idMenuText_TDepthPlus = m_vMenuText->insertItem6(pix,text,this,"textDepthPlus",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("depth-.xpm"));
-  m_idMenuText_TDepthMinus = m_vMenuText->insertItem6(pix,i18n("&Decrease Depth"),this,"textDepthMinus",0,-1,-1);
+  text = Q2C( i18n("&Decrease Depth") );
+  m_idMenuText_TDepthMinus = m_vMenuText->insertItem6(pix,text,this,"textDepthMinus",0,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("spacing.xpm"));
-  m_idMenuText_TSpacing = m_vMenuText->insertItem6(pix,i18n("Paragraph &Spacing..."),this,"textSpacing",0,-1,-1);
+  text = Q2C( i18n("Paragraph &Spacing...") );
+  m_idMenuText_TSpacing = m_vMenuText->insertItem6(pix,text,this,"textSpacing",0,-1,-1);
 
 
   // MENU Extra
-  _menubar->insertMenu(i18n("&Extra"),m_vMenuExtra,-1,-1);
+  text = Q2C( i18n("&Extra") );
+  _menubar->insertMenu(text,m_vMenuExtra,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("style.xpm"));
-  m_idMenuExtra_PenBrush = m_vMenuExtra->insertItem6(pix,i18n("&Pen and Brush..."),this,"extraPenBrush",ALT + Key_P,-1,-1);
+  text = Q2C( i18n("&Pen and Brush...") );
+  m_idMenuExtra_PenBrush = m_vMenuExtra->insertItem6(pix,text,this,"extraPenBrush",ALT + Key_P,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("edit_pie.xpm"));
-  m_idMenuExtra_Pie = m_vMenuExtra->insertItem6(pix,i18n("&Configure Pie/Arc/Chord..."),this,"extraConfigPie",ALT + Key_A,-1,-1);
+  text = Q2C( i18n("&Configure Pie/Arc/Chord...") );
+  m_idMenuExtra_Pie = m_vMenuExtra->insertItem6(pix,text,this,"extraConfigPie",ALT + Key_A,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("rectangle2.xpm"));
-  m_idMenuExtra_Rect = m_vMenuExtra->insertItem6(pix,i18n("C&onfigure Rectangle..."),this,"extraConfigRect",ALT + Key_R,-1,-1);
+  text = Q2C( i18n("C&onfigure Rectangle...") );
+  m_idMenuExtra_Rect = m_vMenuExtra->insertItem6(pix,text,this,"extraConfigRect",ALT + Key_R,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("raise.xpm"));
-  m_idMenuExtra_Raise = m_vMenuExtra->insertItem6(pix,i18n("&Raise object(s)"),this,"extraRaise",CTRL + Key_Plus,-1,-1);
+  text = Q2C( i18n("&Raise object(s)") );
+  m_idMenuExtra_Raise = m_vMenuExtra->insertItem6(pix,text,this,"extraRaise",CTRL + Key_Plus,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("lower.xpm"));
-  m_idMenuExtra_Lower = m_vMenuExtra->insertItem6(pix,i18n("&Lower object(s)"),this,"extraLower",CTRL + Key_Minus,-1,-1);
+  text = Q2C( i18n("&Lower object(s)") );
+  m_idMenuExtra_Lower = m_vMenuExtra->insertItem6(pix,text,this,"extraLower",CTRL + Key_Minus,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("rotate.xpm"));
-  m_idMenuExtra_Rotate = m_vMenuExtra->insertItem6(pix,i18n("Rot&ate object(s)..."),this,"extraRotate",ALT + Key_R,-1,-1);
+  text = Q2C( i18n("Rot&ate object(s)...") );
+  m_idMenuExtra_Rotate = m_vMenuExtra->insertItem6(pix,text,this,"extraRotate",ALT + Key_R,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("shadow.xpm"));
-  m_idMenuExtra_Shadow = m_vMenuExtra->insertItem6(pix,i18n("&Shadow object(s)..."),this,"extraShadow",ALT + Key_S,-1,-1);
+  text = Q2C( i18n("&Shadow object(s)...") );
+  m_idMenuExtra_Shadow = m_vMenuExtra->insertItem6(pix,text,this,"extraShadow",ALT + Key_S,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("alignobjs.xpm"));
-  m_vMenuExtra->insertItem12(pix,i18n("Text &Alignment"),m_vMenuExtra_AlignObj,-1,-1);
+  text = Q2C( i18n("Text &Alignment") );
+  m_vMenuExtra->insertItem12(pix,text,m_vMenuExtra_AlignObj,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aoleft.xpm"));
-  m_idMenuExtra_AlignObj_Left = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align &Left"),this,"extraAlignObjLeftidl",0,-1,-1);
+  text = Q2C( i18n("Align &Left") );
+  m_idMenuExtra_AlignObj_Left = m_vMenuExtra_AlignObj->insertItem6(pix,text,this,"extraAlignObjLeftidl",0,-1,-1);
 
   m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aocenterh.xpm"));
-  m_idMenuExtra_AlignObj_CenterH = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align Center (&horizontal)"),this,"extraAlignObjCenterHidl",0,-1,-1);
+  text = Q2C( i18n("Align Center (&horizontal)") );
+  m_idMenuExtra_AlignObj_CenterH = m_vMenuExtra_AlignObj->insertItem6(pix,text,this,"extraAlignObjCenterHidl",0,-1,-1);
   m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aoright.xpm"));
-  m_idMenuExtra_AlignObj_Right = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align &Right"),this,"extraAlignObjRightidl",0,-1,-1);
+  text = Q2C( i18n("Align &Right") );
+  m_idMenuExtra_AlignObj_Right = m_vMenuExtra_AlignObj->insertItem6(pix,text,this,"extraAlignObjRightidl",0,-1,-1);
   m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aotop.xpm"));
-  m_idMenuExtra_AlignObj_Top = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align &Top"),this,"extraAlignObjTopidl",0,-1,-1);
+  text = Q2C( i18n("Align &Top") );
+  m_idMenuExtra_AlignObj_Top = m_vMenuExtra_AlignObj->insertItem6(pix,text,this,"extraAlignObjTopidl",0,-1,-1);
   m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aocenterv.xpm"));
-  m_idMenuExtra_AlignObj_CenterV = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align Center (&vertical)"),this,"extraAlignObjCenterVidl",0,-1,-1);
+  text = Q2C( i18n("Align Center (&vertical)") );
+  m_idMenuExtra_AlignObj_CenterV = m_vMenuExtra_AlignObj->insertItem6(pix,text,this,"extraAlignObjCenterVidl",0,-1,-1);
   m_vMenuExtra_AlignObj->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("aobottom.xpm"));
-  m_idMenuExtra_AlignObj_Bottom = m_vMenuExtra_AlignObj->insertItem6(pix,i18n("Align &Bottom"),this,"extraAlignObjBottomidl",0,-1,-1);
+  text = Q2C( i18n("Align &Bottom") );
+  m_idMenuExtra_AlignObj_Bottom = m_vMenuExtra_AlignObj->insertItem6(pix,text,this,"extraAlignObjBottomidl",0,-1,-1);
 
   m_vMenuExtra->insertSeparator(-1);
 
-  m_idMenuExtra_Background = m_vMenuExtra->insertItem(i18n("Page &Background..."),this,"extraBackground",0);
+  text = Q2C( i18n("Page &Background...") );
+  m_idMenuExtra_Background = m_vMenuExtra->insertItem(text,this,"extraBackground",0);
 
-  m_idMenuExtra_Layout = m_vMenuExtra->insertItem(i18n("Pa&ge Layout..."),this,"extraLayout",0);
+  text = Q2C( i18n("Pa&ge Layout...") );
+  m_idMenuExtra_Layout = m_vMenuExtra->insertItem(text,this,"extraLayout",0);
 
   m_vMenuExtra->insertSeparator(-1);
 
-  m_idMenuExtra_Options = m_vMenuExtra->insertItem(i18n("&Options..."),this,"extraOptions",0);
+  text = Q2C( i18n("&Options...") );
+  m_idMenuExtra_Options = m_vMenuExtra->insertItem(text,this,"extraOptions",0);
 
   // MENU Screenpresentation
-  _menubar->insertMenu(i18n("&Screen Presentations"),m_vMenuScreen,-1,-1);
+  text = Q2C( i18n("&Screen Presentations") );
+  _menubar->insertMenu(text,m_vMenuScreen,-1,-1);
 
-  m_idMenuScreen_ConfigPage = m_vMenuScreen->insertItem(i18n("&Configure pages..."),this,"screenConfigPages",0);
-  m_idMenuScreen_PresStructView = m_vMenuScreen->insertItem(i18n("&Open presentation structure viewer..."),this,"screenPresStructView",0);
+  text = Q2C( i18n("&Configure pages...") );
+  m_idMenuScreen_ConfigPage = m_vMenuScreen->insertItem(text,this,"screenConfigPages",0);
+  text = Q2C( i18n("&Open presentation structure viewer...") );
+  m_idMenuScreen_PresStructView = m_vMenuScreen->insertItem(text,this,"screenPresStructView",0);
 
   pix = OPUIUtils::convertPixmap(ICON("effect.xpm"));
-  m_idMenuScreen_AssignEffect = m_vMenuScreen->insertItem6(pix,i18n("&Assign effect..."),this,"screenAssignEffect",0,-1,-1);
+  text = Q2C( i18n("&Assign effect...") );
+  m_idMenuScreen_AssignEffect = m_vMenuScreen->insertItem6(pix,text,this,"screenAssignEffect",0,-1,-1);
   m_vMenuScreen->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("kpstart.xpm"));
-  m_idMenuScreen_Start = m_vMenuScreen->insertItem6(pix,i18n("&Start"),this,"screenStart",CTRL + Key_G,-1,-1);
+  text = Q2C( i18n("&Start") );
+  m_idMenuScreen_Start = m_vMenuScreen->insertItem6(pix,text,this,"screenStart",CTRL + Key_G,-1,-1);
 
   //       pix = OPUIUtils::convertPixmap(ICON("stop.xpm"));
   //       m_idMenuScreen_Stop = m_vMenuScreen->insertItem6(pix,
@@ -3139,16 +3213,20 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
   m_vMenuScreen->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("first.xpm"));
-  m_idMenuScreen_First = m_vMenuScreen->insertItem6(pix,i18n("&Go to start"),this,"screenFirst",Key_Home,-1,-1);
+  text = Q2C( i18n("&Go to start") );
+  m_idMenuScreen_First = m_vMenuScreen->insertItem6(pix,text,this,"screenFirst",Key_Home,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("kpprev.xpm"));
-  m_idMenuScreen_Prev = m_vMenuScreen->insertItem6(pix,i18n("&Previous step"),this,"screenPrev",Key_Prior,-1,-1);
+  text = Q2C( i18n("&Previous step") );
+  m_idMenuScreen_Prev = m_vMenuScreen->insertItem6(pix,text,this,"screenPrev",Key_Prior,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("kpnext.xpm"));
-  m_idMenuScreen_Next = m_vMenuScreen->insertItem6(pix,i18n("&Next step"),this,"screenNext",Key_Next,-1,-1);
+  text = Q2C( i18n("&Next step") );
+  m_idMenuScreen_Next = m_vMenuScreen->insertItem6(pix,text,this,"screenNext",Key_Next,-1,-1);
 
   pix = OPUIUtils::convertPixmap(ICON("last.xpm"));
-  m_idMenuScreen_Last = m_vMenuScreen->insertItem6(pix,i18n("&Go to end"),this,"screenLast",Key_End,-1,-1);
+  text = Q2C( i18n("&Go to end") );
+  m_idMenuScreen_Last = m_vMenuScreen->insertItem6(pix,text,this,"screenLast",Key_End,-1,-1);
 
 //   m_idMenuScreen_Skip = m_vMenuScreen->insertItem(i18n("Goto &page"),m_idMenuScreen,
 // 						   this,"screenSkip");
@@ -3156,43 +3234,58 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
   m_vMenuScreen->insertSeparator(-1);
 
   pix = OPUIUtils::convertPixmap(ICON("pen.xpm"));
-  m_vMenuScreen->insertItem12(pix,i18n("&Choose Pen"),m_vMenuScreen_Pen,-1,-1);
+  text = Q2C( i18n("&Choose Pen") );
+  m_vMenuScreen->insertItem12(pix,text,m_vMenuScreen_Pen,-1,-1);
   m_vMenuScreen_Pen->setCheckable(true);
 
-  m_vMenuScreen_Pen->insertItem8(i18n("Pen width") ,m_vMenuScreen_PenWidth,-1,-1);
+  text = Q2C( i18n("Pen width") );
+  m_vMenuScreen_Pen->insertItem8(text ,m_vMenuScreen_PenWidth,-1,-1);
   m_vMenuScreen_PenWidth->setCheckable(true);
 
-  m_idMenuScreen_PenColor = m_vMenuScreen_Pen->insertItem(i18n("Pen color"),this,"presPenColoridl",0);
+  text = Q2C( i18n("Pen color") );
+  m_idMenuScreen_PenColor = m_vMenuScreen_Pen->insertItem(text,this,"presPenColoridl",0);
 
-  m_idMenuScreen_PenW1 = m_vMenuScreen_PenWidth->insertItem(i18n("1"),this,"presPen1idl",0);
+  text = Q2C( i18n("1") );
+  m_idMenuScreen_PenW1 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen1idl",0);
 
-  m_idMenuScreen_PenW2 = m_vMenuScreen_PenWidth->insertItem(i18n("2"),this,"presPen2idl",0);
+  text = Q2C( i18n("2") );
+  m_idMenuScreen_PenW2 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen2idl",0);
 
-  m_idMenuScreen_PenW3 = m_vMenuScreen_PenWidth->insertItem(i18n("3"),this,"presPen3idl",0);
+  text = Q2C( i18n("3") );
+  m_idMenuScreen_PenW3 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen3idl",0);
 
-  m_idMenuScreen_PenW4 = m_vMenuScreen_PenWidth->insertItem(i18n("4"),this,"presPen4idl",0);
+  text = Q2C( i18n("4") );
+  m_idMenuScreen_PenW4 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen4idl",0);
 
-  m_idMenuScreen_PenW5 = m_vMenuScreen_PenWidth->insertItem(i18n("5"),this,"presPen5idl",0);
+  text = Q2C( i18n("5") );
+  m_idMenuScreen_PenW5 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen5idl",0);
 
-  m_idMenuScreen_PenW6 = m_vMenuScreen_PenWidth->insertItem(i18n("6"),this,"presPen6idl",0);
+  text = Q2C( i18n("6") );
+  m_idMenuScreen_PenW6 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen6idl",0);
 
-  m_idMenuScreen_PenW7 = m_vMenuScreen_PenWidth->insertItem(i18n("7"),this,"presPen7idl",0);
+  text = Q2C( i18n("7") );
+  m_idMenuScreen_PenW7 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen7idl",0);
 
-  m_idMenuScreen_PenW8 = m_vMenuScreen_PenWidth->insertItem(i18n("8"),this,"presPen8idl",0);
+  text = Q2C( i18n("8") );
+  m_idMenuScreen_PenW8 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen8idl",0);
 
-  m_idMenuScreen_PenW9 = m_vMenuScreen_PenWidth->insertItem(i18n("9"),this,"presPen9idl",0);
+  text = Q2C( i18n("9") );
+  m_idMenuScreen_PenW9 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen9idl",0);
 
-  m_idMenuScreen_PenW10 = m_vMenuScreen_PenWidth->insertItem(i18n("10"),this,"presPen10idl",0);
+  text = Q2C( i18n("10") );
+  m_idMenuScreen_PenW10 = m_vMenuScreen_PenWidth->insertItem(text,this,"presPen10idl",0);
 
   // MENU Help
   m_vMenuHelp = _menubar->helpMenu();
   if (CORBA::is_nil(m_vMenuHelp))
   {
     _menubar->insertSeparator(-1);
-    _menubar->setHelpMenu(_menubar->insertMenu(i18n("&Help"),m_vMenuHelp,-1,-1));
+    text = Q2C( i18n("&Help") );
+    _menubar->setHelpMenu(_menubar->insertMenu(text,m_vMenuHelp,-1,-1));
   }
 
-  m_idMenuHelp_Contents = m_vMenuHelp->insertItem(i18n("&Contents"),this,"helpContents",0);
+  text = Q2C( i18n("&Contents") );
+  m_idMenuHelp_Contents = m_vMenuHelp->insertItem(text,this,"helpContents",0);
 
   // Torben: Reggie,Check/uncheck all checked menu items to their actual value in this function
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,true);

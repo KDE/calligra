@@ -248,7 +248,8 @@ void KoHTMLView::init()
   for (; it.current(); ++it)
       slotInsertObject(it.current());
       
-  m_vMainWindow->setPartCaption( id(), m_strCaptionText );      
+  CORBA::WString_var caption = Q2C( m_strCaptionText );
+  m_vMainWindow->setPartCaption( id(), caption );      
   
   slotUpdateConfig();
 
@@ -372,51 +373,66 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   m_vMenuBar = OpenPartsUI::MenuBar::_duplicate(menuBar);
   menuBar->connect("highlighted", this, "statusCallback");
 
-  menuBar->setFileMenu( menuBar->insertMenu(i18n("&File"), m_vMenuFile, -1, -1) );
+  CORBA::WString_var text = Q2C( i18n("&File") );
+  menuBar->setFileMenu( menuBar->insertMenu(text, m_vMenuFile, -1, -1) );
 
   pix = OPUIUtils::convertPixmap(ICON("go-url3.xpm"));
-  m_vMenuFile->insertItem6( pix, i18n("Open &URL..."), this, "slotOpenURLDlg", CTRL + Key_U, ID_OPENURL, -1 );
+  text = Q2C( i18n("Open &URL...") );
+  m_vMenuFile->insertItem6( pix, text, this, "slotOpenURLDlg", CTRL + Key_U, ID_OPENURL, -1 );
   
-  menuBar->insertMenu(i18n("&Edit"), m_vMenuEdit, -1, -1);
+  text = Q2C( i18n("&Edit") );
+  menuBar->insertMenu(text, m_vMenuEdit, -1, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6(pix, i18n("&Copy"), this, "editCopy", CTRL + Key_C, ID_EDIT_COPY, -1);
+  text = Q2C( i18n("&Copy") );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6(pix, text, this, "editCopy", CTRL + Key_C, ID_EDIT_COPY, -1);
 
   m_vMenuEdit->insertSeparator(-1);
   
-  m_vMenuEdit->insertItem8(i18n("&Insert"), m_vMenuEdit_Insert, -1, -1);
+  text = Q2C( i18n("&Insert") );
+  m_vMenuEdit->insertItem8(text, m_vMenuEdit_Insert, -1, -1);
   
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));  
-  m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem6(pix, i18n("&Object..."), this, "insertObject", 0, ID_EDIT_INSERT_OBJECT, -1);
+  text = Q2C( i18n("&Object...") );
+  m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem6(pix, text, this, "insertObject", 0, ID_EDIT_INSERT_OBJECT, -1);
 
   m_vMenuEdit->insertSeparator(-1);
   
   pix = OPUIUtils::convertPixmap(ICON("edit-html.xpm"));
-  m_vMenuEdit->insertItem6(pix, i18n("Edit HTML code"), this, "editHTMLCode", 0, ID_EDIT_HTMLCODE, -1);
+  text = Q2C( i18n("Edit HTML code") );
+  m_vMenuEdit->insertItem6(pix, text, this, "editHTMLCode", 0, ID_EDIT_HTMLCODE, -1);
 
-  menuBar->insertMenu(i18n("Bookmarks"), m_vMenuBookmarks, -1, -1);
+  text = Q2C( i18n("Bookmarks") );
+  menuBar->insertMenu(text, m_vMenuBookmarks, -1, -1);
   
   m_vMenuBar->connect("activated", this, "slotBookmarkSelected");
   
-  m_vMenuBookmarks->insertItem4(i18n("Add Bookmark"), this, "addBookmark", 0, ID_BOOKMARKS_ADD, -1);
-  m_vMenuBookmarks->insertItem4(i18n("Edit Bookmarks"), this, "editBookmarks", 0, ID_BOOKMARKS_EDIT, -1);
+  text = Q2C( i18n("Add Bookmark") );
+  m_vMenuBookmarks->insertItem4(text, this, "addBookmark", 0, ID_BOOKMARKS_ADD, -1);
+  text = Q2C( i18n("Edit Bookmarks") );
+  m_vMenuBookmarks->insertItem4(text, this, "editBookmarks", 0, ID_BOOKMARKS_EDIT, -1);
   m_vMenuBookmarks->insertSeparator(-1);
   
   QString bdir(kapp->localkdedir().data());
   bdir += "/share/apps/kfm/bookmarks";
   scanBookmarks( m_vMenuBookmarks, bdir );  
 
-  menuBar->insertMenu(i18n("&Options"), m_vMenuOptions, -1, -1);
+  text = Q2C( i18n("&Options") );
+  menuBar->insertMenu(text, m_vMenuOptions, -1, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("configure.xpm"));
-  m_idMenuOptions_Settings = m_vMenuOptions->insertItem6(pix, i18n("Settings..."), this, "editSettings", 0, ID_OPTIONS_SETTINGS, -1);
+  text = Q2C( i18n("Settings...") );
+  m_idMenuOptions_Settings = m_vMenuOptions->insertItem6(pix, text, this, "editSettings", 0, ID_OPTIONS_SETTINGS, -1);
 
-  m_idMenuOptions_ConfigureKeys = m_vMenuOptions->insertItem4(i18n("Configure &keys"), this, "editKeys", 0, ID_OPTIONS_CONFIGUREKEYS, -1);
+  text = Q2C( i18n("Configure &keys") );
+  m_idMenuOptions_ConfigureKeys = m_vMenuOptions->insertItem4(text, this, "editKeys", 0, ID_OPTIONS_CONFIGUREKEYS, -1);
   
   m_vMenuOptions->insertSeparator(-1);
 
-  m_idMenuOptions_View_ToolBar = m_vMenuOptions->insertItem4(i18n("Show/Hide Tool&bar"), this, "viewToolBar", 0, ID_OPTIONS_VIEW_TOOLBAR, -1);
-  m_idMenuOptions_View_StatusBar = m_vMenuOptions->insertItem4(i18n("Show/Hide &Statusbar"), this, "viewStatusBar", 0, ID_OPTIONS_VIEW_STATUSBAR, -1);
+  text = Q2C( i18n("Show/Hide Tool&bar") );
+  m_idMenuOptions_View_ToolBar = m_vMenuOptions->insertItem4(text, this, "viewToolBar", 0, ID_OPTIONS_VIEW_TOOLBAR, -1);
+  text = Q2C( i18n("Show/Hide &Statusbar") );
+  m_idMenuOptions_View_StatusBar = m_vMenuOptions->insertItem4(text, this, "viewStatusBar", 0, ID_OPTIONS_VIEW_STATUSBAR, -1);
 
   m_vMenuOptions->setItemChecked(m_idMenuOptions_View_ToolBar, m_bToolBarVisible);
   m_vMenuOptions->setItemChecked(m_idMenuOptions_View_StatusBar, m_bStatusBarVisible);
@@ -871,7 +887,8 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 	pix = OPUIUtils::loadPixmap(f);
 
         OpenPartsUI::Menu_var pop;
-	menu->insertItem12(pix, ep->d_name, pop, -1, -1);
+	CORBA::WString_var text = Q2C( QString( ep->d_name ) );
+	menu->insertItem12(pix, text, pop, -1, -1);
 	
 	scanBookmarks( pop, file );
       }
@@ -888,6 +905,7 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 	  if ( !url.isEmpty() && !miniicon.isEmpty() )
 	  {
 	    OpenPartsUI::Pixmap_var pix;
+	    CORBA::WString_var text;
 	    QString name = cfg.readEntry( "Name" );
 	    if ( name.isEmpty() )
 	    {
@@ -928,7 +946,8 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 		pix = OPUIUtils::loadPixmap(f);
 	      }
 	    }
-	    menu->insertItem11( pix, name, m_idBookmarkId, -1);
+	    text = Q2C( name );
+	    menu->insertItem11( pix, text, m_idBookmarkId, -1);
 	    m_mapBookmarks[ m_idBookmarkId++ ] = new QString( url );
 	  }
 	}
@@ -947,8 +966,9 @@ void KoHTMLView::slotSetCaption(const char *title)
         m_strCaptionText = QString(title).prepend("KoHTML : ");
     }  
 
+  CORBA::WString_var caption = Q2C( m_strCaptionText );
   if (!CORBA::is_nil( m_vMainWindow ))
-    m_vMainWindow->setPartCaption( id(), m_strCaptionText );
+    m_vMainWindow->setPartCaption( id(), caption );
 }
 
 void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)

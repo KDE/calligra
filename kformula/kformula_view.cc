@@ -173,127 +173,176 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
     cerr << "START --------------- MENU -------------------" << endl;
 
+    CORBA::WString_var text;
+    
     // View
-    _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
+    text = Q2C( i18n( "&View" ) );
+    _menubar->insertMenu( text, m_vMenuView, -1, -1 );
 
-    m_idMenuView_NewView = m_vMenuView->insertItem( i18n( "&New View" ), this, "newView", 0 );
-    m_idMenuView_FontToolbar = m_vMenuView->insertItem( i18n( "Font Toolbar" ), this, "newView", 0 );
-    m_idMenuView_TextToolbar = m_vMenuView->insertItem( i18n( "Text Toolbar" ), this, "newView", 0 );
-    m_idMenuView_TypeToolbar = m_vMenuView->insertItem( i18n( "Type Toolbar" ), this, "newView", 0 );
+    text = Q2C( i18n( "&New View" ) );
+    m_idMenuView_NewView = m_vMenuView->insertItem( text, this, "newView", 0 );
+    text = Q2C( i18n( "Font Toolbar" ) );
+    m_idMenuView_FontToolbar = m_vMenuView->insertItem( text, this, "newView", 0 );
+    text = Q2C( i18n( "Text Toolbar" ) );
+    m_idMenuView_TextToolbar = m_vMenuView->insertItem( text, this, "newView", 0 );
+    text = Q2C( i18n( "Type Toolbar" ) );
+    m_idMenuView_TypeToolbar = m_vMenuView->insertItem( text, this, "newView", 0 );
 
     // Element
-    _menubar->insertMenu( i18n( "&Element" ), m_vMenuElement, -1, -1 );
+    text = Q2C( i18n( "&Element" ) );
+    _menubar->insertMenu( text, m_vMenuElement, -1, -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Add Index" ), m_vMenuElement_AddIndex, -1, -1 );
+    text = Q2C( i18n( "&Add Index" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_AddIndex, -1, -1 );
 
     OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("index0.xpm"));
-    m_idMenuElement_AddIndex_TL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Top left" ), this, "addTopLeftIndex", 0, -1, -1 );
+    text = Q2C( i18n( "Top left" ) );
+    m_idMenuElement_AddIndex_TL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addTopLeftIndex", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("index1.xpm") );
-    m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Bottom left" ), this, "addBottomLeftIndex", 0, -1, -1 );
+    text = Q2C( i18n( "Bottom left" ) );
+    m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addBottomLeftIndex", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("index2.xpm") );
-    m_idMenuElement_AddIndex_TR = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Top right" ), this, "addTopRightIndex", 0, -1, -1 );
+    text = Q2C( i18n( "Top right" ) );
+    m_idMenuElement_AddIndex_TR = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addTopRightIndex", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("index3.xpm") );
-    m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Bottom right" ), this, "addBottomRightIndex", 0, -1, -1 );
+    text = Q2C( i18n( "Bottom right" ) );
+    m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, text, this, "addBottomRightIndex", 0, -1, -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Add Element" ), m_vMenuElement_AddElement, -1, -1 );	
+    text = Q2C( i18n( "&Add Element" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_AddElement, -1, -1 );	
 
     pix = OPUIUtils::convertPixmap(ICON("mini-xy.xpm") );
-    m_idMenuElement_AddElement_T = m_vMenuElement_AddElement->insertItem6( pix, i18n( "Plain text" ), this, "addText", 0, -1, -1 );
+    text = Q2C( i18n( "Plain text" ) );
+    m_idMenuElement_AddElement_T = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addText", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("mini-root.xpm") );
-    m_idMenuElement_AddElement_R = m_vMenuElement_AddElement->insertItem6( pix, i18n( "Root" ), this, "addRoot", 0, -1, -1 );
+    text = Q2C( i18n( "Root" ) );
+    m_idMenuElement_AddElement_R = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addRoot", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("mini-bra.xpm") );
-    m_idMenuElement_AddElement_B = m_vMenuElement_AddElement->insertItem6( pix, i18n( "Bracket" ), this, "addBracket", 0, -1, -1 );
+    text = Q2C( i18n( "Bracket" ) );
+    m_idMenuElement_AddElement_B = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addBracket", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("mini-frac.xpm") );
-    m_idMenuElement_AddElement_F = m_vMenuElement_AddElement->insertItem6( pix, i18n( "Fraction" ), this, "addFraction", 0, -1, -1 );
+    text = Q2C( i18n( "Fraction" ) );
+    m_idMenuElement_AddElement_F = m_vMenuElement_AddElement->insertItem6( pix, text, this, "addFraction", 0, -1, -1 );
 
-    m_idMenuElement_Color = m_vMenuElement->insertItem( i18n( "Set color" ), this, "elementColor", 0 );
+    text = Q2C( i18n( "Set color" ) );
+    m_idMenuElement_Color = m_vMenuElement->insertItem( text, this, "elementColor", 0 );
 
-    m_idMenuElement_Remove = m_vMenuElement->insertItem( i18n( "Remove element" ), this, "remove", 0 );
+    text = Q2C( i18n( "Remove element" ) );
+    m_idMenuElement_Remove = m_vMenuElement->insertItem( text, this, "remove", 0 );
 
     m_vMenuElement->insertSeparator( -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Text" ), m_vMenuElement_Text, -1, -1 );	
+    text = Q2C( i18n( "&Text" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_Text, -1, -1 );	
 
-    m_idMenuElement_Text_Font = m_vMenuElement_Text->insertItem( i18n( "Set font" ), this, "textFont", 0 );
+    text = Q2C( i18n( "Set font" ) );
+    m_idMenuElement_Text_Font = m_vMenuElement_Text->insertItem( text, this, "textFont", 0 );
 
     pix = OPUIUtils::convertPixmap(ICON("split.xpm") );
-    m_idMenuElement_Text_Split = m_vMenuElement_Text->insertItem6( pix, i18n( "Split at current position" ), this, "textSplit", 0, -1, -1 );
+    text = Q2C( i18n( "Split at current position" ) );
+    m_idMenuElement_Text_Split = m_vMenuElement_Text->insertItem6( pix, text, this, "textSplit", 0, -1, -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Root" ), m_vMenuElement_Root, -1, -1 );	
+    text = Q2C( i18n( "&Root" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_Root, -1, -1 );	
 
-    m_idMenuElement_Root_Pixmap = m_vMenuElement_Root->insertItem( i18n( "Use pixmap" ), this, "togglePixmap", 0 );
+    text = Q2C( i18n( "Use pixmap" ) );
+    m_idMenuElement_Root_Pixmap = m_vMenuElement_Root->insertItem( text, this, "togglePixmap", 0 );
 
     pix = OPUIUtils::convertPixmap(ICON("rootindex.xpm") );
-    m_idMenuElement_Root_Index = m_vMenuElement_Root->insertItem6( pix, i18n( "Add root index (Top left)" ), this, "addTopLeftIndex", 0, -1, -1 );
+    text = Q2C( i18n( "Add root index (Top left)" ) );
+    m_idMenuElement_Root_Index = m_vMenuElement_Root->insertItem6( pix, text, this, "addTopLeftIndex", 0, -1, -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Bracket" ), m_vMenuElement_Bracket, -1, -1 );	
+    text = Q2C( i18n( "&Bracket" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_Bracket, -1, -1 );	
 
     pix = OPUIUtils::convertPixmap(ICON("delimiter.xpm") );
-    m_idMenuElement_Bracket_Type = m_vMenuElement_Bracket->insertItem6( pix, i18n( "Set delimiter ..." ), this, "bracketType", 0, -1, -1 );
+    text = Q2C( i18n( "Set delimiter ..." ) );
+    m_idMenuElement_Bracket_Type = m_vMenuElement_Bracket->insertItem6( pix, text, this, "bracketType", 0, -1, -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Fraction" ), m_vMenuElement_Fraction, -1, -1 );
+    text = Q2C( i18n( "&Fraction" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_Fraction, -1, -1 );
 	
-    m_idMenuElement_Fraction_VA = m_vMenuElement_Fraction->insertItem( i18n( "Vertical align ..." ), this, "addFraction", 0 );
+    text = Q2C( i18n( "Vertical align ..." ) );
+    m_idMenuElement_Fraction_VA = m_vMenuElement_Fraction->insertItem( text, this, "addFraction", 0 );
 
-    m_idMenuElement_Fraction_HA = m_vMenuElement_Fraction->insertItem( i18n( "Horizontal align ..." ), this, "fractionHAlign", 0 );
+    text = Q2C( i18n( "Horizontal align ..." ) );
+    m_idMenuElement_Fraction_HA = m_vMenuElement_Fraction->insertItem( text, this, "fractionHAlign", 0 );
 
-    m_idMenuElement_Fraction_MidLine = m_vMenuElement_Fraction->insertItem( i18n( "Set midline" ), this, "toggleMidline", 0 );
+    text = Q2C( i18n( "Set midline" ) );
+    m_idMenuElement_Fraction_MidLine = m_vMenuElement_Fraction->insertItem( text, this, "toggleMidline", 0 );
 
-    m_vMenuElement->insertItem8( i18n( "&Integral" ), m_vMenuElement_Integral, -1, -1 );
+    text = Q2C( i18n( "&Integral" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_Integral, -1, -1 );
 
-    m_idMenuElement_Integral_Pixmap = m_vMenuElement_Integral->insertItem( i18n( "Use pixmap" ), this, "togglePixmap", 0 );
+    text = Q2C( i18n( "Use pixmap" ) );
+    m_idMenuElement_Integral_Pixmap = m_vMenuElement_Integral->insertItem( text, this, "togglePixmap", 0 );
 
     pix = OPUIUtils::convertPixmap(ICON("Ihigher.xpm") );
-    m_idMenuElement_Integral_Higher = m_vMenuElement_Integral->insertItem6( pix, i18n( "Add higher limit" ), this, "addHigher", 0, -1, -1 );
+    text = Q2C( i18n( "Add higher limit" ) );
+    m_idMenuElement_Integral_Higher = m_vMenuElement_Integral->insertItem6( pix, text, this, "addHigher", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("Ilower.xpm") );
-    m_idMenuElement_Integral_Lower = m_vMenuElement_Integral->insertItem6( pix, i18n( "Add lower limit" ), this, "addLower", 0, -1, -1 );
+    text = Q2C( i18n( "Add lower limit" ) );
+    m_idMenuElement_Integral_Lower = m_vMenuElement_Integral->insertItem6( pix, text, this, "addLower", 0, -1, -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Matrix" ), m_vMenuElement_Matrix, -1, -1 );
+    text = Q2C( i18n( "&Matrix" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_Matrix, -1, -1 );
 
     // pix = OPUIUtils::convertPixmap(ICON("setmatrix.xpm" );
     // m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Set dimension" ), this, "matrixSet", 0, -1, -1 );
-    m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem( i18n( "Set dimension" ), this, "matrixSet", 0 );
+    text = Q2C( i18n( "Set dimension" ) );
+    m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem( text, this, "matrixSet", 0 );
 
     pix = OPUIUtils::convertPixmap(ICON("insrow.xpm") );
-    m_idMenuElement_Matrix_InsRow = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Insert a row" ), this, "matrixInsRow", 0, -1, -1 );
+    text = Q2C( i18n( "Insert a row" ) );
+    m_idMenuElement_Matrix_InsRow = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixInsRow", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("inscol.xpm") );
-    m_idMenuElement_Matrix_InsCol = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Insert a column" ), this, "matrixInsCol", 0, -1, -1 );
+    text = Q2C( i18n( "Insert a column" ) );
+    m_idMenuElement_Matrix_InsCol = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixInsCol", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("remrow.xpm") );
-    m_idMenuElement_Matrix_RemRow = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Remove a row" ), this, "matrixRemRow", 0, -1, -1 );
+    text = Q2C( i18n( "Remove a row" ) );
+    m_idMenuElement_Matrix_RemRow = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixRemRow", 0, -1, -1 );
 
     pix = OPUIUtils::convertPixmap(ICON("remcol.xpm") );
-    m_idMenuElement_Matrix_RemCol = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Remove a column" ), this, "matrixRemCol", 0, -1, -1 );
+    text = Q2C( i18n( "Remove a column" ) );
+    m_idMenuElement_Matrix_RemCol = m_vMenuElement_Matrix->insertItem6( pix, text, this, "matrixRemCol", 0, -1, -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Decoration" ), m_vMenuElement_Decoration, -1, -1 );
+    text = Q2C( i18n( "&Decoration" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_Decoration, -1, -1 );
 
-    m_vMenuElement->insertItem8( i18n( "&Symbol" ), m_vMenuElement_Symbol, -1, -1 );
+    text = Q2C( i18n( "&Symbol" ) );
+    m_vMenuElement->insertItem8( text, m_vMenuElement_Symbol, -1, -1 );
 	
     // Formula
-    _menubar->insertMenu( i18n( "&Formula" ), m_vMenuFormula, -1, -1 );
+    text = Q2C( i18n( "&Formula" ) );
+    _menubar->insertMenu( text, m_vMenuFormula, -1, -1 );
 
-    m_idMenuFormula_Color = m_vMenuFormula->insertItem( i18n( "Set general color" ), this, "addFraction", 0 );
+    text = Q2C( i18n( "Set general color" ) );
+    m_idMenuFormula_Color = m_vMenuFormula->insertItem( text, this, "addFraction", 0 );
 
-    m_idMenuFormula_Font = m_vMenuFormula->insertItem( i18n( "Set general font" ), this, "generalFont", 0 );
+    text = Q2C( i18n( "Set general font" ) );
+    m_idMenuFormula_Font = m_vMenuFormula->insertItem( text, this, "generalFont", 0 );
 
     // Help
     m_vMenuHelp = _menubar->helpMenu();
     if ( CORBA::is_nil( m_vMenuHelp ) )
 	{
 	    _menubar->insertSeparator( -1 );
-	    _menubar->setHelpMenu( _menubar->insertMenu( i18n( "&Help" ), m_vMenuHelp, -1, -1 ) );
+	    text = Q2C( i18n( "&Help" ) );
+	    _menubar->setHelpMenu( _menubar->insertMenu( text, m_vMenuHelp, -1, -1 ) );
 	}
 
     // m_idMenuHelp_About = m_vMenuHelp->insertItem( i18n( "&About" ), this, "helpAbout", 0 );
-    m_idMenuHelp_Using = m_vMenuHelp->insertItem( i18n( "&Using KFormula" ), this, "helpUsing", 0 );
+    text = Q2C( i18n( "&Using KFormula" ) );
+    m_idMenuHelp_Using = m_vMenuHelp->insertItem( text, this, "helpUsing", 0 );
 
     cerr << "END --------------- MENU -------------------" << endl;
 

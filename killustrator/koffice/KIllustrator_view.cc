@@ -229,139 +229,185 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
     return true;
   }
 
+  CORBA::WString_var text;
+  
   // Menu: Edit
-  menubar->insertMenu (i18n ("&Edit"), m_vMenuEdit, -1, -1);
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem (i18n ("Undo"), this,
+  text = Q2C( i18n ("&Edit") );
+  menubar->insertMenu (text, m_vMenuEdit, -1, -1);
+  text = Q2C( i18n ("Undo") );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem (text, this,
 					       "editUndo", 0);
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem (i18n ("Redo"), this,
+  text = Q2C( i18n ("Redo") );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem (text, this,
 					       "editRedo", 0);
   m_vMenuEdit->insertSeparator (-1);
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem (i18n ("&Copy"), this,
+  text = Q2C( i18n ("&Copy") );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem (text, this,
 					   "editCopy", 0);
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem (i18n ("&Paste"), this,
+  text = Q2C( i18n ("&Paste") );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem (text, this,
 					    "editPaste", 0);
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem (i18n ("C&ut"), this,
+  text = Q2C( i18n ("C&ut") );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem (text, this,
 					      "editCut", 0);
   m_vMenuEdit->insertSeparator (-1);
-  m_idMenuEdit_Duplicate = m_vMenuEdit->insertItem (i18n ("Duplicate"), this,
+  text = Q2C( i18n ("Duplicate") );
+  m_idMenuEdit_Duplicate = m_vMenuEdit->insertItem (text, this,
 						 "editDuplicate", 0);
-  m_idMenuEdit_Delete = m_vMenuEdit->insertItem (i18n ("&Delete"), this,
+  text = Q2C( i18n ("&Delete") );
+  m_idMenuEdit_Delete = m_vMenuEdit->insertItem (text, this,
 						 "editDelete", 0);
   m_vMenuEdit->insertSeparator (-1);
-  m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem (i18n ("&Select All"), this,
+  text = Q2C( i18n ("&Select All") );
+  m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem (text, this,
 						    "editSelectAll", 0);
   m_vMenuEdit->insertSeparator (-1);
 
-  m_vMenuEdit->insertItem8 (i18n ("&Insert"), m_vMenuInsert, -1, -1);
+  text = Q2C( i18n ("&Insert") );
+  m_vMenuEdit->insertItem8 (text, m_vMenuInsert, -1, -1);
 
+  text = Q2C( i18n ("Pr&operties") );
   m_idMenuEdit_Properties =
-    m_vMenuEdit->insertItem (i18n ("Pr&operties"), this,
+    m_vMenuEdit->insertItem (text, this,
 			     "editProperties", 0);
 
   // Menu: Edit->Insert
+  text = Q2C( i18n ("&Object...") );
   m_idMenuInsert_Object =
-    m_vMenuInsert->insertItem (i18n ("&Object..."), this,
+    m_vMenuInsert->insertItem (text, this,
 			       "editInsertObject", 0);
+  text = Q2C( i18n ("&Clipart...") );
   m_idMenuInsert_Clipart =
-    m_vMenuInsert->insertItem (i18n ("&Clipart..."), this,
+    m_vMenuInsert->insertItem (text, this,
 			       "editInsertClipart", 0);
+  text = Q2C( i18n ("&Bitmap...") );
   m_idMenuInsert_Bitmap =
-    m_vMenuInsert->insertItem (i18n ("&Bitmap..."), this,
+    m_vMenuInsert->insertItem (text, this,
 			       "editInsertBitmap", 0);
 
   // Menu: View
-  menubar->insertMenu (i18n ("&View"), m_vMenuView, -1, -1);
+  text = Q2C( i18n ("&View") );
+  menubar->insertMenu (text, m_vMenuView, -1, -1);
+  text = Q2C( i18n ("Outline") );
   m_idMenuView_Outline =
-    m_vMenuView->insertItem (i18n ("Outline"), this, "viewOutline", 0);
+    m_vMenuView->insertItem (text, this, "viewOutline", 0);
   m_vMenuView->setCheckable (true);
+  text = Q2C( i18n ("Normal") );
   m_idMenuView_Normal =
-    m_vMenuView->insertItem (i18n ("Normal"), this, "viewNormal", 0);
+    m_vMenuView->insertItem (text, this, "viewNormal", 0);
   m_vMenuView->insertSeparator (-1);
+  text = Q2C( i18n ("Layers") );
   m_idMenuView_Layers =
-    m_vMenuView->insertItem (i18n ("Layers"), this, "editLayers", 0);
+    m_vMenuView->insertItem (text, this, "editLayers", 0);
   m_vMenuView->insertSeparator (-1);
+  text = Q2C( i18n ("Ruler") );
   m_idMenuView_Ruler =
-    m_vMenuView->insertItem (i18n ("Ruler"), this, "toggleRuler", 0);
+    m_vMenuView->insertItem (text, this, "toggleRuler", 0);
   m_vMenuView->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
+  text = Q2C( i18n ("Grid") );
   m_idMenuView_Grid =
-    m_vMenuView->insertItem (i18n ("Grid"), this, "toggleGrid", 0);
+    m_vMenuView->insertItem (text, this, "toggleGrid", 0);
   m_vMenuView->setItemChecked (m_idMenuView_Grid, false);
+  text = Q2C( i18n ("Helplines") );
   m_idMenuView_Helplines =
-    m_vMenuView->insertItem (i18n ("Helplines"), this, "toggleHelplines", 0);
+    m_vMenuView->insertItem (text, this, "toggleHelplines", 0);
   m_vMenuView->setItemChecked (m_idMenuView_Helplines, false);
 
   // Menu: Layout
-  menubar->insertMenu (i18n ("&Layout"), m_vMenuLayout, -1, -1);
+  text = Q2C( i18n ("&Layout") );
+  menubar->insertMenu (text, m_vMenuLayout, -1, -1);
+  text = Q2C( i18n ("Page Layout") );
   m_idMenuLayout_PageLayout =
-    m_vMenuLayout->insertItem (i18n ("Page Layout"), this, "setupPage", 0);
+    m_vMenuLayout->insertItem (text, this, "setupPage", 0);
   m_vMenuLayout->insertSeparator (-1);
+  text = Q2C( i18n ("Setup Grid") );
   m_idMenuLayout_SetupGrid =
-    m_vMenuLayout->insertItem (i18n ("Setup Grid"), this, "setupGrid", 0);
+    m_vMenuLayout->insertItem (text, this, "setupGrid", 0);
+  text = Q2C( i18n ("Setup Helplines") );
   m_idMenuLayout_SetupHelplines =
-    m_vMenuLayout->insertItem (i18n ("Setup Helplines"), this,
+    m_vMenuLayout->insertItem (text, this,
 			       "setupHelplines", 0);
   m_vMenuLayout->insertSeparator (-1);
+  text = Q2C( i18n ("Align to Grid") );
   m_idMenuLayout_AlignToGrid =
-    m_vMenuLayout->insertItem (i18n ("Align to Grid"), this, "alignToGrid", 0);
+    m_vMenuLayout->insertItem (text, this, "alignToGrid", 0);
   m_vMenuLayout->setCheckable (true);
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToGrid, false);
+  text = Q2C( i18n ("Align to Helplines") );
   m_idMenuLayout_AlignToHelplines =
-    m_vMenuLayout->insertItem (i18n ("Align to Helplines"), this,
+    m_vMenuLayout->insertItem (text, this,
 			       "alignToHelplines", 0);
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToHelplines, false);
 
   // Menu: Arrange
-  menubar->insertMenu (i18n ("&Arrange"), m_vMenuArrange, -1, -1);
-  m_vMenuArrange->insertItem8 (i18n ("Transform"), m_vMenuTransform, -1, -1);
-  m_idMenuArrange_Align = m_vMenuArrange->insertItem (i18n ("Align"), this,
+  text = Q2C( i18n ("&Arrange") );
+  menubar->insertMenu (text, m_vMenuArrange, -1, -1);
+  text = Q2C( i18n ("Transform") );
+  m_vMenuArrange->insertItem8 (text, m_vMenuTransform, -1, -1);
+  text = Q2C( i18n ("Align") );
+  m_idMenuArrange_Align = m_vMenuArrange->insertItem (text, this,
 						      "arrangeAlign", 0);
-  m_idMenuArrange_ToFront = m_vMenuArrange->insertItem (i18n ("To Front"),
+  text = Q2C( i18n ("To Front") );
+  m_idMenuArrange_ToFront = m_vMenuArrange->insertItem (text,
 							this,
 							"arrangeToFront", 0);
-  m_idMenuArrange_ToBack = m_vMenuArrange->insertItem (i18n ("To Back"), this,
+  text = Q2C( i18n ("To Back") );
+  m_idMenuArrange_ToBack = m_vMenuArrange->insertItem (text, this,
 				"arrangeToBack", 0);
+  text = Q2C( i18n ("Forward One") );
   m_idMenuArrange_1Forward =
-    m_vMenuArrange->insertItem (i18n ("Forward One"), this,
+    m_vMenuArrange->insertItem (text, this,
 				"arrangeOneForward", 0);
-  m_idMenuArrange_1Back = m_vMenuArrange->insertItem (i18n ("Back One"), this,
+  text = Q2C( i18n ("Back One") );
+  m_idMenuArrange_1Back = m_vMenuArrange->insertItem (text, this,
 						      "arrangeOneBack", 0);
   m_vMenuArrange->insertSeparator (-1);
-  m_idMenuArrange_Group = m_vMenuArrange->insertItem (i18n ("Group"), this,
+  text = Q2C( i18n ("Group") );
+  m_idMenuArrange_Group = m_vMenuArrange->insertItem (text, this,
 						      "arrangeGroup", 0);
-  m_idMenuArrange_Ungroup = m_vMenuArrange->insertItem (i18n ("Ungroup"),
+  text = Q2C( i18n ("Ungroup") );
+  m_idMenuArrange_Ungroup = m_vMenuArrange->insertItem (text,
 							this,
 							"arrangeUngroup", 0);
   m_vMenuArrange->insertSeparator (-1);
+  text = Q2C( i18n ("Text along path") );
   m_idMenuArrange_TextAlongPath =
-    m_vMenuArrange->insertItem (i18n ("Text along path"),
+    m_vMenuArrange->insertItem (text,
 				this,
 				"arrangeTextAlongPath", 0);
 
   // Menu: Arrange->Transform
+  text = Q2C( i18n ("Position") );
   m_idMenuTransform_Position =
-    m_vMenuTransform->insertItem (i18n ("Position"), this,
+    m_vMenuTransform->insertItem (text, this,
 				  "transformPosition", 0);
+  text = Q2C( i18n ("Dimension") );
   m_idMenuTransform_Dimension =
-    m_vMenuTransform->insertItem (i18n ("Dimension"), this,
+    m_vMenuTransform->insertItem (text, this,
 				  "transformDimension", 0);
+  text = Q2C( i18n ("Rotation") );
   m_idMenuTransform_Rotation =
-    m_vMenuTransform->insertItem (i18n ("Rotation"), this,
+    m_vMenuTransform->insertItem (text, this,
 				  "transformRotation", 0);
+  text = Q2C( i18n ("Mirror") );
   m_idMenuTransform_Mirror =
-    m_vMenuTransform->insertItem (i18n ("Mirror"), this,
+    m_vMenuTransform->insertItem (text, this,
 				  "transformMirror", 0);
 
   // Menu: Extras
-  menubar->insertMenu (i18n ("&Extras"), m_vMenuExtras, -1, -1);
+  text = Q2C( i18n ("&Extras") );
+  menubar->insertMenu (text, m_vMenuExtras, -1, -1);
+  text = Q2C( i18n ("Scripts") );
   m_idMenuExtras_Scripts =
-    m_vMenuExtras->insertItem (i18n ("Scripts"), this,
+    m_vMenuExtras->insertItem (text, this,
 				  "showScripts", 0);
 
   // Menu: Help
   m_vMenuHelp = menubar->helpMenu ();
   if (CORBA::is_nil (m_vMenuHelp)) {
     menubar->insertSeparator (-1);
-    menubar->setHelpMenu (menubar->insertMenu (i18n ("&Help"),
+    text = Q2C( i18n ("&Help") );
+    menubar->setHelpMenu (menubar->insertMenu (text,
 					       m_vMenuHelp, -1, -1));
   }
   return true;
@@ -772,10 +818,13 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
     // we do this " " trick to avoid double translation of "Undo" and "Undo "
     m_vMenuEdit->setItemEnabled (m_idMenuEdit_Undo, undoPossible);
 
+    CORBA::WString_var text;
+    
     QString label = i18n ("Undo");
     if (undoPossible)
       label += " " + cmdHistory.getUndoName ();
-    m_vMenuEdit->changeItemText (label, m_idMenuEdit_Undo);
+    text = Q2C( label );
+    m_vMenuEdit->changeItemText (text, m_idMenuEdit_Undo);
 
     m_vMenuEdit->setItemEnabled (m_idMenuEdit_Redo, redoPossible);
 
@@ -783,7 +832,8 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
     if (redoPossible)
       label += " " + cmdHistory.getRedoName ();
 
-    m_vMenuEdit->changeItemText (label, m_idMenuEdit_Redo);
+    text = Q2C( label );
+    m_vMenuEdit->changeItemText (text, m_idMenuEdit_Redo);
   }
 }
 

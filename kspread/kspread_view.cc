@@ -678,86 +678,117 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
+  CORBA::WString_var text;
+  
   // Edit
-  _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
+  text = Q2C( i18n( "&Edit" ) );
+  _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
   OpenPartsUI::Pixmap_var pix;
   pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("Un&do"), this, "undo", stdAccel.undo(), -1, -1 );
+  text = Q2C( i18n("Un&do") );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, text, this, "undo", stdAccel.undo(), -1, -1 );
   pix = OPUIUtils::convertPixmap( ICON("redo.xpm") );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n("&Redo"), this, "redo", 0, -1, -1 );
+  text = Q2C( i18n("&Redo") );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, text, this, "redo", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("editcut.xpm") );
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("C&ut"), this, "cutSelection", stdAccel.cut(), -1, -1 );
+  text = Q2C( i18n("C&ut") );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, text, this, "cutSelection", stdAccel.cut(), -1, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("editcopy.xpm") );
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "copySelection", stdAccel.copy(), -1, -1 );
+  text = Q2C( i18n("&Copy") );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, text, this, "copySelection", stdAccel.copy(), -1, -1 );
 
   pix = OPUIUtils::convertPixmap( ICON("editpaste.xpm") );
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "paste", stdAccel.paste(), -1, -1 );
+  text = Q2C( i18n("&Paste") );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, text, this, "paste", stdAccel.paste(), -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  m_vMenuEdit->insertItem8( i18n( "&Insert" ), m_vMenuEdit_Insert, -1, -1 );
-  m_idMenuEdit_Insert_Table = m_vMenuEdit_Insert->insertItem( i18n( "&Table" ), this, "insertTable", 0 );
-  m_idMenuEdit_Insert_Image = m_vMenuEdit_Insert->insertItem( i18n( "&Image" ), this, "insertImage", 0 );
-  m_idMenuEdit_Insert_Chart = m_vMenuEdit_Insert->insertItem( i18n( "&Chart" ), this, "insertChart", 0 );
-  m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem( i18n( "&Object ..." ), this, "insertObject", 0 );
+  text = Q2C( i18n( "&Insert" ) );
+  m_vMenuEdit->insertItem8( text, m_vMenuEdit_Insert, -1, -1 );
+  text = Q2C( i18n( "&Table" ) );
+  m_idMenuEdit_Insert_Table = m_vMenuEdit_Insert->insertItem( text, this, "insertTable", 0 );
+  text = Q2C( i18n( "&Image" ) );
+  m_idMenuEdit_Insert_Image = m_vMenuEdit_Insert->insertItem( text, this, "insertImage", 0 );
+  text = Q2C( i18n( "&Chart" ) );
+  m_idMenuEdit_Insert_Chart = m_vMenuEdit_Insert->insertItem( text, this, "insertChart", 0 );
+  text = Q2C( i18n( "&Object ..." ) );
+  m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem( text, this, "insertObject", 0 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  m_idMenuEdit_Cell = m_vMenuEdit->insertItem( i18n( "C&ell" ), this, "editCell", 0 );
+  text = Q2C( i18n( "C&ell" ) );
+  m_idMenuEdit_Cell = m_vMenuEdit->insertItem( text, this, "editCell", 0 );
 	
   m_vMenuEdit->insertSeparator( -1 );
 
-  m_idMenuEdit_Layout = m_vMenuEdit->insertItem( i18n( "Paper &Layout" ), this, "paperLayoutDlg", 0 );
+  text = Q2C( i18n( "Paper &Layout" ) );
+  m_idMenuEdit_Layout = m_vMenuEdit->insertItem( text, this, "paperLayoutDlg", 0 );
 
   // View
-  _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
+  text = Q2C( i18n( "&View" ) );
+  _menubar->insertMenu( text, m_vMenuView, -1, -1 );
   m_vMenuView->setCheckable( true );
 
-  m_idMenuView_NewView = m_vMenuView->insertItem( i18n( "New View" ), this, "newView", 0 );
+  text = Q2C( i18n( "New View" ) );
+  m_idMenuView_NewView = m_vMenuView->insertItem( text, this, "newView", 0 );
 
   m_vMenuView->insertSeparator( -1 );
 
-  m_idMenuView_ShowPageBorders = m_vMenuView->insertItem( i18n( "Show Page Borders" ), this, "togglePageBorders", 0 );
+  text = Q2C( i18n( "Show Page Borders" ) );
+  m_idMenuView_ShowPageBorders = m_vMenuView->insertItem( text, this, "togglePageBorders", 0 );
   m_vMenuView->setItemChecked( m_idMenuView_ShowPageBorders, m_pTable->isShowPageBorders() );
 
   // Data
-  _menubar->insertMenu( i18n( "D&ata" ), m_vMenuData, -1, -1 );
+  text = Q2C( i18n( "D&ata" ) );
+  _menubar->insertMenu( text, m_vMenuData, -1, -1 );
 
-  m_idMenuData_Consolidate = m_vMenuData->insertItem( i18n( "Consolidate" ), this, "consolidate", 0 );
+  text = Q2C( i18n( "Consolidate" ) );
+  m_idMenuData_Consolidate = m_vMenuData->insertItem( text, this, "consolidate", 0 );
 
   // Folder
-  _menubar->insertMenu( i18n( "F&older" ), m_vMenuFolder, -1, -1 );
+  text = Q2C( i18n( "F&older" ) );
+  _menubar->insertMenu( text, m_vMenuFolder, -1, -1 );
 
-  m_idMenuFolder_NewTable = m_vMenuFolder->insertItem( i18n( "New Table" ), this, "insertNewTable", 0 );
+  text = Q2C( i18n( "New Table" ) );
+  m_idMenuFolder_NewTable = m_vMenuFolder->insertItem( text, this, "insertNewTable", 0 );
 
   // Format
-  _menubar->insertMenu( i18n( "Fo&rmat" ), m_vMenuFormat, -1, -1 );
+  text = Q2C( i18n( "Fo&rmat" ) );
+  _menubar->insertMenu( text, m_vMenuFormat, -1, -1 );
 
-  m_idMenuFormat_AutoFill = m_vMenuFormat->insertItem( i18n( "&Auto Fill ..." ), this, "autoFill", 0 );
+  text = Q2C( i18n( "&Auto Fill ..." ) );
+  m_idMenuFormat_AutoFill = m_vMenuFormat->insertItem( text, this, "autoFill", 0 );
 
   // Scripts
-  _menubar->insertMenu( i18n( "&Scripts" ), m_vMenuScripts, -1, -1 );
+  text = Q2C( i18n( "&Scripts" ) );
+  _menubar->insertMenu( text, m_vMenuScripts, -1, -1 );
 
-  m_idMenuScripts_EditGlobal = m_vMenuScripts->insertItem( i18n( "Edit &global scripts..." ), this, "editGlobalScripts", 0 );
-  m_idMenuScripts_EditLocal = m_vMenuScripts->insertItem( i18n( "Edit &local script" ), this, "editLocalScripts", 0 );
-  m_idMenuScripts_Reload = m_vMenuScripts->insertItem( i18n( "&Reload scripts" ), this, "reloadScripts", 0 );
-  m_idMenuScripts_Run = m_vMenuScripts->insertItem( i18n( "R&un local script" ), this, "runLocalScript", 0 );
+  text = Q2C( i18n( "Edit &global scripts..." ) );
+  m_idMenuScripts_EditGlobal = m_vMenuScripts->insertItem( text, this, "editGlobalScripts", 0 );
+  text = Q2C( i18n( "Edit &local script" ) );
+  m_idMenuScripts_EditLocal = m_vMenuScripts->insertItem( text, this, "editLocalScripts", 0 );
+  text = Q2C( i18n( "&Reload scripts" ) );
+  m_idMenuScripts_Reload = m_vMenuScripts->insertItem( text, this, "reloadScripts", 0 );
+  text = Q2C( i18n( "R&un local script" ) );
+  m_idMenuScripts_Run = m_vMenuScripts->insertItem( text, this, "runLocalScript", 0 );
 
   // Help
   m_vMenuHelp = _menubar->helpMenu();
   if ( CORBA::is_nil( m_vMenuHelp ) )
   {
     _menubar->insertSeparator( -1 );
-    _menubar->setHelpMenu( _menubar->insertMenu( i18n( "&Help" ), m_vMenuHelp, -1, -1 ) );
+    text = Q2C( i18n( "&Help" ) );
+    _menubar->setHelpMenu( _menubar->insertMenu( text, m_vMenuHelp, -1, -1 ) );
   }
 
   // m_idMenuHelp_About = m_vMenuHelp->insertItem( i18n( "&About" ), this, "helpAbout", 0 );
-  m_idMenuHelp_Using = m_vMenuHelp->insertItem( i18n( "&Using KSpread" ), this, "helpUsing", 0 );
+  text = Q2C( i18n( "&Using KSpread" ) );
+  m_idMenuHelp_Using = m_vMenuHelp->insertItem( text, this, "helpUsing", 0 );
 	
   enableUndo( false );
   enableRedo( false );
