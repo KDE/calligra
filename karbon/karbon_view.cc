@@ -282,7 +282,7 @@ KarbonView::textTool()
 	delete fontDia;
 
 	// TODO : find a way to edit the text, no predefined strings
-	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ) );
+	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ), true );
 }
 
 void
