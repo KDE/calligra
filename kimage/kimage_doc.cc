@@ -105,7 +105,7 @@ QCString KImageDocument::mimeType() const
 
 QString KImageDocument::configFile() const
 {
-    return readConfigFile( locate("kim", "kimage.rc", KImageFactory::global()) );
+    return readConfigFile( locate("data", "kimage/kimage.rc", KImageFactory::global()) );
 }
 
 /*

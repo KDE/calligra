@@ -9,30 +9,30 @@
   <Action name="paste"/>
  </Menu>
  <Menu name="View"><text>View</text>
-  <Action name="zoom_view"/>
-  <Action name="fit_to_view"/>
-  <Action name="fit_with_props"/>
-  <Action name="originalsize"/>
+  <Action name="viewZoomFactor"/>
+  <Action name="viewFitToView"/>
+  <Action name="viewFitWithProportions"/>
+  <Action name="viewOriginalSize"/>
   <Separator/>  
-  <Action name="centered"/>
-  <Action name="scrollbars"/>
-  <Action name="informations"/>
-  <Action name="background"/>
+  <Action name="viewCentered"/>
+  <Action name="viewScrollbars"/>
+  <Action name="viewInformations"/>
+  <Action name="viewBackgroundColor"/>
  </Menu>
  <Menu name="Transform"><text>Transform</text>
-  <Action name="rotate_right"/>
-  <Action name="rotate_left"/>
-  <Action name="rotate_angle"/>
-  <Action name="flip_horizontal"/>
-  <Action name="flip_vertital"/>
+  <Action name="transformRotateRight"/>
+  <Action name="transformRotateLeft"/>
+  <Action name="transformRotateAngle"/>
+  <Action name="transformFlipHorizontal"/>
+  <Action name="transformFlipVertical"/>
   <Separator/>  
-  <Action name="zoom_image"/>
-  <Action name="zoom_in_10"/>
-  <Action name="zoom_out_10"/>
-  <Action name="zoom_double"/>
-  <Action name="zoom_half"/>
-  <Action name="zoom_max"/>
-  <Action name="zoom_maxaspect"/>
+  <Action name="transformZoomFactor"/>
+  <Action name="transformZoomIn10"/>
+  <Action name="transformZoomOut10"/>
+  <Action name="transformZoomDouble"/>
+  <Action name="transformZoomHalf"/>
+  <Action name="transformZoomMax"/>
+  <Action name="transformZoomMaxAspect"/>
  </Menu>
 </MenuBar>
 <ToolBars>

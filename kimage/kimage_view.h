@@ -59,19 +59,20 @@ public:
   void cut();
   void paste();
 
-  /*
-  void editEditImage();
+/*
   void editImportImage();
   void editExportImage();
   void editPageLayout();
   void editPreferences();
+*/
 
   void viewZoomFactor();
   void viewFitToView();
   void viewFitWithProportions();
   void viewOriginalSize();
   void viewCentered();
-  void viewInfoImage();
+  void viewScrollbars();
+  void viewInformations();
   void viewBackgroundColor();
 
   void transformRotateRight();
@@ -86,7 +87,6 @@ public:
   void transformZoomHalf();
   void transformZoomMax();
   void transformZoomMaxAspect();
-  */
 
 public slots:
   // Document signals
@@ -106,13 +106,13 @@ protected:
  private:
 
   // edit menu
-  KAction *m_undo, *m_redo, *m_import, *m_export, *m_pageSetup, *m_preferences;
+  KAction *m_undo, *m_redo, *m_cut, *m_copy, *m_paste, *m_import, *m_export, *m_pageSetup, *m_preferences;
 
   // view menu
-  KAction *m_viewFactor, *m_fitToView, *m_fitWithProps, *m_original, *m_center, *m_info, *_backgroundColor;
+  KAction *m_viewFactor, *m_fitToView, *m_fitWithProps, *m_original, *m_center, *m_scrollbars, *m_info, *m_backgroundColor;
 
   // transform menu
-  KAction *m_rotateRight, *m_rotateLeft, *m_rotateAngle, *m_flipVetical, *m_flipHorizontal;
+  KAction *m_rotateRight, *m_rotateLeft, *m_rotateAngle, *m_flipVertical, *m_flipHorizontal;
   KAction *m_zoomFactor, *m_zoomIn10, *m_zoomOut10, *m_zoomDouble, *m_zoomHalf, *m_zoomMax, *m_zoomMaxAspect;
 
   // help menu

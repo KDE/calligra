@@ -53,15 +53,39 @@ KImageView::KImageView( KImageDocument* doc, QWidget* parent, const char* name )
 
   // edit actions
 
-  m_undo = new KAction( tr( "&Undo" ), KImageBarIcon( "undo" ), 0, this, SLOT( undo() ), actionCollection(), "undo" );
-  m_undo = new KAction( tr( "&Redo" ), KImageBarIcon( "redo" ), 0, this, SLOT( redo() ), actionCollection(), "redo" );
-  m_undo = new KAction( tr( "&Cut" ), KImageBarIcon( "editcut" ), 0, this, SLOT( cut() ), actionCollection(), "cut" );
-  m_undo = new KAction( tr( "&Copy" ), KImageBarIcon( "editcopy" ), 0, this, SLOT( copy() ), actionCollection(), "copy" );
-  m_undo = new KAction( tr( "&Paste" ), KImageBarIcon( "editpaste" ), 0, this, SLOT( paste() ), actionCollection(), "paste" );
+  m_undo  = new KAction( tr( "&Undo" ), KImageBarIcon( "undo" ), 0, this, SLOT( undo() ), actionCollection(), "undo" );
+  m_redo  = new KAction( tr( "&Redo" ), KImageBarIcon( "redo" ), 0, this, SLOT( redo() ), actionCollection(), "redo" );
+  m_cut   = new KAction( tr( "&Cut" ), KImageBarIcon( "editcut" ), 0, this, SLOT( cut() ), actionCollection(), "cut" );
+  m_copy  = new KAction( tr( "&Copy" ), KImageBarIcon( "editcopy" ), 0, this, SLOT( copy() ), actionCollection(), "copy" );
+  m_paste = new KAction( tr( "&Paste" ), KImageBarIcon( "editpaste" ), 0, this, SLOT( paste() ), actionCollection(), "paste" );
 
   // view actions
 
-  setBackgroundColor( red );
+  m_viewFactor      = new KAction( tr( "&Zoom view..." ), 0, this, SLOT( viewZoomFactor() ), actionCollection(), "viewZoomFactor" );
+  m_fitToView       = new KAction( tr( "&Fit image to view" ), KImageBarIcon( "fittoview" ), 0, this, SLOT( viewFitToView() ), actionCollection(), "viewFitToView" );
+  m_fitWithProps    = new KAction( tr( "&Fit image to view props" ), KImageBarIcon( "fitwithprops" ), 0, this, SLOT( viewFitWithProportions() ), actionCollection(), "viewFitWithProportions" );
+  m_original        = new KAction( tr( "&Original size" ), KImageBarIcon( "originalsize" ), 0, this, SLOT( viewOriginalSize() ), actionCollection(), "viewOriginalSize" );
+  m_center          = new KAction( tr( "&Center image" ), 0, this, SLOT( viewCentered() ), actionCollection(), "viewCentered" );
+  m_scrollbars      = new KAction( tr( "&Scrollbars" ), 0, this, SLOT( viewScrollbars() ), actionCollection(), "viewScrollbars" );
+  m_info            = new KAction( tr( "&Informations" ), 0, this, SLOT( viewInformations() ), actionCollection(), "viewInformations" );
+  m_backgroundColor = new KAction( tr( "&Background color" ), 0, this, SLOT( viewBackgroundColor() ), actionCollection(), "viewBackgroundColor" );
+
+  // transform actions
+
+  m_rotateRight    = new KAction( tr( "Rotate &right" ), 0, this, SLOT( transformRotateRight() ), actionCollection(), "transformRotateRight" );
+  m_rotateLeft     = new KAction( tr( "Rotate &left" ), 0, this, SLOT( transformRotateLeft() ), actionCollection(), "transformRotateLeft" );
+  m_rotateAngle    = new KAction( tr( "Rotate &angle" ), 0, this, SLOT( transformRotateAngle() ), actionCollection(), "transformRotateAngle" );
+  m_flipVertical   = new KAction( tr( "Flip &vertical" ), 0, this, SLOT( transformFlipVertical() ), actionCollection(), "transformFlipVertical" );
+  m_flipHorizontal = new KAction( tr( "Flip &horizontal" ), 0, this, SLOT( transformFlipHorizontal() ), actionCollection(), "transformFlipHorizontal" );
+  m_zoomFactor     = new KAction( tr( "&Zoom..." ), 0, this, SLOT( transformZoomFactor() ), actionCollection(), "transformZoomFactor" );
+  m_zoomIn10       = new KAction( tr( "Zoom &in 10 %" ), 0, this, SLOT( transformZoomIn10() ), actionCollection(), "transformZoomIn10" );
+  m_zoomOut10      = new KAction( tr( "Zoom &out 10%" ), 0, this, SLOT( transformZoomOut10() ), actionCollection(), "transformZoomOut10" );
+  m_zoomDouble     = new KAction( tr( "Zoom &double" ), 0, this, SLOT( transformZoomDouble() ), actionCollection(), "transformZoomDouble" );
+  m_zoomHalf       = new KAction( tr( "Zoom &half" ), 0, this, SLOT( transformZoomHalf() ), actionCollection(), "transformZoomHalf" );
+  m_zoomMax        = new KAction( tr( "Zoom &max" ), 0, this, SLOT( transformZoomMax() ), actionCollection(), "transformZoomMax" );
+  m_zoomMaxAspect  = new KAction( tr( "Zoom max &aspect" ), 0, this, SLOT( transformZoomMaxAspect() ), actionCollection(), "transformZoomMaxAspect" );
+
+  setBackgroundColor( darkBlue );
 
   m_drawMode = OriginalSize;
   m_centerMode = 0;
@@ -299,19 +323,19 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   _menubar->insertMenu( text, m_vMenuView, -1, -1 );
 
   text =  i18n( "Zoom..." ) ;
-  m_idMenuView_ZoomFactor = m_vMenuView->insertItem( text, this, "viewZoomFactor", 0 );
+  m_idMenuView_ZoomFactor = m_vMenuView->insertItem( text, this, "zoo_view", 0 );
 
   text =  i18n( "Fit to &view" ) ;
   pix = OPICON( "fittoview" );
-  m_idMenuView_FitToView = m_vMenuView->insertItem6( pix, text, this, "viewFitToView", CTRL + Key_V, -1, -1 );
+  m_idMenuView_FitToView = m_vMenuView->insertItem6( pix, text, this, "fit_to_view", CTRL + Key_V, -1, -1 );
 
   text =  i18n( "Fit and keep &proportions" ) ;
   pix = OPICON( "fitwithprops" );
-  m_idMenuView_FitWithProps = m_vMenuView->insertItem6( pix, text, this, "viewFitWithProportions", CTRL + Key_P, -1, -1 );
+  m_idMenuView_FitWithProps = m_vMenuView->insertItem6( pix, text, this, "fir_with_props", CTRL + Key_P, -1, -1 );
 
   text =  i18n( "&Original size" ) ;
   pix = OPICON( "originalsize" );
-  m_idMenuView_Original = m_vMenuView->insertItem6( pix, text, this, "viewOriginalSize", CTRL + Key_O, -1, -1 );
+  m_idMenuView_Original = m_vMenuView->insertItem6( pix, text, this, "originalsize", CTRL + Key_O, -1, -1 );
 
   m_vMenuView->insertSeparator( -1 );
 
@@ -475,38 +499,45 @@ void KImageView::editPageLayout()
 {
   m_pDoc->paperLayoutDlg();
 }
+*/
 
 void KImageView::viewFitToView()
 {
+/*
   if( m_pDoc->image().isNull() )
   {
     return;
   }
   m_drawMode = FitToView;
+*/
   slotUpdateView();
 }
 
 void KImageView::viewFitWithProportions()
 {
+/*
   if( m_pDoc->image().isNull() )
   {
     return;
   }
   m_drawMode = FitWithProps;
+*/
   slotUpdateView();
 }
 
 void KImageView::viewOriginalSize()
 {
+/*
   if( m_pDoc->image().isNull() )
   {
     return;
   }
   m_drawMode = OriginalSize;
+*/
   slotUpdateView();
 }
 
-void KImageView::viewInfoImage()
+void KImageView::viewInformations()
 {
   if( m_pDoc->isEmpty() )
   {
@@ -530,6 +561,7 @@ void KImageView::viewZoomFactor()
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
     return;
   }
+/*
   KZoomFactorDialog dlg( NULL, "KImage" );
   if( dlg.getValue( m_zoomFactor ) != QDialog::Accepted )
   {
@@ -537,6 +569,7 @@ void KImageView::viewZoomFactor()
   }
   kdebug( KDEBUG_INFO, 0, "zoom factor: X: %i, Y: %i", m_zoomFactor.x(), m_zoomFactor.y() );
   m_drawMode = ZoomFactor;
+*/
   slotUpdateView();
 }
 
@@ -549,6 +582,10 @@ void KImageView::viewCentered()
   }
   m_centerMode = 1 - m_centerMode;
   slotUpdateView();
+}
+
+void KImageView::viewScrollbars()
+{
 }
 
 void KImageView::viewBackgroundColor()
@@ -567,7 +604,7 @@ void KImageView::transformRotateRight()
 
   QWMatrix matrix;
   matrix.rotate( 90 );
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -577,7 +614,7 @@ void KImageView::transformRotateLeft()
 
   QWMatrix matrix;
   matrix.rotate( -90 );
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -595,7 +632,7 @@ void KImageView::transformRotateAngle()
 
   QWMatrix matrix;
   matrix.rotate( angle );
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -606,7 +643,7 @@ void KImageView::transformFlipVertical()
   QWMatrix matrix;
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   matrix *= matrix2;
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -618,7 +655,7 @@ void KImageView::transformFlipHorizontal()
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   matrix2.rotate( 180 );
   matrix *= matrix2;
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -635,7 +672,7 @@ void KImageView::transformZoomFactor()
     return;
   double val = (double)factor/100;
   matrix.scale( val, val );
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -645,7 +682,7 @@ void KImageView::transformZoomIn10()
 
   QWMatrix matrix;
   matrix.scale( 1.1, 1.1 );
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -655,7 +692,7 @@ void KImageView::transformZoomOut10()
 
   QWMatrix matrix;
   matrix.scale( 0.9, 0.9 );
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -665,7 +702,7 @@ void KImageView::transformZoomDouble()
 
   QWMatrix matrix;
   matrix.scale( 2.0, 2.0 );
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -675,7 +712,7 @@ void KImageView::transformZoomHalf()
 
   QWMatrix matrix;
   matrix.scale( 0.5, 0.5 );
-  m_pDoc->transformImage( matrix );
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -683,8 +720,8 @@ void KImageView::transformZoomMax()
 {
   kdebug( KDEBUG_INFO, 0, "Zoom Max" );
 
-  QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-  m_pDoc->transformImage( matrix );
+  //QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
@@ -692,20 +729,12 @@ void KImageView::transformZoomMaxAspect()
 {
   kdebug( KDEBUG_INFO, 0, "Zoom Max Aspect" );
 
-  QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-  m_pDoc->transformImage( matrix );
+  //QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+  //m_pDoc->transformImage( matrix );
   slotUpdateView();
 }
 
-QString KImageView::tmpFilename()
-{
-  QString file;
-
-  file.sprintf( "/tmp/kimage_%i.image", getpid() );
-  kdebug( KDEBUG_INFO, 0, file );
-  return file;
-}
-
+/*
 void KImageView::resizeEvent( QResizeEvent* )
 {
   slotUpdateView();

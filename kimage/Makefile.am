@@ -43,7 +43,7 @@ kdelnkdir = $(kde_appsdir)/KOffice
 kdemime_DATA = x-kimage.desktop
 kdemimedir = $(kde_mimedir)/application
 
-rcdir = $(kde_datadir)/kimageshop
+rcdir = $(kde_datadir)/kimage
 rc_DATA = kimage.rc kimage_shell.rc
 
 messages:

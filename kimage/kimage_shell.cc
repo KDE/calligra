@@ -43,7 +43,7 @@ KImageShell::~KImageShell()
 
 QString KImageShell::configFile() const
 {
-  return readConfigFile( locate( "kim", "kimage_shell.rc", KImageFactory::global() ) );
+  return readConfigFile( locate( "data", "kimage/kimage_shell.rc", KImageFactory::global() ) );
 }
 
 KoDocument* KImageShell::createDoc()
