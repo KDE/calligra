@@ -259,7 +259,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     m_nbPagePerRow->setRange(1, 10, 1);
     m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pages per row:"));
     QWhatsThis::add(m_nbPagePerRow , i18n("After selecting preview mode (via the \"View\" "
-                    "menu, option \"Preview mode\" this is the amount of pages KWord will "
+                    "menu, option \"Preview mode\") this is the amount of pages KWord will "
                     "position on one horizontal row") );
 }
 
