@@ -252,6 +252,11 @@ public:
 
     KoRect zoomAllObject();
 
+
+    //return pos of kptextobj
+    int textObjectNum( KPTextObject * obj ) const;
+    KPTextObject * textObjectByPos( int pos );
+
 public slots:
     void exitEditMode();
 
@@ -285,6 +290,8 @@ signals:
     void updateSideBarItem( int );
     void stopPres();
     void objectSelectedChanged();
+    // Emitted when the current frameset edit changes
+    void currentObjectEditChanged();
 
     void selectionChanged( bool hasSelection );
     void sigMouseWheelEvent( QWheelEvent * );
@@ -428,7 +435,8 @@ private:
     void calcBoundingRect();
     bool objectIsAHeaderFooterHidden(KPObject *obj) const;
 
-
+    KPTextObject* textUnderMouse( const QPoint & point );
+    bool checkCurrentTextEdit( KPTextObject * textObj );
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }

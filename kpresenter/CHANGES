@@ -29,3 +29,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Add support for flip polyline object
 - Add support for "protect size and postion"
 - When we create a line object and we press shift we draw horizontal/vertical
+- Add support for dnd between "text object"

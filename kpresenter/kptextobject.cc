@@ -1154,10 +1154,10 @@ KoTextViewIface* KPTextView::dcopObject()
 }
 
 
-void KPTextView::terminate()
+void KPTextView::terminate(bool removeSelection)
 {
     disconnect( textView()->textObject(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
-    textView()->terminate();
+    textView()->terminate(removeSelection);
 }
 
 void KPTextView::cut()
@@ -1585,6 +1585,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
     }
     KPrTextDrag *kd = new KPrTextDrag( parent );
     kd->setPlain( text );
+    kd->setTextObjectNumber( m_canvas->textObjectNum(kpTextObject()) );
     kd->setKPresenter( domDoc.toCString() );
     //kdDebug() << "KPTextView::newDrag " << domDoc.toCString() << endl;
     return kd;
@@ -1637,13 +1638,21 @@ void KPTextView::dropEvent( QDropEvent * e )
         if ( ( e->source() == m_canvas ) &&
              e->action() == QDropEvent::Move ) {
             //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
-            KCommand *cmd=textView()->dropEvent(textObject(), dropCursor, true/* for the moment we can't dnd on other textbj*/);
-            if(cmd)
-                macroCmd->addCommand(cmd);
-            else
+            int objTextNum=-1;
+            objTextNum=KPrTextDrag::decodeTextObjectNumber( e );
+            KPTextObject * obj = m_canvas->textObjectByPos( objTextNum );
+            obj =obj  ? obj : kpTextObject();
+            if ( obj )
             {
-                delete macroCmd;
-                return;
+                bool dropInSameObj= ( obj == kpTextObject());
+                KCommand *cmd=textView()->dropEvent(obj->textObject(), dropCursor, dropInSameObj );
+                if(cmd)
+                    macroCmd->addCommand(cmd);
+                else
+                {
+                    delete macroCmd;
+                    return;
+                }
             }
         }
         else

@@ -603,7 +603,7 @@ protected slots:
     void refreshRuler( bool state );
     void slotApplyFont();
     void slotApplyParag();
-
+    void slotObjectEditChanged();
 
 // end of protected slots
 protected:

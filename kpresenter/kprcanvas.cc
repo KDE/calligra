@@ -5411,13 +5411,10 @@ void KPrCanvas::selectNext()
 /*================================================================*/
 void KPrCanvas::selectPrev()
 {
-    kdDebug()<<"KPrCanvas::selectPrev()**********\n";
     if ( objectList().count() == 0 ) return;
-    kdDebug()<<" wwcwcwxc ==============\n";
     if ( m_activePage->numSelected() == 0 )
         objectList().at( objectList().count() - 1 )->setSelected( true );
     else {
-        kdDebug()<<" else********************\n";
         int i = objectList().findRef( m_activePage->getSelectedObj() );
         if ( i > 0 ) {
             m_view->kPresenterDoc()->deSelectAllObj();
@@ -5427,7 +5424,6 @@ void KPrCanvas::selectPrev()
             objectList().at( objectList().count() - 1 )->setSelected( true );
         }
     }
-    kdDebug()<<" apres 2222222222222222222222222\n";
     m_view->makeRectVisible( m_view->zoomHandler()->zoomRect(m_activePage->getSelectedObj()->getBoundingRect(m_view->zoomHandler() )) );
     _repaint( false );
 }
@@ -5458,7 +5454,18 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
 {
     if( m_currentTextObjectView)
     {
-        m_currentTextObjectView->dragMoveEvent( e, QPoint() );
+        KPTextObject * obj = textUnderMouse( e->pos());
+        bool emitChanged = false;
+        if ( obj )
+        {
+            emitChanged = checkCurrentTextEdit( obj );
+        }
+        if ( m_currentTextObjectView )
+        {
+            m_currentTextObjectView->dragMoveEvent( e, QPoint() );
+            if ( emitChanged )
+                emit currentObjectEditChanged();
+        }
     }
     else if ( /*QTextDrag::canDecode( e ) ||*/
          QImageDrag::canDecode( e ) )
@@ -6897,4 +6904,109 @@ KoRect KPrCanvas::zoomAllObject()
     objBoundingRect = m_activePage->getBoundingAllObjectRect( objBoundingRect, m_view->kPresenterDoc());
     objBoundingRect = stickyPage()->getBoundingAllObjectRect( objBoundingRect, m_view->kPresenterDoc());
     return objBoundingRect;
+}
+
+KPTextObject * KPrCanvas::textObjectByPos( int pos )
+{
+    if ( pos < 0 )
+        return 0L;
+    QPtrList<KPTextObject> lst;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if (  it.current()->getType() == OT_TEXT )
+            lst.append( static_cast<KPTextObject*>( it.current() ) );
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->getType() == OT_TEXT )
+        {
+            if ( objectIsAHeaderFooterHidden(it.current()))
+                continue;
+            else
+                lst.append( static_cast<KPTextObject*>( it.current() ));
+        }
+    }
+    return lst.at( pos );
+}
+
+int KPrCanvas::textObjectNum( KPTextObject * obj ) const
+{
+    QPtrList<KPTextObject> lst;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if (  it.current()->getType() == OT_TEXT )
+            lst.append( static_cast<KPTextObject*>( it.current() ) );
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->getType() == OT_TEXT )
+        {
+            if ( objectIsAHeaderFooterHidden(it.current()))
+                continue;
+            else
+                lst.append( static_cast<KPTextObject*>( it.current() ));
+        }
+    }
+
+    int num = 0;
+    QPtrListIterator<KPTextObject> it2( lst );
+    for ( ; it2.current() ; ++it2, num++ ) {
+        if ( it2.current() == obj )
+        {
+            return num;
+        }
+    }
+    return -1;
+}
+
+KPTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
+{
+    QPtrList<KPTextObject> lst;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if (  it.current()->getType() == OT_TEXT )
+            lst.append( static_cast<KPTextObject*>( it.current() ) );
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->getType() == OT_TEXT )
+        {
+            if ( objectIsAHeaderFooterHidden(it.current()))
+                continue;
+            else
+                lst.append( static_cast<KPTextObject*>( it.current() ));
+        }
+    }
+
+    QPtrListIterator<KPTextObject> it2( lst );
+    for ( ; it2.current() ; ++it2 ) {
+        QRect outerRect( m_view->kPresenterDoc()->zoomHandler()->zoomRect( it2.current()->getRect()) );
+        if ( outerRect.contains( point) )
+            return it2.current();
+    }
+    return 0L;
+}
+
+bool KPrCanvas::checkCurrentTextEdit( KPTextObject * textObj )
+{
+    bool emitChanged = false;
+    if ( textObj && m_currentTextObjectView && m_currentTextObjectView->kpTextObject() != textObj )
+    {
+        //don't remove selection otherwise break dnd.
+        m_currentTextObjectView->terminate(false);
+        delete m_currentTextObjectView;
+        m_currentTextObjectView = 0L;
+        emitChanged = true;
+    }
+
+    // Edit the frameset under the mouse, if any
+    if ( textObj && !m_currentTextObjectView )
+    {
+        m_currentTextObjectView = textObj->createKPTextView( this );
+        emitChanged = true;
+    }
+    return emitChanged;
 }

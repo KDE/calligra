@@ -307,6 +307,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 
     connect (m_canvas, SIGNAL(selectionChanged(bool)),
              actionChangeCase, SLOT(setEnabled(bool)));
+    connect( m_canvas, SIGNAL( currentObjectEditChanged() ), this,  SLOT( slotObjectEditChanged()));
 
     connect( h_ruler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), this,
              SLOT( tabListChanged( const KoTabulatorList & ) ) );
@@ -6398,6 +6399,11 @@ void KPresenterView::openPopupMenuFlipObject( const QPoint &_point )
         return;
     static_cast<QPopupMenu*>(factory()->container("flip_popup",this))->popup(_point);
 
+}
+
+void KPresenterView::slotObjectEditChanged()
+{
+    //todo
 }
 
 #include <kpresenter_view.moc>

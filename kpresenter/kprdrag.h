@@ -44,8 +44,13 @@ public:
 
     static const char * selectionMimeType();
 
+    void setTextObjectNumber( int number );
+
+    static int decodeTextObjectNumber( QMimeSource *e );
+
 protected:
     QCString kpresenter;
+    int m_textObjectNumber;
 };
 
 #endif

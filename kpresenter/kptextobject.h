@@ -172,7 +172,7 @@ public:
     virtual KoTextViewIface* dcopObject();
 
     KoTextView * textView() { return this; }
-    KPTextObject * kpTextObject() { return m_kptextobj; }
+    KPTextObject * kpTextObject() const { return m_kptextobj; }
 
     void keyPressEvent( QKeyEvent * );
     void keyReleaseEvent( QKeyEvent * );
@@ -196,7 +196,7 @@ public:
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertVariable( KoVariable *var);
-    void terminate();
+    void terminate(bool removeSelection=true);
     void insertComment(const QString &_note);
 
 public slots:
