@@ -1079,7 +1079,7 @@ void KPresenterDoc::loadOasisIgnoreList( const QDomDocument&settingsDoc )
     if ( tmp )
     {
         QString ignorelist = settings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        kdDebug()<<" ignorelist :"<<ignorelist<<endl;
+        //kdDebug()<<" ignorelist :"<<ignorelist<<endl;
 
         m_spellListIgnoreAll = QStringList::split( ',', ignorelist );
     }
@@ -1190,8 +1190,6 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 
     //not define into oo spec
     settingsWriter.addConfigItem( "SnapLineIsVisible", showHelplines() );
-    //settingsWriter.addConfigItem( "ShowHeader", hasHeader() );
-    //settingsWriter.addConfigItem( "ShowFooter", hasFooter() );
 }
 
 void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
@@ -1213,10 +1211,6 @@ void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
             int valy = settings.parseConfigItemInt( "GridFineHeight" );
             m_gridY = MM_TO_POINT( valy / 100.0 );
             setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
-
-
-            //setFooter( settings.parseConfigItemBool( "ShowFooter" ) );
-            //setHeader( settings.parseConfigItemBool( "ShowHeader" ) );
         }
     }
 }
