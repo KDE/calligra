@@ -24,13 +24,10 @@ DESCRIPTION
 #define MSODIMPORT_H
 
 #include <koFilter.h>
-#include <qmap.h>
-#include <qobject.h>
-#include <qstring.h>
 #include <msod.h>
 
 class MSODImport :
-    public KoFilter, protected Msod
+    public KoEmbeddingFilter, protected Msod
 {
     Q_OBJECT
 
@@ -68,8 +65,9 @@ protected:
         const QPointArray &points);
 
 private:
-    // Debug support.
+    virtual void savePartContents( QIODevice* file );
 
+    // Debug support.
     static const int s_area = 30505;
 
     void pointArray(
@@ -77,19 +75,8 @@ private:
     QString m_text;
 
     // Embedded objects.
-
-    class Part
-    {
-    public:
-        QString mimeType;
-        QString fullName;
-        QString storageName;
-        QString file;
-    };
-
-    QMap<unsigned, Part> m_parts;
-    QString m_prefixOut;
-    int m_nextPart;
+    const char* m_embeddeeData;
+    int m_embeddeeLength;
 };
 
 #endif

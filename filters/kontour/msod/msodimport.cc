@@ -21,14 +21,13 @@ DESCRIPTION
 */
 
 #include <kdebug.h>
-#include <koFilterManager.h>
-#include <kgenericfactory.h>
-#include <koQueryTrader.h>
-#include <koStore.h>
+#include <kurl.h>
+#include <kmimetype.h>
 #include <ktempfile.h>
+#include <kgenericfactory.h>
+#include <koFilterChain.h>
 #include <qfile.h>
 #include <msodimport.h>
-#include <msodimport.moc>
 #include <qpointarray.h>
 #include <unistd.h>
 
@@ -39,7 +38,7 @@ MSODImport::MSODImport(
     KoFilter *,
     const char *,
     const QStringList&) :
-        KoFilter(), Msod(100)
+        KoEmbeddingFilter(), Msod(100)
 {
 }
 
@@ -53,6 +52,7 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
         return KoFilter::NotImplemented;
 
     // Get configuration data: the shape id, and any delay stream that we were given.
+    // ###### FIXME: This has to be done using comm* magic, I think
 
     unsigned shapeId = (unsigned)-1;
     const char *delayStream = 0L;
@@ -78,12 +78,8 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
             return KoFilter::StupidError;
         }
     }
-    QString prefixOut = ""; // ###### FIXME: No prefix yet
-    m_prefixOut = prefixOut;
-    m_nextPart = 0;
 
-    m_text = "";
-    m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    m_text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     m_text += "<!DOCTYPE kontour>\n";
     m_text += "<kontour mime=\"application/x-kontour\" version=\"3\" editor=\"MSOD import filter\">\n";
     m_text += " <head currentpagenum=\"2\">\n";
@@ -103,33 +99,15 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
 
     emit sigProgress(100);
 
-    QCString appIdentification( "KOffice application/x-kontour\004\006" );
-    KoStore* out = KoStore::createStore(m_chain->outputFile(), KoStore::Write, appIdentification);
-    if (!out || !out->open("root"))
+    KoStoreDevice* dev = m_chain->storageFile( "root", KoStore::Write );
+    if (!dev)
     {
         kdError(s_area) << "Cannot open output file" << endl;
-	delete out;
         return KoFilter::StorageCreationError;
     }
     QCString cstring = m_text.utf8();
-    out->write((const char*)cstring, cstring.length());
-    out->close();
+    dev->writeBlock(cstring.data(), cstring.size()-1);
 
-    // Now add in the data for all embedded parts.
-
-    QMap<unsigned, Part>::Iterator it;
-
-    for (it = m_parts.begin(); it != m_parts.end(); ++it)
-    {
-        // Now fetch out the elements from the resulting KoStore and embed them in our KoStore.
-
-        KoStore* storedPart = KoStore::createStore(it.data().file, KoStore::Read);
-        if (!out->embed(it.data().storageName, storedPart))
-            kdError(s_area) << "Could not embed in KoStore!" << endl;
-	delete storedPart;
-        unlink(it.data().file.local8Bit());
-    }
-    delete out;
     return KoFilter::OK;
 }
 
@@ -166,63 +144,49 @@ void MSODImport::gotPicture(
     unsigned length,
     const char *data)
 {
-    KTempFile tempFile(QString::null, "." + extension);
-
-    tempFile.file()->writeBlock(data, length);
-    tempFile.close();
+    kdDebug() << "##########################################MSODImport::gotPicture" << endl;
+    kdDebug() << "MSODImport::gotPicture -- " << extension << endl;
     if ((extension == "wmf") ||
         (extension == "emf") ||
         (extension == "pict"))
     {
-        Part part;
-        QMap<unsigned, Part>::Iterator it = m_parts.find(key);
+        int partRef = internalPartReference( QString::number( key ) );
 
-        if (it != m_parts.end())
+        if (partRef == -1)
         {
-            // This part is already known! Extract the duplicate part.
+            m_embeddeeData = data;
+            m_embeddeeLength = length;
 
-            part = m_parts[key];
-        }
-        else
-        {
-            // It's not here, so let's generate one.
+            // We need to resort to an ugly hack to determine the mimetype
+            // from the extension, as kservicetypefactory.h isn't installed
+            KURL url;
+            url.setPath( QString( "dummy.%1" ).arg( extension ) );
+            KMimeType::Ptr m( KMimeType::findByURL( url, 0, true, true ) );
+            if ( m->name() == KMimeType::defaultMimeType() )
+                kdWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
 
-            part.fullName = m_prefixOut + '/' + QString::number(m_nextPart);
-            part.storageName = "tar:/" + QString::number(m_nextPart);
+            QCString destMime; // intentionally empty, the filter manager will do the rest
+            KoFilter::ConversionStatus status;
+            partRef = embedPart( m->name().latin1(), destMime, status, QString::number( key ) );
 
-            // Save the data supplied into a temporary file, then run the filter
-            // on it.
+            m_embeddeeData = 0;
+            m_embeddeeLength = 0;
 
-            KoFilterManager *mgr = new KoFilterManager( tempFile.name() );
-            KTempFile tempFileOut(QString::null, "." + extension);
-
-            QCString mime( part.mimeType.latin1() );
-            KoFilter::ConversionStatus status = mgr->exp0rt( tempFileOut.name(), mime );
-            delete mgr;
-            //part.file = mgr->import(tempFile.name(), part.mimeType, "", part.fullName.mid(sizeof("tar:") - 1));
-            if ( status == KoFilter::OK )
-                part.file = tempFileOut.name();
-            else
-                part.file = QString::null;
-
-            if (part.file != QString::null)
-            {
-                m_parts.insert(key, part);
-                m_nextPart++;
-            }
-            else
-            {
-                kdError(s_area) << "could not create part" << endl;
+            if ( status != KoFilter::OK ) {
+                kdWarning(s_area) << "Couldn't convert the image!" << endl;
+                return;
             }
         }
-        unlink(tempFile.name().local8Bit());
-        m_text += "<object url=\"" + part.fullName +
-                    "\" mime=\"" + part.mimeType +
-                    "\" x=\"0\" y=\"0\" width=\"100\" height=\"200\"/>\n";
+        m_text += "<object url=\"" + QString::number( partRef ) + "\" mime=\"";
+        m_text += internalPartMimeType( QString::number( key ) );
+        m_text += "\" x=\"0\" y=\"0\" width=\"100\" height=\"200\"/>\n";
     }
     else
     {
         // We could not import it as a part. Try as an image.
+        KTempFile tempFile( QString::null, '.' + extension );
+        tempFile.file()->writeBlock( data, length );
+        tempFile.close();
 
         m_text += "<pixmap src=\"" + tempFile.name() + "\">\n"
                     " <gobject fillstyle=\"0\" linewidth=\"1\" strokecolor=\"#000000\" strokestyle=\"1\">\n"
@@ -301,6 +265,12 @@ void MSODImport::gotRectangle(
     m_text += "</rectangle>\n";
 }
 
+void MSODImport::savePartContents( QIODevice* file )
+{
+    if ( m_embeddeeData != 0 && m_embeddeeLength != 0 )
+        file->writeBlock( m_embeddeeData, m_embeddeeLength );
+}
+
 void MSODImport::pointArray(
     const QPointArray &points)
 {
@@ -312,3 +282,5 @@ void MSODImport::pointArray(
                      "\"/>\n";
     }
 }
+
+#include <msodimport.moc>

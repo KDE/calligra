@@ -142,7 +142,7 @@ void OLEFilter::slotSavePart(
         // We need to resort to an ugly hack to determine the mimetype
         // from the extension, as kservicetypefactory.h isn't installed
         KURL url;
-        url.setPath( QString( "dummy.$1" ).arg( extension ) );
+        url.setPath( QString( "dummy.%1" ).arg( extension ) );
         KMimeType::Ptr m( KMimeType::findByURL( url, 0, true, true ) );
         if ( m->name() == KMimeType::defaultMimeType() )
             kdWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
