@@ -1948,9 +1948,10 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 {
                     if(theFrame->frameSet()->getGroupManager()) {
 #ifdef DEBUG_FORMAT_MORE
-                        kdDebug(32002) << "is table cell; just setting new minFrameHeight" << endl;
+                        kdDebug(32002) << "is table cell; just setting new minFrameHeight, to " << newPosition - theFrame->top() << endl;
 #endif
                         theFrame->setMinFrameHeight(newPosition - theFrame->top());
+                        frameResized( theFrame, false );
                     } else {
 #ifdef DEBUG_FORMAT_MORE
                         kdDebug(32002) << "slotAfterFormatting changing bottom from " << theFrame->bottom() << " to " << newPosition << endl;
