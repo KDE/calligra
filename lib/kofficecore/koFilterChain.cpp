@@ -184,10 +184,7 @@ namespace KOffice {
         from->setKey( 0 );
 
         // Fill the priority queue with all the vertices
-        PriorityQueue<Vertex> queue;
-        QAsciiDictIterator<Vertex> it( m_vertices );
-        for ( ; it.current(); ++it )
-            queue.insert( it.current() );
+        PriorityQueue<Vertex> queue( m_vertices );
 
         while ( !queue.isEmpty() ) {
             Vertex *min = queue.extractMinimum();

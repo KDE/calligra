@@ -20,52 +20,68 @@
 #include <priorityqueue.h>
 #include <kdebug.h>
 #include <qptrlist.h>
+#include <qasciidict.h>
 #include <stdlib.h>
 #include <time.h>
 
 struct Node {
-    Node(unsigned int key) : m_key(key), m_index(0) {}
+    Node( unsigned int key ) : m_key( key ), m_index( 0 ) {}
 
     unsigned int key() const { return m_key; }
-    void setKey(unsigned int key) { m_key=key; }
+    void setKey( unsigned int key ) { m_key = key; }
 
     int index() const { return m_index; }
-    void setIndex(int i) { m_index=i; }
+    void setIndex( int i ) { m_index = i; }
 private:
     unsigned int m_key;
     int m_index;
 };
 
-int main(int /*argc*/, char **/*argv*/) {
+static const char* const keys[] = { "one",  "two", "three",  "four", "five",
+                                    "six", "seven", "eight", "nine", "ten",
+                                    "eleven", "twelve", 0 };
 
+int main( int /*argc*/, char **/*argv*/ )
+{
     QPtrList<Node> list;
-    list.setAutoDelete(true);
+    list.setAutoDelete( true );
+    QAsciiDict<Node> dict;
+
     KOffice::PriorityQueue<Node> queue;
 
-    srand(time(0));
-    for(int i=0; i<12; ++i) {
-        Node *n=new Node(rand()%20);
-        list.append(n);
-        queue.insert(n);
+    srand( time( 0 ) );
+    for ( int i = 0; i < 12; ++i ) {
+        Node *n = new Node( rand() % 20 );
+        list.append( n );
+        queue.insert( n );
+        // Check whether the AsciiDict CTOR is okay
+        Node *n2 = new Node( *n );
+        dict.insert( keys[ i ], n2 );
     }
+
+    kdDebug() << "##### Queue 1: " << endl;
     queue.dump();
 
-    Node *n=list.at(6);
-    kdDebug() << "Decreasing node: " << n->key() << " at " << n->index() << endl;
-    n->setKey(2);
-    queue.keyDecreased(n);
+    kdDebug() << "##### Queue 2: " << endl;
+    KOffice::PriorityQueue<Node> queue2( dict );
+    queue2.dump();
+
+    Node *n = list.at( 6 );
+    kdDebug() << "##### Decreasing node: " << n->key() << " at " << n->index() << endl;
+    n->setKey( 2 );
+    queue.keyDecreased( n );
     queue.dump();
 
-    n=list.at(2);
-    kdDebug() << "Decreasing node: " << n->key() << " at " << n->index() << endl;
-    n->setKey(0);
-    queue.keyDecreased(n);
+    n = list.at( 2 );
+    kdDebug() << "##### Decreasing node: " << n->key() << " at " << n->index() << endl;
+    n->setKey( 0 );
+    queue.keyDecreased( n );
     queue.dump();
 
-    n=queue.extractMinimum();
-    while(n) {
+    n = queue.extractMinimum();
+    while ( n ) {
         queue.dump();
-        n=queue.extractMinimum();
+        n = queue.extractMinimum();
     }
     return 0;
 }
