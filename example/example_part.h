@@ -15,6 +15,9 @@ public:
 
     virtual bool initDoc();
 
+    virtual bool loadXML( const QDomDocument & );
+    virtual QDomDocument saveXML();
+
     virtual QCString mimeType() const;
 
 protected:

@@ -34,6 +34,19 @@ KoMainWindow* ExamplePart::createShell()
     return shell;
 }
 
+bool ExamplePart::loadXML( const QDomDocument & )
+{
+    // TODO load the document from the QDomDocument
+    return true;
+}
+
+QDomDocument ExamplePart::saveXML()
+{
+    // TODO save the document into a QDomDocument
+    return QDomDocument();
+}
+
+
 void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/ )
 {
     // ####### handle transparency
