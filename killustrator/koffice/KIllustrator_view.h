@@ -25,11 +25,8 @@
 #ifndef KIllustrator_view_h_
 #define KIllustrator_view_h_
 
-#include <qarray.h>
-
-#include "CommandHistory.h"
-#include "MainView.h"
-
+#include <CommandHistory.h>
+#include <MainView.h>
 #include <koView.h>
 
 #define ID_TOOL_SELECT        1001
@@ -45,20 +42,6 @@
 #define ID_TOOL_PATHTEXT      1011
 
 #define ID_TOOL_INSERTPART    1012
-
-#define ID_EDIT_UNDO          2001
-#define ID_EDIT_REDO          2002
-#define ID_EDIT_CUT           2003
-#define ID_EDIT_COPY          2004
-#define ID_EDIT_PASTE         2005
-#define ID_EDIT_DELETE        2006
-#define ID_EDIT_ZOOM          2007
-
-#define ID_TOOL_EP_MOVE       1101
-#define ID_TOOL_EP_INSERT     1102
-#define ID_TOOL_EP_DELETE     1103
-#define ID_TOOL_EP_SPLIT      1104
-#define ID_TOOL_EP_JOIN       1105
 
 class KIllustratorView;
 class KIllustratorChild;
@@ -100,76 +83,61 @@ public:
 
     bool printDlg();
 
-    /* void newView ();
-  bool printDlg ();
+/*
+    void editInsertObject ();
 
-  void editUndo ();
-  void editRedo ();
-  void editCut ();
-  void editCopy ();
-  void editPaste ();
-  void editSelectAll ();
-  void editDelete ();
-  void editDuplicate ();
-  void editProperties ();
+    void viewOutline ();
+    void viewNormal ();
 
-  void editInsertObject ();
-  void editInsertClipart ();
-  void editInsertBitmap ();
+    void transformPosition ();
+    void transformDimension ();
+    void transformRotation ();
+    void transformMirror ();
 
-  void viewOutline ();
-  void viewNormal ();
+    void arrangeAlign ();
+    void arrangeToFront ();
+    void arrangeToBack ();
+    void arrangeOneForward ();
+    void arrangeOneBack ();
+    void arrangeGroup ();
+    void arrangeUngroup ();
+    void arrangeTextAlongPath ();
 
-  void transformPosition ();
-  void transformDimension ();
-  void transformRotation ();
-  void transformMirror ();
+    void toggleRuler ();
+    void toggleGrid ();
+    void toggleHelplines ();
 
-  void arrangeAlign ();
-  void arrangeToFront ();
-  void arrangeToBack ();
-  void arrangeOneForward ();
-  void arrangeOneBack ();
-  void arrangeGroup ();
-  void arrangeUngroup ();
-  void arrangeTextAlongPath ();
+    void setupGrid ();
+    void alignToGrid ();
+    void setupHelplines ();
+    void alignToHelplines ();
 
-  void toggleRuler ();
-  void toggleGrid ();
-  void toggleHelplines ();
+    void editLayers ();
+    void setupPage ();
 
-  void setupGrid ();
-  void alignToGrid ();
-  void setupHelplines ();
-  void alignToHelplines ();
+    void setPenColor (long int id);
+    void setFillColor (long int id);
 
-  void editLayers ();
-  void setupPage ();
+    void toolSelection ();
+    void toolEditPoint ();
+    void toolFreehandLine ();
+    void toolPolyline ();
+    void toolBezier ();
+    void toolRectangle ();
+    void toolPolygon ();
+    void toolEllipse ();
+    void toolText ();
+    void toolZoom ();
 
-  void setPenColor (long int id);
-  void setFillColor (long int id);
+    void toolMovePoint ();
+    void toolInsertPoint ();
+    void toolRemovePoint ();
 
-  void toolSelection ();
-  void toolEditPoint ();
-  void toolFreehandLine ();
-  void toolPolyline ();
-  void toolBezier ();
-  void toolRectangle ();
-  void toolPolygon ();
-  void toolEllipse ();
-  void toolText ();
-  void toolZoom ();
+    void configPolygonTool ();
+    void configEllipseTool ();
 
-  void toolMovePoint ();
-  void toolInsertPoint ();
-  void toolRemovePoint ();
-
-  void configPolygonTool ();
-  void configEllipseTool ();
-
-  void zoomSizeSelected (const QString & s);
-
-  // void showScripts (); */
+    void zoomSizeSelected (const QString & s);
+*/
 
 protected:
     void showTransformationDialog (int id);
@@ -188,21 +156,21 @@ protected slots:
 
     void showCurrentMode (const QString &msg);
     /* protected slots:
-  void editCutSlot ();
-  void editCopySlot ();
-  void editPropertiesSlot ();
-  void arrangeAlignSlot ();
-  void arrangeToFrontSlot ();
-  void arrangeToBackSlot ();
-  void arrangeOneForwardSlot ();
-  void arrangeOneBackSlot ();
+       void editCutSlot ();
+       void editCopySlot ();
+       void editPropertiesSlot ();
+       void arrangeAlignSlot ();
+       void arrangeToFrontSlot ();
+       void arrangeToBackSlot ();
+       void arrangeOneForwardSlot ();
+       void arrangeOneBackSlot ();
 
-  void popupForSelection (int x, int y);
-  void setUndoStatus(bool undoPossible, bool redoPossible);
-  void resetTools ();
+       void popupForSelection (int x, int y);
+       void setUndoStatus(bool undoPossible, bool redoPossible);
+       void resetTools ();
 
-  void insertPartSlot (KIllustratorChild *child, GPart *part);
-  void changeChildGeometrySlot (KIllustratorChild *child); */
+       void insertPartSlot (KIllustratorChild *child, GPart *part);
+       void changeChildGeometrySlot (KIllustratorChild *child); */
 
 private slots:
     /**
@@ -267,79 +235,36 @@ private slots:
     void slotLoadPalette ();
 
 protected:
-  KIllustratorDocument *m_pDoc;
-  EditPointTool *editPointTool;
-  InsertPartTool *insertPartTool;
-  QPopupMenu *objMenu;
+    KIllustratorDocument *m_pDoc;
+    EditPointTool *editPointTool;
+    InsertPartTool *insertPartTool;
+    QPopupMenu *objMenu;
 
-  bool m_bShowGUI;
-  bool m_bShowRulers;
+    bool m_bShowGUI;
+    bool m_bShowRulers;
 
-  ToolController *tcontroller;
-  QScrollView *scrollview;
-  Canvas *canvas;
-  Ruler *hRuler, *vRuler;
-  LayerDialog *layerDialog;
-  CommandHistory cmdHistory;
+    ToolController *tcontroller;
+    QScrollView *scrollview;
+    Canvas *canvas;
+    Ruler *hRuler, *vRuler;
+    LayerDialog *layerDialog;
+    CommandHistory cmdHistory;
 
-    // int m_idActiveTool;
-
-    KAction* m_import;
-    KAction* m_export;
-    KAction* m_insertBitmap;
-    KAction* m_insertClipart;
     KAction* m_copy;
-    KAction* m_paste;
     KAction* m_cut;
     KAction* m_undo;
     KAction* m_redo;
-    KAction* m_duplicate;
-    KAction* m_delete;
-    KAction* m_selectAll;
     KAction* m_properties;
-    KToggleAction* m_outline;
-    KToggleAction* m_normal;
-    KAction* m_layers;
-    KToggleAction* m_showRuler;
-    KToggleAction* m_showGrid;
-    KToggleAction* m_showHelplines;
-    KAction* m_page;
-    KAction* m_grid;
-    KAction* m_helplines;
-    KToggleAction* m_alignToGrid;
-    KToggleAction* m_alignToHelplines;
-    KAction* m_transformPosition;
-    KAction* m_transformDimension;
-    KAction* m_transformRotation;
-    KAction* m_transformMirror;
     KAction* m_distribute;
     KAction* m_toFront;
     KAction* m_toBack;
     KAction* m_forwardOne;
     KAction* m_backOne;
-    KAction* m_group;
-    KAction* m_ungroup;
-    KAction* m_textAlongPath;
-    KAction* m_convertToCurve;
-    KAction* m_blend;
-    KAction* m_options;
-    KAction* m_loadPalette;
-    KColorBarAction* m_colorBar;
     KToggleAction* m_selectTool;
-    KToggleAction* m_pointTool;
-    KToggleAction* m_freehandTool;
-    KToggleAction* m_lineTool;
-    KToggleAction* m_bezierTool;
-    KToggleAction* m_rectTool;
-    KToggleAction* m_polygonTool;
-    KToggleAction* m_ellipseTool;
-    KToggleAction* m_textTool;
-    KToggleAction* m_zoomTool;
     KToggleAction* m_moveNode;
     KToggleAction* m_newNode;
     KToggleAction* m_deleteNode;
     KToggleAction* m_splitLine;
-    KSelectAction* m_viewZoom;
     QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
             lastExportDir, lastImportDir, lastPaletteDir;
     QString lastExport;

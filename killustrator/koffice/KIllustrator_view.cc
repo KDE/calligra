@@ -22,66 +22,61 @@
 
 */
 
-#include <iostream.h>
+#include <KIllustrator_shell.h>
+#include <KIllustrator_view.h>
+#include <KIllustrator_doc.h>
+#include <KIllustrator_factory.h>
 
-#include <qaccel.h>
-#include "KIllustrator_shell.h"
-#include "KIllustrator_view.h"
-#include "KIllustrator_doc.h"
-#include "KIllustrator_factory.h"
-#include "MainView.h"
-
-#include <qscrollview.h>
-#include "GDocument.h"
-#include "Canvas.h"
-#include "Tool.h"
-#include "Ruler.h"
-#include "ToolController.h"
-#include "RectangleTool.h"
-#include "PolylineTool.h"
-#include "FreeHandTool.h"
-#include "SelectionTool.h"
-#include "OvalTool.h"
-#include "TextTool.h"
-#include "PolygonTool.h"
-#include "EditPointTool.h"
-#include "BezierTool.h"
-#include "ZoomTool.h"
-#include "PathTextTool.h"
-#include "InsertPartTool.h"
-#include "PropertyEditor.h"
-#include "AlignmentDialog.h"
-#include "GridDialog.h"
-#include "HelplineDialog.h"
-#include "TransformationDialog.h"
-#include "LayerDialog.h"
-#include "PStateManager.h"
-#include "ExportFilter.h"
-#include "GroupCmd.h"
-#include "UngroupCmd.h"
-#include "DeleteCmd.h"
-#include "CutCmd.h"
-#include "CopyCmd.h"
-#include "PasteCmd.h"
-#include "DuplicateCmd.h"
-#include "ReorderCmd.h"
-#include "InsertClipartCmd.h"
-#include "InsertPixmapCmd.h"
-#include "SetPropertyCmd.h"
-#include "FilterManager.h"
-#include "ToCurveCmd.h"
-#include "BlendCmd.h"
-#include "BlendDialog.h"
-#include "OptionDialog.h"
+#include <GDocument.h>
+#include <Canvas.h>
+#include <Tool.h>
+#include <Ruler.h>
+#include <ToolController.h>
+#include <RectangleTool.h>
+#include <PolylineTool.h>
+#include <FreeHandTool.h>
+#include <SelectionTool.h>
+#include <OvalTool.h>
+#include <TextTool.h>
+#include <PolygonTool.h>
+#include <EditPointTool.h>
+#include <BezierTool.h>
+#include <ZoomTool.h>
+#include <PathTextTool.h>
+#include <InsertPartTool.h>
+#include <PropertyEditor.h>
+#include <AlignmentDialog.h>
+#include <GridDialog.h>
+#include <HelplineDialog.h>
+#include <TransformationDialog.h>
+#include <LayerDialog.h>
+#include <PStateManager.h>
+#include <ExportFilter.h>
+#include <GroupCmd.h>
+#include <UngroupCmd.h>
+#include <DeleteCmd.h>
+#include <CutCmd.h>
+#include <CopyCmd.h>
+#include <PasteCmd.h>
+#include <DuplicateCmd.h>
+#include <ReorderCmd.h>
+#include <InsertClipartCmd.h>
+#include <InsertPixmapCmd.h>
+#include <SetPropertyCmd.h>
+#include <FilterManager.h>
+#include <ToCurveCmd.h>
+#include <BlendCmd.h>
+#include <BlendDialog.h>
+#include <OptionDialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kapp.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <qmessagebox.h>
 #include <unistd.h>
 #include <qfileinfo.h>
+#include <qscrollview.h>
 
 #include <koPartSelectDia.h>
 #include <kaction.h>
@@ -89,6 +84,7 @@
 #include <kdebug.h>
 #include <kcoloractions.h>
 #include <kmessagebox.h>
+#include <kpopupmenu.h>
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
                                     KIllustratorDocument* doc) :
@@ -120,7 +116,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 
 KIllustratorView::~KIllustratorView()
 {
-    //kdDebug() << "~KIllustratorView ()" << endl;
+    delete objMenu;
 }
 
 void KIllustratorView::createMyGUI()
@@ -128,75 +124,105 @@ void KIllustratorView::createMyGUI()
     setupCanvas ();
 
     // File menu
-    m_import = new KAction( i18n("&Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
-    m_export = new KAction( i18n("&Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
-
-    // Insert menu
-    m_insertBitmap = new KAction( i18n("Insert &Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
-    m_insertClipart = new KAction( i18n("Insert &Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
+    new KAction( i18n("&Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
+    new KAction( i18n("&Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
 
     // Edit menu
     m_copy = KStdAction::copy(this, SLOT( slotCopy() ), actionCollection(), "copy" );
-    m_paste = KStdAction::paste(this, SLOT( slotPaste() ), actionCollection(), "paste" );
+    KStdAction::paste(this, SLOT( slotPaste() ), actionCollection(), "paste" );
     m_cut = KStdAction::cut(this, SLOT( slotCut() ), actionCollection(), "cut" );
     m_undo = KStdAction::undo(this, SLOT( slotUndo() ), actionCollection(), "undo" );
     m_redo = KStdAction::redo(this, SLOT( slotRedo() ), actionCollection(), "redo" );
-    m_duplicate = new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
-    m_delete = new KAction( i18n("&Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
-    m_selectAll = new KAction( i18n("&Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
+    new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
+    new KAction( i18n("&Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
+    new KAction( i18n("&Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
     // View menu
-    m_outline = new KToggleAction( i18n("Ou&tline"), 0, actionCollection(), "outline" );
+    KToggleAction *m_outline = new KToggleAction( i18n("Ou&tline"), 0, actionCollection(), "outline" );
     m_outline->setExclusiveGroup( "Outline" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotOutline( bool ) ) );
-    m_normal = new KToggleAction( i18n("&Normal"), 0, actionCollection(), "normal" );
+    KToggleAction *m_normal = new KToggleAction( i18n("&Normal"), 0, actionCollection(), "normal" );
     m_normal->setExclusiveGroup( "Outline" );
     connect( m_normal, SIGNAL( toggled( bool ) ), this, SLOT( slotNormal( bool ) ) );
-    m_layers = new KAction( i18n("&Layers ..."), 0, this, SLOT( slotLayers() ), actionCollection(), "layers" );
-    m_showRuler = new KToggleAction( i18n("Show &Ruler"), 0, actionCollection(), "showRuler" );
+    new KAction( i18n("&Layers..."), 0, this, SLOT( slotLayers() ), actionCollection(), "layers" );
+    KToggleAction *m_showRuler = new KToggleAction( i18n("Show &Ruler"), 0, actionCollection(), "showRuler" );
     connect( m_showRuler, SIGNAL( toggled( bool ) ), this, SLOT( slotShowRuler( bool ) ) );
-    m_showGrid = new KToggleAction( i18n("Show &Grid"), 0, actionCollection(), "showGrid" );
+    KToggleAction *m_showGrid = new KToggleAction( i18n("Show &Grid"), 0, actionCollection(), "showGrid" );
     connect( m_showGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotShowGrid( bool ) ) );
-    m_showHelplines = new KToggleAction( i18n("Show &Helplines"), 0, actionCollection(), "showHelplines" );
+    KToggleAction *m_showHelplines = new KToggleAction( i18n("Show &Helplines"), 0, actionCollection(), "showHelplines" );
     connect( m_showHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotShowHelplines( bool ) ) );
 
+    // Insert menu
+    new KAction( i18n("Insert &Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
+    new KAction( i18n("Insert &Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
+
+    // Tools
+    m_selectTool = new KToggleAction( i18n("Mouse"), "selecttool", 0, actionCollection(), "mouse" );
+    m_selectTool->setExclusiveGroup( "Tools" );
+    connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
+    KToggleAction *m_pointTool = new KToggleAction( i18n("Point"), "pointtool", 0, actionCollection(), "point" );
+    m_pointTool->setExclusiveGroup( "Tools" );
+    connect( m_pointTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPointTool( bool ) ) );
+    KToggleAction *m_freehandTool = new KToggleAction( i18n("Freehand"), "freehandtool", 0, actionCollection(), "freehand" );
+    m_freehandTool->setExclusiveGroup( "Tools" );
+    connect( m_freehandTool, SIGNAL( toggled( bool ) ), this, SLOT( slotFreehandTool( bool ) ) );
+    KToggleAction *m_lineTool = new KToggleAction( i18n("Line"), "linetool", 0, actionCollection(), "line" );
+    m_lineTool->setExclusiveGroup( "Tools" );
+    connect( m_lineTool, SIGNAL( toggled( bool ) ), this, SLOT( slotLineTool( bool ) ) );
+    KToggleAction *m_bezierTool = new KToggleAction( i18n("Bezier"), "beziertool", 0, actionCollection(), "bezier" );
+    m_bezierTool->setExclusiveGroup( "Tools" );
+    connect( m_bezierTool, SIGNAL( toggled( bool ) ), this, SLOT( slotBezierTool( bool ) ) );
+    KToggleAction *m_rectTool = new KToggleAction( i18n("Rectangle"), "recttool", 0, actionCollection(), "rectangle" );
+    m_rectTool->setExclusiveGroup( "Tools" );
+    connect( m_rectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotRectTool( bool ) ) );
+    KToggleAction *m_polygonTool = new KToggleAction( i18n("Polygon"), "polygontool", 0, actionCollection(), "polygon" );
+    m_polygonTool->setExclusiveGroup( "Tools" );
+    connect( m_polygonTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPolygonTool( bool ) ) );
+    KToggleAction *m_ellipseTool = new KToggleAction( i18n("Ellipse"), "ellipsetool", 0, actionCollection(), "ellipse" );
+    m_ellipseTool->setExclusiveGroup( "Tools" );
+    connect( m_ellipseTool, SIGNAL( toggled( bool ) ), this, SLOT( slotEllipseTool( bool ) ) );
+    KToggleAction *m_textTool = new KToggleAction( i18n("Text"), "texttool", 0, actionCollection(), "text" );
+    m_textTool->setExclusiveGroup( "Tools" );
+    connect( m_textTool, SIGNAL( toggled( bool ) ), this, SLOT( slotTextTool( bool ) ) );
+    KToggleAction *m_zoomTool = new KToggleAction( i18n("Zoom"), "zoomtool", 0, actionCollection(), "zoom" );
+    m_zoomTool->setExclusiveGroup( "Tools" );
+    connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
+
     // Layout menu
-    m_page = new KAction( i18n("&Page ..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
-    m_grid = new KAction( i18n("&Grid ..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
-    m_helplines = new KAction( i18n("&Helplines ..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
-    m_alignToGrid = new KToggleAction( i18n("&Align To Grid"), 0, actionCollection(), "alignToGrid" );
+    new KAction( i18n("&Page..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
+    new KAction( i18n("&Grid..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
+    new KAction( i18n("&Helplines..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
+    KToggleAction *m_alignToGrid = new KToggleAction( i18n("&Align To Grid"), 0, actionCollection(), "alignToGrid" );
     connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
-    m_alignToHelplines = new KToggleAction( i18n("Align &To Helplines"), 0, actionCollection(), "alignToHelplines" );
+    KToggleAction *m_alignToHelplines = new KToggleAction( i18n("Align &To Helplines"), 0, actionCollection(), "alignToHelplines" );
     connect( m_alignToHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToHelplines( bool ) ) );
 
     // Transform menu
-    m_transformPosition = new KAction( i18n("&Position ..."), 0, this, SLOT( slotTransformPosition() ), actionCollection(), "transformPosition" );
-    m_transformDimension = new KAction( i18n("&Dimension ..."), 0, this, SLOT( slotTransformDimension() ), actionCollection(), "transformDimension" );
-    m_transformRotation = new KAction( i18n("&Rotation ..."), 0, this, SLOT( slotTransformRotation() ), actionCollection(), "transformRotation" );
-    m_transformMirror = new KAction( i18n("&Mirror ..."), 0, this, SLOT( slotTransformMirror() ), actionCollection(), "transformMirror" );
+    new KAction( i18n("&Position..."), 0, this, SLOT( slotTransformPosition() ), actionCollection(), "transformPosition" );
+    new KAction( i18n("&Dimension..."), 0, this, SLOT( slotTransformDimension() ), actionCollection(), "transformDimension" );
+    new KAction( i18n("&Rotation..."), 0, this, SLOT( slotTransformRotation() ), actionCollection(), "transformRotation" );
+    new KAction( i18n("&Mirror..."), 0, this, SLOT( slotTransformMirror() ), actionCollection(), "transformMirror" );
 
     // Arrange menu
-    m_distribute = new KAction( i18n("&Align/Distribute ..."), 0, this, SLOT( slotDistribute() ), actionCollection(), "distribute" );
+    m_distribute = new KAction( i18n("&Align/Distribute..."), 0, this, SLOT( slotDistribute() ), actionCollection(), "distribute" );
     m_toFront = new KAction( i18n("To &Front"), 0, this, SLOT( slotToFront() ), actionCollection(), "toFront" );
     m_toBack = new KAction( i18n("To &Back"), 0, this, SLOT( slotToBack() ), actionCollection(), "toBack" );
     m_forwardOne = new KAction( i18n("Forward &One"), 0, this, SLOT( slotForwardOne() ), actionCollection(), "forwardOne" );
     m_backOne = new KAction( i18n("B&ack One"), 0, this, SLOT( slotBackOne() ), actionCollection(), "backOne" );
-    m_group = new KAction( i18n("&Group"), 0, this, SLOT( slotGroup() ), actionCollection(), "group" );
-    m_ungroup = new KAction( i18n("&Ungroup"), 0, this, SLOT( slotUngroup() ), actionCollection(), "ungroup" );
-    m_textAlongPath = new KAction( i18n("Text Along &Path"), 0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
-    m_convertToCurve = new KAction( i18n("&Convert to Curve"), 0, this, SLOT( slotConvertToCurve() ), actionCollection(), "convertToCurve" );
+    new KAction( i18n("&Group"), 0, this, SLOT( slotGroup() ), actionCollection(), "group" );
+    new KAction( i18n("&Ungroup"), 0, this, SLOT( slotUngroup() ), actionCollection(), "ungroup" );
+    new KAction( i18n("Text Along &Path"), 0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
+    new KAction( i18n("&Convert to Curve"), 0, this, SLOT( slotConvertToCurve() ), actionCollection(), "convertToCurve" );
 
-    // Effects menu
-    m_blend = new KAction( i18n("&Blend ..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
+    // Extra menu
+    new KAction( i18n("&Blend..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
+    new KAction( i18n("&Load Palette..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" );
 
-    // Extras menu
-    m_loadPalette = new KAction( i18n("&Load Palette ..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" );
-    m_options = new KAction( i18n("&Options ..."), 0, this, SLOT( slotOptions() ), actionCollection(), "options" );
+    // Settings
+    new KAction( i18n("&Configure..."), 0, this, SLOT( slotOptions() ), actionCollection(), "configure" );
 
-    //
-    m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (),
-                                    "view_zoom");
+    KSelectAction *m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (), "view_zoom");
     QStringList zooms;
     zooms << "50%";
     zooms << "100%";
@@ -207,57 +233,24 @@ void KIllustratorView::createMyGUI()
     zooms << "800%";
     zooms << "1000%";
 
-    ((KSelectAction *) m_viewZoom)->setItems (zooms);
-    connect (((KSelectAction *) m_viewZoom),
-             SIGNAL(activated(const QString &)),
+    m_viewZoom->setItems (zooms);
+    connect (m_viewZoom, SIGNAL(activated(const QString &)),
              this, SLOT(slotViewZoom(const QString &)));
-    ((KSelectAction *) m_viewZoom)->setCurrentItem (2);
+    m_viewZoom->setCurrentItem(1);
+
     // Colorbar action
-
     QValueList<QColor> colorList;
-    colorList << white << red << green << blue << cyan << magenta << yellow
-              << darkRed << darkGreen << darkBlue << darkCyan
-              << darkMagenta << darkYellow << white << lightGray
-              << gray << darkGray << black;
+    colorList << Qt::white << Qt::red << Qt::green << Qt::blue << Qt::cyan << Qt::magenta << Qt::yellow
+              << Qt::darkRed << Qt::darkGreen << Qt::darkBlue << Qt::darkCyan
+              << Qt::darkMagenta << Qt::darkYellow << Qt::white << Qt::lightGray
+              << Qt::gray << Qt::darkGray << Qt::black;
 
-    m_colorBar = new KColorBarAction( i18n( "&Colorbar" ), 0,
-                                      this,
-                                      SLOT( slotBrushChosen( const QColor & ) ),
-                                      SLOT( slotPenChosen( const QColor & ) ),
-                                      colorList,
-                                      actionCollection(), "colorbar" );
-
-    // Tools
-    m_selectTool = new KToggleAction( i18n("Select Tool"), "selecttool", 0, actionCollection(), "selectTool" );
-    m_selectTool->setExclusiveGroup( "Tools" );
-    connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
-    m_pointTool = new KToggleAction( i18n("Point Tool"), "pointtool", 0, actionCollection(), "pointTool" );
-    m_pointTool->setExclusiveGroup( "Tools" );
-    connect( m_pointTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPointTool( bool ) ) );
-    m_freehandTool = new KToggleAction( i18n("Freehand Tool"), "freehandtool", 0, actionCollection(), "freehandTool" );
-    m_freehandTool->setExclusiveGroup( "Tools" );
-    connect( m_freehandTool, SIGNAL( toggled( bool ) ), this, SLOT( slotFreehandTool( bool ) ) );
-    m_lineTool = new KToggleAction( i18n("Line Tool"), "linetool", 0, actionCollection(), "lineTool" );
-    m_lineTool->setExclusiveGroup( "Tools" );
-    connect( m_lineTool, SIGNAL( toggled( bool ) ), this, SLOT( slotLineTool( bool ) ) );
-    m_bezierTool = new KToggleAction( i18n("Bezier Tool"), "beziertool", 0, actionCollection(), "bezierTool" );
-    m_bezierTool->setExclusiveGroup( "Tools" );
-    connect( m_bezierTool, SIGNAL( toggled( bool ) ), this, SLOT( slotBezierTool( bool ) ) );
-    m_rectTool = new KToggleAction( i18n("Rect Tool"), "recttool", 0, actionCollection(), "rectTool" );
-    m_rectTool->setExclusiveGroup( "Tools" );
-    connect( m_rectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotRectTool( bool ) ) );
-    m_polygonTool = new KToggleAction( i18n("Polygon Tool"), "polygontool", 0, actionCollection(), "polygonTool" );
-    m_polygonTool->setExclusiveGroup( "Tools" );
-    connect( m_polygonTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPolygonTool( bool ) ) );
-    m_ellipseTool = new KToggleAction( i18n("Ellipse Tool"), "ellipsetool", 0, actionCollection(), "ellipseTool" );
-    m_ellipseTool->setExclusiveGroup( "Tools" );
-    connect( m_ellipseTool, SIGNAL( toggled( bool ) ), this, SLOT( slotEllipseTool( bool ) ) );
-    m_textTool = new KToggleAction( i18n("Text Tool"), "texttool", 0, actionCollection(), "textTool" );
-    m_textTool->setExclusiveGroup( "Tools" );
-    connect( m_textTool, SIGNAL( toggled( bool ) ), this, SLOT( slotTextTool( bool ) ) );
-    m_zoomTool = new KToggleAction( i18n("Zoom Tool"), "zoomtool", 0, actionCollection(), "zoomTool" );
-    m_zoomTool->setExclusiveGroup( "Tools" );
-    connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
+    new KColorBarAction( i18n( "&Colorbar" ), 0,
+                         this,
+                         SLOT( slotBrushChosen( const QColor & ) ),
+                         SLOT( slotPenChosen( const QColor & ) ),
+                         colorList,
+                         actionCollection(), "colorbar" );
 
     // Node Toolbar
     m_moveNode = new KToggleAction( i18n("Move Node "), "moveNode", 0, actionCollection(), "moveNode" );
@@ -273,14 +266,14 @@ void KIllustratorView::createMyGUI()
     m_splitLine->setExclusiveGroup( "Node" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
 
-    m_selectTool->setChecked( TRUE );
-    m_normal->setChecked( TRUE );
-    m_showRuler->setChecked( TRUE );
-    m_showHelplines->setChecked( TRUE );
-    m_showGrid->setChecked( TRUE );
+    m_selectTool->setChecked( true );
+    m_normal->setChecked( true );
+    m_showRuler->setChecked( true );
+    m_showHelplines->setChecked( false );
+    m_showGrid->setChecked( false );
 
     // Disable node actions
-    slotPointTool( FALSE );
+    slotPointTool( false );
 
     setupPopups ();
     setUndoStatus (false, false);
@@ -290,13 +283,11 @@ void KIllustratorView::createMyGUI()
 
 void KIllustratorView::setupPopups()
 {
-    objMenu = new QPopupMenu ();
+    objMenu = new KPopupMenu();
     m_copy->plug( objMenu );
     m_cut->plug( objMenu );
     objMenu->insertSeparator ();
     m_properties->plug( objMenu );
-    objMenu->insertSeparator ();
-    m_distribute->plug( objMenu );
     objMenu->insertSeparator ();
     m_distribute->plug( objMenu );
     m_toFront->plug( objMenu );
@@ -318,7 +309,7 @@ void KIllustratorView::setupCanvas()
 
     canvas = new Canvas (m_pDoc->gdoc(), 72.0, scrollview, scrollview->viewport());
     scrollview->addChild(canvas);
-    //scrollview->viewport()->setBackgroundMode(QWidget::PaletteBackground);
+    scrollview->viewport()->setBackgroundMode(QWidget::PaletteBackground);
     QObject::connect (canvas, SIGNAL(sizeChanged ()),
                       scrollview, SLOT(updateScrollBars()));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
@@ -409,21 +400,21 @@ void KIllustratorView::setupCanvas()
     tcontroller->registerTool (ID_TOOL_INSERTPART,
                                insertPartTool =
                                new InsertPartTool (&cmdHistory));
-    QObject::connect (insertPartTool, SIGNAL(operationDone ()),
-                      this, SLOT (resetTools ()));
+    QObject::connect (insertPartTool, SIGNAL(operationDone()),
+                      this, SLOT (resetTools()));
 
     tcontroller->toolSelected( ID_TOOL_SELECT );
-    // m_idActiveTool = ID_TOOL_SELECT;
-
     canvas->setToolController(tcontroller);
 }
 
+// FIXME (Werner)
 void KIllustratorView::showCurrentMode (const QString& ) {
-    //  statusbar->changeItem (msg, 2);
+    //statusbar->changeItem (msg, 2);
 }
 
 void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
+    qDebug("+++++++++++ UNDO - REDO +++++++++++");
     m_undo->setEnabled( undoPossible );
     m_redo->setEnabled( redoPossible );
 
@@ -463,7 +454,6 @@ void KIllustratorView::showTransformationDialog( int id )
     transformationDialog->setDocument ( m_pDoc->gdoc() );
     transformationDialog->showTab (id);
 }
-
 
 bool KIllustratorView::printDlg()
 {
@@ -580,7 +570,7 @@ void KIllustratorView::popupForSelection (int, int )
 
 void KIllustratorView::resetTools()
 {
-    m_selectTool->setEnabled( TRUE );
+    m_selectTool->setEnabled( true );
 }
 
 // void KIllustratorView::activatePart (GObject *obj) {
@@ -635,9 +625,6 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
     }
     QString filter = filterMgr->exportFilters (defaultExt);
 
-#ifdef USE_QFD
-    QString filename = QFileDialog::getSaveFileName( QString::null, filter, this );
-#else
     KFileDialog *dlg = new KFileDialog (lastExportDir,
                                         filter, this,
                                         "file dia", true);
@@ -656,8 +643,6 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
     }
 
     delete dlg;
-#endif
-
     return filename;
 }
 
@@ -668,14 +653,10 @@ void KIllustratorView::slotImport()
     FilterManager* filterMgr = FilterManager::instance ();
     QString filter = filterMgr->importFilters ();
 
-#ifdef USE_QFD
-    QString fname = QFileDialog::getOpenFileName (lastImportDir, filter, this);
-#else
     KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
     if (!url.isLocalFile())
         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
     QString fname = url.path();
-#endif
     if (! fname.isEmpty ())
     {
         QFileInfo finfo ((const char *) fname);
@@ -739,15 +720,6 @@ void KIllustratorView::slotExport()
 
 void KIllustratorView::slotInsertBitmap()
 {
-#ifdef USE_QFD
-    QString fname = QFileDialog::getOpenFileName
-                    ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
-                                                        "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
-                                                        "*.png | PNG Images\n"
-                                                        "*.xbm | X11 Bitmaps\n"
-                                                        "*.xpm | X11 Pixmaps"),
-                     this);
-#else
     KURL url = KFileDialog::getOpenURL
                (lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
                                     "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
@@ -758,7 +730,6 @@ void KIllustratorView::slotInsertBitmap()
     if (!url.isLocalFile())
         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
     QString fname = url.path();
-#endif
     if (! fname.isEmpty ()) {
         QFileInfo finfo (fname);
         lastBitmapDir = finfo.dirPath ();
@@ -770,17 +741,11 @@ void KIllustratorView::slotInsertBitmap()
 
 void KIllustratorView::slotInsertClipart()
 {
-#ifdef USE_QFD
-    QString fname = QFileDialog::getOpenFileName
-                    (lastClipartDir,
-                     i18n("*.wmf *.WMF | Windows Metafiles"), this);
-#else
     KURL url = KFileDialog::getOpenURL( lastClipartDir,
                                         i18n("*.wmf *.WMF | Windows Metafiles"), this);
     if (!url.isLocalFile())
         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
     QString fname = url.path();
-#endif
     if ( !fname.isEmpty ())
     {
         QFileInfo finfo (fname);
@@ -1000,7 +965,7 @@ void KIllustratorView::slotOptions()
 void KIllustratorView::slotBrushChosen( const QColor & c )
 {
     // #### Torben: ..... hmmmmm
-    bool fill = TRUE;
+    bool fill = true;
 
     GObject::OutlineInfo oInfo;
     oInfo.mask = 0;
@@ -1031,7 +996,7 @@ void KIllustratorView::slotBrushChosen( const QColor & c )
 void KIllustratorView::slotPenChosen( const QColor & c  )
 {
     // #### Torben: ..... hmmmmm
-    bool fill = TRUE;
+    bool fill = true;
 
     GObject::OutlineInfo oInfo;
     oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style;
@@ -1072,7 +1037,7 @@ void KIllustratorView::slotPointTool( bool b )
     m_splitLine->setEnabled( b );
 
     if ( b )
-        slotMoveNode( TRUE );
+        slotMoveNode( true );
 
     tcontroller->toolSelected( ID_TOOL_EDITPOINT );
 }

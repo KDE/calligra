@@ -98,6 +98,7 @@ void GraphiteView::setupActions() {
     lst << i18n("300%");
     lst << i18n("Other...");
     zoom->setItems(lst);
+    zoom->setCurrentItem(1);
 }
 
 void GraphiteView::setupRulers() {
