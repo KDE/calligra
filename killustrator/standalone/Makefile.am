@@ -42,7 +42,7 @@ killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 FILTER_LIBS = ../filter/libfilter.a
 XML_LIBS = ../xmlutils/libxml.a
 KSHARE_LIBS = ../share/libkillu.a
-killustrator_LDADD   =  $(KSHARE_LIBS) $(FILTER_LIBS) $(XML_LIBS) \
+killustrator_LDADD   =  $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) \
 	-lkfm -lkfile -lkdeui -lkdecore \
 	-lqt $(LIBQIMGIO) \
 	-lX11 -lXext $(LIBSOCKET) $(LIBDL)
