@@ -211,6 +211,7 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
         ;
     ProcessAttributes (myNode, attrProcessingList);
 
+    // ### TODO: use QColor::setRgb instead of QColor::QColor
     frameAnchor->frame.lColor  = QColor( lRed, lGreen, lBlue );
     frameAnchor->frame.rColor  = QColor( rRed, rGreen, rBlue );
     frameAnchor->frame.tColor  = QColor( tRed, tGreen, tBlue );
@@ -415,7 +416,11 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 
             break;
         }
-
+    case 4: // KFormula
+        {
+            kdWarning(30520) << "KFormula frameset not supported yet!" << endl; // ### TODO
+            break;
+        }
     default:
             kdWarning (30508) << "Unexpected frametype " << frameType << " (in ProcessFramesetTag)" << endl;
     }
@@ -526,7 +531,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "orientation",         "int",    (void *) &orientation )
                        << AttrProcessing ( "columns",             "",       NULL                  )
                        << AttrProcessing ( "columnspacing",       "",       NULL                  )
-                       << AttrProcessing ( "pages",               "",       NULL                  )
+                       << AttrProcessing ( "pages",               leader->m_numPages )
                        << AttrProcessing ( "hType",               "int",    (void*) &hType        )
                        << AttrProcessing ( "fType",               "int",    (void*) &fType        )
                        << AttrProcessing ( "spHeadBody",          "",       NULL                  )
