@@ -971,8 +971,8 @@ void KWTableFrameSet::deleteCol( unsigned int col )
         Cell *cell = m_cells.at(i);
         if ( col >= cell->m_col  && col < cell->m_col + cell->m_cols) { // cell is indeed in col
             if(cell->m_cols == 1) { // lets remove it
-                m_cells.remove( i );
-                frames.remove( i );
+                frames.remove( cell->getFrame(0) );
+                m_cells.remove(  i);
                 i--;
             } else { // make cell span colspan less cols
                 cell->m_cols -= colspan;
@@ -987,6 +987,13 @@ void KWTableFrameSet::deleteCol( unsigned int col )
     }
     m_cols -= colspan;
 
+    //laurent
+    //it's necessary to recalc row, because when you used contain(...)
+    //you used m_pageBoundaries.
+    // But m_pageBoundaries is init in recalcRows
+    //and  when you remove col, you must recreate m_pageBoundaries
+    // otherwise kword crashs.
+    recalcRows();
     recalcCols();
 }
 
