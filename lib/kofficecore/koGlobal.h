@@ -192,6 +192,9 @@ struct KoPageLayout
                 ptTop == l.ptTop &&
                 ptBottom == l.ptBottom );
     }
+    bool operator!=( const KoPageLayout& l ) const {
+        return !( *this == l );
+    }
 };
 
 /** structure for header-footer */
@@ -210,6 +213,14 @@ struct KoColumns
 {
     int columns;
     double ptColumnSpacing;
+    bool operator==( const KoColumns& rhs ) const {
+        return columns == rhs.columns &&
+               QABS(ptColumnSpacing - rhs.ptColumnSpacing) <= 1E-10;
+    }
+    bool operator!=( const KoColumns& rhs ) const {
+        return columns != rhs.columns ||
+               QABS(ptColumnSpacing - rhs.ptColumnSpacing) > 1E-10;
+    }
 };
 
 /** structure for KWord header-footer */
@@ -220,6 +231,15 @@ struct KoKWHeaderFooter
     double ptHeaderBodySpacing;
     double ptFooterBodySpacing;
     double ptFootNoteBodySpacing;
+    bool operator==( const KoKWHeaderFooter& rhs ) const {
+        return header == rhs.header && footer == rhs.footer &&
+               QABS(ptHeaderBodySpacing - rhs.ptHeaderBodySpacing) <= 1E-10 &&
+               QABS(ptFooterBodySpacing - rhs.ptFooterBodySpacing) <= 1E-10 &&
+               QABS(ptFootNoteBodySpacing - rhs.ptFootNoteBodySpacing) <= 1E-10;
+    }
+    bool operator!=( const KoKWHeaderFooter& rhs ) const {
+        return !( *this == rhs );
+    }
 };
 
 
