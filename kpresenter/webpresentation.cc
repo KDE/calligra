@@ -842,13 +842,13 @@ void KPWebPresentationWizard::setupPage3()
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
-    helptext->setText( i18n( "Here you can specify titles for"
+    helptext->setText( i18n( "Here you can specify titles for "
                              "each slide. Click on a slide in "
                              "the list and then enter the title "
                              "in the textbox below. If you "
-                             "click on a title, the KPresenter "
-                             "mainview will scroll to this "
-                             "slide, so it can be seen." ) );
+                             "click on a title, KPresenter "
+                             "mainview will display the slide.") );
+
     layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
 
     QLabel *label = new QLabel( i18n( "Slide title:" ), canvas );
