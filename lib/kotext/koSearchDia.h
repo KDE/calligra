@@ -231,11 +231,10 @@ class KoTextFind : public KoFind
 {
     Q_OBJECT
 public:
-    KoTextFind(const QString &pattern, long options, KoSearchContext * _searchContext, KoFindReplace *_findReplace, QWidget *parent = 0);
+    KoTextFind(const QString &pattern, long options, KoFindReplace *_findReplace, QWidget *parent = 0);
     ~KoTextFind();
     virtual bool validateMatch( const QString &text, int index, int matchedlength );
 private:
-    KoSearchContext *m_searchContext;
     KoFindReplace * m_findReplace;
 };
 
@@ -246,15 +245,10 @@ class KoTextReplace : public KoReplace
 {
     Q_OBJECT
 public:
-    KoTextReplace(const QString &pattern, const QString &replacement, long options, KoSearchContext * _searchContext, KoSearchContext *_replaceContext, KoFindReplace *_findReplace, QWidget *parent = 0);
+    KoTextReplace(const QString &pattern, const QString &replacement, long options, KoFindReplace *_findReplace, QWidget *parent = 0);
     ~KoTextReplace();
     virtual bool validateMatch( const QString &text, int index, int matchedlength );
-    KoSearchContext *replaceContext()const {
-        return m_replaceContext;
-    }
 private:
-    KoSearchContext *m_searchContext;
-    KoSearchContext *m_replaceContext;
     KoFindReplace * m_findReplace;
 };
 

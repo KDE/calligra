@@ -125,7 +125,7 @@ void KoReplaceDia::slotOk()
 
 
 KoFindReplace::KoFindReplace( QWidget * parent, KoSearchDia * dialog, KoTextView *textView,const QPtrList<KoTextObject> & lstObject)
-    : m_find( new KoTextFind( dialog->pattern(), dialog->options(), dialog->searchContext(),this, parent ) ),
+    : m_find( new KoTextFind( dialog->pattern(), dialog->options(), this, parent ) ),
       m_replace( 0L ),
       m_findDlg( dialog ), // guaranteed to remain alive while we live
       m_replaceDlg( 0L ),
@@ -141,7 +141,7 @@ KoFindReplace::KoFindReplace( QWidget * parent, KoSearchDia * dialog, KoTextView
 
 KoFindReplace::KoFindReplace( QWidget * parent, KoReplaceDia * dialog, KoTextView *textView,const QPtrList<KoTextObject> & lstObject)
     : m_find( 0L ),
-      m_replace( new KoTextReplace( dialog->pattern(), dialog->replacement(), dialog->options(), dialog->searchContext(), dialog->replaceContext(), this, parent ) ),
+      m_replace( new KoTextReplace( dialog->pattern(), dialog->replacement(), dialog->options(), this, parent ) ),
       m_findDlg( 0L ),
       m_replaceDlg( dialog ), // guaranteed to remain alive while we live
       m_currentTextObj( 0L ),
@@ -351,7 +351,7 @@ void KoFindReplace::replace( const QString &text, int matchingIndex,
 
     //reactive spellchecking
     m_currentTextObj->setNeedSpellCheck(true);
-    if ( m_replace->replaceContext()->m_optionsMask )
+    if ( m_replaceDlg->replaceContext()->m_optionsMask )
     {
         replaceWithAttribut( &cursor, index );
     }
@@ -369,7 +369,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
 {
     KoTextFormat * lastFormat = m_currentParag->at( index )->format();
     KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
-    KoSearchContext *m_replaceContext = m_replace->replaceContext();
+    KoSearchContext *m_replaceContext = m_replaceDlg->replaceContext();
     int flags = 0;
     if (m_replaceContext->m_optionsMask & KoSearchContext::Bold)
     {
@@ -466,9 +466,8 @@ int KoFindReplace::numReplacements() const
 
 ////
 
-KoTextFind::KoTextFind( const QString &pattern, long options, KoSearchContext * _searchContext, KoFindReplace *_findReplace, QWidget *parent )
+KoTextFind::KoTextFind( const QString &pattern, long options, KoFindReplace *_findReplace, QWidget *parent )
     : KoFind( pattern, options, parent),
-      m_searchContext(_searchContext),
       m_findReplace( _findReplace)
 {
 }
@@ -482,10 +481,8 @@ bool KoTextFind::validateMatch( const QString &text, int index, int matchedlengt
     return m_findReplace->validateMatch( text, index, matchedlength );
 }
 
-KoTextReplace::KoTextReplace(const QString &pattern, const QString &replacement, long options, KoSearchContext * _searchContext, KoSearchContext *_replaceContext, KoFindReplace *_findReplace, QWidget *parent )
-    : KoReplace( pattern,replacement, options, parent),
-      m_searchContext(_searchContext),
-      m_replaceContext(_replaceContext),
+KoTextReplace::KoTextReplace(const QString &pattern, const QString &replacement, long options, KoFindReplace *_findReplace, QWidget *parent )
+    : KoReplace( pattern, replacement, options, parent),
       m_findReplace( _findReplace)
 {
 }
