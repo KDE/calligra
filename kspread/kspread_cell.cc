@@ -827,11 +827,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     applyZoomedFont( _painter, _col, _row );
 
-    //Adjust fontsize to zoomlevel
-    QFont tmpFont = _painter.font();
-    tmpFont.setPointSizeFloat( m_pTable->doc()->zoomedResolutionY() * tmpFont.pointSizeFloat() );
-    _painter.setFont( tmpFont );
-
     // Calculate text dimensions
     textSize( _painter );
 
@@ -847,7 +842,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     double h = rl->dblHeight();
 
     // Calculate the extraWidth and extraHeight if we are forced to.
-    /* TODO - use m_dExtraWidth/height here? Isn't it already calculated?*/
+    /* Use m_dExtraWidth/height here? Isn't it already calculated?*/
+    /* No, they are calculated here only (beside of QML part above) Philipp */
     if ( testFlag( Flag_ForceExtra ) )
     {
         for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
@@ -1304,7 +1300,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
             else
             {
                 if( tmpAngle < 0 )
-                    m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE ;
+                    m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE;
                 else
                     m_dTextY = topBorderWidth( _col, _row ) + BORDER_SPACE +
                                  (double)m_fmAscent * cos( tmpAngle * M_PI / 180 ) /
@@ -1481,15 +1477,19 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
 {
     KSpreadConditional condition;
 
+    QFont tmpFont;
     if( conditions.currentCondition( condition ) &&
            !m_pTable->getShowFormula() )
     {
-        painter.setFont( condition.fontcond );
+        tmpFont = condition.fontcond;
     }
     else
     {
-        painter.setFont( textFont( _col, _row ) );
+        tmpFont = textFont( _col, _row );
     }
+
+    tmpFont.setPointSizeFloat( m_pTable->doc()->zoomedResolutionY() * tmpFont.pointSizeFloat() );
+    painter.setFont( tmpFont );
 }
 
 void KSpreadCell::calculateTextParameters( QPainter &_paint, int _col, int _row )
@@ -2420,11 +2420,6 @@ void KSpreadCell::paintText( QPainter& painter,
     }
   }
 
-  //Adjust font to zoom level
-  QFont tmpFont = painter.font();
-  tmpFont.setPointSizeFloat( m_pTable->doc()->zoomedResolutionY() * tmpFont.pointSizeFloat() );
-  painter.setFont( tmpFont );
-
 /****
 
  For now I am commenting this out -- with the default color display you
@@ -2993,7 +2988,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     for ( int i = column(); i <= column() + m_iExtraXCells; i++ )
     {
       ColumnLayout *cl2 = m_pTable->columnLayout( i );
-      len += cl2->dblWidth() - 1;
+      len += cl2->dblWidth() - 1; //Why -1 ? Philipp
     }
 
     QString tmp;
@@ -3004,7 +2999,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     {
       tmp = m_strOutText.left(i);
 
-        if( fm.width( tmp ) + tmpIndent < len - 4 - 1 ) //4 equal lenght of red triangle +1 pixel
+        if( m_pTable->doc()->unzoomItX( fm.width( tmp ) ) + tmpIndent < len - 4.0 - 1.0 ) //4 equal lenght of red triangle +1 point
         {
             if( getAngle( column(), row() ) != 0 )
             {
@@ -3015,7 +3010,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
                     for ( int j = m_strOutText.length(); j != 0; j-- )
                     {
                         tmp2 = m_strOutText.left( j );
-                        if( fm.width(tmp2) < rl->dblHeight() - 1 )
+                        if( m_pTable->doc()->unzoomItY( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
                         {
                             return m_strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
                         }
@@ -3049,7 +3044,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
 
     for ( int i = m_strOutText.length(); i != 0; i-- )
     {
-        if( ( fm.ascent() + fm.descent() ) * i < rl->dblHeight() - 1 )
+        if( m_pTable->doc()->unzoomItY( fm.ascent() + fm.descent() ) * i < rl->dblHeight() - 1.0 )
         {
             return m_strOutText.left( i );
         }
@@ -3110,7 +3105,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
          }
        }
      }
-     if( fm.width( localizedNumber ) < w && !m_pTable->getShowFormula() )
+     if( m_pTable->doc()->unzoomItX( fm.width( localizedNumber ) ) < w && !m_pTable->getShowFormula() )
      {
        return localizedNumber;
      }
@@ -3120,7 +3115,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
    int i;
    for( i=4; i != 0; i-- )
    {
-     if( fm.width( str.right( i ) ) < w - 4 - 1 )
+     if( m_pTable->doc()->unzoomItX( fm.width( str.right( i ) ) ) < w - 4.0 - 1.0 )
      {
        break;
      }
@@ -3133,7 +3128,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
    for ( int i = m_strOutText.length(); i != 0; i-- )
    {
      tmp = m_strOutText.left( i );
-     if( fm.width( tmp ) < w - 4 - 1 ) //4 equals lenght of red triangle +1 pixel
+     if( m_pTable->doc()->unzoomItX( fm.width( tmp ) ) < w - 4.0 - 1.0 ) //4 equals lenght of red triangle +1 pixel
      {
        return tmp;
      }
