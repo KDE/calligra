@@ -270,6 +270,10 @@ public:
     bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
     void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
 
+    bool showStatusBar() const { return m_bShowStatusBar;}
+    void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
+
+
     // The user-chosen global unit
     QString getUnitName() { return KoUnit::unitName( m_unit ); }
     KoUnit::Unit getUnit() { return m_unit; }
@@ -451,6 +455,7 @@ protected:
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
     bool m_bShowRuler;
+    bool m_bShowStatusBar;
 
     double m_indent; // in pt
 

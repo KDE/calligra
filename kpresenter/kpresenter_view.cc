@@ -3559,6 +3559,15 @@ void KPresenterView::reorganize()
                 v_ruler->hide();
             getTabChooser()->hide();
         }
+
+        if( statusBar())
+        {
+            if(m_pKPresenterDoc->showStatusBar())
+                statusBar()->show();
+            else
+                statusBar()->hide();
+        }
+
 	setRanges();
     }
     else
@@ -4139,7 +4148,7 @@ void KPresenterView::updateObjectStatusBarItem()
   KStatusBar * sb = statusBar();
   int nbObjects = m_canvas->objNums();
 
-  if ( sb && nbObjects > 0 ) {
+  if ( m_pKPresenterDoc->showStatusBar() && sb && nbObjects > 0 ) {
     if ( !m_sbObjectLabel ) {
       m_sbObjectLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
       addStatusBarItem( m_sbObjectLabel );

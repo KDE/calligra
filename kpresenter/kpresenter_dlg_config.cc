@@ -122,6 +122,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     oldNbRecentFiles=10;
     double ptIndent = MM_TO_POINT(10.0);
     bool bShowRuler=true;
+    bool oldShowStatusBar = true;
 
     QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
     tmpQGroupBox->setTitle( i18n("Interface") );
@@ -140,11 +141,18 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
         oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
         ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
         bShowRuler=config->readBoolEntry("Rulers",true);
+        oldShowStatusBar = config->readBoolEntry( "ShowStatusBar" , true );
+
     }
 
     showRuler= new QCheckBox(i18n("Show rulers"),tmpQGroupBox);
     showRuler->setChecked(bShowRuler);
     lay1->addWidget(showRuler);
+
+    showStatusBar = new QCheckBox(i18n("Show status bar"),tmpQGroupBox);
+    showStatusBar->setChecked(oldShowStatusBar);
+    lay1->addWidget(showStatusBar);
+
 
     autoSave = new KIntNumInput( oldAutoSaveValue, tmpQGroupBox );
     autoSave->setRange( 0, 60, 1 );
@@ -189,6 +197,8 @@ void configureInterfacePage::apply()
     unsigned int rastX = eRastX->value();
     unsigned int rastY = eRastY->value();
     bool ruler=showRuler->isChecked();
+    bool statusBar=showStatusBar->isChecked();
+
     KPresenterDoc * doc = m_pView->kPresenterDoc();
 
     config->setGroup( "Interface" );
@@ -221,12 +231,24 @@ void configureInterfacePage::apply()
         m_pView->changeNbOfRecentFiles(nbRecent);
         oldNbRecentFiles=nbRecent;
     }
+    bool refreshGUI=false;
     if(ruler != doc->showRuler())
     {
         config->writeEntry( "Rulers", ruler );
         doc->setShowRuler( ruler );
-        doc->reorganizeGUI();
+        refreshGUI=true;
+
     }
+    if( statusBar != doc->showStatusBar() )
+    {
+        config->writeEntry( "ShowStatusBar", statusBar );
+        doc->setShowStatusBar( statusBar );
+        refreshGUI=true;
+    }
+
+    if( refreshGUI )
+        doc->reorganizeGUI();
+
 }
 
 void configureInterfacePage::slotDefault()
@@ -238,6 +260,7 @@ void configureInterfacePage::slotDefault()
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
+    showStatusBar->setChecked(true);
 }
 
 configureColorBackground::configureColorBackground( KPresenterView* _view, QWidget *parent , char *name )

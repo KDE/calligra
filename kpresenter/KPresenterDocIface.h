@@ -128,6 +128,9 @@ k_dcop:
     virtual bool configAutoReplaceNumber() const;
     virtual void setConfigAutoReplaceNumber( bool b );
 
+    virtual bool showStatusBar() const;
+    virtual void setShowStatusBar( bool _status );
+
 private:
     KPresenterDoc *doc;
 

@@ -150,6 +150,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     dcop = 0;
     m_kpresenterView = 0;
     m_initialActivePage=0;
+    m_bShowStatusBar = true;
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection);
     _clean = true;
     _spInfinitLoop = false;
@@ -275,6 +276,8 @@ void KPresenterDoc::initConfig()
         m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
         setShowRuler(config->readBoolEntry("Rulers",true));
         zoom = config->readNumEntry( "Zoom", 100 );
+        setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
+
     }
     else
         zoom=100;

@@ -430,3 +430,14 @@ void KPresenterDocIface::setConfigAutoReplaceNumber( bool b )
 {
     doc->getAutoFormat()->configAutoReplaceNumber(b);
 }
+
+bool KPresenterDocIface::showStatusBar() const
+{
+    return doc->showStatusBar();
+}
+
+void KPresenterDocIface::setShowStatusBar( bool _status )
+{
+    doc->setShowStatusBar(_status);
+    doc->reorganizeGUI();
+}
