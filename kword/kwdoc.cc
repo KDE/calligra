@@ -1501,7 +1501,7 @@ bool KWDocument::completeLoading( KoStore *_store )
         KWFrameSet * fs = getFrameSetByName( itanch.key() );
         ASSERT( fs );
         if ( fs )
-            fs->setAnchored( itanch.data(), true );
+            fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true );
     }
     m_anchorRequests.clear();
 
@@ -1857,7 +1857,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     frameset->addFrame( frame );
     addFrameSet( frameset );
 
-    KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a part frame"), this,  frame) ;
+    KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create a part frame"), frame);
     addCommand(cmd);
 
     emit sig_insertObject( ch, frameset );
@@ -2564,7 +2564,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
     }
     else
     {
-        KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( cmdName, this, frame );
+        KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( cmdName, frame );
         addCommand( cmd );
         cmd->execute();
     }

@@ -2021,13 +2021,21 @@ void KWView::tableUngroupTable()
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
 
-    if ( table->isFloating() )
-        table->setFixed();
+    // Use a macro command because we may have to make the table non-floating first
+    KMacroCommand * macroCmd = new KMacroCommand( i18n( "Ungroup Table" ) );
 
-    KWUngroupTableCommand *cmd = new KWUngroupTableCommand( i18n("Ungroup Table"), doc, table ) ;
-    doc->addCommand( cmd );
-    cmd->execute();
-    gui->canvasWidget()->repaintAll();
+    if ( table->isFloating() )
+    {
+        KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( QString::null, table, false ) ;
+        macroCmd->addCommand(cmd);
+    }
+
+    KWUngroupTableCommand *cmd = new KWUngroupTableCommand( QString::null, table );
+    macroCmd->addCommand( cmd );
+    doc->addCommand( macroCmd );
+    macroCmd->execute(); // do it all
+
+    gui->canvasWidget()->repaintAll(); // ## the command should do it
 }
 
 void KWView::tableDelete()

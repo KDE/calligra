@@ -846,7 +846,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                             QString framesetName = anchorElem.attribute( "instance" );
                             KWAnchorPosition pos;
                             pos.textfs = textDocument()->textFrameSet();
-                            pos.parag = this;
+                            pos.paragId = paragId();
                             pos.index = index;
                             doc->addAnchorRequest( framesetName, pos );
                         }

@@ -27,16 +27,13 @@ class KWTextParag;
  * - A text frameset
  * - A paragraph in this frameset
  * - An index in the paragraph
- * This is used in KWFrameSet for floating framesets
- * and in KWDocument for making framesets floating upon loading.
  */
 struct KWAnchorPosition
 {
-    KWAnchorPosition() { makeInvalid(); }
-    void makeInvalid() { textfs = 0L; parag = 0L; index = 0; }
+    KWAnchorPosition() { textfs = 0L; paragId = -1; index = -1; }
 
     KWTextFrameSet* textfs;
-    KWTextParag* parag;
+    int paragId;
     int index;
 };
 

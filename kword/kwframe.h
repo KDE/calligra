@@ -36,7 +36,6 @@ namespace KFormula {
 
 class KCommand;
 class KWAnchor;
-class KWAnchorPosition;
 class KWCanvas;
 class KWChild;
 class KWDocument;
@@ -387,11 +386,13 @@ public:
     void setCurrent( int i ) { m_current = i; }
     int getCurrent() { return m_current; }
 
+    //Note: none of those floating-frameset methods creates undo/redo
+    //They are _called_ by the undo/redo commands.
+
     /** Make this frameset floating, as close to its current position as possible. */
     void setFloating();
-    /** Make this frameset floating, with the anchor at @p parag,@p index in the text frameset @p textfs */
-    void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index ); // convenience method
-    void setAnchored( KWAnchorPosition & pos, bool placeHolderExists = false );
+    /** Make this frameset floating, with the anchor at @p paragId,@p index in the text frameset @p textfs */
+    void setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists = false );
     /** Note that this frameset has been made floating already, and store anchor position */
     void setAnchored( KWTextFrameSet* textfs );
     /** Make this frameset fixed, i.e. not anchored */

@@ -356,11 +356,8 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
             m_boundingRect |= table->boundingRect();
         else
             m_boundingRect |= *frame;
-        FrameIndex *index=new FrameIndex;
+        FrameIndex *index=new FrameIndex( frame );
         FrameResizeStruct *move=new FrameResizeStruct;
-
-        index->m_pFrameSet=frame->getFrameSet();
-        index->m_iFrameIndex=fs->getFrameFromPtr(frame);
 
         move->sizeOfBegin=frame->normalize();
         move->sizeOfEnd=KoRect();
@@ -369,7 +366,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     }
     m_hotSpot = docPoint - m_boundingRect.topLeft();
     if(frameindexMove.count()!=0)
-        cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"),doc,frameindexList, frameindexMove ) ;
+        cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
 
     viewport()->setCursor( doc->getMouseCursor( nPoint, e && e->state() & ControlButton ) );
 
@@ -926,15 +923,12 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             ASSERT( frame );
             if ( frame )
             {
-                FrameIndex index;
+                FrameIndex index( frame );
                 FrameResizeStruct tmpResize;
                 tmpResize.sizeOfBegin = m_resizedFrameInitialSize;
                 tmpResize.sizeOfEnd = frame->normalize();
 
-                index.m_pFrameSet=frame->getFrameSet();
-                index.m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-
-                KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
+                KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize );
                 doc->addCommand(cmd);
 
                 doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
@@ -1013,7 +1007,7 @@ void KWCanvas::mrCreatePixmap()
                                      m_insRect.height() );
         frameset->addFrame( frame, false );
         doc->addFrameSet( frameset );
-        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a picture frame"), doc,  frame) ;
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a picture frame"), frame );
         doc->addCommand(cmd);
         doc->frameChanged( frame );
     }
@@ -1039,7 +1033,7 @@ void KWCanvas::mrCreateFormula()
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frameset->addFrame( frame, false );
         doc->addFrameSet( frameset );
-        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a formula frame"), doc,  frame) ;
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a formula frame"), frame );
         doc->addCommand(cmd);
         doc->frameChanged( frame );
     }
@@ -1058,7 +1052,7 @@ void KWCanvas::mrCreateTable()
         }
         else {
             KWTableFrameSet * table = createTable();
-            KWCreateTableCommand *cmd=new KWCreateTableCommand(i18n("Create table"),doc, table );
+            KWCreateTableCommand *cmd=new KWCreateTableCommand( i18n("Create table"), doc, table );
             doc->addCommand(cmd);
             cmd->execute();
             emit docStructChanged(Tables);
@@ -1177,14 +1171,10 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         frame=settingsFrame(frame);
-        FrameIndex *index=new FrameIndex;
+        FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getLeftBorder();
         tmp->m_EFrameType= FBLeft;
-
-        index->m_pFrameSet=frame->getFrameSet();
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1207,7 +1197,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
     }
     if(leftFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),frameindexList,tmpBorderList,_frmBrd);
         doc->addCommand(cmd);
         doc->repaintAllViews();
     }
@@ -1228,13 +1218,10 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         frame=settingsFrame(frame);
-        FrameIndex *index=new FrameIndex;
+        FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getRightBorder();
         tmp->m_EFrameType= FBRight;
-
-        index->m_pFrameSet=frame->getFrameSet();
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1258,7 +1245,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
     }
     if( rightFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),frameindexList,tmpBorderList,_frmBrd);
         doc->addCommand(cmd);
         doc->repaintAllViews();
     }
@@ -1280,13 +1267,10 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         frame=settingsFrame(frame);
-        FrameIndex *index=new FrameIndex;
+        FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getTopBorder();
         tmp->m_EFrameType= FBTop;
-
-        index->m_pFrameSet=frame->getFrameSet();
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1309,7 +1293,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
     }
     if(topFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),frameindexList,tmpBorderList,_frmBrd);
         doc->addCommand(cmd);
         doc->repaintAllViews();
     }
@@ -1330,14 +1314,10 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         frame=settingsFrame(frame);
-        FrameIndex *index=new FrameIndex;
+        FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getBottomBorder();
         tmp->m_EFrameType= FBBottom;
-
-        index->m_pFrameSet=frame->getFrameSet();
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
@@ -1360,7 +1340,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
     }
     if(bottomFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),frameindexList,tmpBorderList,_frmBrd);
         doc->addCommand(cmd);
         doc->repaintAllViews();
     }
@@ -1457,16 +1437,16 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
         }
     }
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change Outline Border") );
-    KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),doc,frameindexListBottom,tmpBorderListBottom,_frmBrd);
+    KWFrameBorderCommand *cmd=new KWFrameBorderCommand(QString::null,frameindexListBottom,tmpBorderListBottom,_frmBrd);
     macroCmd->addCommand(cmd);
 
-    cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),doc,frameindexListLeft,tmpBorderListLeft,_frmBrd);
+    cmd=new KWFrameBorderCommand(QString::null,frameindexListLeft,tmpBorderListLeft,_frmBrd);
     macroCmd->addCommand(cmd);
 
-    cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),doc,frameindexListTop,tmpBorderListTop,_frmBrd);
+    cmd=new KWFrameBorderCommand(QString::null,frameindexListTop,tmpBorderListTop,_frmBrd);
     macroCmd->addCommand(cmd);
 
-    cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),doc,frameindexListRight,tmpBorderListRight,_frmBrd);
+    cmd=new KWFrameBorderCommand(QString::null,frameindexListRight,tmpBorderListRight,_frmBrd);
     macroCmd->addCommand(cmd);
 
     doc->addCommand(macroCmd);
@@ -1508,14 +1488,10 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     {
         frame=settingsFrame(frame);
 
-        FrameIndex *index=new FrameIndex;
-
-        index->m_pFrameSet=frame->getFrameSet();
-        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-
+        FrameIndex *index=new FrameIndex( frame );
+        frameindexList.append(index);
 
         QBrush *_color=new QBrush(frame->getBackgroundColor());
-        frameindexList.append(index);
         oldColor.append(_color);
 
         if (_backColor!=frame->getBackgroundColor())
@@ -1526,7 +1502,7 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     }
     if(colorChanged)
     {
-        KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame BackGroundColor"),doc,frameindexList,oldColor,_backColor);
+        KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame BackGroundColor"),frameindexList,oldColor,_backColor);
         doc->addCommand(cmd);
         doc->repaintAllViews();
     }

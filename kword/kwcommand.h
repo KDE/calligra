@@ -161,6 +161,9 @@ protected:
 
 // Identifies a frame
 struct FrameIndex {
+    FrameIndex() {}
+    FrameIndex( KWFrame *frame );
+
     KWFrameSet * m_pFrameSet;
     unsigned int m_iFrameIndex;
 };
@@ -178,17 +181,16 @@ struct FrameBorderTypeStruct {
 class KWFrameBorderCommand : public KCommand
 {
 public:
-    KWFrameBorderCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const Border & _newBorder ) ;
+    KWFrameBorderCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const Border & _newBorder ) ;
     ~ KWFrameBorderCommand() {}
 
     void execute();
     void unexecute();
 
 protected:
-    QList<FrameIndex> m_IndexFrame;
+    QList<FrameIndex> m_indexFrame;
     QList<FrameBorderTypeStruct> m_oldBorderFrameType;
     Border m_newBorder;
-    KWDocument *m_pDoc;
 };
 
 /**
@@ -197,17 +199,16 @@ protected:
 class KWFrameBackGroundColorCommand : public KCommand
 {
 public:
-    KWFrameBackGroundColorCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush,const QBrush & _newColor ) ;
+    KWFrameBackGroundColorCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush, const QBrush & _newColor ) ;
     ~KWFrameBackGroundColorCommand() {}
 
     void execute();
     void unexecute();
 
 protected:
-    QList<FrameIndex> m_IndexFrame;
+    QList<FrameIndex> m_indexFrame;
     QList<QBrush> m_oldBackGroundColor;
     QBrush m_newColor;
-    KWDocument *m_pDoc;
 };
 
 struct FrameResizeStruct {
@@ -221,16 +222,15 @@ struct FrameResizeStruct {
 class KWFrameResizeCommand : public KCommand
 {
 public:
-    KWFrameResizeCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex,FrameResizeStruct _frameResize ) ;
+    KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) ;
     ~KWFrameResizeCommand() {}
 
     void execute();
     void unexecute();
 
 protected:
-    FrameIndex m_IndexFrame;
+    FrameIndex m_indexFrame;
     FrameResizeStruct m_FrameResize;
-    KWDocument *m_pDoc;
 };
 
 /**
@@ -239,18 +239,33 @@ protected:
 class KWFrameMoveCommand : public KCommand
 {
 public:
-    KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,QList<FrameResizeStruct>&_frameMove ) ;
+    KWFrameMoveCommand( const QString &name,QList<FrameIndex> &_frameIndex,QList<FrameResizeStruct>&_frameMove ) ;
     ~KWFrameMoveCommand() {}
 
     void execute();
     void unexecute();
     QList<FrameResizeStruct> & listFrameMoved() { return m_frameMove; }
 protected:
-    QList<FrameIndex> m_IndexFrame;
+    QList<FrameIndex> m_indexFrame;
     QList<FrameResizeStruct> m_frameMove;
-    KWDocument *m_pDoc;
 };
 
+/**
+ * Command created when a frameset is made floating or fixed using the frame dialog
+ */
+class KWFrameSetFloatingCommand : public KCommand
+{
+public:
+    KWFrameSetFloatingCommand( const QString &name, KWFrameSet *frameset, bool floating );
+    ~KWFrameSetFloatingCommand() {}
+
+    void execute();
+    void unexecute();
+
+protected:
+    KWFrameSet* m_pFrameSet;
+    bool m_bFloating;
+};
 
 ///////////////////////////////layout command///////////////////////////
 struct pageLayout {
@@ -283,32 +298,27 @@ protected:
 class KWDeleteFrameCommand : public KCommand
 {
 public:
-    KWDeleteFrameCommand( const QString &name, KWDocument *_doc, KWFrame * frame) ;
+    KWDeleteFrameCommand( const QString &name, KWFrame * frame) ;
     ~KWDeleteFrameCommand() {}
 
     void execute();
     void unexecute();
 protected:
-    KWDocument *m_pDoc;
-    FrameIndex frameIndex;
-    KWFrame *copyFrame;
+    FrameIndex m_frameIndex;
+    KWFrame *m_copyFrame;
 };
 
 /**
  * Command created when you create a frame
  */
-class KWCreateFrameCommand : public KCommand
+class KWCreateFrameCommand : public KWDeleteFrameCommand
 {
 public:
-    KWCreateFrameCommand( const QString &name, KWDocument *_doc, KWFrame * frame) ;
+    KWCreateFrameCommand( const QString &name, KWFrame * frame);
     ~KWCreateFrameCommand() {}
 
-    void execute();
-    void unexecute();
-protected:
-    KWDocument *m_pDoc;
-    FrameIndex frameIndex;
-    KWFrame *copyFrame;
+    void execute() { KWDeleteFrameCommand::unexecute(); }
+    void unexecute() { KWDeleteFrameCommand::execute(); }
 };
 
 /**
@@ -317,13 +327,12 @@ protected:
 class KWUngroupTableCommand : public KCommand
 {
 public:
-    KWUngroupTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table) ;
+    KWUngroupTableCommand( const QString &name, KWTableFrameSet * _table) ;
     ~KWUngroupTableCommand() {}
 
     void execute();
     void unexecute();
 protected:
-    KWDocument *m_pDoc;
     KWTableFrameSet *m_pTable;
     QList<KWFrameSet> m_ListFrame;
 };
@@ -348,17 +357,15 @@ protected:
 /**
  * Command created when you create a table
  */
-class KWCreateTableCommand : public KCommand
+class KWCreateTableCommand : public KWDeleteTableCommand
 {
 public:
-    KWCreateTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table) ;
+    KWCreateTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table)
+        : KWDeleteTableCommand( name, _doc, _table ) {}
     ~KWCreateTableCommand() {}
 
-    void execute();
-    void unexecute();
-protected:
-    KWDocument *m_pDoc;
-    KWTableFrameSet *m_pTable;
+    void execute() { KWDeleteTableCommand::unexecute(); }
+    void unexecute() { KWDeleteTableCommand::execute(); }
 };
 
 #endif

@@ -383,23 +383,30 @@ QTextCursor * KWPasteCommand::unexecute( QTextCursor *c )
 
 ////////////////////////// Frame commands ////////////////////////////////
 
-KWFrameBorderCommand::KWFrameBorderCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const Border & _newBorder):
+FrameIndex::FrameIndex( KWFrame *frame )
+{
+    m_pFrameSet=frame->getFrameSet();
+    m_iFrameIndex=m_pFrameSet->getFrameFromPtr(frame);
+}
+
+KWFrameBorderCommand::KWFrameBorderCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const Border & _newBorder):
     KCommand(name),
-    m_IndexFrame(_listFrameIndex),
+    m_indexFrame(_listFrameIndex),
     m_oldBorderFrameType(_frameTypeBorder),
-    m_newBorder( _newBorder),
-    m_pDoc(_doc)
+    m_newBorder( _newBorder)
 {
 }
 
 void KWFrameBorderCommand::execute()
 {
     FrameIndex *tmp;
-    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    KWDocument *doc = 0L;
+    for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
+        doc = frameSet->kWordDocument();
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
-        FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_IndexFrame.find(tmp));
+        FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_indexFrame.find(tmp));
         switch( tmpFrameStruct->m_EFrameType)
         {
             case  FBLeft:
@@ -418,18 +425,23 @@ void KWFrameBorderCommand::execute()
                 break;
         }
     }
-    m_pDoc->refreshFrameBorderButton();
-    m_pDoc->repaintAllViews();
+    if ( doc )
+    {
+        doc->refreshFrameBorderButton();
+        doc->repaintAllViews();
+    }
 }
 
 void KWFrameBorderCommand::unexecute()
 {
     FrameIndex *tmp;
-    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    KWDocument *doc = 0L;
+    for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
+        doc = frameSet->kWordDocument();
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
-        FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_IndexFrame.find(tmp));
+        FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_indexFrame.find(tmp));
         switch(tmpFrameStruct->m_EFrameType)
         {
             case  FBLeft:
@@ -448,62 +460,69 @@ void KWFrameBorderCommand::unexecute()
                 break;
         }
     }
-    m_pDoc->refreshFrameBorderButton();
-    //update frames
-    m_pDoc->repaintAllViews();
+    if ( doc )
+    {
+        doc->refreshFrameBorderButton();
+        //update frames
+        doc->repaintAllViews();
+    }
 }
 
-KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush,const QBrush & _newColor ):
+KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush,const QBrush & _newColor ):
     KCommand(name),
-    m_IndexFrame(_listFrameIndex),
+    m_indexFrame(_listFrameIndex),
     m_oldBackGroundColor(_oldBrush),
-    m_newColor( _newColor),
-    m_pDoc(_doc)
+    m_newColor( _newColor)
 {
 }
 
 void KWFrameBackGroundColorCommand::execute()
 {
     FrameIndex *tmp;
-    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    KWDocument * doc = 0L;
+    for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
+        doc = frameSet->kWordDocument();
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         frame->setBackgroundColor(m_newColor);
     }
     //update frame
-    m_pDoc->repaintAllViews();
+    if ( doc )
+        doc->repaintAllViews();
 }
 
 void KWFrameBackGroundColorCommand::unexecute()
 {
     FrameIndex *tmp;
-    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    KWDocument * doc = 0L;
+    for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
+        doc = frameSet->kWordDocument();
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
-        QBrush *tmpFrameStruct=m_oldBackGroundColor.at(m_IndexFrame.find(tmp));
+        QBrush *tmpFrameStruct=m_oldBackGroundColor.at(m_indexFrame.find(tmp));
         frame->setBackgroundColor(*tmpFrameStruct);
     }
 
     //update frames
-    m_pDoc->repaintAllViews();
+    if ( doc )
+        doc->repaintAllViews();
 }
 
 
-KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, KWDocument *_doc, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) :
+KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) :
     KCommand(name),
-    m_IndexFrame(_frameIndex),
-    m_FrameResize(_frameResize),
-    m_pDoc(_doc)
+    m_indexFrame(_frameIndex),
+    m_FrameResize(_frameResize)
 {
 }
 
 void KWFrameResizeCommand::execute()
 {
-    KWFrameSet *frameSet = m_IndexFrame.m_pFrameSet;
+    KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
     ASSERT( frameSet );
-    KWFrame *frame = frameSet->getFrame(m_IndexFrame.m_iFrameIndex);
+    KWFrame *frame = frameSet->getFrame(m_indexFrame.m_iFrameIndex);
     ASSERT( frame );
     frame->setCoords(m_FrameResize.sizeOfEnd.left(),m_FrameResize.sizeOfEnd.top(),m_FrameResize.sizeOfEnd.right(),m_FrameResize.sizeOfEnd.bottom());
 
@@ -524,20 +543,21 @@ void KWFrameResizeCommand::execute()
         table->refreshSelectedCell();
         //repaintTableHeaders( table );
     }
+    KWDocument * doc = frameSet->kWordDocument();
 
     if(frameSet->isAHeader() || frameSet->isAFooter())
-        m_pDoc->recalcFrames();
+        doc->recalcFrames();
 
     if(frame->isSelected())
         frame->updateResizeHandles();
 
-    m_pDoc->frameChanged( frame );
+    doc->frameChanged( frame );
 }
 
 void KWFrameResizeCommand::unexecute()
 {
-    KWFrameSet *frameSet =m_IndexFrame.m_pFrameSet;
-    KWFrame *frame=frameSet->getFrame(m_IndexFrame.m_iFrameIndex);
+    KWFrameSet *frameSet =m_indexFrame.m_pFrameSet;
+    KWFrame *frame=frameSet->getFrame(m_indexFrame.m_iFrameIndex);
     frame->setCoords(m_FrameResize.sizeOfBegin.left(),m_FrameResize.sizeOfBegin.top(),m_FrameResize.sizeOfBegin.right(),m_FrameResize.sizeOfBegin.bottom());
     KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
     if (table) {
@@ -556,20 +576,20 @@ void KWFrameResizeCommand::unexecute()
         table->refreshSelectedCell();
         //repaintTableHeaders( table );
     }
+    KWDocument * doc = frameSet->kWordDocument();
     if(frameSet->isAHeader() || frameSet->isAFooter())
-        m_pDoc->recalcFrames();
+        doc->recalcFrames();
     if(frame->isSelected())
         frame->updateResizeHandles();
     //update frames
-    m_pDoc->frameChanged( frame );
+    doc->frameChanged( frame );
 }
 
 
-KWFrameMoveCommand::KWFrameMoveCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_frameIndex,QList<FrameResizeStruct>&_frameMove  ) :
+KWFrameMoveCommand::KWFrameMoveCommand( const QString &name, QList<FrameIndex> &_frameIndex, QList<FrameResizeStruct>&_frameMove  ) :
     KCommand(name),
-    m_IndexFrame(_frameIndex),
-    m_frameMove(_frameMove),
-    m_pDoc(_doc)
+    m_indexFrame(_frameIndex),
+    m_frameMove(_frameMove)
 {
 }
 
@@ -577,11 +597,13 @@ void KWFrameMoveCommand::execute()
 {
     bool needRelayout = false;
     FrameIndex *tmp;
-    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    KWDocument * doc = 0L;
+    for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
-        KWFrameSet *frameSet =tmp->m_pFrameSet;
+        KWFrameSet *frameSet = tmp->m_pFrameSet;
+        doc = frameSet->kWordDocument();
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
-        FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
+        FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_indexFrame.find(tmp));
         KWTableFrameSet *table=frameSet->getGroupManager();
         if(table)
         {
@@ -595,22 +617,26 @@ void KWFrameMoveCommand::execute()
 
         needRelayout = needRelayout || ( frame->getRunAround() != RA_NO );
     }
-
-    m_pDoc->updateAllFrames();
-    if ( needRelayout )
-        m_pDoc->layout();
-    m_pDoc->repaintAllViews();
+    if ( doc )
+    {
+        doc->updateAllFrames();
+        if ( needRelayout )
+            doc->layout();
+        doc->repaintAllViews();
+    }
 }
 
 void KWFrameMoveCommand::unexecute()
 {
     bool needRelayout = false;
     FrameIndex *tmp;
-    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    KWDocument * doc = 0L;
+    for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
+        doc = frameSet->kWordDocument();
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
-        FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
+        FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_indexFrame.find(tmp));
         KWTableFrameSet *table=frameSet->getGroupManager();
         if(table)
         {
@@ -624,13 +650,49 @@ void KWFrameMoveCommand::unexecute()
         needRelayout = needRelayout || ( frame->getRunAround() != RA_NO );
     }
 
-    m_pDoc->updateAllFrames();
-    if ( needRelayout )
-        m_pDoc->layout();
-    m_pDoc->repaintAllViews();
+    if ( doc )
+    {
+        doc->updateAllFrames();
+        if ( needRelayout )
+            doc->layout();
+        doc->repaintAllViews();
+    }
 }
 
 
+
+KWFrameSetFloatingCommand::KWFrameSetFloatingCommand( const QString &name, KWFrameSet *frameset, bool floating ) :
+    KCommand(name),
+    m_pFrameSet( frameset ),
+    m_bFloating( floating )
+{
+}
+
+void KWFrameSetFloatingCommand::execute()
+{
+    if ( !m_bFloating )
+        unexecute();
+    else
+    {
+        kdDebug() << "KWFrameSetFloatingCommand::execute" << endl;
+        // Make frame(set) floating
+        m_pFrameSet->setFloating();
+        m_pFrameSet->kWordDocument()->repaintAllViews();
+    }
+}
+
+void KWFrameSetFloatingCommand::unexecute()
+{
+    if ( !m_bFloating )
+        execute();
+    else
+    {
+        kdDebug() << "KWFrameSetFloatingCommand::unexecute" << endl;
+        // Make frame(set) non-floating
+        m_pFrameSet->setFixed();
+        m_pFrameSet->kWordDocument()->repaintAllViews();
+    }
+}
 
 KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
     KCommand(name),
@@ -657,36 +719,32 @@ void KWPageLayoutCommand::unexecute()
 }
 
 
-KWDeleteFrameCommand::KWDeleteFrameCommand( const QString &name, KWDocument *_doc, KWFrame * frame ):
+KWDeleteFrameCommand::KWDeleteFrameCommand( const QString &name, KWFrame * frame ):
     KCommand(name),
-    m_pDoc(_doc)
+    m_frameIndex( frame ),
+    m_copyFrame( frame->getCopy() )
 {
-    KWFrameSet *frameSet =frame->getFrameSet();
-    ASSERT( frameSet );
-    frameIndex.m_pFrameSet = frame->getFrameSet();
-    frameIndex.m_iFrameIndex=frameSet->getFrameFromPtr(frame);
-    copyFrame = frame->getCopy();
 }
 
 void KWDeleteFrameCommand::execute()
 {
-    KWFrameSet *frameSet =frameIndex.m_pFrameSet;
+    KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
     ASSERT( frameSet );
 
-    KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
+    KWFrame *frame = frameSet->getFrame( m_frameIndex.m_iFrameIndex );
     ASSERT( frame );
 
-    frameSet->delFrame( frameIndex.m_iFrameIndex );
-    //when you delete a frame frame pointor is deleted
+    frameSet->delFrame( m_frameIndex.m_iFrameIndex );
+    //when you delete a frame frame pointer is deleted
     //so used frameChanged with a null pointer.
-    m_pDoc->frameChanged( 0L );
-    m_pDoc->refreshDocStructure( frameSet->getFrameType() );
+    frameSet->kWordDocument()->frameChanged( 0L );
+    frameSet->kWordDocument()->refreshDocStructure( frameSet->getFrameType() );
 }
 
 void KWDeleteFrameCommand::unexecute()
 {
-    KWFrameSet *frameSet = frameIndex.m_pFrameSet;
-    KWFrame * frame = copyFrame->getCopy();
+    KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
+    KWFrame * frame = m_copyFrame->getCopy();
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
     if(frame->anchor())
@@ -696,57 +754,17 @@ void KWDeleteFrameCommand::unexecute()
     if ( textfs )
         textfs->formatMore();
 
-    m_pDoc->frameChanged( frame );
-    m_pDoc->refreshDocStructure(frameSet->getFrameType());
+    frameSet->kWordDocument()->frameChanged( frame );
+    frameSet->kWordDocument()->refreshDocStructure(frameSet->getFrameType());
 }
 
-KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWDocument *_doc, KWFrame * frame ):
+KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWFrame * frame ) :
+    KWDeleteFrameCommand( name, frame )
+{}
+
+
+KWUngroupTableCommand::KWUngroupTableCommand( const QString &name, KWTableFrameSet * _table ):
     KCommand(name),
-    m_pDoc(_doc)
-{
-    KWFrameSet *frameSet = frame->getFrameSet();
-    ASSERT( frameSet );
-    frameIndex.m_pFrameSet = frameSet;
-    frameIndex.m_iFrameIndex=frameSet->getFrameFromPtr(frame);
-    //ASSERT( frameIndex.m_iFrameSetIndex != -1 );
-    copyFrame = frame->getCopy();
-}
-
-void KWCreateFrameCommand::execute()
-{
-    KWFrameSet *frameSet = frameIndex.m_pFrameSet;
-    KWFrame * frame = copyFrame->getCopy();
-    frame->setFrameSet( frameSet );
-    frameSet->addFrame( frame );
-
-    KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
-    if ( textfs )
-        textfs->formatMore();
-    m_pDoc->frameChanged( frame );
-    kdDebug()<<"KWCreateFrameCommand: frameSet->getFrameType() :"<<frameSet->getFrameType()<<endl;
-    m_pDoc->refreshDocStructure( frameSet->getFrameType());
-}
-
-void KWCreateFrameCommand::unexecute()
-{
-    KWFrameSet *frameSet = frameIndex.m_pFrameSet;
-    ASSERT( frameSet );
-    KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
-    ASSERT( frame );
-    FrameType type=frameSet->getFrameType();
-    kdDebug() << "KWCreateFrameCommand::unexecute delFrame " << frameIndex.m_iFrameIndex << endl;
-    frameSet->delFrame( frameIndex.m_iFrameIndex );
-
-    m_pDoc->frameChanged( 0L );
-    m_pDoc->refreshDocStructure(type);
-
-}
-
-
-
-KWUngroupTableCommand::KWUngroupTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table ):
-    KCommand(name),
-    m_pDoc(_doc),
     m_pTable(_table)
 {
     m_ListFrame.clear();
@@ -757,35 +775,37 @@ KWUngroupTableCommand::KWUngroupTableCommand( const QString &name, KWDocument *_
 
 void KWUngroupTableCommand::execute()
 {
+    KWDocument * doc = m_pTable->kWordDocument();
     for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
         m_pTable->getCell( i )->setGroupManager( 0L );
-        m_pDoc->addFrameSet(m_pTable->getCell( i ));
+        doc->addFrameSet(m_pTable->getCell( i ));
     }
     m_pTable->ungroup();
-    m_pDoc->delFrameSet(m_pTable,false);
+    doc->delFrameSet(m_pTable,false);
     //when you ungroup a table
     // you must remove table item in docstruct
     // create items in text item in docstruct
-    m_pDoc->refreshDocStructure(FT_TEXT);
-    m_pDoc->refreshDocStructure(FT_TABLE);
+    doc->refreshDocStructure(FT_TEXT);
+    doc->refreshDocStructure(FT_TABLE);
 }
 
 void KWUngroupTableCommand::unexecute()
 {
     ASSERT(m_pTable);
     m_pTable->group();
+    KWDocument * doc = m_pTable->kWordDocument();
     KWFrameSet *tmp;
     for ( tmp=m_ListFrame.first(); tmp != 0; tmp=m_ListFrame.next() )
     {
         tmp->setGroupManager(m_pTable);
-        m_pDoc->delFrameSet(tmp,false);
+        doc->delFrameSet(tmp,false);
         KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(tmp);
         ASSERT(cell);
         m_pTable->addCell( cell );
     }
-    m_pDoc->addFrameSet(m_pTable);
-    m_pDoc->refreshDocStructure(FT_TEXT);
-    m_pDoc->refreshDocStructure(FT_TABLE);
+    doc->addFrameSet(m_pTable);
+    doc->refreshDocStructure(FT_TEXT);
+    doc->refreshDocStructure(FT_TABLE);
 }
 
 
@@ -798,7 +818,10 @@ KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWDocument *_do
 
 void KWDeleteTableCommand::execute()
 {
-    m_pDoc->delFrameSet(m_pTable,false);
+    m_pDoc->delFrameSet(m_pTable,false); // !!!!!!!!!!!
+    // I thought we said we'd never delete a frameset. By doing this, we certainly
+    // screw up redo-ing whatever was done inside that table.... (DF)
+
     m_pDoc->refreshDocStructure(FT_TABLE);
     m_pDoc->updateAllFrames();
     m_pDoc->layout();
@@ -809,33 +832,6 @@ void KWDeleteTableCommand::unexecute()
 {
     ASSERT(m_pTable);
     m_pDoc->addFrameSet(m_pTable);
-    m_pDoc->refreshDocStructure(FT_TABLE);
-    m_pDoc->updateAllFrames();
-    m_pDoc->layout();
-    m_pDoc->repaintAllViews();
-}
-
-
-KWCreateTableCommand::KWCreateTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table ):
-    KCommand(name),
-    m_pDoc(_doc),
-    m_pTable(_table)
-{
-}
-
-void KWCreateTableCommand::execute()
-{
-    m_pDoc->addFrameSet(m_pTable);
-    m_pDoc->refreshDocStructure(FT_TABLE);
-    m_pDoc->updateAllFrames();
-    m_pDoc->layout();
-    m_pDoc->repaintAllViews();
-}
-
-void KWCreateTableCommand::unexecute()
-{
-    ASSERT(m_pTable);
-    m_pDoc->delFrameSet(m_pTable,false);
     m_pDoc->refreshDocStructure(FT_TABLE);
     m_pDoc->updateAllFrames();
     m_pDoc->layout();

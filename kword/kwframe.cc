@@ -27,7 +27,6 @@
 #include "kwutils.h"
 #include "kwtextframeset.h"
 #include "kwanchor.h"
-#include "kwanchorpos.h"
 #include "resizehandles.h"
 
 #include <kformulacontainer.h>
@@ -331,7 +330,7 @@ void KWFrameSet::setFloating()
         int index = 0;
         QPoint cPoint( qRound( frames.first()->x() ), qRound( frames.first()->y() ) );
         frameSet->findPosition( cPoint, parag, index );
-        setAnchored( frameSet, static_cast<KWTextParag *>( parag ), index );
+        setAnchored( frameSet, parag->paragId(), index );
         frameSet->layout();
         frames.first()->updateResizeHandles();
         m_doc->frameChanged(  frames.first() );
@@ -339,22 +338,16 @@ void KWFrameSet::setFloating()
     }
 }
 
-void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index )
+void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */ )
 {
     ASSERT( textfs );
-    ASSERT( parag );
     if ( isFloating() )
         deleteAnchors();
     m_anchorTextFs = textfs;
-    createAnchors( parag, index );
-}
-
-void KWFrameSet::setAnchored( KWAnchorPosition & pos, bool placeHolderExists /* = false */ )
-{
-    if ( isFloating() )
-        deleteAnchors();
-    m_anchorTextFs = pos.textfs;
-    createAnchors( pos.parag, pos.index, placeHolderExists );
+    KWTextParag * parag = static_cast<KWTextParag *>( textfs->textDocument()->paragAt( paragId ) );
+    ASSERT( parag );
+    if ( parag )
+        createAnchors( parag, index, placeHolderExists );
 }
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
@@ -402,8 +395,16 @@ void KWFrameSet::deleteAnchors()
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         if ( frameIt.current()->anchor() )
-            m_anchorTextFs->deleteAnchoredFrame( frameIt.current()->anchor() );
+        {
+            KWAnchor * anchor = frameIt.current()->anchor();
+            QTextCursor c( m_anchorTextFs->textDocument() );
+            c.setParag( anchor->paragraph() );
+            c.setIndex( anchor->index() );
+            c.remove(); // This deletes the character _and_ the customitem( anchor )
+            c.parag()->setChanged( true );
+        }
 
+    emit repaintChanged( m_anchorTextFs );
 }
 
 void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
@@ -435,14 +436,14 @@ KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
-    return new KWCreateFrameCommand( QString::null, kWordDocument(), frame );
+    return new KWCreateFrameCommand( QString::null, frame );
 }
 
 KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
-    return new KWDeleteFrameCommand( QString::null, kWordDocument(), frame );
+    return new KWDeleteFrameCommand( QString::null, frame );
 }
 
 KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint )

@@ -864,7 +864,7 @@ bool KWFrameDia::applyChanges()
                 KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
                 _frameSet->addFrame( frame );
                 doc->addFrameSet( _frameSet );
-                KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), doc, frame) ;
+                KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), frame) ;
                 doc->addCommand(cmd);
             }
             else
@@ -893,14 +893,16 @@ bool KWFrameDia::applyChanges()
         if ( floating->isChecked() && !fs->isFloating() )
         {
             // turn non-floating frame into floating frame
-            fs->setFloating();
-            doc->repaintAllViews();
+            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make Frame Floating"), frame->getFrameSet(), true );
+            doc->addCommand(cmd);
+            cmd->execute();
         }
         else if ( !floating->isChecked() && fs->isFloating() )
         {
             // turn floating-frame into non-floating frame
-            fs->setFixed();
-            doc->repaintAllViews();
+            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make Frame Non-Floating"), frame->getFrameSet(), false );
+            doc->addCommand(cmd);
+            cmd->execute();
         }
     }
     if ( tab2 )
@@ -930,13 +932,13 @@ bool KWFrameDia::applyChanges()
             tmpResize.sizeOfBegin = frame->normalize();
 
             frame->setRect( px, py, pw, ph );
-            // TODO apply page limits
+            // TODO apply page limits?
 
             tmpResize.sizeOfEnd = frame->normalize();
             index.m_pFrameSet=frame->getFrameSet();
             index.m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
 
-            KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
+            KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
             doc->addCommand(cmd);
             doc->frameChanged( frame );
         }
