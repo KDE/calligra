@@ -202,7 +202,12 @@ void KChartFontConfigPage::apply()
     _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
-    _params->setHeader1Font(title);
+//    _params->setHeader1Font(title);
+
+bool bUseRelSize = true;
+int nRelSize = title.pointSize();
+
+    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader, title, bUseRelSize, nRelSize );
 
 //     _params->setXTitleFont(xtitle);
 //     _params->setYTitleFont(ytitle);
