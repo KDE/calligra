@@ -669,7 +669,9 @@ contentTmpFile.close();
 
 void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
 {
-    QString pageLayoutName;
+    typedef QMap<QString, QString> layoutMap;
+    layoutMap pageLayoutName;
+
     KoStoreDevice stylesDev( store );
     KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
 
@@ -679,29 +681,36 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
-#if 0
+    stylesWriter.endElement(); // office:styles
+
+    stylesWriter.startElement( "office:automatic-styles" );
     styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
-    Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
+    int i = 0;
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
-        //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
-        // which only works as long as we have only one page master
         stylesWriter.endElement();
-        Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
-        pageLayoutName = (*it).name;
+        if ( i == 0 )
+            pageLayoutName.insert ( (*it).name, "Standard");
+        else
+            pageLayoutName.insert ( (*it).name, QString("Standard-%1" ).arg( i ));
+        ++i;
     }
-#endif
+
     stylesWriter.endElement(); // office:automatic-styles
-#if 0
+
     //code from kword
     stylesWriter.startElement( "office:master-styles" );
-    stylesWriter.startElement( "style:master-page" );
-    stylesWriter.addAttribute( "style:name", "Standard" );
-    stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
-    stylesWriter.endElement();
+    layoutMap::Iterator it2;
+    for ( it2 = pageLayoutName.begin(); it2 != pageLayoutName.end(); ++it2 ) {
+        stylesWriter.startElement( "style:master-page" );
+        stylesWriter.addAttribute( "style:name", it2.data() );
+        stylesWriter.addAttribute( "style:page-layout-name", it2.key() );
+        stylesWriter.endElement();
+    }
+
     stylesWriter.endElement(); // office:master-style
-#endif
+
 
     stylesWriter.endElement(); // root element (office:document-styles)
     stylesWriter.endDocument();
