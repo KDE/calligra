@@ -951,9 +951,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             if ( _clean || !hasHeader() ) {
                 if(elem.hasAttribute("show")) {
                     setHeader(static_cast<bool>(elem.attribute("show").toInt()));
-#if 0
-                    headerFooterEdit->setShowHeader( hasHeader() );
-#endif
                 }
                 _header->load(elem);
             }
@@ -961,9 +958,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             if ( _clean || !hasFooter() ) {
                 if(elem.hasAttribute("show")) {
                     setFooter( static_cast<bool>(elem.attribute("show").toInt() ) );
-#if 0
-                    headerFooterEdit->setShowFooter( hasFooter() );
-#endif
                 }
                 _footer->load(elem);
             }

@@ -2364,7 +2364,7 @@ void KPresenterView::createGUI()
             actionViewShowNoteBar->setChecked(false);
         }
     }
-        KPrPage *initPage=m_pKPresenterDoc->initialActivePage();
+    KPrPage *initPage=m_pKPresenterDoc->initialActivePage();
     if (initPage)
         skipToPage(m_pKPresenterDoc->pageList().findRef( initPage));
     else
@@ -2389,6 +2389,9 @@ void KPresenterView::initGui()
     if ( sb )
         sb->show();
     showZoom( zoomHandler()->zoom() );
+    actionViewHeader->setChecked(m_pKPresenterDoc->hasHeader());
+    actionViewFooter->setChecked(m_pKPresenterDoc->hasFooter());
+
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
 }
