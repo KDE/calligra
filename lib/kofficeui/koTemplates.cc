@@ -192,10 +192,6 @@ void KoTemplateTree::writeTemplateTree() {
     }
     // write back the local .templates file
     writeOutLocalTemplates(localTemplates);
-
-    // update the KStdDir cache... ugh!
-    if(m_instance->dirs()->resourceDirs(m_templateType).count()==1)
-	m_instance->dirs()->addResourceDir(m_templateType, localDir);
 }
 
 void KoTemplateTree::add(KoTemplateGroup *g) {
