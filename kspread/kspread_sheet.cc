@@ -7225,25 +7225,19 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
 QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
 {
     KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is table*/ );
-    QString nameStyle =m_pPrint->saveOasisTableStyleLayout( mainStyles );
-    if ( m_pDoc->savingInfo()->findStyleName( nameStyle ) )
-    {
-        pageStyle.addAttribute( "style:master-page-name", m_pDoc->savingInfo()->masterPageName( nameStyle )  );
-    }
-    else
-    {
-        QString newName;
-        if ( m_pDoc->savingInfo()->styleNumber == 0 )
-            newName = "Standard";
-        else
-            newName = QString("Standard-%1" ).arg( m_pDoc->savingInfo()->styleNumber );
-        ++m_pDoc->savingInfo()->styleNumber;
-        pageStyle.addAttribute( "style:master-page-name",  newName );
-        KSPRSavingInfo::tableDef def;
-        def.tableName = newName;
-        def.tableIndex = this;
-        m_pDoc->savingInfo()->appendMasterPage( nameStyle, def );
-    }
+
+    KoGenStyle pageMaster( KSpreadDoc::STYLE_PAGEMASTER );
+    pageMaster.addAttribute( "style:page-layout-name", m_pPrint->saveOasisTableStyleLayout( mainStyles ) );
+
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    saveOasisHeaderFooter(elementWriter);
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    pageMaster.addChildElement( "headerfooter", elementContents );
+    pageStyle.addAttribute( "style:master-page-name", mainStyles.lookup( pageMaster, "Standard" ) );
+
     pageStyle.addProperty( "table:display", !m_bTableHide );
     return mainStyles.lookup( pageStyle, "ta" );
 }

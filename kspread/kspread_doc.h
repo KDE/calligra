@@ -38,7 +38,6 @@ class KSpreadSheet;
 class KSpreadStyleManager;
 class KSpreadUndoAction;
 class KSPLoadingInfo;
-class KSPRSavingInfo;
 
 class KoStore;
 class KoCommandHistory;
@@ -63,7 +62,6 @@ class KSpellConfig;
 #include <qpainter.h>
 #include <qrect.h>
 #include <qstring.h>
-#include "ksprsavinginfo.h"
 
 #include "kspread_interpreter.h"
 #include "kspread_locale.h"
@@ -122,7 +120,7 @@ public:
    */
   ~KSpreadDoc();
 
-    enum { STYLE_PAGE = 20, STYLE_COLUMN, STYLE_ROW, STYLE_CELL };
+    enum { STYLE_PAGE = 20, STYLE_COLUMN, STYLE_ROW, STYLE_CELL, STYLE_PAGEMASTER };
 
 
   /**
@@ -449,7 +447,6 @@ public:
   virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
     bool saveOasisAreaName( KoXmlWriter & xmlWriter );
-    void saveOasisHeaderFooter( const KSPRSavingInfo::tableDef & defTable, KoXmlWriter & xmlWriter) const;
 
   void loadAreaName( const QDomElement& element );
   void loadOasisAreaName( const QDomElement& element );
@@ -649,7 +646,6 @@ public:
     void setDisplayTable(KSpreadSheet *_Table );
     KSpreadSheet * displayTable() const;
     KSPLoadingInfo * loadingInfo() const;
-    KSPRSavingInfo * savingInfo() const;
   void increaseNumOperation();
   void decreaseNumOperation();
 public slots:

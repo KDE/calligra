@@ -60,7 +60,6 @@
 #include "kspread_view.h"
 #include "commands.h"
 #include "ksploadinginfo.h"
-#include "ksprsavinginfo.h"
 
 #include "KSpreadDocIface.h"
 
@@ -80,7 +79,6 @@ public:
   KSpreadStyleManager* styleManager;
   KSpreadSheet *activeSheet;
     KSPLoadingInfo *m_loadingInfo;
-    KSPRSavingInfo *m_savingInfo;
   static QValueList<KSpreadDoc*> s_docs;
   static int s_docId;
 
@@ -163,7 +161,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 {
   d = new DocPrivate;
   d->m_loadingInfo = 0L;
-  d->m_savingInfo = 0L;
   d->workbook = new KSpreadMap( this, "Map" );
   d->styleManager = new KSpreadStyleManager();
   d->activeSheet= 0;
@@ -602,7 +599,6 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //todo fixme just add a element for testing saving content.xml
     contentTmpWriter.startElement( "office:body" );
 
-    d->m_savingInfo = new KSPRSavingInfo;
 
     d->workbook->saveOasis( contentTmpWriter, mainStyles );
     saveOasisAreaName( contentTmpWriter );
@@ -652,26 +648,16 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentWriter.endElement(); // root element
     contentWriter.endDocument();
     if ( !store->close() )
-    {
-        delete d->m_savingInfo;
-        d->m_savingInfo = 0L;
         return false;
-    }
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml",  "text/xml" );
 
     //todo add manifest line for style.xml
     if ( !store->open( "styles.xml" ) )
-    {
-        delete d->m_savingInfo;
-        d->m_savingInfo = 0L;
         return false;
-    }
 
     manifestWriter->addManifestEntry( "styles.xml",  "text/xml" );
     saveOasisDocumentStyles( store, mainStyles );
-    delete d->m_savingInfo;
-    d->m_savingInfo = 0L;
 
     if ( !store->close() ) // done with styles.xml
         return false;
@@ -706,17 +692,11 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter.endElement(); // office:automatic-styles
     //code from kword
     stylesWriter.startElement( "office:master-styles" );
-    KSPRSavingInfo::StylePageMap map = d->m_savingInfo->stylePageMap();
-    KSPRSavingInfo::StylePageMap::const_iterator it2 = d->m_savingInfo->stylePageMap().begin();
-    for ( ; it2 != map.end(); ++it2 ) {
-        stylesWriter.startElement( "style:master-page" );
-        KSPRSavingInfo::tableDef def = it2.data();
-        stylesWriter.addAttribute( "style:name", def.tableName );
-        stylesWriter.addAttribute( "style:page-layout-name", it2.key() );
 
-        saveOasisHeaderFooter( def, stylesWriter);
-
-        stylesWriter.endElement();
+    styles = mainStyles.styles( KSpreadDoc::STYLE_PAGEMASTER );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:master-page", (*it).name, "style:page-master-page-properties" );
     }
 
     stylesWriter.endElement(); // office:master-style
@@ -724,11 +704,6 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
 
     stylesWriter.endElement(); // root element (office:document-styles)
     stylesWriter.endDocument();
-}
-
-void KSpreadDoc::saveOasisHeaderFooter( const KSPRSavingInfo::tableDef & defTable, KoXmlWriter & xmlWriter) const
-{
-    defTable.tableIndex->saveOasisHeaderFooter( xmlWriter );
 }
 
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )
@@ -2247,11 +2222,6 @@ void KSpreadDoc::clearIgnoreWordAll( )
 void KSpreadDoc::setDisplayTable(KSpreadSheet *_table )
 {
     d->activeSheet = _table;
-}
-
-KSPRSavingInfo * KSpreadDoc::savingInfo() const
-{
-    return d->m_savingInfo;
 }
 
 KSPLoadingInfo * KSpreadDoc::loadingInfo() const
