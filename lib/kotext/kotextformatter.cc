@@ -604,19 +604,19 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	    }
 	}
     }
-    double current=0;
+    int current=0;
     int nc=0; // Not double, as we check it against 0 and to avoid gcc warnings
     for(int i=start;i<=last;i++)
     {
 	KoTextFormat* format=string->at(i).format();
 	if((((!format->underline())&&
 	   (!format->doubleUnderline())&&
+	   (!format->waveUnderline())&&
 	   (format->underlineLineType()!=KoTextFormat::U_SIMPLE_BOLD))||
 	  (i==last))&&nc)
 	{
-	    double avg=current/nc;
+	    double avg=static_cast<double>(current)/nc;
 	    avg/=18.0;
-	    avg/=25.0;
 	    for(int j=i-nc;j<=i;j++)
 	    {
 		KoTextFormat* tmpfmt=new KoTextFormat(*string->at(j).format());
@@ -628,12 +628,12 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	    current=0;
 	}
 	else if(format->underline()||
+	    format->waveUnderline()||
 	    format->doubleUnderline()||
 	    (format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD))
 	{
 	    nc++;
-            // ### TODO: check if a formula with descent() instead of height() would not be better (for strikeout, use ascent())
-	    current+=format->height();
+	    current+=format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()
 	}
     }
     if ( last >= 0 && last < string->length() ) {

@@ -783,6 +783,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
        len--;
        if ( len <= 0 )
            return;
+       bw-=at(length()-1)->pixelwidth;
     }
     KoTextParag::drawFontEffectsHelper( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this );
 
@@ -1433,22 +1434,27 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
 
 void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int /*h*/ )
 {
-    double ulw=format->underLineWidth();
+    double dimd;
+    int y;
+    int offset = 0;
+    if (format->vAlign() == KoTextFormat::AlignSubScript )
+        offset= p->fontMetrics().height() / 6;
+    if (format->vAlign() == KoTextFormat::AlignSuperScript )
+        offset= -p->fontMetrics().height() / 2;
+
+    dimd = KoBorder::zoomWidthY( format->underLineWidth(), zh, 1 );
+    if((format->vAlign() == KoTextFormat::AlignSuperScript) ||
+	(format->vAlign() == KoTextFormat::AlignSubScript ))
+	dimd*=format->relativeTextSize();
+    y = lastY + baseLine + offset - format->offsetFromBaseLine();
+
     if ( format->doubleUnderline())
     {
-        // For double-underlining, both lines are of width 0.5 (*zoom), in the hopes
-        // to have room for both.
-        // Another solution would be to increase the descent, but this would have to be
-        // done in the formatter
-        // ### TODO scale the painter to do this, especially when printing, to gain more resolution
-        //kdDebug(32500) << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
-        double dimd = KoBorder::zoomWidthY( 0.75*ulw, zh, 1 );
-	if((format->vAlign() == KoTextFormat::AlignSuperScript) ||
-	    (format->vAlign() == KoTextFormat::AlignSubScript ))
-	    dimd/=1.5;
-	int dim=static_cast<int>(dimd);
+	int dim=static_cast<int>(0.75*dimd);
+	dim=dim?dim:1; //width of line should be at least 1
         p->save();
+
         switch( format->underlineLineStyle())
         {
         case KoTextFormat::U_SOLID:
@@ -1465,25 +1471,14 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             break;
         case KoTextFormat::U_DASH_DOT_DOT:
             p->setPen( QPen( col, dim, Qt::DashDotDotLine ) );
-
             break;
         default:
             p->setPen( QPen( color, dim, Qt::SolidLine ) );
         }
-        int y = lastY + baseLine - format->offsetFromBaseLine() + KoBorder::zoomWidthY( 1.125*ulw, zh, 0 ); // slightly under the baseline if possible
-        if (format->vAlign() == KoTextFormat::AlignSubScript )
-            y += p->fontMetrics().height() / 6;
-        if (format->vAlign() == KoTextFormat::AlignSuperScript )
-            y -= p->fontMetrics().height() / 2;
 
-
+        y += static_cast<int>(1.125*dimd); // slightly under the baseline if possible
         p->drawLine( startX, y, startX + bw, y );
-        //kdDebug(32500) << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
-//        y = lastY + baseLine - format->offsetFromBaseLine() + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
-        y = lastY + baseLine - format->offsetFromBaseLine() + KoBorder::zoomWidthY( 2.625*ulw, zh, 0 );
-        //kdDebug(32500) << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
-        if (format->vAlign() == KoTextFormat::AlignSuperScript )
-            y -= p->fontMetrics().height() / 2;
+        y += static_cast<int>(1.5*dimd);
         p->drawLine( startX, y, startX + bw, y );
         p->restore();
         if ( font.underline() ) { // can this happen?
@@ -1494,19 +1489,13 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     else if ( format->underline() ||
                 format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
     {
-        int y = lastY + baseLine- format->offsetFromBaseLine()+ KoBorder::zoomWidthY( 1.875*ulw, zh, 0 );
-        if (format->vAlign() == KoTextFormat::AlignSubScript )
-            y += p->fontMetrics().height() / 6;
-        if (format->vAlign() == KoTextFormat::AlignSuperScript )
-            y -= p->fontMetrics().height() / 2;
 
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
         p->save();
-        double dimd = (format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)? KoBorder::zoomWidthY( 2*ulw, zh, 1 ) : KoBorder::zoomWidthY( ulw, zh, 1 );
-	if((format->vAlign() == KoTextFormat::AlignSuperScript) ||
-	    (format->vAlign() == KoTextFormat::AlignSubScript ))
-	    dimd/=1.5;
-	int dim=static_cast<int>(dimd);
+	int dim=(format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)?static_cast<int>(2*dimd):static_cast<int>(dimd);
+	dim=dim?dim:1; //width of line should be at least 1
+        y += static_cast<int>(1.875*dimd);
+
         switch( format->underlineLineStyle() )
         {
         case KoTextFormat::U_SOLID:
@@ -1523,7 +1512,6 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             break;
         case KoTextFormat::U_DASH_DOT_DOT:
             p->setPen( QPen( col, dim, Qt::DashDotDotLine ) );
-
             break;
         default:
             p->setPen( QPen( col, dim, Qt::SolidLine ) );
@@ -1536,42 +1524,65 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     }
     else if ( format->waveUnderline() )
     {
-        int y = lastY + baseLine - KoBorder::zoomWidthY( 1, zh, 0 );
-        if (format->vAlign() == KoTextFormat::AlignSubScript )
-            y += p->fontMetrics().height() / 6;
-
+	int dim=static_cast<int>(dimd);
+	dim=dim?dim:1; //width of line should be at least 1
+        y += dim;
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
         p->save();
-        int offset = 2 * KoBorder::zoomWidthY( 1, zh, 0 );
-        p->setPen( QPen( col, 1, Qt::SolidLine ) );
+	int offset = 2 * dim;
+	QPen pen(col, dim, Qt::SolidLine);
+	pen.setCapStyle(Qt::RoundCap);
+	p->setPen(pen);
         int oldy = y;
         int newy= oldy + offset;
         int tmp = 0;
-        for ( int zigzag_x = 0/*startX*/; zigzag_x < bw; zigzag_x += offset)
+	Q_ASSERT(offset);
+	int zigzag_x = (startX/offset+1)*offset;
+	if(2*((startX/offset)/2)==startX/offset)
+	{
+            tmp = oldy;
+            oldy = newy;
+            newy = tmp;
+	    p->drawLine( startX, y + startX%offset, zigzag_x, oldy);
+	}
+	else
+	    p->drawLine( startX, y + offset-startX%offset, zigzag_x, oldy);
+
+        for ( ; zigzag_x + offset <= bw+startX; zigzag_x += offset)
         {
-            p->drawLine( startX+zigzag_x, oldy, startX+zigzag_x+offset, newy);
+            p->drawLine( zigzag_x, oldy, zigzag_x+offset, newy);
             tmp = oldy;
             oldy = newy;
             newy = tmp;
         }
+	if(2*(((startX+bw)/offset)/2)==(startX+bw)/offset)
+	    p->drawLine( zigzag_x, oldy, bw+startX, y+(startX+bw)%offset);
+	else
+	    p->drawLine( zigzag_x, oldy, bw+startX, y+offset-(startX+bw)%offset);
         p->restore();
         font.setUnderline( FALSE );
         p->setFont( font );
     }
 
+    dimd = KoBorder::zoomWidthY( static_cast<double>(format->pointSize())/18.0, zh, 1 );
+    if((format->vAlign() == KoTextFormat::AlignSuperScript) ||
+	(format->vAlign() == KoTextFormat::AlignSubScript ))
+	dimd*=format->relativeTextSize();
+    y = lastY + baseLine + offset - format->offsetFromBaseLine();
+
     if ( format->strikeOutLineType() == KoTextFormat::S_SIMPLE
          || format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)
     {
-        unsigned int dim = (format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)? KoBorder::zoomWidthY( 2, zh, 1 ) : KoBorder::zoomWidthY( 1, zh, 1 );
-
+        unsigned int dim = (format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)? static_cast<int>(2*dimd) : static_cast<int>(dimd);
         p->save();
+
         switch( format->strikeOutLineStyle() )
         {
         case KoTextFormat::S_SOLID:
             p->setPen( QPen( color, dim, Qt::SolidLine ) );
             break;
         case KoTextFormat::S_DASH:
-            p->setPen( QPen( color,dim, Qt::DashLine ) );
+            p->setPen( QPen( color, dim, Qt::DashLine ) );
             break;
         case KoTextFormat::S_DOT:
             p->setPen( QPen( color, dim, Qt::DotLine ) );
@@ -1581,24 +1592,12 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             break;
         case KoTextFormat::S_DASH_DOT_DOT:
             p->setPen( QPen( color, dim, Qt::DashDotDotLine ) );
-
             break;
         default:
             p->setPen( QPen( color, dim, Qt::SolidLine ) );
         }
-        int y = 0;
-        if (format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD )
-            y = lastY + baseLine + KoBorder::zoomWidthY( 2, zh, 0 );
-        else
-            y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
 
-        int offset = 0;
-        if (format->vAlign() == KoTextFormat::AlignSubScript )
-            offset= p->fontMetrics().height() / 6;
-        if (format->vAlign() == KoTextFormat::AlignSuperScript )
-            offset= p->fontMetrics().height() / 2;
-        y-=(p->fontMetrics().height()  + format->offsetFromBaseLine() + offset)/2 + 2;
-
+        y -= static_cast<int>(5*dimd);
         p->drawLine( startX, y, startX + bw, y );
         p->restore();
         font.setStrikeOut( FALSE );
@@ -1606,40 +1605,34 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     }
     else if ( format->strikeOutLineType() == KoTextFormat::S_DOUBLE )
     {
+        unsigned int dim = static_cast<int>(dimd);
         p->save();
+
         switch( format->strikeOutLineStyle() )
         {
         case KoTextFormat::S_SOLID:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            p->setPen( QPen( color, dim, Qt::SolidLine ) );
             break;
         case KoTextFormat::S_DASH:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
+            p->setPen( QPen( color, dim, Qt::DashLine ) );
             break;
         case KoTextFormat::S_DOT:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DotLine ) );
+            p->setPen( QPen( color, dim, Qt::DotLine ) );
             break;
         case KoTextFormat::S_DASH_DOT:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            p->setPen( QPen( color, dim, Qt::DashDotLine ) );
             break;
         case KoTextFormat::S_DASH_DOT_DOT:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotDotLine ) );
-
+            p->setPen( QPen( color, dim, Qt::DashDotDotLine ) );
             break;
         default:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            p->setPen( QPen( color, dim, Qt::SolidLine ) );
         }
-        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        int offset = 0;
-        if (format->vAlign() == KoTextFormat::AlignSubScript )
-            offset= p->fontMetrics().height() / 6;
-        if (format->vAlign() == KoTextFormat::AlignSuperScript )
-            offset= p->fontMetrics().height() / 2;
 
-        y-=(p->fontMetrics().height()  + format->offsetFromBaseLine()+ offset)/2 + 2;
-
-        p->drawLine( startX, y -KoBorder::zoomWidthY( 1, zh, 0 ), startX + bw, y -KoBorder::zoomWidthY( 1, zh, 0 ));
-
-        p->drawLine( startX, y + 2 + KoBorder::zoomWidthY( 1, zh, 0 ), startX + bw, y +2 +KoBorder::zoomWidthY( 1, zh, 0 ));
+	y -= static_cast<int>(4*dimd);
+        p->drawLine( startX, y, startX + bw, y);
+	y -= static_cast<int>(2*dimd);
+        p->drawLine( startX, y, startX + bw, y);
         p->restore();
         font.setStrikeOut( FALSE );
         p->setFont( font );
