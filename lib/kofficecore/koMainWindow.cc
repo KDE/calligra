@@ -34,6 +34,7 @@
 #include <kstdaction.h>
 #include <kapplication.h>
 #include <kfiledialog.h>
+#include <kfilefiltercombo.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
@@ -66,6 +67,42 @@ public:
       return false;
     return KParts::PartManager::eventFilter( obj, ev );
   }
+};
+
+// Extension to KFileDialog in order to add "save as koffice-1.1" and "save as dir"
+// Used only when saving!
+class KoFileDialog : public KFileDialog
+{
+public:
+    KoFileDialog(const QString& startDir, const QString& filter,
+                 QWidget *parent, const char *name,
+                 bool modal)
+        : KFileDialog( startDir, filter, parent, name, modal ) { }
+
+    void setSpecialMimeFilter( QStringList& mimeFilter, const QString& nativeFormat )
+    {
+        Q_ASSERT( !mimeFilter.isEmpty() );
+        Q_ASSERT( mimeFilter[0] == nativeFormat );
+        // Insert two entries with native mimetypes, for the special entries.
+        QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
+        mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, 2, nativeFormat );
+        // Fill in filter combo
+        setMimeFilter( mimeFilter, nativeFormat );
+        // To get a different description in the combo, we need to change its entries afterwards
+        KMimeType::Ptr type = KMimeType::mimeType( nativeFormat );
+        filterWidget->changeItem( i18n("%1 (KOffice-1.1 format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot1 );
+        filterWidget->changeItem( i18n("%1 (Uncompressed XML files)").arg( type->comment() ), KoDocument::SaveAsDirectoryStore );
+        // KFileFilterCombo selected the _last_ "native mimetype" entry, select 0 again.
+        filterWidget->setCurrentItem( 0 );
+    }
+    int specialEntrySelected()
+    {
+        int i = filterWidget->currentItem();
+        // This enum is the position of the special items in the filter combo.
+        if ( i == KoDocument::SaveAsKOffice1dot1 || i == KoDocument::SaveAsDirectoryStore )
+            return i;
+        return 0;
+    }
 };
 
 class KoMainWindowPrivate
@@ -501,14 +538,15 @@ bool KoMainWindow::saveDocument( bool saveas )
 
     if ( pDoc->url().isEmpty() || saveas )
     {
-        KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+        KoFileDialog *dialog=new KoFileDialog(QString::null, QString::null, 0L, "file dialog", true);
         dialog->setCaption( i18n("Save document as") );
         dialog->setKeepLocation( true );
         dialog->setOperationMode( KFileDialog::Saving );
-        dialog->setMimeFilter( KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export ),
-                               _native_format );
+        QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export );
+        dialog->setSpecialMimeFilter( mimeFilter, _native_format );
         KURL newURL;
         QCString outputFormat = _native_format;
+        int specialOutputFlag = 0;
         kdDebug(30003) << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
         bool bOk;
         do {
@@ -516,6 +554,7 @@ bool KoMainWindow::saveDocument( bool saveas )
             if(dialog->exec()==QDialog::Accepted) {
                 newURL=dialog->selectedURL();
                 outputFormat=dialog->currentMimeFilter().latin1();
+                specialOutputFlag = dialog->specialEntrySelected();
             }
             else
             {
@@ -550,9 +589,10 @@ bool KoMainWindow::saveDocument( bool saveas )
         if (bOk) {
             addRecentURL( newURL );
 
-            pDoc->setOutputMimeType( outputFormat );
+            pDoc->setOutputMimeType( outputFormat, specialOutputFlag );
             if ( outputFormat != _native_format )
             {
+                Q_ASSERT( specialOutputFlag == 0 ); // this is for the native mimetype only!
                 // Warn the user
                 KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
                 QString comment = ( mime->name() == KMimeType::defaultMimeType() ) ? i18n( "Unknown file type %1" ).arg( outputFormat )

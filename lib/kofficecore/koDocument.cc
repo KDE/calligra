@@ -86,6 +86,7 @@ public:
     KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
 
     QCString outputMimeType; // The mimetype to use when saving
+    int m_specialOutputFlag; // See KoFileDialog in koMainWindow.cc
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
     int m_autoSaveDelay; // in seconds, 0 to disable.
@@ -302,9 +303,10 @@ bool KoDocument::saveFile()
     return ret;
 }
 
-void KoDocument::setOutputMimeType( const QCString & mimeType )
+void KoDocument::setOutputMimeType( const QCString & mimeType, int specialOutputFlag )
 {
     d->outputMimeType = mimeType;
+    d->m_specialOutputFlag = specialOutputFlag;
 }
 
 QCString KoDocument::outputMimeType() const
@@ -606,16 +608,35 @@ bool KoDocument::saveChildren( KoStore* /*_store*/ )
     return true;
 }
 
-bool KoDocument::saveNativeFormat( const QString & file )
+bool KoDocument::saveNativeFormat( const QString & _file )
 {
+    QString file( _file );
     d->lastErrorMessage = QString::null;
     //kdDebug(30003) << "Saving to store" << endl;
+
+    KoStore::Backend backend = KoStore::Auto;
+    if ( d->m_specialOutputFlag == SaveAsKOffice1dot1 )
+    {
+        kdDebug(30003) << "Saving as KOffice-1.1 format, using a tar.gz" << endl;
+        backend = KoStore::Tar; // KOffice-1.0/1.1 used tar.gz for the native mimetype
+        //// TODO more backwards compat stuff (embedded docs etc.)
+    }
+    else if ( d->m_specialOutputFlag == SaveAsDirectoryStore )
+    {
+        backend = KoStore::Directory;
+	// Remove filename from path. A bit dirty, but KFileDialog doesn't support
+        // Changing modes depending on the selected filter....
+        int pos = file.findRev( '/' );
+        if ( pos != -1 && pos != (int)file.length()-1 )
+            file = file.left( pos );
+        kdDebug(30003) << "Saving as uncompressed XML, using directory store. Directory: " << file << endl;
+    }
 
     QCString appIdentification( "KOffice " ); // We are limited in the number of chars.
     appIdentification += nativeFormatMimeType();
     appIdentification += '\004'; // Two magic bytes to make the identification
     appIdentification += '\006'; // more reliable (DF)
-    KoStore* store = KoStore::createStore( file, KoStore::Write, appIdentification );
+    KoStore* store = KoStore::createStore( file, KoStore::Write, appIdentification, backend );
     if ( store->bad() )
     {
         d->lastErrorMessage = i18n( "Couldn't open the file for saving" ); // more details needed?
@@ -878,19 +899,29 @@ bool KoDocument::openFile()
     }
 
     QCString _native_format = nativeFormatMimeType();
-    QString importedFile = m_file;
 
     KURL u;
     u.setPath( m_file );
-    KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
-    if ( t->name() == KMimeType::defaultMimeType() ) {
+    QString typeName = KMimeType::findByURL( u, 0, true )->name();
+
+    // Special case for flat XML files (e.g. using directory store)
+    if ( u.fileName() == "maindoc.xml" )
+    {
+        typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
+        m_file = u.directory();
+        kdDebug() << "KoDocument::openFile loading maindoc.xml, using directory store for " << m_file << endl;
+    }
+
+    QString importedFile = m_file;
+
+    if ( typeName == KMimeType::defaultMimeType() ) {
         kdError(30003) << "No mimetype found for " << m_file << endl;
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
         return false;
     }
 
-    if ( t->name().latin1() != _native_format ) {
+    if ( typeName.latin1() != _native_format ) {
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
         KoFilter::ConversionStatus status;
@@ -955,6 +986,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     kdDebug(30003) << "KoDocument::loadNativeFormat( " << file << " )" << endl;
 
+    // This isn't needed anymore, KoDirectoryStore takes care of raw XML files
     QFile in(file);
     if ( !in.open( IO_ReadOnly ) )
     {
@@ -963,6 +995,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         return false;
     }
 
+#if 0
     // Try to find out whether it is a mime multi part file
     char buf[5];
     if ( in.readBlock( buf, 4 ) < 4 )
@@ -1005,13 +1038,14 @@ bool KoDocument::loadNativeFormat( const QString & file )
         m_bEmpty = false;
         return res;
     } else
+#endif
     { // It's a koffice store (tar.gz, zip etc.)
         in.close();
         KoStore * store = KoStore::createStore( file, KoStore::Read );
 
         if ( store->bad() )
         {
-            d->lastErrorMessage = i18n( "Not a valid TAR file" );
+            d->lastErrorMessage = i18n( "Not a valid KOffice file" );
             delete store;
             QApplication::restoreOverrideCursor();
             return false;

@@ -163,12 +163,15 @@ public:
 
     KService::Ptr nativeService();
 
+    enum { SaveAsKOffice1dot1 = 1, SaveAsDirectoryStore = 2 };
+
     /**
      * Set the format in which the document should be saved.
      * This is called on loading, and in "save as", so you shouldn't
      * have to call it.
+     * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType( const QCString & mimeType );
+    void setOutputMimeType( const QCString & mimeType, int specialOutputFlag = 0 );
     QCString outputMimeType() const;
 
     /**
