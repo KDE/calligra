@@ -3488,7 +3488,7 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
 
 void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
+    KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
 
   if(!m_pView->koDocument()->isReadWrite())
@@ -3521,12 +3521,10 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   //you mustn't resize it.
   int tmp2;
   int tmpCol=table->leftColumn( _ev->pos().x() - 1, tmp2, m_pCanvas );
-
   if ( table->columnLayout(tmpCol  )->isHide() && tmpCol == 1)
       m_bResize = false;
 
   QRect rect = table->selectionRect();
-
   if ( m_bResize )
   {
     // Determine the column to resize
@@ -3536,18 +3534,15 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   }
   else if ( ( rect.left() != rect.right() )
             && ( tmpCol >= rect.left() )
-            && ( tmpCol <= rect.right() ) )
+            && ( tmpCol <= rect.right() )
+      && _ev->button() == RightButton )
   {
-      if (_ev->button() == RightButton )
-      {
-          QPoint p = mapToGlobal( _ev->pos() );
-          m_pView->popupColumnMenu( p );
-      }
+      QPoint p = mapToGlobal( _ev->pos() );
+      m_pView->popupColumnMenu( p );
   }
   else
   {
     m_bSelection = TRUE;
-
     int tmp;
     int hit_col = table->leftColumn( _ev->pos().x(), tmp, m_pCanvas );
     if( hit_col > KS_colMax)
@@ -3561,7 +3556,6 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
         r.setCoords( hit_col, 1, hit_col, KS_rowMax );
         table->setSelection( r, m_pCanvas );
     }
-
     if ( _ev->button() == RightButton )
     {
       QPoint p = mapToGlobal( _ev->pos() );
