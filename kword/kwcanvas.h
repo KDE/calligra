@@ -115,7 +115,7 @@ public:
 
     void setMouseMode( MouseMode _mm );
     MouseMode getMouseMode(){return m_mouseMode;}
-    void setPixmapFilename( const QString & f ) { m_PixmapName = f; }
+    void insertPicture( const QString &filename, bool isClipart );
     void setPartEntry( const KoDocumentEntry & e ) { m_partEntry = e; }
 
     void updateCurrentFormat();
@@ -239,7 +239,8 @@ private:
     KoPoint m_hotSpot; // when moving frame(s)
     bool deleteMovingRect, frameMoved, frameResized;
     bool m_ctrlClickOnSelectedFrame;
-    QString m_PixmapName; // when inserting a pixmap
+    bool m_isClipart; // when inserting a picture
+    QString m_pictureFilename; // when inserting a picture
     KoDocumentEntry m_partEntry; // when inserting a part
 
     // Table creation support.

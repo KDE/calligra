@@ -1563,9 +1563,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart, bool makeIn
     }
     else
     {
-        m_gui->canvasWidget()->setMouseMode( MM_CREATE_PIX );
-        m_gui->canvasWidget()->setPixmapFilename( filename ); // #########
-#warning TODO
+        m_gui->canvasWidget()->insertPicture( filename, isClipart );
     }
 }
 

@@ -392,8 +392,8 @@ void KWCanvas::mpCreate( int mx, int my )
 
 void KWCanvas::mpCreatePixmap( int mx, int my )
 {
-    if ( !m_PixmapName.isEmpty() ) {
-        QPixmap pix( m_PixmapName );
+    if ( !m_pictureFilename.isEmpty() )
+    {
         // Apply grid for the first corner only
         mx = ( mx / m_doc->gridX() ) * m_doc->gridX();
         my = ( my / m_doc->gridX() ) * m_doc->gridY();
@@ -402,16 +402,20 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
         m_insRect.setCoords( x, y, 0, 0 );
         deleteMovingRect = false;
 
-        // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-        int width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-        int height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
-        // Apply reasonable limits
-        width = QMIN( width, m_doc->paperWidth() );
-        height = QMIN( height, m_doc->paperHeight() );
+        if ( !m_isClipart )
+        {
+            QPixmap pix( m_pictureFilename );
+            // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
+            int width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+            int height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            // Apply reasonable limits
+            width = QMIN( width, m_doc->paperWidth() );
+            height = QMIN( height, m_doc->paperHeight() );
 
-        QPoint nPoint( mx + width, my + height );
-        QPoint vPoint = m_viewMode->normalToView( nPoint );
-        QCursor::setPos( viewport()->mapToGlobal( contentsToViewport( vPoint ) ) );
+            QPoint nPoint( mx + width, my + height );
+            QPoint vPoint = m_viewMode->normalToView( nPoint );
+            QCursor::setPos( viewport()->mapToGlobal( contentsToViewport( vPoint ) ) );
+        }
     }
 }
 
@@ -1025,14 +1029,26 @@ void KWCanvas::mrCreateText()
 void KWCanvas::mrCreatePixmap()
 {
     m_insRect = m_insRect.normalize();
-    if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() && !m_PixmapName.isEmpty() ) {
-        KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
-        frameset->loadImage( m_PixmapName, m_doc->zoomRect( m_insRect ).size() );
+    if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() && !m_pictureFilename.isEmpty() )
+    {
+        KWFrameSet * fs = 0L;
+        if ( m_isClipart )
+        {
+            KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null /*automatic name*/ );
+            frameset->loadClipart( m_pictureFilename );
+            fs = frameset;
+        }
+        else
+        {
+            KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
+            frameset->loadImage( m_pictureFilename, m_doc->zoomRect( m_insRect ).size() );
+            fs = frameset;
+        }
         m_insRect = m_insRect.normalize();
-        KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(),
+        KWFrame *frame = new KWFrame(fs, m_insRect.x(), m_insRect.y(), m_insRect.width(),
                                      m_insRect.height() );
-        frameset->addFrame( frame, false );
-        m_doc->addFrameSet( frameset );
+        fs->addFrame( frame, false );
+        m_doc->addFrameSet( fs );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a picture frame"), frame );
         m_doc->addCommand(cmd);
         m_doc->frameChanged( frame );
@@ -1786,6 +1802,13 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
         viewport()->setCursor( crossCursor );
         break;
     }
+}
+
+void KWCanvas::insertPicture( const QString & filename, bool isClipart )
+{
+    setMouseMode( MM_CREATE_PIX );
+    m_pictureFilename = filename;
+    m_isClipart = isClipart;
 }
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
