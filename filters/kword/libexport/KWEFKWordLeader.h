@@ -30,8 +30,8 @@
 class KWEFKWordLeader
 {
     public:
-        KWEFKWordLeader(void) : m_worker (0 /*NULL*/) {}
-        KWEFKWordLeader(KWEFBaseWorker* newWorker) : m_worker (newWorker)
+        KWEFKWordLeader(void) : m_worker(NULL), m_chain(NULL) {}
+        KWEFKWordLeader(KWEFBaseWorker* newWorker) : m_worker(newWorker), m_chain(NULL)
         { if (newWorker) newWorker->registerKWordLeader(this); }
         virtual ~KWEFKWordLeader(void) {}
 
@@ -62,6 +62,7 @@ class KWEFKWordLeader
     private:
         KWEFBaseWorker *m_worker;
         QString m_filenameIn;
+        KoFilterChain* m_chain;
 };
 
 #endif /* KWEF_KWORDLEADER_H */

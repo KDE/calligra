@@ -97,7 +97,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
 
     CreateMissingFormatData (paraData.text, paraData.formattingList);
 
-
+    // TODO/FIXME: why !paraData.text.isEmpty()
     if ( paraData.formattingList.isEmpty () && !paraData.text.isEmpty () )
     {
         if ( paraData.layout.formatData.id == 1 )
@@ -324,7 +324,7 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, KWEFKWordLeader *le
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "STYLE", ProcessStyleTag, leader );
     ProcessSubtags (myNode, tagProcessingList, leader);
-    
+
     leader->doCloseStyles ();
 }
 
@@ -652,6 +652,14 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     {
         return KoFilter::NotImplemented;
     }
+    
+    if (!chain)
+    {
+        kdError(30508) << "'Chain' is NULL! Internal error of the filter system?" << endl;
+        return KoFilter::StupidError;
+    }
+
+    m_chain=chain;
 
     // We must save the input file name, as KoFilterChain::inputFile can only be called once!!
     m_filenameIn=chain->inputFile();
@@ -671,6 +679,56 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
         return KoFilter::StupidError;
     }
 
+#if 0
+    QByteArray byteArrayIn;
+
+    KoStoreDevice* subFile;
+
+    subFile=chain->storageFile("documentinfo.xml",KoStore::Read);
+
+    if (!subFile)
+    {
+        kdWarning(30508) << "Could not get a device for document info!" << endl;
+    }
+    else if ( subFile->open ( IO_ReadOnly ) )
+    {
+        byteArrayIn = subFile->readAll();
+        subFile->close ();
+
+        kdDebug (30508) << "Processing Document Info..." << endl;
+        ProcessStoreFile (byteArrayIn, ProcessDocumentInfoTag, this);
+    }
+    else
+    {
+        // Note: we do not worry too much if we cannot open the document info!
+        kdWarning (30508) << "Unable to open documentinfo.xml sub-file!" << endl;
+    }
+
+    subFile=chain->storageFile("root",KoStore::Read);
+
+    bool fileWasRead=false;
+
+    if (!subFile)
+    {
+        kdDebug(30508) << "Could not get a device for root document!" << endl;
+    }
+    else if ( subFile->open ( IO_ReadOnly ) )
+    {
+        byteArrayIn = subFile->readAll();
+        subFile->close ();
+        fileWasRead=true;
+
+        kdDebug (30508) << "Processing KWord File (KoStore)..." << endl;
+        ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
+    }
+    else
+    {
+        kdWarning(30508) << "Could not open root sub-file!" << endl;
+    }
+
+    if (!fileWasRead)
+    {
+#else
     KoStore koStoreIn (m_filenameIn, KoStore::Read);  // TODO
     QByteArray byteArrayIn;
 
@@ -698,6 +756,7 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     }
     else
     {
+#endif
         // We were not able to open maindoc.xml
         // But perhaps we have an untarred, uncompressed file
         //  (it might happen with koconverter)
@@ -708,13 +767,14 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
             file.close ();
 
             // Do *not* set m_filenameIn as we have not any KoStore
-	    m_filenameIn=QString::null; // PROVISORY
+            m_filenameIn=QString::null; // PROVISORY
 
             kdDebug (30508) << "Processing KWord File (QFile)..." << endl;
             ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
         }
         else
         {
+            // Despite the fall back, we are unable to open the file
             kdError (30508) << "Unable to open input file!" << endl;
             doAbortFile ();
             return KoFilter::StupidError;
