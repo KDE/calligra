@@ -9,7 +9,7 @@
 
 class VPath;
 // Provides a common base class for creation commands since they all have
-// a similar execute / unexecute behaviour.
+// a similar execute / unexecute behaviour and all build a VPath.
 class VCCommand : public VCommand
 {
 public:

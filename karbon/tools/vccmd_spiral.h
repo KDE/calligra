@@ -5,27 +5,23 @@
 #ifndef __VCCMDSPIRAL_H__
 #define __VCCMDSPIRAL_H__
 
-#include "vcommand.h"
+#include "vccommand.h"
 
 // create a spiral-shape.
 
 class VPath;
 
-class VCCmdSpiral : public VCommand
+class VCCmdSpiral : public VCCommand
 {
 public:
 	VCCmdSpiral( KarbonPart* part, const double centerX, const double centerY,
 		const double radius, const uint segments, const double fade, const bool cw );
  	virtual ~VCCmdSpiral() {}
 
-	virtual void execute();
-	virtual void unexecute();
-
 	// for complex shapes. needed to draw while creation (creation tool):
 	VPath* createPath();
 
 private:
-	VPath* m_object;
 	double m_centerX;
 	double m_centerY;
 	double m_radius;

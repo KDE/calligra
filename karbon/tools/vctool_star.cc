@@ -10,7 +10,7 @@ VCToolStar* VCToolStar::s_instance = 0L;
 
 VCToolStar::VCToolStar( KarbonPart* part )
 	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
-		m_isCentered( false ), m_width( 0.0 ), m_height( 0.0 )
+		m_isCentered( false ), m_width( 0 ), m_height( 0 )
 {
 	// create config dialog:
 	m_dialog = new VCDlgStar();

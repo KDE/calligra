@@ -13,8 +13,7 @@
 VCCmdStar::VCCmdStar( KarbonPart* part,
 		const double centerX, const double centerY,
 		const double outerR, const double innerR, const uint edges )
-	: VCommand( part, i18n("Insert Star") ), m_object( 0L ),
-	  m_centerX( centerX ), m_centerY( centerY )
+	: VCCommand( part, i18n("Insert Star") ), m_centerX( centerX ), m_centerY( centerY )
 {
 	// a star should have at least 3 edges:
 	m_edges = edges < 3 ? 3 : edges;
@@ -22,27 +21,6 @@ VCCmdStar::VCCmdStar( KarbonPart* part,
 	// make sure, radii are positive:
 	m_outerR = outerR < 0.0 ? -outerR : outerR;
 	m_innerR = innerR < 0.0 ? -innerR : innerR;
-}
-
-void
-VCCmdStar::execute()
-{
-	if ( m_object )
-		m_object->setState( VObject::normal );
-	else
-	{
-		m_object = createPath();
-		// add path:
-		m_part->insertObject( m_object );
-		m_object->setState( VObject::selected );
-	}
-}
-
-void
-VCCmdStar::unexecute()
-{
-	if ( m_object )
-		m_object->setState( VObject::deleted );
 }
 
 VPath*

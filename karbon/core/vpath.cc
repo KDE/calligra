@@ -637,6 +637,10 @@ VPath::draw( QPainter& painter, const QRect& rect,
 
 	if( state() == selected )
 	{
+		// draw bbox:
+		// TODO : selection -> handle, editing -> nodes/boxes ?
+		//painter.drawRect( boundingBox() );
+
 		painter.setBrush( Qt::NoBrush );
 
 		for( itr.toFirst(); itr.current(); ++itr )

@@ -13,8 +13,7 @@
 VCCmdSpiral::VCCmdSpiral( KarbonPart* part,
 		const double centerX, const double centerY,
 		const double radius, const uint segments, const double fade, const bool cw )
-	: VCommand( part, i18n("Insert Spiral") ), m_object( 0L ),
-	  m_centerX( centerX ), m_centerY( centerY ),
+	: VCCommand( part, i18n("Insert Spiral") ), m_centerX( centerX ), m_centerY( centerY ),
 	  m_clockWise( cw )
 {
 	// it makes sense to have at least one segment:
@@ -25,27 +24,6 @@ VCCmdSpiral::VCCmdSpiral( KarbonPart* part,
 
 	// fall back, when fade is out of range:
 	m_fade = ( fade <= 0.0 || fade >= 1.0 ) ? 0.5 : fade;
-}
-
-void
-VCCmdSpiral::execute()
-{
-	if ( m_object )
-		m_object->setState( VObject::normal );
-	else
-	{
-		m_object = createPath();
-
-		// add path:
-		m_part->insertObject( m_object );
-	}
-}
-
-void
-VCCmdSpiral::unexecute()
-{
-	if ( m_object )
-		m_object->setState( VObject::deleted );
 }
 
 VPath*

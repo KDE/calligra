@@ -102,7 +102,7 @@ KarbonView::ellipseTool()
 void
 KarbonView::polygonTool()
 {
-//	s_currentTool = VCToolPolygon::instance( m_part );
+	//s_currentTool = VCToolPolygon::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( CrossCursor ) );
 }
 
@@ -137,7 +137,7 @@ KarbonView::sinusTool()
 void
 KarbonView::spiralTool()
 {
-//	s_currentTool = VCToolSpiral::instance( m_part );
+	//s_currentTool = VCToolSpiral::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( CrossCursor ) );
 }
 

@@ -12,31 +12,11 @@
 VCCmdSinus::VCCmdSinus( KarbonPart* part,
 		const double tlX, const double tlY,
 		const double brX, const double brY, const uint periods )
-	: VCommand( part, i18n("Insert Sinus") ), m_object( 0L ),
+	: VCCommand( part, i18n("Insert Sinus") ),
 	  m_tlX( tlX ), m_tlY( tlY ), m_brX( brX ), m_brY( brY )
 {
 	// we want at least 1 period:
 	m_periods = periods < 1 ? 1 : periods;
-}
-
-void
-VCCmdSinus::execute()
-{
-	if ( m_object )
-		m_object->setState( VObject::normal );
-	else
-	{
-		m_object = createPath();
-		// add path:
-		m_part->insertObject( m_object );
-	}
-}
-
-void
-VCCmdSinus::unexecute()
-{
-	if ( m_object )
-		m_object->setState( VObject::deleted );
 }
 
 VPath*

@@ -14,7 +14,7 @@
 VCCmdPolygon::VCCmdPolygon( KarbonPart* part,
 		const double centerX, const double centerY,
 		const double radius, const uint edges )
-	: VCommand( part, i18n("Insert Polygon") ), m_object( 0L ),
+	: VCCommand( part, i18n("Insert Polygon") ),
 	  m_centerX( centerX ), m_centerY( centerY )
 {
 	// a polygon should have at least 3 edges:
@@ -22,26 +22,6 @@ VCCmdPolygon::VCCmdPolygon( KarbonPart* part,
 
 	// make sure the radius is positive:
 	m_radius = radius < 0.0 ? -radius : radius;
-}
-
-void
-VCCmdPolygon::execute()
-{
-	if ( m_object )
-		m_object->setState( VObject::normal );
-	else
-	{
-		m_object = createPath();
-		// add path:
-		m_part->insertObject( m_object );
-	}
-}
-
-void
-VCCmdPolygon::unexecute()
-{
-	if ( m_object )
-		m_object->setState( VObject::deleted );
 }
 
 VPath*

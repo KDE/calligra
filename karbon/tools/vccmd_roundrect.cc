@@ -10,7 +10,7 @@
 VCCmdRoundRect::VCCmdRoundRect( KarbonPart* part,
 		const double tlX, const double tlY,
 		const double brX, const double brY, const double edgeR )
-	: VCommand( part, i18n("Insert Round Rectangle") ), m_object( 0L )
+	: VCCommand( part, i18n("Insert Round Rectangle") )
 {
 	m_edgeR = edgeR < 0.0 ? 0.0 : edgeR;
 
@@ -43,28 +43,6 @@ VCCmdRoundRect::VCCmdRoundRect( KarbonPart* part,
 	{
  		m_edgeR = minimum;
 	}
-}
-
-void
-VCCmdRoundRect::execute()
-{
-	if ( m_object )
-		m_object->setState( VObject::normal );
-	else
-	{
-		m_object = createPath();
-		// add path:
-		m_part->unselectObjects();
-		m_part->insertObject( m_object );
-		m_object->setState( VObject::selected );
-	}
-}
-
-void
-VCCmdRoundRect::unexecute()
-{
-	if ( m_object )
-		m_object->setState( VObject::deleted );
 }
 
 VPath*
