@@ -19,26 +19,30 @@
 */
 
 #include <qvariant.h>   // first for gcc 2.7.2
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qmap.h>
+#include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qstringlist.h>
 #include <qvbox.h>
-#include <qgroupbox.h>
 #include <qwidget.h>
 
-#include <algorithm>
+//#include <algorithm>
 
 #include <kcolorbutton.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <kfontdialog.h>
 #include <klistview.h>
 #include <klocale.h>
-#include <kpushbutton.h>
+#include <kmessagebox.h>
 #include <knuminput.h>
+#include <kpushbutton.h>
 
 #include "contextstyle.h"
 #include "kformulaconfigpage.h"
@@ -101,60 +105,79 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     syntaxHighlighting = new QCheckBox( i18n( "Use syntax highlighting" ),box );
     syntaxHighlighting->setChecked( contextStyle.syntaxHighlighting() );
 
-    hlBox = new QGroupBox( i18n( "Highlight Colors" ), box );
-    hlBox->setColumnLayout( 0, Qt::Horizontal );
+//     hlBox = new QGroupBox( i18n( "Highlight Colors" ), box );
+//     hlBox->setColumnLayout( 0, Qt::Horizontal );
 
-    grid = new QGridLayout( hlBox->layout(), 5, 2 );
-    grid->setSpacing( KDialog::spacingHint() );
+//     grid = new QGridLayout( hlBox->layout(), 5, 2 );
+//     grid->setSpacing( KDialog::spacingHint() );
 
-    QLabel* defaultLabel = new QLabel( hlBox, "defaultLabel" );
-    defaultLabel->setText( i18n( "Default color:" ) );
-    grid->addWidget( defaultLabel, 0, 0 );
+//     QLabel* defaultLabel = new QLabel( hlBox, "defaultLabel" );
+//     defaultLabel->setText( i18n( "Default color:" ) );
+//     grid->addWidget( defaultLabel, 0, 0 );
 
-    defaultColorBtn = new KColorButton( hlBox, "defaultColor" );
-    defaultColorBtn->setColor( contextStyle.getDefaultColor() );
-    grid->addWidget( defaultColorBtn, 0, 1 );
-
-
-    QLabel* numberLabel = new QLabel( hlBox, "numberLabel" );
-    numberLabel->setText( i18n( "Number color:" ) );
-    grid->addWidget( numberLabel, 1, 0 );
-
-    numberColorBtn = new KColorButton( hlBox, "numberColor" );
-    numberColorBtn->setColor( contextStyle.getNumberColorPlain() );
-    grid->addWidget( numberColorBtn, 1, 1 );
+//     defaultColorBtn = new KColorButton( hlBox, "defaultColor" );
+//     defaultColorBtn->setColor( contextStyle.getDefaultColor() );
+//     grid->addWidget( defaultColorBtn, 0, 1 );
 
 
-    QLabel* operatorLabel = new QLabel( hlBox, "operatorLabel" );
-    operatorLabel->setText( i18n( "Operator color:" ) );
-    grid->addWidget( operatorLabel, 2, 0 );
+//     QLabel* numberLabel = new QLabel( hlBox, "numberLabel" );
+//     numberLabel->setText( i18n( "Number color:" ) );
+//     grid->addWidget( numberLabel, 1, 0 );
 
-    operatorColorBtn = new KColorButton( hlBox, "operatorColor" );
-    operatorColorBtn->setColor( contextStyle.getOperatorColorPlain() );
-    grid->addWidget( operatorColorBtn, 2, 1 );
-
-
-    QLabel* emptyLabel = new QLabel( hlBox, "emptyLabel" );
-    emptyLabel->setText( i18n( "Empty color:" ) );
-    grid->addWidget( emptyLabel, 3, 0 );
-
-    emptyColorBtn = new KColorButton( hlBox, "emptyColor" );
-    emptyColorBtn->setColor( contextStyle.getEmptyColorPlain() );
-    grid->addWidget( emptyColorBtn, 3, 1 );
+//     numberColorBtn = new KColorButton( hlBox, "numberColor" );
+//     numberColorBtn->setColor( contextStyle.getNumberColorPlain() );
+//     grid->addWidget( numberColorBtn, 1, 1 );
 
 
-    QLabel* errorLabel = new QLabel( hlBox, "errorLabel" );
-    errorLabel->setText( i18n( "Error color:" ) );
-    grid->addWidget( errorLabel, 4, 0 );
+//     QLabel* operatorLabel = new QLabel( hlBox, "operatorLabel" );
+//     operatorLabel->setText( i18n( "Operator color:" ) );
+//     grid->addWidget( operatorLabel, 2, 0 );
 
-    errorColorBtn = new KColorButton( hlBox, "errorColor" );
-    errorColorBtn->setColor( contextStyle.getErrorColorPlain() );
-    grid->addWidget( errorColorBtn, 4, 1 );
+//     operatorColorBtn = new KColorButton( hlBox, "operatorColor" );
+//     operatorColorBtn->setColor( contextStyle.getOperatorColorPlain() );
+//     grid->addWidget( operatorColorBtn, 2, 1 );
+
+
+//     QLabel* emptyLabel = new QLabel( hlBox, "emptyLabel" );
+//     emptyLabel->setText( i18n( "Empty color:" ) );
+//     grid->addWidget( emptyLabel, 3, 0 );
+
+//     emptyColorBtn = new KColorButton( hlBox, "emptyColor" );
+//     emptyColorBtn->setColor( contextStyle.getEmptyColorPlain() );
+//     grid->addWidget( emptyColorBtn, 3, 1 );
+
+
+//     QLabel* errorLabel = new QLabel( hlBox, "errorLabel" );
+//     errorLabel->setText( i18n( "Error color:" ) );
+//     grid->addWidget( errorLabel, 4, 0 );
+
+//     errorColorBtn = new KColorButton( hlBox, "errorColor" );
+//     errorColorBtn->setColor( contextStyle.getErrorColorPlain() );
+//     grid->addWidget( errorColorBtn, 4, 1 );
 
     connect( syntaxHighlighting, SIGNAL( clicked() ),
             SLOT( syntaxHighlightingClicked() ) );
 
     syntaxHighlightingClicked();
+
+    styleBox = new QButtonGroup( i18n( "Font Style" ), box );
+    styleBox->setColumnLayout( 0, Qt::Horizontal );
+
+    grid = new QGridLayout( styleBox->layout(), 3, 1 );
+    grid->setSpacing( KDialog::spacingHint() );
+
+    esstixStyle = new QRadioButton( i18n( "Esstix Font Style" ), styleBox, "esstixStyle" );
+    esstixStyle->setChecked( contextStyle.getFontStyle() == "esstix" );
+
+    cmStyle = new QRadioButton( i18n( "Computer Modern (TeX) Style" ), styleBox, "cmStyle" );
+    cmStyle->setChecked( contextStyle.getFontStyle() == "tex" );
+
+    symbolStyle = new QRadioButton( i18n( "Symbol Font Style" ), styleBox, "symbolStyle" );
+    symbolStyle->setChecked( !esstixStyle->isChecked() && !cmStyle->isChecked() );
+
+    grid->addWidget( symbolStyle, 0, 0 );
+    grid->addWidget( esstixStyle, 1, 0 );
+    grid->addWidget( cmStyle, 2, 0 );
 }
 
 
@@ -179,8 +202,102 @@ QPushButton* ConfigurePage::buildFontLine( QWidget* parent,
 }
 
 
+static bool fontAvailable( QString fontName )
+{
+    QFont f( fontName );
+    QStringList fields = QStringList::split( '-', f.rawName() );
+    if ( ( fields.size() > 1 ) &&
+         ( ( fields[1].upper() == fontName.upper() ) ||
+           ( fields[0].upper() == fontName.upper() ) ) ) {
+        return true;
+    }
+    else {
+        kdWarning() << "Font '" << fontName << "' not found but '" << f.rawName() << "'." << endl;
+        return false;
+    }
+}
+
+
+inline void testFont( QStringList& missing, const QString& fontName ) {
+    if ( !fontAvailable( fontName ) ) {
+        missing.append( fontName );
+    }
+}
+
 void ConfigurePage::apply()
 {
+    QString fontStyle;
+    if ( esstixStyle->isChecked() ) {
+        fontStyle = "esstix";
+
+        QStringList missing;
+        testFont( missing, "esstixeight" );
+        testFont( missing, "esstixeleven" );
+        testFont( missing, "esstixfifteen" );
+        testFont( missing, "esstixfive" );
+        testFont( missing, "esstixfour" );
+        testFont( missing, "esstixfourteen" );
+        testFont( missing, "esstixnine" );
+        testFont( missing, "esstixone" );
+        testFont( missing, "esstixseven" );
+        testFont( missing, "esstixseventeen" );
+        testFont( missing, "esstixsix" );
+        testFont( missing, "esstixsixteen" );
+        testFont( missing, "esstixten" );
+        testFont( missing, "esstixthirteen" );
+        testFont( missing, "esstixthree" );
+        testFont( missing, "esstixtwelve" );
+        testFont( missing, "esstixtwo" );
+
+        if ( missing.count() > 0 ) {
+            QString text = i18n( "The fonts '%1' are missing."
+                                 " Do you want to change the font style anyway?" )
+                           .arg( missing.join( "', '" ) );
+            if ( KMessageBox::warningContinueCancel( m_view, text ) ==
+                 KMessageBox::Cancel ) {
+                return;
+            }
+        }
+    }
+    else if ( cmStyle->isChecked() ) {
+        fontStyle = "tex";
+
+        QStringList missing;
+        testFont( missing, "cmbx10" );
+        testFont( missing, "cmex10" );
+        testFont( missing, "cmmi10" );
+        testFont( missing, "cmr10" );
+        testFont( missing, "cmsy10" );
+        testFont( missing, "msam10" );
+        testFont( missing, "msbm10" );
+
+        if ( missing.count() > 0 ) {
+            QString text = i18n( "The fonts '%1' are missing."
+                                 " Do you want to change the font style anyway?" )
+                           .arg( missing.join( "', '" ) );
+            if ( KMessageBox::warningContinueCancel( m_view, text ) ==
+                 KMessageBox::Cancel ) {
+                return;
+            }
+        }
+    }
+    else { // symbolStyle->isChecked ()
+        fontStyle = "symbol";
+
+        QStringList missing;
+        testFont( missing, "symbol" );
+
+        if ( missing.count() > 0 ) {
+            QString text = i18n( "The font 'symbol' is missing."
+                                 " Do you want to change the font style anyway?" );
+            if ( KMessageBox::warningContinueCancel( m_view, text ) ==
+                 KMessageBox::Cancel ) {
+                return;
+            }
+
+        }
+    }
+
     ContextStyle& contextStyle = m_document->getContextStyle( true );
 
     contextStyle.setDefaultFont( defaultFont );
@@ -189,12 +306,14 @@ void ConfigurePage::apply()
     contextStyle.setOperatorFont( operatorFont );
     contextStyle.setBaseSize( sizeSpin->value() );
 
+    contextStyle.setFontStyle( fontStyle );
+
     contextStyle.setSyntaxHighlighting( syntaxHighlighting->isChecked() );
-    contextStyle.setDefaultColor( defaultColorBtn->color() );
-    contextStyle.setNumberColor( numberColorBtn->color() );
-    contextStyle.setOperatorColor( operatorColorBtn->color() );
-    contextStyle.setEmptyColor( emptyColorBtn->color() );
-    contextStyle.setErrorColor( errorColorBtn->color() );
+//     contextStyle.setDefaultColor( defaultColorBtn->color() );
+//     contextStyle.setNumberColor( numberColorBtn->color() );
+//     contextStyle.setOperatorColor( operatorColorBtn->color() );
+//     contextStyle.setEmptyColor( emptyColorBtn->color() );
+//     contextStyle.setErrorColor( errorColorBtn->color() );
 
     m_config->setGroup( "kformula Font" );
     m_config->writeEntry( "defaultFont", defaultFont.toString() );
@@ -203,13 +322,15 @@ void ConfigurePage::apply()
     m_config->writeEntry( "operatorFont", operatorFont.toString() );
     m_config->writeEntry( "baseSize", QString::number( sizeSpin->value() ) );
 
-    m_config->setGroup( "kformula Color" );
-    m_config->writeEntry( "syntaxHighlighting", syntaxHighlighting->isChecked() );
-    m_config->writeEntry( "defaultColor", defaultColorBtn->color() );
-    m_config->writeEntry( "numberColor",  numberColorBtn->color() );
-    m_config->writeEntry( "operatorColor", operatorColorBtn->color() );
-    m_config->writeEntry( "emptyColor", emptyColorBtn->color() );
-    m_config->writeEntry( "errorColor", errorColorBtn->color() );
+    m_config->writeEntry( "fontStyle", fontStyle );
+
+//     m_config->setGroup( "kformula Color" );
+//     m_config->writeEntry( "syntaxHighlighting", syntaxHighlighting->isChecked() );
+//     m_config->writeEntry( "defaultColor", defaultColorBtn->color() );
+//     m_config->writeEntry( "numberColor",  numberColorBtn->color() );
+//     m_config->writeEntry( "operatorColor", operatorColorBtn->color() );
+//     m_config->writeEntry( "emptyColor", emptyColorBtn->color() );
+//     m_config->writeEntry( "errorColor", errorColorBtn->color() );
 
     // notify!!!
     m_document->updateConfig();
@@ -229,19 +350,22 @@ void ConfigurePage::slotDefault()
     updateFontLabel( numberFont, numberFontName );
     updateFontLabel( operatorFont, operatorFontName );
 
+    symbolStyle->setChecked( true );
+
     syntaxHighlighting->setChecked( true );
     syntaxHighlightingClicked();
-    defaultColorBtn->setColor( Qt::black );
-    numberColorBtn->setColor( Qt::blue );
-    operatorColorBtn->setColor( Qt::darkGreen );
-    emptyColorBtn->setColor( Qt::blue );
-    errorColorBtn->setColor( Qt::darkRed );
+
+//     defaultColorBtn->setColor( Qt::black );
+//     numberColorBtn->setColor( Qt::blue );
+//     operatorColorBtn->setColor( Qt::darkGreen );
+//     emptyColorBtn->setColor( Qt::blue );
+//     errorColorBtn->setColor( Qt::darkRed );
 }
 
 void ConfigurePage::syntaxHighlightingClicked()
 {
-    bool checked = syntaxHighlighting->isChecked();
-    hlBox->setEnabled( checked );
+//     bool checked = syntaxHighlighting->isChecked();
+//     hlBox->setEnabled( checked );
 }
 
 void ConfigurePage::selectNewDefaultFont()

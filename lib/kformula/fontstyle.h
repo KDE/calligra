@@ -47,9 +47,6 @@ public:
     /// lazy init support. Needs to be run before anything else.
     virtual bool init( ContextStyle* context ) = 0;
 
-    /// this styles name
-    virtual QString name() = 0;
-
     /// the table for ordinary symbols (those that have a unicode value)
     virtual const SymbolTable* symbolTable() const { return &m_symbolTable; }
     virtual SymbolTable* symbolTable() { return &m_symbolTable; }
@@ -60,8 +57,6 @@ public:
     virtual Artwork* createArtwork(SymbolType type = EmptyBracket) const = 0;
 
 protected:
-
-    bool fontAvailable( QString fontName );
 
     // This is going to disappear in favour of a real macro facility some day.
     void fillNameTable( SymbolTable::NameTable& names );

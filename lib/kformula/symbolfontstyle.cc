@@ -51,14 +51,9 @@ bool SymbolFontStyle::init( ContextStyle* context )
     fillNameTable( names );
     symbolTable()->initFont( symbolMap, "symbol", names );
 
-    return fontAvailable( "symbol" );
+    return true;
 }
 
-
-QString SymbolFontStyle::name()
-{
-    return i18n( "Symbol Font Style" );
-}
 
 Artwork* SymbolFontStyle::createArtwork( SymbolType type ) const
 {

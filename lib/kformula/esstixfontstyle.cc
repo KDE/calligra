@@ -33,59 +33,31 @@ KFORMULA_NAMESPACE_BEGIN
 
 bool EsstixFontStyle::init( ContextStyle* context )
 {
-    if ( fontAvailable( "esstixeight" ) &&
-         fontAvailable( "esstixeleven" ) &&
-         fontAvailable( "esstixfifteen" ) &&
-         fontAvailable( "esstixfive" ) &&
-         fontAvailable( "esstixfour" ) &&
-         fontAvailable( "esstixfourteen" ) &&
-         fontAvailable( "esstixnine" ) &&
-         fontAvailable( "esstixone" ) &&
-         fontAvailable( "esstixseven" ) &&
-         fontAvailable( "esstixseventeen" ) &&
-         fontAvailable( "esstixsix" ) &&
-         fontAvailable( "esstixsixteen" ) &&
-         fontAvailable( "esstixten" ) &&
-         fontAvailable( "esstixthirteen" ) &&
-         fontAvailable( "esstixthree" ) &&
-         fontAvailable( "esstixtwelve" ) &&
-         fontAvailable( "esstixtwo" ) ) {
+    SymbolTable* st = symbolTable();
+    st->init( context );
 
-        SymbolTable* st = symbolTable();
-        st->init( context );
+    SymbolTable::NameTable tempNames;
+    fillNameTable( tempNames );
 
-        SymbolTable::NameTable tempNames;
-        fillNameTable( tempNames );
+    st->initFont( esstixeightMap, "esstixeight", tempNames );
+    st->initFont( esstixelevenMap, "esstixeleven", tempNames );
+    st->initFont( esstixfifteenMap, "esstixfifteen", tempNames );
+    st->initFont( esstixfiveMap, "esstixfive", tempNames );
+    st->initFont( esstixfourMap, "esstixfour", tempNames );
+    st->initFont( esstixfourteenMap, "esstixfourteen", tempNames );
+    st->initFont( esstixnineMap, "esstixnine", tempNames );
+    st->initFont( esstixoneMap, "esstixone", tempNames );
+    st->initFont( esstixsevenMap, "esstixseven", tempNames );
+    st->initFont( esstixseventeenMap, "esstixseventeen", tempNames );
+    st->initFont( esstixsixMap, "esstixsix", tempNames );
+    st->initFont( esstixsixteenMap, "esstixsixteen", tempNames );
+    st->initFont( esstixtenMap, "esstixten", tempNames );
+    st->initFont( esstixthirteenMap, "esstixthirteen", tempNames );
+    st->initFont( esstixthreeMap, "esstixthree", tempNames );
+    st->initFont( esstixtwelveMap, "esstixtwelve", tempNames );
+    st->initFont( esstixtwoMap, "esstixtwo", tempNames );
 
-        st->initFont( esstixeightMap, "esstixeight", tempNames );
-        st->initFont( esstixelevenMap, "esstixeleven", tempNames );
-        st->initFont( esstixfifteenMap, "esstixfifteen", tempNames );
-        st->initFont( esstixfiveMap, "esstixfive", tempNames );
-        st->initFont( esstixfourMap, "esstixfour", tempNames );
-        st->initFont( esstixfourteenMap, "esstixfourteen", tempNames );
-        st->initFont( esstixnineMap, "esstixnine", tempNames );
-        st->initFont( esstixoneMap, "esstixone", tempNames );
-        st->initFont( esstixsevenMap, "esstixseven", tempNames );
-        st->initFont( esstixseventeenMap, "esstixseventeen", tempNames );
-        st->initFont( esstixsixMap, "esstixsix", tempNames );
-        st->initFont( esstixsixteenMap, "esstixsixteen", tempNames );
-        st->initFont( esstixtenMap, "esstixten", tempNames );
-        st->initFont( esstixthirteenMap, "esstixthirteen", tempNames );
-        st->initFont( esstixthreeMap, "esstixthree", tempNames );
-        st->initFont( esstixtwelveMap, "esstixtwelve", tempNames );
-        st->initFont( esstixtwoMap, "esstixtwo", tempNames );
-
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-
-QString EsstixFontStyle::name()
-{
-    return i18n( "Esstix Font Style" );
+    return true;
 }
 
 

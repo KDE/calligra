@@ -33,43 +33,21 @@ KFORMULA_NAMESPACE_BEGIN
 
 bool CMStyle::init( ContextStyle* context )
 {
-    if ( fontAvailable( "cmex10" ) &&
-         //fontAvailable( "cmbx10" ) &&
-         //fontAvailable( "cmti10" ) &&
-         //fontAvailable( "cmtt10" ) &&
-         //fontAvailable( "cmsl10" ) &&
-         fontAvailable( "msam10" ) &&
-         fontAvailable( "msbm10" ) &&
-         fontAvailable( "cmr10" ) &&
-         fontAvailable( "cmmi10" ) &&
-         fontAvailable( "cmbx10" ) &&
-         fontAvailable( "cmsy10" ) ) {
+    SymbolTable* st = symbolTable();
+    st->init( context );
 
-        SymbolTable* st = symbolTable();
-        st->init( context );
+    SymbolTable::NameTable tempNames;
+    fillNameTable( tempNames );
 
-        SymbolTable::NameTable tempNames;
-        fillNameTable( tempNames );
+    st->initFont( cmbx10Map, "cmbx10", tempNames );
+    st->initFont( cmex10Map, "cmex10", tempNames );
+    st->initFont( cmmi10Map, "cmmi10", tempNames );
+    st->initFont( cmr10Map, "cmr10", tempNames );
+    st->initFont( cmsy10Map, "cmsy10", tempNames );
+    st->initFont( msam10Map, "msam10", tempNames );
+    st->initFont( msbm10Map, "msbm10", tempNames );
 
-        st->initFont( cmbx10Map, "cmbx10", tempNames );
-        st->initFont( cmex10Map, "cmex10", tempNames );
-        st->initFont( cmmi10Map, "cmmi10", tempNames );
-        st->initFont( cmr10Map, "cmr10", tempNames );
-        st->initFont( cmsy10Map, "cmsy10", tempNames );
-        st->initFont( msam10Map, "msam10", tempNames );
-        st->initFont( msbm10Map, "msbm10", tempNames );
-
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-
-QString CMStyle::name()
-{
-    return i18n( "Computer Modern Style (plain TeX)" );
+    return true;
 }
 
 
@@ -228,7 +206,6 @@ void CMArtwork::calcSizes( const ContextStyle& style,
     setBaseline( -1 );
     cmChar = -1;
     luPt mySize = style.getAdjustedSize( tstyle );
-    //const SymbolTable& symbolTable = style.symbolTable();
     switch (getType()) {
     case LeftSquareBracket:
         if ( calcCMDelimiterSize( style, cmex_LeftSquareBracket,
@@ -314,15 +291,12 @@ void CMArtwork::calcSizes( const ContextStyle& style,
         calcCurlyBracket( style, rightCurlyBracket, parentSize, mySize );
         break;
     case Integral:
-        //calcCharSize( style, qRound( 1.5*mySize ), integralChar );
         calcCharSize( style, QFont( "cmex10" ), mySize, cmex_Int );
         break;
     case Sum:
-        //calcCharSize( style, qRound( 1.5*mySize ), summationChar );
         calcCharSize( style, QFont( "cmex10" ), mySize, cmex_Sum );
         break;
     case Product:
-        //calcCharSize( style, qRound( 1.5*mySize ), productChar );
         calcCharSize( style, QFont( "cmex10" ), mySize, cmex_Prod );
         break;
     }
@@ -381,7 +355,6 @@ void CMArtwork::draw(QPainter& painter, const LuPixelRect& r,
         return;
 
     painter.setPen(style.getDefaultColor());
-    //const SymbolTable& symbolTable = style.symbolTable();
 
     switch (getType()) {
     case LeftSquareBracket:
@@ -469,23 +442,23 @@ void CMArtwork::draw(QPainter& painter, const LuPixelRect& r,
     case EmptyBracket:
         break;
     case Integral:
-        //drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), integralChar);
         drawCharacter(painter, style, QFont( "cmex10" ), myX, myY, mySize, cmex_Int);
         break;
     case Sum:
-        //drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), summationChar);
         drawCharacter(painter, style, QFont( "cmex10" ), myX, myY, mySize, cmex_Sum);
         break;
     case Product:
-        //drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), productChar);
         drawCharacter(painter, style, QFont( "cmex10" ), myX, myY, mySize, cmex_Prod);
         break;
     }
 
     // debug
-    //painter.setBrush(Qt::NoBrush);
-    //painter.setPen(Qt::green);
-    //painter.drawRect(myX, myY, getWidth(), getHeight());
+//     painter.setBrush(Qt::NoBrush);
+//     painter.setPen(Qt::green);
+//     painter.drawRect( style.layoutUnitToPixelX( myX ),
+//                       style.layoutUnitToPixelY( myY ),
+//                       style.layoutUnitToPixelX( getWidth() ),
+//                       style.layoutUnitToPixelY( getHeight() ) );
 }
 
 
@@ -508,7 +481,6 @@ bool CMArtwork::calcCMDelimiterSize( const ContextStyle& context,
                                      luPt parentSize )
 {
     QFont f( "cmex10" );
-    //f.setPointSizeFloat( context.layoutUnitToFontSize( i*fontSize, false ) );
     f.setPointSizeFloat( context.layoutUnitPtToPt( fontSize ) );
     QFontMetrics fm( f );
 
@@ -540,7 +512,6 @@ void CMArtwork::calcLargest( const ContextStyle& context,
                              uchar c, luPt fontSize )
 {
     QFont f( "cmex10" );
-    //f.setPointSizeFloat( context.layoutUnitToFontSize( i*fontSize, false ) );
     f.setPointSizeFloat( context.layoutUnitPtToPt( fontSize ) );
     QFontMetrics fm( f );
 
@@ -576,6 +547,18 @@ void CMArtwork::drawCMDelimiter( QPainter& painter, const ContextStyle& style,
     painter.drawText( style.layoutUnitToPixelX( x ),
                       style.layoutUnitToPixelY( y + getBaseline() ),
                       QString( QChar( cmChar ) ) );
+
+    // Debug
+#if 0
+    QFontMetrics fm( f );
+    LuPixelRect bound = fm.boundingRect( cmChar );
+    painter.setBrush(Qt::NoBrush);
+    painter.setPen(Qt::green);
+    painter.drawRect( style.layoutUnitToPixelX( x ),
+                      style.layoutUnitToPixelY( y ),
+                      fm.width( cmChar ),
+                      bound.height() );
+#endif
 }
 
 

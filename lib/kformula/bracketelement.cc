@@ -264,10 +264,12 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
     SequenceElement* content = getContent();
     content->calcSizes(style, tstyle, istyle);
 
-    if ( left == 0 ) {
-        left = style.fontStyle().createArtwork( leftType );
-        right = style.fontStyle().createArtwork( rightType );
-    }
+    //if ( left == 0 ) {
+    delete left;
+    delete right;
+    left = style.fontStyle().createArtwork( leftType );
+    right = style.fontStyle().createArtwork( rightType );
+    //}
 
     if (content->isTextOnly()) {
         left->calcSizes(style, tstyle);
@@ -359,16 +361,18 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 
     // Debug
-//     painter.setBrush( Qt::NoBrush );
-//     painter.setPen( Qt::red );
-//     painter.drawRect( style.layoutUnitToPixelX( myPos.x()+left->getX() ),
-//                       style.layoutUnitToPixelY( myPos.y()+left->getY() ),
-//                       style.layoutUnitToPixelX( left->getWidth() ),
-//                       style.layoutUnitToPixelY( left->getHeight() ) );
-//     painter.drawRect( style.layoutUnitToPixelX( myPos.x()+right->getX() ),
-//                       style.layoutUnitToPixelY( myPos.y()+right->getY() ),
-//                       style.layoutUnitToPixelX( right->getWidth() ),
-//                       style.layoutUnitToPixelY( right->getHeight() ) );
+#if 0
+    painter.setBrush( Qt::NoBrush );
+    painter.setPen( Qt::red );
+    painter.drawRect( style.layoutUnitToPixelX( myPos.x()+left->getX() ),
+                      style.layoutUnitToPixelY( myPos.y()+left->getY() ),
+                      style.layoutUnitToPixelX( left->getWidth() ),
+                      style.layoutUnitToPixelY( left->getHeight() ) );
+    painter.drawRect( style.layoutUnitToPixelX( myPos.x()+right->getX() ),
+                      style.layoutUnitToPixelY( myPos.y()+right->getY() ),
+                      style.layoutUnitToPixelX( right->getWidth() ),
+                      style.layoutUnitToPixelY( right->getHeight() ) );
+#endif
 }
 
 

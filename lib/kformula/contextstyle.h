@@ -127,6 +127,9 @@ public:
     void setEmptyColor( const QColor& );
     void setHelpColor( const QColor& );
 
+    QString getFontStyle() const { return m_fontStyleName; }
+    void setFontStyle( const QString& fontStyle );
+
     QFont getDefaultFont()    const { return defaultFont; }
     QFont getNameFont()       const { return nameFont; }
     QFont getNumberFont()     const { return numberFont; }
@@ -138,8 +141,8 @@ public:
     void setNumberFont( QFont f )   { numberFont = f; }
     void setOperatorFont( QFont f ) { operatorFont = f; }
 
-    const QStringList& requestedFonts() const;
-    void setRequestedFonts( const QStringList& list );
+    //const QStringList& requestedFonts() const;
+    //void setRequestedFonts( const QStringList& list );
 
     double getReductionFactor( TextStyle tstyle ) const;
 
@@ -246,7 +249,7 @@ private:
     QFont operatorFont;
     QFont symbolFont;
 
-    QStringList m_requestedFonts;
+    //QStringList m_requestedFonts;
 
     QColor defaultColor;
     QColor numberColor;
@@ -314,6 +317,7 @@ private:
     //SymbolTable table;
 
     FontStyle* m_fontStyle;
+    QString m_fontStyleName;
 };
 
 KFORMULA_NAMESPACE_END

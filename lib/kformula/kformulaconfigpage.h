@@ -28,15 +28,17 @@
 
 #include "kformuladefs.h"
 
+class QButtonGroup;
 class QCheckBox;
 class QColor;
 class QGridLayout;
+class QGroupBox;
 class QLabel;
 class QPushButton;
+class QRadioButton;
 class QSpinBox;
 class QStringList;
 class QWidget;
-class QGroupBox;
 
 class KColorButton;
 class KConfig;
@@ -95,13 +97,18 @@ private:
     QLabel* numberFontName;
     QLabel* operatorFontName;
 
-    KColorButton* defaultColorBtn;
-    KColorButton* numberColorBtn;
-    KColorButton* operatorColorBtn;
-    KColorButton* emptyColorBtn;
-    KColorButton* errorColorBtn;
+//     KColorButton* defaultColorBtn;
+//     KColorButton* numberColorBtn;
+//     KColorButton* operatorColorBtn;
+//     KColorButton* emptyColorBtn;
+//     KColorButton* errorColorBtn;
     QCheckBox* syntaxHighlighting;
-    QGroupBox* hlBox;
+//     QGroupBox* hlBox;
+
+    QButtonGroup* styleBox;
+    QRadioButton* symbolStyle;
+    QRadioButton* esstixStyle;
+    QRadioButton* cmStyle;
 };
 
 

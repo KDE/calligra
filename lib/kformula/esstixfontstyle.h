@@ -45,9 +45,6 @@ class EsstixFontStyle : public FontStyle {
     /// lazy init support. Needs to be run before anything else.
     virtual bool init( ContextStyle* context );
 
-    /// this styles name
-    virtual QString name();
-
     /// the table for special alphabets.
     virtual const AlphaTable* alphaTable() const;
 

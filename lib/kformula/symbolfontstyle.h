@@ -33,9 +33,6 @@ class SymbolFontStyle : public FontStyle {
     /// lazy init support. Needs to be run before anything else.
     virtual bool init( ContextStyle* context );
 
-    /// this styles name
-    virtual QString name();
-
     virtual Artwork* createArtwork( SymbolType type = EmptyBracket ) const;
 };
 

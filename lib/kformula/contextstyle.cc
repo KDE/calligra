@@ -72,18 +72,28 @@ ContextStyle::~ContextStyle()
 void ContextStyle::init()
 {
     setup();
-    m_fontStyle = new CMStyle();
-    if ( !m_fontStyle->init( this ) ) {
-        delete m_fontStyle;
+    setFontStyle( m_fontStyleName );
+}
 
+
+void ContextStyle::setFontStyle( const QString& fontStyle )
+{
+    delete m_fontStyle;
+    m_fontStyleName = fontStyle;
+    if ( m_fontStyleName == "tex" ) {
+        m_fontStyle = new CMStyle();
+        if ( !m_fontStyle->init( this ) ) {
+        }
+    }
+    else if ( m_fontStyleName == "esstix" ) {
         m_fontStyle = new EsstixFontStyle();
         if ( !m_fontStyle->init( this ) ) {
-            delete m_fontStyle;
-
-            // The SymbolFontStyle is always expected to work.
-            m_fontStyle = new SymbolFontStyle();
-            m_fontStyle->init( this );
         }
+    }
+    else {
+        // The SymbolFontStyle is always expected to work.
+        m_fontStyle = new SymbolFontStyle();
+        m_fontStyle->init( this );
     }
 }
 
@@ -108,6 +118,9 @@ void ContextStyle::readConfig( KConfig* config )
     QString baseSize = config->readEntry( "baseSize", "20" );
     m_baseSize = baseSize.toInt();
 
+    m_fontStyleName = config->readEntry( "fontStyle", "symbol" );
+
+#if 0
     m_requestedFonts = config->readListEntry( "usedMathFonts" );
     if ( m_requestedFonts.size() == 0 ) {
         m_requestedFonts.push_back( "esstixone" );
@@ -133,7 +146,9 @@ void ContextStyle::readConfig( KConfig* config )
 //         m_requestedFonts.push_back( "euclid math two" );
 //         m_requestedFonts.push_back( "euclid symbol" );
     }
+#endif
 
+    // There's no gui right anymore but I'll leave it here...
     config->setGroup( "kformula Color" );
     defaultColor  = config->readColorEntry( "defaultColor",  &defaultColor );
     numberColor   = config->readColorEntry( "numberColor",   &numberColor );
@@ -141,6 +156,7 @@ void ContextStyle::readConfig( KConfig* config )
     emptyColor    = config->readColorEntry( "emptyColor",    &emptyColor );
     errorColor    = config->readColorEntry( "errorColor",    &errorColor );
     helpColor     = config->readColorEntry( "helpColor",     &helpColor );
+
     m_syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting", true );
 }
 
@@ -223,6 +239,7 @@ void ContextStyle::setHelpColor( const QColor& color )
     helpColor = color;
 }
 
+#if 0
 const QStringList& ContextStyle::requestedFonts() const
 {
     return m_requestedFonts;
@@ -233,6 +250,7 @@ void ContextStyle::setRequestedFonts( const QStringList& list )
     m_requestedFonts = list;
     //table.init( this );
 }
+#endif
 
 double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 {

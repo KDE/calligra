@@ -200,9 +200,10 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
     luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
 
-    if ( symbol == 0 ) {
-        symbol = style.fontStyle().createArtwork( symbolType );
-    }
+    //if ( symbol == 0 ) {
+    delete symbol;
+    symbol = style.fontStyle().createArtwork( symbolType );
+    //}
 
     symbol->calcSizes(style, tstyle, mySize);
     content->calcSizes(style, tstyle, istyle);
@@ -321,21 +322,21 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 
     // Debug
-//     painter.setBrush(Qt::NoBrush);
-//     painter.setPen(Qt::red);
+    painter.setBrush(Qt::NoBrush);
+    painter.setPen(Qt::red);
 //     painter.drawRect( style.layoutUnitToPixelX( myPos.x() ),
 //                       style.layoutUnitToPixelY( myPos.y() ),
 //                       style.layoutUnitToPixelX( getWidth() ),
 //                       style.layoutUnitToPixelY( getHeight() ) );
-//     painter.drawRect( style.layoutUnitToPixelX( myPos.x()+symbol->getX() ),
-//                       style.layoutUnitToPixelY( myPos.y()+symbol->getY() ),
-//                       style.layoutUnitToPixelX( symbol->getWidth() ),
-//                       style.layoutUnitToPixelY( symbol->getHeight() ) );
-//     painter.setPen(Qt::green);
-//     painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-//                       style.layoutUnitToPixelY( myPos.y()+axis(style, tstyle) ),
-//                       style.layoutUnitToPixelX( myPos.x()+getWidth() ),
-//                       style.layoutUnitToPixelY( myPos.y()+axis(style, tstyle) ) );
+    painter.drawRect( style.layoutUnitToPixelX( myPos.x()+symbol->getX() ),
+                      style.layoutUnitToPixelY( myPos.y()+symbol->getY() ),
+                      style.layoutUnitToPixelX( symbol->getWidth() ),
+                      style.layoutUnitToPixelY( symbol->getHeight() ) );
+    painter.setPen(Qt::green);
+    painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
+                      style.layoutUnitToPixelY( myPos.y()+axis(style, tstyle) ),
+                      style.layoutUnitToPixelX( myPos.x()+getWidth() ),
+                      style.layoutUnitToPixelY( myPos.y()+axis(style, tstyle) ) );
 }
 
 
