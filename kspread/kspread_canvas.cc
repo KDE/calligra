@@ -3477,7 +3477,7 @@ void KSpreadVBorder::equalizeRow( int resize )
   }
 }
 
-void KSpreadVBorder::resizeRow( int resize, int nb, bool makeUndo )
+void KSpreadVBorder::resizeRow( double resize, int nb, bool makeUndo )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
@@ -3492,7 +3492,7 @@ void KSpreadVBorder::resizeRow( int resize, int nb, bool makeUndo )
     }
     RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
     resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
-    rl->setHeight( resize, m_pCanvas );
+    rl->setDblHeight( resize, m_pCanvas );
   }
   else
   {
@@ -3508,7 +3508,7 @@ void KSpreadVBorder::resizeRow( int resize, int nb, bool makeUndo )
       }
       RowLayout *rl = table->nonDefaultRowLayout( m_pCanvas->markerRow() );
       resize=QMAX((int)(2.0* m_pCanvas->zoom()), resize);
-      rl->setHeight( resize, m_pCanvas );
+      rl->setDblHeight( resize, m_pCanvas );
     }
     else
     {
@@ -3522,7 +3522,7 @@ void KSpreadVBorder::resizeRow( int resize, int nb, bool makeUndo )
       {
         rl = table->nonDefaultRowLayout( i );
         resize=QMAX((int)(2.0* m_pCanvas->zoom()), resize);
-        rl->setHeight( resize, m_pCanvas );
+        rl->setDblHeight( resize, m_pCanvas );
       }
     }
   }
@@ -4014,7 +4014,7 @@ void KSpreadHBorder::equalizeColumn( int resize )
 
 }
 
-void KSpreadHBorder::resizeColumn( int resize, int nb, bool makeUndo )
+void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
@@ -4030,7 +4030,7 @@ void KSpreadHBorder::resizeColumn( int resize, int nb, bool makeUndo )
     }
     ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
     resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
-    cl->setWidth( resize, m_pCanvas );
+    cl->setDblWidth( resize, m_pCanvas );
   }
   else
   {
@@ -4048,7 +4048,7 @@ void KSpreadHBorder::resizeColumn( int resize, int nb, bool makeUndo )
       ColumnLayout *cl = table->nonDefaultColumnLayout( m_pCanvas->markerColumn() );
 
       resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
-      cl->setWidth( resize, m_pCanvas );
+      cl->setDblWidth( resize, m_pCanvas );
     }
     else
     {
@@ -4063,7 +4063,7 @@ void KSpreadHBorder::resizeColumn( int resize, int nb, bool makeUndo )
         cl = table->nonDefaultColumnLayout( i );
 
         resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
-        cl->setWidth( resize, m_pCanvas );
+        cl->setDblWidth( resize, m_pCanvas );
       }
     }
   }

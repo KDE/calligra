@@ -31,77 +31,78 @@
 #include <knuminput.h>
 #include <koUnit.h>
 
-KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resize re)
-	: KDialogBase( parent, name,TRUE,i18n("Default"),Ok|Cancel )
+KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name, type_resize re )
+	: KDialogBase( parent, name, TRUE, i18n("Default"), Ok|Cancel )
 {
 
-  m_pView=parent;
-  type=re;
+  m_pView = parent;
+  type = re;
   QString tmp;
   QString tmpCheck;
-  //int pos;
   QString label;
   QWidget *page = new QWidget( this );
   setMainWidget(page);
 
   QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
-  tmpCheck=i18n("Default");
+  tmpCheck = i18n("Default");
   RowLayout *rl;
   ColumnLayout *cl;
-  bool equals=true;
+  bool equals = true;
   int i;
   QRect selection( m_pView->activeTable()->selection() );
   switch(type)
-	{
+  {
 	case resize_row:
 		setCaption( i18n("Resize Row") );
-                rl = m_pView->activeTable()->rowLayout(selection.top());
-		size=rl->height(m_pView->canvasWidget());
-		for(i=selection.top()+1;i<=selection.bottom();i++)
-			if(size!=m_pView->activeTable()->rowLayout(i)->height(m_pView->canvasWidget()))
-			equals=false;
-		label=i18n("Height (%1)").arg(m_pView->doc()->getUnitName());
-                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit( static_cast<int>( heightOfRow ), m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
+                rl = m_pView->activeTable()->rowLayout( selection.top() );
+		size = rl->dblHeight( m_pView->canvasWidget() );
+		for( i=selection.top()+1; i<=selection.bottom(); i++ )
+			if( size != m_pView->activeTable()->rowLayout(i)->dblHeight( m_pView->canvasWidget() ) )
+				equals = false;
+		label = i18n("Height");
+                tmpCheck += QString(" %1 %2").arg(KoUnit::ptToUnit( heightOfRow, m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	case resize_column:
 		setCaption( i18n("Resize Column") );
-                cl = m_pView->activeTable()->columnLayout(selection.left());
-		size=cl->width(m_pView->canvasWidget());
-		for(i=selection.left()+1;i<=selection.right();i++)
-                  if(size!=m_pView->activeTable()->columnLayout(i)->width(m_pView->canvasWidget()))
-                    equals=false;
+                cl = m_pView->activeTable()->columnLayout( selection.left() );
+		size = cl->dblWidth( m_pView->canvasWidget() );
+		for( i=selection.left()+1; i<=selection.right(); i++ )
+			if( size != m_pView->activeTable()->columnLayout(i)->dblWidth( m_pView->canvasWidget() ) )
+				equals = false;
 
-		label=i18n("Width (%1)").arg(m_pView->doc()->getUnitName());
-                tmpCheck+=QString(" %1 %2").arg(KoUnit::ptToUnit(  static_cast<int>( colWidth ) , m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
+		label = i18n("Width");
+		tmpCheck += QString(" %1 %2").arg(KoUnit::ptToUnit( colWidth, m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	default :
-	        kdDebug(36001) <<"Err in type_resize" << endl;
 		break;
-	}
+  }
 
 
   if(!equals)
-  	switch(type)
+	switch(type)
 	{
-	case resize_row:
-          size=(int)KoUnit::ptToUnit(  static_cast<int>( heightOfRow ), m_pView->doc()->getUnit() );
-          break;
-	case resize_column:
-          size=(int)KoUnit::ptToUnit(  static_cast<int>( colWidth ), m_pView->doc()->getUnit() );
-          break;
+		case resize_row:
+			size = KoUnit::ptToUnit( heightOfRow, m_pView->doc()->getUnit() );
+			break;
+		case resize_column:
+			size = KoUnit::ptToUnit( colWidth, m_pView->doc()->getUnit() );
+			break;
 	}
 
-  m_pSize2=new KIntNumInput((int)KoUnit::ptToUnit( size, m_pView->doc()->getUnit() ), page, 10);
-  m_pSize2->setRange(2, 400, 1);
-  m_pSize2->setLabel(label);
-  lay1->addWidget(m_pSize2);
+  m_pSize2 = new KDoubleNumInput( page );
+  m_pSize2->setRange( 2, 400, 1 );
+  m_pSize2->setLabel( label );
+  m_pSize2->setPrecision( 3 );
+  m_pSize2->setValue( KoUnit::ptToUnit( size, m_pView->doc()->getUnit() ) );
+  m_pSize2->setSuffix( m_pView->doc()->getUnitName() );
+  lay1->addWidget( m_pSize2 );
 
-  m_pDefault=new QCheckBox(tmpCheck,page);
-  lay1->addWidget(m_pDefault);
+  m_pDefault = new QCheckBox( tmpCheck, page );
+  lay1->addWidget( m_pDefault );
 
   lay1->activate();
   m_pSize2->setFocus();
-  connect( m_pDefault, SIGNAL(clicked() ),this, SLOT(slotChangeState()));
+  connect( m_pDefault, SIGNAL(clicked() ), this, SLOT(slotChangeState()));
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 
 }
@@ -109,9 +110,9 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 void KSpreadresize2::slotChangeState()
 {
     if(m_pDefault->isChecked())
-	m_pSize2->setEnabled(false);
+	m_pSize2->setEnabled( false );
     else
-	m_pSize2->setEnabled(true);
+	m_pSize2->setEnabled( true );
 }
 
 
@@ -119,34 +120,36 @@ void KSpreadresize2::slotOk()
 {
     QRect selection( m_pView->activeTable()->selection() );
 
-    int new_size = (int) KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
+    double new_size = KoUnit::ptFromUnit( m_pSize2->value() + 0.00005 /* rounded */, m_pView->doc()->getUnit() );
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
-      {
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , selection );
+    {
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeTable(), selection );
         m_pView->doc()->undoBuffer()->appendUndo( undo );
-      }
+    }
     switch(type)
-      {
+    {
       case resize_row:
-	if(m_pDefault->isChecked())
-	  for(int i=selection.top();i<=selection.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-	    m_pView->vBorderWidget()->resizeRow( static_cast<int>( heightOfRow ), i, false );
+	if( m_pDefault->isChecked() )
+	  for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
+	    m_pView->vBorderWidget()->resizeRow( heightOfRow, i, false );
 	else
-	  for(int i=selection.top();i<=selection.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-	    m_pView->vBorderWidget()->resizeRow(new_size,i,false );
+	  for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
+	    m_pView->vBorderWidget()->resizeRow( new_size, i, false );
 	break;
+
       case resize_column:
-	if(m_pDefault->isChecked())
-	  for(int i=selection.left();i<=selection.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-	    m_pView->hBorderWidget()->resizeColumn( static_cast<int>( colWidth ), i, false );
+	if( m_pDefault->isChecked() )
+	  for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+	    m_pView->hBorderWidget()->resizeColumn( colWidth, i, false );
 	else
-	  for(int i=selection.left();i<=selection.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-	    m_pView->hBorderWidget()->resizeColumn(new_size,i,false );
+	  for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+	    m_pView->hBorderWidget()->resizeColumn( new_size, i, false );
 	break;
+
       default :
-	kdDebug(36001) <<"Err in type_resize" << endl;
+	kdDebug(36001) << "Err in type_resize" << endl;
 	break;
-      }
+    }
     accept();
 }
 

@@ -27,7 +27,7 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 class QCheckBox;
-class KIntNumInput;
+class KDoubleNumInput;
 
 class KSpreadresize2 : public KDialogBase
 {
@@ -37,13 +37,13 @@ public:
   KSpreadresize2( KSpreadView* parent, const char* name,type_resize re);
 
   type_resize type;
-  int size;
+  double size;
 public slots:
   void slotOk();
   void slotChangeState();
 protected:
   KSpreadView* m_pView;
-  KIntNumInput *m_pSize2;
+  KDoubleNumInput *m_pSize2;
   QCheckBox *m_pDefault;
 };
 

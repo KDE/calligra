@@ -1757,6 +1757,30 @@ void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
   UPDATE_END;
 }
 
+void RowLayout::setDblHeight( double _h, KSpreadCanvas *_canvas )
+{
+  KSpreadTable *_table;
+  if ( _canvas )
+      _table = _canvas->activeTable();
+  else
+      _table = m_pTable;
+
+  UPDATE_BEGIN;
+
+  // Lower maximum size by old height
+  _table->adjustSizeMaxY ( - height() );
+
+  if ( _canvas )
+    m_fHeight = ( _h / _canvas->zoom() );
+  else
+    m_fHeight = _h;
+
+  // Rise maximum size by new height
+  _table->adjustSizeMaxY ( height() );
+
+  UPDATE_END;
+}
+
 int RowLayout::height( KSpreadCanvas *_canvas )
 {
   if( m_bHide )
@@ -1766,6 +1790,17 @@ int RowLayout::height( KSpreadCanvas *_canvas )
     return (int) ( _canvas->zoom() * m_fHeight );
   else
     return (int) m_fHeight;
+}
+
+double RowLayout::dblHeight( KSpreadCanvas *_canvas )
+{
+  if( m_bHide )
+    return 0.0;
+
+  if ( _canvas )
+    return _canvas->zoom() * m_fHeight;
+  else
+    return m_fHeight;
 }
 
 double RowLayout::mmHeight()
@@ -1988,15 +2023,50 @@ void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
   UPDATE_END;
 }
 
+void ColumnLayout::setDblWidth( double _w, KSpreadCanvas *_canvas )
+{
+  KSpreadTable *_table;
+  if ( _canvas )
+      _table = _canvas->activeTable();
+  else
+      _table = m_pTable;
+
+  UPDATE_BEGIN;
+
+  // Lower maximum size by old width
+  _table->adjustSizeMaxX ( - width() );
+
+  if ( _canvas )
+      m_fWidth = ( _w / _canvas->zoom() );
+  else
+      m_fWidth = _w;
+
+  // Rise maximum size by new width
+  _table->adjustSizeMaxX ( width() );
+
+  UPDATE_END;
+}
+
 int ColumnLayout::width( KSpreadCanvas *_canvas )
 {
   if( m_bHide )
     return 0;
 
   if ( _canvas )
-    return (int) ( _canvas->zoom() * m_fWidth );
+    return (int) _canvas->zoom() * m_fWidth;
   else
     return (int) m_fWidth;
+}
+
+double ColumnLayout::dblWidth( KSpreadCanvas *_canvas )
+{
+  if( m_bHide )
+    return 0.0;
+
+  if ( _canvas )
+    return _canvas->zoom() * m_fWidth;
+  else
+    return m_fWidth;
 }
 
 double ColumnLayout::mmWidth()
