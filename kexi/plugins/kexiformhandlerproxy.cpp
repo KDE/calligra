@@ -26,13 +26,14 @@
 
 #include "kexiformhandlerproxy.h"
 #include "kexiformhandler.h"
+#include "kexiformhandleritem.h"
 #include "kexiprojecthandleritem.h"
 #include "kexiformbase.h"
 
 KexiFormHandlerProxy::KexiFormHandlerProxy(KexiFormHandler *handler, KexiView *view)
  : KexiProjectHandlerProxy(handler, view), KXMLGUIClient()
 {
-	m_handler = handler;
+	m_formHandler = handler;
 }
 
 KexiPartPopupMenu *
@@ -66,7 +67,10 @@ KexiFormHandlerProxy::slotCreate()
 
 	if(ok && name.length() > 0)
 	{
-		KexiFormBase *nform = new KexiFormBase(kexiView(), 0, "nform", name);
+		KexiFormHandlerItem *i = new KexiFormHandlerItem(part(), name, name);
+		part()->items()->insert(name, i);
+                emit m_formHandler->itemListChanged(part());
+		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, "nform", name);
 		nform->show();
 	}
 }

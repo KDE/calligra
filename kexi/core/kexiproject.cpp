@@ -311,7 +311,7 @@ bool KexiProject::loadXML( QIODevice *, const QDomDocument &domDoc )
 void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/,
                                 double /*zoomX*/, double /*zoomY*/)
 {
-	
+
 }
 
 bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
@@ -440,7 +440,7 @@ KexiProject::handlerForMime(const QString& mime)
 	return 0;
 }
 
-ProviderList 
+ProviderList
 KexiProject::providers(const QString &interfaceName)
 {
 	ProviderList l;
@@ -462,7 +462,9 @@ KexiProject::getParts()
 void
 KexiProject::addFileReference(FileReference fileref)
 {
-	m_fileReferences.append(fileref);
+//	FIXME: port m_fileReferences to QMap...
+//	if(m_fileReferences.findIndex(fileref) != -1)
+		m_fileReferences.append(fileref);
 }
 
 QString

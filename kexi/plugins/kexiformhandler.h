@@ -42,9 +42,9 @@ class KexiFormHandler : public KexiProjectHandler
 
 		virtual QPixmap				groupPixmap();
 		virtual QPixmap				itemPixmap();
-	
+
 	protected:
-//		friend class KexiRelationHandlerProxy;
+		friend class KexiFormHandlerProxy;
 
 	signals:
 		void				itemListChanged(KexiProjectHandler*);

@@ -20,6 +20,8 @@
 #ifndef KFE_WIDGETCONTAINER_H
 #define KFE_WIDGETCONTAINER_H
 
+#include "propertybuffer.h"
+
 #include <qpixmap.h>
 
 /**
@@ -47,6 +49,9 @@ namespace KFormEditor
 
 			void addInteractive(QWidget *widget);
 			void registerSubContainer(WidgetContainer *cont);
+
+			void setWidgetList(WidgetList *wl);
+			void setPropertyBuffer(PropertyBuffer *pb);
 
 		protected:
 			void setTopLevelContainer(WidgetContainer *tpc);
@@ -86,7 +91,9 @@ namespace KFormEditor
 			WidgetContainer *m_topLevelContainer;
 
 		private:
-			QWidget	*m_pendingWidget;
+			QWidget		*m_pendingWidget;
+			WidgetList	*m_widgetList;
+			PropertyBuffer	*m_propertyBuffer;
 
 		protected slots:
 			bool eventFilter(QObject *obj, QEvent *ev);

@@ -126,7 +126,7 @@ private:
 	Groups          m_refGroups;
 	KexiRelation	*m_relationManager;
 	PartList	*m_parts;
-	DCOPObject *dcop;
+	DCOPObject	*dcop;
 	bool		m_handlersLoaded;
 };
 

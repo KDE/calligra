@@ -31,6 +31,8 @@ template <class type> class QPtrList;
 
 class KAction;
 class KexiProject;
+class KexiFormHandlerItem;
+
 namespace KFormEditor {
 	class WidgetContainer;
 }
@@ -41,7 +43,7 @@ class KexiFormBase : public KexiDialogBase
 	Q_OBJECT
    
 	public: 
-		KexiFormBase(KexiView *view, QWidget *parent=0, const char *name=0, QString identifier=QString::null);
+		KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent=0, const char *name=0, QString identifier=QString::null);
 		~KexiFormBase();
 		
                 virtual KXMLGUIClient *guiClient();

@@ -43,7 +43,7 @@ class KexiFormHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUIClien
 		void slotDelete(const QString &identifier);
 
 	private:
-		KexiFormHandler	*m_handler;
+		KexiFormHandler	*m_formHandler;
 };
 
 #endif

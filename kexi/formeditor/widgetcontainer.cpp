@@ -62,6 +62,8 @@ namespace KFormEditor {
 		m_activeWidget=0;
 		m_activeMoveWidget=0;
 		m_resizeHandleSet=0;
+		m_widgetList = 0;
+		m_propertyBuffer = 0;
 
 	}
 
@@ -381,6 +383,27 @@ namespace KFormEditor {
 				break;
 		}
 		return false;
+	}
+
+	void WidgetContainer::setWidgetList(WidgetList *wl)
+	{
+		m_widgetList = wl;
+		WidgetContainer *c;
+		for(c = m_subWidgets.first(); c; c = m_subWidgets.next())
+		{
+			c->setWidgetList(wl);
+		}
+
+	}
+
+	void WidgetContainer::setPropertyBuffer(PropertyBuffer *pb)
+	{
+		m_propertyBuffer = pb;
+		WidgetContainer *c;
+		for(c = m_subWidgets.first(); c; c = m_subWidgets.next())
+		{
+			c->setPropertyBuffer(pb);
+		}
 	}
 
 	WidgetContainer::~WidgetContainer(){

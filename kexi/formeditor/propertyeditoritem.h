@@ -40,7 +40,7 @@ class PropertyEditorItem : public KListViewItem
 		static QString	format(const QVariant &s);
 
 	protected:
-//		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 
 	private:
 		QString		m_name;

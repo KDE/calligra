@@ -40,6 +40,7 @@
 
 #include <qlayout.h>
 
+#include "kexiformhandleritem.h"
 #include "kexiformbase.h"
 #include "kexiview.h"
 #include "formeditor/widgetcontainer.h"
@@ -130,7 +131,7 @@ KexiFormBase::EditGUIClient *KexiFormBase::m_editGUIClient=0;
 KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 
 
-KexiFormBase::KexiFormBase(KexiView *view, QWidget *parent, const char *name, QString identifier)
+KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, const char *name, QString identifier)
 	: KexiDialogBase(view,parent,name)
 {
 	setMinimumWidth(50);
@@ -148,6 +149,8 @@ KexiFormBase::KexiFormBase(KexiView *view, QWidget *parent, const char *name, QS
 	QVBoxLayout *l=new QVBoxLayout(this);
 	l->setAutoAdd(true);
 	topLevelEditor=new KFormEditor::WidgetContainer(this,"foo","bar");
+	topLevelEditor->setWidgetList(item->widgetList());
+	topLevelEditor->setPropertyBuffer(item->propertyBuffer());
 
 	QDockWindow *editorWindow = new QDockWindow(view->mainWindow(), "edoc");
 	editorWindow->setCaption(i18n("Properties"));

@@ -69,11 +69,10 @@ PropertyEditorItem::setValue(QVariant value, bool sync)
 		m_object->setProperty(m_name.latin1(), value);
 }
 
-/*
+
 void
 PropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align)
 {
-	KListViewItem::paintCell(p, cg, column, width, align);
 	if(column == 1)
 	{
 		switch(m_value.type())
@@ -81,17 +80,30 @@ PropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 			case QVariant::Pixmap:
 			{
 				p->drawPixmap(1, 1, m_value.toPixmap());
+				break;
+			}
+			case QVariant::Color:
+			{
+				QColor ncolor = m_value.toColor();
+				p->setBrush(ncolor);
+				p->drawRect(2, 2, width - 2, height() - 2);
+				QColorGroup nGroup(cg);
+//				nGroup.setColor(QColorGroup::Base, ncolor);
+//				KListViewItem::paintCell(p, cg, column, width, align);
+//				p->fillRect(2, 2, width - 2, height() - 2, QBrush(m_value.toColor()));
+				return;
 			}
 
 			default:
 			{
+				KListViewItem::paintCell(p, cg, column, width, align);
 				return;
 			}
 		}
 	}
-
+	KListViewItem::paintCell(p, cg, column, width, align);
 }
-*/
+
 
 QString
 PropertyEditorItem::format(const QVariant &v)
