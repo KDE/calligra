@@ -12,7 +12,7 @@
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -30,48 +30,50 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "kword_xml2html.h"
+
 /*
 ** Every token is one of the following types.
 */
-typedef enum TokenType {
-  TT_Word,        /* Anything besides markup and whitespace */
-  TT_Space,       /* Spaces, not counting "\n" characters */
-  TT_EOL,         /* A sequence of spaces ending with "\n" */
-  TT_Markup       /* Any markup sequence */
-} TokenType;
+// typedef enum TokenType {
+//   TT_Word,        /* Anything besides markup and whitespace */
+//   TT_Space,       /* Spaces, not counting "\n" characters */
+//   TT_EOL,         /* A sequence of spaces ending with "\n" */
+//   TT_Markup       /* Any markup sequence */
+// } TokenType;
 
-/*
-** Each token is represented by an instance of the following structure.
-*/
-typedef struct Token Token;
-struct Token {
-  int offset;         /* Offset from start of file.  Used for error messages */
-  TokenType eType;    /* What type of token is this. */
-  char *zText;        /* The actual text of the token */
-  Token *pNext;       /* Next token in the list */
-};
+// /*
+// ** Each token is represented by an instance of the following structure.
+// */
+// typedef struct Token Token;
+// struct Token {
+//   int offset;         /* Offset from start of file.  Used for error messages */
+//   TokenType eType;    /* What type of token is this. */
+//   char *zText;        /* The actual text of the token */
+//   Token *pNext;       /* Next token in the list */
+// };
 
-/*
-** Arguments to a markup token are recorded as a list of the 
-** following structure.
-*/
-typedef struct Arg Arg;
-struct Arg {
-  int offset;      /* Index of first char of name -- for error messages */
-  char *zName;     /* Name of argument */
-  char *zValue;    /* Value of the argument */
-  Arg *pNext;      /* Next argument in the list, or NULL */
-};
+// /*
+// ** Arguments to a markup token are recorded as a list of the
+// ** following structure.
+// */
+// typedef struct Arg Arg;
+// struct Arg {
+//   int offset;      /* Index of first char of name -- for error messages */
+//   char *zName;     /* Name of argument */
+//   char *zValue;    /* Value of the argument */
+//   Arg *pNext;      /* Next argument in the list, or NULL */
+// };
 
-/*
-** Markup tokens have a few extra fields, shown by this structure.
-*/
-typedef struct Markup Markup;
-struct Markup {
-  Token token;       /* Base class.  Must be first */
-  Token *pContent;   /* Tokens between <MARKUP> and </MARKUP> */
-  Arg *pArg;         /* Arguments to this token */
-};
+// /*
+// ** Markup tokens have a few extra fields, shown by this structure.
+// */
+// typedef struct Markup Markup;
+// struct Markup {
+//   Token token;       /* Base class.  Must be first */
+//   Token *pContent;   /* Tokens between <MARKUP> and </MARKUP> */
+//   Arg *pArg;         /* Arguments to this token */
+// };
 
 /*
 ** The maximum length of a line of output for error messages.
@@ -88,13 +90,15 @@ static int nError = 0;
 ** Also define our own assert macro.
 */
 #define CANT_HAPPEN  AssertFailed(__FILE__,__LINE__)
+#ifndef ASSERT
 #define ASSERT(X)    if(!(X)){AssertFailed(__FILE__,__LINE__);}
+#endif
 static void AssertFailed(const char *zFile, int line){
   fprintf(stderr,"Assertion filed on line %d of %s.\n", line, zFile);
   exit(1);
 }
 
-/* 
+/*
 ** Open and read a file into memory.  Return a pointer
 ** to the buffer containing the text of this file.  The buffer will
 ** be null-terminated.  The calling function is responsible for reclaiming
@@ -156,7 +160,7 @@ char *ReadFileIntoMemory(const char *fileName){
   return textBuf;
 }
 
-/* 
+/*
 ** Print an error message across multiple lines (if necessary) so that
 ** no line exceeds LINELEN characters in length.  Put the given prefix at
 ** the beginning of each line.
@@ -185,7 +189,7 @@ static void BreakLines(char *zPrefix, char *zErr){
     }
 
     /*
-    ** The error message won't fit, so try to break it at a 
+    ** The error message won't fit, so try to break it at a
     ** space or '-' character.
     */
     i = LINELEN - lenPrefix;
@@ -218,11 +222,11 @@ static void BreakLines(char *zPrefix, char *zErr){
   }
 }
 
-/* 
+/*
 ** This routine prints an error message associated with a particular
 ** place in a file.  The line of the file on which the error occurred
 ** is printed together with the line number and a pointer to the position
-** on the line where the error occurred. 
+** on the line where the error occurred.
 **
 ** Consider an example:
 **
@@ -246,7 +250,7 @@ static void BreakLines(char *zPrefix, char *zErr){
 **      message is rendered into a static buffer (of size about 1000)
 **      so the format string should take care not to overflow this buffer.
 **   *  A variable argument list to accompany the format string.
-*/ 
+*/
 static void ErrorAtCharV(
   const char *zFile,         /* Complete text of file containing error */
   int offset,                /* Error begins at zFile[offset] */
@@ -266,9 +270,9 @@ static void ErrorAtCharV(
   char zBuf[LINELEN+100];    /* Staging buffer */
   char zPrefix[LINELEN+100]; /* Prefix string for this error message */
   char zErr[1000];           /* Text of the error message */
-  static char zUp[] = 
+  static char zUp[] =
     "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
-  
+
   lineno = 1;
   charno = 0;
   zLineStart = zFile;
@@ -327,7 +331,7 @@ static void ErrorAtCharV(
     **   test2.spgn:14:  IQ3 : CFLOAT,
     **                   ^^^--- Unknown Variable.
     */
-    fprintf(stderr,"%s%*s%.*s--- %s\n", 
+    fprintf(stderr,"%s%*s%.*s--- %s\n",
        zPrefix, charno, "", lenSpot, zUp, zErr);
   }else if( charno >= lenErr + 4 ){
     /* Error message to the left of the error.
@@ -416,7 +420,7 @@ struct Er {
 */
 static int bErNeedsInit = 1;
 
-/* The hash table 
+/* The hash table
 **
 ** If the name of an entity reference hashes to the value H, then
 ** apErHash[H] will point to a linked list of Er structures, one of
@@ -534,7 +538,7 @@ void *SafeMalloc(int nByte){
 #define SafeFree free
 
 /* An array to map all upper-case characters into their corresponding
-** lower-case character. 
+** lower-case character.
 */
 unsigned char UpperToLowerCase[] = {
       0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
@@ -691,7 +695,7 @@ Token *ParseXml(
       i++;
       if( zFile[i]=='!' && zFile[i+1]=='-' && zFile[i+2]=='-' ){
         i += 3;
-        while( (c=zFile[i])!=0 && 
+        while( (c=zFile[i])!=0 &&
             (c!='-' || zFile[i+1]!='-' || zFile[i+2]!='>')){ i++; }
         if( zFile[i] ){
           i += 3;
@@ -792,10 +796,10 @@ Token *ParseXml(
       }
       if( hasContent ){
         pM->pContent = ParseXml(zFile, &i);
-        if( zFile[i]!='<' || zFile[i+1]!='/' 
+        if( zFile[i]!='<' || zFile[i+1]!='/'
             || StrNICmp(&zFile[i+2], pM->token.zText, n)!=0 ){
           ErrorAtChar(zFile, pM->token.offset, 1, "Unterminated element");
-          ErrorAtChar(zFile, i-1, 1, "Inserted \"</%s>\" here", 
+          ErrorAtChar(zFile, i-1, 1, "Inserted \"</%s>\" here",
             pM->token.zText);
           nError++;
           continue;
@@ -989,7 +993,7 @@ char **WordList(Token *pList, int *pN){
       *z = 0;
     }
   }
-  az[n] = 0;  
+  az[n] = 0;
   if( pN ) *pN = n;
   return az;
 }
@@ -1166,7 +1170,7 @@ void RestrictArgs(char *zFile, Markup *pM, ...){
     z = va_arg(ap,char*);
     azAllow[N] = z;
   }
-  va_end(ap); 
+  va_end(ap);
   for(p=pM->pArg; p; p=p->pNext){
     for(i=0; i<N-1; i++){
       if( StrICmp(azAllow[i],p->zName)==0 ) break;

@@ -13,13 +13,15 @@
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** To receive a copy of the GNU Library General Public License, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
 **
 */
 
+#ifndef kword_xml2html
+#define kword_xml2html
 
 /*
 ** Every token is one of the following types.
@@ -44,7 +46,7 @@ struct Token {
 };
 
 /*
-** Arguments to a markup token are recorded as a list of the 
+** Arguments to a markup token are recorded as a list of the
 ** following structure.
 */
 typedef struct Arg Arg;
@@ -70,3 +72,4 @@ Token *ParseXml(
   int *piFile         /* Index of next unparsed character in zFile */
 );
 
+#endif
