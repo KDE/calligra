@@ -671,6 +671,25 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         }
     }
 
+    key += ",";
+
+    if ( force || ( formatOrigin.verticalAlignment != formatData.verticalAlignment ) )
+    {
+        if ( 1 == formatData.verticalAlignment )
+        {
+            //Subscript
+            strElement += "style:text-position=\"sub\" ";
+            key += 'B';
+        }
+        else if ( 2 == formatData.verticalAlignment )
+        {
+            //Superscript
+            strElement += "style:text-position=\"super\" ";
+            key += 'P';
+        }
+        // ### TODO: how to reset it?
+    }
+
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
