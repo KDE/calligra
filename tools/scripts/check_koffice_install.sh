@@ -45,7 +45,7 @@ if [ $found = 0 ]; then
 
   for dir in $applnks; do
     echo Looking under applnk dir: $dir
-    for f in `find $dir -name kword.desktop`; do
+    for f in `find $dir -name $instance.desktop`; do
       checkname $f
     done
   done
