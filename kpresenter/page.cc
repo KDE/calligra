@@ -112,8 +112,6 @@ void Page::paintEvent(QPaintEvent* paintEvent)
 /*====================== paint background ========================*/
 void Page::paintBackground(QPainter *painter,QRect rect)
 {
-  int i,j,pw,ph;
-
   painter->setPen(NoPen);
   if (editMode || !editMode && !fillBlack)
     painter->setBrush(white);
@@ -174,25 +172,7 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 		  case BV_TILED:
 		    {
 		      if (!pagePtr->backPix.isNull())
-			{
-			  for (i=0;i<=getPageSize(pagePtr->pageNum,_presFakt).height()/pagePtr->backPix.height();i++)
-			    {
-			      ph = -1;
-			      if (getPageSize(pagePtr->pageNum,_presFakt).height()
-				  -i*pagePtr->backPix.height() < pagePtr->backPix.height())
-				ph = getPageSize(pagePtr->pageNum,_presFakt).height()-i*pagePtr->backPix.height();
-			      for (j=0;j<=getPageSize(pagePtr->pageNum,_presFakt).width()/pagePtr->backPix.width();j++)
-				{
-				  pw = -1;
-				  if (getPageSize(pagePtr->pageNum,_presFakt).width()
-				      -j*pagePtr->backPix.width() < pagePtr->backPix.width())
-				    pw = getPageSize(pagePtr->pageNum,_presFakt).width()-j*pagePtr->backPix.width();
-				  painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x()+j*pagePtr->backPix.width(),
-						      getPageSize(pagePtr->pageNum,_presFakt).y()+i*pagePtr->backPix.height(),
-						      pagePtr->backPix,0,0,pw,ph);
-				}
-			    }
-			}
+			painter->drawTiledPixmap(getPageSize(pagePtr->pageNum,_presFakt),pagePtr->backPix);
 		    } break;
 		  }
 	      } break;
