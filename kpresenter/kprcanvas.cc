@@ -2495,7 +2495,7 @@ void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, c
     QPtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
         KCommand *cmd = it.current()->setFontCommand(font,
-                                                     _superscript,
+                                                     _subscript,
                                                      _superscript,
                                                      col,
                                                      backGroundColor,

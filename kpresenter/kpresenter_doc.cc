@@ -317,7 +317,7 @@ void KPresenterDoc::initConfig()
         config->setGroup( "Interface" );
         setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
         // Config-file value in mm, default 10 pt
-        double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
+        double indent =  config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0) ) ;
         setIndentValue(indent);
         m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
         setShowRuler(config->readBoolEntry("Rulers",true));
