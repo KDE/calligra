@@ -167,12 +167,11 @@ void KoTinyButton::mouseReleaseEvent( QMouseEvent* )
 		{
 			m_toggled = !m_toggled;
 			emit( toggled( m_toggled ) );
-			switch ( m_action )
-			{
-				case Sticky:
+			//switch ( m_action )
+			//{
+			//	case Sticky:
 						m_bitmap = QBitmap( 5, 5, ( m_toggled ? stickybits : notstickybits ), true );
-					break;
-			}
+			//}
 			m_bitmap.setMask( m_bitmap );
 		}
 		update();
