@@ -920,6 +920,11 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 				--stringPtr;
 
 				switch (integer) {
+					case 1: // if
+                                                --stringPtr;
+                                                --stringPtr;
+						(*stringPtr).prepend("IF(");
+						break;
 					case 4:  // sum
 						(*stringPtr).prepend("sum(");
 						break;
