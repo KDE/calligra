@@ -309,14 +309,16 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		  {
 		    _format = new KWFormat();
 		    _format->load(parser,lst,_doc);
+		    format = _doc->getFormatCollection()->getFormat(*_format);
 		    for (unsigned int i = __pos;i < __pos + __len;i++)
 		      {
 			if (static_cast<int>(i) > static_cast<int>(size() - 1)) break;
 			freeChar(_data_[i]);
-			format = _doc->getFormatCollection()->getFormat(*_format);
 			_kwformat = new KWCharFormat(format);
 			_data_[i].attrib = _kwformat;
+			format->incRef();
 		      }
+		    format->decRef();
 		    delete _format;
 		    _format = 0;
 		  } break;
