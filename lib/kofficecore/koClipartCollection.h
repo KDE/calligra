@@ -50,6 +50,12 @@ public:
     KoClipart loadClipart( const QString &fileName );
 
     /**
+     * Helper method, able to load a clipart from a file, into a QPicture.
+     * Can be used by preview widgets, for instance.
+     */
+    static bool loadFromFile( const QString& fileName, QPicture *pic );
+
+    /**
      * Save the used cliparts from the collection into the store
      * Usually called from completeSaving().
      *
@@ -81,6 +87,10 @@ public:
      * @param prefix same as above (only used for old format support)
      */
     void readFromStore( KoStore * store, const StoreMap & storeMap, const QString &prefix );
+
+private:
+    /** @internal helper function */
+    void readFromStore( KoStore * store, const QString &u, QPicture * pic );
 };
 
 #endif

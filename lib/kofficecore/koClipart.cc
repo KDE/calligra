@@ -38,7 +38,7 @@ KoClipart::KoClipart()
 KoClipart::KoClipart( const KoClipartKey &key, const QPicture &pic )
 {
     d = new KoClipartPrivate;
-    d->m_picture.setData( pic.data(), pic.size() ); // make a copy
+    d->m_picture = pic;
     d->m_key = key;
 }
 

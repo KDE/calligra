@@ -25,6 +25,10 @@
 #include <kdebug.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
+#include <ktempfile.h>
+
+// Can't do that yet
+//#define SAVE_IN_SVG_FORMAT
 
 KoClipart KoClipartCollection::findClipart( const KoClipartKey &key ) const
 {
@@ -59,17 +63,36 @@ KoClipart KoClipartCollection::loadClipart( const QString &fileName )
     if ( c.isNull() )
     {
         kdDebug(30003) << " loading clipart from file " << fileName << endl;
-        // ### WMF specific
-        QWinMetaFile wmf;
-        wmf.load( fileName );
         QPicture pic;
-        wmf.paint( &pic );
+        loadFromFile( fileName, &pic );
         if ( !pic.isNull() )
             c = insertClipart( key, pic );
         else
             kdWarning(30003) << "Couldn't build WMF QPicture from " << fileName << endl;
     }
     return c;
+}
+
+//static
+bool KoClipartCollection::loadFromFile( const QString& fileName, QPicture *pic )
+{
+    if ( fileName.lower().endsWith( "wmf" ) || fileName.lower().endsWith( "emf" ))
+    {
+        // WMF
+        QWinMetaFile wmf;
+        if ( wmf.load( fileName ) )
+        {
+            wmf.paint( pic );
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+    {
+        // assume SVG
+        return pic->load( fileName, "svg" );
+    }
 }
 
 void KoClipartCollection::saveToStore( KoStore *store, QValueList<KoClipartKey> keys, const QString & prefix )
@@ -83,14 +106,32 @@ void KoClipartCollection::saveToStore( KoStore *store, QValueList<KoClipartKey> 
             kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
+#ifdef SAVE_IN_SVG_FORMAT
+            QString format = "svg";
+#else
             QString format = "wmf";
+#endif
             QString storeURL = QString( "cliparts/clipart%1.%2" ).arg( ++i ).arg( format.lower() );
             storeURL.prepend( prefix );
 
             if ( store->open( storeURL ) ) {
 		KoStoreDevice dev( store );
                 QPicture * pic = c.picture();
-		dev.writeBlock( pic->data(), pic->size() );
+
+#ifdef SAVE_IN_SVG_FORMAT
+                KTempFile tmpFile;
+                tmpFile.setAutoDelete( true );
+                if ( pic->save( tmpFile.name(), "svg" ) )
+                {
+                    // Argl, it would be so much simpler if QPicture::save would take a QIODevice * !
+                    QByteArray array( 1024 );
+                    int n;
+                    while ( ( n = tmpFile.file()->readBlock( array.data(), array.size() ) ) )
+                        dev.writeBlock( array.data(), n );
+                }
+#else
+                dev.writeBlock( pic->data(), pic->size() );
+#endif
 		store->close();
             }
         }
@@ -109,7 +150,11 @@ QDomElement KoClipartCollection::saveXML( QDomDocument &doc, QValueList<KoClipar
             kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
+#ifdef SAVE_IN_SVG_FORMAT
+            QString format = "svg";
+#else
             QString format = "wmf";
+#endif
             QString pictureName = QString( "cliparts/clipart%1.%2" ).arg( ++i ).arg( format.lower() );
             pictureName.prepend( prefix );
 
@@ -157,22 +202,12 @@ void KoClipartCollection::readFromStore( KoStore * store, const StoreMap & store
         QPicture pic;
 
         if ( store->open( u ) ) {
-            KoStoreDevice dev(store );
-            int size = store->size();
-            char * data = new char[size];
-            dev.readBlock( data, size );
-            pic.setData( data, size );
-            delete data;
+            readFromStore( store, u, &pic );
             store->close();
         } else {
             u.prepend( "file:" );
             if ( store->open( u ) ) {
-                KoStoreDevice dev(store );
-                int size = store->size();
-                char * data = new char[size];
-                dev.readBlock( data, size );
-                pic.setData( data, size );
-                delete data;
+                readFromStore( store, u, &pic );
                 store->close();
             }
         }
@@ -180,4 +215,24 @@ void KoClipartCollection::readFromStore( KoStore * store, const StoreMap & store
         if ( !pic.isNull() )
             insertClipart( it.key(), pic );
     }
+}
+
+void KoClipartCollection::readFromStore( KoStore * store, const QString &u, QPicture * pic )
+{
+    KoStoreDevice dev( store );
+    int size = store->size();
+    char * data = new char[size];
+    dev.readBlock( data, size );
+    if ( u.endsWith( "svg" ) )
+    {
+        // Argl, why doesn't QPicture::load take a QIODevice * ?
+        KTempFile tmpFile;
+        tmpFile.setAutoDelete( true );
+        tmpFile.file()->writeBlock( data, size );
+        tmpFile.close();
+        (void)pic->load( tmpFile.name(), "svg" );
+    }
+    else // raw QPicture data (compat for KOffice <= 1.1)
+        pic->setData( data, size );
+    delete data;
 }
