@@ -958,7 +958,7 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 
 //	d->navToolWindow->wrapperWidget()->setFixedWidth(200);
 //js TODO: make visible FOR OTHER MODES if needed
-	if (mdiMode()==KMdi::ChildframeMode) {
+	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
 		//make docks visible again
 		if (!d->navToolWindow->wrapperWidget()->isVisible())
 			static_cast<KDockWidget*>(d->navToolWindow->wrapperWidget())->makeDockVisible();
@@ -1054,7 +1054,7 @@ KexiMainWindowImpl::initNavigator()
 				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
 		}
 #if defined(KDOCKWIDGET_P)
-		if (mdiMode()==KMdi::ChildframeMode) {
+		if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
 			KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 //			ds->setKeepSize(true);
@@ -1111,7 +1111,7 @@ KexiMainWindowImpl::initNavigator()
 void KexiMainWindowImpl::slotLastActions()
 {
 #if defined(KEXI_PROP_EDITOR) && defined(KDOCKWIDGET_P)
-	if (mdiMode()==KMdi::ChildframeMode) {
+	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
 		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 		Q_UNUSED(ds);
@@ -1152,7 +1152,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 	f.setPointSize( size );
 	d->propEditor->setFont(f);
 
-	if (mdiMode()==KMdi::ChildframeMode) {
+	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
 	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 #if defined(KDOCKWIDGET_P)
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
@@ -1420,7 +1420,7 @@ KexiMainWindowImpl::storeSettings()
 //	config->sync();
 	d->config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
 
-	if (mdiMode()==KMdi::ChildframeMode) {
+	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
 //		manager()->writeConfig( d->config, "DockWindows" );
 		if (d->propEditorDockSeparatorPos >= 0 && d->propEditorDockSeparatorPos <= 100) {
 			d->config->setGroup("MainWindow");
