@@ -38,7 +38,6 @@
  </Menu>
  <Menu name="insert"><text>&amp;Insert</text>
   <!-- Inside the text -->
-  <Action name="tools_formula"/>
   <Action name="insert_specialchar"/>
   <Action name="insert_framebreak"/>
   <Action name="insert_footendnote"/>
@@ -46,17 +45,16 @@
   <Action name="insert_variable"/> <!-- menu -->
   <Action name="insert_expression"/> <!-- menu -->
   <Separator/>
-  <!-- Frames -->
-  <Action name="insert_table"/>
+  <!-- Frames - the order matches the order of the keybindings -->
   <Action name="tools_createtext"/>
   <Action name="insert_picture"/>
-  <Action name="tools_kspreadtable"/>
+  <Action name="tools_formula"/>
+  <Action name="insert_table"/>
   <Action name="tools_part"/>
  </Menu>
  <Menu name="format"><text>F&amp;ormat</text>
   <Action name="text_default"/>
   <Action name="format_font"/>
-  <!--<Action name="format_color"/> part of format_font now-->
   <Action name="format_paragraph"/>
   <Separator/>
   <Action name="format_page"/>
@@ -132,7 +130,6 @@
   <Separator/>
   <Action name="tools_createtext"/>
   <Action name="tools_createpix"/>
-  <Action name="tools_kspreadtable"/>
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
 </ToolBar>
@@ -201,7 +198,6 @@
 <Menu name="text_popup">
  <Action name="text_default"/>
  <Action name="format_font"/>
-  <!--<Action name="format_color"/> part of format_font now-->
  <Action name="format_paragraph"/>
  <Separator/>
  <Action name="edit_cut"/>

@@ -351,10 +351,6 @@ void KWView::setupActions()
     changeZoomMenu( );
 
     // -------------- Insert menu
-    (void) new KAction( i18n( "&Table" ), "inline_table", 0,
-                        this, SLOT( insertTable() ),
-                        actionCollection(), "insert_table" );
-
     /*actionInsertPicture = new KAction( i18n( "&Picture Inline..." ),"inline_image", Key_F2,
                         this, SLOT( insertPicture() ),
                         actionCollection(), "insert_picture" );*/
@@ -364,36 +360,18 @@ void KWView::setupActions()
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
 
-    actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", 0,
-                                       this, SLOT( insertFormula() ),
-                                       actionCollection(), "tools_formula" );
-
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
 
-    actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
+    // TODO
+    /*actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
                                            this, SLOT( insertFootNoteEndNote() ),
-                                           actionCollection(), "insert_footendnote" );
-    actionInsertFootEndNote->setEnabled( false ); // ### TODO
+                                           actionCollection(), "insert_footendnote" );*/
 
     actionInsertContents = new KAction( i18n( "Table of &Contents" ), 0,
                                         this, SLOT( insertContents() ),
                                         actionCollection(), "insert_contents" );
-
-    actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Key_F6,
-                                               this, SLOT( toolsCreateText() ),
-                                               actionCollection(), "tools_createtext" );
-    actionToolsCreateText->setExclusiveGroup( "tools" );
-    actionToolsCreatePix = new KToggleAction( i18n( "P&icture..." ), "frame_image", // or inline_image ?
-                                              Key_F3 /*same as kpr*/,
-                                              this, SLOT( insertPicture() ),
-                                              actionCollection(), "insert_picture" );
-    actionToolsCreatePix->setExclusiveGroup( "tools" );
-    actionToolsCreatePart = new KToggleAction( i18n( "&Object Frame" ), "frame_query", Key_F12,
-                                               this, SLOT( toolsPart() ),
-                                               actionCollection(), "tools_part" );
-    actionToolsCreatePart->setExclusiveGroup( "tools" );
 
     m_variableDefMap.clear();
     actionInsertVariable = new KActionMenu( i18n( "&Variable" ),
@@ -410,21 +388,34 @@ void KWView::setupActions()
                                             actionCollection(), "insert_expression" );
     loadexpressionActions( actionInsertExpression);
 
-    actionEditPersonnalExpr=new KAction( i18n( "Edit personal expressions..." ), 0,
-                                         this, SLOT( editPersonalExpr() ),
-                                     actionCollection(), "personal_expr" );
+    actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Key_F2,
+                                               this, SLOT( toolsCreateText() ),
+                                               actionCollection(), "tools_createtext" );
+    actionToolsCreateText->setExclusiveGroup( "tools" );
+    actionToolsCreatePix = new KToggleAction( i18n( "P&icture..." ), "frame_image", // or inline_image ?
+                                              Key_F3 /*same as kpr*/,
+                                              this, SLOT( insertPicture() ),
+                                              actionCollection(), "insert_picture" );
+    actionToolsCreatePix->setExclusiveGroup( "tools" );
+    actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", Key_F4,
+                                       this, SLOT( insertFormula() ),
+                                       actionCollection(), "tools_formula" );
 
-    actionChangeCase=new KAction( i18n( "Change case..." ), 0,
-                                     this, SLOT( changeCaseOfText() ),
-                                     actionCollection(), "change_case" );
+    (void) new KAction( i18n( "&Table..." ), "inline_table",
+                        CTRL+Key_F1 /*same as kpr*/,
+                        this, SLOT( insertTable() ),
+                        actionCollection(), "insert_table" );
+
+    actionToolsCreatePart = new KToggleAction( i18n( "&Object Frame" ), "frame_query",
+                                               CTRL+Key_F2 /*same as kpr*/,
+                                               this, SLOT( toolsPart() ),
+                                               actionCollection(), "tools_part" );
+    actionToolsCreatePart->setExclusiveGroup( "tools" );
 
     // ------------------------- Format menu
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
                                     this, SLOT( formatFont() ),
                                     actionCollection(), "format_font" );
-    actionFormatColor = new KColorAction( i18n( "Text Color..." ), KColorAction::TextColor, ALT + CTRL + Key_C,
-                                     this, SLOT( textColor() ),
-                                     actionCollection(), "format_color" );
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
@@ -509,6 +500,9 @@ void KWView::setupActions()
                                       this, SLOT( textDecreaseIndent() ),
                                       actionCollection(), "format_decreaseindent" );
 
+    actionFormatColor = new KColorAction( i18n( "Text Color..." ), KColorAction::TextColor, 0,
+                                     this, SLOT( textColor() ),
+                                     actionCollection(), "format_color" );
 
 #if KDE_VERSION < 220
     // Necessary with kdelibs-2.1.x, because those actions are only in the toolbar
@@ -602,6 +596,14 @@ void KWView::setupActions()
     (void) new KAction( i18n( "&Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
+
+    actionEditPersonnalExpr=new KAction( i18n( "Edit personal expressions..." ), 0,
+                                         this, SLOT( editPersonalExpr() ),
+                                     actionCollection(), "personal_expr" );
+
+    actionChangeCase=new KAction( i18n( "Change case..." ), 0,
+                                     this, SLOT( changeCaseOfText() ),
+                                     actionCollection(), "change_case" );
 
     //------------------------ Settings menu
     KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
