@@ -80,13 +80,13 @@ bool kspreadfunc_pow( KSContext& context );
 bool kspreadfunc_product( KSContext& context );
 bool kspreadfunc_rand( KSContext& context );
 bool kspreadfunc_randbetween( KSContext& context );
+bool kspreadfunc_rootn( KSContext& context );
 bool kspreadfunc_round( KSContext& context );
 bool kspreadfunc_rounddown( KSContext& context );
 bool kspreadfunc_roundup( KSContext& context );
 bool kspreadfunc_sign( KSContext& context );
 bool kspreadfunc_sqrt( KSContext& context );
 bool kspreadfunc_sqrtpi( KSContext& context );
-bool kspreadfunc_sqrtn( KSContext& context );
 bool kspreadfunc_sum( KSContext& context );
 bool kspreadfunc_sumsq( KSContext& context );
 
@@ -523,13 +523,13 @@ static const functionEntry funcTab[] = {
   { "PRODUCT", kspreadfunc_product },
   { "RAND", kspreadfunc_rand },
   { "RANDBETWEEN", kspreadfunc_randbetween },
+  { "ROOTN", kspreadfunc_rootn },
   { "ROUND", kspreadfunc_round },
   { "ROUNDDOWN", kspreadfunc_rounddown },
   { "ROUNDUP", kspreadfunc_roundup },
   { "SIGN", kspreadfunc_sign },
   { "SQRT", kspreadfunc_sqrt },
   { "SQRTPI", kspreadfunc_sqrtpi },
-  { "SQRTN", kspreadfunc_sqrtn },
   { "SUM", kspreadfunc_sum },
   { "SUMSQ", kspreadfunc_sumsq },
 

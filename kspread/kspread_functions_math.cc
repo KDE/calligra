@@ -96,8 +96,8 @@ bool kspreadfunc_sqrtpi( KSContext& context )
 
 
 
-// Function: SQRTn
-bool kspreadfunc_sqrtn( KSContext& context )
+// Function: ROOTN
+bool kspreadfunc_rootn( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
