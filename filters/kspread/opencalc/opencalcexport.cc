@@ -709,6 +709,30 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       QString formula( convertFormula( cell->text() ) );
       cellElem.setAttribute( "table:formula", formula );
     }
+    else if ( !cell->link().isEmpty() )
+    {
+      QDomElement link = doc.createElement( "text:p" );
+      QDomElement linkref = doc.createElement( "text:a" );
+
+      QString tmp = cell->link();
+       if ( localReferenceAnchor( tmp ) )
+           linkref.setAttribute( "xlink:href", ( "#"+tmp ) );
+       else
+           linkref.setAttribute( "xlink:href", tmp  );
+
+       linkref.appendChild( doc.createTextNode( cell->text() ) );
+
+       link.appendChild( linkref );
+       cellElem.appendChild( link );
+    }
+    else if ( !cell->isEmpty() )
+    {
+      QDomElement textElem = doc.createElement( "text:p" );
+      textElem.appendChild( doc.createTextNode( cell->strOutText() ) );
+
+      cellElem.appendChild( textElem );
+      kdDebug(30518) << "Cell StrOut: " << cell->strOutText() << endl;
+    }
 
     if ( cell->isForceExtraCells() )
     {
@@ -731,15 +755,6 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
       annotation.appendChild( text );
       cellElem.appendChild( annotation );
-    }
-
-    if ( !cell->isEmpty() )
-    {
-      QDomElement textElem = doc.createElement( "text:p" );
-      textElem.appendChild( doc.createTextNode( cell->strOutText() ) );
-
-      cellElem.appendChild( textElem );
-      kdDebug(30518) << "Cell StrOut: " << cell->strOutText() << endl;
     }
 
     rowElem.appendChild( cellElem );
