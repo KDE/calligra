@@ -273,7 +273,7 @@ void RotateCmd::execute()
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->rotate( newAngle );
-
+    doc->updateRuler();
     doc->repaint( false );
 }
 
@@ -282,7 +282,7 @@ void RotateCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
         objects.at(i)->rotate( oldRotate.at( i )->angle );
-
+    doc->updateRuler();
     doc->repaint( false );
 }
 
