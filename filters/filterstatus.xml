@@ -128,7 +128,7 @@
             <filter id="kword_amipro" path="koffice/filters/kword/amipro">
                 <title xml:lang="en_us">AmiPro</title>
                 <note xml:lang="en_us">Lotus word processor</note>
-                <stat import="beta" export="beta"/>
+                <stat import="working" export="working"/>
             </filter>
             <filter id="kword_applixword" path="koffice/filters/kword/applixword">
                 <title xml:lang="en_us">Applix Word</title>
@@ -147,7 +147,7 @@
             <filter id="kword_html" path="koffice/filters/kword/html">
                 <title xml:lang="en_us">HTML</title>
                 <note xml:lang="en_us">HTML 4.01 / XHTML 1.0</note>
-                <stat import="alpha" export="beta"/>
+                <stat import="alpha" export="working"/>
             </filter>
             <filter id="kword_latex" path="koffice/filters/kword/latex">
                 <title xml:lang="en_us">LaTeX</title>
@@ -173,7 +173,7 @@
             <filter id="kword_rtf" path="koffice/filters/kword/rtf">
                 <title xml:lang="en_us">RTF</title>
                 <note xml:lang="en_us">Rich Text Format</note>
-                <stat import="beta" export="alpha"/>
+                <stat import="working" export="alpha"/>
             </filter>
             <filter id="kword_starwriter">
                 <title xml:lang="en_us">StarWriter</title>
@@ -189,12 +189,12 @@
             <filter id="kword_wml" path="koffice/filters/kword/wml">
                 <title xml:lang="en_us">WML</title>
                 <note xml:lang="en_us">Wireless markup language</note>
-                <stat import="beta" export="beta"/>
+                <stat import="working" export="working"/>
             </filter>
             <filter id="kword_wordperfect" path="koffice/filters/kword/wordperfect">
                 <title xml:lang="en_us">WordPerfect</title>
                 <note xml:lang="en_us">WP 5.x and WP 6/7/8 documents, text only</note>
-                <stat import="working" export="none"/>
+                <stat import="working" export="beta"/>
             </filter>
         </application>
 
