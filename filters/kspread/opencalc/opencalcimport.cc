@@ -147,7 +147,7 @@ int getFontSize( QString s )
   return result;
 }
 
-int convertToPoint( QString s )
+double convertToPoint( QString s )
 {
   double mm = 0.0;
   int p = s.find( "cm" );
@@ -175,7 +175,7 @@ int convertToPoint( QString s )
     }
   }
 
-  return (int) mm;//( MM_TO_POINT( mm ) < 1 ? 1 : MM_TO_POINT( mm ) );
+  return mm;//( MM_TO_POINT( mm ) < 1 ? 1 : MM_TO_POINT( mm ) );
 }
 
 bool OpenCalcImport::readRowLayout( QDomElement & rowNode, QDomElement * rowStyle,
@@ -1663,7 +1663,7 @@ void OpenCalcImport::loadBorder( KSpreadLayout * layout, QString const & borderD
 
   QPen pen;
   QString w = borderDef.left( p );
-  pen.setWidth( convertToPoint( w ) );
+  pen.setWidth( (int)convertToPoint( w ) );
 
 
   ++p;

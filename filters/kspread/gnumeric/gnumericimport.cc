@@ -1193,9 +1193,9 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
 
           if (style_element.hasAttribute("Indent"))
           {
-            int indent = style_element.attribute("Indent").toInt();
+            double indent = style_element.attribute("Indent").toDouble();
             // gnumeric saves indent in characters, we in points:
-            kspread_cell->setIndent( indent * 10 );
+            kspread_cell->setIndent( indent * 10.0 );
           }
 
           if (style_element.hasAttribute("HAlign"))
