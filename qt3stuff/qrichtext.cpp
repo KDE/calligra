@@ -2688,10 +2688,9 @@ void QTextDocument::setDefaultFont( const QFont &f )
 
 void QTextDocument::registerCustomItem( QTextCustomItem *i, QTextParag *p )
 {
-    if ( i && i->placement() != QTextCustomItem::PlaceInline ) {
+    if ( i && i->placement() != QTextCustomItem::PlaceInline )
 	flow_->registerFloatingItem( i, i->placement() == QTextCustomItem::PlaceRight );
-	p->registerFloatingItem( i );
-    }
+    p->registerFloatingItem( i );
     i->setParagraph( p );
     //qDebug("QTextDocument::registerCustomItem %p",(void*)i);
     customItems.append( i );
@@ -3279,7 +3278,8 @@ void QTextParag::invalidate( int chr )
     else
 	invalid = QMIN( invalid, chr );
     for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() )
-	i->move( 0, -1 );
+        if ( i->placement() != QTextCustomItem::PlaceInline )
+            i->move( 0, -1 );
     lm = rm = bm = tm = flm = -1;
 }
 
@@ -3430,9 +3430,10 @@ void QTextParag::format( int start, bool doMove )
 	for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() ) {
 	    if ( i->placement() == QTextCustomItem::PlaceRight )
 		i->move( r.x() + r.width() - i->width, r.y() );
-	    else
+	    else if ( i->placement() == QTextCustomItem::PlaceLeft )
 		i->move( 0, r.y() );
-	    doc->flow()->updateHeight( i );
+            if ( i->placement() != QTextCustomItem::PlaceInline )
+                doc->flow()->updateHeight( i );
 	}
     }
     QMap<int, QTextParagLineStart*> oldLineStarts = lineStarts;
@@ -3493,7 +3494,7 @@ void QTextParag::format( int start, bool doMove )
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	QTextParag *s = n;
 	bool makeInvalid = p && p->lastInFrame;
-	//qDebug("moving. previous's lastInFrame (=makeInvalid): %d",makeInvalid);
+	//qDebug("moving of dy=%d. previous's lastInFrame (=makeInvalid): %d", dy, makeInvalid);
 	while ( s && dy ) {
 	    if ( !s->isFullWidth() || s->movedDown )
 		makeInvalid = TRUE;
@@ -4948,7 +4949,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	}
 	//qDebug("c='%c' i=%d/%d x=%d ww=%d w=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,w,lastBreak,isBreakable(string,i));
 	// Wrapping at end of line
-	if ( wrapEnabled && ( !isBreakable( string, i ) || lastBreak == -2 )
+	if ( wrapEnabled
+             // Allow '  ' but not more
+             && ( !isBreakable( string, i ) || ( i > 1 && lastBreak == i-1 && isBreakable( string, i-2 ) )
+                                            || lastBreak == -2 )
 	     && ( lastBreak != -1 || allowBreakInWords() ) &&
 	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
 	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
