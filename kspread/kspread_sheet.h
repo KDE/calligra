@@ -504,7 +504,7 @@ public:
      * @param updateDepends set to false to disable updating the dependencies
      */
     void setText( int row, int column, const QString& text,
-                  bool updateDepends = true, bool asString = false );
+                  bool asString = false );
 
 
 
@@ -557,11 +557,8 @@ public:
      *                In this case the cell on which the marker is will
      *                be deleted.
      *
-     * @param preserveDoM preserve the DependingOnMe list (set this to true if you want
-     *        the cells in the selection to remember which cells depend on them)
-     *
      */
-    void deleteSelection( KSpreadSelection* selectionInfo, bool undo = true, bool preserveDoM = false );
+    void deleteSelection( KSpreadSelection* selectionInfo, bool undo = true );
 
     /**
      * @param _marker is used if there is no selection currently.
@@ -920,12 +917,9 @@ public:
      *
      * @param rect The rectangle that contains the cells that should be deleted
      *
-     * @param preserveDoM preserve the DependingOnMe list (set this to true if you want
-     *        the cells in rect to remember which cells depend on them)
-     *
      * @see #loadCells
      */
-    void deleteCells( const QRect& rect, bool preserveDoM = false );
+    void deleteCells( const QRect& rect );
 
 
     /**

@@ -1022,7 +1022,7 @@ KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
   return cell;
 }
 
-void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool updateDepends, bool asString )
+void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool asString )
 {
     KSpreadCell * cell = nonDefaultCell( _column, _row );
 
@@ -1039,7 +1039,7 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool up
     }
 
     // The cell will force a display refresh itself, so we dont have to care here.
-    cell->setCellText( _text, updateDepends, asString );
+    cell->setCellText( _text, asString );
     //refresh anchor
     if(_text.at(0)=='!')
       emit sig_updateView( this, QRect(_column,_row,_column,_row) );
@@ -1076,9 +1076,7 @@ void KSpreadSheet::valueChanged (KSpreadCell *cell)
   //TODO: call cell updating, when cell damaging implemented
   //TODO: do nothing is updates are disabled
   
-  return;  //DELETE THIS LINE WHEN THE DEPENDENCY MANAGER IS READY !!!
-  
-  //prepare the CellInfo object
+  //prepare the KSpreadPoint structure
   KSpreadPoint c;
   c.setRow (cell->row());
   c.setColumn (cell->column());
@@ -2966,7 +2964,7 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
           undo->saveFormulaReference( this, origCol, origRow, formulaText );
       }
 
-      c->setCellText( newText, false /* no recalc deps for each, done independently */ );
+      c->setCellText( newText );
     }
   }
 }
@@ -4438,8 +4436,8 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
       if (ref1->isFormula() && !ref2->isFormula() )
       {
         QString d = ref1->encodeFormula();
-        ref1->setCellText(ref2->text(), true);
-        ref2->setCellText(ref2->decodeFormula(d), true);
+        ref1->setCellText(ref2->text());
+        ref2->setCellText(ref2->decodeFormula(d));
         ref2->setCalcDirtyFlag();
         ref2->calc(false);
       }
@@ -4447,8 +4445,8 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
         if (!ref1->isFormula() && ref2->isFormula() )
         {
           QString d = ref2->encodeFormula();
-          ref2->setCellText(ref1->text(), true);
-          ref1->setCellText(ref1->decodeFormula(d), true);
+          ref2->setCellText(ref1->text());
+          ref1->setCellText(ref1->decodeFormula(d));
           ref1->setCalcDirtyFlag();
           ref1->calc(false);
         }
@@ -5701,7 +5699,7 @@ void KSpreadSheet::cutSelection( KSpreadSelection* selectionInfo )
 
     QApplication::clipboard()->setData( kd );
 
-    deleteSelection( selectionInfo, true, true );
+    deleteSelection( selectionInfo, true );
 }
 
 void KSpreadSheet::paste( const QRect &pasteArea, bool makeUndo,
@@ -5871,7 +5869,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
         {
             if(!insert)
             {
-                d->cells.clearColumn( _xshift + i, true );
+                d->cells.clearColumn( _xshift + i );
                 d->columns.removeElement( _xshift + i );
             }
         }
@@ -5899,7 +5897,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
         // Clear the existing rows
         for( int i = 1; i <= pasteHeight; ++i )
         {
-            d->cells.clearRow( _yshift + i, true );
+            d->cells.clearRow( _yshift + i );
             d->rows.removeElement( _yshift + i );
         }
 
@@ -6086,7 +6084,7 @@ bool KSpreadSheet::testAreaPasteInsert()const
     return false;
 }
 
-void KSpreadSheet::deleteCells( const QRect& rect, bool preserveDoM )
+void KSpreadSheet::deleteCells( const QRect& rect )
 {
     // A list of all cells we want to delete.
     QPtrStack<KSpreadCell> cellStack;
@@ -6136,10 +6134,6 @@ void KSpreadSheet::deleteCells( const QRect& rect, bool preserveDoM )
       KSpreadCell * cell = cellStack.pop();
 
       d->cells.remove( cell->column(), cell->row() );
-      if (preserveDoM) {
-        KSpreadCell * emptycell = new KSpreadCell (this, cell->getDepending(), cell->column(), cell->row()) ;
-        insertCell (emptycell) ;
-      }
       cell->setCalcDirtyFlag();
       setRegionPaintDirty(cell->cellRect());
 
@@ -6163,7 +6157,7 @@ void KSpreadSheet::deleteCells( const QRect& rect, bool preserveDoM )
     d->doc->setModified( true );
 }
 
-void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo, bool preserveDoM )
+void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo )
 {
     QRect r( selectionInfo->selection() );
 
@@ -6178,7 +6172,7 @@ void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo, 
     {
         for( int i = r.top(); i <= r.bottom(); ++i )
         {
-            d->cells.clearRow( i, preserveDoM );
+            d->cells.clearRow( i );
             d->rows.removeElement( i );
         }
 
@@ -6189,7 +6183,7 @@ void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo, 
     {
         for( int i = r.left(); i <= r.right(); ++i )
         {
-            d->cells.clearColumn( i, preserveDoM );
+            d->cells.clearColumn( i );
             d->columns.removeElement( i );
         }
 
@@ -6198,7 +6192,7 @@ void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo, 
     else
     {
 
-        deleteCells( r, preserveDoM );
+        deleteCells( r );
     }
     refreshMergedCell();
     emit sig_updateView( this );
@@ -8367,7 +8361,7 @@ void KSpreadSheet::updateLocale()
   for( ;c; c = c->nextCell() )
   {
       QString _text = c->text();
-      c->setDisplayText( _text, false/* no recalc deps for each, done independently */ );
+      c->setDisplayText( _text );
   }
   emit sig_updateView( this );
   //  d->doc->emitEndOperation();

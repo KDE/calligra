@@ -56,7 +56,6 @@ class KSpreadGenValidationStyles;
 
 #include "kspread_format.h"
 #include "kspread_global.h"
-#include "kspread_depend.h"
 #include "kspread_condition.h"
 
 #include "kspread_value.h"
@@ -117,7 +116,6 @@ public:
 
     KSpreadCell( KSpreadSheet *_table, int _column, int _row );
     KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row );
-    KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row );
     /**
      * @see #tableDies
      */
@@ -373,16 +371,15 @@ public:
     /**
      * The high-level method for setting text, when the user inputs it.
      * It will revert back to the old text if testValidity() returns action==stop.
-     * @param updateDepends whether to recalculate the dependent cells (always true nowadays)
      */
-    void setCellText( const QString& _text, bool updateDepends = true, bool asString = false );
+    void setCellText( const QString& _text, bool asString = false );
 
     /**
      * Sets the text in the cell when the user inputs it.
      * Will determine the type of contents automatically.
      * Called by setCellText.
      */
-    void setDisplayText( const QString& _text, bool updateDepends = true );
+    void setDisplayText( const QString& _text );
 
     ////////////////////////////////
     //
@@ -531,12 +528,6 @@ public:
      *                    depending on it.
      */
     void NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending );
-
-    /**
-     * get the list of dependencies of this cell
-     * this is a deep copy of the m_lstDependingOnMe (the KSpreadDepenency objects are also copied)
-     **/
-    QPtrList<KSpreadDependency> getDepending (void) ;
 
     /**
      * Causes the format to be recalculated when the cell is drawn next time.
@@ -856,8 +847,6 @@ protected:
      * a scientific format (if the number is too big)
      */
     void checkNumberFormat();
-
-    void NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isDepending);
 
     void loadOasisValidationCondition( QString &valExpression );
     void saveOasisAnnotation( KoXmlWriter &xmlwriter );

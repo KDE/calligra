@@ -223,7 +223,7 @@ void KSpreadUndoInsertRemoveAction::undoFormulaReference()
             KSpreadCell * cell = table->cellAt( (*it).col(), (*it).row() );
             if ( cell && !cell->isDefault() )
             {
-                cell->setCellText( (*it).formula(), true );
+                cell->setCellText( (*it).formula() );
             }
         }
     }
@@ -2004,7 +2004,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
               found = true;
             }            
           if( !found )   
-            cell->setCellText( "", true, true );
+            cell->setCellText( "", true );
         }
         
     }
@@ -2054,7 +2054,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
               found = true;
             }            
           if( !found )   
-            cell->setCellText( "", true, true );
+            cell->setCellText( "", true );
         }
         
     }

@@ -666,11 +666,10 @@ QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* tabl
   kdDebug(36001)<<"KSpreadConsolidate::evaluate " << formula << endl;
 
   KSContext context;
-  QPtrList<KSpreadDependency> lst;
 
   // parse and evaluate formula
   KSParseNode* code = table->doc()->interpreter()->parse( context,
-    table, formula, lst );
+    table, formula );
   if( !code ) return result;
 
   context = table->doc()->context();

@@ -134,11 +134,10 @@ public:
 
     /**
      * Removes all elements from the column.
-     *
-     * @param presereDoM preserve the DependingOnMe lists of the cells if non-empty
+     * 
      */
-    void clearColumn( int col, bool preserveDoM = false );
-    void clearRow( int row, bool preserveDoM = false );
+    void clearColumn( int col );
+    void clearRow( int row );
 
   /**
    * Retrieve the first used cell in a given column.  Can be used in conjunction

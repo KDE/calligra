@@ -539,7 +539,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
     if ( sequence.first() != 0L && sequence.first()->getType() == AutoFillSequenceItem::FORMULA )
     {
         QString f = dest->decodeFormula( sequence.first()->getString() );
-        dest->setCellText( f, true );
+        dest->setCellText( f );
         dest->copyFormat( src );
         return;
     }
@@ -557,7 +557,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
         erg += item->getPredecessor( _block, delta->getItemDelta( i++ ) );
     }
 
-    dest->setCellText( erg, true );
+    dest->setCellText( erg );
     dest->copyFormat( src );
 }
 
@@ -856,7 +856,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
           res.sprintf("%f", initDouble );
         }
 
-        dest->setCellText( res, true );
+        dest->setCellText( res );
         dest->copyFormat( src );
         dest->setFormatType( src->formatType() );
 
@@ -1051,7 +1051,7 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       if ( _srcList.at( s )->isFormula() )
       {
  	QString d = _srcList.at( s )->encodeFormula();
-	cell->setCellText( cell->decodeFormula( d ), true );
+	cell->setCellText( cell->decodeFormula( d ) );
       }
       else if(_srcList.at( s )->value().isNumber() && _srcList.count()==1)
       {
@@ -1064,7 +1064,7 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
           val = (_srcList.at( s )->value().asFloat() + (incr * factor));
 	QString tmp;
 	tmp = tmp.setNum(val);
-	cell->setCellText( tmp, true );
+	cell->setCellText( tmp );
         ++incr;
       }
       else if((AutoFillSequenceItem::month != 0L)
@@ -1101,11 +1101,11 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
 	  cell->setCellText(_srcList.at( s )->text().replace(number,QString::number(num)));
 	}
 	else
-	  cell->setCellText( _srcList.at( s )->text(), true );
+	  cell->setCellText( _srcList.at( s )->text() );
       }
     }
     else
-      cell->setCellText( "", true );
+      cell->setCellText( "" );
 
     cell->copyFormat( _srcList.at( s ) );
 

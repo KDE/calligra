@@ -70,7 +70,16 @@ void DependencyManager::reset ()
 
 void DependencyManager::cellChanged (const KSpreadPoint &cell)
 {
-  generateDependencies (cell);
+  KSpreadCell *c = cell.cell();
+  
+  //if the cell contains the circle error, we mustn't do anything
+  if (c->testFlag (KSpreadCell::Flag_CircularCalculation))
+    return;
+
+  //don't re-generate dependencies if we're updating dependencies
+  if ( !(c->testFlag (KSpreadCell::Flag_Progress)))
+    generateDependencies (cell);
+
   processDependencies (cell);
 }
 
@@ -240,15 +249,17 @@ void DependencyManager::processRangeDependencies (const KSpreadPoint &cell) cons
   QValueList<RangeDependency>::iterator it;
   if (!deps->rangeDeps.count (leading))
     return;  //no range dependencies in this cell chunk
-  for (it = deps->rangeDeps[leading].begin(); it != deps->rangeDeps[leading].end(); ++it)
+  
+  for (it = deps->rangeDeps[leading].begin();
+      it != deps->rangeDeps[leading].end(); ++it)
   {
     //process all range dependencies, and for each range including the modified cell,
     //recalc the depending cell
     if ((*it).range.contains (cell))
     {
       KSpreadPoint c;
-      c.setRow ((*it).range.startRow());
-      c.setColumn ((*it).range.startCol());
+      c.setRow ((*it).cellrow);
+      c.setColumn ((*it).cellcolumn);
       c.table = sheet;
       updateCell (c);
     }
@@ -331,11 +342,16 @@ void DependencyManager::updateCell (const KSpreadPoint &cell) const
     KSpreadValue v;
     v.setError ( "####" );
     c->setValue (v);
+    //clear the computing-dependencies flag
+    c->clearFlag (KSpreadCell::Flag_Progress);
     return;
   }
   
   //set the computing-dependencies flag
   c->setFlag (KSpreadCell::Flag_Progress);
+  
+  //mark the cell as calc-dirty
+  c->setCalcDirtyFlag();
   
   //recalculate the cell
   c->calc (false);

@@ -4,7 +4,6 @@
 #include <koscript.h>
 
 #include "kspread_global.h"
-#include "kspread_depend.h"
 
 class KSParseNode;
 class KSContext;
@@ -20,7 +19,7 @@ public:
 
   KSpreadInterpreter( KSpreadDoc* );
 
-  KSParseNode* parse( KSContext& context, KSpreadSheet* table, const QString& formula, QPtrList<KSpreadDependency>& );
+  KSParseNode* parse( KSContext& context, KSpreadSheet* table, const QString& formula );
   bool evaluate( KSContext& context, KSParseNode*, KSpreadSheet*, KSpreadCell* );
 
   KSNamespace* globalNamespace()const  { return m_global; }

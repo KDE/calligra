@@ -5215,7 +5215,7 @@ void KSpreadView::slotItemSelected( int id )
     d->doc->addCommand( undo );
   }
 
-  cell->setCellText( tmp, true );
+  cell->setCellText( tmp );
   editWidget()->setText( tmp );
 
   d->doc->emitEndOperation( QRect( x, y, 1, 1 ) );

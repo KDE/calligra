@@ -83,67 +83,6 @@ private:
  *
  ****************************************************/
 
-/**
- * Creates dependencies from the parse tree of a formula.
- */
-void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadSheet* t, QPtrList<KSpreadDependency>& depends )
-{
-  KSParseNodeExtra* extra = node->extra();
-  if ( !extra )
-  {
-    if ( node->getType() == t_cell )
-    {
-      KSParseNodeExtraPoint* extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m, t );
-      kdDebug(36001) << "-------- Got dep " << KSpreadCell::name( extra->point()->pos.x(), extra->point()->pos.y() ) << endl;
-      KSpreadDependency* d = new KSpreadDependency(extra->point()->pos.x(), extra->point()->pos.y(),
-					       extra->point()->table);
-      if (!d->Table())
-      {
-        QString tmp( i18n("The expression %1 is not valid") );
-        tmp = tmp.arg( node->getStringLiteral() );
-        context.setException( new KSException( "InvalidTableExpression", tmp ) );
-        delete d;
-        delete extra;
-        return;
-      }
-      depends.append( d );
-      node->setExtra( extra );
-    }
-    else if ( node->getType() == t_range )
-    {
-      KSParseNodeExtraRange* extra = new KSParseNodeExtraRange( node->getStringLiteral(), m, t );
-      KSpreadDependency* d = new KSpreadDependency(extra->range()->range.left(),
-						   extra->range()->range.top(),
-						   extra->range()->range.right(),
-						   extra->range()->range.bottom(),
-						   extra->range()->table);
-      if (!d->Table())
-      {
-        QString tmp( i18n("The expression %1 is not valid") );
-        tmp = tmp.arg( node->getStringLiteral() );
-        context.setException( new KSException( "InvalidTableExpression", tmp ) );
-        delete d;
-        delete extra;
-        return;
-      }
-      depends.append( d );
-      node->setExtra( extra );
-    }
-  }
-
-  if ( node->branch1() )
-    makeDepends( context, node->branch1(), m, t, depends );
-  if ( node->branch2() )
-    makeDepends( context, node->branch2(), m, t, depends );
-  if ( node->branch3() )
-    makeDepends( context, node->branch3(), m, t, depends );
-  if ( node->branch4() )
-    makeDepends( context, node->branch4(), m, t, depends );
-  if ( node->branch5() )
-    makeDepends( context, node->branch5(), m, t, depends );
-}
-
-
 static bool kspreadfunc_cell( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -430,7 +369,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
   return false;
 }
 
-KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadSheet* table, const QString& formula, QPtrList<KSpreadDependency>& depends )
+KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadSheet* table, const QString& formula )
 {
     // Create the parse tree.
     KSParser parser;
@@ -442,7 +381,6 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadSheet* table,
     }
 
     KSParseNode* n = parser.donateParseTree();
-    makeDepends( context, n, table->map(), table, depends );
 
     return n;
 }

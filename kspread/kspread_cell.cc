@@ -170,12 +170,6 @@ public:
     // result of "fm.ascent()" in makeLayout. used in offsetAlign.
     int fmAscent;
 
-    // list of cells that must be calculated in order to calculate this cell
-    QPtrList<KSpreadDependency> lstDepends;
-
-    // list of cells that require this cell's value to be calculated
-    QPtrList<KSpreadDependency> lstDependingOnMe;
-
     KSpreadCell* nextCell;
     KSpreadCell* previousCell;
 
@@ -206,9 +200,6 @@ CellPrivate::CellPrivate()
 
   nextCell = 0;
   previousCell = 0;
-
-  lstDepends.setAutoDelete( true );
-  lstDependingOnMe.setAutoDelete( true );
 
   cellExtra = 0;
 }
@@ -260,16 +251,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d = new CellPrivate;
   d->row = _row;
   d->column = _column;
-  clearAllErrors();
-}
-
-KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row )
-  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() )
-{
-  d = new CellPrivate;
-  d->row = _row;
-  d->column = _column;
-  d->lstDependingOnMe = _deponme ;
   clearAllErrors();
 }
 
@@ -380,28 +361,29 @@ const KSpreadValue KSpreadCell::value() const
 
 void KSpreadCell::setValue( const KSpreadValue& v )
 {
-    clearFormula();
+  if (v.type() != KSpreadValue::Error)
     clearAllErrors();
-    d->value = v;
-
-    // Free all content data
-    if (d->hasExtra())
-    {
-      delete d->extra()->QML;
-      d->extra()->QML = 0;
-    }
-
-    //set the displayed text, if we hold an error value
-    if (d->value.type() == KSpreadValue::Error)
-      d->strOutText = d->value.errorMessage ();
     
-    setFlag(Flag_LayoutDirty);
-    setFlag(Flag_TextFormatDirty);
+  d->value = v;
 
-    //value of the cell has changed - trigger necessary actions
-    valueChanged ();
-        
-    m_pTable->setRegionPaintDirty(cellRect());
+  // Free all content data
+  if (d->hasExtra())
+  {
+    delete d->extra()->QML;
+    d->extra()->QML = 0;
+  }
+
+  //set the displayed text, if we hold an error value
+  if (d->value.type() == KSpreadValue::Error)
+    d->strOutText = d->value.errorMessage ();
+  
+  setFlag(Flag_LayoutDirty);
+  setFlag(Flag_TextFormatDirty);
+
+  //value of the cell has changed - trigger necessary actions
+  valueChanged ();
+      
+  m_pTable->setRegionPaintDirty(cellRect());
 }
 
 KSpreadCell* KSpreadCell::previousCell() const
@@ -513,7 +495,7 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
       // change all the references, e.g. from A1 to A3 if copying
       // from e.g. B2 to B4
       QString d = cell->encodeFormula();
-      setCellText( cell->decodeFormula( d ), true );
+      setCellText( cell->decodeFormula( d ) );
     }
     else
       setCellText( cell->text() );
@@ -1037,7 +1019,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         clearFlag( Flag_LayoutDirty );
         return;
     }
-
     setOutputText();
 
     // Empty text?
@@ -1050,7 +1031,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             return;
         }
     }
-
     //
     // Determine the correct font
     //
@@ -2066,11 +2046,10 @@ bool KSpreadCell::makeFormula()
     sDelocalizedText.replace( pos++, 1, "." );
     // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
   */
-  d->code = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/d->strText, d->lstDepends );
+  d->code = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/d->strText );
   // Did a syntax error occur ?
   if ( context.exception() )
   {
-    d->lstDepends.clear();
     clearFormula();
 
     setFlag(Flag_ParseError);
@@ -2091,18 +2070,11 @@ bool KSpreadCell::makeFormula()
   //TODO: is this necessary?
   valueChanged ();
   
-  /* notify the new dependancy list that we are depending on them now */
-  NotifyDependancyList(d->lstDepends, true);
-
   return true;
 }
 
 void KSpreadCell::clearFormula()
 {
-  /*notify dependancies that we're not depending on them any more */
-  NotifyDependancyList(d->lstDepends, false);
-
-  d->lstDepends.clear();
   delete d->code;
   d->code = 0L;
 }
@@ -2111,16 +2083,6 @@ bool KSpreadCell::calc(bool delay)
 {
   if ( !isFormula() )
     return true;
-
-  if ( testFlag(Flag_Progress) )
-  {
-    kdError(36001) << "ERROR: Circle" << endl;
-    setFlag(Flag_CircularCalculation);
-    KSpreadValue v;
-    v.setError ( "####" );
-    setValue (v);
-    return false;
-  }
 
   if ( d->code == 0 )
   {
@@ -2151,27 +2113,6 @@ bool KSpreadCell::calc(bool delay)
   setFlag(Flag_TextFormatDirty);
   clearFlag(Flag_CalcDirty);
 
-  setFlag(Flag_Progress);
-
-  /* calculate any dependancies */
-  KSpreadDependency *dep;
-  for ( dep = d->lstDepends.first(); dep != 0L; dep = d->lstDepends.next() )
-    for ( int x = dep->Left(); x <= dep->Right(); x++ )
-      for ( int y = dep->Top(); y <= dep->Bottom(); y++ )
-      {
-        KSpreadCell *cell = dep->Table()->cellAt( x, y );
-        if ( !cell->calc( delay ) )
-        {
-          setFlag(Flag_DependancyError);
-          KSpreadValue v;
-          v.setError( "####" );
-          setValue (v);
-          clearFlag(Flag_Progress);
-          clearFlag(Flag_CalcDirty);
-          return false;
-        }
-      }
-
   KSContext& context = m_pTable->doc()->context();
   if ( !m_pTable->doc()->interpreter()->evaluate( context, d->code, m_pTable, this ) )
   {
@@ -2191,7 +2132,6 @@ bool KSpreadCell::calc(bool delay)
     }
 
     // setFlag(Flag_LayoutDirty);
-    clearFlag(Flag_Progress);
     clearFlag(Flag_CalcDirty);
 
     return false;
@@ -2274,7 +2214,6 @@ bool KSpreadCell::calc(bool delay)
 
   clearFlag(Flag_CalcDirty);
   setFlag(Flag_LayoutDirty);
-  clearFlag(Flag_Progress);
 
   return true;
 }
@@ -2289,7 +2228,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
 {
   if ( testFlag( Flag_PaintingCell ) )
     return;
-
+  
   setFlag( Flag_PaintingCell );
 
   static int paintingObscured = 0;
@@ -4277,8 +4216,7 @@ void KSpreadCell::setNumber( double number )
   checkNumberFormat();
 }
 
-void KSpreadCell::setCellText( const QString& _text, bool /*updateDepends*/, bool asText )
-//the only place where this is called with updateDepends==false in KSpreadSheet::changeNameCellRef
+void KSpreadCell::setCellText( const QString& _text, bool asText )
 {
     QString ctext = _text;
     if( ctext.length() > 5000 )
@@ -4305,9 +4243,7 @@ void KSpreadCell::setCellText( const QString& _text, bool /*updateDepends*/, boo
 
 
 
-void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
-//the only place where this is called with updateDepends==false in KSpreadSheet::updateLocale,
-//and when setCellText (our only other caller) is called with fupdateDepends==false
+void KSpreadCell::setDisplayText( const QString& _text )
 {
   m_pTable->doc()->emitBeginOperation( false );
   d->strText = _text;
@@ -4371,8 +4307,6 @@ void KSpreadCell::update()
     }
   }
 
-  /* this call will recursively set cells that reference us as dirty,
-     both calc dirty and paint dirty*/
   setCalcDirtyFlag();
 
   /* TODO - is this a good place for this? */
@@ -4641,37 +4575,14 @@ bool KSpreadCell::isTime() const
 
 void KSpreadCell::setCalcDirtyFlag()
 {
-  KSpreadDependency* dep = NULL;
-
-  if ( testFlag(Flag_CalcDirty) )
-  {
-    /* we need to avoid recursion */
-    return;
-  }
-
-  setFlag(Flag_CalcDirty);
-  m_pTable->setRegionPaintDirty(cellRect());
-
-  /* if this cell is dirty, every cell that references this one is dirty */
-  for (dep = d->lstDependingOnMe.first(); dep != NULL; dep = d->lstDependingOnMe.next())
-  {
-    for (int c = dep->Left(); c <= dep->Right(); c++)
-    {
-      for (int r = dep->Top(); r <= dep->Bottom(); r++)
-      {
-        dep->Table()->cellAt( c, r )->setCalcDirtyFlag();
-      }
-    }
-  }
-
   if ( d->content != Formula )
   {
-    /* we set it temporarily to true to handle recursion (although that
-       shouldn't happen if it's not a formula - we might as well be safe).
-    */
+    //don't set the flag if we don't hold a formula
     clearFlag(Flag_CalcDirty);
+    return;
   }
-
+  setFlag(Flag_CalcDirty);
+  m_pTable->setRegionPaintDirty(cellRect());
 }
 
 
@@ -6245,7 +6156,6 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   // A formula like =A1+A2 ?
   if( t[0] == '=' )
   {
-    clearFormula();
     t = decodeFormula( t, d->column, d->row );
     d->strText = pasteOperation( t, d->strText, op );
 
@@ -6531,7 +6441,6 @@ QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old
             Q_ASSERT( 0 );
         }
 
-        clearFormula();
         tmp_op = decodeFormula( tmp_op, d->column, d->row );
         setFlag(Flag_LayoutDirty);
         clearAllErrors();
@@ -6684,69 +6593,6 @@ QRect KSpreadCell::cellRect()
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
-void KSpreadCell::NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending )
-{
-  if (isDefault())
-  {
-    return;
-  }
-
-  KSpreadDependency *dep = NULL;
-  bool alreadyInList = false;
-
-  /* see if this cell is already in the list */
-  for (dep = d->lstDependingOnMe.first(); dep != NULL && !alreadyInList; dep = d->lstDependingOnMe.next() )
-  {
-    alreadyInList = (dep->Left() <= col && dep->Right() >= col &&
-		     dep->Top() <= row && dep->Bottom() >= row &&
-		     dep->Table() == table);
-  }
-
-  if (isDepending && !alreadyInList)
-  {
-    /* if we're supposed to add it and it's not already in there, add it */
-    dep = new KSpreadDependency(col, row, table);
-    d->lstDependingOnMe.prepend(dep);
-  }
-  else if (!isDepending && alreadyInList)
-  {
-    /* if we're supposed to remove it and it actually was there, then remove it */
-    d->lstDependingOnMe.remove();
-  }
-
-  return;
-}
-
-void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isDepending)
-{
-  KSpreadDependency *dep = NULL;
-
-  for (dep = lst.first(); dep != NULL; dep = lst.next())
-  {
-    for (int c = dep->Left(); c <= dep->Right(); c++)
-    {
-      for (int r = dep->Top(); r <= dep->Bottom(); r++)
-      {
-	dep->Table()->nonDefaultCell( c, r )->NotifyDepending(d->column, d->row, m_pTable, isDepending);
-      }
-    }
-  }
-}
-
-QPtrList<KSpreadDependency> KSpreadCell::getDepending ()
-{
-  QPtrList<KSpreadDependency> retval ;
-  KSpreadDependency *dep = NULL ;
-
-  for (dep = d->lstDependingOnMe.first() ; dep != NULL ; dep = d->lstDependingOnMe.next())
-  {
-    KSpreadDependency *d_copy = new KSpreadDependency (*dep) ;
-	retval.prepend (d_copy) ;
-  }
-
-  return retval ;
-}
-
 QValueList<KSpreadConditional> KSpreadCell::conditionList() const
 {
   if ( !d->hasExtra() || !d->extra()->conditions )
@@ -6783,7 +6629,7 @@ void KSpreadCell::clearAllErrors()
 
 bool KSpreadCell::calcDirtyFlag()
 {
-  return ( d->content == Formula ? false : testFlag( Flag_CalcDirty ) );
+  return ( (d->content == Formula) ? testFlag( Flag_CalcDirty ) : false );
 }
 
 bool KSpreadCell::layoutDirtyFlag() const

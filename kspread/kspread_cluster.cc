@@ -572,81 +572,54 @@ void KSpreadCluster::removeRow( int row )
     }
 }
 
-void KSpreadCluster::clearColumn( int col, bool preserveDoM )
+void KSpreadCluster::clearColumn( int col )
 {
-    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
-    {
-	kdDebug(36001) << "KSpreadCluster::clearColumn: invalid column value (col: "
-		       << col << ")" << endl;
-	return;
-    }
+  if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+  {
+    kdDebug(36001) << "KSpreadCluster::clearColumn: invalid column value (col: "
+    << col << ")" << endl;
+    return;
+  }
 
-    int cx = col / KSPREAD_CLUSTER_LEVEL2;
-    int dx = col % KSPREAD_CLUSTER_LEVEL2;
+  int cx = col / KSPREAD_CLUSTER_LEVEL2;
+  int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
-    for( int cy = 0; cy < KSPREAD_CLUSTER_LEVEL1; ++cy )
-    {
-        KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ];
-        if ( cl ) {
-            for( int dy = 0; dy < KSPREAD_CLUSTER_LEVEL2; ++dy ) {
-                if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] ) {
-                    int row = cy * KSPREAD_CLUSTER_LEVEL2 + dy ;
-                    if ( preserveDoM ) {
-                        KSpreadCell* c = cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] ;
-                        QPtrList<KSpreadDependency> dep = c->getDepending() ;
-                        if ( dep.isEmpty() )
-                            remove( col, row );
-                        else {
-                            cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] = new KSpreadCell (c->table(), dep, col, row) ;
-                            cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ]->setCalcDirtyFlag() ;
-                        }
-                    }
-                    else {
-                        remove( col, row );
-                    }
-                }
-            }
+  for( int cy = 0; cy < KSPREAD_CLUSTER_LEVEL1; ++cy )
+  {
+    KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ];
+    if ( cl )
+      for( int dy = 0; dy < KSPREAD_CLUSTER_LEVEL2; ++dy )
+        if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] )
+        {
+          int row = cy * KSPREAD_CLUSTER_LEVEL2 + dy ;
+          remove( col, row );
         }
-    }
+  }
 }
 
-void KSpreadCluster::clearRow( int row, bool preserveDoM )
-//TODO: bei column genauso
+void KSpreadCluster::clearRow( int row )
 {
-    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
-    {
-	kdDebug(36001) << "KSpreadCluster::clearRow: invalid row value (row: "
-		       << row << ")" << endl;
-	return;
-    }
+  if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+  {
+    kdDebug(36001) << "KSpreadCluster::clearRow: invalid row value (row: "
+        << row << ")" << endl;
+    return;
+  }
 
-    int cy = row / KSPREAD_CLUSTER_LEVEL2;
-    int dy = row % KSPREAD_CLUSTER_LEVEL2;
+  int cy = row / KSPREAD_CLUSTER_LEVEL2;
+  int dy = row % KSPREAD_CLUSTER_LEVEL2;
 
-    for( int cx = 0; cx < KSPREAD_CLUSTER_LEVEL1; ++cx )
-    {
-        KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL2 + cx ];
-        if ( cl ) {
-            for( int dx = 0; dx < KSPREAD_CLUSTER_LEVEL2; ++dx ) {
-                if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] ) {
-                    int column = cx * KSPREAD_CLUSTER_LEVEL2 + dx ;
-                    if ( preserveDoM ) {
-                        KSpreadCell* c = cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] ;
-                        QPtrList<KSpreadDependency> dep = c->getDepending() ;
-                        if ( dep.isEmpty() )
-                            remove( column, row );
-                        else {
-                            cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] = new KSpreadCell (c->table(), dep, column, row) ;
-                            cl [ dy * KSPREAD_CLUSTER_LEVEL2 + dx ]->setCalcDirtyFlag() ;
-                        }
-                    }
-                    else {
-                        remove( column, row );
-                    }
-                }
-            }
+  for( int cx = 0; cx < KSPREAD_CLUSTER_LEVEL1; ++cx )
+  {
+    KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL2 + cx ];
+    if ( cl )
+      for( int dx = 0; dx < KSPREAD_CLUSTER_LEVEL2; ++dx )
+        if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ] )
+        {
+          int column = cx * KSPREAD_CLUSTER_LEVEL2 + dx ;
+          remove( column, row );
         }
-    }
+  }
 }
 
 
