@@ -20,7 +20,7 @@
 #ifndef __kzoomfactordlg_h__
 #define __kzoomfactordlg_h__
 
-#include <kintegerline.h>
+#include <kintlineedit.h>
 #include <kwizard.h>
 
 /**
@@ -37,8 +37,8 @@ public:
   int getValue( QPoint& theValue);
 
 private:
-  KIntegerLine* m_pLineEditXFactor;
-  KIntegerLine* m_pLineEditYFactor;
+  KIntLineEdit* m_pLineEditXFactor;
+  KIntLineEdit* m_pLineEditYFactor;
 };
 
 #endif

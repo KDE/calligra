@@ -38,13 +38,13 @@ KZoomFactorDialog::KZoomFactorDialog( QWidget* parent, const char* name, WFlags 
   QGridLayout* grid = new QGridLayout( this, 6, 4, 15, 7 );
 
   // Inputline X
-  m_pLineEditXFactor = new KIntegerLine( this, i18n( "inputZoomX" ) );
+  m_pLineEditXFactor = new KIntLineEdit( this, i18n( "inputZoomX" ) );
   grid->addMultiCellWidget( m_pLineEditXFactor, 1, 1, 0, 3 );
   QLabel* label = new QLabel( m_pLineEditXFactor, i18n( "Test" ), this );
   grid->addWidget( label, 0, 0 );
 
   // Inputline Y
-  m_pLineEditYFactor = new KIntegerLine( this, i18n( "inputZoomX" ) );
+  m_pLineEditYFactor = new KIntLineEdit( this, i18n( "inputZoomX" ) );
   grid->addMultiCellWidget( m_pLineEditYFactor, 3, 1, 0, 3 );
   label = new QLabel( m_pLineEditYFactor, i18n( "Test" ), this );
   grid->addWidget( label, 2, 0 );

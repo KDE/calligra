@@ -20,7 +20,7 @@
 #ifndef __kintegerinputdlg_h__
 #define __kintegerinputdlg_h__
 
-#include <kintegerline.h>
+#include <kintlineedit.h>
 #include <kwizard.h>
 
 /**
@@ -36,7 +36,7 @@ public:
 	int getValue( int& theValue);
 
 private:
-	KIntegerLine* m_pLineEdit;
+	KIntLineEdit* m_pLineEdit;
 };
 
 #endif

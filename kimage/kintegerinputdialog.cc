@@ -38,7 +38,7 @@ KIntegerInputDialog::KIntegerInputDialog(QWidget *parent, const char *name, cons
     QGridLayout* grid = new QGridLayout( this, 4, 4, 15, 7 );
 
 	// Inputline
-	m_pLineEdit = new KIntegerLine( this, "inputtext" );
+	m_pLineEdit = new KIntLineEdit( this, "inputtext" );
 	grid->addMultiCellWidget( m_pLineEdit, 1, 1, 0, 3 );
 	
 	// Label
