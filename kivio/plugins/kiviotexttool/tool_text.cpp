@@ -181,6 +181,11 @@ void TextTool::text(QRect r)
 
 void TextTool::mousePress( QMouseEvent *e )
 {
+    if(e->button() == RightButton)
+    {
+        controller()->activateDefault();
+        return;
+    }
     if( startRubberBanding( e ) )
     {
         m_mode = stmDrawRubber;

@@ -132,6 +132,11 @@ void ConnectorTool::connector(QRect)
 
 void ConnectorTool::mousePress( QMouseEvent *e )
 {
+    if(e->button() == RightButton)
+    {
+        controller()->activateDefault();
+        return;
+    }
     if( startRubberBanding( e ) )
     {
         m_mode = stmDrawRubber;
