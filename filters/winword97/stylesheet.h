@@ -3,6 +3,7 @@
 
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qmap.h>
 #include <myfile.h>
 #include <misc.h>
 #include <fib.h>
@@ -14,6 +15,12 @@ struct STYLE {
     unsigned short lenPAPX;  // length of the grpprl
     unsigned long fcCHPX;    // CHPX position
     unsigned short lenCHPX;  // length
+};
+
+struct STD {
+    unsigned short istdBase;
+    QString name;
+    STYLE style;
 };
 
 class StyleSheet {
@@ -31,10 +38,10 @@ private:
     const StyleSheet &operator=(const StyleSheet &);
 
     const bool chain_rec(const unsigned short &sti);             // recursively walks back to the NULL-Style
-    const bool findSTD(const unsigned short &sti, unsigned long &offset); // Offset to specific STD
 
     myFile table;
     const FIB * const fib;
+    QMap<unsigned long, STD> styleMap;
     QValueList<STYLE> _chain;                                    // the list with all the styles
     unsigned short lastSti;                                      // don't calculate the chain again if the
                                                                  // list is still correct!
