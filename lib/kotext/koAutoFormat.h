@@ -150,6 +150,8 @@ public:
 
     void configCorrectionWithFormat( bool b);
 
+    void configAutoFormatLanguage( const QString &_lang);
+
     TypographicQuotes getConfigTypographicSimpleQuotes() const
     { return m_typographicSimpleQuotes; }
 
@@ -218,6 +220,11 @@ public:
 
     bool getConfigCorrectionWithFormat() const
     { return m_bAutoCorrectionWithFormat; }
+
+
+    QString getConfigAutoFormatLanguage( )const
+        { return m_autoFormatLanguage;}
+
 
     const QDict<KoAutoFormatEntry> & getAutoFormatEntries() const{
         return m_entries;
@@ -301,6 +308,7 @@ private:
     KoVariableCollection *m_varCollection;
     KoVariableFormatCollection *m_varFormatCollection;
 
+    QString m_autoFormatLanguage;
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
     bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;

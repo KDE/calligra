@@ -75,6 +75,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     : m_doc( _doc ),
       m_varCollection(_varCollection),
       m_varFormatCollection(_varFormatCollection),
+      m_autoFormatLanguage( QString::null),
       m_configRead( false ),
       m_convertUpperCase( false ), m_convertUpperUpper( false ),
       m_advancedAutoCorrect( true ),
@@ -117,6 +118,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
     : m_doc( format.m_doc ),
       m_varCollection( format.m_varCollection ),
       m_varFormatCollection( format.m_varFormatCollection ),
+      m_autoFormatLanguage( format.m_autoFormatLanguage),
       m_configRead( format.m_configRead ),
       m_convertUpperCase( format.m_convertUpperCase ),
       m_convertUpperUpper( format.m_convertUpperUpper ),
@@ -1666,6 +1668,11 @@ void KoAutoFormat::configAutoSuperScript( bool b )
 void KoAutoFormat::configCorrectionWithFormat( bool b)
 {
     m_bAutoCorrectionWithFormat = b;
+}
+
+void KoAutoFormat::configAutoFormatLanguage( const QString &_lang)
+{
+    m_autoFormatLanguage=_lang;
 }
 
 KCommand *KoAutoFormat::applyAutoFormat( KoTextObject * obj )

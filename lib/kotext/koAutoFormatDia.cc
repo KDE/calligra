@@ -473,6 +473,10 @@ void KoAutoFormatDia::setupTab3()
             KDialog::spacingHint() );
 
     autoFormatLanguage = new QComboBox(tab3);
+
+    QStringList lst;
+    lst<<i18n("Default");
+
     grid->addMultiCellWidget( autoFormatLanguage, 0, 0, 4, 6 );
     QLabel *lblAutoFormatLanguage = new QLabel( i18n("Remplacement and exeption for language"), tab3);
     grid->addMultiCellWidget( lblAutoFormatLanguage, 0, 0, 0, 3 );
