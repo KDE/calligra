@@ -642,11 +642,14 @@ void KSpreadCell::freeAllObscuredCells()
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
     // Let's see ;-)
-    if ( _col != m_iColumn || _row != m_iRow )
+    /*if ( _col != m_iColumn || _row != m_iRow )
     {
         kdWarning() << "KSpreadCell::makeLayout _col=" << _col << " _row=" << _row
                     << "  but m_iColumn=" << m_iColumn << " m_iRow=" << m_iRow << endl;
-    }
+                    }*/
+    // Yes they are: they are useful if this is the default layout,
+    // in which case m_iRow and m_iColumn are 0 and 0, but col and row
+    // are the real coordinates of the cell.
 
     /*m_leftBorderPen.setWidth(leftBorderWidth( _col, _row ));
     m_topBorderPen.setWidth(topBorderWidth( _col, _row ));
@@ -3544,7 +3547,7 @@ void KSpreadCell::update()
         m_pTable->updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
     }
 
-    bool b_update_begin = m_bDisplayDirtyFlag;
+    //bool b_update_begin = m_bDisplayDirtyFlag;
     m_bDisplayDirtyFlag = true;
 
     updateDepending();

@@ -2058,7 +2058,7 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
   }
 }
 
-void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
+void KSpreadTable::find( const QPoint &_marker, QString _find, long options, KSpreadCanvas *canvas )
 {
     // Identify the region of interest.
     QRect region( m_rctSelection );
@@ -2083,7 +2083,7 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
     else
     {
         // All cells.
-        region.setCoords( 0, 0, 0x7FFF, 0x7FFF );
+        region.setCoords( 0, 0, m_iMaxRow, m_iMaxColumn );
     }
 
     // Create the class that handles all the actual Find stuff, and connect it to its
@@ -2091,49 +2091,38 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
     KoFind dialog( _find, options );
     QObject::connect(
         &dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
-        this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
+        canvas, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
 
     // Now do the finding...
-    KSpreadCell *cell;
     QRect cellRegion( 0, 0, 0, 0 );
     bool bck = options & KoFindDialog::FindBackwards;
 
-    cell = m_cells.firstCell();
-    if ( cell && bck )
-        while ( cell->nextCell() )
-            cell = cell->nextCell();
-    for ( ; cell; cell = (bck ? cell->previousCell() : cell->nextCell() ) )
+    int colStart = !bck ? region.left() : region.right();
+    int colEnd = !bck ? region.right() : region.left();
+    int rowStart = !bck ? region.top() :region.bottom();
+    int rowEnd = !bck ? region.bottom() : region.top();
+    if ( options & KoFindDialog::FromCursor ) {
+        colStart = _marker.x();
+        rowStart =  _marker.y();
+    }
+    for (int row = rowStart ; !bck ? row < rowEnd : row > rowEnd ; !bck ? ++row : --row )
     {
-        int row = cell->row();
-        int col = cell->column();
-        if ( region.top() <= row && region.bottom() >= row &&
-            region.left() <= col && region.right() >= col )
+        for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
         {
-            if ( !cell->isObscured() && !cell->isNumeric() && !cell->isBool() && !cell->isFormula() )
+            KSpreadCell *cell = cellAt( col, row );
+            if ( !cell->isDefault() && !cell->isObscured() && !cell->isFormula() )
             {
-                QString text;
-
-                text = cell->text();
+                QString text = cell->text();
                 cellRegion.setTop( row );
                 cellRegion.setLeft( col );
                 if ( !dialog.find( text, cellRegion ) )
-                    break;
+                    return;
             }
         }
     }
 }
 
-// Used by find() and replace() logic to highlight a cell.
-void KSpreadTable::highlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/, const QRect &cellRect )
-{
-    // Which cell was this again?
-    //KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
-
-    // ...now I remember, update it!
-    // TBD: highlight it!
-}
-
-void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _replace, long options )
+void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _replace, long options, KSpreadCanvas *canvas )
 {
     // Identify the region of interest.
     QRect region( m_rctSelection );
@@ -2158,7 +2147,7 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
     else
     {
         // All cells.
-        region.setCoords( 0, 0, 0x7FFF, 0x7FFF );
+        region.setCoords( 0, 0, m_iMaxRow, m_iMaxColumn );
     }
 
     // Create the class that handles all the actual replace stuff, and connect it to its
@@ -2166,10 +2155,10 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
     KoReplace dialog( _find, _replace, options );
     QObject::connect(
         &dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
-        this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
+        canvas, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
     QObject::connect(
         &dialog, SIGNAL( replace( const QString &, int, int,int, const QRect & ) ),
-        this, SLOT( replace( const QString &, int, int,int, const QRect & ) ) );
+        canvas, SLOT( replace( const QString &, int, int,int, const QRect & ) ) );
 
     // Now do the replacing...
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -2178,45 +2167,32 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    KSpreadCell *cell;
     QRect cellRegion( 0, 0, 0, 0 );
-    bool bck = options & KoReplaceDialog::FindBackwards;
+    bool bck = options & KoFindDialog::FindBackwards;
 
-    cell = m_cells.firstCell();
-    if ( cell && bck )
-        while ( cell->nextCell() )
-            cell = cell->nextCell();
-    for ( ; cell; cell = (bck ? cell->previousCell() : cell->nextCell() ) )
+    int colStart = !bck ? region.left() : region.right();
+    int colEnd = !bck ? region.right() : region.left();
+    int rowStart = !bck ? region.top() :region.bottom();
+    int rowEnd = !bck ? region.bottom() : region.top();
+    if ( options & KoFindDialog::FromCursor ) {
+        colStart = _marker.x();
+        rowStart =  _marker.y();
+    }
+    for (int row = rowStart ; !bck ? row < rowEnd : row > rowEnd ; !bck ? ++row : --row )
     {
-        int row = cell->row();
-        int col = cell->column();
-        if ( region.top() <= row && region.bottom() >= row &&
-            region.left() <= col && region.right() >= col )
+        for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
         {
-            if ( !cell->isObscured() && !cell->isNumeric() && !cell->isBool() && !cell->isFormula() )
+            KSpreadCell *cell = cellAt( col, row );
+            if ( !cell->isDefault() && !cell->isObscured() && !cell->isFormula() )
             {
-                QString text;
-
-                text = cell->text();
+                QString text = cell->text();
                 cellRegion.setTop( row );
                 cellRegion.setLeft( col );
-                dialog.replace( text, cellRegion );
+                if (!dialog.replace( text, cellRegion ))
+                    return;
             }
         }
     }
-}
-
-// Used by replace() logic to modify a cell.
-void KSpreadTable::replace( const QString &newText, int /*index*/, int /*replacedLength*/, int /*searchWordLenght*/,const QRect &cellRect )
-{
-    // Which cell was this again?
-    KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
-
-    // ...now I remember, update it!
-    cell->setDisplayDirtyFlag();
-    cell->setCellText( newText );
-    cell->clearDisplayDirtyFlag();
-    updateCell( cell, cellRect.left(), cellRect.top() );
 }
 
 void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )

@@ -1558,7 +1558,7 @@ void KSpreadView::find()
 
     // Do the finding!
     QPoint m_marker=QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-    activeTable()->find( m_marker, dlg.pattern(), dlg.options() );
+    activeTable()->find( m_marker, dlg.pattern(), dlg.options(), m_pCanvas );
 }
 
 void KSpreadView::replace()
@@ -1574,7 +1574,7 @@ void KSpreadView::replace()
 
     // Do the replacement.
     QPoint m_marker=QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-    activeTable()->replace( m_marker, dlg.pattern(), dlg.replacement(), dlg.options() );
+    activeTable()->replace( m_marker, dlg.pattern(), dlg.replacement(), dlg.options(), m_pCanvas );
 
     // Refresh the editWidget
     KSpreadCell *cell = activeTable()->cellAt( canvasWidget()->markerColumn(),

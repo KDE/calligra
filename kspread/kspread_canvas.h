@@ -261,12 +261,27 @@ public:
     KSpreadView* view() { return m_pView; }
     KSpreadDoc* doc() { return m_pDoc; }
 
+    /**
+     * Find support.
+     */
+    void find( const QPoint &_marker, QString _find, long options );
+
+    /**
+     * Find'n'Replace support.
+     */
+    void replace( const QPoint &_marker, QString _find, QString _replace, long options );
+
+
 public slots:
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
 
     void slotMaxColumn( int _max_column );
     void slotMaxRow( int _max_row );
+
+    // Connected to KoFind/KoReplace by KSpreadTable during a search and replace
+    void highlight( const QString &text, int matchingIndex, int matchedLength, const QRect &cellRect );
+    void replace( const QString &newText, int index, int replacedLength,int searchWordLenght, const QRect &cellRect );
 
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );

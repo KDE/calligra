@@ -626,6 +626,29 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   }
 }
 
+void KSpreadCanvas::highlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/, const QRect &cellRect )
+{
+    // Which cell was this again?
+    //KSpreadCell *cell = cellAt( cellRect.left(), cellRect.top() );
+
+    // ...now I remember, update it!
+    // TBD: highlight it!
+    gotoLocation( cellRect.left(), cellRect.top(), activeTable() );
+}
+
+// Used by replace() logic to modify a cell.
+void KSpreadCanvas::replace( const QString &newText, int /*index*/, int /*replacedLength*/, int /*searchWordLenght*/,const QRect &cellRect )
+{
+    // Which cell was this again?
+    KSpreadCell *cell = activeTable()->cellAt( cellRect.left(), cellRect.top() );
+
+    // ...now I remember, update it!
+    cell->setDisplayDirtyFlag();
+    cell->setCellText( newText );
+    cell->clearDisplayDirtyFlag();
+    activeTable()->updateCell( cell, cellRect.left(), cellRect.top() );
+}
+
 void KSpreadCanvas::slotScrollHorz( int _value )
 {
   if ( activeTable() == 0L )

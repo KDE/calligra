@@ -451,12 +451,12 @@ public:
     /**
      * Find support.
      */
-    void find( const QPoint &_marker, QString _find, long options );
+    void find( const QPoint &_marker, QString _find, long options, KSpreadCanvas *canvas );
 
     /**
      * Find'n'Replace support.
      */
-    void replace( const QPoint &_marker, QString _find, QString _replace, long options );
+    void replace( const QPoint &_marker, QString _find, QString _replace, long options, KSpreadCanvas *canvas );
 
     void sortByRow( int ref_row, SortingOrder = Increase );
     void sortByColumn( int ref_column, SortingOrder = Increase );
@@ -844,11 +844,6 @@ public:
     const QColor& emptyColor() const { return m_emptyColor; }
 
     void updateLocale();
-
-private slots:
-
-    void highlight( const QString &text, int matchingIndex, int matchedLength, const QRect &cellRect );
-    void replace( const QString &newText, int index, int replacedLength,int searchWordLenght, const QRect &cellRect );
 
 signals:
     void sig_updateView( KSpreadTable *_table );
