@@ -1,5 +1,4 @@
-/*
-   This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -28,7 +27,8 @@
 #include <klocale.h>
 
 SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
-  KDialogBase( parent )
+  KDialogBase( parent, "sheetPropertiesDialog", true, 
+  i18n("Sheet Properties"), Ok|Cancel|Default )
 {
   QVBox* mainWidget = makeVBoxMainWidget();
   d = new SheetPropertiesBase( mainWidget );
@@ -36,6 +36,7 @@ SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
   showButtonOK( true );
   showButtonCancel( true );
   showButtonApply( false );
+  showButton( Default, true );
   
   setCaption( i18n("Sheet Properties") );
   enableButtonSeparator( true );
@@ -44,6 +45,18 @@ SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
 SheetPropertiesDialog::~SheetPropertiesDialog()
 {
   delete d;
+}
+
+void SheetPropertiesDialog::slotDefault()
+{
+  setAutoCalc( true );
+  setShowGrid( true );
+  setShowFormula( false );
+  setHideZero( false );
+  setShowFormulaIndicator( true );
+  setColumnAsNumber( false );
+  setLcMode( false );
+  setCapitalizeFirstLetter( false );
 }
 
 bool SheetPropertiesDialog::autoCalc() const

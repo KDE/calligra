@@ -1,5 +1,4 @@
-/*
-   This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -36,6 +35,8 @@ public:
     SheetPropertiesDialog( QWidget* parent = 0 );
     
     ~SheetPropertiesDialog();
+    
+    virtual void slotDefault();
     
     bool autoCalc() const;
     
