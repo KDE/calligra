@@ -36,20 +36,19 @@
 QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
 {
     // Reference: section 4.1.3 of the CSS2 recommendation
-    // (When we need to escape, we choose the numerical CSS escape as it is encoding neutral.)
-    // However most HTML user agents supports this section only in a restrictive way, so we cannot use an escape
-    // to allow a character if it would not be allow unescaped (for example a space.)
+    // However most HTML user agents support this section only in a restrictive way, so we cannot use any CSS escape
 
     // NOTE: we do not guarantee anymore that the style name is unique! (### FIXME)
 
-
     QString strReturn;
-    // Taken in a restrictive way, an identifier can only start with a letter.
+
+    // Taken in the restrictive way, an identifier can only start with a letter.
     const QChar qch0(strText[0]);
     if ((qch0<'a' || qch0>'z') && (qch0<'A' || qch0>'Z'))
     {
-        // Not a letter, so we have to put a prefix to be a valid identifier
+        // Not a letter, so we have to add a prefix
         strReturn+="kWoRd_"; // The curious spelling is for allowing a HTML import to identfy it and to remove it.
+        // The processing of the character itself is done below
     }
 
     for (uint i=0; i<strText.length(); i++)
@@ -62,30 +61,30 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
             || ((ch>='0') && (ch<='9'))
             || (ch=='-') || (ch=='_')) // The underscore is allowed by the CSS2 errata
         {
-            // Normal allowed characters (whitout any problem)
+            // Normal allowed characters (without any problem)
             strReturn+=qch;
         }
         else if ((ch<=' ') || (ch>=128 && ch<=160)) // space (breaking or not) and control characters
         {
-            // CSS2 would allow to escape them but no HTML user agent supports this
-            strReturn+='_'; // This makes the identifier (style name) potentially non-unique
+            // CSS2 would allow to escape it but not any HTML user agent supports this
+            strReturn+='_';
         }
         else if ((ch>=161) && (getCodec()->canEncode(qch)))
         {
-            // Any Unicode character greater or egual to 161 is allowed too, even at start.
-            // Except if the encoding cannot write the character
+            // Any Unicode character greater or egual to 161 is allowed
+            // except if it cannot be written in the encoding
             strReturn+=qch;
         }
-        else // if ch >= 33 && ch <=127 but without alphanumerics (or not in encoding)
+        else // if ch >= 33 && ch <=127 with holes (or not in encoding)
         {
-            // CSS2 does not allow these character unescaped, but a CSS escape would break some HTML user agents (e.g. Mozilla 1.4)
+            // Either CSS2 does not allow this character unescaped or it is not in the encoding
+            // but a CSS escape would break some HTML user agents (e.g. Mozilla 1.4)
             // So we have to do our own incompatible cooking. :-(
             strReturn+="--"; // start our private escape
             strReturn+=QString::number(ch,16);
             strReturn+="--"; // end our private escape
         }
     }
-    // It is supposed that a last escape do not need an extra space
     return strReturn;
 }
 
