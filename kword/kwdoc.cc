@@ -1925,8 +1925,6 @@ bool KWDocument::completeSaving( KoStore *_store )
     if ( !_store )
         return TRUE;
 
-    QString u = KURL( url() ).path();
-
     QValueList<KoImageKey> saveImages;
     QValueList<KoClipartKey> saveCliparts;
     QListIterator<KWFrameSet> fit = framesetsIterator();
