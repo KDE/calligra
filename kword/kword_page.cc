@@ -255,6 +255,18 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      bend = true; 
 	  }
 
+
+	if ((int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
+	    - (int)yOffset < height())
+	  {
+	    int _y = (int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
+	      - (int)yOffset;
+	    painter.fillRect(paintfc.getPTLeft() - xOffset,
+			     _y,paintfc.getPTWidth(),
+			     height() - _y,
+			     QBrush(white));
+	  }
+
 	fc->cursorGotoPos(tmpTextPos,painter);
       } break;
     case Key_Backspace:
@@ -284,9 +296,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	bool del = fc->getParag()->deleteText(tmpTextPos,1); 
 	bool joined = false;
 
-	if (!del && fc->getParag()->getTextLen() == 0/* && fc->getParag()->getNext()*/)
+	if (!del && fc->getParag()->getTextLen() == 0)
 	  {
-	    debug("here");
 	    KWParag *p = fc->getParag()->getPrev();
 	    doc->deleteParag(fc->getParag());
 	    if (p) 
@@ -320,6 +331,17 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    bend = !paintfc.makeNextLineLayout(painter);
 	    if (paintfc.getPage() > lastVisiblePage)
 	      bend = true; 
+	  }
+
+	if ((int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
+	    - (int)yOffset < height())
+	  {
+	    int _y = (int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
+	      - (int)yOffset;
+	    painter.fillRect(paintfc.getPTLeft() - xOffset,
+			     _y,paintfc.getPTWidth(),
+			     height() - _y,
+			     QBrush(white));
 	  }
 
 	if (!joined)

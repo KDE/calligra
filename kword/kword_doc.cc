@@ -539,15 +539,12 @@ void KWordDocument_impl::joinParag(KWParag *_parag1,KWParag *_parag2)
 {
   if (!_parag1 || !_parag2) return;
 
-  if (_parag2->getNext())
-    {
-      _parag2->getNext()->setPrev(_parag1);
-      _parag1->setNext(_parag2->getNext());
+  if (_parag2->getNext()) _parag2->getNext()->setPrev(_parag1);
+  _parag1->setNext(_parag2->getNext());
 
-      _parag1->appendText(_parag2->getText(),_parag2->getTextLen());
+  _parag1->appendText(_parag2->getText(),_parag2->getTextLen());
 
-      delete _parag2;
-    }
+  delete _parag2;
 }
 
 /*================================================================*/
