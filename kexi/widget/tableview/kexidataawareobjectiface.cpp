@@ -438,7 +438,8 @@ void KexiDataAwareObjectInterface::selectFirstRow()
 
 void KexiDataAwareObjectInterface::selectLastRow()
 {
-	selectRow(rows() - 1 + (isInsertingEnabled()?1:0));
+//	selectRow(rows() - 1 + (isInsertingEnabled()?1:0));
+	selectRow(rows() - 1);
 }
 
 void KexiDataAwareObjectInterface::selectRow(int row)
@@ -583,7 +584,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		if (m_curCol != oldCol || m_curRow != oldRow ) //ensure this is also refreshed
 			updateCell( oldRow, m_curCol );
 		//update row
-		if (m_curRow != oldRow) {
+		if (forceSet || m_curRow != oldRow) {
 			if (isInsertingEnabled() && m_curRow == rows()) {
 				kdDebug(44021) << "NOW insert item is current" << endl;
 				m_currentItem = m_insertItem;
@@ -597,9 +598,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 					//moving from 'insert item' to last item
 					m_itemIterator->toLast();
 				}
-				else if (m_currentItem != m_insertItem && oldRow>=0 && (oldRow+1)==m_curRow) //just move next
+				else if (!forceSet && m_currentItem != m_insertItem && oldRow>=0 && (oldRow+1)==m_curRow) //just move next
 					++(*m_itemIterator);
-				else if (m_currentItem != m_insertItem && oldRow>=0 && (oldRow-1)==m_curRow) //just move back
+				else if (!forceSet && m_currentItem != m_insertItem && oldRow>=0 && (oldRow-1)==m_curRow) //just move back
 					--(*m_itemIterator);
 				else { //move at:
 					m_itemIterator->toFirst();

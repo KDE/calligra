@@ -78,6 +78,8 @@ int KexiFormScrollView::rowsPerPage() const
 void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
 {
 	//! @todo
+	if (m_currentItem)
+		m_provider->fillDataItems(*m_currentItem);
 }
 
 void KexiFormScrollView::moveToRecordRequested(uint r)
@@ -167,8 +169,8 @@ KexiTableEdit *KexiFormScrollView::editor( int col, bool ignoreMissingEditor )
 void KexiFormScrollView::editorShowFocus( int row, int col )
 {
 	//! @todo
-	if (m_currentItem)
-		m_provider->fillDataItems(*m_currentItem);
+//	if (m_currentItem)
+//		m_provider->fillDataItems(*m_currentItem);
 }
 
 void KexiFormScrollView::updateCell(int row, int col)
