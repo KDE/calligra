@@ -2946,13 +2946,10 @@ void KSpreadCanvas::paintUpdates()
 
   //Save clip region
   QRegion rgnComplete( painter.clipRegion() );
-  QWMatrix matrix( painter.worldMatrix() );
+  QWMatrix matrix;
   if ( m_pView )
   {
-    matrix.scale( m_pDoc->zoomedResolutionX(),
-                  m_pDoc->zoomedResolutionY() );
-    matrix.translate( - xOffset(),
-                      - yOffset() );
+    matrix = m_pView->matrix();
   }
   else
   {
