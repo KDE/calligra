@@ -34,7 +34,7 @@ KoTarStore::KoTarStore( const QString & _filename, KoStore::Mode _mode )
 
   kdebug( KDEBUG_INFO, 30002, "KoTarStore Constructor filename = %s mode = %d", _filename.data(), _mode);
 
-  m_pTar = new KTar( _filename );
+  m_pTar = new KTarGz( _filename );
 
   m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
 }

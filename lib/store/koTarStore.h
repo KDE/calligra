@@ -27,7 +27,7 @@
 
 #include <qdatastream.h>
 
-class KTar;
+class KTarGz;
 
 /**
  * Saves and loads koffice documents using a tar file called "the tar store".
@@ -72,7 +72,7 @@ protected:
   // Current size of the file named m_sName
   unsigned long m_iSize;
 
-  KTar * m_pTar;
+  KTarGz * m_pTar;
   QByteArray m_byteArray;
   QDataStream * m_stream;
 
