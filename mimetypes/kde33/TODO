@@ -1,0 +1,10 @@
+Done:
+application/vnd.oasis.openoffice.text for text documents
+application/vnd.oasis.openoffice.spreadsheet for spreadsheet documents
+application/vnd.oasis.openoffice.presentation for presentation documents
+
+TODO:
+application/vnd.oasis.openoffice.drawing for drawing documents   *.ood
+application/vnd.oasis.openoffice.chart for chart documents       *.ooc
+application/vnd.oasis.openoffice.image for image documents       ?
+application/vnd.oasis.openoffice.formula for formula documents   *.oof

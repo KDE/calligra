@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.openoffice.presentation
+Patterns=*.oop;*.OOP
+Icon=presentation
+Comment=OASIS Open Office Presentation
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.oop

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/vnd.oasis.openoffice.text
+Patterns=*.oot;*.OOT
+Icon=wordprocessing
+Comment=OASIS Open Office Text
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.oot
