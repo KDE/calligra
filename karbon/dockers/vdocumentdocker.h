@@ -22,6 +22,7 @@
 #define __VDOCUMENTDOCKER_H__
 
 #include <qlistview.h>
+#include <qptrdict.h>
 
 #include "vdocker.h"
 
@@ -149,11 +150,12 @@ private slots:
 protected:
 	VLayerListViewItem* listItem( int pos );
 
-private:	
-	QListView*		m_layersListView;
-	QHButtonGroup*	m_buttonGroup;
-	KarbonView*		m_view;
-	VDocument*		m_document;
+private:
+	QListView						*m_layersListView;
+	QHButtonGroup					*m_buttonGroup;
+	KarbonView						*m_view;
+	VDocument						*m_document;
+	QPtrDict<VLayerListViewItem>	m_layers;
 }; // VLayersTab
 
 /*************************************************************************

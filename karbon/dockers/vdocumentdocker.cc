@@ -476,13 +476,24 @@ VLayersTab::slotSelectionChanged()
 		if( itr.current()->state() != VObject::deleted )
 		{
 			QListViewItemIterator it( m_layersListView );
-		    while( it.current() )
+			bool found = false;
+		    while( !found && it.current() )
 			{
 				if( dynamic_cast<VObjectListViewItem *>( it.current() ) &&
 					dynamic_cast<VObjectListViewItem *>( it.current() )->object() == itr.current() )
+				{
 					m_layersListView->setSelected( it.current(), true );
+					found = true;
+				}
 				++it;
 			}
+			// not found, insert
+			if( !found )
+			{
+				VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem *>( m_layers[ m_document->activeLayer() ] );
+				new VObjectListViewItem( layerItem, itr.current(), m_document, layerItem->childCount() );
+			}
+
 		}
 }
 
@@ -688,11 +699,13 @@ VLayersTab::updateLayers()
 	m_document->layers().toVector( &vector );
 	VLayerListViewItem* item;
 	KIconLoader il;
+	m_layers.clear();
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{
 		if ( vector[i]->state() != VObject::deleted )
 		{
 			item = new VLayerListViewItem( m_layersListView, vector[i], m_document );
+			m_layers.insert( vector[i], item );
 			item->setOpen( true );
 		}
 	}
