@@ -285,7 +285,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_sendfile->setEnabled( false);
     d->m_paCloseFile->setEnabled( false);
 
-    d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
+    d->m_splitter=new QSplitter(Qt::Vertical, this, "mw-splitter");
     setCentralWidget( d->m_splitter );
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
@@ -392,7 +392,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   {
     doc->setSelectable( false );
     //d->m_manager->addPart( doc, false ); // done by KoView::setPartManager
-    d->m_rootViews.append( doc->createView( d->m_splitter ) );
+    d->m_rootViews.append( doc->createView( d->m_splitter, "view" /*not unique, but better than unnamed*/ ) );
     d->m_rootViews.current()->setPartManager( d->m_manager );
 
     d->m_rootViews.current()->show();
@@ -790,7 +790,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 
             // this file exists and we are not just clicking "Save As" to change filter options
             // => ask for confirmation
-            if ( KIO::NetAccess::exists( newURL, this ) && !justChangingFilterOptions )
+            if ( KIO::NetAccess::exists( newURL, false /*will write*/, this ) && !justChangingFilterOptions )
             {
                 bOk = KMessageBox::questionYesNo( this,
                                                   i18n("A document with this name already exists.\n"\
@@ -1288,7 +1288,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
 
 void KoMainWindow::slotSplitView() {
     d->m_splitted=true;
-    d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter));
+    d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter, "splitted-view"));
     d->m_rootViews.current()->show();
     d->m_rootViews.current()->setPartManager( d->m_manager );
     d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
