@@ -4,6 +4,7 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDChartAreaPainter.cpp	\
 			KDChartAxesPainter.cpp	\
 			KDChartAxisParams.cpp	\
+			KDChartAxisParams.moc.cpp	\
 			KDChartBarPainter.cpp	\
 			KDChartCustomBox.cpp 	\
 			KDChartData.cpp 	\
@@ -11,15 +12,18 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDChartLinesPainter.cpp	\
 			KDChartPainter.cpp	\
 			KDChartParams.cpp	\
+			KDChartParams.moc.cpp	\
 			KDChartPiePainter.cpp	\
 			KDChartPolarPainter.cpp	\
 			KDChartRingPainter.cpp	\
 			KDChartTextPiece.cpp	\
 			KDChartWidget.cpp 	\
-			KDDrawText.cpp		\
+			KDChartWidget.moc.cpp	\
+			KDDrawText.cpp		\ 
 			KDFrame.cpp 		\
+			KDFrame.moc.cpp		\
 			KDFrameProfileSection.cpp \
-			KDXMLTools.cpp 
+			KDXMLTools.cpp
 
 noinst_HEADERS =	KDChart.h 		\
 			KDChartAreaPainter.h	\
@@ -27,7 +31,6 @@ noinst_HEADERS =	KDChart.h 		\
 			KDChartAxisParams.h	\
 			KDChartBarPainter.h	\
 			KDChartCustomBox.h 	\
-			KDChartData.h 		\
 			KDChartDataRegion.h	\
 			KDChartEnums.h	 	\
 			KDChartHiLoPainter.h	\
@@ -45,6 +48,8 @@ noinst_HEADERS =	KDChart.h 		\
 			KDFrame.h 		\
 			KDFrameProfileSection.h \
 			KDXMLTools.h
+			
+
 METASOURCES = AUTO
 
 INCLUDES  = -I../include $(all_includes)
