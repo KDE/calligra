@@ -143,8 +143,16 @@ KontourImport::convert()
 		lay = docElem.namedItem( "layer" ).toElement();
 	else
 		lay = docElem.namedItem( "page" ).namedItem( "layer" ).toElement();
-	
-	QDomElement b = lay.firstChild().toElement();
+
+	parseGroup( lay.firstChild().toElement() );
+
+	m_document.saveXML( outdoc );
+}
+
+void
+KontourImport::parseGroup( const QDomElement &e )
+{
+	QDomElement b = e;
 	for( ; !b.isNull(); b = b.nextSibling().toElement() )
 	{       
 		if ( b.tagName() == "rectangle" )
@@ -239,8 +247,6 @@ KontourImport::convert()
 			m_document.append( path );	
 		}
 	}
-	
-	m_document.saveXML( outdoc );
 }
 
 #include <kontourimport.moc>

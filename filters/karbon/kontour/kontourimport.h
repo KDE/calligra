@@ -41,6 +41,7 @@ protected:
 
 private:
 	void parseGObject( VObject *, const QDomElement & );
+	void parseGroup( const QDomElement & );
 	VDocument m_document;
 };
 
