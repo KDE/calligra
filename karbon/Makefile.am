@@ -8,7 +8,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
 	-I$(srcdir)/render \
 	$(all_includes)
 
-SUBDIRS = core visitors ui commands tools filters render . data pics
+SUBDIRS = core visitors ui commands tools render . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \
