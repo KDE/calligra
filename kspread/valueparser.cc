@@ -28,7 +28,8 @@
 using namespace KSpread;
 
 ValueParser* ValueParser::_self = 0;
-static KStaticDeleter<ValueParser> sd;
+
+static KStaticDeleter<ValueParser> valueparser_sd;
 
 ValueParser::~ValueParser ()
 {
@@ -38,7 +39,7 @@ ValueParser::~ValueParser ()
 ValueParser * ValueParser::self ()
 {
   if (!_self)
-    sd.setObject( _self, new ValueParser() );
+    valueparser_sd.setObject( _self, new ValueParser() );
   return _self;
 }
 

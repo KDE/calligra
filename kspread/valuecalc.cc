@@ -30,13 +30,13 @@ using namespace KSpread;
 
 KLocale *ValueCalc::locale = 0;
 
-static KStaticDeleter<ValueCalc> sd;
+static KStaticDeleter<ValueCalc> valuecalc_sd;
 ValueCalc* ValueCalc::_self = 0;
 
 ValueCalc * ValueCalc::self ()
 {
   if (!_self)
-    sd.setObject( _self, new ValueCalc() );
+    valuecalc_sd.setObject( _self, new ValueCalc() );
   return _self;
 }
 
