@@ -3500,40 +3500,40 @@ public:
         case NoLegend:
             return "NoLegend";
         case LegendTop:
-            return "Top";
+            return "LegendTop";
         case LegendBottom:
-            return "Bottom";
+            return "LegendBottom";
         case LegendLeft:
-            return "Left";
+            return "LegendLeft";
         case LegendRight:
-            return "Right";
+            return "LegendRight";
         case LegendTopLeft:
-            return "TopLeft";
+            return "LegendTopLeft";
         case LegendTopLeftTop:
-            return "TopLeftTop";
+            return "LegendTopLeftTop";
         case LegendTopLeftLeft:
-            return "TopLeftLeft";
+            return "LegendTopLeftLeft";
         case LegendBottomLeft:
-            return "BottomLeft";
+            return "LegendBottomLeft";
         case LegendBottomLeftBottom:
-            return "BottomLeftTop";
+            return "LegendBottomLeftTop";
         case LegendBottomLeftLeft:
-            return "BottomLeftLeft";
+            return "LegendBottomLeftLeft";
         case LegendTopRight:
-            return "TopRight";
+            return "LegendTopRight";
         case LegendTopRightTop:
-            return "TopRightTop";
+            return "LegendTopRightTop";
         case LegendTopRightRight:
-            return "TopRightRight";
+            return "LegendTopRightRight";
         case LegendBottomRight:
-            return "BottomRight";
+            return "LegendBottomRight";
         case LegendBottomRightBottom:
-            return "BottomRightTop";
+            return "LegendBottomRightTop";
         case LegendBottomRightRight:
-            return "BottomRightRight";
+            return "LegendBottomRightRight";
         default: // should not happen
             qDebug( "Unknown legend position" );
-            return "Right";
+            return "LegendRight";
         }
     }
 

@@ -423,7 +423,6 @@ bool KChartPart::loadData( const QDomDocument& doc, KoChart::Data& currentData )
     QDomNode n = data.firstChild();
     //QArray<int> tmpExp(rows*cols);
     //QArray<bool> tmpMissing(rows*cols);
-    kdDebug()<<"    int cols = currentData.cols() :"<<currentData.cols()<<" currentData.rows(); :"<<currentData.rows()<<endl;
     for (int i=0; i!=rows; i++) {
         for (int j=0; j!=cols; j++) {
             if (n.isNull()) {

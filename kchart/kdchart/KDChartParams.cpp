@@ -738,7 +738,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         docRoot.setAttribute( "xmlns:xsi", "http://www.w3.org/2000/10/XMLSchema-instance" );
         docRoot.setAttribute( "xsi:schemaLocation", "http://www.klaralvdalens-datakonsult.se/kdchart" );
     }
-    
+
     // the ChartType element
     QDomElement chartTypeElement = doc.createElement( "ChartType" );
     docRoot.appendChild( chartTypeElement );
@@ -1279,16 +1279,19 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                             _axisSettings[axis].params._axisSteadyValueCalc );
 
             // the ValueStart element
-            createChartValueNode( doc, axisSettingsElement, "ValueStart",
-                                  _axisSettings[axis].params._axisValueStart );
+            if(!(_axisSettings[axis].params._axisValueStart==KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT))
+                createChartValueNode( doc, axisSettingsElement, "ValueStart",
+                                      _axisSettings[axis].params._axisValueStart );
 
             // the ValueEnd element
-            createChartValueNode( doc, axisSettingsElement, "ValueEnd",
-                                  _axisSettings[axis].params._axisValueEnd );
+            if(!(_axisSettings[axis].params._axisValueEnd==KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT))
+                createChartValueNode( doc, axisSettingsElement, "ValueEnd",
+                                      _axisSettings[axis].params._axisValueEnd );
 
             // the ValueDelta element
-            createDoubleNode( doc, axisSettingsElement, "ValueDelta",
-                              _axisSettings[axis].params._axisValueDelta );
+            if(!(_axisSettings[axis].params._axisValueDelta==KDChartAxisParams::AXIS_LABELS_AUTO_DELTA))
+                createDoubleNode( doc, axisSettingsElement, "ValueDelta",
+                                  _axisSettings[axis].params._axisValueDelta );
 
             // the TrueLow element
             createDoubleNode( doc, axisSettingsElement, "TrueLow",
