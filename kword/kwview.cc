@@ -4244,6 +4244,14 @@ void KWView::frameSelectedChanged()
 
     updateFrameStatusBarItem();
     slotUpdateRuler();
+
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() )
+        return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KoTextFormat format=*(lst.first()->currentFormat());
+    format.setPointSize(KoTextZoomHandler::layoutUnitPtToPt(format.font().pointSize()));
+    showFormat(format );
 }
 
 void KWView::docStructChanged(int _type)
