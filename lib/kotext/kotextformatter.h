@@ -37,7 +37,7 @@ public:
     KoTextFormatter();
     virtual ~KoTextFormatter();
 
-    virtual int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts );
+    virtual bool format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts, int& y, int& widthUsed );
 
     // Called after formatting a paragraph
     virtual void postFormat( KoTextParag* parag );
@@ -57,13 +57,14 @@ class KoTextFormatterCore
 public:
     KoTextFormatterCore( KoTextFormatter* settings, KoTextDocument *doc, KoTextParag *parag, int start );
 
-    int format();
+    bool format();
 
     // widthUsed is the width of the wider line (with the current
     // word-breaking, margins included, but e.g. centering not included).
     // Unused in KWord currently, this is however used by KPresenter's
     // "resize object to fit contents" feature.
     int widthUsed() const { return wused; }
+    int resultY() const { return y; }
 
 protected:
     // Return ww (in LU) and pixelww (in pixels)
@@ -89,6 +90,7 @@ private:
     KoTextParag* parag;
     int start; // always 0 currently
     int wused; // see widthUsed
+    int y;
     int availableWidth;
     int maxY;
 

@@ -30,6 +30,9 @@
 // Vertical info (height, baseline etc.)
 //#define DEBUG_FORMATTER_VERT
 
+// Line and paragraph width
+//#define DEBUG_FORMATTER_WIDTH
+
 /////// keep in sync with kotextformat.cc !
 //#define REF_IS_LU
 
@@ -56,13 +59,15 @@ struct TemporaryWordData
     int lineWidth; // value of wused
 };
 
-int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
-                             int start, const QMap<int, KoTextParagLineStart*> & )
+bool KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
+                              int start, const QMap<int, KoTextParagLineStart*> &,
+                              int& y, int& widthUsed )
 {
     KoTextFormatterCore formatter( this, doc, parag, start );
-    int y = formatter.format();
-    thiswused = formatter.widthUsed();
-    return y;
+    bool worked = formatter.format();
+    y = formatter.resultY();
+    widthUsed = formatter.widthUsed();
+    return worked;
 }
 
 KoTextFormatterCore::KoTextFormatterCore( KoTextFormatter* _settings,
@@ -108,7 +113,7 @@ QPair<int, int> KoTextFormatterCore::determineCharWidth()
 }
 
 
-int KoTextFormatterCore::format()
+bool KoTextFormatterCore::format()
 {
     start = 0; // we don't do partial formatting yet
     if ( start == 0 )
@@ -124,7 +129,7 @@ int KoTextFormatterCore::format()
     if ( doc && !rtl )
         x += parag->firstLineMargin();
     int curLeft = left;
-    int y = doc && doc->addMargins() ? parag->topMargin() : 0;
+    y = doc && doc->addMargins() ? parag->topMargin() : 0;
     // #57555, top margin doesn't apply if parag at top of page
     // (but a portion of the margin can be needed, to complete the prev page)
     // So we apply formatVertically() on the top margin, to find where to break it.
@@ -177,7 +182,14 @@ int KoTextFormatterCore::format()
 
     availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
-    kdDebug(32500) << "KoTextFormatter::format left=" << left << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " availableWidth=" << availableWidth << " maxY=" << maxY << endl;
+    kdDebug(32500) << "KoTextFormatter::format formatting parag " << parag->paragId()
+                   << " text:" << parag->string()->toString() << "\n"
+                   << " left=" << left << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " availableWidth=" << availableWidth << " maxY=" << maxY << endl;
+#else
+    if ( availableWidth == 0 )
+        kdDebug(32500) << "KoTextFormatter::format " << parag->paragId() << " warning, availableWidth=0" << endl;;
+    if ( maxY == 0 )
+        kdDebug(32500) << "KoTextFormatter::format " << parag->paragId() << " warning, maxY=0" << endl;
 #endif
     bool fullWidth = TRUE;
     //int marg = left + initialRMargin;
@@ -353,7 +365,7 @@ int KoTextFormatterCore::format()
                             lineStart->hyphenated = true;
                             lastBreak = hypos + wordStart;
                             hyphenated = true;
-#ifdef DEBUG_FORMATTER
+#if defined(DEBUG_FORMATTER) || defined(DEBUG_FORMATTER_WIDTH)
                             kdDebug(32500) << "Hyphenation: will break at " << lastBreak << " using tempworddata at position " << hypos << "/" << tempWordData.size() << endl;
 #endif
                             if ( hypos < (int)tempWordData.size() )
@@ -401,7 +413,7 @@ int KoTextFormatterCore::format()
                         // Ideally KWTextFrameSet would tell us how much we need to move
                         // ("validHeight" idea). For now we keep the old behavior:
                         y += tmph;
-                        kdDebug(32500) << "Moving down by h=" << tmph << ": y=" << y << endl;
+                        kdDebug(32500) << "KoTextFormatter: moving down empty line by h=" << tmph << ": y=" << y << endl;
                         formatLine = false; // line is not ready yet
                     }
                 }
@@ -572,6 +584,9 @@ int KoTextFormatterCore::format()
             //minw = QMAX( minw, tminw );
             //tminw = marg + ww;
             wused = QMAX( wused, tmpWused );
+#ifdef DEBUG_FORMATTER_WIDTH
+            kdDebug(32500) << " Breakable character (i=" << i << " len=" << len << "): wused=" << wused << endl;
+#endif
             tmpWused = 0;
             // (combine lineStart and tmpBaseLine/tmph)
 #ifdef DEBUG_FORMATTER_VERT
@@ -667,7 +682,7 @@ int KoTextFormatterCore::format()
         // pixelxadj is the adjustement to add to lu2pixel(x), to find pixelx
         // (pixelx would be too expensive to store directly since it would require an int)
         c->pixelxadj = pixelx - zh->layoutUnitToPixelX( x );
-        //c->pixelwidth = pixelww;
+        //c->pixelwidth = pixelww; // done as pixelx - lastPixelx below
 #ifdef DEBUG_FORMATTER
         kdDebug(32500) << "LU: x=" << x << " [equiv. to pix=" << zh->layoutUnitToPixelX( x ) << "] ; PIX: x=" << pixelx << "  --> adj=" << c->pixelxadj << endl;
 #endif
@@ -728,6 +743,9 @@ int KoTextFormatterCore::format()
 
     //minw = QMAX( minw, tminw );
     wused = QMAX( wused, tmpWused );
+#ifdef DEBUG_FORMATTER_WIDTH
+    kdDebug(32500) << "Done, wused=" << wused << endl;
+#endif
 
     int m = parag->bottomMargin();
     // ##### Does OOo add margins or does it max them?
@@ -762,7 +780,7 @@ int KoTextFormatterCore::format()
     kdDebug(32500) << parag->lineStartList().count() << " lines. " << numberOfLines << " chars with lineStart set: " << charPosList << endl;
     assert( numberOfLines == (int)parag->lineStartList().count() );
 #endif
-    return y;
+    return !abort;
 }
 
 // Helper for koFormatLine and koBidiReorderLine

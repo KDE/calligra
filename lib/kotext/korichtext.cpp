@@ -3398,12 +3398,12 @@ void KoTextParag::format( int start, bool doMove )
     }
     QMap<int, KoTextParagLineStart*> oldLineStarts = lineStarts;
     lineStarts.clear();
-    int y = formatter()->format( doc, this, start, oldLineStarts );
+    int y;
+    bool formatterWorked = formatter()->format( doc, this, start, oldLineStarts, y, m_wused );
 
     // It can't happen that width < minimumWidth -- hopefully.
     //r.setWidth( QMAX( r.width(), formatter()->minimumWidth() ) );
     //m_minw = formatter()->minimumWidth();
-    m_wused = formatter()->widthUsed();
 
     QMap<int, KoTextParagLineStart*>::Iterator it = oldLineStarts.begin();
 
@@ -3523,8 +3523,11 @@ void KoTextParag::format( int start, bool doMove )
     }
 
     //firstFormat = FALSE; //// unused
+    if ( formatterWorked > 0 ) // only if it worked, i.e. we had some width to format it
+    {
+        invalid = -1;
+    }
     changed = TRUE;
-    invalid = -1;
     //####   string()->setTextChanged( FALSE );
 }
 
@@ -4114,7 +4117,7 @@ void KoTextCursor::setIndex( int i, bool restore )
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextFormatterBase::KoTextFormatterBase()
-    : thisminw(0), /*thiswused(0), */ wrapColumn( -1 ), wrapEnabled( TRUE ),
+    : wrapColumn( -1 ), wrapEnabled( TRUE ),
       m_bViewFormattingChars( false ),
       biw( true /*default in kotext*/ )
 {

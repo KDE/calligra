@@ -1092,8 +1092,9 @@ class KoTextFormatterBase
 public:
     KoTextFormatterBase();
     virtual ~KoTextFormatterBase() {}
-    virtual int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts ) = 0;
+    virtual bool format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts, int& y, int& widthUsed ) = 0;
     virtual int formatVertically( KoTextDocument* doc, KoTextParag* parag );
+
     // Called after formatting a paragraph
     virtual void postFormat( KoTextParag* parag ) = 0;
 
@@ -1103,9 +1104,6 @@ public:
     virtual void setWrapAtColumn( int c ) { wrapColumn = c; }
     virtual void setAllowBreakInWords( bool b ) { biw = b; }
     bool allowBreakInWords() const { return biw; }
-
-    //int minimumWidth() const { return thisminw; }
-    int widthUsed() const { return thiswused; }
 
     // This setting is passed to KoTextParag::fixParagWidth by postFormat()
     void setViewFormattingChars( bool b ) { m_bViewFormattingChars = b; }
@@ -1123,8 +1121,6 @@ protected:
     virtual KoTextParagLineStart *bidiReorderLine( KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line, KoTextStringChar *start,
 						    KoTextStringChar *last, int align, int space );
 #endif
-    int thisminw;
-    int thiswused;
 
 private:
     int wrapColumn;
