@@ -773,5 +773,6 @@ don't put a </?xml...> at the end of the file!).
         and the name of the part-frameset.
 -->
 <!ELEMENT SETTINGS
-    (FRAME|NAME)*>
-
+    (FRAME)>
+<!ATTLIST SETTINGS
+    name #REQUIRED>
