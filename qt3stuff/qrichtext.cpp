@@ -2261,8 +2261,12 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
 	return;
     }
 
+    bool didGoLeft = FALSE;
     if (  c1.index() == 0 )
+    {
 	cursor->gotoLeft();
+        didGoLeft = TRUE;
+    }
 
     c1.parag()->remove( c1.index(), c1.parag()->length() - 1 - c1.index() );
     QTextParag *p = c1.parag()->next();
@@ -2283,6 +2287,9 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
     }
 
     c1.parag()->join( c2.parag() );
+
+    if ( didGoLeft )
+       cursor->gotoRight();
 }
 
 void QTextDocument::indentSelection( int id )
