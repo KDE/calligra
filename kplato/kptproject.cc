@@ -24,6 +24,7 @@
 #include "kptduration.h"
 #include "kptpertcanvas.h"
 #include "kptcanvasitem.h"
+#include "kptresource.h"
 
 #include <qdom.h>
 #include <qstring.h>
@@ -317,8 +318,15 @@ bool KPTProject::load(QDomElement &element) {
 		        // TODO: Complain about this
 		        delete child;
             }
-	    } else if (e.tagName() == "resource") {
-		// TODO: Load the resource
+	    } else if (e.tagName() == "resourceGroup") {
+		    // Load the resources
+		    KPTResourceGroup *child = new KPTResourceGroup();
+    		if (child->load(e)) {
+                addResourceGroup(child);
+            } else {
+		        // TODO: Complain about this
+		        delete child;
+            }
 	    }
 	}
     }
@@ -354,6 +362,11 @@ void KPTProject::save(QDomElement &element) const {
     for (int i=0; i<numChildren(); i++)
 	// Save all children
 	getChildNode(i)->save(me);
+
+    QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
+    for ( ; git.current(); ++git ) {
+        git.current()->save(me);
+    }
 }
 
 

@@ -56,6 +56,43 @@ KPTResourceGroup* KPTResourceGroup::getRequiredResource(int) {
 void KPTResourceGroup::removeRequiredResource(int) {
 }
 
+bool KPTResourceGroup::load(QDomElement &element) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_name = element.attribute("name");
+
+    QDomNodeList list = element.childNodes();
+    for (unsigned int i=0; i<list.count(); ++i) {
+    	if (list.item(i).isElement()) {
+	        QDomElement e = list.item(i).toElement();
+    	    if (e.tagName() == "resource") {
+	    	    // Load the subproject
+		        KPTResource *child = new KPTResource();
+    		    if (child->load(e))
+	    	        addResource(child, 0);
+		        else
+		            // TODO: Complain about this
+    		        delete child;
+            }
+        }
+    }
+    return true;
+}
+
+void KPTResourceGroup::save(QDomElement &element) const {
+    //kdDebug()<<k_funcinfo<<endl;
+
+    QDomElement me = element.ownerDocument().createElement("resourceGroup");
+    element.appendChild(me);
+
+    // TODO: Save the rest of the information
+    me.setAttribute("name", m_name);
+
+    QPtrListIterator<KPTResource> it(m_resources);
+    for ( ; it.current(); ++it ) {
+        it.current()->save(me);
+    }
+}
+
 KPTResource::KPTResource() : m_appointments(), m_workingHours() {
 }
 
@@ -74,6 +111,21 @@ KPTDuration *KPTResource::getBestAvailableTime(KPTDuration duration) {
     return 0L;
 }
 
+bool KPTResource::load(QDomElement &element) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_name = element.attribute("name");
+    return true;
+}
+
+void KPTResource::save(QDomElement &element) const {
+    //kdDebug()<<k_funcinfo<<endl;
+
+    QDomElement me = element.ownerDocument().createElement("resource");
+    element.appendChild(me);
+
+    me.setAttribute("name", m_name);
+
+}
 
 KPTAppointment::KPTAppointment(KPTDuration startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
     m_startTime=startTime;

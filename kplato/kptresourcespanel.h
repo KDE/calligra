@@ -24,32 +24,78 @@
 #include "resourcespanelbase.h"
 
 #include <qlistbox.h>
+#include <qstring.h>
 class KPTProject;
+class KPTGroupItem;
+class KPTResourceItem;
 
-class KPTGroupItem : public QListBoxText {
+class KPTGroupItem {
 public:
-    KPTGroupItem(KPTResourceGroup *item)
-        : QListBoxText(item->name()) { m_group = item; }
+    enum State {NONE, MODIFIED, NEW};
 
-    void setName(const QString &newName) {
-        m_group->setName(newName);
-        setText(newName);
-    }
+    KPTGroupItem(KPTResourceGroup *item, State state = NONE)
+        { m_group = item; m_name = item->name(); m_state = state; }
+    ~KPTGroupItem() { if (m_state == NEW) delete m_group; }
+
+    void setState(State s);
+
+    void setName(const QString &newName);
+
+    void deleteResource(KPTResourceItem *item);
+
     KPTResourceGroup *m_group;
+    QString m_name;
+    QPtrList<KPTResourceItem> m_resourceItems;
+    QPtrList<KPTResourceItem> m_deletedItems;
+    State m_state;
 };
 
-class KPTResourceItem : public QListBoxText {
+class KPTGroupLBItem : public QListBoxText {
 public:
-    KPTResourceItem(KPTResource *item)
-        : QListBoxText(item->name()) { m_resource = item; m_group = NULL; }
+    KPTGroupLBItem(KPTGroupItem *item) {m_group = item; setText(item->m_name); }
 
     void setName(const QString &newName) {
-        m_resource->setName(newName);
         setText(newName);
+        m_group->setName(newName);
+    }
+
+    KPTGroupItem *m_group;
+};
+
+class KPTResourceItem {
+public:
+    enum State {NONE, MODIFIED, NEW};
+
+    KPTResourceItem(KPTResource *item, State state = NONE)
+        { m_resource = item; m_name = item->name(); m_state = state; }
+    ~KPTResourceItem() { if (m_state == NEW) delete m_resource; }
+
+    void setState(State s);
+
+    void setName(const QString &newName) {
+        m_name = newName;
+        if (m_state == NEW)
+            m_resource->setName(newName);
+        if (m_state == NONE)
+            m_state = MODIFIED;
     }
 
     KPTResource *m_resource;
-    KPTResourceGroup *m_group; // The group this resource belongs to. (For delete)
+    QDateTime m_availabeFrom, m_availableUntil;
+    QString m_name;
+    State m_state;
+};
+
+class KPTResourceLBItem : public QListBoxText {
+public:
+    KPTResourceLBItem(KPTResourceItem *item) { m_resource = item; setText(item->m_name); }
+
+    void setName(const QString &newName) {
+        setText(newName);
+        m_resource->setName(newName);
+    }
+
+    KPTResourceItem *m_resource;
 };
 
 class KPTResourcesPanel : public ResourcesPanelBase {
@@ -75,9 +121,10 @@ signals:
 
 private:
     KPTProject *project;
-    KPTGroupItem *m_groupItem;
-	QPtrList<KPTResourceGroup> m_deletedGroups;
-	QPtrList<KPTResourceItem> m_deletedResources;
+    KPTGroupLBItem *m_groupItem;
+
+    QPtrList<KPTGroupItem> m_groupItems;
+    QPtrList<KPTGroupItem> m_deletedGroupItems;
 };
 
 #endif // KPTPRESOURCESPANEL_H

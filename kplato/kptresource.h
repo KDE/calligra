@@ -20,6 +20,7 @@
 #ifndef KPTRESOURCE_H
 #define KPTRESOURCE_H
 
+#include <qdom.h>
 #include <qstring.h>
 #include "kptduration.h"
 #include <qptrlist.h>
@@ -84,8 +85,11 @@ class KPTResourceGroup {
             * <p>see also @ref getRequiredResource, @ref addRequiredResource
 	        */
 	      void removeRequiredResource(int);
-          
+
           QPtrList<KPTResource> &resources() { return m_resources; }
+
+          bool load(QDomElement &element);
+          void save(QDomElement &element) const;
 
 #ifndef NDEBUG
         void printDebug(QString ident);
@@ -100,8 +104,8 @@ class KPTResourceGroup {
 
 /**
   * Any resource that is used by a task. A resource can be a worker, or maybe wood.
-  * If the resources is a worker or a piece of equiment which can be reused but 
-  * can only be used by one node in time, then we can use the scheduling methods of the 
+  * If the resources is a worker or a piece of equiment which can be reused but
+  * can only be used by one node in time, then we can use the scheduling methods of the
   * resource to schedule the resource available time for the project.
   * The Idea is that all nodes which need this resource point to it and the scheduling
   * code (partly implemented here) schedules the actual usage.
@@ -116,7 +120,7 @@ class KPTResource {
 
 	   void setName(QString n) {m_name=n;}
 	   const QString &name() const {return m_name;}
-	
+
         void setAvailableFrom(KPTDuration af) {m_availableFrom=af;}
         const KPTDuration &availableFrom() const {return m_availableFrom;}
         void setAvailableUntil(KPTDuration au) {m_availableUntil=au;}
@@ -126,6 +130,9 @@ class KPTResource {
 
         KPTDuration *getFirstAvailableTime(KPTDuration after = KPTDuration());
         KPTDuration *getBestAvailableTime(KPTDuration duration);
+
+        bool load(QDomElement &element);
+        void save(QDomElement &element) const;
 
 #ifndef NDEBUG
         void printDebug(QString ident);

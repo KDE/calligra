@@ -29,6 +29,43 @@
 #include <qlistbox.h>
 #include <qlineedit.h>
 
+
+void KPTGroupItem::setState(State s) {
+    if (m_state == NEW)
+        return; // A new is allways new
+
+    m_state = s;
+}
+
+void KPTGroupItem::setName(const QString &newName) {
+    m_name = newName;
+    if (m_state == NEW)
+        m_group->setName(newName);
+    if (m_state == NONE)
+        m_state = MODIFIED;
+
+    //kdDebug()<<k_funcinfo<<"New name: '"<<newName<<"', group name: '"<<m_group->name()<<"' state="<<m_state<<endl;
+}
+
+
+void KPTGroupItem::deleteResource(KPTResourceItem *item) {
+
+    //kdDebug()<<k_funcinfo<<" Deleted: "<<item->m_name<<" ("<<item<<")"<<endl;
+    m_resourceItems.removeRef(item);
+    if (item->m_state == KPTResourceItem::NEW)
+        delete item;
+    else
+        m_deletedItems.append(item);
+    //kdDebug()<<k_funcinfo<<"No of items now="<<m_resourceItems.count()<<", no of deleted items="<<m_deletedItems.count()<<endl;
+}
+
+void KPTResourceItem::setState(State s) {
+    if (m_state == NEW)
+        return; // A new is allways new
+
+    m_state = s;
+}
+
 KPTResourcesPanel::KPTResourcesPanel(QWidget *parent, KPTProject *p) : ResourcesPanelBase(parent) {
     project = p;
     m_groupItem = NULL;
@@ -37,11 +74,18 @@ KPTResourcesPanel::KPTResourcesPanel(QWidget *parent, KPTProject *p) : Resources
 	for(; git.current(); ++git) {
 		KPTResourceGroup *grp = dynamic_cast<KPTResourceGroup *>(git.current());
 		KPTGroupItem *groupItem = new KPTGroupItem(grp);
-		listOfGroups->insertItem(groupItem);
-		kdDebug()<<k_funcinfo<<endl;
+        //kdDebug()<<k_funcinfo<<" Added group: "<<groupItem->m_name<<" ("<<groupItem<<")"<<endl;
+        QPtrListIterator<KPTResource> rit(grp->resources());
+        for(; rit.current(); ++rit) {
+            KPTResource *res = dynamic_cast<KPTResource *>(rit.current());
+            KPTResourceItem *ritem = new KPTResourceItem(res);
+            groupItem->m_resourceItems.append(ritem);
+            //kdDebug()<<k_funcinfo<<"      Added resource: "<<ritem->m_name<<" ("<<ritem<<")"<<endl;
+        }
+        m_groupItems.append(groupItem);
+		listOfGroups->insertItem(new KPTGroupLBItem(groupItem));
 	}
 	slotGroupChanged(listOfGroups->firstItem());
-    m_deletedResources.setAutoDelete(TRUE);
 
     connect( bAdd, SIGNAL( clicked() ), this, SLOT( slotAddGroup() ) );
     connect (bRemove, SIGNAL( clicked() ), this, SLOT ( slotDeleteGroup() ));
@@ -58,8 +102,9 @@ void KPTResourcesPanel::slotAddGroup() {
 
     KPTResourceGroup *r = new KPTResourceGroup();
     r->setName(groupName->text());
-    project->addResourceGroup(r);	//TODO only add to project when OK is pressed
-    KPTGroupItem *groupItem = new KPTGroupItem(r);
+    KPTGroupItem *gitem = new KPTGroupItem(r, KPTGroupItem::NEW);
+    m_groupItems.append(gitem);
+    KPTGroupLBItem *groupItem = new KPTGroupLBItem(gitem);
     listOfGroups->insertItem(groupItem);
     listOfGroups->setCurrentItem(groupItem);
 
@@ -67,15 +112,21 @@ void KPTResourcesPanel::slotAddGroup() {
 }
 
 void KPTResourcesPanel::slotDeleteGroup() {
-    KPTGroupItem *groupItem = dynamic_cast<KPTGroupItem*> (listOfGroups->selectedItem());
+    KPTGroupLBItem *groupItem = dynamic_cast<KPTGroupLBItem*> (listOfGroups->selectedItem());
     if(groupItem == NULL) return;
 
-	m_deletedGroups.append(groupItem->m_group);
+    m_groupItems.removeRef(groupItem->m_group);
+    if (groupItem->m_group->m_state == KPTGroupItem::NEW)
+        delete groupItem->m_group;
+    else
+        m_deletedGroupItems.append(groupItem->m_group);
+
 	listOfResources->clear();
     listOfGroups->removeItem(listOfGroups->currentItem());
 
-    kdDebug()<<k_funcinfo<<"No of groups="<<listOfGroups->count()<<" Deleted="<<m_deletedGroups.count()<<endl;
-	emit changed();
+    //kdDebug()<<k_funcinfo<<" No of deleted groups="<<m_deletedGroupItems.count()<<", now "<<m_groupItems.count()<<" groups left"<<endl;
+
+    emit changed();
 }
 
 void KPTResourcesPanel::slotAddResource() {
@@ -88,29 +139,29 @@ void KPTResourcesPanel::slotAddResource() {
     KPTResource *res = new KPTResource();
     res->setName(resourceName->text());
     //res->addWorkingHour(); // TODO
-    m_groupItem->m_group->addResource(res, 0); //TODO only add to project when OK is pressed
-    KPTResourceItem *resourceItem = new KPTResourceItem(res);
-    listOfResources->insertItem(resourceItem);
+    //m_groupItem->m_group->addResource(res, 0); //TODO only add to project when OK is pressed
+    KPTResourceItem *resourceItem = new KPTResourceItem(res, KPTResourceItem::NEW);
+    m_groupItem->m_group->m_resourceItems.append(resourceItem);
+    //kdDebug()<<k_funcinfo<<" Added: "<<resourceItem->m_name<<" ("<<resourceItem<<")"<<endl;
+
+    listOfResources->insertItem(new KPTResourceLBItem(resourceItem));
     resourceName->clear();
 
 	emit changed();
 }
 
 void KPTResourcesPanel::slotDeleteResource() {
-    kdDebug()<<k_funcinfo<<endl;
-    KPTResourceItem *item = dynamic_cast<KPTResourceItem*> (listOfResources->selectedItem());
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTResourceLBItem *item = dynamic_cast<KPTResourceLBItem*> (listOfResources->selectedItem());
     if(item == NULL) return;
 
-    KPTResourceItem *ritem = new KPTResourceItem(item->m_resource);
     //Can't delete resource from unselected group
     if(m_groupItem == NULL) return;
 
-    ritem->m_group = m_groupItem->m_group;
-    m_deletedResources.append(ritem);
-
+    m_groupItem->m_group->deleteResource(item->m_resource);
     listOfResources->removeItem(listOfResources->currentItem());
 
-	emit changed();
+    emit changed();
 }
 
 /* Selected another group */
@@ -121,21 +172,24 @@ void KPTResourcesPanel::slotGroupChanged( QListBoxItem *item) {
 
     resourceName->clear();
 
-    m_groupItem = (KPTGroupItem *)item;
+    m_groupItem = (KPTGroupLBItem *)item;
     listOfResources->clear();
-    QPtrListIterator<KPTResource> it(m_groupItem->m_group->resources());
+
+    QPtrListIterator<KPTResourceItem> it(m_groupItem->m_group->m_resourceItems);
     for ( ; it.current(); ++it ) {
-        listOfResources->insertItem(new KPTResourceItem(it.current()));
+        listOfResources->insertItem(new KPTResourceLBItem(it.current()));
+        //kdDebug()<<k_funcinfo<<"Insert resource item: "<<it.current()->m_name<<endl;
     }
-    groupName->setText(m_groupItem->m_group->name());
-    //kdDebug()<<k_funcinfo<<" Groups now: "<<it.count()<<endl;
+    //kdDebug()<<k_funcinfo<<" Resources now: "<<it.count()<<endl;
 }
 
 void KPTResourcesPanel::slotGroupRename( const QString &newName) {
+    //kdDebug()<<k_funcinfo<<endl;
     QListBoxItem *item = listOfGroups->selectedItem();
     if(!item) return;
 
-    ((KPTGroupItem *)item)->setName(newName);
+    ((KPTGroupLBItem *)item)->setName(newName);
+
     listOfGroups->triggerUpdate(false);
 
 	emit changed();
@@ -145,32 +199,67 @@ void KPTResourcesPanel::slotGroupRename( const QString &newName) {
 void KPTResourcesPanel::slotResourceChanged( QListBoxItem *item) {
     if (!item)
         return;
-    resourceName->setText( ((KPTResourceItem *)item)->m_resource->name());
+    resourceName->setText( ((KPTResourceLBItem *)item)->m_resource->m_name);
 }
 
 void KPTResourcesPanel::slotResourceRename( const QString &newName) {
     QListBoxItem *item = listOfResources->selectedItem();
     if(!item) return;
 
-    ((KPTResourceItem *)item)->setName(newName);
+    KPTResourceLBItem *i = dynamic_cast<KPTResourceLBItem *>(item);
+    if (i->m_resource->m_name == newName) return;
+
+    //kdDebug()<<k_funcinfo<<" Old name: "<<i->m_resource->m_name<<" ("<<i<<") "<<"  New name: "<<newName<<endl;
+    i->setName(newName);
     listOfResources->triggerUpdate(false);
+
+    emit changed();
 }
 
 void KPTResourcesPanel::ok() {
-	// Delete recources first in case their group were deleted later
-	QPtrListIterator<KPTResourceItem> it( m_deletedResources );
-	KPTResourceItem *res;
-    for (; (res = it.current()) != 0; ++it) {
-        if (res->m_group) {
-            kdDebug()<<k_funcinfo<<"Delete resource: "<<res->m_resource->name()<<" from group: "<<res->m_group->name()<<endl;
-            res->m_group->removeResource(res->m_resource);
-        }
+    KPTGroupItem *gitem;
+
+    QPtrListIterator<KPTGroupItem> dgit(m_deletedGroupItems);
+    for (; (gitem = dgit.current()) != 0; ++dgit) {
+        //kdDebug()<<k_funcinfo<<"Remove group: '"<<gitem->m_name<<"'"<<endl;
+        project->removeResourceGroup(gitem->m_group); // remove group and its resources from project
     }
-	QPtrListIterator<KPTResourceGroup> git( m_deletedGroups );
-	KPTResourceGroup *grp;
-    for (; (grp = git.current()) != 0; ++git) {
-        kdDebug()<<k_funcinfo<<"Delete group: "<<grp->name()<<endl;
-		project->removeResourceGroup(grp);
+
+    QPtrListIterator<KPTGroupItem> git(m_groupItems);
+    for (; (gitem = git.current()) != 0; ++git) {
+        //kdDebug()<<k_funcinfo<<"Group: "<<gitem->m_name<<" has "<<gitem->m_resourceItems.count()<<" resources"<<" and "<<gitem->m_deletedItems.count()<<" deleted resources"<<endl;
+        //First remove deleted resources from group
+        QPtrListIterator<KPTResourceItem> dit( gitem->m_deletedItems );
+        KPTResourceItem *ditem;
+        for (; (ditem = dit.current()) != 0; ++dit) {
+            //kdDebug()<<k_funcinfo<<" Deleting resource: '"<<ditem->m_name<<"'"<<endl;
+            gitem->m_group->removeResource(ditem->m_resource); // remove resource from project
+        }
+        // Now add/modify group/resources
+        if (gitem->m_state == KPTGroupItem::NEW) {
+            //kdDebug()<<k_funcinfo<<" Adding group: '"<<gitem->m_name<<"'"<<endl;
+            project->addResourceGroup(gitem->m_group);
+        } else if (gitem->m_state == KPTGroupItem::MODIFIED) {
+            //kdDebug()<<k_funcinfo<<" Modifying group: '"<<gitem->m_name<<"'"<<endl;
+            gitem->m_group->setName(gitem->m_name);
+        }
+        QPtrListIterator<KPTResourceItem> it( gitem->m_resourceItems );
+        KPTResourceItem *ritem;
+        for (; (ritem = it.current()) != 0; ++it) {
+            switch (ritem->m_state) {
+                case KPTResourceItem::MODIFIED:
+                    //kdDebug()<<k_funcinfo<<" Modifying resource: '"<<ritem->m_name<<"'"<<endl;
+                    ritem->m_resource->setName(ritem->m_name);
+                    break;
+                case KPTResourceItem::NEW:
+                    //kdDebug()<<k_funcinfo<<" Adding resource: '"<<ritem->m_resource->name()<<"' to group: '"<<gitem->m_group->name()<<"'"<<endl;
+                    gitem->m_group->addResource(ritem->m_resource, 0);
+                    break;
+                default:
+                    //kdDebug()<<k_funcinfo<<" No action for resource: '"<<ritem->m_name<<"' with state="<<ritem->m_state<<endl;
+                    break;
+            }
+        }
     }
 }
 
