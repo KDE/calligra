@@ -64,6 +64,7 @@
 #include "kwtextimage.h"
 #include <kdebug.h>
 #include <kfontdialog.h>
+#include <kconfig.h>
 
 #include <kspell.h>
 
@@ -211,6 +212,41 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     KWStyle * standardStyle = new KWStyle( "Standard" ); // This gets translated later on
     addStyleTemplate( standardStyle );
 }
+
+
+void KWDocument::initConfig()
+{
+  KConfig *config = KWFactory::global()->config();
+  KSpellConfig ksconfig;
+  if( config->hasGroup("KSpell kword" ) )
+  {
+      config->setGroup( "KSpell kword" );
+      ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+      ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+      ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+      ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+      ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+      ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+      setKSpellConfig(ksconfig);
+      setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+      setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
+  }
+
+  if(config->hasGroup("Interface" ) )
+  {
+      config->setGroup( "Interface" );
+      setGridY(config->readNumEntry("GridY",10));
+      setGridX(config->readNumEntry("GridX",10));
+      // Config-file value in mm, default 10 pt
+      double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
+      setIndentValue(indent);
+      setShowRuler(config->readBoolEntry("Rulers",true));
+      setAutoSave((config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()))*60);
+      setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
+  }
+}
+
+
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
 {
@@ -1288,7 +1324,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     setModified( false );
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-
+    initConfig();
     return TRUE;
 }
 
