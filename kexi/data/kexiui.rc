@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="124">
+<kpartgui name="kexi" version="125">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -81,11 +81,11 @@
 
   <Merge/>
 
-  <Menu name="tools" noMerge="1">
-    <text>&amp;Tools</text>
-    <MergeLocal/>
-    <Action name="tools_data_migration"/>
-  </Menu>
+  <!-- Menu name="tools" noMerge="1" -->
+    <!-- text>&amp;Tools</text -->
+    <!-- MergeLocal/ -->
+    <!-- Action name="tools_data_migration"/ -->
+  <!-- /Menu -->
 
   <Menu name="window" noMerge="0">
     <text>&amp;Window</text>
