@@ -38,6 +38,7 @@
 #include <core/vcanvas.h>
 #include "vselecttool.h"
 #include <commands/vtransformcmd.h>
+#include <visitors/vselectiondesc.h>
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
 	: QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ) ), m_view( view )
@@ -290,10 +291,9 @@ VSelectTool::updateStatusBar() const
 
 		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)] (%5)" ).arg( KoUnit::ptToUnit( rect.x(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.y(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.right(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.bottom(), view()->part()->unit() ), 0, 'f', 1 ).arg( view()->part()->unitName() );
 
-		if( objcount == 1 )
-			selectMessage += QString( "(%1 object)" ).arg( objcount );
-		else
-			selectMessage += QString( "(%1 objects)" ).arg( objcount );
+		VSelectionDescription selectionDesc;
+		selectionDesc.visit( *view()->part()->document().selection() );
+		selectMessage += QString( "(%1)" ).arg( selectionDesc.description() );
 
 		view()->statusMessage()->setText( selectMessage );
 	}
