@@ -94,9 +94,7 @@ public:
     // public functions
     void selectAllObj();
     void deSelectAllObj();
-    void selectObj( int num );
     void selectObj( KPObject* );
-    void deSelectObj( int num );
     void deSelectObj( KPObject* );
     void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
     void setTextColor( const QColor & );

@@ -1740,22 +1740,6 @@ KPObject* KPrCanvas::getObjectAt( const KoPoint&pos )
 }
 
 /*======================= select object ==========================*/
-void KPrCanvas::selectObj( int num )
-{
-    if ( num < static_cast<int>( objectList().count() ) ) {
-        selectObj( objectList().at( num ) );
-        emit objectSelectedChanged();
-    }
-}
-
-/*======================= deselect object ========================*/
-void KPrCanvas::deSelectObj( int num )
-{
-    if ( num < static_cast<int>( objectList().count() ) )
-        deSelectObj( objectList().at( num ) );
-}
-
-/*======================= select object ==========================*/
 void KPrCanvas::selectObj( KPObject *kpobject )
 {
     kpobject->setSelected( true );
