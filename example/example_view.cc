@@ -6,6 +6,7 @@
 #include <qiconset.h>
 #include <kaction.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 ExampleView::ExampleView( ExamplePart* part, QWidget* parent, const char* name )
     : KoView( part, parent, name )
@@ -29,7 +30,7 @@ void ExampleView::paintEvent( QPaintEvent* ev )
     painter.end();
 }
 
-void ExampleView::updateReadWrite( bool readwrite )
+void ExampleView::updateReadWrite( bool /*readwrite*/ )
 {
 #ifdef __GNUC__
 #warning TODO
@@ -38,7 +39,7 @@ void ExampleView::updateReadWrite( bool readwrite )
 
 void ExampleView::cut()
 {
-    qDebug("CUT called");
+    kdDebug(31000) << "CUT called" << endl;
 }
 
 #include "example_view.moc"

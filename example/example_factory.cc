@@ -3,6 +3,7 @@
 #include <kaboutdata.h>
 #include <kinstance.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -24,7 +25,7 @@ ExampleFactory::ExampleFactory( QObject* parent, const char* name )
 
 ExampleFactory::~ExampleFactory()
 {
-    if ( s_global ) 
+    if ( s_global )
       delete s_global;
 }
 
@@ -33,7 +34,7 @@ QObject* ExampleFactory::create( QObject* parent, const char* name, const char* 
 /*
     if ( parent && !parent->inherits("KoDocument") )
     {
-	qDebug("ExampleFactory: parent does not inherit KoDocument");
+	kdDebug(31000) << "ExampleFactory: parent does not inherit KoDocument" << endl;
 	return 0;
     }
 */
@@ -66,7 +67,7 @@ KInstance* ExampleFactory::global()
         s_global = new KInstance( aboutData() );
         // Add any application-specific resource directories here
     }
-    
+
     return s_global;
 }
 
