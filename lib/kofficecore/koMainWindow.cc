@@ -112,16 +112,19 @@ void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
   m_pFileMenu = new OPMenu( _menubar );
 
   m_idMenuFile_New = m_pFileMenu->insertItem( Icon( "filenew.xpm" ) , i18n( "&New" ), this, SLOT( slotFileNew() ), CTRL + Key_N );
-  m_idMenuFile_Open = m_pFileMenu->insertItem( Icon( "fileopen.xpm" ), i18n( "&Open" ), this, SLOT( slotFileOpen() ), CTRL + Key_O );
+  m_idMenuFile_Open = m_pFileMenu->insertItem( Icon( "fileopen.xpm" ), i18n( "&Open..." ), this, SLOT( slotFileOpen() ), CTRL + Key_O );
+  m_pFileMenu->insertSeparator(-1);
   m_idMenuFile_Save = m_pFileMenu->insertItem( Icon( "filefloppy.xpm" ), i18n( "&Save" ), this, SLOT( slotFileSave() ), CTRL + Key_S );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
   
-  m_idMenuFile_SaveAs = m_pFileMenu->insertItem( i18n( "&Save as" ), this, SLOT( slotFileSaveAs() ) );
+  m_idMenuFile_SaveAs = m_pFileMenu->insertItem( i18n( "&Save as..." ), this, SLOT( slotFileSaveAs() ) );
   m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
 
-  m_idMenuFile_Print = m_pFileMenu->insertItem( i18n( "&Print" ), this, SLOT( slotFilePrint() ) );
+  m_pFileMenu->insertSeparator(-1);
+  m_idMenuFile_Print = m_pFileMenu->insertItem( i18n( "&Print..." ), this, SLOT( slotFilePrint() ) );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
   
+  m_pFileMenu->insertSeparator(-1);
   m_idMenuFile_Close = m_pFileMenu->insertItem( i18n( "&Close" ), this, SLOT( slotFileClose() ), CTRL + Key_W );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
   
