@@ -38,7 +38,7 @@
 #include "kexiformbase.h"
 #include "kexiworkspace.h"
 #include "kexibrowseritem.h"
-#include "kexidatatable.h"
+//#include "kexidatatable.h"
 #include "kexialtertable.h"
 #include "kexiquerydesigner.h"
 //#include "kexikugarwrapper.h"

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=Kexi/Handler
+Comment=Kexi Project Handlers
+
+[PropertyDef::X-KDE-Library]
+Type=QString

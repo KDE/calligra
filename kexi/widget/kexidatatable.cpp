@@ -45,6 +45,7 @@
 #include "kexiDB/kexidberror.h"
 
 #include "kexidatatable.h"
+#include "kexidataview.h"
 #include "kexiproject.h"
 
 KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, const char *name, bool embedd)

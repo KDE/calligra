@@ -23,7 +23,6 @@
 #define KEXIDATATABLE_H
 
 #include "kexidialogbase.h"
-#include "kexitableview.h"
 
 class KexiTableItem;
 class QStatusBar;
@@ -31,6 +30,7 @@ class QLineEdit;
 
 class KexiDBRecord;
 class KExiView;
+class KexiTableView;
 
 class KexiDataTable : public KexiDialogBase
 {

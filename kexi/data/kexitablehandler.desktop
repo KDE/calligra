@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=Kexi/Handler
+
+Name=Kexi Table Handler
+Comment=Manages database tables
+
+X-KDE-Library=kexihandler_table
