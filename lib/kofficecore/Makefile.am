@@ -28,7 +28,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	KoMainWindowIface.cc KoMainWindowIface.skel
 libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
-include_HEADERS = koFilter.h \
+include_HEADERS = koFilter.h koFilterChain.h \
 	koGlobal.h koUnit.h koDocument.h \
 	koMainWindow.h \
 	koApplication.h koQueryTrader.h \
