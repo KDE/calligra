@@ -5,4 +5,9 @@ When doing a new CVS pull, don't forget to edit admin/am_edit (lines
 This is necessary because Debian asks that documentation be available in
 HTML format.
 
+Other patches that need to be applied to the CVS sources are in file
+cvs.patch.  From the parent directory, run:
+
+  patch -p0 < debian/cvs.patch
+
  -- Ben Burton <benb@acm.org>  Sun,  8 Apr 2001 11:19:00 -0500

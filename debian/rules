@@ -26,7 +26,7 @@ build-stamp:
 	fi 
 	./configure $(configkde) \
 	  --libdir=$(kde_libdir) --includedir=$(kde_includedir)
-	$(MAKE)
+	$(MAKE) KDE_PLUGIN_DEBIAN="-module -no-undefined"
 	touch build-stamp
 
 clean: debian-clean
