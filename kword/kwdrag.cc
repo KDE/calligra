@@ -18,7 +18,6 @@
 */
 
 #include "kwdrag.h"
-#include "kwdrag.moc"
 #include "defs.h"
 #include <kdebug.h>
 #include <kotextobject.h>
