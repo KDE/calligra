@@ -19,6 +19,9 @@
 
 #include "creportitem.h"
 #include "property.h"
+#include "plugin.h"
+#include "mycanvas.h"
+
 
 #include <qrect.h>
 #include <qpainter.h>
@@ -94,12 +97,17 @@ QString CanvasReportItem::getXml()
     QString result = "";
     std::map<QString, PropPtr >::const_iterator it;
     int i = 1;
+    KuDesignerPlugin *plugin=((MyCanvas*)canvas())->document()->plugin();
     for (it = props.begin(); it != props.end(); ++it)
     {
         if (it->first.isNull()) continue;
 	if (!it->second->allowSaving()) continue;
         if (!(i%3)) result += "\n\t\t  ";
-        result += " " + it->first + "=" + "\"" + it->second->value() + "\"";
+	
+	QString propName=it->first;
+	QString value=it->second->value();
+	if (plugin) plugin->modifyItemPropertyOnSave(this,it->second ,propName,value);
+        result += " " + propName + "=" + "\"" + value + "\"";
         i++;
     }
     return result;

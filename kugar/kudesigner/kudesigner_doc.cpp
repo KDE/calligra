@@ -383,7 +383,7 @@ void KudesignerDoc::setReportItemAttributes(QDomNode *node, CanvasReportItem *it
     {
         QString propertyName=attributes.item(i).nodeName();
         QString propertyValue=attributes.item(i).nodeValue();
-        if (m_plugin) m_plugin->modifyItemPropertyOnLoad(item,propertyName,propertyValue);
+        if (m_plugin) m_plugin->modifyItemPropertyOnLoad(item,item->props[propertyName],propertyName,propertyValue);
         item->props[propertyName]->setValue(propertyValue);
     }
 }

@@ -19,12 +19,12 @@
 #define _KUGAR_DESIGNER_PLUGIN_H_
 
 #include <qobject.h>
+#include <property.h>
 
 class PropertyEditor;
 class QString;
 class CanvasBox;
 class QWidget;
-class Property;
 class CanvasReportItem;
 class KoStore;
 
@@ -36,7 +36,8 @@ public:
         virtual bool acceptsDrops(){return false;}
 	virtual bool dragMove(QDragMoveEvent *,CanvasBox *cb) {return false;}
 	virtual void newCanvasBox(int type, CanvasBox *cb){;}
-        virtual void modifyItemPropertyOnLoad(CanvasReportItem *item,QString &propertyName,QString &propertyValue){;}
+        virtual void modifyItemPropertyOnSave(CanvasReportItem *item, const PropPtr & p ,QString &propertyName,QString &propertyValue){;}
+        virtual void modifyItemPropertyOnLoad(CanvasReportItem *item, const PropPtr & p,QString &propertyName,QString &propertyValue){;}
         virtual bool store (KoStore*){return true;}
         virtual bool load (KoStore*){return true;}
 
