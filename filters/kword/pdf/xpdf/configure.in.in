@@ -12,5 +12,5 @@ AC_CHECK_FUNCS(ftell64)
 
 dnl ##### Check for libpaper (Debian).
 AC_CHECK_HEADERS(paper.h)
-AC_CHECK_LIB(libpaper, paperinit, [LIBPAPER="-lpaper"])
+AC_CHECK_LIB(paper, paperinit, [LIBPAPER="-lpaper"])
 AC_SUBST(LIBPAPER)
