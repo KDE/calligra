@@ -1324,6 +1324,19 @@ void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
 
 }
 
+KWFrame *KWPictureFrameSet::frameByBorder( const QPoint & nPoint )
+{
+    // For pictures/cliparts there is nothing to do when clicking
+    // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        QRect outerRect( frameIt.current()->outerRect() );
+        if ( outerRect.contains( nPoint ) )
+            return frameIt.current();
+    }
+}
+
 /******************************************************************/
 /* Class: KWClipartFrameSet                                       */
 /******************************************************************/
@@ -1391,6 +1404,19 @@ void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
     painter->setViewport( painter->worldMatrix().map( vp ) ); // stolen from killu
     painter->drawPicture( *m_clipart.picture() );
     painter->restore();
+}
+
+KWFrame *KWClipartFrameSet::frameByBorder( const QPoint & nPoint )
+{
+    // For pictures/cliparts there is nothing to do when clicking
+    // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        QRect outerRect( frameIt.current()->outerRect() );
+        if ( outerRect.contains( nPoint ) )
+            return frameIt.current();
+    }
 }
 
 /******************************************************************/

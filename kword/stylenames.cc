@@ -10,3 +10,4 @@ i18n( "KWord style", "Contents Title" );
 i18n( "KWord style", "Contents Head 1" );
 i18n( "KWord style", "Contents Head 2" );
 i18n( "KWord style", "Contents Head 3" );
+i18n( "Document Title" );

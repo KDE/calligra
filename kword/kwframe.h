@@ -237,8 +237,6 @@ public:
      */
     virtual KWFrameSetEdit* currentTextEdit() { return 0L; }
 
-    virtual QString getPopupName() { return QString();}
-
     /**
      * Called before destruction, when terminating edition - use to e.g. hide cursor
      */
@@ -333,7 +331,7 @@ public:
     /** retrieve frame from x and y coords (unzoomed coords) */
     KWFrame *frameAtPos( double _x, double _y );
     /** return a frame if nPoint in on one of its borders */
-    KWFrame *frameByBorder( const QPoint & nPoint );
+    virtual KWFrame *frameByBorder( const QPoint & nPoint );
 
     /** get a frame by number */
     KWFrame *getFrame( unsigned int _num );
@@ -421,6 +419,9 @@ public:
     virtual bool contains( double mx, double my );
 
     virtual bool getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor, bool canMove );
+
+    /** which popup (from the XML file) should be shown when right-clicking inside this frame */
+    virtual QString getPopupName() = 0;
 
     /** create XML to describe yourself */
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
@@ -582,6 +583,10 @@ public:
                             QColorGroup &, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit = 0L );
 
+    virtual KWFrame *frameByBorder( const QPoint & nPoint );
+
+    // RMB -> normal frame popup
+    virtual QString getPopupName() { return "frame_popup"; }
 protected:
     KWImage m_image;
 };
@@ -612,6 +617,10 @@ public:
                             QColorGroup &, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit = 0L );
 
+    virtual KWFrame *frameByBorder( const QPoint & nPoint );
+
+    // RMB -> normal frame popup
+    virtual QString getPopupName() { return "frame_popup"; }
 protected:
     KoClipart m_clipart;
 };
@@ -641,6 +650,9 @@ public:
 
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
+
+    // RMB -> normal frame popup
+    virtual QString getPopupName() { return "frame_popup"; }
 
 protected slots:
     void slotChildChanged();
@@ -701,7 +713,9 @@ public:
 
     void setChanged() { m_changed = true; }
 
-    int floatingFrameBaseline( int /*frameNum*/ );
+    virtual int floatingFrameBaseline( int /*frameNum*/ );
+
+    virtual QString getPopupName() { return "Formula";}
 
 protected slots:
 
@@ -729,8 +743,6 @@ public:
     {
         return formulaView;
     }
-
-    virtual QString getPopupName() { return "Formula";}
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent(QKeyEvent*);

@@ -421,8 +421,8 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
             uint width = qRound( (double)m_pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
             uint height = qRound( (double)m_pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
             // Apply reasonable limits
-            width = QMIN( width, m_doc->paperWidth() );
-            height = QMIN( height, m_doc->paperHeight() );
+            width = QMIN( width, m_doc->paperWidth() - mx - 5 );
+            height = QMIN( height, m_doc->paperHeight()- my - 5 );
 
             QPoint nPoint( mx + width, my + height );
             QPoint vPoint = m_viewMode->normalToView( nPoint );
@@ -528,8 +528,9 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 }
                 else
                 {
-                    if (m_doc->frameAtPos( docPoint.x(), docPoint.y() ))
-                        m_gui->getView()->openPopupMenuEditText( QCursor::pos() );
+                    KWFrame * frame = m_doc->frameAtPos( docPoint.x(), docPoint.y() );
+                    if ( frame )
+                        m_gui->getView()->openPopupMenuInsideFrame( frame, QCursor::pos() );
                     else
                         m_gui->getView()->openPopupMenuChangeAction( QCursor::pos() );
                 }
@@ -540,6 +541,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             case MM_CREATE_TABLE:
             case MM_CREATE_FORMULA:
             case MM_CREATE_PIX:
+                deleteMovingRect();
                 setMouseMode( MM_EDIT );
             default: break;
         }

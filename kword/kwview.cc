@@ -2756,30 +2756,31 @@ void KWView::newLeftIndent( double _leftIndent)
         edit->setMargin( QStyleSheetItem::MarginLeft, _leftIndent );
 }
 
-void KWView::openPopupMenuEditText( const QPoint & _point )
+void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
 {
-    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-    QString menuName;
-    if (edit)
-        menuName=edit->getPopupName();
+    QString menuName = frame->getFrameSet()->getPopupName();
     if(!menuName.isEmpty())
     {
-        QPopupMenu * popup = ((QPopupMenu*)factory()->container(menuName,this));
-        ASSERT(popup);
-        if (popup)
+        ASSERT(factory());
+        if ( factory() )
         {
-            KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
-            if (textedit)
+            QPopupMenu * popup = ((QPopupMenu*)factory()->container(menuName,this));
+            ASSERT(popup);
+            if (popup)
             {
-                // Removed previous stuff
-                unplugActionList( "datatools" );
-                m_actionList.clear();
-                m_actionList = textedit->dataToolActionList();
-                kdDebug() << "KWView::openPopupMenuEditText plugging actionlist with " << m_actionList.count() << " actions" << endl;
-                plugActionList( "datatools", m_actionList );
-                popup->popup(_point); // using exec() here breaks the spellcheck tool (event loop pb)
-            } else
-                popup->popup(_point);
+                KWTextFrameSetEdit * textedit = currentTextEdit();
+                if (textedit)
+                {
+                    // Removed previous stuff
+                    unplugActionList( "datatools" );
+                    m_actionList.clear();
+                    m_actionList = textedit->dataToolActionList();
+                    kdDebug() << "KWView::openPopupMenuEditText plugging actionlist with " << m_actionList.count() << " actions" << endl;
+                    plugActionList( "datatools", m_actionList );
+                    popup->popup(_point); // using exec() here breaks the spellcheck tool (event loop pb)
+                } else
+                    popup->popup(_point);
+            }
         }
     }
 }

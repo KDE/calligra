@@ -131,6 +131,8 @@ public:
 
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
 
+    virtual QString getPopupName() { return "text_popup"; }
+
     void insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,
                  CustomItemsMap customItemsMap = CustomItemsMap() );
@@ -332,8 +334,6 @@ public:
     virtual ~KWTextFrameSetEdit();
 
     virtual KWFrameSetEdit* currentTextEdit(){return this;}
-
-    virtual QString getPopupName() { return "text_popup";}
 
     virtual void terminate();
 

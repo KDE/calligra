@@ -239,6 +239,8 @@ public:
 
     virtual bool canRemovePage( int num );
 
+    virtual QString getPopupName() { return "text_popup"; }
+
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();
@@ -280,8 +282,6 @@ public:
     virtual KWFrameSetEdit* currentTextEdit();
 
     KWFrameSetEdit* currentCell() const { return m_currentCell; }
-
-    virtual QString getPopupName() { return "text_popup";}
 
     // Forward all events to the current cell
     virtual void keyPressEvent( QKeyEvent * e );

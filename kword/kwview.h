@@ -36,8 +36,7 @@ class KWCanvas;
 class KWChild;
 class KWDocument;
 class KWGUI;
-class KWParag;
-class KWParagDia;
+class KWFrame;
 class KWPartFrameSet;
 class KWSearchContext;
 class KWStyleManager;
@@ -132,7 +131,7 @@ public:
 
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
-    void openPopupMenuEditText(const QPoint &);
+    void openPopupMenuInsideFrame(KWFrame *, const QPoint &);
     void openPopupMenuEditFrame(const QPoint &);
     void openPopupMenuChangeAction( const QPoint & );
 
