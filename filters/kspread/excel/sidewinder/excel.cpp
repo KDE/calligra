@@ -380,6 +380,9 @@ Record* RecordFactory::create( unsigned type )
   else if( type == RKRecord::id )
     record = new RKRecord();
     
+  else if( type == RowRecord::id )
+    record = new RowRecord();
+    
   else if( type == RStringRecord::id )
     record = new RStringRecord();
     
@@ -2482,6 +2485,7 @@ void ExcelReader::handleRecord( Record* record )
   handleMulRK( dynamic_cast<MulRKRecord*>( record ) );
   handleNumber( dynamic_cast<NumberRecord*>( record ) );
   handleRK( dynamic_cast<RKRecord*>( record ) );
+  handleRow( dynamic_cast<RowRecord*>( record ) );
   handleRString( dynamic_cast<RStringRecord*>( record ) );
   handleSST( dynamic_cast<SSTRecord*>( record ) );
   handleXF( dynamic_cast<XFRecord*>( record ) );
@@ -2735,8 +2739,6 @@ void ExcelReader::handleNumber( NumberRecord* record )
   }
 }
 
-
-
 void ExcelReader::handleRK( RKRecord* record )
 {
   if( !record ) return;
@@ -2759,6 +2761,26 @@ void ExcelReader::handleRK( RKRecord* record )
     cell->setValue( value );
     cell->setFormat( convertFormat( xfIndex) );
   }
+}
+
+void ExcelReader::handleRow( RowRecord* record )
+{
+  if( !record ) return;
+  
+  if( !d->activeSheet ) return;
+
+  unsigned index = record->row();  
+  unsigned xfIndex = record->xfIndex();
+  unsigned height = record->height();
+  bool hidden = record->hidden();
+  
+  Row* row = d->activeSheet->row( index, true );
+  if( row )
+  {
+    row->setHeight( height / 20.0 );
+    row->setFormat( convertFormat( xfIndex ) );
+    row->setVisible( !hidden );
+  }  
 }
 
 void ExcelReader::handleRString( RStringRecord* record )

@@ -2260,6 +2260,7 @@ private:
   void handleNumber( NumberRecord* record );
   void handleRString( RStringRecord* record );
   void handleRK( RKRecord* record );
+  void handleRow( RowRecord* record );
   void handleSST( SSTRecord* record );
   void handleXF( XFRecord* record );    
   
