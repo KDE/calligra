@@ -34,8 +34,10 @@ KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, KexiQueryDocu
 bool
 KexiQueryView::afterSwitchFrom(int)
 {
-	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*m_doc->schema());
-	setData(rec);
+	if (m_doc) {
+		KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*m_doc->schema());
+		setData(rec);
+	}
 	return true;
 }
 

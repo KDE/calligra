@@ -102,7 +102,7 @@ KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
 //	 = QVariant(tbl);
 	item->push_back(QVariant(tbl));
 	item->push_back(QVariant(field));
-	item->push_back(QVariant(false));
+	item->push_back(QVariant(true));
 	item->push_back(QVariant());
 	m_data->append(item);
 
@@ -125,6 +125,8 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 KexiDB::QuerySchema *
 KexiQueryDesignerGuiEditor::schema()
 {
+	if (!m_doc)
+		return 0;
 	if(m_doc->schema())
 		m_doc->schema()->clear();
 	else
@@ -165,7 +167,7 @@ KexiQueryDesignerGuiEditor::schema()
 void
 KexiQueryDesignerGuiEditor::restore()
 {
-	if(!m_doc->schema())
+	if(!m_doc || !m_doc->schema())
 		return;
 
 	m_table->clearData();

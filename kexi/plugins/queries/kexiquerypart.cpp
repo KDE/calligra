@@ -83,18 +83,23 @@ KexiQueryPart::data(KexiDB::Connection *conn, const KexiPart::Item &i)
 	if(doc)
 		return doc;
 
-	KexiDB::Cursor *cursor = conn->executeQuery(QString("SELECT q_sql FROM kexi__querydata WHERE q_id = %1").arg(i.identifier()));
-	cursor->moveFirst();
-	if(cursor->eof())
+//	KexiDB::Cursor *cursor = conn->executeQuery(QString("SELECT q_sql FROM kexi__querydata WHERE q_id = %1").arg(i.identifier()));
+	KexiDB::RowData data;
+	if (!conn->querySingleRecord( 
+		QString("SELECT q_sql FROM kexi__querydata WHERE q_id=%1").arg(i.identifier()), data))
 		return 0;
 
+//	if (!cursor->moveFirst())
+//		return 0;
+//js NOT THIS WAY	if(cursor->eof())
+//		return 0;
+
 	KexiDB::Parser *parser = new KexiDB::Parser(conn);
-	parser->parse(cursor->value(0).toString());
+	parser->parse(data.at(0).toString());
 
 	doc = new KexiQueryDocument(parser->select());
 	m_data.insert(i.identifier(), doc);
 
-	conn->deleteCursor(cursor);
 	delete parser;
 	return doc;
 }

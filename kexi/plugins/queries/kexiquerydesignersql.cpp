@@ -55,14 +55,15 @@ KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *par
 bool
 KexiQueryDesignerSQL::beforeSwitchTo(int)
 {
-	KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
-	parser->parse(getQuery());
-	m_doc->setSchema(parser->select());
+	if (m_doc) {
+		KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
+		parser->parse(getQuery());
+		m_doc->setSchema(parser->select());
+		delete parser;
 
-	delete parser;
-
-	if(parser->operation() == KexiDB::Parser::OP_Error)
-		return false;
+		if(parser->operation() == KexiDB::Parser::OP_Error)
+			return false;
+	}
 
 	return true;
 }
@@ -71,7 +72,9 @@ bool
 KexiQueryDesignerSQL::afterSwitchFrom(int)
 {
 	kdDebug() << "KexiQueryDesignerSQL::afterSwitchFrom()" << endl;
-	m_editor->setText(m_doc->schema()->connection()->selectStatement(*m_doc->schema()));
+	if (m_doc) {
+		m_editor->setText(m_doc->schema()->connection()->selectStatement(*m_doc->schema()));
+	}
 	return true;
 }
 
