@@ -334,6 +334,8 @@ KexiMain
   like --open, but the object will\nbe opened in Text Mode
 KexiDB
 - Parser::query() public function added; select() is now internal
+SQL Editor
+- CTRL+Return shortcut; added information what to do to validate query text
 
 2004-06-23
 KexiCore

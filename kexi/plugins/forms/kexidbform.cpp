@@ -40,10 +40,10 @@ KexiDBForm::KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win
 	m_part = m;
 	m_conn = conn;
 	m_item = i;
+	QHBoxLayout *l = new QHBoxLayout(this);
 	if(preview)
 	{
 		m_preview = new QWidget(this);
-		QHBoxLayout *l = new QHBoxLayout(this);
 		l->addWidget(m_preview);
 	}
 	else
