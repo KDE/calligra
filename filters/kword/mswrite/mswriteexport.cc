@@ -408,9 +408,13 @@ public:
 	// In Write the header/footer must be the same for every page except that
 	// you can choose to not display it on the first page
 	//
-	// This filter aims to be as lossless as possible so if we can't
+	// /*This filter aims to be as lossless as possible so if we can't
 	// accommodate the types of headers/footers found in KWord, we at least
-	// print out the paragraphs in the body
+	// print out the paragraphs in the body*/
+	//
+	//    Not anymore. Dumping headers & footers in the body didn't
+	//    turn out to be that useful, nor was it expected by users.
+	//
 	bool doPageInfo (int headerType, int footerType)
 	{
 		kdDebug (30509) << "doPageInfo (headerType=" << headerType
