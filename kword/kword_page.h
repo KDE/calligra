@@ -95,6 +95,8 @@ public:
     { xOffset = _x; calcVisiblePages(); }
   void setYOffset(int _y)
     { yOffset = _y; calcVisiblePages(); }
+  int getXOffset() { return xOffset; }
+  int getYOffset() { return yOffset; }
 
   void scroll(int dx,int dy);
 
@@ -139,6 +141,7 @@ public:
   void applyStyle(QString _style);
 
   KWParagLayout *getParagLayout() { return fc->getParag()->getParagLayout(); }
+  KWFormatContext *getCursor() { return fc; }
 
   void setEnumList();
   void setBulletList();

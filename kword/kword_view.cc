@@ -1009,6 +1009,14 @@ void KWordView::tableDeleteRow()
     QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
   else
     {
+      if (grpMgr->getRows() == 1)
+	QMessageBox::critical(0L,i18n("Error"),i18n("The table has only one row. You can't delete the last one!"),i18n("OK"));
+      else
+	{
+	  KWDeleteDia dia(0L,"",grpMgr,m_pKWordDoc,KWDeleteDia::ROW,gui->getPaperWidget());
+	  dia.setCaption(i18n("Delete Row"));
+	  dia.show();
+	}
     }
 }
 
@@ -1022,6 +1030,14 @@ void KWordView::tableDeleteCol()
     QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
   else
     {
+      if (grpMgr->getCols() == 1)
+	QMessageBox::critical(0L,i18n("Error"),i18n("The table has only one column. You can't delete the last one!"),i18n("OK"));
+      else
+	{
+	  KWDeleteDia dia(0L,"",grpMgr,m_pKWordDoc,KWDeleteDia::COL,gui->getPaperWidget());
+	  dia.setCaption(i18n("Delete Column"));
+	  dia.show();
+	}
     }
 }
 

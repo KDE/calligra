@@ -216,8 +216,7 @@ public:
   KWTextFrameSet(KWordDocument *_doc)
     : KWFrameSet(_doc) 
     {;}
-  virtual ~KWTextFrameSet() 
-    {;}
+  ~KWTextFrameSet();
 
   virtual FrameType getFrameType()
     { return FT_TEXT; }
@@ -351,7 +350,7 @@ public:
     unsigned int row,col;
   };
 
-  KWGroupManager(KWordDocument *_doc) { doc = _doc; cells.setAutoDelete(false); rows = 0; cols = 0; };
+  KWGroupManager(KWordDocument *_doc) { doc = _doc; cells.setAutoDelete(true); rows = 0; cols = 0; };
 
   void addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int col);
   KWFrameSet *getFrameSet(unsigned int row,unsigned int col);

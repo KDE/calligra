@@ -55,6 +55,7 @@ class KWPaintWindow;
 #include "searchdia.h"
 #include "tabledia.h"
 #include "insdia.h"
+#include "deldia.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>

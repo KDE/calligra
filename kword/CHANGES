@@ -719,3 +719,9 @@ Reggie, 24.1.1999:
 - If the cursor is in a table, CTRL-Return inserts a new row below the row, where the cursor currently is
 - If the cursor is in a normal text frame, CTRL-Return makes a hard break (jumps to next frame)
 - Added menu item for inserting a hard frame break
+
+Reggie, 25.1.1999:
+------------------
+- Added dialog for deleting rows/cols in tables
+- Implemented deleting rows and columns
+- Did some internal stuff for borders in frames

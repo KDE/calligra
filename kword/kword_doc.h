@@ -167,6 +167,8 @@ public:
     { return frames.count(); }
   void addFrameSet(KWFrameSet *f)
     { frames.append(f); updateAllRanges(); updateAllFrames(); /*updateAllViews(0L);*/ }
+  void delFrameSet(KWFrameSet *f)
+    { frames.remove(f); }
 
 
   /**

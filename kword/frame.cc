@@ -511,6 +511,12 @@ void KWTextFrameSet::init()
 }
 
 /*================================================================*/
+KWTextFrameSet::~KWTextFrameSet() 
+{ 
+  delete parags; 
+}
+
+/*================================================================*/
 void KWTextFrameSet::update()
 {
   typedef QList<KWFrame> FrameList;
@@ -1547,11 +1553,43 @@ void KWGroupManager::insertCol(unsigned int _idx)
 /*================================================================*/
 void KWGroupManager::deleteRow(unsigned int _idx,QPainter &_painter)
 {
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->row == _idx) 
+	{
+	  doc->delFrameSet(cells.at(i)->frameSet);
+	  cells.at(i)->frameSet = 0L;
+	  cells.remove(i);
+	  i--;
+	  continue;
+	}
+      if (cells.at(i)->row > _idx) cells.at(i)->row--;
+    }
+
+  rows--;
+
+  recalcRows(_painter);
 }
 
 /*================================================================*/
 void KWGroupManager::deleteCol(unsigned int _idx)
 {
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->col == _idx) 
+	{
+	  doc->delFrameSet(cells.at(i)->frameSet);
+	  cells.at(i)->frameSet = 0L;
+	  cells.remove(i);
+	  i--;
+	  continue;
+	}
+      if (cells.at(i)->col > _idx) cells.at(i)->col--;
+    }
+
+  cols--;
+
+  recalcCols();
 }
 
 /*================================================================*/
