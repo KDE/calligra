@@ -362,10 +362,7 @@ FormManager::copyWidget()
 
 	QDomElement parent = m_domDoc.namedItem("UI").toElement();
 	if(parent.hasChildNodes())
-	{
 		parent.clear();
-		m_domDoc.appendChild(m_domDoc.createElement("UI"));
-	}
 
 	QWidget *w;
 	for(w = list->first(); w; w = list->next())
@@ -394,7 +391,6 @@ FormManager::cutWidget()
 void
 FormManager::pasteWidget()
 {
-	kdDebug() << m_domDoc.toString() << endl;
 	if(!m_domDoc.namedItem("UI").hasChildNodes())
 		return;
 	if(!activeForm())

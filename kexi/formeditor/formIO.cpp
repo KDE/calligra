@@ -709,7 +709,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
 	for(QMap<QString,QVariant>::Iterator it = item->modifProp()->begin(); it != item->modifProp()->end(); ++it)
 	{
-		if((it.key() == QString("hAlign")) || (it.key() == QString("vAlign")) || (it.key() == QString("wordbreak")))
+		QString name = it.key();
+		if((name == QString("hAlign")) || (name == QString("vAlign")) || (name == QString("wordbreak")))
 		{
 			if(!savedAlignment)
 			{
@@ -718,7 +719,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			}
 		}
 
-		else if((it.key() != QString("name")) && (it.key() != QString("geometry")) && (it.key() != QString("layout")))
+		else if((name != "name") && (name != "geometry") && (name != "layout"))
 			prop(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), item->widget(), lib);
 	}
 	parent.appendChild(tclass);
@@ -789,7 +790,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 }
 
 void
-FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent, bool insideGrid)
+FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent)
 {
 	QString wname;
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -831,7 +832,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	else
 		tree = container->form()->objectTree()->lookup(wname);
 
-	if(insideGrid)
+	if(el.parentNode().toElement().tagName() == "grid")
 	{
 		QGridLayout *layout = (QGridLayout*)container->layout();
 		if(!layout)
@@ -903,16 +904,14 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 		}
 		else if(tag == "widget")
 		{
-			bool insideGrid = (eltag == "grid");
 			if(tree->container())
-				loadWidget(tree->container(), lib, node, 0, insideGrid);
+				loadWidget(tree->container(), lib, node);
 			else
-				loadWidget(container, lib, node, w, insideGrid);
+				loadWidget(container, lib, node, w);
 		}
 		else if(tag == "spacer")
 		{
-			bool insideGrid = (eltag == "grid");
-			loadWidget(container, lib, node, w, insideGrid);
+			loadWidget(container, lib, node, w);
 		}
 		else if((tag == "vbox") || (tag == "hbox") || (tag == "grid"))
 		{

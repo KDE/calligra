@@ -92,7 +92,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    If parent = 0, the Container::widget() is used as parent widget.
 		    This is used to copy/paste widgets.
 		*/
-		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0, bool insideGrid=false);
+		static void         loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent=0);
 		static void         saveProperty(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, const QString &property, const QVariant &value);
 		/*! Read an object property in the DOM doc.
 		   \param node   the QDomNode of the property
