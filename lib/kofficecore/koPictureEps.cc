@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@
 #include <qapplication.h>
 #include <qdragobject.h>
 
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kdeversion.h>
 #if ! KDE_IS_VERSION( 3,1,90 )
@@ -283,6 +284,49 @@ bool KoPictureEps::extractPostScriptStream( void )
     return true;
 }
 
+QString KoPictureEps::readLine( const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr )
+{
+    QString strLine;
+    const uint finish = kMin( start + length, array.size() );
+    for ( ; pos < finish; ++pos ) // We are starting at pos
+    {
+        const char ch = array[ pos ]; // Read one character
+        if ( ch == '\n' )
+        {
+            if ( lastCharWasCr )
+            {
+                // We have a line feed following a Carriage Return
+                // As the Carriage Return has already ended the previous line,
+                // discard this Line Feed.
+                lastCharWasCr = false;
+            }
+            else
+            {
+                // We have a normal Line Feed, therefore we end the line
+                break;
+            }
+        }
+        else if ( ch == '\r' )
+        {
+            // We have a Carriage Return, therefore we end the line
+            lastCharWasCr = true;
+            break;
+        }
+        else if ( ch == char(12) ) // Form Feed
+        { // ### TODO: can a FF happen in PostScript?
+            // Ignore the form feed
+            continue;
+        }
+        else
+        {
+            strLine += ch;
+            lastCharWasCr = false;
+        }
+    }
+    return strLine;
+}
+
+
 bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ )
 {
 
@@ -312,10 +356,16 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         m_psStreamLength = m_rawData.size();
     }
 
-    
-    QTextStream stream(m_rawData, IO_ReadOnly);
     QString lineBox;
+#if 1
+    bool lastWasCr = false;
+    uint pos = 0;
+    QString line( readLine( m_rawData, m_psStreamStart, m_psStreamLength, pos, lastWasCr ) );
+    kdDebug(30003) << "Pos: " << pos << endl;
+#else    
+    QTextStream stream(m_rawData, IO_ReadOnly);
     QString line( stream.readLine() );
+#endif
     kdDebug(30003) << "Header: " << line << endl;
     if (!line.startsWith("%!"))
     {
@@ -325,7 +375,13 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
     QRect rect;
     for(;;)
     {
+#if 1
+        ++pos; // Get over the previous line end (CR or LF)
+        line = readLine( m_rawData,  m_psStreamStart, m_psStreamLength, pos, lastWasCr );
+        kdDebug(30003) << "Pos: " << pos << endl;
+#else
         line=stream.readLine();
+#endif
         kdDebug(30003) << "Checking line: " << line << endl;
         // ### TODO: it seems that the bounding box can be delayed in the trailer (GhostScript 7.07 does not support it either.)
         if (line.startsWith("%%BoundingBox:"))

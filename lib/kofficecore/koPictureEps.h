@@ -98,6 +98,7 @@ protected:
 
 private:
     int tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device );
+    QString KoPictureEps::readLine( const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr );
 
 private:
     /**
