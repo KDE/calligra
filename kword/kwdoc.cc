@@ -1228,8 +1228,11 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // so it must be done last.
     setPageLayout( m_pageLayout, __columns, __hf, false );
 
-    loadOasisSettings( settings );
-
+    if ( !settings.isNull() )
+    {
+        loadOasisSettings( settings );
+        loadOasisIgnoreList( settings );
+    }
     //printDebug();
 
     return true;
@@ -1237,8 +1240,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
 void KWDocument::loadOasisSettings( const QDomDocument&settingsDoc )
 {
-    if ( settingsDoc.isNull() )
-        return ; //not a error some file doesn't have settings.xml
     KoOasisSettings settings( settingsDoc );
     bool tmp = settings.selectItemSet( "view-settings" );
     //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
@@ -2658,6 +2659,13 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.endElement();
 
     settingsWriter.endElement(); // config:config-item-set
+
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "configuration-settings");
+    saveOasisIgnoreList( settingsWriter );
+    settingsWriter.endElement(); // config:config-item-set
+
+
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element
     settingsWriter.endDocument();
@@ -2668,6 +2676,28 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
     return true;
+}
+
+void KWDocument::saveOasisIgnoreList( KoXmlWriter &settingsWriter )
+{
+    settingsWriter.startElement("config:config-item-map-entry" );
+    settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
+    settingsWriter.endElement();
+}
+
+void KWDocument::loadOasisIgnoreList( const QDomDocument&settingsDoc )
+{
+    KoOasisSettings settings( settingsDoc );
+    bool tmp = settings.selectItemSet( "configuration-settings" );
+    kdDebug()<<" settings : configuration-settings :"<<tmp<<endl;
+
+    if ( tmp )
+    {
+        QString ignorelist = settings.parseConfigItemString( "SpellCheckerIgnoreList" );
+        kdDebug()<<" ignorelist :"<<ignorelist<<endl;
+
+        m_spellListIgnoreAll = QStringList::split( ',', ignorelist );
+    }
 }
 
 void KWDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles )

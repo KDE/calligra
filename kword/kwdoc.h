@@ -860,6 +860,9 @@ protected:
 
     void saveOasisSettings( KoXmlWriter &settingsWriter );
 
+    void saveOasisIgnoreList( KoXmlWriter &settingsWriter );
+    void loadOasisIgnoreList( const QDomDocument&settingsDoc );
+
 private:
     void endOfLoading();
     //private helper functions for frameUnderMouse
