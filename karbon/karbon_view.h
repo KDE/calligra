@@ -75,6 +75,8 @@ public:
 
 	QLabel* statusMessage() const { return m_status; }
 
+	void selectionChanged();
+
 public slots:
 	// editing:
 	void editCut();

@@ -819,9 +819,9 @@ KarbonView::initActions()
 	m_gradToolAction = new KToggleAction(
 		i18n( "G&radient" ), "14_star", 0, this,
 		SLOT( gradTool() ), actionCollection(), "tool_grad" );
-	m_textToolAction = new KToggleAction(
+	/*m_textToolAction = new KToggleAction(
 		i18n( "Text" ), "14_text", 0, this,
-		SLOT( textTool() ), actionCollection(), "tool_text" );
+		SLOT( textTool() ), actionCollection(), "tool_text" );*/
 
 	m_ellipseToolAction->setExclusiveGroup( "Tools" );
 	m_polygonToolAction->setExclusiveGroup( "Tools" );
@@ -834,7 +834,7 @@ KarbonView::initActions()
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
 	m_gradToolAction->setExclusiveGroup( "Tools" );
-	m_textToolAction->setExclusiveGroup( "Tools" );
+	//m_textToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
 
 	// text ----->
@@ -1006,7 +1006,8 @@ KarbonView::eventFilter( QObject* object, QEvent* event )
 		return false;
 }
 
-void KarbonView::reorganizeGUI()
+void
+KarbonView::reorganizeGUI()
 {
 	if( statusBar() )
 	{
@@ -1017,16 +1018,28 @@ void KarbonView::reorganizeGUI()
 	}
 }
 
-void KarbonView::setNumberOfRecentFiles( int number )
+void
+KarbonView::setNumberOfRecentFiles( int number )
 {
 	if( shell() ) // 0 when embedded into konq !
 		shell()->setMaxRecentItems( number );
 }
 
-void KarbonView::configure()
+void
+KarbonView::configure()
 {
 	VConfigureDlg dialog( this );
 	dialog.exec();
+}
+
+void
+KarbonView::selectionChanged()
+{
+	if( part()->document().selection()->objects().count() > 0)
+	{
+		m_toolbox->strokeFillPreview()->update( *part()->document().selection()->objects().getFirst()->stroke(),
+												*part()->document().selection()->objects().getFirst()->fill() );
+	}
 }
 
 #include "karbon_view.moc"
