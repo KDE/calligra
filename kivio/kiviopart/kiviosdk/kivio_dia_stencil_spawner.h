@@ -24,7 +24,7 @@
 #include <qstring.h>
 
 #include "kivio_connector_target.h"
-//#define protected public // ewww... what a groy hack
+//#define protected public // ewww... what a gory hack
 #include "kivio_stencil_spawner.h"
 //#undef protected
 #include "kivio_sml_stencil_spawner.h"
