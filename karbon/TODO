@@ -1,7 +1,6 @@
 REAL BUGS:
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
 	canvas is "fragmented")
--	libart rendering uses the wrong fill rule (see filled spiral) => use even odd
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
 -	shape creation: the last temporary shape looks slightly different than the final shape

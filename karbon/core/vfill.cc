@@ -33,7 +33,7 @@ VFill::VFill()
 }
 
 VFill::VFill( const VColor &c )
-	: m_type( solid ), m_fillRule( evenOdd )
+	: m_type( solid ), m_fillRule( winding )
 {
 	m_color = c;
 }
@@ -113,6 +113,7 @@ VFill::operator=( const VFill& fill )
 		m_color = fill.m_color;
 		m_gradient = fill.m_gradient;
 		m_pattern = fill.m_pattern;
+		m_fillRule = fill.m_fillRule;
 	}
 
 	return *this;

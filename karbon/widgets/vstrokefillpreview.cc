@@ -152,6 +152,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		}
 		else
 			fill.setColor( s.color() );
+		fill.setFillRule( VFill::evenOdd );
 		m_painter->setBrush( fill );
 
 		m_painter->newPath();
