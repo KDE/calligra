@@ -60,18 +60,18 @@ class KoHTMLDoc;
 class KoHTMLChild : public KoDocumentChild
 {
 public:
-  KoHTMLChild(KoHTMLDoc *doc, const KRect &rect, KOffice::Document_ptr koDoc);
+  KoHTMLChild(KoHTMLDoc *doc, const QRect &rect, KOffice::Document_ptr koDoc);
   KoHTMLChild(KoHTMLDoc *doc);
   ~KoHTMLChild();
   
-  KRect kGeometry() { return m__geometry; }
-  void setkGeometry(KRect g) { m__geometry = g; }
+  QRect kGeometry() { return m__geometry; }
+  void setkGeometry(QRect g) { m__geometry = g; }
   
   KoHTMLDoc *parent() { return m_parent; }
 
 protected:
   KoHTMLDoc *m_parent;
-  KRect m__geometry;  
+  QRect m__geometry;  
 };
 
 class KoHTMLDoc : public QObject,
@@ -142,9 +142,9 @@ public:
   virtual const char *copyright(); 
   virtual const char *comment();
   
-  void insertObject(const KRect &rect, KoDocumentEntry &de);
+  void insertObject(const QRect &rect, KoDocumentEntry &de);
   void insertChild(KoHTMLChild *child);
-  void changeChildGeometry(KoHTMLChild *child, const KRect &rect);
+  void changeChildGeometry(KoHTMLChild *child, const QRect &rect);
   QListIterator<KoHTMLChild> childIterator();
 
   // these two functions are needed to make using the internal view (for

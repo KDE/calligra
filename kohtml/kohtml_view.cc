@@ -197,7 +197,7 @@ void KoHTMLView::insertObject()
 
   if (de.name.isEmpty()) return;
 
-  KRect tmp;
+  QRect tmp;
   tmp.setLeft(0);
   tmp.setTop(0);
   tmp.setRight(100);

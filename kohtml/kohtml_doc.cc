@@ -37,7 +37,7 @@
 #include "kfileio.h"
 #include <klocale.h>
 
-KoHTMLChild::KoHTMLChild(KoHTMLDoc *doc, const KRect &rect, KOffice::Document_ptr koDoc)
+KoHTMLChild::KoHTMLChild(KoHTMLDoc *doc, const QRect &rect, KOffice::Document_ptr koDoc)
 :KoDocumentChild(rect, koDoc)
 {
   m_parent = doc;
@@ -532,7 +532,7 @@ const char *KoHTMLDoc::comment()
   return "insert your comment here";
 }
 
-void KoHTMLDoc::insertObject(const KRect &rect, KoDocumentEntry &de)
+void KoHTMLDoc::insertObject(const QRect &rect, KoDocumentEntry &de)
 {
   KOffice::Document_var doc = imr_createDoc(de);
 
@@ -563,7 +563,7 @@ void KoHTMLDoc::insertChild(KoHTMLChild *child)
   m_bRepaintDocument = true;
 }
 
-void KoHTMLDoc::changeChildGeometry(KoHTMLChild *child, const KRect &rect)
+void KoHTMLDoc::changeChildGeometry(KoHTMLChild *child, const QRect &rect)
 {
   child->setGeometry(rect);
   child->setkGeometry(rect);
