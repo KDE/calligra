@@ -1228,7 +1228,8 @@ void KWTextFrameSet::formatMore()
     // but make sure we format everything the views need
     // ###### lastFormatted->rect().height() is dangerous. It's 0 initially, and it can
     // be too big after zooming out !!!
-    for ( int i = 0;
+    int i;
+    for ( i = 0;
           lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
           ( i < to || bottom <= viewsBottom ) ; ++i )
     {
