@@ -262,7 +262,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
-        << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
+        << "\" mime=\"" << "application/x-kpresenter" << "\" url=\"" << url() << "\">" << endl;
 
     out << otag << "<PAPER format=\"" << static_cast<int>( _pageLayout.format ) << "\" ptWidth=\"" << _pageLayout.ptWidth
         << "\" ptHeight=\"" << _pageLayout.ptHeight
@@ -514,6 +514,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
         _xRnd = 20;
         _yRnd = 20;
         _txtBackCol = white;
+        urlIntern = url();
     }
 
     // DOC
@@ -537,6 +538,8 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
                 return false;
             }
         }
+        else if ( ( *it ).m_strName == "url" )
+            urlIntern = ( *it ).m_strValue.c_str();
     }
 
     // PAPER
@@ -1136,7 +1139,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 {
     if ( _store )
     {
-        CORBA::String_var str = url();
+        CORBA::String_var str = urlIntern.latin1();
 
         QValueListIterator<KPPixmapDataCollection::Key> it = pixmapCollectionKeys.begin();
 

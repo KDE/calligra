@@ -422,6 +422,8 @@ protected:
     QValueList<KPClipartCollection::Key> clipartCollectionKeys;
     KoPageLayout __pgLayout;
 
+    QString urlIntern;
+    
 };
 
 #endif

@@ -270,3 +270,7 @@ Reggie, 31.5.1999:
 ------------------
 - Fixes in effects for disappearing objs
 - Implemented more effects for disappearing objs
+
+Reggie, 1.6.1999:
+-----------------
+- Fix in saving pictures/cliparts inline
