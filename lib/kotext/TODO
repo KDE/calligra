@@ -2,10 +2,10 @@ Save Oasis File:
 ----------------
 Done:
 -> Save/load field variables
+-> Save/load note variable 
 
 In progress:
 -> Save/load variable (date/time)
--> Save/load note variable (adapt kotextparag to support office:presentation)
 
 Todo:
 -> Save/load mail merge variable

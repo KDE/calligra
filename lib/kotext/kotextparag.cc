@@ -1676,7 +1676,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         QString textData;
         QString tagName( ts.tagName() );
         //kdDebug() << k_funcinfo << tagName << " isText:" << node.isText() << endl;
-        bool textFoo = tagName.startsWith( "text:" );
+        bool textFoo = tagName.startsWith( "text:" ) || ( tagName == "office:annotation" );
         QString afterText = tagName.mid( 5 );
         KoTextCustomItem* customItem = 0;
 

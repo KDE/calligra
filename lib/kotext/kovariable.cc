@@ -689,12 +689,11 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
 
 KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
 {
-    Q_ASSERT( tag.tagName().startsWith( "text:" ) ); // checked by caller
+    Q_ASSERT( tag.tagName().startsWith( "text:" ) || ( tag.tagName() == "office:annotation" )); // checked by caller
     const QString tagName( tag.tagName() );
     const QCString afterText = tagName.latin1() + 5;
     QString key;
     int type = -1;
-
     if ( tagName.endsWith( "date" ) || tagName.endsWith( "time" ) )
     {
         QString dataStyleName = tag.attribute( "style:data-style-name" );
@@ -717,6 +716,11 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
             type = VT_DATE;
             key = "DATE" + dateFormat;
         }
+    }
+    else if ( tagName == "office:annotation" )
+    {
+        type = VT_NOTE;
+        key = "NUMBER";
     }
     else if (afterText == "page-number" || afterText == "page-count" )
     {
