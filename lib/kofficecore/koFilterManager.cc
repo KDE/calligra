@@ -146,7 +146,7 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   KMimeType *t = KMimeType::findByURL( url, 0, url.isLocalFile() );
   QString mimeType;
   if (t) {
-    kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %c", t->mimeType().ascii() );
+    kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %s", t->mimeType().ascii() );
     mimeType = t->mimeType();
   }
   else {
