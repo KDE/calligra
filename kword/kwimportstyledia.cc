@@ -150,6 +150,11 @@ void KWImportStyleDia::loadFile()
                                 i18n("File is not a kword file!"),
                                 i18n("Import Style"));
         }
+        if(m_styleList.count() == 0) {
+            KMessageBox::error( this,
+                                i18n("File does not contain any styles, wrong version perhaps?"),
+                                i18n("Import Style"));
+        }
         store->close();
     }
     delete m_insertStyle;
@@ -168,7 +173,6 @@ KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const 
     m_listStyleName = new QListBox( page );
     m_listStyleName->setSelectionMode( QListBox::Multi );
     loadFile();
-    enableButtonOK( (m_listStyleName->count()!=0) );
     resize (300, 400);
     setFocus();
 }
@@ -251,6 +255,12 @@ void KWImportFrameTableStyleDia::loadFile()
         {
             KMessageBox::error( this,
                                 i18n("File is not a kword file!"),
+                                i18n("Import Style"));
+        }
+
+        if(m_tableStyleList.count() == 0) {
+            KMessageBox::error( this,
+                                i18n("File does not contain any styles, wrong version perhaps?"),
                                 i18n("Import Style"));
         }
         store->close();
