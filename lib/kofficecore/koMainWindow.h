@@ -41,8 +41,7 @@ namespace KParts
  * of a KOffice component. Each main window contains
  * a menubar and some toolbars.
  *
- * If you are going to implement a new KOffice component, then
- * you must implement a subclass of this class.
+ * This class does NOT need to be subclassed in your application.
  */
 class KoMainWindow : public KParts::MainWindow
 {
