@@ -464,11 +464,19 @@ protected slots:
     void extraPenStyleDashDot();
     void extraPenStyleDashDotDot();
     void extraPenStyleNoPen();
+    void setExtraPenStyle( Qt::PenStyle style );
 
     void extraPenWidth1();
+    void extraPenWidth2();
+    void extraPenWidth3();
     void extraPenWidth4();
+    void extraPenWidth5();
+    void extraPenWidth6();
     void extraPenWidth7();
+    void extraPenWidth8();
+    void extraPenWidth9();
     void extraPenWidth10();
+    void setExtraPenWidth( unsigned int width );
 
     void stopPres() {continuePres = false; }
     void newPageLayout( KoPageLayout _layout );
