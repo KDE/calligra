@@ -19,6 +19,10 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <assert.h>
 #include <unistd.h>
 
@@ -69,6 +73,8 @@ class KoViewWrapperWidget;
  * KoDocument
  *
  **********************************************************/
+
+const int KoDocument::s_defaultAutoSave = 120; // 2 minutes
 
 class KoDocument::Private
 {

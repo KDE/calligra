@@ -619,7 +619,7 @@ private:
     KService::Ptr m_nativeService;
     bool m_bEmpty;
     static QPtrList<KoDocument> *s_documentList;
-    static const int s_defaultAutoSave = 120; // 2 minutes
+    static const int s_defaultAutoSave;
 };
 
 #endif
