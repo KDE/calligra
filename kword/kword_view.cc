@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#undef Unsorted
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qstring.h>
