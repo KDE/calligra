@@ -99,7 +99,6 @@ bool WMLWorker::doCloseDocument(void)
 bool WMLWorker::doFullParagraph(const QString& paraText, 
   const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-  //result += "<p>" + paraText + "</p>\n";
   QString wmlText;
   QString text = paraText;
 
@@ -131,7 +130,12 @@ bool WMLWorker::doFullParagraph(const QString& paraText,
     }
   }
 
-  result += "<p>" + wmlText + "</p>\n";
+  // sentinel check
+  QString align = layout.alignment.lower();
+  if( ( align!="left" ) && ( align!="right" ) && ( align!="center" ) )
+    align = "left"; 
+
+  result += "<p align=\"" + align + "\">" + wmlText + "</p>\n";
 
   return TRUE;
 }
