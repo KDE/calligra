@@ -8,7 +8,7 @@ KOfficeCore:
   when opening OOWriter documents in particular.
 
 KOfficeUI:
-- Fix overwriting of templates
+- Fix overwriting of templates (#73537)
 - Fix loading icons when creating templates
 
 KoText:
