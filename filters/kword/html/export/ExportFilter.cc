@@ -184,37 +184,37 @@ bool HtmlWorker::makeClipart(const FrameAnchor& anchor)
 void HtmlWorker::formatTextParagraph(const QString& strText,
  const FormatData& formatOrigin, const FormatData& format)
 {
-    if (format.text.missing)
+    QString strEscaped(escapeHtmlText(strText));
+
+    // Replace line feeds by line breaks
+    int pos;
+    QString strBr(isXML()?QString("<br/>"):QString("<br>"));
+    while ((pos=strEscaped.find(QChar(10)))>-1)
     {
-        //Format is not issued from KWord. Therefore it is only the layout
-        // So it is only the text
-        if (strText==" ")
-        {//Just a space as text. Therefore we must use a non-breaking space.
-            *m_streamOut << "&nbsp;";
-            // FIXME: only needed for <p>&nbsp;</p>, but not for </span> <span>
-        }
-        else
-        {
-            *m_streamOut << escapeHtmlText(strText);
-        }
+        strEscaped.replace(pos,1,strBr);
+    }
+
+    if (!format.text.missing)
+    {
+        // Opening elements
+        openSpan(formatOrigin,format);
+    }
+        
+    // TODO: first and last characters of partialText should not be a space (white space problems!)
+    // TODO: replace multiples spaces by non-breaking spaces!
+
+    if (strText==" ")
+    {//Just a space as text. Therefore we must use a non-breaking space.
+        *m_streamOut << "&nbsp;";
+        // FIXME: only needed for <p>&nbsp;</p>, but not for </span> <span>
     }
     else
     {
-        // TODO: first and last characters of partialText should not be a space (white space problems!)
-        // TODO: replace multiples spaces by non-breaking spaces!
-        // Opening elements
-        openSpan(formatOrigin,format);
+        *m_streamOut << strEscaped;
+    }
 
-        // The text
-        if (strText==" ")
-        {//Just a space as text. Therefore we must use a non-breaking space.
-            *m_streamOut << "&nbsp;";
-        }
-        else
-        {
-            *m_streamOut << escapeHtmlText(strText);
-        }
-
+    if (!format.text.missing)
+    {
         // Closing elements
         closeSpan(formatOrigin,format);
     }
