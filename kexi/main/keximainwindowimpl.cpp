@@ -158,7 +158,7 @@ class KexiMainWindowImpl::Private
 			*action_edit_insert_empty_row,
 			*action_edit_edititem, *action_edit_clear_table;
 
-		// view menu
+		//! view menu
 		KAction *action_view_nav, *action_view_propeditor;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
 		QIntDict<KRadioAction> actions_for_view_modes;
@@ -166,14 +166,19 @@ class KexiMainWindowImpl::Private
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
-		//data menu
+		//! data menu
 		KAction *action_data_save_row;
 		KAction *action_data_cancel_row_changes;
 
-		//settings menu
+		//! tools menu
+#ifndef KEXI_NO_MIGRATION
+		KAction *action_tools_data_migration;
+#endif
+
+		//! settings menu
 		KAction *action_configure;
 
-		//for dock windows
+		//! for dock windows
 		KMdiToolViewAccessor* navToolWindow;
 		KMdiToolViewAccessor* propEditorToolWindow;
 
@@ -609,7 +614,7 @@ KexiMainWindowImpl::initActions()
 
 	//TOOLS MENU
 #ifndef KEXI_NO_MIGRATION
-	new KAction(i18n("Import Data..."), "toolsdatamigrate", 0, this, SLOT(slotMigrationWizard()), actionCollection(), "tools_data_migration");
+	d->action_tools_data_migration = new KAction(i18n("Import Data..."), "toolsdatamigrate", 0, this, SLOT(slotMigrationWizard()), actionCollection(), "tools_data_migration");
 #endif	
 
 	//SETTINGS MENU
@@ -739,6 +744,11 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	//CREATE MENU
 	if (d->createMenu)
 		d->createMenu->setEnabled(d->prj);
+
+	//TOOLS MENU
+#ifndef KEXI_NO_MIGRATION
+	d->action_tools_data_migration->setEnabled(d->prj);
+#endif
 
 	//DOCKS
 	if (d->nav)

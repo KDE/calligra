@@ -146,8 +146,10 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_partPopup = new KPopupMenu(this, "partPopup");
 	m_partPopupTitle_id = m_partPopup->insertTitle("");
 	m_newObjectAction->plug(m_partPopup);
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	m_partPopup->insertSeparator();
 	plugSharedAction("edit_paste", m_partPopup);
+#endif
 }
 
 KexiBrowser::~KexiBrowser()
