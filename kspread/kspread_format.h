@@ -366,7 +366,7 @@ public:
 
     KLocale* locale()const;
 
-    virtual bool hasProperty( Properties p ) const;
+    virtual bool hasProperty( Properties p, bool withoutParent = false ) const;
 
     /**
      * returns false if no currency information is set or

@@ -2421,8 +2421,7 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
 
   // Point the little corner if there is a comment attached
   // to this cell.
-  if ( m_strComment 
-       && !m_strComment->isEmpty() 
+  if ( ( m_mask & (uint) PComment )
        && cellRect.width() > 10.0
        && cellRect.height() > 10.0 
        && ( table()->print()->printCommentIndicator()

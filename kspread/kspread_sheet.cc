@@ -1651,7 +1651,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
        the cell value will be stored in the left most cell so we need to
        extend the undo range to include that column.
   */
-  if(mode == Column)
+  if ( mode == Column )
   {
     for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1); y++ )
     {

@@ -108,7 +108,7 @@ class KSpreadStyle
   int usage() const { return m_usageCount; }
 
   bool   hasProperty( Properties p ) const;
-  bool   hasFeature( FlagsSet f ) const;
+  bool   hasFeature( FlagsSet f, bool withoutParent ) const;
 
   QPen    const & pen()             const;
   QColor  const & bgColor()         const;

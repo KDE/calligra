@@ -601,13 +601,13 @@ bool KSpreadStyle::hasProperty( Properties p ) const
   return ( !m_parent || featureSet( f ) ? ( m_properties & (uint) p ) : m_parent->hasProperty( p ) );
 }
 
-bool KSpreadStyle::hasFeature( FlagsSet f ) const
+bool KSpreadStyle::hasFeature( FlagsSet f, bool withoutParent ) const
 {
   bool b = ( m_featuresSet & (uint) f );
   
   // check if feature is defined here or at parent level
-  if ( m_parent )
-    b = ( m_parent->hasFeature( f ) ? true : b );
+  if ( m_parent && !withoutParent )
+    b = ( m_parent->hasFeature( f, withoutParent ) ? true : b );
 
   return b;
 }

@@ -4062,7 +4062,10 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
 void KSpreadView::toggleProtectDoc( bool mode )
 {
    if ( !m_pDoc || !m_pDoc->map() )
-       return;
+     return;
+
+   if ( m_protectDoc->isChecked() == mode )
+     return;
 
    QCString passwd;
    if ( mode )
@@ -4089,7 +4092,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
        return;
      }
 
-     QCString hash;
+     QCString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -4137,6 +4140,9 @@ void KSpreadView::toggleProtectSheet( bool mode )
    if ( !m_pTable )
        return;
 
+   if ( m_protectSheet->isChecked() == mode )
+     return;
+
    QCString passwd;
    if ( mode )
    {
@@ -4151,6 +4157,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
+
      m_pTable->setProtected( hash );
    }
    else
@@ -4162,10 +4169,11 @@ void KSpreadView::toggleProtectSheet( bool mode )
        return;
      }
 
-     QCString hash;
+     QCString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
+
      if ( !m_pTable->checkPassword( hash ) )
      {
        KMessageBox::error( 0, i18n( "Incorrect password" ) );
@@ -4390,7 +4398,7 @@ bool KSpreadView::checkChangeRecordPassword()
     return false;
   }
   
-  QCString hash;
+  QCString hash( "" );
   QString password( passwd );
   if ( password.length() > 0 )
     SHA1::getHash( password, hash );
@@ -4458,6 +4466,8 @@ void KSpreadView::viewZoom( const QString & s )
   z = z.replace( QRegExp( "%" ), "" );
   z = z.simplifyWhiteSpace();
   newZoom = z.toInt(&ok);
+  kdDebug() << "---------viewZoom: " << z << " - " << s << ", newZoom: " << newZoom
+            << ", oldZoom " << oldZoom << ", " << zoom() << endl;
 
   if ( !ok || newZoom < 10 ) //zoom should be valid and >10
     newZoom = oldZoom;
@@ -4469,12 +4479,16 @@ void KSpreadView::viewZoom( const QString & s )
     m_pCanvas->closeEditor();
     setZoom( newZoom, true );
 
-    m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+    QRect r( m_pTable->visibleRect( m_pCanvas ) );
+    r.setWidth( r.width() + 2 );
+    m_pDoc->emitEndOperation( r );
   }
 }
 
 void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 {
+  kdDebug() << "---------SetZoom: " << zoom << endl;
+
   // Set the zoom in KoView (for embedded views)
   m_pDoc->emitBeginOperation( false );
   // KoView::setZoom( (double) zoom / 100 );
