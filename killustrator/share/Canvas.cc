@@ -43,6 +43,7 @@
 #include "QwViewport.h"
 #include "version.h"
 #include <kconfig.h>
+#include <kapp.h>
 
 #include "GPolyline.h" // for NEAR_DISTANCE
 #include "SelectionTool.h"
@@ -843,7 +844,7 @@ bool Canvas::showHelplines () {
 
 int Canvas::indexOfHorizHelpline (float pos) {
   for (int i = 0; i < horizHelplines.size (); i++) {
-    if (pos - NEAR_DISTANCE < horizHelplines[i] && 
+    if (pos - NEAR_DISTANCE < horizHelplines[i] &&
 	pos + NEAR_DISTANCE > horizHelplines[i])
       return i;
   }
@@ -852,7 +853,7 @@ int Canvas::indexOfHorizHelpline (float pos) {
 
 int Canvas::indexOfVertHelpline (float pos) {
   for (unsigned int i = 0; i < vertHelplines.size (); i++) {
-    if (pos - NEAR_DISTANCE < vertHelplines[i] && 
+    if (pos - NEAR_DISTANCE < vertHelplines[i] &&
 	pos + NEAR_DISTANCE > vertHelplines[i])
       return i;
   }
@@ -889,8 +890,8 @@ bool Canvas::eventFilter (QObject *o, QEvent *e) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == Key_Tab) {
       if (toolController->getActiveTool ()->isA ("SelectionTool"))
-	((SelectionTool *) 
-	 toolController->getActiveTool ())->processTabKeyEvent (document, 
+	((SelectionTool *)
+	 toolController->getActiveTool ())->processTabKeyEvent (document,
 								this);
     }
     else

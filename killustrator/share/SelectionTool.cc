@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -39,6 +39,7 @@
 #include "units.h"
 #include "PStateManager.h"
 #include <kapp.h>
+#include <stdio.h>
 #include <klocale.h>
 #include "version.h"
 
@@ -69,14 +70,14 @@ void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 #if QT_VERSION >= 199
     if (e->type () == QEvent::MouseButtonPress)
       processButtonPressForHelpline ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == QEvent::MouseMove) 
+    else if (e->type () == QEvent::MouseMove)
       processMouseMoveForHelpline ((QMouseEvent *) e, doc, canvas);
     else if (e->type () == QEvent::MouseButtonRelease)
       processButtonReleaseForHelpline ((QMouseEvent *) e, doc, canvas);
 #else
     if (e->type () == Event_MouseButtonPress)
       processButtonPressForHelpline ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == Event_MouseMove) 
+    else if (e->type () == Event_MouseMove)
       processMouseMoveForHelpline ((QMouseEvent *) e, doc, canvas);
     else if (e->type () == Event_MouseButtonRelease)
       processButtonReleaseForHelpline ((QMouseEvent *) e, doc, canvas);
@@ -86,7 +87,7 @@ void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 #if QT_VERSION >= 199
     if (e->type () == QEvent::MouseButtonPress)
       processButtonPressEvent ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == QEvent::MouseMove) 
+    else if (e->type () == QEvent::MouseMove)
       processMouseMoveEvent ((QMouseEvent *) e, doc, canvas);
     else if (e->type () == QEvent::MouseButtonRelease)
       processButtonReleaseEvent ((QMouseEvent *) e, doc, canvas);
@@ -95,7 +96,7 @@ void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 #else
     if (e->type () == Event_MouseButtonPress)
       processButtonPressEvent ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == Event_MouseMove) 
+    else if (e->type () == Event_MouseMove)
       processMouseMoveEvent ((QMouseEvent *) e, doc, canvas);
     else if (e->type () == Event_MouseButtonRelease)
       processButtonReleaseEvent ((QMouseEvent *) e, doc, canvas);
@@ -133,7 +134,7 @@ void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
     dragVertHelpline = -1;
   }
   else {
-    dragVertHelpline = canvas->indexOfVertHelpline (xpos); 
+    dragVertHelpline = canvas->indexOfVertHelpline (xpos);
     if (dragVertHelpline != -1 && ctype != C_Horiz) {
       canvas->setCursor (sizeHorCursor);
       ctype = C_Horiz;
@@ -171,7 +172,7 @@ void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me,
 }
 
 void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
-					       GDocument *doc, 
+					       GDocument *doc,
 					       Canvas* canvas) {
   canvas->setCursor (arrowCursor);
   ctype = C_Arrow;
@@ -189,7 +190,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     if (doc->findObjectsContainedIn (selRect.normalize (), olist)) {
       QListIterator<GObject> it (olist);
       doc->setAutoUpdate (false);
-      for (; it.current (); ++it) 
+      for (; it.current (); ++it)
 	doc->selectObject (it.current ());
       state = S_Pick;
       doc->setAutoUpdate (true);
@@ -238,7 +239,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
       else
 	xpos = firstpos.x ();
     }
-    translate (doc, canvas, xpos - firstpos.x (), ypos - firstpos.y (), 
+    translate (doc, canvas, xpos - firstpos.x (), ypos - firstpos.y (),
 	       true, true);
   }
   /**********
@@ -255,7 +256,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     state = S_RotateSelect;
     mode = Handle::HMode_Rotate;
     canvas->snapPositionToGrid (xpos, ypos);
-    rotate (doc, xpos - firstpos.x (), ypos - firstpos.y (), 
+    rotate (doc, xpos - firstpos.x (), ypos - firstpos.y (),
 	    me->x (), me->y (), true);
   }
   else if (state == S_Shear) {
@@ -281,7 +282,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
       doc->unselectAllObjects ();
       state = S_Init;
     }
-    else 
+    else
       state = S_Pick;
     //    doc->handle ().setMode (Handle::HMode_Default);
   }
@@ -291,7 +292,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
   }
   else {
     Rect box = doc->boundingBoxForSelection ();
-    MeasurementUnit unit = 
+    MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
     const char *u = unitToString (unit);
     float x, y, w, h;
@@ -313,7 +314,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
   origbox = doc->boundingBoxForSelection ();
 }
 
-void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc, 
+void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 					   Canvas* canvas) {
   int hmask;
 
@@ -407,7 +408,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       doc->handle ().show (false);
 
       switch (state) {
-      case S_Scale: 
+      case S_Scale:
         {
 	  if (ctype != C_Size) {
 	    ctype = C_Size;
@@ -456,7 +457,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
   }
 }
 
-void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc, 
+void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 					     Canvas* /*canvas*/) {
   int hmask;
   GObject *obj = 0L;
@@ -466,7 +467,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 
   firstpos.x (xpos);
   firstpos.y (ypos);
-  
+
   hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
   bool shiftFlag = me->state () & ShiftButton;
 
@@ -506,7 +507,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
     }
     else {
       obj = doc->findContainingObject (me->x (), me->y ());
-      if (obj) { 
+      if (obj) {
 	if (obj->isSelected ()) {
 
 	  //
@@ -515,7 +516,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 	  if (doc->selectionCount () == 1) {
 	    GObject* selObj = doc->getSelection ().front ();
 	    if (selObj->isA ("GClipart")) {
-	      // the selected object is a clipart, 
+	      // the selected object is a clipart,
 	      // so don't show rotation handles
 	      return;
 	    }
@@ -581,7 +582,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   }
 }
 
-void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc, 
+void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
 					     Canvas* canvas) {
   if (doc->selectionIsEmpty ())
     return;
@@ -615,7 +616,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
   default:
     break;
   }
-  if (dx != 0 || dy != 0) 
+  if (dx != 0 || dy != 0)
     translate (doc, canvas, dx, dy, false, true);
 }
 
@@ -623,7 +624,7 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
 			       float dx, float dy, bool snap,
 			       bool permanent) {
   if (snap) {
-    const Rect& obox = origbox; 
+    const Rect& obox = origbox;
     Rect newbox = canvas->snapTranslatedBoxToGrid (obox.translate (dx, dy));
     if (! (newbox == obox)) {
       dx = newbox.x () - obox.x ();
@@ -633,7 +634,7 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
   if (dx == 0 && dy == 0)  return;
 
   if (permanent) {
-    for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
+    for_each (doc->getSelection ().begin (), doc->getSelection ().end (),
 	      finalize_obj ());
     TranslateCmd *cmd = new TranslateCmd (doc, dx, dy);
     history->addCommand (cmd, true);
@@ -642,7 +643,7 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
     list<GObject*>::iterator it;
     QWMatrix m;
     m.translate (dx, dy);
-    for (it = doc->getSelection ().begin (); 
+    for (it = doc->getSelection ().begin ();
 	 it != doc->getSelection ().end (); it++) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
@@ -650,14 +651,14 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
     }
   }
 
-  MeasurementUnit unit = 
+  MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
   const char *u = unitToString (unit);
   float xval, yval;
   xval = cvtPtToUnit (unit, dx);
   yval = cvtPtToUnit (unit, dy);
 
-  sprintf (msgbuf, "%s [%.3f %s, %.3f %s]", 
+  sprintf (msgbuf, "%s [%.3f %s, %.3f %s]",
 	   I18N ("Translate"), xval, u, yval, u);
   emit modeSelected (msgbuf);
 }
@@ -693,7 +694,7 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
   if (angle>180.0) angle-=360.0;
 
   if (permanent) {
-    for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
+    for_each (doc->getSelection ().begin (), doc->getSelection ().end (),
 	      finalize_obj ());
     RotateCmd *cmd = new RotateCmd (doc, rotCenter, angle);
     history->addCommand (cmd, true);
@@ -704,7 +705,7 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
     m2.rotate (angle);
     m3.translate (rotCenter.x (), rotCenter.y ());
 
-    for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
+    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
 	 it != doc->getSelection ().end (); it++) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
@@ -713,20 +714,20 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
       (*it)->ttransform (m3, true);
     }
   }
-  MeasurementUnit unit = 
+  MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
   const char *u = unitToString (unit);
   float xval, yval;
   xval = cvtPtToUnit (unit, rotCenter.x ());
   yval = cvtPtToUnit (unit, rotCenter.y ());
 
-  sprintf (msgbuf, "%s [%.3f - %.3f %s, %.3f %s]", 
+  sprintf (msgbuf, "%s [%.3f - %.3f %s, %.3f %s]",
 	   I18N ("Rotate"), angle, xval, u, yval, u);
   emit modeSelected (msgbuf);
 }
 
-void SelectionTool::scale (GDocument* doc, Canvas* canvas, 
-			   int mask, float dx, float dy, 
+void SelectionTool::scale (GDocument* doc, Canvas* canvas,
+			   int mask, float dx, float dy,
 			   bool permanent) {
   Rect& r = origbox;
   Rect newbox (origbox);
@@ -736,7 +737,7 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
 
   if (mask & Handle::HPos_Right)
     newbox.right (newbox.right () + dx);
-  if (mask & Handle::HPos_Bottom) 
+  if (mask & Handle::HPos_Bottom)
     newbox.bottom (newbox.bottom () + dy);
   if (mask & Handle::HPos_Left)
     newbox.left (newbox.left () + dx);
@@ -754,7 +755,7 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
     yback = r.top () + r.height () * (1 - sy);
   }
   if (permanent) {
-    for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
+    for_each (doc->getSelection ().begin (), doc->getSelection ().end (),
 	      finalize_obj ());
     ScaleCmd *cmd = new ScaleCmd (doc, oldmask, sx, sy, r);
     history->addCommand (cmd, true);
@@ -765,23 +766,23 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
     m1.translate (-xoff, -yoff);
     m2.scale (sx, sy);
     m3.translate (xback, yback);
-    
-    for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
+
+    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
 	 it != doc->getSelection ().end (); it++) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
-      
+
       (*it)->ttransform (m1);
       (*it)->ttransform (m2);
       (*it)->ttransform (m3, true);
     }
   }
-  sprintf (msgbuf, "%s [%.3f %%, %.3f %%]", 
+  sprintf (msgbuf, "%s [%.3f %%, %.3f %%]",
 	   I18N ("Scale"), sx * 100.0, sy * 100.0);
   emit modeSelected (msgbuf);
 }
 
-void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy, 
+void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
 			   bool permanent) {
   Rect& r = origbox;
   float sx = 0.0, sy = 0.0;
@@ -795,7 +796,7 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
     sy = dy / r.height ();
 
   if (permanent) {
-    for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
+    for_each (doc->getSelection ().begin (), doc->getSelection ().end (),
 	      finalize_obj ());
     ShearCmd *cmd = new ShearCmd (doc, rotCenter, sx, sy);
     history->addCommand (cmd, true);
@@ -806,18 +807,18 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
     m1.translate (-rotCenter.x (), -rotCenter.y ());
     m2.shear (sx, sy);
     m3.translate (rotCenter.x (), rotCenter.y ());
-    
-    for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
+
+    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
 	 it != doc->getSelection ().end (); it++) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
-      
+
       (*it)->ttransform (m1);
       (*it)->ttransform (m2);
       (*it)->ttransform (m3, true);
     }
   }
-  sprintf (msgbuf, "%s [%.3f %%, %.3f %%]", 
+  sprintf (msgbuf, "%s [%.3f %%, %.3f %%]",
 	   I18N ("Shear"), sx * 100.0, sy * 100.0);
   emit modeSelected (msgbuf);
 }
@@ -850,7 +851,7 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
   }
   else {
     Rect box = doc->boundingBoxForSelection ();
-    MeasurementUnit unit = 
+    MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
     const char *u = unitToString (unit);
     float x, y, w, h;

@@ -105,7 +105,7 @@
 #include <ktoolbarradiogroup.h>
 #endif
 
-#include "koPageLayoutDia.h"
+#include "PageLayoutDia.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,7 +405,7 @@ void KIllustrator::initToolBars () {
 			85);
   QComboBox* combo = toolbar->getCombo (10);
   QDoubleValidator *val = new QDoubleValidator (combo);
-  val->setRange (0.0, 1000.0, 1); 
+  val->setRange (0.0, 1000.0, 1);
   combo->setValidator (val);
   for (int i = 0; i < (int) zFactors.size (); i++) {
     if (zFactors[i] == 1.0) {
@@ -929,7 +929,7 @@ void KIllustrator::menuCallback (int item) {
              this);
      if (!url.isLocalFile())
          KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
-     QString fname = url.path(); 
+     QString fname = url.path();
 #else
      QString fname = KFileDialog::getOpenFileName
 	     ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"

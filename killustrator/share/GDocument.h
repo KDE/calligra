@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -40,7 +40,7 @@
 #include "GObject.h"
 #include "GLayer.h"
 
-#include "koPageLayoutDia.h"
+#include "PageLayoutDia.h"
 
 #define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
 
@@ -68,10 +68,10 @@ public:
   virtual void setModified (bool flag = true);
   bool isModified () const { return modifyFlag; }
 
-  void drawContents (QPainter& p, bool withBasePoints = false, 
+  void drawContents (QPainter& p, bool withBasePoints = false,
 		     bool outline = false);
   void drawContentsInRegion (QPainter& p, const Rect& r,
-			     bool withBasePoints = false, 
+			     bool withBasePoints = false,
 			     bool outline = false);
 
   void invalidateClipRegions ();
@@ -131,7 +131,7 @@ public:
   GObject* findContainingObject (int x, int y);
 
   bool findNearestObject (const char* otype, int x, int y,
-			  float max_dist, GObject*& obj, int& pidx, 
+			  float max_dist, GObject*& obj, int& pidx,
 			  bool all = false);
 
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
@@ -142,7 +142,7 @@ public:
   bool insertFromXml (istream& is, std::list<GObject*>& newObjs);
 
   Handle& handle () { return selHandle; }
-  
+
   unsigned int findIndexOfObject (GObject *obj);
   void insertObjectAtIndex (GObject* obj, unsigned int idx);
   void moveObjectToIndex (GObject* obj, unsigned int idx);
@@ -155,22 +155,22 @@ public:
   void setGrid (float dx, float dy, bool snap);
   void getGrid (float& dx, float& dy, bool& snap);
 
-  void setHelplines (const std::vector<float>& hlines, 
+  void setHelplines (const std::vector<float>& hlines,
                      const std::vector<float>& vlines,
 		     bool snap);
   void getHelplines (std::vector<float>& hlines, std::vector<float>& vlines,
 		     bool& snap);
-  
+
   void setComment(QString s);
   void getComment(QString &s);
-  
+
   void setKeywords(QString s);
   void getKeywords(QString &s);
 
 protected:
   void updateHandle ();
   bool parseBody (XmlReader& xml, std::list<GObject*>& newObjs, bool markNew);
-  
+
 public slots:
   void objectChanged ();
   void objectChanged (const Rect& r);
@@ -206,4 +206,4 @@ protected:
   std::vector<float> hHelplines, vHelplines;
 };
 
-#endif 
+#endif
