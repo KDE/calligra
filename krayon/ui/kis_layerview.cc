@@ -35,7 +35,6 @@
 #include <qstyle.h>
 
 #include <kstandarddirs.h>
-#include <iostream>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kiconloader.h>
@@ -51,7 +50,6 @@
 
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
-using namespace std;
 const int iheight = 32;
 
 KisLayerView::KisLayerView( KisDoc *doc, QWidget *parent, const char *name )
