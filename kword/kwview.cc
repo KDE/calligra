@@ -2719,10 +2719,15 @@ void KWView::extraSpelling()
     m_spell.macroCmdSpellCheck=0L;
 
     m_spell.textFramesets.clear();
-     for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
+    // Ask each frameset to complete the list of text framesets.
+    // This way table cells are checked too.
+    // ## TODO replace this with 'KWFrameSet::nextTextFrameSet( KWTextFrameSet * )'
+    // to be able to iterate over a changing list of framesets - as needed by background
+    // spell checking in KWDocument.
+    for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
         KWFrameSet *frameset = m_doc->frameSet( i );
         frameset->addTextFrameSets(m_spell.textFramesets);
-     }
+    }
     startKSpell();
 }
 
@@ -2731,6 +2736,7 @@ void KWView::extraAutoFormat()
     m_doc->getAutoFormat()->readConfig();
     KoAutoFormatDia dia( this, 0, m_doc->getAutoFormat() );
     dia.exec();
+    m_doc->startBackgroundSpellCheck(); // will do so if enabled
 }
 
 void KWView::extraStylist()
@@ -3664,20 +3670,18 @@ void KWView::spellCheckerReady()
         m_spell.spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;
 
-        Qt3::QTextParag * p = textfs->textDocument()->firstParag();
-        QString text;
+        QString text = textfs->textDocument()->plainText();
         bool textIsEmpty=true;
-        while ( p ) {
-            QString str = p->string()->toString();
-            str.truncate( str.length() - 1 ); // damn trailing space
-            if(textIsEmpty)
-                textIsEmpty=str.isEmpty();
-            text += str + '\n';
-            p = p->next();
-        }
+        // Determine if text has any non-space character, otherwise there's nothing to spellcheck
+        for ( uint i = 0 ; i < text.length() ; ++ i )
+            if ( !text[i].isSpace() ) {
+                textIsEmpty = false;
+                break;
+            }
         if(textIsEmpty)
             continue;
-        text += '\n';
+        text += '\n'; // end of last paragraph
+        text += '\n'; // empty line required by kspell
         m_spell.kspell->check( text );
         return;
     }
@@ -3774,12 +3778,12 @@ void KWView::spellCheckerFinished()
     KSpell::spellStatus status = m_spell.kspell->status();
     delete m_spell.kspell;
     m_spell.kspell = 0;
-    bool kspellNoConfigured=false;
+    bool kspellNotConfigured=false;
     if (status == KSpell::Error)
     {
         KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
                                       "Please make sure you have ISpell properly configured and in your PATH."));
-        kspellNoConfigured=true;
+        kspellNotConfigured=true;
     }
     else if (status == KSpell::Crashed)
     {
@@ -3802,7 +3806,7 @@ void KWView::spellCheckerFinished()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );
-    if(kspellNoConfigured)
+    if(kspellNotConfigured)
     {
         KWConfig configDia( this );
         configDia.openPage( KWConfig::KW_KSPELL);

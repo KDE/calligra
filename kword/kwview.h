@@ -261,12 +261,6 @@ public slots:
     void newFirstIndent( double _firstIndent);
     void newRightIndent( double _rightIndent);
 
-    void spellCheckerReady();
-    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
-    void spellCheckerCorrected( const QString &, const QString &, unsigned int);
-    void spellCheckerDone( const QString & );
-    void spellCheckerFinished( );
-
     void clipboardDataChanged();
     void tabListChanged( const KoTabulatorList & tabList );
 
@@ -317,7 +311,14 @@ public slots:
 
     void refreshAllVariable();
 
-    // end of slots
+    // end of public slots
+
+protected slots:
+    void spellCheckerReady();
+    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
+    void spellCheckerCorrected( const QString &, const QString &, unsigned int);
+    void spellCheckerDone( const QString & );
+    void spellCheckerFinished( );
 
 protected:
     void addVariableActions( int type, const QStringList & texts,

@@ -39,6 +39,7 @@ class KMacroCommand;
 class KoDocumentEntry;
 class QPainter;
 class KSpellConfig;
+class KSpell;
 class KoAutoFormat;
 class KCommand;
 class KCommandHistory;
@@ -56,7 +57,7 @@ class QRect;
 namespace KFormula {
     class Document;
 }
-
+namespace Qt3 { class QTextParag; }
 
 #include <koDocument.h>
 #include <koGlobal.h>
@@ -347,10 +348,8 @@ public:
     int getMailMergeRecord() const;
     void setMailMergeRecord( int r );
 
-#if 0
-    bool onLineSpellCheck() const { return m_onlineSpellCheck; }
-    void setOnLineSpellCheck( bool b ) { m_onlineSpellCheck = b; }
-#endif
+    bool backgroundSpellCheckEnabled() const { return m_bSpellCheckEnabled; }
+    void enableBackgroundSpellCheck( bool b );
 
     bool canRemovePage( int num );
 
@@ -497,7 +496,6 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-
     int undoRedoLimit();
     void setUndoRedoLimit(int _val);
 
@@ -527,12 +525,25 @@ public slots:
     void slotRepaintAllViews() { repaintAllViews( false ); }
     void slotRepaintVariable();
 
+    /**
+     * Starts the background spell-checking, asynchronously, if enabled.
+     */
+    void startBackgroundSpellCheck();
+
 protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
 
+    void spellCheckerReady();
+    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
+    void spellCheckerDone( const QString & );
+    void spellCheckerFinished( );
+    void spellCheckNextParagraph();
+
 protected:
+    void nextParagraphNeedingCheck();
+
     KoView* createViewInstance( QWidget* parent, const char* name );
     virtual bool saveChildren( KoStore *_store, const QString &_path );
 
@@ -601,17 +612,33 @@ private:
     // in, this variable reflects that value.
     int m_syntaxVersion;
 
+    // KSpell config, used for both interactive and background spellcheck
     KSpellConfig *m_pKSpellConfig;
+    // Structure holding the background spellcheck data
+    struct KWBGSpell {
+        KWBGSpell() : kspell(0L), currentTextFrameSet(0L), currentParag(0L) {}
+
+        // KSpell object for the background spellcheck
+	KSpell *kspell;
+        // The text frameset currently being checked
+	// TODO change current text frameset, and implementing nextTextFrameSet, see kwview.cc
+        // TODO implement "skip unchanged framesets" and "stop timer after all checked and until
+        // user types something again"
+        KWTextFrameSet *currentTextFrameSet;
+        // The paragraph currently being checked
+        Qt3::QTextParag *currentParag;
+    };
+    KWBGSpell m_bgSpell;
 
     QFont m_defaultFont;
     bool m_headerVisible, m_footerVisible;
     bool m_viewFormattingChars;
     bool m_viewFrameBorders;
     bool m_bShowRuler;
+    bool m_bSpellCheckEnabled;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
     bool m_bShowDocStruct;
-    //bool m_onlineSpellCheck;
     bool m_hasTOC;
 
     // The document that is used by all formulas

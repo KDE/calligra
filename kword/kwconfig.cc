@@ -131,19 +131,23 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Spelling"));
 
-    QGridLayout *grid1 = new QGridLayout(tmpQGroupBox, 5, 1, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout(tmpQGroupBox, 6, 1, KDialog::marginHint(), KDialog::spacingHint());
     grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
-    grid1->setRowStretch( 4, 10 );
+    grid1->setRowStretch( 5, 10 );
     _spellConfig = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
     grid1->addWidget(_spellConfig,1,0);
 
     _dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
-    //QWhatsThis::add( _dontCheckUpperWord, i18n("") ); // What does this do??
+    QWhatsThis::add( _dontCheckUpperWord, i18n("This option tells the spell-checker to accept words that are written in uppercase, such as KDE.") );
     grid1->addWidget(_dontCheckUpperWord,2,0);
 
     _dontCheckTitleCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
-    //QWhatsThis::add( _dontCheckTitleCase, i18n("")); // I honestly don't know what this does :<
+    QWhatsThis::add( _dontCheckTitleCase, i18n("This option tells the spell-checker to accept words starting with an uppercase letter, such as United States."));
     grid1->addWidget(_dontCheckTitleCase,3,0);
+
+    cbBackgroundSpellCheck=new QCheckBox(i18n("Show misspelled words in document"),tmpQGroupBox);
+    cbBackgroundSpellCheck->setChecked( m_pView->kWordDocument()->backgroundSpellCheckEnabled() );
+    grid1->addWidget(cbBackgroundSpellCheck,4,0);
 
     if( config->hasGroup("KSpell kword") )
     {
@@ -164,15 +168,18 @@ void ConfigureSpellPage::apply()
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
 
-  m_pView->kWordDocument()->setKSpellConfig(*_spellConfig);
+  KWDocument* doc = m_pView->kWordDocument();
+  doc->setKSpellConfig(*_spellConfig);
 
   bool state=_dontCheckUpperWord->isChecked();
   config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
-  m_pView->kWordDocument()->setDontCheckUpperWord(state);
+  doc->setDontCheckUpperWord(state);
 
   state=_dontCheckTitleCase->isChecked();
   config->writeEntry("KSpell_dont_check_title_case",(int)state);
-  m_pView->kWordDocument()->setDontCheckTitleCase(state);
+  doc->setDontCheckTitleCase(state);
+
+  doc->enableBackgroundSpellCheck( cbBackgroundSpellCheck->isChecked() );
 }
 
 void ConfigureSpellPage::slotDefault()

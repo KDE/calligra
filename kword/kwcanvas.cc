@@ -1114,14 +1114,14 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
         // No frame was moved or resized.
         if ( e->state() & ControlButton )
         {
-            KWFrame * frame = m_doc->frameUnderMouse( nPoint );
+            //KWFrame * frame = m_doc->frameUnderMouse( nPoint );
             if ( m_ctrlClickOnSelectedFrame /* && frame->isSelected() */ ) // kervel: why the && ?
             {
-            KWFrame *f = m_doc->frameUnderMouse( nPoint,0L,true );
-        if (e->state() & ShiftButton)
+                KWFrame *f = m_doc->frameUnderMouse( nPoint,0L,true );
+                if (e->state() & ShiftButton)
                     selectAllFrames( false );
-        if (f)
-            selectFrame(f,true);
+                if (f)
+                    selectFrame(f,true);
                 emit frameSelectedChanged();
             }
         }

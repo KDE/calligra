@@ -50,6 +50,8 @@
 
 #include <kotextobject.h>
 #include <kspell.h>
+#include <qtimer.h>
+#include <KWordDocIface.h>
 
 #include <KWordDocIface.h>
 //#define DEBUG_PAGES
@@ -147,7 +149,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bShowDocStruct = true;
     m_bDontCheckUpperWord = false;
     m_bDontCheckTitleCase = false;
-    //m_onlineSpellCheck = false;
+    m_bSpellCheckEnabled = false;
 
     m_lastViewMode="ModeNormal";
 
@@ -208,6 +210,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
     KWStyle * standardStyle = new KWStyle( "Standard" ); // This gets translated later on
+    standardStyle->format().setFont( m_defaultFont );
     addStyleTemplate( standardStyle );
 
     if ( name )
@@ -282,6 +285,10 @@ void KWDocument::initConfig()
       m_zoom = config->readNumEntry( "Zoom", 100 );
       m_bShowDocStruct = config->readBoolEntry("showDocStruct",true);
       m_lastViewMode= config->readEntry( "viewmode","ModeNormal");
+
+      // Default is false for spellcheck, but the spell-check config dialog
+      // should write out "true" when the user configures spell checking.
+      m_bSpellCheckEnabled = config->readBoolEntry( "SpellCheck", false );
   }
   else
       m_zoom = 100;
@@ -309,6 +316,7 @@ void KWDocument::saveConfig()
     config->writeEntry( "Zoom", m_zoom );
     config->writeEntry( "showDocStruct",m_bShowDocStruct);
     config->writeEntry( "viewmode",m_lastViewMode);
+    config->writeEntry( "SpellCheck", m_bSpellCheckEnabled );
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
@@ -1393,6 +1401,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     setModified( false );
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+
+    startBackgroundSpellCheck();
+
     return true;
 }
 
@@ -2782,6 +2793,9 @@ void KWDocument::removeFrameSet( KWFrameSet *f )
 {
     emit sig_terminateEditing( f );
     m_lstFrameSet.take( m_lstFrameSet.find(f) );
+    if ( m_bgSpell.currentTextFrameSet == f )
+        // TODO nextTextFrameSet instead of:
+        m_bgSpell.currentTextFrameSet = 0L;
     setModified( true );
 }
 
@@ -3221,6 +3235,169 @@ void KWDocument::refreshGUIButton()
 {
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->initGUIButton();
+}
+
+void KWDocument::enableBackgroundSpellCheck( bool b )
+{
+    m_bSpellCheckEnabled = b;
+    startBackgroundSpellCheck(); // will enable or disable
+}
+
+void KWDocument::startBackgroundSpellCheck()
+{
+    //kdDebug() << "KWDocument::startBackgroundSpellCheck" << endl;
+    if ( !m_bSpellCheckEnabled )
+        return;
+    m_bgSpell.currentTextFrameSet = textFrameSet(0); //m_lstFrameSet.getFirst();
+    m_bgSpell.currentParag = m_bgSpell.currentTextFrameSet->textDocument()->firstParag();
+    nextParagraphNeedingCheck();
+    //kdDebug() << "fs=" << m_bgSpell.currentTextFrameSet << " parag=" << m_bgSpell.currentParag << endl;
+
+    if ( !m_bgSpell.currentTextFrameSet || !m_bgSpell.currentParag ) {
+        // Might be better to launch again upon document modification (key, pasting, etc.) instead of right now
+        //kdDebug() << "KWDocument::startBackgroundSpellCheck nothing to check this time." << endl;
+        QTimer::singleShot( 1000, this, SLOT( startBackgroundSpellCheck() ) );
+        return;
+    }
+
+    bool needsWait = false;
+    if ( !m_bgSpell.kspell ) // reuse if existing
+    {
+        m_bgSpell.kspell = new KSpell( 0L, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_pKSpellConfig );
+
+        needsWait = true; // need to wait for ready()
+        connect( m_bgSpell.kspell, SIGNAL( death() ),
+                 this, SLOT( spellCheckerFinished() ) );
+        connect( m_bgSpell.kspell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int ) ),
+                 this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int ) ) );
+        connect( m_bgSpell.kspell, SIGNAL( done( const QString & ) ),
+                 this, SLOT( spellCheckerDone( const QString & ) ) );
+    }
+    m_bgSpell.kspell->setIgnoreUpperWords( m_bDontCheckUpperWord );
+    m_bgSpell.kspell->setIgnoreTitleCase( m_bDontCheckTitleCase );
+    // TODO 'ignore list' stuff
+
+    if ( !needsWait )
+        spellCheckerReady();
+}
+
+void KWDocument::spellCheckerReady()
+{
+    //kdDebug() << "KWDocument::spellCheckerReady" << endl;
+    QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
+}
+
+// Input: currentTextFrameSet non-null, and currentParag set to the last parag checked
+// Output: currentTextFrameSet+currentParag set to next parag to check. Both 0 if end.
+void KWDocument::nextParagraphNeedingCheck()
+{
+    //kdDebug() << "KWDocument::nextParagraphNeedingCheck" << endl;
+    if ( !m_bgSpell.currentTextFrameSet ) {
+        m_bgSpell.currentParag = 0L;
+        return;
+    }
+    Qt3::QTextParag* parag = m_bgSpell.currentParag;
+    if ( parag && parag->next() )
+        parag = parag->next();
+    // Skip any unchanged parags
+    while ( parag && !parag->string()->needsSpellCheck() )
+        parag = parag->next();
+    while ( parag && parag->length() <= 1 ) // empty parag
+    {
+        parag->string()->setNeedsSpellCheck( false ); // nothing to check
+        while ( parag && !parag->string()->needsSpellCheck() ) // keep looking
+            parag = parag->next();
+    }
+    if ( parag )
+        m_bgSpell.currentParag = parag;
+    else
+        m_bgSpell.currentParag = 0L; // ###
+#if 0
+    m_bgSpell.currentTextFrameSet = nextTextFrameSet( currentTextFrameSet );
+    if ( m_bgSpell.currentTextFrameSet )
+        m_bgSpell.currentParag = m_bgSpell.currentTextFrameSet->textDocument()->firstParag();
+    else
+        m_bgSpell.currentParag = 0L;
+#endif
+}
+
+void KWDocument::spellCheckNextParagraph()
+{
+    // TODO handle deletion of paragraphs.... signal from kotextobjects?
+    kdDebug() << "KWDocument::spellCheckNextParagraph" << endl;
+
+    nextParagraphNeedingCheck();
+    kdDebug() << "fs=" << m_bgSpell.currentTextFrameSet << " parag=" << m_bgSpell.currentParag << endl;
+    if ( !m_bgSpell.currentTextFrameSet || !m_bgSpell.currentParag )
+    {
+        kdDebug() << "KWDocument::spellCheckNextParagraph scheduling restart" << endl;
+        // We arrived to the end of the paragraphs. Jump to startBackgroundSpellCheck,
+        // it will check if we still have something to do.
+        QTimer::singleShot( 100, this, SLOT( startBackgroundSpellCheck() ) );
+        return;
+    }
+    // First remove any misspelled format from the paragraph
+    // - otherwise we'd never notice words being ok again :)
+    KoTextStringChar *ch = m_bgSpell.currentParag->at( 0 );
+    KoTextFormat format( *static_cast<KoTextFormat *>(ch->format()) );
+    format.setMisspelled( false );
+    m_bgSpell.currentParag->setFormat( 0, m_bgSpell.currentParag->length()-1, &format, true, QTextFormat::Misspelled );
+
+    kdDebug() << "KWDocument::spellCheckNextParagraph spell checking parag " << m_bgSpell.currentParag->paragId() << endl;
+    // Now spell-check that paragraph
+    QString text = m_bgSpell.currentParag->string()->toString();
+    text.remove( text.length() - 1, 1 ); // trailing space
+    m_bgSpell.kspell->check( text, false );
+}
+
+void KWDocument::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
+{
+    kdDebug() << "KWDocument::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    KWTextFrameSet * fs = m_bgSpell.currentTextFrameSet;
+    Q_ASSERT( fs );
+    if ( !fs ) return;
+    if ( !m_bgSpell.currentParag ) return;
+    kdDebug() << "KWDocument::spellCheckerMisspelling parag=" << m_bgSpell.currentParag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+
+    // TODO use Misspelled format instead
+    //fs->highlightPortion( m_bgSpell.currentParag, pos, old.length(), 0L /*m_gui->canvasWidget()*/ );
+    KoTextStringChar *ch = m_bgSpell.currentParag->at( pos );
+    KoTextFormat format( *static_cast<KoTextFormat *>(ch->format()) );
+    format.setMisspelled( true );
+    m_bgSpell.currentParag->setFormat( pos, old.length(), &format, true, QTextFormat::Misspelled );
+    m_bgSpell.currentParag->setChanged( true );
+    // TODO delay this, so that repaints are 'compressed'
+    slotRepaintChanged( m_bgSpell.currentTextFrameSet );
+}
+
+void KWDocument::spellCheckerDone( const QString & )
+{
+    kdDebug() << "KWDocument::spellCheckerDone" << endl;
+    m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
+    // Done checking the current paragraph, schedule the next one
+    QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
+}
+
+void KWDocument::spellCheckerFinished()
+{
+    kdDebug() << "--- KWDocument::spellCheckerFinished ---" << endl;
+    KSpell::spellStatus status = m_bgSpell.kspell->status();
+    delete m_bgSpell.kspell;
+    m_bgSpell.kspell = 0;
+    m_bgSpell.currentParag = 0;
+    m_bgSpell.currentTextFrameSet = 0;
+    if (status == KSpell::Error)
+    {
+        // KSpell badly configured... what to do?
+        kdWarning() << "ISpell/ASpell not configured correctly." << endl;
+        return;
+    }
+    else if (status == KSpell::Crashed)
+    {
+        kdWarning() << "ISpell/ASpell seems to have crashed." << endl;
+        return;
+    }
+    // Normal death - nothing to do
 }
 
 #include "kwdoc.moc"
