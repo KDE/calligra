@@ -184,7 +184,8 @@ class KoTemplateChooseDia : public KDialogBase
     private:
 
 	KoTemplateChooseDiaPrivate *d;
-
+	
+	QString descriptionText(const QString &name, const QString &description);
 	void setupDialog();
 	void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);
 	void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);

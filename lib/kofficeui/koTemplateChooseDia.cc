@@ -281,7 +281,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     layout->addWidget(d->m_jwidget,0,0);	
 
     d->boxdescription = new QVGroupBox(
-	    i18n("Selected Template: Empty Document"),
+	    i18n("Selected Template"),
 	    widgetbase,
 	    "boxdescription");
     layout->addWidget(d->boxdescription, 1, 0 );
@@ -338,7 +338,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 
     d->textedit = new KTextEdit( d->boxdescription );
     d->textedit->setReadOnly(1);
-    d->textedit->setText("Creates an empty document");
+    d->textedit->setText(descriptionText(i18n("Empty Document"), i18n("Creates an empty document")));
     d->textedit->setLineWidth(0);
     d->textedit->setMaximumHeight(50);
 
@@ -450,8 +450,10 @@ void KoTemplateChooseDia::currentChanged( QIconViewItem * item)
 	QIconView* canvas =  item->iconView();
 
 	// set text in the textarea
-	d->boxdescription->setTitle(  i18n("Selected Template: %1").arg(item->text()) );
-	d->textedit->setText( ((KoTCDIconViewItem *) item)->getDescr() );
+	d->textedit->setText( descriptionText(
+				item->text(),
+				((KoTCDIconViewItem *) item)->getDescr()
+				));
 
 	// set the icon in the canvas selected
 	if (canvas)
@@ -554,12 +556,23 @@ bool KoTemplateChooseDia::collectInfo()
     return false;
 }
 
-
+/*================================================================*/
+//private
+QString KoTemplateChooseDia::descriptionText(const QString &name, const QString &description)
+{
+	QString descrText(i18n("Name : "));
+	descrText += name;
+	descrText += "\n";
+	descrText += i18n("Description : ");
+	if (description.isEmpty())
+	      descrText += i18n("No description available");
+	else
+              descrText += description;
+	return descrText;
+}
 
 /*================================================================*/
 /*================================================================*/
-
-
 
 QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group , QString name)
 {
