@@ -117,7 +117,7 @@ void KPStartEndLine::load( const QDomElement &element )
 
 void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element )
 {
-    kdDebug()<<"void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element ) :"<<attr<<endl;
+    //kdDebug()<<"void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element ) :"<<attr<<endl;
 
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
@@ -162,7 +162,6 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
 
 void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto ) const
 {
-    //FIXME
     if ( lineBegin != L_NORMAL )
     {
         styleobjectauto.addProperty( "draw:marker-start", saveOasisMarkerStyle( mainStyles, lineBegin ) );
@@ -340,7 +339,6 @@ void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
     xmlWriter.addAttributePt( "svg:y", orig.y() );
     xmlWriter.addAttributePt( "svg:width", ext.width() );
     xmlWriter.addAttributePt( "svg:height", ext.height() );
-    //FIXME create style (protect object etc)
 
     if ( angle!=0.0 )
     {
@@ -1649,7 +1647,7 @@ QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
 
 void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
-    kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
+    //kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
     KPObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
