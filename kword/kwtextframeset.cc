@@ -402,7 +402,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     {
         QPoint cPoint = viewMode->normalToView( nPoint );     // from normal to view contents
         // very small clipping around the cursor
-        QRect clip = QRect( cPoint.x() - 5, cPoint.y(), 10, h );
+        QRect clip( cPoint.x() - 5, cPoint.y(), 10, h );
 
         //kdDebug(32002) << "KWTextFrameSet::drawCursor "
         //               << " cPoint=(" << cPoint.x() << "," << cPoint.y() << ")  h=" << h << endl;
@@ -411,6 +411,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         QRegion reg = frameClipRegion( p, frame, clip, viewMode, true );
         if ( !reg.isEmpty() )
         {
+            bool wasChanged = cursor->parag()->hasChanged();
             cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
             p->save();
 
@@ -430,6 +431,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             textdoc->drawParag( p, cursor->parag(), iPoint.x() - 5, iPoint.y(), 10, h,
                                 pix, cg, cursorVisible, cursor );
             p->restore();
+            cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
         }
     }
     m_currentDrawnCanvas = 0L;
