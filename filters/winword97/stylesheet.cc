@@ -1,7 +1,7 @@
 #include <stylesheet.h>
 #include <stylesheet.moc>
 
-StyleSheet::StyleSheet(const myFile &) : QObject() {
+StyleSheet::StyleSheet(const myFile &m) : QObject(), main(m) {
 }
 
 StyleSheet::~StyleSheet() {

@@ -30,6 +30,7 @@ private:
     void readFIB();
     const PCD readPCD(const long &pos);
     const bool locatePieceTbl();
+    const bool checkBinTables();
 
     const short char2uni(const unsigned char c);
     inline const unsigned short read16(const unsigned char *d);
@@ -41,7 +42,7 @@ private:
     QString _part;
     QStrList mainParas;
 
-    // piece table
+    // piece table (pt)
     long ptCPBase, ptSize, ptCount, ptPCDBase;
 
     static const short CP2UNI[32];

@@ -19,6 +19,10 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
     fib=0L;
     readFIB();
 
+    if(fib->fEncrypted==1) {
+        kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::WinWordDoc(): Sorry - the document is encrypted.");
+        success=false;
+    }
     if(fib->fWhichTblStm==0)
         table=table0Stream;
     else
@@ -50,32 +54,15 @@ WinWordDoc::~WinWordDoc() {
 
 const bool WinWordDoc::convert() {
 
-    QString p;
+    if(!success || ready)
+        return false;
+
+    //QString p;
 
     if(!locatePieceTbl())
         return false;
-
-    PCD pcd=readPCD(ptPCDBase);
-    kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::convert(): pcd[0].fc");
-    kdebug(KDEBUG_ERROR, 31000, (const char*)QString::number((long)pcd.fc));
-    pcd=readPCD(ptPCDBase+8);
-    kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::convert(): pcd[1].fc");
-    kdebug(KDEBUG_ERROR, 31000, (const char*)QString::number((long)pcd.fc));
-
-    kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::convert(): main.length");
-    kdebug(KDEBUG_ERROR, 31000, (const char*)QString::number((long)main.length));
-
-    pcd=readPCD(ptPCDBase);
-    QString r="WinWordDoc::convert(): String(0-1):  ";
-    for(int i=0; i<20; ++i) {
-        if(pcd.unicode) {
-            r+=QChar(read16(main.data+pcd.fc+i));
-            ++i;
-        }
-        else
-            r+=QChar(char2uni(*(main.data+pcd.fc+i)));
-    }
-    kdebug(KDEBUG_INFO, 31000, (const char*)r.latin1());
+    if(!checkBinTables())
+        return false;
 
     if(fib->fComplex==0) {
     }
@@ -140,7 +127,6 @@ void WinWordDoc::FIBInfo() {
         str[j]=*(main.data+i);
 
     kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(str));
-    kdebug(KDEBUG_INFO, 31000, "--------------------------");
     delete [] str;
     kdebug(KDEBUG_INFO, 31000, "WinWordDoc::FIBInfo() - end -----------------");
 }
@@ -213,41 +199,40 @@ const bool WinWordDoc::locatePieceTbl() {
     QString r;
     bool found=false;
 
-    while(*(table.data+tmp)==1 && tmp<static_cast<long>(fib->fcClx+fib->lcbClx)) {
+    while(*(table.data+tmp)==1 && tmp<static_cast<long>(fib->fcClx+fib->lcbClx))
         tmp+=read16(table.data+tmp+1)+3;
-        r="WinWordDoc::locatePieceTbl(): tmp(grpprl): ";
-        r+=QString::number((long)tmp);
-        kdebug(KDEBUG_INFO, 31000, (const char*)r);
-    }
+
     if(*(table.data+tmp)==2) {
         kdebug(KDEBUG_INFO, 31000, "WinWordDoc::locatePieceTbl(): Found pclfpcd :)");
+        found=true;
         ptCPBase=tmp+1;
         ptSize=read32(table.data+ptCPBase);
         ptCPBase+=4;
-
-        r="WinWordDoc::locatePieceTbl(): ptCPBase: ";
-        r+=QString::number((long)ptCPBase);
-        kdebug(KDEBUG_INFO, 31000, (const char*)r);
-        r="WinWordDoc::locatePieceTbl(): ptSize: ";
-        r+=QString::number((long)ptSize);
-        kdebug(KDEBUG_INFO, 31000, (const char*)r);
-
-        if((ptSize-4)%12!=0)
+        if((ptSize-4)%12!=0) {
             kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::locatePieceTbl(): Sumting Wong (inside joke(tm))");
+            found=false;
+        }
         ptCount=static_cast<long>((ptSize-4)/12);
         ptPCDBase=ptCount*4+4+ptCPBase;
-
-        r="WinWordDoc::locatePieceTbl(): ptPCDBase: ";
-        r+=QString::number((long)ptPCDBase);
-        kdebug(KDEBUG_INFO, 31000, (const char*)r);
-
-        found=true;
     }
     else {
         success=false;
         kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::locatePieceTbl(): Can't locate the piece table");
     }
     return found;
+}
+
+const bool WinWordDoc::checkBinTables() {
+
+    bool notCompressed=false;
+    if(fib->pnFbpChpFirst==0xfffff && fib->pnFbpPapFirst==0xfffff &&
+       fib->pnFbpLvcFirst==0xfffff)
+        notCompressed=true;
+    else {
+        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::checkBinTables(): Sigh! It's compressed...");
+        success=false;
+    }
+    return notCompressed;
 }
 
 const short WinWordDoc::char2uni(const unsigned char c) {
