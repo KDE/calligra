@@ -3330,7 +3330,7 @@ void KSpreadView::nextTable(){
         return;
     }
     m_pCanvas->closeEditor();
-    setActiveTable( t,false );
+    setActiveTable( t );
 
 }
 
@@ -3343,7 +3343,7 @@ void KSpreadView::previousTable(){
         return;
     }
     m_pCanvas->closeEditor();
-    setActiveTable( t,false );
+    setActiveTable( t );
 
 }
 void KSpreadView::firstTable(){
@@ -3355,7 +3355,7 @@ void KSpreadView::firstTable(){
         return;
     }
     m_pCanvas->closeEditor();
-    setActiveTable( t,false );
+    setActiveTable( t );
 
 }
 void KSpreadView::lastTable(){
@@ -3367,7 +3367,7 @@ void KSpreadView::lastTable(){
         return;
     }
     m_pCanvas->closeEditor();
-    setActiveTable( t,false );
+    setActiveTable( t );
 
 }
 
