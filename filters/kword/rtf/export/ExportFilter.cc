@@ -836,7 +836,7 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
         else if ( ch == 0x200c ) escapedText += "\\zwnj ";
         else if ( ch == 0x200d ) escapedText += "\\zwj ";
         else if ( ch == 0x200e ) escapedText += "\\ltrmark ";
-        else if ( ch == 0x200f ) escapedText += "\\rtrmark ";
+        else if ( ch == 0x200f ) escapedText += "\\rtlmark ";
         else if ( ch == 0x2013 ) escapedText += "\\endash ";
         else if ( ch == 0x2014 ) escapedText += "\\emdash ";
         else if ( ch == 0x2018 ) escapedText += "\\lquote ";
