@@ -637,19 +637,19 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
             if ( paragLayout.margins[ QStyleSheetItem::MarginBottom ] == 0 )
                 paragLayout.margins[ QStyleSheetItem::MarginBottom ] = bottomBorder;
             lastParag->setParagLayout( paragLayout );
-            //lastParag->setAlignment(Qt::AlignAuto);
+            //lastParag->setAlign(Qt::AlignAuto);
 
             if(e.hasAttribute(attrAlign))
             {
                 int tmpAlign=e.attribute( attrAlign ).toInt();
                 if(tmpAlign==1 || tmpAlign==0 /* a kpresenter version I think a cvs version saved leftAlign = 0 for header/footer */)
-                    lastParag->setAlignment(Qt::AlignLeft);
+                    lastParag->setAlign(Qt::AlignLeft);
                 else if(tmpAlign==2)
-                    lastParag->setAlignment(Qt::AlignRight);
+                    lastParag->setAlign(Qt::AlignRight);
                 else if(tmpAlign==4)
-                    lastParag->setAlignment(Qt::AlignCenter);
+                    lastParag->setAlign(Qt::AlignCenter);
                 else if(tmpAlign==8)
-                    lastParag->setAlignment(Qt::AlignJustify);
+                    lastParag->setAlign(Qt::AlignJustify);
                 else
                     kdDebug(33001)<<"Error in e.attribute( attrAlign ).toInt()\n";
             }
@@ -1727,8 +1727,8 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
     KoTextView::updateUI( updateFormat, force  );
     // Paragraph settings
     KoTextParag * parag = static_cast<KoTextParag*>( cursor()->parag());
-    if ( m_paragLayout.alignment != parag->alignment() || force ) {
-        m_paragLayout.alignment = parag->alignment();
+    if ( m_paragLayout.alignment != parag->resolveAlignment() || force ) {
+        m_paragLayout.alignment = parag->resolveAlignment();
         m_canvas->getView()->alignChanged(  m_paragLayout.alignment );
     }
 
@@ -2281,7 +2281,7 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
         return;
     QDomElement paragraph=doc.createElement(tagP);
     int tmpAlign=0;
-    switch(parag->alignment())
+    switch(parag->resolveAlignment())
     {
     case Qt::AlignLeft:
         tmpAlign=1;
