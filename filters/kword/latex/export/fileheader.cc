@@ -194,7 +194,7 @@ void FileHeader::generateLatinPreambule(QTextStream &out)
 		case TC_MORE:
 			out << "";
 			break;
-		case TC_NONE;
+		case TC_NONE:
 			break;
 	}
 	/* The font and the type of the doc. can not be changed, hmm ? */
@@ -266,7 +266,7 @@ void FileHeader::generateUnicodePreambule(QTextStream &out)
 		case TC_MORE:
 			out << "";
 			break;
-		case TC_NONE;
+		case TC_NONE:
 			break;
 	}
 	/* The font and the type of the doc. can not be changed, hmm ? */
