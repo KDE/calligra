@@ -77,6 +77,7 @@ bool kspreadfunc_mod( KSContext& context );
 bool kspreadfunc_mult( KSContext& context );
 bool kspreadfunc_odd( KSContext& context );
 bool kspreadfunc_pow( KSContext& context );
+bool kspreadfunc_quotient( KSContext& context );
 bool kspreadfunc_product( KSContext& context );
 bool kspreadfunc_rand( KSContext& context );
 bool kspreadfunc_randbetween( KSContext& context );
@@ -520,6 +521,7 @@ static const functionEntry funcTab[] = {
   { "MULTIPLY", kspreadfunc_mult },
   { "ODD", kspreadfunc_odd },
   { "POW", kspreadfunc_pow },
+  { "QUOTIENT", kspreadfunc_quotient },
   { "PRODUCT", kspreadfunc_product },
   { "RAND", kspreadfunc_rand },
   { "RANDBETWEEN", kspreadfunc_randbetween },

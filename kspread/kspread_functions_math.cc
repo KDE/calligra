@@ -773,6 +773,30 @@ bool kspreadfunc_int( KSContext& context )
   return true;
 }
 
+// Function: QUOTIENT
+bool kspreadfunc_quotient( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "QUOTIENT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  double num = args[0]->doubleValue();
+  double den = args[1]->doubleValue();
+
+  if( den == 0 ) return false;
+
+  context.setValue( new KSValue( (int)(num/den) ) );
+  return true;
+}
+
+
 // Function: eps
 bool kspreadfunc_eps( KSContext& context )
 {

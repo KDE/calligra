@@ -648,6 +648,7 @@
 	<Example>INT(12.55) equals 12</Example>
 	<Example>INT(15) equals 15</Example>
 	<Related>FLOOR</Related>
+	<Related>QUOTIENT</Related>
       </Help>
     </Function>
 
@@ -754,6 +755,25 @@
 	<Syntax>FIB(n)</Syntax>
 	<Example>FIB(9) returns 34</Example>
 	<Example>FIB(26) returns 121393</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>QUOTIENT</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Numerator</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Denumerator</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>Function QUOTIENT returns the integer portion of numerator/denumerator.</Text>
+	<Syntax>QUOTIENT(numerator;denumerator)</Syntax>
+	<Example>QUOTIENT(21;4) returns 5</Example>
+	<Related>INT</Related>
       </Help>
     </Function>
 
