@@ -1090,6 +1090,31 @@ void KPTextObject::textContentsToHeight()
     }
 }
 
+void KPTextObject::textObjectToContents()
+{
+    KoTextParag * parag = m_textobj->textDocument()->firstParag();
+    KoTextParag * lastParag = m_textobj->textDocument()->lastParag();
+    int widthTxt=10;
+    for ( ; parag ; parag = parag->next() )
+    {
+        widthTxt = QMAX( widthTxt, m_doc->zoomHandler()->layoutUnitToPixelX( parag->rect().right() ));
+    }
+
+    double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( lastParag->rect().bottom() ));
+    if( getRect().height()> txtHeight )
+    {
+        m_doc->repaint(this);
+        setSize( m_doc->zoomHandler()->unzoomItX(widthTxt), txtHeight);
+        m_doc->updateRuler();
+    }
+    else
+    {
+        m_doc->repaint(this);
+        setSize( m_doc->zoomHandler()->unzoomItX(widthTxt), getRect().height());
+        m_doc->updateRuler();
+    }
+}
+
 KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
     : KoTextView( txtObj->textObject() )
 {

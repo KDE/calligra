@@ -121,6 +121,7 @@ public:
     void setEditingTextObj( bool _edit ) { editingTextObj = _edit; }
 
     void textContentsToHeight();
+    void textObjectToContents();
 
 signals:
     void repaintChanged( KPTextObject* );

@@ -6693,7 +6693,8 @@ void KPrCanvas::textObjectToContents()
         return;
     QPtrListIterator<KPTextObject> it( lst );
     for ( ; it.current() ; ++it ) {
-        //todo
+        it.current()->textObjectToContents();
+        _repaint( it.current() );
     }
 }
 
