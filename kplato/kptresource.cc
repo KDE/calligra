@@ -391,6 +391,41 @@ void KPTAppointment::save(QDomElement &element) {
     me.setAttribute("duration", m_duration.toString());
 }
 
+// TODO: calendar stuff
+double KPTAppointment::cost() {
+    return m_duration.hours()/*FIXME*/ * m_resource->normalRate() + m_resource->fixedCost();
+}
+
+double KPTAppointment::cost(const KPTDateTime &dt) {
+    if (dt < m_startTime)
+        return 0;
+
+    KPTDuration dur;
+    if (dt >= m_startTime + m_duration)
+        dur = m_duration;
+    else
+        dur = dt - m_startTime;
+
+    return dur.hours()/*FIXME*/ * m_resource->normalRate() + m_resource->fixedCost();
+}
+
+int KPTAppointment::work() {
+    return m_duration.hours(); /*FIXME*/
+}
+
+int KPTAppointment::work(const KPTDateTime &dt) {
+    if (dt < m_startTime)
+        return 0;
+
+    KPTDuration dur;
+    if (dt >= m_startTime + m_duration)
+        dur = m_duration;
+    else
+        dur = dt - m_startTime;
+
+    return dur.hours(); /*FIXME*/
+}
+
 KPTRisk::KPTRisk(KPTNode *n, KPTResource *r, RiskType rt) {
     m_node=n;
     m_resource=r;

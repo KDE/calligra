@@ -45,16 +45,16 @@ void KPTDateTime::subtract(const KPTDuration &duration) {
     //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
-KPTDuration KPTDateTime::duration(const KPTDateTime &dt) {
+KPTDuration KPTDateTime::duration(const KPTDateTime &dt) const {
     KPTDuration dur;
-    int days = daysTo(dt);
-    if (days < 0) {
-        dur.addDays(-days);
+    if (*this > dt) {
+        dur.addDays(dt.daysTo(*this));
         dur.addSecs(dt.time().secsTo(time()));
     } else {
-        dur.addDays(days);
+        dur.addDays(daysTo(dt));
         dur.addSecs(time().secsTo(dt.time()));
     }
+    //kdDebug()<<k_funcinfo<<"this="<<this->toString()<<" - dt="<<dt.toString()<<" gives: "<<dur.toString()<<endl;
     return dur;
 }
 

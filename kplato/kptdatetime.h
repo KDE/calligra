@@ -44,6 +44,7 @@ public:
     /**
      * Returns the absolute duration between the two datetimes
      */
+    KPTDuration operator-(const KPTDateTime &dt) const { return duration(dt); }
     KPTDuration operator-(const KPTDateTime &dt) { return duration(dt); }
 
     KPTDateTime &operator+=(const KPTDuration &duration);
@@ -51,7 +52,7 @@ public:
 
 private:
 
-    KPTDuration duration(const KPTDateTime &dt);
+    KPTDuration duration(const KPTDateTime &dt) const;
     void add(const KPTDuration &duration);
     void subtract(const KPTDuration &duration);
 

@@ -454,10 +454,7 @@ double KPTTask::plannedCost() {
         QPtrList<KPTAppointment> list = appointments(this);
         QPtrListIterator<KPTAppointment> it(list);
         for (; it.current(); ++it) {
-            int h = KPTDuration::zeroDuration.hoursTo(it.current()->duration().dateTime());
-            c +=  h * it.current()->resource()->normalRate();
-            //TODO: overtime
-            c += it.current()->resource()->fixedCost();
+            c += it.current()->cost();
         }
     }
     return c;
@@ -475,14 +472,7 @@ double KPTTask::plannedCost(QDateTime &dt) {
         QPtrList<KPTAppointment> list = appointments(this);
         QPtrListIterator<KPTAppointment> it(list);
         for (; it.current(); ++it) {
-/* FIXME           if (it.current()->startTime() < dt) {
-                KPTDateTime d(startTime() + it.current()->duration());
-                int h = 0;
-                dt > d ? h = it.current()->startTime().hoursTo(d) : h = it.current()->startTime().hoursTo(dt);
-                c +=  it.current()->resource()->cost(dt);
-                //TODO:overtime
-                c += it.current()->resource()->fixedCost();
-            }*/
+            c += it.current()->cost(KPTDateTime(dt)); //FIXME
         }
     }
     return c;
@@ -515,7 +505,7 @@ int KPTTask::plannedWork()  {
         QPtrListIterator<KPTAppointment> it(a);
         for (; it.current(); ++it) {
             if (it.current()->resource()->type() == KPTResource::Type_Work) { // hmmm. show only work?
-                w += KPTDuration::zeroDuration.hoursTo(it.current()->duration().dateTime());
+                w += it.current()->work();
                 //TODO:overtime and non-proportional work
             }
         }
@@ -535,12 +525,7 @@ int KPTTask::plannedWork(QDateTime &dt)  {
         QPtrList<KPTAppointment> a = appointments(this);
         QPtrListIterator<KPTAppointment> it(a);
         for (; it.current(); ++it) {
-/*FIXME            if (it.current()->startTime() < dt &&
-                it.current()->resource()->type() == KPTResource::Type_Work) { // hmmm. show only work?
-                KPTDateTime d = it.current()->startTime() + it.current()->duration();
-                dt > d ? w += it.current()->startTime().hoursTo(d) : w += it.current()->startTime().hoursTo(dt);
-                //TODO:overtime and non-proportional work
-            }*/
+            w += it.current()->work(KPTDateTime(dt)); //FIXME
         }
     }
     return w;

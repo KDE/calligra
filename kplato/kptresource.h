@@ -268,6 +268,18 @@ class KPTAppointment {
         bool load(QDomElement &element, KPTProject &project);
         void save(QDomElement &element);
 
+        /**
+         * Calculates the total planned cost for this appointment
+         */
+        double cost();
+        /**
+         * Calculates the planned cost up to date @dt
+         */
+        double cost(const KPTDateTime &dt);
+
+        int work();
+        int work(const KPTDateTime &dt);
+
     private:
         KPTDateTime m_startTime;
         KPTDuration m_duration;
