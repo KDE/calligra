@@ -70,8 +70,7 @@ bool KisDoc::initDoc()
 
   // add background layer
   img->addLayer(QRect(0, 0, 512, 512), KisColor::white(), false, "background");
-  img->setLayerOpacity(255);
-  img->compositeImage(QRect(0, 0, 512, 512));
+  img->markDirty(QRect(0, 0, 512, 512));
   setCurrentImage(img);
 
   emit imageListUpdated();
@@ -308,8 +307,7 @@ bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
   
   // add background layer
   img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
-  img->setLayerOpacity(255);
-  img->compositeImage(QRect(0, 0, w, h));
+  img->markDirty(QRect(0, 0, w, h));
   setCurrentImage(img);
 
   return true;
@@ -471,8 +469,7 @@ void KisDoc::slotNewImage()
   else if (bg == bm_BackgroundColor)
 	img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background"); // FIXME
 
-  img->setLayerOpacity(255);
-  img->compositeImage(QRect(0, 0, w, h));
+  img->markDirty(QRect(0, 0, w, h));
   setCurrentImage(img);
 }
 

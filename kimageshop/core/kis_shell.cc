@@ -28,7 +28,6 @@
 #include <koFilterManager.h>
 
 #include "kis_doc.h"
-#include "kis_core.h"
 #include "kis_shell.h"
 #include "kis_factory.h"
 #include "kis_pluginserver.h"

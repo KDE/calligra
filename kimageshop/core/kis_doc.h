@@ -115,9 +115,6 @@ public:
     QStringList images();
 
 public slots:
-  void setCurrentLayerOpacity( double opacity )
-  {  if (m_pCurrent) m_pCurrent->setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
-
   void slotImageUpdated();
   void slotImageUpdated( const QRect& rect );
   void slotLayersUpdated();

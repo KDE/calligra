@@ -31,6 +31,7 @@ KisLayer::KisLayer(const QString& name, cMode cm, uchar bd)
   m_visible = true;
   m_linked = false;
   m_current = 0;
+  m_opacity= 255;
 
   calcNumChannels();
   

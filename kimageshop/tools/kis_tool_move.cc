@@ -55,28 +55,14 @@ void MoveCommand::moveTo( QPoint _pos )
   if (!img)
 	return;
 
-  QRect oldRect;
-  QRect newRect;
-  QRect updateRect;
-
   img->setCurrentLayer( m_layer );
 
-  oldRect = img->getCurrentLayer()->imageExtents();
-  newRect = QRect( _pos, oldRect.size() );
+  QRect oldRect = img->getCurrentLayer()->imageExtents();
 
-  img->moveLayerTo( _pos.x(), _pos.y() );
+  img->getCurrentLayer()->moveTo( _pos.x(), _pos.y() );
 
-  if( oldRect.intersects( newRect ) )
-  {
-    updateRect = oldRect.unite( newRect );
-
-    img->compositeImage( updateRect );
-  }
-  else
-  {
-    img->compositeImage( oldRect );
-    img->compositeImage( newRect );
-  }
+  img->markDirty( img->getCurrentLayer()->imageExtents() );
+  img->markDirty( oldRect );
 }
 
 MoveTool::MoveTool( KisDoc *doc )
@@ -122,10 +108,11 @@ void MoveTool::mouseMove( QMouseEvent *e )
   {
     m_dragPosition = e->pos() - m_dragStart;
 
-    QRect updateRect( img->getCurrentLayer()->imageExtents() );
-    img->moveLayer( m_dragPosition.x(), m_dragPosition.y() );
-    updateRect = updateRect.unite( img->getCurrentLayer()->imageExtents() );
-    img->compositeImage( updateRect );
+    QRect oldRect = img->getCurrentLayer()->imageExtents();
+
+    img->getCurrentLayer()->moveBy( m_dragPosition.x(), m_dragPosition.y() );
+    img->markDirty( img->getCurrentLayer()->imageExtents() );
+	img->markDirty( oldRect );
 
     m_layerPosition = img->getCurrentLayer()->imageExtents().topLeft();
 

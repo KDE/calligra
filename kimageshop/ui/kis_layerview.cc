@@ -226,7 +226,7 @@ void LayerTable::slotInverseVisibility( int _index )
 {
   m_doc->current()->layerList().at( _index )->setVisible( !m_doc->current()->layerList().at( _index )->visible() );
   updateCell( _index, 0 );
-  m_doc->current()->compositeImage( m_doc->current()->layerList().at( _index )->imageExtents() );
+  m_doc->current()->markDirty( m_doc->current()->layerList().at( _index )->imageExtents() );
 }
 
 void LayerTable::slotInverseLinking( int _index )
@@ -324,10 +324,9 @@ void LayerTable::slotAddLayer()
   name.sprintf("layer %d", img->layerList().count());
   
   img->addLayer( img->imageExtents(), KisColor::white(), true, name );
-  img->setLayerOpacity( 255 );
 
   QRect updateRect = img->layerList().at( img->layerList().count() - 1 )->imageExtents();
-  img->compositeImage( updateRect );
+  img->markDirty( updateRect );
 
   selectLayer( img->layerList().count() - 1 );
 
@@ -343,7 +342,7 @@ void LayerTable::slotRemoveLayer()
 
     m_doc->current()->removeLayer( m_selected );
 
-    m_doc->current()->compositeImage( updateRect );
+    m_doc->current()->markDirty( updateRect );
 
     if( m_selected == (int)m_doc->current()->layerList().count() )
       m_selected--;
@@ -365,7 +364,7 @@ void LayerTable::swapLayers( int a, int b )
     {
       QRect rect = l1.intersect( l2 );
 
-      m_doc->current()->compositeImage( rect );
+      m_doc->current()->markDirty( rect );
     }
   }
 }
@@ -404,7 +403,7 @@ void LayerTable::slotFrontLayer()
     selectLayer( m_doc->current()->layerList().count() - 1 );
 
     QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
-    m_doc->current()->compositeImage( updateRect );
+    m_doc->current()->markDirty( updateRect );
 
     updateAllCells();
   }
@@ -419,7 +418,7 @@ void LayerTable::slotBackgroundLayer()
     selectLayer( 0 );
 
     QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
-    m_doc->current()->compositeImage( updateRect );
+    m_doc->current()->markDirty( updateRect );
 
     updateAllCells();
   }
@@ -438,7 +437,7 @@ void LayerTable::slotProperties()
     QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
 
     updateCell( m_selected, 0 );
-    m_doc->current()->compositeImage( updateRect );
+    m_doc->current()->markDirty( updateRect );
   }
 }
 

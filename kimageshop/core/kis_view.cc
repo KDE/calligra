@@ -36,9 +36,9 @@
 #include <kfiledialog.h>
 #include <kiconloader.h>
 
-#include "kis_core.h"
 #include "kis_view.h"
 #include "kis_doc.h"
+#include "kis_util.h"
 #include "kis_canvas.h"
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
@@ -295,11 +295,11 @@ void KisView::setupActions()
   // tool actions
 
   m_tool_select_rect = new KToggleAction( i18n( "&Rectangular select" ),
-										  KISBarIcon( "areaselect" ), 0, this,
+										  KISBarIcon( "rectangular" ), 0, this,
 										  SLOT( tool_select_rect() ), actionCollection(), "tool_select_rect" );
   m_tool_select_rect->setExclusiveGroup( "tools" );
 
-  m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ), KISBarIcon( "areaselect" ), 0, this,
+  m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ), KISBarIcon( "rectangular" ), 0, this,
                              SLOT( tool_select_rect() ), actionCollection(), "tool_select_polygon" );
   m_tool_select_polygon->setExclusiveGroup( "tools" );
 
@@ -835,7 +835,7 @@ void KisView::insert_layer_image()
 {
   debug("KisView::insert_layer_image");
 
-  KURL url = KFileDialog::getOpenURL( getenv("HOME"),KisCore::readFilters(),0,i18n("Image file for layer") );
+  KURL url = KFileDialog::getOpenURL( getenv("HOME"),KisUtil::readFilters(),0,i18n("Image file for layer") );
 
   if( !url.isEmpty() )
   {
@@ -845,32 +845,27 @@ void KisView::insert_layer_image()
 
 void KisView::layer_rotate180()
 {
-  if (m_pDoc->current())
-	m_pDoc->current()->rotateLayer180(0);
+ 
 }
 
 void KisView::layer_rotateleft90()
 {
-  if (m_pDoc->current())
-	m_pDoc->current()->rotateLayerLeft90(0);
+  
 }
 
 void KisView::layer_rotateright90()
 {
-  if (m_pDoc->current())
-	m_pDoc->current()->rotateLayerRight90(0);
+ 
 }
 
 void KisView::layer_mirrorX()
 {
-  if (m_pDoc->current())
-	m_pDoc->current()->mirrorLayerX(0);
+ 
 }
 
 void KisView::layer_mirrorY()
 {
-  if (m_pDoc->current())
-	m_pDoc->current()->mirrorLayerY(0);
+ 
 }
 
 /*

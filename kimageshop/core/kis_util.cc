@@ -21,6 +21,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kimgio.h>
 
 #include "kis_global.h"
 #include "kis_util.h"
@@ -108,4 +109,14 @@ QString KisUtil::channelIdtoString(cId cid)
 	  return "unknown";
 	  break;
 	}
+}
+
+QString KisUtil::readFilters()
+{
+  return KImageIO::pattern( KImageIO::Reading ) + "\n*.kis|KImageShop picture\n";
+}
+
+QString KisUtil::writeFilters()
+{
+  return KisUtil::readFilters();
 }

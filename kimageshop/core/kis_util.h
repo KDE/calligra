@@ -42,6 +42,9 @@ class KisUtil
   static QRect findTileExtents( QRect r );
 
   static QString channelIdtoString(cId);
+
+  static QString readFilters();
+  static QString writeFilters();
 };
                       
 

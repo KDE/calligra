@@ -61,7 +61,6 @@ void BrushTool::mousePress(QMouseEvent *e)
   paint(e->pos());
   
   QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
-  // m_pDoc->current()->compositeImage(updateRect);
   m_pDoc->current()->markDirty(updateRect);
 }
 
@@ -181,7 +180,6 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	  
       KisVector step = start;
 
-      QRect updateRect;
       while (dist >= spacing)
 		{
 		  if (saved_dist > 0)

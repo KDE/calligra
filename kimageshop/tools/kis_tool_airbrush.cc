@@ -61,7 +61,7 @@ void AirBrushTool::mousePress(QMouseEvent *e)
   paint(e->pos());
   
   QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
-  img->compositeImage(updateRect);
+  img->markDirty(updateRect);
 }
 
 bool AirBrushTool::paint(QPoint pos)
@@ -176,7 +176,6 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
 
       KisVector step = start;
 
-      QRect updateRect;
       while (dist >= spacing)
 	{
 	  if (saved_dist > 0)
@@ -190,11 +189,9 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
 	  QPoint p(step.x(), step.y());
 	  	  
 	  if (paint(p))
-	    updateRect = updateRect.unite(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
+	    img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
 	  dist -= spacing;
 	}
-      if (!updateRect.isEmpty())
-	img->compositeImage(updateRect);
 
       if (dist > 0)
 	m_dragdist = dist; //save for next moveevent

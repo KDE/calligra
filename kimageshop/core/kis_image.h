@@ -37,10 +37,6 @@
 
 class KisBrush;
 
-struct canvasTileDescriptor
-{
-  QPixmap pix;
-};
 
 class KisImage : public QObject
 {
@@ -53,13 +49,15 @@ class KisImage : public QObject
 
     int     height()       { return m_height; }
     int     width()        { return m_width; }
+    QSize   size()         { return QSize( m_width, m_height); }
+    QRect   imageExtents() { return QRect(0, 0, m_width, m_height); }
+
     QString name()         { return m_name; }
 	QString author()       { return m_author; }
 	QString email()        { return m_email; }
+
 	cMode   colorMode()    { return m_cMode; } 
 	uchar   bitDepth()     { return m_bitDepth; }
-    QSize   size()         { return QSize( m_width, m_height); }
-    QRect   imageExtents() { return QRect(0, 0, m_width, m_height); }
 
     void setName(const QString& n)    { m_name = n; }
 	void setAuthor(const QString& a)  { m_author = a; }
@@ -68,33 +66,23 @@ class KisImage : public QObject
     void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
     void paintPixmap( QPainter *painter, QRect area);
 
-    KisLayer* getCurrentLayer() { return currentLayer; }
-    int getCurrentLayerIndex() { return layers.find( currentLayer ); }
+    KisLayer* getCurrentLayer() { return m_pCurrentLay; }
+    int getCurrentLayerIndex() { return m_layers.find( m_pCurrentLay ); }
     void setCurrentLayer( int _layer );
 
     void upperLayer( unsigned int _layer );
     void lowerLayer( unsigned int _layer );
     void setFrontLayer( unsigned int _layer );
     void setBackgroundLayer( unsigned int _layer );
-    void moveLayer( int dx, int dy, KisLayer *lay = 0 );
-    void moveLayerTo( int x, int y, KisLayer *lay = 0 );
-    void setLayerOpacity( uchar _opacity, KisLayer *_layer = 0 );
 
     void addLayer(const QRect& r, const KisColor& c, bool transparent, const QString& name);
     void removeLayer( unsigned int _layer );
 
     KisLayer* layerPtr( KisLayer *_layer );
-    QList<KisLayer> layerList() { return layers; };
+    QList<KisLayer> layerList() { return m_layers; };
  
 	void markDirty( QRect rect );
-    void compositeImage( QRect _rect );
      
-    void rotateLayer180(KisLayer *_layer);
-    void rotateLayerLeft90(KisLayer *_layer);
-    void rotateLayerRight90(KisLayer *_layer);
-    void mirrorLayerX(KisLayer *_layer);
-    void mirrorLayerY(KisLayer *_layer);
-
     void mergeAllLayers();
     void mergeVisibleLayers();
     void mergeLinkedLayers();
@@ -109,6 +97,7 @@ class KisImage : public QObject
 	void slotUpdateTimeOut();  
     
  protected:
+    void compositeImage( QRect _rect );
     void compositeTile( int x, int y, KisLayer *dstLay = 0, int dstTile = -1 );
     void convertTileToPixmap( KisLayer *lay, int tileNo, QPixmap *pix );
     void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, KisLayer *dstLay, int dstTile );
@@ -119,20 +108,17 @@ class KisImage : public QObject
         
  private:
     enum dispVisual { unknown, rgb565, rgb888x } visual;
-    int         channels;
-    QRect       viewportRect;
-    int         xTiles;
-    int         yTiles;
-    QList<KisLayer>   layers;
-    KisLayer    *compose, *background;
-    QImage      img;
-    KisLayer    *currentLayer;
-    QPixmap     **tiles;
-    bool        dragging;
-    QPoint      dragStart;
-    char        *imageData;
-    XImage      *xi;
 
+    int               m_xTiles;
+    int               m_yTiles;
+
+    QImage            m_img;
+    QList<KisLayer>   m_layers;
+    KisLayer         *m_pCurrentLay, *m_pComposeLay, *m_pBGLay;
+
+    QPixmap    **m_ptiles;
+    char        *m_pImgData;
+    XImage      *m_pxi;
     QString      m_name;
 	QString      m_author;
 	QString      m_email;
