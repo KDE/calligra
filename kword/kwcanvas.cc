@@ -1741,10 +1741,8 @@ void KWCanvas::editFrameProperties()
     if(frames.count()==1) {
         KWFrame *frame = frames.first();
         frameDia = new KWFrameDia( this, frame );
-        frameDia->setCaption(i18n("Frame Properties"));
     } else { // multi frame dia.
         frameDia = new KWFrameDia( this, frames );
-        frameDia->setCaption(i18n("Frames Properties"));
     }
     frameDia->exec();
     delete frameDia;

@@ -87,7 +87,7 @@ void KWBrushStylePreview::drawContents( QPainter* painter )
  ******************************************************************/
 
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
-    : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true)
+    : KDialogBase( Tabbed, QString::null, Ok | Cancel, Ok, parent, "framedialog", true)
 {
     noSignal=false;
     frame = _frame;
@@ -95,6 +95,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
         kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
     }
+    setCaption( i18n( "Frame Properties For %1" ).arg( frame->frameSet()->getName() ) );
     KWFrameSet *fs = frame->frameSet()->getGroupManager();
     if(fs==0L) fs=frame->frameSet();
     frameType = fs->type();
@@ -106,7 +107,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
 
 /* Contructor when the dialog is used on creation of frame */
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, FrameSetType _ft )
-    : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true)
+    : KDialogBase( Tabbed, i18n("Frame Properties For New Frame"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     noSignal=false;
     frameType=_ft;
@@ -121,7 +122,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
     init();
 }
 
-KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true) , allFrames() {
+KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frames Properties"), Ok | Cancel, Ok, parent, "framedialog", true) , allFrames() {
     noSignal=false;
 
     frame=0L;
@@ -132,6 +133,8 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
         kdDebug() << "ERROR: KWFrameDia::constructor no frames.."<<endl;
         return;
     }
+    if ( listOfFrames.count() == 1 )
+        setCaption( i18n( "Frame Settings For %1" ).arg( f->frameSet()->getName() ) );
 
     KWFrameSet *fs = f->frameSet()->getGroupManager();
     if(fs==0L) fs=f->frameSet();
