@@ -4405,6 +4405,7 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origS
 {
     *origSize = KoSize(obj->originalSize().width(),obj->originalSize().height());
     *currentSize = obj->getSize();
+    return true;
 }
 
 /*================================================================*/
