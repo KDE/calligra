@@ -2662,9 +2662,11 @@ void KWView::insertFootNote()
                                       "endnotes into the first frameset."),
                                 i18n("Insert Footnote"));
         } else {
-            KWFootNoteDia dia( this, 0 );
+            KWFootNoteDia dia( m_gui->canvasWidget()->footNoteType(), m_gui->canvasWidget()->numberingFootNoteType(), this, 0 );
             if ( dia.exec() ) {
                 edit->insertFootNote( dia.noteType(), dia.numberingType(), dia.manualString() );
+                m_gui->canvasWidget()->setFootNoteType( dia.noteType() );
+                m_gui->canvasWidget()->setNumberingFootNoteType( dia.numberingType() );
             }
         }
     }
@@ -4994,7 +4996,7 @@ void KWView::switchModeView()
 }
 void KWView::configureFootEndNote()
 {
-    KWConfigFootNoteDia *dia = new KWConfigFootNoteDia( this, "configfootnote", m_doc);
+    KWConfigFootNoteDia *dia = new KWConfigFootNoteDia( this, "configfootnote", m_doc );
     dia->exec();
     delete dia;
 }

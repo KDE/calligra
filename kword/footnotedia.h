@@ -34,13 +34,12 @@ class KWFootNoteDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWFootNoteDia( QWidget *parent, const char *name = 0 );
+    KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, QWidget *parent, const char *name = 0 );
 
     NoteType noteType() const;
     KWFootNoteVariable::Numbering numberingType()const;
     QString manualString()const;
 protected:
-    void setupTab1();
     bool insertFootNote();
 protected slots:
     void footLineChanged( const QString & );

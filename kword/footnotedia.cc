@@ -33,20 +33,14 @@
 /* Class: KWFootNoteDia                                           */
 /******************************************************************/
 
-KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name )
+KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, QString::null, Ok|Cancel, Ok, true )
 {
-    setupTab1();
 
     setButtonOKText(i18n("&Insert"));
 
     setCaption( i18n("Insert Footnote / Endnote") );
 
-    //setInitialSize( QSize(300, 250) );
-}
-
-void KWFootNoteDia::setupTab1()
-{
     QVBox *page = makeVBoxMainWidget();
 
     QButtonGroup *grp = new QButtonGroup(  page );
@@ -57,7 +51,10 @@ void KWFootNoteDia::setupTab1()
     grp->setExclusive( true );
     grid->addWidget( m_rbAuto, 0, 0);
     grid->addWidget( m_rbManual, 1, 0);
-    m_rbAuto->setChecked( true );
+    if ( _numberingType == KWFootNoteVariable::Auto )
+        m_rbAuto->setChecked( true );
+    else
+        m_rbManual->setChecked( true );
     m_footLine = new QLineEdit( grp);
     connect( m_footLine, SIGNAL( textChanged ( const QString & )), this, SLOT(footLineChanged( const QString & )));
     grid->addWidget( m_footLine, 1, 1);
@@ -69,9 +66,11 @@ void KWFootNoteDia::setupTab1()
     grp->setExclusive( true );
     grp->insert( m_rbFootNote );
     grp->insert( m_rbEndNote );
+    if (_noteType == FootNote )
+        m_rbFootNote->setChecked( true );
+    else
+        m_rbEndNote->setChecked( true );
 
-
-    m_rbFootNote->setChecked( true );
 }
 
 void KWFootNoteDia::footLineChanged( const QString & )

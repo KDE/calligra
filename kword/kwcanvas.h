@@ -28,6 +28,7 @@
 #include <koQueryTrader.h>
 #include "kwtextparag.h"
 #include "kwframe.h"
+#include <kwvariable.h>
 class KWDocument;
 class KWFrame;
 class KWFrameSet;
@@ -170,6 +171,14 @@ public:
     bool checkCurrentTextEdit( KWFrameSet * fs );
     bool checkCurrentEdit( KWFrameSet * fs );
 
+
+
+    NoteType footNoteType()const{return m_footEndNote.noteType;}
+    KWFootNoteVariable::Numbering numberingFootNoteType() const { return m_footEndNote.numberingType;}
+
+    void setFootNoteType( NoteType _type ) { m_footEndNote.noteType = _type; }
+    void setNumberingFootNoteType(KWFootNoteVariable::Numbering _type) { m_footEndNote.numberingType = _type; }
+
 protected:
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );
@@ -297,6 +306,11 @@ private:
         unsigned int nbRows;
     }m_tableSplit;
 
+    struct
+    {
+        NoteType noteType;
+        KWFootNoteVariable::Numbering numberingType;
+    } m_footEndNote;
 };
 
 #endif
