@@ -3074,6 +3074,43 @@ bool KPrPage::chClip(KPresenterView *_view)
     }
     return false;
 }
+
+bool KPrPage::saveClip(KPresenterView *_view)
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_CLIPART )
+        {
+	  KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
+	  if(obj)
+	    {
+	      _view->saveClipart( obj );
+	      return true;
+	    }
+        }
+    }
+    return false;
+}
+
+bool KPrPage::savePicture( KPresenterView *_view )
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        {
+	  KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
+	  if( obj)
+	    {
+	      _view->savePicture( obj );
+	      return true;
+	    }
+        }
+    }
+    return false;
+}
+
 // move object for releasemouseevent
 KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
 {

@@ -61,7 +61,7 @@ public:
 
     KoPictureKey getKey() const
     { return m_clipart.getKey(); }
-
+    KoPicture clipart() const { return m_clipart ; }
 protected:
     KoPicture m_clipart;
 

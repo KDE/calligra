@@ -84,7 +84,7 @@ public:
     void setPictureSwapRGB(bool _swapRGB) { swapRGB = _swapRGB; }
     void setPictureGrayscal(bool _grayscal) { grayscal = _grayscal; }
     void setPictureBright(int _bright) { bright = _bright; }
-
+    KoPicture picture() const { return image;}
 protected:
     KPPixmapObject() {}
 

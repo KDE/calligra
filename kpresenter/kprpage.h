@@ -273,6 +273,9 @@ public:
     bool canMoveOneObject();
     KCommand *alignVertical( VerticalAlignmentType _type );
     void changeTabStopValue ( double _tabStop );
+    bool saveClip(KPresenterView *_view);
+    bool savePicture( KPresenterView *_view );
+
 protected:
 
 private:

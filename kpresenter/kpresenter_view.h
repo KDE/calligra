@@ -69,6 +69,8 @@ class KPrFindReplace;
 class KPrCanvas;
 class KoFontDia;
 class KoParagDia;
+class KPPixmapObject;
+class KPClipartObject;
 
 class PageBase : public QWidget
 {
@@ -132,6 +134,8 @@ public:
     void updateHelpLineButton();
 
     void updateGridButton();
+    void savePicture( KPPixmapObject* obj );
+    void saveClipart( KPClipartObject* obj );
 
 signals:
     void currentPageChanged( int );
@@ -388,7 +392,8 @@ public slots:
     void alignVerticalBottom();
     void alignVerticalCenter();
 
-
+    void saveClipart();
+    void savePicture();
 public:
     // create GUI
     virtual void createGUI();
@@ -974,6 +979,9 @@ private:
     KAction *actionApplyAutoFormat;
 
     KAction *actionCreateStyleFromSelection;
+
+    KAction *actionSaveClipart;
+    KAction *actionSavePicture;
 
     KToggleAction *actionAlignVerticalTop;
     KToggleAction *actionAlignVerticalBottom;

@@ -309,6 +309,9 @@ public:
     void closeObject(bool _close);
     void layout();
     void alignVertical( VerticalAlignmentType _type );
+    void saveClip();
+    void savePicture();
+
 public slots:
     void exitEditMode();
 

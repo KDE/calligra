@@ -51,3 +51,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - New transition effects: Strips
 - Add support for vertical alignment
 - Now we can change tab stop value
+- Now we can save picture from file to disk

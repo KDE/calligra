@@ -127,7 +127,8 @@
 #include <qpaintdevicemetrics.h>
 #include <kostyle.h>
 #include "kprstylemanager.h"
-
+#include "kppixmapobject.h"
+#include "kpclipartobject.h"
 #include <koCommentDia.h>
 
 #include "kprhelplinedia.h"
@@ -665,7 +666,44 @@ void KPresenterView::insertPicture(const QString &file)
 
 }
 
-/*====================== insert a clipart =======================*/
+void KPresenterView::savePicture()
+{
+    m_canvas->savePicture();
+}
+
+void KPresenterView::savePicture( KPPixmapObject* obj )
+{
+    QString oldFile=obj->getFileName();
+
+    QStringList mimetypes;
+    mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
+    KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
+    fd.setMimeFilter( mimetypes );
+    fd.setCaption(i18n("Save Image"));
+    KURL url;
+    if ( fd.exec() == QDialog::Accepted )
+    {
+        url = fd.selectedURL();
+        if( url.isEmpty() )
+        {
+            KMessageBox::sorry( this,
+                                i18n("File name is empty"),
+                                i18n("Save Picture"));
+            return;
+        }
+        QFile file( url.path() );
+        if ( file.open( IO_ReadWrite ) ) {
+            obj->picture().save( &file );
+            file.close();
+        } else {
+            KMessageBox::error(this,
+                               i18n("Error during saving"),
+                               i18n("Save Picture"));
+        }
+    }
+
+}
+
 void KPresenterView::insertClipart()
 {
     m_canvas->setToolEditMode( INS_CLIPART );
@@ -696,7 +734,42 @@ void KPresenterView::insertClipart()
         m_canvas->activePage()->setInsClipartFile( file );
 }
 
-/*==============================================================*/
+void KPresenterView::saveClipart()
+{
+    m_canvas->saveClip();
+}
+
+void KPresenterView::saveClipart( KPClipartObject* obj )
+{
+    QString oldFile=obj->getFileName();
+    QStringList mimetypes;
+    mimetypes = KoPictureFilePreview::clipartMimeTypes();
+    KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
+    fd.setMimeFilter( mimetypes );
+    fd.setCaption(i18n("Save Clipart"));
+    KURL url;
+    if ( fd.exec() == QDialog::Accepted )
+    {
+        url = fd.selectedURL();
+        if( url.isEmpty() )
+        {
+            KMessageBox::sorry( this,
+                                i18n("File name is empty"),
+                                i18n("Save Clipart"));
+            return;
+        }
+        QFile file( url.path() );
+        if ( file.open( IO_ReadWrite ) ) {
+            obj->clipart().save( &file );
+            file.close();
+        } else {
+            KMessageBox::error(this,
+                               i18n("Error during saving"),
+                               i18n("Save Clipart"));
+        }
+    }
+}
+
 void KPresenterView::toolsMouse()
 {
     if ( actionToolsMouse->isChecked() )
@@ -3077,6 +3150,14 @@ void KPresenterView::setupActions()
                                                    actionCollection(), "align_center" );
     actionAlignVerticalCenter->setExclusiveGroup( "vertical_alignment" );
 
+
+    actionSavePicture= new KAction( i18n("Save Picture..."), 0,
+                                    this, SLOT( savePicture() ),
+                                    actionCollection(), "save_picture");
+
+    actionSaveClipart= new KAction( i18n("Save Clipart..."), 0,
+                                    this, SLOT( saveClipart() ),
+                                    actionCollection(), "save_clipart");
 }
 
 void KPresenterView::textSubScript()

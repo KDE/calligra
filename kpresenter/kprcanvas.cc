@@ -2489,6 +2489,22 @@ void KPrCanvas::chClip()
     stickyPage()->chClip(m_view);
 }
 
+void KPrCanvas::saveClip()
+{
+    bool state=m_activePage->saveClip( m_view);
+    if( state)
+        return;
+    stickyPage()->saveClip(m_view);
+}
+
+void KPrCanvas::savePicture()
+{
+    bool state=m_activePage->savePicture( m_view);
+    if( state)
+        return;
+    stickyPage()->savePicture(m_view);
+}
+
 void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::NbLine underlineNblineType, KoTextFormat::LineStyle underlineType, KoTextFormat::LineStyle strikeOutType , KoTextFormat::NbLine strikeOutNblineType, int flags)
 
 {
@@ -4391,7 +4407,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 
         unsigned x, y;
 
-        for ( ; _step < _steps;  ) 
+        for ( ; _step < _steps;  )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -4402,7 +4418,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                     y = _step - x;
 
                     bitBlt( this, dwidth - x * blockSize, dheight - y * blockSize, &_pix2,
-                        dwidth - x * blockSize, dheight - y * blockSize, 
+                        dwidth - x * blockSize, dheight - y * blockSize,
                         x * blockSize, blockSize );
                 }
 
@@ -4427,7 +4443,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 
         unsigned x, y;
 
-        for ( ; _step < _steps;  ) 
+        for ( ; _step < _steps;  )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -4461,7 +4477,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 
         unsigned x, y;
 
-        for ( ; _step < _steps;  ) 
+        for ( ; _step < _steps;  )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -4495,7 +4511,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 
         unsigned x, y;
 
-        for ( ; _step < _steps;  ) 
+        for ( ; _step < _steps;  )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )

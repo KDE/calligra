@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="78">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="79">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -519,6 +519,7 @@
   <Action name="extra_shadow"/>
   <Separator/>
   <Action name="change_clipart"/>
+  <Action name="save_clipart"/>
   <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
@@ -548,6 +549,7 @@
   <Action name="extra_shadow"/>
   <Separator/>
   <Action name="change_picture"/>
+  <Action name="save_picture"/>
   <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
