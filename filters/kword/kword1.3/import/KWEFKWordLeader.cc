@@ -694,21 +694,11 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
     int modificationDay = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "startingPageNumber",
-                                           "int",
-                                           &vs.startingPageNumber )
-                       << AttrProcessing ( "displaylink",
-                                           "bool",
-                                           &vs.displaylink )
-                       << AttrProcessing ( "underlinelink",
-                                           "bool",
-                                           &vs.underlinelink )
-                       << AttrProcessing ( "displaycomment",
-                                           "bool",
-                                           &vs.displaycomment )
-                       << AttrProcessing ( "displayfieldcode",
-                                           "bool",
-                                           &vs.displayfieldcode )
+    attrProcessingList << AttrProcessing ( "startingPageNumber", vs.startingPageNumber )
+                       << AttrProcessing ( "displaylink", vs.displaylink )
+                       << AttrProcessing ( "underlinelink", vs.underlinelink )
+                       << AttrProcessing ( "displaycomment", vs.displaycomment )
+                       << AttrProcessing ( "displayfieldcode", vs.displayfieldcode )
         ;
 
 

@@ -562,30 +562,14 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
     QString print, creation, modification; // Dates
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "startingPageNumber",
-                                           "int",
-                                            &vs.startingPageNumber )
-                       << AttrProcessing ( "displaylink",
-                                           "bool",
-                                            &vs.displaylink )
-                       << AttrProcessing ( "underlinelink",
-                                           "bool",
-                                            &vs.underlinelink )
-                       << AttrProcessing ( "displaycomment",
-                                           "bool",
-                                            &vs.displaycomment )
-                       << AttrProcessing ( "displayfieldcode",
-                                           "bool",
-                                            &vs.displayfieldcode )
-                       << AttrProcessing ( "lastPrintingDate",
-                                           "QString",
-                                           &print )
-                       << AttrProcessing ( "creationDate",
-                                           "QString",
-                                           &creation )
-                       << AttrProcessing ( "modificationDate",
-                                           "QString",
-                                           &modification );
+    attrProcessingList << AttrProcessing ( "startingPageNumber", vs.startingPageNumber )
+                       << AttrProcessing ( "displaylink", vs.displaylink )
+                       << AttrProcessing ( "underlinelink", vs.underlinelink )
+                       << AttrProcessing ( "displaycomment", vs.displaycomment )
+                       << AttrProcessing ( "displayfieldcode", vs.displayfieldcode )
+                       << AttrProcessing ( "lastPrintingDate", print )
+                       << AttrProcessing ( "creationDate", creation )
+                       << AttrProcessing ( "modificationDate", modification );
     ProcessAttributes (myNode, attrProcessingList);
 
     if (!creation.isEmpty())
