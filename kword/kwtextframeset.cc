@@ -374,7 +374,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, kWordDocument(), // TODO view's zoom handler
-        onlyChanged, drawCursor, cursor, resetChanged,m_doc->viewFormattingChars() );
+        onlyChanged, drawCursor, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled(),m_doc->viewFormattingChars() );
 
     // The last paragraph of this frame might have a bit in the next frame too.
     // In that case, and if we're only drawing changed paragraphs, (and resetting changed),
