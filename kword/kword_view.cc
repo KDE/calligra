@@ -252,9 +252,10 @@ void KWordView::setupActions()
 					actionCollection(), "edit_sldatabase" );
 
     // -------------- View actions
+/*
     actionViewNewView = new KAction( i18n( "&New View" ), 0,
 				     this, SLOT( newView() ),
-				     actionCollection(), "view_newview" );
+				     actionCollection(), "view_newview" ); */
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
 						   this, SLOT( viewFormattingChars() ),
 						   actionCollection(), "view_formattingchars" );
@@ -799,8 +800,7 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
 	 && gui->getPaperWidget()->getCursor()->getParag()->getKWString()->
 	 data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib
 	 && gui->getPaperWidget()->getCursor()->getParag()->
-	 getKWString()->data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib->getClassId() ==
-	 ID_KWCharFootNote )
+	 getKWString()->data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib->getClassId() == ID_KWCharFootNote )
 	return;
 
     format = _format;
@@ -1190,6 +1190,7 @@ void KWordView::editSerialLetterDataBase()
 }
 
 /*================================================================*/
+/*
 void KWordView::newView()
 {
     assert( ( m_pKWordDoc != 0L ) );
@@ -1197,7 +1198,7 @@ void KWordView::newView()
     KoMainWindow* shell = m_pKWordDoc->createShell();
     shell->show();
     shell->setRootDocument( m_pKWordDoc );
-}
+}  */
 
 /*===============================================================*/
 void KWordView::viewFormattingChars()

@@ -3705,7 +3705,7 @@ bool KWordDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, i
 /* Sets and gets this frames behaviour. This is used when the text
    gets to long to fit in this frame. The possible behaviours are
    defined in kword_frame.h with enum FrameBehaviour.
-   Writen by zander@earhtling.net
+   Written by zander@earhtling.net
 */
 FrameBehaviour KWordDocument::getFrameBehaviour() {
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {

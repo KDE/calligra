@@ -1324,8 +1324,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 	    ptY = pFrame->top() + pFrame->getBTop().pt();
 	    return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
 	} else { // append a page or resize frame
-            if ( dynamic_cast<KWTextFrameSet*>( pFrameSet )->getFrameBehaviour() ==
-AutoExtendFrame) { // Resize frame
+            if ( static_cast<KWTextFrameSet*>( pFrameSet )->getFrameBehaviour() == AutoExtendFrame) { // Resize frame
 		int diff = ( ptY + getLineHeight() ) - ( pFrame->bottom() -
 							 pFrame->getBBottom().pt() );
 
@@ -1348,7 +1347,7 @@ AutoExtendFrame) { // Resize frame
 		    outOfFrame = TRUE;
 		    return FALSE;
 		}
-	    } else if ( dynamic_cast<KWTextFrameSet*>( pFrameSet )->getFrameBehaviour() == AutoCreateNewFrame) { // Append page
+	    } else if ( static_cast<KWTextFrameSet*>( pFrameSet )->getFrameBehaviour() == AutoCreateNewFrame) { // Append page
 		doc->appendPage( page - 1, redrawBackgroundWhenAppendPage );
 		page++;
 		setFrame( frame + 1 );

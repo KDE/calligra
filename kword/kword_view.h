@@ -153,7 +153,7 @@ public slots:
     virtual void editCustomVars();
     virtual void editSerialLetterDataBase();
 
-    virtual void newView();
+    //virtual void newView();
     virtual void viewFormattingChars();
     virtual void viewFrameBorders();
     virtual void viewTableGrid();
@@ -313,7 +313,7 @@ protected:
     KAction *actionEditCustomVars;
     KAction *actionEditSlDataBase;
 
-    KAction *actionViewNewView;
+    //KAction *actionViewNewView;
     KAction *actionViewFormattingChars;
     KAction *actionViewFrameBorders;
     KAction *actionViewTableGrid;
