@@ -1177,7 +1177,7 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
     }
 }
 
-void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h )
+void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int /*h*/ )
 {
     if ( format->doubleUnderline())
     {
