@@ -1,8 +1,8 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-noinst_LTLIBRARIES = kexicorestartup.la
+noinst_LTLIBRARIES = libkexicorestartup.la
 
-kexicorestartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
+libkexicorestartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
 	KexiNewFileDBWidget.ui KexiOpenExistingFile.ui \
 	KexiNewPrjTypeSelector.ui KexiDBTitlePage.ui \
 	KexiServerDBNamePage.ui \
@@ -11,10 +11,10 @@ kexicorestartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui 
 	KexiXMLStorage.cpp KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
 	KexiStartup.cpp
 
-kexicorestartup_la_LDFLAGS = $(all_libraries) -Wnounresolved -module
-kexicorestartup_la_LIBADD =
+libkexicorestartup_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexicorestartup_la_LIBADD =
 
-kexicorestartup_la_METASOURCES = AUTO
+libkexicorestartup_la_METASOURCES = AUTO
 
 SUBDIRS = .
 

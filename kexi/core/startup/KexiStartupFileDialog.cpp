@@ -125,7 +125,8 @@ QString KexiStartupFileDialog::currentFileName()
 	QString path = selectedFile();
 	//js @todo
 #else
-	QString path = locationEdit->currentText().stripWhiteSpace(); //url.path().stripWhiteSpace();
+//	QString path = locationEdit->currentText().stripWhiteSpace(); //url.path().stripWhiteSpace(); that does not work, if the full path is not in the location edit !!!!!
+	QString path=KFileDialog::selectedURL().path();
 #endif
 	kdDebug() << "KFileDialog::selectedURL() == " << KFileDialog::selectedURL().path() <<endl;
 	
