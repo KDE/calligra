@@ -1447,10 +1447,7 @@ void KoTextObject::setParagLayoutFormat( KoParagLayout *newLayout,int flags)
     }
     textdoc->removeSelection( QTextDocument::Temp );
     if (cmd)
-    {
-        kdDebug()<<"change align******************** \n";
         emit newCommand( cmd );
-    }
 }
 
 void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
