@@ -200,7 +200,13 @@
         operator
       and generated "Neg" if unary operator is '-'
 
+  Percent operator is a special case and not handled the above mentioned rule.
+  When the parser finds the percent operator, it checks whether there's a non-operator 
+  token right before the percent. If yes, then the following code is generated:
+      load 0.01
+      multiply
 
+      
   Useful references:
    - "Principles of Compiler Design", A.V.Aho, J.D.Ullman, Addison Wesley, 1978
    - "Writing Interactive Compilers and Interpreters", P.J. Brown,
@@ -216,13 +222,19 @@
 
  /*
 TODO:
+ - owner of formula: KSpreadCell
+ - handle initial formula marker = (and +)
+ - reuse constant already in the pool
+ - reuse references already in the pool
  - cell and range reference
  - array/list for function arguments
  - conversion using KLocale
  - handle Intersection
  - cell reference is made relative
  - expression optimization (e.g. 1+2+A1 becomes 3+A1)
- - shared formula
+ - shared formula (different owner, same data)
+ - relative internal representation (independent of owner)
+ - OASIS support
  */
 
 namespace KSpread
