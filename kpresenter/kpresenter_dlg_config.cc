@@ -29,10 +29,14 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qvbox.h>
+#include <qcheckbox.h>
 
 #include <kpresenter_dlg_config.h>
 #include <kpresenter_view.h>
 #include <kpresenter_doc.h>
+
+
+#include <kspell.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -46,6 +50,11 @@ KPConfig::KPConfig( KPresenterView* parent )
     page = addVBoxPage( i18n("Color"), i18n("Color"),
                         BarIcon("colorize", KIcon::SizeMedium) );
     _colorBackground = new configureColorBackground( parent, page );
+
+    page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
+                        BarIcon("spellcheck", KIcon::SizeMedium) );
+    _spellPage=new ConfigureSpellPage(parent, page);
+
     connect( this, SIGNAL( okClicked() ),this, SLOT( slotApply() ) );
 }
 
@@ -53,6 +62,7 @@ void KPConfig::slotApply()
 {
     _interfacePage->apply();
     _colorBackground->apply();
+    _spellPage->apply();
 }
 
 void KPConfig::slotDefault()
@@ -63,6 +73,9 @@ void KPConfig::slotDefault()
             break;
         case 1:
             _colorBackground->slotDefault();
+            break;
+        case 2:
+            _spellPage->slotDefault();
         default:
             break;
     }
@@ -184,5 +197,71 @@ void configureColorBackground::slotDefault()
 {
     bgColor->setColor( Qt::white );
 }
+
+
+
+ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char *name )
+    : QObject( box->parent(), name )
+{
+  m_pView=_view;
+  config = KPresenterFactory::global()->config();
+  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
+  tmpQGroupBox->setTitle(i18n("Spelling"));
+
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox, 5, 1, KDialog::marginHint(), KDialog::spacingHint());
+  grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
+  grid1->setRowStretch( 4, 10 );
+  _spellConfig = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kPresenterDoc()->getKSpellConfig(), false );
+  grid1->addWidget(_spellConfig,1,0);
+
+  _dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
+  grid1->addWidget(_dontCheckUpperWord,2,0);
+
+  _dontCheckTilteCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
+  grid1->addWidget(_dontCheckTilteCase,3,0);
+
+  if( config->hasGroup("KSpell kpresenter") )
+    {
+        config->setGroup( "KSpell kpresenter" );
+        _dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+        _dontCheckTilteCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false));
+    }
+
+}
+
+void ConfigureSpellPage::apply()
+{
+  config->setGroup( "KSpell kpresenter" );
+  config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
+  config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
+  config->writeEntry ("KSpell_Dictionary", _spellConfig->dictionary ());
+  config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
+  config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
+  config->writeEntry ("KSpell_Client",  _spellConfig->client());
+
+  m_pView->kPresenterDoc()->setKSpellConfig(*_spellConfig);
+
+  bool state=_dontCheckUpperWord->isChecked();
+  config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
+  m_pView->kPresenterDoc()->setDontCheckUpperWord(state);
+
+  state=_dontCheckTilteCase->isChecked();
+  config->writeEntry("KSpell_dont_check_title_case",(int)state);
+  m_pView->kPresenterDoc()->setDontCheckTitleCase(state);
+}
+
+void ConfigureSpellPage::slotDefault()
+{
+    _spellConfig->setNoRootAffix( 0);
+    _spellConfig->setRunTogether(0);
+    _spellConfig->setDictionary( "");
+    _spellConfig->setDictFromList( FALSE);
+    _spellConfig->setEncoding (KS_E_ASCII);
+    _spellConfig->setClient (KS_CLIENT_ISPELL);
+    _dontCheckUpperWord->setChecked(false);
+    _dontCheckTilteCase->setChecked(false);
+
+}
+
 
 #include <kpresenter_dlg_config.moc>

@@ -26,7 +26,8 @@ class KPresenterView;
 class KIntNumInput;
 class KColorButton;
 class KConfig;
-
+class KSpellConfig;
+class QCheckBox;
 
 class configureInterfacePage : public QWidget
 {
@@ -59,6 +60,21 @@ protected:
     QColor oldBgColor;
 } ;
 
+class ConfigureSpellPage : public QObject
+{
+    Q_OBJECT
+public:
+    ConfigureSpellPage( KPresenterView *_view, QVBox *box, char *name = 0 );
+    void apply();
+    void slotDefault();
+private:
+    KPresenterView* m_pView;
+    KSpellConfig *_spellConfig;
+    QCheckBox *_dontCheckUpperWord;
+    QCheckBox *_dontCheckTilteCase;
+    KConfig* config;
+};
+
 class KPConfig : public KDialogBase
 {
     Q_OBJECT
@@ -70,6 +86,7 @@ public slots:
 private:
     configureInterfacePage *_interfacePage;
     configureColorBackground *_colorBackground;
+    ConfigureSpellPage *_spellPage;
 };
 
 #endif

@@ -73,6 +73,8 @@
 #include <kostyle.h>
 #include <kcommand.h>
 #include <KPresenterDocIface.h>
+#include <kspell.h>
+
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
@@ -139,6 +141,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _orastY = 10;
     _txtBackCol = lightGray;
     _otxtBackCol = lightGray;
+    m_pKSpellConfig=0;
     //   _pageLayout.format = PG_SCREEN;
     //   _pageLayout.orientation = PG_PORTRAIT;
     //   _pageLayout.width = PG_SCREEN_WIDTH;
@@ -217,6 +220,24 @@ void KPresenterDoc::initConfig()
         config->setGroup( "KPresenter Color" );
         setTxtBackCol(config->readColorEntry( "BackgroundColor", &oldBgColor ));
     }
+
+    KSpellConfig ksconfig;
+
+    if( config->hasGroup("KSpell kpresenter" ) )
+    {
+        config->setGroup( "KSpell kpresenter" );
+        ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+        ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+        ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+        ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+        ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+        ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+        setKSpellConfig(ksconfig);
+        setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+        setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
+    }
+
+
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );
 }
@@ -3816,6 +3837,19 @@ void KPresenterDoc::slotRepaintChanged( KPTextObject *kptextobj )
     //todo
     //use this function for the moment
     repaint( kptextobj );
+}
+
+void KPresenterDoc::setKSpellConfig(KSpellConfig _kspell)
+{
+  if(m_pKSpellConfig==0)
+    m_pKSpellConfig=new KSpellConfig();
+
+  m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
+  m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
+  m_pKSpellConfig->setDictionary(_kspell.dictionary ());
+  m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
+  m_pKSpellConfig->setEncoding(_kspell.encoding());
+  m_pKSpellConfig->setClient(_kspell.client());
 }
 
 #include <kpresenter_doc.moc>

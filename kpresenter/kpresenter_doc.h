@@ -56,6 +56,7 @@ class StyleDia;
 class KPPartObject;
 
 class KoStyle;
+class KSpellConfig;
 
 /******************************************************************/
 /* class KPresenterChild                                          */
@@ -313,6 +314,18 @@ public:
     KoZoomHandler* zoomHandler() const { return m_zoomHandler; }
     QFont defaultFont() const { return m_defaultFont; }
 
+    /**
+     * get custom kspell config
+     */
+    void setKSpellConfig(KSpellConfig _kspell);
+    KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
+
+    bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
+    void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
+
+    bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
+    void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -427,6 +440,9 @@ protected:
     KoZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
     KoAutoFormat * m_autoFormat;
+    KSpellConfig *m_pKSpellConfig;
+    bool m_bDontCheckUpperWord;
+    bool m_bDontCheckTitleCase;
 
 private:
     void pageTitleInsert( unsigned int pageNumber);
