@@ -489,7 +489,14 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                                 overObject = true;
                                 if ( kpobject->isSelected() && modType == MT_MOVE ) deSelAll = false;
                                 if ( kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE ) {
-                                    oldBoundingRect = m_view->zoomHandler()->zoomRect(kpobject->getBoundingRect( ));
+                                    KoRect oldKoBoundingRect = kpobject->getBoundingRect();
+                                    double _dx = oldKoBoundingRect.x() - 5.0;
+                                    double _dy = oldKoBoundingRect.y() - 5.0;
+                                    double _dw = oldKoBoundingRect.width() + 10.0;
+                                    double _dh = oldKoBoundingRect.height() + 10.0;
+                                    oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
+                                    oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
+
                                     resizeObjNum = i;
                                 }
                                 break;
@@ -4578,6 +4585,15 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     {
         if ( it.current()->isSelected() ) {
             p.begin( this );
+
+            KoRect oldKoBoundingRect = it.current()->getBoundingRect();
+            double _dx = oldKoBoundingRect.x() - 5.0;
+            double _dy = oldKoBoundingRect.y() - 5.0;
+            double _dw = oldKoBoundingRect.width() + 10.0;
+            double _dh = oldKoBoundingRect.height() + 10.0;
+            oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
+            QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
+
             it.current()->moveBy(m_view->zoomHandler()->unzoomItX(+diffx()),m_view->zoomHandler()->unzoomItY(+diffy()));
             it.current()->paintSelection( &p, m_view->zoomHandler() );
             it.current()->moveBy( _move );
@@ -4585,6 +4601,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
             it.current()->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
             p.end();
             _objects.append( it.current() );
+            _repaint( oldBoundingRect );
             QRect br = m_view->zoomHandler()->zoomRect( it.current()->getBoundingRect() );
             _repaint( br );
             _repaint( it.current() );
@@ -4707,7 +4724,13 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     _repaint( oldBoundingRect );
     _repaint( kpobject );
 
-    oldBoundingRect = m_view->zoomHandler()->zoomRect(kpobject->getBoundingRect( ));
+    KoRect oldKoBoundingRect = kpobject->getBoundingRect();
+    double _dx = oldKoBoundingRect.x() - 5.0;
+    double _dy = oldKoBoundingRect.y() - 5.0;
+    double _dw = oldKoBoundingRect.width() + 10.0;
+    double _dh = oldKoBoundingRect.height() + 10.0;
+    oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
+    oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
 }
 
 void KPrCanvas::raiseObject()
