@@ -523,7 +523,6 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		else if( b.tagName() == "path" )
 		{
 			VComposite *path = new VComposite( &m_document );
-			path->clear();
 			parsePath( path, b );
 			obj = path;
 		}
@@ -635,7 +634,6 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 
 		double contrlx, contrly, curx, cury, tox, toy, x1, y1, x2, y2, xc, yc;
 		bool relative;
-		VPath *path = 0L;
 		char command = *(ptr++), lastCommand = ' ';
 
 		curx = cury = contrlx = contrly = 0.0;
@@ -659,15 +657,9 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					curx = relative ? curx + tox : tox;
 					cury = relative ? cury + toy : toy;
 
-					if( path )
-					{
-						obj->combinePath( *path );
-						delete path;
-					}
-					path = new VPath( 0L );
 					//if( lastCommand == 'z' || lastCommand == 'Z' )
 					//	path->close();
-					path->moveTo( KoPoint( curx, cury ) );
+					obj->moveTo( KoPoint( curx, cury ) );
 					break;
 				}
 				case 'l':
@@ -680,47 +672,44 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					curx = relative ? curx + tox : tox;
 					cury = relative ? cury + toy : toy;
 
-					path->lineTo( KoPoint( curx, cury ) );
+					obj->lineTo( KoPoint( curx, cury ) );
 					break;
 				}
 				case 'h':
 				{
 					ptr = getCoord( ptr, tox );
 					curx += tox;
-					path->lineTo( KoPoint( curx, cury ) );
+					obj->lineTo( KoPoint( curx, cury ) );
 					break;
 				}
 				case 'H':
 				{
 					ptr = getCoord( ptr, tox );
 					curx = tox;
-					path->lineTo( KoPoint( curx, cury ) );
+					obj->lineTo( KoPoint( curx, cury ) );
 					break;
 				}
 				case 'v':
 				{
 					ptr = getCoord( ptr, toy );
 					cury += toy;
-					path->lineTo( KoPoint( curx, cury ) );
+					obj->lineTo( KoPoint( curx, cury ) );
 					break;
 				}
 				case 'V':
 				{
 					ptr = getCoord( ptr, toy );
 					cury = toy;
-					path->lineTo( KoPoint( curx, cury ) );
+					obj->lineTo( KoPoint( curx, cury ) );
 					break;
 				}
 				case 'z':
 				case 'Z':
 				{
 					// reset curx, cury for next path
-					curx = path->getFirst()->knot().x();
-					cury = path->getFirst()->knot().y();
-					path->close();
-					obj->combinePath( *path );
-					delete path;
-					path = 0;
+					curx = obj->currentPoint().x();
+					cury = obj->currentPoint().y();
+					obj->close();
 					break;
 				}
 				case 'c':
@@ -735,10 +724,10 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					ptr = getCoord( ptr, toy );
 
 					if(relative)
-						path->curveTo( KoPoint( curx + x1, cury + y1 ), KoPoint( curx + x2, cury + y2 ),
+						obj->curveTo( KoPoint( curx + x1, cury + y1 ), KoPoint( curx + x2, cury + y2 ),
 									   KoPoint( curx + tox, cury + toy ) );
 					else
-						path->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( tox, toy ) );
+						obj->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( tox, toy ) );
 					contrlx = relative ? curx + x2 : x2;
 					contrly = relative ? cury + y2 : y2;
 					curx = relative ? curx + tox : tox;
@@ -756,11 +745,11 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					ptr = getCoord( ptr, toy );
 
 					if(relative)
-						path->curveTo( KoPoint( 2 * curx - contrlx, 2 * cury - contrly ),
+						obj->curveTo( KoPoint( 2 * curx - contrlx, 2 * cury - contrly ),
 									   KoPoint( curx + x2, cury + y2 ),
 									   KoPoint( curx + tox, cury + toy ) );
 					else
-						path->curveTo( KoPoint( 2 * curx - contrlx, 2 * cury - contrly ),
+						obj->curveTo( KoPoint( 2 * curx - contrlx, 2 * cury - contrly ),
 									   KoPoint( x2, y2 ), KoPoint( tox, toy ) );
 					contrlx = relative ? curx + x2 : x2;
 					contrly = relative ? cury + y2 : y2;
@@ -778,11 +767,11 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					ptr = getCoord( ptr, toy );
 
 					if(relative)
-						path->curveTo( KoPoint( (curx + 2 * (x1 + curx)) * (1.0 / 3.0), (cury + 2 * (y1 + cury)) * (1.0 / 3.0) ),
+						obj->curveTo( KoPoint( (curx + 2 * (x1 + curx)) * (1.0 / 3.0), (cury + 2 * (y1 + cury)) * (1.0 / 3.0) ),
 									   KoPoint( ((curx + tox) + 2 * (x1 + curx)) * (1.0 / 3.0), ((cury + toy) + 2 * (y1 + cury)) * (1.0 / 3.0) ),
 									   KoPoint( curx + tox, cury + toy ) );
 					else
-						path->curveTo( KoPoint( (curx + 2 * x1) * (1.0 / 3.0), (cury + 2 * y1) * (1.0 / 3.0) ),
+						obj->curveTo( KoPoint( (curx + 2 * x1) * (1.0 / 3.0), (cury + 2 * y1) * (1.0 / 3.0) ),
 									   KoPoint( (tox + 2 * x1) * (1.0 / 3.0), (toy + 2 * y1) * (1.0 / 3.0) ), KoPoint( tox, toy ) );
 					contrlx = relative ? curx + x1 : (tox + 2 * x1) * (1.0 / 3.0);
 					contrly = relative ? cury + y1 : (toy + 2 * y1) * (1.0 / 3.0);
@@ -801,11 +790,11 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					ptr = getCoord(ptr, toy);
 
 					if(relative)
-						path->curveTo( KoPoint( (curx + 2 * xc) * (1.0 / 3.0), (cury + 2 * yc) * (1.0 / 3.0) ),
+						obj->curveTo( KoPoint( (curx + 2 * xc) * (1.0 / 3.0), (cury + 2 * yc) * (1.0 / 3.0) ),
 									   KoPoint( ((curx + tox) + 2 * xc) * (1.0 / 3.0), ((cury + toy) + 2 * yc) * (1.0 / 3.0) ),
 									   KoPoint( curx + tox, cury + toy ) );
 					else
-						path->curveTo( KoPoint( (curx + 2 * xc) * (1.0 / 3.0), (cury + 2 * yc) * (1.0 / 3.0) ),
+						obj->curveTo( KoPoint( (curx + 2 * xc) * (1.0 / 3.0), (cury + 2 * yc) * (1.0 / 3.0) ),
 									   KoPoint( (tox + 2 * xc) * (1.0 / 3.0), (toy + 2 * yc) * (1.0 / 3.0) ), KoPoint( tox, toy ) );
 					contrlx = xc;
 					contrly = yc;
@@ -860,11 +849,8 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 				contrly = cury;
 			}
 		}
-		if( path )
-		{
-			obj->combinePath( *path );
-			delete path;
-		}
+
+		obj->end();
 	}
 }
 
