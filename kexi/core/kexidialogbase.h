@@ -39,14 +39,6 @@ namespace KexiPart {
 	class Part;
 }
 
-class KexiDialogData : public QObject
-{
-	Q_OBJECT
-	public:
-		KexiDialogData();
-		virtual ~KexiDialogData();
-};
-
 class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy
 {
 	Q_OBJECT
