@@ -412,7 +412,7 @@ bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)
   if (res)
   {
       qDebug ("before save document");
-      m_document->saveXML(doc);
+      doc = m_document->saveXML();
       qDebug ("after save document");
   }
   else
