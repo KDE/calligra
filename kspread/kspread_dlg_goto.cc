@@ -37,16 +37,14 @@ KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
 	: QDialog( parent, name, TRUE )
 {
   m_pView = parent;
-
-  tabname=m_pView->activeTable()->name();
-
   setCaption( i18n("Goto cell") );
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
 
-  name_cell = new QLineEdit( this );
-  lay1->addWidget(name_cell);
+  m_nameCell = new QLineEdit( this );
+  lay1->addWidget(m_nameCell);
+
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
@@ -54,31 +52,30 @@ KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   lay1->addWidget( bb );
-  name_cell->setFocus();
+  m_nameCell->setFocus();
 
+  m_pOk->setEnabled(false);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-
+  connect( m_nameCell, SIGNAL(textChanged ( const QString & )),
+           this, SLOT(textChanged ( const QString & )));
 }
 
+void KSpreadGotoDlg::textChanged ( const QString &_text )
+{
+    m_pOk->setEnabled(!_text.isEmpty());
+}
 
 void KSpreadGotoDlg::slotOk()
 {
     QString tmp_upper;
-    if(!name_cell->text().isEmpty())
-        {
-        tmp_upper=name_cell->text().upper();
+    tmp_upper=m_nameCell->text().upper();
 
-        if ( tmp_upper.contains( ':' ) ) //Selection entered in location widget
-                m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp_upper, m_pView->doc()->map() ) );
-        else //Location entered in location widget
-                m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
-        accept();
-        }
-    else
-        {
-        KMessageBox::error( this, i18n("Area Text is empty!") );
-        }
+    if ( tmp_upper.contains( ':' ) ) //Selection entered in location widget
+        m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp_upper, m_pView->doc()->map() ) );
+    else //Location entered in location widget
+        m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
+    accept();
 }
 
 void KSpreadGotoDlg::slotClose()

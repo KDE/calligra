@@ -1561,7 +1561,7 @@ void KSpreadView::replace()
 
     // Refresh the editWidget
     KSpreadCell *cell = activeTable()->cellAt( canvasWidget()->markerColumn(),
-                                                        canvasWidget()->markerRow() );
+                                               canvasWidget()->markerRow() );
     if ( cell->text() != 0L )
         editWidget()->setText( cell->text() );
     else

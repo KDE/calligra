@@ -38,18 +38,15 @@ public:
 public slots:
   void slotOk();
   void slotClose();
-
+  void textChanged ( const QString &_text );
 
 
 protected:
   KSpreadView* m_pView;
   
-  QLineEdit* name_cell;
+  QLineEdit* m_nameCell;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
-  QString tabname;
-
-
 };
 
 #endif
