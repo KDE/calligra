@@ -1,10 +1,10 @@
 
-SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins trader koshell po pics
+SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins trader koshell pics
 
 AUTOMAKE_OPTIONS = foreign # 1.4
 
 acinclude.m4: admin/acinclude.m4.in admin/libtool.m4.in
-	@cat $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in   > $(top_srcdir)/acinclude.m4 
+	@cat $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in   > $(top_srcdir)/acinclude.m4
 
 messages:
 	rm -rf po.backup
@@ -33,5 +33,5 @@ messages:
 	(cd po && $(MAKE) -f Makefile.am merge)
 
 dist-hook:
-	cd $(top_distdir) && perl $(top_srcdir)/admin/am_edit -padmin 
+	cd $(top_distdir) && perl $(top_srcdir)/admin/am_edit -padmin
 
