@@ -1581,6 +1581,8 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
     delete cursor;
     if ( createMacro )
         return macro;
+    else
+        delete macro;
     return 0L;
 }
 
