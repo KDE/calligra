@@ -267,16 +267,18 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
   QPainter painter;
   painter.begin(m_buffer);
-  painter.translate(-m_iXOffset, -m_iYOffset);
 
   KoPageLayout pl = page->paperLayout();
   int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
   int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
   QRect fillRect(0, 0, pw, ph);
   QRect paintRect = ev->rect();
+  paintRect.setX(paintRect.x());
+  paintRect.setY(paintRect.y());
   QRegion grayRegion(paintRect);
-  grayRegion.translate(-m_iXOffset, -m_iYOffset);
+  grayRegion.translate(m_iXOffset, m_iYOffset);
   grayRegion -= fillRect;
+  grayRegion.translate(-m_iXOffset, -m_iYOffset);
 
   // This code comes from KPresenter's kprcanvas.cpp
   // Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -287,6 +289,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   painter.restore();
   // end of copy...
 
+  painter.translate(-m_iXOffset, -m_iYOffset);
   painter.fillRect(fillRect, white);
 
   // Draw Grid
