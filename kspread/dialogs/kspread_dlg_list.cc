@@ -33,6 +33,7 @@
 #include <kmessagebox.h>
 
 #include <kspread_autofill.h>
+#include <kspread_factory.h>
 
 #include "kspread_dlg_list.h"
 
