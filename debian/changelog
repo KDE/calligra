@@ -1,10 +1,10 @@
-koffice (1:1.3.0-1) unstable; urgency=low
+koffice (1:1.2.95-1) unstable; urgency=low
 
-  * New upstream release (1.3-final).
+  * New upstream release (1.3-rc2).
   * Changed suggests openoffice.org-mimelnk to recommends now that OOo is in
     main.
 
- -- Ben Burton <bab@debian.org>  Mon,  3 Nov 2003 11:18:03 +1100
+ -- Ben Burton <bab@debian.org>  Sun, 21 Dec 2003 01:26:54 +1100
 
 koffice (1:1.2.94-1) unstable; urgency=low
 
