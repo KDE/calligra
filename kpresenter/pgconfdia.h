@@ -57,6 +57,8 @@ public:
     QPen getPen() const;
     QValueList<bool> getSelectedSlides() const;
 
+    QString presentationName() const;
+
 protected:
 
     KPresenterDoc* m_doc;

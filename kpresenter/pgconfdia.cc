@@ -250,4 +250,9 @@ void PgConfDia::deselectAllSlides()
     }
 }
 
+QString PgConfDia::presentationName() const
+{
+    return m_customSlideCombobox->currentText();
+}
+
 #include "pgconfdia.moc"
