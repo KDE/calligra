@@ -13,6 +13,7 @@
 #include <qcursor.h>
 #include <qstack.h>
 #include <qbuffer.h>
+#include <qmsgbox.h>
 
 #include "kspread_table.h"
 #include "kspread_view.h"
@@ -20,6 +21,8 @@
 #include "kspread_dlg_print.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"
+
+#include <koffice_imr.h>
 
 /*****************************************************************************
  *
@@ -2212,8 +2215,33 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int )
 
 void KSpreadTable::insertChild( const QRect& _rect, const char *_arg )
 {
-  OPParts::Document_var doc = new KSpreadDoc;
-  KSpreadChild* ch = new KSpreadChild( m_pDoc, _rect, doc );
+  cout << "void KSpreadTable::insertChild( const QRect& _rect, const char *_arg = '" << _arg << "' )" << endl;
+  
+  CORBA::Object_var obj = imr_activate( _arg );
+  if ( CORBA::is_nil( obj ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n("Could not start server %s" ), _arg );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    return;
+  }
+  
+  // Narrow by hand
+  CORBA::Object_ptr p2 = obj;
+  OPParts::Factory_ptr factory_stub = new OPParts::Factory_stub;
+  factory_stub->CORBA::Object::operator=( *p2 );
+  OPParts::Factory_var factory = factory_stub;
+  assert( !CORBA::is_nil( factory ) );
+  CORBA::Object_var v = factory->create();
+  
+  // Narrow by hand
+  CORBA::Object_ptr p = v;
+  OPParts::Document_ptr doc_stub = new OPParts::Document_stub;
+  doc_stub->CORBA::Object::operator=( *p );
+  OPParts::Document_var doc = doc_stub;
+  cout << "Creating MimeType '" << doc->mimeType() << "'" << endl;
+  
+  KSpreadChild* ch = new KSpreadChild( m_pDoc, this, _rect, doc );
   m_lstChildren.append( ch );
   
   emit sig_insertChild( ch );
@@ -2244,8 +2272,9 @@ KSpreadTable::~KSpreadTable()
  *
  **********************************************************/
 
-KSpreadChild::KSpreadChild( KSpreadDoc *_spread, const QRect& _rect, OPParts::Document_ptr _doc )
+KSpreadChild::KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc )
 {
+  m_pTable = _table;
   m_pDoc = _spread;
   m_rDoc = OPParts::Document::_duplicate( _doc );
   m_geometry = _rect;

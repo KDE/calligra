@@ -13,8 +13,8 @@ PYTHONLIBS =    -L$(PYTHON)/Modules \
 #PYTHONLIBS = -L/usr/lib/python-1.4/config
 
 INCDIR  =	-I$(QTDIR)/include -I$(KDEDIR)/include -I/usr/local/include $(PYTHONINC) -I$(KDEDIR)/idl
-CXXFLAGS =	$(INCDIR) -g -fhandle-exceptions -O0
-LDFLAGS =        -L$(KDEDIR)/lib -L/usr/X11/lib -lqt -lkdecore -lkdeui -lmico2.0.5 -lX11 -lXext -lkom -lop $(PYTHONLIBS) -lModules -lPython -lObjects -lParser -lkfm -lkfile
+CXXFLAGS =	$(INCDIR) -g -fexceptions -O0
+LDFLAGS =        -L$(KDEDIR)/lib -L/usr/X11/lib -lqt -lkdecore -lkdeui -lmico2.0.5 -lX11 -lXext -lkom -lop $(PYTHONLIBS) -lModules -lPython -lObjects -lParser -lkfm -lkfile -lkofficecore -lkofficeui
 CXX     =       c++
 MOC     =       /usr/bin/moc
 
@@ -27,6 +27,14 @@ SRCMETA =	kspread_main.moc kspread_shell.moc kspread_doc.moc kspread_dlg_paper.m
 IDL	=	kspread.idl
 IDLH	=	kspread.h
 TARGET	=	kspread
+
+####### Install
+
+INSTALL = install -m 0755 -s
+INSTALL_SHELL = install -m 0755
+INSTALL_DATA = install -m 0644
+INSTALL_DIR = install -d -m 0755
+INSTALL_DIR_PRIVATE = install -d -m 0700
 
 ####### Implicit rules
 
@@ -56,7 +64,16 @@ clean:
 	-rm -f $(SRCMETA) $(TARGET)
 
 idl: kspread.idl
-	idl -I$(KDEDIR)/idl kspread.idl
+	idl --query-server-for-narrow -I$(KDEDIR)/idl kspread.idl
+
+install:
+	$(INSTALL_DIR) $(KDEDIR)/share/apps/koffice
+	$(INSTALL_DIR) $(KDEDIR)/share/apps/koffice/partlnk
+	$(INSTALL_DATA) kspread_part.kdelnk $(KDEDIR)/share/apps/koffice/partlnk/kspread.kdelnk
+	$(INSTALL_DIR) $(KDEDIR)/idl
+	$(INSTALL_DATA) kspread.idl $(KDEDIR)/idl
+	( cd pics; make install; cd .. )
+	( cd scripts; make install; cd .. )
 
 ####### Meta objects
 
@@ -243,7 +260,9 @@ kspread_main.o: /opt/kde/include/kcolordlg.h /opt/kde/include/kselect.h
 kspread_main.o: /usr/lib/qt/include/qstack.h kspread_view.h kspread_tabbar.h
 kspread_main.o: kspread_map.h kspread_shell.h
 kspread_main.o: /opt/kde/include/default_shell_impl.h
-kspread_main.o: /opt/kde/include/default_shell.h kspread_main.moc
+kspread_main.o: /opt/kde/include/default_shell.h
+kspread_main.o: /opt/kde/include/koScanParts.h
+kspread_main.o: /opt/kde/include/factory_impl.h kspread_main.moc
 kspread_main.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
 kspread_shell.o: kspread_shell.h /opt/kde/include/default_shell_impl.h
 kspread_shell.o: /opt/kde/include/default_shell.h /usr/local/include/CORBA.h
@@ -986,11 +1005,15 @@ kspread_view.o: kspread.h /opt/kde/idl/controls.h /opt/kde/idl/parts.h
 kspread_view.o: /opt/kde/include/utils.h /usr/lib/qt/include/qobjcoll.h
 kspread_view.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
 kspread_view.o: /usr/lib/qt/include/qkeycode.h /opt/kde/include/kbutton.h
-kspread_view.o: kspread_map.h kspread_dlg_scripts.h kmetaedit.h
-kspread_view.o: kspread_dlg_paper.h kspread_dlg_paper_border.h
-kspread_view.o: kspread_dlg_paper_headings.h kspread_dlg_print.h
-kspread_view.o: /usr/lib/qt/include/qprinter.h kspread_doc.h kspread_python.h
-kspread_view.o: ./Python-1.4/Include/Python.h
+kspread_view.o: /opt/kde/include/koPartSelectDia.h
+kspread_view.o: /opt/kde/include/koScanParts.h /opt/kde/include/op_app.h
+kspread_view.o: /opt/kde/include/kom_app.h /usr/lib/qt/include/qsocknot.h
+kspread_view.o: /opt/kde/include/topwidget_impl.h
+kspread_view.o: /opt/kde/include/koPartSelectDia_data.h kspread_map.h
+kspread_view.o: kspread_dlg_scripts.h kmetaedit.h kspread_dlg_paper.h
+kspread_view.o: kspread_dlg_paper_border.h kspread_dlg_paper_headings.h
+kspread_view.o: kspread_dlg_print.h /usr/lib/qt/include/qprinter.h
+kspread_view.o: kspread_doc.h kspread_python.h ./Python-1.4/Include/Python.h
 kspread_view.o: ./Python-1.4/Include/allobjects.h ./Python-1.4/config.h
 kspread_view.o: ./Python-1.4/Include/myproto.h ./Python-1.4/Include/object.h
 kspread_view.o: ./Python-1.4/Include/objimpl.h ./Python-1.4/Include/pydebug.h
@@ -1026,8 +1049,7 @@ kspread_view.o: ./Python-1.4/Include/graminit.h kspread_undo.h
 kspread_view.o: /usr/lib/qt/include/qstack.h kspread_shell.h
 kspread_view.o: /opt/kde/include/default_shell_impl.h
 kspread_view.o: /opt/kde/include/default_shell.h
-kspread_view.o: /opt/kde/include/part_shell_impl.h
-kspread_view.o: /opt/kde/include/topwidget_impl.h kspread_view.moc
+kspread_view.o: /opt/kde/include/part_shell_impl.h kspread_view.moc
 kspread_tabbar.o: /usr/lib/qt/include/qpntarry.h /usr/lib/qt/include/qarray.h
 kspread_tabbar.o: /usr/lib/qt/include/qgarray.h /usr/lib/qt/include/qshared.h
 kspread_tabbar.o: /usr/lib/qt/include/qglobal.h

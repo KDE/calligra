@@ -71,17 +71,19 @@ protected:
 class KSpreadChild
 {
 public:
-  KSpreadChild( KSpreadDoc *_spread, const QRect& _rect, OPParts::Document_ptr _doc );
+  KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc );
   ~KSpreadChild();
   
   const QRect& geometry() { return m_geometry; }
   OPParts::Document_ptr document() { return OPParts::Document::_duplicate( m_rDoc ); }
   KSpreadDoc* parent() { return m_pDoc; }
-
+  KSpreadTable* table() { return m_pTable; }
+  
   void setGeometry( const QRect& _rect ) { m_geometry = _rect; }
   
 protected:
   KSpreadDoc *m_pDoc;
+  KSpreadTable *m_pTable;
   Document_ref m_rDoc;
   QRect m_geometry;
 };

@@ -2,6 +2,17 @@
 
 ImageDocument_impl::ImageDocument_impl()
 {
+  init();
+}
+
+ImageDocument_impl::ImageDocument_impl( const CORBA::BOA::ReferenceData &_refdata ) :
+  KImage::ImageDocument_skel( _refdata )
+{
+  init();
+}
+
+void ImageDocument_impl::init()
+{
   // Use CORBA mechanism for deleting views
   m_lstViews.setAutoDelete( false );
   m_lstChildren.setAutoDelete( true );
@@ -14,7 +25,7 @@ ImageDocument_impl::~ImageDocument_impl()
 {
   sdeb("ImageDocument_impl::~ImageDocument_impl()\n");
   cleanUp();
-  edeb("...ImageDocument_impl::~ImageDocument_impl() %i\n",_refcnt());
+  edeb("...ImageDocument_impl::~ImageDocument_impl()\n");
 }
 
 void ImageDocument_impl::cleanUp()
@@ -157,6 +168,8 @@ void ImageDocument_impl::removeView( ImageView_impl *_view )
 
 OPParts::View_ptr ImageDocument_impl::createView()
 {
+  cout << "OPParts::View_ptr ImageDocument_impl::createView()" << endl;
+  
   ImageView_impl *p = new ImageView_impl( 0L );
   p->setDocument( this );
   

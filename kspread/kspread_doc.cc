@@ -120,87 +120,89 @@ CORBA::Boolean KSpreadDoc::saveAs( const char *_filename, const char *_format )
   return false;
 }
 
-/* void KSpreadDoc::activate( bool _status )
-{
-    if ( _status )
-    {
-	QString tmp;
-	if ( fileURL.isEmpty() )
-	{
-	    tmp.sprintf( "Kxcl: New Document %i", ++documentCount );
-	    shell()->setCaption( this, tmp.data() );
-	}
-	else
-	{
-	    tmp.sprintf( "Kxcl: %s", fileURL.data() );
-	    shell()->setCaption( this, tmp.data() );
-	}
-
-	if ( pGui )
-	    pGui->getPaperWidget()->setFocus();
-    }
-    KPart::activate( _status );
-} */
-
-/* void KSpreadDoc::showGUI()
-{
-    KPart::showGUI();
-
-    if ( pGui )
-	pGui->showGUI( TRUE );
-} */
-
-/* void KSpreadDoc::hideGUI()
-{
-    KPart::hideGUI();
-
-    if ( pGui )
-	pGui->showGUI( FALSE );
-} */
-
 /*
 bool KSpreadDoc::save( const char *_url )
 {
   KURL u( _url );
-    if ( u.isMalformed() )
-	return FALSE;
+  if ( u.isMalformed() )
+    return FALSE;
     
-    KorbSession* korb = new KorbSession( u.path(), IO_WriteOnly );
-    korb->setAuthor( "(c) Torben Weis, weis@kde.org" );
-
-    OBJECT o_map = save( korb );
-
-    if ( o_map == 0 )
-    {
-	korb->release();
-	delete korb;
-	return FALSE;
-    }
-    
-    korb->setRootObject( o_map );
-    korb->release();
+  if ( !u.isLocal() )
+  {
+    warning("Can not save to remote URL\n");
+    return false;
+  }
+  
+  Store* store = new Store( u.path(), IO_WriteOnly );
+  store->setAuthor( "(c) Torben Weis, weis@kde.org" );
+  store->setEditor( "KSpread" );
+  store->setMimeType( "application/x-kspread" );
+  
+  OBJECT o_map = save( korb );
+  
+  if ( o_map == 0 )
+  {
+    store->release();
     delete korb;
-
-    fileURL = _url;
+    return FALSE;
+  }
     
-    return TRUE;
+  store->setRootObject( o_map );
+  store->release();
+  delete korb;
+
+  fileURL = _url;
+    
+  return TRUE;
 }
-*/
-/*
-OBJECT KSpreadDoc::save( KorbSession* _korb )
+
+OBJECT KSpreadDoc::save( Store* _store )
 {
     // For use as values in the ObjectType property
-    TYPE t_map   =  _korb->registerType( "KDE:kxcl:Map" );
+    TYPE t_map   =  _store->registerType( "KDE:KSpread:Map" );
 
-    if ( editor && !editorBuffer.isNull() && editorBuffer.length() > 0 )
-	editor->saveBuffer( editorBuffer );
-    pMap->getPythonCodeFromFile();
-    
-    OBJECT o_map = KPart::save( _korb, t_map );
+    if ( m_pEditor && !m_editorBuffer.isNull() && m_editorBuffer.length() > 0 )
+      m_pEditor->saveBuffer( editorBuffer );
+    m_pMap->getPythonCodeFromFile();
+
+    OBJECT o_doc( _store->newObject( t_part ) ); 
+
+    // Properties
+    PROPERTY p_leftborder = _store->registerProperty( "KDE:KSpread:LeftBorder" );
+    PROPERTY p_rightborder = _store->registerProperty( "KDE:KSpread:RightBorder" );
+    PROPERTY p_topborder = _store->registerProperty( "KDE:KSpread:TopBorder" );
+    PROPERTY p_bottomborder = _store->registerProperty( "KDE:KSpread:BottomBorder" );
+    PROPERTY p_papersize = _store->registerProperty( "KDE:KSpread:PaperSize" );
+    PROPERTY p_paperorientation = _store->registerProperty( "KDE:KSpread:PaperOrientation" );
+    PROPERTY p_m_headLeft = _store->registerProperty( "KDE:KSpread:headLeft" );
+    PROPERTY p_m_headMid = _store->registerProperty( "KDE:KSpread:headMid" );
+    PROPERTY p_m_headRight = _store->registerProperty( "KDE:KSpread:headRight" );
+    PROPERTY p_footLeft = _store->registerProperty( "KDE:KSpread:footLeft" );
+    PROPERTY p_footMid = _store->registerProperty( "KDE:KSpread:footMid" );
+    PROPERTY p_footRight = _store->registerProperty( "KDE:KSpread:footRight" );
+    PROPERTY p_code = _store->registerProperty( "KDE:KSpread:PythonCode" );
+
+    // Write the paper metrics
+    korb->writeFloatValue( o_doc, p_leftborder, xclPart->getLeftBorder() );
+    korb->writeFloatValue( o_doc, p_rightborder, xclPart->getRightBorder() );
+    korb->writeFloatValue( o_doc, p_topborder, xclPart->getTopBorder() );
+    korb->writeFloatValue( o_doc, p_bottomborder, xclPart->getBottomBorder() );
+    korb->writeStringValue( o_doc, p_papersize, xclPart->paperFormatString() );
+    korb->writeStringValue( o_doc, p_paperorientation, xclPart->orientationString() );
+    korb->writeStringValue( o_doc, p_m_headLeft, xclPart->getHeadLeft() );
+    korb->writeStringValue( o_doc, p_m_headMid, xclPart->getHeadMid() );
+    korb->writeStringValue( o_doc, p_m_headRight, xclPart->getHeadRight() );
+    korb->writeStringValue( o_doc, p_footLeft, xclPart->getFootLeft() );
+    korb->writeStringValue( o_doc, p_footMid, xclPart->getFootMid() );
+    korb->writeStringValue( o_doc, p_footRight, xclPart->getFootRight() );
+    if ( !pythonCode.isNull() && pythonCode.length() > 0 )
+	korb->writeStringValue( o_doc, p_code, pythonCode.data() );
+
+    OBJECT o_map( _store->newObject( t_part ) ); 
     if ( o_map )
-	return pMap->save( _korb, o_map );
-
-    return o_map;
+      return pMap->save( _store, o_map );
+    
+    return 0;
 }
 */
 /*

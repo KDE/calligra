@@ -1,3 +1,8 @@
+Thu Apr 30 02:00:53 1998  Torben Weis  <weis@localhost>
+
+	* kspread_main.cc (start): Changed to work with new
+	                  koffice libs.
+
 Wed Apr 22 01:45:47 1998  Torben Weis  <weis@localhost>
 
 	* (resizeEvent): Embedded tables do no longer display

@@ -1,0 +1,8 @@
+Thu Apr 30 01:39:33 1998  Torben Weis  <weis@localhost>
+
+	* test.cc: Rewrote the main function. 'test' is now a full
+	           featured CORBA application. Otherwise the
+	           "KoPartSelectDia" would not run.
+
+	* test.h (class MyTest): Added "KoPartSelectDia".
+

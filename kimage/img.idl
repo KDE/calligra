@@ -19,6 +19,10 @@ module KImage
 		boolean import( in string filename );
 		boolean export( in string filename, in string format );
 	};
+
+	interface Factory : OPParts::Factory
+	{
+	};
 };
 
 #endif

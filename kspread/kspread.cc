@@ -57,6 +57,11 @@ KSpread::View_ptr KSpread::View::_narrow( CORBA::Object_ptr _obj )
       return _o;
     }
   }
+  if( _obj->_is_a_remote( "IDL:KSpread/View:1.0" ) ) {
+    _o = new KSpread::View_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
+  }
   return _nil();
 }
 
@@ -694,6 +699,11 @@ KSpread::Document_ptr KSpread::Document::_narrow( CORBA::Object_ptr _obj )
       return _o;
     }
   }
+  if( _obj->_is_a_remote( "IDL:KSpread/Document:1.0" ) ) {
+    _o = new KSpread::Document_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
+  }
   return _nil();
 }
 
@@ -739,6 +749,106 @@ operator>>=( const CORBA::Any &_a, KSpread::Document_ptr &_obj )
     return TRUE;
   }
   _obj = ::KSpread::Document::_narrow( _o );
+  CORBA::release( _o );
+  return TRUE;
+}
+
+
+// Stub interface Factory
+KSpread::Factory::~Factory()
+{
+}
+
+KSpread::Factory_ptr KSpread::Factory::_duplicate( Factory_ptr _obj )
+{
+  if( !CORBA::is_nil( _obj ) )
+    _obj->_ref();
+  return _obj;
+}
+
+void *KSpread::Factory::_narrow_helper( const char *_repoid )
+{
+  if( strcmp( _repoid, "IDL:KSpread/Factory:1.0" ) == 0 )
+    return (void *)this;
+  if( void *_p = OPParts::Factory::_narrow_helper( _repoid ))
+    return _p;
+  return NULL;
+}
+
+bool KSpread::Factory::_narrow_helper2( CORBA::Object_ptr _obj )
+{
+  if( strcmp( _obj->_repoid(), "IDL:KSpread/Factory:1.0" ) == 0) {
+    return true;
+  }
+  for( int _i = 0; _narrow_helpers && _i < _narrow_helpers->size(); _i++ ) {
+    bool _res = (*(*_narrow_helpers)[ _i ])( _obj );
+    if( _res )
+      return true;
+  }
+  return false;
+}
+
+KSpread::Factory_ptr KSpread::Factory::_narrow( CORBA::Object_ptr _obj )
+{
+  KSpread::Factory_ptr _o;
+  if( !CORBA::is_nil( _obj ) ) {
+    if( void *_p = _obj->_narrow_helper( "IDL:KSpread/Factory:1.0" ))
+      return _duplicate( (KSpread::Factory_ptr) _p );
+    if( _narrow_helper2( _obj ) ) {
+      _o = new KSpread::Factory_stub;
+      _o->CORBA::Object::operator=( *_obj );
+      return _o;
+    }
+  }
+  if( _obj->_is_a_remote( "IDL:KSpread/Factory:1.0" ) ) {
+    _o = new KSpread::Factory_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
+  }
+  return _nil();
+}
+
+KSpread::Factory_ptr KSpread::Factory::_nil()
+{
+  return NULL;
+}
+
+KSpread::Factory_stub::~Factory_stub()
+{
+}
+
+struct _global_init_KSpread_Factory {
+  _global_init_KSpread_Factory()
+  {
+    if( ::OPParts::Factory::_narrow_helpers == NULL )
+      ::OPParts::Factory::_narrow_helpers = new vector<CORBA::Narrow_proto>;
+    ::OPParts::Factory::_narrow_helpers->push_back( KSpread::Factory::_narrow_helper2 );
+  }
+} __global_init_KSpread_Factory;
+
+vector<CORBA::Narrow_proto> *KSpread::Factory::_narrow_helpers;
+
+CORBA::TypeCode_ptr KSpread::_tc_Factory = (new CORBA::TypeCode(
+  "010000000e0000002c000000010000001800000049444c3a4b5370726561"
+  "642f466163746f72793a312e300008000000466163746f727900" ))->mk_constant();
+
+CORBA::Boolean
+operator<<=( CORBA::Any &_a, const KSpread::Factory_ptr _obj )
+{
+  return (_a <<= CORBA::Any::from_object( _obj, "Factory" ));
+}
+
+CORBA::Boolean
+operator>>=( const CORBA::Any &_a, KSpread::Factory_ptr &_obj )
+{
+  CORBA::Object_ptr _o;
+  if( !(_a >>= CORBA::Any::to_object( _o )) )
+    return FALSE;
+  if( CORBA::is_nil( _o ) ) {
+    _obj = ::KSpread::Factory::_nil();
+    return TRUE;
+  }
+  _obj = ::KSpread::Factory::_narrow( _o );
   CORBA::release( _o );
   return TRUE;
 }
@@ -1158,5 +1268,45 @@ bool KSpread::Document_skel::dispatch( CORBA::ServerRequest_ptr _req, CORBA::Env
 KSpread::Document_ptr KSpread::Document_skel::_this()
 {
   return KSpread::Document::_duplicate( this );
+}
+
+
+// Dynamic Implementation Routine for interface Factory
+KSpread::Factory_skel::Factory_skel( const CORBA::BOA::ReferenceData &_id )
+{
+  CORBA::ImplementationDef_var _impl =
+    _find_impl( "IDL:KSpread/Factory:1.0", "Factory" );
+  assert( !CORBA::is_nil( _impl ) );
+  _create_ref( _id,
+    CORBA::InterfaceDef::_nil(),
+    _impl,
+    "IDL:KSpread/Factory:1.0" );
+  register_dispatcher( new InterfaceDispatcherWrapper<Factory_skel>( this ) );
+}
+
+KSpread::Factory_skel::Factory_skel( CORBA::Object_ptr _obj )
+{
+  CORBA::ImplementationDef_var _impl =
+    _find_impl( "IDL:KSpread/Factory:1.0", "Factory" );
+  assert( !CORBA::is_nil( _impl ) );
+  _restore_ref( _obj,
+    CORBA::BOA::ReferenceData(),
+    CORBA::InterfaceDef::_nil(),
+    _impl );
+  register_dispatcher( new InterfaceDispatcherWrapper<Factory_skel>( this ) );
+}
+
+KSpread::Factory_skel::~Factory_skel()
+{
+}
+
+bool KSpread::Factory_skel::dispatch( CORBA::ServerRequest_ptr _req, CORBA::Environment &_env )
+{
+  return false;
+}
+
+KSpread::Factory_ptr KSpread::Factory_skel::_this()
+{
+  return KSpread::Factory::_duplicate( this );
 }
 

@@ -43,10 +43,8 @@ class ImageView_impl : public QWidget,
 public:
   // C++
   ImageView_impl( QWidget *_parent = 0L, const char *_name = 0L );
-  ~ImageView_impl();
+  virtual ~ImageView_impl();
 
-  virtual void cleanUp();
-  
   // IDL  
   virtual void toggleFitToWindow();
   virtual void newView();
@@ -62,7 +60,7 @@ public:
   virtual void createGUI();
   /**
    * Called on the first paint event. This function
-   * bringd the view and the document in sync.
+   * brings the view and the document in sync.
    */
   virtual void construct();
 
@@ -81,6 +79,8 @@ signals:
   void rectangleSelected( const QRect& );
 
 protected:
+  virtual void cleanUp();
+  
   void updatePixmap();
   void scale();
 

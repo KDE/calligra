@@ -1,0 +1,11 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KImage
+Exec=/home/weis/kde/koffice2/kimage/img --server
+Comment=Torben's Image Viewer
+MimeTypes=application/x-kimage,image/gif,
+RepoID=IDL:KImage/Factory:1.0,
+ActivationMode=shared
+Type=OpenPart
+Icon=image.xpm
+MiniIcon=image.xpm

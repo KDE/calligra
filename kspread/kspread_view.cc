@@ -11,6 +11,8 @@
 #include <kbutton.h>
 #include <klocale.h>
 
+#include <koPartSelectDia.h>
+
 #include "kspread_map.h"
 #include "kspread_table.h"
 #include "kspread_dlg_scripts.h"
@@ -731,27 +733,39 @@ void KSpreadView::insertChart( const QRect& _geometry )
 
 void KSpreadView::insertChild( const QRect& _geometry, const char *_arg )
 {
-  if ( strcmp( _arg, "application/x-kspread" ) != 0L )
-  {
-    QMessageBox::critical( this, "KSpread Error", "Not implemented yet" );
-    return;
-  }
-  
   m_pTable->insertChild( _geometry, _arg );
 }
 
 void KSpreadView::slotRemoveChild( KSpreadChild *_child )
 {
+  if ( _child->table() != m_pTable )
+    return;
+  
   // TODO
 }
 
 void KSpreadView::slotInsertChild( KSpreadChild *_child )
 { 
+  if ( _child->table() != m_pTable )
+    return;
+
   OPParts::Document_var doc = _child->document();
   OPParts::View_var v;
 
   try
   { 
+    /* CORBA::Object_var obj;
+    obj = doc->createView();
+    if( !CORBA::is_nil( obj ) )
+    {
+      // Narrow by hand
+      CORBA::Object_ptr p = obj;
+      OPParts::View_ptr view_stub = new OPParts::View_stub;
+      view_stub->CORBA::Object::operator=( *p );
+      v = view_stub;
+    }
+    else
+      cerr << "Shit! We did not get a view!!!" << endl; */
     v = doc->createView();
   }
   catch ( OPParts::Document::MultipleViewsNotSupported &_ex )
@@ -777,7 +791,7 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
   p->setGeometry( _child->geometry() );
   p->show();
   m_lstFrames.append( p );
-  CORBA::release( p );
+  // CORBA::release( p );
   
   QObject::connect( p, SIGNAL( sig_geometryEnd( PartFrame_impl* ) ),
 		    this, SLOT( slotChildGeometryEnd( PartFrame_impl* ) ) );
@@ -803,6 +817,9 @@ void KSpreadView::slotChildMoveEnd( PartFrame_impl* _frame )
 
 void KSpreadView::slotUpdateChildGeometry( KSpreadChild *_child )
 {
+  if ( _child->table() != m_pTable )
+    return;
+
   // Find frame for child
   KSpreadChildFrame *f = 0L;
   QListIterator<KSpreadChildFrame> it( m_lstFrames );
@@ -1214,17 +1231,21 @@ void KSpreadView::percent()
 
 void KSpreadView::insertTable()
 {
-  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "application/x-kspread" );
+  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "KSpread" );
 }
 
 void KSpreadView::insertImage()
 {
-  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "application/x-kimage" );
+  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "KImage" );
 }
 
 void KSpreadView::insertObject()
 {
-  // m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, "application/x-kchart" );
+  KoPartEntry* pe = KoPartSelectDia::selectPart();
+  if ( !pe )
+    return;
+  
+  m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, pe->name() );
 }
 
 void KSpreadView::insertChart()
@@ -2145,7 +2166,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     return;
   }
 
-  if ( m_pView->isMarkerVisible )
+  if ( m_pView->isMarkerVisible() )
   {
     m_pView->drawMarker();
     // TODO

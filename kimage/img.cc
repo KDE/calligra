@@ -57,6 +57,11 @@ KImage::ImageView_ptr KImage::ImageView::_narrow( CORBA::Object_ptr _obj )
       return _o;
     }
   }
+  if( _obj->_is_a_remote( "IDL:KImage/ImageView:1.0" ) ) {
+    _o = new KImage::ImageView_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
+  }
   return _nil();
 }
 
@@ -228,6 +233,11 @@ KImage::ImageDocument_ptr KImage::ImageDocument::_narrow( CORBA::Object_ptr _obj
       return _o;
     }
   }
+  if( _obj->_is_a_remote( "IDL:KImage/ImageDocument:1.0" ) ) {
+    _o = new KImage::ImageDocument_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
+  }
   return _nil();
 }
 
@@ -326,6 +336,106 @@ operator>>=( const CORBA::Any &_a, KImage::ImageDocument_ptr &_obj )
     return TRUE;
   }
   _obj = ::KImage::ImageDocument::_narrow( _o );
+  CORBA::release( _o );
+  return TRUE;
+}
+
+
+// Stub interface Factory
+KImage::Factory::~Factory()
+{
+}
+
+KImage::Factory_ptr KImage::Factory::_duplicate( Factory_ptr _obj )
+{
+  if( !CORBA::is_nil( _obj ) )
+    _obj->_ref();
+  return _obj;
+}
+
+void *KImage::Factory::_narrow_helper( const char *_repoid )
+{
+  if( strcmp( _repoid, "IDL:KImage/Factory:1.0" ) == 0 )
+    return (void *)this;
+  if( void *_p = OPParts::Factory::_narrow_helper( _repoid ))
+    return _p;
+  return NULL;
+}
+
+bool KImage::Factory::_narrow_helper2( CORBA::Object_ptr _obj )
+{
+  if( strcmp( _obj->_repoid(), "IDL:KImage/Factory:1.0" ) == 0) {
+    return true;
+  }
+  for( int _i = 0; _narrow_helpers && _i < _narrow_helpers->size(); _i++ ) {
+    bool _res = (*(*_narrow_helpers)[ _i ])( _obj );
+    if( _res )
+      return true;
+  }
+  return false;
+}
+
+KImage::Factory_ptr KImage::Factory::_narrow( CORBA::Object_ptr _obj )
+{
+  KImage::Factory_ptr _o;
+  if( !CORBA::is_nil( _obj ) ) {
+    if( void *_p = _obj->_narrow_helper( "IDL:KImage/Factory:1.0" ))
+      return _duplicate( (KImage::Factory_ptr) _p );
+    if( _narrow_helper2( _obj ) ) {
+      _o = new KImage::Factory_stub;
+      _o->CORBA::Object::operator=( *_obj );
+      return _o;
+    }
+  }
+  if( _obj->_is_a_remote( "IDL:KImage/Factory:1.0" ) ) {
+    _o = new KImage::Factory_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
+  }
+  return _nil();
+}
+
+KImage::Factory_ptr KImage::Factory::_nil()
+{
+  return NULL;
+}
+
+KImage::Factory_stub::~Factory_stub()
+{
+}
+
+struct _global_init_KImage_Factory {
+  _global_init_KImage_Factory()
+  {
+    if( ::OPParts::Factory::_narrow_helpers == NULL )
+      ::OPParts::Factory::_narrow_helpers = new vector<CORBA::Narrow_proto>;
+    ::OPParts::Factory::_narrow_helpers->push_back( KImage::Factory::_narrow_helper2 );
+  }
+} __global_init_KImage_Factory;
+
+vector<CORBA::Narrow_proto> *KImage::Factory::_narrow_helpers;
+
+CORBA::TypeCode_ptr KImage::_tc_Factory = (new CORBA::TypeCode(
+  "010000000e0000002c000000010000001700000049444c3a4b496d616765"
+  "2f466163746f72793a312e30000008000000466163746f727900" ))->mk_constant();
+
+CORBA::Boolean
+operator<<=( CORBA::Any &_a, const KImage::Factory_ptr _obj )
+{
+  return (_a <<= CORBA::Any::from_object( _obj, "Factory" ));
+}
+
+CORBA::Boolean
+operator>>=( const CORBA::Any &_a, KImage::Factory_ptr &_obj )
+{
+  CORBA::Object_ptr _o;
+  if( !(_a >>= CORBA::Any::to_object( _o )) )
+    return FALSE;
+  if( CORBA::is_nil( _o ) ) {
+    _obj = ::KImage::Factory::_nil();
+    return TRUE;
+  }
+  _obj = ::KImage::Factory::_narrow( _o );
   CORBA::release( _o );
   return TRUE;
 }
@@ -518,5 +628,45 @@ bool KImage::ImageDocument_skel::dispatch( CORBA::ServerRequest_ptr _req, CORBA:
 KImage::ImageDocument_ptr KImage::ImageDocument_skel::_this()
 {
   return KImage::ImageDocument::_duplicate( this );
+}
+
+
+// Dynamic Implementation Routine for interface Factory
+KImage::Factory_skel::Factory_skel( const CORBA::BOA::ReferenceData &_id )
+{
+  CORBA::ImplementationDef_var _impl =
+    _find_impl( "IDL:KImage/Factory:1.0", "Factory" );
+  assert( !CORBA::is_nil( _impl ) );
+  _create_ref( _id,
+    CORBA::InterfaceDef::_nil(),
+    _impl,
+    "IDL:KImage/Factory:1.0" );
+  register_dispatcher( new InterfaceDispatcherWrapper<Factory_skel>( this ) );
+}
+
+KImage::Factory_skel::Factory_skel( CORBA::Object_ptr _obj )
+{
+  CORBA::ImplementationDef_var _impl =
+    _find_impl( "IDL:KImage/Factory:1.0", "Factory" );
+  assert( !CORBA::is_nil( _impl ) );
+  _restore_ref( _obj,
+    CORBA::BOA::ReferenceData(),
+    CORBA::InterfaceDef::_nil(),
+    _impl );
+  register_dispatcher( new InterfaceDispatcherWrapper<Factory_skel>( this ) );
+}
+
+KImage::Factory_skel::~Factory_skel()
+{
+}
+
+bool KImage::Factory_skel::dispatch( CORBA::ServerRequest_ptr _req, CORBA::Environment &_env )
+{
+  return false;
+}
+
+KImage::Factory_ptr KImage::Factory_skel::_this()
+{
+  return KImage::Factory::_duplicate( this );
 }
 

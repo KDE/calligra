@@ -48,6 +48,10 @@ module KSpread
 	interface Document : OPParts::Document
 	{
 	};
+
+	interface Factory : OPParts::Factory
+	{
+	};
 };
 
 #endif

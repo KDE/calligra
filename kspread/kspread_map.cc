@@ -31,31 +31,15 @@ void KSpreadMap::removeTable( KSpreadTable *_table )
     m_lstTables.setAutoDelete( true );
 }
 
-/*
-OBJECT KSpreadMap::save( KorbSession *korb, OBJECT o_map )
+/* OBJECT KSpreadMap::save( KorbSession *korb, OBJECT o_map )
 {
-    printf("Saving map ....\n");
+  printf("Saving map ....\n");
 
-    QDataStream stream;
+  QDataStream stream;
 
-    // Real types
-    TYPE t_m_lstTables =  korb->registerType( "KDE:kxcl:KSpreadm_lstTables" );
+  // Real types
+  TYPE t_m_lstTables =  korb->registerType( "KDE:KSpread::lstTables" );
 
-    // Properties
-    PROPERTY p_tables = korb->registerProperty( "KDE:kxcl:KSpreadTables" );
-    PROPERTY p_leftborder = korb->registerProperty( "KDE:kxcl:LeftBorder" );
-    PROPERTY p_rightborder = korb->registerProperty( "KDE:kxcl:RightBorder" );
-    PROPERTY p_topborder = korb->registerProperty( "KDE:kxcl:TopBorder" );
-    PROPERTY p_bottomborder = korb->registerProperty( "KDE:kxcl:BottomBorder" );
-    PROPERTY p_papersize = korb->registerProperty( "KDE:kxcl:PaperSize" );
-    PROPERTY p_paperorientation = korb->registerProperty( "KDE:kxcl:PaperOrientation" );
-    PROPERTY p_m_headLeft = korb->registerProperty( "KDE:kxcl:headLeft" );
-    PROPERTY p_m_headMid = korb->registerProperty( "KDE:kxcl:headMid" );
-    PROPERTY p_m_headRight = korb->registerProperty( "KDE:kxcl:headRight" );
-    PROPERTY p_footLeft = korb->registerProperty( "KDE:kxcl:footLeft" );
-    PROPERTY p_footMid = korb->registerProperty( "KDE:kxcl:footMid" );
-    PROPERTY p_footRight = korb->registerProperty( "KDE:kxcl:footRight" );
-    PROPERTY p_code = korb->registerProperty( "KDE:kxcl:PythonCode" );
 
     // A list of all table object ids.
     QStack<OBJECT> tableStack;

@@ -39,6 +39,11 @@ typedef Document *Document_ptr;
 typedef Document_ptr DocumentRef;
 typedef ObjVar<Document> Document_var;
 
+class Factory;
+typedef Factory *Factory_ptr;
+typedef Factory_ptr FactoryRef;
+typedef ObjVar<Factory> Factory_var;
+
 
 
 // Common definitions for interface View
@@ -206,6 +211,53 @@ class Document_skel :
 
 };
 
+
+// Common definitions for interface Factory
+class Factory : 
+  virtual public ::OPParts::Factory
+{
+  public:
+    virtual ~Factory();
+    static Factory_ptr _duplicate( Factory_ptr obj );
+    static Factory_ptr _narrow( CORBA::Object_ptr obj );
+    static Factory_ptr _nil();
+
+    static vector<CORBA::Narrow_proto> *_narrow_helpers;
+    virtual void *_narrow_helper( const char *repoid );
+    static bool _narrow_helper2( CORBA::Object_ptr obj );
+
+  protected:
+    Factory() {};
+  private:
+    Factory( const Factory& );
+    void operator=( const Factory& );
+};
+
+MICO_EXPORT_DECL CORBA::TypeCode_ptr _tc_Factory;
+
+// Stub for interface Factory
+class Factory_stub : virtual public Factory,
+  virtual public ::OPParts::Factory_stub
+{
+  public:
+    virtual ~Factory_stub();
+  private:
+    void operator=( const Factory_stub& );
+};
+
+class Factory_skel :
+  virtual public MethodDispatcher,
+  virtual public Factory
+{
+  public:
+    Factory_skel( const CORBA::BOA::ReferenceData & = CORBA::BOA::ReferenceData() );
+    virtual ~Factory_skel();
+    Factory_skel( CORBA::Object_ptr obj );
+    virtual bool dispatch( CORBA::ServerRequest_ptr _req, CORBA::Environment &_env );
+    Factory_ptr _this();
+
+};
+
 #endif // !defined(MICO_NO_TOPLEVEL_MODULES) || defined(MICO_MODULE_KSpread)
 
 #ifndef MICO_NO_TOPLEVEL_MODULES
@@ -224,6 +276,9 @@ CORBA::Boolean operator>>=( const CORBA::Any &a, KSpread::View_ptr &obj );
 
 CORBA::Boolean operator<<=( CORBA::Any &a, const KSpread::Document_ptr obj );
 CORBA::Boolean operator>>=( const CORBA::Any &a, KSpread::Document_ptr &obj );
+
+CORBA::Boolean operator<<=( CORBA::Any &a, const KSpread::Factory_ptr obj );
+CORBA::Boolean operator>>=( const CORBA::Any &a, KSpread::Factory_ptr &obj );
 
 #endif // !defined(MICO_NO_TOPLEVEL_MODULES) || defined(MICO_MODULE__GLOBAL)
 

@@ -46,11 +46,13 @@ ImageView_impl::~ImageView_impl()
 
   cleanUp();
 
-  edeb("...ImageView_impl::~ImageView_impl() %i\n",_refcnt());
+  edeb("...ImageView_impl::~ImageView_impl()\n");
 }
 
 void ImageView_impl::cleanUp()
 {
+  sdeb("void ImageView_impl::cleanUp()\n" );
+  
   if ( m_bIsClean )
     return;
   
@@ -68,6 +70,8 @@ void ImageView_impl::cleanUp()
   m_vToolBarFactory = 0L;
 
   View_impl::cleanUp();
+
+  edeb("... void ImageView_impl::cleanUp()\n" );
 }
   
 void ImageView_impl::setDocument( ImageDocument_impl *_doc )

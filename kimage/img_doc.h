@@ -15,7 +15,7 @@ class ImageDocument_impl;
 #include <qrect.h>
 
 #define MIME_TYPE "application/x-kimage"
-#define EDITOR "IDL:KImage/ImageDocument:1.0"
+#define KImageRepoID "IDL:KImage/ImageDocument:1.0"
 
 class ImageChild
 {
@@ -42,11 +42,15 @@ class ImageDocument_impl : public QObject,
   Q_OBJECT
 public:
   // C++
+  ImageDocument_impl( const CORBA::BOA::ReferenceData &refdata );
   ImageDocument_impl();
   ~ImageDocument_impl();
   
+protected:
+  virtual void init();
   virtual void cleanUp();
   
+public:
   // IDL
   virtual CORBA::Boolean open( const char *_filename );
   virtual CORBA::Boolean saveAs( const char *_filename, const char *_format );
