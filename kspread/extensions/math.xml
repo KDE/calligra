@@ -471,6 +471,20 @@
     </Function>
 
     <Function>
+      <Name>SQRTPI</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The SQRTPI() function returns the non-negative square root of x * PI.</Text>
+	<Syntax>SQRTPI(x)</Syntax>
+	<Example>SQRTPI(2) equals 2.506628</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>LN</Name>
       <Type>Float</Type>
       <Parameter>

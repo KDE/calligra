@@ -70,6 +70,32 @@ bool kspreadfunc_sqrt( KSContext& context )
   return true;
 }
 
+// Function: SQRTPI
+bool kspreadfunc_sqrtpi( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "SQRTPI", true ) )
+    return false;
+  double val=0.0;
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
+
+  if( val < 0 ) return false;
+
+  context.setValue( new KSValue( sqrt( val * M_PI ) ) );
+  return true;
+}
+
+
+
+
+
 // Function: SQRTn
 bool kspreadfunc_sqrtn( KSContext& context )
 {

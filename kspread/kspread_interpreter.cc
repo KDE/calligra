@@ -85,6 +85,7 @@ bool kspreadfunc_rounddown( KSContext& context );
 bool kspreadfunc_roundup( KSContext& context );
 bool kspreadfunc_sign( KSContext& context );
 bool kspreadfunc_sqrt( KSContext& context );
+bool kspreadfunc_sqrtpi( KSContext& context );
 bool kspreadfunc_sqrtn( KSContext& context );
 bool kspreadfunc_sum( KSContext& context );
 bool kspreadfunc_sumsq( KSContext& context );
@@ -527,6 +528,7 @@ static const functionEntry funcTab[] = {
   { "ROUNDUP", kspreadfunc_roundup },
   { "SIGN", kspreadfunc_sign },
   { "SQRT", kspreadfunc_sqrt },
+  { "SQRTPI", kspreadfunc_sqrtpi },
   { "SQRTN", kspreadfunc_sqrtn },
   { "SUM", kspreadfunc_sum },
   { "SUMSQ", kspreadfunc_sumsq },
