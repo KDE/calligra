@@ -3281,7 +3281,10 @@ void KSpreadView::borderRight()
   if ( d->activeSheet != 0L )
   {
     d->doc->emitBeginOperation( false );
-    d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
+    if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+      d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
+    else
+      d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
     endOperation( d->selectionInfo->selection() );
   }
 }
@@ -3291,7 +3294,10 @@ void KSpreadView::setSelectionRightBorderColor( const QColor & color )
   if ( d->activeSheet != 0L )
   {
     d->doc->emitBeginOperation( false );
-    d->activeSheet->borderRight( selectionInfo(), color );
+    if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+      d->activeSheet->borderLeft( selectionInfo(), color );
+    else
+      d->activeSheet->borderRight( selectionInfo(), color );
     endOperation( d->selectionInfo->selection() );
   }
 }
@@ -3301,7 +3307,10 @@ void KSpreadView::borderLeft()
   if ( d->activeSheet != 0L )
   {
     d->doc->emitBeginOperation( false );
-    d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
+    if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+      d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
+    else
+      d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
     endOperation( d->selectionInfo->selection() );
   }
 }
@@ -3311,7 +3320,10 @@ void KSpreadView::setSelectionLeftBorderColor( const QColor & color )
   if ( d->activeSheet != 0L )
   {
     d->doc->emitBeginOperation( false );
-    d->activeSheet->borderLeft( selectionInfo(), color );
+    if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+      d->activeSheet->borderRight( selectionInfo(), color );
+    else
+      d->activeSheet->borderLeft( selectionInfo(), color );
     endOperation( d->selectionInfo->selection() );
   }
 }

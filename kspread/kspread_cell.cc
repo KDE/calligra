@@ -2364,6 +2364,8 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 {
   KSpreadDoc* doc = table()->doc();
 
+  KSpreadSheet::LayoutDirection sheetDir =  m_pTable->layoutDirection();
+
   /* Each cell is responsible for drawing it's top and left portions of the
      "default" grid. --Or not drawing it if it shouldn't be there.
      It's even responsible to paint the right and bottom, if it is the last
@@ -2424,10 +2426,16 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
     else
     {
-      painter.drawLine( doc->zoomItX( cellRect.x() ),
-                        doc->zoomItY( cellRect.y() + dt ),
-                        doc->zoomItX( cellRect.x() ),
-                        doc->zoomItY( cellRect.bottom() - db ) );
+      if ( sheetDir == KSpreadSheet::RightToLeft )
+        painter.drawLine( doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.y() + dt ),
+                          doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.bottom() - db ) );
+      else
+        painter.drawLine( doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.y() + dt ),
+                          doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.bottom() - db ) );
     }
   }
 
@@ -2461,10 +2469,16 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
     else
     {
-      painter.drawLine( doc->zoomItX( cellRect.right() ),
-                        doc->zoomItY( cellRect.y() + dt ),
-                        doc->zoomItX( cellRect.right() ),
-                        doc->zoomItY( cellRect.bottom() - db ) );
+      if ( sheetDir == KSpreadSheet::RightToLeft )
+        painter.drawLine( doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.y() + dt ),
+                          doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.bottom() - db ) );
+      else
+        painter.drawLine( doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.y() + dt ),
+                          doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.bottom() - db ) );
     }
   }
 
@@ -3027,6 +3041,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
 {
   KSpreadDoc * doc = table()->doc();
 
+  KSpreadSheet::LayoutDirection sheetDir =  m_pTable->layoutDirection();
   /* we might not paint some borders if this cell is merged with another in
      that direction
   bool paintLeft   = paintBorderLeft;
@@ -3087,10 +3102,16 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
     else
     {
-      painter.drawLine( doc->zoomItX( cellRect.x() ),
-                        doc->zoomItY( cellRect.y() ) - top,
-                        doc->zoomItX( cellRect.x() ),
-                        doc->zoomItY( cellRect.bottom() ) + bottom );
+      if ( sheetDir == KSpreadSheet::RightToLeft )
+        painter.drawLine( doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.y() ) - top,
+                          doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.bottom() ) + bottom );
+      else
+        painter.drawLine( doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.y() ) - top,
+                          doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.bottom() ) + bottom );
     }
   }
 
@@ -3114,10 +3135,16 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     {
       double r = cellRect.right();
 
-      painter.drawLine( doc->zoomItX( r ),
-                        doc->zoomItY( cellRect.y() ) - top,
-                        doc->zoomItX( r ),
-                        doc->zoomItY( cellRect.bottom() ) + bottom );
+      if ( sheetDir == KSpreadSheet::RightToLeft )
+        painter.drawLine( doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.y() ) - top,
+                          doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.bottom() ) + bottom );
+      else
+        painter.drawLine( doc->zoomItX( r ),
+                          doc->zoomItY( cellRect.y() ) - top,
+                          doc->zoomItX( r ),
+                          doc->zoomItY( cellRect.bottom() ) + bottom );
     }
   }
 
@@ -3204,10 +3231,16 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
     else
     {
-      painter.drawLine( doc->zoomItX( cellRect.x() ),
-                        doc->zoomItY( cellRect.y() ),
-                        doc->zoomItX( cellRect.x() ),
-                        doc->zoomItY( cellRect.y() ) + bottom );
+      if ( sheetDir == KSpreadSheet::RightToLeft )
+        painter.drawLine( doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.y() ),
+                          doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.y() ) + bottom );
+      else
+        painter.drawLine( doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.y() ),
+                          doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.y() ) + bottom );
     }
   }
 
@@ -3245,10 +3278,16 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
     else
     {
-      painter.drawLine( doc->zoomItX( cellRect.right() ),
-                        doc->zoomItY( cellRect.y() ),
-                        doc->zoomItX( cellRect.right() ),
-                        doc->zoomItY( cellRect.y() ) + bottom );
+      if ( sheetDir == KSpreadSheet::RightToLeft )
+        painter.drawLine( doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.y() ),
+                          doc->zoomItX( cellRect.x() ),
+                          doc->zoomItY( cellRect.y() ) + bottom );
+      else
+        painter.drawLine( doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.y() ),
+                          doc->zoomItX( cellRect.right() ),
+                          doc->zoomItY( cellRect.y() ) + bottom );
     }
   }
 
@@ -3289,10 +3328,16 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       }
       else
       {
-        painter.drawLine( doc->zoomItX( cellRect.x() ),
-                          doc->zoomItY( cellRect.bottom() ) - bottom,
-                          doc->zoomItX( cellRect.x() ),
-                          doc->zoomItY( cellRect.bottom() ) );
+        if ( sheetDir == KSpreadSheet::RightToLeft )
+          painter.drawLine( doc->zoomItX( cellRect.right() ),
+                            doc->zoomItY( cellRect.bottom() ) - bottom,
+                            doc->zoomItX( cellRect.right() ),
+                            doc->zoomItY( cellRect.bottom() ) );
+        else
+          painter.drawLine( doc->zoomItX( cellRect.x() ),
+                            doc->zoomItY( cellRect.bottom() ) - bottom,
+                            doc->zoomItX( cellRect.x() ),
+                            doc->zoomItY( cellRect.bottom() ) );
       }
     }
 
@@ -3330,10 +3375,16 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       }
       else
       {
-        painter.drawLine( doc->zoomItX( cellRect.right() ),
-                          doc->zoomItY( cellRect.bottom() ) - bottom,
-                          doc->zoomItX( cellRect.right() ),
-                          doc->zoomItY( cellRect.bottom() ) );
+        if ( sheetDir == KSpreadSheet::RightToLeft )
+          painter.drawLine( doc->zoomItX( cellRect.x() ),
+                            doc->zoomItY( cellRect.bottom() ) - bottom,
+                            doc->zoomItX( cellRect.x() ),
+                            doc->zoomItY( cellRect.bottom() ) );
+        else
+          painter.drawLine( doc->zoomItX( cellRect.right() ),
+                            doc->zoomItY( cellRect.bottom() ) - bottom,
+                            doc->zoomItX( cellRect.right() ),
+                            doc->zoomItY( cellRect.bottom() ) );
       }
     }
   }
