@@ -543,7 +543,7 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     if ( listOK ) {
         const QDomElement listStyle = context.listStyleStack().currentListStyle();
         // The tag is either text:list-level-style-number or text:list-level-style-bullet
-        bool ordered = listStyle.tagName() == "text:list-level-style-number";
+        const bool ordered = listStyle.localName() == "list-level-style-number";
         Q_ASSERT( !layout.counter );
         layout.counter = new KoParagCounter;
         layout.counter->loadOasis( context, -1, ordered, m_bOutline, level );

@@ -19,18 +19,19 @@
 
 #include "kovariable.h"
 #include "kovariable.moc"
-#include <koDocumentInfo.h>
-#include <kozoomhandler.h>
+#include "kozoomhandler.h"
 #include "timeformatwidget_impl.h"
 #include "dateformatwidget_impl.h"
 #include "kocommand.h"
 #include "kotextobject.h"
-#include <koOasisStyles.h>
 #include "kooasiscontext.h"
 
+#include <koDocumentInfo.h>
+#include <koOasisStyles.h>
 #include <koxmlwriter.h>
 #include <koDocument.h>
 #include <koxmlns.h>
+#include <kodom.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -689,84 +690,86 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
 
 KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
 {
-    Q_ASSERT( tag.tagName().startsWith( "text:" ) || ( tag.tagName() == "office:annotation" )); // checked by caller
-    const QString tagName( tag.tagName() );
-    const QCString afterText = tagName.latin1() + 5;
+    const QString localName( tag.localName() );
+    const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
     QString key;
     int type = -1;
-    if ( tagName.endsWith( "date" ) || tagName.endsWith( "time" ) )
+    if ( isTextNS )
     {
-        QString dataStyleName = tag.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
-        QString dateFormat = "locale";
-        const KoOasisStyles::DataFormatsMap& map = context.oasisStyles().dataFormats();
-        KoOasisStyles::DataFormatsMap::const_iterator it = map.find( dataStyleName );
-        if ( it != map.end() )
-            dateFormat = (*it);
+        if ( localName.endsWith( "date" ) || localName.endsWith( "time" ) )
+        {
+            QString dataStyleName = tag.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
+            QString dateFormat = "locale";
+            const KoOasisStyles::DataFormatsMap& map = context.oasisStyles().dataFormats();
+            KoOasisStyles::DataFormatsMap::const_iterator it = map.find( dataStyleName );
+            if ( it != map.end() )
+                dateFormat = (*it);
 
-        // Only text:time is a pure time (the data behind is only h/m/s)
-        // ### FIXME: not true, a time can have a date too (reason: for MS Word (already from long ago) time and date are the same thing. But for OO the correction is not in the same unit for time and date.)
-        // Whereas print-time/creation-time etc. are actually related to a date/time value.
-        if ( afterText == "time" )
-        {
-            type = VT_TIME;
-            key = "TIME" + dateFormat;
+            // Only text:time is a pure time (the data behind is only h/m/s)
+            // ### FIXME: not true, a time can have a date too (reason: for MS Word (already from long ago) time and date are the same thing. But for OO the correction is not in the same unit for time and date.)
+            // Whereas print-time/creation-time etc. are actually related to a date/time value.
+            if ( localName == "time" )
+            {
+                type = VT_TIME;
+                key = "TIME" + dateFormat;
+            }
+            else
+            {
+                type = VT_DATE;
+                key = "DATE" + dateFormat;
+            }
         }
-        else
+        else if (localName == "page-number" || localName == "page-count" )
         {
-            type = VT_DATE;
-            key = "DATE" + dateFormat;
+            type = VT_PGNUM;
+            key = "NUMBER";
+        }
+        else if (localName == "chapter")
+        {
+            type = VT_PGNUM;
+            key = "STRING";
+        }
+        else if (localName == "file-name")
+        {
+            type = VT_FIELD;
+            key = "STRING";
+        }
+        else if (localName == "author-name"
+                 || localName == "author-initials"
+                 || localName == "subject"
+                 || localName == "title"
+                 || localName == "description")
+        {
+            type = VT_FIELD;
+            key = "STRING";
+        }
+        else if ( localName.startsWith( "sender-" )
+                  && localName != "sender-firstname" // not supported
+                  && localName != "sender-lastname" // not supported
+                  && localName != "sender-initials" // not supported
+            )
+        {
+            type = VT_FIELD;
+            key = "STRING";
+        }
+        else if ( localName == "variable-set"
+                  || localName == "user-defined" )
+        {
+            key = "STRING";
+            type = VT_CUSTOM;
         }
     }
-    else if ( tagName == "office:annotation" )
+    else if ( tag.namespaceURI() == KoXmlNS::office && localName == "annotation" )
     {
         type = VT_NOTE;
         key = "NUMBER";
-    }
-    else if (afterText == "page-number" || afterText == "page-count" )
-    {
-        type = VT_PGNUM;
-        key = "NUMBER";
-    }
-    else if (afterText == "chapter")
-    {
-        type = VT_PGNUM;
-        key = "STRING";
-    }
-    else if (afterText == "file-name")
-    {
-        type = VT_FIELD;
-        key = "STRING";
-    }
-    else if (afterText == "author-name"
-             || afterText == "author-initials"
-             || afterText == "subject"
-             || afterText == "title"
-             || afterText == "description")
-    {
-        type = VT_FIELD;
-        key = "STRING";
-    }
-    else if ( tagName.startsWith( "text:sender-" )
-              && afterText != "sender-firstname" // not supported
-              && afterText != "sender-lastname" // not supported
-              && afterText != "sender-initials" // not supported
-        )
-    {
-        type = VT_FIELD;
-        key = "STRING";
-    }
-    else if ( afterText == "variable-set"
-              || afterText == "user-defined" )
-    {
-        key = "STRING";
-        type = VT_CUSTOM;
     }
     else
     {
         // Not an error. It's simply not a variable tag (the caller doesn't check for that)
         return 0;
     }
-// TODO afterText == "page-variable-get", "initial-creator" and many more
+// TODO localName == "page-variable-get", "initial-creator" and many more
 // TODO VT_MAILMERGE
 
     return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
@@ -1097,8 +1100,8 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
 
 void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    const QString tagName( elem.tagName() );
-    if ( tagName == "text:date" ) // current (or fixed) date
+    const QString localName( elem.localName() );
+    if ( localName == "date" ) // current (or fixed) date
     {
         // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
         QDateTime dt(QDate::fromString(elem.attributeNS( KoXmlNS::text, "date-value", QString::null), Qt::ISODate));
@@ -1111,11 +1114,11 @@ void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
         m_subtype = fixed ? VST_DATE_FIX : VST_DATE_CURRENT;
     }
     // For all those the value of the date will be retrieved from meta.xml
-    else if ( tagName.startsWith( "text:print" ) )
+    else if ( localName.startsWith( "print" ) )
         m_subtype = VST_DATE_LAST_PRINTING;
-    else if ( tagName.startsWith( "text:creation" ) )
+    else if ( localName.startsWith( "creation" ) )
         m_subtype = VST_DATE_CREATE_FILE;
-    else if ( tagName.startsWith( "text:modification" ) )
+    else if ( localName.startsWith( "modification" ) )
         m_subtype = VST_DATE_MODIFY_FILE;
     m_correctDate = elem.attributeNS( KoXmlNS::text, "date-adjust", QString::null ).toInt();
 }
@@ -1292,9 +1295,9 @@ void KoTimeVariable::load( QDomElement& elem )
 
 void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    const QString tagName( elem.tagName() );
-    Q_ASSERT( tagName == "text:time" ); // caller checked for it
-    if ( tagName == "text:time" ) // current (or fixed) time
+    const QString localName( elem.localName() );
+    Q_ASSERT( localName == "time" ); // caller checked for it
+    if ( localName == "time" ) // current (or fixed) time
     {
         // Use QDateTime to work around a possible problem of QTime::fromString in Qt 3.2.2
         QDateTime dt(QDateTime::fromString(elem.attributeNS( KoXmlNS::text, "time-value", QString::null), Qt::ISODate));
@@ -1452,13 +1455,13 @@ void KoCustomVariable::load( QDomElement& elem )
 
 void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    const QCString tagName( elem.tagName().latin1() );
+    const QString localName( elem.localName() );
     // We treat both the same. For OO the difference is that
     // - variable-set is related to variable-decls (defined in <body>);
     //                 its value can change in the middle of the document.
     // - user-defined is related to meta::user-defined in meta.xml
-    if ( tagName == "text:variable-set"
-         || tagName == "text:user-defined" ) {
+    if ( localName == "variable-set"
+         || localName == "user-defined" ) {
         m_varValue = elem.attributeNS( KoXmlNS::text, "name", QString::null );
         setValue( elem.text() );
     }
@@ -1650,11 +1653,12 @@ void KoPgNumVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context
 
 void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    const QCString afterText( elem.tagName().latin1() + 5 );
-    if (afterText == "page-number") {
+    const QString localName( elem.localName() );
+    if ( localName == "page-number" )
+    {
         m_subtype = VST_PGNUM_CURRENT;
 
-        if (elem.hasAttributeNS( KoXmlNS::text, "select-page"))
+        if ( elem.hasAttributeNS( KoXmlNS::text, "select-page") )
         {
             const QString select = elem.attributeNS( KoXmlNS::text, "select-page", QString::null);
             if (select == "previous")
@@ -1665,7 +1669,7 @@ void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
         // Missing: fixed, page adjustment, formatting style
         m_varValue = QVariant( elem.text().toInt() );
     }
-    else if ( afterText == "chapter" )
+    else if ( localName == "chapter" )
     {
         m_subtype = VST_CURRENT_SECTION;
         m_varValue = QVariant( elem.text() );
@@ -1673,7 +1677,7 @@ void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
         // number-and-name, plain-number-and-name, plain-number
         // TODO: a special format class for this, so that it can be easily switched using the RMB
     }
-    else if ( afterText == "page-count" )
+    else if ( localName == "page-count" )
     {
         m_subtype = VST_PGNUM_TOTAL;
         m_varValue = QVariant( elem.text() );
@@ -1804,9 +1808,9 @@ void KoFieldVariable::load( QDomElement& elem )
 
 void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    const QCString afterText( elem.tagName().latin1() + 5 );
-    if (afterText == "file-name") {
-        const QCString display = elem.attributeNS( KoXmlNS::text, "display", QString::null).latin1();
+    const QString localName( elem.localName() );
+    if ( localName == "file-name" ) {
+        const QString display = elem.attributeNS( KoXmlNS::text, "display", QString::null );
         if (display == "path")
             m_subtype = VST_DIRECTORYNAME;
         else if (display == "name")
@@ -1816,44 +1820,44 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
         else
             m_subtype = VST_PATHFILENAME;
     }
-    else if ( afterText == "author-name" )
+    else if ( localName == "author-name" )
         m_subtype = VST_AUTHORNAME;
-    else if (afterText == "author-initials")
+    else if ( localName == "author-initials" )
         m_subtype = VST_INITIAL;
-    else if ( afterText == "subject" )
+    else if ( localName == "subject" )
         m_subtype = VST_TITLE; // TODO separate variable
-    else if ( afterText == "title" )
+    else if ( localName == "title" )
         m_subtype = VST_TITLE;
-    else if ( afterText == "description" )
+    else if ( localName == "description" )
         m_subtype = VST_ABSTRACT;
 
-    else if ( afterText == "sender-company" )
+    else if ( localName == "sender-company" )
         m_subtype = VST_COMPANYNAME;
-    else if ( afterText == "sender-firstname" )
+    else if ( localName == "sender-firstname" )
         ; // ## This is different from author-name, but the notion of 'sender' is unclear...
-    else if ( afterText == "sender-lastname" )
+    else if ( localName == "sender-lastname" )
         ; // ## This is different from author-name, but the notion of 'sender' is unclear...
-    else if ( afterText == "sender-initials" )
+    else if ( localName == "sender-initials" )
         ; // ## This is different from author-initials, but the notion of 'sender' is unclear...
-    else if ( afterText == "sender-street" )
+    else if ( localName == "sender-street" )
         m_subtype = VST_STREET;
-    else if ( afterText == "sender-country" )
+    else if ( localName == "sender-country" )
         m_subtype = VST_COUNTRY;
-    else if ( afterText == "sender-postal-code" )
+    else if ( localName == "sender-postal-code" )
         m_subtype = VST_POSTAL_CODE;
-    else if ( afterText == "sender-city" )
+    else if ( localName == "sender-city" )
         m_subtype = VST_CITY;
-    else if ( afterText == "sender-title" )
+    else if ( localName == "sender-title" )
         m_subtype = VST_AUTHORTITLE; // Small hack (it's supposed to be about the sender, not about the author)
-    else if ( afterText == "sender-position" )
+    else if ( localName == "sender-position" )
         m_subtype = VST_AUTHORTITLE; // TODO separate variable
-    else if ( afterText == "sender-phone-private" )
+    else if ( localName == "sender-phone-private" )
         m_subtype = VST_TELEPHONE;
-    else if ( afterText == "sender-phone-work" )
+    else if ( localName == "sender-phone-work" )
         m_subtype = VST_TELEPHONE; // ### TODO separate type
-    else if ( afterText == "sender-fax" )
+    else if ( localName == "sender-fax" )
         m_subtype = VST_FAX;
-    else if ( afterText == "sender-email" )
+    else if ( localName == "sender-email" )
         m_subtype = VST_EMAIL;
 
     m_varValue = QVariant( elem.text() );
@@ -2123,8 +2127,7 @@ QString KoLinkVariable::fieldCode()
 
 void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    const QCString afterText( elem.tagName().latin1() + 5 );
-    if (afterText == "a") {
+    if ( elem.localName() == "a" && elem.namespaceURI() == KoXmlNS::text ) {
         m_url = elem.attributeNS( KoXmlNS::xlink, "href", QString::null);
         m_varValue = QVariant(elem.text());
     }
@@ -2217,19 +2220,23 @@ QString KoNoteVariable::createdNote() const
 
 void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    const QCString afterText( elem.tagName().latin1() );
+    const QString localName = elem.localName();
     QString note;
-    if (afterText == "office:annotation") {
-        QDomNode date = elem.namedItem( "dc:date" );
-        m_createdNoteDate = QDate::fromString( date.toElement().text(), Qt::ISODate );
-        QDomNode text = elem.namedItem( "text:p" );
+    if ( localName == "annotation" && elem.namespaceURI() == KoXmlNS::office )
+    {
+        QDomElement date = KoDom::namedItemNS( elem, KoXmlNS::dc, "date" );
+        m_createdNoteDate = QDate::fromString( date.text(), Qt::ISODate );
+        QDomNode text = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
         for ( ; !text.isNull(); text = text.nextSibling() )
         {
-            QDomElement t = text.toElement();
-            note += t.text() + "\n";
+            if ( text.isElement() )
+            {
+                QDomElement t = text.toElement();
+                note += t.text() + "\n";
+            }
         }
     }
-    m_varValue=QVariant( note  );
+    m_varValue = QVariant( note  );
 }
 
 void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const

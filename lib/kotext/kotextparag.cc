@@ -25,6 +25,7 @@
 #include <kooasiscontext.h>
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
+#include <kodom.h>
 #include <koxmlns.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -1670,15 +1671,15 @@ QString KoTextParag::toString( int from, int length ) const
 
 void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos )
 {
-    // parse every child node of the parent
-    for( QDomNode node ( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
+    // Parse every child node of the parent
+    // Can't use forEachElement here since we also care about text nodes
+    QDomNode node;
+    for ( node = parent.firstChild(); !node.isNull(); node = node.nextSibling() ) \
     {
-        QDomElement ts ( node.toElement() );
+        QDomElement ts = node.toElement();
         QString textData;
-        QString tagName( ts.tagName() );
-        //kdDebug() << k_funcinfo << tagName << " isText:" << node.isText() << endl;
-        bool textFoo = tagName.startsWith( "text:" ) || ( tagName == "office:annotation" );
-        QString afterText = tagName.mid( 5 );
+        const QString localName( ts.localName() );
+        const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         KoTextCustomItem* customItem = 0;
 
         // allow loadSpanTag to modify the stylestack
@@ -1687,17 +1688,16 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         // Try to keep the order of the tag names by probability of happening
         if ( node.isText() )
         {
-            QDomText t ( node.toText() );
-            textData = t.data();
+            textData = node.toText().data();
         }
-        else if ( afterText == "span" ) // text:span
+        else if ( isTextNS && localName == "span" ) // text:span
         {
             context.styleStack().save();
             context.fillStyleStack( ts, KoXmlNS::text, "style-name" );
             loadOasisSpan( ts, context, pos ); // recurse
             context.styleStack().restore();
         }
-        else if ( textFoo && afterText == "s" ) // text:s
+        else if ( isTextNS && localName == "s" ) // text:s
         {
             int howmany = 1;
             if (ts.hasAttributeNS( KoXmlNS::text, "c"))
@@ -1705,27 +1705,24 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
 
             textData.fill(32, howmany);
         }
-        else if ( textFoo && afterText == "tab" ) // text:tab (it's tab-stop in OO-1.1 but tab in oasis)
+        else if ( isTextNS && localName == "tab" ) // text:tab (it's tab-stop in OO-1.1 but tab in oasis)
         {
             textData = '\t';
         }
-        else if ( textFoo && afterText == "line-break" ) // text:line-break
+        else if ( isTextNS && localName == "line-break" ) // text:line-break
         {
             textData = '\n';
         }
         else
         {
             bool handled = false;
-            if ( textFoo )
+            // Check if it's a variable
+            KoVariable* var = context.variableCollection().loadOasisField( textDocument(), ts, context );
+            if ( var )
             {
-                // Check if it's a variable
-                KoVariable* var = context.variableCollection().loadOasisField( textDocument(), ts, context );
-                if ( var )
-                {
-                    textData = "#";     // field placeholder
-                    customItem = var;
-                    handled = true;
-                }
+                textData = "#";     // field placeholder
+                customItem = var;
+                handled = true;
             }
             if ( !handled )
             {

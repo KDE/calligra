@@ -24,6 +24,7 @@
 #include "kooasiscontext.h"
 #include <koxmlwriter.h>
 #include <koxmlns.h>
+#include <kodom.h>
 #include <koGenStyles.h>
 
 #include <kglobal.h>
@@ -511,11 +512,11 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     if ( context.styleStack().hasChildNodeNS( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
         QDomElement tabStops = context.styleStack().childNodeNS( KoXmlNS::style, "tab-stops" );
         //kdDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
-        for ( QDomNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
+        QDomElement tabStop;
+        forEachElement( tabStop, tabStops )
         {
-            QDomElement tabStop = it.toElement();
-            Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
-            QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString::null ); // left, right, center or char
+            Q_ASSERT( tabStop.localName() == "tab-stop" );
+            const QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString::null ); // left, right, center or char
 
             KoTabulator tab;
             tab.ptPos = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString::null ) );
