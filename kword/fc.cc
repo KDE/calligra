@@ -1336,7 +1336,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 	    ptY = static_cast<int>(pFrame->top() + pFrame->getBTop().pt());
 	    return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
 	} else { // append a page or resize frame
-	    if ( pFrame->getFrameBehaviour() == AutoExtendFrame) { // Resize frame
+	    if ( pFrame->getFrameBehaviour() == AutoExtendFrame && !parag->hasHardBreak() ) { // Resize frame
 		int diff = static_cast<int>(( ptY + getLineHeight() ) - ( pFrame->bottom() -
 							 pFrame->getBBottom().pt() ));
 
@@ -1359,7 +1359,10 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 		    outOfFrame = TRUE;
 		    return FALSE;
 		}
-	    } else if (!(pFrame->getFrameSet()->getGroupManager()) && pFrame->getFrameBehaviour() == AutoCreateNewFrame && pFrame->getNewFrameBehaviour()==Reconnect) { // Append page
+	    } else if ( parag->hasHardBreak() || 
+			( !(pFrame->getFrameSet()->getGroupManager()) && 
+			  pFrame->getFrameBehaviour() == AutoCreateNewFrame && 
+			  pFrame->getNewFrameBehaviour()==Reconnect ) ) { // Append page
 		doc->appendPage( page - 1, redrawBackgroundWhenAppendPage );
 		page++;
 		setFrame( frame + 1 );
@@ -1513,7 +1516,7 @@ void KWFormatContext::setFrame( unsigned int _frame )
     frame = _frame;
     if ( doc && pFrameSet ) {
 	pFrame = pFrameSet->getFrame( frame - 1 );
-        if(pFrame) 
+        if(pFrame)
             emptyRegion = pFrame->getEmptyRegion();
     } else
 	pFrame = 0;
