@@ -4042,7 +4042,7 @@ static bool kspreadfunc_decsex( KSContext& context )
     inter=1;
   else
     inter=-1;
-  hours=inter*(int)(std::fabs(val));
+  hours=inter*(int)(fabs(val));
   minutes=(int)(60*val-60*(int)(val));
   second=(int)(3600*val-3600*(int)(val)-60*(int)(60*val-60*(int)(val)));
   QTime _time(hours,minutes,second);
