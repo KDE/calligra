@@ -26,16 +26,39 @@ int main( int argc, char **argv )
 {
     KoApplication app( argc, argv, "kchart" );
 
+    KStartParams params( argc, argv );
+
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
     
     ASSERT( !entry.isEmpty() );
-    KoDocument* doc = entry.createDoc();
-    doc->initDoc();
 
-    Shell* shell = doc->createShell();
-    shell->show();
-    app.setMainWidget( shell );
+    QStringList open;
+    // Parse command line parameters
+    for( uint i = 0; i < params.count(); i++ )
+	if( params.get( i ).left( 1 ) != "-" )
+	    open.append( params.get( i ) );
 
+
+
+    if ( open.isEmpty() ) {
+      KoDocument* doc = entry.createDoc();
+      doc->initDoc();
+      
+      Shell* shell = doc->createShell();
+      shell->show();
+      app.setMainWidget( shell );
+    } else {
+      QStringList::Iterator it = open.begin();
+      for( ; it != open.end(); ++it )
+        {
+	  KoDocument* doc = entry.createDoc( 0 );
+	  doc->loadFromURL( *it );
+	  
+	  Shell* shell = doc->createShell();
+	  shell->show();
+	  // app.setMainWidget( shell );
+	}
+    }
 
     app.exec();
 

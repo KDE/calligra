@@ -34,6 +34,7 @@ KChartPart::KChartPart( KoDocument* parent, const char* name )
   : KoDocument( parent, name ),
     _params( 0 )
 {
+    cerr << "Contstructor started!\n";
 }
 
 KChartPart::~KChartPart()
@@ -44,7 +45,8 @@ KChartPart::~KChartPart()
 bool KChartPart::initDoc()
 {
   // Initialize the parameter set for this chart document
-  // PENDING(kalle,torben) Where to delete this?
+  // PENDING(kalle,torben) Where to delete this?    
+  cerr << "InitDOC";
   _params = new KChartParameters;
   initRandomData();
   // PENDING(lotzi) This is where to start the wizard and fill the
@@ -100,22 +102,23 @@ Shell* KChartPart::createShell()
 
 void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transparent )
 {
-	// if params is 0, initDoc() has not been called
-	ASSERT( _params != 0 );
-	
-    // ####### handle transparency
-    if( !transparent )
-        painter.eraseRect( rect );
+  // if params is 0, initDoc() has not been called
+  ASSERT( _params != 0 );
+  
+  // ####### handle transparency
+  if( !transparent )
+    painter.eraseRect( rect );
 
-    // debug( "KChartPart::paintContent called, rows = %d, cols = %d", currentData.rows(), currentData.cols() );
+  // debug( "KChartPart::paintContent called, rows = %d, cols = %d", currentData.rows(), currentData.cols() );
 
-    // Need to draw only the document rectangle described in the parameter rect.
-    out_graph( rect.width(),
-               rect.height(),      /* short       width, height */
-               &painter,        // Paint into this painter
-			   _params,			// the parameters of the chart,
-								// including the type
-               currentData );
+  // Need to draw only the document rectangle described in the parameter rect.
+  out_graph( rect.width(),
+	     rect.height(), // short width, height 
+	     &painter,        // Paint into this painter
+	     _params,	      // the parameters of the chart,
+	     // including the type
+	     currentData );
+  
 }
 
 QString KChartPart::configFile() const
@@ -218,21 +221,30 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* store ) {
   if (!ok)  { return false; }
   cerr << rows << " x " << cols << "\n";
   currentData.expand(rows, cols);
-
+  cerr << "Expanded!";
   QDomNode n = data.firstChild();
-  while( !n.isNull() )
-  {
-    QDomElement e = n.toElement();
-    if ( !e.isNull() && e.tagName() == "cell" )
-    {
-      // add the cell to the corresponding place...
-      double val = e.attribute("value").toDouble(&ok);
-      if (!ok)  {  return false; }
-      cerr << val << "\n";      
+
+  for (int i=0; i!=rows; i++) {
+    for (int j=0; j!=cols; j++) {
+      if (n.isNull()) {
+	qDebug("Some problems, there is less data than it should be!");
+	break;
+      }	  
+      QDomElement e = n.toElement();
+      if ( !e.isNull() && e.tagName() == "cell" ) {
+	  // add the cell to the corresponding place...
+	  double val = e.attribute("value").toDouble(&ok);
+	  if (!ok)  {  return false; }
+	  cerr << i << " " << j << "=" << val << "\n";      
+	  KChartValue t; 
+	  t.exists= true;
+	  t.value.setValue(val);
+	  // cerr << "Set cell for " << row << "," << col << "\n";
+	  currentData.setCell(i,j,t);     
+	  n = n.nextSibling();	  
+      }
     }
-    n = n.nextSibling();
   }
-  //  cerr << 
   return true;
 };
 
@@ -257,6 +269,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
     QDomDocument doc( &buffer );
 
     bool b = loadXML( doc, store );
+    //bool b = true;
+    //initDoc();
+
     buffer.close();
     // init the parameters 
 
@@ -268,6 +283,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.7  1999/11/21 15:27:14  boloni
+ * ok
+ *
  * Revision 1.6  1999/11/19 05:04:35  boloni
  * more work on saving
  *
