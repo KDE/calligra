@@ -621,21 +621,6 @@ protected:
     QString m_tableName;
 };
 
-class KSpreadUndoHideTable : public KSpreadUndoAction
-{
-public:
-    KSpreadUndoHideTable( KSpreadDoc *_doc, KSpreadSheet *_table );
-    virtual ~KSpreadUndoHideTable();
-
-    virtual void undo();
-    virtual void redo();
-
-protected:
-    void execute( bool b );
-    QString m_tableName;
-};
-
-
 class KSpreadUndoCellPaste : public KSpreadUndoAction
 {
 public:

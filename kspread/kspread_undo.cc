@@ -2544,44 +2544,6 @@ void KSpreadUndoConditional::redo()
     doc()->undoUnlock();
 }
 
-/****************************************************************************
- *
- * KSpreadUndoHideTable
- *
- ***************************************************************************/
-
-KSpreadUndoHideTable::KSpreadUndoHideTable( KSpreadDoc *_doc, KSpreadSheet *_table) :
-    KSpreadUndoAction( _doc )
-{
-    name=i18n("Hide Table");
-
-    m_tableName = _table->tableName();
-}
-
-KSpreadUndoHideTable::~KSpreadUndoHideTable()
-{
-}
-
-void KSpreadUndoHideTable::execute( bool b )
-{
-    KSpreadSheet* table = doc()->map()->findTable( m_tableName );
-    if ( !table )
-	return;
-
-    doc()->undoLock();
-    table->hideTable(b);
-    doc()->undoUnlock();
-
-}
-void KSpreadUndoHideTable::undo()
-{
-    execute( false );
-}
-
-void KSpreadUndoHideTable::redo()
-{
-    execute( true );
-}
 
 /****************************************************************************
  *
