@@ -58,6 +58,9 @@
 #include <koRect.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
+#include <kurlrequesterdlg.h>
+#include <klistview.h>
+#include <kfiledialog.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -91,6 +94,11 @@ KPConfig::KPConfig( KPresenterView* parent )
 
     _toolsPage=new ConfigureToolsPage(parent, page);
 
+    page = addVBoxPage( i18n("Path"), i18n("Path Settings"),
+                        BarIcon("path") );
+
+    m_pathPage=new ConfigurePathPage(parent, page);
+
     connect( this, SIGNAL( okClicked() ),this, SLOT( slotApply() ) );
 }
 
@@ -108,6 +116,8 @@ void KPConfig::openPage(int flags)
         showPage(4 );
     else if(flags & KP_TOOLS)
         showPage(5);
+    else if(flags & KP_PATH)
+        showPage(6);
 }
 
 void KPConfig::slotApply()
@@ -116,6 +126,7 @@ void KPConfig::slotApply()
     _interfacePage->apply();
     _colorBackground->apply();
     _spellPage->apply();
+    m_pathPage->apply();
     KCommand *cmd = _miscPage->apply();
     if ( cmd )
     {
@@ -157,6 +168,9 @@ void KPConfig::slotDefault()
             break;
         case 5:
             _toolsPage->slotDefault();
+            break;
+        case 6:
+            m_pathPage->slotDefault();
             break;
         default:
             break;
@@ -866,6 +880,69 @@ void ConfigureToolsPage::slotDefault()
     m_confBrushDia->setFillType(FT_BRUSH);
     m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());
     m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
+}
+
+ConfigurePathPage::ConfigurePathPage( KPresenterView *_view, QVBox *box, char *name )
+ : QObject( box->parent(), name )
+{
+    m_pView=_view;
+    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    config = KPresenterFactory::global()->config();
+    QVGroupBox* gbPathGroup = new QVGroupBox( i18n("Path"), box, "GroupBox" );
+    gbPathGroup->setMargin( 10 );
+    gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
+
+    m_pPathView = new KListView( gbPathGroup );
+    m_pPathView->setResizeMode(QListView::NoColumn);
+    m_pPathView->addColumn( i18n( "Type" ) );
+    m_pPathView->addColumn( i18n( "Path" ) );
+    (void) new QListViewItem( m_pPathView, i18n("Picture path"),doc->picturePath() );
+
+    m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
+    connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
+    connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int  )), this, SLOT( slotModifyPath()));
+    connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )), this, SLOT( slotSelectionChanged(QListViewItem * )));
+    slotSelectionChanged(m_pPathView->currentItem());
+}
+
+void ConfigurePathPage::slotSelectionChanged(QListViewItem * item)
+{
+    m_modifyPath->setEnabled( item );
+}
+
+void ConfigurePathPage::slotModifyPath()
+{
+    QListViewItem *item = m_pPathView->currentItem ();
+    if ( item && (item->text(0)==i18n("Picture path")))
+    {
+
+        KURLRequesterDlg * dlg = new KURLRequesterDlg( item->text(1), 0L,
+                      "picture path dlg");
+        dlg->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
+        if ( dlg->exec() )
+        {
+            item->setText( 1, dlg->selectedURL().path());
+        }
+        delete dlg;
+    }
+}
+
+void ConfigurePathPage::slotDefault()
+{
+    QListViewItem * item = m_pPathView->findItem(i18n("Picture path"), 0);
+    if ( item )
+        item->setText(1, KGlobalSettings::documentPath());
+}
+
+void ConfigurePathPage::apply()
+{
+    QListViewItem * item = m_pPathView->findItem(i18n("Picture path"), 0);
+    if ( item )
+    {
+        config->setGroup( "Kpresenter Path" );
+        m_pView->kPresenterDoc()->setPicturePath( item->text(1) );
+        config->writeEntry( "picture path",item->text(1) );
+    }
 }
 
 #include <kpresenter_dlg_config.moc>

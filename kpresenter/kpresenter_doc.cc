@@ -86,6 +86,7 @@
 #include "kpbackground.h"
 #include "notebar.h"
 #include "kprbgspellcheck.h"
+#include <kglobalsettings.h>
 
 using namespace std;
 
@@ -141,6 +142,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_styleColl=new KoStyleCollection();
     m_insertFilePage = 0;
     m_refreshSideBar = true;
+    m_picturePath= KGlobalSettings::documentPath();
 
     _duplicatePage=false;
 
@@ -382,6 +384,11 @@ void KPresenterDoc::initConfig()
         if(undo!=-1)
             setUndoRedoLimit(undo);
         setRefreshSideBar( config->readBoolEntry("RefreshSideBar",true));
+    }
+    if(config->hasGroup("Kpresenter Path" ) )
+    {
+        config->setGroup( "Kpresenter Path" );
+        m_picturePath=config->readEntry( "picture path",KGlobalSettings::documentPath());
     }
 
     // Apply configuration, without creating an undo/redo command

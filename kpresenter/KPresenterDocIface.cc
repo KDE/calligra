@@ -846,3 +846,13 @@ QString KPresenterDocIface::configAutoFormatLanguage( )const
 {
     return doc->getAutoFormat()->getConfigAutoFormatLanguage( );
 }
+
+QString KPresenterDocIface::picturePath()const
+{
+    return doc->picturePath();
+}
+
+void KPresenterDocIface::setPicturePath( const QString & _path )
+{
+    doc->setPicturePath( _path );
+}

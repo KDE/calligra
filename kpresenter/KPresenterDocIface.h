@@ -244,6 +244,10 @@ k_dcop:
     void setDisplayFieldCode( bool b);
     QString configAutoFormatLanguage( )const;
 
+    QString picturePath()const;
+    void setPicturePath( const QString & _path );
+
+
 private:
     KPresenterDoc *doc;
 

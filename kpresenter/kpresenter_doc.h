@@ -420,6 +420,9 @@ public:
     void updatePresentationButton();
     void refreshGroupButton();
 
+    QString picturePath()const { return m_picturePath; }
+    void setPicturePath( const QString & _path ) { m_picturePath = _path ; }
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -581,6 +584,7 @@ private:
     KPrBgSpellCheck *m_bgSpellCheck;
     KoStyleCollection *m_styleColl;
     KPObject *bgObjSpellChecked;
+    QString m_picturePath;
 };
 
 #endif

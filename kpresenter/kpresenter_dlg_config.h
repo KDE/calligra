@@ -149,11 +149,29 @@ private:
     ConfPolygonDia *m_confPolygonDia;
 };
 
+class ConfigurePathPage : public QObject
+{
+    Q_OBJECT
+public:
+    ConfigurePathPage( KPresenterView *_view, QVBox *box, char *name = 0 );
+    void slotDefault();
+    void apply();
+private slots:
+    void slotModifyPath();
+    void slotSelectionChanged(QListViewItem *);
+private:
+    KPresenterView* m_pView;
+    KConfig* config;
+    KListView* m_pPathView;
+    QPushButton *m_modifyPath;
+};
+
+
 class KPConfig : public KDialogBase
 {
     Q_OBJECT
 public:
-    enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8, KP_DOC=16, KP_TOOLS=32 };
+    enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8, KP_DOC=16, KP_TOOLS=32,KP_PATH = 64 };
     KPConfig( KPresenterView* parent );
 public slots:
     void slotApply();
@@ -166,6 +184,7 @@ private:
     ConfigureMiscPage *_miscPage;
     ConfigureDefaultDocPage *_defaultDocPage;
     ConfigureToolsPage *_toolsPage;
+    ConfigurePathPage *m_pathPage;
     KPresenterDoc* m_doc;
 
 };

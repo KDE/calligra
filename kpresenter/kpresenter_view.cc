@@ -671,7 +671,7 @@ void KPresenterView::insertPicture()
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( QString::null, QString::null, 0, 0, true );
+    KFileDialog fd( /*QString::null*/m_pKPresenterDoc->picturePath(), QString::null, 0, 0, true );
     fd.setCaption( i18n( "Insert Picture" ) );
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
