@@ -250,48 +250,47 @@ static inline double PicaToPoints(const double d)
 }
 
 static inline double IndentPos( QString _str)
-// FIXME: QString::contains does *not* return a position!
 {
-  double d=0;
+  double d;
   int pos=0;
-  if ((pos=_str.contains("cm")))
+  if ((pos=_str.find("cm"))>=0)
     {
-      _str=_str.left (_str.length()-pos  );
+      _str=_str.left (pos);
       d=_str.toDouble();
       d=CentimetresToPoints(d);
     }
-  else if ((pos=_str.contains("in")))
+  else if ((pos=_str.find("in"))>=0)
     {
-      _str=_str.left (_str.length()-pos  );
+      _str=_str.left (pos);
       d=_str.toDouble();
       d=InchesToPoints(d);
-   }
-  else if ((pos=_str.contains("mm")))
+    }
+  else if ((pos=_str.find("mm"))>=0)
     {
-      _str=_str.left (_str.length()-pos  );
+      _str=_str.left (pos);
       d=_str.toDouble();
       d=MillimetresToPoints(d);
     }
-  else if((pos=_str.contains("pt")))
+  else if((pos=_str.find("pt"))>=0)
     {
-      _str=_str.left (_str.length()-pos  );
+      _str=_str.left (pos);
       d=_str.toDouble();
     }
-  else if((pos=_str.contains("pi")))
-  {
-      _str=_str.left (_str.length()-pos  );
+  else if((pos=_str.find("pi"))>=0)
+    {
+      _str=_str.left (pos);
       d=_str.toDouble();
       d=PicaToPoints(d);
-  }
+    }
   else
     {
       bool b=false;
       d=_str.toDouble(&b);
       if(!b)
-	{
-	  d=0;
-	  kdWarning(30506) << "unknown indent pos: " << _str << endl;
-	}
+	    {
+          d=0;
+	      kdWarning(30506) << "unknown indent pos: " << _str << endl;
+	    }
     }
   return d;
 }
