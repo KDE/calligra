@@ -74,7 +74,7 @@ public:
 
     static double getAngle( const KoPoint& p1, const KoPoint& p2 ) {
 	double a = atan2( p2.x() - p1.x(), p2.y() - p1.y() ) + M_PI;
-	return ( - ( a * 360 ) / ( 2 * M_PI ) - 90 );
+	return ( ( - ( a * 360 ) / ( 2 * M_PI ) - 90 ) - 180 );
     }
 
 private:

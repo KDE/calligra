@@ -323,7 +323,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             html += note;
 
             html += "  </P>\n";
-            html += "  </BLOCKQUOTE>\n";
+            html += "  </BLOCKQUOTE><HR NOSHADE>\n";
         }
 
         html += "  <CENTER>\n";

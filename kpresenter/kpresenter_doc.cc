@@ -1593,7 +1593,7 @@ void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _li
         QString soundFile = *it;
 
         if ( _store->open( soundFile ) ) {
-            kdDebug( 3301 ) << "Not found file on disk. Use this( " << soundFile << " ) file." << endl;
+            kdDebug( 33001 ) << "Not found file on disk. Use this( " << soundFile << " ) file." << endl;
             KoStoreDevice dev( _store );
             int size = _store->size();
             char *data = new char[size];
@@ -1634,7 +1634,7 @@ void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _li
             delete data;
         }
         else {
-            kdDebug( 3301 ) << "Found this( " << soundFile << " ) file on disk" << endl;
+            kdDebug( 33001 ) << "Found this( " << soundFile << " ) file on disk" << endl;
         }
     }
 }
