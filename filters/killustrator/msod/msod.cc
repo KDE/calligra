@@ -180,12 +180,74 @@ void Msod::opArcrule(MSOFBH &, U32, QDataStream &)
 
 void Msod::opBlip(MSOFBH &, U32, QDataStream &)
 {
+/*
+    int headerBytesToSkip = -1;
+
+    switch (data.inst)
+    {
+    case msobiWMF:
+    case msobiEMF:
+    case msobiPICT:
+        headerBytesToSkip = 34;
+        break;
+    case msobiPNG:
+    case msobiJFIF:
+    //case msobiJPEG:
+    case msobiDIB:
+        headerBytesToSkip = 17;
+        break;
+    default:
+        kdError(s_area) << "opBlip: unknown Blip signature: " <<
+            data.inst << endl;
+        break;
+    }
+
+    // Only return data we can vouch for!
+
+    if (headerBytesToSkip >= 0)
+    {
+        *pictureLength = data.cbLength - headerBytesToSkip;
+        *pictureData = in + bytes + headerBytesToSkip;
+    }
+*/
 }
 
 // FBSE - File Blip Store Entry
 
-void Msod::opBse(MSOFBH &, U32 byteOperands, QDataStream &operands)
+void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
 {
+
+    // GEL provided types...
+
+    typedef enum
+    {
+        msoblipERROR,               // An error occured during loading.
+        msoblipUNKNOWN,             // An unknown blip type.
+        msoblipEMF,                 // Windows Enhanced Metafile.
+        msoblipWMF,                 // Windows Metafile.
+        msoblipPICT,                // Macintosh PICT.
+        msoblipJPEG,                // JFIF.
+        msoblipPNG,                 // PNG.
+        msoblipDIB,                 // Windows DIB.
+        msoblipFirstClient = 32,    // First client defined blip type.
+        msoblipLastClient  = 255    // Last client defined blip type.
+    } MSOBLIPTYPE;
+
+    // Blip signature as encoded in the MSOFBH.inst
+
+    typedef enum
+    {
+        msobiUNKNOWN = 0,
+        msobiWMF = 0x216,       // Metafile header then compressed WMF
+        msobiEMF = 0x3D4,       // Metafile header then compressed EMF
+        msobiPICT = 0x542,      // Metafile header then compressed PICT
+        msobiPNG = 0x6E0,       // One byte tag then PNG data
+        msobiJFIF = 0x46A,      // One byte tag then JFIF data
+        msobiJPEG = msobiJFIF,
+        msobiDIB = 0x7A8,       // One byte tag then DIB data
+        msobiClient = 0x800     // Clients should set this bit
+    } MSOBI;
+
     struct
     {
         U8 btWin32;     // Required type on Win32.
@@ -201,6 +263,9 @@ void Msod::opBse(MSOFBH &, U32 byteOperands, QDataStream &operands)
         U8 unused3;     // for the future.
     } data;
     unsigned i;
+
+    enum MSOBI blipInstance = static_cast<MSOBI>(op.opcode.fields.inst & (~1));
+    bool hasPrimaryId = (op.opcode.fields.inst & 1);
 
     operands >> data.btWin32 >> data.btWin32;
     for (i = 0; i < sizeof(data.rgbUid); i++)

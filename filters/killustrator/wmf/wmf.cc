@@ -70,6 +70,7 @@ void Wmf::brushCreateIndirect(
     WinObjBrushHandle *handle = handleCreateBrush();
     S16 arg;
     S32 colour;
+    S16 discard;
 
     operands >> arg >> colour;
     handle->m_colour = getColour(colour);
@@ -90,11 +91,13 @@ void Wmf::brushCreateIndirect(
     if (arg >= 0 && arg < 9)
     {
         style = styleTab[arg];
+        operands >> discard;
     }
     else
     {
         kdError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
         style = Qt::SolidPattern;
+        operands >> discard;
     }
     handle->m_style = style;
 }
@@ -287,15 +290,27 @@ void Wmf::invokeHandler(
     if (!result)
     {
         if (funcTab[i].name)
-            kdError(s_area) << "findFunc: unsupported opcode: " <<
-                funcTab[i].name << endl;
+            kdError(s_area) << "invokeHandler: unsupported opcode: " <<
+                funcTab[i].name <<
+                " operands: " << wordOperands << endl;
         else
-            kdError(s_area) << "findFunc: unsupported opcode: 0x" <<
-                QString::number(opcode, 16) << endl;
+            kdError(s_area) << "invokeHandler: unsupported opcode: 0x" <<
+                QString::number(opcode, 16) <<
+                " operands: " << wordOperands << endl;
+
+        // Skip data we cannot use.
+
+        for (i = 0; wordOperands; i++)
+        {
+            S16 discard;
+
+            operands >> discard;
+        }
     }
     else
     {
-        kdDebug(s_area) << "findFunc: opcode: " << funcTab[i].name << endl;
+        kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
+            " operands: " << wordOperands << endl;
         (this->*result)(wordOperands, operands);
     }
 }
@@ -481,15 +496,8 @@ bool Wmf::parse(
 
         // Package the arguments...
 
-        QByteArray record(1024);
-        QDataStream *body;
-
         wordCount -= 3;
-        st.readRawBytes(record.data(), wordCount * 2);
-        body = new QDataStream(record, IO_ReadOnly);
-        body->setByteOrder(QDataStream::LittleEndian);
-        invokeHandler(opcode, wordCount, *body);
-        delete body;
+        invokeHandler(opcode, wordCount, st);
     }
     in.close();
     return true;
