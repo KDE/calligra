@@ -119,8 +119,7 @@ SvgImport::convert()
 			//parseGObject( rect, object );
 			m_document.append( rect );
 		}
-		else
-		if( b.tagName() == "ellipse" )
+		else if( b.tagName() == "ellipse" )
 		{
 			//QDomElement object = b.namedItem( "gobject" ).toElement();
 			//QDomElement matrix = object.namedItem( "matrix" ).toElement();
@@ -133,8 +132,17 @@ SvgImport::convert()
 			//parseGObject( ellipse, object );
 			m_document.append( ellipse );
 		}
-		else
-		if( b.tagName() == "polyline" )
+		else if( b.tagName() == "circle" )
+		{
+			double r = b.attribute( "r" ).toDouble();
+			double left	= b.attribute( "cx" ).toDouble() - ( r / 2.0 );
+			double top	= b.attribute( "cy" ).toDouble() + ( r / 2.0 );
+			// Append the ellipse to the document
+			VObject *circle = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
+			//parseGObject( circle, object );
+			m_document.append( circle );
+		}
+		else if( b.tagName() == "polyline" )
 		{
 			QDomElement point = b.firstChild().toElement();
 			VComposite *path = new VComposite( &m_document );
