@@ -114,11 +114,11 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_thes_syn = new QListBox(vbox_syn);
     
     vbox_hyper = new QVBox(hbox);
-    (void) new QLabel(i18n("More general words"), vbox_hyper);
+    (void) new QLabel(i18n("More General Words"), vbox_hyper);
     m_thes_hyper = new QListBox(vbox_hyper);
-    
+
     vbox_hypo = new QVBox(hbox);
-    (void) new QLabel(i18n("More specific words"), vbox_hypo);
+    (void) new QLabel(i18n("More Specific Words"), vbox_hypo);
     m_thes_hypo = new QListBox(vbox_hypo);
 
     // single click -- keep display unambiguous by removing other selections:

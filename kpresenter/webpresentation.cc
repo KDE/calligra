@@ -512,13 +512,13 @@ void KPWebPresentationWizard::setupPage1()
     QHBox *row3 = new QHBox( canvas );
     QHBox *row4 = new QHBox( canvas );
 
-    QLabel *label1 = new QLabel( i18n(" Author: "), row1 );
+    QLabel *label1 = new QLabel( i18n("Author:"), row1 );
     label1->setAlignment( Qt::AlignVCenter );
-    QLabel *label2 = new QLabel( i18n(" Title: "), row2 );
+    QLabel *label2 = new QLabel( i18n("Title:"), row2 );
     label2->setAlignment( Qt::AlignVCenter );
-    QLabel *label3 = new QLabel( i18n(" Email Address: "), row3 );
+    QLabel *label3 = new QLabel( i18n("Email address:"), row3 );
     label3->setAlignment( Qt::AlignVCenter );
-    QLabel *label4 = new QLabel( i18n(" Path: "), row4 );
+    QLabel *label4 = new QLabel( i18n("Path:"), row4 );
     label4->setAlignment( Qt::AlignVCenter );
 
     author = new KLineEdit( webPres.getAuthor(), row1 );
@@ -580,17 +580,17 @@ void KPWebPresentationWizard::setupPage2()
     QHBox *row5 = new QHBox( canvas );
     QHBox *row6 = new QHBox( canvas );
 
-    QLabel *label1 = new QLabel( i18n(" Text Color: "), row1 );
+    QLabel *label1 = new QLabel( i18n("Text color:"), row1 );
     label1->setAlignment( Qt::AlignVCenter );
-    QLabel *label2 = new QLabel( i18n(" Title Color: "), row2 );
+    QLabel *label2 = new QLabel( i18n("Title color:"), row2 );
     label2->setAlignment( Qt::AlignVCenter );
-    QLabel *label3 = new QLabel( i18n(" Background Color: "), row3 );
+    QLabel *label3 = new QLabel( i18n("Background color:"), row3 );
     label3->setAlignment( Qt::AlignVCenter );
-    QLabel *label4 = new QLabel( i18n(" Picture Format: "), row4 );
+    QLabel *label4 = new QLabel( i18n("Picture format:"), row4 );
     label4->setAlignment( Qt::AlignVCenter );
-    QLabel *label5 = new QLabel( i18n(" Zoom: "), row5 );
+    QLabel *label5 = new QLabel( i18n("Zoom:"), row5 );
     label5->setAlignment( Qt::AlignVCenter );
-    QLabel *label6 = new QLabel( i18n( "Default Encoding:" ), row6 );
+    QLabel *label6 = new QLabel( i18n( "Default encoding:" ), row6 );
     label6->setAlignment( Qt::AlignVCenter );
 
     textColor = new KColorButton( webPres.getTextColor(), row1 );
@@ -641,7 +641,7 @@ void KPWebPresentationWizard::setupPage3()
     QVBox *canvas = new QVBox( page3 );
 
     QHBox *row = new QHBox( canvas );
-    QLabel *label = new QLabel( i18n( " Slide Title: " ), row );
+    QLabel *label = new QLabel( i18n( "Slide Title:" ), row );
     label->setAlignment( Qt::AlignVCenter );
     label->setMinimumWidth( label->sizeHint().width() );
     label->setMaximumWidth( label->sizeHint().width() );

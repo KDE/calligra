@@ -79,7 +79,7 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     m_findLayout->setSpacing( KDialog::spacingHint() );
     m_findLayout->setMargin( KDialog::marginHint() );
 
-    m_findLabel = new QLabel(i18n("&Text To Find"), m_findGrp);
+    m_findLabel = new QLabel(i18n("&Text to find:"), m_findGrp);
     m_find = new KHistoryCombo(true, m_findGrp);
     m_find->setMaxCount(10);
     m_find->setDuplicatesEnabled(false);
@@ -102,7 +102,7 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     m_replaceLayout->setSpacing( KDialog::spacingHint() );
     m_replaceLayout->setMargin( KDialog::marginHint() );
 
-    m_replaceLabel = new QLabel(i18n("&Replacement Text"), m_replaceGrp);
+    m_replaceLabel = new QLabel(i18n("&Replacement text:"), m_replaceGrp);
     m_replace = new KHistoryCombo(true, m_replaceGrp);
     m_replace->setMaxCount(10);
     m_replace->setDuplicatesEnabled(false);
@@ -266,8 +266,8 @@ void KoFindDialog::showPatterns()
         { I18N_NOOP("Start of Line"),                 "^",        0 },
         { I18N_NOOP("End of Line"),                   "$",        0 },
         { I18N_NOOP("Set of Characters"),             "[]",       -1 },
-        { I18N_NOOP("Repeats, zero or more times"),   "*",        0 },
-        { I18N_NOOP("Repeats, one or more times"),    "+",        0 },
+        { I18N_NOOP("Repeats, Zero or More Times"),   "*",        0 },
+        { I18N_NOOP("Repeats, One or More Times"),    "+",        0 },
         { I18N_NOOP("Optional"),                      "?",        0 },
         { I18N_NOOP("Escape"),                        "\\",       0 },
         { I18N_NOOP("TAB"),                           "\\t",      0 },
@@ -276,8 +276,8 @@ void KoFindDialog::showPatterns()
         { I18N_NOOP("White Space"),                   "\\s",      0 },
         { I18N_NOOP("Digit"),                         "\\d",      0 },
         // Those don't work
-        //{ I18N_NOOP("Unicode point"),               "\x0000",   0 },
-        //{ I18N_NOOP("ASCII/Latin-1 character"),       "\000",     0 }
+        //{ I18N_NOOP("Unicode Point"),               "\x0000",   0 },
+        //{ I18N_NOOP("ASCII/Latin-1 Character"),       "\000",     0 }
     };
     int i;
 

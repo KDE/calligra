@@ -59,14 +59,14 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent,
 
 
     QLabel *lPrefix = new QLabel( gStyle, "lPrefix" );
-    lPrefix->setText( i18n( "Prefix Text" ) );
+    lPrefix->setText( i18n( "Prefix text:" ) );
     grid->addWidget( lPrefix, 0, 1);
 
     sPrefix = new QLineEdit( gStyle, "sPrefix" );
     grid->addWidget( sPrefix, 0, 2);
 
     QLabel *lSuffix = new QLabel( gStyle, "lSuffix" );
-    lSuffix->setText( i18n( "Suffix Text" ) );
+    lSuffix->setText( i18n( "Suffix text:" ) );
     grid->addWidget( lSuffix, 0, 3);
 
     sSuffix = new QLineEdit( gStyle, "sSuffix" );
@@ -78,7 +78,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent,
     connect( bCustom, SIGNAL( clicked() ), this, SLOT( selectCustomBullet() ) );
 
     lStart = new QLabel( gStyle, "lStart" );
-    lStart->setText( i18n( "Start at" ) );
+    lStart->setText( i18n( "Start at:" ) );
     grid->addWidget( lStart, 1, 1);
 
 
@@ -88,7 +88,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent,
     if ( !displayDepth )
         spnDepth->hide();
     lCustom = new QLabel( gStyle, "lCustom" );
-    lCustom->setText( i18n( "Custom character" ) );
+    lCustom->setText( i18n( "Custom character:" ) );
     grid->addWidget( lCustom, 3, 1);
 
     spnStart = new KoSpinBox( gStyle );

@@ -139,7 +139,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   grid->setMargin(KDialog::marginHint());
   grid->setSpacing(KDialog::spacingHint());
 
-  (void) new QLabel( i18n( "Full Name:" ), grid );
+  (void) new QLabel( i18n( "Full name:" ), grid );
   d->m_leFullName = new QLineEdit( authorInfo->fullName(), grid );
 
   if ( authorInfo->fullName().isEmpty() )
@@ -181,7 +181,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   (void) new QLabel( i18n( "Street:" ), grid );
   d->m_leStreet = new QLineEdit( authorInfo->street(), grid );
 
-  (void) new QLabel( i18n( "Postal Code:" ), grid );
+  (void) new QLabel( i18n( "Postal code:" ), grid );
   d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), grid );
 
   (void) new QLabel( i18n( "City:" ), grid );

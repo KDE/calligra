@@ -1035,7 +1035,7 @@ QStringList KoPgNumVariable::actionTexts()
 {
     QStringList lst;
     lst << i18n( "Page Number" );
-    lst << i18n( "Number Of Pages" );
+    lst << i18n( "Number of Pages" );
     lst << i18n( "Section Title" );
     return lst;
 }

@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>137</width>
+            <width>242</width>
             <height>146</height>
         </rect>
     </property>
@@ -16,7 +16,7 @@
         <string>Form1</string>
     </property>
     <spacer>
-        <property name="name" stdset="0">
+        <property name="name">
             <cstring>Spacer2</cstring>
         </property>
         <property name="orientation">
@@ -25,11 +25,13 @@
         <property name="sizeType">
             <enum>Expanding</enum>
         </property>
-        <property name="sizeHint">
-            <size>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
                 <width>20</width>
                 <height>20</height>
-            </size>
+            </rect>
         </property>
     </spacer>
     <widget class="QCheckBox">
@@ -40,7 +42,7 @@
             <rect>
                 <x>11</x>
                 <y>11</y>
-                <width>115</width>
+                <width>213</width>
                 <height>19</height>
             </rect>
         </property>

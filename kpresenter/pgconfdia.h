@@ -70,7 +70,7 @@ protected:
     QButtonGroup *general, *page, *slides;
     QCheckBox *infinitLoop, *manualSwitch, *presentationDuration;
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
-    QLabel *label1, *label2, *label3, *lTimer;
+    QLabel *label2, *label3, *lTimer;
     QComboBox *effectCombo;
     QVBoxLayout *back;
     QListView *lSlides;

@@ -30,8 +30,8 @@
 
 static const KCmdLineOptions options[]=
 {
-	{"+in", I18N_NOOP("Input File"),0},
-	{"+out", I18N_NOOP("Output File"),0},
+	{"+in", I18N_NOOP("Input file"),0},
+	{"+out", I18N_NOOP("Output file"),0},
 	{"mimetype <mime>", I18N_NOOP("Mimetype of the output file"),0},
 	{0,0,0}
 };

@@ -81,13 +81,9 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     back->addWidget(general);
 
 
-    QGroupBox *grp = new QGroupBox( i18n( "Page Configuration" ), page );
+    QGroupBox *grp = new QGroupBox( i18n( "Configuration Page %1" ).arg( pgNum ), page );
     back->addWidget( grp );
     QGridLayout *grid = new QGridLayout( grp, 4, 4, 15 );
-
-    label1 = new QLabel( i18n( "Page number: %1" ).arg( pgNum ), grp );
-    label1->setAlignment( AlignVCenter );
-    grid->addWidget( label1, 0, 0 );
 
     label2 = new QLabel( i18n( "Effect for changing to next page:" ), grp );
     label2->setAlignment( AlignVCenter );
@@ -163,7 +159,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 
     connect( checkSoundEffect, SIGNAL( clicked() ), this, SLOT( soundEffectChanged() ) );
 
-    lSoundEffect = new QLabel( i18n( "File Name: " ), grp );
+    lSoundEffect = new QLabel( i18n( "File name:" ), grp );
     lSoundEffect->setAlignment( AlignVCenter );
     grid->addWidget( lSoundEffect, 4, 0 );
 

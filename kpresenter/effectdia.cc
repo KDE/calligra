@@ -66,7 +66,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     topLayout->addWidget(grp1);
     QGridLayout *upperRow = new QGridLayout(grp1, 5, 4, 15);
 
-    lNum = new QLabel( i18n( "Order of Appearance: " ), grp1 );
+    lNum = new QLabel( i18n( "Order of appearance:" ), grp1 );
     lNum->setAlignment( AlignVCenter );
     upperRow->addWidget(lNum, 0, 0);
 
@@ -77,7 +77,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     //( void )new QWidget( grp1 );
     //( void )new QWidget( grp1 );
 
-    lEffect = new QLabel( i18n( "Effect (appearing): " ), grp1 );
+    lEffect = new QLabel( i18n( "Effect (appearing):" ), grp1 );
     lEffect->setAlignment( AlignVCenter );
     upperRow->addWidget(lEffect, 1, 0);
 
@@ -100,7 +100,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     connect( cEffect, SIGNAL( activated( int ) ), this, SLOT( appearEffectChanged( int ) ) );
 
-    lEffect2 = new QLabel( i18n( "Effect (object specific): " ), grp1 );
+    lEffect2 = new QLabel( i18n( "Effect (object specific):" ), grp1 );
     lEffect2->setAlignment( AlignVCenter );
     upperRow->addWidget(lEffect2, 2, 0);
 
@@ -154,7 +154,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     connect( appearSoundEffect, SIGNAL( clicked() ), this, SLOT( appearSoundEffectChanged() ) );
 
-    lSoundEffect1 = new QLabel( i18n( "File Name: " ), grp1 );
+    lSoundEffect1 = new QLabel( i18n( "File name:" ), grp1 );
     lSoundEffect1->setAlignment( AlignVCenter );
     upperRow->addWidget( lSoundEffect1, 5, 0 );
 
@@ -191,7 +191,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     topLayout->addWidget(grp2);
     QGridLayout *lowerRow = new QGridLayout(grp2, 4, 4, 15);
 
-    lDisappear = new QLabel( i18n( "Order of Disappearance: " ), grp2 );
+    lDisappear = new QLabel( i18n( "Order of disappearance:" ), grp2 );
     lDisappear->setAlignment( AlignVCenter );
     lowerRow->addWidget(lDisappear, 0, 0);
 
@@ -199,7 +199,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     eDisappear->setValue( obj->getDisappearNum() );
     lowerRow->addWidget(eDisappear, 0, 1);
 
-    lDEffect = new QLabel( i18n( "Effect (disappearing): " ), grp2 );
+    lDEffect = new QLabel( i18n( "Effect (disappearing):" ), grp2 );
     lDEffect->setAlignment( AlignVCenter );
     lowerRow->addWidget(lDEffect, 1, 0);
 
@@ -246,7 +246,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     connect( disappearSoundEffect, SIGNAL( clicked() ), this, SLOT( disappearSoundEffectChanged() ) );
 
-    lSoundEffect2 = new QLabel( i18n( "File Name: " ), grp2 );
+    lSoundEffect2 = new QLabel( i18n( "File name:" ), grp2 );
     lSoundEffect2->setAlignment( AlignVCenter );
     lowerRow->addWidget( lSoundEffect2, 4, 0 );
 

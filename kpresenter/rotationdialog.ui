@@ -81,7 +81,7 @@
                                         <cstring>customRadio</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Custom</string>
+                                        <string>Custom:</string>
                                     </property>
                                     <property name="checked">
                                         <bool>true</bool>

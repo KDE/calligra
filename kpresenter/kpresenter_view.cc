@@ -2332,7 +2332,7 @@ void KPresenterView::setupActions()
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "view_footer" );
 
-    actionViewShowHelpLine= new KToggleAction( i18n( "HelpLines" ), 0,
+    actionViewShowHelpLine= new KToggleAction( i18n( "Help Lines" ), 0,
                                           this, SLOT( viewHelpLines() ),
                                           actionCollection(), "view_helplines" );
 
@@ -2343,11 +2343,11 @@ void KPresenterView::setupActions()
                                           this, SLOT( viewGridToFront() ),
                                           actionCollection(), "view_gridtofront" );
 
-    actionViewSnapToGrid= new KToggleAction( i18n( "Snap To Grid" ), 0,
+    actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), 0,
                                           this, SLOT(viewSnapToGrid() ),
                                           actionCollection(), "view_snaptogrid" );
 
-    actionViewHelpLineToFront= new KToggleAction( i18n( "HelpLine to Front" ), 0,
+    actionViewHelpLineToFront= new KToggleAction( i18n( "Help Line to Front" ), 0,
                                           this, SLOT( viewHelpLineToFront() ),
                                           actionCollection(), "view_helplinetofront" );
 
@@ -2483,7 +2483,7 @@ void KPresenterView::setupActions()
 					   this, SLOT( textUnderline() ),
 					   actionCollection(), "text_underline" );
 
-    actionFormatStrikeOut = new KToggleAction( i18n( "&Strike out" ), "text_strike", 0 ,
+    actionFormatStrikeOut = new KToggleAction( i18n( "&Strike Out" ), "text_strike", 0 ,
                                                this, SLOT( textStrikeOut() ),
                                                actionCollection(), "format_strike" );
 
@@ -2569,7 +2569,7 @@ void KPresenterView::setupActions()
 				       actionCollection(), "extra_properties" );
 
 
-    actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), "raise",
+    actionExtraRaise = new KAction( i18n( "Ra&ise Object(s)" ), "raise",
 				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
 				    actionCollection(), "extra_raise" );
 
@@ -2754,7 +2754,7 @@ void KPresenterView::setupActions()
      actionPenColor->setDefaultColor(QColor());
     actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ), actionCollection(), "extendobjectheight" );
 
-    actionResizeTextObject = new KAction( i18n( "&Resize Object to Fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
+    actionResizeTextObject = new KAction( i18n( "&Resize Object to fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
 
 //     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
 // 				       this, SLOT( extraPenBrush() ),
@@ -2762,7 +2762,7 @@ void KPresenterView::setupActions()
     actionChangeClipart =new KAction( i18n( "&Change Clipart..." ), "clipart", 0,
 				       this, SLOT( extraChangeClip() ),
 				       actionCollection(), "change_clipart" );
-    actionRenamePage=new KAction(i18n( "&Rename Page" ),0,this,
+    actionRenamePage=new KAction(i18n( "&Rename Page..." ),0,this,
                      SLOT( renamePageTitle() ),
                      actionCollection(), "rename_page" );
 
@@ -2839,7 +2839,7 @@ void KPresenterView::setupActions()
                                           this, SLOT( textDefaultFormat() ),
                                           actionCollection(), "text_default" );
 
-    actionOpenLink = new KAction( i18n( "Open link" ), 0,
+    actionOpenLink = new KAction( i18n( "Open Link" ), 0,
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
 
@@ -2927,7 +2927,7 @@ void KPresenterView::setupActions()
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
 
-    actionRemoveHelpLine = new KAction( i18n( "Remove HelpLine" ), 0,
+    actionRemoveHelpLine = new KAction( i18n( "Remove Help Line" ), 0,
                                     this, SLOT( removeHelpLine() ),
                                     actionCollection(), "remove_helpline" );
 

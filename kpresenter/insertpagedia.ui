@@ -33,13 +33,13 @@
             <item>
                 <property>
                     <name>text</name>
-                    <string>Before current page</string>
+                    <string>Before Current Page</string>
                 </property>
             </item>
             <item>
                 <property>
                     <name>text</name>
-                    <string>After current page</string>
+                    <string>After Current Page</string>
                 </property>
             </item>
             <property stdset="1">

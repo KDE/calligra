@@ -609,18 +609,18 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
 
     QGridLayout *m_grid = new QGridLayout( page, 12, 2, 0, 6 );
-    m_checkFamily = new QCheckBox( i18n( "Family" ),page  );
-    m_checkSize = new QCheckBox( i18n( "Size" ), page );
-    m_checkColor = new QCheckBox( i18n( "Color" ), page );
-    m_checkBgColor = new QCheckBox( i18n( "Background color" ), page );
-    m_checkBold = new QCheckBox( i18n( "Bold" ), page );
-    m_checkItalic = new QCheckBox( i18n( "Italic" ),page );
-    m_checkUnderline = new QCheckBox( i18n( "Underline" ), page);
-    m_checkStrikeOut = new QCheckBox( i18n( "Strikeout" ), page);
-    m_checkDoubleLine = new QCheckBox( i18n( "Double underline" ), page);
+    m_checkFamily = new QCheckBox( i18n( "Family:" ),page  );
+    m_checkSize = new QCheckBox( i18n( "Size:" ), page );
+    m_checkColor = new QCheckBox( i18n( "Color:" ), page );
+    m_checkBgColor = new QCheckBox( i18n( "Background color:" ), page );
+    m_checkBold = new QCheckBox( i18n( "Bold:" ), page );
+    m_checkItalic = new QCheckBox( i18n( "Italic:" ),page );
+    m_checkUnderline = new QCheckBox( i18n( "Underline:" ), page);
+    m_checkStrikeOut = new QCheckBox( i18n( "Strikeout:" ), page);
+    m_checkDoubleLine = new QCheckBox( i18n( "Double underline:" ), page);
 
 
-    m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment" ), page );
+    m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment:" ), page );
 
     m_familyItem = new KFontCombo(page);
     m_familyItem->setCurrentFont(m_ctx->m_family);

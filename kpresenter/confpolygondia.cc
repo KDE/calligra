@@ -145,7 +145,7 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name )
 
     connect( m_convexPolygon, SIGNAL( clicked() ), this, SLOT( slotConvexPolygon() ) );
 
-    m_concavePolygon = new QRadioButton( i18n( "Concave Polygon" ), group );
+    m_concavePolygon = new QRadioButton( i18n( "Concave polygon" ), group );
     connect( m_concavePolygon, SIGNAL( clicked() ), this, SLOT( slotConcavePolygon() ) );
 
     m_corners = new KIntNumInput( 0 , gSettings );

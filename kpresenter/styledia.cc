@@ -153,14 +153,14 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     left->setSpacing( 5 );
     right->setSpacing( 5 );
 
-    QLabel *l = new QLabel( i18n( "Pen Color:" ), left );
+    QLabel *l = new QLabel( i18n( "Pen color:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
     choosePCol = new KColorButton( Qt::black, left );
     connect( choosePCol, SIGNAL( changed( const QColor& ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
-    l = new QLabel( i18n( "Pen Style:" ), left );
+    l = new QLabel( i18n( "Pen style:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
     choosePStyle = new KComboBox( false, left, "PStyle" );
@@ -173,7 +173,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     connect( choosePStyle, SIGNAL( activated( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
-    l = new QLabel( i18n( "Pen Width:" ), left );
+    l = new QLabel( i18n( "Pen width:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
     choosePWidth = new KIntNumInput( 1, left );
@@ -181,7 +181,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     connect( choosePWidth, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
-    l = new QLabel( i18n( "Line Begin:" ), right );
+    l = new QLabel( i18n( "Line begin:" ), right );
     l->setFixedHeight( l->sizeHint().height() );
 
     clineBegin = new KComboBox( false, right, "lineBegin" );
@@ -197,7 +197,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     connect( clineBegin, SIGNAL( activated( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
-    l = new QLabel( i18n( "Line End:" ), right );
+    l = new QLabel( i18n( "Line end:" ), right );
     l->setFixedHeight( l->sizeHint().height() );
 
     clineEnd = new KComboBox( false, right, "lineEnd" );
@@ -360,14 +360,14 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     brushConfig->setSpacing( 5 );
     stack->addWidget( brushConfig, 0 );
 
-    l = new QLabel( i18n( "Brush Color:" ), brushConfig );
+    l = new QLabel( i18n( "Brush color:" ), brushConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
     chooseBCol = new KColorButton( Qt::white, brushConfig );
     connect( chooseBCol, SIGNAL( changed( const QColor & ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    l = new QLabel( i18n( "Brush Style:" ), brushConfig );
+    l = new QLabel( i18n( "Brush style:" ), brushConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
     chooseBStyle = new KComboBox( false, brushConfig, "BStyle" );

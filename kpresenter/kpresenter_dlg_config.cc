@@ -200,7 +200,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     indent->setRange(0.1, 50, 0.1);
     indent->setPrecision(1);
     indent->setSuffix( suffix );
-    indent->setLabel(i18n("Paragraph indent by toolbar buttons"));
+    indent->setLabel(i18n("Paragraph indent by toolbar buttons:"));
 
     lay1->addWidget(indent);
 
@@ -276,7 +276,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     tmpQGroupBox->setTitle( i18n("Colors") );
     QGridLayout *grid1 = new QGridLayout( tmpQGroupBox, 5, 1, 15, 7);
     QLabel *lab = new QLabel( tmpQGroupBox, "label20" );
-    lab->setText( i18n( "Background color of objects in Editing Mode:" ) );
+    lab->setText( i18n( "Background color of objects in editing mode:" ) );
     grid1->addWidget( lab, 0, 0 );
 
     bgColor = new KColorButton( tmpQGroupBox );
@@ -285,7 +285,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
 
 
     lab = new QLabel( tmpQGroupBox, "label20" );
-    lab->setText( i18n( "Grid Color:" ) );
+    lab->setText( i18n( "Grid color:" ) );
     grid1->addWidget( lab, 2, 0 );
 
     gridColor = new KColorButton( tmpQGroupBox );
@@ -574,7 +574,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     fontLayout->setColStretch(1, 1);
     fontLayout->setColStretch(2, 0);
 
-    QLabel *fontTitle = new QLabel(i18n("Default font"), fontContainer);
+    QLabel *fontTitle = new QLabel(i18n("Default font:"), fontContainer);
 
     font= new QFont();
     font->fromString(defaultFont);
