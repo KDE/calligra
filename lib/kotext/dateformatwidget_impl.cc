@@ -37,12 +37,12 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
 
     combo2->insertItem( i18n( "Day"));
     combo2->insertItem( i18n( "Day (2 digits)"));
-    combo2->insertItem( i18n( "Abbreviated day name"));
-    combo2->insertItem( i18n( "Long day name"));
+    combo2->insertItem( i18n( "Day (abbreviated name)"));
+    combo2->insertItem( i18n( "Day (long name)"));
     combo2->insertItem( i18n( "Month" ) );
     combo2->insertItem( i18n( "Month (2 digits)" ) );
-    combo2->insertItem( i18n( "Abbreviated month name" ) );
-    combo2->insertItem( i18n( "Long month name" ) );
+    combo2->insertItem( i18n( "Month (abbreviated name)" ) );
+    combo2->insertItem( i18n( "Month (long name)" ) );
     combo2->insertItem( i18n( "Year (2 digits)" ) );
     combo2->insertItem( i18n( "Year (4 digits)" ) );
     combo2->setCurrentItem( 0 );
@@ -86,17 +86,17 @@ void DateFormatWidget::comboActivated()
         combo1->lineEdit()->insert("d");
     else if(string==i18n( "Day (2 digits)"))
         combo1->lineEdit()->insert("dd");
-    else if(string==i18n( "Abbreviated day name"))
+    else if(string==i18n( "Day (abbreviated name)"))
         combo1->lineEdit()->insert("ddd");
-    else if(string==i18n( "Long day name"))
+    else if(string==i18n( "Day (long name)"))
         combo1->lineEdit()->insert("dddd");
     else if(string==i18n( "Month" ) )
         combo1->lineEdit()->insert("M");
     else if(string==i18n( "Month (2 digits)" ) )
         combo1->lineEdit()->insert("MM");
-    else if(string==i18n( "Abbreviated month name" ) )
+    else if(string==i18n( "Month (abbreviated name)" ) )
         combo1->lineEdit()->insert("MMM");
-    else if(string==i18n( "Long month name" ) )
+    else if(string==i18n( "Month (long name)" ) )
         combo1->lineEdit()->insert("MMMM");
     else if(string==i18n( "Year (2 digits)" ) )
         combo1->lineEdit()->insert("yy");
