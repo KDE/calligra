@@ -274,6 +274,8 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 
 		objPtr->objPic->play(painter);
 	      
+		painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
+
 		if (objPtr->objType == OT_CLIPART)
 		  painter->setViewport(r);
 
@@ -284,6 +286,8 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	  /* draw selection, if selected */
 	  if (objPtr->isSelected)
 	    {
+	      RasterOp rastOp = painter->rasterOp();
+	      painter->setRasterOp(NotROP);
 	      painter->setBrush(black);
 	      painter->setPen(NoPen);
 	      painter->drawRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
@@ -302,6 +306,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 				6,6);
 	      painter->drawRect(objPtr->ox - diffx() + objPtr->ow - 6,objPtr->oy - diffy() + objPtr->oh / 2 - 3,
 				6,6);
+	      painter->setRasterOp(rastOp);
 	      //painter->setBrush(NoBrush);
 	      //if (mousePressed && (objPtr->objType == OT_PICTURE || objPtr->objType == OT_CLIPART))
 	      //painter->setPen(QPen(gray,1,DotLine));
