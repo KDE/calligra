@@ -5377,7 +5377,7 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
       ++rows;
   }
 
-  KSpreadCell * cell = cellAt( mx, my );
+  KSpreadCell * cell = nonDefaultCell( mx, my );
   if ( rows == 1 )
   {
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -5407,18 +5407,12 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
 
     rowtext = tmp.left(p);
 
-    if ( cell->isDefault() )
-    {
-      cell = new KSpreadCell( this, mx, my + i );
-      insertCell( cell );
-    }
-
     cell->setCellText( rowtext );
     cell->updateChart();
 
     // next cell
     ++i;
-    cell = cellAt( mx, my + i );
+    cell = nonDefaultCell( mx, my + i );
 
     if (!cell || p == (int) tmp.length())
       break;
@@ -6816,41 +6810,55 @@ void KSpreadTable::update()
   }
 }
 
-void KSpreadTable::updateCell( KSpreadCell *cell, int _column, int _row )
+void KSpreadTable::updateCellArea( QRect cellArea )
 {
-    if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
-        return;
+  if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
+    return;
 
-    // Get the size
-    int left = columnPos( _column );
-    int top = rowPos( _row );
-    int right = left + cell->extraWidth();
-    int bottom = top + cell->extraHeight();
+  KSpreadCell* cell = cellAt(cellArea.bottomRight());
+  // Get the size
+  int left = columnPos( cellArea.left() );
+  int top = rowPos( cellArea.top() );
+  int right = columnPos(cellArea.right()) + cell->extraWidth();
+  int bottom = rowPos(cellArea.bottom()) + cell->extraHeight();
 
-    // Need to calculate ?
-    if ( cell->calcDirtyFlag() )
-        cell->calc();
+  // Need to calculate ?
+  for (int x = cellArea.left(); x <= cellArea.right(); x++)
+  {
+    for (int y = cellArea.top(); y <= cellArea.bottom(); y++)
+    {
+      cell = cellAt(x,y);
 
-    // Need to make layout ?
-    if ( cell->layoutDirtyFlag() )
-        cell->makeLayout( painter(), _column, _row );
+      cell->calc();
 
-    // Perhaps the size changed now ?
-    right = QMAX( right, left + cell->extraWidth() );
-    bottom = QMAX( bottom, top + cell->extraHeight() );
+      // Need to make layout ?
+      cell->makeLayout( painter(), x, y );
 
-    // Force redraw
-    QPointArray arr( 4 );
-    arr.setPoint( 0, left, top );
-    arr.setPoint( 1, right, top );
-    arr.setPoint( 2, right, bottom );
-    arr.setPoint( 3, left, bottom );
+      // Perhaps the size changed now ?
+      right = QMAX( right, left + cell->extraWidth() );
+      bottom = QMAX( bottom, top + cell->extraHeight() );
+    }
+  }
 
-    // ##### Hmmmm, why not draw the cell directly ?
-    // That will be faster.
-    emit sig_polygonInvalidated( arr );
+  // Force redraw
+  QPointArray arr( 4 );
+  arr.setPoint( 0, left, top );
+  arr.setPoint( 1, right, top );
+  arr.setPoint( 2, right, bottom );
+  arr.setPoint( 3, left, bottom );
 
-    cell->clearDisplayDirtyFlag();
+  // ##### Hmmmm, why not draw the cell directly ?
+  // That will be faster.
+  emit sig_polygonInvalidated( arr );
+
+  cell->clearDisplayDirtyFlag();
+}
+
+void KSpreadTable::updateCell( KSpreadCell */*cell*/, int _column, int _row )
+{
+  QRect cellArea(QPoint(_column, _row), QPoint(_column, _row));
+
+  updateCellArea(cellArea);
 }
 
 void KSpreadTable::emit_polygonInvalidated( const QPointArray& arr )

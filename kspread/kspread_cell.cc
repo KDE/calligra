@@ -668,6 +668,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // in which case m_iRow and m_iColumn are 0 and 0, but col and row
     // are the real coordinates of the cell.
 
+    if (!testFlag(Flag_LayoutDirty))
+      return;
+
     m_nbLines = 0;
     clearFlag(Flag_CellTooShort);
 

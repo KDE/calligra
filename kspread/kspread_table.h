@@ -1027,6 +1027,13 @@ public:
     void updateCell( KSpreadCell* _cell, int _col, int _row );
 
     /**
+     * Like updateCell except it works on a range of cells.  Use this function
+     * rather than calling updateCell(..) on several adjacent cells so there
+     * will be one paint event instead of several
+     */
+    void updateCellArea(QRect cellArea);
+
+  /**
      * Updates every cell on the table
      */
     void update();
