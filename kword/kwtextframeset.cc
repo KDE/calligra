@@ -2724,6 +2724,18 @@ QString KWTextFrameSet::copyTextParag( QDomElement & elem, int selectionId )
     return text;
 }
 
+void KWTextFrameSet::sortText()
+{
+    KoTextCursor c1 = textDocument()->selectionStartCursor(KoTextDocument::Standard );
+    KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
+    QString text;
+    if ( c1.parag() == c2.parag() )
+        return;
+    else
+    {
+        //todo
+    }
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////

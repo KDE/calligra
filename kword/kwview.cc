@@ -6879,7 +6879,9 @@ void KWView::slotAddIgnoreAllWord()
 
 void KWView::sortText()
 {
-    //todo
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    if ( edit && edit->textFrameSet()->hasSelection())
+        edit->textFrameSet()->sortText();
 }
 
 void KWView::addPersonalExpression()
