@@ -37,6 +37,10 @@ class VColorDocker : public VDocker
 
 public:
 	 VColorDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
+	 virtual void setFillDocker() { m_isStrokeDocker = false; };
+	 virtual void setStrokeDocker() { m_isStrokeDocker = true; };
+	 VColor color() { return *m_Color; }
   
 private:
 	QWidget *mainWidget;
@@ -61,6 +65,7 @@ private slots:
 	void updateOpacity();
 
 protected:
+	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
 	VColor *m_Color;
 };
 
