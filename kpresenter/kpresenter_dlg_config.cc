@@ -25,12 +25,21 @@
 #include <knuminput.h>
 #include <kcolorbutton.h>
 #include <kprvariable.h>
+#include <kprcanvas.h>
+#include <tkcoloractions.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
+#include <qtabwidget.h>
+
+#include <styledia.h>
+#include <confpiedia.h>
+#include <confrectdia.h>
+#include <confpolygondia.h>
+#include <confpicturedia.h>
 
 #include <kpresenter_dlg_config.h>
 #include <kpresenter_view.h>
@@ -73,6 +82,11 @@ KPConfig::KPConfig( KPresenterView* parent )
 
     _defaultDocPage=new ConfigureDefaultDocPage(parent, page);
 
+    page = addVBoxPage( i18n("Tools"), i18n("Default Tools Settings"),
+                        BarIcon("configure", KIcon::SizeMedium) );
+
+    _toolsPage=new ConfigureToolsPage(parent, page);
+
     connect( this, SIGNAL( okClicked() ),this, SLOT( slotApply() ) );
 }
 
@@ -88,6 +102,8 @@ void KPConfig::openPage(int flags)
         showPage(3 );
     else if(flags & KP_DOC)
         showPage(4 );
+    else if(flags & KP_TOOLS)
+        showPage(5);
 }
 
 void KPConfig::slotApply()
@@ -97,7 +113,7 @@ void KPConfig::slotApply()
     _spellPage->apply();
     _miscPage->apply();
     _defaultDocPage->apply();
-
+    _toolsPage->apply();
 }
 
 void KPConfig::slotDefault()
@@ -117,6 +133,9 @@ void KPConfig::slotDefault()
             break;
         case 4:
             _defaultDocPage->slotDefault();
+            break;
+        case 5:
+            _toolsPage->slotDefault();
             break;
         default:
             break;
@@ -620,6 +639,105 @@ void ConfigureDefaultDocPage::selectNewDefaultFont() {
         fontName->setText(font->family() + ' ' + QString::number(font->pointSize()));
         fontName->setFont(*font);
     }
+}
+
+ConfigureToolsPage::ConfigureToolsPage( KPresenterView *_view, QVBox *box, char *name )
+    : QObject( box->parent(), name )
+{
+    m_pView = _view;
+    config = KPresenterFactory::global()->config();
+
+    QTabWidget *tab = new QTabWidget(box);
+    box->setMargin( 5 );
+    box->setSpacing( 10 );
+
+    m_confPenDia = new ConfPenDia(tab, 0, StyleDia::SdAll);
+    m_confPenDia->setPen(m_pView->getCanvas()->activePage()->getPen(m_pView->getPen()));
+    m_confPenDia->setLineBegin(m_pView->getCanvas()->activePage()->getLineBegin(m_pView->getLineBegin()));
+    m_confPenDia->setLineEnd(m_pView->getCanvas()->activePage()->getLineEnd(m_pView->getLineEnd()));
+    tab->addTab(m_confPenDia, i18n("&Pen"));
+
+    m_confBrushDia = new ConfBrushDia(tab, 0, StyleDia::SdAll);
+    m_confBrushDia->setBrush(m_pView->getCanvas()->activePage()->getBrush(m_pView->getBrush()));
+    m_confBrushDia->setFillType(m_pView->getCanvas()->activePage()->getFillType(m_pView->getFillType()));
+    m_confBrushDia->setGradient(m_pView->getCanvas()->activePage()->getGColor1(m_pView->getGColor1()),
+                                m_pView->getCanvas()->activePage()->getGColor2(m_pView->getGColor2()),
+                                m_pView->getCanvas()->activePage()->getGType(m_pView->getGType()),
+                                m_pView->getCanvas()->activePage()->getGUnbalanced(m_pView->getGUnbalanced()),
+                                m_pView->getCanvas()->activePage()->getGXFactor(m_pView->getGXFactor()),
+                                m_pView->getCanvas()->activePage()->getGYFactor(m_pView->getGYFactor()));
+    tab->addTab(m_confBrushDia, i18n("&Brush"));
+
+    m_confPieDia = new ConfPieDia(tab, "ConfPageDia");
+    m_confPieDia->setType(m_pView->getCanvas()->activePage()->getPieType(m_pView->getPieType()));
+    m_confPieDia->setAngle(m_pView->getCanvas()->activePage()->getPieAngle(m_pView->getPieAngle()));
+    m_confPieDia->setLength(m_pView->getCanvas()->activePage()->getPieLength(m_pView->getPieLength()));
+    m_confPieDia->setPenBrush(m_pView->getCanvas()->activePage()->getPen(m_pView->getPen()),
+                            m_pView->getCanvas()->activePage()->getBrush(m_pView->getBrush()));
+    tab->addTab(m_confPieDia, i18n("P&ie"));
+
+    bool _checkConcavePolygon;
+    int _cornersValue;
+    int _sharpnessValue;
+
+    if (!m_pView->getCanvas()->activePage()->getPolygonSettings(&_checkConcavePolygon, &_cornersValue, &_sharpnessValue))
+    {
+        _checkConcavePolygon = m_pView->getCheckConcavePolygon();
+        _cornersValue = m_pView->getCornersValue();
+        _sharpnessValue = m_pView->getSharpnessValue();
+    }
+
+    m_confPolygonDia = new ConfPolygonDia(tab, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
+    tab->addTab(m_confPolygonDia, i18n("P&olygon"));
+
+    m_confRectDia = new ConfRectDia(tab, "ConfRectDia" );
+    m_confRectDia->setRnds(m_pView->getCanvas()->activePage()->getRndX(m_pView->getRndX()),
+                           m_pView->getCanvas()->activePage()->getRndY(m_pView->getRndY()));
+    tab->addTab(m_confRectDia, i18n("&Rectangle"));
+}
+
+void ConfigureToolsPage::apply()
+{
+    m_pView->setPieType(m_confPieDia->getType());
+    m_pView->setPieAngle(m_confPieDia->getAngle());
+    m_pView->setPieLength(m_confPieDia->getLength());
+    m_pView->setCheckConcavePolygon(m_confPolygonDia->getCheckConcavePolygon());
+    m_pView->setCornersValue(m_confPolygonDia->getCornersValue());
+    m_pView->setSharpnessValue(m_confPolygonDia->getSharpnessValue());
+    m_pView->setRndX(m_confRectDia->getRndX());
+    m_pView->setRndY(m_confRectDia->getRndY());
+    m_pView->setPen(m_confPenDia->getPen());
+    m_pView->setBrush(m_confBrushDia->getBrush());
+    m_pView->setLineBegin(m_confPenDia->getLineBegin());
+    m_pView->setLineEnd(m_confPenDia->getLineEnd());
+    m_pView->setFillType(m_confBrushDia->getFillType());
+    m_pView->setGColor1(m_confBrushDia->getGColor1());
+    m_pView->setGColor2(m_confBrushDia->getGColor2());
+    m_pView->setGType(m_confBrushDia->getGType());
+    m_pView->setGUnbalanced(m_confBrushDia->getGUnbalanced());
+    m_pView->setGXFactor(m_confBrushDia->getGXFactor());
+    m_pView->setGYFactor(m_confBrushDia->getGYFactor());
+    m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());
+    m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
+}
+
+void ConfigureToolsPage::slotDefault()
+{
+    m_confPieDia->setType(PT_PIE);
+    m_confPieDia->setLength(90 * 16);
+    m_confPieDia->setAngle(45 * 16);
+    m_confPolygonDia->setCheckConcavePolygon(false);
+    m_confPolygonDia->setCornersValue(3);
+    m_confPolygonDia->setSharpnessValue(0);
+    m_confRectDia->setRnds(0, 0);
+    m_confPenDia->setPen(QPen(black, 1, SolidLine));
+    m_confBrushDia->setBrush(QBrush(white, SolidPattern));
+    m_confPenDia->setLineBegin(L_NORMAL);
+    m_confPenDia->setLineEnd(L_NORMAL);
+    m_confBrushDia->setGradient(red, green, BCT_GHORZ, false, 100, 100);
+    m_confBrushDia->setFillType(FT_BRUSH);
+    m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());
+    m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
 }
 
 #include <kpresenter_dlg_config.moc>

@@ -21,8 +21,6 @@
 #ifndef confpicturedia_h
 #define confpicturedia_h
 
-#include <kdialogbase.h>
-
 #include <qframe.h>
 #include <qlabel.h>
 
@@ -84,7 +82,7 @@ protected:
 /* class ConfPictureDia                                           */
 /******************************************************************/
 
-class ConfPictureDia : public KDialogBase
+class ConfPictureDia : public QWidget
 {
     Q_OBJECT
 

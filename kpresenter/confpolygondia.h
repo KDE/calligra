@@ -24,7 +24,6 @@
 #ifndef confpolygondia_h
 #define confpolygondia_h
 
-#include <kdialogbase.h>
 #include <qframe.h>
 
 class QPainter;
@@ -66,7 +65,7 @@ protected:
 /* class ConfPolygonDia                                           */
 /******************************************************************/
 
-class ConfPolygonDia : public KDialogBase
+class ConfPolygonDia : public QWidget
 {
     Q_OBJECT
 
@@ -78,6 +77,10 @@ public:
     bool getCheckConcavePolygon() const { return checkConcavePolygon; }
     int getCornersValue() const { return cornersValue; }
     int getSharpnessValue() const { return sharpnessValue; }
+
+    void setCheckConcavePolygon(bool _concavePolygon);
+    void setCornersValue(int _cornersValue);
+    void setSharpnessValue(int _sharpnessValue);
 
 protected:
     QRadioButton *m_convexPolygon, *m_concavePolygon;

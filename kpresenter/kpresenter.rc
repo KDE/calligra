@@ -97,11 +97,7 @@
   <Action name="extra_layout"/>
   <Action name="extra_background"/>
   <Separator/>
-  <Action name="extra_penbrush"/>
-  <Action name="extra_configpie"/>
-  <Action name="extra_configrect"/>
-  <Action name="extra_configpolygon"/>
-  <Action name="extra_configpicture"/>
+  <Action name="extra_properties"/>
  </Menu>
  <Menu name="Text"><text>Te&amp;xt</text>
   <Action name="text_default"/>
@@ -211,14 +207,8 @@
   <Action name="extra_raise"/>
   <Action name="extra_alignobjs"/>
 </ToolBar>
-<ToolBar name="configure" position="top" fullWidth="false" hidden="true"><Text>Configure</Text>
-  <Action name="extra_penbrush"/>
-  <Action name="extra_configpie"/>
-  <Action name="extra_configrect"/>
-  <Action name="extra_configpolygon"/>
-  <Action name="extra_configpicture"/>
-</ToolBar>
 <ToolBar name="extraToolBar" position="top" fullWidth="false"><Text>Format</Text>
+  <Action name="extra_properties"/>
   <Action name="extra_linebegin"/>
   <Action name="extra_lineend"/>
   <Action name="extra_penstyle"/>
@@ -309,8 +299,6 @@
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
   <Separator/>
-  <Action name="object_properties"/>
-  <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
@@ -329,6 +317,8 @@
   <Separator/>
   <Action name="extendobjectheight"/>
   <Action name="resizetextobject"/>
+  <Separator/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="partobject_popup">
   <Action name="edit_cut"/>
@@ -337,7 +327,6 @@
   <Action name="edit_delete"/>
   <Separator/>
   <Action name="extra_rotate"/>
-  <Action name="object_properties"/>
   <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
@@ -354,6 +343,8 @@
    <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="rectangleobject_popup">
   <Action name="edit_cut"/>
@@ -364,10 +355,6 @@
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
   <Separator/>
-  <Action name="extra_configrect"/>
-  <Separator/>
-  <Action name="object_properties"/>
-  <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
@@ -383,6 +370,8 @@
    <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="graphmenu_popup">
   <Action name="edit_cut"/>
@@ -393,8 +382,6 @@
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
   <Separator/>
-  <Action name="object_properties"/>
-  <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
@@ -410,6 +397,8 @@
    <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="flip_popup">
   <Action name="edit_cut"/>
@@ -420,8 +409,6 @@
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
   <Separator/>
-  <Action name="object_properties"/>
-  <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Menu name="Flip Objects"><text>Flips Objects</text>
@@ -441,6 +428,8 @@
    <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="piemenu_popup">
   <Action name="edit_cut"/>
@@ -451,10 +440,6 @@
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
   <Separator/>
-  <Action name="object_properties"/>
-  <Separator/>
-  <Action name="extra_configpie"/>
-  <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Menu name="Flip Objects"><text>Flips Objects</text>
@@ -475,6 +460,8 @@
    <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="clipmenu_popup">
   <Action name="edit_cut"/>
@@ -484,8 +471,6 @@
   <Separator/>
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
-  <Separator/>
-  <Action name="object_properties"/>
   <Separator/>
   <Action name="change_clipart"/>
   <Separator/>
@@ -504,6 +489,8 @@
    <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="picmenu_popup">
   <Action name="edit_cut"/>
@@ -513,8 +500,6 @@
   <Separator/>
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
-  <Separator/>
-  <Action name="object_properties"/>
   <Separator/>
   <Action name="change_picture"/>
   <Separator/>
@@ -543,7 +528,7 @@
    <Action name="pic_1600_1200"/>
   </Menu>
   <Separator/>
-  <Action name="extra_configpicture"/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="sidebarmenu_popup">
   <Action name="insert_page"/>
@@ -621,10 +606,6 @@
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
   <Separator/>
-  <Action name="extra_configpolygon"/>
-  <Separator/>
-  <Action name="object_properties"/>
-  <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
@@ -640,6 +621,8 @@
    <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
 </Menu>
 <Menu name="helpline_popup">
  <Action name="remove_helpline"/>

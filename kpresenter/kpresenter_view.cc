@@ -952,7 +952,7 @@ void KPresenterView::extraPenBrush()
         delete styleDia;
         styleDia = 0;
     }
-    KPrPage * page=m_canvas->activePage();
+
     bool canHaveStickyObj = true;
     bool state = (m_canvas->numberOfObjectSelected()==1);
     if(state)
@@ -965,18 +965,8 @@ void KPresenterView::extraPenBrush()
         }
     }
 
-    styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, m_canvas->getPenBrushFlags(),canHaveStickyObj, state );
-    styleDia->setPen( m_canvas->getPen( pen ) );
-    styleDia->setBrush( m_canvas->getBrush( brush ) );
-    styleDia->setLineBegin( m_canvas->getLineBegin( lineBegin ) );
-    styleDia->setLineEnd( m_canvas->getLineEnd( lineEnd ) );
-    styleDia->setFillType( m_canvas->getFillType( fillType ) );
-    styleDia->setGradient( m_canvas->getGColor1( gColor1 ),
-			   m_canvas->getGColor2( gColor2 ),
-			   m_canvas->getGType( gType ),
-			   m_canvas->getGUnbalanced( gUnbalanced ),
-			   m_canvas->getGXFactor( gXFactor ),
-			   m_canvas->getGYFactor( gYFactor ) );
+    styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, canHaveStickyObj, state );
+
     if ( state )
     {
         styleDia->setSize( m_canvas->getSelectedObj()->getRect());
@@ -987,7 +977,7 @@ void KPresenterView::extraPenBrush()
     styleDia->setKeepRatio( m_canvas->getKeepRatio( keepRatio ) );
 
 
-    styleDia->setCaption( i18n( "Pen and Brush" ) );
+    styleDia->setCaption( i18n( "Properties" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
     styleDia->exec();
@@ -1000,125 +990,125 @@ void KPresenterView::extraPenBrush()
 /*===============================================================*/
 void KPresenterView::extraConfigPie()
 {
-    if ( confPieDia ) {
-        delete confPieDia;
-        confPieDia = 0;
-    }
+//     if ( confPieDia ) {
+//         delete confPieDia;
+//         confPieDia = 0;
+//     }
 
-    confPieDia = new ConfPieDia( this, "ConfPageDia" );
-    confPieDia->setMaximumSize( confPieDia->width(), confPieDia->height() );
-    confPieDia->setMinimumSize( confPieDia->width(), confPieDia->height() );
-    confPieDia->setType( m_canvas->activePage()->getPieType( pieType ) );
-    confPieDia->setAngle( m_canvas->activePage()->getPieAngle( pieAngle ) );
-    confPieDia->setLength( m_canvas->activePage()->getPieLength( pieLength ) );
-    confPieDia->setPenBrush( m_canvas->activePage()->getPen( pen ), m_canvas->activePage()->getBrush( brush ) );
+//     confPieDia = new ConfPieDia( this, "ConfPageDia" );
+//     confPieDia->setMaximumSize( confPieDia->width(), confPieDia->height() );
+//     confPieDia->setMinimumSize( confPieDia->width(), confPieDia->height() );
+//     confPieDia->setType( m_canvas->activePage()->getPieType( pieType ) );
+//     confPieDia->setAngle( m_canvas->activePage()->getPieAngle( pieAngle ) );
+//     confPieDia->setLength( m_canvas->activePage()->getPieLength( pieLength ) );
+//     confPieDia->setPenBrush( m_canvas->activePage()->getPen( pen ), m_canvas->activePage()->getBrush( brush ) );
 
-    QObject::connect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
-    m_canvas->setToolEditMode( TEM_MOUSE );
-    confPieDia->exec();
+//     QObject::connect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
+//     m_canvas->setToolEditMode( TEM_MOUSE );
+//     confPieDia->exec();
 
-    QObject::disconnect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
-    delete confPieDia;
-    confPieDia = 0;
+//     QObject::disconnect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
+//     delete confPieDia;
+//     confPieDia = 0;
 }
 
 /*===============================================================*/
 void KPresenterView::extraConfigRect()
 {
-    if ( confRectDia ) {
-        delete confRectDia;
-        confRectDia = 0;
-    }
+//     if ( confRectDia ) {
+//         delete confRectDia;
+//         confRectDia = 0;
+//     }
 
-    confRectDia = new ConfRectDia( this, "ConfRectDia" );
-    confRectDia->setMaximumSize( confRectDia->width(), confRectDia->height() );
-    confRectDia->setMinimumSize( confRectDia->width(), confRectDia->height() );
-    confRectDia->setRnds( m_canvas->activePage()->getRndX( rndX ), m_canvas->activePage()->getRndY( rndY ) );
-    QObject::connect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
-    m_canvas->setToolEditMode( TEM_MOUSE );
-    confRectDia->exec();
+//     confRectDia = new ConfRectDia( this, "ConfRectDia" );
+//     confRectDia->setMaximumSize( confRectDia->width(), confRectDia->height() );
+//     confRectDia->setMinimumSize( confRectDia->width(), confRectDia->height() );
+//     confRectDia->setRnds( m_canvas->activePage()->getRndX( rndX ), m_canvas->activePage()->getRndY( rndY ) );
+//     QObject::connect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
+//     m_canvas->setToolEditMode( TEM_MOUSE );
+//     confRectDia->exec();
 
-    QObject::disconnect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
-    delete confRectDia;
-    confRectDia = 0;
+//     QObject::disconnect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
+//     delete confRectDia;
+//     confRectDia = 0;
 }
 
 /*===============================================================*/
 void KPresenterView::extraConfigPolygon()
 {
-    bool _checkConcavePolygon;
-    int _cornersValue;
-    int _sharpnessValue;
+//     bool _checkConcavePolygon;
+//     int _cornersValue;
+//     int _sharpnessValue;
 
-    if ( !m_canvas->activePage()->getPolygonSettings( &_checkConcavePolygon, &_cornersValue, &_sharpnessValue ) ) {
-        _checkConcavePolygon = checkConcavePolygon;
-        _cornersValue = cornersValue;
-        _sharpnessValue = sharpnessValue;
-    }
+//     if ( !m_canvas->activePage()->getPolygonSettings( &_checkConcavePolygon, &_cornersValue, &_sharpnessValue ) ) {
+//         _checkConcavePolygon = checkConcavePolygon;
+//         _cornersValue = cornersValue;
+//         _sharpnessValue = sharpnessValue;
+//     }
 
-    if ( confPolygonDia ) {
-        delete confPolygonDia;
-        confPolygonDia = 0;
-    }
+//     if ( confPolygonDia ) {
+//         delete confPolygonDia;
+//         confPolygonDia = 0;
+//     }
 
-    confPolygonDia = new ConfPolygonDia( this, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
-    confPolygonDia->setMaximumSize( confPolygonDia->width(), confPolygonDia->height() );
-    confPolygonDia->setMinimumSize( confPolygonDia->width(), confPolygonDia->height() );
+//     confPolygonDia = new ConfPolygonDia( this, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
+//     confPolygonDia->setMaximumSize( confPolygonDia->width(), confPolygonDia->height() );
+//     confPolygonDia->setMinimumSize( confPolygonDia->width(), confPolygonDia->height() );
 
-    QObject::connect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
+//     QObject::connect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
 
-    m_canvas->setToolEditMode( TEM_MOUSE );
+//     m_canvas->setToolEditMode( TEM_MOUSE );
 
-    confPolygonDia->exec();
+//     confPolygonDia->exec();
 
-    QObject::disconnect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
-    delete confPolygonDia;
-    confPolygonDia = 0;
+//     QObject::disconnect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
+//     delete confPolygonDia;
+//     confPolygonDia = 0;
 }
 
 /*===============================================================*/
 void KPresenterView::extraConfigPicture()
 {
-    PictureMirrorType _mirrorType;
-    int _depth;
-    bool _swapRGB;
-    bool _grayscal;
-    int _bright;
-    QPixmap _origPixmap;
+//     PictureMirrorType _mirrorType;
+//     int _depth;
+//     bool _swapRGB;
+//     bool _grayscal;
+//     int _bright;
+//     QPixmap _origPixmap;
 
-    if ( !m_canvas->activePage()->getPictureSettingsAndPixmap( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright, &_origPixmap ) ) {
-        _mirrorType = mirrorType;
-        _depth = depth;
-        _swapRGB= swapRGB;
-        _grayscal = grayscal;
-        _bright = bright;
-        _origPixmap = QPixmap();
-    }
+//     if ( !m_canvas->activePage()->getPictureSettingsAndPixmap( &_mirrorType, &_depth, &_swapRGB, &_grayscal, &_bright, &_origPixmap ) ) {
+//         _mirrorType = mirrorType;
+//         _depth = depth;
+//         _swapRGB= swapRGB;
+//         _grayscal = grayscal;
+//         _bright = bright;
+//         _origPixmap = QPixmap();
+//     }
 
-    if ( _origPixmap.isNull() )
-    {
-        _origPixmap=BarIcon("kpresenter", KIcon::SizeMedium);
-    }
+//     if ( _origPixmap.isNull() )
+//     {
+//         _origPixmap=BarIcon("kpresenter", KIcon::SizeMedium);
+//     }
 
-    if ( confPictureDia ) {
-        delete confPictureDia;
-        confPictureDia = 0;
-    }
+//     if ( confPictureDia ) {
+//         delete confPictureDia;
+//         confPictureDia = 0;
+//     }
 
 
-    confPictureDia = new ConfPictureDia( this, "ConfPictureDia", _mirrorType, _depth, _swapRGB, _grayscal, _bright, _origPixmap );
-    confPictureDia->setMaximumSize( confPictureDia->width(), confPictureDia->height() );
-    confPictureDia->setMinimumSize( confPictureDia->width(), confPictureDia->height() );
+//     confPictureDia = new ConfPictureDia( this, "ConfPictureDia", _mirrorType, _depth, _swapRGB, _grayscal, _bright, _origPixmap );
+//     confPictureDia->setMaximumSize( confPictureDia->width(), confPictureDia->height() );
+//     confPictureDia->setMinimumSize( confPictureDia->width(), confPictureDia->height() );
 
-    QObject::connect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
+//     QObject::connect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
 
-    m_canvas->setToolEditMode( TEM_MOUSE );
+//     m_canvas->setToolEditMode( TEM_MOUSE );
 
-    confPictureDia->exec();
+//     confPictureDia->exec();
 
-    QObject::disconnect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
-    delete confPictureDia;
-    confPictureDia = 0;
+//     QObject::disconnect( confPictureDia, SIGNAL( confPictureDiaOk() ), this, SLOT( confPictureOk() ) );
+//     delete confPictureDia;
+//     confPictureDia = 0;
 }
 
 /*===============================================================*/
@@ -2661,29 +2651,29 @@ void KPresenterView::setupActions()
 
     // ----------------- format actions
 
-    actionExtraPenBrush = new KAction( i18n( "&Pen and Brush..." ), "penbrush", 0,
+    actionExtraPenBrush = new KAction( i18n( "&Properties..." ), "penbrush", 0,
 				       this, SLOT( extraPenBrush() ),
-				       actionCollection(), "extra_penbrush" );
+				       actionCollection(), "extra_properties" );
 
-    actionExtraConfigPie = new KAction( i18n( "Configure Pie/&Arc/Chord..." ),
-					"edit_pie", 0,
-					this, SLOT( extraConfigPie() ),
-					actionCollection(), "extra_configpie" );
+//     actionExtraConfigPie = new KAction( i18n( "Configure Pie/&Arc/Chord..." ),
+// 					"edit_pie", 0,
+// 					this, SLOT( extraConfigPie() ),
+// 					actionCollection(), "extra_configpie" );
 
-    actionExtraConfigRect = new KAction( i18n( "Configure &Rectangle..." ),
-					 "rectangle2", 0,
-					 this, SLOT( extraConfigRect() ),
-					 actionCollection(), "extra_configrect" );
+//     actionExtraConfigRect = new KAction( i18n( "Configure &Rectangle..." ),
+// 					 "rectangle2", 0,
+// 					 this, SLOT( extraConfigRect() ),
+// 					 actionCollection(), "extra_configrect" );
 
-    actionExtraConfigPolygon = new KAction( i18n( "Configure Po&lygon..." ),
-                                            "edit_polygon", 0,
-                                            this, SLOT( extraConfigPolygon() ),
-                                            actionCollection(), "extra_configpolygon" );
+//     actionExtraConfigPolygon = new KAction( i18n( "Configure Po&lygon..." ),
+//                                             "edit_polygon", 0,
+//                                             this, SLOT( extraConfigPolygon() ),
+//                                             actionCollection(), "extra_configpolygon" );
 
-    actionExtraConfigPolygon = new KAction( i18n( "Configure P&icture..." ),
-                                            "edit_picture", 0,
-                                            this, SLOT( extraConfigPicture() ),
-                                            actionCollection(), "extra_configpicture" );
+//     actionExtraConfigPolygon = new KAction( i18n( "Configure P&icture..." ),
+//                                             "edit_picture", 0,
+//                                             this, SLOT( extraConfigPicture() ),
+//                                             actionCollection(), "extra_configpicture" );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), "raise",
 				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
@@ -2872,9 +2862,9 @@ void KPresenterView::setupActions()
 
     actionResizeTextObject = new KAction( i18n( "&Resize Object to Fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
 
-    actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
-				       this, SLOT( extraPenBrush() ),
-				       actionCollection(), "object_properties" );
+//     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
+// 				       this, SLOT( extraPenBrush() ),
+// 				       actionCollection(), "object_properties" );
     actionChangeClipart =new KAction( i18n( "&Change Clipart..." ), "clipart", 0,
 				       this, SLOT( extraChangeClip() ),
 				       actionCollection(), "change_clipart" );
@@ -3162,6 +3152,7 @@ void KPresenterView::objectSelectedChanged()
         }
     }
     actionScreenAssignEffect->setEnabled(state&&!headerfooterselected);
+    actionExtraPenBrush->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
     actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedClipartObj()
                                   && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
@@ -3248,17 +3239,28 @@ void KPresenterView::slotAfchooseCanceled()
 /*=========== take changes for style dialog =====================*/
 void KPresenterView::styleOk()
 {
-    bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Apply Styles" ) );
+    ConfPieDia *confPieDia;
+    ConfRectDia *confRectDia;
+    ConfPictureDia *confPictureDia;
+    ConfPolygonDia *confPolygonDia;
 
-    KCommand *cmd=m_canvas->activePage()->setPenBrush(
-        styleDia->getPen(), styleDia->getBrush(), styleDia->getLineBegin(),
-        styleDia->getLineEnd(), styleDia->getFillType(),
-        styleDia->getGColor1(),
-        styleDia->getGColor2(), styleDia->getGType(),
-        styleDia->getGUnbalanced(),
-        styleDia->getGXFactor(), styleDia->getGYFactor(),m_canvas->activePage()->objectList() );
-    if( cmd)
+    bool createMacro=false;
+    KCommand *cmd;
+    KMacroCommand *macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
+    ConfPenDia *confPenDia = styleDia->getConfPenDia();
+    ConfBrushDia *confBrushDia = styleDia->getConfBrushDia();
+
+    cmd=m_canvas->activePage()->setPenBrush(
+        confPenDia->getPen(), confBrushDia->getBrush(), confPenDia->getLineBegin(),
+        confPenDia->getLineEnd(), confBrushDia->getFillType(),
+        confBrushDia->getGColor1(),
+        confBrushDia->getGColor2(), confBrushDia->getGType(),
+        confBrushDia->getGUnbalanced(),
+        confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
+        m_canvas->activePage()->objectList() );
+
+    if(cmd)
     {
         macro->addCommand(cmd);
         createMacro=true;
@@ -3267,7 +3269,8 @@ void KPresenterView::styleOk()
     bool prot = styleDia->isProtected();
     bool keepR = styleDia->isKeepRatio();
     cmd = m_canvas->setGeometryPropertiesObj(prot, keepR);
-    if ( cmd)
+
+    if (cmd)
     {
         createMacro=true;
         macro->addCommand( cmd );
@@ -3289,50 +3292,162 @@ void KPresenterView::styleOk()
         cmd=m_canvas->activePage()->stickyObj(bSticky,m_canvas->activePage() );
     else
         cmd=stickyPage()->stickyObj(bSticky,m_canvas->activePage());
-    if( cmd)
+
+    if(cmd)
     {
         macro->addCommand(cmd);
         createMacro=true;
     }
+
     cmd=stickyPage()->setPenBrush(
-        styleDia->getPen(), styleDia->getBrush(), styleDia->getLineBegin(),
-        styleDia->getLineEnd(), styleDia->getFillType(),
-        styleDia->getGColor1(),
-        styleDia->getGColor2(), styleDia->getGType(),
-        styleDia->getGUnbalanced(),
-        styleDia->getGXFactor(), styleDia->getGYFactor(),stickyPage()->objectList() );
-    if( cmd)
+        confPenDia->getPen(), confBrushDia->getBrush(), confPenDia->getLineBegin(),
+        confPenDia->getLineEnd(), confBrushDia->getFillType(),
+        confBrushDia->getGColor1(),
+        confBrushDia->getGColor2(), confBrushDia->getGType(),
+        confBrushDia->getGUnbalanced(),
+        confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),stickyPage()->objectList() );
+
+    if(cmd)
     {
         macro->addCommand(cmd);
         createMacro=true;
+    }
+
+    if ((confPieDia = styleDia->getConfPieDia()))
+    {
+        cmd=m_canvas->activePage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(), confPieDia->getLength() );
+
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+
+        cmd=stickyPage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(), confPieDia->getLength() );
+
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+
+        updateObjectStatusBarItem();  //the type might have changed
+    }
+
+    if ((confPolygonDia = styleDia->getConfPolygonDia()))
+    {
+        cmd=m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
+                                                        confPolygonDia->getCornersValue(),
+                                                        confPolygonDia->getSharpnessValue() );
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+
+        cmd=stickyPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
+                                              confPolygonDia->getCornersValue(),
+                                              confPolygonDia->getSharpnessValue() );
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+    }
+
+    if ((confPictureDia = styleDia->getConfPictureDia()))
+    {
+        cmd = m_canvas->activePage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
+                                                          confPictureDia->getPictureDepth(),
+                                                          confPictureDia->getPictureSwapRGB(),
+                                                          confPictureDia->getPictureGrayscal(),
+                                                          confPictureDia->getPictureBright() );
+        if (cmd )
+        {
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
+
+        cmd = stickyPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
+                                                confPictureDia->getPictureDepth(),
+                                                confPictureDia->getPictureSwapRGB(),
+                                                confPictureDia->getPictureGrayscal(),
+                                                confPictureDia->getPictureBright() );
+        if (cmd)
+        {
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
+    }
+
+    if ((confRectDia = styleDia->getConfRectangleDia()))
+    {
+        cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
+
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+
+        cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
+
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
     }
 
     if(createMacro)
         kPresenterDoc()->addCommand(macro);
     else
+    {
         delete macro;
 
-    if ( !createMacro ) {
-	pen = styleDia->getPen();
-	brush = styleDia->getBrush();
-	lineBegin = styleDia->getLineBegin();
-	lineEnd = styleDia->getLineEnd();
-	fillType = styleDia->getFillType();
-	gColor1 = styleDia->getGColor1();
-	gColor2 = styleDia->getGColor2();
-	gType = styleDia->getGType();
-	gUnbalanced = styleDia->getGUnbalanced();
-	gXFactor = styleDia->getGXFactor();
-	gYFactor = styleDia->getGYFactor();
+        if (confPieDia)
+        {
+            pieType = confPieDia->getType();
+            pieAngle = confPieDia->getAngle();
+            pieLength = confPieDia->getLength();
+        }
+        if (confPolygonDia)
+        {
+            checkConcavePolygon = confPolygonDia->getCheckConcavePolygon();
+            cornersValue = confPolygonDia->getCornersValue();
+            sharpnessValue = confPolygonDia->getSharpnessValue();
+        }
+        if (confPictureDia)
+        {
+            mirrorType = confPictureDia->getPictureMirrorType();
+            depth = confPictureDia->getPictureDepth();
+            swapRGB = confPictureDia->getPictureSwapRGB();
+            grayscal = confPictureDia->getPictureGrayscal();
+            bright = confPictureDia->getPictureBright();
+        }
+        if (confRectDia)
+        {
+            rndX = confRectDia->getRndX();
+            rndY = confRectDia->getRndY();
+        }
+
+	pen = confPenDia->getPen();
+	brush = confBrushDia->getBrush();
+	lineBegin = confPenDia->getLineBegin();
+	lineEnd = confPenDia->getLineEnd();
+	fillType = confBrushDia->getFillType();
+	gColor1 = confBrushDia->getGColor1();
+	gColor2 = confBrushDia->getGColor2();
+	gType = confBrushDia->getGType();
+	gUnbalanced = confBrushDia->getGUnbalanced();
+	gXFactor = confBrushDia->getGXFactor();
+	gYFactor = confBrushDia->getGYFactor();
 	sticky = bSticky;
         keepRatio = styleDia->isSticky();
-        actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
-        actionPenColor->setCurrentColor( (styleDia->getPen()).color() );
         protect = styleDia->isProtected();
-    }
-    else {
-        actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
-        actionPenColor->setCurrentColor( (styleDia->getPen()).color() );
+
+        actionBrushColor->setCurrentColor( (confBrushDia->getBrush()).color() );
+        actionPenColor->setCurrentColor( (confPenDia->getPen()).color() );
     }
 }
 
@@ -3425,128 +3540,128 @@ void KPresenterView::psvClosed()
 /*================================================================*/
 void KPresenterView::confPieOk()
 {
-    bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Change Pie/Arc/Chord Values" ));
+//     bool createMacro=false;
+//     KMacroCommand *macro=new KMacroCommand(i18n( "Change Pie/Arc/Chord Values" ));
 
-    KCommand *cmd=m_canvas->activePage()->setPieSettings( confPieDia->getType(),
-                                                          confPieDia->getAngle(), confPieDia->getLength() );
-    if( cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->setPieSettings( confPieDia->getType(),
-                                      confPieDia->getAngle(), confPieDia->getLength() );
-    if( cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        kPresenterDoc()->addCommand(macro);
-    else
-    {
-        delete macro;
-        pieType = confPieDia->getType();
-        pieAngle = confPieDia->getAngle();
-	pieLength = confPieDia->getLength();
-    }
-    updateObjectStatusBarItem();  //the type might have changed
+//     KCommand *cmd=m_canvas->activePage()->setPieSettings( confPieDia->getType(),
+//                                                           confPieDia->getAngle(), confPieDia->getLength() );
+//     if( cmd)
+//     {
+//         macro->addCommand(cmd);
+//         createMacro=true;
+//     }
+//     cmd=stickyPage()->setPieSettings( confPieDia->getType(),
+//                                       confPieDia->getAngle(), confPieDia->getLength() );
+//     if( cmd)
+//     {
+//         macro->addCommand(cmd);
+//         createMacro=true;
+//     }
+//     if(createMacro)
+//         kPresenterDoc()->addCommand(macro);
+//     else
+//     {
+//         delete macro;
+//         pieType = confPieDia->getType();
+//         pieAngle = confPieDia->getAngle();
+// 	pieLength = confPieDia->getLength();
+//     }
+//     updateObjectStatusBarItem();  //the type might have changed
 }
 
 /*================================================================*/
 void KPresenterView::confRectOk()
 {
-    bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Change Rectangle values" ));
-    KCommand *cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
-    if( cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
-    if( cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        kPresenterDoc()->addCommand(macro);
-    else
-    {
-        rndX = confRectDia->getRndX();
-	rndY = confRectDia->getRndY();
-        delete macro;
-    }
+//     bool createMacro=false;
+//     KMacroCommand *macro=new KMacroCommand(i18n( "Change Rectangle values" ));
+//     KCommand *cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
+//     if( cmd)
+//     {
+//         macro->addCommand(cmd);
+//         createMacro=true;
+//     }
+//     cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
+//     if( cmd)
+//     {
+//         macro->addCommand(cmd);
+//         createMacro=true;
+//     }
+//     if(createMacro)
+//         kPresenterDoc()->addCommand(macro);
+//     else
+//     {
+//         rndX = confRectDia->getRndX();
+// 	rndY = confRectDia->getRndY();
+//         delete macro;
+//     }
 }
 
 /*================================================================*/
 void KPresenterView::confPolygonOk()
 {
-    bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Change Polygon Settings" ));
-    KCommand *cmd=m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
-                                                confPolygonDia->getCornersValue(),
-                                                confPolygonDia->getSharpnessValue() );
-    if( cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    cmd=stickyPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
-                                          confPolygonDia->getCornersValue(),
-                                          confPolygonDia->getSharpnessValue() );
-    if( cmd)
-    {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        kPresenterDoc()->addCommand(macro);
-    else
-    {
-        checkConcavePolygon = confPolygonDia->getCheckConcavePolygon();
-        cornersValue = confPolygonDia->getCornersValue();
-        sharpnessValue = confPolygonDia->getSharpnessValue();
-        delete macro;
-    }
+//     bool createMacro=false;
+//     KMacroCommand *macro=new KMacroCommand(i18n( "Change Polygon Settings" ));
+//     KCommand *cmd=m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
+//                                                 confPolygonDia->getCornersValue(),
+//                                                 confPolygonDia->getSharpnessValue() );
+//     if( cmd)
+//     {
+//         macro->addCommand(cmd);
+//         createMacro=true;
+//     }
+//     cmd=stickyPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
+//                                           confPolygonDia->getCornersValue(),
+//                                           confPolygonDia->getSharpnessValue() );
+//     if( cmd)
+//     {
+//         macro->addCommand(cmd);
+//         createMacro=true;
+//     }
+//     if(createMacro)
+//         kPresenterDoc()->addCommand(macro);
+//     else
+//     {
+//         checkConcavePolygon = confPolygonDia->getCheckConcavePolygon();
+//         cornersValue = confPolygonDia->getCornersValue();
+//         sharpnessValue = confPolygonDia->getSharpnessValue();
+//         delete macro;
+//     }
 }
 
 /*================================================================*/
 void KPresenterView::confPictureOk()
 {
-    bool createMacro = false;
-    KMacroCommand *macro = new KMacroCommand( i18n( "Change Picture Settings" ) );
-    KCommand *cmd = m_canvas->activePage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
-                                                                confPictureDia->getPictureDepth(),
-                                                                confPictureDia->getPictureSwapRGB(),
-                                                                confPictureDia->getPictureGrayscal(),
-                                                                confPictureDia->getPictureBright() );
-    if ( cmd ) {
-        macro->addCommand( cmd );
-        createMacro = true;
-    }
-    cmd = stickyPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
-                                            confPictureDia->getPictureDepth(),
-                                            confPictureDia->getPictureSwapRGB(),
-                                            confPictureDia->getPictureGrayscal(),
-                                            confPictureDia->getPictureBright() );
-    if ( cmd ) {
-        macro->addCommand( cmd );
-        createMacro = true;
-    }
-    if ( createMacro )
-        kPresenterDoc()->addCommand( macro );
-    else {
-        mirrorType = confPictureDia->getPictureMirrorType();
-        depth = confPictureDia->getPictureDepth();
-        swapRGB = confPictureDia->getPictureSwapRGB();
-        grayscal = confPictureDia->getPictureGrayscal();
-        bright = confPictureDia->getPictureBright();
+//     bool createMacro = false;
+//     KMacroCommand *macro = new KMacroCommand( i18n( "Change Picture Settings" ) );
+//     KCommand *cmd = m_canvas->activePage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
+//                                                                 confPictureDia->getPictureDepth(),
+//                                                                 confPictureDia->getPictureSwapRGB(),
+//                                                                 confPictureDia->getPictureGrayscal(),
+//                                                                 confPictureDia->getPictureBright() );
+//     if ( cmd ) {
+//         macro->addCommand( cmd );
+//         createMacro = true;
+//     }
+//     cmd = stickyPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
+//                                             confPictureDia->getPictureDepth(),
+//                                             confPictureDia->getPictureSwapRGB(),
+//                                             confPictureDia->getPictureGrayscal(),
+//                                             confPictureDia->getPictureBright() );
+//     if ( cmd ) {
+//         macro->addCommand( cmd );
+//         createMacro = true;
+//     }
+//     if ( createMacro )
+//         kPresenterDoc()->addCommand( macro );
+//     else {
+//         mirrorType = confPictureDia->getPictureMirrorType();
+//         depth = confPictureDia->getPictureDepth();
+//         swapRGB = confPictureDia->getPictureSwapRGB();
+//         grayscal = confPictureDia->getPictureGrayscal();
+//         bright = confPictureDia->getPictureBright();
 
-        delete macro;
-    }
+//         delete macro;
+//     }
 }
 
 /*================================================================*/
@@ -4863,7 +4978,6 @@ void KPresenterView::spellCheckerReady()
         spellCheckerReady();
     }
 }
-
 
 void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {

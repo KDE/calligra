@@ -66,28 +66,27 @@ void RectPreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
-    : KDialogBase( parent, name, true, i18n( "Configure Rectangle" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok )
+    : QWidget( parent, name )
 {
 
     // ------------------------ layout
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
-    QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
-
+    QVBoxLayout *layout = new QVBoxLayout( this, 0 );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
 
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
 
     // ------------------------ settings
-    gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), page );
+    gSettings = new QGroupBox( 4, Qt::Vertical, i18n( "Settings" ), this );
 
-    lRndX = new QLabel( i18n( "Roundedness X" ), gSettings );
+    lRndX = new QLabel( i18n( "Roundedness X:" ), gSettings );
 
     eRndX = new KIntNumInput( gSettings );
     eRndX->setRange(0, 99);
     connect( eRndX, SIGNAL( valueChanged( int ) ), this, SLOT( rndXChanged( int ) ) );
 
-    lRndY = new QLabel( i18n( "Roundedness Y" ), gSettings );
+    lRndY = new QLabel( i18n( "Roundedness Y:" ), gSettings );
 
     eRndY = new KIntNumInput( gSettings );
     eRndY->setRange(0, 99);
@@ -96,17 +95,10 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     hbox->addWidget( gSettings );
 
     // ------------------------ preview
-    rectPreview = new RectPreview( page, "preview" );
+    rectPreview = new RectPreview( this, "preview" );
 
     hbox->addWidget( rectPreview );
-
-    setButtonText( KDialogBase::User1, i18n("Reset") );
-
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
-
-    connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
-    connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
-    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+    slotReset();
 }
 
 /*===================== destructor ===============================*/

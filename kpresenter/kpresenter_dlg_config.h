@@ -123,12 +123,31 @@ private:
     QLineEdit* m_variableNumberOffset;
 };
 
+class ConfigureToolsPage : public QObject
+{
+    Q_OBJECT
+public:
+    ConfigureToolsPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
+    void apply();
+    void slotDefault();
+public slots:
+
+private:
+    KPresenterView* m_pView;
+    KConfig* config;
+
+    ConfPenDia *m_confPenDia;
+    ConfPieDia *m_confPieDia;
+    ConfRectDia *m_confRectDia;
+    ConfBrushDia *m_confBrushDia;
+    ConfPolygonDia *m_confPolygonDia;
+};
 
 class KPConfig : public KDialogBase
 {
     Q_OBJECT
 public:
-    enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8, KP_DOC=16 };
+    enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8, KP_DOC=16, KP_TOOLS=32 };
     KPConfig( KPresenterView* parent );
 public slots:
     void slotApply();
@@ -140,6 +159,7 @@ private:
     ConfigureSpellPage *_spellPage;
     ConfigureMiscPage *_miscPage;
     ConfigureDefaultDocPage *_defaultDocPage;
+    ConfigureToolsPage *_toolsPage;
 };
 
 #endif

@@ -2062,27 +2062,33 @@ int KPrPage::getPenBrushFlags( QPtrList<KPObject>list )
             switch ( it.current()->getType() ) {
                 case OT_LINE: case OT_FREEHAND: case OT_POLYLINE:
                 case OT_QUADRICBEZIERCURVE: case OT_CUBICBEZIERCURVE:
-                    flags = flags | StyleDia::SdPen;
+                    flags = flags | StyleDia::SdPen | StyleDia::SdOther;
                     flags = flags | StyleDia::SdEndBeginLine;
                     break;
                 case OT_PIE:
-                    flags=flags | StyleDia::SdPen;
+                    flags=flags | StyleDia::SdPen | StyleDia::SdPie;
                     if((static_cast<KPPieObject*>(it.current())->getPieType())!=PT_ARC)
                         flags=flags |StyleDia::SdBrush;
                     break;
-                case OT_RECT: case OT_PART:  case OT_ELLIPSE:
-                case OT_POLYGON:
-                case OT_TEXT: case OT_CLIPART: {
-                    flags = flags | StyleDia::SdPen;
+                case OT_RECT:
+                    flags = flags | StyleDia::SdPen | StyleDia::SdRectangle;
                     flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                }
+                    break;
+                case OT_POLYGON:
+                    flags = flags | StyleDia::SdPen | StyleDia::SdPolygon;
+                    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
+                    break;
+                case OT_PART:  case OT_ELLIPSE:
+                case OT_TEXT: case OT_CLIPART:
+                    flags = flags | StyleDia::SdPen | StyleDia::SdOther;
+                    flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                     break;
                 case OT_PICTURE:
-                    flags = flags | StyleDia::SdPen;
+                    flags = flags | StyleDia::SdPen | StyleDia::SdPicture;
                     break;
                 case OT_AUTOFORM:
                 {
-                    flags = flags | StyleDia::SdPen;
+                    flags = flags | StyleDia::SdPen | StyleDia::SdOther;
                     flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                     flags = flags | StyleDia::SdEndBeginLine;
                 }

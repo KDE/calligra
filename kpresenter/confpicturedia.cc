@@ -307,7 +307,7 @@ void PicturePreview::setMirrorType (PictureMirrorType _t)
 /*==================== constructor ===============================*/
 ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirrorType _mirrorType,
                                 int _depth, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap )
-    : KDialogBase( parent, name, true ,i18n( "Configure Picture" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
+    : QWidget( parent, name )
 {
     mirrorType = _mirrorType;
     depth = _depth;
@@ -324,14 +324,15 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     origPixmap = _origPixmap;
 
     // ------------------------ layout
-    QWidget *page = new QWidget( this );
-    setMainWidget( page );
-    QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout( this, 0 );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
+
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
 
     // ------------------------ settings
-    gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), page );
+    gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), this );
 
 
     QButtonGroup *mirrorGroup = new QVButtonGroup( i18n( "Mirror" ), gSettings );
@@ -382,9 +383,8 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     hbox->addWidget( gSettings );
 
     // ------------------------ preview
-    picturePreview = new PicturePreview( page, "preview", mirrorType, depth, swapRGB, grayscal, bright, origPixmap );
+    picturePreview = new PicturePreview( this, "preview", mirrorType, depth, swapRGB, grayscal, bright, origPixmap );
     hbox->addWidget( picturePreview );
-
 
     connect( m_normalPicture, SIGNAL( clicked() ), picturePreview, SLOT( slotNormalPicture() ) );
 
@@ -409,15 +409,6 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     connect( m_grayscalCheck, SIGNAL( toggled( bool ) ), picturePreview, SLOT( slotGrayscalPicture( bool ) ) );
 
     connect( m_brightValue, SIGNAL( valueChanged( int ) ), picturePreview, SLOT( slotBrightValue( int ) ) );
-
-    setButtonText( KDialogBase::User1, i18n("Reset") );
-
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
-
-
-    connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
-    connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
-    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
     slotReset();
 }
 

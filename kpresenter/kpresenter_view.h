@@ -429,11 +429,31 @@ public:
     bool getGUnbalanced() const { return gUnbalanced; }
     int getGXFactor() const { return gXFactor; }
     int getGYFactor() const { return gYFactor; }
+    TKSelectColorAction* getActionBrushColor() const { return actionBrushColor; }
+    TKSelectColorAction* getActionPenColor() const { return actionPenColor; }
+
+    void setPieType(PieType _pieType) { pieType = _pieType; }
+    void setPieAngle(int _pieAngle) { pieAngle = _pieAngle; }
+    void setPieLength(int _pieLength) { pieLength = _pieLength; }
+    void setPen(QPen _pen) { pen = _pen; }
+    void setBrush(QBrush _brush) { brush = _brush; }
+    void setLineBegin(LineEnd _lineBegin) { lineBegin = _lineBegin; }
+    void setLineEnd(LineEnd _lineEnd){ lineEnd = _lineEnd; }
+    void setGColor1(QColor _gColor1) { gColor1 = _gColor1; }
+    void setGColor2(QColor _gColor2) { gColor2 = _gColor2; }
+    void setGType(BCType _gType) { gType = _gType; }
+    void setFillType(FillType _fillType) { fillType = _fillType; }
+    void setGUnbalanced(bool _gUnbalanced) { gUnbalanced = _gUnbalanced; }
+    void setGXFactor(int _gXFactor) { gXFactor = _gXFactor; }
+    void setGYFactor(int _gYFactor) { gYFactor = _gYFactor; }
 
     void setTool( ToolEditMode toolEditMode );
 
     int getRndX() const { return rndX; }
     int getRndY() const { return rndY; }
+
+    void setRndX(int _rndX) { rndX = _rndX; }
+    void setRndY(int _rndY) { rndY = _rndY; }
 
 //     QFont &currFont() { return tbFont; }
 //     QColor &currColor() { return tbColor; }
@@ -466,7 +486,6 @@ public:
 
     void setCanvasXOffset( int _x );
     void setCanvasYOffset( int _y );
-
 
     void openPopupMenuMenuPage( const QPoint & _point );
     void openPopupMenuTextObject( const QPoint & _point );
@@ -512,6 +531,10 @@ public:
     bool getCheckConcavePolygon() const { return checkConcavePolygon; }
     int getCornersValue() const { return cornersValue; }
     int getSharpnessValue() const { return sharpnessValue; }
+
+    void setCheckConcavePolygon(bool _concavePolygon) { checkConcavePolygon = _concavePolygon; }
+    void setCornersValue(int _cornersValue) { cornersValue = _cornersValue; }
+    void setSharpnessValue(int _sharpnessValue) { sharpnessValue = _sharpnessValue; }
 
     // for Picture Object
     PictureMirrorType getPictureMirrorType() const { return mirrorType; }

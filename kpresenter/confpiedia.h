@@ -20,7 +20,6 @@
 #ifndef confpiedia_h
 #define confpiedia_h
 
-#include <kdialogbase.h>
 #include <qframe.h>
 #include <global.h>
 #include <qcombobox.h>
@@ -68,7 +67,7 @@ protected:
 /* class ConfPieDia                                               */
 /******************************************************************/
 
-class ConfPieDia : public KDialogBase
+class ConfPieDia : public QWidget
 {
     Q_OBJECT
 

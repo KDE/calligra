@@ -38,6 +38,11 @@ class QWidgetStack;
 class QLabel;
 class KoZoomHandler;
 class QLineEdit;
+class ConfPieDia;
+class ConfRectDia;
+class ConfPolygonDia;
+class ConfPictureDia;
+class KPrCanvas;
 class KPresenterDoc;
 class KDoubleNumInput;
 
@@ -79,6 +84,89 @@ private:
 };
 
 /******************************************************************/
+/* class ConfPenDia                                               */
+/******************************************************************/
+
+class ConfPenDia : public QWidget
+{
+    Q_OBJECT
+
+public:
+    ConfPenDia( QWidget* parent, const char* name, int flags);
+    ~ConfPenDia();
+
+    void setPen( const QPen &_pen );
+    void setLineBegin( LineEnd lb );
+    void setLineEnd( LineEnd le );
+
+    QPen getPen()const;
+    LineEnd getLineBegin()const;
+    LineEnd getLineEnd()const;
+
+private:
+    int m_flags;
+    QPen oldPen;
+    LineEnd oldLb;
+    LineEnd oldLe;
+    KColorButton *choosePCol;
+    KIntNumInput *choosePWidth;
+    PBPreview *penPrev;
+    KComboBox *choosePStyle, *clineBegin, *clineEnd;
+
+private slots:
+    void slotReset();
+    void updatePenConfiguration();
+};
+
+/******************************************************************/
+/* class ConfBrushDia                                             */
+/******************************************************************/
+
+class ConfBrushDia : public QWidget
+{
+    Q_OBJECT
+
+public:
+    ConfBrushDia( QWidget* parent, const char* name, int flags);
+    ~ConfBrushDia();
+
+    void setBrush( const QBrush &_brush );
+    void setFillType( FillType ft );
+    void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
+                      bool _unbalanced, int _xfactor, int _yfactor );
+
+    QBrush getBrush()const;
+    FillType getFillType() const;
+    QColor getGColor1()const;
+    QColor getGColor2()const;
+    BCType getGType()const;
+    bool getGUnbalanced()const;
+    int getGXFactor() const;
+    int getGYFactor() const;
+
+private:
+    bool oldUnbalanced;
+    int m_flags, oldXfactor, oldYfactor;
+    QCheckBox *unbalanced;
+    QBrush oldBrush;
+    FillType oldFillType;
+    QColor oldC1, oldC2;
+    BCType oldBCType;
+    KComboBox *gradients, *chooseBStyle, *cFillType;
+    KColorButton *gradient1, *gradient2;
+    QSlider *xfactor, *yfactor;
+    QLabel *xfactorLabel, *yfactorLabel;
+    KPGradient *gradient;
+    QWidgetStack *stack;
+    KColorButton *chooseBCol;
+    PBPreview *brushPrev;
+
+private slots:
+    void slotReset();
+    void updateBrushConfiguration();
+};
+
+/******************************************************************/
 /* class StyleDia						  */
 /******************************************************************/
 
@@ -92,32 +180,19 @@ public:
         SdBrush = 2,
         SdGradient = 4,
 	SdEndBeginLine = 8,
+        SdPie = 16,
+        SdPicture = 32,
+        SdPolygon = 64,
+        SdRectangle = 128,
+        SdOther = 256,
         SdAll = SdPen | SdBrush | SdGradient | SdEndBeginLine
     };
 
-    StyleDia( QWidget* parent = 0, const char* name = 0, KPresenterDoc *_doc = 0, int flags = SdAll, bool _noStickyObj = true, bool _oneObject=true );
+    StyleDia( QWidget* parent = 0, const char* name = 0, KPresenterDoc *_doc = 0,
+              bool _noStickyObj = true, bool _oneObject=true );
     ~StyleDia();
 
-    void setPen( const QPen &_pen );
-    void setBrush( const QBrush &_brush );
-    void setLineBegin( LineEnd lb );
-    void setLineEnd( LineEnd le );
-    void setFillType( FillType ft );
-    void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
-		      bool _unbalanced, int _xfactor, int _yfactor );
     void setSticky( bool s );
-
-    QPen getPen()const;
-    QBrush getBrush()const;
-    LineEnd getLineBegin()const;
-    LineEnd getLineEnd()const;
-    FillType getFillType() const;
-    QColor getGColor1()const;
-    QColor getGColor2()const;
-    BCType getGType()const;
-    bool getGUnbalanced()const;
-    int getGXFactor() const;
-    int getGYFactor() const;
     bool isSticky()const;
 
     bool isOneObject() {return oneObject;}
@@ -130,53 +205,47 @@ public:
     KoRect getNewSize() const;
     void setSize(const KoRect &);
 
+    ConfPenDia* getConfPenDia() { return m_confPenDia; }
+    ConfPieDia* getConfPieDia() { return m_confPieDia; }
+    ConfBrushDia* getConfBrushDia() { return m_confBrushDia; }
+    ConfRectDia* getConfRectangleDia() { return m_confRectDia; }
+    ConfPolygonDia* getConfPolygonDia() { return m_confPolygonDia; }
+    ConfPictureDia* getConfPictureDia() { return m_confPictureDia; }
+
 private:
-    void setupTab1();
-    void setupTab2();
-    void setupTab3();
-    void setupTab4();
-
-    QWidgetStack *stack;
-    KColorButton *choosePCol, *chooseBCol;
-    KComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd, *cFillType;
-    KIntNumInput *choosePWidth;
-    PBPreview *penPrev, *brushPrev;
-    QCheckBox *unbalanced, *sticky, *protect, *keepRatio;
-    KComboBox *gradients;
-    KColorButton *gradient1, *gradient2;
-    QSlider *xfactor, *yfactor;
-    QLabel *xfactorLabel, *yfactorLabel;
-    KPGradient *gradient;
-    bool lockUpdate, stickyObj;
-    int flags;
-
-    KDoubleNumInput *m_lineTop, *m_lineLeft, *m_lineWidth, *m_lineHeight;
-    KPresenterDoc *m_doc;
-
-    QPen oldPen;
-    QBrush oldBrush;
-    LineEnd oldLb;
-    LineEnd oldLe;
-    FillType oldFillType;
-    QColor oldC1, oldC2;
-    BCType oldBCType;
-    bool oldUnbalanced;
-    bool oneObject;
-    bool oldSticky,  oldProtect, oldKeepRatio;
-    int oldXfactor, oldYfactor;
+    void setupTabPen();
+    void setupTabBrush();
+    void setupTabGeneral();
+    void setupTabGeometry();
+    void setupTabPie();
+    void setupTabPolygon();
+    void setupTabPicture();
+    void setupTabRectangle();
 
     KoRect oldRect;
+    QCheckBox *sticky, *protect, *keepRatio;
+    KDoubleNumInput *m_lineTop, *m_lineLeft, *m_lineWidth, *m_lineHeight;
+
+    KPresenterDoc *m_doc;
+    KPrCanvas *m_canvas;
+    ConfPenDia *m_confPenDia;
+    ConfPieDia *m_confPieDia;
+    ConfRectDia *m_confRectDia;
+    ConfBrushDia *m_confBrushDia;
+    ConfPolygonDia *m_confPolygonDia;
+    ConfPictureDia *m_confPictureDia;
+
+    int flags;
+    bool lockUpdate, stickyObj, oneObject;
+    bool oldSticky,  oldProtect, oldKeepRatio;
 
 private slots:
     void slotReset();
     void styleDone() { emit styleOk(); }
-    void updatePenConfiguration();
-    void updateBrushConfiguration();
     void protectChanged();
 
 signals:
     void styleOk();
-
 };
 
 #endif //STYLEDIA_H

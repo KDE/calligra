@@ -20,7 +20,6 @@
 #ifndef confrectdia_h
 #define confrectdia_h
 
-#include <kdialogbase.h>
 #include <qframe.h>
 
 class QPainter;
@@ -55,7 +54,7 @@ protected:
 /* class ConfRectDia                                              */
 /******************************************************************/
 
-class ConfRectDia : public KDialogBase
+class ConfRectDia : public QWidget
 {
     Q_OBJECT
 
@@ -65,10 +64,8 @@ public:
 
     void setRnds( int _rx, int _ry );
 
-    int getRndX()
-    { return xRnd; }
-    int getRndY()
-    { return yRnd; }
+    int getRndX() { return xRnd; }
+    int getRndY() { return yRnd; }
 
 protected:
     QLabel *lRndX, *lRndY;

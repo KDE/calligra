@@ -86,18 +86,18 @@ void PiePreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
-    : KDialogBase( parent, name, true , i18n( "Configure Pie/Arc/Chord" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
+    : QWidget( parent, name )
 {
   // ------------------------ layout
-  QWidget *page = new QWidget( this );
-  setMainWidget(page);
-  QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
+  QVBoxLayout *layout = new QVBoxLayout( this, 0 );
+  layout->setMargin( 5 );
+  layout->setSpacing( 5 );
 
   QHBoxLayout *hbox = new QHBoxLayout( layout );
   hbox->setSpacing( 5 );
 
   // ------------------------ settings
-  gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), page );
+  gSettings = new QGroupBox( 6, Qt::Vertical, i18n( "Settings" ), this );
 
   lType = new QLabel( i18n( "Type:" ), gSettings );
 
@@ -123,18 +123,10 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
   hbox->addWidget( gSettings );
 
   // ------------------------ preview
-  piePreview = new PiePreview( page, "preview" );
+  piePreview = new PiePreview( this, "preview" );
 
   hbox->addWidget( piePreview );
-
-  setButtonText( KDialogBase::User1, i18n("Reset") );
-
-  connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
-
-
-  connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
-  connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
-  connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+  slotReset();
 }
 
 /*===================== destructor ===============================*/

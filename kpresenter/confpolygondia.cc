@@ -2,7 +2,6 @@
    Base code from Kontour.
    Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
-
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -130,7 +129,7 @@ void PolygonPreview::slotSharpnessValue( int value )
 /*==================== constructor ===============================*/
 ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkConcavePolygon,
                                 int _cornersValue, int _sharpnessValue )
-    : KDialogBase( parent, name, true , i18n( "Configure Polygon" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok )
+    : QWidget( parent, name )
 {
     checkConcavePolygon = _checkConcavePolygon;
     cornersValue = _cornersValue;
@@ -141,14 +140,15 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     oldCheckConcavePolygon = _checkConcavePolygon;
 
     // ------------------------ layout
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
-    QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *layout = new QVBoxLayout( this, 0 );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
+
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
 
     // ------------------------ settings
-    gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), page );
+    gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), this );
 
     QButtonGroup *group = new QVButtonGroup( i18n( "Convex/Concave" ), gSettings );
 
@@ -173,7 +173,7 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     hbox->addWidget( gSettings );
 
     // ------------------------ preview
-    polygonPreview = new PolygonPreview( page, "preview", checkConcavePolygon, cornersValue, sharpnessValue );
+    polygonPreview = new PolygonPreview( this, "preview", checkConcavePolygon, cornersValue, sharpnessValue );
     hbox->addWidget( polygonPreview );
 
     connect ( m_convexPolygon, SIGNAL( clicked() ), polygonPreview,
@@ -184,15 +184,6 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
              SLOT( slotConersValue( int ) ) );
     connect( m_sharpness, SIGNAL( valueChanged( int ) ), polygonPreview,
              SLOT( slotSharpnessValue( int ) ) );
-
-    setButtonText( KDialogBase::User1, i18n("Reset") );
-
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
-
-    connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
-    connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
-    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
-
     slotReset();
 }
 
@@ -246,4 +237,34 @@ void ConfPolygonDia::slotReset()
     polygonPreview->repaint();
 }
 
+void ConfPolygonDia::setCheckConcavePolygon(bool _concavePolygon)
+{
+    checkConcavePolygon = _concavePolygon;
+    if (checkConcavePolygon)
+    {
+        m_concavePolygon->setChecked(true);
+        m_sharpness->setEnabled(true);
+        polygonPreview->slotConcavePolygon();
+    }
+    else
+    {
+        m_convexPolygon->setChecked(true);
+        m_sharpness->setEnabled(false);
+        polygonPreview->slotConvexPolygon();
+    }
+}
+
+void ConfPolygonDia::setCornersValue(int _cornersValue)
+{
+    cornersValue = _cornersValue;
+    m_corners->setValue(cornersValue);
+}
+
+void ConfPolygonDia::setSharpnessValue(int _sharpnessValue)
+{
+    sharpnessValue = _sharpnessValue;
+    m_sharpness->setValue(sharpnessValue);
+}
+
 #include <confpolygondia.moc>
+
