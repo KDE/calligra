@@ -3705,8 +3705,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     if ( !koDocument()->isReadWrite() )
       return;
 
-    if (m_pPopupRow != 0L )
-        delete m_pPopupRow ;
+    delete m_pPopupRow ;
 
     m_pPopupRow= new QPopupMenu();
 
@@ -3869,8 +3868,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     assert( m_pTable );
 
 
-    if ( m_pPopupMenu != 0L )
-        delete m_pPopupMenu;
+    delete m_pPopupMenu;
 
     if(!koDocument()->isReadWrite() )
         return;
