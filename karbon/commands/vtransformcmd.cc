@@ -243,9 +243,9 @@ VTranslateBezierCmd::execute()
 
 		for( uint i = 0;i < m_segment->degree();i++ )
 		{
-			m_segment->selectPoint( i, i == ( m_firstControl ? 0 : 1 ) );
+			m_segment->selectPoint( i, i == uint( m_firstControl ? 0 : 1 ) );
 
-			if( i == ( m_firstControl ? 0 : 1 ) )
+			if( i == uint( m_firstControl ? 0 : 1 ) )
 				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat ) );
 		}
 	}
@@ -260,9 +260,9 @@ VTranslateBezierCmd::unexecute()
 	{
 		for( uint i = 0;i < m_segment->degree();i++ )
 		{
-			m_segment->selectPoint( i, i == ( m_firstControl ? 0 : 1 ) );
+			m_segment->selectPoint( i, i == uint( m_firstControl ? 0 : 1 ) );
 	
-			if( i == ( m_firstControl ? 0 : 1 ) )
+			if( i == uint( m_firstControl ? 0 : 1 ) )
 				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat.invert() ) );
 		}
 

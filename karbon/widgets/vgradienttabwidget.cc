@@ -19,25 +19,18 @@
 */
 
 #include <qlabel.h>
-#include <qframe.h>
-
-#include <kstandarddirs.h>
-#include <kcolorbutton.h>
-#include <kcombobox.h>
-#include <klocale.h>
 #include <qpainter.h>
 #include <qlayout.h>
-#include <qvbox.h>
 #include <qgroupbox.h>
-#include <qtabwidget.h>
-#include <klistbox.h>
 #include <qpushbutton.h>
-#include <qdom.h>
-#include <qfile.h>
 #include <qfileinfo.h>
 #include <qpixmap.h>
-#include <kiconloader.h>
+
 #include <knuminput.h>
+#include <kcombobox.h>
+#include <klocale.h>
+#include <klistbox.h>
+#include <kiconloader.h>
 
 #include "vgradientwidget.h"
 #include "vgradienttabwidget.h"
