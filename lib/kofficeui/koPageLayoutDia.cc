@@ -109,6 +109,8 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
 
   cl.columns = 1;
 
+  enableBorders = true;
+
   if (tabs & FORMAT_AND_BORDERS) setupTab1();
   if (tabs & HEADER_AND_FOOTER) setupTab2();
 

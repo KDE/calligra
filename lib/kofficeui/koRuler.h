@@ -31,10 +31,26 @@
 #include <qevent.h>
 #include <qcursor.h>
 #include <qpixmap.h>
+#include <qlist.h>
+
+#include "koTabChooser.h"
 
 #define _MM_TO_POINT 2.83465
 #define _POINT_TO_MM 0.3527772388    
 #define cMM_TO_POINT(mm) (int((float)mm*2.83465))
+
+/******************************************************************/
+/* Struct: KoTabulator                                            */
+/******************************************************************/
+
+enum KoTabulators {T_LEFT = 0,T_CENTER = 1,T_RIGHT = 2,T_DEC_PNT = 3};
+
+struct KoTabulator
+{
+  int ptPos;
+  int mmPos;
+  KoTabulators type;
+};
 
 /******************************************************************/
 /* Class: KoRuler                                                 */
@@ -51,7 +67,7 @@ public:
   static const int F_INDENTS = 2;
 
   KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
-	  KoPageLayout _layout,int _flags);
+	  KoPageLayout _layout,int _flags,KoTabChooser *_tabChooser = 0L);
   ~KoRuler();
 
   void setPageLayout(KoPageLayout _layout)
@@ -74,6 +90,7 @@ signals:
   void newLeftIndent(int);
   void newFirstIndent(int);
   void openPageLayoutDia();
+  void tabListChanged(QList<KoTabulator>);
 
 protected:
   enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT,A_BR_TOP,A_BR_BOTTOM,A_LEFT_INDENT,A_FIRST_INDENT};
@@ -83,12 +100,12 @@ protected:
   
   void drawHorizontal(QPainter *_painter);
   void drawVertical(QPainter *_painter);
+  void drawTabs(QPainter &_painter);
 
   void mousePressEvent(QMouseEvent *e);
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
-  void mouseDoubleClickEvent(QMouseEvent*)
-    { emit openPageLayoutDia(); }
+  void mouseDoubleClickEvent(QMouseEvent*);
 
   void resizeEvent(QResizeEvent *e);
 
@@ -108,6 +125,8 @@ protected:
   QPixmap buffer;
   bool whileMovingBorderLeft,whileMovingBorderRight,whileMovingBorderTop,whileMovingBorderBottom;
   QPixmap pmFirst,pmLeft;
+  KoTabChooser *tabChooser;
+  QList<KoTabulator> tabList;
   
 };
 

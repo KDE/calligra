@@ -1576,7 +1576,9 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   KoColumns cols;
   doc->getPageLayout(layout,cols);
 
-  r_horz = new KoRuler(this,paperWidget,KoRuler::HORIZONTAL,layout,KoRuler::F_INDENTS);
+  tabChooser = new KoTabChooser(this,KoTabChooser::TAB_ALL);
+
+  r_horz = new KoRuler(this,paperWidget,KoRuler::HORIZONTAL,layout,KoRuler::F_INDENTS | KoRuler::F_TABS,tabChooser);
   r_vert = new KoRuler(this,paperWidget,KoRuler::VERTICAL,layout,0);
   connect(r_horz,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
   connect(r_horz,SIGNAL(newLeftIndent(int)),paperWidget,SLOT(newLeftIndent(int)));
@@ -1695,7 +1697,10 @@ void KWordGUI::reorganize()
       s_horz->show();
       r_vert->show();
       r_horz->show();
+      tabChooser->show();
       
+      tabChooser->setGeometry(0,0,20,20);
+
       r_horz->setGeometry(20,0,width() - 36,20);
       r_vert->setGeometry(0,20,20,height() - 36);
       s_horz->setGeometry(0,height() - 16,width() - 16,16);
@@ -1710,6 +1715,7 @@ void KWordGUI::reorganize()
       s_horz->hide();
       r_vert->hide();
       r_horz->hide();
+      tabChooser->hide();
 
       paperWidget->setGeometry(0,0,width(),height());
     }

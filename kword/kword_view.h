@@ -41,6 +41,7 @@ class KWPaintWindow;
 
 #include <koRuler.h>
 #include <kcolordlg.h>
+#include <koTabChooser.h>
 
 #include "kword.h"
 #include "kword_page.h"
@@ -329,6 +330,8 @@ public:
     { return r_vert; }
   KoRuler *getHorzRuler()
     { return r_horz; }
+  KoTabChooser *getTabChooser()
+    { return tabChooser; }
   
   void setOffset(int _x,int _y)
     { xOffset = _x; yOffset = _y; }
@@ -357,11 +360,8 @@ protected:
   KWPage *paperWidget;
   KWordDocument_impl *doc;
   KWordView_impl *view;
+  KoTabChooser *tabChooser;
   
 };
 
 #endif
-
-
-
-
