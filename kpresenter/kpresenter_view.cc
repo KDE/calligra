@@ -502,7 +502,11 @@ void KPresenterView::editCut()
 {
     if ( !m_canvas->currentTextObjectView() ) {
         m_canvas->setToolEditMode( TEM_MOUSE );
+#if COPYOASISFORMAT
+        m_canvas->copyOasisObjs();
+#else
         m_canvas->copyObjs();
+#endif
         m_canvas->deleteObjs();
     } else {
         if ( !m_canvas->currentTextObjectView()->kpTextObject()->isProtectContent())
@@ -514,7 +518,11 @@ void KPresenterView::editCopy()
 {
     if ( !m_canvas->currentTextObjectView() ) {
         m_canvas->setToolEditMode( TEM_MOUSE );
+#if COPYOASISFORMAT
+        m_canvas->copyOasisObjs();
+#else
         m_canvas->copyObjs();
+#endif
     }
     else
         m_canvas->currentTextObjectView()->copy();
@@ -543,6 +551,19 @@ void KPresenterView::editPaste()
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();
         }
+#if COPYOASISFORMAT
+        else if ( data->provides( KoStoreDrag::mimeType("application/vnd.oasis.openoffice.presentation" ) ))
+        {
+            //TODO : fix me !!
+            // TODO: it would be nice to have no offset when pasting onto a different page...
+            //m_canvas->activePage()->pasteObjs(
+            //data->encodedData(KoStoreDrag::mimeType("application/vnd.oasis.openoffice.presentation")),
+            //1, 0.0, 0.0, 0.0, 20.0, 20.0);
+
+            m_canvas->setMouseSelectedObject(true);
+            emit objectSelectedChanged();
+        }
+#endif
         else if (QImageDrag::canDecode (data)) {
             m_canvas->dropImage( data );
         }
