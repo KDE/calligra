@@ -3862,17 +3862,15 @@ void KWView::increaseFontSize()
     KWTextFrameSetEdit * edit = currentTextEdit();
     KoTextFormat *format = edit->currentFormat();
     if ( edit )
-        // ## HACK. Implement properly
-        textSizeSelected( format->font().pointSize() + 1 );
+        textSizeSelected( edit->textFrameSet()->textObject()->docFontSize( format ) + 1 );
 }
 
 void KWView::decreaseFontSize()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     KoTextFormat *format = edit->currentFormat();
-    if ( edit && format->font().pointSize() > 1)
-        // ## HACK. Implement properly
-        textSizeSelected( format->font().pointSize() - 1 );
+    if ( edit )
+        textSizeSelected( edit->textFrameSet()->textObject()->docFontSize( format ) - 1 );
 }
 
 void KWView::textSizeSelected( int size )
