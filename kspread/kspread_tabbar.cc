@@ -33,7 +33,8 @@
 #include "kspread_tabbar.h"
 #include "kspread_map.h"
 
-KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent ) : QWidget( (QWidget *)_parent )
+KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
+    : QWidget( (QWidget *)_parent )
 {
     m_pView = _parent;
     m_pPopupMenu = 0L;
@@ -200,10 +201,10 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
 
     if ( i + 1 == activeTab )
 	return;
-    
+
     activeTab = i + 1;
     repaint( false );
-    
+
     emit tabChanged( _text );
 }
 
@@ -353,9 +354,9 @@ void KSpreadTabBar::openPopupMenu( const QPoint &_global )
         delete m_pPopupMenu;
     m_pPopupMenu = new QPopupMenu();
 
-    m_pPopupMenu->insertItem( i18n( "Rename..." ), this, SLOT( slotRename() ) );
-    m_pPopupMenu->insertItem( i18n( "Remove" ), this, SLOT( slotRemove() ) );
-    m_pPopupMenu->insertItem( i18n( "add" ), this, SLOT( slotAdd() ) );
+    m_pPopupMenu->insertItem( i18n( "Rename table" ), this, SLOT( slotRename() ) );
+    m_pPopupMenu->insertItem( i18n( "Remove table" ), this, SLOT( slotRemove() ) );
+    m_pPopupMenu->insertItem( i18n( "Insert table" ), this, SLOT( slotAdd() ) );
     m_pPopupMenu->popup( _global );
 }
 
@@ -377,7 +378,7 @@ void KSpreadTabBar::renameTab()
             QStringList::Iterator it = tabsList.find( activeName );
             (*it) = newName;
 	    repaint();
-	QListIterator<KSpreadTable> it2( table->map()->tableList() );
+	    QListIterator<KSpreadTable> it2( table->map()->tableList() );
             for( ; it2.current(); ++it2 )
 		it2.current()->changeCellTabName(activeName,newName);
 
@@ -444,42 +445,44 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 
 void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
 {
-	if ( _ev->button() == LeftButton && m_moveTab != 0 )
-	{
-		if ( m_autoScroll != 0 )
-		{
-			m_pAutoScrollTimer->stop();
-			m_autoScroll = 0;
-		}
-		m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )).ascii(), (*tabsList.at( m_moveTab - 1 )).ascii(), m_moveTabFlag == moveTabBefore );
-		moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
-		
-		m_moveTabFlag = moveTabNo;
-		if ( activeTab < m_moveTab && m_moveTabFlag == moveTabBefore )
-			m_moveTab--;
-		activeTab = m_moveTab;
-	
-		m_moveTab = 0;
-		repaint( false );
+    if ( _ev->button() == LeftButton && m_moveTab != 0 )
+    {
+	if ( m_autoScroll != 0 )
+        {
+	    m_pAutoScrollTimer->stop();
+	    m_autoScroll = 0;
 	}
+	m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )).ascii(),
+					  (*tabsList.at( m_moveTab - 1 )).ascii(),
+					  m_moveTabFlag == moveTabBefore );
+	moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
+		
+	m_moveTabFlag = moveTabNo;
+	if ( activeTab < m_moveTab && m_moveTabFlag == moveTabBefore )
+	    m_moveTab--;
+	activeTab = m_moveTab;
+	
+	m_moveTab = 0;
+	repaint( false );
+    }
 }
 
 void KSpreadTabBar::slotAutoScroll( )
 {
-	if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
-	{
-		m_moveTab = leftTab - 1;
-		scrollLeft();
-	}
-	else if ( m_autoScroll == autoScrollRight )
-	{
-		scrollRight();
-	}
-	if ( leftTab <= 1 )
-	{
-		m_pAutoScrollTimer->stop();
-		m_autoScroll = 0;
-	}
+    if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
+    {
+	m_moveTab = leftTab - 1;
+	scrollLeft();
+    }
+    else if ( m_autoScroll == autoScrollRight )
+    {
+	scrollRight();
+    }
+    if ( leftTab <= 1 )
+    {
+	m_pAutoScrollTimer->stop();
+	m_autoScroll = 0;
+    }
 }
 
 
@@ -571,38 +574,39 @@ void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
     renameTab();
 }
+
 void KSpreadTabBar::hideTable()
 {
-if ( tabsList.count() ==  1)
+    if ( tabsList.count() ==  1)
     {
-        QMessageBox::warning( this, i18n("Hide table"), i18n("You cannot hide the only table visible."), i18n("OK") ); // FIXME bad english? no english!
+        QMessageBox::warning( this, i18n("Hide table"), i18n("You cannot hide the last table visible."), i18n("OK") );
         return;
     }
-else
+    else
     {
-    KSpreadTable* table = m_pView->activeTable();
-    m_pView->activeTable()->setHide(true);
-    QString activeName = table->tableName();
-    removeTab( activeName );
-    tablehide.append( activeName );
-    m_pView->setActiveTable( m_pView->doc()->map()->findTable( tabsList.first()) );
+	KSpreadTable* table = m_pView->activeTable();
+	m_pView->activeTable()->setHide(true);
+	QString activeName = table->tableName();
+	removeTab( activeName );
+	tablehide.append( activeName );
+	m_pView->setActiveTable( m_pView->doc()->map()->findTable( tabsList.first()) );
 
-    emit tabChanged( tabsList.first() );
+	emit tabChanged( tabsList.first() );
     }
 }
 
 void KSpreadTabBar::showTable(const QString& text)
 {
-addTab(text);
-tablehide.remove( text );
+    addTab( text );
+    tablehide.remove( text );
 
-emit tabChanged( text);
-m_pView->activeTable()->setHide(false);
+    emit tabChanged( text);
+    m_pView->activeTable()->setHide( false );
 }
 
 void KSpreadTabBar::init(const QString & text)
 {
-tablehide.append( text );
+    tablehide.append( text );
 }
 
 #include "kspread_tabbar.moc"

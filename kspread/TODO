@@ -8,6 +8,7 @@ Improvement :
 -Improved position in a cell (top, bottom ) when we increase size
 -Add zoom
 -create an script editor for execute script
+ (Use KWrite)
 
 Bug fix :
 ---------
@@ -19,3 +20,10 @@ for example =Tablle!A1  =>crash
 -and also bug fix :)
 
 <montell@club-internet.fr>
+
+Torbens TODO-List:
+------------------
+- Get rid of koml
+- Copy/Paste of complete rows/cols
+- Hide the grid
+- Write-Protect cells

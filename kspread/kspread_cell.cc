@@ -40,8 +40,6 @@
 #include "kspread_factory.h"
 
 #include <koStream.h>
-#include <komlWriter.h>
-#include <torben.h>
 #include <kformula.h>
 #include <kinstance.h>
 #include <klocale.h>
@@ -60,7 +58,7 @@ char KSpreadCell::decimal_point = '\0';
  *
  *****************************************************************************/
 
-KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text )
+KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   : KSpreadLayout( _table )
 {
   m_pCode = 0;
@@ -71,8 +69,8 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const cha
 
   m_lstDepends.setAutoDelete( TRUE );
 
-  if ( _text != 0L )
-    m_strText = _text;
+  // if ( _text != 0L )
+  // m_strText = _text;
 
   m_bLayoutDirtyFlag= FALSE;
 
@@ -2382,6 +2380,12 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
       text.appendChild( doc.createTextNode( encodeFormular() ) );
       cell.appendChild( text );
     }
+    else if ( content() == RichText || content() == VisualFormula )
+    {
+      QDomElement text = doc.createElement( "text" );
+      text.appendChild( doc.createCDATASection( m_strText ) );
+      cell.appendChild( text );
+    }	
     else
     {
       QDomElement text = doc.createElement( "text" );
@@ -2393,257 +2397,240 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   return cell;
 }
 
-bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift )
+bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm, Operation op )
 {
-  bool ok;
-  m_iRow = cell.attribute( "row" ).toInt( &ok );
-  if ( !ok ) return false;
-  m_iColumn = cell.attribute( "column" ).toInt( &ok );
-  if ( !ok ) return false;
+    bool ok;
+    m_iRow = cell.attribute( "row" ).toInt( &ok ) + _yshift;
+    if ( !ok ) return false;
+    m_iColumn = cell.attribute( "column" ).toInt( &ok ) + _xshift;
+    if ( !ok ) return false;
 
-  if ( cell.hasAttribute( "action" ) )
-      setAction( cell.attribute("action") );
+    if ( cell.hasAttribute( "action" ) )
+	setAction( cell.attribute("action") );
 
-  // Validation
-  if ( m_iRow < 1 || m_iRow > 0xFFFF )
-  {
-    cerr << "Value out of Range Cell:row=" << m_iRow << endl;
-    return false;
-  }
-  if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
-  {
-    cerr << "Value out of Range Cell:column=" << m_iColumn << endl;
-    return false;
-  }
-
-  QDomElement f = cell.namedItem( "format" ).toElement();
-  if ( !f.isNull() )
-  {
-    if ( f.hasAttribute( "align" ) )
+    // Validation
+    if ( m_iRow < 1 || m_iRow > 0xFFFF )
     {
-      Align a = (Align)f.attribute("align").toInt( &ok );
-      if ( !ok )
+	cerr << "Value out of Range Cell:row=" << m_iRow << endl;
 	return false;
-      // Validation
-      if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
-      {
-	cerr << "Value of of range Cell::align=" << (unsigned int)a << endl;
+    }
+    if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
+    {
+	cerr << "Value out of Range Cell:column=" << m_iColumn << endl;
 	return false;
-      }
-      // Assignment
-      setAlign( a );
     }
-    if ( f.hasAttribute( "bgcolor" ) )
-      setBgColor( QColor( f.attribute( "bgcolor" ) ) );
-    if ( f.hasAttribute( "multirow" ) )
-      setMultiRow( true );
-    if ( f.hasAttribute( "colspan" ) )
+
+    QDomElement f = cell.namedItem( "format" ).toElement();
+    if ( !f.isNull() && ( pm == Normal || pm == Format || pm == NoBorder ) )
     {
-      int i = f.attribute("colspan").toInt( &ok );
-      if ( !ok ) return false;
-      // Validation
-      if ( i < 0 || i > 0xFFF )
-      {
-	cerr << "Value out of range Cell::colspan=" << i << endl;
-	return false;
-      }
-      m_iExtraXCells = i;
-      if ( i > 0 )
-	m_bForceExtraCells = true;	
+	if ( f.hasAttribute( "align" ) )
+        {
+	    Align a = (Align)f.attribute("align").toInt( &ok );
+	    if ( !ok )
+		return false;
+	    // Validation
+	    if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+	    {
+		cerr << "Value of of range Cell::align=" << (unsigned int)a << endl;
+		return false;
+	    }
+	    // Assignment
+	    setAlign( a );
+	}
+	if ( f.hasAttribute( "bgcolor" ) )
+	    setBgColor( QColor( f.attribute( "bgcolor" ) ) );
+	if ( f.hasAttribute( "multirow" ) )
+	    setMultiRow( true );
+	if ( f.hasAttribute( "colspan" ) )
+        {
+	    int i = f.attribute("colspan").toInt( &ok );
+	    if ( !ok ) return false;
+	    // Validation
+	    if ( i < 0 || i > 0xFFF )
+	    {
+		cerr << "Value out of range Cell::colspan=" << i << endl;
+		return false;
+	    }
+	    m_iExtraXCells = i;
+	    if ( i > 0 )
+		m_bForceExtraCells = true;	
+	}
+	if ( f.hasAttribute( "rowspan" ) )
+        {
+	    int i = f.attribute("rowspan").toInt( &ok );
+	    if ( !ok ) return false;
+	    // Validation
+	    if ( i < 0 || i > 0xFFF )
+	    {
+		cerr << "Value out of range Cell::rowspan=" << i << endl;
+		return false;
+	    }
+	    m_iExtraYCells = i;
+	    if ( i > 0 )
+		m_bForceExtraCells = true;	
+	}
+	if ( f.hasAttribute( "precision" ) )
+        {
+	    int i = f.attribute("precision").toInt( &ok );
+	    if ( i < -1 )
+	    {
+		cerr << "Value out of range Cell::precision=" << i << endl;
+		return false;
+	    }
+	    m_iPrecision = i;
+	}
+	if ( f.hasAttribute( "float" ) )
+        {
+	    FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
+	    if ( !ok ) return false;
+	    if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
+	    {
+		cerr << "Value of of range Cell::float=" << (unsigned int)a << endl;
+		return false;
+	    }
+	    // Assignment
+	    setFloatFormat( a );
+	}
+	if ( f.hasAttribute( "floatcolor" ) )
+        {
+	    FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
+	    if ( !ok ) return false;
+	    if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
+	    {
+		cerr << "Value of of range Cell::floatcolor=" << (unsigned int)a << endl;
+		return false;
+	    }
+	    // Assignment
+	    setFloatColor( a );
+	}
+	if ( f.hasAttribute( "faktor" ) )
+        {
+	    m_dFaktor = f.attribute("faktor").toDouble( &ok );
+	    if ( !ok ) return false;
+	}
+
+	QDomElement pen = f.namedItem( "pen" ).toElement();
+	if ( !pen.isNull() )
+	    setTextPen( pen.toPen() );
+
+	QDomElement font = f.namedItem( "font" ).toElement();
+	if ( !font.isNull() )
+	    setTextFont( font.toFont() );
+
+	QDomElement left = f.namedItem( "left-border" ).toElement();
+	if ( !left.isNull() && pm != NoBorder )
+        {
+	    QDomElement pen = left.namedItem( "pen" ).toElement();
+	    if ( !pen.isNull() )
+		setLeftBorderPen( pen.toPen() );
+	}
+
+	QDomElement top = f.namedItem( "top-border" ).toElement();
+	if ( !top.isNull() && pm != NoBorder )
+        {
+	    QDomElement pen = top.namedItem( "pen" ).toElement();
+	    if ( !pen.isNull() )
+		setTopBorderPen( pen.toPen() );
+	}
+
+	m_strPrefix = f.attribute( "prefix" );
+	m_strPostfix = f.attribute( "postfix" );
     }
-    if ( f.hasAttribute( "rowspan" ) )
+
+    QDomElement text = cell.namedItem( "text" ).toElement();
+    if ( !text.isNull() && ( pm == Normal || pm == Text || pm == NoBorder ) )
     {
-      int i = f.attribute("rowspan").toInt( &ok );
-      if ( !ok ) return false;
-      // Validation
-      if ( i < 0 || i > 0xFFF )
-      {
-	cerr << "Value out of range Cell::rowspan=" << i << endl;
-	return false;
-      }
-      m_iExtraYCells = i;
-      if ( i > 0 )
-	m_bForceExtraCells = true;	
-    }
-    if ( f.hasAttribute( "precision" ) )
-    {
-      int i = f.attribute("rowspan").toInt( &ok );
-      if ( i < -1 )
-      {
-	cerr << "Value out of range Cell::precision=" << i << endl;
-	return false;
-      }
-      m_iPrecision = i;
-    }
-    if ( f.hasAttribute( "float" ) )
-    {
-      FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
-      if ( !ok ) return false;
-      if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
-      {
-	cerr << "Value of of range Cell::float=" << (unsigned int)a << endl;
-	return false;
-      }
-      // Assignment
-      setFloatFormat( a );
-    }
-    if ( f.hasAttribute( "floatcolor" ) )
-    {
-      FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
-      if ( !ok ) return false;
-      if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
-      {
-	cerr << "Value of of range Cell::floatcolor=" << (unsigned int)a << endl;
-	return false;
-      }
-      // Assignment
-      setFloatColor( a );
-    }
-    if ( f.hasAttribute( "faktor" ) )
-    {
-      m_dFaktor = f.attribute("faktor").toDouble( &ok );
-      if ( !ok ) return false;
+	QString t = text.text();
+	t = t.stripWhiteSpace();
+
+	if ( t[0] == '=' )
+	    t = decodeFormular( t, m_iColumn, m_iRow );
+
+	setText( pasteOperation( t, m_strText, op ) );
     }
 
-    QDomElement pen = f.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
-      setTextPen( pen.toPen() );
+    if ( !f.isNull() && f.hasAttribute( "style" ) )
+	setStyle( (Style)f.attribute("style").toInt() );
 
-    QDomElement font = f.namedItem( "font" ).toElement();
-    if ( !font.isNull() )
-      setTextFont( font.toFont() );
-
-    QDomElement left = f.namedItem( "left-border" ).toElement();
-    if ( !left.isNull() )
-    {
-      QDomElement pen = left.namedItem( "pen" ).toElement();
-      if ( !pen.isNull() )
-	setLeftBorderPen( pen.toPen() );
-    }
-
-    QDomElement top = f.namedItem( "top-border" ).toElement();
-    if ( !top.isNull() )
-    {
-      QDomElement pen = top.namedItem( "pen" ).toElement();
-      if ( !pen.isNull() )
-	setTopBorderPen( pen.toPen() );
-    }
-
-    m_strPrefix = f.attribute( "prefix" );
-    m_strPostfix = f.attribute( "postfix" );
-  }
-
-  QDomElement text = cell.namedItem( "text" ).toElement();
-  if ( !text.isNull() )
-  {
-    QString t = text.text();
-    t = t.stripWhiteSpace();
-
-    if ( t[0] == '=' )
-      t = decodeFormular( t, m_iColumn, m_iRow );
-
-    setText( t );
-  }
-
-  if ( !f.isNull() && f.hasAttribute( "style" ) )
-      setStyle( (Style)f.attribute("style").toInt() );
-
-  return true;
+    return true;
 }
 
-QString KSpreadCell::paste_Operation(QString new_text,QString old_text,Operation op)
+QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operation op )
 {
-    QString tmp;
+    if ( op == OverWrite )
+	return new_text;
+    
     QString tmp_op;
-    QString old_op;
-    if(new_text.find("=")==0)
-    {
-	tmp=new_text.right(new_text.length()-1);
-    }
-    else
-    {
-	tmp=new_text;
-    }
-    if(old_text.find("=")==0)
-    {
-	old_op=old_text.right(old_text.length()-1);
-    }
-    else
-    {
-	old_op=old_text;
-    }
-
-    //two double
-    QString inter;
-    if(tmp.toDouble()!=0&&old_op.toDouble()!=0)
-	{
-	switch(op)
-		{
-		case  Add:
-			tmp_op="="+inter.setNum(old_op.toDouble()+tmp.toDouble());
-			break;
-		case Mul :
-		        tmp_op="="+inter.setNum(old_op.toDouble()*tmp.toDouble());
-			break;
-		case Sub:
-		        tmp_op="="+inter.setNum(old_op.toDouble()-tmp.toDouble());
-			break;
-		case Div :
-		        tmp_op="="+inter.setNum(old_op.toDouble()/tmp.toDouble());
-			break;
-		default :
-			cout <<"Err in paste Operation\n";
-			break;
-		}
-	return tmp_op;
-	}
-    else if (new_text.find("=")==0&&old_text.find("=")==0||(new_text.find("=")==0&&old_op.toDouble()!=0)
-	||(old_text.find("=")==0&&tmp.toDouble()!=0))
-	{
-	switch(op)
-		{
-		case  Add:
-			tmp_op="=("+old_op+")+"+"("+tmp+")";
-			break;
-		case Mul :
-		        tmp_op="=("+old_op+")*"+"("+tmp+")";
-			break;
-		case Sub:
-		        tmp_op="=("+old_op+")-"+"("+tmp+")";
-			break;
-		case Div :
-		        tmp_op="=("+old_op+")/"+"("+tmp+")";
-			break;
-		default :
-			cout <<"Err in paste Operation\n";
-			break;
-		}
-	return tmp_op;
-	}
-    else
-	{	
-	return old_text;
-	}
-}
-
-bool KSpreadCell::Operation_ok(QString new_text)
-{
-    //test if a cell or a value
     QString tmp;
-    tmp=m_pTable->name();
-    tmp+= "!" +new_text;
-    //cout <<"Tmp : "<<tmp.ascii()<<endl;
-    KSpreadPoint _cell=KSpreadPoint( tmp, m_pTable->map() );
-    if(_cell.isValid())
-	{
-	//cout <<"Cell Valid\n";
-	return true;
-	}
+    QString old;
+    if( new_text.find("=") == 0 )
+    {
+	tmp = new_text.right( new_text.length() - 1 );
+    }
     else
-	{
-	//cout <<"No valid !\n";
-	return false;
+    {
+	tmp = new_text;
+    }
+
+    if( old_text.find("=") == 0 )
+    {
+	old = old_text.right( old_text.length() - 1 );
+    }
+    else
+    {
+	old = old_text;
+    }
+
+    QString inter;
+    bool b1, b2;
+    tmp.toDouble( &b1 );
+    old.toDouble( &b2 );
+    
+    if( b1 && b2 )
+    {
+	switch( op )
+        {
+	case  Add:
+	    tmp_op = "="+inter.setNum(old.toDouble()+tmp.toDouble());
+	    break;
+	case Mul :
+	    tmp_op = "="+inter.setNum(old.toDouble()*tmp.toDouble());
+	    break;
+	case Sub:
+	    tmp_op = "="+inter.setNum(old.toDouble()-tmp.toDouble());
+	    break;
+	case Div:
+	    tmp_op = "="+inter.setNum(old.toDouble()/tmp.toDouble());
+	    break;
+	default:
+	    ASSERT( 0 );
 	}
+	return tmp_op;
+    }
+    else if ( ( new_text[0] == '=' && old_text[0] == '=' ) ||
+	      ( b1 && old_text[0] == '=' ) || ( new_text[0] == '=' && b2 ) )
+    {
+	switch( op )
+        {
+	case  Add:
+	    tmp_op="=("+old+")+"+"("+tmp+")";
+	    break;
+	case Mul :
+	    tmp_op="=("+old+")*"+"("+tmp+")";
+	    break;
+	case Sub:
+	    tmp_op="=("+old+")-"+"("+tmp+")";
+	    break;
+	case Div:
+	    tmp_op="=("+old+")/"+"("+tmp+")";
+	    break;
+	default :
+	    ASSERT( 0 );
+	}
+	return tmp_op;
+    }
+
+    return new_text;
 }
 
 void KSpreadCell::setStyle( Style _s )

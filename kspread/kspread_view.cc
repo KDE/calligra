@@ -1218,38 +1218,41 @@ void KSpreadView::copySelection()
 
 void KSpreadView::cutSelection()
 {
-  if ( m_pTable )
-  	{
-    	m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-        editWidget()->setText("");
-        }
+    if ( !m_pTable )
+	return;
+    
+    m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    updateEditWidget();
 }
 
 void KSpreadView::paste()
 {
-  if ( m_pTable )
+    if ( !m_pTable )
+	return;
+    
     m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    updateEditWidget();
 }
 
 void KSpreadView::specialPaste()
 {
-  if ( m_pTable )
-  	{
-  	KSpreadspecial *dlg=new KSpreadspecial(this,"Special Paste");
-  	dlg->show();
-  	}
-  	
+    if ( !m_pTable )
+	return;
+  
+    KSpreadspecial dlg( this, "Special Paste" );
+    dlg.exec();
 }
+
 void KSpreadView::consolidate()
 {
-  KSpreadConsolidate* dlg = new KSpreadConsolidate( this, "Consolidate" );
-  dlg->show();
+    KSpreadConsolidate* dlg = new KSpreadConsolidate( this, "Consolidate" );
+    dlg->show();
 }
 
 void KSpreadView::gotoCell()
 {
-  KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
-  dlg->show();
+    KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
+    dlg->show();
 }
 
 void KSpreadView::replace()
@@ -2127,7 +2130,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
 void KSpreadView::repaintPolygon( const QPointArray& polygon )
 {
     QPointArray arr = polygon;
-    QWMatrix m = matrix().invert();
+    QWMatrix m = matrix()/*.invert()*/;
 
     for( int i = 0; i < 4; ++i )
 	arr.setPoint( i, m.map( arr.point( i ) ) );

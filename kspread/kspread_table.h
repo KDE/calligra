@@ -38,10 +38,6 @@ class QDomElement;
 
 class DCOPObject;
 
-#include <iostream.h>
-#include <komlParser.h>
-#include <komlMime.h>
-
 #include <koDocument.h>
 
 #include <kscript_context.h>
@@ -62,6 +58,7 @@ class DCOPObject;
 #include "kspread_layout.h"
 #include "kspread_cell.h"
 #include "kspread_dlg_layout.h"
+#include "kspread_global.h"
 
 /********************************************************************
  *
@@ -184,10 +181,8 @@ class KSpreadTable : public QObject
 
     Q_OBJECT
 public:
-    enum PasteMode { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans,Value,Value_trans};
-    enum Operation { Any, Add, Mul, Sub, Div };
     enum SortingOrder{ Increase, Decrease };
-    enum ChangeRef {ColumnInsert,ColumnRemove,RowInsert,RowRemove};
+    enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
 
     KSpreadTable( KSpreadMap *_map, const char *_name );
     ~KSpreadTable();
@@ -348,11 +343,12 @@ public:
 
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
+    
     void deleteSelection( const QPoint &_marker );
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
     void clearSelection(const QPoint &_marker );
-    void paste( const QPoint &_marker,PasteMode=ALL,Operation=Any );
+    void paste( const QPoint &_marker, PasteMode=Normal, Operation=OverWrite );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace );
     void onlyRow( SortingOrder = Increase );
@@ -509,9 +505,14 @@ public:
     void insertRowLayout( RowLayout *_l );
 
     /**
+     * @see #copy
+     */
+    QDomDocument saveCellRect( const QRect& );
+    
+    /**
      * @see #paste
      */
-    bool loadSelection( istream& _in, int _xshift, int _yshift,PasteMode = ALL, Operation = Any );
+    bool loadSelection( const QDomDocument& doc, int _xshift, int _yshift,PasteMode = Normal, Operation = OverWrite );
 
     /**
      * Deletes all cells in the given rectangle.
@@ -601,8 +602,6 @@ protected:
      * @see #autofill
      */
     void fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList, QList<AutoFillSequence>& _seqList );
-
-    bool saveCellRect( ostream&, const QRect& );
 
     QIntDict<KSpreadCell> m_dctCells;
     QIntDict<RowLayout> m_dctRows;

@@ -21,8 +21,6 @@
 #include "kspread_layout.h"
 #include "kspread_table.h"
 
-#include <komlWriter.h>
-
 #include <stdlib.h>
 
 #include <qdom.h>

@@ -35,13 +35,11 @@
 
 
 KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
 
   tabname=m_pView->activeTable()->name();
-
-
 
   setCaption( i18n("Goto cell") );
   QVBoxLayout *lay1 = new QVBoxLayout( this );
@@ -69,8 +67,8 @@ void KSpreadgoto::slotOk()
 {
     QString tmp = m_pView->activeTable()->tableName() + "!" + name_cell->text();
     m_pView->canvasWidget()->hideMarker();
-    m_pView->canvasWidget()->setgotohorz(true);
-    m_pView->canvasWidget()->setgotovert(true);
+    // m_pView->canvasWidget()->setgotohorz(true);
+    // m_pView->canvasWidget()->setgotovert(true);
     m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ) );
     m_pView->canvasWidget()->showMarker();
 

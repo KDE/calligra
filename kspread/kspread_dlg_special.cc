@@ -24,182 +24,115 @@
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_table.h"
+#include "kspread_global.h"
+
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
 
-KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
-	: QDialog( 0L, name )
+KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
+	: QDialog( parent, name, TRUE )
 {
-  m_pView = parent;
+    m_pView = parent;
 
-  setCaption( i18n("Special Paste") );
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+    setCaption( i18n("Special Paste") );
+    QVBoxLayout *lay1 = new QVBoxLayout( this );
+    lay1->setMargin( 5 );
+    lay1->setSpacing( 10 );
 
-  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Special Paste",this);
-  grp->setRadioButtonExclusive( TRUE );
-  grp->layout();
-  lay1->addWidget(grp);
-  rb1 = new QRadioButton( i18n("All"), grp );
-  rb2 = new QRadioButton( i18n("Formula"), grp );
-  rb3 = new QRadioButton( i18n("Format"), grp );
-  rb4 = new QRadioButton( i18n("All without border"), grp );
-  rb10 = new QRadioButton( i18n("Only value"),grp);
-  rb1->setChecked(true);
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Paste what:" ),this );
+    grp->setRadioButtonExclusive( TRUE );
+    grp->layout();
+    lay1->addWidget(grp);
+    rb1 = new QRadioButton( i18n("Everything"), grp );
+    rb2 = new QRadioButton( i18n("Text"), grp );
+    rb3 = new QRadioButton( i18n("Format"), grp );
+    rb4 = new QRadioButton( i18n("Everything without border"), grp );
+    rb1->setChecked(true);
 
-  grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Operation",this);
-  grp->setRadioButtonExclusive( TRUE );
-  grp->layout();
-  lay1->addWidget(grp);
-
-
-  rb5 = new QRadioButton( i18n("Any"), grp );
-  rb6 = new QRadioButton( i18n("Addition"), grp );
-  rb7 = new QRadioButton( i18n("Substration"), grp );
-  rb8 = new QRadioButton( i18n("Multiplication"), grp );
-  rb9 = new QRadioButton( i18n("Division"), grp );
-  rb5->setChecked(true);
-  cb=new QCheckBox(i18n("Transpose"),this);
-  cb->layout();
-  lay1->addWidget(cb);
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
-  m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
-  m_link=bb->addButton(i18n("Create link"));
-  bb->layout();
-  lay1->addWidget( bb );
+    grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Operation",this);
+    grp->setRadioButtonExclusive( TRUE );
+    grp->layout();
+    lay1->addWidget(grp);
 
 
+    rb5 = new QRadioButton( i18n("Overwrite"), grp );
+    rb6 = new QRadioButton( i18n("Addition"), grp );
+    rb7 = new QRadioButton( i18n("Substration"), grp );
+    rb8 = new QRadioButton( i18n("Multiplication"), grp );
+    rb9 = new QRadioButton( i18n("Division"), grp );
+    rb5->setChecked(true);
 
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-  connect( m_link,SIGNAL(clicked()),this,SLOT(slotlink()));
-  connect( grp,SIGNAL(pressed ( int  )),this,SLOT(slotclick(int)));
+    // cb = new QCheckBox(i18n("Transpose"),this);
+    // cb->layout();
+    // lay1->addWidget(cb);
+    
+    KButtonBox *bb = new KButtonBox( this );
+    bb->addStretch();
+    m_pOk = bb->addButton( i18n("OK") );
+    m_pOk->setDefault( TRUE );
+    m_pClose = bb->addButton( i18n( "Close" ) );
+    bb->layout();
+    lay1->addWidget( bb );
+
+    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
+    connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+    connect( rb3, SIGNAL( toggled( bool ) ), this, SLOT( slotToggled( bool ) ) );
 }
-
 
 void KSpreadspecial::slotOk()
 {
- KSpreadTable::PasteMode sp;
- KSpreadTable::Operation op;
-if(rb1->isChecked())
-	{
-	if(cb->isChecked())
-		{
-		sp=KSpreadTable::ALL_trans;
-		}
-	else
-		{
-		sp=KSpreadTable::ALL;
-		}
-	}
-if(rb2->isChecked())
-	{
-	if(cb->isChecked())
-		{
-		sp=KSpreadTable::Formula_trans;
-		}
-	else
-		{
-		sp=KSpreadTable::Formula;
-		}
-	}
-if(rb3->isChecked())
-	{
-	if(cb->isChecked())
-		{
-		sp=KSpreadTable::Format_trans;
-		}
-	else
-		{
-		sp=KSpreadTable::Format;
-		}
-	}
-if(rb10->isChecked())
-	{
-	if(cb->isChecked())
-		{
-		sp=KSpreadTable::Value_trans;
-		}
-	else
-		{
-		sp=KSpreadTable::Value;
-		}
-	}
-if(rb4->isChecked())
-	{
-	if(cb->isChecked())
-		{
-		sp=KSpreadTable::Wborder_trans;
-		}
-	else
-		{
-		sp=KSpreadTable::Wborder;
-		}
-	}
-if(rb5->isChecked())
-	{
-	op=KSpreadTable::Any;
-	}
-if(rb6->isChecked())
-	{
-	op=KSpreadTable::Add;
-	}
-if(rb7->isChecked())
-	{
-	op=KSpreadTable::Sub;
-	}
-if(rb8->isChecked())
-	{
-	op=KSpreadTable::Mul;
-	}
-if(rb9->isChecked())
-	{
-	op=KSpreadTable::Div;
-	}
-m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),  m_pView->canvasWidget()->markerRow() ) ,sp,op);
-accept();
-}
+    PasteMode sp = Normal;
+    Operation op = OverWrite;
+    
+    /* if( rb1->isChecked() )
+	sp = cb->isChecked() ? NormalAndTranspose : Normal;
+    else if( rb2->isChecked() )
+	sp = cb->isChecked() ? TextAndTranspose : Text;
+    else if( rb3->isChecked() )
+	sp = cb->isChecked() ? FormatAndTranspose : Format;
+    else if( rb4->isChecked() )
+    sp = cb->isChecked() ? NoBorderAndTranspose : NoBorder; */
 
-void KSpreadspecial::slotclick(int id )
-{
-if(id!=0)	
-	{
-	m_link->setEnabled(false);
-	}
-else if( m_link->isEnabled()==false)
-	{
-	m_link->setEnabled(true);
-	}
-}
+    if( rb1->isChecked() )
+	sp = Normal;
+    else if( rb2->isChecked() )
+	sp = Text;
+    else if( rb3->isChecked() )
+	sp = Format;
+    else if( rb4->isChecked() )
+	sp = NoBorder;
 
-void KSpreadspecial::slotlink()
-{
-KSpreadTable::PasteMode sp;
-if(cb->isChecked())
-		{
-		sp=KSpreadTable::Link_trans;
-		}
-	else
-		{
-		sp=KSpreadTable::Link;
-		}
-m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),  m_pView->canvasWidget()->markerRow() ) ,sp);
-accept();
+    if( rb5->isChecked() )
+	op = OverWrite;
+    if( rb6->isChecked() )
+	op = Add;
+    if( rb7->isChecked() )
+	op = Sub;
+    if( rb8->isChecked() )
+	op = Mul;
+    if( rb9->isChecked() )
+	op = Div;
+
+    m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),
+					    m_pView->canvasWidget()->markerRow() ), sp, op );
+    accept();
 }
 
 void KSpreadspecial::slotClose()
 {
-reject();
+    reject();
 }
 
-
-
+void KSpreadspecial::slotToggled( bool b )
+{
+    rb5->setEnabled( !b );
+    rb6->setEnabled( !b );
+    rb7->setEnabled( !b );
+    rb8->setEnabled( !b );
+    rb9->setEnabled( !b );
+}
 
 #include "kspread_dlg_special.moc"

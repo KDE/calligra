@@ -36,6 +36,9 @@
 #include <qclipbrd.h>
 #include <qpicture.h>
 #include <qdom.h>
+#include <qtextstream.h>
+#include <qdragobject.h>
+#include <qmime.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -50,11 +53,6 @@
 #include "KSpreadTableIface.h"
 
 #include <koStream.h>
-
-#include <komlWriter.h>
-#include <komlParser.h>
-#include <komlStreamFeed.h>
-#include <torben.h>
 
 #include <strstream.h>
 #include <kautoarray.h>
@@ -2901,38 +2899,39 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
 
 void KSpreadTable::copySelection( const QPoint &_marker )
 {
-  QRect rct;
+    QRect rct;
 
-  // No selection ? => copy active cell
-  if ( m_rctSelection.left() == 0 )
-    rct.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-  else if ( m_rctSelection.right() == 0x7fff )
-  {
-    QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supproted", i18n("OK"));
-    return;
-  }
-  else if ( m_rctSelection.bottom() == 0x7fff )
-  {
-    QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supproted", i18n("OK"));
-    return;
-  }
-  else
-    rct = selectionRect();
-
-  string data;
-
-  {
-    tostrstream out( data );
-    if ( !saveCellRect( out, rct ) )
+    // No selection ? => copy active cell
+    if ( m_rctSelection.left() == 0 )
+	rct.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    // Complete rows
+    else if ( m_rctSelection.right() == 0x7fff )
     {
-      cerr << "INTERNAL ERROR while copying" << endl;
-      return;
+	QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supported", i18n("OK"));
+	return;
     }
-  }
+    // Complete columns
+    else if ( m_rctSelection.bottom() == 0x7fff )
+    {
+	QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supported", i18n("OK"));
+	return;
+    }
+    else
+	rct = selectionRect();
+	    
+    // Save to buffer
+    QDomDocument doc = saveCellRect( rct );
+    
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    QTextStream str( &buffer );
+    str << doc;
+    buffer.close();
 
-  QClipboard *clip = QApplication::clipboard();
-  clip->setText( data.c_str() );
-  //cout <<" copy : " <<data.c_str()<<endl;
+    QStoredDrag* data = new QStoredDrag( "application/x-kspread-snippet" );
+    data->setEncodedData( buffer.buffer() );
+    
+    QApplication::clipboard()->setData( data );
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )
@@ -2943,144 +2942,57 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
     deleteSelection( _marker );
 }
 
-void KSpreadTable::paste( const QPoint &_marker,PasteMode sp,Operation op)
+void KSpreadTable::paste( const QPoint &_marker, PasteMode sp, Operation op )
 {
-  string data = QApplication::clipboard()->text().ascii();
-  if ( data.empty() )
-  {
-    QMessageBox::critical( (QWidget*)0L, i18n( "KSpread Error" ), i18n( "Clipboard is empty" ), i18n( "Ok" ) );
-    return;
-  }
+    QMimeSource* mime = QApplication::clipboard()->data();
+    if ( !mime || !mime->provides( "application/x-kspread-snippet" ) )
+	return;
 
-  istrstream in( data.c_str() );
-  loadSelection( in, _marker.x() - 1, _marker.y() - 1,sp,op);
-  m_pDoc->setModified( true );
-  emit sig_updateView( this );
+    QByteArray b = mime->encodedData( "application/x-kspread-snippet" );
+
+    qDebug("Parsing %i bytes", b.size() );
+
+    QBuffer buffer( b );
+    buffer.open( IO_ReadOnly );
+    QDomDocument doc( &buffer );
+    buffer.close();
+    
+    // TODO: Test for parsing errors
+    
+    loadSelection( doc, _marker.x() - 1, _marker.y() - 1, sp, op );
+    m_pDoc->setModified( true );
+    emit sig_updateView( this );
 }
 
-bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, PasteMode sp,Operation op )
+bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift, PasteMode sp, Operation op )
 {
-  KOMLStreamFeed feed( _in );
-  KOMLParser parser( &feed );
-
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
-  KSpreadCell::PasteMode sp_cell;
-  KSpreadCell::Operation op_cell;
-  switch(sp)
-  	{
-  	case ALL:
-  		sp_cell=KSpreadCell::ALL;
-  		break;
-  	case Formula:
-  		sp_cell=KSpreadCell::FORMULA;
-  		break;
-  	case Format:
-  		sp_cell= KSpreadCell::Format;
-  		break;
-  	case Wborder:
-  		sp_cell= KSpreadCell::Wborder;
-  		break;
-  	case Link:
-  		sp_cell= KSpreadCell::Link;
-  		break;
-  	case ALL_trans:
-  		sp_cell=KSpreadCell::ALL_trans;
-  		break;
-  	case Formula_trans:
-  		sp_cell=KSpreadCell::FORMULA_trans;
-  		break;
-  	case Format_trans:
-  		sp_cell= KSpreadCell::Format_trans;
-  		break;
-  	case Wborder_trans:
-  		sp_cell= KSpreadCell::Wborder_trans;
-  		break;
-  	case Link_trans:
-  		sp_cell= KSpreadCell::Link_trans;
-  		break;
-  	case Value_trans:
-  		sp_cell=KSpreadCell::Value_trans;
-  		break;
-  	case Value :
-  		sp_cell=KSpreadCell::Value;
-  		break;
-  	default:
-  		sp_cell=KSpreadCell::ALL;
-  	}
-  	
-  switch(op)
-  	{
-  	case Any:
-  		op_cell=KSpreadCell::Any;
-  		break;
-  	case Add:
-  		op_cell=KSpreadCell::Add;
-  		break;
-  	case Mul:
-  		op_cell= KSpreadCell::Mul;
-  		break;
-  	case Sub:
-  		op_cell= KSpreadCell::Sub;
-  		break;
-  	case Div:
-  		op_cell= KSpreadCell::Div;
-  		break;
-  	}		
-  		
-
-  // DOC
-  if ( !parser.open( "DOC", tag ) )
-  {
-    cerr << "Missing DOC" << endl;
-    return false;
-  }
-
-  KOMLParser::parseTag( tag.c_str(), name, lst );
-  vector<KOMLAttrib>::const_iterator it = lst.begin();
-  for( ; it != lst.end(); it++ )
-  {
-    if ( (*it).m_strName == "mime" )
+    QDomElement e = doc.documentElement();
+    
+    QDomElement c = e.firstChild().toElement();
+    for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
-      if ( (*it).m_strValue != "application/x-kspread-selection" )
-      {
-	cerr << "Unknown mime type " << (*it).m_strValue << endl;
-	return false;
-      }
+	if ( c.tagName() == "cell" )
+        {
+	    int row = c.attribute( "row" ).toInt() + _yshift;
+	    int col = c.attribute( "column" ).toInt() + _xshift;
+
+	    bool n = FALSE;
+	    KSpreadCell* cell = cellAt( col, row );
+	    if ( ( op == OverWrite && sp == Normal ) || cell->isDefault() )
+	    {
+		cell = new KSpreadCell( this, 0, 0 );
+		n = TRUE;
+	    }
+	    if ( !cell->load( c, _xshift, _yshift, sp, op ) )
+		return FALSE;
+	    if ( n )
+		insertCell( cell );
+	}
     }
-  }
-  // OBJECT
-  while( parser.open( 0L, tag ) )
-  {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
 
-    if ( name == "CELL" )
-    {
-      KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      // ############## Torben
-      // cell->load( parser, lst, _xshift, _yshift,sp_cell,m_strName,op_cell );
-      insertCell( cell );
-    }
-    else
-      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;
+    m_pDoc->setModified( true );
 
-    if ( !parser.close( tag ) )
-    {
-      cerr << "ERR: Closing CELL" << endl;
-      return false;
-    }
-  }
-
-  if ( !parser.close( tag ) )
-  {
-    cerr << "ERR: Closing DOC" << endl;
-    return false;
-  }
-
-  m_pDoc->setModified( true );
-
-  return true;
+    return true;
 }
 
 void KSpreadTable::deleteCells( int _left, int _top, int _right, int _bottom )
@@ -3407,28 +3319,26 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen&
   */
 }
 
-bool KSpreadTable::saveCellRect( ostream &out, const QRect &_rect )
+QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 {
-  out << "<?xml version=\"1.0\"?>" << endl;
-  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KSpread"
-      << "\" mime=\"" << "application/x-kspread-selection" << "\" >" << endl;
-
-  // Save all cells.
-  QIntDictIterator<KSpreadCell> it( m_dctCells );
-  for ( ; it.current(); ++it )
-  {
-    if ( !it.current()->isDefault() )
+    QDomDocument doc( "spreadsheet-snippet" );
+    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    QDomElement spread = doc.createElement( "spreadsheet-snippet" );
+    doc.appendChild( spread );
+    
+    // Save all cells.
+    QIntDictIterator<KSpreadCell> it( m_dctCells );
+    for ( ; it.current(); ++it )
     {
-      QPoint p( it.current()->column(), it.current()->row() );
-      // ########## Torben
-      // if ( _rect.contains( p ) )
-      // it.current()->save( out, _rect.left() - 1, _rect.top() - 1 );
+	if ( !it.current()->isDefault() )
+        {
+	    QPoint p( it.current()->column(), it.current()->row() );
+	    if ( _rect.contains( p ) )
+		spread.appendChild( it.current()->save( doc, _rect.left() - 1, _rect.top() - 1 ) );
+	}
     }
-  }
 
-  out << "</DOC>" << endl;
-
-  return true;
+    return doc;
 }
 
 QDomElement KSpreadTable::save( QDomDocument& doc )

@@ -30,9 +30,6 @@ class QDomDocument;
 #include <qcolor.h>
 #include <qfont.h>
 
-#include <iostream.h>
-#include <komlParser.h>
-
 /**
  */
 class KSpreadLayout

@@ -202,46 +202,48 @@ KSpreadTable* KSpreadCanvas::activeTable()
 
 void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 {
-  if ( !_cell.isValid() )
-  {
-    QMessageBox::critical( this, i18n("KSpread Error"), i18n("Invalid cell reference"), i18n("Ok") );
-    return;
-  }
+    if ( !_cell.isValid() )
+    {
+	QMessageBox::critical( this, i18n("KSpread Error"), i18n("Invalid cell reference"), i18n("Ok") );
+	return;
+    }
 
-  KSpreadTable* table = activeTable();
-  if ( _cell.isTableKnown() )
-    table = _cell.table;
-  if ( !table )
-  {
-    QMessageBox::critical( this, i18n("KSpread Error"),
-			   i18n("Unknown table name %1").arg( _cell.tableName ), i18n("Ok" ) );
-    return;
-  }
+    KSpreadTable* table = activeTable();
+    if ( _cell.isTableKnown() )
+	table = _cell.table;
+    if ( !table )
+    {
+	QMessageBox::critical( this, i18n("KSpread Error"),
+			       i18n("Unknown table name %1").arg( _cell.tableName ), i18n("Ok" ) );
+	return;
+    }
 
-  m_pView->setActiveTable( table );
+    m_pView->setActiveTable( table );
 
-  int xpos = table->columnPos( _cell.pos.x(), this );
-  int ypos = table->rowPos( _cell.pos.y(), this );
+    int xpos = table->columnPos( _cell.pos.x(), this );
+    int ypos = table->rowPos( _cell.pos.y(), this );
 
-  if ( xpos < 0 || xpos > width()-100 * zoom() )
-  { //bugfix remove width()/2 =>I don't know why width()/2 added
-    //but now it works
-    slotScrollHorz( xOffset() + xpos );//+width()/2
-  }
+    if ( xpos < 0 || xpos > width()-100 * zoom() )
+    { //bugfix remove width()/2 =>I don't know why width()/2 added
+	//but now it works
+	// slotScrollHorz( xOffset() + xpos );//+width()/2
+	horzScrollBar()->setValue( xOffset() + xpos );
+    }
 
-  if ( ypos < 0 || ypos > height() - 50 * zoom() )
-  { //bugfix remove height()/2 =>I don't know why width()/2 added
-    //but now it works
-    slotScrollVert( yOffset() + ypos  ); // +height()/2
-  }
+    if ( ypos < 0 || ypos > height() - 50 * zoom() )
+    { //bugfix remove height()/2 =>I don't know why width()/2 added
+	//but now it works
+	vertScrollBar()->setValue( yOffset() + ypos );
+	// slotScrollVert( yOffset() + ypos  ); // +height()/2
+    }
 
-  setMarkerColumn( _cell.pos.x() );
-  setMarkerRow( _cell.pos.y() );
+    setMarkerColumn( _cell.pos.x() );
+    setMarkerRow( _cell.pos.y() );
 
-  KSpreadCell *cell = m_pView->activeTable()->cellAt( markerColumn(),markerRow() );
-  if ( cell->text() != 0L )
+    KSpreadCell *cell = m_pView->activeTable()->cellAt( markerColumn(),markerRow() );
+    if ( cell->text() != 0L )
 	m_pView->editWidget()->setText( cell->text() );
- else
+    else
 	m_pView->editWidget()->setText( "" );
 }
 
@@ -261,13 +263,13 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   m_iXOffset = _value;
   scroll( dx, 0 );
   hBorderWidget()->scroll( dx, 0 );
-  if(isgotohorz()==true)
+  /* if(isgotohorz()==true)
   	{
   	setgotohorz(false);
 
   	m_pView->horzScrollBar()->setValue(_value);
   	
-  	}
+  	} */
   showMarker();
 
   activeTable()->enableScrollBarUpdates( true );
@@ -290,11 +292,11 @@ void KSpreadCanvas::slotScrollVert( int _value )
   scroll( 0, dy );
   vBorderWidget()->scroll( 0, dy );
 
-   if(isgotovert()==true)
+  /* if(isgotovert()==true)
   	{
   	setgotovert(false);
   	m_pView->vertScrollBar()->setValue(_value);
-  	}
+  	} */
   showMarker();
 
   activeTable()->enableScrollBarUpdates( true );
@@ -680,8 +682,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( !m_strAnchor.isEmpty() )
   {
     debug("ANCHOR=%s",m_strAnchor.ascii() );
-    setgotovert(true);
-    setgotohorz(true);
+    // setgotovert(true);
+    // setgotohorz(true);
     gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
   }
 
@@ -774,8 +776,8 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
     if ( !activeTable() )
 	return;
 
-    qDebug("------------PAINT EVENT %i,%i %i|%i", _ev->rect().x(), _ev->rect().y(),
-	   _ev->rect().width(), _ev->rect().height() );
+    qDebug("------------PAINT EVENT %i,%i %i|%i widget %i:%i", _ev->rect().x(), _ev->rect().y(),
+	   _ev->rect().width(), _ev->rect().height(), width(), height() );
 
     hideMarker();
 
@@ -788,6 +790,8 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
     QPoint tl = m.map( _ev->rect().topLeft() );
     QPoint br = m.map( _ev->rect().bottomRight() );
 
+    qDebug("Mapped topleft to %i:%i", tl.x(), tl.y() );
+    
     painter.save();
 
     // Clip away children
@@ -872,10 +876,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	if ( m_pEditor )
 	{
-	  setFocus();
-	  m_pView->setText( m_pEditor->text() );
-	  deleteEditor();
-	  m_pEditor = 0;
+	    // Delete the editor first and after that update the document.
+	    // That means we get a syncron repaint after the editor
+	    // widget is gone. Otherwise we may get painting errors.
+	    QString t = m_pEditor->text();
+	    setFocus();
+	    deleteEditor();
+	    m_pView->setText( t );
 	}
 	break;
 	
@@ -886,8 +893,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	if ( m_pEditor )
 	{
-	  m_pView->setText( m_pEditor->text() );
-	  deleteEditor();
+	    QString t = m_pEditor->text();
+	    setFocus();
+	    deleteEditor();
+	    m_pView->setText( t );
 	}
 
 	break;
@@ -896,22 +905,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     	
 	if ( m_pEditor )
 	{
-	    /* if ( m_pEditor->inherits( "KSpreadTextEditor" ) )
-	    {
-		KSpreadTextEditor* tmp = (KSpreadTextEditor*)m_pEditor;
-		if ( tmp->text().length() > tmp->cursorPosition() )
-	        {
-		    m_pEditor->handleKeyPressEvent( _ev );
-		    return;
-		}
-		else
-	        {		
-		    m_pView->setText( m_pEditor->text() );
-		    deleteEditor();
-		}
-		} */
-	    m_pView->setText( m_pEditor->text() );
+	    QString t = m_pEditor->text();
+	    setFocus();
 	    deleteEditor();
+	    m_pView->setText( t );
 	}
 
 	if ( markerColumn() == 0xFFFF )
@@ -935,96 +932,67 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       if ( m_pEditor )
       {
 	deleteEditor();
-	m_pEditor = 0;
 	
 	m_pView->updateEditWidget();
       }
       return;
 
+      // We dont get that key while m_pEditor != 0
     case Key_Home:
-    	tmp=m_pView->activeTable()->tableName() + "!A1" ;
+    	tmp = m_pView->activeTable()->tableName() + "!A1" ;
     	hideMarker();
-    	setgotovert(true);
-    	setgotohorz(true);
+    	// setgotovert(true);
+    	// setgotohorz(true);
     	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
     	showMarker();
     	setFocus();
-    	m_pView->showFormulaToolBar(false);
+    	// m_pView->showFormulaToolBar(false);
     	break;
     	
-    case Key_Prior :
+    case Key_Prior:
     	if ( m_pEditor )
-		{
-	 	 setFocus();
-	  	m_pView->setText( m_pEditor->text() );
-	  	deleteEditor();
-	  	m_pEditor = 0;
-		}
-    	if(markerRow() == 1)
-    		{
-    		m_pView->showFormulaToolBar(false);
-    		return;
-    		}
+        {
+	    QString t = m_pEditor->text();
+	    setFocus();
+	    deleteEditor();
+	    m_pView->setText( t );
+	}
+	
+    	if( markerRow() == 1 )
+	    return;
     		
-    	setgotovert(true);
-    	setgotohorz(true);
-    	
-    	if((markerRow() >1) &&( markerRow()<11))
-    		{
-    		tmp=m_pView->activeTable()->tableName() + "!"+util_columnLabel(markerColumn())+"1";
-    		hideMarker();
-    		gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
-    		showMarker();
-    		setFocus();
-    		}
-    	else
-    		{
-    		tmp=tmp.setNum(markerRow()-10);
-    		tmp=m_pView->activeTable()->tableName() + "!"+util_columnLabel(markerColumn())+tmp;
-    		hideMarker();
-    		gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
-    		showMarker();
-    		setFocus();
-    		}
-    	m_pView->showFormulaToolBar(false);
+    	// setgotovert(true);
+    	// setgotohorz(true);
+
+	tmp = tmp.setNum( QMAX( 0, markerRow() - 10 ) );
+	tmp = m_pView->activeTable()->tableName() + "!" + util_columnLabel( markerColumn() ) + tmp;
+	hideMarker();
+	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+	showMarker();
     	break;
     	
-    	case Key_Next :
+    case Key_Next:
     	if ( m_pEditor )
-		{
-	  	setFocus();
-	  	m_pView->setText( m_pEditor->text() );
-	  	deleteEditor();
-	  	m_pEditor = 0;
-		}
-		
-    	if(markerRow() == 0x7FFF)
-    		{
-    		return;
-    		m_pView->showFormulaToolBar(false);
-    		}
-    	setgotovert(true);
-    	setgotohorz(true);
-    	if((markerRow() >0x7FF5) &&( markerRow()<0x7FFF))
-    		{
-    		tmp=tmp.setNum(0x7FFF,16);
-    		tmp=m_pView->activeTable()->tableName() + "!"+util_columnLabel(markerColumn())+tmp;
-    		hideMarker();
-    		gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
-    		showMarker();
-    		setFocus();
-    		}
-    	else
-    		{
-    		tmp=tmp.setNum(markerRow()+10);
-    		tmp=m_pView->activeTable()->tableName() + "!"+util_columnLabel(markerColumn())+tmp;
-    		hideMarker();
-    		gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
-    		showMarker();
-    		setFocus();
-    		}
-    	m_pView->showFormulaToolBar(false);
+        {
+	    QString t = m_pEditor->text();
+	    setFocus();
+	    deleteEditor();
+	    m_pView->setText( t );
+	}
+   
+	if( markerRow() == 0x7FFF )
+	    return;
+
+    	// setgotovert(true);
+    	// setgotohorz(true);
+    	
+	tmp = tmp.setNum( QMIN( 0x7FFF, markerRow() + 10 ) );
+	tmp = m_pView->activeTable()->tableName() + "!" + util_columnLabel( markerColumn() ) + tmp;
+	hideMarker();
+	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+	showMarker();
     	break;
+
     default:
       // No null character ...
       if ( _ev->ascii() == 0 )
@@ -1180,8 +1148,8 @@ void KSpreadCanvas::createEditor( EditorType ed )
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
 {
-    // qDebug("======================= UPDATE RECT %i,%i %i,%i==================",
-    // _rect.x(), _rect.y(), _rect.width(), _rect.height() );
+    qDebug("======================= UPDATE RECT %i,%i %i,%i==================",
+	   _rect.x(), _rect.y(), _rect.width(), _rect.height() );
 
     KSpreadTable *table = activeTable();
     if ( !table )
@@ -1394,13 +1362,14 @@ void KSpreadCanvas::showMarker( QPainter& _painter)
     drawMarker( &_painter );
 }
 
-// ################ Torben: Not needed any longer
+// Torben: ########### Not needed any more
+
 void KSpreadCanvas::drawCell( KSpreadCell *_cell, int _col, int _row )
 {
-    int left = activeTable()->columnPos( _col );
-    int top = activeTable()->rowPos( _row );
-    int right = left + _cell->extraWidth();
-    int bottom = top + _cell->extraHeight();
+    int left = activeTable()->columnPos( _col ) - m_iXOffset;
+    int top = activeTable()->rowPos( _row ) - m_iYOffset;
+    int right = left + _cell->extraWidth() - m_iXOffset;
+    int bottom = top + _cell->extraHeight() - m_iYOffset;
 
     qDebug("left=%i right=%i extra=%i", left, right, _cell->extraWidth() );
 
@@ -1416,32 +1385,32 @@ void KSpreadCanvas::drawCell( KSpreadCell *_cell, int _col, int _row )
 
 void KSpreadCanvas::ajustArea()
 {
-QRect selection( activeTable()->selectionRect() );
-if(selection.left() != 0 && selection.bottom() == 0x7FFF )
-	{
+    QRect selection( activeTable()->selectionRect() );
+    if( selection.left() != 0 && selection.bottom() == 0x7FFF )
+    {
 	hBorderWidget()->ajustColumn();
-	}
-else if(selection.left() != 0 && selection.right() == 0x7FFF )
-	{
+    }
+    else if(selection.left() != 0 && selection.right() == 0x7FFF )
+    {
 	vBorderWidget()->ajustRow();
-	}
-else if(selection.left() == 0 || selection.top() == 0||
-	selection.bottom() == 0 || selection.right() == 0)
-	{
+    }
+    else if( selection.left() == 0 || selection.top() == 0 ||
+	     selection.bottom() == 0 || selection.right() == 0 )
+    {
 	vBorderWidget()->ajustRow(markerRow());
 	hBorderWidget()->ajustColumn(markerColumn());
-	}
-else
-	{
+    }
+    else
+    {
 	for (int x=selection.left(); x <= selection.right(); x++ )
-		{
-		hBorderWidget()->ajustColumn(x);
-		}
-	for(int y = selection.top(); y <= selection.bottom(); y++ )
-		{
-		vBorderWidget()->ajustRow(y);
-		}
+        {
+	    hBorderWidget()->ajustColumn(x);
 	}
+	for(int y = selection.top(); y <= selection.bottom(); y++ )
+        {
+	    vBorderWidget()->ajustRow(y);
+	}
+    }
 }
 
 /****************************************************************

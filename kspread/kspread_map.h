@@ -30,9 +30,6 @@ class DCOPObject;
 class QDomElement;
 class QDomDocument;
 
-#include <iostream.h>
-#include <komlParser.h>
-
 #include <qlist.h>
 #include <qstring.h>
 #include <qintdict.h>

@@ -92,10 +92,10 @@ public:
 
     KSpreadCellEditor* editor() { return m_pEditor ; }
     void chooseCell( QMouseEvent * _ev );
-    void setgotohorz(bool _gotohorz){m_gotohorz=_gotohorz;}
-    bool isgotohorz(){return m_gotohorz;}
-    void setgotovert(bool _gotovert){m_gotovert=_gotovert;}
-    bool isgotovert(){return m_gotovert;}
+    // void setgotohorz(bool _gotohorz){m_gotohorz=_gotohorz;}
+    // bool isgotohorz(){return m_gotohorz;}
+    // void setgotovert(bool _gotovert){m_gotovert=_gotovert;}
+    // bool isgotovert(){return m_gotovert;}
 
     						
     int chooseMarkerColumn() { return m_i_chooseMarkerColumn; }
@@ -334,8 +334,8 @@ private:
 
     int m_i_chooseMarkerRow;
     int m_i_chooseMarkerColumn;
-    bool m_gotohorz;
-    bool m_gotovert;
+    // bool m_gotohorz;
+    // bool m_gotovert;
 
     /**
      * Is true if the user is to choose a cell.

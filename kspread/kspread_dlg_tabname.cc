@@ -32,7 +32,7 @@
 #include <qlayout.h>
 
 KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QString& _tableName )
-	: QDialog( 0L, _name, true )
+	: QDialog( _parent, _name, true )
 {
    m_pView = _parent;
 
@@ -56,11 +56,9 @@ KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QSt
    m_pClose = new QPushButton( i18n("Cancel"), this );
    grid->addWidget( m_pClose, 1, 1 );
 
-
    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
    connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-   connect( m_pTableName, SIGNAL( returnPressed() ), this, SLOT( slotReturnPressed() ) );
-
+   connect( m_pTableName, SIGNAL( returnPressed() ), this, SLOT( accept() ) );
 }
 
 void KSpreadTableName::slotOk()
@@ -88,11 +86,6 @@ void KSpreadTableName::slotOk()
 void KSpreadTableName::slotClose()
 {
    reject();
-}
-
-void KSpreadTableName::slotReturnPressed()
-{
-   //FIXME handle
 }
 
 #include "kspread_dlg_tabname.moc"

@@ -6,17 +6,17 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_dlg_special__
 #define __kspread_dlg_special__
@@ -24,7 +24,7 @@
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+// #include <qcheckbox.h>
 
 
 class KSpreadView;
@@ -33,33 +33,30 @@ class KSpreadCell;
 
 class KSpreadspecial : public QDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  KSpreadspecial( KSpreadView* parent, const char* name );
+    KSpreadspecial( KSpreadView* parent, const char* name );
 
-  KSpreadTable* table;
 public slots:
-  void slotOk();
-  void slotClose();
-  void slotlink();
-  void slotclick(int id );
+    void slotOk();
+    void slotClose();
+    void slotToggled( bool );
+    
 protected:
-  KSpreadView* m_pView;
+    KSpreadView* m_pView;
 
-  QPushButton* m_pOk;
-  QPushButton* m_pClose;
-  QPushButton* m_link;
-  QRadioButton *rb1;
-  QRadioButton *rb2;
-  QRadioButton *rb3;
-  QRadioButton *rb4;
-  QRadioButton *rb5;
-  QRadioButton *rb6;
-  QRadioButton *rb7;
-  QRadioButton *rb8;
-  QRadioButton *rb9;
-  QRadioButton *rb10;
-  QCheckBox *cb;
+    QPushButton* m_pOk;
+    QPushButton* m_pClose;
+    QRadioButton *rb1;
+    QRadioButton *rb2;
+    QRadioButton *rb3;
+    QRadioButton *rb4;
+    QRadioButton *rb5;
+    QRadioButton *rb6;
+    QRadioButton *rb7;
+    QRadioButton *rb8;
+    QRadioButton *rb9;
+    // QCheckBox *cb;
 };
 
 #endif
