@@ -22,11 +22,13 @@
 #define KEXIQUERYDESIGNERSQL_H
 
 #include <kexiviewbase.h>
+#include <kexiquerypart.h>
 
 class KexiQueryDesignerSQLEditor;
 class KexiQueryDesignerSQLViewPrivate;
 
-/*! The KexiQueryDesignerSQLView class is a view containing SQL text editor 
+//! The KexiQueryDesignerSQLView class for editing Queries in text mode.
+/*! It is a view containing SQL text editor 
  and SQL history/status widget splitted vertically. 
  Depending on user's will, the widget can be in "sql history" 
  mode or in "sql status" mode. */
@@ -44,6 +46,8 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		virtual bool eventFilter ( QObject *o, QEvent *e );
 
 	protected:
+		KexiQueryPart::TempData * tempData() const;
+
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 		void setStatusOk();

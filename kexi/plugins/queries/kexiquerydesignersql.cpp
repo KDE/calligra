@@ -45,7 +45,7 @@
 static bool compareSQL(const QString& sql1, const QString& sql2)
 {
 	//TODO: use reformatting functions here
-	return sql1!=sql2;
+	return sql1.stripWhiteSpace()==sql2.stripWhiteSpace();
 }
 
 //===================
@@ -74,8 +74,11 @@ class KexiQueryDesignerSQLViewPrivate
 		QPixmap statusPixmapOk, statusPixmapErr, statusPixmapInfo;
 		QSplitter *splitter;
 		KToggleAction *action_toggle_history;
-		//! For internal use, this pointer is usually copied to TempData structure, and then cleared.
+		//! For internal use, this pointer is usually copied to TempData structure, 
+		//! when switching out of this view (then it's cleared).
 		KexiDB::QuerySchema *parsedQuery;
+		//! For internal use, statement passed in switching to this view
+		QString origStatement;
 		//! needed to remember height for both modes, beteen switching
 		int heightForStatusMode, heightForHistoryMode;
 		//! helper for slotUpdateMode()
@@ -196,7 +199,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontSt
 	dontStore = true;
 	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
 		QString sqlText = d->editor->text().stripWhiteSpace();
-		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+		KexiQueryPart::TempData * temp = tempData();
 		if (sqlText.isEmpty()) {
 			//special case: empty SQL text
 			if (temp->query) {
@@ -206,24 +209,32 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontSt
 			}
 		}
 		else {
-			//parse SQL text
-			if (!slotCheckQuery()) {
-				if (KMessageBox::warningYesNo(this, "<p>"+i18n("The query you entered is incorrect.")
-					+"</p><p>"+i18n("Do you want to cancel any changes made to this SQL text?")+"</p>"
-					+"</p><p>"+i18n("Answering \"No\" allows you to make corrections.")+"</p>")==KMessageBox::No)
-				{
-					cancelled = true;
-					return false;
-				}
-				else {
-					//do not change original query
-					temp->queryChangedInPreviousView = false;
-					return true;
-				}
+			if (compareSQL(d->origStatement, d->editor->text())) {
+				//statement unchanged! - nothing to do
+				temp->queryChangedInPreviousView = false;
 			}
-			delete temp->query; //safe?
-			temp->query = d->parsedQuery; //new query
-			d->parsedQuery = 0;
+			else {
+				//parse SQL text
+				if (!slotCheckQuery()) {
+					if (KMessageBox::warningYesNo(this, "<p>"+i18n("The query you entered is incorrect.")
+						+"</p><p>"+i18n("Do you want to cancel any changes made to this SQL text?")+"</p>"
+						+"</p><p>"+i18n("Answering \"No\" allows you to make corrections.")+"</p>")==KMessageBox::No)
+					{
+						cancelled = true;
+						return false;
+					}
+					else {
+						//do not change original query
+						temp->queryChangedInPreviousView = false;
+						return true;
+					}
+				}
+				//replace old query schema with new one
+				delete temp->query; //safe?
+				temp->query = d->parsedQuery;
+				d->parsedQuery = 0;
+				temp->queryChangedInPreviousView = true;
+			}
 		}
 	}
 
@@ -252,12 +263,13 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode, bool &cancelled)
 {
 	kdDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
 	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
-		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+		KexiQueryPart::TempData * temp = tempData();
 		if (!temp->query) {
 			//TODO msg
 			return false;
 		}
-		d->editor->setText( mainWin()->project()->dbConnection()->selectStatement( *temp->query ) );
+		d->origStatement = mainWin()->project()->dbConnection()->selectStatement( *temp->query ).stripWhiteSpace();
+		d->editor->setText( d->origStatement );
 	}
 
 /*	if (d->doc && d->doc->schema()) {
@@ -283,7 +295,7 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
 	}
 
 	kdDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
-	KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+	KexiQueryPart::TempData * temp = tempData();
 	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
 	parser->parse( sqlText );
 	delete d->parsedQuery;
@@ -374,6 +386,12 @@ void KexiQueryDesignerSQLView::slotSelectQuery()
 	if (!sql.isEmpty()) {
 		d->editor->setText( sql );
 	}
+}
+
+KexiQueryPart::TempData *
+KexiQueryDesignerSQLView::tempData() const
+{	
+	return static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
 }
 
 /*void KexiQueryDesignerSQLView::slotHistoryHeaderButtonClicked(const QString& buttonIdentifier)

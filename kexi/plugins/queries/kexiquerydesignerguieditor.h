@@ -66,7 +66,9 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		virtual QSize sizeHint() const;
 
 	protected:
-		void initTable();
+
+		void initTableColumns(); //!< Called just once.
+		void initTableRows(); //!< Called to have all rows empty.
 		void addRow(const QString &tbl, const QString &field);
 //		void			restore();
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
@@ -92,7 +94,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		 \return true on proper schema creation. */
 		bool buildSchema(QString *errMsg = 0);
 
-		KexiQueryPart::TempData * tempData();
+		KexiQueryPart::TempData * tempData() const;
 
 		/*! Helper: allocates and initializes new GUI table's row. Doesn't insert it, just returns. */
 		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName) const;
