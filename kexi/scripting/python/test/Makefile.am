@@ -1,15 +1,15 @@
 noinst_LTLIBRARIES = libkrosspythontest.la
 
 libkrosspythontest_la_SOURCES = test.cpp
-libkrosspythontest_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkrosspythontest_la_LDFLAGS = ${PYTHON_FLAGS} $(all_libraries) -Wnounresolved
 
 libkrosspythontest_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
     ../CXX/libkrosspythoncxx.la \
     ../kexidb/libkrosspythonkexidb.la \
-    -lkexidbparser -lkexidb \
-    -l$(PYTHON_LIB)
+    $(KEXI_LIB) \
+    $(PYTHON_LIB)
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
@@ -21,7 +21,7 @@ INCLUDES = \
     -I$(top_srcdir)/test \
     -I$(top_srcdir)/CXX \
     -I$(top_srcdir)/kexidb \
-    -I$(PYTHON_INCLUDE) \
+    $(PYTHON_INCLUDE) \
     $(KEXI_INCLUDE) \
     $(all_includes)
 

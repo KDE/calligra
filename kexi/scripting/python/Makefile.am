@@ -1,11 +1,12 @@
 bin_PROGRAMS = krosspython
 
-export PYTHON_INCLUDE="/usr/include/python2.3"
-export PYTHON_LIB="python2.3"
-#export KEXI_INCLUDE = -I/home/snoopy/cvs/kde/koffice/kexi -I/home/snoopy/cvs/kde/koffice/kexi/kexidb
 export KEXI_INCLUDE = \
     -I$(top_srcdir)/../.. \
     -I$(top_srcdir)/../../kexidb
+
+export KEXI_LIB = \
+    -lkexidbparser \
+    -lkexidb
 
 SUBDIRS = CXX kexidb test .
 
@@ -16,7 +17,7 @@ INCLUDES = \
     -I$(srcdir)/test \
     -I$(srcdir)/CXX \
     -I$(srcdir)/kexidb \
-    -I$(PYTHON_INCLUDE) \
+    $(PYTHON_INCLUDE) \
     $(KEXI_INCLUDE) \
     $(all_includes)
 
@@ -27,11 +28,11 @@ krosspython_LDADD = \
     $(LIB_KDECORE) \
     CXX/libkrosspythoncxx.la \
     test/libkrosspythontest.la \
-    -lkexidbparser -lkexidb \
-    -l$(PYTHON_LIB)
+    $(KEXI_LIB) \
+    $(PYTHON_LIB)
 
 #LDFLAGS = -Xlinker -export-dynamic -rdynamic $(all_libraries)
-krosspython_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+krosspython_LDFLAGS = ${PYTHON_FLAGS} $(all_libraries) $(KDE_RPATH)
 AM_CPPFLAGS = $(all_includes)
 
 METASOURCES = AUTO
