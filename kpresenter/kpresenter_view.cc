@@ -243,6 +243,7 @@ KPresenterView::~KPresenterView()
         config->writeEntry("Sidebar", sidebar->isVisible());
     }
     delete searchDialog;
+    delete presStructView;
     delete rb_oalign;
     delete rb_lbegin;
     delete rb_lend;
