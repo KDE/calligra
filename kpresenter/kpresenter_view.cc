@@ -3295,6 +3295,7 @@ void KPresenterView::updateReadWrite( bool readwrite )
         for (; aIt != aEnd; ++aIt )
             (*aIt)->setEnabled( readwrite );
     }
+    refreshPageButton();
 }
 
 /*======================== setup popup menus ===================*/
@@ -3495,7 +3496,6 @@ void KPresenterView::skipToPage( int num )
 void KPresenterView::refreshPageButton()
 {
     bool state = (currPg > 0);
-
     pgPrev->setEnabled( state );
     actionScreenFirst->setEnabled(state);
     actionScreenPrev->setEnabled(state);
