@@ -423,7 +423,7 @@ void BackDia::selectClip()
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else    
-    fiile = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
+    file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
 #endif
     
     if ( !file.isEmpty() ) {

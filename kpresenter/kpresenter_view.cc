@@ -477,7 +477,7 @@ void KPresenterView::insertClipart()
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else    
-    fiile = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
+    file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
 #endif
     
     if ( !file.isEmpty() ) 
@@ -2544,7 +2544,7 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else    
-    fiile = KFilePreviewDialog::getOpenFileName( fileInfo.dirPath(), i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
+    file = KFilePreviewDialog::getOpenFileName( fileInfo.dirPath(), i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
 #endif
 
     if ( !file.isEmpty() ) 
