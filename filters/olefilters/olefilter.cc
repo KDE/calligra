@@ -149,8 +149,13 @@ void OLEFilter::slotSavePart(
         m_nextPart++;
         partMap.insert(key, id);
         mimeMap.insert(key, mimeType);
+#ifdef __GNUC__
+#warning "KoStore::embed doesn't exist anymore ! Shaheed ? :}"
+#endif
+#if 0
         if (!store->embed(id, storedPart))
             kdError(s_area) << "OLEFilter::slotSavePart(): Could not embed in KoStore!" << endl;
+#endif
         unlink(result.local8Bit());
     }
     //storageId = QFile::encodeName(id);
@@ -288,6 +293,7 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
 
         // Find out the correct file type and create the appropriate filter
         do {
+            kdDebug(s_area) << "OLEFilter::convert(): " << node->name << endl;
             if(node->name=="WordDocument") {
 
                 myFile main, table0, table1, data;
