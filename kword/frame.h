@@ -164,7 +164,7 @@ public:
     virtual void addFrame( KWFrame _frame );
     virtual void addFrame( KWFrame *_frame );
     virtual void delFrame( unsigned int _num );
-    virtual void delFrame( KWFrame *frm );
+    virtual void delFrame( KWFrame *frm, bool remove = TRUE );
     
     virtual int getFrame( int _x, int _y );
     virtual KWFrame *getFrame( unsigned int _num );

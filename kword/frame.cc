@@ -420,7 +420,7 @@ void KWFrameSet::delFrame( unsigned int _num )
 }
 
 /*================================================================*/
-void KWFrameSet::delFrame( KWFrame *frm )
+void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 {
     int _num = frames.findRef( frm );
     if ( _num == -1 )
@@ -439,7 +439,7 @@ void KWFrameSet::delFrame( KWFrame *frm )
         }
     }
 
-    if ( !del )
+    if ( !del || !remove )
         frames.take( _num );
     else
         frames.remove( _num );

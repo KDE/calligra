@@ -324,7 +324,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
     if ( processingType == WP ) {
         int headOffset = 0, footOffset = 0;
 
-        for ( unsigned int j = 0; j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) / 
+        for ( unsigned int j = 0; j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) /
                                                                        static_cast<double>( pageColumns.columns ) ) ); j++ ) {
             if ( j == 0 ) {
                 headOffset = firstHeadOffset;

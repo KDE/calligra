@@ -49,7 +49,8 @@ class KWFrameDia : public QTabDialog
     Q_OBJECT
 
 public:
-    KWFrameDia( QWidget *parent, const char *name, KWFrame *_frame, KWordDocument *_doc, KWPage *_page, int _flags );
+    KWFrameDia( QWidget *parent, const char *name, KWFrame *_frame, KWordDocument *_doc, 
+                KWPage *_page, int _flags, KWFrameSet *fs = 0 );
 
 protected:
     void setupTab1TextFrameSet();
@@ -68,13 +69,14 @@ protected:
     QListView *lFrameSList;
     KRestrictedLine *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
     QLineEdit *eFrameSetName;
-    
+
     KWFrame *frame;
     KRestrictedLine *eRGap;
     int flags;
     KWordDocument *doc;
     KWPage *page;
-
+    KWFrameSet *frameset;
+    
     float oldX, oldY, oldW, oldH;
 
     void closeEvent( QCloseEvent *e )
@@ -83,7 +85,7 @@ protected:
 signals:
     void frameDiaClosed();
     void applyButtonReallyPressed();
-    
+
 protected slots:
     void runNoClicked();
     void runBoundingClicked();

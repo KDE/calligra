@@ -17,6 +17,7 @@ module KWord
       slot void editSelectAll();
       slot void editFind();
       slot void editDeleteFrame();
+      slot void editReconnectFrame();
       
       slot void newView();
       slot void viewFormattingChars();

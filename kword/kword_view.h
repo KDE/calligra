@@ -108,6 +108,7 @@ public:
     virtual void editSelectAll();
     virtual void editFind();
     virtual void editDeleteFrame();
+    virtual void editReconnectFrame();
     
     virtual void newView();
     virtual void viewFormattingChars();
@@ -292,6 +293,7 @@ protected:
     CORBA::Long m_idMenuEdit_SelectAll;
     CORBA::Long m_idMenuEdit_Find;
     CORBA::Long m_idMenuEdit_DeleteFrame;
+    CORBA::Long m_idMenuEdit_ReconnectFrame;
     
     // view menu
     OpenPartsUI::Menu_var m_vMenuView;

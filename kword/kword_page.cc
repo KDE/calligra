@@ -1390,7 +1390,7 @@ void KWPage::editDeleteFrame()
             return;
         if ( QMessageBox::warning( this, i18n( "Delete Frame" ),
                                    i18n( "The selected Frame is the last frame of the Frameset\n%1.\n"
-                                         "If you delet it, the whole Frameset + its Text will be deleted too!\n"
+                                         "If you delete it, the whole Frameset + its Text will be deleted too!\n"
                                          "Do really want to do that?" ).arg( fs->getName() ), 
                                    i18n( "&Yes" ), i18n( "&No" ) ) == 1 )
             return;
@@ -1452,6 +1452,85 @@ void KWPage::deleteTable( KWGroupManager *g )
     recalcCursor();
     repaintScreen( true );
     recalcAll = false;
+
+    if ( blinking )
+        startBlinkCursor();
+}
+
+/*================================================================*/
+void KWPage::editReconnectFrame()
+{
+    if ( mouseMode != MM_EDIT_FRAME ) {
+        QMessageBox::information( this, i18n( "Reconnect Frame" ),
+                                  i18n( "Switch to the frame edit tool, to reconnect a frame" ) );
+        return;
+    }
+    
+    KWFrameSet *fs = 0;
+    KWFrame *frame = 0;
+    for ( unsigned int i = 0;i < doc->getNumFrameSets(); ++i ) {
+        KWFrameSet *f = doc->getFrameSet( i );
+        for ( unsigned int j = 0;j < f->getNumFrames(); ++j ) {
+            KWFrame *_f = f->getFrame( j );
+            if ( _f->isSelected() ) {
+                if ( frame ) {
+                    QMessageBox::information( this, i18n( "Reconnect Frame" ),
+                                              i18n( "You have to select exactly one frame to reconnect it!" ) );
+                    return;
+                }
+                frame = _f;
+                fs = f;
+            }
+        }
+    }
+    
+    if ( !frame || !fs ) {
+        QMessageBox::information( this, i18n( "Return Frame" ),
+                                  i18n( "You have to select exactly one frame to reconnect it!" ) );
+        return; 
+    }
+    
+    if ( fs->getGroupManager() || fs->getFrameType() != FT_TEXT )
+        return;
+    
+    if ( fs->getNumFrames() == 1 ) {
+        if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( fs ) == 0 )
+            return;
+        if ( QMessageBox::warning( this, i18n( "Reconnect Frame" ),
+                                   i18n( "The selected Frame is the last frame of the Frameset\n%1.\n"
+                                         "If you reconnect it to another Frameset, the whole Frameset + its Text will be deleted!\n"
+                                         "Do really want to do that?" ).arg( fs->getName() ), 
+                                   i18n( "&Yes" ), i18n( "&No" ) ) == 1 )
+            return;
+    }
+
+    bool blinking = blinkTimer.isActive();
+    if ( blinking )
+        stopBlinkCursor();
+
+    KWFrameSet *f = doc->getFrameSet( fc->getFrameSet() - 1 );
+    if ( f == fs ) {
+        fc->setFrameSet( 1 );
+        fc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getFirstParag() );
+    }
+    
+    if ( frameDia ) {
+        frameDia->close();
+        disconnect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
+        disconnect( frameDia, SIGNAL( applyButtonPressed() ), this, SLOT( frameDiaClosed() ) );
+        disconnect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
+        disconnect( frameDia, SIGNAL( defaultButtonPressed() ), this, SLOT( frameDiaClosed() ) );
+        delete frameDia;
+        frameDia = 0;
+    }
+
+    frameDia = new KWFrameDia( this, "", frame, doc, this, FD_FRAME_CONNECT | FD_PLUS_NEW_FRAME , fs );
+    connect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
+    connect( frameDia, SIGNAL( applyButtonReallyPressed() ), this, SLOT( frameDiaClosed() ) );
+    connect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
+    connect( frameDia, SIGNAL( defaultButtonPressed() ), this, SLOT( frameDiaClosed() ) );
+    frameDia->setCaption( i18n( "KWord - Reconnect Frame" ) );
+    frameDia->show();
 
     if ( blinking )
         startBlinkCursor();
@@ -3105,6 +3184,7 @@ void KWPage::setupMenus()
     frame_edit_menu->insertItem( i18n( "Properties..." ), this, SLOT( femProps() ) );
     frame_edit_menu->insertSeparator();
     frame_edit_menu->insertItem( i18n( "Delete Frame" ), this, SLOT( editDeleteFrame() ) );
+    frame_edit_menu->insertItem( i18n( "Reconnect Frame" ), this, SLOT( editReconnectFrame() ) );
 }
 
 /*================================================================*/

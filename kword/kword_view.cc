@@ -788,6 +788,12 @@ void KWordView::editDeleteFrame()
 }
 
 /*================================================================*/
+void KWordView::editReconnectFrame()
+{
+    gui->getPaperWidget()->editReconnectFrame();
+}
+
+/*================================================================*/
 void KWordView::newView()
 {
     assert( ( m_pKWordDoc != 0L ) );
@@ -1783,6 +1789,9 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_vMenuEdit->insertSeparator( -1 );
     text = Q2C( i18n( "&Delete Frame" ) );
     m_idMenuEdit_DeleteFrame = m_vMenuEdit->insertItem4( text, this, "editDeleteFrame", 0, -1, -1 );
+
+    text = Q2C( i18n( "&Reconnect Frame..." ) );
+    m_idMenuEdit_ReconnectFrame = m_vMenuEdit->insertItem4( text, this, "editReconnectFrame", 0, -1, -1 );
 
     // View
     text = Q2C( i18n( "&View" ) );

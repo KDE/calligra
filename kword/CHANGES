@@ -1369,3 +1369,8 @@ Reggie, 3.7.1999:
 - Implemented deleting frames, framesets and tables
 - Some minor fixes
 
+Reggie, 4.7.1999:
+-----------------
+- Implemented reconnecting frames
+- Some fixes
+

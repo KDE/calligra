@@ -48,10 +48,12 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWordDocument *_doc, KWPage *_page, int _flags )
+KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWordDocument *_doc, 
+                        KWPage *_page, int _flags, KWFrameSet *fs )
     : QTabDialog( parent, name, true )
 {
     frame = _frame;
+    frameset = fs;
     if ( frame ) {
         QRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
@@ -262,6 +264,8 @@ void KWFrameDia::setupTab3ConnectTextFrames()
             continue;
         if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
              dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
+            continue;
+        if ( frameset == doc->getFrameSet( i ) )
             continue;
         QListViewItem *item = new QListViewItem( lFrameSList );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
@@ -654,6 +658,15 @@ void KWFrameDia::applyChanges()
             }
         }
         int _num = str.toInt() - 1;
+
+        if ( frameset ) {
+            if ( frameset->getNumFrames() > 1 )
+                frameset->delFrame( frame, FALSE );
+            else {
+                frameset->delFrame( frame, FALSE );
+                doc->delFrameSet( frameset );
+            }
+        }
 
         if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() ) {
             doc->getFrameSet( _num )->addFrame( frame );

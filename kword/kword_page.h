@@ -205,6 +205,7 @@ public slots:
     void femProps();
     void tabListChanged( QList<KoTabulator> *_tablist );
     void editDeleteFrame();
+    void editReconnectFrame();
 
 protected slots:
     void frameDiaClosed();
