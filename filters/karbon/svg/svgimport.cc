@@ -209,6 +209,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 				grp->append( path );
 			else
 				m_document.append( path );	
+			m_gc.pop();
 		}
 		else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
 		{
