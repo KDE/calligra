@@ -574,3 +574,12 @@ Reggie 5.12.1999:
 ------------------
 - extend contents to txtobj height and resize txtobj to fit contents
   works now also if the txtobj is in edit mode
+
+Reggie, 9.12.1999:
+-----------------
+- Only printable characters are inserted in the text obj
+- CTRL + E works now - what todo with CTRL + A? It currently does
+  select all, but it could also mean the same as pos1....
+- Cleaned up TODO list
+- Got rid of a warning
+

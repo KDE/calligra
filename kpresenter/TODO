@@ -1,26 +1,21 @@
 BUGS :
 ======
 - Text editor :
-  - copy&paste with mouse (MMB) bugs (ah, QT 2 bug)
-    '^' + 'e' = 'e' !
   - selecting several lines : first line gets unselected
   - When selecting a whole line and changing attribs, a word in next and/or prev line
-    is changed too 
-  - Extend contents to height and so on should also work in dit mode
-- Placing of objects is not precise 
+    is changed too
+- Placing of objects is not precise
 
 TO FINISH:
 ===========
 - Presentation structure editor/viewer
-- Group objects (resizing is fucked up, set properties doesn´t work)
+- Group objects (resizing is fucked up, set properties doesn't work)
 
 MISSING FEATURES / TODO:
 ==============================
-- Restart with last presentation (suggesting it in initial "open" dialog)
-  (using kapp->getConfig)
 - Current "align objects" aligns in relation with the page, is there a
   way to align the h or v centers of several objects ?
-- use libkformula
+- use libkformula (or better, make a KPart out of it)
 - seperate the general configuration and page/slide specific config dialog
   and make 2 out of them (currently it's one, which is confusing)
 - use GM in all dialogs
@@ -32,7 +27,13 @@ MISSING FEATURES / TODO:
 - Make option for txt obj to be abe to set a few colors and automatically use
   them in this order for the paragraphs (like always one in black and one in blue and
   again and again)
- 
+
+
+KOffice in general:
+=======================
+- koTemplateChooseDia:
+  - Restart with last presentation (suggesting it in initial "open" dialog)
+    (using kapp->getConfig)
 
 
 

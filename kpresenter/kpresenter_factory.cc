@@ -73,10 +73,10 @@ KPresenterFactory::~KPresenterFactory()
     delete s_global;
 }
 
-QObject* KPresenterFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
+QObject* KPresenterFactory::create( QObject* parent, const char* name, 
+				    const char*, const QStringList & )
 {
-    if ( parent && !parent->inherits("KoDocument") )
-    {
+    if ( parent && !parent->inherits("KoDocument") ) {
 	qDebug("KPresenterFactory: parent does not inherit KoDocument");
 	return 0;
     }

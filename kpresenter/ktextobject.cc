@@ -4204,7 +4204,8 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 	    cursorChanged = true;
 	} break;
 	default: {
-	    if ( !e->text().isEmpty() ) {
+	    if ( e->text().length() &&
+		 ( !e->ascii() || e->ascii() >= 32) ) {
 		_modified = true;
 		for ( unsigned int i = 0; i < e->text().length(); i++ ) {
 		    if ( insertChar( e->text()[ i ] ) )
@@ -4215,8 +4216,22 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 		    }
 		    cursorChanged = true;
 		}
+	    } else if ( e->state() & ControlButton ) {
+		switch( e->key() ) {
+		case Key_E:
+		    txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(),
+						     paragraphAt( txtCursor->positionParagraph() )->
+						     lineAt( txtCursor->positionLine() )->lineLength()-1  );
+		    cursorChanged = TRUE;
+		    break;
+		case Key_A:
+		    // ######### hmmm, problem with logic here
+// 		    txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
+// 		    cursorChanged = TRUE;
+		    break;
+		}
 	    }
-	};
+	}
 	}
 
 	// if only one line has changed, redraw it
@@ -5674,7 +5689,7 @@ void KTextObject::home()
     txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
     repaint( FALSE );
 }
-    
+
 /*================================================================*/
 void KTextObject::end()
 {
