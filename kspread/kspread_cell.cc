@@ -534,13 +534,25 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
 		    else // It must be a cell identifier
 		    {
 			int col = 0;
+                        //used when there is a lower reference cell
+                        //example =a1
+                        int offset='a'-'A';
 			if ( strlen( buffer ) >= 2 )
 			{
-			    col += 26 * ( buffer[0] - 'A' + 1 );
-			    col += buffer[1] - 'A' + 1;
+                            if(buffer[0] >= 'A' && buffer[0] <= 'Z')
+			        col += 26 * ( buffer[0] - 'A' + 1 );
+                            else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
+                                 col += 26 * ( buffer[0] - 'A' + 1 -offset );
+                            if(buffer[1] >= 'A' && buffer[1] <= 'Z')
+			        col += buffer[1] - 'A' + 1;
+                            else if( buffer[1]>= 'a' && buffer[1] <= 'z' )
+                                 col +=  buffer[1] - 'A' + 1 -offset ;
 			}
 			else
-			    col += buffer[0] - 'A' + 1;
+                            if(buffer[0] >= 'A' && buffer[0] <= 'Z')
+			        col += buffer[0] - 'A' + 1;
+                            else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
+                                col += buffer[0] - 'A' + 1 -offset ;
 			if ( fix1 )
 			    sprintf( buffer, "$%i", col );
 			else

@@ -1739,7 +1739,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
         }
   grid->addMultiCellWidget(tmpQGroupBox,3,4,0,0);
 
-  tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
+  tmpQGroupBox = new QGroupBox( this, "GroupBox_10" );
   tmpQGroupBox->setFrameStyle( 49 );
   tmpQGroupBox->setTitle( i18n("Pattern") );
   tmpQGroupBox->setAlignment( 1 );
@@ -2578,7 +2578,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     QGridLayout *grid = new QGridLayout(this,5,2,15,15);
 
     QGroupBox* tmpQGroupBox;
-    tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+    tmpQGroupBox = new QGroupBox( this, "GroupBox_20" );
     tmpQGroupBox->setFrameStyle( 49 );
     tmpQGroupBox->setTitle( i18n("Pattern") );
     tmpQGroupBox->setAlignment( 1 );
@@ -2681,7 +2681,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     tmpQGroupBox->setFrameStyle( 49 );
     tmpQGroupBox->setAlignment( 1 );
 
-    grid2 = new QGridLayout(tmpQGroupBox,1,1,15,7);
+    grid2 = new QGridLayout(tmpQGroupBox,1,1,14,4);
 
     current = new KSpreadBrushSelect( tmpQGroupBox, "Current" );
     current->setFrameStyle( 50 );
