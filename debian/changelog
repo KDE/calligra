@@ -16,7 +16,7 @@ koffice (1:1.2.90-1) unstable; urgency=low
   * KPresenter now handles transparent images correctly (closes: #184598).
   * KWord HTML export is no longer white-on-white (closes: #184421).
   * Support for openoffice imports/exports (closes: #188779).
-  * Thanks to James Greenhalgh for helping with this build.
+  * Thanks to James Greenhalgh for helping start this build.
 
  -- Ben Burton <bab@debian.org>  Fri,  9 May 2003 17:19:37 +1000
 
