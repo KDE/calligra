@@ -221,7 +221,10 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                 }
              case CSVDialog::DATE:
               cell = table->nonDefaultCell( col + 1, row + 1, false, s );
-              cell->setDate( text );
+#ifdef __GNUC_
+#warning Reimplement setDate             
+#endif			 
+			  //cell->setDate( text );
               cell->setFormatType( ShortDate_format );
               break;
              case CSVDialog::CURRENCY:
