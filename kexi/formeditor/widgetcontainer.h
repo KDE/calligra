@@ -39,7 +39,6 @@ namespace KFormEditor
 
 	class KFORMEDITOR_EXPORT WidgetContainer : public QWidget
 	{
-
 		Q_OBJECT
 
 		public:

@@ -31,7 +31,7 @@ class Widget;
 /**
  * KAction subclass which remembers the matching class name
  */
-class LibActionWidget : public KAction
+class KFORMEDITOR_EXPORT LibActionWidget : public KAction
 {
 	Q_OBJECT
 	public:
@@ -40,7 +40,7 @@ class LibActionWidget : public KAction
 
 	signals:
 		/**
-		 * emmits a signal containing the class name
+		 * emits a signal containing the class name
 		 */
 		void	prepareInsert(const QString &className);
 

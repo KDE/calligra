@@ -34,7 +34,7 @@ namespace KFormDesigner
 	 * a single widget which represents a dot for resizing a widget
 	 * @author Joseph Wenninger
 	 */
-	class ResizeHandle : public QWidget
+	class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 	{
 	Q_OBJECT
 	public:
@@ -62,7 +62,7 @@ namespace KFormDesigner
 	 * a set of resize handles (for resizing widgets)
 	 * @author Joseph Wenninger
 	 */
-	class ResizeHandleSet: public QObject
+	class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 	{
 	Q_OBJECT
 	public:

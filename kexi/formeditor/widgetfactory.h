@@ -37,7 +37,7 @@ class Container;
 /**
  * this class holds properties of widgets
  */
-class Widget
+class KFORMEDITOR_EXPORT Widget
 {
 	public:
 		Widget(WidgetFactory *f=0) {m_factory = f; }
@@ -85,7 +85,7 @@ typedef QPtrList<Widget> WidgetList;
  * avaible to the WidgetLibrary.
  * you can either make a KPart module out of it or call @ref WidgetLibrary::addFactory()
  */
-class WidgetFactory : public QObject
+class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 {
 	Q_OBJECT
 	public:

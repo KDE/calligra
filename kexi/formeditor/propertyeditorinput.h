@@ -25,8 +25,6 @@
 class QLineEdit;
 class QSpinBox;
 
-#define KFORMEDITOR_EXPORT
-
 class KFORMEDITOR_EXPORT PropertyEditorInput : public PropertyEditorEditor
 {
 	Q_OBJECT

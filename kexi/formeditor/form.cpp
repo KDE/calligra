@@ -66,6 +66,7 @@ Form::insertWidget(const QString &c)
 QWidget*
 Form::createInstance(QWidget *parent, bool e)
 {
+    return NULL;//TMP!
 }
 
 QWidget*

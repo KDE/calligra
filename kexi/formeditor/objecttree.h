@@ -40,11 +40,11 @@ typedef QMap<QString, int> Names;
  * @author Lucijan Busch <lucijan@kde.org>
  * this class holds the classanme, properties and children
  **/
-class ObjectTreeItem
+class KFORMEDITOR_EXPORT ObjectTreeItem
 {
 	public:
 		ObjectTreeItem(const QString &className, const QString &name);
-		~ObjectTreeItem();
+		virtual ~ObjectTreeItem();
 
 		ObjectTreeC	children() { return m_children; }
 		PropertyMap	properties() { return m_properties; }
@@ -59,11 +59,11 @@ class ObjectTreeItem
 		PropertyMap	m_properties;
 };
 
-class ObjectTree : public ObjectTreeItem
+class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	public:
 		ObjectTree(const QString &className=QString::null, const QString &name=QString::null);
-		~ObjectTree();
+		virtual ~ObjectTree();
 
 		virtual bool	rename(const QString &name);
 

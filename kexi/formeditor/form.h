@@ -37,7 +37,7 @@ class Container;
  * it holds e.g. the toplevel container, the property buffer the widget library
  * (if no FormDesiger ptr was overgiven)
  **/
-class Form : public QObject
+class KFORMEDITOR_EXPORT Form : public QObject
 {
 	Q_OBJECT
 

@@ -85,9 +85,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if(s == m_container && m_prepare)
 			{
 				int tmpx,tmpy;
-				tmpx = ((float)mev->x()/((float)m_gridX)+0.5);
+				tmpx = int((float)mev->x()/((float)m_gridX)+0.5);
 				tmpx*=m_gridX;
-				tmpy = ((float)mev->y()/((float)m_gridY)+0.5);
+				tmpy = int((float)mev->y()/((float)m_gridY)+0.5);
 				tmpy*=m_gridX;
 
 				m_insertBegin = QPoint(tmpx, tmpy);
@@ -103,7 +103,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(!m_lib)
 					return true;
 
-				char *name = "";
+				const char *name = "";
 				if(tree())
 					name = tree()->genName(m_insertClass).latin1();
 				else
@@ -130,9 +130,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if(s == m_container && m_prepare)
 			{
 				int tmpx,tmpy;
-				tmpx = ((float)mev->x()/((float)m_gridX)+0.5);
+				tmpx = int((float)mev->x()/((float)m_gridX)+0.5);
 				tmpx*=m_gridX;
-				tmpy = ((float)mev->y()/((float)m_gridY)+0.5);
+				tmpy = int((float)mev->y()/((float)m_gridY)+0.5);
 				tmpy*=m_gridX;
 
 				m_insertRect = QRect(m_insertBegin, QPoint(tmpx, tmpy));

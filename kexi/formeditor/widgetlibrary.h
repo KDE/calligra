@@ -49,7 +49,7 @@ typedef QPtrList<KAction> Actions;
  * calles won't borther with factories directly than, but with the Library
  */
 
-class WidgetLibrary : public QObject
+class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 {
 	Q_OBJECT
 

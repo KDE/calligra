@@ -43,7 +43,7 @@ class ObjectTree;
  * of any QWidget
  */
 
-class Container : public QObject
+class KFORMEDITOR_EXPORT Container : public QObject
 {
 	Q_OBJECT
 
