@@ -2502,8 +2502,14 @@ void KPresenterView::setupActions()
     connect( actionTextFontSize, SIGNAL( fontSizeChanged( int ) ),
              this, SLOT( sizeSelected( int ) ) );
 
+#ifdef KFONTACTION_HAS_CRITERIA_ARG
+    actionTextFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
+                                            i18n( "Font Family" ), 0,
+                                            actionCollection(), "text_fontfamily" );
+#else
     actionTextFontFamily = new KFontAction( i18n( "Font Family" ), 0,
                                             actionCollection(), "text_fontfamily" );
+#endif
     connect( actionTextFontFamily , SIGNAL( activated( const QString & ) ),
              this, SLOT( fontSelected( const QString & ) ) );
 
