@@ -86,6 +86,8 @@ public:
     // to have the "goto page" buttons at the bottom of the scrollbars etc.)
     int diffx() const { return m_xOffset; }
     int diffy() const { return m_yOffset; }
+    void setDiffX( int _diffX ) { m_xOffset = _diffX; }
+    void setDiffY( int _diffY ) { m_yOffset = _diffY; }
     void scrollX( int x );
     void scrollY( int y );
 

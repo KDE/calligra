@@ -245,6 +245,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     checkConcavePolygon = false;
     cornersValue = 3;
     sharpnessValue = 0;
+    m_presentationDurationList = QValueList<int>();
 
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
@@ -1336,10 +1337,10 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         float _presFakt = QMIN(_presFaktW,_presFaktH);
         kdDebug(33001) << "KPresenterView::startScreenPres page->setPresFakt " << _presFakt << endl;
 
-        //xOffsetSaved = xOffset;
-        //yOffsetSaved = yOffset;
-        //xOffset = 0;
-        //yOffset = 0;
+        xOffsetSaved = canvasXOffset();
+        yOffsetSaved = canvasYOffset();
+        setCanvasXOffset( 0 );
+        setCanvasYOffset( 0 );
 
         // Center the slide in the screen, if it's smaller...
         pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
@@ -1399,10 +1400,10 @@ void KPresenterView::screenStop()
         m_canvas->hide();
         m_canvas->reparent( pageBase, 0, QPoint( 0, 0 ), true );
         m_canvas->lower();
-        //xOffset = xOffsetSaved;
-        //yOffset = yOffsetSaved;
+        setCanvasXOffset( xOffsetSaved );
+        setCanvasYOffset( yOffsetSaved );
 
-        if ( kPresenterDoc()->presentationDuration() )
+        if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() )
             setPresentationDuration( m_canvas->presPage() - 1 );
 
         m_canvas->stopScreenPresentation();
@@ -1427,9 +1428,9 @@ void KPresenterView::screenStop()
         actionScreenViewPage->setEnabled( true );
         pageBase->resizeEvent( 0 );
 
-        if ( kPresenterDoc()->presentationDuration() ) {
+        if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() ) {
             openThePresentationDurationDialog();
-            m_presentationDurationList.clear();
+            m_presentationDurationList = QValueList<int>();
         }
     }
 }
@@ -3872,6 +3873,18 @@ int KPresenterView::canvasXOffset() const
 int KPresenterView::canvasYOffset() const
 {
     return m_canvas->diffy();
+}
+
+/*================================================================*/
+void KPresenterView::setCanvasXOffset( int _x )
+{
+    m_canvas->setDiffX( _x );
+}
+
+/*================================================================*/
+void KPresenterView::setCanvasYOffset( int _y )
+{
+    m_canvas->setDiffY( _y );
 }
 
 /*================================================================*/

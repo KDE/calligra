@@ -412,6 +412,9 @@ public:
 
     void refreshPageButton();
 
+    void setCanvasXOffset( int _x );
+    void setCanvasYOffset( int _y );
+
 
     void openPopupMenuMenuPage( const QPoint & _point );
     void openPopupMenuTextObject( const QPoint & _point );
@@ -827,6 +830,8 @@ private:
     KPrFindReplace *m_findReplace;
     int m_searchPage;
     int m_initSearchPage;
+
+    int xOffsetSaved, yOffsetSaved; // saved when going fullscreen
 };
 
 #endif
