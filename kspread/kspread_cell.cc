@@ -4447,6 +4447,97 @@ bool KSpreadCell::updateChart(bool refresh)
 
 }
 
+double KSpreadCell::getDouble ()
+{
+  if (isDefault())
+    return 0.0;
+  //(Tomas) umm can't we simply call value().asFloat() ?
+  if (isDate())
+  {
+    QDate date = value().asDate();
+    QDate dummy (1900, 1, 1);
+    return (dummy.daysTo (date) + 1);
+  }
+  if (isTime())
+  {
+    QTime time  = value().asTime();
+    QTime dummy;
+    return dummy.secsTo( time );
+  }
+  if (value().isNumber())
+    return value().asFloat();
+
+  return 0.0;
+}
+
+void KSpreadCell::convertToDouble ()
+{
+  if (isDefault())
+    return;
+  if (isTime() || isDate())
+    setValue (getDouble ());
+  setFactor (1.0);
+  setFormatType (Number_format);
+}
+
+void KSpreadCell::convertToPercent ()
+{
+  if (isDefault())
+    return;
+  if (isTime() || isDate() )
+    setValue (getDouble ());
+  setFactor (100.0);
+  setFormatType (Percentage_format);
+}
+
+void KSpreadCell::convertToMoney ()
+{
+  if (isDefault())
+    return;
+  if (isTime() || isDate() )
+    setValue (getDouble ());
+  setFormatType (Money_format);
+  setFactor( 1.0 );
+  setPrecision (locale()->fracDigits());
+}
+
+void KSpreadCell::convertToTime ()
+{
+  //(Tomas) This is weird. And I mean *REALLY* weird. First, we
+  //generate a time (QTime), then we convert it to text, then
+  //we give the text to the cell and ask it to parse it. Weird...
+  
+  if (isDefault() || isEmpty())
+    return;
+  if (isDate())
+    setValue (getDouble ());
+  setFormatType (SecondeTime_format);
+  QTime time = value().asDateTime().time();
+  int msec = (int) ( (value().asFloat() - (int) value().asFloat()) * 1000 );
+  time = time.addMSecs( msec );
+  setCellText( time.toString() );
+}
+
+void KSpreadCell::convertToDate ()
+{
+  //(Tomas) This is weird. And I mean *REALLY* weird. First, we
+  //generate a date (QDate), then we convert it to text, then
+  //we give the text to the cell and ask it to parse it. Weird...
+  
+  if (isDefault() || isEmpty())
+    return;
+  if (isTime())
+    setValue (getDouble ());
+  setFormatType (ShortDate_format);
+  setFactor( 1.0 );
+
+  //TODO: why did we call setValue(), when we override it here?
+  QDate date(1900, 1, 1);
+  date = date.addDays( (int) value().asFloat() - 1 );
+  date = value().asDateTime().date();
+  setCellText (locale()->formatDate (date, true));
+}
+
 void KSpreadCell::checkTextInput()
 {
   // Goal of this method: determine the value of the cell

@@ -2334,88 +2334,6 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   return;
 }
 
-double KSpreadCanvas::getDouble( KSpreadCell * cell )
-{
-  cell->setFactor( 1.0 );
-  if ( cell->isDate() )
-  {
-    QDate date = cell->value().asDate();
-    QDate dummy(1900, 1, 1);
-    return (dummy.daysTo( date ) + 1);
-  }
-  if ( cell->isTime() )
-  {
-    QTime time  = cell->value().asTime();
-    QTime dummy;
-    return dummy.secsTo( time );
-  }
-  if ( cell->value().isNumber() )
-    return cell->value().asFloat();
-
-  return 0.0;
-}
-
-void KSpreadCanvas::convertToDouble( KSpreadCell * cell )
-{
-  if ( cell->isTime() || cell->isDate() )
-    cell->setValue( getDouble( cell ) );
-  cell->setFactor( 1.0 );
-}
-
-void KSpreadCanvas::convertToPercent( KSpreadCell * cell )
-{
-  if ( cell->isTime() || cell->isDate() )
-    cell->setValue( getDouble( cell ) );
-  cell->setFactor( 100.0 );
-  cell->setFormatType (Percentage_format);
-}
-
-void KSpreadCanvas::convertToMoney( KSpreadCell * cell )
-{
-  if ( cell->isTime() || cell->isDate() )
-    cell->setValue( getDouble( cell ) );
-  cell->setFormatType (Money_format);
-  cell->setFactor( 1.0 );
-  cell->setPrecision( m_pDoc->locale()->fracDigits() );
-}
-
-void KSpreadCanvas::convertToTime( KSpreadCell * cell )
-{
-  //(Tomas) This is weird. And I mean *REALLY* weird. First, we
-  //generate a time (QTime), then we convert it to text, then
-  //we give the text to the cell and ask it to parse it. Weird...
-  
-  if ( cell->isDefault() || cell->isEmpty() )
-    return;
-  if ( cell->isDate() )
-    cell->setValue( getDouble( cell ) );
-  cell->setFormatType (SecondeTime_format);
-  QTime time = cell->value().asDateTime().time();
-  int msec = (int) ( (cell->value().asFloat() - (int) cell->value().asFloat())* 1000 );
-  time = time.addMSecs( msec );
-  cell->setCellText( time.toString() );
-}
-
-void KSpreadCanvas::convertToDate( KSpreadCell * cell )
-{
-  //(Tomas) This is weird. And I mean *REALLY* weird. First, we
-  //generate a date (QDate), then we convert it to text, then
-  //we give the text to the cell and ask it to parse it. Weird...
-  
-  if ( cell->isDefault() || cell->isEmpty() )
-    return;
-  if ( cell->isTime() )
-    cell->setValue( getDouble( cell ) );
-  cell->setFormatType (ShortDate_format);
-  cell->setFactor( 1.0 );
-
-  //TODO: why did we call setValue(), when we override it here?
-  QDate date(1900, 1, 1);
-  date = date.addDays( (int) cell->value().asFloat() - 1 );
-  date = cell->value().asDateTime().date();
-  cell->setCellText (m_pDoc->locale()->formatDate (date, true));
-}
-
 bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 {
   if (!(_ev->state() & ControlButton ))
@@ -2619,30 +2537,30 @@ bool KSpreadCanvas::formatCellByKey (KSpreadCell *cell, int key, const QRect &re
   switch (key)
   {
     case Key_Exclam:
-    convertToDouble( cell );
+    cell->convertToDouble ();
     cell->setFormatType (Number_format);
     cell->setPrecision( 2 );
     break;
 
     case Key_Dollar:
-    convertToMoney( cell );
+    cell->convertToMoney ();
     break;
 
     case Key_Percent:
-    convertToPercent( cell );
+    cell->convertToPercent ();
     break;
 
     case Key_At:
-    convertToTime( cell );
+    cell->convertToTime ();
     break;
 
     case Key_NumberSign:
-    convertToDate( cell );
+    cell->convertToDate ();
     break;
 
     case Key_AsciiCircum:
     cell->setFormatType (Scientific_format);
-    convertToDouble( cell );
+    cell->convertToDouble ();
     cell->setFactor( 1.0 );
     break;
 

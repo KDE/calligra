@@ -475,6 +475,15 @@ public:
 
     void setNumber( double number );
 
+    /** return the cell's value as a double */
+    double getDouble ();
+    
+    void convertToDouble ();
+    void convertToPercent ();
+    void convertToMoney ();
+    void convertToTime ();
+    void convertToDate ();
+
     /**
      * return size of the text
      */

@@ -468,13 +468,6 @@ private:
   /** helper method for formatKeyPress */
   bool formatCellByKey (KSpreadCell *cell, int key, const QRect &rect);
   
-  double getDouble( KSpreadCell * cell );
-  void convertToDouble( KSpreadCell * cell );
-  void convertToPercent( KSpreadCell * cell );
-  void convertToMoney( KSpreadCell * cell );
-  void convertToTime( KSpreadCell * cell );
-  void convertToDate( KSpreadCell * cell );
-
   void processClickSelectionHandle(QMouseEvent *event);
   void processLeftClickAnchor();
 
