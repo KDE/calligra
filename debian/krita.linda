@@ -1,0 +1,2 @@
+Tag: binary-rpath
+Data: /usr/(lib(/kde3)?|bin)/.*
