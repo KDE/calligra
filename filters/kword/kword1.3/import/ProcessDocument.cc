@@ -735,8 +735,8 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
     {
         // Avoid too many warning
         attrProcessingList
-            << AttrProcessing ( "mmpos", "", 0 )
-            << AttrProcessing ( "inchpos", "", 0 )
+            << AttrProcessing ( "mmpos" )
+            << AttrProcessing ( "inchpos" ) // Never ever use it, as this value is mostly wrong (e.g. 1.1009e+15)
             ;
     }
 

@@ -803,7 +803,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             }
             else
             {
-                kdDebug(30520) << "Not language without country: " << lang << endl;
+                kdDebug(30520) << "Language without country: " << lang << endl;
                 strElement += "fo:language=\"";
                 strElement += lang;
                 strElement += "\" ";
@@ -880,17 +880,17 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         << "Table1" // ### TODO: we need an automatic table style
         << "\" >\n";
 
-    // ### TODO: table:table-column (how do we count?)
-    // (Perhaps iterating on the first row to get each width. This would make a two pass generation.)
+    ulong columnNumber = 0;
+
     QValueList<TableCell>::ConstIterator itCell;
     for ( itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); ++itCell )
     {
         if ( (*itCell).row != 1 )
-            break; // We have finished the first line
+            break; // We have finished the first row
         const double width = (*itCell).frame.right - (*itCell).frame.left;
 
-        QString automaticStyle ( makeAutomaticStyleName( tableName + ".Column", m_automaticTextStyleNumber ) );
+        const QString automaticStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
         kdDebug(30520) << "Creating automatic cell style: " << automaticStyle /* << " key: " */ << styleKey << endl;
 
         m_contentAutomaticStyles += "  <style:style";
@@ -899,12 +899,12 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         m_contentAutomaticStyles += ">\n";
         m_contentAutomaticStyles += "   <style:properties ";
         // ### TODO: style:column-width (OOWriter 1.1) or fo:width (OO specification)
-        // ### TODO: and what about style:column-width-rel (same problem, it would be nice if we could skip it)
+        // ### TODO:  and what about style:column-width-rel (same problem, it would be nice if we could skip it)
         m_contentAutomaticStyles += " style:column-width=\"" + QString::number( width ) + "pt\" ";
         m_contentAutomaticStyles += "/>\n";
         m_contentAutomaticStyles += "  </style:style>\n";
 
-
+        // ### TODO: find a way how to use table:number-columns-repeated > 1
         *m_streamOut << "<table:column table:style-name=\""
             << escapeOOText( automaticStyle )
             << "\" table:number-columns-repeated=\"1\"/>\n";
