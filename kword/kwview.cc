@@ -3155,7 +3155,9 @@ void KWView::slotApplyParag()
 
     if( m_paragDlg->isShadowChanged())
     {
-        cmd=edit->setShadowCommand( m_paragDlg->shadowDistance(),m_paragDlg->shadowDirection(), m_paragDlg->shadowColor() );
+        cmd = edit->setShadowCommand( m_paragDlg->shadowDistance(),
+                                      m_paragDlg->shadowDirection(),
+                                      m_paragDlg->shadowColor() );
         if(cmd)
         {
             if ( !macroCommand )
@@ -3165,6 +3167,10 @@ void KWView::slotApplyParag()
     }
     if(macroCommand)
         m_doc->addCommand(macroCommand);
+    // Set "oldLayout" in KoParagDia from the current paragraph's settings
+    // Otherwise "isBlahChanged" will return wrong things when doing A -> B -> A
+    KWParagLayout lay = static_cast<KWTextParag *>(edit->cursor()->parag())->paragLayout();
+    m_paragDlg->setParagLayout( lay );
 }
 
 void KWView::slotHRulerDoubleClicked( double ptpos )
