@@ -183,6 +183,7 @@ void OLEFilter::slotSavePart(
         // ##### FIXME: Ensure that the prefix is handled (Werner)
         QCString mime( mimeType.latin1() );
         KoFilter::ConversionStatus status = mgr->exp0rt( tempFileOUT.name(), mime );
+	mimeType = mime;
         if ( status != KoFilter::OK )
             kdDebug(s_area) << "Huh??? Couldn't convert that file" << endl;
 
