@@ -3018,12 +3018,16 @@ void KWView::spellCheckerReady()
 
         QTextParag * p = textfs->textDocument()->firstParag();
         QString text;
+        bool textIsEmpty=false;
         while ( p ) {
             QString str = p->string()->toString();
             str.truncate( str.length() - 1 ); // damn trailing space
+            textIsEmpty=str.isEmpty();
             text += str + '\n';
             p = p->next();
         }
+        if(textIsEmpty)
+            continue;
         text += '\n';
         m_spell.kspell->check( text );
         return;
