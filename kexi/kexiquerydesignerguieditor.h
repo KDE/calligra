@@ -62,9 +62,11 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		~KexiQueryDesignerGuiEditor();
 
 		QString			getQuery();
+		KexiTableView		*table() { return m_designTable; };
 
 	protected slots:
 		void			slotDropped(QDropEvent *ev);
+		void			slotItemChanged(KexiTableItem *item, int col);
 
 	private:
 		KexiDB			*m_db;

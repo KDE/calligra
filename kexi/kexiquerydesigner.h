@@ -26,6 +26,7 @@
 #include <kexidialogbase.h>
 
 class KAction;
+class KoStore;
 class KexiQueryDesignerGuiEditor;
 class KexiDataTable;
 
@@ -43,7 +44,7 @@ class KexiQueryDesigner : public KexiDialogBase
 	};
 	
 	
-		KexiQueryDesigner(QWidget *parent, const char *name=0);
+		KexiQueryDesigner(QWidget *parent, QString indentifire, const char *name=0);
 		~KexiQueryDesigner();
 		
 		virtual KXMLGUIClient	*guiClient();
@@ -63,6 +64,8 @@ class KexiQueryDesigner : public KexiDialogBase
 		KexiDataTable		*m_view;
 
 		QString			m_query;
+
+		QString			m_identifire;
 		
 		ActivePart		m_currentPart;
 
@@ -73,6 +76,8 @@ class KexiQueryDesigner : public KexiDialogBase
 		void			slotEditState();
 		void			slotSQLState();
 		void			slotViewState();
+
+		void			slotSave(KoStore *store);
 };
 
 #endif

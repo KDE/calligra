@@ -241,8 +241,14 @@ void KexiBrowser::slotAlterTable()
 
 void KexiBrowser::slotCreateQuery()
 {
-	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), "query");
-	kqd->show();
+	bool ok = false;
+	QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query Name:"), "", &ok, this);
+
+	if(ok && name.length() > 0)
+	{
+		KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), "query");
+		kqd->show();
+	}
 }
 
 void KexiBrowser::slotDeleteTable()

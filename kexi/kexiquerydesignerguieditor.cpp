@@ -55,7 +55,9 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent
 	m_designTable->addColumn(i18n("source"), QVariant::StringList, true, QVariant(m_sourceList));
 	m_designTable->addColumn(i18n("field"), QVariant::String, true);
 	m_designTable->addColumn(i18n("shown"), QVariant::Bool, true);
-	m_designTable->addColumn(i18n("condition"), QVariant::String, true);
+	m_designTable->addColumn(i18n("AND condition"), QVariant::String, true);
+	m_designTable->addColumn(i18n("OR condition"), QVariant::String, true);
+
 	
 	m_insertItem = new KexiTableItem(m_designTable);
 	m_insertItem->setValue(0, 0);
@@ -76,8 +78,6 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 
 	QString srcTable = sourceTable->table();
 	QString srcField(ev->encodedData("kexi/field"));
-
-//	m_insertItem->setValue(0, m_sourceList.findIndex(srcField));
 
 	uint i=0;
 	for(QStringList::Iterator it = m_sourceList.begin(); it != m_sourceList.end(); it++)
@@ -100,6 +100,21 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 	newInsert->setValue(2, true);
 	newInsert->setInsertItem(true);
 	m_insertItem = newInsert;
+}
+
+void
+KexiQueryDesignerGuiEditor::slotItemChanged(KexiTableItem *item, int col)
+{
+	if(item->isInsertItem())
+	{
+		item->setInsertItem(false);
+
+		KexiTableItem *newInsert = new KexiTableItem(m_designTable);
+		newInsert->setValue(0, 0);
+		newInsert->setValue(2, true);
+		newInsert->setInsertItem(true);
+		m_insertItem = newInsert;
+	}
 }
 
 QString
@@ -170,49 +185,46 @@ KexiQueryDesignerGuiEditor::getQuery()
 	bool isSrcTable = false;
 	for(InvolvedTables::Iterator it = m_involvedTables.begin(); it != m_involvedTables.end(); it++)
 	{
-//		if(it.data().involveCount > maxCount)
-//		{
-			for(RelationList::Iterator itRel = relations.begin(); itRel != relations.end(); itRel++)
+		for(RelationList::Iterator itRel = relations.begin(); itRel != relations.end(); itRel++)
+		{
+			if((*itRel).srcTable == it.key())
 			{
-				if((*itRel).srcTable == it.key())
+				kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): " << it.key() << " inherits" << endl;
+				for(QMap<QString,QString>::Iterator itS = involvedFields.begin(); itS != involvedFields.end(); itS++)
 				{
-					kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): " << it.key() << " inherits" << endl;
-					for(QMap<QString,QString>::Iterator itS = involvedFields.begin(); itS != involvedFields.end(); itS++)
+					if(itS.key() == it.key())
 					{
-						if(itS.key() == it.key())
-						{
-							isSrcTable = true;
-						
-							maxTable = it.key();
-							maxCount = it.data().involveCount;
-						}
-					}
-				}
-				else if((*itRel).rcvTable == it.key())
-				{
-					kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): " << it.key() << " is inherited" << endl;
-					for(QMap<QString,QString>::Iterator itS = involvedFields.begin(); itS != involvedFields.end(); itS++)
-					{
-						if(itS.key() == it.key())
-						{
-							isSrcTable = false;
-							
-							JoinField jf;
-							jf.sourceField = (*itRel).srcField;
-							jf.eqLeft = (*itRel).srcTable + "." + (*itRel).srcField;
-							jf.eqRight = (*itRel).rcvTable + "." + (*itRel).rcvField;
-							joinFields.append(jf);
-						}
-						
-						if(maxCount < 0)
-						{
-							maxTable = it.key();
-							maxCount = it.data().involveCount;
-						}
+						isSrcTable = true;
+					
+						maxTable = it.key();
+						maxCount = it.data().involveCount;
 					}
 				}
 			}
-
+			else if((*itRel).rcvTable == it.key())
+			{
+				kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): " << it.key() << " is inherited" << endl;
+				for(QMap<QString,QString>::Iterator itS = involvedFields.begin(); itS != involvedFields.end(); itS++)
+				{
+					if(itS.key() == it.key())
+					{
+						isSrcTable = false;
+						
+						JoinField jf;
+						jf.sourceField = (*itRel).srcField;
+						jf.eqLeft = (*itRel).srcTable + "." + (*itRel).srcField;
+						jf.eqRight = (*itRel).rcvTable + "." + (*itRel).rcvField;
+						joinFields.append(jf);
+					}
+					
+					if(maxCount < 0)
+					{
+						maxTable = it.key();
+						maxCount = it.data().involveCount;
+					}
+				}
+			}
+		}
 	}
 
 	//get "forign" tables

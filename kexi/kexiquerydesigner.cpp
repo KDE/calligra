@@ -18,17 +18,24 @@
 */
 
 #include <qlayout.h>
+#include <qdom.h>
 
 #include <klocale.h>
 #include <kaction.h>
 #include <kdebug.h>
 
+#include <koStore.h>
+
 #include <ktexteditor/editorchooser.h>
 #include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/editinterface.h>
 
+#include "kexiapplication.h"
+#include "kexiproject.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexidatatable.h"
+#include "kexitableview.h"
+#include "kexitableitem.h"
 #include "kexiquerydesigner.h"
 
 class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
@@ -64,9 +71,11 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 
 KexiQueryDesigner::EditGUIClient *KexiQueryDesigner::m_editGUIClient=0;
 
-KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, const char *name)
+KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, QString identifire, const char *name)
  : KexiDialogBase(parent, name)
 {
+	m_identifire = identifire;
+
 	setCaption(i18n("Query"));
 	registerAs(DocumentWindow);
 
@@ -93,6 +102,8 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, const char *name)
 	m_view->hide();
 
 //	activateActions();
+//	connect(kexi->project(), SIGNAL(saving()), this, SLOT(slotSave()));
+	connect(kexi->project(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
 
 	QGridLayout *g = new QGridLayout(this);
 	g->addWidget(m_editor,	0,	0);
@@ -187,8 +198,48 @@ KexiQueryDesigner::slotViewState()
 
 			break;
 	}
+}
 
-//	m_currentPart = ViewPart;
+void
+KexiQueryDesigner::slotSave(KoStore *store)
+{
+	kdDebug() << "KexiQueryDesigner::slotSave()" << endl;
+
+	if(m_editor->table()->rows() > 1)
+	{
+		kdDebug() << "KexiQueryDesigner::slotSave() processing information" << endl;
+
+		QDomDocument domDoc("Query");
+		domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+
+		QDomElement itemsElement = domDoc.createElement("Items");
+		domDoc.appendChild(itemsElement);
+
+		kdDebug() << "KexiQueryDesigner::slotSave() have to process " << m_editor->table()->rows() << "items" << endl;
+
+
+		for(int i=0; m_editor->table()->rows(); i++)
+		{
+			KexiTableItem *it = m_editor->table()->itemAt(i);
+//			KexiTableItem *it = new KexiTableItem(m_editor->table());
+			
+			if(!it)
+				return;
+			
+			if(!it->isInsertItem())
+			{
+				QDomElement table = domDoc.createElement("table");
+				itemsElement.appendChild(table);
+				QDomText tTable = domDoc.createTextNode(it->getValue(1).toString());
+				table.appendChild(tTable);
+			}
+
+			i++;
+		}
+
+		kdDebug() << "KexiQueryDesigner::slotSave() XML:\n" << domDoc.toString() << endl;
+
+	}
 }
 
 KexiQueryDesigner::~KexiQueryDesigner()
