@@ -153,7 +153,7 @@ void KWImportStyleDia::loadFile()
         else
         {
             KMessageBox::error( this,
-                                i18n("File is not a KWord file!"),
+                                i18n("This file is not a KWord file!"),
                                 i18n("Import Style"));
         }
         store->close();
@@ -261,7 +261,7 @@ void KWImportFrameTableStyleDia::loadFile()
         else
         {
             KMessageBox::error( this,
-                                i18n("File is not a KWord file!"),
+                                i18n("This file is not a KWord file!"),
                                 i18n("Import Style"));
         }
 
