@@ -91,9 +91,9 @@ void KoTextFormat::setTextUnderlineColor(const QColor &_col)
 
 void KoTextFormat::setShadowText(bool _b)
 {
-    if ( m_bShadowText == _b )
+    if ( d->m_bShadowText == _b )
         return;
-    m_bShadowText=_b;
+    d->m_bShadowText=_b;
     update();
 }
 

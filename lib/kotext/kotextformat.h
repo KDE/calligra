@@ -46,6 +46,7 @@ public:
     int m_refHeight;
     ushort m_screenWidths[ 256 ];
     // m_refWidths[ 256 ] would speed things up too, but ushort might not be enough for it
+    bool m_bShadowText;
 };
 
 
@@ -98,7 +99,7 @@ public:
     void setSpellCheckingLanguage( const QString & _lang);
     QString spellCheckingLanguage() const { return m_spellCheckLanguage;}
 
-    bool shadowText() const { return m_bShadowText;}
+    bool shadowText() const { return d->m_bShadowText;}
     void setShadowText(bool _b);
 
     bool doubleUnderline() const { return (m_underlineLine==U_DOUBLE ); }
@@ -183,6 +184,5 @@ protected:
     UnderlineLineStyle m_underlineLineStyle;
     StrikeOutLineStyle m_strikeOutLineStyle;
     QString m_spellCheckLanguage;
-    bool m_bShadowText;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;

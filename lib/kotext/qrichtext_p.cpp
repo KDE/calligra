@@ -137,7 +137,7 @@ KoTextFormat::KoTextFormat()
     m_underlineLineStyle = U_SOLID;
     m_strikeOutLineStyle = S_SOLID;
     m_spellCheckLanguage = QString::null;
-    m_bShadowText = true;
+    d->m_bShadowText = true;
     ////
 //#ifdef DEBUG_COLLECTION
 //    qDebug("KoTextFormat simple ctor, no addRef, no generateKey ! %p",this);
@@ -210,7 +210,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     m_underlineLineStyle = U_SOLID;
     m_strikeOutLineStyle = S_SOLID;
     m_spellCheckLanguage = QString::null;
-    m_bShadowText = true;
+    d->m_bShadowText = true;
 
     ////
     generateKey();
@@ -252,7 +252,7 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     m_underlineLineStyle = f.m_underlineLineStyle;
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
     m_spellCheckLanguage = f.m_spellCheckLanguage;
-    m_bShadowText = f.m_bShadowText;
+    d->m_bShadowText = f.d->m_bShadowText;
 
     ////
     addRef();
@@ -306,7 +306,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     m_underlineLineStyle = f.m_underlineLineStyle;
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
     m_spellCheckLanguage = f.m_spellCheckLanguage;
-    m_bShadowText = f.m_bShadowText;
+    d->m_bShadowText = f.d->m_bShadowText;
 
     ////
     addRef();
@@ -401,7 +401,7 @@ void KoTextFormat::generateKey()
     k += '/';
     k += m_spellCheckLanguage;
     k += '/';
-    k += QString::number( (int)m_bShadowText);
+    k += QString::number( (int)d->m_bShadowText);
 
     ////
 }
