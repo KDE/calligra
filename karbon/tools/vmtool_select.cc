@@ -78,11 +78,13 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	else
 	{
 		painter->setPen( Qt::DotLine );
+		painter->setZoomFactor( 1 );
 		painter->moveTo( KoPoint( m_fp.x(), m_fp.y() ) );
 		painter->lineTo( KoPoint( m_lp.x(), m_fp.y() ) );
 		painter->lineTo( KoPoint( m_lp.x(), m_lp.y() ) );
 		painter->lineTo( KoPoint( m_fp.x(), m_lp.y() ) );
 		painter->lineTo( KoPoint( m_fp.x(), m_fp.y() ) );
+		painter->setZoomFactor( view->zoomFactor() );
 		painter->strokePath();
 
 		m_state = normal;
