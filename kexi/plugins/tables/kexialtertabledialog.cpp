@@ -142,6 +142,7 @@ void KexiAlterTableDialog::init()
 	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
 	m_view->setAcceptsRowEditAfterCellAccepting( true );
 	m_view->setFilteringEnabled( false );
+	m_view->setEmptyRowInsertingEnabled( true );
 //	setFocusProxy(m_view);
 
 	connect(m_view, SIGNAL(cellSelected(int,int)), 

@@ -64,6 +64,7 @@ void KexiDataTable::init()
 	//! updating actions on start/stop editing
 	connect(m_view, SIGNAL(rowEditStarted(int)), this, SLOT(slotUpdateRowActions(int)));
 	connect(m_view, SIGNAL(rowEditTerminated(int)), this, SLOT(slotUpdateRowActions(int)));
+	connect(m_view, SIGNAL(reloadActions()), this, SLOT(reloadActions()));
 
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(m_view);
@@ -88,6 +89,7 @@ void KexiDataTable::init()
 	
 	initActions();
 //js already done in keximainwindow:	registerDialog();
+	reloadActions();
 }
 
 KexiDataTable::~KexiDataTable()
@@ -97,15 +99,8 @@ KexiDataTable::~KexiDataTable()
 void
 KexiDataTable::initActions()
 {
-//	m_view->initActions(guiClient()->actionCollection());
-//warning FIXME Move this to the table part
-/*
-	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
-	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
-	setXMLFile("kexidatatableui.rc");
-*/
+	plugSharedAction("edit_insert_empty_row", m_view, SLOT(insertEmptyRow()));
 	plugSharedAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
-	plugSharedAction("edit_delete_row", m_view->popup());
 	m_view->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
 
 	plugSharedAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
@@ -113,6 +108,27 @@ KexiDataTable::initActions()
 
 	plugSharedAction("data_save_row",m_view, SLOT(acceptRowEdit()));
 	m_view->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
+}
+
+void KexiDataTable::reloadActions()
+{
+//	m_view->initActions(guiClient()->actionCollection());
+//warning FIXME Move this to the table part
+/*
+	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
+	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
+	setXMLFile("kexidatatableui.rc");
+*/
+	m_view->popup()->clear();
+	if (m_view->isEmptyRowInsertingEnabled())
+		plugSharedAction("edit_insert_empty_row", m_view->popup());
+	else
+		unplugSharedAction("edit_insert_empty_row", m_view->popup());
+
+	if (m_view->isDeleteEnabled())
+		plugSharedAction("edit_delete_row", m_view->popup());
+	else
+		unplugSharedAction("edit_delete_row", m_view->popup());
 
 	slotCellSelected( m_view->currentColumn(), m_view->currentRow() );
 }
@@ -156,9 +172,9 @@ void KexiDataTable::slotCellSelected(int col, int row)
 void KexiDataTable::slotUpdateRowActions(int row)
 {
 	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
+	setAvailable("edit_insert_empty_row", m_view->isEmptyRowInsertingEnabled());
 	setAvailable("data_save_row", m_view->rowEditing());
 }
-
 
 #include "kexidatatable.moc"
 

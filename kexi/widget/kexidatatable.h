@@ -71,10 +71,11 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiViewBase
 		void filter();
 		void slotCellSelected(int col, int row);
 		void slotUpdateRowActions(int row);
+		void reloadActions();
 
 	protected:
-		void init();
 		void initActions();
+		void init();
 
 		KexiTableView *m_view;
 };

@@ -63,11 +63,11 @@ KexiDataTableView::init()
 //	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
 
-void KexiDataTableView::initActions(KActionCollection *col)
+/*void KexiDataTableView::initActions(KActionCollection *col)
 {
 	KexiTableView::initActions(col);
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
-}
+}*/
 
 bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 {

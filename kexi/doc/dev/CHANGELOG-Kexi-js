@@ -317,16 +317,16 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 
 TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
+TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
+
 CC_MAIL: dkite@shaw.ca
 
 2004-03-19
 2004-03-20
 KEXIDB:
 	<KEXIDB FORMAT CHANGED TO 1.2>
-	- 'kexi__obejctdata' table introduced: contains object's data, 
-	   such as form's xml def
-
-		kexi__objectdata
+	- 'kexi__objectdata' table introduced: contains object's data, such as form's xml def
+		SCHEMA: table kexi__objectdata
 			o_id integer REFERENCES kexi__objects(o_id),
 			o_data BLOB,
 			o_sub_id varchar(200)
@@ -335,11 +335,19 @@ KEXIDB:
 	- Field::typeForString(typeString) Field::typeGroupForString(typeGroupString) added
 	- Connection::querySingleString() and Connection::resultExists() added
 	- KexiDB::sqlWhere() utility function added
-
 Alter Table Dialog
 	- Saving field types FIXED
-
-
+CORE:
+	- KexiDialogBase::storeDataBlock() added
+Table View
+	- fixed row's painting for empty table that have only row "for inserting"
+	- vertical record marker: fixed painting during inserting 1st row
+	- function for inserting an empty row above the cursor added (not finished yet)
+CORE:
+	- Shared Actions: unplugSharedAction(action_name, widget) added
+Main window:
+	- "Insert empty row" shared action added
+	- Shared actions are updated on switching between dialog view modes
 
 2004-03-17
 	-KexiProperty: fix for fix :) changes from null string to "" string (or vice-versa) are ignored

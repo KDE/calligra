@@ -53,7 +53,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 
 		~KexiDataTableView();
 
-		virtual void initActions(KActionCollection *col);
+//		virtual void initActions(KActionCollection *col);
 
 		/*! Fills table view with data using \a cursor. \return true on success.
 		*/
