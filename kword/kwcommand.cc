@@ -433,9 +433,7 @@ void KWTextFormatCommand::resizeCustomItem()
     else
     {
         int i;
-        QString text;
-        // Replace the trailing spaces with '\n'. That char carries the formatting for the trailing space.
-        text = start.parag()->string()->toString().mid( start.index(), start.parag()->length() - 1 - start.index() );
+        QString text = start.parag()->string()->toString().mid( start.index(), start.parag()->length() - 1 - start.index() );
         for ( i = start.index(); i < start.parag()->length(); ++i )
             if( start.parag()->at(i)->isCustom())
             {

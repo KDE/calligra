@@ -3423,8 +3423,8 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
             else if ( firstVis->next() )
                 firstVis = firstVis->next();
 #endif
-            // Go up of crect.height()
-            int h = crect.height();
+            // Go up of 90% of crect.height()
+            int h = static_cast<int>( (double)crect.height() * 0.9 );
             QTextParag *s = cursor->parag();
             int y = s->rect().y();
             while ( s ) {
@@ -3435,8 +3435,6 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
 
             if ( !s )
                 s = textFrameSet()->textDocument()->firstParag();
-            else if ( s->next() )
-                s = s->next();
 
             cursor->setParag( s );
             cursor->setIndex( 0 );
@@ -3449,8 +3447,8 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
             QRect crect( m_canvas->contentsX(), m_canvas->contentsY(),
                          m_canvas->visibleWidth(), m_canvas->visibleHeight() );
             crect = m_canvas->viewMode()->viewToNormal( crect );
-            // Go down of crect.height()
-            int h = crect.height();
+            // Go down of 90% of crect.height()
+            int h = static_cast<int>( (double)crect.height() * 0.9 );
 
             QTextParag *s = cursor->parag();
             int y = s->rect().y();
@@ -3465,8 +3463,6 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action )
                 cursor->setParag( s );
                 cursor->setIndex( s->length() - 1 );
             } else {
-                if ( s->prev() )
-                    s = s->prev();
                 cursor->setParag( s );
                 cursor->setIndex( 0 );
             }
