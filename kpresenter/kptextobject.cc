@@ -342,7 +342,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     //kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
     _painter->save();
-    _painter->translate( m_doc->zoomHandler()->zoomItX( bLeft()), m_doc->zoomHandler()->zoomItY( bTop()));
+    _painter->translate( m_doc->zoomHandler()->zoomItX( bLeft()), m_doc->zoomHandler()->zoomItY( bTop()+alignVertical));
     if ( !editingTextObj )
         cg.setBrush( QColorGroup::Base, NoBrush );
     else
@@ -1110,7 +1110,7 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
     if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
         editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
 
-    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, /*ext.width()*/innerWidth(), /*ext.height()*/innerHeight() ) );
+    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, innerWidth(), innerHeight() ) );
     KoTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         if ( !parag->isValid() )
@@ -1136,7 +1136,7 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
 {
     //kdDebug() << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << endl;
     KoZoomHandler *zh = m_doc->zoomHandler();
-    QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()) );
+    QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
     // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( origPix.x(), origPix.y() );
     if ( angle != 0 )
@@ -1710,7 +1710,7 @@ void KPTextView::drawCursor( bool b )
 
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &/*_pos*/)
 {
-    QPoint iPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()) );
+    QPoint iPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
 
     handleMousePressEvent( e, iPoint );
@@ -1912,7 +1912,7 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
         e->ignore();
         return;
     }
-    QPoint iPoint=e->pos() - doc->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()));
+    QPoint iPoint=e->pos() - doc->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
 
     textObject()->emitHideCursor();
@@ -1933,7 +1933,7 @@ void KPTextView::dropEvent( QDropEvent * e )
     {
         e->acceptAction();
         KoTextCursor dropCursor( textDocument() );
-        QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint( kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()));
+        QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint( kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
         dropPoint=doc->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );

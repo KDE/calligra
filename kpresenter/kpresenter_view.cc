@@ -6534,12 +6534,12 @@ void KPresenterView::alignVerticalBottom()
 
 void KPresenterView::alignVerticalCenter()
 {
-    if ( actionAlignVerticalBottom->isChecked() )
+    if ( actionAlignVerticalCenter->isChecked() )
     {
         m_canvas->alignVertical(KP_CENTER );
     }
     else
-        actionAlignVerticalBottom->setChecked(true);
+        actionAlignVerticalCenter->setChecked(true);
 }
 
 
