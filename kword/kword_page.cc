@@ -140,8 +140,8 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
 
     curTable = 0L;
 
-    setAcceptDrops( TRUE );
-    viewport()->setAcceptDrops( TRUE );
+    setAcceptDrops( FALSE ); // #### enable again when drop event processing has been rewrittem
+    viewport()->setAcceptDrops( FALSE ); // #### enable again when drop event processing has been rewrittem
 
     cursorIsVisible = TRUE;
 
@@ -4605,9 +4605,12 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 
     if ( KWordDrag::canDecode( e ) ) {
 	if ( drop->provides( MIME_TYPE ) ) {
+	    e->ignore();
+	    return;
 	    if ( drop->encodedData( MIME_TYPE ).size() ) {
 		if ( ( drop->source() == this || drop->source() == viewport() ) &&
-		     TRUE /*drop->action() == QDropEvent::Move*/ ) { // #### todo
+		     drop->action() == QDropEvent::Move ) { // #### todo
+		    editPaste( drop->encodedData( MIME_TYPE ), MIME_TYPE );
 		    KWFormatContext oldFc( doc, fc->getFrameSet() );
 		    oldFc = *fc;
 		    doc->deleteSelectedText( fc );	
@@ -4615,13 +4618,16 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 		    *fc = oldFc;
 		    recalcCursor();
 		    pasteLaterData = drop->encodedData( MIME_TYPE );
-		}
-		editPaste( drop->encodedData( MIME_TYPE ), MIME_TYPE );
+		} else
+		    editPaste( drop->encodedData( MIME_TYPE ), MIME_TYPE );
 	    }
 	} else if ( drop->provides( "text/plain" ) ) {
+	    e->ignore();
+	    return;
 	    if ( drop->encodedData( "text/plain" ).size() ) {
 		if ( ( drop->source() == this || drop->source() == viewport() ) &&
-		     TRUE /*drop->action() == QDropEvent::Move*/ ) { // #### todo
+		     drop->action() == QDropEvent::Move ) { // #### todo
+		    editPaste( drop->encodedData( "text/plain" ) );
 		    KWFormatContext oldFc( doc, fc->getFrameSet() );
 		    oldFc = *fc;
 		    doc->deleteSelectedText( fc );	
@@ -4629,8 +4635,8 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 		    *fc = oldFc;
 		    recalcCursor();
 		    pasteLaterData = drop->encodedData( "text/plain" );
-		}
-		editPaste( drop->encodedData( "text/plain" ) );
+		} else 
+		    editPaste( drop->encodedData( "text/plain" ) );
 	    }
 	}
 	e->accept();//Action();

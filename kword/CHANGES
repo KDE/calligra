@@ -1666,3 +1666,8 @@ reggie, 27.12.1999:
   we don't need a call to the XServer (through QFontMetrcis)
   to get the same information again and again => biiig speed 
   improvement
+
+Reggie, 31.12.1999
+----------------
+- Disabled dropping for now as it crashed a lot and needs lots of work
+  to get it really working
