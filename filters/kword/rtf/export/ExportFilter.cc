@@ -27,6 +27,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qfontinfo.h>
+#include <qfontdatabase.h>
 #include <qpicture.h>
 #include <qregion.h> // for #include <kdebugclasses.h>
 #include <qimage.h>
@@ -917,13 +918,13 @@ void RTFWorker::writeFontData(void)
     kdDebug(30515) << "Fonts:" << m_fontList << endl;
     *m_streamOut << "{\\fonttbl";
     uint count;
+    QFontDatabase fontDatabase;
     QStringList::ConstIterator it;
     for (count=0, it=m_fontList.begin();
         it!=m_fontList.end();
         count++, it++)
     {
-        QFontInfo info(*it);
-        QString strLower(info.family().lower());
+        const QString strLower( (*it).lower() );
         *m_streamOut << "{\\f" << count;
         if ( (strLower.find("symbol")>-1) || (strLower.find("dingbat")>-1) )
             *m_streamOut << "\\ftech";
@@ -933,13 +934,14 @@ void RTFWorker::writeFontData(void)
 #if 1
         else
         {
-            // We do not know the font type that we have and we cannot even tell if it is TrueType
+            // We do not know the font type that we have
             *m_streamOut << "\\fnil";
         }
 #else
         else
         // QFontInfo:styleHint() does not guess anything, it just returns what is in the QFont. Nothing put in, nothing gets out.
         {
+            QFontInfo info(*it);
             switch (info.styleHint())
             {
             case QFont::SansSerif:
@@ -966,9 +968,9 @@ void RTFWorker::writeFontData(void)
             }
         }
 #endif
-        // ### TODO: check if QFontInfo::fixedPitch is really working
-        *m_streamOut << "\\fprq" << (info.fixedPitch()?1:2) << " "; // font definition
-        *m_streamOut << escapeRtfText(info.family()); // ### TODO: does RTF allows brackets in the font names?
+        // ### TODO: \fcharset would be mandatory but Qt3 does not give us the font charset. :-(
+        *m_streamOut << "\\fprq" << ( fontDatabase.isFixedPitch( *it ) ? 1 : 2 ) << " "; // font definition
+        *m_streamOut << escapeRtfText( *it );
         *m_streamOut <<  ";}" << m_eol; // end font table entry
     }
     *m_streamOut << "}"; // end of font table
