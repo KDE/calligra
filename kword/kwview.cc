@@ -2495,7 +2495,7 @@ void KWView::insertFootNoteEndNote()
     if ( start == -1 )
     {
         KMessageBox::sorry( this,
-                            i18n( "Sorry, you can only insert footnotes or "
+                            i18n( "You can only insert footnotes or "
                                   "endnotes into the first frameset."),
                             i18n("Insert Footnote/Endnote"));
     } else {
@@ -2793,7 +2793,7 @@ void KWView::formatFrameSet()
     }
     else // Should never happen, the action is disabled
         KMessageBox::sorry( this,
-                            i18n("Sorry, you have to select a frame first."),
+                            i18n("You must select a frame first."),
                             i18n("Format Frameset"));
 }
 

@@ -737,7 +737,7 @@ void KPresenterView::toolsDiagramm()
         KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
         if (entry.isEmpty())
         {
-            KMessageBox::sorry( this, i18n( "Sorry, no chart component registered" ) );
+            KMessageBox::sorry( this, i18n( "No chart component registered" ) );
             m_canvas->setToolEditMode( TEM_MOUSE );
         }
         else
@@ -758,7 +758,7 @@ void KPresenterView::toolsTable()
         KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
         if (entry.isEmpty())
         {
-            KMessageBox::sorry( this, i18n( "Sorry, no table component registered" ) );
+            KMessageBox::sorry( this, i18n( "No table component registered" ) );
             m_canvas->setToolEditMode( TEM_MOUSE );
         }
         else
@@ -779,7 +779,7 @@ void KPresenterView::toolsFormula()
         KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kformula" );
         if (entry.isEmpty())
         {
-            KMessageBox::sorry( this, i18n( "Sorry, no formula component registered" ) );
+            KMessageBox::sorry( this, i18n( "No formula component registered" ) );
             m_canvas->setToolEditMode( TEM_MOUSE );
         }
         else

@@ -245,7 +245,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
          break;
 
       case QpPassword:
-        KMessageBox::sorry( 0L, i18n("Sorry, can't open password protected files.\n"
+        KMessageBox::sorry( 0L, i18n("Unable to open password protected files.\n"
                                      "The password algorithm has not been published")
                           );
         return KoFilter::NotImplemented;
