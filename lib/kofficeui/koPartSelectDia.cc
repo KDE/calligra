@@ -17,7 +17,7 @@
     Boston, MA 02111-1307, USA.
 */
 
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 
 #include "koPartSelectDia.h"
 
@@ -54,8 +54,9 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     m_lstEntries = KoDocumentEntry::query();
     QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
-	QListViewItem *item = new QListViewItem( listview, ( *it ).name, ( *it ).comment );
-	item->setPixmap( 0, SmallIcon( ( *it ).icon ) );
+        KService::Ptr serv = (*it).service();
+	QListViewItem *item = new QListViewItem( listview, serv->name(), serv->comment() );
+	item->setPixmap( 0, SmallIcon( serv->icon() ) );
     }
 
     selectionChanged( 0 );
@@ -73,7 +74,7 @@ KoDocumentEntry KoPartSelectDia::entry()
     if ( listview->currentItem() ) {
 	QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
 	for ( ; it != m_lstEntries.end(); ++it ) {
-	    if ( ( *it ).name == listview->currentItem()->text( 0 ) )
+	    if ( ( *it ).service()->name() == listview->currentItem()->text( 0 ) )
 		return *it;
 	}
     }

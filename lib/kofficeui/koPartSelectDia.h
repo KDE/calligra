@@ -21,7 +21,7 @@
 #define DlgPartSelect_included
 
 #include <kdialogbase.h>
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 #include <qvaluelist.h>
 
 class QListView;
