@@ -132,6 +132,7 @@ protected:
 
     KoAutoFormatExceptionWidget *abbreviation;
     KoAutoFormatExceptionWidget *twoUpperLetter;
+    QString initialLanguage;
     bool noSignal;
     bool changeLanguage;
 

@@ -606,10 +606,11 @@ void KoAutoFormatDia::initTab3()
     }
     if ( !changeLanguage || noSignal)
     {
-        if ( m_autoFormat.getConfigAutoFormatLanguage( ).isEmpty() )
+        initialLanguage=m_autoFormat.getConfigAutoFormatLanguage( );
+        if ( initialLanguage.isEmpty() )
             autoFormatLanguage->setCurrentItem(0);
         else
-            autoFormatLanguage->setCurrentText(m_autoFormat.getConfigAutoFormatLanguage( ));
+            autoFormatLanguage->setCurrentText(initialLanguage);
     }
 }
 
@@ -918,7 +919,10 @@ void KoAutoFormatDia::slotCancel()
 {
     //force to reload
     if ( autocorrectionEntryChanged )
+    {
+        m_docAutoFormat->configAutoFormatLanguage( initialLanguage);
         m_docAutoFormat->readConfig( true );
+    }
     KDialogBase::slotCancel();
 }
 
@@ -930,6 +934,7 @@ void KoAutoFormatDia::chooseDoubleQuote1()
     {
         pbDoubleQuote1->setText( c );
     }
+
 }
 
 void KoAutoFormatDia::chooseDoubleQuote2()
