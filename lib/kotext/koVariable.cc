@@ -77,7 +77,7 @@ KoVariableDateFormat::KoVariableDateFormat() : KoVariableFormat()
 
 QString KoVariableDateFormat::convert( const QDate & date ) const
 {
-    if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())
+    if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())  // FIXME: "Locale" is I18N !
 	return KGlobal::locale()->formatDate( date,m_bShort );
     return date.toString(m_strFormat);
 }
@@ -111,7 +111,7 @@ void KoVariableTimeFormat::load( const QCString &key )
 
 QString KoVariableTimeFormat::convert( const QTime & time ) const
 {
-    if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())
+    if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())   // FIXME: "Locale" is I18N !
 	return KGlobal::locale()->formatTime( time );
     return time.toString(m_strFormat);
 }
@@ -398,6 +398,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             if(selectLast) {
                 QComboBox *combo= dynamic_cast<DateFormatWidget*>(widget)->combo1;
                 combo->setCurrentItem(combo->count() -1);
+                dynamic_cast<DateFormatWidget*>(widget)->updateLabel();
             }
 
             if(dialog->exec()==QDialog::Accepted)
@@ -421,7 +422,9 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             delete dialog;
             delete kad;
             delete instance;
-            varFormat = coll->format( "DATE"+string );
+            varFormat = coll->format( "DATE"
+                + QCString((subtype == KoDateVariable::VST_DATE_FIX) ? "1" : "0")
+                + string );
             break;
         }
         case VT_TIME: {
