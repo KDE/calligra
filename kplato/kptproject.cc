@@ -18,6 +18,7 @@
 */
 
 #include "kptproject.h"
+#include "kpttask.h"
 
 #include <qdom.h>
 #include <kdebug.h>
@@ -178,7 +179,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
 
 
 bool KPTProject::load(QDomElement &element) {
-    // TODO: Delete old stuff here
+    // Maybe TODO: Delete old stuff here
 
     // Load attributes (TODO: Finish with the rest of them)
     m_name = element.attribute("name");
@@ -192,9 +193,21 @@ bool KPTProject::load(QDomElement &element) {
 	    QDomElement e = list.item(i).toElement();
 
 	    if (e.tagName() == "project") {
-		// TODO: Load the subproject
+		// Load the subproject
+		KPTProject *child = new KPTProject();
+		if (child->load(e))
+		    addChildNode(child);
+		else
+		    // TODO: Complain about this
+		    delete child;
 	    } else if (e.tagName() == "task") {
-		// TODO: Load the task
+		// Load the task
+		KPTTask *child = new KPTTask();
+		if (child->load(e))
+		    addChildNode(child);
+		else
+		    // TODO: Complain about this
+		    delete child;
 	    } else if (e.tagName() == "milestone") {
 		// TODO: Load the milestone
 	    } else if (e.tagName() == "terminalnode") {
@@ -215,11 +228,14 @@ void KPTProject::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("project");
     element.appendChild(me);
 
+    // TODO: Save some more info
     me.setAttribute("name", m_name);
     me.setAttribute("leader", m_leader);
     me.setAttribute("description", m_description);
 
-    // TODO: Save children
+    for (int i=0; i<numChildren(); i++)
+	// Save all children
+	getChildNode(i).save(me);
 }
 
 
