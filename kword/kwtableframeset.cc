@@ -220,8 +220,11 @@ double KWTableFrameSet::leftWithoutBorder()
 /* returns the cell that occupies row, col. */
 KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col )
 {
-    if ( row < m_rowArray.size() )
-        return (*m_rowArray[row])[col];
+    if ( row < m_rowArray.size() ) {
+        Cell* cell = (*m_rowArray[row])[col];
+        if ( cell )
+            return cell;
+    }
     // Emulate the old behaviour of this method: go up or left until
     // finding a merged cell which covers (row,col). Some methods rely
     // on this, but it also makes some other methods look at the same cell
