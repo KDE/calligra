@@ -16,14 +16,15 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kpresenter_view.cc kpresenter_shell.cc kpresenter.cc graphobj.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	jpeg.cc formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
-	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc
+	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
+	kpresenter_utils.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h graphobj.h \
 		backdia.h page.h ktextobject.h styledia.h \
 		jpeg.h formats.h qwmf.h global.h \
 		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
-		pgconfdia.h effectdia.h
+		pgconfdia.h effectdia.h kpresenter_utils.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc graphobj.moc moc \

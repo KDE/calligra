@@ -65,6 +65,7 @@ struct Background
   QList<int> timeParts;
   bool hasSameCPix;
   PageEffect pageEffect;
+  QString pix_data;
 };
 
 // page object

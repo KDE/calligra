@@ -30,6 +30,7 @@
 #include <qlist.h>
 #include <qpntarry.h>
 #include <qfileinf.h>
+#include <qregexp.h>
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -42,6 +43,7 @@
 #include "autoformEdit/atfinterpreter.h"
 #include "qwmf.h"
 #include "global.h"
+#include "kpresenter_utils.h"
 
 /******************************************************************/
 /* class GraphObj                                                 */
@@ -91,6 +93,7 @@ protected:
   void mousePressEvent(QMouseEvent*);                
   void mouseReleaseEvent(QMouseEvent*);
   void mouseMoveEvent(QMouseEvent*);
+  QString toPixString(QString _filename);
 
 private:
 
@@ -108,6 +111,8 @@ private:
   QPixmap origPix;
   ATFInterpreter *atfInterp;
   QWinMetaFile wmf;
+  QString pix_data;
+  QString pix_data_native;
 
 };
 #endif //GRAPHOBJ_H

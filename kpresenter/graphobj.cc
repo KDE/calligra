@@ -38,6 +38,8 @@ GraphObj::GraphObj(QWidget* parent=0,const char* name=0,ObjType _objType=OT_LINE
       atfInterp = new ATFInterpreter(this,fi.baseName());
       atfInterp->load(fileName);
     }
+  pix_data = "";
+  pix_data_native = "";
 }
 
 /*===================== destructor ===============================*/
@@ -64,8 +66,22 @@ QPicture* GraphObj::getPic(int,int,int,int)
 /*======================= load pixmap ============================*/
 void GraphObj::loadPixmap()
 {
-  pix.load(fileName);
-  origPix.load(fileName);
+  if (pix_data.isEmpty())
+    {
+      QPixmap _pix;
+      _pix.load(fileName);
+      _pix.save("/tmp/kpresenter_tmp.xpm","XPM");
+      pix_data = load_pixmap("/tmp/kpresenter_tmp.xpm");
+      pix_data_native = load_pixmap_native_format("/tmp/kpresenter_tmp.xpm");
+      
+      pix.load(fileName);
+      origPix.load(fileName);
+    }
+  else
+    {
+      pix = string_to_pixmap(pix_data);
+      origPix = string_to_pixmap(pix_data);
+    }
 }
 
 /*======================= load clipart ===========================*/
@@ -83,7 +99,8 @@ QPixmap GraphObj::getPix()
   if (width() != pix.width() || height() != pix.height())
     {
       m.scale((float)width()/origPix.width(),(float)height()/origPix.height());
-      pix.operator=(origPix.xForm(m));
+      pix.operator=(QPixmap(origPix));
+      pix = pix.xForm(m);
     }
 
   return pix;
@@ -92,8 +109,12 @@ QPixmap GraphObj::getPix()
 /*======================== set filename ==========================*/
 void GraphObj::setFileName(QString fn)
 {
+  if (fileName == fn) return;
+
   fileName = fn;
   if (objType == OT_AUTOFORM) atfInterp->load(fileName);
+  pix_data = "";
+  pix_data_native = "";
 }
 
 /*========================== save ================================*/
@@ -108,6 +129,8 @@ void GraphObj::save(ostream& out)
       << "\" blue=\"" << oBrush.color().blue() << "\" style=\"" << oBrush.style() << "\"/>" << endl;
   out << indent << "<XRND value=\"" << xRnd << "\"/>" << endl;
   out << indent << "<YRND value=\"" << yRnd << "\"/>" << endl;
+  if (objType == OT_PICTURE)
+    out << indent << "<PICTURE data=\"" << toPixString(fileName) << "\"/>" << endl;
   if (objType != OT_AUTOFORM)
     out << indent << "<FILENAME value=\"" << fileName << "\"/>" << endl;
   else
@@ -155,6 +178,21 @@ void GraphObj::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	}
       
+      // rectType
+      else if (name == "PICTURE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "data")
+		{
+		  pix_data_native = qstrdup((*it).m_strValue.c_str());
+		  pix_data = qstrdup((*it).m_strValue.c_str());
+		}
+	    }
+	}
+
       // pen
       else if (name == "PEN")
 	{
@@ -373,6 +411,56 @@ void GraphObj::mouseMoveEvent(QMouseEvent*)
 {
   // manage hotpoints
 }
+
+/*==================== convert picture to string =================*/
+QString GraphObj::toPixString(QString _filename)
+{
+  if (true) // if save pic in file
+    {
+      if (!pix_data.isEmpty())
+	{
+// 	  QString str = qstrdup(pix_data);
+// 	  str.replace(QRegExp("\x22"),"\xfe");
+// 	  return str;
+	  return pix_data_native;
+	}
+
+      QPixmap pix;
+      pix.load(_filename);
+      
+      pix.save("/tmp/kpresenter_tmp.xpm","XPM");
+      
+      FILE *f = fopen("/tmp/kpresenter_tmp.xpm","r");
+      if (f == 0L)
+	{
+	  warning("Could not open pixmap\n");
+	  return QString();
+	}
+      
+      char buffer[2048];
+      
+      QString str;
+      str = "";
+      QString str2;
+      while(!feof(f))
+	{
+	  int i = fread(buffer,1,2047,f);
+	  if (i > 0)
+	    {
+	      buffer[i] = 0;
+	      str2 = buffer;
+	      str2 = str2.replace(QRegExp("\x22"),"\x1");
+	      str += str2;
+	    }
+	}
+      
+      fclose(f);
+    }
+  else
+    return QString();
+}
+
+
 
 
 

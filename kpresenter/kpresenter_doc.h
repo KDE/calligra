@@ -40,6 +40,7 @@ class KPresenterView_impl;
 #include <qmsgbox.h>
 #include <qstring.h>
 #include <qclipbrd.h>
+#include <qregexp.h>
 
 #include <koPageLayoutDia.h>
 #include <koIMR.h>
@@ -56,6 +57,8 @@ class KPresenterView_impl;
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
+
+#include "kpresenter_utils.h"
 
 #include <iostream.h>
 #include <fstream.h>
@@ -192,6 +195,7 @@ public:
   // background
   void setBackColor(unsigned int,QColor,QColor,BCType);
   void setBackPic(unsigned int,const char*);
+  void setBackPic(unsigned int,const char*,QString);
   void setBackClip(unsigned int,const char*);
   void setBPicView(unsigned int,BackView);
   void setBackType(unsigned int,BackType);
@@ -316,13 +320,22 @@ protected:
   void loadObjects(KOMLParser&,vector<KOMLAttrib>&);
   void loadTxtObj(KOMLParser&,vector<KOMLAttrib>&,KTextObject*);
   void replaceObjs();
+  QString toPixString(Background *_page,QString _filename);
+  int isInPixCache(QString _filename);
   
   // ************ variables ************
+
+  struct PixCache
+  {
+    QString filename;
+    QString pix_string;
+  };
 
   // list of views and children
   QList<KPresenterView_impl> m_lstViews;
   QList<KPresenterChild> m_lstChildren;
   KPresenterView_impl *viewPtr;
+  QList<PixCache> pixCache;
 
   // modified?
   bool m_bModified;

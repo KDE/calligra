@@ -114,6 +114,7 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   objStartY = 0;
   objStartNum = 0;
   setPageLayout(_pageLayout,0,0);
+  pixCache.setAutoDelete(true);
 }
 
 /*====================== constructor =============================*/
@@ -152,6 +153,7 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   objStartY = 0;
   objStartNum = 0;
   insertNewTemplate(0,0,true);
+  pixCache.setAutoDelete(true);
 }
 
 /*====================== destructor ==============================*/
@@ -243,6 +245,7 @@ bool KPresenterDocument_impl::save(const char *_url)
 /*========================== save ===============================*/
 bool KPresenterDocument_impl::save(ostream& out)
 {
+  pixCache.clear();
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
   
@@ -275,6 +278,7 @@ bool KPresenterDocument_impl::save(ostream& out)
     
   setModified(false);
     
+  pixCache.clear();
   return true;
 }
 
@@ -292,8 +296,9 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
 	  << pagePtr->backColor2.green() << "\" blue=\"" << pagePtr->backColor2.blue() << "\"/>" << endl; 
       out << indent << "<BCTYPE value=\"" << pagePtr->bcType << "\"/>" << endl; 
       if (pagePtr->backPic)
-	out << indent << "<BACKPIC value=\"" << pagePtr->backPic << "\"/>" << endl;
-
+	out << indent << "<BACKPIC  data=\"" << toPixString(pagePtr,pagePtr->backPic) << "\" value=\"" 
+	    << pagePtr->backPic << "\"/>" << endl;
+	  
       if (pagePtr->backClip)
 	out << indent << "<BACKCLIP value=\"" << pagePtr->backClip << "\"/>" << endl; 
 
@@ -479,6 +484,8 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
   string tag;
   vector<KOMLAttrib> lst;
   string name;
+
+  pixCache.clear();
 
   KoPageLayout __pgLayout;
   __pgLayout.unit = PG_MM;
@@ -666,7 +673,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	}
     }
 
-  
+  pixCache.clear();
   setPageLayout(__pgLayout,0,0);
   //repaint(true);
   return true;
@@ -836,11 +843,23 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 		  pagePtr = _pageList.last();
 		  KOMLParser::parseTag(tag.c_str(),name,lst);
 		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  
+		  bool openPic = true;
+		  QString _data,_fileName;
+
 		  for(;it != lst.end();it++)
 		    {
-		      if ((*it).m_strName == "value")
+		      if ((*it).m_strName == "data")
 			{
-			  QString _fileName = (*it).m_strValue.c_str();
+			  _data = (*it).m_strValue.c_str();
+			  if (_data.isEmpty())
+			    openPic = true;
+			  else
+			    openPic = false;
+			}
+		      else if ((*it).m_strName == "value")
+			{
+			  _fileName = (*it).m_strValue.c_str();
 			  if (!_fileName.isEmpty())
 			    {
 			      if (int _envVarB = _fileName.find('$') >= 0)
@@ -850,9 +869,13 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 				  _fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
 				}
 			    }
-			  setBackPic(_num,(const char*)_fileName);
 			}
 		    }
+
+		  if (openPic)
+		    setBackPic(_num,(const char*)_fileName);
+		  else
+		    setBackPic(_num,(const char*)_fileName,_data);
 		}
 	      
 	      // backclip
@@ -1477,6 +1500,7 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
   pagePtr->timeParts.setAutoDelete(false);
   pagePtr->timeParts.append((int*)10);
   pagePtr->hasSameCPix = false;
+  pagePtr->pix_data = "";
 
   emit restoreBackColor(_pageNums-1);
   repaint(true);
@@ -1523,7 +1547,49 @@ void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPi
       if (pagePtr->pageNum == pageNum)
 	{
 	  unsigned int i;
-	  
+	  QString fn1(backPic);
+	  QString fn2(pagePtr->backPic);
+	  if (fn1 == fn2) return;
+ 	  
+	  pagePtr->backPic = qstrdup(backPic);
+
+	  for (i = i;i < pageNum;i++)
+	    {
+	      if (_pageList.at(i-1)->backPic == backPic &&
+		  _pageList.at(i-1)->backPicView == pagePtr->backPicView)
+		{
+		  pagePtr->backPix = _pageList.at(i-1)->backPix;
+		  pagePtr->obackPix = _pageList.at(i-1)->obackPix;
+		  break;
+		}
+	    }
+
+	  QPixmap pix;
+	  pix.load(pagePtr->backPic);
+	  pix.save("/tmp/kpresenter_tmp.xpm","XPM");
+	  pagePtr->pix_data = qstrdup(load_pixmap_native_format("/tmp/kpresenter_tmp.xpm"));
+
+	  pagePtr->backPix.load(pagePtr->backPic);
+	  pagePtr->obackPix.load(pagePtr->backPic);
+
+	  //emit restoreBackColor(pageNum-1);
+	  return;
+	}
+    }
+}
+
+/*==================== set background picture ====================*/
+void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPic,QString pix_data)
+{
+  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
+    {
+      if (pagePtr->pageNum == pageNum)
+	{
+	  unsigned int i;
+	  QString fn1(backPic);
+	  QString fn2(pagePtr->backPic);
+	  if (fn1 == fn2) return;
+  
 	  pagePtr->backPic = qstrdup(backPic);
 
 	  for (i = i;i < pageNum;i++)
@@ -1537,8 +1603,10 @@ void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPi
 		}
 	    }
 	  
-	  pagePtr->backPix.load(pagePtr->backPic);
-	  pagePtr->obackPix.load(pagePtr->backPic);
+	  pagePtr->pix_data = qstrdup(pix_data);
+
+	  pagePtr->backPix = string_to_pixmap(pix_data);
+	  pagePtr->obackPix = string_to_pixmap(pix_data);
 	  //emit restoreBackColor(pageNum-1);
 	  return;
 	}
@@ -1569,12 +1637,14 @@ void KPresenterDocument_impl::setBPicView(unsigned int pageNum,BackView picView)
       if (pagePtr->pageNum == pageNum)
 	{
 	  pagePtr->backPicView = picView;
+	  pagePtr->backPix.operator=(QPixmap(pagePtr->obackPix));
 	  if ((picView == BV_ZOOM) && (!pagePtr->backPix.isNull()))
 	    {
 	      QWMatrix m;
 	      m.scale((float)getPageSize(pagePtr->pageNum,0,0).width()/pagePtr->obackPix.width(),
 		      (float)getPageSize(pagePtr->pageNum,0,0).height()/pagePtr->obackPix.height());
-	      pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
+
+	      pagePtr->backPix = pagePtr->backPix.xForm(m);
 	    }
 	  //emit restoreBackColor(pageNum-1);
 	  return;
@@ -2540,4 +2610,84 @@ void KPresenterDocument_impl::replaceObjs()
     }
 }
 
+/*==================== convert picture to string =================*/
+QString KPresenterDocument_impl::toPixString(Background *_page,QString _filename)
+{
+  if (true) // if save pic in file
+    {
+      int ind = isInPixCache(_filename);
+      if (ind != -1)
+	return pixCache.at(ind)->pix_string;
+      else
+	{
+	  if (!_page->pix_data.isEmpty())
+	    {
+// 	      QString str = qstrdup(_page->pix_data);
+// 	      str.replace(QRegExp("\x22"),"\xfe");
+
+// 	      PixCache *pc = new PixCache;
+// 	      pc->filename = qstrdup(_filename);
+// 	      pc->pix_string = qstrdup(str);
+// 	      pixCache.append(pc);
+
+// 	      return str;
+	      return _page->pix_data;
+	    }
+
+	  QPixmap pix;
+	  pix.load(_filename);
+	  
+	  pix.save("/tmp/kpresenter_tmp.xpm","XPM");
+	  
+	  FILE *f = fopen("/tmp/kpresenter_tmp.xpm","r");
+	  if (f == 0L)
+	    {
+	      warning("Could not open pixmap\n");
+	      return QString();
+	    }
+	  
+	  char buffer[2048];
+	  
+	  QString str;
+	  str = "";
+	  QString str2;
+	  while(!feof(f))
+	    {
+	      int i = fread(buffer,1,2047,f);
+	      if (i > 0)
+		{
+		  buffer[i] = 0;
+		  str2 = buffer;
+		  str2 = str2.replace(QRegExp("\x22"),"\x1");
+		  str += str2;
+		}
+	    }
+	  
+	  fclose(f);
+    
+	  PixCache *pc = new PixCache;
+	  pc->filename = qstrdup(_filename);
+	  pc->pix_string = qstrdup(str);
+	  pixCache.append(pc);
+	  
+	  return str;
+	}
+    }
+  else
+    return QString();
+}
+
+/*===================== search pix in pixcache ===================*/
+int KPresenterDocument_impl::isInPixCache(QString _filename)
+{
+  if (!pixCache.isEmpty())
+    {
+      PixCache *pc;
+      for (pc = pixCache.first();pc != 0;pc = pixCache.next())
+	if (pc->filename == _filename) return pixCache.at();
+
+      return -1;
+    }
+  else return -1;
+}
 
