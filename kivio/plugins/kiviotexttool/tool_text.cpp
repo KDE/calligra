@@ -54,6 +54,7 @@ TextTool::TextTool( KivioView* view )
 
 TextTool::~TextTool()
 {
+  delete m_pTextCursor;
 }
 
 

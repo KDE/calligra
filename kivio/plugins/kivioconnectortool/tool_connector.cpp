@@ -54,6 +54,8 @@ ConnectorTool::ConnectorTool( KivioView* view )
 
 ConnectorTool::~ConnectorTool()
 {
+  delete m_pConnectorCursor1;
+  delete m_pConnectorCursor2;
 }
 
 

@@ -94,6 +94,8 @@ void KivioGuideLines::resizeLinesPixmap(QSize s, QPixmap* vLine, QPixmap* hLine,
   p.end();
   hLine->setMask(*hmask);
 
+  delete hmask;
+
   QWMatrix m;
   m.rotate(90);
   QPixmap rpattern = linePattern->xForm(m);
@@ -108,6 +110,7 @@ void KivioGuideLines::resizeLinesPixmap(QSize s, QPixmap* vLine, QPixmap* hLine,
   p.drawTiledPixmap(0,0,1,vmask->height(),*rmask);
   p.end();
   vLine->setMask(*vmask);
+  delete vmask;
 }
 
 void KivioGuideLines::resize()

@@ -497,6 +497,7 @@ QButton* KivioView::newIconButton( const char* file, bool kbutton, QWidget* pare
     pb->setPixmap(*pixmap);
 
   pb->setFixedSize(16,16);
+  delete pixmap;
   return pb;
 }
 
