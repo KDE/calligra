@@ -93,7 +93,10 @@ public:
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged );
 
-    // frameset management
+    // Frame management.
+    virtual const QList<KWFrame> &frameIterator() const;
+
+    // Frameset management
     Cell *getCell( int i ) { return m_cells.at( i ); }
     Cell *getCell( unsigned int row, unsigned int col );
     Cell *getCellByPos( int mx, int my ); // bad naming
@@ -204,6 +207,7 @@ protected:
     bool m_isRendered;
     QList<Cell> m_cells;
     QValueList<int> m_pageBoundaries;
+    mutable QList<KWFrame> m_cellFrames;
     void addCell( Cell *cell );
 };
 

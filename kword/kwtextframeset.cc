@@ -507,7 +507,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
             //kdDebug(32002) << "checkVerticalBreak ok." << endl;
         }
         else // shouldn't happen
-            kdWarning(32002) << "checkVerticalBreak didn't find it !?!?!?!??!?!?!?" << endl;
+            kdWarning(32002) << "checkVerticalBreak didn't find it" << endl;
     }
 
     // ## TODO loop around those three methods until we don't move anymore ?

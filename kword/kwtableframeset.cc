@@ -2,8 +2,6 @@
     Copyright (C) 2001, S.R.Haque (srhaque@iee.org).
     This file is part of the KDE project
 
-#include "kwtableframeset.h"
-
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
@@ -101,6 +99,23 @@ void KWTableFrameSet::addCell( Cell *cell )
     }
 #endif
     m_cells.insert( i, cell );
+}
+
+/*================================================================*/
+const QList<KWFrame> &KWTableFrameSet::frameIterator() const
+{
+    // Initialise the list of frames, and then return it. TBD: cache this?
+    m_cellFrames.clear();
+    QListIterator<Cell> cells( m_cells );
+    for ( ; cells.current() ; ++cells )
+    {
+        QListIterator<KWFrame> frames = cells.current()->frameIterator();
+        for ( ; frames.current() ; ++frames )
+        {
+            m_cellFrames.append( frames.current() );
+        }
+    }
+    return m_cellFrames;
 }
 
 /*================================================================*/

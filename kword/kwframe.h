@@ -310,8 +310,7 @@ public:
     /** retrieve frame from x and y coords (absolute coords) */
     KWFrame *getFrame( int _x, int _y );
     KWFrame *getFrame( unsigned int _num );
-    QListIterator<KWFrame> frameIterator() { return QListIterator<KWFrame>(frames); }
-    const QListIterator<KWFrame> frameIterator() const { return QListIterator<KWFrame>(frames); }
+    virtual const QList<KWFrame> &frameIterator() const { return frames; }
     int getFrameFromPtr( KWFrame *frame );
     unsigned int getNumFrames() { return frames.count(); }
 
