@@ -127,6 +127,7 @@ public slots:
   void emitChanged();
   void emitChanged(const Rect& r);
   void emitHandleChanged();
+  void emitSizeChanged();
 
 signals:
   void pageChanged();

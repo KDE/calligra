@@ -87,6 +87,7 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
   connect (document, SIGNAL (changed (const Rect&)), this, SLOT (updateRegion (const Rect&)));
 
   connect (document, SIGNAL (sizeChanged ()), this, SLOT (docSizeChanged()));
+  connect (document, SIGNAL (pageChanged ()), this, SLOT (docSizeChanged()));
 
   connect (document, SIGNAL (handleChanged ()), this, SLOT (repaint ()));
 //  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
@@ -644,8 +645,10 @@ void Canvas::setupPrinter( KPrinter &printer )
 
 void Canvas::print( KPrinter &printer )
 {
+  printer.setFullPage(true);
   QPainter paint;
   paint.begin (&printer);
+  paint.setClipping (false);
   QValueList<int> pageList;
 #ifndef HAVE_KDEPRINT
   int from = printer.fromPage();
@@ -663,14 +666,12 @@ void Canvas::print( KPrinter &printer )
   QValueList<int>::Iterator it = pageList.begin();
   for ( ; it != pageList.end(); ++it )
   {
+    int pgNum = (*it) - 1;
     if ( it != pageList.begin() )
       printer.newPage();
 
-    int pgNum = (*it) - 1;
     QRect pageRect (0,0,document->pageForIndex(pgNum)->getPaperWidth(), document->pageForIndex(pgNum)->getPaperHeight());
     paint.fillRect( pageRect, document->pageForIndex(pgNum)->bgColor());
-
-    paint.setClipping (false);
     document->pageForIndex(pgNum)->drawContents (paint);
   }
   paint.end ();

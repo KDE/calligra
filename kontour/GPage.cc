@@ -67,6 +67,7 @@ doc(adoc),selHandle(adoc)
   connect(this, SIGNAL(changed(const Rect&)),doc, SLOT(emitChanged(const Rect&)));
   connect(this, SIGNAL(changed()),doc, SLOT(emitChanged()));
   connect(this, SIGNAL(handleChanged()),doc, SLOT(emitHandleChanged()));
+  connect(this, SIGNAL(sizeChanged()),doc, SLOT(emitSizeChanged()));
   initialize ();
 }
 

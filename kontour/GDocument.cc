@@ -118,6 +118,7 @@ void GDocument::setActivePage (GPage *page)
       break;
     }
   }
+  emit pageChanged();
 }
 
 void GDocument::emitChanged()
@@ -128,6 +129,11 @@ void GDocument::emitChanged()
 void GDocument::emitHandleChanged()
 {
   emit handleChanged();
+}
+
+void GDocument::emitSizeChanged()
+{
+  emit sizeChanged();
 }
 
 void GDocument::emitChanged(const Rect& r)
