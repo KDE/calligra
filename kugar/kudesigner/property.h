@@ -43,8 +43,8 @@ enum PropertyType {
 /** Integers that represent the type of the property */
 enum PropertyType {
     StringValue,   /*string*/
-    IntegerValue,   /*integer number*/
-    CheckedValue,  /*only numbers or strings from a list*/
+    IntegerValue,  /*integer number*/
+    ValueFromList, /*only numbers or strings from a list*/
     Color,         /*color*/
     Symbol,        /*unicode symbol's code*/
     FontName,      /*font name - "times new roman"*/
@@ -67,19 +67,19 @@ enum PropertyType {
 class Property {
 public:
     Property() {}
-    Property(int type, QString name, QString value);
+    Property(int type, QString name, QString value=QString::null);
     ~Property();
 
     bool operator<(const Property &prop) const;
 
-    QString name();
+    QString name() const;
     void setName(QString name);
     int type() const;
     void setType(int type);
-    QString value();
+    QString value() const;
     void setValue(QString value);
 
-    static QWidget *editorOfType(int type, QWidget *parent);
+    virtual QWidget *editorOfType();
 
 protected:
     int m_type;
@@ -87,5 +87,19 @@ protected:
     QString m_value;
 };
 
+/** Property with the values that have descriptions. In the combobox
+    descriptions must be displayed, not the values itself.
+ */
+class DescriptionProperty: public Property {
+public:
+    DescriptionProperty(): Property() {}
+    /** map<description, value> <-> map<QString, QString> */
+    DescriptionProperty(QString name, QString value, std::map<QString, QString> v_correspList);
+
+    void setCorrespList(std::map<QString, QString> list);
+    std::map<QString, QString> correspList;
+
+    virtual QWidget *editorOfType();
+};
 
 #endif

@@ -16,7 +16,8 @@
  ***************************************************************************/
 #include <qstring.h>
 #include <qwidget.h>
-#include <qlineedit.h>
+
+#include "propertywidgets.h"
 #include "property.h"
 
 Property::Property(int type, QString name, QString value):
@@ -30,13 +31,13 @@ Property::~Property()
 
 bool Property::operator<(const Property &prop) const
 {
-    if (type() < prop.type())
+    if ((type() < prop.type()) && (name() < prop.name()))
         return true;
     else
         return false;
 }
 
-QString Property::name()
+QString Property::name() const
 {
     return m_name;
 }
@@ -56,41 +57,68 @@ void Property::setType(int type)
     m_type = type;
 }
 
-QString Property::value()
+QString Property::value() const
 {
     return m_value;
 }
 
 void Property::setValue(QString value)
-{
+    {
     m_value = value;
 }
 
 
-QWidget *Property::editorOfType(int type, QWidget *parent)
+QWidget *Property::editorOfType()
 {
-    switch (type)
+/*    switch (type())
     {
         case IntegerValue:
-            return new QLineEdit(parent);
-            break;
+            return new PLineEdit(0);
 
-        case CheckedValue:
         case LineStyle:
-            return new QLineEdit(parent);
-            break;
+            return new PLineEdit(0);
 
         case Color:
-            return new QLineEdit(parent);
-            break;
+            return new PLineEdit(0);
 
         case FontName:
-            return new QLineEdit(parent);
-            break;
+            return new PLineEdit(0);
 
+        case ValueFromList:
         case StringValue:
         case Symbol:
         default:
-            return new QLineEdit(parent);
-    }
+            PLineEdit *l = new PLineEdit(0);
+            l->setValue(value());
+            return l;
+    }*/
+    return 0;
+}
+
+DescriptionProperty::DescriptionProperty(QString name, QString value, std::map<QString, QString> v_correspList):
+    Property(ValueFromList, name, value), correspList(v_correspList)
+{
+    
+}
+
+
+void DescriptionProperty::setCorrespList(std::map<QString, QString> list)
+{
+    correspList = list;
+}
+
+QWidget *DescriptionProperty::editorOfType()
+{
+/*    switch (type())
+    {
+        case ValueFromList:
+            QComboBox *b = new QComboBox(false, 0, 0);
+            for (std::map<QString, QString>::iterator it = corerspList.begin(); it != correspList.end(); ++it)
+            {
+                b->insertItem((*it).first);
+            }
+            break;
+        default:
+            return Property::editorOfType();*/
+    return 0;
 }
