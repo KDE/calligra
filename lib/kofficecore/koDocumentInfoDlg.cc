@@ -131,6 +131,8 @@ KDialogBase *KoDocumentInfoDlg::dialog() const
 void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 {
   QGrid *grid = d->m_dialog->addGridPage( 2, QGrid::Horizontal, i18n( "Author" ) );
+  grid->setMargin(KDialog::marginHint());
+  grid->setSpacing(KDialog::spacingHint());
 
   (void) new QLabel( i18n( "Full Name :" ), grid );
   d->m_leFullName = new QLineEdit( authorInfo->fullName(), grid );
@@ -201,7 +203,9 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
   QGrid *grid = d->m_dialog->addGridPage( 2, QGrid::Horizontal, i18n( "About" ) );
-
+  grid->setMargin(KDialog::marginHint());
+  grid->setSpacing(KDialog::spacingHint());
+  
   (void) new QLabel( i18n( "Title :" ), grid );
   d->m_leDocTitle = new QLineEdit( aboutInfo->title(), grid );
 
