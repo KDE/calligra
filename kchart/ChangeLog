@@ -1,5 +1,9 @@
 2005-02-24    <inge@lysator.liu.se>
 
+	Fix bug 99390:
+	* kchartBackgroundPixmapConfigPage.{h,cc}: Remove the big unused
+	list to the left of the page.
+
 	Fix bug 99999:
 	* kchartWizardLabelsLegendPage.{h,cc}: Remove everything that has
 	to do with second Y axis.

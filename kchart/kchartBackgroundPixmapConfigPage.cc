@@ -58,11 +58,12 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
     QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
 
+#if 0
     QVBoxLayout* left=new QVBoxLayout(10);
     toplevel->addLayout(left,2);
     regionList=new QListBox(this);
     left->addWidget(regionList);
-
+#endif
 
     QVBoxLayout* center = new QVBoxLayout( 10 );
     toplevel->addLayout( center, 2 );
@@ -117,7 +118,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     connect( wallCB, SIGNAL( activated( int ) ),
              this, SLOT( slotWallPaperChanged( int ) ) );
 
-    QVGroupBox* right = new QVGroupBox( i18n( "Configuration" ), this );
+    QVGroupBox* right = new QVGroupBox( i18n( "Wallpaper Configuration" ), this );
     QWhatsThis::add( right, i18n( "In this box, you can set various settings "
                                   "that control how the background image is "
                                   "displayed." ) );
@@ -176,6 +177,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
 void KChartBackgroundPixmapConfigPage::init()
 {
+#if 0
     QStringList lst;
     lst.append(i18n( "Outermost Region" ));
     lst.append(i18n( "Innermost Region" ));
@@ -207,6 +209,7 @@ void KChartBackgroundPixmapConfigPage::init()
     lst.append(i18n( "Footer 3 B" ));
     lst.append(i18n( "Footer 3 C" ));
     regionList->insertStringList(lst);
+#endif
     // PENDING(kalle) Readapt
     //     showSettings( _params->backgroundPixmapName );
 //     intensitySB->setValue( (int)(_params->backgroundPixmapIntensity * 100.0) );

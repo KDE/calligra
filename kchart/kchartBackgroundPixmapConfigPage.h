@@ -63,7 +63,9 @@ private:
     QRadioButton* tiledRB;
     QString wallFile;
     QPixmap wallPixmap;
+#if 0
     QListBox *regionList;
+#endif
     KColorButton* _backgroundCB;	
 };
 
