@@ -182,7 +182,7 @@ public:
     void highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint = true );
     void removeHighlight( bool repaint = true );
 
-    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> &lst );
+    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> &lst, bool forceAllTextFrameSet=false );
 
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.

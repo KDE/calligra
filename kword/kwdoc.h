@@ -370,8 +370,8 @@ public:
     KWFrame *getFirstSelectedFrame() const;
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
 
-    int numberOfTextFrameSet( KWFrameSet* fs );
-    KWFrameSet * textFrameSetFromIndex( unsigned int _num );
+    int numberOfTextFrameSet( KWFrameSet* fs,bool forceAllTextFrameSet );
+    KWFrameSet * textFrameSetFromIndex( unsigned int _num,bool forceAllTextFrameSet );
 
 
     /** Gather all the frames which are on a certain page and return them.

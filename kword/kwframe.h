@@ -434,7 +434,7 @@ public:
      */
     virtual FrameSetType typeAsKOffice1Dot1(void) { return type(); }
 
-    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/ ) {};
+    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool forceAllTextFrameSet = false ) {};
 
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>

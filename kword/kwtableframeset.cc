@@ -1956,10 +1956,10 @@ bool KWTableFrameSet::canRemovePage( int num ) {
     return true;
 }
 
-void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst )
+void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst,bool forceAllTextFrameSet )
 {
     for (unsigned int i =0; i < m_cells.count(); i++) {
-        if (!m_cells.at(i)->textObject()->protectContent())
+        if (!m_cells.at(i)->textObject()->protectContent() ||forceAllTextFrameSet )
             lst.append(m_cells.at(i));
     }
 }

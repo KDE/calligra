@@ -102,7 +102,7 @@ public:
 
     virtual KWordFrameSetIface* dcopObject();
 
-    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/ );
+    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool forceAllTextFrameSet =false  );
 
     // constructor
     KWTableFrameSet( KWDocument *_doc, const QString & name );

@@ -4043,24 +4043,24 @@ int KWDocument::maxZOrder( int pageNum) const
 }
 
 
-int KWDocument::numberOfTextFrameSet( KWFrameSet* fs )
+int KWDocument::numberOfTextFrameSet( KWFrameSet* fs, bool forceAllTextFrameSet )
 {
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
         if(fit.current()->isDeleted()) continue;
-        fit.current()->addTextFrameSets(textFramesets);
+        fit.current()->addTextFrameSets(textFramesets, forceAllTextFrameSet);
     }
     return textFramesets.findRef( static_cast<KWTextFrameSet*>(fs) );
 }
 
-KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num )
+KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num, bool forceAllTextFrameSet )
 {
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
         if(fit.current()->isDeleted()) continue;
-        fit.current()->addTextFrameSets(textFramesets);
+        fit.current()->addTextFrameSets(textFramesets, forceAllTextFrameSet);
     }
     return textFramesets.at( _num );
 
