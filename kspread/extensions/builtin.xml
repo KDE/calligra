@@ -624,7 +624,7 @@
       </Help>
     </Function>
     
-    <Function>	    
+    <Function>
      <Name>hours</Name>
       <Type>Int</Type>
       <Parameter>
@@ -635,6 +635,66 @@
 	<Text>The hours() function returns the value of hour in a time expression.</Text>
 	<Syntax>hours( time)</Syntax>
 	<Example>hours("10:5:2") returns 10</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>isLeapYear</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The function isLeapYear() returns True if the given year is leap.</Text>
+	<Syntax>isLeapYear(year)</Syntax>
+	<Example>isLeapYear(2000) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>daysInMonth</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>month</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The function daysInMonth() returns number of days in the given year and month.</Text>
+	<Syntax>daysInMonth(year; month)</Syntax>
+	<Example>daysInMonth(2000; 2) returns 29</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>daysInYear</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The function daysInYear() returns number of days in the given year.</Text>
+	<Syntax>daysInYear(year)</Syntax>
+	<Example>daysInYear(2000) returns 366</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>weeksInYear</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The function weeksInYear() returns number of weeks in the given year.</Text>
+	<Syntax>weeksInYear(year)</Syntax>
+	<Example>weeksInYear(2000) returns 52</Example>
       </Help>
     </Function>
 

@@ -3867,6 +3867,116 @@ static bool kspreadfunc_iseven( KSContext& context )
   return true;
 }
 
+static bool isLeapYear_helper(int _year)
+{
+    return (((_year % 4) == 0) && ((_year % 100) != 0) || ((_year % 400) == 0));
+}
+
+static bool kspreadfunc_isLeapYear ( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1,"isLeapYear",true ) )
+    return false;
+  bool result=true;
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  if(result)
+  {
+    int nYear = args[0]->intValue();
+    result = isLeapYear_helper(nYear);
+  }
+
+  context.setValue( new KSValue(result));
+
+  return true;
+}
+
+static bool kspreadfunc_daysInYear ( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1,"daysInYear",true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  int nYear = args[0]->intValue();
+  bool leap = isLeapYear_helper(nYear);
+  int result;
+
+  if (leap)
+    result = 366;
+  else
+    result = 365;
+
+  context.setValue( new KSValue(result));
+
+  return true;
+}
+
+static bool kspreadfunc_weeksInYear( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1,"weeksInYear",true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  int nYear = args[0]->intValue();
+  int result;
+  QDate _date(nYear, 1, 1);
+  int nJan1DayOfWeek = _date.dayOfWeek();   //first day of the year
+
+  if ( nJan1DayOfWeek == 4 ) { // Thursday
+        result = 53;
+  } else if ( nJan1DayOfWeek == 3 ) { // Wednesday
+        result = isLeapYear_helper(nYear) ? 53 : 52 ;
+  } else {
+        result = 52;
+  }
+
+  context.setValue( new KSValue(result));
+
+  return true;
+}
+
+static bool kspreadfunc_daysInMonth( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,2,"daysInMonth",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+  {
+    context.setValue( new KSValue( i18n("Err") ) );
+    return true;
+  }
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+  {
+    context.setValue( new KSValue( i18n("Err") ) );
+    return true;
+  }
+
+  static uint aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+  int nYear = args[0]->intValue();
+  int nMonth = args[1]->intValue();
+  int result;
+
+  if ( nMonth != 2)
+    result = aDaysInMonth[nMonth-1];
+  else
+  {
+    if (isLeapYear_helper(nYear))
+        result = aDaysInMonth[nMonth-1] + 1;
+    else
+        result = aDaysInMonth[nMonth-1];
+  }
+
+  context.setValue( new KSValue(result));
+
+  return true;
+}
+
 
 static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result)
 {
@@ -3877,7 +3987,7 @@ static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Pt
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
       {
-	
+
 	if ( !kspreadfunc_count_helper( context, (*it)->listValue(), result ) )
 	  return false;
       }
@@ -4238,6 +4348,10 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ISDATE", new KSValue( new KSBuiltinFunction( module, "ISDATE", kspreadfunc_isdate) ) );
   module->addObject( "hours", new KSValue( new KSBuiltinFunction( module, "hours", kspreadfunc_hours) ) );
   module->addObject( "minutes", new KSValue( new KSBuiltinFunction( module, "minutes", kspreadfunc_minutes) ) );
+  module->addObject( "isLeapYear", new KSValue( new KSBuiltinFunction( module, "isLeapYear", kspreadfunc_isLeapYear) ) );
+  module->addObject( "daysInMonth", new KSValue( new KSBuiltinFunction( module, "daysInMonth", kspreadfunc_daysInMonth) ) );
+  module->addObject( "daysInYear", new KSValue( new KSBuiltinFunction( module, "daysInYear", kspreadfunc_daysInYear) ) );
+  module->addObject( "weeksInYear", new KSValue( new KSBuiltinFunction( module, "weeksInYear", kspreadfunc_weeksInYear) ) );
   module->addObject( "seconds", new KSValue( new KSBuiltinFunction( module, "seconds", kspreadfunc_seconds) ) );
   module->addObject( "ROMAN", new KSValue( new KSBuiltinFunction( module, "ROMAN", kspreadfunc_roman) ) );
   return module;
