@@ -1481,7 +1481,7 @@ void KWTextFrameSet::updateFrames( int flags )
     for ( ; frameIter.current(); ++frameIter )
     {
         // Calculate max width while we're at it
-        //kdDebug(32002) << "KWTextFrameSet::updateFrames frame innerWidth=" << frameIt.current()->innerWidth() << endl;
+        //kdDebug(32002) << "KWTextFrameSet::updateFrames frame " << *frameIter.current() << " innerWidth=" << frameIter.current()->innerWidth() << "pt" << endl;
         width = QMAX( width, m_doc->ptToLayoutUnitPixX( frameIter.current()->innerWidth()));
         if ( flags & SortFrames )
         {
@@ -1492,10 +1492,10 @@ void KWTextFrameSet::updateFrames( int flags )
     }
     if ( width != textDocument()->width() )
     {
-        //kdDebug(32002) << "KWTextFrameSet::updateFrames setWidth " << width << endl;
+        //kdDebug(32002) << "KWTextFrameSet::updateFrames setWidth " << width << " LU pixels." << endl;
         textDocument()->setMinimumWidth( -1, 0 );
         textDocument()->setWidth( width + 1 ); // QRect semantics problem (#32866)
-    } //else kdDebug(32002) << "KWTextFrameSet::updateFrames width already " << width << endl;
+    } //else kdDebug(32002) << "KWTextFrameSet::updateFrames width already " << width << " LU pixels." << endl;
 
     if ( flags & SortFrames )
     {
@@ -1785,9 +1785,11 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
 void KWTextFrameSet::finalize()
 {
     KWFrameSet::finalize();
-    m_textobj->formatMore( 2 ); // just to get the timer going
+    m_textobj->formatMore( 0 ); // just to get the timer going
     // This is important in case of auto-resized frames or table cells,
     // which come from an import filter, which didn't give them the right size.
+    // However it shouldn't start _now_ (so we use 0), because e.g. main frames
+    // don't have the right size yet (KWFrameLayout not done yet).
 }
 
 void KWTextFrameSet::zoom( bool forPrint )
