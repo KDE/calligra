@@ -1,12 +1,10 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="7">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="8">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
   <Action name="extra_webpres"/>
   <Action name="extra_template"/>
   <Action name="extra_defaulttemplate"/>
-  <Separator/>
-  <Action name="extra_layout"/>
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -40,44 +38,7 @@
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
  </Menu>
- <Menu name="Tools"><text>T&amp;ools</text>
-  <Action name="tools_mouse"/>
-  <Separator/>
-  <Action name="tools_line"/>
-  <Action name="tools_rectangle"/>
-  <Action name="tools_circle"/>
-  <Action name="tools_pie"/>
-  <Action name="tools_text"/>
-  <Action name="tools_autoform"/>
-  <Action name="tools_diagramm"/>
-  <Action name="tools_table"/>
-  <Action name="tools_object"/>
- </Menu>
- <Menu name="Text"><text>&amp;Text</text>
-  <Action name="text_font"/>
-  <Action name="text_color"/>
-  <Action name="text_settings"/>
-  <Separator/>
-  <Menu name="Align"><text>&amp;Align</text>
-   <Action name="text_alignleft"/>
-   <Action name="text_aligncenter"/>
-   <Action name="text_alignright"/>
-  </Menu>
-  <Separator/>
-  <Menu name="Type"><text>T&amp;ype</text>
-   <Action name="text_enumList"/>
-   <Action name="text_unsortedList"/>
-   <Action name="text_normalText"/>
-  </Menu>
-  <Separator/>
-  <Action name="text_depthPlus"/>
-  <Action name="text_depthMinus"/>
-  <Separator/>
-  <Action name="text_con2hei"/>
-  <Action name="text_obj2cont"/>
-  <Action name="text_inspgnum"/>
- </Menu>
- <Menu name="Extra"><text>E&amp;xtra</text>
+ <Menu name="Extra"><text>F&amp;ormat</text>
   <Action name="extra_penbrush"/>
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
@@ -105,7 +66,31 @@
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
+  <Action name="extra_layout"/>
   <Action name="extra_background"/>
+ </Menu>
+ <Menu name="Text"><text>Te&amp;xt</text>
+  <Action name="text_font"/>
+  <Action name="text_color"/>
+  <Action name="text_settings"/>
+  <Separator/>
+  <Menu name="Align"><text>&amp;Align</text>
+   <Action name="text_alignleft"/>
+   <Action name="text_aligncenter"/>
+   <Action name="text_alignright"/>
+  </Menu>
+  <Separator/>
+  <Menu name="Type"><text>T&amp;ype</text>
+   <Action name="text_unsortedList"/>
+   <Action name="text_normalText"/>
+  </Menu>
+  <Separator/>
+  <Action name="text_depthPlus"/>
+  <Action name="text_depthMinus"/>
+  <Separator/>
+  <Action name="text_con2hei"/>
+  <Action name="text_obj2cont"/>
+  <!-- <Action name="text_inspgnum"/> -->
  </Menu>
  <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
   <Action name="screen_configpages"/>
@@ -124,11 +109,24 @@
   <Separator/>
   <Action name="screen_presstruct"/>
  </Menu>
+ <Menu name="Tools"><text>&amp;Tools</text>
+  <Action name="tools_mouse"/>
+  <Separator/>
+  <Action name="tools_line"/>
+  <Action name="tools_rectangle"/>
+  <Action name="tools_circle"/>
+  <Action name="tools_pie"/>
+  <Action name="tools_text"/>
+  <Action name="tools_autoform"/>
+  <Action name="tools_diagramm"/>
+  <Action name="tools_table"/>
+  <Action name="tools_object"/>
+ </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="extra_options" group="settings_configure"/>
  </Menu>
 </MenuBar>
-<ToolBar name="editToolBar" position="right" fullWidth="false"><Text>Edit</Text>
+<ToolBar name="editToolBar" position="top" fullWidth="false"><Text>Edit</Text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -138,14 +136,13 @@
   <Separator/>
   <Action name="edit_delete"/>
 </ToolBar>
-<ToolBar name="insertToolBar" position="left" fullWidth="false"><Text>Insert</Text>
-  <Action name="insertToolBar"/>
+<ToolBar name="insertToolBar" position="top" fullWidth="false"><Text>Insert</Text>
   <Action name="insert_page"/>
   <Separator/>
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
 </ToolBar>
-<ToolBar name="toolsToolBar" position="top" fullWidth="false"><Text>Tools</Text>
+<ToolBar name="toolsToolBar" position="left" fullWidth="false"><Text>Tools</Text>
   <Action name="tools_mouse"/>
   <Action name="tools_line"/>
   <Action name="tools_rectangle"/>
@@ -158,30 +155,7 @@
   <Action name="tools_formula"/>
   <Action name="tools_object"/>
 </ToolBar>
-<ToolBar name="textToolBar" position="bottom" fullWidth="false"><Text>Text</Text>
-  <Action name="text_fontsize"/>
-  <Action name="text_fontfamily"/>
-  <Separator/>
-  <Action name="text_bold"/>
-  <Action name="text_italic"/>
-  <Action name="text_underline"/>
-  <Action name="text_color"/>
-  <Separator/>
-  <Action name="text_alignleft"/>
-  <Action name="text_aligncenter"/>
-  <Action name="text_alignright"/>
-  <Separator/>
-  <Action name="text_enumList"/>
-  <Action name="text_unsortedList"/>
-  <Action name="text_normalText"/>
-  <Separator/>
-  <Action name="text_depthPlus"/>
-  <Action name="text_depthMinus"/>
-  <Action name="text_settings"/>
-  <Separator/>
-  <Action name="text_inspgnum"/>
-</ToolBar>
-<ToolBar name="extraToolBar" position="left" fullWidth="false"><Text>Extra</Text>
+<ToolBar name="extraToolBar" position="top" fullWidth="false"><Text>Format</Text>
   <Action name="extra_penbrush"/>
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
@@ -200,7 +174,27 @@
   <Separator/>
   <Action name="extra_webpres"/>
 </ToolBar>
-<ToolBar name="screenToolBar" position="top" fullWidth="false"><Text>Screen</Text>
+<ToolBar name="textToolBar" position="top" fullWidth="false"><Text>Text</Text>
+  <Action name="text_fontfamily"/>
+  <Action name="text_fontsize"/>
+  <Separator/>
+  <Action name="text_bold"/>
+  <Action name="text_italic"/>
+  <Action name="text_underline"/>
+  <Separator/>
+  <Action name="text_alignleft"/>
+  <Action name="text_aligncenter"/>
+  <Action name="text_alignright"/>
+  <Separator/>
+  <Action name="text_unsortedList"/>
+  <Action name="text_normalText"/>
+  <Separator/>
+  <Action name="text_depthMinus"/>
+  <Action name="text_depthPlus"/>
+  <Separator/>
+  <Action name="text_color"/>
+</ToolBar>
+<ToolBar name="screenToolBar" position="top" fullWidth="false"><Text>Presentation</Text>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Action name="screen_start"/>
@@ -212,7 +206,6 @@
   <Action name="screen_last"/>
   <Separator/>
   <Action name="screen_pencolor"/>
-  <Action name="screen_penwidth"/>
 </ToolBar>
 <ToolBar name="colorBar" position="right" fullWidth="false"><Text>Color</Text>
   <Action name="colorbar"/>

@@ -1,9 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="6">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="7">
 <MenuBar>
- <Menu name="file" noMerge="1"><text>&amp;File</text>
-        <Separator/>
-        <Action name="paperLayout"/>
- </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>
   <Action name="redo"/>
@@ -12,6 +8,7 @@
   <Action name="copy"/>
   <Action name="paste"/>
   <Action name="specialPaste"/>
+  <Separator/>
   <Action name="edit_find"/>
   <Action name="edit_replace"/>
   <Menu name="Clear"><text>Clear</text>
@@ -19,43 +16,39 @@
         <Action name="clearcomment"/>
         <Action name="clearvalidity"/>
         <Action name="clearconditional"/>
-    </Menu>
+  </Menu>
   <Action name="delete"/>
-  <Action name="mergecell"/>
-  <Action name="dissociatecell"/>
-  <Action name="decreaseindent"/>
-  <Action name="increaseindent"/>
-  <Separator/>
-  <Action name="RecalcWorkSheet"/>
-  <Action name="RecalcWorkBook"/>
   <Separator/>
   <Action name="conditional"/>
   <Action name="validity"/>
   <Action name="editCell"/>
   <Separator/>
-  <Action name="sortlist"/>
-  <Separator/>
   <Action name="transform"/>
  </Menu>
- <Menu name="Format"><text>Fo&amp;rmat</text>
-  <Action name="bold"/>
-  <Action name="italic"/>
-  <Action name="underline"/>
-  <Action name="strikeout"/>
-  <Action name="changeangle"/>
+ <Menu name="View"><text>&amp;View</text>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
   <Separator/>
-  <Action name="percent"/>
-  <Action name="precplus"/>
-  <Action name="precminus"/>
-  <Action name="money"/>
-  <Action name="default"/>
-  <Separator/>
-  <Action name="left"/>
-  <Action name="center"/>
-  <Action name="right"/>
-  <Action name="multiRow"/>
-  <Separator/>
+  <ActionList name="view_split" />
+  <Action name="gotoCell"/>
+  <Action name="showPageBorders"/>
+ </Menu>
+ <Menu name="Insert"><text>&amp;Insert</text>
+  <Menu name="Comment"><text>Commen&amp;t</text>
+    <Action name="addmodifycomment"/>
+    <Action name="showcomment"/>
+    <Action name="removecomment"/>
+  </Menu>
+  <Action name="insertMathExpr"/>
+  <Action name="insertFormula"/>
+  <Action name="series"/>
+  <Action name="insertHyperlink"/>
+  <Action name="insertPart"/>
+  <Action name="insertChart"/>
+ </Menu>
+ <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
+  <Action name="paperLayout"/>
   <Separator/>
   <Action name="adjust"/>
   <Menu name="Row"><text>&amp;Row</text>
@@ -71,35 +64,17 @@
     <Action name="showColumn"/>
   </Menu>
   <Action name="tableFormat"/>
- </Menu>
- <Menu name="Insert"><text>&amp;Insert</text>
-  <Menu name="Comment"><text>Commen&amp;t</text>
-    <Action name="addmodifycomment"/>
-    <Action name="showcomment"/>
-    <Action name="removecomment"/>
-  </Menu>
-  <Action name="insertMathExpr"/>
-  <Action name="insertFormula"/>
-  <Action name="series"/>
-  <Action name="insertHyperlink"/>
-  <Action name="insertPart"/>
-  <Action name="insertChart"/>
- </Menu>
- <Menu name="View"><text>&amp;View</text>
-  <Action name="view_newview"/>
-  <ActionList name="view_closeallviews"/>
   <Separator/>
-  <ActionList name="view_split" />
-  <Action name="gotoCell"/>
-  <Action name="showPageBorders"/>
- </Menu>
- <Menu name="Folder"><text>F&amp;older</text>
-  <Action name="insertTable"/>
-  <Action name="removeTable"/>
-  <Action name="hideTable"/>
-  <Action name="showTable"/>
+  <Action name="default"/>
+  <Action name="percent"/>
+  <Action name="precplus"/>
+  <Action name="precminus"/>
+  <Action name="money"/>
   <Separator/>
-  <Action name="showArea"/>
+  <Action name="decreaseindent"/>
+  <Action name="increaseindent"/>
+  <Separator/>
+  <Action name="changeangle"/>
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
@@ -116,6 +91,24 @@
   <Separator/>
   <Action name="consolidate"/>
   <Action name="oszi"/>
+ </Menu>
+ <Menu name="table"><text>Ta&amp;ble</text>
+  <Action name="insertTable"/>
+  <Action name="removeTable"/>
+  <Action name="hideTable"/>
+  <Action name="showTable"/>
+  <Separator/>
+  <Action name="mergecell"/>
+  <Action name="dissociatecell"/>
+  <Separator/>
+  <Action name="showArea"/>
+ </Menu>
+ <Menu name="tools"><text>&amp;Tools</text>
+  <Action name="sortlist"/>
+  <Separator/>
+  <Action name="RecalcWorkSheet"/>
+  <Action name="RecalcWorkBook"/>
+  <Separator/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="preference" group="settings_configure"/>
@@ -148,18 +141,18 @@
  <Action name="insertPart"/>
  <Action name="transform"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="fontPropertyToolBar"><text>Font Property</text>
+<ToolBar fullWidth="false" name="mathToolBar"><text>Math</text>
+ <Action name="autoSum"/>
+ <Action name="insertMathExpr"/>
+ <Action name="formulaSelection"/>
+</ToolBar>
+<ToolBar fullWidth="false" name="fontPropertyToolBar"><text>Format</text>
+ <Action name="selectFont"/>
+ <Action name="selectFontSize"/>
+ <Separator/>
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
- <Action name="selectFont"/>
- <Action name="selectFontSize"/>
-</ToolBar>
-<ToolBar fullWidth="false" name="cellFormatToolBar"><text>Cell Format</text>
- <Action name="percent"/>
- <Action name="precplus"/>
- <Action name="precminus"/>
- <Action name="money"/>
  <Separator/>
  <Action name="left"/>
  <Action name="center"/>
@@ -169,13 +162,16 @@
  <Action name="middle"/>
  <Action name="bottom"/>
  <Action name="multiRow"/>
+ <Separator/>
+ <Action name="percent"/>
+ <Action name="precplus"/>
+ <Action name="precminus"/>
+ <Action name="money"/>
+ <Separator/>
+ <Action name="decreaseindent"/>
+ <Action name="increaseindent"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="mathToolBar"><text>Math</text>
- <Action name="autoSum"/>
- <Action name="insertMathExpr"/>
- <Action name="formulaSelection"/>
-</ToolBar>
-<ToolBar fullWidth="false" hidden="true" name="formulaToolBar"><text>Formula</text>
+<ToolBar fullWidth="false" hidden="true" name="formulaToolBar" position="bottom"><text>Formula</text>
  <Action name="formulaPower"/>
  <Action name="formulaSubscript"/>
  <Action name="formulaParentheses"/>
@@ -190,10 +186,7 @@
  <Action name="formulaSum"/>
  <Action name="formulaProduct"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="colorAndBorderToolBar"><text>Color/Border</text>
- <Action name="textColor"/>
- <Action name="backgroundColor"/>
- <Separator/>
+<ToolBar fullWidth="false" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
  <Action name="borderLeft"/>
  <Action name="borderTop"/>
  <Action name="borderRight"/>
@@ -202,28 +195,11 @@
  <Action name="borderAll"/>
  <Action name="borderRemove"/>
  <Action name="borderColor"/>
+ <Separator/>
  <Action name="dissociatecell"/>
  <Action name="mergecell"/>
- <Action name="decreaseindent"/>
- <Action name="increaseindent"/>
+ <Separator/>
+ <Action name="textColor"/>
+ <Action name="backgroundColor"/>
 </ToolBar>
-<!--
-<InPlaceEditing>
- <MenuBar>
-  <Menu name="View"><text>View</text>
-   <Action name="newView"/>
-  </Menu>
-  <Menu name="Extra"><text>Extra</text>
-   <PluginAction name="qcalc_show" plugin="qcalc" major="1" minor="0"/>
-  </Menu>
-  <Menu name="Help"><text>Help</text>
-   <Action name="about"/>
-  </Menu>
- </MenuBar>
- <ToolBar fullWidth="false">
-  <ToolBar fullWidth="false">
-   <Action name="about"/>
-  </ToolBar>
- </ToolBars>
-</InPlaceEditing> -->
 </kpartgui>

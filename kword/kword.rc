@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="10">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="11">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -12,12 +12,10 @@
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>
+  <Action name="edit_selectall"/>
   <Separator/>
   <Action name="edit_find"/>
   <Action name="edit_replace"/>
-  <Separator/>
-  <Action name="edit_selectall"/>
-  <Action name="extra_spellcheck"/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>
@@ -36,7 +34,6 @@
   <Action name="view_zoom"/>
  </Menu>
  <Menu name="insert"><text>&amp;Insert</text>
-  <Separator/>
   <!-- Non-frames -->
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
@@ -72,19 +69,19 @@
   <Action name="format_page"/>
   <Action name="format_stylist"/>
   <Action name="format_style"/>
+  <Menu name="Formula"><text>Formula</text>
+    <Action name="formula_addupperindex"/>
+    <Action name="formula_addlowerindex"/>
+    <Action name="formula_removeenclosing"/>
+    <Action name="formula_makegreek"/>
  </Menu>
- <Menu name="frames"><text>Frames</text>
+ </Menu>
+ <Menu name="frames"><text>Fra&amp;mes</text>
   <Action name="edit_delframe"/>
   <Action name="edit_reconnect"/>
   <Separator/>
   <Action name="tools_edit"/>
   <Action name="tools_editframes"/>
- </Menu>
- <Menu name="Formula"><text>Formula</text>
-  <Action name="formula_addupperindex"/>
-  <Action name="formula_addlowerindex"/>
-  <Action name="formula_removeenclosing"/>
-  <Action name="formula_makegreek"/>
  </Menu>
  <Menu name="table"><text>Ta&amp;ble</text>
   <Action name="table_insrow"/>
@@ -99,6 +96,8 @@
   <Action name="table_delete"/>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
+  <Action name="extra_spellcheck"/>
+  <Separator/>
   <Action name="edit_customvars"/>
   <Action name="extra_autocorrection"/>
  </Menu>
@@ -119,7 +118,16 @@
   <Separator/>
   <Action name="view_zoom"/>
 </ToolBar>
-<ToolBar hidden="true" fullWidth="false" name="insert_toolbar" position="top" ><Text>Insert</Text>
+<ToolBar hidden="false" fullWidth="false" name="table_toolbar" position="top"><Text>Table</Text>
+  <Action name="table_insrow"/>
+  <Action name="table_inscol"/>
+  <Action name="table_delrow"/>
+  <Action name="table_delcol"/>
+</ToolBar>
+<ToolBar fullWidth="false" name="insert_toolbar" position="left"><Text>Insert</Text>
+  <Action name="tools_edit"/>
+  <Action name="tools_editframes"/>
+  <Separator/>
   <Action name="insert_table"/>
   <Action name="insert_picture"/>
   <!-- Action name="insert_clipart"/>
@@ -132,18 +140,18 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="tools_toolbar" position="left"><Text>Tools</Text>
-  <Action name="tools_edit"/>
-  <Action name="tools_editframes"/>
- </ToolBar>
-<ToolBar hidden="true" fullWidth="false" name="table_toolbar" position="top"><Text>Table</Text>
-  <Action name="table_insrow"/>
-  <Action name="table_inscol"/>
-  <Action name="table_delrow"/>
-  <Action name="table_delcol"/>
-</ToolBar>
-<ToolBar fullWidth="false" name="paragraph_toolbar" position="top"><Text>Paragraph</Text>
+<ToolBar fullWidth="false" name="format_toolbar" position="top"><Text>Format</Text>
   <Action name="format_style"/>
+  <Action name="format_fontfamily"/>
+  <Action name="format_fontsize"/>
+  <Separator/>
+  <Action name="format_bold"/>
+  <Action name="format_italic"/>
+  <Action name="format_underline"/>
+  <Action name="format_strike"/>
+  <Separator/>
+  <Action name="format_super"/>
+  <Action name="format_sub"/>
   <Separator/>
   <Action name="format_alignleft"/>
   <Action name="format_aligncenter"/>
@@ -154,20 +162,8 @@
   <Separator/>
   <Action name="format_decreaseindent"/>
   <Action name="format_increaseindent"/>
-</ToolBar>
-<ToolBar fullWidth="false" name="format_toolbar" position="top"><Text>Format</Text>
-  <Action name="format_fontsize"/>
-  <Action name="format_fontfamily"/>
-  <Separator/>
-  <Action name="format_bold"/>
-  <Action name="format_italic"/>
-  <Action name="format_underline"/>
-  <Action name="format_strike"/>
   <Separator/>
   <Action name="format_color"/>
-  <Separator/>
-  <Action name="format_super"/>
-  <Action name="format_sub"/>
 </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="border_toolbar" position="top"><Text>Borders</Text>
   <Action name="border_outline"/>
