@@ -310,12 +310,6 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
 }
 
 /*================================================================*/
-/*void KWFrameSet::addFrame( KWFrame _frame )
-{
-    addFrame(_frame.getCopy());
-}*/
-
-/*================================================================*/
 void KWFrameSet::addFrame( KWFrame *_frame )
 {
     if ( frames.findRef( _frame ) != -1 )
@@ -799,17 +793,6 @@ void KWFrameSet::load( QDomElement &attributes )
 }
 
 /*================================================================*/
-int KWFrameSet::getNext( QRect _rect )
-{
-    for ( unsigned int i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->intersects( _rect ) )
-            return i;
-    }
-
-    return -1;
-}
-
-/*================================================================*/
 bool KWFrameSet::hasSelectedFrame()
 {
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
@@ -831,6 +814,12 @@ bool KWFrameSet::isVisible()
              !isAWrongFooter( m_doc->getFooterType() ) );
 }
 
+void KWFrameSet::finalize()
+{
+    kdDebug() << "KWFrameSet::finalize" << endl;
+    updateFrames();
+    zoom();
+}
 
 // This determines where to clip the painter to draw the contents of a given frame
 // It clips to the frame, and clips out any "on top" frame.

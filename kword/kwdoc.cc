@@ -1160,7 +1160,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         QRect r = ch->geometry();
         KWFrame *frame = new KWFrame(frameset, r.x(), r.y(), r.width(), r.height() );
         frameset->addFrame( frame );
-        addFrameSet( frameset );
+        frames.append( frameset );
         emit sig_insertObject( ch, frameset );
     }
 
@@ -1198,7 +1198,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     recalcFrames(); // This computes the number of pages (from the frames)
                     // for the first time (and adds footers/headers etc.)
-    updateAllFrames();
 
 #if 0 // If KWCanvas calls updateViewArea right, this is not needed anymore
     kdDebug(32002) << "KWDocument::loadXML starting formatting" << endl;
@@ -1379,7 +1378,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                         table = new KWTableFrameSet( this );
 
                         table->setName( tableName );
-                        addFrameSet( table );
+                        frames.append( table );
                     }
                     KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col );
                     cell->setVisible( _visible );
@@ -1494,6 +1493,11 @@ bool KWDocument::completeLoading( KoStore *_store )
     for ( ; it3 != imageRequests2.end(); ++it3 )
         it3.data()->setImage( m_imageCollection.findImage( it3.key() ) );
     imageRequests2.clear();
+
+    // Finalize all the existing framesets
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->finalize();
 
     return TRUE;
 }
@@ -2362,9 +2366,9 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
 
 void KWDocument::addFrameSet( KWFrameSet *f )
 {
-  frames.append(f);
-  //updateAllFrames();
-  setModified( true );
+    frames.append(f);
+    f->finalize();
+    setModified( true );
 }
 
 void KWDocument::delFrameSet( KWFrameSet *f, bool deleteit)

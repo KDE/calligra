@@ -291,7 +291,7 @@ public:
     // constructor
     KWFrameSet( KWDocument *doc );
     // destructor
-    virtual ~KWFrameSet() {; }
+    virtual ~KWFrameSet() {}
 
     virtual FrameType getFrameType() { return FT_BASE; }
     FrameInfo getFrameInfo() { return frameInfo; }
@@ -371,12 +371,15 @@ public:
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
 
-    int getNext( QRect _rect );
     /** returns page number of the numbered frame */
     int getPageOfFrame( int i ) { return frames.at( i )->pageNum(); }
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom() {}
+
+    /** Called once the frameset has been completely loaded or constructed.
+     * The default implementation calls updateFrames() and zoom(). Call the parent :) */
+    virtual void finalize();
 
     KWDocument* kWordDocument() const { return m_doc; }
 

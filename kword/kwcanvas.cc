@@ -953,7 +953,6 @@ void KWCanvas::mrCreateTable()
                 numTables++;
             }
             table->setName( _name );
-            doc->addFrameSet( table );
 
             // Create a set of cells with random-size frames.
             for ( unsigned int i = 0; i < m_table.rows; i++ ) {
@@ -969,6 +968,8 @@ void KWCanvas::mrCreateTable()
             table->setWidthMode( m_table.width );
             table->setBoundingRect( m_insRect );
             table->recalcRows();
+            // Done at the end so that finalize is called
+            doc->addFrameSet( table );
         }
         doc->updateAllFrames();
         doc->layout();

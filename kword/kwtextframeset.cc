@@ -737,8 +737,6 @@ void KWTextFrameSet::load( QDomElement &attributes )
     textdoc->setLastParag( lastParagraph );
     m_lastFormatted = textdoc->firstParag();
     //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
-
-    zoom();
 }
 
 void KWTextFrameSet::zoom()
@@ -747,7 +745,11 @@ void KWTextFrameSet::zoom()
         unzoom();
     QTextFormatCollection * coll = textdoc->formatCollection();
     double factor = kWordDocument()->zoomedResolutionY();
-    //kdDebug(32002) << "KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
+    //kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
+    /*kdDebug(32002) << this << " firstparag:" << textdoc->firstParag()
+                   << " format:" << textdoc->firstParag()->paragFormat()
+                   << " first-char's format:" << textdoc->firstParag()->at(0)->format()
+                   << endl;*/
     QDictIterator<QTextFormat> it( coll->dict() );
     for ( ; it.current() ; ++it ) {
         KWTextFormat * format = dynamic_cast<KWTextFormat *>(it.current());
@@ -759,6 +761,11 @@ void KWTextFrameSet::zoom()
                            << " to " << format->font().pointSizeFloat() * factor << endl;*/
         format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
     }
+    // Do the same to the default format !
+    KWTextFormat * format = static_cast<KWTextFormat *>(coll->defaultFormat());
+    //kdDebug() << "KWTextFrameSet::zoom default format " << format << " " << format->key() << endl;
+    m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
+    format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
 
     // Zoom all custom items
     QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
@@ -801,6 +808,10 @@ void KWTextFrameSet::unzoom()
             format->setPointSizeFloat( *oldSize );
         }
     }
+    KWTextFormat * format = static_cast<KWTextFormat *>(coll->defaultFormat());
+    int * oldSize = m_origFontSizes.find( format );
+    if ( oldSize )
+        format->setPointSizeFloat( *oldSize );
 
     m_origFontSizes.clear();
 }
@@ -1709,9 +1720,11 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     undoRedoInfo.clear();
 }
 
-void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &txt, bool checkNewLine, bool removeSelected, const QString & commandName )
+void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
+                             const QString &txt, bool checkNewLine,
+                             bool removeSelected, const QString & commandName )
 {
-    kdDebug(32001) << "KWTextFrameSet::insert" << endl;
+    //kdDebug(32001) << "KWTextFrameSet::insert" << endl;
     QTextDocument *textdoc = textDocument();
     emit hideCursor();
     if ( textdoc->hasSelection( QTextDocument::Standard ) && removeSelected ) {
@@ -2753,10 +2766,10 @@ void KWTextFrameSetEdit::updateUI()
     int i = cursor->index();
     if ( i > 0 )
         --i;
-    if ( currentFormat )
+    /*if ( currentFormat )
         kdDebug(32003) << "KWTextFrameSet::updateUI currentFormat=" << currentFormat
                        << " " << currentFormat->key()
-                       << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
+                       << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;*/
 
     if ( !currentFormat || currentFormat->key() != cursor->parag()->at( i )->format()->key() )
     {
