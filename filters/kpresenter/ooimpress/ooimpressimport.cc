@@ -1218,6 +1218,16 @@ void OoImpressImport::appendShadow( QDomDocument& doc, QDomElement& e )
 
         e.appendChild( shadow );
     }
+    if ( m_styleStack.hasAttribute( "draw:size-protect" ) || m_styleStack.hasAttribute("draw:move-protect" ) )
+    {
+        bool b = ( m_styleStack.attribute("draw:size-protect" ) == "true" ) || ( m_styleStack.attribute("draw:move-protect" ) == "true" );
+        if ( b )
+        {
+            QDomElement protect  = doc.createElement( "PROTECT" );
+            protect.setAttribute("state" , b);
+            e.appendChild(protect);
+        }
+    }
 }
 
 void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e, bool orderEndStartLine )
