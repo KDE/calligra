@@ -33,7 +33,7 @@
 #include "contextstyle.h"
 #include "elementindex.h"
 #include "formuladefs.h"
-
+#include <koprinter.h>
 
 class BasicElement;
 class FormulaCursor;
@@ -42,7 +42,6 @@ class IndexElement;
 class KCommand;
 class KFormulaCommand;
 class KFormulaDocument;
-class KPrinter;
 class QColorGroup;
 class QKeyEvent;
 class QPainter;
