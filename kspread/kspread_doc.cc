@@ -186,8 +186,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->docinfo->parser = new KSpread::ValueParser( d->docinfo->locale );
   d->docinfo->converter = new KSpread::ValueConverter ( d->docinfo->parser );
   d->docinfo->calc = new KSpread::ValueCalc( d->docinfo->converter );
-  
-  d->docinfo->formatter = new KSpread::ValueFormatter (d->docinfo);
+  d->docinfo->formatter = new KSpread::ValueFormatter( d->docinfo->converter );
   
   d->activeSheet = 0;
 

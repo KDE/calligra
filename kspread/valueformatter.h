@@ -20,7 +20,6 @@
 #ifndef KSPREAD_VALUEFORMATTER
 #define KSPREAD_VALUEFORMATTER
 
-#include "docbase.h"
 #include "kspread_global.h"
 #include "kspread_format.h"
 #include "kspread_value.h"
@@ -31,16 +30,17 @@ class KSpreadCell;
 
 namespace KSpread {
 
+class ValueConverter;
 
 /**
 The ValueFormatter class generates a textual representation of
 data stored in a KSpreadValue, with a given formatting.
 */
 
-class ValueFormatter : public DocBase {
+class ValueFormatter {
  public:
   /** copnstructor */
-  ValueFormatter (DocInfo *docinfo);
+  ValueFormatter (ValueConverter *converter);
 
   /** create a text representation of data in this cell */
   QString formatText (KSpreadCell *cell, FormatType fmtType);
@@ -59,6 +59,9 @@ class ValueFormatter : public DocBase {
   QString timeFormat (const QDateTime &_time, FormatType fmtType);
   
  protected:
+ 
+  ValueConverter* converter;
+ 
   /** determine the formatting type that should be used to format this value
   in a cell with a given format type */
   FormatType determineFormatting (const KSpreadValue &value,
