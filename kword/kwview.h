@@ -20,7 +20,7 @@
 #ifndef kwview_h
 #define kwview_h
 
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qwidget.h>
 #include <qlist.h>
 #include <qcolor.h>

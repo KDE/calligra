@@ -20,7 +20,7 @@
 #ifndef KWCANVAS_H
 #define KWCANVAS_H
 
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qscrollview.h>
 #include <qstylesheet.h>
 #include <qrichtext_p.h>

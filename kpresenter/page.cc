@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qprogressdialog.h>
 #include <qprogressbar.h>
 #include <qdragobject.h>
