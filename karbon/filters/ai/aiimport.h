@@ -12,19 +12,20 @@
 class QDomElement;
 class QTextStream;
 
+class AiDocument;
+
 class AiImport : public KoFilter
 {
 	Q_OBJECT
 
 public:
 	AiImport( KoFilter* parent, const char* name, const QStringList& );
-	virtual ~AiImport() {}
+	virtual ~AiImport();
 
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
-	void importDocument( QTextStream& s, const QByteArray& ba );
-
 private:
+	AiDocument* m_aiDocument;
 };
 
 #endif

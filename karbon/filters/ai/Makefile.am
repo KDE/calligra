@@ -18,10 +18,12 @@ service_DATA = karbon_ai_import.desktop
 servicedir = $(kde_servicesdir)
 
 noinst_HEADERS = \
+	aidocument.h \
 	aiimport.h \
 	yacc.cc.h
 
 libkarbonaiimport_la_SOURCES = \
+	aidocument.cc \
 	aiimport.cc \
 	scanner.cc \
 	yacc.cc

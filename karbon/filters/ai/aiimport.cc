@@ -14,10 +14,11 @@
 
 #include <kdebug.h>
 
+#include "aidocument.h"
 #include "aiimport.h"
 
 
-void parseAI( QTextStream& s, const char* in );	// from yacc/bison
+void parseAI( const char* in );	// from yacc/bison
 
 
 class AiImportFactory : KGenericFactory<AiImport, KoFilter>
@@ -39,6 +40,12 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() );
 AiImport::AiImport( KoFilter*, const char*, const QStringList& )
 	: KoFilter()
 {
+	m_aiDocument = new AiDocument();
+}
+
+AiImport::~AiImport()
+{
+	delete m_aiDocument;
 }
 
 KoFilter::ConversionStatus
@@ -70,23 +77,20 @@ AiImport::convert( const QCString& from, const QCString& to )
 	QString outStr;
 	QTextStream s( &outStr, IO_WriteOnly );
 
-	importDocument( s, byteArrayIn );
+
+	m_aiDocument->begin( s );
+
+	// parse with flex/bison:
+	parseAI( byteArrayIn.data() );
+
+	m_aiDocument->end( s );
+
 
 	QCString cStr = outStr.latin1();
 	storeOut->writeBlock( cStr, cStr.length() );
 
 	return KoFilter::OK;
 }
-
-void
-AiImport::importDocument( QTextStream& s, const QByteArray& ba )
-{
-	s << "" << endl;
-		
-
-	parseAI( s, ba.data() );
-}
-
 
 #include "aiimport.moc"
 

@@ -1,13 +1,15 @@
 %{
 
 #define YYERROR_VERBOSE
+#define YYDEBUG 1
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 
 #include <qstring.h>
-#include <qtextstream.h>
+
+#include "aidocument.h"
 
 extern int yylex();
 
@@ -21,16 +23,34 @@ void yyerror( const char* s )
 
 %}
 
-%token T_HEAD_COMMENT
+
+%union
+{
+	QString* qstr;
+	double nmbr;
+	char* node;
+}
+
+%token <qstr> HEADER_CREATOR
+%token <qstr> HEADER_AUTHOR
+
+%type <node>	head
+
 
 %%
 
-exp:	T_HEAD_COMMENT	{  }
+
+input:
+		| input head
+;
+
+head:		HEADER_CREATOR		{ aiDocument->headerCreator( $1 ); }
+		| 	HEADER_AUTHOR		{ aiDocument->headerAuthor( $1 ); }
 ;
 
 %%
 
-void parseAI( QTextStream& s, const char* in )
+void parseAI( const char* in )
 {
 	karbonInitFlex( in );
 	yyparse();
