@@ -84,9 +84,35 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         painter->setPen( QPen(color , _zoomHandler->zoomItX( _w )) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
-        QPoint p1( _zoomHandler->zoomItX(/*-5 - _w/2*/0), _zoomHandler->zoomItY(-5 - _w / 2) );
-        QPoint p2( _zoomHandler->zoomItX(/*-5 -_w/2*/0), _zoomHandler->zoomItY(5 + _w / 2 ) );
+        QPoint p1( _zoomHandler->zoomItX(0), _zoomHandler->zoomItY(-5 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItX(0), _zoomHandler->zoomItY(5 + _w / 2 ) );
         painter->drawLine( p1, p2);
+    }break;
+    case L_DOUBLE_ARROW:
+    {
+	painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+        painter->rotate( angle );
+        painter->scale( 1, 1 );
+        painter->setBrush( color );
+
+        QPoint p1( -5 - _w / 2, -3 - _w / 2 );
+        QPoint p2( 5 + _w / 2, 0 );
+        QPoint p3( -5 - _w / 2, 3 + _w / 2 );
+
+        QPoint p4( -15 - _w / 2, -3 - _w / 2 );
+        QPoint p5( -5 + _w / 2, 0 );
+        QPoint p6( -15 - _w / 2, 3 + _w / 2 );
+
+        QPointArray pArray( 3 );
+        pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );
+        pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
+        pArray.setPoint( 2, _zoomHandler->zoomPoint(p3) );
+        painter->drawPolygon( pArray );
+        pArray.setPoint( 0, _zoomHandler->zoomPoint(p4) );
+        pArray.setPoint( 1, _zoomHandler->zoomPoint(p5) );
+        pArray.setPoint( 2, _zoomHandler->zoomPoint(p6) );
+        painter->drawPolygon( pArray );
+
     }break;
     default: break;
     }
@@ -116,6 +142,10 @@ KoSize getBoundingSize( LineEnd figure, int _w, KoZoomHandler*_zoomHandler )
     case L_DIMENSION_LINE:
         return KoSize( _zoomHandler->zoomItX( 14 +_w),_zoomHandler->zoomItY( 14 + _w) );
         break;
+    case L_DOUBLE_ARROW:
+        return KoSize( _zoomHandler->zoomItX( 28 + _w),_zoomHandler->zoomItY( 14 + _w) );
+
+        break;
     default: break;
     }
 
@@ -138,6 +168,8 @@ QString lineEndBeginName( LineEnd type )
         return QString("LINE_ARROW");
     case L_DIMENSION_LINE:
         return QString("DIMENSION_LINE");
+    case L_DOUBLE_ARROW:
+        return QString("DOUBLE_ARROW");
     }
     return QString::null;
 }
@@ -156,6 +188,8 @@ LineEnd lineEndBeginFromString( const QString & type )
         return L_LINE_ARROW;
     else if (type=="DIMENSION_LINE")
         return L_DIMENSION_LINE;
+    else if (type=="DOUBLE_ARROW")
+        return L_DOUBLE_ARROW;
     else
         kdDebug()<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
     return L_NORMAL;
