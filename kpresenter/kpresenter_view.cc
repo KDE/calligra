@@ -245,6 +245,9 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     cornersValue = 3;
     sharpnessValue = 0;
     m_presentationDurationList = QValueList<int>();
+    tbAlign = Qt::AlignLeft;
+    tbFont = font();
+    tbColor = black;
 
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
