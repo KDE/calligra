@@ -30,7 +30,6 @@ Document settings
 <FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
 <FORMAT id="5"> (footnote)
 <LINESPACE>
-<HARDBRK> (forced page break)
 Attachement #4318 of bug #16430 (tables...)
 ...
 
