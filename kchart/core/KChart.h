@@ -32,155 +32,111 @@ public:
   KChart( KChartType charttype = Bars );
   ~KChart();
 
-  void setChartType( KChartType charttype );
-  KChartType chartType() const;
-  
   void setChartData( KChartData* );
+  void setAutoUpdate( QPaintDevice* device );
+
+  KChartType chartType() const;
   KChartData* chartData() const;
   
   void repaintChart( QPaintDevice* paintdev );
 
-  void setTitle( const char* );
   QString title() const;
-
-  void setXLabel( const char* );
   QString xLabel() const;
-
-  void setYLabel( const char* );
   QString yLabel() const;
-
-  void setY1Label( const char* );
-
   QString y1Label() const;
-
-  void setY2Label( const char* );
-
   QString y2Label() const;
-  
-	void setTextColor( QColor color );
-	QColor textColor() const;
-
-	void setTitleFont( QFont font );
-	QFont titleFont() const;
-
-	void setLabelFont( QFont font );
-	QFont labelFont() const;
-
-	void setXLabelFont( QFont font );
-	QFont xLabelFont() const;
-
-	void setYLabelFont( QFont font );
-	QFont yLabelFont() const;
-
-	void setValueFont( QFont font );
-	QFont valueFont() const;
-
-	void setXAxisFont( QFont font );
-	QFont xAxisFont() const;
-
-	void setYAxisFont( QFont font );
-	QFont yAxisFont() const;
-
-	void setMargin( int margin );
-	int margin() const;
-
-	void setDataColors( KChartColorArray* colors );
-	const KChartColorArray* dataColors() const;
-
-	void setTickLength( int );
-	int tickLength() const;
-
-	void setXTicksEnabled( bool enabled );
-	bool xTicksEnabled() const;
-
-	void setYTicksEnabled( bool enabled );
-	bool yTicksEnabled() const;
-
-  void setYTicksNum( int ticks );
+  QColor textColor() const;
+  QFont titleFont() const;
+  QFont labelFont() const;
+  QFont xLabelFont() const;
+  QFont yLabelFont() const;
+  QFont valueFont() const;
+  QFont xAxisFont() const;
+  QFont yAxisFont() const;
+  int margin() const;
+  const KChartColorArray* dataColors() const;
+  int tickLength() const;
+  bool xTicksEnabled() const;
+  bool yTicksEnabled() const;
   int yTicksNum() const;
-
-	void setXLabelSkip( int skip );
-	int xLabelSkip() const;
-
-	void setYLabelSkip( int skip );
-	int yLabelSkip() const;
-
-	void setXPlotValues( bool plot );
-	bool xPlotValues() const;
-
-	void setYPlotValues( bool plot );
-	bool yPlotValues() const;
-
-	void setYMaxValue( double value );
-	double yMaxValue() const;
-
-	void setYMinValue( double value );
-	double yMinValue() const;
-
-	void setY1MaxValue( double value );
-	double y1MaxValue() const;
-
-	void setY1MinValue( double value );
-	double y1MinValue() const;
-
-	void setY2MaxValue( double value );
-	double y2MaxValue() const;
-
-	void setY2MinValue( double value );
-	double y2MinValue() const;
-
-	void setAxisSpace( int space );
-	int axisSpace() const;
-
-	void setLineType( PenStyle linetype );
-	PenStyle lineType() const;
-
-	void setLineWidth( int width );
-	int lineWidth() const;
-
-  void setOverwrite( OverwriteMode over );
+  int xLabelSkip() const;
+  int yLabelSkip() const;
+  bool xPlotValues() const;
+  bool yPlotValues() const;
+  double yMaxValue() const;
+  double yMinValue() const;
+  double y1MaxValue() const;
+  double y1MinValue() const;
+  double y2MaxValue() const;
+  double y2MinValue() const;
+  int axisSpace() const;
+  PenStyle lineType() const;
+  int lineWidth() const;
   OverwriteMode overwrite() const;
-
-  void setTwoAxes( bool twoaxes );
   bool twoAxes() const;
-
-  void setLongTicks( bool longticks );
   bool longTicks() const;
-
-  void setLegends( QStrList legends );
   QStrList legends() const;
-
-  void setLegendPlacement( LegendPlacement );
   LegendPlacement legendPlacement() const;
-
-  void setLegendFont( QFont font );
   QFont legendFont() const;
-
-  void setAxisLabelColor( QColor color );
   QColor axisLabelColor() const;
-
-  void setZeroAxisOnly( bool only );
   bool zeroAxisOnly() const;
-
-  void setBoxAxis( bool boxaxis );
   bool boxAxis() const;
-
-  void setXTicks( bool xticks );
   bool xTicks() const;
-
-  void setLineTypes( PenStyle types[], int number );
   void lineTypes( PenStyle types[], int& number );
-
-  void setLegendMarkerWidth( int width );
   int legendMarkerWidth() const;
-
-  void setLegendMarkerHeight( int height );
   int legendMarkerHeight() const;
+
+public slots:
+  void setChartType( KChartType charttype );
+  void setTitle( const char* );
+  void setXLabel( const char* );
+  void setYLabel( const char* );
+  void setY1Label( const char* );
+  void setY2Label( const char* );
+  void setTextColor( QColor color );
+  void setTitleFont( QFont font );
+  void setLabelFont( QFont font );
+  void setXLabelFont( QFont font );
+  void setYLabelFont( QFont font );
+  void setValueFont( QFont font );
+  void setXAxisFont( QFont font );
+  void setYAxisFont( QFont font );
+  void setMargin( int margin );
+  void setDataColors( KChartColorArray* colors );
+  void setTickLength( int );
+  void setYTicksNum( int ticks );
+  void setXLabelSkip( int skip );
+  void setYLabelSkip( int skip );
+  void setXPlotValues( bool plot );
+  void setYPlotValues( bool plot );
+  void setYMaxValue( double value );
+  void setYMinValue( double value );
+  void setY1MaxValue( double value );
+  void setY1MinValue( double value );
+  void setY2MaxValue( double value );
+  void setY2MinValue( double value );
+  void setAxisSpace( int space );
+  void setLineWidth( int width );
+  void setOverwrite( OverwriteMode over );
+  void setTwoAxes( bool twoaxes );
+  void setLongTicks( bool longticks );
+  void setLegends( QStrList legends );
+  void setLegendPlacement( int );
+  void setLegendFont( QFont font );
+  void setAxisLabelColor( QColor color );
+  void setZeroAxisOnly( bool only );
+  void setBoxAxis( bool boxaxis );
+  void setXTicks( bool xticks );
+  void setLineTypes( PenStyle types[], int number );
+  void setLegendMarkerWidth( int width );
+  void setLegendMarkerHeight( int height );
 
 private:
   KChartType _charttype;
   KChartPainter* _cp;
   KChartData* _chartdata;
+
+  QPaintDevice* _autoupdatedevice;
 
   // This is stuff that used to be in the painters
   KChartColorArray _datacolors;
