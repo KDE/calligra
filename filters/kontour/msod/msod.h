@@ -13,7 +13,7 @@
     Library General Public License for more details.
 
     You should have received a copy of the GNU Library General Public License
-    aU32 with this library; see the file COPYING.LIB.  If not, write to
+    along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
 
@@ -102,13 +102,6 @@ private:
 
     static const int s_area = 30505;
 
-    // Use unambiguous names for Microsoft types.
-
-public:
-    typedef unsigned char U8;
-    typedef unsigned short U16;
-    typedef unsigned int U32;
-
 private:
     int m_dpi;
     DrawContext m_dc;
@@ -129,25 +122,25 @@ private:
         QDataStream &operands);
     void drawShape(
         unsigned shapeType,
-        U32 bytes,
+        Q_UINT32 bytes,
         QDataStream &operands);
 
-    // Common Header (MSOBFH)
 public:
 
+    // Common Header (MSOBFH)
     typedef struct
     {
         union
         {
-            U32 info;
+            Q_UINT32 info;
             struct
             {
-                U32 ver: 4;
-                U32 inst: 12;
-                U32 fbt: 16;
+                Q_UINT32 ver: 4;
+                Q_UINT32 inst: 12;
+                Q_UINT32 fbt: 16;
             } fields;
         } opcode;
-        U32 cbLength;
+        Q_UINT32 cbLength;
     } Header;
 
 private:
@@ -181,47 +174,47 @@ private:
     // Opcode handling and painter methods.
 
     void walk(
-        U32 bytes,
+        Q_UINT32 bytes,
         QDataStream &operands);
     void skip(
-        U32 bytes,
+        Q_UINT32 bytes,
         QDataStream &operands);
     void invokeHandler(
         Header &op,
-        U32 bytes,
+        Q_UINT32 bytes,
         QDataStream &operands);
 
-    void opAlignrule(Header &op, U32 bytes, QDataStream &operands);
-    void opAnchor(Header &op, U32 bytes, QDataStream &operands);
-    void opArcrule(Header &op, U32 bytes, QDataStream &operands);
-    void opBlip(Header &op, U32 bytes, QDataStream &operands);
-    void opBse(Header &op, U32 bytes, QDataStream &operands);
-    void opBstorecontainer(Header &op, U32 bytes, QDataStream &operands);
-    void opCalloutrule(Header &op, U32 bytes, QDataStream &operands);
-    void opChildanchor(Header &op, U32 bytes, QDataStream &operands);
-    void opClientanchor(Header &op, U32 bytes, QDataStream &operands);
-    void opClientdata(Header &op, U32 bytes, QDataStream &operands);
-    void opClientrule(Header &op, U32 bytes, QDataStream &operands);
-    void opClienttextbox(Header &op, U32 bytes, QDataStream &operands);
-    void opClsid(Header &op, U32 bytes, QDataStream &operands);
-    void opColormru(Header &op, U32 bytes, QDataStream &operands);
-    void opConnectorrule(Header &op, U32 bytes, QDataStream &operands);
-    void opDeletedpspl(Header &op, U32 bytes, QDataStream &operands);
-    void opDg(Header &op, U32 bytes, QDataStream &operands);
-    void opDgcontainer(Header &op, U32 bytes, QDataStream &operands);
-    void opDgg(Header &op, U32 bytes, QDataStream &operands);
-    void opDggcontainer(Header &op, U32 bytes, QDataStream &operands);
-    void opOleobject(Header &op, U32 bytes, QDataStream &operands);
-    void opOpt(Header &op, U32 bytes, QDataStream &operands);
-    void opRegroupitems(Header &op, U32 bytes, QDataStream &operands);
-    void opSelection(Header &op, U32 bytes, QDataStream &operands);
-    void opSolvercontainer(Header &op, U32 bytes, QDataStream &operands);
-    void opSp(Header &op, U32 bytes, QDataStream &operands);
-    void opSpcontainer(Header &op, U32 bytes, QDataStream &operands);
-    void opSpgr(Header &op, U32 bytes, QDataStream &operands);
-    void opSpgrcontainer(Header &op, U32 bytes, QDataStream &operands);
-    void opSplitmenucolors(Header &op, U32 bytes, QDataStream &operands);
-    void opTextbox(Header &op, U32 bytes, QDataStream &operands);
+    void opAlignrule(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opAnchor(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opArcrule(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opBlip(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opBse(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opBstorecontainer(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opCalloutrule(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opChildanchor(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opClientanchor(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opClientdata(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opClientrule(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opClienttextbox(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opClsid(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opColormru(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opConnectorrule(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opDeletedpspl(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opDg(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opDgcontainer(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opDgg(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opDggcontainer(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opOleobject(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opOpt(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opRegroupitems(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opSelection(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opSolvercontainer(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opSp(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opSpcontainer(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opSpgr(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opSpgrcontainer(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opSplitmenucolors(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    void opTextbox(Header &op, Q_UINT32 bytes, QDataStream &operands);
 
     // Option handling.
 
@@ -231,27 +224,27 @@ private:
         Options(Msod &parent);
         ~Options();
         void walk(
-            U32 bytes,
+            Q_UINT32 bytes,
             QDataStream &operands);
 
         double m_rotation;
 
-        U32 m_lTxid;
+        Q_UINT32 m_lTxid;
 
-        U32 m_pib;
+        Q_UINT32 m_pib;
         QString m_pibName;
-        U32 m_pibFlags;
-        U32 m_pictureId;
+        Q_UINT32 m_pibFlags;
+        Q_UINT32 m_pictureId;
         bool m_fNoHitTestPicture;
         bool m_pictureGray;
         bool m_pictureBiLevel;
         bool m_pictureActive;
 
-        U32 m_geoLeft;
-        U32 m_geoTop;
-        U32 m_geoRight;
-        U32 m_geoBottom;
-        U32 m_shapePath;
+        Q_UINT32 m_geoLeft;
+        Q_UINT32 m_geoTop;
+        Q_UINT32 m_geoRight;
+        Q_UINT32 m_geoBottom;
+        Q_UINT32 m_shapePath;
         QPointArray *m_pVertices;
         bool m_fShadowOK;
         bool m_f3DOK;
@@ -266,10 +259,10 @@ private:
         bool m_fillUseRect;
         bool m_fNoFillHitTest;
 
-        U32 m_lineColor;
-        U32 m_lineBackColor;
-        U32 m_lineType;
-        U32 m_lineWidth;
+        Q_UINT32 m_lineColor;
+        Q_UINT32 m_lineBackColor;
+        Q_UINT32 m_lineType;
+        Q_UINT32 m_lineWidth;
 
         bool m_fArrowheadsOK;
         bool m_fLine;
@@ -277,7 +270,7 @@ private:
         bool m_lineFillShape;
         bool m_fNoLineDrawDash;
 
-        U32 m_bWMode;
+        Q_UINT32 m_bWMode;
 
         bool m_fOleIcon;
         bool m_fPreferRelativeResize;
@@ -292,19 +285,19 @@ private:
         {
             union
             {
-                U16 info;
+                Q_UINT16 info;
                 struct
                 {
-                    U16 pid: 14;
-                    U16 fBid: 1;
-                    U16 fComplex: 1;
+                    Q_UINT16 pid: 14;
+                    Q_UINT16 fBid: 1;
+                    Q_UINT16 fComplex: 1;
                 } fields;
             } opcode;
-            U32 value;
+            Q_UINT32 value;
         } Header;
 
         void initialise();
-        double from1616ToDouble(U32 value);
+        double from1616ToDouble(Q_UINT32 value);
     };
     friend class Msod::Options;
 
