@@ -57,7 +57,7 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
     {
 	k+=i;
         int j = buf.find( "</TEXT>", i );
-        if ( j - ( i + 6 ) > 0 )
+        if ( j - ( i + 6 ) >= 0 )
         {
             str += buf.mid( i + 6, j - ( i + 6 ) ).replace( amp, "&" )
                                                   .replace( lt, "<" )
