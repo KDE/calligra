@@ -48,6 +48,7 @@
 #include <koUnit.h>
 #include <koStyleStack.h>
 
+#include "ksprsavinginfo.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_global.h"
@@ -6991,7 +6992,22 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
 QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
 {
     KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is table*/ );
-    pageStyle.addAttribute( "style:master-page-name",  m_pPrint->saveOasisTableStyleLayout( mainStyles ) );
+    QString nameStyle =m_pPrint->saveOasisTableStyleLayout( mainStyles );
+    if ( m_pDoc->savingInfo()->findStyleName( nameStyle ) )
+    {
+        pageStyle.addAttribute( "style:master-page-name", m_pDoc->savingInfo()->masterPageName( nameStyle )  );
+    }
+    else
+    {
+        QString newName;
+        if ( m_pDoc->savingInfo()->styleNumber == 0 )
+            newName = "Standard";
+        else
+            newName = QString("Standard-%1" ).arg( m_pDoc->savingInfo()->styleNumber );
+        ++m_pDoc->savingInfo()->styleNumber;
+        pageStyle.addAttribute( "style:master-page-name",  newName );
+        m_pDoc->savingInfo()->appendMasterPage( nameStyle, newName );
+    }
     pageStyle.addProperty( "table:display", !m_bTableHide );
     return mainStyles.lookup( pageStyle, "ta" );
 }

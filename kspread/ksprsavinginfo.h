@@ -24,14 +24,14 @@
 class KSPRSavingInfo
 {
 public:
-    KSPRSavingInfo() {value = 0;}
+    KSPRSavingInfo() {styleNumber = 0;}
     ~KSPRSavingInfo() {}
 
-    void appendValidation( const QString &styleName, const QString &displayName ){ m_masterPageStyle.insert( styleName,displayName );}
-    QString validation( const QString &name) { return m_masterPageStyle[name];}
+    void appendMasterPage( const QString &styleName, const QString &displayName ){ m_masterPageStyle.insert( styleName,displayName );}
+    QString masterPageName( const QString &name) { return m_masterPageStyle[name];}
     bool findStyleName(const QString & name) const { return (m_masterPageStyle.find( name ) != m_masterPageStyle.end());}
     
-    int value;
+    int styleNumber;
 private:
     QMap<QString,QString> m_masterPageStyle;
 };
