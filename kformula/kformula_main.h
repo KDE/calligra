@@ -1,14 +1,14 @@
 #ifndef __kformula_main_h__
 #define __kformula_main_h__
 
-#include <opApplication.h>
+#include <koApplication.h>
 
 #include "kformula_doc.h"
 #include "kformula_shell.h"
 
 class KFormulaShell;
 
-class KFormulaApp : public OPApplication
+class KFormulaApp : public KoApplication
 {
   Q_OBJECT
 public:

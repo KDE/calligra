@@ -21,6 +21,7 @@
 #include <koIMR.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
+#include <koApplication.h>
 #include "kword_main.moc"
 
 #include <list>
@@ -39,10 +40,8 @@ typedef OPAutoLoader<KWordFactory> KWordAutoLoader;
 
 /*================================================================*/
 KWordApp::KWordApp(int &argc,char** argv) 
-  : OPApplication(argc,argv,"kword")
+  : KoApplication(argc,argv,"kword")
 {
-    getLocale()->insertCatalogue("koffice");
-    getIconLoader()->insertDirectory(3, kde_datadir() + "/koffice/toolbar");
 }
 
 /*================================================================*/

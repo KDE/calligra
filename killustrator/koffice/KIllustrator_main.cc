@@ -28,6 +28,7 @@
 #include "KIllustrator_shell.h"
 
 #include <koScanParts.h>
+#include <koApplication.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
@@ -40,9 +41,8 @@ KOFFICE_DOCUMENT_FACTORY(KIllustratorDocument, KIllustratorFactory)
 typedef OPAutoLoader<KIllustratorFactory> KIllustratorAutoLoader;
 
 KIllustratorApp::KIllustratorApp (int& argc, char** argv) :
-    OPApplication (argc, argv, "killustrator") 
+    KoApplication (argc, argv, "killustrator") 
 {
-    getLocale()->insertCatalogue("koffice");
 }
 
 KIllustratorApp::~KIllustratorApp () {

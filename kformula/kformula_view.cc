@@ -15,6 +15,7 @@
 #include "FractionElement.h"
 #include "MatrixElement.h"
 #include "PrefixedElement.h"
+#include <kiconloader.h>
 
 #include <opUIUtils.h>
 #include <opMainWindow.h>
@@ -37,22 +38,14 @@ KFormulaView::KFormulaView( QWidget *_parent, const char *_name, KFormulaDoc* _d
   
   m_pDoc = _doc;
     
-  QPixmap pix;
-  QString tmp = KApplication::kde_datadir().copy();
-  tmp += "/kformula/pics/";
-    
   mn_indexList = new QPopupMenu();
-  pix.load(tmp+"index0.xpm");
-  mn_indexList->insertItem(pix,0);
+  mn_indexList->insertItem(ICON("index0.xpm"),0);
   mn_indexList->insertSeparator();
-  pix.load(tmp+"index1.xpm");
-  mn_indexList->insertItem(pix,1);
+  mn_indexList->insertItem(ICON("index1.xpm"),1);
   mn_indexList->insertSeparator();
-  pix.load(tmp+"index2.xpm");
-  mn_indexList->insertItem(pix,2);
+  mn_indexList->insertItem(ICON("index2.xpm"),2);
   mn_indexList->insertSeparator();
-  pix.load(tmp+"index3.xpm");
-  mn_indexList->insertItem(pix,3);
+  mn_indexList->insertItem(ICON("index3.xpm"),3);
   mn_indexList->setMouseTracking(true);
   mn_indexList->setCheckable(false);
   
@@ -140,84 +133,79 @@ CORBA::Long KFormulaView::addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
 					 const char* func,
 					 CORBA::Long _id ) 
 {
-    QString tmp = KApplication::kde_datadir().copy();
-    tmp += "/kformula/pics/";
-    tmp += pictname;
-    
-    OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
+    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( pictname );
    
-    CORBA::Long id = toolbar->insertButton2( pix, _id, SIGNAL( clicked() ), this, func, true, tooltip, -1 );
+    CORBA::Long id = 
+	toolbar->insertButton2( pix, _id, 
+				SIGNAL( clicked() ), this, func, true, 
+				tooltip, -1 );
 
     return id;
 }
 
 bool KFormulaView::event( const char* _event, const CORBA::Any& _value )
 {
-  cerr << "CALLED" << endl;
+    cerr << "CALLED" << endl;
   
-  EVENT_MAPPER( _event, _value );
-
-  MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
-  MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
-
-  END_EVENT_MAPPER;
-  
-  return false;
+    EVENT_MAPPER( _event, _value );
+    
+    MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
+    MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
+    
+    END_EVENT_MAPPER;
+    
+    return false;
 }
 
 bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 {
-  if ( CORBA::is_nil( _menubar ) )
-  {
-    m_vMenuView = 0L;
-    m_vMenuElement = 0L;
-    m_vMenuFormula = 0L;
-    m_vMenuHelp = 0L;
-    return true;
-  }
-
-  cerr << "START --------------- MENU -------------------" << endl;
+    if ( CORBA::is_nil( _menubar ) ) {
+	m_vMenuView = 0L;
+	m_vMenuElement = 0L;
+	m_vMenuFormula = 0L;
+	m_vMenuHelp = 0L;
+	return true;
+    }
+    
+    cerr << "START --------------- MENU -------------------" << endl;
+    
+    // View
+    _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
+    
+    m_idMenuView_NewView = m_vMenuView->insertItem( i18n( "&New View" ), this, "newView", 0 );
+    m_idMenuView_FontToolbar = m_vMenuView->insertItem( i18n( "Font Toolbar" ), this, "newView", 0 );
+    m_idMenuView_TextToolbar = m_vMenuView->insertItem( i18n( "Text Toolbar" ), this, "newView", 0 );
+    m_idMenuView_TypeToolbar = m_vMenuView->insertItem( i18n( "Type Toolbar" ), this, "newView", 0 );
+    
+    // Element
+    _menubar->insertMenu( i18n( "&Element" ), m_vMenuElement, -1, -1 );
+    
+    m_vMenuElement->insertItem8( i18n( "&Add Index" ), m_vMenuElement_AddIndex, -1, -1 );
+    
+    OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("index0.xpm"));
+    m_idMenuElement_AddIndex_TL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Top left" ), this, "addTopLeftIndex", 0, -1, -1 );
+    
+    pix = OPUIUtils::convertPixmap(ICON("index1.xpm") );
+    m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Bottom left" ), this, "addBottomLeftIndex", 0, -1, -1 );
+    
+    pix = OPUIUtils::convertPixmap(ICON("index2.xpm") );
+    m_idMenuElement_AddIndex_TR = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Top right" ), this, "addTopRightIndex", 0, -1, -1 );
   
-  QString tmp = KApplication::kde_datadir().copy();
-  tmp += "/kformula/pics/";    
-
-  // View
-  _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
-	
-  m_idMenuView_NewView = m_vMenuView->insertItem( i18n( "&New View" ), this, "newView", 0 );
-  m_idMenuView_FontToolbar = m_vMenuView->insertItem( i18n( "Font Toolbar" ), this, "newView", 0 );
-  m_idMenuView_TextToolbar = m_vMenuView->insertItem( i18n( "Text Toolbar" ), this, "newView", 0 );
-  m_idMenuView_TypeToolbar = m_vMenuView->insertItem( i18n( "Type Toolbar" ), this, "newView", 0 );
-	
-  // Element
-  _menubar->insertMenu( i18n( "&Element" ), m_vMenuElement, -1, -1 );
-  
-  m_vMenuElement->insertItem8( i18n( "&Add Index" ), m_vMenuElement_AddIndex, -1, -1 );
-
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp+"index0.xpm" );
-  m_idMenuElement_AddIndex_TL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Top left" ), this, "addTopLeftIndex", 0, -1, -1 );
-
-  pix = OPUIUtils::loadPixmap( tmp+"index1.xpm" );
-  m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Bottom left" ), this, "addBottomLeftIndex", 0, -1, -1 );
-
-  pix = OPUIUtils::loadPixmap( tmp+"index2.xpm" );
-  m_idMenuElement_AddIndex_TR = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Top right" ), this, "addTopRightIndex", 0, -1, -1 );
-  
-  pix = OPUIUtils::loadPixmap( tmp+"index3.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("index3.xpm") );
   m_idMenuElement_AddIndex_BL = m_vMenuElement_AddIndex->insertItem6( pix, i18n( "Bottom right" ), this, "addBottomRightIndex", 0, -1, -1 );
 
   m_vMenuElement->insertItem8( i18n( "&Add Element" ), m_vMenuElement_AddElement, -1, -1 );	
 
-  pix = OPUIUtils::loadPixmap( tmp+"mini-xy.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("mini-xy.xpm") );
   m_idMenuElement_AddElement_T = m_vMenuElement_AddElement->insertItem6( pix, i18n( "Plain text" ), this, "addText", 0, -1, -1 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"mini-root.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("mini-root.xpm") );
   m_idMenuElement_AddElement_R = m_vMenuElement_AddElement->insertItem6( pix, i18n( "Root" ), this, "addRoot", 0, -1, -1 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"mini-bra.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("mini-bra.xpm") );
   m_idMenuElement_AddElement_B = m_vMenuElement_AddElement->insertItem6( pix, i18n( "Bracket" ), this, "addBracket", 0, -1, -1 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"mini-frac.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("mini-frac.xpm") );
   m_idMenuElement_AddElement_F = m_vMenuElement_AddElement->insertItem6( pix, i18n( "Fraction" ), this, "addFraction", 0, -1, -1 );
 
   m_idMenuElement_Color = m_vMenuElement->insertItem( i18n( "Set color" ), this, "elementColor", 0 );
@@ -230,19 +218,19 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_idMenuElement_Text_Font = m_vMenuElement_Text->insertItem( i18n( "Set font" ), this, "textFont", 0 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"split.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("split.xpm") );
   m_idMenuElement_Text_Split = m_vMenuElement_Text->insertItem6( pix, i18n( "Split at current position" ), this, "textSplit", 0, -1, -1 );
 
   m_vMenuElement->insertItem8( i18n( "&Root" ), m_vMenuElement_Root, -1, -1 );	
 
   m_idMenuElement_Root_Pixmap = m_vMenuElement_Root->insertItem( i18n( "Use pixmap" ), this, "togglePixmap", 0 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"rootindex.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("rootindex.xpm") );
   m_idMenuElement_Root_Index = m_vMenuElement_Root->insertItem6( pix, i18n( "Add root index (Top left)" ), this, "addTopLeftIndex", 0, -1, -1 );
 
   m_vMenuElement->insertItem8( i18n( "&Bracket" ), m_vMenuElement_Bracket, -1, -1 );	
 
-  pix = OPUIUtils::loadPixmap( tmp+"delimiter.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("delimiter.xpm") );
   m_idMenuElement_Bracket_Type = m_vMenuElement_Bracket->insertItem6( pix, i18n( "Set delimiter ..." ), this, "bracketType", 0, -1, -1 );
 
   m_vMenuElement->insertItem8( i18n( "&Fraction" ), m_vMenuElement_Fraction, -1, -1 );
@@ -257,28 +245,28 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_idMenuElement_Integral_Pixmap = m_vMenuElement_Integral->insertItem( i18n( "Use pixmap" ), this, "togglePixmap", 0 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"Ihigher.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("Ihigher.xpm") );
   m_idMenuElement_Integral_Higher = m_vMenuElement_Integral->insertItem6( pix, i18n( "Add higher limit" ), this, "addHigher", 0, -1, -1 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"Ilower.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("Ilower.xpm") );
   m_idMenuElement_Integral_Lower = m_vMenuElement_Integral->insertItem6( pix, i18n( "Add lower limit" ), this, "addLower", 0, -1, -1 );
 
   m_vMenuElement->insertItem8( i18n( "&Matrix" ), m_vMenuElement_Matrix, -1, -1 );
 
-  // pix = OPUIUtils::loadPixmap( tmp+"setmatrix.xpm" );
+  // pix = OPUIUtils::convertPixmap(ICON("setmatrix.xpm" );
   // m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Set dimension" ), this, "matrixSet", 0, -1, -1 );
   m_idMenuElement_Matrix_Set = m_vMenuElement_Matrix->insertItem( i18n( "Set dimension" ), this, "matrixSet", 0 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"insrow.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("insrow.xpm") );
   m_idMenuElement_Matrix_InsRow = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Insert a row" ), this, "matrixInsRow", 0, -1, -1 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"inscol.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("inscol.xpm") );
   m_idMenuElement_Matrix_InsCol = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Insert a column" ), this, "matrixInsCol", 0, -1, -1 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"remrow.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("remrow.xpm") );
   m_idMenuElement_Matrix_RemRow = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Remove a row" ), this, "matrixRemRow", 0, -1, -1 );
 
-  pix = OPUIUtils::loadPixmap( tmp+"remcol.xpm" );
+  pix = OPUIUtils::convertPixmap(ICON("remcol.xpm") );
   m_idMenuElement_Matrix_RemCol = m_vMenuElement_Matrix->insertItem6( pix, i18n( "Remove a column" ), this, "matrixRemCol", 0, -1, -1 );
 
   m_vMenuElement->insertItem8( i18n( "&Decoration" ), m_vMenuElement_Decoration, -1, -1 );
@@ -644,13 +632,11 @@ void KFormulaView::slotTypeChanged( const BasicElement *elm)
     if (isPrefixed)
     { 
       QString content=elm->getContent();
-      QString tmp = KApplication::kde_datadir().copy();
-      tmp += "/kformula/pics/";
 
-      OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp + content.left(1) + "higher.xpm" );
+      OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON(content.left(1) + "higher.xpm" ));
       m_vToolBarType->setButtonPixmap( m_idButtonType_AddH, pix );
 
-      pix = OPUIUtils::loadPixmap( tmp + content.left(1) + "lower.xpm" );
+      pix = OPUIUtils::convertPixmap( ICON(content.left(1) + "lower.xpm" ));
       m_vToolBarType->setButtonPixmap(m_idButtonType_AddL, pix );
     }
 

@@ -4,6 +4,7 @@
 #include <koScanTools.h>
 #include <koScanPlugins.h>
 #include <koIMR.h>
+#include <koApplication.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
@@ -21,9 +22,8 @@ KOFFICE_DOCUMENT_FACTORY( KSpreadDoc, KSpreadFactory )
 typedef OPAutoLoader<KSpreadFactory> KSpreadAutoLoader;
 
 KSpreadApp::KSpreadApp( int &argc, char** argv ) : 
-  OPApplication( argc, argv, "kspread" )
+  KoApplication( argc, argv, "kspread" )
 {
-  getLocale()->insertCatalogue("koffice");
   m_pShell = 0L;
 }
 

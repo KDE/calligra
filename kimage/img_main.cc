@@ -4,6 +4,7 @@
 
 #include <factory_impl.h>
 
+#include <koApplication.h>
 #include <koScanParts.h>
 
 bool g_bWithGUI = true;
@@ -44,9 +45,8 @@ typedef AutoLoader<KImageFactory> KImageAutoLoader;
  *******************************************************************/
 
 ImageApp::ImageApp( int argc, char** argv ) : 
-     OPApplication( argc, argv, "kimage" )
+     KoApplication( argc, argv, "kimage" )
 {
-    getLocale()->insertCatalogue("koffice");
 }
 
 ImageApp::~ImageApp()

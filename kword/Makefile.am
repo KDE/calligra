@@ -5,7 +5,7 @@ LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	../lib/store/libkstore.la -lkparts -lkpartsui -lkom \
-	$(LIB_KFILE) $(LIB_KIMGIO) -lkdeutil $(LIBMICO) $(LIBDL)
+	$(LIB_KFILE) $(LIB_KIMGIO) -lkdeutil $(LIBMICO) 
 
 ####### Files
 

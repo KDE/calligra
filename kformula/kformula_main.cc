@@ -8,6 +8,7 @@
 #include <opAutoLoader.h>
 #include "kformula_shell.h"
 #include "kformula_doc.h"
+#include <koApplication.h>
 
 // DEBUG
 #include <iostream>
@@ -20,9 +21,8 @@ KOFFICE_DOCUMENT_FACTORY( KFormulaDoc, KFormulaFactory )
 typedef OPAutoLoader<KFormulaFactory> KFormulaAutoLoader;
 
 KFormulaApp::KFormulaApp( int &argc, char** argv ) : 
-  OPApplication( argc, argv, "kformula" )
+  KoApplication( argc, argv, "kformula" )
 {
-  getLocale()->insertCatalogue("koffice");
   m_pShell = 0L;
 }
 

@@ -28,7 +28,6 @@ class Page;
 #include <koDocument.h>
 #include <koFrame.h>
 #include <opToolBarIf.h>
-#include <opApplication.h>
 #include <koPartSelectDia.h>
 
 #include <qwidget.h>

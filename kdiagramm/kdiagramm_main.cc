@@ -4,6 +4,7 @@
 #include <koIMR.h>
 #include <koFactory.h>
 #include <koDocument.h>
+#include <koApplication.h>
 #include <opAutoLoader.h>
 #include "kdiagramm_shell.h"
 #include "kdiagramm_doc.h"
@@ -19,9 +20,8 @@ KOFFICE_DOCUMENT_FACTORY( KDiagrammDoc, KDiagrammFactory )
 typedef OPAutoLoader<KDiagrammFactory> KDiagrammAutoLoader;
 
 KDiagrammApp::KDiagrammApp( int &argc, char** argv ) : 
-  OPApplication( argc, argv, "kdiagramm" )
+  KoApplication( argc, argv, "kdiagramm" )
 {
-  getLocale()->insertCatalogue("koffice");
   m_pShell = 0L;
 }
 

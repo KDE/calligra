@@ -1,14 +1,14 @@
 #ifndef __kdiagramm_main_h__
 #define __kdiagramm_main_h__
 
-#include <opApplication.h>
+#include <koApplication.h>
 
 #include "kdiagramm_doc.h"
 #include "kdiagramm_shell.h"
 
 class KDiagrammShell;
 
-class KDiagrammApp : public OPApplication
+class KDiagrammApp : public KoApplication
 {
   Q_OBJECT
 public:

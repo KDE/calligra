@@ -16,7 +16,7 @@
 #ifndef kword_main_h
 #define kword_main_h
 
-#include <opApplication.h>
+#include <koApplication.h>
 
 #include "kword_doc.h"
 #include "kword_shell.h"
@@ -26,7 +26,7 @@
 /* Class: KWordApp                                                */
 /******************************************************************/
 
-class KWordApp : public OPApplication
+class KWordApp : public KoApplication
 {
   Q_OBJECT
 

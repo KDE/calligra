@@ -1,6 +1,7 @@
 #include "kchart_main.h"
 
 #include <string.h>
+#include <koApplication.h>
 
 #include <factory_impl.h>
 
@@ -19,9 +20,8 @@ typedef AutoLoader<KChartFactory> KChartAutoLoader;
  *******************************************************************/
 
 KChartApp::KChartApp( int argc, char** argv ) : 
-      OPApplication( argc, argv, "kchart" )
+      KoApplication( argc, argv, "kchart" )
 {
-   getLocale()->insertCatalogue("koffice");
 }
 
 KChartApp::~KChartApp()

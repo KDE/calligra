@@ -15,12 +15,12 @@
 #ifndef __kpresenter_main_h__
 #define __kpresenter_main_h__
 
-#include <opApplication.h>
+#include <koApplication.h>
 
 /******************************************************************/
 /* class KPresenterApp - KPresenter Application                   */
 /******************************************************************/
-class KPresenterApp : public OPApplication
+class KPresenterApp : public KoApplication
 {
   Q_OBJECT
 
