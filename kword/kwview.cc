@@ -1997,7 +1997,7 @@ void KWView::insertInlinePicture()
 void KWView::displayFrameInlineInfo()
 {
     KMessageBox::information(this,
-                             i18n("Set cursor where you want insert inline frame."),
+                             i18n("Set cursor where you want to insert inline frame."),
                              i18n("Insert Inline frame"),
                              "SetCursorInsertInlineFrame",true);
 
@@ -2010,7 +2010,7 @@ void KWView::displayFrameInlineInfo()
             addStatusBarItem( m_sbFramesLabel );
         }
         if(m_sbFramesLabel)
-            m_sbFramesLabel->setText( i18n("Set cursor where you want insert inline frame.") );
+            m_sbFramesLabel->setText( i18n("Set cursor where you want to insert inline frame.") );
     }
 }
 
