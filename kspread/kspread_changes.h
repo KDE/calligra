@@ -27,12 +27,66 @@
 #include <qptrlist.h>
 #include <qstring.h>
 
+class FilterMain;
+
 class KSpreadCell;
 class KSpreadMap;
 class KSpreadSheet;
 
 class QDomDocument;
 class QDomElement;
+
+class FilterSettings
+{
+ public:
+  FilterSettings();
+
+  bool loadXml( QDomElement const & settings );
+  void saveXml( QDomDocument & doc, QDomElement & parent ) const;
+
+  void setShowChanges( bool b );
+  void setShowAccepted( bool b );
+  void setShowRejected( bool b );
+ 
+  bool dateSet() const      { return m_dateSet; }
+  bool authorSet() const    { return m_authorSet; }
+  bool commentSet() const   { return m_commentSet; }
+  bool rangeSet() const     { return m_rangeSet; }
+
+  bool showChanges() const  { return m_showChanges; }
+  bool showRejected() const { return m_showRejected; }
+  bool showAccepted() const { return m_showAccepted; }
+
+  int  dateUsage() const    { return m_dateUsage; }
+
+  QString author() const    { return m_author; }
+  QString comment() const   { return m_comment; }
+  QString range() const     { return m_range; }
+
+  QDateTime firstTime() const  { return m_firstTime; }
+  QDateTime secondTime() const { return m_secondTime; }
+  
+ private:
+  friend class FilterMain;
+
+  bool      m_dateSet;
+  int       m_dateUsage;
+  QDateTime m_firstTime;
+  QDateTime m_secondTime;
+
+  bool      m_authorSet;
+  QString   m_author;
+  
+  bool      m_commentSet;
+  QString   m_comment;
+
+  bool      m_rangeSet;
+  QString   m_range;
+
+  bool      m_showChanges;
+  bool      m_showAccepted;
+  bool      m_showRejected;
+};
 
 class KSpreadChanges : public QObject
 {
@@ -150,6 +204,7 @@ class KSpreadChanges : public QObject
   QString                m_name;
   QCString               m_strPassword;
   KSpreadMap *           m_map;
+  FilterSettings         m_filterSettings;
 
   int  addAuthor();
   bool loadAuthors( QDomElement const & authors );

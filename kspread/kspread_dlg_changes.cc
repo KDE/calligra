@@ -35,8 +35,10 @@
 #include <qlayout.h>
 #include <qtabwidget.h>
 
-FilterMain::FilterMain( QWidget * parent, const char * name, WFlags fl )
-  : QWidget( parent, name, fl )
+FilterMain::FilterMain( FilterSettings * settings, QWidget * parent, 
+                        const char * name, WFlags fl )
+  : QWidget( parent, name, fl ),
+    m_filterSettings( settings )
 {
   setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)1, 
                               0, 0, sizePolicy().hasHeightForWidth() ) );
@@ -44,34 +46,51 @@ FilterMain::FilterMain( QWidget * parent, const char * name, WFlags fl )
 
   m_dateBox = new QCheckBox( this, "m_dateBox" );
   m_dateBox->setText( i18n( "&Date" ) );
+  connect( m_dateBox, SIGNAL( toggled( bool ) ), this, SLOT( slotDateStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_dateBox, 0, 0 );
 
   m_authorBox = new QCheckBox( this, "m_authorBox" );
   m_authorBox->setText( i18n( "&Author" ) );
+  connect( m_authorBox, SIGNAL( toggled( bool ) ), this, SLOT( slotAuthorStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_authorBox, 2, 0 );
 
   m_rangeBox = new QCheckBox( this, "m_rangeBox" );
   m_rangeBox->setText( i18n( "&Range" ) );
+  connect( m_rangeBox, SIGNAL( toggled( bool ) ), this, SLOT( slotRangeStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_rangeBox, 3, 0 );
 
   m_commentBox = new QCheckBox( this, "m_commentBox" );
   m_commentBox->setText( i18n( "&Comment" ) );
+  connect( m_commentBox, SIGNAL( toggled( bool ) ), this, SLOT( slotCommentStateChanged( bool ) ) );
   FilterMainLayout->addWidget( m_commentBox, 4, 0 );
     
   m_authorEdit = new KLineEdit( this, "m_authorEdit" );
+  connect( m_authorEdit, SIGNAL( textChanged( QString const & ) ),
+           this, SLOT( slotAuthorChanged( QString const & ) ) );
   FilterMainLayout->addMultiCellWidget( m_authorEdit, 2, 2, 1, 2 );
 
   m_rangeEdit = new KLineEdit( this, "m_rangeEdit" );
+  connect( m_rangeEdit, SIGNAL( textChanged( QString const & ) ),
+           this, SLOT( slotRangeChanged( QString const & ) ) );
   FilterMainLayout->addMultiCellWidget( m_rangeEdit, 3, 3, 1, 2 );
 
   QSpacerItem * spacer = new QSpacerItem( 20, 16, QSizePolicy::Minimum, QSizePolicy::Expanding );
   FilterMainLayout->addItem( spacer, 5, 1 );
 
   m_commentEdit = new KLineEdit( this, "m_commentEdit" );
+  connect( m_commentEdit, SIGNAL( textChanged( QString const & ) ),
+           this, SLOT( slotCommentChanged( QString const & ) ) );
   FilterMainLayout->addMultiCellWidget( m_commentEdit, 4, 4, 1, 2 );
 
   m_dateUsage = new KComboBox( FALSE, this, "m_dateUsage" );
+  m_dateUsage->insertItem( i18n( "earlier than" ) );
+  m_dateUsage->insertItem( i18n( "since" ) );
+  m_dateUsage->insertItem( i18n( "equal to" ) );
+  m_dateUsage->insertItem( i18n( "not equal to" ) );
+  m_dateUsage->insertItem( i18n( "between" ) );
   FilterMainLayout->addWidget( m_dateUsage, 0, 1 );
+  connect( m_dateUsage, SIGNAL( activated( int ) ),
+           this, SLOT( slotDateUsageChanged( int ) ) );
 
   QLabel * textLabel = new QLabel( this, "textLabel" );
   textLabel->setText( i18n( "<p align=\"right\">and</p>" ) );
@@ -82,53 +101,153 @@ FilterMain::FilterMain( QWidget * parent, const char * name, WFlags fl )
   m_timeFirst = new QDateTimeEdit( this, "m_timeFirst" );
   m_timeFirst->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)5, 
                                            0, 0, m_timeFirst->sizePolicy().hasHeightForWidth() ) );
+  connect( m_timeFirst, SIGNAL( valueChanged( QDateTime ) ),
+           this, SLOT( slotFirstTimeChanged( QDateTime const & ) ) );
   layout->addWidget( m_timeFirst );
 
   m_timeSecond = new QDateTimeEdit( this, "m_timeSecond" );
   m_timeSecond->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)5, 
                                             0, 0, m_timeSecond->sizePolicy().hasHeightForWidth() ) );
+  connect( m_timeSecond, SIGNAL( valueChanged( QDateTime ) ),
+           this, SLOT( slotSecondTimeChanged( QDateTime const & ) ) );
   layout->addWidget( m_timeSecond );
   FilterMainLayout->addMultiCellLayout( layout, 0, 1, 2, 2 );
 
+  m_dateBox->setChecked( settings->dateSet() );
+  slotDateStateChanged( settings->dateSet() );
 
-    resize( QSize(549, 196).expandedTo(minimumSizeHint()) );
+  m_authorBox->setChecked( settings->authorSet() );
+  slotAuthorStateChanged( settings->authorSet() );
+
+  m_commentBox->setChecked( settings->commentSet() );
+  slotCommentStateChanged( settings->commentSet() );
+
+  m_rangeBox->setChecked( settings->rangeSet() );
+  slotRangeStateChanged( settings->rangeSet() );
+
+  resize( QSize(549, 196).expandedTo(minimumSizeHint()) );
 }
 
 FilterMain::~FilterMain()
 {
 }
 
+void FilterMain::slotDateUsageChanged( int index )
+{
+  if ( index == 4 )
+    m_timeSecond->setEnabled( true );
+  else
+    m_timeSecond->setEnabled( false );
 
-AcceptRejectWidget::AcceptRejectWidget( QWidget * parent, const char * name, WFlags fl )
-  : QWidget( parent, name, fl )
+  m_filterSettings->m_dateUsage = index;
+}
+
+void FilterMain::slotDateStateChanged( bool on )
+{
+  if ( on )
+  {
+    m_dateUsage->setEnabled( true );
+    m_timeFirst->setEnabled( true );
+    if ( m_dateUsage->currentItem() == 4 )
+      m_timeSecond->setEnabled( true );
+  }
+  else
+  {
+    m_dateUsage->setEnabled( false );
+    m_timeFirst->setEnabled( false );
+    m_timeSecond->setEnabled( false );
+  }
+  m_filterSettings->m_dateSet = on;
+}
+
+void FilterMain::slotAuthorStateChanged( bool on )
+{
+  if ( on )
+    m_authorEdit->setEnabled( true );
+  else
+    m_authorEdit->setEnabled( false );
+
+  m_filterSettings->m_authorSet = on;
+}
+
+void FilterMain::slotCommentStateChanged( bool on )
+{
+  if ( on )
+    m_commentEdit->setEnabled( true );
+  else
+    m_commentEdit->setEnabled( false );
+
+  m_filterSettings->m_commentSet = on;
+}
+
+void FilterMain::slotRangeStateChanged( bool on )
+{
+  if ( on )
+    m_rangeEdit->setEnabled( true );
+  else
+    m_rangeEdit->setEnabled( false );
+
+  m_filterSettings->m_rangeSet = on;
+}
+
+void FilterMain::slotCommentChanged( QString const & text )
+{
+  m_filterSettings->m_comment = text;
+}
+
+void FilterMain::slotAuthorChanged( QString const & text )
+{
+  m_filterSettings->m_author = text;
+}
+
+void FilterMain::slotRangeChanged( QString const & text )
+{
+  m_filterSettings->m_range = text;
+}
+
+void FilterMain::slotFirstTimeChanged( QDateTime const & dt )
+{
+  m_filterSettings->m_firstTime = dt;
+}
+
+void FilterMain::slotSecondTimeChanged( QDateTime const & dt )
+{
+  m_filterSettings->m_secondTime = dt;
+}
+
+
+AcceptRejectWidget::AcceptRejectWidget( FilterSettings * settings, QWidget * parent, 
+                                        const char * name, WFlags fl )
+  : QWidget( parent, name, fl ),
+    m_filterSettings( settings )
 {
   QHBoxLayout * layout = new QHBoxLayout( this, 11, 6, "layout"); 
   QTabWidget  * listTab  = new QTabWidget( this, "listTab" );
 
-  QWidget     * tab         = new QWidget( listTab, "tab" );
-  QGridLayout * tabLayout   = new QGridLayout( tab, 1, 1, 11, 6, "tabLayout"); 
+  m_listTab         = new QWidget( listTab, "m_listTab" );
+  QGridLayout * tabLayout   = new QGridLayout( m_listTab, 1, 1, 11, 6, "tabLayout"); 
 
-  m_acceptButton = new KPushButton( tab, "m_acceptButton" );
+  m_acceptButton = new KPushButton( m_listTab, "m_acceptButton" );
   m_acceptButton->setText( i18n( "&Accept" ) );
   m_acceptButton->setEnabled( false );
   tabLayout->addWidget( m_acceptButton, 1, 0 );
 
-  m_rejectButton = new KPushButton( tab, "m_rejectButton" );
+  m_rejectButton = new KPushButton( m_listTab, "m_rejectButton" );
   m_rejectButton->setText( i18n( "&Reject" ) );
   m_rejectButton->setEnabled( false );
   tabLayout->addWidget( m_rejectButton, 1, 1 );
 
-  m_acceptAllButton = new KPushButton( tab, "m_AcceptAllButton" );
+  m_acceptAllButton = new KPushButton( m_listTab, "m_AcceptAllButton" );
   m_acceptAllButton->setText( i18n( "&Accept All" ) );
   m_acceptAllButton->setEnabled( false );
   tabLayout->addWidget( m_acceptAllButton, 1, 2 );
 
-  m_rejectAllButton = new KPushButton( tab, "m_rejectAllButton" );
+  m_rejectAllButton = new KPushButton( m_listTab, "m_rejectAllButton" );
   m_rejectAllButton->setText( i18n( "&Reject All" ) );
   m_rejectAllButton->setEnabled( false );
   tabLayout->addWidget( m_rejectAllButton, 1, 3 );
 
-  m_listView = new KListView( tab, "m_listView" );
+  m_listView = new KListView( m_listTab, "m_listView" );
   m_listView->addColumn( i18n( "Action" ) );
   m_listView->addColumn( i18n( "Position" ) );
   m_listView->addColumn( i18n( "Author" ) );
@@ -142,16 +261,20 @@ AcceptRejectWidget::AcceptRejectWidget( QWidget * parent, const char * name, WFl
   m_listView->header()->setLabel( 4, i18n( "Comment" ) );
   
   tabLayout->addMultiCellWidget( m_listView, 0, 0, 0, 3 );
-  listTab->insertTab( tab, i18n( "&List" ) );
+  listTab->insertTab( m_listTab, i18n( "&List" ) );
 
   QWidget * tabFilter = new QWidget( listTab, "tabFilter" );
   QVBoxLayout * filterLayout = new QVBoxLayout( tabFilter, 1, 1, "fLayout"); 
 
-  m_filter = new FilterMain( tabFilter );
+  m_filter = new FilterMain( settings, tabFilter );
+  m_filter->m_timeSecond->setEnabled( false );
   filterLayout->addWidget( m_filter, 0, 0 );
 
   listTab->insertTab( tabFilter, i18n( "&Filter" ) );
   layout->addWidget( listTab );
+
+  connect( listTab, SIGNAL( currentChanged( QWidget * ) ),
+           this, SLOT( slotTabChanged( QWidget * ) ) );
 
   resize( QSize(682, 480).expandedTo(minimumSizeHint()) );
 }
@@ -160,6 +283,16 @@ AcceptRejectWidget::~AcceptRejectWidget()
 {
 }
 
+void AcceptRejectWidget::slotTabChanged( QWidget * widget )
+{
+  if ( widget == m_listTab )
+    applyFilterSettings();
+}
+
+void AcceptRejectWidget::applyFilterSettings()
+{
+  // TODO
+}
 
 
 KSpreadAcceptDlg::KSpreadAcceptDlg( KSpreadView * parent, KSpreadChanges * changes,
@@ -168,7 +301,7 @@ KSpreadAcceptDlg::KSpreadAcceptDlg( KSpreadView * parent, KSpreadChanges * chang
                  KDialogBase::Close, KDialogBase::Close, false ),   
     m_view( parent ),
     m_changes( changes ),
-    m_dialog( new AcceptRejectWidget( this ) )
+    m_dialog( new AcceptRejectWidget( &changes->m_filterSettings, this ) )
 {
   setCaption( i18n( "Accept or Reject Changes" ) );
   setButtonBoxOrientation( Vertical );

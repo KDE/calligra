@@ -34,11 +34,14 @@ class KPushButton;
 class QCheckBox;
 class QDateTimeEdit;
 
+class FilterSettings;
+
 class FilterMain : public QWidget
 {
   Q_OBJECT
  public:
-  FilterMain( QWidget * parent = 0, const char * name = "FilterMain", WFlags fl = 0 );
+  FilterMain( FilterSettings * settings, QWidget * parent = 0, 
+              const char * name = "FilterMain", WFlags fl = 0 );
   ~FilterMain();
 
   QCheckBox     * m_dateBox;
@@ -51,6 +54,21 @@ class FilterMain : public QWidget
   KComboBox     * m_dateUsage;
   QDateTimeEdit * m_timeFirst;
   QDateTimeEdit * m_timeSecond;
+
+ protected slots:
+  void slotDateUsageChanged( int );
+  void slotDateStateChanged( bool );
+  void slotAuthorStateChanged( bool );
+  void slotCommentStateChanged( bool );
+  void slotRangeStateChanged( bool );
+  void slotCommentChanged( QString const & text );
+  void slotAuthorChanged( QString const & text );
+  void slotRangeChanged( QString const & text );
+  void slotFirstTimeChanged( QDateTime const & dt );
+  void slotSecondTimeChanged( QDateTime const & dt );
+
+ private:
+  FilterSettings * m_filterSettings;
 };
 
 class AcceptRejectWidget : public QWidget
@@ -58,17 +76,26 @@ class AcceptRejectWidget : public QWidget
   Q_OBJECT
 
  public:
-  AcceptRejectWidget( QWidget * parent = 0, const char * name = 0, WFlags fl = 0 );
+  AcceptRejectWidget( FilterSettings * settings, QWidget * parent = 0, 
+                      const char * name = 0, WFlags fl = 0 );
   ~AcceptRejectWidget();
   
-  KPushButton * m_acceptButton;
-  KPushButton * m_rejectButton;
-  KPushButton * m_acceptAllButton;
-  KPushButton * m_rejectAllButton;
-  KListView   * m_listView;
-  FilterMain  * m_filter;
-};
+  KPushButton    * m_acceptButton;
+  KPushButton    * m_rejectButton;
+  KPushButton    * m_acceptAllButton;
+  KPushButton    * m_rejectAllButton;
+  KListView      * m_listView;
+  FilterMain     * m_filter;
 
+ protected slots:
+  void slotTabChanged( QWidget * );
+  
+ private:
+  QWidget        * m_listTab;
+  FilterSettings * m_filterSettings;
+
+  void applyFilterSettings();
+};
 
 class KSpreadAcceptDlg : public KDialogBase
 {  

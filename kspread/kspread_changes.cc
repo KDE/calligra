@@ -26,6 +26,44 @@
 #include <kmdcodec.h>
 #include <qdom.h>
 
+FilterSettings::FilterSettings()
+  : m_dateSet( false ),
+    m_dateUsage( 0 ),
+    m_firstTime( QDateTime::currentDateTime() ),
+    m_secondTime( QDateTime::currentDateTime() ),
+    m_authorSet( false ),
+    m_commentSet( false ),
+    m_rangeSet( false ),
+    m_showChanges( true ),
+    m_showAccepted( false ),
+    m_showRejected( false )
+{
+}
+
+bool FilterSettings::loadXml( QDomElement const & settings )
+{
+}
+
+void FilterSettings::saveXml( QDomDocument & doc, QDomElement & parent ) const
+{
+}
+
+void FilterSettings::setShowChanges( bool b )
+{
+  m_showChanges = b;
+}
+
+void FilterSettings::setShowAccepted( bool b )
+{
+  m_showAccepted = b;
+}
+
+void FilterSettings::setShowRejected( bool b )
+{
+  m_showRejected = b;
+}
+
+
 KSpreadChanges::KSpreadChanges( KSpreadMap * map )
   : m_counter( 0 ),
     m_map( map )
