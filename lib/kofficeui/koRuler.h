@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 // Description: Ruler (header)
 
@@ -50,127 +50,128 @@
 #define _MM_TO_POINT 2.83465
 #define _INCH_TO_POINT 72.0
 
-#define cPOINT_TO_MM(px) ((float)px/2.83465)
-#define cMM_TO_POINT(mm) (int((float)mm*2.83465))
-#define cPOINT_TO_INCH(px) ((float)px/72.0)
-#define cINCH_TO_POINT(inch) (int((float)inch*72.0))
-#define cMM_TO_INCH(mm) (mm/25.4)
-#define cINCH_TO_MM(inch) (inch*25.4)
+#define cPOINT_TO_MM( px ) ( ( float )px/2.83465 )
+#define cMM_TO_POINT( mm ) ( int( ( float )mm*2.83465 ) )
+#define cPOINT_TO_INCH( px ) ( ( float )px/72.0 )
+#define cINCH_TO_POINT( inch ) ( int( ( float )inch*72.0 ) )
+#define cMM_TO_INCH( mm ) ( mm/25.4 )
+#define cINCH_TO_MM( inch ) ( inch*25.4 )
 
 /******************************************************************/
-/* Struct: KoTabulator                                            */
+/* Struct: KoTabulator						  */
 /******************************************************************/
 
-enum KoTabulators {T_LEFT = 0,T_CENTER = 1,T_RIGHT = 2,T_DEC_PNT = 3};
+enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3 };
 
-struct KoTabulator
-{
-  int ptPos;
-  float mmPos;
-  float inchPos;
-  KoTabulators type;
+struct KoTabulator {
+    int ptPos;
+    float mmPos;
+    float inchPos;
+    KoTabulators type;
 };
 
 /******************************************************************/
-/* Class: KoRuler                                                 */
+/* Class: KoRuler						  */
 /******************************************************************/
 
 class KoRuler : public QFrame
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  enum Orientation {HORIZONTAL,VERTICAL};
+    enum Orientation {HORIZONTAL, VERTICAL};
 
-  static const int F_TABS = 1;
-  static const int F_INDENTS = 2;
+    static const int F_TABS = 1;
+    static const int F_INDENTS = 2;
 
-  KoRuler(QWidget *_parent, QWidget *_canvas,Orientation _orientation,
-	  KoPageLayout _layout,int _flags,KoTabChooser *_tabChooser = 0L);
-  ~KoRuler();
+    KoRuler( QWidget *_parent,	QWidget *_canvas, Orientation _orientation, 
+	     KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser = 0L );
+    ~KoRuler();
 
-  void setUnit(const QString& _unit);
+    void setUnit( const QString& _unit );
 
-  void setPageLayout(KoPageLayout _layout)
-    { layout = _layout; repaint(false); }
+    void setPageLayout( KoPageLayout _layout )
+    { layout = _layout; repaint( false ); }
 
-  void showMousePos(bool _showMPos)
-    { showMPos = _showMPos; hasToDelete = false; mposX = -1; mposY = -1; repaint(false); }
-  void setMousePos(int mx,int my);
+    void showMousePos( bool _showMPos )
+    { showMPos = _showMPos; hasToDelete = false; mposX = -1; mposY = -1; repaint( false ); }
+    void setMousePos( int mx, int my );
 
-  void setOffset(int _diffx,int _diffy)
-    { diffx = _diffx; diffy = _diffy; repaint(false); }
+    void setOffset( int _diffx, int _diffy )
+    { diffx = _diffx; diffy = _diffy; repaint( false ); }
 
-  void setLeftIndent(float _left)
-    { i_left = makeIntern(_left); repaint(false); }
-  void setFirstIndent(float _first)
-    { i_first = makeIntern(_first); repaint(false); }
+    void setLeftIndent( float _left )
+    { i_left = makeIntern( _left ); repaint( false ); }
+    void setFirstIndent( float _first )
+    { i_first = makeIntern( _first ); repaint( false ); }
 
-  void setTabList(const QList<KoTabulator>* _tabList);
-  void setFrameStart(int _frameStart) { frameStart = _frameStart; repaint(false); }
-  
-  void setAllowUnits(bool _allow) { allowUnits = _allow; }
+    void setTabList( const QList<KoTabulator>* _tabList );
+    void setFrameStart( int _frameStart ) { frameStart = _frameStart; repaint( false ); }
+
+    void setAllowUnits( bool _allow ) { allowUnits = _allow; }
 
 signals:
-  void newPageLayout(KoPageLayout);
-  void newLeftIndent(int);
-  void newFirstIndent(int);
-  void openPageLayoutDia();
-  void tabListChanged(QList<KoTabulator>*);
-  void unitChanged(QString);
+    void newPageLayout( KoPageLayout );
+    void newLeftIndent( int );
+    void newFirstIndent( int );
+    void openPageLayoutDia();
+    void tabListChanged( QList<KoTabulator>* );
+    void unitChanged( QString );
 
 protected:
-  enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT,A_BR_TOP,A_BR_BOTTOM,A_LEFT_INDENT,A_FIRST_INDENT,A_TAB};
+    enum Action {A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM, 
+		 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB};
 
-  void drawContents(QPainter *_painter)
-    { if (orientation == HORIZONTAL) drawHorizontal(_painter); else drawVertical(_painter); }
-  
-  void drawHorizontal(QPainter *_painter);
-  void drawVertical(QPainter *_painter);
-  void drawTabs(QPainter &_painter);
+    void drawContents( QPainter *_painter )
+    { if ( orientation == HORIZONTAL ) drawHorizontal( _painter ); else drawVertical( _painter ); }
 
-  void mousePressEvent(QMouseEvent *e);
-  void mouseReleaseEvent(QMouseEvent *e);
-  void mouseMoveEvent(QMouseEvent *e);
-  void mouseDoubleClickEvent(QMouseEvent*);
-  void resizeEvent(QResizeEvent *e);
+    void drawHorizontal( QPainter *_painter );
+    void drawVertical( QPainter *_painter );
+    void drawTabs( QPainter &_painter );
 
-  unsigned int makeIntern(float _v);
-  void setupMenu();
-  void uncheckMenu();
+    void mousePressEvent( QMouseEvent *e );
+    void mouseReleaseEvent( QMouseEvent *e );
+    void mouseMoveEvent( QMouseEvent *e );
+    void mouseDoubleClickEvent( QMouseEvent* );
+    void resizeEvent( QResizeEvent *e );
 
-  Orientation orientation;
-  QWidget *canvas;
-  KoPageLayout layout;
-  int flags;
-  int diffx,diffy;
-  bool showMPos;
-  int mposX,mposY;
-  int i_left,i_first;
+    unsigned int makeIntern( float _v );
+    void setupMenu();
+    void uncheckMenu();
 
-  int oldMx,oldMy;
-  bool mousePressed;
-  Action action;
-  bool hasToDelete;
-  QPixmap buffer;
-  bool whileMovingBorderLeft,whileMovingBorderRight,whileMovingBorderTop,whileMovingBorderBottom;
-  QPixmap pmFirst,pmLeft;
-  KoTabChooser *tabChooser;
-  QList<KoTabulator> tabList;
-  int currTab;
-  int frameStart;
-  bool allowUnits;
-  QPopupMenu *rb_menu;
-  int mMM,mPT,mINCH;
+    Orientation orientation;
+    QWidget *canvas;
+    KoPageLayout layout;
+    int flags;
+    int diffx, diffy;
+    bool showMPos;
+    int mposX, mposY;
+    int i_left, i_first;
 
-  QString unit;
+    int oldMx, oldMy;
+    bool mousePressed;
+    Action action;
+    bool hasToDelete;
+    QPixmap buffer;
+    bool whileMovingBorderLeft, whileMovingBorderRight; 	
+    bool whileMovingBorderTop, whileMovingBorderBottom;
+    QPixmap pmFirst, pmLeft;
+    KoTabChooser *tabChooser;
+    QList<KoTabulator> tabList;
+    int currTab;
+    int frameStart;
+    bool allowUnits;
+    QPopupMenu *rb_menu;
+    int mMM, mPT, mINCH;
+
+    QString unit;
 
 protected slots:
-  void rbPT() { setUnit("pt"); emit unitChanged("pt"); }
-  void rbMM() { setUnit("mm"); emit unitChanged("mm"); }
-  void rbINCH() { setUnit("inch"); emit unitChanged("inch"); }
+    void rbPT() { setUnit( "pt" ); emit unitChanged( "pt" ); }
+    void rbMM() { setUnit( "mm" ); emit unitChanged( "mm" ); }
+    void rbINCH() { setUnit( "inch" ); emit unitChanged( "inch" ); }
 
 };
 
 #endif
-  
+

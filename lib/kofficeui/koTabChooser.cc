@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 // Description: Tabulator chooser (header)
 
@@ -25,121 +25,107 @@
 #include <klocale.h>
 
 /******************************************************************/
-/* Class: KoTabChooser                                            */
+/* Class: KoTabChooser						  */
 /******************************************************************/
 
 /*================================================================*/
-KoTabChooser::KoTabChooser(QWidget *parent,int _flags)
-  : QFrame(parent,"")
+KoTabChooser::KoTabChooser( QWidget *parent, int _flags )
+    : QFrame( parent, "" )
 {
-  setFrameStyle(Box | Raised);
-  flags = _flags;
+    setFrameStyle( Box | Raised );
+    flags = _flags;
 
-  currType = 0;
+    currType = 0;
 
-  if (flags & TAB_DEC_PNT) currType = TAB_DEC_PNT;
-  if (flags & TAB_CENTER) currType = TAB_CENTER;
-  if (flags & TAB_RIGHT) currType = TAB_RIGHT;
-  if (flags & TAB_LEFT) currType = TAB_LEFT;
+    if ( flags & TAB_DEC_PNT ) currType = TAB_DEC_PNT;
+    if ( flags & TAB_CENTER ) currType = TAB_CENTER;
+    if ( flags & TAB_RIGHT ) currType = TAB_RIGHT;
+    if ( flags & TAB_LEFT ) currType = TAB_LEFT;
 
-  setupMenu();
+    setupMenu();
 }
 
 /*================================================================*/
-void KoTabChooser::mousePressEvent(QMouseEvent *e)
+void KoTabChooser::mousePressEvent( QMouseEvent *e )
 {
-  if (currType == 0) return;
+    if ( currType == 0 ) return;
 
-  switch (e->button())
-    {
-    case LeftButton: case MidButton:
-      {
-	switch (currType)
-	  {
-	  case TAB_LEFT:
-	    {
-	      if (flags & TAB_CENTER) currType = TAB_CENTER;
-	      else if (flags & TAB_RIGHT) currType = TAB_RIGHT;
-	      else if (flags & TAB_DEC_PNT) currType = TAB_DEC_PNT;
-	    } break;
-	  case TAB_RIGHT:
-	    {
-	      if (flags & TAB_DEC_PNT) currType = TAB_DEC_PNT;
-	      else if (flags & TAB_LEFT) currType = TAB_LEFT;
-	      else if (flags & TAB_CENTER) currType = TAB_CENTER;
-	    } break;
-	  case TAB_CENTER:
-	    {
-	      if (flags & TAB_RIGHT) currType = TAB_RIGHT;
-	      else if (flags & TAB_DEC_PNT) currType = TAB_DEC_PNT;
-	      else if (flags & TAB_LEFT) currType = TAB_LEFT;
-	    } break;
-	  case TAB_DEC_PNT:
-	    {
-	      if (flags & TAB_LEFT) currType = TAB_LEFT;
-	      else if (flags & TAB_CENTER) currType = TAB_CENTER;
-	      else if (flags & TAB_RIGHT) currType = TAB_RIGHT;
-	    } break;
-	  }
-	repaint(true);
-      } break;
-    case RightButton:
-      {
-	QPoint pnt(QCursor::pos());
+    switch ( e->button() ) {
+    case LeftButton: case MidButton: {
+	switch ( currType ) {
+	case TAB_LEFT: {
+	    if ( flags & TAB_CENTER ) currType = TAB_CENTER;
+	    else if ( flags & TAB_RIGHT ) currType = TAB_RIGHT;
+	    else if ( flags & TAB_DEC_PNT ) currType = TAB_DEC_PNT;
+	} break;
+	case TAB_RIGHT: {
+	    if ( flags & TAB_DEC_PNT ) currType = TAB_DEC_PNT;
+	    else if ( flags & TAB_LEFT ) currType = TAB_LEFT;
+	    else if ( flags & TAB_CENTER ) currType = TAB_CENTER;
+	} break;
+	case TAB_CENTER: {
+	    if ( flags & TAB_RIGHT ) currType = TAB_RIGHT;
+	    else if ( flags & TAB_DEC_PNT ) currType = TAB_DEC_PNT;
+	    else if ( flags & TAB_LEFT ) currType = TAB_LEFT;
+	} break;
+	case TAB_DEC_PNT: {
+	    if ( flags & TAB_LEFT ) currType = TAB_LEFT;
+	    else if ( flags & TAB_CENTER ) currType = TAB_CENTER;
+	    else if ( flags & TAB_RIGHT ) currType = TAB_RIGHT;
+	} break;
+	}
+	repaint( true );
+    } break;
+    case RightButton: {
+	QPoint pnt( QCursor::pos() );
 
-	rb_menu->setItemChecked(mLeft,false);
-	rb_menu->setItemChecked(mCenter,false);
-	rb_menu->setItemChecked(mRight,false);
-	rb_menu->setItemChecked(mDecPoint,false);
+	rb_menu->setItemChecked( mLeft, false );
+	rb_menu->setItemChecked( mCenter, false );
+	rb_menu->setItemChecked( mRight, false );
+	rb_menu->setItemChecked( mDecPoint, false );
 
-	switch (currType)
-	  {
-	  case TAB_LEFT: rb_menu->setItemChecked(mLeft,true);
+	switch ( currType ) {
+	case TAB_LEFT: rb_menu->setItemChecked( mLeft, true );
 	    break;
-	  case TAB_CENTER: rb_menu->setItemChecked(mCenter,true);
+	case TAB_CENTER: rb_menu->setItemChecked( mCenter, true );
 	    break;
-	  case TAB_RIGHT: rb_menu->setItemChecked(mRight,true);
+	case TAB_RIGHT: rb_menu->setItemChecked( mRight, true );
 	    break;
-	  case TAB_DEC_PNT: rb_menu->setItemChecked(mDecPoint,true);
+	case TAB_DEC_PNT: rb_menu->setItemChecked( mDecPoint, true );
 	    break;
-	  }
+	}
 
-	rb_menu->popup(pnt);
-      } break;
+	rb_menu->popup( pnt );
+    } break;
     default: break;
     }
 }
 
 /*================================================================*/
-void KoTabChooser::drawContents(QPainter *painter)
+void KoTabChooser::drawContents( QPainter *painter )
 {
-  if (currType == 0) return;
+    if ( currType == 0 ) return;
 
-  painter->setPen(QPen(black,2,SolidLine));
+    painter->setPen( QPen( black, 2, SolidLine ) );
 
-  switch (currType)
-    {
-    case TAB_LEFT:
-      {
-	painter->drawLine(4,height() - 4,width() - 4,height() - 4);
-	painter->drawLine(5,4,5,height() - 4);
-      } break;
-    case TAB_CENTER:
-      {
-	painter->drawLine(4,height() - 4,width() - 4,height() - 4);
-	painter->drawLine(width() / 2,4,width() / 2,height() - 4);
-      } break;
-    case TAB_RIGHT:
-      {
-	painter->drawLine(4,height() - 4,width() - 4,height() - 4);
-	painter->drawLine(width() - 5,4,width() - 5,height() - 4);
-      } break;
-    case TAB_DEC_PNT:
-      {
-	painter->drawLine(4,height() - 4,width() - 4,height() - 4);
-	painter->drawLine(width() / 2,4,width() / 2,height() - 4);
-	painter->fillRect(width() / 2 + 2,height() - 9,3,3,black);
-      } break;
+    switch ( currType ) {
+    case TAB_LEFT: {
+	painter->drawLine( 4, height() - 4, width() - 4, height() - 4 );
+	painter->drawLine( 5, 4, 5, height() - 4 );
+    } break;
+    case TAB_CENTER: {
+	painter->drawLine( 4, height() - 4, width() - 4, height() - 4 );
+	painter->drawLine( width() / 2, 4, width() / 2, height() - 4 );
+    } break;
+    case TAB_RIGHT: {
+	painter->drawLine( 4, height() - 4, width() - 4, height() - 4 );
+	painter->drawLine( width() - 5, 4, width() - 5, height() - 4 );
+    } break;
+    case TAB_DEC_PNT: {
+	painter->drawLine( 4, height() - 4, width() - 4, height() - 4 );
+	painter->drawLine( width() / 2, 4, width() / 2, height() - 4 );
+	painter->fillRect( width() / 2 + 2, height() - 9, 3, 3, black );
+    } break;
     default: break;
     }
 }
@@ -147,13 +133,13 @@ void KoTabChooser::drawContents(QPainter *painter)
 /*================================================================*/
 void KoTabChooser::setupMenu()
 {
-  rb_menu = new QPopupMenu();
-  CHECK_PTR(rb_menu);
-  mLeft = rb_menu->insertItem(i18n("Tabulator &Left"),this,SLOT(rbLeft()));
-  mCenter = rb_menu->insertItem(i18n("Tabulator &Center"),this,SLOT(rbCenter()));
-  mRight = rb_menu->insertItem(i18n("Tabulator &Right"),this,SLOT(rbRight()));
-  mDecPoint =  rb_menu->insertItem(i18n("Tabulator &Decimal Point"),this,SLOT(rbDecPoint()));
-  rb_menu->setCheckable(false);
+    rb_menu = new QPopupMenu();
+    CHECK_PTR( rb_menu );
+    mLeft = rb_menu->insertItem( i18n( "Tabulator &Left" ), this, SLOT( rbLeft() ) );
+    mCenter = rb_menu->insertItem( i18n( "Tabulator &Center" ), this, SLOT( rbCenter() ) );
+    mRight = rb_menu->insertItem( i18n( "Tabulator &Right" ), this, SLOT( rbRight() ) );
+    mDecPoint =  rb_menu->insertItem( i18n( "Tabulator &Decimal Point" ), this, SLOT( rbDecPoint() ) );
+    rb_menu->setCheckable( false );
 }
 
 #include "koTabChooser.moc"
